@@ -17,18 +17,15 @@
     along with 'MMUAq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "main.h"
+#include "folders.h"
 
 #include "core.h"
-#include "folders.h"
 #include "registry.h"
 #include "sclfrntnd.h"
 
-using namespace main;
-
 namespace {
-	qCDEF( char *, XSLAffix_, "Main" );
-	qCDEF(char *, FoldersFrameId, "Folders" );
+
+	qCDEF( char *, XSLAffix_, "Folders" );
 
 	void GetContext_(
 		core::rSession &Session,
@@ -43,7 +40,9 @@ namespace {
 	qRE
 	}
 
-	void SetCasting_( core::rSession &Session )
+	void SetCasting_(
+		const char *Id,
+		core::rSession &Session )
 	{
 	qRH
 		str::string XML, XSL;
@@ -54,13 +53,13 @@ namespace {
 		XSL.Init();
 		sclxdhtml::LoadXSLAndTranslateTags(rgstry::tentry___( registry::definition::XSLCastingFile, XSLAffix_ ), Session.Registry() , XSL );
 
-		Session.FillDocumentCastings( XML, XSL );
+		Session.FillElementCastings( Id, XML, XSL );
 	qRR
 	qRT
 	qRE
 	}
 
-	void GetContent_(
+	static void GetContent_(
 		const sclrgstry::registry_ &Registry,
 		core::rSession &Session,
 		str::string_ &XML )
@@ -69,13 +68,17 @@ namespace {
 		base::rContentRack Rack;
 	qRB
 		Rack.Init( XSLAffix_, XML, Session );
+	
+		Session.User.DumpFolders( Rack );
 	qRR
 	qRT
 	qRE
 	}
 }
 
-void main::SetLayout( core::rSession &Session )
+void folders::SetLayout(
+	const char *Id,
+	core::rSession &Session )
 {
 qRH
 	str::string XML, XSL;
@@ -86,34 +89,20 @@ qRB
 	XSL.Init();
 	sclxdhtml::LoadXSLAndTranslateTags( rgstry::tentry___( registry::definition::XSLLayoutFile, XSLAffix_ ), Session.Registry(), XSL );
 
-	Session.FillDocument( XML, XSL );
+	Session.FillElement( Id, XML, XSL );
 
-	SetCasting_( Session );
+	SetCasting_( Id, Session );
 
-	folders::SetLayout( FoldersFrameId, Session );
-
-	Session.SwitchTo( core::pMain );
+//	Session.SwitchTo( core::folders );
 qRR
 qRT
 qRE
 }
 
-#define AC( name ) BASE_AC( main, name )
+#define AC( name ) BASE_AC( folders, name )
 
-AC( Configuration )
+AC( Template )
 {
-	config::SetLayout( Session );
-}
-
-AC( SelectFolder )
-{
-qRH
-	str::wString Value;
-qRB
-	Value.Init();
-	Session.AlertU( Session.GetContent( Id, Value ) );
-qRR
-qRT
-qRE
+	Session.AlertT( "Template" );
 }
 

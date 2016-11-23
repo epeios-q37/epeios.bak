@@ -24,7 +24,6 @@
 #include "sclfrntnd.h"
 
 namespace {
-
 	qCDEF( char *, XSLAffix_, "Frame" );
 
 	void GetContext_(

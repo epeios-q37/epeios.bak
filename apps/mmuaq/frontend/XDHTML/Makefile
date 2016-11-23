@@ -47,7 +47,8 @@ mods += xdhcmn xdhdws
 mods += frdapi frdfrntnd frdrgstry frdinstc 
 mods += muafbc muainf 
 mods += config login main prolog 
-mods += agents agent Frame 
+mods += agents agent folders Frame mail 
+mods += mails 
 mods += base core global registry 
 
 pmods += pllio 
@@ -361,7 +362,7 @@ ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20161114"\"
+copt += -DVERSION=\""20161123"\"
 copt += -DCOPYRIGHT_YEARS=\""2016"\"
 copt += -DIDENTIFIER=\""c8c33276-5e09-4f11-bd1b-3283b0ef0697"\"
 

@@ -55,7 +55,10 @@
 		<Modules Group="Frames">
    <Module>agents</Module>
    <Module>agent</Module>
+   <Module>folders</Module>
    <Module>Frame</Module>
+   <Module>mail</Module>
+   <Module>mails</Module>
   </Modules>
 		<Module>base</Module>
 		<Module>core</Module>
@@ -80,12 +83,34 @@
      <File>AgentsCasting.xsl</File>
      <File>AgentsLocale.xml</File>
     </Files>
+    <Files Group="Folders">
+     <File>FoldersLayout.xsl</File>
+     <File>FoldersCasting.xsl</File>
+     <File>FoldersLocale.xml</File>
+    </Files>
     <Files Group="Frame">
-					<File>FrameLayout.xsl</File>
-					<File>FrameCasting.xsl</File>
-					<File>FrameLocale.xml</File>
-				</Files>
-			</Files>
+     <File>FrameLayout.xsl</File>
+     <File>FrameCasting.xsl</File>
+     <File>FrameLocale.xml</File>
+    </Files>
+    <Files Group="Mail">
+     <File>MailLayout.xsl</File>
+     <File>MailCasting.xsl</File>
+     <File>MailLocale.xml</File>
+    </Files>
+    <Files Group="Mails">
+     <File>MailsLayout.xsl</File>
+     <File>MailsCasting.xsl</File>
+     <File>MailsLocale.xml</File>
+    </Files>
+    <!--
+    <Files Group="">
+     <File>Layout.xsl</File>
+     <File>Casting.xsl</File>
+     <File>Locale.xml</File>
+    </Files>
+    -->
+   </Files>
 			<Files Group="Global">
 				<File>About.xsl</File>
 			</Files>
