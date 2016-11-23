@@ -17,7 +17,37 @@
     along with 'MMUAq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "muamel.h"
+#include "muadir.h"
 
-using namespace muamel;
+using namespace muadir;
+
+void muadir::dDirectory::GetFoldersNames(
+	const muafld::dRows &Folders,
+	str::dStrings &Names ) const
+{
+	sdr::sRow Row = Folders.First(), NRow = qNIL;
+
+	while ( Row != qNIL ) {
+		NRow = Names.New();
+		Names( NRow ).Init();
+
+		Names( NRow ) = this->Folders.GetName( Folders( Row ), Names( NRow ) );
+
+		Row = Folders.Next( Row);
+	}
+}
+
+void muadir::dDirectory::GetAllMails( muamel::dRows &Rows ) const
+{
+	muamel::sRow Row = Mails.First();
+
+	while ( Row != qNIL ) {
+		Rows.Append( Row );
+
+		Row = Mails.Next( Row );
+	}
+}
+
+
+
 

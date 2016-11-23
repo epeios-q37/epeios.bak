@@ -26,10 +26,9 @@
 #	define MUAXMP__DBG
 # endif
 
-# include "muaagt.h"
 # include "muabsc.h"
-# include "muafld.h"
-# include "muamel.h"
+# include "muadir.h"
+# include "muaagt.h"
 
 # include "bitbch.h"
 # include "lck.h"
@@ -103,63 +102,45 @@ namespace muaacc {
 		}
 	};
 
+	// Link from mail to agent.
+	typedef bch::qBUNCHd( muaagt::sRow, muamel::sRow ) dM2A_;
+
 	class dAccount
 	{
 	public:
 		struct s {
+			muadir::dDirectory::s Directory;
 			muaagt::dAgents::s Agents;
-			muamel::dMails::s Mails;
-			muafld::dFoldersTree::s Folders;
-			muafld::sRow Inbox;
-		} &S_;
+			dM2A_::s M2A;
+		};
+		muadir::dDirectory Directory;
 		muaagt::dAgents Agents;
-		muamel::dMails Mails;
-		muafld::dFoldersTree Folders;
+		dM2A_ M2A;
 		dAccount( s &S )
-		: S_( S ),
+		: Directory( S.Directory ),
 		  Agents( S.Agents ),
-		  Mails( S.Mails ),
-		  Folders( S.Folders )
+		  M2A( S.M2A )
 		{}
 		void reset( bso::bool__ P = true )
 		{
-			tol::reset( P, Agents, Mails, Folders );
+			tol::reset( P, Directory, Agents, M2A );
 		}
 		void plug( qASd *AS )
 		{
-			tol::plug( AS, Agents, Mails, Folders );
+			tol::plug( AS, Directory, Agents, M2A );
 		}
 		dAccount &operator =( const dAccount &A )
 		{
+			Directory = A.Directory;
 			Agents = A.Agents;
-			Mails = A.Mails;
-			Folders = A.Folders;
-			S_.Inbox = A.S_.Inbox;
+			M2A = A.M2A;
 
 			return *this;
 		}
 		void Init( void )
 		{
-			tol::Init( Agents, Mails, Folders );
-
-			S_.Inbox = Folders.CreateChild( str::wString(), qNIL );
+			tol::Init( Directory, Agents, M2A );
 		}
-		muafld::sRow CreateFolder(
-			const str::dString &Name,
-			muafld::sRow Parent )
-		{
-			return Folders.CreateChild( Name, Parent );
-		}
-		void GetFolders(
-			muafld::sRow Folder,
-			muafld::dRows &Folders ) const
-		{
-			this->Folders.GetFolders( Folder, Folders );
-		}
-		void GetFoldersNames(
-			const muafld::dRows &Folders,
-			str::dStrings &Names ) const;
-		void GetAllMails( muamel::dRows &Rows ) const;
 		void Update( void );	// Updates the mail with the content on the different agent.
 		void GetFields(
 			const muamel::dRows &Wanted,

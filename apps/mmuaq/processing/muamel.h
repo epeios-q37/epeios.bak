@@ -27,19 +27,17 @@
 # endif
 
 # include "muabsc.h"
-# include "muaagt.h"
+
+# include "lstcrt.h"
 
 namespace muamel {
 	typedef str::dString dId;
 	typedef str::wString wId;
 
-	typedef muaagt::sRow sARow_;
-
 	class dMail {
 	public:
 		struct s {
 			dId::s Id;
-			sARow_ Agent;
 		} &S_;
 		dId Id;
 		dMail( s &S )
@@ -49,7 +47,6 @@ namespace muamel {
 		void reset( bso::sBool P = true )
 		{
 			tol::reset( P, Id );
-			S_.Agent = qNIL;
 		}
 		void plug( uys::sHook &Hook )
 		{
@@ -61,7 +58,6 @@ namespace muamel {
 		}
 		dMail &operator = (const dMail &M)
 		{
-			S_.Agent = M.S_.Agent;
 			Id = M.Id;
 
 			return *this;
@@ -69,16 +65,11 @@ namespace muamel {
 		void Init( void )
 		{
 			tol::Init( Id );
-			S_.Agent = qNIL;
 		}
-		void Init(
-			sARow_ Agent,
-			const dId &Id )
+		void Init( const dId &Id )
 		{
 			this->Id.Init( Id );
-			S_.Agent = Agent;
 		}
-		qRODISCLOSEd( muaagt::sRow, Agent );
 	};
 
 	qW( Mail );
@@ -90,23 +81,6 @@ namespace muamel {
 
 	typedef lstcrt::qLMCRATEd( dMail, sRow ) dMails;
 	qW( Mails );
-
-	inline sRow Add(
-		muaagt::sRow Agent,
-		const dId &Id,
-		dMails &Mails )
-	{
-		sRow Row = Mails.New();
-
-		Mails(Row).Init( Agent, Id );
-
-		return Row;
-	}
-
-	sRow Search(
-		muaagt::sRow Agent,
-		const dId &Id,
-		const dMails &Mails );
 }
 
 

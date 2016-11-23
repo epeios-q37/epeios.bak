@@ -45,8 +45,8 @@ mods += fblber fblbkd fblbrd fblbrq fblbrr
 mods += fblcmd fblcst fbltyp fblovl 
 mods += csdleo csdles csdrcc csdscb csdbnc 
 mods += muafbc muainf muaacc muaagt muabsc 
-mods += muafld muaimf muamel muaplg muapo3 
-mods += muaxmp 
+mods += muadir muafld muaimf muamel muaplg 
+mods += muapo3 muaxmp 
 mods += wrpexample wrpunbound 
 mods += common registry 
 
@@ -363,7 +363,7 @@ ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20161122"\"
+copt += -DVERSION=\""20161123"\"
 copt += -DCOPYRIGHT_YEARS=\""2016"\"
 copt += -DIDENTIFIER=\""189de286-5b16-4d82-b398-595aaaa23053"\"
 

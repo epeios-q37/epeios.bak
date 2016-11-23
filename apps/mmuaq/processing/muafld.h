@@ -27,7 +27,6 @@
 # endif
 
 # include "muabsc.h"
-# include "muamel.h"
 
 # include "dtr.h"
 # include "lstcrt.h"
@@ -37,37 +36,32 @@ namespace muafld {
 	public:
 		struct s {
 			str::dString::s Name;
-			muamel::dRows::s Mails;
 		};
 		str::dString Name;
-		muamel::dRows Mails;
 		dFolder( s &S )
-		: Name( S.Name ),
-		  Mails( S.Mails )
+		: Name( S.Name )
 		{}
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, Name, Mails );
+			tol::reset( P, Name );
+		}
+		void plug( uys::sHook &Hook )
+		{
+			Name.plug( Hook );
 		}
 		void plug( qASd *AS )
 		{
-			tol::plug( AS, Name, Mails );
+			tol::plug( AS, Name );
 		}
 		dFolder &operator =(const dFolder &F)
 		{
 			Name = F.Name;
-			Mails = F.Mails;
 
 			return *this;
 		}
 		void Init( const str::dString &Name )
 		{
 			this->Name.Init( Name );
-			tol::Init( Mails );
-		}
-		void Add( muamel::sRow Mail )
-		{
-			Mails.Add( Mail );
 		}
 	};
 
@@ -76,7 +70,7 @@ namespace muafld {
 	qROW( Row );
 	qROWS( Row );
 
-	typedef lstcrt::qLCRATEd( dFolder, sRow ) dFolders_;
+	typedef lstcrt::qLMCRATEd( dFolder, sRow ) dFolders_;
 	qW( Folders_ );
 
 	typedef dtr::qDTREEd( sRow ) dTree_;
@@ -150,15 +144,6 @@ namespace muafld {
 		const dRows &GetFolders(
 			sRow Row,
 			dRows &Rows ) const;
-		void Add(
-			sRow Folder,
-			muamel::sRow Mail )
-		{
-			Folder = Normalize_( Folder );
-
-			Folders( Folder ).Add( Mail );
-			Folders.Flush();
-		}
 		sRow CreateChild(
 			const str::dString &Name,
 			sRow Parent )
