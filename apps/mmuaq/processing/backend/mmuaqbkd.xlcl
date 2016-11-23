@@ -31,8 +31,12 @@
   <Translation language="fr">Le nom d'utilisateur ne peut être vide.</Translation>
   <Translation language="en">User name cannot not be empty.</Translation>
  </Translations>
+ <Translations text="DemoFolderLabel">
+  <Translation language="fr">Dossier</Translation>
+  <Translation language="en">Folder</Translation>
+ </Translations>
  <!--
-<Translations text="">
+<Translations text="DemoFolderNme">
 	<Translation language="fr"></Translation>
 	<Translation language="en"></Translation>
 </Translations>

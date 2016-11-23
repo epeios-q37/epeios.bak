@@ -43,12 +43,12 @@ namespace muaacc {
 	class cProvider
 	{
 	protected:
-		virtual sRow MUAACCProvide( void ) = 0;
+		virtual sRow MUAACCProvide( const char *Language ) = 0;
 	public:
 		qCALLBACK( Provider );
-		sRow Provide( void )
+		sRow Provide( const char *Language )
 		{
-			return MUAACCProvide();
+			return MUAACCProvide( Language );
 		}
 	};
 
@@ -68,13 +68,13 @@ namespace muaacc {
 			Callback_ = &Callback;
 			tol::Init( Locker_ );
 		}
-		sRow Provide( void )
+		sRow Provide( const char *Language )
 		{
 			sRow Row = qNIL;
 		qRH
 		qRB
 			Locker_.Lock();
-			Row = C_().Provide();
+			Row = C_().Provide( Language );
 		qRR
 		qRT
 			Locker_.Unlock();
@@ -89,15 +89,17 @@ namespace muaacc {
 		virtual sRow MUAACCAuthenticate(
 			const str::dString &Username,
 			const str::dString &Password,
-			lProvider &Provider ) = 0;
+			lProvider &Provide,
+			const char *LAnguage ) = 0;
 	public:
 		qCALLBACK( Authentication );
 		sRow Authenticate(
 			const str::dString &Username,
 			const str::dString &Password,
-			lProvider &Provider )
+			lProvider &Provider,
+			const char *Language )
 		{
-			return MUAACCAuthenticate( Username, Password, Provider );
+			return MUAACCAuthenticate( Username, Password, Provider, Language );
 		}
 	};
 
@@ -193,12 +195,16 @@ namespace muaacc {
 	class cAccount
 	{
 	protected:
-		virtual void MUAACCOnCreate( dAccount &Account ) = 0;
+		virtual void MUAACCOnCreate(
+			dAccount &Account,
+			const char *Language ) = 0;
 	public:
 		qCALLBACK( Account );
-		void OnCreate( dAccount &Account )
+		void OnCreate(
+			dAccount &Account,
+			const char *Language )
 		{
-			return MUAACCOnCreate( Account );
+			return MUAACCOnCreate( Account, Language );
 		}
 	};
 
@@ -221,7 +227,9 @@ namespace muaacc {
 
 			Accounts_.Init();
 		}
-		sRow New_( sRow Row )
+		sRow New_(
+			sRow Row,
+			const char *Language )
 		{
 		qRH
 			rAccountTutor *Account = NULL;
@@ -233,7 +241,7 @@ namespace muaacc {
 
 			Row = Accounts_.New( Row );
 
-			C_().OnCreate( Account->Core );
+			C_().OnCreate( Account->Core, Language );
 
 			Accounts_.Store( Account, Row );
 		qRR
@@ -259,14 +267,14 @@ namespace muaacc {
 			tol::Init( Locker_, Accounts_ );
 			Callback_ = &Callback;
 		}
-		sRow New( void )
+		sRow New( const char *Language )
 		{
 			sRow Row = qNIL;
 		qRH
 		qRB
 			Locker_.Lock();
 		
-			Row = New_( qNIL );
+			Row = New_( qNIL, Language );
 
 			Locker_.Unlock();
 		qRR
@@ -286,7 +294,7 @@ namespace muaacc {
 			Locker_.Lock();
 		
 			if ( !Accounts_.Exists( Row ) )
-				New_( Row );
+				qRGnr();
 
 			Accounts_.Recall( Row, Account );
 
@@ -324,22 +332,23 @@ namespace muaacc {
 		lProvider Provider_;
 		sRow Authenticate_(
 			const str::dString &Username,
-			const str::dString &Password )
+			const str::dString &Password,
+			const char *Language )
 		{
 			sRow Row = qNIL;
 		qRH
 		qRB
 			Locker_.Lock();
-			Row = C_().Authenticate( Username, Password, Provider_ );
+			Row = C_().Authenticate( Username, Password, Provider_, Language );
 		qRR
 		qRT
 			Locker_.Unlock();
 		qRE
 			return Row;
 		}
-		sRow MUAACCProvide( void ) override
+		sRow MUAACCProvide( const char *Language ) override
 		{
-			return A_().New();
+			return A_().New( Language );
 		}
 	public:
 		void reset( bso::sBool P = true )
@@ -358,9 +367,10 @@ namespace muaacc {
 		}
 		sRow Authenticate(
 			const str::dString &Username,
-			const str::dString &Password )
+			const str::dString &Password,
+			const char *Language )
 		{
-			return Authenticate_( Username, Password );
+			return Authenticate_( Username, Password, Language );
 		}
 	};
 }

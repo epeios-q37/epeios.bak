@@ -62,7 +62,8 @@ protected:
 	virtual muaacc::sRow MUAACCAuthenticate(
 		const str::dString &Username,
 		const str::dString &Password,
-		muaacc::lProvider &Provider ) override
+		muaacc::lProvider &Provider,
+		const char *Language ) override
 	{
 		sRow Row = qNIL;
 
@@ -87,7 +88,7 @@ protected:
 
 			Passwords_(Row).Init( Password );
 
-			if ( Accounts_.Add( Provider.Provide() ) != Row )
+			if ( Accounts_.Add( Provider.Provide( Language ) ) != Row )
 				qRGnr();
 		}
 

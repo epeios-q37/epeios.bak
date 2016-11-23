@@ -58,13 +58,14 @@ qRH
 	muaacc::sRow Account = qNIL;
 	bso::sBool New = false;
 qRB
+	BACKENDb;
 	STUFFb;
 	AUTHENTICATIONb;
 
 	const str::dString &Username = Request.StringIn();
 	const str::dString &Password = Request.StringIn();
 
-	Account = Authentication.Authenticate( Username, Password );
+	Account = Authentication.Authenticate( Username, Password, Backend.Language() );
 
 	if ( Account != qNIL )
 		Stuff.SetAccount( Account );

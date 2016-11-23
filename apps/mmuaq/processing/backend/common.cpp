@@ -93,22 +93,55 @@ namespace {
 				}
 			}
 
-			void CreateFolders_( muaacc::dAccount &Account )
+			namespace {
+				const str::dString &GetFolderName_(
+					const str::dString &Folder,
+					const char *Suffix,
+					str::dString &Name )
+				{
+					Name.Init( Folder );
+					Name.Append( ' ' );
+					Name.Append( Suffix );
+
+					return Name;
+				}
+			}
+
+#define F( name, parent ) Account.CreateFolder( GetFolderName_( Folder, name, Name), parent )
+
+			void CreateFolders_(
+				muaacc::dAccount &Account,
+				const char *Language )
 			{
-				muafld::sRow Folder1 = qNIL, Folder2 = qNIL;
+			qRH
+				muafld::sRow Folder1 = qNIL, Folder2 = qNIL, Folder1_1 = qNIL, Folder2_2 = qNIL;
+				str::wString Folder, Name;
+			qRB
+				Folder.Init();
+				scllocale::GetTranslation("DemoFolderLabel", Language, Folder );
 
-				Folder1 = Account.CreateFolder(str::wString("Folder 1"), qNIL );
-				Folder2 = Account.CreateFolder(str::wString("Folder 2"), qNIL );
+				Folder1 = F( "1", qNIL );
+				Folder2 = F( "2", qNIL );
 
-				Account.CreateFolder(str::wString("Folder 1.1"), Folder1 );
-				Account.CreateFolder(str::wString("Folder 1.2"), Folder1 );
+				Folder1_1 = F( "1.1", Folder1 );
+				F( "1.2", Folder1 );
+				F("1.1.1", Folder1_1 );
+				F("1.1.2", Folder1_1 );
 
-				Account.CreateFolder(str::wString("Folder 2.1"), Folder2 );
-				Account.CreateFolder(str::wString("Folder 2.2"), Folder2 );
+				F( "2.1", Folder2 );
+				Folder2_2 = F( "2.2", Folder2 );
+				F("2.2.1", Folder2_2 );
+				F("2.2.2", Folder2_2 );
+			qRR
+			qRT
+			qRE
 			}
 		}
+#undef F
 
-		void Fill( muaacc::dAccount &Account )
+		void Fill(
+			muaacc::dAccount &Account,
+			const char *Language )
 		{
 		qRH
 			str::wStrings Ids;
@@ -117,7 +150,7 @@ namespace {
 			sclmisc::GetValues( registry::definition::demo::agent::Id, Ids );
 
 			Fill_( Ids, Account );
-			CreateFolders_( Account );
+			CreateFolders_( Account, Language );
 		qRR
 		qRT
 		qRE
@@ -128,9 +161,11 @@ namespace {
 	: public cAccount_
 	{
 	protected:
-		virtual void MUAACCOnCreate( muaacc::dAccount &Account ) override
+		virtual void MUAACCOnCreate(
+			muaacc::dAccount &Account,
+			const char *Language ) override
 		{
-			fill_account_::Fill( Account );
+			fill_account_::Fill( Account, Language );
 		}
 	public:
 		void reset( bso::sBool = true )

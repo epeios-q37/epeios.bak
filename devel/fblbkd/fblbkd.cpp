@@ -694,16 +694,15 @@ qRB
 	Flow.Dismiss();
 
 	if ( RemoteBackendLabel[0] && strcmp( RemoteBackendLabel, _BackendLabel ) )
-		qRVct();	// Pas encore trait.
+		qRVct();	// Not already handled.
+
+	SetLanguage( Language );
 
 	if ( strcmp( RemoteProtocolVersion, FBLOVL_PROTOCOL_VERSION )
 		 || ( RemoteAPIVersion[0] && strcmp( RemoteAPIVersion, APIVersion ) ) ) {
 		Success = false;
 
-
 		Flow.Put( -1 );
-
-		SetLanguage( Language );
 
 		Translation.Init();
 		flw::PutString( _Locale->GetTranslation( MessageLabel, Language, Translation ).Convert( Buffer ), Flow );
