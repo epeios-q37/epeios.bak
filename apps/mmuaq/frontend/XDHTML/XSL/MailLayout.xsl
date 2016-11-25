@@ -6,7 +6,9 @@
 		<xsl:apply-templates select="*/Corpus"/>
 	</xsl:template>
 	<xsl:template match="Content">
-  <xsl:value-of select="Mail"/>
+  <div style="white-space: pre-wrap;">
+   <xsl:value-of select="Mail"/>
+  </div>
 	</xsl:template>
 	<xsl:template match="Corpus">
 	</xsl:template>

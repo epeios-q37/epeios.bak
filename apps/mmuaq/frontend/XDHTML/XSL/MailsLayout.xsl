@@ -6,11 +6,13 @@
   <xsl:apply-templates select="*/Corpus"/>
  </xsl:template>
  <xsl:template match="Content">
-  <xsl:apply-templates select="Mails"/>
+  <div>
+   <xsl:apply-templates select="Mails"/>
+  </div>
   <fieldset id="Mail"/>
  </xsl:template>
  <xsl:template match="Mails">
-  <table style="border: 1px solid black;">
+  <table style="border: 1px solid black; width: 100%;">
    <tr>
     <th>Subject</th>
    </tr>
