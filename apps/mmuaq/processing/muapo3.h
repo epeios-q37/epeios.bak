@@ -364,6 +364,19 @@ namespace muapo3 {
 		hBody &Body,
 		qRPD );
 
+
+	bso::sBool GetMessage(
+		sNumber Number,
+		fdr::rIODriver &Server,
+		hBody &Body,
+		qRPD );
+
+	bso::sBool GetMessage(
+		sNumber Number,
+		fdr::rIODriver &Server,
+		str::dString &Body,
+		qRPD );
+
 	typedef str::dString dUIDL;
 	typedef str::wString wUIDL;
 
@@ -436,6 +449,10 @@ namespace muapo3 {
 		return GetUIDLs( Server, Callback, qRP );
 	}
 
+	// If 0 is retuned, no corresponding message found.
+	sNumber GetNumberForUIDL(
+		const dUIDL &UIDL,
+		fdr::rIODriver &Server );
 }
 
 

@@ -188,6 +188,9 @@ namespace muaacc {
 			const muamel::dRows &Wanted,
 			str::dStrings &Subjects,
 			muamel::dRows &Available ) const;	// Returns only subjects now. Will return other fields in the future.
+		const str::dString &GetMail(
+			muamel::sRow MailRow,
+			str::dString &Mail ) const;
 	};
 
 	qW( Account );

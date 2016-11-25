@@ -142,6 +142,21 @@ qRT
 qRE
 }
 
+void frdinstc::rUser::DumpMail( xml::dWriter &Writer )
+{
+qRH
+	str::wString Content;
+qRB
+	if ( CurrentMail_ != UndefinedMail ) {
+		Content.Init();
+		Core_.GetMail( CurrentMail_, Content );
+		Writer.PutValue( Content, "Mail" );
+	}
+qRR
+qRT
+qRE
+}
+
 namespace dump_folders_ {
 	void Dump(
 		sFolder Folder,

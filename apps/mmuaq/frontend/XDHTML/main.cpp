@@ -29,8 +29,8 @@ using namespace main;
 
 namespace {
 	qCDEF( char *, XSLAffix_, "Main" );
-	qCDEF(char *, FoldersFrameId, "Folders" );
-	qCDEF(char *, MailsFrameId, "Mails" );
+	qCDEF(char *, FoldersFrameId_, "Folders" );
+	qCDEF(char *, MailsFrameId_, "Mails" );
 
 	void GetContext_(
 		core::rSession &Session,
@@ -92,8 +92,8 @@ qRB
 
 	SetCasting_( Session );
 
-	folders::SetLayout( FoldersFrameId, Session );
-	mails::SetLayout( MailsFrameId, Session );
+	folders::SetLayout( FoldersFrameId_, Session );
+	mails::SetLayout( MailsFrameId_, Session );
 
 	Session.SwitchTo( core::pMain );
 qRR
@@ -103,7 +103,7 @@ qRE
 
 void main::SetMailsLayout( core::rSession &Session )
 {
-	mails::SetLayout( MailsFrameId, Session );
+	mails::SetLayout( MailsFrameId_, Session );
 }
 
 #define AC( name ) BASE_AC( main, name )

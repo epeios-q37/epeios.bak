@@ -75,7 +75,7 @@ namespace muaagt {
 		{
 			tol::plug( AS, HostPort, Username, Password );
 		}
-		dAgent operator =(const dAgent &A)
+		dAgent &operator =(const dAgent &A)
 		{
 			S_.Protocol = A.S_.Protocol;
 			HostPort = A.HostPort;
@@ -260,11 +260,11 @@ namespace muaagt {
 		{
 			return tol::Search<sRow>( Name, MetaDatas );
 		}
+		void InitAndAuthenticate(
+			sRow Agent,
+			csdbnc::rIODriver &Driver ) const;
 	};
 
-	void InitAndAuthenticate(
-		const dAgent &Agent,
-		csdbnc::rIODriver &Driver );
 }
 
 #endif

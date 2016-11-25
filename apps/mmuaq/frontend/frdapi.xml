@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--                    DON'T MODIFY !!! !
-    This document was generated the 25/11/2016 10:27:29
+    This document was generated the 25/11/2016 17:17:26
     using barq V20161027 (http://q37.info/)
     Build : Nov 13 2016 17:38:12 (Win32;MSC 1800;IA-32)
 -->
@@ -23,14 +23,14 @@
   </Backend>
   <Software>MMUAq V1.0</Software>
   <Date>25/11/2016</Date>
-  <Time>10:27:29</Time>
+  <Time>17:17:26</Time>
  </Misc>
  <Types>
   <Type Object="Master">
    <ID>65535</ID>
    <Prefix Default="" Lower="" Upper=""/>
    <Name Raw="" Underscored="" Mixedcased=""/>
-   <Commands Amount="11">
+   <Commands Amount="12">
     <Command>
      <Name>LoadSetupOfId_1</Name>
      <ID>18</ID>
@@ -175,9 +175,45 @@
      </Parameters>
     </Command>
     <Command>
-     <Name>MUAGetMailsFields_1</Name>
+     <Name>MUAGetFolders_1</Name>
      <ID>26</ID>
-     <Parameters Amount="4" Position="27">
+     <Parameters Amount="3" Position="27">
+      <In>
+       <Parameter Discriminator="1" Type="Static">
+        <Name>id</Name>
+        <ID>21</ID>
+       </Parameter>
+      </In>
+      <Out>
+       <Parameter Discriminator="1" Position="Last" Type="Bunch">
+        <Name>ids</Name>
+        <ID>22</ID>
+       </Parameter>
+      </Out>
+     </Parameters>
+    </Command>
+    <Command>
+     <Name>MUAGetFoldersNames_1</Name>
+     <ID>27</ID>
+     <Parameters Amount="3" Position="30">
+      <In>
+       <Parameter Discriminator="1" Type="Bunch">
+        <Name>ids</Name>
+        <ID>22</ID>
+       </Parameter>
+      </In>
+      <Out>
+       <Parameter Discriminator="1" Position="Last" Type="Container">
+        <Name>strings</Name>
+        <ID>26</ID>
+       </Parameter>
+      </Out>
+     </Parameters>
+    </Command>
+    <Command>
+     <Name>MUAGetMailsFields_1</Name>
+     <ID>28</ID>
+     <Parameters Amount="4" Position="33">
       <In>
        <Parameter Discriminator="1" Type="Static">
         <Name>id</Name>
@@ -197,9 +233,9 @@
      </Parameters>
     </Command>
     <Command>
-     <Name>MUAGetFolders_1</Name>
-     <ID>27</ID>
-     <Parameters Amount="3" Position="31">
+     <Name>MUAGetMail_1</Name>
+     <ID>29</ID>
+     <Parameters Amount="3" Position="37">
       <In>
        <Parameter Discriminator="1" Type="Static">
         <Name>id</Name>
@@ -208,26 +244,8 @@
       </In>
       <Out>
        <Parameter Discriminator="1" Position="Last" Type="Bunch">
-        <Name>ids</Name>
-        <ID>22</ID>
-       </Parameter>
-      </Out>
-     </Parameters>
-    </Command>
-    <Command>
-     <Name>MUAGetFoldersNames_1</Name>
-     <ID>28</ID>
-     <Parameters Amount="3" Position="34">
-      <In>
-       <Parameter Discriminator="1" Type="Bunch">
-        <Name>ids</Name>
-        <ID>22</ID>
-       </Parameter>
-      </In>
-      <Out>
-       <Parameter Discriminator="1" Position="Last" Type="Container">
-        <Name>strings</Name>
-        <ID>26</ID>
+        <Name>string</Name>
+        <ID>25</ID>
        </Parameter>
       </Out>
      </Parameters>

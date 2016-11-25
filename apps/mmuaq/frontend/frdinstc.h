@@ -30,6 +30,7 @@ namespace frdinstc {
 
 	SCLF_I( Agent, Id);
 	SCLF_I( Folder, Id );
+	SCLF_I( Mail, Id );
 
 	using fbltyp::dString;
 	using fbltyp::dStrings;
@@ -145,6 +146,12 @@ namespace frdinstc {
 		{
 			S_().MUAGetMailsFields_1( *Folder, Ids, Subjects );
 		}
+		void GetMail(
+			sMail Mail,
+			str::dString &Content )
+		{
+			S_().MUAGetMail_1( **Mail, Content );
+		}
 		void GetFolders(
 			sFolder Folder,
 			dFolders &Folders )
@@ -167,12 +174,14 @@ namespace frdinstc {
 		bso::sBool AgentEdition_;
 		bso::sBool ShowAgentPassword_;
 		sFolder CurrentFolder_;
+		sMail CurrentMail_;
 	public:
 		void reset( bso::bool__ P = true )
 		{	
 			tol::reset( P, Core_, AgentEdition_, ShowAgentPassword_ );
 			CurrentAgent_ = UndefinedAgent;
 			CurrentFolder_ = UndefinedFolder;
+			CurrentMail_ = UndefinedMail;
 		}
 		E_CVDTOR( rUser );
 		void Init( frdfrntnd::rFrontend &Frontend )
@@ -183,6 +192,7 @@ namespace frdinstc {
 			CurrentAgent_ = UndefinedAgent;
 			AgentEdition_ = ShowAgentPassword_ = false;
 			CurrentFolder_ = UndefinedFolder;
+			CurrentMail_ = UndefinedMail;
 		}
 		str::string_ &ToUpper( str::string_ &String )
 		{
@@ -206,11 +216,16 @@ namespace frdinstc {
 		void DumpCurrentAgent( xml::dWriter &Writer );
 		// Write only attributes (only usable on a start tag).
 		void DumpMails( xml::dWriter &Writer );
+		void DumpMail( xml::dWriter &Writer );
 		void DumpFolders( xml::dWriter &Writer );
 		const str::dString &GetAgentStatus( str::dString &Status );
 		void SelectFolder( sFolder Folder )
 		{
 			CurrentFolder_ = Folder;
+		}
+		void SelectMail( sMail Mail )
+		{
+			CurrentMail_ = Mail;
 		}
 		void PutAgentStatusAttribute(
 			const char *Name,

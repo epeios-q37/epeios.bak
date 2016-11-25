@@ -26,6 +26,7 @@
 namespace {
 
 	qCDEF( char *, XSLAffix_, "Mails" );
+	qCDEF( char *, MailFrameId_, "Mail" );
 
 	void GetContext_(
 		core::rSession &Session,
@@ -103,10 +104,13 @@ qRE
 
 AC( SelectMail )
 {
-	str::wString Value;
+	frdinstc::sMail Mail = frdinstc::UndefinedMail;
 
-	Value.Init();
-	Session.AlertU( Session.GetContent( Id, Value ) );
+	Session.GetNumericalContent( Id, **Mail );
+
+	Session.User.SelectMail( Mail );
+
+	mail::SetLayout( MailFrameId_, Session );
 }
 
 

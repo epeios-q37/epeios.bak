@@ -6,6 +6,7 @@
 		<xsl:apply-templates select="*/Corpus"/>
 	</xsl:template>
 	<xsl:template match="Content">
+  <xsl:value-of select="Mail"/>
 	</xsl:template>
 	<xsl:template match="Corpus">
 	</xsl:template>

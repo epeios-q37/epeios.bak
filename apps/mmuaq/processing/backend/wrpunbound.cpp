@@ -281,20 +281,6 @@ qRT
 qRE
 }
 
-namespace agent_{
-	void InitAndAuthenticate(
-		const muaagt::dAgent &Agent,
-		csdbnc::rIODriver &Driver )
-	{
-		muaagt::InitAndAuthenticate( Agent, Driver );
-	}
-
-	void Quit( csdbnc::rIODriver &Driver )
-	{
-		muapo3::Quit( Driver );
-	}
-}
-
 DEC( GetFolders, 1 ) 
 {
 qRH
@@ -355,6 +341,24 @@ qRB
 	Account.GetFields( Wanted, Subjects, Available );
 
 	fbltyp::Convert( Available, Ids );
+qRR 
+qRT
+qRE
+}
+
+DEC( GetMail, 1 )
+{
+qRH
+	ACCOUNTh;
+qRB
+	ACCOUNTb;
+
+	muamel::sRow Mail = *Request.IdIn();
+
+	if ( !Account.Directory().Mails.Exists( Mail ) )
+		qRGnr();
+
+	Account.GetMail(Mail, Request.StringOut() );
 qRR 
 qRT
 qRE
@@ -422,6 +426,12 @@ void wrpunbound::Inform( fblbkd::backend___ &Backend )
 		fblbkd::cEnd,
 			fblbkd::cIds,		// Ids of the mails.
 			fblbkd::cStrings,	// Subjects of the mails.
+		fblbkd::cEnd );
+
+	Backend.Add( D( GetMail, 1 ),
+			fblbkd::cId,		// Mail id.
+		fblbkd::cEnd,
+			fblbkd::cString,	// Mail content.
 		fblbkd::cEnd );
 }
 

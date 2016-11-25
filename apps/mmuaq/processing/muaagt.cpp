@@ -23,13 +23,17 @@
 
 using namespace muaagt;
 
-void muaagt::InitAndAuthenticate(
-	const muaagt::dAgent &Agent,
-	csdbnc::rIODriver &Driver )
+void muaagt::dAgents::InitAndAuthenticate(
+	sRow AgentRow,
+	csdbnc::rIODriver &Driver ) const
 {
 qRH
-	qCBUFFERr( Buffer );
+	wAgent Agent;
+	qCBUFFERr Buffer;
 qRB
+	Agent.Init();
+	Core.Recall( AgentRow, Agent );
+
 	Driver.Init( Agent.HostPort.Convert( Buffer ), SCK_INFINITE, err::h_Default );
 
 	muapo3::Authenticate( Agent.Username, Agent.Password, Driver );

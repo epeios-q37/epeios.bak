@@ -107,8 +107,8 @@ namespace update_ {
 		}
 
 		void Update_(
-			muaagt::sRow AgentRow,
-			const muaagt::dAgent &Agent,
+			muaagt::sRow Agent,
+			const muaagt::dAgents &Agents,
 			muatrk::dTracker &Tracker,
 			muadir::dDirectory &Directory )
 		{
@@ -117,7 +117,7 @@ namespace update_ {
 			muapo3::wNumbers Numbers;
 			muapo3::wUIDLs UIDLs;
 		qRB
-			muaagt::InitAndAuthenticate( Agent, Driver );
+			Agents.InitAndAuthenticate( Agent, Driver );
 
 			tol::Init( Numbers, UIDLs );
 
@@ -125,7 +125,7 @@ namespace update_ {
 
 			muapo3::Quit( Driver );
 
-			Update_( AgentRow, UIDLs, Tracker, Directory );
+			Update_( Agent, UIDLs, Tracker, Directory );
 		qRR
 		qRT
 		qRE
@@ -140,7 +140,7 @@ namespace update_ {
 		muaagt::sRow Row = Agents.First();
 
 		while ( Row != qNIL ) {
-			Update_( Row, Agents.Core( Row ), Tracker, Directory );
+			Update_( Row, Agents, Tracker, Directory );
 
 			Row = Agents.Next( Row );
 		}
@@ -266,8 +266,8 @@ namespace get_fields_ {
 			void Get(
 				const dUIDLs &UIDLs,
 				const muamel::dRows &Wanted,
-				muaagt::sRow AgentRow,
-				const muaagt::dAgent &Agent,
+				muaagt::sRow Agent,
+				const muaagt::dAgents &Agents,
 				str::dStrings &Subjects,
 				muamel::dRows &Available )
 			{
@@ -275,7 +275,7 @@ namespace get_fields_ {
 				csdbnc::rIODriver Driver;
 				muapo3::wNumbers Numbers;
 			qRB
-				muaagt::InitAndAuthenticate( Agent, Driver );
+				Agents.InitAndAuthenticate( Agent, Driver );
 
 				tol::Init( Numbers );
 				u2n_::Get( UIDLs, Wanted, Driver, Numbers, Available );
@@ -294,7 +294,7 @@ namespace get_fields_ {
 			const muatrk::dTracker &Tracker,
 			const muamel::dRows &Wanted,
 			muaagt::sRow AgentRow,
-			const muaagt::dAgent &Agent,
+			const muaagt::dAgents &Agents,
 			str::dStrings &Subjects,
 			muamel::dRows &Available )
 		{
@@ -308,7 +308,7 @@ namespace get_fields_ {
 			UIDLs.Init();
 			Directory.GetIds( Owned, UIDLs );
 
-			u2s_::Get( UIDLs, Owned, AgentRow, Agent, Subjects, Available );
+			u2s_::Get( UIDLs, Owned, AgentRow, Agents, Subjects, Available );
 		qRR
 		qRT
 		qRE
@@ -326,7 +326,7 @@ namespace get_fields_ {
 		muaagt::sRow Row = Agents.First();
 
 		while ( Row != qNIL ) {
-			Get_( Directory, Tracker, Wanted, Row, Agents.Core( Row ), Subjects, Available );
+			Get_( Directory, Tracker, Wanted, Row, Agents, Subjects, Available );
 
 			Row = Agents.Next( Row);
 		}
@@ -340,5 +340,28 @@ void muaacc::dAccount::GetFields(
 	muamel::dRows &Available ) const
 {
 	return get_fields_::Get( Directory_, Tracker_, Wanted, Agents_, Subjects, Available ); 
+}
+
+const str::dString &muaacc::dAccount::GetMail(
+	muamel::sRow MailRow,
+	str::dString &Mail ) const
+{
+qRH
+	muaagt::sRow AgentRow = qNIL;
+	csdbnc::rIODriver Driver;
+	muapo3::sNumber Number = 0;
+qRB
+	Agents_.InitAndAuthenticate( Tracker_.GetMailAgent( MailRow ), Driver );
+
+	Number = muapo3::GetNumberForUIDL( Directory_.Mails( MailRow ).Id, Driver );
+
+	if ( Number == 0 )
+		qRGnr();
+
+	muapo3::GetMessage( Number, Driver, Mail );
+qRR
+qRT
+qRE
+	return Mail;
 }
 

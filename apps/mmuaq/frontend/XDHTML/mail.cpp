@@ -68,6 +68,8 @@ namespace {
 		base::rContentRack Rack;
 	qRB
 		Rack.Init( XSLAffix_, XML, Session );
+
+		Session.User.DumpMail( Rack );
 	qRR
 	qRT
 	qRE
@@ -103,3 +105,4 @@ AC( Template )
 {
 	Session.AlertT( "Template" );
 }
+

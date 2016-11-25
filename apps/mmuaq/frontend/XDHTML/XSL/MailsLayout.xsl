@@ -7,6 +7,7 @@
  </xsl:template>
  <xsl:template match="Content">
   <xsl:apply-templates select="Mails"/>
+  <fieldset id="Mail"/>
  </xsl:template>
  <xsl:template match="Mails">
   <table style="border: 1px solid black;">

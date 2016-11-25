@@ -481,6 +481,48 @@ bso::sBool muapo3::GetHeader(
 	return Success;
 }
 
+
+bso::sBool muapo3::GetMessage(
+	sNumber Number,
+	fdr::rIODriver &Server,
+	hBody &Body,
+	qRPN )
+{
+	bso::sBool Success = base::Retrieve( Number, Server, true, Body ).Boolean();
+
+	if ( !Success )
+		if ( qRPT )
+			qRGnr();
+
+	return Success;
+}
+
+bso::sBool muapo3::GetMessage(
+	sNumber Number,
+	fdr::rIODriver &Server,
+	str::dString &Message,
+	qRPN )
+{
+	bso::sBool Success = false;
+qRH
+	hBody Body;
+	flx::rStringODriver Driver;
+qRB
+	if ( !GetMessage( Number, Server, Body, qRP ) )
+		qRReturn;
+
+	Driver.Init( Message, fdr::ts_Default );
+
+	fdr::Copy(Body.GetDriver(),Driver );
+
+	Success = true;
+qRR
+qRT
+qRE
+	return Success;
+}
+
+
 namespace uidl_ {
 	namespace {
 		bso::sBool Extract_(
@@ -568,5 +610,59 @@ bso::sBool muapo3::GetUIDLs(
 
 	return false;	// To avoid a warning.
 }
+
+namespace get_number_for_uidl_{
+	class rCallback
+	: public cUIDL
+	{
+	private:
+		str::wString UIDL_;
+	protected:
+		virtual void MUAPO3OnUIDL(
+			sNumber Number,
+			const str::dString &UIDL ) override
+		{
+			if ( UIDL == UIDL_ )
+				if ( this->Number == 0 )
+					this->Number = Number;
+				else
+					qRGnr();
+		}
+	public:
+		sNumber Number;
+		void reset( bso::sBool P = true )
+		{
+			tol::reset( P, UIDL_);
+			Number = 0;
+		}
+		qCVDTOR( rCallback );
+		void Init( const str::dString &UIDL )
+		{
+			Number = 0;
+			UIDL_.Init( UIDL );
+		}
+	};
+}
+
+// If 0 is retuned, no corresponding message found.
+sNumber muapo3::GetNumberForUIDL(
+	const dUIDL &UIDL,
+	fdr::rIODriver &Server )
+{
+	sNumber Number = 0;
+qRH
+	get_number_for_uidl_::rCallback Callback;
+qRB
+	Callback.Init( UIDL );
+
+	GetUIDLs( Server, Callback );
+
+	Number = Callback.Number;
+qRR
+qRT
+qRE
+	return Number;
+}
+
 
 
