@@ -144,6 +144,8 @@ namespace lcl {
 		}
 	};
 
+	class meaning;
+
 	class meaning_ {
 	private:
 		_basic_ &_Basic( void )
@@ -168,6 +170,8 @@ namespace lcl {
 
 			return _GetBasic( S_.Basic, Basic );
 		}
+		void AddTag_( const str::string_ &Value );
+		void AddTag_( const meaning_ &Meaning );
 	public:
 		struct s {
 			brow__ Basic;
@@ -214,13 +218,33 @@ namespace lcl {
 		{
 			SetValue( str::string( Value ) );
 		}
-		void AddTag( const str::string_ &Value );
+		void AddTag( const meaning_ &Meaning )
+		{
+			AddTag_( Meaning );
+		}
+		// To avoid ambiguity with below templated method.
+		// Deported, because 'meaning' is not already known.
+		void AddTag( const meaning &Meaning );
+		void AddTag( const str::string_ &Value )
+		{
+			AddTag_( Value );
+		}
+		// To avoid ambiguity with below templated method.
+		void AddTag( const str::string &Value )
+		{
+			AddTag_( Value );
+		}
 		void AddTag( const ntvstr::string___ &Value );
 		void AddTag( const char *Value )
 		{
 			AddTag( str::string( Value ) );
 		}
-		void AddTag( const meaning_ &Meaning );
+		template <typename i> void AddTag( i I )
+		{
+			bso::bInteger Buffer;
+
+			AddTag( bso::Convert( I, Buffer ) );
+		}
 		const _basic_ &GetBasic( ctn::qCMITEMs( _basic_, brow__ ) &Basic ) const
 		{
 			return _Basic( Basic );

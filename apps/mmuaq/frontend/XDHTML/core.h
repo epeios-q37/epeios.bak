@@ -23,6 +23,9 @@
 # include "agent.h"
 # include "agents.h"
 # include "config.h"
+# include "folders.h"
+# include "mail.h"
+# include "mails.h"
 # include "global.h"
 # include "prolog.h"
 # include "login.h"
@@ -48,6 +51,9 @@ namespace core {
 		agent::Register();
 		agents::Register();
 		config::Register();
+		folders::Register();
+		mail::Register();
+		mails::Register();
 		global::Register();
 		prolog::Register();
 		login::Register();

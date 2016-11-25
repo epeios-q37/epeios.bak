@@ -37,9 +37,13 @@ namespace common {
 		mNotLoggedIn,
 		mAgentWithSuchNameExists,
 		mAgentNameCanNotBeEmpty,
-		mUnknownAgent,
 		mHostPortCanNotBeEmpty,
 		mUsernameCanNotBeEmpty,
+		mHostPortCanNotBeLongerAs,
+		mAgentNameCanNotBeLongerAs,
+		mUsernameCanNotBeLongerAs,
+		mPasswordCanNotBeLongerAs,
+		mUnknownAgent,
 		m_amount,
 		m_Undefined
 	};
@@ -110,10 +114,17 @@ namespace common {
 	muaacc::lAuthentication &Authentication( void );
 
 	muaacc::lAccounts &Accounts( void );
+
+	template <typename... tags> inline void ReportAndAbort(
+		eMessage Message,
+		const tags&... Tags )
+	{
+		return sclmisc::ReportAndAbort( common::GetLabel( Message ), Tags... );
+	}
 }
 
 // '##' needed by 'clang++'/'g++'.
-# define REPORT( message, ... ) sclmisc::ReportAndAbort( common::GetLabel( common::m##message ), ##__VA_ARGS__  )
+# define REPORT( message, ... ) common::ReportAndAbort( common::m##message, ##__VA_ARGS__  )
 
 # define BACKEND_ ( *(sclbacknd::rBackend *)BaseBackend.UP() )
 # define STUFF_ ( *(common::rStuff *)BACKEND_.Stuff() )

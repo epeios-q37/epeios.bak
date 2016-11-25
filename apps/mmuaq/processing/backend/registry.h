@@ -41,6 +41,14 @@ namespace registry {
 					TaggedPassword;
 			}
 		}
+
+		namespace limitation {
+			extern rEntry
+				AgentNameLength,
+				HostPortLength,
+				UsernameLength,
+				PasswordLength;
+		}
 	}
 }
 

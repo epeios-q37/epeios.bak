@@ -38,6 +38,7 @@
 
 namespace muaagt {
 	qROW( Row );	// Agent row.
+	qROWS( Row );
 
 	qENUM( Protocol ) {
 		pPOP3,
@@ -92,14 +93,56 @@ namespace muaagt {
 
 	qW( Agent );
 
-	namespace agent_ {
+	typedef str::dString dName;
+	typedef str::wString wName;
 
-		typedef lstcrt::qLCRATEd( dAgent, sRow ) dAgents;
+	class dMetaData {
+	public:
+		struct s {
+			dName::s Name;
+		} &S_;
+		dName Name;
+		dMetaData( s &S )
+		: S_( S ),
+		  Name( S.Name )
+		{}
+		void reset( bso::sBool P = true )
+		{
+			tol::reset( P, Name );
+		}
+		void plug( uys::sHook &Hook )
+		{
+			Name.plug( Hook );
+		}
+		void plug( qASd *AS )
+		{
+			tol::plug( AS, Name );
+		}
+		dMetaData &operator = (const dMetaData &MD)
+		{
+			Name = MD.Name;
 
-		typedef str::dString dName;
-		typedef lstcrt::qLMCRATEd( dName, sRow ) dNames;
-	}
+			return *this;
+		}
+		void Init( void )
+		{
+			tol::Init( Name );
+		}
+		void Init( const dName &Name )
+		{
+			this->Name.Init( Name );
+		}
+		// For the 'tol::Search(...)' function.
+		const str::dString &ID( void ) const
+		{
+			return Name;
+		}
+	};
 
+
+	typedef lstcrt::qLCRATEd( dAgent, sRow ) dAgents_;
+
+	typedef lstcrt::qLMCRATEd( dMetaData, sRow ) dMetaDatas;
 
 	class dAgents {
 	private:
@@ -132,47 +175,55 @@ namespace muaagt {
 		}
 	public:
 		struct s {
-			agent_::dAgents::s Core;
-			agent_::dNames::s Names;
+			dAgents_::s Core;
+			dMetaDatas::s MetaDatas;
 		};
-		agent_::dAgents Core;
-		agent_::dNames Names;
+		dAgents_ Core;
+		dMetaDatas MetaDatas;
 		dAgents( s &S )
 		: Core( S.Core ),
-		  Names( S.Names )
+		  MetaDatas( S.MetaDatas )
 		{}
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, Core, Names );
+			tol::reset( P, Core, MetaDatas );
 		}
 		void plug( qASd *AS )
 		{
-			tol::plug( AS, Core, Names );
+			tol::plug( AS, Core, MetaDatas );
 		}
 		dAgents &operator =(const dAgents &A)
 		{
 			Core = A.Core;
-			Names = A.Names;
+			MetaDatas = A.MetaDatas;
 
 			return *this;
 		}
 		void Init( void )
 		{
-			tol::Init( Core, Names );
+			tol::Init( Core, MetaDatas );
 		}
-		qNAV( Names., sRow );
+		const str::dString &GetName(
+			sRow Agent,
+			str::dString &Name ) const
+		{
+			Name.Append( MetaDatas( Agent ).Name );
+
+			return Name;
+		}
+		qNAV( Core., sRow );
 		sRow New(
 			const str::dString &Name,
 			const str::dString &HostPort,
 			const str::dString &Username,
 			const str::dString &Password )
 		{
-			sRow Row = Names.New();
+			sRow Row = MetaDatas.New();
 
 			if ( Row != Core.New() )
 				qRGnr();
 
-			Names( Row ).Init( Name );
+			MetaDatas( Row ).Init( Name );
 
 			Init_( Core( Row ), HostPort, Username, Password );
 
@@ -188,7 +239,7 @@ namespace muaagt {
 			if ( !Exists( Row ) )
 				qRGnr();
 
-			Names( Row ) = Name;
+			MetaDatas( Row ).Init( Name );
 			Set_( Core( Row ), HostPort, Username, Password );
 
 		}
@@ -201,13 +252,13 @@ namespace muaagt {
 			if ( !Exists( Row ) )
 				qRGnr();
 
-			Names( Row ) = Name ;
+			MetaDatas( Row ).Init( Name );
 			Set_( Core( Row ), HostPort, Username );
 
 		}
 		sRow Search( const str::dString &Name ) const
 		{
-			return crt::Search( Name, Names );
+			return tol::Search<sRow>( Name, MetaDatas );
 		}
 	};
 

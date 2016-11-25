@@ -165,7 +165,7 @@ void lcl::meaning_::SetValue( const str::string_ &Value )
 	Core.Basics.Flush();
 }
 
-void lcl::meaning_::AddTag( const str::string_ &Value )
+void lcl::meaning_::AddTag_( const str::string_ &Value )
 {
 #if 1
 	brow__ Row = NewBasic_( Value, false, true,  Core );
@@ -189,9 +189,7 @@ qRT
 qRE
 }
 
-
-
-void lcl::meaning_::AddTag( const meaning_ &Meaning )
+void lcl::meaning_::AddTag_( const meaning_ &Meaning )
 {
 #if 1
 	brow__ Row = NewBasic_( Meaning, true, Core );
@@ -201,6 +199,11 @@ void lcl::meaning_::AddTag( const meaning_ &Meaning )
 #endif
 
 	Core.Basics.Flush();
+}
+
+void lcl::meaning_::AddTag( const meaning &Meaning )
+{
+	AddTag_( Meaning );
 }
 
 void lcl::locale_::_GetCorrespondingLabels(

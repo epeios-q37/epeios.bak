@@ -132,6 +132,10 @@ namespace muafld {
 			Folders( S_.Root ).Init( str::wString() );
 			dTree_::Allocate( 1 );
 		}
+		bso::sBool Exists( sRow Row ) const
+		{
+			return Folders.Exists( Row );
+		}
 		const str::dString &GetName(
 			sRow Row,
 			str::dString &Name ) const

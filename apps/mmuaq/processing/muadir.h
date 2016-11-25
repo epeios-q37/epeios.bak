@@ -91,6 +91,10 @@ namespace muadir {
 
 			S_.Inbox = Folders.CreateChild( str::wString(), qNIL );
 		}
+		bso::sBool Exists( muafld::sRow Folder ) const
+		{
+			return Folders.Exists( Folder );
+		}
 		muafld::sRow CreateFolder(
 			const str::dString &Name,
 			muafld::sRow Parent )
@@ -122,11 +126,55 @@ namespace muadir {
 
 			F2M( S_.Inbox ).Add( Row );
 			F2M.Flush();
+
+			return Row;
+		}
+		void Remove( muamel::sRow Mail )
+		{
+			muafld::sRow Folder = M2F( Mail );
+
+			if ( Folder == qNIL )
+				qRGnr();	// A mail should not be removed twice.
+
+			if ( !F2M(Folder).Remove( Mail ) )
+				qRGnr();
+
+			M2F.Store( qNIL, Mail );
+
+			Mails.Remove( Mail );
 		}
 		void GetFoldersNames(
 			const muafld::dRows &Folders,
 			str::dStrings &Names ) const;
+		muamel::dRows &GetMails(
+			muafld::sRow Folder,
+			muamel::dRows &Mails ) const
+		{
+			F2M.Recall( Folder, Mails);
+
+			return Mails;
+		}
 		void GetAllMails( muamel::dRows &Rows ) const;
+		muamel::sRow Search(
+			const str::dString &Id,
+			const muamel::dRows &Rows ) const
+		{
+			return muamel::Search( Id, Rows, Mails );
+		}
+		const str::dStrings &GetIds(
+			const muamel::dRows &Rows,
+			str::dStrings &Ids ) const
+		{
+			sdr::sRow Row = Rows.First();
+
+			while ( Row != qNIL ) {
+				Ids.Add( Mails( Rows( Row ) ).Id );
+
+				Row = Rows.Next( Row );
+			}
+
+			return Ids;
+		}
 	};
 
 	qW( Directory );

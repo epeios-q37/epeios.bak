@@ -139,10 +139,11 @@ namespace frdinstc {
 			S_().MUAUpdateAgent_1( *Agent, Name, HostPort, Username, PasswordIsSet, Password, *Agent );
 		}
 		void GetMailsFields(
+			sFolder Folder,
 			fbltyp::dIds &Ids,
 			dStrings &Subjects )
 		{
-			S_().MUAGetMailsFields_1( Ids, Subjects );
+			S_().MUAGetMailsFields_1( *Folder, Ids, Subjects );
 		}
 		void GetFolders(
 			sFolder Folder,
@@ -165,11 +166,13 @@ namespace frdinstc {
 		sAgent CurrentAgent_;
 		bso::sBool AgentEdition_;
 		bso::sBool ShowAgentPassword_;
+		sFolder CurrentFolder_;
 	public:
 		void reset( bso::bool__ P = true )
 		{	
 			tol::reset( P, Core_, AgentEdition_, ShowAgentPassword_ );
 			CurrentAgent_ = UndefinedAgent;
+			CurrentFolder_ = UndefinedFolder;
 		}
 		E_CVDTOR( rUser );
 		void Init( frdfrntnd::rFrontend &Frontend )
@@ -179,6 +182,7 @@ namespace frdinstc {
 
 			CurrentAgent_ = UndefinedAgent;
 			AgentEdition_ = ShowAgentPassword_ = false;
+			CurrentFolder_ = UndefinedFolder;
 		}
 		str::string_ &ToUpper( str::string_ &String )
 		{
@@ -204,6 +208,10 @@ namespace frdinstc {
 		void DumpMails( xml::dWriter &Writer );
 		void DumpFolders( xml::dWriter &Writer );
 		const str::dString &GetAgentStatus( str::dString &Status );
+		void SelectFolder( sFolder Folder )
+		{
+			CurrentFolder_ = Folder;
+		}
 		void PutAgentStatusAttribute(
 			const char *Name,
 			xml::dWriter &Writer );

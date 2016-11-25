@@ -21,6 +21,7 @@
 
 #include "core.h"
 #include "folders.h"
+#include "mails.h"
 #include "registry.h"
 #include "sclfrntnd.h"
 
@@ -29,6 +30,7 @@ using namespace main;
 namespace {
 	qCDEF( char *, XSLAffix_, "Main" );
 	qCDEF(char *, FoldersFrameId, "Folders" );
+	qCDEF(char *, MailsFrameId, "Mails" );
 
 	void GetContext_(
 		core::rSession &Session,
@@ -91,11 +93,17 @@ qRB
 	SetCasting_( Session );
 
 	folders::SetLayout( FoldersFrameId, Session );
+	mails::SetLayout( MailsFrameId, Session );
 
 	Session.SwitchTo( core::pMain );
 qRR
 qRT
 qRE
+}
+
+void main::SetMailsLayout( core::rSession &Session )
+{
+	mails::SetLayout( MailsFrameId, Session );
 }
 
 #define AC( name ) BASE_AC( main, name )
@@ -104,16 +112,3 @@ AC( Configuration )
 {
 	config::SetLayout( Session );
 }
-
-AC( SelectFolder )
-{
-qRH
-	str::wString Value;
-qRB
-	Value.Init();
-	Session.AlertU( Session.GetContent( Id, Value ) );
-qRR
-qRT
-qRE
-}
-

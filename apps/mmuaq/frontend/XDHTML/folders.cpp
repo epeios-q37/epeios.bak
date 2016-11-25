@@ -101,8 +101,12 @@ qRE
 
 #define AC( name ) BASE_AC( folders, name )
 
-AC( Template )
+AC( SelectFolder )
 {
-	Session.AlertT( "Template" );
-}
+	frdinstc::sFolder Folder = frdinstc::UndefinedFolder;
+	Session.GetNumericalContent( Id, **Folder );
 
+	Session.User.SelectFolder( Folder );
+
+	main::SetMailsLayout( Session );
+}

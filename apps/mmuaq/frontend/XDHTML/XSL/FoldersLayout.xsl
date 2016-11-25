@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet	version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xpp="http://q37.info/ns/xpp/">
-	<xsl:output method="html" encoding="UTF-8"/>
+ <xsl:output method="html" encoding="UTF-8"/>
  <!-- Functions -->
  <xsl:template name="FolderName">
   <xsl:choose>
@@ -14,16 +14,16 @@
  </xsl:template>
  <!-- Templates -->
  <xsl:template match="/">
-		<xsl:apply-templates select="*/Content"/>
-		<xsl:apply-templates select="*/Corpus"/>
-	</xsl:template>
-	<xsl:template match="Content">
+  <xsl:apply-templates select="*/Content"/>
+  <xsl:apply-templates select="*/Corpus"/>
+ </xsl:template>
+ <xsl:template match="Content">
   <div class="css-treeview">
    <xsl:apply-templates select="Folders"/>
   </div>
  </xsl:template>
-	<xsl:template match="Corpus">
-	</xsl:template>
+ <xsl:template match="Corpus">
+ </xsl:template>
  <xsl:template match="Folders">
   <ul>
    <xsl:apply-templates select="Folder"/>
@@ -40,10 +40,11 @@
       </xsl:attribute>
      </input>
      <label data-xdh-onevent="SelectFolder">
-      <xsl:attribute name="for">
-       <xsl:text>Folder-</xsl:text>
-       <xsl:value-of select="@id"/>
+      <xsl:if test="@id=../@Current">
+       <xsl:attribute name="style">
+       <xsl:text>font-style: italic;</xsl:text>
       </xsl:attribute>
+      </xsl:if>
       <xsl:attribute name="data-xdh-content">
        <xsl:value-of select="@id"/>
       </xsl:attribute>

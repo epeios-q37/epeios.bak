@@ -103,4 +103,3 @@ AC( Template )
 {
 	Session.AlertT( "Template" );
 }
-

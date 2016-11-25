@@ -133,7 +133,8 @@ qRH
 qRB
 	tol::Init( Ids, Subjects );
 
-	Core_.GetMailsFields( Ids, Subjects );
+	if ( CurrentFolder_ != UndefinedFolder )
+		Core_.GetMailsFields( CurrentFolder_, Ids, Subjects );
 
 	dump_mails_::Dump( Ids, Subjects, Writer );
 qRR

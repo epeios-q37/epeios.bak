@@ -367,6 +367,9 @@ namespace muapo3 {
 	typedef str::dString dUIDL;
 	typedef str::wString wUIDL;
 
+	typedef str::dStrings dUIDLs;
+	typedef str::wStrings wUIDLs;
+
 	class cUIDL {
 	protected:
 		virtual void MUAPO3OnUIDL(
@@ -390,9 +393,6 @@ namespace muapo3 {
 
 	typedef bch::qBUNCHdl( sNumber ) dNumbers;
 	qW( Numbers );
-
-	typedef crt::qCRATEdl( dUIDL ) dUIDLs;
-	qW( UIDLs);
 
 	class sDefaultUIDLCallback
 	: public cUIDL

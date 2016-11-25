@@ -34,22 +34,12 @@ namespace update_ {
 		typedef bch::qBUNCHdl( muamel::sRow ) dMRows;
 		qW( MRows );
 
-		bso::sBool Exists(
-			muamel::sRow Mail,
-			const dMRows &Mails )
-		{
-			sdr::sRow Row = Mails.First();
-
-			while ( ( Row != qNIL ) && ( Mails( Row ) != Mail ) )
-				Row = Mails.Next( Row );
-
-			return Row != qNIL;
-		}
-
 		void Add_(
 			muaagt::sRow Agent,
 			const muapo3::dUIDLs &Ids,
-			muamel::dMails &Mails,
+			const muamel::dRows &Mails,
+			muatrk::dTracker &Tracker,
+			muadir::dDirectory &Directory,
 			dMRows &Rows )
 		{
 		qRH
@@ -59,8 +49,10 @@ namespace update_ {
 			Row = Ids.First();
 
 			while ( Row != qNIL ) {
-				if ( ( Mail = muamel::Search( Agent, Ids( Row ), Mails ) ) == qNIL  )
-					Mail = muamel::Add( Agent, Ids( Row ), Mails );
+				if ( ( Mail = Directory.Search( Ids( Row ), Mails ) ) == qNIL ) {
+					Mail = Directory.AddMail(Ids( Row ) );
+					Tracker.Link( Mail, Agent );
+				}
 
 				Rows.Add( Mail );
 
@@ -73,16 +65,21 @@ namespace update_ {
 
 		void Remove_(
 			muaagt::sRow AgentRow,
-			const dMRows &Rows,
-			muamel::dMails &Mails )
+			const dMRows &New,
+			const muamel::dRows &Old,
+			muatrk::dTracker &Tracker,
+			muadir::dDirectory &Directory )
 		{
-			muamel::sRow Row = Mails.First(), Next = qNIL;
+			sdr::sRow Row = Old.First(), Next = qNIL;
+			muamel::sRow Mail = qNIL;
 
 			while ( Row != qNIL ) {
-				Next = Mails.Next( Row );
+				Next = Old.Next( Row );
 
-				if ( ( Mails( Row ).Agent() == AgentRow ) && !Exists( Row, Rows ) )
-					Mails.Remove( Row );
+				if ( New.Search(Mail = Old(Row)) == qNIL ) {
+					Directory.Remove( Mail );
+					Tracker.Remove( Mail );
+				}
 
 				Row = Next;
 			}
@@ -91,16 +88,19 @@ namespace update_ {
 		void Update_(
 			muaagt::sRow Agent,
 			const muapo3::dUIDLs &Ids,
-			muamel::dMails &Mails )
+			muatrk::dTracker &Tracker,
+			muadir::dDirectory &Directory )
 		{
 		qRH
-			wMRows Rows;
+			wMRows New, Old;
 		qRB
-			Rows.Init();
+			Old.Init();
+			Tracker.GetMails( Agent, Old );
 
-			Add_( Agent, Ids, Mails, Rows );
+			New.Init();
+			Add_( Agent, Ids, Old, Tracker, Directory, New );
 
-			Remove_( Agent, Rows, Mails );
+			Remove_( Agent, New, Old, Tracker, Directory );
 		qRR
 		qRT
 		qRE
@@ -109,7 +109,8 @@ namespace update_ {
 		void Update_(
 			muaagt::sRow AgentRow,
 			const muaagt::dAgent &Agent,
-			muamel::dMails &Mails )
+			muatrk::dTracker &Tracker,
+			muadir::dDirectory &Directory )
 		{
 		qRH
 			csdbnc::rIODriver Driver;
@@ -124,7 +125,7 @@ namespace update_ {
 
 			muapo3::Quit( Driver );
 
-			Update_( AgentRow, UIDLs, Mails);
+			Update_( AgentRow, UIDLs, Tracker, Directory );
 		qRR
 		qRT
 		qRE
@@ -133,12 +134,13 @@ namespace update_ {
 
 	void Update(
 		const muaagt::dAgents &Agents,
-		muamel::dMails &Mails )
+		muatrk::dTracker &Tracker,
+		muadir::dDirectory &Directory )
 	{
 		muaagt::sRow Row = Agents.First();
 
 		while ( Row != qNIL ) {
-			Update_( Row, Agents.Core( Row ), Mails );
+			Update_( Row, Agents.Core( Row ), Tracker, Directory );
 
 			Row = Agents.Next( Row );
 		}
@@ -148,7 +150,7 @@ namespace update_ {
 
 void muaacc::dAccount::Update( void )
 {
-	update_::Update( Agents, Mails );
+	update_::Update( Agents_, Tracker_, Directory_ );
 }
 
 namespace get_fields_ {
@@ -156,29 +158,6 @@ namespace get_fields_ {
 		using muapo3::sNumber;
 		using muapo3::dNumbers;
 		using muapo3::dUIDLs;
-
-		// _m_ails to _U_IDLs
-		namespace m2u_ {
-			void Get(
-				muaagt::sRow Agent,
-				const muamel::dMails &Mails,
-				const muamel::dRows &Wanted,
-				dUIDLs &UIDLs,
-				muamel::dRows &Owned )	// Mails owned by agent.
-			{
-				sdr::sRow Row = Wanted.First();
-				muamel::sRow MRow = qNIL;
-
-				while ( Row != qNIL ) {
-					if ( Mails( MRow = Wanted( Row ) ).Agent() == Agent ) {
-						UIDLs.Add( Mails( MRow ).Id );
-						Owned.Append( MRow );
-					}
-
-					Row = Wanted.Next( Row );
-				}
-			}
-		}
 
 		// _U_IDLs to _S_ubjects
 		namespace u2s_ {
@@ -311,7 +290,8 @@ namespace get_fields_ {
 		}
 		
 		void Get_(
-			const muamel::dMails &Mails,
+			const muadir::dDirectory &Directory,
+			const muatrk::dTracker &Tracker,
 			const muamel::dRows &Wanted,
 			muaagt::sRow AgentRow,
 			const muaagt::dAgent &Agent,
@@ -319,14 +299,14 @@ namespace get_fields_ {
 			muamel::dRows &Available )
 		{
 		qRH
-			csdbnc::rIODriver Driver;
 			muapo3::wUIDLs UIDLs;
 			muamel::wRows Owned;
 		qRB
-			tol::Init( UIDLs, Owned );	// Owned by agent.
-			m2u_::Get( AgentRow, Mails, Wanted, UIDLs, Owned );
+			Owned.Init();
+			Tracker.FilterOutMails( Wanted, AgentRow, Owned );
 
-			muaagt::InitAndAuthenticate( Agent, Driver );
+			UIDLs.Init();
+			Directory.GetIds( Owned, UIDLs );
 
 			u2s_::Get( UIDLs, Owned, AgentRow, Agent, Subjects, Available );
 		qRR
@@ -336,7 +316,8 @@ namespace get_fields_ {
 	}
 
 	void Get(
-		const muamel::dMails &Mails,
+		const muadir::dDirectory &Directory,
+		const muatrk::dTracker &Tracker,
 		const muamel::dRows &Wanted,
 		const muaagt::dAgents &Agents,
 		str::dStrings &Subjects,
@@ -345,7 +326,7 @@ namespace get_fields_ {
 		muaagt::sRow Row = Agents.First();
 
 		while ( Row != qNIL ) {
-			Get_( Mails, Wanted, Row, Agents.Core( Row ), Subjects, Available );
+			Get_( Directory, Tracker, Wanted, Row, Agents.Core( Row ), Subjects, Available );
 
 			Row = Agents.Next( Row);
 		}
@@ -358,6 +339,6 @@ void muaacc::dAccount::GetFields(
 	str::dStrings &Subjects,
 	muamel::dRows &Available ) const
 {
-	return get_fields_::Get( Mails, Wanted, Agents, Subjects, Available ); 
+	return get_fields_::Get( Directory_, Tracker_, Wanted, Agents_, Subjects, Available ); 
 }
 

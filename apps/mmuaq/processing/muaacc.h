@@ -26,9 +26,10 @@
 #	define MUAXMP__DBG
 # endif
 
+# include "muaagt.h"
 # include "muabsc.h"
 # include "muadir.h"
-# include "muaagt.h"
+# include "muatrk.h"
 
 # include "bitbch.h"
 # include "lck.h"
@@ -102,44 +103,85 @@ namespace muaacc {
 		}
 	};
 
-	// Link from mail to agent.
-	typedef bch::qBUNCHd( muaagt::sRow, muamel::sRow ) dM2A_;
-
 	class dAccount
 	{
+	private:
+		muadir::dDirectory Directory_;
+		muaagt::dAgents Agents_;
+		muatrk::dTracker Tracker_;
 	public:
 		struct s {
 			muadir::dDirectory::s Directory;
 			muaagt::dAgents::s Agents;
-			dM2A_::s M2A;
+			muatrk::dTracker::s Tracker;
 		};
-		muadir::dDirectory Directory;
-		muaagt::dAgents Agents;
-		dM2A_ M2A;
 		dAccount( s &S )
-		: Directory( S.Directory ),
-		  Agents( S.Agents ),
-		  M2A( S.M2A )
+		: Directory_( S.Directory ),
+		  Agents_( S.Agents ),
+		  Tracker_( S.Tracker )
 		{}
 		void reset( bso::bool__ P = true )
 		{
-			tol::reset( P, Directory, Agents, M2A );
+			tol::reset( P, Directory_, Agents_, Tracker_ );
 		}
 		void plug( qASd *AS )
 		{
-			tol::plug( AS, Directory, Agents, M2A );
+			tol::plug( AS, Directory_, Agents_, Tracker_ );
 		}
 		dAccount &operator =( const dAccount &A )
 		{
-			Directory = A.Directory;
-			Agents = A.Agents;
-			M2A = A.M2A;
+			Directory_ = A.Directory_;
+			Agents_ = A.Agents_;
+			Tracker_ = A.Tracker_;
 
 			return *this;
 		}
 		void Init( void )
 		{
-			tol::Init( Directory, Agents, M2A );
+			tol::Init( Directory_, Agents_, Tracker_ );
+		}
+		const muaagt::dAgents &Agents( void ) const
+		{
+			return Agents_;
+		}
+		const muadir::dDirectory &Directory( void ) const
+		{
+			return Directory_;
+		}
+		muaagt::sRow NewAgent(
+			const str::dString &Name,
+			const str::dString &HostPort,
+			const str::dString &Username,
+			const str::dString &Password )
+		{
+			muaagt::sRow Agent = Agents_.New( Name, HostPort, Username, Password );
+
+			Tracker_.NewAgent( Agent );
+
+			return Agent;
+		}
+		void UpdateAgent(
+			muaagt::sRow Agent,
+			const str::dString &Name,
+			const str::dString &HostPort,
+			const str::dString &Username,
+			const str::dString &Password )
+		{
+			return Agents_.Update( Agent, Name, HostPort, Username, Password );
+		}
+		void UpdateAgent(
+			muaagt::sRow Agent,
+			const str::dString &Name,
+			const str::dString &HostPort,
+			const str::dString &Username )
+		{
+			return Agents_.Update( Agent, Name, HostPort, Username );
+		}
+		muafld::sRow CreateFolder(
+			const str::dString &Name,
+			muafld::sRow Parent )
+		{
+			return Directory_.CreateFolder( Name, Parent );
 		}
 		void Update( void );	// Updates the mail with the content on the different agent.
 		void GetFields(

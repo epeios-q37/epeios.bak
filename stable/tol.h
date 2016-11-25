@@ -2209,6 +2209,21 @@ namespace tol {
 	bso::sBool GetEnv(
 		const str::dString &Name,
 		str::dString &Value );
+
+	template <typename row, typename container> inline row Search(
+		const str::dString &ID,
+		const container &Container )
+	{
+		row Row = Container.First();
+
+		// '-1' because 'qNIL' is not available.
+		while ( ( Row != (row)-1 ) && ( Container( Row ).ID() != ID ) )
+			Row = Container.Next( Row );
+
+		return Row;
+	}
+
+
 }
 
 

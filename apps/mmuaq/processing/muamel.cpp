@@ -21,3 +21,18 @@
 
 using namespace muamel;
 
+sRow muamel::Search(
+	const str::dString &Id,
+	const dRows &Rows,
+	const dMails &Mails )
+{
+	sdr::sRow Row = Rows.First();
+
+	while ( ( Row != qNIL ) && ( Mails( Rows( Row ) ).Id != Id ))
+		Row = Rows.Next( Row );
+
+	if ( Row != qNIL )
+		return Rows( Row );
+	else
+		return qNIL;
+}

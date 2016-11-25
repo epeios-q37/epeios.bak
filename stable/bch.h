@@ -447,6 +447,16 @@ namespace bch {
 
 			Allouer_( this->Amount() - Amount, aem::m_Default );
 		}
+		bso::sBool Remove( const type &Object )
+		{
+			row Row = Search( Object );
+
+			if ( Row != qNIL ) {
+				Remove( Row );
+				return true;
+			} else
+				return false;
+		}
 		//f Return the row of the first of 'Amount' new object.
 		row New( sdr::size__ Amount = 1 )
 		{

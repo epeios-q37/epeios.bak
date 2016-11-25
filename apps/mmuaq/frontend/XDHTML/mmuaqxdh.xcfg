@@ -86,6 +86,26 @@
        <xpp:bloc>FoldersCasting.xsl</xpp:bloc>
       </Casting>
      </XSLFiles>
+     <XSLFiles target="Mail">
+      <Layout>
+       <xpp:expand select="XSLRootDir"/>
+       <xpp:bloc>MailLayout.xsl</xpp:bloc>
+      </Layout>
+      <Casting>
+       <xpp:expand select="XSLRootDir"/>
+       <xpp:bloc>MailCasting.xsl</xpp:bloc>
+      </Casting>
+     </XSLFiles>
+     <XSLFiles target="Mails">
+      <Layout>
+       <xpp:expand select="XSLRootDir"/>
+       <xpp:bloc>MailsLayout.xsl</xpp:bloc>
+      </Layout>
+      <Casting>
+       <xpp:expand select="XSLRootDir"/>
+       <xpp:bloc>MailsCasting.xsl</xpp:bloc>
+      </Casting>
+     </XSLFiles>
      <XSLFiles target="Prolog">
 						<Layout>
 							<xpp:expand select="XSLRootDir"/>
@@ -146,6 +166,8 @@
    <xpp:expand href="XSL/AgentLocale.xml"/>
    <xpp:expand href="XSL/AgentsLocale.xml"/>
    <xpp:expand href="XSL/FoldersLocale.xml"/>
+   <xpp:expand href="XSL/MailLocale.xml"/>
+   <xpp:expand href="XSL/MailsLocale.xml"/>
    <xpp:expand href="XSL/ConfigLocale.xml"/>
    <xpp:expand href="XSL/MainLocale.xml"/>
   </Locale>

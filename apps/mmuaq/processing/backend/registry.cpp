@@ -21,17 +21,28 @@
 
 using namespace registry;
 
-namespace  {
-	rEntry Demo_("Demo", Definitions );
+namespace definition_ {
+	namespace {
+		rEntry Demo_("Demo", Definitions );
+	}
+
+	namespace demo {
+		rEntry Agents( "Agents", Demo_ );
+		rEntry FreeAgent( "Agent", Agents );
+		rEntry TaggedAgent( RGSTRY_TAGGING_ATTRIBUTE("id"), FreeAgent );
+	}
 }
 
-namespace demo_ {
-	rEntry Agents( "Agents", Demo_ );
-	rEntry FreeAgent( "Agent", Agents );
-	rEntry TaggedAgent( RGSTRY_TAGGING_ATTRIBUTE("id"), FreeAgent );
+rEntry registry::definition::demo::agent::Id( "@id", definition_::demo::FreeAgent );
+rEntry registry::definition::demo::agent::TaggedHostPort( "HostPort", definition_::demo::TaggedAgent );
+rEntry registry::definition::demo::agent::TaggedUsername( "Username", definition_::demo::TaggedAgent );
+rEntry registry::definition::demo::agent::TaggedPassword( "Password", definition_::demo::TaggedAgent );
+
+namespace definition_ {
+	rEntry Limitations("Limitations", Definitions );
 }
 
-rEntry registry::definition::demo::agent::Id( "@id", demo_::FreeAgent );
-rEntry registry::definition::demo::agent::TaggedHostPort( "HostPort", demo_::TaggedAgent );
-rEntry registry::definition::demo::agent::TaggedUsername( "Username", demo_::TaggedAgent );
-rEntry registry::definition::demo::agent::TaggedPassword( "Password", demo_::TaggedAgent );
+rEntry registry::definition::limitation::AgentNameLength( "AgentNameLength", definition_::Limitations );
+rEntry registry::definition::limitation::HostPortLength( "HostPortLength", definition_::Limitations );
+rEntry registry::definition::limitation::UsernameLength( "UsernameLength", definition_::Limitations );
+rEntry registry::definition::limitation::PasswordLength( "Length", definition_::Limitations );

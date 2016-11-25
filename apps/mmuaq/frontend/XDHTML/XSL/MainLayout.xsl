@@ -21,25 +21,16 @@
       </li>
      </ul>
     </div-->
-    <fieldset id="Folders"/>
-    <xsl:apply-templates select="Mails"/>
+    <fieldset>
+     <fieldset>
+      <div style="display: flex; flex-direction: row;">
+       <fieldset id="Folders"/>
+       <fieldset id="Mails"/>
+     </div>
+     </fieldset>
      <button title="#mainConfigTitle#" data-xdh-onevent="Configuration">#mainConfig#</button>
+    </fieldset>
    </span>
   </span>
- </xsl:template>
- <xsl:template match="Mails">
-  <table style="border: 1px solid black;">
-   <tr>
-    <th>Subject</th>
-   </tr>
-   <xsl:apply-templates select="Mail"/>
-  </table>
- </xsl:template>
- <xsl:template match="Mail">
-  <tr>
-   <td>
-    <xsl:value-of select="@Subject"/>
-   </td>
-  </tr>
  </xsl:template>
 </xsl:stylesheet>

@@ -35,6 +35,7 @@
 # include "bch.h"
 # include "cpe.h"
 # include "ctn.h"
+# include "crt.h"
 
 /*************************/
 /****** New version ******/
@@ -650,6 +651,11 @@ namespace str {
 		const ctn::mono_container_<str::string_,row> &Strings )
 	{
 		return ctn::Search<row, string_>( String, Strings );
+	}
+
+	inline sdr::sRow NewAndInit( str::dStrings &Strings )
+	{
+		return crt::NewAndInit( Strings );
 	}
 }
 

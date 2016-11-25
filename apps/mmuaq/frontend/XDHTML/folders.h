@@ -23,11 +23,11 @@
 # include "base.h"
 
 namespace folders {
-	BASE_ACD( Template );
+	BASE_ACD( SelectFolder );
 
 	inline void Register( void )
 	{
-		BASE_ACR( Template );
+		BASE_ACR( SelectFolder );
 	};
 
 	void SetLayout(

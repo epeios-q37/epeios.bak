@@ -23,11 +23,11 @@
 # include "base.h"
 
 namespace mails {
-	BASE_ACD( Template );
+	BASE_ACD( SelectMail );
 
 	inline void Register( void )
 	{
-		BASE_ACR( Template );
+		BASE_ACR( SelectMail );
 	};
 
 	void SetLayout(

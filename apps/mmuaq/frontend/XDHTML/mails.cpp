@@ -101,8 +101,13 @@ qRE
 
 #define AC( name ) BASE_AC( mails, name )
 
-AC( Template )
+AC( SelectMail )
 {
-	Session.AlertT( "Template" );
+	str::wString Value;
+
+	Value.Init();
+	Session.AlertU( Session.GetContent( Id, Value ) );
 }
+
+
 

@@ -34,13 +34,13 @@ namespace muamel {
 	typedef str::dString dId;
 	typedef str::wString wId;
 
-	class dMail {
+	class dMetaData {
 	public:
 		struct s {
 			dId::s Id;
 		} &S_;
 		dId Id;
-		dMail( s &S )
+		dMetaData( s &S )
 		: S_( S ),
 		  Id( S.Id )
 		{}
@@ -56,9 +56,9 @@ namespace muamel {
 		{
 			tol::plug( AS, Id );
 		}
-		dMail &operator = (const dMail &M)
+		dMetaData &operator = (const dMetaData &MD)
 		{
-			Id = M.Id;
+			Id = MD.Id;
 
 			return *this;
 		}
@@ -70,17 +70,27 @@ namespace muamel {
 		{
 			this->Id.Init( Id );
 		}
+		// For the 'tol::Search(...)' function.
+		const str::dString &ID( void ) const
+		{
+			return Id;
+		}
 	};
 
-	qW( Mail );
+	qW( MetaData );
 
 	qROW( Row );
 
 	typedef bch::qBUNCHdl( sRow ) dRows;
 	qW( Rows );
 
-	typedef lstcrt::qLMCRATEd( dMail, sRow ) dMails;
+	typedef lstcrt::qLMCRATEd( dMetaData, sRow ) dMails;
 	qW( Mails );
+
+	sRow Search(
+		const str::dString &Id,
+		const dRows &Rows,
+		const dMails &Mails	);
 }
 
 

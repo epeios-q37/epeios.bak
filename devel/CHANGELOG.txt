@@ -1,5 +1,17 @@
 CHANGELOG for the 'Epeios' framework.
 
+2016-11-25 :
+- CRT, STR :
+	- Adding 'NewAndInit(...)'
+- LCL :
+	- Adding 'meaning_::AddTag(...)' integer variant.
+
+2016-11-24 :
+- BCH :
+	- Adding a 'Remove(...)' method removing an item if existing.
+- TOL :
+	- Adding 'Search(...)'.
+
 2016-11-23 :
 - FBLBKD :
 	- Fixing language issue.

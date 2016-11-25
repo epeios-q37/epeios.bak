@@ -44,6 +44,27 @@ namespace crt {
 	using ctn::sHooks;
 
 	using ctn::Search;
+
+	template <typename row, typename crate> inline row NewAndInit_( crate &Crate )
+	{
+		row Row = Crate.New();
+
+		Crate( Row ).Init();
+
+		Crate.Flush();
+
+		return Row;
+	}
+
+	template <typename row, typename item> inline row NewAndInit( ctn::mono_container_<item, row> &Crate )
+	{
+		return NewAndInit_<row>( Crate );
+	}
+
+	template <typename row, typename item> inline row NewAndInit( ctn::poly_container_<item, row> &Crate )
+	{
+		return NewAndInit_<row>( Crate );
+	}
 }
 
 # define qMCRATEd( Type, r )	dMonoCrate< Type, r >

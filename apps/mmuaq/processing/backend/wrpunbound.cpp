@@ -86,7 +86,7 @@ namespace get_agents_ {
 
 		while ( Row != qNIL ) {
 			Ids.Append( *Row );
-			Names.Append( Agents.Names( Row ) );
+			Agents.GetName( Row, Names( str::NewAndInit( Names ) ) );
 
 			Row = Agents.Next( Row );
 		}
@@ -103,7 +103,7 @@ qRB
 	fbltyp::dIds &Ids = Request.IdsOut();
 	fbltyp::dStrings &Names = Request.StringsOut();
 
-	get_agents_::Get( Account.Agents, Ids, Names );
+	get_agents_::Get( Account.Agents(), Ids, Names );
 qRR 
 qRT
 qRE
@@ -120,7 +120,7 @@ namespace get_agent_ {
 		if ( !Agents.Exists( Row ) )
 			REPORT( UnknownAgent );
 
-		Agents.Names.Recall( Row, Name );
+		Agents.GetName( Row, Name );
 
 		const muaagt::dAgent &Agent = Agents.Core( Row );
 
@@ -143,50 +143,72 @@ qRB
 		&HostPort = Request.StringOut(),
 		&Username = Request.StringOut();
 
-	get_agent_::Get( *Id, Account.Agents, Name, HostPort, Username );
+	get_agent_::Get( *Id, Account.Agents(), Name, HostPort, Username );
 qRR 
 qRT
 qRE
 }
 
 namespace update_agent_ {
-	inline bso::sBool CheckName_(
-		const str::dString &Name,
-		const muaagt::dAgents &Agents,
-		muaagt::sRow Candidate )
-	{
-		muaagt::sRow Target = Agents.Search( Name );
+	namespace {
+		inline bso::sBool CheckName_(
+			const str::dString &Name,
+			const muaagt::dAgents &Agents,
+			muaagt::sRow Candidate )
+		{
+			muaagt::sRow Target = Agents.Search( Name );
 
-		return ( Target == qNIL ) || ( Target == Candidate );
+			return ( Target == qNIL ) || ( Target == Candidate );
+		}
+
+		qCDEF( bso::sUInt, DefaultLengthLimit_, 50 );
+
+		const str::dString &Normalize_(
+			str::dString &Value,
+			common::eMessage EmptyMessage,
+			common::eMessage LengthMessage,
+			rgstry::rEntry &Entry )
+		{
+		qRH
+		qRB
+			Value.StripCharacter( ' ' );
+
+			if ( Value.Amount() == 0 )
+				common::ReportAndAbort( EmptyMessage );
+
+			if ( Value.Amount() > sclmisc::OGetUInt( Entry, DefaultLengthLimit_ ) )
+				common::ReportAndAbort( LengthMessage, DefaultLengthLimit_ );
+		qRR
+		qRT
+		qRE
+			return Value;
+		}
 	}
+
+#define N( name ) Normalize_( name, common::m##name##CanNotBeEmpty, common::m##name##CanNotBeLongerAs, registry::definition::limitation::name##Length )
 
 	muaagt::sRow Update(
 		muaagt::sRow Row,
-		const str::dString &RawName,
+		const str::dString &RawAgentName,
 		const str::dString &RawHostPort,
 		const str::dString &RawUsername,
 		bso::sBool PasswordIsSet,
 		const str::dString &Password,
-		muaagt::dAgents &Agents )
+		muaacc::dAccount &Account )
 	{
 	qRH
-		str::wString Name, HostPort, Username;
+		str::wString AgentName, HostPort, Username;
 	qRB
-		Name.Init( RawName );
+		AgentName.Init( RawAgentName );
 		HostPort.Init( RawHostPort );
 		Username.Init( RawUsername );
 
-		Name.StripCharacter( ' ' );
-		if ( Name.Amount() == 0 )
-			REPORT( AgentNameCanNotBeEmpty );
+		N( AgentName );
+		N( HostPort );
+		N( Username );
 
-		HostPort.StripCharacter( ' ' );
-		if ( HostPort.Amount() == 0 )
-			REPORT( HostPortCanNotBeEmpty );
-
-		Username.StripCharacter( ' ' );
-		if ( Username.Amount() == 0 )
-			REPORT( UsernameCanNotBeEmpty );
+		if ( Password.Amount() > DefaultLengthLimit_ )
+			REPORT( PasswordCanNotBeLongerAs, DefaultLengthLimit_ );
 
 		if ( HostPort.Search(':') == qNIL )
 			HostPort.Append( ":110" );
@@ -195,21 +217,23 @@ namespace update_agent_ {
 			if ( !PasswordIsSet )
 				qRGnr();
 
-			if ( !CheckName_( Name, Agents, qNIL ) )
-				REPORT( AgentWithSuchNameExists, Name );
+			if ( !CheckName_( AgentName, Account.Agents(), qNIL ) )
+				REPORT( AgentWithSuchNameExists, AgentName );
 
-			Row = Agents.New( Name, HostPort, Username, Password );
-		} else if ( !CheckName_( Name, Agents, Row ) )
-				REPORT( AgentWithSuchNameExists, Name );
+			Row = Account.NewAgent( AgentName, HostPort, Username, Password );
+		} else if ( !CheckName_( AgentName, Account.Agents(), Row ) )
+				REPORT( AgentWithSuchNameExists, AgentName );
 		else if ( PasswordIsSet )
-			Agents.Update( Row, Name, HostPort, Username );
+			Account.UpdateAgent( Row, AgentName, HostPort, Username );
 		else
-			Agents.Update( Row, Name, HostPort, Username, Password );
+			Account.UpdateAgent( Row, AgentName, HostPort, Username, Password );
 	qRR
 	qRT
 	qRE
 		return Row;
 	}
+
+# undef N
 }
 
 DEC( UpdateAgent, 1 )
@@ -230,7 +254,7 @@ qRB
 
 	const str::dString &Password = Request.StringIn();
 
-	Request.IdOut() = *update_agent_::Update( Row, Name, HostPort, Username, PasswordIsSet, Password, Account.Agents );
+	Request.IdOut() = *update_agent_::Update( Row, Name, HostPort, Username, PasswordIsSet, Password, Account );
 qRR 
 qRT
 qRE
@@ -257,18 +281,6 @@ qRT
 qRE
 }
 
-namespace get_fileds_infos_ {
-	void Get_(
-		const fblbkd::dId8s &Ids,
-		fblbkd::dStrings &Labels,
-		fblbkd::dStrings &Wording )
-	{
-		sdr::sRow Row = Ids.First();
-
-		while ( Row != qNIL );
-	}
-}
-
 namespace agent_{
 	void InitAndAuthenticate(
 		const muaagt::dAgent &Agent,
@@ -283,127 +295,6 @@ namespace agent_{
 	}
 }
 
-namespace get_mails_fields_ {
-	namespace {
-		void Get_(
-			muabsc::sIndex Index,
-			fdr::rIODriver &Driver,
-			fblbkd::dStrings &Subjects )
-		{
-		qRH
-			muapo3::hBody Body;
-			muaimf::wFields Fields;
-			str::wString Subject;
-			muaimf::sFRow Row = qNIL;
-		qRB
-			muapo3::GetHeader( Index, Driver, Body );
-
-			Fields.Init();
-			muaimf::Fill(Body.GetDriver(), Fields );
-
-			Subject.Init();
-			Row = Fields.Search( muaimf::fSubject );
-
-			if ( Row == qNIL )
-				qRGnr();
-
-			Subject.Init();
-			Fields.GetBody( Row, Subject );
-			Subjects.Add( Subject );
-		qRR
-		qRT
-		qRE
-		}
-
-		void Get_(
-			const muabsc::dIndexes &Indexes,
-			fdr::rIODriver &Driver,
-			fblbkd::dIds &Ids,
-			fblbkd::dStrings &Subjects )
-		{
-			sdr::sRow Row = Indexes.First();
-
-			while ( Row != qNIL ) {
-				Ids.Add( Indexes( Row ) );
-				Get_( Indexes( Row ), Driver, Subjects );
-
-				Row = Indexes.Next( Row );
-			}
-		}
-
-		void Get_(
-			const muaagt::dAgent &Agent,
-			fblbkd::dIds &Ids,
-			fblbkd::dStrings &Subjects )
-		{
-		qRH
-			csdbnc::rIODriver Driver;
-			muabsc::wIndexes Indexes;
-		qRB
-			agent_::InitAndAuthenticate( Agent, Driver );
-
-			Indexes.Init();
-
-			muapo3::GetIndexes( Driver, Indexes );
-
-			Get_( Indexes, Driver, Ids, Subjects );
-
-			agent_::Quit( Driver );
-		qRR
-		qRT
-		qRE
-		}
-
-		void Get_(
-			const muaagt::dAgents &Agents,
-			fblbkd::dIds &Ids,
-			fblbkd::dStrings &Subjects )
-		{
-			muaagt::sRow Row = Agents.First();
-
-			while ( Row != qNIL ) {
-				Get_( Agents.Core( Row ), Ids, Subjects );
-
-				Row = Agents.Next( Row );
-			}
-		}
-	}
-
-	void Get(
-		const muaacc::dAccount &Account,
-		fblbkd::dIds &Ids,
-		fblbkd::dStrings &Subjects )
-	{
-		Get_( Account.Agents, Ids, Subjects );
-	}
-}
-
-DEC( GetMailsFields, 1 )
-{
-qRH
-	ACCOUNTh;
-	muamel::wRows Wanted, Available;
-qRB
-	ACCOUNTb;
-
-	Account.Update();
-
-	tol::Init( Wanted );
-	Account.GetAllMails( Wanted );
-
-	fblbkd::dIds &Ids = Request.IdsOut();
-	fblbkd::dStrings &Subjects = Request.StringsOut();
-
-	tol::Init( Available );
-	Account.GetFields( Wanted, Subjects, Available );
-
-
-	fbltyp::Convert( Available, Ids );
-qRR 
-qRT
-qRE
-}
-
 DEC( GetFolders, 1 ) 
 {
 qRH
@@ -416,7 +307,7 @@ qRB
 
 	tol::Init( Rows );
 
-	Account.GetFolders( Row, Rows );
+	Account.Directory().GetFolders( Row, Rows );
 
 	fbltyp::Convert(Rows, Request.IdsOut() );
 qRR 
@@ -435,7 +326,35 @@ qRB
 	tol::Init( Rows );
 	fbltyp::Convert( Request.IdsIn(), Rows );
 
-	Account.GetFoldersNames( Rows, Request.StringsOut() );
+	Account.Directory().GetFoldersNames( Rows, Request.StringsOut() );
+qRR 
+qRT
+qRE
+}
+
+DEC( GetMailsFields, 1 )
+{
+qRH
+	ACCOUNTh;
+	muamel::wRows Wanted, Available;
+qRB
+	ACCOUNTb;
+
+	muafld::sRow Folder = *Request.IdIn();
+
+	if ( !Account.Directory().Exists( Folder ) )
+		qRGnr();
+
+	tol::Init( Wanted );
+	Account.Directory().GetMails( Folder, Wanted );
+
+	fblbkd::dIds &Ids = Request.IdsOut();
+	fblbkd::dStrings &Subjects = Request.StringsOut();
+
+	tol::Init( Available );
+	Account.GetFields( Wanted, Subjects, Available );
+
+	fbltyp::Convert( Available, Ids );
 qRR 
 qRT
 qRE
@@ -486,12 +405,6 @@ void wrpunbound::Inform( fblbkd::backend___ &Backend )
 			fblbkd::cId8s,	// Ids of the fields.
 		fblbkd::cEnd );
 
-	Backend.Add( D( GetMailsFields, 1 ),
-		fblbkd::cEnd,
-			fblbkd::cIds,		// Ids of the mails.
-			fblbkd::cStrings,	// Subjects of the mails.
-		fblbkd::cEnd );
-
 	Backend.Add( D( GetFolders, 1 ),
 			fblbkd::cId,	// Folder.
 		fblbkd::cEnd,
@@ -504,6 +417,11 @@ void wrpunbound::Inform( fblbkd::backend___ &Backend )
 			fblbkd::cStrings,	// Names,
 		fblbkd::cEnd );
 
-
+	Backend.Add( D( GetMailsFields, 1 ),
+			fblbkd::cId,		// Folder id.
+		fblbkd::cEnd,
+			fblbkd::cIds,		// Ids of the mails.
+			fblbkd::cStrings,	// Subjects of the mails.
+		fblbkd::cEnd );
 }
 

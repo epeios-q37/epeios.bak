@@ -19,21 +19,37 @@
   <Translation language="fr">Le nom d'un agent ne peut être vide.</Translation>
   <Translation language="en">Agent name can not be empty.</Translation>
  </Translations>
- <Translations text="UnknownAgent">
-  <Translation language="fr">Agent inconnu.</Translation>
-  <Translation language="en">Unknown agent.</Translation>
- </Translations>
  <Translations text="HostPortCanNotBeEmpty">
-  <Translation language="fr">L'adresse et le port ne peuve être vide.</Translation>
+  <Translation language="fr">L'adresse et le port ne peuvent être vide.</Translation>
   <Translation language="en">Address/port can not be empty.</Translation>
  </Translations>
  <Translations text="UsernameCanNotBeEmpty">
   <Translation language="fr">Le nom d'utilisateur ne peut être vide.</Translation>
   <Translation language="en">User name cannot not be empty.</Translation>
  </Translations>
+ <Translations text="AgentNameCannotBeLongerAs">
+  <Translation language="fr">Le nom d'un agent est limité à %1 caractères.</Translation>
+  <Translation language="en">Agent name can not be longer as %1 chars.</Translation>
+ </Translations>
+ <Translations text="HostPortCannotBeLongerAs">
+  <Translation language="fr">L'adresse et le port est limité à %1 caractères.</Translation>
+  <Translation language="en">Address/port can not be longer as %1 chars.</Translation>
+ </Translations>
+ <Translations text="UsernameCannotBeLongerAs">
+  <Translation language="fr">Le nom d'utilisateur est limité à %1 caractères.</Translation>
+  <Translation language="en">User name can not be longer as %1 chars.</Translation>
+ </Translations>
+ <Translations text="PasswordCannotBeLongerAs">
+  <Translation language="fr">Le mot de passe est limité à %1 caractères.</Translation>
+  <Translation language="en">Password can not be longer as %1 chars.</Translation>
+ </Translations>
+ <Translations text="UnknownAgent">
+  <Translation language="fr">Agent inconnu.</Translation>
+  <Translation language="en">Unknown agent.</Translation>
+ </Translations>
  <Translations text="DemoFolderLabel">
-  <Translation language="fr">Dossier</Translation>
-  <Translation language="en">Folder</Translation>
+  <Translation language="fr">Dossier démo</Translation>
+  <Translation language="en">Demo folder</Translation>
  </Translations>
  <!--
 <Translations text="">

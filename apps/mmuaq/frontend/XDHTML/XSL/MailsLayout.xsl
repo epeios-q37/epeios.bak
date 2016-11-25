@@ -1,12 +1,29 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet	version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xpp="http://q37.info/ns/xpp/">
-	<xsl:output method="html" encoding="UTF-8"/>
-	<xsl:template match="/">
-		<xsl:apply-templates select="*/Content"/>
-		<xsl:apply-templates select="*/Corpus"/>
-	</xsl:template>
-	<xsl:template match="Content">
-	</xsl:template>
-	<xsl:template match="Corpus">
-	</xsl:template>
- </xsl:stylesheet>
+ <xsl:output method="html" encoding="UTF-8"/>
+ <xsl:template match="/">
+  <xsl:apply-templates select="*/Content"/>
+  <xsl:apply-templates select="*/Corpus"/>
+ </xsl:template>
+ <xsl:template match="Content">
+  <xsl:apply-templates select="Mails"/>
+ </xsl:template>
+ <xsl:template match="Mails">
+  <table style="border: 1px solid black;">
+   <tr>
+    <th>Subject</th>
+   </tr>
+   <xsl:apply-templates select="Mail"/>
+  </table>
+ </xsl:template>
+ <xsl:template match="Mail">
+  <tr data-xdh-onevent="SelectMail" style="cursor: pointer;">
+   <xsl:attribute name="data-xdh-content">
+    <xsl:value-of select="@id"/>
+   </xsl:attribute>
+   <td>
+    <xsl:value-of select="@Subject"/>
+   </td>
+  </tr>
+ </xsl:template>
+</xsl:stylesheet>

@@ -36,9 +36,13 @@ const char *common::GetLabel( eMessage Message )
 	C( NotLoggedIn );
 	C( AgentWithSuchNameExists );
 	C( AgentNameCanNotBeEmpty );
-	C( UnknownAgent );
 	C( HostPortCanNotBeEmpty );
 	C( UsernameCanNotBeEmpty );
+	C( AgentNameCanNotBeLongerAs );
+	C( UsernameCanNotBeLongerAs );
+	C( HostPortCanNotBeLongerAs );
+	C( PasswordCanNotBeLongerAs );
+	C( UnknownAgent );
 /*
 	C(  );
 */
@@ -72,7 +76,7 @@ namespace {
 					G( Username );
 					G( Password );
 
-					Account.Agents.New( Id, HostPort, Username, Password );
+					Account.NewAgent( Id, HostPort, Username, Password );
 				qRR
 				qRT
 				qRE
@@ -132,6 +136,8 @@ namespace {
 				Folder2_2 = F( "2.2", Folder2 );
 				F("2.2.1", Folder2_2 );
 				F("2.2.2", Folder2_2 );
+
+				Account.Update();
 			qRR
 			qRT
 			qRE
