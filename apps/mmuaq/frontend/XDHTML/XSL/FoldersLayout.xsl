@@ -34,34 +34,29 @@
    <xsl:attribute name="data-xdh-content">
     <xsl:value-of select="@id"/>
    </xsl:attribute>
-   <img src="js/cursor_drag_hand.png" title="#mailsDragTitle#" style="width: 15px; height: 15px" data-xdh-onevents="(dragend|EndFolderDragging)|(dragstart|DragFolder)">
+   <img src="js/cursor_drag_hand.png" title="#foldersDragTitle#" style="width: 15px; height: 15px" data-xdh-onevents="(dragend|EndFolderDragging)|(dragstart|DragFolder)">
     <xsl:attribute name="data-xdh-content">
      <xsl:value-of select="@id"/>
     </xsl:attribute>
    </img>
    <xsl:choose>
    <xsl:when test="Folders/@Amount!=0">
-     <input type="checkbox">
-      <xsl:attribute name="id">
-       <xsl:text>Folder-</xsl:text>
-       <xsl:value-of select="@id"/>
-      </xsl:attribute>
-     </input>
-     <label data-xdh-onevent="SelectFolder">
-      <xsl:if test="@id=../@Current">
-       <xsl:attribute name="style">
-       <xsl:text>font-style: italic;</xsl:text>
-      </xsl:attribute>
-      </xsl:if>
+     <input type="checkbox"/>
+     <label>
       <xsl:attribute name="data-xdh-content">
        <xsl:value-of select="@id"/>
       </xsl:attribute>
-      <xsl:call-template name="FolderName"/>
+      <span data-xdh-onevent="SelectFolder" data-xdh-cast="folderCasting">
+       <xsl:attribute name="data-xdh-content">
+        <xsl:value-of select="@id"/>
+       </xsl:attribute>
+       <xsl:call-template name="FolderName"/>
+      </span>
      </label>
      <xsl:apply-templates select="Folders"/>
    </xsl:when>
    <xsl:otherwise>
-     <span style="cursor: pointer;" data-xdh-onevent="SelectFolder">
+     <span data-xdh-onevent="SelectFolder" data-xdh-cast="folderCasting">
       <xsl:attribute name="data-xdh-content">
        <xsl:value-of select="@id"/>
       </xsl:attribute>

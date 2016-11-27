@@ -116,6 +116,11 @@ void main::SetMailsLayout( core::rSession &Session )
 	mails::SetLayout( MailsFrameId_, Session );
 }
 
+void main::SetMailsCasting( core::rSession &Session )
+{
+	mails::SetCasting( MailsFrameId_, Session );
+}
+
 #define AC( name ) BASE_AC( main, name )
 
 AC( Configuration )

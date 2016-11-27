@@ -326,6 +326,8 @@ namespace frdinstc {
 			AgentEdition_ = true;
 		}
 		qRWDISCLOSEr( bso::sBool, ShowAgentPassword );
+		qRODISCLOSEr( sMail, CurrentMail );
+		qRODISCLOSEr( sFolder, CurrentFolder );
 	};
 }
 

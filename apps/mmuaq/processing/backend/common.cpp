@@ -126,6 +126,7 @@ namespace {
 
 				Folder1 = F( "1", qNIL );
 				Folder2 = F( "2", qNIL );
+				F( "3", qNIL );
 
 				Folder1_1 = F( "1.1", Folder1 );
 				F( "1.2", Folder1 );

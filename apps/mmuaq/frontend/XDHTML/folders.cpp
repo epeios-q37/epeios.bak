@@ -41,6 +41,8 @@ namespace {
 
 		if ( Session.User.MailDragInProgress() )
 			Rack().PutAttribute( "MailDragging", "InProgress" );
+
+		Rack().PutAttribute( "CurrentFolder", **Session.User.CurrentFolder(), **frdinstc::UndefinedFolder );
 	qRR
 	qRT
 	qRE
@@ -105,8 +107,6 @@ qRT
 qRE
 }
 
-
-
 #define AC( name ) BASE_AC( folders, name )
 
 AC( SelectFolder )
@@ -117,6 +117,7 @@ AC( SelectFolder )
 	Session.User.SelectFolder( Folder );
 
 	main::SetMailsLayout( Session );
+	main::SetFoldersCasting( Session );
 }
 
 AC( DragFolder )

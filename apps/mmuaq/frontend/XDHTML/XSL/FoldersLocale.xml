@@ -4,6 +4,10 @@
   <Translation language="fr">Courrier entrant</Translation>
   <Translation language="en">Inbox</Translation>
  </Translations>
+ <Translations text="foldersDragTitle">
+  <Translation language="fr">Glisser vers un dossier pour l'y déplacer.</Translation>
+  <Translation language="en">Drag to a folder to move it there.</Translation>
+ </Translations>
  <!--
 	<Translations text="folders">
 		<Translation language="fr"></Translation>

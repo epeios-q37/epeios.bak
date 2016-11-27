@@ -36,25 +36,8 @@ namespace {
 		base::rContextRack Rack;
 	qRB
 		Rack.Init( XSLAffix_, XML, Session );
-	qRR
-	qRT
-	qRE
-	}
 
-	void SetCasting_(
-		const char *Id,
-		core::rSession &Session )
-	{
-	qRH
-		str::string XML, XSL;
-	qRB
-		XML.Init();
-		GetContext_( Session,  XML );
-
-		XSL.Init();
-		sclxdhtml::LoadXSLAndTranslateTags(rgstry::tentry___( registry::definition::XSLCastingFile, XSLAffix_ ), Session.Registry() , XSL );
-
-		Session.FillElementCastings( Id, XML, XSL );
+		Rack().PutAttribute( "CurrentMail", **Session.User.CurrentMail(), **frdinstc::UndefinedMail );
 	qRR
 	qRT
 	qRE
@@ -92,9 +75,28 @@ qRB
 
 	Session.FillElement( Id, XML, XSL );
 
-	SetCasting_( Id, Session );
+	SetCasting( Id, Session );
 
 //	Session.SwitchTo( core::fMails );
+qRR
+qRT
+qRE
+}
+
+void mails::SetCasting(
+	const char *Id,
+	core::rSession &Session )
+{
+qRH
+	str::string XML, XSL;
+qRB
+	XML.Init();
+	GetContext_( Session,  XML );
+
+	XSL.Init();
+	sclxdhtml::LoadXSLAndTranslateTags(rgstry::tentry___( registry::definition::XSLCastingFile, XSLAffix_ ), Session.Registry() , XSL );
+
+	Session.FillElementCastings( Id, XML, XSL );
 qRR
 qRT
 qRE
@@ -110,6 +112,7 @@ AC( SelectMail )
 
 	Session.User.SelectMail( Mail );
 
+	main::SetMailsCasting( Session );
 	mail::SetLayout( MailFrameId_, Session );
 }
 

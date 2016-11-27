@@ -36,6 +36,7 @@ namespace main {
 	void SetFoldersCasting( core::rSession &Session );
 
 	void SetMailsLayout( core::rSession &Session );
+	void SetMailsCasting( core::rSession &Session );
 }
 
 #endif

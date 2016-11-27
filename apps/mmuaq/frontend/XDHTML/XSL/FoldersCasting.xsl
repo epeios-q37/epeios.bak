@@ -13,5 +13,13 @@
     <xdh-cast id="DroppingCast" kind="Undroppable"/>
    </xsl:otherwise>
   </xsl:choose>
+  <xdh-cast id="folderCasting">
+   <xsl:attribute name="exec">
+    <xsl:text>if ( getContent( element ) == '</xsl:text>
+    <xsl:value-of select="@CurrentFolder"/>
+    <xsl:text>') { element.style='cursor: pointer;background-color: lightgrey;'; while ( element.tagName != 'DIV' ) { if ( (element.firstChild.tagName == 'IMG' ) &amp;&amp; ( element.firstChild.nextSibling.tagName == 'INPUT' ) ) {element.firstChild.nextSibling.checked=true;} element = element.parentNode; } }</xsl:text>
+    <xsl:text>else element.style='cursor: pointer;';</xsl:text>
+   </xsl:attribute>
+  </xdh-cast>
  </xsl:template>
 </xsl:stylesheet>

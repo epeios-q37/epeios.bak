@@ -23,7 +23,7 @@
   </table>
  </xsl:template>
  <xsl:template match="Mail">
-  <tr data-xdh-onevent="SelectMail" style="cursor: pointer;">
+  <tr data-xdh-onevent="SelectMail" style="cursor: pointer;" data-xdh-cast="mailCasting">
    <xsl:attribute name="data-xdh-content">
     <xsl:value-of select="@id"/>
    </xsl:attribute>
