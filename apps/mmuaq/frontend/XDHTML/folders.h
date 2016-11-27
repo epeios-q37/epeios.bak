@@ -24,13 +24,23 @@
 
 namespace folders {
 	BASE_ACD( SelectFolder );
+	BASE_ACD( DragFolder );
+	BASE_ACD( EndFolderDragging );
+	BASE_ACD( DropToFolder );
 
 	inline void Register( void )
 	{
 		BASE_ACR( SelectFolder );
+		BASE_ACR( DragFolder );
+		BASE_ACR( EndFolderDragging );
+		BASE_ACR( DropToFolder );
 	};
 
 	void SetLayout(
+		const char *Id,
+		core::rSession &Session );
+
+	void SetCasting(
 		const char *Id,
 		core::rSession &Session );
 }

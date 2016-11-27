@@ -129,6 +129,20 @@ namespace muadir {
 
 			return Row;
 		}
+		void MoveMailTo(
+			muamel::sRow Mail,
+			muafld::sRow Folder )
+		{
+			F2M( M2F( Mail ) ).Remove( Mail );
+			M2F.Store( Folder, Mail );
+			F2M(Folder).Add( Mail );
+		}
+		void MoveFolderTo(
+			muafld::sRow Folder,
+			muafld::sRow Parent )
+		{
+			Folders.MoveTo( Folder, Parent );
+		}
 		void Remove( muamel::sRow Mail )
 		{
 			muafld::sRow Folder = M2F( Mail );

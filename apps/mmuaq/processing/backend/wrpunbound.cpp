@@ -364,6 +364,50 @@ qRT
 qRE
 }
 
+DEC( MoveMailTo, 1 )
+{
+qRH
+	ACCOUNTh;
+qRB
+	ACCOUNTb;
+
+	muamel::sRow Mail = *Request.IdIn();
+	muafld::sRow Folder = *Request.IdIn();
+
+	if ( !Account.Directory().Mails.Exists( Mail ) )
+		qRGnr();
+
+	if ( !Account.Directory().Folders.Exists( Folder ) )
+		qRGnr();
+
+	Account.MoveMailTo( Mail, Folder );
+qRR 
+qRT
+qRE
+}
+
+DEC( MoveFolderTo, 1 )
+{
+qRH
+	ACCOUNTh;
+qRB
+	ACCOUNTb;
+
+	muafld::sRow Folder = *Request.IdIn();
+	muafld::sRow Parent = *Request.IdIn();
+
+	if ( !Account.Directory().Folders.Exists( Folder ) )
+		qRGnr();
+
+	if ( !Account.Directory().Folders.Exists( Parent ) )
+		qRGnr();
+
+	Account.MoveFolderTo( Folder, Parent );
+qRR 
+qRT
+qRE
+}
+
 #define D( name, version )	MUAINF_UC_SHORT #name "_" #version, ::name##_##version
 
 void wrpunbound::Inform( fblbkd::backend___ &Backend )
@@ -432,6 +476,18 @@ void wrpunbound::Inform( fblbkd::backend___ &Backend )
 			fblbkd::cId,		// Mail id.
 		fblbkd::cEnd,
 			fblbkd::cString,	// Mail content.
+		fblbkd::cEnd );
+
+	Backend.Add( D( MoveMailTo, 1 ),
+			fblbkd::cId,	// Mail.
+			fblbkd::cId,	// Folder.
+		fblbkd::cEnd,
+		fblbkd::cEnd );
+
+	Backend.Add( D( MoveFolderTo, 1 ),
+			fblbkd::cId,	// Folder to move.
+			fblbkd::cId,	// New parent.
+		fblbkd::cEnd,
 		fblbkd::cEnd );
 }
 

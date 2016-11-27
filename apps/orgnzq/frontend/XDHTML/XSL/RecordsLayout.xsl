@@ -29,7 +29,7 @@
 	</xsl:template>
 	<xsl:template match="Record">
 		<fieldset data-xdh-onevent="DefineRecord">
-			<xsl:attribute name="data-xdh-value">
+			<xsl:attribute name="data-xdh-content">
 				<xsl:value-of select="@id"/>
 			</xsl:attribute>
 			<xsl:call-template name="DOE">

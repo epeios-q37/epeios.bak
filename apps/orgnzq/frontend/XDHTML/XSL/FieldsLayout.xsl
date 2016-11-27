@@ -45,16 +45,16 @@
 	<xsl:template match="Field">
 		<div style="display: flex;">
 			<img title="#fieldsDragAndDropTitle#" style="width: 15px; height: 15px" src="js/cursor_drag_hand.png" data-xdh-onevents="(dragstart|DragField)|(drop|DropField)|(dragend|EndFieldDragging)" data-xdh-casts="FieldDraggingCast|FieldDroppingCast">
-				<xsl:attribute name="data-xdh-value">
+				<xsl:attribute name="data-xdh-content">
 					<xsl:value-of select="@id"/>
 				</xsl:attribute>
 			</img>
 			<fieldset style="width: 100%;">
-				<xsl:attribute name="data-xdh-value" >
+				<xsl:attribute name="data-xdh-content" >
 					<xsl:value-of select="@id"/>
 				</xsl:attribute>
 				<legend data-xdh-onevent="DefineField">
-					<xsl:attribute name="data-xdh-value">
+					<xsl:attribute name="data-xdh-content">
 						<xsl:value-of select="@id"/>
 					</xsl:attribute>
 					<xsl:call-template name="ColumnLabel">

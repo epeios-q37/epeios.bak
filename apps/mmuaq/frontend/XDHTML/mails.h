@@ -24,10 +24,14 @@
 
 namespace mails {
 	BASE_ACD( SelectMail );
+	BASE_ACD( DragMail );
+	BASE_ACD( EndMailDragging );
 
 	inline void Register( void )
 	{
 		BASE_ACR( SelectMail );
+		BASE_ACR( DragMail );
+		BASE_ACR( EndMailDragging );
 	};
 
 	void SetLayout(

@@ -23,43 +23,13 @@
 #include "registry.h"
 #include "sclfrntnd.h"
 
+
 namespace {
-
 	qCDEF( char *, XSLAffix_, "Frame" );
+}
 
-	void GetContext_(
-		core::rSession &Session,
-		str::string_ &XML )
-	{
-	qRH
-		base::rContextRack Rack;
-	qRB
-		Rack.Init( XSLAffix_, XML, Session );
-	qRR
-	qRT
-	qRE
-	}
-
-	void SetCasting_(
-		const char *Id,
-		core::rSession &Session )
-	{
-	qRH
-		str::string XML, XSL;
-	qRB
-		XML.Init();
-		GetContext_( Session,  XML );
-
-		XSL.Init();
-		sclxdhtml::LoadXSLAndTranslateTags(rgstry::tentry___( registry::definition::XSLCastingFile, XSLAffix_ ), Session.Registry() , XSL );
-
-		Session.FillElementCastings( Id, XML, XSL );
-	qRR
-	qRT
-	qRE
-	}
-
-	static void GetContent_(
+namespace layout_ {
+	static void GetContent(
 		const sclrgstry::registry_ &Registry,
 		core::rSession &Session,
 		str::string_ &XML )
@@ -82,20 +52,53 @@ qRH
 	str::string XML, XSL;
 qRB
 	XML.Init(); 
-	GetContent_( Session.Registry(), Session, XML );
+	layout_::GetContent( Session.Registry(), Session, XML );
 
 	XSL.Init();
 	sclxdhtml::LoadXSLAndTranslateTags( rgstry::tentry___( registry::definition::XSLLayoutFile, XSLAffix_ ), Session.Registry(), XSL );
 
 	Session.FillElement( Id, XML, XSL );
 
-	SetCasting_( Id, Session );
-
-//	Session.SwitchTo( core::fframe );
+	SetCasting( Id, Session );
 qRR
 qRT
 qRE
 }
+
+namespace casting_ {
+	void GetContext(
+		core::rSession &Session,
+		str::string_ &XML )
+	{
+	qRH
+		base::rContextRack Rack;
+	qRB
+		Rack.Init( XSLAffix_, XML, Session );
+	qRR
+	qRT
+	qRE
+	}
+}
+
+void frame::SetCasting(
+	const char *Id,
+	core::rSession &Session )
+{
+qRH
+	str::string XML, XSL;
+qRB
+	XML.Init();
+	casting_::GetContext( Session,  XML );
+
+	XSL.Init();
+	sclxdhtml::LoadXSLAndTranslateTags(rgstry::tentry___( registry::definition::XSLCastingFile, XSLAffix_ ), Session.Registry() , XSL );
+
+	Session.FillElementCastings( Id, XML, XSL );
+qRR
+qRT
+qRE
+}
+
 
 #define AC( name ) BASE_AC( frame, name )
 

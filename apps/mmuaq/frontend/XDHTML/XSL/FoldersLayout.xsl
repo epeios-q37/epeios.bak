@@ -30,9 +30,17 @@
   </ul>
  </xsl:template>
  <xsl:template match="Folder">
-  <xsl:choose>
+  <li data-xdh-cast="DroppingCast" data-xdh-onevent="drop|DropToFolder">
+   <xsl:attribute name="data-xdh-content">
+    <xsl:value-of select="@id"/>
+   </xsl:attribute>
+   <img src="js/cursor_drag_hand.png" title="#mailsDragTitle#" style="width: 15px; height: 15px" data-xdh-onevents="(dragend|EndFolderDragging)|(dragstart|DragFolder)">
+    <xsl:attribute name="data-xdh-content">
+     <xsl:value-of select="@id"/>
+    </xsl:attribute>
+   </img>
+   <xsl:choose>
    <xsl:when test="Folders/@Amount!=0">
-    <li>
      <input type="checkbox">
       <xsl:attribute name="id">
        <xsl:text>Folder-</xsl:text>
@@ -51,18 +59,16 @@
       <xsl:call-template name="FolderName"/>
      </label>
      <xsl:apply-templates select="Folders"/>
-    </li>
    </xsl:when>
    <xsl:otherwise>
-    <li>
      <span style="cursor: pointer;" data-xdh-onevent="SelectFolder">
       <xsl:attribute name="data-xdh-content">
        <xsl:value-of select="@id"/>
       </xsl:attribute>
       <xsl:call-template name="FolderName"/>
      </span>
-    </li>
    </xsl:otherwise>
   </xsl:choose>
+  </li>
  </xsl:template>
 </xsl:stylesheet>

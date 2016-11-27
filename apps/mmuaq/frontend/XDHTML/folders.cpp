@@ -35,25 +35,12 @@ namespace {
 		base::rContextRack Rack;
 	qRB
 		Rack.Init( XSLAffix_, XML, Session );
-	qRR
-	qRT
-	qRE
-	}
 
-	void SetCasting_(
-		const char *Id,
-		core::rSession &Session )
-	{
-	qRH
-		str::string XML, XSL;
-	qRB
-		XML.Init();
-		GetContext_( Session,  XML );
+		if ( Session.User.FolderDragInProgress() )
+			Rack().PutAttribute( "FolderDragging", "InProgress" );
 
-		XSL.Init();
-		sclxdhtml::LoadXSLAndTranslateTags(rgstry::tentry___( registry::definition::XSLCastingFile, XSLAffix_ ), Session.Registry() , XSL );
-
-		Session.FillElementCastings( Id, XML, XSL );
+		if ( Session.User.MailDragInProgress() )
+			Rack().PutAttribute( "MailDragging", "InProgress" );
 	qRR
 	qRT
 	qRE
@@ -91,13 +78,34 @@ qRB
 
 	Session.FillElement( Id, XML, XSL );
 
-	SetCasting_( Id, Session );
+	SetCasting( Id, Session );
 
 //	Session.SwitchTo( core::folders );
 qRR
 qRT
 qRE
 }
+
+void folders::SetCasting(
+	const char *Id,
+	core::rSession &Session )
+{
+qRH
+	str::string XML, XSL;
+qRB
+	XML.Init();
+	GetContext_( Session,  XML );
+
+	XSL.Init();
+	sclxdhtml::LoadXSLAndTranslateTags(rgstry::tentry___( registry::definition::XSLCastingFile, XSLAffix_ ), Session.Registry() , XSL );
+
+	Session.FillElementCastings( Id, XML, XSL );
+qRR
+qRT
+qRE
+}
+
+
 
 #define AC( name ) BASE_AC( folders, name )
 
@@ -109,4 +117,34 @@ AC( SelectFolder )
 	Session.User.SelectFolder( Folder );
 
 	main::SetMailsLayout( Session );
+}
+
+AC( DragFolder )
+{
+	frdinstc::sFolder Folder = frdinstc::UndefinedFolder;
+
+	Session.GetNumericalContent( Id, **Folder );
+
+	Session.User.DragFolder( Folder );
+
+	main::SetFoldersCasting( Session);
+}
+
+AC( EndFolderDragging )
+{
+	Session.User.EndFolderDragging();
+
+	main::SetFoldersCasting( Session);
+}
+
+AC( DropToFolder )
+{
+	frdinstc::sFolder Folder = frdinstc::UndefinedFolder;
+
+	Session.GetNumericalContent( Id, **Folder );
+
+	if ( Session.User.DropToFolder( Folder ) )
+		main::SetFoldersLayout( Session );
+	else
+		main::SetMailsLayout( Session );
 }

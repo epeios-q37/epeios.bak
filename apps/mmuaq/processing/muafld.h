@@ -164,6 +164,14 @@ namespace muafld {
 
 			return Row;
 		}
+		void MoveTo(
+			sRow Folder,
+			sRow Parent )
+		{
+			Cut( Folder );
+
+			BecomeLastChild( Folder, Parent );
+		}
 	};
 }
 

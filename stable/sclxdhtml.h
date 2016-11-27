@@ -377,6 +377,12 @@ namespace sclxdhtml {
 		{
 			sclxdhtml::Alert( XML, XSL, Title, *this, Language() );
 		}
+		template <typename i> void Alert( i I )
+		{
+			bso::bInt Buffer;
+
+			AlertU( bso::Convert( I, Buffer ) ); 
+		}
 		bso::bool__ ConfirmU( const ntvstr::string___ &Message )	// Displays 'Message' as is.
 		{
 			return sclxdhtml::Confirm( Message, *this, Language() );

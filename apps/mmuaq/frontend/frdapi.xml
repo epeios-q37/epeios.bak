@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--                    DON'T MODIFY !!! !
-    This document was generated the 25/11/2016 17:17:26
+    This document was generated the 27/11/2016 11:42:59
     using barq V20161027 (http://q37.info/)
     Build : Nov 13 2016 17:38:12 (Win32;MSC 1800;IA-32)
 -->
@@ -22,15 +22,15 @@
    <Copyright>2016 Claude SIMON (http://q37.info/contact/)</Copyright>
   </Backend>
   <Software>MMUAq V1.0</Software>
-  <Date>25/11/2016</Date>
-  <Time>17:17:26</Time>
+  <Date>27/11/2016</Date>
+  <Time>11:42:59</Time>
  </Misc>
  <Types>
   <Type Object="Master">
    <ID>65535</ID>
    <Prefix Default="" Lower="" Upper=""/>
    <Name Raw="" Underscored="" Mixedcased=""/>
-   <Commands Amount="12">
+   <Commands Amount="14">
     <Command>
      <Name>LoadSetupOfId_1</Name>
      <ID>18</ID>
@@ -248,6 +248,38 @@
         <ID>25</ID>
        </Parameter>
       </Out>
+     </Parameters>
+    </Command>
+    <Command>
+     <Name>MUAMoveMailTo_1</Name>
+     <ID>30</ID>
+     <Parameters Amount="3" Position="40">
+      <In>
+       <Parameter Discriminator="1" Type="Static">
+        <Name>id</Name>
+        <ID>21</ID>
+       </Parameter>
+       <Parameter Discriminator="2" Position="Last" Type="Static">
+        <Name>id</Name>
+        <ID>21</ID>
+       </Parameter>
+      </In>
+     </Parameters>
+    </Command>
+    <Command>
+     <Name>MUAMoveFolderTo_1</Name>
+     <ID>31</ID>
+     <Parameters Amount="3" Position="43">
+      <In>
+       <Parameter Discriminator="1" Type="Static">
+        <Name>id</Name>
+        <ID>21</ID>
+       </Parameter>
+       <Parameter Discriminator="2" Position="Last" Type="Static">
+        <Name>id</Name>
+        <ID>21</ID>
+       </Parameter>
+      </In>
      </Parameters>
     </Command>
    </Commands>

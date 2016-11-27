@@ -34,7 +34,7 @@
 	<xsl:template match="Tab">
 		<li>
 			<a data-xdh-onevent="SelectPanel" data-xdh-onevents="(dragstart|DragPanel)|(drop|DropPanel)|(dragend|EndPanelDragging)" data-xdh-casts="PanelDraggingCast|PanelDroppingCast">
-				<xsl:attribute name="data-xdh-value">
+				<xsl:attribute name="data-xdh-content">
 					<xsl:value-of select="@id"/>
 				</xsl:attribute>
 				<xsl:if test="../@Selected=@id">

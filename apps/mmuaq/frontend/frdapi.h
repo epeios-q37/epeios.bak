@@ -25,7 +25,7 @@ namespace mmuaq {
 	{
 	private:
 		fblfrd::object__ _ID;
-		fblfrd::command__ _Commands[12];
+		fblfrd::command__ _Commands[14];
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -52,6 +52,8 @@ namespace mmuaq {
 				22, 0, 26, 
 				21, 0, 22, 26, 
 				21, 0, 25, 
+				21, 21, 0, 
+				21, 21, 0, 
 			};
 
 			_frontend_depot__::Init( Frontend );
@@ -119,10 +121,20 @@ namespace mmuaq {
 			CommandDetail.Casts.Append( Parameters + 37, 3 );
 			CommandsDetails.Append( CommandDetail );
 
+			CommandDetail.Init();
+			CommandDetail.Name = "MUAMoveMailTo_1";;
+			CommandDetail.Casts.Append( Parameters + 40, 3 );
+			CommandsDetails.Append( CommandDetail );
+
+			CommandDetail.Init();
+			CommandDetail.Name = "MUAMoveFolderTo_1";;
+			CommandDetail.Casts.Append( Parameters + 43, 3 );
+			CommandsDetails.Append( CommandDetail );
+
 
 			Commands.Init();
 			this->Frontend().GetCommands( FBLFRD_MASTER_TYPE, CommandsDetails, Commands );
-			Commands.Recall( 0, 12, _Commands );
+			Commands.Recall( 0, 14, _Commands );
 		}
 		void LoadSetupOfId_1( 
 			const fblfrd::string_ &In1 ) const
@@ -285,6 +297,32 @@ namespace mmuaq {
 			Frontend().EndOfInParameters();
 
 			Frontend().StringOut( Out1 );
+
+			Frontend().Handle();
+		}
+		void MUAMoveMailTo_1( 
+			const fblfrd::id__ &In1,
+			const fblfrd::id__ &In2 ) const
+		{
+			Frontend().PushHeader( _ID, Commands()[12] );
+			Frontend().IdIn( In1 );
+			Frontend().IdIn( In2 );
+
+			Frontend().EndOfInParameters();
+
+
+			Frontend().Handle();
+		}
+		void MUAMoveFolderTo_1( 
+			const fblfrd::id__ &In1,
+			const fblfrd::id__ &In2 ) const
+		{
+			Frontend().PushHeader( _ID, Commands()[13] );
+			Frontend().IdIn( In1 );
+			Frontend().IdIn( In2 );
+
+			Frontend().EndOfInParameters();
+
 
 			Frontend().Handle();
 		}

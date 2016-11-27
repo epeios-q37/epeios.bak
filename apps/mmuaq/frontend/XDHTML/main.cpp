@@ -101,6 +101,16 @@ qRT
 qRE
 }
 
+void main::SetFoldersLayout( core::rSession &Session )
+{
+	folders::SetLayout( FoldersFrameId_, Session );
+}
+
+void main::SetFoldersCasting( core::rSession &Session )
+{
+	folders::SetCasting( FoldersFrameId_, Session );
+}
+
 void main::SetMailsLayout( core::rSession &Session )
 {
 	mails::SetLayout( MailsFrameId_, Session );

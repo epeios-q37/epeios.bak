@@ -32,6 +32,9 @@ namespace main {
 
 	void SetLayout( core::rSession &Session );
 
+	void SetFoldersLayout( core::rSession &Session );
+	void SetFoldersCasting( core::rSession &Session );
+
 	void SetMailsLayout( core::rSession &Session );
 }
 

@@ -183,6 +183,18 @@ namespace muaacc {
 		{
 			return Directory_.CreateFolder( Name, Parent );
 		}
+		void MoveMailTo(
+			muamel::sRow Mail,
+			muafld::sRow Folder )
+		{
+			return Directory_.MoveMailTo( Mail, Folder );
+		}
+		void MoveFolderTo(
+			muafld::sRow Folder,
+			muafld::sRow Parent )
+		{
+			return Directory_.MoveFolderTo( Folder, Parent );
+		}
 		void Update( void );	// Updates the mail with the content on the different agent.
 		void GetFields(
 			const muamel::dRows &Wanted,

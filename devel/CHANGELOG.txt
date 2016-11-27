@@ -1,5 +1,9 @@
 CHANGELOG for the 'Epeios' framework.
 
+2016-11-27 :
+- SCLXDHTML :
+	- Adding 'rSession::Alert(...)' variant for integers.
+
 2016-11-25 :
 - CRT, STR :
 	- Adding 'NewAndInit(...)'

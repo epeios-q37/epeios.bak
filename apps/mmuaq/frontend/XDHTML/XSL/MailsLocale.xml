@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xpp:bloc xmlns:xpp="http://q37.info/ns/xpp">
-<!--
-	<Translations text="frame">
+ <Translations text="mailsDragTitle">
+  <Translation language="fr">Glisser vers un dossier pour y déplacer le courrier.</Translation>
+  <Translation language="en">Drag to a folder to move there the mail.</Translation>
+ </Translations>
+ <Translations text="mailsSubjectHeader">
+  <Translation language="fr">Sujet</Translation>
+  <Translation language="en">Subject</Translation>
+ </Translations>
+
+ <!--
+	<Translations text="mails">
 		<Translation language="fr"></Translation>
 		<Translation language="en"></Translation>
 	</Translations>

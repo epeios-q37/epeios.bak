@@ -113,5 +113,21 @@ AC( SelectMail )
 	mail::SetLayout( MailFrameId_, Session );
 }
 
+AC( DragMail )
+{
+	frdinstc::sMail Mail = frdinstc::UndefinedMail;
 
+	Session.GetNumericalContent( Id, **Mail );
+
+	Session.User.DragMail( Mail );
+
+	main::SetFoldersCasting( Session );
+}
+
+AC( EndMailDragging )
+{
+	Session.User.EndMailDragging();
+
+	main::SetFoldersCasting( Session);
+}
 

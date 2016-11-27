@@ -1,0 +1,3 @@
+TODO list for the 'MMUAq' applcation.
+
+- XDHTML : drag and drop to folders by selecting part of the mail row, not the dedicated icon (which will be removed).

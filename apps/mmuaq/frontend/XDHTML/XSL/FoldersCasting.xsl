@@ -5,5 +5,13 @@
 		<xsl:apply-templates select="*/Context"/>
 	</xsl:template>
 	<xsl:template match="Context">
-	</xsl:template>
+  <xsl:choose>
+   <xsl:when test="@MailDragging='InProgress' or @FolderDragging='InProgress'">
+    <xdh-cast id="DroppingCast" kind="Droppable"/>
+   </xsl:when>
+   <xsl:otherwise>
+    <xdh-cast id="DroppingCast" kind="Undroppable"/>
+   </xsl:otherwise>
+  </xsl:choose>
+ </xsl:template>
 </xsl:stylesheet>

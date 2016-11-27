@@ -152,6 +152,12 @@ namespace frdinstc {
 		{
 			S_().MUAGetMail_1( **Mail, Content );
 		}
+		void MoveMailTo(
+			sMail Mail,
+			sFolder Folder )
+		{
+			S_().MUAMoveMailTo_1( *Mail, *Folder );
+		}
 		void GetFolders(
 			sFolder Folder,
 			dFolders &Folders )
@@ -164,6 +170,12 @@ namespace frdinstc {
 		{
 			S_().MUAGetFoldersNames_1( Folders, Names );
 		}
+		void MoveFolderTo(
+			sFolder Folder,
+			sFolder Parent )
+		{
+			S_().MUAMoveFolderTo_1( *Folder, *Parent );
+		}
 	};
 
 	class rUser
@@ -174,14 +186,18 @@ namespace frdinstc {
 		bso::sBool AgentEdition_;
 		bso::sBool ShowAgentPassword_;
 		sFolder CurrentFolder_;
+		sFolder DraggedFolder_;
 		sMail CurrentMail_;
+		sMail DraggedMail_;
 	public:
 		void reset( bso::bool__ P = true )
 		{	
 			tol::reset( P, Core_, AgentEdition_, ShowAgentPassword_ );
 			CurrentAgent_ = UndefinedAgent;
 			CurrentFolder_ = UndefinedFolder;
+			DraggedFolder_ = UndefinedFolder;
 			CurrentMail_ = UndefinedMail;
+			DraggedMail_ = UndefinedMail;
 		}
 		E_CVDTOR( rUser );
 		void Init( frdfrntnd::rFrontend &Frontend )
@@ -193,6 +209,7 @@ namespace frdinstc {
 			AgentEdition_ = ShowAgentPassword_ = false;
 			CurrentFolder_ = UndefinedFolder;
 			CurrentMail_ = UndefinedMail;
+			DraggedMail_ = UndefinedMail;
 		}
 		str::string_ &ToUpper( str::string_ &String )
 		{
@@ -226,6 +243,51 @@ namespace frdinstc {
 		void SelectMail( sMail Mail )
 		{
 			CurrentMail_ = Mail;
+		}
+		void DragMail( sMail Mail )
+		{
+			if ( DraggedMail_ != UndefinedMail )
+				qRGnr();
+
+			DraggedMail_ = Mail;
+		}
+		void EndMailDragging( void )
+		{
+			DraggedMail_ = UndefinedMail;
+		}
+		bso::sBool MailDragInProgress( void ) const
+		{
+			return DraggedMail_ != UndefinedMail;
+		}
+		void DragFolder( sFolder Folder )
+		{
+			if ( DraggedFolder_ != UndefinedFolder )
+				qRGnr();
+
+			DraggedFolder_ = Folder;
+		}
+		void EndFolderDragging( void )
+		{
+			DraggedFolder_ = UndefinedFolder;
+		}
+		bso::sBool FolderDragInProgress( void ) const
+		{
+			return DraggedFolder_ != UndefinedFolder;
+		}
+		bso::sBool DropToFolder( sFolder Folder )
+		{
+			if ( DraggedMail_ != UndefinedMail ) {
+				Core_.MoveMailTo( DraggedMail_, Folder );
+				DraggedMail_ = UndefinedMail;
+				return false;
+			} else if ( DraggedFolder_ != UndefinedFolder ) {
+				Core_.MoveFolderTo( DraggedFolder_, Folder );
+				DraggedFolder_ = UndefinedFolder;
+				return true;
+			} else
+				qRGnr();
+
+			return false;	// To avoid a warning.
 		}
 		void PutAgentStatusAttribute(
 			const char *Name,

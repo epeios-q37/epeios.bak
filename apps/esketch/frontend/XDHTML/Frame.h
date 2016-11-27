@@ -33,6 +33,11 @@ namespace frame {
 	void SetLayout(
 		const char *Id,
 		core::rSession &Session );
+
+	void SetCasting(
+		const char *Id,
+		core::rSession &Session );
+
 }
 
 #endif

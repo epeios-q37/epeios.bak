@@ -14,7 +14,10 @@
  <xsl:template match="Mails">
   <table style="border: 1px solid black; width: 100%;">
    <tr>
-    <th>Subject</th>
+    <th style="width: 15px;">
+     <img src="js/cursor_drag_hand.png" style="width: 15px; height: 15px"/>
+    </th>
+    <th>#mailsSubjectHeader#</th>
    </tr>
    <xsl:apply-templates select="Mail"/>
   </table>
@@ -24,6 +27,13 @@
    <xsl:attribute name="data-xdh-content">
     <xsl:value-of select="@id"/>
    </xsl:attribute>
+   <td>
+    <img src="js/cursor_drag_hand.png" title="#mailsDragTitle#" style="width: 15px; height: 15px" data-xdh-onevents="(dragstart|DragMail)|(dragend|EndMailDragging)">
+     <xsl:attribute name="data-xdh-content">
+      <xsl:value-of select="@id"/>
+     </xsl:attribute>
+    </img>
+   </td>
    <td>
     <xsl:value-of select="@Subject"/>
    </td>
