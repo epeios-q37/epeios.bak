@@ -876,6 +876,7 @@ qRE
 }
 
 static inline status__ CreateGhostIfRequired_(
+	bso::sBool Unconditional,
 	const str::string_ &Root,
 	const item_ &Item,
 	const dwtbsc::ghosts_oddities_ &GO,
@@ -883,7 +884,7 @@ static inline status__ CreateGhostIfRequired_(
 	dwtght::ghosts_ &Ghosts,
 	dwtght::grow__ &Row )
 {
-	if ( ( ( Row = Item.Dir.GhostRow() ) == qNIL ) || !Ghosts.Exists( Row ) )
+	if ( Unconditional || ( ( Row = Item.Dir.GhostRow() ) == qNIL ) || !Ghosts.Exists( Row ) )
 		return dwtght::CreateGhost( Root, Item.Path, Item.Dir.Name, GO, Parent, Ghosts, Row );
 	else if ( (Ghosts( Row ).S_.Parent != Parent) || (Ghosts( Row ).Name != Item.Dir.Name) ) {
 qRH
@@ -925,15 +926,18 @@ static void Clean_(
 }
 
 namespace {
-	void DeleteExtraneousGhostFiles_(
+	// If returns 'true', a ghost must be created.
+	bso::sBool DeleteExtraneousGhostFiles_(
 		const str::dString &Root,
 		const item_ &Item,
 		const dwtdct::fstrings_ &Filenames,
 		const dwtxcl::excluder_ &Excluder,
 		const dwtbsc::ghosts_oddities_ &GO,
 		const ghosts_ &Ghosts,
+		const g2i_ &G2I,
 		fGhostsSettingStats &Stats )
 	{
+		bso::sBool Create = false;
 		dwtght::grow__ GRow = qNIL;
 		dwtdct::frow__ Row = Filenames.First();
 
@@ -942,7 +946,9 @@ namespace {
 				GRow = dwtght::GetGhostRow( Filenames( Row ), GO );
 
 				if ( GRow != qNIL ) {
-					if ( !Ghosts.Exists( GRow ) || ( GRow != Item.Dir.GetGhostRow()) ) {
+					Create |= G2I( GRow ) != qNIL;
+
+					if ( !Ghosts.Exists( GRow ) || ( G2I( GRow )!= qNIL ) || ( GRow != Item.Dir.GetGhostRow() ) ) {
 						Stats.Inc( gssIntruder );
 						dwtbsc::Delete( Root, Item.Path, Filenames( Row ) );
 					} else
@@ -953,16 +959,19 @@ namespace {
 			Row = Filenames.Next( Row );
 		}
 
+		return Create;
 	}
 
 	bso::sBool DeleteExtraneousGhosts_(
 		const str::string_ &Root,
 		const item_ &Item,
 		const content_ &Content,
-		dwtxcl::excluder_ &Excluder,
+		const dwtxcl::excluder_ &Excluder,
 		const dwtbsc::ghosts_oddities_ &GO,
 		const ghosts_ &Ghosts,
-		fGhostsSettingStats &Stats )
+		const g2i_ &G2I,
+		fGhostsSettingStats &Stats,
+		bso::sBool &Create )	// If at 'true' at return, a new ghost must be created.
 	{
 		dwtght::grow__ GRow = qNIL;
 
@@ -970,18 +979,20 @@ namespace {
 			GRow = dwtght::GetGhostRow( Item.Dir.Name, GO );
 	
 			if ( GRow != qNIL ) {
-				if ( GRow == 0  )
-					Stats.Inc( gssExpected );
-				else if ( !Ghosts.Exists( GRow ) || ( GRow != Content( Item.GetParent() )->Dir.GetGhostRow()) ) {
-					Stats.Inc( gssIntruder );
-					dwtbsc::Delete( Root, Item.Path, 0 );
-				} else
-					Stats.Inc( gssExpected );
+				Create |= G2I( GRow ) != qNIL;
+
+				if ( GRow != 0 ) { // The root ghost (the dir whch contains all the data) is skipped.
+					if ( !Ghosts.Exists( GRow ) || ( G2I( GRow )!= qNIL ) || ( GRow != Content( Item.GetParent() )->Dir.GetGhostRow()) ) {
+						Stats.Inc( gssIntruder );
+						dwtbsc::Delete( Root, Item.Path, 0 );
+					} else
+						Stats.Inc( gssExpected );
+				}
 			}
 
 			return false;
 		} else {
-			DeleteExtraneousGhostFiles_( Root, Item, Item.Files.Names, Excluder, GO, Ghosts, Stats );
+			Create = DeleteExtraneousGhostFiles_( Root, Item, Item.Files.Names, Excluder, GO, Ghosts, G2I, Stats );
 
 			return true;
 		}
@@ -1004,6 +1015,7 @@ qRH
 	dwtght::rRack GhostsRack;
 	dwtght::ghost Ghost;
 	dwtxcl::excluder Excluder;
+	bso::sBool Create = false;	// If stet to 'true', a nex ghost must be created.
 qRB
 	I2G.Init();
 	I2G.Allocate( Content.Extent() );
@@ -1047,9 +1059,11 @@ qRB
 	while ( IRow != qNIL ) {
 		item_ &Item = *Content( IRow );
 
-		if ( DeleteExtraneousGhosts_( Root, Item, Content, Excluder, GO, Ghosts, Stats ) ) {
+		Create = false;
+
+		if ( DeleteExtraneousGhosts_( Root, Item, Content, Excluder, GO, Ghosts, G2I, Stats, Create ) ) {
 			GRow = qNIL;
-			switch ( CreateGhostIfRequired_( Root, Item, GO, I2G( Item.GetParent() ), Ghosts, GRow ) ) {
+			switch ( CreateGhostIfRequired_( Create, Root, Item, GO, I2G( Item.GetParent() ), Ghosts, GRow ) ) {
 			case sCreated:
 				Stats.Inc( gssCreated );
 				I2G.Store( GRow, IRow );
@@ -1211,13 +1225,13 @@ qRB
 
 				if ( Moved ) {
 					if ( Renamed )
-						TFlow << " => ";
+						TFlow << " => ";	// Moved and renamed.
 					else
-						TFlow << " -> ";
+						TFlow << " -> ";	// Only moved.
 
 					TFlow << Item.Path;
 				} else
-					TFlow <<  " => " << Item.Dir.Name;
+					TFlow <<  " => " << Item.Dir.Name;	// Only renamed.
 			}
 
 			TFlow << txf::nl;

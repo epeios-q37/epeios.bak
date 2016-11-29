@@ -26,7 +26,7 @@
 #  define DWTDCT_DBG
 # endif
 
-// Directory WatCher ConTent
+// Directory WatCher Directory ConTent
 
 # include "bso.h"
 # include "err.h"
