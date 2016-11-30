@@ -12,15 +12,31 @@
    </xsl:otherwise>
   </xsl:choose>
  </xsl:template>
+ <!-- Fuctions -->
+ <xsl:template name="Folder">
+  <span data-xdh-onevent="SelectFolder" data-xdh-cast="folderCasting">
+   <xsl:attribute name="data-xdh-content">
+    <xsl:value-of select="@id"/>
+   </xsl:attribute>
+   <xsl:call-template name="FolderName"/>
+   <!--input type="text">
+    <xsl:attribute name="value">ll
+     <xsl:call-template name="FolderName"/>
+    </xsl:attribute>
+   </input-->
+  </span>
+ </xsl:template>
  <!-- Templates -->
  <xsl:template match="/">
   <xsl:apply-templates select="*/Content"/>
   <xsl:apply-templates select="*/Corpus"/>
  </xsl:template>
  <xsl:template match="Content">
-  <div class="css-treeview">
+  <ul class="mktree" id="totot">
+   <li>truc
    <xsl:apply-templates select="Folders"/>
-  </div>
+   </li>
+  </ul>
  </xsl:template>
  <xsl:template match="Corpus">
  </xsl:template>
@@ -40,30 +56,14 @@
     </xsl:attribute>
    </img>
    <xsl:choose>
-   <xsl:when test="Folders/@Amount!=0">
-     <input type="checkbox"/>
-     <label>
-      <xsl:attribute name="data-xdh-content">
-       <xsl:value-of select="@id"/>
-      </xsl:attribute>
-      <span data-xdh-onevent="SelectFolder" data-xdh-cast="folderCasting">
-       <xsl:attribute name="data-xdh-content">
-        <xsl:value-of select="@id"/>
-       </xsl:attribute>
-       <xsl:call-template name="FolderName"/>
-      </span>
-     </label>
+    <xsl:when test="Folders/@Amount!=0">
+      <xsl:call-template name="Folder"/>
      <xsl:apply-templates select="Folders"/>
-   </xsl:when>
-   <xsl:otherwise>
-     <span data-xdh-onevent="SelectFolder" data-xdh-cast="folderCasting">
-      <xsl:attribute name="data-xdh-content">
-       <xsl:value-of select="@id"/>
-      </xsl:attribute>
-      <xsl:call-template name="FolderName"/>
-     </span>
-   </xsl:otherwise>
-  </xsl:choose>
+    </xsl:when>
+    <xsl:otherwise>
+     <xsl:call-template name="Folder"/>
+    </xsl:otherwise>
+   </xsl:choose>
   </li>
  </xsl:template>
 </xsl:stylesheet>
