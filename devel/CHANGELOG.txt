@@ -1,5 +1,9 @@
 CHANGELOG for the 'Epeios' framework.
 
+2016-11-30 :
+- DWTDCT :
+	- Fixing unreferenced ghost bug.
+
 2016-11-29 :
 - DWTDCT :
 	- Handling duplicated ghosts.

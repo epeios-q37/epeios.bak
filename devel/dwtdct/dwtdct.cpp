@@ -946,7 +946,8 @@ namespace {
 				GRow = dwtght::GetGhostRow( Filenames( Row ), GO );
 
 				if ( GRow != qNIL ) {
-					Create |= G2I( GRow ) != qNIL;
+					if ( Ghosts.Exists( GRow ) )
+						Create |= G2I( GRow ) != qNIL;
 
 					if ( !Ghosts.Exists( GRow ) || ( G2I( GRow )!= qNIL ) || ( GRow != Item.Dir.GetGhostRow() ) ) {
 						Stats.Inc( gssIntruder );
@@ -979,7 +980,8 @@ namespace {
 			GRow = dwtght::GetGhostRow( Item.Dir.Name, GO );
 	
 			if ( GRow != qNIL ) {
-				Create |= G2I( GRow ) != qNIL;
+				if ( Ghosts.Exists( GRow ) )
+					Create |= G2I( GRow ) != qNIL;
 
 				if ( GRow != 0 ) { // The root ghost (the dir whch contains all the data) is skipped.
 					if ( !Ghosts.Exists( GRow ) || ( G2I( GRow )!= qNIL ) || ( GRow != Content( Item.GetParent() )->Dir.GetGhostRow()) ) {
@@ -1198,7 +1200,7 @@ qRB
 
 		if ( GRow == qNIL )
 			NoGhost = true;
-		else if ( Reminder( GRow ) != qNIL )
+		else if ( !Ghosts.Exists( GRow ) || ( Reminder( GRow ) != qNIL ) )
 			GhostIgnored = true;
 		else {
 			Reminder.Store( IRow, GRow );
