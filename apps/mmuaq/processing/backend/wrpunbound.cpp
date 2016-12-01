@@ -281,6 +281,20 @@ qRT
 qRE
 }
 
+DEC( GetRootAndInboxFolders, 1 )
+{
+qRH
+	ACCOUNTh;
+qRB
+	ACCOUNTb;
+
+	Request.IdOut() = *Account.Directory().Root();
+	Request.IdOut() = *Account.Directory().Inbox();
+qRR 
+qRT
+qRE
+}
+
 DEC( GetFolders, 1 ) 
 {
 qRH
@@ -451,6 +465,12 @@ void wrpunbound::Inform( fblbkd::backend___ &Backend )
 	Backend.Add( D( GetFields, 1 ),
 		fblbkd::cEnd,
 			fblbkd::cId8s,	// Ids of the fields.
+		fblbkd::cEnd );
+
+	Backend.Add( D( GetRootAndInboxFolders, 1 ),
+		fblbkd::cEnd,
+			fblbkd::cId,	// Root.
+			fblbkd::cId,	// Inbox.
 		fblbkd::cEnd );
 
 	Backend.Add( D( GetFolders, 1 ),

@@ -25,7 +25,7 @@ namespace mmuaq {
 	{
 	private:
 		fblfrd::object__ _ID;
-		fblfrd::command__ _Commands[14];
+		fblfrd::command__ _Commands[15];
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -48,6 +48,7 @@ namespace mmuaq {
 				21, 0, 25, 25, 25, 
 				21, 25, 25, 25, 2, 25, 0, 21, 
 				0, 13, 
+				0, 21, 21, 
 				21, 0, 22, 
 				22, 0, 26, 
 				21, 0, 22, 26, 
@@ -102,39 +103,44 @@ namespace mmuaq {
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
-			CommandDetail.Name = "MUAGetFolders_1";;
+			CommandDetail.Name = "MUAGetRootAndInboxFolders_1";;
 			CommandDetail.Casts.Append( Parameters + 27, 3 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
-			CommandDetail.Name = "MUAGetFoldersNames_1";;
+			CommandDetail.Name = "MUAGetFolders_1";;
 			CommandDetail.Casts.Append( Parameters + 30, 3 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
+			CommandDetail.Name = "MUAGetFoldersNames_1";;
+			CommandDetail.Casts.Append( Parameters + 33, 3 );
+			CommandsDetails.Append( CommandDetail );
+
+			CommandDetail.Init();
 			CommandDetail.Name = "MUAGetMailsFields_1";;
-			CommandDetail.Casts.Append( Parameters + 33, 4 );
+			CommandDetail.Casts.Append( Parameters + 36, 4 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
 			CommandDetail.Name = "MUAGetMail_1";;
-			CommandDetail.Casts.Append( Parameters + 37, 3 );
-			CommandsDetails.Append( CommandDetail );
-
-			CommandDetail.Init();
-			CommandDetail.Name = "MUAMoveMailTo_1";;
 			CommandDetail.Casts.Append( Parameters + 40, 3 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
-			CommandDetail.Name = "MUAMoveFolderTo_1";;
+			CommandDetail.Name = "MUAMoveMailTo_1";;
 			CommandDetail.Casts.Append( Parameters + 43, 3 );
+			CommandsDetails.Append( CommandDetail );
+
+			CommandDetail.Init();
+			CommandDetail.Name = "MUAMoveFolderTo_1";;
+			CommandDetail.Casts.Append( Parameters + 46, 3 );
 			CommandsDetails.Append( CommandDetail );
 
 
 			Commands.Init();
 			this->Frontend().GetCommands( FBLFRD_MASTER_TYPE, CommandsDetails, Commands );
-			Commands.Recall( 0, 14, _Commands );
+			Commands.Recall( 0, 15, _Commands );
 		}
 		void LoadSetupOfId_1( 
 			const fblfrd::string_ &In1 ) const
@@ -246,11 +252,24 @@ namespace mmuaq {
 
 			Frontend().Handle();
 		}
+		void MUAGetRootAndInboxFolders_1( 
+			fblfrd::id__ &Out1,
+			fblfrd::id__ &Out2 ) const
+		{
+			Frontend().PushHeader( _ID, Commands()[8] );
+
+			Frontend().EndOfInParameters();
+
+			Frontend().IdOut( Out1 );
+			Frontend().IdOut( Out2 );
+
+			Frontend().Handle();
+		}
 		void MUAGetFolders_1( 
 			const fblfrd::id__ &In1,
 			fblfrd::ids_ &Out1 ) const
 		{
-			Frontend().PushHeader( _ID, Commands()[8] );
+			Frontend().PushHeader( _ID, Commands()[9] );
 			Frontend().IdIn( In1 );
 
 			Frontend().EndOfInParameters();
@@ -263,7 +282,7 @@ namespace mmuaq {
 			const fblfrd::ids_ &In1,
 			fblfrd::strings_ &Out1 ) const
 		{
-			Frontend().PushHeader( _ID, Commands()[9] );
+			Frontend().PushHeader( _ID, Commands()[10] );
 			Frontend().IdsIn( In1 );
 
 			Frontend().EndOfInParameters();
@@ -277,7 +296,7 @@ namespace mmuaq {
 			fblfrd::ids_ &Out1,
 			fblfrd::strings_ &Out2 ) const
 		{
-			Frontend().PushHeader( _ID, Commands()[10] );
+			Frontend().PushHeader( _ID, Commands()[11] );
 			Frontend().IdIn( In1 );
 
 			Frontend().EndOfInParameters();
@@ -291,7 +310,7 @@ namespace mmuaq {
 			const fblfrd::id__ &In1,
 			fblfrd::string_ &Out1 ) const
 		{
-			Frontend().PushHeader( _ID, Commands()[11] );
+			Frontend().PushHeader( _ID, Commands()[12] );
 			Frontend().IdIn( In1 );
 
 			Frontend().EndOfInParameters();
@@ -304,7 +323,7 @@ namespace mmuaq {
 			const fblfrd::id__ &In1,
 			const fblfrd::id__ &In2 ) const
 		{
-			Frontend().PushHeader( _ID, Commands()[12] );
+			Frontend().PushHeader( _ID, Commands()[13] );
 			Frontend().IdIn( In1 );
 			Frontend().IdIn( In2 );
 
@@ -317,7 +336,7 @@ namespace mmuaq {
 			const fblfrd::id__ &In1,
 			const fblfrd::id__ &In2 ) const
 		{
-			Frontend().PushHeader( _ID, Commands()[13] );
+			Frontend().PushHeader( _ID, Commands()[14] );
 			Frontend().IdIn( In1 );
 			Frontend().IdIn( In2 );
 

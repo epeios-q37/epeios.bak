@@ -54,7 +54,9 @@ namespace muadir {
 			muafld::dFoldersTree::s Folders;
 			dM2F_::s M2F;
 			dF2M_::s F2M;
-			muafld::sRow Inbox;
+			muafld::sRow
+				Root,
+				Inbox;
 		} &S_;
 		muamel::dMails Mails;
 		muafld::dFoldersTree Folders;
@@ -70,6 +72,9 @@ namespace muadir {
 		void reset( bso::bool__ P = true )
 		{
 			tol::reset( P, Mails, Folders, M2F, F2M  );
+
+			S_.Root = qNIL;
+			S_.Inbox = qNIL;
 		}
 		void plug( qASd *AS )
 		{
@@ -81,16 +86,21 @@ namespace muadir {
 			Folders = D.Folders;
 			M2F = D.M2F;
 			F2M = D.F2M;
+
+			S_.Root = D.S_.Root;
 			S_.Inbox = D.S_.Inbox;
 
 			return *this;
 		}
 		void Init( void )
 		{
-			tol::Init( Mails, Folders, M2F, F2M  );
+			tol::Init( Mails, M2F, F2M  );
 
+			S_.Root = Folders.Init();
 			S_.Inbox = Folders.CreateChild( str::wString(), qNIL );
 		}
+		qRODISCLOSEd( muafld::sRow, Root );
+		qRODISCLOSEd( muafld::sRow, Inbox );
 		bso::sBool Exists( muafld::sRow Folder ) const
 		{
 			return Folders.Exists( Folder );

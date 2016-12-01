@@ -102,23 +102,24 @@ namespace base {
 	: public cCorpus_
 	{
 	private:
-		qRMV( frdfrntnd::rFrontend, F_,  Frontend_ );
+		qRMV( core::rSession, S_,  Session_ );
 	protected:
-		virtual void XDHDWSDump( xml::writer_ &Writer ) override
-		{
-		}
+		/*
+		Deported to '.cpp' due to 'g++', which needs 'core::rSession' definition
+		on the declaration (where 'core::rSession' is only declared, but no defined),
+		and not on instanciation.
+		*/
+		virtual void XDHDWSDump( xml::writer_ &Writer ) override;
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			Frontend_ = NULL;
+			tol::reset( P, Session_ );
 		}
 		E_CVDTOR( sCorpusCallback );
-		/*
-		Deported to '.cpp' due to 'g++', which tries to convert 'core::rSession' to 'frdfrntnd::rFrontend'
-		in the template below right on the declaration (where 'core::rSession' is only declared, but no defined),
-		and not on instanciation.
-		*/
-		void Init( core::rSession &Session );
+		void Init( core::rSession &Session )
+		{
+			Session_ = &Session;
+		}
 	};
 
 	XDHDWS_RACKS( Name );

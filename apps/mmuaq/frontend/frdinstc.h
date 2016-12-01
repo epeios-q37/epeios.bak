@@ -158,6 +158,12 @@ namespace frdinstc {
 		{
 			S_().MUAMoveMailTo_1( *Mail, *Folder );
 		}
+		void GetRootAndInboxFolders(
+			sFolder &Root,
+			sFolder &Inbox )
+		{
+			S_().MUAGetRootAndInboxFolders_1( *Root, *Inbox );
+		}
 		void GetFolders(
 			sFolder Folder,
 			dFolders &Folders )
@@ -189,6 +195,7 @@ namespace frdinstc {
 		sFolder DraggedFolder_;
 		sMail CurrentMail_;
 		sMail DraggedMail_;
+		sFolder Root_, Inbox_;
 	public:
 		void reset( bso::bool__ P = true )
 		{	
@@ -198,6 +205,7 @@ namespace frdinstc {
 			DraggedFolder_ = UndefinedFolder;
 			CurrentMail_ = UndefinedMail;
 			DraggedMail_ = UndefinedMail;
+			Root_ = Inbox_ = UndefinedFolder;
 		}
 		E_CVDTOR( rUser );
 		void Init( frdfrntnd::rFrontend &Frontend )
@@ -210,7 +218,10 @@ namespace frdinstc {
 			CurrentFolder_ = UndefinedFolder;
 			CurrentMail_ = UndefinedMail;
 			DraggedMail_ = UndefinedMail;
+			Root_ = Inbox_ = UndefinedFolder;
 		}
+		qRODISCLOSEr( sFolder, Root );
+		qRODISCLOSEr( sFolder, Inbox );
 		str::string_ &ToUpper( str::string_ &String )
 		{
 			return Core_.ToUpper( String );
@@ -224,6 +235,8 @@ namespace frdinstc {
 			const str::dString &Password )
 		{
 			if ( Core_.Login( Username, Password ) ) {
+				Core_.GetRootAndInboxFolders( Root_, Inbox_ );
+				CurrentFolder_ = Inbox_;
 				return true;
 			} else 
 				return false;

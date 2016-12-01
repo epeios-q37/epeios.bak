@@ -71,9 +71,12 @@ bso::bool__ base::sActionHelper::SCLXOnClose( core::rSession &Session )
 	return Session.ConfirmT( "ClosingConfirmation" );
 }
 
-void base::sCorpusCallback::Init( core::rSession &Session )
+void base::sCorpusCallback::XDHDWSDump( xml::dWriter &Writer )
 {
-	Frontend_ = &Session;
+	Writer.PushTag( "Folders" );
+	Writer.PutAttribute( "Root", **S_().User.Root(), **frdinstc::UndefinedFolder );
+	Writer.PutAttribute( "Inbox", **S_().User.Inbox(), **frdinstc::UndefinedFolder );
+	Writer.PopTag();
 }
 
 Q37_GCTOR( base )

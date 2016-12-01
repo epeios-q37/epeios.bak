@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xpp:bloc xmlns:xpp="http://q37.info/ns/xpp">
- <Translations text="foldersInbox">
-  <Translation language="fr">Courrier entrant</Translation>
+ <Translations text="foldersRootFolder">
+  <Translation language="fr">Courrier</Translation>
+  <Translation language="en">MAil</Translation>
+ </Translations>
+ <Translations text="foldersInboxFolder">
+  <Translation language="fr">Entrant</Translation>
   <Translation language="en">Inbox</Translation>
  </Translations>
  <Translations text="foldersDragTitle">
