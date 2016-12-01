@@ -123,7 +123,8 @@ namespace muafld {
 
 			return *this;
 		}
-		void Init( void )
+		// Returns the root.
+		sRow Init( void )
 		{
 			dTree_::Init();
 			tol::Init( Folders );
@@ -131,6 +132,8 @@ namespace muafld {
 			S_.Root = Folders.New();
 			Folders( S_.Root ).Init( str::wString() );
 			dTree_::Allocate( 1 );
+
+			return S_.Root;
 		}
 		bso::sBool Exists( sRow Row ) const
 		{

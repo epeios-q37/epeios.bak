@@ -32,7 +32,7 @@
   <xsl:apply-templates select="*/Corpus"/>
  </xsl:template>
  <xsl:template match="Content">
-  <ul class="mktree" id="totot">
+  <ul class="mktree">
    <li>truc
    <xsl:apply-templates select="Folders"/>
    </li>
