@@ -2,7 +2,7 @@
 <xpp:bloc xmlns:xpp="http://q37.info/ns/xpp">
  <Translations text="foldersRootFolder">
   <Translation language="fr">Courrier</Translation>
-  <Translation language="en">MAil</Translation>
+  <Translation language="en">Mail</Translation>
  </Translations>
  <Translations text="foldersInboxFolder">
   <Translation language="fr">Entrant</Translation>
@@ -11,6 +11,14 @@
  <Translations text="foldersDragTitle">
   <Translation language="fr">Glisser vers un dossier pour l'y déplacer.</Translation>
   <Translation language="en">Drag to a folder to move it there.</Translation>
+ </Translations>
+ <Translations text="foldersRenameFolder">
+  <Translation language="fr">Renommer</Translation>
+  <Translation language="en">Rename</Translation>
+ </Translations>
+ <Translations text="foldersRenameFolderTitle">
+  <Translation language="fr">Renommer le dossier sélectionné.</Translation>
+  <Translation language="en">Rename selected folder</Translation>
  </Translations>
  <!--
 	<Translations text="folders">

@@ -62,7 +62,7 @@ qRB
 	Writer.PushTag( "Agents" );
 	Writer.PutAttribute( "Amount", Agents.Amount() );
 
-	Writer.PutAttribute( "Current", **CurrentAgent_, **UndefinedAgent );
+	Writer.PutAttribute( "Current", **Agent_.Current, **UndefinedAgent );
 
 	DumpAgents_( Agents, Names, Writer );
 
@@ -77,10 +77,10 @@ void frdinstc::rUser::DumpCurrentAgent( xml::dWriter &Writer )
 qRH
 	wString Name, HostPort, Username; 
 qRB
-	if ( CurrentAgent_ != UndefinedAgent ) {
+	if ( Agent_.Current != UndefinedAgent ) {
 
 		tol::Init( Name, HostPort, Username );
-		Core_.GetAgent( CurrentAgent_, Name, HostPort, Username );
+		Core_.GetAgent( Agent_.Current, Name, HostPort, Username );
 
 		Writer.PushTag( "Agent" );
 
@@ -133,8 +133,8 @@ qRH
 qRB
 	tol::Init( Ids, Subjects );
 
-	if ( CurrentFolder_ != UndefinedFolder )
-		Core_.GetMailsFields( CurrentFolder_, Ids, Subjects );
+	if ( Folder_.Current != UndefinedFolder )
+		Core_.GetMailsFields( Folder_.Current, Ids, Subjects );
 
 	dump_mails_::Dump( Ids, Subjects, Writer );
 qRR
@@ -147,9 +147,9 @@ void frdinstc::rUser::DumpMail( xml::dWriter &Writer )
 qRH
 	str::wString Content;
 qRB
-	if ( CurrentMail_ != UndefinedMail ) {
+	if ( Mail_.Current != UndefinedMail ) {
 		Content.Init();
-		Core_.GetMail( CurrentMail_, Content );
+		Core_.GetMail( Mail_.Current, Content );
 		Writer.PutValue( Content, "Mail" );
 	}
 qRR
@@ -220,22 +220,20 @@ void frdinstc::rUser::DumpFolders( xml::dWriter &Writer )
 	dump_folders_::Dump( UndefinedFolder, Core_, Writer );
 }
 
-
-
 const str::dString &frdinstc::rUser::GetAgentStatus( str::dString &Status )
 {
-	if ( CurrentAgent_ != frdinstc::UndefinedAgent ) {
-		if ( AgentEdition_  )
+	if ( Agent_.Current != frdinstc::UndefinedAgent ) {
+		if ( Agent_.Edition  )
 			Status = "Edit";
 		else
 			Status = "Show";
-	} else if ( AgentEdition_ )
+	} else if ( Agent_.Edition )
 		Status = "Create";
 
 	return Status;
 }
 
-void frdinstc::rUser::PutAgentStatusAttribute(
+void frdinstc::rUser::DumpAgentStatusAttribute(
 	const char *Name,
 	xml::dWriter &Writer )
 {

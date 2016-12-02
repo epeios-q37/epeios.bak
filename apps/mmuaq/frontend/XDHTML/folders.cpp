@@ -42,7 +42,7 @@ namespace {
 		if ( Session.User.MailDragInProgress() )
 			Rack().PutAttribute( "MailDragging", "InProgress" );
 
-		Rack().PutAttribute( "CurrentFolder", **Session.User.CurrentFolder(), **frdinstc::UndefinedFolder );
+		Rack().PutAttribute( "CurrentFolder", **Session.User.Folder().Current, **frdinstc::UndefinedFolder );
 	qRR
 	qRT
 	qRE

@@ -74,8 +74,8 @@ bso::bool__ base::sActionHelper::SCLXOnClose( core::rSession &Session )
 void base::sCorpusCallback::XDHDWSDump( xml::dWriter &Writer )
 {
 	Writer.PushTag( "Folders" );
-	Writer.PutAttribute( "Root", **S_().User.Root(), **frdinstc::UndefinedFolder );
-	Writer.PutAttribute( "Inbox", **S_().User.Inbox(), **frdinstc::UndefinedFolder );
+	Writer.PutAttribute( "Root", **S_().User.Folder().Root, **frdinstc::UndefinedFolder );
+	Writer.PutAttribute( "Inbox", **S_().User.Folder().Inbox, **frdinstc::UndefinedFolder );
 	Writer.PopTag();
 }
 

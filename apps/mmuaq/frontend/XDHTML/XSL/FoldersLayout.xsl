@@ -41,7 +41,7 @@
    </li>
   </ul>
   </fieldset>
-  <input type="button"/>
+  <button title="#foldersRenameFolderTitle#" data-xdh-onevent="RenameFolder">#foldersRenameFolder#</button>
  </xsl:template>
  <xsl:template match="Corpus">
  </xsl:template>

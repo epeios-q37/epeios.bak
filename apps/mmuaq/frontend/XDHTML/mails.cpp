@@ -37,7 +37,7 @@ namespace {
 	qRB
 		Rack.Init( XSLAffix_, XML, Session );
 
-		Rack().PutAttribute( "CurrentMail", **Session.User.CurrentMail(), **frdinstc::UndefinedMail );
+		Rack().PutAttribute( "CurrentMail", **Session.User.Mail().Current, **frdinstc::UndefinedMail );
 	qRR
 	qRT
 	qRE

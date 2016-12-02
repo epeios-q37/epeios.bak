@@ -41,7 +41,7 @@ namespace {
 
 		Rack().PushTag( "Agent" );
 
-		Session.User.PutAgentStatusAttribute( "Status", Rack );
+		Session.User.DumpAgentStatusAttribute( "Status", Rack );
 
 		Rack().PopTag();
 	qRR

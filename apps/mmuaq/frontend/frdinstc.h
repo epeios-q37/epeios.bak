@@ -184,28 +184,76 @@ namespace frdinstc {
 		}
 	};
 
+	struct sAgentTracker_
+	{
+	public:
+		sAgent Current;
+		bso::sBool Edition;
+		bso::sBool ShowPassword;
+		void reset( bso::sBool = true )
+		{	
+			Current = UndefinedAgent;
+			Edition = false;
+			ShowPassword = false;
+		}
+		qCDTOR( sAgentTracker_ );
+		void Init( void )
+		{	
+			Current = UndefinedAgent;
+			Edition = false;
+			ShowPassword = false;
+		}
+	};
+
+	template <typename id> struct sTracker_ {
+	public:
+		id
+			Current,
+			Dragged;
+		void reset( bso::sBool P = true )
+		{
+			Current = Dragged = fbltyp::UndefinedId;
+		}
+		qCDTOR( sTracker_ );
+		void Init( void )
+		{
+			Current = Dragged = fbltyp::UndefinedId;
+		}
+	};
+
+	struct sFolderTracker_
+	: public sTracker_<sFolder>
+	{
+	public:
+		sFolder
+			Root,
+			Inbox;
+		void reset( bso::sBool P = true )
+		{
+			sTracker_::reset( P );
+			Root = Inbox = UndefinedFolder;
+		}
+		qCDTOR( sFolderTracker_ );
+		void Init( void )
+		{
+			sTracker_::Init();
+			Root = Inbox = UndefinedFolder;
+		}
+	};
+
+	typedef sTracker_<sMail> sMailTracker_;
+
 	class rUser
 	{
 	private:
 		rUser_ Core_;
-		sAgent CurrentAgent_;
-		bso::sBool AgentEdition_;
-		bso::sBool ShowAgentPassword_;
-		sFolder CurrentFolder_;
-		sFolder DraggedFolder_;
-		sMail CurrentMail_;
-		sMail DraggedMail_;
-		sFolder Root_, Inbox_;
+		sAgentTracker_ Agent_;
+		sFolderTracker_ Folder_;
+		sMailTracker_ Mail_;
 	public:
 		void reset( bso::bool__ P = true )
 		{	
-			tol::reset( P, Core_, AgentEdition_, ShowAgentPassword_ );
-			CurrentAgent_ = UndefinedAgent;
-			CurrentFolder_ = UndefinedFolder;
-			DraggedFolder_ = UndefinedFolder;
-			CurrentMail_ = UndefinedMail;
-			DraggedMail_ = UndefinedMail;
-			Root_ = Inbox_ = UndefinedFolder;
+			tol::reset( P, Core_, Agent_, Folder_, Mail_ );
 		}
 		E_CVDTOR( rUser );
 		void Init( frdfrntnd::rFrontend &Frontend )
@@ -213,15 +261,11 @@ namespace frdinstc {
 			if ( Frontend.IsConnected() )
 				Core_.Init( Frontend );
 
-			CurrentAgent_ = UndefinedAgent;
-			AgentEdition_ = ShowAgentPassword_ = false;
-			CurrentFolder_ = UndefinedFolder;
-			CurrentMail_ = UndefinedMail;
-			DraggedMail_ = UndefinedMail;
-			Root_ = Inbox_ = UndefinedFolder;
+			tol::Init( Agent_, Folder_, Mail_ );
 		}
-		qRODISCLOSEr( sFolder, Root );
-		qRODISCLOSEr( sFolder, Inbox );
+		qRODISCLOSEr( sAgentTracker_, Agent );
+		qRODISCLOSEr( sFolderTracker_, Folder );
+		qRODISCLOSEr( sMailTracker_, Mail );
 		str::string_ &ToUpper( str::string_ &String )
 		{
 			return Core_.ToUpper( String );
@@ -235,8 +279,8 @@ namespace frdinstc {
 			const str::dString &Password )
 		{
 			if ( Core_.Login( Username, Password ) ) {
-				Core_.GetRootAndInboxFolders( Root_, Inbox_ );
-				CurrentFolder_ = Inbox_;
+				Core_.GetRootAndInboxFolders( Folder_.Root, Folder_.Inbox );
+				Folder_.Current = Folder_.Inbox;
 				return true;
 			} else 
 				return false;
@@ -251,69 +295,69 @@ namespace frdinstc {
 		const str::dString &GetAgentStatus( str::dString &Status );
 		void SelectFolder( sFolder Folder )
 		{
-			CurrentFolder_ = Folder;
+			Folder_.Current = Folder;
 		}
 		void SelectMail( sMail Mail )
 		{
-			CurrentMail_ = Mail;
+			Mail_.Current = Mail;
 		}
 		void DragMail( sMail Mail )
 		{
-			if ( DraggedMail_ != UndefinedMail )
+			if ( Mail_.Dragged != UndefinedMail )
 				qRGnr();
 
-			DraggedMail_ = Mail;
+			Mail_.Dragged = Mail;
 		}
 		void EndMailDragging( void )
 		{
-			DraggedMail_ = UndefinedMail;
+			Mail_.Dragged = UndefinedMail;
 		}
 		bso::sBool MailDragInProgress( void ) const
 		{
-			return DraggedMail_ != UndefinedMail;
+			return Mail_.Dragged != UndefinedMail;
 		}
 		void DragFolder( sFolder Folder )
 		{
-			if ( DraggedFolder_ != UndefinedFolder )
+			if ( Folder_.Dragged != UndefinedFolder )
 				qRGnr();
 
-			DraggedFolder_ = Folder;
+			Folder_.Dragged = Folder;
 		}
 		void EndFolderDragging( void )
 		{
-			DraggedFolder_ = UndefinedFolder;
+			Folder_.Dragged = UndefinedFolder;
 		}
 		bso::sBool FolderDragInProgress( void ) const
 		{
-			return DraggedFolder_ != UndefinedFolder;
+			return Folder_.Dragged != UndefinedFolder;
 		}
 		bso::sBool DropToFolder( sFolder Folder )
 		{
-			if ( DraggedMail_ != UndefinedMail ) {
-				Core_.MoveMailTo( DraggedMail_, Folder );
-				DraggedMail_ = UndefinedMail;
+			if ( Mail_.Dragged != UndefinedMail ) {
+				Core_.MoveMailTo( Mail_.Dragged, Folder );
+				Mail_.Dragged = UndefinedMail;
 				return false;
-			} else if ( DraggedFolder_ != UndefinedFolder ) {
-				Core_.MoveFolderTo( DraggedFolder_, Folder );
-				DraggedFolder_ = UndefinedFolder;
+			} else if ( Folder_.Dragged != UndefinedFolder ) {
+				Core_.MoveFolderTo( Folder_.Dragged, Folder );
+				Folder_.Dragged = UndefinedFolder;
 				return true;
 			} else
 				qRGnr();
 
 			return false;	// To avoid a warning.
 		}
-		void PutAgentStatusAttribute(
+		void DumpAgentStatusAttribute(
 			const char *Name,
 			xml::dWriter &Writer );
 		void DefineAgent( void )
 		{
-			CurrentAgent_ = UndefinedAgent;
-			AgentEdition_ = true;
+			Agent_.Current = UndefinedAgent;
+			Agent_.Edition = true;
 		}
 		void DiscardAgent( void )
 		{
-			CurrentAgent_ = UndefinedAgent;
-			AgentEdition_ = false;
+			Agent_.Current = UndefinedAgent;
+			Agent_.Edition = false;
 		}
 		void UpdateAgent(
 			const dString &Name,
@@ -322,25 +366,26 @@ namespace frdinstc {
 			bso::sBool PasswordIsSet,
 			const dString &Password )
 		{
-			if ( CurrentAgent_ != UndefinedAgent )
-				Core_.UpdateAgent( CurrentAgent_, Name, HostPort, Username, PasswordIsSet, Password );
+			if ( Agent_.Current != UndefinedAgent )
+				Core_.UpdateAgent( Agent_.Current, Name, HostPort, Username, PasswordIsSet, Password );
 			else 
-				CurrentAgent_ = Core_.CreateAgent( Name, HostPort, Username, Password );
+				Agent_.Current = Core_.CreateAgent( Name, HostPort, Username, Password );
 
-			AgentEdition_ = false;
+			Agent_.Edition = false;
 		}
 		void SelectAgent( sAgent Agent )
 		{
-			CurrentAgent_ = Agent;
-			AgentEdition_ = false;
+			Agent_.Current = Agent;
+			Agent_.Edition = false;
 		}
 		void EditAgent( void )
 		{
-			AgentEdition_ = true;
+			Agent_.Edition = true;
 		}
-		qRWDISCLOSEr( bso::sBool, ShowAgentPassword );
-		qRODISCLOSEr( sMail, CurrentMail );
-		qRODISCLOSEr( sFolder, CurrentFolder );
+		void SetAgentShowPassword( bso::sBool Value )
+		{
+			Agent_.ShowPassword = Value;
+		}
 	};
 }
 

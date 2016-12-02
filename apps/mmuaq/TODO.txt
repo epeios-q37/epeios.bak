@@ -1,3 +1,5 @@
-TODO list for the 'MMUAq' applcation.
+TODO list for the 'MMUAq' applcation. The main goal of this file is NOT to list missing functionnalities,
+but ameliorations to be made on the existing ones.
 
 - XDHTML : drag and drop to folders by selecting part of the mail row, not the dedicated icon (which will be removed).
+- XDHTML : drag and drop folders by selecting part of a folder, not the dedicated icon (which will be removed).

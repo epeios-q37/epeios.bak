@@ -36,9 +36,9 @@ namespace {
 	qRB
 		Rack.Init( XSLAffix_, XML, Session );
 
-		Session.User.PutAgentStatusAttribute( "Status", Rack );
+		Session.User.DumpAgentStatusAttribute( "Status", Rack );
 
-		Rack().PutAttribute("Password", Session.User.GetShowAgentPassword() ? "Visible" : "Hidden" );
+		Rack().PutAttribute("Password", Session.User.Agent().ShowPassword ? "Visible" : "Hidden" );
 	qRR
 	qRT
 	qRE
@@ -140,7 +140,7 @@ AC( DiscardAgent )
 
 AC( ToggleAgentPassword )
 {
-	Session.User.SetShowAgentPassword( Session.GetBooleanContent( "AgentPasswordToggle" ) );
+	Session.User.SetAgentShowPassword( Session.GetBooleanContent( "AgentPasswordToggle" ) );
 
 	core::SetAgentCasting( Session );
 }
