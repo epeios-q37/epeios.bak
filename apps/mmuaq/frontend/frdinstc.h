@@ -357,6 +357,8 @@ namespace frdinstc {
 				qRGnr();
 
 			Core_.RenameFolder( Folder_.Current, Name );
+
+			Folder_.State = folder_::sViewing;
 		}
 		void SelectMail( sMail Mail )
 		{
