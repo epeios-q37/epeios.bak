@@ -28,9 +28,9 @@ namespace frdinstc {
 
 	using namespace frdfrntnd;
 
-	SCLF_I( Agent, Id);
-	SCLF_I( Folder, Id );
-	SCLF_I( Mail, Id );
+	SCLF_I( agent, Agent, Id);
+	SCLF_I( folder, Folder, Id );
+	SCLF_I( mail, Mail, Id );
 
 	using fbltyp::dString;
 	using fbltyp::dStrings;
@@ -184,72 +184,96 @@ namespace frdinstc {
 		}
 	};
 
-	struct sAgentTracker_
+	namespace agent_ {
+		struct sTracker
+		{
+		public:
+			sAgent Current;
+			bso::sBool Edition;
+			bso::sBool ShowPassword;
+			void reset( bso::sBool = true )
+			{	
+				Current = UndefinedAgent;
+				Edition = false;
+				ShowPassword = false;
+			}
+			qCDTOR( sTracker );
+			void Init( void )
+			{	
+				Current = UndefinedAgent;
+				Edition = false;
+				ShowPassword = false;
+			}
+		};
+	}
+
+	namespace shared_ {
+		template <typename id> struct sTracker
+		{
+		public:
+			id
+				Current,
+				Dragged;
+			void reset( bso::sBool P = true )
+			{
+				Current = Dragged = fbltyp::UndefinedId;
+			}
+			qCDTOR( sTracker );
+			void Init( void )
+			{
+				Current = Dragged = fbltyp::UndefinedId;
+			}
+		};
+	}
+
+	namespace folder_
 	{
-	public:
-		sAgent Current;
-		bso::sBool Edition;
-		bso::sBool ShowPassword;
-		void reset( bso::sBool = true )
-		{	
-			Current = UndefinedAgent;
-			Edition = false;
-			ShowPassword = false;
-		}
-		qCDTOR( sAgentTracker_ );
-		void Init( void )
-		{	
-			Current = UndefinedAgent;
-			Edition = false;
-			ShowPassword = false;
-		}
-	};
+		qENUM( State )
+		{
+			sViewing,
+			sEdition,
+			sCreation,	// In this state, the current folder is the one to which the created folder will be attached.
+			s_amount,
+			s_Undefined
+		};
 
-	template <typename id> struct sTracker_ {
-	public:
-		id
-			Current,
-			Dragged;
-		void reset( bso::sBool P = true )
-		{
-			Current = Dragged = fbltyp::UndefinedId;
-		}
-		qCDTOR( sTracker_ );
-		void Init( void )
-		{
-			Current = Dragged = fbltyp::UndefinedId;
-		}
-	};
+		typedef shared_::sTracker<sFolder> sTracker_;
 
-	struct sFolderTracker_
-	: public sTracker_<sFolder>
-	{
-	public:
-		sFolder
-			Root,
-			Inbox;
-		void reset( bso::sBool P = true )
+		struct sTracker
+		: public sTracker_
 		{
-			sTracker_::reset( P );
-			Root = Inbox = UndefinedFolder;
-		}
-		qCDTOR( sFolderTracker_ );
-		void Init( void )
-		{
-			sTracker_::Init();
-			Root = Inbox = UndefinedFolder;
-		}
-	};
+		public:
+			sFolder
+				Root,
+				Inbox;
+			eState State;
+			void reset( bso::sBool P = true )
+			{
+				sTracker_::reset( P );
+				Root = Inbox = UndefinedFolder;
+				State = s_Undefined;
+			}
+			qCDTOR( sTracker );
+			void Init( void )
+			{
+				sTracker_::Init();
+				Root = Inbox = UndefinedFolder;
+				State = s_Undefined;
+			}
+		};
+	}
 
-	typedef sTracker_<sMail> sMailTracker_;
+	namespace mail_ {
+		typedef shared_::sTracker<sMail> sTracker;
+	}
 
 	class rUser
 	{
 	private:
 		rUser_ Core_;
-		sAgentTracker_ Agent_;
-		sFolderTracker_ Folder_;
-		sMailTracker_ Mail_;
+		agent_::sTracker Agent_;
+		folder_::sTracker Folder_;
+		mail_::sTracker Mail_;
 	public:
 		void reset( bso::bool__ P = true )
 		{	
@@ -263,9 +287,9 @@ namespace frdinstc {
 
 			tol::Init( Agent_, Folder_, Mail_ );
 		}
-		qRODISCLOSEr( sAgentTracker_, Agent );
-		qRODISCLOSEr( sFolderTracker_, Folder );
-		qRODISCLOSEr( sMailTracker_, Mail );
+		qRODISCLOSEr( agent_::sTracker, Agent );
+		qRODISCLOSEr( folder_::sTracker, Folder );
+		qRODISCLOSEr( mail_::sTracker, Mail );
 		str::string_ &ToUpper( str::string_ &String )
 		{
 			return Core_.ToUpper( String );
@@ -296,6 +320,7 @@ namespace frdinstc {
 		void SelectFolder( sFolder Folder )
 		{
 			Folder_.Current = Folder;
+			Folder_.State = folder_::sViewing;
 		}
 		void SelectMail( sMail Mail )
 		{

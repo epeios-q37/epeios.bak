@@ -227,7 +227,16 @@ namespace sclfrntnd {
 
 	void GuessBackendFeatures( rFeatures &Features );	// Set features following what's in registry.
 
-# define SCLF_I( name, id  )\
+# define SCLF_I( ns, name, id  )\
+	namespace ns {\
+		typedef fbltyp::s##id t##id;\
+		E_TMIMIC__( t##id,	s##id );\
+		typedef fbltyp::d##id##s	d##id##s;\
+		qW( id##s );\
+\
+		E_CDEF( s##id, Undefined, fbltyp::Undefined##id );\
+	}\
+\
 	typedef fbltyp::s##id t##name;\
 	E_TMIMIC__( t##name,	s##name );\
 	typedef fbltyp::d##id##s	d##name##s;\
