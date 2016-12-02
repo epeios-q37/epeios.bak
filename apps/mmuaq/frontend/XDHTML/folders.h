@@ -24,6 +24,7 @@
 
 namespace folders {
 	BASE_ACD( SelectFolder );
+	BASE_ACD( EditFolder );
 	BASE_ACD( DragFolder );
 	BASE_ACD( EndFolderDragging );
 	BASE_ACD( DropToFolder );
@@ -31,6 +32,7 @@ namespace folders {
 	inline void Register( void )
 	{
 		BASE_ACR( SelectFolder );
+		BASE_ACR( EditFolder );
 		BASE_ACR( DragFolder );
 		BASE_ACR( EndFolderDragging );
 		BASE_ACR( DropToFolder );

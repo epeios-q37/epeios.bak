@@ -42,7 +42,7 @@ namespace {
 		if ( Session.User.MailDragInProgress() )
 			Rack().PutAttribute( "MailDragging", "InProgress" );
 
-		Rack().PutAttribute( "CurrentFolder", **Session.User.Folder().Current, **frdinstc::UndefinedFolder );
+		Session.User.DumpCurrentFolderAttributes( Rack );
 	qRR
 	qRT
 	qRE
@@ -58,6 +58,8 @@ namespace {
 	qRB
 		Rack.Init( XSLAffix_, XML, Session );
 	
+		Session.User.DumpCurrentFolderAttributes( Rack );
+
 		Session.User.DumpFolders( Rack );
 	qRR
 	qRT
@@ -114,10 +116,21 @@ AC( SelectFolder )
 	frdinstc::sFolder Folder = frdinstc::UndefinedFolder;
 	Session.GetNumericalContent( Id, **Folder );
 
-	Session.User.SelectFolder( Folder );
+	if ( Session.User.SelectFolder( Folder ) ) {
+		main::SetFoldersLayout( Session );
+	} else {
+		main::SetMailsLayout( Session );
+		main::SetFoldersCasting( Session );
+	}
+}
 
-	main::SetMailsLayout( Session );
-	main::SetFoldersCasting( Session );
+AC( EditFolder )
+{
+	Session.User.EditFolder();
+
+	main::SetFoldersLayout( Session );
+
+	Session.Focus( "EditableFolder" );
 }
 
 AC( DragFolder )

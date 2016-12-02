@@ -27,8 +27,24 @@ using namespace frdinstc;
 using fbltyp::wString;
 using fbltyp::wStrings;
 
-namespace {
-	void DumpAgents_(
+#define C( name ) case folder_::s##name : return #name; break
+
+const char *frdinstc::folder_::GetLabel( folder_::eState State )
+{
+	switch ( State ) {
+	C( Viewing );
+	C( Creation );
+	C( Edition );
+	default:
+		qRGnr();
+		break;
+	}
+
+	return NULL;	// To avoid a warning.
+}
+
+namespace dump_agents_ {
+	void Dump(
 		const dAgents &Ids,
 		dStrings &Labels,
 		xml::dWriter &Writer )
@@ -64,7 +80,7 @@ qRB
 
 	Writer.PutAttribute( "Current", **Agent_.Current, **UndefinedAgent );
 
-	DumpAgents_( Agents, Names, Writer );
+	dump_agents_::Dump( Agents, Names, Writer );
 
 	Writer.PopTag();
 qRR

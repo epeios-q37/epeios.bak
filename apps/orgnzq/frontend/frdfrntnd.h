@@ -37,14 +37,14 @@ namespace frdfrntnd {
 	using frdmisc::dTypes;
 	using frdmisc::UndefinedType;
 
-	SCLF_I1S( Number, Id8 );
-	SCLF_I( Column, Id );
-	SCLF_I( Field, Id );
-	SCLF_I( Record, Id );
-	SCLF_I1S( Digest, Id );
+	SCLF_I1S( number, Number, Id8 );
+	SCLF_I( column, Column, Id );
+	SCLF_I( field, Field, Id );
+	SCLF_I( record, Record, Id );
+	SCLF_I1S( digest, Digest, Id );
 
 
-	SCLF_I1S( Entry, Id );
+	SCLF_I1S( entry, Entry, Id );
 	typedef dEntrys dEntries;
 	qW( Entries );
 	typedef dEntrysI1S dEntriesI1S;

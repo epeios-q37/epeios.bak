@@ -3,26 +3,37 @@
  <xsl:output method="html" encoding="UTF-8"/>
  <!-- Fuctions -->
  <xsl:template name="Folder">
-  <span data-xdh-onevent="SelectFolder" data-xdh-cast="folderCasting">
-   <xsl:attribute name="data-xdh-content">
-    <xsl:value-of select="@id"/>
-   </xsl:attribute>
    <xsl:choose>
-    <xsl:when test="@id=/*/Corpus/Folders/@Inbox">
-     <span style="font-style: italic;">
-      <xsl:text>#foldersInboxFolder#</xsl:text>
-     </span>
-    </xsl:when>
-    <xsl:otherwise>
-     <xsl:value-of select="@Name"/>
-    </xsl:otherwise>
-   </xsl:choose>
-   <!--input type="text">
-    <xsl:attribute name="value">ll
-     <xsl:call-template name="FolderName"/>
-    </xsl:attribute>
-   </input-->
-  </span>
+   <xsl:when test="(/*/Content/@CurrentFolderState='Edition') and (@id=/*/Content/@CurrentFolder)">
+    <span data-xdh-cast="folderCasting">
+     <xsl:attribute name="data-xdh-content">
+      <xsl:value-of select="@id"/>
+     </xsl:attribute>
+     <input type="text" id="EditableFolder">
+      <xsl:attribute name="value">
+       <xsl:value-of select="@Name"/>
+      </xsl:attribute>
+     </input>
+    </span>
+   </xsl:when>
+   <xsl:otherwise>
+    <span data-xdh-onevent="SelectFolder" data-xdh-cast="folderCasting">
+     <xsl:attribute name="data-xdh-content">
+      <xsl:value-of select="@id"/>
+     </xsl:attribute>
+     <xsl:choose>
+      <xsl:when test="@id=/*/Corpus/Folders/@Inbox">
+       <span style="font-style: italic;">
+        <xsl:text>#foldersInboxFolder#</xsl:text>
+       </span>
+      </xsl:when>
+      <xsl:otherwise>
+       <xsl:value-of select="@Name"/>
+      </xsl:otherwise>
+     </xsl:choose>
+    </span>
+   </xsl:otherwise>
+  </xsl:choose>
  </xsl:template>
  <!-- Templates -->
  <xsl:template match="/">
@@ -32,23 +43,23 @@
  <xsl:template match="Content">
   <fieldset>
    <ul class="mktree">
-   <li data-xdh-cast="DroppingCast" data-xdh-onevent="drop|DropToFolder">
-    <xsl:attribute name="data-xdh-content">
-     <xsl:value-of select="/*/Corpus/Folders/@Root"/>
-    </xsl:attribute>
-    <xsl:text>#foldersRootFolder#</xsl:text>
-    <xsl:apply-templates select="Folders"/>
-   </li>
-  </ul>
+    <li data-xdh-cast="DroppingCast" data-xdh-onevent="drop|DropToFolder">
+     <xsl:attribute name="data-xdh-content">
+      <xsl:value-of select="/*/Corpus/Folders/@Root"/>
+     </xsl:attribute>
+     <xsl:text>#foldersRootFolder#</xsl:text>
+     <xsl:apply-templates select="Folders"/>
+    </li>
+   </ul>
   </fieldset>
-  <button title="#foldersRenameFolderTitle#" data-xdh-onevent="RenameFolder">#foldersRenameFolder#</button>
+  <button title="#foldersEditFolderTitle#" data-xdh-onevent="EditFolder">#foldersEditFolder#</button>
  </xsl:template>
  <xsl:template match="Corpus">
  </xsl:template>
  <xsl:template match="Folders">
-   <ul>
-    <xsl:apply-templates select="Folder"/>
-   </ul>
+  <ul>
+   <xsl:apply-templates select="Folder"/>
+  </ul>
  </xsl:template>
  <xsl:template match="Folder">
   <li data-xdh-cast="DroppingCast" data-xdh-onevent="drop|DropToFolder">

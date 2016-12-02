@@ -2,7 +2,7 @@ CHANGELOG for the 'Epeios' framework.
 
 2016-12-02 :
 - SCLFRNTND :
-	- Extending 'SCLF_I' macro.
+	- Extending 'SCLF_I...' macros.
 
 2016-11-30 :
 - DWTDCT :

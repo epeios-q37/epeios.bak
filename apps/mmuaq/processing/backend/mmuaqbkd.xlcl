@@ -19,21 +19,21 @@
   <Translation language="fr">Le nom d'un agent ne peut être vide.</Translation>
   <Translation language="en">Agent name can not be empty.</Translation>
  </Translations>
- <Translations text="HostPortCanNotBeEmpty">
-  <Translation language="fr">L'adresse et le port ne peuvent être vide.</Translation>
-  <Translation language="en">Address/port can not be empty.</Translation>
- </Translations>
- <Translations text="UsernameCanNotBeEmpty">
-  <Translation language="fr">Le nom d'utilisateur ne peut être vide.</Translation>
-  <Translation language="en">User name cannot not be empty.</Translation>
- </Translations>
  <Translations text="AgentNameCannotBeLongerAs">
   <Translation language="fr">Le nom d'un agent est limité à %1 caractères.</Translation>
   <Translation language="en">Agent name can not be longer as %1 chars.</Translation>
  </Translations>
+ <Translations text="HostPortCanNotBeEmpty">
+  <Translation language="fr">L'adresse et le port ne peuvent être vide.</Translation>
+  <Translation language="en">Address/port can not be empty.</Translation>
+ </Translations>
  <Translations text="HostPortCannotBeLongerAs">
   <Translation language="fr">L'adresse et le port est limité à %1 caractères.</Translation>
   <Translation language="en">Address/port can not be longer as %1 chars.</Translation>
+ </Translations>
+ <Translations text="UsernameCanNotBeEmpty">
+  <Translation language="fr">Le nom d'utilisateur ne peut être vide.</Translation>
+  <Translation language="en">User name cannot not be empty.</Translation>
  </Translations>
  <Translations text="UsernameCannotBeLongerAs">
   <Translation language="fr">Le nom d'utilisateur est limité à %1 caractères.</Translation>
@@ -43,9 +43,21 @@
   <Translation language="fr">Le mot de passe est limité à %1 caractères.</Translation>
   <Translation language="en">Password can not be longer as %1 chars.</Translation>
  </Translations>
+ <Translations text="FolderNameCanNotBeEmpty">
+  <Translation language="fr">Un nom de dossier ne peut être vide.</Translation>
+  <Translation language="en">A folder name cannot not be empty.</Translation>
+ </Translations>
+ <Translations text="FolderNameCannotBeLongerAs">
+  <Translation language="fr">Les noms de dossiers sont limités à %1 caractères.</Translation>
+  <Translation language="en">Folder names can not be longer as %1 chars.</Translation>
+ </Translations>
  <Translations text="UnknownAgent">
   <Translation language="fr">Agent inconnu.</Translation>
   <Translation language="en">Unknown agent.</Translation>
+ </Translations>
+ <Translations text="UnknownFolder">
+  <Translation language="fr">Dossier inconnu.</Translation>
+  <Translation language="en">Unknown folder.</Translation>
  </Translations>
  <Translations text="DemoFolderLabel">
   <Translation language="fr">Dossier démo</Translation>

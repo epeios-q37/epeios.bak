@@ -32,7 +32,7 @@ namespace frdmisc {
 
 	frdcllbck::cXML &Get( const str::dString &Label );
 
-	SCLF_I( Type, Id );
+	SCLF_I( type, Type, Id );
 
 	struct dXType {
 	public:
@@ -52,7 +52,7 @@ namespace frdmisc {
 			S_.Callback = NULL;
 			Label.reset( P );
 		}
-		void plug( str::cHook &Hook )
+		void plug( str::sHook &Hook )
 		{
 			Label.plug( Hook );
 		}

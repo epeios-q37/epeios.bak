@@ -167,6 +167,12 @@ namespace muafld {
 
 			return Row;
 		}
+		void Rename(
+			sRow Row,
+			const str::dString &Name )
+		{
+			Folders(Row).Init( Name );
+		}
 		void MoveTo(
 			sRow Folder,
 			sRow Parent )

@@ -183,6 +183,12 @@ namespace muaacc {
 		{
 			return Directory_.CreateFolder( Name, Parent );
 		}
+		void RenameFolder(
+			muafld::sRow Folder,
+			const str::dString &Name )
+		{
+			Directory_.RenameFolder( Folder, Name );
+		}
 		void MoveMailTo(
 			muamel::sRow Mail,
 			muafld::sRow Folder )

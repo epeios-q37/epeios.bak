@@ -47,7 +47,9 @@ namespace registry {
 				AgentNameLength,
 				HostPortLength,
 				UsernameLength,
-				PasswordLength;
+				PasswordLength,
+				FolderNameLength;
+;
 		}
 	}
 }

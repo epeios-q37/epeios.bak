@@ -117,6 +117,12 @@ namespace muadir {
 
 			return Row;
 		}
+		void RenameFolder(
+			muafld::sRow Folder,
+			const str::dString &Name )
+		{
+			Folders.Rename( Folder, Name );
+		}
 		void GetFolders(
 			muafld::sRow Folder,
 			muafld::dRows &Folders ) const

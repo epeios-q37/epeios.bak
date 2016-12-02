@@ -45,4 +45,5 @@ namespace definition_ {
 rEntry registry::definition::limitation::AgentNameLength( "AgentNameLength", definition_::Limitations );
 rEntry registry::definition::limitation::HostPortLength( "HostPortLength", definition_::Limitations );
 rEntry registry::definition::limitation::UsernameLength( "UsernameLength", definition_::Limitations );
-rEntry registry::definition::limitation::PasswordLength( "Length", definition_::Limitations );
+rEntry registry::definition::limitation::PasswordLength( "PasswordLength", definition_::Limitations );
+rEntry registry::definition::limitation::FolderNameLength( "FolderNameLength", definition_::Limitations );

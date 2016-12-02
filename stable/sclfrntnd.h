@@ -229,20 +229,20 @@ namespace sclfrntnd {
 
 # define SCLF_I( ns, name, id  )\
 	namespace ns {\
-		typedef fbltyp::s##id t##id;\
-		E_TMIMIC__( t##id,	s##id );\
-		typedef fbltyp::d##id##s	d##id##s;\
-		qW( id##s );\
+		typedef fbltyp::s##id tId;\
+		E_TMIMIC__( tId, sId );\
+		typedef fbltyp::d##id##s dIds;\
+		qW( Ids );\
 \
-		E_CDEF( s##id, Undefined, fbltyp::Undefined##id );\
+		E_CDEF( sId, Undefined, fbltyp::Undefined##id );\
 	}\
 \
-	typedef fbltyp::s##id t##name;\
-	E_TMIMIC__( t##name,	s##name );\
-	typedef fbltyp::d##id##s	d##name##s;\
+	typedef ns::tId t##name;\
+	typedef ns::sId s##name;\
+	typedef ns::dIds d##name##s;\
 	qW( name##s );\
 \
-	E_CDEF( s##name, Undefined##name, fbltyp::Undefined##id )
+	E_CDEF( s##name, Undefined##name, ns::Undefined )
 
 	template <typename ids> class dI1S
 	{
@@ -284,11 +284,15 @@ namespace sclfrntnd {
 
 	qW1( I1S );
 
-# define SCLF_I1S( name, id  )\
-	SCLF_I( name, id );\
+# define SCLF_I1S( ns, name, id  )\
+	SCLF_I( ns, name, id );\
 \
-	typedef sclfrntnd::dI1S<d##name##s> d##name##sI1S;\
-	qW( name##sI1S );
+	namespace ns {\
+		typedef sclfrntnd::dI1S<d##name##s> dI1S;\
+		qW( I1S );\
+	}\
+	typedef ns::dI1S d##name##sI1S;\
+	qW( name##sI1S )
 
 	template <typename id> class dI2S	// id, 2 strings.
 	: public dI1S<id>
@@ -332,10 +336,12 @@ namespace sclfrntnd {
 
 
 # define SCLF_I2S( name, id  )\
-	SCLF_I( name, id );\
-\
-	typedef sclfrntnd::dI2S<d##name##s> d##name##sI2S;\
-	qW( name##sI2S );
+	namespace ns {\
+		typedef sclfrntnd::dI1S<d##name##s> dI2S;\
+		qW( I2S );\
+	}\
+	typedef ns::dI2S d##name##sI2S;\
+	qW( name##sI2S )
 
 	E_CDEF( char *, IdAttribute, "id" );
 	E_CDEF( char *, AmountAttribute, "Amount" );

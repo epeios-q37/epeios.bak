@@ -40,6 +40,31 @@ using common::rStuff;
 		fblbkd::backend___ &BaseBackend,\
 		fblbkd::rRequest &Request )
 
+namespace shared_ {
+	qCDEF( bso::sUInt, DefaultLengthLimit, 50 );
+
+	const str::dString &Normalize(
+		str::dString &Value,
+		common::eMessage EmptyMessage,
+		common::eMessage LengthMessage,
+		rgstry::rEntry &Entry )
+	{
+	qRH
+	qRB
+		Value.StripCharacter( ' ' );
+
+		if ( Value.Amount() == 0 )
+			common::ReportAndAbort( EmptyMessage );
+
+		if ( Value.Amount() > sclmisc::OGetUInt( Entry, DefaultLengthLimit ) )
+			common::ReportAndAbort( LengthMessage, DefaultLengthLimit );
+	qRR
+	qRT
+	qRE
+		return Value;
+	}
+}
+
 DEC( Test, 1 )
 {
 qRH
@@ -160,32 +185,9 @@ namespace update_agent_ {
 
 			return ( Target == qNIL ) || ( Target == Candidate );
 		}
-
-		qCDEF( bso::sUInt, DefaultLengthLimit_, 50 );
-
-		const str::dString &Normalize_(
-			str::dString &Value,
-			common::eMessage EmptyMessage,
-			common::eMessage LengthMessage,
-			rgstry::rEntry &Entry )
-		{
-		qRH
-		qRB
-			Value.StripCharacter( ' ' );
-
-			if ( Value.Amount() == 0 )
-				common::ReportAndAbort( EmptyMessage );
-
-			if ( Value.Amount() > sclmisc::OGetUInt( Entry, DefaultLengthLimit_ ) )
-				common::ReportAndAbort( LengthMessage, DefaultLengthLimit_ );
-		qRR
-		qRT
-		qRE
-			return Value;
-		}
 	}
 
-#define N( name ) Normalize_( name, common::m##name##CanNotBeEmpty, common::m##name##CanNotBeLongerAs, registry::definition::limitation::name##Length )
+#define N( name ) shared_::Normalize( name, common::m##name##CanNotBeEmpty, common::m##name##CanNotBeLongerAs, registry::definition::limitation::name##Length )
 
 	muaagt::sRow Update(
 		muaagt::sRow Row,
@@ -207,8 +209,8 @@ namespace update_agent_ {
 		N( HostPort );
 		N( Username );
 
-		if ( Password.Amount() > DefaultLengthLimit_ )
-			REPORT( PasswordCanNotBeLongerAs, DefaultLengthLimit_ );
+		if ( Password.Amount() > shared_::DefaultLengthLimit )
+			REPORT( PasswordCanNotBeLongerAs, shared_::DefaultLengthLimit );
 
 		if ( HostPort.Search(':') == qNIL )
 			HostPort.Append( ":110" );
@@ -327,6 +329,29 @@ qRB
 	fbltyp::Convert( Request.IdsIn(), Rows );
 
 	Account.Directory().GetFoldersNames( Rows, Request.StringsOut() );
+qRR 
+qRT
+qRE
+}
+
+DEC( RenameFolder, 1 )
+{
+qRH
+	ACCOUNTh;
+	str::wString Name;
+qRB
+	ACCOUNTb;
+
+	muafld::sRow Folder = *Request.IdIn();
+
+	if ( !Account.Directory().Folders.Exists( Folder ) )
+		REPORT( UnknownFolder );
+
+	Name.Init(  Request.StringIn() );
+
+	shared_::Normalize( Name, common::mFolderNameCanNotBeEmpty, common::mFolderNameCanNotBeLongerAs, registry::definition::limitation::FolderNameLength );
+
+	Account.RenameFolder( Folder, Name );
 qRR 
 qRT
 qRE
@@ -452,7 +477,7 @@ void wrpunbound::Inform( fblbkd::backend___ &Backend )
 		fblbkd::cEnd );
 
 	Backend.Add(D( UpdateAgent, 1 ),
-			fblbkd::cId,		// If of the agent. New one is created if undefined.
+			fblbkd::cId,		// Id of the agent. New one is created if undefined.
 			fblbkd::cString,	// Name.
 			fblbkd::cString,	// HostPort.
 			fblbkd::cString,	// Username.
@@ -483,6 +508,12 @@ void wrpunbound::Inform( fblbkd::backend___ &Backend )
 			fblbkd::cIds,		// Folders.
 		fblbkd::cEnd,
 			fblbkd::cStrings,	// Names,
+		fblbkd::cEnd );
+
+	Backend.Add(D( RenameFolder, 1 ),
+			fblbkd::cId,		// Id of the folder.
+			fblbkd::cString,	// New name.
+		fblbkd::cEnd,
 		fblbkd::cEnd );
 
 	Backend.Add( D( GetMailsFields, 1 ),

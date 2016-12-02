@@ -12,11 +12,11 @@
   <Translation language="fr">Glisser vers un dossier pour l'y déplacer.</Translation>
   <Translation language="en">Drag to a folder to move it there.</Translation>
  </Translations>
- <Translations text="foldersRenameFolder">
+ <Translations text="foldersEditFolder">
   <Translation language="fr">Renommer</Translation>
   <Translation language="en">Rename</Translation>
  </Translations>
- <Translations text="foldersRenameFolderTitle">
+ <Translations text="foldersEditFolderTitle">
   <Translation language="fr">Renommer le dossier sélectionné.</Translation>
   <Translation language="en">Rename selected folder</Translation>
  </Translations>

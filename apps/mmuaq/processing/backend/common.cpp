@@ -36,13 +36,16 @@ const char *common::GetLabel( eMessage Message )
 	C( NotLoggedIn );
 	C( AgentWithSuchNameExists );
 	C( AgentNameCanNotBeEmpty );
-	C( HostPortCanNotBeEmpty );
-	C( UsernameCanNotBeEmpty );
 	C( AgentNameCanNotBeLongerAs );
-	C( UsernameCanNotBeLongerAs );
+	C( HostPortCanNotBeEmpty );
 	C( HostPortCanNotBeLongerAs );
+	C( UsernameCanNotBeEmpty );
+	C( UsernameCanNotBeLongerAs );
 	C( PasswordCanNotBeLongerAs );
+	C( FolderNameCanNotBeEmpty );
+	C( FolderNameCanNotBeLongerAs );
 	C( UnknownAgent );
+	C( UnknownFolder );
 /*
 	C(  );
 */

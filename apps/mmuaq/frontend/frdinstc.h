@@ -176,6 +176,12 @@ namespace frdinstc {
 		{
 			S_().MUAGetFoldersNames_1( Folders, Names );
 		}
+		void RenameFolder(
+			folder::sId &Folder,
+			const str::dString &Name )
+		{
+			S_().MUARenameFolder_1( *Folder, Name );
+		}
 		void MoveFolderTo(
 			sFolder Folder,
 			sFolder Parent )
@@ -236,6 +242,8 @@ namespace frdinstc {
 			s_amount,
 			s_Undefined
 		};
+
+		const char *GetLabel( eState State );
 
 		typedef shared_::sTracker<sFolder> sTracker_;
 
@@ -305,6 +313,7 @@ namespace frdinstc {
 			if ( Core_.Login( Username, Password ) ) {
 				Core_.GetRootAndInboxFolders( Folder_.Root, Folder_.Inbox );
 				Folder_.Current = Folder_.Inbox;
+				Folder_.State = folder_::sViewing;
 				return true;
 			} else 
 				return false;
@@ -315,12 +324,39 @@ namespace frdinstc {
 		// Write only attributes (only usable on a start tag).
 		void DumpMails( xml::dWriter &Writer );
 		void DumpMail( xml::dWriter &Writer );
+		void DumpCurrentFolderAttributes( xml::dWriter &Writer )
+		{
+			if ( Folder_.Current != folder::Undefined ) {
+				Writer.PutAttribute("CurrentFolder", **Folder_.Current );
+
+				Writer.PutAttribute( "CurrentFolderState", folder_::GetLabel( Folder_.State ) );
+			}
+		}
 		void DumpFolders( xml::dWriter &Writer );
 		const str::dString &GetAgentStatus( str::dString &Status );
-		void SelectFolder( sFolder Folder )
+		// Returns true if the state changed.
+		bso::sBool SelectFolder( sFolder Folder )
 		{
+			bso::sBool Changed = Folder_.State != folder_::sViewing;
+
 			Folder_.Current = Folder;
 			Folder_.State = folder_::sViewing;
+
+			return Changed;
+		}
+		void EditFolder( void )
+		{
+			if ( Folder_.Current == folder::Undefined )
+				qRGnr();
+
+			Folder_.State = folder_::sEdition;
+		}
+		void RenameCurrentFolder( const str::dString &Name )
+		{
+			if ( Folder_.Current == folder::Undefined )
+				qRGnr();
+
+			Core_.RenameFolder( Folder_.Current, Name );
 		}
 		void SelectMail( sMail Mail )
 		{
