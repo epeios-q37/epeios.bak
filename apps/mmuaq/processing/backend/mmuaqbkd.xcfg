@@ -58,12 +58,14 @@
   <Locale>
   </Locale>
   <xpp:ifeq select="packing" value="no">
-   <xpp:ifeq select="prod" value="yes">
-    <xpp:expand href="Prod.pxcfg"/>
-   </xpp:ifeq>
-   <xpp:ifeq select="prod" value="no">
-    <xpp:expand href="Demo.pxcfg"/>
-   </xpp:ifeq>
+   <xpp:bloc>
+    <xpp:ifeq select="prod" value="yes">
+     <xpp:expand href="Prod.pxcfg"/>
+    </xpp:ifeq>
+    <xpp:ifeq select="prod" value="no">
+     <xpp:expand href="Demo.pxcfg"/>
+    </xpp:ifeq>
+   </xpp:bloc>
   </xpp:ifeq>
  </Configuration>
 </Configurations>
