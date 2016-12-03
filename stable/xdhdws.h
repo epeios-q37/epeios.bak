@@ -330,6 +330,10 @@ namespace xdhdws {
 		{
 			C_().Process( xdhcmn::fFocus, NULL, Id.Internal()( ) );
 		}
+		void Select( const nstring___ &Id )
+		{
+			C_().Process( xdhcmn::fSelect, NULL, Id.Internal()( ) );
+		}
 	};
 
 	class cCorpus

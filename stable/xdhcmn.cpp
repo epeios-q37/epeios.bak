@@ -51,6 +51,7 @@ const char *xdhcmn::GetLabel( function__ Function )
 	C( SetContent );
 	C( GetContent );
 	C( Focus );
+	C( Select );
 	default:
 		qRFwk();
 		break;

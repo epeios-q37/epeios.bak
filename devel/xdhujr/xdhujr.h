@@ -64,6 +64,7 @@ namespace xdhujr {
 		extern entry___ WidgetsInstantiator;
 		extern entry___ CastsSetter;
 		extern entry___ Focuser;
+		extern entry___ Selector;
 		namespace property {
 			extern entry___ Setter;
 			extern entry___ Getter;
@@ -84,6 +85,7 @@ namespace xdhujr {
 		namespace widget {
 			extern entry___ ContentRetriever;
 			extern entry___ Focuser;
+			extern entry___ Selector;
 		}
 	}
 

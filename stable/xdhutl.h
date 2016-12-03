@@ -201,14 +201,16 @@ namespace xdhutl {
 		str::string_ &Type,
 		str::string_ &Parameters,
 		str::string_ &ContentRetrievingMethod,
-		str::string_ &FocusingMethod );
+		str::string_ &FocusingMethod,
+		str::dString &SelectionMethod );
 
 	void ExtractWidgetFeatures(
 		const str::string_ &Description,
 		str::string_ &Type,
 		str::string_ &Parameters,
 		str::string_ &ContentRetrievingMethod,
-		str::string_ &FocusingMethod );
+		str::string_ &FocusingMethod,
+		str::dString &SelectionMethod );
 
 	void ExtractWidgetTypeAndParameters(
 		const xdhcmn::digest_ &Description,
@@ -228,6 +230,14 @@ namespace xdhutl {
 		str::string_ &Method );
 
 	void ExtractWidgetFocusingMethod(
+		const str::string_ &Description,
+		str::string_ &Method );
+
+	void ExtractWidgetSelectionMethod(
+		const xdhcmn::digest_ &Description,
+		str::string_ &Method );
+
+	void ExtractWidgetSelectionMethod(
 		const str::string_ &Description,
 		str::string_ &Method );
 

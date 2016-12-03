@@ -131,6 +131,7 @@ AC( EditFolder )
 	main::SetFoldersLayout( Session );
 
 	Session.Focus( "EditableFolder" );
+	Session.Select("EditableFolder");
 }
 
 AC( DragFolder )

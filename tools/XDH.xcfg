@@ -201,12 +201,17 @@
 						document.getElementById( "%Id%" ).addEventListener( "%Event%", handleEvent );
 					]]>
 			</EventHandler>-->
-			<Focuser>
-				<![CDATA[
+   <Focuser>
+    <![CDATA[
 						jQuery(document.getElementById( "%Id%" )).focus();
 					]]>
-			</Focuser>
-			<Log>
+   </Focuser>
+   <Selector>
+    <![CDATA[
+						jQuery(document.getElementById( "%Id%" )).select();
+					]]>
+   </Selector>
+   <Log>
 				<![CDATA[
 						log( "%Message%" );
 					]]>
@@ -229,12 +234,17 @@
 							jQuery( document.getElementById( "%Id%") ).%Method_%
 						]]>
 				</ContentRetriever>
-				<Focuser>
-					<![CDATA[
+    <Focuser>
+     <![CDATA[
 							jQuery( document.getElementById( "%Id%") ).%Method_%
 						]]>
-				</Focuser>
-			</Widget>
+    </Focuser>
+    <Selector>
+     <![CDATA[
+							jQuery( document.getElementById( "%Id%") ).%Method_%
+						]]>
+    </Selector>
+   </Widget>
 		</Scripts>
 	</Definitions>
 </xpp:bloc>

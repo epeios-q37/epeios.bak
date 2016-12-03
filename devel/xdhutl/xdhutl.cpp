@@ -462,7 +462,8 @@ void xdhutl::ExtractWidgetFeatures(
 	str::string_ &Type,
 	str::string_ &Parameters,
 	str::string_ &ContentRetrievingMethod,
-	str::string_ &FocusingMethod )
+	str::string_ &FocusingMethod,
+	str::dString &SelectionMethod )
 {
 qRH
 	xdhcmn::retriever__ Retriever;
@@ -480,6 +481,9 @@ qRB
 
 	if ( Retriever.Availability() != strmrg::aNone )
 		Retriever.GetString( FocusingMethod );
+
+	if ( Retriever.Availability() != strmrg::aNone )
+		Retriever.GetString( SelectionMethod );
 qRR
 qRT
 qRE
@@ -490,7 +494,8 @@ void xdhutl::ExtractWidgetFeatures(
 	str::string_ &Type,
 	str::string_ &Parameters,
 	str::string_ &ContentRetrievingMethod,
-	str::string_ &FocusingMethod )
+	str::string_ &FocusingMethod,
+	str::dString &SelectionMethod )
 
 {
 qRH
@@ -499,7 +504,7 @@ qRB
 	Description.Init();
 	xdhcmn::Split( RawDescription, Description );
 
-	ExtractWidgetFeatures( Description, Type, Parameters, ContentRetrievingMethod, FocusingMethod );
+	ExtractWidgetFeatures( Description, Type, Parameters, ContentRetrievingMethod, FocusingMethod, SelectionMethod );
 qRR
 qRT
 qRE
@@ -512,11 +517,12 @@ void xdhutl::ExtractWidgetTypeAndParameters(
 	str::string_ &Parameters )
 {
 qRH
-	str::string ContentRetrievingMethod, FocusingMethod;
+	str::string ContentRetrievingMethod, FocusingMethod, SelectionMethod;
 qRB
 	ContentRetrievingMethod.Init();
 	FocusingMethod.Init();
-	ExtractWidgetFeatures( Description, Type, Parameters, ContentRetrievingMethod, FocusingMethod );
+	SelectionMethod.Init();
+	ExtractWidgetFeatures( Description, Type, Parameters, ContentRetrievingMethod, FocusingMethod, SelectionMethod );
 qRR
 qRT
 qRE
@@ -527,13 +533,14 @@ void xdhutl::ExtractWidgetContentRetrievingMethod(
 	str::string_ &Method )
 {
 qRH
-	str::string Type, Parameters, OtherMethod;
+	str::string Type, Parameters, FocusingMethod, SelectionMethod;
 qRB
 	Type.Init();
 	Parameters.Init();
-	OtherMethod.Init();
+	FocusingMethod.Init();
+	SelectionMethod.Init();
 
-	ExtractWidgetFeatures( Description, Type, Parameters, Method, OtherMethod );
+	ExtractWidgetFeatures( Description, Type, Parameters, Method, FocusingMethod, SelectionMethod );
 qRR
 qRT
 qRE
@@ -544,13 +551,14 @@ void xdhutl::ExtractWidgetContentRetrievingMethod(
 	str::string_ &Method )
 {
 qRH
-	str::string Type, Parameters, OtherMethod;
+	str::string Type, Parameters, FocusingMethod, SelectionMethod;
 qRB
 	Type.Init();
 	Parameters.Init();
-	OtherMethod.Init();
+	FocusingMethod.Init();
+	SelectionMethod.Init();
 
-	ExtractWidgetFeatures( Description, Type, Parameters, Method, OtherMethod );
+	ExtractWidgetFeatures( Description, Type, Parameters, Method, FocusingMethod, SelectionMethod );
 qRR
 qRT
 qRE
@@ -561,13 +569,14 @@ void xdhutl::ExtractWidgetFocusingMethod(
 	str::string_ &Method )
 {
 qRH
-	str::string Type, Parameters, OtherMethod;
+	str::string Type, Parameters, ContentMethod, SelectionMethod;
 qRB
 	Type.Init();
 	Parameters.Init();
-	OtherMethod.Init();
+	ContentMethod.Init();
+	SelectionMethod.Init();
 
-	ExtractWidgetFeatures( Description, Type, Parameters, OtherMethod, Method );
+	ExtractWidgetFeatures( Description, Type, Parameters, ContentMethod, Method, SelectionMethod );
 qRR
 qRT
 qRE
@@ -578,13 +587,50 @@ void xdhutl::ExtractWidgetFocusingMethod(
 	str::string_ &Method )
 {
 qRH
-	str::string Type, Parameters, OtherMethod;
+	str::string Type, Parameters, ContentMethod, SelectionMethod;
 qRB
 	Type.Init();
 	Parameters.Init();
-	OtherMethod.Init();
+	ContentMethod.Init();
+	SelectionMethod.Init();
 
-	ExtractWidgetFeatures( Description, Type, Parameters, OtherMethod, Method );
+	ExtractWidgetFeatures( Description, Type, Parameters, ContentMethod, Method, SelectionMethod );
+qRR
+qRT
+qRE
+}
+
+void xdhutl::ExtractWidgetSelectionMethod(
+	const xdhcmn::digest_ &Description,
+	str::string_ &Method )
+{
+qRH
+	str::string Type, Parameters, ContentMethod, FocusingMethod;
+qRB
+	Type.Init();
+	Parameters.Init();
+	ContentMethod.Init();
+	FocusingMethod.Init();
+
+	ExtractWidgetFeatures( Description, Type, Parameters, ContentMethod, FocusingMethod, Method );
+qRR
+qRT
+qRE
+}
+
+void xdhutl::ExtractWidgetSelectionMethod(
+	const str::string_ &Description,
+	str::string_ &Method )
+{
+qRH
+	str::string Type, Parameters, ContentMethod, FocusingMethod;
+qRB
+	Type.Init();
+	Parameters.Init();
+	ContentMethod.Init();
+	FocusingMethod.Init();
+
+	ExtractWidgetFeatures( Description, Type, Parameters, ContentMethod, FocusingMethod, Method );
 qRR
 qRT
 qRE

@@ -1,5 +1,9 @@
 CHANGELOG for the 'Epeios' framework.
 
+2016-12-03 :
+- XDHCMN, XDHDWS, XDHUJP, XDGUJR, XDHUJS, XDHUTL :
+	- Adding text selection related features.
+
 2016-12-02 :
 - SCLFRNTND :
 	- Extending 'SCLF_I...' macros.

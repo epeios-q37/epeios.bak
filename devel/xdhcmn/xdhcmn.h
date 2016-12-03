@@ -97,6 +97,7 @@ namespace xdhcmn {
 		fGetContent,		// Id.
 		fGetResult,			// Id.
 		fFocus,				// Id.
+		fSelect,			// Id.
 		f_amount,
 		f_Undefined
 	};

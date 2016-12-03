@@ -438,11 +438,44 @@ qRT
 qRE
 }
 
+static void Select_(
+	callback__ &Callback,
+	const nchar__ *Id )
+{
+qRH
+	str::string Args, Method;
+	nstring___ WidgetAttributeName;
+	TOL_CBUFFER___ Buffer;
+qRB
+	WidgetAttributeName.Init( Callback.GetWidgetAttributeName( Buffer ) );
+	Args.Init( Execute( Callback, xdhujs::snAttributeGetter, &Buffer, Id, WidgetAttributeName.Internal()()) );
+
+	Method.Init();
+
+	if ( Args.Amount() != 0 )
+		xdhutl::ExtractWidgetSelectionMethod( Args, Method );
+
+	if ( Method.Amount() == 0 )
+		Execute( Callback, xdhujs::snSelector, NULL, Id );
+	else
+		Execute( Callback, xdhujs::snWidgetSelector, NULL, Id, nstring___( Method ).Internal()() );
+qRR
+qRT
+qRE
+}
+
 static void Focus_(
 	callback__ &Callback,
 	va_list List )
 {
 	Focus_( Callback, va_arg( List, const nchar__ * ) );
+}
+
+static void Select_(
+	callback__ &Callback,
+	va_list List )
+{
+	Select_( Callback, va_arg( List, const nchar__ * ) );
 }
 
 static void GetResult_(
@@ -508,6 +541,9 @@ static script_name__ Convert_( xdhcmn::function__ Function )
 	case xdhcmn::fFocus:
 		qRFwk();
 		break;
+	case xdhcmn::fSelect:
+		qRFwk();
+		break;
 	case xdhcmn::fFillDocument:
 		qRFwk();
 		break;
@@ -552,6 +588,9 @@ void xdhujp::proxy_callback__::XDHCMNProcess(
 		break;
 	case xdhcmn::fFocus:
 		Focus_( C_(), List);
+		break;
+	case xdhcmn::fSelect:
+		Select_( C_(), List);
 		break;
 	case xdhcmn::fFillDocument:
 		FillDocument_( C_(), List );
