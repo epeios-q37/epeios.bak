@@ -9,7 +9,7 @@
      <xsl:attribute name="data-xdh-content">
       <xsl:value-of select="@id"/>
      </xsl:attribute>
-     <input type="text" id="FolderName" data-xdh-onevents="(keydown|ApplyFolder|Enter)(keydown|DiscardFolder|Esc)">
+     <input type="text" id="FolderName" data-xdh-onevents="(keydown|ApplyFolder|Enter)(keydown|DiscardFolder|Esc)" data-xdh-cast="folderNameInputCast">
       <xsl:attribute name="value">
        <xsl:value-of select="@Name"/>
       </xsl:attribute>
@@ -52,21 +52,27 @@
     <li data-xdh-cast="DroppingCast" data-xdh-onevent="drop|DropToFolder">
      <span data-xdh-onevent="SelectFolder" data-xdh-cast="folderCasting">
       <xsl:attribute name="data-xdh-content">
-      <xsl:value-of select="/*/Corpus/Folders/@Root"/>
-     </xsl:attribute>
-     <xsl:text>#foldersRootFolder#</xsl:text>
+       <xsl:value-of select="/*/Corpus/Folders/@Root"/>
+      </xsl:attribute>
+      <xsl:text>#foldersRootFolder#</xsl:text>
      </span>
      <xsl:apply-templates select="Folders"/>
     </li>
    </ul>
   </fieldset>
   <button title="#foldersEditFolderTitle#" data-xdh-onevent="EditFolder" data-xdh-cast="FolderRenamingCast">#foldersEditFolder#</button>
+  <button title="#foldersCreateFolderTitle#" data-xdh-onevent="CreateFolder" data-xdh-cast="FolderCreationCast">#foldersCreateFolder#</button>
  </xsl:template>
  <xsl:template match="Corpus">
  </xsl:template>
  <xsl:template match="Folders">
   <ul>
    <xsl:apply-templates select="Folder"/>
+   <xsl:if test="(/*/Content/@CurrentFolderState='Creation' ) and ( ../@id=/*/Content/@CurrentFolder)">
+    <li>
+     <input type="text" id="FolderName" data-xdh-onevents="(keydown|ApplyFolder|Enter)(keydown|DiscardFolder|Esc)" data-xdh-cast="folderNameInputCast"/>
+    </li>
+   </xsl:if>
   </ul>
  </xsl:template>
  <xsl:template match="Folder">
@@ -82,8 +88,8 @@
     </img>
    </xsl:if>
    <xsl:call-template name="Folder"/>
-    <xsl:if test="Folders/@Amount!=0">
-     <xsl:apply-templates select="Folders"/>
+   <xsl:if test="(Folders/@Amount!=0) or (/*/Content/@CurrentFolderState='Creation' ) and ( @id=/*/Content/@CurrentFolder)">
+    <xsl:apply-templates select="Folders"/>
    </xsl:if>
   </li>
  </xsl:template>

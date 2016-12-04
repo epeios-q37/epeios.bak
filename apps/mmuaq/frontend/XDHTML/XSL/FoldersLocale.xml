@@ -18,7 +18,15 @@
  </Translations>
  <Translations text="foldersEditFolderTitle">
   <Translation language="fr">Renommer le dossier sélectionné.</Translation>
-  <Translation language="en">Rename selected folder</Translation>
+  <Translation language="en">Rename selected folder.</Translation>
+ </Translations>
+ <Translations text="foldersCreateFolder">
+  <Translation language="fr">Nouveau</Translation>
+  <Translation language="en">Nouveau</Translation>
+ </Translations>
+ <Translations text="foldersEditFolderTitle">
+  <Translation language="fr">Créer un nouveau dossier.</Translation>
+  <Translation language="en">Create new folder.</Translation>
  </Translations>
  <!--
 	<Translations text="folders">

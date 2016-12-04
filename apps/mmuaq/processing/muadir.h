@@ -105,7 +105,7 @@ namespace muadir {
 		{
 			return Folders.Exists( Folder );
 		}
-		bso::sBool IsRenamable( muafld::sRow Folder ) const
+		bso::sBool IsRenameable( muafld::sRow Folder ) const
 		{
 			return ( S_.Root != Folder ) && ( S_.Inbox != Folder );
 		}

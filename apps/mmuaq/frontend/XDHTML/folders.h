@@ -24,6 +24,7 @@
 
 namespace folders {
 	BASE_ACD( SelectFolder );
+	BASE_ACD( CreateFolder );
 	BASE_ACD( EditFolder );
 	BASE_ACD( ApplyFolder );
 	BASE_ACD( DiscardFolder );
@@ -34,6 +35,7 @@ namespace folders {
 	inline void Register( void )
 	{
 		BASE_ACR( SelectFolder );
+		BASE_ACR( CreateFolder );
 		BASE_ACR( EditFolder );
 		BASE_ACR( ApplyFolder );
 		BASE_ACR( DiscardFolder );

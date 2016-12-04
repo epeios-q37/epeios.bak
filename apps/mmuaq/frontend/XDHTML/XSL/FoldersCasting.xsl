@@ -33,5 +33,18 @@
     </xsl:choose>
    </xsl:attribute>
   </xdh-cast>
+  <xdh-cast id="FolderCreationCast">
+   <xsl:attribute name="kind">
+    <xsl:choose>
+     <xsl:when test="@CurrentFolderState='Viewing'">
+      <xsl:text>Plain</xsl:text>
+     </xsl:when>
+     <xsl:otherwise>
+      <xsl:text>Disabled</xsl:text>
+     </xsl:otherwise>
+    </xsl:choose>
+   </xsl:attribute>
+  </xdh-cast>
+  <xdh-cast id="folderNameInputCast" exec="mktreeExpandToNode( element );"/>
  </xsl:template>
 </xsl:stylesheet>

@@ -63,10 +63,11 @@
   <Translation language="fr">Dossier démo</Translation>
   <Translation language="en">Demo folder</Translation>
  </Translations>
- <Translations text="FolderNotRenamable">
+ <Translations text="FolderNotRenameable">
   <Translation language="fr">Ce dossier ne peut pas être renommé.</Translation>
   <Translation language="en">This folder can not be renamed.</Translation>
- </Translations><!--
+ </Translations>
+ <!--
 <Translations text="">
 	<Translation language="fr"></Translation>
 	<Translation language="en"></Translation>

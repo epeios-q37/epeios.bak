@@ -344,6 +344,13 @@ namespace frdinstc {
 
 			return Changed;
 		}
+		void CreateFolder( void )
+		{
+			if ( Folder_.Current == folder::Undefined )
+				qRGnr();
+
+			Folder_.State = folder_::sCreation;
+		}
 		bso::sBool EditFolder( void )
 		{
 			if ( Folder_.Current == folder::Undefined )

@@ -124,6 +124,15 @@ AC( SelectFolder )
 	}
 }
 
+AC( CreateFolder )
+{
+	Session.User.CreateFolder();
+	main::SetFoldersLayout( Session );
+
+	Session.Focus( core::folder::NameInputId );
+	Session.Select( core::folder::NameInputId ) ;
+}
+
 AC( EditFolder )
 {
 	if ( Session.User.EditFolder() ) {

@@ -347,8 +347,8 @@ qRB
 	if ( !Account.Directory().Exists( Folder ) )
 		REPORT( UnknownFolder );
 
-	if ( !Account.Directory().IsRenamable( Folder ) )
-		REPORT( FolderNotRenamable );
+	if ( !Account.Directory().IsRenameable( Folder ) )
+		REPORT( FolderNotRenameable );
 
 	Name.Init(  Request.StringIn() );
 
