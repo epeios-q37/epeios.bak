@@ -126,12 +126,13 @@ AC( SelectFolder )
 
 AC( EditFolder )
 {
-	Session.User.EditFolder();
+	if ( Session.User.EditFolder() ) {
+		main::SetFoldersLayout( Session );
 
-	main::SetFoldersLayout( Session );
-
-	Session.Focus( core::folder::NameInputId );
-	Session.Select( core::folder::NameInputId ) ;
+		Session.Focus( core::folder::NameInputId );
+		Session.Select( core::folder::NameInputId ) ;
+	} else
+		Session.AlertT( "FolderNotRenameable" );
 }
 
 AC( ApplyFolder )

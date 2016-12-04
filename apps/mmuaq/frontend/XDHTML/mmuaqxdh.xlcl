@@ -17,4 +17,8 @@
   <Translation language="fr">Echec authentification !</Translation>
   <Translation language="en">Login failure !</Translation>
  </Translations>
+ <Translations text="FolderNotRenameable">
+  <Translation language="fr">Ce dossier ne peut pas être renommé.</Translation>
+  <Translation language="en">This folder can not be renamed.</Translation>
+ </Translations>
 </Locale>

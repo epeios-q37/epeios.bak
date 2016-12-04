@@ -50,15 +50,17 @@
   <fieldset>
    <ul class="mktree">
     <li data-xdh-cast="DroppingCast" data-xdh-onevent="drop|DropToFolder">
-     <xsl:attribute name="data-xdh-content">
+     <span data-xdh-onevent="SelectFolder" data-xdh-cast="folderCasting">
+      <xsl:attribute name="data-xdh-content">
       <xsl:value-of select="/*/Corpus/Folders/@Root"/>
      </xsl:attribute>
      <xsl:text>#foldersRootFolder#</xsl:text>
+     </span>
      <xsl:apply-templates select="Folders"/>
     </li>
    </ul>
   </fieldset>
-  <button title="#foldersEditFolderTitle#" data-xdh-onevent="EditFolder">#foldersEditFolder#</button>
+  <button title="#foldersEditFolderTitle#" data-xdh-onevent="EditFolder" data-xdh-cast="FolderRenamingCast">#foldersEditFolder#</button>
  </xsl:template>
  <xsl:template match="Corpus">
  </xsl:template>
@@ -79,15 +81,10 @@
      </xsl:attribute>
     </img>
    </xsl:if>
-   <xsl:choose>
-    <xsl:when test="Folders/@Amount!=0">
-     <xsl:call-template name="Folder"/>
+   <xsl:call-template name="Folder"/>
+    <xsl:if test="Folders/@Amount!=0">
      <xsl:apply-templates select="Folders"/>
-    </xsl:when>
-    <xsl:otherwise>
-     <xsl:call-template name="Folder"/>
-    </xsl:otherwise>
-   </xsl:choose>
+   </xsl:if>
   </li>
  </xsl:template>
 </xsl:stylesheet>

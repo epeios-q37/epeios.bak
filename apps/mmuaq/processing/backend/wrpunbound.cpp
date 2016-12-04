@@ -344,8 +344,11 @@ qRB
 
 	muafld::sRow Folder = *Request.IdIn();
 
-	if ( !Account.Directory().Folders.Exists( Folder ) )
+	if ( !Account.Directory().Exists( Folder ) )
 		REPORT( UnknownFolder );
+
+	if ( !Account.Directory().IsRenamable( Folder ) )
+		REPORT( FolderNotRenamable );
 
 	Name.Init(  Request.StringIn() );
 

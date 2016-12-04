@@ -47,6 +47,7 @@ namespace common {
 		mFolderNameCanNotBeLongerAs,
 		mUnknownAgent,
 		mUnknownFolder,
+		mFolderNotRenamable,
 		m_amount,
 		m_Undefined
 	};

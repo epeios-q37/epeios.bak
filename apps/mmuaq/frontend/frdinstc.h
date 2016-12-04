@@ -344,12 +344,17 @@ namespace frdinstc {
 
 			return Changed;
 		}
-		void EditFolder( void )
+		bso::sBool EditFolder( void )
 		{
 			if ( Folder_.Current == folder::Undefined )
 				qRGnr();
 
-			Folder_.State = folder_::sEdition;
+			if ( ( Folder_.Current == Folder_.Root ) || ( Folder_.Current == Folder_.Inbox ) )
+				return false;
+			else {
+				Folder_.State = folder_::sEdition;
+				return true;
+			}
 		}
 		void RenameCurrentFolder( const str::dString &Name )
 		{
