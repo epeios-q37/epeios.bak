@@ -30,9 +30,16 @@ using namespace core;
 core::core___ core::Core;
 
 sclxdhtml::rActionHelper core::OnNotConnectedAllowedActions;
+sclxdhtml::rActionHelper core::OnFolderEditionIgnoredActions;
 
 namespace {
 	sclfrntnd::rKernel Kernel_;
+
+	void InitActionHelpers_( void )
+	{
+		OnNotConnectedAllowedActions.Init();
+		OnFolderEditionIgnoredActions.Init();
+	}
 }
 
 sclfrntnd::rKernel &core::Kernel( void )
@@ -165,7 +172,25 @@ void core::SetAgentCasting( rSession &Session )
 	}
 }
 
+bso::sBool core::folder::Apply( rSession &Session )
+{
+qRH
+	str::wString Name;
+qRB
+	Name.Init();
+	Session.GetContent( NameInputId, Name );
+
+	Session.User.RenameCurrentFolder( Name );
+
+	main::SetFoldersLayout( Session );
+qRR
+qRT
+qRE
+	return true;
+}
+
+
 qGCTOR( core )
 {
-	OnNotConnectedAllowedActions.Init();
+	InitActionHelpers_();
 }

@@ -3,13 +3,13 @@
  <xsl:output method="html" encoding="UTF-8"/>
  <!-- Fuctions -->
  <xsl:template name="Folder">
-   <xsl:choose>
+  <xsl:choose>
    <xsl:when test="(/*/Content/@CurrentFolderState='Edition') and (@id=/*/Content/@CurrentFolder)">
     <span data-xdh-cast="folderCasting">
      <xsl:attribute name="data-xdh-content">
       <xsl:value-of select="@id"/>
      </xsl:attribute>
-     <input type="text" id="EditableFolder">
+     <input type="text" id="FolderName" data-xdh-onevents="(keydown|ApplyFolder|Enter)(keydown|DiscardFolder|Esc)">
       <xsl:attribute name="value">
        <xsl:value-of select="@Name"/>
       </xsl:attribute>
@@ -18,6 +18,12 @@
    </xsl:when>
    <xsl:otherwise>
     <span data-xdh-onevent="SelectFolder" data-xdh-cast="folderCasting">
+     <!-- We set an id, and do let the computer generate one, to keep the same one between 2 layout generation.
+     When renaming a folder, 'SelectFolder' refreshes the layout. -->
+     <xsl:attribute name="id">
+      <xsl:text>Folder </xsl:text>
+      <xsl:value-of select="@id"/>
+     </xsl:attribute>
      <xsl:attribute name="data-xdh-content">
       <xsl:value-of select="@id"/>
      </xsl:attribute>

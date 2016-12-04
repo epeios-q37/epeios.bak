@@ -360,6 +360,13 @@ namespace frdinstc {
 
 			Folder_.State = folder_::sViewing;
 		}
+		void DiscardFolder( void )
+		{
+			if ( Folder_.Current == folder::Undefined )
+				qRGnr();
+
+			Folder_.State = folder_::sViewing;
+		}
 		void SelectMail( sMail Mail )
 		{
 			Mail_.Current = Mail;

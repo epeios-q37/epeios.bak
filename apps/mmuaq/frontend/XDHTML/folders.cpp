@@ -130,8 +130,19 @@ AC( EditFolder )
 
 	main::SetFoldersLayout( Session );
 
-	Session.Focus( "EditableFolder" );
-	Session.Select("EditableFolder");
+	Session.Focus( core::folder::NameInputId );
+	Session.Select( core::folder::NameInputId ) ;
+}
+
+AC( ApplyFolder )
+{
+	// We do nothing, as the action helper will do the correct action.
+}
+
+AC( DiscardFolder )
+{
+	Session.User.DiscardFolder();
+	main::SetFoldersLayout( Session );
 }
 
 AC( DragFolder )

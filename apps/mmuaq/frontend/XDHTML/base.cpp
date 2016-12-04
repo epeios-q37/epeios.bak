@@ -30,37 +30,22 @@ void base::Register(
 	core::Core.AddActionCallback( Name, Callback );
 }
 
-namespace {
-	bso::sBool ApplyFolder_( core::rSession &Session )
-	{
-	qRH
-		str::wString Name;
-	qRB
-		Name.Init();
-		Session.GetContent( "EditableFolder", Name );
-
-		Session.User.RenameCurrentFolder( Name );
-	qRR
-	qRT
-	qRE
-		return true;
-	}
-
-}
-
 bso::bool__ base::sActionHelper::SCLXOnBeforeAction(
 	core::rSession &Session,
 	const char *Id,
 	const char *Action )
 {
 	if ( !Session.IsConnected() ) {
-		if ( !core::OnNotConnectedAllowedActions.Search( Action) ) {
+		if ( !core::OnNotConnectedAllowedActions.Search( Action ) ) {
 			Session.AlertT( "ActionNeedsBackend" );
 			return false;
 		} else
 			return true;
 	} else if ( Session.User.Folder().State == frdinstc::folder_::sEdition ) {
-		return ApplyFolder_( Session );
+		if ( core::OnFolderEditionIgnoredActions.Search( Action ) )
+			return true;
+		else
+			return core::folder::Apply( Session );
 	} else
 		return true;
 }

@@ -36,6 +36,7 @@
 
 namespace core {
 	extern sclxdhtml::rActionHelper OnNotConnectedAllowedActions;
+	extern sclxdhtml::rActionHelper OnFolderEditionIgnoredActions;
 
 	enum page__ {
 		pProlog,
@@ -64,6 +65,8 @@ namespace core {
 			global::About, global::Test,
 			prolog::DisplayProjectFilename, prolog::LoadProject, prolog::SwitchProjectType,	// All 'prolog'-related actions are allowed.
 			login::Dismiss, login::DisplayEmbeddedBackendFilename, login::Connect, login::SwitchBackendType );	// All 'login'-related actions too.
+
+		OnFolderEditionIgnoredActions.Add( folders::DiscardFolder );	// No 'folders::ApplyFolder', because it does nothing more as for the other actions.
 	};
 
 	class rInstancesCore
@@ -131,6 +134,12 @@ namespace core {
 	void SetAgentsLayout( rSession &Session );
 
 	void SetAgentCasting( rSession &Session );
+
+	namespace folder {
+		qCDEF( char *, NameInputId, "FolderName" );
+
+		bso::sBool Apply( rSession &Session );
+	}
 }
 
 #endif
