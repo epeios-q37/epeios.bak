@@ -174,6 +174,7 @@ qRE
 }
 
 namespace dump_folders_ {
+	// Predeclaration ; defined below.
 	void Dump(
 		sFolder Folder,
 		rUser_ &Core,

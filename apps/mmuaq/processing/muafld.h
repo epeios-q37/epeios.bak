@@ -79,17 +79,6 @@ namespace muafld {
 	class dFoldersTree
 	: public dTree_
 	{
-	private:
-		sRow Normalize_( muafld::sRow Row ) const
-		{
-			if ( Row == qNIL )
-				Row = S_.Root;
-
-			if ( !Folders.Exists( Row ) )
-				qRGnr();
-
-			return Row;
-		}
 	public:
 		struct s
 		: public dTree_::s
@@ -143,11 +132,11 @@ namespace muafld {
 			sRow Row,
 			str::dString &Name ) const
 		{
-			Row = Normalize_( Row );
 			Name.Append( Folders( Row ).Name );
 
 			return Name;
 		}
+		// if 'Row' ==qNIL, return the root row.
 		const dRows &GetFolders(
 			sRow Row,
 			dRows &Rows ) const;
@@ -157,9 +146,7 @@ namespace muafld {
 		{
 			sRow Row = Folders.New();
 
-			Parent = Normalize_( Parent );
-
-			Folders(Row).Init( Name );
+			Folders( Row ).Init( Name );
 
 			dTree_::Allocate(Folders.Amount() );
 

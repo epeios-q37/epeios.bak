@@ -769,7 +769,7 @@ CHANGELOG for the 'Epeios' framework.
 
 2016-03-15
 - DWTFTR :
-	- The 'Goofs' tag was not handled when In 'Load(...)'.
+	- The 'Goofs' tag was not handled when in 'Load(...)'.
 - FLW :
 	- Adding 'Purge()' function.
 - FNM :

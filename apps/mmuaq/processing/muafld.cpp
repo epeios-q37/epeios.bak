@@ -25,14 +25,16 @@ const dRows &muafld::dFoldersTree::GetFolders(
 	sRow Row,
 	dRows &Rows ) const
 {
-	Row = Normalize_( Row );
+	if ( Row == qNIL )
+		Rows.Append( S_.Root );
+	else {
+		Row = FirstChild( Row );
 
-	Row = FirstChild( Row );
+		while ( Row != qNIL ) {
+			Rows.Add( Row );
 
-	while ( Row != qNIL ) {
-		Rows.Add( Row );
-
-		Row = NextSibling( Row );
+			Row = NextSibling( Row );
+		}
 	}
 
 	return Rows;

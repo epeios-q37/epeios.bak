@@ -97,7 +97,7 @@ namespace muadir {
 			tol::Init( Mails, M2F, F2M  );
 
 			S_.Root = Folders.Init();
-			S_.Inbox = Folders.CreateChild( str::wString(), qNIL );
+			S_.Inbox = Folders.CreateChild( str::wString(), S_.Root );
 		}
 		qRODISCLOSEd( muafld::sRow, Root );
 		qRODISCLOSEd( muafld::sRow, Inbox );
@@ -111,8 +111,11 @@ namespace muadir {
 		}
 		muafld::sRow CreateFolder(
 			const str::dString &Name,
-			muafld::sRow Parent )
+			muafld::sRow Parent )	// if 'Parent' == qNIL, The folder is attache to 'Root'.
 		{
+			if ( Parent == qNIL )
+				Parent = S_.Root;
+
 			muafld::sRow Row = Folders.CreateChild( Name, Parent );
 			Adjust_();
 
