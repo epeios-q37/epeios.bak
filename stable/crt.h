@@ -78,7 +78,6 @@ namespace crt {
 # define qCRATEw( Type, r )		wPolyCrate< Type, r >
 
 # define qCRATEdl( Type )		qCRATEd( Type, sdr::row__ )
-# define qCRATEwl( Type )		qCRATEw( Type, sdr::row__ )*
-
+# define qCRATEwl( Type )		qCRATEw( Type, sdr::row__ )
 
 #endif

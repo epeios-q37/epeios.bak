@@ -22,6 +22,7 @@
 #include <string.h>
 
 #include "ctn.h"
+#include "crt.h"
 
 #include "err.h"
 #include "cio.h"
@@ -144,6 +145,53 @@ qRT
 qRE
 }
 
+void Dump_( const str::dStrings &Strings )
+{
+	sdr::sRow Row = Strings.First();
+
+	while ( Row != qNIL )
+	{
+		cio::COut << Strings( Row ) << txf::nl << txf::commit;
+
+		Row = Strings.Next( Row );
+	}
+
+	cio::COut << txf::nl << txf::commit;
+}
+
+#define A( text ) Strings( Strings.New() ).Init( #text )
+
+void Test3( int argc, char *argv[] )
+{
+qRH
+	str::wStrings Strings;
+qRB
+	Strings.Init();
+	
+	A( 1 );
+	A( 2 );
+	A( 3 );
+	A( 4 );
+	A( 5 );
+
+	Dump_( Strings );
+
+	Strings.Remove( 2 );
+	Strings.Remove( 1 );
+
+	Dump_( Strings );
+
+	A( 6 );
+
+	Dump_( Strings );
+
+qRR
+qRT
+qRE
+}
+
+#undef A
+
 void Action( void )
 {}
 
@@ -155,7 +203,7 @@ qRFB
 	cio::Initialize( cio::t_Default );
 	COut << "Test of library " << CTN_NAME << ' ' << __DATE__" "__TIME__"\n";
 
-	Test1( argc, argv );
+	Test3( argc, argv );
 qRFR
 qRFT
 	cio::COut << txf::commit;

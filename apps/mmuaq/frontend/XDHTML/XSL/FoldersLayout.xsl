@@ -53,11 +53,9 @@
  </xsl:template>
  <xsl:template match="Content">
   <fieldset>
-   <span class="mktree">
-    <xsl:apply-templates select="Folders">
-     <xsl:with-param name="IsRoot">yes</xsl:with-param>
-    </xsl:apply-templates>
-   </span>
+   <xsl:apply-templates select="Folders">
+    <xsl:with-param name="IsRoot">yes</xsl:with-param>
+   </xsl:apply-templates>
   </fieldset>
   <button title="#foldersEditFolderTitle#" data-xdh-onevent="EditFolder" data-xdh-cast="FolderRenamingCast">#foldersEditFolder#</button>
   <button title="#foldersCreateFolderTitle#" data-xdh-onevent="CreateFolder" data-xdh-cast="FolderCreationCast">#foldersCreateFolder#</button>
@@ -68,7 +66,7 @@
   <xsl:param name="IsRoot">no</xsl:param>
   <ul>
    <xsl:if test="$IsRoot='yes'">
-   <xsl:attribute name="class">mktree</xsl:attribute>
+    <xsl:attribute name="class">mktree</xsl:attribute>
    </xsl:if>
    <xsl:apply-templates select="Folder"/>
    <xsl:if test="(/*/Content/@CurrentFolderState='Creation' ) and ( ../@id=/*/Content/@CurrentFolder)">
