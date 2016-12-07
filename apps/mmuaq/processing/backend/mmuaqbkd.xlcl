@@ -1,20 +1,8 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Locale xmlns:xpp="http://q37.info/ns/xpp/" target="mmuaqbkd">
-	<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
-	<xpp:expand value-of="q37.xpp"/>
-	<xpp:expand select="epeios.xlcl"/>
-	<Translations text="TestMessage">
-		<Translation language="fr">Message d'erreur de test</Translation>
-		<Translation language="en">Test error message</Translation>
-	</Translations>
- <Translations text="NotLoggedIn">
-  <Translation language="fr">Pas de session ouverte.</Translation>
-  <Translation language="en">Not logged in.</Translation>
- </Translations>
- <Translations text="AgentWithSuchNameExists">
-  <Translation language="fr">Un agent de nom '%1' existe déjà.</Translation>
-  <Translation language="en">A agent named '%1' exists already.</Translation>
- </Translations>
+ <xpp:set name="q37.xpp" env-var="Q37_XPP"/>
+ <xpp:expand value-of="q37.xpp"/>
+ <xpp:expand select="epeios.xlcl"/>
  <Translations text="AgentNameCanNotBeEmpty">
   <Translation language="fr">Le nom d'un agent ne peut être vide.</Translation>
   <Translation language="en">Agent name can not be empty.</Translation>
@@ -22,6 +10,34 @@
  <Translations text="AgentNameCannotBeLongerAs">
   <Translation language="fr">Le nom d'un agent est limité à %1 caractères.</Translation>
   <Translation language="en">Agent name can not be longer as %1 chars.</Translation>
+ </Translations>
+ <Translations text="AgentWithSuchNameExists">
+  <Translation language="fr">Un agent de nom '%1' existe déjà.</Translation>
+  <Translation language="en">A agent named '%1' exists already.</Translation>
+ </Translations>
+ <Translations text="DemoFolderLabel">
+  <Translation language="fr">Dossier démo</Translation>
+  <Translation language="en">Demo folder</Translation>
+ </Translations>
+ <Translations text="FolderNameCanNotBeEmpty">
+  <Translation language="fr">Un nom de dossier ne peut être vide.</Translation>
+  <Translation language="en">A folder name cannot not be empty.</Translation>
+ </Translations>
+ <Translations text="FolderNameCanNotBeLongerAs">
+  <Translation language="fr">Les noms de dossiers sont limités à %1 caractères.</Translation>
+  <Translation language="en">Folder names can not be longer as %1 chars.</Translation>
+ </Translations>
+ <Translations text="FolderNotRenameable">
+  <Translation language="fr">Ce dossier ne peut pas être renommé.</Translation>
+  <Translation language="en">This folder can not be renamed.</Translation>
+ </Translations>
+ <Translations text="FolderNotMoveable">
+  <Translation language="fr">Ce dossier ne peut pas être déplacé.</Translation>
+  <Translation language="en">This folder can not be moved.</Translation>
+ </Translations>
+ <Translations text="FolderWithSameNameAlreadyExistsInThisFolder">
+  <Translation language="fr">Il existe déjà un dossier de ce nom dans ce dossier.</Translation>
+  <Translation language="en">There is already a folder with this name in this folder.</Translation>
  </Translations>
  <Translations text="HostPortCanNotBeEmpty">
   <Translation language="fr">L'adresse et le port ne peuvent être vide.</Translation>
@@ -31,25 +47,17 @@
   <Translation language="fr">L'adresse et le port est limité à %1 caractères.</Translation>
   <Translation language="en">Address/port can not be longer as %1 chars.</Translation>
  </Translations>
- <Translations text="UsernameCanNotBeEmpty">
-  <Translation language="fr">Le nom d'utilisateur ne peut être vide.</Translation>
-  <Translation language="en">User name cannot not be empty.</Translation>
- </Translations>
- <Translations text="UsernameCannotBeLongerAs">
-  <Translation language="fr">Le nom d'utilisateur est limité à %1 caractères.</Translation>
-  <Translation language="en">User name can not be longer as %1 chars.</Translation>
+ <Translations text="NotLoggedIn">
+  <Translation language="fr">Pas de session ouverte.</Translation>
+  <Translation language="en">Not logged in.</Translation>
  </Translations>
  <Translations text="PasswordCannotBeLongerAs">
   <Translation language="fr">Le mot de passe est limité à %1 caractères.</Translation>
   <Translation language="en">Password can not be longer as %1 chars.</Translation>
  </Translations>
- <Translations text="FolderNameCanNotBeEmpty">
-  <Translation language="fr">Un nom de dossier ne peut être vide.</Translation>
-  <Translation language="en">A folder name cannot not be empty.</Translation>
- </Translations>
- <Translations text="FolderNameCannotBeLongerAs">
-  <Translation language="fr">Les noms de dossiers sont limités à %1 caractères.</Translation>
-  <Translation language="en">Folder names can not be longer as %1 chars.</Translation>
+ <Translations text="TestMessage">
+  <Translation language="fr">Message d'erreur de test</Translation>
+  <Translation language="en">Test error message</Translation>
  </Translations>
  <Translations text="UnknownAgent">
   <Translation language="fr">Agent inconnu.</Translation>
@@ -59,17 +67,13 @@
   <Translation language="fr">Dossier inconnu.</Translation>
   <Translation language="en">Unknown folder.</Translation>
  </Translations>
- <Translations text="DemoFolderLabel">
-  <Translation language="fr">Dossier démo</Translation>
-  <Translation language="en">Demo folder</Translation>
+ <Translations text="UsernameCanNotBeEmpty">
+  <Translation language="fr">Le nom d'utilisateur ne peut être vide.</Translation>
+  <Translation language="en">User name cannot not be empty.</Translation>
  </Translations>
- <Translations text="FolderNotRenameable">
-  <Translation language="fr">Ce dossier ne peut pas être renommé.</Translation>
-  <Translation language="en">This folder can not be renamed.</Translation>
- </Translations>
- <Translations text="FolderWithSameNameAlreadyExistsInThisFolder">
-  <Translation language="fr">Il existe déjà un dossier de ce nom dans ce dossier.</Translation>
-  <Translation language="en">There is already a folder with this name in this folder.</Translation>
+ <Translations text="UsernameCannotBeLongerAs">
+  <Translation language="fr">Le nom d'utilisateur est limité à %1 caractères.</Translation>
+  <Translation language="en">User name can not be longer as %1 chars.</Translation>
  </Translations>
  <!--
 <Translations text="">

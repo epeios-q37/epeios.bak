@@ -1,6 +1,6 @@
 /* DON'T MODIFY : computer-generated file ! */
 /*
-	API from : mmuaqbkd V20161124 Build Nov 25 2016 10:06:59 - Win32;MSC 1800;IA-32
+	API from : mmuaqbkd V20161124 Build Dec  7 2016 07:19:17 - Win32;MSC 1800;IA-32
 
 	This file was generated using barq 20161027 (Build Nov 13 2016 17:38:12 Win32;MSC 1800;IA-32)
 */
@@ -25,7 +25,7 @@ namespace mmuaq {
 	{
 	private:
 		fblfrd::object__ _ID;
-		fblfrd::command__ _Commands[16];
+		fblfrd::command__ _Commands[17];
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -51,6 +51,7 @@ namespace mmuaq {
 				0, 21, 21, 
 				21, 0, 22, 
 				22, 0, 26, 
+				21, 25, 0, 21, 
 				21, 25, 0, 
 				21, 0, 22, 26, 
 				21, 0, 25, 
@@ -119,34 +120,39 @@ namespace mmuaq {
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
+			CommandDetail.Name = "MUACreateFolder_1";;
+			CommandDetail.Casts.Append( Parameters + 36, 4 );
+			CommandsDetails.Append( CommandDetail );
+
+			CommandDetail.Init();
 			CommandDetail.Name = "MUARenameFolder_1";;
-			CommandDetail.Casts.Append( Parameters + 36, 3 );
+			CommandDetail.Casts.Append( Parameters + 40, 3 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
 			CommandDetail.Name = "MUAGetMailsFields_1";;
-			CommandDetail.Casts.Append( Parameters + 39, 4 );
+			CommandDetail.Casts.Append( Parameters + 43, 4 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
 			CommandDetail.Name = "MUAGetMail_1";;
-			CommandDetail.Casts.Append( Parameters + 43, 3 );
+			CommandDetail.Casts.Append( Parameters + 47, 3 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
 			CommandDetail.Name = "MUAMoveMailTo_1";;
-			CommandDetail.Casts.Append( Parameters + 46, 3 );
+			CommandDetail.Casts.Append( Parameters + 50, 3 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
 			CommandDetail.Name = "MUAMoveFolderTo_1";;
-			CommandDetail.Casts.Append( Parameters + 49, 3 );
+			CommandDetail.Casts.Append( Parameters + 53, 3 );
 			CommandsDetails.Append( CommandDetail );
 
 
 			Commands.Init();
 			this->Frontend().GetCommands( FBLFRD_MASTER_TYPE, CommandsDetails, Commands );
-			Commands.Recall( 0, 16, _Commands );
+			Commands.Recall( 0, 17, _Commands );
 		}
 		void LoadSetupOfId_1( 
 			const fblfrd::string_ &In1 ) const
@@ -297,11 +303,26 @@ namespace mmuaq {
 
 			Frontend().Handle();
 		}
+		void MUACreateFolder_1( 
+			const fblfrd::id__ &In1,
+			const fblfrd::string_ &In2,
+			fblfrd::id__ &Out1 ) const
+		{
+			Frontend().PushHeader( _ID, Commands()[11] );
+			Frontend().IdIn( In1 );
+			Frontend().StringIn( In2 );
+
+			Frontend().EndOfInParameters();
+
+			Frontend().IdOut( Out1 );
+
+			Frontend().Handle();
+		}
 		void MUARenameFolder_1( 
 			const fblfrd::id__ &In1,
 			const fblfrd::string_ &In2 ) const
 		{
-			Frontend().PushHeader( _ID, Commands()[11] );
+			Frontend().PushHeader( _ID, Commands()[12] );
 			Frontend().IdIn( In1 );
 			Frontend().StringIn( In2 );
 
@@ -315,7 +336,7 @@ namespace mmuaq {
 			fblfrd::ids_ &Out1,
 			fblfrd::strings_ &Out2 ) const
 		{
-			Frontend().PushHeader( _ID, Commands()[12] );
+			Frontend().PushHeader( _ID, Commands()[13] );
 			Frontend().IdIn( In1 );
 
 			Frontend().EndOfInParameters();
@@ -329,7 +350,7 @@ namespace mmuaq {
 			const fblfrd::id__ &In1,
 			fblfrd::string_ &Out1 ) const
 		{
-			Frontend().PushHeader( _ID, Commands()[13] );
+			Frontend().PushHeader( _ID, Commands()[14] );
 			Frontend().IdIn( In1 );
 
 			Frontend().EndOfInParameters();
@@ -342,7 +363,7 @@ namespace mmuaq {
 			const fblfrd::id__ &In1,
 			const fblfrd::id__ &In2 ) const
 		{
-			Frontend().PushHeader( _ID, Commands()[14] );
+			Frontend().PushHeader( _ID, Commands()[15] );
 			Frontend().IdIn( In1 );
 			Frontend().IdIn( In2 );
 
@@ -355,7 +376,7 @@ namespace mmuaq {
 			const fblfrd::id__ &In1,
 			const fblfrd::id__ &In2 ) const
 		{
-			Frontend().PushHeader( _ID, Commands()[15] );
+			Frontend().PushHeader( _ID, Commands()[16] );
 			Frontend().IdIn( In1 );
 			Frontend().IdIn( In2 );
 

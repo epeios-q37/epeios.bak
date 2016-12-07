@@ -126,7 +126,7 @@ AC( SelectFolder )
 
 AC( CreateFolder )
 {
-	Session.User.CreateFolder();
+	Session.User.NewFolder();
 	main::SetFoldersLayout( Session );
 
 	Session.Focus( core::folder::NameInputId );

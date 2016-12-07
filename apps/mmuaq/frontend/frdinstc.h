@@ -176,8 +176,16 @@ namespace frdinstc {
 		{
 			S_().MUAGetFoldersNames_1( Folders, Names );
 		}
+		folder::sId CreateFolder(
+			folder::sId Folder,
+			const str::dString &Name )
+		{
+			S_().MUACreateFolder_1( *Folder, Name, *Folder );
+
+			return Folder;
+		}
 		void RenameFolder(
-			folder::sId &Folder,
+			folder::sId Folder,
 			const str::dString &Name )
 		{
 			S_().MUARenameFolder_1( *Folder, Name );
@@ -344,7 +352,7 @@ namespace frdinstc {
 
 			return Changed;
 		}
-		void CreateFolder( void )
+		void NewFolder( void )
 		{
 			if ( Folder_.Current == folder::Undefined )
 				qRGnr();
@@ -363,12 +371,22 @@ namespace frdinstc {
 				return true;
 			}
 		}
-		void RenameCurrentFolder( const str::dString &Name )
+		void ApplyFolder( const str::dString &Name )
 		{
 			if ( Folder_.Current == folder::Undefined )
 				qRGnr();
 
-			Core_.RenameFolder( Folder_.Current, Name );
+			switch ( Folder_.State ) {
+			case folder_::sCreation:
+				Folder_.Current = Core_.CreateFolder( Folder_.Current, Name );
+				break;
+			case folder_::sEdition:
+				Core_.RenameFolder( Folder_.Current, Name );
+				break;
+			default:
+				qRGnr();
+				break;
+			}
 
 			Folder_.State = folder_::sViewing;
 		}

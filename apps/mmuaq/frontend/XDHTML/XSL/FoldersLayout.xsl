@@ -17,7 +17,7 @@
     </span>
    </xsl:when>
    <xsl:otherwise>
-    <span data-xdh-onevent="SelectFolder" data-xdh-cast="folderCasting">
+    <span data-xdh-onevents="SelectFolder|(drop|DropToFolder)" data-xdh-casts="folderCasting|DroppingCast">
      <!-- We set an id, and do let the computer generate one, to keep the same one between 2 layout generation.
      When renaming a folder, 'SelectFolder' refreshes the layout. -->
      <xsl:attribute name="id">
@@ -69,7 +69,7 @@
     <xsl:attribute name="class">mktree</xsl:attribute>
    </xsl:if>
    <xsl:apply-templates select="Folder"/>
-   <xsl:if test="(/*/Content/@CurrentFolderState='Creation' ) and ( ../@id=/*/Content/@CurrentFolder)">
+   <xsl:if test="(/*/Content/@CurrentFolderState='Creation') and ( ../@id=/*/Content/@CurrentFolder)">
     <li>
      <input type="text" id="FolderName" data-xdh-onevents="(keydown|ApplyFolder|Enter)(keydown|DiscardFolder|Esc)" data-xdh-cast="folderNameInputCast"/>
     </li>
@@ -77,7 +77,7 @@
   </ul>
  </xsl:template>
  <xsl:template match="Folder">
-  <li data-xdh-cast="DroppingCast" data-xdh-onevent="drop|DropToFolder">
+  <li>
    <xsl:attribute name="data-xdh-content">
     <xsl:value-of select="@id"/>
    </xsl:attribute>

@@ -180,7 +180,7 @@ qRB
 	Name.Init();
 	Session.GetContent( NameInputId, Name );
 
-	Session.User.RenameCurrentFolder( Name );
+	Session.User.ApplyFolder( Name );
 
 	main::SetFoldersLayout( Session );
 qRR

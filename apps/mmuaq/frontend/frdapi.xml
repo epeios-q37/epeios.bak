@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--                    DON'T MODIFY !!! !
-    This document was generated the 02/12/2016 11:05:58
+    This document was generated the 07/12/2016 09:48:31
     using barq V20161027 (http://q37.info/)
     Build : Nov 13 2016 17:38:12 (Win32;MSC 1800;IA-32)
 -->
@@ -18,19 +18,19 @@
    <Copyright>2016 Claude SIMON (http://q37.info/contact/)</Copyright>
   </Generator>
   <Backend>
-   <Details>mmuaqbkd V20161124 Build Nov 25 2016 10:06:59 - Win32;MSC 1800;IA-32</Details>
+   <Details>mmuaqbkd V20161124 Build Dec  7 2016 07:19:17 - Win32;MSC 1800;IA-32</Details>
    <Copyright>2016 Claude SIMON (http://q37.info/contact/)</Copyright>
   </Backend>
   <Software>MMUAq V1.0</Software>
-  <Date>02/12/2016</Date>
-  <Time>11:05:58</Time>
+  <Date>07/12/2016</Date>
+  <Time>09:48:31</Time>
  </Misc>
  <Types>
   <Type Object="Master">
    <ID>65535</ID>
    <Prefix Default="" Lower="" Upper=""/>
    <Name Raw="" Underscored="" Mixedcased=""/>
-   <Commands Amount="16">
+   <Commands Amount="17">
     <Command>
      <Name>LoadSetupOfId_1</Name>
      <ID>18</ID>
@@ -227,9 +227,31 @@
      </Parameters>
     </Command>
     <Command>
-     <Name>MUARenameFolder_1</Name>
+     <Name>MUACreateFolder_1</Name>
      <ID>29</ID>
-     <Parameters Amount="3" Position="36">
+     <Parameters Amount="4" Position="36">
+      <In>
+       <Parameter Discriminator="1" Type="Static">
+        <Name>id</Name>
+        <ID>21</ID>
+       </Parameter>
+       <Parameter Discriminator="2" Type="Bunch">
+        <Name>string</Name>
+        <ID>25</ID>
+       </Parameter>
+      </In>
+      <Out>
+       <Parameter Discriminator="1" Position="Last" Type="Static">
+        <Name>id</Name>
+        <ID>21</ID>
+       </Parameter>
+      </Out>
+     </Parameters>
+    </Command>
+    <Command>
+     <Name>MUARenameFolder_1</Name>
+     <ID>30</ID>
+     <Parameters Amount="3" Position="40">
       <In>
        <Parameter Discriminator="1" Type="Static">
         <Name>id</Name>
@@ -244,8 +266,8 @@
     </Command>
     <Command>
      <Name>MUAGetMailsFields_1</Name>
-     <ID>30</ID>
-     <Parameters Amount="4" Position="39">
+     <ID>31</ID>
+     <Parameters Amount="4" Position="43">
       <In>
        <Parameter Discriminator="1" Type="Static">
         <Name>id</Name>
@@ -266,8 +288,8 @@
     </Command>
     <Command>
      <Name>MUAGetMail_1</Name>
-     <ID>31</ID>
-     <Parameters Amount="3" Position="43">
+     <ID>32</ID>
+     <Parameters Amount="3" Position="47">
       <In>
        <Parameter Discriminator="1" Type="Static">
         <Name>id</Name>
@@ -284,8 +306,8 @@
     </Command>
     <Command>
      <Name>MUAMoveMailTo_1</Name>
-     <ID>32</ID>
-     <Parameters Amount="3" Position="46">
+     <ID>33</ID>
+     <Parameters Amount="3" Position="50">
       <In>
        <Parameter Discriminator="1" Type="Static">
         <Name>id</Name>
@@ -300,8 +322,8 @@
     </Command>
     <Command>
      <Name>MUAMoveFolderTo_1</Name>
-     <ID>33</ID>
-     <Parameters Amount="3" Position="49">
+     <ID>34</ID>
+     <Parameters Amount="3" Position="53">
       <In>
        <Parameter Discriminator="1" Type="Static">
         <Name>id</Name>

@@ -334,6 +334,32 @@ qRT
 qRE
 }
 
+DEC( CreateFolder, 1 )
+{
+qRH
+	ACCOUNTh;
+	str::wString Name;
+qRB
+	ACCOUNTb;
+
+	muafld::sRow Parent = *Request.IdIn();
+
+	if ( !Account.Directory().Exists( Parent ) )
+		REPORT( UnknownFolder );
+
+	Name.Init( Request.StringIn() );
+
+	shared_::Normalize( Name, common::mFolderNameCanNotBeEmpty, common::mFolderNameCanNotBeLongerAs, registry::definition::limitation::FolderNameLength );
+
+	if ( Account.Directory().Folders().Search( Parent, Name ) != qNIL )
+		REPORT( FolderWithSameNameAlreadyExistsInThisFolder );
+	else
+		Request.IdOut() = *Account.CreateFolder( Name, Parent );
+qRR 
+qRT
+qRE
+}
+
 DEC( RenameFolder, 1 )
 {
 qRH
@@ -445,19 +471,29 @@ DEC( MoveFolderTo, 1 )
 {
 qRH
 	ACCOUNTh;
+	str::wString Name;
 qRB
 	ACCOUNTb;
 
 	muafld::sRow Folder = *Request.IdIn();
-	muafld::sRow Parent = *Request.IdIn();
+	muafld::sRow NewParent = *Request.IdIn();
 
 	if ( !Account.Directory().Folders().Exists( Folder ) )
 		qRGnr();
 
-	if ( !Account.Directory().Folders().Exists( Parent ) )
+	if ( !Account.Directory().Folders().Exists( NewParent ) )
 		qRGnr();
 
-	Account.MoveFolderTo( Folder, Parent );
+	if ( !Account.Directory().IsMoveable( Folder ) )
+		REPORT( FolderNotMoveable );
+
+	Name.Init();
+	Account.Directory().Folders().GetName( Folder, Name );
+
+	if ( Account.Directory().Folders().Search( NewParent, Name ) != qNIL )
+		REPORT( FolderWithSameNameAlreadyExistsInThisFolder );
+	else
+		Account.MoveFolderTo( Folder, NewParent );
 qRR 
 qRT
 qRE
@@ -524,6 +560,13 @@ void wrpunbound::Inform( fblbkd::backend___ &Backend )
 			fblbkd::cIds,		// Folders.
 		fblbkd::cEnd,
 			fblbkd::cStrings,	// Names,
+		fblbkd::cEnd );
+
+	Backend.Add( D( CreateFolder, 1 ),
+			fblbkd::cId,		// Parent folder.
+			fblbkd::cString,	// Name.
+		fblbkd::cEnd,
+			fblbkd::cId,		// The created folder id.
 		fblbkd::cEnd );
 
 	Backend.Add(D( RenameFolder, 1 ),

@@ -48,6 +48,10 @@ namespace muadir {
 			M2F_.Allocate( Mails_.Amount() );
 			F2M_.Allocate( Folders_.Amount() );
 		}
+		bso::sBool IsSpecial_( muafld::sRow Folder ) const
+		{
+			return ( S_.Root == Folder ) || ( S_.Inbox == Folder );
+		}
 		muamel::dMails Mails_;
 		muafld::dFoldersTree Folders_;
 		dM2F_ M2F_;
@@ -115,7 +119,11 @@ namespace muadir {
 		}
 		bso::sBool IsRenameable( muafld::sRow Folder ) const
 		{
-			return ( S_.Root != Folder ) && ( S_.Inbox != Folder );
+			return !IsSpecial_( Folder );
+		}
+		bso::sBool IsMoveable( muafld::sRow Folder ) const
+		{
+			return !IsSpecial_( Folder );
 		}
 		muafld::sRow CreateFolder(
 			const str::dString &Name,

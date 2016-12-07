@@ -41,7 +41,7 @@ bso::bool__ base::sActionHelper::SCLXOnBeforeAction(
 			return false;
 		} else
 			return true;
-	} else if ( Session.User.Folder().State == frdinstc::folder_::sEdition ) {
+	} else if ( ( Session.User.Folder().State == frdinstc::folder_::sEdition ) || ( Session.User.Folder().State == frdinstc::folder_::sCreation ) ) {
 		if ( core::OnFolderEditionIgnoredActions.Search( Action ) )
 			return true;
 		else

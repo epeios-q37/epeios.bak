@@ -46,6 +46,7 @@ const char *common::GetLabel( eMessage Message )
 	C( FolderNameCanNotBeLongerAs );
 	C( UnknownAgent );
 	C( UnknownFolder );
+	C( FolderNotMoveable );
 	C( FolderNotRenameable );
 	C( FolderWithSameNameAlreadyExistsInThisFolder );
 /*

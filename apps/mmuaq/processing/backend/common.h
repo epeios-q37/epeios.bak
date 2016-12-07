@@ -33,22 +33,23 @@ namespace common {
 
 	qENUM( Message )
 	{
-		mTestMessage,
-		mNotLoggedIn,
-		mAgentWithSuchNameExists,
 		mAgentNameCanNotBeEmpty,
 		mAgentNameCanNotBeLongerAs,
-		mHostPortCanNotBeEmpty,
-		mHostPortCanNotBeLongerAs,
-		mUsernameCanNotBeEmpty,
-		mUsernameCanNotBeLongerAs,
-		mPasswordCanNotBeLongerAs,
+		mAgentWithSuchNameExists,
 		mFolderNameCanNotBeEmpty,
 		mFolderNameCanNotBeLongerAs,
-		mUnknownAgent,
-		mUnknownFolder,
+		mFolderNotMoveable,
 		mFolderNotRenameable,
 		mFolderWithSameNameAlreadyExistsInThisFolder,
+		mHostPortCanNotBeEmpty,
+		mHostPortCanNotBeLongerAs,
+		mNotLoggedIn,
+		mPasswordCanNotBeLongerAs,
+		mTestMessage,
+		mUnknownAgent,
+		mUnknownFolder,
+		mUsernameCanNotBeEmpty,
+		mUsernameCanNotBeLongerAs,
 		m_amount,
 		m_Undefined
 	};
