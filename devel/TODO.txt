@@ -1,16 +1,25 @@
 TODO for the 'Epeios' framework.
 
-- XDHTML : Implementing data filling in a second pass through a 'data-xdh' attribute (like event and cast handling); should fix Mozilla issue.
-- 'CSDL...' : Reimplementation ; has no more to do with embedded library.
+FAST :
+
+MIDDLE
 - 'SCL...' : Renaming ('SCLxyyy...' to 'SCLx').
-- 'XPP' : Réimplement in a simplified manner.
+- 'CSDL...' : Reimplementation ; has no more to do with embedded library.
+- XDHTML : Implementing data filling in a second pass through a 'data-xdh' attribute (like event and cast handling); should fix Mozilla issue.
 - Reimplement log handling ('LOG' library) to put is as part of 'SCLMISC' (depends if it's a file log or a console log).
+- Implementing the number conversion from the 'STR' library in another library based on a flow as input.
+- Reimplementing flow handling to be based on driver rather then on flow.
+- Implement a solution which prevent that an 'Enter' (or other touch) event on a text box is also applied to a potential alert box reporting an error,
+  preventing this box to be displayed. Currently, there is a workaround in the 'handleEvent' function from the 'xdhtml.js' file.
+
+LONG :
+- 'XPP' : Réimplement in a simplified manner.
 - Adaptation of the network related libraries to IPv6.
 - Implementing 'XDHTML' technology under 'Gecko' (without 'XUL' ; only 'HTML 5'). There are more platforms for 'Gecko' than for 'CEF', as,
   for 'Gecko', if there is no 'XULRunner', there will be 'Firefox' (check if the '--app' option is always available for 'Firefox').
   Furthermore, things as a file explorer are available under 'Gecko' and needs no to be reimplelmented as with 'CEF'.
-- Implementing the number conversion from the 'STR' library in another library based on a flow as input.
-- Reimplementing flow handling to be based on driver rather then on flow.
+
+--------------------------------------------------------------------
 
 IN PROGRESS :
 - Implementing flow variations (TXF, XTF, FLX libraries) to take a driver, not a flow ; the needed flow will be instantiated internally.
