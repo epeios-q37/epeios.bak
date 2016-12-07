@@ -151,8 +151,8 @@
 					<Translation language="en">Remote backend to use</Translation>
 				</Translations>
 				<Translations text="lgnAddressPort">
-					<Translation language="fr">adresse:port</Translation>
-					<Translation language="en">address:port</Translation>
+					<Translation language="fr">adresse[:port]</Translation>
+					<Translation language="en">address[:port]</Translation>
 				</Translations>
 				<Translations text="lgnOK">
 					<Translation language="fr">OK</Translation>
