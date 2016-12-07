@@ -79,6 +79,8 @@ namespace muafld {
 	class dFoldersTree
 	: public dTree_
 	{
+	private:
+		dFolders_ Folders_;
 	public:
 		struct s
 		: public dTree_::s
@@ -86,28 +88,27 @@ namespace muafld {
 			dFolders_::s Folders;
 			sRow Root;
 		} &S_;
-		dFolders_ Folders;
 		dFoldersTree( s &S )
 		: S_( S ),
 		  dTree_( S ),
-		  Folders( S.Folders )
+		  Folders_( S.Folders )
 		{}
 		void reset( bso::sBool P = true )
 		{
 			dTree_::reset( P );
-			tol::reset( P, Folders );
+			tol::reset( P, Folders_ );
 
 			S_.Root = qNIL;
 		}
 		void plug( qASd *AS )
 		{
 			dTree_::plug( AS );
-			tol::plug( AS, Folders );
+			tol::plug( AS, Folders_ );
 		}
 		dFoldersTree &operator =(const dFoldersTree &FD)
 		{
 			dTree_::operator =( FD );
-			Folders = FD.Folders;
+			Folders_ = FD.Folders_;
 			S_.Root = FD.S_.Root;
 
 			return *this;
@@ -116,39 +117,45 @@ namespace muafld {
 		sRow Init( void )
 		{
 			dTree_::Init();
-			tol::Init( Folders );
+			tol::Init( Folders_ );
 
-			S_.Root = Folders.New();
-			Folders( S_.Root ).Init( str::wString() );
+			S_.Root = Folders_.New();
+			Folders_( S_.Root ).Init( str::wString() );
 			dTree_::Allocate( 1 );
 
 			return S_.Root;
 		}
+		sRow Search(
+			sRow Folder,
+			const str::dString &Name ) const;
 		bso::sBool Exists( sRow Row ) const
 		{
-			return Folders.Exists( Row );
+			return Folders_.Exists( Row );
 		}
 		const str::dString &GetName(
 			sRow Row,
 			str::dString &Name ) const
 		{
-			Name.Append( Folders( Row ).Name );
+			Name.Append( Folders_( Row ).Name );
 
 			return Name;
 		}
+		void GetNames(
+			const dRows &Folders,
+			str::dStrings &Names ) const;
 		// if 'Row' ==qNIL, return the root row.
-		const dRows &GetFolders(
+		const dRows &GetChildren(
 			sRow Row,
 			dRows &Rows ) const;
 		sRow CreateChild(
 			const str::dString &Name,
 			sRow Parent )
 		{
-			sRow Row = Folders.New();
+			sRow Row = Folders_.New();
 
-			Folders( Row ).Init( Name );
+			Folders_( Row ).Init( Name );
 
-			dTree_::Allocate(Folders.Amount() );
+			dTree_::Allocate( Folders_.Amount() );
 
 			BecomeLastChild( Row, Parent );
 
@@ -158,7 +165,7 @@ namespace muafld {
 			sRow Row,
 			const str::dString &Name )
 		{
-			Folders(Row).Init( Name );
+			Folders_(Row).Init( Name );
 		}
 		void MoveTo(
 			sRow Folder,

@@ -21,7 +21,19 @@
 
 using namespace muafld;
 
-const dRows &muafld::dFoldersTree::GetFolders(
+sRow muafld::dFoldersTree::Search(
+	sRow Folder,
+	const str::dString &Name ) const
+{
+	sRow Row = FirstChild( Folder );
+
+	while ( ( Row != qNIL ) && ( Folders_( Row ).Name != Name ) )
+		Row = NextSibling( Row );
+
+	return Row;
+}
+
+const dRows &muafld::dFoldersTree::GetChildren(
 	sRow Row,
 	dRows &Rows ) const
 {
@@ -39,6 +51,24 @@ const dRows &muafld::dFoldersTree::GetFolders(
 
 	return Rows;
 }
+
+void muafld::dFoldersTree::GetNames(
+	const muafld::dRows &Folders,
+	str::dStrings &Names ) const
+{
+	sdr::sRow Row = Folders.First(), NRow = qNIL;
+
+	while ( Row != qNIL ) {
+		NRow = Names.New();
+		Names( NRow ).Init();
+
+		Names( NRow ) = GetName( Folders( Row ), Names( NRow ) );
+
+		Row = Folders.Next( Row);
+	}
+}
+
+
 
 
 

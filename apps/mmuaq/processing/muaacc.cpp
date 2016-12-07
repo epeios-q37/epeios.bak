@@ -353,7 +353,7 @@ qRH
 qRB
 	Agents_.InitAndAuthenticate( Tracker_.GetMailAgent( MailRow ), Driver );
 
-	Number = muapo3::GetNumberForUIDL( Directory_.Mails( MailRow ).Id, Driver );
+	Number = muapo3::GetNumberForUIDL( Directory_.Mails()( MailRow ).Id, Driver );
 
 	if ( Number == 0 )
 		qRGnr();

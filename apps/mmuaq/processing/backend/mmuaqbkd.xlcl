@@ -67,6 +67,10 @@
   <Translation language="fr">Ce dossier ne peut pas être renommé.</Translation>
   <Translation language="en">This folder can not be renamed.</Translation>
  </Translations>
+ <Translations text="FolderWithSameNameAlreadyExistsInThisFolder">
+  <Translation language="fr">Il existe déjà un dossier de ce nom dans ce dossier.</Translation>
+  <Translation language="en">There is already a folder with this name in this folder.</Translation>
+ </Translations>
  <!--
 <Translations text="">
 	<Translation language="fr"></Translation>

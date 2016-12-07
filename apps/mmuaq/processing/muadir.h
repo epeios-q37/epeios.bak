@@ -45,9 +45,13 @@ namespace muadir {
 	private:
 		void Adjust_( void )
 		{
-			M2F.Allocate( Mails.Amount() );
-			F2M.Allocate( Folders.Amount() );
+			M2F_.Allocate( Mails_.Amount() );
+			F2M_.Allocate( Folders_.Amount() );
 		}
+		muamel::dMails Mails_;
+		muafld::dFoldersTree Folders_;
+		dM2F_ M2F_;
+		dF2M_ F2M_;
 	public:
 		struct s {
 			muamel::dMails::s Mails;
@@ -58,34 +62,30 @@ namespace muadir {
 				Root,
 				Inbox;
 		} &S_;
-		muamel::dMails Mails;
-		muafld::dFoldersTree Folders;
-		dM2F_ M2F;
-		dF2M_ F2M;
 		dDirectory( s &S )
 		: S_( S ),
-		  Mails( S.Mails ),
-		  Folders( S.Folders ),
-		  M2F( S.M2F ),
-		  F2M( S.F2M )
+		  Mails_( S.Mails ),
+		  Folders_( S.Folders ),
+		  M2F_( S.M2F ),
+		  F2M_( S.F2M )
 		{}
 		void reset( bso::bool__ P = true )
 		{
-			tol::reset( P, Mails, Folders, M2F, F2M  );
+			tol::reset( P, Mails_, Folders_, M2F_, F2M_  );
 
 			S_.Root = qNIL;
 			S_.Inbox = qNIL;
 		}
 		void plug( qASd *AS )
 		{
-			tol::plug( AS, Mails, Folders, M2F, F2M  );
+			tol::plug( AS, Mails_, Folders_, M2F_, F2M_  );
 		}
 		dDirectory &operator =( const dDirectory &D )
 		{
-			Mails = D.Mails;
-			Folders = D.Folders;
-			M2F = D.M2F;
-			F2M = D.F2M;
+			Mails_ = D.Mails_;
+			Folders_ = D.Folders_;
+			M2F_ = D.M2F_;
+			F2M_ = D.F2M_;
 
 			S_.Root = D.S_.Root;
 			S_.Inbox = D.S_.Inbox;
@@ -94,16 +94,24 @@ namespace muadir {
 		}
 		void Init( void )
 		{
-			tol::Init( Mails, M2F, F2M  );
+			tol::Init( Mails_, M2F_, F2M_  );
 
-			S_.Root = Folders.Init();
-			S_.Inbox = Folders.CreateChild( str::wString(), S_.Root );
+			S_.Root = Folders_.Init();
+			S_.Inbox = Folders_.CreateChild( str::wString(), S_.Root );
 		}
 		qRODISCLOSEd( muafld::sRow, Root );
 		qRODISCLOSEd( muafld::sRow, Inbox );
+		const muafld::dFoldersTree &Folders( void ) const
+		{
+			return Folders_;
+		}
+		const muamel::dMails &Mails( void ) const
+		{
+			return Mails_;
+		}
 		bso::sBool Exists( muafld::sRow Folder ) const
 		{
-			return Folders.Exists( Folder );
+			return Folders_.Exists( Folder );
 		}
 		bso::sBool IsRenameable( muafld::sRow Folder ) const
 		{
@@ -116,11 +124,11 @@ namespace muadir {
 			if ( Parent == qNIL )
 				Parent = S_.Root;
 
-			muafld::sRow Row = Folders.CreateChild( Name, Parent );
+			muafld::sRow Row = Folders_.CreateChild( Name, Parent );
 			Adjust_();
 
-			F2M( Row ).Init();
-			F2M.Flush();
+			F2M_( Row ).Init();
+			F2M_.Flush();
 
 			return Row;
 		}
@@ -128,27 +136,21 @@ namespace muadir {
 			muafld::sRow Folder,
 			const str::dString &Name )
 		{
-			Folders.Rename( Folder, Name );
-		}
-		void GetFolders(
-			muafld::sRow Folder,
-			muafld::dRows &Folders ) const
-		{
-			this->Folders.GetFolders( Folder, Folders );
+			Folders_.Rename( Folder, Name );
 		}
 		muamel::sRow AddMail( const str::dString &Id )
 		{
-			muamel::sRow Row = Mails.New();
+			muamel::sRow Row = Mails_.New();
 
-			Mails( Row ).Init( Id );
-			Mails.Flush();
+			Mails_( Row ).Init( Id );
+			Mails_.Flush();
 
 			Adjust_();
 
-			M2F.Store( S_.Inbox, Row );
+			M2F_.Store( S_.Inbox, Row );
 
-			F2M( S_.Inbox ).Add( Row );
-			F2M.Flush();
+			F2M_( S_.Inbox ).Add( Row );
+			F2M_.Flush();
 
 			return Row;
 		}
@@ -156,47 +158,43 @@ namespace muadir {
 			muamel::sRow Mail,
 			muafld::sRow Folder )
 		{
-			F2M( M2F( Mail ) ).Remove( Mail );
-			M2F.Store( Folder, Mail );
-			F2M(Folder).Add( Mail );
+			F2M_( M2F_( Mail ) ).Remove( Mail );
+			M2F_.Store( Folder, Mail );
+			F2M_(Folder).Add( Mail );
 		}
 		void MoveFolderTo(
 			muafld::sRow Folder,
 			muafld::sRow Parent )
 		{
-			Folders.MoveTo( Folder, Parent );
+			Folders_.MoveTo( Folder, Parent );
 		}
 		void Remove( muamel::sRow Mail )
 		{
-			muafld::sRow Folder = M2F( Mail );
+			muafld::sRow Folder = M2F_( Mail );
 
 			if ( Folder == qNIL )
 				qRGnr();	// A mail should not be removed twice.
 
-			if ( !F2M(Folder).Remove( Mail ) )
+			if ( !F2M_(Folder).Remove( Mail ) )
 				qRGnr();
 
-			M2F.Store( qNIL, Mail );
+			M2F_.Store( qNIL, Mail );
 
-			Mails.Remove( Mail );
+			Mails_.Remove( Mail );
 		}
-		void GetFoldersNames(
-			const muafld::dRows &Folders,
-			str::dStrings &Names ) const;
 		muamel::dRows &GetMails(
 			muafld::sRow Folder,
 			muamel::dRows &Mails ) const
 		{
-			F2M.Recall( Folder, Mails);
+			F2M_.Recall( Folder, Mails);
 
 			return Mails;
 		}
-		void GetAllMails( muamel::dRows &Rows ) const;
 		muamel::sRow Search(
 			const str::dString &Id,
 			const muamel::dRows &Rows ) const
 		{
-			return muamel::Search( Id, Rows, Mails );
+			return muamel::Search( Id, Rows, Mails_ );
 		}
 		const str::dStrings &GetIds(
 			const muamel::dRows &Rows,
@@ -205,7 +203,7 @@ namespace muadir {
 			sdr::sRow Row = Rows.First();
 
 			while ( Row != qNIL ) {
-				Ids.Add( Mails( Rows( Row ) ).Id );
+				Ids.Add( Mails_( Rows( Row ) ).Id );
 
 				Row = Rows.Next( Row );
 			}

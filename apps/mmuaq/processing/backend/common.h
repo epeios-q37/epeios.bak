@@ -48,6 +48,7 @@ namespace common {
 		mUnknownAgent,
 		mUnknownFolder,
 		mFolderNotRenameable,
+		mFolderWithSameNameAlreadyExistsInThisFolder,
 		m_amount,
 		m_Undefined
 	};

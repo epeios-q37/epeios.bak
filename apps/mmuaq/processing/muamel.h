@@ -19,8 +19,8 @@
 
 // MUA MAIL (somehow phonetically).
 
-#ifndef MUAMEL__INC
-# define MUAMEL__INC
+#ifndef MUAMEL_INC_
+# define MUAMEL_INC_
 
 # ifdef XXX_DBG
 #	define MUAXMP__DBG

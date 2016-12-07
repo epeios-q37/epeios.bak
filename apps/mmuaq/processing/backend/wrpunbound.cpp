@@ -309,7 +309,7 @@ qRB
 
 	tol::Init( Rows );
 
-	Account.Directory().GetFolders( Row, Rows );
+	Account.Directory().Folders().GetChildren( Row, Rows );
 
 	fbltyp::Convert(Rows, Request.IdsOut() );
 qRR 
@@ -328,7 +328,7 @@ qRB
 	tol::Init( Rows );
 	fbltyp::Convert( Request.IdsIn(), Rows );
 
-	Account.Directory().GetFoldersNames( Rows, Request.StringsOut() );
+	Account.Directory().Folders().GetNames( Rows, Request.StringsOut() );
 qRR 
 qRT
 qRE
@@ -338,7 +338,7 @@ DEC( RenameFolder, 1 )
 {
 qRH
 	ACCOUNTh;
-	str::wString Name;
+	str::wString NewName, CurrentName;
 qRB
 	ACCOUNTb;
 
@@ -350,11 +350,24 @@ qRB
 	if ( !Account.Directory().IsRenameable( Folder ) )
 		REPORT( FolderNotRenameable );
 
-	Name.Init(  Request.StringIn() );
+	NewName.Init( Request.StringIn() );
 
-	shared_::Normalize( Name, common::mFolderNameCanNotBeEmpty, common::mFolderNameCanNotBeLongerAs, registry::definition::limitation::FolderNameLength );
+	shared_::Normalize( NewName, common::mFolderNameCanNotBeEmpty, common::mFolderNameCanNotBeLongerAs, registry::definition::limitation::FolderNameLength );
 
-	Account.RenameFolder( Folder, Name );
+	CurrentName.Init();
+	Account.Directory().Folders().GetName( Folder, CurrentName );
+
+	if ( NewName != CurrentName ) {
+		muafld::sRow Parent = Account.Directory().Folders().Parent( Folder );
+
+		if ( Parent == qNIL )
+			qRGnr();
+
+		if ( Account.Directory().Folders().Search( Parent, NewName ) != qNIL )
+			REPORT( FolderWithSameNameAlreadyExistsInThisFolder );
+		else
+			Account.RenameFolder( Folder, NewName );
+	}
 qRR 
 qRT
 qRE
@@ -397,10 +410,10 @@ qRB
 
 	muamel::sRow Mail = *Request.IdIn();
 
-	if ( !Account.Directory().Mails.Exists( Mail ) )
+	if ( !Account.Directory().Mails().Exists( Mail ) )
 		qRGnr();
 
-	Account.GetMail(Mail, Request.StringOut() );
+	Account.GetMail (Mail, Request.StringOut() );
 qRR 
 qRT
 qRE
@@ -416,10 +429,10 @@ qRB
 	muamel::sRow Mail = *Request.IdIn();
 	muafld::sRow Folder = *Request.IdIn();
 
-	if ( !Account.Directory().Mails.Exists( Mail ) )
+	if ( !Account.Directory().Mails().Exists( Mail ) )
 		qRGnr();
 
-	if ( !Account.Directory().Folders.Exists( Folder ) )
+	if ( !Account.Directory().Folders().Exists( Folder ) )
 		qRGnr();
 
 	Account.MoveMailTo( Mail, Folder );
@@ -438,10 +451,10 @@ qRB
 	muafld::sRow Folder = *Request.IdIn();
 	muafld::sRow Parent = *Request.IdIn();
 
-	if ( !Account.Directory().Folders.Exists( Folder ) )
+	if ( !Account.Directory().Folders().Exists( Folder ) )
 		qRGnr();
 
-	if ( !Account.Directory().Folders.Exists( Parent ) )
+	if ( !Account.Directory().Folders().Exists( Parent ) )
 		qRGnr();
 
 	Account.MoveFolderTo( Folder, Parent );
