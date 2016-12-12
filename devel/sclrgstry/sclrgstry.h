@@ -52,6 +52,8 @@ namespace sclrgstry {
 
 	registry_ &GetCommonRegistry( void );
 
+	tht::rLocker &GetCommonRegistryLocker( void );
+
 	qENUM( Level ) {
 		lMain,
 		lLasting,	// Lasting data set by application.

@@ -70,9 +70,10 @@ void sclmisc::RefreshBaseLanguage( void )
 {
 qRH
 	str::string Language;
+	rRegistryLocker Locker;
 qRB
-Language.Init();
-
+	Language.Init();
+	Locker.Init();
 	if ( sclrgstry::BGetValue( sclrgstry::GetCommonRegistry(), sclrgstry::parameter::Language, Language ) )
 		Language.Convert( BaseLanguage_ );
 qRR
@@ -293,7 +294,9 @@ namespace {
 		flx::E_STRING_OFLOW___ Flow;
 		txf::text_oflow__ TFlow;
 		xml::writer Writer;
+		rRegistryLocker Locker;
 	qRB
+		Locker.Init();
 		Row = sclrgstry::GetCommonRegistry().Search( Level, sclrgstry::Locale );
 
 		if ( Row == qNIL )
@@ -426,7 +429,7 @@ namespace {
 	qRE
 	}
 
-
+	// Common registry locked upstream.
 	void UnconditionalStoreAppData_(
 		const fnm::rName &Filename,
 		sclrgstry::eLevel Level )
@@ -461,10 +464,12 @@ namespace {
 		flf::rOFlow Flow;
 		txf::sOFlow TFlow;
 		xml::wWriter Writer;
+		rRegistryLocker Locker;
 	qRB
+		Locker.Init();
 		if ( !sclrgstry::GetCommonRegistry().IsEmpty( Level ) ) {
 			if ( !fil::Exists(Filename) || ( fil::GetLastModificationTime(Filename) <= sclrgstry::GetCommonRegistry().TimeStamp( Level ) ) )
-				UnconditionalStoreAppData_( Filename, Level );
+				UnconditionalStoreAppData_( Filename, Level );	// Accesses to common registry too, so no unlock.
 		} else if ( fil::Exists( Filename ) ) {
 			fil::Remove( Filename );
 		}
@@ -846,12 +851,16 @@ static void LoadPredefinedProject_( const str::string_ &Id )
 {
 qRH
 	str::string ProjectFileName;
+	rRegistryLocker Locker;
 qRB
 	if ( Id.Amount() == 0 )
 		sclmisc::ReportAndAbort( SCLMISC_NAME "_EmptyPredefinedProjectId" );
 
 	ProjectFileName.Init();
+
+	Locker.Init();
 	sclrgstry::MGetValue(sclrgstry::GetCommonRegistry(), rgstry::tentry___( sclrgstry::definition::TaggedProject, Id ), ProjectFileName );
+	Locker.Unlock();
 
 	if ( ProjectFileName.Amount() == 0 )
 		sclmisc::ReportAndAbort( SCLMISC_NAME "_NoOrBadProjectFileNameInPredefinedProject", Id );
@@ -1068,6 +1077,7 @@ qRE
 
 sclrgstry::registry_ &sclmisc::GetRegistry( void )
 {
+	// Locking is tested downstream.
 	return sclrgstry::GetCommonRegistry();
 }
 
@@ -1092,6 +1102,7 @@ txf::text_oflow__ &sclmisc::text_oflow_rack___::Init( const fnm::name___ &FileNa
 }
 
 namespace {
+	// Common registry locked upstream.
 	void DumpRegistry_(
 		sclrgstry::eLevel Level,
 		txf::text_oflow__ &Flow	)
@@ -1114,6 +1125,7 @@ qRH
 	str::string List;
 	rgstry::row__ Row = qNIL;
 	rgstry::level__ Level = qNIL;
+	rRegistryLocker Locker;
 qRB
 	List.Init( RawList );
 	List.StripCharacter(' ');
@@ -1122,6 +1134,8 @@ qRB
 
 	if ( List.Amount() == 0 )
 		All = true;
+
+	Locker.Init();
 
 	T( 'm', Main );
 	T( 'l', Lasting );
@@ -1221,14 +1235,20 @@ static void GetPluginFeature_(
 	const rgstry::tentry__ &Path,
 	rgstry::entry__ &Entry )
 {
+qRH
 	rgstry::level__ Level = rgstry::UndefinedLevel;
-
+	rRegistryLocker Locker;
+qRB
+	Locker.Init();
 	Entry.Root = GetRegistry().Search( Path, Level );
 
 	if ( Entry.Root == qNIL )
 		qRFwk();
 
 	Entry.Registry = &GetRegistry().GetRegistry( Level );
+qRR
+qRT
+qRE
 }
 
 namespace {
@@ -1496,10 +1516,9 @@ fdr::rIDriver &sclmisc::rIDriverRack::Init( const fnm::name___ &FileName )
 	}
 }
 
-
-
 Q37_GCTOR( sclmisc )
 {
 	BinPath_.Init();
 	FillProjectAutomat_();
+	bso::sBool RegistryExternallyLocked_ = false;
 }

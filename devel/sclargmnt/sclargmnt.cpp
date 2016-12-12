@@ -682,7 +682,14 @@ namespace {
 		const str::dString &Value,
 		sdr::sRow *Error = NULL )
 	{
+	qRH
+		sclmisc::rRegistryLocker Locker;
+	qRB
+		Locker.Init();
 		sclmisc::GetRegistry().SetValue( sclrgstry::GetRawLevel( sclrgstry::lArguments ), Path, Value, Error );
+	qRR
+	qRT
+	qRE
 	}
 
 	void AddValue_(
@@ -690,7 +697,14 @@ namespace {
 		const str::dString &Value,
 		sdr::sRow *Error = NULL )
 	{
+	qRH
+		sclmisc::rRegistryLocker Locker;
+	qRB
+		Locker.Init();
 		sclmisc::GetRegistry().AddValue( sclrgstry::GetRawLevel( sclrgstry::lArguments ), Path, Value, Error );
+	qRR
+	qRT
+	qRE
 	}
 }
 

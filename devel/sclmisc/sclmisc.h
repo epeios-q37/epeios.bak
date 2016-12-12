@@ -303,26 +303,74 @@ namespace sclmisc {
 
 	sclrgstry::registry_ &GetRegistry( void );
 
+	typedef tht::rLockerHandler Locker_;
+
+	class rRegistryLocker
+	: public Locker_
+	{
+		tht::rLockerHandler Handler_;
+	public:
+		void reset( bso::sBool P = true )
+		{
+			Locker_::reset( P );
+		}
+		qCDTOR( rRegistryLocker );
+		void Init( void )
+		{
+			Handler_.Init( sclrgstry::GetCommonRegistryLocker() );
+		}
+	};
+
 	inline rgstry::level__ GetRegistryRawLevel( sclrgstry::eLevel Level )
 	{
-		return sclrgstry::GetRawLevel( Level );
+		rgstry::level__ RawLevel = rgstry::UndefinedLevel;
+	qRH
+		rRegistryLocker Locker;
+	qRB
+		Locker.Init();
+		RawLevel = sclrgstry::GetRawLevel( Level );
+	qRR
+	qRT
+	qRE
+		return RawLevel;
 	}
 
 	inline void FillSetupRegistry( const str::string_ &Id )
 	{
+	qRH
+		rRegistryLocker Locker;
+	qRB
+		Locker.Init();
 		sclrgstry::FillWithSetupOfId( sclrgstry::GetCommonRegistry(), sclrgstry::GetRawLevel( sclrgstry::lSetup ), Id );
+	qRR
+	qRT
+	qRE
 	}
 
 	inline void FillSetupRegistry( void )
 	{
+	qRH
+		rRegistryLocker Locker;
+	qRB
+		Locker.Init();
 		sclrgstry::FillWithGivenSetup( sclrgstry::GetCommonRegistry(), sclrgstry::GetRawLevel( sclrgstry::lSetup ) );
+	qRR
+	qRT
+	qRE
 	}
 
 	inline void AddValue(
 		const str::string_ &Value,
 		const rgstry::tentry__ &Entry )
 	{
-		return sclrgstry::AddValue( GetRegistry(), Value, Entry );
+	qRH
+		rRegistryLocker Locker;
+	qRB
+		Locker.Init();
+		sclrgstry::AddValue( GetRegistry(), Value, Entry );
+	qRR
+	qRT
+	qRE
 	}
 
 	inline void AddValue(
@@ -330,7 +378,14 @@ namespace sclmisc {
 		const str::string_ &Value,
 		sdr::row__ *Error = NULL )
 	{
-		return sclrgstry::AddValue( GetRegistry(), Path, Value, Error );
+	qRH
+		rRegistryLocker Locker;
+	qRB
+		Locker.Init();
+		sclrgstry::AddValue( GetRegistry(), Path, Value, Error );
+	qRR
+	qRT
+	qRE
 	}
 
 	inline void AddLastingValue(
@@ -338,7 +393,14 @@ namespace sclmisc {
 		const str::string_ &Value,
 		sdr::row__ *Error = NULL )
 	{
+	qRH
+		rRegistryLocker Locker;
+	qRB
+		Locker.Init();
 		GetRegistry().AddValue( sclrgstry::lLasting, Path, Value, Error );
+	qRR
+	qRT
+	qRE
 	}
 
 	inline void AddLastingValue(
@@ -360,7 +422,14 @@ namespace sclmisc {
 		const str::string_ &Value,
 		const rgstry::tentry__ &Entry )
 	{
-		return sclrgstry::SetValue( GetRegistry(), Value, Entry );
+	qRH
+		rRegistryLocker Locker;
+	qRB
+		Locker.Init();
+		sclrgstry::SetValue( GetRegistry(), Value, Entry );
+	qRR
+	qRT
+	qRE
 	}
 
 	inline void SetValue(
@@ -368,7 +437,14 @@ namespace sclmisc {
 		const str::string_ &Value,
 		sdr::row__ *Error = NULL )
 	{
-		return sclrgstry::SetValue( GetRegistry(), Path, Value, Error );
+	qRH
+		rRegistryLocker Locker;
+	qRB
+		Locker.Init();
+		sclrgstry::SetValue( GetRegistry(), Path, Value, Error );
+	qRR
+	qRT
+	qRE
 	}
 
 	inline void SetLastingValue(
@@ -376,7 +452,14 @@ namespace sclmisc {
 		const str::string_ &Value,
 		sdr::row__ *Error = NULL )
 	{
+	qRH
+		rRegistryLocker Locker;
+	qRB
+		Locker.Init();
 		GetRegistry().SetValue( sclrgstry::lLasting, Path, Value, Error );
+	qRR
+	qRT
+	qRE
 	}
 
 	inline void SetLastingValue(
@@ -398,54 +481,123 @@ namespace sclmisc {
 		const rgstry::tentry__ &Entry,
 		str::string_ &Value )
 	{
-		return sclrgstry::BGetValue( GetRegistry(), Entry, Value );
+		bso::sBool Result = false;
+	qRH
+		rRegistryLocker Locker;
+	qRB
+		Locker.Init();
+		Result = sclrgstry::BGetValue( GetRegistry(), Entry, Value );
+	qRR
+	qRT
+	qRE
+		return Result;
 	}
 
 	inline bso::bool__ GetValues(
 		const rgstry::tentry__ &Entry,
 		str::strings_ &Values )
 	{
-		return sclrgstry::GetValues( GetRegistry(), Entry, Values );
+		bso::sBool Result = false;
+	qRH
+		rRegistryLocker Locker;
+	qRB
+		Locker.Init();
+		Result = sclrgstry::GetValues( GetRegistry(), Entry, Values );
+	qRR
+	qRT
+	qRE
+		return Result;
 	}
 
 	inline bso::bool__ OGetValue(
 		const rgstry::tentry__ &Entry,
 		str::string_ &Value )
 	{
-		return sclrgstry::OGetValue( GetRegistry(), Entry, Value );
+		bso::sBool Result = false;
+	qRH
+		rRegistryLocker Locker;
+	qRB
+		Locker.Init();
+		Result = sclrgstry::OGetValue( GetRegistry(), Entry, Value );
+	qRR
+	qRT
+	qRE
+		return Result;
 	}
 
 	inline const char *OGetValue(
 		const rgstry::tentry__ &Entry,
 		TOL_CBUFFER___ &Buffer )	// Returns NULL when entry missing.
 	{
-		return sclrgstry::OGetValue( GetRegistry(), Entry, Buffer );
+	qRH
+		rRegistryLocker Locker;
+	qRB
+		Locker.Init();
+		sclrgstry::OGetValue( GetRegistry(), Entry, Buffer );
+	qRR
+	qRT
+	qRE
+		return Buffer;
 	}
 
 	inline const str::string_ &MGetValue(
 		const rgstry::tentry__ &Entry,
 		str::string_ &Value )
 	{
-		return sclrgstry::MGetValue( GetRegistry(), Entry, Value );
+	qRH
+		rRegistryLocker Locker;
+	qRB
+		Locker.Init();
+		sclrgstry::MGetValue( GetRegistry(), Entry, Value );
+	qRR
+	qRT
+	qRE
+		return Value;
 	}
 
 	inline const char *MGetValue(
 		const rgstry::tentry__ &Entry,
 		TOL_CBUFFER___ &Buffer )
 	{
-		return sclrgstry::MGetValue( GetRegistry(), Entry, Buffer );
+	qRH
+		rRegistryLocker Locker;
+	qRB
+		Locker.Init();
+		sclrgstry::MGetValue( GetRegistry(), Entry, Buffer );
+	qRR
+	qRT
+	qRE
+		return Buffer;
 	}
 
 	inline bso::bool__ BGetBoolean(
 		const rgstry::tentry__ &Entry,
 		bso::bool__ DefaultValue = false )
 	{
-		return sclrgstry::BGetBoolean( GetRegistry(), Entry, DefaultValue );
+		bso::sBool Result = false;
+	qRH
+		rRegistryLocker Locker;
+	qRB
+		Locker.Init();
+		Result = sclrgstry::BGetBoolean( GetRegistry(), Entry, DefaultValue );
+	qRR
+	qRT
+	qRE
+		return Result;
 	}
 
 	inline bso::bool__ MGetBoolean( const rgstry::tentry___ &Entry )
 	{
-		return sclrgstry::MGetBoolean( GetRegistry(), Entry );
+		bso::sBool Result = false;
+	qRH
+		rRegistryLocker Locker;
+	qRB
+		Locker.Init();
+		Result = sclrgstry::MGetBoolean( GetRegistry(), Entry );
+	qRR
+	qRT
+	qRE
+		return Result;
 	}
 
 # define SCLMISC__UN( type, name, limit )\
@@ -453,17 +605,35 @@ namespace sclmisc {
 		const rgstry::tentry__ &Entry,\
 		type Limit = limit )\
 		{\
-		return sclrgstry::MGet##name( GetRegistry(), Entry, Limit );\
+			type Result;\
+		qRH\
+			sclmisc::rRegistryLocker Locker;\
+		qRB\
+			Locker.Init();\
+			Result = sclrgstry::MGet##name( GetRegistry(), Entry, Limit );\
+		qRR\
+		qRT\
+		qRE\
+			return Result;\
 		}\
 	inline type OGet##name(\
 		const rgstry::tentry__ &Entry,\
 		type DefaultValue,\
 		type Limit = limit )\
 		{\
-		return sclrgstry::OGet##name( GetRegistry(), Entry, DefaultValue, Limit );\
+			type Result;\
+		qRH\
+			sclmisc::rRegistryLocker Locker;\
+		qRB\
+			Locker.Init();\
+			Result = sclrgstry::OGet##name( GetRegistry(), Entry, DefaultValue, Limit );\
+		qRR\
+		qRT\
+		qRE\
+			return Result;\
 		}
 
-	SCLMISC__UN( bso::uint__, UInt, BSO_UINT_MAX )
+		SCLMISC__UN( bso::uint__, UInt, BSO_UINT_MAX )
 # ifdef BSO__64BITS_ENABLED
 		SCLRGSTRY__UN( bso::u64__, U64, BSO_U64_MAX )
 # endif
@@ -477,7 +647,16 @@ namespace sclmisc {
 		type Min = min,\
 		type Max = max )\
 		{\
-		return sclrgstry::MGet##name( GetRegistry(), Entry, Min, Max );\
+			type Result;\
+		qRH\
+			sclmisc::rRegistryLocker Locker;\
+		qRB\
+			Locker.Init();\
+			Result = sclrgstry::MGet##name( GetRegistry(), Entry, Min, Max );\
+		qRR\
+		qRT\
+		qRE\
+			return Result;\
 		}\
 	inline type OGet##name(\
 		const rgstry::tentry__ &Entry,\
@@ -485,7 +664,16 @@ namespace sclmisc {
 		type Min = min,\
 		type Max = max )\
 		{\
-		return sclrgstry::OGet##name( GetRegistry(), Entry, DefaultValue, Min, Max );\
+			type Result;\
+		qRH\
+			sclmisc::rRegistryLocker Locker;\
+		qRB\
+			Locker.Init();\
+			Result = sclrgstry::OGet##name( GetRegistry(), Entry, DefaultValue, Min, Max );\
+		qRR\
+		qRT\
+		qRE\
+			return Result;\
 		}
 
 		SCLMISC__SN( bso::sint__, SInt, BSO_SINT_MIN, BSO_SINT_MAX )
@@ -501,22 +689,55 @@ namespace sclmisc {
 	inline const char *name(\
 		TOL_CBUFFER___ &Buffer )\
 		{\
-		return sclmisc::MGetValue( entry, Buffer );\
+		qRH\
+			sclmisc::rRegistryLocker Locker;\
+		qRB\
+			Locker.Init();\
+			Result = sclmisc::MGetValue( entry, Buffer );\
+		qRR\
+		qRT\
+		qRE\
+			return Buffer;\
 		}\
 	inline const str::string_ &name( str::string_ &Value )\
 		{\
-		return sclmisc::MGetValue( entry, Value );\
+		qRH\
+			sclmisc::rRegistryLocker Locker;\
+		qRB\
+			Locker.Init();\
+			result = sclmisc::MGetValue( entry, Value );\
+		qRR\
+		qRT\
+		qRE\
+			return Value;\
 		}
 
 		// To define function retrieving optional registry value.
 # define SCLMISC_OV( name, entry )\
 	inline const char *name( TOL_CBUFFER___ &Buffer )\
 		{\
-		return sclmisc::OGetValue( entry, Buffer );\
+		qRH\
+			sclmisc::rRegistryLocker Locker;\
+		qRB\
+			Locker.Init();\
+			Result = sclmisc::OGetValue( entry, Buffer );\
+		qRR\
+		qRT\
+		qRE\
+			return Buffer;\
 		}\
 	inline bso::bool__ name( str::string_ &Value )\
 		{\
-		return sclmisc::OGetValue( entry, Value );\
+			bso::sBool Result= false;\
+		qRH\
+			sclmisc::rRegistryLocker Locker;\
+		qRB\
+			Locker.Init();\
+			Result = sclmisc::OGetValue( entry, Value );\
+		qRR\
+		qRT\
+		qRE\
+			return Result;\
 		}
 
 	// To facilitate optional text output file handling. if no file name is given, then the standard output is given. Also creates a backup file, which can be restored.

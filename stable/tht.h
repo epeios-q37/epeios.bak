@@ -114,7 +114,7 @@ namespace tht {
 
 			Mutex_ = mtx::UndefinedHandler;
 		}
-		void Test_( void )
+		void Test_( void ) const
 		{
 			if ( Mutex_ == mtx::UndefinedHandler )
 				qRFwk();
@@ -137,6 +137,12 @@ namespace tht {
 			Mutex_ = mtx::Create();
 			ThreadID = Undefined;
 		}
+		bso::sBool IsLocked( void ) const
+		{
+			Test_();
+
+			return mtx::IsLocked( Mutex_ );
+		}
 		bso::sBool TryToLock( void )
 		{
 			Test_();
@@ -155,10 +161,14 @@ namespace tht {
 
 			mtx::Unlock( Mutex_ );
 		}
-		void UnlockIfLocked( void )
+		// Retruns 'true' if registry was lcoekd.
+		bso::sBool UnlockIfLocked( void )
 		{
-			if ( mtx::IsLocked( Mutex_ ) )
+			if ( mtx::IsLocked(Mutex_) ) {
 				mtx::Unlock( Mutex_ );
+				return true;
+			} else
+				return false;
 		}
 	};
 
@@ -204,45 +214,105 @@ namespace tht {
 		}
 	};
 
-	// Ensure that a ressource is only acces by one thread at a time.
+	typedef bso::sUInt sCounter_;
+	qCDEF( sCounter_, CounterMax_, bso::UIntMax );
+	
+	// Ensure that a ressource is only accessed by one thread at a time.
+	// All consecutive locking from same thread does not lock again.
+	// Unlocking is only effective after be called as much as being locked.
 	class rLocker {
 	private:
 		rCore_ Core_;
+		sCounter_ Counter_;
 	public:
 		void reset( bso::sBool P = true )
 		{
 			Core_.reset( P );
+			Counter_ = 0;
 		}
 		qCDTOR( rLocker );
 		void Init( void )
 		{
 			Core_.Init();
+			Counter_ = 0;
+		}
+		bso::sBool IsLocked( void ) const
+		{
+			return Core_.IsLocked();
 		}
 		void Lock( void )
 		{
-			Core_.Lock();
+			tht::sTID TID = GetTID();
 
-			if ( Core_.ThreadID != Undefined )
-				qRFwk();
+			if ( Core_.ThreadID != TID ) {
+				Core_.Lock();
 
-			Core_.ThreadID = GetTID();
+				if ( Core_.ThreadID == Undefined )
+					Core_.ThreadID = TID;
+				else
+					qRFwk();
+			}
+
+			if ( Counter_ == CounterMax_ )
+				qRLmt();
+
+			Counter_++;
 		}
 		void Unlock( void )
 		{
-			if ( Core_.ThreadID == Undefined )
+			if ( Core_.ThreadID == GetTID() )
+				Counter_--;
+			else if ( Core_.ThreadID == Undefined )
 				qRFwk();
-			else if ( Core_.ThreadID != GetTID() )
+			else
 				qRFwk();
 
-			Core_.ThreadID = Undefined;
-
-			Core_.Unlock();
+			if ( Counter_ == 0 ) {
+				Core_.ThreadID = Undefined;
+				Core_.Unlock();
+			}
 		}
-		void UnlockIfLocked( void )
-		{
-			Core_.UnlockIfLocked();
+	};
 
-			Core_.ThreadID = Undefined;
+	class rLockerHandler
+	{
+	private:
+		qRMV( rLocker, L_, Locker_ );
+		bso::sBool Locked_;
+	public:
+		void reset( bso::sBool P = true )
+		{
+			if ( P ) {
+				if ( Locked_ )
+					L_().Unlock();
+			}
+
+			tol::reset( P, Locker_, Locked_ );
+		}
+		qCDTOR( rLockerHandler );
+		void Init( rLocker &Locker )
+		{
+			reset();
+
+			Locker_ = &Locker;
+
+			Lock();
+		}
+		void Lock( void )
+		{
+			if ( !Locked_ )
+				L_().Lock();
+
+			Locked_ = true;
+		}
+		void Unlock( void )
+		{
+			if ( !Locked_ )
+				qRGnr();
+
+			L_().Unlock();
+
+			Locked_ = false;
 		}
 	};
 }

@@ -42,6 +42,8 @@
 namespace sclxdhtml {
 	const sclrgstry::registry_ &GetRegistry( void );
 
+	using sclmisc::rRegistryLocker;
+
 	const char *GetLauncher( void );
 
 	template <typename session> class cAction
@@ -319,13 +321,20 @@ namespace sclxdhtml {
 			const char *Language,
 			xdhcmn::proxy_callback__ *Callback )
 		{
+		qRH
+			sclmisc::rRegistryLocker Locker;
+		qRB
 			proxy__::Init( Callback );
 			_ReportingCallback.Init( *this, Language );
-			frontend::Init( Kernel, Language, _ReportingCallback, sclmisc::GetRegistry() );
+			Locker.Init();
+			frontend::Init( Kernel, Language, _ReportingCallback );
 			_session_callback__::Init();
 			Page_ = UndefinedPage;
 			// instances::Init( *this );	// Made on connection.
 			BackendVisibility_ = bvShow;	// By default, the backend part of the login page is shown.
+		qRR
+		qRT
+		qRE
 		}
 		bso::bool__ Connect(
 			const fblfrd::compatibility_informations__ &CompatibilityInformations,

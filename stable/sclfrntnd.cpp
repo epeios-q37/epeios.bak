@@ -375,17 +375,20 @@ static void GetFeatures_(
 {
 qRH
 	str::string DefaultType;
+	sclmisc::rRegistryLocker Locker;
 qRB
 	DefaultType.Init();
 
-	if ( sclrgstry::OGetValue( sclrgstry::GetCommonRegistry(), DefaultTypeEntry, DefaultType ) ) {
+	Locker.Init();
+
+	if ( sclrgstry::OGetValue( sclmisc::GetRegistry(), DefaultTypeEntry, DefaultType ) ) {
 		Writer.PushTag( DefaultTypeTag );
 		Writer.PutValue( DefaultType );
 		Writer.PopTag();
 	}
 
 	Writer.PushTag( ItemsTag );
-	GetPredefinedItems_( ItemTag, IdEntry, ParameterDefaultEntry, DefinitionDefaultEntry, ValueEntry, AliasEntry, sclrgstry::GetCommonRegistry(), scllocale::GetLocale(), Language, Writer );
+	GetPredefinedItems_( ItemTag, IdEntry, ParameterDefaultEntry, DefinitionDefaultEntry, ValueEntry, AliasEntry, sclmisc::GetRegistry(), scllocale::GetLocale(), Language, Writer );
 	Writer.PopTag();
 qRR
 qRT
@@ -407,15 +410,16 @@ bso::bool__ sclfrntnd::rFrontend::Connect(
 void sclfrntnd::rFrontend::Init(
 	rKernel &Kernel,
 	const char *Language,
-	fblfrd::reporting_callback__ &ReportingCallback,
-	const rgstry::multi_level_registry_ &Registry )
+	fblfrd::reporting_callback__ &ReportingCallback )
 {
 qRH
 	str::wString Key;
+	sclmisc::rRegistryLocker Locker;
 qRB
+	Locker.Init();
 	// _Flow.Init(...);	// Made on connection.
 	_Registry.Init();
-	_Registry.Push( Registry );
+	_Registry.Push( sclmisc::GetRegistry() );
 	_RegistryLevel = _Registry.CreateEmbedded( rgstry::name( "Session" ) );
 
 	if ( (Language != NULL) && *Language )
@@ -484,12 +488,15 @@ void sclfrntnd::GetBackendsFeatures(
 {
 qRH
 	str::string Backend, Type;
+	sclmisc::rRegistryLocker Locker;
 qRB
 	Backend.Init();
 
-	if ( sclrgstry::OGetValue( sclrgstry::GetCommonRegistry(), parameter_::backend_::Feature_, Backend ) ) {
+	Locker.Init();
+
+	if ( sclrgstry::OGetValue( sclmisc::GetRegistry(), parameter_::backend_::Feature_, Backend ) ) {
 		Type.Init();
-		sclrgstry::MGetValue( sclrgstry::GetCommonRegistry(), parameter_::backend_::Type_, Type );
+		sclrgstry::MGetValue( sclmisc::GetRegistry(), parameter_::backend_::Type_, Type );
 
 		Writer.PushTag( "Backend" );
 		Writer.PutAttribute( "Type", Type );
@@ -507,8 +514,16 @@ static void GetBackendFeatures_(
 	const str::string_ &Id,
 	rFeatures &Features )
 {
-	sclrgstry::MGetValue(sclrgstry::GetCommonRegistry(), rgstry::tentry___( definition_::backends::tagged_backend::Plugin, Id ), Features.Plugin );
-	sclrgstry::OGetValue(sclrgstry::GetCommonRegistry(), rgstry::tentry___( definition_::backends::TaggedBackend, Id ), Features.Parameters );
+qRH
+	sclmisc::rRegistryLocker Locker;
+qRB
+	Locker.Init();
+
+	sclrgstry::MGetValue( sclmisc::GetRegistry(), rgstry::tentry___( definition_::backends::tagged_backend::Plugin, Id ), Features.Plugin );
+	sclrgstry::OGetValue( sclmisc::GetRegistry(), rgstry::tentry___( definition_::backends::TaggedBackend, Id ), Features.Parameters );
+qRR
+qRT
+qRE
 }
 
 namespace {

@@ -83,7 +83,10 @@ void login::SetLayout( core::rSession &Session )
 {
 qRH
 	str::string XML, XSL;
+	sclxdhtml::rRegistryLocker Locker;
 qRB
+	Locker.Init();
+
 	XML.Init();
 	GetContent_( sclxdhtml::GetRegistry(), Session, XML );	// Outside session, so we use the global registry...
 

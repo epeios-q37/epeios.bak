@@ -614,6 +614,7 @@ public:
 		qRH
 			rProxy *Proxy = NULL;
 			wPending Pending;
+			tht::rLockerHandler Locker;
 		qRB
 			Proxy = new rProxy;
 
@@ -622,9 +623,11 @@ public:
 
 			Pending.Init( Proxy, Id );
 
+			Locker.Init( Locker_ );
+
 			GetPendings_( Type ).Append( Pending );
 
-			Locker_.Unlock();	// Locked by caller.
+			Locker.Unlock();
 
 			Proxy->Init( IODriver, Type );
 		qRR
@@ -638,8 +641,6 @@ public:
 			prxybase::eType Type,
 			tol::sDelay Timeout )
 		{
-			Locker_.Unlock();	// Locked by caller.
-
 			Proxy->Plug( IODriver, Type, Timeout );	// Blocking until deconnection or 'Timeout' ms.
 
 			delete Proxy;
@@ -664,8 +665,6 @@ public:
 
 		Id.Init();
 		prxybase::GetId( Flow, Id );
-
-		Locker_.Lock();
 
 		switch ( Type ) {
 		case prxybase::tClient:
@@ -697,7 +696,6 @@ public:
 
 	qRR
 	qRT
-		Locker_.UnlockIfLocked();
 	qRE
 	}
 
@@ -707,6 +705,7 @@ public:
 		prxybase::eType Type = prxybase::t_Undefined;
 		str::wString ID;
 		rLogRack_ Log;
+		tht::rLockerHandler Locker;
 	qRB
 		Type = prxybase::GetType( Flow );
 
@@ -716,7 +715,7 @@ public:
 		ID.Init();
 		prxybase::GetId( Flow, ID );
 
-		Locker_.Lock();
+		Locker.Init( Locker_ );
 
 		Log.Init( Log_ );
 
@@ -729,7 +728,6 @@ public:
 		Flow.Commit();
 	qRR
 	qRT
-		Locker_.UnlockIfLocked();
 	qRE
 	}
 
@@ -795,6 +793,7 @@ public:
 			str::string Id;
 			csdcmn::sVersion Version = csdcmn::UndefinedVersion;
 			flw::sDressedIOFlow<> Flow;
+			tht::rLockerHandler Locker;
 		qRB
 			Flow.Init( *IODriver );
 
@@ -827,7 +826,6 @@ public:
 
 			Flow.Commit( false );
 		qRR
-			Locker_.UnlockIfLocked();
 		qRT
 		qRE
 			return csdscb::aStop;

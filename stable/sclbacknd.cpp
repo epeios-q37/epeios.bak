@@ -116,7 +116,9 @@ void sclbacknd::backend___::Init(
 {
 qRH
 	str::wString Code, Key;
+	sclmisc::rRegistryLocker Locker;
 qRB
+Locker.Init();
 	Code.Init();
 	sclmisc::OGetValue( ::Code_, Code );
 
@@ -128,7 +130,7 @@ qRB
 	_VoidFlowDriver.Init( fdr::tsDisabled, flx::aAllowed );
 	_RequestLogFunctions.Init( _VoidFlowDriver );
 	_Registry.Init();
-	_Registry.Push( sclrgstry::GetCommonRegistry() );
+	_Registry.Push( sclmisc::GetRegistry() );
 	_RegistrySetupLevel = _Registry.Create();
 
 	AppendFunctions_( *this );

@@ -108,9 +108,21 @@ rgstry::entry___ sclrgstry::definition::plugin::Locale( "Locale", ::definition::
 
 static rgstry::entry___ Setup_( "@Setup", sclrgstry::Parameters );
 
+namespace {
+	tht::rLocker Locker_;
+}
+
 registry_ &sclrgstry::GetCommonRegistry( void )
 {
+	if ( !Locker_.IsLocked() )
+		qRFwk();
+
 	return Registry_;
+}
+
+tht::rLocker &sclrgstry::GetCommonRegistryLocker( void )
+{
+	return Locker_;
 }
 
 #define C( name )	case l##name : return #name; break
@@ -790,6 +802,7 @@ SN( S8, bso::s8__ )
 Q37_GCTOR( sclrgstry )
 {
 	Registry_.Init();
+	Locker_.Init();
 
 	// 3 firsts not as 'embedded', due to the fact that plugins use the registry of the main program.
 	MainLevel_ = Registry_.Create();

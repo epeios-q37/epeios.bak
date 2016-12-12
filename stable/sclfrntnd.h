@@ -192,8 +192,7 @@ namespace sclfrntnd {
 		void Init(
 			rKernel &Kernel,
 			const char *Language,
-			fblfrd::reporting_callback__ &ReportingCallback,
-			const rgstry::multi_level_registry_ &Registry );
+			fblfrd::reporting_callback__ &ReportingCallback );
 		void Ping( void );
 		void Crash( void );
 		bso::bool__ Connect(
