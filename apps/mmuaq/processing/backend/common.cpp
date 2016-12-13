@@ -23,45 +23,6 @@
 
 using namespace common;
 
- #define C( name )\
-	case m##name:\
-		return #name;\
-		break
-
-
-const char *common::GetLabel( eMessage Message )
-{
-	switch ( Message ){
-	C( TestMessage );
-	C( NotLoggedIn );
-	C( AgentWithSuchNameExists );
-	C( AgentNameCanNotBeEmpty );
-	C( AgentNameCanNotBeLongerAs );
-	C( HostPortCanNotBeEmpty );
-	C( HostPortCanNotBeLongerAs );
-	C( UsernameCanNotBeEmpty );
-	C( UsernameCanNotBeLongerAs );
-	C( PasswordCanNotBeLongerAs );
-	C( FolderNameCanNotBeEmpty );
-	C( FolderNameCanNotBeLongerAs );
-	C( UnknownAgent );
-	C( UnknownFolder );
-	C( FolderNotMoveable );
-	C( FolderNotRenameable );
-	C( FolderWithSameNameAlreadyExistsInThisFolder );
-/*
-	C(  );
-*/
-	default:
-		qRGnr();
-		break;
-	}
-
-	return NULL;
-}
-
-#undef C
-
 namespace {
 	typedef muaacc::cAccount cAccount_;
 

@@ -31,31 +31,6 @@
 
 namespace common {
 
-	qENUM( Message )
-	{
-		mAgentNameCanNotBeEmpty,
-		mAgentNameCanNotBeLongerAs,
-		mAgentWithSuchNameExists,
-		mFolderNameCanNotBeEmpty,
-		mFolderNameCanNotBeLongerAs,
-		mFolderNotMoveable,
-		mFolderNotRenameable,
-		mFolderWithSameNameAlreadyExistsInThisFolder,
-		mHostPortCanNotBeEmpty,
-		mHostPortCanNotBeLongerAs,
-		mNotLoggedIn,
-		mPasswordCanNotBeLongerAs,
-		mTestMessage,
-		mUnknownAgent,
-		mUnknownFolder,
-		mUsernameCanNotBeEmpty,
-		mUsernameCanNotBeLongerAs,
-		m_amount,
-		m_Undefined
-	};
-
-	const char *GetLabel( eMessage Message );
-
 	void Initialize( void );
 
 	bso::bool__ IsInitialized( void );
@@ -120,17 +95,10 @@ namespace common {
 	muaacc::lAuthentication &Authentication( void );
 
 	muaacc::lAccounts &Accounts( void );
-
-	template <typename... tags> inline void ReportAndAbort(
-		eMessage Message,
-		const tags&... Tags )
-	{
-		return sclmisc::ReportAndAbort( common::GetLabel( Message ), Tags... );
-	}
 }
 
 // '##' needed by 'clang++'/'g++'.
-# define REPORT( message, ... ) common::ReportAndAbort( common::m##message, ##__VA_ARGS__  )
+# define REPORT( message, ... ) sclmisc::ReportAndAbort( message_::message, ##__VA_ARGS__  )
 
 # define BACKEND_ ( *(sclbacknd::rBackend *)BaseBackend.UP() )
 # define STUFF_ ( *(common::rStuff *)BACKEND_.Stuff() )

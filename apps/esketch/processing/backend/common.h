@@ -29,15 +29,6 @@
 
 namespace common {
 
-	qENUM( Message )
-	{
-		mTestMessage,
-		m_amount,
-		m_Undefined
-	};
-
-	const char *GetLabel( eMessage Message );
-
 	void Initialize( void );
 
 	bso::bool__ IsInitialized( void );
@@ -56,7 +47,7 @@ namespace common {
 }
 
 // '##' needed by 'clang++'/'g++'.
-# define REPORT( message, ... ) sclmisc::ReportAndAbort( common::GetLabel( common::m##message ), ##__VA_ARGS__  )
+# define REPORT( message, ... ) sclmisc::ReportAndAbort( message_::message, ##__VA_ARGS__  )
 
 # define BACKEND_ ( *(sclbacknd::rBackend *)BaseBackend.UP() )
 # define STUFF_ ( *(common::rStuff *)BACKEND_.Stuff() )

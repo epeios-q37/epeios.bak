@@ -62,13 +62,11 @@ namespace frdfrntnd {
 		void Init(
 			rKernel &Kernel,
 			const char *Language,
-			fblfrd::reporting_callback__ &ReportingCallback,
-			const rgstry::multi_level_registry_ &Registry )
+			fblfrd::reporting_callback__ &ReportingCallback )
 		{
-			rFrontend_::Init( Kernel, Language, ReportingCallback, Registry );
+			rFrontend_::Init( Kernel, Language, ReportingCallback );
 		}
 	};
-
 }
 
 #endif

@@ -33,6 +33,33 @@
 
 using namespace wrpunbound;
 
+#define M( message )	E_CDEF( char *, message, #message )
+
+namespace message_ {
+	M( TestMessage );
+	M( NotLoggedIn );
+	M( AgentWithSuchNameExists );
+	M( AgentNameCanNotBeEmpty );
+	M( AgentNameCanNotBeLongerAs );
+	M( HostPortCanNotBeEmpty );
+	M( HostPortCanNotBeLongerAs );
+	M( UsernameCanNotBeEmpty );
+	M( UsernameCanNotBeLongerAs );
+	M( PasswordCanNotBeLongerAs );
+	M( FolderNameCanNotBeEmpty );
+	M( FolderNameCanNotBeLongerAs );
+	M( UnknownAgent );
+	M( UnknownFolder );
+	M( FolderNotMoveable );
+	M( FolderNotRenameable );
+	M( FolderWithSameNameAlreadyExistsInThisFolder );
+/*
+	M(  );
+*/
+}
+
+#undef M
+
 using common::rStuff;
 
 #define DEC( name, version )\
@@ -45,8 +72,8 @@ namespace shared_ {
 
 	const str::dString &Normalize(
 		str::dString &Value,
-		common::eMessage EmptyMessage,
-		common::eMessage LengthMessage,
+		const char *EmptyMessage,
+		const char *LengthMessage,
 		rgstry::rEntry &Entry )
 	{
 	qRH
@@ -54,10 +81,10 @@ namespace shared_ {
 		Value.StripCharacter( ' ' );
 
 		if ( Value.Amount() == 0 )
-			common::ReportAndAbort( EmptyMessage );
+			sclmisc::ReportAndAbort( EmptyMessage );
 
 		if ( Value.Amount() > sclmisc::OGetUInt( Entry, DefaultLengthLimit ) )
-			common::ReportAndAbort( LengthMessage, DefaultLengthLimit );
+			sclmisc::ReportAndAbort( LengthMessage, DefaultLengthLimit );
 	qRR
 	qRT
 	qRE
@@ -187,7 +214,7 @@ namespace update_agent_ {
 		}
 	}
 
-#define N( name ) shared_::Normalize( name, common::m##name##CanNotBeEmpty, common::m##name##CanNotBeLongerAs, registry::definition::limitation::name##Length )
+#define N( name ) shared_::Normalize( name, message_::name##CanNotBeEmpty, message_::name##CanNotBeLongerAs, registry::definition::limitation::name##Length )
 
 	muaagt::sRow Update(
 		muaagt::sRow Row,
@@ -349,7 +376,7 @@ qRB
 
 	Name.Init( Request.StringIn() );
 
-	shared_::Normalize( Name, common::mFolderNameCanNotBeEmpty, common::mFolderNameCanNotBeLongerAs, registry::definition::limitation::FolderNameLength );
+	shared_::Normalize( Name, message_::FolderNameCanNotBeEmpty, message_::FolderNameCanNotBeLongerAs, registry::definition::limitation::FolderNameLength );
 
 	if ( Account.Directory().Folders().Search( Parent, Name ) != qNIL )
 		REPORT( FolderWithSameNameAlreadyExistsInThisFolder );
@@ -378,7 +405,7 @@ qRB
 
 	NewName.Init( Request.StringIn() );
 
-	shared_::Normalize( NewName, common::mFolderNameCanNotBeEmpty, common::mFolderNameCanNotBeLongerAs, registry::definition::limitation::FolderNameLength );
+	shared_::Normalize( NewName, message_::FolderNameCanNotBeEmpty, message_::FolderNameCanNotBeLongerAs, registry::definition::limitation::FolderNameLength );
 
 	CurrentName.Init();
 	Account.Directory().Folders().GetName( Folder, CurrentName );

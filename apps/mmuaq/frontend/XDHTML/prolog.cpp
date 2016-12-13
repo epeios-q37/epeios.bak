@@ -48,10 +48,12 @@ namespace {
 	{
 	qRH
 		str::string XML, XSL;
+	sclxdhtml::rRegistryLocker Locker;
 	qRB
 		XML.Init();
 		GetContext_( Session,  XML );
 
+		Locker.Init();
 		XSL.Init();
 		sclxdhtml::LoadXSLAndTranslateTags(rgstry::tentry___( registry::definition::XSLCastingFile, XSLAffix_ ), sclxdhtml::GetRegistry(), XSL );	// Outside session, so we use the global registry...
 
@@ -83,7 +85,9 @@ void prolog::SetLayout( core::rSession &Session )
 {
 qRH
 	str::string XML, XSL;
+	sclxdhtml::rRegistryLocker Locker;
 qRB
+	Locker.Init();
 	XML.Init();
 	GetContent_( sclxdhtml::GetRegistry(), Session, XML );	// Outside session, so we use the global registry...
 

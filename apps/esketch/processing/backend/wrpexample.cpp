@@ -29,11 +29,20 @@
 #include "sclmisc.h"
 
 using namespace wrpexample;
+
 using namespace sktxmp;
 using common::rStuff;
 
 const char *wrpexample::dMyObject::PREFIX = WRPEXAMPLE_MYOBJECT_PREFIX;
 const char *wrpexample::dMyObject::NAME = WRPEXAMPLE_MYOBJECT_NAME;
+
+#define M( message )	E_CDEF( char *, message, #message )
+
+namespace message_ {
+	M( TestMessage );
+}
+
+#undef M
 
 #define ARGS (\
 	dMyObject_ &MyObject,\

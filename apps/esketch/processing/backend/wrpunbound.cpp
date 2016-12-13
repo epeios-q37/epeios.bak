@@ -27,6 +27,14 @@
 
 using namespace wrpunbound;
 
+#define M( message )	E_CDEF( char *, message, #message )
+
+namespace message_ {
+	M( TestMessage );
+}
+
+#undef M
+
 using common::rStuff;
 
 #define DEC( name, version )\

@@ -30,6 +30,19 @@
 
 using namespace wrpexample;
 using namespace muaxmp;
+
+#define M( message )	E_CDEF( char *, message, #message )
+
+namespace message_ {
+	M( TestMessage );
+/*
+	M(  );
+*/
+}
+
+#undef M
+
+
 using common::rStuff;
 
 const char *wrpexample::dMyObject::PREFIX = WRPEXAMPLE_MYOBJECT_PREFIX;

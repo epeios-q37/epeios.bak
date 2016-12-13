@@ -315,15 +315,13 @@ namespace muaacc {
 		{
 			sRow Row = qNIL;
 		qRH
+			tht::rLockerHandler Locker;
 		qRB
-			Locker_.Lock();
+			Locker.Init( Locker_ );
 		
 			Row = New_( qNIL, Language );
-
-			Locker_.Unlock();
 		qRR
 		qRT
-			Locker_.UnlockIfLocked();
 		qRE
 			return Row;
 		}
@@ -331,21 +329,19 @@ namespace muaacc {
 		{
 			rAccountTutor *Account = NULL;
 		qRH
+			tht::rLockerHandler Locker;
 		qRB
 			if ( Row == qNIL )
 				qRGnr();
 
-			Locker_.Lock();
+			Locker.Init( Locker_  );
 		
 			if ( !Accounts_.Exists( Row ) )
 				qRGnr();
 
 			Accounts_.Recall( Row, Account );
-
-			Locker_.Unlock();
 		qRR
 		qRT
-			Locker_.UnlockIfLocked();
 		qRE
 			return *Account;
 		}
