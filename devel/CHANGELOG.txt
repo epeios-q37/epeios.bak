@@ -3,8 +3,12 @@ CHANGELOG for the 'Epeios' framework.
 2016-12-13 :
 - CSDBNC :
 	- Fixing bad handling of error parameter.
+- SCLARGMNT :
+	- Adaptation to changes in 'SCLMISC' (continued).
 - SCLFRNTND, SCLXDHTML :
 	- Handling default port for straight connexion to backend.
+- SCLMISC :
+	- Fixing registry locker bug.
 
 2016-12-12 :
 - SCLARGMNT, SCLBACND, SCLFRNTND, SCLXDHTML :

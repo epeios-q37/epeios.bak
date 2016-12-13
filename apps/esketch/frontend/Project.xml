@@ -4,6 +4,7 @@
 	<xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
 	<Dependencies Target="esketch">
 		<Dependency Dir="XDHTML/"/>
+		<Dependency Dir="CLI/"/>
 		<xpp:bloc marker="$">
 			<Dependency Dir="$EpeiosToolsDir$xdhcefq/" Ext="xdhcefq/"/>
 			<Dependency Dir="$EpeiosPluginsDir$frontend/" Ext="plugins/frontend"/>

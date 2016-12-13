@@ -1443,9 +1443,12 @@ qRH
 	str::strings Ids, Commands, Flags, Options, Frees;
 	str::string  ProgramDescription;
 	str::string EntryPath;
+	sclmisc::rRegistryLocker Locker;
 qRB
 	EntryPath.Init();
-	sclrgstry::GetCommonRegistry().Delete( Command_.GetPath( EntryPath ), sclrgstry::GetRawLevel( sclrgstry::lArguments ) );	// Pour pouvoir rcuprer la valeur correspondant  ce 'Path' tel qu'ventuellement dfini dans le fichier de configuration.
+	Locker.Init();	
+	sclmisc::GetRegistry().Delete( Command_.GetPath( EntryPath ), sclrgstry::GetRawLevel( sclrgstry::lArguments ) );	// Pour pouvoir rcuprer la valeur correspondant  ce 'Path' tel qu'ventuellement dfini dans le fichier de configuration.
+	Locker.Unlock();
 
 	Ids.Init();
 	GetValues( ArgumentId_, Ids );

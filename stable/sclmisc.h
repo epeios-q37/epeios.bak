@@ -308,7 +308,6 @@ namespace sclmisc {
 	class rRegistryLocker
 	: public Locker_
 	{
-		tht::rLockerHandler Handler_;
 	public:
 		void reset( bso::sBool P = true )
 		{
@@ -317,7 +316,7 @@ namespace sclmisc {
 		qCDTOR( rRegistryLocker );
 		void Init( void )
 		{
-			Handler_.Init( sclrgstry::GetCommonRegistryLocker() );
+			Locker_::Init( sclrgstry::GetCommonRegistryLocker() );
 		}
 	};
 
