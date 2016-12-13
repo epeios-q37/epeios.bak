@@ -62,8 +62,7 @@ namespace frdfrntnd {
 		void Init(
 			rKernel &Kernel,
 			const char *Language,
-			fblfrd::reporting_callback__ &ReportingCallback,
-			void *)
+			fblfrd::reporting_callback__ &ReportingCallback )
 		{
 			rFrontend_::Init( Kernel, Language, ReportingCallback );
 		}
