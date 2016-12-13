@@ -44,15 +44,17 @@ namespace {
 	qRE
 	}
 
-	void FillCasting_( core::rSession &Session )
+	void SetCasting_( core::rSession &Session )
 	{
 	qRH
 		str::string XML, XSL;
+		sclxdhtml::rRegistryLocker Locker;
 	qRB
 		XML.Init();
 		GetContext_( Session,  XML );
 
 		XSL.Init();
+		Locker.Init();
 		sclxdhtml::LoadXSLAndTranslateTags(rgstry::tentry___( registry::definition::XSLCastingFile, XSLAffix_ ), sclxdhtml::GetRegistry() , XSL );	// Outside session, so we use the global registry...
 
 		Session.FillDocumentCastings( XML, XSL );
@@ -95,7 +97,7 @@ qRB
 
 	Session.FillDocument( XML, XSL );
 
-	FillCasting_( Session );
+	SetCasting_( Session );
 
 	Session.SwitchTo( core::pLogin );
 qRR
@@ -107,7 +109,7 @@ qRE
 
 AC( SwitchBackendType )
 {
-	FillCasting_( Session );
+	SetCasting_( Session );
 }
 
 AC( DisplayEmbeddedBackendFilename )

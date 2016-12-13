@@ -63,7 +63,8 @@ namespace csdbnc {
 	//f Return the host name contained in 'HostService'.
 	const char *Host(
 		const char *HostService,
-		buffer__ Buffer );
+		buffer__ Buffer,
+		qRPD );
 
 #ifndef CPE_F_MT
 	inline const char *Host( const char *HostService )
@@ -124,13 +125,18 @@ namespace csdbnc {
 	inline socket__ Connect(
 		const char *HostService,
 		socket__ Desc = SCK_INVALID_SOCKET,
-		err::handling__ ErrorHandling = err::h_Default )
+		qRPD )
 	{
 		buffer__ Buffer;
 
-		return Connect( Host( HostService, Buffer ), Service( HostService ), Desc, ErrorHandling );
-	} 
+		const char *Host = csdbnc::Host( HostService, Buffer, qRP );
+		const char *Service = csdbnc::Service( HostService, qRP );
 
+		if ( ( Host == NULL ) || ( Service == NULL ) )
+			return SCK_INVALID_SOCKET;	// Error parameters handled by downstream functions.
+		else
+			return Connect( Host, Service, Desc, qRP );
+	} 
 	/*f Return a descriptot to a socket connected to 'HostService'.
 	'HostService' can be in '212.95.72.3:80' format, or in 'www.ensd.net:http' format.
 	If connection failed, and 'ErrHandler' == 'err::hSkip', return 'SCK_INVALID'. */

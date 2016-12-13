@@ -60,6 +60,8 @@ namespace parameter_ {
 	}
 }
 
+rgstry::rEntry &sclfrntnd::BackendParametersRegistryEntry = parameter_::Backend_;
+
 namespace definition_ {
 
 	namespace tagged_project_ {

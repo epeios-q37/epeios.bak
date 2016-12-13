@@ -571,6 +571,29 @@ qRT
 qRE
 }
 
+namespace straight_ {
+	namespace {
+		rgstry::rEntry DefaultPort_("@DefaultStraightPort", sclfrntnd::BackendParametersRegistryEntry );
+	}
+
+	void Normalize( str::dString &Parameters )
+	{
+	qRH
+		str::wString Port;
+	qRB
+		if ( Parameters.Search( ':' ) == qNIL ) {
+			Port.Init();
+			if ( sclmisc::OGetValue( DefaultPort_, Port ) ) {
+				Parameters.Append( ':' );
+				Parameters.Append( Port );
+			}
+		}
+	qRR
+	qRT
+	qRE
+	}
+}
+
 void sclxdhtml::login::GetBackendFeatures(
 	proxy__ &Proxy,
 	sclfrntnd::rFeatures &Features )
@@ -579,6 +602,7 @@ qRH
 	TOL_CBUFFER___ Buffer;
 	str::string Type, Parameters;
 	const char *BackendId = NULL;
+	bso::sBool NormalizeStraightBackendFeature = false;
 qRB
 	Parameters.Init();
 
@@ -590,12 +614,16 @@ qRB
 			BackendId = PredefinedBackendId;
 		else if ( Type == EmbeddedBackendType_ )
 			BackendId = EmbeddedBackendId;
-		else if ( Type == StraightBackendType_ )
+		else if ( Type == StraightBackendType_ ) {
+			NormalizeStraightBackendFeature = true;
 			BackendId = StraightBackendId;
-		else
+		} else
 			qRGnr();
 
 		Parameters.Append( Proxy.GetContent( BackendId, Buffer ) );
+
+		if ( NormalizeStraightBackendFeature )
+			straight_::Normalize( Parameters );
 	}
 
 	sclfrntnd::SetBackendFeatures( Type, Parameters, Features );

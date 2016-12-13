@@ -25,7 +25,8 @@ using namespace csdbnc;
 
 const char *csdbnc::Host(
 	const char *HostService,
-	buffer__ Buffer )
+	buffer__ Buffer,
+	qRPN )	// The error parameter is not used ; only herer for standardization.
 {
 	char *P;
 

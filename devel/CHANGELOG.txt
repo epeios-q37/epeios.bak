@@ -1,5 +1,11 @@
 CHANGELOG for the 'Epeios' framework.
 
+2016-12-13 :
+- CSDBNC :
+	- Fixing bad handling of error parameter.
+- SCLFRNTND, SCLXDHTML :
+	- Handling default port for straight connexion to backend.
+
 2016-12-12 :
 - SCLARGMNT, SCLBACND, SCLFRNTND, SCLXDHTML :
 	- Adaptation to changes in 'SCLMISC'.

@@ -46,6 +46,9 @@
 /***************/
 
 namespace sclfrntnd {
+
+	extern rgstry::rEntry &BackendParametersRegistryEntry;
+
 	using fblfrd::compatibility_informations__;
 
 	using fblfrd::incompatibility_informations_;
