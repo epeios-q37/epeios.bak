@@ -142,9 +142,10 @@ namespace frdinstc {
 		void GetMailsFields(
 			sFolder Folder,
 			fbltyp::dIds &Ids,
-			dStrings &Subjects )
+			dStrings &Subjects,
+			dAgents &Agents )
 		{
-			S_().MUAGetMailsFields_1( *Folder, Ids, Subjects );
+			S_().MUAGetMailsFields_1( *Folder, Ids, Subjects, Agents );
 		}
 		void GetMail(
 			sMail Mail,

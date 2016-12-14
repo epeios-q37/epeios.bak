@@ -115,11 +115,15 @@ namespace dump_mails_{
 	void Dump(
 		const fbltyp::dIds &Ids,
 		fbltyp::dStrings &Subjects,
+		const dAgents &Agents,
 		xml::dWriter &Writer )
 	{
 		sdr::sRow Row = Ids.First();
 
 		if ( Ids.Amount() != Subjects.Amount() )
+			qRGnr();
+
+		if ( Ids.Amount() != Agents.Amount() )
 			qRGnr();
 
 		Writer.PushTag("Mails");
@@ -129,6 +133,7 @@ namespace dump_mails_{
 
 			Writer.PutAttribute("id", *Ids( Row ) );
 			Writer.PutAttribute("Subject", Subjects( Row ) );
+			Writer.PutAttribute("Agent", *Agents( Row ) );
 
 			Writer.PopTag();
 
@@ -146,13 +151,14 @@ void frdinstc::rUser::DumpMails( xml::dWriter &Writer )
 qRH
 	fbltyp::wIds Ids;
 	fbltyp::wStrings Subjects;
+	wAgents Agents;
 qRB
-	tol::Init( Ids, Subjects );
+	tol::Init( Ids, Subjects, Agents );
 
 	if ( Folder_.Current != UndefinedFolder )
-		Core_.GetMailsFields( Folder_.Current, Ids, Subjects );
+		Core_.GetMailsFields( Folder_.Current, Ids, Subjects, Agents );
 
-	dump_mails_::Dump( Ids, Subjects, Writer );
+	dump_mails_::Dump( Ids, Subjects, Agents, Writer );
 qRR
 qRT
 qRE

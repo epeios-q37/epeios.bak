@@ -205,7 +205,8 @@ namespace muaacc {
 		void GetFields(
 			const muamel::dRows &Wanted,
 			str::dStrings &Subjects,
-			muamel::dRows &Available ) const;	// Returns only subjects now. Will return other fields in the future.
+			muaagt::dRows &Agents,
+			muamel::dRows &Available ) const;	// Returns only subjects and woning agents now. Will return other fields in the future.
 		const str::dString &GetMail(
 			muamel::sRow MailRow,
 			str::dString &Mail ) const;

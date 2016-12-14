@@ -53,6 +53,8 @@ namespace {
 	qRB
 		Rack.Init( XSLAffix_, XML, Session );
 
+		Session.User.DumpAgents( Rack );
+
 		Session.User.DumpMails( Rack );
 	qRR
 	qRT

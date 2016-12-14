@@ -217,8 +217,10 @@ namespace get_fields_ {
 				namespace {
 					void Get_(
 						sNumber Number,
+						muaagt::sRow OwningAgent,
 						fdr::rIODriver &Driver,
-						str::dStrings &Subjects )
+						str::dStrings &Subjects,
+						muaagt::dRows &Agents )
 					{
 					qRH
 						muapo3::hBody Body;
@@ -241,6 +243,7 @@ namespace get_fields_ {
 							Subject.Init();
 							Fields.GetBody( Row, Subject );
 							Subjects.Add( Subject );
+							Agents.Add( OwningAgent );
 						}
 					qRR
 					qRT
@@ -250,13 +253,15 @@ namespace get_fields_ {
 
 				void Get(
 					const dNumbers &Numbers,
+					muaagt::sRow OwningAgent,
 					fdr::rIODriver &Driver,
-					str::dStrings &Subjects )
+					str::dStrings &Subjects,
+					muaagt::dRows &Agents )
 				{
 					sdr::sRow Row = Numbers.First();
 
 					while ( Row != qNIL ) {
-						Get_( Numbers( Row ), Driver, Subjects );
+						Get_( Numbers( Row ), OwningAgent, Driver, Subjects, Agents );
 
 						Row = Numbers.Next( Row );
 					}
@@ -269,6 +274,7 @@ namespace get_fields_ {
 				muaagt::sRow Agent,
 				const muaagt::dAgents &Agents,
 				str::dStrings &Subjects,
+				muaagt::dRows &CorrespondingAgents,
 				muamel::dRows &Available )
 			{
 			qRH
@@ -280,7 +286,7 @@ namespace get_fields_ {
 				tol::Init( Numbers );
 				u2n_::Get( UIDLs, Wanted, Driver, Numbers, Available );
 
-				n2s_::Get( Numbers, Driver, Subjects );
+				n2s_::Get( Numbers, Agent, Driver, Subjects, CorrespondingAgents );
 
 				muapo3::Quit( Driver );
 			qRR
@@ -296,6 +302,7 @@ namespace get_fields_ {
 			muaagt::sRow AgentRow,
 			const muaagt::dAgents &Agents,
 			str::dStrings &Subjects,
+			muaagt::dRows &CorrespondingAgents,
 			muamel::dRows &Available )
 		{
 		qRH
@@ -308,7 +315,7 @@ namespace get_fields_ {
 			UIDLs.Init();
 			Directory.GetIds( Owned, UIDLs );
 
-			u2s_::Get( UIDLs, Owned, AgentRow, Agents, Subjects, Available );
+			u2s_::Get( UIDLs, Owned, AgentRow, Agents, Subjects, CorrespondingAgents, Available );
 		qRR
 		qRT
 		qRE
@@ -321,12 +328,13 @@ namespace get_fields_ {
 		const muamel::dRows &Wanted,
 		const muaagt::dAgents &Agents,
 		str::dStrings &Subjects,
+			muaagt::dRows &CorrespondingAgents,
 		muamel::dRows &Available )
 	{
 		muaagt::sRow Row = Agents.First();
 
 		while ( Row != qNIL ) {
-			Get_( Directory, Tracker, Wanted, Row, Agents, Subjects, Available );
+			Get_( Directory, Tracker, Wanted, Row, Agents, Subjects, CorrespondingAgents, Available );
 
 			Row = Agents.Next( Row);
 		}
@@ -337,9 +345,10 @@ namespace get_fields_ {
 void muaacc::dAccount::GetFields(
 	const muamel::dRows &Wanted,
 	str::dStrings &Subjects,
+	muaagt::dRows &CorrespondingAgents,
 	muamel::dRows &Available ) const
 {
-	return get_fields_::Get( Directory_, Tracker_, Wanted, Agents_, Subjects, Available ); 
+	return get_fields_::Get( Directory_, Tracker_, Wanted, Agents_, Subjects, CorrespondingAgents, Available ); 
 }
 
 const str::dString &muaacc::dAccount::GetMail(

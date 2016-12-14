@@ -18,6 +18,7 @@
      <img src="js/cursor_drag_hand.png" style="width: 15px; height: 15px"/>
     </th>
     <th>#mailsSubjectHeader#</th>
+    <th>#mailsAccountHeader#</th>
    </tr>
    <xsl:apply-templates select="Mail"/>
   </table>
@@ -36,6 +37,10 @@
    </td>
    <td>
     <xsl:value-of select="@Subject"/>
+   </td>
+   <td>
+    <xsl:variable name="Agent" select="@Agent"/>
+    <xsl:value-of select="/*/Content/Agents/Agent[@id=$Agent]"/>
    </td>
   </tr>
  </xsl:template>

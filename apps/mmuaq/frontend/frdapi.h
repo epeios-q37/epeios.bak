@@ -1,6 +1,6 @@
 /* DON'T MODIFY : computer-generated file ! */
 /*
-	API from : mmuaqbkd V20161124 Build Dec  7 2016 07:19:17 - Win32;MSC 1800;IA-32
+	API from : mmuaqbkd V20161124 Build Dec 14 2016 18:30:45 - Win32;MSC 1800;IA-32
 
 	This file was generated using barq 20161027 (Build Nov 13 2016 17:38:12 Win32;MSC 1800;IA-32)
 */
@@ -53,7 +53,7 @@ namespace mmuaq {
 				22, 0, 26, 
 				21, 25, 0, 21, 
 				21, 25, 0, 
-				21, 0, 22, 26, 
+				21, 0, 22, 26, 22, 
 				21, 0, 25, 
 				21, 21, 0, 
 				21, 21, 0, 
@@ -131,22 +131,22 @@ namespace mmuaq {
 
 			CommandDetail.Init();
 			CommandDetail.Name = "MUAGetMailsFields_1";;
-			CommandDetail.Casts.Append( Parameters + 43, 4 );
+			CommandDetail.Casts.Append( Parameters + 43, 5 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
 			CommandDetail.Name = "MUAGetMail_1";;
-			CommandDetail.Casts.Append( Parameters + 47, 3 );
+			CommandDetail.Casts.Append( Parameters + 48, 3 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
 			CommandDetail.Name = "MUAMoveMailTo_1";;
-			CommandDetail.Casts.Append( Parameters + 50, 3 );
+			CommandDetail.Casts.Append( Parameters + 51, 3 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
 			CommandDetail.Name = "MUAMoveFolderTo_1";;
-			CommandDetail.Casts.Append( Parameters + 53, 3 );
+			CommandDetail.Casts.Append( Parameters + 54, 3 );
 			CommandsDetails.Append( CommandDetail );
 
 
@@ -334,7 +334,8 @@ namespace mmuaq {
 		void MUAGetMailsFields_1( 
 			const fblfrd::id__ &In1,
 			fblfrd::ids_ &Out1,
-			fblfrd::strings_ &Out2 ) const
+			fblfrd::strings_ &Out2,
+			fblfrd::ids_ &Out3 ) const
 		{
 			Frontend().PushHeader( _ID, Commands()[13] );
 			Frontend().IdIn( In1 );
@@ -343,6 +344,7 @@ namespace mmuaq {
 
 			Frontend().IdsOut( Out1 );
 			Frontend().StringsOut( Out2 );
+			Frontend().IdsOut( Out3 );
 
 			Frontend().Handle();
 		}

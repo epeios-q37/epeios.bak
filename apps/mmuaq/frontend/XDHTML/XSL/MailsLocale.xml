@@ -8,7 +8,10 @@
   <Translation language="fr">Sujet</Translation>
   <Translation language="en">Subject</Translation>
  </Translations>
-
+ <Translations text="mailsAccountHeader">
+  <Translation language="fr">Compte</Translation>
+  <Translation language="en">Account</Translation>
+ </Translations>
  <!--
 	<Translations text="mails">
 		<Translation language="fr"></Translation>

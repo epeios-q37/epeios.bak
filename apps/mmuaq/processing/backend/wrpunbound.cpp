@@ -431,6 +431,7 @@ DEC( GetMailsFields, 1 )
 qRH
 	ACCOUNTh;
 	muamel::wRows Wanted, Available;
+	muaagt::wRows Agents;
 qRB
 	ACCOUNTb;
 
@@ -445,10 +446,11 @@ qRB
 	fblbkd::dIds &Ids = Request.IdsOut();
 	fblbkd::dStrings &Subjects = Request.StringsOut();
 
-	tol::Init( Available );
-	Account.GetFields( Wanted, Subjects, Available );
+	tol::Init( Agents, Available );
+	Account.GetFields( Wanted, Subjects, Agents, Available );
 
 	fbltyp::Convert( Available, Ids );
+	fbltyp::Convert(Agents, Request.IdsOut() );
 qRR 
 qRT
 qRE
@@ -607,6 +609,7 @@ void wrpunbound::Inform( fblbkd::backend___ &Backend )
 		fblbkd::cEnd,
 			fblbkd::cIds,		// Ids of the mails.
 			fblbkd::cStrings,	// Subjects of the mails.
+			fblbkd::cIds,		// Agents of the mails.
 		fblbkd::cEnd );
 
 	Backend.Add( D( GetMail, 1 ),
