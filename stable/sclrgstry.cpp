@@ -109,12 +109,49 @@ rgstry::entry___ sclrgstry::definition::plugin::Locale( "Locale", ::definition::
 static rgstry::entry___ Setup_( "@Setup", sclrgstry::Parameters );
 
 namespace {
-	tht::rLocker Locker_;
+	tht::rLocker GlobalLocker_;
+	tht::rLocker LastingRegistryLocker_;
+
+	typedef rgstry::cLocker cLocker_;
+
+	class sLastingRegistryLockerCallback_
+	: public cLocker_
+	{
+	protected:
+		virtual void RGSTRYLock( void ) override
+		{
+			LastingRegistryLocker_.Lock();
+		}
+		virtual void RGSTRYUnlock( void ) override
+		{
+			LastingRegistryLocker_.Unlock();
+		}
+	public:
+		void reset( bso::sBool P = true )
+		{
+			if ( P )
+				if ( LastingRegistryLocker_.IsLocked() )
+					LastingRegistryLocker_.Lock();
+		}
+		qCVDTOR( sLastingRegistryLockerCallback_ );
+		void Init( void )
+		{
+			reset();
+		}
+	} LastingRegistryLockerCallback_;
 }
 
-registry_ &sclrgstry::GetCommonRegistry( void )
+registry_ &sclrgstry::GetRWCommonRegistry( void )
 {
-	if ( !Locker_.IsLocked() )
+	if ( !GlobalLocker_.IsLocked() )
+		qRFwk();
+
+	return Registry_;
+}
+
+const registry_ &sclrgstry::GetCommonRegistry( void )
+{
+	if ( GlobalLocker_.IsLocked() )
 		qRFwk();
 
 	return Registry_;
@@ -122,7 +159,7 @@ registry_ &sclrgstry::GetCommonRegistry( void )
 
 tht::rLocker &sclrgstry::GetCommonRegistryLocker( void )
 {
-	return Locker_;
+	return GlobalLocker_;
 }
 
 #define C( name )	case l##name : return #name; break
@@ -802,11 +839,13 @@ SN( S8, bso::s8__ )
 Q37_GCTOR( sclrgstry )
 {
 	Registry_.Init();
-	Locker_.Init();
+	GlobalLocker_.Init();
+	LastingRegistryLocker_.Init();
+	LastingRegistryLockerCallback_.Init();
 
 	// 3 firsts not as 'embedded', due to the fact that plugins use the registry of the main program.
 	MainLevel_ = Registry_.Create();
-	LastingLevel_ = Registry_.CreateEmbedded();
+	LastingLevel_ = Registry_.CreateEmbedded( LastingRegistryLockerCallback_ );
 	ProjectLevel_ = Registry_.Create();
 	SetupLevel_ = Registry_.Create();
 	ArgumentsLevel_ = Registry_.CreateEmbedded();

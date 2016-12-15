@@ -377,11 +377,8 @@ static void GetFeatures_(
 {
 qRH
 	str::string DefaultType;
-	sclmisc::rRegistryLocker Locker;
 qRB
 	DefaultType.Init();
-
-	Locker.Init();
 
 	if ( sclrgstry::OGetValue( sclmisc::GetRegistry(), DefaultTypeEntry, DefaultType ) ) {
 		Writer.PushTag( DefaultTypeTag );
@@ -416,9 +413,7 @@ void sclfrntnd::rFrontend::Init(
 {
 qRH
 	str::wString Key;
-	sclmisc::rRegistryLocker Locker;
 qRB
-	Locker.Init();
 	// _Flow.Init(...);	// Made on connection.
 	_Registry.Init();
 	_Registry.Push( sclmisc::GetRegistry() );
@@ -490,11 +485,8 @@ void sclfrntnd::GetBackendsFeatures(
 {
 qRH
 	str::string Backend, Type;
-	sclmisc::rRegistryLocker Locker;
 qRB
 	Backend.Init();
-
-	Locker.Init();
 
 	if ( sclrgstry::OGetValue( sclmisc::GetRegistry(), parameter_::backend_::Feature_, Backend ) ) {
 		Type.Init();
@@ -516,16 +508,8 @@ static void GetBackendFeatures_(
 	const str::string_ &Id,
 	rFeatures &Features )
 {
-qRH
-	sclmisc::rRegistryLocker Locker;
-qRB
-	Locker.Init();
-
 	sclrgstry::MGetValue( sclmisc::GetRegistry(), rgstry::tentry___( definition_::backends::tagged_backend::Plugin, Id ), Features.Plugin );
 	sclrgstry::OGetValue( sclmisc::GetRegistry(), rgstry::tentry___( definition_::backends::TaggedBackend, Id ), Features.Parameters );
-qRR
-qRT
-qRE
 }
 
 namespace {

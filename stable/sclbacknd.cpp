@@ -116,9 +116,7 @@ void sclbacknd::backend___::Init(
 {
 qRH
 	str::wString Code, Key;
-	sclmisc::rRegistryLocker Locker;
 qRB
-Locker.Init();
 	Code.Init();
 	sclmisc::OGetValue( ::Code_, Code );
 

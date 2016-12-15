@@ -70,11 +70,9 @@ void sclmisc::RefreshBaseLanguage( void )
 {
 qRH
 	str::string Language;
-	rRegistryLocker Locker;
 qRB
 	Language.Init();
-	Locker.Init();
-	if ( sclrgstry::BGetValue( sclrgstry::GetCommonRegistry(), sclrgstry::parameter::Language, Language ) )
+	if ( sclrgstry::BGetValue( GetRegistry(), sclrgstry::parameter::Language, Language ) )
 		Language.Convert( BaseLanguage_ );
 qRR
 qRT
@@ -294,10 +292,8 @@ namespace {
 		flx::E_STRING_OFLOW___ Flow;
 		txf::text_oflow__ TFlow;
 		xml::writer Writer;
-		rRegistryLocker Locker;
 	qRB
-		Locker.Init();
-		Row = sclrgstry::GetCommonRegistry().Search( Level, sclrgstry::Locale );
+		Row = GetRegistry().Search( Level, sclrgstry::Locale );
 
 		if ( Row == qNIL )
 			qRReturn;
@@ -306,7 +302,7 @@ namespace {
 		TFlow.Init( Flow );
 		Writer.Init( TFlow, xml::lCompact, xml::e_Default );
 
-		sclrgstry::GetCommonRegistry().Dump( Level, Row, true, Writer );
+		GetRegistry().Dump( Level, Row, true, Writer );
 
 		Found = true;
 	qRR
@@ -448,7 +444,7 @@ namespace {
 
 		Writer.PutAttribute( "Timestamp", tol::DateAndTime( Buffer ) );
 
-		sclrgstry::GetCommonRegistry().Dump( Level, qNIL, false, Writer  );
+		GetRegistry().Dump( Level, qNIL, false, Writer  );
 
 		Writer.PopTag();
 	qRR
@@ -464,11 +460,9 @@ namespace {
 		flf::rOFlow Flow;
 		txf::sOFlow TFlow;
 		xml::wWriter Writer;
-		rRegistryLocker Locker;
 	qRB
-		Locker.Init();
-		if ( !sclrgstry::GetCommonRegistry().IsEmpty( Level ) ) {
-			if ( !fil::Exists(Filename) || ( fil::GetLastModificationTime(Filename) <= sclrgstry::GetCommonRegistry().TimeStamp( Level ) ) )
+		if ( !GetRegistry().IsEmpty( Level ) ) {
+			if ( !fil::Exists(Filename) || ( fil::GetLastModificationTime(Filename) <= GetRegistry().TimeStamp( Level ) ) )
 				UnconditionalStoreAppData_( Filename, Level );	// Accesses to common registry too, so no unlock.
 		} else if ( fil::Exists( Filename ) ) {
 			fil::Remove( Filename );
@@ -851,16 +845,13 @@ static void LoadPredefinedProject_( const str::string_ &Id )
 {
 qRH
 	str::string ProjectFileName;
-	rRegistryLocker Locker;
 qRB
 	if ( Id.Amount() == 0 )
 		sclmisc::ReportAndAbort( SCLMISC_NAME "_EmptyPredefinedProjectId" );
 
 	ProjectFileName.Init();
 
-	Locker.Init();
-	sclrgstry::MGetValue(sclrgstry::GetCommonRegistry(), rgstry::tentry___( sclrgstry::definition::TaggedProject, Id ), ProjectFileName );
-	Locker.Unlock();
+	sclrgstry::MGetValue( GetRegistry(), rgstry::tentry___( sclrgstry::definition::TaggedProject, Id ), ProjectFileName );
 
 	if ( ProjectFileName.Amount() == 0 )
 		sclmisc::ReportAndAbort( SCLMISC_NAME "_NoOrBadProjectFileNameInPredefinedProject", Id );
@@ -1075,10 +1066,14 @@ qRT
 qRE
 }
 
-sclrgstry::registry_ &sclmisc::GetRegistry( void )
+const sclrgstry::registry_ &sclmisc::GetRegistry( void )
 {
-	// Locking is tested downstream.
 	return sclrgstry::GetCommonRegistry();
+}
+
+sclrgstry::registry_ &sclmisc::GetRWRegistry( void )
+{
+	return sclrgstry::GetRWCommonRegistry();
 }
 
 txf::text_oflow__ &sclmisc::text_oflow_rack___::Init( const fnm::name___ &FileName )
@@ -1125,7 +1120,6 @@ qRH
 	str::string List;
 	rgstry::row__ Row = qNIL;
 	rgstry::level__ Level = qNIL;
-	rRegistryLocker Locker;
 qRB
 	List.Init( RawList );
 	List.StripCharacter(' ');
@@ -1134,8 +1128,6 @@ qRB
 
 	if ( List.Amount() == 0 )
 		All = true;
-
-	Locker.Init();
 
 	T( 'm', Main );
 	T( 'l', Lasting );
@@ -1237,15 +1229,15 @@ static void GetPluginFeature_(
 {
 qRH
 	rgstry::level__ Level = rgstry::UndefinedLevel;
-	rRegistryLocker Locker;
+	rgstry::hLock Lock;
 qRB
-	Locker.Init();
 	Entry.Root = GetRegistry().Search( Path, Level );
 
 	if ( Entry.Root == qNIL )
 		qRFwk();
 
-	Entry.Registry = &GetRegistry().GetRegistry( Level );
+	Entry.Registry = &GetRegistry().GetRegistry( Level, Lock );
+	Entry.Locker = GetRegistry().GetLocker( Level );
 qRR
 qRT
 qRE

@@ -48,13 +48,11 @@ namespace {
 	{
 	qRH
 		str::string XML, XSL;
-		sclxdhtml::rRegistryLocker Locker;
 	qRB
 		XML.Init();
 		GetContext_( Session,  XML );
 
 		XSL.Init();
-		Locker.Init();
 		sclxdhtml::LoadXSLAndTranslateTags(rgstry::tentry___( registry::definition::XSLCastingFile, XSLAffix_ ), sclxdhtml::GetRegistry() , XSL );	// Outside session, so we use the global registry...
 
 		Session.FillDocumentCastings( XML, XSL );
@@ -85,10 +83,7 @@ void login::SetLayout( core::rSession &Session )
 {
 qRH
 	str::string XML, XSL;
-	sclxdhtml::rRegistryLocker Locker;
 qRB
-	Locker.Init();
-
 	XML.Init();
 	GetContent_( sclxdhtml::GetRegistry(), Session, XML );	// Outside session, so we use the global registry...
 

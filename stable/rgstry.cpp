@@ -1151,13 +1151,21 @@ void rgstry::Dump(
 	bso::bool__ RootToo,
 	xml::writer_ &Writer )
 {
+qRH
+	hLock Lock;
+qRB
 	if ( Entry.Registry == NULL )
 		qRFwk();
 
 	if ( Entry.Root == qNIL )
 		qRFwk();
 
+	Entry.Lock();
+	Lock.Set( Entry.Locker );
 	Entry.Registry->Dump( Entry.Root, RootToo, Writer );
+qRR
+qRT
+qRE
 }
 
 const value_ &rgstry::multi_level_registry_::GetValue(

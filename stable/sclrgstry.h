@@ -50,7 +50,8 @@ namespace sclrgstry {
 	registry_ &GetRegistry( void );
 # endif
 
-	registry_ &GetCommonRegistry( void );
+	registry_ &GetRWCommonRegistry( void );
+	const registry_ &GetCommonRegistry( void );
 
 	tht::rLocker &GetCommonRegistryLocker( void );
 

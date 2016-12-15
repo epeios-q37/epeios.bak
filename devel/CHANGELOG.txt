@@ -1,5 +1,11 @@
 CHANGELOG for the 'Epeios' framework.
 
+2016-12-15 :
+- RGSTRY :
+	- Introducing locking feature.
+- SCLARGMNT, SCLBACKND, SCLFRNTND, SCLMISC, SCLRGSTRY, SCLXDHTML :
+	- Adaptation to changes in 'RGSTRY'.
+
 2016-12-13 :
 - CSDBNC :
 	- Fixing bad handling of error parameter.
@@ -11,7 +17,7 @@ CHANGELOG for the 'Epeios' framework.
 	- Fixing registry locker bug.
 
 2016-12-12 :
-- SCLARGMNT, SCLBACND, SCLFRNTND, SCLXDHTML :
+- SCLARGMNT, SCLBACKND, SCLFRNTND, SCLXDHTML :
 	- Adaptation to changes in 'SCLMISC'.
 - SCLMISC :
 	- All registry related functions are now thread safe.

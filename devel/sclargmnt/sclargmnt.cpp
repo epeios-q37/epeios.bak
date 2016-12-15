@@ -683,10 +683,10 @@ namespace {
 		sdr::sRow *Error = NULL )
 	{
 	qRH
-		sclmisc::rRegistryLocker Locker;
+		sclmisc::rLocker_ Locker;
 	qRB
 		Locker.Init();
-		sclmisc::GetRegistry().SetValue( sclrgstry::GetRawLevel( sclrgstry::lArguments ), Path, Value, Error );
+		sclmisc::GetRWRegistry().SetValue( sclrgstry::GetRawLevel( sclrgstry::lArguments ), Path, Value, Error );
 	qRR
 	qRT
 	qRE
@@ -698,10 +698,10 @@ namespace {
 		sdr::sRow *Error = NULL )
 	{
 	qRH
-		sclmisc::rRegistryLocker Locker;
+		sclmisc::rLocker_ Locker;
 	qRB
 		Locker.Init();
-		sclmisc::GetRegistry().AddValue( sclrgstry::GetRawLevel( sclrgstry::lArguments ), Path, Value, Error );
+		sclmisc::GetRWRegistry().AddValue( sclrgstry::GetRawLevel( sclrgstry::lArguments ), Path, Value, Error );
 	qRR
 	qRT
 	qRE
@@ -1443,11 +1443,11 @@ qRH
 	str::strings Ids, Commands, Flags, Options, Frees;
 	str::string  ProgramDescription;
 	str::string EntryPath;
-	sclmisc::rRegistryLocker Locker;
+	sclmisc::rLocker_ Locker;
 qRB
 	EntryPath.Init();
 	Locker.Init();	
-	sclmisc::GetRegistry().Delete( Command_.GetPath( EntryPath ), sclrgstry::GetRawLevel( sclrgstry::lArguments ) );	// Pour pouvoir rcuprer la valeur correspondant  ce 'Path' tel qu'ventuellement dfini dans le fichier de configuration.
+	sclmisc::GetRWRegistry().Delete( Command_.GetPath( EntryPath ), sclrgstry::GetRawLevel( sclrgstry::lArguments ) );	// Pour pouvoir rcuprer la valeur correspondant  ce 'Path' tel qu'ventuellement dfini dans le fichier de configuration.
 	Locker.Unlock();
 
 	Ids.Init();
