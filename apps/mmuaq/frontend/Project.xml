@@ -5,7 +5,7 @@
 	<Dependencies Target="mmuaq">
 		<Dependency Dir="XDHTML/"/>
 		<xpp:bloc marker="$">
-			<!--Dependency Dir="$EpeiosPluginsDir$frontend/" Ext="plugins/frontend"/-->
+			<Dependency Dir="$EpeiosPluginsDir$frontend/" Ext="plugins/frontend"/>
 			<Dependency Dir="$EpeiosToolsDir$xdhbrwq/" Ext="xdhbrwq/"/>
 			<Dependency Dir="$EpeiosToolsDir$xdhcefq/" Ext="xdhcefq/"/>
 		</xpp:bloc>

@@ -1569,9 +1569,11 @@ namespace rgstry {
 			Root = qNIL;
 			Registry = NULL;
 		}
-		void Init( cLocker &Locker )
+		void Init(
+			cLocker &Locker,
+			row__ Root )
 		{
-			this->Root = qNIL;
+			this->Root = Root;
 			this->Registry = NULL;
 			this->Locker = &Locker;
 		}
@@ -1595,9 +1597,11 @@ namespace rgstry {
 		{
 			Init( Root, Registry, Locker );
 		}
-		entry__( cLocker &Locker )
+		entry__(
+			cLocker &Locker,
+			row__ Root )
 		{
-			Init( Locker );
+			Init( Locker, Root );
 		}
 		bso::bool__ IsInitialized( void ) const
 		{
@@ -1605,17 +1609,11 @@ namespace rgstry {
 		}
 		void Lock( void ) const
 		{
-			if ( !IsInitialized() )
-				qRFwk();
-
 			if ( Locker != NULL )
 				Locker->Lock();
 		}
 		void Unlock( void ) const
 		{
-			if ( !IsInitialized() )
-				qRFwk();
-
 			if ( Locker != NULL )
 				Locker->Unlock();
 		}
@@ -1814,9 +1812,11 @@ namespace rgstry {
 		{
 			return _RawPushLevel( entry__( EmbeddedRegistry.CreateRegistry( Name ) ) );
 		}
-		level__ CreateEmbedded( cLocker &Locker )
+		level__ CreateEmbedded(
+			cLocker &Locker,
+			const name_ &Name = name() )
 		{
-			return _RawPushLevel( entry__( Locker ) );
+			return _RawPushLevel( entry__( Locker, EmbeddedRegistry.CreateRegistry( Name ) ) );
 		}
 		void Push(
 			const multi_level_registry_ &Registry,

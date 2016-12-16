@@ -1,5 +1,9 @@
 CHANGELOG for the 'Epeios' framework.
 
+2016-12-16 :
+- RGSTRY :
+	- Fixing bug intoduces by yesterday's modifications.
+
 2016-12-15 :
 - RGSTRY :
 	- Introducing locking feature.
