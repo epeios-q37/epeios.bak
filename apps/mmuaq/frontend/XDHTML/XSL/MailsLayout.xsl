@@ -13,7 +13,7 @@
  </xsl:template>
  <xsl:template match="Mails">
   <table style="border: 1px solid black; width: 100%;">
-   <tr>
+   <tr style="background-color: lightgrey;">
     <th style="width: 15px;">
      <img src="js/cursor_drag_hand.png" style="width: 15px; height: 15px"/>
     </th>
@@ -24,7 +24,7 @@
   </table>
  </xsl:template>
  <xsl:template match="Mail">
-  <tr data-xdh-onevent="SelectMail" style="cursor: pointer;" data-xdh-cast="mailCasting">
+  <tr data-xdh-onevent="SelectMail" data-xdh-cast="mailCasting">
    <xsl:attribute name="data-xdh-content">
     <xsl:value-of select="@id"/>
    </xsl:attribute>

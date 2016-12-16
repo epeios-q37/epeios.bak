@@ -9,8 +9,8 @@
    <xsl:attribute name="exec">
     <xsl:text>if ( getContent( element ) == '</xsl:text>
     <xsl:value-of select="@CurrentMail"/>
-    <xsl:text>') element.style='cursor: pointer;background-color: lightgrey;'; </xsl:text>
-    <xsl:text>else element.style='cursor: pointer;';</xsl:text>
+    <xsl:text>') { alert( 'av'); element.style='cursor: pointer;background-color: lightgrey;'; alert( 'ap' );} </xsl:text>
+    <xsl:text>else { element.style='cursor: pointer;'; }</xsl:text>
    </xsl:attribute>
   </xdh-cast>
 	</xsl:template>

@@ -17,8 +17,8 @@
    <xsl:attribute name="exec">
     <xsl:text>if ( getContent( element ) == '</xsl:text>
     <xsl:value-of select="@CurrentFolder"/>
-    <xsl:text>') { element.style='cursor: pointer;background-color: lightgrey;'; mktreeExpandToNode( element );}</xsl:text>
-    <xsl:text>else element.style='cursor: pointer;';</xsl:text>
+    <xsl:text>') {element.style='cursor: pointer;background-color: lightgrey;'; mktreeExpandToNode( element );}</xsl:text>
+    <xsl:text>else {element.style='cursor: pointer;';}</xsl:text>
    </xsl:attribute>
   </xdh-cast>
   <xdh-cast id="FolderRenamingCast">

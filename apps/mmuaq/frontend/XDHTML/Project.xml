@@ -37,9 +37,9 @@
 			</Modules>
 		</Modules>
 		<Modules Group="FRD" Path="../">
-			<Module>frdapi</Module>
-			<Module>frdfrntnd</Module>
-			<Module>frdrgstry</Module>
+      <Module>frdapi</Module>
+      <Module>frdfrntnd</Module>
+      <Module>frdrgstry</Module>
 			<Module>frdinstc</Module>
 		</Modules>
 		<Modules Group="MUA" Path="../../">
