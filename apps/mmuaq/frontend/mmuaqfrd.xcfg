@@ -89,7 +89,8 @@
 						<xpp:bloc>mmuaqbkd</xpp:bloc>
 					</Backend>
 					<Backend id="LocalHost" Alias="LocalPredefinedBackend" Plugin="Straight">localhost:53740</Backend>
-				</xpp:bloc>
+     <Backend id="Q37" Alias="Q37PredefinedBackend" Plugin="Straight">q37.info:53740</Backend>
+    </xpp:bloc>
 			</Backends>
 		</xpp:bloc>
 	</xpp:define>
@@ -112,11 +113,15 @@
 				<Translation language="fr">Moteur de traitement local</Translation>
 				<Translation language="en">Local backend</Translation>
 			</Translations>
-			<Translations text="EmbeddedPredefinedBackend">
-				<Translation language="fr">Moteur de traitement enclavé</Translation>
-				<Translation language="en">Embedded backend</Translation>
-			</Translations>
-		</xpp:bloc>
+   <Translations text="EmbeddedPredefinedBackend">
+    <Translation language="fr">Moteur de traitement enclavé</Translation>
+    <Translation language="en">Embedded backend</Translation>
+   </Translations>
+   <Translations text="Q37PredefinedBackend">
+    <Translation language="fr">Moteur de traitement sur 'q37.info'</Translation>
+    <Translation language="en">Backend on 'q37.info'</Translation>
+   </Translations>
+  </xpp:bloc>
 	</xpp:define>
 	<Profiles>
 		<Profile name="Default">
