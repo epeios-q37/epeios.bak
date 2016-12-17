@@ -225,8 +225,9 @@ static struct _cef_life_span_handler_t* CEF_CALLBACK GetLifeSpanHandler_( struct
 
 static void CEF_CALLBACK OnLoadStart_(
 	struct _cef_load_handler_t* self,
-	struct _cef_browser_t* browser,
-	struct _cef_frame_t* frame )
+    struct _cef_browser_t* browser,
+	struct _cef_frame_t* frame,
+    cef_transition_type_t transition_type)
 {
 	if ( frame->is_main( frame ) )
 	{

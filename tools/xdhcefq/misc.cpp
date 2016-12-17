@@ -312,7 +312,7 @@ qRB
 	cio::COut << __LOC__ << txf::nl << txf::commit;
 	*/
 
-	if ( V8Context->eval( V8Context, CEFString, &V8Value, &V8Exception ) != 1 )
+	if ( V8Context->eval( V8Context, CEFString, NULL, 0, &V8Value, &V8Exception ) != 1 )
 		qRGnr();
 
 	if ( Buffer != NULL ) {
