@@ -33,6 +33,16 @@ sRow muafld::dFoldersTree::Search(
 	return Row;
 }
 
+bso::sBool muafld::dFoldersTree::IsDescendant(
+	sRow Folder,
+	sRow Ascendant ) const
+{
+	while ( ( Folder != qNIL ) && ( Folder != Ascendant ) )
+		Folder = Parent( Folder );
+
+	return Folder != qNIL;
+}
+
 const dRows &muafld::dFoldersTree::GetChildren(
 	sRow Row,
 	dRows &Rows ) const

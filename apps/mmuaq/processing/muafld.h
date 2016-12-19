@@ -128,6 +128,9 @@ namespace muafld {
 		sRow Search(
 			sRow Folder,
 			const str::dString &Name ) const;
+		bso::sBool IsDescendant(
+			sRow Folder,
+			sRow Ascendant ) const;
 		bso::sBool Exists( sRow Row ) const
 		{
 			return Folders_.Exists( Row );

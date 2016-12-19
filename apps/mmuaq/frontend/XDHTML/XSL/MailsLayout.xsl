@@ -13,7 +13,7 @@
  </xsl:template>
  <xsl:template match="Mails">
   <table style="border: 1px solid black; width: 100%;">
-   <tr style="background-color: lightgrey;">
+   <tr>
     <th style="width: 15px;">
      <img src="js/cursor_drag_hand.png" style="width: 15px; height: 15px"/>
     </th>

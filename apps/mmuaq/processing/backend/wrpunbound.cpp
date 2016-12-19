@@ -53,6 +53,7 @@ namespace message_ {
 	M( FolderNotMoveable );
 	M( FolderNotRenameable );
 	M( FolderWithSameNameAlreadyExistsInThisFolder );
+	M( FolderCannotBeMovedToDescendant );
 /*
 	M(  );
 */
@@ -521,6 +522,8 @@ qRB
 
 	if ( Account.Directory().Folders().Search( NewParent, Name ) != qNIL )
 		REPORT( FolderWithSameNameAlreadyExistsInThisFolder );
+	else if ( Account.Directory().Folders().IsDescendant( NewParent, Folder ) )
+		REPORT( FolderCannotBeMovedToDescendant );
 	else
 		Account.MoveFolderTo( Folder, NewParent );
 qRR 

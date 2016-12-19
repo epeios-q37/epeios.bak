@@ -75,6 +75,10 @@
   <Translation language="fr">Le nom d'utilisateur est limité à %1 caractères.</Translation>
   <Translation language="en">User name can not be longer as %1 chars.</Translation>
  </Translations>
+ <Translations text="FolderCannotBeMovedToDescendant">
+  <Translation language="fr">Un dossier ne peut être déplacé dans un des ses descendants.</Translation>
+  <Translation language="en">A folder cannot not be moved into one of its descendants.</Translation>
+ </Translations>
  <!--
 <Translations text="">
 	<Translation language="fr"></Translation>

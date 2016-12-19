@@ -142,8 +142,6 @@ namespace dump_mails_{
 
 		Writer.PopTag();
 	}
-
-
 }
 
 void frdinstc::rUser::DumpMails( xml::dWriter &Writer )

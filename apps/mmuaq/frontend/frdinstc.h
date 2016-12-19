@@ -348,6 +348,8 @@ namespace frdinstc {
 		{
 			bso::sBool Changed = Folder_.State != folder_::sViewing;
 
+			Mail_.Current = mail::Undefined;
+
 			Folder_.Current = Folder;
 			Folder_.State = folder_::sViewing;
 
