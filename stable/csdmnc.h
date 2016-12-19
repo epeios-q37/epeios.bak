@@ -122,7 +122,7 @@ namespace csdmnc {
 			rCore_::reset( P );
 			Callback_.reset( P );
 		}
-		qCDTOR( rCore );
+		qCVDTOR( rCore );
 		bso::sBool Init(
 			const char *HostService,
 			bso::uint__ PingDelay,

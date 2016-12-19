@@ -303,34 +303,42 @@ namespace fblfrd {
 		fblovl::reply__ Send_( void )
 		{
 			fblovl::reply__ Reply = fblovl::r_Undefined;
+		qRH
+		qRB
+			if ( Channel_ != NULL ) {
+				if ( _FlowInParameter != NULL ) {
+					if ( !FlowIn_(false, *_FlowInParameter) ) {
+						Channel_ = NULL;
+						Reply = fblovl::rDisconnected;
+					}
 
-			if ( _FlowInParameter != NULL ) {
-				if ( !FlowIn_(false, *_FlowInParameter) ) {
-					Channel_ = NULL;
-					Reply = fblovl::rDisconnected;
+					_FlowInParameter = NULL;
 				}
 
-				_FlowInParameter = NULL;
-			}
+				if ( Reply == fblovl::r_Undefined ) {
+					C_().Commit();
 
-			if ( Reply == fblovl::r_Undefined ) {
-				C_().Commit();
+					if ( C_().EndOfFlow() ) {
+						Channel_ = NULL;
+						Reply = fblovl::rDisconnected;
+						Message_[0] = 0;
+					} else {
+						if ( ( Reply = (fblovl::reply__)C_().Get() ) != fblovl::rOK ) {
+							if ( Reply >= fblovl::r_amount )
+								qRFwk();
 
-				if ( C_().EndOfFlow() ) {
-					Channel_ = NULL;
-					Reply = fblovl::rDisconnected;
-					Message_[0] = 0;
-				} else {
-					if ( ( Reply = (fblovl::reply__)C_().Get() ) != fblovl::rOK ) {
-						if ( Reply >= fblovl::r_amount )
-							qRFwk();
-
-						if ( ( !flw::GetString( C_(), Message_, sizeof( Message_ ) ) ) )
-							strcpy( Message_ + sizeof( Message_ ) - 7, " [...]" );
+							if ( ( !flw::GetString( C_(), Message_, sizeof( Message_ ) ) ) )
+								strcpy( Message_ + sizeof( Message_ ) - 7, " [...]" );
+						}
 					}
 				}
-			}
-
+			} else
+				Reply = fblovl::rDisconnected;
+		qRR
+			Reply = fblovl::rDisconnected;
+			Channel_ = NULL;
+		qRT
+		qRE
 			return Reply;
 		}
 		bso::bool__ _TestCompatibility(

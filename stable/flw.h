@@ -342,7 +342,6 @@ namespace flw {
 			size__ Stayed = _Size - _Free;
 			
 			if ( Stayed != 0 ) {
-
 				if ( _DirectWrite( _Cache, Stayed, Stayed, NULL ) == Stayed ) {
 					_Free = _Size;
 					return true;
@@ -411,10 +410,11 @@ namespace flw {
 
 			return AmountWritten;
 		}
-		// Put 'Amount' data from 'Buffer'.
-		bso::sSize _Write(
+		// Put 'Amount' data from 'Buffer'. Returns true on success, false otherwise, or throws an excpeiotn, depending on RP.
+		bso::sBool _Write(
 			const byte__ *Buffer,
-			size__ Amount );
+			size__ Amount,
+			qRPN );
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -452,38 +452,28 @@ namespace flw {
 			const void *Buffer,
 			size__ Amount )
 		{
-			return _WriteUpTo( (byte__ *)Buffer, Amount, &Written_ );
+			if ( Amount == 0 )
+				return 0;
+			else
+				return _WriteUpTo( (byte__ *)Buffer, Amount, &Written_ );
 		}
 		//f Put 'Amount' data from 'Buffer'.
-		size__ Write(
+		bso::sBool Write(
 			const void *Buffer,
 			size__ Amount,
 			qRPD )
 		{
-			if ( _Write((const byte__ *)Buffer, Amount) != Amount ) {
-				if ( qRPT )
-					qRFwk();
-				else
-					return false;
-			} else 
+			if ( Amount == 0 )
 				return true;
-
-			return false;	// To avoid a warning.
+			else
+				return _Write((const byte__ *)Buffer, Amount, qRP);
 		}
 		//f Put 'C'.
 		bso::sBool Put(
 			byte__ C,
 			qRPD )
 		{
-			if ( _Write(&C, 1) != 1 ) {
-				if ( qRPT )
-					qRFwk();
-				else
-					return false;
-			} else
-				return true;
-
-			return false;	// To avoid a warning.
+			return _Write( &C, 1, qRP );
 		}
 		//f Synchronization.
 		bso::sBool Commit(
@@ -570,19 +560,21 @@ namespace flw {
 
 
 	//f Write to 'OutputFlow' 'StaticObject'.
-	template <class t> inline void Put(
+	template <class t> inline bso::sBool Put(
 		const t &StaticObjet,
-		oflow__ &OutputFlow )
+		oflow__ &OutputFlow,
+		qRPD )
 	{
-		OutputFlow.Write( &StaticObjet, sizeof( t ) );
+		return OutputFlow.Write( &StaticObjet, sizeof( t ), qRP );
 	}
 
 	//f Write to 'OutputFlow' the 'NULL' terminated String 'String' WITH the 'NULL' character.
-	inline void PutString(
+	inline bso::sBool PutString(
 		const char *String,
-		oflow__ &OutputFlow )
+		oflow__ &OutputFlow,
+		qRPD )
 	{
-		OutputFlow.Write( String, (size__)( strlen( String ) + 1 ) );
+		return OutputFlow.Write( String, (size__)( strlen( String ) + 1 ), qRP );
 	}
 
 	//c Basic input/output flow.

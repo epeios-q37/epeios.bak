@@ -27,9 +27,10 @@
 
 using namespace flw;
 
-fdr::sSize flw::oflow__::_Write(
+bso::sBool flw::oflow__::_Write(
 	const byte__ *Buffer,
-	size__ Amount )
+	size__ Amount,
+	qRPN )
 {
 	size__ PonctualAmountWritten = _WriteUpTo( Buffer, Amount, &Written_ );
 	size__ AmountWritten = PonctualAmountWritten;
@@ -37,10 +38,12 @@ fdr::sSize flw::oflow__::_Write(
 	while( ( PonctualAmountWritten != 0 ) && ( AmountWritten < Amount ) )
 		AmountWritten += PonctualAmountWritten = _WriteUpTo( Buffer + AmountWritten, Amount - AmountWritten, &Written_ );
 
-	if ( PonctualAmountWritten == 0 )
-		AmountWritten = 0;	// To report dailure.
-
-	return AmountWritten;
+	if ( PonctualAmountWritten == 0 ) {
+		if ( qRP == err::hThrowException )
+			qRFwk();
+		return false;
+	} else
+		return true;
 }
 
 bool flw::GetString(
@@ -116,7 +119,7 @@ qRB
 	if ( Amount > Wanted )
 		qRFwk();
 
-	if ( Amount < Minimum )
+	if ( ( Amount > 0 ) && ( Amount < Minimum ) )
 		qRFwk();
 #endif
 qRR

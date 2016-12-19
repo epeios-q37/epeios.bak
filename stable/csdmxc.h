@@ -420,6 +420,9 @@ qRE
 				Prepare_();
 
 				Amount = Flow_.WriteUpTo( Buffer, Maximum );
+
+				if ( Amount == 0 )
+					GiveUp_();
 			}
 		qRR
 			GiveUp_();
@@ -452,6 +455,9 @@ qRE
 			qRB
 			if ( Core_ != NULL ) {
 				Amount = Flow_.ReadUpTo( Maximum, Buffer );
+
+				if ( Amount == 0 )
+					GiveUp_();
 			}
 		qRR
 			GiveUp_();

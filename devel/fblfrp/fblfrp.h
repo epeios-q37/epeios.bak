@@ -68,19 +68,19 @@ namespace fblfrp {
 		virtual void FBLFPHIn(
 			fblcst::cast__ Cast,
 			const void *Pointer,
-			flw::ioflow__ &Channel );
+			flw::ioflow__ &Channel ) override;
 		virtual void FBLFPHOut(
 			flw::ioflow__ &Channel,
 			fblcst::cast__ Cast,
-			void *Pointer );
+			void *Pointer ) override;
 		virtual void FBLFPHFlowIn(
 			bso::bool__ FirstCall,
 			flw::iflow__ &Flow,
-			flw::ioflow__ &Channel );
+			flw::ioflow__ &Channel ) override;
 		virtual void FBLFPHFlowOut(
 			flw::ioflow__ &Channel,
 			flw::iflow__ *&Flow );
-		virtual void FBLFPHPostProcess( flw::ioflow__ &Flow );
+		virtual void FBLFPHPostProcess( flw::ioflow__ &Flow ) override;
 	public:
 		void reset( bso::bool__ P = true )
 		{

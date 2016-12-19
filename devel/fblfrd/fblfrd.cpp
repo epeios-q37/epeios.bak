@@ -74,18 +74,19 @@ bso::bool__ fblfrd::frontend___::TestBackendCasts_()
 
 	Channel_->Put( 0 );
 
-	Send_();
+	if ( Send_() == fblovl::rOK ) {
+		for( i = 0; i < fblcst::c_amount; i++ )
+			if ( i != Channel_->Get() )
+				return false;
 
-	for( i = 0; i < fblcst::c_amount; i++ )
-		if ( i != Channel_->Get() )
+		if ( Channel_->Get() != fblcst::cEnd )
 			return false;
 
-	if ( Channel_->Get() != fblcst::cEnd )
+		Channel_->Dismiss();
+
+		return true;
+	} else
 		return false;
-
-	Channel_->Dismiss();
-
-	return true;
 }
 
 command__ fblfrd::frontend___::GetBackendDefaultCommand_()
@@ -96,16 +97,19 @@ command__ fblfrd::frontend___::GetBackendDefaultCommand_()
 	
 	Channel_->Put( 0 );	// End of request
 
-	Send_();
+	if ( Send_() == fblovl::rOK ) {
+		flw::Get( *Channel_, DefaultCommand );
 
-	flw::Get( *Channel_, DefaultCommand );
+		if ( Channel_->Get() != fblcst::cEnd )
+			qRFwk();
 
-	if ( Channel_->Get() != fblcst::cEnd )
+		Channel_->Dismiss();
+
+		return DefaultCommand;
+	} else
 		qRFwk();
 
-	Channel_->Dismiss();
-
-	return DefaultCommand;
+	return 0;	// To avoid a warning.
 }
 
 namespace {
