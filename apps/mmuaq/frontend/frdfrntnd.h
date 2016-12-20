@@ -35,6 +35,13 @@ namespace frdfrntnd {
 	using sclfrntnd::rKernel;
 	typedef sclfrntnd::rFrontend rFrontend_;
 
+	using fbltyp::dString;
+	using fbltyp::dStrings;
+
+	SCLF_I( agent, Agent, Id);
+	SCLF_I( folder, Folder, Id );
+	SCLF_I( mail, Mail, Id );
+
 	class rFrontend
 	: public rFrontend_
 	{
@@ -65,6 +72,121 @@ namespace frdfrntnd {
 			fblfrd::reporting_callback__ &ReportingCallback )
 		{
 			rFrontend_::Init( Kernel, Language, ReportingCallback );
+		}
+		void LoadSetupOfId( const dString &Id )
+		{
+			Statics.LoadSetupOfId_1( Id );
+		}
+		void LoadSetupContent( const dString &Content )
+		{
+			Statics.LoadSetupContent_1( Content );
+		}
+		bso::sBool Login(
+			const dString &Username,
+			const dString &Password )
+		{
+			bso::sBool Success = false;
+
+			Statics.MUALogin_1( Username, Password, Success );
+
+			return Success;
+		}
+		void GetAgents(
+			dAgents &Agents,
+			dStrings &Names )
+		{
+			Statics.MUAGetAgents_1( Agents, Names );
+		}
+		void GetAgent(
+			sAgent Agent,
+			dString &Name,
+			dString &HostPort,
+			dString &Username )
+		{
+			Statics.MUAGetAgent_1( *Agent, Name, HostPort, Username );
+		}
+		sAgent CreateAgent(
+			const dString &Name,
+			const dString &HostPort,
+			const dString &Username,
+			const dString &Password )
+		{
+			sAgent Agent = UndefinedAgent;
+
+			Statics.MUAUpdateAgent_1( *Agent, Name, HostPort, Username, true, Password, *Agent );
+
+			return Agent;
+		}
+		void UpdateAgent(
+			sAgent Agent,
+			const dString &Name,
+			const dString &HostPort,
+			const dString &Username,
+			bso::sBool PasswordIsSet,
+			const dString &Password )
+		{
+			if ( Agent == UndefinedAgent )
+				qRGnr();
+
+			Statics.MUAUpdateAgent_1( *Agent, Name, HostPort, Username, PasswordIsSet, Password, *Agent );
+		}
+		void GetMailsFields(
+			sFolder Folder,
+			fbltyp::dIds &Ids,
+			dStrings &Subjects,
+			dAgents &Agents )
+		{
+			Statics.MUAGetMailsFields_1( *Folder, Ids, Subjects, Agents );
+		}
+		void GetMail(
+			sMail Mail,
+			str::dString &Content )
+		{
+			Statics.MUAGetMail_1( **Mail, Content );
+		}
+		void MoveMailTo(
+			sMail Mail,
+			sFolder Folder )
+		{
+			Statics.MUAMoveMailTo_1( *Mail, *Folder );
+		}
+		void GetRootAndInboxFolders(
+			sFolder &Root,
+			sFolder &Inbox )
+		{
+			Statics.MUAGetRootAndInboxFolders_1( *Root, *Inbox );
+		}
+		void GetFolders(
+			sFolder Folder,
+			dFolders &Folders )
+		{
+			Statics.MUAGetFolders_1( *Folder, Folders );
+		}
+		void GetFoldersNames(
+			const dFolders &Folders,
+			dStrings &Names )
+		{
+			Statics.MUAGetFoldersNames_1( Folders, Names );
+		}
+		folder::sId CreateFolder(
+			folder::sId Folder,
+			const str::dString &Name )
+		{
+			Statics.MUACreateFolder_1( *Folder, Name, *Folder );
+
+			return Folder;
+		}
+		void RenameFolder(
+			folder::sId Folder,
+			const str::dString &Name )
+		{
+			Statics.MUARenameFolder_1( *Folder, Name );
+		}
+		void MoveFolderTo(
+			sFolder Folder,
+			sFolder Parent )
+		{
+			Statics.MUAMoveFolderTo_1( *Folder, *Parent );
 		}
 	};
 }

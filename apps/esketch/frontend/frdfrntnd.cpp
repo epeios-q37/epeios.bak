@@ -26,3 +26,20 @@
 using namespace fbltyp;
 
 using namespace frdfrntnd;
+
+dString &frdfrntnd::rMyObject::ToUpper( dString &String )
+{
+qRH
+	wString Result;
+qRB
+	Result.Init();
+
+	Object_.ToUC( String, Result );
+
+	String = Result;
+qRR
+qRT
+qRE
+	return String;
+}
+

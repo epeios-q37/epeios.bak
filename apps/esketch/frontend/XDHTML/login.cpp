@@ -20,6 +20,8 @@
 #include "login.h"
 
 #include "core.h"
+#include "main.h"
+#include "prolog.h"
 #include "registry.h"
 
 #include "xdhdws.h"

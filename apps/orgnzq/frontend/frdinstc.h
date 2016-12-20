@@ -25,106 +25,7 @@
 # include "frdfrntnd.h"
 
 namespace frdinstc {
-
 	using namespace frdfrntnd;
-
-	class rUser_
-	{
-	private:
-		qRMV( frdfrntnd::rFrontend, F_,  Frontend_ );
-		orgnzq::fStatics &S_( void ) const
-		{
-			return F_().Statics;
-		}
-	public:
-		void reset( bso::bool__ P = true )
-		{	
-			Frontend_ = NULL;
-		}
-		E_CVDTOR( rUser_ );
-		void Init( frdfrntnd::rFrontend &Frontend )
-		{
-			Frontend_ = &Frontend;
-		}
-		frdfrntnd::rFrontend &Frontend( void ) const
-		{
-			return F_();
-		}
-		bso::sBool Login(
-			const str::dString &Username,
-			const str::dString &Password )
-		{
-			bso::sBool Success = false;
-
-			S_().OGZLogin( Username, Password, Success );
-
-			return Success;
-		}
-		void GetRecordColumns(
-			sRecord Record,
-			fbltyp::dIds &Columns,
-			fbltyp::dIds &Types,
-			fbltyp::dId8s &Numbers,
-			str::dStrings &Labels,
-			str::dStrings &Comments ) const
-		{
-			S_().OGZGetRecordColumns( *Record, Columns, Types, Numbers, Labels, Comments );
-		}
-		void GetRecordFields(
-			sRecord Record,
-			fbltyp::dIds &Fields,
-			fbltyp::dIds &Columns,
-			fbltyp::dStringsSet &EntriesSet,
-			fbltyp::dIds &Types ) const
-		{
-			S_().OGZGetRecordFields( *Record, Fields, Columns, Types, EntriesSet );
-		}
-		const frdmisc::wXTypes &Types( void ) const
-		{
-			return F_().Types();
-		}
-		sRecord CreateRecord( void ) const
-		{
-			sRecord Record = UndefinedRecord;
-
-			S_().OGZCreateRecord( *Record );
-
-			return Record;
-		}
-		sField CreateField(
-			sRecord Record,
-			fbltyp::sObject ColumnBuffer,
-			fbltyp::sObject FieldBuffer ) const
-		{
-			sField Field = UndefinedField;
-
-			S_().OGZCreateField( *Record, ColumnBuffer, FieldBuffer, *Field );
-
-			return Field;
-		}
-		bso::sBool UpdateField(
-			sField Field,
-			fbltyp::sObject FieldBuffer,
-			bso::sBool &RecordErased ) const
-		{
-			bso::sBool FieldErased = false;
-
-			S_().OGZUpdateField( *Field, FieldBuffer, FieldErased, RecordErased );
-
-			return FieldErased;
-		}
-		void GetRecords( dDigestsI1S &Digests ) const
-		{
-			S_().OGZGetRecords( Digests.Ids, Digests.Strings1 );
-		}
-		void MoveField(
-			sRecord Record,
-			sField Source,
-			sField Target ) const
-		{
-			S_().OGZMoveField( *Record, *Source, *Target );
-		}
-	};
 
 	class rPanel_
 	{
@@ -265,7 +166,7 @@ namespace frdinstc {
 	{
 	private:
 		rPanel_ Core_;
-		qRMV( rUser_, U_, User_ );
+		qRMV( rFrontend, F_, Frontend_ );
 		eTarget Focus_;
 		// Focused items.
 		sRecord Record_;
@@ -361,14 +262,13 @@ namespace frdinstc {
 		void reset( bso::bool__ P = true )
 		{	
 			Core_.reset( P );
-			User_ = NULL;
+			Frontend_ = NULL;
 			UnselectAll_();
 		}
 		E_CVDTOR( rPanel );
-		void Init( rUser_ &User )
+		void Init( rFrontend &Frontend )
 		{
-			Core_.Init( User.Frontend() );
-			User_ = &User;
+			Core_.Init( Frontend );
 
 			UnselectAll_();
 
@@ -428,12 +328,12 @@ namespace frdinstc {
 			bso::sBool RecordErased = false;
 
 			if ( Record_ == UndefinedRecord )
-				Record_ = U_().CreateRecord();
+				Record_ = F_().CreateRecord();
 
 			if ( Field_ == UndefinedField )
-				Field_ = U_().CreateField( Record_, Core_.GetColumnBuffer(), Core_.GetFieldBuffer() );
+				Field_ = F_().CreateField( Record_, Core_.GetColumnBuffer(), Core_.GetFieldBuffer() );
 
-			if ( U_().UpdateField( Field_, Core_.GetFieldBuffer(), RecordErased) ) {
+			if ( F_().UpdateField( Field_, Core_.GetFieldBuffer(), RecordErased) ) {
 				Field_ = UndefinedField;
 
 				if ( RecordErased )
@@ -486,7 +386,7 @@ namespace frdinstc {
 			if ( DraggedField_ == UndefinedField )
 				qRGnr();
 
-			U_().MoveField( Record_, DraggedField_, Field );
+			F_().MoveField( Record_, DraggedField_, Field );
 		}
 		void EndFieldDragging( void )
 		{
@@ -514,7 +414,7 @@ namespace frdinstc {
 	class rUser
 	{
 	private:
-		rUser_ Core_;
+		qRMV( rFrontend, F_, Frontend_ );
 		lstbch::qLBUNCHw( rPanel*, sPRow ) Panels_;
 		bch::qBUNCHw( sPRow, sPPos ) PanelPositions_;
 		sPPos CurrentPanelPosition_;
@@ -531,7 +431,7 @@ namespace frdinstc {
 			if ( Panel == NULL )
 				qRAlc();
 
-			Panel->Init( Core_ );
+			Panel->Init( F_() );
 
 			Pos = PanelPositions_.Append( Panels_.Add( Panel ) );
 		qRR
@@ -547,17 +447,14 @@ namespace frdinstc {
 			if ( P )
 				DeletePanels_();
 
-			Panels_.reset( P );
-			PanelPositions_.reset( P );
-			Core_.reset( P );
+			tol::reset( P, Panels_, PanelPositions_, Frontend_ );
 			CurrentPanelPosition_ = qNIL;
 			DraggedPanel_ = qNIL;
 		}
 		E_CVDTOR( rUser );
 		void Init( frdfrntnd::rFrontend &Frontend )
 		{
-			if ( Frontend.IsConnected() )
-				Core_.Init( Frontend );
+			Frontend_ = &Frontend;
 
 			DeletePanels_();
 
@@ -571,7 +468,7 @@ namespace frdinstc {
 			const str::dString &Username,
 			const str::dString &Password )
 		{
-			if ( Core_.Login( Username, Password ) ) {
+			if ( F_().Login( Username, Password ) ) {
 				CurrentPanelPosition_ = NewPanel_();
 				return true;
 			} else 
@@ -618,9 +515,7 @@ namespace frdinstc {
 
 				PanelPositions_.InsertAt( Row, Pos );
 
-				PanelPositions_.Remove( *DraggedPanel_ + ( *DraggedPanel_ > *Pos ? 1 : 0 ) );
-
-
+				PanelPositions_.Remove( (sPPos)( *DraggedPanel_ + ( *DraggedPanel_ > *Pos ? 1 : 0 ) ) );
 			}
 			else {
 				PanelPositions_.Append( Row );

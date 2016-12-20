@@ -23,6 +23,9 @@
 #include "frdrgstry.h"
 
 #include "core.h"
+#include "login.h"
+#include "main.h"
+#include "prolog.h"
 
 void sclxdhtml::SCLXDHTMLInitialization( xdhcmn::mode__ Mode )
 {

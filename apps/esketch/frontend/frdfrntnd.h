@@ -35,6 +35,9 @@ namespace frdfrntnd {
 	using sclfrntnd::rKernel;
 	typedef sclfrntnd::rFrontend rFrontend_;
 
+	using fbltyp::dString;
+	using fbltyp::dStrings;
+
 	class rFrontend
 	: public rFrontend_
 	{
@@ -66,7 +69,37 @@ namespace frdfrntnd {
 		{
 			rFrontend_::Init( Kernel, Language, ReportingCallback );
 		}
+		void LoadSetupOfId( const dString &Id )
+		{
+			Statics.LoadSetupOfId_1( Id );
+		}
+		void LoadSetupContent( const dString &Content )
+		{
+			Statics.LoadSetupContent_1( Content );
+		}
 	};
+
+	class rMyObject
+	{
+	private:
+		esketch::rSKTMyObject Object_;
+	public:
+		void reset( bso::bool__ P = true )
+		{	
+			Object_.reset( P );
+		}
+		E_CVDTOR( rMyObject );
+		void Init( frdfrntnd::rFrontend &Frontend )
+		{
+			Object_.Init( Frontend.MyObject );
+		}
+		dString &ToUpper( dString &String );
+		void TestMessage( void )
+		{
+			Object_.Test();
+		}
+	};
+
 
 }
 

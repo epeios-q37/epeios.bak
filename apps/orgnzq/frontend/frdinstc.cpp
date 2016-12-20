@@ -94,7 +94,7 @@ qRB
 	Comments.Init();
 
 	if ( Record_ != UndefinedRecord )
-		U_().GetRecordColumns( Record_, Columns, Types, Numbers, Labels, Comments );
+		F_().GetRecordColumns( Record_, Columns, Types, Numbers, Labels, Comments );
 
 	Dump_( Columns, Types, Numbers, Labels, Comments, Writer );
 qRR
@@ -184,9 +184,9 @@ qRB
 	Types.Init();
 
 	if ( Record_ != UndefinedRecord )
-		U_().GetRecordFields( Record_, Fields, Columns, EntriesSet, Types );
+		F_().GetRecordFields( Record_, Fields, Columns, EntriesSet, Types );
 
-	Dump_( Fields, Columns, EntriesSet, Types, Field_, U_().Types(), Writer );
+	Dump_( Fields, Columns, EntriesSet, Types, Field_, F_().Types(), Writer );
 qRR
 qRT
 qRE
@@ -253,7 +253,7 @@ qRH
 	wDigestsI1S Digests;
 qRB
 	Digests.Init();
-	U_().GetRecords( Digests );
+	F_().GetRecords( Digests );
 
 	sclfrntnd::Dump( Digests, "Records", "Record", Writer );
 qRR

@@ -20,12 +20,11 @@
 #ifndef CORE__INC
 # define CORE__INC
 
-# include "global.h"
-# include "prolog.h"
-# include "login.h"
-# include "main.h"
+# include "base.h"
 
 # include "frdinstc.h"
+
+# include "sclxdhtml.h"
 
 namespace core {
 	extern sclxdhtml::rActionHelper OnNotConnectedAllowedActions;
@@ -36,20 +35,6 @@ namespace core {
 		pMain,
 		p_amount,
 		p_Undefined
-	};
-
-	inline void Register_( void )
-	{
-		global::Register();
-		prolog::Register();
-		login::Register();
-		main::Register();
-
-		OnNotConnectedAllowedActions.Add(
-			xdhcmn::CloseActionLabel,
-			global::About, global::Test,
-			prolog::DisplayProjectFilename, prolog::LoadProject, prolog::SwitchProjectType,	// All 'prolog'-related actions are allowed.
-			login::Dismiss, login::DisplayEmbeddedBackendFilename, login::Connect, login::SwitchBackendType );	// All 'login'-related actions too.
 	};
 
 	class rInstancesCore
@@ -83,19 +68,14 @@ namespace core {
 	: public _core___
 	{
 	private:
-		base::sActionHelper _ActionHelperCallback;
+		base::sActionHelper ActionHelperCallback_;
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_ActionHelperCallback.reset( P );
+			ActionHelperCallback_.reset( P );
 		}
 		E_CDTOR( core___ );
-		void Init( xdhcmn::mode__ Mode )
-		{
-			_ActionHelperCallback.Init();
-			_core___::Init( Mode, _ActionHelperCallback );
-			Register_();
-		}
+		void Init( xdhcmn::mode__ Mode );
 	};
 
 	extern core___ Core;

@@ -19,6 +19,17 @@
 
 #include "core.h"
 
+#include "agent.h"
+#include "agents.h"
+#include "config.h"
+#include "folders.h"
+#include "mail.h"
+#include "mails.h"
+#include "global.h"
+#include "prolog.h"
+#include "login.h"
+#include "main.h"
+#include "config.h"
 #include "registry.h"
 
 #include "sclrgstry.h"
@@ -45,6 +56,37 @@ namespace {
 sclfrntnd::rKernel &core::Kernel( void )
 {
 	return Kernel_;
+}
+
+namespace {
+	void Register_( void )
+	{
+		agent::Register();
+		agents::Register();
+		config::Register();
+		folders::Register();
+		mail::Register();
+		mails::Register();
+		global::Register();
+		prolog::Register();
+		login::Register();
+		main::Register();
+
+		OnNotConnectedAllowedActions.Add(
+			xdhcmn::CloseActionLabel,
+			global::About, global::Test,
+			prolog::DisplayProjectFilename, prolog::LoadProject, prolog::SwitchProjectType,	// All 'prolog'-related actions are allowed.
+			login::Dismiss, login::DisplayEmbeddedBackendFilename, login::Connect, login::SwitchBackendType );	// All 'login'-related actions too.
+
+		OnFolderEditionIgnoredActions.Add( folders::DiscardFolder );	// No 'folders::ApplyFolder', because it does nothing more as for the other actions.
+	};
+}
+
+void core::core___::Init( xdhcmn::mode__ Mode )
+{
+	_ActionHelperCallback.Init();
+	_core___::Init( Mode, _ActionHelperCallback );
+	Register_();
 }
 
 void core::rInstancesCore::Init( frdfrntnd::rFrontend &Frontend )

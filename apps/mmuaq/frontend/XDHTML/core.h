@@ -20,25 +20,17 @@
 #ifndef CORE__INC
 # define CORE__INC
 
-# include "agent.h"
-# include "agents.h"
-# include "config.h"
-# include "folders.h"
-# include "mail.h"
-# include "mails.h"
-# include "global.h"
-# include "prolog.h"
-# include "login.h"
-# include "main.h"
-# include "config.h"
+# include "base.h"
 
 # include "frdinstc.h"
+
+# include "sclxdhtml.h"
 
 namespace core {
 	extern sclxdhtml::rActionHelper OnNotConnectedAllowedActions;
 	extern sclxdhtml::rActionHelper OnFolderEditionIgnoredActions;
 
-	enum page__ {
+	qENUM( Page ) {
 		pProlog,
 		pLogin,
 		pMain,
@@ -47,27 +39,7 @@ namespace core {
 		p_Undefined
 	};
 
-	inline void Register_( void )
-	{
-		agent::Register();
-		agents::Register();
-		config::Register();
-		folders::Register();
-		mail::Register();
-		mails::Register();
-		global::Register();
-		prolog::Register();
-		login::Register();
-		main::Register();
-
-		OnNotConnectedAllowedActions.Add(
-			xdhcmn::CloseActionLabel,
-			global::About, global::Test,
-			prolog::DisplayProjectFilename, prolog::LoadProject, prolog::SwitchProjectType,	// All 'prolog'-related actions are allowed.
-			login::Dismiss, login::DisplayEmbeddedBackendFilename, login::Connect, login::SwitchBackendType );	// All 'login'-related actions too.
-
-		OnFolderEditionIgnoredActions.Add( folders::DiscardFolder );	// No 'folders::ApplyFolder', because it does nothing more as for the other actions.
-	};
+	sclfrntnd::rKernel &Kernel( void );
 
 	class rInstancesCore
 	{
@@ -81,7 +53,7 @@ namespace core {
 		void Init( frdfrntnd::rFrontend &Frontend );
 	};
 
-	typedef sclxdhtml::rSession<rInstancesCore, frdfrntnd::rFrontend, page__, p_Undefined> rSession_;
+	typedef sclxdhtml::rSession<rInstancesCore, frdfrntnd::rFrontend, ePage, p_Undefined> rSession_;
 
 	class rSession
 	: public rSession_
@@ -111,17 +83,10 @@ namespace core {
 			_ActionHelperCallback.reset( P );
 		}
 		E_CDTOR( core___ );
-		void Init( xdhcmn::mode__ Mode )
-		{
-			_ActionHelperCallback.Init();
-			_core___::Init( Mode, _ActionHelperCallback );
-			Register_();
-		}
+		void Init( xdhcmn::mode__ Mode );
 	};
 
 	extern core___ Core;
-
-	sclfrntnd::rKernel &Kernel( void );
 
 	void About(
 		rSession &Session,

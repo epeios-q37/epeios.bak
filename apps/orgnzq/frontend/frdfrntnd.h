@@ -98,12 +98,81 @@ namespace frdfrntnd {
 		void Init(
 			sclfrntnd::rKernel &Kernel,
 			const char *Language,
-			fblfrd::reporting_callback__ &ReportingCallback,
-			const rgstry::multi_level_registry_ &Registry )
+			fblfrd::reporting_callback__ &ReportingCallback )
 		{
-			rFrontend_::Init( Kernel, Language, ReportingCallback, Registry );
+			rFrontend_::Init( Kernel, Language, ReportingCallback );
 			Types_.Init();
 			Numbers_.Init();
+		}
+		bso::sBool Login(
+			const str::dString &Username,
+			const str::dString &Password )
+		{
+			bso::sBool Success = false;
+
+			Statics.OGZLogin( Username, Password, Success );
+
+			return Success;
+		}
+		void GetRecordColumns(
+			sRecord Record,
+			fbltyp::dIds &Columns,
+			fbltyp::dIds &Types,
+			fbltyp::dId8s &Numbers,
+			str::dStrings &Labels,
+			str::dStrings &Comments ) const
+		{
+			Statics.OGZGetRecordColumns( *Record, Columns, Types, Numbers, Labels, Comments );
+		}
+		void GetRecordFields(
+			sRecord Record,
+			fbltyp::dIds &Fields,
+			fbltyp::dIds &Columns,
+			fbltyp::dStringsSet &EntriesSet,
+			fbltyp::dIds &Types ) const
+		{
+			Statics.OGZGetRecordFields( *Record, Fields, Columns, Types, EntriesSet );
+		}
+		sRecord CreateRecord( void ) const
+		{
+			sRecord Record = UndefinedRecord;
+
+			Statics.OGZCreateRecord( *Record );
+
+			return Record;
+		}
+		sField CreateField(
+			sRecord Record,
+			fbltyp::sObject ColumnBuffer,
+			fbltyp::sObject FieldBuffer ) const
+		{
+			sField Field = UndefinedField;
+
+			Statics.OGZCreateField( *Record, ColumnBuffer, FieldBuffer, *Field );
+
+			return Field;
+		}
+		bso::sBool UpdateField(
+			sField Field,
+			fbltyp::sObject FieldBuffer,
+			bso::sBool &RecordErased ) const
+		{
+			bso::sBool FieldErased = false;
+
+			Statics.OGZUpdateField( *Field, FieldBuffer, FieldErased, RecordErased );
+
+			return FieldErased;
+		}
+		void GetRecords( dDigestsI1S &Digests ) const
+		{
+			Statics.OGZGetRecords( Digests.Ids, Digests.Strings1 );
+		}
+		void MoveField(
+			sRecord Record,
+			sField Source,
+			sField Target ) const
+		{
+			Statics.OGZMoveField( *Record, *Source, *Target );
 		}
 		void DumpCorpus( xml::writer_ &Writer )
 		{

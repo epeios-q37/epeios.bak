@@ -25,8 +25,6 @@
 # include "muafbc.h"
 # include "muainf.h"
 
-# include "frdfrntnd.h"
-
 # include "xdhdws.h"
 
 # define BASE_NAME				MUAINF_LC_AFFIX	SCLXDHTML_DEFAULT_SUFFIX

@@ -31,78 +31,32 @@ namespace frdinstc {
 	using fbltyp::dString;
 	using fbltyp::dStrings;
 
-	class rUser_
-	{
-	private:
-		qRMV( frdfrntnd::rFrontend, F_,  Frontend_ );
-		esketch::fStatics S_( void )
-		{
-			return F_().Statics;
-		}
-		esketch::rSKTMyObject Object_;
-	public:
-		void reset( bso::bool__ P = true )
-		{	
-			Frontend_ = NULL;
-
-			Object_.reset( P );
-		}
-		E_CVDTOR( rUser_ );
-		void Init( frdfrntnd::rFrontend &Frontend )
-		{
-			Frontend_ = &Frontend;
-
-			Object_.Init( Frontend.MyObject );
-		}
-		void Ping( void )
-		{
-			F_().Ping();
-		}
-		void Crash( void )
-		{
-			F_().Crash();
-		}
-		void LoadSetupOfId( const dString &Id )
-		{
-			S_().LoadSetupOfId_1( Id );
-		}
-		void LoadSetupContent( const dString &Content )
-		{
-			S_().LoadSetupContent_1( Content );
-		}
-		dString &ToUpper( dString &String );
-		void TestMessage( void )
-		{
-			Object_.Test();
-		}
-	};
-
 	class rUser
 	{
 	private:
-		rUser_ Core_;
+		rMyObject MyObject_;
 		bso::bool__ _TestButtonIsVisible;
 	public:
 		void reset( bso::bool__ P = true )
 		{	
-			Core_.reset( P );
+			MyObject_.reset( P );
 			_TestButtonIsVisible = false;
 		}
 		E_CVDTOR( rUser );
 		void Init( frdfrntnd::rFrontend &Frontend )
 		{
 			if ( Frontend.IsConnected() )
-				Core_.Init( Frontend );
+				MyObject_.Init( Frontend );
 
 			_TestButtonIsVisible = false;
 		}
 		dString &ToUpper( dString &String )
 		{
-			return Core_.ToUpper( String );
+			return MyObject_.ToUpper( String );
 		}
 		void TestMessage( void )
 		{
-			Core_.TestMessage();
+			MyObject_.TestMessage();
 		}
 		E_RWDISCLOSE__( bso::bool__, TestButtonIsVisible );
 	};

@@ -20,6 +20,9 @@
 #include "base.h"
 
 #include "core.h"
+#include "login.h"
+#include "main.h"
+#include "prolog.h"
 
 using namespace base;
 

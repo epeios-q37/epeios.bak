@@ -19,6 +19,10 @@
 
 #include "core.h"
 
+#include "global.h"
+#include "login.h"
+#include "main.h"
+#include "prolog.h"
 #include "registry.h"
 
 #include "sclrgstry.h"
@@ -39,6 +43,31 @@ sclfrntnd::rKernel &core::Kernel( void )
 {
 	return Kernel_;
 }
+
+namespace {
+	void Register_( void )
+	{
+		global::Register();
+		prolog::Register();
+		login::Register();
+		main::Register();
+
+		OnNotConnectedAllowedActions.Add(
+			xdhcmn::CloseActionLabel,
+			global::About, global::Test,
+			prolog::DisplayProjectFilename, prolog::LoadProject, prolog::SwitchProjectType,	// All 'prolog'-related actions are allowed.
+			login::Dismiss, login::DisplayEmbeddedBackendFilename, login::Connect, login::SwitchBackendType );	// All 'login'-related actions too.
+	};
+}
+
+
+void core::core___::Init( xdhcmn::mode__ Mode )
+{
+	ActionHelperCallback_.Init();
+	_core___::Init( Mode, ActionHelperCallback_ );
+	Register_();
+}
+
 
 void core::rInstancesCore::Init( frdfrntnd::rFrontend &Frontend )
 {

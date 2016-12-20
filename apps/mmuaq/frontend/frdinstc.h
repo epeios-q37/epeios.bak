@@ -25,24 +25,17 @@
 # include "frdfrntnd.h"
 
 namespace frdinstc {
-
 	using namespace frdfrntnd;
 
-	SCLF_I( agent, Agent, Id);
-	SCLF_I( folder, Folder, Id );
-	SCLF_I( mail, Mail, Id );
-
-	using fbltyp::dString;
-	using fbltyp::dStrings;
+	// To avoid ambiguity with 'mail' module.
+	namespace mail {
+		using namespace frdfrntnd::mail;
+	}
 
 	class rUser_
 	{
 	private:
 		qRMV( frdfrntnd::rFrontend, F_,  Frontend_ );
-		mmuaq::fStatics S_( void )
-		{
-			return F_().Statics;
-		}
 		mmuaq::rMUAMyObject Object_;
 	public:
 		void reset( bso::bool__ P = true )
@@ -66,14 +59,6 @@ namespace frdinstc {
 		{
 			F_().Crash();
 		}
-		void LoadSetupOfId( const dString &Id )
-		{
-			S_().LoadSetupOfId_1( Id );
-		}
-		void LoadSetupContent( const dString &Content )
-		{
-			S_().LoadSetupContent_1( Content );
-		}
 		str::string_ &ToUpper( dString &String )
 		{
 			str::string Result;
@@ -89,113 +74,6 @@ namespace frdinstc {
 		void TestMessage( void )
 		{
 			Object_.Test();
-		}
-		bso::sBool Login(
-			const dString &Username,
-			const dString &Password )
-		{
-			bso::sBool Success = false;
-
-			S_().MUALogin_1( Username, Password, Success );
-
-			return Success;
-		}
-		void GetAgents(
-			dAgents &Agents,
-			dStrings &Names )
-		{
-			S_().MUAGetAgents_1( Agents, Names );
-		}
-		void GetAgent(
-			sAgent Agent,
-			dString &Name,
-			dString &HostPort,
-			dString &Username )
-		{
-			S_().MUAGetAgent_1( *Agent, Name, HostPort, Username );
-		}
-		sAgent CreateAgent(
-			const dString &Name,
-			const dString &HostPort,
-			const dString &Username,
-			const dString &Password )
-		{
-			sAgent Agent = UndefinedAgent;
-
-			S_().MUAUpdateAgent_1( *Agent, Name, HostPort, Username, true, Password, *Agent );
-
-			return Agent;
-		}
-		void UpdateAgent(
-			sAgent Agent,
-			const dString &Name,
-			const dString &HostPort,
-			const dString &Username,
-			bso::sBool PasswordIsSet,
-			const dString &Password )
-		{
-			if ( Agent == UndefinedAgent )
-				qRGnr();
-
-			S_().MUAUpdateAgent_1( *Agent, Name, HostPort, Username, PasswordIsSet, Password, *Agent );
-		}
-		void GetMailsFields(
-			sFolder Folder,
-			fbltyp::dIds &Ids,
-			dStrings &Subjects,
-			dAgents &Agents )
-		{
-			S_().MUAGetMailsFields_1( *Folder, Ids, Subjects, Agents );
-		}
-		void GetMail(
-			sMail Mail,
-			str::dString &Content )
-		{
-			S_().MUAGetMail_1( **Mail, Content );
-		}
-		void MoveMailTo(
-			sMail Mail,
-			sFolder Folder )
-		{
-			S_().MUAMoveMailTo_1( *Mail, *Folder );
-		}
-		void GetRootAndInboxFolders(
-			sFolder &Root,
-			sFolder &Inbox )
-		{
-			S_().MUAGetRootAndInboxFolders_1( *Root, *Inbox );
-		}
-		void GetFolders(
-			sFolder Folder,
-			dFolders &Folders )
-		{
-			S_().MUAGetFolders_1( *Folder, Folders );
-		}
-		void GetFoldersNames(
-			const dFolders &Folders,
-			dStrings &Names )
-		{
-			S_().MUAGetFoldersNames_1( Folders, Names );
-		}
-		folder::sId CreateFolder(
-			folder::sId Folder,
-			const str::dString &Name )
-		{
-			S_().MUACreateFolder_1( *Folder, Name, *Folder );
-
-			return Folder;
-		}
-		void RenameFolder(
-			folder::sId Folder,
-			const str::dString &Name )
-		{
-			S_().MUARenameFolder_1( *Folder, Name );
-		}
-		void MoveFolderTo(
-			sFolder Folder,
-			sFolder Parent )
-		{
-			S_().MUAMoveFolderTo_1( *Folder, *Parent );
 		}
 	};
 
@@ -288,19 +166,22 @@ namespace frdinstc {
 	{
 	private:
 		rUser_ Core_;
+		qRMV( rFrontend, F_, Frontend_ );
 		agent_::sTracker Agent_;
 		folder_::sTracker Folder_;
 		mail_::sTracker Mail_;
 	public:
 		void reset( bso::bool__ P = true )
 		{	
-			tol::reset( P, Core_, Agent_, Folder_, Mail_ );
+			tol::reset( P, Core_, Frontend_, Agent_, Folder_, Mail_ );
 		}
 		E_CVDTOR( rUser );
 		void Init( frdfrntnd::rFrontend &Frontend )
 		{
-			if ( Frontend.IsConnected() )
-				Core_.Init( Frontend );
+			Frontend_ = &Frontend;
+
+			if ( F_().IsConnected() )
+				Core_.Init(F_() );
 
 			tol::Init( Agent_, Folder_, Mail_ );
 		}
@@ -319,8 +200,8 @@ namespace frdinstc {
 			const str::dString &Username,
 			const str::dString &Password )
 		{
-			if ( Core_.Login( Username, Password ) ) {
-				Core_.GetRootAndInboxFolders( Folder_.Root, Folder_.Inbox );
+			if ( F_().Login( Username, Password ) ) {
+				F_().GetRootAndInboxFolders( Folder_.Root, Folder_.Inbox );
 				Folder_.Current = Folder_.Inbox;
 				Folder_.State = folder_::sViewing;
 				return true;
@@ -381,10 +262,10 @@ namespace frdinstc {
 
 			switch ( Folder_.State ) {
 			case folder_::sCreation:
-				Folder_.Current = Core_.CreateFolder( Folder_.Current, Name );
+				Folder_.Current = F_().CreateFolder( Folder_.Current, Name );
 				break;
 			case folder_::sEdition:
-				Core_.RenameFolder( Folder_.Current, Name );
+				F_().RenameFolder( Folder_.Current, Name );
 				break;
 			default:
 				qRGnr();
@@ -437,11 +318,11 @@ namespace frdinstc {
 		bso::sBool DropToFolder( sFolder Folder )
 		{
 			if ( Mail_.Dragged != UndefinedMail ) {
-				Core_.MoveMailTo( Mail_.Dragged, Folder );
+				F_().MoveMailTo( Mail_.Dragged, Folder );
 				Mail_.Dragged = UndefinedMail;
 				return false;
 			} else if ( Folder_.Dragged != UndefinedFolder ) {
-				Core_.MoveFolderTo( Folder_.Dragged, Folder );
+				F_().MoveFolderTo( Folder_.Dragged, Folder );
 				Folder_.Dragged = UndefinedFolder;
 				return true;
 			} else
@@ -470,9 +351,9 @@ namespace frdinstc {
 			const dString &Password )
 		{
 			if ( Agent_.Current != UndefinedAgent )
-				Core_.UpdateAgent( Agent_.Current, Name, HostPort, Username, PasswordIsSet, Password );
+				F_().UpdateAgent( Agent_.Current, Name, HostPort, Username, PasswordIsSet, Password );
 			else 
-				Agent_.Current = Core_.CreateAgent( Name, HostPort, Username, Password );
+				Agent_.Current = F_().CreateAgent( Name, HostPort, Username, Password );
 
 			Agent_.Edition = false;
 		}

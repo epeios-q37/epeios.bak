@@ -20,7 +20,10 @@
 #include "mails.h"
 
 #include "core.h"
+#include "main.h"
+#include "mail.h"
 #include "registry.h"
+
 #include "sclfrntnd.h"
 
 namespace {

@@ -36,7 +36,7 @@ namespace ogzetr {
 	using ogzbsc::dDatum;
 	using ogzbsc::wDatum;
 
-	using crt::cHooks;
+	using crt::sHooks;
 
 	qROW( Row );
 	qROWS( Row );
@@ -256,7 +256,7 @@ namespace ogzetr {
 		}
 	};
 
-	using bch::cHook;
+	using bch::sHook;
 }
 
 

@@ -70,7 +70,7 @@ qRH
 qRB
 	tol::Init( Agents, Names );
 
-	Core_.GetAgents( Agents, Names );
+	F_().GetAgents( Agents, Names );
 
 	if ( Agents.Amount() != Names.Amount() )
 		qRGnr();
@@ -96,7 +96,7 @@ qRB
 	if ( Agent_.Current != UndefinedAgent ) {
 
 		tol::Init( Name, HostPort, Username );
-		Core_.GetAgent( Agent_.Current, Name, HostPort, Username );
+		F_().GetAgent( Agent_.Current, Name, HostPort, Username );
 
 		Writer.PushTag( "Agent" );
 
@@ -154,7 +154,7 @@ qRB
 	tol::Init( Ids, Subjects, Agents );
 
 	if ( Folder_.Current != UndefinedFolder )
-		Core_.GetMailsFields( Folder_.Current, Ids, Subjects, Agents );
+		F_().GetMailsFields( Folder_.Current, Ids, Subjects, Agents );
 
 	dump_mails_::Dump( Ids, Subjects, Agents, Writer );
 qRR
@@ -169,7 +169,7 @@ qRH
 qRB
 	if ( Mail_.Current != UndefinedMail ) {
 		Content.Init();
-		Core_.GetMail( Mail_.Current, Content );
+		F_().GetMail( Mail_.Current, Content );
 		Writer.PutValue( Content, "Mail" );
 	}
 qRR
@@ -181,13 +181,13 @@ namespace dump_folders_ {
 	// Predeclaration ; defined below.
 	void Dump(
 		sFolder Folder,
-		rUser_ &Core,
+		rFrontend &Frontend,
 		xml::dWriter &Writer );
 
 	void Dump_(
 		const dFolders &Folders,
 		const dStrings &Names,
-		rUser_ &Core,
+		rFrontend &Frontend,
 		xml::dWriter &Writer )
 	{
 		sdr::sRow Row = Folders.First();
@@ -205,7 +205,7 @@ namespace dump_folders_ {
 			Writer.PutAttribute("id", *Folders( Row ) );
 			Writer.PutAttribute("Name", Names( Row ) );
 
-			Dump( Folders( Row ), Core, Writer );
+			Dump( Folders( Row ), Frontend, Writer );
 
 			Writer.PopTag();
 
@@ -217,7 +217,7 @@ namespace dump_folders_ {
 
 	void Dump(
 		sFolder Folder,
-		rUser_ &Core,
+		rFrontend &Frontend,
 		xml::dWriter &Writer )
 	{
 	qRH
@@ -226,10 +226,10 @@ namespace dump_folders_ {
 	qRB
 		tol::Init( Folders, Names );
 
-		Core.GetFolders( Folder, Folders );
-		Core.GetFoldersNames( Folders, Names );
+		Frontend.GetFolders( Folder, Folders );
+		Frontend.GetFoldersNames( Folders, Names );
 
-		Dump_( Folders, Names, Core, Writer );
+		Dump_( Folders, Names, Frontend, Writer );
 	qRR
 	qRT
 	qRE
@@ -238,7 +238,7 @@ namespace dump_folders_ {
 
 void frdinstc::rUser::DumpFolders( xml::dWriter &Writer )
 {
-	dump_folders_::Dump( UndefinedFolder, Core_, Writer );
+	dump_folders_::Dump( UndefinedFolder, F_(), Writer );
 }
 
 const str::dString &frdinstc::rUser::GetAgentStatus( str::dString &Status )

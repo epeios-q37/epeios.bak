@@ -36,7 +36,7 @@ namespace ogzbsc {
 	typedef str::dStrings dData;
 	qW( Data );
 
-	using crt::cHooks;
+	using crt::sHooks;
 
 	qROW( URow );	// User row.
 	qROW( MRow );	// User meta row.

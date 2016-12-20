@@ -21,6 +21,7 @@
 
 #include "agents.h"
 #include "core.h"
+#include "main.h"
 #include "registry.h"
 
 #include "sclfrntnd.h"

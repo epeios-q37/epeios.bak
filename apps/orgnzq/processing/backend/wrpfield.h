@@ -52,7 +52,7 @@ namespace wrpfield {
 			S_.Type = qNIL;
 			S_.Number = ogzclm::n_Undefined;
 		}
-		void plug( ogzetr::cHooks &Hook )
+		void plug( ogzetr::sHooks &Hook )
 		{
 			dData_::plug( Hook );
 		}

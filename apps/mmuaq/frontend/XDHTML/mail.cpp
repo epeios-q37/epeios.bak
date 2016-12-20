@@ -24,7 +24,6 @@
 #include "sclfrntnd.h"
 
 namespace {
-
 	qCDEF( char *, XSLAffix_, "Mail" );
 
 	void GetContext_(

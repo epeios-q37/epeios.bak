@@ -20,6 +20,7 @@
 #include "main.h"
 
 #include "core.h"
+#include "config.h"
 #include "folders.h"
 #include "mails.h"
 #include "registry.h"
