@@ -17,12 +17,12 @@
     along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "frdinstc.h"
+#include "instc.h"
 
 #include "flf.h"
 #include "fnm.h"
 
-using namespace frdinstc;
+using namespace instc;
 
 using fbltyp::wString;
 using fbltyp::wStrings;

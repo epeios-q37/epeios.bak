@@ -95,14 +95,7 @@ static void About_(
 qRH
 	str::wString ProtocolVersion, Plugin, PluginParameters, BackendLabel, APIVersion, BackendInformations, BackendCopyright, SoftwareInformations;
 qRB
-	ProtocolVersion.Init();
-	Plugin.Init();
-	PluginParameters.Init();
-	BackendLabel.Init();
-	APIVersion.Init();
-	BackendInformations.Init();
-	BackendCopyright.Init();
-	SoftwareInformations.Init();
+	tol::Init( ProtocolVersion, Plugin, PluginParameters, BackendLabel, APIVersion, BackendInformations, BackendCopyright, SoftwareInformations );
 
 	Kernel_.GetFeatures( Plugin, PluginParameters );
 	Frontend.About( ProtocolVersion, BackendLabel, APIVersion, BackendInformations, BackendCopyright, SoftwareInformations );

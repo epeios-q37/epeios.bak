@@ -21,8 +21,7 @@
 # define CORE__INC
 
 # include "base.h"
-
-# include "frdinstc.h"
+# include "instc.h"
 
 # include "sclxdhtml.h"
 
@@ -40,7 +39,7 @@ namespace core {
 	class rInstancesCore
 	{
 	public:
-		frdinstc::rUser User;
+		instc::rUser User;
 		void reset( bso::bool__ P = true )
 		{
 			User.reset( P );
@@ -84,10 +83,6 @@ namespace core {
 
 	void About(
 		rSession &Session,
-		xml::writer_ &Writer );
-
-	void About(
-		core::rSession &Session,
 		xml::writer_ &Writer );
 }
 

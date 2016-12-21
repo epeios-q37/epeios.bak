@@ -17,14 +17,14 @@
     along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// FRontenD INSTanCes
+// INSTanCes
 
-#ifndef FRDINSTC__INC
-# define FRDINSTC__INC
+#ifndef INSTC__INC
+# define INSTC__INC
 
 # include "frdfrntnd.h"
 
-namespace frdinstc {
+namespace instc {
 
 	using namespace frdfrntnd;
 

@@ -2121,6 +2121,7 @@ namespace tol {
 	void Crash( void );	// Crashes deliberately the program. For testing of daemons watchdog.
 
 	/* BEGIN 'reset' serialization with parameter */
+
 	template <typename t> void reset(
 		bso::sBool P,
 		t &O )
@@ -2142,17 +2143,20 @@ namespace tol {
 		Boolean = false;
 	}
 
+	// Last arguments handled first : arguments has to be passed in the same order they were declared !
 	template <typename f, typename ... o> void reset(
 		bso::sBool P,
 		f &F,
 		o&... O )
 	{
-		reset( P, F );
 		reset( P, O... );
+		reset( P, F );
 	}
+
 	/* END 'reset' serialization with parameter */
 
 	/* BEGIN 'reset' serialization without parameter */
+
 	template <typename t> void reset( t &O )
 	{
 		O.reset();
@@ -2163,16 +2167,19 @@ namespace tol {
 		Pointer = NULL;
 	}
 
+	// Last arguments handled first : arguments has to be passed in the same order they were declared !
 	template <typename f, typename ... o> void reset(
 		f &F,
 		o&... O )
 	{
-		reset( F );
 		reset( O... );
+		reset( F );
 	}
+
 	/* END 'reset' serialization without parameter */
 
 	/* BEGIN 'plug' serialization */
+
 	template <typename t> void plug(
 		ags::aggregated_storage_ *AS,
 		t &O )
@@ -2188,9 +2195,11 @@ namespace tol {
 		plug( AS, F );
 		plug( AS, O... );
 	}
+
 	/* END 'plug' serialization */
 
 	/* BEGIN 'Init' serialization */
+
 	template <typename t> void Init( t &O )
 	{
 		O.Init();
@@ -2203,6 +2212,7 @@ namespace tol {
 		Init( F );
 		Init( O... );
 	}
+
 	/* End 'Init' serialization */
 
 	// 'false' if env var doesn't exist.

@@ -40,7 +40,6 @@
 			<Module>frdapi</Module>
 			<Module>frdfrntnd</Module>
 			<Module>frdrgstry</Module>
-			<Module>frdinstc</Module>
 		</Modules>
 		<Modules Group="SKT" Path="../../">
 			<Module>sktfbc</Module>
@@ -58,7 +57,8 @@
 		<Module>core</Module>
 		<Module>global</Module>
 		<Module>registry</Module>
-	</Modules>
+  <Module>instc</Module>
+ </Modules>
 	<SourceDirs>
 		<SourceDir>..</SourceDir>
 		<SourceDir>../..</SourceDir>

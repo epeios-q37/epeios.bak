@@ -1,5 +1,9 @@
 CHANGELOG for the 'Epeios' framework.
 
+2016-12-21 :
+- TOL :
+	- Teh 'reset(...)' functions handles now their arguments in reverse order.
+
 2016-12-19 :
 - FLW :
 	- Fixing error handling issues, on writing operations.
