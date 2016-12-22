@@ -1,8 +1,15 @@
 CHANGELOG for the 'Epeios' framework.
 
+2016-12-22 :
+- FBLFRD :
+	- Introducing frontend callback.
+- SCLFRNTND :
+	- Exposing some login registry entries.
+	- Adaptation to changes in 'FBLFRD'.
+
 2016-12-21 :
 - TOL :
-	- Teh 'reset(...)' functions handles now their arguments in reverse order.
+	- The 'reset(...)' functions handles now their arguments in reverse order.
 
 2016-12-19 :
 - FLW :

@@ -335,6 +335,9 @@ qRB
 
 	muafld::sRow Row = *Request.IdIn();
 
+	if ( !Account.Directory().Exists( Row ) )
+		REPORT( UnknownFolder );
+
 	tol::Init( Rows );
 
 	Account.Directory().Folders().GetChildren( Row, Rows );

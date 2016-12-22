@@ -34,6 +34,7 @@
 namespace frdfrntnd {
 	using sclfrntnd::rKernel;
 	typedef sclfrntnd::rFrontend rFrontend_;
+	typedef fblfrd::cFrontend cFrontend_;
 
 	using fbltyp::dString;
 	using fbltyp::dStrings;
@@ -43,15 +44,16 @@ namespace frdfrntnd {
 	SCLF_I( mail, Mail, Id );
 
 	class rFrontend
-	: public rFrontend_
+	: public rFrontend_,
+	  public cFrontend_
 	{
 	protected:
-		virtual void FBLFRDOnConnect( void ) override
+		virtual void FBLFRDOnConnection( void ) override
 		{
 			Statics.Init( *this );
 			MyObject.Init( *this );
 		}
-		virtual void FBLFRDOnDisconnect( void ) override
+		virtual void FBLFRDOnDisconnection( void ) override
 		{
 			Statics.reset();
 			MyObject.reset();
@@ -71,7 +73,7 @@ namespace frdfrntnd {
 			const char *Language,
 			fblfrd::reporting_callback__ &ReportingCallback )
 		{
-			rFrontend_::Init( Kernel, Language, ReportingCallback );
+			rFrontend_::Init( Kernel, Language, *this, ReportingCallback );
 		}
 		void LoadSetupOfId( const dString &Id )
 		{

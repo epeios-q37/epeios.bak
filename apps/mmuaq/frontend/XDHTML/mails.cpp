@@ -40,7 +40,7 @@ namespace {
 	qRB
 		Rack.Init( XSLAffix_, XML, Session );
 
-		Rack().PutAttribute( "CurrentMail", **Session.User.Mail().Current, **frdinstc::UndefinedMail );
+		Rack().PutAttribute( "CurrentMail", **Session.User.Mail().Current, **instc::UndefinedMail );
 	qRR
 	qRT
 	qRE
@@ -111,7 +111,7 @@ qRE
 
 AC( SelectMail )
 {
-	frdinstc::sMail Mail = frdinstc::UndefinedMail;
+	instc::sMail Mail = instc::UndefinedMail;
 
 	Session.GetNumericalContent( Id, **Mail );
 
@@ -123,7 +123,7 @@ AC( SelectMail )
 
 AC( DragMail )
 {
-	frdinstc::sMail Mail = frdinstc::UndefinedMail;
+	instc::sMail Mail = instc::UndefinedMail;
 
 	Session.GetNumericalContent( Id, **Mail );
 

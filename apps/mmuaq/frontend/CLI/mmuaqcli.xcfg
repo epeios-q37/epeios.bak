@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Configurations xmlns:xpp="http://q37.info/ns/xpp/" >
+	<Configuration target="mmuaqcli">
+		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
+		<xpp:expand value-of="q37.xpp"/>
+  <xpp:expand href="../mmuaqfrd.xcfg"/>
+  <xpp:expand href="../../../../TOL.xcfg"/>
+		<Parameters>
+   <xpp:expand select="Parameters"/>
+   <Language>fr</Language>
+   <!-- Default command -->
+   <Command></Command>
+  </Parameters>
+		<Definitions>
+   <xpp:expand select="Definitions"/>
+  </Definitions>
+		<Locale>
+			<xpp:expand select="TOL_Locale"/>
+   <Translations text="FoldersCommandDescription">
+    <Translation language="fr">Affiche la liste de dossiers.</Translation>
+    <Translation language="en">Displays folders list.</Translation>
+   </Translations>
+   <Translations text="AboutBackendCommandDescription">
+    <Translation language="fr">Affiche des informations à propos du moteur de traitement.</Translation>
+    <Translation language="en">Displays infomation about the backend.</Translation>
+   </Translations>
+   <Translations text="TestFlagDescription">
+				<Translation language="fr">fanion de test.</Translation>
+				<Translation language="en">test flag.</Translation>
+			</Translations>
+			<Translations text="TestOptionDescription">
+				<Translation language="fr">option de test.</Translation>
+				<Translation language="en">test option.</Translation>
+			</Translations>
+			<Translations text="TestOptionLabel">
+				<Translation language="fr">option (fr)</Translation>
+				<Translation language="en">option (en)</Translation>
+			</Translations>
+			<Translations text="FolderArgumentDescription">
+				<Translation language="fr">identifiant de dossier : dossier racine si absent.</Translation>
+				<Translation language="en">folder ID ; root folder if absent.</Translation>
+			</Translations>
+			<Translations text="FolderArgumentLabel">
+				<Translation language="fr">dossier</Translation>
+				<Translation language="en">folder</Translation>
+			</Translations>
+		</Locale>
+		<Arguments>
+			<xpp:expand select="TOL_Arguments"/>
+			<!-- Commandes : pas de 'Path' (vaut 'Parameters/Command'), ni de 'Value'. -->
+   <Argument id="AboutBackendCommand" Description="AboutBackendCommandDescription" long="about-backend" Value="AboutBackend" Usage=""/>
+   <Argument id="FoldersCommand" Description="FoldersCommandDescription" long="folders" Value="Folders" Usage="%FolderArgument%"/>
+   <!--Argument id="TestCommand" Description="TestCommandDescription" long="test" short="t" Value="Test" Usage="%TestFlag% %TestOption% %TestArgument%"/-->
+   <!-- Fanaux : 'Path', mais pas de 'Value'. -->
+   <!--Argument id="TestFlag" Description="TestFlagDescription" long="flag" short="f" Path="Flag" Value="TestFlag"/-->
+			<!-- Options : 'Path' ET 'Value'. -->
+   <!--Argument id="TestOption" Description="TestOptionDescription" long="option" short="o" Path="Option" Label="TestOptionLabel"/-->
+			<!-- Arguments libres : 'Path' mais PAS de 'Value' (ni de 'short', ni de 'long'). -->
+   <Argument id="FolderArgument" Description="FolderArgumentDescription" Path="Folder" Label="FolderArgumentLabel"/>
+			<!-- Affectations des arguments libres-->
+			<Layouts>
+				<Layout command="Folders">
+					<Link index="0" Target="FolderArgument"/>
+				</Layout>
+			</Layouts>
+		</Arguments>
+	</Configuration>
+</Configurations>

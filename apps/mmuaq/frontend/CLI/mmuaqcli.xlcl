@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Locale target="mmuaqcli" xmlns:xpp="http://q37.info/ns/xpp/" >
+	<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
+	<xpp:expand value-of="q37.xpp"/>
+	<xpp:expand select="epeios.xlcl"/>
+	<Translations text="ProgramDescription">
+		<Translation language="fr">Mettre ici la description du programme en français !</Translation>
+		<Translation language="en">Put here the english description of the program !</Translation>
+	</Translations>
+ <Translations text="RootFolderName">
+  <Translation language="fr">Courrier</Translation>
+  <Translation language="en">Mail</Translation>
+ </Translations>
+ <Translations text="InboxFolderName">
+  <Translation language="fr">Entrant</Translation>
+  <Translation language="en">Inbox</Translation>
+ </Translations>
+ <!--
+	<Translations text="">
+		<Translation language="fr"></Translation>
+		<Translation language="en"></Translation>
+	</Translations>
+	-->
+</Locale>

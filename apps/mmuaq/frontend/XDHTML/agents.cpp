@@ -125,7 +125,7 @@ AC( DefineAgent )
 
 AC( SelectAgent )
 {
-	frdinstc::sAgent Agent = frdinstc::UndefinedAgent;
+	instc::sAgent Agent = instc::UndefinedAgent;
 
 	Session.GetNumericalContent( Id, **Agent );
 

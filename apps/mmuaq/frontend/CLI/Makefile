@@ -1,21 +1,21 @@
 #	Copyright (C) 2016 Claude SIMON (http://q37.info/contact/).
 #
-#	This file is part of MMUAq.
+#	This file is part of mmuaqcli.
 #
-#	MMUAq is free software: you can redistribute it and/or
+#	mmuaqcli is free software: you can redistribute it and/or
 #	modify it under the terms of the GNU Affero General Public License
 #	published by the Free Software Foundation, either version 3 of the
 #	License, or (at your option) any later version.
 #
-#	MMUAq is distributed in the hope that it will be useful,
+#	mmuaqcli is distributed in the hope that it will be useful,
 #	but WITHOUT ANY WARRANTY; without even the implied warranty of
 #	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 #	Affero General Public License for more details.
 #
 #	You should have received a copy of the GNU Affero General Public License
-#	along with MMUAq. If not, see <http://www.gnu.org/licenses/>.
+#	along with mmuaqcli. If not, see <http://www.gnu.org/licenses/>.
 
-name = mmuaqxdh
+name = mmuaqcli
 
 
 # Epeios general debugging features
@@ -34,22 +34,18 @@ mods += iop lst lstbch lstcrt lstctn
 mods += mns mtx ntvstr que sdr 
 mods += stkbse stkbch stkctn str strng 
 mods += tagsbs tol txf tys uys 
-mods += utf xtf llio bomhdl cdgb64 
-mods += dlbrry fil fnm lcl plgn 
-mods += plgncore rgstry stsfsm xml xpp 
-mods += mtk tht thtsub strmrg 
+mods += utf xtf llio tht thtsub 
+mods += bomhdl cdgb64 dlbrry fil fnm 
+mods += lcl plgn plgncore rgstry stsfsm 
+mods += xml xpp 
 mods += csdrcc 
 mods += fblcmd fblcst fblfep fblfph fblfrd 
 mods += fblfrp fblovl fbltyp 
 mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
-mods += sclxdhtml sclfrntnd 
-mods += xdhcmn xdhdws 
-mods += frdapi frdfrntnd frdrgstry 
-mods += muafbc muainf 
-mods += config login main prolog 
-mods += agents agent folders Frame mail 
-mods += mails 
-mods += base core global instc registry 
+mods += scltool sclfrntnd 
+mods += frdfrntnd 
+mods += muainf 
+mods += registry 
 
 pmods += pllio 
 
@@ -70,7 +66,7 @@ CXXFLAGS += -O
 
 ###############################
 	
-copt += -DQ37_LIBRARY
+copt += -DE_ST
 
 win=win
 win32=win32
@@ -86,11 +82,9 @@ Android=Android
 os=$(shell uname -o 2>/dev/null || uname -s)
 mach=$(shell uname -m)
   
-src += :..
+src += :../
 
-src += :../..
-
-src += :../../..
+src += :../../
 
 
 ##########################
@@ -224,11 +218,7 @@ ifeq ("$(os)","$(Cygwin)")
     
 	endif
 	
-	ifneq ("$(target)","$(Android)")
-		binary=$(name).dll
-		lo += -Wl,--kill-at -shared
-	endif
-
+	binary=$(name).exe
 
 	dest=/cygdrive/h/bin/
 
@@ -260,8 +250,7 @@ ifeq ("$(os)", "$(MinGW)")
 		endif
 	endif
 
-	binary=$(name).dll
-	lo += -Wl,--kill-at -shared
+	binary=$(name).exe
 
 	dest=/h/bin/
 endif
@@ -290,9 +279,7 @@ ifeq ("$(os)","$(GNULinux)")
 			lo += -m64
 		endif
 	endif
-	binary=lib$(name).so
-	lo += -shared
-	co += -fPIC
+	binary=$(name)
 
 	dest=/home/csimon/bin/
 endif
@@ -321,9 +308,7 @@ ifeq ("$(os)","$(Linux)")
 			lo += -m64
 		endif
 	endif
-	binary=lib$(name).so
-	lo += -shared
-	co += -fPIC
+	binary=$(name)
 endif
 
 #############################
@@ -348,8 +333,7 @@ ifeq ("$(os)","$(MacOS)")
 			lo += -m64
 		endif
 	endif
-	binary=lib$(name).dylib
-	lo += -dynamiclib
+	binary=$(name)
 
 	dest=/Users/csimon/bin/
 endif
@@ -364,7 +348,7 @@ endif
 
 copt += -DVERSION=\""20161222"\"
 copt += -DCOPYRIGHT_YEARS=\""2016"\"
-copt += -DIDENTIFIER=\""c8c33276-5e09-4f11-bd1b-3283b0ef0697"\"
+copt += -DIDENTIFIER=\""64b22e6b-c01f-4bc0-a7b0-8989c6a24f26"\"
 
 ifndef EPEIOS_SRC
 	src += :src:src/epeios

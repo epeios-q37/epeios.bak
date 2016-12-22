@@ -21,19 +21,20 @@
 # define FRDRGSTRY__INC
 
 # include "sclrgstry.h"
+# include "sclfrntnd.h"
 
 namespace frdrgstry {
-	using sclrgstry::registry_;
-	E_AUTO( registry );
+	using sclrgstry::dRegistry;
+	using sclrgstry::wRegistry;
 
 	using rgstry::rEntry;
 
 	namespace parameter {
-		using namespace sclrgstry::parameter;
+		using namespace sclfrntnd::registry::parameter;
 	}
 
 	namespace definition {
-		using namespace sclrgstry::definition;
+		using namespace sclfrntnd::registry::definition;
 	}
 }
 

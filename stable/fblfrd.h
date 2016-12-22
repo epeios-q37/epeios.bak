@@ -198,11 +198,28 @@ namespace fblfrd {
 
 	E_AUTO( incompatibility_informations );
 
+	class cFrontend
+	{
+	protected:
+		virtual void FBLFRDOnConnection( void ) = 0;
+		virtual void FBLFRDOnDisconnection( void ) = 0;
+	public:
+		qCALLBACK( Frontend );
+		void OnConnection( void )
+		{
+			return FBLFRDOnConnection();
+		}
+		void OnDisconnection( void )
+		{
+			return FBLFRDOnDisconnection();
+		}
+	};
 
 	class frontend___
 	{
 	private:
 		qRMV( flw::ioflow__, C_, Channel_ );
+		qRMV( cFrontend, F_, FrontendCallback_ )
 		qRMV( fblfph::callbacks__, P_, ParametersCallback_ );
 		reporting_callback__ *_ReportingCallback;
 		flw::iflow__ *_FlowInParameter;	// Contient, s'il y en a un,  le pointeur sur le 'Flow' en paramtre d'entre.
@@ -346,9 +363,6 @@ namespace fblfrd {
 			const compatibility_informations__ &CompatibilityInformations,
 			flw::ioflow__ &Flow,
 			incompatibility_informations_ &IncompatibilityInformations );
-	protected:
-		virtual void FBLFRDOnConnect( void ) = 0;
-		virtual void FBLFRDOnDisconnect( void ) = 0;
 	public:
 		void reset( bool P = true )
 		{
@@ -358,6 +372,7 @@ namespace fblfrd {
 			}
 				
 			ParametersCallback_ = NULL;
+			FrontendCallback_ = NULL;
 			_ReportingCallback = NULL;
 			Channel_ = NULL;
 			_FlowInParameter = NULL;
@@ -369,6 +384,7 @@ namespace fblfrd {
 		E_CVDTOR( frontend___ );
 		void Init(
 			const str::dString &CodeKey,
+			cFrontend &FrontendCallback,
 			reporting_callback__ &ReportingCallback )
 		{
 
@@ -377,6 +393,7 @@ namespace fblfrd {
 
 			Channel_ = NULL;
 			ParametersCallback_ = NULL;
+			FrontendCallback_ = &FrontendCallback;
 			_ReportingCallback = &ReportingCallback;
 			_FlowInParameter = NULL;
 			_FlowOutParameter = false;
@@ -414,7 +431,7 @@ namespace fblfrd {
 			
 			RetrieveBackendCommands_();
 
-			FBLFRDOnConnect();
+			F_().OnConnection();
 		qRR
 			Channel_ = NULL;	// Pour viter toute future tentative de communication avec le backend.
 		qRT
@@ -423,7 +440,7 @@ namespace fblfrd {
 		}
 		void Disconnect( void )
 		{
-			FBLFRDOnDisconnect();
+			F_().OnDisconnection();
 
 			Internal_( fblcmd::cDisconnect );
 
@@ -832,12 +849,6 @@ namespace fblfrd {
 			_EmbeddedCallbacks.reset( P );
 		}
 		E_CVDTOR( universal_frontend___ );
-		void Init(
-			const str::dString &CodeKey,
-			fblfrd::reporting_callback__ &ReportingCallback )
-		{
-			return frontend___::Init( CodeKey, ReportingCallback );
-		}
 		bso::bool__ Connect(
 			const char *Language,
 			flw::ioflow__ &Flow,

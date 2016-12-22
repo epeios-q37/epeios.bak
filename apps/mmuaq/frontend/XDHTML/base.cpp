@@ -45,7 +45,7 @@ bso::bool__ base::sActionHelper::SCLXOnBeforeAction(
 			return false;
 		} else
 			return true;
-	} else if ( ( Session.User.Folder().State == frdinstc::folder_::sEdition ) || ( Session.User.Folder().State == frdinstc::folder_::sCreation ) ) {
+	} else if ( ( Session.User.Folder().State == instc::folder_::sEdition ) || ( Session.User.Folder().State == instc::folder_::sCreation ) ) {
 		if ( core::OnFolderEditionIgnoredActions.Search( Action ) )
 			return true;
 		else
@@ -83,8 +83,8 @@ bso::bool__ base::sActionHelper::SCLXOnClose( core::rSession &Session )
 void base::sCorpusCallback::XDHDWSDump( xml::dWriter &Writer )
 {
 	Writer.PushTag( "Folders" );
-	Writer.PutAttribute( "Root", **S_().User.Folder().Root, **frdinstc::UndefinedFolder );
-	Writer.PutAttribute( "Inbox", **S_().User.Folder().Inbox, **frdinstc::UndefinedFolder );
+	Writer.PutAttribute( "Root", **S_().User.Folder().Root, **instc::UndefinedFolder );
+	Writer.PutAttribute( "Inbox", **S_().User.Folder().Inbox, **instc::UndefinedFolder );
 	Writer.PopTag();
 }
 

@@ -114,7 +114,7 @@ qRE
 
 AC( SelectFolder )
 {
-	frdinstc::sFolder Folder = frdinstc::UndefinedFolder;
+	instc::sFolder Folder = instc::UndefinedFolder;
 	Session.GetNumericalContent( Id, **Folder );
 
 	if ( Session.User.SelectFolder( Folder ) ) {
@@ -158,7 +158,7 @@ AC( DiscardFolder )
 
 AC( DragFolder )
 {
-	frdinstc::sFolder Folder = frdinstc::UndefinedFolder;
+	instc::sFolder Folder = instc::UndefinedFolder;
 
 	Session.GetNumericalContent( Id, **Folder );
 
@@ -176,7 +176,7 @@ AC( EndFolderDragging )
 
 AC( DropToFolder )
 {
-	frdinstc::sFolder Folder = frdinstc::UndefinedFolder;
+	instc::sFolder Folder = instc::UndefinedFolder;
 
 	Session.GetNumericalContent( Id, **Folder );
 

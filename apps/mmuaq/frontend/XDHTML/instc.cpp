@@ -17,19 +17,19 @@
     along with 'MMUAq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "frdinstc.h"
+#include "instc.h"
 
 #include "flf.h"
 #include "fnm.h"
 
-using namespace frdinstc;
+using namespace instc;
 
 using fbltyp::wString;
 using fbltyp::wStrings;
 
 #define C( name ) case folder_::s##name : return #name; break
 
-const char *frdinstc::folder_::GetLabel( folder_::eState State )
+const char *instc::folder_::GetLabel( folder_::eState State )
 {
 	switch ( State ) {
 	C( Viewing );
@@ -62,7 +62,7 @@ namespace dump_agents_ {
 	}
 }
 
-void frdinstc::rUser::DumpAgents( xml::dWriter &Writer )
+void instc::rUser::DumpAgents( xml::dWriter &Writer )
 {
 qRH
 	wAgents Agents;
@@ -88,7 +88,7 @@ qRT
 qRE
 }
 
-void frdinstc::rUser::DumpCurrentAgent( xml::dWriter &Writer )
+void instc::rUser::DumpCurrentAgent( xml::dWriter &Writer )
 {
 qRH
 	wString Name, HostPort, Username; 
@@ -144,7 +144,7 @@ namespace dump_mails_{
 	}
 }
 
-void frdinstc::rUser::DumpMails( xml::dWriter &Writer )
+void instc::rUser::DumpMails( xml::dWriter &Writer )
 {
 qRH
 	fbltyp::wIds Ids;
@@ -162,7 +162,7 @@ qRT
 qRE
 }
 
-void frdinstc::rUser::DumpMail( xml::dWriter &Writer )
+void instc::rUser::DumpMail( xml::dWriter &Writer )
 {
 qRH
 	str::wString Content;
@@ -236,14 +236,14 @@ namespace dump_folders_ {
 	}
 }
 
-void frdinstc::rUser::DumpFolders( xml::dWriter &Writer )
+void instc::rUser::DumpFolders( xml::dWriter &Writer )
 {
 	dump_folders_::Dump( UndefinedFolder, F_(), Writer );
 }
 
-const str::dString &frdinstc::rUser::GetAgentStatus( str::dString &Status )
+const str::dString &instc::rUser::GetAgentStatus( str::dString &Status )
 {
-	if ( Agent_.Current != frdinstc::UndefinedAgent ) {
+	if ( Agent_.Current != instc::UndefinedAgent ) {
 		if ( Agent_.Edition  )
 			Status = "Edit";
 		else
@@ -254,7 +254,7 @@ const str::dString &frdinstc::rUser::GetAgentStatus( str::dString &Status )
 	return Status;
 }
 
-void frdinstc::rUser::DumpAgentStatusAttribute(
+void instc::rUser::DumpAgentStatusAttribute(
 	const char *Name,
 	xml::dWriter &Writer )
 {

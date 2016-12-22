@@ -18,12 +18,12 @@
 		<Translation language="en">(Not connected to a backend.)</Translation>
 	</Translations>
  <Translations text="SCLFRNTND_RequestError">
-  <Translation language="fr">Erreur de requête : ¨%1'.</Translation>
-  <Translation language="en">Request error : '%1'.</Translation>
+  <Translation language="fr">%1</Translation>
+  <Translation language="en">%1</Translation>
  </Translations>
  <Translations text="SCLFRNTND_BackendError">
-  <Translation language="fr">Erreur 'backend' : '%1'.</Translation>
-  <Translation language="en">Backend error : '%1'.</Translation>
+  <Translation language="fr">%1</Translation>
+  <Translation language="en">%1</Translation>
  </Translations>
  <Translations text="SCLFRNTND_Disconnection">
   <Translation language="fr">Deconnexion !</Translation>

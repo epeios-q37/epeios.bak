@@ -6,8 +6,9 @@
 		<Dependency Dir="XDHTML/"/>
 		<Dependency Dir="CLI/"/>
 		<xpp:bloc marker="$">
-			<Dependency Dir="$EpeiosToolsDir$xdhcefq/" Ext="xdhcefq/"/>
 			<Dependency Dir="$EpeiosPluginsDir$frontend/" Ext="plugins/frontend"/>
+			<Dependency Dir="$EpeiosToolsDir$xdhbrwq/" Ext="xdhbrwq/"/>
+			<Dependency Dir="$EpeiosToolsDir$xdhcefq/" Ext="xdhcefq/"/>
 		</xpp:bloc>
 	</Dependencies>
 </Project>

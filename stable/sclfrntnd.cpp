@@ -28,6 +28,11 @@ using namespace sclfrntnd;
 
 using sclrgstry::registry_;
 
+rgstry::entry___ sclfrntnd::registry::parameter::Login( "Login", sclrgstry::Parameters );
+rgstry::entry___ sclfrntnd::registry::parameter::login::UserID( "UserID", Login );
+rgstry::entry___ sclfrntnd::registry::parameter::login::Password( "Password", Login );
+
+
 namespace parameter_ {
 	rgstry::entry___ Backend_( "Backend", sclrgstry::Parameters );
 
@@ -42,13 +47,13 @@ namespace parameter_ {
 		rgstry::entry___ Handling_( "@Handling", sclrgstry::parameter::Project );
 	}
 
-	rgstry::entry___ Login_( "Login", sclrgstry::Parameters );
+	rgstry::entry___ &Login_ = registry::parameter::Login;
 
 	namespace login_ {
+		rgstry::rEntry &UserID_ = registry::parameter::login::UserID;
+		rgstry::rEntry &Password_ = registry::parameter::login::Password;
 		rgstry::entry___ CypherKey_( "@CypherKey", Login_ );
 		rgstry::entry___ Mode_( "@Mode", Login_ );
-		rgstry::entry___ UserID_( "UserID", Login_ );
-		rgstry::entry___ Password_( "Password", Login_ );
 	}
 
 	rgstry::rEntry Watchdog_( "Watchdog", sclrgstry::Parameters );
@@ -403,12 +408,13 @@ bso::bool__ sclfrntnd::rFrontend::Connect(
 	if ( Mode != fblovl::mNone )
 		Flow_.Init( K_() );
 
-	return _frontend___::Connect( Language(), Flow_, Mode, CompatibilityInformations, IncompatibilityInformations );
+	return Frontend_.Connect( Language(), Flow_, Mode, CompatibilityInformations, IncompatibilityInformations );
 }
 
 void sclfrntnd::rFrontend::Init(
 	rKernel &Kernel,
 	const char *Language,
+	fblfrd::cFrontend &FrontendCallback,
 	fblfrd::reporting_callback__ &ReportingCallback )
 {
 qRH
@@ -426,7 +432,7 @@ qRB
 
 	Key.Init();
 	sclmisc::OGetValue( parameter_::watchdog::Key_, Key );
-	_frontend___::Init( Key, ReportingCallback );
+	Frontend_.Init( Key, FrontendCallback, ReportingCallback );
 qRR
 qRT
 qRE
@@ -439,7 +445,7 @@ qRH
 qRB
 	Code.Init();
 	sclmisc::OGetValue( parameter_::watchdog::Code_, Code );
-	_frontend___::Ping( Code );	// If 'Code' not empty and correct, the backend doesn't return (watchdog testing purpose).
+	Frontend_.Ping( Code );	// If 'Code' not empty and correct, the backend doesn't return (watchdog testing purpose).
 qRR
 qRT
 qRE
@@ -452,7 +458,7 @@ qRH
 qRB
 	Code.Init();
 	sclmisc::MGetValue( parameter_::watchdog::Code_, Code );
-	_frontend___::Crash( Code );
+	Frontend_.Crash( Code );
 qRR
 qRT
 qRE
@@ -460,7 +466,7 @@ qRE
 
 void sclfrntnd::rFrontend::Disconnect( void )
 {
-	_frontend___::Disconnect();
+	Frontend_.Disconnect();
 
 	Flow_.reset();
 }

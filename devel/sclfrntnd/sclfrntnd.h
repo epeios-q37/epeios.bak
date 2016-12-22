@@ -47,14 +47,32 @@
 
 namespace sclfrntnd {
 
+	namespace registry {
+		using rgstry::rEntry;
+
+		namespace parameter {
+			using namespace sclrgstry::parameter;
+
+			extern rEntry Login;
+
+			namespace login {
+				extern rEntry
+					UserID,
+					Password;
+			}
+		}
+
+		namespace definition {
+			using namespace sclrgstry::definition;
+		}
+	}
+
 	extern rgstry::rEntry &BackendParametersRegistryEntry;
 
 	using fblfrd::compatibility_informations__;
 
 	using fblfrd::incompatibility_informations_;
 	using fblfrd::incompatibility_informations;
-
-	typedef fblfrd::universal_frontend___ _frontend___;
 
 	// Returns the plugin of id 'Id' path an name for connecting to a remote backend.
 	void GetFrontendPluginFilename(
@@ -173,10 +191,10 @@ namespace sclfrntnd {
 	};
 
 	class rFrontend
-	: public _frontend___
 	{
 	private:
 		qRMV( rKernel, K_, Kernel_ );
+		fblfrd::universal_frontend___ Frontend_;
 		rIOFlow_ Flow_;
 		rgstry::multi_level_registry _Registry;
 		rgstry::level__ _RegistryLevel;
@@ -184,7 +202,7 @@ namespace sclfrntnd {
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_frontend___::reset( P );
+			Frontend_.reset( P );
 			Flow_.reset( P );
 			_Registry.reset( P );
 			_RegistryLevel = rgstry::UndefinedLevel;
@@ -195,12 +213,27 @@ namespace sclfrntnd {
 		void Init(
 			rKernel &Kernel,
 			const char *Language,
+			fblfrd::cFrontend &FrontendCallback,
 			fblfrd::reporting_callback__ &ReportingCallback );
 		void Ping( void );
 		void Crash( void );
 		bso::bool__ Connect(
 			const fblfrd::compatibility_informations__ &CompatibilityInformations,
 			fblfrd::incompatibility_informations_ &IncompatibilityInformations );
+		bso::sBool IsConnected( void )
+		{
+			return Frontend_.IsConnected();
+		}
+		void About(
+			str::string_ &ProtocolVersion,
+			str::string_ &BackendLabel,
+			str::string_ &APIVersion,
+			str::string_ &Backend,
+			str::string_ &BackendCopyright,
+			str::string_ &Software )
+		{
+			return Frontend_.About( ProtocolVersion, BackendLabel, APIVersion, Backend, BackendCopyright, Software );
+		}
 		void Disconnect( void );
 		const rgstry::multi_level_registry_ &Registry( void ) const
 		{
@@ -209,6 +242,10 @@ namespace sclfrntnd {
 		const char *Language( void ) const
 		{
 			return sclrgstry::MGetValue( _Registry, rgstry::tentry___( sclrgstry::parameter::Language ), _Language );
+		}
+		operator fblfrd::frontend___ &(void)
+		{
+			return Frontend_;
 		}
 	};
 

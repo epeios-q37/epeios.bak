@@ -40,7 +40,6 @@
       <Module>frdapi</Module>
       <Module>frdfrntnd</Module>
       <Module>frdrgstry</Module>
-			<Module>frdinstc</Module>
 		</Modules>
 		<Modules Group="MUA" Path="../../">
 			<Module>muafbc</Module>
@@ -63,7 +62,8 @@
 		<Module>base</Module>
 		<Module>core</Module>
 		<Module>global</Module>
-		<Module>registry</Module>
+  <Module>instc</Module>
+  <Module>registry</Module>
 	</Modules>
 	<SourceDirs>
 		<SourceDir>..</SourceDir>
