@@ -16,9 +16,21 @@
   </Definitions>
 		<Locale>
 			<xpp:expand select="TOL_Locale"/>
+   <Translations text="AgentsCommandDescription">
+    <Translation language="fr">Affiche la liste des agents.</Translation>
+    <Translation language="en">Displays agents list.</Translation>
+   </Translations>
+   <Translations text="AgentCommandDescription">
+    <Translation language="fr">Affiche des informations sur un agent.</Translation>
+    <Translation language="en">Displays some agent infomration.</Translation>
+   </Translations>
    <Translations text="FoldersCommandDescription">
-    <Translation language="fr">Affiche la liste de dossiers.</Translation>
-    <Translation language="en">Displays folders list.</Translation>
+    <Translation language="fr">Affiche la liste de sous-dossiers d'un dossier.</Translation>
+    <Translation language="en">Displays subfolders list of a folder.</Translation>
+   </Translations>
+   <Translations text="MailsCommandDescription">
+    <Translation language="fr">Affiche la liste des courriers d'un dossier.</Translation>
+    <Translation language="en">Displays mails list of a folder.</Translation>
    </Translations>
    <Translations text="AboutBackendCommandDescription">
     <Translation language="fr">Affiche des informations à propos du moteur de traitement.</Translation>
@@ -36,33 +48,53 @@
 				<Translation language="fr">option (fr)</Translation>
 				<Translation language="en">option (en)</Translation>
 			</Translations>
-			<Translations text="FolderArgumentDescription">
-				<Translation language="fr">identifiant de dossier : dossier racine si absent.</Translation>
-				<Translation language="en">folder ID ; root folder if absent.</Translation>
-			</Translations>
-			<Translations text="FolderArgumentLabel">
-				<Translation language="fr">dossier</Translation>
-				<Translation language="en">folder</Translation>
-			</Translations>
-		</Locale>
+   <Translations text="AgentArgumentDescription">
+    <Translation language="fr">identifiant d'agent.</Translation>
+    <Translation language="en">agent ID.</Translation>
+   </Translations>
+   <Translations text="AgentArgumentLabel">
+    <Translation language="fr">agent</Translation>
+    <Translation language="en">agent</Translation>
+   </Translations>
+   <Translations text="FolderArgumentDescription">
+    <Translation language="fr">identifiant de dossier : dossier racine si absent.</Translation>
+    <Translation language="en">folder ID ; root folder if absent.</Translation>
+   </Translations>
+   <Translations text="FolderArgumentLabel">
+    <Translation language="fr">dossier</Translation>
+    <Translation language="en">folder</Translation>
+   </Translations>
+  </Locale>
 		<Arguments>
 			<xpp:expand select="TOL_Arguments"/>
 			<!-- Commandes : pas de 'Path' (vaut 'Parameters/Command'), ni de 'Value'. -->
    <Argument id="AboutBackendCommand" Description="AboutBackendCommandDescription" long="about-backend" Value="AboutBackend" Usage=""/>
+   <Argument id="AgentsCommand" Description="AgentsCommandDescription" long="agents" Value="Agents" Usage=""/>
+   <Argument id="AgentCommand" Description="AgentCommandDescription" long="agent" Value="Agent" Usage="%AgentArgument%"/>
    <Argument id="FoldersCommand" Description="FoldersCommandDescription" long="folders" Value="Folders" Usage="%FolderArgument%"/>
+   <Argument id="MailsCommand" Description="MailsCommandDescription" long="mails" Value="Mails" Usage="%FolderArgument%"/>
    <!--Argument id="TestCommand" Description="TestCommandDescription" long="test" short="t" Value="Test" Usage="%TestFlag% %TestOption% %TestArgument%"/-->
    <!-- Fanaux : 'Path', mais pas de 'Value'. -->
    <!--Argument id="TestFlag" Description="TestFlagDescription" long="flag" short="f" Path="Flag" Value="TestFlag"/-->
 			<!-- Options : 'Path' ET 'Value'. -->
    <!--Argument id="TestOption" Description="TestOptionDescription" long="option" short="o" Path="Option" Label="TestOptionLabel"/-->
 			<!-- Arguments libres : 'Path' mais PAS de 'Value' (ni de 'short', ni de 'long'). -->
+   <Argument id="AgentArgument" Description="AgentArgumentDescription" Path="Agent" Label="AgentArgumentLabel"/>
    <Argument id="FolderArgument" Description="FolderArgumentDescription" Path="Folder" Label="FolderArgumentLabel"/>
-			<!-- Affectations des arguments libres-->
+   <!-- Affectations des arguments libres-->
 			<Layouts>
-				<Layout command="Folders">
-					<Link index="0" Target="FolderArgument"/>
-				</Layout>
-			</Layouts>
+    <Layout command="Agents">
+    </Layout>
+    <Layout command="Agent">
+     <Link index="0" Target="AgentArgument"/>
+    </Layout>
+    <Layout command="Folders">
+     <Link index="0" Target="FolderArgument"/>
+    </Layout>
+    <Layout command="Mails">
+     <Link index="0" Target="FolderArgument"/>
+    </Layout>
+   </Layouts>
 		</Arguments>
 	</Configuration>
 </Configurations>

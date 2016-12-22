@@ -15,7 +15,7 @@
 		<Translation language="fr">Backend enclavé</Translation>
 		<Translation language="en">Embedded backend</Translation>
 	</Translations>
-	<!--
+ <!--
 	<Translations text="">
 		<Translation language="fr"></Translation>
 		<Translation language="en"></Translation>

@@ -15,6 +15,14 @@
   <Translation language="fr">Entrant</Translation>
   <Translation language="en">Inbox</Translation>
  </Translations>
+ <Translations text="LoginFailed">
+  <Translation language="fr">Echec de l'authentification.</Translation>
+  <Translation language="en">Login failed.</Translation>
+ </Translations>
+ <Translations text="BadOrMissingRegistryLoginEntries">
+  <Translation language="fr">Les entrées relatives à l'authentication sont incorrectes ou manquantes. Voir la documentation pour plus de détails.</Translation>
+  <Translation language="en">Authentication entries are incorrect or missing. Please see the documentation for more details.</Translation>
+ </Translations>
  <!--
 	<Translations text="">
 		<Translation language="fr"></Translation>

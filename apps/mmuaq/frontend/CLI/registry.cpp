@@ -21,4 +21,5 @@
 
 using namespace registry;
 
+rEntry registry::parameter::Agent("Agent", sclrgstry::Parameters );
 rEntry registry::parameter::Folder("Folder", sclrgstry::Parameters );

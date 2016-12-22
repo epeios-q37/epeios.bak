@@ -21,6 +21,7 @@
 
 #include "frdfrntnd.h"
 
+#include "sclc.h"
 #include "scltool.h"
 #include "sclerror.h"
 
@@ -76,18 +77,20 @@ namespace {
 			qRE
 			qRT
 			}
+
 			void Login_( void )
 			{
 			qRH
 				str::wString UserID, Password;
 			qRB
-				UserID.Init();
-				sclmisc::MGetValue( registry::parameter::login::UserID, UserID );
+				tol::Init( UserID, Password );
+				if ( !sclmisc::OGetValue( registry::parameter::login::UserID, UserID )
+					 || ( UserID.Amount() == 0 ) 
+					 || !sclmisc::OGetValue( registry::parameter::login::Password, Password ) )
+					sclc::ReportAndAbort("BadOrMissingRegistryLoginEntries" );
 
-				Password.Init();
-				sclmisc::MGetValue( registry::parameter::login::Password, Password );
-
-				Frontend.Login( UserID, Password );
+				if ( !Frontend.Login( UserID, Password ) )
+					sclmisc::ReportAndAbort( "LoginFailed" );
 			qRR
 			qRT
 			qRE
@@ -159,6 +162,77 @@ namespace {
 	qRT
 	}
 	*/
+
+	void Test_( void )
+	{
+	qRH
+		rRack_ Rack;
+		str::wString Name, HostPort, Username, Password;
+	qRB
+		Rack.Init();
+
+		tol::Init( Name, HostPort, Username, Password );
+
+		Rack.Frontend.UpdateAgent( agent::Undefined, Name, HostPort, Username, true, Password );
+	qRR
+	qRE
+	qRT
+	}
+
+	namespace agents_ {
+		void Display(
+			const dAgents &Agents,
+			const str::dStrings &Names,
+			txf::sOFlow &Flow )
+		{
+			sdr::sRow Row = Agents.First();
+
+			if ( Agents.Amount() != Names.Amount() )
+				qRGnr();
+
+			while ( Row != qNIL ) {
+				Flow << *Agents(Row) << ": " << Names( Row ) << txf::nl;
+
+				Row = Agents.Next( Row );
+			}
+		}
+	}
+	void Agents_( void )
+	{
+	qRH
+		rRack_ Rack;
+		agent::wIds Agents;
+		str::wStrings Names;
+	qRB
+		Rack.Init();
+
+		tol::Init( Agents, Names );
+		Rack.Frontend.GetAgents( Agents, Names );
+
+		agents_::Display( Agents, Names, cio::COut );
+	qRR
+	qRE
+	qRT
+	}
+
+	void Agent_( void )
+	{
+	qRH
+		rRack_ Rack;
+		agent::sId Agent = agent::Undefined;
+		str::wString Name, HostPort, Username ;
+	qRB
+		*Agent = sclmisc::MGetUInt( registry::parameter::Agent );
+
+		tol::Init( Rack, Name, HostPort, Username );
+		Rack.Frontend.GetAgent( Agent, Name, HostPort, Username  );
+
+		cio::COut << Name << ": " << Username << '@' << HostPort << txf::nl;
+	qRR
+	qRE
+	qRT
+	}
+
 
 	namespace folders_ {
 		namespace {
@@ -233,6 +307,53 @@ namespace {
 	qRE
 	qRT
 	}
+
+	namespace  mails_ {
+		void Display(
+			const mail::dIds &Mails,
+			const str::dStrings &Subjects,
+			const agent::dIds &Agents,
+			txf::sOFlow &Flow )
+		{
+			if ( Mails.Amount() != Subjects.Amount() )
+				qRGnr();
+
+			if ( Mails.Amount() != Agents.Amount() )
+				qRGnr();
+
+			sdr::sRow Row = Mails.First();
+
+			while ( Row != qNIL ) {
+				Flow << *Mails(Row) << " (" << *Agents(Row) << "): " << Subjects( Row ) << txf::nl;
+
+				Row = Mails.Next( Row );
+			}
+		}
+	}
+
+	void Mails_( void )
+	{
+	qRH
+		rRack_ Rack;
+		sFolder Root = folder::Undefined, Inbox = folder::Undefined, Folder = folder::Undefined;
+		mail::wIds Mails;
+		str::wStrings Subjects;
+		agent::wIds Agents;
+	qRB
+		Rack.Init();
+		Rack.Frontend.GetRootAndInboxFolders( Root, Inbox );
+
+		*Folder = sclmisc::OGetUInt( registry::parameter::Folder, **Root );
+
+		tol::Init( Mails, Subjects, Agents );
+		Mails.Init();
+		Rack.Frontend.GetMailsFields( Folder, Mails, Subjects, Agents );
+
+		mails_::Display( Mails, Subjects, Agents, cio::COut );
+	qRR
+	qRE
+	qRT
+	}
 }
 
 #define C( name )\
@@ -251,7 +372,10 @@ qRB
 	else if ( Command == "License" )
 		epsmsc::PrintLicense( NAME_MC );
 	C( AboutBackend );
+	C( Agents );
+	C( Agent );
 	C( Folders );
+	C( Mails );
 	else
 		qRGnr();
 

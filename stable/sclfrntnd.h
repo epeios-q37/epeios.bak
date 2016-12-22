@@ -243,6 +243,10 @@ namespace sclfrntnd {
 		{
 			return sclrgstry::MGetValue( _Registry, rgstry::tentry___( sclrgstry::parameter::Language ), _Language );
 		}
+		void DismissFlow( void )
+		{
+			Frontend_.DismissFlow();
+		}
 		operator fblfrd::frontend___ &(void)
 		{
 			return Frontend_;

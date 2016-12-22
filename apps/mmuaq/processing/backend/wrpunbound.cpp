@@ -335,7 +335,7 @@ qRB
 
 	muafld::sRow Row = *Request.IdIn();
 
-	if ( !Account.Directory().Exists( Row ) )
+	if ( ( Row != qNIL ) && !Account.Directory().Exists( Row ) )
 		REPORT( UnknownFolder );
 
 	tol::Init( Rows );
@@ -442,7 +442,7 @@ qRB
 	muafld::sRow Folder = *Request.IdIn();
 
 	if ( !Account.Directory().Exists( Folder ) )
-		qRGnr();
+		REPORT( UnknownFolder );
 
 	tol::Init( Wanted );
 	Account.Directory().GetMails( Folder, Wanted );
