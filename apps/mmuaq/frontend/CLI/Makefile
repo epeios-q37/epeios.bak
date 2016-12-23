@@ -43,7 +43,7 @@ mods += fblcmd fblcst fblfep fblfph fblfrd
 mods += fblfrp fblovl fbltyp 
 mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
 mods += scltool sclfrntnd 
-mods += frdfrntnd 
+mods += frdapi frdfrntnd frdrgstry 
 mods += muainf 
 mods += registry 
 
@@ -346,7 +346,7 @@ ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20161222"\"
+copt += -DVERSION=\""20161223"\"
 copt += -DCOPYRIGHT_YEARS=\""2016"\"
 copt += -DIDENTIFIER=\""64b22e6b-c01f-4bc0-a7b0-8989c6a24f26"\"
 

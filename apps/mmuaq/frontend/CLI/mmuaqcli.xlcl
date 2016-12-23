@@ -4,8 +4,8 @@
 	<xpp:expand value-of="q37.xpp"/>
 	<xpp:expand select="epeios.xlcl"/>
 	<Translations text="ProgramDescription">
-		<Translation language="fr">Mettre ici la description du programme en français !</Translation>
-		<Translation language="en">Put here the english description of the program !</Translation>
+		<Translation language="fr">Frontal en ligne de commande de l'application MMUAq.</Translation>
+		<Translation language="en">Command-line interface frontend of the MMUaq application.</Translation>
 	</Translations>
  <Translations text="RootFolderName">
   <Translation language="fr">Courrier</Translation>

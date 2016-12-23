@@ -67,6 +67,10 @@
   <Translation language="fr">Dossier inconnu.</Translation>
   <Translation language="en">Unknown folder.</Translation>
  </Translations>
+ <Translations text="UnknownMail">
+  <Translation language="fr">Courrier inconnu.</Translation>
+  <Translation language="en">Unknown mail.</Translation>
+ </Translations>
  <Translations text="UsernameCanNotBeEmpty">
   <Translation language="fr">Le nom d'utilisateur ne peut être vide.</Translation>
   <Translation language="en">User name cannot not be empty.</Translation>

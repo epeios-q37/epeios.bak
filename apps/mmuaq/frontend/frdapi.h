@@ -1,8 +1,8 @@
 /* DON'T MODIFY : computer-generated file ! */
 /*
-	API from : mmuaqbkd V20161124 Build Dec 14 2016 18:30:45 - Win32;MSC 1800;IA-32
+	API from : mmuaqbkd V20161219 Build Dec 22 2016 11:26:33 - Win32;MSC 1800;IA-32
 
-	This file was generated using barq 20161027 (Build Nov 13 2016 17:38:12 Win32;MSC 1800;IA-32)
+	This file was generated using barq 20161027 (Build Dec 21 2016 17:42:27 Win32;MSC 1800;IA-32)
 */
 
 #ifndef MMUAQ__INC
@@ -125,7 +125,7 @@ namespace mmuaq {
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
-			CommandDetail.Name = "MUARenameFolder_1";;
+			CommandDetail.Name = "MUAUpdateFolder_1";;
 			CommandDetail.Casts.Append( Parameters + 40, 3 );
 			CommandsDetails.Append( CommandDetail );
 
@@ -318,7 +318,7 @@ namespace mmuaq {
 
 			Frontend().Handle();
 		}
-		void MUARenameFolder_1( 
+		void MUAUpdateFolder_1( 
 			const fblfrd::id__ &In1,
 			const fblfrd::string_ &In2 ) const
 		{

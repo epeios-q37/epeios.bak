@@ -28,8 +28,15 @@ namespace registry {
 	namespace parameter {
 		using namespace frdrgstry::parameter;
 
-		extern rEntry Agent;
-		extern rEntry Folder;
+		extern rEntry
+			Agent,
+			Folder,
+			Parent,
+			Mail,
+			Name,
+			HostPort,
+			Username,
+			Password;
 
 		namespace {
 

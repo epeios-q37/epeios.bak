@@ -1,28 +1,41 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Configurations xmlns:xpp="http://q37.info/ns/xpp/" >
-	<Configuration target="mmuaqcli">
-		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
-		<xpp:expand value-of="q37.xpp"/>
+ <Configuration target="mmuaqcli">
+  <xpp:set name="q37.xpp" env-var="Q37_XPP"/>
+  <xpp:expand value-of="q37.xpp"/>
   <xpp:expand href="../mmuaqfrd.xcfg"/>
   <xpp:expand href="../../../../TOL.xcfg"/>
-		<Parameters>
+  <Parameters>
    <xpp:expand select="Parameters"/>
    <Language>fr</Language>
    <!-- Default command -->
    <Command></Command>
   </Parameters>
-		<Definitions>
+  <Definitions>
    <xpp:expand select="Definitions"/>
   </Definitions>
-		<Locale>
-			<xpp:expand select="TOL_Locale"/>
-   <Translations text="AgentsCommandDescription">
-    <Translation language="fr">Affiche la liste des agents.</Translation>
-    <Translation language="en">Displays agents list.</Translation>
+  <Locale>
+   <xpp:expand select="TOL_Locale"/>
+   <!-- Commands -->
+   <Translations text="AboutBackendCommandDescription">
+    <Translation language="fr">Affiche des informations à propos du moteur de traitement.</Translation>
+    <Translation language="en">Displays infomation about the backend.</Translation>
    </Translations>
    <Translations text="AgentCommandDescription">
     <Translation language="fr">Affiche des informations sur un agent.</Translation>
     <Translation language="en">Displays some agent infomration.</Translation>
+   </Translations>
+   <Translations text="AgentsCommandDescription">
+    <Translation language="fr">Affiche la liste des agents.</Translation>
+    <Translation language="en">Displays agents list.</Translation>
+   </Translations>
+   <Translations text="CreateAgentCommandDescription">
+    <Translation language="fr">Crée un nouvel agent.</Translation>
+    <Translation language="en">Creates a new agent.</Translation>
+   </Translations>
+   <Translations text="CreateFolderCommandDescription">
+    <Translation language="fr">Crée un sous-dossier de nom donné.</Translation>
+    <Translation language="en">Creates un sub-folder of given name.</Translation>
    </Translations>
    <Translations text="FoldersCommandDescription">
     <Translation language="fr">Affiche la liste de sous-dossiers d'un dossier.</Translation>
@@ -32,22 +45,33 @@
     <Translation language="fr">Affiche la liste des courriers d'un dossier.</Translation>
     <Translation language="en">Displays mails list of a folder.</Translation>
    </Translations>
-   <Translations text="AboutBackendCommandDescription">
-    <Translation language="fr">Affiche des informations à propos du moteur de traitement.</Translation>
-    <Translation language="en">Displays infomation about the backend.</Translation>
+   <Translations text="MailCommandDescription">
+    <Translation language="fr">Affiche un courrier.</Translation>
+    <Translation language="en">Displays a mail.</Translation>
    </Translations>
-   <Translations text="TestFlagDescription">
-				<Translation language="fr">fanion de test.</Translation>
-				<Translation language="en">test flag.</Translation>
-			</Translations>
-			<Translations text="TestOptionDescription">
-				<Translation language="fr">option de test.</Translation>
-				<Translation language="en">test option.</Translation>
-			</Translations>
-			<Translations text="TestOptionLabel">
-				<Translation language="fr">option (fr)</Translation>
-				<Translation language="en">option (en)</Translation>
-			</Translations>
+   <Translations text="MoveFolderCommandDescription">
+    <Translation language="fr">Déplace un dossier vers un nouveau parent.</Translation>
+    <Translation language="en">Moves a folder to a new parent.</Translation>
+   </Translations>
+   <Translations text="MoveMailCommandDescription">
+    <Translation language="fr">Déplace un courrier vers un autre dossier.</Translation>
+    <Translation language="en">Moves a mail to another folder.</Translation>
+   </Translations>
+   <Translations text="UpdateAgentCommandDescription">
+    <Translation language="fr">Met à jour un agent.</Translation>
+    <Translation language="en">Updates a agent.</Translation>
+   </Translations>
+   <Translations text="UpdateFolderCommandDescription">
+    <Translation language="fr">Renomme un dossier.</Translation>
+    <Translation language="en">Renames a folder.</Translation>
+   </Translations>
+   <!--
+   <Translations text="CommandDescription">
+    <Translation language="fr"></Translation>
+    <Translation language="en"></Translation>
+   </Translations>
+   -->
+   <!-- Arguments -->
    <Translations text="AgentArgumentDescription">
     <Translation language="fr">identifiant d'agent.</Translation>
     <Translation language="en">agent ID.</Translation>
@@ -64,29 +88,109 @@
     <Translation language="fr">dossier</Translation>
     <Translation language="en">folder</Translation>
    </Translations>
+   <Translations text="MailArgumentDescription">
+    <Translation language="fr">identifiant de courrier.</Translation>
+    <Translation language="en">mail ID.</Translation>
+   </Translations>
+   <Translations text="MailArgumentLabel">
+    <Translation language="fr">courrier</Translation>
+    <Translation language="en">mail</Translation>
+   </Translations>
+   <Translations text="NameArgumentDescription">
+    <Translation language="fr">nom de l'item.</Translation>
+    <Translation language="en">name of the item.</Translation>
+   </Translations>
+   <Translations text="NameArgumentLabel">
+    <Translation language="fr">nom</Translation>
+    <Translation language="en">name</Translation>
+   </Translations>
+   <Translations text="HostPortArgumentDescription">
+    <Translation language="fr">Adresse et service de l'agent.</Translation>
+    <Translation language="en">Address and service of the agent.</Translation>
+   </Translations>
+   <Translations text="HostPortArgumentLabel">
+    <Translation language="fr">adresse:service</Translation>
+    <Translation language="en">address:service</Translation>
+   </Translations>
+   <Translations text="ParentArgumentDescription">
+    <Translation language="fr">identifiant du dossier parent ; dossier racine si absent.</Translation>
+    <Translation language="en">parent folder ID ; root folder if absent.</Translation>
+   </Translations>
+   <Translations text="ParentArgumentLabel">
+    <Translation language="fr">parent</Translation>
+    <Translation language="en">parent</Translation>
+   </Translations>
+   <Translations text="UsernameArgumentDescription">
+    <Translation language="fr">Nom d'utilisateur utilisé pour la connexion.</Translation>
+    <Translation language="en">Username for the connection</Translation>
+   </Translations>
+   <Translations text="UsernameArgumentLabel">
+    <Translation language="fr">utilisateur</Translation>
+    <Translation language="en">user</Translation>
+   </Translations>
+   <Translations text="PasswordArgumentDescription">
+    <Translation language="fr">Mot de passe de connexion.</Translation>
+    <Translation language="en">Password for the connexion.</Translation>
+   </Translations>
+   <Translations text="PasswordArgumentLabel">
+    <Translation language="fr">mot de passe</Translation>
+    <Translation language="en">password</Translation>
+   </Translations>
+   <!--
+   <Translations text="ArgumentDescription">
+    <Translation language="fr"></Translation>
+    <Translation language="en"></Translation>
+   </Translations>
+   <Translations text="ArgumentLabel">
+    <Translation language="fr"></Translation>
+    <Translation language="en"></Translation>
+   </Translations>
+   -->
   </Locale>
-		<Arguments>
-			<xpp:expand select="TOL_Arguments"/>
-			<!-- Commandes : pas de 'Path' (vaut 'Parameters/Command'), ni de 'Value'. -->
+  <Arguments>
+   <xpp:expand select="TOL_Arguments"/>
+   <!-- Commandes : pas de 'Path' (vaut 'Parameters/Command'), ni de 'Value'. -->
    <Argument id="AboutBackendCommand" Description="AboutBackendCommandDescription" long="about-backend" Value="AboutBackend" Usage=""/>
+   <Argument id="CreateAgentCommand" Description="CreateAgentCommandDescription" long="create-agent" Value="CreateAgent" Usage="%NameArgument% %HostPortArgument% %UsernameArgument% %PasswordArgument%"/>
+   <Argument id="CreateFolderCommand" Description="CreateFolderCommandDescription" long="create-folder" Value="CreateFolder" Usage="%NameArgument% [%ParentArgument%]"/>
+   <Argument id="UpdateAgentCommand" Description="UpdateAgentCommandDescription" long="update-agent" Value="UpdateAgent" Usage="%AgentArgument% %NameArgument% %HostPortArgument% %UsernameArgument% [%PasswordArgument%]"/>
+   <Argument id="UpdateFolderCommand" Description="UpdateFolderCommandDescription" long="rename-folder" Value="UpdateFolder" Usage="%FolderArgument% %NameArgument%"/>
    <Argument id="AgentsCommand" Description="AgentsCommandDescription" long="agents" Value="Agents" Usage=""/>
    <Argument id="AgentCommand" Description="AgentCommandDescription" long="agent" Value="Agent" Usage="%AgentArgument%"/>
    <Argument id="FoldersCommand" Description="FoldersCommandDescription" long="folders" Value="Folders" Usage="%FolderArgument%"/>
    <Argument id="MailsCommand" Description="MailsCommandDescription" long="mails" Value="Mails" Usage="%FolderArgument%"/>
+   <Argument id="MailCommand" Description="MailCommandDescription" long="mail" Value="Mail" Usage="%MailArgument%"/>
+   <Argument id="MoveFolderCommand" Description="MoveFolderCommandDescription" long="move-folder" Value="MoveFolder" Usage="%FolderArgument% [%ParentArgument%]"/>
+   <Argument id="MoveMailCommand" Description="MoveMailCommandDescription" long="move-mail" Value="MoveMail" Usage="%MailArgument% %FolderArgument%"/>
    <!--Argument id="TestCommand" Description="TestCommandDescription" long="test" short="t" Value="Test" Usage="%TestFlag% %TestOption% %TestArgument%"/-->
    <!-- Fanaux : 'Path', mais pas de 'Value'. -->
    <!--Argument id="TestFlag" Description="TestFlagDescription" long="flag" short="f" Path="Flag" Value="TestFlag"/-->
-			<!-- Options : 'Path' ET 'Value'. -->
+   <!-- Options : 'Path' ET 'Value'. -->
    <!--Argument id="TestOption" Description="TestOptionDescription" long="option" short="o" Path="Option" Label="TestOptionLabel"/-->
-			<!-- Arguments libres : 'Path' mais PAS de 'Value' (ni de 'short', ni de 'long'). -->
+   <!-- Arguments libres : 'Path' mais PAS de 'Value' (ni de 'short', ni de 'long'). -->
    <Argument id="AgentArgument" Description="AgentArgumentDescription" Path="Agent" Label="AgentArgumentLabel"/>
    <Argument id="FolderArgument" Description="FolderArgumentDescription" Path="Folder" Label="FolderArgumentLabel"/>
+   <Argument id="MailArgument" Description="MailArgumentDescription" Path="Mail" Label="MailArgumentLabel"/>
+   <Argument id="NameArgument" Description="NameArgumentDescription" Path="Name" Label="NameArgumentLabel"/>
+   <Argument id="ParentArgument" Description="ParentArgumentDescription" Path="Parent" Label="ParentArgumentLabel"/>
+   <Argument id="HostPortArgument" Description="HostPortArgumentDescription" Path="HostPort" Label="HostPortArgumentLabel"/>
+   <Argument id="UsernameArgument" Description="UsernameArgumentDescription" Path="Username" Label="UsernameArgumentLabel"/>
+   <Argument id="PasswordArgument" Description="PasswordArgumentDescription" Path="Password" Label="PasswordArgumentLabel"/>
    <!-- Affectations des arguments libres-->
-			<Layouts>
-    <Layout command="Agents">
-    </Layout>
+   <Layouts>
     <Layout command="Agent">
      <Link index="0" Target="AgentArgument"/>
+    </Layout>
+    <Layout command="Agents"/>
+    <Layout command="CreateAgent">
+     <Link index="0" Target="NameArgument"/>
+     <Link index="1" Target="HostPortArgument"/>
+     <Link index="2" Target="UsernameArgument"/>
+     <Link index="3" Target="PasswordArgument"/>
+    </Layout>
+    <Layout command="CreateFolder">
+     <Link index="0" Target="NameArgument"/>
+     <Link index="1" Target="ParentArgument"/>
     </Layout>
     <Layout command="Folders">
      <Link index="0" Target="FolderArgument"/>
@@ -94,7 +198,29 @@
     <Layout command="Mails">
      <Link index="0" Target="FolderArgument"/>
     </Layout>
+    <Layout command="Mail">
+     <Link index="0" Target="MailArgument"/>
+    </Layout>
+    <Layout command="MoveFolder">
+     <Link index="0" Target="FolderArgument"/>
+     <Link index="1" Target="ParentArgument"/>
+    </Layout>
+    <Layout command="MoveMail">
+     <Link index="0" Target="MailArgument"/>
+     <Link index="1" Target="FolderArgument"/>
+    </Layout>
+    <Layout command="UpdateAgent">
+     <Link index="0" Target="AgentArgument"/>
+     <Link index="1" Target="NameArgument"/>
+     <Link index="2" Target="HostPortArgument"/>
+     <Link index="3" Target="UsernameArgument"/>
+     <Link index="4" Target="PasswordArgument"/>
+    </Layout>
+    <Layout command="UpdateFolder">
+     <Link index="0" Target="FolderArgument"/>
+     <Link index="1" Target="NameArgument"/>
+    </Layout>
    </Layouts>
-		</Arguments>
-	</Configuration>
+  </Arguments>
+ </Configuration>
 </Configurations>

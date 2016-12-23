@@ -21,5 +21,15 @@
 
 using namespace registry;
 
-rEntry registry::parameter::Agent("Agent", sclrgstry::Parameters );
-rEntry registry::parameter::Folder("Folder", sclrgstry::Parameters );
+#define P( name ) rEntry registry::parameter::name( #name, sclrgstry::Parameters )
+
+P( Agent );
+P( Folder );
+P( HostPort );
+P( Mail );
+P( Name );
+P( Parent );
+P( Username );
+P( Password );
+
+#undef P

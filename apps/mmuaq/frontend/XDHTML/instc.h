@@ -265,7 +265,7 @@ namespace instc {
 				Folder_.Current = F_().CreateFolder( Folder_.Current, Name );
 				break;
 			case folder_::sEdition:
-				F_().RenameFolder( Folder_.Current, Name );
+				F_().UpdateFolder( Folder_.Current, Name );
 				break;
 			default:
 				qRGnr();

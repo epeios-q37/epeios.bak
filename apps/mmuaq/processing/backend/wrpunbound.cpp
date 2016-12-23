@@ -41,19 +41,20 @@ namespace message_ {
 	M( AgentWithSuchNameExists );
 	M( AgentNameCanNotBeEmpty );
 	M( AgentNameCanNotBeLongerAs );
-	M( HostPortCanNotBeEmpty );
-	M( HostPortCanNotBeLongerAs );
-	M( UsernameCanNotBeEmpty );
-	M( UsernameCanNotBeLongerAs );
-	M( PasswordCanNotBeLongerAs );
 	M( FolderNameCanNotBeEmpty );
 	M( FolderNameCanNotBeLongerAs );
-	M( UnknownAgent );
-	M( UnknownFolder );
 	M( FolderNotMoveable );
 	M( FolderNotRenameable );
 	M( FolderWithSameNameAlreadyExistsInThisFolder );
 	M( FolderCannotBeMovedToDescendant );
+	M( HostPortCanNotBeEmpty );
+	M( HostPortCanNotBeLongerAs );
+	M( UnknownAgent );
+	M( UnknownFolder );
+	M( UnknownMail );
+	M( UsernameCanNotBeEmpty );
+	M( UsernameCanNotBeLongerAs );
+	M( PasswordCanNotBeLongerAs );
 /*
 	M(  );
 */
@@ -391,7 +392,7 @@ qRT
 qRE
 }
 
-DEC( RenameFolder, 1 )
+DEC( UpdateFolder, 1 )
 {
 qRH
 	ACCOUNTh;
@@ -470,7 +471,7 @@ qRB
 	muamel::sRow Mail = *Request.IdIn();
 
 	if ( !Account.Directory().Mails().Exists( Mail ) )
-		qRGnr();
+		REPORT( UnknownMail );
 
 	Account.GetMail (Mail, Request.StringOut() );
 qRR 
@@ -489,10 +490,10 @@ qRB
 	muafld::sRow Folder = *Request.IdIn();
 
 	if ( !Account.Directory().Mails().Exists( Mail ) )
-		qRGnr();
+		REPORT( UnknownMail );
 
 	if ( !Account.Directory().Folders().Exists( Folder ) )
-		qRGnr();
+		REPORT( UnknownFolder );
 
 	Account.MoveMailTo( Mail, Folder );
 qRR 
@@ -512,10 +513,10 @@ qRB
 	muafld::sRow NewParent = *Request.IdIn();
 
 	if ( !Account.Directory().Folders().Exists( Folder ) )
-		qRGnr();
+		REPORT( UnknownFolder );
 
 	if ( !Account.Directory().Folders().Exists( NewParent ) )
-		qRGnr();
+		REPORT( UnknownFolder );
 
 	if ( !Account.Directory().IsMoveable( Folder ) )
 		REPORT( FolderNotMoveable );
@@ -604,7 +605,7 @@ void wrpunbound::Inform( fblbkd::backend___ &Backend )
 			fblbkd::cId,		// The created folder id.
 		fblbkd::cEnd );
 
-	Backend.Add(D( RenameFolder, 1 ),
+	Backend.Add(D( UpdateFolder, 1 ),
 			fblbkd::cId,		// Id of the folder.
 			fblbkd::cString,	// New name.
 		fblbkd::cEnd,

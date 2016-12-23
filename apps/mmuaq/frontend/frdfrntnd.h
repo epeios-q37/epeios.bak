@@ -178,11 +178,11 @@ namespace frdfrntnd {
 
 			return Folder;
 		}
-		void RenameFolder(
+		void UpdateFolder(
 			folder::sId Folder,
 			const str::dString &Name )
 		{
-			Statics.MUARenameFolder_1( *Folder, Name );
+			Statics.MUAUpdateFolder_1( *Folder, Name );
 		}
 		void MoveFolderTo(
 			sFolder Folder,

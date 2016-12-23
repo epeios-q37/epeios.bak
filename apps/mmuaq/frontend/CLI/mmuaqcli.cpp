@@ -163,21 +163,52 @@ namespace {
 	}
 	*/
 
-	void Test_( void )
+#define G( name )	sclmisc::MGetValue( registry::parameter::name, name )
+
+	void CreateAgent_( void )
 	{
 	qRH
-		rRack_ Rack;
 		str::wString Name, HostPort, Username, Password;
+		rRack_ Rack;
 	qRB
-		Rack.Init();
-
 		tol::Init( Name, HostPort, Username, Password );
+		G( Name );
+		G( HostPort );
+		G( Username );
+		G( Password );
 
-		Rack.Frontend.UpdateAgent( agent::Undefined, Name, HostPort, Username, true, Password );
+		Rack.Init();
+		Rack.Frontend.CreateAgent( Name, HostPort, Username, Password );
 	qRR
 	qRE
 	qRT
 	}
+
+	void UpdateAgent_( void )
+	{
+	qRH
+		agent::sId Agent = agent::Undefined;
+		str::wString Name, HostPort, Username, Password;
+		bso::sBool PasswordAvailable = false;
+		rRack_ Rack;
+	qRB
+		*Agent = sclmisc::MGetUInt( registry::parameter::Agent );
+
+		tol::Init( Name, HostPort, Username, Password );
+		G( Name );
+		G( HostPort );
+		G( Username );
+
+		PasswordAvailable = sclmisc::OGetValue( registry::parameter::Password, Password );
+
+		Rack.Init();
+		Rack.Frontend.UpdateAgent( Agent, Name, HostPort, Username, PasswordAvailable, Password );
+	qRR
+	qRE
+	qRT
+	}
+
+#undef G
 
 	namespace agents_ {
 		void Display(
@@ -233,6 +264,46 @@ namespace {
 	qRT
 	}
 
+	void CreateFolder_( void )
+	{
+	qRH
+		folder::sId Root = folder::Undefined, Inbox = folder::Undefined, Parent = folder::Undefined;
+		str::wString Name;
+		rRack_ Rack;
+	qRB
+		Rack.Init();
+		Rack.Frontend.GetRootAndInboxFolders( Root, Inbox );
+
+		*Parent = sclmisc::OGetUInt( registry::parameter::Parent, **Root );
+
+		Name.Init();
+		sclmisc::MGetValue( registry::parameter::Name, Name );
+
+		Rack.Frontend.CreateFolder( Parent, Name );
+	qRR
+	qRE
+	qRT
+	}
+
+	void UpdateFolder_( void )
+	{
+	qRH
+		folder::sId Folder = folder::Undefined;
+		str::wString Name;
+		rRack_ Rack;
+	qRB
+		*Folder = sclmisc::MGetUInt( registry::parameter::Folder );
+
+		Name.Init();
+		sclmisc::MGetValue( registry::parameter::Name, Name );
+
+
+		Rack.Init();
+		Rack.Frontend.UpdateFolder( Folder, Name );
+	qRR
+	qRE
+	qRT
+	}
 
 	namespace folders_ {
 		namespace {
@@ -308,6 +379,24 @@ namespace {
 	qRT
 	}
 
+	void MoveFolder_( void )
+	{
+	qRH
+		rRack_ Rack;
+		sFolder Root = folder::Undefined, Inbox = folder::Undefined, Folder = folder::Undefined, Parent = folder::Undefined;
+	qRB
+		Rack.Init();
+		Rack.Frontend.GetRootAndInboxFolders( Root, Inbox );
+
+		*Parent = sclmisc::OGetUInt( registry::parameter::Parent, **Root );
+		*Folder = sclmisc::MGetUInt( registry::parameter::Folder );
+
+		Rack.Frontend.MoveFolderTo( Folder, Parent );
+	qRR
+	qRE
+	qRT
+	}
+
 	namespace  mails_ {
 		void Display(
 			const mail::dIds &Mails,
@@ -354,6 +443,44 @@ namespace {
 	qRE
 	qRT
 	}
+
+	void Mail_( void )
+	{
+	qRH
+		mail::sId Mail = mail::Undefined;
+		rRack_ Rack;
+		str::wString Content;
+	qRB
+		*Mail = sclmisc::MGetUInt( registry::parameter::Mail );
+
+		Rack.Init();
+		Content.Init();
+		Rack.Frontend.GetMail( Mail, Content );
+
+		cio::COut << Content;
+	qRR
+	qRE
+	qRT
+	}
+
+	void MoveMail_( void )
+	{
+	qRH
+		folder::sId Folder = folder::Undefined;
+		mail::sId Mail = mail::Undefined;
+		rRack_ Rack;
+	qRB
+		*Folder = sclmisc::MGetUInt( registry::parameter::Folder );
+		*Mail = sclmisc::MGetUInt( registry::parameter::Mail );
+
+		Rack.Init();
+		Rack.Frontend.MoveMailTo( Mail, Folder );
+	qRR
+	qRE
+	qRT
+	}
+
+
 }
 
 #define C( name )\
@@ -372,10 +499,17 @@ qRB
 	else if ( Command == "License" )
 		epsmsc::PrintLicense( NAME_MC );
 	C( AboutBackend );
+	C( CreateAgent );
+	C( UpdateAgent );
 	C( Agents );
 	C( Agent );
+	C( CreateFolder );
+	C( UpdateFolder );
+	C( MoveFolder );
 	C( Folders );
 	C( Mails );
+	C( Mail );
+	C( MoveMail );
 	else
 		qRGnr();
 
