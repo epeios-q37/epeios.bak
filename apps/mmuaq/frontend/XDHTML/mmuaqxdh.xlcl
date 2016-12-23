@@ -5,7 +5,11 @@
 		<Translation language="fr">À propos...</Translation>
 		<Translation language="en">About...</Translation>
 	</Translations>
-	<Translations text="ClosingConfirmation">
+ <Translations text="AgentSuppressionConfirmation">
+  <Translation language="fr">Êtes-vous sûr de vouloir supprimer cet agent ? L'opération est irréversible.</Translation>
+  <Translation language="en">Are you sure ou want to remove this agent ? This operation can not be undone.</Translation>
+ </Translations>
+ <Translations text="ClosingConfirmation">
 		<Translation language="fr">Êtes-vous sûr de vouloir fermer l'application ?</Translation>
 		<Translation language="en">Are yu sure you want to close ?</Translation>
 	</Translations>
@@ -21,4 +25,10 @@
   <Translation language="fr">Ce dossier ne peut pas être renommé.</Translation>
   <Translation language="en">This folder can not be renamed.</Translation>
  </Translations>
+ <!--
+ <Translations text="">
+  <Translation language="fr"></Translation>
+  <Translation language="en"></Translation>
+ </Translations>
+ -->
 </Locale>

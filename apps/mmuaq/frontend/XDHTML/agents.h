@@ -26,12 +26,14 @@ namespace agents {
 	BASE_ACD( DefineAgent );
 	BASE_ACD( SelectAgent );
 	BASE_ACD( EditAgent );
+	BASE_ACD( RemoveAgent );
 
 	inline void Register( void )
 	{
 		BASE_ACR( DefineAgent );
 		BASE_ACR( SelectAgent );
 		BASE_ACR( EditAgent );
+		BASE_ACR( RemoveAgent );
 	};
 
 	void SetLayout(

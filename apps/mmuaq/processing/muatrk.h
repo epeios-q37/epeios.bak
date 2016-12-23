@@ -37,78 +37,88 @@ namespace muatrk {
 	// Link from mail to agent.
 	typedef bch::qBUNCHd( muaagt::sRow, muamel::sRow ) dM2A_;
 
-	// Link from gent to mails.
+	// Link from agent to mails.
 	typedef crt::qCRATEd( muamel::dRows, muaagt::sRow ) dA2M_;
 
 	class dTracker
 	{
 	private:
+		dM2A_ M2A_;
+		dA2M_ A2M_;
 		void AllocateM2A_( muamel::sRow Row )	// Allocate what's necessary to store item for 'Row'.
 		{
-			sdr::sSize Previous = M2A.Amount();
+			sdr::sSize Previous = M2A_.Amount();
 
-			M2A.Allocate( *Row + 1 );
+			M2A_.Allocate( *Row + 1 );
 
-			M2A.FillWith( qNIL, Previous );
+			M2A_.FillWith( qNIL, Previous );
 		}
 	public:
 		struct s {
 			dM2A_::s M2A;
 			dA2M_::s A2M;
 		};
-		dM2A_ M2A;
-		dA2M_ A2M;
 		dTracker( s &S )
-		: M2A( S.M2A ),
-		  A2M( S.A2M )
+		: M2A_( S.M2A ),
+		  A2M_( S.A2M )
 		{}
 		void reset( bso::bool__ P = true )
 		{
-			tol::reset( P, M2A, A2M );
+			tol::reset( P, M2A_, A2M_ );
 		}
 		void plug( qASd *AS )
 		{
-			tol::plug( AS, M2A, A2M );
+			tol::plug( AS, M2A_, A2M_ );
 		}
 		dTracker &operator =( const dTracker &T )
 		{
-			M2A = T.M2A;
-			A2M = T.A2M;
+			M2A_ = T.M2A_;
+			A2M_ = T.A2M_;
 
 			return *this;
 		}
 		void Init( void )
 		{
-			tol::Init( M2A, A2M );
+			tol::Init( M2A_, A2M_ );
 		}
 		void Link(
 			muamel::sRow Mail,
 			muaagt::sRow Agent )
 		{
-			if ( M2A.Exists( Mail ) ) {
-				if ( M2A( Mail ) != qNIL )
+			if ( M2A_.Exists( Mail ) ) {
+				if ( M2A_( Mail ) != qNIL )
 					qRGnr();	// A 'Remove(...)' for that mail should have be called before.
 			} else
 				AllocateM2A_( Mail );
 
-			M2A.Store( Agent, Mail );
-			A2M( Agent ).Add( Mail );
+			M2A_.Store( Agent, Mail );
+			A2M_( Agent ).Add( Mail );
 		}
 		void Remove( muamel::sRow Mail )
 		{
-			muaagt::sRow Agent = M2A( Mail );
+			muaagt::sRow Agent = M2A_( Mail );
 
 			if ( Agent == qNIL )
 				qRGnr();	// We should not remove twice the same mail/
 
-			M2A.Store( qNIL, Mail );
-			A2M(Agent).Remove( Mail );
+			M2A_.Store( qNIL, Mail );
+			A2M_(Agent).Remove( Mail );
+		}
+		void Remove( const muamel::dRows &Mails )
+		{
+			sdr::sRow Row = Mails.First();
+
+			while ( Row != qNIL ) {
+				Remove( Mails( Row ) );
+
+				Row = Mails.Next( Row );
+			}
 		}
 		const muamel::dRows &GetMails(
 			muaagt::sRow Agent,
 			muamel::dRows &Mails ) const
 		{
-			A2M.Recall( Agent, Mails );
+			A2M_.Recall( Agent, Mails );
 
 			return Mails;
 		}
@@ -120,7 +130,7 @@ namespace muatrk {
 			sdr::sRow Row = List.First();
 
 			while ( Row != qNIL ) {
-				if ( M2A( List( Row  ) ) == Agent )
+				if ( M2A_( List( Row  ) ) == Agent )
 					Owned.Add( List( Row ) );
 
 				Row = List.Next( Row );
@@ -130,16 +140,17 @@ namespace muatrk {
 		}
 		void NewAgent( muaagt::sRow Agent )
 		{
-			if ( !A2M.Exists( Agent ) ) {
-				if ( A2M.New() != Agent )
+			if ( !A2M_.Exists( Agent ) ) {
+				if ( A2M_.New() != Agent )
 					qRGnr();
 			}
 
-			A2M(Agent).Init();
+			A2M_(Agent).Init();
 		}
+		void Remove( muaagt::sRow Agent );
 		muaagt::sRow GetMailAgent( muamel::sRow Mail ) const
 		{
-			return M2A( Mail );
+			return M2A_( Mail );
 		}
 	};
 }

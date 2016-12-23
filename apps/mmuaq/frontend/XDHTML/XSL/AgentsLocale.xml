@@ -28,6 +28,14 @@
   <Translation language="fr">(vide)</Translation>
   <Translation language="en">(empty)</Translation>
  </Translations>
+ <Translations text="agentsRemove">
+  <Translation language="fr">Retirer</Translation>
+  <Translation language="en">Remove</Translation>
+ </Translations>
+ <Translations text="agentsEditTitle">
+  <Translation language="fr">Retire l'agent sélectionné.</Translation>
+  <Translation language="en">Removes selected agent.</Translation>
+ </Translations>
  <!--
 	<Translations text="agents">
 		<Translation language="fr"></Translation>

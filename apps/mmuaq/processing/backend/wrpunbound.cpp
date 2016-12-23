@@ -130,6 +130,20 @@ qRT
 qRE
 }
 
+DEC( Refresh, 1 )
+{
+qRH
+	ACCOUNTh;
+qRB
+	ACCOUNTb;
+
+	Account.Update();
+qRR 
+qRT
+qRE
+}
+
+
 namespace get_agents_ {
 	void Get(
 		const muaagt::dAgents &Agents,
@@ -219,7 +233,7 @@ namespace update_agent_ {
 #define N( name ) shared_::Normalize( name, message_::name##CanNotBeEmpty, message_::name##CanNotBeLongerAs, registry::definition::limitation::name##Length )
 
 	muaagt::sRow Update(
-		muaagt::sRow Row,
+		muaagt::sRow Agent,
 		const str::dString &RawAgentName,
 		const str::dString &RawHostPort,
 		const str::dString &RawUsername,
@@ -244,24 +258,26 @@ namespace update_agent_ {
 		if ( HostPort.Search(':') == qNIL )
 			HostPort.Append( ":110" );
 
-		if ( Row == qNIL ) {
+		if ( Agent == qNIL ) {
 			if ( !PasswordIsSet )
 				qRGnr();
 
 			if ( !CheckName_( AgentName, Account.Agents(), qNIL ) )
 				REPORT( AgentWithSuchNameExists, AgentName );
 
-			Row = Account.NewAgent( AgentName, HostPort, Username, Password );
-		} else if ( !CheckName_( AgentName, Account.Agents(), Row ) )
+			Agent = Account.NewAgent( AgentName, HostPort, Username, Password );
+
+			Account.Update( Agent );
+		} else if ( !CheckName_( AgentName, Account.Agents(), Agent ) )
 				REPORT( AgentWithSuchNameExists, AgentName );
 		else if ( PasswordIsSet )
-			Account.UpdateAgent( Row, AgentName, HostPort, Username );
+			Account.UpdateAgent( Agent, AgentName, HostPort, Username );
 		else
-			Account.UpdateAgent( Row, AgentName, HostPort, Username, Password );
+			Account.UpdateAgent( Agent, AgentName, HostPort, Username, Password );
 	qRR
 	qRT
 	qRE
-		return Row;
+		return Agent;
 	}
 
 # undef N
@@ -274,7 +290,10 @@ qRH
 qRB
 	ACCOUNTb;
 
-	muaagt::sRow Row = *Request.IdIn();
+	muaagt::sRow Agent = *Request.IdIn();
+
+	if ( ( Agent != qNIL ) && ( !Account.Agents().Exists( Agent ) ) )
+		REPORT( UnknownAgent );
 
 	const str::dString
 		&Name = Request.StringIn(),
@@ -285,7 +304,25 @@ qRB
 
 	const str::dString &Password = Request.StringIn();
 
-	Request.IdOut() = *update_agent_::Update( Row, Name, HostPort, Username, PasswordIsSet, Password, Account );
+	Request.IdOut() = *update_agent_::Update( Agent, Name, HostPort, Username, PasswordIsSet, Password, Account );
+qRR 
+qRT
+qRE
+}
+
+DEC( RemoveAgent, 1 )
+{
+qRH
+	ACCOUNTh;
+qRB
+	ACCOUNTb;
+
+	muaagt::sRow Agent = *Request.IdIn();
+
+	if ( !Account.Agents().Exists( Agent ) )
+		REPORT( UnknownAgent );
+
+	Account.RemoveAgent( Agent );
 qRR 
 qRT
 qRE
@@ -550,6 +587,10 @@ void wrpunbound::Inform( fblbkd::backend___ &Backend )
 			fblbkd::cBoolean,	// Success.
 		fblbkd::cEnd );
 
+	Backend.Add( D( Refresh, 1 ),
+		fblbkd::cEnd,
+		fblbkd::cEnd );
+
 	Backend.Add( D( GetAgents, 1 ),
 		fblbkd::cEnd,
 			fblbkd::cIds,		// Ids.
@@ -573,6 +614,11 @@ void wrpunbound::Inform( fblbkd::backend___ &Backend )
 			fblbkd::cString,	// Password.
 		fblbkd::cEnd,
 			fblbkd::cId,		// Id.
+		fblbkd::cEnd );
+
+	Backend.Add(D( RemoveAgent, 1 ),
+			fblbkd::cId,		// Id of the agent.
+		fblbkd::cEnd,
 		fblbkd::cEnd );
 
 	Backend.Add( D( GetFields, 1 ),

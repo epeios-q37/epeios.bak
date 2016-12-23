@@ -43,6 +43,10 @@ namespace muadir {
 	class dDirectory
 	{
 	private:
+		muamel::dMails Mails_;
+		muafld::dFoldersTree Folders_;
+		dM2F_ M2F_;
+		dF2M_ F2M_;
 		void Adjust_( void )
 		{
 			M2F_.Allocate( Mails_.Amount() );
@@ -52,10 +56,6 @@ namespace muadir {
 		{
 			return ( S_.Root == Folder ) || ( S_.Inbox == Folder );
 		}
-		muamel::dMails Mails_;
-		muafld::dFoldersTree Folders_;
-		dM2F_ M2F_;
-		dF2M_ F2M_;
 	public:
 		struct s {
 			muamel::dMails::s Mails;
@@ -189,6 +189,16 @@ namespace muadir {
 			M2F_.Store( qNIL, Mail );
 
 			Mails_.Remove( Mail );
+		}
+		void Remove( const muamel::dRows &Mails )
+		{
+			sdr::sRow Row = Mails.First();
+
+			while ( Row != qNIL ) {
+				Remove( Mails( Row ) );
+
+				Row = Mails.Next( Row );
+			}
 		}
 		muamel::dRows &GetMails(
 			muafld::sRow Folder,

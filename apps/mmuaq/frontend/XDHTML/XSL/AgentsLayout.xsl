@@ -22,7 +22,8 @@
          <span style="display: flex; flex-direction: column;">
          <button title="#agentsEditTitle#" data-xdh-onevent="EditAgent" data-xdh-cast="EditAgentCast">#agentsEdit#</button>
          <button title="#agentsNewTitle#" data-xdh-onevent="DefineAgent" data-xdh-cast="CreateAgentCast">#agentsNew#</button>
-        </span>
+          <button title="#agentsRemoveTitle#" data-xdh-onevent="RemoveAgent" data-xdh-cast="EditAgentCast">#agentsRemove#</button>
+         </span>
         </span>
        </fieldset>
        <span id="Agent"/>

@@ -141,3 +141,11 @@ AC( EditAgent )
 	core::SetAgentsLayout( Session );
 }
 
+AC( RemoveAgent )
+{
+	if ( Session.ConfirmT( "AgentSuppressionConfirmation" ) )
+		Session.User.RemoveAgent();
+
+	core::SetAgentsLayout( Session );
+}
+

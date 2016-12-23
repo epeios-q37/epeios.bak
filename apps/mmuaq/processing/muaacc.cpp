@@ -26,6 +26,25 @@
 
 using namespace muaacc;
 
+void muaacc::dAccount::RemoveAgent( muaagt::sRow Agent )
+{
+qRH
+	muamel::wRows Mails;
+qRB
+	Mails.Init();
+
+	Tracker_.GetMails( Agent, Mails );
+
+	Directory_.Remove( Mails );
+	Tracker_.Remove( Mails );
+
+	Agents_.Remove( Agent );
+qRR
+qRT
+qRE
+}
+
+
 namespace update_ {
 	namespace {
 		typedef crt::qCRATEdl( muamel::dId ) dIds;
@@ -76,7 +95,7 @@ namespace update_ {
 			while ( Row != qNIL ) {
 				Next = Old.Next( Row );
 
-				if ( New.Search(Mail = Old(Row)) == qNIL ) {
+				if ( New.Search( Mail = Old( Row ) ) == qNIL ) {
 					Directory.Remove( Mail );
 					Tracker.Remove( Mail );
 				}
@@ -146,6 +165,11 @@ namespace update_ {
 		}
 	}
 
+}
+
+void muaacc::dAccount::Update( muaagt::sRow Agent )
+{
+	update_::Update_( Agent, Agents_, Tracker_, Directory_ );
 }
 
 void muaacc::dAccount::Update( void )

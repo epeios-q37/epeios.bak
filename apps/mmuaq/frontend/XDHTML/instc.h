@@ -366,6 +366,14 @@ namespace instc {
 		{
 			Agent_.Edition = true;
 		}
+		void RemoveAgent( void )
+		{
+			if ( Agent_.Current == UndefinedAgent )
+				qRGnr();
+
+			F_().RemoveAgent( Agent_.Current );
+			Agent_.Current = frdfrntnd::agent::Undefined;
+		}
 		void SetAgentShowPassword( bso::sBool Value )
 		{
 			Agent_.ShowPassword = Value;

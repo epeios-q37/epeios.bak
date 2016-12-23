@@ -57,6 +57,14 @@
     <Translation language="fr">Déplace un courrier vers un autre dossier.</Translation>
     <Translation language="en">Moves a mail to another folder.</Translation>
    </Translations>
+   <Translations text="RefreshCommandDescription">
+    <Translation language="fr">Rafraîchit avec le contenu des agents.</Translation>
+    <Translation language="en">Refreshes with the agents content.</Translation>
+   </Translations>
+   <Translations text="RemoveAgentCommandDescription">
+    <Translation language="fr">Retire un agent.</Translation>
+    <Translation language="en">Removes an agent.</Translation>
+   </Translations>
    <Translations text="UpdateAgentCommandDescription">
     <Translation language="fr">Met à jour un agent.</Translation>
     <Translation language="en">Updates a agent.</Translation>
@@ -151,6 +159,7 @@
    <xpp:expand select="TOL_Arguments"/>
    <!-- Commandes : pas de 'Path' (vaut 'Parameters/Command'), ni de 'Value'. -->
    <Argument id="AboutBackendCommand" Description="AboutBackendCommandDescription" long="about-backend" Value="AboutBackend" Usage=""/>
+   <Argument id="RefreshCommand" Description="RefreshCommandDescription" long="refresh" Value="Refresh" Usage=""/>
    <Argument id="CreateAgentCommand" Description="CreateAgentCommandDescription" long="create-agent" Value="CreateAgent" Usage="%NameArgument% %HostPortArgument% %UsernameArgument% %PasswordArgument%"/>
    <Argument id="CreateFolderCommand" Description="CreateFolderCommandDescription" long="create-folder" Value="CreateFolder" Usage="%NameArgument% [%ParentArgument%]"/>
    <Argument id="UpdateAgentCommand" Description="UpdateAgentCommandDescription" long="update-agent" Value="UpdateAgent" Usage="%AgentArgument% %NameArgument% %HostPortArgument% %UsernameArgument% [%PasswordArgument%]"/>
@@ -162,6 +171,7 @@
    <Argument id="MailCommand" Description="MailCommandDescription" long="mail" Value="Mail" Usage="%MailArgument%"/>
    <Argument id="MoveFolderCommand" Description="MoveFolderCommandDescription" long="move-folder" Value="MoveFolder" Usage="%FolderArgument% [%ParentArgument%]"/>
    <Argument id="MoveMailCommand" Description="MoveMailCommandDescription" long="move-mail" Value="MoveMail" Usage="%MailArgument% %FolderArgument%"/>
+   <Argument id="RemoveAgentCommand" Description="RemoveAgentCommandDescription" long="remove-agent" Value="RemoveAgent" Usage="%AgentArgument%"/>
    <!--Argument id="TestCommand" Description="TestCommandDescription" long="test" short="t" Value="Test" Usage="%TestFlag% %TestOption% %TestArgument%"/-->
    <!-- Fanaux : 'Path', mais pas de 'Value'. -->
    <!--Argument id="TestFlag" Description="TestFlagDescription" long="flag" short="f" Path="Flag" Value="TestFlag"/-->
@@ -216,6 +226,10 @@
      <Link index="3" Target="UsernameArgument"/>
      <Link index="4" Target="PasswordArgument"/>
     </Layout>
+    <Layout command="RemoveAgent">
+     <Link index="0" Target="AgentArgument"/>
+    </Layout>
+    <Layout command="Refresh"/>
     <Layout command="UpdateFolder">
      <Link index="0" Target="FolderArgument"/>
      <Link index="1" Target="NameArgument"/>

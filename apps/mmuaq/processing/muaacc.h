@@ -177,6 +177,7 @@ namespace muaacc {
 		{
 			return Agents_.Update( Agent, Name, HostPort, Username );
 		}
+		void RemoveAgent( muaagt::sRow Agent );
 		muafld::sRow CreateFolder(
 			const str::dString &Name,
 			muafld::sRow Parent )
@@ -201,6 +202,7 @@ namespace muaacc {
 		{
 			return Directory_.MoveFolderTo( Folder, Parent );
 		}
+		void Update( muaagt::sRow Agent );	// Updates the mail with the content on given agent.
 		void Update( void );	// Updates the mail with the content on the different agent.
 		void GetFields(
 			const muamel::dRows &Wanted,

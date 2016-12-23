@@ -25,7 +25,7 @@ namespace mmuaq {
 	{
 	private:
 		fblfrd::object__ _ID;
-		fblfrd::command__ _Commands[17];
+		fblfrd::command__ _Commands[19];
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -44,9 +44,11 @@ namespace mmuaq {
 				25, 0, 
 				0, 
 				25, 25, 0, 2, 
+				0, 
 				0, 22, 26, 
 				21, 0, 25, 25, 25, 
 				21, 25, 25, 25, 2, 25, 0, 21, 
+				21, 0, 
 				0, 13, 
 				0, 21, 21, 
 				21, 0, 22, 
@@ -85,74 +87,84 @@ namespace mmuaq {
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
+			CommandDetail.Name = "MUARefresh_1";;
+			CommandDetail.Casts.Append( Parameters + 9, 1 );
+			CommandsDetails.Append( CommandDetail );
+
+			CommandDetail.Init();
 			CommandDetail.Name = "MUAGetAgents_1";;
-			CommandDetail.Casts.Append( Parameters + 9, 3 );
+			CommandDetail.Casts.Append( Parameters + 10, 3 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
 			CommandDetail.Name = "MUAGetAgent_1";;
-			CommandDetail.Casts.Append( Parameters + 12, 5 );
+			CommandDetail.Casts.Append( Parameters + 13, 5 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
 			CommandDetail.Name = "MUAUpdateAgent_1";;
-			CommandDetail.Casts.Append( Parameters + 17, 8 );
+			CommandDetail.Casts.Append( Parameters + 18, 8 );
+			CommandsDetails.Append( CommandDetail );
+
+			CommandDetail.Init();
+			CommandDetail.Name = "MUARemoveAgent_1";;
+			CommandDetail.Casts.Append( Parameters + 26, 2 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
 			CommandDetail.Name = "MUAGetFields_1";;
-			CommandDetail.Casts.Append( Parameters + 25, 2 );
+			CommandDetail.Casts.Append( Parameters + 28, 2 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
 			CommandDetail.Name = "MUAGetRootAndInboxFolders_1";;
-			CommandDetail.Casts.Append( Parameters + 27, 3 );
-			CommandsDetails.Append( CommandDetail );
-
-			CommandDetail.Init();
-			CommandDetail.Name = "MUAGetFolders_1";;
 			CommandDetail.Casts.Append( Parameters + 30, 3 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
-			CommandDetail.Name = "MUAGetFoldersNames_1";;
+			CommandDetail.Name = "MUAGetFolders_1";;
 			CommandDetail.Casts.Append( Parameters + 33, 3 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
+			CommandDetail.Name = "MUAGetFoldersNames_1";;
+			CommandDetail.Casts.Append( Parameters + 36, 3 );
+			CommandsDetails.Append( CommandDetail );
+
+			CommandDetail.Init();
 			CommandDetail.Name = "MUACreateFolder_1";;
-			CommandDetail.Casts.Append( Parameters + 36, 4 );
+			CommandDetail.Casts.Append( Parameters + 39, 4 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
 			CommandDetail.Name = "MUAUpdateFolder_1";;
-			CommandDetail.Casts.Append( Parameters + 40, 3 );
+			CommandDetail.Casts.Append( Parameters + 43, 3 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
 			CommandDetail.Name = "MUAGetMailsFields_1";;
-			CommandDetail.Casts.Append( Parameters + 43, 5 );
+			CommandDetail.Casts.Append( Parameters + 46, 5 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
 			CommandDetail.Name = "MUAGetMail_1";;
-			CommandDetail.Casts.Append( Parameters + 48, 3 );
-			CommandsDetails.Append( CommandDetail );
-
-			CommandDetail.Init();
-			CommandDetail.Name = "MUAMoveMailTo_1";;
 			CommandDetail.Casts.Append( Parameters + 51, 3 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
-			CommandDetail.Name = "MUAMoveFolderTo_1";;
+			CommandDetail.Name = "MUAMoveMailTo_1";;
 			CommandDetail.Casts.Append( Parameters + 54, 3 );
+			CommandsDetails.Append( CommandDetail );
+
+			CommandDetail.Init();
+			CommandDetail.Name = "MUAMoveFolderTo_1";;
+			CommandDetail.Casts.Append( Parameters + 57, 3 );
 			CommandsDetails.Append( CommandDetail );
 
 
 			Commands.Init();
 			this->Frontend().GetCommands( FBLFRD_MASTER_TYPE, CommandsDetails, Commands );
-			Commands.Recall( 0, 17, _Commands );
+			Commands.Recall( 0, 19, _Commands );
 		}
 		void LoadSetupOfId_1( 
 			const fblfrd::string_ &In1 ) const
@@ -200,11 +212,20 @@ namespace mmuaq {
 
 			Frontend().Handle();
 		}
+		void MUARefresh_1( void ) const
+		{
+			Frontend().PushHeader( _ID, Commands()[4] );
+
+			Frontend().EndOfInParameters();
+
+
+			Frontend().Handle();
+		}
 		void MUAGetAgents_1( 
 			fblfrd::ids_ &Out1,
 			fblfrd::strings_ &Out2 ) const
 		{
-			Frontend().PushHeader( _ID, Commands()[4] );
+			Frontend().PushHeader( _ID, Commands()[5] );
 
 			Frontend().EndOfInParameters();
 
@@ -219,7 +240,7 @@ namespace mmuaq {
 			fblfrd::string_ &Out2,
 			fblfrd::string_ &Out3 ) const
 		{
-			Frontend().PushHeader( _ID, Commands()[5] );
+			Frontend().PushHeader( _ID, Commands()[6] );
 			Frontend().IdIn( In1 );
 
 			Frontend().EndOfInParameters();
@@ -239,7 +260,7 @@ namespace mmuaq {
 			const fblfrd::string_ &In6,
 			fblfrd::id__ &Out1 ) const
 		{
-			Frontend().PushHeader( _ID, Commands()[6] );
+			Frontend().PushHeader( _ID, Commands()[7] );
 			Frontend().IdIn( In1 );
 			Frontend().StringIn( In2 );
 			Frontend().StringIn( In3 );
@@ -253,10 +274,21 @@ namespace mmuaq {
 
 			Frontend().Handle();
 		}
+		void MUARemoveAgent_1( 
+			const fblfrd::id__ &In1 ) const
+		{
+			Frontend().PushHeader( _ID, Commands()[8] );
+			Frontend().IdIn( In1 );
+
+			Frontend().EndOfInParameters();
+
+
+			Frontend().Handle();
+		}
 		void MUAGetFields_1( 
 			fblfrd::id8s_ &Out1 ) const
 		{
-			Frontend().PushHeader( _ID, Commands()[7] );
+			Frontend().PushHeader( _ID, Commands()[9] );
 
 			Frontend().EndOfInParameters();
 
@@ -268,7 +300,7 @@ namespace mmuaq {
 			fblfrd::id__ &Out1,
 			fblfrd::id__ &Out2 ) const
 		{
-			Frontend().PushHeader( _ID, Commands()[8] );
+			Frontend().PushHeader( _ID, Commands()[10] );
 
 			Frontend().EndOfInParameters();
 
@@ -281,7 +313,7 @@ namespace mmuaq {
 			const fblfrd::id__ &In1,
 			fblfrd::ids_ &Out1 ) const
 		{
-			Frontend().PushHeader( _ID, Commands()[9] );
+			Frontend().PushHeader( _ID, Commands()[11] );
 			Frontend().IdIn( In1 );
 
 			Frontend().EndOfInParameters();
@@ -294,7 +326,7 @@ namespace mmuaq {
 			const fblfrd::ids_ &In1,
 			fblfrd::strings_ &Out1 ) const
 		{
-			Frontend().PushHeader( _ID, Commands()[10] );
+			Frontend().PushHeader( _ID, Commands()[12] );
 			Frontend().IdsIn( In1 );
 
 			Frontend().EndOfInParameters();
@@ -308,7 +340,7 @@ namespace mmuaq {
 			const fblfrd::string_ &In2,
 			fblfrd::id__ &Out1 ) const
 		{
-			Frontend().PushHeader( _ID, Commands()[11] );
+			Frontend().PushHeader( _ID, Commands()[13] );
 			Frontend().IdIn( In1 );
 			Frontend().StringIn( In2 );
 
@@ -322,7 +354,7 @@ namespace mmuaq {
 			const fblfrd::id__ &In1,
 			const fblfrd::string_ &In2 ) const
 		{
-			Frontend().PushHeader( _ID, Commands()[12] );
+			Frontend().PushHeader( _ID, Commands()[14] );
 			Frontend().IdIn( In1 );
 			Frontend().StringIn( In2 );
 
@@ -337,7 +369,7 @@ namespace mmuaq {
 			fblfrd::strings_ &Out2,
 			fblfrd::ids_ &Out3 ) const
 		{
-			Frontend().PushHeader( _ID, Commands()[13] );
+			Frontend().PushHeader( _ID, Commands()[15] );
 			Frontend().IdIn( In1 );
 
 			Frontend().EndOfInParameters();
@@ -352,7 +384,7 @@ namespace mmuaq {
 			const fblfrd::id__ &In1,
 			fblfrd::string_ &Out1 ) const
 		{
-			Frontend().PushHeader( _ID, Commands()[14] );
+			Frontend().PushHeader( _ID, Commands()[16] );
 			Frontend().IdIn( In1 );
 
 			Frontend().EndOfInParameters();
@@ -365,7 +397,7 @@ namespace mmuaq {
 			const fblfrd::id__ &In1,
 			const fblfrd::id__ &In2 ) const
 		{
-			Frontend().PushHeader( _ID, Commands()[15] );
+			Frontend().PushHeader( _ID, Commands()[17] );
 			Frontend().IdIn( In1 );
 			Frontend().IdIn( In2 );
 
@@ -378,7 +410,7 @@ namespace mmuaq {
 			const fblfrd::id__ &In1,
 			const fblfrd::id__ &In2 ) const
 		{
-			Frontend().PushHeader( _ID, Commands()[16] );
+			Frontend().PushHeader( _ID, Commands()[18] );
 			Frontend().IdIn( In1 );
 			Frontend().IdIn( In2 );
 

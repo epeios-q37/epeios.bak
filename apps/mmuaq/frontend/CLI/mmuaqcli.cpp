@@ -148,6 +148,19 @@ namespace {
 	qRE
 	}
 
+	void Refresh_( void )
+	{
+	qRH
+		rRack_ Rack;
+	qRB
+		Rack.Init();
+
+		Rack.Frontend.Refresh();
+	qRR
+	qRE
+	qRT
+	}
+
 	/*
 	void Test_( void )
 	{
@@ -203,6 +216,21 @@ namespace {
 
 		Rack.Init();
 		Rack.Frontend.UpdateAgent( Agent, Name, HostPort, Username, PasswordAvailable, Password );
+	qRR
+	qRE
+	qRT
+	}
+
+	void RemoveAgent_( void )
+	{
+	qRH
+		agent::sId Agent = agent::Undefined;
+		rRack_ Rack;
+	qRB
+		*Agent = sclmisc::MGetUInt( registry::parameter::Agent );
+
+		Rack.Init();
+		Rack.Frontend.RemoveAgent( Agent );
 	qRR
 	qRE
 	qRT
@@ -499,8 +527,10 @@ qRB
 	else if ( Command == "License" )
 		epsmsc::PrintLicense( NAME_MC );
 	C( AboutBackend );
+	C( Refresh );
 	C( CreateAgent );
 	C( UpdateAgent );
+	C( RemoveAgent );
 	C( Agents );
 	C( Agent );
 	C( CreateFolder );

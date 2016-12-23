@@ -93,6 +93,10 @@ namespace frdfrntnd {
 
 			return Success;
 		}
+		void Refresh( void )
+		{
+			Statics.MUARefresh_1();
+		}
 		void GetAgents(
 			dAgents &Agents,
 			dStrings &Names )
@@ -131,6 +135,13 @@ namespace frdfrntnd {
 				qRGnr();
 
 			Statics.MUAUpdateAgent_1( *Agent, Name, HostPort, Username, PasswordIsSet, Password, *Agent );
+		}
+		void RemoveAgent( sAgent Agent )
+		{
+			if ( Agent == UndefinedAgent )
+				qRGnr();
+
+			Statics.MUARemoveAgent_1( *Agent );
 		}
 		void GetMailsFields(
 			sFolder Folder,

@@ -21,3 +21,18 @@
 
 using namespace muatrk;
 
+void muatrk::dTracker::Remove( muaagt::sRow Agent )
+{
+qRH
+	muamel::wRows Mails;
+qRB
+	Mails.Init();
+	GetMails( Agent, Mails );
+
+	Remove( Mails );
+
+	A2M_( Agent ).Init();
+qRR
+qRT
+qRE
+}

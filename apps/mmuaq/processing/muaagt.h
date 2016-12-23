@@ -256,6 +256,11 @@ namespace muaagt {
 			Set_( Core( Row ), HostPort, Username );
 
 		}
+		void Remove( sRow Agent )
+		{
+			Core.Remove( Agent );
+			MetaDatas.Remove( Agent );
+		}
 		sRow Search( const str::dString &Name ) const
 		{
 			return tol::Search<sRow>( Name, MetaDatas );
