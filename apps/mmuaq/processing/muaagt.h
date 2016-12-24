@@ -97,48 +97,66 @@ namespace muaagt {
 	typedef str::wString wName;
 
 	class dMetaData {
+	private:
+		dName Name_;
 	public:
 		struct s {
 			dName::s Name;
+			bso::sBool Disabled;
 		} &S_;
-		dName Name;
 		dMetaData( s &S )
 		: S_( S ),
-		  Name( S.Name )
+		  Name_( S.Name )
 		{}
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, Name );
+			tol::reset( P, Name_, S_.Disabled );
 		}
 		void plug( uys::sHook &Hook )
 		{
-			Name.plug( Hook );
+			Name_.plug( Hook );
 		}
 		void plug( qASd *AS )
 		{
-			tol::plug( AS, Name );
+			tol::plug( AS, Name_ );
 		}
 		dMetaData &operator = (const dMetaData &MD)
 		{
-			Name = MD.Name;
+			Name_ = MD.Name_;
+			S_.Disabled = MD.S_.Disabled;
 
 			return *this;
 		}
 		void Init( void )
 		{
-			tol::Init( Name );
+			tol::Init( Name_ );
+			S_.Disabled = false;
 		}
 		void Init( const dName &Name )
 		{
-			this->Name.Init( Name );
+			this->Name_.Init( Name );
+			S_.Disabled = false;
+		}
+		const str::dString &Name( void ) const
+		{
+			return Name_;
 		}
 		// For the 'tol::Search(...)' function.
 		const str::dString &ID( void ) const
 		{
-			return Name;
+			return Name_;
+		}
+		void SetDisabledState( bso::sBool Value )
+		{
+			S_.Disabled = Value;
+		}
+		bso::sBool GetDisabledState( void ) const
+		{
+			return S_.Disabled;
 		}
 	};
 
+	qW( MetaData );
 
 	typedef lstcrt::qLCRATEd( dAgent, sRow ) dAgents_;
 
@@ -146,6 +164,8 @@ namespace muaagt {
 
 	class dAgents {
 	private:
+		dAgents_ Core_;
+		dMetaDatas MetaDatas_;
 		void Set_(
 			dAgent &Agent,
 			const str::dString &HostPort,
@@ -173,59 +193,75 @@ namespace muaagt {
 
 			Set_( Agent, HostPort, Username, Password );
 		}
+		bso::sBool IsDisabled_( sRow Agent ) const
+		{
+			return MetaDatas_( Agent ).GetDisabledState();
+		}
+		bso::sBool IsEnabled_( sRow Agent ) const
+		{
+			return !IsDisabled_( Agent );
+		}
+		void Disable_( sRow Agent );
+		// Returns 'false' if the agent is disabled.
 	public:
 		struct s {
 			dAgents_::s Core;
 			dMetaDatas::s MetaDatas;
 		};
-		dAgents_ Core;
-		dMetaDatas MetaDatas;
 		dAgents( s &S )
-		: Core( S.Core ),
-		  MetaDatas( S.MetaDatas )
+		: Core_( S.Core ),
+		  MetaDatas_( S.MetaDatas )
 		{}
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, Core, MetaDatas );
+			tol::reset( P, Core_, MetaDatas_ );
 		}
 		void plug( qASd *AS )
 		{
-			tol::plug( AS, Core, MetaDatas );
+			tol::plug( AS, Core_, MetaDatas_ );
 		}
 		dAgents &operator =(const dAgents &A)
 		{
-			Core = A.Core;
-			MetaDatas = A.MetaDatas;
+			Core_ = A.Core_;
+			MetaDatas_ = A.MetaDatas_;
 
 			return *this;
 		}
 		void Init( void )
 		{
-			tol::Init( Core, MetaDatas );
+			tol::Init( Core_, MetaDatas_ );
+		}
+		const dAgents_ &Core( void ) const
+		{
+			return Core_;
 		}
 		const str::dString &GetName(
 			sRow Agent,
 			str::dString &Name ) const
 		{
-			Name.Append( MetaDatas( Agent ).Name );
+			Name.Append( MetaDatas_( Agent ).Name() );
 
 			return Name;
 		}
-		qNAV( Core., sRow );
+		bso::sBool IsEnabled( sRow Agent ) const
+		{
+			return IsEnabled_( Agent );
+		}
+		qNAV( Core_., sRow );
 		sRow New(
 			const str::dString &Name,
 			const str::dString &HostPort,
 			const str::dString &Username,
 			const str::dString &Password )
 		{
-			sRow Row = MetaDatas.New();
+			sRow Row = MetaDatas_.New();
 
-			if ( Row != Core.New() )
+			if ( Row != Core_.New() )
 				qRGnr();
 
-			MetaDatas( Row ).Init( Name );
+			MetaDatas_( Row ).Init( Name );
 
-			Init_( Core( Row ), HostPort, Username, Password );
+			Init_( Core_( Row ), HostPort, Username, Password );
 
 			return Row;
 		}
@@ -239,9 +275,8 @@ namespace muaagt {
 			if ( !Exists( Row ) )
 				qRGnr();
 
-			MetaDatas( Row ).Init( Name );
-			Set_( Core( Row ), HostPort, Username, Password );
-
+			MetaDatas_( Row ).Init( Name );
+			Set_( Core_( Row ), HostPort, Username, Password );
 		}
 		void Update(
 			sRow Row,
@@ -252,22 +287,22 @@ namespace muaagt {
 			if ( !Exists( Row ) )
 				qRGnr();
 
-			MetaDatas( Row ).Init( Name );
-			Set_( Core( Row ), HostPort, Username );
+			MetaDatas_( Row ).Init( Name );
+			Set_( Core_( Row ), HostPort, Username );
 
 		}
 		void Remove( sRow Agent )
 		{
-			Core.Remove( Agent );
-			MetaDatas.Remove( Agent );
+			Core_.Remove( Agent );
+			MetaDatas_.Remove( Agent );
 		}
 		sRow Search( const str::dString &Name ) const
 		{
-			return tol::Search<sRow>( Name, MetaDatas );
+			return tol::Search<sRow>( Name, MetaDatas_ );
 		}
-		void InitAndAuthenticate(
+		bso::sBool InitAndAuthenticateIfEnabled(
 			sRow Agent,
-			csdbnc::rIODriver &Driver ) const;
+			csdbnc::rIODriver &Driver );
 	};
 
 }

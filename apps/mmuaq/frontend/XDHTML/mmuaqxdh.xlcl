@@ -7,7 +7,7 @@
 	</Translations>
  <Translations text="AgentSuppressionConfirmation">
   <Translation language="fr">Êtes-vous sûr de vouloir supprimer cet agent ? L'opération est irréversible.</Translation>
-  <Translation language="en">Are you sure ou want to remove this agent ? This operation can not be undone.</Translation>
+  <Translation language="en">Are you sure you want to remove this agent ? This operation can not be undone.</Translation>
  </Translations>
  <Translations text="ClosingConfirmation">
 		<Translation language="fr">Êtes-vous sûr de vouloir fermer l'application ?</Translation>

@@ -93,23 +93,25 @@ namespace frdfrntnd {
 
 			return Success;
 		}
-		void Refresh( void )
+		void Check( void )
 		{
-			Statics.MUARefresh_1();
+			Statics.MUACheck_1();
 		}
 		void GetAgents(
 			dAgents &Agents,
-			dStrings &Names )
+			dStrings &Names,
+			fbltyp::dBooleans &Enabled )
 		{
-			Statics.MUAGetAgents_1( Agents, Names );
+			Statics.MUAGetAgents_1( Agents, Names, Enabled );
 		}
 		void GetAgent(
 			sAgent Agent,
 			dString &Name,
 			dString &HostPort,
-			dString &Username )
+			dString &Username,
+			bso::sBool &Enabled )
 		{
-			Statics.MUAGetAgent_1( *Agent, Name, HostPort, Username );
+			Statics.MUAGetAgent_1( *Agent, Name, HostPort, Username, Enabled );
 		}
 		sAgent CreateAgent(
 			const dString &Name,

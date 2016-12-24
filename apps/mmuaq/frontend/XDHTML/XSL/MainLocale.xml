@@ -12,6 +12,14 @@
   <Translation language="fr">Affiche la page configuration.</Translation>
   <Translation language="en">Displays configuration page.</Translation>
  </Translations>
+ <Translations text="mainCheck">
+  <Translation language="fr">Relever</Translation>
+  <Translation language="en">Check</Translation>
+ </Translations>
+ <Translations text="mainCheckTitle">
+  <Translation language="fr">Relève le courrier.</Translation>
+  <Translation language="en">Check mails.</Translation>
+ </Translations>
  <Translations text="mainMessages">
   <Translation language="fr">Messages</Translation>
   <Translation language="en">Messages</Translation>

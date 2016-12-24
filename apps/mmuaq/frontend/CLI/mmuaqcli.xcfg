@@ -57,9 +57,9 @@
     <Translation language="fr">Déplace un courrier vers un autre dossier.</Translation>
     <Translation language="en">Moves a mail to another folder.</Translation>
    </Translations>
-   <Translations text="RefreshCommandDescription">
-    <Translation language="fr">Rafraîchit avec le contenu des agents.</Translation>
-    <Translation language="en">Refreshes with the agents content.</Translation>
+   <Translations text="CheckCommandDescription">
+    <Translation language="fr">Relève le courrier.</Translation>
+    <Translation language="en">Check mails.</Translation>
    </Translations>
    <Translations text="RemoveAgentCommandDescription">
     <Translation language="fr">Retire un agent.</Translation>
@@ -159,7 +159,7 @@
    <xpp:expand select="TOL_Arguments"/>
    <!-- Commandes : pas de 'Path' (vaut 'Parameters/Command'), ni de 'Value'. -->
    <Argument id="AboutBackendCommand" Description="AboutBackendCommandDescription" long="about-backend" Value="AboutBackend" Usage=""/>
-   <Argument id="RefreshCommand" Description="RefreshCommandDescription" long="refresh" Value="Refresh" Usage=""/>
+   <Argument id="CheckCommand" Description="CheckCommandDescription" long="check" Value="Check" Usage=""/>
    <Argument id="CreateAgentCommand" Description="CreateAgentCommandDescription" long="create-agent" Value="CreateAgent" Usage="%NameArgument% %HostPortArgument% %UsernameArgument% %PasswordArgument%"/>
    <Argument id="CreateFolderCommand" Description="CreateFolderCommandDescription" long="create-folder" Value="CreateFolder" Usage="%NameArgument% [%ParentArgument%]"/>
    <Argument id="UpdateAgentCommand" Description="UpdateAgentCommandDescription" long="update-agent" Value="UpdateAgent" Usage="%AgentArgument% %NameArgument% %HostPortArgument% %UsernameArgument% [%PasswordArgument%]"/>
@@ -229,7 +229,7 @@
     <Layout command="RemoveAgent">
      <Link index="0" Target="AgentArgument"/>
     </Layout>
-    <Layout command="Refresh"/>
+    <Layout command="Check"/>
     <Layout command="UpdateFolder">
      <Link index="0" Target="FolderArgument"/>
      <Link index="1" Target="NameArgument"/>

@@ -124,6 +124,12 @@ void main::SetMailsCasting( core::rSession &Session )
 
 #define AC( name ) BASE_AC( main, name )
 
+AC( Check )
+{
+	Session.User.Check();
+	SetLayout( Session );
+}
+
 AC( Configuration )
 {
 	config::SetLayout( Session );

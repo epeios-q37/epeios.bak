@@ -47,13 +47,19 @@ namespace dump_agents_ {
 	void Dump(
 		const dAgents &Ids,
 		dStrings &Labels,
+		const fbltyp::dBooleans &Enabled,
 		xml::dWriter &Writer )
 	{
+		if ( !tol::HaveSameAmount( Ids, Labels, Enabled ) )
+			qRFwk();
+
 		sdr::sRow Row = Ids.First();
 
 		while ( Row != qNIL ) {
 			Writer.PushTag( "Agent");
 			Writer.PutAttribute( "id", *Ids( Row ) );
+			if ( !Enabled( Row ) )
+				Writer.PutAttribute("Disabled", "true" );
 			Writer.PutValue( Labels( Row ) );
 			Writer.PopTag();
 
@@ -67,10 +73,11 @@ void instc::rUser::DumpAgents( xml::dWriter &Writer )
 qRH
 	wAgents Agents;
 	wStrings Names;
+	fbltyp::wBooleans Enabled;
 qRB
-	tol::Init( Agents, Names );
+	tol::Init( Agents, Names, Enabled );
 
-	F_().GetAgents( Agents, Names );
+	F_().GetAgents( Agents, Names, Enabled );
 
 	if ( Agents.Amount() != Names.Amount() )
 		qRGnr();
@@ -80,7 +87,7 @@ qRB
 
 	Writer.PutAttribute( "Current", **Agent_.Current, **UndefinedAgent );
 
-	dump_agents_::Dump( Agents, Names, Writer );
+	dump_agents_::Dump( Agents, Names, Enabled, Writer );
 
 	Writer.PopTag();
 qRR
@@ -92,17 +99,21 @@ void instc::rUser::DumpCurrentAgent( xml::dWriter &Writer )
 {
 qRH
 	wString Name, HostPort, Username; 
+	bso::sBool Enabled = false;
 qRB
 	if ( Agent_.Current != UndefinedAgent ) {
 
 		tol::Init( Name, HostPort, Username );
-		F_().GetAgent( Agent_.Current, Name, HostPort, Username );
+		F_().GetAgent( Agent_.Current, Name, HostPort, Username, Enabled );
 
 		Writer.PushTag( "Agent" );
 
 		Writer.PutAttribute( "Name", Name );
 		Writer.PutAttribute( "HostPort", HostPort );
 		Writer.PutAttribute( "Username", Username );
+
+		if ( !Enabled )
+			Writer.PutAttribute("Disabled", "true" );
 
 		Writer.PopTag();
 	}

@@ -23,10 +23,12 @@
 # include "base.h"
 
 namespace main {
+	BASE_ACD( Check );
 	BASE_ACD( Configuration );
 
 	inline void Register( void  )
 	{
+		BASE_ACR( Check );
 		BASE_ACR( Configuration );
 	};
 

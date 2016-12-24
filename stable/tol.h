@@ -2120,16 +2120,39 @@ namespace tol {
 
 	void Crash( void );	// Crashes deliberately the program. For testing of daemons watchdog.
 
+
+	/* BEGIN 'HaveSameAmount' serialization */
+
+	template <typename a, typename b> inline bso::sBool HaveSameAmount(
+		const a &A,
+		const b &B )
+	{
+		return A.Amount() == B.Amount();
+	}
+
+	template <typename a, typename b, typename ... o> inline bso::sBool HaveSameAmount(
+		const a &A,
+		const b &B,
+		const o&... O )
+	{
+		if ( HaveSameAmount( A, B ) )
+			return HaveSameAmount( B, O... );
+		else
+			return false;
+	}
+
+	/* END 'HaveSameAmount' serialization */
+
 	/* BEGIN 'reset' serialization with parameter */
 
-	template <typename t> void reset(
+	template <typename t> inline void reset(
 		bso::sBool P,
 		t &O )
 	{
 		O.reset( P );
 	}
 
-	template <typename t> void reset(
+	template <typename t> inline void reset(
 		bso::sBool,
 		t *&Pointer )
 	{
@@ -2144,7 +2167,7 @@ namespace tol {
 	}
 
 	// Last arguments handled first : arguments has to be passed in the same order they were declared !
-	template <typename f, typename ... o> void reset(
+	template <typename f, typename ... o> inline void reset(
 		bso::sBool P,
 		f &F,
 		o&... O )
@@ -2157,18 +2180,18 @@ namespace tol {
 
 	/* BEGIN 'reset' serialization without parameter */
 
-	template <typename t> void reset( t &O )
+	template <typename t> void inline reset( t &O )
 	{
 		O.reset();
 	}
 
-	template <typename t> void reset( t *&Pointer )
+	template <typename t> inline void reset( t *&Pointer )
 	{
 		Pointer = NULL;
 	}
 
 	// Last arguments handled first : arguments has to be passed in the same order they were declared !
-	template <typename f, typename ... o> void reset(
+	template <typename f, typename ... o> inline void reset(
 		f &F,
 		o&... O )
 	{
@@ -2180,14 +2203,14 @@ namespace tol {
 
 	/* BEGIN 'plug' serialization */
 
-	template <typename t> void plug(
+	template <typename t> inline void plug(
 		ags::aggregated_storage_ *AS,
 		t &O )
 	{
 		O.plug( AS );
 	}
 
-	template <typename f, typename ... o> void plug(
+	template <typename f, typename ... o> inline void plug(
 		ags::aggregated_storage_ *AS,
 		f &F,
 		o&... O )
@@ -2200,12 +2223,12 @@ namespace tol {
 
 	/* BEGIN 'Init' serialization */
 
-	template <typename t> void Init( t &O )
+	template <typename t> inline void Init( t &O )
 	{
 		O.Init();
 	}
 
-	template <typename f, typename ... o> void Init(
+	template <typename f, typename ... o> inline void Init(
 		f &F,
 		o&... O )
 	{

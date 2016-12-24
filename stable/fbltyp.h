@@ -1252,6 +1252,7 @@ namespace fbltyp {
 	M( sint, SInt );
 	M( ubig, UBig );
 	M( sbig, SBig );
+	M( boolean, Boolean );
 
 # undef M
 

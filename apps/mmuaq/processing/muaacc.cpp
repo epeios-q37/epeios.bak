@@ -127,7 +127,7 @@ namespace update_ {
 
 		void Update_(
 			muaagt::sRow Agent,
-			const muaagt::dAgents &Agents,
+			muaagt::dAgents &Agents,
 			muatrk::dTracker &Tracker,
 			muadir::dDirectory &Directory )
 		{
@@ -136,15 +136,15 @@ namespace update_ {
 			muapo3::wNumbers Numbers;
 			muapo3::wUIDLs UIDLs;
 		qRB
-			Agents.InitAndAuthenticate( Agent, Driver );
+			if ( Agents.InitAndAuthenticateIfEnabled( Agent, Driver ) ) {
+				tol::Init( Numbers, UIDLs );
 
-			tol::Init( Numbers, UIDLs );
+				muapo3::GetUIDLs( Driver, Numbers, UIDLs );
 
-			muapo3::GetUIDLs( Driver, Numbers, UIDLs );
+				muapo3::Quit( Driver );
 
-			muapo3::Quit( Driver );
-
-			Update_( Agent, UIDLs, Tracker, Directory );
+				Update_( Agent, UIDLs, Tracker, Directory );
+			}
 		qRR
 		qRT
 		qRE
@@ -152,7 +152,7 @@ namespace update_ {
 	}
 
 	void Update(
-		const muaagt::dAgents &Agents,
+		muaagt::dAgents &Agents,
 		muatrk::dTracker &Tracker,
 		muadir::dDirectory &Directory )
 	{
@@ -296,7 +296,7 @@ namespace get_fields_ {
 				const dUIDLs &UIDLs,
 				const muamel::dRows &Wanted,
 				muaagt::sRow Agent,
-				const muaagt::dAgents &Agents,
+				muaagt::dAgents &Agents,
 				str::dStrings &Subjects,
 				muaagt::dRows &CorrespondingAgents,
 				muamel::dRows &Available )
@@ -305,14 +305,14 @@ namespace get_fields_ {
 				csdbnc::rIODriver Driver;
 				muapo3::wNumbers Numbers;
 			qRB
-				Agents.InitAndAuthenticate( Agent, Driver );
+				if ( Agents.InitAndAuthenticateIfEnabled( Agent, Driver ) ) {
+					tol::Init( Numbers );
+					u2n_::Get( UIDLs, Wanted, Driver, Numbers, Available );
 
-				tol::Init( Numbers );
-				u2n_::Get( UIDLs, Wanted, Driver, Numbers, Available );
+					n2s_::Get( Numbers, Agent, Driver, Subjects, CorrespondingAgents );
 
-				n2s_::Get( Numbers, Agent, Driver, Subjects, CorrespondingAgents );
-
-				muapo3::Quit( Driver );
+					muapo3::Quit( Driver );
+				}
 			qRR
 			qRT
 			qRE
@@ -324,7 +324,7 @@ namespace get_fields_ {
 			const muatrk::dTracker &Tracker,
 			const muamel::dRows &Wanted,
 			muaagt::sRow AgentRow,
-			const muaagt::dAgents &Agents,
+			muaagt::dAgents &Agents,
 			str::dStrings &Subjects,
 			muaagt::dRows &CorrespondingAgents,
 			muamel::dRows &Available )
@@ -336,10 +336,12 @@ namespace get_fields_ {
 			Owned.Init();
 			Tracker.FilterOutMails( Wanted, AgentRow, Owned );
 
-			UIDLs.Init();
-			Directory.GetIds( Owned, UIDLs );
+			if ( Owned.Amount() != 0 ) {
+				UIDLs.Init();
+				Directory.GetIds( Owned, UIDLs );
 
-			u2s_::Get( UIDLs, Owned, AgentRow, Agents, Subjects, CorrespondingAgents, Available );
+				u2s_::Get( UIDLs, Owned, AgentRow, Agents, Subjects, CorrespondingAgents, Available );
+			}
 		qRR
 		qRT
 		qRE
@@ -350,9 +352,9 @@ namespace get_fields_ {
 		const muadir::dDirectory &Directory,
 		const muatrk::dTracker &Tracker,
 		const muamel::dRows &Wanted,
-		const muaagt::dAgents &Agents,
+		muaagt::dAgents &Agents,
 		str::dStrings &Subjects,
-			muaagt::dRows &CorrespondingAgents,
+		muaagt::dRows &CorrespondingAgents,
 		muamel::dRows &Available )
 	{
 		muaagt::sRow Row = Agents.First();
@@ -370,28 +372,30 @@ void muaacc::dAccount::GetFields(
 	const muamel::dRows &Wanted,
 	str::dStrings &Subjects,
 	muaagt::dRows &CorrespondingAgents,
-	muamel::dRows &Available ) const
+	muamel::dRows &Available )
 {
 	return get_fields_::Get( Directory_, Tracker_, Wanted, Agents_, Subjects, CorrespondingAgents, Available ); 
 }
 
 const str::dString &muaacc::dAccount::GetMail(
 	muamel::sRow MailRow,
-	str::dString &Mail ) const
+	str::dString &Mail )
 {
 qRH
 	muaagt::sRow AgentRow = qNIL;
 	csdbnc::rIODriver Driver;
 	muapo3::sNumber Number = 0;
 qRB
-	Agents_.InitAndAuthenticate( Tracker_.GetMailAgent( MailRow ), Driver );
+	if ( Agents_.InitAndAuthenticateIfEnabled(Tracker_.GetMailAgent(MailRow), Driver ) ) {
+		Number = muapo3::GetNumberForUIDL( Directory_.Mails()( MailRow ).Id, Driver );
 
-	Number = muapo3::GetNumberForUIDL( Directory_.Mails()( MailRow ).Id, Driver );
+		if ( Number == 0 )
+			qRGnr();
 
-	if ( Number == 0 )
-		qRGnr();
+		muapo3::GetMessage( Number, Driver, Mail );
 
-	muapo3::GetMessage( Number, Driver, Mail );
+		muapo3::Quit( Driver );
+	}
 qRR
 qRT
 qRE

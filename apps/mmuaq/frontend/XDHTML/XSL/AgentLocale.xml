@@ -80,6 +80,10 @@
   <Translation language="fr">Cocher pour changer le mot de passe.</Translation>
   <Translation language="en">Check to modify password.</Translation>
  </Translations>
+ <Translations text="agentDisabled">
+  <Translation language="fr">Cet agent est actuellement désactivé.</Translation>
+  <Translation language="en">This agent is currently disabled.</Translation>
+ </Translations>
  <!--
 	<Translations text="agent">
 		<Translation language="fr"></Translation>

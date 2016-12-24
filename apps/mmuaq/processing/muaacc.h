@@ -208,10 +208,10 @@ namespace muaacc {
 			const muamel::dRows &Wanted,
 			str::dStrings &Subjects,
 			muaagt::dRows &Agents,
-			muamel::dRows &Available ) const;	// Returns only subjects and woning agents now. Will return other fields in the future.
+			muamel::dRows &Available );	// Returns only subjects and woning agents now. Will return other fields in the future.
 		const str::dString &GetMail(
 			muamel::sRow MailRow,
-			str::dString &Mail ) const;
+			str::dString &Mail );
 	};
 
 	qW( Account );

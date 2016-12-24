@@ -26,9 +26,12 @@
       <div style="display: flex; flex-direction: row;">
        <fieldset id="Folders"/>
        <fieldset id="Mails"/>
-     </div>
+      </div>
+      <button title="#mainCheckTitle#" data-xdh-onevent="Check">#mainCheck#</button>
      </fieldset>
+     <span style="width: 100%; display: flex; justify-content: flex-end;">
      <button title="#mainConfigTitle#" data-xdh-onevent="Configuration">#mainConfig#</button>
+     </span>
     </fieldset>
    </span>
   </span>

@@ -130,7 +130,7 @@ qRT
 qRE
 }
 
-DEC( Refresh, 1 )
+DEC( Check, 1 )
 {
 qRH
 	ACCOUNTh;
@@ -148,13 +148,15 @@ namespace get_agents_ {
 	void Get(
 		const muaagt::dAgents &Agents,
 		fbltyp::dIds &Ids,
-		fbltyp::dStrings &Names )
+		fbltyp::dStrings &Names,
+		fbltyp::dBooleans &Enabled )
 	{
 		muaagt::sRow Row = Agents.First();
 
 		while ( Row != qNIL ) {
 			Ids.Append( *Row );
 			Agents.GetName( Row, Names( str::NewAndInit( Names ) ) );
+			Enabled.Append( Agents.IsEnabled( Row ) );
 
 			Row = Agents.Next( Row );
 		}
@@ -170,8 +172,9 @@ qRB
 
 	fbltyp::dIds &Ids = Request.IdsOut();
 	fbltyp::dStrings &Names = Request.StringsOut();
+	fbltyp::dBooleans &Enabled = Request.BooleansOut();
 
-	get_agents_::Get( Account.Agents(), Ids, Names );
+	get_agents_::Get( Account.Agents(), Ids, Names, Enabled );
 qRR 
 qRT
 qRE
@@ -183,17 +186,19 @@ namespace get_agent_ {
 		const muaagt::dAgents &Agents,
 		str::dString &Name,
 		str::dString &HostPort,
-		str::dString &Username )
+		str::dString &Username,
+		bso::sBool &Enabled )
 	{
 		if ( !Agents.Exists( Row ) )
 			REPORT( UnknownAgent );
 
 		Agents.GetName( Row, Name );
 
-		const muaagt::dAgent &Agent = Agents.Core( Row );
+		const muaagt::dAgent &Agent = Agents.Core()( Row );
 
 		HostPort = Agent.HostPort;
 		Username = Agent.Username;
+		Enabled = Agents.IsEnabled( Row );
 	}
 }
 
@@ -211,7 +216,9 @@ qRB
 		&HostPort = Request.StringOut(),
 		&Username = Request.StringOut();
 
-	get_agent_::Get( *Id, Account.Agents(), Name, HostPort, Username );
+	bso::sBool &Enabled = Request.BooleanOut();
+
+	get_agent_::Get( *Id, Account.Agents(), Name, HostPort, Username, Enabled );
 qRR 
 qRT
 qRE
@@ -271,9 +278,9 @@ namespace update_agent_ {
 		} else if ( !CheckName_( AgentName, Account.Agents(), Agent ) )
 				REPORT( AgentWithSuchNameExists, AgentName );
 		else if ( PasswordIsSet )
-			Account.UpdateAgent( Agent, AgentName, HostPort, Username );
-		else
 			Account.UpdateAgent( Agent, AgentName, HostPort, Username, Password );
+		else
+			Account.UpdateAgent( Agent, AgentName, HostPort, Username );
 	qRR
 	qRT
 	qRE
@@ -489,10 +496,12 @@ qRB
 	fblbkd::dStrings &Subjects = Request.StringsOut();
 
 	tol::Init( Agents, Available );
-	Account.GetFields( Wanted, Subjects, Agents, Available );
+
+	if ( Wanted.Amount() != 0 )
+		Account.GetFields( Wanted, Subjects, Agents, Available );
 
 	fbltyp::Convert( Available, Ids );
-	fbltyp::Convert(Agents, Request.IdsOut() );
+	fbltyp::Convert( Agents, Request.IdsOut() );
 qRR 
 qRT
 qRE
@@ -587,7 +596,7 @@ void wrpunbound::Inform( fblbkd::backend___ &Backend )
 			fblbkd::cBoolean,	// Success.
 		fblbkd::cEnd );
 
-	Backend.Add( D( Refresh, 1 ),
+	Backend.Add( D( Check, 1 ),
 		fblbkd::cEnd,
 		fblbkd::cEnd );
 
@@ -595,6 +604,7 @@ void wrpunbound::Inform( fblbkd::backend___ &Backend )
 		fblbkd::cEnd,
 			fblbkd::cIds,		// Ids.
 			fblbkd::cStrings,	// Names.
+			fblbkd::cBooleans,	// Enabled states.
 		fblbkd::cEnd );
 
 	Backend.Add( D( GetAgent, 1 ),
@@ -603,6 +613,7 @@ void wrpunbound::Inform( fblbkd::backend___ &Backend )
 			fblbkd::cString,	// Name.
 			fblbkd::cString,	// HostPort.
 			fblbkd::cString,	// Username.
+			fblbkd::cBoolean,	// Enabled.
 		fblbkd::cEnd );
 
 	Backend.Add(D( UpdateAgent, 1 ),

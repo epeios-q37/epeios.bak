@@ -225,6 +225,11 @@ namespace instc {
 		void DumpFolders( xml::dWriter &Writer );
 		const str::dString &GetAgentStatus( str::dString &Status );
 		// Returns true if the state changed.
+		void Check( void )
+		{
+			F_().Check();
+			Mail_.Init();
+		}
 		bso::sBool SelectFolder( sFolder Folder )
 		{
 			bso::sBool Changed = Folder_.State != folder_::sViewing;

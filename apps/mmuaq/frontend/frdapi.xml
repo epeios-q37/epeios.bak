@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--                    DON'T MODIFY !!! !
-    This document was generated the 23/12/2016 11:00:18
+    This document was generated the 24/12/2016 11:37:18
     using barq V20161027 (http://q37.info/)
     Build : Dec 21 2016 17:42:27 (Win32;MSC 1800;IA-32)
 -->
@@ -18,12 +18,12 @@
    <Copyright>2016 Claude SIMON (http://q37.info/contact/)</Copyright>
   </Generator>
   <Backend>
-   <Details>mmuaqbkd V20161219 Build Dec 22 2016 11:26:33 - Win32;MSC 1800;IA-32</Details>
+   <Details>mmuaqbkd V20161219 Build Dec 24 2016 11:08:31 - Win32;MSC 1800;IA-32</Details>
    <Copyright>2016 Claude SIMON (http://q37.info/contact/)</Copyright>
   </Backend>
   <Software>MMUAq V1.0</Software>
-  <Date>23/12/2016</Date>
-  <Time>11:00:18</Time>
+  <Date>24/12/2016</Date>
+  <Time>11:37:18</Time>
  </Misc>
  <Types>
   <Type Object="Master">
@@ -83,22 +83,26 @@
      </Parameters>
     </Command>
     <Command>
-     <Name>MUARefresh_1</Name>
+     <Name>MUACheck_1</Name>
      <ID>22</ID>
      <Parameters Amount="1" Position="9"/>
     </Command>
     <Command>
      <Name>MUAGetAgents_1</Name>
      <ID>23</ID>
-     <Parameters Amount="3" Position="10">
+     <Parameters Amount="4" Position="10">
       <Out>
        <Parameter Discriminator="1" Type="Bunch">
         <Name>ids</Name>
         <ID>22</ID>
        </Parameter>
-       <Parameter Discriminator="2" Position="Last" Type="Container">
+       <Parameter Discriminator="2" Type="Container">
         <Name>strings</Name>
         <ID>26</ID>
+       </Parameter>
+       <Parameter Discriminator="3" Position="Last" Type="Bunch">
+        <Name>booleans</Name>
+        <ID>3</ID>
        </Parameter>
       </Out>
      </Parameters>
@@ -106,7 +110,7 @@
     <Command>
      <Name>MUAGetAgent_1</Name>
      <ID>24</ID>
-     <Parameters Amount="5" Position="13">
+     <Parameters Amount="6" Position="14">
       <In>
        <Parameter Discriminator="1" Type="Static">
         <Name>id</Name>
@@ -122,9 +126,13 @@
         <Name>string</Name>
         <ID>25</ID>
        </Parameter>
-       <Parameter Discriminator="3" Position="Last" Type="Bunch">
+       <Parameter Discriminator="3" Type="Bunch">
         <Name>string</Name>
         <ID>25</ID>
+       </Parameter>
+       <Parameter Discriminator="4" Position="Last" Type="Static">
+        <Name>boolean</Name>
+        <ID>2</ID>
        </Parameter>
       </Out>
      </Parameters>
@@ -132,7 +140,7 @@
     <Command>
      <Name>MUAUpdateAgent_1</Name>
      <ID>25</ID>
-     <Parameters Amount="8" Position="18">
+     <Parameters Amount="8" Position="20">
       <In>
        <Parameter Discriminator="1" Type="Static">
         <Name>id</Name>
@@ -170,7 +178,7 @@
     <Command>
      <Name>MUARemoveAgent_1</Name>
      <ID>26</ID>
-     <Parameters Amount="2" Position="26">
+     <Parameters Amount="2" Position="28">
       <In>
        <Parameter Discriminator="1" Position="Last" Type="Static">
         <Name>id</Name>
@@ -182,7 +190,7 @@
     <Command>
      <Name>MUAGetFields_1</Name>
      <ID>27</ID>
-     <Parameters Amount="2" Position="28">
+     <Parameters Amount="2" Position="30">
       <Out>
        <Parameter Discriminator="1" Position="Last" Type="Bunch">
         <Name>id8s</Name>
@@ -194,7 +202,7 @@
     <Command>
      <Name>MUAGetRootAndInboxFolders_1</Name>
      <ID>28</ID>
-     <Parameters Amount="3" Position="30">
+     <Parameters Amount="3" Position="32">
       <Out>
        <Parameter Discriminator="1" Type="Static">
         <Name>id</Name>
@@ -210,7 +218,7 @@
     <Command>
      <Name>MUAGetFolders_1</Name>
      <ID>29</ID>
-     <Parameters Amount="3" Position="33">
+     <Parameters Amount="3" Position="35">
       <In>
        <Parameter Discriminator="1" Type="Static">
         <Name>id</Name>
@@ -228,7 +236,7 @@
     <Command>
      <Name>MUAGetFoldersNames_1</Name>
      <ID>30</ID>
-     <Parameters Amount="3" Position="36">
+     <Parameters Amount="3" Position="38">
       <In>
        <Parameter Discriminator="1" Type="Bunch">
         <Name>ids</Name>
@@ -246,7 +254,7 @@
     <Command>
      <Name>MUACreateFolder_1</Name>
      <ID>31</ID>
-     <Parameters Amount="4" Position="39">
+     <Parameters Amount="4" Position="41">
       <In>
        <Parameter Discriminator="1" Type="Static">
         <Name>id</Name>
@@ -268,7 +276,7 @@
     <Command>
      <Name>MUAUpdateFolder_1</Name>
      <ID>32</ID>
-     <Parameters Amount="3" Position="43">
+     <Parameters Amount="3" Position="45">
       <In>
        <Parameter Discriminator="1" Type="Static">
         <Name>id</Name>
@@ -284,7 +292,7 @@
     <Command>
      <Name>MUAGetMailsFields_1</Name>
      <ID>33</ID>
-     <Parameters Amount="5" Position="46">
+     <Parameters Amount="5" Position="48">
       <In>
        <Parameter Discriminator="1" Type="Static">
         <Name>id</Name>
@@ -310,7 +318,7 @@
     <Command>
      <Name>MUAGetMail_1</Name>
      <ID>34</ID>
-     <Parameters Amount="3" Position="51">
+     <Parameters Amount="3" Position="53">
       <In>
        <Parameter Discriminator="1" Type="Static">
         <Name>id</Name>
@@ -328,7 +336,7 @@
     <Command>
      <Name>MUAMoveMailTo_1</Name>
      <ID>35</ID>
-     <Parameters Amount="3" Position="54">
+     <Parameters Amount="3" Position="56">
       <In>
        <Parameter Discriminator="1" Type="Static">
         <Name>id</Name>
@@ -344,7 +352,7 @@
     <Command>
      <Name>MUAMoveFolderTo_1</Name>
      <ID>36</ID>
-     <Parameters Amount="3" Position="57">
+     <Parameters Amount="3" Position="59">
       <In>
        <Parameter Discriminator="1" Type="Static">
         <Name>id</Name>

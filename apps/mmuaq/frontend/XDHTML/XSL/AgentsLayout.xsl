@@ -47,6 +47,9 @@
  </xsl:template>
  <xsl:template match="Agent">
   <option data-xdh-onevent="SelectAgent">
+   <xsl:if test="@Disabled='true'">
+    <xsl:attribute name="style">text-decoration: line-through;</xsl:attribute>
+   </xsl:if>
    <xsl:attribute name="value">
     <xsl:value-of select="@id"/>
    </xsl:attribute>

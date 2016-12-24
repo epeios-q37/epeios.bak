@@ -23,23 +23,46 @@
 
 using namespace muaagt;
 
-void muaagt::dAgents::InitAndAuthenticate(
-	sRow AgentRow,
-	csdbnc::rIODriver &Driver ) const
+void muaagt::dAgents::Disable_( sRow Agent )
 {
+qRH
+	wMetaData MetaData;
+qRB
+	MetaData.Init();
+
+	MetaDatas_.Recall( Agent, MetaData );
+
+	MetaData.SetDisabledState( true );
+
+	MetaDatas_.Store( MetaData, Agent );
+qRR
+qRT
+qRE
+}
+
+bso::sBool muaagt::dAgents::InitAndAuthenticateIfEnabled(
+	sRow AgentRow,
+	csdbnc::rIODriver &Driver )
+{
+	bso::sBool Success = false;
 qRH
 	wAgent Agent;
 	qCBUFFERr Buffer;
 qRB
 	Agent.Init();
-	Core.Recall( AgentRow, Agent );
+	Core_.Recall( AgentRow, Agent );
 
-	Driver.Init( Agent.HostPort.Convert( Buffer ), SCK_INFINITE, err::h_Default );
-
-	muapo3::Authenticate( Agent.Username, Agent.Password, Driver );
+	if ( IsEnabled_( AgentRow ) ) {
+		if ( ( Driver.Init( Agent.HostPort.Convert( Buffer ), SCK_INFINITE, qRPU ) ) 
+			&& ( muapo3::Authenticate( Agent.Username, Agent.Password, Driver, qRPU ) ) )
+			Success = true;
+		else
+			Disable_( AgentRow );
+	}
 qRR
 qRT
 qRE
+	return Success;
 }
 
 

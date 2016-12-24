@@ -148,14 +148,14 @@ namespace {
 	qRE
 	}
 
-	void Refresh_( void )
+	void Check_( void )
 	{
 	qRH
 		rRack_ Rack;
 	qRB
 		Rack.Init();
 
-		Rack.Frontend.Refresh();
+		Rack.Frontend.Check();
 	qRR
 	qRE
 	qRT
@@ -242,15 +242,23 @@ namespace {
 		void Display(
 			const dAgents &Agents,
 			const str::dStrings &Names,
+			const fbltyp::dBooleans &Enabled,
 			txf::sOFlow &Flow )
 		{
 			sdr::sRow Row = Agents.First();
 
-			if ( Agents.Amount() != Names.Amount() )
+			if ( !tol::HaveSameAmount( Agents, Names, Enabled ) )
 				qRGnr();
 
 			while ( Row != qNIL ) {
-				Flow << *Agents(Row) << ": " << Names( Row ) << txf::nl;
+				Flow << *Agents(Row);
+				
+				if ( Enabled( Row ) )
+					Flow << ':';
+				else
+					Flow << '!';
+
+				Flow << ' ' << Names( Row ) << txf::nl;
 
 				Row = Agents.Next( Row );
 			}
@@ -262,13 +270,14 @@ namespace {
 		rRack_ Rack;
 		agent::wIds Agents;
 		str::wStrings Names;
+		fbltyp::wBooleans Enabled;
 	qRB
 		Rack.Init();
 
-		tol::Init( Agents, Names );
-		Rack.Frontend.GetAgents( Agents, Names );
+		tol::Init( Agents, Names, Enabled );
+		Rack.Frontend.GetAgents( Agents, Names, Enabled );
 
-		agents_::Display( Agents, Names, cio::COut );
+		agents_::Display( Agents, Names, Enabled, cio::COut );
 	qRR
 	qRE
 	qRT
@@ -279,14 +288,22 @@ namespace {
 	qRH
 		rRack_ Rack;
 		agent::sId Agent = agent::Undefined;
-		str::wString Name, HostPort, Username ;
+		str::wString Name, HostPort, Username;
+		bso::sBool Enabled = false;
 	qRB
 		*Agent = sclmisc::MGetUInt( registry::parameter::Agent );
 
 		tol::Init( Rack, Name, HostPort, Username );
-		Rack.Frontend.GetAgent( Agent, Name, HostPort, Username  );
+		Rack.Frontend.GetAgent( Agent, Name, HostPort, Username, Enabled );
 
-		cio::COut << Name << ": " << Username << '@' << HostPort << txf::nl;
+		cio::COut << Name;
+		
+		if ( Enabled )
+			cio::COut << ':';
+		else
+			cio::COut << '!';
+
+		cio::COut << ' ' << Username << '@' << HostPort << txf::nl;
 	qRR
 	qRE
 	qRT
@@ -527,7 +544,7 @@ qRB
 	else if ( Command == "License" )
 		epsmsc::PrintLicense( NAME_MC );
 	C( AboutBackend );
-	C( Refresh );
+	C( Check );
 	C( CreateAgent );
 	C( UpdateAgent );
 	C( RemoveAgent );
