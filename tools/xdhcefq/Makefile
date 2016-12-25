@@ -397,20 +397,20 @@ $(binary): $(objs)
 ifdef EPEIOS_SRC
 
 ifeq ("$(os)","$(MacOS)")
-		cp $(binary) "$(cef)/build/cefsimple/Debug/cefsimple.app/Contents/MacOS/cefsimple"
-		install_name_tool -change "@executable_path/Chromium Embedded Framework" "@executable_path/../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" "$(cef)/build/cefsimple/Debug/cefsimple.app/Contents/MacOS/cefsimple"
+		cp $(binary) "$(cef)/build/cefsimple/Release/cefsimple.app/Contents/MacOS/cefsimple"
+		install_name_tool -change "@executable_path/Chromium Embedded Framework" "@executable_path/../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" "$(cef)/build/cefsimple/Release/cefsimple.app/Contents/MacOS/cefsimple"
 		install_name_tool -change "@executable_path/Chromium Embedded Framework" "@executable_path/../../../Chromium Embedded Framework.framework/Chromium Embedded Framework" $(binary)
-		cp $(binary) "$(cef)/build/cefsimple/Debug/cefsimple.app/Contents/Frameworks/cefsimple Helper.app/Contents/MacOS/cefsimple Helper"
-# 		cp $(binary) "$(cef)/build/cefsimple/Debug/cefsimple.app/Contents/Frameworks/cefsimple Helper EH.app/Contents/MacOS/cefsimple Helper EH"
-# 		cp $(binary) "$(cef)/build/cefsimple/Debug/cefsimple.app/Contents/Frameworks/cefsimple Helper NP.app/Contents/MacOS/cefsimple Helper NP"
-		echo "$(xcfgb)Main$(xcfga)" | xppq --#Output="$(cef)/build/cefsimple/Debug/cefsimple.app/Contents/MacOS/xdhcefq.xcfg"
-		echo "$(xlcl)" | xppq --#Output="$(cef)/build/cefsimple/Debug/cefsimple.app/Contents/MacOS/xdhcefq.xlcl"
-		echo "$(xcfgb)Sub$(xcfga)" | xppq --#Output="$(cef)/build/cefsimple/Debug/cefsimple.app/Contents/Frameworks/cefsimple Helper.app/Contents/MacOS/xdhcefq.xcfg"
-		echo "$(xlcl)" | xppq --#Output="$(cef)/build/cefsimple/Debug/cefsimple.app/Contents/Frameworks/cefsimple Helper.app/Contents/MacOS/xdhcefq.xlcl"
-# 		echo "$(xcfgb)Sub$(xcfga)" | xppq --#Output="$(cef)/build/cefsimple/Debug/cefsimple.app/Contents/Frameworks/cefsimple Helper EH.app/Contents/MacOS/xdhcefq.xcfg"
-# 		echo "$(xlcl)" | xppq --#Output="$(cef)/build/cefsimple/Debug/cefsimple.app/Contents/Frameworks/cefsimple Helper EH.app/Contents/MacOS/xdhcefq.xlcl"
-# 		echo "$(xcfgb)Sub$(xcfga)" | xppq --#Output="$(cef)/build/cefsimple/Debug/cefsimple.app/Contents/Frameworks/cefsimple Helper NP.app/Contents/MacOS/xdhcefq.xcfg"
-# 		echo "$(xlcl)" | xppq --#Output="$(cef)/build/cefsimple/Debug/cefsimple.app/Contents/Frameworks/cefsimple Helper NP.app/Contents/MacOS/xdhcefq.xlcl"
+		cp $(binary) "$(cef)/build/cefsimple/Release/cefsimple.app/Contents/Frameworks/cefsimple Helper.app/Contents/MacOS/cefsimple Helper"
+# 		cp $(binary) "$(cef)/build/cefsimple/Release/cefsimple.app/Contents/Frameworks/cefsimple Helper EH.app/Contents/MacOS/cefsimple Helper EH"
+# 		cp $(binary) "$(cef)/build/cefsimple/Release/cefsimple.app/Contents/Frameworks/cefsimple Helper NP.app/Contents/MacOS/cefsimple Helper NP"
+		echo "$(xcfgb)Main$(xcfga)" | xppq --#Output="$(cef)/build/cefsimple/Release/cefsimple.app/Contents/MacOS/xdhcefq.xcfg"
+		echo "$(xlcl)" | xppq --#Output="$(cef)/build/cefsimple/Release/cefsimple.app/Contents/MacOS/xdhcefq.xlcl"
+		echo "$(xcfgb)Sub$(xcfga)" | xppq --#Output="$(cef)/build/cefsimple/Release/cefsimple.app/Contents/Frameworks/cefsimple Helper.app/Contents/MacOS/xdhcefq.xcfg"
+		echo "$(xlcl)" | xppq --#Output="$(cef)/build/cefsimple/Release/cefsimple.app/Contents/Frameworks/cefsimple Helper.app/Contents/MacOS/xdhcefq.xlcl"
+# 		echo "$(xcfgb)Sub$(xcfga)" | xppq --#Output="$(cef)/build/cefsimple/Release/cefsimple.app/Contents/Frameworks/cefsimple Helper EH.app/Contents/MacOS/xdhcefq.xcfg"
+# 		echo "$(xlcl)" | xppq --#Output="$(cef)/build/cefsimple/Release/cefsimple.app/Contents/Frameworks/cefsimple Helper EH.app/Contents/MacOS/xdhcefq.xlcl"
+# 		echo "$(xcfgb)Sub$(xcfga)" | xppq --#Output="$(cef)/build/cefsimple/Release/cefsimple.app/Contents/Frameworks/cefsimple Helper NP.app/Contents/MacOS/xdhcefq.xcfg"
+# 		echo "$(xlcl)" | xppq --#Output="$(cef)/build/cefsimple/Release/cefsimple.app/Contents/Frameworks/cefsimple Helper NP.app/Contents/MacOS/xdhcefq.xlcl"
 endif
 endif
 
