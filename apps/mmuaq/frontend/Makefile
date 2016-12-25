@@ -102,6 +102,12 @@ clean : common
 
 common:
 	$(MAKE) $(MAKECMDGOALS) -C XDHTML/
+	$(MAKE) $(MAKECMDGOALS) -C CLI/
+ifdef EPEIOS_SRC
+	$(MAKE) $(MAKECMDGOALS) -C /hg/epeios/plugins/frontend/
+else
+	$(MAKE) $(MAKECMDGOALS) -C plugins/frontend
+endif
 ifdef EPEIOS_SRC
 	$(MAKE) $(MAKECMDGOALS) -C /hg/epeios/tools/xdhbrwq/
 else

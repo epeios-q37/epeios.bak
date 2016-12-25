@@ -339,7 +339,7 @@ ifeq ("$(os)","$(MacOS)")
 	endif
 	binary=$(name)
 	lo += -Wl,-search_paths_first -Wl,-ObjC -Wl,-pie -Wl,-search_paths_first -Wl,-headerpad_max_install_names -lpthread -framework Cocoa -framework AppKit
-	libs += "$(cef)/Debug/Chromium Embedded Framework.framework/Chromium Embedded Framework" # /Users/csimon/cef_binary_3.2454.1344.g2782fb8_macosx64/build/libcef_dll/Debug/libcef_dll_wrapper.a
+	libs += "$(cef)/Release/Chromium Embedded Framework.framework/Chromium Embedded Framework" # /Users/csimon/cef_binary_3.2454.1344.g2782fb8_macosx64/build/libcef_dll/Release/libcef_dll_wrapper.a
 	
 	ifdef EPEIOS_SRC
 		xcfgb=<xpp:bloc><xpp:define name=\"ProcessType\"><xpp:bloc>
@@ -361,7 +361,7 @@ ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20161221"\"
+copt += -DVERSION=\""20161224"\"
 copt += -DCOPYRIGHT_YEARS=\""2014-2016"\"
 copt += -DIDENTIFIER=\""968ea869-90d0-4e03-a4d9-10f4f73d50aa"\"
 
