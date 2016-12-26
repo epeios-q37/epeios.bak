@@ -35,7 +35,7 @@ namespace {
 			cef_life_span_handler_t LifeSpanHandler;
 			cef_load_handler_t LoadHandler;
 			cef_jsdialog_handler_t JSDialogHandler;
-			bso::bool__ ClosePending;	// If 'true', wating for user agreement for clsing;
+			bso::bool__ ClosePending;	// If 'true', wating for user agreement for closing;
 			void reset( bso::bool__ P = true )
 			{
 #ifdef CPE_S_WIN
@@ -412,12 +412,98 @@ void activate_callback (Widget dialog,
 			return false;
 		}
 }
+#endif
+
+namespace jsdialog_ {
+	namespace {
+		int CEF_CALLBACK OnJSDialog_(
+			struct _cef_jsdialog_handler_t* self,
+			struct _cef_browser_t* browser,
+			const cef_string_t* origin_url,
+			cef_jsdialog_type_t dialog_type,
+			const cef_string_t* message_text,
+			const cef_string_t* default_prompt_text,
+			struct _cef_jsdialog_callback_t* callback,
+			int* suppress_message )
+		{
+			*suppress_message = 1;
+			str::wString UTF;
+			ntvstr::rString Natif;
+			cef_nstring_t Text;
+
+//			callback->cont( callback, true, default_prompt_text );
+
+			misc::Release( self );
+			misc::Release( browser );
+			misc::Release( callback );
+
+			cef_convert_from( message_text, &Text );
+
+			Natif.Init( Text.str );
+
+			UTF.Init();
+			cio::COut << "---------------------> OnJSDialog !    " << Natif.UTF8( UTF ) << txf::nl << txf::commit;
+
+			return false;
+		}
+
+		int CEF_CALLBACK OnBeforeUnloadDialog_(
+			struct _cef_jsdialog_handler_t* self,
+			struct _cef_browser_t* browser,
+			const cef_string_t* message_text,
+			int is_reload,
+			struct _cef_jsdialog_callback_t* callback )
+		{
+			callback->cont( callback, true, message_text );
+
+			misc::Release( self );
+			misc::Release( browser );
+			misc::Release( callback );
+
+			cio::COut << "---------------------> OnBefore !" << txf::nl << txf::commit;
+
+			return true;
+		}
+
+		void CEF_CALLBACK OnResetDialogState_(
+			struct _cef_jsdialog_handler_t* self,
+			struct _cef_browser_t* browser )
+			{
+			misc::Release( self );
+			misc::Release( browser );
+
+						cio::COut << "---------------------> Reset !" << txf::nl << txf::commit;
+
+
+			}
+
+		 void CEF_CALLBACK OnDialogClosed_(
+			struct _cef_jsdialog_handler_t* self,
+			struct _cef_browser_t* browser)
+		 {
+			misc::Release( self );
+			misc::Release( browser );
+
+						cio::COut << "---------------------> OnClosed !" << txf::nl << txf::commit;
+
+		 }
+	}
+
+	void Set( cef_jsdialog_handler_t &Handler )
+	{
+		Handler.on_before_unload_dialog = OnBeforeUnloadDialog_;
+		Handler.on_dialog_closed = OnDialogClosed_;
+		Handler.on_jsdialog = OnJSDialog_;
+		Handler.on_reset_dialog_state = OnResetDialogState_;
+	}
+}
+
 
 static struct _cef_jsdialog_handler_t* CEF_CALLBACK GetJSDialogHandler_( struct _cef_client_t* self )
 {
 	misc::Set( &Rack_.JSDialogHandler );
 
-	Rack_.JSDialogHandler.on_jsdialog = jsdialog_::OnJSDialog_;
+	jsdialog_::Set( Rack_.JSDialogHandler );
 
 	misc::Release( &Rack_.JSDialogHandler );
 
@@ -425,8 +511,6 @@ static struct _cef_jsdialog_handler_t* CEF_CALLBACK GetJSDialogHandler_( struct 
 
 	return &Rack_.JSDialogHandler;
 }
-
-#endif
 
 static void FileDialog_(
 	cef_list_value_t *ListValue,
@@ -570,7 +654,7 @@ qRB
 //	Rack_.Client.get_keyboard_handler = GetKeyboardHandler_;
 	Rack_.Client.get_life_span_handler = GetLifeSpanHandler_;
 	Rack_.Client.get_load_handler = GetLoadHandler_;
-//	Rack_.Client.get_jsdialog_handler = GetJSDialogHandler_;
+	Rack_.Client.get_jsdialog_handler = GetJSDialogHandler_;
 	Rack_.Client.on_process_message_received = ClientOnProcessMessageReceived_;
 
 	cef_browser_host_create_browser( &Rack_.WindowInfo, &Rack_.Client, misc::cef_string___( URL ), &Rack_.BrowserSettings, NULL );
