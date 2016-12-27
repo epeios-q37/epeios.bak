@@ -163,6 +163,10 @@
 			<xpp:bloc>
 				<!-- Login : in 'XDH.xcfg : XDH_Locale'-->
 			</xpp:bloc>
+   <Translations text="LinuxDialogBoxIssue">
+    <Translation language="fr">Les boîtes de dialogues ne s'afficheront pas ou s'afficheront dans la console.</Translation>
+    <Translation language="en">Dialog boxes will not be displayed, or be displayed in the console.</Translation>
+   </Translations>
    <xpp:expand href="XSL/AgentLocale.xml"/>
    <xpp:expand href="XSL/AgentsLocale.xml"/>
    <xpp:expand href="XSL/FoldersLocale.xml"/>

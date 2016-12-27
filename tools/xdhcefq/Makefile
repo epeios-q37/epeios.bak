@@ -361,7 +361,7 @@ ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20161226"\"
+copt += -DVERSION=\""20161227"\"
 copt += -DCOPYRIGHT_YEARS=\""2014-2016"\"
 copt += -DIDENTIFIER=\""968ea869-90d0-4e03-a4d9-10f4f73d50aa"\"
 
@@ -397,20 +397,21 @@ $(binary): $(objs)
 ifdef EPEIOS_SRC
 
 ifeq ("$(os)","$(MacOS)")
-		cp $(binary) "$(cef)/build/cefsimple/Release/cefsimple.app/Contents/MacOS/cefsimple"
-		install_name_tool -change "@executable_path/Chromium Embedded Framework" "@executable_path/../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" "$(cef)/build/cefsimple/Release/cefsimple.app/Contents/MacOS/cefsimple"
+		app = $(cef)/build/tests/cefsimple/Debug/cefsimple.app
+		cp $(binary) "$(app)/Contents/MacOS/cefsimple"
+		install_name_tool -change "@executable_path/Chromium Embedded Framework" "@executable_path/../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" "$(app)/Contents/MacOS/cefsimple"
 		install_name_tool -change "@executable_path/Chromium Embedded Framework" "@executable_path/../../../Chromium Embedded Framework.framework/Chromium Embedded Framework" $(binary)
-		cp $(binary) "$(cef)/build/cefsimple/Release/cefsimple.app/Contents/Frameworks/cefsimple Helper.app/Contents/MacOS/cefsimple Helper"
-# 		cp $(binary) "$(cef)/build/cefsimple/Release/cefsimple.app/Contents/Frameworks/cefsimple Helper EH.app/Contents/MacOS/cefsimple Helper EH"
-# 		cp $(binary) "$(cef)/build/cefsimple/Release/cefsimple.app/Contents/Frameworks/cefsimple Helper NP.app/Contents/MacOS/cefsimple Helper NP"
-		echo "$(xcfgb)Main$(xcfga)" | xppq --#Output="$(cef)/build/cefsimple/Release/cefsimple.app/Contents/MacOS/xdhcefq.xcfg"
-		echo "$(xlcl)" | xppq --#Output="$(cef)/build/cefsimple/Release/cefsimple.app/Contents/MacOS/xdhcefq.xlcl"
-		echo "$(xcfgb)Sub$(xcfga)" | xppq --#Output="$(cef)/build/cefsimple/Release/cefsimple.app/Contents/Frameworks/cefsimple Helper.app/Contents/MacOS/xdhcefq.xcfg"
-		echo "$(xlcl)" | xppq --#Output="$(cef)/build/cefsimple/Release/cefsimple.app/Contents/Frameworks/cefsimple Helper.app/Contents/MacOS/xdhcefq.xlcl"
-# 		echo "$(xcfgb)Sub$(xcfga)" | xppq --#Output="$(cef)/build/cefsimple/Release/cefsimple.app/Contents/Frameworks/cefsimple Helper EH.app/Contents/MacOS/xdhcefq.xcfg"
-# 		echo "$(xlcl)" | xppq --#Output="$(cef)/build/cefsimple/Release/cefsimple.app/Contents/Frameworks/cefsimple Helper EH.app/Contents/MacOS/xdhcefq.xlcl"
-# 		echo "$(xcfgb)Sub$(xcfga)" | xppq --#Output="$(cef)/build/cefsimple/Release/cefsimple.app/Contents/Frameworks/cefsimple Helper NP.app/Contents/MacOS/xdhcefq.xcfg"
-# 		echo "$(xlcl)" | xppq --#Output="$(cef)/build/cefsimple/Release/cefsimple.app/Contents/Frameworks/cefsimple Helper NP.app/Contents/MacOS/xdhcefq.xlcl"
+		cp $(binary) "$(app)/Contents/Frameworks/cefsimple Helper.app/Contents/MacOS/cefsimple Helper"
+# 		cp $(binary) "$(app)/Contents/Frameworks/cefsimple Helper EH.app/Contents/MacOS/cefsimple Helper EH"
+# 		cp $(binary) "$(app)/Contents/Frameworks/cefsimple Helper NP.app/Contents/MacOS/cefsimple Helper NP"
+		echo "$(xcfgb)Main$(xcfga)" | xppq --#Output="$(app)/Contents/MacOS/xdhcefq.xcfg"
+		echo "$(xlcl)" | xppq --#Output="$(app)/Contents/MacOS/xdhcefq.xlcl"
+		echo "$(xcfgb)Sub$(xcfga)" | xppq --#Output="$(app)/Contents/Frameworks/cefsimple Helper.app/Contents/MacOS/xdhcefq.xcfg"
+		echo "$(xlcl)" | xppq --#Output="$(app)/Contents/Frameworks/cefsimple Helper.app/Contents/MacOS/xdhcefq.xlcl"
+# 		echo "$(xcfgb)Sub$(xcfga)" | xppq --#Output="$(app)/Contents/Frameworks/cefsimple Helper EH.app/Contents/MacOS/xdhcefq.xcfg"
+# 		echo "$(xlcl)" | xppq --#Output="$(app)/Contents/Frameworks/cefsimple Helper EH.app/Contents/MacOS/xdhcefq.xlcl"
+# 		echo "$(xcfgb)Sub$(xcfga)" | xppq --#Output="$(app)/Contents/Frameworks/cefsimple Helper NP.app/Contents/MacOS/xdhcefq.xcfg"
+# 		echo "$(xlcl)" | xppq --#Output="$(app)/Contents/Frameworks/cefsimple Helper NP.app/Contents/MacOS/xdhcefq.xlcl"
 endif
 endif
 
