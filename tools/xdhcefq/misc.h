@@ -133,7 +133,7 @@ namespace misc {
 
 	client_message__ GetClientMessage( const cef_string_t *Pattern );
 
-	enum render_message__ {	// Messages  destination du 'render'.
+	enum render_message__ {	// Messages à destination du 'render'.
 		rmStart,
 		rmHandleSelectedFiles,	// Gestion des fichiers slectionns.
 //		rmHandleAction,

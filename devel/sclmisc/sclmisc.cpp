@@ -66,6 +66,11 @@ const char *sclmisc::GetBaseLanguage( void )
 	return BaseLanguage_;
 }
 
+void sclmisc::SetBaseLanguage( const str::dString &Language )
+{
+	Language.Convert( BaseLanguage_ );
+}
+
 void sclmisc::RefreshBaseLanguage( void )
 {
 qRH
@@ -73,7 +78,7 @@ qRH
 qRB
 	Language.Init();
 	if ( sclrgstry::BGetValue( GetRegistry(), sclrgstry::parameter::Language, Language ) )
-		Language.Convert( BaseLanguage_ );
+		SetBaseLanguage( Language );
 qRR
 qRT
 qRE

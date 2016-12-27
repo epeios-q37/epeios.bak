@@ -275,145 +275,6 @@ static struct _cef_load_handler_t* CEF_CALLBACK GetLoadHandler_( struct _cef_cli
 	return &Rack_.LoadHandler;
 }
 
-#if 0
-
-#include <Xm/RowColumn.h>
-#include <Xm/MessageB.h>
-#include <Xm/PushB.h>
-
-namespace jsdialog_ {
-
-
-void Test_( void )
-{
-    XtAppContext     app;
-    Widget           toplevel, rc, hpb, gpb; 
-    /* callbacks for the pushbuttons -- pops up dialog */
-    void             popup_callback(Widget, XtPointer, XtPointer);
-    void             exit_callback(Widget, XtPointer, XtPointer);
-
-    XtSetLanguageProc (NULL, NULL, NULL);
-    toplevel = XtVaOpenApplication (&app, "Demos", NULL, 0, &argc, argv, NULL, 
-                                     sessionShellWidgetClass, NULL);   
-
-    rc = XmCreateRowColumn (toplevel, "rowcol", NULL, 0);
-
-    hpb = XmCreatePushButton (rc, "Hello", NULL, 0);
-    XtAddCallback (hpb,
-           XmNactivateCallback,
-           popup_callback,
-           (XtPointer) "Hello World");
-
-    gpb = XmCreatePushButton (rc, "Goodbye", NULL, 0);
-    XtAddCallback (gpb, XmNactivateCallback, exit_callback, NULL);
-
-    XtManageChild (hpb);
-    XtManageChild (gpb);
-    XtManageChild (rc);
-    XtRealizeWidget (toplevel);
-    XtAppMainLoop (app);
-}
-
-/* callback for the "Hello" PushButton. 
-** Popup an InformationDialog displaying the text passed as the client
-** data parameter. 
-*/
-void popup_callback (Widget button, XtPointer client_data,
-                     XtPointer call_data)
-{
-    Widget     dialog;
-    XmString   xm_string;
-    void       activate_callback(Widget, XtPointer, XtPointer);
-    Arg        args[5];
-    int        n = 0;
-    char       *text = (char *) client_data;
-
-    /* set the label for the dialog */
-    xm_string = XmStringCreateLocalized (text);
-    XtSetArg (args[n], XmNmessageString, xm_string); n++;
-    /* Create the InformationDialog as child of button */
-    dialog = XmCreateInformationDialog (button, "info", args, n); 
-    /* no longer need the compound string, free it */
-    XmStringFree (xm_string);
-    /* add the callback routine */
-    XtAddCallback (dialog, XmNokCallback, activate_callback, NULL);
-    /* manage the MessageBox: has the side effect of displaying the */
-    /*       XmDialogShell parent */
-    XtManageChild (dialog);
-}
-
-/*
-** callback routine when the user pressed the "Goodbye" button 
-*/
-void exit_callback (Widget w, XtPointer client_data, XtPointer call_data){
-    exit (0);
-}
-
-/* callback routine for when the user presses the OK button. 
-** Yes, despite the fact that the OK button was pressed, the 
-** widget passed to this callback routine is the dialog! 
-*/
-void activate_callback (Widget dialog,
-                        XtPointer client_data,
-                        XtPointer call_data)
-{
-    puts ("OK was pressed.");
-}
-
-	void Test_(void) {
- Display *d;
-   Window w;
-   XEvent e;
-   const char *msg = "Hello, World!";
-   int s;
- 
-   d = XOpenDisplay(NULL);
-   if (d == NULL) {
-      fprintf(stderr, "Cannot open display\n");
-      exit(1);
-   }
- 
-   s = DefaultScreen(d);
-   w = XCreateSimpleWindow(d, RootWindow(d, s), 10, 10, 100, 100, 1,
-                           BlackPixel(d, s), WhitePixel(d, s));
-   XSelectInput(d, w, ExposureMask | KeyPressMask);
-   XMapWindow(d, w);
- 
-   while (1) {
-      XNextEvent(d, &e);
-      if (e.type == Expose) {
-         XFillRectangle(d, w, DefaultGC(d, s), 20, 20, 10, 10);
-         XDrawString(d, w, DefaultGC(d, s), 10, 50, msg, strlen(msg));
-      }
-      if (e.type == KeyPress)
-         break;
-   }
-
- 
-   XCloseDisplay(d);
-	
-	}
-
-
-		int CEF_CALLBACK OnJSDialog_(
-		struct _cef_jsdialog_handler_t* self,
-		struct _cef_browser_t* browser,
-			const cef_string_t* origin_url,
-			cef_jsdialog_type_t dialog_type,
-			const cef_string_t* message_text,
-			const cef_string_t* default_prompt_text,
-		struct _cef_jsdialog_callback_t* callback,
-			int* suppress_message )
-		{
-			Test_();
-
-			*suppress_message = 1;
-
-			return false;
-		}
-}
-#endif
-
 namespace jsdialog_ {
 	namespace {
 		int CEF_CALLBACK OnJSDialog_(
@@ -426,25 +287,59 @@ namespace jsdialog_ {
 			struct _cef_jsdialog_callback_t* callback,
 			int* suppress_message )
 		{
-			*suppress_message = 1;
+		qRH
 			str::wString UTF;
 			ntvstr::rString Natif;
 			cef_nstring_t Text;
+			str::wString Script;
+			bso::sBool Answer = false;
+		qRB
+			// Should not be launched under 'Linux', but is also compiled under 'Windows' to facilitate the development.
+#ifndef CPE_S_LINUX
+			qRGnr();
+#endif
+			cef_convert_from( message_text, &Text );
+			Natif.Init( Text.str );
+			UTF.Init();
+			Script.Init();
 
-//			callback->cont( callback, true, default_prompt_text );
+			switch ( dialog_type ) {
+			case JSDIALOGTYPE_ALERT:
+				scllocale::GetTranslation( "LinuxAlertDialogScript", sclmisc::GetBaseLanguage(), Script, Natif.UTF8( UTF ) );
+				break;
+			case JSDIALOGTYPE_CONFIRM:
+				scllocale::GetTranslation( "LinuxConfirmationDialogScript", sclmisc::GetBaseLanguage(), Script, Natif.UTF8( UTF ) );
+				break;
+			case JSDIALOGTYPE_PROMPT:
+				qRVct();
+				break;
+			default:
+				qRGnr();
+				break;
+			}
+
+			switch ( tol::System( Script ) ) {
+			case 0:
+				Answer = true;
+				break;
+			case -1:
+				qRGnr();
+				break;
+			default:
+				Answer = false;
+				break;
+			}
+
+			callback->cont( callback, Answer, default_prompt_text );
 
 			misc::Release( self );
 			misc::Release( browser );
 			misc::Release( callback );
 
-			cef_convert_from( message_text, &Text );
-
-			Natif.Init( Text.str );
-
-			UTF.Init();
-			cio::COut << "---------------------> OnJSDialog !    " << Natif.UTF8( UTF ) << txf::nl << txf::commit;
-
-			return false;
+		qRR
+		qRE
+		qRT
+			return true;	// We use a custom dialog box (there is no default implementation under 'Linux').
 		}
 
 		int CEF_CALLBACK OnBeforeUnloadDialog_(
@@ -460,8 +355,6 @@ namespace jsdialog_ {
 			misc::Release( browser );
 			misc::Release( callback );
 
-			cio::COut << "---------------------> OnBefore !" << txf::nl << txf::commit;
-
 			return true;
 		}
 
@@ -469,12 +362,8 @@ namespace jsdialog_ {
 			struct _cef_jsdialog_handler_t* self,
 			struct _cef_browser_t* browser )
 			{
-			misc::Release( self );
-			misc::Release( browser );
-
-						cio::COut << "---------------------> Reset !" << txf::nl << txf::commit;
-
-
+				misc::Release( self );
+				misc::Release( browser );
 			}
 
 		 void CEF_CALLBACK OnDialogClosed_(
@@ -483,9 +372,6 @@ namespace jsdialog_ {
 		 {
 			misc::Release( self );
 			misc::Release( browser );
-
-						cio::COut << "---------------------> OnClosed !" << txf::nl << txf::commit;
-
 		 }
 	}
 
@@ -497,7 +383,6 @@ namespace jsdialog_ {
 		Handler.on_reset_dialog_state = OnResetDialogState_;
 	}
 }
-
 
 static struct _cef_jsdialog_handler_t* CEF_CALLBACK GetJSDialogHandler_( struct _cef_client_t* self )
 {
@@ -654,7 +539,9 @@ qRB
 //	Rack_.Client.get_keyboard_handler = GetKeyboardHandler_;
 	Rack_.Client.get_life_span_handler = GetLifeSpanHandler_;
 	Rack_.Client.get_load_handler = GetLoadHandler_;
+#ifdef CPE_S_LINUX	// No default implementation under Linux.
 	Rack_.Client.get_jsdialog_handler = GetJSDialogHandler_;
+#endif
 	Rack_.Client.on_process_message_received = ClientOnProcessMessageReceived_;
 
 	cef_browser_host_create_browser( &Rack_.WindowInfo, &Rack_.Client, misc::cef_string___( URL ), &Rack_.BrowserSettings, NULL );

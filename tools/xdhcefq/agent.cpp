@@ -575,6 +575,7 @@ void agent::agent___::_InitializeSession( void )
 {
 qRH
 	xdhujp::proxy_callback__ *ProxyCallback;
+	qCBUFFERr Buffer;
 qRB
 	ProxyCallback = new xdhujp::proxy_callback__;	// Destruction is made by '_Session'.
 
@@ -586,6 +587,7 @@ qRB
 	ProxyCallback->Init( ::Callback_ );
 
 	_Session.Init( RetrieveCallback( Language( _LanguageBuffer ), ProxyCallback ) );
+	sclmisc::SetBaseLanguage( str::wString( BaseLanguage( Buffer ) ) );
 qRR
 	if ( ProxyCallback != NULL )
 		delete ProxyCallback;

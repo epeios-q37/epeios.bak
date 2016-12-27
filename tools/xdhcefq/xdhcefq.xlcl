@@ -11,7 +11,15 @@
 		<Translation language="fr">Fermer</Translation>
 		<Translation language="en">Close</Translation>
 	</Translations>
-	<!--
+ <Translations text="LinuxAlertDialogScript">
+  <Translation language="fr">echo -n "************************************************************************\\n%1 (appuyez sur une touche pour continuer) "; read answer; echo "Veuillez poursuivre dans la fenêtre principale de l'application.";eval true</Translation>
+  <Translation language="en">echo -n "************************************************************************\\n%1 (press a key to continue) "; read answer; echo "Please return to the main window of the application.";eval true</Translation>
+ </Translations>
+ <Translations text="LinuxConfirmationDialogScript">
+  <Translation language="fr">echo -n "************************************************************************\\n%1 (o/n) "; read answer; if echo "$answer" | grep -iq "^o" ;then result=true; else result=false; fi; echo "Veuillez poursuivre dans la fenêtre principale de l'application.";eval $result</Translation>
+  <Translation language="en">echo -n "************************************************************************\\n%1 (y/n) "; read answer; if echo "$answer" | grep -iq "^y" ;then result=true; else result=false; fi; echo "Please return to the main window of the application.";eval $result</Translation>
+ </Translations>
+ <!--
 	<Translations text="">
 		<Translation language="fr"></Translation>
 		<Translation language="en"></Translation>

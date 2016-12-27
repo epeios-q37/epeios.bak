@@ -1,5 +1,9 @@
 CHANGELOG for the 'Epeios' framework.
 
+2016-12-27 :
+- SCLMISC :
+	- Introducing 'SetBaseLanguage(...)'.
+
 2016-12-24 :
 - TOL :
 	- Adding 'HaveSameAmount(...)' function.

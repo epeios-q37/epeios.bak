@@ -52,9 +52,11 @@ namespace sclmisc {
 
 	const str::dString &GetBinPath( void );
 
-	void RefreshBaseLanguage( void );	// Set the base langauge (returned by above function) with the content of the registry.
+	void SetBaseLanguage( const str::dString &Language );	// Set the base language.
 
-	const char *GetBaseLanguage( void );	// Language d'administration, pouvant être language utilsateur selon contexte.
+	void RefreshBaseLanguage( void );	// Set the base language with the content of the registry.
+
+	const char *GetBaseLanguage( void );	// Admin. language ; could also be the user language under some circumstances.
 
 	template <typename source> inline const str::string_ &GetBaseTranslation(
 		const source &Source,
