@@ -399,9 +399,9 @@ ifdef EPEIOS_SRC
 
 ifeq ("$(os)","$(MacOS)")
 		cp $(binary) "$(app)/Contents/MacOS/cefsimple"
-		install_name_tool -change "@executable_path/Chromium Embedded Framework" "@executable_path/../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" "$(app)/Contents/MacOS/cefsimple"
-		install_name_tool -change "@executable_path/Chromium Embedded Framework" "@executable_path/../../../Chromium Embedded Framework.framework/Chromium Embedded Framework" $(binary)
+		install_name_tool -change "@rpath/Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" "@executable_path/../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" "$(app)/Contents/MacOS/cefsimple"
 		cp $(binary) "$(app)/Contents/Frameworks/cefsimple Helper.app/Contents/MacOS/cefsimple Helper"
+		install_name_tool -change "@rpath/Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" "@executable_path/../../../../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" "$(app)/Contents/Frameworks/cefsimple Helper.app/Contents/MacOS/cefsimple Helper"
 # 		cp $(binary) "$(app)/Contents/Frameworks/cefsimple Helper EH.app/Contents/MacOS/cefsimple Helper EH"
 # 		cp $(binary) "$(app)/Contents/Frameworks/cefsimple Helper NP.app/Contents/MacOS/cefsimple Helper NP"
 		echo "$(xcfgb)Main$(xcfga)" | xppq --#Output="$(app)/Contents/MacOS/xdhcefq.xcfg"
