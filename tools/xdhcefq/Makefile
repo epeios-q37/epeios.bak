@@ -342,6 +342,7 @@ ifeq ("$(os)","$(MacOS)")
 	libs += "$(cef)/Release/Chromium Embedded Framework.framework/Chromium Embedded Framework" # /Users/csimon/cef_binary_3.2454.1344.g2782fb8_macosx64/build/libcef_dll/Release/libcef_dll_wrapper.a
 	
 	ifdef EPEIOS_SRC
+		app = $(cef)/build/tests/cefsimple/Debug/cefsimple.app
 		xcfgb=<xpp:bloc><xpp:define name=\"ProcessType\"><xpp:bloc>
 		xcfga=</xpp:bloc></xpp:define><xpp:expand href=\"/Users/csimon/epeios/tools/xdhcefq/xdhcefq.xcfg\"/></xpp:bloc>
 		xlcl=<xpp:expand href=\"/Users/csimon/epeios/tools/xdhcefq/xdhcefq.xlcl\"/>
@@ -397,7 +398,6 @@ $(binary): $(objs)
 ifdef EPEIOS_SRC
 
 ifeq ("$(os)","$(MacOS)")
-		app = $(cef)/build/tests/cefsimple/Debug/cefsimple.app
 		cp $(binary) "$(app)/Contents/MacOS/cefsimple"
 		install_name_tool -change "@executable_path/Chromium Embedded Framework" "@executable_path/../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" "$(app)/Contents/MacOS/cefsimple"
 		install_name_tool -change "@executable_path/Chromium Embedded Framework" "@executable_path/../../../Chromium Embedded Framework.framework/Chromium Embedded Framework" $(binary)
