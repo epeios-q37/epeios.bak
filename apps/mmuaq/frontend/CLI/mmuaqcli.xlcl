@@ -5,7 +5,7 @@
 	<xpp:expand select="epeios.xlcl"/>
 	<Translations text="ProgramDescription">
 		<Translation language="fr">Frontal en ligne de commande de l'application MMUAq.</Translation>
-		<Translation language="en">Command-line interface frontend of the MMUaq application.</Translation>
+		<Translation language="en">Command-line frontend of the MMUaq application.</Translation>
 	</Translations>
  <Translations text="RootFolderName">
   <Translation language="fr">Courrier</Translation>

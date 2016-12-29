@@ -19,11 +19,11 @@
    <!-- Commands -->
    <Translations text="AboutBackendCommandDescription">
     <Translation language="fr">Affiche des informations à propos du moteur de traitement.</Translation>
-    <Translation language="en">Displays infomation about the backend.</Translation>
+    <Translation language="en">Displays information about the backend.</Translation>
    </Translations>
    <Translations text="AgentCommandDescription">
     <Translation language="fr">Affiche des informations sur un agent.</Translation>
-    <Translation language="en">Displays some agent infomration.</Translation>
+    <Translation language="en">Displays some agent information.</Translation>
    </Translations>
    <Translations text="AgentsCommandDescription">
     <Translation language="fr">Affiche la liste des agents.</Translation>
@@ -35,7 +35,7 @@
    </Translations>
    <Translations text="CreateFolderCommandDescription">
     <Translation language="fr">Crée un sous-dossier de nom donné.</Translation>
-    <Translation language="en">Creates un sub-folder of given name.</Translation>
+    <Translation language="en">Creates a sub-folder of given name.</Translation>
    </Translations>
    <Translations text="FoldersCommandDescription">
     <Translation language="fr">Affiche la liste de sous-dossiers d'un dossier.</Translation>
@@ -130,7 +130,7 @@
    </Translations>
    <Translations text="UsernameArgumentDescription">
     <Translation language="fr">Nom d'utilisateur utilisé pour la connexion.</Translation>
-    <Translation language="en">Username for the connection</Translation>
+    <Translation language="en">Username for the connection.</Translation>
    </Translations>
    <Translations text="UsernameArgumentLabel">
     <Translation language="fr">utilisateur</Translation>
@@ -138,7 +138,7 @@
    </Translations>
    <Translations text="PasswordArgumentDescription">
     <Translation language="fr">Mot de passe de connexion.</Translation>
-    <Translation language="en">Password for the connexion.</Translation>
+    <Translation language="en">Password for the connection.</Translation>
    </Translations>
    <Translations text="PasswordArgumentLabel">
     <Translation language="fr">mot de passe</Translation>
