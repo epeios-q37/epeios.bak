@@ -36,7 +36,14 @@
 	</xpp:define>
 	<xpp:define name="Definitions">
 		<xpp:bloc>
-			<xpp:expand select="FRD_Definitions"/>
+   <xpp:ifeq select="packing" value="yes">
+    <xpp:bloc>
+     <xpp:set name="BinPath" value="."/>
+     <xpp:set name="PlgPath" value="../plugins/"/>
+     <xpp:set name="Backend" value="../../processing/backend/mmuaqbkd"/>
+    </xpp:bloc>
+   </xpp:ifeq>
+   <xpp:expand select="FRD_Definitions"/>
 			<xpp:define name="BinRootDir">
 				<xpp:bloc>
 					<xpp:ifeq select="env" value="windows">

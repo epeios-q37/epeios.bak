@@ -32,7 +32,7 @@
 		<Parameters>
 			<xpp:expand select="Parameters"/>
 			<xpp:expand select="XDH_Parameters"/>
-			<Language>fr</Language>
+			<Language>en</Language>
 		</Parameters>
 		<Definitions>
 			<xpp:expand select="Definitions"/>

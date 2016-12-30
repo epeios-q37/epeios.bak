@@ -1,43 +1,43 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Project xmlns:xpp="http://zeusw.org/epeios/xpp">
-	<xpp:bloc>
-		<!-- User definitions -->
-		<xpp:define name="Version">
-			<xpp:bloc>(Version)</xpp:bloc>
-		</xpp:define>
-		<xpp:define name="CopyrightYears">
-			<xpp:bloc>2016</xpp:bloc>
-		</xpp:define>
-	</xpp:bloc>
-	<xpp:set name="Credits" value="Epeios"/>
-	<xpp:set name="Type" value="Plugin"/>
-	<xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
-	<About>
-		<Program>basic</Program>
-		<Software>mmuaq</Software>
-		<UUID>ac14c930-379c-40bd-a79a-63e8c72748db</UUID>
-	</About>
-	<InstallPath>plugins/mmuaq/backend/authentication/basic/</InstallPath>
-	<Modules>
-		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
-			<Modules Group="Core">
-				<xpp:expand select="Core"/>
-			</Modules>
-			<Modules Group="SCL">
-				<xpp:expand select="SCL"/>
-			</Modules>
-		</Modules>
-		<Modules Group="MUA" Path="../../../">
+ <xpp:bloc>
+  <!-- User definitions -->
+  <xpp:define name="Version">
+   <xpp:bloc>(Version)</xpp:bloc>
+  </xpp:define>
+  <xpp:define name="CopyrightYears">
+   <xpp:bloc>2016</xpp:bloc>
+  </xpp:define>
+ </xpp:bloc>
+ <xpp:set name="Credits" value="Epeios"/>
+ <xpp:set name="Type" value="Plugin"/>
+ <xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
+ <About>
+  <Program>basic</Program>
+  <Software>mmuaq</Software>
+  <UUID>ac14c930-379c-40bd-a79a-63e8c72748db</UUID>
+ </About>
+ <InstallPath>plugins/mmuaq/backend/authentication/basic/</InstallPath>
+ <Modules>
+  <Modules Group="Epeios" Path="h:/hg/epeios/stable/">
+   <Modules Group="Core">
+    <xpp:expand select="Core"/>
+   </Modules>
+   <Modules Group="SCL">
+    <xpp:expand select="SCL"/>
+   </Modules>
+  </Modules>
+  <Modules Group="MUA" Path="../../../">
    <Module>muaplg</Module>
-		</Modules>
-		<Module>registry</Module>
-	</Modules>
-	<SourceDirs>
-		<SourceDir>../</SourceDir>
-		<SourceDir>../../..</SourceDir>
-		<SourceDir>../../../..</SourceDir>
-	</SourceDirs>
-	<PreprocessorDefinitions>
-	</PreprocessorDefinitions>
-	<Packing XFiles="No"/>
+  </Modules>
+  <Module>registry</Module>
+ </Modules>
+ <SourceDirs>
+  <SourceDir>../</SourceDir>
+  <SourceDir>../../..</SourceDir>
+  <SourceDir>../../../..</SourceDir>
+ </SourceDirs>
+ <PreprocessorDefinitions>
+ </PreprocessorDefinitions>
+ <Packing XFiles="No"/>
 </Project>

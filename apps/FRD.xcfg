@@ -7,6 +7,9 @@
 	<xpp:define name="FRD_Definitions">
 		<xpp:bloc>
 			<FrontendPlugins>
+				<xpp:define name="PlgPath">
+						<xpp:expand value-of="PlgPath"/>
+					</xpp:define>
 				<Plugin id="Straight">
 					<xpp:expand select="PlgPath"/>
 					<xpp:bloc>frontend/straight/straight</xpp:bloc>

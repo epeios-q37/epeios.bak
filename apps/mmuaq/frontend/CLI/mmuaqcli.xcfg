@@ -7,7 +7,7 @@
   <xpp:expand href="../../../../TOL.xcfg"/>
   <Parameters>
    <xpp:expand select="Parameters"/>
-   <Language>fr</Language>
+   <Language>en</Language>
    <!-- Default command -->
    <Command></Command>
   </Parameters>

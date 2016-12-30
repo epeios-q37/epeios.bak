@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Project xmlns:xpp="http://q37.info/ns/xpp/">
-	<xpp:set name="Type" value="Bundle"/>
-	<xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
-	<Dependencies Target="mmuaq">
-		<Dependency Dir="basic/"/>
-	</Dependencies>
+ <xpp:set name="Type" value="Bundle"/>
+ <xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
+ <Dependencies Target="mmuaq">
+  <Dependency Dir="basic/"/>
+ </Dependencies>
 </Project>
