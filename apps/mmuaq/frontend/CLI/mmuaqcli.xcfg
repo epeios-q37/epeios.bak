@@ -113,8 +113,8 @@
     <Translation language="en">name</Translation>
    </Translations>
    <Translations text="HostPortArgumentDescription">
-    <Translation language="fr">Adresse et service de l'agent.</Translation>
-    <Translation language="en">Address and service of the agent.</Translation>
+    <Translation language="fr">adresse et service de l'agent.</Translation>
+    <Translation language="en">address and service of the agent.</Translation>
    </Translations>
    <Translations text="HostPortArgumentLabel">
     <Translation language="fr">adresse:service</Translation>
@@ -129,16 +129,16 @@
     <Translation language="en">parent</Translation>
    </Translations>
    <Translations text="UsernameArgumentDescription">
-    <Translation language="fr">Nom d'utilisateur utilisé pour la connexion.</Translation>
-    <Translation language="en">Username for the connection.</Translation>
+    <Translation language="fr">nom d'utilisateur utilisé pour la connexion.</Translation>
+    <Translation language="en">username for the connection.</Translation>
    </Translations>
    <Translations text="UsernameArgumentLabel">
     <Translation language="fr">utilisateur</Translation>
     <Translation language="en">user</Translation>
    </Translations>
    <Translations text="PasswordArgumentDescription">
-    <Translation language="fr">Mot de passe de connexion.</Translation>
-    <Translation language="en">Password for the connection.</Translation>
+    <Translation language="fr">mot de passe de connexion.</Translation>
+    <Translation language="en">password for the connection.</Translation>
    </Translations>
    <Translations text="PasswordArgumentLabel">
     <Translation language="fr">mot de passe</Translation>

@@ -27,9 +27,7 @@
 
 # include "sclfrntnd.h"
 
-# include "csducl.h"
 # include "xml.h"
-
 
 namespace frdfrntnd {
 	using sclfrntnd::rKernel;

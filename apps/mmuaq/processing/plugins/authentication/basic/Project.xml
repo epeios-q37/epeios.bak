@@ -22,13 +22,32 @@
   <Modules Group="Epeios" Path="h:/hg/epeios/stable/">
    <Modules Group="Core">
     <xpp:expand select="Core"/>
+    <Module>btr</Module>
+    <Module>dtr</Module>
+    <Module>htp</Module>
+    <Module>lck</Module>
+    <Module>sck</Module>
+    <Module>txmtbl</Module>
+   </Modules>
+   <Modules Group="CSD">
+    <Module>csdbnc</Module>
    </Modules>
    <Modules Group="SCL">
     <xpp:expand select="SCL"/>
    </Modules>
   </Modules>
   <Modules Group="MUA" Path="../../../">
+   <Module>muaacc</Module>
+   <Module>muaagt</Module>
+   <Module>muabsc</Module>
+   <Module>muadir</Module>
+   <Module>muafld</Module>
+   <Module>muaimf</Module>
+   <Module Path="../">muainf</Module>
+   <Module>muamel</Module>
+   <Module>muapo3</Module>
    <Module>muaplg</Module>
+   <Module>muatrk</Module>
   </Modules>
   <Module>registry</Module>
  </Modules>

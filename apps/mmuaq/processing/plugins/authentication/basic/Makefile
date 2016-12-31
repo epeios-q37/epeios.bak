@@ -37,10 +37,14 @@ mods += tagsbs tol txf tys uys
 mods += utf xtf llio bomhdl cdgb64 
 mods += dlbrry fil fnm lcl plgn 
 mods += plgncore rgstry stsfsm xml xpp 
-mods += tht thtsub 
+mods += tht thtsub btr dtr htp 
+mods += lck sck txmtbl 
+mods += csdbnc 
 mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
 mods += sclplugin 
-mods += muaplg 
+mods += muaacc muaagt muabsc muadir muafld 
+mods += muaimf muainf muamel muapo3 muaplg 
+mods += muatrk 
 mods += registry 
 
 pmods += pllio 
