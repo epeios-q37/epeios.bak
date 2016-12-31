@@ -23,7 +23,7 @@
 # define CPE_NAME		"CPE"
 
 # if defined( E_DEBUG ) && !defined( CPE_NODBG )
-# define CPE_DBG
+#  define CPE_DBG
 # endif
 
 // ComPilation Enviroment.
@@ -58,7 +58,7 @@
 #  define CPE_C_MSC
 #  define CPE_CL	CPE_CL_MSC
 #  define CPE_VL	CPE_STRING_( _MSC_VER )
-#endif
+# endif
 
 # ifndef CPE_CL
 #  error "Undefined compiler !"
@@ -121,7 +121,7 @@
 #  define CPE_SL	CPE_SL_WIN32
 # endif
 
-# if !defined(_WIN32) && (defined(__unix__) || defined(__unix) || (defined(__APPLE__) && defined(__MACH__)))
+# if !defined( _WIN32 ) && ( defined( __unix__ ) || defined( __unix ) || ( defined( __APPLE__ ) && defined( __MACH__ ) ) )
 # define CPE_S_UNIX
 # include <unistd.h>
 # if defined(_POSIX_VERSION)
@@ -168,15 +168,15 @@
 # endif
 
 
-#if defined(__x86_64__) || defined(_M_X64)
+# if defined( __x86_64__ ) || defined( _M_X64 )
 #  define CPE_A_AMD64
 #  define CPE_F_64BITS
 #  define CPE_AL	CPE_TL_AMD64
-#elif defined(__i386) || defined(_M_IX86)
+# elif defined( __i386 ) || defined( _M_IX86 )
 #  define CPE_A_IA32
 #  define CPE_F_32BITS
 #  define CPE_AL	CPE_TL_IA32
-#endif
+# endif
 
 # ifndef CPE_AL
 #  error "Undefined architecture !"
@@ -198,7 +198,7 @@
 #  endif
 # endif
 
-#define CPE_DESCRIPTION	CPE_SL ";" CPE_CL " " CPE_VL ";" CPE_AL
+# define CPE_DESCRIPTION	CPE_SL ";" CPE_CL " " CPE_VL ";" CPE_AL
 
 namespace cpe {
 
@@ -210,6 +210,4 @@ namespace cpe {
 	const char *GetOSDigest( void );
 }
 
-
-/*$END$*/
 #endif

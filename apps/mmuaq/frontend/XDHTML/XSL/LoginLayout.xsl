@@ -20,9 +20,9 @@
 		</xsl:variable>
 		<span class="vcenter-out">
 			<span class="vcenter-in">
-    <xsl:if test="contains(/RichFrontEnd/@OS,'Linux')">
+    <!--xsl:if test="contains(/RichFrontEnd/@OS,'Linux')">
      <div style="width: 100%; display: flex; justify-content: center;">#LinuxDialogBoxIssue#</div>
-    </xsl:if>
+    </xsl:if-->
     <fieldset>
 					<fieldset title="#lgnLoginTitle#">
 						<legend>#lgnLogin#</legend>

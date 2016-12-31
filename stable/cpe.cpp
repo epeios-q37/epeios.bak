@@ -27,7 +27,7 @@ using namespace cpe;
 
 #define C( label )\
 	if ( Digest[0] )\
-		strcat(Digest, ",");	\
+		strcat(Digest, ";");	\
 \
 	strcat( Digest, label )
 

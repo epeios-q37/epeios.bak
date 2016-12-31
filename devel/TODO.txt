@@ -1,6 +1,7 @@
 TODO for the 'Epeios' framework.
 
 FAST :
+- Study the possibility to adapt the framework to 'emscripten'.
 
 MIDDLE
 - 'SCL...' : Renaming ('SCLxyyy...' to 'SCLx').
@@ -12,6 +13,7 @@ MIDDLE
 - Implement a solution which prevent that an 'Enter' (or other touch) event on a text box is also applied to a potential alert box reporting an error,
   preventing this box to be displayed. Currently, there is a workaround in the 'handleEvent' function from the 'xdhtml.js' file.
 - Implementing better thread-safety for the registry, in peculiar the common registry as defined in 'SCLRGSTRY'/'SCLMISC'.
+- XDHTML : expose in the XML flow tje nature of the interface (desktop, web, touchscreen, mobile...).
 
 LONG :
 - 'XPP' : Réimplement in a simplified manner.
@@ -19,6 +21,14 @@ LONG :
 - Implementing 'XDHTML' technology under 'Gecko' (without 'XUL' ; only 'HTML 5'). There are more platforms for 'Gecko' than for 'CEF', as,
   for 'Gecko', if there is no 'XULRunner', there will be 'Firefox' (check if the '--app' option is always available for 'Firefox').
   Furthermore, things as a file explorer are available under 'Gecko' and needs no to be reimplelmented as with 'CEF'.
+
+DISMISSED :
+- 2016-12-31 : 'XULRunner' is no longer maintained !
+  - Implementing 'XDHTML' technology under 'Gecko' (without 'XUL' ; only 'HTML 5'). There are more platforms for 'Gecko' than for 'CEF', as,
+    for 'Gecko', if there is no 'XULRunner', there will be 'Firefox' (check if the '--app' option is always available for 'Firefox').
+    Furthermore, things as a file explorer are available under 'Gecko' and needs no to be reimplelmented as with 'CEF'.
+
+
 
 --------------------------------------------------------------------
 
