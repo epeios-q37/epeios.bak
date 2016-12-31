@@ -23,6 +23,7 @@
     <xpp:expand select="Core"/>
     <Module>btr</Module>
     <Module>dtr</Module>
+    <Module>htp</Module>
     <Module>sck</Module>
     <Module>txmtbl</Module>
    </Modules>

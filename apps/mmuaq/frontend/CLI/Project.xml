@@ -47,12 +47,6 @@
   <File>../mmuaqfrd.xcfg</File>
   <File>../mmuaqfrd.xlcl</File>
  </Files>
-  <Doc>
-   <File Dir="computing/epeios/apps/mmuaq/" Name="mmuaqcli" Desc="general description of 'mmuaqcli'" IsHome="yes"/>
-   <File Dir="computing/epeios/apps/mmuaq/" Name="functionalities"/>
-   <File Dir="computing/epeios/apps/mmuaq/mmuaqcli/" Name="Manual" Desc="user manual of 'mmuaqcli'"/>
-   <xpp:expand select="DocCompConf"/>
- </Doc>
  <SourceDirs>
   <SourceDir>../</SourceDir>
   <SourceDir>../../</SourceDir>

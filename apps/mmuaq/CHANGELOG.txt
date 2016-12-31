@@ -1,2 +1,4 @@
 ***** MMUAq changelog *****
 
+2016-12-31 : first release.
+

@@ -6,6 +6,14 @@
   <xpp:expand select="AppDeps"/>
  </Dependencies>
  <Doc>
-  <File Dir="computing/epeios/apps/" Desc="Meta Mail User Agent" Name="MMUAq" IsHome="yes"/>
+  <File Dir="computing/epeios/apps/" Desc="The Epeios Meta Mail User Agent" Name="MMUAq" IsHome="yes"/>
+  <File Dir="computing/epeios/apps/mmuaq/" Name="mmuaqxdh"/>
+  <File Dir="computing/epeios/apps/mmuaq/" Name="functionalities"/>
+  <File Dir="computing/epeios/apps/mmuaq/" Name="mmuaqbkd"/>
+  <File Dir="computing/epeios/apps/mmuaq/" Name="mmuaq" IsHome="yes"/>
+  <File Dir="computing/epeios/apps/mmuaq/mmuaq/" Name="manual"/>
+  <File Dir="computing/epeios/apps/mmuaq/" Name="mmuaqcli" IsHome="yes"/>
+  <File Dir="computing/epeios/apps/mmuaq/mmuaqcli/" Name="manual"/>
+  <xpp:expand select="DocApp"/>
  </Doc>
 </Project>

@@ -10,6 +10,7 @@
    <span class="vcenter-in">
     <fieldset title="#agentTitle#" data-xdh-cast="EditCast">
      <legend>#agentLegend#</legend>
+     <!-- No '<xsl:apply-templates select="Agent"/>', because there is no 'Agent' entry when creating a new one...-->
      <div style="display: flex; flex-direction: column;">
       <xsl:if test="@Disabled='true'">
        <span style="display: flex; justify-content: center;font-style: italic;">
@@ -20,7 +21,7 @@
        <label>#agentNameLabel#</label>
        <input id="AgentName" title="#agentNameTitle#" placeholder="#agentNamePlaceholder#" type="text">
         <xsl:attribute name="value">
-         <xsl:value-of select="@Name"/>
+         <xsl:value-of select="Agent/@Name"/>
         </xsl:attribute>
        </input>
       </span>
@@ -28,7 +29,7 @@
        <label>#agentHostPortLabel#</label>
        <input id="AgentHostPort" title="#agentHostPortTitle#" placeholder="#agentHostPortPlaceholder#" type="text">
         <xsl:attribute name="value">
-         <xsl:value-of select="@HostPort"/>
+         <xsl:value-of select="Agent/@HostPort"/>
         </xsl:attribute>
        </input>
       </span>
@@ -36,7 +37,7 @@
        <label>#agentUsernameLabel#</label>
        <input id="AgentUsername" title="#agentUsernameTitle#" placeholder="#agentUsernamePlaceholder#" type="text">
         <xsl:attribute name="value">
-         <xsl:value-of select="@Username"/>
+         <xsl:value-of select="Agent/@Username"/>
         </xsl:attribute>
        </input>
       </span>

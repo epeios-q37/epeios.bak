@@ -40,14 +40,6 @@
   <Module>registry</Module>
  </Modules>
  <Files/>
- <Packing>
-  <WikiFiles>
-   <File Dir="computing/epeios/tools/" WikiOddity="IsHome">mmuaq</File>
-   <File Dir="computing/epeios/tools/mmuaq/">Manual</File>
-   <File Dir="computing/epeios/">Compilation</File>
-   <File Dir="computing/epeios/tools/">Configuration</File>
-  </WikiFiles>
- </Packing>
  <SourceDirs>
   <SourceDir>../</SourceDir>
   <SourceDir>../../</SourceDir>

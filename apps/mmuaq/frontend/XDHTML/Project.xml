@@ -138,11 +138,6 @@
   <File>../mmuaqfrd.xcfg</File>
   <File>../mmuaqfrd.xlcl</File>
  </Files>
-  <Doc>
-   <File Dir="computing/epeios/apps/mmuaq/" Name="mmuaqxdh" Desc="general description of mmuaqxdh"/>
-   <File Dir="computing/epeios/apps/mmuaq/" Name="Functionalities"/>
-   <xpp:expand select="DocXDHTML"/>
-  </Doc>
  <PreprocessorDefinitions>
  </PreprocessorDefinitions>
 </Project>
