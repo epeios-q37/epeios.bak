@@ -3,8 +3,8 @@
  <xpp:set name="Type" value="Bundle"/>
  <xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
  <Dependencies Target="mmuaq">
-  <Dependency Dir="XDHTML/" Name="mmuaqxdh" Desc="GUI frontends"/>
-  <Dependency Dir="CLI/" Name="mmuaqcli" Desc="CLI frontends"/>
+  <Dependency Dir="XDHTML/"/>
+  <Dependency Dir="CLI/"/>
   <xpp:bloc marker="$">
    <Dependency Dir="$EpeiosPluginsDir$frontend/" Ext="plugins/frontend"/>
    <Dependency Dir="$EpeiosToolsDir$xdhbrwq/" Ext="xdhbrwq/"/>

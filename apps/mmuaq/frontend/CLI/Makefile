@@ -42,9 +42,9 @@ mods += csdrcc
 mods += fblcmd fblcst fblfep fblfph fblfrd 
 mods += fblfrp fblovl fbltyp 
 mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
-mods += scltool sclfrntnd 
+mods += scltool sclfrntnd sclc 
 mods += frdapi frdfrntnd frdrgstry 
-mods += muainf 
+mods += muafbc muainf 
 mods += registry 
 
 pmods += pllio 
