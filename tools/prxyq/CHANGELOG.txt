@@ -1,5 +1,8 @@
 Changelog for the 'prxyq' tool.
 
+2017-01-02 :
+- Fixing some 'g++' issue.
+
 2016-08-13 :
 - Adding version handling.
 - Adding 'Dismiss' handling.

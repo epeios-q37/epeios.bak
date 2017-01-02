@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2016 by Claude SIMON (http://zeusw.org/epeios/contact.html).
+	Copyright (C) 2016-2017 by Claude SIMON (http://zeusw.org/epeios/contact.html).
 
 	This file is part of 'prxyq'.
 
@@ -353,8 +353,6 @@ public:
 		}
 		bso::sBool WaitForOther_( tol::sDelay Delay )
 		{
-			tol::sTimer;
-
 			if ( mtx::TryToLock(Mutex_) ) {
 				if ( !mtx::Lock( Mutex_, Delay ) )
 					return false;
