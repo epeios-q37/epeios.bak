@@ -59,10 +59,22 @@ namespace plgn {
 		void *Plugin_;
 		void ReleasePlugin_( void )
 		{
+			bso::sBool Rethrow = false;
+
 			if ( Plugin_ == NULL )
 				qRFwk();
 
-			C_().ReleasePlugin( Plugin_ );
+			Rethrow = C_().OnPluginRelease();
+
+			if ( Plugin_ == NULL )
+				qRFwk();
+
+			delete Plugin_;
+
+			Plugin_ = NULL;
+
+			if ( Rethrow )
+				ERRT();
 		}
 			private:
 		void SubInitialize_(

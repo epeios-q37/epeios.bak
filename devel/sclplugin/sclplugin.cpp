@@ -147,10 +147,8 @@ void *sclplugin::callback__::PLGNCORERetrievePlugin( plgncore::sAbstract *Abstra
 	return sclplugin::SCLPLUGINRetrievePlugin( Abstract );
 }
 
-void sclplugin::callback__::PLGNCOREReleasePlugin( void *Plugin )
+void sclplugin::callback__::PLGNCOREOnPluginRelease( void )
 {
-	sclplugin::SCLPLUGINReleasePlugin( Plugin );
-
 	sclmisc::Quit();
 }
 

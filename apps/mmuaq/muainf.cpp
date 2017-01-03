@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2016 Claude SIMON (http://zeusw.org/epeios/contact.html).
+	Copyright (C) 2016-2017 Claude SIMON (http://zeusw.org/epeios/contact.html).
 
 	This file is part of 'MMUAq' software.
 

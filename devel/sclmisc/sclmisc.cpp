@@ -482,6 +482,8 @@ namespace {
 	qRH
 		fnm::rName Filename;
 	qRB
+#pragma message (__LOC__ "!!! Remove below line after !!!")
+		qRReturn;
 #ifndef CPE_S_WIN
 		qRReturn;
 #endif

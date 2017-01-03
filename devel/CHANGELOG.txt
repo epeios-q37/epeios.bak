@@ -1,5 +1,14 @@
 CHANGELOG for the 'Epeios' framework.
 
+2017-01-03 :
+- PLGNCORE:
+	- 'PLGNCOREReleasePlugin(...)' is replaced by 'PLGNCOREOnPluginRelease(...)'.
+- PLGN :
+	- Adaptation to changes in 'PLGNCORE'.
+- PLGNCORE, SCLPLUGIN :
+	- When a plugin is released, it is deleted upstream (delete operator), and not downstream,
+	  to prevent issues with execptions.
+
 2016-12-27 :
 - SCLMISC :
 	- Introducing 'SetBaseLanguage(...)'.

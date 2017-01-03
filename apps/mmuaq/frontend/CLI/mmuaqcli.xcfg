@@ -9,7 +9,7 @@
    <xpp:expand select="Parameters"/>
    <Language>en</Language>
    <!-- Default command -->
-   <Command></Command>
+   <Command>Usage</Command>
   </Parameters>
   <Definitions>
    <xpp:expand select="Definitions"/>

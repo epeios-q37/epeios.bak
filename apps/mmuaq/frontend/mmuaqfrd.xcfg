@@ -20,12 +20,12 @@
 					</xpp:ifeq>
 				</xpp:bloc>
 			</xpp:ifeq>
-			<xpp:ifeq select="packing" value="no">
+   <!--xpp:ifeq select="packing" value="no">
 				<Login Mode="Full">
-					<UserID>TheUser</UserID>
-					<Password>ThePassword</Password>
-				</Login>
-			</xpp:ifeq>
+     <UserID>Test</UserID>
+     <Password>Essai</Password>
+    </Login>
+			</xpp:ifeq-->
 			<xpp:ifeq select="packing" value="yes">
 				<Login Mode="Full">
 					<UserID></UserID>
@@ -95,7 +95,7 @@
 						<xpp:expand value-of="BackendPath"/>
 						<xpp:bloc>mmuaqbkd</xpp:bloc>
 					</Backend>
-					<Backend id="LocalHost" Alias="LocalPredefinedBackend" Plugin="Straight">localhost:53740</Backend>
+					<Backend id="LocalHost" Alias="LocalPredefinedBackend" Plugin="Straight">192.168.7.61:53740</Backend>
      <Backend id="Q37" Alias="Q37PredefinedBackend" Plugin="Straight">q37.info:53740</Backend>
     </xpp:bloc>
 			</Backends>
