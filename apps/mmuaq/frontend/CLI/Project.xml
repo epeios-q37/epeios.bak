@@ -9,7 +9,7 @@
    <xpp:bloc>2016</xpp:bloc>
   </xpp:define>
   <xpp:set name="Credits" value="Epeios"/>
-  <xpp:set name="Type" value="Tool"/>
+  <xpp:set name="Type" value="CLI"/>
  </xpp:bloc>
  <xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
  <About>
@@ -30,8 +30,6 @@
    </Modules>
    <Modules Group="SCL">
     <xpp:expand select="SCL"/>
-    <Module>sclfrntnd</Module>
-    <Module>sclc</Module>
    </Modules>
   </Modules>
   <Modules Group="FRD" Path="../">

@@ -1,4 +1,8 @@
 ***** MMUAq changelog *****
 
+2017-01-04 :
+- CLI :
+	- Fixing weird message under POSIX when the registries login entries are missing.
+
 2016-12-31 : first release.
 
