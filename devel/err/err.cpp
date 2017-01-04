@@ -21,15 +21,13 @@
 
 #include "err.h"
 
-#include "fnm.h"
-
 using namespace err;
 
 #include "mtx.h"
-
 #include "tol.h"
-
 #include "tht.h"
+#include "fnm.h"
+#include "cio.h"
 
 // Utilis durant la phase de chargement du programme.
 static err::err___ FallbackError_( true );
@@ -170,6 +168,11 @@ void err___::Set(
 	int Ligne,
 	err::type Type )
 {
+	if ( ERRHit() && ( Type == err::t_Return ) ) {
+		cio::CErr << __LOC__ " : Using 'qRReturn' when a error already in progress is actually not handled correctly !!!" << txf::nl << txf::commit;
+		abort();
+	}
+
 	if ( ( !ERRHit() ) || !err::Concerned() )
 	{
 		mtx::Lock( Mutex );

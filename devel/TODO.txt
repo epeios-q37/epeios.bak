@@ -14,6 +14,7 @@ MIDDLE
   preventing this box to be displayed. Currently, there is a workaround in the 'handleEvent' function from the 'xdhtml.js' file.
 - Implementing better thread-safety for the registry, in peculiar the common registry as defined in 'SCLRGSTRY'/'SCLMISC'.
 - XDHTML : expose in the XML flow tje nature of the interface (desktop, web, touchscreen, mobile...).
+- ERR : Handling of 'qRReturn' when an error is already in progress.
 
 LONG :
 - 'XPP' : Réimplement in a simplified manner.

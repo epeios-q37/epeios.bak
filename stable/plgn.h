@@ -64,19 +64,13 @@ namespace plgn {
 			if ( Plugin_ == NULL )
 				qRFwk();
 
-			Rethrow = C_().OnPluginRelease();
-
-			if ( Plugin_ == NULL )
-				qRFwk();
-
-			delete Plugin_;
+			Rethrow = !C_().ReleasePlugin( Plugin_ );
 
 			Plugin_ = NULL;
 
 			if ( Rethrow )
 				ERRT();
 		}
-			private:
 		void SubInitialize_(
 			const ntvstr::string___ &PluginPath,
 			const char *Label,

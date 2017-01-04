@@ -387,13 +387,12 @@ namespace {
 	qRH
 		fnm::rName Path;
 	qRB
-#ifndef CPE_S_WIN
-		qRReturn;
-#endif
+#ifdef CPE_S_WIN
 		Path.Init();
 		dir::GetAppDataPath( Path );
 
 		Exist = GetAppDataConfigurationFilename_( Path, Name, Target, Product, Organization, CreateDir );
+#endif
 	qRR
 	qRT
 	qRE
@@ -482,16 +481,13 @@ namespace {
 	qRH
 		fnm::rName Filename;
 	qRB
-#pragma message (__LOC__ "!!! Remove below line after !!!")
-		qRReturn;
-#ifndef CPE_S_WIN
-		qRReturn;
-#endif
+#ifdef CPE_S_WIN
 		Filename.Init();
 
 		GetAppDataConfigurationFilename_( Filename, SCLMISCTargetName, SCLMISCProductName, SCLMISCOrganizationName, true );
 
 		StoreAppData_( Filename, sclrgstry::lLasting );
+#endif
 	qRR
 	qRT
 	qRE

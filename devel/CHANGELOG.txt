@@ -1,5 +1,14 @@
 CHANGELOG for the 'Epeios' framework.
 
+2017-01-04 :
+- ERR :
+	- Adding notice when 'qRReturn' is called when an error is already in progress.
+- SCLMISC :
+	- Fixing 'qRReturn' issue.
+- PLGN, PLGNCORE, SCLPLUGIN :
+	- Reverting to 'PLGNCOREReleasePlugin(...)', due to type issue ; exceptions issues still handled.
+
+
 2017-01-03 :
 - PLGNCORE:
 	- 'PLGNCOREReleasePlugin(...)' is replaced by 'PLGNCOREOnPluginRelease(...)'.
@@ -7,7 +16,7 @@ CHANGELOG for the 'Epeios' framework.
 	- Adaptation to changes in 'PLGNCORE'.
 - PLGNCORE, SCLPLUGIN :
 	- When a plugin is released, it is deleted upstream (delete operator), and not downstream,
-	  to prevent issues with execptions.
+	  to prevent issues with exceptions.
 
 2016-12-27 :
 - SCLMISC :

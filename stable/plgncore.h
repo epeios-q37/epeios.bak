@@ -115,7 +115,7 @@ namespace plgncore {
 			const sData *Data,
 			const fnm::name___ &Directory ) = 0;
 		virtual void *PLGNCORERetrievePlugin( sAbstract *Abstract ) = 0;	// When an error occurs, 'NULL' is returned, and if 'Abstract' == NULL the error is handled internally.
-		virtual void PLGNCOREOnPluginRelease( void ) = 0;
+		virtual bso::sBool PLGNCOREReleasePlugin( void *Plugin ) = 0;
 		virtual const char *PLGNCOREPluginIdentifier( void ) = 0;
 		virtual const char *PLGNCOREPluginDetails( void ) = 0;
 	public:
@@ -144,18 +144,9 @@ namespace plgncore {
 		{
 			return PLGNCORERetrievePlugin( Abstract );
 		}
-		bso::sBool OnPluginRelease( void )
+		bso::sBool ReleasePlugin( void *Plugin )
 		{
-			bso::sBool Error = false;
-		qRH
-		qRB
-			PLGNCOREOnPluginRelease();
-		qRR
-			Error = true;
-			ERRRst();
-		qRT
-		qRE
-			return Error;
+			return PLGNCOREReleasePlugin( Plugin );
 		}
 		const char *PluginIdentifier( void )
 		{
