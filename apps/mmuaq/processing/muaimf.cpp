@@ -278,8 +278,11 @@ namespace {
 			} else if ( Byte == ':' ) {
 				if ( BodyPart )
 					Body.Append( Byte );
-				else
+				else {
 					BodyPart = true;
+					if ( Flow.Get() != ' ' ) // To skip the heading space.
+						qRGnr();
+				}
 			} else {
 				if ( BodyPart )
 					Body.Append( Byte );

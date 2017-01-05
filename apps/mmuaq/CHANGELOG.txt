@@ -3,6 +3,7 @@
 2017-01-05 :
 - GLOBAL :
 	- Fixing bad 'POP3' UIDL / mail correspondance.
+	- Removing extraneous space at the beginning of each field body.
 
 2017-01-04 :
 - CLI :
