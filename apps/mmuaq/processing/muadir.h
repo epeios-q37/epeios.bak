@@ -169,6 +169,7 @@ namespace muadir {
 			F2M_( M2F_( Mail ) ).Remove( Mail );
 			M2F_.Store( Folder, Mail );
 			F2M_(Folder).Add( Mail );
+			F2M_.Flush();
 		}
 		void MoveFolderTo(
 			muafld::sRow Folder,

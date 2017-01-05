@@ -20,12 +20,12 @@
 					</xpp:ifeq>
 				</xpp:bloc>
 			</xpp:ifeq>
-   <!--xpp:ifeq select="packing" value="no">
+   <xpp:ifeq select="packing" value="no">
 				<Login Mode="Full">
      <UserID>Test</UserID>
      <Password>Essai</Password>
     </Login>
-			</xpp:ifeq-->
+			</xpp:ifeq>
 			<xpp:ifeq select="packing" value="yes">
 				<Login Mode="Full">
 					<UserID></UserID>

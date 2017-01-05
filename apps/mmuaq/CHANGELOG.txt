@@ -1,5 +1,9 @@
 ***** MMUAq changelog *****
 
+2017-01-05 :
+- GLOBAL :
+	- Fixing bad 'POP3' UIDL / mail correspondance.
+
 2017-01-04 :
 - CLI :
 	- Fixing weird message under POSIX when the registries login entries are missing.

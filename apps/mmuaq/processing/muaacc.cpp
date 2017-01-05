@@ -206,7 +206,7 @@ namespace get_fields_ {
 							UIDLRow = ctn::Search( UIDLs( Row ), AllUIDLs );
 
 							if ( UIDLRow != qNIL ) {
-								Numbers.Add( AllNumbers( Row ) );
+								Numbers.Add( AllNumbers( UIDLRow ) );
 								Available.Append( Wanted( Row ) );
 							}
 
