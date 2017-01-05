@@ -17,7 +17,7 @@
     along with 'MUAq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// MUA Post Office protocole 3 (POP3 - RFC 1939).
+// MUA Post Office protocol 3 (POP3 - RFC 1939).
 
 #ifndef MUAXMP__INC
 # define MUAXMP__INC
@@ -35,7 +35,7 @@ namespace muapo3 {
 	typedef fdr::rIDressedDriver rIDressedDriver_;
 
 	// For a given state, the next state can only be 's_Regular', or the immediatly following one (except for the last one).
-	qENUM( State ) {
+	qENUM( State_ ) {
 		sRegular,	// We are not in a potential termination sequence.
 		sICR,	// Initial CR.
 		sRILF,	// Regular Initial LF.
@@ -52,14 +52,13 @@ namespace muapo3 {
 	qCDEF( bso::sU8, CR_, 13 );
 	qCDEF( bso::sU8, Dot_, 46 );
 
-	class rSequenceDelimitedIDriver
+	class rSequenceDelimitedIDriver_
 	: public rIDressedDriver_
 	{
 	private:
-		eState State_;
+		eState_ State_;
 		flw::sDressedIFlow<> Flow_;
 		bso::sBool MultiLine_;
-		// If returned value == 'true', we are in a potential termination sequen ce.
 		fdr::sByte StateSize_( void ) const
 		{
 			switch ( State_ ) {
@@ -94,7 +93,7 @@ namespace muapo3 {
 		bso::sBool HandleState_(
 			fdr::sByte C,
 			fdr::sByte Awaited,
-			eState Next )
+			eState_ Next )
 		{
 			if ( C == Awaited ) {
 				State_ = Next;
@@ -214,7 +213,7 @@ namespace muapo3 {
 			State_ = s_Undefined;
 			MultiLine_ = false;
 		}
-		qCVDTOR( rSequenceDelimitedIDriver );
+		qCVDTOR( rSequenceDelimitedIDriver_ );
 		void Init(
 			bso::sBool EOL,
 			fdr::rIDriver &Driver,
@@ -231,29 +230,10 @@ namespace muapo3 {
 		}
 	};
 
-	qENUM( Command ) {
-		cUser,
-		cPass,
-		cDele,
-		cList,
-		cRetr,
-		cStat,
-		cTop,
-		cApop,
-		cNoop,
-		cQuit,
-		cRset,
-		cUidl,
-		c_amount,
-		c_Undefined
-	};
-
-	const char *GetLabel( eCommand Command );
-
 	class hBody
 	{
 	private:
-		rSequenceDelimitedIDriver Driver_;
+		rSequenceDelimitedIDriver_ Driver_;
 	public:
 		void reset( bso::sBool P = true )
 		{
@@ -273,22 +253,22 @@ namespace muapo3 {
 		}
 	};
 
-	qENUM( Indicator_ ) {
-		iOK,
-		i_True = iOK,
-		iError,
-		i_False = iError,
-		i_Error,
-		iErroneous = i_Error,	// Server returned a not 'POP3' compliant answer.
-		i_amount,
-		i_Undefined
-	};
-
-	qXENUM( Indicator, i );
-
 	typedef bso::sUInt sNumber;	// POP3 message-number.
 
-	namespace base{
+	namespace base {
+		qENUM( Indicator_ ) {
+			iOK,
+			i_True = iOK,
+			iError,
+			i_False = iError,
+			i_Error,
+			iErroneous = i_Error,	// Server returned a not 'POP3' compliant answer.
+			i_amount,
+			i_Undefined
+		};
+
+		qXENUM( Indicator, i );
+		
 		// To launch before any of the operation below. Eats the message sent on connection.
 		eIndicator Authenticate(
 			const str::dString &Username,
@@ -316,7 +296,7 @@ namespace muapo3 {
 			hBody & Body );
 
 		eIndicator UIDL(
-			sNumber Number,	// If = à '0', give all the messages.
+			sNumber Number,	// If == 0, give all the messages.
 			fdr::rIODriver &Server,
 			hBody & Body );
 

@@ -30,5 +30,6 @@ rEntry registry::parameter::Message("Message", sclrgstry::Parameters );
 rEntry registry::parameter::Lines("Lines", sclrgstry::Parameters );
 rEntry registry::parameter::KeepAnswer("KeepAnswer", sclrgstry::Parameters );
 rEntry registry::parameter::FieldName("FieldName", sclrgstry::Parameters );
+rEntry registry::parameter::Tag("Tag", sclrgstry::Parameters );
 
 

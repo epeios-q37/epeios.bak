@@ -19,6 +19,7 @@
 
 #include "registry.h"
 
+#include "muaima.h"
 #include "muaimf.h"
 #include "muapo3.h"
 
@@ -163,11 +164,14 @@ namespace {
 	}
 
 	namespace pop3_ {
-		muapo3::eIndicator InitAndAuthenticate(
+		using namespace muapo3;
+		using namespace base;
+
+		base::eIndicator InitAndAuthenticate(
 			csdbnc::rIODriver &Server,
-			muapo3::hBody &Body )
+			hBody &Body )
 		{
-			muapo3::eIndicator Indicator = muapo3::i_Undefined;
+			base::eIndicator Indicator = i_Undefined;
 		qRH
 			str::wString Username, Password;
 			qCBUFFERr Buffer;
@@ -178,7 +182,7 @@ namespace {
 
 			Init_( Server );
 
-			Indicator = muapo3::base::Authenticate( Username, Password, Server, Body );
+			Indicator = base::Authenticate( Username, Password, Server, Body );
 		qRR
 		qRT
 		qRE
@@ -189,7 +193,7 @@ namespace {
 		{
 			bso::sBool Success = false;
 		qRH
-			muapo3::hBody Body;
+			hBody Body;
 		qRB
 			Success = InitAndAuthenticate(Server, Body).Boolean();
 		qRR
@@ -199,7 +203,7 @@ namespace {
 		}
 
 		namespace {
-			void ReportError_( muapo3::hBody &Body )
+			void ReportError_( hBody &Body )
 			{
 			qRH
 				str::wString Message;
@@ -219,16 +223,16 @@ namespace {
 		}
 
 		void Handle(
-			muapo3::eIndicator Indicator,
-			muapo3::hBody &Body )
+			eIndicator Indicator,
+			hBody &Body )
 		{
 			switch ( Indicator.Value() ) {
-			case muapo3::iOK:
+			case iOK:
 				break;
-			case muapo3::iError:
+			case iError:
 				ReportError_( Body );
 				break;
-			case muapo3::iErroneous:
+			case iErroneous:
 				sclmisc::ReportAndAbort( "ErroneousAnswer" );
 				break;
 			default:
@@ -318,6 +322,21 @@ namespace {
 		Dump_( Body.GetDriver() );
 
 		pop3_::Handle( muapo3::base::Quit( Server, Body ), Body );
+	qRR
+	qRT
+	qRE
+	}
+
+	void NextTag_( void )
+	{
+	qRH
+		str::wString Tag;
+	qRB
+		Tag.Init();
+		
+		sclmisc::OGetValue( registry::parameter::Tag, Tag  );
+
+		cio::COut << muabsc::GetNextIMAPTag( Tag) << txf::nl;
 	qRR
 	qRT
 	qRE
@@ -490,6 +509,7 @@ qRB
 	C( Test );
 	C( B64Encode );
 	C( B64Decode );
+	C( NextTag );
 	C( POP3List );
 	C( POP3Retrieve );
 	C( POP3Top );

@@ -23,6 +23,57 @@
 
 using namespace muabsc;
 
+namespace get_next_imap_tag_ {
+	void GetNext( str::dString &Tag )
+	{
+		sdr::sRow Row = Tag.Last();
+		bso::sChar Char = 0;
+		bso::sBool Cont = false;;
+
+		while ( Row != qNIL ) {
+			Cont = false;
+			Char = Tag( Row );
+
+			if ( !isalnum( Char ) )
+				qRGnr();
+
+			if ( tolower( Char ) != Char )
+				qRGnr();
+
+			if ( Char < '9' )
+				Tag.Store( Char + 1, Row );
+			else if ( Char == '9' )
+				Tag.Store('a', Row );
+			else if ( Char < 'z' )
+				Tag.Store( Char + 1, Row );
+			else if ( Char == 'z' ) {
+				Tag.Store( '0', Row );
+				Cont = true;
+			}
+
+			Row = Tag.Previous( Row );
+
+			if ( Cont ) {
+				if ( Row == qNIL )
+					Tag.InsertAt( '1' );
+			} else
+				Row = qNIL;
+		}
+	}
+}
+
+const str::dString &muabsc::GetNextIMAPTag( str::dString &Tag )
+{
+	if ( Tag.Amount() == 0 )
+		Tag.Append( '0' );
+	else
+		get_next_imap_tag_::GetNext( Tag );
+
+	return Tag;
+}
+
+
+
 void muabsc::Dump(
 	const dIndexes &Indexes,
 	txf::sOFlow &Flow )

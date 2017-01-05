@@ -26,47 +26,65 @@
 using namespace muapo3;
 
 namespace {
+	using namespace base;
+
 	qCDEF( char *, NL_, "\r\n" );
-}
+
+	qENUM( Command_ ) {
+		cUser,
+		cPass,
+		cDele,
+		cList,
+		cRetr,
+		cStat,
+		cTop,
+		cApop,
+		cNoop,
+		cQuit,
+		cRset,
+		cUidl,
+		c_amount,
+		c_Undefined
+	};
 
 #define C( name )\
 	case c##name:\
 		return #name;\
 		break
 
+	const char *GetLabel_( eCommand_ Command )
+	{
+		switch ( Command ) {
+		C( User );
+		C( Pass );
+		C( Dele );
+		C( List );
+		C( Retr );
+		C( Stat );
+		C( Top );
+		C( Apop );
+		C( Noop );
+		C( Quit );
+		C( Rset );
+		C( Uidl );
+		default:
+			qRGnr();
+			break;
+		}
 
-const char *muapo3::GetLabel( eCommand Command )
-{
-	switch ( Command ) {
-	C( User );
-	C( Pass );
-	C( Dele );
-	C( List );
-	C( Retr );
-	C( Stat );
-	C( Top );
-	C( Apop );
-	C( Noop );
-	C( Quit );
-	C( Rset );
-	C( Uidl );
-	default:
-		qRGnr();
-		break;
+		return NULL;	// To avoid a warning.
 	}
 
-	return NULL;	// To avoid a warning.
-}
+#undef C
 
-namespace {
 	void SendCommand_(
-		eCommand Command,
+		eCommand_ Command,
 		txf::sOFlow &Flow )
 	{
 	qRH
 		str::wString CommandString;
 	qRB
-		CommandString.Init( GetLabel( Command ) );
+		CommandString.Init( GetLabel_( Command ) );
 
 		str::ToUpper( CommandString );
 
@@ -644,7 +662,6 @@ namespace get_number_for_uidl_{
 	};
 }
 
-// If 0 is retuned, no corresponding message found.
 sNumber muapo3::GetNumberForUIDL(
 	const dUIDL &UIDL,
 	fdr::rIODriver &Server )

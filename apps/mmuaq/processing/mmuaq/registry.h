@@ -36,7 +36,8 @@ namespace registry {
 			Message,
 			Lines,
 			KeepAnswer,
-			FieldName;
+			FieldName,
+			Tag;
 	}
 
 	namespace definition {

@@ -29,6 +29,8 @@
 # include "str.h"
 
 namespace muabsc {
+	const str::dString &GetNextIMAPTag( str::dString &Tag );
+
 	typedef bso::sUInt sIndex;
 
 	typedef bch::qBUNCHdl( sIndex ) dIndexes;

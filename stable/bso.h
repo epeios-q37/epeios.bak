@@ -713,5 +713,7 @@ namespace bso {
 	typedef s32__ sS32;
 
 	typedef sUInt sFlag;
+
+	typedef char__ sChar;
 }
 #endif

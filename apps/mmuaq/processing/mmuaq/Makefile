@@ -41,7 +41,7 @@ mods += xml xpp htp sck txmtbl
 mods += csdbnc 
 mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
 mods += scltool 
-mods += muabsc muaimf muapo3 muainf 
+mods += muabsc muaima muaimf muapo3 muainf 
 mods += registry 
 
 pmods += pllio 
@@ -343,7 +343,7 @@ ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20161231"\"
+copt += -DVERSION=\""20170105"\"
 copt += -DCOPYRIGHT_YEARS=\""2016"\"
 copt += -DIDENTIFIER=\""d8d40658-515d-40f7-b847-337d9ef331db"\"
 

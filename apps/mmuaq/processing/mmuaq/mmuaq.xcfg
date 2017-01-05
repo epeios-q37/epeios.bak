@@ -26,6 +26,10 @@
     <Translation language="fr">Decodage 'Base64'.</Translation>
     <Translation language="en">'Base64' decoding.</Translation>
    </Translations>
+   <Translations text="NextTagCommandDescription">
+    <Translation language="fr">Retourne l'étiquette 'IMAP' suivante.</Translation>
+    <Translation language="en">Returns the next 'IMAP' tag.</Translation>
+   </Translations>
    <Translations text="POP3ListCommandDescription">
     <Translation language="fr">Affiche des informations sur les messages d'un serveur 'POP3'.</Translation>
     <Translation language="en">Displays information about messages from a 'POP3' server.</Translation>
@@ -91,6 +95,14 @@
     <Translation language="fr">champ</Translation>
     <Translation language="en">field</Translation>
    </Translations>
+   <Translations text="TagArgumentDescription">
+    <Translation language="fr">Étiquette 'IMAP'.</Translation>
+    <Translation language="en">'IMAP' tag.</Translation>
+   </Translations>
+   <Translations text="TagArgumentLabel">
+    <Translation language="fr">étiquette</Translation>
+    <Translation language="en">tag</Translation>
+   </Translations>
    <!-- Flags -->
    <Translations text="KeepAnswerFlagDescription">
     <Translation language="fr">Conserve la réponse du serveur.</Translation>
@@ -111,6 +123,7 @@
    <!-- Commandes : pas de 'Path' (vaut 'Parameters/Command'), ni de 'Value'. -->
    <Argument id="B64EncodeCommand" Description="B64EncodeCommandDescription" long="b64-encode" Value="B64Encode" Usage="[%InputArgument% [%OutputArgument%]]"/>
    <Argument id="B64DecodeCommand" Description="B64DecodeCommandDescription" long="b64-decode" Value="B64Decode" Usage="[%InputArgument% [%OutputArgument%]]"/>
+   <Argument id="NextTagCommand" Description="NextTagCommandDescription" long="next-tag" Value="NextTag" Usage="[%TagArgument%]"/>
    <Argument id="POP3ListCommand" Description="POP3ListCommandDescription" long="pop3-list" Value="POP3List" Usage="[%SetupOption%] [%MessageArgument%]"/>
    <Argument id="POP3RetrieveCommand" Description="POP3RetrieveCommandDescription" long="pop3-retrieve" Value="POP3Retrieve" Usage="[%SetupOption%] [%KeepAnswerFlag%] %MessageArgument%"/>
    <Argument id="POP3TopCommand" Description="POP3TopCommandDescription" long="pop3-top" Value="POP3Top" Usage="[%SetupOption%] [%KeepAnswerFlag%] %MessageArgument% %LinesArgument%"/>
@@ -128,6 +141,7 @@
    <Argument id="MessageArgument" Description="MessageArgumentDescription" Path="Message" Label="MessageArgumentLabel"/>
    <Argument id="LinesArgument" Description="LinesArgumentDescription" Path="Lines" Label="LinesArgumentLabel"/>
    <Argument id="FieldArgument" Description="FieldArgumentDescription" Path="FieldName" Label="FieldArgumentLabel"/>
+   <Argument id="TagArgument" Description="TagArgumentDescription" Path="Tag" Label="TagArgumentLabel"/>
    <!-- Affectations des arguments libres-->
    <Layouts>
     <Layout command="B64Encode">
@@ -137,6 +151,9 @@
     <Layout command="B64Decode">
      <Link index="0" Target="InputArgument"/>
      <Link index="1" Target="OutputArgument"/>
+    </Layout>
+    <Layout command="NextTag">
+     <Link index="0" Target="TagArgument"/>
     </Layout>
     <Layout command="POP3List">
      <Link index="0" Target="MessageArgument"/>
