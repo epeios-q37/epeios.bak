@@ -43,7 +43,7 @@ namespace muaima {
 	: public rDriver_
 	{
 	private:
-		flw::sDressedIFlow<> Flow_;
+		qRMV( flw::sIFlow, F_, Flow_ );
 		bso::sBool EOF_;
 	protected:
 		virtual fdr::sSize FDRRead(
@@ -54,18 +54,20 @@ namespace muaima {
 			fdr::sByte Byte = 0;
 			fdr::sSize Amount = 0;
 
+			flw::sIFlow &Flow = F_();
+
 			if ( !EOF_ ) {
 				while ( Continue ) {
-					if ( Flow_.EndOfFlow() )
+					if ( F_().EndOfFlow() )
 						qRGnr();
 
-					Byte = Flow_.Get();
+					Byte = Flow.Get();
 
 					if ( Byte == '\r' ) {
 						Continue = false;
 						EOF_ = true;
 
-						if ( Flow_.EndOfFlow() || ( Flow_.Get() != '\n' ) )
+						if ( Flow.EndOfFlow() || ( Flow.Get() != '\n' ) )
 							qRGnr();
 					} else {
 						Buffer[Amount++] = Byte;
@@ -79,11 +81,11 @@ namespace muaima {
 		}
 		virtual void FDRDismiss( bso::sBool Unlock ) override
 		{
-			Flow_.Dismiss( Unlock );
+			F_().Dismiss( Unlock );
 		}
 		virtual fdr::sTID FDRITake( fdr::sTID Owner ) override
 		{
-			return Flow_.IDriver().ITake( Owner );
+			return F_().IDriver().ITake( Owner );
 		}
 	public:
 		void reset( bso::sBool P = true )
@@ -91,10 +93,10 @@ namespace muaima {
 			tol::reset( P, Flow_ );
 		}
 		qCVDTOR( rResponseDriver );
-		void Init( fdr::rIDriver &Driver )
+		void Init( flw::sIFlow &Flow )
 		{
 			EOF_ = false;
-			Flow_.Init( Driver );
+			Flow_ = &Flow;
 			rDriver_::Init( fdr::ts_Default );
 		}
 	};
@@ -103,18 +105,20 @@ namespace muaima {
 	{
 	private:
 		str::wString Tag_;
-		qRMV( fdr::rIODriver, D_, Driver_ );
+		flw::sDressedIFlow<> IFlow_;
+		txf::rOFlow OFlow_;
 		rResponseDriver ResponseDriver_;
 	public:
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, Tag_, Driver_ );
+			tol::reset( P, Tag_, IFlow_, OFlow_ );
 		}
 		qCDTOR( rSession );
 		void Init( fdr::rIODriver &Driver )
 		{
 			tol::Init( Tag_ );
-			Driver_ = &Driver;
+			IFlow_.Init( Driver );
+			OFlow_.Init( Driver );
 		}
 		const str::dString &GetNextTag( void )
 		{
@@ -127,14 +131,18 @@ namespace muaima {
 
 			return Tag_;
 		}
-		fdr::rIODriver &Driver( void ) const
+		flw::sIFlow &IFlow( void )
 		{
-			return D_();
+			return IFlow_;
+		}
+		txf::sOFlow &OFlow( void )
+		{
+			return OFlow_;
 		}
 		eResponse GetResponse( void );
 		fdr::rIDriver &GetDataDriver( void )
 		{
-			ResponseDriver_.Init( D_() );
+			ResponseDriver_.Init( IFlow_ );
 
 			return ResponseDriver_;
 		}
@@ -173,8 +181,11 @@ namespace muaima {
 
 		eIndicator Connect( rSession &Session );
 		eIndicator Logout( rSession &Session );
-
 		eIndicator Capability( rSession &Session );
+		eIndicator Login(
+			const str::dString &Username,
+			const str::dString &Password,
+			rSession &Session );
 	}
 }
 

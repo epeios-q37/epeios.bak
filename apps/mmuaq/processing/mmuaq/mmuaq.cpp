@@ -348,6 +348,43 @@ namespace {
 		qRT
 		qRE
 		}
+
+		namespace _ {
+			void GetUsernameAndPassword_(
+				str::dString &Username,
+				str::dString &Password )
+			{
+				sclmisc::MGetValue( registry::parameter::imap::Username, Username );
+				sclmisc::MGetValue( registry::parameter::imap::Password, Password );
+			}
+		}
+
+		void Login(
+			bso::sBool KeepAnswer,
+			muaima::rSession &Session )
+		{
+		qRH
+			str::wString Username, Password;
+		qRB
+			tol::Init( Username, Password );
+
+			_::GetUsernameAndPassword_( Username, Password );
+
+			if ( muaima::base::Login( Username, Password, Session  ) != iOK )
+				qRGnr();
+
+			if ( Session.GetResponse() != muaima::r_None )
+				qRGnr();
+
+			if ( KeepAnswer ) {
+				Dump_( Session.GetDataDriver() );
+				cio::COut << txf::nl;
+			} else
+				Session.SkipData();
+		qRR
+		qRT
+		qRE
+		}
 	}
 
 	void IMAPCapability_( void )
@@ -370,6 +407,8 @@ namespace {
 			cio::COut << txf::nl;
 		} else
 			Session.SkipData();
+
+		imap_::Login( KeepAnswer, Session );
 
 		muaima::base::Capability( Session );
 

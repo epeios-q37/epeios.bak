@@ -98,10 +98,7 @@ namespace response_ {
 eResponse muaima::rSession::GetResponse( void )
 {
 	eResponse Response = r_Undefined;
-qRH
-	flw::sDressedIFlow<> Flow;
-qRB
-	Flow.Init( D_() );
+	flw::sIFlow &Flow = IFlow_;
 
 	EOFT;
 
@@ -115,16 +112,15 @@ qRB
 
 		Response = response_::Get( Flow );
 	}
-qRR
-qRT
-qRE
+
 	return Response;
 }
 
 namespace _ {
 	qENUM( Command_ ) {
-		cLogout,
+		cLogout,	// NOT the counter-part of 'Login' ; closes the connection.
 		cCapability,
+		cLogin,
 		c_amount,
 		c_Undefined
 	};
@@ -139,6 +135,7 @@ namespace _ {
 		switch ( Command ) {
 		C( Logout );
 		C( Capability );
+		C( Login);
 		default:
 			qRGnr();
 			break;
@@ -147,65 +144,37 @@ namespace _ {
 		return NULL;	// To avoid a warning.
 	}
 
-	namespace send_command_ {
-		void Send(
-			const str::dString &Tag,
-			eCommand_ Command,
-			txf::sOFlow &Flow )
-		{
-		qRH
-			str::wString CommandString;
-		qRB
-			CommandString.Init( GetLabel_( Command ) );
-
-			str::ToUpper( CommandString );
-
-			Flow << Tag << ' ' << CommandString << ' ' << "\r\n";
-		qRR
-		qRT
-		qRE
-		}
-	}
-
 	void SendCommand(
 		const str::dString &Tag,
 		eCommand_ Command,
-		fdr::rODriver &Driver )
+		txf::sOFlow &Flow )
 	{
 	qRH
-		txf::rOFlow Flow;
+		str::wString CommandString;
 	qRB
-		Flow.Init( Driver );
+		CommandString.Init( GetLabel_( Command ) );
 
-		send_command_::Send( Tag, Command, Flow );
+		str::ToUpper( CommandString );
+
+		Flow << Tag << ' ' << CommandString;
 	qRR
 	qRT
 	qRE
 	}
 
-	namespace handle_answer_ {
-		base::eIndicator Handle( flw::sIFlow &Flow )
-		{
-			if ( Flow.EndOfFlow() )
-				return base::iErroneous;
+	void SendCFLR( txf::sOFlow &Flow )
+	{
+		 Flow << "\r\n";
 
-			return base::iOK;
-		}
+		 Flow.Commit();
 	}
 
-	base::eIndicator HandleAnswer( rSession &Session )
+	base::eIndicator HandleAnswer( flw::sIFlow &Flow )
 	{
-		base::eIndicator Indicator = base::i_Undefined;
-	qRH
-		flw::sDressedIFlow<> Flow;
-	qRB
-		Flow.Init(Session.Driver() );
+		if ( Flow.EndOfFlow() )
+			return base::iErroneous;
 
-		Indicator = handle_answer_::Handle( Flow );
-	qRR
-	qRT
-	qRE
-		return Indicator;
+		return base::iOK;
 	}
 }
 
@@ -213,21 +182,37 @@ namespace _ {
 
 base::eIndicator muaima::base::Connect( rSession &Session )
 {
-	return _::HandleAnswer( Session );
+	return _::HandleAnswer( Session.IFlow() );
 }
 
 base::eIndicator muaima::base::Logout( rSession &Session )
 {
-	_::SendCommand( Session.GetNextTag(), _::cLogout, Session.Driver() );
+	_::SendCommand( Session.GetNextTag(), _::cLogout, Session.OFlow() );
+	_::SendCFLR( Session.OFlow() );
 
-	return _::HandleAnswer( Session );
+	return _::HandleAnswer( Session.IFlow() );
 }
 
 base::eIndicator muaima::base::Capability( rSession &Session )
 {
-	_::SendCommand( Session.GetNextTag(), _::cCapability, Session.Driver() );
+	_::SendCommand( Session.GetNextTag(), _::cCapability, Session.OFlow() );
+	_::SendCFLR( Session.OFlow() );
 
-	return _::HandleAnswer( Session );
+	return _::HandleAnswer( Session.IFlow() );
+}
+
+base::eIndicator muaima::base::Login(
+	const str::dString &Username,
+	const str::dString &Password,
+	rSession &Session )
+{
+	_::SendCommand(Session.GetNextTag(), _::cLogin, Session.OFlow() );
+
+	Session.OFlow() << ' ' << Username << ' ' << Password;
+
+	_::SendCFLR( Session.OFlow() );
+
+	return _::HandleAnswer( Session.IFlow() );
 }
 
 qGCTOR( muaima )
