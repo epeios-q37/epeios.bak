@@ -106,7 +106,7 @@ namespace {
 	qRE
 	}
 
-	namespace { 
+	namespace {
 		void Dump_( fdr::rIDriver &Driver )
 		{
 		qRH
@@ -139,33 +139,35 @@ namespace {
 		}
 	}
 
-	void Init_( csdbnc::rIODriver &Server )
-	{
-	qRH
-		str::wString HostPort;
-		qCBUFFERr Buffer;
-	qRB
-		HostPort.Init();
-		sclmisc::MGetValue( registry::parameter::HostPort, HostPort );
-
-		if ( !Server.Init( HostPort.Convert( Buffer ), SCK_INFINITE, qRPU ) )
-			sclmisc::ReportAndAbort("UnableToConnect", HostPort );
-	qRR
-	qRT
-	qRE
-	}
-
-	void GetUsernameAndPassword_(
-		str::dString &Username,
-		str::dString &Password )
-	{
-		sclmisc::MGetValue( registry::parameter::Username, Username );
-		sclmisc::MGetValue( registry::parameter::Password, Password );
-	}
-
 	namespace pop3_ {
 		using namespace muapo3;
 		using namespace base;
+
+		namespace {
+			void Init_( csdbnc::rIODriver &Server )
+			{
+			qRH
+				str::wString HostPort;
+				qCBUFFERr Buffer;
+			qRB
+				HostPort.Init();
+				sclmisc::MGetValue( registry::parameter::pop3::HostPort, HostPort );
+
+				if ( !Server.Init( HostPort.Convert( Buffer ), SCK_INFINITE, qRPU ) )
+					sclmisc::ReportAndAbort("UnableToConnect", HostPort );
+			qRR
+			qRT
+			qRE
+			}
+
+			void GetUsernameAndPassword_(
+				str::dString &Username,
+				str::dString &Password )
+			{
+				sclmisc::MGetValue( registry::parameter::pop3::Username, Username );
+				sclmisc::MGetValue( registry::parameter::pop3::Password, Password );
+			}
+		}
 
 		base::eIndicator InitAndAuthenticate(
 			csdbnc::rIODriver &Server,
@@ -327,6 +329,80 @@ namespace {
 	qRE
 	}
 
+	namespace imap_ {
+		using namespace muaima;
+		using namespace base;
+
+		void Init( csdbnc::rIODriver &Server )
+		{
+		qRH
+			str::wString HostPort;
+			qCBUFFERr Buffer;
+		qRB
+			HostPort.Init();
+			sclmisc::MGetValue( registry::parameter::imap::HostPort, HostPort );
+
+			if ( !Server.Init( HostPort.Convert( Buffer ), SCK_INFINITE, qRPU ) )
+				sclmisc::ReportAndAbort("UnableToConnect", HostPort );
+		qRR
+		qRT
+		qRE
+		}
+	}
+
+	void IMAPCapability_( void )
+	{
+	qRH
+		csdbnc::rIODriver Server;	
+		muaima::rSession Session;
+		bso::sBool KeepAnswer = false;
+	qRB
+		imap_::Init( Server );
+
+		Session.Init( Server );
+
+		muaima::base::Connect( Session );
+
+		KeepAnswer = sclmisc::BGetBoolean( registry::parameter::KeepAnswer, false );
+
+		if ( KeepAnswer ) {
+			Dump_( Session.GetDataDriver() );
+			cio::COut << txf::nl;
+		} else
+			Session.SkipData();
+
+		muaima::base::Capability( Session );
+
+		if ( Session.GetResponse() != muaima::rCapability )
+			qRGnr();
+
+		Dump_( Session.GetDataDriver() );
+		cio::COut << txf::nl;
+
+		if ( Session.GetResponse() != muaima::r_None )
+			qRGnr();
+
+		if ( KeepAnswer ) {
+			Dump_( Session.GetDataDriver() );
+			cio::COut << txf::nl;
+		} else
+			Session.SkipData();
+
+		muaima::base::Logout( Session );
+
+		if ( KeepAnswer ) {
+			Dump_( Session.GetDataDriver() );
+			cio::COut << txf::nl;
+			Dump_( Session.GetDataDriver() );
+			cio::COut << txf::nl;
+		} else
+			Session.SkipData();
+
+	qRR
+	qRT
+	qRE
+	}
+
 	void NextTag_( void )
 	{
 	qRH
@@ -336,7 +412,7 @@ namespace {
 		
 		sclmisc::OGetValue( registry::parameter::Tag, Tag  );
 
-		cio::COut << muabsc::GetNextIMAPTag( Tag) << txf::nl;
+		cio::COut << muabsc::GetNextIMAPTag( Tag ) << txf::nl;
 	qRR
 	qRT
 	qRE
@@ -514,6 +590,7 @@ qRB
 	C( POP3Retrieve );
 	C( POP3Top );
 	C( POP3UIDL );
+	C( IMAPCapability );
 	C( GetIndexes );
 	C( ShowHeader );
 	C( GetField );

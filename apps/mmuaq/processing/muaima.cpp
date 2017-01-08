@@ -19,10 +19,111 @@
 
 #include "muaima.h"
 
+#include "stsfsm.h"
+
 using namespace muaima;
 
-namespace {
+#define EOFT	if ( Flow.EndOfFlow() ) qRGnr();
+
+namespace response_ {
+	namespace _ {
+		stsfsm::wAutomat Automat;
+
+		namespace _ {
+#define C( name )	case r##name : return #name; break
+ 
+			const char *GetLabel( eResponse Response )
+			{
+				switch ( Response ) {
+				C( Capability );
+				default:
+					qRFwk();
+					break;
+				}
+ 
+				return NULL;	// To avoid a warning.
+			}
+
+#undef C
+		}
+
+		const str::dString &GetUCLabel(
+			eResponse Response,
+			str::dString &Label )
+		{
+			Label.Append( _::GetLabel( Response ) );
+
+			str::ToUpper( Label );
+
+			return Label;
+		}
+
+		eResponse GetResponse( const str::dString &Pattern )
+		{
+			return stsfsm::GetId( Pattern, Automat, r_Undefined, r_amount );
+		}
+	}
+
+	void FillAutomat( void )
+	{
+		_::Automat.Init();
+		stsfsm::Fill<eResponse>( _::Automat, r_amount, _::GetUCLabel );
+	}
+
+	eResponse Get( flw::sIFlow &Flow )
+	{
+		eResponse Response = r_Undefined;
+	qRH
+		str::wString Pattern;
+		flw::sByte Byte = 0;
+	qRB
+		EOFT;
+
+		Pattern.Init();
+
+		while ( ( Byte = Flow.Get() ) != ' ' ) {
+			Pattern.Append( Byte );
+
+			EOFT;
+		}
+
+		Response = _::GetResponse( Pattern );
+	qRR
+	qRT
+	qRE
+		return Response;
+	}
+}
+
+eResponse muaima::rSession::GetResponse( void )
+{
+	eResponse Response = r_Undefined;
+qRH
+	flw::sDressedIFlow<> Flow;
+qRB
+	Flow.Init( D_() );
+
+	EOFT;
+
+	if ( Flow.View() != '*' )
+		Response = r_None;
+	else {
+		Flow.Skip();
+
+		if ( Flow.Get() != ' ' )
+			qRGnr();
+
+		Response = response_::Get( Flow );
+	}
+qRR
+qRT
+qRE
+	return Response;
+}
+
+namespace _ {
 	qENUM( Command_ ) {
+		cLogout,
 		cCapability,
 		c_amount,
 		c_Undefined
@@ -36,6 +137,7 @@ namespace {
 	const char *GetLabel_( eCommand_ Command )
 	{
 		switch ( Command ) {
+		C( Logout );
 		C( Capability );
 		default:
 			qRGnr();
@@ -45,29 +147,91 @@ namespace {
 		return NULL;	// To avoid a warning.
 	}
 
-	void SendCommand_(
+	namespace send_command_ {
+		void Send(
+			const str::dString &Tag,
+			eCommand_ Command,
+			txf::sOFlow &Flow )
+		{
+		qRH
+			str::wString CommandString;
+		qRB
+			CommandString.Init( GetLabel_( Command ) );
+
+			str::ToUpper( CommandString );
+
+			Flow << Tag << ' ' << CommandString << ' ' << "\r\n";
+		qRR
+		qRT
+		qRE
+		}
+	}
+
+	void SendCommand(
 		const str::dString &Tag,
 		eCommand_ Command,
-		txf::sOFlow &Flow )
+		fdr::rODriver &Driver )
 	{
 	qRH
-		str::wString CommandString;
+		txf::rOFlow Flow;
 	qRB
-		CommandString.Init( GetLabel_( Command ) );
+		Flow.Init( Driver );
 
-		str::ToUpper( CommandString );
-
-		Flow << Tag << ' ' << CommandString << ' ';
+		send_command_::Send( Tag, Command, Flow );
 	qRR
 	qRT
 	qRE
 	}
+
+	namespace handle_answer_ {
+		base::eIndicator Handle( flw::sIFlow &Flow )
+		{
+			if ( Flow.EndOfFlow() )
+				return base::iErroneous;
+
+			return base::iOK;
+		}
+	}
+
+	base::eIndicator HandleAnswer( rSession &Session )
+	{
+		base::eIndicator Indicator = base::i_Undefined;
+	qRH
+		flw::sDressedIFlow<> Flow;
+	qRB
+		Flow.Init(Session.Driver() );
+
+		Indicator = handle_answer_::Handle( Flow );
+	qRR
+	qRT
+	qRE
+		return Indicator;
+	}
 }
 
-const str::dString &muaima::base::Capability(
-	rSession &Session,
-	str::dString &Capability )
+#include "cio.h"
+
+base::eIndicator muaima::base::Connect( rSession &Session )
 {
-	return Capability;
+	return _::HandleAnswer( Session );
+}
+
+base::eIndicator muaima::base::Logout( rSession &Session )
+{
+	_::SendCommand( Session.GetNextTag(), _::cLogout, Session.Driver() );
+
+	return _::HandleAnswer( Session );
+}
+
+base::eIndicator muaima::base::Capability( rSession &Session )
+{
+	_::SendCommand( Session.GetNextTag(), _::cCapability, Session.Driver() );
+
+	return _::HandleAnswer( Session );
+}
+
+qGCTOR( muaima )
+{
+	response_::FillAutomat();
 }
 

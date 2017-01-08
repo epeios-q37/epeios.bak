@@ -148,7 +148,7 @@ namespace {
 	{
 		eIndicator Indicator = i_Undefined;
 
-		Indicator = CleanBegin_( Flow, true );
+		Indicator = CleanBegin_( Flow, true ); 
 
 		return Indicator;
 	}
@@ -457,7 +457,7 @@ namespace indexes_ {
 	qRB
 		H( base::List( 0, Server, true, Body ) );
 
-		if ( !Extract_(Body.GetDriver(), Callback ) )
+		if ( !Extract_( Body.GetDriver(), Callback ) )
 			qRReturn;
 
 		Success = true;

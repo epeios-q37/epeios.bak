@@ -30,11 +30,81 @@
 
 namespace muaima {
 
+	qENUM( Response ) {
+		rCapability,
+		r_amount,
+		r_None,
+		r_Undefined
+	};
+
+	typedef fdr::rIDressedDriver rDriver_;
+
+	class rResponseDriver
+	: public rDriver_
+	{
+	private:
+		flw::sDressedIFlow<> Flow_;
+		bso::sBool EOF_;
+	protected:
+		virtual fdr::sSize FDRRead(
+			fdr::sSize Maximum,
+			fdr::sByte* Buffer ) override
+		{
+			bso::sBool Continue = true;
+			fdr::sByte Byte = 0;
+			fdr::sSize Amount = 0;
+
+			if ( !EOF_ ) {
+				while ( Continue ) {
+					if ( Flow_.EndOfFlow() )
+						qRGnr();
+
+					Byte = Flow_.Get();
+
+					if ( Byte == '\r' ) {
+						Continue = false;
+						EOF_ = true;
+
+						if ( Flow_.EndOfFlow() || ( Flow_.Get() != '\n' ) )
+							qRGnr();
+					} else {
+						Buffer[Amount++] = Byte;
+
+						if ( Amount == Maximum )
+							Continue = false;
+					}
+				}
+			}
+			return Amount;
+		}
+		virtual void FDRDismiss( bso::sBool Unlock ) override
+		{
+			Flow_.Dismiss( Unlock );
+		}
+		virtual fdr::sTID FDRITake( fdr::sTID Owner ) override
+		{
+			return Flow_.IDriver().ITake( Owner );
+		}
+	public:
+		void reset( bso::sBool P = true )
+		{
+			tol::reset( P, Flow_ );
+		}
+		qCVDTOR( rResponseDriver );
+		void Init( fdr::rIDriver &Driver )
+		{
+			EOF_ = false;
+			Flow_.Init( Driver );
+			rDriver_::Init( fdr::ts_Default );
+		}
+	};
+
 	class rSession
 	{
 	private:
 		str::wString Tag_;
 		qRMV( fdr::rIODriver, D_, Driver_ );
+		rResponseDriver ResponseDriver_;
 	public:
 		void reset( bso::sBool P = true )
 		{
@@ -50,9 +120,36 @@ namespace muaima {
 		{
 			return muabsc::GetNextIMAPTag( Tag_ );
 		}
+		const str::dString &GetCurrentTag( void ) const
+		{
+			if ( Tag_.Amount() == 0)
+				qRGnr();
+
+			return Tag_;
+		}
 		fdr::rIODriver &Driver( void ) const
 		{
 			return D_();
+		}
+		eResponse GetResponse( void );
+		fdr::rIDriver &GetDataDriver( void )
+		{
+			ResponseDriver_.Init( D_() );
+
+			return ResponseDriver_;
+		}
+		void SkipData( void )
+		{
+		qRH
+			flw::sDressedIFlow<> Flow;
+		qRB
+			Flow.Init(GetDataDriver() );
+
+			while ( !Flow.EndOfFlow() )
+				Flow.Skip();
+		qRR
+		qRT
+		qRE
 		}
 	};
 
@@ -61,9 +158,12 @@ namespace muaima {
 		qENUM( Indicator_ ) {
 			iOK,
 			i_True = iOK,
+			iPREAUTH,
+			iBYE,
+			iNO,
+			i_False = iNO,
 			iBAD,
-			i_False = iBAD,
-			i_Error,
+			i_Error = iBAD,
 			iErroneous = i_Error,	// Server returned a not 'POP3' compliant answer.
 			i_amount,
 			i_Undefined
@@ -71,9 +171,10 @@ namespace muaima {
 
 		qXENUM( Indicator, i );
 
-		const str::dString &Capability(
-			rSession &Session,
-			str::dString &Capability );
+		eIndicator Connect( rSession &Session );
+		eIndicator Logout( rSession &Session );
+
+		eIndicator Capability( rSession &Session );
 	}
 }
 

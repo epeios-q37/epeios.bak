@@ -27,10 +27,22 @@ namespace registry {
 
 	namespace parameter {
 		using namespace sclrgstry::parameter;
+
+		namespace pop3 {
+			extern rEntry
+				HostPort,
+				Username,
+				Password;
+		};
+
+		namespace imap {
+			extern rEntry
+				HostPort,
+				Username,
+				Password;
+		};
+
 		extern rEntry
-			HostPort,
-			Username,
-			Password,
 			Input,
 			Output,
 			Message,

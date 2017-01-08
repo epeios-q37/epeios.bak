@@ -21,9 +21,21 @@
 
 using namespace registry;
 
-rEntry registry::parameter::HostPort("HostPort", sclrgstry::Parameters );
-rEntry registry::parameter::Username("Username", sclrgstry::Parameters );
-rEntry registry::parameter::Password("Password", sclrgstry::Parameters );
+namespace {
+	rEntry POP3_("POP3", sclrgstry::Parameters );
+}
+rEntry registry::parameter::pop3::HostPort("@HostPort", POP3_ );
+rEntry registry::parameter::pop3::Username("Username", POP3_ );
+rEntry registry::parameter::pop3::Password("Password", POP3_ );
+
+namespace {
+	rEntry IMAP_("IMAP", sclrgstry::Parameters );
+}
+
+rEntry registry::parameter::imap::HostPort("@HostPort", IMAP_ );
+rEntry registry::parameter::imap::Username("Username", IMAP_ );
+rEntry registry::parameter::imap::Password("Password", IMAP_ );
+
 rEntry registry::parameter::Input("Input", sclrgstry::Parameters );
 rEntry registry::parameter::Output("Output", sclrgstry::Parameters );
 rEntry registry::parameter::Message("Message", sclrgstry::Parameters );

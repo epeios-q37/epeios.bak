@@ -330,13 +330,13 @@ namespace muapo3 {
 		fdr::rIODriver &Server,
 		muabsc::dIndexes &Indexes,
 		qRPD )
-		{
-			muabsc::sDefaultIndexCallback Callback;
+	{
+		muabsc::sDefaultIndexCallback Callback;
 
-			Callback.Init( Indexes );
+		Callback.Init( Indexes );
 
-			return GetIndexes( Server, Callback, qRP );
-		}
+		return GetIndexes( Server, Callback, qRP );
+	}
 
 	bso::sBool GetHeader(
 		sNumber Number,
