@@ -17,7 +17,7 @@
     along with 'MMUAq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// MUA Internet Message Access protocol (IMAP 4rev1 - RFC 3501).
+// MUA Internet Message Access protocol (IMAP 4rev1 - RFC 3501 & 5530).
 
 #ifndef MUAIMA__INC
 # define MUAIMA__INC
@@ -29,22 +29,16 @@
 # include "muabsc.h"
 
 namespace muaima {
-
-	qENUM( Response ) {
-		rCapability,
-		r_amount,
-		r_None,
-		r_Undefined
-	};
-
 	typedef fdr::rIDressedDriver rDriver_;
 
-	class rResponseDriver
+	class rResponseDriver_
 	: public rDriver_
 	{
 	private:
 		qRMV( flw::sIFlow, F_, Flow_ );
-		bso::sBool EOF_;
+		bso::sBool
+			EOF_,
+			BracketIsEOF_;	// At true if a square backet ']' means a EOF.
 	protected:
 		virtual fdr::sSize FDRRead(
 			fdr::sSize Maximum,
@@ -63,11 +57,24 @@ namespace muaima {
 
 					Byte = Flow.Get();
 
-					if ( Byte == '\r' ) {
+					if ( ( Byte == '\r' )
+						 || ( BracketIsEOF_ && ( Byte ==']' ) ) )
+					{
 						Continue = false;
 						EOF_ = true;
+						BracketIsEOF_ = false;
 
-						if ( Flow.EndOfFlow() || ( Flow.Get() != '\n' ) )
+						if ( Flow.EndOfFlow() )
+							qRGnr();
+
+						if ( Byte == ']' ) {
+							if ( Flow.View() == ' ' )
+								Flow.Skip();
+							else if ( Flow.View() == '\r' ) {
+								if ( Flow.EndOfFlow() || ( Flow.Get() != '\n' ) )
+									qRGnr();
+							}
+						} else if ( Flow.EndOfFlow() || ( Flow.Get() != '\n' ) )
 							qRGnr();
 					} else {
 						Buffer[Amount++] = Byte;
@@ -90,16 +97,67 @@ namespace muaima {
 	public:
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, Flow_ );
+			tol::reset( P, Flow_, EOF_, BracketIsEOF_ );
 		}
-		qCVDTOR( rResponseDriver );
+		qCVDTOR( rResponseDriver_ );
 		void Init( flw::sIFlow &Flow )
 		{
-			EOF_ = false;
+			EOF_ = BracketIsEOF_ = false;
 			Flow_ = &Flow;
 			rDriver_::Init( fdr::ts_Default );
 		}
+		void BracketIsEOF( void )
+		{
+			if ( BracketIsEOF_ )
+				qRGnr();
+
+			BracketIsEOF_ = true;
+		}
 	};
+
+	// Response code.
+	qENUM( Code ) {
+		cOK,
+		cNo,
+		cBad,
+		cBye,
+		cCapability,
+		// Below response codes are from RFC 55530.
+		cUnavailable,
+		cAuthenticationFailed,
+		cAuthorizationFailed,
+		cExpired,
+		cPrivacyRequired,
+		cContactAdmin,
+		cNoPerm,
+		cInUse,
+		cExpungeIssued,
+		cCorruption,
+		cServerBug,
+		cClientBug,
+		cCanNot,
+		cLimit,
+		cOverQuota,
+		cAlreadyExists,
+		cNonExistent,
+	c_amount,
+		c_None,
+		c_Undefined
+	};
+
+	const char *GetLabel( eCode Code );
+
+	namespace base {
+		qENUM( Status ) {
+			sOK,
+			sNO,
+			sBAD,
+			s_amount,
+			s_Pending,	// Status pending ; other response have to be handled before obtining the status.
+			sErroneous,	// Server returned a not 'IMAP' compliant answer.
+			s_Undefined
+		};
+	}
 
 	class rSession
 	{
@@ -107,18 +165,27 @@ namespace muaima {
 		str::wString Tag_;
 		flw::sDressedIFlow<> IFlow_;
 		txf::rOFlow OFlow_;
-		rResponseDriver ResponseDriver_;
+		rResponseDriver_ ResponseDriver_;
+		bso::sBool SkipTag_;	// On first use, the tag is already eaten.
+		base::eStatus PendingStatus_;
 	public:
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, Tag_, IFlow_, OFlow_ );
+			tol::reset( P, Tag_, IFlow_, OFlow_, SkipTag_  );
+			PendingStatus_ = base::s_Undefined;
 		}
 		qCDTOR( rSession );
 		void Init( fdr::rIODriver &Driver )
 		{
 			tol::Init( Tag_ );
+			PendingStatus_ = base::s_Undefined;
 			IFlow_.Init( Driver );
 			OFlow_.Init( Driver );
+			SkipTag_ = true;
+		}
+		void SetPendingStatus( base::eStatus Status )
+		{
+			PendingStatus_ = Status;
 		}
 		const str::dString &GetNextTag( void )
 		{
@@ -139,19 +206,22 @@ namespace muaima {
 		{
 			return OFlow_;
 		}
-		eResponse GetResponse( void );
-		fdr::rIDriver &GetDataDriver( void )
+		eCode GetCode( void );
+		fdr::rIDriver &GetResponseDriver( void )
 		{
 			ResponseDriver_.Init( IFlow_ );
 
+			if ( PendingStatus_ != base::s_Undefined )
+				ResponseDriver_.BracketIsEOF();
+
 			return ResponseDriver_;
 		}
-		void SkipData( void )
+		void SkipResponse( void )
 		{
 		qRH
 			flw::sDressedIFlow<> Flow;
 		qRB
-			Flow.Init(GetDataDriver() );
+			Flow.Init( GetResponseDriver() );
 
 			while ( !Flow.EndOfFlow() )
 				Flow.Skip();
@@ -159,30 +229,26 @@ namespace muaima {
 		qRT
 		qRE
 		}
+		base::eStatus GetPendingStatus( void ) const
+		{
+			return PendingStatus_;
+		}
 	};
 
 	namespace base {
+		const char *GetLabel( eStatus Status );
+		/*
+			If returned value == 'iPending, you must read pendind response using
+			'Session.GetCode(...)',  followed by 'GetDataDriver(...)'/'SkipData(...)'
+			until 'GetCode(...)' returns 'c_Completed'.
+		*/
 
-		qENUM( Indicator_ ) {
-			iOK,
-			i_True = iOK,
-			iPREAUTH,
-			iBYE,
-			iNO,
-			i_False = iNO,
-			iBAD,
-			i_Error = iBAD,
-			iErroneous = i_Error,	// Server returned a not 'POP3' compliant answer.
-			i_amount,
-			i_Undefined
-		};
+		eStatus GetCompletionStatus( rSession &Session );
 
-		qXENUM( Indicator, i );
-
-		eIndicator Connect( rSession &Session );
-		eIndicator Logout( rSession &Session );
-		eIndicator Capability( rSession &Session );
-		eIndicator Login(
+		eStatus Connect( rSession &Session );
+		eStatus Logout( rSession &Session );
+		eStatus Capability( rSession &Session );
+		eStatus Login(
 			const str::dString &Username,
 			const str::dString &Password,
 			rSession &Session );

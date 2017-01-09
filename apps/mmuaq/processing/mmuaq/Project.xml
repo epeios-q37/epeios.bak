@@ -39,6 +39,9 @@
    <Module>muapo3</Module>
    <Module Path="../">muainf</Module>
   </Modules>
+  <Module>imap</Module>
+  <Module>misc</Module>
+  <Module>pop3</Module>
   <Module>registry</Module>
  </Modules>
  <Files/>

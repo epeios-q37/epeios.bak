@@ -25,54 +25,85 @@ using namespace muaima;
 
 #define EOFT	if ( Flow.EndOfFlow() ) qRGnr();
 
-namespace response_ {
+namespace {
+	inline const str::dString &GetAlphanum_(
+		flw::sIFlow &Flow,
+		str::dString &AlphaNum )
+	{
+		while ( !Flow.EndOfFlow() && isalnum( Flow.View() ) )
+			AlphaNum.Append( Flow.Get() );
+
+		return AlphaNum;
+	}
+}
+
+#define C( name )	case c##name : return #name; break
+ 
+const char *muaima::GetLabel( eCode Code )
+{
+	switch ( Code ) {
+	C( OK );
+	C( No );
+	C( Bad );
+	C( Bye );
+	C( Capability );
+	C( Unavailable );
+	C( AuthenticationFailed );
+	C( AuthorizationFailed );
+	C( Expired );
+	C( PrivacyRequired );
+	C( ContactAdmin );
+	C( NoPerm );
+	C( InUse );
+	C( ExpungeIssued );
+	C( Corruption );
+	C( ServerBug );
+	C( ClientBug );
+	C( CanNot );
+	C( Limit );
+	C( OverQuota );
+	C( AlreadyExists );
+	C( NonExistent );
+	default:
+		qRFwk();
+		break;
+	}
+ 
+	return NULL;	// To avoid a warning.
+}
+
+#undef C
+
+namespace code_ {
 	namespace _ {
 		stsfsm::wAutomat Automat;
 
-		namespace _ {
-#define C( name )	case r##name : return #name; break
- 
-			const char *GetLabel( eResponse Response )
-			{
-				switch ( Response ) {
-				C( Capability );
-				default:
-					qRFwk();
-					break;
-				}
- 
-				return NULL;	// To avoid a warning.
-			}
-
-#undef C
-		}
-
 		const str::dString &GetUCLabel(
-			eResponse Response,
+			eCode Code,
 			str::dString &Label )
 		{
-			Label.Append( _::GetLabel( Response ) );
+			Label.Append( GetLabel( Code ) );
 
 			str::ToUpper( Label );
 
 			return Label;
 		}
 
-		eResponse GetResponse( const str::dString &Pattern )
+		eCode GetCode( const str::dString &Pattern )
 		{
-			return stsfsm::GetId( Pattern, Automat, r_Undefined, r_amount );
+			return stsfsm::GetId( Pattern, Automat, c_Undefined, c_amount );
 		}
 	}
 
 	void FillAutomat( void )
 	{
 		_::Automat.Init();
-		stsfsm::Fill<eResponse>( _::Automat, r_amount, _::GetUCLabel );
+		stsfsm::Fill<eCode>( _::Automat, c_amount, _::GetUCLabel );
 	}
 
-	eResponse Get( flw::sIFlow &Flow )
+	eCode Get( flw::sIFlow &Flow )
 	{
-		eResponse Response = r_Undefined;
+		eCode Code = c_Undefined;
 	qRH
 		str::wString Pattern;
 		flw::sByte Byte = 0;
@@ -81,39 +112,99 @@ namespace response_ {
 
 		Pattern.Init();
 
-		while ( ( Byte = Flow.Get() ) != ' ' ) {
-			Pattern.Append( Byte );
+		GetAlphanum_( Flow, Pattern );
 
-			EOFT;
-		}
+		Code = _::GetCode( Pattern );
 
-		Response = _::GetResponse( Pattern );
+		EOFT;
+
+		if ( Flow.View() == ' ' )
+			Flow.Skip();
 	qRR
 	qRT
 	qRE
-		return Response;
+		return Code;
 	}
 }
 
-eResponse muaima::rSession::GetResponse( void )
+eCode muaima::rSession::GetCode( void )
 {
-	eResponse Response = r_Undefined;
+	eCode Code = c_Undefined;
 	flw::sIFlow &Flow = IFlow_;
 
 	EOFT;
 
-	if ( Flow.View() != '*' )
-		Response = r_None;
-	else {
+	if ( SkipTag_ ) {
+		Code = code_::Get( Flow );
+		SkipTag_ = false;
+	} else if ( Flow.View() != '*' ) {
+		SkipTag_ = true;
+		Code = c_None;
+	} else {
 		Flow.Skip();
 
 		if ( Flow.Get() != ' ' )
 			qRGnr();
 
-		Response = response_::Get( Flow );
+		Code = code_::Get( Flow );
 	}
 
-	return Response;
+	return Code;
+}
+
+#define C( name )	case s##name : return #name; break
+const char *base::GetLabel( eStatus Status )
+{
+	switch ( Status ) {
+	C( OK );
+	C( NO );
+	C( BAD );
+	default:
+		qRFwk();
+		break;
+	}
+ 
+	return NULL;	// To avoid a warning.
+}
+#undef C
+
+
+namespace status_ {
+	using namespace base;
+
+	namespace _ {
+		stsfsm::wAutomat Automat;
+
+		eStatus GetStatus( const str::dString &Pattern )
+		{
+			return stsfsm::GetId( Pattern, Automat, s_Undefined, s_amount );
+		}
+	}
+
+	void FillAutomat( void )
+	{
+		_::Automat.Init();
+		stsfsm::Fill<base::eStatus>( _::Automat, base::s_amount, GetLabel );
+	}
+
+	eStatus Get( flw::sIFlow &Flow )
+	{
+		eStatus Status = s_Undefined;
+	qRH
+		str::wString Pattern;
+	qRB
+		EOFT;
+
+		Pattern.Init();
+
+		GetAlphanum_( Flow, Pattern );
+
+		Status = _::GetStatus( Pattern );
+	qRR
+	qRT
+	qRE
+		return Status;
+	}
 }
 
 namespace _ {
@@ -169,39 +260,115 @@ namespace _ {
 		 Flow.Commit();
 	}
 
-	base::eIndicator HandleAnswer( flw::sIFlow &Flow )
-	{
-		if ( Flow.EndOfFlow() )
-			return base::iErroneous;
+	namespace _ {
+		namespace _ {
+			void SkipTag( flw::sIFlow &Flow )
+			{
+			qRH
+				str::wString Dummy;
+			qRB
+				Dummy.Init();
 
-		return base::iOK;
+				GetAlphanum_( Flow, Dummy );
+			qRR
+			qRT
+			qRE
+			}
+		}
+
+		base::eStatus HandleAnswer(
+			flw::sIFlow &Flow,
+			bso::sBool NoPending )
+		{
+			EOFT;
+
+			if ( ( Flow.View() == '*' ) && !NoPending )
+			{ 
+				Flow.Skip();
+
+				EOFT;
+
+				if ( Flow.Get() != ' ' )
+				qRGnr();
+
+				return base::s_Pending;
+			} else {
+				if ( NoPending ) {
+					if ( Flow.Get() != '*' )
+						qRGnr();
+				} else
+					_::SkipTag( Flow );
+
+				EOFT;
+
+				if ( Flow.Get() != ' ' )
+					qRGnr();
+
+				return status_::Get( Flow );
+			}
+		}
+	}
+
+	base::eStatus HandleAnswer(
+		rSession &Session,
+		bso::sBool NoPending = false )
+	{
+		base::eStatus Status = _::HandleAnswer( Session.IFlow(), NoPending );
+
+		if ( ( Status < base::s_amount ) ) {
+			if ( Session.IFlow().View() != '\r' ) {
+				if ( Session.IFlow().Get() != ' ' )
+					qRGnr();
+
+				if ( Session.IFlow().View() == '[' ) {
+					Session.IFlow().Skip();
+					Session.SetPendingStatus( Status );
+					Status = base::s_Pending;
+				}
+			}
+		}
+
+		return Status;
 	}
 }
 
 #include "cio.h"
 
-base::eIndicator muaima::base::Connect( rSession &Session )
+base::eStatus muaima::base::GetCompletionStatus( rSession &Session )
 {
-	return _::HandleAnswer( Session.IFlow() );
+	base::eStatus Status = Session.GetPendingStatus();
+
+	if ( Status == s_Undefined )
+		Status = _::HandleAnswer( Session );
+
+	Session.SetPendingStatus( base::s_Undefined );
+
+	return Status;
 }
 
-base::eIndicator muaima::base::Logout( rSession &Session )
+
+base::eStatus muaima::base::Connect( rSession &Session )
+{
+	return _::HandleAnswer( Session, true );
+}
+
+base::eStatus muaima::base::Logout( rSession &Session )
 {
 	_::SendCommand( Session.GetNextTag(), _::cLogout, Session.OFlow() );
 	_::SendCFLR( Session.OFlow() );
 
-	return _::HandleAnswer( Session.IFlow() );
+	return _::HandleAnswer( Session );
 }
 
-base::eIndicator muaima::base::Capability( rSession &Session )
+base::eStatus muaima::base::Capability( rSession &Session )
 {
 	_::SendCommand( Session.GetNextTag(), _::cCapability, Session.OFlow() );
 	_::SendCFLR( Session.OFlow() );
 
-	return _::HandleAnswer( Session.IFlow() );
+	return _::HandleAnswer( Session );
 }
 
-base::eIndicator muaima::base::Login(
+base::eStatus muaima::base::Login(
 	const str::dString &Username,
 	const str::dString &Password,
 	rSession &Session )
@@ -212,11 +379,19 @@ base::eIndicator muaima::base::Login(
 
 	_::SendCFLR( Session.OFlow() );
 
-	return _::HandleAnswer( Session.IFlow() );
+	return _::HandleAnswer( Session );
+}
+
+namespace {
+	void FillAutomats_( void )
+	{
+		code_::FillAutomat();
+		status_::FillAutomat();
+	}
 }
 
 qGCTOR( muaima )
 {
-	response_::FillAutomat();
+	FillAutomats_();
 }
 
