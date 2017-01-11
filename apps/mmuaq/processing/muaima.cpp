@@ -26,11 +26,12 @@ using namespace muaima;
 #define EOFT	if ( Flow.EndOfFlow() ) qRGnr();
 
 namespace {
-	inline const str::dString &GetAlphanum_(
+	inline const str::dString &GetAlphanumMinus_(
 		flw::sIFlow &Flow,
 		str::dString &AlphaNum )
 	{
-		while ( !Flow.EndOfFlow() && isalnum( Flow.View() ) )
+		flw::sByte Byte = 0;
+		while ( !Flow.EndOfFlow() && ( isalnum( Byte = Flow.View() ) || ( Byte == '-' ) ) )
 			AlphaNum.Append( Flow.Get() );
 
 		return AlphaNum;
@@ -60,7 +61,7 @@ const char *muaima::GetLabel( eCode Code )
 		break;
 	C( TryCreate );
 	C( UIDNext );
-	C( UUIDValidity );
+	C( UIDValidity );
 	C( Unseen );
 	C( Unavailable );
 	C( AuthenticationFailed );
@@ -137,7 +138,7 @@ namespace code_ {
 		EOFT;
 
 		if ( isdigit( Flow.View() ) ) {
-			GetAlphanum_( Flow, Before );
+			GetAlphanumMinus_( Flow, Before );
 
 			if ( Flow.Get() != ' ' )
 				qRGnr();
@@ -145,7 +146,7 @@ namespace code_ {
 
 		Pattern.Init();
 
-		GetAlphanum_( Flow, Pattern );
+		GetAlphanumMinus_( Flow, Pattern );
 
 		Code = _::GetCode( Pattern );
 
@@ -163,27 +164,64 @@ namespace code_ {
 eCode muaima::rSession::GetCode( void )
 {
 	eCode Code = c_Undefined;
+qRH
 	flw::sIFlow &Flow = IFlow_;
+	str::wString PendingData, Tag;
+qRB
+	PendingData.Init();
 
-	EOFT;
-
-	PendingData_.Init();
-
-	if ( SkipTag_ ) {
-		Code = code_::Get( Flow, PendingData_ );
-		SkipTag_ = false;
-	} else if ( Flow.View() != '*' ) {
-		SkipTag_ = true;
-		Code = c_None;
+	if ( PendingCode_ != c_Undefined ) {
+		if ( PendingCodeIsStatus_ ) {
+			Code = c_None;
+			PendingCodeIsStatus_ = false;
+		} else {
+			Code = PendingCode_;
+			PendingCode_ = c_Undefined;
+		}
+		ResponseDriver_.Init( Flow, PendingData, false );
 	} else {
-		Flow.Skip();
+		if ( Flow.View() == '*' ) {
+			Flow.Skip();
+
+			if ( NoTaggedStatusResponse_ ) {
+				PendingCodeIsStatus_ = true;
+				NoTaggedStatusResponse_ = false;
+			}
+		} else {
+			Tag.Init();
+			GetAlphanumMinus_( Flow, Tag );
+			PendingCodeIsStatus_ = true;
+		}
+
+		EOFT;
 
 		if ( Flow.Get() != ' ' )
 			qRGnr();
 
-		Code = code_::Get( Flow, PendingData_ );
-	}
+		Code = code_::Get( Flow, PendingData );
 
+		EOFT;
+
+		if ( Flow.View() == '[' ) {
+			PendingCode_ = Code;
+			if ( PendingData.Amount() != 0 )
+				qRGnr();
+			Flow.Skip();
+			Code = code_::Get( Flow, PendingData );
+			ResponseDriver_.Init( Flow, PendingData, true );
+		} else {
+			if ( PendingCodeIsStatus_ ) {
+				PendingCode_ = Code;
+				Code = c_None;
+				PendingCodeIsStatus_ = false;
+			}
+
+			ResponseDriver_.Init( Flow, PendingData, false );
+		}
+	}
+qRR
+qRT
+qRE
 	return Code;
 }
 
@@ -232,7 +270,7 @@ namespace status_ {
 
 		Pattern.Init();
 
-		GetAlphanum_( Flow, Pattern );
+		GetAlphanumMinus_( Flow, Pattern );
 
 		Status = _::GetStatus( Pattern );
 	qRR
@@ -296,97 +334,19 @@ namespace _ {
 
 		 Flow.Commit();
 	}
-
-	namespace _ {
-		namespace _ {
-			void SkipTag( flw::sIFlow &Flow )
-			{
-			qRH
-				str::wString Dummy;
-			qRB
-				Dummy.Init();
-
-				GetAlphanum_( Flow, Dummy );
-			qRR
-			qRT
-			qRE
-			}
-		}
-
-		base::eStatus HandleAnswer(
-			flw::sIFlow &Flow,
-			bso::sBool NoPending )
-		{
-			EOFT;
-
-			if ( ( Flow.View() == '*' ) && !NoPending )
-			{ 
-				Flow.Skip();
-
-				EOFT;
-
-				if ( Flow.Get() != ' ' )
-				qRGnr();
-
-				return base::s_Pending;
-			} else {
-				if ( NoPending ) {
-					if ( Flow.Get() != '*' )
-						qRGnr();
-				} else
-					_::SkipTag( Flow );
-
-				EOFT;
-
-				if ( Flow.Get() != ' ' )
-					qRGnr();
-
-				return status_::Get( Flow );
-			}
-		}
-	}
-
-	base::eStatus HandleAnswer(
-		rSession &Session,
-		bso::sBool NoPending = false )
-	{
-		base::eStatus Status = _::HandleAnswer( Session.IFlow(), NoPending );
-
-		if ( ( Status < base::s_amount ) ) {
-			if ( Session.IFlow().View() != '\r' ) {
-				if ( Session.IFlow().Get() != ' ' )
-					qRGnr();
-
-				if ( Session.IFlow().View() == '[' ) {
-					Session.IFlow().Skip();
-					Session.SetPendingStatus( Status );
-					Status = base::s_Pending;
-				}
-			}
-		}
-
-		return Status;
-	}
 }
-
-#include "cio.h"
 
 base::eStatus muaima::base::GetCompletionStatus( rSession &Session )
 {
-	base::eStatus Status = Session.GetPendingStatus();
-
-	if ( Status == s_Undefined )
-		Status = _::HandleAnswer( Session );
-
-	Session.SetPendingStatus( base::s_Undefined );
-
-	return Status;
+	return Session.GetPendingStatus();
 }
 
 
 base::eStatus muaima::base::Connect( rSession &Session )
 {
-	return _::HandleAnswer( Session, true );
+	Session.ReportUntaggedStatusResponse();
+
+	return base::s_Undefined;
 }
 
 base::eStatus muaima::base::Login(
@@ -400,7 +360,7 @@ base::eStatus muaima::base::Login(
 
 	_::SendCFLR( Session.OFlow() );
 
-	return _::HandleAnswer( Session );
+	return base::s_Undefined;
 }
 
 base::eStatus muaima::base::Logout( rSession &Session )
@@ -408,7 +368,7 @@ base::eStatus muaima::base::Logout( rSession &Session )
 	_::SendCommand( Session.GetNextTag(), _::cLogout, Session.OFlow() );
 	_::SendCFLR( Session.OFlow() );
 
-	return _::HandleAnswer( Session );
+	return base::s_Undefined;
 }
 
 base::eStatus muaima::base::Capability( rSession &Session )
@@ -416,7 +376,7 @@ base::eStatus muaima::base::Capability( rSession &Session )
 	_::SendCommand( Session.GetNextTag(), _::cCapability, Session.OFlow() );
 	_::SendCFLR( Session.OFlow() );
 
-	return _::HandleAnswer( Session );
+	return base::s_Undefined;
 }
 
 base::eStatus muaima::base::Select( rSession &Session )
@@ -425,7 +385,7 @@ base::eStatus muaima::base::Select( rSession &Session )
 	Session.OFlow() << " INBOX";
 	_::SendCFLR( Session.OFlow() );
 
-	return _::HandleAnswer( Session );
+	return base::s_Undefined;
 }
 
 namespace {

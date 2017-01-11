@@ -70,7 +70,7 @@ namespace {
 				if ( KeepAnswer  )
 					cio::COut << muaima::GetLabel(Code) << ": ";
 				misc::Dump( Session.GetResponseDriver() );
-				cio::COut << txf::nl;
+				cio::COut << txf::nl << txf::commit;
 			} else
 				Session.SkipResponse();
 		}
@@ -82,15 +82,13 @@ namespace {
 		bso::sBool KeepAnswer,
 		muaima::rSession &Session )
 	{
-		if ( Status == s_Pending ) {
-			DumpPending_( Awaited, KeepAnswer, Session );
-			Status = muaima::base::GetCompletionStatus( Session );
-		}
+		DumpPending_( Awaited, KeepAnswer, Session );
+		Status = muaima::base::GetCompletionStatus( Session );
 
 		if ( KeepAnswer ) {
 			cio::COut << muaima::base::GetLabel(Status) << ": ";
 			misc::Dump( Session.GetResponseDriver() );
-			cio::COut << txf::nl;
+			cio::COut << txf::nl << txf::commit;
 		} else
 			Session.SkipResponse();
 

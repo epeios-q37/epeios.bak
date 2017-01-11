@@ -125,24 +125,20 @@ namespace muaima {
 	public:
 		void reset( bso::sBool P = true )
 		{
+			rDriver_::reset( P );
 			tol::reset( P, Flow_, EOF_, BracketIsEOF_, Pending_ );
 		}
 		qCVDTOR( rResponseDriver_ );
 		void Init(
 			flw::sIFlow &Flow,
-			const str::dString &PendingData )
+			const str::dString &PendingData,
+			bso::sBool BracketIsEOF )
 		{
-			EOF_ = BracketIsEOF_ = false;
+			EOF_ = false;
+			BracketIsEOF_ = BracketIsEOF;
 			Flow_ = &Flow;
 			rDriver_::Init( fdr::ts_Default );
 			Pending_.Init( PendingData );
-		}
-		void BracketIsEOF( void )
-		{
-			if ( BracketIsEOF_ )
-				qRGnr();
-
-			BracketIsEOF_ = true;
 		}
 	};
 
@@ -164,7 +160,7 @@ namespace muaima {
 		cReadWrite,
 		cTryCreate,
 		cUIDNext,
-		cUUIDValidity,
+		cUIDValidity,
 		cUnseen,
 		// Below response codes are from RFC 55530.
 		cUnavailable,
@@ -195,7 +191,7 @@ namespace muaima {
 		cRecent,
 		cExpunge,
 		cFetch,
-	c_amount,
+		c_amount,
 		c_None,
 		c_Undefined
 	};
@@ -221,27 +217,29 @@ namespace muaima {
 		flw::sDressedIFlow<> IFlow_;
 		txf::rOFlow OFlow_;
 		rResponseDriver_ ResponseDriver_;
-		bso::sBool SkipTag_;	// On first use, the tag is already eaten.
-		base::eStatus PendingStatus_;
-		str::wString PendingData_;
+		eCode PendingCode_;
+		bso::sBool PendingCodeIsStatus_;
+		bso::sBool NoTaggedStatusResponse_;	// To handle the connection, where there is no tagged status response.
 	public:
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, Tag_, IFlow_, OFlow_, SkipTag_, PendingData_  );
-			PendingStatus_ = base::s_Undefined;
+			tol::reset( P, Tag_, IFlow_, OFlow_, PendingCodeIsStatus_, ResponseDriver_, NoTaggedStatusResponse_ );
+			PendingCode_ = c_Undefined;
 		}
 		qCDTOR( rSession );
 		void Init( fdr::rIODriver &Driver )
 		{
-			tol::Init( Tag_, PendingData_ );
-			PendingStatus_ = base::s_Undefined;
+			tol::Init( Tag_ );
+			PendingCode_ = c_Undefined;
 			IFlow_.Init( Driver );
 			OFlow_.Init( Driver );
-			SkipTag_ = true;
+			PendingCodeIsStatus_ = false;
+			NoTaggedStatusResponse_ = false;
+			// 'ReponseDriver_' will be initialized as needed.
 		}
-		void SetPendingStatus( base::eStatus Status )
+		void ReportUntaggedStatusResponse( void )	// To handle the connection, where there is no tagged status response.
 		{
-			PendingStatus_ = Status;
+			NoTaggedStatusResponse_ = true;
 		}
 		const str::dString &GetNextTag( void )
 		{
@@ -265,11 +263,6 @@ namespace muaima {
 		eCode GetCode( void );
 		fdr::rIDriver &GetResponseDriver( void )
 		{
-			ResponseDriver_.Init( IFlow_, PendingData_ );
-
-			if ( PendingStatus_ != base::s_Undefined )
-				ResponseDriver_.BracketIsEOF();
-
 			return ResponseDriver_;
 		}
 		void SkipResponse( void )
@@ -285,9 +278,30 @@ namespace muaima {
 		qRT
 		qRE
 		}
-		base::eStatus GetPendingStatus( void ) const
+		// Also resets the PendingStatus.
+		base::eStatus GetPendingStatus( void )
 		{
-			return PendingStatus_;
+			// Althought 'PendingCode' is a status, the 'PendingCodeIsStatus_' is already set to false by 'GetCode(...').
+			base::eStatus Status = base::s_Undefined;
+
+			switch ( PendingCode_ ) {
+			case cOK:
+				Status = base::sOK;
+				break;
+			case cNo:
+				Status = base::sNO;
+				break;
+			case cBad:
+				Status = base::sBAD;
+				break;
+			default:
+				qRGnr();
+				break;
+			}
+
+			PendingCode_ = c_Undefined;
+
+			return Status;
 		}
 	};
 

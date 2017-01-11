@@ -34,7 +34,7 @@ namespace misc {
 		Flow.Init( Driver );
 
 		while ( !Flow.EndOfFlow() )
-			cio::COut << Flow.Get() << txf::commit;
+			cio::COut << Flow.Get();
 
 		Flow.Dismiss();
 	qRR
