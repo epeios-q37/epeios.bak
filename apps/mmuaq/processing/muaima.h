@@ -30,6 +30,30 @@
 
 namespace muaima {
 	typedef fdr::rIDressedDriver rDriver_;
+	typedef flx::sStringIFlow sSIFlow_;
+
+	class rPendingIFlow_
+	: public sSIFlow_
+	{
+	private:
+		str::wString Data_;
+	public:
+		void reset( bso::sBool P = true )
+		{
+			sSIFlow_::reset( P );
+			tol::reset( P, Data_ );
+		}
+		qCDTOR( rPendingIFlow_ );
+		void Init( const str::dString &Data )
+		{
+			Data_.Init( Data );
+			sSIFlow_::Init( Data_ );
+		}
+		bso::sBool IsEmpty( void )
+		{
+			return ( Data_.Amount() == 0 ) || (sSIFlow_::EndOfFlow() );
+		}
+	};
 
 	class rResponseDriver_
 	: public rDriver_
@@ -39,6 +63,7 @@ namespace muaima {
 		bso::sBool
 			EOF_,
 			BracketIsEOF_;	// At true if a square backet ']' means a EOF.
+		rPendingIFlow_ Pending_;
 	protected:
 		virtual fdr::sSize FDRRead(
 			fdr::sSize Maximum,
@@ -52,36 +77,39 @@ namespace muaima {
 
 			if ( !EOF_ ) {
 				while ( Continue ) {
-					if ( F_().EndOfFlow() )
-						qRGnr();
-
-					Byte = Flow.Get();
-
-					if ( ( Byte == '\r' )
-						 || ( BracketIsEOF_ && ( Byte ==']' ) ) )
-					{
-						Continue = false;
-						EOF_ = true;
-						BracketIsEOF_ = false;
-
-						if ( Flow.EndOfFlow() )
+					if ( Pending_.IsEmpty() ) {
+						if ( F_().EndOfFlow() )
 							qRGnr();
 
-						if ( Byte == ']' ) {
-							if ( Flow.View() == ' ' )
-								Flow.Skip();
-							else if ( Flow.View() == '\r' ) {
-								if ( Flow.EndOfFlow() || ( Flow.Get() != '\n' ) )
-									qRGnr();
-							}
-						} else if ( Flow.EndOfFlow() || ( Flow.Get() != '\n' ) )
-							qRGnr();
-					} else {
-						Buffer[Amount++] = Byte;
+						Byte = Flow.Get();
 
-						if ( Amount == Maximum )
+						if ( ( Byte == '\r' )
+							 || ( BracketIsEOF_ && ( Byte ==']' ) ) )
+						{
 							Continue = false;
-					}
+							EOF_ = true;
+							BracketIsEOF_ = false;
+
+							if ( Flow.EndOfFlow() )
+								qRGnr();
+
+							if ( Byte == ']' ) {
+								if ( Flow.View() == ' ' )
+									Flow.Skip();
+								else if ( Flow.View() == '\r' ) {
+									if ( Flow.EndOfFlow() || ( Flow.Get() != '\n' ) )
+										qRGnr();
+								}
+							} else if ( Flow.EndOfFlow() || ( Flow.Get() != '\n' ) )
+								qRGnr();
+						} else {
+							Buffer[Amount++] = Byte;
+
+							if ( Amount == Maximum )
+								Continue = false;
+						}
+					} else
+						Amount = Pending_.ReadUpTo( Maximum, Buffer );
 				}
 			}
 			return Amount;
@@ -97,14 +125,17 @@ namespace muaima {
 	public:
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, Flow_, EOF_, BracketIsEOF_ );
+			tol::reset( P, Flow_, EOF_, BracketIsEOF_, Pending_ );
 		}
 		qCVDTOR( rResponseDriver_ );
-		void Init( flw::sIFlow &Flow )
+		void Init(
+			flw::sIFlow &Flow,
+			const str::dString &PendingData )
 		{
 			EOF_ = BracketIsEOF_ = false;
 			Flow_ = &Flow;
 			rDriver_::Init( fdr::ts_Default );
+			Pending_.Init( PendingData );
 		}
 		void BracketIsEOF( void )
 		{
@@ -117,11 +148,24 @@ namespace muaima {
 
 	// Response code.
 	qENUM( Code ) {
+		// Not really response code, but 
 		cOK,
 		cNo,
 		cBad,
+		cPreAuth,
 		cBye,
+		// Response codes which may optionnaly be contained in status response.
+		cAlert,
+		cBadCharSet,
 		cCapability,
+		cParse,
+		cPermanentFlags,
+		cReadOnly,
+		cReadWrite,
+		cTryCreate,
+		cUIDNext,
+		cUUIDValidity,
+		cUnseen,
 		// Below response codes are from RFC 55530.
 		cUnavailable,
 		cAuthenticationFailed,
@@ -140,6 +184,17 @@ namespace muaima {
 		cOverQuota,
 		cAlreadyExists,
 		cNonExistent,
+		// Reponses to commands.
+		// cCapability, // Already present above.
+		cList,
+		cLSub,
+		cStatus,
+		cSearch,
+		cFlags,
+		cExists,
+		cRecent,
+		cExpunge,
+		cFetch,
 	c_amount,
 		c_None,
 		c_Undefined
@@ -168,16 +223,17 @@ namespace muaima {
 		rResponseDriver_ ResponseDriver_;
 		bso::sBool SkipTag_;	// On first use, the tag is already eaten.
 		base::eStatus PendingStatus_;
+		str::wString PendingData_;
 	public:
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, Tag_, IFlow_, OFlow_, SkipTag_  );
+			tol::reset( P, Tag_, IFlow_, OFlow_, SkipTag_, PendingData_  );
 			PendingStatus_ = base::s_Undefined;
 		}
 		qCDTOR( rSession );
 		void Init( fdr::rIODriver &Driver )
 		{
-			tol::Init( Tag_ );
+			tol::Init( Tag_, PendingData_ );
 			PendingStatus_ = base::s_Undefined;
 			IFlow_.Init( Driver );
 			OFlow_.Init( Driver );
@@ -209,7 +265,7 @@ namespace muaima {
 		eCode GetCode( void );
 		fdr::rIDriver &GetResponseDriver( void )
 		{
-			ResponseDriver_.Init( IFlow_ );
+			ResponseDriver_.Init( IFlow_, PendingData_ );
 
 			if ( PendingStatus_ != base::s_Undefined )
 				ResponseDriver_.BracketIsEOF();
@@ -245,13 +301,19 @@ namespace muaima {
 
 		eStatus GetCompletionStatus( rSession &Session );
 
+		// This is the first command to call after opening a connection to the server.
 		eStatus Connect( rSession &Session );
-		eStatus Logout( rSession &Session );
-		eStatus Capability( rSession &Session );
+
+		// To log in. Most commands are not available when this is not done successfully.
 		eStatus Login(
 			const str::dString &Username,
 			const str::dString &Password,
 			rSession &Session );
+
+		// To call just before closing the connexion. You do _not_ need to be logged in to log out.
+		eStatus Logout( rSession &Session );
+		eStatus Capability( rSession &Session );
+		eStatus Select( rSession &Session );
 	}
 }
 

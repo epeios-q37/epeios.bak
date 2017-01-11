@@ -22,6 +22,7 @@
 
 namespace imap {
 	void Capability( void );
+	void Select( void );
 }
 
 #endif

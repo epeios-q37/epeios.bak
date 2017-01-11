@@ -45,8 +45,23 @@ const char *muaima::GetLabel( eCode Code )
 	C( OK );
 	C( No );
 	C( Bad );
+	C( PreAuth);
 	C( Bye );
+	C( Alert );
+	C( BadCharSet );
 	C( Capability );
+	C( Parse );
+	C( PermanentFlags );
+	case cReadOnly:
+		return "Read-Only";
+		break;
+	case cReadWrite:
+		return "Read-Write";
+		break;
+	C( TryCreate );
+	C( UIDNext );
+	C( UUIDValidity );
+	C( Unseen );
 	C( Unavailable );
 	C( AuthenticationFailed );
 	C( AuthorizationFailed );
@@ -64,6 +79,15 @@ const char *muaima::GetLabel( eCode Code )
 	C( OverQuota );
 	C( AlreadyExists );
 	C( NonExistent );
+	C( List );
+	C( LSub );
+	C( Status );
+	C( Search );
+	C( Flags );
+	C( Exists );
+	C( Recent );
+	C( Expunge );
+	C( Fetch );
 	default:
 		qRFwk();
 		break;
@@ -101,7 +125,9 @@ namespace code_ {
 		stsfsm::Fill<eCode>( _::Automat, c_amount, _::GetUCLabel );
 	}
 
-	eCode Get( flw::sIFlow &Flow )
+	eCode Get(
+		flw::sIFlow &Flow,
+		str::dString &Before )
 	{
 		eCode Code = c_Undefined;
 	qRH
@@ -109,6 +135,13 @@ namespace code_ {
 		flw::sByte Byte = 0;
 	qRB
 		EOFT;
+
+		if ( isdigit( Flow.View() ) ) {
+			GetAlphanum_( Flow, Before );
+
+			if ( Flow.Get() != ' ' )
+				qRGnr();
+		}
 
 		Pattern.Init();
 
@@ -134,8 +167,10 @@ eCode muaima::rSession::GetCode( void )
 
 	EOFT;
 
+	PendingData_.Init();
+
 	if ( SkipTag_ ) {
-		Code = code_::Get( Flow );
+		Code = code_::Get( Flow, PendingData_ );
 		SkipTag_ = false;
 	} else if ( Flow.View() != '*' ) {
 		SkipTag_ = true;
@@ -146,7 +181,7 @@ eCode muaima::rSession::GetCode( void )
 		if ( Flow.Get() != ' ' )
 			qRGnr();
 
-		Code = code_::Get( Flow );
+		Code = code_::Get( Flow, PendingData_ );
 	}
 
 	return Code;
@@ -209,9 +244,10 @@ namespace status_ {
 
 namespace _ {
 	qENUM( Command_ ) {
+		cLogin,
 		cLogout,	// NOT the counter-part of 'Login' ; closes the connection.
 		cCapability,
-		cLogin,
+		cSelect,
 		c_amount,
 		c_Undefined
 	};
@@ -224,9 +260,10 @@ namespace _ {
 	const char *GetLabel_( eCommand_ Command )
 	{
 		switch ( Command ) {
+		C( Login);
 		C( Logout );
 		C( Capability );
-		C( Login);
+		C( Select );
 		default:
 			qRGnr();
 			break;
@@ -352,6 +389,20 @@ base::eStatus muaima::base::Connect( rSession &Session )
 	return _::HandleAnswer( Session, true );
 }
 
+base::eStatus muaima::base::Login(
+	const str::dString &Username,
+	const str::dString &Password,
+	rSession &Session )
+{
+	_::SendCommand(Session.GetNextTag(), _::cLogin, Session.OFlow() );
+
+	Session.OFlow() << ' ' << Username << ' ' << Password;
+
+	_::SendCFLR( Session.OFlow() );
+
+	return _::HandleAnswer( Session );
+}
+
 base::eStatus muaima::base::Logout( rSession &Session )
 {
 	_::SendCommand( Session.GetNextTag(), _::cLogout, Session.OFlow() );
@@ -368,15 +419,10 @@ base::eStatus muaima::base::Capability( rSession &Session )
 	return _::HandleAnswer( Session );
 }
 
-base::eStatus muaima::base::Login(
-	const str::dString &Username,
-	const str::dString &Password,
-	rSession &Session )
+base::eStatus muaima::base::Select( rSession &Session )
 {
-	_::SendCommand(Session.GetNextTag(), _::cLogin, Session.OFlow() );
-
-	Session.OFlow() << ' ' << Username << ' ' << Password;
-
+	_::SendCommand( Session.GetNextTag(), _::cSelect, Session.OFlow() );
+	Session.OFlow() << " INBOX";
 	_::SendCFLR( Session.OFlow() );
 
 	return _::HandleAnswer( Session );

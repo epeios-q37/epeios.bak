@@ -134,6 +134,11 @@ namespace {
 		return imap::Capability();
 	}
 
+	void IMAPTest_( void )
+	{
+		return imap::Select();
+	}
+
 	void NextTag_( void )
 	{
 	qRH
@@ -322,6 +327,7 @@ qRB
 	C( POP3Top );
 	C( POP3UIDL );
 	C( IMAPCapability );
+	C( IMAPTest );
 //	C( GetIndexes );
 	C( ShowHeader );
 	C( GetField );

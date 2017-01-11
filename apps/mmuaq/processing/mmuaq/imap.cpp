@@ -84,11 +84,10 @@ namespace {
 	{
 		if ( Status == s_Pending ) {
 			DumpPending_( Awaited, KeepAnswer, Session );
-			Status = Session.GetPendingStatus();
+			Status = muaima::base::GetCompletionStatus( Session );
 		}
 
 		if ( KeepAnswer ) {
-			Status = muaima::base::GetCompletionStatus( Session );
 			cio::COut << muaima::base::GetLabel(Status) << ": ";
 			misc::Dump( Session.GetResponseDriver() );
 			cio::COut << txf::nl;
@@ -133,6 +132,31 @@ qRB
 	Login_( KeepAnswer, Session );
 
 	Dump_( muaima::base::Capability( Session ), muaima::cCapability, KeepAnswer, Session );
+
+	Dump_( muaima::base::Logout( Session ), muaima::c_Undefined, KeepAnswer, Session );
+qRR
+qRT
+qRE
+}
+
+void imap::Select( void )
+{
+qRH
+	csdbnc::rIODriver Server;	
+	muaima::rSession Session;
+	bso::sBool KeepAnswer = false;
+qRB
+	KeepAnswer = sclmisc::BGetBoolean( registry::parameter::KeepAnswer, false );
+
+	Init_( Server );
+
+	Session.Init( Server );
+
+	Dump_( muaima::base::Connect( Session ), muaima::c_Undefined, KeepAnswer, Session );
+
+	Login_( KeepAnswer, Session );
+
+	Dump_( muaima::base::Select( Session ), muaima::cCapability, KeepAnswer, Session );
 
 	Dump_( muaima::base::Logout( Session ), muaima::c_Undefined, KeepAnswer, Session );
 qRR
