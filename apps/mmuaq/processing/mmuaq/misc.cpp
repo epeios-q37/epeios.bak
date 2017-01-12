@@ -19,5 +19,37 @@
 
 #include "misc.h"
 
+#include "registry.h"
+
+#include "sclmisc.h"
+
+#include "rgstry.h"
+
 using namespace misc;
 
+bso::sBool misc::IsVerboseActivated( void )
+{
+	return sclmisc::BGetBoolean( registry::parameter::Verbose, false );
+}
+
+void misc::rVerboseIODriver::Init(
+	const rgstry::rEntry &HostPortEntry,
+	bso::sBool Activate )
+{
+	qRH
+		str::wString HostPort;
+		qCBUFFERr Buffer;
+	qRB
+		HostPort.Init();
+		sclmisc::MGetValue( HostPortEntry, HostPort );
+
+		if ( !Driver_.Init( HostPort.Convert( Buffer ), SCK_INFINITE, qRPU ) )
+			sclmisc::ReportAndAbort("UnableToConnect", HostPort );
+
+		Activated_ = Activate;
+		Commited_ = true;
+		rIODriver_::Init( fdr::ts_Default );
+	qRR
+	qRT
+	qRE
+}

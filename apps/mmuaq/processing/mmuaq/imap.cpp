@@ -34,22 +34,6 @@ namespace {
 	using namespace muaima;
 	using namespace base;
 
-	void Init_( csdbnc::rIODriver &Server )
-	{
-	qRH
-		str::wString HostPort;
-		qCBUFFERr Buffer;
-	qRB
-		HostPort.Init();
-		sclmisc::MGetValue( registry::parameter::imap::HostPort, HostPort );
-
-		if ( !Server.Init( HostPort.Convert( Buffer ), SCK_INFINITE, qRPU ) )
-			sclmisc::ReportAndAbort("UnableToConnect", HostPort );
-	qRR
-	qRT
-	qRE
-	}
-
 	void GetUsernameAndPassword_(
 		str::dString &Username,
 		str::dString &Password )
@@ -112,26 +96,38 @@ namespace {
 	}
 }
 
+namespace{
+	class rVerboseIODriver_
+	: public misc::rVerboseIODriver
+	{
+	public:
+		void Init( bso::sBool Activate )
+		{
+			misc::rVerboseIODriver::Init( registry::parameter::imap::HostPort, Activate );
+		}
+	};
+}
+
 void imap::Capability( void )
 {
 qRH
-	csdbnc::rIODriver Server;	
+	bso::sBool Verbose = false;
+	rVerboseIODriver_ VerboseDriver;
 	muaima::rSession Session;
-	bso::sBool KeepAnswer = false;
 qRB
-	KeepAnswer = sclmisc::BGetBoolean( registry::parameter::KeepAnswer, false );
+	Verbose = misc::IsVerboseActivated();
 
-	Init_( Server );
+	VerboseDriver.Init( Verbose );
 
-	Session.Init( Server );
+	Session.Init( VerboseDriver );
 
-	Dump_( muaima::base::Connect( Session ), muaima::c_Undefined, KeepAnswer, Session );
+	Dump_( muaima::base::Connect( Session ), muaima::c_Undefined, Verbose, Session );
 
-	Login_( KeepAnswer, Session );
+	Login_( Verbose, Session );
 
-	Dump_( muaima::base::Capability( Session ), muaima::cCapability, KeepAnswer, Session );
+	Dump_( muaima::base::Capability( Session ), muaima::cCapability, Verbose, Session );
 
-	Dump_( muaima::base::Logout( Session ), muaima::c_Undefined, KeepAnswer, Session );
+	Dump_( muaima::base::Logout( Session ), muaima::c_Undefined, Verbose, Session );
 qRR
 qRT
 qRE
@@ -140,23 +136,23 @@ qRE
 void imap::Select( void )
 {
 qRH
-	csdbnc::rIODriver Server;	
+	bso::sBool Verbose = false;
+	rVerboseIODriver_ VerboseDriver;
 	muaima::rSession Session;
-	bso::sBool KeepAnswer = false;
 qRB
-	KeepAnswer = sclmisc::BGetBoolean( registry::parameter::KeepAnswer, false );
+	Verbose = misc::IsVerboseActivated();
 
-	Init_( Server );
+	VerboseDriver.Init( Verbose );
 
-	Session.Init( Server );
+	Session.Init( VerboseDriver );
 
-	Dump_( muaima::base::Connect( Session ), muaima::c_Undefined, KeepAnswer, Session );
+	Dump_( muaima::base::Connect( Session ), muaima::c_Undefined, Verbose, Session );
 
-	Login_( KeepAnswer, Session );
+	Login_( Verbose, Session );
 
-	Dump_( muaima::base::Select( Session ), muaima::cCapability, KeepAnswer, Session );
+	Dump_( muaima::base::Select( str::wString( "inbox" ), Session ), muaima::cCapability, Verbose, Session );
 
-	Dump_( muaima::base::Logout( Session ), muaima::c_Undefined, KeepAnswer, Session );
+	Dump_( muaima::base::Logout( Session ), muaima::c_Undefined, Verbose, Session );
 qRR
 qRT
 qRE

@@ -81,75 +81,53 @@ namespace {
 		sclmisc::MGetValue( registry::parameter::pop3::Password, Password );
 	}
 
-	void Init_( csdbnc::rIODriver &Server )
+	class rVerboseIODriver_
+	: public misc::rVerboseIODriver
 	{
-	qRH
-		str::wString HostPort;
-		qCBUFFERr Buffer;
-	qRB
-		HostPort.Init();
-		sclmisc::MGetValue( registry::parameter::pop3::HostPort, HostPort );
+	public:
+		eIndicator InitAndAuthenticate(
+			hBody &Body,
+			bso::sBool Activate )
+		{
+			base::eIndicator Indicator = i_Undefined;
+		qRH
+			str::wString Username, Password;
+			qCBUFFERr Buffer;
+		qRB
+			tol::Init( Username, Password );
 
-		if ( !Server.Init( HostPort.Convert( Buffer ), SCK_INFINITE, qRPU ) )
-			sclmisc::ReportAndAbort("UnableToConnect", HostPort );
-	qRR
-	qRT
-	qRE
-	}
+			GetUsernameAndPassword_( Username, Password );
 
-	eIndicator InitAndAuthenticate_(
-		csdbnc::rIODriver &Server,
-		hBody &Body )
-	{
-		base::eIndicator Indicator = i_Undefined;
-	qRH
-		str::wString Username, Password;
-		qCBUFFERr Buffer;
-	qRB
-		tol::Init( Username, Password );
+			misc::rVerboseIODriver::Init( registry::parameter::pop3::HostPort, Activate );
 
-		GetUsernameAndPassword_( Username, Password );
-
-		Init_( Server );
-
-		Indicator = base::Authenticate( Username, Password, Server, Body );
-	qRR
-	qRT
-	qRE
-		return Indicator;
-	}
-
-	bso::sBool InitAndAuthenticate( csdbnc::rIODriver &Server )
-	{
-		bso::sBool Success = false;
-	qRH
-		hBody Body;
-	qRB
-		Success = InitAndAuthenticate_(Server, Body ).Boolean();
-	qRR
-	qRT
-	qRE
-		return Success;
-	}
-
+			Indicator = base::Authenticate( Username, Password, *this, Body );
+		qRR
+		qRT
+		qRE
+			return Indicator;
+		}
+	};
 }
 
 void pop3::List( void )
 {
 qRH
-	csdbnc::rIODriver Server;
+	rVerboseIODriver_ VerboseDriver;
 	muapo3::hBody Body;
 	bso::sUInt Number = 0;
+	bso::sBool Verbose = false;
 qRB
-	Handle_( InitAndAuthenticate_( Server, Body ), Body );
+	Verbose = misc::IsVerboseActivated();
+
+	Handle_( VerboseDriver.InitAndAuthenticate( Body, Verbose ), Body );
 
 	Number = sclmisc::OGetUInt( registry::parameter::Message, 0 );
 
-	Handle_( muapo3::base::List( Number, Server, false, Body ), Body );
+	Handle_( muapo3::base::List( Number, VerboseDriver, false, Body ), Body );
 
 	misc::Dump( Body.GetDriver() );
 
-	Handle_( muapo3::base::Quit( Server, Body ), Body );
+	Handle_( muapo3::base::Quit( VerboseDriver, Body ), Body );
 qRR
 qRT
 qRE
@@ -158,19 +136,22 @@ qRE
 void pop3::Retrieve( void )
 {
 qRH
-	csdbnc::rIODriver Server;	
+	rVerboseIODriver_ VerboseDriver;
 	muapo3::hBody Body;
 	bso::sUInt Number = 0;
+	bso::sBool Verbose = false;
 qRB
-	Handle_( InitAndAuthenticate_( Server, Body ), Body );
+	Verbose = misc::IsVerboseActivated();
+
+	Handle_( VerboseDriver.InitAndAuthenticate( Body, Verbose ), Body );
 
 	Number = sclmisc::MGetUInt( registry::parameter::Message );
 
-	Handle_( muapo3::base::Retrieve( Number, Server, !sclmisc::BGetBoolean( registry::parameter::KeepAnswer, false ), Body ), Body );
+	Handle_( muapo3::base::Retrieve( Number, VerboseDriver, !Verbose, Body ), Body );
 
 	misc::Dump( Body.GetDriver() );
 
-	Handle_( muapo3::base::Quit( Server, Body ), Body );
+	Handle_( muapo3::base::Quit( VerboseDriver, Body ), Body );
 qRR
 qRT
 qRE
@@ -179,20 +160,23 @@ qRE
 void pop3::Top( void )
 {
 qRH
-	csdbnc::rIODriver Server;	
+	rVerboseIODriver_ VerboseDriver;
 	muapo3::hBody Body;
 	bso::sUInt Number = 0, Lines = 0;
+	bso::sBool Verbose = false;
 qRB
-	Handle_( InitAndAuthenticate_( Server, Body ), Body );
+	Verbose = misc::IsVerboseActivated();
+
+	Handle_( VerboseDriver.InitAndAuthenticate( Body, Verbose ), Body );
 
 	Number = sclmisc::MGetUInt( registry::parameter::Message );
 	Lines = sclmisc::MGetUInt( registry::parameter::Lines );
 
-	Handle_( muapo3::base::Top( Number, Lines, Server, !sclmisc::BGetBoolean( registry::parameter::KeepAnswer, false ), Body ), Body );
+	Handle_( muapo3::base::Top( Number, Lines, VerboseDriver, !Verbose, Body ), Body );
 
 	misc::Dump( Body.GetDriver() );
 
-	Handle_( muapo3::base::Quit( Server, Body ), Body );
+	Handle_( muapo3::base::Quit( VerboseDriver, Body ), Body );
 qRR
 qRT
 qRE
@@ -201,19 +185,22 @@ qRE
 void pop3::UIDL( void )
 {
 qRH
-	csdbnc::rIODriver Server;	
+	rVerboseIODriver_ VerboseDriver;
 	muapo3::hBody Body;
 	bso::sUInt Number = 0;
+	bso::sBool Verbose = false;
 qRB
-	Handle_( InitAndAuthenticate_( Server, Body ), Body );
+	Verbose = misc::IsVerboseActivated();
+
+	Handle_( VerboseDriver.InitAndAuthenticate( Body, Verbose ), Body );
 
 	Number = sclmisc::OGetUInt( registry::parameter::Message, 0 );
 
-	Handle_( muapo3::base::UIDL( Number, Server, Body ), Body );
+	Handle_( muapo3::base::UIDL( Number, VerboseDriver, Body ), Body );
 
 	misc::Dump( Body.GetDriver() );
 
-	Handle_( muapo3::base::Quit( Server, Body ), Body );
+	Handle_( muapo3::base::Quit( VerboseDriver, Body ), Body );
 qRR
 qRT
 qRE

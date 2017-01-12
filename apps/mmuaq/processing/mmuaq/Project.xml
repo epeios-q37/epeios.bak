@@ -44,7 +44,9 @@
   <Module>pop3</Module>
   <Module>registry</Module>
  </Modules>
- <Files/>
+ <Files>
+  <File>../../CHANGELOG.txt</File>
+ </Files>
  <SourceDirs>
   <SourceDir>../</SourceDir>
   <SourceDir>../../</SourceDir>

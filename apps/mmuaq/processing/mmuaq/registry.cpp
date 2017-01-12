@@ -40,7 +40,7 @@ rEntry registry::parameter::Input("Input", sclrgstry::Parameters );
 rEntry registry::parameter::Output("Output", sclrgstry::Parameters );
 rEntry registry::parameter::Message("Message", sclrgstry::Parameters );
 rEntry registry::parameter::Lines("Lines", sclrgstry::Parameters );
-rEntry registry::parameter::KeepAnswer("KeepAnswer", sclrgstry::Parameters );
+rEntry registry::parameter::Verbose("Verbose", sclrgstry::Parameters );
 rEntry registry::parameter::FieldName("FieldName", sclrgstry::Parameters );
 rEntry registry::parameter::Tag("Tag", sclrgstry::Parameters );
 

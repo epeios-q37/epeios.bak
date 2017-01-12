@@ -379,10 +379,12 @@ base::eStatus muaima::base::Capability( rSession &Session )
 	return base::s_Undefined;
 }
 
-base::eStatus muaima::base::Select( rSession &Session )
+base::eStatus muaima::base::Select(
+	const str::dString &Mailbox,
+	rSession &Session )
 {
 	_::SendCommand( Session.GetNextTag(), _::cSelect, Session.OFlow() );
-	Session.OFlow() << " INBOX";
+	Session.OFlow() << ' ' << Mailbox;
 	_::SendCFLR( Session.OFlow() );
 
 	return base::s_Undefined;

@@ -47,7 +47,7 @@ namespace registry {
 			Output,
 			Message,
 			Lines,
-			KeepAnswer,
+			Verbose,
 			FieldName,
 			Tag;
 	}

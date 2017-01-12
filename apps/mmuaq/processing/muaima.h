@@ -327,7 +327,9 @@ namespace muaima {
 		// To call just before closing the connexion. You do _not_ need to be logged in to log out.
 		eStatus Logout( rSession &Session );
 		eStatus Capability( rSession &Session );
-		eStatus Select( rSession &Session );
+		eStatus Select(
+			const str::dString &Mailbox,
+			rSession &Session );
 	}
 }
 

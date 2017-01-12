@@ -104,9 +104,9 @@
     <Translation language="en">tag</Translation>
    </Translations>
    <!-- Flags -->
-   <Translations text="KeepAnswerFlagDescription">
-    <Translation language="fr">Conserve la réponse du serveur.</Translation>
-    <Translation language="en">Keeps the server response.</Translation>
+   <Translations text="VerboseFlagDescription">
+    <Translation language="fr">Détaille les opérations exécutées.</Translation>
+    <Translation language="en">Displays infomation about the operations.</Translation>
    </Translations>
    <!-- Options -->
    <Translations text="SetupOptionDescription">
@@ -125,13 +125,13 @@
    <Argument id="B64DecodeCommand" Description="B64DecodeCommandDescription" long="b64-decode" Value="B64Decode" Usage="[%InputArgument% [%OutputArgument%]]"/>
    <Argument id="NextTagCommand" Description="NextTagCommandDescription" long="next-tag" Value="NextTag" Usage="[%TagArgument%]"/>
    <Argument id="POP3ListCommand" Description="POP3ListCommandDescription" long="pop3-list" Value="POP3List" Usage="[%SetupOption%] [%MessageArgument%]"/>
-   <Argument id="POP3RetrieveCommand" Description="POP3RetrieveCommandDescription" long="pop3-retrieve" Value="POP3Retrieve" Usage="[%SetupOption%] [%KeepAnswerFlag%] %MessageArgument%"/>
-   <Argument id="POP3TopCommand" Description="POP3TopCommandDescription" long="pop3-top" Value="POP3Top" Usage="[%SetupOption%] [%KeepAnswerFlag%] %MessageArgument% %LinesArgument%"/>
+   <Argument id="POP3RetrieveCommand" Description="POP3RetrieveCommandDescription" long="pop3-retrieve" Value="POP3Retrieve" Usage="[%SetupOption%] [%VerboseFlag%] %MessageArgument%"/>
+   <Argument id="POP3TopCommand" Description="POP3TopCommandDescription" long="pop3-top" Value="POP3Top" Usage="[%SetupOption%] [%VerboseFlag%] %MessageArgument% %LinesArgument%"/>
    <Argument id="POP3UIDLCommand" Description="POP3UIDLCommandDescription" long="pop3-uidl" Value="POP3UIDL" Usage="[%SetupOption%] [%MessageArgument%]"/>
    <Argument id="ShowHeaderCommand" Description="ShowHeaderCommandDescription" long="show-header" Value="ShowHeader" Usage="[%InputArgument% [%OutputArgument%]]"/>
    <Argument id="GetFieldCommand" Description="GetFieldCommandDescription" long="get-field" Value="GetField" Usage="%FieldArgument% [%InputArgument% [%OutputArgument%]]"/>
    <!-- Fanaux : 'Path', mais pas de 'Value'. -->
-   <Argument id="KeepAnswerFlag" Description="KeepAnswerFlagDescription" long="keep-answer" Path="KeepAnswer" Value="true"/>
+   <Argument id="VerboseFlag" Description="VerboseFlagDescription" long="verbose" Path="Verbose" Value="true"/>
    <!-- Options : 'Path' ET 'Value'. -->
    <!--Argument id="TestOption" Description="TestOptionDescription" long="option" short="o" Path="Option" Label="TestOptionLabel"/-->
    <Argument id="SetupOption" Description="SetupOptionDescription" long="setup" short="s" Path="@Setup" Label="SetupOptionLabel"/>
