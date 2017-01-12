@@ -183,6 +183,10 @@ namespace csdbnc {
 
 			return Socket != SCK_INVALID_SOCKET;
 		}
+		bso::sBool IsConnected( void ) const
+		{
+			return Socket != SCK_INVALID_SOCKET;
+		}
 };
 
 	class flow___
@@ -264,6 +268,10 @@ namespace csdbnc {
 				return true;
 			} else
 				return false;
+		}
+		bso::sBool IsConnected( void ) const
+		{
+			return Socket_.IsConnected();
 		}
 	};
 

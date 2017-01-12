@@ -1,5 +1,9 @@
 CHANGELOG for the 'Epeios' framework.
 
+2017-01-12 :
+- CSDBNC :
+	- Adding 'IsConnected(...)' methods.
+
 2017-01-04 :
 - ERR :
 	- Adding notice when 'qRReturn' is called when an error is already in progress.

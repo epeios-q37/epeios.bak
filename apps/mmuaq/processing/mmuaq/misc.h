@@ -37,8 +37,6 @@ namespace misc {
 
 		while ( !Flow.EndOfFlow() )
 			cio::COut << Flow.Get();
-
-		Flow.Dismiss();
 	qRR
 	qRT
 	qRE
@@ -122,6 +120,10 @@ namespace misc {
 		void Init(
 			const rgstry::rEntry &HostPortEntry,
 			bso::sBool Activate );
+		bso::sBool IsConnected( void )
+		{
+			return Driver_.IsConnected();
+		}
 	};
 }
 
