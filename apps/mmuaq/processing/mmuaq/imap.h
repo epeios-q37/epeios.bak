@@ -22,7 +22,7 @@
 
 namespace imap {
 	void Capability( void );
-	void Select( void );
+	void Test( void );
 }
 
 #endif

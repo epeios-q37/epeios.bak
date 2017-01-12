@@ -32,7 +32,6 @@ using namespace imap;
 
 namespace {
 	using namespace muaima;
-	using namespace base;
 
 	void GetUsernameAndPassword_(
 		str::dString &Username,
@@ -43,14 +42,14 @@ namespace {
 	}
 
 	void DumpPending_(
-		muaima::eCode Awaited,
+		bso::sBool Concerned,
 		bso::sBool Verbose,
 		muaima::rSession &Session )
 	{
 		muaima::eCode Code = muaima::c_Undefined;
 
 		while ( ( Code = Session.GetCode()) != muaima::c_None ) {
-			if ( Verbose || ( Code == Awaited ) ) {
+			if ( Verbose || ( Concerned &&  ( Code != muaima::cOK ) ) ) {
 				fdr::rIDriver &Driver = Session.GetResponseDriver();
 
 				cio::COut << muaima::GetLabel( Code );
@@ -67,15 +66,15 @@ namespace {
 
 	void Dump_(
 		eStatus Status,
-		muaima::eCode Awaited,
+		bso::sBool Concerned,
 		bso::sBool Verbose,
 		muaima::rSession &Session )
 	{
-		DumpPending_( Awaited, Verbose, Session );
-		Status = muaima::base::GetCompletionStatus( Session );
+		DumpPending_( Concerned, Verbose, Session );
+		Status = muaima::GetCompletionStatus( Session );
 
 		if ( Verbose ) {
-			cio::COut << muaima::base::GetLabel(Status) << ": ";
+			cio::COut << muaima::GetLabel(Status) << ": ";
 			misc::Dump( Session.GetResponseDriver() );
 			cio::COut << txf::nl << txf::commit;
 		} else
@@ -96,7 +95,7 @@ namespace {
 
 		GetUsernameAndPassword_( Username, Password );
 
-		Dump_( Login( Username, Password, Session  ), muaima::c_Undefined, Verbose, Session );
+		Dump_( Login( Username, Password, Session  ), false, Verbose, Session );
 	qRR
 	qRT
 	qRE
@@ -114,7 +113,7 @@ namespace{
 		{
 			if ( P ) {
 				if ( IsConnected() )
-					muaima::base::Logout( *this );
+					muaima::Logout( *this );
 			}
 
 			rSession::reset( P );
@@ -126,9 +125,10 @@ namespace{
 		{
 			Connected_ = false;
 			misc::rVerboseIODriver::Init( registry::parameter::imap::HostPort, Activate );
-			Connected_ = true;
 			muaima::rSession::Init( *this );
-
+			Dump_( muaima::Connect( *this ), false, Activate, *this );
+			Connected_ = true;
+			Login_( Activate, *this );
 		}
 	};
 }
@@ -143,17 +143,13 @@ qRB
 
 	Rack.Init( Verbose );
 
-	Dump_( muaima::base::Connect( Rack ), muaima::c_Undefined, Verbose, Rack );
-
-	Login_( Verbose, Rack );
-
-	Dump_( muaima::base::Capability( Rack ), muaima::cCapability, Verbose, Rack );
+	Dump_( muaima::Capability( Rack ), true, Verbose, Rack );
 qRR
 qRT
 qRE
 }
 
-void imap::Select( void )
+void imap::Test( void )
 {
 qRH
 	bso::sBool Verbose = false;
@@ -163,11 +159,7 @@ qRB
 
 	Rack.Init( Verbose );
 
-	Dump_( muaima::base::Connect( Rack ), muaima::c_Undefined, Verbose, Rack );
-
-	Login_( Verbose, Rack );
-
-	Dump_( muaima::base::Select( str::wString( "inbox" ), Rack ), muaima::cCapability, Verbose, Rack );
+	Dump_( muaima::List( str::wString( "" ), str::wString( "Divers/*" ), Rack ), true, Verbose, Rack );
 qRR
 qRT
 qRE

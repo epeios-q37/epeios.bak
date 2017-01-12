@@ -136,7 +136,7 @@ namespace {
 
 	void IMAPTest_( void )
 	{
-		return imap::Select();
+		return imap::Test();
 	}
 
 	void NextTag_( void )

@@ -226,7 +226,7 @@ qRE
 }
 
 #define C( name )	case s##name : return #name; break
-const char *base::GetLabel( eStatus Status )
+const char *muaima::GetLabel( eStatus Status )
 {
 	switch ( Status ) {
 	C( OK );
@@ -243,8 +243,6 @@ const char *base::GetLabel( eStatus Status )
 
 
 namespace status_ {
-	using namespace base;
-
 	namespace _ {
 		stsfsm::wAutomat Automat;
 
@@ -257,7 +255,7 @@ namespace status_ {
 	void FillAutomat( void )
 	{
 		_::Automat.Init();
-		stsfsm::Fill<base::eStatus>( _::Automat, base::s_amount, GetLabel );
+		stsfsm::Fill<eStatus>( _::Automat, s_amount, GetLabel );
 	}
 
 	eStatus Get( flw::sIFlow &Flow )
@@ -286,6 +284,7 @@ namespace _ {
 		cLogout,	// NOT the counter-part of 'Login' ; closes the connection.
 		cCapability,
 		cSelect,
+		cList,
 		c_amount,
 		c_Undefined
 	};
@@ -302,6 +301,7 @@ namespace _ {
 		C( Logout );
 		C( Capability );
 		C( Select );
+		C( List );
 		default:
 			qRGnr();
 			break;
@@ -336,20 +336,20 @@ namespace _ {
 	}
 }
 
-base::eStatus muaima::base::GetCompletionStatus( rSession &Session )
+eStatus muaima::GetCompletionStatus( rSession &Session )
 {
 	return Session.GetPendingStatus();
 }
 
 
-base::eStatus muaima::base::Connect( rSession &Session )
+eStatus muaima::Connect( rSession &Session )
 {
 	Session.ReportUntaggedStatusResponse();
 
-	return base::s_Undefined;
+	return s_Undefined;
 }
 
-base::eStatus muaima::base::Login(
+eStatus muaima::Login(
 	const str::dString &Username,
 	const str::dString &Password,
 	rSession &Session )
@@ -360,26 +360,26 @@ base::eStatus muaima::base::Login(
 
 	_::SendCFLR( Session.OFlow() );
 
-	return base::s_Undefined;
+	return s_Undefined;
 }
 
-base::eStatus muaima::base::Logout( rSession &Session )
+eStatus muaima::Logout( rSession &Session )
 {
 	_::SendCommand( Session.GetNextTag(), _::cLogout, Session.OFlow() );
 	_::SendCFLR( Session.OFlow() );
 
-	return base::s_Undefined;
+	return s_Undefined;
 }
 
-base::eStatus muaima::base::Capability( rSession &Session )
+eStatus muaima::Capability( rSession &Session )
 {
 	_::SendCommand( Session.GetNextTag(), _::cCapability, Session.OFlow() );
 	_::SendCFLR( Session.OFlow() );
 
-	return base::s_Undefined;
+	return s_Undefined;
 }
 
-base::eStatus muaima::base::Select(
+eStatus muaima::Select(
 	const str::dString &Mailbox,
 	rSession &Session )
 {
@@ -387,7 +387,19 @@ base::eStatus muaima::base::Select(
 	Session.OFlow() << ' ' << Mailbox;
 	_::SendCFLR( Session.OFlow() );
 
-	return base::s_Undefined;
+	return s_Undefined;
+}
+
+eStatus muaima::List(
+	const str::dString &Reference,
+	const str::dString &Mailbox,
+	rSession &Session )
+{
+	_::SendCommand( Session.GetNextTag(), _::cList, Session.OFlow() );
+	Session.OFlow() << " \"" << Reference << "\" \"" << Mailbox << '"';
+	_::SendCFLR( Session.OFlow() );
+
+	return s_Undefined;
 }
 
 namespace {

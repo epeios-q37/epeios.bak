@@ -198,17 +198,17 @@ namespace muaima {
 
 	const char *GetLabel( eCode Code );
 
-	namespace base {
-		qENUM( Status ) {
-			sOK,
-			sNO,
-			sBAD,
-			s_amount,
-			s_Pending,	// Status pending ; other response have to be handled before obtining the status.
-			sErroneous,	// Server returned a not 'IMAP' compliant answer.
-			s_Undefined
-		};
-	}
+	qENUM( Status ) {
+		sOK,
+		sNO,
+		sBAD,
+		s_amount,
+		s_Pending,	// Status pending ; other response have to be handled before obtining the status.
+		sErroneous,	// Server returned a not 'IMAP' compliant answer.
+		s_Undefined
+	};
+
+	const char *GetLabel( eStatus Status );
 
 	class rSession
 	{
@@ -279,20 +279,20 @@ namespace muaima {
 		qRE
 		}
 		// Also resets the PendingStatus.
-		base::eStatus GetPendingStatus( void )
+		eStatus GetPendingStatus( void )
 		{
 			// Althought 'PendingCode' is a status, the 'PendingCodeIsStatus_' is already set to false by 'GetCode(...').
-			base::eStatus Status = base::s_Undefined;
+			eStatus Status = s_Undefined;
 
 			switch ( PendingCode_ ) {
 			case cOK:
-				Status = base::sOK;
+				Status = sOK;
 				break;
 			case cNo:
-				Status = base::sNO;
+				Status = sNO;
 				break;
 			case cBad:
-				Status = base::sBAD;
+				Status = sBAD;
 				break;
 			default:
 				qRGnr();
@@ -305,32 +305,33 @@ namespace muaima {
 		}
 	};
 
-	namespace base {
-		const char *GetLabel( eStatus Status );
-		/*
-			If returned value == 'iPending, you must read pendind response using
-			'Session.GetCode(...)',  followed by 'GetDataDriver(...)'/'SkipData(...)'
-			until 'GetCode(...)' returns 'c_Completed'.
-		*/
+	/*
+		If returned value == 'iPending, you must read pendind response using
+		'Session.GetCode(...)',  followed by 'GetDataDriver(...)'/'SkipData(...)'
+		until 'GetCode(...)' returns 'c_Completed'.
+	*/
 
-		eStatus GetCompletionStatus( rSession &Session );
+	eStatus GetCompletionStatus( rSession &Session );
 
-		// This is the first command to call after opening a connection to the server.
-		eStatus Connect( rSession &Session );
+	// This is the first command to call after opening a connection to the server.
+	eStatus Connect( rSession &Session );
 
-		// To log in. Most commands are not available when this is not done successfully.
-		eStatus Login(
-			const str::dString &Username,
-			const str::dString &Password,
-			rSession &Session );
+	// To log in. Most commands are not available when this is not done successfully.
+	eStatus Login(
+		const str::dString &Username,
+		const str::dString &Password,
+		rSession &Session );
 
-		// To call just before closing the connexion. You do _not_ need to be logged in to log out.
-		eStatus Logout( rSession &Session );
-		eStatus Capability( rSession &Session );
-		eStatus Select(
-			const str::dString &Mailbox,
-			rSession &Session );
-	}
+	// To call just before closing the connexion. You do _not_ need to be logged in to log out.
+	eStatus Logout( rSession &Session );
+	eStatus Capability( rSession &Session );
+	eStatus Select(
+		const str::dString &Mailbox,
+		rSession &Session );
+	eStatus List(
+		const str::dString &List,
+		const str::dString &Mailbox,
+		rSession &Session );
 }
 
 
