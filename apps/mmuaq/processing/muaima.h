@@ -204,7 +204,7 @@ namespace muaima {
 		sBAD,
 		s_amount,
 		s_Pending,	// Status pending ; other response have to be handled before obtining the status.
-		sErroneous,	// Server returned a not 'IMAP' compliant answer.
+		s_Erroneous,	// Server returned a not 'IMAP' compliant answer.
 		s_Undefined
 	};
 
@@ -351,45 +351,84 @@ namespace muaima {
 	// To call after 'rConsole::GetCode(...)' return 'c_None'.
 	eStatus GetCompletionStatus( rConsole &Console );
 
+	class cResponse_
+	{
+	protected:
+		virtual void MUAIMAOnResponse(
+			eCode Code,
+			fdr::rIDriver &Driver) = 0;
+	public:
+		qCALLBACK( Response_ );
+		void OnReponse(
+			eCode Code,
+			fdr::rIDriver &Driver )
+		{
+			return MUAIMAOnResponse( Code, Driver );
+		}
+	};
+
 	class rSession
 	{
 	private:
 		rConsole Console_;
 		bso::sBool Connected_;
-		void Disconnect_( void );
-		bso::sBool Connect_(
+		bso::sByte Delimiter_;	// The hierarchy delimiter. '0' means no demimiter (hope that '0' is not a valid delmimiter).
+		str::wString Message_;
+		void RetrieveMessage_( void );
+		eStatus HandleCompletion_(
+			eStatus Status,
+			qRPN );
+		eStatus HandlePending_(
+			cResponse_ &ReponseCallback,
+			qRPN );
+		eStatus Handle_(
+			eStatus Status,
+			cResponse_ &ReponseCallback,
+			qRPN );
+		eStatus Connect_(
 			const str::dString &Username,
-			const str::dString &Password );
+			const str::dString &Password,
+			qRPN );
+		eStatus FetchHierarchyDelimiter_( qRPN );
+		eStatus Disconnect_( qRPN );
 	public:
 		void reset( bso::sBool P = true )
 		{
 			if ( P ) {
 				if ( Connected_ )
-					Disconnect_();
+					Disconnect_( qRPU ); // We don't care if it fails.
 			}
 
-			tol::reset( P, Console_, Connected_ );
+			tol::reset( P, Console_, Connected_, Message_ );
+			Delimiter_ = 0;
 		}
 		qCDTOR( rSession );
-		bso::sBool Init(
+		eStatus Init(
 			fdr::rIODriver &Driver,
 			const str::dString &Username,
 			const str::dString &Password,
 			qRPD )
 		{
+			eStatus Status = s_Undefined;
+
+			Message_.Init();
+
 			if ( Connected_ )
-				Disconnect_();
+				Status = Disconnect_( qRPU );	// We don't care if it fails.
 
 			Console_.Init( Driver );
 
-			if ( !Connect_(Username, Password) ) {
+			Status = Connect_( Username, Password, qRP );
+
+			if ( Status == sOK )
+				Status = FetchHierarchyDelimiter_( qRP );
+
+			if ( Status != sOK ) {
 				if ( qRPT )
 					qRGnr();
-				else
-					return false;
 			}
 
-			return true;
+			return Status;
 		}
 	};
 }

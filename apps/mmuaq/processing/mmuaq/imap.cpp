@@ -107,6 +107,7 @@ namespace{
 	: public misc::rVerboseIODriver,
 	  public muaima::rConsole
 	{
+	private:
 		bso::sBool Connected_ = true;
 	public:
 		void reset( bso::sBool P = true )
@@ -229,17 +230,42 @@ qRT
 qRE
 }
 
+namespace{
+	class rSession_
+	: public misc::rVerboseIODriver,
+	  public muaima::rSession
+	{
+	public:
+		void reset( bso::sBool P = true )
+		{
+			rSession::reset( P );
+			misc::rVerboseIODriver::reset( P );
+		}
+		qCVDTOR( rSession_ );
+		void Init( void )
+		{
+		qRH
+			str::wString Username, Password;
+		qRB
+			tol::Init( Username, Password );
+
+			GetUsernameAndPassword_( Username, Password );
+
+			misc::rVerboseIODriver::Init( registry::parameter::imap::HostPort, misc::IsVerboseActivated() );
+			muaima::rSession::Init( *this, Username, Password );
+		qRR
+		qRT
+		qRE
+		}
+	};
+}
+
 void imap::Test( void )
 {
 qRH
-	bso::sBool Verbose = false;
-	rConsole_ Console;
+	rSession_ Session;
 qRB
-	Verbose = misc::IsVerboseActivated();
-
-	Console.Init( Verbose );
-
-	Dump_( muaima::List( str::wString( "inbox" ), str::wString( "" ), Console ), true, Verbose, Console );
+	Session.Init();
 qRR
 qRT
 qRE

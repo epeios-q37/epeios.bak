@@ -1,5 +1,9 @@
 CHANGELOG for the 'Epeios' framework.
 
+2017-01-13 :
+- FDR :
+	- Addding 'rIDriver::Drain()'.
+
 2017-01-12 :
 - CSDBNC :
 	- Adding 'IsConnected(...)' methods.

@@ -552,6 +552,12 @@ namespace fdr {
 		{
 			return Red_;
 		}
+		void Drain( void )
+		{
+			bso::sByte Buffer[100];
+
+			while ( Read(sizeof( Buffer ), Buffer, bNonBlocking ) != 0 );
+		}
 	};
 
 	template <int cache_size = FDR__DEFAULT_CACHE_SIZE> class iflow_driver___

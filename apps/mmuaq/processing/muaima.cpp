@@ -416,6 +416,232 @@ eStatus muaima::LSub(
 	return s_Undefined;
 }
 
+void muaima::rSession::RetrieveMessage_( void )
+{
+qRH
+	flx::rStringODriver Driver;
+qRB
+	Message_.Init();
+	Driver.Init( Message_, fdr::ts_Default );
+
+	fdr::Copy(Console_.GetResponseDriver(), Driver );
+qRR
+qRE
+qRT
+}
+
+eStatus muaima::rSession::HandleCompletion_(
+	eStatus Status,
+	qRPN )
+{
+	switch ( Status ) {
+	case sOK:
+		Console_.SkipResponse();
+		break;
+	case sNO:
+	case sBAD:
+		RetrieveMessage_();
+		break;
+	default:
+		qRGnr();
+		break;
+	}
+
+	return Status;
+}
+
+eStatus muaima::rSession::HandlePending_(
+	cResponse_ &ReponseCallback,
+	qRPN )
+{
+	eCode Code = c_Undefined;
+
+	while ( (Code = Console_.GetCode()) != c_None )
+		ReponseCallback.OnReponse(Code, Console_.GetResponseDriver() );
+
+	return sOK;
+}
+
+eStatus muaima::rSession::Handle_(
+	eStatus Status,
+	cResponse_ &ReponseCallback,
+	qRPN )
+{
+	if ( Status == s_Pending ) {
+		if ( HandlePending_( ReponseCallback, qRP ) == sOK )
+			Status = HandleCompletion_( GetCompletionStatus( Console_ ), qRP );
+	} else
+		Status = HandleCompletion_( GetCompletionStatus( Console_ ), qRP );
+
+	return Status;
+}
+
+namespace {
+	class sNOPReponseCallback_
+	: public cResponse_
+	{
+	protected:
+		virtual void MUAIMAOnResponse(
+			eCode Code,
+			fdr::rIDriver &Driver ) override
+		{
+			Driver.Drain();
+		}
+	public:
+		void reset( bso::sBool = true )
+		{
+			// Standardization.
+		}
+		qCVDTOR( sNOPReponseCallback_ );
+		void Init( void )
+		{
+			// Standardization.
+		}
+	} NOPResponseCallback_;
+}
+
+eStatus muaima::rSession::Connect_(
+	const str::dString &Username,
+	const str::dString &Password,
+	qRPN )
+{
+	eStatus Status = s_Undefined;
+
+	Status = Handle_( Connect( Console_ ), NOPResponseCallback_, qRP );
+
+	if ( Status == sOK )
+		Status = Handle_( Login( Username, Password, Console_ ), NOPResponseCallback_, qRP );
+
+	return Status;
+}
+
+namespace {
+	void Get_(
+		flw::sIFlow &Flow,
+		bso::sByte Separator,
+		str::dString &Value )
+	{
+		flw::sByte Byte = 0;
+
+		while ( ( Byte = Flow.Get() ) != Separator )
+			Value.Append( Byte );
+	}
+}
+
+namespace list_answer_  {	// Also for 'LSUB'.
+	void Get(
+		flw::sIFlow &Flow,
+		str::dString &Attributes,
+		str::dString &Delimiter,
+		str::dString &Name )
+	{
+		flw::sByte Byte = 0;
+
+		if ( Flow.Get() != '(' )
+			qRGnr();
+
+		Get_(Flow, ')', Attributes );
+
+		if ( Flow.Get() != ' ' )
+			qRGnr();
+
+		if ( Flow.Get() != '"' )
+			qRGnr();
+
+		Get_(Flow, '"', Delimiter );
+
+		if ( Flow.Get() != ' ' )
+			qRGnr();
+
+		if ( Flow.Get() != '"' )
+			qRGnr();
+
+		Get_(Flow, '"', Name );
+	}
+
+	void Get(
+		fdr::rIDriver &Driver,
+		str::dString &Attributes,
+		str::dString &Delimiter,
+		str::dString &Name )
+	{
+	qRH
+		flw::sDressedIFlow<> Flow;
+	qRB
+		Flow.Init( Driver );
+
+		Get( Flow, Attributes, Delimiter, Name );
+	qRR
+	qRT
+	qRE
+	}
+}
+
+namespace fetch_hierarchy_delimiter_ {
+	class sResponseCallback_
+	: public cResponse_
+	{
+	protected:
+		virtual void MUAIMAOnResponse(
+			eCode Code,
+			fdr::rIDriver &Driver ) override
+		{
+		qRH
+			str::wString Dummy;
+		qRB
+			if ( Delimiter.Amount() != 0 )
+				qRGnr();
+
+			list_answer_::Get( Driver, Dummy, Delimiter, Dummy );
+		qRR
+		qRT
+		qRE
+		}
+	public:
+		str::wString Delimiter;
+		void reset( bso::sBool P = true )
+		{
+			tol::reset( P, Delimiter );
+		}
+		qCVDTOR( sResponseCallback_ );
+		void Init( void )
+		{
+			tol::Init( Delimiter );
+		}
+	};
+}
+
+eStatus muaima::rSession::FetchHierarchyDelimiter_( qRPN )
+{
+	eStatus Status = s_Undefined;
+qRH
+	fetch_hierarchy_delimiter_::sResponseCallback_ ResponseCallback;
+qRB
+	if ( Delimiter_ != 0 )
+		qRGnr();
+
+	ResponseCallback.Init();
+
+	Status = Handle_( List( str::wString(""), str::wString("" ), Console_ ), ResponseCallback, qRP );
+
+	if ( ResponseCallback.Delimiter.Amount() != 1 )
+		qRGnr();
+
+	Delimiter_ = ResponseCallback.Delimiter( ResponseCallback.Delimiter.First() );
+qRR
+qRT
+qRE
+	return Status;
+}
+
+eStatus muaima::rSession::Disconnect_( qRPN )
+{
+	return Handle_( Logout( Console_ ), NOPResponseCallback_, qRP );
+}
+
+
+
+
 namespace {
 	void FillAutomats_( void )
 	{
@@ -427,5 +653,6 @@ namespace {
 qGCTOR( muaima )
 {
 	FillAutomats_();
+	NOPResponseCallback_.Init();
 }
 
