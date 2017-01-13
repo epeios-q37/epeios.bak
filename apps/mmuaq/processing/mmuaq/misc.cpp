@@ -34,7 +34,7 @@ bso::sBool misc::IsVerboseActivated( void )
 
 void misc::rVerboseIODriver::Init(
 	const rgstry::rEntry &HostPortEntry,
-	bso::sBool Activate )
+	eVerbosity Verbosity )
 {
 	qRH
 		str::wString HostPort;
@@ -46,8 +46,9 @@ void misc::rVerboseIODriver::Init(
 		if ( !Driver_.Init( HostPort.Convert( Buffer ), SCK_INFINITE, qRPU ) )
 			sclmisc::ReportAndAbort("UnableToConnect", HostPort );
 
-		Activated_ = Activate;
+		Verbosity_ = Verbosity;
 		Commited_ = true;
+		ReadInProgress_ = false;
 		rIODriver_::Init( fdr::ts_Default );
 	qRR
 	qRT

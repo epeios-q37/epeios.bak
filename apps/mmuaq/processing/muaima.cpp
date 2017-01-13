@@ -161,7 +161,7 @@ namespace code_ {
 	}
 }
 
-eCode muaima::rConsole::GetCode( void )
+eCode muaima::rConsole::GetPendingCode( void )
 {
 	eCode Code = c_Undefined;
 qRH
@@ -338,20 +338,12 @@ namespace _ {
 	}
 }
 
-eStatus muaima::GetCompletionStatus( rConsole &Console )
-{
-	return Console.GetPendingStatus();
-}
-
-
-eStatus muaima::Connect( rConsole &Console )
+void muaima::Connect( rConsole &Console )
 {
 	Console.ReportUntaggedStatusResponse();
-
-	return s_Undefined;
 }
 
-eStatus muaima::Login(
+void muaima::Login(
 	const str::dString &Username,
 	const str::dString &Password,
 	rConsole &Console )
@@ -361,38 +353,30 @@ eStatus muaima::Login(
 	Console.OFlow() << ' ' << Username << ' ' << Password;
 
 	_::SendCFLR( Console.OFlow() );
-
-	return s_Undefined;
 }
 
-eStatus muaima::Logout( rConsole &Console )
+void muaima::Logout( rConsole &Console )
 {
 	_::SendCommand( Console.GetNextTag(), _::cLogout, Console.OFlow() );
 	_::SendCFLR( Console.OFlow() );
-
-	return s_Undefined;
 }
 
-eStatus muaima::Capability( rConsole &Console )
+void muaima::Capability( rConsole &Console )
 {
 	_::SendCommand( Console.GetNextTag(), _::cCapability, Console.OFlow() );
 	_::SendCFLR( Console.OFlow() );
-
-	return s_Undefined;
 }
 
-eStatus muaima::Select(
+void muaima::Select(
 	const str::dString &Mailbox,
 	rConsole &Console )
 {
 	_::SendCommand( Console.GetNextTag(), _::cSelect, Console.OFlow() );
 	Console.OFlow() << ' ' << Mailbox;
 	_::SendCFLR( Console.OFlow() );
-
-	return s_Undefined;
 }
 
-eStatus muaima::List(
+void muaima::List(
 	const str::dString &Reference,
 	const str::dString &Mailbox,
 	rConsole &Console )
@@ -400,11 +384,9 @@ eStatus muaima::List(
 	_::SendCommand( Console.GetNextTag(), _::cList, Console.OFlow() );
 	Console.OFlow() << " \"" << Reference << "\" \"" << Mailbox << '"';
 	_::SendCFLR( Console.OFlow() );
-
-	return s_Undefined;
 }
 
-eStatus muaima::LSub(
+void muaima::LSub(
 	const str::dString &Reference,
 	const str::dString &Mailbox,
 	rConsole &Console )
@@ -412,8 +394,6 @@ eStatus muaima::LSub(
 	_::SendCommand( Console.GetNextTag(), _::cLSub, Console.OFlow() );
 	Console.OFlow() << " \"" << Reference << "\" \"" << Mailbox << '"';
 	_::SendCFLR( Console.OFlow() );
-
-	return s_Undefined;
 }
 
 void muaima::rSession::RetrieveMessage_( void )
@@ -430,10 +410,10 @@ qRE
 qRT
 }
 
-eStatus muaima::rSession::HandleCompletion_(
-	eStatus Status,
-	qRPN )
+eStatus muaima::rSession::HandleStatus_( qRPN )
 {
+	eStatus Status = Console_.GetStatus() ;
+
 	switch ( Status ) {
 	case sOK:
 		Console_.SkipResponse();
@@ -450,30 +430,16 @@ eStatus muaima::rSession::HandleCompletion_(
 	return Status;
 }
 
-eStatus muaima::rSession::HandlePending_(
+eStatus muaima::rSession::HandleResponses_(
 	cResponse_ &ReponseCallback,
 	qRPN )
 {
 	eCode Code = c_Undefined;
 
-	while ( (Code = Console_.GetCode()) != c_None )
-		ReponseCallback.OnReponse(Code, Console_.GetResponseDriver() );
+	while ( ( Code = Console_.GetPendingCode()) != c_None )
+		ReponseCallback.OnResponse( Code, Console_.GetResponseDriver() );
 
-	return sOK;
-}
-
-eStatus muaima::rSession::Handle_(
-	eStatus Status,
-	cResponse_ &ReponseCallback,
-	qRPN )
-{
-	if ( Status == s_Pending ) {
-		if ( HandlePending_( ReponseCallback, qRP ) == sOK )
-			Status = HandleCompletion_( GetCompletionStatus( Console_ ), qRP );
-	} else
-		Status = HandleCompletion_( GetCompletionStatus( Console_ ), qRP );
-
-	return Status;
+	return HandleStatus_( qRP );
 }
 
 namespace {
@@ -507,10 +473,14 @@ eStatus muaima::rSession::Connect_(
 {
 	eStatus Status = s_Undefined;
 
-	Status = Handle_( Connect( Console_ ), NOPResponseCallback_, qRP );
+	Connect( Console_ );
+	Status = HandleResponses_( NOPResponseCallback_, qRP );
 
-	if ( Status == sOK )
-		Status = Handle_( Login( Username, Password, Console_ ), NOPResponseCallback_, qRP );
+
+	if ( Status == sOK ) {
+		Login( Username, Password, Console_ );
+		Status = HandleResponses_( NOPResponseCallback_, qRP );
+	}
 
 	return Status;
 }
@@ -592,6 +562,7 @@ namespace fetch_hierarchy_delimiter_ {
 			if ( Delimiter.Amount() != 0 )
 				qRGnr();
 
+			Dummy.Init();
 			list_answer_::Get( Driver, Dummy, Delimiter, Dummy );
 		qRR
 		qRT
@@ -622,7 +593,8 @@ qRB
 
 	ResponseCallback.Init();
 
-	Status = Handle_( List( str::wString(""), str::wString("" ), Console_ ), ResponseCallback, qRP );
+	List( str::wString(""), str::wString("" ), Console_ );
+	Status = HandleResponses_( ResponseCallback, qRP );
 
 	if ( ResponseCallback.Delimiter.Amount() != 1 )
 		qRGnr();
@@ -636,11 +608,9 @@ qRE
 
 eStatus muaima::rSession::Disconnect_( qRPN )
 {
-	return Handle_( Logout( Console_ ), NOPResponseCallback_, qRP );
+	Logout( Console_ );
+	return HandleResponses_( NOPResponseCallback_, qRP );
 }
-
-
-
 
 namespace {
 	void FillAutomats_( void )

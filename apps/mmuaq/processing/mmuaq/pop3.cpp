@@ -33,6 +33,7 @@
 using namespace pop3;
 
 using namespace muapo3;
+
 namespace {
 	using namespace base;
 
@@ -98,7 +99,7 @@ namespace {
 
 			GetUsernameAndPassword_( Username, Password );
 
-			misc::rVerboseIODriver::Init( registry::parameter::pop3::HostPort, Activate );
+			misc::rVerboseIODriver::Init( registry::parameter::pop3::HostPort, Activate ? misc::vIn : misc::vNone );
 
 			Indicator = base::Authenticate( Username, Password, *this, Body );
 		qRR

@@ -41,14 +41,14 @@ namespace {
 		sclmisc::MGetValue( registry::parameter::imap::Password, Password );
 	}
 
-	void DumpPending_(
+	muaima::eStatus DumpPendingResponses_(
 		bso::sBool Concerned,
 		bso::sBool Verbose,
 		muaima::rConsole &Console )
 	{
 		muaima::eCode Code = muaima::c_Undefined;
 
-		while ( ( Code = Console.GetCode()) != muaima::c_None ) {
+		while ( ( Code = Console.GetPendingCode() ) != muaima::c_None ) {
 			if ( Verbose || ( Concerned &&  ( Code != muaima::cOK ) ) ) {
 				fdr::rIDriver &Driver = Console.GetResponseDriver();
 
@@ -62,16 +62,16 @@ namespace {
 			} else
 				Console.SkipResponse();
 		}
+
+		return Console.GetStatus();
 	}
 
-	void Dump_(
-		eStatus Status,
+	void DumpResponses_(
 		bso::sBool Concerned,
 		bso::sBool Verbose,
 		muaima::rConsole &Console )
 	{
-		DumpPending_( Concerned, Verbose, Console );
-		Status = muaima::GetCompletionStatus( Console );
+		eStatus Status = DumpPendingResponses_( Concerned, Verbose, Console );
 
 		if ( Verbose || ( Status != muaima::sOK ) ) {
 			cio::COut << muaima::GetLabel(Status) << ": ";
@@ -95,7 +95,8 @@ namespace {
 
 		GetUsernameAndPassword_( Username, Password );
 
-		Dump_( Login( Username, Password, Console  ), false, Verbose, Console );
+		Login( Username, Password, Console );
+		DumpResponses_( false, Verbose, Console );
 	qRR
 	qRT
 	qRE
@@ -125,9 +126,10 @@ namespace{
 		void Init( bso::sBool Activate )
 		{
 			Connected_ = false;
-			misc::rVerboseIODriver::Init( registry::parameter::imap::HostPort, Activate );
+			misc::rVerboseIODriver::Init( registry::parameter::imap::HostPort, Activate ? misc::vOut : misc::vNone );
 			muaima::rConsole::Init( *this );
-			Dump_( muaima::Connect( *this ), false, Activate, *this );
+			muaima::Connect( *this );
+			DumpResponses_( false, Activate, *this );
 			Connected_ = true;
 			Login_( Activate, *this );
 		}
@@ -144,7 +146,8 @@ qRB
 
 	Console.Init( Verbose );
 
-	Dump_( muaima::Capability( Console ), true, Verbose, Console );
+	muaima::Capability( Console );
+	DumpResponses_( true, Verbose, Console );
 qRR
 qRT
 qRE
@@ -184,7 +187,8 @@ qRB
 
 	Console.Init( Verbose );
 
-	Dump_( muaima::List( Reference, Mailbox, Console ), true, Verbose, Console );
+	muaima::List( Reference, Mailbox, Console );
+	DumpResponses_( true, Verbose, Console );
 qRR
 qRT
 qRE
@@ -204,7 +208,8 @@ qRB
 
 	Console.Init( Verbose );
 
-	Dump_( muaima::LSub( Reference, Mailbox, Console ), true, Verbose, Console );
+	muaima::LSub( Reference, Mailbox, Console ),
+	DumpResponses_( true, Verbose, Console );
 qRR
 qRT
 qRE
@@ -224,7 +229,8 @@ qRB
 
 	Console.Init( Verbose );
 
-	Dump_( muaima::Select( Mailbox, Console ), true, Verbose, Console );
+	muaima::Select( Mailbox, Console );
+	DumpResponses_( true, Verbose, Console );
 qRR
 qRT
 qRE
@@ -251,7 +257,7 @@ namespace{
 
 			GetUsernameAndPassword_( Username, Password );
 
-			misc::rVerboseIODriver::Init( registry::parameter::imap::HostPort, misc::IsVerboseActivated() );
+			misc::rVerboseIODriver::Init( registry::parameter::imap::HostPort, misc::IsVerboseActivated() ? misc::vInAndOut : misc::vNone );
 			muaima::rSession::Init( *this, Username, Password );
 		qRR
 		qRT

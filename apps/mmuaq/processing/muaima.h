@@ -203,7 +203,6 @@ namespace muaima {
 		sNO,
 		sBAD,
 		s_amount,
-		s_Pending,	// Status pending ; other response have to be handled before obtining the status.
 		s_Erroneous,	// Server returned a not 'IMAP' compliant answer.
 		s_Undefined
 	};
@@ -260,7 +259,7 @@ namespace muaima {
 		{
 			return OFlow_;
 		}
-		eCode GetCode( void );
+		eCode GetPendingCode( void );
 		fdr::rIDriver &GetResponseDriver( void )
 		{
 			return ResponseDriver_;
@@ -278,10 +277,10 @@ namespace muaima {
 		qRT
 		qRE
 		}
-		// Also resets the PendingStatus.
-		eStatus GetPendingStatus( void )
+		// Also resets the 'PendingCodeIsStatus_'
+		eStatus GetStatus( void )
 		{
-			// Althought 'PendingCode' is a status, the 'PendingCodeIsStatus_' is already set to false by 'GetCode(...').
+			// Althought 'PendingCode' is a status, the 'PendingCodeIsStatus_' is already set to false by 'GetPendingCode(...').
 			eStatus Status = s_Undefined;
 
 			switch ( PendingCode_ ) {
@@ -311,45 +310,39 @@ namespace muaima {
 		'Logout(...)'. Between 'Login(....)' and 'Logout(...)', call all other
 		functions as needed.
 
-		For all this functions, when they return 's_Pending', call 'rConsole.GetCode(...)',
+		After calling each functions, call 'rConsole.GetPendingCode(...)',
 		then handle 'rConsole::GetResponseDriver(...)' or call 'rConsole::SkipReponse(...)'
-		until 'rConsole.GetCode(...)' returns 'c_None'.	Then Call the
-		'GetCompletionStatus(...)',	then handle 'rConsole::GetResponseDriver(...)'
+		until 'rConsole.GetPendingCode(...)' returns 'c_None'.	Then Call the
+		'rConsole::GetStatus(...)',	then handle 'rConsole::GetResponseDriver(...)',
 		or call 'rConsole::SkipReponse(...)'.
-
-		If one of this functions doesn't return 's_Pending', then handle
-		'rConsole::GetResponseDriver(...)' or call 'rConsole::SkipReponse(...)'.
 	*/
 
 
 	// This is the first command to call after opening a connection to the 'IMAP' server.
-	eStatus Connect( rConsole &Console );
+	void Connect( rConsole &Console );
 
 	// To log in. Most commands are not available when this is skipped or not done successfully.
-	eStatus Login(
+	void Login(
 		const str::dString &Username,
 		const str::dString &Password,
 		rConsole &Console );
 
 	// To call just before closing the connexion. You do _not_ need to be logged in to log out.
-	eStatus Logout( rConsole &Console );
+	void Logout( rConsole &Console );
 
 	// Launches the corresponding 'IMAP' command.
-	eStatus Capability( rConsole &Console );
-	eStatus Select(
+	void Capability( rConsole &Console );
+	void Select(
 		const str::dString &Mailbox,
 		rConsole &Console );
-	eStatus List(
+	void List(
 		const str::dString &Reference,
 		const str::dString &Mailbox,
 		rConsole &Console );
-	eStatus LSub(
+	void LSub(
 		const str::dString &Reference,
 		const str::dString &Mailbox,
 		rConsole &Console );
-
-	// To call after 'rConsole::GetCode(...)' return 'c_None'.
-	eStatus GetCompletionStatus( rConsole &Console );
 
 	class cResponse_
 	{
@@ -359,7 +352,7 @@ namespace muaima {
 			fdr::rIDriver &Driver) = 0;
 	public:
 		qCALLBACK( Response_ );
-		void OnReponse(
+		void OnResponse(
 			eCode Code,
 			fdr::rIDriver &Driver )
 		{
@@ -375,14 +368,8 @@ namespace muaima {
 		bso::sByte Delimiter_;	// The hierarchy delimiter. '0' means no demimiter (hope that '0' is not a valid delmimiter).
 		str::wString Message_;
 		void RetrieveMessage_( void );
-		eStatus HandleCompletion_(
-			eStatus Status,
-			qRPN );
-		eStatus HandlePending_(
-			cResponse_ &ReponseCallback,
-			qRPN );
-		eStatus Handle_(
-			eStatus Status,
+		eStatus HandleStatus_( qRPN );
+		eStatus HandleResponses_(
 			cResponse_ &ReponseCallback,
 			qRPN );
 		eStatus Connect_(

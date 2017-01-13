@@ -61,19 +61,50 @@ namespace misc {
 
 	bso::sBool IsVerboseActivated( void );
 
+	qENUM( Verbosity ) {
+		vNone,
+		vIn,
+		vOut,
+		vInAndOut,
+		v_amount,
+		v_Undefined
+	};
+
 	class rVerboseIODriver
 	: public rIODriver_
 	{
 	private:
 		csdbnc::rIODriver Driver_;
-		bso::sBool Activated_;
+		eVerbosity Verbosity_;
 		bso::sBool Commited_;
+		bso::sBool ReadInProgress_;
+		bso::sBool IsIn_( void ) const
+		{
+			return ( Verbosity_ == vIn ) || ( Verbosity_ == vInAndOut );
+		}
+		bso::sBool IsOut_( void ) const
+		{
+			return ( Verbosity_ == vOut ) || ( Verbosity_ == vInAndOut );
+		}
 	protected:
 		virtual fdr::sSize FDRRead(
 			fdr::sSize Maximum,
 			fdr::sByte *Buffer ) override
 		{
-			return Driver_.Read( Maximum, Buffer, fdr::bNonBlocking );
+			Maximum = Driver_.Read( Maximum, Buffer, fdr::bNonBlocking );
+
+			if ( IsIn_() ) {
+				if ( Maximum != 0 ) {
+					if ( !ReadInProgress_ ) {
+						cio::COut << "<- ";
+						ReadInProgress_ = true;
+					}
+
+					cio::COutF.Write( Buffer, Maximum );
+				}
+			}
+
+			return Maximum;
 		}
 		virtual void FDRDismiss( bso::sBool Unlock ) override
 		{
@@ -87,7 +118,12 @@ namespace misc {
 			const fdr::sByte *Buffer,
 			fdr::sSize Maximum ) override
 		{
-			if ( Activated_ ) {
+			if ( IsIn_() && ReadInProgress_ ) {
+				cio::COut << "--" << txf::nl;
+				ReadInProgress_ = false;
+			}
+
+			if ( IsOut_() ) {
 				if ( Commited_ ) {
 					cio::COut << "-> ";
 					Commited_ = false;
@@ -96,7 +132,7 @@ namespace misc {
 
 			Maximum = Driver_.Write( Buffer, Maximum );
 
-			if ( Activated_ && ( Maximum != 0 ) )
+			if ( IsOut_() && ( Maximum != 0 ) )
 				cio::COutF.Write( Buffer, Maximum );
 
 			return Maximum;
@@ -113,13 +149,21 @@ namespace misc {
 	public:
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, Driver_, Activated_, Commited_ );
+			if ( P ) {
+				if ( ReadInProgress_ ) {
+					cio::COut << "--" << txf::nl;
+					ReadInProgress_ = false;
+				}
+			}
+
+			tol::reset( P, Driver_, Commited_, ReadInProgress_ );
 			rIODriver_::reset( P );
+			Verbosity_ = v_Undefined;
 		}
 		qCVDTOR( rVerboseIODriver );
 		void Init(
 			const rgstry::rEntry &HostPortEntry,
-			bso::sBool Activate );
+			eVerbosity Verbosity );
 		bso::sBool IsConnected( void )
 		{
 			return Driver_.IsConnected();
