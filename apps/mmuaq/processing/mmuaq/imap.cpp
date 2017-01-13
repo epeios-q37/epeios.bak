@@ -73,7 +73,7 @@ namespace {
 		DumpPending_( Concerned, Verbose, Console );
 		Status = muaima::GetCompletionStatus( Console );
 
-		if ( Verbose ) {
+		if ( Verbose || ( Status != muaima::sOK ) ) {
 			cio::COut << muaima::GetLabel(Status) << ": ";
 			misc::Dump( Console.GetResponseDriver() );
 			cio::COut << txf::nl << txf::commit;
@@ -150,12 +150,22 @@ qRE
 }
 
 namespace {
+	void GetReference_( str::dString &Reference )
+	{
+		sclmisc::MGetValue( registry::parameter::imap::Reference, Reference );
+	}
+
+	void GetMailbox_( str::dString &Mailbox )
+	{
+		sclmisc::MGetValue( registry::parameter::imap::Mailbox, Mailbox );
+	}
+
 	void GetReferenceAndMailbox_(
 		str::dString &Reference,
 		str::dString &Mailbox )
 	{
-		sclmisc::MGetValue( registry::parameter::imap::Reference, Reference );
-		sclmisc::MGetValue( registry::parameter::imap::Mailbox, Mailbox );
+		GetReference_( Reference );
+		GetMailbox_( Mailbox );
 	}
 }
 
@@ -194,6 +204,26 @@ qRB
 	Console.Init( Verbose );
 
 	Dump_( muaima::LSub( Reference, Mailbox, Console ), true, Verbose, Console );
+qRR
+qRT
+qRE
+}
+
+void imap::Select( void )
+{
+qRH
+	str::wString Mailbox;
+	bso::sBool Verbose = false;
+	rConsole_ Console;
+qRB
+	Verbose = misc::IsVerboseActivated();
+
+	tol::Init( Mailbox );
+	GetMailbox_( Mailbox );
+
+	Console.Init( Verbose );
+
+	Dump_( muaima::Select( Mailbox, Console ), true, Verbose, Console );
 qRR
 qRT
 qRE

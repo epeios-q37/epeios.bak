@@ -144,6 +144,11 @@ namespace {
 		return imap::LSub();
 	}
 
+	void IMAPSelect_( void )
+	{
+		return imap::Select();
+	}
+
 	void IMAPTest_( void )
 	{
 		return imap::Test();
@@ -339,6 +344,7 @@ qRB
 	C( IMAPCapability );
 	C( IMAPList );
 	C( IMAPLSub );
+	C( IMAPSelect );
 	C( IMAPTest );
 //	C( GetIndexes );
 	C( ShowHeader );

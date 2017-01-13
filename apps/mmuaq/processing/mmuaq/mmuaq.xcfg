@@ -159,6 +159,7 @@
    <Argument id="IMAPCapabilityCommand" Description="IMAPCapabilityCommandDescription" long="imap-capability" Value="IMAPCapability" Usage="[%SetupOption%] [%VerboseFlag%]"/>
    <Argument id="IMAPListCommand" Description="IMAPListCommandDescription" long="imap-list" Value="IMAPList" Usage="[%SetupOption%] [%VerboseFlag%] %IMAPReferenceArgument% %IMAPMailboxArgument%"/>
    <Argument id="IMAPLSubCommand" Description="IMAPLSubCommandDescription" long="imap-lsub" Value="IMAPLSub" Usage="[%SetupOption%] [%VerboseFlag%] %IMAPReferenceArgument% %IMAPMailboxArgument%"/>
+   <Argument id="IMAPSelectCommand" Description="IMAPSelectCommandDescription" long="imap-select" Value="IMAPSelect" Usage="[%SetupOption%] [%VerboseFlag%] %IMAPMailboxArgument%"/>
    <Argument id="ShowHeaderCommand" Description="ShowHeaderCommandDescription" long="show-header" Value="ShowHeader" Usage="[%InputArgument% [%OutputArgument%]]"/>
    <Argument id="GetFieldCommand" Description="GetFieldCommandDescription" long="get-field" Value="GetField" Usage="%FieldArgument% [%InputArgument% [%OutputArgument%]]"/>
    <!-- Fanaux : 'Path', mais pas de 'Value'. -->
@@ -210,6 +211,9 @@
     <Layout command="IMAPLSub">
      <Link index="0" Target="IMAPReferenceArgument"/>
      <Link index="1" Target="IMAPMailboxArgument"/>
+    </Layout>
+    <Layout command="IMAPSelect">
+     <Link index="0" Target="IMAPMailboxArgument"/>
     </Layout>
     <Layout command="ShowHeader">
      <Link index="0" Target="InputArgument"/>

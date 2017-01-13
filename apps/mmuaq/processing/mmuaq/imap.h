@@ -24,6 +24,7 @@ namespace imap {
 	void Capability( void );
 	void List( void );
 	void LSub( void );
+	void Select( void );
 
 	void Test( void );
 }
