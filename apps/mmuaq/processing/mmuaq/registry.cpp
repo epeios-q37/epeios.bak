@@ -35,6 +35,8 @@ namespace {
 rEntry registry::parameter::imap::HostPort("@HostPort", IMAP_ );
 rEntry registry::parameter::imap::Username("Username", IMAP_ );
 rEntry registry::parameter::imap::Password("Password", IMAP_ );
+rEntry registry::parameter::imap::Reference("Reference", IMAP_ );
+rEntry registry::parameter::imap::Mailbox("Mailbox", IMAP_ );
 
 rEntry registry::parameter::Input("Input", sclrgstry::Parameters );
 rEntry registry::parameter::Output("Output", sclrgstry::Parameters );

@@ -4,7 +4,7 @@
   <xpp:set name="q37.xpp" env-var="Q37_XPP"/>
   <xpp:expand value-of="q37.xpp"/>
   <xpp:expand href="../../../../TOL.xcfg"/>
-  <Parameters Setup="Prod">
+  <Parameters Setup="Q37">
    <Language>en</Language>
    <!-- Default command -->
   </Parameters>
@@ -45,6 +45,18 @@
    <Translations text="POP3UIDLCommandDescription">
     <Translation language="fr">Affiche l'identifiant unique des messages d'un serveur 'POP3'.</Translation>
     <Translation language="en">Displays the unique ID of messages from a 'POP3' server.</Translation>
+   </Translations>
+   <Translations text="IMAPCapabilityCommandDescription">
+    <Translation language="fr">Lance la commande 'CAPABILITY' du protocole 'IMAP'.</Translation>
+    <Translation language="en">Launches the 'CAPABILITY' command from the 'IMAP' protocol.</Translation>
+   </Translations>
+   <Translations text="IMAPListCommandDescription">
+    <Translation language="fr">Lance la commande 'LIST' du protocole 'IMAP'.</Translation>
+    <Translation language="en">Launches the 'LIST' command from the 'IMAP' protocol.</Translation>
+   </Translations>
+   <Translations text="IMAPLSubCommandDescription">
+    <Translation language="fr">Lance la commande 'LSUB' du protocole 'IMAP'.</Translation>
+    <Translation language="en">Launches the 'LSUB' command from the 'IMAP' protocol.</Translation>
    </Translations>
    <Translations text="ShowHeaderCommandDescription">
     <Translation language="fr">Affiche l'entête d'un courrier.</Translation>
@@ -103,6 +115,22 @@
     <Translation language="fr">étiquette</Translation>
     <Translation language="en">tag</Translation>
    </Translations>
+   <Translations text="IMAPReferenceArgumentDescription">
+    <Translation language="fr">'reference name' tel que défini pour le protocole 'IMAP'.</Translation>
+    <Translation language="en">'reference name' as defined for the 'IMAP' protocol.</Translation>
+   </Translations>
+   <Translations text="IMAPReferenceArgumentLabel">
+    <Translation language="fr">reference</Translation>
+    <Translation language="en">reference</Translation>
+   </Translations>
+   <Translations text="IMAPMailboxArgumentDescription">
+    <Translation language="fr">'mailbox name' tel que défini pour le protocole 'IMAP'.</Translation>
+    <Translation language="en">'mailbox name' as defined for the 'IMAP' protocol.</Translation>
+   </Translations>
+   <Translations text="IMAPMailboxArgumentLabel">
+    <Translation language="fr">mailbox</Translation>
+    <Translation language="en">mailbox</Translation>
+   </Translations>
    <!-- Flags -->
    <Translations text="VerboseFlagDescription">
     <Translation language="fr">Détaille les opérations exécutées.</Translation>
@@ -124,10 +152,13 @@
    <Argument id="B64EncodeCommand" Description="B64EncodeCommandDescription" long="b64-encode" Value="B64Encode" Usage="[%InputArgument% [%OutputArgument%]]"/>
    <Argument id="B64DecodeCommand" Description="B64DecodeCommandDescription" long="b64-decode" Value="B64Decode" Usage="[%InputArgument% [%OutputArgument%]]"/>
    <Argument id="NextTagCommand" Description="NextTagCommandDescription" long="next-tag" Value="NextTag" Usage="[%TagArgument%]"/>
-   <Argument id="POP3ListCommand" Description="POP3ListCommandDescription" long="pop3-list" Value="POP3List" Usage="[%SetupOption%] [%MessageArgument%]"/>
+   <Argument id="POP3ListCommand" Description="POP3ListCommandDescription" long="pop3-list" Value="POP3List" Usage="[%SetupOption%] [%VerboseFlag%] [%MessageArgument%]"/>
    <Argument id="POP3RetrieveCommand" Description="POP3RetrieveCommandDescription" long="pop3-retrieve" Value="POP3Retrieve" Usage="[%SetupOption%] [%VerboseFlag%] %MessageArgument%"/>
    <Argument id="POP3TopCommand" Description="POP3TopCommandDescription" long="pop3-top" Value="POP3Top" Usage="[%SetupOption%] [%VerboseFlag%] %MessageArgument% %LinesArgument%"/>
-   <Argument id="POP3UIDLCommand" Description="POP3UIDLCommandDescription" long="pop3-uidl" Value="POP3UIDL" Usage="[%SetupOption%] [%MessageArgument%]"/>
+   <Argument id="POP3UIDLCommand" Description="POP3UIDLCommandDescription" long="pop3-uidl" Value="POP3UIDL" Usage="[%SetupOption%] [%VerboseFlag%] [%MessageArgument%]"/>
+   <Argument id="IMAPCapabilityCommand" Description="IMAPCapabilityCommandDescription" long="imap-capability" Value="IMAPCapability" Usage="[%SetupOption%] [%VerboseFlag%]"/>
+   <Argument id="IMAPListCommand" Description="IMAPListCommandDescription" long="imap-list" Value="IMAPList" Usage="[%SetupOption%] [%VerboseFlag%] %IMAPReferenceArgument% %IMAPMailboxArgument%"/>
+   <Argument id="IMAPLSubCommand" Description="IMAPLSubCommandDescription" long="imap-lsub" Value="IMAPLSub" Usage="[%SetupOption%] [%VerboseFlag%] %IMAPReferenceArgument% %IMAPMailboxArgument%"/>
    <Argument id="ShowHeaderCommand" Description="ShowHeaderCommandDescription" long="show-header" Value="ShowHeader" Usage="[%InputArgument% [%OutputArgument%]]"/>
    <Argument id="GetFieldCommand" Description="GetFieldCommandDescription" long="get-field" Value="GetField" Usage="%FieldArgument% [%InputArgument% [%OutputArgument%]]"/>
    <!-- Fanaux : 'Path', mais pas de 'Value'. -->
@@ -142,6 +173,8 @@
    <Argument id="LinesArgument" Description="LinesArgumentDescription" Path="Lines" Label="LinesArgumentLabel"/>
    <Argument id="FieldArgument" Description="FieldArgumentDescription" Path="FieldName" Label="FieldArgumentLabel"/>
    <Argument id="TagArgument" Description="TagArgumentDescription" Path="Tag" Label="TagArgumentLabel"/>
+   <Argument id="IMAPReferenceArgument" Description="IMAPReferenceArgumentDescription" Path="IMAP/Reference" Label="IMAPReferenceArgumentLabel"/>
+   <Argument id="IMAPMailboxArgument" Description="IMAPMailboxArgumentDescription" Path="IMAP/Mailbox" Label="IMAPMailboxArgumentLabel"/>
    <!-- Affectations des arguments libres-->
    <Layouts>
     <Layout command="B64Encode">
@@ -167,6 +200,16 @@
     </Layout>
     <Layout command="POP3UIDL">
      <Link index="0" Target="MessageArgument"/>
+    </Layout>
+    <Layout command="IMAPCapability">
+    </Layout>
+    <Layout command="IMAPList">
+     <Link index="0" Target="IMAPReferenceArgument"/>
+     <Link index="1" Target="IMAPMailboxArgument"/>
+    </Layout>
+    <Layout command="IMAPLSub">
+     <Link index="0" Target="IMAPReferenceArgument"/>
+     <Link index="1" Target="IMAPMailboxArgument"/>
     </Layout>
     <Layout command="ShowHeader">
      <Link index="0" Target="InputArgument"/>

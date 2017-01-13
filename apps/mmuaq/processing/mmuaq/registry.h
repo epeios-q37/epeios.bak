@@ -39,7 +39,9 @@ namespace registry {
 			extern rEntry
 				HostPort,
 				Username,
-				Password;
+				Password,
+				Reference,
+				Mailbox;
 		};
 
 		extern rEntry

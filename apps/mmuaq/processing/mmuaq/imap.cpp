@@ -44,13 +44,13 @@ namespace {
 	void DumpPending_(
 		bso::sBool Concerned,
 		bso::sBool Verbose,
-		muaima::rSession &Session )
+		muaima::rConsole &Console )
 	{
 		muaima::eCode Code = muaima::c_Undefined;
 
-		while ( ( Code = Session.GetCode()) != muaima::c_None ) {
+		while ( ( Code = Console.GetCode()) != muaima::c_None ) {
 			if ( Verbose || ( Concerned &&  ( Code != muaima::cOK ) ) ) {
-				fdr::rIDriver &Driver = Session.GetResponseDriver();
+				fdr::rIDriver &Driver = Console.GetResponseDriver();
 
 				cio::COut << muaima::GetLabel( Code );
 
@@ -60,7 +60,7 @@ namespace {
 				misc::Dump( Driver );
 				cio::COut << txf::nl << txf::commit;
 			} else
-				Session.SkipResponse();
+				Console.SkipResponse();
 		}
 	}
 
@@ -68,25 +68,25 @@ namespace {
 		eStatus Status,
 		bso::sBool Concerned,
 		bso::sBool Verbose,
-		muaima::rSession &Session )
+		muaima::rConsole &Console )
 	{
-		DumpPending_( Concerned, Verbose, Session );
-		Status = muaima::GetCompletionStatus( Session );
+		DumpPending_( Concerned, Verbose, Console );
+		Status = muaima::GetCompletionStatus( Console );
 
 		if ( Verbose ) {
 			cio::COut << muaima::GetLabel(Status) << ": ";
-			misc::Dump( Session.GetResponseDriver() );
+			misc::Dump( Console.GetResponseDriver() );
 			cio::COut << txf::nl << txf::commit;
 		} else
-			Session.SkipResponse();
+			Console.SkipResponse();
 
-		if ( ( Status == muaima::cNo ) || ( Status == muaima::cBad ) )
+		if ( ( Status == muaima::sNO ) || ( Status == muaima::sBAD ) )
 			qRAbort();
 	}
 
 	void Login_(
 		bso::sBool Verbose,
-		muaima::rSession &Session )
+		muaima::rConsole &Console )
 	{
 	qRH
 		str::wString Username, Password;
@@ -95,7 +95,7 @@ namespace {
 
 		GetUsernameAndPassword_( Username, Password );
 
-		Dump_( Login( Username, Password, Session  ), false, Verbose, Session );
+		Dump_( Login( Username, Password, Console  ), false, Verbose, Console );
 	qRR
 	qRT
 	qRE
@@ -103,9 +103,9 @@ namespace {
 }
 
 namespace{
-	class rVerboseRack_
+	class rConsole_
 	: public misc::rVerboseIODriver,
-	  public muaima::rSession
+	  public muaima::rConsole
 	{
 		bso::sBool Connected_ = true;
 	public:
@@ -116,16 +116,16 @@ namespace{
 					muaima::Logout( *this );
 			}
 
-			rSession::reset( P );
+			rConsole::reset( P );
 			misc::rVerboseIODriver::reset( P );
 			Connected_ = false;
 		}
-		qCVDTOR( rVerboseRack_ );
+		qCVDTOR( rConsole_ );
 		void Init( bso::sBool Activate )
 		{
 			Connected_ = false;
 			misc::rVerboseIODriver::Init( registry::parameter::imap::HostPort, Activate );
-			muaima::rSession::Init( *this );
+			muaima::rConsole::Init( *this );
 			Dump_( muaima::Connect( *this ), false, Activate, *this );
 			Connected_ = true;
 			Login_( Activate, *this );
@@ -137,13 +137,63 @@ void imap::Capability( void )
 {
 qRH
 	bso::sBool Verbose = false;
-	rVerboseRack_ Rack;
+	rConsole_ Console;
 qRB
 	Verbose = misc::IsVerboseActivated();
 
-	Rack.Init( Verbose );
+	Console.Init( Verbose );
 
-	Dump_( muaima::Capability( Rack ), true, Verbose, Rack );
+	Dump_( muaima::Capability( Console ), true, Verbose, Console );
+qRR
+qRT
+qRE
+}
+
+namespace {
+	void GetReferenceAndMailbox_(
+		str::dString &Reference,
+		str::dString &Mailbox )
+	{
+		sclmisc::MGetValue( registry::parameter::imap::Reference, Reference );
+		sclmisc::MGetValue( registry::parameter::imap::Mailbox, Mailbox );
+	}
+}
+
+void imap::List( void )
+{
+qRH
+	str::wString Reference, Mailbox;
+	bso::sBool Verbose = false;
+	rConsole_ Console;
+qRB
+	Verbose = misc::IsVerboseActivated();
+
+	tol::Init( Reference, Mailbox );
+	GetReferenceAndMailbox_( Reference, Mailbox );
+
+	Console.Init( Verbose );
+
+	Dump_( muaima::List( Reference, Mailbox, Console ), true, Verbose, Console );
+qRR
+qRT
+qRE
+}
+
+void imap::LSub( void )
+{
+qRH
+	str::wString Reference, Mailbox;
+	bso::sBool Verbose = false;
+	rConsole_ Console;
+qRB
+	Verbose = misc::IsVerboseActivated();
+
+	tol::Init( Reference, Mailbox );
+	GetReferenceAndMailbox_( Reference, Mailbox );
+
+	Console.Init( Verbose );
+
+	Dump_( muaima::LSub( Reference, Mailbox, Console ), true, Verbose, Console );
 qRR
 qRT
 qRE
@@ -153,13 +203,13 @@ void imap::Test( void )
 {
 qRH
 	bso::sBool Verbose = false;
-	rVerboseRack_ Rack;
+	rConsole_ Console;
 qRB
 	Verbose = misc::IsVerboseActivated();
 
-	Rack.Init( Verbose );
+	Console.Init( Verbose );
 
-	Dump_( muaima::List( str::wString( "" ), str::wString( "Divers/*" ), Rack ), true, Verbose, Rack );
+	Dump_( muaima::List( str::wString( "inbox" ), str::wString( "" ), Console ), true, Verbose, Console );
 qRR
 qRT
 qRE

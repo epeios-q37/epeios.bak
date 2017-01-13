@@ -210,7 +210,7 @@ namespace muaima {
 
 	const char *GetLabel( eStatus Status );
 
-	class rSession
+	class rConsole
 	{
 	private:
 		str::wString Tag_;
@@ -226,7 +226,7 @@ namespace muaima {
 			tol::reset( P, Tag_, IFlow_, OFlow_, PendingCodeIsStatus_, ResponseDriver_, NoTaggedStatusResponse_ );
 			PendingCode_ = c_Undefined;
 		}
-		qCDTOR( rSession );
+		qCDTOR( rConsole );
 		void Init( fdr::rIODriver &Driver )
 		{
 			tol::Init( Tag_ );
@@ -306,32 +306,92 @@ namespace muaima {
 	};
 
 	/*
-		If returned value == 'iPending, you must read pendind response using
-		'Session.GetCode(...)',  followed by 'GetDataDriver(...)'/'SkipData(...)'
-		until 'GetCode(...)' returns 'c_Completed'.
+		First, call 'Connect(...)', then 'Login(...)' (technically, it's not mandatory
+		but if you dont, you would not be able to do very much), and end with 
+		'Logout(...)'. Between 'Login(....)' and 'Logout(...)', call all other
+		functions as needed.
+
+		For all this functions, when they return 's_Pending', call 'rConsole.GetCode(...)',
+		then handle 'rConsole::GetResponseDriver(...)' or call 'rConsole::SkipReponse(...)'
+		until 'rConsole.GetCode(...)' returns 'c_None'.	Then Call the
+		'GetCompletionStatus(...)',	then handle 'rConsole::GetResponseDriver(...)'
+		or call 'rConsole::SkipReponse(...)'.
+
+		If one of this functions doesn't return 's_Pending', then handle
+		'rConsole::GetResponseDriver(...)' or call 'rConsole::SkipReponse(...)'.
 	*/
 
-	eStatus GetCompletionStatus( rSession &Session );
 
-	// This is the first command to call after opening a connection to the server.
-	eStatus Connect( rSession &Session );
+	// This is the first command to call after opening a connection to the 'IMAP' server.
+	eStatus Connect( rConsole &Console );
 
-	// To log in. Most commands are not available when this is not done successfully.
+	// To log in. Most commands are not available when this is skipped or not done successfully.
 	eStatus Login(
 		const str::dString &Username,
 		const str::dString &Password,
-		rSession &Session );
+		rConsole &Console );
 
 	// To call just before closing the connexion. You do _not_ need to be logged in to log out.
-	eStatus Logout( rSession &Session );
-	eStatus Capability( rSession &Session );
+	eStatus Logout( rConsole &Console );
+
+	// Launches the corresponding 'IMAP' command.
+	eStatus Capability( rConsole &Console );
 	eStatus Select(
 		const str::dString &Mailbox,
-		rSession &Session );
+		rConsole &Console );
 	eStatus List(
-		const str::dString &List,
+		const str::dString &Reference,
 		const str::dString &Mailbox,
-		rSession &Session );
+		rConsole &Console );
+	eStatus LSub(
+		const str::dString &Reference,
+		const str::dString &Mailbox,
+		rConsole &Console );
+
+	// To call after 'rConsole::GetCode(...)' return 'c_None'.
+	eStatus GetCompletionStatus( rConsole &Console );
+
+	class rSession
+	{
+	private:
+		rConsole Console_;
+		bso::sBool Connected_;
+		void Disconnect_( void );
+		bso::sBool Connect_(
+			const str::dString &Username,
+			const str::dString &Password );
+	public:
+		void reset( bso::sBool P = true )
+		{
+			if ( P ) {
+				if ( Connected_ )
+					Disconnect_();
+			}
+
+			tol::reset( P, Console_, Connected_ );
+		}
+		qCDTOR( rSession );
+		bso::sBool Init(
+			fdr::rIODriver &Driver,
+			const str::dString &Username,
+			const str::dString &Password,
+			qRPD )
+		{
+			if ( Connected_ )
+				Disconnect_();
+
+			Console_.Init( Driver );
+
+			if ( !Connect_(Username, Password) ) {
+				if ( qRPT )
+					qRGnr();
+				else
+					return false;
+			}
+
+			return true;
+		}
+	};
 }
 
 

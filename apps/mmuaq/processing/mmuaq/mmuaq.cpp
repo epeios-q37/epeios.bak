@@ -134,6 +134,16 @@ namespace {
 		return imap::Capability();
 	}
 
+	void IMAPList_( void )
+	{
+		return imap::List();
+	}
+
+	void IMAPLSub_( void )
+	{
+		return imap::LSub();
+	}
+
 	void IMAPTest_( void )
 	{
 		return imap::Test();
@@ -327,6 +337,8 @@ qRB
 	C( POP3Top );
 	C( POP3UIDL );
 	C( IMAPCapability );
+	C( IMAPList );
+	C( IMAPLSub );
 	C( IMAPTest );
 //	C( GetIndexes );
 	C( ShowHeader );
