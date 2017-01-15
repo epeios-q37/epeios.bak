@@ -58,7 +58,7 @@ namespace {
 					cio::COut << ": ";
 
 				misc::Dump( Driver );
-				cio::COut << txf::nl << txf::commit;
+				cio::COut << txf::commit;
 			} else
 				Console.SkipResponse();
 		}
@@ -76,7 +76,7 @@ namespace {
 		if ( Verbose || ( Status != muaima::sOK ) ) {
 			cio::COut << muaima::GetLabel(Status) << ": ";
 			misc::Dump( Console.GetResponseDriver() );
-			cio::COut << txf::nl << txf::commit;
+			cio::COut << txf::commit;
 		} else
 			Console.SkipResponse();
 
@@ -302,7 +302,7 @@ namespace{
 
 			GetUsernameAndPassword_( Username, Password );
 
-			misc::rVerboseIODriver::Init( registry::parameter::imap::HostPort, misc::IsVerboseActivated() ? misc::vInAndOut : misc::vNone );
+			misc::rVerboseIODriver::Init( registry::parameter::imap::HostPort, misc::IsVerboseActivated() ? misc::vOut : misc::vNone );
 			muaima::rSession::Init( *this, Username, Password );
 		qRR
 		qRT

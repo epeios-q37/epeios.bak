@@ -197,9 +197,6 @@ namespace muaima {
 								EOF_ = true;
 								Continue = false;
 								break;
-							case '[':
-								SetDelimiter_( dBracket );
-								break;
 							case '{':
 								SetDelimiter_( dBrace );
 								break;
@@ -207,6 +204,7 @@ namespace muaima {
 								SetDelimiter_( dQuote );
 								break;
 							default:
+								// 'dBracket' is only set on 'Init(...)' (optional response code), hence all '[' are ignored.
 								break;
 							}
 							break;

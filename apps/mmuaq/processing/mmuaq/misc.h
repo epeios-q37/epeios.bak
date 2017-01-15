@@ -37,6 +37,8 @@ namespace misc {
 
 		while ( !Flow.EndOfFlow() )
 			cio::COut << Flow.Get();
+
+		cio::COut << txf::nl;
 	qRR
 	qRT
 	qRE
@@ -80,7 +82,7 @@ namespace misc {
 		bso::sBool ReadInProgress_;
 		bso::sBool IsIn_( void ) const
 		{
-			return ( Verbosity_ == vIn ) || ( Verbosity_ == vInAndOut );
+		return ( Verbosity_ == vIn ) || ( Verbosity_ == vInAndOut );
 		}
 		bso::sBool IsOut_( void ) const
 		{

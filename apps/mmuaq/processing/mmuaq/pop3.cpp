@@ -99,7 +99,7 @@ namespace {
 
 			GetUsernameAndPassword_( Username, Password );
 
-			misc::rVerboseIODriver::Init( registry::parameter::pop3::HostPort, Activate ? misc::vIn : misc::vNone );
+			misc::rVerboseIODriver::Init( registry::parameter::pop3::HostPort, Activate ? misc::vOut : misc::vNone );
 
 			Indicator = base::Authenticate( Username, Password, *this, Body );
 		qRR
@@ -127,7 +127,7 @@ qRB
 	Handle_( muapo3::base::List( Number, VerboseDriver, false, Body ), Body );
 
 	misc::Dump( Body.GetDriver() );
-
+	
 	Handle_( muapo3::base::Quit( VerboseDriver, Body ), Body );
 qRR
 qRT
