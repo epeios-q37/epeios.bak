@@ -178,7 +178,7 @@ qRB
 			Code = PendingCode_;
 			PendingCode_ = c_Undefined;
 		}
-		ResponseDriver_.Init( Flow, PendingData, false );
+		ResponseDriver_.Init( Flow, PendingData );
 	} else {
 		if ( Flow.View() == '*' ) {
 			Flow.Skip();
@@ -208,7 +208,7 @@ qRB
 				qRGnr();
 			Flow.Skip();
 			Code = code_::Get( Flow, PendingData );
-			ResponseDriver_.Init( Flow, PendingData, true );
+			ResponseDriver_.Init( Flow, PendingData, dBracket );
 		} else {
 			if ( PendingCodeIsStatus_ ) {
 				PendingCode_ = Code;
@@ -216,7 +216,7 @@ qRB
 				PendingCodeIsStatus_ = false;
 			}
 
-			ResponseDriver_.Init( Flow, PendingData, false );
+			ResponseDriver_.Init( Flow, PendingData );
 		}
 	}
 qRR
@@ -286,6 +286,7 @@ namespace _ {
 		cSelect,
 		cList,
 		cLSub,
+		cFetch,
 		c_amount,
 		c_Undefined
 	};
@@ -304,6 +305,7 @@ namespace _ {
 		C( Select );
 		C( List );
 		C( LSub );
+		C( Fetch );
 		default:
 			qRGnr();
 			break;
@@ -395,6 +397,17 @@ void muaima::LSub(
 	Console.OFlow() << " \"" << Reference << "\" \"" << Mailbox << '"';
 	_::SendCFLR( Console.OFlow() );
 }
+
+void muaima::Fetch(
+	const str::dString &Sequence,
+	const str::dString &Items,
+	rConsole &Console )
+{
+	_::SendCommand(Console.GetNextTag(), _::cFetch, Console.OFlow() );
+	Console.OFlow() << ' ' << Sequence << ' ' << Items;
+	_::SendCFLR( Console.OFlow() );
+}
+
 
 void muaima::rSession::RetrieveMessage_( void )
 {
@@ -593,7 +606,7 @@ qRB
 
 	ResponseCallback.Init();
 
-	List( str::wString(""), str::wString("" ), Console_ );
+	muaima::List( str::wString(""), str::wString(""), Console_ );
 	Status = HandleResponses_( ResponseCallback, qRP );
 
 	if ( ResponseCallback.Delimiter.Amount() != 1 )
@@ -610,6 +623,13 @@ eStatus muaima::rSession::Disconnect_( qRPN )
 {
 	Logout( Console_ );
 	return HandleResponses_( NOPResponseCallback_, qRP );
+}
+
+eStatus muaima::rSession::List(
+	const str::dString &Mailbox,
+	class cList &Callback )
+{
+	return s_Undefined;
 }
 
 namespace {

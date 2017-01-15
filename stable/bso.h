@@ -715,5 +715,7 @@ namespace bso {
 	typedef sUInt sFlag;
 
 	typedef char__ sChar;
+
+	const bso::sSize SizeMax = BSO_SIZE_MAX;
 }
 #endif

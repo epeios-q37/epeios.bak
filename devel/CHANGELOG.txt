@@ -1,5 +1,9 @@
 CHANGELOG for the 'Epeios' framework.
 
+2017-01-15 :
+- BSO :
+	- Introducing 'SizeMax'.
+
 2017-01-13 :
 - FDR :
 	- Addding 'rIDriver::Drain()'.

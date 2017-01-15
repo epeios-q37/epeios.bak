@@ -149,6 +149,11 @@ namespace {
 		return imap::Select();
 	}
 
+	void IMAPFetch_( void )
+	{
+		return imap::Fetch();
+	}
+
 	void IMAPTest_( void )
 	{
 		return imap::Test();
@@ -345,6 +350,7 @@ qRB
 	C( IMAPList );
 	C( IMAPLSub );
 	C( IMAPSelect );
+	C( IMAPFetch );
 	C( IMAPTest );
 //	C( GetIndexes );
 	C( ShowHeader );

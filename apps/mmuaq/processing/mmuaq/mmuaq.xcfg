@@ -58,6 +58,14 @@
     <Translation language="fr">Lance la commande 'LSUB' du protocole 'IMAP'.</Translation>
     <Translation language="en">Launches the 'LSUB' command from the 'IMAP' protocol.</Translation>
    </Translations>
+   <Translations text="IMAPSelectCommandDescription">
+    <Translation language="fr">Lance la commande 'SELECT' du protocole 'IMAP'.</Translation>
+    <Translation language="en">Launches the 'SELECT' command from the 'IMAP' protocol.</Translation>
+   </Translations>
+   <Translations text="IMAPFetchCommandDescription">
+    <Translation language="fr">Lance la commande 'FETCH' du protocole 'IMAP'.</Translation>
+    <Translation language="en">Launches the 'FETCH' command from the 'IMAP' protocol.</Translation>
+   </Translations>
    <Translations text="ShowHeaderCommandDescription">
     <Translation language="fr">Affiche l'entête d'un courrier.</Translation>
     <Translation language="en">Displays the header of a mail.</Translation>
@@ -131,6 +139,22 @@
     <Translation language="fr">mailbox</Translation>
     <Translation language="en">mailbox</Translation>
    </Translations>
+   <Translations text="IMAPSequenceArgumentDescription">
+    <Translation language="fr">'sequence set' tel que défini pour le protocole 'IMAP'.</Translation>
+    <Translation language="en">'sequence set' as defined for the 'IMAP' protocol.</Translation>
+   </Translations>
+   <Translations text="IMAPSequenceArgumentLabel">
+    <Translation language="fr">sequence</Translation>
+    <Translation language="en">sequence</Translation>
+   </Translations>
+   <Translations text="IMAPItemsArgumentDescription">
+    <Translation language="fr">'message data item names or macro' tel que défini pour le protocole 'IMAP'.</Translation>
+    <Translation language="en">'message data item names or macro' as defined for the 'IMAP' protocol.</Translation>
+   </Translations>
+   <Translations text="IMAPItemsArgumentLabel">
+    <Translation language="fr">items</Translation>
+    <Translation language="en">items</Translation>
+   </Translations>
    <!-- Flags -->
    <Translations text="VerboseFlagDescription">
     <Translation language="fr">Détaille les opérations exécutées.</Translation>
@@ -160,6 +184,7 @@
    <Argument id="IMAPListCommand" Description="IMAPListCommandDescription" long="imap-list" Value="IMAPList" Usage="[%SetupOption%] [%VerboseFlag%] %IMAPReferenceArgument% %IMAPMailboxArgument%"/>
    <Argument id="IMAPLSubCommand" Description="IMAPLSubCommandDescription" long="imap-lsub" Value="IMAPLSub" Usage="[%SetupOption%] [%VerboseFlag%] %IMAPReferenceArgument% %IMAPMailboxArgument%"/>
    <Argument id="IMAPSelectCommand" Description="IMAPSelectCommandDescription" long="imap-select" Value="IMAPSelect" Usage="[%SetupOption%] [%VerboseFlag%] %IMAPMailboxArgument%"/>
+   <Argument id="IMAPFetchCommand" Description="IMAPFetchCommandDescription" long="imap-fetch" Value="IMAPFetch" Usage="[%SetupOption%] [%VerboseFlag%] %IMAPMailboxArgument% %IMAPSequenceArgument% %IMAPItemsArgument%"/>
    <Argument id="ShowHeaderCommand" Description="ShowHeaderCommandDescription" long="show-header" Value="ShowHeader" Usage="[%InputArgument% [%OutputArgument%]]"/>
    <Argument id="GetFieldCommand" Description="GetFieldCommandDescription" long="get-field" Value="GetField" Usage="%FieldArgument% [%InputArgument% [%OutputArgument%]]"/>
    <!-- Fanaux : 'Path', mais pas de 'Value'. -->
@@ -176,6 +201,8 @@
    <Argument id="TagArgument" Description="TagArgumentDescription" Path="Tag" Label="TagArgumentLabel"/>
    <Argument id="IMAPReferenceArgument" Description="IMAPReferenceArgumentDescription" Path="IMAP/Reference" Label="IMAPReferenceArgumentLabel"/>
    <Argument id="IMAPMailboxArgument" Description="IMAPMailboxArgumentDescription" Path="IMAP/Mailbox" Label="IMAPMailboxArgumentLabel"/>
+   <Argument id="IMAPSequenceArgument" Description="IMAPSequenceArgumentDescription" Path="IMAP/Sequence" Label="IMAPSequenceArgumentLabel"/>
+   <Argument id="IMAPItemsArgument" Description="IMAPItemsArgumentDescription" Path="IMAP/Items" Label="IMAPItemsArgumentLabel"/>
    <!-- Affectations des arguments libres-->
    <Layouts>
     <Layout command="B64Encode">
@@ -214,6 +241,11 @@
     </Layout>
     <Layout command="IMAPSelect">
      <Link index="0" Target="IMAPMailboxArgument"/>
+    </Layout>
+    <Layout command="IMAPFetch">
+     <Link index="0" Target="IMAPMailboxArgument"/>
+     <Link index="1" Target="IMAPSequenceArgument"/>
+     <Link index="2" Target="IMAPItemsArgument"/>
     </Layout>
     <Layout command="ShowHeader">
      <Link index="0" Target="InputArgument"/>

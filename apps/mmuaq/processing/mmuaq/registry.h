@@ -41,7 +41,9 @@ namespace registry {
 				Username,
 				Password,
 				Reference,
-				Mailbox;
+				Mailbox,
+				Sequence,
+				Items;
 		};
 
 		extern rEntry

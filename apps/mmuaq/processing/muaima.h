@@ -55,15 +55,100 @@ namespace muaima {
 		}
 	};
 
+	qENUM( Delimiter ) {
+		dNone,
+		dBracket, // '[' : for optional respone code.
+		dBrace,	// '{' : delimits the size of a literal string.
+		dQuote, // '"'  quoted string  ; must take care of '\' (escaping char).
+		d_amount,
+		d_Undefined
+	};
+
 	class rResponseDriver_
 	: public rDriver_
 	{
 	private:
 		qRMV( flw::sIFlow, F_, Flow_ );
-		bso::sBool
-			EOF_,
-			BracketIsEOF_;	// At true if a square backet ']' means a EOF.
+		bso::sBool EOF_;
+		eDelimiter Delimiter_;
 		rPendingIFlow_ Pending_;
+		bso::sSize RawAmount_;	// Remaining amount of byte to put without taking care of value.
+	private:
+		void SkipCRLF_( flw::sIFlow &Flow )
+		{
+			if ( Flow.Get() != '\r' )
+				qRGnr();
+
+			if ( Flow.Get() != '\n' )
+				qRGnr();
+		}
+		bso::sBool HandleBracketDelimitation_(
+			fdr::sByte Byte,
+			flw::sIFlow &Flow )
+		{
+			if ( Byte == ']' ) {
+				EOF_ = true;
+				Delimiter_ = dNone;
+
+				if ( Flow.View() == ' ' )
+					Flow.Skip();
+				else
+					SkipCRLF_( Flow );
+
+				return false;
+			} else
+				return true;
+		}
+		bso::sBool HandleBraceDelimitation_(
+			fdr::sByte Byte,
+			flw::sIFlow &Flow )
+		{
+			if ( Byte == '}' ) {
+				RawAmount_ += 2;	// To include the 'CRLF'.
+
+				Delimiter_ = dNone;
+			} else if ( !isdigit(Byte) ) {
+				qRGnr();
+			} else if ( RawAmount_ >= ( bso::SizeMax / 10 ) ) {
+				qRLmt();
+			} else {
+				RawAmount_ = RawAmount_ * 10 + ( Byte - '0' );
+			}
+
+			return true;
+		}
+		bso::sBool HandleQuoteDelimitation_(
+			fdr::sByte Byte,
+			flw::sIFlow &Flow )
+		{
+
+			switch ( Byte ) {
+			case '\\':
+				Byte = Flow.View();
+				if ( ( Byte != '\\' ) && (Byte != '"' ) )
+					qRGnr();
+
+				if ( RawAmount_ != 0 )
+					qRGnr();
+
+				RawAmount_ = 1;
+				break;
+			case '"':
+				Delimiter_ = dNone;
+				break;
+			default:
+				break;
+			}
+
+			return true;
+		}
+		void SetDelimiter_( eDelimiter Delimiter )
+		{
+			if ( Delimiter_ != dNone )
+				qRGnr();
+
+			Delimiter_ = Delimiter;
+		}
 	protected:
 		virtual fdr::sSize FDRRead(
 			fdr::sSize Maximum,
@@ -75,43 +160,81 @@ namespace muaima {
 
 			flw::sIFlow &Flow = F_();
 
+			if ( Maximum < 2 )	// Due to the 'Pending' handling, that must be place in the 'Buffer' to put at least chars.
+				qRVct();
+
 			if ( !EOF_ ) {
 				while ( Continue ) {
-					if ( Pending_.IsEmpty() ) {
-						if ( F_().EndOfFlow() )
-							qRGnr();
+					if ( !Pending_.IsEmpty() ) {
+						if ( Maximum > ( Amount + 1 ) ) { // To ensure that there is place in 'Buffer' to put a ' '.
+							Amount += Pending_.ReadUpTo( Maximum - Amount - 1, Buffer + Amount );
 
+							if ( Pending_.IsEmpty() )
+								if ( Flow.View() != '\r' )
+									Buffer[Amount++] = ' ';
+
+							if ( Maximum == Amount )
+								Continue = false;
+						} else
+							Continue = false;
+					} else if ( ( Delimiter_ != dBrace ) && ( RawAmount_ != 0 ) ) {
+						bso::sSize PonctualAmount = Flow.ReadUpTo( RawAmount_ > Maximum - Amount ? Maximum - Amount : RawAmount_, Buffer + Amount );
+
+						Amount += PonctualAmount;
+
+						RawAmount_ -= PonctualAmount;
+
+						Continue = false;
+					} else {
 						Byte = Flow.Get();
 
-						if ( ( Byte == '\r' )
-							 || ( BracketIsEOF_ && ( Byte ==']' ) ) )
-						{
-							Continue = false;
-							EOF_ = true;
-							BracketIsEOF_ = false;
+						switch ( Delimiter_ ) {
+						case dNone:
+							switch ( Byte ) {
+							case '\r':
+								if ( Flow.Get() != '\n' )
+									qRGnr();
+								EOF_ = true;
+								Continue = false;
+								break;
+							case '[':
+								SetDelimiter_( dBracket );
+								break;
+							case '{':
+								SetDelimiter_( dBrace );
+								break;
+							case '"':
+								SetDelimiter_( dQuote );
+								break;
+							default:
+								break;
+							}
+							break;
+						case dBracket:
+							Continue = HandleBracketDelimitation_( Byte, Flow );
+							break;
+						case dBrace:
+							Continue = HandleBraceDelimitation_( Byte, Flow );
+							break;
+						case dQuote:
+							Continue = HandleQuoteDelimitation_( Byte, Flow );
+							break;
+						default:
+							qRGnr();
+							break;
+						}
 
-							if ( Flow.EndOfFlow() )
-								qRGnr();
-
-							if ( Byte == ']' ) {
-								if ( Flow.View() == ' ' )
-									Flow.Skip();
-								else if ( Flow.View() == '\r' ) {
-									if ( Flow.EndOfFlow() || ( Flow.Get() != '\n' ) )
-										qRGnr();
-								}
-							} else if ( Flow.EndOfFlow() || ( Flow.Get() != '\n' ) )
-								qRGnr();
-						} else {
-							Buffer[Amount++] = Byte;
+						if ( Continue ) {
+							if ( ( Byte != '[' )  || ( Delimiter_ != dBracket ) )
+								Buffer[Amount++] = Byte;
 
 							if ( Amount == Maximum )
 								Continue = false;
 						}
-					} else
-						Amount = Pending_.ReadUpTo( Maximum, Buffer );
+					}
 				}
 			}
+
 			return Amount;
 		}
 		virtual void FDRDismiss( bso::sBool Unlock ) override
@@ -126,19 +249,22 @@ namespace muaima {
 		void reset( bso::sBool P = true )
 		{
 			rDriver_::reset( P );
-			tol::reset( P, Flow_, EOF_, BracketIsEOF_, Pending_ );
+			tol::reset( P, Flow_, EOF_, Pending_ );
+			Delimiter_ = d_Undefined;
+			RawAmount_ = 0;
 		}
 		qCVDTOR( rResponseDriver_ );
 		void Init(
 			flw::sIFlow &Flow,
 			const str::dString &PendingData,
-			bso::sBool BracketIsEOF )
+			eDelimiter Delimiter = dNone )
 		{
 			EOF_ = false;
-			BracketIsEOF_ = BracketIsEOF;
+			Delimiter_ = Delimiter;
 			Flow_ = &Flow;
 			rDriver_::Init( fdr::ts_Default );
 			Pending_.Init( PendingData );
+			RawAmount_ = 0;
 		}
 	};
 
@@ -343,6 +469,10 @@ namespace muaima {
 		const str::dString &Reference,
 		const str::dString &Mailbox,
 		rConsole &Console );
+	void Fetch(
+		const str::dString &Sequence,
+		const str::dString &Items,
+		rConsole &Console );
 
 	class cResponse_
 	{
@@ -357,6 +487,18 @@ namespace muaima {
 			fdr::rIDriver &Driver )
 		{
 			return MUAIMAOnResponse( Code, Driver );
+		}
+	};
+
+	class cList
+	{
+	protected:
+		virtual void MUAIMAOnMailbox( const str::dString &Name ) = 0;
+	public:
+		qCALLBACK( List );
+		void OnMailbox( const str::dString &Name )
+		{
+			return MUAIMAOnMailbox( Name );
 		}
 	};
 
@@ -417,6 +559,9 @@ namespace muaima {
 
 			return Status;
 		}
+		eStatus List(
+			const str::dString &Mailbox,
+			class cList &Callback );
 	};
 }
 

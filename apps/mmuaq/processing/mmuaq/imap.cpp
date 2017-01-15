@@ -236,6 +236,51 @@ qRT
 qRE
 }
 
+namespace {
+	void GetSequence_( str::dString &Sequence )
+	{
+		sclmisc::MGetValue( registry::parameter::imap::Sequence, Sequence );
+	}
+
+	void GetItems_( str::dString &Items )
+	{
+		sclmisc::MGetValue( registry::parameter::imap::Items, Items );
+	}
+
+	void GetMailboxSequenceAndItems_(
+		str::dString &Mailbox,
+		str::dString &Sequence,
+		str::dString &Items )
+	{
+		GetMailbox_( Mailbox );
+		GetSequence_( Sequence );
+		GetItems_( Items );
+	}
+}
+
+void imap::Fetch( void )
+{
+qRH
+	str::wString Mailbox, Sequence, Items;
+	bso::sBool Verbose = false;
+	rConsole_ Console;
+qRB
+	Verbose = misc::IsVerboseActivated();
+
+	tol::Init( Mailbox, Sequence, Items );
+	GetMailboxSequenceAndItems_( Mailbox, Sequence, Items );
+
+	Console.Init( Verbose );
+
+	muaima::Select( Mailbox, Console );
+	DumpResponses_( false, Verbose, Console );
+	muaima::Fetch( Sequence, Items, Console );
+	DumpResponses_( true, Verbose, Console );
+qRR
+qRT
+qRE
+}
+
 namespace{
 	class rSession_
 	: public misc::rVerboseIODriver,
@@ -269,9 +314,11 @@ namespace{
 void imap::Test( void )
 {
 qRH
-	rSession_ Session;
+//	rSession_ Session;
 qRB
-	Session.Init();
+//	Session.Init();
+
+	Fetch();
 qRR
 qRT
 qRE
