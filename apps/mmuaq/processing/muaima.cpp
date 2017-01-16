@@ -178,7 +178,7 @@ qRB
 			Code = PendingCode_;
 			PendingCode_ = c_Undefined;
 		}
-		ResponseDriver_.Init( Flow, PendingData );
+		ResponseDriver_.Init( Flow, PendingData, dCRLF );
 	} else {
 		if ( Flow.View() == '*' ) {
 			Flow.Skip();
@@ -216,7 +216,7 @@ qRB
 				PendingCodeIsStatus_ = false;
 			}
 
-			ResponseDriver_.Init( Flow, PendingData );
+			ResponseDriver_.Init( Flow, PendingData, dCRLF );
 		}
 	}
 qRR
@@ -350,32 +350,32 @@ void muaima::Login(
 	const str::dString &Password,
 	rConsole &Console )
 {
-	_::SendCommand(Console.GetNextTag(), _::cLogin, Console.OFlow() );
+	::_::SendCommand( Console.GetNextTag(), ::_::cLogin, Console.OFlow() );
 
 	Console.OFlow() << ' ' << Username << ' ' << Password;
 
-	_::SendCFLR( Console.OFlow() );
+	::_::SendCFLR( Console.OFlow() );
 }
 
 void muaima::Logout( rConsole &Console )
 {
-	_::SendCommand( Console.GetNextTag(), _::cLogout, Console.OFlow() );
-	_::SendCFLR( Console.OFlow() );
+	::_::SendCommand( Console.GetNextTag(), ::_::cLogout, Console.OFlow() );
+	::_::SendCFLR( Console.OFlow() );
 }
 
 void muaima::Capability( rConsole &Console )
 {
-	_::SendCommand( Console.GetNextTag(), _::cCapability, Console.OFlow() );
-	_::SendCFLR( Console.OFlow() );
+	::_::SendCommand( Console.GetNextTag(), ::_::cCapability, Console.OFlow() );
+	::_::SendCFLR( Console.OFlow() );
 }
 
 void muaima::Select(
 	const str::dString &Mailbox,
 	rConsole &Console )
 {
-	_::SendCommand( Console.GetNextTag(), _::cSelect, Console.OFlow() );
+	::_::SendCommand( Console.GetNextTag(), ::_::cSelect, Console.OFlow() );
 	Console.OFlow() << ' ' << Mailbox;
-	_::SendCFLR( Console.OFlow() );
+	::_::SendCFLR( Console.OFlow() );
 }
 
 void muaima::List(
@@ -383,9 +383,9 @@ void muaima::List(
 	const str::dString &Mailbox,
 	rConsole &Console )
 {
-	_::SendCommand( Console.GetNextTag(), _::cList, Console.OFlow() );
+	::_::SendCommand( Console.GetNextTag(), ::_::cList, Console.OFlow() );
 	Console.OFlow() << " \"" << Reference << "\" \"" << Mailbox << '"';
-	_::SendCFLR( Console.OFlow() );
+	::_::SendCFLR( Console.OFlow() );
 }
 
 void muaima::LSub(
@@ -393,9 +393,9 @@ void muaima::LSub(
 	const str::dString &Mailbox,
 	rConsole &Console )
 {
-	_::SendCommand( Console.GetNextTag(), _::cLSub, Console.OFlow() );
+	::_::SendCommand( Console.GetNextTag(), ::_::cLSub, Console.OFlow() );
 	Console.OFlow() << " \"" << Reference << "\" \"" << Mailbox << '"';
-	_::SendCFLR( Console.OFlow() );
+	::_::SendCFLR( Console.OFlow() );
 }
 
 void muaima::Fetch(
@@ -403,11 +403,125 @@ void muaima::Fetch(
 	const str::dString &Items,
 	rConsole &Console )
 {
-	_::SendCommand(Console.GetNextTag(), _::cFetch, Console.OFlow() );
+	::_::SendCommand(Console.GetNextTag(), ::_::cFetch, Console.OFlow() );
 	Console.OFlow() << ' ' << Sequence << ' ' << Items;
-	_::SendCFLR( Console.OFlow() );
+	::_::SendCFLR( Console.OFlow() );
 }
 
+const char *item::GetLabel( eName Name )
+{
+	switch ( Name ) {
+	case nBody:
+		return "Body";
+		break;
+	case nBodyWithSection:
+		return "Body";
+		break;
+	case nBodyStructure:
+		return "BodyStructure";
+		break;
+	case nEnvelope:
+		return "Envelope";
+		break;
+	case nFlags:
+		return "Flags";
+		break;
+	case nInternalDate:
+		return "InternalDate";
+		break;
+	case nRFC822:
+		return "RFC.822";
+		break;
+	case nRFC822_Header:
+		return "RFC822.Header";
+		break;
+	case nRFC822_Size:
+		return "RFC822.Sisze";
+		break;
+	case nRFC822_Text:
+		return "RFC822.Text";
+		break;
+	case nUID:
+		return "UID";
+		break;
+	default:
+		qRGnr();
+		break;
+	}
+
+	return NULL;	// To avoid a warning.
+}
+
+namespace item_ {
+	using namespace muaima::item;
+
+	namespace {
+		stsfsm::wAutomat Automat_;
+	}
+
+	namespace {
+		const str::dString &GetLabelForAutomat_(
+			eName Name,
+			str::dString &Label )
+		{
+			if ( Name == nBodyWithSection )
+				Label.Append( "dummy" );	// Should be found as already exiting 'nBody' label;
+			else {
+				Label.Append( GetLabel( Name ) );
+				str::ToUpper( Label );
+			}
+
+			return Label;
+		}
+	}
+
+	eName GetName( const str::dString &Pattern )
+	{
+		return stsfsm::GetId( Pattern, Automat_, n_Undefined, n_amount );
+	}
+
+	void FillAutomat( void )
+	{
+		Automat_.Init();
+		stsfsm::Fill<eName>( Automat_, n_amount, GetLabelForAutomat_ );
+	}
+
+	void GetName(
+		flw::sIFlow &Flow,
+		str::dString &Name )
+	{
+		flw::sByte Byte = 0;
+
+		while ( isalpha( Byte = Flow.View() ) || ( Byte == '.' ) )
+			Name.Append( Byte );
+	}
+
+}
+
+item::eName muaima::item::rConsole::Get( void )
+{
+	eName Name = n_Undefined;
+qRH
+	str::wString Pattern;
+qRB
+	if ( Flow_.Get() == ')' )
+		Name = n_None;
+	else {
+		tol::Init( Pattern );
+		str::ToUpper( Pattern );
+
+		Name = item_::GetName( Pattern );
+
+		if ( ( Name == nBody ) && ( Flow_.View() == '[' ) )
+			Name = nBodyWithSection;
+		else if ( Flow_.Get() != ' ' )
+			qRGnr();
+	}
+qRR
+qRT
+qRE
+	return Name;
+}
 
 void muaima::rSession::RetrieveMessage_( void )
 {
@@ -637,6 +751,7 @@ namespace {
 	{
 		code_::FillAutomat();
 		status_::FillAutomat();
+		item_::FillAutomat();
 	}
 }
 

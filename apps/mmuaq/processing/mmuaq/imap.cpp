@@ -109,29 +109,34 @@ namespace{
 	  public muaima::rConsole
 	{
 	private:
-		bso::sBool Connected_ = true;
+		bso::sBool Connected_;
+		bso::sBool Verbose_;
 	public:
 		void reset( bso::sBool P = true )
 		{
 			if ( P ) {
-				if ( IsConnected() )
+				if ( IsConnected() ) {
 					muaima::Logout( *this );
+					DumpResponses_( false, Verbose_, *this );
+				}
 			}
 
 			rConsole::reset( P );
 			misc::rVerboseIODriver::reset( P );
 			Connected_ = false;
+			Verbose_ = false;
 		}
 		qCVDTOR( rConsole_ );
-		void Init( bso::sBool Activate )
+		void Init( bso::sBool Verbose )
 		{
 			Connected_ = false;
-			misc::rVerboseIODriver::Init( registry::parameter::imap::HostPort, Activate ? misc::vOut : misc::vNone );
+			misc::rVerboseIODriver::Init( registry::parameter::imap::HostPort, Verbose ? misc::vOut : misc::vNone );
 			muaima::rConsole::Init( *this );
 			muaima::Connect( *this );
-			DumpResponses_( false, Activate, *this );
+			DumpResponses_( false, Verbose, *this );
 			Connected_ = true;
-			Login_( Activate, *this );
+			Verbose_ = Verbose;
+			Login_( Verbose, *this );
 		}
 	};
 }

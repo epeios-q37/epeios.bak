@@ -15,6 +15,10 @@ MIDDLE
 - Implementing better thread-safety for the registry, in peculiar the common registry as defined in 'SCLRGSTRY'/'SCLMISC'.
 - XDHTML : expose in the XML flow tje nature of the interface (desktop, web, touchscreen, mobile...).
 - ERR : Handling of 'qRReturn' when an error is already in progress.
+- SCLTOOL :
+	- implementation of the possibility to display a free text defined in the configuration file for '--help' command.
+	- implementation of the displaying of options which are common to all commands, to avoid to put them in each command definition
+	  ('--verbose' in 'mmuaq', for example, or the '-s|--setup' option).
 
 LONG :
 - 'XPP' : Réimplement in a simplified manner.

@@ -55,107 +55,262 @@ namespace muaima {
 		}
 	};
 
+	// Main delimiter, which is dicarded ; only the content is returned.
 	qENUM( Delimiter ) {
-		dNone,
-		dBracket, // '[' : for optional respone code.
-		dBrace,	// '{' : delimits the size of a literal string.
-		dQuote, // '"'  quoted string  ; must take care of '\' (escaping char).
+		dNone,			// No yet delimiter detected. This one is the initial one, or the below one.
+		dCRLF,			// To read the entire message until 'CRLF' of an status response.
+		dBracket,		// '[' : for optional response code. Could be the other initial one, instead of the above one.
+		dParenthesis,	// '(' : delimits the size of a literal string.
+		dQuote,			// Quoted ('"') string.
+		dLiteral,		// Literal ('{') string.
+//		dSpace,			// Separation of basic strings. Can be a space, CRLF, EOF.
 		d_amount,
 		d_Undefined
 	};
 
-	class rResponseDriver_
-	: public rDriver_
+	namespace _ {
+		// Delimiters are re-issued.
+		qENUM( Context ) {
+			cFree,
+			cQuoted,	// Quoted string.
+			cLiteral,	// Reading literal string size. The content it self id handled through 'Force_'.
+			cEOF,		// All data red;
+			// No parenthensis, as 'Level_' is enough ti inform about.
+			// No bracket corresponding item, because it's always a root delimiter.
+			c_amount,
+			c_Undefined
+		};
+	}
+
+	inline void SkipCRLF_( flw::sIFlow &Flow )
+	{
+		if ( Flow.Get() != '\r' )
+			qRGnr();
+
+		if ( Flow.Get() != '\n' )
+			qRGnr();
+	}
+
+	class rDriverBase_
 	{
 	private:
 		qRMV( flw::sIFlow, F_, Flow_ );
-		bso::sBool EOF_;
 		eDelimiter Delimiter_;
+		_::eContext Context_;
 		rPendingIFlow_ Pending_;
-		bso::sSize RawAmount_;	// Remaining amount of byte to put without taking care of value.
-	private:
-		void SkipCRLF_( flw::sIFlow &Flow )
-		{
-			if ( Flow.Get() != '\r' )
-				qRGnr();
-
-			if ( Flow.Get() != '\n' )
-				qRGnr();
-		}
-		bso::sBool HandleBracketDelimitation_(
+		bso::sSize Level_;	// Parenthensis level.
+		bso::sSize Force_;	// Remaining amount of byte to put without taking care of value.
+		void HandleFreeContext_(
 			fdr::sByte Byte,
-			flw::sIFlow &Flow )
+			flw::sIFlow &Flow,
+			fdr::sByte *Buffer,
+			fdr::sSize &Amount )
 		{
-			if ( Byte == ']' ) {
-				EOF_ = true;
-				Delimiter_ = dNone;
-
-				if ( Flow.View() == ' ' )
-					Flow.Skip();
-				else
-					SkipCRLF_( Flow );
-
-				return false;
-			} else
-				return true;
-		}
-		bso::sBool HandleBraceDelimitation_(
-			fdr::sByte Byte,
-			flw::sIFlow &Flow )
-		{
-			if ( Byte == '}' ) {
-				RawAmount_ += 2;	// To include the 'CRLF'.
-
-				Delimiter_ = dNone;
-			} else if ( !isdigit(Byte) ) {
-				qRGnr();
-			} else if ( RawAmount_ >= ( bso::SizeMax / 10 ) ) {
-				qRLmt();
-			} else {
-				RawAmount_ = RawAmount_ * 10 + ( Byte - '0' );
-			}
-
-			return true;
-		}
-		bso::sBool HandleQuoteDelimitation_(
-			fdr::sByte Byte,
-			flw::sIFlow &Flow )
-		{
+			bso::sBool Put = true;	// If 'true', 'Byte' is put in 'Buffer'.
 
 			switch ( Byte ) {
-			case '\\':
-				Byte = Flow.View();
-				if ( ( Byte != '\\' ) && (Byte != '"' ) )
-					qRGnr();
-
-				if ( RawAmount_ != 0 )
-					qRGnr();
-
-				RawAmount_ = 1;
-				break;
 			case '"':
-				Delimiter_ = dNone;
+				if ( Delimiter_ == dNone ) {
+					Delimiter_ = dQuote;
+					Put = false;
+				} else if ( Delimiter_ == dQuote ) {
+					Context_ = _::cEOF;
+					Put = false;
+				} else
+					Context_ = _::cQuoted;
+				break;
+			case '(':
+				if ( Delimiter_ == dNone ) {
+					Delimiter_ = dParenthesis;
+					Put = false;
+				} else if ( Level_ == bso::U8Max )
+					qRLmt();
+				else 
+					Level_++;
+				// We stay in the same context.
+				break;
+			case ')':
+				if ( Level_ == 0 ) {
+					if ( Delimiter_ != dParenthesis )
+						qRGnr();
+
+					Context_ = _::cEOF;
+					Put = false;
+				} else
+					Level_--;
+
+				// We stay in the same context.
+				break;
+			case '[':	// Can happen with 'FETCH' 'BODY[HEADER]' reponse.
+				if ( Delimiter_ == dBracket )
+					qRGnr();
+				break;
+			case ']':
+				if ( Delimiter_ == dBracket ) {
+					Context_ = _::cEOF;
+					Put = false;
+				}
+				break;		
+			case '{':
+				if ( Delimiter_ == dNone ) {
+					Delimiter_ = dBracket;
+					Put = false;
+				}
+
+				Context_ = _::cLiteral;
+				break;
+			case '}':
+				qRGnr();
+				break;
+			case '\r':
+				if ( Flow.View() != '\n' )
+					qRGnr();
+
+				if ( ( Delimiter_ == dCRLF ) || ( Delimiter_ == dNone ) ) {	// Can sometimes occur when directly called from 'HandleFreeContext_(...)'.
+					Context_ = _::cEOF;
+					Put = false;
+				} else 
+					Force_ = 1;
+				break;
+			case '\n':	// Should have be already skipped.
+				qRGnr();
+				break;
+			case 0:		// Not allowed
+				qRGnr();
 				break;
 			default:
 				break;
 			}
 
+			if ( Put )
+				Buffer[Amount++] = Byte;
+		}
+		bso::sBool HandleQuotedContext_(
+			fdr::sByte Byte,
+			flw::sIFlow &Flow,
+			fdr::sByte *Buffer,
+			fdr::sSize &Amount )
+		{
+			switch ( Byte ) {
+			case '\\':
+				Byte = Flow.View();
+				if ( ( Byte != '\\' ) && ( Byte != '"' ) )
+					qRGnr();
+
+				if ( Delimiter_ == dQuote ) {
+					Buffer[Amount++] = Flow.Get();
+				} else {
+					Buffer[Amount++] = '\\';
+					Force_ = 1;
+				}
+				break;
+			case '"':
+				if ( Delimiter_ == dQuote )
+					Context_ = _::cEOF;
+				else {
+					Buffer[Amount++] = Byte;
+					Context_ = _::cFree;
+				}
+				break;
+			default:
+				Buffer[Amount++]=Byte;
+				break;
+			}
+
 			return true;
 		}
-		void SetDelimiter_( eDelimiter Delimiter )
+		void HandleLiteralContext_(
+			fdr::sByte Byte,
+			flw::sIFlow &Flow,
+			fdr::sByte *Buffer,
+			fdr::sSize &Amount )
 		{
-			if ( Delimiter_ != dNone )
+			if ( Byte == '}' ) {
+				if ( Delimiter_ != dLiteral )
+					Force_ += 2;	// To include the 'CRLF'.
+				Context_ = _::cFree;
+			} else if ( !isdigit(Byte) ) {
 				qRGnr();
+			} else if ( Force_ < ( ( bso::SizeMax / 10 ) -1 ) ) {
+				Force_ = Force_ * 10 + ( Byte - '0' );
+			} else
+				qRLmt();
 
-			Delimiter_ = Delimiter;
+			if ( Delimiter_ != dLiteral )
+				Buffer[Amount++] = Byte;
 		}
-	protected:
-		virtual fdr::sSize FDRRead(
-			fdr::sSize Maximum,
-			fdr::sByte* Buffer ) override
+		bso::sBool HandleContext_(
+			flw::sIFlow &Flow,
+			fdr::sByte *Buffer,
+			fdr::sSize &Amount )
 		{
-			bso::sBool Continue = true;
-			fdr::sByte Byte = 0;
+			bso::sBool HandleSPCRLF = true;
+
+			switch ( Context_ ) {
+			case _::cFree:
+				HandleFreeContext_( Flow.Get(), Flow, Buffer, Amount );
+				break;
+			case _::cQuoted:
+				HandleQuotedContext_( Flow.Get(), Flow, Buffer, Amount );
+				break;
+			case _::cLiteral:
+				HandleLiteralContext_( Flow.Get(), Flow, Buffer, Amount );
+				break;
+			case _::cEOF:
+				HandleSPCRLF = false;
+				break;
+			default:
+				qRGnr();
+				break;
+			}
+
+			if ( Context_ == _::cEOF ) {
+				if ( HandleSPCRLF && !Flow.EndOfFlow() ) {
+					switch ( Flow.Get() ) {
+					case ' ':
+						break;
+					case '\r':
+						if ( Flow.Get() != '\n' )
+							qRGnr();
+						break;
+					case '\n':	// '\r' was already eaten.
+						break;
+					default:	// All above space chars are already be eaten.
+						break;
+					}
+				}
+
+				return false;
+			} else
+				return true;
+
+		}
+	public:
+		void reset( bso::sBool P = true )
+		{
+			tol::reset( P, Flow_, Pending_ );
+			Delimiter_ = d_Undefined;
+			Context_ = _::c_Undefined,
+			Force_ = 0;
+			Level_ = 0;
+		}
+		qCVDTOR( rDriverBase_ );
+		void Init(
+			flw::sIFlow &Flow,
+			const str::dString &PendingData,
+			eDelimiter Delimiter )
+		{
+			Delimiter_ = Delimiter;
+			Context_ = _::cFree;
+			Flow_ = &Flow;
+			Pending_.Init( PendingData );
+			Force_ = 0;
+			Level_ = 0;
+		}
+		 fdr::sSize Read(
+			fdr::sSize Maximum,
+			fdr::sByte *Buffer )
+		{
 			fdr::sSize Amount = 0;
 
 			flw::sIFlow &Flow = F_();
@@ -163,106 +318,75 @@ namespace muaima {
 			if ( Maximum < 2 )	// Due to the 'Pending' handling, that must be place in the 'Buffer' to put at least chars.
 				qRVct();
 
-			if ( !EOF_ ) {
-				while ( Continue ) {
-					if ( !Pending_.IsEmpty() ) {
-						if ( Maximum > ( Amount + 1 ) ) { // To ensure that there is place in 'Buffer' to put a ' '.
-							Amount += Pending_.ReadUpTo( Maximum - Amount - 1, Buffer + Amount );
+			while ( Amount < Maximum ) {
+				if ( !Pending_.IsEmpty() ) {
+					if ( Maximum > ( Amount + 1 ) ) { // To ensure that there is place in 'Buffer' to put a ' '.
+						Amount += Pending_.ReadUpTo( Maximum - Amount - 1, Buffer + Amount );
 
-							if ( Pending_.IsEmpty() )
-								if ( Flow.View() != '\r' )
-									Buffer[Amount++] = ' ';
+						if ( Pending_.IsEmpty() )
+							if ( Flow.View() != '\r' )
+								Buffer[Amount++] = ' ';
+					} else
+						Maximum = Amount;	// To exit the loop.
+				} else if ( ( Force_ != 0 ) && ( Context_ != _::cLiteral ) ) {
+					bso::sSize PonctualAmount = Flow.ReadUpTo( Force_ > Maximum - Amount ? Maximum - Amount : Force_, Buffer + Amount );
 
-							if ( Maximum == Amount )
-								Continue = false;
-						} else
-							Continue = false;
-					} else if ( ( Delimiter_ != dBrace ) && ( RawAmount_ != 0 ) ) {
-						bso::sSize PonctualAmount = Flow.ReadUpTo( RawAmount_ > Maximum - Amount ? Maximum - Amount : RawAmount_, Buffer + Amount );
+					Amount += PonctualAmount;
 
-						Amount += PonctualAmount;
-
-						RawAmount_ -= PonctualAmount;
-
-						Continue = false;
-					} else {
-						Byte = Flow.Get();
-
-						switch ( Delimiter_ ) {
-						case dNone:
-							switch ( Byte ) {
-							case '\r':
-								if ( Flow.Get() != '\n' )
-									qRGnr();
-								EOF_ = true;
-								Continue = false;
-								break;
-							case '{':
-								SetDelimiter_( dBrace );
-								break;
-							case '"':
-								SetDelimiter_( dQuote );
-								break;
-							default:
-								// 'dBracket' is only set on 'Init(...)' (optional response code), hence all '[' are ignored.
-								break;
-							}
-							break;
-						case dBracket:
-							Continue = HandleBracketDelimitation_( Byte, Flow );
-							break;
-						case dBrace:
-							Continue = HandleBraceDelimitation_( Byte, Flow );
-							break;
-						case dQuote:
-							Continue = HandleQuoteDelimitation_( Byte, Flow );
-							break;
-						default:
-							qRGnr();
-							break;
-						}
-
-						if ( Continue ) {
-							if ( ( Byte != '[' )  || ( Delimiter_ != dBracket ) )
-								Buffer[Amount++] = Byte;
-
-							if ( Amount == Maximum )
-								Continue = false;
-						}
-					}
+					Force_ -= PonctualAmount;
+				} else {
+					if ( !HandleContext_( Flow, Buffer, Amount ) )
+						Maximum = Amount;	// To exit the loop.
 				}
 			}
 
 			return Amount;
 		}
-		virtual void FDRDismiss( bso::sBool Unlock ) override
+		void Dismiss( bso::sBool Unlock )
 		{
 			F_().Dismiss( Unlock );
 		}
-		virtual fdr::sTID FDRITake( fdr::sTID Owner ) override
+		fdr::sTID ITake( fdr::sTID Owner )
 		{
 			return F_().IDriver().ITake( Owner );
+		}
+
+	};
+
+	class rResponseDriver_
+	: public rDriver_
+	{
+	private:
+		rDriverBase_ Base_;
+	protected:
+		virtual fdr::sSize FDRRead(
+			fdr::sSize Maximum,
+			fdr::sByte* Buffer ) override
+		{
+			return Base_.Read( Maximum, Buffer );
+		}
+		virtual void FDRDismiss( bso::sBool Unlock ) override
+		{
+			return Base_.Dismiss( Unlock );
+		}
+		virtual fdr::sTID FDRITake( fdr::sTID Owner ) override
+		{
+			return Base_.ITake( Owner );
 		}
 	public:
 		void reset( bso::sBool P = true )
 		{
 			rDriver_::reset( P );
-			tol::reset( P, Flow_, EOF_, Pending_ );
-			Delimiter_ = d_Undefined;
-			RawAmount_ = 0;
+			Base_.reset( P );
 		}
 		qCVDTOR( rResponseDriver_ );
 		void Init(
 			flw::sIFlow &Flow,
 			const str::dString &PendingData,
-			eDelimiter Delimiter = dNone )
+			eDelimiter Delimiter )
 		{
-			EOF_ = false;
-			Delimiter_ = Delimiter;
-			Flow_ = &Flow;
+			Base_.Init( Flow, PendingData, Delimiter );
 			rDriver_::Init( fdr::ts_Default );
-			Pending_.Init( PendingData );
-			RawAmount_ = 0;
 		}
 	};
 
@@ -375,10 +499,6 @@ namespace muaima {
 
 			return Tag_;
 		}
-		flw::sIFlow &IFlow( void )
-		{
-			return IFlow_;
-		}
 		txf::sOFlow &OFlow( void )
 		{
 			return OFlow_;
@@ -471,6 +591,173 @@ namespace muaima {
 		const str::dString &Sequence,
 		const str::dString &Items,
 		rConsole &Console );
+
+	// Handles items pairs (
+	namespace  item {
+		qENUM( Name ) {
+			nBody,
+			nBodyWithSection,
+			nBodyStructure,
+			nEnvelope,
+			nFlags,
+			nInternalDate,
+			nRFC822,
+			nRFC822_Header,
+			nRFC822_Size,
+			nRFC822_Text,
+			nUID,
+			n_amount,
+			n_None,
+			n_Undefined,
+		};
+
+		const char *GetLabel( eName Name );
+
+		qENUM( State_ )	{
+			sQuoted,	// Reading a quoted value,
+			sLiteralSize,	// Reading the size of a literal string.
+			sLiteralContent,	// Reading the content of a literal string.
+			sEOF,	// EOF is reached,
+			s_amount,
+			s_Undefined
+		};
+
+		class rValueDriver_
+		: public rDriver_
+		{
+		public:
+			flw::sDressedIFlow<> Flow_;
+			eState_ State_;
+			bso::sSize LiteralSize_;	// The remaining size of a literal string.
+		protected:
+			virtual fdr::sSize FDRRead(
+				fdr::sSize Maximum,
+				fdr::sByte* Buffer ) override
+			{
+				fdr::sByte Byte = 0, PonctualAmount = 0;
+				fdr::sSize Amount = 0;
+
+				while ( ( State_ != sEOF ) && ( Amount < Maximum ) ) {
+					Byte = Flow_.Get();
+
+					switch ( State_ ) {
+					case s_Undefined:
+						switch ( Byte ) {
+						case '"':
+							State_ = sQuoted;
+							break;
+						case '{':
+							if( LiteralSize_ != 0 )
+								qRGnr();
+
+							State_ = sLiteralSize;
+							break;
+						default:
+							qRGnr();
+							break;
+						}
+					case sQuoted:
+						if ( Byte == '\\' ) {
+							switch ( Byte = Flow_.Get() ) {
+							case '\\':
+							case '"':
+								Buffer[Amount++] = Byte;
+								break;
+							default:
+								qRGnr();
+								break;
+							}
+						} else if ( Byte == '"' )
+							State_ = sEOF;
+						else
+							Buffer[Amount++] = Byte;
+						break;
+					case sLiteralSize:
+						if ( Byte == '}' ) {
+							SkipCRLF_( Flow_ );
+
+							State_ = sLiteralContent;
+						} else {
+							if ( LiteralSize_ >= ( bso::SizeMax / 10 ) )
+								qRLmt();
+
+							if ( !isdigit( Byte ) )
+								qRGnr();
+
+							LiteralSize_ = LiteralSize_ * 10 + ( Byte - '0' );
+						}
+						break;
+					case sLiteralContent:
+						PonctualAmount = Flow_.ReadUpTo( ( Maximum - Amount ) < LiteralSize_ ? Maximum - Amount : LiteralSize_, Buffer + Amount );
+
+						Amount += PonctualAmount;
+						LiteralSize_ -= PonctualAmount;
+
+						if ( LiteralSize_ == 0 )
+							State_ = sEOF;
+						break;
+					default:
+						// Also when 'State_' == 'sEOF', which shoud not occur here.
+						qRGnr();
+						break;
+					}
+				}
+
+				return Amount;
+			}
+			virtual void FDRDismiss( bso::sBool Unlock ) override
+			{
+				Flow_.Dismiss( Unlock );
+			}
+			virtual fdr::sTID FDRITake( fdr::sTID Owner ) override
+			{
+				return Flow_.IDriver().ITake( Owner );
+			}
+		public:
+			void reset( bso::sBool P = true ) {
+				tol::reset( P, Flow_ );
+
+				State_ = s_Undefined;
+				LiteralSize_= 0;
+			}
+			qCVDTOR( rValueDriver_ );
+			void Init( fdr::rIDriver &Driver )
+			{
+				State_ = s_Undefined;
+				LiteralSize_= 0;
+			}
+			void Prepare( void )
+			{
+				State_ = s_Undefined;
+				LiteralSize_= 0;
+			}
+		};
+
+		class rConsole
+		{
+		private:
+			flw::sDressedIFlow<> Flow_;
+			rValueDriver_ ValueDriver_;
+		public:
+			void reset( bso::sBool P = true )
+			{
+				tol::reset( P, Flow_, ValueDriver_ );
+			}
+			qCDTOR( rConsole );
+			void Init( fdr::rIDriver &Driver )
+			{
+				Flow_.Init( Driver );
+				ValueDriver_.Init( Driver );
+			}
+			eName Get( void );
+			fdr::rIDriver &GetValueDriver( void )
+			{
+				ValueDriver_.Prepare();
+
+				return ValueDriver_;
+			}
+		};
+	}
 
 	class cResponse_
 	{
