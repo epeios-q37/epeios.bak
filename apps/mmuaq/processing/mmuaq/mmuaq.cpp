@@ -129,6 +129,7 @@ namespace {
 		return pop3::UIDL();
 	}
 
+	// Low-level IMAP commands.
 	void IMAPCapability_( void )
 	{
 		return imap::Capability();
@@ -152,6 +153,12 @@ namespace {
 	void IMAPFetch_( void )
 	{
 		return imap::Fetch();
+	}
+
+	// High-level IMAP commands 
+	void IMAPFolders_( void )
+	{
+		return imap::Folders();
 	}
 
 	void IMAPTest_( void )
@@ -352,6 +359,7 @@ qRB
 	C( IMAPSelect );
 	C( IMAPFetch );
 	C( IMAPTest );
+	C( IMAPFolders );
 //	C( GetIndexes );
 	C( ShowHeader );
 	C( GetField );

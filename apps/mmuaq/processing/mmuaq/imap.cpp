@@ -46,10 +46,10 @@ namespace {
 		bso::sBool Verbose,
 		muaima::rConsole &Console )
 	{
-		muaima::eCode Code = muaima::c_Undefined;
+		muaima::eResponseCode Code = muaima::rc_Undefined;
 
-		while ( ( Code = Console.GetPendingCode() ) != muaima::c_None ) {
-			if ( Verbose || ( Concerned &&  ( Code != muaima::cOK ) ) ) {
+		while ( ( Code = Console.GetPendingResponseCode() ) != muaima::rc_None ) {
+			if ( Verbose || ( Concerned &&  ( Code != muaima::rcOK ) ) ) {
 				fdr::rIDriver &Driver = Console.GetResponseDriver();
 
 				cio::COut << muaima::GetLabel( Code );
@@ -286,7 +286,7 @@ qRT
 qRE
 }
 
-namespace{
+namespace {
 	class rSession_
 	: public misc::rVerboseIODriver,
 	  public muaima::rSession
@@ -307,23 +307,61 @@ namespace{
 
 			GetUsernameAndPassword_( Username, Password );
 
-			misc::rVerboseIODriver::Init( registry::parameter::imap::HostPort, misc::IsVerboseActivated() ? misc::vOut : misc::vNone );
+			misc::rVerboseIODriver::Init( registry::parameter::imap::HostPort, misc::IsVerboseActivated() ? misc::vInAndOut : misc::vNone );
 			muaima::rSession::Init( *this, Username, Password );
 		qRR
 		qRT
 		qRE
 		}
 	};
+
+	class cList_
+	: public muaima::cList
+	{
+	protected:
+		virtual void MUAIMAOnMailbox( const str::dString &Mailbox ) override
+		{
+			cio::COut << Mailbox << txf::nl;
+		}
+	public:
+		void reset( bso::sBool = true )
+		{}
+		qCVDTOR( cList_ );
+		void Init( void )
+		{}
+	};
+
+}
+
+void imap::Folders( void )
+{
+qRH
+	rSession_ Session;
+	cList_ Callback;
+	str::wString Folder;
+qRB
+	Folder.Init();
+	sclmisc::OGetValue( registry::parameter::imap::Folder, Folder );
+
+	Session.Init();
+
+	Callback.Init();
+	Session.GetFolders( Folder, Callback );
+qRR
+qRT
+qRE
 }
 
 void imap::Test( void )
 {
 qRH
-//	rSession_ Session;
+	rSession_ Session;
+	cList_ Callback;
 qRB
-//	Session.Init();
+	Session.Init();
 
-	Fetch();
+	Callback.Init();
+	Session.GetFolders( str::wString( "" ), Callback );
 qRR
 qRT
 qRE

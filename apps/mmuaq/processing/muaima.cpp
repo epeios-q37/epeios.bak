@@ -23,8 +23,6 @@
 
 using namespace muaima;
 
-#define EOFT	if ( Flow.EndOfFlow() ) qRGnr();
-
 namespace {
 	inline const str::dString &GetAlphanumMinus_(
 		flw::sIFlow &Flow,
@@ -38,9 +36,9 @@ namespace {
 	}
 }
 
-#define C( name )	case c##name : return #name; break
+#define C( name )	case rc##name : return #name; break
  
-const char *muaima::GetLabel( eCode Code )
+const char *muaima::GetLabel( eResponseCode Code )
 {
 	switch ( Code ) {
 	C( OK );
@@ -53,10 +51,10 @@ const char *muaima::GetLabel( eCode Code )
 	C( Capability );
 	C( Parse );
 	C( PermanentFlags );
-	case cReadOnly:
+	case rcReadOnly:
 		return "Read-Only";
 		break;
-	case cReadWrite:
+	case rcReadWrite:
 		return "Read-Write";
 		break;
 	C( TryCreate );
@@ -104,7 +102,7 @@ namespace code_ {
 		stsfsm::wAutomat Automat;
 
 		const str::dString &GetUCLabel(
-			eCode Code,
+			eResponseCode Code,
 			str::dString &Label )
 		{
 			Label.Append( GetLabel( Code ) );
@@ -114,29 +112,27 @@ namespace code_ {
 			return Label;
 		}
 
-		eCode GetCode( const str::dString &Pattern )
+		eResponseCode GetCode( const str::dString &Pattern )
 		{
-			return stsfsm::GetId( Pattern, Automat, c_Undefined, c_amount );
+			return stsfsm::GetId( Pattern, Automat, rc_Undefined, rc_amount );
 		}
 	}
 
 	void FillAutomat( void )
 	{
 		_::Automat.Init();
-		stsfsm::Fill<eCode>( _::Automat, c_amount, _::GetUCLabel );
+		stsfsm::Fill<eResponseCode>( _::Automat, rc_amount, _::GetUCLabel );
 	}
 
-	eCode Get(
+	eResponseCode Get(
 		flw::sIFlow &Flow,
 		str::dString &Before )
 	{
-		eCode Code = c_Undefined;
+		eResponseCode Code = rc_Undefined;
 	qRH
 		str::wString Pattern;
 		flw::sByte Byte = 0;
 	qRB
-		EOFT;
-
 		if ( isdigit( Flow.View() ) ) {
 			GetAlphanumMinus_( Flow, Before );
 
@@ -150,8 +146,6 @@ namespace code_ {
 
 		Code = _::GetCode( Pattern );
 
-		EOFT;
-
 		if ( Flow.View() == ' ' )
 			Flow.Skip();
 	qRR
@@ -161,22 +155,22 @@ namespace code_ {
 	}
 }
 
-eCode muaima::rConsole::GetPendingCode( void )
+eResponseCode muaima::rConsole::GetPendingResponseCode( void )
 {
-	eCode Code = c_Undefined;
+	eResponseCode Code = rc_Undefined;
 qRH
 	flw::sIFlow &Flow = IFlow_;
 	str::wString PendingData, Tag;
 qRB
 	PendingData.Init();
 
-	if ( PendingCode_ != c_Undefined ) {
+	if ( PendingCode_ != rc_Undefined ) {
 		if ( PendingCodeIsStatus_ ) {
-			Code = c_None;
+			Code = rc_None;
 			PendingCodeIsStatus_ = false;
 		} else {
 			Code = PendingCode_;
-			PendingCode_ = c_Undefined;
+			PendingCode_ = rc_Undefined;
 		}
 		ResponseDriver_.Init( Flow, PendingData, dCRLF );
 	} else {
@@ -193,14 +187,10 @@ qRB
 			PendingCodeIsStatus_ = true;
 		}
 
-		EOFT;
-
 		if ( Flow.Get() != ' ' )
 			qRGnr();
 
 		Code = code_::Get( Flow, PendingData );
-
-		EOFT;
 
 		if ( Flow.View() == '[' ) {
 			PendingCode_ = Code;
@@ -212,7 +202,7 @@ qRB
 		} else {
 			if ( PendingCodeIsStatus_ ) {
 				PendingCode_ = Code;
-				Code = c_None;
+				Code = rc_None;
 				PendingCodeIsStatus_ = false;
 			}
 
@@ -264,8 +254,6 @@ namespace status_ {
 	qRH
 		str::wString Pattern;
 	qRB
-		EOFT;
-
 		Pattern.Init();
 
 		GetAlphanumMinus_( Flow, Pattern );
@@ -436,7 +424,7 @@ const char *item::GetLabel( eName Name )
 		return "RFC822.Header";
 		break;
 	case nRFC822_Size:
-		return "RFC822.Sisze";
+		return "RFC822.Size";
 		break;
 	case nRFC822_Text:
 		return "RFC822.Text";
@@ -465,7 +453,7 @@ namespace item_ {
 			str::dString &Label )
 		{
 			if ( Name == nBodyWithSection )
-				Label.Append( "dummy" );	// Should be found as already exiting 'nBody' label;
+				Label.Append( "dummy" );	// Should be found as already existing 'nBody' label;
 			else {
 				Label.Append( GetLabel( Name ) );
 				str::ToUpper( Label );
@@ -561,21 +549,21 @@ eStatus muaima::rSession::HandleResponses_(
 	cResponse_ &ReponseCallback,
 	qRPN )
 {
-	eCode Code = c_Undefined;
+	eResponseCode Code = rc_Undefined;
 
-	while ( ( Code = Console_.GetPendingCode()) != c_None )
+	while ( ( Code = Console_.GetPendingResponseCode()) != rc_None )
 		ReponseCallback.OnResponse( Code, Console_.GetResponseDriver() );
 
 	return HandleStatus_( qRP );
 }
 
 namespace {
-	class sNOPReponseCallback_
+	class sNOPResponseCallback_
 	: public cResponse_
 	{
 	protected:
 		virtual void MUAIMAOnResponse(
-			eCode Code,
+			eResponseCode Code,
 			fdr::rIDriver &Driver ) override
 		{
 			Driver.Drain();
@@ -585,7 +573,7 @@ namespace {
 		{
 			// Standardization.
 		}
-		qCVDTOR( sNOPReponseCallback_ );
+		qCVDTOR( sNOPResponseCallback_ );
 		void Init( void )
 		{
 			// Standardization.
@@ -602,7 +590,6 @@ eStatus muaima::rSession::Connect_(
 
 	Connect( Console_ );
 	Status = HandleResponses_( NOPResponseCallback_, qRP );
-
 
 	if ( Status == sOK ) {
 		Login( Username, Password, Console_ );
@@ -623,9 +610,25 @@ namespace {
 		while ( ( Byte = Flow.Get() ) != Separator )
 			Value.Append( Byte );
 	}
+
+	void Get_(
+		fdr::rIDriver &Driver,
+		str::dString &Value )
+	{
+	qRH
+		flw::sDressedIFlow<> Flow;
+	qRB
+		Flow.Init( Driver );
+
+		while ( !Flow.EndOfFlow() )
+			Value.Append( Flow.Get() );
+	qRR
+	qRT
+	qRE
+	}
 }
 
-namespace list_answer_  {	// Also for 'LSUB'.
+namespace list_lsub_answer_  {	
 	void Get(
 		flw::sIFlow &Flow,
 		str::dString &Attributes,
@@ -654,6 +657,9 @@ namespace list_answer_  {	// Also for 'LSUB'.
 			qRGnr();
 
 		Get_(Flow, '"', Name );
+
+		if ( !Flow.EndOfFlow() )
+			qRGnr();
 	}
 
 	void Get(
@@ -663,11 +669,16 @@ namespace list_answer_  {	// Also for 'LSUB'.
 		str::dString &Name )
 	{
 	qRH
-		flw::sDressedIFlow<> Flow;
+		rValueDriver_ ValueDriver;
 	qRB
-		Flow.Init( Driver );
+		ValueDriver.Init( Driver );
+		Get_( ValueDriver, Attributes);
 
-		Get( Flow, Attributes, Delimiter, Name );
+		ValueDriver.Init( Driver );
+		Get_( ValueDriver, Delimiter);
+
+		ValueDriver.Init( Driver );
+		Get_( ValueDriver, Name);
 	qRR
 	qRT
 	qRE
@@ -680,7 +691,7 @@ namespace fetch_hierarchy_delimiter_ {
 	{
 	protected:
 		virtual void MUAIMAOnResponse(
-			eCode Code,
+			eResponseCode Code,
 			fdr::rIDriver &Driver ) override
 		{
 		qRH
@@ -689,8 +700,11 @@ namespace fetch_hierarchy_delimiter_ {
 			if ( Delimiter.Amount() != 0 )
 				qRGnr();
 
+			if ( Code != rcList )
+				qRGnr();
+
 			Dummy.Init();
-			list_answer_::Get( Driver, Dummy, Delimiter, Dummy );
+			list_lsub_answer_::Get( Driver, Dummy, Delimiter, Dummy );
 		qRR
 		qRT
 		qRE
@@ -739,11 +753,98 @@ eStatus muaima::rSession::Disconnect_( qRPN )
 	return HandleResponses_( NOPResponseCallback_, qRP );
 }
 
-eStatus muaima::rSession::List(
-	const str::dString &Mailbox,
-	class cList &Callback )
+namespace list_ {
+	void Crop_(
+		const char Delimiter,
+		str::dString &String )
+	{
+		if ( String.Amount() != 0 ) {
+			sdr::sRow Row = qNIL, PRow = qNIL;
+
+			Row = PRow = String.Search( Delimiter );
+
+			while ( Row != qNIL ) {
+				PRow = Row = String.Next( Row );
+				Row = String.Search( Delimiter, Row );
+			}
+
+			if ( PRow != qNIL )
+				String.Crop(PRow, String.Last() );
+		}
+	}
+
+	class sResponseCallback
+	: public cResponse_
+	{
+	private:
+		qRMV( cList, C_, Callback_ );
+		bso::sChar Delimiter_;
+	protected:
+		virtual void MUAIMAOnResponse(
+			eResponseCode Code,
+			fdr::rIDriver &Driver ) override
+		{
+		qRH
+			str::wString Dummy, Child;
+		qRB
+			if ( Code != rcList )
+				qRGnr();
+
+			tol::Init( Dummy, Child );
+			list_lsub_answer_::Get( Driver, Dummy, Dummy, Child );
+
+			Crop_( Delimiter_, Child );
+
+			C_().OnMailbox( Child );
+		qRR
+		qRT
+		qRE
+		}
+	public:
+		void reset( bso::sBool P = true )
+		{
+			Delimiter_ = 0;
+		}
+		qCVDTOR( sResponseCallback );
+		void Init(
+			cList &Callback,
+			bso::sChar Delimiter )
+		{
+			Callback_ = &Callback;
+			Delimiter_ = Delimiter;
+		}
+	};
+}
+
+
+eStatus muaima::rSession::GetFolders(
+	const str::dString &Folder,
+	cList &Callback,
+		qRPN )
 {
-	return s_Undefined;
+	eStatus Status = s_Undefined;
+qRH
+	str::wString Reference;
+	list_::sResponseCallback ResponseCallback;
+qRB
+	if ( Delimiter_ == 0 ) {
+		qRGnr();
+	}
+
+	Reference.Init( Folder );
+
+	if ( ( Reference.Amount() != 0) && ( Reference( Reference.Last() ) != '/' ) )
+		Reference.Append('/' );
+	
+	Reference.Replace( '/', Delimiter_ );
+
+	ResponseCallback.Init( Callback, Delimiter_ );
+	muaima::List( Reference, str::wString( "%" ), Console_ );
+	Status = HandleResponses_( ResponseCallback, qRP );
+qRR
+qRT
+qRE
+	return Status;
 }
 
 namespace {

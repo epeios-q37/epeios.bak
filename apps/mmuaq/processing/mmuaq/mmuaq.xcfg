@@ -17,7 +17,9 @@
   </Definitions>
   <Locale>
    <xpp:expand select="TOL_Locale"/>
+   <!--          -->
    <!-- Commands -->
+   <!--          -->
    <Translations text="B64EncodeCommandDescription">
     <Translation language="fr">Encodage 'Base64'.</Translation>
     <Translation language="en">'Base64' encoding.</Translation>
@@ -66,6 +68,10 @@
     <Translation language="fr">Lance la commande 'FETCH' du protocole 'IMAP'.</Translation>
     <Translation language="en">Launches the 'FETCH' command from the 'IMAP' protocol.</Translation>
    </Translations>
+   <Translations text="IMAPFoldersCommandDescription">
+    <Translation language="fr">Affiche les sous-dossiers d'un dossier 'IMAP'.</Translation>
+    <Translation language="en">Displays sub-folders of an 'IMAP' folder.</Translation>
+   </Translations>
    <Translations text="ShowHeaderCommandDescription">
     <Translation language="fr">Affiche l'entête d'un courrier.</Translation>
     <Translation language="en">Displays the header of a mail.</Translation>
@@ -74,7 +80,9 @@
     <Translation language="fr">Affiche le contenu du champ d'un courrier.</Translation>
     <Translation language="en">Displays the body of a field from a mail.</Translation>
    </Translations>
+   <!--           -->
    <!-- Arguments -->
+   <!--           -->
    <Translations text="InputArgumentDescription">
     <Translation language="fr">Nom du fichier d'entrée (utilisation de l'entrée standard si absent).</Translation>
     <Translation language="en">Input file name (use of standard input if missing).</Translation>
@@ -155,6 +163,14 @@
     <Translation language="fr">items</Translation>
     <Translation language="en">items</Translation>
    </Translations>
+   <Translations text="IMAPFolderArgumentDescription">
+    <Translation language="fr">Dossier 'IMAP' ; dossier racine si absent.</Translation>
+    <Translation language="en">'IMAP' folder ; root folder if absent.</Translation>
+   </Translations>
+   <Translations text="IMAPFolderArgumentLabel">
+    <Translation language="fr">dossier</Translation>
+    <Translation language="en">folder</Translation>
+   </Translations>
    <!-- Flags -->
    <Translations text="VerboseFlagDescription">
     <Translation language="fr">Détaille les opérations exécutées.</Translation>
@@ -185,6 +201,7 @@
    <Argument id="IMAPLSubCommand" Description="IMAPLSubCommandDescription" long="imap-lsub" Value="IMAPLSub" Usage="[%SetupOption%] [%VerboseFlag%] %IMAPReferenceArgument% %IMAPMailboxArgument%"/>
    <Argument id="IMAPSelectCommand" Description="IMAPSelectCommandDescription" long="imap-select" Value="IMAPSelect" Usage="[%SetupOption%] [%VerboseFlag%] %IMAPMailboxArgument%"/>
    <Argument id="IMAPFetchCommand" Description="IMAPFetchCommandDescription" long="imap-fetch" Value="IMAPFetch" Usage="[%SetupOption%] [%VerboseFlag%] %IMAPMailboxArgument% %IMAPSequenceArgument% %IMAPItemsArgument%"/>
+   <Argument id="IMAPFoldersCommand" Description="IMAPFoldersCommandDescription" long="imap-folders" Value="IMAPFolders" Usage="[%SetupOption%] [%VerboseFlag%] [%IMAPFolderArgument%]"/>
    <Argument id="ShowHeaderCommand" Description="ShowHeaderCommandDescription" long="show-header" Value="ShowHeader" Usage="[%InputArgument% [%OutputArgument%]]"/>
    <Argument id="GetFieldCommand" Description="GetFieldCommandDescription" long="get-field" Value="GetField" Usage="%FieldArgument% [%InputArgument% [%OutputArgument%]]"/>
    <!-- Fanaux : 'Path', mais pas de 'Value'. -->
@@ -203,6 +220,7 @@
    <Argument id="IMAPMailboxArgument" Description="IMAPMailboxArgumentDescription" Path="IMAP/Mailbox" Label="IMAPMailboxArgumentLabel"/>
    <Argument id="IMAPSequenceArgument" Description="IMAPSequenceArgumentDescription" Path="IMAP/Sequence" Label="IMAPSequenceArgumentLabel"/>
    <Argument id="IMAPItemsArgument" Description="IMAPItemsArgumentDescription" Path="IMAP/Items" Label="IMAPItemsArgumentLabel"/>
+   <Argument id="IMAPFolderArgument" Description="IMAPFolderArgumentDescription" Path="IMAP/Folder" Label="IMAPFolderArgumentLabel"/>
    <!-- Affectations des arguments libres-->
    <Layouts>
     <Layout command="B64Encode">
@@ -246,6 +264,9 @@
      <Link index="0" Target="IMAPMailboxArgument"/>
      <Link index="1" Target="IMAPSequenceArgument"/>
      <Link index="2" Target="IMAPItemsArgument"/>
+    </Layout>
+    <Layout command="IMAPFolders">
+     <Link index="0" Target="IMAPFolderArgument"/>
     </Layout>
     <Layout command="ShowHeader">
      <Link index="0" Target="InputArgument"/>

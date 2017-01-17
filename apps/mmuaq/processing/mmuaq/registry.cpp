@@ -39,6 +39,7 @@ rEntry registry::parameter::imap::Reference("Reference", IMAP_ );
 rEntry registry::parameter::imap::Mailbox("Mailbox", IMAP_ );
 rEntry registry::parameter::imap::Sequence("Sequence", IMAP_ );
 rEntry registry::parameter::imap::Items("Items", IMAP_ );
+rEntry registry::parameter::imap::Folder("Folder", IMAP_ );
 
 rEntry registry::parameter::Input("Input", sclrgstry::Parameters );
 rEntry registry::parameter::Output("Output", sclrgstry::Parameters );

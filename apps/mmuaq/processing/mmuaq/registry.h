@@ -43,7 +43,8 @@ namespace registry {
 				Reference,
 				Mailbox,
 				Sequence,
-				Items;
+				Items,
+				Folder;
 		};
 
 		extern rEntry

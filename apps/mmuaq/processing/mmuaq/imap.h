@@ -21,11 +21,15 @@
 # define IMAP__INC
 
 namespace imap {
+	// Low-level functions.
 	void Capability( void );
 	void List( void );
 	void LSub( void );
 	void Select( void );
 	void Fetch( void );
+
+	// High-level functions.
+	void Folders( void );
 
 	void Test( void );
 }

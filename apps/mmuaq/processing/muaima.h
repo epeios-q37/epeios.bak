@@ -57,10 +57,10 @@ namespace muaima {
 
 	// Main delimiter, which is dicarded ; only the content is returned.
 	qENUM( Delimiter ) {
-		dNone,			// No yet delimiter detected. This one is the initial one, or the below one.
+		dNone,			// No delimiter detected yet.
 		dCRLF,			// To read the entire message until 'CRLF' of an status response.
-		dBracket,		// '[' : for optional response code. Could be the other initial one, instead of the above one.
-		dParenthesis,	// '(' : delimits the size of a literal string.
+		dBracket,		// '[' : for optional response code.
+		dParenthesis,	// '(' : parenthisized list.
 		dQuote,			// Quoted ('"') string.
 		dLiteral,		// Literal ('{') string.
 //		dSpace,			// Separation of basic strings. Can be a space, CRLF, EOF.
@@ -73,10 +73,10 @@ namespace muaima {
 		qENUM( Context ) {
 			cFree,
 			cQuoted,	// Quoted string.
-			cLiteral,	// Reading literal string size. The content it self id handled through 'Force_'.
+			cLiteral,	// Reading literal string _size_. The content itself is handled through 'Force_'.
 			cEOF,		// All data red;
-			// No parenthensis, as 'Level_' is enough ti inform about.
-			// No bracket corresponding item, because it's always a root delimiter.
+			// No parenthensis, as 'Level_' is enough to inform about.
+			// No bracket corresponding item, because it's always a root delimiter; or should be handled as regular char.
 			c_amount,
 			c_Undefined
 		};
@@ -239,7 +239,7 @@ namespace muaima {
 			if ( Delimiter_ != dLiteral )
 				Buffer[Amount++] = Byte;
 		}
-		bso::sBool HandleContext_(
+		void HandleContext_(
 			flw::sIFlow &Flow,
 			fdr::sByte *Buffer,
 			fdr::sSize &Amount )
@@ -279,11 +279,7 @@ namespace muaima {
 						break;
 					}
 				}
-
-				return false;
-			} else
-				return true;
-
+			}
 		}
 	public:
 		void reset( bso::sBool P = true )
@@ -335,8 +331,12 @@ namespace muaima {
 
 					Force_ -= PonctualAmount;
 				} else {
-					if ( !HandleContext_( Flow, Buffer, Amount ) )
-						Maximum = Amount;	// To exit the loop.
+					HandleContext_( Flow, Buffer, Amount );
+				}
+
+				if ( ( Context_ == _::cEOF ) || Flow.EndOfFlow() ) {
+					Context_ = _::cEOF;
+					Maximum = Amount;	// To exit the loop.
 				}
 			}
 
@@ -358,6 +358,7 @@ namespace muaima {
 	{
 	private:
 		rDriverBase_ Base_;
+		flw::sDressedIFlow<> Flow_;
 	protected:
 		virtual fdr::sSize FDRRead(
 			fdr::sSize Maximum,
@@ -377,7 +378,7 @@ namespace muaima {
 		void reset( bso::sBool P = true )
 		{
 			rDriver_::reset( P );
-			Base_.reset( P );
+			tol::reset( P, Base_, Flow_ );
 		}
 		qCVDTOR( rResponseDriver_ );
 		void Init(
@@ -388,63 +389,72 @@ namespace muaima {
 			Base_.Init( Flow, PendingData, Delimiter );
 			rDriver_::Init( fdr::ts_Default );
 		}
+		void Init(
+			fdr::rIDriver &Driver,
+			const str::dString &PendingData,
+			eDelimiter Delimiter )
+		{
+			Flow_.Init( Driver );
+			Base_.Init( Flow_, PendingData, Delimiter );
+			rDriver_::Init( fdr::ts_Default );
+		}
 	};
 
 	// Response code.
-	qENUM( Code ) {
+	qENUM( ResponseCode ) {
 		// Not really response code, but 
-		cOK,
-		cNo,
-		cBad,
-		cPreAuth,
-		cBye,
+		rcOK,
+		rcNo,
+		rcBad,
+		rcPreAuth,
+		rcBye,
 		// Response codes which may optionnaly be contained in status response.
-		cAlert,
-		cBadCharSet,
-		cCapability,
-		cParse,
-		cPermanentFlags,
-		cReadOnly,
-		cReadWrite,
-		cTryCreate,
-		cUIDNext,
-		cUIDValidity,
-		cUnseen,
+		rcAlert,
+		rcBadCharSet,
+		rcCapability,
+		rcParse,
+		rcPermanentFlags,
+		rcReadOnly,
+		rcReadWrite,
+		rcTryCreate,
+		rcUIDNext,
+		rcUIDValidity,
+		rcUnseen,
 		// Below response codes are from RFC 55530.
-		cUnavailable,
-		cAuthenticationFailed,
-		cAuthorizationFailed,
-		cExpired,
-		cPrivacyRequired,
-		cContactAdmin,
-		cNoPerm,
-		cInUse,
-		cExpungeIssued,
-		cCorruption,
-		cServerBug,
-		cClientBug,
-		cCanNot,
-		cLimit,
-		cOverQuota,
-		cAlreadyExists,
-		cNonExistent,
+		rcUnavailable,
+		rcAuthenticationFailed,
+		rcAuthorizationFailed,
+		rcExpired,
+		rcPrivacyRequired,
+		rcContactAdmin,
+		rcNoPerm,
+		rcInUse,
+		rcExpungeIssued,
+		rcCorruption,
+		rcServerBug,
+		rcClientBug,
+		rcCanNot,
+		rcLimit,
+		rcOverQuota,
+		rcAlreadyExists,
+		rcNonExistent,
 		// Reponses to commands.
-		// cCapability, // Already present above.
-		cList,
-		cLSub,
-		cStatus,
-		cSearch,
-		cFlags,
-		cExists,
-		cRecent,
-		cExpunge,
-		cFetch,
-		c_amount,
-		c_None,
-		c_Undefined
+		// rcCapability, // Already present above.
+		rcList,
+		rcLSub,
+		rcStatus,
+		rcSearch,
+		rcFlags,
+		rcExists,
+		rcRecent,
+		rcExpunge,
+		rcFetch,
+		rc_amount,
+		rc_None,
+		rc_Undefined
 	};
 
-	const char *GetLabel( eCode Code );
+	const char *GetLabel( eResponseCode Code );
 
 	qENUM( Status ) {
 		sOK,
@@ -464,20 +474,20 @@ namespace muaima {
 		flw::sDressedIFlow<> IFlow_;
 		txf::rOFlow OFlow_;
 		rResponseDriver_ ResponseDriver_;
-		eCode PendingCode_;
+		eResponseCode PendingCode_;
 		bso::sBool PendingCodeIsStatus_;
 		bso::sBool NoTaggedStatusResponse_;	// To handle the connection, where there is no tagged status response.
 	public:
 		void reset( bso::sBool P = true )
 		{
 			tol::reset( P, Tag_, IFlow_, OFlow_, PendingCodeIsStatus_, ResponseDriver_, NoTaggedStatusResponse_ );
-			PendingCode_ = c_Undefined;
+			PendingCode_ = rc_Undefined;
 		}
 		qCDTOR( rConsole );
 		void Init( fdr::rIODriver &Driver )
 		{
 			tol::Init( Tag_ );
-			PendingCode_ = c_Undefined;
+			PendingCode_ = rc_Undefined;
 			IFlow_.Init( Driver );
 			OFlow_.Init( Driver );
 			PendingCodeIsStatus_ = false;
@@ -503,7 +513,7 @@ namespace muaima {
 		{
 			return OFlow_;
 		}
-		eCode GetPendingCode( void );
+		eResponseCode GetPendingResponseCode( void );
 		fdr::rIDriver &GetResponseDriver( void )
 		{
 			return ResponseDriver_;
@@ -528,13 +538,13 @@ namespace muaima {
 			eStatus Status = s_Undefined;
 
 			switch ( PendingCode_ ) {
-			case cOK:
+			case rcOK:
 				Status = sOK;
 				break;
-			case cNo:
+			case rcNo:
 				Status = sNO;
 				break;
-			case cBad:
+			case rcBad:
 				Status = sBAD;
 				break;
 			default:
@@ -542,7 +552,7 @@ namespace muaima {
 				break;
 			}
 
-			PendingCode_ = c_Undefined;
+			PendingCode_ = rc_Undefined;
 
 			return Status;
 		}
@@ -592,6 +602,47 @@ namespace muaima {
 		const str::dString &Items,
 		rConsole &Console );
 
+	class rValueDriver_
+	: public rDriver_
+	{
+	public:
+		rDriverBase_ Base_;
+		flw::sDressedIFlow<> Flow_;
+	protected:
+		virtual fdr::sSize FDRRead(
+			fdr::sSize Maximum,
+			fdr::sByte* Buffer ) override
+		{
+			return Base_.Read( Maximum, Buffer );
+		}
+		virtual void FDRDismiss( bso::sBool Unlock ) override
+		{
+			return Base_.Dismiss( Unlock );
+		}
+		virtual fdr::sTID FDRITake( fdr::sTID Owner ) override
+		{
+			return Base_.ITake( Owner );
+		}
+	public:
+		void reset( bso::sBool P = true ) {
+			rDriver_::reset( P  );
+			tol::reset( P, Base_, Flow_ );
+		}
+		qCVDTOR( rValueDriver_ );
+		void Init( flw::sIFlow &Flow )
+		{
+			rDriver_::Init( fdr::ts_Default );
+			Base_.Init( Flow, str::wString(), dNone );
+		}
+		void Init( fdr::rIDriver &Driver )
+		{
+			rDriver_::Init( fdr::ts_Default );
+			Flow_.Init( Driver );
+			Base_.Init( Flow_, str::wString(), dNone );
+		}
+	};
+
+
 	// Handles items pairs (
 	namespace  item {
 		qENUM( Name ) {
@@ -613,126 +664,6 @@ namespace muaima {
 
 		const char *GetLabel( eName Name );
 
-		qENUM( State_ )	{
-			sQuoted,	// Reading a quoted value,
-			sLiteralSize,	// Reading the size of a literal string.
-			sLiteralContent,	// Reading the content of a literal string.
-			sEOF,	// EOF is reached,
-			s_amount,
-			s_Undefined
-		};
-
-		class rValueDriver_
-		: public rDriver_
-		{
-		public:
-			flw::sDressedIFlow<> Flow_;
-			eState_ State_;
-			bso::sSize LiteralSize_;	// The remaining size of a literal string.
-		protected:
-			virtual fdr::sSize FDRRead(
-				fdr::sSize Maximum,
-				fdr::sByte* Buffer ) override
-			{
-				fdr::sByte Byte = 0, PonctualAmount = 0;
-				fdr::sSize Amount = 0;
-
-				while ( ( State_ != sEOF ) && ( Amount < Maximum ) ) {
-					Byte = Flow_.Get();
-
-					switch ( State_ ) {
-					case s_Undefined:
-						switch ( Byte ) {
-						case '"':
-							State_ = sQuoted;
-							break;
-						case '{':
-							if( LiteralSize_ != 0 )
-								qRGnr();
-
-							State_ = sLiteralSize;
-							break;
-						default:
-							qRGnr();
-							break;
-						}
-					case sQuoted:
-						if ( Byte == '\\' ) {
-							switch ( Byte = Flow_.Get() ) {
-							case '\\':
-							case '"':
-								Buffer[Amount++] = Byte;
-								break;
-							default:
-								qRGnr();
-								break;
-							}
-						} else if ( Byte == '"' )
-							State_ = sEOF;
-						else
-							Buffer[Amount++] = Byte;
-						break;
-					case sLiteralSize:
-						if ( Byte == '}' ) {
-							SkipCRLF_( Flow_ );
-
-							State_ = sLiteralContent;
-						} else {
-							if ( LiteralSize_ >= ( bso::SizeMax / 10 ) )
-								qRLmt();
-
-							if ( !isdigit( Byte ) )
-								qRGnr();
-
-							LiteralSize_ = LiteralSize_ * 10 + ( Byte - '0' );
-						}
-						break;
-					case sLiteralContent:
-						PonctualAmount = Flow_.ReadUpTo( ( Maximum - Amount ) < LiteralSize_ ? Maximum - Amount : LiteralSize_, Buffer + Amount );
-
-						Amount += PonctualAmount;
-						LiteralSize_ -= PonctualAmount;
-
-						if ( LiteralSize_ == 0 )
-							State_ = sEOF;
-						break;
-					default:
-						// Also when 'State_' == 'sEOF', which shoud not occur here.
-						qRGnr();
-						break;
-					}
-				}
-
-				return Amount;
-			}
-			virtual void FDRDismiss( bso::sBool Unlock ) override
-			{
-				Flow_.Dismiss( Unlock );
-			}
-			virtual fdr::sTID FDRITake( fdr::sTID Owner ) override
-			{
-				return Flow_.IDriver().ITake( Owner );
-			}
-		public:
-			void reset( bso::sBool P = true ) {
-				tol::reset( P, Flow_ );
-
-				State_ = s_Undefined;
-				LiteralSize_= 0;
-			}
-			qCVDTOR( rValueDriver_ );
-			void Init( fdr::rIDriver &Driver )
-			{
-				State_ = s_Undefined;
-				LiteralSize_= 0;
-			}
-			void Prepare( void )
-			{
-				State_ = s_Undefined;
-				LiteralSize_= 0;
-			}
-		};
-
 		class rConsole
 		{
 		private:
@@ -747,12 +678,12 @@ namespace muaima {
 			void Init( fdr::rIDriver &Driver )
 			{
 				Flow_.Init( Driver );
-				ValueDriver_.Init( Driver );
+				// 'ValueDriver_' will be initialized as needed.
 			}
 			eName Get( void );
 			fdr::rIDriver &GetValueDriver( void )
 			{
-				ValueDriver_.Prepare();
+				ValueDriver_.Init( Flow_ );
 
 				return ValueDriver_;
 			}
@@ -763,12 +694,12 @@ namespace muaima {
 	{
 	protected:
 		virtual void MUAIMAOnResponse(
-			eCode Code,
+			eResponseCode Code,
 			fdr::rIDriver &Driver) = 0;
 	public:
 		qCALLBACK( Response_ );
 		void OnResponse(
-			eCode Code,
+			eResponseCode Code,
 			fdr::rIDriver &Driver )
 		{
 			return MUAIMAOnResponse( Code, Driver );
@@ -844,9 +775,10 @@ namespace muaima {
 
 			return Status;
 		}
-		eStatus List(
-			const str::dString &Mailbox,
-			class cList &Callback );
+		eStatus GetFolders(
+			const str::dString &Folder,
+			cList &Callback,
+			qRPD );
 	};
 }
 

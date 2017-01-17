@@ -110,6 +110,11 @@ namespace misc {
 		}
 		virtual void FDRDismiss( bso::sBool Unlock ) override
 		{
+			if ( ReadInProgress_ )
+				cio::COut << "--" << txf::nl;
+
+			ReadInProgress_ = false;
+
 			return Driver_.Dismiss( Unlock );
 		}
 		virtual fdr::sTID FDRITake( fdr::sTID Owner )
@@ -120,11 +125,6 @@ namespace misc {
 			const fdr::sByte *Buffer,
 			fdr::sSize Maximum ) override
 		{
-			if ( IsIn_() && ReadInProgress_ ) {
-				cio::COut << "--" << txf::nl;
-				ReadInProgress_ = false;
-			}
-
 			if ( IsOut_() ) {
 				if ( Commited_ ) {
 					cio::COut << "-> ";
