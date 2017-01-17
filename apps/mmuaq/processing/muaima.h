@@ -706,15 +706,15 @@ namespace muaima {
 		}
 	};
 
-	class cList
+	class cFolders
 	{
 	protected:
-		virtual void MUAIMAOnMailbox( const str::dString &Name ) = 0;
+		virtual void MUAIMAOnFolder( const str::dString &Name ) = 0;
 	public:
-		qCALLBACK( List );
-		void OnMailbox( const str::dString &Name )
+		qCALLBACK( Folders );
+		void OnFolder( const str::dString &Name )
 		{
-			return MUAIMAOnMailbox( Name );
+			return MUAIMAOnFolder( Name );
 		}
 	};
 
@@ -725,6 +725,7 @@ namespace muaima {
 		bso::sBool Connected_;
 		bso::sByte Delimiter_;	// The hierarchy delimiter. '0' means no demimiter (hope that '0' is not a valid delmimiter).
 		str::wString Message_;
+		rValueDriver_ ValueDriver_;
 		void RetrieveMessage_( void );
 		eStatus HandleStatus_( qRPN );
 		eStatus HandleResponses_(
@@ -777,8 +778,18 @@ namespace muaima {
 		}
 		eStatus GetFolders(
 			const str::dString &Folder,
-			cList &Callback,
+			cFolders &Callback,
 			qRPD );
+		/* Commands after which, on success, you have to handle 'GetValueDriver(...)'*/
+		eStatus GetMail(
+			const str::dString &Folder,
+			bso::sUInt Number,
+			qRPD );
+		/* End of commands after which, on success, you have to handle 'GetValueDriver(...)'*/
+		fdr::rIDriver &GetValueDriver( void )
+		{
+			return ValueDriver_;
+		}
 	};
 }
 

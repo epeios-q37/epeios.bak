@@ -315,18 +315,18 @@ namespace {
 		}
 	};
 
-	class cList_
-	: public muaima::cList
+	class cFolders_
+	: public muaima::cFolders
 	{
 	protected:
-		virtual void MUAIMAOnMailbox( const str::dString &Mailbox ) override
+		virtual void MUAIMAOnFolder( const str::dString &Name ) override
 		{
-			cio::COut << Mailbox << txf::nl;
+			cio::COut << Name << txf::nl;
 		}
 	public:
 		void reset( bso::sBool = true )
 		{}
-		qCVDTOR( cList_ );
+		qCVDTOR( cFolders_ );
 		void Init( void )
 		{}
 	};
@@ -337,7 +337,7 @@ void imap::Folders( void )
 {
 qRH
 	rSession_ Session;
-	cList_ Callback;
+	cFolders_ Callback;
 	str::wString Folder;
 qRB
 	Folder.Init();
@@ -356,12 +356,9 @@ void imap::Test( void )
 {
 qRH
 	rSession_ Session;
-	cList_ Callback;
 qRB
 	Session.Init();
 
-	Callback.Init();
-	Session.GetFolders( str::wString( "" ), Callback );
 qRR
 qRT
 qRE

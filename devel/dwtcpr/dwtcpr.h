@@ -293,7 +293,9 @@ namespace dwtcpr {
 		const dwtftr::dKernel &Source,
 		const dwtftr::dKernel &Target,
 		scene_ &Scene,
-		comparison_observer__ &Observer );
+		comparison_observer__ &Observer,
+		bso::sUBig &TotalFilesAmount,	// Total amount of files to transfer.
+		bso::sUBig &FilesTotalSize );	// The cumulated size of all files to transfer.
 
 	void Dump( 
 		drow__ Row,

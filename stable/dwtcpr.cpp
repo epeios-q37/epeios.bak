@@ -215,7 +215,7 @@ qRB
 				Link.Source = SRows( SRow );
 				// Link.Target = TRows( TRow );	// Répertoire n'existant pas dans la cible, 'Target' est laissé à 'qNIL' pour signaler le fait qu'il faut mettre tous les sous-répertoires en 'Created'.
 				Links.Push( Link );
-}
+			}
 			SRow = SRows.Next( SRow );
 			break;
 		case 0:
@@ -307,7 +307,9 @@ static void Complete_(
 	status__ Status,
 	frows_ &RRows,
 	files_ &RFiles,
-	names_ &RNames )
+	names_ &RNames,
+	bso::sUBig &TotalFilesAmount,
+	bso::sUBig &FilesTotalSize )
 {
 qRH
 	file__ File;
@@ -319,6 +321,9 @@ qRB
 			File.Status = Status;
 
 			RRows.Append( RFiles.Append( File ) );
+
+			TotalFilesAmount++;
+			FilesTotalSize += Files(Rows( Row ) ).Size;
 		}
 
 		Row = Rows.Next( Row );
@@ -353,7 +358,9 @@ static bso::bool__ Compare_(
 	const dwtftr::names_ &TNames,
 	frows_ &Rows,
 	files_ &Files,
-	names_ &Names )
+	names_ &Names,
+	bso::sUBig &TotalFilesAmount,
+	bso::sUBig &FilesTotalSize )
 {
 	bso::bool__ Modified = false;
 qRH
@@ -378,6 +385,8 @@ qRB
 				File.Status = sCreated;
 				Rows.Append( Files.Append( File ) );
 				Modified = true;
+				TotalFilesAmount++;
+				FilesTotalSize += SFiles( SRows( SRow ) ).Size;
 			}
 			SRow = SRows.Next( SRow );
 			break;
@@ -388,6 +397,8 @@ qRB
 				File.Status = sModified;
 				Rows.Append( Files.Append( File ) );
 				Modified = true;
+				TotalFilesAmount++;
+				FilesTotalSize += SFiles( SRows( SRow ) ).Size;
 			}
 
 			SRow = SRows.Next( SRow );
@@ -408,12 +419,12 @@ qRB
 	}
 
 	if ( SRow != qNIL ) {
-		Complete_( SRow, SRows, SFiles, SNames, sCreated, Rows, Files, Names );
+		Complete_( SRow, SRows, SFiles, SNames, sCreated, Rows, Files, Names, TotalFilesAmount, FilesTotalSize );
 		Modified = true;
 	}
 
 	if ( TRow != qNIL ) {
-		Complete_( TRow, TRows, TFiles, TNames, sRemoved, Rows, Files, Names );
+		Complete_( TRow, TRows, TFiles, TNames, sRemoved, Rows, Files, Names, TotalFilesAmount, FilesTotalSize );
 		Modified = true;
 	}
 qRR
@@ -429,7 +440,9 @@ static bso::bool__ inline Compare_(
 	const dwtftr::dKernel &Target,
 	frows_ &Rows,
 	files_ &Files,
-	names_ &Names )
+	names_ &Names,
+	bso::sUBig &TotalFilesAmount,
+	bso::sUBig &FilesTotalSize )
 {
 
 	ctn::qCITEMs( dwtftr::directory_, dwtftr::drow__ ) SDir, TDir;
@@ -437,7 +450,7 @@ static bso::bool__ inline Compare_(
 	SDir.Init( Source.Directories );
 	TDir.Init( Target.Directories );
 
-	return Compare_( SDir( SRow ).Files, Source.Files, Source.Names, TDir( TRow ).Files, Target.Files, Target.Names, Rows, Files, Names );
+	return Compare_( SDir( SRow ).Files, Source.Files, Source.Names, TDir( TRow ).Files, Target.Files, Target.Names, Rows, Files, Names, TotalFilesAmount, FilesTotalSize );
 }
 
 static void MarkAsModified_(
@@ -502,15 +515,16 @@ static void Put_(
 	drows_ &DRows,
 	directories_ &Directories,
 	names_ &Names,
-	dFillLinks &Links )
+	dFillLinks &Links,
+	bso::sUBig &TotalFilesAmount,
+	bso::sUBig &FilesTotalSize )
 {
-
 	ctn::qCITEMs( dwtftr::directory_, dwtftr::drow__) Dir;
 
 	Dir.Init( Kernel.Directories );
 
 	Put_( Parent, Dir( Row ).Dirs, Kernel.Directories, Kernel.Names, DRows, Directories, Names, Links );
-	Complete_( Dir( Row ).Files.First(), Dir( Row ).Files, Kernel.Files, Kernel.Names, sCreated, FRows, Files, Names );
+	Complete_( Dir( Row ).Files.First(), Dir( Row ).Files, Kernel.Files, Kernel.Names, sCreated, FRows, Files, Names, TotalFilesAmount, FilesTotalSize );
 }
 
 
@@ -518,7 +532,9 @@ drow__ dwtcpr::Compare(
 	const dwtftr::dKernel &Source,
 	const dwtftr::dKernel &Target,
 	scene_ &Scene,
-	comparison_observer__ &Observer )
+	comparison_observer__ &Observer,
+	bso::sUBig &TotalFilesAmount,
+	bso::sUBig &FilesTotalSize )
 {
 	drow__ Root = qNIL;
 qRH
@@ -540,7 +556,7 @@ qRB
 	Observer.Report( 0, Handled );
 
 	Modified = Compare_( Source.Directories.First(), Source, Target.Directories.First(), Target, Dir.Dirs, Scene.Directories, Scene.Names, Links );
-	Modified |= Compare_( Source.Directories.First(), Source, Target.Directories.First(), Target, Dir.Files, Scene.Files, Scene.Names );
+	Modified |= Compare_( Source.Directories.First(), Source, Target.Directories.First(), Target, Dir.Files, Scene.Files, Scene.Names, TotalFilesAmount, FilesTotalSize );
 
 	Scene.Directories.Store( Dir, Root );
 	Scene.Allocate( Scene.Directories.Amount() );
@@ -565,10 +581,10 @@ qRB
 
 		if ( Link.Target != qNIL ){
 			Modified = Compare_( Link.Source, Source, Link.Target, Target, Dir.Dirs, Scene.Directories, Scene.Names, Links );
-			Modified |= Compare_( Link.Source, Source, Link.Target, Target, Dir.Files, Scene.Files, Scene.Names );
+			Modified |= Compare_( Link.Source, Source, Link.Target, Target, Dir.Files, Scene.Files, Scene.Names, TotalFilesAmount, FilesTotalSize );
 		}
 		else // On est dans le cas d'un répertoire nouvellement crée, et on veut donc ajouter tout son contenu à l'arbre des modifications.
-			Put_( Link.Parent, Link.Source, Source, Dir.Files, Scene.Files, Dir.Dirs, Scene.Directories, Scene.Names, Links );
+			Put_( Link.Parent, Link.Source, Source, Dir.Files, Scene.Files, Dir.Dirs, Scene.Directories, Scene.Names, Links, TotalFilesAmount, FilesTotalSize );
 
 		Scene.Directories.Store( Dir, Link.Parent );
 

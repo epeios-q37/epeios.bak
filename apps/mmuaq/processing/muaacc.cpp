@@ -252,7 +252,7 @@ namespace get_fields_ {
 						str::wString Subject;
 						muaimf::sFRow Row = qNIL;
 					qRB
-						if ( Number != 0 ) {	// 'Number' can be 0 it the corresponding 'UIDL4 was not found (mail erased).
+						if ( Number != 0 ) {	// 'Number' can be 0 it the corresponding 'UIDL' was not found (mail erased).
 							muapo3::GetHeader( Number, Driver, Body );
 
 							Fields.Init();
