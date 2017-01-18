@@ -359,6 +359,10 @@ qRH
 qRB
 	Session.Init();
 
+	Session.GetMail(str::wString("INBOX"), 1 );
+
+	misc::Dump(Session.GetValueDriver() );
+
 qRR
 qRT
 qRE

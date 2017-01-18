@@ -36,6 +36,231 @@ namespace {
 	}
 }
 
+void muaima::rDriverBase_::HandleFreeContext_(
+	fdr::sByte Byte,
+	flw::sIFlow &Flow,
+	fdr::sByte *Buffer,
+	fdr::sSize &Amount )
+{
+	bso::sBool Put = true;	// If 'true', 'Byte' is put in 'Buffer'.
+
+	switch ( Byte ) {
+	case '"':
+		if ( Delimiter_ == dNone ) {
+			Delimiter_ = dQuote;
+			Put = false;
+		} else if ( Delimiter_ == dQuote ) {
+			Context_ = _::cEOF;
+			Put = false;
+		} else
+			Context_ = _::cQuoted;
+		break;
+	case '(':
+		if ( Delimiter_ == dNone ) {
+			Delimiter_ = dParenthesis;
+			Put = false;
+		} else if ( Level_ == bso::U8Max )
+			qRLmt();
+		else 
+			Level_++;
+		// We stay in the same context.
+		break;
+	case ')':
+		if ( Level_ == 0 ) {
+			if ( Delimiter_ != dParenthesis )
+				qRGnr();
+
+			Context_ = _::cEOF;
+			Put = false;
+		} else
+			Level_--;
+
+		// We stay in the same context.
+		break;
+	case '[':	// Can happen with 'FETCH' 'BODY[HEADER]' reponse.
+		if ( Delimiter_ == dBracket )
+			qRGnr();
+		break;
+	case ']':
+		if ( Delimiter_ == dBracket ) {
+			Context_ = _::cEOF;
+			Put = false;
+		}
+		break;		
+	case '{':
+		if ( Delimiter_ == dNone ) {
+			Delimiter_ = dBracket;
+			Put = false;
+		}
+
+		Context_ = _::cLiteral;
+		break;
+	case '}':
+		qRGnr();
+		break;
+	case '\r':
+		if ( Flow.View() != '\n' )
+			qRGnr();
+
+		if ( ( Delimiter_ == dCRLF ) || ( Delimiter_ == dNone ) ) {	// Can sometimes occur when directly called from 'HandleFreeContext_(...)'.
+			Context_ = _::cEOF;
+			Put = false;
+		} else 
+			Force_ = 1;
+		break;
+	case '\n':	// Should have be already skipped.
+		qRGnr();
+		break;
+	case 0:		// Not allowed
+		qRGnr();
+		break;
+	default:
+		break;
+	}
+
+	if ( Put )
+		Buffer[Amount++] = Byte;
+}
+
+bso::sBool muaima::rDriverBase_::HandleQuotedContext_(
+	fdr::sByte Byte,
+	flw::sIFlow &Flow,
+	fdr::sByte *Buffer,
+	fdr::sSize &Amount )
+{
+	switch ( Byte ) {
+	case '\\':
+		Byte = Flow.View();
+		if ( ( Byte != '\\' ) && ( Byte != '"' ) )
+			qRGnr();
+
+		if ( Delimiter_ == dQuote ) {
+			Buffer[Amount++] = Flow.Get();
+		} else {
+			Buffer[Amount++] = '\\';
+			Force_ = 1;
+		}
+		break;
+	case '"':
+		if ( Delimiter_ == dQuote )
+			Context_ = _::cEOF;
+		else {
+			Buffer[Amount++] = Byte;
+			Context_ = _::cFree;
+		}
+		break;
+	default:
+		Buffer[Amount++]=Byte;
+		break;
+	}
+
+	return true;
+}
+
+void muaima::rDriverBase_::HandleLiteralContext_(
+	fdr::sByte Byte,
+	flw::sIFlow &Flow,
+	fdr::sByte *Buffer,
+	fdr::sSize &Amount )
+{
+	if ( Byte == '}' ) {
+		if ( Delimiter_ != dLiteral )
+			Force_ += 2;	// To include the 'CRLF'.
+		Context_ = _::cFree;
+	} else if ( !isdigit(Byte) ) {
+		qRGnr();
+	} else if ( Force_ < ( ( bso::SizeMax / 10 ) -1 ) ) {
+		Force_ = Force_ * 10 + ( Byte - '0' );
+	} else
+		qRLmt();
+
+	if ( Delimiter_ != dLiteral )
+		Buffer[Amount++] = Byte;
+}
+
+void muaima::rDriverBase_::HandleContext_(
+	flw::sIFlow &Flow,
+	fdr::sByte *Buffer,
+	fdr::sSize &Amount )
+{
+	bso::sBool HandleSPCRLF = true;
+
+	switch ( Context_ ) {
+	case _::cFree:
+		HandleFreeContext_( Flow.Get(), Flow, Buffer, Amount );
+		break;
+	case _::cQuoted:
+		HandleQuotedContext_( Flow.Get(), Flow, Buffer, Amount );
+		break;
+	case _::cLiteral:
+		HandleLiteralContext_( Flow.Get(), Flow, Buffer, Amount );
+		break;
+	case _::cEOF:
+		HandleSPCRLF = false;
+		break;
+	default:
+		qRGnr();
+		break;
+	}
+
+	if ( Context_ == _::cEOF ) {
+		if ( HandleSPCRLF && !Flow.EndOfFlow() ) {
+			switch ( Flow.Get() ) {
+			case ' ':
+				break;
+			case '\r':
+				if ( Flow.Get() != '\n' )
+					qRGnr();
+				break;
+			case '\n':	// '\r' was already eaten.
+				break;
+			default:	// All above space chars are already be eaten.
+				break;
+			}
+		}
+	}
+}
+
+fdr::sSize muaima::rDriverBase_::Read(
+	fdr::sSize Maximum,
+	fdr::sByte *Buffer )
+{
+	fdr::sSize Amount = 0;
+
+	flw::sIFlow &Flow = F_();
+
+	if ( Maximum < 2 )	// Due to the 'Pending' handling, that must be place in the 'Buffer' to put at least chars.
+		qRVct();
+
+	while ( Amount < Maximum ) {
+		if ( !Pending_.IsEmpty() ) {
+			if ( Maximum > ( Amount + 1 ) ) { // To ensure that there is place in 'Buffer' to put a ' '.
+				Amount += Pending_.ReadUpTo( Maximum - Amount - 1, Buffer + Amount );
+
+				if ( Pending_.IsEmpty() )
+					if ( Flow.View() != '\r' )
+						Buffer[Amount++] = ' ';
+			} else
+				Maximum = Amount;	// To exit the loop.
+		} else if ( ( Force_ != 0 ) && ( Context_ != _::cLiteral ) ) {
+			bso::sSize PonctualAmount = Flow.ReadUpTo( Force_ > Maximum - Amount ? Maximum - Amount : Force_, Buffer + Amount );
+
+			Amount += PonctualAmount;
+
+			Force_ -= PonctualAmount;
+		} else {
+			HandleContext_( Flow, Buffer, Amount );
+		}
+
+		if ( ( Context_ == _::cEOF ) || Flow.EndOfFlow() ) {
+			Context_ = _::cEOF;
+			Maximum = Amount;	// To exit the loop.
+		}
+	}
+
+	return Amount;
+}
+
 #define C( name )	case rc##name : return #name; break
  
 const char *muaima::GetLabel( eResponseCode Code )
@@ -418,7 +643,7 @@ const char *item::GetLabel( eName Name )
 		return "InternalDate";
 		break;
 	case nRFC822:
-		return "RFC.822";
+		return "RFC822";
 		break;
 	case nRFC822_Header:
 		return "RFC822.Header";
@@ -525,10 +750,10 @@ qRE
 qRT
 }
 
-eStatus muaima::rSession::HandleStatus_( qRPN )
+eStatus muaima::rSession::HandleStatus_(
+	eStatus Status,
+	qRPN )
 {
-	eStatus Status = Console_.GetStatus() ;
-
 	switch ( Status ) {
 	case sOK:
 		Console_.SkipResponse();
@@ -536,6 +761,8 @@ eStatus muaima::rSession::HandleStatus_( qRPN )
 	case sNO:
 	case sBAD:
 		RetrieveMessage_();
+		if ( qRPT )
+			qRGnr();
 		break;
 	default:
 		qRGnr();
@@ -671,13 +898,13 @@ namespace list_lsub_answer_  {
 	qRH
 		rValueDriver_ ValueDriver;
 	qRB
-		ValueDriver.Init( Driver );
+		ValueDriver.Init( Driver, NULL );
 		Get_( ValueDriver, Attributes);
 
-		ValueDriver.Init( Driver );
+		ValueDriver.Init( Driver, NULL );
 		Get_( ValueDriver, Delimiter);
 
-		ValueDriver.Init( Driver );
+		ValueDriver.Init( Driver, NULL );
 		Get_( ValueDriver, Name);
 	qRR
 	qRT
@@ -756,13 +983,15 @@ eStatus muaima::rSession::Disconnect_( qRPN )
 namespace common_ {
 	void NormalizeFolderName(
 		const bso::sChar Delimiter,
+		bso::sBool AppendDelimiter,
 		str::dString &Name )
 	{
 		if ( Delimiter == 0 )
 			qRGnr();
 
-		if ( ( Name.Amount() != 0) && ( Name( Name.Last() ) != '/' ) )
-			Name.Append('/' );
+		if ( AppendDelimiter )
+			if ( ( Name.Amount() != 0) && ( Name( Name.Last() ) != '/' ) )
+				Name.Append('/' );
 	
 		Name.Replace( '/', Delimiter );
 	}
@@ -867,7 +1096,7 @@ qRH
 qRB
 	Reference.Init( Folder );
 
-	common_::NormalizeFolderName( Delimiter_, Reference );
+	common_::NormalizeFolderName( Delimiter_, true, Reference );
 
 	ResponseCallback.Init( Callback, Delimiter_ );
 	muaima::List( Reference, str::wString( "%" ), Console_ );
@@ -907,6 +1136,7 @@ namespace get_mail_ {
 			Amount = 0;
 		}
 	};
+
 }
 
 
@@ -918,20 +1148,36 @@ eStatus muaima::rSession::GetMail(
 	eStatus Status = s_Undefined;
 qRH
 	str::wString Folder;
+	eResponseCode Code = rc_None;
+	bso::bInteger Buffer;
 qRB
 	Folder.Init( RawFolder );
-	common_::NormalizeFolderName( Delimiter_, Folder );
+	common_::NormalizeFolderName( Delimiter_, false, Folder );
 
 	Select( Folder, Console_ );
-	Status = HandleResponses_( NOPResponseCallback_, qRP );
 
-#pragma message( __LOC__ " continue here !!!" )
+	Status = HandleStatus_( Console_.SkipRemainingReponses(), qRP );
+
+	if ( Status == sOK ) {
+		Fetch( str::wString( bso::Convert( Number, Buffer ) ), str::wString( item::GetLabel( item::nRFC822 ) ), Console_ );
+
+		while ( ( ( Code = Console_.GetPendingResponseCode() ) != rc_None ) && ( Code != rcFetch ) )
+			Console_.SkipResponse();
+
+		if ( Code == rc_None ) {
+			Status = HandleStatus_( qRP );
+			if ( Status == sOK )
+				qRGnr();
+		} else {
+			GetMailRack_.Init( Console_ );
+			ValueDriver_ = GetMailRack_();
+		}
+	}
 qRR
 qRT
 qRE
 	return Status;
 }
-
 
 namespace {
 	void FillAutomats_( void )
