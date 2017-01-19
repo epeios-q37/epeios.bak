@@ -110,8 +110,10 @@ namespace misc {
 		}
 		virtual void FDRDismiss( bso::sBool Unlock ) override
 		{
-			if ( ReadInProgress_ )
+			if ( ReadInProgress_ ) {
+				cio::COut.Commit();
 				cio::COut << "--" << txf::nl;
+			}
 
 			ReadInProgress_ = false;
 

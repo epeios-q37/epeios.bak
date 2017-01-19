@@ -26,386 +26,10 @@
 #	define MUAIMA__DBG
 # endif
 
-# include "muabsc.h"
+# include "muaimabs.h"
 
 namespace muaima {
-	typedef fdr::rIDressedDriver rDriver_;
-	typedef flx::sStringIFlow sSIFlow_;
-
-	class rPendingIFlow_
-	: public sSIFlow_
-	{
-	private:
-		str::wString Data_;
-	public:
-		void reset( bso::sBool P = true )
-		{
-			sSIFlow_::reset( P );
-			tol::reset( P, Data_ );
-		}
-		qCDTOR( rPendingIFlow_ );
-		void Init( const str::dString &Data )
-		{
-			Data_.Init( Data );
-			sSIFlow_::Init( Data_ );
-		}
-		bso::sBool IsEmpty( void )
-		{
-			return ( Data_.Amount() == 0 ) || (sSIFlow_::EndOfFlow() );
-		}
-	};
-
-	// Main delimiter, which is dicarded ; only the content is returned.
-	qENUM( Delimiter ) {
-		dNone,			// No delimiter detected yet.
-		dCRLF,			// To read the entire message until 'CRLF' of an status response.
-		dBracket,		// '[' : for optional response code.
-		dParenthesis,	// '(' : parenthisized list.
-		dQuote,			// Quoted ('"') string.
-		dLiteral,		// Literal ('{') string.
-//		dSpace,			// Separation of basic strings. Can be a space, CRLF, EOF.
-		d_amount,
-		d_Undefined
-	};
-
-	namespace _ {
-		// Delimiters are re-issued.
-		qENUM( Context ) {
-			cFree,
-			cQuoted,	// Quoted string.
-			cLiteral,	// Reading literal string _size_. The content itself is handled through 'Force_'.
-			cEOF,		// All data red;
-			// No parenthensis, as 'Level_' is enough to inform about.
-			// No bracket corresponding item, because it's always a root delimiter; or should be handled as regular char.
-			c_amount,
-			c_Undefined
-		};
-	}
-
-	inline void SkipCRLF_( flw::sIFlow &Flow )
-	{
-		if ( Flow.Get() != '\r' )
-			qRGnr();
-
-		if ( Flow.Get() != '\n' )
-			qRGnr();
-	}
-
-	class rDriverBase_
-	{
-	private:
-		qRMV( flw::sIFlow, F_, Flow_ );
-		eDelimiter Delimiter_;
-		_::eContext Context_;
-		rPendingIFlow_ Pending_;
-		bso::sSize Level_;	// Parenthensis level.
-		bso::sSize Force_;	// Remaining amount of byte to put without taking care of value.
-		void HandleFreeContext_(
-			fdr::sByte Byte,
-			flw::sIFlow &Flow,
-			fdr::sByte *Buffer,
-			fdr::sSize &Amount );
-		bso::sBool HandleQuotedContext_(
-			fdr::sByte Byte,
-			flw::sIFlow &Flow,
-			fdr::sByte *Buffer,
-			fdr::sSize &Amount );
-		void HandleLiteralContext_(
-			fdr::sByte Byte,
-			flw::sIFlow &Flow,
-			fdr::sByte *Buffer,
-			fdr::sSize &Amount );
-		void HandleContext_(
-			flw::sIFlow &Flow,
-			fdr::sByte *Buffer,
-			fdr::sSize &Amount );
-	public:
-		void reset( bso::sBool P = true )
-		{
-			tol::reset( P, Flow_, Pending_ );
-			Delimiter_ = d_Undefined;
-			Context_ = _::c_Undefined,
-			Force_ = 0;
-			Level_ = 0;
-		}
-		qCVDTOR( rDriverBase_ );
-		void Init(
-			flw::sIFlow &Flow,
-			const str::dString &PendingData,
-			eDelimiter Delimiter )
-		{
-			Delimiter_ = Delimiter;
-			Context_ = _::cFree;
-			Flow_ = &Flow;
-			Pending_.Init( PendingData );
-			Force_ = 0;
-			Level_ = 0;
-		}
-		fdr::sSize Read(
-			fdr::sSize Maximum,
-			fdr::sByte *Buffer );
-		void Dismiss( bso::sBool Unlock )
-		{
-			F_().Dismiss( Unlock );
-		}
-		fdr::sTID ITake( fdr::sTID Owner )
-		{
-			return F_().IDriver().ITake( Owner );
-		}
-
-	};
-
-	class rResponseDriver_
-	: public rDriver_
-	{
-	private:
-		rDriverBase_ Base_;
-		flw::sDressedIFlow<> Flow_;
-	protected:
-		virtual fdr::sSize FDRRead(
-			fdr::sSize Maximum,
-			fdr::sByte* Buffer ) override
-		{
-			return Base_.Read( Maximum, Buffer );
-		}
-		virtual void FDRDismiss( bso::sBool Unlock ) override
-		{
-			return Base_.Dismiss( Unlock );
-		}
-		virtual fdr::sTID FDRITake( fdr::sTID Owner ) override
-		{
-			return Base_.ITake( Owner );
-		}
-	public:
-		void reset( bso::sBool P = true )
-		{
-			rDriver_::reset( P );
-			tol::reset( P, Base_, Flow_ );
-		}
-		qCVDTOR( rResponseDriver_ );
-		void Init(
-			flw::sIFlow &Flow,
-			const str::dString &PendingData,
-			eDelimiter Delimiter )
-		{
-			Base_.Init( Flow, PendingData, Delimiter );
-			rDriver_::Init( fdr::ts_Default );
-		}
-		void Init(
-			fdr::rIDriver &Driver,
-			const str::dString &PendingData,
-			eDelimiter Delimiter )
-		{
-			Flow_.Init( Driver );
-			Base_.Init( Flow_, PendingData, Delimiter );
-			rDriver_::Init( fdr::ts_Default );
-		}
-	};
-
-	// Response code.
-	qENUM( ResponseCode ) {
-		// Not really response code, but 
-		rcOK,
-		rcNo,
-		rcBad,
-		rcPreAuth,
-		rcBye,
-		// Response codes which may optionnaly be contained in status response.
-		rcAlert,
-		rcBadCharSet,
-		rcCapability,
-		rcParse,
-		rcPermanentFlags,
-		rcReadOnly,
-		rcReadWrite,
-		rcTryCreate,
-		rcUIDNext,
-		rcUIDValidity,
-		rcUnseen,
-		// Below response codes are from RFC 55530.
-		rcUnavailable,
-		rcAuthenticationFailed,
-		rcAuthorizationFailed,
-		rcExpired,
-		rcPrivacyRequired,
-		rcContactAdmin,
-		rcNoPerm,
-		rcInUse,
-		rcExpungeIssued,
-		rcCorruption,
-		rcServerBug,
-		rcClientBug,
-		rcCanNot,
-		rcLimit,
-		rcOverQuota,
-		rcAlreadyExists,
-		rcNonExistent,
-		// Reponses to commands.
-		// rcCapability, // Already present above.
-		rcList,
-		rcLSub,
-		rcStatus,
-		rcSearch,
-		rcFlags,
-		rcExists,
-		rcRecent,
-		rcExpunge,
-		rcFetch,
-		rc_amount,
-		rc_None,
-		rc_Undefined
-	};
-
-	const char *GetLabel( eResponseCode Code );
-
-	qENUM( Status ) {
-		sOK,
-		sNO,
-		sBAD,
-		s_amount,
-		s_Erroneous,	// Server returned a not 'IMAP' compliant answer.
-		s_Undefined
-	};
-
-	const char *GetLabel( eStatus Status );
-
-	class rConsole
-	{
-	private:
-		str::wString Tag_;
-		flw::sDressedIFlow<> IFlow_;
-		txf::rOFlow OFlow_;
-		rResponseDriver_ ResponseDriver_;
-		eResponseCode PendingCode_;
-		bso::sBool PendingCodeIsStatus_;
-		bso::sBool NoTaggedStatusResponse_;	// To handle the connection, where there is no tagged status response.
-	public:
-		void reset( bso::sBool P = true )
-		{
-			tol::reset( P, Tag_, IFlow_, OFlow_, PendingCodeIsStatus_, ResponseDriver_, NoTaggedStatusResponse_ );
-			PendingCode_ = rc_Undefined;
-		}
-		qCDTOR( rConsole );
-		void Init( fdr::rIODriver &Driver )
-		{
-			tol::Init( Tag_ );
-			PendingCode_ = rc_Undefined;
-			IFlow_.Init( Driver );
-			OFlow_.Init( Driver );
-			PendingCodeIsStatus_ = false;
-			NoTaggedStatusResponse_ = false;
-			// 'ReponseDriver_' will be initialized as needed.
-		}
-		void ReportUntaggedStatusResponse( void )	// To handle the connection, where there is no tagged status response.
-		{
-			NoTaggedStatusResponse_ = true;
-		}
-		const str::dString &GetNextTag( void )
-		{
-			return muabsc::GetNextIMAPTag( Tag_ );
-		}
-		const str::dString &GetCurrentTag( void ) const
-		{
-			if ( Tag_.Amount() == 0)
-				qRGnr();
-
-			return Tag_;
-		}
-		txf::sOFlow &OFlow( void )
-		{
-			return OFlow_;
-		}
-		eResponseCode GetPendingResponseCode( void );
-		fdr::rIDriver &GetResponseDriver( void )
-		{
-			return ResponseDriver_;
-		}
-		void SkipResponse( void )
-		{
-			fdr::Copy( ResponseDriver_, flx::VoidOFlowDriver );
-		}
-		// Also resets the 'PendingCodeIsStatus_'
-		eStatus GetStatus( void )
-		{
-			// Althought 'PendingCode' is a status, the 'PendingCodeIsStatus_' is already set to false by 'GetPendingCode(...').
-			eStatus Status = s_Undefined;
-
-			switch ( PendingCode_ ) {
-			case rcOK:
-				Status = sOK;
-				break;
-			case rcNo:
-				Status = sNO;
-				break;
-			case rcBad:
-				Status = sBAD;
-				break;
-			default:
-				qRGnr();
-				break;
-			}
-
-			PendingCode_ = rc_Undefined;
-
-			return Status;
-		}
-		// You have srtill to handle 'GetResponseCode(...)' or launch 'SkipReponse(...');
-		eStatus SkipRemainingReponses( void )
-		{
-			eStatus Status = s_Undefined;
-
-			while ( GetPendingResponseCode() != rc_None )
-				SkipResponse();
-
-			Status = GetStatus();
-
-			return Status;
-		}
-	};
-
-	/*
-		First, call 'Connect(...)', then 'Login(...)' (technically, it's not mandatory
-		but if you dont, you would not be able to do very much), and end with 
-		'Logout(...)'. Between 'Login(....)' and 'Logout(...)', call all other
-		functions as needed.
-
-		After calling each functions, call 'rConsole.GetPendingCode(...)',
-		then handle 'rConsole::GetResponseDriver(...)' or call 'rConsole::SkipReponse(...)'
-		until 'rConsole.GetPendingCode(...)' returns 'c_None'.	Then Call the
-		'rConsole::GetStatus(...)',	then handle 'rConsole::GetResponseDriver(...)',
-		or call 'rConsole::SkipReponse(...)'.
-	*/
-
-
-	// This is the first command to call after opening a connection to the 'IMAP' server.
-	void Connect( rConsole &Console );
-
-	// To log in. Most commands are not available when this is skipped or not done successfully.
-	void Login(
-		const str::dString &Username,
-		const str::dString &Password,
-		rConsole &Console );
-
-	// To call just before closing the connexion. You do _not_ need to be logged in to log out.
-	void Logout( rConsole &Console );
-
-	// Launches the corresponding 'IMAP' command.
-	void Capability( rConsole &Console );
-	void Select(
-		const str::dString &Mailbox,
-		rConsole &Console );
-	void List(
-		const str::dString &Reference,
-		const str::dString &Mailbox,
-		rConsole &Console );
-	void LSub(
-		const str::dString &Reference,
-		const str::dString &Mailbox,
-		rConsole &Console );
-	void Fetch(
-		const str::dString &Sequence,
-		const str::dString &Items,
-		rConsole &Console );
+	using namespace muaimabs;
 
 	class cValue_
 	{
@@ -426,6 +50,7 @@ namespace muaima {
 		rDriverBase_ Base_;
 		flw::sDressedIFlow<> Flow_;
 		cValue_ *Callback_;
+		bso::sBool EOFHandled_;
 	protected:
 		virtual fdr::sSize FDRRead(
 			fdr::sSize Maximum,
@@ -433,9 +58,14 @@ namespace muaima {
 		{
 			fdr::sSize Amount = Base_.Read( Maximum, Buffer );
 
-			if ( Amount == 0 )	// EOF reach.
-				if ( Callback_ != NULL )
-					Callback_->OnEOF();
+			if ( Base_.EndOfFlow() ) {
+				if ( !EOFHandled_  ) {
+					EOFHandled_ = true;
+					if ( Callback_ != NULL )
+						Callback_->OnEOF();
+				}
+			} else
+				EOFHandled_ = false;
 
 			return Amount;
 		}
@@ -451,25 +81,28 @@ namespace muaima {
 		void reset( bso::sBool P = true )
 		{
 			rDriver_::reset( P  );
-			tol::reset( P, Base_, Flow_, Callback_ );
+			tol::reset( P, Base_, Flow_, Callback_, EOFHandled_ );
 		}
 		qCVDTOR( rValueDriver_ );
 		void Init(
 			flw::sIFlow &Flow,
+			eDelimiter Delimiter,
 			cValue_ *Callback )
 		{
 			rDriver_::Init( fdr::ts_Default );
-			Base_.Init( Flow, str::wString(), dNone );
-			Callback_ = Callback_;
+			Base_.Init( Flow, str::wString(), Delimiter );
+			Callback_ = Callback;
+			EOFHandled_ = false;
 		}
 		void Init(
 			fdr::rIDriver &Driver,
+			eDelimiter Delimiter,
 			cValue_ *Callback )
 		{
 			rDriver_::Init( fdr::ts_Default );
 			Flow_.Init( Driver );
-			Base_.Init( Flow_, str::wString(), dNone );
-			Callback_ = Callback_;
+			Base_.Init( Flow_, str::wString(), Delimiter );
+			Callback_ = Callback;
 		}
 	};
 
@@ -493,7 +126,7 @@ namespace muaima {
 		};
 
 		const char *GetLabel( eName Name );
-
+		/*
 		class rConsole
 		{
 		private:
@@ -518,6 +151,7 @@ namespace muaima {
 				return ValueDriver_;
 			}
 		};
+		*/
 	}
 
 	class cResponse_
@@ -549,6 +183,29 @@ namespace muaima {
 	};
 
 	namespace get_mail_ {
+		class sRFC822ValueCallback_
+		: public cValue_
+		{
+		private:
+			qRMV( fdr::rIDriver, D_, Driver_ );
+		protected:
+			virtual void MUAIMAOnEOF( void ) override
+			{
+				fdr::Purge( D_() );
+			}
+		public:
+			void reset( bso::sBool P = true )
+			{
+				tol::reset( P, Driver_ );
+			}
+			qCVDTOR( sRFC822ValueCallback_ );
+			void Init( fdr::rIDriver &Driver )
+			{
+				Driver_ = &Driver;
+			}
+		};
+
+
 		class sFetchResponseValueCallback_
 		: public cValue_
 		{
@@ -577,22 +234,28 @@ namespace muaima {
 		class rRack
 		{
 		private:
-			rValueDriver_ ValueDriver_;
+			rValueDriver_ FetchValueDriver_, ItemsValueDriver_, RFC822ValueDriver_;
 			sFetchResponseValueCallback_ FetchResponseValueCallback_;
+			sRFC822ValueCallback_ ItemsValueCallback_, RFC822ValueCallback_;
+			void GetValue_( void );
 		public:
 			void reset( bso::sBool P = true )
 			{
-				tol::reset( P, ValueDriver_, FetchResponseValueCallback_ );
+				tol::reset( P, FetchValueDriver_, ItemsValueDriver_, RFC822ValueDriver_, FetchResponseValueCallback_, ItemsValueCallback_, RFC822ValueCallback_ );
 			}
 			qCDTOR( rRack )
 			void Init( rConsole &Console )
 			{
 				FetchResponseValueCallback_.Init( Console );
-				ValueDriver_.Init( Console.GetResponseDriver(), &FetchResponseValueCallback_ );
+				FetchValueDriver_.Init(Console.GetResponseDriver(), dCRLF, &FetchResponseValueCallback_ );
+				GetValue_();
+
+				RFC822ValueCallback_.Init( ItemsValueDriver_ );
+				RFC822ValueDriver_.Init( ItemsValueDriver_, dNone, &RFC822ValueCallback_ );
 			}
 			fdr::rIDriver *operator()( void )
 			{
-				return &ValueDriver_;
+				return &RFC822ValueDriver_;
 			}
 			
 		};
@@ -649,12 +312,16 @@ namespace muaima {
 			if ( Connected_ )
 				Status = Disconnect_( qRPU );	// We don't care if it fails.
 
+			Connected_ = false;
+
 			Console_.Init( Driver );
 
 			Status = Connect_( Username, Password, qRP );
 
-			if ( Status == sOK )
+			if ( Status == sOK ) {
+				Connected_ = true;
 				Status = FetchHierarchyDelimiter_( qRP );
+			}
 
 			if ( Status != sOK ) {
 				if ( qRPT )

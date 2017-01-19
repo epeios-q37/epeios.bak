@@ -23,11 +23,15 @@
 
 #include "str.h"
 
-flx::void_oflow_driver___ flx::VoidOFlowDriver;
+flx::void_odriver___ flx::VoidODriver;
+flx::void_odriver___ flx::PlaceholderODriver;
 flx::void_oflow__ flx::VoidOFlow;
+flx::void_oflow__ flx::PlaceholderOFlow;
 
-flx::void_iflow_driver___ flx::VoidIFlowDriver;
+flx::void_idriver___ flx::VoidIDriver;
+flx::void_idriver___ flx::PlaceholderIDriver;
 flx::void_iflow__ flx::VoidIFlow;
+flx::void_iflow__ flx::PlaceholderIFlow;
 
 cslio::descriptor__ flx::_POpen(
 	const ntvstr::string___ &Command,
@@ -242,19 +246,19 @@ bso::bool__ flx::exec_ioflow_driver___::Init(
 
 Q37_GCTOR( flx )
 {
-	flx::VoidOFlowDriver.Init( fdr::ts_Default, flx::a_Default );
+	flx::VoidODriver.Init( fdr::ts_Default, flx::aAllowed );
 	flx::VoidOFlow.Init();
+	flx::PlaceholderODriver.Init( fdr::ts_Default, flx::aForbidden );
+	flx::PlaceholderOFlow.Init();
 
-	flx::VoidIFlowDriver.Init( fdr::ts_Default, flx::a_Default );
+	flx::VoidIDriver.Init( fdr::ts_Default, flx::aAllowed );
 	flx::VoidIFlow.Init();
+	flx::PlaceholderIDriver.Init( fdr::ts_Default, flx::aForbidden );
+	flx::PlaceholderIFlow.Init();
 }
 
 Q37_GDTOR( flx )
 {
-	// Below 4 lines should not be necessary, but if missing, 'pure virtual function call' problem (at least under VC++10).
-	flx::VoidIFlow.reset();
-	flx::VoidIFlowDriver.reset();
-
-	flx::VoidOFlow.reset();
-	flx::VoidOFlowDriver.reset();
+	// Below line should not be necessary, but if missing, 'pure virtual function call' problem (at least under VC++10).
+	tol::reset( flx::VoidODriver, flx::VoidOFlow, flx::PlaceholderODriver, flx::PlaceholderOFlow, flx::VoidIDriver, flx::VoidIFlow, flx::PlaceholderIDriver, flx::PlaceholderIFlow );
 }

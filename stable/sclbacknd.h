@@ -60,7 +60,7 @@ namespace sclbacknd {
 	{
 	private:
 		fblbkd::text_log_functions__<> _RequestLogFunctions;
-		flx::void_oflow_driver___ _VoidFlowDriver;
+		flx::void_odriver___ _VoidFlowDriver;
 		rgstry::multi_level_registry _Registry;
 		rgstry::level__ _RegistrySetupLevel;
 	protected:

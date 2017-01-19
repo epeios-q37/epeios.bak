@@ -17,10 +17,6 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-
-
-//	$Id: cio.cpp,v 1.48 2013/04/06 14:50:43 csimon Exp $
-
 #define CIO__COMPILATION
 
 #include "cio.h"
@@ -31,9 +27,9 @@ using namespace cio;
 
 static target__ Target_ = t_Undefined;
 
-static flx::void_iflow_driver___ _VInDriver;
-static flx::void_oflow_driver___ _VOutDriver;
-static flx::void_oflow_driver___ _VErrDriver;
+static flx::void_idriver___ &_VInDriver = flx::VoidIDriver;
+static flx::void_odriver___ _VOutDriver = flx::VoidODriver;;
+static flx::void_odriver___ _VErrDriver = flx::VoidODriver;;
 
 static iof::io_iflow_driver___ _SInDriver;
 static iof::io_oflow_driver___ _SOutDriver;

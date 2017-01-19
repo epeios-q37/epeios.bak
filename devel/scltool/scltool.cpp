@@ -189,7 +189,7 @@ int WINAPI wWinMain(
 qRFH
 	str::string SOut, SErr;
 	flx::bunch_oflow_driver___<str::string_, bso::char__> FOut, FErr;
-	flx::void_iflow_driver___ FIn;
+	flx::void_idriver___ FIn;
 	cio::set__ CIO;
 	oddities__ Oddities;
 qRFB

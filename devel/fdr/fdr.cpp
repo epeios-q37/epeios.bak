@@ -21,5 +21,26 @@
 
 #include "fdr.h"
 
+#include "flx.h"
+
 using namespace fdr;
+
+void fdr::Copy_(
+	rIDriver &IDriver,
+	sByte *Buffer,
+	sSize BufferSize,
+	rODriver &ODriver )
+{
+	while ( !IDriver.EndOfFlow() )
+		ODriver.Write( Buffer, IDriver.Read( BufferSize, Buffer, fdr::bNonBlocking ) );
+}
+
+void fdr::Purge_(
+	rIDriver &Driver,
+	sByte *Buffer,
+	sSize BufferSize )
+{
+	Copy_( Driver, Buffer, BufferSize, flx::VoidODriver );
+}
+
 

@@ -89,11 +89,11 @@ namespace flx {
 
 namespace flx {
 
-	template <int cache_size = FDR__DEFAULT_CACHE_SIZE> E_TTCLONE__( fdr::iflow_driver___<cache_size>, _iflow_driver___ );
+	template <int cache_size = FDR__DEFAULT_CACHE_SIZE> E_TTCLONE__( fdr::iflow_driver___<cache_size>, _idriver___ );
 
 	//c Buffer as a standard input flow.
 	class buffer_iflow_driver___
-	: public _iflow_driver___<>
+	: public _idriver___<>
 	{
 	private:
 		// Pointeur sur le prochain caractre  lire.
@@ -137,7 +137,7 @@ namespace flx {
 	public:
 		void reset( bool P = true )
 		{
-			_iflow_driver___<>::reset( P );
+			_idriver___<>::reset( P );
 			Taille_ = 0;
 			Tampon_ = NULL;
 		}
@@ -158,7 +158,7 @@ namespace flx {
 		{
 			reset();
 
-			_iflow_driver___<>::Init( ThreadSafety );
+			_idriver___<>::Init( ThreadSafety );
 
 			Tampon_ = Buffer;
 			Taille_ = Size;
@@ -295,7 +295,7 @@ namespace flx {
 
 	//c A bunch as input flow.driver.
 	template < typename bunch_, typename so__, int cache_size> class bunch_iflow_driver___
-	: public _iflow_driver___<cache_size>
+	: public _idriver___<cache_size>
 	{ 
 	protected:
 		virtual fdr::size__ FDRRead(
@@ -325,7 +325,7 @@ namespace flx {
 	public:
 		void reset( bool P = true )
 		{
-			_iflow_driver___<cache_size>::reset( P );
+			_idriver___<cache_size>::reset( P );
 			Bunch_ = NULL;
 			Position_ = 0;
 		}
@@ -348,7 +348,7 @@ namespace flx {
 			Bunch_ = &Bunch;
 			Position_ = Position;
 
-			_iflow_driver___<cache_size>::Init( ThreadSafety );
+			_idriver___<cache_size>::Init( ThreadSafety );
 		}
 	};
 
@@ -527,16 +527,17 @@ namespace flx {
 		}
 	};
 
-	E_ENUM( access )
+	// For the 'void' flow/driver.
+	qENUM( Access )
 	{
-		aAllowed,
-		aForbidden,
+		aAllowed,	// Writing/reading allowed.
+		aForbidden,	// Writing/reading forbidden. Useful to use the flow/driver as placeholder, which should not be used.
 		a_amount,
 		a_Undefined,
 		a_Default = aForbidden,
 	};
 
-	inline void Test_( access__ Access )
+	inline void Test_( eAccess Access )
 	{
 		switch ( Access ) {
 		case aAllowed:
@@ -552,14 +553,14 @@ namespace flx {
 
 # define E_STRING_TOFLOW___	string_text_oflow___
 
-	typedef fdr::oflow_driver___<> _oflow_driver___;
+	typedef fdr::oflow_driver___<> _odriver___;
 
 	// 'driver' qui n'crit dans rien.
-	class void_oflow_driver___
+	class void_odriver___
 	: public _oflow_driver___
 	{
 	private:
-		access__ _Access;
+		eAccess _Access;
 	protected:
 		virtual fdr::size__ FDRWrite(
 			const fdr::byte__ *,
@@ -581,17 +582,19 @@ namespace flx {
 			_oflow_driver___::reset( P );
 			_Access = a_Undefined;
 		}
-		E_CDTOR( void_oflow_driver___ );
+		E_CDTOR( void_odriver___ );
 		void Init(
 			fdr::thread_safety__ ThreadSafety,
-			access__ Access )
+			eAccess Access )
 		{
 			_oflow_driver___::Init( ThreadSafety );
 			_Access = Access;
 		}
 	};	
 
-	extern void_oflow_driver___ VoidOFlowDriver;
+	extern void_odriver___ VoidODriver;
+	// As placeholder, but with no writing.
+	extern void_odriver___ PlaceholderODriver;
 
 	// 'flow' qui n'crit dans rien.
 	class void_oflow__
@@ -612,20 +615,22 @@ namespace flx {
 		}
 		void Init( void )
 		{
-			standalone_oflow__<>::Init( VoidOFlowDriver );
+			standalone_oflow__<>::Init( VoidODriver );
 		}
 	};
 
-	// ATTENTION : n'est pas 'therad-safe'.
+	// ATTENTION : n'est pas 'thread-safe'.
 	extern void_oflow__ VoidOFlow;
+	// As placeholder, but with no writing.
+	extern void_oflow__ PlaceholderOFlow;
 
 
 	// 'driver' qui ne lit rien.
-	class void_iflow_driver___
-	: public _iflow_driver___<>
+	class void_idriver___
+	: public _idriver___<>
 	{
 	private:
-		access__ _Access;
+		eAccess _Access;
 	protected:
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
@@ -644,20 +649,23 @@ namespace flx {
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_iflow_driver___<>::reset( P );
+			_idriver___<>::reset( P );
 			_Access = a_Undefined;
 		}
-		E_CDTOR( void_iflow_driver___ );
+		E_CDTOR( void_idriver___ );
 		void Init(
 			fdr::thread_safety__ ThreadSafety,
-			access__ Access )
+			eAccess Access )
 		{
 			fdr::iflow_driver___<>::Init( ThreadSafety );
 			_Access = Access;
 		}
 	};	
 
-	extern void_iflow_driver___ VoidIFlowDriver;
+	extern void_idriver___ VoidIDriver;
+	// As placeholder, but with no reading.
+	extern void_idriver___ PlaceholderIDriver;
+
 
 	// 'flow' qui ne lit rien.
 	class void_iflow__
@@ -679,12 +687,14 @@ namespace flx {
 		}
 		void Init( void )
 		{
-			standalone_iflow__<>::Init( VoidIFlowDriver );
+			standalone_iflow__<>::Init( VoidIDriver );
 		}
 	};
 
 	// ATTENTION : n'est pas 'thread-safe'.
 	extern void_iflow__ VoidIFlow;
+	// As placeholder, but with no reading.
+	extern void_iflow__ PlaceholderIFlow;
 
 	// 'driver' qui relaye un autre 'driver'.
 	class relay_oflow_driver___
@@ -738,7 +748,7 @@ namespace flx {
 
 	// 'driver' qui relaye un autre 'driver'.
 	class relay_iflow_driver___
-	: public _iflow_driver___<>
+	: public _idriver___<>
 	{
 	private:
 		fdr::iflow_driver_base___ *_Driver;
@@ -762,7 +772,7 @@ namespace flx {
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_iflow_driver___<>::reset( P );
+			_idriver___<>::reset( P );
 			_Driver = NULL;
 		}
 		relay_iflow_driver___( void )
@@ -778,7 +788,7 @@ namespace flx {
 			fdr::thread_safety__ ThreadSafety )
 		{
 			_Driver = &Driver;
-			_iflow_driver___<>::Init( ThreadSafety );
+			_idriver___<>::Init( ThreadSafety );
 		}
 		bso::bool__ IsInitialized( void ) const
 		{
@@ -885,7 +895,7 @@ namespace flx {
 
 	// 'driver' qui relaye un 'iflow', mais dont la taille est 'encode' dans le flux.
 	class size_embedded_iflow_driver___
-	: public _iflow_driver___<>
+	: public _idriver___<>
 	{
 	private:
 		flw::iflow__ *_Flow;
@@ -955,7 +965,7 @@ namespace flx {
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_iflow_driver___<>::reset( P );
+			_idriver___<>::reset( P );
 			_Flow = NULL;
 			_EmbeddedSizeRemainder = 0;
 			_DismissHandling = dh_Undefined;
@@ -970,7 +980,7 @@ namespace flx {
 			_Flow = &Flow;
 			_EmbeddedSizeRemainder = 0;
 			_DismissHandling = DismissHandling,
-			_iflow_driver___<>::Init( ThreadSafety );
+			_idriver___<>::Init( ThreadSafety );
 			_AllRed = true;
 		}
 		bso::bool__ IsInitialized( void ) const
@@ -1186,7 +1196,7 @@ namespace flx {
 
 	// Lance une commande dans le shell et rcupre les donnes crites par la commande.
 	class exec_iflow_driver___
-	: public _iflow_driver___<>,
+	: public _idriver___<>,
 	  public _exec_driver___<cslio::standard_input__>
 	{
 	protected:
@@ -1217,7 +1227,7 @@ namespace flx {
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_iflow_driver___::reset( P );
+			_idriver___::reset( P );
 			_exec_driver___::reset( P );
 				
 		}
@@ -1226,7 +1236,7 @@ namespace flx {
 			const ntvstr::string___ &Command,
 			fdr::thread_safety__ ThreadSafety )
 		{
-			_iflow_driver___<>::Init( ThreadSafety );
+			_idriver___<>::Init( ThreadSafety );
 			return _exec_driver___::Init(Command, _ReadMode );
 		}
 	};
@@ -1388,7 +1398,7 @@ namespace flx {
 	};
 
 	class rSizeDelimitedIDriver
-	: public _iflow_driver___<>
+	: public _idriver___<>
 	{
 	private:
 		fdr::sSize Size_;
@@ -1424,7 +1434,7 @@ namespace flx {
 	public:
 		void reset( bso::sBool P = true )
 		{
-			_iflow_driver___::reset( P );
+			_idriver___::reset( P );
 
 			tol::reset( P, Flow_, Callback_ );
 
@@ -1437,7 +1447,7 @@ namespace flx {
 			cSizeDelimitedOFlow *Callback,
 			fdr::thread_safety__ ThreadSafety )
 		{
-			_iflow_driver___::Init( ThreadSafety );
+			_idriver___::Init( ThreadSafety );
 
 			Size_ = Size;
 			Flow_.Init( Driver );

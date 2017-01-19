@@ -552,12 +552,6 @@ namespace fdr {
 		{
 			return Red_;
 		}
-		void Drain( void )
-		{
-			bso::sByte Buffer[100];
-
-			while ( Read(sizeof( Buffer ), Buffer, bNonBlocking ) != 0 );
-		}
 	};
 
 	template <int cache_size = FDR__DEFAULT_CACHE_SIZE> class iflow_driver___
@@ -722,25 +716,33 @@ namespace fdr {
 
 	typedef fdr::thread_safety__ eThreadSafety;
 
+	void Copy_(
+		rIDriver &IDriver,
+		sByte *Buffer,
+		sSize BufferSize,
+		rODriver &ODriver );
+
+
 	template <int BufferSize = 1024> inline void Copy(
 		fdr::rIDriver &IDriver,
 		fdr::rODriver &ODriver )
 	{
 		fdr::byte__ Buffer[BufferSize];
-		fdr::sSize Amount = 0;
 
-		while ( !IDriver.EndOfFlow() )
-			ODriver.Write( Buffer, IDriver.Read( BufferSize, Buffer, fdr::bNonBlocking ) );
+		Copy_( IDriver, Buffer, BufferSize, ODriver );
 	}
+
+	void Purge_(
+		rIDriver &IDriver,
+		sByte *Buffer,
+		sSize BufferSize );
 
 	template <int BufferSize = 1024> inline void Purge( fdr::rIDriver &Driver )
 	{
 		fdr::byte__ Buffer[BufferSize];
 
-		while ( !Driver.EndOfFlow() )
-			Driver.Read( BufferSize, Buffer, fdr::bNonBlocking );
+		Purge_( Driver, Buffer, BufferSize );
 	}
-
 }
 
 #endif

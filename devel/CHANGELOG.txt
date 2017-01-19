@@ -1,5 +1,11 @@
 CHANGELOG for the 'Epeios' framework.
 
+2017-01-19 :
+- CIO, SCLBACKND, SCLTOOL :
+	- Adaptation to changes in 'FLX'.
+- FLX :
+	- Simplicication of all 'void' related stuff.
+
 2017-01-17 :
 - DWTCPR :
 	- Returning the amount of modified/created files, and the cumulated size of all modified/created files.

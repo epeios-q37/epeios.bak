@@ -23,603 +23,6 @@
 
 using namespace muaima;
 
-namespace {
-	inline const str::dString &GetAlphanumMinus_(
-		flw::sIFlow &Flow,
-		str::dString &AlphaNum )
-	{
-		flw::sByte Byte = 0;
-		while ( !Flow.EndOfFlow() && ( isalnum( Byte = Flow.View() ) || ( Byte == '-' ) ) )
-			AlphaNum.Append( Flow.Get() );
-
-		return AlphaNum;
-	}
-}
-
-void muaima::rDriverBase_::HandleFreeContext_(
-	fdr::sByte Byte,
-	flw::sIFlow &Flow,
-	fdr::sByte *Buffer,
-	fdr::sSize &Amount )
-{
-	bso::sBool Put = true;	// If 'true', 'Byte' is put in 'Buffer'.
-
-	switch ( Byte ) {
-	case '"':
-		if ( Delimiter_ == dNone ) {
-			Delimiter_ = dQuote;
-			Put = false;
-		} else if ( Delimiter_ == dQuote ) {
-			Context_ = _::cEOF;
-			Put = false;
-		} else
-			Context_ = _::cQuoted;
-		break;
-	case '(':
-		if ( Delimiter_ == dNone ) {
-			Delimiter_ = dParenthesis;
-			Put = false;
-		} else if ( Level_ == bso::U8Max )
-			qRLmt();
-		else 
-			Level_++;
-		// We stay in the same context.
-		break;
-	case ')':
-		if ( Level_ == 0 ) {
-			if ( Delimiter_ != dParenthesis )
-				qRGnr();
-
-			Context_ = _::cEOF;
-			Put = false;
-		} else
-			Level_--;
-
-		// We stay in the same context.
-		break;
-	case '[':	// Can happen with 'FETCH' 'BODY[HEADER]' reponse.
-		if ( Delimiter_ == dBracket )
-			qRGnr();
-		break;
-	case ']':
-		if ( Delimiter_ == dBracket ) {
-			Context_ = _::cEOF;
-			Put = false;
-		}
-		break;		
-	case '{':
-		if ( Delimiter_ == dNone ) {
-			Delimiter_ = dBracket;
-			Put = false;
-		}
-
-		Context_ = _::cLiteral;
-		break;
-	case '}':
-		qRGnr();
-		break;
-	case '\r':
-		if ( Flow.View() != '\n' )
-			qRGnr();
-
-		if ( ( Delimiter_ == dCRLF ) || ( Delimiter_ == dNone ) ) {	// Can sometimes occur when directly called from 'HandleFreeContext_(...)'.
-			Context_ = _::cEOF;
-			Put = false;
-		} else 
-			Force_ = 1;
-		break;
-	case '\n':	// Should have be already skipped.
-		qRGnr();
-		break;
-	case 0:		// Not allowed
-		qRGnr();
-		break;
-	default:
-		break;
-	}
-
-	if ( Put )
-		Buffer[Amount++] = Byte;
-}
-
-bso::sBool muaima::rDriverBase_::HandleQuotedContext_(
-	fdr::sByte Byte,
-	flw::sIFlow &Flow,
-	fdr::sByte *Buffer,
-	fdr::sSize &Amount )
-{
-	switch ( Byte ) {
-	case '\\':
-		Byte = Flow.View();
-		if ( ( Byte != '\\' ) && ( Byte != '"' ) )
-			qRGnr();
-
-		if ( Delimiter_ == dQuote ) {
-			Buffer[Amount++] = Flow.Get();
-		} else {
-			Buffer[Amount++] = '\\';
-			Force_ = 1;
-		}
-		break;
-	case '"':
-		if ( Delimiter_ == dQuote )
-			Context_ = _::cEOF;
-		else {
-			Buffer[Amount++] = Byte;
-			Context_ = _::cFree;
-		}
-		break;
-	default:
-		Buffer[Amount++]=Byte;
-		break;
-	}
-
-	return true;
-}
-
-void muaima::rDriverBase_::HandleLiteralContext_(
-	fdr::sByte Byte,
-	flw::sIFlow &Flow,
-	fdr::sByte *Buffer,
-	fdr::sSize &Amount )
-{
-	if ( Byte == '}' ) {
-		if ( Delimiter_ != dLiteral )
-			Force_ += 2;	// To include the 'CRLF'.
-		Context_ = _::cFree;
-	} else if ( !isdigit(Byte) ) {
-		qRGnr();
-	} else if ( Force_ < ( ( bso::SizeMax / 10 ) -1 ) ) {
-		Force_ = Force_ * 10 + ( Byte - '0' );
-	} else
-		qRLmt();
-
-	if ( Delimiter_ != dLiteral )
-		Buffer[Amount++] = Byte;
-}
-
-void muaima::rDriverBase_::HandleContext_(
-	flw::sIFlow &Flow,
-	fdr::sByte *Buffer,
-	fdr::sSize &Amount )
-{
-	bso::sBool HandleSPCRLF = true;
-
-	switch ( Context_ ) {
-	case _::cFree:
-		HandleFreeContext_( Flow.Get(), Flow, Buffer, Amount );
-		break;
-	case _::cQuoted:
-		HandleQuotedContext_( Flow.Get(), Flow, Buffer, Amount );
-		break;
-	case _::cLiteral:
-		HandleLiteralContext_( Flow.Get(), Flow, Buffer, Amount );
-		break;
-	case _::cEOF:
-		HandleSPCRLF = false;
-		break;
-	default:
-		qRGnr();
-		break;
-	}
-
-	if ( Context_ == _::cEOF ) {
-		if ( HandleSPCRLF && !Flow.EndOfFlow() ) {
-			switch ( Flow.Get() ) {
-			case ' ':
-				break;
-			case '\r':
-				if ( Flow.Get() != '\n' )
-					qRGnr();
-				break;
-			case '\n':	// '\r' was already eaten.
-				break;
-			default:	// All above space chars are already be eaten.
-				break;
-			}
-		}
-	}
-}
-
-fdr::sSize muaima::rDriverBase_::Read(
-	fdr::sSize Maximum,
-	fdr::sByte *Buffer )
-{
-	fdr::sSize Amount = 0;
-
-	flw::sIFlow &Flow = F_();
-
-	if ( Maximum < 2 )	// Due to the 'Pending' handling, that must be place in the 'Buffer' to put at least chars.
-		qRVct();
-
-	while ( Amount < Maximum ) {
-		if ( !Pending_.IsEmpty() ) {
-			if ( Maximum > ( Amount + 1 ) ) { // To ensure that there is place in 'Buffer' to put a ' '.
-				Amount += Pending_.ReadUpTo( Maximum - Amount - 1, Buffer + Amount );
-
-				if ( Pending_.IsEmpty() )
-					if ( Flow.View() != '\r' )
-						Buffer[Amount++] = ' ';
-			} else
-				Maximum = Amount;	// To exit the loop.
-		} else if ( ( Force_ != 0 ) && ( Context_ != _::cLiteral ) ) {
-			bso::sSize PonctualAmount = Flow.ReadUpTo( Force_ > Maximum - Amount ? Maximum - Amount : Force_, Buffer + Amount );
-
-			Amount += PonctualAmount;
-
-			Force_ -= PonctualAmount;
-		} else {
-			HandleContext_( Flow, Buffer, Amount );
-		}
-
-		if ( ( Context_ == _::cEOF ) || Flow.EndOfFlow() ) {
-			Context_ = _::cEOF;
-			Maximum = Amount;	// To exit the loop.
-		}
-	}
-
-	return Amount;
-}
-
-#define C( name )	case rc##name : return #name; break
- 
-const char *muaima::GetLabel( eResponseCode Code )
-{
-	switch ( Code ) {
-	C( OK );
-	C( No );
-	C( Bad );
-	C( PreAuth);
-	C( Bye );
-	C( Alert );
-	C( BadCharSet );
-	C( Capability );
-	C( Parse );
-	C( PermanentFlags );
-	case rcReadOnly:
-		return "Read-Only";
-		break;
-	case rcReadWrite:
-		return "Read-Write";
-		break;
-	C( TryCreate );
-	C( UIDNext );
-	C( UIDValidity );
-	C( Unseen );
-	C( Unavailable );
-	C( AuthenticationFailed );
-	C( AuthorizationFailed );
-	C( Expired );
-	C( PrivacyRequired );
-	C( ContactAdmin );
-	C( NoPerm );
-	C( InUse );
-	C( ExpungeIssued );
-	C( Corruption );
-	C( ServerBug );
-	C( ClientBug );
-	C( CanNot );
-	C( Limit );
-	C( OverQuota );
-	C( AlreadyExists );
-	C( NonExistent );
-	C( List );
-	C( LSub );
-	C( Status );
-	C( Search );
-	C( Flags );
-	C( Exists );
-	C( Recent );
-	C( Expunge );
-	C( Fetch );
-	default:
-		qRFwk();
-		break;
-	}
- 
-	return NULL;	// To avoid a warning.
-}
-
-#undef C
-
-namespace code_ {
-	namespace _ {
-		stsfsm::wAutomat Automat;
-
-		const str::dString &GetUCLabel(
-			eResponseCode Code,
-			str::dString &Label )
-		{
-			Label.Append( GetLabel( Code ) );
-
-			str::ToUpper( Label );
-
-			return Label;
-		}
-
-		eResponseCode GetCode( const str::dString &Pattern )
-		{
-			return stsfsm::GetId( Pattern, Automat, rc_Undefined, rc_amount );
-		}
-	}
-
-	void FillAutomat( void )
-	{
-		_::Automat.Init();
-		stsfsm::Fill<eResponseCode>( _::Automat, rc_amount, _::GetUCLabel );
-	}
-
-	eResponseCode Get(
-		flw::sIFlow &Flow,
-		str::dString &Before )
-	{
-		eResponseCode Code = rc_Undefined;
-	qRH
-		str::wString Pattern;
-		flw::sByte Byte = 0;
-	qRB
-		if ( isdigit( Flow.View() ) ) {
-			GetAlphanumMinus_( Flow, Before );
-
-			if ( Flow.Get() != ' ' )
-				qRGnr();
-		}
-
-		Pattern.Init();
-
-		GetAlphanumMinus_( Flow, Pattern );
-
-		Code = _::GetCode( Pattern );
-
-		if ( Flow.View() == ' ' )
-			Flow.Skip();
-	qRR
-	qRT
-	qRE
-		return Code;
-	}
-}
-
-eResponseCode muaima::rConsole::GetPendingResponseCode( void )
-{
-	eResponseCode Code = rc_Undefined;
-qRH
-	flw::sIFlow &Flow = IFlow_;
-	str::wString PendingData, Tag;
-qRB
-	PendingData.Init();
-
-	if ( PendingCode_ != rc_Undefined ) {
-		if ( PendingCodeIsStatus_ ) {
-			Code = rc_None;
-			PendingCodeIsStatus_ = false;
-		} else {
-			Code = PendingCode_;
-			PendingCode_ = rc_Undefined;
-		}
-		ResponseDriver_.Init( Flow, PendingData, dCRLF );
-	} else {
-		if ( Flow.View() == '*' ) {
-			Flow.Skip();
-
-			if ( NoTaggedStatusResponse_ ) {
-				PendingCodeIsStatus_ = true;
-				NoTaggedStatusResponse_ = false;
-			}
-		} else {
-			Tag.Init();
-			GetAlphanumMinus_( Flow, Tag );
-			PendingCodeIsStatus_ = true;
-		}
-
-		if ( Flow.Get() != ' ' )
-			qRGnr();
-
-		Code = code_::Get( Flow, PendingData );
-
-		if ( Flow.View() == '[' ) {
-			PendingCode_ = Code;
-			if ( PendingData.Amount() != 0 )
-				qRGnr();
-			Flow.Skip();
-			Code = code_::Get( Flow, PendingData );
-			ResponseDriver_.Init( Flow, PendingData, dBracket );
-		} else {
-			if ( PendingCodeIsStatus_ ) {
-				PendingCode_ = Code;
-				Code = rc_None;
-				PendingCodeIsStatus_ = false;
-			}
-
-			ResponseDriver_.Init( Flow, PendingData, dCRLF );
-		}
-	}
-qRR
-qRT
-qRE
-	return Code;
-}
-
-#define C( name )	case s##name : return #name; break
-const char *muaima::GetLabel( eStatus Status )
-{
-	switch ( Status ) {
-	C( OK );
-	C( NO );
-	C( BAD );
-	default:
-		qRFwk();
-		break;
-	}
- 
-	return NULL;	// To avoid a warning.
-}
-#undef C
-
-
-namespace status_ {
-	namespace _ {
-		stsfsm::wAutomat Automat;
-
-		eStatus GetStatus( const str::dString &Pattern )
-		{
-			return stsfsm::GetId( Pattern, Automat, s_Undefined, s_amount );
-		}
-	}
-
-	void FillAutomat( void )
-	{
-		_::Automat.Init();
-		stsfsm::Fill<eStatus>( _::Automat, s_amount, GetLabel );
-	}
-
-	eStatus Get( flw::sIFlow &Flow )
-	{
-		eStatus Status = s_Undefined;
-	qRH
-		str::wString Pattern;
-	qRB
-		Pattern.Init();
-
-		GetAlphanumMinus_( Flow, Pattern );
-
-		Status = _::GetStatus( Pattern );
-	qRR
-	qRT
-	qRE
-		return Status;
-	}
-}
-
-namespace _ {
-	qENUM( Command_ ) {
-		cLogin,
-		cLogout,	// NOT the counter-part of 'Login' ; closes the connection.
-		cCapability,
-		cSelect,
-		cList,
-		cLSub,
-		cFetch,
-		c_amount,
-		c_Undefined
-	};
-
-#define C( name )\
-	case c##name:\
-		return #name;\
-		break
-
-	const char *GetLabel_( eCommand_ Command )
-	{
-		switch ( Command ) {
-		C( Login);
-		C( Logout );
-		C( Capability );
-		C( Select );
-		C( List );
-		C( LSub );
-		C( Fetch );
-		default:
-			qRGnr();
-			break;
-		}
-
-		return NULL;	// To avoid a warning.
-	}
-
-	void SendCommand(
-		const str::dString &Tag,
-		eCommand_ Command,
-		txf::sOFlow &Flow )
-	{
-	qRH
-		str::wString CommandString;
-	qRB
-		CommandString.Init( GetLabel_( Command ) );
-
-		str::ToUpper( CommandString );
-
-		Flow << Tag << ' ' << CommandString;
-	qRR
-	qRT
-	qRE
-	}
-
-	void SendCFLR( txf::sOFlow &Flow )
-	{
-		 Flow << "\r\n";
-
-		 Flow.Commit();
-	}
-}
-
-void muaima::Connect( rConsole &Console )
-{
-	Console.ReportUntaggedStatusResponse();
-}
-
-void muaima::Login(
-	const str::dString &Username,
-	const str::dString &Password,
-	rConsole &Console )
-{
-	::_::SendCommand( Console.GetNextTag(), ::_::cLogin, Console.OFlow() );
-
-	Console.OFlow() << ' ' << Username << ' ' << Password;
-
-	::_::SendCFLR( Console.OFlow() );
-}
-
-void muaima::Logout( rConsole &Console )
-{
-	::_::SendCommand( Console.GetNextTag(), ::_::cLogout, Console.OFlow() );
-	::_::SendCFLR( Console.OFlow() );
-}
-
-void muaima::Capability( rConsole &Console )
-{
-	::_::SendCommand( Console.GetNextTag(), ::_::cCapability, Console.OFlow() );
-	::_::SendCFLR( Console.OFlow() );
-}
-
-void muaima::Select(
-	const str::dString &Mailbox,
-	rConsole &Console )
-{
-	::_::SendCommand( Console.GetNextTag(), ::_::cSelect, Console.OFlow() );
-	Console.OFlow() << ' ' << Mailbox;
-	::_::SendCFLR( Console.OFlow() );
-}
-
-void muaima::List(
-	const str::dString &Reference,
-	const str::dString &Mailbox,
-	rConsole &Console )
-{
-	::_::SendCommand( Console.GetNextTag(), ::_::cList, Console.OFlow() );
-	Console.OFlow() << " \"" << Reference << "\" \"" << Mailbox << '"';
-	::_::SendCFLR( Console.OFlow() );
-}
-
-void muaima::LSub(
-	const str::dString &Reference,
-	const str::dString &Mailbox,
-	rConsole &Console )
-{
-	::_::SendCommand( Console.GetNextTag(), ::_::cLSub, Console.OFlow() );
-	Console.OFlow() << " \"" << Reference << "\" \"" << Mailbox << '"';
-	::_::SendCFLR( Console.OFlow() );
-}
-
-void muaima::Fetch(
-	const str::dString &Sequence,
-	const str::dString &Items,
-	rConsole &Console )
-{
-	::_::SendCommand(Console.GetNextTag(), ::_::cFetch, Console.OFlow() );
-	Console.OFlow() << ' ' << Sequence << ' ' << Items;
-	::_::SendCFLR( Console.OFlow() );
-}
 
 const char *item::GetLabel( eName Name )
 {
@@ -710,7 +113,7 @@ namespace item_ {
 	}
 
 }
-
+/*
 item::eName muaima::item::rConsole::Get( void )
 {
 	eName Name = n_Undefined;
@@ -735,7 +138,7 @@ qRT
 qRE
 	return Name;
 }
-
+*/
 void muaima::rSession::RetrieveMessage_( void )
 {
 qRH
@@ -793,7 +196,7 @@ namespace {
 			eResponseCode Code,
 			fdr::rIDriver &Driver ) override
 		{
-			Driver.Drain();
+			fdr::Purge( Driver );
 		}
 	public:
 		void reset( bso::sBool = true )
@@ -898,13 +301,13 @@ namespace list_lsub_answer_  {
 	qRH
 		rValueDriver_ ValueDriver;
 	qRB
-		ValueDriver.Init( Driver, NULL );
+		ValueDriver.Init( Driver, dNone, NULL );
 		Get_( ValueDriver, Attributes);
 
-		ValueDriver.Init( Driver, NULL );
+		ValueDriver.Init( Driver, dNone, NULL );
 		Get_( ValueDriver, Delimiter);
 
-		ValueDriver.Init( Driver, NULL );
+		ValueDriver.Init( Driver, dNone, NULL );
 		Get_( ValueDriver, Name);
 	qRR
 	qRT
@@ -1006,7 +409,7 @@ namespace common_ {
 		Flow.Init( Driver );
 
 		while ( !Flow.EndOfFlow() ) {
-			if ( Result < ( bso::UIntMax / 10 - 1 ) )
+			if ( Result >= ( bso::UIntMax / 10 - 1 ) )
 				qRLmt();
 
 			if ( !isdigit( Byte = Flow.Get() ) )
@@ -1018,6 +421,23 @@ namespace common_ {
 	qRT
 	qRE
 		return Result;
+	}
+
+	void GetString(
+		fdr::rIDriver &Driver,
+		str::dString &String )
+	{
+	qRH
+		flw::sDressedIFlow<> Flow;
+	qRB
+		Flow.Init( Driver );
+
+		while ( !Flow.EndOfFlow() ) {
+			String.Append(Flow.Get() );
+		}
+	qRR
+	qRT
+	qRE
 	}
 }
 
@@ -1108,37 +528,64 @@ qRE
 }
 
 namespace get_mail_ {
-	class sResponseCallback
-	: public cResponse_
+	bso::sUInt GetSequence( fdr::rIDriver &Driver )
 	{
-	protected:
-		virtual void MUAIMAOnResponse(
-			eResponseCode Code,
-			fdr::rIDriver &Driver ) override
-		{
-			if ( Code == rcExists ) {
-				if ( Amount != 0 )
-					qRGnr();
+		bso::sUInt Sequence = 0;
+	qRH
+		rValueDriver_ ValueDriver;
+	qRB
+		ValueDriver.Init( Driver, dNone, NULL );
+		Sequence = common_::GetNumber( ValueDriver );
+	qRR
+	qRT
+	qRE
+		return Sequence;
+	}
 
-				Amount = common_::GetNumber( Driver );
-			} else
-				fdr::Copy( Driver, flx::VoidOFlowDriver );
-		}
-	public:
-		bso::sUInt Amount;
-		void reset( bso::sBool P = true )
-		{
-			Amount = 0;
-		}
-		qCVDTOR( sResponseCallback );
-		void Init( void )
-		{
-			Amount = 0;
-		}
-	};
+	void SearchRFC822Value( fdr::rIDriver &Driver )
+	{
+	qRH
+		str::wString Name;
+		bso::sBool Continue = true;
+		rValueDriver_ ValueDriver;
+	qRB
+		while ( Continue ) {
+			Name.Init();
+			ValueDriver.Init( Driver, dNone, NULL );
+			common_::GetString(ValueDriver, Name );
 
+			if ( item_::GetName( Name ) == item_::nRFC822 )
+				Continue = false;
+			else {
+				ValueDriver.Init( Driver, dNone, NULL );
+				fdr::Purge( ValueDriver );
+			}
+		}
+
+		if ( Driver.EndOfFlow() )
+			qRGnr();
+	qRR
+	qRT
+	qRE
+	}
 }
 
+void muaima::get_mail_::rRack::GetValue_( void )
+{
+qRH
+	str::wString Name;
+qRB
+	::get_mail_::GetSequence( FetchValueDriver_ );
+
+	ItemsValueCallback_.Init( FetchValueDriver_ );
+	ItemsValueDriver_.Init( FetchValueDriver_, dNone, &ItemsValueCallback_ );
+	
+	::get_mail_::SearchRFC822Value( ItemsValueDriver_ );
+qRR
+qRT
+qRE
+
+}
 
 eStatus muaima::rSession::GetMail(
 	const str::dString &RawFolder,
@@ -1182,8 +629,6 @@ qRE
 namespace {
 	void FillAutomats_( void )
 	{
-		code_::FillAutomat();
-		status_::FillAutomat();
 		item_::FillAutomat();
 	}
 }
