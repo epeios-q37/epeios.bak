@@ -27,9 +27,9 @@ using namespace cio;
 
 static target__ Target_ = t_Undefined;
 
-static flx::void_idriver___ &_VInDriver = flx::VoidIDriver;
-static flx::void_odriver___ _VOutDriver = flx::VoidODriver;;
-static flx::void_odriver___ _VErrDriver = flx::VoidODriver;;
+static flx::void_idriver___ _VInDriver;
+static flx::void_odriver___ _VOutDriver;
+static flx::void_odriver___ _VErrDriver;
 
 static iof::io_iflow_driver___ _SInDriver;
 static iof::io_oflow_driver___ _SOutDriver;
@@ -86,6 +86,10 @@ static void InitializeConsole_( void )
 	if ( _setmode( _fileno( stderr ), _O_BINARY ) == -1 )
 		qRLbr();
 #endif
+	_VInDriver.Init( fdr::ts_Default, flx::aAllowed );
+	_VOutDriver.Init( fdr::ts_Default, flx::aAllowed );
+	_VErrDriver.Init( fdr::ts_Default, flx::aAllowed );
+
 	_SInDriver.Init( CInDescriptor, fdr::ts_Default );
 	_SOutDriver.Init( COutDescriptor, fdr::ts_Default );
 	_SErrDriver.Init( CErrDescriptor, fdr::ts_Default );
