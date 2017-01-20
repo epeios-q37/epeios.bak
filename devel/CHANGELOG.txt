@@ -1,5 +1,11 @@
 CHANGELOG for the 'Epeios' framework.
 
+2017-01-20 :
+- STSFSM :
+	- Introducing 'eUnmatchingBehavior'.
+- TAGSBS :
+	- Introducing 'Append(...)' method with variadics.
+
 2017-01-19 :
 - CIO, SCLBACKND, SCLTOOL :
 	- Adaptation to changes in 'FLX'.

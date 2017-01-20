@@ -266,6 +266,17 @@ namespace tagsbs {
 		{
 			return Tags.Amount() != 0;
 		}
+		void Append( void )	// Called by below method.
+		{}
+		template <typename tag1, typename value, typename tag2, typename... others> void Append(	// 'tag1'/'tag2' to avod recusirve calls.
+			const tag1 &Tag1,
+			const value &Value,
+			const tag2 &Tag2,
+			const others &...Others )
+		{
+			Append( Tag1, Value );
+			Append( Tag2, Others... );
+		}
 	};
 
 	E_AUTO( tvalues );

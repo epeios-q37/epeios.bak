@@ -119,22 +119,26 @@ status__ stsfsm::parser__::_Handle(
 	return Status;
 }
 
-
 id__ stsfsm::GetId(
 	flw::iflow__ &Flow,
-	const automat_ &Automat )
+	const automat_ &Automat,
+	eUnmatchingBehavior UnmatchingBehavior)
 {
 	id__ Id = UndefinedId;
 qRH
 	parser__ Parser;
-	bso::bool__ Match = false;int C = 0;
+	bso::bool__ Match = false;
+	fdr::sByte Byte = 0;
+	bso::sBool Continue = true;
 qRB
 	Parser.Init( Automat );
 
-	while ( ( !Flow.EndOfFlow() ) && ( ( C = Flow.Get() ) != 0 ) ) {
-		switch ( Parser.Handle( C ) ) {
+	Continue = !Flow.EndOfFlow() && ( ( Byte = Flow.Get() ) != 0 );
+
+	while ( Continue ) {
+		switch ( Parser.Handle( Byte ) ) {
 		case sLost:
-			qRReturn;
+			Continue = false;
 			break;
 		case sMatch:
 			Match = true;
@@ -146,10 +150,14 @@ qRB
 			qRFwk();
 			break;
 		}
+
+		Continue = Continue && !Flow.EndOfFlow() && ( ( Byte = Flow.Get() ) != 0 );
 	}
 
 	if ( Match )
 		Id = Parser.GetId();
+	else if ( (Byte != 0 ) && ( UnmatchingBehavior == ubPurge ) )
+		while ( !Flow.EndOfFlow() && (Flow.Get() != 0 ) );
 qRR
 qRT
 qRE
@@ -164,6 +172,6 @@ id__ stsfsm::GetId(
 
 	Flow.Init( Pattern );
 
-	return GetId( Flow, Automat );
+	return GetId( Flow, Automat, ubKeep );
 }
 

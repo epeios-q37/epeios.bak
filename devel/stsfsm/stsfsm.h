@@ -189,7 +189,6 @@ namespace stsfsm {
 		return Add( str::string( Tag, Length ), Id, Automat );
 	}
 
-
 	enum status__ {
 		sPending,
 		sMatch,
@@ -294,9 +293,19 @@ namespace stsfsm {
 		}
 	}
 
+	// What to do with remaining data when no matching found.
+	qENUM( UnmatchingBehavior ) {
+		ubPurge,	// Purge remainig data (until EOF or '\0').
+		ubKeep,		// Keep remaining data.
+		ub_amount,
+		ub_Undefined,
+		ub_Default = ubKeep,
+	};
+
 	id__ GetId(
 		flw::iflow__ &Flow,
-		const automat_ &Automat );
+		const automat_ &Automat,
+		eUnmatchingBehavior UnmatchingBehavior );
 
 	template <typename type> inline type Normalize_(
 		id__ Id,
@@ -322,9 +331,10 @@ namespace stsfsm {
 		const automat_ &Automat,
 		type UndefinedValue,
 		bso::uint__ Amount,
+		eUnmatchingBehavior UnmatchingBehavior = ub_Default,
 		qRPD )
 	{
-		return Normalize_<type>( GetId( Flow, Automat ), Amount, UndefinedValue, qRP );
+		return Normalize_<type>( GetId( Flow, Automat, UnmatchingBehavior ), Amount, UndefinedValue, qRP );
 	}
 
 	id__ GetId(
