@@ -643,6 +643,26 @@ public:
 
 			delete Proxy;
 		}
+
+		prxybase::eType GetTypeAndId_(
+			fdr::rIDriver &Driver,
+			str::dString &Id )
+		{
+			prxybase::eType Type = prxybase::t_Undefined;
+		qRH
+			flw::sDressedIFlow<> Flow;
+		qRB
+			Flow.Init( Driver );
+
+			Type = prxybase::GetType( Flow );
+
+			Id.Init();
+			prxybase::GetId( Flow, Id );
+		qRR
+		qRT
+		qRE
+			return Type;
+		}
 	}
 
 	void Plug_1_(
@@ -655,14 +675,9 @@ public:
 		str::string Id;
 		rProxy *Proxy = NULL;
 		rLogRack_ Log;
-		flw::sDressedIFlow<> Flow;
 	qRB
-		Flow.Init( *IODriver );
-
-		Type = prxybase::GetType( Flow );
-
 		Id.Init();
-		prxybase::GetId( Flow, Id );
+		Type = plug_::GetTypeAndId_( *IODriver, Id );
 
 		switch ( Type ) {
 		case prxybase::tClient:
@@ -803,6 +818,7 @@ public:
 			switch ( prxybase::GetRequest( Flow ) ) {
 			case prxybase::rPlug_1:
 				 Plug_1_( IODriver, 5000 );
+				 Flow.reset( false );	// 'IODriver' could have been deleted.
 				 CloseSocketUpstream_ = false;
 				break;
 			case prxybase::rDismiss_1:

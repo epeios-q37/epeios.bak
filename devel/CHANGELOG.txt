@@ -1,6 +1,10 @@
 CHANGELOG for the 'Epeios' framework.
 
 2017-01-20 :
+- CSDMXC :
+	- Simplification.
+- FDR, FLW :
+	- Introducing the automatic dismissing on enf of flow.
 - STSFSM :
 	- Introducing 'eUnmatchingBehavior'.
 - TAGSBS :

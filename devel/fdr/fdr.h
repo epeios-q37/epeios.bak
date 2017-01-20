@@ -289,18 +289,26 @@ namespace fdr {
 		size__ _Available;
 		size__ _Position;
 		size__ Red_;	// Amount of red data since last dismiss.
-		bso::sBool Dismissed_;
+		bso::sBool DismissPending_;
+		bso::sBool AutoDismissOnEOF_;	// If at 'true', 'Dismiss' is automatically called on EOF. Can be useful when the object is reused, i.e. when several 'Init(...)' are called.
 		size__ _Read(
 			size__ Wanted,
 			byte__ *Buffer )	// Si valeur retourne == 0, alors , alors 'EOF' atteint.
 		{
+			size__ Amount = 0;
 # ifdef FDR_DBG
 			if ( Wanted == 0 )
 				qRFwk();
 # endif
 			if ( _Size != 0 ) {
-				Dismissed_ = false;
-				return FDRRead( Wanted, Buffer );
+				Amount = FDRRead( Wanted, Buffer );
+
+				if ( ( Amount == 0 ) && AutoDismissOnEOF_ && DismissPending_ )
+					Dismiss( true );	// Relaying dismissing to underlying level on EOF.
+				else if ( Amount != 0 )
+					DismissPending_ = true;
+
+				return Amount;
 			} else
 				return 0;
 		}
@@ -441,7 +449,8 @@ namespace fdr {
 			_Size = _Available = _Position = 0;
 			_flow_driver_base__::reset( P );
 			Red_ = 0;
-			Dismissed_ = false;
+			DismissPending_ = false;
+			AutoDismissOnEOF_ = false;
 		}
 		E_CVDTOR( iflow_driver_base___ );
 		void Init(
@@ -458,10 +467,15 @@ namespace fdr {
 			_Cache = Cache;
 			_Size = Size;
 			Red_ = 0;
-			Dismissed_ = false;
+			DismissPending_ = false;
 
 			_Available = _Position = 0;
 			_flow_driver_base__::Init( ThreadSafety );
+			AutoDismissOnEOF_ = false;
+		}
+		void SetAutoDismissOnEOF( bso::sBool Value = true )
+		{
+			AutoDismissOnEOF_ = Value;
 		}
 		sTID ITake( sTID Owner )
 		{
@@ -469,7 +483,7 @@ namespace fdr {
 		}
 		void Dismiss( bso::sBool Unlock )
 		{
-			if ( !Dismissed_ ) {
+			if ( DismissPending_ ) {
 				if ( _Cache != NULL ) {
 				qRH
 				qRB
@@ -483,7 +497,7 @@ namespace fdr {
 
 				Red_ = 0;
 
-				Dismissed_ = true;
+				DismissPending_ = false;
 			}
 		}
 		size__ Read(
@@ -576,7 +590,7 @@ namespace fdr {
 	{
 	private:
 		bso::bool__ _Initialized;	// Pour viter des 'pure virtual function call'.
-		bso::sBool Commited_;
+		bso::sBool CommitPending_;
 	protected:
 		// Returns amount of written data. Returns '0' only when no other data can be written (deconnection...), otherwise must block.
 		virtual size__ FDRWrite(
@@ -593,7 +607,7 @@ namespace fdr {
 			}
 
 			_Initialized = false;
-			Commited_ = false;
+			CommitPending_ = false;
 			_flow_driver_base__::reset( P );
 		}
 		E_CVDTOR( oflow_driver_base___ );
@@ -602,14 +616,14 @@ namespace fdr {
 			reset();
 
 			_Initialized = true;
-			Commited_ = false;
+			CommitPending_ = false;
 			_flow_driver_base__::Init( ThreadSafety );
 		}
 		void Commit( bso::sBool Unlock )
 		{
 			bso::sBool Success = false;
 
-			if ( !Commited_ ) {
+			if ( CommitPending_ ) {
 				if ( _Initialized ) {
 				qRH
 				qRB
@@ -621,7 +635,7 @@ namespace fdr {
 				qRE
 				}
 
-				Commited_ = true;
+				CommitPending_ = false;
 			} else
 				Success = true;
 		}
@@ -630,7 +644,7 @@ namespace fdr {
 			size__ Maximum )
 		{
 			Lock();
-			Commited_ = false;
+			CommitPending_ = true;
 			return FDRWrite( Buffer, Maximum );
 		}
 		sTID OTake( sTID Owner )

@@ -130,7 +130,7 @@ void csdmxc::rCore::KeepAlive_( time_t Delay )
 void csdmxc::rCore::ReleaseUPs_( void )
 {
 qRH
-	flw::sDressedIOFlow<> Flow;
+	flw::sDressedOFlow<> Flow;
 qRB
 	while ( UPs.Amount() != 0 )
 	{

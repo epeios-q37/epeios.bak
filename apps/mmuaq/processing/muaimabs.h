@@ -193,6 +193,9 @@ namespace muaimabs {
 		{
 			Base_.Init( Flow, PendingData, Delimiter );
 			rDriver_::Init( fdr::ts_Default );
+			// The object 'Init(...)' several times during its lifespan, so the 'Dismissed', which drives the 'verbose' driver, is sometines called to late.
+			// By calling below method, 'Dimissed()' is called each time EOF is reached.
+			rDriver_::SetAutoDismissOnEOF();	
 		}
 		void Init(
 			fdr::rIDriver &Driver,

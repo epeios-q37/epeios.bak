@@ -141,6 +141,13 @@ namespace flw {
 			_Driver = NULL;
 		}
 		qCVDTOR( iflow__ );
+		void SetAutoDismissOnEOF( bso::sBool Value = true )
+		{
+			if ( _Driver == NULL )
+				qRFwk();
+
+			_Driver->SetAutoDismissOnEOF( Value );
+		}
 		fdr::iflow_driver_base___ &IDriver( void ) const
 		{
 			return _D();
