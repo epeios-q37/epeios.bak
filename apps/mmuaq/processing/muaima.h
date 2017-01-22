@@ -144,17 +144,6 @@ namespace muaima {
 		}
 	};
 
-	class cFolders
-	{
-	protected:
-		virtual void MUAIMAOnFolder( const str::dString &Name ) = 0;
-	public:
-		qCALLBACK( Folders );
-		void OnFolder( const str::dString &Name )
-		{
-			return MUAIMAOnFolder( Name );
-		}
-	};
 
 	namespace get_mail_ {
 		class sRFC822ValueCallback_
@@ -324,15 +313,18 @@ namespace muaima {
 
 			return Delimiter_;
 		}
-		eStatus GetFolders(
+		void GetFolders(
 			const str::dString &Folder,
-			class rFolders &Folders,
-			qRPD );
+			class rFolders &Folders );
 		/* Commands after which, on success, you have to handle 'GetValueDriver(...)'*/
 		eStatus GetMail(
 			const str::dString &Folder,
 			bso::sUInt Number,
 			qRPD );
+		void GetMail(
+			const str::dString &Folder,
+			bso::sUInt Number,
+			class rMail &Mail );
 		eStatus EndStatus( str::dString *Message  )
 		{
 			eStatus Status = Console_.GetStatus();
@@ -401,6 +393,9 @@ namespace muaima {
 		}
 		friend rSession;
 	};
+
+	class rMail
+	{};
 
 }
 

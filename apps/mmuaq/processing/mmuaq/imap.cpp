@@ -101,13 +101,6 @@ namespace {
 	qRT
 	qRE
 	}
-
-	void Handle_(
-		eStatus Status,
-		const str::dString &Message )
-	{
-		cio::COut << muaima::GetLabel( Status ) << ": " << Message << txf::nl;
-	}
 }
 
 namespace{
@@ -329,6 +322,7 @@ namespace {
 			misc::rVerboseIODriver::Init( registry::parameter::imap::HostPort, misc::IsVerboseActivated() ? misc::vInAndOut : misc::vNone );
 
 			Message.Init();
+
 			if ( ( Status = muaima::rSession::Init( *this, Username, Password, Message, qRPU ) ) != sOK ) {
 				cio::COut << muaima::GetLabel( Status ) << ": " << Message << txf::nl;
 				qRAbort();
@@ -338,23 +332,16 @@ namespace {
 		qRE
 		}
 	};
+}
 
-	class cFolders_
-	: public muaima::cFolders
+namespace {
+	void Handle_(
+		eStatus Status,
+		const str::dString &Message )
 	{
-	protected:
-		virtual void MUAIMAOnFolder( const str::dString &Name ) override
-		{
-			cio::COut << Name << txf::nl;
-		}
-	public:
-		void reset( bso::sBool = true )
-		{}
-		qCVDTOR( cFolders_ );
-		void Init( void )
-		{}
-	};
-
+		if ( Status != sOK )
+			cio::COut << muaima::GetLabel( Status ) << ": " << Message << txf::nl;
+	}
 }
 
 void imap::Folders( void )
@@ -380,7 +367,6 @@ qRB
 
 	Message.Init();
 	Handle_( Folders.EndStatus( Message ), Message );
-
 qRR
 qRT
 qRE
@@ -395,7 +381,7 @@ qRB
 
 	Session.GetMail(str::wString("INBOX"), 1 );
 
-	misc::Dump(Session.GetValueDriver() );
+	misc::Dump( Session.GetValueDriver() );
 
 qRR
 qRT

@@ -111,50 +111,33 @@ namespace item_ {
 		while ( isalpha( Byte = Flow.View() ) || ( Byte == '.' ) )
 			Name.Append( Byte );
 	}
-
 }
-/*
-item::eName muaima::item::rConsole::Get( void )
-{
-	eName Name = n_Undefined;
-qRH
-	str::wString Pattern;
-qRB
-	if ( Flow_.Get() == ')' )
-		Name = n_None;
-	else {
-		tol::Init( Pattern );
-		str::ToUpper( Pattern );
 
-		Name = item_::GetName( Pattern );
+namespace {
+	void RetrieveMessage_(
+		rConsole &Console,
+		str::dString &Message )
+	{
+	qRH
+		flx::rStringODriver Driver;
+	qRB
+		Driver.Init( Message, fdr::ts_Default );
 
-		if ( ( Name == nBody ) && ( Flow_.View() == '[' ) )
-			Name = nBodyWithSection;
-		else if ( Flow_.Get() != ' ' )
-			qRGnr();
+		fdr::Copy( Console.GetResponseDriver(), Driver );
+	qRR
+	qRE
+	qRT
 	}
-qRR
-qRT
-qRE
-	return Name;
 }
-*/
+
 
 void muaima::rSession::RetrieveMessage_( str::dString *Message )
 {
 	if ( Message == NULL )
 		Console_.SkipResponse();
 	else {
-qRH
-	flx::rStringODriver Driver;
-qRB
-	Message->Init();
-	Driver.Init( *Message, fdr::ts_Default );
-
-	fdr::Copy(Console_.GetResponseDriver(), Driver );
-qRR
-qRE
-qRT
+		Message->Init();
+		::RetrieveMessage_( Console_, *Message );
 	}
 }
 
@@ -477,12 +460,10 @@ qRT
 qRE
 }
 
-eStatus muaima::rSession::GetFolders(
+void muaima::rSession::GetFolders(
 	const str::dString &Folder,
-	rFolders &Folders,
-	qRPN )
+	rFolders &Folders )
 {
-	eStatus Status = s_Undefined;
 qRH
 	str::wString Reference;
 qRB
@@ -496,7 +477,6 @@ qRB
 qRR
 qRT
 qRE
-	return Status;
 }
 
 namespace get_mail_ {
@@ -597,6 +577,45 @@ qRT
 qRE
 	return Status;
 }
+
+void muaima::rSession::GetMail(
+	const str::dString &RawFolder,
+	bso::sUInt Number,
+	rMail &Mail )
+{
+qRH
+	str::wString Folder;
+	eResponseCode Code = rc_None;
+	bso::bInteger Buffer;
+	eStatus Status = s_Undefined;
+qRB
+	Folder.Init( RawFolder );
+	common_::NormalizeFolderName( Delimiter_, false, Folder );
+
+	Select( Folder, Console_ );
+
+	Status = Console_.GetStatus();
+
+	if ( Status == sOK ) {
+		Fetch( muaima::f_Default, str::wString( bso::Convert( Number, Buffer ) ), str::wString( item::GetLabel( item::nRFC822 ) ), Console_ );
+
+		while ( ( ( Code = Console_.GetPendingResponseCode() ) != rc_None ) && ( Code != rcFetch ) )
+			Console_.SkipResponse();
+
+		if ( Code == rc_None ) {
+			Status = Console_.GetStatus();
+			if ( Status == sOK )
+				qRGnr();
+		} else {
+			GetMailRack_.Init( Console_ );
+			ValueDriver_ = GetMailRack_();
+		}
+	}
+qRR
+qRT
+qRE
+}
+
 
 namespace {
 	void FillAutomats_( void )
