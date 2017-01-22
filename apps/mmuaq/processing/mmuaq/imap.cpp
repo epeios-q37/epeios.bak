@@ -101,6 +101,13 @@ namespace {
 	qRT
 	qRE
 	}
+
+	void Handle_(
+		eStatus Status,
+		const str::dString &Message )
+	{
+		cio::COut << muaima::GetLabel( Status ) << ": " << Message << txf::nl;
+	}
 }
 
 namespace{
@@ -312,14 +319,20 @@ namespace {
 		void Init( void )
 		{
 		qRH
-			str::wString Username, Password;
+			str::wString Username, Password, Message;
+			eStatus Status = s_Undefined;
 		qRB
 			tol::Init( Username, Password );
 
 			GetUsernameAndPassword_( Username, Password );
 
 			misc::rVerboseIODriver::Init( registry::parameter::imap::HostPort, misc::IsVerboseActivated() ? misc::vInAndOut : misc::vNone );
-			muaima::rSession::Init( *this, Username, Password );
+
+			Message.Init();
+			if ( ( Status = muaima::rSession::Init( *this, Username, Password, Message, qRPU ) ) != sOK ) {
+				cio::COut << muaima::GetLabel( Status ) << ": " << Message << txf::nl;
+				qRAbort();
+			}
 		qRR
 		qRT
 		qRE
@@ -349,7 +362,7 @@ void imap::Folders( void )
 qRH
 	rSession_ Session;
 	rFolders Folders;
-	str::wString Folder;
+	str::wString Folder, Message;
 qRB
 	Folder.Init();
 	sclmisc::OGetValue( registry::parameter::imap::Folder, Folder );
@@ -364,6 +377,10 @@ qRB
 		cio::COut << Folder << txf::nl << txf::commit;
 		Folder.Init();
 	}
+
+	Message.Init();
+	Handle_( Folders.EndStatus( Message ), Message );
+
 qRR
 qRT
 qRE

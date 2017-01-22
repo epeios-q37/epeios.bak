@@ -140,53 +140,40 @@ qRE
 }
 */
 
-
-void muaima::rSession::RetrieveMessage_( void )
+void muaima::rSession::RetrieveMessage_( str::dString *Message )
 {
+	if ( Message == NULL )
+		Console_.SkipResponse();
+	else {
 qRH
 	flx::rStringODriver Driver;
 qRB
-	Message_.Init();
-	Driver.Init( Message_, fdr::ts_Default );
+	Message->Init();
+	Driver.Init( *Message, fdr::ts_Default );
 
 	fdr::Copy(Console_.GetResponseDriver(), Driver );
 qRR
 qRE
 qRT
-}
-
-eStatus muaima::rSession::HandleStatus_(
-	eStatus Status,
-	qRPN )
-{
-	switch ( Status ) {
-	case sOK:
-		Console_.SkipResponse();
-		break;
-	case sNO:
-	case sBAD:
-		RetrieveMessage_();
-		if ( qRPT )
-			qRGnr();
-		break;
-	default:
-		qRGnr();
-		break;
 	}
-
-	return Status;
 }
 
 eStatus muaima::rSession::HandleResponses_(
 	cResponse_ &ReponseCallback,
+	str::dString *Message,
 	qRPN )
 {
 	eResponseCode Code = rc_Undefined;
+	eStatus Status = s_Undefined;
 
 	while ( ( Code = Console_.GetPendingResponseCode()) != rc_None )
 		ReponseCallback.OnResponse( Code, Console_.GetResponseDriver() );
 
-	return HandleStatus_( qRP );
+	Status = Console_.GetStatus();
+
+	RetrieveMessage_( Message );
+
+	return Status;
 }
 
 namespace {
@@ -210,22 +197,23 @@ namespace {
 		{
 			// Standardization.
 		}
-	} NOPResponseCallback_;
+	} PurgeResponseCallback_;
 }
 
 eStatus muaima::rSession::Connect_(
 	const str::dString &Username,
 	const str::dString &Password,
+	str::dString *Message,
 	qRPN )
 {
 	eStatus Status = s_Undefined;
 
 	Connect( Console_ );
-	Status = HandleResponses_( NOPResponseCallback_, qRP );
+	Status = HandleResponses_( PurgeResponseCallback_, Message, qRP );
 
 	if ( Status == sOK ) {
 		Login( Username, Password, Console_ );
-		Status = HandleResponses_( NOPResponseCallback_, qRP );
+		Status = HandleResponses_( PurgeResponseCallback_, Message, qRP );
 	}
 
 	return Status;
@@ -362,7 +350,9 @@ namespace fetch_hierarchy_delimiter_ {
 	};
 }
 
-eStatus muaima::rSession::FetchHierarchyDelimiter_( qRPN )
+eStatus muaima::rSession::FetchHierarchyDelimiter_(
+	str::dString *Message,
+	qRPN )
 {
 	eStatus Status = s_Undefined;
 qRH
@@ -374,7 +364,7 @@ qRB
 	ResponseCallback.Init();
 
 	muaima::List( str::wString(""), str::wString(""), Console_ );
-	Status = HandleResponses_( ResponseCallback, qRP );
+	Status = HandleResponses_( ResponseCallback, Message, qRP );
 
 	Delimiter_ = ResponseCallback.Delimiter;
 qRR
@@ -383,10 +373,12 @@ qRE
 	return Status;
 }
 
-eStatus muaima::rSession::Disconnect_( qRPN )
+eStatus muaima::rSession::Disconnect_(
+	str::dString *Message,
+	qRPN )
 {
 	Logout( Console_ );
-	return HandleResponses_( NOPResponseCallback_, qRP );
+	return HandleResponses_( PurgeResponseCallback_, Message, qRP );
 }
 
 namespace common_ {
@@ -583,7 +575,7 @@ qRB
 
 	Select( Folder, Console_ );
 
-	Status = HandleStatus_( Console_.SkipRemainingReponses(), qRP );
+	Status = Console_.GetStatus();
 
 	if ( Status == sOK ) {
 		Fetch( muaima::f_Default, str::wString( bso::Convert( Number, Buffer ) ), str::wString( item::GetLabel( item::nRFC822 ) ), Console_ );
@@ -592,7 +584,7 @@ qRB
 			Console_.SkipResponse();
 
 		if ( Code == rc_None ) {
-			Status = HandleStatus_( qRP );
+			Status = Console_.GetStatus();
 			if ( Status == sOK )
 				qRGnr();
 		} else {
@@ -616,6 +608,6 @@ namespace {
 qGCTOR( muaima )
 {
 	FillAutomats_();
-	NOPResponseCallback_.Init();
+	PurgeResponseCallback_.Init();
 }
 

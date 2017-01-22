@@ -65,10 +65,6 @@
     <Translation language="en">Launches the 'SELECT' command from the 'IMAP' protocol.</Translation>
    </Translations>
    <Translations text="IMAPFetchCommandDescription">
-    <Translation language="fr">Lance la commande 'UID FETCH' du protocole 'IMAP'.</Translation>
-    <Translation language="en">Launches the 'UID FETCH' command from the 'IMAP' protocol.</Translation>
-   </Translations>
-   <Translations text="IMAPUIDFetchCommandDescription">
     <Translation language="fr">Lance la commande 'FETCH' du protocole 'IMAP'.</Translation>
     <Translation language="en">Launches the 'FETCH' command from the 'IMAP' protocol.</Translation>
    </Translations>

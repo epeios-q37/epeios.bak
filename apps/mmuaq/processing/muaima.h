@@ -242,34 +242,33 @@ namespace muaima {
 		qRMV( fdr::rIDriver, VD_, ValueDriver_ );
 		bso::sBool Connected_;
 		bso::sByte Delimiter_;	// The hierarchy delimiter. '0' means no demimiter (hope that '0' is not a valid delmimiter).
-		str::wString Message_;
 		get_mail_::rRack GetMailRack_;
-		void RetrieveMessage_( void );
-		eStatus HandleStatus_(
-			eStatus Status,
-			qRPN );
-		eStatus HandleStatus_( qRPN )
-		{
-			return HandleStatus_(Console_.GetStatus(), qRP );
-		}
+		// If 'Message' == NULL, skips the message.
+		void RetrieveMessage_( str::dString *Message );
 		eStatus HandleResponses_(
 			cResponse_ &ReponseCallback,
+			str::dString *Message,
 			qRPN );
 		eStatus Connect_(
 			const str::dString &Username,
 			const str::dString &Password,
+			str::dString *Message,
 			qRPN );
-		eStatus FetchHierarchyDelimiter_( qRPN );
-		eStatus Disconnect_( qRPN );
+		eStatus FetchHierarchyDelimiter_(
+			str::dString *Message,
+			qRPN );
+		eStatus Disconnect_(
+			str::dString *Message,
+			qRPN );
 	public:
 		void reset( bso::sBool P = true )
 		{
 			if ( P ) {
 				if ( Connected_ )
-					Disconnect_( qRPU ); // We don't care if it fails.
+					Disconnect_( NULL, qRPU ); // We don't care if it fails.
 			}
 
-			tol::reset( P, Console_, ValueDriver_, Connected_, Message_, GetMailRack_ );
+			tol::reset( P, Console_, ValueDriver_, Connected_, GetMailRack_ );
 			Delimiter_ = 0;
 		}
 		qCDTOR( rSession );
@@ -277,24 +276,23 @@ namespace muaima {
 			fdr::rIODriver &Driver,
 			const str::dString &Username,
 			const str::dString &Password,
+			str::dString *Message = NULL,
 			qRPD )
 		{
 			eStatus Status = s_Undefined;
 
-			Message_.Init();
-
 			if ( Connected_ )
-				Status = Disconnect_( qRPU );	// We don't care if it fails.
+				Status = Disconnect_( NULL, qRPU );	// We don't care if it fails.
 
 			Connected_ = false;
 
 			Console_.Init( Driver );
 
-			Status = Connect_( Username, Password, qRP );
+			Status = Connect_( Username, Password, Message, qRP );
 
 			if ( Status == sOK ) {
 				Connected_ = true;
-				Status = FetchHierarchyDelimiter_( qRP );
+				Status = FetchHierarchyDelimiter_( Message, qRP );
 			}
 
 			if ( Status != sOK ) {
@@ -305,6 +303,15 @@ namespace muaima {
 			// The racks and 'ValueDriver_' will be initalized/set as needed.
 
 			return Status;
+		}
+		eStatus Init(
+			fdr::rIODriver &Driver,
+			const str::dString &Username,
+			const str::dString &Password,
+			str::dString &Message,
+			qRPD )
+		{
+			return Init( Driver, Username, Password, &Message, qRP );
 		}
 		rConsole &Console( void )
 		{
@@ -326,6 +333,14 @@ namespace muaima {
 			const str::dString &Folder,
 			bso::sUInt Number,
 			qRPD );
+		eStatus EndStatus( str::dString *Message  )
+		{
+			eStatus Status = Console_.GetStatus();
+
+			RetrieveMessage_( Message );
+
+			return Status;
+		}
 		/* End of commands after which, on success, you have to handle 'GetValueDriver(...)'*/
 		fdr::rIDriver &GetValueDriver( void )
 		{
@@ -375,6 +390,14 @@ namespace muaima {
 				return true;
 			} else
 				return false;
+		}
+		eStatus EndStatus( str::dString *Message  = NULL)
+		{
+			return S_().EndStatus( Message );
+		}
+		eStatus EndStatus( str::dString &Message )
+		{
+			return EndStatus( &Message );
 		}
 		friend rSession;
 	};

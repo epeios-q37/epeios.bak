@@ -82,7 +82,7 @@ namespace misc {
 		bso::sBool ReadInProgress_;
 		bso::sBool IsIn_( void ) const
 		{
-		return ( Verbosity_ == vIn ) || ( Verbosity_ == vInAndOut );
+			return ( Verbosity_ == vIn ) || ( Verbosity_ == vInAndOut );
 		}
 		bso::sBool IsOut_( void ) const
 		{
@@ -103,6 +103,7 @@ namespace misc {
 					}
 
 					cio::COutF.Write( Buffer, Maximum );
+					cio::COutF.Commit();
 				}
 			}
 
@@ -110,10 +111,8 @@ namespace misc {
 		}
 		virtual void FDRDismiss( bso::sBool Unlock ) override
 		{
-			if ( ReadInProgress_ ) {
-				cio::COut.Commit();
-				cio::COut << "--" << txf::nl;
-			}
+			if ( ReadInProgress_ )
+				cio::COut << "--" << txf::nl << txf::commit;
 
 			ReadInProgress_ = false;
 
@@ -136,8 +135,10 @@ namespace misc {
 
 			Maximum = Driver_.Write( Buffer, Maximum );
 
-			if ( IsOut_() && ( Maximum != 0 ) )
+			if ( IsOut_() && (Maximum != 0) ) {
 				cio::COutF.Write( Buffer, Maximum );
+				cio::COutF.Commit();
+			}
 
 			return Maximum;
 		}
