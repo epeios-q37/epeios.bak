@@ -606,7 +606,7 @@ qRB
 	Status = HandleStatus_( Console_.SkipRemainingReponses(), qRP );
 
 	if ( Status == sOK ) {
-		Fetch( str::wString( bso::Convert( Number, Buffer ) ), str::wString( item::GetLabel( item::nRFC822 ) ), Console_ );
+		Fetch( muaima::f_Default, str::wString( bso::Convert( Number, Buffer ) ), str::wString( item::GetLabel( item::nRFC822 ) ), Console_ );
 
 		while ( ( ( Code = Console_.GetPendingResponseCode() ) != rc_None ) && ( Code != rcFetch ) )
 			Console_.SkipResponse();

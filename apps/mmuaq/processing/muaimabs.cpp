@@ -509,67 +509,7 @@ namespace status_ {
 	}
 }
 
-namespace _ {
-	qENUM( Command_ ) {
-		cLogin,
-		cLogout,	// NOT the counter-part of 'Login' ; closes the connection.
-		cCapability,
-		cSelect,
-		cList,
-		cLSub,
-		cFetch,
-		c_amount,
-		c_Undefined
-	};
-
-#define C( name )\
-	case c##name:\
-		return #name;\
-		break
-
-	const char *GetLabel_( eCommand_ Command )
-	{
-		switch ( Command ) {
-		C( Login);
-		C( Logout );
-		C( Capability );
-		C( Select );
-		C( List );
-		C( LSub );
-		C( Fetch );
-		default:
-			qRGnr();
-			break;
-		}
-
-		return NULL;	// To avoid a warning.
-	}
-
-	void SendCommand(
-		const str::dString &Tag,
-		eCommand_ Command,
-		txf::sOFlow &Flow )
-	{
-	qRH
-		str::wString CommandString;
-	qRB
-		CommandString.Init( GetLabel_( Command ) );
-
-		str::ToUpper( CommandString );
-
-		Flow << Tag << ' ' << CommandString;
-	qRR
-	qRT
-	qRE
-	}
-
-	void SendCFLR( txf::sOFlow &Flow )
-	{
-		 Flow << "\r\n";
-
-		 Flow.Commit();
-	}
-}
+# define CRLF "\r\n"
 
 void muaimabs::Connect( rConsole &Console )
 {
@@ -581,32 +521,24 @@ void muaimabs::Login(
 	const str::dString &Password,
 	rConsole &Console )
 {
-	::_::SendCommand( Console.GetNextTag(), ::_::cLogin, Console.OFlow() );
-
-	Console.OFlow() << ' ' << Username << ' ' << Password;
-
-	::_::SendCFLR( Console.OFlow() );
+	Console.OFlow() << Console.GetNextTag() << " LOGIN " << Username << ' ' << Password  << CRLF << txf::commit;
 }
 
 void muaimabs::Logout( rConsole &Console )
 {
-	::_::SendCommand( Console.GetNextTag(), ::_::cLogout, Console.OFlow() );
-	::_::SendCFLR( Console.OFlow() );
+	Console.OFlow() << Console.GetNextTag() << " LOGOUT" << CRLF << txf::commit;
 }
 
 void muaimabs::Capability( rConsole &Console )
 {
-	::_::SendCommand( Console.GetNextTag(), ::_::cCapability, Console.OFlow() );
-	::_::SendCFLR( Console.OFlow() );
+	Console.OFlow() << Console.GetNextTag() << " CAPABILITY " << CRLF << txf::commit;
 }
 
 void muaimabs::Select(
 	const str::dString &Mailbox,
 	rConsole &Console )
 {
-	::_::SendCommand( Console.GetNextTag(), ::_::cSelect, Console.OFlow() );
-	Console.OFlow() << ' ' << Mailbox;
-	::_::SendCFLR( Console.OFlow() );
+	Console.OFlow() << Console.GetNextTag() << " SELECT " << ' ' << Mailbox << CRLF << txf::commit;
 }
 
 void muaimabs::List(
@@ -614,9 +546,7 @@ void muaimabs::List(
 	const str::dString &Mailbox,
 	rConsole &Console )
 {
-	::_::SendCommand( Console.GetNextTag(), ::_::cList, Console.OFlow() );
-	Console.OFlow() << " \"" << Reference << "\" \"" << Mailbox << '"';
-	::_::SendCFLR( Console.OFlow() );
+	Console.OFlow() << Console.GetNextTag() << " LIST " << " \"" << Reference << "\" \"" << Mailbox << '"' << CRLF << txf::commit;
 }
 
 void muaimabs::LSub(
@@ -624,19 +554,16 @@ void muaimabs::LSub(
 	const str::dString &Mailbox,
 	rConsole &Console )
 {
-	::_::SendCommand( Console.GetNextTag(), ::_::cLSub, Console.OFlow() );
-	Console.OFlow() << " \"" << Reference << "\" \"" << Mailbox << '"';
-	::_::SendCFLR( Console.OFlow() );
+	Console.OFlow() << Console.GetNextTag() << " LSUB " << " \"" << Reference << "\" \"" << Mailbox << '"' << CRLF << txf::commit;
 }
 
 void muaimabs::Fetch(
+	eFlavor Flavor,
 	const str::dString &Sequence,
 	const str::dString &Items,
 	rConsole &Console )
 {
-	::_::SendCommand(Console.GetNextTag(), ::_::cFetch, Console.OFlow() );
-	Console.OFlow() << ' ' << Sequence << ' ' << Items;
-	::_::SendCFLR( Console.OFlow() );
+	Console.OFlow() << Console.GetNextTag() << ( Flavor == fUID ? " UID" : "" ) << " FETCH " << Sequence << ' ' << Items << CRLF << txf::commit;
 }
 
 namespace {

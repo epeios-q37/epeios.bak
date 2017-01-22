@@ -44,7 +44,8 @@ namespace registry {
 				Mailbox,
 				Sequence,
 				Items,
-				Folder;
+				Folder,
+				UID;
 		};
 
 		extern rEntry

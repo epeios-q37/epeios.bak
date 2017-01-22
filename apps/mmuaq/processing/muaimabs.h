@@ -355,7 +355,7 @@ namespace muaimabs {
 
 			return Status;
 		}
-		// You have srtill to handle 'GetResponseCode(...)' or launch 'SkipReponse(...');
+		// You have still to handle 'GetResponseCode(...)' or launch 'SkipReponse(...');
 		eStatus SkipRemainingReponses( void )
 		{
 			eStatus Status = s_Undefined;
@@ -367,6 +367,15 @@ namespace muaimabs {
 
 			return Status;
 		}
+	};
+
+	// The 'COPY', 'FETCH', 'SEARCH', 'STORE' can be sub-commands of the 'UID' command.
+	qENUM( Flavor ) {
+		fRegular,
+		fUID,
+		f_amount,
+		f_Undefined,
+		f_Default = fRegular,
 	};
 
 	/*
@@ -381,7 +390,6 @@ namespace muaimabs {
 		'rConsole::GetStatus(...)',	then handle 'rConsole::GetResponseDriver(...)',
 		or call 'rConsole::SkipReponse(...)'.
 	*/
-
 
 	// This is the first command to call after opening a connection to the 'IMAP' server.
 	void Connect( rConsole &Console );
@@ -409,9 +417,11 @@ namespace muaimabs {
 		const str::dString &Mailbox,
 		rConsole &Console );
 	void Fetch(
+		eFlavor Flavor,
 		const str::dString &Sequence,
 		const str::dString &Items,
-		rConsole &Console );}
+		rConsole &Console );
+}
 
 
 #endif

@@ -263,6 +263,16 @@ namespace {
 	}
 }
 
+namespace {
+	inline muaima::eFlavor GetFlavor_( void )
+	{
+		if ( sclmisc::BGetBoolean( registry::parameter::imap::UID, false ) )
+			return muaima::fUID;
+		else
+			return muaima::fRegular;
+	}
+}
+
 void imap::Fetch( void )
 {
 qRH
@@ -279,7 +289,8 @@ qRB
 
 	muaima::Select( Mailbox, Console );
 	DumpResponses_( false, Verbose, Console );
-	muaima::Fetch( Sequence, Items, Console );
+
+	muaima::Fetch( GetFlavor_(), Sequence, Items, Console );
 	DumpResponses_( true, Verbose, Console );
 qRR
 qRT

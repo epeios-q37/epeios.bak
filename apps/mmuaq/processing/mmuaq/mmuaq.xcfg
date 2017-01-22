@@ -65,6 +65,10 @@
     <Translation language="en">Launches the 'SELECT' command from the 'IMAP' protocol.</Translation>
    </Translations>
    <Translations text="IMAPFetchCommandDescription">
+    <Translation language="fr">Lance la commande 'UID FETCH' du protocole 'IMAP'.</Translation>
+    <Translation language="en">Launches the 'UID FETCH' command from the 'IMAP' protocol.</Translation>
+   </Translations>
+   <Translations text="IMAPUIDFetchCommandDescription">
     <Translation language="fr">Lance la commande 'FETCH' du protocole 'IMAP'.</Translation>
     <Translation language="en">Launches the 'FETCH' command from the 'IMAP' protocol.</Translation>
    </Translations>
@@ -171,12 +175,20 @@
     <Translation language="fr">dossier</Translation>
     <Translation language="en">folder</Translation>
    </Translations>
+   <!--       -->
    <!-- Flags -->
+   <!--       -->
    <Translations text="VerboseFlagDescription">
     <Translation language="fr">Détaille les opérations exécutées.</Translation>
     <Translation language="en">Displays infomation about the operations.</Translation>
    </Translations>
+   <Translations text="UIDFlagDescription">
+    <Translation language="fr">Lance le version 'UID' de la commande ('UID commande ...').</Translation>
+    <Translation language="en">Launches the 'UID' version of the command ('UID command ...').</Translation>
+   </Translations>
+   <!--         -->
    <!-- Options -->
+   <!--         -->
    <Translations text="SetupOptionDescription">
     <Translation language="fr">Identifiant du 'setup'.</Translation>
     <Translation language="en">Setup ID.</Translation>
@@ -200,12 +212,13 @@
    <Argument id="IMAPListCommand" Description="IMAPListCommandDescription" long="imap-list" Value="IMAPList" Usage="[%SetupOption%] [%VerboseFlag%] %IMAPReferenceArgument% %IMAPMailboxArgument%"/>
    <Argument id="IMAPLSubCommand" Description="IMAPLSubCommandDescription" long="imap-lsub" Value="IMAPLSub" Usage="[%SetupOption%] [%VerboseFlag%] %IMAPReferenceArgument% %IMAPMailboxArgument%"/>
    <Argument id="IMAPSelectCommand" Description="IMAPSelectCommandDescription" long="imap-select" Value="IMAPSelect" Usage="[%SetupOption%] [%VerboseFlag%] %IMAPMailboxArgument%"/>
-   <Argument id="IMAPFetchCommand" Description="IMAPFetchCommandDescription" long="imap-fetch" Value="IMAPFetch" Usage="[%SetupOption%] [%VerboseFlag%] %IMAPMailboxArgument% %IMAPSequenceArgument% %IMAPItemsArgument%"/>
+   <Argument id="IMAPFetchCommand" Description="IMAPFetchCommandDescription" long="imap-fetch" Value="IMAPFetch" Usage="[%SetupOption%] [%VerboseFlag%] [%UIDFlag%] %IMAPMailboxArgument% %IMAPSequenceArgument% %IMAPItemsArgument%"/>
    <Argument id="IMAPFoldersCommand" Description="IMAPFoldersCommandDescription" long="imap-folders" Value="IMAPFolders" Usage="[%SetupOption%] [%VerboseFlag%] [%IMAPFolderArgument%]"/>
    <Argument id="ShowHeaderCommand" Description="ShowHeaderCommandDescription" long="show-header" Value="ShowHeader" Usage="[%InputArgument% [%OutputArgument%]]"/>
    <Argument id="GetFieldCommand" Description="GetFieldCommandDescription" long="get-field" Value="GetField" Usage="%FieldArgument% [%InputArgument% [%OutputArgument%]]"/>
    <!-- Fanaux : 'Path', mais pas de 'Value'. -->
    <Argument id="VerboseFlag" Description="VerboseFlagDescription" long="verbose" Path="Verbose" Value="true"/>
+   <Argument id="UIDFlag" Description="UIDFlagDescription" long="uid" Path="IMAP/UID" Value="true"/>
    <!-- Options : 'Path' ET 'Value'. -->
    <!--Argument id="TestOption" Description="TestOptionDescription" long="option" short="o" Path="Option" Label="TestOptionLabel"/-->
    <Argument id="SetupOption" Description="SetupOptionDescription" long="setup" short="s" Path="@Setup" Label="SetupOptionLabel"/>
