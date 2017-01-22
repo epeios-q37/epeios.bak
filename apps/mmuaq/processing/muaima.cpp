@@ -139,6 +139,8 @@ qRE
 	return Name;
 }
 */
+
+
 void muaima::rSession::RetrieveMessage_( void )
 {
 qRH
@@ -295,17 +297,24 @@ namespace list_lsub_answer_  {
 	void Get(
 		fdr::rIDriver &Driver,
 		str::dString &Attributes,
-		str::dString &Delimiter,
+		bso::sByte &Delimiter,
 		str::dString &Name )
 	{
 	qRH
 		rValueDriver_ ValueDriver;
+		str::wString RawDelimiter;
 	qRB
 		ValueDriver.Init( Driver, dNone, NULL );
 		Get_( ValueDriver, Attributes);
 
 		ValueDriver.Init( Driver, dNone, NULL );
-		Get_( ValueDriver, Delimiter);
+		RawDelimiter.Init();
+		Get_( ValueDriver, RawDelimiter);
+
+		if ( RawDelimiter.Amount() == 1 )
+			Delimiter = RawDelimiter( RawDelimiter.First() );
+		else
+			qRGnr();
 
 		ValueDriver.Init( Driver, dNone, NULL );
 		Get_( ValueDriver, Name);
@@ -327,7 +336,7 @@ namespace fetch_hierarchy_delimiter_ {
 		qRH
 			str::wString Dummy;
 		qRB
-			if ( Delimiter.Amount() != 0 )
+			if ( Delimiter != 0 )
 				qRGnr();
 
 			if ( Code != rcList )
@@ -340,15 +349,15 @@ namespace fetch_hierarchy_delimiter_ {
 		qRE
 		}
 	public:
-		str::wString Delimiter;
+		bso::sByte Delimiter;
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, Delimiter );
+			Delimiter = 0;
 		}
 		qCVDTOR( sResponseCallback_ );
 		void Init( void )
 		{
-			tol::Init( Delimiter );
+			Delimiter = 0;
 		}
 	};
 }
@@ -367,10 +376,7 @@ qRB
 	muaima::List( str::wString(""), str::wString(""), Console_ );
 	Status = HandleResponses_( ResponseCallback, qRP );
 
-	if ( ResponseCallback.Delimiter.Amount() != 1 )
-		qRGnr();
-
-	Delimiter_ = ResponseCallback.Delimiter( ResponseCallback.Delimiter.First() );
+	Delimiter_ = ResponseCallback.Delimiter;
 qRR
 qRT
 qRE
@@ -460,67 +466,41 @@ namespace get_folders_ {
 				String.Crop(PRow, String.Last() );
 		}
 	}
+}
 
-	class sResponseCallback
-	: public cResponse_
-	{
-	private:
-		qRMV( cFolders, C_, Callback_ );
-		bso::sChar Delimiter_;
-	protected:
-		virtual void MUAIMAOnResponse(
-			eResponseCode Code,
-			fdr::rIDriver &Driver ) override
-		{
-		qRH
-			str::wString Dummy, Child;
-		qRB
-			if ( Code != rcList )
-				qRGnr();
+void muaima::rFolders::GetFolderName_( str::dString &Folder )
+{
+qRH
+	str::wString Dummy, Mailbox;
+	bso::sByte Delimiter = 0;
+qRB
+	tol::Init( Dummy, Mailbox );
+	list_lsub_answer_::Get( C_().GetResponseDriver(), Dummy, Delimiter, Mailbox );
 
-			tol::Init( Dummy, Child );
-			list_lsub_answer_::Get( Driver, Dummy, Dummy, Child );
+	get_folders_::Crop_( Delimiter, Mailbox );
 
-			Crop_( Delimiter_, Child );
-
-			C_().OnFolder( Child );
-		qRR
-		qRT
-		qRE
-		}
-	public:
-		void reset( bso::sBool P = true )
-		{
-			Delimiter_ = 0;
-		}
-		qCVDTOR( sResponseCallback );
-		void Init(
-			cFolders &Callback,
-			bso::sChar Delimiter )
-		{
-			Callback_ = &Callback;
-			Delimiter_ = Delimiter;
-		}
-	};
+	Folder = Mailbox;
+qRR
+qRT
+qRE
 }
 
 eStatus muaima::rSession::GetFolders(
 	const str::dString &Folder,
-	cFolders &Callback,
+	rFolders &Folders,
 	qRPN )
 {
 	eStatus Status = s_Undefined;
 qRH
 	str::wString Reference;
-	get_folders_::sResponseCallback ResponseCallback;
 qRB
 	Reference.Init( Folder );
 
 	common_::NormalizeFolderName( Delimiter_, true, Reference );
 
-	ResponseCallback.Init( Callback, Delimiter_ );
 	muaima::List( Reference, str::wString( "%" ), Console_ );
-	Status = HandleResponses_( ResponseCallback, qRP );
+
+	Folders.Init_( *this );
 qRR
 qRT
 qRE

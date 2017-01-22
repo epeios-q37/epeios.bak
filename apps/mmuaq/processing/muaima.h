@@ -126,32 +126,6 @@ namespace muaima {
 		};
 
 		const char *GetLabel( eName Name );
-		/*
-		class rConsole
-		{
-		private:
-			flw::sDressedIFlow<> Flow_;
-			rValueDriver_ ValueDriver_;
-		public:
-			void reset( bso::sBool P = true )
-			{
-				tol::reset( P, Flow_, ValueDriver_ );
-			}
-			qCDTOR( rConsole );
-			void Init( fdr::rIDriver &Driver )
-			{
-				Flow_.Init( Driver );
-				// 'ValueDriver_' will be initialized as needed.
-			}
-			eName Get( void );
-			fdr::rIDriver &GetValueDriver( void )
-			{
-				ValueDriver_.Init( Flow_, NULL );
-
-				return ValueDriver_;
-			}
-		};
-		*/
 	}
 
 	class cResponse_
@@ -332,9 +306,20 @@ namespace muaima {
 
 			return Status;
 		}
+		rConsole &Console( void )
+		{
+			return Console_;
+		}
+		bso::sByte Delimiter( void ) const
+		{
+			if ( Delimiter_ == 0 )
+				qRGnr();
+
+			return Delimiter_;
+		}
 		eStatus GetFolders(
 			const str::dString &Folder,
-			cFolders &Callback,
+			class rFolders &Folders,
 			qRPD );
 		/* Commands after which, on success, you have to handle 'GetValueDriver(...)'*/
 		eStatus GetMail(
@@ -351,6 +336,49 @@ namespace muaima {
 			return ValueDriver;
 		}
 	};
+
+	class rFolders
+	{
+	private:
+		qRMV( rSession, S_, Session_ );
+		rConsole &C_( void )
+		{
+			return S_().Console();
+		}
+		void Init_( rSession &Session )
+		{
+			Session_ = &Session;
+		}
+		void GetFolderName_( str::dString &Folder );
+	public:
+		void reset( bso::sBool P = true )
+		{
+			tol::reset( P, Session_ );
+		}
+		qCDTOR( rFolders );
+		void Init( void )
+		{
+			reset();
+
+			// Memebers will bi itialzed as needed.
+		}
+		// Call until returns 'false'.
+		bso::sBool GetFolder( str::dString &Folder )
+		{
+			eResponseCode Code = rc_Undefined;
+
+			while ( ( ( Code = C_().GetPendingResponseCode() ) != rc_None ) && ( Code != rcList ) )
+				C_().SkipResponse();
+
+			if ( Code == rcList ) {
+				GetFolderName_( Folder );
+				return true;
+			} else
+				return false;
+		}
+		friend rSession;
+	};
+
 }
 
 

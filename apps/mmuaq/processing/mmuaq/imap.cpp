@@ -348,7 +348,7 @@ void imap::Folders( void )
 {
 qRH
 	rSession_ Session;
-	cFolders_ Callback;
+	rFolders Folders;
 	str::wString Folder;
 qRB
 	Folder.Init();
@@ -356,8 +356,14 @@ qRB
 
 	Session.Init();
 
-	Callback.Init();
-	Session.GetFolders( Folder, Callback );
+	Session.GetFolders( Folder, Folders );
+
+	Folder.Init();
+
+	while ( Folders.GetFolder( Folder ) ) {
+		cio::COut << Folder << txf::nl << txf::commit;
+		Folder.Init();
+	}
 qRR
 qRT
 qRE
