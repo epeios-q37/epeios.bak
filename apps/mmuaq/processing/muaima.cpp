@@ -460,9 +460,10 @@ qRT
 qRE
 }
 
-void muaima::rSession::GetFolders(
+bso::sBool muaima::rSession::GetFolders(
 	const str::dString &Folder,
-	rFolders &Folders )
+	rFolders &Folders,
+	qRPN )
 {
 qRH
 	str::wString Reference;
@@ -477,6 +478,7 @@ qRB
 qRR
 qRT
 qRE
+	return true;
 }
 
 namespace get_mail_ {
@@ -577,24 +579,24 @@ qRE
 	return Status;
 }
 
-void muaima::rSession::GetMail(
+bso::sBool muaima::rSession::GetMail(
 	const str::dString &RawFolder,
 	bso::sUInt Number,
 	rMail &Mail,
 	qRPN )
 {
+	eStatus Status = s_Undefined;
 qRH
 	str::wString Folder;
 	eResponseCode Code = rc_None;
 	bso::bInteger Buffer;
-	eStatus Status = s_Undefined;
 qRB
 	Folder.Init( RawFolder );
 	common_::NormalizeFolderName( Delimiter_, false, Folder );
 
 	Select( Folder, Console_ );
 
-	Status = HandleResponses_( PurgeResponseCallback_, NULL, qRP );
+	Status = HandleResponses_( PurgeResponseCallback_, &PendingMessage_, qRP );
 
 	if ( Status == sOK ) {
 		Fetch( muaima::f_Default, str::wString( bso::Convert( Number, Buffer ) ), str::wString( item::GetLabel( item::nRFC822 ) ), Console_ );
@@ -606,13 +608,19 @@ qRB
 			Status = Console_.GetStatus();
 			if ( Status == sOK )
 				qRGnr();
+			else
+				RetrieveMessage_( &PendingMessage_ );
 		} else {
 			Mail.Init_( *this );
 		}
 	}
+
+	if ( Status != sOK )
+		PendingStatus_ = Status;
 qRR
 qRT
 qRE
+	return Status == sOK;
 }
 
 void muaima::rMail::GetValue_( void )

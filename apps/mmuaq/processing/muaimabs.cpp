@@ -548,7 +548,7 @@ void muaimabs::List(
 	const str::dString &Mailbox,
 	rConsole &Console )
 {
-	Console.OFlow() << Console.GetNextTag() << " LIST " << " \"" << Reference << "\" \"" << Mailbox << '"' << CRLF << txf::commit;
+	Console.OFlow() << Console.GetNextTag() << " LIST \"" << Reference << "\" \"" << Mailbox << '"' << CRLF << txf::commit;
 }
 
 void muaimabs::LSub(
@@ -556,7 +556,7 @@ void muaimabs::LSub(
 	const str::dString &Mailbox,
 	rConsole &Console )
 {
-	Console.OFlow() << Console.GetNextTag() << " LSUB " << " \"" << Reference << "\" \"" << Mailbox << '"' << CRLF << txf::commit;
+	Console.OFlow() << Console.GetNextTag() << " LSUB \"" << Reference << "\" \"" << Mailbox << '"' << CRLF << txf::commit;
 }
 
 void muaimabs::Fetch(

@@ -234,6 +234,8 @@ namespace muaima {
 		bso::sBool Connected_;
 		bso::sByte Delimiter_;	// The hierarchy delimiter. '0' means no demimiter (hope that '0' is not a valid delmimiter).
 		get_mail_::rRack GetMailRack_;
+		eStatus PendingStatus_;
+		str::wString PendingMessage_;
 		// If 'Message' == NULL, skips the message.
 		void RetrieveMessage_( str::dString *Message );
 		eStatus HandleResponses_(
@@ -259,8 +261,9 @@ namespace muaima {
 					Disconnect_( NULL, qRPU ); // We don't care if it fails.
 			}
 
-			tol::reset( P, Console_, ValueDriver_, Connected_, GetMailRack_ );
+			tol::reset( P, Console_, ValueDriver_, Connected_, GetMailRack_, PendingMessage_ );
 			Delimiter_ = 0;
+			PendingStatus_ = s_Undefined;
 		}
 		qCDTOR( rSession );
 		eStatus Init(
@@ -291,6 +294,9 @@ namespace muaima {
 					qRGnr();
 			}
 
+			PendingStatus_ = s_Undefined;
+			PendingMessage_.Init();
+
 			// The racks and 'ValueDriver_' will be initalized/set as needed.
 
 			return Status;
@@ -315,26 +321,43 @@ namespace muaima {
 
 			return Delimiter_;
 		}
-		void GetFolders(
+		bso::sBool GetFolders(
 			const str::dString &Folder,
-			class rFolders &Folders );
+			class rFolders &Folders,
+				qRPD );
 		/* Commands after which, on success, you have to handle 'GetValueDriver(...)'*/
 		eStatus GetMail(
 			const str::dString &Folder,
 			bso::sUInt Number,
 			qRPD );
-		void GetMail(
+		bso::sBool GetMail(
 			const str::dString &Folder,
 			bso::sUInt Number,
 			class rMail &Mail,
 			qRPD );
-		eStatus EndStatus( str::dString *Message  )
+		eStatus EndStatus( str::dString *Message = NULL )
 		{
-			eStatus Status = Console_.GetStatus();
+			eStatus Status = PendingStatus_;
 
-			RetrieveMessage_( Message );
+			if ( Status != s_Undefined ) {
+				if ( Status == sOK )
+					qRGnr();
+
+				if ( Message != NULL )
+					Message->Append( PendingMessage_ );
+
+				PendingStatus_ = s_Undefined;
+				PendingMessage_.Init();
+			} else {
+				Status = Console_.GetStatus();
+				RetrieveMessage_( Message );
+			}
 
 			return Status;
+		}
+		eStatus EndStatus( str::dString &Message  )
+		{
+			return EndStatus( &Message );
 		}
 		/* End of commands after which, on success, you have to handle 'GetValueDriver(...)'*/
 		fdr::rIDriver &GetValueDriver( void )

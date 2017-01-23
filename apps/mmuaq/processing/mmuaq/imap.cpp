@@ -339,8 +339,10 @@ namespace {
 		eStatus Status,
 		const str::dString &Message )
 	{
-		if ( Status != sOK )
+		if ( Status != sOK ) {
 			cio::COut << muaima::GetLabel( Status ) << ": " << Message << txf::nl;
+			qRAbort();
+		}
 	}
 }
 
@@ -351,12 +353,15 @@ qRH
 	rFolders Folders;
 	str::wString Folder, Message;
 qRB
+	Message.Init();
+
 	Folder.Init();
 	sclmisc::OGetValue( registry::parameter::imap::Folder, Folder );
 
 	Session.Init();
 
-	Session.GetFolders( Folder, Folders );
+	if ( !Session.GetFolders( Folder, Folders ) )
+		Handle_( Folders.EndStatus( Message ), Message );
 
 	Folder.Init();
 
@@ -365,7 +370,6 @@ qRB
 		Folder.Init();
 	}
 
-	Message.Init();
 	Handle_( Folders.EndStatus( Message ), Message );
 qRR
 qRT
@@ -379,14 +383,15 @@ qRH
 	muaima:: rMail Mail;
 	str::wString Message;
 qRB
+	Message.Init();
 	Session.Init();
 
 	Mail.Init();
-	Session.GetMail(str::wString("INBOX"), 1, Mail );
+	if ( !Session.GetMail( str::wString( "INBOX" ), 1, Mail ) )
+		Handle_( Session.EndStatus( Message ), Message );
 
 	misc::Dump( Mail.GetMailDriver() );
 
-	Message.Init();
 	Handle_( Mail.EndStatus( Message ), Message );
 qRR
 qRT
