@@ -38,7 +38,7 @@ namespace misc {
 		while ( !Flow.EndOfFlow() )
 			cio::COut << Flow.Get();
 
-		cio::COut << txf::nl;
+		cio::COut << txf::nl << txf::commit;
 	qRR
 	qRT
 	qRE
@@ -156,7 +156,7 @@ namespace misc {
 		{
 			if ( P ) {
 				if ( ReadInProgress_ ) {
-					cio::COut << "--" << txf::nl;
+					cio::COut << "--" << txf::nl << txf::commit;
 					ReadInProgress_ = false;
 				}
 			}

@@ -376,13 +376,18 @@ void imap::Test( void )
 {
 qRH
 	rSession_ Session;
+	muaima:: rMail Mail;
+	str::wString Message;
 qRB
 	Session.Init();
 
-	Session.GetMail(str::wString("INBOX"), 1 );
+	Mail.Init();
+	Session.GetMail(str::wString("INBOX"), 1, Mail );
 
-	misc::Dump( Session.GetValueDriver() );
+	misc::Dump( Mail.GetMailDriver() );
 
+	Message.Init();
+	Handle_( Mail.EndStatus( Message ), Message );
 qRR
 qRT
 qRE

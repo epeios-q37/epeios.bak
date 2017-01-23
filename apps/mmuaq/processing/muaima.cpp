@@ -536,7 +536,6 @@ qRB
 qRR
 qRT
 qRE
-
 }
 
 eStatus muaima::rSession::GetMail(
@@ -581,7 +580,8 @@ qRE
 void muaima::rSession::GetMail(
 	const str::dString &RawFolder,
 	bso::sUInt Number,
-	rMail &Mail )
+	rMail &Mail,
+	qRPN )
 {
 qRH
 	str::wString Folder;
@@ -594,7 +594,7 @@ qRB
 
 	Select( Folder, Console_ );
 
-	Status = Console_.GetStatus();
+	Status = HandleResponses_( PurgeResponseCallback_, NULL, qRP );
 
 	if ( Status == sOK ) {
 		Fetch( muaima::f_Default, str::wString( bso::Convert( Number, Buffer ) ), str::wString( item::GetLabel( item::nRFC822 ) ), Console_ );
@@ -607,14 +607,29 @@ qRB
 			if ( Status == sOK )
 				qRGnr();
 		} else {
-			GetMailRack_.Init( Console_ );
-			ValueDriver_ = GetMailRack_();
+			Mail.Init_( *this );
 		}
 	}
 qRR
 qRT
 qRE
 }
+
+void muaima::rMail::GetValue_( void )
+{
+qRH
+	str::wString Name;
+qRB
+	::get_mail_::GetSequence( Global_ );
+
+	Items_.Init( Global_, dNone );
+	
+	::get_mail_::SearchRFC822Value( Items_ );
+qRR
+qRT
+qRE
+}
+
 
 
 namespace {

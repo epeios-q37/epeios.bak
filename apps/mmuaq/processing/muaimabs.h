@@ -146,7 +146,7 @@ namespace muaimabs {
 			fdr::sByte *Buffer );
 		void Dismiss( bso::sBool Unlock )
 		{
-			F_().Dismiss( Unlock );
+//			F_().Dismiss( Unlock );
 		}
 		fdr::sTID ITake( fdr::sTID Owner )
 		{
@@ -188,8 +188,8 @@ namespace muaimabs {
 		qCVDTOR( rResponseDriver_ );
 		void Init(
 			flw::sIFlow &Flow,
-			const str::dString &PendingData,
-			eDelimiter Delimiter )
+			eDelimiter Delimiter,
+			const str::dString &PendingData = str::wString() )
 		{
 			Base_.Init( Flow, PendingData, Delimiter );
 			rDriver_::Init( fdr::ts_Default );
@@ -199,12 +199,16 @@ namespace muaimabs {
 		}
 		void Init(
 			fdr::rIDriver &Driver,
-			const str::dString &PendingData,
-			eDelimiter Delimiter )
+			eDelimiter Delimiter,
+			const str::dString &PendingData = str::wString() )
 		{
 			Flow_.Init( Driver );
 			Base_.Init( Flow_, PendingData, Delimiter );
 			rDriver_::Init( fdr::ts_Default );
+		}
+		void Purge( void )
+		{
+			fdr::Purge( *this );
 		}
 	};
 
@@ -328,7 +332,12 @@ namespace muaimabs {
 		}
 		void SkipResponse( void )
 		{
-			fdr::Purge( ResponseDriver_ );
+			ResponseDriver_.Purge();
+		}
+		void SkipRemainingReponses( void )
+		{
+			while ( GetPendingResponseCode() != rc_None )
+				SkipResponse();
 		}
 		// Also resets the 'PendingCodeIsStatus_'
 		eStatus GetStatus( void )
@@ -356,17 +365,6 @@ namespace muaimabs {
 			return Status;
 		}
 		// You have still to handle 'GetResponseCode(...)' or launch 'SkipReponse(...');
-		eStatus SkipRemainingReponses( void )
-		{
-			eStatus Status = s_Undefined;
-
-			while ( GetPendingResponseCode() != rc_None )
-				SkipResponse();
-
-			Status = GetStatus();
-
-			return Status;
-		}
 	};
 
 	// The 'COPY', 'FETCH', 'SEARCH', 'STORE' can be sub-commands of the 'UID' command.

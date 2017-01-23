@@ -272,6 +272,8 @@ fdr::sSize muaimabs::rDriverBase_::Read(
 
 		if ( ( Context_ == _::cEOF ) || Flow.EndOfFlow() ) {
 			Context_ = _::cEOF;
+			if ( Amount != 0 )
+				F_().Dismiss(false);
 			Maximum = Amount;	// To exit the loop.
 		}
 	}
@@ -415,7 +417,7 @@ qRB
 			Code = PendingCode_;
 			PendingCode_ = rc_Undefined;
 		}
-		ResponseDriver_.Init( Flow, PendingData, dCRLF );
+		ResponseDriver_.Init( Flow, dCRLF, PendingData );
 	} else {
 		if ( Flow.View() == '*' ) {
 			Flow.Skip();
@@ -441,7 +443,7 @@ qRB
 				qRGnr();
 			Flow.Skip();
 			Code = code_::Get( Flow, PendingData );
-			ResponseDriver_.Init( Flow, PendingData, dBracket );
+			ResponseDriver_.Init( Flow, dBracket, PendingData );
 		} else {
 			if ( PendingCodeIsStatus_ ) {
 				PendingCode_ = Code;
@@ -449,7 +451,7 @@ qRB
 				PendingCodeIsStatus_ = false;
 			}
 
-			ResponseDriver_.Init( Flow, PendingData, dCRLF );
+			ResponseDriver_.Init( Flow, dCRLF, PendingData );
 		}
 	}
 qRR
@@ -538,7 +540,7 @@ void muaimabs::Select(
 	const str::dString &Mailbox,
 	rConsole &Console )
 {
-	Console.OFlow() << Console.GetNextTag() << " SELECT " << ' ' << Mailbox << CRLF << txf::commit;
+	Console.OFlow() << Console.GetNextTag() << " SELECT " << Mailbox << CRLF << txf::commit;
 }
 
 void muaimabs::List(

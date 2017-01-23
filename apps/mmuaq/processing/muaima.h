@@ -177,7 +177,9 @@ namespace muaima {
 		protected:
 			virtual void MUAIMAOnEOF( void ) override
 			{
-				if ( C_().SkipRemainingReponses() != sOK )
+				C_().SkipRemainingReponses();
+
+				if ( C_().GetStatus() != sOK )
 					qRGnr();
 
 				C_().SkipResponse();
@@ -324,7 +326,8 @@ namespace muaima {
 		void GetMail(
 			const str::dString &Folder,
 			bso::sUInt Number,
-			class rMail &Mail );
+			class rMail &Mail,
+			qRPD );
 		eStatus EndStatus( str::dString *Message  )
 		{
 			eStatus Status = Console_.GetStatus();
@@ -344,9 +347,10 @@ namespace muaima {
 		}
 	};
 
-	class rFolders
+
+	class rBase_
 	{
-	private:
+	protected:
 		qRMV( rSession, S_, Session_ );
 		rConsole &C_( void )
 		{
@@ -356,18 +360,47 @@ namespace muaima {
 		{
 			Session_ = &Session;
 		}
-		void GetFolderName_( str::dString &Folder );
+		virtual void MUAIMAOnEnd( void )
+		{}
 	public:
 		void reset( bso::sBool P = true )
 		{
 			tol::reset( P, Session_ );
 		}
-		qCDTOR( rFolders );
+		qCDTOR( rBase_ );
 		void Init( void )
 		{
 			reset();
 
-			// Memebers will bi itialzed as needed.
+			// Memebers will be initialized as needed.
+		}
+		eStatus EndStatus( str::dString *Message  = NULL)
+		{
+			MUAIMAOnEnd();
+			return S_().EndStatus( Message );
+		}
+		eStatus EndStatus( str::dString &Message )
+		{
+			return EndStatus( &Message );
+		}
+		friend rSession;
+	};
+
+
+	class rFolders
+	: public rBase_
+	{
+	private:
+		void GetFolderName_( str::dString &Folder );
+	public:
+		void reset( bso::sBool P = true )
+		{
+			rBase_::reset( P );
+		}
+		qCVDTOR( rFolders );
+		void Init( void )
+		{
+			rBase_::Init();
 		}
 		// Call until returns 'false'.
 		bso::sBool GetFolder( str::dString &Folder )
@@ -383,19 +416,53 @@ namespace muaima {
 			} else
 				return false;
 		}
-		eStatus EndStatus( str::dString *Message  = NULL)
-		{
-			return S_().EndStatus( Message );
-		}
-		eStatus EndStatus( str::dString &Message )
-		{
-			return EndStatus( &Message );
-		}
 		friend rSession;
 	};
 
 	class rMail
-	{};
+	: public rBase_
+	{
+	private:
+		rResponseDriver_
+			Global_,	// Handle the global response,
+			Items_,	// Handles all the items (delimited by '())').
+			RFC822_;	// Handle the 'RFC822' content.
+		void GetValue_( void );
+		void Init_( rSession &Session )
+		{
+			rBase_::Init_( Session );
+
+			Global_.Init( C_().GetResponseDriver(), dCRLF );
+			GetValue_();
+
+			RFC822_.Init( Items_, dNone );
+		}
+	protected:
+		virtual void MUAIMAOnEnd( void ) override
+		{
+			RFC822_.Purge();
+			Items_.Purge();
+			Global_.Purge();
+			C_().SkipRemainingReponses();
+		}
+	public:
+		void reset( bso::sBool P = true )
+		{
+			rBase_::reset( P );
+		}
+		qCVDTOR( rMail );
+		void Init( void )
+		{
+			rBase_::Init();
+
+			// Other members will be initilaized as needed.
+		}
+		fdr::rIDriver &GetMailDriver( void )
+		{
+			return RFC822_;
+		}
+		friend rSession;
+	};
 
 }
 
