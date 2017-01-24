@@ -326,6 +326,15 @@ namespace muaimabs {
 			return OFlow_;
 		}
 		eResponseCode GetPendingResponseCode( void );
+		bso::sBool Search( eResponseCode WantedCode )
+		{
+			eResponseCode Code = rc_Undefined;
+
+			while ( ( ( Code = GetPendingResponseCode() ) != rc_None ) && ( Code != WantedCode ) ) 
+				SkipResponse();
+
+			return Code == WantedCode;
+		}
 		fdr::rIDriver &GetResponseDriver( void )
 		{
 			return ResponseDriver_;

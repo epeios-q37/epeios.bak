@@ -31,81 +31,6 @@
 namespace muaima {
 	using namespace muaimabs;
 
-	class cValue_
-	{
-	protected:
-		virtual void MUAIMAOnEOF( void ) = 0;
-	public:
-		qCALLBACK( Value_ );
-		void OnEOF( void )
-		{
-			return MUAIMAOnEOF();
-		}
-	};
-
-	class rValueDriver_
-	: public rDriver_
-	{
-	public:
-		rDriverBase_ Base_;
-		flw::sDressedIFlow<> Flow_;
-		cValue_ *Callback_;
-		bso::sBool EOFHandled_;
-	protected:
-		virtual fdr::sSize FDRRead(
-			fdr::sSize Maximum,
-			fdr::sByte* Buffer ) override
-		{
-			fdr::sSize Amount = Base_.Read( Maximum, Buffer );
-
-			if ( Base_.EndOfFlow() ) {
-				if ( !EOFHandled_  ) {
-					EOFHandled_ = true;
-					if ( Callback_ != NULL )
-						Callback_->OnEOF();
-				}
-			} else
-				EOFHandled_ = false;
-
-			return Amount;
-		}
-		virtual void FDRDismiss( bso::sBool Unlock ) override
-		{
-			return Base_.Dismiss( Unlock );
-		}
-		virtual fdr::sTID FDRITake( fdr::sTID Owner ) override
-		{
-			return Base_.ITake( Owner );
-		}
-	public:
-		void reset( bso::sBool P = true )
-		{
-			rDriver_::reset( P  );
-			tol::reset( P, Base_, Flow_, Callback_, EOFHandled_ );
-		}
-		qCVDTOR( rValueDriver_ );
-		void Init(
-			flw::sIFlow &Flow,
-			eDelimiter Delimiter,
-			cValue_ *Callback )
-		{
-			rDriver_::Init( fdr::ts_Default );
-			Base_.Init( Flow, str::wString(), Delimiter );
-			Callback_ = Callback;
-			EOFHandled_ = false;
-		}
-		void Init(
-			fdr::rIDriver &Driver,
-			eDelimiter Delimiter,
-			cValue_ *Callback )
-		{
-			rDriver_::Init( fdr::ts_Default );
-			Flow_.Init( Driver );
-			Base_.Init( Flow_, str::wString(), Delimiter );
-			Callback_ = Callback;
-		}
-	};
-
 	// Handles items pairs (
 	namespace  item {
 		qENUM( Name ) {
@@ -128,104 +53,6 @@ namespace muaima {
 		const char *GetLabel( eName Name );
 	}
 
-	class cResponse_
-	{
-	protected:
-		virtual void MUAIMAOnResponse(
-			eResponseCode Code,
-			fdr::rIDriver &Driver) = 0;
-	public:
-		qCALLBACK( Response_ );
-		void OnResponse(
-			eResponseCode Code,
-			fdr::rIDriver &Driver )
-		{
-			return MUAIMAOnResponse( Code, Driver );
-		}
-	};
-
-
-	namespace get_mail_ {
-		class sRFC822ValueCallback_
-		: public cValue_
-		{
-		private:
-			qRMV( fdr::rIDriver, D_, Driver_ );
-		protected:
-			virtual void MUAIMAOnEOF( void ) override
-			{
-				fdr::Purge( D_() );
-			}
-		public:
-			void reset( bso::sBool P = true )
-			{
-				tol::reset( P, Driver_ );
-			}
-			qCVDTOR( sRFC822ValueCallback_ );
-			void Init( fdr::rIDriver &Driver )
-			{
-				Driver_ = &Driver;
-			}
-		};
-
-
-		class sFetchResponseValueCallback_
-		: public cValue_
-		{
-		private:
-			qRMV( rConsole, C_, Console_ );
-		protected:
-			virtual void MUAIMAOnEOF( void ) override
-			{
-				C_().SkipRemainingReponses();
-
-				if ( C_().GetStatus() != sOK )
-					qRGnr();
-
-				C_().SkipResponse();
-			}
-		public:
-			void reset( bso::sBool P = true )
-			{
-				tol::reset( P, Console_ );
-			}
-			qCVDTOR( sFetchResponseValueCallback_ );
-			void Init( rConsole &Console )
-			{
-				Console_ = &Console;
-			}
-		};
-
-		class rRack
-		{
-		private:
-			rValueDriver_ FetchValueDriver_, ItemsValueDriver_, RFC822ValueDriver_;
-			sFetchResponseValueCallback_ FetchResponseValueCallback_;
-			sRFC822ValueCallback_ ItemsValueCallback_, RFC822ValueCallback_;
-			void GetValue_( void );
-		public:
-			void reset( bso::sBool P = true )
-			{
-				tol::reset( P, FetchValueDriver_, ItemsValueDriver_, RFC822ValueDriver_, FetchResponseValueCallback_, ItemsValueCallback_, RFC822ValueCallback_ );
-			}
-			qCDTOR( rRack )
-			void Init( rConsole &Console )
-			{
-				FetchResponseValueCallback_.Init( Console );
-				FetchValueDriver_.Init(Console.GetResponseDriver(), dCRLF, &FetchResponseValueCallback_ );
-				GetValue_();
-
-				RFC822ValueCallback_.Init( ItemsValueDriver_ );
-				RFC822ValueDriver_.Init( ItemsValueDriver_, dNone, &RFC822ValueCallback_ );
-			}
-			fdr::rIDriver *operator()( void )
-			{
-				return &RFC822ValueDriver_;
-			}
-			
-		};
-	}
-
 	class rSession
 	{
 	private:
@@ -233,13 +60,11 @@ namespace muaima {
 		qRMV( fdr::rIDriver, VD_, ValueDriver_ );
 		bso::sBool Connected_;
 		bso::sByte Delimiter_;	// The hierarchy delimiter. '0' means no demimiter (hope that '0' is not a valid delmimiter).
-		get_mail_::rRack GetMailRack_;
 		eStatus PendingStatus_;
 		str::wString PendingMessage_;
 		// If 'Message' == NULL, skips the message.
 		void RetrieveMessage_( str::dString *Message );
-		eStatus HandleResponses_(
-			cResponse_ &ReponseCallback,
+		eStatus PurgeResponses_(
 			str::dString *Message,
 			qRPN );
 		eStatus Connect_(
@@ -261,7 +86,7 @@ namespace muaima {
 					Disconnect_( NULL, qRPU ); // We don't care if it fails.
 			}
 
-			tol::reset( P, Console_, ValueDriver_, Connected_, GetMailRack_, PendingMessage_ );
+			tol::reset( P, Console_, ValueDriver_, Connected_, PendingMessage_ );
 			Delimiter_ = 0;
 			PendingStatus_ = s_Undefined;
 		}
@@ -325,11 +150,6 @@ namespace muaima {
 			const str::dString &Folder,
 			class rFolders &Folders,
 				qRPD );
-		/* Commands after which, on success, you have to handle 'GetValueDriver(...)'*/
-		eStatus GetMail(
-			const str::dString &Folder,
-			bso::sUInt Number,
-			qRPD );
 		bso::sBool GetMail(
 			const str::dString &Folder,
 			bso::sUInt Number,

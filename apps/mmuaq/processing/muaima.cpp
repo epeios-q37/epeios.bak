@@ -130,7 +130,6 @@ namespace {
 	}
 }
 
-
 void muaima::rSession::RetrieveMessage_( str::dString *Message )
 {
 	if ( Message == NULL )
@@ -141,46 +140,20 @@ void muaima::rSession::RetrieveMessage_( str::dString *Message )
 	}
 }
 
-eStatus muaima::rSession::HandleResponses_(
-	cResponse_ &ReponseCallback,
+eStatus muaima::rSession::PurgeResponses_(
 	str::dString *Message,
 	qRPN )
 {
 	eResponseCode Code = rc_Undefined;
 	eStatus Status = s_Undefined;
 
-	while ( ( Code = Console_.GetPendingResponseCode()) != rc_None )
-		ReponseCallback.OnResponse( Code, Console_.GetResponseDriver() );
+	Console_.SkipRemainingReponses();
 
 	Status = Console_.GetStatus();
 
 	RetrieveMessage_( Message );
 
 	return Status;
-}
-
-namespace {
-	class sNOPResponseCallback_
-	: public cResponse_
-	{
-	protected:
-		virtual void MUAIMAOnResponse(
-			eResponseCode Code,
-			fdr::rIDriver &Driver ) override
-		{
-			fdr::Purge( Driver );
-		}
-	public:
-		void reset( bso::sBool = true )
-		{
-			// Standardization.
-		}
-		qCVDTOR( sNOPResponseCallback_ );
-		void Init( void )
-		{
-			// Standardization.
-		}
-	} PurgeResponseCallback_;
 }
 
 eStatus muaima::rSession::Connect_(
@@ -192,11 +165,11 @@ eStatus muaima::rSession::Connect_(
 	eStatus Status = s_Undefined;
 
 	Connect( Console_ );
-	Status = HandleResponses_( PurgeResponseCallback_, Message, qRP );
+	Status = PurgeResponses_( Message, qRP );
 
 	if ( Status == sOK ) {
 		Login( Username, Password, Console_ );
-		Status = HandleResponses_( PurgeResponseCallback_, Message, qRP );
+		Status = PurgeResponses_( Message, qRP );
 	}
 
 	return Status;
@@ -272,13 +245,13 @@ namespace list_lsub_answer_  {
 		str::dString &Name )
 	{
 	qRH
-		rValueDriver_ ValueDriver;
+		rResponseDriver_ ValueDriver;
 		str::wString RawDelimiter;
 	qRB
-		ValueDriver.Init( Driver, dNone, NULL );
+		ValueDriver.Init( Driver, dNone );
 		Get_( ValueDriver, Attributes);
 
-		ValueDriver.Init( Driver, dNone, NULL );
+		ValueDriver.Init( Driver, dNone);
 		RawDelimiter.Init();
 		Get_( ValueDriver, RawDelimiter);
 
@@ -287,50 +260,12 @@ namespace list_lsub_answer_  {
 		else
 			qRGnr();
 
-		ValueDriver.Init( Driver, dNone, NULL );
+		ValueDriver.Init( Driver, dNone );
 		Get_( ValueDriver, Name);
 	qRR
 	qRT
 	qRE
 	}
-}
-
-namespace fetch_hierarchy_delimiter_ {
-	class sResponseCallback_
-	: public cResponse_
-	{
-	protected:
-		virtual void MUAIMAOnResponse(
-			eResponseCode Code,
-			fdr::rIDriver &Driver ) override
-		{
-		qRH
-			str::wString Dummy;
-		qRB
-			if ( Delimiter != 0 )
-				qRGnr();
-
-			if ( Code != rcList )
-				qRGnr();
-
-			Dummy.Init();
-			list_lsub_answer_::Get( Driver, Dummy, Delimiter, Dummy );
-		qRR
-		qRT
-		qRE
-		}
-	public:
-		bso::sByte Delimiter;
-		void reset( bso::sBool P = true )
-		{
-			Delimiter = 0;
-		}
-		qCVDTOR( sResponseCallback_ );
-		void Init( void )
-		{
-			Delimiter = 0;
-		}
-	};
 }
 
 eStatus muaima::rSession::FetchHierarchyDelimiter_(
@@ -339,17 +274,20 @@ eStatus muaima::rSession::FetchHierarchyDelimiter_(
 {
 	eStatus Status = s_Undefined;
 qRH
-	fetch_hierarchy_delimiter_::sResponseCallback_ ResponseCallback;
+	str::wString Dummy;
 qRB
 	if ( Delimiter_ != 0 )
 		qRGnr();
 
-	ResponseCallback.Init();
-
 	muaima::List( str::wString(""), str::wString(""), Console_ );
-	Status = HandleResponses_( ResponseCallback, Message, qRP );
 
-	Delimiter_ = ResponseCallback.Delimiter;
+	if ( !Console_.Search( rcList ) )
+		qRGnr();
+
+	Dummy.Init();
+	list_lsub_answer_::Get( Console_.GetResponseDriver(), Dummy, Delimiter_, Dummy );
+
+	Status = PurgeResponses_( Message, qRP );
 qRR
 qRT
 qRE
@@ -361,7 +299,7 @@ eStatus muaima::rSession::Disconnect_(
 	qRPN )
 {
 	Logout( Console_ );
-	return HandleResponses_( PurgeResponseCallback_, Message, qRP );
+	return PurgeResponses_( Message, qRP );
 }
 
 namespace common_ {
@@ -486,9 +424,9 @@ namespace get_mail_ {
 	{
 		bso::sUInt Sequence = 0;
 	qRH
-		rValueDriver_ ValueDriver;
+		rResponseDriver_ ValueDriver;
 	qRB
-		ValueDriver.Init( Driver, dNone, NULL );
+		ValueDriver.Init( Driver, dNone );
 		Sequence = common_::GetNumber( ValueDriver );
 	qRR
 	qRT
@@ -501,17 +439,17 @@ namespace get_mail_ {
 	qRH
 		str::wString Name;
 		bso::sBool Continue = true;
-		rValueDriver_ ValueDriver;
+		rResponseDriver_ ValueDriver;
 	qRB
 		while ( Continue ) {
 			Name.Init();
-			ValueDriver.Init( Driver, dNone, NULL );
+			ValueDriver.Init( Driver, dNone );
 			common_::GetString(ValueDriver, Name );
 
 			if ( item_::GetName( Name ) == item_::nRFC822 )
 				Continue = false;
 			else {
-				ValueDriver.Init( Driver, dNone, NULL );
+				ValueDriver.Init( Driver, dNone );
 				fdr::Purge( ValueDriver );
 			}
 		}
@@ -522,61 +460,6 @@ namespace get_mail_ {
 	qRT
 	qRE
 	}
-}
-
-void muaima::get_mail_::rRack::GetValue_( void )
-{
-qRH
-	str::wString Name;
-qRB
-	::get_mail_::GetSequence( FetchValueDriver_ );
-
-	ItemsValueCallback_.Init( FetchValueDriver_ );
-	ItemsValueDriver_.Init( FetchValueDriver_, dNone, &ItemsValueCallback_ );
-	
-	::get_mail_::SearchRFC822Value( ItemsValueDriver_ );
-qRR
-qRT
-qRE
-}
-
-eStatus muaima::rSession::GetMail(
-	const str::dString &RawFolder,
-	bso::sUInt Number,
-	qRPN )
-{
-	eStatus Status = s_Undefined;
-qRH
-	str::wString Folder;
-	eResponseCode Code = rc_None;
-	bso::bInteger Buffer;
-qRB
-	Folder.Init( RawFolder );
-	common_::NormalizeFolderName( Delimiter_, false, Folder );
-
-	Select( Folder, Console_ );
-
-	Status = Console_.GetStatus();
-
-	if ( Status == sOK ) {
-		Fetch( muaima::f_Default, str::wString( bso::Convert( Number, Buffer ) ), str::wString( item::GetLabel( item::nRFC822 ) ), Console_ );
-
-		while ( ( ( Code = Console_.GetPendingResponseCode() ) != rc_None ) && ( Code != rcFetch ) )
-			Console_.SkipResponse();
-
-		if ( Code == rc_None ) {
-			Status = Console_.GetStatus();
-			if ( Status == sOK )
-				qRGnr();
-		} else {
-			GetMailRack_.Init( Console_ );
-			ValueDriver_ = GetMailRack_();
-		}
-	}
-qRR
-qRT
-qRE
-	return Status;
 }
 
 bso::sBool muaima::rSession::GetMail(
@@ -596,7 +479,7 @@ qRB
 
 	Select( Folder, Console_ );
 
-	Status = HandleResponses_( PurgeResponseCallback_, &PendingMessage_, qRP );
+	Status = PurgeResponses_( &PendingMessage_, qRP );
 
 	if ( Status == sOK ) {
 		Fetch( muaima::f_Default, str::wString( bso::Convert( Number, Buffer ) ), str::wString( item::GetLabel( item::nRFC822 ) ), Console_ );
@@ -650,6 +533,5 @@ namespace {
 qGCTOR( muaima )
 {
 	FillAutomats_();
-	PurgeResponseCallback_.Init();
 }
 
