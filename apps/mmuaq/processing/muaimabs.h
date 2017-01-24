@@ -425,7 +425,7 @@ namespace muaimabs {
 		rConsole &Console );
 	void Fetch(
 		eFlavor Flavor,
-		const str::dString &Sequence,
+		const str::dString &SequenceSet,
 		const str::dString &Items,
 		rConsole &Console );
 }

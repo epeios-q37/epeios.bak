@@ -37,8 +37,8 @@
     <Translation language="en">Displays information about messages from a 'POP3' server.</Translation>
    </Translations>
    <Translations text="POP3RetrieveCommandDescription">
-    <Translation language="fr">Récupère un message d'un serveur 'POP3'.</Translation>
-    <Translation language="en">Retrieve a message from a 'POP3' server.</Translation>
+    <Translation language="fr">Récupère un courrier d'un serveur 'POP3'.</Translation>
+    <Translation language="en">Retrieve a mail from a 'POP3' server.</Translation>
    </Translations>
    <Translations text="POP3TopCommandDescription">
     <Translation language="fr">Affiche le début d'un message d'un serveur 'POP3'.</Translation>
@@ -72,6 +72,10 @@
     <Translation language="fr">Affiche les sous-dossiers d'un dossier 'IMAP'.</Translation>
     <Translation language="en">Displays sub-folders of an 'IMAP' folder.</Translation>
    </Translations>
+   <Translations text="IMAPMailCommandDescription">
+    <Translation language="fr">Affiche courrier d'un dossier 'IMAP'.</Translation>
+    <Translation language="en">Displays a mail from an 'IMAP' folder.</Translation>
+   </Translations>
    <Translations text="ShowHeaderCommandDescription">
     <Translation language="fr">Affiche l'entête d'un courrier.</Translation>
     <Translation language="en">Displays the header of a mail.</Translation>
@@ -99,13 +103,13 @@
     <Translation language="fr">sortie</Translation>
     <Translation language="en">out</Translation>
    </Translations>
-   <Translations text="MessageArgumentDescription">
-    <Translation language="fr">Numéro de message.</Translation>
-    <Translation language="en">Message number.</Translation>
+   <Translations text="MailIDArgumentDescription">
+    <Translation language="fr">Identifiant de courrier (nombre, séquence, 'UID'... selon le contexte).</Translation>
+    <Translation language="en">Mail id (number, sequence, 'UID'... depending on the context).</Translation>
    </Translations>
-   <Translations text="MessageArgumentLabel">
-    <Translation language="fr">message</Translation>
-    <Translation language="en">message</Translation>
+   <Translations text="MailIDArgumentLabel">
+    <Translation language="fr">courrier</Translation>
+    <Translation language="en">mail</Translation>
    </Translations>
    <Translations text="LinesArgumentDescription">
     <Translation language="fr">Nombre de lignes.</Translation>
@@ -147,13 +151,13 @@
     <Translation language="fr">mailbox</Translation>
     <Translation language="en">mailbox</Translation>
    </Translations>
-   <Translations text="IMAPSequenceArgumentDescription">
+   <Translations text="IMAPSequenceSetArgumentDescription">
     <Translation language="fr">'sequence set' tel que défini pour le protocole 'IMAP'.</Translation>
     <Translation language="en">'sequence set' as defined for the 'IMAP' protocol.</Translation>
    </Translations>
-   <Translations text="IMAPSequenceArgumentLabel">
-    <Translation language="fr">sequence</Translation>
-    <Translation language="en">sequence</Translation>
+   <Translations text="IMAPSequenceSetArgumentLabel">
+    <Translation language="fr">sequence set</Translation>
+    <Translation language="en">sequence set</Translation>
    </Translations>
    <Translations text="IMAPItemsArgumentDescription">
     <Translation language="fr">'message data item names or macro' tel que défini pour le protocole 'IMAP'.</Translation>
@@ -200,16 +204,17 @@
    <Argument id="B64EncodeCommand" Description="B64EncodeCommandDescription" long="b64-encode" Value="B64Encode" Usage="[%InputArgument% [%OutputArgument%]]"/>
    <Argument id="B64DecodeCommand" Description="B64DecodeCommandDescription" long="b64-decode" Value="B64Decode" Usage="[%InputArgument% [%OutputArgument%]]"/>
    <Argument id="NextTagCommand" Description="NextTagCommandDescription" long="next-tag" Value="NextTag" Usage="[%TagArgument%]"/>
-   <Argument id="POP3ListCommand" Description="POP3ListCommandDescription" long="pop3-list" Value="POP3List" Usage="[%SetupOption%] [%VerboseFlag%] [%MessageArgument%]"/>
-   <Argument id="POP3RetrieveCommand" Description="POP3RetrieveCommandDescription" long="pop3-retrieve" Value="POP3Retrieve" Usage="[%SetupOption%] [%VerboseFlag%] %MessageArgument%"/>
-   <Argument id="POP3TopCommand" Description="POP3TopCommandDescription" long="pop3-top" Value="POP3Top" Usage="[%SetupOption%] [%VerboseFlag%] %MessageArgument% %LinesArgument%"/>
-   <Argument id="POP3UIDLCommand" Description="POP3UIDLCommandDescription" long="pop3-uidl" Value="POP3UIDL" Usage="[%SetupOption%] [%VerboseFlag%] [%MessageArgument%]"/>
+   <Argument id="POP3ListCommand" Description="POP3ListCommandDescription" long="pop3-list" Value="POP3List" Usage="[%SetupOption%] [%VerboseFlag%] [%MailIDArgument%]"/>
+   <Argument id="POP3RetrieveCommand" Description="POP3RetrieveCommandDescription" long="pop3-retrieve" Value="POP3Retrieve" Usage="[%SetupOption%] [%VerboseFlag%] %MailIDArgument%"/>
+   <Argument id="POP3TopCommand" Description="POP3TopCommandDescription" long="pop3-top" Value="POP3Top" Usage="[%SetupOption%] [%VerboseFlag%] %MailIDArgument% %LinesArgument%"/>
+   <Argument id="POP3UIDLCommand" Description="POP3UIDLCommandDescription" long="pop3-uidl" Value="POP3UIDL" Usage="[%SetupOption%] [%VerboseFlag%] [%MailIDArgument%]"/>
    <Argument id="IMAPCapabilityCommand" Description="IMAPCapabilityCommandDescription" long="imap-capability" Value="IMAPCapability" Usage="[%SetupOption%] [%VerboseFlag%]"/>
    <Argument id="IMAPListCommand" Description="IMAPListCommandDescription" long="imap-list" Value="IMAPList" Usage="[%SetupOption%] [%VerboseFlag%] %IMAPReferenceArgument% %IMAPMailboxArgument%"/>
    <Argument id="IMAPLSubCommand" Description="IMAPLSubCommandDescription" long="imap-lsub" Value="IMAPLSub" Usage="[%SetupOption%] [%VerboseFlag%] %IMAPReferenceArgument% %IMAPMailboxArgument%"/>
    <Argument id="IMAPSelectCommand" Description="IMAPSelectCommandDescription" long="imap-select" Value="IMAPSelect" Usage="[%SetupOption%] [%VerboseFlag%] %IMAPMailboxArgument%"/>
-   <Argument id="IMAPFetchCommand" Description="IMAPFetchCommandDescription" long="imap-fetch" Value="IMAPFetch" Usage="[%SetupOption%] [%VerboseFlag%] [%UIDFlag%] %IMAPMailboxArgument% %IMAPSequenceArgument% %IMAPItemsArgument%"/>
+   <Argument id="IMAPFetchCommand" Description="IMAPFetchCommandDescription" long="imap-fetch" Value="IMAPFetch" Usage="[%SetupOption%] [%VerboseFlag%] [%UIDFlag%] %IMAPMailboxArgument% %IMAPSequenceSetArgument% %IMAPItemsArgument%"/>
    <Argument id="IMAPFoldersCommand" Description="IMAPFoldersCommandDescription" long="imap-folders" Value="IMAPFolders" Usage="[%SetupOption%] [%VerboseFlag%] [%IMAPFolderArgument%]"/>
+   <Argument id="IMAPMailCommand" Description="IMAPMailCommandDescription" long="imap-mail" Value="IMAPMail" Usage="[%SetupOption%] [%VerboseFlag%] [%UIDFlag%] %IMAPFolderArgument% %MailIDArgument%"/>
    <Argument id="ShowHeaderCommand" Description="ShowHeaderCommandDescription" long="show-header" Value="ShowHeader" Usage="[%InputArgument% [%OutputArgument%]]"/>
    <Argument id="GetFieldCommand" Description="GetFieldCommandDescription" long="get-field" Value="GetField" Usage="%FieldArgument% [%InputArgument% [%OutputArgument%]]"/>
    <!-- Fanaux : 'Path', mais pas de 'Value'. -->
@@ -221,13 +226,13 @@
    <!-- Arguments libres : 'Path' mais PAS de 'Value' (ni de 'short', ni de 'long'). -->
    <Argument id="InputArgument" Description="InputArgumentDescription" Path="Input" Label="InputArgumentLabel"/>
    <Argument id="OutputArgument" Description="OutputArgumentDescription" Path="Output" Label="OutputArgumentLabel"/>
-   <Argument id="MessageArgument" Description="MessageArgumentDescription" Path="Message" Label="MessageArgumentLabel"/>
+   <Argument id="MailIDArgument" Description="MailIDArgumentDescription" Path="MailID" Label="MailIDArgumentLabel"/>
    <Argument id="LinesArgument" Description="LinesArgumentDescription" Path="Lines" Label="LinesArgumentLabel"/>
    <Argument id="FieldArgument" Description="FieldArgumentDescription" Path="FieldName" Label="FieldArgumentLabel"/>
    <Argument id="TagArgument" Description="TagArgumentDescription" Path="Tag" Label="TagArgumentLabel"/>
    <Argument id="IMAPReferenceArgument" Description="IMAPReferenceArgumentDescription" Path="IMAP/Reference" Label="IMAPReferenceArgumentLabel"/>
    <Argument id="IMAPMailboxArgument" Description="IMAPMailboxArgumentDescription" Path="IMAP/Mailbox" Label="IMAPMailboxArgumentLabel"/>
-   <Argument id="IMAPSequenceArgument" Description="IMAPSequenceArgumentDescription" Path="IMAP/Sequence" Label="IMAPSequenceArgumentLabel"/>
+   <Argument id="IMAPSequenceSetArgument" Description="IMAPSequenceSetArgumentDescription" Path="IMAP/SequenceSet" Label="IMAPSequenceSetArgumentLabel"/>
    <Argument id="IMAPItemsArgument" Description="IMAPItemsArgumentDescription" Path="IMAP/Items" Label="IMAPItemsArgumentLabel"/>
    <Argument id="IMAPFolderArgument" Description="IMAPFolderArgumentDescription" Path="IMAP/Folder" Label="IMAPFolderArgumentLabel"/>
    <!-- Affectations des arguments libres-->
@@ -244,17 +249,17 @@
      <Link index="0" Target="TagArgument"/>
     </Layout>
     <Layout command="POP3List">
-     <Link index="0" Target="MessageArgument"/>
+     <Link index="0" Target="MailIDArgument"/>
     </Layout>
     <Layout command="POP3Retrieve">
-     <Link index="0" Target="MessageArgument"/>
+     <Link index="0" Target="MailIDArgument"/>
     </Layout>
     <Layout command="POP3Top">
-     <Link index="0" Target="MessageArgument"/>
+     <Link index="0" Target="MailIDArgument"/>
      <Link index="1" Target="LinesArgument"/>
     </Layout>
     <Layout command="POP3UIDL">
-     <Link index="0" Target="MessageArgument"/>
+     <Link index="0" Target="MailIDArgument"/>
     </Layout>
     <Layout command="IMAPCapability">
     </Layout>
@@ -271,11 +276,15 @@
     </Layout>
     <Layout command="IMAPFetch">
      <Link index="0" Target="IMAPMailboxArgument"/>
-     <Link index="1" Target="IMAPSequenceArgument"/>
+     <Link index="1" Target="IMAPSequenceSetArgument"/>
      <Link index="2" Target="IMAPItemsArgument"/>
     </Layout>
     <Layout command="IMAPFolders">
      <Link index="0" Target="IMAPFolderArgument"/>
+    </Layout>
+    <Layout command="IMAPMail">
+     <Link index="0" Target="IMAPFolderArgument"/>
+     <Link index="1" Target="MailIDArgument"/>
     </Layout>
     <Layout command="ShowHeader">
      <Link index="0" Target="InputArgument"/>

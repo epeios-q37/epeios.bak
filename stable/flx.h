@@ -671,7 +671,6 @@ namespace flx {
 	class void_iflow__
 	: public flw::standalone_iflow__<>
 	{
-	private:
 	public:
 		void reset( bso::bool__ P = true )
 		{

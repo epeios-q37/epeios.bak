@@ -197,6 +197,9 @@ void muaimabs::rDriverBase_::HandleContext_(
 	fdr::sSize &Amount )
 {
 	bso::sBool HandleSPCRLF = true;
+	
+	if ( ( Context_ != _::cEOF ) && Flow.EndOfFlow() )
+		Context_ = _::cEOF;
 
 	switch ( Context_ ) {
 	case _::cFree:
@@ -561,11 +564,11 @@ void muaimabs::LSub(
 
 void muaimabs::Fetch(
 	eFlavor Flavor,
-	const str::dString &Sequence,
+	const str::dString &SequenceSet,
 	const str::dString &Items,
 	rConsole &Console )
 {
-	Console.OFlow() << Console.GetNextTag() << ( Flavor == fUID ? " UID" : "" ) << " FETCH " << Sequence << ' ' << Items << CRLF << txf::commit;
+	Console.OFlow() << Console.GetNextTag() << ( Flavor == fUID ? " UID" : "" ) << " FETCH " << SequenceSet << ' ' << Items << CRLF << txf::commit;
 }
 
 namespace {

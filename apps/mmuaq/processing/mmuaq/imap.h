@@ -30,6 +30,7 @@ namespace imap {
 
 	// High-level functions.
 	void Folders( void );
+	void Mail( void );
 
 	void Test( void );
 }

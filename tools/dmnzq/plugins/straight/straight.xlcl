@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
-	<!--Translations text="">
-		<Translation language="fr"></Translation>
-		<Translation language="en"></Translation>
-	</Translations-->
+	<Translations text="UnableToUsePort">
+		<Translation language="fr">Impossible d'utiliser le port %1.</Translation>
+		<Translation language="en">Unable to use port %1.</Translation>
+	</Translations>
 </xpp:bloc>

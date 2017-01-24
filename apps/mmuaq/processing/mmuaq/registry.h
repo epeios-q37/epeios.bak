@@ -42,7 +42,7 @@ namespace registry {
 				Password,
 				Reference,
 				Mailbox,
-				Sequence,
+				SequenceSet,
 				Items,
 				Folder,
 				UID;
@@ -51,7 +51,7 @@ namespace registry {
 		extern rEntry
 			Input,
 			Output,
-			Message,
+			MailID,
 			Lines,
 			Verbose,
 			FieldName,

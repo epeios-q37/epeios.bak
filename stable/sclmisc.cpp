@@ -387,12 +387,10 @@ namespace {
 	qRH
 		fnm::rName Path;
 	qRB
-#ifdef CPE_S_WIN
 		Path.Init();
 		dir::GetAppDataPath( Path );
 
 		Exist = GetAppDataConfigurationFilename_( Path, Name, Target, Product, Organization, CreateDir );
-#endif
 	qRR
 	qRT
 	qRE

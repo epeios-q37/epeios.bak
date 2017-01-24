@@ -31,7 +31,11 @@
   <Translation language="fr">Pas de champ '%1'.</Translation>
   <Translation language="en">No '%1' field.</Translation>
  </Translations>
- <!--
+ 	<Translations text="NoCorrespondingMail">
+		<Translation language="fr">(pas de mail correspondant)</Translation>
+		<Translation language="en">(no corresponding mail)</Translation>
+	</Translations>
+<!--
 	<Translations text="">
 		<Translation language="fr"></Translation>
 		<Translation language="en"></Translation>

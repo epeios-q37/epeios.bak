@@ -1,5 +1,8 @@
 Changelog of the 'straight' 'dmnzq' plugin.
 
+2017-01-24 :
+- Displays now a message when the port to listen to is already in use.
+
 2016-08-03 :
 - Adding timeout handling.
 

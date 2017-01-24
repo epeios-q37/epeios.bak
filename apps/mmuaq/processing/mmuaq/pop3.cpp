@@ -122,7 +122,7 @@ qRB
 
 	Handle_( VerboseDriver.InitAndAuthenticate( Body, Verbose ), Body );
 
-	Number = sclmisc::OGetUInt( registry::parameter::Message, 0 );
+	Number = sclmisc::OGetUInt( registry::parameter::MailID, 0 );
 
 	Handle_( muapo3::base::List( Number, VerboseDriver, false, Body ), Body );
 
@@ -146,7 +146,7 @@ qRB
 
 	Handle_( VerboseDriver.InitAndAuthenticate( Body, Verbose ), Body );
 
-	Number = sclmisc::MGetUInt( registry::parameter::Message );
+	Number = sclmisc::MGetUInt( registry::parameter::MailID );
 
 	Handle_( muapo3::base::Retrieve( Number, VerboseDriver, !Verbose, Body ), Body );
 
@@ -170,7 +170,7 @@ qRB
 
 	Handle_( VerboseDriver.InitAndAuthenticate( Body, Verbose ), Body );
 
-	Number = sclmisc::MGetUInt( registry::parameter::Message );
+	Number = sclmisc::MGetUInt( registry::parameter::MailID );
 	Lines = sclmisc::MGetUInt( registry::parameter::Lines );
 
 	Handle_( muapo3::base::Top( Number, Lines, VerboseDriver, !Verbose, Body ), Body );
@@ -195,7 +195,7 @@ qRB
 
 	Handle_( VerboseDriver.InitAndAuthenticate( Body, Verbose ), Body );
 
-	Number = sclmisc::OGetUInt( registry::parameter::Message, 0 );
+	Number = sclmisc::OGetUInt( registry::parameter::MailID, 0 );
 
 	Handle_( muapo3::base::UIDL( Number, VerboseDriver, Body ), Body );
 

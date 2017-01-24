@@ -49,7 +49,8 @@ namespace {
 			sModule &Module,
 			sTimeout Timeout ) override
 		{
-			Server_.Init( GetPort_(), Module );
+			if ( !Server_.Init( GetPort_(), Module, qRPU ) )
+				sclmisc::ReportAndAbort( "UnableToUsePort", GetPort_() );
 			Server_.Process( NULL,  Timeout == misc::NoTimeout ? sck::NoTimeout : Timeout * 1000 );
 		}
 	public:

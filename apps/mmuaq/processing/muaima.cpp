@@ -463,16 +463,18 @@ namespace get_mail_ {
 }
 
 bso::sBool muaima::rSession::GetMail(
+	eFlavor Flavor,
 	const str::dString &RawFolder,
 	bso::sUInt Number,
 	rMail &Mail,
 	qRPN )
 {
-	eStatus Status = s_Undefined;
+	bso::sBool Success = false;
 qRH
 	str::wString Folder;
 	eResponseCode Code = rc_None;
 	bso::bInteger Buffer;
+	eStatus Status = s_Undefined;
 qRB
 	Folder.Init( RawFolder );
 	common_::NormalizeFolderName( Delimiter_, false, Folder );
@@ -482,28 +484,24 @@ qRB
 	Status = PurgeResponses_( &PendingMessage_, qRP );
 
 	if ( Status == sOK ) {
-		Fetch( muaima::f_Default, str::wString( bso::Convert( Number, Buffer ) ), str::wString( item::GetLabel( item::nRFC822 ) ), Console_ );
+		Fetch( Flavor, str::wString( bso::Convert( Number, Buffer ) ), str::wString( item::GetLabel( item::nRFC822 ) ), Console_ );
 
 		while ( ( ( Code = Console_.GetPendingResponseCode() ) != rc_None ) && ( Code != rcFetch ) )
 			Console_.SkipResponse();
 
 		if ( Code == rc_None ) {
-			Status = Console_.GetStatus();
-			if ( Status == sOK )
-				qRGnr();
-			else
-				RetrieveMessage_( &PendingMessage_ );
+			PendingStatus_ = Console_.GetStatus();
+			RetrieveMessage_( &PendingMessage_ );
 		} else {
 			Mail.Init_( *this );
+			Success = true;
 		}
-	}
-
-	if ( Status != sOK )
+	} else
 		PendingStatus_ = Status;
 qRR
 qRT
 qRE
-	return Status == sOK;
+	return Success;
 }
 
 void muaima::rMail::GetValue_( void )
@@ -513,15 +511,11 @@ qRH
 qRB
 	::get_mail_::GetSequence( Global_ );
 
-	Items_.Init( Global_, dNone );
-	
 	::get_mail_::SearchRFC822Value( Items_ );
 qRR
 qRT
 qRE
 }
-
-
 
 namespace {
 	void FillAutomats_( void )

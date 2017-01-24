@@ -242,9 +242,9 @@ qRE
 }
 
 namespace {
-	void GetSequence_( str::dString &Sequence )
+	void GetSequenceSet_( str::dString &SequenceSet )
 	{
-		sclmisc::MGetValue( registry::parameter::imap::Sequence, Sequence );
+		sclmisc::MGetValue( registry::parameter::imap::SequenceSet, SequenceSet );
 	}
 
 	void GetItems_( str::dString &Items )
@@ -252,13 +252,13 @@ namespace {
 		sclmisc::MGetValue( registry::parameter::imap::Items, Items );
 	}
 
-	void GetMailboxSequenceAndItems_(
+	void GetMailboxSequenceSetAndItems_(
 		str::dString &Mailbox,
-		str::dString &Sequence,
+		str::dString &SequenceSet,
 		str::dString &Items )
 	{
 		GetMailbox_( Mailbox );
-		GetSequence_( Sequence );
+		GetSequenceSet_( SequenceSet );
 		GetItems_( Items );
 	}
 }
@@ -276,21 +276,21 @@ namespace {
 void imap::Fetch( void )
 {
 qRH
-	str::wString Mailbox, Sequence, Items;
+	str::wString Mailbox, SequenceSet, Items;
 	bso::sBool Verbose = false;
 	rConsole_ Console;
 qRB
 	Verbose = misc::IsVerboseActivated();
 
-	tol::Init( Mailbox, Sequence, Items );
-	GetMailboxSequenceAndItems_( Mailbox, Sequence, Items );
+	tol::Init( Mailbox, SequenceSet, Items );
+	GetMailboxSequenceSetAndItems_( Mailbox, SequenceSet, Items );
 
 	Console.Init( Verbose );
 
 	muaima::Select( Mailbox, Console );
 	DumpResponses_( false, Verbose, Console );
 
-	muaima::Fetch( GetFlavor_(), Sequence, Items, Console );
+	muaima::Fetch( GetFlavor_(), SequenceSet, Items, Console );
 	DumpResponses_( true, Verbose, Console );
 qRR
 qRT
@@ -335,7 +335,7 @@ namespace {
 }
 
 namespace {
-	void Handle_(
+	eStatus Handle_(
 		eStatus Status,
 		const str::dString &Message )
 	{
@@ -343,6 +343,8 @@ namespace {
 			cio::COut << muaima::GetLabel( Status ) << ": " << Message << txf::nl;
 			qRAbort();
 		}
+
+		return Status;
 	}
 }
 
@@ -376,6 +378,36 @@ qRT
 qRE
 }
 
+void imap::Mail( void )
+{
+qRH
+	rSession_ Session;
+	muaima:: rMail Mail;
+	str::wString Folder, Message;
+qRB
+	Folder.Init();
+	sclmisc::MGetValue( registry::parameter::imap::Folder, Folder );
+
+	Message.Init();
+	Session.Init();
+
+	Mail.Init();
+	if ( Session.GetMail(GetFlavor_(), Folder, sclmisc::MGetU32(registry::parameter::MailID), Mail) ) {
+		misc::Dump( Mail.GetMailDriver() );
+
+		Handle_( Mail.EndStatus( Message ), Message );
+	}
+	else if ( Handle_( Session.EndStatus( Message ), Message ) == sOK ) {
+		Message.Init();
+		sclmisc::GetBaseTranslation( "NoCorrespondingMail", Message );
+		cio::COut << Message << txf::nl;
+	}
+qRR
+qRT
+qRE
+}
+
+
 void imap::Test( void )
 {
 qRH
@@ -386,13 +418,6 @@ qRB
 	Message.Init();
 	Session.Init();
 
-	Mail.Init();
-	if ( !Session.GetMail( str::wString( "INBOX" ), 1, Mail ) )
-		Handle_( Session.EndStatus( Message ), Message );
-
-	misc::Dump( Mail.GetMailDriver() );
-
-	Handle_( Mail.EndStatus( Message ), Message );
 qRR
 qRT
 qRE

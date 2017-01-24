@@ -166,6 +166,8 @@ void fil::Close( iop::descriptor__ D )
 	::Close_( D );
 }
 
+#include "cio.h"
+
 bso::bool__ fil::Create(
 	const fnm::name___ &Filename,
 	err::handling__ ErrorHandling )
@@ -178,8 +180,12 @@ qRB
 
 	Success = ( Descriptor != IOP_UNDEFINED_DESCRIPTOR );
 
-	if ( !Success && ( ErrorHandling == err::hThrowException ) )
+	if ( !Success && (ErrorHandling == err::hThrowException) ) {
+// If removed, remove above "#include...".
+		cio::CErr << txf::nl << Filename << txf::nl << txf::commit;
 		qRLbr();
+	}
+
 qRR
 qRT
 	if ( Descriptor != IOP_UNDEFINED_DESCRIPTOR )

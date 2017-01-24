@@ -161,6 +161,11 @@ namespace {
 		return imap::Folders();
 	}
 
+	void IMAPMail_( void )
+	{
+		return imap::Mail();
+	}
+
 	void IMAPTest_( void )
 	{
 		return imap::Test();
@@ -360,6 +365,7 @@ qRB
 	C( IMAPFetch );
 	C( IMAPTest );
 	C( IMAPFolders );
+	C( IMAPMail );
 //	C( GetIndexes );
 	C( ShowHeader );
 	C( GetField );

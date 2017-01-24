@@ -37,14 +37,14 @@ rEntry registry::parameter::imap::Username("Username", IMAP_ );
 rEntry registry::parameter::imap::Password("Password", IMAP_ );
 rEntry registry::parameter::imap::Reference("Reference", IMAP_ );
 rEntry registry::parameter::imap::Mailbox("Mailbox", IMAP_ );
-rEntry registry::parameter::imap::Sequence("Sequence", IMAP_ );
+rEntry registry::parameter::imap::SequenceSet("SequenceSet", IMAP_ );
 rEntry registry::parameter::imap::Items("Items", IMAP_ );
 rEntry registry::parameter::imap::Folder("Folder", IMAP_ );
 rEntry registry::parameter::imap::UID("UID", IMAP_ );
 
 rEntry registry::parameter::Input("Input", sclrgstry::Parameters );
 rEntry registry::parameter::Output("Output", sclrgstry::Parameters );
-rEntry registry::parameter::Message("Message", sclrgstry::Parameters );
+rEntry registry::parameter::MailID("MailID", sclrgstry::Parameters );
 rEntry registry::parameter::Lines("Lines", sclrgstry::Parameters );
 rEntry registry::parameter::Verbose("Verbose", sclrgstry::Parameters );
 rEntry registry::parameter::FieldName("FieldName", sclrgstry::Parameters );

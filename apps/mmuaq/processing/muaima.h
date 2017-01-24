@@ -82,8 +82,10 @@ namespace muaima {
 		void reset( bso::sBool P = true )
 		{
 			if ( P ) {
-				if ( Connected_ )
+				if ( Connected_ ) {
+					Connected_ = false;	// To avoid that a 'Disconnect_(...)' will be recalled when an error occured during 'Disconnect_(...)'.
 					Disconnect_( NULL, qRPU ); // We don't care if it fails.
+				}
 			}
 
 			tol::reset( P, Console_, ValueDriver_, Connected_, PendingMessage_ );
@@ -150,7 +152,9 @@ namespace muaima {
 			const str::dString &Folder,
 			class rFolders &Folders,
 				qRPD );
+		// If returns false and 'EndStatus(...)' returns 'sOK', it means that here is no corresponding mail.
 		bso::sBool GetMail(
+			eFlavor Flavor,
 			const str::dString &Folder,
 			bso::sUInt Number,
 			class rMail &Mail,
@@ -160,9 +164,6 @@ namespace muaima {
 			eStatus Status = PendingStatus_;
 
 			if ( Status != s_Undefined ) {
-				if ( Status == sOK )
-					qRGnr();
-
 				if ( Message != NULL )
 					Message->Append( PendingMessage_ );
 
@@ -276,9 +277,10 @@ namespace muaima {
 			rBase_::Init_( Session );
 
 			Global_.Init( C_().GetResponseDriver(), dCRLF );
-			GetValue_();
-
+			Items_.Init( Global_, dNone );
 			RFC822_.Init( Items_, dNone );
+
+			GetValue_();
 		}
 	protected:
 		virtual void MUAIMAOnEnd( void ) override
