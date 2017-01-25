@@ -42,9 +42,22 @@ namespace muaagt {
 
 	qENUM( Protocol ) {
 		pPOP3,
+		pIMAP,
 		p_amount,
 		p_Undefined
 	};
+
+	inline eProtocol GetProtocol( const str::dString &Pattern )
+	{
+		if ( Pattern == "POP3" )
+			return pPOP3;
+		else if ( Pattern == "IMAP" )
+			return pIMAP;
+		else
+			qRGnr();
+
+		return p_Undefined;	// To avoid a warnin.
+	}
 
 	class dAgent
 	{
@@ -84,11 +97,12 @@ namespace muaagt {
 
 			return *this;
 		}
-		void Init( void )
+		void Init( eProtocol Protocol )
 		{
-			S_.Protocol = p_Undefined;
+			S_.Protocol = Protocol;
 			tol::Init( HostPort, Username, Password );
 		}
+		qRODISCLOSEd( eProtocol, Protocol );
 	};
 
 	qW( Agent );
@@ -185,11 +199,12 @@ namespace muaagt {
 		}
 		void Init_(
 			dAgent &Agent,
+			eProtocol Protocol,
 			const str::dString &HostPort,
 			const str::dString &Username,
 			const str::dString &Password )
 		{
-			Agent.Init();
+			Agent.Init( Protocol );
 
 			Set_( Agent, HostPort, Username, Password );
 		}
@@ -250,6 +265,7 @@ namespace muaagt {
 		qNAV( Core_., sRow );
 		sRow New(
 			const str::dString &Name,
+			eProtocol Protocol,
 			const str::dString &HostPort,
 			const str::dString &Username,
 			const str::dString &Password )
@@ -261,7 +277,7 @@ namespace muaagt {
 
 			MetaDatas_( Row ).Init( Name );
 
-			Init_( Core_( Row ), HostPort, Username, Password );
+			Init_( Core_( Row ), Protocol, HostPort, Username, Password );
 
 			return Row;
 		}
@@ -300,7 +316,8 @@ namespace muaagt {
 		{
 			return tol::Search<sRow>( Name, MetaDatas_ );
 		}
-		bso::sBool InitAndAuthenticateIfEnabled(
+		// If returns 'p_Undefined', this means failure.
+		eProtocol InitAndAuthenticateIfEnabled(
 			sRow Agent,
 			csdbnc::rIODriver &Driver );
 	};

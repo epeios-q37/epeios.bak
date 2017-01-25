@@ -48,14 +48,14 @@ const char *item::GetLabel( eName Name )
 	case nRFC822:
 		return "RFC822";
 		break;
-	case nRFC822_Header:
-		return "RFC822.Header";
+	case nRFC822Header:
+		return "RFC822.HEADER";
 		break;
-	case nRFC822_Size:
-		return "RFC822.Size";
+	case nRFC822Size:
+		return "RFC822.SIZE";
 		break;
-	case nRFC822_Text:
-		return "RFC822.Text";
+	case nRFC822Text:
+		return "RFC822.TEXT";
 		break;
 	case nUID:
 		return "UID";
@@ -434,7 +434,27 @@ namespace get_mail_ {
 		return Sequence;
 	}
 
-	void SearchRFC822Value( fdr::rIDriver &Driver )
+#define C( part  ) case rp##part : return item::nRFC822##part; break
+	inline item::eName Convert( eRFC822Part Part )
+	{
+		switch ( Part ) {
+		case rpAll:
+			return item::nRFC822;
+		C( Size );
+		C( Header );
+		C( Text );
+		default:
+			qRGnr();
+			break;
+		}
+
+		return item::n_Undefined;	// To avoid a warning.
+	}
+#undef C
+
+	void SearchValue(
+		eRFC822Part Part,
+		fdr::rIDriver &Driver )
 	{
 	qRH
 		str::wString Name;
@@ -446,7 +466,7 @@ namespace get_mail_ {
 			ValueDriver.Init( Driver, dNone );
 			common_::GetString(ValueDriver, Name );
 
-			if ( item_::GetName( Name ) == item_::nRFC822 )
+			if ( item_::GetName( Name ) == Convert( Part ) )
 				Continue = false;
 			else {
 				ValueDriver.Init( Driver, dNone );
@@ -462,11 +482,12 @@ namespace get_mail_ {
 	}
 }
 
-bso::sBool muaima::rSession::GetMail(
+bso::sBool muaima::rSession::GetRFC822(
+	eRFC822Part Part,
 	eFlavor Flavor,
 	const str::dString &RawFolder,
 	bso::sUInt Number,
-	rMail &Mail,
+	rRFC822 &RFC822,
 	qRPN )
 {
 	bso::sBool Success = false;
@@ -484,7 +505,7 @@ qRB
 	Status = PurgeResponses_( &PendingMessage_, qRP );
 
 	if ( Status == sOK ) {
-		Fetch( Flavor, str::wString( bso::Convert( Number, Buffer ) ), str::wString( item::GetLabel( item::nRFC822 ) ), Console_ );
+		Fetch( Flavor, str::wString( bso::Convert( Number, Buffer ) ), str::wString( item::GetLabel( get_mail_::Convert( Part ) ) ), Console_ );
 
 		while ( ( ( Code = Console_.GetPendingResponseCode() ) != rc_None ) && ( Code != rcFetch ) )
 			Console_.SkipResponse();
@@ -493,7 +514,7 @@ qRB
 			PendingStatus_ = Console_.GetStatus();
 			RetrieveMessage_( &PendingMessage_ );
 		} else {
-			Mail.Init_( *this );
+			RFC822.Init_( Part, *this );
 			Success = true;
 		}
 	} else
@@ -504,14 +525,14 @@ qRE
 	return Success;
 }
 
-void muaima::rMail::GetValue_( void )
+void muaima::rRFC822::GetValue_( eRFC822Part Part )
 {
 qRH
 	str::wString Name;
 qRB
 	::get_mail_::GetSequence( Global_ );
 
-	::get_mail_::SearchRFC822Value( Items_ );
+	::get_mail_::SearchValue( Part, Items_ );
 qRR
 qRT
 qRE

@@ -34,7 +34,8 @@ namespace definition_ {
 }
 
 rEntry registry::definition::demo::agent::Id( "@id", definition_::demo::FreeAgent );
-rEntry registry::definition::demo::agent::TaggedHostPort( "HostPort", definition_::demo::TaggedAgent );
+rEntry registry::definition::demo::agent::TaggedHostPort( "@HostPort", definition_::demo::TaggedAgent );
+rEntry registry::definition::demo::agent::TaggedProtocol( "@Protocol", definition_::demo::TaggedAgent );
 rEntry registry::definition::demo::agent::TaggedUsername( "Username", definition_::demo::TaggedAgent );
 rEntry registry::definition::demo::agent::TaggedPassword( "Password", definition_::demo::TaggedAgent );
 

@@ -37,6 +37,7 @@ namespace registry {
 				extern rEntry
 					Id,	// Also used as agent name.
 					TaggedHostPort,
+					TaggedProtocol,
 					TaggedUsername,
 					TaggedPassword;
 			}

@@ -40,29 +40,29 @@ qRT
 qRE
 }
 
-bso::sBool muaagt::dAgents::InitAndAuthenticateIfEnabled(
+eProtocol muaagt::dAgents::InitAndAuthenticateIfEnabled(
 	sRow AgentRow,
 	csdbnc::rIODriver &Driver )
 {
-	bso::sBool Success = false;
+	eProtocol Protocol = p_Undefined;
 qRH
 	wAgent Agent;
 	qCBUFFERr Buffer;
 qRB
-	Agent.Init();
+	Agent.Init( p_Undefined);
 	Core_.Recall( AgentRow, Agent );
 
 	if ( IsEnabled_( AgentRow ) ) {
 		if ( ( Driver.Init( Agent.HostPort.Convert( Buffer ), SCK_INFINITE, qRPU ) ) 
 			&& ( muapo3::Authenticate( Agent.Username, Agent.Password, Driver, qRPU ) ) )
-			Success = true;
+			Protocol = Agent.Protocol();
 		else
 			Disable_( AgentRow );
 	}
 qRR
 qRT
 qRE
-	return Success;
+	return Protocol;
 }
 
 

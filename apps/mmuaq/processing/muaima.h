@@ -32,26 +32,42 @@ namespace muaima {
 	using namespace muaimabs;
 
 	// Handles items pairs (
-	namespace  item {
+	namespace item {
 		qENUM( Name ) {
 			nBody,
-			nBodyWithSection,
-			nBodyStructure,
-			nEnvelope,
-			nFlags,
-			nInternalDate,
-			nRFC822,
-			nRFC822_Header,
-			nRFC822_Size,
-			nRFC822_Text,
-			nUID,
-			n_amount,
-			n_None,
-			n_Undefined,
+				nBodyWithSection,
+				nBodyStructure,
+				nEnvelope,
+				nFlags,
+				nInternalDate,
+				n_RFC822First,
+				nRFC822 = n_RFC822First,
+				nRFC822Header,
+				nRFC822Size,
+				nRFC822Text,
+				n_RFC822Last = nRFC822Text,
+				nUID,
+				n_amount,
+				n_None,
+				n_Undefined,
 		};
 
 		const char *GetLabel( eName Name );
+
+		inline bso::sBool IsRFC822( eName Name )
+		{
+			return (Name >= n_RFC822First) && (Name <= n_RFC822Last);
+		}
 	}
+
+	qENUM( RFC822Part ) {
+		rpAll,
+		rpSize,
+		rpHeader,
+		rpText,
+		rp_amount,
+		rp_Undefined
+	};
 
 	class rSession
 	{
@@ -153,11 +169,12 @@ namespace muaima {
 			class rFolders &Folders,
 				qRPD );
 		// If returns false and 'EndStatus(...)' returns 'sOK', it means that here is no corresponding mail.
-		bso::sBool GetMail(
+		bso::sBool GetRFC822(
+			eRFC822Part Part,
 			eFlavor Flavor,
 			const str::dString &Folder,
 			bso::sUInt Number,
-			class rMail &Mail,
+			class rRFC822 &RFC822,
 			qRPD );
 		eStatus EndStatus( str::dString *Message = NULL )
 		{
@@ -263,29 +280,31 @@ namespace muaima {
 		friend rSession;
 	};
 
-	class rMail
+	class rRFC822	// Complete, header, text or size.
 	: public rBase_
 	{
 	private:
 		rResponseDriver_
 			Global_,	// Handle the global response,
 			Items_,	// Handles all the items (delimited by '())').
-			RFC822_;	// Handle the 'RFC822' content.
-		void GetValue_( void );
-		void Init_( rSession &Session )
+			Content_;	// Handle the 'RFC822' content.
+		void GetValue_( eRFC822Part Part );
+		void Init_(
+			eRFC822Part PArt,
+			rSession &Session )
 		{
 			rBase_::Init_( Session );
 
 			Global_.Init( C_().GetResponseDriver(), dCRLF );
 			Items_.Init( Global_, dNone );
-			RFC822_.Init( Items_, dNone );
+			Content_.Init( Items_, dNone );
 
-			GetValue_();
+			GetValue_( PArt );
 		}
 	protected:
 		virtual void MUAIMAOnEnd( void ) override
 		{
-			RFC822_.Purge();
+			Content_.Purge();
 			Items_.Purge();
 			Global_.Purge();
 			C_().SkipRemainingReponses();
@@ -295,16 +314,16 @@ namespace muaima {
 		{
 			rBase_::reset( P );
 		}
-		qCVDTOR( rMail );
+		qCVDTOR( rRFC822 );
 		void Init( void )
 		{
 			rBase_::Init();
 
 			// Other members will be initilaized as needed.
 		}
-		fdr::rIDriver &GetMailDriver( void )
+		fdr::rIDriver &GetDriver( void )
 		{
-			return RFC822_;
+			return Content_;
 		}
 		friend rSession;
 	};

@@ -150,11 +150,12 @@ namespace muaacc {
 		}
 		muaagt::sRow NewAgent(
 			const str::dString &Name,
+			muaagt::eProtocol Protocol,
 			const str::dString &HostPort,
 			const str::dString &Username,
 			const str::dString &Password )
 		{
-			muaagt::sRow Agent = Agents_.New( Name, HostPort, Username, Password );
+			muaagt::sRow Agent = Agents_.New( Name, Protocol, HostPort, Username, Password );
 
 			Tracker_.NewAgent( Agent );
 

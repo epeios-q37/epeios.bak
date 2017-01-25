@@ -161,9 +161,22 @@ namespace {
 		return imap::Folders();
 	}
 
-	void IMAPMail_( void )
+	void IMAPRFC822_( void )
 	{
-		return imap::Mail();
+		return imap::RFC822();
+	}
+
+	void IMAPRFC822Size_( void )
+	{
+		return imap::RFC822Size();
+	}
+	void IMAPRFC822Header_( void )
+	{
+		return imap::RFC822Header();
+	}
+	void IMAPRFC822Text_( void )
+	{
+		return imap::RFC822Text();
 	}
 
 	void IMAPTest_( void )
@@ -365,7 +378,10 @@ qRB
 	C( IMAPFetch );
 	C( IMAPTest );
 	C( IMAPFolders );
-	C( IMAPMail );
+	C( IMAPRFC822 );
+	C( IMAPRFC822Size );
+	C( IMAPRFC822Header );
+	C( IMAPRFC822Text );
 //	C( GetIndexes );
 	C( ShowHeader );
 	C( GetField );

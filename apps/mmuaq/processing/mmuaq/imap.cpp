@@ -378,41 +378,63 @@ qRT
 qRE
 }
 
-void imap::Mail( void )
-{
-qRH
-	rSession_ Session;
-	muaima:: rMail Mail;
-	str::wString Folder, Message;
-qRB
-	Folder.Init();
-	sclmisc::MGetValue( registry::parameter::imap::Folder, Folder );
+namespace rfc822_ {
+	void Handle( muaima::eRFC822Part Part )
+	{
+	qRH
+		rSession_ Session;
+		muaima::rRFC822 RFC822;
+		str::wString Folder, Message;
+	qRB
+		Folder.Init();
+		sclmisc::MGetValue( registry::parameter::imap::Folder, Folder );
 
-	Message.Init();
-	Session.Init();
-
-	Mail.Init();
-	if ( Session.GetMail(GetFlavor_(), Folder, sclmisc::MGetU32(registry::parameter::MailID), Mail) ) {
-		misc::Dump( Mail.GetMailDriver() );
-
-		Handle_( Mail.EndStatus( Message ), Message );
-	}
-	else if ( Handle_( Session.EndStatus( Message ), Message ) == sOK ) {
 		Message.Init();
-		sclmisc::GetBaseTranslation( "NoCorrespondingMail", Message );
-		cio::COut << Message << txf::nl;
+		Session.Init();
+
+		RFC822.Init();
+		if ( Session.GetRFC822( Part, GetFlavor_(), Folder, sclmisc::MGetU32(registry::parameter::MailID), RFC822 ) ) {
+			misc::Dump( RFC822.GetDriver() );
+
+			Handle_( RFC822.EndStatus( Message ), Message );
+		}
+		else if ( Handle_( Session.EndStatus( Message ), Message ) == sOK ) {
+			Message.Init();
+			sclmisc::GetBaseTranslation( "NoCorrespondingMail", Message );
+			cio::COut << Message << txf::nl;
+		}
+	qRR
+	qRT
+	qRE
 	}
-qRR
-qRT
-qRE
 }
+
+void imap::RFC822( void )
+{
+	rfc822_::Handle( muaima::rpAll );
+}
+
+void imap::RFC822Size( void )
+{
+	rfc822_::Handle( muaima::rpSize );
+}
+
+void imap::RFC822Header( void )
+{
+	rfc822_::Handle( muaima::rpHeader );
+}
+
+void imap::RFC822Text( void )
+{
+	rfc822_::Handle( muaima::rpText );
+}
+
 
 
 void imap::Test( void )
 {
 qRH
 	rSession_ Session;
-	muaima:: rMail Mail;
 	str::wString Message;
 qRB
 	Message.Init();

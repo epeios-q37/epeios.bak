@@ -136,7 +136,8 @@ namespace update_ {
 			muapo3::wNumbers Numbers;
 			muapo3::wUIDLs UIDLs;
 		qRB
-			if ( Agents.InitAndAuthenticateIfEnabled( Agent, Driver ) ) {
+			switch ( Agents.InitAndAuthenticateIfEnabled( Agent, Driver ) ) {
+			case muaagt::pPOP3:
 				tol::Init( Numbers, UIDLs );
 
 				muapo3::GetUIDLs( Driver, Numbers, UIDLs );
@@ -144,6 +145,15 @@ namespace update_ {
 				muapo3::Quit( Driver );
 
 				Update_( Agent, UIDLs, Tracker, Directory );
+					break;
+			case muaagt::pIMAP:
+				qRVct();
+				break;
+			case muaagt::p_Undefined:
+				break;
+			default:
+				qRFwk();
+				break;
 			}
 		qRR
 		qRT
@@ -305,13 +315,23 @@ namespace get_fields_ {
 				csdbnc::rIODriver Driver;
 				muapo3::wNumbers Numbers;
 			qRB
-				if ( Agents.InitAndAuthenticateIfEnabled( Agent, Driver ) ) {
+				switch ( Agents.InitAndAuthenticateIfEnabled( Agent, Driver ) ) {
+				case muaagt::pPOP3:
 					tol::Init( Numbers );
 					u2n_::Get( UIDLs, Wanted, Driver, Numbers, Available );
 
 					n2s_::Get( Numbers, Agent, Driver, Subjects, CorrespondingAgents );
 
 					muapo3::Quit( Driver );
+					break;
+				case muaagt::pIMAP:
+					qRVct();
+					break;
+				case muaagt::p_Undefined:
+					break;
+				default:
+					qRFwk();
+					break;
 				}
 			qRR
 			qRT
@@ -386,7 +406,8 @@ qRH
 	csdbnc::rIODriver Driver;
 	muapo3::sNumber Number = 0;
 qRB
-	if ( Agents_.InitAndAuthenticateIfEnabled(Tracker_.GetMailAgent(MailRow), Driver ) ) {
+	switch ( Agents_.InitAndAuthenticateIfEnabled(Tracker_.GetMailAgent(MailRow), Driver ) ) {
+	case muaagt::pPOP3:
 		Number = muapo3::GetNumberForUIDL( Directory_.Mails()( MailRow ).Id, Driver );
 
 		if ( Number == 0 )
@@ -395,6 +416,15 @@ qRB
 		muapo3::GetMessage( Number, Driver, Mail );
 
 		muapo3::Quit( Driver );
+		break;
+	case muaagt::pIMAP:
+		qRVct();
+		break;
+	case muaagt::p_Undefined:
+		break;
+	default:
+		qRFwk();
+		break;
 	}
 qRR
 qRT

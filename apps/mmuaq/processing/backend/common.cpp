@@ -35,15 +35,16 @@ namespace {
 					muaacc::dAccount &Account )
 				{
 				qRH
-					str::wString HostPort, Username, Password;
+					str::wString HostPort, Protocol, Username, Password;
 				qRB
-					tol::Init( HostPort, Username, Password );
+					tol::Init( HostPort, Protocol, Username, Password );
 
 					G( HostPort );
+					G( Protocol );
 					G( Username );
 					G( Password );
 
-					Account.NewAgent( Id, HostPort, Username, Password );
+					Account.NewAgent( Id, muaagt::GetProtocol( Protocol ), HostPort, Username, Password );
 				qRR
 				qRT
 				qRE

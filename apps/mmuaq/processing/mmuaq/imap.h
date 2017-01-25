@@ -30,7 +30,10 @@ namespace imap {
 
 	// High-level functions.
 	void Folders( void );
-	void Mail( void );
+	void RFC822( void );
+	void RFC822Size( void );
+	void RFC822Header( void );
+	void RFC822Text( void );
 
 	void Test( void );
 }

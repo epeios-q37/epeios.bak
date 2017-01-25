@@ -72,9 +72,21 @@
     <Translation language="fr">Affiche les sous-dossiers d'un dossier 'IMAP'.</Translation>
     <Translation language="en">Displays sub-folders of an 'IMAP' folder.</Translation>
    </Translations>
-   <Translations text="IMAPMailCommandDescription">
-    <Translation language="fr">Affiche courrier d'un dossier 'IMAP'.</Translation>
-    <Translation language="en">Displays a mail from an 'IMAP' folder.</Translation>
+   <Translations text="IMAPRFC822CommandDescription">
+    <Translation language="fr">Affiche le 'RFC822' d'un courrier d'un dossier 'IMAP'.</Translation>
+    <Translation language="en">Displays the 'RFC822' of a mail from an 'IMAP' folder.</Translation>
+   </Translations>
+   <Translations text="IMAPRFC822SizeCommandDescription">
+    <Translation language="fr">Affiche le 'RFC822.SIZE' d'un courrier d'un dossier 'IMAP'.</Translation>
+    <Translation language="en">Displays the 'RFC822.SIZE' of a mail from an 'IMAP' folder.</Translation>
+   </Translations>
+   <Translations text="IMAPRFC822HeaderCommandDescription">
+    <Translation language="fr">Affiche le 'RFC822.HEADER' d'un courrier d'un dossier 'IMAP'.</Translation>
+    <Translation language="en">Displays the 'RFC822.HEADER' of a mail from an 'IMAP' folder.</Translation>
+   </Translations>
+   <Translations text="IMAPRFC822TextCommandDescription">
+    <Translation language="fr">Affiche le 'RFC822.TEXT' d'un courrier d'un dossier 'IMAP'.</Translation>
+    <Translation language="en">Displays the 'RFC822.TEXT' of a mail from an 'IMAP' folder.</Translation>
    </Translations>
    <Translations text="ShowHeaderCommandDescription">
     <Translation language="fr">Affiche l'entête d'un courrier.</Translation>
@@ -214,7 +226,10 @@
    <Argument id="IMAPSelectCommand" Description="IMAPSelectCommandDescription" long="imap-select" Value="IMAPSelect" Usage="[%SetupOption%] [%VerboseFlag%] %IMAPMailboxArgument%"/>
    <Argument id="IMAPFetchCommand" Description="IMAPFetchCommandDescription" long="imap-fetch" Value="IMAPFetch" Usage="[%SetupOption%] [%VerboseFlag%] [%UIDFlag%] %IMAPMailboxArgument% %IMAPSequenceSetArgument% %IMAPItemsArgument%"/>
    <Argument id="IMAPFoldersCommand" Description="IMAPFoldersCommandDescription" long="imap-folders" Value="IMAPFolders" Usage="[%SetupOption%] [%VerboseFlag%] [%IMAPFolderArgument%]"/>
-   <Argument id="IMAPMailCommand" Description="IMAPMailCommandDescription" long="imap-mail" Value="IMAPMail" Usage="[%SetupOption%] [%VerboseFlag%] [%UIDFlag%] %IMAPFolderArgument% %MailIDArgument%"/>
+   <Argument id="IMAPRFC822Command" Description="IMAPRFC822CommandDescription" long="imap-RFC822" Value="IMAPRFC822" Usage="[%SetupOption%] [%VerboseFlag%] [%UIDFlag%] %IMAPFolderArgument% %MailIDArgument%"/>
+   <Argument id="IMAPRFC822SizeCommand" Description="IMAPRFC822SizeCommandDescription" long="imap-RFC822-size" Value="IMAPRFC822Size" Usage="[%SetupOption%] [%VerboseFlag%] [%UIDFlag%] %IMAPFolderArgument% %MailIDArgument%"/>
+   <Argument id="IMAPRFC822HeaderCommand" Description="IMAPRFC822HeaderCommandDescription" long="imap-RFC822-header" Value="IMAPRFC822Header" Usage="[%SetupOption%] [%VerboseFlag%] [%UIDFlag%] %IMAPFolderArgument% %MailIDArgument%"/>
+   <Argument id="IMAPRFC822TextCommand" Description="IMAPRFC822TextCommandDescription" long="imap-RFC822-text" Value="IMAPRFC822Text" Usage="[%SetupOption%] [%VerboseFlag%] [%UIDFlag%] %IMAPFolderArgument% %MailIDArgument%"/>
    <Argument id="ShowHeaderCommand" Description="ShowHeaderCommandDescription" long="show-header" Value="ShowHeader" Usage="[%InputArgument% [%OutputArgument%]]"/>
    <Argument id="GetFieldCommand" Description="GetFieldCommandDescription" long="get-field" Value="GetField" Usage="%FieldArgument% [%InputArgument% [%OutputArgument%]]"/>
    <!-- Fanaux : 'Path', mais pas de 'Value'. -->
@@ -282,7 +297,19 @@
     <Layout command="IMAPFolders">
      <Link index="0" Target="IMAPFolderArgument"/>
     </Layout>
-    <Layout command="IMAPMail">
+    <Layout command="IMAPRFC822">
+     <Link index="0" Target="IMAPFolderArgument"/>
+     <Link index="1" Target="MailIDArgument"/>
+    </Layout>
+    <Layout command="IMAPRFC822Size">
+     <Link index="0" Target="IMAPFolderArgument"/>
+     <Link index="1" Target="MailIDArgument"/>
+    </Layout>
+    <Layout command="IMAPRFC822Header">
+     <Link index="0" Target="IMAPFolderArgument"/>
+     <Link index="1" Target="MailIDArgument"/>
+    </Layout>
+    <Layout command="IMAPRFC822Text">
      <Link index="0" Target="IMAPFolderArgument"/>
      <Link index="1" Target="MailIDArgument"/>
     </Layout>

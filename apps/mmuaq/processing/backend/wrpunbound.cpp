@@ -185,6 +185,7 @@ namespace get_agent_ {
 		muaagt::sRow Row,
 		const muaagt::dAgents &Agents,
 		str::dString &Name,
+		bso::sBool &Protocol,
 		str::dString &HostPort,
 		str::dString &Username,
 		bso::sBool &Enabled )
@@ -198,6 +199,19 @@ namespace get_agent_ {
 
 		HostPort = Agent.HostPort;
 		Username = Agent.Username;
+
+		switch ( Agent.Protocol() ) {
+		case muaagt::pPOP3:
+			Protocol = false;
+			break;
+		case muaagt::pIMAP:
+			Protocol = true;
+			break;
+		default:
+			qRGnr();
+			break;
+		}
+
 		Enabled = Agents.IsEnabled( Row );
 	}
 }
@@ -211,14 +225,17 @@ qRB
 
 	const fbltyp::sId &Id = Request.IdIn();
 
+	str::dString &Name = Request.StringOut();
+
+	bso::sBool &Protocol = Request.BooleanOut();
+
 	str::dString
-		&Name = Request.StringOut(),
 		&HostPort = Request.StringOut(),
 		&Username = Request.StringOut();
 
 	bso::sBool &Enabled = Request.BooleanOut();
 
-	get_agent_::Get( *Id, Account.Agents(), Name, HostPort, Username, Enabled );
+	get_agent_::Get( *Id, Account.Agents(), Name, Protocol, HostPort, Username, Enabled );
 qRR 
 qRT
 qRE
@@ -239,9 +256,11 @@ namespace update_agent_ {
 
 #define N( name ) shared_::Normalize( name, message_::name##CanNotBeEmpty, message_::name##CanNotBeLongerAs, registry::definition::limitation::name##Length )
 
+	// If 'Agent' == wNIL, creation.
 	muaagt::sRow Update(
 		muaagt::sRow Agent,
 		const str::dString &RawAgentName,
+		muaagt::eProtocol Protocol,
 		const str::dString &RawHostPort,
 		const str::dString &RawUsername,
 		bso::sBool PasswordIsSet,
@@ -272,7 +291,10 @@ namespace update_agent_ {
 			if ( !CheckName_( AgentName, Account.Agents(), qNIL ) )
 				REPORT( AgentWithSuchNameExists, AgentName );
 
-			Agent = Account.NewAgent( AgentName, HostPort, Username, Password );
+			if ( Protocol == muaagt::p_Undefined )
+				qRGnr();
+
+			Agent = Account.NewAgent( AgentName, Protocol, HostPort, Username, Password );
 
 			Account.Update( Agent );
 		} else if ( !CheckName_( AgentName, Account.Agents(), Agent ) )
@@ -294,6 +316,7 @@ DEC( UpdateAgent, 1 )
 {
 qRH
 	ACCOUNTh;
+	muaagt::eProtocol Protocol = muaagt::p_Undefined;
 qRB
 	ACCOUNTb;
 
@@ -302,8 +325,11 @@ qRB
 	if ( ( Agent != qNIL ) && ( !Account.Agents().Exists( Agent ) ) )
 		REPORT( UnknownAgent );
 
+	const str::dString &Name = Request.StringIn();
+
+	Protocol = ( Request.BooleanIn() ? muaagt::pIMAP : muaagt::pPOP3 );
+
 	const str::dString
-		&Name = Request.StringIn(),
 		&HostPort = Request.StringIn(),
 		&Username = Request.StringIn();
 
@@ -311,7 +337,7 @@ qRB
 
 	const str::dString &Password = Request.StringIn();
 
-	Request.IdOut() = *update_agent_::Update( Agent, Name, HostPort, Username, PasswordIsSet, Password, Account );
+	Request.IdOut() = *update_agent_::Update( Agent, Name, Protocol, HostPort, Username, PasswordIsSet, Password, Account );
 qRR 
 qRT
 qRE
@@ -611,6 +637,7 @@ void wrpunbound::Inform( fblbkd::backend___ &Backend )
 			fblbkd::cId,		// Id.
 		fblbkd::cEnd,
 			fblbkd::cString,	// Name.
+			fblbkd::cBoolean,	// Protocol - 'false' : POP3; 'true' : IMAP.
 			fblbkd::cString,	// HostPort.
 			fblbkd::cString,	// Username.
 			fblbkd::cBoolean,	// Enabled.
@@ -619,6 +646,7 @@ void wrpunbound::Inform( fblbkd::backend___ &Backend )
 	Backend.Add(D( UpdateAgent, 1 ),
 			fblbkd::cId,		// Id of the agent. New one is created if undefined.
 			fblbkd::cString,	// Name.
+			fblbkd::cBoolean,	// Protocol - false : 'POP3'; 'true' : IMAP. Ignored on update.
 			fblbkd::cString,	// HostPort.
 			fblbkd::cString,	// Username.
 			fblbkd::cBoolean,	// 'true' if following password is set.
