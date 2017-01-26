@@ -19,6 +19,7 @@
 
 #include "muaagt.h"
 
+#include "muaima.h"
 #include "muapo3.h"
 
 using namespace muaagt;
@@ -53,11 +54,15 @@ qRB
 	Core_.Recall( AgentRow, Agent );
 
 	if ( IsEnabled_( AgentRow ) ) {
-		if ( ( Driver.Init( Agent.HostPort.Convert( Buffer ), SCK_INFINITE, qRPU ) ) 
-			&& ( muapo3::Authenticate( Agent.Username, Agent.Password, Driver, qRPU ) ) )
-			Protocol = Agent.Protocol();
-		else
-			Disable_( AgentRow );
+	if ( Driver.Init(Agent.HostPort.Convert(Buffer), SCK_INFINITE, qRPU) ) {
+		switch ( Agent.Protocol() ) {
+		case muaagt::pPOP3:
+			if ( muapo3::Authenticate( Agent.Username, Agent.Password, Driver, qRPU ) )
+				Protocol = muaagt::pPOP3;
+			break;
+		case muaagt::pIMAP:
+			if ( muaima::Connect( Authenticate( Agent.Username, Agent.Password, Driver, qRPU ) )
+
 	}
 qRR
 qRT

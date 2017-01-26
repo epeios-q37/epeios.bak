@@ -1,6 +1,8 @@
 CHANGELOG for the 'Epeios' framework.
 
 2017-01-26 :
+- SCLMISC :
+	- Handling the storing of the lasting registry under 'POSIX' ('AppData' directory handling).
 - SCLXDHTML :
 	- Software error issued by the backend were not correctly reported.
 

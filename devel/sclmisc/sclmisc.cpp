@@ -352,15 +352,18 @@ namespace {
 		bso::sBool Exist = false;
 	qRH
 		fnm::rName Buffer, Dir;
+		str::wString OrganizationPath;
 	qRB
 #ifdef CPE_S_WIN
-		Buffer.Init();
+		OrganizationPath.Init( Organization );
 #elif defined( CPE_S_POSIX )
-		Buffer.Init( "." );
+		OrganizationPath.Init( "." );
+		OrganizationPath.Append( Organization );
 #else
 # error
 #endif
-		fnm::BuildPath( Path, Organization, "", Buffer );
+		Buffer.Init();
+		fnm::BuildPath( Path, OrganizationPath, "", Buffer );
 
 		Dir.Init();
 		fnm::BuildPath( Buffer, Product, "", Dir );
@@ -479,13 +482,11 @@ namespace {
 	qRH
 		fnm::rName Filename;
 	qRB
-#ifdef CPE_S_WIN
 		Filename.Init();
 
 		GetAppDataConfigurationFilename_( Filename, SCLMISCTargetName, SCLMISCProductName, SCLMISCOrganizationName, true );
 
 		StoreAppData_( Filename, sclrgstry::lLasting );
-#endif
 	qRR
 	qRT
 	qRE
