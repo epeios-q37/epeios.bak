@@ -258,9 +258,11 @@ namespace sclxdhtml {
 		{
 			if ( Reply == fblovl::rDisconnected )
 				Alert("SCLXHTML_Disconnected", L_(), P_() );
-			else
+			else {
 //				sclmisc::ReportAndAbort( Message );
 				Alert( Message, P_(), L_() );
+				qRAbort();
+			}
 		}
 	public:
 		void reset( bso::bool__ P = true )

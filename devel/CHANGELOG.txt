@@ -1,5 +1,9 @@
 CHANGELOG for the 'Epeios' framework.
 
+2017-01-26 :
+- SCLXDHTML :
+	- Software error issued by the backend were not correctly reported.
+
 2017-01-20 :
 - CSDMXC :
 	- Simplification.
