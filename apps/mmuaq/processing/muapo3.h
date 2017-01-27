@@ -19,8 +19,8 @@
 
 // MUA Post Office protocol 3 (POP3 - RFC 1939).
 
-#ifndef MUAXMP__INC
-# define MUAXMP__INC
+#ifndef MUAPO3__INC
+# define MUAPO3__INC
 
 # ifdef XXX_DBG
 #  define MUAXMP__DBG

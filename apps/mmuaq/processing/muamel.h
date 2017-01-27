@@ -81,6 +81,8 @@ namespace muamel {
 
 	qROW( Row );
 
+	qSTRINGSl( Ids );
+
 	typedef bch::qBUNCHdl( sRow ) dRows;
 	qW( Rows );
 

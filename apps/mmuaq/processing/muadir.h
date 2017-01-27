@@ -215,19 +215,19 @@ namespace muadir {
 		{
 			return muamel::Search( Id, Rows, Mails_ );
 		}
-		const str::dStrings &GetIds(
+		const muamel::dIds &GetIds(
 			const muamel::dRows &Rows,
-			str::dStrings &Ids ) const
+			muamel::dIds &UMIDs ) const
 		{
 			sdr::sRow Row = Rows.First();
 
 			while ( Row != qNIL ) {
-				Ids.Add( Mails_( Rows( Row ) ).Id );
+				UMIDs.Add( Mails_( Rows( Row ) ).Id );
 
 				Row = Rows.Next( Row );
 			}
 
-			return Ids;
+			return UMIDs;
 		}
 	};
 

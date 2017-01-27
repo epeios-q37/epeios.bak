@@ -27,6 +27,8 @@
 # endif
 
 # include "muabsc.h"
+# include "muaima.h"
+# include "muapo3.h"
 
 # include "bitbch.h"
 # include "csdbnc.h"
@@ -176,6 +178,34 @@ namespace muaagt {
 
 	typedef lstcrt::qLMCRATEd( dMetaData, sRow ) dMetaDatas;
 
+	class rRack
+	{
+	private:
+		csdbnc::rIODriver Driver_;
+		muaima::rSession IMAPSession_;
+	public:
+		void reset( bso::sBool P = true )
+		{
+			tol::reset( P, Driver_, IMAPSession_ );
+		}
+		qCDTOR( rRack );
+		void Init( void )
+		{
+			reset();
+
+			// Members will be initialized as needed.
+		}
+		fdr::rIODriver &POP3( void )
+		{
+			return Driver_;
+		}
+		muaima::rSession &IMAP( void )
+		{
+			return IMAPSession_;
+		}
+		friend class dAgents;
+	};
+
 	class dAgents {
 	private:
 		dAgents_ Core_;
@@ -319,7 +349,7 @@ namespace muaagt {
 		// If returns 'p_Undefined', this means failure.
 		eProtocol InitAndAuthenticateIfEnabled(
 			sRow Agent,
-			csdbnc::rIODriver &Driver );
+			rRack &Rack );
 	};
 
 }

@@ -19,8 +19,8 @@
 
 // SKeTch BaSiCs
 
-#ifndef SKTBSC__INC
-# define SKTBSC__INC
+#ifndef SKTBSC_INC_
+# define SKTBSC_INC_
 
 # include "bso.h"
 # include "err.h"

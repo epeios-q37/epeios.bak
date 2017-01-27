@@ -17,41 +17,39 @@
     along with 'MMUAq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// MUA eXaMPle
+// MUA ACCount P(OP)3.
 
-#ifndef MUAXMP_INC_
-# define MUAXMP_INC_
+#ifndef MUAACCP3_INC_
+# define MUAACCP3_INC_
 
 # ifdef XXX_DBG
-#  define MUAXMP_DBG_
+#  define MUAACCP3_DBG_
 # endif
 
 # include "muabsc.h"
+# include "muaagt.h"
+# include "muadir.h"
+# include "muatrk.h"
 
-namespace muaxmp {
-	class dMyObject
-	{
-	private:
-	public:
-		struct s {
-		};
-		dMyObject( s &S )
-		{}
-		void reset( bso::bool__ P = true )
-		{
-		}
-		void plug( qASd *AS )
-		{
-		}
-		dMyObject &operator =( const dMyObject &M )
-		{
-			return *this;
-		}
-		bso::sBool Init( void )
-		{
-			return true;
-		}
-	};
+namespace muaaccp3 {
+	void Update(
+		fdr::rIODriver &Driver,
+		muatrk::dTracker &Tracker,
+		muadir::dDirectory &Directory );
+
+	void GetFields(
+		const muamel::dRows &Wanted,
+		const muamel::dIds &dIds,
+		muaagt::sRow Agent,
+		fdr::rIODriver &Driver,
+		str::dStrings &Subjects,
+		muaagt::dRows &CorrespondingAgents,
+		muamel::dRows &Available );
+
+	const str::dString &GetMail(
+		const muamel::dId &dId,
+		fdr::rIODriver &Driver,
+		str::dString &Mail );
 }
 
 

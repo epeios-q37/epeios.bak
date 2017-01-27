@@ -19,11 +19,11 @@
 
 // SKeTch eXaMPle
 
-#ifndef SKTXMP__INC
-# define SKTXMP__INC
+#ifndef SKTXMP_INC_
+# define SKTXMP_INC_
 
 # ifdef XXX_DBG
-#	define SKTXMP__DBG
+# define SKTXMP_DBG_
 # endif
 
 # include "sktbsc.h"

@@ -349,6 +349,7 @@ namespace muaimabs {
 				SkipResponse();
 		}
 		// Also resets the 'PendingCodeIsStatus_'
+		// You have still have to handle 'GetResponseCode(...)' or launch 'SkipReponse(...');
 		eStatus GetStatus( void )
 		{
 			// Althought 'PendingCode' is a status, the 'PendingCodeIsStatus_' is already set to false by 'GetPendingCode(...').
@@ -373,7 +374,6 @@ namespace muaimabs {
 
 			return Status;
 		}
-		// You have still to handle 'GetResponseCode(...)' or launch 'SkipReponse(...');
 	};
 
 	// The 'COPY', 'FETCH', 'SEARCH', 'STORE' can be sub-commands of the 'UID' command.

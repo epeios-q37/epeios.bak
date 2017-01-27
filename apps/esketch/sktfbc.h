@@ -22,8 +22,8 @@
 // This is the place where to put common objects and functions.
 // (ex. : Gestion liste d'autorit dans 'Gesbib').
 
-#ifndef SKTFBC__INC
-# define SKTFBC__INC
+#ifndef SKTFBC_INC_
+# define SKTFBC_INC_
 
 # define SKTBFC_VERSION			"1"
 

@@ -44,9 +44,10 @@ mods += scldaemon sclbacknd
 mods += fblber fblbkd fblbrd fblbrq fblbrr 
 mods += fblcmd fblcst fbltyp fblovl 
 mods += csdleo csdles csdrcc csdscb csdbnc 
-mods += muafbc muainf muaacc muaagt muabsc 
-mods += muadir muafld muaima muaimabs muaimf 
-mods += muamel muaplg muapo3 muatrk muaxmp 
+mods += muafbc muainf muaacc muaaccim muaaccp3 
+mods += muaagt muabsc muadir muafld muaima 
+mods += muaimabs muaimf muamel muaplg muapo3 
+mods += muatrk muaxmp 
 mods += wrpexample wrpunbound 
 mods += common registry 
 
@@ -363,7 +364,7 @@ ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20170119"\"
+copt += -DVERSION=\""20170127"\"
 copt += -DCOPYRIGHT_YEARS=\""2016"\"
 copt += -DIDENTIFIER=\""189de286-5b16-4d82-b398-595aaaa23053"\"
 

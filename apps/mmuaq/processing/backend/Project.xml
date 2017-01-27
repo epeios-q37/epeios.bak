@@ -42,6 +42,8 @@
    <Module Path="../">muafbc</Module>
    <Module Path="../">muainf</Module>
    <Module>muaacc</Module>
+   <Module>muaaccim</Module>
+   <Module>muaaccp3</Module>
    <Module>muaagt</Module>
    <Module>muabsc</Module>
    <Module>muadir</Module>

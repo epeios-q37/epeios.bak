@@ -20,7 +20,8 @@
 #include "muaacc.h"
 
 #include "muaimf.h"
-#include "muapo3.h"
+#include "muaaccim.h"
+#include "muaaccp3.h"
 
 #include "crt.h"
 
@@ -47,84 +48,6 @@ qRE
 
 namespace update_ {
 	namespace {
-		typedef crt::qCRATEdl( muamel::dId ) dIds;
-		qW( Ids );
-
-		typedef bch::qBUNCHdl( muamel::sRow ) dMRows;
-		qW( MRows );
-
-		void Add_(
-			muaagt::sRow Agent,
-			const muapo3::dUIDLs &Ids,
-			const muamel::dRows &Mails,
-			muatrk::dTracker &Tracker,
-			muadir::dDirectory &Directory,
-			dMRows &Rows )
-		{
-		qRH
-			sdr::sRow Row = qNIL;
-			muamel::sRow Mail = qNIL;
-		qRB
-			Row = Ids.First();
-
-			while ( Row != qNIL ) {
-				if ( ( Mail = Directory.Search( Ids( Row ), Mails ) ) == qNIL ) {
-					Mail = Directory.AddMail(Ids( Row ) );
-					Tracker.Link( Mail, Agent );
-				}
-
-				Rows.Add( Mail );
-
-				Row = Ids.Next( Row );
-			}
-		qRR
-		qRT
-		qRE
-		}
-
-		void Remove_(
-			muaagt::sRow AgentRow,
-			const dMRows &New,
-			const muamel::dRows &Old,
-			muatrk::dTracker &Tracker,
-			muadir::dDirectory &Directory )
-		{
-			sdr::sRow Row = Old.First(), Next = qNIL;
-			muamel::sRow Mail = qNIL;
-
-			while ( Row != qNIL ) {
-				Next = Old.Next( Row );
-
-				if ( New.Search( Mail = Old( Row ) ) == qNIL ) {
-					Directory.Remove( Mail );
-					Tracker.Remove( Mail );
-				}
-
-				Row = Next;
-			}
-		}
-
-		void Update_(
-			muaagt::sRow Agent,
-			const muapo3::dUIDLs &Ids,
-			muatrk::dTracker &Tracker,
-			muadir::dDirectory &Directory )
-		{
-		qRH
-			wMRows New, Old;
-		qRB
-			Old.Init();
-			Tracker.GetMails( Agent, Old );
-
-			New.Init();
-			Add_( Agent, Ids, Old, Tracker, Directory, New );
-
-			Remove_( Agent, New, Old, Tracker, Directory );
-		qRR
-		qRT
-		qRE
-		}
-
 		void Update_(
 			muaagt::sRow Agent,
 			muaagt::dAgents &Agents,
@@ -132,22 +55,17 @@ namespace update_ {
 			muadir::dDirectory &Directory )
 		{
 		qRH
-			csdbnc::rIODriver Driver;
+			muaagt::rRack Rack;
 			muapo3::wNumbers Numbers;
 			muapo3::wUIDLs UIDLs;
 		qRB
-			switch ( Agents.InitAndAuthenticateIfEnabled( Agent, Driver ) ) {
+			Rack.Init();
+			switch ( Agents.InitAndAuthenticateIfEnabled( Agent, Rack ) ) {
 			case muaagt::pPOP3:
-				tol::Init( Numbers, UIDLs );
-
-				muapo3::GetUIDLs( Driver, Numbers, UIDLs );
-
-				muapo3::Quit( Driver );
-
-				Update_( Agent, UIDLs, Tracker, Directory );
-					break;
+				muaaccp3::Update( Rack.POP3(), Tracker, Directory );
+				break;
 			case muaagt::pIMAP:
-				qRVct();
+				muaaccim::Update( Rack.IMAP(), Tracker, Directory );
 				break;
 			case muaagt::p_Undefined:
 				break;
@@ -188,144 +106,28 @@ void muaacc::dAccount::Update( void )
 }
 
 namespace get_fields_ {
-	namespace {
-		using muapo3::sNumber;
-		using muapo3::dNumbers;
-		using muapo3::dUIDLs;
 
-		// _U_IDLs to _S_ubjects
-		namespace u2s_ {
-			// _U_idls to _n_umbers
-			namespace u2n_ {
-				namespace {
-					void Get_(
-						const dUIDLs &UIDLs,
-						const muamel::dRows &Wanted,
-						const dUIDLs &AllUIDLs,
-						const dNumbers &AllNumbers,
-						dNumbers &Numbers,
-						muamel::dRows &Available )
-					{
-						if ( UIDLs.Amount() != Wanted.Amount() )
-							qRGnr();
-
-						sdr::sRow Row = UIDLs.First();
-						sdr::sRow UIDLRow = qNIL;
-
-						while ( Row != qNIL ) {
-							UIDLRow = ctn::Search( UIDLs( Row ), AllUIDLs );
-
-							if ( UIDLRow != qNIL ) {
-								Numbers.Add( AllNumbers( UIDLRow ) );
-								Available.Append( Wanted( Row ) );
-							}
-
-							Row = UIDLs.Next( Row );
-						}
-					}
-				}
-
-				void Get(
-					const dUIDLs &UIDLs,
-					const muamel::dRows &Wanted,
-					fdr::rIODriver &Driver,
-					dNumbers &Numbers,
-					muamel::dRows &Available )				{
-				qRH
-					muapo3::wNumbers AllNumbers;
-					muapo3::wUIDLs AllUIDLs;
-				qRB
-					tol::Init( AllNumbers, AllUIDLs );
-
-					muapo3::GetUIDLs( Driver, AllNumbers, AllUIDLs );
-
-					Get_( UIDLs, Wanted, AllUIDLs, AllNumbers, Numbers, Available );
-				qRR
-				qRT
-				qRE
-				}
-			}
-
-			// 'POP3' message _n_umbers to _s_ubjects.
-			namespace n2s_ {
-				namespace {
-					void Get_(
-						sNumber Number,
-						muaagt::sRow OwningAgent,
-						fdr::rIODriver &Driver,
-						str::dStrings &Subjects,
-						muaagt::dRows &Agents )
-					{
-					qRH
-						muapo3::hBody Body;
-						muaimf::wFields Fields;
-						str::wString Subject;
-						muaimf::sFRow Row = qNIL;
-					qRB
-						if ( Number != 0 ) {	// 'Number' can be 0 it the corresponding 'UIDL' was not found (mail erased).
-							muapo3::GetHeader( Number, Driver, Body );
-
-							Fields.Init();
-							muaimf::Fill(Body.GetDriver(), Fields );
-
-							Subject.Init();
-							Row = Fields.Search( muaimf::fSubject );
-
-							if ( Row == qNIL )
-								qRGnr();
-
-							Subject.Init();
-							Fields.GetBody( Row, Subject );
-							Subjects.Add( Subject );
-							Agents.Add( OwningAgent );
-						}
-					qRR
-					qRT
-					qRE
-					}
-				}
-
-				void Get(
-					const dNumbers &Numbers,
-					muaagt::sRow OwningAgent,
-					fdr::rIODriver &Driver,
-					str::dStrings &Subjects,
-					muaagt::dRows &Agents )
-				{
-					sdr::sRow Row = Numbers.First();
-
-					while ( Row != qNIL ) {
-						Get_( Numbers( Row ), OwningAgent, Driver, Subjects, Agents );
-
-						Row = Numbers.Next( Row );
-					}
-				}
-			}
-
-			void Get(
-				const dUIDLs &UIDLs,
-				const muamel::dRows &Wanted,
-				muaagt::sRow Agent,
-				muaagt::dAgents &Agents,
-				str::dStrings &Subjects,
-				muaagt::dRows &CorrespondingAgents,
-				muamel::dRows &Available )
+	namespace u2s_ {
+		void Get(
+			const muamel::dRows &Wanted,
+			const muamel::dIds &Ids,
+			muaagt::sRow Agent,
+			muaagt::dAgents &Agents,
+			str::dStrings &Subjects,
+			muaagt::dRows &CorrespondingAgents,
+			muamel::dRows &Available )
 			{
 			qRH
-				csdbnc::rIODriver Driver;
+				muaagt::rRack Rack;
 				muapo3::wNumbers Numbers;
 			qRB
-				switch ( Agents.InitAndAuthenticateIfEnabled( Agent, Driver ) ) {
+				Rack.Init();
+				switch ( Agents.InitAndAuthenticateIfEnabled( Agent, Rack ) ) {
 				case muaagt::pPOP3:
-					tol::Init( Numbers );
-					u2n_::Get( UIDLs, Wanted, Driver, Numbers, Available );
-
-					n2s_::Get( Numbers, Agent, Driver, Subjects, CorrespondingAgents );
-
-					muapo3::Quit( Driver );
+					muaaccp3::GetFields( Wanted, Ids, Agent, Rack.POP3(), Subjects, CorrespondingAgents, Available );
 					break;
 				case muaagt::pIMAP:
-					qRVct();
+					muaaccim::GetFields( Wanted, Ids, Agent, Rack.IMAP(), Subjects, CorrespondingAgents, Available );
 					break;
 				case muaagt::p_Undefined:
 					break;
@@ -339,33 +141,32 @@ namespace get_fields_ {
 			}
 		}
 		
-		void Get_(
-			const muadir::dDirectory &Directory,
-			const muatrk::dTracker &Tracker,
-			const muamel::dRows &Wanted,
-			muaagt::sRow AgentRow,
-			muaagt::dAgents &Agents,
-			str::dStrings &Subjects,
-			muaagt::dRows &CorrespondingAgents,
-			muamel::dRows &Available )
-		{
-		qRH
-			muapo3::wUIDLs UIDLs;
-			muamel::wRows Owned;
-		qRB
-			Owned.Init();
-			Tracker.FilterOutMails( Wanted, AgentRow, Owned );
+	void Get_(
+		const muadir::dDirectory &Directory,
+		const muatrk::dTracker &Tracker,
+		const muamel::dRows &Wanted,
+		muaagt::sRow AgentRow,
+		muaagt::dAgents &Agents,
+		str::dStrings &Subjects,
+		muaagt::dRows &CorrespondingAgents,
+		muamel::dRows &Available )
+	{
+	qRH
+		muamel::wIds Ids;
+		muamel::wRows Owned;
+	qRB
+		Owned.Init();
+		Tracker.FilterOutMails( Wanted, AgentRow, Owned );
 
-			if ( Owned.Amount() != 0 ) {
-				UIDLs.Init();
-				Directory.GetIds( Owned, UIDLs );
+		if ( Owned.Amount() != 0 ) {
+			Ids.Init();
+			Directory.GetIds( Owned, Ids );
 
-				u2s_::Get( UIDLs, Owned, AgentRow, Agents, Subjects, CorrespondingAgents, Available );
-			}
-		qRR
-		qRT
-		qRE
+			u2s_::Get( Owned, Ids, AgentRow, Agents, Subjects, CorrespondingAgents, Available );
 		}
+	qRR
+	qRT
+	qRE
 	}
 
 	void Get(
@@ -403,22 +204,15 @@ const str::dString &muaacc::dAccount::GetMail(
 {
 qRH
 	muaagt::sRow AgentRow = qNIL;
-	csdbnc::rIODriver Driver;
-	muapo3::sNumber Number = 0;
+	muaagt::rRack Rack;
 qRB
-	switch ( Agents_.InitAndAuthenticateIfEnabled(Tracker_.GetMailAgent(MailRow), Driver ) ) {
+	Rack.Init();
+	switch ( Agents_.InitAndAuthenticateIfEnabled( Tracker_.GetMailAgent(MailRow), Rack ) ) {
 	case muaagt::pPOP3:
-		Number = muapo3::GetNumberForUIDL( Directory_.Mails()( MailRow ).Id, Driver );
-
-		if ( Number == 0 )
-			qRGnr();
-
-		muapo3::GetMessage( Number, Driver, Mail );
-
-		muapo3::Quit( Driver );
+		muaaccp3::GetMail( Directory_.Mails()( MailRow ).Id, Rack.POP3(), Mail );
 		break;
 	case muaagt::pIMAP:
-		qRVct();
+		muaaccim::GetMail( Directory_.Mails()( MailRow ).Id, Rack.IMAP(), Mail );
 		break;
 	case muaagt::p_Undefined:
 		break;

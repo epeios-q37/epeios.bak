@@ -17,42 +17,9 @@
     along with 'MMUAq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// MUA eXaMPle
+#include "muaaccim.h"
 
-#ifndef MUAXMP_INC_
-# define MUAXMP_INC_
-
-# ifdef XXX_DBG
-#  define MUAXMP_DBG_
-# endif
-
-# include "muabsc.h"
-
-namespace muaxmp {
-	class dMyObject
-	{
-	private:
-	public:
-		struct s {
-		};
-		dMyObject( s &S )
-		{}
-		void reset( bso::bool__ P = true )
-		{
-		}
-		void plug( qASd *AS )
-		{
-		}
-		dMyObject &operator =( const dMyObject &M )
-		{
-			return *this;
-		}
-		bso::sBool Init( void )
-		{
-			return true;
-		}
-	};
-}
+using namespace muaaccim;
 
 
-#endif
+

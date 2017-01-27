@@ -17,41 +17,39 @@
     along with 'MMUAq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// MUA eXaMPle
+// MUA ACCount IM(AP).
 
-#ifndef MUAXMP_INC_
-# define MUAXMP_INC_
+#ifndef MUAACCIM_INC_
+# define MUAACCIM_INC_
 
 # ifdef XXX_DBG
-#  define MUAXMP_DBG_
+# define MUAACCIM_DBG
 # endif
 
 # include "muabsc.h"
+# include "muaagt.h"
+# include "muadir.h"
+# include "muatrk.h"
 
-namespace muaxmp {
-	class dMyObject
-	{
-	private:
-	public:
-		struct s {
-		};
-		dMyObject( s &S )
-		{}
-		void reset( bso::bool__ P = true )
-		{
-		}
-		void plug( qASd *AS )
-		{
-		}
-		dMyObject &operator =( const dMyObject &M )
-		{
-			return *this;
-		}
-		bso::sBool Init( void )
-		{
-			return true;
-		}
-	};
+namespace muaaccim {
+	void Update(
+		muaima::rSession &Session,
+		muatrk::dTracker &Tracker,
+		muadir::dDirectory &Directory );
+
+	void GetFields(
+		const muamel::dRows &Wanted,
+		const muamel::dIds &Ids,
+		muaagt::sRow Agent,
+		muaima::rSession &Session,
+		str::dStrings &Subjects,
+		muaagt::dRows &CorrespondingAgents,
+		muamel::dRows &Available );
+
+	const str::dString &GetMail(
+		const muamel::dId &Id,
+		muaima::rSession &Session,
+		str::dString &Mail );
 }
 
 

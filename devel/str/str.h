@@ -659,4 +659,16 @@ namespace str {
 	}
 }
 
+#define qSTRING( name )\
+	typedef str::dString d##name;\
+	typedef str::wString w##name
+
+#define qSTRINGS( name, row )\
+	typedef crt::qMCRATEd( str::dString, row ) d##name;\
+	typedef crt::qMCRATEw( str::dString, row ) w##name
+
+#define qSTRINGSl( name ) qSTRINGS( name, sdr::sRow )
+
+
+
 #endif

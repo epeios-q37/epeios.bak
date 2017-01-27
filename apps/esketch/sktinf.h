@@ -19,8 +19,8 @@
 
 // SKeTch INFormations.
 
-#ifndef SKTINF__INC
-# define SKTINF__INC
+#ifndef SKTINF_INC_
+# define SKTINF_INC_
 
 # define SKTINF_LC_AFFIX					"esketch"
 # define SKTINF_UC_AFFIX					"ESKETCH"

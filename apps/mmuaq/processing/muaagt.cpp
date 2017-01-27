@@ -19,9 +19,6 @@
 
 #include "muaagt.h"
 
-#include "muaima.h"
-#include "muapo3.h"
-
 using namespace muaagt;
 
 void muaagt::dAgents::Disable_( sRow Agent )
@@ -41,9 +38,24 @@ qRT
 qRE
 }
 
+namespace {
+	namespace imap_ {
+		using namespace muaima;
+		inline bso::sBool Connect(
+			fdr::rIODriver &Driver,
+			muaima::rSession Session,
+			const str::dString &Username,
+			const str::dString &Password,
+			qRPN )
+		{
+			return Session.Init( Driver, Username, Password, NULL, qRP ) == sOK;
+		}
+	}
+}
+
 eProtocol muaagt::dAgents::InitAndAuthenticateIfEnabled(
 	sRow AgentRow,
-	csdbnc::rIODriver &Driver )
+	rRack &Rack )
 {
 	eProtocol Protocol = p_Undefined;
 qRH
@@ -54,15 +66,22 @@ qRB
 	Core_.Recall( AgentRow, Agent );
 
 	if ( IsEnabled_( AgentRow ) ) {
-	if ( Driver.Init(Agent.HostPort.Convert(Buffer), SCK_INFINITE, qRPU) ) {
-		switch ( Agent.Protocol() ) {
-		case muaagt::pPOP3:
-			if ( muapo3::Authenticate( Agent.Username, Agent.Password, Driver, qRPU ) )
-				Protocol = muaagt::pPOP3;
-			break;
-		case muaagt::pIMAP:
-			if ( muaima::Connect( Authenticate( Agent.Username, Agent.Password, Driver, qRPU ) )
+		if ( Rack.Driver_.Init(Agent.HostPort.Convert(Buffer), SCK_INFINITE, qRPU) ) {
+			switch ( Agent.Protocol() ) {
+			case muaagt::pPOP3:
+				if ( muapo3::Authenticate( Agent.Username, Agent.Password, Rack.POP3(), qRPU ) )
+					Protocol = pPOP3;
+				break;
+			case muaagt::pIMAP:
+				if ( imap_::Connect( Rack.Driver_, Rack.IMAP(), Agent.Username, Agent.Password, qRPU ) )
+					Protocol = pIMAP;
+				break;
 
+			default:
+				qRGnr();
+				break;
+			}
+		}
 	}
 qRR
 qRT
