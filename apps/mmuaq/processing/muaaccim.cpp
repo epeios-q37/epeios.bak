@@ -146,7 +146,7 @@ qRB
 	RawId.ToNumber( Id );
 
 	RFC822.Init();
-	Session.GetRFC822( muaima::rpText, muaima::fUID, str::wString("inbox"), Id, RFC822 );
+	Session.GetRFC822( muaima::rpAll, muaima::fUID, str::wString("inbox"), Id, RFC822 );
 
 	flx::GetString( RFC822.GetDriver(), Mail );
 
