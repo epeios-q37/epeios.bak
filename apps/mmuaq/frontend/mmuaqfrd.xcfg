@@ -95,7 +95,7 @@
 						<xpp:expand value-of="BackendPath"/>
 						<xpp:bloc>mmuaqbkd</xpp:bloc>
 					</Backend>
-					<Backend id="LocalHost" Alias="LocalPredefinedBackend" Plugin="Straight">192.168.7.61:53740</Backend>
+					<Backend id="LocalHost" Alias="LocalPredefinedBackend" Plugin="Straight">localhost:53740</Backend>
      <Backend id="Q37" Alias="Q37PredefinedBackend" Plugin="Straight">q37.info:53740</Backend>
     </xpp:bloc>
 			</Backends>
