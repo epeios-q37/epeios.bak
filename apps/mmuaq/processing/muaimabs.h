@@ -220,6 +220,8 @@ namespace muaimabs {
 		rcBad,
 		rcPreAuth,
 		rcBye,
+		// Not an 'IMAP' response code, but it's the counterpart of the one defined in 'eStatus'.
+		rcDisconnected,
 		// Response codes which may optionnaly be contained in status response.
 		rcAlert,
 		rcBadCharSet,
@@ -272,6 +274,7 @@ namespace muaimabs {
 		sOK,
 		sNO,
 		sBAD,
+		sDisconnected,	// Not an 'IMAP' status, but hndling this here is easier.
 		s_amount,
 		s_Erroneous,	// Server returned a not 'IMAP' compliant answer.
 		s_Undefined
@@ -364,6 +367,9 @@ namespace muaimabs {
 				break;
 			case rcBad:
 				Status = sBAD;
+				break;
+			case rcDisconnected:
+				Status = sDisconnected;
 				break;
 			default:
 				qRGnr();

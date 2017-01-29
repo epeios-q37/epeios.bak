@@ -28,6 +28,26 @@
 # include "rgstry.h"
 
 namespace misc {
+
+# ifdef M
+#  define MISC_M_BUFFER_ M
+#  undef M
+# endif
+
+# define M( name ) qCDEF( char *, name, #name )
+	namespace message {
+		M( NoCorrespondingMail );
+		M( UnableToConnect );
+		M( UnknownField );
+/*
+		M(  );
+*/
+	}
+# undef M
+# ifdef MISC_M_BUFFER_
+#  define M MISC_M_BUFFER_
+# endif
+
 	inline void Dump( fdr::rIDriver &Driver )
 	{
 	qRH

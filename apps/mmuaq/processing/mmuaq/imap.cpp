@@ -80,7 +80,7 @@ namespace {
 		} else
 			Console.SkipResponse();
 
-		if ( ( Status == muaima::sNO ) || ( Status == muaima::sBAD ) )
+		if ( ( Status == muaima::sNO ) || ( Status == muaima::sBAD ) || ( Status == muaima::sDisconnected ) )
 			qRAbort();
 	}
 
@@ -393,14 +393,13 @@ namespace rfc822_ {
 		Session.Init();
 
 		RFC822.Init();
-		if ( Session.GetRFC822( Part, GetFlavor_(), Folder, sclmisc::MGetU32(registry::parameter::MailID), RFC822 ) ) {
+		if ( Session.GetRFC822( Part, GetFlavor_(), Folder, sclmisc::MGetU32( registry::parameter::MailID ), RFC822, qRPU ) ) {
 			misc::Dump( RFC822.GetDriver() );
 
 			Handle_( RFC822.EndStatus( Message ), Message );
-		}
-		else if ( Handle_( Session.EndStatus( Message ), Message ) == sOK ) {
+		} else if ( Handle_( Session.EndStatus( Message ), Message ) == sOK ) {
 			Message.Init();
-			sclmisc::GetBaseTranslation( "NoCorrespondingMail", Message );
+			sclmisc::GetBaseTranslation( misc::message::NoCorrespondingMail, Message );
 			cio::COut << Message << txf::nl;
 		}
 	qRR
@@ -429,17 +428,69 @@ void imap::RFC822Text( void )
 	rfc822_::Handle( muaima::rpText );
 }
 
+void imap::UID( void )
+{
+qRH
+	rSession_ Session;
+	muaima::rUID UID;
+	str::wString Folder, Message;
+qRB
+	Folder.Init();
+	sclmisc::MGetValue( registry::parameter::imap::Folder, Folder );
 
+	Message.Init();
+	Session.Init();
+
+	UID.Init();
+	if ( Session.GetUID( Folder, sclmisc::MGetU32( registry::parameter::MailID ), UID, qRPU ) ) {
+		misc::Dump( UID.GetDriver() );
+
+		Handle_( UID.EndStatus( Message ), Message );
+	} else if ( Handle_( Session.EndStatus( Message ), Message ) == sOK ) {
+		Message.Init();
+		sclmisc::GetBaseTranslation( misc::message::NoCorrespondingMail, Message );
+		cio::COut << Message << txf::nl;
+	}
+qRR
+qRT
+qRE
+}
+
+void imap::MailAmount( void )
+{
+qRH
+	rSession_ Session;
+	bso::sUInt Amount = 0;
+	str::wString Folder, Message;
+qRB
+	Folder.Init();
+	sclmisc::MGetValue( registry::parameter::imap::Folder, Folder );
+
+	Message.Init();
+	Session.Init();
+
+	if ( Session.GetMailAmount( Folder, Amount, qRPU ) )
+		cio::COut << Amount << txf::nl;
+
+	Handle_( Session.EndStatus( Message ), Message );
+qRR
+qRT
+qRE
+}
 
 void imap::Test( void )
 {
 qRH
 	rSession_ Session;
 	str::wString Message;
+	bso::sUInt Amount = 0;
 qRB
 	Message.Init();
 	Session.Init();
 
+	Session.GetMailAmount( str::wString("inbox"), Amount );
+
+	cio::COut << Amount << txf::nl;
 qRR
 qRT
 qRE

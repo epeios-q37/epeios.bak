@@ -4,7 +4,7 @@
   <xpp:set name="q37.xpp" env-var="Q37_XPP"/>
   <xpp:expand value-of="q37.xpp"/>
   <xpp:expand href="../../../../TOL.xcfg"/>
-  <Parameters Setup="Q37">
+  <Parameters Setup="Prod">
    <Language>en</Language>
    <!-- Default command -->
   </Parameters>
@@ -33,20 +33,20 @@
     <Translation language="en">Returns the next 'IMAP' tag.</Translation>
    </Translations>
    <Translations text="POP3ListCommandDescription">
-    <Translation language="fr">Affiche des informations sur les messages d'un serveur 'POP3'.</Translation>
-    <Translation language="en">Displays information about messages from a 'POP3' server.</Translation>
+    <Translation language="fr">Affiche des informations sur les courriers d'un serveur 'POP3'.</Translation>
+    <Translation language="en">Displays information about mails from a 'POP3' server.</Translation>
    </Translations>
    <Translations text="POP3RetrieveCommandDescription">
     <Translation language="fr">Récupère un courrier d'un serveur 'POP3'.</Translation>
     <Translation language="en">Retrieve a mail from a 'POP3' server.</Translation>
    </Translations>
    <Translations text="POP3TopCommandDescription">
-    <Translation language="fr">Affiche le début d'un message d'un serveur 'POP3'.</Translation>
-    <Translation language="en">Displays the begin of a message from a 'POP3' server.</Translation>
+    <Translation language="fr">Affiche le début d'un courrier d'un serveur 'POP3'.</Translation>
+    <Translation language="en">Displays the begin of a mail from a 'POP3' server.</Translation>
    </Translations>
    <Translations text="POP3UIDLCommandDescription">
-    <Translation language="fr">Affiche l'identifiant unique des messages d'un serveur 'POP3'.</Translation>
-    <Translation language="en">Displays the unique ID of messages from a 'POP3' server.</Translation>
+    <Translation language="fr">Affiche l'identifiant unique des courriers d'un serveur 'POP3'.</Translation>
+    <Translation language="en">Displays the unique ID of mails from a 'POP3' server.</Translation>
    </Translations>
    <Translations text="IMAPCapabilityCommandDescription">
     <Translation language="fr">Lance la commande 'CAPABILITY' du protocole 'IMAP'.</Translation>
@@ -87,6 +87,14 @@
    <Translations text="IMAPRFC822TextCommandDescription">
     <Translation language="fr">Affiche le 'RFC822.TEXT' d'un courrier d'un dossier 'IMAP'.</Translation>
     <Translation language="en">Displays the 'RFC822.TEXT' of a mail from an 'IMAP' folder.</Translation>
+   </Translations>
+   <Translations text="IMAPUIDCommandDescription">
+    <Translation language="fr">Affiche l'UID' d'un courrier d'un dossier 'IMAP'.</Translation>
+    <Translation language="en">Displays the 'UID' of a mail from an 'IMAP' folder.</Translation>
+   </Translations>
+   <Translations text="IMAPMailAmountCommandDescription">
+    <Translation language="fr">Affiche le nombre de courriers d'un dossier 'IMAP'.</Translation>
+    <Translation language="en">Displays the amount of mail in an 'IMAP' folder.</Translation>
    </Translations>
    <Translations text="ShowHeaderCommandDescription">
     <Translation language="fr">Affiche l'entête d'un courrier.</Translation>
@@ -230,6 +238,8 @@
    <Argument id="IMAPRFC822SizeCommand" Description="IMAPRFC822SizeCommandDescription" long="imap-RFC822-size" Value="IMAPRFC822Size" Usage="[%SetupOption%] [%VerboseFlag%] [%UIDFlag%] %IMAPFolderArgument% %MailIDArgument%"/>
    <Argument id="IMAPRFC822HeaderCommand" Description="IMAPRFC822HeaderCommandDescription" long="imap-RFC822-header" Value="IMAPRFC822Header" Usage="[%SetupOption%] [%VerboseFlag%] [%UIDFlag%] %IMAPFolderArgument% %MailIDArgument%"/>
    <Argument id="IMAPRFC822TextCommand" Description="IMAPRFC822TextCommandDescription" long="imap-RFC822-text" Value="IMAPRFC822Text" Usage="[%SetupOption%] [%VerboseFlag%] [%UIDFlag%] %IMAPFolderArgument% %MailIDArgument%"/>
+   <Argument id="IMAPUIDCommand" Description="IMAPUIDCommandDescription" long="imap-uid" Value="IMAPUID" Usage="[%SetupOption%] [%VerboseFlag%] %IMAPFolderArgument% %MailIDArgument%"/>
+   <Argument id="IMAPMailAmountCommand" Description="IMAPMailAmountCommandDescription" long="imap-mail-amount" Value="IMAPMailAmount" Usage="[%SetupOption%] [%VerboseFlag%] %IMAPFolderArgument%"/>
    <Argument id="ShowHeaderCommand" Description="ShowHeaderCommandDescription" long="show-header" Value="ShowHeader" Usage="[%InputArgument% [%OutputArgument%]]"/>
    <Argument id="GetFieldCommand" Description="GetFieldCommandDescription" long="get-field" Value="GetField" Usage="%FieldArgument% [%InputArgument% [%OutputArgument%]]"/>
    <!-- Fanaux : 'Path', mais pas de 'Value'. -->
@@ -312,6 +322,13 @@
     <Layout command="IMAPRFC822Text">
      <Link index="0" Target="IMAPFolderArgument"/>
      <Link index="1" Target="MailIDArgument"/>
+    </Layout>
+    <Layout command="IMAPUID">
+     <Link index="0" Target="IMAPFolderArgument"/>
+     <Link index="1" Target="MailIDArgument"/>
+    </Layout>
+    <Layout command="IMAPMailAmount">
+     <Link index="0" Target="IMAPFolderArgument"/>
     </Layout>
     <Layout command="ShowHeader">
      <Link index="0" Target="InputArgument"/>

@@ -21,5 +21,21 @@
 
 using namespace muaaccim;
 
+namespace update_ {
+}
+
+void muaaccim::Update(
+	muaima::rSession &Session,
+	muatrk::dTracker &Tracker,
+	muadir::dDirectory &Directory )
+{
+qRH
+	muaima::rRFC822 RFC822;
+qRB
+qRR
+qRT
+qRE
+}
+
 
 

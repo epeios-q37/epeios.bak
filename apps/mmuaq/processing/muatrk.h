@@ -40,6 +40,7 @@ namespace muatrk {
 	// Link from agent to mails.
 	typedef crt::qCRATEd( muamel::dRows, muaagt::sRow ) dA2M_;
 
+	// Tracker of the links between mails and agents.
 	class dTracker
 	{
 	private:

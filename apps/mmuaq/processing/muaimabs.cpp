@@ -294,6 +294,7 @@ const char *muaimabs::GetLabel( eResponseCode Code )
 	C( Bad );
 	C( PreAuth);
 	C( Bye );
+	C( Disconnected );
 	C( Alert );
 	C( BadCharSet );
 	C( Capability );
@@ -421,6 +422,10 @@ qRB
 			PendingCode_ = rc_Undefined;
 		}
 		ResponseDriver_.Init( Flow, dCRLF, PendingData );
+	} else if ( Flow.EndOfFlow() ) {
+		Code = rc_None;
+		PendingCode_ = rcDisconnected;
+		PendingCodeIsStatus_ = true;
 	} else {
 		if ( Flow.View() == '*' ) {
 			Flow.Skip();
@@ -470,6 +475,7 @@ const char *muaimabs::GetLabel( eStatus Status )
 	C( OK );
 	C( NO );
 	C( BAD );
+	C( Disconnected );
 	default:
 		qRFwk();
 		break;

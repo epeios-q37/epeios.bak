@@ -44,7 +44,7 @@ void misc::rVerboseIODriver::Init(
 		sclmisc::MGetValue( HostPortEntry, HostPort );
 
 		if ( !Driver_.Init( HostPort.Convert( Buffer ), SCK_INFINITE, qRPU ) )
-			sclmisc::ReportAndAbort("UnableToConnect", HostPort );
+			sclmisc::ReportAndAbort( message::UnableToConnect, HostPort );
 
 		Verbosity_ = Verbosity;
 		Commited_ = true;

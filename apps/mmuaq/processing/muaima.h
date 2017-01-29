@@ -69,11 +69,12 @@ namespace muaima {
 		rp_Undefined
 	};
 
+	extern str::wString CurrentFolder;	// Can be given as the 'Folder' argument, if a successful 'rSeesion::Select(...)' was made bofore.
+
 	class rSession
 	{
 	private:
 		rConsole Console_;
-		qRMV( fdr::rIDriver, VD_, ValueDriver_ );
 		bso::sBool Connected_;
 		bso::sByte Delimiter_;	// The hierarchy delimiter. '0' means no demimiter (hope that '0' is not a valid delmimiter).
 		eStatus PendingStatus_;
@@ -94,6 +95,13 @@ namespace muaima {
 		eStatus Disconnect_(
 			str::dString *Message,
 			qRPN );
+		bso::sBool GetFetchItem_(
+			item::eName ItemName,
+			eFlavor Flavor,
+			const str::dString &Folder,
+			bso::sUInt Number,
+			class rFetch_ &Fetch,
+			qRPN );
 	public:
 		void reset( bso::sBool P = true )
 		{
@@ -104,7 +112,7 @@ namespace muaima {
 				}
 			}
 
-			tol::reset( P, Console_, ValueDriver_, Connected_, PendingMessage_ );
+			tol::reset( P, Console_, Connected_, PendingMessage_ );
 			Delimiter_ = 0;
 			PendingStatus_ = s_Undefined;
 		}
@@ -164,17 +172,29 @@ namespace muaima {
 
 			return Delimiter_;
 		}
-		bso::sBool GetFolders(
+		bso::sBool Select(
 			const str::dString &Folder,
+			qRPD );
+		bso::sBool GetMailAmount(
+			const str::dString &Folder,
+			bso::sUInt &Amount,
+			qRPD );
+		bso::sBool GetFolders(
+			const str::dString &Folder,	// Can be 'CurrentFolder' if a successful 'Select(...)' was made before.
 			class rFolders &Folders,
 				qRPD );
 		// If returns false and 'EndStatus(...)' returns 'sOK', it means that here is no corresponding mail.
 		bso::sBool GetRFC822(
 			eRFC822Part Part,
 			eFlavor Flavor,
-			const str::dString &Folder,
+			const str::dString &Folder,	// Can be 'CurrentFolder' if a successful 'Select(...)' was made before.
 			bso::sUInt Number,
 			class rRFC822 &RFC822,
+			qRPD );
+		bso::sBool GetUID(
+			const str::dString &Folder,	// Can be 'CurrentFolder' if a successful 'Select(...)' was made before.
+			bso::sUInt Number,
+			class rUID &UID,
 			qRPD );
 		eStatus EndStatus( str::dString *Message = NULL )
 		{
@@ -197,17 +217,7 @@ namespace muaima {
 		{
 			return EndStatus( &Message );
 		}
-		/* End of commands after which, on success, you have to handle 'GetValueDriver(...)'*/
-		fdr::rIDriver &GetValueDriver( void )
-		{
-			fdr::rIDriver &ValueDriver = VD_();
-
-			ValueDriver_ = NULL;
-
-			return ValueDriver;
-		}
 	};
-
 
 	class rBase_
 	{
@@ -247,7 +257,6 @@ namespace muaima {
 		friend rSession;
 	};
 
-
 	class rFolders
 	: public rBase_
 	{
@@ -280,27 +289,15 @@ namespace muaima {
 		friend rSession;
 	};
 
-	class rRFC822	// Complete, header, text or size.
+	class rFetch_	
 	: public rBase_
 	{
 	private:
 		rResponseDriver_
 			Global_,	// Handle the global response,
 			Items_,	// Handles all the items (delimited by '())').
-			Content_;	// Handle the 'RFC822' content.
-		void GetValue_( eRFC822Part Part );
-		void Init_(
-			eRFC822Part PArt,
-			rSession &Session )
-		{
-			rBase_::Init_( Session );
-
-			Global_.Init( C_().GetResponseDriver(), dCRLF );
-			Items_.Init( Global_, dNone );
-			Content_.Init( Items_, dNone );
-
-			GetValue_( PArt );
-		}
+			Content_;	// Handles item value.
+		void GetValue_( item::eName ItemName );
 	protected:
 		virtual void MUAIMAOnEnd( void ) override
 		{
@@ -309,12 +306,24 @@ namespace muaima {
 			Global_.Purge();
 			C_().SkipRemainingReponses();
 		}
+		void Init_(
+			item::eName ItemName,
+			rSession &Session )
+		{
+			rBase_::Init_( Session );
+
+			Global_.Init( C_().GetResponseDriver(), dCRLF );
+			Items_.Init( Global_, dNone );
+			Content_.Init( Items_, dNone );
+
+			GetValue_( ItemName );
+		}
 	public:
 		void reset( bso::sBool P = true )
 		{
 			rBase_::reset( P );
 		}
-		qCVDTOR( rRFC822 );
+		qCVDTOR( rFetch_ );
 		void Init( void )
 		{
 			rBase_::Init();
@@ -328,6 +337,8 @@ namespace muaima {
 		friend rSession;
 	};
 
+	qTCLONE( rFetch_, rRFC822 );
+	qTCLONE( rFetch_, rUID );
 }
 
 

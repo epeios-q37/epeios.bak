@@ -34,6 +34,13 @@ using namespace pop3;
 
 using namespace muapo3;
 
+#define M( name ) qCDEF( char *, name, #name );
+namespace message_ {
+	M( Error );
+	M( ErrorWithNoMessage );
+	M( ErroneousAnswer );
+}
+
 namespace {
 	using namespace base;
 
@@ -47,9 +54,9 @@ namespace {
 		misc::Dump( Body.GetDriver(), Message );
 
 		if ( Message.Amount() )
-			sclmisc::ReportAndAbort("Error", Message );
+			sclmisc::ReportAndAbort( message_::Error, Message );
 		else
-			sclmisc::ReportAndAbort( "ErrorWithNoMessage" );
+			sclmisc::ReportAndAbort( message_::ErrorWithNoMessage );
 	qRR
 	qRT
 	qRE
@@ -66,7 +73,7 @@ namespace {
 			ReportError_( Body );
 			break;
 		case iErroneous:
-			sclmisc::ReportAndAbort( "ErroneousAnswer" );
+			sclmisc::ReportAndAbort( message_::ErroneousAnswer );
 			break;
 		default:
 			qRGnr();

@@ -1,5 +1,9 @@
 CHANGELOG for the 'Epeios' framework.
 
+2017-01-27 :
+- STR :
+	- Introducing 'qSTRING(s)(l)(...)'.
+
 2017-01-26 :
 - SCLMISC :
 	- Handling the storing of the lasting registry under 'POSIX' ('AppData' directory handling).

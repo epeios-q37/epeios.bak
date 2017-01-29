@@ -34,6 +34,8 @@ namespace imap {
 	void RFC822Size( void );
 	void RFC822Header( void );
 	void RFC822Text( void );
+	void UID( void );
+	void MailAmount( void );
 
 	void Test( void );
 }

@@ -23,6 +23,7 @@
 
 using namespace muaima;
 
+str::wString muaima::CurrentFolder;
 
 const char *item::GetLabel( eName Name )
 {
@@ -419,7 +420,7 @@ qRE
 	return true;
 }
 
-namespace get_mail_ {
+namespace fetch_ {
 	bso::sUInt GetSequence( fdr::rIDriver &Driver )
 	{
 		bso::sUInt Sequence = 0;
@@ -434,7 +435,157 @@ namespace get_mail_ {
 		return Sequence;
 	}
 
-#define C( part  ) case rp##part : return item::nRFC822##part; break
+	void SearchValue(
+		item::eName WantedItemName,
+		fdr::rIDriver &Driver )
+	{
+	qRH
+		str::wString ItemName;
+		bso::sBool Continue = true;
+		rResponseDriver_ ValueDriver;
+	qRB
+		while ( Continue ) {
+			ItemName.Init();
+			ValueDriver.Init( Driver, dNone );
+			common_::GetString(ValueDriver, ItemName );
+
+			if ( item_::GetName( ItemName ) == WantedItemName )
+				Continue = false;
+			else {
+				ValueDriver.Init( Driver, dNone );
+				fdr::Purge( ValueDriver );
+			}
+		}
+
+		if ( Driver.EndOfFlow() )
+			qRGnr();
+	qRR
+	qRT
+	qRE
+	}
+}
+
+void muaima::rFetch_::GetValue_( item::eName ItemName )
+{
+qRH
+	str::wString Name;
+qRB
+	fetch_::GetSequence( Global_ );
+
+	fetch_::SearchValue( ItemName, Items_ );
+qRR
+qRT
+qRE
+}
+
+bso::sBool muaima::rSession::GetFetchItem_(
+	item::eName ItemName,
+	eFlavor Flavor,
+	const str::dString &RawFolder,
+	bso::sUInt Number,
+	class rFetch_ &Fetch,
+	qRPN )
+{
+	bso::sBool Success = false;
+qRH
+	str::wString Folder;
+	eResponseCode Code = rc_None;
+	bso::bInteger Buffer;
+	eStatus Status = s_Undefined;
+qRB
+	Folder.Init( RawFolder );
+	common_::NormalizeFolderName( Delimiter_, false, Folder );
+
+	if ( RawFolder.Amount() != 0 ) {
+		muaima::Select( Folder, Console_ );
+		Status = PurgeResponses_( &PendingMessage_, qRP );
+	} else
+		Status = sOK;
+
+	if ( Status == sOK ) {
+		muaima::Fetch( Flavor, str::wString( bso::Convert( Number, Buffer ) ), str::wString( item::GetLabel( ItemName ) ), Console_ );
+
+		while ( ( ( Code = Console_.GetPendingResponseCode() ) != rc_None ) && ( Code != rcFetch ) )
+			Console_.SkipResponse();
+
+		if ( Code == rc_None ) {
+			PendingStatus_ = Console_.GetStatus();
+			RetrieveMessage_( &PendingMessage_ );
+		} else {
+			Fetch.Init_( ItemName, *this );
+			Success = true;
+		}
+	} else
+		PendingStatus_ = Status;
+qRR
+qRT
+qRE
+	return Success;
+}
+
+bso::sBool muaima::rSession::Select(
+	const str::dString &RawFolder,
+	qRPN )
+{
+	bso::sBool Success = false;
+qRH
+	str::wString Folder;
+	eStatus Status = s_Undefined;
+qRB
+	Folder.Init( RawFolder );
+	common_::NormalizeFolderName( Delimiter_, false, Folder );
+
+	muaima::Select( Folder, Console_ );
+
+	if ( ( Status = PurgeResponses_( &PendingMessage_, qRP ) ) == sOK )
+		Success = true;
+	else
+		PendingStatus_ = Status;
+qRR
+qRT
+qRE
+	return Success;
+}
+
+bso::sBool muaima::rSession::GetMailAmount(
+	const str::dString &RawFolder,
+	bso::sUInt &Amount,
+	qRPN )
+{
+	bso::sBool Success = false;
+qRH
+	str::wString Folder;
+	eResponseCode Code = rc_None;
+	eStatus Status = s_Undefined;
+	rResponseDriver_ Driver;
+qRB
+	Folder.Init( RawFolder );
+	common_::NormalizeFolderName( Delimiter_, false, Folder );
+
+	muaima::Select( Folder, Console_ );
+
+	while ( ( ( Code = Console_.GetPendingResponseCode() ) != rc_None ) && ( Code != rcExists ) )
+		Console_.SkipResponse();
+
+	if ( Code == rc_None ) {
+		PendingStatus_ = Console_.GetStatus();
+		RetrieveMessage_( &PendingMessage_ );
+	} else {
+		Driver.Init(Console_.GetResponseDriver(), dNone );
+		Amount = common_::GetNumber( Driver );
+		Console_.SkipRemainingReponses();
+		Success = true;
+	}
+qRR
+qRT
+qRE
+	return Success;
+}
+
+
+
+namespace rfc822_{
+	#define C( part  ) case rp##part : return item::nRFC822##part; break
 	inline item::eName Convert( eRFC822Part Part )
 	{
 		switch ( Part ) {
@@ -451,35 +602,6 @@ namespace get_mail_ {
 		return item::n_Undefined;	// To avoid a warning.
 	}
 #undef C
-
-	void SearchValue(
-		eRFC822Part Part,
-		fdr::rIDriver &Driver )
-	{
-	qRH
-		str::wString Name;
-		bso::sBool Continue = true;
-		rResponseDriver_ ValueDriver;
-	qRB
-		while ( Continue ) {
-			Name.Init();
-			ValueDriver.Init( Driver, dNone );
-			common_::GetString(ValueDriver, Name );
-
-			if ( item_::GetName( Name ) == Convert( Part ) )
-				Continue = false;
-			else {
-				ValueDriver.Init( Driver, dNone );
-				fdr::Purge( ValueDriver );
-			}
-		}
-
-		if ( Driver.EndOfFlow() )
-			qRGnr();
-	qRR
-	qRT
-	qRE
-	}
 }
 
 bso::sBool muaima::rSession::GetRFC822(
@@ -490,54 +612,18 @@ bso::sBool muaima::rSession::GetRFC822(
 	rRFC822 &RFC822,
 	qRPN )
 {
-	bso::sBool Success = false;
-qRH
-	str::wString Folder;
-	eResponseCode Code = rc_None;
-	bso::bInteger Buffer;
-	eStatus Status = s_Undefined;
-qRB
-	Folder.Init( RawFolder );
-	common_::NormalizeFolderName( Delimiter_, false, Folder );
-
-	Select( Folder, Console_ );
-
-	Status = PurgeResponses_( &PendingMessage_, qRP );
-
-	if ( Status == sOK ) {
-		Fetch( Flavor, str::wString( bso::Convert( Number, Buffer ) ), str::wString( item::GetLabel( get_mail_::Convert( Part ) ) ), Console_ );
-
-		while ( ( ( Code = Console_.GetPendingResponseCode() ) != rc_None ) && ( Code != rcFetch ) )
-			Console_.SkipResponse();
-
-		if ( Code == rc_None ) {
-			PendingStatus_ = Console_.GetStatus();
-			RetrieveMessage_( &PendingMessage_ );
-		} else {
-			RFC822.Init_( Part, *this );
-			Success = true;
-		}
-	} else
-		PendingStatus_ = Status;
-qRR
-qRT
-qRE
-	return Success;
+	return GetFetchItem_( rfc822_::Convert( Part ), Flavor, RawFolder, Number, RFC822, qRP );
 }
 
-void muaima::rRFC822::GetValue_( eRFC822Part Part )
+bso::sBool muaima::rSession::GetUID(
+	const str::dString &Folder,
+	bso::sUInt Number,
+	class rUID &UID,
+	qRPN )
 {
-qRH
-	str::wString Name;
-qRB
-	::get_mail_::GetSequence( Global_ );
-
-	::get_mail_::SearchValue( Part, Items_ );
-qRR
-qRT
-qRE
+	return GetFetchItem_( item::nUID, muaima::fRegular, Folder, Number, UID, qRP );
 }
-
+	
 namespace {
 	void FillAutomats_( void )
 	{
@@ -548,5 +634,6 @@ namespace {
 qGCTOR( muaima )
 {
 	FillAutomats_();
+	CurrentFolder.Init();
 }
 

@@ -18,8 +18,9 @@
 */
 
 #include "imap.h"
-#include "registry.h"
+#include "misc.h"
 #include "pop3.h"
+#include "registry.h"
 
 #include "muaima.h"
 #include "muaimf.h"
@@ -179,6 +180,16 @@ namespace {
 		return imap::RFC822Text();
 	}
 
+	void IMAPUID_( void )
+	{
+		return imap::UID();
+	}
+
+	void IMAPMailAmount_( void )
+	{
+		return imap::MailAmount();
+	}
+
 	void IMAPTest_( void )
 	{
 		return imap::Test();
@@ -331,7 +342,7 @@ namespace {
 		Field = muaimf::GetField( FieldName );
 
 		if ( Field == muaimf::f_Undefined )
-			sclmisc::ReportAndAbort("UnknownField", FieldName );
+			sclmisc::ReportAndAbort( misc::message::UnknownField, FieldName );
 
 		FieldRows.Init();
 
@@ -376,12 +387,14 @@ qRB
 	C( IMAPLSub );
 	C( IMAPSelect );
 	C( IMAPFetch );
-	C( IMAPTest );
 	C( IMAPFolders );
 	C( IMAPRFC822 );
 	C( IMAPRFC822Size );
 	C( IMAPRFC822Header );
 	C( IMAPRFC822Text );
+	C( IMAPUID );
+	C( IMAPMailAmount );
+	C( IMAPTest );
 //	C( GetIndexes );
 	C( ShowHeader );
 	C( GetField );
