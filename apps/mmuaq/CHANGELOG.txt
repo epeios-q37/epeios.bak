@@ -1,5 +1,9 @@
 ***** MMUAq changelog *****
 
+2017-01-29 :
+- GLOBAL :
+	- Fixing bad handling of field name followed by a ':CRLF'.
+
 2017-01-05 :
 - GLOBAL :
 	- Fixing bad 'POP3' UIDL / mail correspondance.

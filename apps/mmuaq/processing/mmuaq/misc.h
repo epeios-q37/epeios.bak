@@ -79,116 +79,25 @@ namespace misc {
 	qRE
 	}
 
-	typedef fdr::rIODressedDriver rIODriver_;
-
 	bso::sBool IsVerboseActivated( void );
 
-	qENUM( Verbosity ) {
-		vNone,
-		vIn,
-		vOut,
-		vInAndOut,
-		v_amount,
-		v_Undefined
-	};
-
+	typedef flx::rIOMonitor rIODriver_;
 	class rVerboseIODriver
 	: public rIODriver_
 	{
 	private:
 		csdbnc::rIODriver Driver_;
-		eVerbosity Verbosity_;
-		bso::sBool Commited_;
-		bso::sBool ReadInProgress_;
-		bso::sBool IsIn_( void ) const
-		{
-			return ( Verbosity_ == vIn ) || ( Verbosity_ == vInAndOut );
-		}
-		bso::sBool IsOut_( void ) const
-		{
-			return ( Verbosity_ == vOut ) || ( Verbosity_ == vInAndOut );
-		}
-	protected:
-		virtual fdr::sSize FDRRead(
-			fdr::sSize Maximum,
-			fdr::sByte *Buffer ) override
-		{
-			Maximum = Driver_.Read( Maximum, Buffer, fdr::bNonBlocking );
-
-			if ( IsIn_() ) {
-				if ( Maximum != 0 ) {
-					if ( !ReadInProgress_ ) {
-						cio::COut << "<- ";
-						ReadInProgress_ = true;
-					}
-
-					cio::COutF.Write( Buffer, Maximum );
-					cio::COutF.Commit();
-				}
-			}
-
-			return Maximum;
-		}
-		virtual void FDRDismiss( bso::sBool Unlock ) override
-		{
-			if ( ReadInProgress_ )
-				cio::COut << "--" << txf::nl << txf::commit;
-
-			ReadInProgress_ = false;
-
-			return Driver_.Dismiss( Unlock );
-		}
-		virtual fdr::sTID FDRITake( fdr::sTID Owner )
-		{
-			return Driver_.ITake( Owner );
-		}
-		virtual fdr::sSize FDRWrite(
-			const fdr::sByte *Buffer,
-			fdr::sSize Maximum ) override
-		{
-			if ( IsOut_() ) {
-				if ( Commited_ ) {
-					cio::COut << "-> ";
-					Commited_ = false;
-				}
-			}
-
-			Maximum = Driver_.Write( Buffer, Maximum );
-
-			if ( IsOut_() && (Maximum != 0) ) {
-				cio::COutF.Write( Buffer, Maximum );
-				cio::COutF.Commit();
-			}
-
-			return Maximum;
-		}
-		virtual void FDRCommit( bso::sBool Unlock ) override
-		{
-			Driver_.Commit( Unlock );
-			Commited_ = true;
-		}
-		virtual fdr::sTID FDROTake( fdr::sTID Owner ) override
-		{
-			return Driver_.OTake( Owner );
-		}
 	public:
 		void reset( bso::sBool P = true )
 		{
-			if ( P ) {
-				if ( ReadInProgress_ ) {
-					cio::COut << "--" << txf::nl << txf::commit;
-					ReadInProgress_ = false;
-				}
-			}
-
-			tol::reset( P, Driver_, Commited_, ReadInProgress_ );
 			rIODriver_::reset( P );
-			Verbosity_ = v_Undefined;
+			tol::reset( Driver_ );
+			rIODriver_::reset( P );
 		}
 		qCVDTOR( rVerboseIODriver );
 		void Init(
 			const rgstry::rEntry &HostPortEntry,
-			eVerbosity Verbosity );
+			flx::eChannel );
 		bso::sBool IsConnected( void )
 		{
 			return Driver_.IsConnected();

@@ -32,9 +32,13 @@ bso::sBool misc::IsVerboseActivated( void )
 	return sclmisc::BGetBoolean( registry::parameter::Verbose, false );
 }
 
+namespace {
+	const flx::sMarkers Markers_ = { { "<- ", "--\n" }, { "-> " } };
+}
+
 void misc::rVerboseIODriver::Init(
 	const rgstry::rEntry &HostPortEntry,
-	eVerbosity Verbosity )
+	flx::eChannel Channel )
 {
 	qRH
 		str::wString HostPort;
@@ -46,10 +50,7 @@ void misc::rVerboseIODriver::Init(
 		if ( !Driver_.Init( HostPort.Convert( Buffer ), SCK_INFINITE, qRPU ) )
 			sclmisc::ReportAndAbort( message::UnableToConnect, HostPort );
 
-		Verbosity_ = Verbosity;
-		Commited_ = true;
-		ReadInProgress_ = false;
-		rIODriver_::Init( fdr::ts_Default );
+		rIODriver_::Init( Driver_, Channel, ::Markers_, cio::COut );
 	qRR
 	qRT
 	qRE

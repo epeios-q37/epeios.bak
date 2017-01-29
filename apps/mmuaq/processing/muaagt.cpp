@@ -19,7 +19,22 @@
 
 #include "muaagt.h"
 
+#include "cio.h"
+
 using namespace muaagt;
+
+namespace {
+	flx::sMarkers Markers_ = { { "<-", "--\n" }, { "-> " } };
+}
+
+void muaagt::rRack::Init( void )
+{
+	reset();
+
+	MonitorDriver_.Init( NetDriver_, flx::cInAndOut, Markers_, cio::COut );
+
+	// Members will be initialized as needed.
+}
 
 void muaagt::dAgents::Disable_( sRow Agent )
 {
@@ -66,14 +81,14 @@ qRB
 	Core_.Recall( AgentRow, Agent );
 
 	if ( IsEnabled_( AgentRow ) ) {
-		if ( Rack.Driver_.Init(Agent.HostPort.Convert(Buffer), SCK_INFINITE, qRPU) ) {
+		if ( Rack.NetDriver_.Init(Agent.HostPort.Convert(Buffer), SCK_INFINITE, qRPU) ) {
 			switch ( Agent.Protocol() ) {
 			case muaagt::pPOP3:
 				if ( muapo3::Authenticate( Agent.Username, Agent.Password, Rack.POP3(), qRPU ) )
 					Protocol = pPOP3;
 				break;
 			case muaagt::pIMAP:
-				if ( imap_::Connect( Rack.Driver_, Rack.IMAP(), Agent.Username, Agent.Password, qRPU ) )
+				if ( imap_::Connect( Rack.MonitorDriver_, Rack.IMAP(), Agent.Username, Agent.Password, qRPU ) )
 					Protocol = pIMAP;
 				break;
 			default:

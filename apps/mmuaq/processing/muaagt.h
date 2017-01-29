@@ -181,23 +181,19 @@ namespace muaagt {
 	class rRack
 	{
 	private:
-		csdbnc::rIODriver Driver_;
+		csdbnc::rIODriver NetDriver_;
+		flx::rIOMonitor MonitorDriver_;
 		muaima::rSession IMAPSession_;
 	public:
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, Driver_, IMAPSession_ );
+			tol::reset( P, NetDriver_, MonitorDriver_, IMAPSession_ );
 		}
 		qCDTOR( rRack );
-		void Init( void )
-		{
-			reset();
-
-			// Members will be initialized as needed.
-		}
+		void Init( void );
 		fdr::rIODriver &POP3( void )
 		{
-			return Driver_;
+			return MonitorDriver_;
 		}
 		muaima::rSession &IMAP( void )
 		{

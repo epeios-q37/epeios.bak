@@ -40,7 +40,8 @@ void fdr::Purge_(
 	sByte *Buffer,
 	sSize BufferSize )
 {
-	Copy_( Driver, Buffer, BufferSize, flx::VoidODriver );
+	while ( !Driver.EndOfFlow() )
+		Driver.Read( BufferSize, Buffer, fdr::bNonBlocking );
 }
 
 

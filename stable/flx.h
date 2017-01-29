@@ -1492,6 +1492,90 @@ namespace flx {
 	const str::dString &GetString(
 		fdr::rIDriver &Driver,
 		str::dString &String );
+
+	// Channel(s) to monitor.
+	qENUM( Channel ) {
+		cNone,
+		cIn,
+		cOut,
+		cInAndOut,
+		c_amount,
+		c_Undefined
+	};
+
+	typedef fdr::rIODressedDriver rIODriver_;
+
+	struct sMarkers {
+		struct {
+			const char
+				*Before,
+				*After;
+		} In, Out;
+	};
+
+	class rIOMonitor
+	: public rIODriver_
+	{
+	private:
+		qRMV( fdr::rIODriver, D_, Driver_ );
+		qRMV( const sMarkers, M_, Markers_ );
+		qRMV( txf::sOFlow, F_, Flow_ );
+		eChannel Channel_;
+		bso::sBool Commited_;
+		bso::sBool ReadInProgress_;
+		bso::sBool IsIn_( void ) const
+		{
+			return ( Channel_ == cIn ) || ( Channel_ == cInAndOut );
+		}
+		bso::sBool IsOut_( void ) const
+		{
+			return ( Channel_ == cOut ) || ( Channel_ == cInAndOut );
+		}
+	protected:
+		virtual fdr::sSize FDRRead(
+			fdr::sSize Maximum,
+			fdr::sByte *Buffer ) override;
+		virtual void FDRDismiss( bso::sBool Unlock ) override;
+		virtual fdr::sTID FDRITake( fdr::sTID Owner ) override;
+		virtual fdr::sSize FDRWrite(
+			const fdr::sByte *Buffer,
+			fdr::sSize Maximum ) override;
+		virtual void FDRCommit( bso::sBool Unlock ) override;
+		virtual fdr::sTID FDROTake( fdr::sTID Owner ) override;
+	public:
+		void reset( bso::sBool P = true )
+		{
+			if ( P ) {
+				if ( ReadInProgress_ ) {
+					if ( M_().Out.After != NULL )
+						F_() << M_().Out.After << txf::commit;
+					ReadInProgress_ = false;
+				}
+			}
+
+			tol::reset( P, Driver_, Markers_, Flow_, Commited_, ReadInProgress_ );
+			rIODriver_::reset( P );
+			Channel_ = c_Undefined;
+		}
+		qCVDTOR( rIOMonitor );
+		void Init(
+			fdr::rIODriver &Driver,
+			eChannel Channel,
+			const sMarkers &Markers,	// NOT duplicated !
+			txf::sOFlow &Flow )
+		{
+			reset();
+
+			Commited_ = true;
+			ReadInProgress_ = false;
+			rIODriver_::Init( fdr::ts_Default );
+			Driver_ = &Driver;
+			Markers_ = &Markers;
+			Flow_ = &Flow;
+			Channel_ = Channel;
+		}
+	};
+
 }
 
 #endif

@@ -280,8 +280,21 @@ namespace {
 					Body.Append( Byte );
 				else {
 					BodyPart = true;
-					if ( Flow.Get() != ' ' ) // To skip the heading space.
+					switch ( Flow.Get() ) {
+					case ' ':
+						break;// Skipping the heading space.
+					case CR_:
+						if ( Flow.Get() != LF_ )
+							qRGnr();
+						if ( !IsWSP_(Flow.View()) ) {
+							BodyPart = false;
+							Continue = false;
+						}
+						break;
+					default:
 						qRGnr();
+						break;
+					}
 				}
 			} else {
 				if ( BodyPart )

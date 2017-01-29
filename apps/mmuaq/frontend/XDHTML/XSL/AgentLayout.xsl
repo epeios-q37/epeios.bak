@@ -26,6 +26,23 @@
        </input>
       </span>
       <span style="display: flex; justify-content: space-between;">
+       <label>#agentProtocolLabel#</label>
+       <select id="AgentProtocol">
+        <option value="POP3">
+         <xsl:if test="Agent/@Protocol='POP3'">
+          <xsl:attribute name="selected">selected</xsl:attribute>
+         </xsl:if>
+         <xsl:text>POP3</xsl:text>
+        </option>
+        <option value="IMAP">
+         <xsl:if test="Agent/@Protocol='IMAP'">
+          <xsl:attribute name="selected">selected</xsl:attribute>
+         </xsl:if>
+         <xsl:text>IMAP</xsl:text>
+        </option>
+       </select>
+      </span>
+      <span style="display: flex; justify-content: space-between;">
        <label>#agentHostPortLabel#</label>
        <input id="AgentHostPort" title="#agentHostPortTitle#" placeholder="#agentHostPortPlaceholder#" type="text">
         <xsl:attribute name="value">

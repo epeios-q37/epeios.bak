@@ -12,6 +12,10 @@
   <Translation language="fr">Nom : </Translation>
   <Translation language="en">Name: </Translation>
  </Translations>
+ <Translations text="agentProtocolLabel">
+  <Translation language="fr">Protocole : </Translation>
+  <Translation language="en">Protocol: </Translation>
+ </Translations>
  <Translations text="agentNameTitle">
   <Translation language="fr">Désignation de l'agent.</Translation>
   <Translation language="en">Designation of the agent.</Translation>

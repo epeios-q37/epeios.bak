@@ -260,6 +260,82 @@ qRE
 	return String;
 }
 
+fdr::sSize flx::rIOMonitor::FDRRead(
+	fdr::sSize Maximum,
+	fdr::sByte *Buffer )
+{
+	Maximum = D_().Read( Maximum, Buffer, fdr::bNonBlocking );
+
+	if ( IsIn_() ) {
+		if ( Maximum != 0 ) {
+			if ( !ReadInProgress_ ) {
+				if ( M_().In.Before != NULL )
+				F_() << M_().In.Before;
+				ReadInProgress_ = true;
+			}
+
+			F_().Flow().Write( Buffer, Maximum );
+			F_().Commit();
+		}
+	}
+
+	return Maximum;
+}
+
+void flx::rIOMonitor::FDRDismiss( bso::sBool Unlock )
+{
+	if ( ReadInProgress_ )
+		if ( M_().In.After != NULL )
+		F_() << M_().In.After << txf::commit;
+
+	ReadInProgress_ = false;
+
+	return D_().Dismiss( Unlock );
+}
+
+fdr::sTID flx::rIOMonitor::FDRITake( fdr::sTID Owner )
+{
+	return D_().ITake( Owner );
+}
+
+fdr::sSize flx::rIOMonitor::FDRWrite(
+	const fdr::sByte *Buffer,
+	fdr::sSize Maximum )
+{
+	if ( IsOut_() ) {
+		if ( Commited_ ) {
+			if ( M_().Out.Before != NULL )
+				F_() << M_().Out.Before;
+			Commited_ = false;
+		}
+	}
+
+	Maximum = D_().Write( Buffer, Maximum );
+
+	if ( IsOut_() && (Maximum != 0) ) {
+		F_().Flow().Write( Buffer, Maximum );
+		F_().Commit();
+	}
+
+	return Maximum;
+}
+
+void flx::rIOMonitor::FDRCommit( bso::sBool Unlock )
+{
+	if ( IsOut_() ) {
+		if ( M_().Out.After != NULL )
+			F_() << M_().Out.After << txf::commit;
+	}
+	D_().Commit( Unlock );
+	Commited_ = true;
+}
+
+fdr::sTID flx::rIOMonitor::FDROTake( fdr::sTID Owner )
+{
+	return D_().OTake( Owner );
+}
+
+
 Q37_GCTOR( flx )
 {
 	flx::VoidODriver.Init( fdr::ts_Default, flx::aAllowed );

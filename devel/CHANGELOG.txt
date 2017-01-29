@@ -1,5 +1,10 @@
 CHANGELOG for the 'Epeios' framework.
 
+2017-01-29 :
+- FLX :
+	- Introducing 'GetString(...)'.
+	- Introducing 'rIOMonitor'.
+
 2017-01-27 :
 - STR :
 	- Introducing 'qSTRING(s)(l)(...)'.

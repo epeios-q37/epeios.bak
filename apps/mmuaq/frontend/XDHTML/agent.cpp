@@ -114,16 +114,17 @@ void agent::SetCasting(
 AC( SubmitAgent )
 {
 qRH
-	str::wString Name, HostPort, Username, Password;
+	str::wString Name, Protocol, HostPort, Username, Password;
 qRB
-	tol::Init( Name, HostPort, Username, Password );
+	tol::Init( Name, Protocol, HostPort, Username, Password );
 
-	Session.GetContent("AgentName", Name );
-	Session.GetContent("AgentHostPort", HostPort );
-	Session.GetContent("AgentUsername", Username );
-	Session.GetContent("AgentPassword", Password );
+	Session.GetContent( "AgentName", Name );
+	Session.GetContent( "AgentProtocol", Protocol );
+	Session.GetContent( "AgentHostPort", HostPort );
+	Session.GetContent( "AgentUsername", Username );
+	Session.GetContent( "AgentPassword", Password );
 
-	Session.User.UpdateAgent( Name, frdfrntnd::p_Undefined, HostPort, Username, Session.GetBooleanContent( "AgentPasswordToggle" ), Password );
+	Session.User.UpdateAgent( Name, frdfrntnd::GetProtocol( Protocol ), HostPort, Username, Session.GetBooleanContent( "AgentPasswordToggle" ), Password );
 
 	core::SetAgentsLayout( Session );
 qRR

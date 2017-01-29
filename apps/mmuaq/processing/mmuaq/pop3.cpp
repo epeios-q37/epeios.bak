@@ -106,7 +106,7 @@ namespace {
 
 			GetUsernameAndPassword_( Username, Password );
 
-			misc::rVerboseIODriver::Init( registry::parameter::pop3::HostPort, Activate ? misc::vOut : misc::vNone );
+			misc::rVerboseIODriver::Init( registry::parameter::pop3::HostPort, Activate ? flx::cOut : flx::cNone );
 
 			Indicator = base::Authenticate( Username, Password, *this, Body );
 		qRR

@@ -130,7 +130,7 @@ namespace{
 		void Init( bso::sBool Verbose )
 		{
 			Connected_ = false;
-			misc::rVerboseIODriver::Init( registry::parameter::imap::HostPort, Verbose ? misc::vOut : misc::vNone );
+			misc::rVerboseIODriver::Init( registry::parameter::imap::HostPort, Verbose ? flx::cOut : flx::cNone );
 			muaima::rConsole::Init( *this );
 			muaima::Connect( *this );
 			DumpResponses_( false, Verbose, *this );
@@ -319,7 +319,7 @@ namespace {
 
 			GetUsernameAndPassword_( Username, Password );
 
-			misc::rVerboseIODriver::Init( registry::parameter::imap::HostPort, misc::IsVerboseActivated() ? misc::vInAndOut : misc::vNone );
+			misc::rVerboseIODriver::Init( registry::parameter::imap::HostPort, misc::IsVerboseActivated() ? flx::cInAndOut : flx::cNone );
 
 			Message.Init();
 
@@ -444,7 +444,6 @@ qRB
 	UID.Init();
 	if ( Session.GetUID( Folder, sclmisc::MGetU32( registry::parameter::MailID ), UID, qRPU ) ) {
 		misc::Dump( UID.GetDriver() );
-
 		Handle_( UID.EndStatus( Message ), Message );
 	} else if ( Handle_( Session.EndStatus( Message ), Message ) == sOK ) {
 		Message.Init();

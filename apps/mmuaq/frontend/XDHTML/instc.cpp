@@ -110,6 +110,7 @@ qRB
 		Writer.PushTag( "Agent" );
 
 		Writer.PutAttribute( "Name", Name );
+		Writer.PutAttribute( "Protocol", frdfrntnd::GetLabel( Protocol ) );
 		Writer.PutAttribute( "HostPort", HostPort );
 		Writer.PutAttribute( "Username", Username );
 
