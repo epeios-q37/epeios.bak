@@ -350,6 +350,7 @@ namespace instc {
 		}
 		void UpdateAgent(
 			const dString &Name,
+			frdfrntnd::eProtocol Protocol,
 			const dString &HostPort,
 			const dString &Username,
 			bso::sBool PasswordIsSet,
@@ -358,7 +359,7 @@ namespace instc {
 			if ( Agent_.Current != UndefinedAgent )
 				F_().UpdateAgent( Agent_.Current, Name, HostPort, Username, PasswordIsSet, Password );
 			else 
-				Agent_.Current = F_().CreateAgent( Name, HostPort, Username, Password );
+				Agent_.Current = F_().CreateAgent( Name, Protocol, HostPort, Username, Password );
 
 			Agent_.Edition = false;
 		}

@@ -175,8 +175,10 @@ namespace muaima {
 		bso::sBool Select(
 			const str::dString &Folder,
 			qRPD );
+		/* Calling a method which implies a folder will 'select' this folder, so 'CurrentFolder' can be use as 'Folder'
+		for the other methods. */
 		bso::sBool GetMailAmount(
-			const str::dString &Folder,
+			const str::dString &Folder,	// Can NOT be 'CurrentFolder', as to retrieve the amount a 'Select' must be made.
 			bso::sUInt &Amount,
 			qRPD );
 		bso::sBool GetFolders(

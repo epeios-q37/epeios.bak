@@ -27,6 +27,88 @@
 
 using namespace muaacc;
 
+namespace {
+	typedef crt::qCRATEdl( muamel::dId ) dIds;
+	qW( Ids );
+
+	typedef bch::qBUNCHdl( muamel::sRow ) dMRows;
+	qW( MRows );
+
+	void Add_(
+		muaagt::sRow Agent,
+		const muamel::dIds &Ids,
+		const muamel::dRows &Mails,
+		muatrk::dTracker &Tracker,
+		muadir::dDirectory &Directory,
+		dMRows &Rows )
+	{
+	qRH
+		sdr::sRow Row = qNIL;
+		muamel::sRow Mail = qNIL;
+	qRB
+		Row = Ids.First();
+
+		while ( Row != qNIL ) {
+			if ( ( Mail = Directory.Search( Ids( Row ), Mails ) ) == qNIL ) {
+				Mail = Directory.AddMail(Ids( Row ) );
+				Tracker.Link( Mail, Agent );
+			}
+
+			Rows.Add( Mail );
+
+			Row = Ids.Next( Row );
+		}
+	qRR
+	qRT
+	qRE
+	}
+
+	void Remove_(
+		muaagt::sRow AgentRow,
+		const dMRows &New,
+		const muamel::dRows &Old,
+		muatrk::dTracker &Tracker,
+		muadir::dDirectory &Directory )
+	{
+		sdr::sRow Row = Old.First(), Next = qNIL;
+		muamel::sRow Mail = qNIL;
+
+		while ( Row != qNIL ) {
+			Next = Old.Next( Row );
+
+			if ( New.Search( Mail = Old( Row ) ) == qNIL ) {
+				Directory.Remove( Mail );
+				Tracker.Remove( Mail );
+			}
+
+			Row = Next;
+		}
+	}
+
+}
+
+void muaacc::Update(
+	muaagt::sRow Agent,
+	const muamel::dIds &Ids,
+	muatrk::dTracker &Tracker,
+	muadir::dDirectory &Directory )
+{
+qRH
+	wMRows New, Old;
+qRB
+	Old.Init();
+	Tracker.GetMails( Agent, Old );
+
+	New.Init();
+	Add_( Agent, Ids, Old, Tracker, Directory, New );
+
+	Remove_( Agent, New, Old, Tracker, Directory );
+qRR
+qRT
+qRE
+}
+
+
 void muaacc::dAccount::RemoveAgent( muaagt::sRow Agent )
 {
 qRH
@@ -62,10 +144,10 @@ namespace update_ {
 			Rack.Init();
 			switch ( Agents.InitAndAuthenticateIfEnabled( Agent, Rack ) ) {
 			case muaagt::pPOP3:
-				muaaccp3::Update( Rack.POP3(), Tracker, Directory );
+				muaaccp3::Update( Agent, Rack.POP3(), Tracker, Directory );
 				break;
 			case muaagt::pIMAP:
-				muaaccim::Update( Rack.IMAP(), Tracker, Directory );
+				muaaccim::Update( Agent, Rack.IMAP(), Tracker, Directory );
 				break;
 			case muaagt::p_Undefined:
 				break;
@@ -115,7 +197,7 @@ namespace get_fields_ {
 			muaagt::dAgents &Agents,
 			str::dStrings &Subjects,
 			muaagt::dRows &CorrespondingAgents,
-			muamel::dRows &Available )
+			muamel::dRows &Availables )
 			{
 			qRH
 				muaagt::rRack Rack;
@@ -124,10 +206,10 @@ namespace get_fields_ {
 				Rack.Init();
 				switch ( Agents.InitAndAuthenticateIfEnabled( Agent, Rack ) ) {
 				case muaagt::pPOP3:
-					muaaccp3::GetFields( Wanted, Ids, Agent, Rack.POP3(), Subjects, CorrespondingAgents, Available );
+					muaaccp3::GetFields( Wanted, Ids, Agent, Rack.POP3(), Subjects, CorrespondingAgents, Availables );
 					break;
 				case muaagt::pIMAP:
-					muaaccim::GetFields( Wanted, Ids, Agent, Rack.IMAP(), Subjects, CorrespondingAgents, Available );
+					muaaccim::GetFields( Wanted, Ids, Agent, Rack.IMAP(), Subjects, CorrespondingAgents, Availables );
 					break;
 				case muaagt::p_Undefined:
 					break;
@@ -149,7 +231,7 @@ namespace get_fields_ {
 		muaagt::dAgents &Agents,
 		str::dStrings &Subjects,
 		muaagt::dRows &CorrespondingAgents,
-		muamel::dRows &Available )
+		muamel::dRows &Availables )
 	{
 	qRH
 		muamel::wIds Ids;
@@ -162,7 +244,7 @@ namespace get_fields_ {
 			Ids.Init();
 			Directory.GetIds( Owned, Ids );
 
-			u2s_::Get( Owned, Ids, AgentRow, Agents, Subjects, CorrespondingAgents, Available );
+			u2s_::Get( Owned, Ids, AgentRow, Agents, Subjects, CorrespondingAgents, Availables );
 		}
 	qRR
 	qRT
@@ -176,12 +258,12 @@ namespace get_fields_ {
 		muaagt::dAgents &Agents,
 		str::dStrings &Subjects,
 		muaagt::dRows &CorrespondingAgents,
-		muamel::dRows &Available )
+		muamel::dRows &Availables )
 	{
 		muaagt::sRow Row = Agents.First();
 
 		while ( Row != qNIL ) {
-			Get_( Directory, Tracker, Wanted, Row, Agents, Subjects, CorrespondingAgents, Available );
+			Get_( Directory, Tracker, Wanted, Row, Agents, Subjects, CorrespondingAgents, Availables );
 
 			Row = Agents.Next( Row);
 		}
@@ -193,9 +275,9 @@ void muaacc::dAccount::GetFields(
 	const muamel::dRows &Wanted,
 	str::dStrings &Subjects,
 	muaagt::dRows &CorrespondingAgents,
-	muamel::dRows &Available )
+	muamel::dRows &Availables )
 {
-	return get_fields_::Get( Directory_, Tracker_, Wanted, Agents_, Subjects, CorrespondingAgents, Available ); 
+	return get_fields_::Get( Directory_, Tracker_, Wanted, Agents_, Subjects, CorrespondingAgents, Availables ); 
 }
 
 const str::dString &muaacc::dAccount::GetMail(

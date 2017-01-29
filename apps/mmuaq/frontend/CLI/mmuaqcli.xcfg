@@ -112,6 +112,14 @@
     <Translation language="fr">nom</Translation>
     <Translation language="en">name</Translation>
    </Translations>
+   <Translations text="ProtocolArgumentDescription">
+    <Translation language="fr">'POP3' ou 'IMAP'.</Translation>
+    <Translation language="en">'POP3' or 'IMAP'.</Translation>
+   </Translations>
+   <Translations text="ProtocolArgumentLabel">
+    <Translation language="fr">protocole</Translation>
+    <Translation language="en">protocol</Translation>
+   </Translations>
    <Translations text="HostPortArgumentDescription">
     <Translation language="fr">adresse et service de l'agent.</Translation>
     <Translation language="en">address and service of the agent.</Translation>
@@ -160,7 +168,7 @@
    <!-- Commandes : pas de 'Path' (vaut 'Parameters/Command'), ni de 'Value'. -->
    <Argument id="AboutBackendCommand" Description="AboutBackendCommandDescription" long="about-backend" Value="AboutBackend" Usage=""/>
    <Argument id="CheckCommand" Description="CheckCommandDescription" long="check" Value="Check" Usage=""/>
-   <Argument id="CreateAgentCommand" Description="CreateAgentCommandDescription" long="create-agent" Value="CreateAgent" Usage="%NameArgument% %HostPortArgument% %UsernameArgument% %PasswordArgument%"/>
+   <Argument id="CreateAgentCommand" Description="CreateAgentCommandDescription" long="create-agent" Value="CreateAgent" Usage="%NameArgument% %ProtocolArgument% %HostPortArgument% %UsernameArgument% %PasswordArgument%"/>
    <Argument id="CreateFolderCommand" Description="CreateFolderCommandDescription" long="create-folder" Value="CreateFolder" Usage="%NameArgument% [%ParentArgument%]"/>
    <Argument id="UpdateAgentCommand" Description="UpdateAgentCommandDescription" long="update-agent" Value="UpdateAgent" Usage="%AgentArgument% %NameArgument% %HostPortArgument% %UsernameArgument% [%PasswordArgument%]"/>
    <Argument id="UpdateFolderCommand" Description="UpdateFolderCommandDescription" long="rename-folder" Value="UpdateFolder" Usage="%FolderArgument% %NameArgument%"/>
@@ -184,6 +192,7 @@
    <Argument id="NameArgument" Description="NameArgumentDescription" Path="Name" Label="NameArgumentLabel"/>
    <Argument id="ParentArgument" Description="ParentArgumentDescription" Path="Parent" Label="ParentArgumentLabel"/>
    <Argument id="HostPortArgument" Description="HostPortArgumentDescription" Path="HostPort" Label="HostPortArgumentLabel"/>
+   <Argument id="ProtocolArgument" Description="ProtocolArgumentDescription" Path="Protocol" Label="ProtocolArgumentLabel"/>
    <Argument id="UsernameArgument" Description="UsernameArgumentDescription" Path="Username" Label="UsernameArgumentLabel"/>
    <Argument id="PasswordArgument" Description="PasswordArgumentDescription" Path="Password" Label="PasswordArgumentLabel"/>
    <!-- Affectations des arguments libres-->
@@ -194,9 +203,10 @@
     <Layout command="Agents"/>
     <Layout command="CreateAgent">
      <Link index="0" Target="NameArgument"/>
-     <Link index="1" Target="HostPortArgument"/>
-     <Link index="2" Target="UsernameArgument"/>
-     <Link index="3" Target="PasswordArgument"/>
+     <Link index="1" Target="ProtocolArgument"/>
+     <Link index="2" Target="HostPortArgument"/>
+     <Link index="3" Target="UsernameArgument"/>
+     <Link index="4" Target="PasswordArgument"/>
     </Layout>
     <Layout command="CreateFolder">
      <Link index="0" Target="NameArgument"/>

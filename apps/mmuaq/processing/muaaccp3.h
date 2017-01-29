@@ -33,6 +33,7 @@
 
 namespace muaaccp3 {
 	void Update(
+		muaagt::sRow Agent,
 		fdr::rIODriver &Driver,
 		muatrk::dTracker &Tracker,
 		muadir::dDirectory &Directory );
@@ -44,7 +45,7 @@ namespace muaaccp3 {
 		fdr::rIODriver &Driver,
 		str::dStrings &Subjects,
 		muaagt::dRows &CorrespondingAgents,
-		muamel::dRows &Available );
+		muamel::dRows &Availables );
 
 	const str::dString &GetMail(
 		const muamel::dId &dId,

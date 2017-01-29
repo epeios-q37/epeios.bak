@@ -33,6 +33,7 @@
 
 namespace muaaccim {
 	void Update(
+		muaagt::sRow Agent,
 		muaima::rSession &Session,
 		muatrk::dTracker &Tracker,
 		muadir::dDirectory &Directory );
@@ -44,7 +45,7 @@ namespace muaaccim {
 		muaima::rSession &Session,
 		str::dStrings &Subjects,
 		muaagt::dRows &CorrespondingAgents,
-		muamel::dRows &Available );
+		muamel::dRows &Availables );
 
 	const str::dString &GetMail(
 		const muamel::dId &Id,

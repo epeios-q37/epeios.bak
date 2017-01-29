@@ -178,6 +178,28 @@ namespace {
 
 #define G( name )	sclmisc::MGetValue( registry::parameter::name, name )
 
+	namespace {
+		// Get protocol from registry.
+		eProtocol GetProtocol_( void )
+		{
+			eProtocol Protocol = p_Undefined;
+		qRH
+			str::wString Pattern;
+		qRB
+			tol::Init( Pattern);
+			sclmisc::MGetValue( registry::parameter::Protocol, Pattern );
+
+			Protocol = GetProtocol( Pattern );
+
+			if ( Protocol == p_Undefined )
+				sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( registry::parameter::Protocol ) ;
+		qRR
+		qRT
+		qRE
+			return Protocol;
+		}
+	}
+
 	void CreateAgent_( void )
 	{
 	qRH
@@ -191,7 +213,7 @@ namespace {
 		G( Password );
 
 		Rack.Init();
-		Rack.Frontend.CreateAgent( Name, HostPort, Username, Password );
+		Rack.Frontend.CreateAgent( Name, GetProtocol_(), HostPort, Username, Password );
 	qRR
 	qRE
 	qRT
@@ -290,11 +312,12 @@ namespace {
 		agent::sId Agent = agent::Undefined;
 		str::wString Name, HostPort, Username;
 		bso::sBool Enabled = false;
+		eProtocol Protocol = p_Undefined;
 	qRB
 		*Agent = sclmisc::MGetUInt( registry::parameter::Agent );
 
 		tol::Init( Rack, Name, HostPort, Username );
-		Rack.Frontend.GetAgent( Agent, Name, HostPort, Username, Enabled );
+		Rack.Frontend.GetAgent( Agent, Name, Protocol, HostPort, Username, Enabled );
 
 		cio::COut << Name;
 		
@@ -303,7 +326,7 @@ namespace {
 		else
 			cio::COut << '!';
 
-		cio::COut << ' ' << Username << '@' << HostPort << txf::nl;
+		cio::COut << ' ' << GetLabel( Protocol ) << ' ' << Username << '@' << HostPort << txf::nl;
 	qRR
 	qRE
 	qRT

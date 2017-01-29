@@ -244,6 +244,22 @@ bso::bool__ flx::exec_ioflow_driver___::Init(
 	return POpen2_( Command, _In, _Out, _Err );
 }
 
+const str::dString &flx::GetString(
+	fdr::rIDriver &Driver,
+	str::dString &String )
+{
+qRH
+	flx::rStringODriver SDriver;
+qRB
+	SDriver.Init( String, fdr::ts_Default );
+
+	fdr::Copy( Driver, SDriver );
+qRR
+qRT
+qRE
+	return String;
+}
+
 Q37_GCTOR( flx )
 {
 	flx::VoidODriver.Init( fdr::ts_Default, flx::aAllowed );

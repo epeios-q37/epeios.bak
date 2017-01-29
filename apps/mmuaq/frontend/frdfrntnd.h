@@ -41,6 +41,62 @@ namespace frdfrntnd {
 	SCLF_I( folder, Folder, Id );
 	SCLF_I( mail, Mail, Id );
 
+	qENUM( Protocol ) {
+		pPOP3,
+		pIMAP,
+		p_amount,
+		p_Undefined
+	};
+
+	inline const char *GetLabel( eProtocol Protocol )
+	{
+		switch ( Protocol ) {
+		case pPOP3:
+			return "POP3";
+			break;
+		case pIMAP:
+			return "IMAP";
+			break;
+		default:
+			qRGnr();
+			break;
+		}
+
+		return NULL;	// To avoid a warning.
+	}
+
+	inline bso::sBool GetProtocolAsBoolean( eProtocol Protocol )
+	{
+		switch ( Protocol ) {
+		case pPOP3:
+			return false;
+			break;
+		case pIMAP:
+			return true;
+			break;
+		default:
+			qRGnr();
+			break;
+		}
+
+		return false;	// To avoid a warning.
+	}
+
+	inline eProtocol GetProtocolFromBoolean( bso::sBool Value )
+	{
+		return ( GetProtocolAsBoolean( pPOP3 ) == Value ? pPOP3 : pIMAP );
+	}
+
+	inline eProtocol GetProtocol( const str::dString &Pattern )
+	{
+		if ( Pattern == GetLabel( pPOP3 ) )
+			return pPOP3;
+		else if ( Pattern == GetLabel( pIMAP ) )
+			return pIMAP;
+		else
+			return p_Undefined;
+	}
+
 	class rFrontend
 	: public rFrontend_,
 	  public cFrontend_
@@ -105,21 +161,26 @@ namespace frdfrntnd {
 		void GetAgent(
 			sAgent Agent,
 			dString &Name,
+			eProtocol &Protocol,
 			dString &HostPort,
 			dString &Username,
 			bso::sBool &Enabled )
 		{
-			Statics.MUAGetAgent_1( *Agent, Name, HostPort, Username, Enabled );
+			bso::sBool ProtocolBool = false;
+			Statics.MUAGetAgent_1( *Agent, Name, ProtocolBool, HostPort, Username, Enabled );
+
+			Protocol = GetProtocolFromBoolean( ProtocolBool );
 		}
 		sAgent CreateAgent(
 			const dString &Name,
+			eProtocol Protocol,
 			const dString &HostPort,
 			const dString &Username,
 			const dString &Password )
 		{
 			sAgent Agent = UndefinedAgent;
 
-			Statics.MUAUpdateAgent_1( *Agent, Name, HostPort, Username, true, Password, *Agent );
+			Statics.MUAUpdateAgent_1( *Agent, Name, GetProtocolAsBoolean( Protocol ), HostPort, Username, true, Password, *Agent );
 
 			return Agent;
 		}
@@ -134,7 +195,7 @@ namespace frdfrntnd {
 			if ( Agent == UndefinedAgent )
 				qRGnr();
 
-			Statics.MUAUpdateAgent_1( *Agent, Name, HostPort, Username, PasswordIsSet, Password, *Agent );
+			Statics.MUAUpdateAgent_1( *Agent, Name, false, HostPort, Username, PasswordIsSet, Password, *Agent );	// Protocol doesn't matter (is ignored) on update.
 		}
 		void RemoveAgent( sAgent Agent )
 		{

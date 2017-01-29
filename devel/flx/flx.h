@@ -1487,6 +1487,11 @@ namespace flx {
 
 	typedef flx::bunch_iflow_driver___<str::string_, bso::char__, FDR__DEFAULT_CACHE_SIZE> rStringIDriver;
 	typedef flx::bunch_oflow_driver___<str::string_, bso::char__> rStringODriver;
+
+	// Put the content of 'Driver' into 'String' until EOF.
+	const str::dString &GetString(
+		fdr::rIDriver &Driver,
+		str::dString &String );
 }
 
 #endif

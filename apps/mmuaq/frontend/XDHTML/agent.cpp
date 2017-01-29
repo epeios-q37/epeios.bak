@@ -123,7 +123,7 @@ qRB
 	Session.GetContent("AgentUsername", Username );
 	Session.GetContent("AgentPassword", Password );
 
-	Session.User.UpdateAgent( Name, HostPort, Username, Session.GetBooleanContent( "AgentPasswordToggle" ), Password );
+	Session.User.UpdateAgent( Name, frdfrntnd::p_Undefined, HostPort, Username, Session.GetBooleanContent( "AgentPasswordToggle" ), Password );
 
 	core::SetAgentsLayout( Session );
 qRR

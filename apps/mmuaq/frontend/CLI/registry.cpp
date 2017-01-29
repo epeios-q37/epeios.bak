@@ -25,6 +25,7 @@ using namespace registry;
 
 P( Agent );
 P( Folder );
+P( Protocol );
 P( HostPort );
 P( Mail );
 P( Name );

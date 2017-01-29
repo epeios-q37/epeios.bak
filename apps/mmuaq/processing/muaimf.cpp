@@ -305,6 +305,30 @@ namespace {
 	}
 }
 
+const str::dString &muaimf::GetField(
+	eField Field,
+	fdr::rIDriver &Driver,
+	str::dString &Body )
+{
+qRH
+	wFields Fields;
+	muaimf::sFRow Row = qNIL;
+qRB
+	Fields.Init();
+	muaimf::Fill( Driver, Fields );
+
+	Row = Fields.Search( muaimf::fSubject );
+
+	if ( Row == qNIL )
+		qRGnr();
+
+	Fields.GetBody( Row, Body );
+qRR
+qRT
+qRE
+	return Body;
+}
+
 void muaimf::Fill(
 	flw::sIFlow &Flow,
 	dFields &Fields )

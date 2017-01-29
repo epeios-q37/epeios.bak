@@ -34,6 +34,7 @@ namespace registry {
 			Parent,
 			Mail,
 			Name,
+			Protocol,
 			HostPort,
 			Username,
 			Password;

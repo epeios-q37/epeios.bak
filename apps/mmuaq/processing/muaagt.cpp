@@ -43,7 +43,7 @@ namespace {
 		using namespace muaima;
 		inline bso::sBool Connect(
 			fdr::rIODriver &Driver,
-			muaima::rSession Session,
+			muaima::rSession &Session,
 			const str::dString &Username,
 			const str::dString &Password,
 			qRPN )
@@ -76,7 +76,6 @@ qRB
 				if ( imap_::Connect( Rack.Driver_, Rack.IMAP(), Agent.Username, Agent.Password, qRPU ) )
 					Protocol = pIMAP;
 				break;
-
 			default:
 				qRGnr();
 				break;

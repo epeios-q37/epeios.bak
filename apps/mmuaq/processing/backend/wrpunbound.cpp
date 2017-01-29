@@ -505,7 +505,7 @@ DEC( GetMailsFields, 1 )
 {
 qRH
 	ACCOUNTh;
-	muamel::wRows Wanted, Available;
+	muamel::wRows Wanted, Availables;
 	muaagt::wRows Agents;
 qRB
 	ACCOUNTb;
@@ -521,12 +521,12 @@ qRB
 	fblbkd::dIds &Ids = Request.IdsOut();
 	fblbkd::dStrings &Subjects = Request.StringsOut();
 
-	tol::Init( Agents, Available );
+	tol::Init( Agents, Availables );
 
 	if ( Wanted.Amount() != 0 )
-		Account.GetFields( Wanted, Subjects, Agents, Available );
+		Account.GetFields( Wanted, Subjects, Agents, Availables );
 
-	fbltyp::Convert( Available, Ids );
+	fbltyp::Convert( Availables, Ids );
 	fbltyp::Convert( Agents, Request.IdsOut() );
 qRR 
 qRT

@@ -99,12 +99,13 @@ void instc::rUser::DumpCurrentAgent( xml::dWriter &Writer )
 {
 qRH
 	wString Name, HostPort, Username; 
+	frdfrntnd::eProtocol Protocol = frdfrntnd::p_Undefined;
 	bso::sBool Enabled = false;
 qRB
 	if ( Agent_.Current != UndefinedAgent ) {
 
 		tol::Init( Name, HostPort, Username );
-		F_().GetAgent( Agent_.Current, Name, HostPort, Username, Enabled );
+		F_().GetAgent( Agent_.Current, Name, Protocol, HostPort, Username, Enabled );
 
 		Writer.PushTag( "Agent" );
 

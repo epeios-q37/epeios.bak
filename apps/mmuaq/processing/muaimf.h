@@ -49,7 +49,7 @@ namespace muaimf {
 
 	eField GetField( const str::dString &Label );
 
-	// Not thread-safe.
+	// NOT thread-safe.
 	const char *GetWording( eField Field );
 
 	qROW( SRow_ );	// String row.
@@ -158,6 +158,11 @@ namespace muaimf {
 
 	typedef dFields dHeader;
 	qW( Header );
+
+	const str::dString &GetField(
+		eField Field,
+		fdr::rIDriver &Driver,
+		str::dString &Body );
 
 	void Fill(
 		flw::sIFlow &Flow,

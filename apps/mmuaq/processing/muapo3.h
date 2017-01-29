@@ -357,17 +357,14 @@ namespace muapo3 {
 		str::dString &Body,
 		qRPD );
 
-	typedef str::dString dUIDL;
-	typedef str::wString wUIDL;
-
-	typedef str::dStrings dUIDLs;
-	typedef str::wStrings wUIDLs;
+	qSTRING( UIDL );
+	qSTRINGSl( UIDLs );
 
 	class cUIDL {
 	protected:
 		virtual void MUAPO3OnUIDL(
 			sNumber Number,
-			const dUIDL &UIDL	) = 0;
+			const dUIDL &UIDL ) = 0;
 	public:
 		qCALLBACK( UIDL );
 		void OnUIDL(

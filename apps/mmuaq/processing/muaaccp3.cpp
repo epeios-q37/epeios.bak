@@ -19,91 +19,13 @@
 
 #include "muaaccp3.h"
 
+#include "muaacc.h"
 #include "muaimf.h"
 
 using namespace muaaccp3;
 
-namespace {
-	typedef crt::qCRATEdl( muamel::dId ) dIds;
-	qW( Ids );
-
-	typedef bch::qBUNCHdl( muamel::sRow ) dMRows;
-	qW( MRows );
-
-	void Add_(
-		muaagt::sRow Agent,
-		const muapo3::dUIDLs &Ids,
-		const muamel::dRows &Mails,
-		muatrk::dTracker &Tracker,
-		muadir::dDirectory &Directory,
-		dMRows &Rows )
-	{
-	qRH
-		sdr::sRow Row = qNIL;
-		muamel::sRow Mail = qNIL;
-	qRB
-		Row = Ids.First();
-
-		while ( Row != qNIL ) {
-			if ( ( Mail = Directory.Search( Ids( Row ), Mails ) ) == qNIL ) {
-				Mail = Directory.AddMail(Ids( Row ) );
-				Tracker.Link( Mail, Agent );
-			}
-
-			Rows.Add( Mail );
-
-			Row = Ids.Next( Row );
-		}
-	qRR
-	qRT
-	qRE
-	}
-
-	void Remove_(
-		muaagt::sRow AgentRow,
-		const dMRows &New,
-		const muamel::dRows &Old,
-		muatrk::dTracker &Tracker,
-		muadir::dDirectory &Directory )
-	{
-		sdr::sRow Row = Old.First(), Next = qNIL;
-		muamel::sRow Mail = qNIL;
-
-		while ( Row != qNIL ) {
-			Next = Old.Next( Row );
-
-			if ( New.Search( Mail = Old( Row ) ) == qNIL ) {
-				Directory.Remove( Mail );
-				Tracker.Remove( Mail );
-			}
-
-			Row = Next;
-		}
-	}
-
-	void Update_(
-		muaagt::sRow Agent,
-		const muapo3::dUIDLs &Ids,
-		muatrk::dTracker &Tracker,
-		muadir::dDirectory &Directory )
-	{
-	qRH
-		wMRows New, Old;
-	qRB
-		Old.Init();
-		Tracker.GetMails( Agent, Old );
-
-		New.Init();
-		Add_( Agent, Ids, Old, Tracker, Directory, New );
-
-		Remove_( Agent, New, Old, Tracker, Directory );
-	qRR
-	qRT
-	qRE
-	}
-}
-
 void muaaccp3::Update(
+	muaagt::sRow Agent,
 	fdr::rIODriver &Driver,
 	muatrk::dTracker &Tracker,
 	muadir::dDirectory &Directory )
@@ -115,6 +37,8 @@ qRB
 	tol::Init( Numbers, UIDLs );
 
 	muapo3::GetUIDLs( Driver, Numbers, UIDLs );
+
+	muaacc::Update( Agent, UIDLs, Tracker, Directory );
 
 	muapo3::Quit( Driver );
 qRR
@@ -136,7 +60,7 @@ namespace {
 				const dUIDLs &AllUIDLs,
 				const dNumbers &AllNumbers,
 				dNumbers &Numbers,
-				muamel::dRows &Available )
+				muamel::dRows &Availables )
 			{
 				if ( UIDLs.Amount() != Wanted.Amount() )
 					qRGnr();
@@ -149,7 +73,7 @@ namespace {
 
 					if ( UIDLRow != qNIL ) {
 						Numbers.Add( AllNumbers( UIDLRow ) );
-						Available.Append( Wanted( Row ) );
+						Availables.Append( Wanted( Row ) );
 					}
 
 					Row = UIDLs.Next( Row );
@@ -162,7 +86,7 @@ namespace {
 			const muamel::dIds &Ids,
 			fdr::rIODriver &Driver,
 			dNumbers &Numbers,
-			muamel::dRows &Available )				{
+			muamel::dRows &Availables )				{
 		qRH
 			muapo3::wNumbers AllNumbers;
 			muapo3::wUIDLs AllUIDLs;
@@ -171,7 +95,7 @@ namespace {
 
 			muapo3::GetUIDLs( Driver, AllNumbers, AllUIDLs );
 
-			Get_( Wanted, Ids, AllUIDLs, AllNumbers, Numbers, Available );
+			Get_( Wanted, Ids, AllUIDLs, AllNumbers, Numbers, Availables );
 		qRR
 		qRT
 		qRE
@@ -188,26 +112,14 @@ namespace {
 			{
 			qRH
 				muapo3::hBody Body;
-				muaimf::wFields Fields;
 				str::wString Subject;
-				muaimf::sFRow Row = qNIL;
 			qRB
-				if ( Number != 0 ) {	// 'Number' can be 0 it the corresponding 'UIDL' was not found (mail erased).
-					muapo3::GetHeader( Number, Driver, Body );
+				muapo3::GetHeader( Number, Driver, Body );
 
-					Fields.Init();
-					muaimf::Fill( Body.GetDriver(), Fields );
+				tol::Init( Subject );
+				muaimf::GetField( muaimf::fSubject, Body.GetDriver(), Subject );
 
-					Subject.Init();
-					Row = Fields.Search( muaimf::fSubject );
-
-					if ( Row == qNIL )
-						qRGnr();
-
-					Subject.Init();
-					Fields.GetBody( Row, Subject );
-					Subjects.Add( Subject );
-				}
+				Subjects.Add( Subject );
 			qRR
 			qRT
 			qRE
@@ -225,7 +137,6 @@ namespace {
 
 			while ( Row != qNIL ) {
 				Get_( Numbers( Row ), Driver, Subjects );
-
 				Agents.Add( OwningAgent );
 
 				Row = Numbers.Next( Row );
@@ -234,7 +145,6 @@ namespace {
 	}
 }
 
-
 void muaaccp3::GetFields(
 	const muamel::dRows &Wanted,
 	const muamel::dIds &Ids,
@@ -242,13 +152,13 @@ void muaaccp3::GetFields(
 	fdr::rIODriver &Driver,
 	str::dStrings &Subjects,
 	muaagt::dRows &CorrespondingAgents,
-	muamel::dRows &Available )
+	muamel::dRows &Availables )
 {
 qRH
 	muapo3::wNumbers Numbers;
 qRB
 	tol::Init( Numbers );
-	::u2n_::Get( Wanted, Ids, Driver, Numbers, Available );
+	::u2n_::Get( Wanted, Ids, Driver, Numbers, Availables );
 
 	n2s_::Get( Numbers, Agent, Driver, Subjects, CorrespondingAgents );
 

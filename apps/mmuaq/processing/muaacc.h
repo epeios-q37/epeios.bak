@@ -40,6 +40,12 @@
 namespace muaacc {
 	qROW( Row );	// Account row.
 
+	void Update(
+		muaagt::sRow Agent,
+		const muamel::dIds &Ids,
+		muatrk::dTracker &Tracker,
+		muadir::dDirectory &Directory );
+
 	class cProvider
 	{
 	protected:
