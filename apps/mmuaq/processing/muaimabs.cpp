@@ -177,14 +177,11 @@ void muaimabs::rDriverBase_::HandleLiteralContext_(
 		else
 			Flow.Skip( 2 );
 		Context_ = _::cFree;
-	}
-	else if ( !isdigit( Byte ) ) {
+	} else if ( !isdigit( Byte ) ) {
 		qRGnr();
-	}
-	else if ( Force_ < ((bso::SizeMax / 10) - 1) ) {
+	} else if ( Force_ < ((bso::SizeMax / 10) - 1) ) {
 		Force_ = Force_ * 10 + (Byte - '0');
-	}
-	else
+	} else
 		qRLmt();
 
 	if ( Delimiter_ != dLiteral )

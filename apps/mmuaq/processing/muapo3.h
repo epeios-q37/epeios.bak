@@ -17,7 +17,7 @@
     along with 'MUAq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// MUA Post Office protocol 3 (POP3 - RFC 1939).
+// MUA Post Office Protocol 3 (POP3 - RFC 1939).
 
 #ifndef MUAPO3_INC_
 # define MUAPO3_INC_

@@ -4,8 +4,8 @@
 	<xpp:expand value-of="q37.xpp"/>
 	<xpp:expand select="epeios.xlcl"/>
 	<Translations text="ProgramDescription">
-		<Translation language="fr">Utilitaire de gestion de l'application 'MMUAq'.</Translation>
-		<Translation language="en">Management tool for the 'MMUAq' application.</Translation>
+		<Translation language="fr">Utilitaire d'aide au développement de l'application 'MMUAq'.</Translation>
+		<Translation language="en">Development help tool for the 'MMUAq' application.</Translation>
 	</Translations>
  <Translations text="Error">
   <Translation language="fr">Erreur : '%1'.</Translation>

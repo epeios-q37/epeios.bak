@@ -1,5 +1,7 @@
 ***** MMUAq changelog *****
 
+2017-01-30 : PUBLICATION !
+
 2017-01-29 :
 - GLOBAL :
 	- Fixing bad handling of field name followed by a ':CRLF'.

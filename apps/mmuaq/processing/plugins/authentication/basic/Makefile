@@ -42,9 +42,9 @@ mods += lck sck txmtbl
 mods += csdbnc 
 mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
 mods += sclplugin 
-mods += muaacc muaagt muabsc muadir muafld 
-mods += muaimf muainf muamel muapo3 muaplg 
-mods += muatrk 
+mods += muaacc muaaccim muaaccp3 muaagt muabsc 
+mods += muadir muafld muaimf muaima muaimabs 
+mods += muainf muamel muapo3 muaplg muatrk 
 mods += registry 
 
 pmods += pllio 
@@ -358,7 +358,7 @@ ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20161231"\"
+copt += -DVERSION=\""20170130"\"
 copt += -DCOPYRIGHT_YEARS=\""2016"\"
 copt += -DIDENTIFIER=\""ac14c930-379c-40bd-a79a-63e8c72748db"\"
 

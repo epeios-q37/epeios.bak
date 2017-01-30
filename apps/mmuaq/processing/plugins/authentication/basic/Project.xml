@@ -38,11 +38,15 @@
   </Modules>
   <Modules Group="MUA" Path="../../../">
    <Module>muaacc</Module>
+   <Module>muaaccim</Module>
+   <Module>muaaccp3</Module>
    <Module>muaagt</Module>
    <Module>muabsc</Module>
    <Module>muadir</Module>
    <Module>muafld</Module>
    <Module>muaimf</Module>
+   <Module>muaima</Module>
+   <Module>muaimabs</Module>
    <Module Path="../">muainf</Module>
    <Module>muamel</Module>
    <Module>muapo3</Module>

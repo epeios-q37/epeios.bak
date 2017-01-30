@@ -35,21 +35,21 @@ namespace muaima {
 	namespace item {
 		qENUM( Name ) {
 			nBody,
-				nBodyWithSection,
-				nBodyStructure,
-				nEnvelope,
-				nFlags,
-				nInternalDate,
-				n_RFC822First,
-				nRFC822 = n_RFC822First,
-				nRFC822Header,
-				nRFC822Size,
-				nRFC822Text,
-				n_RFC822Last = nRFC822Text,
-				nUID,
-				n_amount,
-				n_None,
-				n_Undefined,
+			nBodyWithSection,
+			nBodyStructure,
+			nEnvelope,
+			nFlags,
+			nInternalDate,
+			n_RFC822First,
+			nRFC822 = n_RFC822First,
+			nRFC822Header,
+			nRFC822Size,
+			nRFC822Text,
+			n_RFC822Last = nRFC822Text,
+			nUID,
+			n_amount,
+			n_None,
+			n_Undefined,
 		};
 
 		const char *GetLabel( eName Name );
@@ -297,7 +297,7 @@ namespace muaima {
 	private:
 		rResponseDriver_
 			Global_,	// Handle the global response,
-			Items_,	// Handles all the items (delimited by '())').
+			Items_,	// Handles all the items (delimited by '()').
 			Content_;	// Handles item value.
 		void GetValue_( item::eName ItemName );
 	protected:

@@ -214,7 +214,7 @@ namespace muaimabs {
 
 	// Response code.
 	qENUM( ResponseCode ) {
-		// Not really response code, but 
+		// Not really response code, but simplifies the detection of a status.
 		rcOK,
 		rcNo,
 		rcBad,
