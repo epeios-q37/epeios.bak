@@ -1,5 +1,12 @@
 CHANGELOG for the 'Epeios' framework.
 
+2017-02-01 :
+- DWTGHT :
+	- If a 'ghost' cannot be created (name too long, for example), this does no more interrupt the global ghost creation,
+	but the ghost is simply ignored.
+- MTK :
+	- Like under 'Windows', threads are no more keeped after been used.
+
 2017-01-29 :
 - FLX :
 	- Introducing 'GetString(...)'.

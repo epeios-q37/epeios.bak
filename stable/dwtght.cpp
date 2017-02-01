@@ -43,10 +43,10 @@ static inline status__ CreateGhost_(
 
 	switch ( GhostType ) {
 	case gtFile:
-		Success = fil::Create( Name );
+		Success = fil::Create( Name, qRPU );
 		break;
 	case gtDir:
-		Success = dir::CreateDir( Name ) == dir::sOK;
+		Success = dir::CreateDir( Name, qRPU ) == dir::sOK;
 		break;
 	default:
 		qRFwk();

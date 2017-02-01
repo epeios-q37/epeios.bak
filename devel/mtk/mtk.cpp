@@ -19,13 +19,13 @@
 
 #define MTK__COMPILATION
 
-#include "mtk.h"
+# include "mtk.h"
 
-#include "mtx.h"
+# include "mtx.h"
 
 using namespace mtk;
 
-#ifdef MTK__POSIX
+# ifdef MTK__POSIX
 
 namespace {
 	struct thread_struct__

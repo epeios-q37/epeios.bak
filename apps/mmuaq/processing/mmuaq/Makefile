@@ -1,4 +1,4 @@
-#	Copyright (C) 2016 Claude SIMON (http://q37.info/contact/).
+#	Copyright (C) 2016-2017 Claude SIMON (http://q37.info/contact/).
 #
 #	This file is part of MMUAq.
 #
@@ -345,7 +345,7 @@ ifeq ("$(target)","$(Android)")
 endif
 
 copt += -DVERSION=\""20170130"\"
-copt += -DCOPYRIGHT_YEARS=\""2016"\"
+copt += -DCOPYRIGHT_YEARS=\""2016-2017"\"
 copt += -DIDENTIFIER=\""d8d40658-515d-40f7-b847-337d9ef331db"\"
 
 ifndef EPEIOS_SRC
