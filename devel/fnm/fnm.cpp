@@ -274,17 +274,3 @@ const name___ &fnm::GetAffix(
 	return Affix;
 }
 
-txf::text_oflow__ &operator <<(
-	txf::text_oflow__ &Flow,
-	const name___ &Name )
-{
-qRH
-	TOL_CBUFFER___ Buffer;
-qRB
-	Flow << Name.UTF8( Buffer );
-qRR
-qRT
-qRE
-	return Flow;
-}
-

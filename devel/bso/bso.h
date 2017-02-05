@@ -90,7 +90,7 @@ namespace bso {
 	typedef sBool bool__;
 
 # define BSO__DEF( type, name, value )\
-	static const type##__ &name = value
+	static const type##__ name = value
 
 # define BSO__MIN_MAX_DEF( type, name, affix )\
 	BSO__DEF( type, name##Min, affix##_MIN );\

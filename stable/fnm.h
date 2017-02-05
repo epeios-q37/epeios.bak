@@ -38,7 +38,6 @@
 	- 'affix' le 'basename' d'un fichier sans son extension.
 */
 
-# include "txf.h"
 # include "cpe.h"
 # include "tol.h"
 # include "strng.h"
@@ -134,10 +133,6 @@ namespace fnm {
 		return GetAffix( Filename.Internal(), Affix );
 	}
 }
-
-txf::text_oflow__ &operator <<(
-	txf::text_oflow__ &Flow,
-	const fnm::name___ &Name );
 
 /**************/
 /**** NEW *****/

@@ -34,6 +34,7 @@
 # include "cpe.h"
 # include "tol.h"
 # include "strng.h"
+# include "txf.h"
 
 # if defined( CPE_S_POSIX )
 #  define NTVSTR__MBS	// 'Multi-Byte Strings'
@@ -245,5 +246,10 @@ namespace ntvstr {
 
 	typedef char__ sChar;
 }
+
+txf::text_oflow__ &operator <<(
+	txf::text_oflow__ &Flow,
+	const ntvstr::rString &String );
+
 
 #endif

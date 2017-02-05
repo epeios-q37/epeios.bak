@@ -34,6 +34,10 @@ static err::err___ FallbackError_( true );
 
 err::err___ *err::qRRor = &FallbackError_;
 
+#ifdef ERR__JMPUSE
+jmp_buf *err::err___::Jump;
+#endif
+
 bool err::Concerned( void )
 {
 	return ( qRRor->ThreadID == tht::GetTID() );

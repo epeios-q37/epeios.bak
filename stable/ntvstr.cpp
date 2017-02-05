@@ -149,3 +149,19 @@ qRT
 qRE
 	return SBuffer;
 }
+
+txf::text_oflow__ &operator <<(
+	txf::text_oflow__ &Flow,
+	const rString &String )
+{
+qRH
+	TOL_CBUFFER___ Buffer;
+qRB
+	Flow << String.UTF8( Buffer );
+qRR
+qRT
+qRE
+	return Flow;
+}
+
+
