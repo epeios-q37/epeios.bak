@@ -4,7 +4,7 @@ CHANGELOG for the 'Epeios' framework.
 - BSO :
 	Fixing some issue due to some issues with 'V8'.
 - ERR :
-	- Fixin missing definition when used with 'setjmp'.
+	- Fixing missing definition when used with 'setjmp'.
 - FNM, NTVSTR :
 	- Moving 'txf::OFlow::operator <<' from 'FNM' to 'NTVSTR'.
 
