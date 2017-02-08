@@ -47,7 +47,7 @@ namespace dwtght {
 		if ( ( Pattern.Amount() > ( GO.Prefix.Amount() + GO.Suffix.Amount() + 2 ) )	// '+2' pour les '.' ajoutés automatiquement.
 			 && ( str::Compare( Pattern, GO.Prefix, Pattern.First(), GO.Prefix.First(), GO.Prefix.Amount() ) == 0 ) ) {
 
-			Row = Pattern.ToUInt( Pattern.First( GO.Suffix.Amount() + 1 ), &Error, str::bAuto );
+			Row = Pattern.ToUInt( Pattern.First( GO.Prefix.Amount() + 1 ), &Error, str::bAuto );
 
 			if ( ( Error != qNIL ) && ( Pattern( Error ) != '.' ) )
 				Row = qNIL;

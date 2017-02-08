@@ -35,6 +35,13 @@
 # include "v8q.h"
 
 namespace scln {
+
+	inline void ErrFinal( v8::Isolate *isolate )
+	{
+		err::buffer__ Buffer;
+		isolate->ThrowException( v8::Exception::Error( v8::String::NewFromUtf8( isolate, err::Message( Buffer ) ) ) ); 
+	}
+
 	void Register_(
 		v8::Local<v8::Object> Exports,
 		v8::Local<v8::Value> Module,
@@ -42,7 +49,7 @@ namespace scln {
 
 	typedef void (* sFunction_)( const v8q::sArguments &);
 
-	class gRegistrar
+	class sRegistrar
 	{
 	private:
 		qRMV( v8::Local<v8::Object>, E_, Exports_ );
@@ -51,15 +58,18 @@ namespace scln {
 		{
 			tol::reset( P, Exports_ );
 		}
-		qCDTOR( gRegistrar )
+		qCDTOR( sRegistrar )
 		void Init( v8::Local<v8::Object> &Exports )
 		{
 			Exports_ = &Exports;
 		}
 		void Register( sFunction_ Function );
+		void Register(
+			const char *Name,
+			v8::FunctionCallback Function );
 	};
 
-	void SCLNRegister( gRegistrar &Registrar );	// To overload by user.
+	void SCLNRegister( sRegistrar &Registrar );	// To overload by user.
 }
 
 #define SCLN_MODULE( name ) NODE_MODULE( name, scln::Register_ );

@@ -17,33 +17,9 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define V8Q__COMPILATION
+#define V8QNDE__COMPILATION
 
-#include "v8q.h"
+#include "v8qnde.h"
 
-#include "ntvstr.h"
+using namespace v8qnde;
 
-using namespace v8q;
-
-txf::text_oflow__ &operator <<(
-	txf::text_oflow__ &Flow,
-	const sString &String)
-{
-qRH
-	char *Buffer = NULL;
-qRB
-	Buffer = (char *)malloc ( String.Size() + 1);
-
-	if ( Buffer == NULL )
-		qRAlc();
-
-	String.Get( Buffer );
-
-	Flow << Buffer;
-qRR
-qRT
-	if ( Buffer != NULL )
-		delete( Buffer );
-qRE
-	return Flow;
-}

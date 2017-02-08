@@ -348,6 +348,42 @@ qRT
 qRE
 }
 
+namespace {
+	bso::sBool inline Handle_( const char *Buffer )
+	{
+		bso::sBool Handle = false;
+
+		switch ( Buffer[0] ) {
+		case 0:
+			qRFwk();
+			break;
+		case '.':
+			switch ( Buffer[1] ) {
+			case 0:
+				break;
+			case '.':
+				switch ( Buffer[2] ) {
+				case 0:
+					break;
+				default:
+					Handle = true;
+					break;
+				}
+				break;
+			default:
+				Handle = true;
+				break;
+			}
+			break;
+		default:
+			Handle = true;
+			break;
+		}
+
+		return Handle;
+	}
+}
+
 static bso::bool__ GetFiles_(
 	const fnm::name___ &PathWithRoot,
 	const fnm::name___ &PathWithoutRoot,
@@ -370,7 +406,7 @@ qRB
 	Name = dir::GetFirstFile( PathWithRoot, Handle );
 
 	while ( !Name.IsEmpty() ) {
-		if ( *Name.UTF8( Buffer ) != '.' ) {
+		if ( Handle_( Name.UTF8( Buffer ) ) ) {
 			LocalizedFileNameWithRoot.Init();
 			Build_( PathWithRoot, Name, LocalizedFileNameWithRoot );
 

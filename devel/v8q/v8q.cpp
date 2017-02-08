@@ -21,5 +21,29 @@
 
 #include "v8q.h"
 
+#include "ntvstr.h"
+
 using namespace v8q;
 
+txf::text_oflow__ &operator <<(
+	txf::text_oflow__ &Flow,
+	const sString &String)
+{
+qRH
+	char *Buffer = NULL;
+qRB
+	Buffer = (char *)malloc ( String.Size() + 1);
+
+	if ( Buffer == NULL )
+		qRAlc();
+
+	String.Get( Buffer );
+
+	Flow << Buffer;
+qRR
+qRT
+	if ( Buffer != NULL )
+		delete( Buffer );
+qRE
+	return Flow;
+}

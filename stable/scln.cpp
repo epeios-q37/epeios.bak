@@ -30,20 +30,20 @@ namespace {
 	bch::qBUNCHwl( sFunction_ ) Functions_;
 }
 
-void scln::gRegistrar::Register( sFunction_ Function )
+void scln::sRegistrar::Register( sFunction_ Function )
 {
 	Functions_.Append( Function );
 }
 
-namespace {
-	namespace {
-		void Final_( v8::Isolate *isolate )
-		{
-			err::buffer__ Buffer;
-			isolate->ThrowException( v8::Exception::Error( v8::String::NewFromUtf8( isolate, err::Message( Buffer ) ) ) ); 
-		}
-	}
+void scln::sRegistrar::Register(
+	const char *Name,
+	v8::FunctionCallback Function )
+{
+	NODE_SET_METHOD( E_(), Name, Function );
+}
 
+
+namespace {
 	void Launch_( const v8::FunctionCallbackInfo<v8::Value>& Info )
 	{
 	qRFH
@@ -65,7 +65,7 @@ namespace {
 		Functions_( Index->Uint32Value())( Arguments );
 	qRFR
 	qRFT
-	qRFE( Final_( Info.GetIsolate() ) )
+	qRFE( ErrFinal( Info.GetIsolate() ) )
 	}
 }
 
@@ -74,16 +74,18 @@ void scln::Register_(
 	v8::Local<v8::Value> Module,
 	void* priv )
 {
-	gRegistrar Registrar;
+	sRegistrar Registrar;
 
 	NODE_SET_METHOD( Exports, "dummy", Launch_ );
 
 	Registrar.Init( Exports );
 
+	Functions_.Init();
 	scln::SCLNRegister( Registrar );
 }
 
 qGCTOR( scln )
 {
-	Functions_.Init();
+// Sudenly stops to work ('Segmentation fault', so was deplaced in the 'Register_' function.
+//	Functions_.Init();
 }
