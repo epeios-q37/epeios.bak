@@ -36,10 +36,10 @@
 
 namespace scln {
 
-	inline void ErrFinal( v8::Isolate *isolate )
+	inline void ErrFinal( v8::Isolate *Isolate = NULL )
 	{
 		err::buffer__ Buffer;
-		isolate->ThrowException( v8::Exception::Error( v8::String::NewFromUtf8( isolate, err::Message( Buffer ) ) ) ); 
+		v8q::GetIsolate( Isolate )->ThrowException( v8::Exception::Error( v8q::ToString( err::Message( Buffer ) ) ) ); 
 	}
 
 	void Register_(

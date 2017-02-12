@@ -100,7 +100,7 @@ qRB
 		sclmisc::Initialize( *Data->SCLRack, Configuration );
 	else // Same plugin loaded several times from same excutable ; data is common,
 		// so the 'Arguments' registry from the previous loading is erased.
-		sclrgstry::EraseRegistry( sclrgstry::lArguments );
+		sclrgstry::Reset( sclrgstry::lArguments );
 
 	if ( Data->Arguments->Amount() != 0 )
 		HandleArguments_( *Data->Arguments, Arguments );
@@ -128,7 +128,7 @@ qRB
 		sclmisc::Initialize( *Data->SCLRack, Directory );
 	else // Same plugin loaded several times from same excutable ; data is common,
 		// so the 'Arguments' registry from the previous loading is erased.
-		sclrgstry::EraseRegistry( sclrgstry::lArguments );
+		sclrgstry::Reset( sclrgstry::lArguments );
 
 	if ( Data->Arguments->Amount() != 0 )
 		HandleArguments_( *Data->Arguments, Arguments );

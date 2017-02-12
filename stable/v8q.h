@@ -36,11 +36,23 @@
 # include "tol.h"
 
 namespace v8q {
-	inline v8::Local<v8::String> ToString(
-		v8::Isolate *Isolate,
-		const char *String )
+	void SetGlobalIsolate( v8::Isolate *Isolate );
+
+	v8::Isolate *GetGlobalIsolate( void );
+
+	inline v8::Isolate *GetIsolate( v8::Isolate *Isolate = NULL )
 	{
-		return v8::String::NewFromUtf8( Isolate, String );
+		if ( Isolate == NULL )
+			return GetGlobalIsolate();
+		else
+			return Isolate;
+	}
+
+	inline v8::Local<v8::String> ToString(
+		const char *String,
+		v8::Isolate *Isolate = NULL )
+	{
+		return v8::String::NewFromUtf8( GetIsolate( Isolate ), String );
 	}
 
 	template <typename arg> inline void Set_(
@@ -67,7 +79,7 @@ namespace v8q {
 		int Position,
 		const char *Arg )
 	{
-		argv[Position] =ToString( Isolate, Arg );
+		argv[Position] = ToString( Arg, Isolate  );
 	}
 
 	template <typename arg, typename ...args> void Set_(
@@ -85,9 +97,17 @@ namespace v8q {
 	template <typename t> inline v8::Local<t> ToLocal( v8::MaybeLocal<t> V )
 	{
 		if ( V.IsEmpty()  )
-			qRGnr();
+			qRFwk();
 
 		return V.ToLocalChecked();
+	}
+
+	template <typename t> t Expose( v8::Maybe<t> V )
+	{
+		if ( !V.IsJust() )
+			qRFwk();
+
+		return V.FromJust();
 	}
 
 	inline bso::sBool IsFunction( v8::Local<v8::Value> Value )
@@ -103,7 +123,7 @@ namespace v8q {
 	inline v8::Local<v8::Function> ToFunction( v8::Local<v8::Value> Value )
 	{
 		if ( !IsFunction( Value ) )
-			qRGnr();
+			qRFwk();
 
 		return v8::Local<v8::Function>::Cast( Value );
 	}
@@ -115,43 +135,49 @@ namespace v8q {
 
 
 	inline v8::Local<v8::Function> GetFunction(
-		v8::Isolate *Isolate,
 		v8::Local<v8::Context> Context,
 		v8::Local<v8::Object> Object,
-		const char *Key )
+		const char *Key,
+		v8::Isolate *Isolate = NULL )
 	{
-		return ToFunction( Object->Get( Context, ToString( Isolate, Key ) ) );
+		return ToFunction( Object->Get( Context, ToString( Key, Isolate ) ) );
+	}
+
+	inline v8::Local<v8::Context> GetContext( v8::Isolate *Isolate = NULL )
+	{
+		return GetIsolate( Isolate )->GetCurrentContext();
 	}
 
 	inline v8::Local<v8::Function> GetFunction(
-		v8::Isolate *Isolate,
 		v8::Local<v8::Object> Object,
-		const char *Key )
+		const char *Key,
+		v8::Isolate *Isolate = NULL )
 	{
-		return GetFunction( Isolate, Isolate->GetCurrentContext(), Object, Key );
+		return GetFunction( GetContext( Isolate ), Object, Key, Isolate );
 	}
 
-	inline v8::Local<v8::Context> GetContext( v8::Isolate *Isolate )
-	{
-		return Isolate->GetCurrentContext();
-	}
 
 	inline v8::Local<v8::Value> Execute(
-		v8::Isolate *Isolate,
-		const char *Script )
+		const char *Script,
+		v8::Isolate *Isolate = NULL )
 	{
 		v8::Local<v8::Context> Context = GetContext( Isolate );
-		return ToLocal( ToLocal( v8::Script::Compile( Context, ToString( Isolate, Script) ) )->Run( Context ) );
+		return ToLocal( ToLocal( v8::Script::Compile( Context, ToString( Script, Isolate ) ) )->Run( Context ) );
 	}
 
 	template <typename t> class sCore_
 	{
-	protected:
-		qRMV( v8::Isolate, I_, Isolate_ );
+	private:
+		v8::Isolate *Isolate_;
 		v8::Local<t> Core_;
+		v8::Isolate *I_( void ) const
+		{
+			return GetIsolate( Isolate_ );
+		}
+	protected:
 		void Init(
 			v8::Local<v8::Value> Value,
-			v8::Isolate *Isolate )
+			v8::Isolate *Isolate = NULL )
 		{
 			Core_ = v8::Local<t>::Cast( Value );
 			Isolate_ = Isolate;
@@ -172,98 +198,245 @@ namespace v8q {
 		{
 			return Core_;
 		}
+		v8::Isolate *Isolate( void ) const
+		{
+			return I_();
+		}
+		v8::Local<v8::Context> Context( void ) const
+		{
+			return v8q::GetContext( I_() );
+		}
 	};
 
+	typedef sCore_<v8::Value> sValue_;
+
+	class sValue
+	: public sValue_
+	{
+	public:
+		qCDTOR( sValue );
+		sValue( v8::Local<v8::Value> Value )
+		{
+			sValue_::Init( Value );
+		}
+		using sCore_<v8::Value>::Init;
+		bso::sBool IsNull( void ) const
+		{
+			return Core()->IsNull();
+		}
+	};
+
+	typedef sCore_<v8::Object> sObject_;
+
 	class sObject
-	: public sCore_<v8::Object>
+	: public sObject_
 	{
 	public:
 		qCDTOR( sObject );
-		using sCore_<v8::Object>::Init;
+		sObject( sValue Value )
+		{
+			Init( Value.Core() );
+		}
+		using sObject_::Init;
 		void Init(
 			v8::Local<v8::Value> Value,
-			v8::Isolate *Isolate )
+			v8::Isolate *Isolate = NULL )
 		{
 			if ( !Value->IsObject() )
-				qRGnr();
+				qRFwk();
 
-			sCore_<v8::Object>::Init( Value, Isolate );
+			sObject_::Init( Value, Isolate );
+		}
+		v8::Local<v8::Value> Get(
+			const char *Key,
+			v8::Isolate *Isolate = NULL )
+		{
+			return ToLocal( Core()->Get( Context(), v8q::ToString( Key, Isolate ) ) );
+		}
+		bso::sBool Set(
+			const char *Key,
+			v8::Local<v8::Value> Value,
+			v8::Isolate *Isolate = NULL,
+			qRPD )
+		{
+			if ( !Expose( Core()->Set(Context(), v8q::ToString( Key, Isolate ), Value)) ) {
+				if ( qRPU )
+					qRFwk();
+				else
+					return false;
+			}
+
+			return true;
+		}
+		template <typename t> bso::sBool Set(
+			const char *Key,
+			sCore_<t> &Value,
+			v8::Isolate *Isolate = NULL,
+			qRPD )
+		{
+			return Set( Key, Value.Core(), Isolate, qRP );
+		}
+		template <typename t> bso::sBool Set(
+			const char *Key,
+			t &Value,
+			qRPN )
+		{
+			return Set( Key, Value, NULL, qRP );
 		}
 		template <typename arg, typename ...args> v8::Local<v8::Value> Launch(
 			const char *Method,
+			v8::Isolate *Isolate,
+			arg &Arg,
+			args &...Args ) const
+		{
+			v8::Local<v8::Value> Argv[1+sizeof...( Args )];
+
+			Set_( Isolate, Argv, 0, Arg, Args... );
+
+			v8::Local<v8::Function> Function = GetFunction( Core(), Method, Isolate );
+
+			return Function->Call( Core(), 1 + sizeof...( Args ), Argv );
+		}
+		template <typename ...args> v8::Local<v8::Value> Launch(
+			const char *Method,
+			args &...Args ) const
+		{
+			return Launch( Method, NULL, Args... );
+		}
+		v8::Local<v8::Value> Launch(
+			const char *Method,
+			v8::Isolate *Isolate = NULL ) const
+		{
+			v8::Local<v8::Function> Function = GetFunction( Core(), Method, Isolate );
+
+			return Function->Call( Core(), 0, NULL );
+		}
+		void On(
+			const char *Event,
+			const class sFunction &Callback,
+			v8::Isolate *Isolate = NULL ) const
+		{
+			Launch( "on", Isolate, Event, Callback );
+		}
+	};
+
+	typedef sCore_<v8::Function> sFunction_;
+
+	class sFunction
+	: public sFunction_
+	{
+	public:
+		qCDTOR( sFunction );
+		sFunction( v8::FunctionCallback Callback )
+		{
+			Init( Callback );
+		}
+		using sFunction_::Init;
+		void Init(
+			v8::Local<v8::Value> Value,
+			v8::Isolate *Isolate = NULL )
+		{
+			if ( !Value->IsFunction() )
+				qRFwk();
+
+			sFunction_::Init( Value, Isolate );
+		}
+		void Init(
+			v8::FunctionCallback Function,
+			v8::Isolate *Isolate = NULL )
+		{
+			Init( v8::FunctionTemplate::New( GetIsolate( Isolate ), Function)->GetFunction(), Isolate );
+		}
+		template <typename arg, typename ...args> v8::Local<v8::Value> Launch(
+			v8::Isolate *Isolate,
 			arg &Arg,
 			args &...Args )
 		{
 			v8::Local<v8::Value> Argv[1+sizeof...( Args )];
 
-			Set_( &I_(), Argv, 0, Arg, Args... );
+			Set_( Isolate, Argv, 0, Arg, Args... );
 
-			v8::Local<v8::Function> Function = GetFunction( &I_(), Core_, Method );
-
-			return Function->Call( Core_, 1 + sizeof...( Args ), Argv );
+			return Core()->Call( Core(), 1 + sizeof...( Args ), Argv );
 		}
-		v8::Local<v8::Value> Launch( const char *Method )
+		template <typename ...args> v8::Local<v8::Value> Launch( args &...Args )
 		{
-			v8::Local<v8::Function> Function = GetFunction( &I_(), Core_, Method );
-
-			return Function->Call( Core_, 0, NULL );
+			return Launch( NULL, Args... );
 		}
-		void On(
-			const char *Event,
-			const class sFunction &Callback )
+		v8::Local<v8::Value> Launch( void )
 		{
-			Launch( "on", Event, Callback );
+			return Core()->Call( Core(), 0, NULL );
 		}
 	};
 
-	class sFunction
-	: public sCore_<v8::Function>
-	{
-	public:
-		qCDTOR( sFunction );
-		using sCore_<v8::Function>::Init;
-		void Init(
-			v8::Local<v8::Value> Value,
-			v8::Isolate *Isolate )
-		{
-			if ( !Value->IsFunction() )
-				qRGnr();
-
-			sCore_<v8::Function>::Init( Value, Isolate );
-		}
-		void Init(
-			v8::FunctionCallback Function,
-			v8::Isolate *Isolate )
-		{
-			Init( v8::FunctionTemplate::New(Isolate, Function)->GetFunction(), Isolate );
-		}
-	};
+	typedef sCore_<v8::String> sString_;
 
 	class sString
-	: public sCore_<v8::String>
+	: public sString_
 	{
 	public:
 		qCDTOR( sString );
-		using sCore_<v8::String>::Init;
+		sString( const char * String )
+		{
+			Init( String );
+		}
+		using sString_::Init;
 		void Init(
 			v8::Local<v8::Value> Value,
-			v8::Isolate *Isolate )
+			v8::Isolate *Isolate = NULL )
 		{
 			if ( !Value->IsString() )
-				qRGnr();
+				qRFwk();
 
-			sCore_<v8::String>::Init( Value, Isolate );
+			sString_::Init( Value, Isolate );
+		}
+		void Init(
+			const char *String,
+			v8::Isolate *Isolate = NULL )
+		{
+			sString_::Init( ToString( String , Isolate ) , Isolate );
 		}
 		// NOT the number of char, but the size of the string in bytes, WITHOUT NULL terminating char.
 		int Size( void ) const
 		{
-			return Core_->Utf8Length();
+			return Core()->Utf8Length();
 		}
 		const char *Get( char *Buffer ) const
 		{
-			Core_->WriteUtf8( Buffer );
+			Core()->WriteUtf8( Buffer );
 
 			return Buffer;
+		}
+	};
+
+	typedef sCore_<v8::External> sExternal_;
+
+	template <typename t> class sExternal
+	: public sExternal_
+	{
+	public:
+		qCDTOR( sExternal );
+		sExternal( v8::Local<v8::Value> Value )
+		{
+			Init( Value );
+		}
+		sExternal( sValue &Value )
+		{
+			Init( Value.Core() );
+		}
+		sExternal( const t* External )
+		{
+			Init( External );
+		}
+		using sExternal_::Init;
+		void Init(
+			const t *External,
+			v8::Isolate *Isolate = NULL )
+		{
+			sExternal_::Init( v8::External::New( GetIsolate( Isolate ), (void *)External ), Isolate );
+		}
+		t *Value( void ) const
+		{
+			return (t *)Core()->Value();
 		}
 	};
 
@@ -273,7 +446,7 @@ namespace v8q {
 		item &Item )
 	{
 		if ( Index >= Infos.Length()  )
-			qRGnr();
+			qRFwk();
 
 		Item.Init( Infos[Index], Infos.GetIsolate() );
 	}
@@ -322,7 +495,7 @@ namespace v8q {
 			item &Item ) const
 		{
 			if ( Index == 0 )
-				qRGnr();
+				qRFwk();
 
 			v8q::Get( Index, A_(), Item );
 		}
@@ -330,13 +503,11 @@ namespace v8q {
 		{
 			Get_( 1, A_(), Items... );
 		}
-		void This( sObject &This )
+		void This(
+			sObject &This,
+			v8::Isolate *Isolate)
 		{
-			This.Init( A_().This(), GetIsolate() );
-		}
-		v8::Isolate *GetIsolate( void ) const
-		{
-			return A_().GetIsolate();
+			This.Init( A_().This(), Isolate );
 		}
 	};
 

@@ -200,7 +200,7 @@ void sclmisc::Initialize(
 {
 	Initialize_( Rack );
 
-	sclrgstry::Set( sclrgstry::lMain, Configuration );
+	sclrgstry::Reset( sclrgstry::lMain, Configuration );
 //	scllocale::Set( scllocale::tMain, Locale );
 }
 
@@ -776,7 +776,7 @@ void sclmisc::DumpRegistriesAndOrLocalesIfRequired( void )
 
 void sclmisc::EraseProjectRegistry( void )
 {
-	sclrgstry::EraseRegistry( sclrgstry::lProject );
+	sclrgstry::Erase( sclrgstry::lProject );
 	scllocale::Erase( scllocale::tProject );
 }
 
@@ -870,7 +870,7 @@ void sclmisc::LoadProject(
 {
 	switch ( ProjectType ) {
 	case ptNew:
-		sclrgstry::EraseRegistry( sclrgstry::lProject );
+		sclrgstry::Erase( sclrgstry::lProject );
 		break;
 	case ptPredefined:
 		LoadPredefinedProject_( ProjectFeature );

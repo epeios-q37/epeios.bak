@@ -1804,6 +1804,10 @@ namespace rgstry {
 
 			Entries.Store( Entry, Level );
 		}
+		void Set( level__ Level )
+		{
+			Set( Level, entry__( EmbeddedRegistry.CreateRegistry( name() ) ) );
+		}
 		level__ Push( const entry__ &Entry )
 		{
 			return _RawPushLevel( Entry );

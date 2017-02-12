@@ -17,9 +17,25 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define V8QNDE__COMPILATION
+#define V8QNJS__COMPILATION
 
-#include "v8qnde.h"
+#include "v8qnjs.h"
 
-using namespace v8qnde;
+using namespace v8qnjs;
 
+txf::text_oflow__ &operator <<(
+	txf::text_oflow__ &Flow,
+	const sBuffer &Buffer)
+{
+qRH
+	sString String;
+qRB
+	String.Init();
+	Buffer.ToString( String, Buffer.Isolate() );
+
+	Flow << String;
+qRR
+qRT
+qRE
+	return Flow;
+}

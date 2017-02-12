@@ -149,9 +149,11 @@ namespace sclrgstry {
 		Path.Append( "\"]" );
 	}
 
-	void EraseRegistry( eLevel Level );
+	void Erase( eLevel Level );
 
-	void Set(
+	void Reset( eLevel Level );
+
+	void Reset(
 		eLevel Level,
 		const rgstry::entry__ &Entry );
 

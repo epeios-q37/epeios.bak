@@ -243,20 +243,26 @@ qRT
 qRE
 }
 
-void sclrgstry::EraseRegistry( eLevel Level )
+void sclrgstry::Erase( eLevel Level )
 {
 	Registry_.Erase( GetRawLevel( Level ) );
 }
 
-void sclrgstry::Set(
+void sclrgstry::Reset( eLevel Level )
+{
+	Registry_.Erase( GetRawLevel( Level ) );
+
+	Registry_.Set( GetRawLevel( Level ) );
+}
+
+void sclrgstry::Reset(
 	eLevel Level,
 	const rgstry::entry__ &Entry )
 {
-	Registry_.Erase( Level );
+	Registry_.Erase( GetRawLevel( Level ) );
 
-	Registry_.Set( Level, Entry );
+	Registry_.Set( GetRawLevel( Level ), Entry );
 }
-
 
 namespace {
 	void ReportParsingErrorAndAbort_(
@@ -315,7 +321,7 @@ namespace {
 	qRH
 		rgstry::context___ Context;
 	qRB
-		EraseRegistry( Level );
+		Erase( Level );
 
 		Context.Init();
 		if ( !Registry_.Fill( Level, Source, xpp::criterions___( Directory ), RootPath, Context ) )

@@ -19,8 +19,8 @@
 
 // SKeTch
 
-#ifndef SKT__INC
-# define SKT__INC
+#ifndef SKT_INC_
+# define SKT_INC_
 
 # define SKT_NAME		"SKT"
 
