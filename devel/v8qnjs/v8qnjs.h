@@ -83,9 +83,6 @@ namespace v8qnjs {
 			v8::Local<v8::Value> Value,
 			v8::Isolate *Isolate )
 		{
-			if ( Value->IsNull() )
-				qRGnr();
-
 			Launch( "push", Isolate, Value );
 		}
 	public:
@@ -96,6 +93,12 @@ namespace v8qnjs {
 			v8::Isolate *Isolate = NULL )
 		{
 			On( "data", Callback, Isolate );
+		}
+		void OnEnd(
+			const sFunction &Callback,
+			v8::Isolate *Isolate = NULL )
+		{
+			On( "end", Callback, Isolate );
 		}
 		// This function is ONLY to implement a readable stream. Is called when data is required.
 		void OnRead(
