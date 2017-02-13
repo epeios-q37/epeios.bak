@@ -172,48 +172,6 @@ namespace tht {
 		}
 	};
 
-	// Block a thread until another unblocks it.
-	class rBlocker {
-	private:
-		rCore_ Core_;
-	public:
-		void reset( bso::sBool P = true )
-		{
-			Core_.reset( P );
-		}
-		qCDTOR( rBlocker );
-		void Init( void )
-		{
-			Core_.Init();
-
-			Core_.Lock();
-			Core_.ThreadID = GetTID();
-		}
-		void Wait( void )
-		{
-			if ( Core_.ThreadID == Undefined ) {
-				Core_.Lock();
-				Core_.ThreadID = GetTID();
-			} else 	if ( Core_.ThreadID != GetTID() )
-				qRFwk();
-
-			Core_.Lock();
-
-			Core_.ThreadID = Undefined;
-
-			Core_.Unlock();
-		}
-		void Unblock( void )
-		{
-			if ( Core_.ThreadID == Undefined )
-				qRFwk();
-			else if ( Core_.ThreadID == GetTID() )
-				qRFwk();
-
-			Core_.Unlock();
-		}
-	};
-
 	typedef bso::sUInt sCounter_;
 	qCDEF( sCounter_, CounterMax_, bso::UIntMax );
 	
@@ -313,6 +271,72 @@ namespace tht {
 			L_().Unlock();
 
 			Locked_ = false;
+		}
+	};
+
+		// Block a thread until another unblocks it.
+	class rBlocker {
+	private:
+		rLocker Locker_;
+		rCore_ Core_;
+	public:
+		void reset( bso::sBool P = true )
+		{
+			tol::reset( P, Locker_, Core_);
+		}
+		qCDTOR( rBlocker );
+		void Init( bso::sBool SkipPrefetching = false )
+		{
+			tol::Init( Locker_, Core_ );
+
+			if ( SkipPrefetching ) {
+				Core_.ThreadID = Undefined;
+			} else {
+				Core_.Lock();
+				Core_.ThreadID = GetTID();
+			}
+		}
+		void Wait( void )
+		{
+		qRH
+			rLockerHandler Locker;
+		qRB
+			Locker.Init( Locker_ );
+
+			if ( Core_.ThreadID == Undefined ) {
+				Core_.Lock();
+				Core_.ThreadID = GetTID();
+			} else 	if ( Core_.ThreadID != GetTID() )
+				qRFwk();
+
+			Locker.Unlock();
+
+			Core_.Lock();
+
+			Locker.Lock();
+
+			Core_.ThreadID = Undefined;
+
+			Core_.Unlock();
+		qRR
+		qRT
+		qRE
+		}
+		void Unblock( void )
+		{
+		qRH
+			rLockerHandler Locker;
+		qRB
+			Locker.Init( Locker_ );
+
+			if ( Core_.ThreadID == GetTID() )
+				qRFwk();
+
+			if ( Core_.ThreadID != Undefined )
+				Core_.Unlock();
+		qRR
+		qRT
+		qRE
 		}
 	};
 }

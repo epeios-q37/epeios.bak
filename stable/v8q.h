@@ -331,6 +331,10 @@ namespace v8q {
 		{
 			Init( Callback );
 		}
+		sFunction( v8::Local<v8::Value> Value )
+		{
+			Init( Value );
+		}
 		using sFunction_::Init;
 		void Init(
 			v8::Local<v8::Value> Value,
@@ -400,11 +404,9 @@ namespace v8q {
 		{
 			return Core()->Utf8Length();
 		}
-		const char *Get( char *Buffer ) const
+		int Get( char *Buffer ) const
 		{
-			Core()->WriteUtf8( Buffer );
-
-			return Buffer;
+			return Core()->WriteUtf8( Buffer );
 		}
 	};
 

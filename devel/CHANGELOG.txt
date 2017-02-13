@@ -1,5 +1,13 @@
 CHANGELOG for the 'Epeios' framework.
 
+2017-02-13 :
+- FLX :
+	- Introducing 'Async...' stuff.
+- THT :
+	- 'rBlock' :
+		- can now be used several times.
+		- unblocking will do nothing when no blocked counter-part available.
+
 2017-02-08 :
 - DWTDCT :
 	- Fixing no retrieving of file begining with '.' ('.' and '..' are still not retrieved).

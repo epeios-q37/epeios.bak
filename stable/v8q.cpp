@@ -52,13 +52,15 @@ txf::text_oflow__ &operator <<(
 {
 qRH
 	char *Buffer = NULL;
+	int Size = 0;
 qRB
-	Buffer = (char *)malloc ( String.Size() + 1);
+	Buffer = (char *)malloc ( Size = String.Size() + 1 );
 
 	if ( Buffer == NULL )
 		qRAlc();
 
-	String.Get( Buffer );
+	if ( Size != String.Get( Buffer ) )
+		qRFwk();
 
 	Flow << Buffer;
 qRR

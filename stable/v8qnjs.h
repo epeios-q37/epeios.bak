@@ -41,7 +41,14 @@ namespace v8qnjs {
 	{
 	public:
 		qCDTOR( sHelper );
+		using sObject::Init;
 		using sObject::Get;
+		void Init(
+			sHelper &Helper,
+			v8::Isolate *Isolate = NULL )
+		{
+			sObject::Init(Helper.Core(), Isolate );
+		}
 	};
 
 	class sBuffer

@@ -32,6 +32,7 @@
 # include "cpe.h"
 # include "cslio.h"
 # include "str.h"
+# include "lck.h"
 
 # ifdef CPE_F_MT
 #  define FLX__MT
@@ -1513,6 +1514,7 @@ namespace flx {
 		} In, Out;
 	};
 
+	// Write to console the input and/or output data. For text based protocol exchanges (like HTTP, IMAP, POP...).
 	class rIOMonitor
 	: public rIODriver_
 	{
@@ -1576,6 +1578,218 @@ namespace flx {
 		}
 	};
 
+	class rASync_
+	{
+	private:
+		tht::rLocker Locker_;
+		tht::rBlocker Blocker_;
+		fdr::sByte *Buffer_;
+		fdr::sSize
+			Size_,	// Size of 'Buffer_'. If == 0, the no more input data is available.
+			Head_,	// Position of the first byte of data.
+			Amount_;// Amount of available data.
+		// Moves the data to the beginning of the buffer.
+		void Normalize_( void )
+		{
+			if ( Head_ != 0 ) {
+				if ( Amount_ != 0 )
+					memcpy( Buffer_, Buffer_+ Head_, Amount_ );
+				Head_ = 0;
+			}
+		}
+		fdr::sSize Read_(
+			fdr::sByte *Buffer,
+			fdr::sSize Size )
+		{
+			fdr::sSize Amount = Size > Amount_ ? Amount_ : Size;
+
+			if ( Amount == 0 )
+				qRFwk();
+
+			memcpy( Buffer, Buffer_ + Head_, Amount );
+
+			Amount_ -= Amount;
+			Head_ += Amount;
+
+			return Amount;
+		}
+
+	public:
+		void reset( bso::sBool P = true )
+		{
+			tol::reset( P, Locker_, Blocker_, Buffer_ );
+
+			Size_ = Head_ = Amount_ = 0;
+		}
+		qCDTOR( rASync_ );
+		void Init(
+			fdr::sByte *Buffer,
+			fdr::sSize Size )
+		{
+			Locker_.Init();
+			Blocker_.Init( true );
+
+			Buffer_ = Buffer;
+
+			Size_ = Size;
+
+			Head_ = Amount_ = 0;
+		}
+		fdr::sSize Write(
+			const fdr::sByte *Buffer,
+			fdr::sSize Amount )	// If 'Amount' == 0, this means that no more data will be written.
+		{
+		qRH
+			tht::rLockerHandler Locker;
+		qRB
+			Locker.Init( Locker_ );
+
+			if ( Size_ == 0 )	// Should not be called twice to indicate that there will be no more data.
+				qRFwk();
+
+			if ( Amount_ == 0 )	// If no data available, 'Read(...)' will block until some available.
+				Blocker_.Unblock();	// Will unblock 'Read(...)', which will then be blocked by 'Locker_'.
+
+			if ( Amount != 0 ) {
+				if ( Amount > ( Size_ - Amount_ ) )
+					Amount = Size_ - Amount_;
+
+				Normalize_();
+
+				if ( Amount != 0 ) {
+					memcpy( Buffer_, Buffer, Amount );
+					Amount_ += Amount;
+				}
+			} else
+				Size_ = 0;
+		qRR
+		qRT
+		qRE
+			return Amount;
+		}
+		// If it returns 0, there would no more data (EOF). Otherwise, will block until some data available.
+		fdr::sSize Read(
+			fdr::sByte *Buffer,
+			fdr::sSize Size )
+		{
+			fdr::sSize Amount = 0;
+		qRH
+			tht::rLockerHandler Locker;
+		qRB
+			Locker.Init( Locker_ );
+
+			if ( Amount_ != 0 ) {
+				Amount = Read_( Buffer, Size );
+			} else if ( Size_ != 0 ) {
+				Locker_.Unlock();
+				Blocker_.Wait();
+				Locker_.Lock();
+
+				if ( Amount_ != 0 )	
+					Amount = Read_( Buffer, Size );
+				// Else there will be no more data.
+			}
+		qRR
+		qRT
+		qRE
+			return Amount;
+		}
+	};
+
+	typedef fdr::rIDressedDriver rIDriver_;
+
+	class rIASync
+	: public rIDriver_
+	{
+	private:
+		qRMV( rASync_, C_, Core_ );
+	protected:
+		virtual fdr::sSize FDRRead(
+			fdr::sSize Wanted,
+			fdr::sByte *Buffer ) override
+		{
+			return C_().Read( Buffer, Wanted );
+		}
+		virtual void FDRDismiss( bso::sBool Unlock ) override
+		{}
+		virtual fdr::sTID FDRITake( fdr::sTID Owner ) override
+		{
+			return fdr::UndefinedTID;
+		}
+	public:
+		void reset( bso::sBool P = true )
+		{
+			rIDriver_::reset( P );
+			tol::reset( P, Core_ );
+		}
+		qCVDTOR( rIASync );
+		void Init(
+			rASync_ &Core,
+			fdr::thread_safety__ ThreadSafety = fdr::ts_Default )
+		{
+			rIDriver_::Init( ThreadSafety );
+			Core_ = &Core;
+		}
+	};
+
+	typedef fdr::rODressedDriver rODriver_;
+
+	class rOASync
+	: public rODriver_
+	{
+	private:
+		qRMV( rASync_, C_, Core_ );
+	protected:
+		virtual fdr::sSize FDRWrite(
+			const fdr::sByte *Buffer,
+			fdr::sSize Wanted ) override
+		{
+			fdr::sSize Amount = 0;
+
+			while ( ( Amount = C_().Write( Buffer, Wanted ) ) == 0 );
+
+			return Amount;
+		}
+		virtual void FDRCommit( bso::sBool Unlock ) override
+		{
+			C_().Write( NULL, 0 );
+		}
+		virtual fdr::sTID FDROTake( fdr::sTID Owner ) 
+		{
+			return fdr::UndefinedTID;
+		}
+	public:
+		void reset( bso::sBool P = true )
+		{
+			rODriver_::reset( P );
+			tol::reset( P, Core_ );
+		}
+		qCVDTOR( rOASync );
+		void Init(
+			rASync_ &Core,
+			fdr::thread_safety__ ThreadSafety = fdr::ts_Default )
+		{
+			rODriver_::Init( ThreadSafety );
+			Core_ = &Core;
+		}
+	};
+
+	template <int size = 1024> class rASync
+	: public rASync_
+	{
+	private:
+		fdr::sByte Buffer_[size];
+	public:
+		void reset( bso::sBool P = true )
+		{
+			rASync_::reset( P );
+		}
+		qCDTOR( rASync );
+		void Init( void )
+		{
+			rASync_::Init( Buffer_, size );
+		}
+	};
 }
 
 #endif
