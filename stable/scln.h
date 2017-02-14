@@ -36,12 +36,8 @@
 
 namespace scln {
 
-	inline void ErrFinal( v8::Isolate *Isolate = NULL )
-	{
-		err::buffer__ Buffer;
-		v8q::GetIsolate( Isolate )->ThrowException( v8::Exception::Error( v8q::ToString( err::Message( Buffer ) ) ) ); 
-	}
-
+	void ErrFinal( v8::Isolate *Isolate = NULL );
+	
 	void Register_(
 		v8::Local<v8::Object> Exports,
 		v8::Local<v8::Value> Module,

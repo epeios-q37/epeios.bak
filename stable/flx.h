@@ -1512,6 +1512,12 @@ namespace flx {
 				*Before,
 				*After;
 		} In, Out;
+		bso::sBool Async;	// If at 'true', writing and reading can be occur simultaneously.
+		void reset( bso::sBool P = true )
+		{
+			tol::reset(P, In.Before, In.After, Out.Before, Out.After, Async );
+		}
+		qCDTOR( sMarkers );
 	};
 
 	// Write to console the input and/or output data. For text based protocol exchanges (like HTTP, IMAP, POP...).
@@ -1519,19 +1525,21 @@ namespace flx {
 	: public rIODriver_
 	{
 	private:
-		qRMV( fdr::rIODriver, D_, Driver_ );
+		tht::rLocker Locker_;
+		qRMV( fdr::rIDriver, ID_, IDriver_ );
+		qRMV( fdr::rODriver, OD_, ODriver_ );
 		qRMV( const sMarkers, M_, Markers_ );
-		qRMV( txf::sOFlow, F_, Flow_ );
-		eChannel Channel_;
+		qRMV( txf::sOFlow, FI_, FlowI_ );
+		qRMV( txf::sOFlow, FO_, FlowO_ );
 		bso::sBool Commited_;
 		bso::sBool ReadInProgress_;
 		bso::sBool IsIn_( void ) const
 		{
-			return ( Channel_ == cIn ) || ( Channel_ == cInAndOut );
+			return ( FlowI_ != NULL );
 		}
 		bso::sBool IsOut_( void ) const
 		{
-			return ( Channel_ == cOut ) || ( Channel_ == cInAndOut );
+			return ( FlowO_ != NULL );
 		}
 	protected:
 		virtual fdr::sSize FDRRead(
@@ -1544,37 +1552,95 @@ namespace flx {
 			fdr::sSize Maximum ) override;
 		virtual void FDRCommit( bso::sBool Unlock ) override;
 		virtual fdr::sTID FDROTake( fdr::sTID Owner ) override;
+		void Init_(
+			fdr::rIDriver *IDriver,
+			fdr::rODriver *ODriver,
+			const sMarkers &Markers,	// NOT duplicated !
+			txf::sOFlow *FlowI,
+			txf::sOFlow *FlowO )	// Two different flow, in case one instance is share between two differtent threads.
+		{
+			reset();
+
+			Locker_.Init();
+
+			Commited_ = true;
+			ReadInProgress_ = false;
+			rIODriver_::Init( fdr::ts_Default );
+			IDriver_ = IDriver;
+			ODriver_ = ODriver;
+			Markers_ = &Markers;
+			FlowI_ = FlowI;
+			FlowO_ = FlowO;
+		}
 	public:
 		void reset( bso::sBool P = true )
 		{
 			if ( P ) {
 				if ( ReadInProgress_ ) {
 					if ( M_().Out.After != NULL )
-						F_() << M_().Out.After << txf::commit;
+						FO_() << M_().Out.After << txf::commit;
 					ReadInProgress_ = false;
 				}
 			}
 
-			tol::reset( P, Driver_, Markers_, Flow_, Commited_, ReadInProgress_ );
+			tol::reset( P, Locker_, IDriver_, ODriver_, Markers_, FlowI_, FlowO_, Commited_, ReadInProgress_ );
 			rIODriver_::reset( P );
-			Channel_ = c_Undefined;
 		}
 		qCVDTOR( rIOMonitor );
+		void Init(
+			fdr::rIDriver &IDriver,
+			fdr::rODriver &ODriver,
+			const sMarkers &Markers,	// NOT duplicated !
+			txf::sOFlow &FlowI,
+			txf::sOFlow &FlowO )	// Two different flow, in case one instance is share between two differtent threads.
+		{
+			Init_( &IDriver, &ODriver, Markers, &FlowI, &FlowO );
+		}
+		void Init(
+			fdr::rIODriver &Driver,
+			const sMarkers &Markers,	// NOT duplicated !
+			txf::sOFlow &FlowI,
+			txf::sOFlow &FlowO )	// Two different flow, in case one instance is share between two differtent threads.
+		{
+			Init_( &Driver, &Driver, Markers, &FlowI, &FlowO );
+		}
+		void Init(
+			fdr::rIDriver &Driver,
+			const sMarkers &Markers,	// NOT duplicated !
+			txf::sOFlow &Flow )
+		{
+			Init_( &Driver, NULL, Markers, &Flow, NULL );
+		}
+		void Init(
+			fdr::rODriver &Driver,
+			const sMarkers &Markers,	// NOT duplicated !
+			txf::sOFlow &Flow )
+		{
+			Init_( NULL, &Driver, Markers, NULL, &Flow );
+		}
 		void Init(
 			fdr::rIODriver &Driver,
 			eChannel Channel,
 			const sMarkers &Markers,	// NOT duplicated !
 			txf::sOFlow &Flow )
 		{
-			reset();
-
-			Commited_ = true;
-			ReadInProgress_ = false;
-			rIODriver_::Init( fdr::ts_Default );
-			Driver_ = &Driver;
-			Markers_ = &Markers;
-			Flow_ = &Flow;
-			Channel_ = Channel;
+			switch ( Channel ) {
+			case cNone:
+				Init_( &Driver, &Driver, Markers, NULL, NULL );
+				break;
+			case cIn:
+				Init_( &Driver, &Driver, Markers, &Flow, NULL );
+				break;
+			case cOut:
+				Init_( &Driver, &Driver, Markers, NULL, &Flow );
+				break;
+			case cInAndOut:
+				Init_( &Driver, &Driver, Markers, &Flow, &Flow );
+				break;
+			default:
+				qRFwk();
+				break;
+			}
 		}
 	};
 
@@ -1599,9 +1665,10 @@ namespace flx {
 		}
 		fdr::sSize Read_(
 			fdr::sByte *Buffer,
-			fdr::sSize Size )
+			fdr::sSize Amount )
 		{
-			fdr::sSize Amount = Size > Amount_ ? Amount_ : Size;
+			if ( Amount > Amount_ )
+				Amount = Amount_;
 
 			if ( Amount == 0 )
 				qRFwk();
@@ -1670,25 +1737,26 @@ namespace flx {
 		// If it returns 0, there would no more data (EOF). Otherwise, will block until some data available.
 		fdr::sSize Read(
 			fdr::sByte *Buffer,
-			fdr::sSize Size )
+			fdr::sSize Amount )
 		{
-			fdr::sSize Amount = 0;
 		qRH
 			tht::rLockerHandler Locker;
 		qRB
 			Locker.Init( Locker_ );
 
 			if ( Amount_ != 0 ) {
-				Amount = Read_( Buffer, Size );
+				Amount = Read_( Buffer, Amount );
 			} else if ( Size_ != 0 ) {
 				Locker_.Unlock();
 				Blocker_.Wait();
 				Locker_.Lock();
 
 				if ( Amount_ != 0 )	
-					Amount = Read_( Buffer, Size );
-				// Else there will be no more data.
-			}
+					Amount = Read_( Buffer, Amount );
+				else // There will be no more data.
+					Amount = 0;
+			} else
+				Amount = 0;
 		qRR
 		qRT
 		qRE

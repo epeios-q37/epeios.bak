@@ -491,6 +491,10 @@ namespace xtf {
 				return true;
 			}
 		}
+		void Dismiss( void )
+		{
+			_F().Dismiss();
+		}
 		//f Return the amount of data red.
 		flw::size__ AmountRed( void ) const
 		{

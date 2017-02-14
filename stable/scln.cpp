@@ -23,8 +23,21 @@
 
 #include "v8q.h"
 #include "bch.h"
+#include "cio.h"
 
 using namespace scln;
+
+void scln::ErrFinal( v8::Isolate *Isolate )
+{
+	err::buffer__ Buffer;
+	Isolate = v8q::GetIsolate( Isolate );
+
+	if ( Isolate != NULL )
+		Isolate->ThrowException( v8::Exception::Error( v8q::ToString( err::Message( Buffer ) ) ) ); 
+	else
+		cio::CErr << txf::nl << txf::tab << err::Message( Buffer ) << txf::nl << txf::commit;
+}
+
 
 namespace {
 	bch::qBUNCHwl( sFunction_ ) Functions_;

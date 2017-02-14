@@ -264,38 +264,53 @@ fdr::sSize flx::rIOMonitor::FDRRead(
 	fdr::sSize Maximum,
 	fdr::sByte *Buffer )
 {
-	Maximum = D_().Read( Maximum, Buffer, fdr::bNonBlocking );
+qRH
+	tht::rLockerHandler Locker;
+qRB
+	Locker.Init( Locker_ );
+
+	Maximum = ID_().Read( Maximum, Buffer, fdr::bNonBlocking );
 
 	if ( IsIn_() ) {
 		if ( Maximum != 0 ) {
 			if ( !ReadInProgress_ ) {
 				if ( M_().In.Before != NULL )
-				F_() << M_().In.Before;
-				ReadInProgress_ = true;
+					FI_() << M_().In.Before;
+				if ( !M_().Async )
+					ReadInProgress_ = true;
 			}
 
-			F_().Flow().Write( Buffer, Maximum );
-			F_().Commit();
+			FI_().Flow().Write( Buffer, Maximum );
+
+			if ( M_().Async ) {
+				if ( M_().In.After != NULL )
+					FI_() << M_().In.After;
+				FI_().Commit();
+			}
 		}
 	}
-
+qRR
+qRT
+qRE
 	return Maximum;
 }
 
 void flx::rIOMonitor::FDRDismiss( bso::sBool Unlock )
 {
-	if ( ReadInProgress_ )
+	if ( ReadInProgress_ ) {
 		if ( M_().In.After != NULL )
-		F_() << M_().In.After << txf::commit;
+			FI_() << M_().In.After;
+		FI_().Commit();;
+	}
 
 	ReadInProgress_ = false;
 
-	return D_().Dismiss( Unlock );
+	return ID_().Dismiss( Unlock );
 }
 
 fdr::sTID flx::rIOMonitor::FDRITake( fdr::sTID Owner )
 {
-	return D_().ITake( Owner );
+	return ID_().ITake( Owner );
 }
 
 fdr::sSize flx::rIOMonitor::FDRWrite(
@@ -305,16 +320,21 @@ fdr::sSize flx::rIOMonitor::FDRWrite(
 	if ( IsOut_() ) {
 		if ( Commited_ ) {
 			if ( M_().Out.Before != NULL )
-				F_() << M_().Out.Before;
-			Commited_ = false;
+				FO_() << M_().Out.Before;
+			if ( !M_().Async )
+				Commited_ = false;
 		}
 	}
 
-	Maximum = D_().Write( Buffer, Maximum );
+	Maximum = OD_().Write( Buffer, Maximum );
 
 	if ( IsOut_() && (Maximum != 0) ) {
-		F_().Flow().Write( Buffer, Maximum );
-		F_().Commit();
+		FO_().Flow().Write( Buffer, Maximum );
+		if ( M_().Async ) {
+			if ( M_().Out.After != NULL )
+				FO_() << M_().Out.After;
+			FO_().Commit();
+		}
 	}
 
 	return Maximum;
@@ -324,15 +344,16 @@ void flx::rIOMonitor::FDRCommit( bso::sBool Unlock )
 {
 	if ( IsOut_() ) {
 		if ( M_().Out.After != NULL )
-			F_() << M_().Out.After << txf::commit;
+			FO_() << M_().Out.After;
+		FO_().Commit();
 	}
-	D_().Commit( Unlock );
+	OD_().Commit( Unlock );
 	Commited_ = true;
 }
 
 fdr::sTID flx::rIOMonitor::FDROTake( fdr::sTID Owner )
 {
-	return D_().OTake( Owner );
+	return OD_().OTake( Owner );
 }
 
 

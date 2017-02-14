@@ -1,5 +1,11 @@
 CHANGELOG for the 'Epeios' framework.
 
+2017-02-14 :
+- FLX :
+	-'rMonitor' becomes more versatile.
+- XTF :
+	- Adding 'Dismiss()' method.
+
 2017-02-13 :
 - FLX :
 	- Introducing 'Async...' stuff.

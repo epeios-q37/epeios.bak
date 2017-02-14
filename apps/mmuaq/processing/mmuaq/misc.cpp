@@ -33,7 +33,7 @@ bso::sBool misc::IsVerboseActivated( void )
 }
 
 namespace {
-	const flx::sMarkers Markers_ = { { "<- ", "--\n" }, { "-> " } };
+	flx::sMarkers Markers_;// = { { "<- ", "--\n" }, { "-> ", "" }, false };
 }
 
 void misc::rVerboseIODriver::Init(
@@ -44,6 +44,9 @@ void misc::rVerboseIODriver::Init(
 		str::wString HostPort;
 		qCBUFFERr Buffer;
 	qRB
+		::Markers_.In.Before = "<- " ;
+		::Markers_.In.After = "--\n";
+		::Markers_.Out.Before = "-> ";
 		HostPort.Init();
 		sclmisc::MGetValue( HostPortEntry, HostPort );
 
