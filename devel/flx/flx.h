@@ -1531,8 +1531,8 @@ namespace flx {
 		qRMV( const sMarkers, M_, Markers_ );
 		qRMV( txf::sOFlow, FI_, FlowI_ );
 		qRMV( txf::sOFlow, FO_, FlowO_ );
-		bso::sBool Commited_;
-		bso::sBool ReadInProgress_;
+		bso::sBool Uncommited_;
+		bso::sBool Undismissed_;
 		bso::sBool IsIn_( void ) const
 		{
 			return ( FlowI_ != NULL );
@@ -1563,8 +1563,8 @@ namespace flx {
 
 			Locker_.Init();
 
-			Commited_ = true;
-			ReadInProgress_ = false;
+			Uncommited_ = false;
+			Undismissed_ = false;
 			rIODriver_::Init( fdr::ts_Default );
 			IDriver_ = IDriver;
 			ODriver_ = ODriver;
@@ -1576,14 +1576,13 @@ namespace flx {
 		void reset( bso::sBool P = true )
 		{
 			if ( P ) {
-				if ( ReadInProgress_ ) {
+				if ( Undismissed_ ) {
 					if ( M_().Out.After != NULL )
 						FO_() << M_().Out.After << txf::commit;
-					ReadInProgress_ = false;
 				}
 			}
 
-			tol::reset( P, Locker_, IDriver_, ODriver_, Markers_, FlowI_, FlowO_, Commited_, ReadInProgress_ );
+			tol::reset( P, Locker_, IDriver_, ODriver_, Markers_, FlowI_, FlowO_, Uncommited_, Undismissed_ );
 			rIODriver_::reset( P );
 		}
 		qCVDTOR( rIOMonitor );

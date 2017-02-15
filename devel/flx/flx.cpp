@@ -273,11 +273,11 @@ qRB
 
 	if ( IsIn_() ) {
 		if ( Maximum != 0 ) {
-			if ( !ReadInProgress_ ) {
+			if ( !Undismissed_ ) {
 				if ( M_().In.Before != NULL )
 					FI_() << M_().In.Before;
 				if ( !M_().Async )
-					ReadInProgress_ = true;
+					Undismissed_ = true;
 			}
 
 			FI_().Flow().Write( Buffer, Maximum );
@@ -297,13 +297,13 @@ qRE
 
 void flx::rIOMonitor::FDRDismiss( bso::sBool Unlock )
 {
-	if ( ReadInProgress_ ) {
+	if ( Undismissed_ ) {
 		if ( M_().In.After != NULL )
 			FI_() << M_().In.After;
-		FI_().Commit();;
+		FI_().Commit();
 	}
 
-	ReadInProgress_ = false;
+	Undismissed_ = false;
 
 	return ID_().Dismiss( Unlock );
 }
@@ -318,17 +318,17 @@ fdr::sSize flx::rIOMonitor::FDRWrite(
 	fdr::sSize Maximum )
 {
 	if ( IsOut_() ) {
-		if ( Commited_ ) {
+		if ( !Uncommited_ ) {
 			if ( M_().Out.Before != NULL )
 				FO_() << M_().Out.Before;
 			if ( !M_().Async )
-				Commited_ = false;
+				Uncommited_ = true;
 		}
 	}
 
 	Maximum = OD_().Write( Buffer, Maximum );
 
-	if ( IsOut_() && (Maximum != 0) ) {
+	if ( IsOut_() && ( Maximum != 0 ) ) {
 		FO_().Flow().Write( Buffer, Maximum );
 		if ( M_().Async ) {
 			if ( M_().Out.After != NULL )
@@ -343,12 +343,15 @@ fdr::sSize flx::rIOMonitor::FDRWrite(
 void flx::rIOMonitor::FDRCommit( bso::sBool Unlock )
 {
 	if ( IsOut_() ) {
-		if ( M_().Out.After != NULL )
-			FO_() << M_().Out.After;
-		FO_().Commit();
+		if ( Uncommited_ ) {
+			if ( M_().Out.After != NULL )
+				FO_() << M_().Out.After;
+			FO_().Commit();
+		}
 	}
+
 	OD_().Commit( Unlock );
-	Commited_ = true;
+	Uncommited_ = false;
 }
 
 fdr::sTID flx::rIOMonitor::FDROTake( fdr::sTID Owner )

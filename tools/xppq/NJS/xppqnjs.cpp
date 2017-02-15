@@ -49,8 +49,10 @@ namespace stream_ {
 		}
 	}
 
+	// 'P_...' : producer ; 'C_...' : consumer.
 	namespace read_ {
-		class rCache {
+		class rContent
+		{
 		private:
 			tht::rLocker Locker_;
 			fdr::sByte Buffer_[100];
@@ -67,14 +69,14 @@ namespace stream_ {
 
 				Amount_ = 0;
 			}
-			qCDTOR( rCache );
+			qCDTOR( rContent );
 			void Init( void )
 			{
 				Locker_.Init();
 				Amount_ = 0;
 				Drained_ = false;
 			}
-			fdr::sSize Read(
+			fdr::sSize C_Read(
 				fdr::sSize Amount,
 				fdr::sByte *Buffer )
 			{
@@ -100,7 +102,7 @@ namespace stream_ {
 			qRE
 				return Amount;
 			}
-			fdr::sSize Write(
+			fdr::sSize P_Write(
 				fdr::sByte *Buffer,
 				fdr::sSize Amount )
 			{
@@ -130,16 +132,19 @@ namespace stream_ {
 			qRE
 				return Amount;
 			}
-			qRODISCLOSEr( bso::sBool, Drained );
+			bso::sBool C_IsDrained( void )
+			{
+				return Drained_;
+			}
 		};
 		
 		struct rData {
 			tht::rBlocker Blocker;
 			flw::sIFlow *Flow;
-			rCache *Cache;
+			rContent *Content;
 			void reset( bso::sBool P = true )
 			{
-				tol::reset( P , Blocker, Flow, Cache );
+				tol::reset( P , Blocker, Flow, Content );
 			}
 			qCDTOR( rData );
 			void Init( void )
@@ -156,7 +161,7 @@ namespace stream_ {
 			txf::rOFlow COut;
 			rData &Data = *( rData *)UP;
 			flw::sIFlow &Flow = *Data.Flow;
-			rCache &Cache = *Data.Cache;
+			rContent &Content = *Data.Content;
 		qRFB
 			COut.Init( cio::GetOutDriver() );
 
@@ -167,7 +172,7 @@ namespace stream_ {
 				Amount = Flow.ReadUpTo( sizeof( Buffer ), Buffer );
 
 				while ( Amount != Handled ) {
-					Handled += Cache.Write( Buffer + Handled, Amount - Handled );
+					Handled += Content.P_Write( Buffer + Handled, Amount - Handled );
 					tht::Defer();
 				}
 			}
@@ -175,7 +180,7 @@ namespace stream_ {
 		qRFR
 		qRFT
 			Flow.Dismiss();	// Avoid lock owner problem when destroying rack.
-			Cache.Write( NULL, 0 );
+			Content.P_Write( NULL, 0 );
 		qRFE( scln::ErrFinal() )
 		}
 	}
@@ -199,22 +204,77 @@ namespace stream_ {
 		}
 	};
 
-	class sRack_ {
+	class sUpstreamRack_
+	{
 	private:
-		rASync_
-			UpStream_,	// Before processing.
-			DownStream_; // After processing.
-		txf::rOFlow OFlow_;	// Downstream.
-		flx::rIOMonitor Monitor_;
-		txf::rOFlow FlowI_, FlowO_;
-		flx::sMarkers Markers_;
+		rASync_ ASync_;
 	public:
-		txf::rOFlow OFlow;	// Upstream.
-		flw::sDressedIFlow<> IFlow;	// Downstream.
-		read_::rCache Cache;
+		txf::rOFlow OFlow;
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, UpStream_, DownStream_, OFlow_, OFlow, IFlow, Cache );
+			tol::reset( P, ASync_, OFlow );
+		}
+		qCDTOR( sUpstreamRack_ );
+		void Init( void )
+		{
+			tol::Init( ASync_ );
+			OFlow.Init( ASync_.Out );
+		}
+		fdr::rIDriver &IDriver( void )
+		{
+			return ASync_.In;
+		}
+};
+
+	class sDownstreamRack_
+	{
+	private:
+		rASync_ ASync_;
+		flx::sMarkers Markers_;
+		txf::rOFlow FlowI_, FlowO_;
+		flx::rIOMonitor Monitor_;
+	public:
+		flw::sDressedIFlow<> IFlow;
+		read_::rContent Content;
+		txf::rOFlow OFlow;
+		void reset( bso::sBool P = true )
+		{
+			tol::reset( P, ASync_, OFlow, Markers_,  FlowI_, FlowO_, Monitor_, IFlow, Content );
+		}
+		qCDTOR( sDownstreamRack_ );
+		void Init( void )
+		{
+			tol::Init( ASync_ );
+			OFlow.Init( ASync_.Out );
+
+			Markers_.Async = true;
+			Markers_.In.Before = "\n\t>>>>>>>>>>>>>>>>>I\n";
+			Markers_.In.After = "\n\t<<<<<<<<<<<<<<<<<I\n";
+			Markers_.Out.Before = "\n\t>>>>>>>>>>>>>>>>>O\n";
+			Markers_.Out.After = "\n\t<<<<<<<<<<<<<<<<<O\n";
+
+			FlowI_.Init( cio::GetOutDriver() );
+			FlowO_.Init( cio::GetOutDriver() );
+
+			Monitor_.Init( ASync_.In, ASync_.Out, Markers_, FlowI_, FlowO_ );
+	#if 0
+			IFlow.Init( Monitor_ );
+			OFlow.Init( Monitor_ );
+	#else
+			IFlow.Init( ASync_.In );
+			OFlow.Init( ASync_.Out );
+	#endif
+			Content.Init();
+		}
+	};
+
+	class sRack_ {
+	public:
+		sUpstreamRack_ Upstream;
+		sDownstreamRack_ Downstream;
+		void reset( bso::sBool P = true )
+		{
+			tol::reset( P, Upstream, Downstream );
 		}
 		qCDTOR( sRack_ );
 		void Init( void )
@@ -222,36 +282,17 @@ namespace stream_ {
 		qRH
 			process_::rData Data;
 		qRB
-			UpStream_.Init();
-			OFlow.Init( UpStream_.Out );
+			Upstream.Init();
 
-			DownStream_.Init();
-			FlowI_.Init( cio::GetOutDriver() );
-			FlowO_.Init( cio::GetOutDriver() );
-			Monitor_.Init( DownStream_.In, DownStream_.Out, Markers_, FlowI_, FlowO_ );
-
-			Markers_.Async = true;
-			Markers_.In.Before = "\n >>>>>>>>>>>>>>>>>I\n";
-			Markers_.In.After = "\n <<<<<<<<<<<<<<<<<I\n";
-			Markers_.Out.Before = "\n >>>>>>>>>>>>>>>>>O\n";
-			Markers_.Out.After = "\n <<<<<<<<<<<<<<<<<O\n";
+			Downstream.Init();
 
 	//		int i = 0; while ( i == 0 );
-	#if 0
-			IFlow.Init( Monitor_ );
-			OFlow_.Init( Monitor_ );
-	#else
-			IFlow.Init( DownStream_.In );
-			OFlow_.Init( DownStream_.Out );
-	#endif
-
-			Cache.Init();
 
 			Data.Init();
 
 			Data.Blocker.Init();
-			Data.IDriver = &UpStream_.In;
-			Data.OFlow = &OFlow_;
+			Data.IDriver = &Upstream.IDriver();
+			Data.OFlow = &Downstream.OFlow;
 
 			mtk::Launch( process_::Routine, &Data );
 			Data.Blocker.Wait();
@@ -262,7 +303,7 @@ namespace stream_ {
 	};
 
 	bso::sBool Fill_(
-		read_::rCache &Cache,
+		read_::rContent &Content,
 		v8qnjs::sRStream &Stream,
 		v8::Local<v8::Value> RawFunction )
 	{
@@ -274,7 +315,7 @@ namespace stream_ {
 	qRB
 		Function.Init( RawFunction );
 
-		while ( ( Amount = Cache.Read( sizeof( Buffer ) - 1, Buffer ) ) != 0 ) {
+		while ( ( Amount = Content.C_Read( sizeof( Buffer ) - 1, Buffer ) ) != 0 ) {
 			Buffer[Amount] = 0;
 			Chunk.Init( (const char *)Buffer, Function );
 			Stream.Push( Chunk );
@@ -282,7 +323,7 @@ namespace stream_ {
 	qRR
 	qRT
 	qRE
-		return !Cache.Drained();
+		return !Content.C_IsDrained();
 	}
 
 	void OnData_( const v8q::sFunctionInfos &Infos )
@@ -301,9 +342,9 @@ namespace stream_ {
 		
 		sRack_ &Rack = *v8qnjs::sExternal<sRack_>( This.Get( "_rack" ) ).Value();
 
-		Rack.OFlow << Chunk;
+		Rack.Upstream.OFlow << Chunk;
 
-		Fill_( Rack.Cache, Dest, This.Get( "_func" ) );
+		Fill_( Rack.Downstream.Content, Dest, This.Get( "_func" ) );
 	qRFR
 	qRFT
 	qRFE( scln::ErrFinal() )
@@ -319,9 +360,9 @@ namespace stream_ {
 
 		Dest.Init( This.Get("_dest" ) );
 
-		Rack.OFlow.Commit();
+		Rack.Upstream.OFlow.Commit();
 
-		while ( Fill_( Rack.Cache, Dest, This.Get( "_func" ) ) );
+		while ( Fill_( Rack.Downstream.Content, Dest, This.Get( "_func" ) ) );
 
 		delete v8qnjs::sExternal<sRack_>( This.Get( "_rack" ) ).Value();
 	qRFR
@@ -342,8 +383,8 @@ namespace stream_ {
 
 			Data.Init();
 			Data.Blocker.Init();
-			Data.Flow = &Rack.IFlow;
-			Data.Cache = &Rack.Cache;
+			Data.Flow = &Rack.Downstream.IFlow;
+			Data.Content = &Rack.Downstream.Content;
 
 			mtk::Launch( read_::Routine, &Data );
 
@@ -375,7 +416,7 @@ namespace stream_ {
 
 		Source.Set( "_rack", v8qnjs::sExternal<sRack_>( Rack ) );
 		Source.Set( "_dest", This );
-		Source.Set("_func", v8q::sFunction( Helper.Get("from" ) ).Core() ),
+		Source.Set("_func", v8q::sFunction( Helper.Get( "from" ) ).Core() ),
 		This.Set( "_rack", v8qnjs::sExternal<sRack_>( Rack ) );
 
 		Source.OnData( OnData_ );
