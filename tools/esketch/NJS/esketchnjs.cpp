@@ -14,21 +14,10 @@ namespace {
 		tol::Init( Stream, Test );
 		Arguments.Get( Stream, Test );
   
-		Stream.Launch( "on", v8q::sString( "data" ), Test );
-	}
-
-	void Test1_( const v8q::sArguments &Arguments )
-	{
-		v8qnjs::sRStream Stream;
-		v8q::sFunction Test;
-
-		tol::Init( Stream, Test );
-		Arguments.Get( Stream, Test );
-  
 		Stream.OnData( Test );
 	}
 
-	void Test2_( const v8q::sArguments &Arguments )
+	void Test1_( const v8q::sArguments &Arguments )
 	{
 		v8qnjs::sRStream Stream;
 
@@ -55,7 +44,7 @@ namespace {
 		}
 	}
 	
-	void Test3_( const v8q::sArguments &Arguments )
+	void Test2_( const v8q::sArguments &Arguments )
 	{
 		v8qnjs::sRStream Stream;
 
@@ -74,7 +63,6 @@ void scln::SCLNRegister( scln::sRegistrar &Registrar )
 	Registrar.Register( Test0_ );
 	Registrar.Register( Test1_ );
 	Registrar.Register( Test2_ );
-	Registrar.Register( Test3_ );
 }
 
 SCLN_MODULE( xppq );

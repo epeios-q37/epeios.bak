@@ -11,10 +11,7 @@ readStream = fs.createReadStream( testFilename );
 xppq.test0( readStream, test );
 
 readStream = fs.createReadStream( testFilename );
-xppq.test1( readStream, test );
+xppq.test1( readStream );
 
 readStream = fs.createReadStream( testFilename );
 xppq.test2( readStream );
-
-readStream = fs.createReadStream( testFilename );
-xppq.test3( readStream );
