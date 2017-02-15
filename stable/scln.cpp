@@ -89,7 +89,7 @@ void scln::Register_(
 {
 	sRegistrar Registrar;
 
-	NODE_SET_METHOD( Exports, "dummy", Launch_ );
+	NODE_SET_METHOD( Exports, "_wrapper", Launch_ );
 
 	Registrar.Init( Exports );
 
