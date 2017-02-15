@@ -29,6 +29,7 @@
 # endif
 
 # include "err.h"
+# include "str.h"
 # include "txf.h"
 
 # include <v8.h>
@@ -59,7 +60,7 @@ namespace v8q {
 		v8::Isolate *,
 		v8::Local<v8::Value> *argv,
 		int Position,
-		arg Arg )
+		const arg &Arg )
 	{
 		argv[Position] = Arg.Core();
 	}
@@ -68,7 +69,7 @@ namespace v8q {
 		v8::Isolate *,
 		v8::Local<v8::Value> *argv,
 		int Position,
-		v8::Local<t> Arg )
+		const v8::Local<t> &Arg )
 	{
 		argv[Position] = Arg;
 	}
@@ -82,12 +83,36 @@ namespace v8q {
 		argv[Position] = ToString( Arg, Isolate  );
 	}
 
+	inline void Set_(
+		v8::Isolate *Isolate,
+		v8::Local<v8::Value> *argv,
+		int Position,
+		const str::dString &String )
+	{
+	qRH
+		TOL_CBUFFER___ Buffer;
+	qRB
+		Set_(Isolate, argv, Position, String.Convert( Buffer ) );
+	qRR
+	qRT
+	qRE
+	}
+
+	inline void Set_(
+		v8::Isolate *Isolate,
+		v8::Local<v8::Value> *argv,
+		int Position,
+		const str::wString &String )
+	{
+		return Set_( Isolate, argv, Position, *String );
+	}
+
 	template <typename arg, typename ...args> void Set_(
 		v8::Isolate *Isolate,
 		v8::Local<v8::Value> *argv,
 		int Position,
-		arg Arg,
-		args... Args )
+		const arg &Arg,
+		const args &...Args )
 	{
 		Set_( Isolate, argv, Position, Arg );
 
@@ -286,8 +311,8 @@ namespace v8q {
 		template <typename arg, typename ...args> v8::Local<v8::Value> Launch(
 			const char *Method,
 			v8::Isolate *Isolate,
-			arg &Arg,
-			args &...Args ) const
+			const arg &Arg,
+			const args &...Args ) const
 		{
 			v8::Local<v8::Value> Argv[1+sizeof...( Args )];
 
@@ -299,7 +324,7 @@ namespace v8q {
 		}
 		template <typename ...args> v8::Local<v8::Value> Launch(
 			const char *Method,
-			args &...Args ) const
+			const args &...Args ) const
 		{
 			return Launch( Method, NULL, Args... );
 		}
@@ -353,8 +378,8 @@ namespace v8q {
 		}
 		template <typename arg, typename ...args> v8::Local<v8::Value> Launch(
 			v8::Isolate *Isolate,
-			arg &Arg,
-			args &...Args )
+			const arg &Arg,
+			const args &...Args )
 		{
 			v8::Local<v8::Value> Argv[1+sizeof...( Args )];
 

@@ -9,3 +9,4 @@ class Stream extends stream.Readable {
 }
 
 module.exports.Stream = Stream;
+module.exports.parse = ( stream, callback ) => xppq._wrapper( 1, stream, callback );

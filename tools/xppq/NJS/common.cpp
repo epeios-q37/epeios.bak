@@ -17,24 +17,5 @@
 	along with xppq. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <node.h>
-
-#include "parser.h"
-#include "stream.h"
-
-#include "cio.h"
-#include "scln.h"
-#include "v8qnjs.h"
-#include "xpp.h"
-#include "mtk.h"
-
-
-void scln::SCLNRegister( scln::sRegistrar &Registrar )
-{
-	cio::Initialize(cio::GetConsoleSet() );
-	Registrar.Register( stream::Set );
-	Registrar.Register( parser::Parse );
-}
-
-SCLN_MODULE( xppq );
+#include "common.h"
 

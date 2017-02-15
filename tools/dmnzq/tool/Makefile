@@ -30,14 +30,14 @@ mods += cio cpe crptgr cslio crt
 mods += ctn dir dte dtfbsc dtfptb 
 mods += epsmsc err fdr flf flsq 
 mods += flw flx ias idsq iof 
-mods += iop lst lstbch lstcrt lstctn 
-mods += mns mtx ntvstr que sdr 
-mods += stkbse stkbch stkctn str strng 
-mods += tagsbs tol txf tys uys 
-mods += utf xtf llio tht thtsub 
-mods += bomhdl cdgb64 dlbrry fil fnm 
-mods += lcl plgn plgncore rgstry stsfsm 
-mods += xml xpp 
+mods += iop lck lst lstbch lstcrt 
+mods += lstctn mns mtx ntvstr que 
+mods += sdr stkbse stkbch stkctn str 
+mods += strng tagsbs tol txf tys 
+mods += uys utf xtf llio tht 
+mods += thtsub bomhdl cdgb64 dlbrry fil 
+mods += fnm lcl plgn plgncore rgstry 
+mods += stsfsm xml xpp 
 mods += csdlec csdleo csdmxb csdmxs csdscb 
 mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
 mods += scltool 
@@ -341,7 +341,7 @@ ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20170211"\"
+copt += -DVERSION=\""20170215"\"
 copt += -DCOPYRIGHT_YEARS=\""2015-2016"\"
 copt += -DIDENTIFIER=\""13299010-d5c2-4d64-aad7-94339d73cfcc"\"
 

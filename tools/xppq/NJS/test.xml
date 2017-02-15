@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<OtherThing>
+<OtherThing TheAttribute="TheAttributeValue">
 <xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
-<Something>Coucou</Something>
+<Something TheOtherAttribute="TheOtherAttributeValue">Coucou</Something>
 <xpp:expand href="../CLI/Project.xml"/>
 </xpp:bloc>
 </OtherThing>

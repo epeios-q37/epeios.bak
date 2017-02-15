@@ -1813,7 +1813,8 @@ namespace flx {
 		{
 			fdr::sSize Amount = 0;
 
-			while ( ( Amount = C_().Write( Buffer, Wanted ) ) == 0 );
+			while ( ( Amount = C_().Write( Buffer, Wanted ) ) == 0 )
+				tht::Defer();
 
 			return Amount;
 		}

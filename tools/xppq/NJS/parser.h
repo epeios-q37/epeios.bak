@@ -17,24 +17,13 @@
 	along with xppq. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <node.h>
+#ifndef PARSER_INC_
+# define PARSER_INC_
 
-#include "parser.h"
-#include "stream.h"
+# include "v8q.h"
 
-#include "cio.h"
-#include "scln.h"
-#include "v8qnjs.h"
-#include "xpp.h"
-#include "mtk.h"
-
-
-void scln::SCLNRegister( scln::sRegistrar &Registrar )
-{
-	cio::Initialize(cio::GetConsoleSet() );
-	Registrar.Register( stream::Set );
-	Registrar.Register( parser::Parse );
+namespace parser {
+	void Parse( const v8q::sArguments &Arguments );
 }
 
-SCLN_MODULE( xppq );
-
+#endif

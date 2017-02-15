@@ -17,24 +17,32 @@
 	along with xppq. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <node.h>
+#ifndef COMMON_INC_
+# define COMMON_INC_
 
-#include "parser.h"
-#include "stream.h"
+# include "v8q.h"
 
-#include "cio.h"
-#include "scln.h"
-#include "v8qnjs.h"
-#include "xpp.h"
-#include "mtk.h"
+# include "flx.h"
 
-
-void scln::SCLNRegister( scln::sRegistrar &Registrar )
-{
-	cio::Initialize(cio::GetConsoleSet() );
-	Registrar.Register( stream::Set );
-	Registrar.Register( parser::Parse );
+namespace common {
+	struct rASync {
+	private:
+		flx::rASync<> Core_;
+	public:
+		flx::rIASync In;
+		flx::rOASync Out;
+		void reset( bso::sBool P = true )
+		{
+			tol::reset( P, Core_, In, Out );
+		}
+		qCDTOR( rASync );
+		void Init( void )
+		{
+			Core_.Init();
+			In.Init( Core_ );
+			Out.Init( Core_ );
+		}
+	};
 }
 
-SCLN_MODULE( xppq );
-
+#endif
