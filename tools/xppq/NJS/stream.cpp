@@ -208,34 +208,34 @@ namespace {
 		}
 	}
 
-	typedef common::rASync rASync_;
+	typedef common::sFRelay sFRelay_;
 
 	class sUpstreamRack_
 	{
 	private:
-		rASync_ ASync_;
+		sFRelay_ Relay_;
 	public:
 		txf::rOFlow OFlow;
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, ASync_, OFlow );
+			tol::reset( P, Relay_, OFlow );
 		}
 		qCDTOR( sUpstreamRack_ );
 		void Init( void )
 		{
-			tol::Init( ASync_ );
-			OFlow.Init( ASync_.Out );
+			tol::Init( Relay_ );
+			OFlow.Init( Relay_.Out );
 		}
 		fdr::rIDriver &IDriver( void )
 		{
-			return ASync_.In;
+			return Relay_.In;
 		}
 	};
 
-	class sDownstreamRack_
+	class rDownstreamRack_
 	{
 	private:
-		rASync_ ASync_;
+		sFRelay_ Relay_;
 		flx::sMarkers Markers_;
 		txf::rOFlow FlowI_, FlowO_;
 		flx::rIOMonitor Monitor_;
@@ -245,13 +245,13 @@ namespace {
 		txf::rOFlow OFlow;
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, ASync_, OFlow, Markers_,  FlowI_, FlowO_, Monitor_, IFlow, Content );
+			tol::reset( P, Relay_, OFlow, Markers_,  FlowI_, FlowO_, Monitor_, IFlow, Content );
 		}
-		qCDTOR( sDownstreamRack_ );
+		qCDTOR( rDownstreamRack_ );
 		void Init( void )
 		{
-			tol::Init( ASync_ );
-			OFlow.Init( ASync_.Out );
+			tol::Init( Relay_ );
+			OFlow.Init( Relay_.Out );
 
 			Markers_.Async = true;
 			Markers_.In.Before = "\n\t>>>>>>>>>>>>>>>>>I\n";
@@ -262,28 +262,28 @@ namespace {
 			FlowI_.Init( cio::GetOutDriver() );
 			FlowO_.Init( cio::GetOutDriver() );
 
-			Monitor_.Init( ASync_.In, ASync_.Out, Markers_, FlowI_, FlowO_ );
+			Monitor_.Init( Relay_.In, Relay_.Out, Markers_, FlowI_, FlowO_ );
 	#if 0
 			IFlow.Init( Monitor_ );
 			OFlow.Init( Monitor_ );
 	#else
-			IFlow.Init( ASync_.In );
-			OFlow.Init( ASync_.Out );
+			IFlow.Init( Relay_.In );
+			OFlow.Init( Relay_.Out );
 	#endif
 			Content.Init();
 		}
 	};
 
-	class sRack_ {
+	class rRack_ {
 	public:
 		sUpstreamRack_ Upstream;
-		sDownstreamRack_ Downstream;
+		rDownstreamRack_ Downstream;
 		bso::sBool Started;
 		void reset( bso::sBool P = true )
 		{
 			tol::reset( P, Upstream, Downstream, Started );
 		}
-		qCDTOR( sRack_ );
+		qCDTOR( rRack_ );
 		void Init( void )
 		{
 		qRH
@@ -362,7 +362,7 @@ namespace {
 
 		Dest.Init( This.Get("_dest" ) );
 		
-		sRack_ &Rack = *v8qnjs::sExternal<sRack_>( This.Get( "_rack0" ) ).Value();
+		rRack_ &Rack = *v8qnjs::sExternal<rRack_>( This.Get( "_rack0" ) ).Value();
 
 		Rack.Upstream.OFlow << Chunk;
 
@@ -378,7 +378,7 @@ namespace {
 		v8qnjs::sRStream This, Dest;
 	qRFB
 		This.Init(Infos.This() );
-		sRack_ &Rack = *v8qnjs::sExternal<sRack_>( This.Get( "_rack0" ) ).Value();
+		rRack_ &Rack = *v8qnjs::sExternal<rRack_>( This.Get( "_rack0" ) ).Value();
 
 		Dest.Init( This.Get("_dest" ) );
 
@@ -390,7 +390,7 @@ namespace {
 
 		cio::COut << __LOC__ << tht::GetTID() << txf::nl << txf::commit;
 		
-		delete v8qnjs::sExternal<sRack_>( This.Get( "_rack0" ) ).Value();
+		delete v8qnjs::sExternal<rRack_>( This.Get( "_rack0" ) ).Value();
 	qRFR
 	qRFT
 		cio::COut << __LOC__ << tht::GetTID() << txf::nl << txf::commit;
@@ -406,7 +406,7 @@ namespace {
 		read_::rData Data;
 	qRFB
 		This.Init( Infos.This() );
-		sRack_ &Rack = *v8qnjs::sExternal<sRack_>( This.Get( "_rack0" ) ).Value();
+		rRack_ &Rack = *v8qnjs::sExternal<rRack_>( This.Get( "_rack0" ) ).Value();
 
 		if ( !Rack.Started ) {
 			Data.Init();
@@ -431,9 +431,9 @@ void stream::Set( const v8q::sArguments &Arguments )
 qRFH
 	v8qnjs::sRStream Source, This;
 	v8qnjs::sHelper Helper;
-	sRack_ *Rack = NULL;
+	rRack_ *Rack = NULL;
 qRFB
-	Rack = new sRack_;
+	Rack = new rRack_;
 
 	if ( Rack == NULL )
 		qRGnr();
@@ -443,10 +443,10 @@ qRFB
 
 	Rack->Init();
 
-	Source.Set( "_rack0", v8qnjs::sExternal<sRack_>( Rack ) );
+	Source.Set( "_rack0", v8qnjs::sExternal<rRack_>( Rack ) );
 	Source.Set( "_dest", This );
 	Source.Set("_func", v8q::sFunction( Helper.Get( "from" ) ).Core() ),
-	This.Set( "_rack0", v8qnjs::sExternal<sRack_>( Rack ) );
+	This.Set( "_rack0", v8qnjs::sExternal<rRack_>( Rack ) );
 
 	Source.OnData( OnData_ );
 	Source.OnEnd( OnEnd_ );

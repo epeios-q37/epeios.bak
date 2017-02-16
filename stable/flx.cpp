@@ -21,6 +21,7 @@
 
 #include "flx.h"
 
+#include "mtk.h"
 #include "str.h"
 
 flx::void_odriver___ flx::VoidODriver;
@@ -358,6 +359,74 @@ fdr::sTID flx::rIOMonitor::FDROTake( fdr::sTID Owner )
 {
 	return OD_().OTake( Owner );
 }
+
+namespace async_ {
+	struct rData {
+		tht::rBlocker Blocker;
+		fdr::rIDriver *IDriver;
+		fdr::rODriver *ODriver;
+		void reset( bso::sBool P = true )
+		{
+			tol::reset( P, Blocker, IDriver, ODriver );
+		}
+		qCDTOR( rData );
+		void Init( void )
+		{
+			Blocker.Init();
+		}
+
+	};
+
+	void Routine( void *UP )
+	{
+	qRH
+		flw::sDressedIFlow<> IFlow;
+		flw::sDressedOFlow<> OFlow;
+	qRB
+		fdr::sByte Buffer[100];
+		fdr::sSize Amount = 0;
+		rData &Data = *(rData *)UP;
+
+		IFlow.Init( *Data.IDriver );
+		OFlow.Init( *Data.ODriver );
+
+		Data.Blocker.Unblock();
+
+		while ( !IFlow.EndOfFlow() )
+			OFlow.WriteUpTo(Buffer, IFlow.ReadUpTo( sizeof( Buffer ), Buffer ) );
+
+		IFlow.Dismiss();
+	qRR
+	qRT
+	qRE
+	}
+}
+
+fdr::rODriver &flx::rASync_::Init(
+	fdr::rODriver &ODriver,
+	fdr::sByte *Buffer,
+	fdr::sSize Size )
+{
+qRH
+	async_::rData Data;
+qRB
+	Relay_.Init( Buffer, Size );
+	In_.Init( Relay_ );
+	Out_.Init( Relay_ );
+
+	Data.Init();
+	Data.IDriver = &In_;
+	Data.ODriver = &ODriver;
+
+	mtk::Launch( async_::Routine, &Data );
+
+	Data.Blocker.Wait();
+qRR
+qRT
+qRE
+	return Out_;
+}
+
 
 
 Q37_GCTOR( flx )

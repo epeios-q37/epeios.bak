@@ -593,9 +593,8 @@ namespace flx {
 		}
 	};	
 
+	// All writing will always succeed.
 	extern void_odriver___ VoidODriver;
-	// As placeholder, but with no writing.
-	extern void_odriver___ PlaceholderODriver;
 
 	// 'flow' qui n'crit dans rien.
 	class void_oflow__
@@ -620,11 +619,11 @@ namespace flx {
 		}
 	};
 
-	// ATTENTION : n'est pas 'thread-safe'.
+	// All writing will always succeed.
 	extern void_oflow__ VoidOFlow;
-	// As placeholder, but with no writing.
+	// As placeholder : a writing attempt will throw an error.
+	extern void_odriver___ PlaceholderODriver;
 	extern void_oflow__ PlaceholderOFlow;
-
 
 	// 'driver' qui ne lit rien.
 	class void_idriver___
@@ -663,10 +662,8 @@ namespace flx {
 		}
 	};	
 
+	// Each reading attempt will return EOF.
 	extern void_idriver___ VoidIDriver;
-	// As placeholder, but with no reading.
-	extern void_idriver___ PlaceholderIDriver;
-
 
 	// 'flow' qui ne lit rien.
 	class void_iflow__
@@ -691,11 +688,13 @@ namespace flx {
 		}
 	};
 
-	// ATTENTION : n'est pas 'thread-safe'.
+	// Each reading attempt will return EOF.
 	extern void_iflow__ VoidIFlow;
-	// As placeholder, but with no reading.
+	// As placeholder : read attempt will throw an error.
+	extern void_idriver___ PlaceholderIDriver;
 	extern void_iflow__ PlaceholderIFlow;
 
+# if 0	// Obsolete ? Seems to be useless.
 	// 'driver' qui relaye un autre 'driver'.
 	class relay_oflow_driver___
 	: public _oflow_driver___
@@ -795,6 +794,7 @@ namespace flx {
 			return _Driver != NULL;
 		}
 	};
+#endif
 
 	qENUM( CommitHandling ) {
 		chPropagate,	// 'Commit()' IS propagated to underlying flow.
@@ -1643,7 +1643,9 @@ namespace flx {
 		}
 	};
 
-	class rASync_
+	// Relay classes relays data from an output driver to an input one.
+	// The core. Thread-safe.
+	class rRelay_
 	{
 	private:
 		tht::rLocker Locker_;
@@ -1687,7 +1689,7 @@ namespace flx {
 
 			Size_ = Head_ = Amount_ = 0;
 		}
-		qCDTOR( rASync_ );
+		qCDTOR( rRelay_ );
 		void Init(
 			fdr::sByte *Buffer,
 			fdr::sSize Size )
@@ -1765,11 +1767,11 @@ namespace flx {
 
 	typedef fdr::rIDressedDriver rIDriver_;
 
-	class rIASync
+	class sIRelay
 	: public rIDriver_
 	{
 	private:
-		qRMV( rASync_, C_, Core_ );
+		qRMV( rRelay_, C_, Core_ );
 	protected:
 		virtual fdr::sSize FDRRead(
 			fdr::sSize Wanted,
@@ -1789,9 +1791,9 @@ namespace flx {
 			rIDriver_::reset( P );
 			tol::reset( P, Core_ );
 		}
-		qCVDTOR( rIASync );
+		qCVDTOR( sIRelay );
 		void Init(
-			rASync_ &Core,
+			rRelay_ &Core,
 			fdr::thread_safety__ ThreadSafety = fdr::ts_Default )
 		{
 			rIDriver_::Init( ThreadSafety );
@@ -1801,11 +1803,11 @@ namespace flx {
 
 	typedef fdr::rODressedDriver rODriver_;
 
-	class rOASync
+	class sORelay
 	: public rODriver_
 	{
 	private:
-		qRMV( rASync_, C_, Core_ );
+		qRMV( rRelay_, C_, Core_ );
 	protected:
 		virtual fdr::sSize FDRWrite(
 			const fdr::sByte *Buffer,
@@ -1832,9 +1834,9 @@ namespace flx {
 			rODriver_::reset( P );
 			tol::reset( P, Core_ );
 		}
-		qCVDTOR( rOASync );
+		qCVDTOR( sORelay );
 		void Init(
-			rASync_ &Core,
+			rRelay_ &Core,
 			fdr::thread_safety__ ThreadSafety = fdr::ts_Default )
 		{
 			rODriver_::Init( ThreadSafety );
@@ -1842,7 +1844,45 @@ namespace flx {
 		}
 	};
 
-	template <int size = 1024> class rASync
+	// Fixed-size buffer relay.
+	template <int size = 1024> class rFRelay
+	: public rRelay_
+	{
+	private:
+		fdr::sByte Buffer_[size];
+	public:
+		void reset( bso::sBool P = true )
+		{
+			rRelay_::reset( P );
+		}
+		qCDTOR( rFRelay );
+		void Init( void )
+		{
+			rRelay_::Init( Buffer_, size );
+		}
+	};
+
+	// Asynchrone related class, which buffers an input driver so that a writing will never block (until too much data were written).
+	class rASync_
+	{
+	private:
+		rRelay_ Relay_;
+		sIRelay In_;
+		sORelay Out_;
+	public:
+		void reset( bso::sBool P = true )
+		{
+			tol::reset( P, Relay_, In_, Out_ );
+		}
+		qCDTOR( rASync_ );
+		fdr::rODriver &Init(
+			fdr::rODriver &Driver,
+			fdr::sByte *Buffer,
+			fdr::sSize Size );
+	};
+
+	// Fixed-size buffer asynchrone output.
+	template <int size = 1024> class rFASync
 	: public rASync_
 	{
 	private:
@@ -1852,12 +1892,13 @@ namespace flx {
 		{
 			rASync_::reset( P );
 		}
-		qCDTOR( rASync );
-		void Init( void )
+		qCDTOR( rFASync );
+		void Init( fdr::rODriver &Driver )
 		{
-			rASync_::Init( Buffer_, size );
+			rAsync_::Init( Driver, Buffer_, size );
 		}
 	};
+
 }
 
 #endif

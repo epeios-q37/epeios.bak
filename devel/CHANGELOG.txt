@@ -1,5 +1,10 @@
 CHANGELOG for the 'Epeios' framework.
 
+2017-02-16 :
+- FLX :
+	- Obsoleting the seemingly useless 'relay_...' classes.
+	- 'ASync' related classes becomes 'Relay'.
+
 2017-02-15 :
 - FLX :
 	- Fixing twice commit outputing.

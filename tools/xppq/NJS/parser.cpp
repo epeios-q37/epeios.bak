@@ -170,27 +170,27 @@ namespace {
 		}
 	}
 
-	typedef common::rASync rASync_;
+	typedef common::sFRelay sFRelay_;
 
 	class sUpstreamRack_
 	{
 	private:
-		rASync_ ASync_;
+		sFRelay_ Relay_;
 	public:
 		txf::rOFlow OFlow;
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, ASync_, OFlow );
+			tol::reset( P, Relay_, OFlow );
 		}
 		qCDTOR( sUpstreamRack_ );
 		void Init( void )
 		{
-			tol::Init( ASync_ );
-			OFlow.Init( ASync_.Out );
+			tol::Init( Relay_ );
+			OFlow.Init( Relay_.Out );
 		}
 		fdr::rIDriver &IDriver( void )
 		{
-			return ASync_.In;
+			return Relay_.In;
 		}
 	};
 

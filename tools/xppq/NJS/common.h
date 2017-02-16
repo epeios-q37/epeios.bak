@@ -25,17 +25,17 @@
 # include "flx.h"
 
 namespace common {
-	struct rASync {
+	struct sFRelay {
 	private:
-		flx::rASync<> Core_;
+		flx::rFRelay<> Core_;
 	public:
-		flx::rIASync In;
-		flx::rOASync Out;
+		flx::sIRelay In;
+		flx::sORelay Out;
 		void reset( bso::sBool P = true )
 		{
 			tol::reset( P, Core_, In, Out );
 		}
-		qCDTOR( rASync );
+		qCDTOR( sFRelay );
 		void Init( void )
 		{
 			Core_.Init();
