@@ -22,7 +22,6 @@
 		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
 			<Modules Group="Core">
 				<xpp:expand select="Core"/>
-				<Module>mtk</Module>
 				<Module>strmrg</Module>
 			</Modules>
 			<Modules Group="SCL">

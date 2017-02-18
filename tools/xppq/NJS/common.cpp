@@ -17,5 +17,51 @@
 	along with xppq. If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <uv.h>
+
 #include "common.h"
 
+#include "scln.h"
+
+using namespace common;
+
+namespace {
+	struct sWork_ {
+		uv_work_t Request;
+		cASync *Callbacks;
+	};
+
+	void WorkAsync_(uv_work_t *req)
+	{
+	qRFH
+		sWork_ &Work = *static_cast<sWork_ *>( req->data );
+	qRFB
+		Work.Callbacks->Process();
+	qRFR
+	qRFT
+	qRFE(scln::ErrFinal() );
+	}
+
+	void WorkAsyncComplete_(
+		uv_work_t *req,
+		int Status )
+	{
+			sWork_ *Work = static_cast<sWork_ *>(req->data);
+
+			delete Work;
+	}
+}
+
+void common::HandleASync( cASync &Callbacks )
+{
+	sWork_ *Work = new sWork_;
+
+	if ( Work == NULL )
+		qRAlc();
+
+	Work->Request.data = Work;
+
+	Work->Callbacks = &Callbacks;
+
+	uv_queue_work( uv_default_loop(), &Work->Request, WorkAsync_, WorkAsyncComplete_ );
+}

@@ -23,7 +23,6 @@
 			<Modules Group="Core">
 				<xpp:expand select="Core"/>
 				<Module>fblovl</Module>
-				<Module>mtk</Module>
 				<Module>sck</Module>
 			</Modules>
 			<Modules Group="CSD">

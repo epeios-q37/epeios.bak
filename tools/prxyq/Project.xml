@@ -23,7 +23,6 @@
 				<xpp:expand select="Core"/>
     <Module>log</Module>
     <Module>ltf</Module>
-    <Module>mtk</Module>
     <Module>prxybase</Module>
 				<Module>sck</Module>
 			</Modules>

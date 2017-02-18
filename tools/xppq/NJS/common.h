@@ -27,7 +27,7 @@
 namespace common {
 	struct sFRelay {
 	private:
-		flx::rFRelay<> Core_;
+		flx::rDRelay<> Core_;
 	public:
 		flx::sIRelay In;
 		flx::sORelay Out;
@@ -43,6 +43,42 @@ namespace common {
 			Out.Init( Core_ );
 		}
 	};
+
+	class sUpstreamRack
+	{
+	private:
+		sFRelay Relay_;
+		flx::rDASync<> ASync_;
+	public:
+		txf::rOFlow OFlow;
+		void reset( bso::sBool P = true )
+		{
+			tol::reset( P, Relay_, ASync_, OFlow );
+		}
+		qCDTOR( sUpstreamRack );
+		void Init( void )
+		{
+			tol::Init( Relay_ );
+			OFlow.Init( ASync_.Init( Relay_.Out ) );
+		}
+		fdr::rIDriver &IDriver( void )
+		{
+			return Relay_.In;
+		}
+	};
+
+	class cASync {
+	protected:
+		virtual void COMMONProcess( void ) = 0;
+	public:
+		qCALLBACK( ASync );
+		void Process( void )
+		{
+			return COMMONProcess();
+		}
+	};
+
+	void HandleASync( cASync &Callbacks );
 }
 
 #endif

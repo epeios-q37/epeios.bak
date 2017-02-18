@@ -382,6 +382,7 @@ namespace async_ {
 	qRH
 		flw::sDressedIFlow<> IFlow;
 		flw::sDressedOFlow<> OFlow;
+		bso::sSize Amount = 0;
 	qRB
 		fdr::sByte Buffer[100];
 		fdr::sSize Amount = 0;
@@ -393,7 +394,7 @@ namespace async_ {
 		Data.Blocker.Unblock();
 
 		while ( !IFlow.EndOfFlow() )
-			OFlow.WriteUpTo(Buffer, IFlow.ReadUpTo( sizeof( Buffer ), Buffer ) );
+			OFlow.Write(Buffer, IFlow.ReadUpTo( sizeof( Buffer ), Buffer ) );
 
 		IFlow.Dismiss();
 	qRR
@@ -403,16 +404,14 @@ namespace async_ {
 }
 
 fdr::rODriver &flx::rASync_::Init(
-	fdr::rODriver &ODriver,
-	fdr::sByte *Buffer,
-	fdr::sSize Size )
+	rRelay_ &Relay,
+	fdr::rODriver &ODriver )
 {
 qRH
 	async_::rData Data;
 qRB
-	Relay_.Init( Buffer, Size );
-	In_.Init( Relay_ );
-	Out_.Init( Relay_ );
+	In_.Init( Relay );
+	Out_.Init( Relay );
 
 	Data.Init();
 	Data.IDriver = &In_;

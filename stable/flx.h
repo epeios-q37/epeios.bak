@@ -1660,7 +1660,7 @@ namespace flx {
 		{
 			if ( Head_ != 0 ) {
 				if ( Amount_ != 0 )
-					memcpy( Buffer_, Buffer_+ Head_, Amount_ );
+					memmove( Buffer_, Buffer_+ Head_, Amount_ );
 				Head_ = 0;
 			}
 		}
@@ -1681,7 +1681,18 @@ namespace flx {
 
 			return Amount;
 		}
-
+	protected:
+		// Requires to get a new buffer of current size 'OldSize' to new size 'NewSize'.
+		// Returns the size of the new buffer, which must, at least, be 'OldSize' (untouch buffer).
+		virtual fdr::sSize FLXReallocate(
+			fdr::sByte *&Buffer,
+			fdr::sSize OldSize,
+			fdr::sSize NewSize ) = 0;
+		bso::sBool EOFReached_( void )
+		{
+			// If 'Size' == 0 and 'Buffer' == NULL, then the first buffer alllocation of a dynamic relay was not yet called.
+			return ( Size_ == 0 ) && ( Buffer_ != 0 );
+		}
 	public:
 		void reset( bso::sBool P = true )
 		{
@@ -1712,20 +1723,23 @@ namespace flx {
 		qRB
 			Locker.Init( Locker_ );
 
-			if ( Size_ == 0 )	// Should not be called twice to indicate that there will be no more data.
+			if ( EOFReached_() ) // Should not be called twice to indicate that there will be no more data.
 				qRFwk();
 
 			if ( Amount_ == 0 )	// If no data available, 'Read(...)' will block until some available.
 				Blocker_.Unblock();	// Will unblock 'Read(...)', which will then be blocked by 'Locker_'.
 
 			if ( Amount != 0 ) {
-				if ( Amount > ( Size_ - Amount_ ) )
+				if ( Amount > ( Size_ - Amount_ ) ) {
+					if ( Amount_ == Size_ )
+						Size_ = FLXReallocate( Buffer_, Size_, Amount + Size_ );
 					Amount = Size_ - Amount_;
+				}
 
 				Normalize_();
 
 				if ( Amount != 0 ) {
-					memcpy( Buffer_, Buffer, Amount );
+					memcpy( Buffer_ + Amount_, Buffer, Amount );
 					Amount_ += Amount;
 				}
 			} else
@@ -1747,7 +1761,7 @@ namespace flx {
 
 			if ( Amount_ != 0 ) {
 				Amount = Read_( Buffer, Amount );
-			} else if ( Size_ != 0 ) {
+			} else if ( !EOFReached_() ) {
 				Locker_.Unlock();
 				Blocker_.Wait();
 				Locker_.Lock();
@@ -1763,6 +1777,20 @@ namespace flx {
 		qRE
 			return Amount;
 		}
+		bso::sBool IsCompleted( void )
+		{
+			bso::sBool Completed = false;
+		qRH
+			tht::rLockerHandler Locker;
+		qRB
+			Locker.Init( Locker_ );
+
+			Completed = ( Size_ == 0 ) && ( Amount_ == 0 );
+		qRR
+		qRT
+		qRE
+			return Completed;
+		} 
 	};
 
 	typedef fdr::rIDressedDriver rIDriver_;
@@ -1850,6 +1878,14 @@ namespace flx {
 	{
 	private:
 		fdr::sByte Buffer_[size];
+	protected:
+		virtual fdr::sSize FLXReallocate(
+			fdr::sByte *&Buffer,
+			fdr::sSize OldSize,
+			fdr::sSize NewSize ) override
+		{
+			return OldSize;
+		}
 	public:
 		void reset( bso::sBool P = true )
 		{
@@ -1862,23 +1898,51 @@ namespace flx {
 		}
 	};
 
+	// Dynamic buffer relay.
+	template <int max = 64 * 1024> class rDRelay
+	: public rRelay_
+	{
+	protected:
+		virtual fdr::sSize FLXReallocate(
+			fdr::sByte *&Buffer,
+			fdr::sSize OldSize,
+			fdr::sSize NewSize ) override
+		{
+			if ( ( max != 0 ) && ( NewSize > max ) )
+				qRGnr();
+
+			if ( ( Buffer = (fdr::sByte *)realloc( Buffer, NewSize ) ) == NULL )
+				qRAlc();
+
+			return NewSize;
+		}
+	public:
+		void reset( bso::sBool P = true )
+		{
+			rRelay_::reset( P );
+		}
+		qCDTOR( rDRelay );
+		void Init( void )
+		{
+			rRelay_::Init( NULL, 0 );
+		}
+	};
+
 	// Asynchrone related class, which buffers an input driver so that a writing will never block (until too much data were written).
 	class rASync_
 	{
 	private:
-		rRelay_ Relay_;
 		sIRelay In_;
 		sORelay Out_;
 	public:
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, Relay_, In_, Out_ );
+			tol::reset( P, In_, Out_ );
 		}
 		qCDTOR( rASync_ );
 		fdr::rODriver &Init(
-			fdr::rODriver &Driver,
-			fdr::sByte *Buffer,
-			fdr::sSize Size );
+			rRelay_ &Relay,
+			fdr::rODriver &Driver );
 	};
 
 	// Fixed-size buffer asynchrone output.
@@ -1886,16 +1950,36 @@ namespace flx {
 	: public rASync_
 	{
 	private:
-		fdr::sByte Buffer_[size];
+		rFRelay<size> Relay_;
 	public:
 		void reset( bso::sBool P = true )
 		{
 			rASync_::reset( P );
 		}
 		qCDTOR( rFASync );
-		void Init( fdr::rODriver &Driver )
+		fdr::rODriver &Init( fdr::rODriver &Driver )
 		{
-			rAsync_::Init( Driver, Buffer_, size );
+			Relay_.Init();
+			return rASync_::Init( Relay_, Driver );
+		}
+	};
+
+	// Dynamic buffer asynchrone output.
+	template <int size = 64 * 1024> class rDASync
+	: public rASync_
+	{
+	private:
+		rDRelay<size> Relay_;
+	public:
+		void reset( bso::sBool P = true )
+		{
+			rASync_::reset( P );
+		}
+		qCDTOR( rDASync );
+		fdr::rODriver &Init( fdr::rODriver &Driver )
+		{
+			Relay_.Init();
+			return rASync_::Init( Relay_, Driver );
 		}
 	};
 

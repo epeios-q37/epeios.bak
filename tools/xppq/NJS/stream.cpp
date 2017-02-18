@@ -17,6 +17,8 @@
 	along with xppq. If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <uv.h>
+
 #include "stream.h"
 
 #include "v8qnjs.h"
@@ -31,44 +33,48 @@
 
 namespace {
 	namespace process_ {
-		struct rData {
-			tht::rBlocker Blocker;
-			fdr::rIDriver *IDriver;
-			txf::sOFlow *OFlow;
+		namespace {
+			typedef common::cASync cASync_;
+		}
+
+		class sASyncCallback
+		: public cASync_
+		{
+		private:
+			fdr::rIDriver *IDriver_;
+			txf::sOFlow *OFlow_;
+		protected:
+			virtual void COMMONProcess( void ) override
+			{
+			qRH
+				flw::sDressedIFlow<> IFlow;
+				xtf::sIFlow XFlow;
+			qRB
+				IFlow.Init( *IDriver_ );
+				XFlow.Init( IFlow, utf::f_Guess );
+
+				if ( xpp::Process( XFlow, xpp::criterions___( "" ), xml::oIndent, *OFlow_ ) != xpp::sOK )
+					qRGnr();
+			qRR
+			qRT
+				XFlow.Dismiss();	// Avoid lock owner problem when destroying rack.
+				OFlow_->Commit();	
+			qRE
+			}
+		public:
 			void reset( bso::sBool P = true )
 			{
-				tol::reset( P , Blocker, IDriver, OFlow );
+				tol::reset( P, IDriver_, OFlow_ );
 			}
-			qCDTOR( rData );
-			void Init( void )
+			qCVDTOR( sASyncCallback );
+			void Init(
+				fdr::rIDriver &IDriver,
+				txf::sOFlow &OFlow )
 			{
-				reset();
+				IDriver_ = &IDriver;
+				OFlow_ = &OFlow;
 			}
 		};
-
-		void Routine( void *UP )
-		{
-		qRFH
-			flw::sDressedIFlow<> IFlow;
-			xtf::sIFlow XFlow;
-			rData &Data = *(rData *)UP;
-			fdr::rIDriver &IDriver = *Data.IDriver;
-			txf::sOFlow &OFlow = *Data.OFlow;
-		qRFB
-			Data.Blocker.Unblock();
-
-			IFlow.Init( IDriver );
-			XFlow.Init( IFlow, utf::f_Guess );
-
-			if ( xpp::Process( XFlow, xpp::criterions___( "" ), xml::oIndent, OFlow ) != xpp::sOK )
-				qRGnr();
-
-		qRFR
-		qRFT
-			XFlow.Dismiss();	// Avoid lock owner problem when destroying rack.
-			OFlow.Commit();	
-		qRFE( scln::ErrFinal() )
-		}
 	}
 
 	// 'P_...' : producer ; 'C_...' : consumer.
@@ -160,77 +166,58 @@ namespace {
 			}
 		};
 		
-		struct rData {
-			tht::rBlocker Blocker;
-			flw::sIFlow *Flow;
-			rContent *Content;
+		namespace {
+			typedef common::cASync cASync_;
+		}
+
+		class sASyncCallback
+		: public cASync_
+		{
+		private:
+			flw::sIFlow *Flow_;
+			rContent *Content_;
+		protected:
+			virtual void COMMONProcess( void ) override
+			{
+			qRH
+				fdr::sSize Amount = 0, Handled = 0;
+				fdr::sByte Buffer[100];
+				txf::rOFlow COut;
+			qRB
+				COut.Init( cio::GetOutDriver() );
+
+				while ( !Flow_->EndOfFlow() ) {
+					Handled = 0;
+					Amount = Flow_->ReadUpTo( sizeof( Buffer ), Buffer );
+
+					while ( Amount != Handled ) {
+						Handled += Content_->P_Write( Buffer + Handled, Amount - Handled );
+						tht::Defer();
+					}
+				}
+			qRR
+			qRT
+				Flow_->Dismiss();	// Avoid lock owner problem when destroying rack.
+				Content_->P_Write( NULL, 0 );
+			qRE
+			}
+		public:
 			void reset( bso::sBool P = true )
 			{
-				tol::reset( P , Blocker, Flow, Content );
+				tol::reset( P, Flow_, Content_ );
 			}
-			qCDTOR( rData );
-			void Init( void )
+			qCVDTOR( sASyncCallback );
+			void Init(
+				flw::sIFlow &Flow,
+				rContent &Content )
 			{
-				reset();
+				Flow_ = &Flow;
+				Content_ = &Content;
 			}
 		};
-
-		void Routine( void *UP )
-		{
-		qRFH
-			fdr::sSize Amount = 0, Handled = 0;
-			fdr::sByte Buffer[100];
-			txf::rOFlow COut;
-			rData &Data = *( rData *)UP;
-			flw::sIFlow &Flow = *Data.Flow;
-			rContent &Content = *Data.Content;
-		qRFB
-			COut.Init( cio::GetOutDriver() );
-
-			Data.Blocker.Unblock();
-
-			while ( !Flow.EndOfFlow() ) {
-				Handled = 0;
-				Amount = Flow.ReadUpTo( sizeof( Buffer ), Buffer );
-
-				while ( Amount != Handled ) {
-					Handled += Content.P_Write( Buffer + Handled, Amount - Handled );
-					tht::Defer();
-				}
-			}
-
-			COut << __LOC__ << txf::nl << txf::commit;
-		qRFR
-		qRFT
-			Flow.Dismiss();	// Avoid lock owner problem when destroying rack.
-			Content.P_Write( NULL, 0 );
-		qRFE( scln::ErrFinal() )
-		}
 	}
 
 	typedef common::sFRelay sFRelay_;
-
-	class sUpstreamRack_
-	{
-	private:
-		sFRelay_ Relay_;
-	public:
-		txf::rOFlow OFlow;
-		void reset( bso::sBool P = true )
-		{
-			tol::reset( P, Relay_, OFlow );
-		}
-		qCDTOR( sUpstreamRack_ );
-		void Init( void )
-		{
-			tol::Init( Relay_ );
-			OFlow.Init( Relay_.Out );
-		}
-		fdr::rIDriver &IDriver( void )
-		{
-			return Relay_.In;
-		}
-	};
 
 	class rDownstreamRack_
 	{
@@ -275,34 +262,31 @@ namespace {
 	};
 
 	class rRack_ {
+	private:
+		read_::sASyncCallback AReadCallback_;
+		process_::sASyncCallback AProcessCallback_;
 	public:
-		sUpstreamRack_ Upstream;
+		common::sUpstreamRack Upstream;
 		rDownstreamRack_ Downstream;
 		bso::sBool Started;
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, Upstream, Downstream, Started );
+			tol::reset( P, AReadCallback_, AProcessCallback_, Upstream, Downstream, Started );
 		}
 		qCDTOR( rRack_ );
 		void Init( void )
 		{
 		qRH
-			process_::rData Data;
 		qRB
 			Upstream.Init();
 			Downstream.Init();
 			Started = false;
 
-//			int i = 0; while ( i == 0 );
+			AProcessCallback_.Init( Upstream.IDriver(), Downstream.OFlow );
+			common::HandleASync( AProcessCallback_ );
 
-			Data.Init();
-
-			Data.Blocker.Init();
-			Data.IDriver = &Upstream.IDriver();
-			Data.OFlow = &Downstream.OFlow;
-
-			mtk::Launch( process_::Routine, &Data );
-			Data.Blocker.Wait();
+			AReadCallback_.Init( Downstream.IFlow, Downstream.Content );
+			common::HandleASync( AReadCallback_ );
 		qRR
 		qRT
 		qRE
@@ -323,9 +307,6 @@ namespace {
 	qRB
 		Function.Init( RawFunction );
 
-		if ( Block )
-		cio::COut << __LOC__ << tht::GetTID() << txf::nl << txf::commit;
-
 		do {
 			while ( ( Amount = Content.C_Read( sizeof( Buffer ) - 1, Buffer ) ) != 0 ) {
 				Buffer[Amount] = 0;
@@ -335,17 +316,9 @@ namespace {
 			tht::Defer();
 		} while ( !Content.C_IsDrained() && Block );
 
-		if ( Block )
-		cio::COut << __LOC__ << tht::GetTID() << txf::nl << txf::commit;
 	qRR
-		if ( Block )
-		cio::COut << __LOC__ << tht::GetTID() << txf::nl << txf::commit;
 	qRT
-		if ( Block )
-		cio::COut << __LOC__ << tht::GetTID() << txf::nl << txf::commit;
 	qRE
-		if ( Block )
-		cio::COut << __LOC__ << tht::GetTID() << txf::nl << txf::commit;
 	}
 
 	void OnData_( const v8q::sFunctionInfos &Infos )
@@ -384,45 +357,17 @@ namespace {
 
 		Rack.Upstream.OFlow.Commit();
 
-		cio::COut << __LOC__ << tht::GetTID() << txf::nl << txf::commit;
-
 		Fill_( Rack.Downstream.Content, Dest, This.Get( "_func" ), true );
 
-		cio::COut << __LOC__ << tht::GetTID() << txf::nl << txf::commit;
-		
 		delete v8qnjs::sExternal<rRack_>( This.Get( "_rack0" ) ).Value();
 	qRFR
 	qRFT
-		cio::COut << __LOC__ << tht::GetTID() << txf::nl << txf::commit;
 	qRFE( scln::ErrFinal() )
-		cio::COut << __LOC__ << tht::GetTID() << txf::nl << txf::commit;
-
 	}
 
 	void OnRead_( const v8q::sFunctionInfos &Infos )
 	{
-	qRFH
-		v8qnjs::sRStream This;
-		read_::rData Data;
-	qRFB
-		This.Init( Infos.This() );
-		rRack_ &Rack = *v8qnjs::sExternal<rRack_>( This.Get( "_rack0" ) ).Value();
-
-		if ( !Rack.Started ) {
-			Data.Init();
-			Data.Blocker.Init();
-			Data.Flow = &Rack.Downstream.IFlow;
-			Data.Content = &Rack.Downstream.Content;
-
-			mtk::Launch( read_::Routine, &Data );
-
-			Data.Blocker.Wait();
-			Rack.Started = true;
-		}
-
-	qRFR
-	qRFT
-	qRFE( scln::ErrFinal() )
+		// Nothing to do !
 	}
 }
 
