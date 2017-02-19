@@ -37,6 +37,8 @@ namespace {
 			typedef xml::token__ eToken;
 		}
 
+		typedef common::cASync cASync;
+
 		class rContent
 		{
 		private:
@@ -118,23 +120,13 @@ namespace {
 
 	namespace process_ {
 		namespace {
-			typedef common::cASync cASync_;
-		}
-
-		class cASyncCallback
-		: public cASync_
-		{
-		private:
-			fdr::rIDriver *IDriver_;
-			common_::rContent *Content_;
-		protected:
-			bso::sBool COMMONProcess( void ) override
+			bso::sBool Process_(
+				fdr::rIDriver &IDriver,
+				common_::rContent &Content )
 			{
 				bso::sBool Terminate = false;
 			qRH
 				xml::rParser Parser;
-				fdr::rIDriver &IDriver = *IDriver_;
-				common_::rContent &Content  = *Content_;
 				flw::sDressedIFlow<> IFlow;
 				xtf::sIFlow XFlow;
 				common_::eToken Token = xml::t_Undefined;
@@ -143,8 +135,9 @@ namespace {
 				lcl::locale Locale;
 			qRB
 				IFlow.Init( IDriver );
+	# if 1
 				XFlow.Init( IFlow, utf::f_Guess );
-
+				
 				Parser.Init( XFlow, xml::eh_Default );
 
 				while ( ( Token = Parser.Parse( xml::tfAllButUseless ) ) != xml::t_Processed ) {
@@ -167,13 +160,25 @@ namespace {
 
 				while ( !Content.P_Put( Parser.Token(), Parser.TagName(), Parser.AttributeName(), Parser.Value() ) )
 					tht::Defer();
-
+	#endif
 				Terminate = true;
 			qRR
 			qRT
-				XFlow.Dismiss();	// Avoid lock owner problem when destroying rack.
 			qRE
 				return Terminate;
+			}
+		}
+
+		class cASyncCallback
+		: public common_::cASync
+		{
+		private:
+			fdr::rIDriver *IDriver_;
+			common_::rContent *Content_;
+		protected:
+			bso::sBool COMMONProcess( void ) override
+			{
+				return Process_( *IDriver_, *Content_ );
 			}
 			void COMMONDisclose(void) override {}
 		public:
@@ -190,13 +195,95 @@ namespace {
 				Content_ = &Content;
 			}
 		};
+
+		namespace {
+			struct sData_ {
+				fdr::rIDriver *IDriver;
+				common_::rContent *Content;
+				tht::rBlocker
+					*LaunchBlocker,
+					*GlobalBlocker;
+
+				void reset( bso::sBool P = true )
+				{
+					tol::reset( P, IDriver, Content, LaunchBlocker, GlobalBlocker );
+				}
+				qCDTOR( sData_ );
+			};
+
+			void Routine_( void *UP )
+			{
+				sData_ &Data = *(sData_ *)UP;
+				fdr::rIDriver &IDriver = *Data.IDriver;
+				common_::rContent &Content = *Data.Content;
+				tht::rBlocker &GlobalBlocker = *Data.GlobalBlocker;
+
+				Data.LaunchBlocker->Unblock();
+
+				while ( !Process_( IDriver, Content ) );
+
+				GlobalBlocker.Unblock();
+			}
+		}
+
+		void ASyncProcess(
+			fdr::rIDriver &IDriver,
+			common_::rContent &Content,
+			tht::rBlocker &GlobalBlocker )
+		{
+		qRH
+			sData_ Data;
+			tht::rBlocker LaunchBlocker;
+		qRB
+			LaunchBlocker.Init();
+
+			Data.IDriver = &IDriver;
+			Data.Content = &Content;
+			Data.LaunchBlocker = &LaunchBlocker;
+			Data.GlobalBlocker = &GlobalBlocker;
+
+			mtk::Launch( Routine_, &Data );
+
+			LaunchBlocker.Wait();
+		qRR
+		qRT
+		qRE
+		}
 	}
 
 	typedef common::sFRelay sFRelay_;
 
+	class sAWaitCallback
+	: public common_::cASync
+	{
+	private:
+		tht::rBlocker *Blocker_;
+	protected:
+		bso::sBool COMMONProcess( void ) override
+		{
+			Blocker_->Init();
+			Blocker_->Wait();
+
+			return true;
+		}
+		void COMMONDisclose(void) override {}
+	public:
+		void reset( bso::sBool P = true )
+		{
+			tol::reset( P, Blocker_ );
+		}
+		qCVDTOR( sAWaitCallback );
+		void Init( tht::rBlocker &Blocker )
+		{
+			Blocker_ = &Blocker;
+		}
+	};
+
 	class sRack_ {
 	private:
 		process_::cASyncCallback Callback_;
+		tht::rBlocker Blocker_;
+		sAWaitCallback WaitCallback_;
 	public:
 		common::sUpstreamRack Upstream;
 		common_::rContent Content;
@@ -210,11 +297,18 @@ namespace {
 		qRH
 		qRB
 			Upstream.Init();
+		
 			Content.Init();
-
+			
+#if 0
 			Callback_.Init( Upstream.IDriver(), Content );
-
-			common::HandleASync( Callback_ );
+			common::HandleASync( Callback_, false );
+#else
+			WaitCallback_.Init( Blocker_ );	// Initialize 'Blocker_'.
+			common::HandleASync( WaitCallback_, false );
+			process_::ASyncProcess( Upstream.IDriver(), Content, Blocker_ );
+#endif
+		
 		qRR
 		qRT
 		qRE
@@ -223,7 +317,7 @@ namespace {
 
 	bso::sBool CallCallback_(
 		common_::rContent &Content,
-		v8qnjs::sFunction &Callback )
+		v8qnjs::sFunction &Callback ) 
 	{
 		bso::sBool Done = false;
 	qRH
@@ -294,14 +388,13 @@ namespace {
 	}
 }
 
-
-void parser::Parse( const v8q::sArguments &Arguments )
+void Parse_( const v8q::sArguments &Arguments )
 {
-qRFH
+qRH
 	v8qnjs::sRStream Source;
 	v8qnjs::sFunction Callback;
 	sRack_ *Rack = NULL;
-qRFB
+qRB
 	Rack = new sRack_;
 
 	if ( Rack == NULL )
@@ -309,7 +402,6 @@ qRFB
 
 	tol::Init( Source, Callback );
 	Arguments.Get( Source, Callback );
-
 	Rack->Init();
 
 	Source.Set( "_rack", v8qnjs::sExternal<sRack_>( Rack ) );
@@ -319,10 +411,21 @@ qRFB
 	Source.OnEnd( OnEnd_ );
 
 	Rack = NULL;
-qRFR
-qRFT
+qRR
+qRT
 	if ( Rack != NULL )
 		delete Rack;
+qRE
+}
+
+
+void parser::Parse( const v8q::sArguments &Arguments )
+{
+qRFH
+qRFB
+	Parse_( Arguments );
+qRFR
+qRFT
 qRFE( scln::ErrFinal() )
 }
 

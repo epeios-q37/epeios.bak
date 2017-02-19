@@ -83,7 +83,9 @@ namespace common {
 		}
 	};
 
-	void HandleASync( cASync &Callbacks );
+	void HandleASync(
+		cASync &Callbacks,
+		bso::sBool Skip );
 }
 
 #endif

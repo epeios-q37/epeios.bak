@@ -64,7 +64,7 @@ namespace {
 	}
 }
 
-void common::HandleASync( cASync &Callbacks )
+void common::HandleASync( cASync &Callbacks, bso::sBool Skip )
 {
 	sWork_ *Work = new sWork_;
 
@@ -76,5 +76,6 @@ void common::HandleASync( cASync &Callbacks )
 	Work->Terminate = false;
 //	Work->Blocker.Init();
 
-	uv_queue_work( uv_default_loop(), &Work->Request, WorkAsync_, WorkAsyncComplete_ );
+	if ( !Skip )
+		uv_queue_work( uv_default_loop(), &Work->Request, WorkAsync_, WorkAsyncComplete_ );
 }

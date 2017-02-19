@@ -181,6 +181,10 @@ void scln::Register_(
 
 qGCTOR( scln )
 {
+
+	
+	_putenv_s("UV_THREADPOOL_SIZE","100");
+
 // Sudenly stops to work ('Segmentation fault', so was deplaced in the 'Register_' function.
 //	Functions_.Init();
 }

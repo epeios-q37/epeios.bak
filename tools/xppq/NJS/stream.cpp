@@ -318,14 +318,13 @@ namespace {
 			ProcessFlow_.Init( StreamRelay_.Out );
 
 			ProcessCallback_.Init( ProcessRelay_.In, ProcessFlow_ );
-
-			common::HandleASync( ProcessCallback_ );
+			common::HandleASync( ProcessCallback_, false );
 
 			DriverCallback_.Init( StreamRelay_.In, Content_ );
-			common::HandleASync( DriverCallback_ );
+			common::HandleASync( DriverCallback_, false );
 
 			StreamCallback_.Init( Content_, Stream, Blocker );
-			common::HandleASync( StreamCallback_ );
+			common::HandleASync( StreamCallback_, false );
 		}
 	};
 
@@ -388,6 +387,11 @@ namespace {
 	void OnRead_( const v8q::sFunctionInfos &Infos )
 	{
 		// Nothing to do !
+
+		static int i = 0;
+
+		if ( i == 0 )
+			i++;
 	}
 }
 
@@ -413,8 +417,6 @@ qRFB
 	Source.OnData( OnData_ );
 	Source.OnEnd( OnEnd_ );
 	This.OnRead( OnRead_ );
-
-	Source.Launch("resume");
 
 	Rack = NULL;
 qRFR
