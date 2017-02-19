@@ -18,6 +18,7 @@
 */
 
 #include <uv.h>
+#include <nan.h>
 
 #include "stream.h"
 
@@ -37,15 +38,16 @@ namespace {
 			typedef common::cASync cASync_;
 		}
 
-		class sASyncCallback
+		class sACallback
 		: public cASync_
 		{
 		private:
 			fdr::rIDriver *IDriver_;
 			txf::sOFlow *OFlow_;
 		protected:
-			virtual void COMMONProcess( void ) override
+			virtual bso::sBool COMMONProcess( void ) override
 			{
+				bso::sBool Terminate = false;
 			qRH
 				flw::sDressedIFlow<> IFlow;
 				xtf::sIFlow XFlow;
@@ -55,18 +57,22 @@ namespace {
 
 				if ( xpp::Process( XFlow, xpp::criterions___( "" ), xml::oIndent, *OFlow_ ) != xpp::sOK )
 					qRGnr();
+
+				Terminate = true;
 			qRR
 			qRT
 				XFlow.Dismiss();	// Avoid lock owner problem when destroying rack.
 				OFlow_->Commit();	
 			qRE
+				return Terminate;
 			}
+			void COMMONDisclose( void ) override {}
 		public:
 			void reset( bso::sBool P = true )
 			{
 				tol::reset( P, IDriver_, OFlow_ );
 			}
-			qCVDTOR( sASyncCallback );
+			qCVDTOR( sACallback );
 			void Init(
 				fdr::rIDriver &IDriver,
 				txf::sOFlow &OFlow )
@@ -77,8 +83,8 @@ namespace {
 		};
 	}
 
-	// 'P_...' : producer ; 'C_...' : consumer.
-	namespace read_ {
+	// Flow to stream. Read the content of a flow (epeios) and put it in a stream (node.js).
+	namespace f2s_ {
 		class rContent
 		{
 		private:
@@ -170,25 +176,25 @@ namespace {
 			typedef common::cASync cASync_;
 		}
 
-		class sASyncCallback
+		class rAIDriverCallback
 		: public cASync_
 		{
 		private:
-			flw::sIFlow *Flow_;
+			fdr::rIDriver *Driver_;
 			rContent *Content_;
 		protected:
-			virtual void COMMONProcess( void ) override
+			virtual bso::sBool COMMONProcess( void ) override
 			{
 			qRH
 				fdr::sSize Amount = 0, Handled = 0;
 				fdr::sByte Buffer[100];
-				txf::rOFlow COut;
+				flw::sDressedIFlow<> Flow;
 			qRB
-				COut.Init( cio::GetOutDriver() );
+				Flow.Init( *Driver_ );
 
-				while ( !Flow_->EndOfFlow() ) {
+				while ( !Flow.EndOfFlow() ) {
 					Handled = 0;
-					Amount = Flow_->ReadUpTo( sizeof( Buffer ), Buffer );
+					Amount = Flow.ReadUpTo( sizeof( Buffer ), Buffer );
 
 					while ( Amount != Handled ) {
 						Handled += Content_->P_Write( Buffer + Handled, Amount - Handled );
@@ -197,24 +203,91 @@ namespace {
 				}
 			qRR
 			qRT
-				Flow_->Dismiss();	// Avoid lock owner problem when destroying rack.
 				Content_->P_Write( NULL, 0 );
+			qRE
+				return true;
+			}
+			void COMMONDisclose(void) override {}
+		public:
+			void reset( bso::sBool P = true )
+			{
+				tol::reset( P, Driver_, Content_ );
+			}
+			qCVDTOR( rAIDriverCallback );
+			void Init(
+				fdr::rIDriver &Driver,
+				rContent &Content )
+			{
+				Driver_ = &Driver;
+				Content_ = &Content;
+			}
+		};
+
+		class rAStreamCallback
+		: public cASync_
+		{
+		private:
+		rContent *Content_;
+		v8::Persistent<v8::Object> Stream_;
+		tht::rBlocker *Blocker_;
+		fdr::sByte Buffer_[100];
+		protected:
+			virtual bso::sBool COMMONProcess( void ) override
+			{
+			qRH
+				v8qnjs::sRStream Stream;
+				v8qnjs::sString String;
+				fdr::sSize Amount = 0;
+			qRB
+				while ( ((Amount = Content_->C_Read(sizeof(Buffer_) - 1, Buffer_)) == 0) && !Content_->C_IsDrained() )
+					tht::Defer();
+				Buffer_[Amount] = 0;
+			qRR
+			qRT
+//				Blocker_->Unblock();
+			qRE
+				return Content_->C_IsDrained();
+			}
+			virtual void COMMONDisclose( void ) override
+			{
+			qRH
+				v8qnjs::sRStream Stream;
+				v8qnjs::sString String;
+			qRB
+/*				v8::Local<v8::Context> context = v8::Context::New(v8q::GetIsolate());
+				v8::Context::Scope context_scope(context);
+				context->Enter();
+				*/
+
+				if ( *Buffer_ ) {
+					String.Init( (const char *)Buffer_ );
+					Stream.Init( v8::Local<v8::Object>::New( v8q::GetIsolate(), Stream_ ) );
+					Stream.Push( v8q::ToLocal( node::Buffer::New( v8q::GetIsolate(), String.Core() ) ) );
+				} else
+					Stream.End();
+			qRR
+			qRT
+//				Blocker_->Unblock();
 			qRE
 			}
 		public:
 			void reset( bso::sBool P = true )
 			{
-				tol::reset( P, Flow_, Content_ );
+				tol::reset( P, Content_, Blocker_ );
+				Stream_.Reset();
 			}
-			qCVDTOR( sASyncCallback );
+			qCVDTOR( rAStreamCallback );
 			void Init(
-				flw::sIFlow &Flow,
-				rContent &Content )
+				rContent &Content,
+				v8qnjs::sRStream &Stream,
+				tht::rBlocker &Blocker )
 			{
-				Flow_ = &Flow;
 				Content_ = &Content;
+				Stream_.Reset( v8qnjs::GetIsolate(), Stream.Core() );
+				Blocker_ = &Blocker;
 			}
 		};
+
 	}
 
 	typedef common::sFRelay sFRelay_;
@@ -222,109 +295,64 @@ namespace {
 	class rDownstreamRack_
 	{
 	private:
-		sFRelay_ Relay_;
-		flx::sMarkers Markers_;
-		txf::rOFlow FlowI_, FlowO_;
-		flx::rIOMonitor Monitor_;
+		sFRelay_ StreamRelay_, ProcessRelay_;
+		txf::rOFlow ProcessFlow_;
+		f2s_::rContent Content_;
+		process_::sACallback ProcessCallback_;
+		f2s_::rAIDriverCallback DriverCallback_;
+		f2s_::rAStreamCallback StreamCallback_;
 	public:
-		flw::sDressedIFlow<> IFlow;
-		read_::rContent Content;
 		txf::rOFlow OFlow;
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, Relay_, OFlow, Markers_,  FlowI_, FlowO_, Monitor_, IFlow, Content );
+			tol::reset( P, StreamRelay_, ProcessRelay_, ProcessFlow_, Content_, ProcessCallback_, DriverCallback_, StreamCallback_, OFlow );
 		}
 		qCDTOR( rDownstreamRack_ );
-		void Init( void )
+		void Init(
+			v8qnjs::sRStream &Stream,
+			tht::rBlocker &Blocker )
 		{
-			tol::Init( Relay_ );
-			OFlow.Init( Relay_.Out );
+			tol::Init( StreamRelay_, ProcessRelay_, Content_ );
 
-			Markers_.Async = true;
-			Markers_.In.Before = "\n\t>>>>>>>>>>>>>>>>>I\n";
-			Markers_.In.After = "\n\t<<<<<<<<<<<<<<<<<I\n";
-			Markers_.Out.Before = "\n\t>>>>>>>>>>>>>>>>>O\n";
-			Markers_.Out.After = "\n\t<<<<<<<<<<<<<<<<<O\n";
+			OFlow.Init( ProcessRelay_.Out );
+			ProcessFlow_.Init( StreamRelay_.Out );
 
-			FlowI_.Init( cio::GetOutDriver() );
-			FlowO_.Init( cio::GetOutDriver() );
+			ProcessCallback_.Init( ProcessRelay_.In, ProcessFlow_ );
 
-			Monitor_.Init( Relay_.In, Relay_.Out, Markers_, FlowI_, FlowO_ );
-	#if 0
-			IFlow.Init( Monitor_ );
-			OFlow.Init( Monitor_ );
-	#else
-			IFlow.Init( Relay_.In );
-			OFlow.Init( Relay_.Out );
-	#endif
-			Content.Init();
+			common::HandleASync( ProcessCallback_ );
+
+			DriverCallback_.Init( StreamRelay_.In, Content_ );
+			common::HandleASync( DriverCallback_ );
+
+			StreamCallback_.Init( Content_, Stream, Blocker );
+			common::HandleASync( StreamCallback_ );
 		}
 	};
 
 	class rRack_ {
-	private:
-		read_::sASyncCallback AReadCallback_;
-		process_::sASyncCallback AProcessCallback_;
 	public:
-		common::sUpstreamRack Upstream;
+		tht::rBlocker Blocker_;
+//		common::sUpstreamRack Upstream;
 		rDownstreamRack_ Downstream;
-		bso::sBool Started;
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, AReadCallback_, AProcessCallback_, Upstream, Downstream, Started );
+			if ( P && false)
+				Blocker_.Wait();
+			tol::reset( P, Blocker_, /*Upstream, */ Downstream );
 		}
 		qCDTOR( rRack_ );
-		void Init( void )
+		void Init( v8qnjs::sRStream &Stream )
 		{
-		qRH
-		qRB
-			Upstream.Init();
-			Downstream.Init();
-			Started = false;
-
-			AProcessCallback_.Init( Upstream.IDriver(), Downstream.OFlow );
-			common::HandleASync( AProcessCallback_ );
-
-			AReadCallback_.Init( Downstream.IFlow, Downstream.Content );
-			common::HandleASync( AReadCallback_ );
-		qRR
-		qRT
-		qRE
+			Blocker_.Init();
+//			Upstream.Init();
+			Downstream.Init( Stream, Blocker_  );
 		}
 	};
-
-	void Fill_(
-		read_::rContent &Content,
-		v8qnjs::sRStream &Stream,
-		v8::Local<v8::Value> RawFunction,
-		bso::sBool Block )
-	{
-	qRH
-		fdr::sByte Buffer[100];
-		fdr::sSize Amount = 0;
-		v8qnjs::sBuffer Chunk;
-		v8qnjs::sFunction Function;
-	qRB
-		Function.Init( RawFunction );
-
-		do {
-			while ( ( Amount = Content.C_Read( sizeof( Buffer ) - 1, Buffer ) ) != 0 ) {
-				Buffer[Amount] = 0;
-				Chunk.Init( (const char *)Buffer, Function );
-				Stream.Push( Chunk );
-			}
-			tht::Defer();
-		} while ( !Content.C_IsDrained() && Block );
-
-	qRR
-	qRT
-	qRE
-	}
 
 	void OnData_( const v8q::sFunctionInfos &Infos )
 	{
 	qRFH
-		v8qnjs::sRStream This, Dest;
+		v8qnjs::sRStream This;
 		v8qnjs::sBuffer Chunk;
 		fdr::sSize Amount = 0;
 	qRFB
@@ -332,14 +360,10 @@ namespace {
 
 		Chunk.Init();
 		v8q::Get( Infos, Chunk );
-
-		Dest.Init( This.Get("_dest" ) );
 		
 		rRack_ &Rack = *v8qnjs::sExternal<rRack_>( This.Get( "_rack0" ) ).Value();
 
-		Rack.Upstream.OFlow << Chunk;
-
-		Fill_( Rack.Downstream.Content, Dest, This.Get( "_func" ), false );
+		Rack.Downstream.OFlow << Chunk;
 	qRFR
 	qRFT
 	qRFE( scln::ErrFinal() )
@@ -348,18 +372,14 @@ namespace {
 	void OnEnd_( const v8q::sFunctionInfos &Infos )
 	{
 	qRFH
-		v8qnjs::sRStream This, Dest;
+		v8qnjs::sRStream This;
 	qRFB
 		This.Init(Infos.This() );
 		rRack_ &Rack = *v8qnjs::sExternal<rRack_>( This.Get( "_rack0" ) ).Value();
 
-		Dest.Init( This.Get("_dest" ) );
+		Rack.Downstream.OFlow.Commit();
 
-		Rack.Upstream.OFlow.Commit();
-
-		Fill_( Rack.Downstream.Content, Dest, This.Get( "_func" ), true );
-
-		delete v8qnjs::sExternal<rRack_>( This.Get( "_rack0" ) ).Value();
+		// delete v8qnjs::sExternal<rRack_>( This.Get( "_rack0" ) ).Value();
 	qRFR
 	qRFT
 	qRFE( scln::ErrFinal() )
@@ -375,7 +395,6 @@ void stream::Set( const v8q::sArguments &Arguments )
 {
 qRFH
 	v8qnjs::sRStream Source, This;
-	v8qnjs::sHelper Helper;
 	rRack_ *Rack = NULL;
 qRFB
 	Rack = new rRack_;
@@ -383,19 +402,19 @@ qRFB
 	if ( Rack == NULL )
 		qRGnr();
 
-	tol::Init( Source, This, Helper );
-	Arguments.Get( Source, This, Helper );
+	tol::Init( Source, This );
+	Arguments.Get( Source, This );
 
-	Rack->Init();
+	Rack->Init( This );
 
 	Source.Set( "_rack0", v8qnjs::sExternal<rRack_>( Rack ) );
-	Source.Set( "_dest", This );
-	Source.Set("_func", v8q::sFunction( Helper.Get( "from" ) ).Core() ),
 	This.Set( "_rack0", v8qnjs::sExternal<rRack_>( Rack ) );
 
 	Source.OnData( OnData_ );
 	Source.OnEnd( OnEnd_ );
 	This.OnRead( OnRead_ );
+
+	Source.Launch("resume");
 
 	Rack = NULL;
 qRFR

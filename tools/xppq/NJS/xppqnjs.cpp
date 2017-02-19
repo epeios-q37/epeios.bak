@@ -18,6 +18,7 @@
 */
 
 #include <node.h>
+#include <nan.h>
 
 #include "parser.h"
 #include "stream.h"
@@ -27,7 +28,6 @@
 #include "v8qnjs.h"
 #include "xpp.h"
 #include "mtk.h"
-
 
 void scln::SCLNRegister( scln::sRegistrar &Registrar )
 {

@@ -115,6 +115,12 @@ namespace v8qnjs {
 			Set( "_read", Callback.Core(), Isolate );
 		}
 		void Push(
+			v8::Local<v8::Value> Value,
+			v8::Isolate *Isolate  = NULL )
+		{
+			Push_( Value, Isolate );
+		}
+		void Push(
 			const sBuffer &Buffer,
 			v8::Isolate *Isolate = NULL )
 		{

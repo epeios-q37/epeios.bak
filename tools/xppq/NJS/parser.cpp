@@ -128,8 +128,9 @@ namespace {
 			fdr::rIDriver *IDriver_;
 			common_::rContent *Content_;
 		protected:
-			void COMMONProcess( void ) override
+			bso::sBool COMMONProcess( void ) override
 			{
+				bso::sBool Terminate = false;
 			qRH
 				xml::rParser Parser;
 				fdr::rIDriver &IDriver = *IDriver_;
@@ -166,11 +167,15 @@ namespace {
 
 				while ( !Content.P_Put( Parser.Token(), Parser.TagName(), Parser.AttributeName(), Parser.Value() ) )
 					tht::Defer();
+
+				Terminate = true;
 			qRR
 			qRT
 				XFlow.Dismiss();	// Avoid lock owner problem when destroying rack.
 			qRE
+				return Terminate;
 			}
+			void COMMONDisclose(void) override {}
 		public:
 			void reset( bso::sBool P = true )
 			{
@@ -282,7 +287,7 @@ namespace {
 
 		while ( CallCallback_( Rack.Content, Callback ) );
 
-		delete v8qnjs::sExternal<sRack_>( This.Get( "_rack" ) ).Value();
+		// delete v8qnjs::sExternal<sRack_>( This.Get( "_rack" ) ).Value();
 	qRFR
 	qRFT
 	qRFE( scln::ErrFinal() )

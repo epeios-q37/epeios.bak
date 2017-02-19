@@ -1691,7 +1691,7 @@ namespace flx {
 		bso::sBool EOFReached_( void )
 		{
 			// If 'Size' == 0 and 'Buffer' == NULL, then the first buffer alllocation of a dynamic relay was not yet called.
-			return ( Size_ == 0 ) && ( Buffer_ != 0 );
+			return ( Size_ == 0 ) && ( Buffer_ != NULL );
 		}
 	public:
 		void reset( bso::sBool P = true )

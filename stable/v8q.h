@@ -316,7 +316,7 @@ namespace v8q {
 		{
 			v8::Local<v8::Value> Argv[1+sizeof...( Args )];
 
-			Set_( Isolate, Argv, 0, Arg, Args... );
+			Set_( GetIsolate( Isolate ), Argv, 0, Arg, Args... );
 
 			v8::Local<v8::Function> Function = GetFunction( Core(), Method, Isolate );
 
@@ -383,7 +383,7 @@ namespace v8q {
 		{
 			v8::Local<v8::Value> Argv[1+sizeof...( Args )];
 
-			Set_( Isolate, Argv, 0, Arg, Args... );
+			Set_( GetIsolate( Isolate ), Argv, 0, Arg, Args... );
 
 			return Core()->Call( Core(), 1 + sizeof...( Args ), Argv );
 		}

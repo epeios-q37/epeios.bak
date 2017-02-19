@@ -18,6 +18,7 @@
 */
 
 #include <uv.h>
+#include "v8q.h"
 
 #include "common.h"
 
@@ -29,6 +30,8 @@ namespace {
 	struct sWork_ {
 		uv_work_t Request;
 		cASync *Callbacks;
+		bso::sBool Terminate;
+		tht::rBlocker Blocker;
 	};
 
 	void WorkAsync_(uv_work_t *req)
@@ -36,7 +39,8 @@ namespace {
 	qRFH
 		sWork_ &Work = *static_cast<sWork_ *>( req->data );
 	qRFB
-		Work.Callbacks->Process();
+//		Work.Blocker.Wait();
+		Work.Terminate = Work.Callbacks->Process();
 	qRFR
 	qRFT
 	qRFE(scln::ErrFinal() );
@@ -46,8 +50,16 @@ namespace {
 		uv_work_t *req,
 		int Status )
 	{
-			sWork_ *Work = static_cast<sWork_ *>(req->data);
+		sWork_ *Work = static_cast<sWork_ *>(req->data);
+		v8::HandleScope scope(v8q::GetIsolate() );
 
+		Work->Callbacks->Disclose();
+
+		if ( !Work->Terminate ) {
+//			Work->Blocker.Init();
+			uv_queue_work( uv_default_loop(), req, WorkAsync_, WorkAsyncComplete_ );
+//			Work->Blocker.Unblock();
+		} else
 			delete Work;
 	}
 }
@@ -60,8 +72,9 @@ void common::HandleASync( cASync &Callbacks )
 		qRAlc();
 
 	Work->Request.data = Work;
-
 	Work->Callbacks = &Callbacks;
+	Work->Terminate = false;
+//	Work->Blocker.Init();
 
 	uv_queue_work( uv_default_loop(), &Work->Request, WorkAsync_, WorkAsyncComplete_ );
 }

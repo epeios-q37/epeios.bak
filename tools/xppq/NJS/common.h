@@ -69,12 +69,17 @@ namespace common {
 
 	class cASync {
 	protected:
-		virtual void COMMONProcess( void ) = 0;
+		virtual bso::sBool COMMONProcess( void ) = 0;
+		virtual void COMMONDisclose( void ) = 0;
 	public:
 		qCALLBACK( ASync );
-		void Process( void )
+		bso::sBool Process( void )
 		{
 			return COMMONProcess();
+		}
+		void Disclose( void )
+		{
+			return COMMONDisclose();
 		}
 	};
 
