@@ -120,48 +120,59 @@ namespace {
 
 	namespace process_ {
 		namespace {
+			class rContent_
+			{
+			public:
+				common_::eToken Token;
+				str::wString
+					Tag,
+					Attribute,
+					Value;
+				void reset( bso::sBool P = true )
+				{
+					tol::reset( P, Tag, Attribute, Value );
+					Token = xml::t_Undefined;
+				}
+				qCDTOR( rContent_ );
+				void Init( void )
+				{
+					Token = xml::t_Undefined;
+
+					tol::Init( Tag, Attribute, Value );
+				}
+			};
+
 			bso::sBool Process_(
-				fdr::rIDriver &IDriver,
-				common_::rContent &Content )
+				xml::parser___ &Parser,
+				rContent_ &Content )
 			{
 				bso::sBool Terminate = false;
 			qRH
-				xml::rParser Parser;
-				flw::sDressedIFlow<> IFlow;
-				xtf::sIFlow XFlow;
-				common_::eToken Token = xml::t_Undefined;
 				lcl::wMeaning Meaning;
 				str::wString Translation;
 				lcl::locale Locale;
 			qRB
-				IFlow.Init( IDriver );
-	# if 1
-				XFlow.Init( IFlow, utf::f_Guess );
-				
-				Parser.Init( XFlow, xml::eh_Default );
-
-				while ( ( Token = Parser.Parse( xml::tfAllButUseless ) ) != xml::t_Processed ) {
-					switch ( Token ) {
-					case xml::t_Error:
-						Meaning.Init();
-						xml::GetMeaning( Parser.GetStatus(), XFlow.Position(), Meaning );
-						Translation.Init();
-						Locale.Init();
-						Locale.GetTranslation(Meaning, "fr", Translation );
-						cio::CErr << Translation << txf::nl << txf::commit;
-						qRGnr();
-						break;
-					default:
-						while ( !Content.P_Put( Parser.Token(), Parser.TagName(), Parser.AttributeName(), Parser.Value() ) )
-							tht::Defer();
-						break;
-					}
+				switch ( Parser.Parse( xml::tfAllButUseless ) ) {
+				case xml::t_Processed:
+					Terminate = true;
+					break;
+				case xml::t_Error:
+					Meaning.Init();
+					xml::GetMeaning( Parser.GetStatus(), Parser.Flow().Position(), Meaning );
+					Translation.Init();
+					Locale.Init();
+					Locale.GetTranslation(Meaning, "fr", Translation );
+					cio::CErr << Translation << txf::nl << txf::commit;
+					qRGnr();
+					break;
+				default:
+					Content.Init();
+					Content.Token = Parser.Token();
+					Content.Tag = Parser.TagName();
+					Content.Attribute = Parser.AttributeName();
+					Content.Value = Parser.Value();
+					break;
 				}
-
-				while ( !Content.P_Put( Parser.Token(), Parser.TagName(), Parser.AttributeName(), Parser.Value() ) )
-					tht::Defer();
-	#endif
-				Terminate = true;
 			qRR
 			qRT
 			qRE
@@ -173,82 +184,56 @@ namespace {
 		: public common_::cASync
 		{
 		private:
-			fdr::rIDriver *IDriver_;
-			common_::rContent *Content_;
+			xml::rParser Parser_;
+			flw::sDressedIFlow<> IFlow_;
+			xtf::sIFlow XFlow_;
+			rContent_ Content_;
+			v8::Persistent<v8::Function> Function_;
+			bso::sBool First_;
 		protected:
 			bso::sBool COMMONProcess( void ) override
 			{
-				return Process_( *IDriver_, *Content_ );
+				if ( First_ ) {
+					XFlow_.Init( IFlow_, utf::f_Guess );
+					Parser_.Init( XFlow_, xml::eh_Default );
+
+					First_ = false;
+				}
+
+				return Process_( Parser_, Content_ );
 			}
-			void COMMONDisclose(void) override {}
+			void COMMONDisclose(void) override
+			{
+				v8qnjs::sFunction Function(v8::Local<v8::Function>::New( v8qnjs::GetIsolate(), Function_ ) );
+
+				if ( Content_.Token != xml::t_Undefined ) {
+					Function.Launch( Content_.Tag, Content_.Attribute, Content_.Value );
+				}
+			}
 		public:
 			void reset( bso::sBool P = true )
 			{
-				tol::reset( P , IDriver_, Content_ );
+				if ( P )
+					Function_.Reset();
+				tol::reset( P , Parser_, IFlow_, XFlow_, Content_, First_ );
 			}
 			qCVDTOR( cASyncCallback);
 			void Init(
 				fdr::rIDriver &IDriver,
-				common_::rContent &Content )
+				 v8q::sFunction &Function )
 			{
-				IDriver_ = &IDriver;
-				Content_ = &Content;
+				Function_.Reset(v8qnjs::GetIsolate(), Function.Core() );
+				tol::Init( Content_ );
+				IFlow_.Init( IDriver );
+				First_ = true;
+				// Will be made asynchronously, as it blocks.
+				/*
+				XFlow_.Init( IFlow_, utf::f_Guess );
+				Parser_.Init( XFlow_, xml::eh_Default );
+				*/
+
 			}
 		};
-
-		namespace {
-			struct sData_ {
-				fdr::rIDriver *IDriver;
-				common_::rContent *Content;
-				tht::rBlocker
-					*LaunchBlocker,
-					*GlobalBlocker;
-
-				void reset( bso::sBool P = true )
-				{
-					tol::reset( P, IDriver, Content, LaunchBlocker, GlobalBlocker );
-				}
-				qCDTOR( sData_ );
-			};
-
-			void Routine_( void *UP )
-			{
-				sData_ &Data = *(sData_ *)UP;
-				fdr::rIDriver &IDriver = *Data.IDriver;
-				common_::rContent &Content = *Data.Content;
-				tht::rBlocker &GlobalBlocker = *Data.GlobalBlocker;
-
-				Data.LaunchBlocker->Unblock();
-
-				while ( !Process_( IDriver, Content ) );
-
-				GlobalBlocker.Unblock();
-			}
-		}
-
-		void ASyncProcess(
-			fdr::rIDriver &IDriver,
-			common_::rContent &Content,
-			tht::rBlocker &GlobalBlocker )
-		{
-		qRH
-			sData_ Data;
-			tht::rBlocker LaunchBlocker;
-		qRB
-			LaunchBlocker.Init();
-
-			Data.IDriver = &IDriver;
-			Data.Content = &Content;
-			Data.LaunchBlocker = &LaunchBlocker;
-			Data.GlobalBlocker = &GlobalBlocker;
-
-			mtk::Launch( Routine_, &Data );
-
-			LaunchBlocker.Wait();
-		qRR
-		qRT
-		qRE
-		}
 	}
 
 	typedef common::sFRelay sFRelay_;
@@ -292,16 +277,14 @@ namespace {
 			tol::reset( P, Callback_, Upstream, Content );
 		}
 		qCDTOR( sRack_ );
-		void Init( void )
+		void Init( v8qnjs::sFunction &Function )
 		{
 		qRH
 		qRB
 			Upstream.Init();
-		
 			Content.Init();
-			
-#if 0
-			Callback_.Init( Upstream.IDriver(), Content );
+#if 1
+			Callback_.Init( Upstream.IDriver(), Function );
 			common::HandleASync( Callback_, false );
 #else
 			WaitCallback_.Init( Blocker_ );	// Initialize 'Blocker_'.
@@ -315,52 +298,20 @@ namespace {
 		}
 	};
 
-	bso::sBool CallCallback_(
-		common_::rContent &Content,
-		v8qnjs::sFunction &Callback ) 
-	{
-		bso::sBool Done = false;
-	qRH
-		str::wString Tag, Attribute, Value;
-		common_::eToken Token = xml::t_Undefined;
-	qRB
-		tol::Init( Tag, Attribute, Value );
-
-		while ( ( ( Token = Content.P_Get(Tag, Attribute, Value)) != xml::t_Undefined) && (Token != xml::t_Processed ) ) {  
-			if ( Token != xml::t_Undefined ) {
-				Callback.Launch( Tag, Attribute, Value );
-				tol::Init( Tag, Attribute, Value );
-			}
-			tht::Defer();
-		}
-
-		Done = Token == xml::t_Processed; 
-	qRR
-	qRT
-	qRE
-		return !Done;
-	}
-
-
 	void OnData_( const v8q::sFunctionInfos &Infos )
 	{
 	qRFH
 		v8qnjs::sRStream This;
-		v8qnjs::sFunction Callback;
 		v8qnjs::sBuffer Chunk;
 	qRFB
 		This.Init(Infos.This() );
 
 		Chunk.Init();
 		v8q::Get( Infos, Chunk );
-
-		Callback.Init( This.Get("_callback" ) );
 		
 		sRack_ &Rack = *v8qnjs::sExternal<sRack_>( This.Get( "_rack" ) ).Value();
 
 		Rack.Upstream.OFlow << Chunk;
-
-		CallCallback_( Rack.Content, Callback );
 	qRFR
 	qRFT
 	qRFE( scln::ErrFinal() )
@@ -370,16 +321,12 @@ namespace {
 	{
 	qRFH
 		v8qnjs::sRStream This;
-		v8qnjs::sFunction Callback;
 	qRFB
 		This.Init(Infos.This() );
-		Callback.Init( This.Get("_callback" ) );
 
 		sRack_ &Rack = *v8qnjs::sExternal<sRack_>( This.Get( "_rack" ) ).Value();
 
 		Rack.Upstream.OFlow.Commit();
-
-		while ( CallCallback_( Rack.Content, Callback ) );
 
 		// delete v8qnjs::sExternal<sRack_>( This.Get( "_rack" ) ).Value();
 	qRFR
@@ -402,7 +349,7 @@ qRB
 
 	tol::Init( Source, Callback );
 	Arguments.Get( Source, Callback );
-	Rack->Init();
+	Rack->Init( Callback );
 
 	Source.Set( "_rack", v8qnjs::sExternal<sRack_>( Rack ) );
 	Source.Set( "_callback", Callback );

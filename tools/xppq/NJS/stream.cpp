@@ -35,52 +35,73 @@
 namespace {
 	namespace process_ {
 		namespace {
-			typedef common::cASync cASync_;
-		}
+			struct sData_ {
+				fdr::rIDriver *IDriver;
+				txf::sOFlow *OFlow;
+				tht::rBlocker *Blocker;
+				void reset( bso::sBool P = true )
+				{
+					tol::reset( P, IDriver, OFlow, Blocker );
+				}
+				qCDTOR( sData_ );
+			};
 
-		class sACallback
-		: public cASync_
-		{
-		private:
-			fdr::rIDriver *IDriver_;
-			txf::sOFlow *OFlow_;
-		protected:
-			virtual bso::sBool COMMONProcess( void ) override
+			void Process_(
+				fdr::rIDriver &IDriver,
+				txf::sOFlow &OFlow )
 			{
-				bso::sBool Terminate = false;
 			qRH
 				flw::sDressedIFlow<> IFlow;
 				xtf::sIFlow XFlow;
 			qRB
-				IFlow.Init( *IDriver_ );
+				IFlow.Init( IDriver );
 				XFlow.Init( IFlow, utf::f_Guess );
 
-				if ( xpp::Process( XFlow, xpp::criterions___( "" ), xml::oIndent, *OFlow_ ) != xpp::sOK )
+				if ( xpp::Process( XFlow, xpp::criterions___( "" ), xml::oIndent, OFlow ) != xpp::sOK )
 					qRGnr();
-
-				Terminate = true;
 			qRR
 			qRT
-				XFlow.Dismiss();	// Avoid lock owner problem when destroying rack.
-				OFlow_->Commit();	
+				OFlow.Commit();	
 			qRE
-				return Terminate;
 			}
-			void COMMONDisclose( void ) override {}
-		public:
-			void reset( bso::sBool P = true )
+
+			void Routine_( void *UP )
 			{
-				tol::reset( P, IDriver_, OFlow_ );
+			qRFH
+				sData_ &Data = *(sData_ *)UP;
+				fdr::rIDriver &IDriver = *Data.IDriver;
+				txf::sOFlow &OFlow = *Data.OFlow;
+			qRFB
+				Data.Blocker->Unblock();
+
+				Process_( IDriver, OFlow );
+			qRFR
+			qRFT
+			qRFE(scln::ErrFinal() )
 			}
-			qCVDTOR( sACallback );
-			void Init(
-				fdr::rIDriver &IDriver,
-				txf::sOFlow &OFlow )
-			{
-				IDriver_ = &IDriver;
-				OFlow_ = &OFlow;
-			}
-		};
+		}
+
+		void ASyncProcess(
+			fdr::rIDriver &IDriver,
+			txf::sOFlow &OFlow )
+		{
+		qRH
+			sData_ Data;
+			tht::rBlocker Blocker;
+		qRB
+			Blocker.Init();
+
+			Data.IDriver = &IDriver;
+			Data.OFlow = &OFlow;
+			Data.Blocker = &Blocker;
+
+			mtk::Launch( Routine_, &Data );
+
+			Blocker.Wait();
+		qRR
+		qRT
+		qRE
+		}
 	}
 
 	// Flow to stream. Read the content of a flow (epeios) and put it in a stream (node.js).
@@ -234,18 +255,12 @@ namespace {
 		protected:
 			virtual bso::sBool COMMONProcess( void ) override
 			{
-			qRH
-				v8qnjs::sRStream Stream;
-				v8qnjs::sString String;
 				fdr::sSize Amount = 0;
-			qRB
+
 				while ( ((Amount = Content_->C_Read(sizeof(Buffer_) - 1, Buffer_)) == 0) && !Content_->C_IsDrained() )
 					tht::Defer();
 				Buffer_[Amount] = 0;
-			qRR
-			qRT
-//				Blocker_->Unblock();
-			qRE
+
 				return Content_->C_IsDrained();
 			}
 			virtual void COMMONDisclose( void ) override
@@ -298,14 +313,13 @@ namespace {
 		sFRelay_ StreamRelay_, ProcessRelay_;
 		txf::rOFlow ProcessFlow_;
 		f2s_::rContent Content_;
-		process_::sACallback ProcessCallback_;
 		f2s_::rAIDriverCallback DriverCallback_;
 		f2s_::rAStreamCallback StreamCallback_;
 	public:
 		txf::rOFlow OFlow;
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, StreamRelay_, ProcessRelay_, ProcessFlow_, Content_, ProcessCallback_, DriverCallback_, StreamCallback_, OFlow );
+			tol::reset( P, StreamRelay_, ProcessRelay_, ProcessFlow_, Content_, DriverCallback_, StreamCallback_, OFlow );
 		}
 		qCDTOR( rDownstreamRack_ );
 		void Init(
@@ -317,8 +331,7 @@ namespace {
 			OFlow.Init( ProcessRelay_.Out );
 			ProcessFlow_.Init( StreamRelay_.Out );
 
-			ProcessCallback_.Init( ProcessRelay_.In, ProcessFlow_ );
-			common::HandleASync( ProcessCallback_, false );
+			process_::ASyncProcess( ProcessRelay_.In, ProcessFlow_ );
 
 			DriverCallback_.Init( StreamRelay_.In, Content_ );
 			common::HandleASync( DriverCallback_, false );

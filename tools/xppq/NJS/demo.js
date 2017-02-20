@@ -8,9 +8,9 @@ function test( chunk ) {
 
 // new xppq.Stream( fs.createReadStream( 'test.xml' ) ).pipe( process.stdout );
 
- new xppq.Stream( fs.createReadStream( 'result.xml' ) ).on( 'data', test );
+ // new xppq.Stream( fs.createReadStream( 'result.xml' ) ).on( 'data', test );
 
-// xppq.parse( fs.createReadStream( 'test.xml' ), ( tag, attribute, value ) => { process.stdout.write( tag + " ; " + attribute + " ; " + value + "\n" ) } );
+xppq.parse( fs.createReadStream( 'test.xml' ), ( tag, attribute, value ) => { process.stdout.write( tag + " ; " + attribute + " ; " + value + "\n" ) } );
 
 class Relay extends stream.Readable {
  constructor( stream, options ) {
