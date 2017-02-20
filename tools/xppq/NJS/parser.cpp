@@ -152,6 +152,7 @@ namespace {
 				str::wString Translation;
 				lcl::locale Locale;
 			qRB
+				Parser.Flow().UndelyingFlow().IDriver().ITake(tht::GetTID() );	// Between calls, the thread is not the same.
 				switch ( Parser.Parse( xml::tfAllButUseless ) ) {
 				case xml::t_Processed:
 					Terminate = true;
@@ -267,25 +268,25 @@ namespace {
 	class sRack_ {
 	private:
 		process_::cASyncCallback Callback_;
-		tht::rBlocker Blocker_;
-		sAWaitCallback WaitCallback_;
 	public:
-		common::sUpstreamRack Upstream;
+		common::sFRelay Relay;
 		common_::rContent Content;
+		txf::rOFlow OFlow;
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, Callback_, Upstream, Content );
+			tol::reset( P, Callback_, Relay, Content );
 		}
 		qCDTOR( sRack_ );
 		void Init( v8qnjs::sFunction &Function )
 		{
 		qRH
 		qRB
-			Upstream.Init();
+			Relay.Init();
 			Content.Init();
 #if 1
-			Callback_.Init( Upstream.IDriver(), Function );
+			Callback_.Init( Relay.In, Function );
 			common::HandleASync( Callback_, false );
+			OFlow.Init( Relay.Out );
 #else
 			WaitCallback_.Init( Blocker_ );	// Initialize 'Blocker_'.
 			common::HandleASync( WaitCallback_, false );
@@ -311,7 +312,7 @@ namespace {
 		
 		sRack_ &Rack = *v8qnjs::sExternal<sRack_>( This.Get( "_rack" ) ).Value();
 
-		Rack.Upstream.OFlow << Chunk;
+		Rack.OFlow << Chunk;
 	qRFR
 	qRFT
 	qRFE( scln::ErrFinal() )
@@ -326,7 +327,7 @@ namespace {
 
 		sRack_ &Rack = *v8qnjs::sExternal<sRack_>( This.Get( "_rack" ) ).Value();
 
-		Rack.Upstream.OFlow.Commit();
+		Rack.OFlow.Commit();
 
 		// delete v8qnjs::sExternal<sRack_>( This.Get( "_rack" ) ).Value();
 	qRFR
@@ -352,7 +353,6 @@ qRB
 	Rack->Init( Callback );
 
 	Source.Set( "_rack", v8qnjs::sExternal<sRack_>( Rack ) );
-	Source.Set( "_callback", Callback );
 
 	Source.OnData( OnData_ );
 	Source.OnEnd( OnEnd_ );

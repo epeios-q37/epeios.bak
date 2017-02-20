@@ -257,7 +257,7 @@ namespace {
 			{
 				fdr::sSize Amount = 0;
 
-				while ( ((Amount = Content_->C_Read(sizeof(Buffer_) - 1, Buffer_)) == 0) && !Content_->C_IsDrained() )
+				while ( ( ( Amount = Content_->C_Read(sizeof(Buffer_) - 1, Buffer_ ) ) == 0) && !Content_->C_IsDrained() )
 					tht::Defer();
 				Buffer_[Amount] = 0;
 
@@ -274,9 +274,10 @@ namespace {
 				context->Enter();
 				*/
 
+				Stream.Init( v8::Local<v8::Object>::New( v8q::GetIsolate(), Stream_ ) );
+			
 				if ( *Buffer_ ) {
 					String.Init( (const char *)Buffer_ );
-					Stream.Init( v8::Local<v8::Object>::New( v8q::GetIsolate(), Stream_ ) );
 					Stream.Push( v8q::ToLocal( node::Buffer::New( v8q::GetIsolate(), String.Core() ) ) );
 				} else
 					Stream.End();
@@ -344,7 +345,6 @@ namespace {
 	class rRack_ {
 	public:
 		tht::rBlocker Blocker_;
-//		common::sUpstreamRack Upstream;
 		rDownstreamRack_ Downstream;
 		void reset( bso::sBool P = true )
 		{
@@ -356,7 +356,6 @@ namespace {
 		void Init( v8qnjs::sRStream &Stream )
 		{
 			Blocker_.Init();
-//			Upstream.Init();
 			Downstream.Init( Stream, Blocker_  );
 		}
 	};

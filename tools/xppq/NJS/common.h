@@ -44,29 +44,6 @@ namespace common {
 		}
 	};
 
-	class sUpstreamRack
-	{
-	private:
-		sFRelay Relay_;
-		flx::rDASync<> ASync_;
-	public:
-		txf::rOFlow OFlow;
-		void reset( bso::sBool P = true )
-		{
-			tol::reset( P, Relay_, ASync_, OFlow );
-		}
-		qCDTOR( sUpstreamRack );
-		void Init( void )
-		{
-			tol::Init( Relay_ );
-			OFlow.Init( ASync_.Init( Relay_.Out ) );
-		}
-		fdr::rIDriver &IDriver( void )
-		{
-			return Relay_.In;
-		}
-	};
-
 	class cASync {
 	protected:
 		virtual bso::sBool COMMONProcess( void ) = 0;
