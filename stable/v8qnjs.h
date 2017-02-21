@@ -86,26 +86,38 @@ namespace v8qnjs {
 	: public sObject
 	{
 	private:
-		void Push_(
+		bso::sBool Push_(
 			v8::Local<v8::Value> Value,
 			v8::Isolate *Isolate )
 		{
-			Launch( "push", Isolate, Value );
+			v8q::sBoolean Boolean;
+			Boolean.Init( Launch( "push", Isolate, Value ) );
+
+			return *Boolean;
 		}
 	public:
 		qCDTOR( sRStream );
-		// This function is called when data are available.
-		void OnData(
+		/*
+			Both below event handler seems not to work properly. The 'onend' event semms not be always called. Use 'OnReadable' instead.
+		*/
+		void OnDataFail(
 			const sFunction &Callback,
 			v8::Isolate *Isolate = NULL )
 		{
 			On( "data", Callback, Isolate );
 		}
-		void OnEnd(
+		void OnEndFail(
 			const sFunction &Callback,
 			v8::Isolate *Isolate = NULL )
 		{
 			On( "end", Callback, Isolate );
+		}
+		// Use below event handler rather as the two above one !
+		void OnReadable(
+			const sFunction &Callback,
+			v8::Isolate *Isolate = NULL )
+		{
+			On( "readable", Callback, Isolate );
 		}
 		// This function is ONLY to implement a readable stream. Is called when data is required.
 		void OnRead(
@@ -114,17 +126,26 @@ namespace v8qnjs {
 		{
 			Set( "_read", Callback.Core(), Isolate );
 		}
-		void Push(
+		// 'true' : chunk available ; 'false' EOF ('Chunk' is NULL).
+		bso::sBool Read(
+			sBuffer &Chunk,
+			v8::Isolate *Isolate = NULL )
+		{
+			Chunk.Init( Launch( "read", Isolate ), Isolate );
+
+			return !Chunk.IsNull();
+		}
+		bso::sBool Push(
 			v8::Local<v8::Value> Value,
 			v8::Isolate *Isolate  = NULL )
 		{
-			Push_( Value, Isolate );
+			return Push_( Value, Isolate );
 		}
-		void Push(
+		bso::sBool Push(
 			const sBuffer &Buffer,
 			v8::Isolate *Isolate = NULL )
 		{
-			Push_( Buffer.Core(), Isolate );
+			return Push_( Buffer.Core(), Isolate );
 		}
 		void End( v8::Isolate *Isolate = NULL )
 		{

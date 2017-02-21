@@ -25,9 +25,9 @@
 # include "flx.h"
 
 namespace common {
-	struct sFRelay {
+	struct sRelay {
 	private:
-		flx::rDRelay<> Core_;
+		flx::rDRelay<> Core_;	// 'node.js' functions send up to 64K of data in one chunk.
 	public:
 		flx::sIRelay In;
 		flx::sORelay Out;
@@ -35,7 +35,7 @@ namespace common {
 		{
 			tol::reset( P, Core_, In, Out );
 		}
-		qCDTOR( sFRelay );
+		qCDTOR( sRelay );
 		void Init( void )
 		{
 			Core_.Init();

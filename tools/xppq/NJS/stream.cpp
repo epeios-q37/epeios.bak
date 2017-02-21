@@ -262,28 +262,34 @@ namespace {
 	}
 
 	namespace {
-		typedef common::sFRelay sFRelay_;
+		typedef common::sRelay sRelay_;
 	}
 
-	class rRack_
+	class rStreamRack_	// By naming it simply 'rRack_', VC++ debugger confuse it with 'rRack_' in 'parser.cpp', althought both are defined in an anonymous namespace !
 	{
 	private:
-		sFRelay_ StreamRelay_, ProcessRelay_;
+		sRelay_ StreamRelay_, ProcessRelay_;
 		txf::rOFlow ProcessFlow_;
 		rContent_ Content_;
 		v8::Persistent<v8::Object> Stream_;
 		fdr::sByte Buffer_[100];
 	public:
 		txf::rOFlow OFlow;
+		tht::rBlocker Blocker;
+		bso::sBool Wait;
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, StreamRelay_, ProcessRelay_, OFlow, ProcessFlow_, Content_ );
+			tol::reset( P, StreamRelay_, ProcessRelay_, OFlow, ProcessFlow_, Content_, Blocker, Wait );
 			Stream_.Reset();
 		}
-		qCVDTOR( rRack_ );
+		qCVDTOR( rStreamRack_ );
 		void Init( v8qnjs::sRStream &Stream )
 		{
 			tol::Init( StreamRelay_, ProcessRelay_, Content_ );
+
+			Blocker.Init( true );
+
+			Wait = true;
 
 			OFlow.Init( ProcessRelay_.Out );
 			ProcessFlow_.Init( StreamRelay_.Out );
@@ -296,6 +302,11 @@ namespace {
 		void Retrieve( void )
 		{
 			fdr::sSize Amount = 0;
+
+			if ( Wait ) {
+				Wait = false;
+				Blocker.Wait();
+			}
 
 			while ( ( ( Amount = Content_.C_Read( sizeof( Buffer_ ) - 1, Buffer_ ) ) == 0 )
 				    && !Content_.C_IsDrained() )
@@ -314,7 +325,7 @@ namespace {
 			
 			if ( *Buffer_ ) {
 				String.Init( (const char *)Buffer_ );
-				Stream.Push( v8q::ToLocal( node::Buffer::New( v8q::GetIsolate(), String.Core() ) ) );
+				Wait = !Stream.Push( v8q::ToLocal( node::Buffer::New( v8q::GetIsolate(), String.Core() ) ) );
 			} else {
 				Stream.End();
 				Terminate = true;
@@ -330,18 +341,18 @@ namespace {
 		typedef uvq::cASync cASync_;
 	}
 
-	class rRackASyncCallback_
-	: public rRack_,
+	class rStreamRackASyncCallback_	// By naming it simply 'rRackASyncCallback_', VC++ debugger confuse it with the one in 'parser.cpp', althought both are defined in an anonymous namespace !
+	: public rStreamRack_,
 		public cASync_
 	{
 	protected:
 		virtual void UVQWork( void ) override
 		{
-			rRack_::Retrieve();
+			rStreamRack_::Retrieve();
 		}
 		virtual uvq::eBehavior UVQAfter( void ) override
 		{
-			if ( rRack_::Send() ) {
+			if ( rStreamRack_::Send() ) {
 				return uvq::bExitAndDelete;
 			} else
 				return uvq::bRelaunch;
@@ -349,12 +360,12 @@ namespace {
 	public:
 		void reset( bso::sBool P = true )
 		{
-			rRack_::reset( P );
+			rStreamRack_::reset( P );
 		}
-		qCVDTOR( rRackASyncCallback_ );
+		qCVDTOR( rStreamRackASyncCallback_ );
 		void Init( v8qnjs::sRStream &Stream )
 		{
-			rRack_::Init( Stream );
+			rStreamRack_::Init( Stream );
 		}
 	};
 
@@ -370,7 +381,7 @@ namespace {
 		Chunk.Init();
 		v8q::Get( Infos, Chunk );
 		
-		rRack_ &Rack = *v8qnjs::sExternal<rRack_>( This.Get( "_rack0" ) ).Value();
+		rStreamRack_ &Rack = *v8qnjs::sExternal<rStreamRack_>( This.Get( "_rack0" ) ).Value();
 
 		Rack.OFlow << Chunk;
 	qRFR
@@ -384,7 +395,7 @@ namespace {
 		v8qnjs::sRStream This;
 	qRFB
 		This.Init( Infos.This() );
-		rRack_ &Rack = *v8qnjs::sExternal<rRack_>( This.Get( "_rack0" ) ).Value();
+		rStreamRack_ &Rack = *v8qnjs::sExternal<rStreamRack_>( This.Get( "_rack0" ) ).Value();
 
 		Rack.OFlow.Commit();
 	qRFR
@@ -394,7 +405,34 @@ namespace {
 
 	void OnRead_( const v8q::sFunctionInfos &Infos )
 	{
-		// Nothing to do !
+		v8qnjs::sRStream This;
+		This.Init( Infos.This() );
+
+		rStreamRack_ &Rack = *v8qnjs::sExternal<rStreamRack_>( This.Get( "_rack0" ) ).Value();
+
+		Rack.Blocker.Unblock();
+	}
+
+	void OnReadable_( const v8q::sFunctionInfos &Infos )
+	{
+	qRFH
+		v8qnjs::sRStream This;
+		v8qnjs::sBuffer Chunk;
+		fdr::sSize Amount = 0;
+	qRFB
+		This.Init(Infos.This() );
+
+		rStreamRack_ &Rack = *v8qnjs::sExternal<rStreamRack_>( This.Get( "_rack0" ) ).Value();
+
+		Chunk.Init();
+
+		if ( This.Read( Chunk ) )
+			Rack.OFlow << Chunk;
+		else
+			Rack.OFlow.Commit();
+	qRFR
+	qRFT
+	qRFE( scln::ErrFinal() )
 	}
 }
 
@@ -402,9 +440,9 @@ void stream::Set( const v8q::sArguments &Arguments )
 {
 qRFH
 	v8qnjs::sRStream Source, This;
-	rRackASyncCallback_ *Rack = NULL;
+	rStreamRackASyncCallback_ *Rack = NULL;
 qRFB
-	Rack = new rRackASyncCallback_;
+	Rack = new rStreamRackASyncCallback_;
 
 	if ( Rack == NULL )
 		qRAlc();
@@ -414,10 +452,16 @@ qRFB
 
 	Rack->Init( This );
 
-	Source.Set( "_rack0", v8qnjs::sExternal<rRack_>( Rack ) );
+	Source.Set( "_rack0", v8qnjs::sExternal<rStreamRack_>( Rack ) );
+	This.Set( "_rack0", v8qnjs::sExternal<rStreamRack_>( Rack ) );
 
+#if 1
+	Source.OnReadable( OnReadable_ );
+# else // Doesn't always work. Sometimes, 'onend' event is not launched...
 	Source.OnData( OnData_ );
 	Source.OnEnd( OnEnd_ );
+#endif
+
 	This.OnRead( OnRead_ );
 
 	uvq::Launch( *Rack );

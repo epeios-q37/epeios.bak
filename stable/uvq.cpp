@@ -38,6 +38,7 @@ namespace {
 			uv_work_t Request;
 			cASync *Callbacks;
 			tht::rBlocker Blocker;
+			bso::sBool Error;
 		};
 
 		void ErrFinal_( void )
@@ -77,6 +78,7 @@ namespace {
 	qRFB
 		Work.Callbacks->Work();
 	qRFR
+		Work.Error = true;
 	qRFT
 	qRFE( ErrFinal_() );
 	}
@@ -91,19 +93,20 @@ namespace {
 #ifdef BUILDING_NODE_EXTENSION
 		v8::HandleScope scope(v8q::GetIsolate() );
 #endif
-
-		switch ( Work->Callbacks->After() ) {
-		case bRelaunch:
-			uv_queue_work( uv_default_loop(), req, WorkAsync_, WorkAsyncComplete_ );
-			break;
-		case bExitAndDelete:
-			delete Work->Callbacks;
-		case bExitOnly:
-			delete Work;
-			break;
-		default:
-			qRFwk();
-			break;
+		if ( !Work->Error ) {
+			switch ( Work->Callbacks->After() ) {
+			case bRelaunch:
+				uv_queue_work( uv_default_loop(), req, WorkAsync_, WorkAsyncComplete_ );
+				break;
+			case bExitAndDelete:
+				delete Work->Callbacks;
+			case bExitOnly:
+				delete Work;
+				break;
+			default:
+				qRFwk();
+				break;
+			}
 		}
 	qRFR
 	qRFT
@@ -120,6 +123,7 @@ void uvq::Launch( cASync &Callbacks )
 
 	Work->Request.data = Work;
 	Work->Callbacks = &Callbacks;
+	Work->Error = false;
 
 	uv_queue_work( uv_default_loop(), &Work->Request, WorkAsync_, WorkAsyncComplete_ );
 }

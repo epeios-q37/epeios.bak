@@ -321,7 +321,7 @@ namespace v8q {
 
 			v8::Local<v8::Function> Function = GetFunction( Core(), Method, Isolate );
 
-			return Function->Call( Core(), 1 + sizeof...( Args ), Argv );
+			return ToLocal( Function->Call( GetContext(), Core(), 1 + sizeof...( Args ), Argv ) );
 		}
 		template <typename ...args> v8::Local<v8::Value> Launch(
 			const char *Method,
@@ -467,6 +467,38 @@ namespace v8q {
 			return (t *)Core()->Value();
 		}
 	};
+
+	typedef sCore_<v8::Boolean> sBoolean_;
+
+	class sBoolean
+	: public sBoolean_
+	{
+	public:
+		qCDTOR( sBoolean );
+		sBoolean( v8::Local<v8::Value> Value )
+		{
+			Init( Value );
+		}
+		sBoolean( sValue &Value )
+		{
+			Init( Value.Core() );
+		}
+		using sBoolean_::Init;
+		void Init(
+			v8::Local<v8::Value> Value,
+			v8::Isolate *Isolate = NULL )
+		{
+			if ( !Value->IsBoolean() )
+				qRFwk();
+
+			sBoolean_::Init( Value, Isolate );
+		}
+		bso::sBool operator *(void)
+		{
+			return Core()->Value();
+		}
+	};
+
 
 	template <typename item> inline void Get(
 		int Index,

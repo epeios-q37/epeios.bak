@@ -56,11 +56,10 @@ namespace {
 			}
 		};
 
-		bso::sBool Process_(
+		void Process_(
 			xml::parser___ &Parser,
 			rContent_ &Content )
 		{
-			bso::sBool Terminate = false;
 		qRH
 			lcl::wMeaning Meaning;
 			str::wString Translation;
@@ -88,7 +87,6 @@ namespace {
 		qRR
 		qRT
 		qRE
-			return Terminate;
 		}
 	}
 
@@ -100,7 +98,7 @@ namespace {
 		xml::rParser Parser_;
 		rContent_ Content_;
 		v8::Persistent<v8::Function> Function_;
-		common::sFRelay Relay_;
+		common::sRelay Relay_;
 		bso::sBool First_;
 	public:
 		txf::rOFlow OFlow;
@@ -198,6 +196,8 @@ namespace {
 		rRack_ &Rack = *v8qnjs::sExternal<rRack_>( This.Get( "_rack" ) ).Value();
 
 		Rack.OFlow << Chunk;
+
+		int u = 0;
 	qRFR
 	qRFT
 	qRFE( scln::ErrFinal() )
@@ -213,6 +213,28 @@ namespace {
 		rRack_ &Rack = *v8qnjs::sExternal<rRack_>( This.Get( "_rack" ) ).Value();
 
 		Rack.OFlow.Commit();
+	qRFR
+	qRFT
+	qRFE( scln::ErrFinal() )
+	}
+
+	void OnReadable_( const v8q::sFunctionInfos &Infos )
+	{
+	qRFH
+		v8qnjs::sRStream This;
+		v8qnjs::sBuffer Chunk;
+	qRFB
+		This.Init(Infos.This() );
+
+		rRack_ &Rack = *v8qnjs::sExternal<rRack_>( This.Get( "_rack" ) ).Value();
+
+		Chunk.Init();
+		
+
+		if ( This.Read( Chunk )  )
+			Rack.OFlow << Chunk;
+		else
+			Rack.OFlow.Commit();
 	qRFR
 	qRFT
 	qRFE( scln::ErrFinal() )
@@ -237,8 +259,12 @@ qRB
 
 	Source.Set( "_rack", v8qnjs::sExternal<rRack_>( Rack ) );
 
+#if 1
+	Source.OnReadable( OnReadable_ );
+# else // Doesn't always work. Sometimes, 'onend' event is not launched...
 	Source.OnData( OnData_ );
 	Source.OnEnd( OnEnd_ );
+#endif
 
 	uvq::Launch( *Rack );
 

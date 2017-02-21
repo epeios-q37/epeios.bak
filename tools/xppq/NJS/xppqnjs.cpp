@@ -31,6 +31,7 @@
 
 void scln::SCLNRegister( scln::sRegistrar &Registrar )
 {
+	v8q::Execute("process.env.UV_THREADPOOL_SIZE=5;");
 	cio::Initialize(cio::GetConsoleSet() );
 	Registrar.Register( stream::Set );
 	Registrar.Register( parser::Parse );
