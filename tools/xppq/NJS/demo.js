@@ -19,6 +19,6 @@ class Relay extends stream.Readable {
  }
 }
 
-xppq.parse( new Relay( fs.createReadStream( 'result.xml' ) ), ( tag, attribute, value ) => { process.stdout.write( tag + " ; " + attribute + " ; " + value + "\n" ) } );
+// xppq.parse( new fs.createReadStream( 'result.xml' ), ( tag, attribute, value ) => { process.stdout.write( tag + " ; " + attribute + " ; " + value + "\n" ) } );
 
-// xppq.parse( new Relay( new xppq.Stream( fs.createReadStream( 'test.xml' ) ) ), ( tag, attribute, value ) => { "!" + process.stdout.write( tag + " ; " + attribute + " ; '" + value.trim() + "'\n" ) } );
+xppq.parse( new xppq.Stream( fs.createReadStream( 'test.xml' ) ), ( tag, attribute, value ) => { "!" + process.stdout.write( tag + " ; " + attribute + " ; '" + value.trim() + "'\n" ) } );

@@ -32,6 +32,7 @@
 # include "str.h"
 # include "txf.h"
 
+// Note to developer : you have to add '<path_to_node>/deps/v8/include' as 'Additional Include Directory' in the 'devel' related project.
 # include <v8.h>
 // Put after above line due to redefinition of 'System(...)'.
 # include "tol.h"

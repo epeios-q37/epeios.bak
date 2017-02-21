@@ -44,25 +44,6 @@ namespace common {
 		}
 	};
 
-	class cASync {
-	protected:
-		virtual bso::sBool COMMONProcess( void ) = 0;
-		virtual void COMMONDisclose( void ) = 0;
-	public:
-		qCALLBACK( ASync );
-		bso::sBool Process( void )
-		{
-			return COMMONProcess();
-		}
-		void Disclose( void )
-		{
-			return COMMONDisclose();
-		}
-	};
-
-	void HandleASync(
-		cASync &Callbacks,
-		bso::sBool Skip );
 }
 
 #endif

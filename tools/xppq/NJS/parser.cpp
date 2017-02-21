@@ -21,6 +21,7 @@
 
 #include "common.h"
 
+#include "uvq.h"
 #include "v8qnjs.h"
 
 #include "scln.h"
@@ -37,7 +38,7 @@ namespace {
 			typedef xml::token__ eToken;
 		}
 
-		typedef common::cASync cASync;
+		typedef uvq::cASync cASync;
 
 		class rContent
 		{
@@ -154,9 +155,6 @@ namespace {
 			qRB
 				Parser.Flow().UndelyingFlow().IDriver().ITake(tht::GetTID() );	// Between calls, the thread is not the same.
 				switch ( Parser.Parse( xml::tfAllButUseless ) ) {
-				case xml::t_Processed:
-					Terminate = true;
-					break;
 				case xml::t_Error:
 					Meaning.Init();
 					xml::GetMeaning( Parser.GetStatus(), Parser.Flow().Position(), Meaning );
@@ -192,7 +190,7 @@ namespace {
 			v8::Persistent<v8::Function> Function_;
 			bso::sBool First_;
 		protected:
-			bso::sBool COMMONProcess( void ) override
+			void UVQWork( void ) override
 			{
 				if ( First_ ) {
 					XFlow_.Init( IFlow_, utf::f_Guess );
@@ -201,15 +199,24 @@ namespace {
 					First_ = false;
 				}
 
-				return Process_( Parser_, Content_ );
+				Process_( Parser_, Content_ );
 			}
-			void COMMONDisclose(void) override
+			uvq::eBehavior UVQAfter( void ) override
 			{
+				uvq::eBehavior Behavior = uvq::b_Undefined;
 				v8qnjs::sFunction Function(v8::Local<v8::Function>::New( v8qnjs::GetIsolate(), Function_ ) );
 
-				if ( Content_.Token != xml::t_Undefined ) {
+				switch ( Content_.Token ) {
+				case xml::t_Processed:
+					Behavior = uvq::bExitOnly;
+					break;
+				default:
 					Function.Launch( Content_.Tag, Content_.Attribute, Content_.Value );
+					Behavior = uvq::bRelaunch;
+					break;
 				}
+
+				return Behavior;
 			}
 		public:
 			void reset( bso::sBool P = true )
@@ -239,32 +246,6 @@ namespace {
 
 	typedef common::sFRelay sFRelay_;
 
-	class sAWaitCallback
-	: public common_::cASync
-	{
-	private:
-		tht::rBlocker *Blocker_;
-	protected:
-		bso::sBool COMMONProcess( void ) override
-		{
-			Blocker_->Init();
-			Blocker_->Wait();
-
-			return true;
-		}
-		void COMMONDisclose(void) override {}
-	public:
-		void reset( bso::sBool P = true )
-		{
-			tol::reset( P, Blocker_ );
-		}
-		qCVDTOR( sAWaitCallback );
-		void Init( tht::rBlocker &Blocker )
-		{
-			Blocker_ = &Blocker;
-		}
-	};
-
 	class sRack_ {
 	private:
 		process_::cASyncCallback Callback_;
@@ -285,7 +266,7 @@ namespace {
 			Content.Init();
 #if 1
 			Callback_.Init( Relay.In, Function );
-			common::HandleASync( Callback_, false );
+			uvq::Launch( Callback_ );
 			OFlow.Init( Relay.Out );
 #else
 			WaitCallback_.Init( Blocker_ );	// Initialize 'Blocker_'.

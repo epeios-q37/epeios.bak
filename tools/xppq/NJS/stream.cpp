@@ -22,6 +22,7 @@
 
 #include "stream.h"
 
+#include "uvq.h"
 #include "v8qnjs.h"
 
 #include "common.h"
@@ -194,7 +195,7 @@ namespace {
 		};
 		
 		namespace {
-			typedef common::cASync cASync_;
+			typedef uvq::cASync cASync_;
 		}
 
 		class rAIDriverCallback
@@ -204,7 +205,7 @@ namespace {
 			fdr::rIDriver *Driver_;
 			rContent *Content_;
 		protected:
-			virtual bso::sBool COMMONProcess( void ) override
+			virtual void UVQWork( void ) override
 			{
 			qRH
 				fdr::sSize Amount = 0, Handled = 0;
@@ -226,9 +227,11 @@ namespace {
 			qRT
 				Content_->P_Write( NULL, 0 );
 			qRE
-				return true;
 			}
-			void COMMONDisclose(void) override {}
+			uvq::eBehavior UVQAfter( void ) override
+			{
+				return uvq::bExitOnly;
+			}
 		public:
 			void reset( bso::sBool P = true )
 			{
@@ -253,18 +256,17 @@ namespace {
 		tht::rBlocker *Blocker_;
 		fdr::sByte Buffer_[100];
 		protected:
-			virtual bso::sBool COMMONProcess( void ) override
+			virtual void UVQWork( void ) override
 			{
 				fdr::sSize Amount = 0;
 
 				while ( ( ( Amount = Content_->C_Read(sizeof(Buffer_) - 1, Buffer_ ) ) == 0) && !Content_->C_IsDrained() )
 					tht::Defer();
 				Buffer_[Amount] = 0;
-
-				return Content_->C_IsDrained();
 			}
-			virtual void COMMONDisclose( void ) override
+			virtual uvq::eBehavior UVQAfter( void ) override
 			{
+				uvq::eBehavior Behavior = uvq::b_Undefined;
 			qRH
 				v8qnjs::sRStream Stream;
 				v8qnjs::sString String;
@@ -279,12 +281,16 @@ namespace {
 				if ( *Buffer_ ) {
 					String.Init( (const char *)Buffer_ );
 					Stream.Push( v8q::ToLocal( node::Buffer::New( v8q::GetIsolate(), String.Core() ) ) );
-				} else
+					Behavior = uvq::bRelaunch;
+				} else {
 					Stream.End();
+					Behavior = uvq::bExitOnly;
+				}
 			qRR
 			qRT
 //				Blocker_->Unblock();
 			qRE
+				return Behavior;
 			}
 		public:
 			void reset( bso::sBool P = true )
@@ -335,10 +341,10 @@ namespace {
 			process_::ASyncProcess( ProcessRelay_.In, ProcessFlow_ );
 
 			DriverCallback_.Init( StreamRelay_.In, Content_ );
-			common::HandleASync( DriverCallback_, false );
+			uvq::Launch( DriverCallback_ );
 
 			StreamCallback_.Init( Content_, Stream, Blocker );
-			common::HandleASync( StreamCallback_, false );
+			uvq::Launch( StreamCallback_ );
 		}
 	};
 
