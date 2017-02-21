@@ -187,8 +187,7 @@ namespace {
 		}
 	};
 
-
-		// Flow driver to content.
+	// Flow driver to content.
 	namespace f2c_ {
 		namespace {
 			struct sData_ {
@@ -298,7 +297,8 @@ namespace {
 		{
 			fdr::sSize Amount = 0;
 
-			while ( ( ( Amount = Content_.C_Read(sizeof(Buffer_) - 1, Buffer_ ) ) == 0) && !Content_.C_IsDrained() )
+			while ( ( ( Amount = Content_.C_Read( sizeof( Buffer_ ) - 1, Buffer_ ) ) == 0 )
+				    && !Content_.C_IsDrained() )
 				tht::Defer();
 
 			Buffer_[Amount] = 0;
@@ -383,12 +383,10 @@ namespace {
 	qRFH
 		v8qnjs::sRStream This;
 	qRFB
-		This.Init(Infos.This() );
+		This.Init( Infos.This() );
 		rRack_ &Rack = *v8qnjs::sExternal<rRack_>( This.Get( "_rack0" ) ).Value();
 
 		Rack.OFlow.Commit();
-
-		// delete v8qnjs::sExternal<rRack_>( This.Get( "_rack0" ) ).Value();
 	qRFR
 	qRFT
 	qRFE( scln::ErrFinal() )
@@ -409,7 +407,7 @@ qRFB
 	Rack = new rRackASyncCallback_;
 
 	if ( Rack == NULL )
-		qRGnr();
+		qRAlc();
 
 	tol::Init( Source, This );
 	Arguments.Get( Source, This );
