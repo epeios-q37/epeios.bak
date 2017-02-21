@@ -85,27 +85,27 @@ namespace mtk {
 	
 	/*f Launch a new thread executing 'Routine', with 'UP' as user pointer.
 	Thread is killed when returning from 'Routine'. */
-	void LaunchAndKill(
+	void RawLaunchAndKill(
 		routine__ Routine,
 		void *UP );
 		
 	/*f Launch a new thread executing 'Routine', with 'UP' as user pointer.
 	Thread is NOI killed when returning from 'Routine', and reused if available
 	at next call of this function. */
-	void LaunchAndKeep(
+	void RawLaunchAndKeep(
 		routine__ Routine,
 		void *UP );
 
 
 	//f Launch a new thread executing 'Routine', with 'UP' as user pointer.
-	inline void Launch(
+	inline void RawLaunch(
 		routine__ Routine,
 		void *UP )
 	{
 #ifdef MTK__KILL
-		LaunchAndKill( Routine, UP );
+		RawLaunchAndKill( Routine, UP );
 #elif defined( MTK__KEEP )
-		LaunchAndKeep( Routine, UP );
+		RawLaunchAndKeep( Routine, UP );
 #else
 #	error "None of 'MTK_KEEP' or 'MTK_KILL' are defined."
 #endif
@@ -118,6 +118,50 @@ namespace mtk {
 	using tht::thread_id__;
 	using tht::GetTID;
 
+	class gBlocker {
+	private:
+		qRMV( tht::rBlocker, B_, Blocker_ );
+	protected:
+		void Init( tht::rBlocker &Blocker )
+		{
+			Blocker_ = &Blocker;
+		}
+	public:
+		void reset( bso::sBool P = true )
+		{
+			tol::reset( P, Blocker_ );
+		}
+		qCDTOR( gBlocker );
+		void Release( void )
+		{
+			B_().Unblock();
+		}
+		friend class gBlocker_;
+	};
+
+	// 'Blocker' protects data in 'UP' from being deleted before it 'Release()' method will ba called.
+	typedef void (* sXRoutine)(void *UP, gBlocker &Blocker );
+
+	void LaunchAndKill(
+		sXRoutine Routine,
+		void *UP );
+
+	void LaunchAndKeep(
+		sXRoutine Routine,
+		void *UP );
+
+	inline void Launch(
+		sXRoutine Routine,
+		void *UP )
+	{
+#ifdef MTK__KILL
+		LaunchAndKill( Routine, UP );
+#elif defined( MTK__KEEP )
+		LaunchAndKeep( Routine, UP );
+#else
+#	error "None of 'MTK_KEEP' or 'MTK_KILL' are defined."
+#endif
+	}
 }
 
 #endif

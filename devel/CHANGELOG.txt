@@ -1,5 +1,12 @@
 CHANGELOG for the 'Epeios' framework.
 
+2017-02-21 :
+- FLX :
+	- Adaptation to changes in 'MTK'.
+- MTK :
+	- Introducing a variant which protect user data from being freed too early.
+	- The original version being prefixed with 'Raw'.
+
 2017-02-16 :
 - FLX :
 	- Obsoleting the seemingly useless 'relay_...' classes.

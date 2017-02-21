@@ -362,22 +362,18 @@ fdr::sTID flx::rIOMonitor::FDROTake( fdr::sTID Owner )
 
 namespace async_ {
 	struct rData {
-		tht::rBlocker Blocker;
 		fdr::rIDriver *IDriver;
 		fdr::rODriver *ODriver;
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, Blocker, IDriver, ODriver );
+			tol::reset( P, IDriver, ODriver );
 		}
 		qCDTOR( rData );
-		void Init( void )
-		{
-			Blocker.Init();
-		}
-
 	};
 
-	void Routine( void *UP )
+	void Routine(
+		void *UP,
+		mtk::gBlocker &Blocker )
 	{
 	qRH
 		flw::sDressedIFlow<> IFlow;
@@ -391,7 +387,7 @@ namespace async_ {
 		IFlow.Init( *Data.IDriver );
 		OFlow.Init( *Data.ODriver );
 
-		Data.Blocker.Unblock();
+		Blocker.Release();
 
 		while ( !IFlow.EndOfFlow() )
 			OFlow.Write(Buffer, IFlow.ReadUpTo( sizeof( Buffer ), Buffer ) );
@@ -413,13 +409,10 @@ qRB
 	In_.Init( Relay );
 	Out_.Init( Relay );
 
-	Data.Init();
 	Data.IDriver = &In_;
 	Data.ODriver = &ODriver;
 
 	mtk::Launch( async_::Routine, &Data );
-
-	Data.Blocker.Wait();
 qRR
 qRT
 qRE

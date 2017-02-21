@@ -39,10 +39,9 @@ namespace {
 			struct sData_ {
 				fdr::rIDriver *IDriver;
 				txf::sOFlow *OFlow;
-				tht::rBlocker *Blocker;
 				void reset( bso::sBool P = true )
 				{
-					tol::reset( P, IDriver, OFlow, Blocker );
+					tol::reset( P, IDriver, OFlow );
 				}
 				qCDTOR( sData_ );
 			};
@@ -66,14 +65,16 @@ namespace {
 			qRE
 			}
 
-			void Routine_( void *UP )
+			void Routine_(
+				void *UP,
+				mtk::gBlocker &Blocker )
 			{
 			qRFH
 				sData_ &Data = *(sData_ *)UP;
 				fdr::rIDriver &IDriver = *Data.IDriver;
 				txf::sOFlow &OFlow = *Data.OFlow;
 			qRFB
-				Data.Blocker->Unblock();
+				Blocker.Release();
 
 				Process_( IDriver, OFlow );
 			qRFR
@@ -88,250 +89,200 @@ namespace {
 		{
 		qRH
 			sData_ Data;
-			tht::rBlocker Blocker;
 		qRB
-			Blocker.Init();
-
 			Data.IDriver = &IDriver;
 			Data.OFlow = &OFlow;
-			Data.Blocker = &Blocker;
 
 			mtk::Launch( Routine_, &Data );
-
-			Blocker.Wait();
 		qRR
 		qRT
 		qRE
 		}
 	}
 
-	// Flow to stream. Read the content of a flow (epeios) and put it in a stream (node.js).
-	namespace f2s_ {
-		class rContent
+	class rContent_
+	{
+	private:
+		tht::rLocker Locker_;
+		fdr::sByte Buffer_[100];
+		fdr::sSize Amount_;
+		bso::sBool Drained_;
+		fdr::sSize Size_( void )
 		{
-		private:
-			tht::rLocker Locker_;
-			fdr::sByte Buffer_[100];
-			fdr::sSize Amount_;
-			bso::sBool Drained_;
-			fdr::sSize Size_( void )
-			{
-				return sizeof( Buffer_ );
-			}
-		public:
-			void reset( bso::sBool P = true )
-			{
-				tol::reset( P, Locker_, Drained_ );
+			return sizeof( Buffer_ );
+		}
+	public:
+		void reset( bso::sBool P = true )
+		{
+			tol::reset( P, Locker_, Drained_ );
 
-				Amount_ = 0;
-			}
-			qCDTOR( rContent );
-			void Init( void )
-			{
-				Locker_.Init();
-				Amount_ = 0;
-				Drained_ = false;
-			}
-			fdr::sSize C_Read(
-				fdr::sSize Amount,
-				fdr::sByte *Buffer )
-			{
-			qRH
-				tht::rLockerHandler Locker;
-			qRB
-				Locker.Init( Locker_ );
+			Amount_ = 0;
+		}
+		qCDTOR( rContent_ );
+		void Init( void )
+		{
+			Locker_.Init();
+			Amount_ = 0;
+			Drained_ = false;
+		}
+		fdr::sSize C_Read(
+			fdr::sSize Amount,
+			fdr::sByte *Buffer )
+		{
+		qRH
+			tht::rLockerHandler Locker;
+		qRB
+			Locker.Init( Locker_ );
 
-				if ( Amount_ != 0 ) {
-					if ( Amount > Amount_ )
-						Amount = Amount_;
+			if ( Amount_ != 0 ) {
+				if ( Amount > Amount_ )
+					Amount = Amount_;
 
-					memcpy( Buffer, Buffer_, Amount );
+				memcpy( Buffer, Buffer_, Amount );
 
-					Amount_ -= Amount;
+				Amount_ -= Amount;
 
-					if ( Amount_ != 0 )
-						memcpy( Buffer_, Buffer_ + Amount, Amount_ );
-				} else
-					Amount = 0;
-			qRR
-			qRT
-			qRE
-				return Amount;
-			}
-			fdr::sSize P_Write(
-				fdr::sByte *Buffer,
-				fdr::sSize Amount )
-			{
-			qRH
-				tht::rLockerHandler Locker;
-			qRB
-				Locker.Init( Locker_ );
+				if ( Amount_ != 0 )
+					memcpy( Buffer_, Buffer_ + Amount, Amount_ );
+			} else
+				Amount = 0;
+		qRR
+		qRT
+		qRE
+			return Amount;
+		}
+		fdr::sSize P_Write(
+			fdr::sByte *Buffer,
+			fdr::sSize Amount )
+		{
+		qRH
+			tht::rLockerHandler Locker;
+		qRB
+			Locker.Init( Locker_ );
 
-				if ( Drained_ )
-					qRGnr();
+			if ( Drained_ )
+				qRGnr();
 
-				if ( ( Amount == 0) || (Buffer == NULL) ) {
-					Drained_ = true;
-					Amount = 0;
-				} else {
-					if ( Amount > ( Size_() - Amount_ ) )
-						Amount = Size_() - Amount_;
+			if ( ( Amount == 0) || (Buffer == NULL) ) {
+				Drained_ = true;
+				Amount = 0;
+			} else {
+				if ( Amount > ( Size_() - Amount_ ) )
+					Amount = Size_() - Amount_;
 
-					if ( Amount != 0 ) {
-						memcpy( Buffer_ + Amount_, Buffer, Amount );
+				if ( Amount != 0 ) {
+					memcpy( Buffer_ + Amount_, Buffer, Amount );
 
-						Amount_ += Amount;
-					}
+					Amount_ += Amount;
 				}
-			qRR
-			qRT
-			qRE
-				return Amount;
 			}
-			bso::sBool C_IsDrained( void )
-			{
-				return Drained_;
-			}
-		};
-		
+		qRR
+		qRT
+		qRE
+			return Amount;
+		}
+		bso::sBool C_IsDrained( void )
+		{
+			return Drained_;
+		}
+	};
+
+
+		// Flow driver to content.
+	namespace f2c_ {
 		namespace {
-			typedef uvq::cASync cASync_;
+			struct sData_ {
+				fdr::rIDriver *Driver;
+				rContent_ *Content;
+				void reset( bso::sBool P = true )
+				{
+					tol::reset( P, Driver, Content );
+				}
+				qCDTOR( sData_ );
+			};
+
+			namespace {
+				void Process_(
+					fdr::rIDriver &Driver,
+					rContent_ &Content )
+				{
+				qRH
+					fdr::sSize Amount = 0, Handled = 0;
+					fdr::sByte Buffer[100];
+					flw::sDressedIFlow<> Flow;
+				qRB
+					Flow.Init( Driver );
+
+					while ( !Flow.EndOfFlow() ) {
+						Handled = 0;
+						Amount = Flow.ReadUpTo( sizeof( Buffer ), Buffer );
+
+						while ( Amount != Handled ) {
+							Handled += Content.P_Write( Buffer + Handled, Amount - Handled );
+							tht::Defer();
+						}
+					}
+				qRR
+				qRT
+					Content.P_Write( NULL, 0 );
+				qRE
+				}
+			}
+
+			void Routine_(
+				void *UP,
+				mtk::gBlocker &Blocker )
+			{
+			qRH
+				sData_ &Data = *(sData_ *)UP;
+			qRB
+				fdr::rIDriver &Driver = *Data.Driver;
+				rContent_ &Content = *Data.Content;
+
+				Blocker.Release();
+
+				Process_( Driver, Content );
+			qRFR
+			qRFT
+			qRFE(scln::ErrFinal() )
+			}
 		}
 
-		class rAIDriverCallback
-		: public cASync_
+		void ASyncProcess(
+			fdr::rIDriver &Driver,
+			rContent_ &Content )
 		{
-		private:
-			fdr::rIDriver *Driver_;
-			rContent *Content_;
-		protected:
-			virtual void UVQWork( void ) override
-			{
-			qRH
-				fdr::sSize Amount = 0, Handled = 0;
-				fdr::sByte Buffer[100];
-				flw::sDressedIFlow<> Flow;
-			qRB
-				Flow.Init( *Driver_ );
+			sData_ Data;
 
-				while ( !Flow.EndOfFlow() ) {
-					Handled = 0;
-					Amount = Flow.ReadUpTo( sizeof( Buffer ), Buffer );
+			Data.Driver = &Driver;
+			Data.Content = &Content;
 
-					while ( Amount != Handled ) {
-						Handled += Content_->P_Write( Buffer + Handled, Amount - Handled );
-						tht::Defer();
-					}
-				}
-			qRR
-			qRT
-				Content_->P_Write( NULL, 0 );
-			qRE
-			}
-			uvq::eBehavior UVQAfter( void ) override
-			{
-				return uvq::bExitOnly;
-			}
-		public:
-			void reset( bso::sBool P = true )
-			{
-				tol::reset( P, Driver_, Content_ );
-			}
-			qCVDTOR( rAIDriverCallback );
-			void Init(
-				fdr::rIDriver &Driver,
-				rContent &Content )
-			{
-				Driver_ = &Driver;
-				Content_ = &Content;
-			}
-		};
-
-		class rAStreamCallback
-		: public cASync_
-		{
-		private:
-		rContent *Content_;
-		v8::Persistent<v8::Object> Stream_;
-		tht::rBlocker *Blocker_;
-		fdr::sByte Buffer_[100];
-		protected:
-			virtual void UVQWork( void ) override
-			{
-				fdr::sSize Amount = 0;
-
-				while ( ( ( Amount = Content_->C_Read(sizeof(Buffer_) - 1, Buffer_ ) ) == 0) && !Content_->C_IsDrained() )
-					tht::Defer();
-				Buffer_[Amount] = 0;
-			}
-			virtual uvq::eBehavior UVQAfter( void ) override
-			{
-				uvq::eBehavior Behavior = uvq::b_Undefined;
-			qRH
-				v8qnjs::sRStream Stream;
-				v8qnjs::sString String;
-			qRB
-/*				v8::Local<v8::Context> context = v8::Context::New(v8q::GetIsolate());
-				v8::Context::Scope context_scope(context);
-				context->Enter();
-				*/
-
-				Stream.Init( v8::Local<v8::Object>::New( v8q::GetIsolate(), Stream_ ) );
-			
-				if ( *Buffer_ ) {
-					String.Init( (const char *)Buffer_ );
-					Stream.Push( v8q::ToLocal( node::Buffer::New( v8q::GetIsolate(), String.Core() ) ) );
-					Behavior = uvq::bRelaunch;
-				} else {
-					Stream.End();
-					Behavior = uvq::bExitOnly;
-				}
-			qRR
-			qRT
-//				Blocker_->Unblock();
-			qRE
-				return Behavior;
-			}
-		public:
-			void reset( bso::sBool P = true )
-			{
-				tol::reset( P, Content_, Blocker_ );
-				Stream_.Reset();
-			}
-			qCVDTOR( rAStreamCallback );
-			void Init(
-				rContent &Content,
-				v8qnjs::sRStream &Stream,
-				tht::rBlocker &Blocker )
-			{
-				Content_ = &Content;
-				Stream_.Reset( v8qnjs::GetIsolate(), Stream.Core() );
-				Blocker_ = &Blocker;
-			}
-		};
+			mtk::Launch( f2c_::Routine_, &Data );
+		}
 
 	}
 
-	typedef common::sFRelay sFRelay_;
+	namespace {
+		typedef common::sFRelay sFRelay_;
+	}
 
-	class rDownstreamRack_
+	class rRack_
 	{
 	private:
 		sFRelay_ StreamRelay_, ProcessRelay_;
 		txf::rOFlow ProcessFlow_;
-		f2s_::rContent Content_;
-		f2s_::rAIDriverCallback DriverCallback_;
-		f2s_::rAStreamCallback StreamCallback_;
+		rContent_ Content_;
+		v8::Persistent<v8::Object> Stream_;
+		fdr::sByte Buffer_[100];
 	public:
 		txf::rOFlow OFlow;
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, StreamRelay_, ProcessRelay_, ProcessFlow_, Content_, DriverCallback_, StreamCallback_, OFlow );
+			tol::reset( P, StreamRelay_, ProcessRelay_, OFlow, ProcessFlow_, Content_ );
+			Stream_.Reset();
 		}
-		qCDTOR( rDownstreamRack_ );
-		void Init(
-			v8qnjs::sRStream &Stream,
-			tht::rBlocker &Blocker )
+		qCVDTOR( rRack_ );
+		void Init( v8qnjs::sRStream &Stream )
 		{
 			tol::Init( StreamRelay_, ProcessRelay_, Content_ );
 
@@ -339,30 +290,71 @@ namespace {
 			ProcessFlow_.Init( StreamRelay_.Out );
 
 			process_::ASyncProcess( ProcessRelay_.In, ProcessFlow_ );
+			f2c_::ASyncProcess( StreamRelay_.In, Content_ );
 
-			DriverCallback_.Init( StreamRelay_.In, Content_ );
-			uvq::Launch( DriverCallback_ );
+			Stream_.Reset( v8qnjs::GetIsolate(), Stream.Core() );
+		}
+		void Retrieve( void )
+		{
+			fdr::sSize Amount = 0;
 
-			StreamCallback_.Init( Content_, Stream, Blocker );
-			uvq::Launch( StreamCallback_ );
+			while ( ( ( Amount = Content_.C_Read(sizeof(Buffer_) - 1, Buffer_ ) ) == 0) && !Content_.C_IsDrained() )
+				tht::Defer();
+
+			Buffer_[Amount] = 0;
+		}
+		bso::sBool Send( void )
+		{
+			bso::sBool Terminate = false;
+		qRH
+			v8qnjs::sRStream Stream;
+			v8qnjs::sString String;
+		qRB
+			Stream.Init( v8::Local<v8::Object>::New( v8q::GetIsolate(), Stream_ ) );
+			
+			if ( *Buffer_ ) {
+				String.Init( (const char *)Buffer_ );
+				Stream.Push( v8q::ToLocal( node::Buffer::New( v8q::GetIsolate(), String.Core() ) ) );
+			} else {
+				Stream.End();
+				Terminate = true;
+			}
+		qRR
+		qRT
+		qRE
+			return Terminate;
 		}
 	};
 
-	class rRack_ {
+	namespace {
+		typedef uvq::cASync cASync_;
+	}
+
+	class rRackASyncCallback_
+	: public rRack_,
+		public cASync_
+	{
+	protected:
+		virtual void UVQWork( void ) override
+		{
+			rRack_::Retrieve();
+		}
+		virtual uvq::eBehavior UVQAfter( void ) override
+		{
+			if ( rRack_::Send() ) {
+				return uvq::bExitAndDelete;
+			} else
+				return uvq::bRelaunch;
+		}
 	public:
-		tht::rBlocker Blocker_;
-		rDownstreamRack_ Downstream;
 		void reset( bso::sBool P = true )
 		{
-			if ( P && false)
-				Blocker_.Wait();
-			tol::reset( P, Blocker_, /*Upstream, */ Downstream );
+			rRack_::reset( P );
 		}
-		qCDTOR( rRack_ );
+		qCVDTOR( rRackASyncCallback_ );
 		void Init( v8qnjs::sRStream &Stream )
 		{
-			Blocker_.Init();
-			Downstream.Init( Stream, Blocker_  );
+			rRack_::Init( Stream );
 		}
 	};
 
@@ -380,7 +372,7 @@ namespace {
 		
 		rRack_ &Rack = *v8qnjs::sExternal<rRack_>( This.Get( "_rack0" ) ).Value();
 
-		Rack.Downstream.OFlow << Chunk;
+		Rack.OFlow << Chunk;
 	qRFR
 	qRFT
 	qRFE( scln::ErrFinal() )
@@ -394,7 +386,7 @@ namespace {
 		This.Init(Infos.This() );
 		rRack_ &Rack = *v8qnjs::sExternal<rRack_>( This.Get( "_rack0" ) ).Value();
 
-		Rack.Downstream.OFlow.Commit();
+		Rack.OFlow.Commit();
 
 		// delete v8qnjs::sExternal<rRack_>( This.Get( "_rack0" ) ).Value();
 	qRFR
@@ -405,11 +397,6 @@ namespace {
 	void OnRead_( const v8q::sFunctionInfos &Infos )
 	{
 		// Nothing to do !
-
-		static int i = 0;
-
-		if ( i == 0 )
-			i++;
 	}
 }
 
@@ -417,9 +404,9 @@ void stream::Set( const v8q::sArguments &Arguments )
 {
 qRFH
 	v8qnjs::sRStream Source, This;
-	rRack_ *Rack = NULL;
+	rRackASyncCallback_ *Rack = NULL;
 qRFB
-	Rack = new rRack_;
+	Rack = new rRackASyncCallback_;
 
 	if ( Rack == NULL )
 		qRGnr();
@@ -430,11 +417,12 @@ qRFB
 	Rack->Init( This );
 
 	Source.Set( "_rack0", v8qnjs::sExternal<rRack_>( Rack ) );
-	This.Set( "_rack0", v8qnjs::sExternal<rRack_>( Rack ) );
 
 	Source.OnData( OnData_ );
 	Source.OnEnd( OnEnd_ );
 	This.OnRead( OnRead_ );
+
+	uvq::Launch( *Rack );
 
 	Rack = NULL;
 qRFR

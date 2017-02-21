@@ -19,6 +19,8 @@ MIDDLE
 	- implementation of the possibility to display a free text defined in the configuration file for '--help' command.
 	- implementation of the displaying of options which are common to all commands, to avoid to put them in each command definition
 	  ('--verbose' in 'mmuaq', for example, or the '-s|--setup' option).
+- UVQ :
+	- Launch each 'work callback' in a 'mkt' thread, so that only one 'uv' thread will be used (only 'UV_THREADPOOL_SIZE' threads are available with 'uv').
 
 LONG :
 - 'XPP' : Réimplement in a simplified manner.

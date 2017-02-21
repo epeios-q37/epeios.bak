@@ -33,98 +33,12 @@
 #include "xml.h"
 
 namespace {
-	namespace common_ {
-		namespace {
-			typedef xml::token__ eToken;
-		}
-
-		typedef uvq::cASync cASync;
-
-		class rContent
-		{
-		private:
-			tht::rLocker Locker_;
-			eToken Token_;
-			str::wString
-				Tag_,
-				Attribute_,
-				Value_;
-		public:
-			void reset( bso::sBool P = true )
-			{
-				tol::reset( P, Locker_, Tag_, Attribute_, Value_ );
-
-				Token_ = xml::t_Undefined;
-			}
-			qCDTOR( rContent );
-			void Init( void )
-			{
-				tol::Init( Locker_, Tag_, Attribute_, Value_ );
-				Token_ = xml::t_Undefined;
-			}
-			bso::sBool P_Put(
-				eToken Token,
-				const str::dString &Tag,
-				const str::dString &Attribute,
-				const str::dString &Value )
-			{
-				bso::sBool Done = false;
-			qRH
-				tht::rLockerHandler Locker;
-			qRB
-				Locker.Init( Locker_ );
-
-				if ( Token_ == xml::t_Processed )
-					qRGnr();
-
-				if ( Token_ == xml::t_Undefined ) {
-					Token_ = Token;
-
-					Tag_ = Tag;
-					Attribute_ = Attribute;
-					Value_ = Value;
-
-					Done = true;
-				}
-			qRR
-			qRT
-			qRE
-				return Done;
-			}
-			eToken P_Get(
-				str::dString &Tag,
-				str::dString &Attribute,
-				str::dString &Value )
-			{
-				eToken Token = xml::t_Undefined;
-			qRH
-				tht::rLockerHandler Locker;
-			qRB
-				Locker.Init( Locker_ );
-
-				if ( Token_ != xml::t_Undefined ) {
-					Token = Token_;
-					Tag.Append( Tag_ );
-					Attribute.Append( Attribute_ );
-					Value.Append( Value_ );
-
-					if ( Token_ != xml::t_Processed )
-						Token_ = xml::t_Undefined;
-				}
-			qRR
-			qRT
-			qRE
-				return Token;
-			}
-		};
-	}
-
 	namespace process_ {
 		namespace {
 			class rContent_
 			{
 			public:
-				common_::eToken Token;
+				xml::token__ Token;
 				str::wString
 					Tag,
 					Attribute,
@@ -179,8 +93,10 @@ namespace {
 			}
 		}
 
+		typedef uvq::cASync cASync;
+
 		class cASyncCallback
-		: public common_::cASync
+		: public cASync
 		{
 		private:
 			xml::rParser Parser_;
@@ -251,11 +167,10 @@ namespace {
 		process_::cASyncCallback Callback_;
 	public:
 		common::sFRelay Relay;
-		common_::rContent Content;
 		txf::rOFlow OFlow;
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, Callback_, Relay, Content );
+			tol::reset( P, Callback_, Relay );
 		}
 		qCDTOR( sRack_ );
 		void Init( v8qnjs::sFunction &Function )
@@ -263,7 +178,6 @@ namespace {
 		qRH
 		qRB
 			Relay.Init();
-			Content.Init();
 #if 1
 			Callback_.Init( Relay.In, Function );
 			uvq::Launch( Callback_ );

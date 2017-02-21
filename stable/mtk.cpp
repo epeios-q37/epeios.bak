@@ -19,13 +19,13 @@
 
 #define MTK__COMPILATION
 
-#include "mtk.h"
+# include "mtk.h"
 
-#include "mtx.h"
+# include "mtx.h"
 
 using namespace mtk;
 
-#ifdef MTK__POSIX
+# ifdef MTK__POSIX
 
 namespace {
 	struct thread_struct__
@@ -149,7 +149,7 @@ qRE
 
 #endif
 
-void mtk::LaunchAndKill(
+void mtk::RawLaunchAndKill(
 	mtk__routine Routine,
 	void *UP )
 {
@@ -289,7 +289,7 @@ namespace {
 	}
 }
 
-void mtk::LaunchAndKeep(
+void mtk::RawLaunchAndKeep(
 	routine__ Routine,
 	void *UP )
 {
@@ -301,7 +301,7 @@ void mtk::LaunchAndKeep(
 	Common.UP = UP;
 	
 	if ( Common.Amount == 0 )
-		mtk::LaunchAndKill( Launcher_, NULL ); 
+		mtk::RawLaunchAndKill( Launcher_, NULL ); 
 	else
 		mtx::Unlock( Common.Thread );
 		
@@ -312,6 +312,77 @@ void mtk::LaunchAndKeep(
 	mtx::Unlock( Common.Exclusion );
 }
 
+namespace {
+	struct sData_ {
+		sXRoutine Routine;
+		void *UP;
+		tht::rBlocker *Blocker;
+		void reset( bso::sBool P = true )
+		{
+			tol::reset( P, Routine, UP, Blocker );
+		}
+		qCDTOR( sData_ )
+	};
+
+	class gBlocker_
+	: public gBlocker
+	{
+	public:
+		void Init( tht::rBlocker &Blocker )
+		{
+			gBlocker::Init( Blocker );
+		}
+	};
+
+	void Routine_( void *UP )
+	{
+		sData_ &Data = *(sData_ *)UP;
+		gBlocker_ Blocker;
+
+		Blocker.Init( *Data.Blocker );
+
+		Data.Routine( Data.UP, Blocker );
+
+		// 'Blocker.Blocker_' is no more valid here !!!
+	}
+
+	void Launch_(
+		sXRoutine Routine,
+		void(* Launch)( routine__, void *),
+		void *UP )
+	{
+	qRH
+		tht::rBlocker Blocker;
+		sData_ Data;
+	qRB
+		Blocker.Init();
+		Data.Blocker = &Blocker;
+		Data.Routine = Routine;
+		Data.UP = UP;
+
+		Launch( Routine_, &Data );
+
+		Blocker.Wait();
+	qRR
+	qRT
+	qRE
+	}
+
+}
+
+void mtk::LaunchAndKill(
+	sXRoutine Routine,
+	void *UP )
+{
+	Launch_( Routine, mtk::RawLaunchAndKill, UP );
+}
+
+void mtk::LaunchAndKeep(
+	sXRoutine Routine,
+	void *UP )
+{
+	Launch_( Routine, mtk::RawLaunchAndKeep, UP );
+}
 
 # if 0	// Obsolete  ?
 #  ifdef CPE_C_MSC
@@ -328,7 +399,7 @@ static void WaitAndExit_( void *UP )
 
 void mtk::ForceExit( unsigned long Seconds )
 {
-	Launch( WaitAndExit_, (void *)(intptr_t)Seconds );
+	RawLaunch( WaitAndExit_, (void *)(intptr_t)Seconds );
 }
 
 Q37_GCTOR( mtk )
