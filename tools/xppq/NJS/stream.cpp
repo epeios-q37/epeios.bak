@@ -17,10 +17,9 @@
 	along with xppq. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <uv.h>
-#include <nan.h>
-
 #include "stream.h"
+
+#include <node_buffer.h>
 
 #include "uvq.h"
 #include "v8qnjs.h"
@@ -368,13 +367,33 @@ namespace {
 			rStreamRack_::Init( Stream );
 		}
 	};
+#if 1
+	void OnReadable_( const v8q::sFunctionInfos &Infos )
+	{
+	qRFH
+		v8qnjs::sRStream This;
+		v8qnjs::sBuffer Chunk;
+	qRFB
+		This.Init(Infos.This() );
 
+		rStreamRack_ &Rack = *v8qnjs::sExternal<rStreamRack_>( This.Get( "_rack0" ) ).Value();
+
+		Chunk.Init();
+
+		if ( This.Read( Chunk ) )
+			Rack.OFlow << Chunk;
+		else
+			Rack.OFlow.Commit();
+	qRFR
+	qRFT
+	qRFE( scln::ErrFinal() )
+	}
+#else
 	void OnData_( const v8q::sFunctionInfos &Infos )
 	{
 	qRFH
 		v8qnjs::sRStream This;
 		v8qnjs::sBuffer Chunk;
-		fdr::sSize Amount = 0;
 	qRFB
 		This.Init(Infos.This() );
 
@@ -402,6 +421,7 @@ namespace {
 	qRFT
 	qRFE( scln::ErrFinal() )
 	}
+#endif
 
 	void OnRead_( const v8q::sFunctionInfos &Infos )
 	{
@@ -411,28 +431,6 @@ namespace {
 		rStreamRack_ &Rack = *v8qnjs::sExternal<rStreamRack_>( This.Get( "_rack0" ) ).Value();
 
 		Rack.Blocker.Unblock();
-	}
-
-	void OnReadable_( const v8q::sFunctionInfos &Infos )
-	{
-	qRFH
-		v8qnjs::sRStream This;
-		v8qnjs::sBuffer Chunk;
-		fdr::sSize Amount = 0;
-	qRFB
-		This.Init(Infos.This() );
-
-		rStreamRack_ &Rack = *v8qnjs::sExternal<rStreamRack_>( This.Get( "_rack0" ) ).Value();
-
-		Chunk.Init();
-
-		if ( This.Read( Chunk ) )
-			Rack.OFlow << Chunk;
-		else
-			Rack.OFlow.Commit();
-	qRFR
-	qRFT
-	qRFE( scln::ErrFinal() )
 	}
 }
 

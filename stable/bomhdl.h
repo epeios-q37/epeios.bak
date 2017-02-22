@@ -27,20 +27,7 @@
 #if defined( E_DEBUG ) && !defined( BOMHDL_NODBG )
 #define BOMHDL_DBG
 #endif
-
-/* Begin of automatic documentation generation part. */
-
-//V $Revision: 1.4 $
-//C Claude SIMON (csimon at zeusw dot org)
-//R $Date: 2013/07/18 19:46:21 $
-
-/* End of automatic documentation generation part. */
-
-/* Addendum to the automatic documentation generation part. */
-//D Byte Order Marker 
-/* End addendum to automatic documentation generation part. */
-
-/*$BEGIN$*/
+// Byte Order Marker 
 
 # include "err.h"
 # include "flw.h"
@@ -118,5 +105,4 @@ namespace bomhdl {
 
 }
 
-/*$END$*/
 #endif

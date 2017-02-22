@@ -43,11 +43,9 @@ namespace v8qnjs {
 		qCDTOR( sHelper );
 		using sObject::Init;
 		using sObject::Get;
-		void Init(
-			sHelper &Helper,
-			v8::Isolate *Isolate = NULL )
+		void Init( sHelper &Helper )
 		{
-			sObject::Init(Helper.Core(), Isolate );
+			sObject::Init(Helper.Core() );
 		}
 	};
 
@@ -59,26 +57,22 @@ namespace v8qnjs {
 		using sValue::Init;
 		void Init(
 			const char *String,
-			sFunction &Function,
-			v8::Isolate *Isolate = NULL )
+			sFunction &Function )
 		{
-			sValue::Init( Function.Launch( String ), Isolate );
+			sValue::Init( Function.Launch( String ) );
 		}
 		void Init(
 			const char *String,
-			sHelper &Helper,
-			v8::Isolate *Isolate = NULL )
+			sHelper &Helper )
 		{
 			sFunction Function;
 
-			Function.Init( Helper.Get( "from" ), Isolate );
-			Init( String, Function, Isolate);
+			Function.Init( Helper.Get( "from" ) );
+			Init( String, Function);
 		}
-		void ToString(
-			sString &String,
-			v8::Isolate *Isolate = NULL ) const
+		void ToString( sString &String ) const
 		{
-			String.Init( v8q::sObject( *this ).Launch( "toString" ), Isolate );
+			String.Init( v8q::sObject( *this ).Launch( "toString" ) );
 		}
 	};
 
@@ -131,7 +125,7 @@ namespace v8qnjs {
 			sBuffer &Chunk,
 			v8::Isolate *Isolate = NULL )
 		{
-			Chunk.Init( Launch( "read", Isolate ), Isolate );
+			Chunk.Init( Launch( "read", Isolate ) );
 
 			return !Chunk.IsNull();
 		}

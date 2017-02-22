@@ -247,8 +247,6 @@ static status__ GetCommentOrCData_(
 	str::string_ &Content,
 	bso::bool__ &IsCData )
 {
-	bso::bool__ Continue = true;
-
 	if ( Flow.Get() != '!' )
 		qRFwk();
 

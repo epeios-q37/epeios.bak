@@ -378,12 +378,9 @@ namespace async_ {
 	qRH
 		flw::sDressedIFlow<> IFlow;
 		flw::sDressedOFlow<> OFlow;
-		bso::sSize Amount = 0;
-	qRB
 		fdr::sByte Buffer[100];
-		fdr::sSize Amount = 0;
 		rData &Data = *(rData *)UP;
-
+	qRB
 		IFlow.Init( *Data.IDriver );
 		OFlow.Init( *Data.ODriver );
 

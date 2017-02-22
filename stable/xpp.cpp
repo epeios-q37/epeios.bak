@@ -658,7 +658,6 @@ status__ xpp::_extended_parser___::_HandleExpandDirective( _extended_parser___ *
 {
 	status__ Status = s_Undefined;
 qRH
-	expand_type__ Type = et_Undefined;
 	str::string Value;
 qRB
 	Value.Init();
@@ -953,7 +952,6 @@ status__ xpp::_extended_parser___::_HandleCypherDirective( _extended_parser___ *
 {
 	status__ Status = s_Undefined;
 qRH
-	cypher_mode__ Mode = cm_Undefined;
 	str::string Value;
 qRB
 	Value.Init();
@@ -1574,8 +1572,6 @@ status__ xpp::Process(
 	status__ Status = sOK;
 qRH
 	preprocessing_iflow___ PFlow;
-	xml::token__ Token = xml::t_Undefined;
-	bso::bool__ Continue = true;
 	xtf::extended_text_iflow__ RelayXFlow;
 qRB
 	PFlow.Init( XFlow, Criterions );
@@ -1660,7 +1656,6 @@ static status__ HandleCypherDirective_(
 	status__ Status = s_Undefined;
 qRH
 	str::string CypherKey;
-	bso::bool__ CypheringComplete = false;
 	bso::bool__ Continue = true;
 qRB
 	CypherKey.Init();
@@ -1711,7 +1706,6 @@ status__ xpp::Encrypt(
 	status__ Status = s_Undefined;
 qRH
 	xtf::extended_text_iflow__ XFlow;
-	xml::token__ Token = xml::t_Undefined;
 	bso::bool__ Continue = true;
 	xml::parser___ Parser;
 	_qualified_preprocessor_directives___ Directives;

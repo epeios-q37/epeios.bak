@@ -1,10 +1,30 @@
+// You can submit an additional parameter of value from '0' to '4' as id of the test to launch.
+
 const fs = require( 'fs');
 const stream = require( 'stream');
 const xppq = require( './xppq.js');
 
-function callback( tag, attribute, value )
+function write( text )
 {
-	process.stdout.write( tag + " - " + attribute + " : '" + value.trim() + "'\n" )
+	process.stdout.write( text );
+}
+
+function callback( token, tag, attribute, value )
+{
+	switch ( token ) {
+	case xppq.tokens.START_TAG :
+		write( "Start tag: '" + tag + "'\n" );
+		break;
+	case xppq.tokens.ATTRIBUTE :
+		write( "Attribute: '" + attribute + "' = '" + value + "'\n" );
+		break;
+	case xppq.tokens.VALUE :
+		write( "Value:     '" + value.trim() + "'\n" );
+		break;
+	case xppq.tokens.END_TAG :
+		write( "End tag:   '" + tag + "'\n" );
+		break;
+	}
 }
 
 var test = 4;
@@ -25,14 +45,14 @@ case 1:
 	break;
 case 2:
 	console.log( "Using the preprocessing stream with a callback, wich transforms to lower case.\n" );
-	new xppq.Stream( fs.createReadStream( 'demo.xml' ) ).on( 'data', ( chunk ) => { process.stdout.write( chunk.toString().toLowerCase() ) } );
+	new xppq.Stream( fs.createReadStream( 'demo.xml' ) ).on( 'data', ( chunk ) => { write( chunk.toString().toLowerCase() ) } );
 	break;
 case 3:
-	console.log( "XML parsing without preprocessing.\n" );
+	console.log( "XML parsing WITHOUT preprocessing.\n" );
 	xppq.parse( fs.createReadStream( 'demo.xml' ), callback );
 	break;
 case 4:
-	console.log( "XML parsing with preprocessing.\n" );
+	console.log( "XML parsing WITH preprocessing.\n" );
 	xppq.parse( new xppq.Stream( fs.createReadStream( 'demo.xml' ) ), callback );
 	break;
 default :

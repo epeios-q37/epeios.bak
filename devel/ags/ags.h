@@ -114,8 +114,7 @@ namespace ags {
 			// On ne touche ni  '_Descriptor', ni  '_Addendum' car ils sont grs extrieurement (ce sont des rfrences).
 		}
 		aggregated_storage_driver__( descriptor__ &Descriptor )
-		: _Descriptor( Descriptor ),
-		  sStorageDriver_()
+		: _Descriptor( Descriptor )
 		{
 			reset( false );
 		}
@@ -1319,8 +1318,8 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 			tracker__ Free;	// Ne doit pas pointer sur le dernier fragment, mme s'il s'agit du seul.
 		} &S_;
 		aggregated_storage_( s &S )
-		: S_( S ),
-		  Storage( S.Storage )
+		:  Storage( S.Storage ),
+		   S_( S )
 		{}
 		void reset( bso::bool__  P = true )
 		{

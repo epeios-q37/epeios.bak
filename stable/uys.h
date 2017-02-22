@@ -246,8 +246,8 @@ namespace uys {
 			S_.Size = 0;
 		}
 		untyped_storage_( s &S )
-			: S_( S ),
-			_AggregatedStorageDriver( S.Descriptor )
+		: _AggregatedStorageDriver( S.Descriptor ),
+		  S_( S )
 		{
 			reset( false );
 		}

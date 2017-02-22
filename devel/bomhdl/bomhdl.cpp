@@ -71,6 +71,7 @@ void bomhdl::InitializeParser( stsfsm::parser__ &Parser )
 	Parser.Init( Automat_ );
 }
 
+/*
 static bso::bool__ Match_(
 	const bom__ &Bom,
 	const fdr::byte__ *Buffer,
@@ -82,7 +83,7 @@ static bso::bool__ Match_(
 	} else
 		return false;
 }
-
+*/
 
 /* byte_order_marker__ bom::DetectBOM(
 	const fdr::byte__ *Buffer,
@@ -137,7 +138,9 @@ const bom__ &bomhdl::GetBOM( byte_order_marker__ BOM )
 	if ( BOM > bom_amount )
 		qRFwk();
 
-#pragma warning(suppress: 6385)
+#ifdef CPE_S_WIN
+# pragma warning(suppress: 6385)
+#endif
 	return BOMS_[BOM];
 }
 

@@ -1,5 +1,9 @@
 CHANGELOG for the 'Epeios' framework.
 
+2017-02-22 :
+- Global:
+	- Fixing g++ warnings.
+
 2017-02-21 :
 - FLX :
 	- Adaptation to changes in 'MTK'.

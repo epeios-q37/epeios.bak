@@ -506,7 +506,7 @@ namespace fil {
 		int Source = FIL_UNDEFINED_DESCRIPTOR;
 		int Target = FIL_UNDEFINED_DESCRIPTOR;
 		char Buffer[BUFSIZ];
-		size_t Size = 0;
+		ssize_t Size = 0;
 	qRB
 		Source = Open( SourceFilename, mReadOnly );
 

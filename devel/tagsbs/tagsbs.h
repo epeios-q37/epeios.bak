@@ -101,7 +101,7 @@ namespace tagsbs {
 		{
 			// Standadisation.
 		}
-		const bso::bool__ GetTagValue(
+		bso::bool__ GetTagValue(
 			indice__ Indice,
 			str::string_ &Value )
 		{
@@ -159,7 +159,7 @@ namespace tagsbs {
 		{
 			// Standadisation.
 		}
-		const bso::bool__ GetTagValue(
+		bso::bool__ GetTagValue(
 			const str::string_ &Tag,
 			str::string_ &Value )
 		{

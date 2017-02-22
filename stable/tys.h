@@ -123,11 +123,11 @@ namespace tys {
 		//f Return the object at 'Position'.
 		const t Get( r Position ) const
 		{
-			sdr::byte__ V[sizeof( t )];
+			t V;
 
-			_Recall( *Position, 1, (t *)V );
+			_Recall( *Position, 1, &V );
 
-			return *(t *)V;
+			return V;
 		}
 		//f Store 'Amount' object in 'Buffer' at 'Position'.
 		void Store(

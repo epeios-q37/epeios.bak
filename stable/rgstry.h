@@ -191,7 +191,7 @@ namespace rgstry {
 				}
 			}
 		}
-		const bso::bool__ _IsPostInitialized( void ) const
+		bso::bool__ _IsPostInitialized( void ) const
 		{
 			return ( ( _Path.Amount() != 0 )
 				     || ( _RawPath == NULL )

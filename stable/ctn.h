@@ -201,11 +201,11 @@ namespace ctn {
 			ias::indexed_aggregated_storage_::s Dynamics;
 		} &S_;
 		basic_container_( s &S )
-		: S_( S ),
+		: amount_extent_manager_<r>( S ),
 		  Object_( S.ST ),
-		  Dynamics( S.Dynamics ),
 		  Statics( S.Statics ),
-		  amount_extent_manager_<r>( S )
+		  Dynamics( S.Dynamics ),
+		  S_( S )
 		{}
 		void reset( bool P = true )
 		{
@@ -293,10 +293,7 @@ namespace ctn {
 		{
 			Flush_( true );
 
-			sdr::size__ AncCap;
-			sdr::size__ Amount = Size;
-
-			AncCap = amount_extent_manager_<r>::Amount();
+			sdr::size__ AncCap = amount_extent_manager_<r>::Amount();
 
 			_Allocate( Size, Mode );
 

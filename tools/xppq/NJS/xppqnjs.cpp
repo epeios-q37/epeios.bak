@@ -17,9 +17,6 @@
 	along with xppq. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <node.h>
-#include <nan.h>
-
 #include "parser.h"
 #include "stream.h"
 
@@ -31,7 +28,6 @@
 
 void scln::SCLNRegister( scln::sRegistrar &Registrar )
 {
-	v8q::Execute("process.env.UV_THREADPOOL_SIZE=5;");
 	cio::Initialize(cio::GetConsoleSet() );
 	Registrar.Register( stream::Set );
 	Registrar.Register( parser::Parse );

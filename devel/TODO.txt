@@ -33,7 +33,7 @@ MIDDLE
 
 LONG :
 - 'XPP' :
-	- Réimplement in a simplified manner.
+	- Reimplement in a simplified manner.
 - Socket :
 	- Adaptation of the network related libraries to IPv6.
 

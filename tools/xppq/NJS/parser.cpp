@@ -66,7 +66,7 @@ namespace {
 			lcl::locale Locale;
 		qRB
 			Parser.Flow().UndelyingFlow().IDriver().ITake(tht::GetTID() );	// Between calls, the thread is not the same.
-			switch ( Parser.Parse( xml::tfAllButUseless ) ) {
+			switch ( Parser.Parse( xml::tfObvious ) ) {
 			case xml::t_Error:
 				Meaning.Init();
 				xml::GetMeaning( Parser.GetStatus(), Parser.Flow().Position(), Meaning );
@@ -137,18 +137,36 @@ namespace {
 		bso::sBool SendToCallback( void )
 		{
 			v8qnjs::sFunction Function(v8::Local<v8::Function>::New( v8qnjs::GetIsolate(), Function_ ) );
+			v8qnjs::sNumber Token;
 
-			switch ( Content_.Token ) {
-			case xml::t_Processed:
+			if ( Content_.Token == xml::t_Processed ) {
 				XFlow_.UndelyingFlow().IDriver().ITake(tht::GetTID() );
 				XFlow_.Dismiss();	// To avoid locker owner problem on dextruction.
 				return true;
-				break;
-			default:
-				Function.Launch( Content_.Tag, Content_.Attribute, Content_.Value );
-				return false;
-				break;
+			} else {
+				// Must match 'xppq.js'.
+				switch ( Content_.Token ) {
+				case xml::tStartTag:
+					Token.Init( 1 );
+					break;
+				case xml::tAttribute:
+					Token.Init( 2 );
+					break;
+				case xml::tValue:
+					Token.Init( 3 );
+					break;
+				case xml::tEndTag:
+					Token.Init( 4 );
+					break;
+				default:
+					qRGnr();
+					break;
+				}
+
+				Function.Launch( Token, Content_.Tag, Content_.Attribute, Content_.Value );
 			}
+
+			return false;
 		}
 	};
 
@@ -181,43 +199,7 @@ namespace {
 			rRack_::Init( Function );
 		}
 	};
-
-	void OnData_( const v8q::sFunctionInfos &Infos )
-	{
-	qRFH
-		v8qnjs::sRStream This;
-		v8qnjs::sBuffer Chunk;
-	qRFB
-		This.Init(Infos.This() );
-
-		Chunk.Init();
-		v8q::Get( Infos, Chunk );
-		
-		rRack_ &Rack = *v8qnjs::sExternal<rRack_>( This.Get( "_rack" ) ).Value();
-
-		Rack.OFlow << Chunk;
-
-		int u = 0;
-	qRFR
-	qRFT
-	qRFE( scln::ErrFinal() )
-	}
-
-	void OnEnd_( const v8q::sFunctionInfos &Infos )
-	{
-	qRFH
-		v8qnjs::sRStream This;
-	qRFB
-		This.Init(Infos.This() );
-
-		rRack_ &Rack = *v8qnjs::sExternal<rRack_>( This.Get( "_rack" ) ).Value();
-
-		Rack.OFlow.Commit();
-	qRFR
-	qRFT
-	qRFE( scln::ErrFinal() )
-	}
-
+#if 1
 	void OnReadable_( const v8q::sFunctionInfos &Infos )
 	{
 	qRFH
@@ -239,6 +221,42 @@ namespace {
 	qRFT
 	qRFE( scln::ErrFinal() )
 	}
+#else
+	void OnData_( const v8q::sFunctionInfos &Infos )
+	{
+	qRFH
+		v8qnjs::sRStream This;
+		v8qnjs::sBuffer Chunk;
+	qRFB
+		This.Init(Infos.This() );
+
+		Chunk.Init();
+		v8q::Get( Infos, Chunk );
+		
+		rRack_ &Rack = *v8qnjs::sExternal<rRack_>( This.Get( "_rack" ) ).Value();
+
+		Rack.OFlow << Chunk;
+	qRFR
+	qRFT
+	qRFE( scln::ErrFinal() )
+	}
+
+	void OnEnd_( const v8q::sFunctionInfos &Infos )
+	{
+	qRFH
+		v8qnjs::sRStream This;
+	qRFB
+		This.Init(Infos.This() );
+
+		rRack_ &Rack = *v8qnjs::sExternal<rRack_>( This.Get( "_rack" ) ).Value();
+
+		Rack.OFlow.Commit();
+	qRFR
+	qRFT
+	qRFE( scln::ErrFinal() )
+	}
+
+#endif
 }
 
 void Parse_( const v8q::sArguments &Arguments )

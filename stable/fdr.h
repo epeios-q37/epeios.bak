@@ -619,7 +619,7 @@ namespace fdr {
 			CommitPending_ = false;
 			_flow_driver_base__::Init( ThreadSafety );
 		}
-		void Commit( bso::sBool Unlock )
+		bso::sBool Commit( bso::sBool Unlock )
 		{
 			bso::sBool Success = false;
 
@@ -638,6 +638,8 @@ namespace fdr {
 				CommitPending_ = false;
 			} else
 				Success = true;
+
+			return Success;
 		}
 		size__ Write(
 			const byte__ *Buffer,

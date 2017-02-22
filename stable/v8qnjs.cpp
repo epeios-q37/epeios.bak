@@ -31,7 +31,7 @@ qRH
 	sString String;
 qRB
 	String.Init();
-	Buffer.ToString( String, Buffer.Isolate() );
+	Buffer.ToString( String );
 
 	Flow << String;
 qRR

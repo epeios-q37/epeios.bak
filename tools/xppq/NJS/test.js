@@ -2,8 +2,30 @@ const fs = require( 'fs');
 const stream = require( 'stream');
 const xppq = require( './xppq.js');
 
+function write( text )
+{
+	process.stdout.write( text );
+}
+function callback( token, tag, attribute, value )
+{
+	switch ( token ) {
+	case xppq.tokens.START_TAG :
+		write( "Start tag: '" + tag + "'\n" );
+		break;
+	case xppq.tokens.ATTRIBUTE :
+		write( "Attribute: '" + attribute + "' = '" + value + "'\n" );
+		break;
+	case xppq.tokens.VALUE :
+		write( "Value:     '" + value.trim() + "'\n" );
+		break;
+	case xppq.tokens.END_TAG :
+		write( "End tag:   '" + tag + "'\n" );
+		break;
+	}
+}
+
 function test( chunk ) {
-    process.stdout.write( chunk.toString().toLowerCase() );
+    write( chunk.toString().toLowerCase() );
 }
 
 // new xppq.Stream( fs.createReadStream( 'test.xml' ) ).pipe( process.stdout );
@@ -19,15 +41,10 @@ class Relay extends stream.Readable {
  }
 }
 
-function parserCallback( tag, attribute, value )
-{
-	process.stdout.write( tag + " ; " + attribute + " ; '" + value.trim() + "'\n" )
-}
+xppq.parse( new fs.createReadStream( 'result.xml' ), callback );
 
-xppq.parse( new fs.createReadStream( 'result.xml' ), parserCallback );
-
-// xppq.parse( new xppq.Stream( fs.createReadStream( 'test.xml' ) ), parserCallback );
+// xppq.parse( new xppq.Stream( fs.createReadStream( 'test.xml' ) ), callback );
 
 // TO FIX : doesn't work because file is too big.
-// xppq.parse( new xppq.Stream( fs.createReadStream( "H:/Misc/Training/Excerpts.xml" ) ), parserCallback );
+// xppq.parse( new xppq.Stream( fs.createReadStream( "H:/Misc/Training/Excerpts.xml" ) ), callback );
 

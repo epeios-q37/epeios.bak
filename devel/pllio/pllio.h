@@ -148,13 +148,18 @@ namespace pllio {
 		{
 			_Test();
 
+			ssize_t Result = 0;
+
 			if ( Amount > SSIZE_MAX )
 				Amount = SSIZE_MAX;
 
-			if ( ( Amount = read( _D, Buffer, Amount ) ) == -1 )
+			if ( ( Result = read( _D, Buffer, Amount ) ) == -1 )
 				qRLbr();
 
-			return Amount;
+			if ( Result < 0 )
+				qRLbr();
+
+			return Result;
 		}
 		bso::bool__ OnEOF( void )
 		{
@@ -203,13 +208,18 @@ namespace pllio {
 		{
 			_Test();
 
+			ssize_t Result = 0;
+
 			if ( Amount > SSIZE_MAX )
 				Amount = SSIZE_MAX;
 
-			if ( ( Amount = write( _D, Buffer, Amount ) ) == -1 )
+			if ( ( Result = write( _D, Buffer, Amount ) ) == -1 )
 				qRLbr();
 
-			return Amount;
+			if ( Result < 0 )
+				qRLbr();
+
+			return Result;
 		}
 		void Flush( void )
 		{

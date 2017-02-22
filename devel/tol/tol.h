@@ -1422,7 +1422,7 @@ namespace tol {
 
 		Intermediate->tv_sec = Op1->tv_sec - Op2->tv_sec - ( CarryFlag ? 1 : 0 );
 
-		if ( Intermediate->tv_sec > ( BSO_UINT_MAX / Coeff ) )
+		if ( (bso::sUInt)Intermediate->tv_sec > ( BSO_UINT_MAX / Coeff ) )
 			return TOL_TICK_DIFF_OVERFLOW;
 
 		Result = Intermediate->tv_sec * Coeff;

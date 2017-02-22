@@ -369,7 +369,6 @@ row__ rgstry::registry_::_Search(
 	row__ Row,
 	rows_ *ResultRows ) const
 {
-	cursor__ CandidateRow = qNIL;
 	cursor__ Cursor = qNIL;
 	ctn::qCITEMsl( path_item_ ) Item;
 	row__ ResultRow, ChildRow = qNIL;
@@ -410,8 +409,6 @@ row__ rgstry::registry_::_Search(
 	const path_ &Path,
 	row__ Row ) const
 {
-	sdr::row__ PathRow = qNIL, Cursor = qNIL;
-
 	if ( Path.Amount() != 0 )
 		return _Search( Path, Path.First(), Row, NULL );
 	else
@@ -1052,7 +1049,6 @@ const value_ &rgstry::overloaded_registry___::GetValue(
 	sdr::row__ *PathErrorRow )const // Nota : ne met 'Missing'  'true' que lorque 'Path' n'existe pas. Si 'Missing' est  'true', aucune action n'est ralise.
 {
 qRH
-	row__ Row = qNIL;
 	path Path;
 qRB
 	if ( *Missing )
