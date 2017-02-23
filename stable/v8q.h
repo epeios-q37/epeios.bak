@@ -383,7 +383,11 @@ namespace v8q {
 	{
 	public:
 		qCDTOR( sString );
-		sString( const char * String )
+		sString( const char *String )
+		{
+			Init( String );
+		}
+		sString( const str::dString &String )
 		{
 			Init( String );
 		}
@@ -400,6 +404,18 @@ namespace v8q {
 			v8::Isolate *Isolate = NULL )
 		{
 			sString_::Init( ToString( String , Isolate ) );
+		}
+		void Init(
+			const str::dString &String,
+			v8::Isolate *Isolate = NULL )
+		{
+		qRH
+			TOL_CBUFFER___ Buffer;
+		qRB
+			Init( String.Convert( Buffer ), Isolate );
+		qRR
+		qRT
+		qRE
 		}
 		// NOT the number of char, but the size of the string in bytes, WITHOUT NULL terminating char.
 		int Size( void ) const

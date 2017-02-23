@@ -22,8 +22,10 @@
 #include "scln.h"
 
 #include "v8q.h"
+
 #include "bch.h"
 #include "cio.h"
+#include "cpe.h"
 
 using namespace scln;
 
@@ -82,6 +84,23 @@ namespace {
 	}
 }
 
+namespace {
+	void GetInfo_(const v8::FunctionCallbackInfo<v8::Value>& Args)
+	{
+	qRH
+		str::wString Info;
+	qRB
+		Info.Init("Build : " __DATE__ " " __TIME__ " (" );
+		Info.Append( cpe::GetDescription() );
+		Info.Append( ')' );
+
+		Args.GetReturnValue().Set( v8q::sString( Info ).Core() );
+	qRR
+	qRT
+	qRE
+	}
+}
+
 void scln::Register_(
 	v8::Local<v8::Object> Exports,
 	v8::Local<v8::Value> Module,
@@ -89,6 +108,7 @@ void scln::Register_(
 {
 	sRegistrar Registrar;
 
+	NODE_SET_METHOD( Exports, "info", GetInfo_ );
 	NODE_SET_METHOD( Exports, "_wrapper", Launch_ );
 
 	Registrar.Init( Exports );

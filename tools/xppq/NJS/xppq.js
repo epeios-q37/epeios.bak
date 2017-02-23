@@ -17,7 +17,7 @@
 	along with xppq. If not, see <http://www.gnu.org/licenses/>.
 */
 
-const xppq = require('./build/Debug/xppqnjs.node');
+const xppq = require( __dirname + '/build/Debug/xppqnjs.node');
 const stream = require('stream');
 
 class Stream extends stream.Readable {
@@ -35,6 +35,7 @@ var tokens = {
 	END_TAG: 4
 };
 
+module.exports.info = () => xppq.info();
 module.exports.Stream = Stream;
 module.exports.parse = ( stream, callback ) => xppq._wrapper( 1, stream, callback );
 module.exports.tokens = tokens;
