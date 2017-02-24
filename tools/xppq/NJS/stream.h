@@ -18,7 +18,7 @@
 */
 
 #ifndef STREAM_INC_
-# define STREAM__INC_
+# define STREAM_INC_
 
 # include "v8q.h"
 

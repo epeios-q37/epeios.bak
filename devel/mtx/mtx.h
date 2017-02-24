@@ -80,10 +80,15 @@
 # endif
 
 # ifdef MTX__MESSAGE
-#  ifndef MTX_SUPPRESS_WARNING
-#   pragma message( __LOC__ MTX__MESSAGE )
-#  elif defined( CPE_C_GCC )
-#   pragma message __LOC__ MTX__MESSAGE
+#  ifndef MTX_WARNING_PRINTED_
+#   define MTX_WARNING_PRINTED_
+#    ifndef MTX_SUPPRESS_WARNING
+#     ifdef CPE_C_GCC
+#      pragma message __LOC__ MTX__MESSAGE
+#     else
+#      pragma message( __LOC__ MTX__MESSAGE )
+#     endif
+#    endif
 #  endif
 # endif
 
