@@ -17,7 +17,22 @@
 	along with xppq. If not, see <http://www.gnu.org/licenses/>.
 */
 
-const xppq = require( __dirname + '/build/Debug/xppqnjs.node');
+var addonPath = '';
+
+if ( process.env.EPEIOS_SRC ) {
+	if ( process.platform == 'win32' )
+		addonPath = '/build/Debug/';
+	else
+		addonPath = '/build/Release/';
+} else if ( process.platform == "win32" && process.arch == "x64") {
+	addonPath = './bin/winx64/';  
+} else if ( process.platform == "win32" && process.arch == "ia32" ) {
+	addonPath = './bin/winx86/';  
+} else {
+	addonPath = './build/Release/';  
+}
+
+const xppq = require( __dirname + addonPath + 'xppqnjs.node');
 const stream = require('stream');
 
 class Stream extends stream.Readable {

@@ -60,6 +60,6 @@ case 4:
 	xppq.parse( new xppq.Stream( fs.createReadStream( file ) ), callback );
 	break;
 default :
-	console.error( "'" + arg + "' is not a valid test number ; must be '0' to '4'." );
+	console.error( "'" + arg + "' is not a valid test id ; must be '0' to '4'." );
 	break;
 }
