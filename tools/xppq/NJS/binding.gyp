@@ -41,7 +41,7 @@
     [
      "OS=='mac'",
      {
-      "defines": ["MTX_NATIVE"],
+      "defines": ["MTX_NATIVE", "MTX_SUPPRESS_WARNING"],
       "xcode_settings": { "GCC_ENABLE_CPP_EXCEPTIONS": "YES" },
      }
     ],
