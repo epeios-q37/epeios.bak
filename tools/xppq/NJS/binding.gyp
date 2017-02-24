@@ -41,7 +41,7 @@
     [
      "OS=='mac'",
      {
-      "cflags_cc": ["-DMTX_NATIVE"],
+      "defines": ["MTX_NATIVE"],
      }
     ],
    ],
