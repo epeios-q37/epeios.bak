@@ -38,6 +38,12 @@
       "cflags_cc": ["-std=gnu++11", "-fexceptions"],
      }
     ],
+    [
+     "OS=='mac'",
+     {
+      "cflags_cc": ["-DMTX_NATIVE"],
+     }
+    ],
    ],
   },
  ],
