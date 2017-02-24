@@ -68,7 +68,7 @@ void dtfptb::OldPutSize(
 	*(Pointer++) = (bso::byte__)( Size & 255 );
 }
 
-
+#if 0	// Version originale.
 static inline bso::u32__ Put_(
 	bso::u32__ Value,
 	flw::oflow__ &Flow )
@@ -85,7 +85,6 @@ static inline bso::u32__ Put_(
 	return Value;
 }
 
-#if 0	// Version originale.
 void dtfptb::PutSize(
 	bso::ulong__ Size,
 	flw::oflow__ &Flow )

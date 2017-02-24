@@ -51,7 +51,7 @@ static inline void Unlock_( void )
 	mtx::Unlock( Mutex_ );
 #endif
 }
-
+/*
 static inline bso::bool__ IsLocked_( void )
 {
 #ifdef FLS__AUTOFLUSH
@@ -60,7 +60,7 @@ static inline bso::bool__ IsLocked_( void )
 	return true;
 #endif
 }
-
+*/
 struct _data__ {
 #ifdef FLS__AUTOFLUSH
 	bso::bool__ ToFlush;	// Doit tre 'flush' si  'true'.
@@ -213,7 +213,7 @@ static inline void Flusher_( void * )
 	Unlock_();
 }
 #endif
-
+/*
 inline static void LaunchFlusher_( void )
 {
 #ifdef FLS__AUTOFLUSH
@@ -227,7 +227,7 @@ inline static void LaunchFlusher_( void )
 	FlusherData_.Row = Queue_.Last();
 #endif
 }
-
+*/
 inline static void TouchFlusher_( bso::bool__ ToFlush )	// Indique au 'flusher' qu'une criture  eu lieu.
 {
 #ifdef FLS__AUTOFLUSH
