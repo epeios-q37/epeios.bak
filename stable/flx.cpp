@@ -24,6 +24,17 @@
 #include "mtk.h"
 #include "str.h"
 
+# ifdef FLX__WIN
+	E_CDEF(char *, flx::_ReadMode, "rb" );
+	E_CDEF(char *, flx::_WriteMode, "wb" );
+# elif defined( FLX__POSIX )
+	E_CDEF(char *, flx::_ReadMode, "r" );
+	E_CDEF(char *, flx::_WriteMode, "w" );
+# else
+#  error
+#endif
+
+
 flx::void_odriver___ flx::VoidODriver;
 flx::void_odriver___ flx::PlaceholderODriver;
 flx::void_oflow__ flx::VoidOFlow;

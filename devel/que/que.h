@@ -617,8 +617,8 @@ namespace que {
 			S_.QueueManager.reset( P );
 		}
 		managed_queue_( s &S )
-		: S_( S ),
-		  Queue( S.Queue )
+		: Queue( S.Queue ),
+		  S_( S )
 		{}
 		void plug( sHook &Hook )
 		{

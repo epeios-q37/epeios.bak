@@ -402,7 +402,7 @@ public:\
 	const type *variable;\
 	qCRM( type, method, variable )
 
-# define qCDEF( type, name, value ) static const type name = value
+# define qCDEF( type, name, value ) const type name = value
 
 # define qFLAG( name, value )	qCDEF( bso::sFlag, f##name, 2 << ( value ) )
 

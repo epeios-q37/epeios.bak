@@ -44,7 +44,7 @@ namespace sclrgstry {
 
 	typedef rgstry::multi_level_registry_ registry_;
 
-	E_CDEF( char *, ParametersTag, "Parameters" );
+	extern const char *ParametersTag;
 
 #if 0
 	registry_ &GetRegistry( void );

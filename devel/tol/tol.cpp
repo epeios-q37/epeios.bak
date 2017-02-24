@@ -232,6 +232,7 @@ const char *tol::UUIDGen( bUUID &UUID )
 	InitializeRandomGenerator();
 
 	// http://stackoverflow.com/questions/2174768/generating-random-uuids-in-linux
+	// Modified, because, with the original, the size of the UUID can vary.
 
 	sprintf(UUID, "%04x%04x-%04x-%04x-%04x-%04x%04x%04x", 
 		rand()&0xffff, rand()&0xffff,

@@ -32,6 +32,8 @@
 
 using namespace sclrgstry;
 
+E_CDEF( char *, sclrgstry::ParametersTag, "Parameters" );
+
 #define REGISTRY_FILE_EXTENSION ".xcfg"
 
 static rgstry::multi_level_registry Registry_;

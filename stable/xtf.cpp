@@ -36,7 +36,7 @@ bso::bool__  xtf::extended_text_iflow__::_GetCell(
 	flw::byte__ Separator )
 {
 	bso::bool__ Cont = true;
-	flw::byte__ C;
+	flw::byte__ C = 0;
 	error__ Error = e_NoError;
 	utf__ UTF;
 

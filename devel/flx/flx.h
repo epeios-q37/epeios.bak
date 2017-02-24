@@ -1183,16 +1183,9 @@ namespace flx {
 		}
 	};
 
-# ifdef FLX__WIN
-	E_CDEF(char *, _ReadMode, "rb" );
-	E_CDEF(char *, _WriteMode, "wb" );
-# elif defined( FLX__POSIX )
-	E_CDEF(char *, _ReadMode, "r" );
-	E_CDEF(char *, _WriteMode, "w" );
-# else
-#  error
-#endif
-	
+	extern const char
+		*_ReadMode,
+		*_WriteMode;
 
 	// Lance une commande dans le shell et rcupre les donnes crites par la commande.
 	class exec_iflow_driver___
