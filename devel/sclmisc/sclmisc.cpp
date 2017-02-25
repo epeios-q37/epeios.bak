@@ -204,7 +204,7 @@ void sclmisc::Initialize(
 //	scllocale::Set( scllocale::tMain, Locale );
 }
 
-
+/*
 static void GetConfigurationLocaleParsingErrorMeaning_(
 	const rgstry::context___ &Context,
 	lcl::meaning_ &Meaning )
@@ -222,7 +222,7 @@ qRR
 qRT
 qRE
 }
-
+*/
 # if 0	// Obsolete ?
 static void MergeLocale_(
 	const str::strings_ &SubLocales,
@@ -323,7 +323,6 @@ namespace {
 		bso::sBool Found = false;
 	qRH
 		rgstry::entry__ Entry;
-		rgstry::row__ Row = qNIL;
 		str::wString Locale;
 	qRB
 		Locale.Init();
@@ -685,6 +684,7 @@ qRE
 	return Flow;
 }
 
+/*
 namespace {
 	void DumpLocale_( str::string_ &Tree )
 	{
@@ -703,7 +703,7 @@ namespace {
 	qRE
 	}
 }
-
+*/
 void sclmisc::Initialize(
 	const sRack &Rack,
 	const fnm::name___ &BinPath )
@@ -1120,8 +1120,6 @@ void sclmisc::DumpRegistries(
 qRH
 	bso::bool__ All = false;
 	str::string List;
-	rgstry::row__ Row = qNIL;
-	rgstry::level__ Level = qNIL;
 qRB
 	List.Init( RawList );
 	List.StripCharacter(' ');
@@ -1169,8 +1167,6 @@ void sclmisc::DumpLocales(
 qRH
 	bso::bool__ All = false;
 	str::string List;
-	rgstry::row__ Row = qNIL;
-	rgstry::level__ Level = qNIL;
 qRB
 	List.Init( RawList );
 	List.StripCharacter(' ');
@@ -1349,7 +1345,7 @@ qRE
 }
 
 namespace {
-	static void GetPluginItemRelatedTags_(
+	void GetPluginItemRelatedTags_(
 		const char *Target,
 		const str::dString &Id,
 		rgstry::tags_ &Tags )
@@ -1358,7 +1354,7 @@ namespace {
 		Tags.Append( Id );
 	}
 	
-	const void GetPluginItemFeatures_(
+	void GetPluginItemFeatures_(
 		const char *Target,
 		const str::string_ &Id,
 		str::string_ &Filename,
@@ -1514,5 +1510,4 @@ Q37_GCTOR( sclmisc )
 {
 	BinPath_.Init();
 	FillProjectAutomat_();
-	bso::sBool RegistryExternallyLocked_ = false;
 }

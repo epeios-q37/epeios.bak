@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<xpp:bloc>
+		<!-- User definitions -->
+		<xpp:define name="Version">
+			<xpp:bloc>20150620</xpp:bloc>
+		</xpp:define>
+		<xpp:define name="CopyrightYears">
+			<xpp:bloc>2007-2017</xpp:bloc>
+		</xpp:define>
+		<xpp:set name="Credits" value="Epeios"/>
+		<xpp:set name="Type" value="NodeJS"/>
+	</xpp:bloc>
+	<xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
+	<About>
+		<Program>xppqnjs</Program>
+		<Software>xppq</Software>
+		<UUID>d6a723cb-e88f-4f2f-b429-3adc207f1d62</UUID>
+	</About>
+	<Modules>
+		<Module>parser</Module>
+		<Module>stream</Module>
+		<Module>common</Module>
+		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
+			<Modules Group="Core">
+				<xpp:expand select="Core"/>
+    <Modules Group="SCL">
+     <xpp:expand select="SCL"/>
+    </Modules>
+    <Module>bomhdl</Module>
+    <Module>cdgb64</Module>
+    <Module>fil</Module>
+    <Module>fnm</Module>
+    <Module>lcl</Module>
+    <Module>ntvstr</Module>
+    <Module>rgstry</Module>
+    <Module>stsfsm</Module>
+    <Module>xml</Module>
+    <Module>xpp</Module>
+			</Modules>
+		</Modules>
+	</Modules>
+	<SourceDirs>
+	</SourceDirs>
+	<Files>
+  <File>demo.xml</File>
+  <File>demo.js</File>
+ </Files>
+	<Packing>
+		<WikiFiles>
+			<File Dir="computing/epeios/tools/" Desc="general description of xppq" Oddity="IsHome">xppq</File>
+			<File Dir="computing/epeios/tools/xppq/" Desc="the preprocessor directives">Directives</File>
+			<File Dir="computing/epeios/tools/xppq/" Desc="the user manual">Manual</File>
+			<File Dir="computing/epeios/" Desc="compilation instructions">Compilation</File>
+			<File Dir="computing/epeios/tools/" Desc="general configuration instructions">Configuration</File>
+		</WikiFiles>
+	</Packing>
+	<Doc>
+		<File Dir="computing/epeios/tools/" Name="xppq" Desc="general description of xppq" IsHome="yes"/>
+		<File Dir="computing/epeios/tools/xppq/" Name="Directives" Desc="the preprocessor directives"/>
+		<File Dir="computing/epeios/tools/xppq/" Name="Manual" Desc="the user manual"/>
+		<File Dir="computing/epeios/" Name="Compilation" Desc="compilation instructions"/>
+		<File Dir="computing/epeios/tools/" Name="Configuration" Desc="general configuration instructions"/>
+	</Doc>
+	<PreprocessorDefinitions>
+		<PreprocessorDefinition>E_ST</PreprocessorDefinition>
+	</PreprocessorDefinitions>
+</Project>

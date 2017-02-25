@@ -60,6 +60,7 @@ static rgstry::entry___ UntaggedArgumentLink_( "Link", CommandTaggedArgumentsLay
 static rgstry::entry___ IndexTaggedArgumentLink_( RGSTRY_TAGGING_ATTRIBUTE( "index" ), UntaggedArgumentLink_ );
 static rgstry::entry___ IndexTaggedArgumentLinkTarget_( "@Target", IndexTaggedArgumentLink_ );
 
+/*
 static const str::string_ &GetLongTaggedArguemntId_(
 	str::string_ &Name,
 	str::string_ &Id )
@@ -73,7 +74,7 @@ static const str::string_ &GetShortTaggedArguemntId_(
 {
 	return MGetValue( rgstry::tentry___( ShortTaggedArgumentId_, Name ), Id );
 }
-
+*/
 enum stamp__ {
 	sShort,	// '-...'
 	sLong,	// '--...'

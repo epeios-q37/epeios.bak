@@ -197,7 +197,7 @@ bso::bool__ dlbrry::dynamic_library___::_UnloadLibrary( void  )
 		return false;
 #elif defined( TARGET_POSIX )
 	if ( dlclose( _LibraryHandler ) == -1 ) {
-		const char *Error = dlerror();	// Facilite le dbogage.
+//		const char *Error = dlerror();	// Facilite le dbogage.
 		return false;
 	}
 #else
@@ -228,9 +228,10 @@ void * dlbrry::dynamic_library___::GetFunction( const char *FunctionName )
 	Function = FCAST GetProcAddress( (HMODULE)_LibraryHandler, FunctionName );
 #elif defined( TARGET_POSIX )
 	Function = dlsym( _LibraryHandler, FunctionName );
-
+	/*
 	if ( Function == NULL )
 		const char *Error = dlerror();	// Facilite le dbogage.
+	*/
 #else
 #	error
 #endif

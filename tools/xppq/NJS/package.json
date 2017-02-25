@@ -1,0 +1,38 @@
+{
+ "name": "xppq",
+ "version": "0.1.1",
+ "author": "Claude SIMON (http://q37.info/contact/)",
+ "description": "XML parser and preprocessor.",
+ "main": "xppq.js",
+ "engines": {
+  "node": ">6.9"
+ },
+ "binary": {
+  "module_name" : "xppqnjs",
+  "module_path" : "./lib/{platform}-{arch}/",
+  "remote_path" : "./download/computing/npm/{module_name}/v{version}/",
+  "package_name": "{module_name}-v{version}-{platform}-{arch}.tar.gz",
+  "host" : "https://q37.info" },
+ "scripts": {
+  "test": "node demo.js"
+ },
+ "dependencies"  : {
+   "node-pre-gyp": "0.6.x"
+ },
+ "devDependencies": {
+  "aws-sdk": "2.x"
+ },
+ "scripts": {
+  "preinstall": "npm install node-pre-gyp",
+  "install": "node-pre-gyp install --fallback-to-build",
+  "test": "node demo.js"
+},
+ "repository" : {
+  "type" : "git",
+  "url" : "https://github.com/epeios-q37/epeios.git"
+  },
+  "keywords": [
+  "addon", "XML", "parser", "preprocessor", "xpp", "q37", "epeios"
+ ],
+  "license": "AGPL-3.0"
+}

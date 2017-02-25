@@ -592,7 +592,6 @@ const char *sclrgstry::OGetValue(
 	const char *ReturnedValue = NULL;
 qRH
 	str::string Value;
-	bso::bool__ Missing = false;
 qRB
 	Value.Init();
 

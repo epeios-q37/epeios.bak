@@ -213,7 +213,7 @@ qRH
 	sRow Row = qNIL, BufferRow = qNIL;
 	rLooseRetriever Retriever;
 qRB
-	sRow Row = Retrievers.Last();
+	Row = Retrievers.Last();
 
 	while ( Row != qNIL ) {
 		Retrievers.Recall( Row, Retriever );

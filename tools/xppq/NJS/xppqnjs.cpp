@@ -20,11 +20,23 @@
 #include "parser.h"
 #include "stream.h"
 
+#include "sclmisc.h"
+
 #include "cio.h"
 #include "scln.h"
 #include "v8qnjs.h"
 #include "xpp.h"
 #include "mtk.h"
+
+# define NAME_MC			"XPPqNJS"
+# define NAME_LC			"xppqnjs"
+# define NAME_UC			"XPPQNJS"
+# define WEBSITE_URL		"http://q37.info/"
+# define AUTHOR_NAME		"Claude SIMON"
+# define AUTHOR_CONTACT		"http://q37.info/contact/"
+# define OWNER_NAME			"Claude SIMON"
+# define OWNER_CONTACT		"http://q37.info/contact/"
+# define COPYRIGHT			COPYRIGHT_YEARS " " OWNER_NAME " (" OWNER_CONTACT ")"	
 
 void scln::SCLNRegister( scln::sRegistrar &Registrar )
 {
@@ -35,3 +47,5 @@ void scln::SCLNRegister( scln::sRegistrar &Registrar )
 
 SCLN_MODULE( xppq );
 
+const char *sclmisc::SCLMISCTargetName = NAME_LC;
+const char *sclmisc::SCLMISCProductName = NAME_MC;

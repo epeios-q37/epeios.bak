@@ -17,22 +17,23 @@
 	along with xppq. If not, see <http://www.gnu.org/licenses/>.
 */
 
-var addonPath = '';
+var xppq = null;
 
 if ( process.env.EPEIOS_SRC ) {
+	var addonPath = null;
 	if ( process.platform == 'win32' )
 		addonPath = '/build/Debug/';
 	else
 		addonPath = '/build/Release/';
-} else if ( process.platform == "win32" && process.arch == "x64") {
-	addonPath = './bin/winx64/';  
-} else if ( process.platform == "win32" && process.arch == "ia32" ) {
-	addonPath = './bin/winx86/';  
+	
+	xppq = require( __dirname + addonPath + 'xppqnjs.node');
 } else {
-	addonPath = './build/Release/';  
+	const binary = require('node-pre-gyp');
+	const path = require('path');
+	const xppq_path = binary.find(path.resolve(path.join(__dirname,'./package.json')));
+	xppq = require(xppq_path);	
 }
 
-const xppq = require( __dirname + addonPath + 'xppqnjs.node');
 const stream = require('stream');
 
 class Stream extends stream.Readable {

@@ -83,7 +83,7 @@ const lcl::locale_ &scllocale::GetLocale( void )
 {
 	return Locale_();
 }
-
+/*
 static void GetLocaleFileParsingErrorMeaning_(
 	const rgstry::context___ &Context,
 	lcl::meaning_ &Meaning )
@@ -101,7 +101,7 @@ qRR
 qRT
 qRE
 }
-
+*/
 static level__ GetLevel_( target__ Target )
 {
 	switch ( Target ) {
