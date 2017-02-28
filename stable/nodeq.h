@@ -17,22 +17,21 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-// Node.JS related extension to the 'v8q' module
+// From NODE.js
 
-#ifndef V8QNJS_INC_
-# define V8QNJS_INC_
+#ifndef NODEQ_INC_
+# define NODEQ_INC_
 
-# define V8QNJS_NAME		"V8QNJS"
+# define NODEQ_NAME		"NODEQ"
 
-# if defined( E_DEBUG ) && !defined( V8QNJS_NODBG )
-#  define V8QNJS_DBG
+# if defined( E_DEBUG ) && !defined( NODEQ_NODBG )
+#  define NODEQ_DBG
 # endif
 
+# include "err.h"
 # include "v8q.h"
 
-# include "err.h"
-
-namespace v8qnjs {
+namespace nodeq {
 	using namespace v8q;
 
 	// A class used to retrieve some 'node.js' specific objects.
@@ -150,6 +149,6 @@ namespace v8qnjs {
 
 txf::text_oflow__ &operator <<(
 	txf::text_oflow__ &Flow,
-	const v8qnjs::sBuffer &Buffer );
+	const nodeq::sBuffer &Buffer );
 
 #endif

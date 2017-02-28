@@ -17,7 +17,7 @@ npm install xppq
 
 ```js
 const xppq = require('xppq');
-const fs = require( 'fs');
+const fs = require('fs');
 
 function callback( token, tag, attribute, value )
 {
@@ -37,7 +37,7 @@ function callback( token, tag, attribute, value )
 	}
 }
 
-const files="SomeFileContainingXMLFormattedData";
+const file="SomeFileContainingXMLFormattedData";
 
 // XML parsing WITHOUT preprocessing.
 xppq.parse( fs.createReadStream( file ), callback );

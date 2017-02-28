@@ -22,7 +22,7 @@
 #include "common.h"
 
 #include "uvq.h"
-#include "v8qnjs.h"
+#include "nodeq.h"
 
 #include "scln.h"
 
@@ -111,7 +111,7 @@ namespace {
 		qCVDTOR( rRack_ );
 		void Init( v8q::sFunction &Function )
 		{
-			Function_.Reset(v8qnjs::GetIsolate(), Function.Core() );
+			Function_.Reset(nodeq::GetIsolate(), Function.Core() );
 			tol::Init( Relay_, Content_ );
 			OFlow.Init( Relay_.Out );
 			IFlow_.Init( Relay_.In );
@@ -136,8 +136,8 @@ namespace {
 		}
 		bso::sBool SendToCallback( void )
 		{
-			v8qnjs::sFunction Function(v8::Local<v8::Function>::New( v8qnjs::GetIsolate(), Function_ ) );
-			v8qnjs::sNumber Token;
+			nodeq::sFunction Function(v8::Local<v8::Function>::New( nodeq::GetIsolate(), Function_ ) );
+			nodeq::sNumber Token;
 
 			if ( Content_.Token == xml::t_Processed ) {
 				XFlow_.UndelyingFlow().IDriver().ITake(tht::GetTID() );
@@ -203,12 +203,12 @@ namespace {
 	void OnReadable_( const v8q::sFunctionInfos &Infos )
 	{
 	qRFH
-		v8qnjs::sRStream This;
-		v8qnjs::sBuffer Chunk;
+		nodeq::sRStream This;
+		nodeq::sBuffer Chunk;
 	qRFB
 		This.Init(Infos.This() );
 
-		rRack_ &Rack = *v8qnjs::sExternal<rRack_>( This.Get( "_rack" ) ).Value();
+		rRack_ &Rack = *nodeq::sExternal<rRack_>( This.Get( "_rack" ) ).Value();
 
 		Chunk.Init();
 		
@@ -225,15 +225,15 @@ namespace {
 	void OnData_( const v8q::sFunctionInfos &Infos )
 	{
 	qRFH
-		v8qnjs::sRStream This;
-		v8qnjs::sBuffer Chunk;
+		nodeq::sRStream This;
+		nodeq::sBuffer Chunk;
 	qRFB
 		This.Init(Infos.This() );
 
 		Chunk.Init();
 		v8q::Get( Infos, Chunk );
 		
-		rRack_ &Rack = *v8qnjs::sExternal<rRack_>( This.Get( "_rack" ) ).Value();
+		rRack_ &Rack = *nodeq::sExternal<rRack_>( This.Get( "_rack" ) ).Value();
 
 		Rack.OFlow << Chunk;
 	qRFR
@@ -244,11 +244,11 @@ namespace {
 	void OnEnd_( const v8q::sFunctionInfos &Infos )
 	{
 	qRFH
-		v8qnjs::sRStream This;
+		nodeq::sRStream This;
 	qRFB
 		This.Init(Infos.This() );
 
-		rRack_ &Rack = *v8qnjs::sExternal<rRack_>( This.Get( "_rack" ) ).Value();
+		rRack_ &Rack = *nodeq::sExternal<rRack_>( This.Get( "_rack" ) ).Value();
 
 		Rack.OFlow.Commit();
 	qRFR
@@ -262,8 +262,8 @@ namespace {
 void Parse_( const v8q::sArguments &Arguments )
 {
 qRH
-	v8qnjs::sRStream Source;
-	v8qnjs::sFunction Callback;
+	nodeq::sRStream Source;
+	nodeq::sFunction Callback;
 	rRackASyncCallback_ *Rack = NULL;
 qRB
 	Rack = new rRackASyncCallback_;
@@ -275,7 +275,7 @@ qRB
 	Arguments.Get( Source, Callback );
 	Rack->Init( Callback );
 
-	Source.Set( "_rack", v8qnjs::sExternal<rRack_>( Rack ) );
+	Source.Set( "_rack", nodeq::sExternal<rRack_>( Rack ) );
 
 #if 1
 	Source.OnReadable( OnReadable_ );

@@ -24,7 +24,7 @@
 
 #include "cio.h"
 #include "scln.h"
-#include "v8qnjs.h"
+#include "nodeq.h"
 #include "xpp.h"
 #include "mtk.h"
 

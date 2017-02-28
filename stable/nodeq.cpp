@@ -17,11 +17,11 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define V8QNJS__COMPILATION
+#define NODEQ__COMPILATION
 
-#include "v8qnjs.h"
+#include "nodeq.h"
 
-using namespace v8qnjs;
+using namespace nodeq;
 
 txf::text_oflow__ &operator <<(
 	txf::text_oflow__ &Flow,
@@ -39,3 +39,5 @@ qRT
 qRE
 	return Flow;
 }
+
+

@@ -21,7 +21,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "v8qnjs.h"
+#include "nodeq.h"
 
 #include "err.h"
 #include "cio.h"
@@ -61,7 +61,7 @@ int main( int argc, char *argv[] )
 	int ExitValue = EXIT_SUCCESS;
 qRFH
 qRFB
-	COut << "Test of library " << V8QNJS_NAME << ' ' << __DATE__" "__TIME__"\n";
+	COut << "Test of library " << NODEQ_NAME << ' ' << __DATE__" "__TIME__"\n";
 
 	Generic( argc, argv );
 qRFR
