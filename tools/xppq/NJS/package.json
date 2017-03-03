@@ -11,7 +11,7 @@
   "module_name" : "xppqnjs",
   "module_path" : "./lib/{platform}-{arch}/",
   "remote_path" : "./download/computing/npm/{module_name}/v{version}/",
-  "package_name": "{module_name}-v{version}-{platform}-{arch}.tar.gz",
+  "package_name": "{module_name}-v{version}-{node_abi}-{platform}-{arch}.tar.gz",
   "host" : "https://q37.info"
  },
  "dependencies"  : {

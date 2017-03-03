@@ -94,7 +94,7 @@ namespace {
 	qRB
 		Info.Init("Build : " __DATE__ " " __TIME__ " (" );
 		Info.Append( cpe::GetDescription() );
-		Info.Append( ") - Node " NODE_VERSION_STRING );
+		Info.Append( ") - ABI v" NODE_STRINGIFY( NODE_MODULE_VERSION ) " (Node v" NODE_VERSION_STRING ")" );
 
 		Args.GetReturnValue().Set( v8q::sString( Info ).Core() );
 	qRR

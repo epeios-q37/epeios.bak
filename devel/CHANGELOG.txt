@@ -1,5 +1,9 @@
 CHANGELOG for the 'Epeios' framework.
 
+2017-03-03 :
+- SCLN :
+	- Adding ABI version in the text returned by the 'info()' function.
+
 2017-02-25 :
 - Global:
 	- Fixing g++ warnings.
