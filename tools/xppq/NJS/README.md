@@ -1,6 +1,6 @@
 ## _xppq_ 
 
-XML parser and preprocessor for Node.
+Fast *XML* parser and preprocessor addon for *Node.js*.
 
 ## Install
 
@@ -8,10 +8,12 @@ XML parser and preprocessor for Node.
 npm install xppq
 ```
 
+For other platforms as *Windows*, you need *C++* development tools to be installed.
+
 ## Description
 
-- Parses a stream containing XML formatted data and calls a callback for each token.
-- Provides a read stream which takes another read stream an applies an [XML preprocessor](http://q37.info/s/t/xppq/) to it.
+- Parses a stream containing *XML* formatted data and calls a callback for each token.
+- Provides a read stream which takes another read stream an applies an [*XML* preprocessor](http://q37.info/s/t/xppq/) to it.
 
 ## Usage
 
@@ -19,8 +21,7 @@ npm install xppq
 const xppq = require('xppq');
 const fs = require('fs');
 
-function callback( token, tag, attribute, value )
-{
+function callback( token, tag, attribute, value ) {
 	switch ( token ) {
 	case xppq.tokens.START_TAG :
 		process.stdout.write( "Start tag: '" + tag + "'\n" );
@@ -47,7 +48,7 @@ xppq.parse( new xppq.Stream( fs.createReadStream( file ) ), callback );
 ```
 ## Example
 
-Given following XML file :
+Given following *XML* data :
 
 ```XML
 <?xml version="1.0" encoding="UTF-8"?>
@@ -110,6 +111,15 @@ End tag:   'SomeTag'
 ```sh
 node demo.js
 ```
+
+## Changelog
+
+[https://github.com/epeios-q37/epeios/tree/master/tools/xppq/NJS/CHANGELOG.md](https://github.com/epeios-q37/epeios/tree/master/tools/xppq/NJS/CHANGELOG.md)
+
+## Issue tracker
+
+[https://github.com/epeios-q37/node-xppq/issues/](https://github.com/epeios-q37/node-xppq/issues/)
+
 ## License
 
 AGPL-3.0 © [Claude Simon](http://w37.info/contact/)

@@ -272,6 +272,7 @@ namespace {
 		rContent_ Content_;
 		v8::Persistent<v8::Object> Stream_;
 		fdr::sByte Buffer_[100];
+		fdr::sSize Amount_;	// Amount of dfata in the buffer.
 	public:
 		txf::rOFlow OFlow;
 		tht::rBlocker Blocker;
@@ -279,6 +280,7 @@ namespace {
 		void reset( bso::sBool P = true )
 		{
 			tol::reset( P, StreamRelay_, ProcessRelay_, OFlow, ProcessFlow_, Content_, Blocker, Wait );
+			Amount_ = 0;
 			Stream_.Reset();
 		}
 		qCVDTOR( rStreamRack_ );
@@ -297,34 +299,32 @@ namespace {
 			f2c_::ASyncProcess( StreamRelay_.In, Content_ );
 
 			Stream_.Reset( nodeq::GetIsolate(), Stream.Core() );
+
+			Amount_ = 0;
 		}
 		void Retrieve( void )
 		{
-			fdr::sSize Amount = 0;
+			Amount_ = 0;
 
 			if ( Wait ) {
 				Wait = false;
 				Blocker.Wait();
 			}
 
-			while ( ( ( Amount = Content_.C_Read( sizeof( Buffer_ ) - 1, Buffer_ ) ) == 0 )
+			while ( ( ( Amount_ = Content_.C_Read( sizeof( Buffer_ ) - 1, Buffer_ ) ) == 0 )
 				    && !Content_.C_IsDrained() )
 				tht::Defer();
-
-			Buffer_[Amount] = 0;
 		}
 		bso::sBool Send( void )
 		{
 			bso::sBool Terminate = false;
 		qRH
 			nodeq::sRStream Stream;
-			nodeq::sString String;
 		qRB
 			Stream.Init( v8::Local<v8::Object>::New( v8q::GetIsolate(), Stream_ ) );
 			
-			if ( *Buffer_ ) {
-				String.Init( (const char *)Buffer_ );
-				Wait = !Stream.Push( v8q::ToLocal( node::Buffer::New( v8q::GetIsolate(), String.Core() ) ) );
+			if ( Amount_ != 0 ) {
+				Wait = !Stream.Push( v8q::ToLocal( node::Buffer::New( v8q::GetIsolate(), (char *)Buffer_, Amount_ ) ) );
 			} else {
 				Stream.End();
 				Terminate = true;

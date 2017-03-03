@@ -27,6 +27,8 @@
 #include "cio.h"
 #include "cpe.h"
 
+#include <node_version.h>
+
 using namespace scln;
 
 void scln::ErrFinal( v8::Isolate *Isolate )
@@ -92,7 +94,7 @@ namespace {
 	qRB
 		Info.Init("Build : " __DATE__ " " __TIME__ " (" );
 		Info.Append( cpe::GetDescription() );
-		Info.Append( ')' );
+		Info.Append( ") - Node " NODE_VERSION_STRING );
 
 		Args.GetReturnValue().Set( v8q::sString( Info ).Core() );
 	qRR
