@@ -1,5 +1,7 @@
 ## Changelog for the _xppq_ *Node.js* addon #
 
+2017-03-04 :
+- Fixing [https://github.com/epeios-q37/node-xppq/issues/1](https://github.com/epeios-q37/node-xppq/issues/1).
 
 2017-03-03 :
 - In addition of the *ia32* *Windows* version, the *AMD64* version is now also available.

@@ -21,7 +21,29 @@
 
 #include "nodeq.h"
 
+// Note to developer : you have to add '<path_to_node>/src' as 'Additional Include Directory' in the 'devel' related project.
+#include <node_buffer.h>
+
 using namespace nodeq;
+
+namespace {
+	void ConstFreeCallback_(
+		char* data,
+		void* hint)
+	{
+		// Does nothing, as called for const buffer on stack.
+	}
+}
+
+void nodeq::sBuffer::Init(
+	const char *Data,
+	size_t Length,
+	v8::Isolate *Isolate )
+{
+	Isolate = v8q::GetIsolate( Isolate );
+	sValue::Init( v8q::ToLocal( node::Buffer::New( Isolate, (char *)Data, Length, ConstFreeCallback_, NULL ) ) );
+}
+
 
 txf::text_oflow__ &operator <<(
 	txf::text_oflow__ &Flow,

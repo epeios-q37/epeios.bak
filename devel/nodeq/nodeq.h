@@ -34,40 +34,34 @@
 namespace nodeq {
 	using namespace v8q;
 
-	// A class used to retrieve some 'node.js' specific objects.
-	class sHelper
-	: public sObject
-	{
-	public:
-		qCDTOR( sHelper );
-		using sObject::Init;
-		using sObject::Get;
-		void Init( sHelper &Helper )
-		{
-			sObject::Init(Helper.Core() );
-		}
-	};
-
 	class sBuffer
 	: public sValue
 	{
 	public:
 		qCDTOR( sBuffer );
+		sBuffer( 
+			const char *Data,
+			size_t Length,
+			v8::Isolate *Isolate = NULL )
+		{
+			Init( Data, Length, Isolate );
+		}
+		sBuffer( 
+			const char *Data,
+			v8::Isolate *Isolate = NULL )
+		{
+			Init( Data, Isolate );
+		}
 		using sValue::Init;
 		void Init(
-			const char *String,
-			sFunction &Function )
-		{
-			sValue::Init( Function.Launch( String ) );
-		}
+			const char *Data,
+			size_t Length,
+			v8::Isolate *Isolate = NULL );
 		void Init(
-			const char *String,
-			sHelper &Helper )
+			const char *Data,
+			v8::Isolate *Isolate = NULL )
 		{
-			sFunction Function;
-
-			Function.Init( Helper.Get( "from" ) );
-			Init( String, Function);
+			Init(Data, strlen( Data ), Isolate );
 		}
 		void ToString( sString &String ) const
 		{

@@ -1,5 +1,9 @@
 CHANGELOG for the 'Epeios' framework.
 
+2017-03-04 :
+- NODEQ :
+	- Rewriting 'sBuffer' so it is based on 'node::Buffer'.
+
 2017-03-03 :
 - SCLN :
 	- Adding ABI version in the text returned by the 'info()' function.

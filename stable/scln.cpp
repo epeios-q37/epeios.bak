@@ -117,8 +117,6 @@ void scln::Register_(
 
 	Functions_.Init();
 	scln::SCLNRegister( Registrar );
-
-	v8q::SetGlobalIsolate( v8::Isolate::GetCurrent() );
 }
 
 qGCTOR( scln )

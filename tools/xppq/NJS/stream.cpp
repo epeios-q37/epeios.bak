@@ -257,7 +257,6 @@ namespace {
 
 			mtk::Launch( f2c_::Routine_, &Data );
 		}
-
 	}
 
 	namespace {
@@ -324,7 +323,7 @@ namespace {
 			Stream.Init( v8::Local<v8::Object>::New( v8q::GetIsolate(), Stream_ ) );
 			
 			if ( Amount_ != 0 ) {
-				Wait = !Stream.Push( v8q::ToLocal( node::Buffer::Copy( v8q::GetIsolate(), (char *)Buffer_, Amount_ ) ) );
+				Wait = !Stream.Push( nodeq::sBuffer( (const char *)Buffer_, Amount_ ) );
 			} else {
 				Stream.End();
 				Terminate = true;
