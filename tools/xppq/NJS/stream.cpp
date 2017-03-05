@@ -26,6 +26,8 @@
 
 #include "common.h"
 
+#include "sclmisc.h"
+
 #include "cio.h"
 #include "mtk.h"
 #include "scln.h"
@@ -383,6 +385,9 @@ namespace {
 			Rack.OFlow << Chunk;
 		else
 			Rack.OFlow.Commit();
+
+		if ( sclerror::IsErrorPending() )
+			qRAbort();
 	qRFR
 	qRFT
 	qRFE( scln::ErrFinal() )
@@ -435,10 +440,10 @@ namespace {
 
 void stream::Set( const v8q::sArguments &Arguments )
 {
-qRFH
+qRH
 	nodeq::sRStream Source, This;
 	rStreamRackASyncCallback_ *Rack = NULL;
-qRFB
+qRB
 	Rack = new rStreamRackASyncCallback_;
 
 	if ( Rack == NULL )
@@ -464,9 +469,9 @@ qRFB
 	uvq::Launch( *Rack );
 
 	Rack = NULL;
-qRFR
-qRFT
+qRR
+qRT
 	if ( Rack != NULL )
 		delete Rack;
-qRFE( scln::ErrFinal() )
+qRE
 }

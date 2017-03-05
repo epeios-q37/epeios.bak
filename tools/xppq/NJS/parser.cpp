@@ -141,7 +141,7 @@ namespace {
 
 			if ( Content_.Token == xml::t_Processed ) {
 				XFlow_.UndelyingFlow().IDriver().ITake(tht::GetTID() );
-				XFlow_.Dismiss();	// To avoid locker owner problem on dextruction.
+				XFlow_.Dismiss();	// To avoid locker owner problem on destruction.
 				return true;
 			} else {
 				// Must match 'xppq.js'.
@@ -259,7 +259,7 @@ namespace {
 #endif
 }
 
-void Parse_( const v8q::sArguments &Arguments )
+void parser::Parse( const v8q::sArguments &Arguments )
 {
 qRH
 	nodeq::sRStream Source;
@@ -292,17 +292,6 @@ qRT
 	if ( Rack != NULL )
 		delete Rack;
 qRE
-}
-
-
-void parser::Parse( const v8q::sArguments &Arguments )
-{
-qRFH
-qRFB
-	Parse_( Arguments );
-qRFR
-qRFT
-qRFE( scln::ErrFinal() )
 }
 
 

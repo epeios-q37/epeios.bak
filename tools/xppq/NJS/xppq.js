@@ -20,21 +20,20 @@
 var xppq = null;
 
 if ( process.env.EPEIOS_SRC ) {
-	var addonPath = null;
-	if ( process.platform == 'win32' )
-		addonPath = '/build/Debug/';
-	else
-		addonPath = '/build/Release/';
-	
-	xppq = require( __dirname + addonPath + 'xppqnjs.node');
+ var addonPath = null;
+ if ( process.platform == 'win32' )
+  addonPath = '/build/Debug/';
+ else
+  addonPath = '/build/Release/';
+ xppq = require( __dirname + addonPath + 'xppqnjs.node');
 } else {
-	const binary = require('node-pre-gyp');
-	const path = require('path');
-	const xppq_path = binary.find(path.resolve(path.join(__dirname,'./package.json')));
-	xppq = require(xppq_path);	
+ const binary = require( 'node-pre-gyp' );
+ const path = require( 'path' );
+ const xppq_path = binary.find( path.resolve( path.join( __dirname, './package.json' ) ) );
+ xppq = require( xppq_path );	
 }
 
-const stream = require('stream');
+const stream = require( 'stream' );
 
 class Stream extends stream.Readable {
  constructor( stream, options ) {
@@ -45,10 +44,10 @@ class Stream extends stream.Readable {
 
 // If modified, modify also 'parser.cpp'.
 var tokens = {
-	START_TAG: 1,
-	ATTRIBUTE: 2,
-	VALUE: 3,
-	END_TAG: 4
+ START_TAG: 1,
+ ATTRIBUTE: 2,
+ VALUE: 3,
+ END_TAG: 4
 };
 
 module.exports.info = () => xppq.info();

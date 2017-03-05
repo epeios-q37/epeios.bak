@@ -74,14 +74,14 @@ namespace {
 
 	void PreInitialize_( const plgncore::sData *Data )
 	{
-	if ( Data == NULL )
-		qRFwk();
+		if ( Data == NULL )
+			qRFwk();
 
-	if ( strcmp( Data->Version, PLGNCORE_SHARED_DATA_VERSION ) )
-		qRFwk();
+		if ( strcmp( Data->Version, PLGNCORE_SHARED_DATA_VERSION ) )
+			qRFwk();
 
-	if ( Data->ControlValue != plgncore::sData::Control() )
-		qRFwk();
+		if ( Data->ControlValue != plgncore::sData::Control() )
+			qRFwk();
 	}
 }
 

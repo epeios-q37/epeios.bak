@@ -57,6 +57,21 @@ namespace v8q {
 		return v8::String::NewFromUtf8( GetIsolate( Isolate ), String );
 	}
 
+	inline v8::Local<v8::String> ToString(
+		const str::dString &String,
+		v8::Isolate *Isolate = NULL )
+	{
+		v8::Local<v8::String> Result;
+	qRH
+		qCBUFFERr Buffer;
+	qRB
+		Result = ToString(String.Convert( Buffer ) );
+	qRR
+	qRT
+	qRE
+		return Result;
+	}
+
 	template <typename arg> inline void Set_(
 		v8::Isolate *,
 		v8::Local<v8::Value> *argv,
@@ -383,13 +398,21 @@ namespace v8q {
 	{
 	public:
 		qCDTOR( sString );
-		sString( const char *String )
+		sString(
+			const char *String,
+			v8::Isolate *Isolate = NULL )
 		{
-			Init( String );
+			Init( String, Isolate );
 		}
-		sString( const str::dString &String )
+		sString(
+			const str::dString &String,
+			v8::Isolate *Isolate = NULL )
 		{
-			Init( String );
+			Init( String, Isolate );
+		}
+		sString( v8::Local<v8::Value> Value )
+		{
+			Init( Value );
 		}
 		using sString_::Init;
 		void Init( v8::Local<v8::Value> Value )

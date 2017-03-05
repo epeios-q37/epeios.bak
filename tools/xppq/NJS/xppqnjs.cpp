@@ -37,10 +37,10 @@
 # define OWNER_NAME			"Claude SIMON"
 # define OWNER_CONTACT		"http://q37.info/contact/"
 # define COPYRIGHT			COPYRIGHT_YEARS " " OWNER_NAME " (" OWNER_CONTACT ")"	
+# define VERSION			"0.1.2"
 
 void scln::SCLNRegister( scln::sRegistrar &Registrar )
 {
-	cio::Initialize(cio::GetConsoleSet() );
 	Registrar.Register( stream::Set );
 	Registrar.Register( parser::Parse );
 }
@@ -49,3 +49,4 @@ SCLN_MODULE( xppq );
 
 const char *sclmisc::SCLMISCTargetName = NAME_LC;
 const char *sclmisc::SCLMISCProductName = NAME_MC;
+const char *scln::SCLNProductVersion = VERSION;

@@ -66,6 +66,7 @@ namespace scln {
 	};
 
 	void SCLNRegister( sRegistrar &Registrar );	// To overload by user.
+	extern const char *SCLNProductVersion;	// To define by user.
 }
 
 #define SCLN_MODULE( name ) NODE_MODULE( name, scln::Register_ );
