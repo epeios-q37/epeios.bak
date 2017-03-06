@@ -37,11 +37,11 @@ class Relay extends stream.Readable {
   super( options );
   stream.on( 'data', (chunk) => { this.push( chunk ); process.stdout.write( "\n>>>>> " + chunk + " <<<<<\n" ) } );
   stream.on( 'end', () => { this.push( null ) } );
-  this._read = () => {}; 
+  this._read = () => {process.nextTick(() => this.emit('error', new Error( 'Gni !')));}; 
  }
 }
 
-xppq.parse( new fs.createReadStream( 'result.xml' ), callback );
+xppq.parse( new Relay( new fs.createReadStream( 'result.xml' ) ), callback );
 
 // xppq.parse( new xppq.Stream( fs.createReadStream( 'test.xml' ) ), callback );
 

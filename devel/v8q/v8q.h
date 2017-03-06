@@ -135,14 +135,36 @@ namespace v8q {
 		Set_( Isolate, argv, Position+1, Args... );
 	}
 
-	template <typename t> inline v8::Local<t> ToLocal( v8::MaybeLocal<t> V )
+	template <typename t> inline v8::Local<t> ToLocal(
+		v8::MaybeLocal<t> V,
+		v8::Isolate *Isolate = NULL )
 	{
 		if ( V.IsEmpty()  )
+			return v8::Null( Isolate );
+		else
+			return V.ToLocalChecked();
+	}
+	
+	inline v8::Local<v8::Script> ToLocal(
+		v8::MaybeLocal<v8::Script> Script,
+		v8::Isolate *Isolate = NULL )
+	{
+		if ( Script.IsEmpty() )
 			qRFwk();
 
-		return V.ToLocalChecked();
+		return Script.ToLocalChecked();
 	}
+	
+	inline v8::Local<v8::Object> ToLocal(
+		v8::MaybeLocal<v8::Object> Object,
+		v8::Isolate *Isolate = NULL )
+	{
+		if ( Object.IsEmpty() )
+			qRFwk();
 
+		return Object.ToLocalChecked();
+	}
+	
 	template <typename t> t Expose( v8::Maybe<t> V )
 	{
 		if ( !V.IsJust() )
@@ -169,9 +191,11 @@ namespace v8q {
 		return v8::Local<v8::Function>::Cast( Value );
 	}
 
-	inline v8::Local<v8::Function> ToFunction( v8::MaybeLocal<v8::Value> Value )
+	inline v8::Local<v8::Function> ToFunction(
+		v8::MaybeLocal<v8::Value> Value,
+		v8::Isolate *Isolate = NULL )
 	{
-		return ToFunction(ToLocal( Value ) );
+		return ToFunction( ToLocal( Value, Isolate ) );
 	}
 
 
@@ -181,7 +205,8 @@ namespace v8q {
 		const char *Key,
 		v8::Isolate *Isolate = NULL )
 	{
-		return ToFunction( Object->Get( Context, ToString( Key, Isolate ) ) );
+		Isolate = GetIsolate( Isolate );
+		return ToFunction( Object->Get( Context, ToString( Key, Isolate ) ), Isolate );
 	}
 
 	inline v8::Local<v8::Context> GetContext( v8::Isolate *Isolate = NULL )
@@ -202,8 +227,10 @@ namespace v8q {
 		const char *Script,
 		v8::Isolate *Isolate = NULL )
 	{
+		Isolate = GetIsolate( Isolate );
+
 		v8::Local<v8::Context> Context = GetContext( Isolate );
-		return ToLocal( ToLocal( v8::Script::Compile( Context, ToString( Script, Isolate ) ) )->Run( Context ) );
+		return ToLocal( ToLocal( v8::Script::Compile( Context, ToString( Script, Isolate ) ), Isolate )->Run( Context ), Isolate );
 	}
 
 	template <typename t> class sCore_
@@ -260,6 +287,10 @@ namespace v8q {
 		{
 			Init( Value.Core() );
 		}
+		sObject( v8::Local<v8::Value> Value )
+		{
+			Init( Value );
+		}
 		using sObject_::Init;
 		void Init( v8::Local<v8::Value> Value )
 		{
@@ -272,7 +303,8 @@ namespace v8q {
 			const char *Key,
 			v8::Isolate *Isolate = NULL )
 		{
-			return ToLocal( Core()->Get( GetContext(), v8q::ToString( Key, Isolate ) ) );
+			Isolate = GetIsolate( Isolate );
+			return ToLocal( Core()->Get( GetContext( Isolate ), v8q::ToString( Key, Isolate ) ), Isolate );
 		}
 		bso::sBool Set(
 			const char *Key,
@@ -322,7 +354,7 @@ namespace v8q {
 			const char *Method,
 			const args &...Args ) const
 		{
-			return Launch( Method, NULL, Args... );
+			return Launch( Method, (v8::Isolate *)NULL, Args... );
 		}
 		v8::Local<v8::Value> Launch(
 			const char *Method,
@@ -624,6 +656,90 @@ namespace v8q {
 	};
 
 	typedef v8::FunctionCallbackInfo<v8::Value> sFunctionInfos;
+
+	namespace global {
+		inline sObject &GetGlobal(
+			sObject &Global,
+			v8::Isolate *Isolate = NULL )
+		{
+			Global.Init( v8q::GetContext( Isolate )->Global() );
+
+			return Global;
+		}
+
+		inline sObject &Get(
+			const char *Name,
+			sObject &Object,
+			v8::Isolate *Isolate = NULL )
+		{
+			sObject Global;
+
+			Isolate = GetIsolate( Isolate );
+
+			Global.Init();
+
+			Object.Init( GetGlobal( Global, Isolate ).Get( Name, Isolate ) );
+
+			return Object;
+		}
+	}
+
+	namespace console {
+		inline sObject &GetConsole(
+			sObject &Console,
+			v8::Isolate *Isolate = NULL )
+		{
+			return global::Get( "console", Console, Isolate );
+		}
+
+		template <typename ...args> inline void Log(
+			v8::Isolate *Isolate,
+			const args &...Args )
+		{
+			sObject Console;
+
+			Isolate = GetIsolate( Isolate );
+
+			Console.Init();
+
+			GetConsole( Console, Isolate ).Launch( "log", Isolate, Args... );
+		}
+
+		template <typename ...args> inline void Log( const args &...Args )
+		{
+			Log( (v8::Isolate *)NULL, Args... );
+		}
+	}
+
+	namespace process {
+		inline sObject &GetProcess(
+			sObject &Process,
+			v8::Isolate *Isolate = NULL )
+		{
+			return global::Get( "process", Process, Isolate );
+		}
+
+		template <typename ...args> inline void NextTick(
+			const sFunction &Function,
+			v8::Isolate *Isolate,
+			const args &...Args )
+		{
+			sObject Process;
+
+			Isolate = GetIsolate( Isolate );
+
+			Process.Init();
+
+			GetProcess( Process, Isolate ).Launch( "nextTick", Isolate, Function, Args... );
+		}
+
+		template <typename ...args> inline void NextTick(
+			const sFunction &Function,
+			const args &...Args )
+		{
+			NextTick( Function, (v8::Isolate *)NULL, Args... );
+		}
+	}
 }
 
 txf::text_oflow__ &operator <<(

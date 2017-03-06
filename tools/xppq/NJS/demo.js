@@ -49,7 +49,7 @@ case 1:
 	break;
 case 2:
 	console.log( "Using the preprocessing stream with a callback, wich transforms to lower case.\n" );
-	new xppq.Stream( fs.createReadStream( file ) ).on( 'data', ( chunk ) => { write( chunk.toString().toLowerCase() ) } );
+	new xppq.Stream( fs.createReadStream( file ) ).on( 'data', ( chunk ) => write( chunk.toString().toLowerCase() ) );
 	break;
 case 3:
 	console.log( "XML parsing WITHOUT preprocessing.\n" );
@@ -57,7 +57,7 @@ case 3:
 	break;
 case 4:
 	console.log( "XML parsing WITH preprocessing.\n" );
-	xppq.parse( new xppq.Stream( fs.createReadStream( file ) ), callback );
+	xppq.parse( new xppq.Stream( fs.createReadStream( file ) ).on( 'toto', ( err ) => console.log( err ) ).on( 'error', (err) => console.log( "!!!!!", err ) ), callback );
 	break;
 default :
 	console.error( "'" + arg + "' is not a valid test id ; must be '0' to '4'." );

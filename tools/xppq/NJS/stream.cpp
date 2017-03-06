@@ -427,12 +427,24 @@ namespace {
 	}
 #endif
 
+	namespace {
+		void Error( const v8::FunctionCallbackInfo<v8::Value>& info )
+		{
+			v8q::sObject(info[0]).Launch("emit", "error", "Ohlala" );
+		}
+	}
+
 	void OnRead_( const v8q::sFunctionInfos &Infos )
 	{
 		nodeq::sRStream This;
 		This.Init( Infos.This() );
+		v8q::sFunction Function;
+
+		Function.Init( Error );
 
 		rStreamRack_ &Rack = *nodeq::sExternal<rStreamRack_>( This.Get( "_rack0" ) ).Value();
+
+		v8q::process::NextTick( Error, This );
 
 		Rack.Blocker.Unblock();
 	}

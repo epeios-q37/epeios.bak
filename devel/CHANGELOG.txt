@@ -1,5 +1,9 @@
 CHANGELOG for the 'Epeios' framework.
 
+2017-03-06 :
+- V8Q :
+	- Adding 'console' related features.
+
 2017-03-04 :
 - NODEQ :
 	- Rewriting 'sBuffer' so it is based on 'node::Buffer'.
