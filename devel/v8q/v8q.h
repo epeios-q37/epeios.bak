@@ -140,7 +140,7 @@ namespace v8q {
 		v8::Isolate *Isolate = NULL )
 	{
 		if ( V.IsEmpty()  )
-			return v8::Null( Isolate );
+			return v8::Null( GetIsolate( Isolate ) );
 		else
 			return V.ToLocalChecked();
 	}
@@ -271,7 +271,7 @@ namespace v8q {
 		}
 		using sCore_<v8::Value>::Init;
 		bso::sBool IsNull( void ) const
-		{
+		{ 
 			return Core()->IsNull();
 		}
 	};
@@ -281,6 +281,17 @@ namespace v8q {
 	class sObject
 	: public sObject_
 	{
+	protected:
+		v8::Local<v8::Value> Launch_(
+			const char *Method,
+			v8::Isolate *Isolate,
+			int Argc,
+			v8::Local<v8::Value> Argv[] ) const
+		{
+			v8::Local<v8::Function> Function = GetFunction( Core(), Method, Isolate );
+
+			return ToLocal( Function->Call( GetContext( Isolate ), Core(), Argc, Argv ), Isolate );
+		}
 	public:
 		qCDTOR( sObject );
 		sObject( sValue Value )
@@ -344,11 +355,11 @@ namespace v8q {
 		{
 			v8::Local<v8::Value> Argv[1+sizeof...( Args )];
 
-			Set_( GetIsolate( Isolate ), Argv, 0, Arg, Args... );
+			Isolate = GetIsolate( Isolate );
 
-			v8::Local<v8::Function> Function = GetFunction( Core(), Method, Isolate );
+			Set_( Isolate, Argv, 0, Arg, Args... );
 
-			return ToLocal( Function->Call( GetContext(), Core(), 1 + sizeof...( Args ), Argv ) );
+			return Launch_( Method, Isolate, 1 + sizeof...( Args ), Argv );
 		}
 		template <typename ...args> v8::Local<v8::Value> Launch(
 			const char *Method,
@@ -360,9 +371,26 @@ namespace v8q {
 			const char *Method,
 			v8::Isolate *Isolate = NULL ) const
 		{
-			v8::Local<v8::Function> Function = GetFunction( Core(), Method, Isolate );
-
-			return Function->Call( Core(), 0, NULL );
+			return Launch_( Method, GetIsolate( Isolate ), 0, NULL );
+		}
+		template <typename ...args> void Emit(
+			const char *Event,
+			v8::Isolate *Isolate,
+			const args &...Args ) const
+		{
+			Launch("emit", Isolate, Event, Args... );
+		}
+		template <typename ...args> void Emit(
+			const char *Event,
+			const args &...Args ) const
+		{
+			return Emit( Event, (v8::Isolate *)NULL, Args... );
+		}
+		template <typename arg> void EmitError(
+			const arg &Arg,
+			v8::Isolate *Isolate = NULL )
+		{
+			return Emit( "error", Isolate, Arg );
 		}
 		void On(
 			const char *Event,

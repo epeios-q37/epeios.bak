@@ -22,6 +22,7 @@
 #include "scln.h"
 
 #include "nodeq.h"
+#include "uvq.h"
 
 #include "sclmisc.h"
 
@@ -33,6 +34,101 @@
 
 using namespace scln;
 
+// Not activated yet !
+namespace error_ {
+	typedef uvq::cASync cASync_;
+
+	class sCallback_
+	: public cASync_
+	{
+	protected:
+		virtual void UVQWork( void ) override;
+		virtual uvq::eBehavior UVQAfter( void ) override;
+	};
+
+	namespace {
+		tht::rLocker Lock_;
+		tht::rBlocker Blocker_;
+		str::wString Message_;
+		sCallback_ Callback_;
+
+		bso::sBool GetMessage_( str::dString &Message )
+		{
+			bso::sBool Exists = false;
+		qRH
+			tht::rLockerHandler Locker;
+		qRB
+			Locker.Init( Lock_ );
+
+			Exists =  Message_.Amount() != 0;
+
+			if ( Exists ) {
+				Message.Append( Message_ );
+				Message_.Init();
+			}
+		qRR
+		qRT
+		qRE
+			return Exists;
+		}
+	}
+
+	void sCallback_::UVQWork( void )
+	{
+		if ( uvq::AmountPending() > 1 )
+			Blocker_.Wait();
+	}
+
+	uvq::eBehavior sCallback_::UVQAfter( void )
+	{
+		uvq::eBehavior Behavior = uvq::bExitOnly;
+	qRH
+		str::wString Message;
+	qRB
+		Message.Init();
+
+		if ( GetMessage_(Message) ) {
+			Behavior = uvq::bRelaunch;
+			v8q::GetIsolate()->ThrowException( v8::Exception::Error( v8q::ToString( Message ) ) );
+		}
+	qRR
+	qRT
+	qRE
+		return Behavior;
+	}
+
+	void Initialize( void )
+	{
+		Blocker_.Init( true );
+		Lock_.Init();
+		Message_.Init();
+	}
+
+	void SetMessage( const str::dString &Message )
+	{
+	qRH
+		tht::rLockerHandler Locker;
+	qRB
+		if ( Message.Amount() == 0 )
+			qRFwk();
+
+		Locker.Init( Lock_ );
+
+		if ( Message_.Amount() == 0 ) {
+			Message_.Append( Message );
+			Blocker_.Unblock();
+		}
+	qRR
+	qRT
+	qRE
+	}
+
+	void Launch( void )
+	{
+		uvq::Launch( Callback_ );
+	}
+}
+
 void scln::ErrFinal( v8::Isolate *Isolate )
 {
 qRH
@@ -41,20 +137,19 @@ qRH
 qRB
 	Isolate = v8q::GetIsolate( Isolate );
 
-	if ( Isolate != NULL ) {
-		Message.Init();
-		if ( ERRType != err::t_Abort ) {
-			ERRRst();	// To avoid relaunching of current error by objects of the 'FLW' library.
+	Message.Init();
 
-			Message.Append( err::Message( Buffer ) );
-		} else if ( sclerror::IsErrorPending() )
-			sclmisc::GetSCLBasePendingErrorTranslation( Message );
+	if ( ERRType != err::t_Abort ) {
+		ERRRst();	// To avoid relaunching of current error by objects of the 'FLW' library.
 
-		if ( Message.Amount() != 0  )
-			Isolate->ThrowException( v8::Exception::Error( v8q::ToString( Message ) ) ); 
-	} else if ( ERRType != err::t_Abort ) {
-		sclmisc::ReportAndAbort( err::Message( Buffer ) );
-	}
+		Message.Append( err::Message( Buffer ) );
+	} else if ( sclerror::IsErrorPending() )
+		sclmisc::GetSCLBasePendingErrorTranslation( Message );
+
+	if ( Isolate != NULL )
+		Isolate->ThrowException( v8::Exception::Error( v8q::ToString( Message ) ) ); 
+	else
+		error_::SetMessage( Message );
 qRR
 	ERRRst();
 qRT
@@ -110,7 +205,7 @@ namespace {
 
 namespace {
 	namespace {
-		void GetInfo_( str::dString &Info )
+		void GetExtendedInfo_( str::dString &Info )
 		{
 		qRH
 			flx::rStringOFlow BaseFlow;
@@ -125,7 +220,37 @@ namespace {
 		qRT
 		qRE
 		}
+		void GetInfo_( str::dString &Info )
+		{
+		qRH
+			flx::rStringOFlow BaseFlow;
+			txf::sOFlow Flow;
+		qRB
+			BaseFlow.Init( Info );
+			Flow.Init( BaseFlow );
+
+			Flow << sclmisc::SCLMISCProductName << " v" << SCLNProductVersion << " - Build : " __DATE__ " " __TIME__;
+		qRR
+		qRT
+		qRE
+		}
 	}
+
+	void GetExtendedInfo_(const v8::FunctionCallbackInfo<v8::Value>& Args)
+	{
+	qRH
+		str::wString Info;
+	qRB
+		Info.Init();
+
+		GetExtendedInfo_( Info );
+
+		Args.GetReturnValue().Set( v8q::sString( Info ).Core() );
+	qRR
+	qRT
+	qRE
+	}
+
 	void GetInfo_(const v8::FunctionCallbackInfo<v8::Value>& Args)
 	{
 	qRH
@@ -208,6 +333,7 @@ qRFH
 qRFB
 	sRegistrar Registrar;
 
+	NODE_SET_METHOD( Exports, "extendedInfo", GetExtendedInfo_ );
 	NODE_SET_METHOD( Exports, "info", GetInfo_ );
 	NODE_SET_METHOD( Exports, "_wrapper", Launch_ );
 
@@ -217,12 +343,17 @@ qRFB
 	Location.Init();
 	GetParentModuleLocation_( Module, Location );
 
-	sclmisc::Initialize( Rack_, Location );
+	sclmisc::Initialize( Rack_, Location, qRPU );
 
 	Registrar.Init( Exports );
 
 	Functions_.Init();
 	scln::SCLNRegister( Registrar );
+	/*
+	error_::Initialize();
+
+	error_::Launch();
+	*/
 qRFR
 qRFT
 qRFE( ErrFinal() )
@@ -233,6 +364,9 @@ qGCTOR( scln )
 	Error_.Init();
 	SCLError_.Init();
 	Locale_.Init();
+
+//  Segmentaiton fault when launched here, so launched in 'Register_()'.
+//	error_::Initialize();
 
 // Sudenly stops to work ('Segmentation fault', so was deplaced in the 'Register_' function.
 //	Functions_.Init();

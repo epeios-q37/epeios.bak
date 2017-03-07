@@ -213,7 +213,8 @@ namespace sclmisc {
 
 	void Initialize(
 		const sRack &Rack,
-		const fnm::name___ &BinPath );
+		const fnm::name___ &BinPath,
+		qRPD );
 
 	// Counter-part of 'Initalize'.
 	void Quit( void );

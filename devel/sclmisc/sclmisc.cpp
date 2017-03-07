@@ -543,25 +543,28 @@ static void Initialize_(
 	const char *LocaleDirectory,
 	xtf::extended_text_iflow__ &RegistryFlow,
 	const char *RegistryDirectory,
-	const fnm::name___ &BinPath )
+	const fnm::name___ &BinPath,
+	bso::sBool IgnoreXFiles )
 {
 qRH
 	str::string LocaleRootPath, RegistryRootPath;
 	TOL_CBUFFER___ Buffer;
 qRB
-	LocaleRootPath.Init();
-	sclrgstry::BuildRootPath( "Locale", SCLMISCTargetName, LocaleRootPath );
+	if ( !IgnoreXFiles ) {
+		LocaleRootPath.Init();
+		sclrgstry::BuildRootPath( "Locale", SCLMISCTargetName, LocaleRootPath );
 
-	RegistryRootPath.Init();
-	sclrgstry::BuildRootPath( "Configuration", SCLMISCTargetName, RegistryRootPath );
+		RegistryRootPath.Init();
+		sclrgstry::BuildRootPath( "Configuration", SCLMISCTargetName, RegistryRootPath );
 
-	scllocale::Load( scllocale::tMain, LocaleFlow, LocaleDirectory );
+		scllocale::Load( scllocale::tMain, LocaleFlow, LocaleDirectory );
 
-	sclrgstry::Load( sclrgstry::lMain, RegistryFlow, RegistryDirectory, RegistryRootPath.Convert( Buffer ) );
+		sclrgstry::Load( sclrgstry::lMain, RegistryFlow, RegistryDirectory, RegistryRootPath.Convert( Buffer ) );
 
-	RefreshBaseLanguage();
+		RefreshBaseLanguage();
 
-	LoadLocale_( sclrgstry::GetRawLevel( sclrgstry::lMain ), scllocale::tConfiguration );
+		LoadLocale_( sclrgstry::GetRawLevel( sclrgstry::lMain ), scllocale::tConfiguration );
+	}
 
 	LoadAppData_();
 
@@ -582,7 +585,7 @@ void sclmisc::Initialize(
 {
 	Initialize_( Rack );
 
-	Initialize_( LocaleFlow, LocaleDirectory, RegistryFlow, RegistryDirectory, BinPath );
+	Initialize_( LocaleFlow, LocaleDirectory, RegistryFlow, RegistryDirectory, BinPath, false );
 }
 
 static bso::bool__ GuessFileName_(
@@ -645,44 +648,55 @@ qRE
 	return Success;
 }
 
-static flw::iflow__ &InitializeLocaleFlow_(
-	const fnm::name___ &SuggestedDirectory,
-	flf::file_iflow___ &Flow,
-	str::string_ &Directory )
-{
-qRH
-	lcl::meaning Meaning;
-qRB
-	if ( !InitializeFlow_( LOCALE_DEFAULT_FILENAME_SUFFIX, SuggestedDirectory, Flow, Directory ) ) {
-		Meaning.Init();
-		Meaning.SetValue( "" );	// Ne sera pas traduit, puisque la locale n'a pas pu tre lu.
-		Meaning.AddTag( "Unable to open locale file" );	// Ceci remplacera le '%0' ci-dessus.
-		ReportAndAbort( Meaning );
+namespace {
+	bso::sBool InitializeLocaleFlow_(
+		const fnm::name___ &SuggestedDirectory,
+		flf::file_iflow___ &Flow,
+		str::string_ &Directory,
+		qRPN )
+	{
+		bso::sBool Success = false;
+	qRH
+		lcl::meaning Meaning;
+	qRB
+		Success = InitializeFlow_( LOCALE_DEFAULT_FILENAME_SUFFIX, SuggestedDirectory, Flow, Directory );
+
+		if ( !Success && qRPT ) {
+			Meaning.Init();
+			Meaning.SetValue( "" );	// Ne sera pas traduit, puisque la locale n'a pas pu tre lu.
+			Meaning.AddTag( "Unable to open locale file" );	// Ceci remplacera le '%0' ci-dessus.
+			ReportAndAbort( Meaning );
+		}
+	qRR
+	qRT
+	qRE
+		return Success;
 	}
-qRR
-qRT
-qRE
-	return Flow;
+
+	bso::sBool InitializeConfigurationFlow_(
+		const fnm::name___ &SuggestedDirectory,
+		flf::file_iflow___ &Flow,
+		str::string_ &Directory,
+		qRPN )
+	{
+		bso::sBool Success = false;
+qRH
+		lcl::meaning Meaning;
+	qRB
+		Success = InitializeFlow_( CONFIGURATION_DEFAULT_FILENAME_SUFFIX, SuggestedDirectory, Flow, Directory );
+
+		if ( !Success && qRPT ) {
+			Meaning.Init();
+			Meaning.SetValue( SCLMISC_NAME "_UnableToOpenConfigurationFile" );
+			ReportAndAbort( Meaning );
+		}
+	qRR
+	qRT
+	qRE
+		return Success;
+	}
 }
 
-static flw::iflow__ &InitializeConfigurationFlow_(
-	const fnm::name___ &SuggestedDirectory,
-	flf::file_iflow___ &Flow,
-	str::string_ &Directory )
-{
-qRH
-	lcl::meaning Meaning;
-qRB
-	if ( !InitializeFlow_( CONFIGURATION_DEFAULT_FILENAME_SUFFIX, SuggestedDirectory, Flow, Directory ) ) {
-		Meaning.Init();
-		Meaning.SetValue( SCLMISC_NAME "_UnableToOpenConfigurationFile" );
-		ReportAndAbort( Meaning );
-	}
-qRR
-qRT
-qRE
-	return Flow;
-}
 
 /*
 namespace {
@@ -706,25 +720,31 @@ namespace {
 */
 void sclmisc::Initialize(
 	const sRack &Rack,
-	const fnm::name___ &BinPath )
+	const fnm::name___ &BinPath,
+	qRPN )
 {
 qRH
 	flf::file_iflow___ LocaleFlow, ConfigurationFlow;
 	xtf::extended_text_iflow__ LocaleXFlow, ConfigurationXFlow;
 	str::string LocaleDirectory, ConfigurationDirectory;
 	TOL_CBUFFER___ LocaleBuffer, ConfigurationBuffer;
+	bso::sBool XFilesPresent = false;
 qRB
 	Initialize_( Rack );
 
 	LocaleDirectory.Init();
-	InitializeLocaleFlow_( BinPath, LocaleFlow, LocaleDirectory );
-	LocaleXFlow.Init( LocaleFlow, utf::f_Default );
+	XFilesPresent = InitializeLocaleFlow_( BinPath, LocaleFlow, LocaleDirectory, qRP );
+
+	if ( XFilesPresent )
+		LocaleXFlow.Init( LocaleFlow, utf::f_Default );
 
 	ConfigurationDirectory.Init();
-	InitializeConfigurationFlow_( BinPath, ConfigurationFlow, ConfigurationDirectory );
-	ConfigurationXFlow.Init( ConfigurationFlow, utf::f_Default );
+	XFilesPresent = XFilesPresent && InitializeConfigurationFlow_( BinPath, ConfigurationFlow, ConfigurationDirectory, qRP );
 
-	Initialize_( LocaleXFlow, LocaleDirectory.Convert( LocaleBuffer ), ConfigurationXFlow, ConfigurationDirectory.Convert( ConfigurationBuffer ), BinPath );
+	if ( XFilesPresent )
+		ConfigurationXFlow.Init( ConfigurationFlow, utf::f_Default );
+
+	Initialize_( LocaleXFlow, LocaleDirectory.Convert( LocaleBuffer ), ConfigurationXFlow, ConfigurationDirectory.Convert( ConfigurationBuffer ), BinPath, !XFilesPresent );
 qRR
 qRT
 qRE

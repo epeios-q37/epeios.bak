@@ -21,19 +21,26 @@ For other platforms as *Windows*, you need *C++* development tools to be install
 const xppq = require('xppq');
 const fs = require('fs');
 
-function callback( token, tag, attribute, value ) {
+function callback( token, tag, attribute, value )
+{
 	switch ( token ) {
+	case xppq.tokens.ERROR :
+		write( ">>> ERROR:  '" + value + "'\n" );
+		break;
 	case xppq.tokens.START_TAG :
-		process.stdout.write( "Start tag: '" + tag + "'\n" );
+		write( "Start tag: '" + tag + "'\n" );
 		break;
 	case xppq.tokens.ATTRIBUTE :
-		process.stdout.write( "Attribute: '" + attribute + "' = '" + value + "'\n" );
+		write( "Attribute: '" + attribute + "' = '" + value + "'\n" );
 		break;
 	case xppq.tokens.VALUE :
-		process.stdout.write( "Value:     '" + value.trim() + "'\n" );
+		write( "Value:     '" + value.trim() + "'\n" );
 		break;
 	case xppq.tokens.END_TAG :
-		process.stdout.write( "End tag:   '" + tag + "'\n" );
+		write( "End tag:   '" + tag + "'\n" );
+		break;
+	default:
+		throw( "Unknown token !!!");
 		break;
 	}
 }
@@ -44,8 +51,16 @@ const file="SomeFileContainingXMLFormattedData";
 xppq.parse( fs.createReadStream( file ), callback );
 
 // XML parsing WITH preprocessing.
-xppq.parse( new xppq.Stream( fs.createReadStream( file ) ), callback );
+xppq.parse( new xppq.Stream( fs.createReadStream( file ) ).on( 'error', (err) => console.error( '>>> ERROR : ' + err ) ), callback );
 ```
+## Error handling
+
+For the preprocessing stream, when an error occurs, an `error` event is launched.
+
+If an error occurs during parsing, the callback is called with the `token` parameter containing `xppq.tokens.ERROR`, and `value` containing a description of the error.
+
+Error handling for both case is illustrated in the above section. 
+
 ## Example
 
 Given following *XML* data :
@@ -109,8 +124,10 @@ End tag:   'SomeTag'
 ## Test
 
 ```sh
-node demo.js
+node demo.js [0-4]
 ```
+
+After installation, the files will be in `nodes_module/xppq` directory.
 
 ## Changelog
 

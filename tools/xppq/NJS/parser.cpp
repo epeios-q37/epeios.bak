@@ -41,10 +41,11 @@ namespace {
 			str::wString
 				Tag,
 				Attribute,
-				Value;
+				Value,
+				Error;
 			void reset( bso::sBool P = true )
 			{
-				tol::reset( P, Tag, Attribute, Value );
+				tol::reset( P, Tag, Attribute, Value, Error );
 				Token = xml::t_Undefined;
 			}
 			qCDTOR( rContent_ );
@@ -52,7 +53,7 @@ namespace {
 			{
 				Token = xml::t_Undefined;
 
-				tol::Init( Tag, Attribute, Value );
+				tol::Init( Tag, Attribute, Value, Error );
 			}
 		};
 
@@ -62,23 +63,20 @@ namespace {
 		{
 		qRH
 			lcl::wMeaning Meaning;
-			str::wString Translation;
 			lcl::locale Locale;
 		qRB
 			Parser.Flow().UndelyingFlow().IDriver().ITake(tht::GetTID() );	// Between calls, the thread is not the same.
-			switch ( Parser.Parse( xml::tfObvious ) ) {
+
+			Content.Init();
+
+			switch ( Content.Token = Parser.Parse( xml::tfObvious ) ) {
 			case xml::t_Error:
 				Meaning.Init();
 				xml::GetMeaning( Parser.GetStatus(), Parser.Flow().Position(), Meaning );
-				Translation.Init();
 				Locale.Init();
-				Locale.GetTranslation(Meaning, "fr", Translation );
-				cio::CErr << Translation << txf::nl << txf::commit;
-				qRGnr();
+				Locale.GetTranslation( Meaning, "", Content.Error );
 				break;
 			default:
-				Content.Init();
-				Content.Token = Parser.Token();
 				Content.Tag = Parser.TagName();
 				Content.Attribute = Parser.AttributeName();
 				Content.Value = Parser.Value();
@@ -102,17 +100,19 @@ namespace {
 		bso::sBool First_;
 	public:
 		txf::rOFlow OFlow;
+		str::wString Error;
 		void reset( bso::sBool P = true )
 		{
 			if ( P )
 				Function_.Reset();
-			tol::reset( P , IFlow_, XFlow_, Parser_, Content_, Relay_, First_ );
+
+			tol::reset( P , IFlow_, XFlow_, Parser_, Content_, Relay_, First_, Error );
 		}
 		qCVDTOR( rRack_ );
 		void Init( v8q::sFunction &Function )
 		{
 			Function_.Reset(nodeq::GetIsolate(), Function.Core() );
-			tol::Init( Relay_, Content_ );
+			tol::Init( Relay_, Content_, Error );
 			OFlow.Init( Relay_.Out );
 			IFlow_.Init( Relay_.In );
 			tol::Init( Content_ );
@@ -139,7 +139,13 @@ namespace {
 			nodeq::sFunction Function(v8::Local<v8::Function>::New( nodeq::GetIsolate(), Function_ ) );
 			nodeq::sNumber Token;
 
-			if ( Content_.Token == xml::t_Processed ) {
+			if ( Content_.Token == xml::t_Error ) {
+				Token.Init( 0 );
+				Function.Launch( Token, Content_.Tag, Content_.Attribute, Content_.Error );
+				XFlow_.UndelyingFlow().IDriver().ITake(tht::GetTID() );
+				XFlow_.Dismiss();	// To avoid locker owner problem on destruction.
+				return true;
+			} else if ( Content_.Token == xml::t_Processed ) {
 				XFlow_.UndelyingFlow().IDriver().ITake(tht::GetTID() );
 				XFlow_.Dismiss();	// To avoid locker owner problem on destruction.
 				return true;
@@ -211,7 +217,6 @@ namespace {
 		rRack_ &Rack = *nodeq::sExternal<rRack_>( This.Get( "_rack" ) ).Value();
 
 		Chunk.Init();
-		
 
 		if ( This.Read( Chunk )  )
 			Rack.OFlow << Chunk;

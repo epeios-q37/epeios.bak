@@ -36,6 +36,8 @@
 
 namespace scln {
 
+	void SetPendingError( const str::dString &Error );
+
 	void ErrFinal( v8::Isolate *Isolate = NULL );
 	
 	void Register_(

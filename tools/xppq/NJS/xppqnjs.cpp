@@ -37,7 +37,7 @@
 # define OWNER_NAME			"Claude SIMON"
 # define OWNER_CONTACT		"http://q37.info/contact/"
 # define COPYRIGHT			COPYRIGHT_YEARS " " OWNER_NAME " (" OWNER_CONTACT ")"	
-# define VERSION			"0.1.2"
+# define VERSION			"0.1.3"
 
 void scln::SCLNRegister( scln::sRegistrar &Registrar )
 {

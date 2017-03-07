@@ -44,13 +44,14 @@ class Stream extends stream.Readable {
 
 // If modified, modify also 'parser.cpp'.
 var tokens = {
+ ERROR: 0,
  START_TAG: 1,
  ATTRIBUTE: 2,
  VALUE: 3,
  END_TAG: 4
 };
 
-module.exports.info = () => xppq.info();
+module.exports = xppq;
 module.exports.Stream = Stream;
 module.exports.parse = ( stream, callback ) => xppq._wrapper( 1, stream, callback );
 module.exports.tokens = tokens;

@@ -188,7 +188,6 @@ qRH
 	str::string Value;
 	indice__ Indice = 0;
 qRB
-	MergedValues.Append( " (" );
 
 	Value.Init();
 
@@ -196,23 +195,27 @@ qRB
 		Indice++;
 
 	if ( Indice <= Limit ) {
+		MergedValues.Append( "(" );
 		MergedValues.Append( '\'' );
 		MergedValues.Append( Value );
 		MergedValues.Append( '\'' );
 		Indice++;
-	}
 
-	while ( Indice <= Limit ) {
-		if ( Callback.GetTagValue(Indice, Value) ) {
-			MergedValues.Append( " ,'" );
-			MergedValues.Append( Value );
-			MergedValues.Append( '\'' );
+
+
+		while ( Indice <= Limit ) {
+			if ( Callback.GetTagValue(Indice, Value) ) {
+				MergedValues.Append( " ,'" );
+				MergedValues.Append( Value );
+				MergedValues.Append( '\'' );
+			}
+
+			Indice++;
 		}
 
-		Indice++;
+		MergedValues.Append( ")" );
 	}
 
-	MergedValues.Append( ") " );
 qRR
 qRT
 qRE

@@ -61,7 +61,7 @@ namespace uvq {
 
 	void Launch( cASync &Callbacks );
 
-
+	bso::sUInt AmountPending( void );
 }
 
 #endif

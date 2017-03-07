@@ -33,6 +33,7 @@
 
 using namespace uvq;
 namespace {
+	bso::sUInt Amount_ = 0;
 	namespace {
 		struct sWork_ {
 			uv_work_t Request;
@@ -49,25 +50,34 @@ namespace {
 
 			ERRRst();	// To avoid relaunching of current error by objects of the 'FLW' library.
 
-			qRH
-			qRB
-				if ( cio::IsInitialized() ) {
-					if ( cio::Target() == cio::tConsole ) {
-						cio::COut << txf::commit;
-						cio::CErr << txf::nl << txf::tab;
-					}
+#ifdef  BUILDING_NODE_EXTENSION
+			v8::Isolate *Isolate = v8q::GetIsolate();
+			if ( Isolate != NULL ) {
+				v8::HandleScope scope( Isolate );
+				Isolate->ThrowException( v8::Exception::Error( v8q::ToString( Buffer ) ) );
+			} else 
+#endif
+			{
+				qRH
+				qRB
+					if ( cio::IsInitialized() ) {
+						if ( cio::Target() == cio::tConsole ) {
+							cio::COut << txf::commit;
+							cio::CErr << txf::nl << txf::tab;
+						}
 
-					cio::CErr << "{ " << Message << " }";
+						cio::CErr << "{ " << Message << " }";
 
-					if ( cio::Target() == cio::tConsole )
-						cio::CErr << txf::nl;
+						if ( cio::Target() == cio::tConsole )
+							cio::CErr << txf::nl;
 
-					cio::CErr << txf::commit;
-				} else
-					qRFwk();
-			qRR
-			qRT
-			qRE
+						cio::CErr << txf::commit;
+					} else
+						qRFwk();
+				qRR
+				qRT
+				qRE
+			}
 		}
 	}
 
@@ -76,6 +86,7 @@ namespace {
 	qRFH
 		sWork_ &Work = *static_cast<sWork_ *>( req->data );
 	qRFB
+		Amount_++;
 		Work.Callbacks->Work();
 	qRFR
 		Work.Error = true;
@@ -108,6 +119,7 @@ namespace {
 				break;
 			}
 		}
+		Amount_--;
 	qRFR
 	qRFT
 	qRFE( ErrFinal_() );
@@ -126,6 +138,11 @@ void uvq::Launch( cASync &Callbacks )
 	Work->Error = false;
 
 	uv_queue_work( uv_default_loop(), &Work->Request, WorkAsync_, WorkAsyncComplete_ );
+}
+
+bso::sUInt uvq::AmountPending( void )
+{
+	return Amount_;
 }
 
 

@@ -40,26 +40,34 @@ namespace {
 			struct sData_ {
 				fdr::rIDriver *IDriver;
 				txf::sOFlow *OFlow;
+				str::dString *Error;
 				void reset( bso::sBool P = true )
 				{
-					tol::reset( P, IDriver, OFlow );
+					tol::reset( P, IDriver, OFlow, Error );
 				}
 				qCDTOR( sData_ );
 			};
 
 			void Process_(
 				fdr::rIDriver &IDriver,
-				txf::sOFlow &OFlow )
+				txf::sOFlow &OFlow,
+				str::dString &Error )
 			{
 			qRH
 				flw::sDressedIFlow<> IFlow;
 				xtf::sIFlow XFlow;
+				xpp::context___ Context;
+				lcl::meaning Meaning;
 			qRB
 				IFlow.Init( IDriver );
 				XFlow.Init( IFlow, utf::f_Guess );
+				Context.Init();
 
-				if ( xpp::Process( XFlow, xpp::criterions___( "" ), xml::oIndent, OFlow ) != xpp::sOK )
-					qRGnr();
+				if ( xpp::Process(XFlow, xpp::criterions___(""), xml::oIndent, OFlow, Context) != xpp::sOK ) {
+					Meaning.Init();
+					xpp::GetMeaning( Context, Meaning );
+					scllocale::GetTranslation( Meaning, "", Error );
+				}
 			qRR
 			qRT
 				OFlow.Commit();	
@@ -74,10 +82,11 @@ namespace {
 				sData_ &Data = *(sData_ *)UP;
 				fdr::rIDriver &IDriver = *Data.IDriver;
 				txf::sOFlow &OFlow = *Data.OFlow;
+				str::dString &Error = *Data.Error;
 			qRFB
 				Blocker.Release();
 
-				Process_( IDriver, OFlow );
+				Process_( IDriver, OFlow, Error );
 			qRFR
 			qRFT
 			qRFE(scln::ErrFinal() )
@@ -86,13 +95,15 @@ namespace {
 
 		void ASyncProcess(
 			fdr::rIDriver &IDriver,
-			txf::sOFlow &OFlow )
+			txf::sOFlow &OFlow,
+			str::dString &Error )
 		{
 		qRH
 			sData_ Data;
 		qRB
 			Data.IDriver = &IDriver;
 			Data.OFlow = &OFlow;
+			Data.Error = &Error;
 
 			mtk::Launch( Routine_, &Data );
 		qRR
@@ -278,16 +289,17 @@ namespace {
 		txf::rOFlow OFlow;
 		tht::rBlocker Blocker;
 		bso::sBool Wait;
+		str::wString Error;
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, StreamRelay_, ProcessRelay_, OFlow, ProcessFlow_, Content_, Blocker, Wait );
+			tol::reset( P, StreamRelay_, ProcessRelay_, OFlow, ProcessFlow_, Content_, Blocker, Wait, Error );
 			Amount_ = 0;
 			Stream_.Reset();
 		}
 		qCVDTOR( rStreamRack_ );
 		void Init( nodeq::sRStream &Stream )
 		{
-			tol::Init( StreamRelay_, ProcessRelay_, Content_ );
+			tol::Init( StreamRelay_, ProcessRelay_, Content_, Error );
 
 			Blocker.Init( true );
 
@@ -296,7 +308,7 @@ namespace {
 			OFlow.Init( ProcessRelay_.Out );
 			ProcessFlow_.Init( StreamRelay_.Out );
 
-			process_::ASyncProcess( ProcessRelay_.In, ProcessFlow_ );
+			process_::ASyncProcess( ProcessRelay_.In, ProcessFlow_, Error );
 			f2c_::ASyncProcess( StreamRelay_.In, Content_ );
 
 			Stream_.Reset( nodeq::GetIsolate(), Stream.Core() );
@@ -430,7 +442,8 @@ namespace {
 	namespace {
 		void Error( const v8::FunctionCallbackInfo<v8::Value>& info )
 		{
-			v8q::sObject(info[0]).Launch("emit", "error", "Ohlala" );
+		//	v8q::sObject(info[0]).Launch("emit", "error", "Ohlala" );
+			v8q::sObject(info[0]).EmitError( info[1] );
 		}
 	}
 
@@ -444,7 +457,10 @@ namespace {
 
 		rStreamRack_ &Rack = *nodeq::sExternal<rStreamRack_>( This.Get( "_rack0" ) ).Value();
 
-		v8q::process::NextTick( Error, This );
+		if ( Rack.Error.Amount() != 0 ) {
+			v8q::process::NextTick( Error, This, Rack.Error );
+			Rack.Error.Init();
+		}
 
 		Rack.Blocker.Unblock();
 	}

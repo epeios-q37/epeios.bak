@@ -1,5 +1,9 @@
 CHANGELOG for the 'Epeios' framework.
 
+2017-03-07 :
+- SCLMISC :
+	- Adding possibility to 'Initialize(...)' without '.x(cgf|lcl)' files.
+
 2017-03-06 :
 - V8Q :
 	- Adding 'console' related features.
