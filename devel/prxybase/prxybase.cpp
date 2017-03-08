@@ -30,11 +30,11 @@ using namespace prxybase;
 const char *prxybase::GetLabel( eRequest Request )
 {
 	switch ( Request ) {
-	C( Plug );
-	C( Dismiss );
-	C( Ping );
-	C( Freeze );
-	C( Crash );
+	C( Plug_1 );
+	C( Dismiss_1 );
+	C( Ping_1 );
+	C( Freeze_1 );
+	C( Crash_1 );
 	default:
 		qRFwk();
 		break;

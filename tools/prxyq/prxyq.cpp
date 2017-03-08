@@ -422,7 +422,7 @@ public:
 
 			AnswerOKAndCommit_( Rack_.GetCorrespondingODriver( Type ) );
 
-			mtk::Launch( PostInit_, &Data );
+			mtk::RawLaunch( PostInit_, &Data );
 
 			Data.Wait();
 		}

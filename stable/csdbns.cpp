@@ -392,7 +392,7 @@ qRB
 		Continue = false;
 
 	while ( Continue ) {
-		mtk::Launch( Traiter_, &Data );
+		mtk::RawLaunch( Traiter_, &Data );
 
 //		SCKClose( Socket );	// Only needed when using processes.
 

@@ -37,8 +37,8 @@ namespace xdhdws {
 	using xdhcmn::nchar__;
 	using xdhcmn::nstring___;
 
-	E_CDEF( char *, ContentTagName, "Content" );
-	E_CDEF( char *, ContextTagName, "Context" );
+	static E_CDEF( char *, ContentTagName, "Content" );
+	static E_CDEF( char *, ContextTagName, "Context" );
 
 	class proxy__
 	{

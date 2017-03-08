@@ -100,8 +100,8 @@ namespace sclfrntnd {
 	};
 
 	// Below both  definition refers to special backend type. Other backend types refers to a plugin defined in the 'FrontendPlugins' section.
-	qCDEF( char *, NoneBackendType, "None" );	// No backend is used.
-	qCDEF( char *, PredefinedBackendType, "Predefined" );	// Refers to a predefined backend.
+	static qCDEF( char *, NoneBackendType, "None" );	// No backend is used.
+	static qCDEF( char *, PredefinedBackendType, "Predefined" );	// Refers to a predefined backend.
 
 	void SetBackendFeatures(
 		const str::dString &BackendType,
@@ -277,7 +277,7 @@ namespace sclfrntnd {
 		typedef fbltyp::d##id##s dIds;\
 		qW( Ids );\
 \
-		E_CDEF( sId, Undefined, fbltyp::Undefined##id );\
+		static E_CDEF( sId, Undefined, fbltyp::Undefined##id );\
 	}\
 \
 	typedef ns::tId t##name;\
@@ -285,7 +285,7 @@ namespace sclfrntnd {
 	typedef ns::dIds d##name##s;\
 	qW( name##s );\
 \
-	E_CDEF( s##name, Undefined##name, ns::Undefined )
+	static E_CDEF( s##name, Undefined##name, ns::Undefined )
 
 	template <typename ids> class dI1S
 	{
@@ -386,8 +386,8 @@ namespace sclfrntnd {
 	typedef ns::dI2S d##name##sI2S;\
 	qW( name##sI2S )
 
-	E_CDEF( char *, IdAttribute, "id" );
-	E_CDEF( char *, AmountAttribute, "Amount" );
+	static E_CDEF( char *, IdAttribute, "id" );
+	static E_CDEF( char *, AmountAttribute, "Amount" );
 
 	qENUM( Kind ) {
 		kTag,
@@ -538,7 +538,7 @@ namespace sclfrntnd {
 	}
 
 
-	E_CDEF( char *, LabelAttribute, "label" );
+	static E_CDEF( char *, LabelAttribute, "label" );
 
 	// Root tag is handled by user, so he/she cans put his/her own attributes. 'Amount' attribute is addded.
 	template <typename ids> inline void DumpWithLabelAttribute(
@@ -588,8 +588,8 @@ namespace sclfrntnd {
 	/* An identifier usually identifies the plugin used to access the backend.
 	Identifier belows are returned when there in no bckend, or if the backend is embedded. */
 	namespace identifier {
-		qCDEF(char *, NoneBackendIdentifier, "_NONE" );
-		qCDEF(char *, EmbeddedBackendIdentifier, "_EMBEDDED" );
+		static qCDEF(char *, NoneBackendIdentifier, "_NONE" );
+		static qCDEF(char *, EmbeddedBackendIdentifier, "_EMBEDDED" );
 	}
 
 	using fblfrd::cReporting;

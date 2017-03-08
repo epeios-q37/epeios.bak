@@ -128,6 +128,7 @@ namespace prxy {
 
 	class rIODriver
 	: public rFlowDriver_
+				
 	{
 	private:
 		prxy::rProxy_ Proxy_;
@@ -163,6 +164,7 @@ namespace prxy {
 	public:
 		void reset( bso::bool__ P = true )
 		{
+					  
 			rFlowDriver_::reset( P );
 			Proxy_.reset( P );
 		}
@@ -177,6 +179,8 @@ namespace prxy {
 			reset();
 
 			rFlowDriver_::Init( fdr::ts_Default );
+
+						 
 
 			return Proxy_.Init( HostService, Identifier, Type, Timeout, qRP );
 		}

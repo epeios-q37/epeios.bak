@@ -124,7 +124,7 @@ namespace {
 
 				mtx::Lock( Data.Mutex );
 
-				mtk::Launch( Process_, &Data );
+				mtk::RawLaunch( Process_, &Data );
 
 				mtx::Lock( Data.Mutex );
 				mtx::Unlock( Data.Mutex );

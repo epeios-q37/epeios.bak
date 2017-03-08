@@ -30,7 +30,7 @@
 namespace rpembedded {
 	typedef plgncore::sAbstract sAbstract_;
 
-	qCDEF( char *, Identifier, "99ca6539-a9d5-4df2-b48e-52f6ba4c950b" );	// From 'Project.xml'. Don't use the 'IDENTIFIER' macro, as this header is used by other binaries!!!
+	static qCDEF( char *, Identifier, "99ca6539-a9d5-4df2-b48e-52f6ba4c950b" );	// From 'Project.xml'. Don't use the 'IDENTIFIER' macro, as this header is used by other binaries!!!
 
 	class rAbstract
 	: public sAbstract_

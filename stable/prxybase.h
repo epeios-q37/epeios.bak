@@ -35,7 +35,7 @@
 # include "err.h"
 
 namespace prxybase {
-	qCDEF(char *, ProtocolId, "e8ae7bb1-c950-4102-b420-c38e3b870cfb" );
+	static qCDEF(char *, ProtocolId, "e8ae7bb1-c950-4102-b420-c38e3b870cfb" );
 	qCDEF(bso::sU8, ProtocolVersion, 0 );
 
 	qENUM( Request ) {

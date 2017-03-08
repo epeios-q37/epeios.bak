@@ -1,5 +1,13 @@
 CHANGELOG for the 'Epeios' framework.
 
+2017-03-08 :
+- CSDBNC, CSDMXC, DWTDCT :
+	- Adaptation to changes in 'MTK'.
+- PRXY :
+	- Updating.
+- PRXYBASE, SCLFRNTND, SCLXDHTML, XDHDWS :
+	- Workaround to modification of '(q|E_)CDEF(...)'.
+
 2017-03-07 :
 - SCLMISC :
 	- Adding possibility to 'Initialize(...)' without '.x(cgf|lcl)' files.

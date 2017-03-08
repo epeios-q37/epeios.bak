@@ -120,7 +120,7 @@ void csdmxc::rCore::KeepAlive_( time_t Delay )
 	if ( Delay <= CSDMXC_PING_DELAY )
 		qRFwk();
 
-	mtk::Launch( ::KeepAlive_, this );
+	mtk::RawLaunch( ::KeepAlive_, this );
 #else
 	if ( Delay != 0 )
 		qRFwk();

@@ -28,8 +28,8 @@
 namespace misc {
 	typedef csdscb::cProcessing sModule;	// Module to 'daemonize'.
 
-	E_CDEF( char *, SlotPluginTarget, MISC_SLOT_PLUGIN_TARGET );
-	E_CDEF( char *, SlotPluginVersion, MISC_SLOT_PLUGIN_VERSION );
+	static E_CDEF( char *, SlotPluginTarget, MISC_SLOT_PLUGIN_TARGET );
+	static E_CDEF( char *, SlotPluginVersion, MISC_SLOT_PLUGIN_VERSION );
 
 	using csdscb::sTimeout;		// Timeout duration in seconds.
 	using csdscb::NoTimeout;

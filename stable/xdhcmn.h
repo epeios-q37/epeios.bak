@@ -47,8 +47,8 @@ namespace xdhcmn {
 	typedef ntvstr::char__ nchar__;
 	typedef ntvstr::string___ nstring___;
 
-	E_CDEF( char *, CloseActionLabel, "Q37Close" );
-	E_CDEF( char *, RefreshActionLabel, "Q37Refresh" );
+	static E_CDEF( char *, CloseActionLabel, "Q37Close" );
+	static E_CDEF( char *, RefreshActionLabel, "Q37Refresh" );
 
 	E_ENUM( mode ) {
 		mMonoUser,	// One use only. The content of the project (i.e. which backend type to use) is defined by the user.

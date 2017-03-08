@@ -506,9 +506,9 @@ namespace sclxdhtml {
 	void SCLXDHTMLReleaseCallback( xdhcmn::session_callback__ *Callback );	// To define by user.
 
 	namespace prolog {
-		E_CDEF( char *, ProjectTypeId, "ProjectType" );
-		E_CDEF( char *, PredefinedProjectId, "PredefinedProject" );
-		E_CDEF( char *, RemoteProjectId, "RemoteProject" );
+		static E_CDEF( char *, ProjectTypeId, "ProjectType" );
+		static E_CDEF( char *, PredefinedProjectId, "PredefinedProject" );
+		static E_CDEF( char *, RemoteProjectId, "RemoteProject" );
 
 		void GetContent(
 			sclfrntnd::rFrontend &Frontend,
@@ -530,10 +530,10 @@ namespace sclxdhtml {
 	}
 
 	namespace login {
-		E_CDEF( char *, BackendTypeId, "BackendType" );
-		E_CDEF( char *, StraightBackendId, "StraightBackend" );
-		E_CDEF( char *, EmbeddedBackendId, "EmbeddedBackend" );
-		E_CDEF( char *, PredefinedBackendId, "PredefinedBackend" );
+		static E_CDEF( char *, BackendTypeId, "BackendType" );
+		static E_CDEF( char *, StraightBackendId, "StraightBackend" );
+		static E_CDEF( char *, EmbeddedBackendId, "EmbeddedBackend" );
+		static E_CDEF( char *, PredefinedBackendId, "PredefinedBackend" );
 
 		const char *GetLabel( eBackendVisibility );
 

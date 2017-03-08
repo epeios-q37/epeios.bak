@@ -35,15 +35,15 @@
 # include "err.h"
 
 namespace prxybase {
-	qCDEF(char *, ProtocolId, "e8ae7bb1-c950-4102-b420-c38e3b870cfb" );
+	static qCDEF(char *, ProtocolId, "e8ae7bb1-c950-4102-b420-c38e3b870cfb" );
 	qCDEF(bso::sU8, ProtocolVersion, 0 );
 
 	qENUM( Request ) {
-		rPlug,
-		rDismiss,	// Tells the proxy to disconnect all pending connection from a given id, because no more connection are awaited.
-		rPing,
-		rFreeze,
-		rCrash,
+		rPlug_1,
+		rDismiss_1,	// Tells the proxy to disconnect all pending connection from a given id, because no more connection are awaited.
+		rPing_1,
+		rFreeze_1,
+		rCrash_1,
 		r_amount,
 		r_Undefined
 	};

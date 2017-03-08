@@ -30,7 +30,7 @@
 namespace rpproxy {
 	typedef plgncore::sAbstract sAbstract_;
 
-	qCDEF( char *, Identifier, "e51c58a9-0f0b-408a-9580-e0b2714c8619" );	// From 'Project.xml'. Don't use the 'IDENTIFIER' macro, as this header is used by other binaries!!!
+	static qCDEF( char *, Identifier, "e51c58a9-0f0b-408a-9580-e0b2714c8619" );	// From 'Project.xml'. Don't use the 'IDENTIFIER' macro, as this header is used by other binaries!!!
 
 	class rAbstract
 	: public sAbstract_

@@ -30,7 +30,7 @@
 namespace rpstraight {
 	typedef plgncore::sAbstract sAbstract_;
 
-	qCDEF( char *, Identifier, "2c95d4ed-2c57-4399-9c86-4115883be7cc" );	// From 'Project.xml'. Don't use the 'IDENTIFIER' macro, as it is used to copile other binaries!!!
+	static qCDEF( char *, Identifier, "2c95d4ed-2c57-4399-9c86-4115883be7cc" );	// From 'Project.xml'. Don't use the 'IDENTIFIER' macro, as it is used to copile other binaries!!!
 
 	class rAbstract
 	: public sAbstract_

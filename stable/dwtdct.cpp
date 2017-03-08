@@ -846,7 +846,7 @@ qRB
 			if ( !Data.ThreadAllowed() )
 				Thread_( &Data );
 			else if ( Data.GetThreadAmount() < Data.GetThreadAmountMax() ) {
-				mtk::Launch( Thread_, &Data );
+				mtk::RawLaunch( Thread_, &Data );
 				Data.IncreaseThreadAmount();
 			}
 		} else if ( ( Data.GetThreadAmount() == 0 ) && ( Data.ToHandle.Amount() == 0 ) )
