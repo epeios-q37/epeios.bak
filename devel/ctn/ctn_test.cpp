@@ -274,11 +274,13 @@ qRB
 
 	Dump_( Objects );
 
+	Objects( 0 ).reset();
 	Objects.Remove( 0 );
 	Fill_( "3", Objects( Objects.New() ) );
 
 	Dump_( Objects );
 
+	Objects( 0 ).reset();
 	Objects.Remove( 0 );
 	Fill_( "4", Objects( Objects.New() ) );
 

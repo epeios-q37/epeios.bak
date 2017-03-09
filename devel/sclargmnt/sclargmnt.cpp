@@ -1338,7 +1338,6 @@ static void PrintFreeUsage_( const str::string_ &Id )
 qRH
 	str::string Dummy;
 	str::string_
-		&Value = Dummy,
 		&Label = Dummy,
 		&Description = Dummy,
 		&Path = Dummy;
