@@ -37,7 +37,7 @@ bso::bool__ mscmdf::GetHeaderChunk(
 	header_chunk__ &HeaderChunk,
 	err::handling__ ErrHandling )
 {
-	flw::datum__ Buffer[HEADER_CHUNK_HEAD_SIZE];
+	flw::sByte Buffer[HEADER_CHUNK_HEAD_SIZE];
 
 	Flow.Read( HEADER_CHUNK_HEAD_SIZE, Buffer );
 
@@ -88,7 +88,7 @@ static inline bso::bool__ HandleDeltaTimeTicks_(
 	flw::iflow__ &IFlow,
 	delta_time_ticks__ &DeltaTimeTicks )
 {
-	flw::datum__ Datum = IFlow.Get();
+	flw::sByte Datum = IFlow.Get();
 
 	DeltaTimeTicks = ( DeltaTimeTicks << 8 ) | ( Datum & 0x7f );
 
@@ -99,7 +99,7 @@ track_chunk_size__  mscmdf::GetTrackChunkSize(
 	flw::iflow__ &IFlow,
 	err::handling__ ErrHandling )
 {
-	flw::datum__ Buffer[TRACK_CHUNK_HEAD_SIZE];
+	flw::sByte Buffer[TRACK_CHUNK_HEAD_SIZE];
 
 	IFlow.Read( TRACK_CHUNK_HEAD_SIZE, Buffer );
 
@@ -127,9 +127,9 @@ void mscmdf::PutTrackChunkHeader(
 {
 	OFlow.Write( TRACK_CHUNK_HEAD, TRACK_CHUNK_HEAD_SIZE );
 
-	OFlow.Put( (flw::datum__)( Size >> 24 ) );
-	OFlow.Put( (flw::datum__)( ( Size >> 16 ) & 0xff ) );
-	OFlow.Put( (flw::datum__)( ( Size >> 8 ) & 0xff ) );
-	OFlow.Put( (flw::datum__)( Size & 0xff ) );
+	OFlow.Put( (flw::sByte)( Size >> 24 ) );
+	OFlow.Put( (flw::sByte)( ( Size >> 16 ) & 0xff ) );
+	OFlow.Put( (flw::sByte)( ( Size >> 8 ) & 0xff ) );
+	OFlow.Put( (flw::sByte)( Size & 0xff ) );
 }
 

@@ -126,7 +126,7 @@ namespace mscmdd {
 			return true;
 		}
 		fdr::size__ Write(
-			const fdr::datum__ *Buffer,
+			const fdr::sByte *Buffer,
 			fdr::size__ Maximum )
 		{
 			MIDIHDR     midiHdr;
@@ -238,13 +238,17 @@ namespace mscmdd {
 		midi_out___ _Out;
 	protected:
 		virtual fdr::size__ FDRWrite(
-			const fdr::datum__ *Buffer,
-			fdr::size__ Maximum )
+			const fdr::sByte *Buffer,
+			fdr::size__ Maximum ) override
 		{
 			return _Out.Write( Buffer, Maximum );
 		}
-		virtual void FDRCommit( void )
+		virtual void FDRCommit( bso::sBool ) override
 		{}
+		virtual tht::sTID FDROTake( tht::sTID TID ) override
+		{
+			return TID;
+		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -294,18 +298,11 @@ namespace mscmdd {
 		//f Initialization with socket 'Socket' and 'Timeout' as timeout.
 		bso::bool__ Init(
 			int DeviceId,
-			flw::size__ AmountMax = FLW_AMOUNT_MAX,
 			err::handling__ ErrHandle = err::h_Default )
 		{
-			_oflow__::Init( _Driver, AmountMax );
+			_oflow__::Init( _Driver );
 
 			return _Driver.Init( DeviceId, ErrHandle );
-		}
-		bso::bool__ Init(
-			int DeviceId,
-			err::handling__ ErrHandle )
-		{
-			return Init( DeviceId, FLW_AMOUNT_MAX, ErrHandle );
 		}
 	};
 
@@ -316,7 +313,7 @@ namespace mscmdd {
 		mtx::handler___ Access;	// Pour protger l'accs aus donnes de cet structure.
 		mtx::handler___ Full;		// Pour faire attendre le producteur si 'Buffer' est plein.
 		mtx::handler___ Empty;		// Pout faire attendre le consommateur si 'Buffer' est vide.
-		fdr::datum__ *Buffer;
+		fdr::sByte *Buffer;
 		fdr::size__ Size, Available, Position;
 		bso::bool__ Purge;	// Lorsque  'true', purge l'ensemble des donnes MIDI.
 		void _data__( void )
@@ -362,7 +359,7 @@ namespace mscmdd {
 		bso::bool__ _Started;
 		HMIDIIN _Handle;
 		MIDIHDR _Header[3];
-		fdr::datum__ _Cache[2000];
+		fdr::sByte _Cache[2000];
 		char _HeaderBuffer[512][3];
 		_data___ _Data;
 		void _Purge( void )
@@ -427,7 +424,7 @@ namespace mscmdd {
 		}
 		fdr::size__ Read(
 			fdr::size__ Maximum,
-			fdr::datum__ *Buffer );
+			fdr::sByte *Buffer );
 	};
 #	elif defined( MSCMDD__ALSA )
 	bso::bool__ GetMIDIInDeviceName(
@@ -514,13 +511,17 @@ namespace mscmdd {
 	protected:
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
-			fdr::datum__ *Buffer )
+			fdr::sByte *Buffer ) override
 		{
 			return _In.Read( Maximum, Buffer );
 		}
-		virtual void FDRDismiss( void )
+		virtual void FDRDismiss( bso::sBool ) override
 		{
 			_In.Stop();
+		}
+		virtual tht::sTID FDRITake( tht::sTID TID ) override
+		{
+			return TID;
 		}
 	public:
 		void reset( bso::bool__ P = true )
@@ -577,18 +578,11 @@ namespace mscmdd {
 		}
 		bso::bool__ Init(
 			int Device,
-			flw::size__ AmountMax = FLW_AMOUNT_MAX,
 			err::handling__ ErrHandle = err::h_Default )
 		{
-			_iflow__::Init( _Driver, AmountMax );
+			_iflow__::Init( _Driver );
 
 			return _Driver.Init( Device, ErrHandle );
-		}
-		bso::bool__ Init(
-			int Device,
-			err::handling__ ErrHandle )
-		{
-			return Init( Device, FLW_AMOUNT_MAX, ErrHandle );
 		}
 		void Start( void )
 		{
@@ -622,23 +616,31 @@ namespace mscmdd {
 	protected:
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
-			fdr::datum__ *Buffer )
+			fdr::sByte *Buffer ) override
 		{
 			return _In.Read( Maximum, Buffer );
 		}
-		virtual void FDRDismiss( void )
+		virtual void FDRDismiss( bso::sBool ) override
 		{
 			_In.Stop();
 		}
+		virtual tht::sTID FDRITake( tht::sTID TID ) override
+		{
+			return TID;
+		}
 		virtual fdr::size__ FDRWrite(
-			const fdr::datum__ *Buffer,
-			fdr::size__ Maximum )
+			const fdr::sByte *Buffer,
+			fdr::size__ Maximum ) override
 		{
 			_In.Start();
 			return _Out.Write( Buffer, Maximum );
 		}
-		virtual void FDRCommit( void )
+		virtual void FDRCommit( bso::sBool ) override
 		{}
+		virtual tht::sTID FDROTake( tht::sTID TID ) override
+		{
+			return TID;
+		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -696,15 +698,14 @@ namespace mscmdd {
 		status__ Init(
 			int DeviceIn,
 			int DeviceOut,
-			err::handling__ ErrorHandling = err::h_Default,
-			bso::size__ AmountMax = FLW_AMOUNT_MAX  )
+			err::handling__ ErrorHandling = err::h_Default  )
 		{
 			status__ Status = _Driver.Init( DeviceIn, DeviceOut, ErrorHandling );
 
 			if ( Status != sOK )
 				return Status;
 
-			_ioflow___::Init( _Driver, AmountMax );
+			_ioflow___::Init( _Driver );
 
 			return Status;
 		}

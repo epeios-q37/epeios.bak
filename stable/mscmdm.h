@@ -69,7 +69,7 @@
 
 namespace mscmdm {
 
-	typedef flw::datum__ event_id__;
+	typedef flw::sByte event_id__;
 
 	using flw::size__;
 
@@ -205,18 +205,18 @@ namespace mscmdm {
 	const char *GetEventTypeLabel( event_type__ Event );
 
 	event_type__ DetermineEvent(
-		flw::datum__ Datum,
-		flw::datum__ AdditionalDatum,	// For meta event only.
+		flw::sByte Datum,
+		flw::sByte AdditionalDatum,	// For meta event only.
 		bso::u8__ &Event );
 
-	midi_event__ DetermineMIDIEvent( flw::datum__ Datum );
+	midi_event__ DetermineMIDIEvent( flw::sByte Datum );
 
 	size__ GetMIDIEventDataSize( midi_event__ Event );
 
 
 	inline event_type__ DetermineEvent(
-		flw::datum__ Datum,
-		flw::datum__ AdditionalDatum,
+		flw::sByte Datum,
+		flw::sByte AdditionalDatum,
 		midi_event__ &MIDIEvent,
 		system_event__ &SystemEvent,
 		meta_event__ &MetaEvent )
@@ -290,8 +290,8 @@ namespace mscmdm {
 	const char *GetEventLabel( const event_header__ &Event );
 
 	inline event_type__ PartiallyFillEventHeader(
-		flw::datum__ Datum,
-		flw::datum__ AdditionalDatum,	// Only for meta event.
+		flw::sByte Datum,
+		flw::sByte AdditionalDatum,	// Only for meta event.
 		event_header__ &EventHeader )
 	{
 		EventHeader.Id = Datum;
@@ -406,11 +406,11 @@ namespace mscmdm {
 
 			Data.reset( P );
 		}
-		void plug( qSD__ &SD )
+		void plug( bch::sHook &Hook )
 		{
-			Data.plug( SD );
+			Data.plug( Hook );
 		}
-		void plug( qAS_ &AS )
+		void plug( qASd *AS )
 		{
 			Data.plug( AS );
 		}
@@ -589,7 +589,7 @@ namespace mscmdm {
 */
 	inline delta_time_ticks__ GetDeltaTimeTicks( flw::iflow__ &IFlow )
 	{
-		flw::datum__ Datum = IFlow.Get();
+		flw::sByte Datum = IFlow.Get();
 		delta_time_ticks__ DeltaTimeTicks = 0;
 
 		while ( Datum & 0x80 ) {

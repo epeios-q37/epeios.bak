@@ -35,7 +35,7 @@ static const char *MIDIEventLabels_[mid_amount] = {
 	"PitchWheelChange",
 };
 
-static bso::ubyte__ MIDIEventDataSize_[mid_amount] = {
+static bso::sU8 MIDIEventDataSize_[mid_amount] = {
 	2,
 	2,
 	2,
@@ -87,7 +87,7 @@ static const char *EventTypeLabels_[et_amount] = {
 const char *mscmdm::GetMIDIEventLabel( midi_event__ Event )
 {
 	if ( Event >= mid_amount )
-		ERRu();
+		qRFwk();
 
 	return MIDIEventLabels_[Event];
 }
@@ -95,7 +95,7 @@ const char *mscmdm::GetMIDIEventLabel( midi_event__ Event )
 size__ mscmdm::GetMIDIEventDataSize( midi_event__ Event )
 {
 	if ( Event >= mid_amount )
-		ERRu();
+		qRFwk();
 
 	return MIDIEventDataSize_[Event ];
 }
@@ -103,7 +103,7 @@ size__ mscmdm::GetMIDIEventDataSize( midi_event__ Event )
 const char *mscmdm::GetSystemEventLabel( system_event__ Event )
 {
 	if ( Event >= sys_amount )
-		ERRu();
+		qRFwk();
 
 	return SystemEventLabels_[Event];
 }
@@ -111,7 +111,7 @@ const char *mscmdm::GetSystemEventLabel( system_event__ Event )
 const char *mscmdm::GetMetaEventLabel( meta_event__ Event )
 {
 	if ( Event >= mta_amount )
-		ERRu();
+		qRFwk();
 
 	return MetaEventLabels_[Event];
 }
@@ -129,7 +129,7 @@ const char *mscmdm::GetEventLabel( const event_header__ &Event )
 		return GetMetaEventLabel( Event.MetaEvent.Event ); 
 		break;
 	default:
-		ERRu();
+		qRFwk();
 		break;
 	}
 
@@ -140,7 +140,7 @@ const char *mscmdm::GetEventLabel( const event_header__ &Event )
 const char *mscmdm::GetEventTypeLabel( event_type__ Type )
 {
 	if ( Type >= et_amount )
-		ERRu();
+		qRFwk();
 
 	return EventTypeLabels_[Type];
 }
@@ -166,9 +166,9 @@ const char *mscmdm::GetEventTypeLabel( event_type__ Type )
 #define MASK2	( BASE_MASK << POS2 )
 #define MASK3	( BASE_MASK << POS3 )
 
-static inline bso::ubyte__ GetDeltaTimeTicksSize_( delta_time_ticks__ Ticks )
+static inline bso::sU8 GetDeltaTimeTicksSize_( delta_time_ticks__ Ticks )
 {
-	bso::ubyte__ Size = 1;
+	bso::sU8 Size = 1;
 
 	if ( Ticks & MASK1 )
 		Size++;
@@ -198,7 +198,7 @@ void mscmdm::Encode(
 	Data.Append( (bso::char__)( Ticks & BASE_MASK ) );
 }
 
-midi_event__ mscmdm::DetermineMIDIEvent( flw::datum__ Datum )
+midi_event__ mscmdm::DetermineMIDIEvent( flw::sByte Datum )
 {
 	switch( Datum & 0xf0 ) {
 	case 0x80:
@@ -227,7 +227,7 @@ midi_event__ mscmdm::DetermineMIDIEvent( flw::datum__ Datum )
 	return mid_NotAMIDIEvent;
 }
 
-static inline system_event__ DetermineSystemEvent_( flw::datum__ Datum )
+static inline system_event__ DetermineSystemEvent_( flw::sByte Datum )
 {
 	switch ( Datum &0xf ) {
 	case 0x0:
@@ -262,7 +262,7 @@ static inline system_event__ DetermineSystemEvent_( flw::datum__ Datum )
 	return sys_NotASystemEvent;
 }
 
-static inline meta_event__ DetermineMetaEvent_( flw::datum__ Datum )
+static inline meta_event__ DetermineMetaEvent_( flw::sByte Datum )
 {
 	switch ( Datum ) {
 	case 0x00:
@@ -322,9 +322,9 @@ static inline meta_event__ DetermineMetaEvent_( flw::datum__ Datum )
 }
 
 event_type__ mscmdm::DetermineEvent(
-	flw::datum__ Datum,
-	flw::datum__ AdditionalDatum,	// For meta only.
-	bso::ubyte__ &Event )
+	flw::sByte Datum,
+	flw::sByte AdditionalDatum,	// For meta only.
+	bso::sU8 &Event )
 {
 	event_type__ EventType = et_Undefined;
 
@@ -349,7 +349,7 @@ bso::bool__ mscmdm::GetEventHeader(
 	event_header__ &EventHeader,
 	err::handling__ ErrHandling )
 {
-	flw::datum__ Datum;
+	flw::sByte Datum;
 
 	switch ( Extraneous ) {
 	case xNone:
@@ -402,7 +402,7 @@ bso::bool__ mscmdm::GetEventHeader(
 	event_header__ &EventHeader,
 	err::handling__ ErrHandling )
 {
-	flw::datum__ Datum;
+	flw::sByte Datum;
 
 	switch ( Extraneous ) {
 	case xNone:
@@ -411,7 +411,7 @@ bso::bool__ mscmdm::GetEventHeader(
 		EventHeader.DeltaTimeTicks = GetDeltaTimeTicks( IFlow );
 		break;
 	default:
-		ERRu();
+		qRFwk();
 		break;
 	}
 
@@ -434,7 +434,7 @@ bso::bool__ mscmdm::GetEventHeader(
 			IFlow.Get();
 			break;
 		default :
-			ERRc();
+			qRFwk();
 			break;
 	}
 
@@ -466,12 +466,13 @@ void mscmdm::PrintMIDIEvent(
 	const data_ &Data,
 	txf::text_oflow__ &OFlow )
 {
-	OFlow << GetMIDIEventLabel( Event.Event )<< ( Event.Tied ? "*" : "" ) << " (" << (bso::ulong__)Event.ChannelID << ") :";
+	OFlow << GetMIDIEventLabel( Event.Event )<< ( Event.Tied ? "*" : "" ) << " (" << Event.ChannelID << ") :";
 
-	mdr::row__ Row = Data.First();
+	
+	sdr::row__ Row = Data.First();
 
-	while ( Row != NONE ) {
-		OFlow << ' ' << (bso::ulong__)Data( Row );
+	while ( Row != qNIL ) {
+		OFlow << ' ' <<  Data( Row );
 
 		Row = Data.Next( Row );
 	}
@@ -485,7 +486,7 @@ void mscmdm::PrintSystemEvent(
 	OFlow << GetSystemEventLabel( Event.Event );
 
 	if ( Event.Event == sysExclusive )
-		OFlow << " : " << (bso::ulong__)Data.Amount() <<  " byte long";
+		OFlow << " : " << Data.Amount() <<  " byte long";
 
 	OFlow << '.';
 }
@@ -509,7 +510,7 @@ void mscmdm::PrintMetaEvent(
 		break;
 	case mtaEndOfTrack:
 		if ( Data.Amount() != 0 )
-			ERRc();
+			qRFwk();
 		break;
 	case mtaChannelPrefix:
 	case mtaPortPrefix:
@@ -519,20 +520,20 @@ void mscmdm::PrintMetaEvent(
 	case mtaTimeSignature:
 	case mtaKeySignature:
 	{
-		mdr::row__ Row = Data.First();
+		sdr::row__ Row = Data.First();
 
-		while ( Row != NONE ) {
-			OFlow << ' ' << (bso::ulong__)Data( Row );
+		while ( Row != qNIL ) {
+			OFlow << ' ' << Data( Row );
 
 			Row = Data.Next( Row );
 		}
 		break;
 	}
 	case mta_Unknown:
-		OFlow << (bso::ulong__)Data.Amount() << " byte(s) long";
+		OFlow << Data.Amount() << " byte(s) long";
 		break;
 	default:
-		ERRu();
+		qRFwk();
 		break;
 	}
 }
@@ -555,7 +556,7 @@ void mscmdm::PrintEvent(
 		PrintSystemEvent( EventHeader.SystemEvent, Data, OFlow );
 		break;
 	default:
-		ERRl();
+		qRLmt();
 		break;
 	}
 }
@@ -592,18 +593,18 @@ static size__ GetSystemEventData_(
 				Data.Append( IFlow.Get() );
 
 			if ( IFlow.Get() != 0xf7 )
-				ERRf();
+				qRFwk();
 			break;
 		}
 		case xNone:
-			flw::datum__ Datum;
+			flw::sByte Datum;
 			while( ( Datum = IFlow.Get() ) != 0xf7 ) {
 				Size++;
 				Data.Append( Datum );
 			}
 			break;
 		default:
-			ERRu();
+			qRFwk();
 			break;
 		}
 	}
@@ -641,7 +642,7 @@ size__ mscmdm::GetEventData(
 		return GetSystemEventData_( EventHeader.SystemEvent, IFlow, Extraneous, Data );
 		break;
 	default:
-		ERRl();
+		qRLmt();
 		break;
 	}
 
@@ -652,9 +653,9 @@ void Write_(
 	const str::string_ &String,
 	flw::oflow__ &OFlow )
 {
-	mdr::row__ Row = String.First();
+	sdr::row__ Row = String.First();
 
-	while ( Row != NONE ) {
+	while ( Row != qNIL ) {
 		OFlow.Put( String( Row ) );
 
 		Row = String.Next( Row );
@@ -675,7 +676,7 @@ qRB
 	switch ( Extraneous ) {
 	case xNone:
 		if ( Ticks != 0 )
-			ERRu();
+			qRFwk();
 		break;
 	case xTicks:
 		EncodedTicks.Init();
@@ -683,7 +684,7 @@ qRB
 		Write_( EncodedTicks, OFlow );
 		break;
 	default:
-		ERRu();
+		qRFwk();
 		break;
 	}
 
@@ -731,13 +732,10 @@ void mscmdm::PutEvents(
 	extraneous__ Extraneous,
 	flw::oflow__ &OFlow )
 {
-	ctn::E_CMITEMt( event_, erow__ ) Event;
 	erow__ Row = Events.First();
 
-	Event.Init( Events );
-
-	while ( Row != NONE ) {
-		PutEvent( Event( Row ), Extraneous, OFlow );
+	while ( Row != qNIL ) {
+		PutEvent( Events( Row ), Extraneous, OFlow );
 
 		Row = Events.Next( Row );
 	}
@@ -746,31 +744,28 @@ void mscmdm::PutEvents(
 static mscmdf::track_chunk_size__ GetSize_( const events_ &Events )
 {
 	mscmdf::track_chunk_size__ Size = 0;
-	ctn::E_CMITEMt( event_, erow__ ) Event;
 	erow__ Row = Events.First();
 
-	Event.Init( Events );
+	while ( Row != qNIL ) {
+		Size+= GetDeltaTimeTicksSize_( Events( Row ).EventHeader().DeltaTimeTicks );
 
-	while ( Row != NONE ) {
-		Size+= GetDeltaTimeTicksSize_( Event( Row ).EventHeader().DeltaTimeTicks );
-
-		switch( Event().EventHeader().EventType ) {
+		switch( Events().EventHeader().EventType ) {
 		case etMIDI:
-			if ( !Event().EventHeader().MIDIEvent.Tied )
+			if ( !Events().EventHeader().MIDIEvent.Tied )
 				Size += 1;
 			break;
 		case etSystem:
-			Size += 2 + GetDeltaTimeTicksSize_( Event().Data.Amount() );
+			Size += 2 + GetDeltaTimeTicksSize_( Events().Data.Amount() );
 			break;
 		case etMeta:
-			Size += 2 + GetDeltaTimeTicksSize_( Event().Data.Amount() );
+			Size += 2 + GetDeltaTimeTicksSize_( Events().Data.Amount() );
 			break;
 		default:
-			ERRu();
+			qRFwk();
 			break;
 		}
 
-		Size += Event().Data.Amount();
+		Size += Events().Data.Amount();
 
 		Row = Events.Next( Row );
 	}
@@ -784,17 +779,14 @@ void mscmdm::PutTrack(
 	extraneous__ Extraneous,
 	flw::oflow__ &OFlow )
 {
-	ctn::E_CMITEMt( event_, erow__ ) Event;
-	erow__ Row = NONE;
+	erow__ Row = qNIL;
 	bso::bool__ LastEventIsEndOfTrack = false;
 	mscmdf::track_chunk_size__ Size = GetSize_( Track );
 
-	Event.Init( Track );
-
 	Row = Track.Last();
 
-	if ( Row != NONE )
-		LastEventIsEndOfTrack = ( Event( Row ).EventHeader().EventType == etMeta ) && ( Event( Row ).EventHeader().MetaEvent.Event == mtaEndOfTrack );
+	if ( Row != qNIL )
+		LastEventIsEndOfTrack = ( Track( Row ).EventHeader().EventType == etMeta ) && ( Track( Row ).EventHeader().MetaEvent.Event == mtaEndOfTrack );
 
 	if ( !LastEventIsEndOfTrack )
 		Size += 4;
@@ -813,13 +805,10 @@ void mscmdm::PutTracks(
 	extraneous__ Extraneous,
 	flw::oflow__ &OFlow )
 {
-	ctn::E_CITEMt( track_, trow__ ) Track;
 	trow__ Row = Tracks.First();
 
-	Track.Init( Tracks );
-
-	while ( Row != NONE ) {
-		PutTrack( Track( Row ), Extraneous, OFlow );
+	while ( Row != qNIL ) {
+		PutTrack( Tracks( Row ), Extraneous, OFlow );
 
 		Row = Tracks.Next( Row );
 	}

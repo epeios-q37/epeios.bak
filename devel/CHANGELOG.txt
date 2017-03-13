@@ -1,6 +1,10 @@
 CHANGELOG for the 'Epeios' framework.
 
 2017-03-09 :
+- MSCMDD, MSCMDF, MSCMDM :
+	- Adaptation to changes.
+
+2017-03-09 :
 - SCLARGMNT :
 	- Removing unused variable.
 

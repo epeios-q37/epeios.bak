@@ -98,7 +98,7 @@ qRB
 				break;
 			case 2:
 				Buffer[1] = ( ( dwParam1 & 0xff00 ) >> 8 );
-				Buffer[2] =(fdr::datum__)( ( dwParam1 & 0xff0000 ) >> 16 );
+				Buffer[2] =(fdr::sByte)( ( dwParam1 & 0xff0000 ) >> 16 );
 				Fill_( Buffer, 3, Data );
 				break;
 			default:
@@ -139,7 +139,7 @@ qRE
 
 fdr::size__ mscmdd::midi_in___::Read(
 	fdr::size__ Maximum,
-	fdr::datum__ *Buffer )
+	fdr::sByte *Buffer )
 {
 	bso::u8__ Amount = sizeof( _Header ) / sizeof( *_Header );
 
