@@ -79,8 +79,9 @@ MacOS=Darwin
 Android=Android
 os=$(shell uname -o 2>/dev/null || uname -s)
 mach=$(shell uname -m)
-  
-src += :../../
+ifdef EPEIOS_SRC
+ src += :../../
+endif
 
 
 ##########################
