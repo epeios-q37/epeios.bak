@@ -30,7 +30,7 @@
 
 #include "cio.h"
 #include "mtk.h"
-#include "scln.h"
+#include "sclnjs.h"
 #include "xtf.h"
 #include "xpp.h"
 
@@ -89,7 +89,7 @@ namespace {
 				Process_( IDriver, OFlow, Error );
 			qRFR
 			qRFT
-			qRFE(scln::ErrFinal() )
+			qRFE(sclnjs::ErrFinal() )
 			}
 		}
 
@@ -255,7 +255,7 @@ namespace {
 				Process_( Driver, Content );
 			qRFR
 			qRFT
-			qRFE(scln::ErrFinal() )
+			qRFE(sclnjs::ErrFinal() )
 			}
 		}
 
@@ -402,7 +402,7 @@ namespace {
 			qRAbort();
 	qRFR
 	qRFT
-	qRFE( scln::ErrFinal() )
+	qRFE( sclnjs::ErrFinal() )
 	}
 #else
 	void OnData_( const v8q::sFunctionInfos &Infos )
@@ -421,7 +421,7 @@ namespace {
 		Rack.OFlow << Chunk;
 	qRFR
 	qRFT
-	qRFE( scln::ErrFinal() )
+	qRFE( sclnjs::ErrFinal() )
 	}
 
 	void OnEnd_( const v8q::sFunctionInfos &Infos )
@@ -435,7 +435,7 @@ namespace {
 		Rack.OFlow.Commit();
 	qRFR
 	qRFT
-	qRFE( scln::ErrFinal() )
+	qRFE( sclnjs::ErrFinal() )
 	}
 #endif
 

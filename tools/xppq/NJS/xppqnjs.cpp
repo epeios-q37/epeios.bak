@@ -23,7 +23,7 @@
 #include "sclmisc.h"
 
 #include "cio.h"
-#include "scln.h"
+#include "sclnjs.h"
 #include "nodeq.h"
 #include "xpp.h"
 #include "mtk.h"
@@ -39,14 +39,14 @@
 # define COPYRIGHT			COPYRIGHT_YEARS " " OWNER_NAME " (" OWNER_CONTACT ")"	
 # define VERSION			"0.1.3"
 
-void scln::SCLNRegister( scln::sRegistrar &Registrar )
+void sclnjs::SCLNJSRegister( sclnjs::sRegistrar &Registrar )
 {
 	Registrar.Register( stream::Set );
 	Registrar.Register( parser::Parse );
 }
 
-SCLN_MODULE( xppq );
+SCLNJS_MODULE( xppq );
 
 const char *sclmisc::SCLMISCTargetName = NAME_LC;
 const char *sclmisc::SCLMISCProductName = NAME_MC;
-const char *scln::SCLNProductVersion = VERSION;
+const char *sclnjs::SCLNJSProductVersion = VERSION;

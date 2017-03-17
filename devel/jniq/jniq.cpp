@@ -17,9 +17,49 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define SKT_COMPILATION_
+#define JNIQ__COMPILATION
 
-#include "skt.h"
+#include "jniq.h"
 
-using namespace skt;
+using namespace jniq;
+
+const str::string_ &jniq::Convert(
+	jstring JString,
+	JNIEnv *Env,
+	str::string_ &String )
+{
+qRH
+	const char *Buffer = NULL;
+qRB
+	if ( ( Buffer = Env->GetStringUTFChars( JString, NULL ) ) == NULL )
+		qRLbr();
+
+	String.Append( Buffer );
+qRR
+qRT
+	if ( Buffer != NULL )
+		Env->ReleaseStringUTFChars( JString, Buffer );
+qRE
+	return String;
+}
+
+const char *jniq::Convert(
+	jstring JString,
+	JNIEnv *Env,
+	qCBUFFERr &Buffer )
+{
+qRH
+	str::string String;
+qRB
+	String.Init();
+
+	Convert( JString, Env, String );
+
+	String.Convert( Buffer );
+qRR
+qRT
+qRE
+	return Buffer;
+}
+
 

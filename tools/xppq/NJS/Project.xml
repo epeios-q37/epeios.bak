@@ -9,7 +9,7 @@
 			<xpp:bloc>2007-2017</xpp:bloc>
 		</xpp:define>
 		<xpp:set name="Credits" value="Epeios"/>
-		<xpp:set name="Type" value="NodeJS"/>
+		<xpp:set name="Type" value="NJSComponent"/>
 	</xpp:bloc>
 	<xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
 	<About>

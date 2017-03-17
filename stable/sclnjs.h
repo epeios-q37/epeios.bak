@@ -17,27 +17,23 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-// SoCLe Node.js
+// SoCLe Node.JS
 
-#ifndef SCLN__INC
-# define SCLN__INC
+#ifndef SCLNJS_INC_
+# define SCLNJS_INC_
 
-# define SCLN_NAME		"SCLN"
+# define SCLNJS_NAME		"SCLNJS"
 
-# if defined( E_DEBUG ) && !defined( SCLN_NODBG )
-#  define SCLN_DBG
+# if defined( E_DEBUG ) && !defined( SCLNJS_NODBG )
+#  define SCLNJS_DBG
 # endif
 
 # include <node.h>
 
 # include "err.h"
-# include "tol.h"
 # include "v8q.h"
 
-namespace scln {
-
-	void SetPendingError( const str::dString &Error );
-
+namespace sclnjs {
 	void ErrFinal( v8::Isolate *Isolate = NULL );
 	
 	void Register_(
@@ -67,10 +63,10 @@ namespace scln {
 			v8::FunctionCallback Function );
 	};
 
-	void SCLNRegister( sRegistrar &Registrar );	// To overload by user.
-	extern const char *SCLNProductVersion;	// To define by user.
+	void SCLNJSRegister( sRegistrar &Registrar );	// To overload by user.
+	extern const char *SCLNJSProductVersion;	// To define by user.
 }
 
-#define SCLN_MODULE( name ) NODE_MODULE( name, scln::Register_ );
+# define SCLNJS_MODULE( name ) NODE_MODULE( name, sclnjs::Register_ );
 
 #endif

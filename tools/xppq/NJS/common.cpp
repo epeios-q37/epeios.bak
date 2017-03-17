@@ -22,7 +22,5 @@
 
 #include "common.h"
 
-#include "scln.h"
-
 using namespace common;
 

@@ -15,121 +15,18 @@
 
 	You should have received a copy of the GNU Affero General Public License
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
-	*/
+*/
 
-#define SCLN__COMPILATION
+#define SCLNJS_COMPILATION_
 
-#include "scln.h"
+#include "sclnjs.h"
 
-#include "nodeq.h"
-#include "uvq.h"
-
+#include "sclerror.h"
 #include "sclmisc.h"
 
-#include "bch.h"
-#include "cio.h"
-#include "cpe.h"
+using namespace sclnjs;
 
-#include <node_version.h>
-
-using namespace scln;
-
-// Not activated yet !
-namespace error_ {
-	typedef uvq::cASync cASync_;
-
-	class sCallback_
-	: public cASync_
-	{
-	protected:
-		virtual void UVQWork( void ) override;
-		virtual uvq::eBehavior UVQAfter( void ) override;
-	};
-
-	namespace {
-		tht::rLocker Lock_;
-		tht::rBlocker Blocker_;
-		str::wString Message_;
-		sCallback_ Callback_;
-
-		bso::sBool GetMessage_( str::dString &Message )
-		{
-			bso::sBool Exists = false;
-		qRH
-			tht::rLockerHandler Locker;
-		qRB
-			Locker.Init( Lock_ );
-
-			Exists =  Message_.Amount() != 0;
-
-			if ( Exists ) {
-				Message.Append( Message_ );
-				Message_.Init();
-			}
-		qRR
-		qRT
-		qRE
-			return Exists;
-		}
-	}
-
-	void sCallback_::UVQWork( void )
-	{
-		if ( uvq::AmountPending() > 1 )
-			Blocker_.Wait();
-	}
-
-	uvq::eBehavior sCallback_::UVQAfter( void )
-	{
-		uvq::eBehavior Behavior = uvq::bExitOnly;
-	qRH
-		str::wString Message;
-	qRB
-		Message.Init();
-
-		if ( GetMessage_(Message) ) {
-			Behavior = uvq::bRelaunch;
-			v8q::GetIsolate()->ThrowException( v8::Exception::Error( v8q::ToString( Message ) ) );
-		}
-	qRR
-	qRT
-	qRE
-		return Behavior;
-	}
-
-	void Initialize( void )
-	{
-		Blocker_.Init( true );
-		Lock_.Init();
-		Message_.Init();
-	}
-
-	void SetMessage( const str::dString &Message )
-	{
-	qRH
-		tht::rLockerHandler Locker;
-	qRB
-		if ( Message.Amount() == 0 )
-			qRFwk();
-
-		Locker.Init( Lock_ );
-
-		if ( Message_.Amount() == 0 ) {
-			Message_.Append( Message );
-			Blocker_.Unblock();
-		}
-	qRR
-	qRT
-	qRE
-	}
-
-	void Launch( void )
-	{
-		uvq::Launch( Callback_ );
-	}
-}
-
-void scln::ErrFinal( v8::Isolate *Isolate )
+void sclnjs::ErrFinal( v8::Isolate *Isolate )
 {
 qRH
 	str::wString Message;
@@ -149,7 +46,7 @@ qRB
 	if ( Isolate != NULL )
 		Isolate->ThrowException( v8::Exception::Error( v8q::ToString( Message ) ) ); 
 	else
-		error_::SetMessage( Message );
+		cio::CErr << txf::nl << Message << txf::nl;
 qRR
 	ERRRst();
 qRT
@@ -161,12 +58,12 @@ namespace {
 	bch::qBUNCHwl( sFunction_ ) Functions_;
 }
 
-void scln::sRegistrar::Register( sFunction_ Function )
+void sclnjs::sRegistrar::Register( sFunction_ Function )
 {
 	Functions_.Append( Function );
 }
 
-void scln::sRegistrar::Register(
+void sclnjs::sRegistrar::Register(
 	const char *Name,
 	v8::FunctionCallback Function )
 {
@@ -214,7 +111,7 @@ namespace {
 			BaseFlow.Init( Info );
 			Flow.Init( BaseFlow );
 
-			Flow << sclmisc::SCLMISCProductName << " v" << SCLNProductVersion << " - Node v" NODE_VERSION_STRING " ABI v" NODE_STRINGIFY( NODE_MODULE_VERSION )  << txf::nl
+			Flow << sclmisc::SCLMISCProductName << " v" << SCLNJSProductVersion << " - Node v" NODE_VERSION_STRING " ABI v" NODE_STRINGIFY( NODE_MODULE_VERSION )  << txf::nl
 			     << txf::pad << "Build : " __DATE__ " " __TIME__ " (" <<  cpe::GetDescription() << ')';
 		qRR
 		qRT
@@ -229,7 +126,7 @@ namespace {
 			BaseFlow.Init( Info );
 			Flow.Init( BaseFlow );
 
-			Flow << sclmisc::SCLMISCProductName << " v" << SCLNProductVersion << " - Build : " __DATE__ " " __TIME__;
+			Flow << sclmisc::SCLMISCProductName << " v" << SCLNJSProductVersion << " - Build : " __DATE__ " " __TIME__;
 		qRR
 		qRT
 		qRE
@@ -323,7 +220,7 @@ namespace {
 	}
 }
 
-void scln::Register_(
+void sclnjs::Register_(
 	v8::Local<v8::Object> Exports,
 	v8::Local<v8::Value> Module,
 	void* priv )
@@ -348,7 +245,7 @@ qRFB
 	Registrar.Init( Exports );
 
 	Functions_.Init();
-	scln::SCLNRegister( Registrar );
+	sclnjs::SCLNJSRegister( Registrar );
 	/*
 	error_::Initialize();
 
@@ -359,7 +256,7 @@ qRFT
 qRFE( ErrFinal() )
 }
 
-qGCTOR( scln )
+qGCTOR( sclnjs )
 {
 	Error_.Init();
 	SCLError_.Init();
