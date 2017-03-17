@@ -32,7 +32,7 @@
 # include "str.h"
 # include "txf.h"
 
-// Note to developer : you have to add '<path_to_node>/deps/v8/include' as 'Additional Include Directory' in the 'devel' related project.
+// Note to developer : include 'h:\hg\NJSIncludeDirectories.props' in the '.vcxproj'.
 # include <v8.h>
 // Put after above line due to redefinition of 'System(...)'.
 # include "tol.h"
@@ -610,76 +610,6 @@ namespace v8q {
 		double operator *(void)
 		{
 			return Core()->Value();
-		}
-	};
-
-
-	template <typename item> inline void Get(
-		int Index,
-		const v8::FunctionCallbackInfo<v8::Value> Infos,
-		item &Item )
-	{
-		if ( Index >= Infos.Length()  )
-			qRFwk();
-
-		Item.Init( Infos[Index] );
-	}
-
-	template <typename item> inline void Get_(
-		int Index,
-		const v8::FunctionCallbackInfo<v8::Value> Infos,
-		item &Item )
-	{
-		Get( Index, Infos, Item );
-	}
-
-	template <typename item, typename ...items> inline void Get_(
-		int Index,
-		const v8::FunctionCallbackInfo<v8::Value> Infos,
-		item &Item,
-		items &...Items )
-	{
-		Get( Index, Infos, Item );
-
-		Get_( Index+1, Infos, Items... );
-	}
-
-	template <typename ...items> inline void Get(
-		const v8::FunctionCallbackInfo<v8::Value> Infos,
-		items &...Items )
-	{
-		Get_( 0, Infos, Items... );
-	}
-
-	class sArguments {
-	private:
-		qRMV( const v8::FunctionCallbackInfo<v8::Value>, A_, Arguments_ );
-	public:
-		void reset( bso::sBool P = true )
-		{
-			Arguments_ = NULL;
-		}
-		qCDTOR( sArguments );
-		void Init( const v8::FunctionCallbackInfo<v8::Value> &Arguments )
-		{
-			Arguments_ = &Arguments;
-		}
-		template <typename item> void Get(
-			bso::sUInt Index,
-			item &Item ) const
-		{
-			if ( Index == 0 )
-				qRFwk();
-
-			v8q::Get( Index, A_(), Item );
-		}
-		template <typename ...items> inline void Get( items &...Items ) const
-		{
-			Get_( 1, A_(), Items... );
-		}
-		void This( sObject &This )
-		{
-			This.Init( A_().This() );
 		}
 	};
 

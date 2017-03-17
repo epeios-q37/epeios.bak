@@ -466,7 +466,7 @@ namespace {
 	}
 }
 
-void stream::Set( const v8q::sArguments &Arguments )
+void stream::Set( const sclnjs::sArguments &Arguments )
 {
 qRH
 	nodeq::sRStream Source, This;

@@ -20,10 +20,10 @@
 #ifndef STREAM_INC_
 # define STREAM_INC_
 
-# include "v8q.h"
+# include "sclnjs.h"
 
 namespace stream {
-	void Set( const v8q::sArguments &Arguments );
+	void Set( const sclnjs::sArguments &Arguments );
 }
 
 #endif

@@ -1,4 +1,9 @@
-CHANGELOG for the 'Epeios' framework.
+CHANGELOG for the 'Epeios' framework.*
+
+2017-03-17 :
+- SCLN -> SCLNJS.
+- V8Q, SCLNJS
+	- Moving 'v8q::sArguments' to 'sclnjs'.
 
 2017-03-09 :
 - MSCMDD, MSCMDF, MSCMDM :

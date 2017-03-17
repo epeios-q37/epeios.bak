@@ -264,7 +264,7 @@ namespace {
 #endif
 }
 
-void parser::Parse( const v8q::sArguments &Arguments )
+void parser::Parse( const sclnjs::sArguments &Arguments )
 {
 qRH
 	nodeq::sRStream Source;

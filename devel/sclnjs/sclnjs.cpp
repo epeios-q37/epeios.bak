@@ -75,7 +75,7 @@ namespace {
 	void Launch_( const v8::FunctionCallbackInfo<v8::Value>& Info )
 	{
 	qRFH
-		v8q::sArguments Arguments;
+		sArguments Arguments;
 	qRFB
 		if ( Info.Length() < 1 )
 			qRGnr();
