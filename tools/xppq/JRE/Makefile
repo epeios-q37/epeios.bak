@@ -27,6 +27,7 @@ copt += -DE_DEBUG
 	
 mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
 mods += scljre 
+mods += jniq jniobj 
 mods += ags aem bch bitbch bso 
 mods += cio cpe crptgr cslio crt 
 mods += ctn dir dte dtfbsc dtfptb 
@@ -348,7 +349,7 @@ ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20170317"\"
+copt += -DVERSION=\""20170318"\"
 copt += -DCOPYRIGHT_YEARS=\""2007-2017"\"
 copt += -DIDENTIFIER=\"""\"
 

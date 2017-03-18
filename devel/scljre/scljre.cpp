@@ -65,7 +65,7 @@ qRFB
 	Rack_.Init( Error_, SCLError_, cio::GetSet( cio::t_Default ), Locale_ );
 
 	Location.Init();
-	// TODO : Find a way to fill 'Location' with rhe path of the binary.
+	// TODO : Find a way to fill 'Location' with the path of the binary.
 
 	sclmisc::Initialize( Rack_, Location, qRPU );
 
@@ -100,17 +100,11 @@ qRFT
 qRFE( ERRFinal_( Env ) )
 }
 
-qGCTOR( sclnjs )
+qGCTOR( scljre )
 {
 	Error_.Init();
 	SCLError_.Init();
 	Locale_.Init();
-
-//  Segmentaiton fault when launched here, so launched in 'Register_()'.
-//	error_::Initialize();
-
-// Sudenly stops to work ('Segmentation fault', so was deplaced in the 'Register_' function.
-//	Functions_.Init();
 }
 
 

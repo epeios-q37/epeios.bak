@@ -23,6 +23,9 @@
     <Modules Group="SCL">
      <xpp:expand select="SCL"/>
     </Modules>
+    <Modules Group="JRE">
+     <xpp:expand select="JRE"/>
+    </Modules>
     <Module>bomhdl</Module>
     <Module>cdgb64</Module>
     <Module>fil</Module>

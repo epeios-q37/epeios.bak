@@ -1,4 +1,4 @@
-CHANGELOG for the 'Epeios' framework.*
+CHANGELOG for the 'Epeios' framework.
 
 2017-03-17 :
 - SCLN -> SCLNJS.

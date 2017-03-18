@@ -20,6 +20,7 @@
 */
 
 #include "jniq.h"
+#include "jniobj.h"
 
 #include "sclmisc.h"
 #include "scljre.h"
@@ -38,7 +39,7 @@
 # define OWNER_CONTACT		"http://q37.info/contact/"
 # define COPYRIGHT			COPYRIGHT_YEARS " " OWNER_NAME " (" OWNER_CONTACT ")"	
 
-
+/*
 static void Print_(
 	JNIEnv *Env,
 	const char *Text )
@@ -54,20 +55,38 @@ static void Print_(
 
 	Env->CallNonvirtualVoidMethod( Out, jniq::GetClass( Env, Out ), jniq::GetMethodID( Env, Out, "flush", "()V" ) );
 }
+*/
+
+static void Print_(
+	JNIEnv *Env,
+	const char *Text )
+{
+	jniobj::java::lang::sSystem::Out( Env ).Println( Env, Text );
+	jniobj::java::lang::sSystem::Out( Env ).Flush( Env );
+}
+
 
 static void Print_(
 	JNIEnv *Env,
 	jobject Object )
 {
+	jniobj::java::lang::sSystem::Out( Env ).Println( Env, Object );
+	jniobj::java::lang::sSystem::Out( Env ).Flush( Env );
+}
+
+
+static void PrintNew_(
+	JNIEnv *Env,
+	jobject Object )
+{
+	jniobj::java::io::sPrintStream Out;
+
 	jclass System = Env->FindClass( "java/lang/System" );
 
-	jobject Out = jniq::GetStaticObjectField( Env, System, "out", "Ljava/io/PrintStream;" );
+	Out.Init( Env, jniq::GetStaticObjectField( Env, System, "out", "Ljava/io/PrintStream;" ) );
 
-	jcharArray Array = Env->NewCharArray( 1000 );
-	
-	Env->CallNonvirtualVoidMethod( Out, jniq::GetClass( Env, Out ), jniq::GetMethodID( Env, Out, "println", "(Ljava/lang/Object;)V" ), Object );
-
-	Env->CallNonvirtualVoidMethod( Out, jniq::GetClass( Env, Out ), jniq::GetMethodID( Env, Out, "flush", "()V" ) );
+	Out.Println(Env, Object );
+	Out.CallVoidMethod(Env, "flush", "()V", Object );
 }
 
 /*
@@ -307,7 +326,7 @@ namespace {
 		JNIEnv *Env,
 		const scljre::sArguments & )
 	{
-		Print_( Env, "Other Youhou !!!");
+		Print_( Env, "Youplobaoum !");
 	}
 }
 

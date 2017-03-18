@@ -51,6 +51,7 @@ class XPPQ {
 		XPPQ xppq = new XPPQ();
 		xppq.test0();
 		xppq.test1();
+		java.lang.System.out.println( "I'm happy.");
 	}
 }
 

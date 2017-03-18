@@ -33,6 +33,7 @@
 
 # include "err.h"
 # include "str.h"
+# include "tol.h"
 
 
 namespace jniq {
@@ -201,6 +202,20 @@ namespace jniq {
 		return Object;
 	}
 
+	inline jobject GetStaticObjectField(
+		JNIEnv *Env,
+		const char *ClassName,
+		const char *Name,
+		const char *Signature )
+	{
+		jclass Class = Env->FindClass( ClassName );
+
+		if ( Class == NULL )
+			qRFwk();
+
+		return GetStaticObjectField( Env, Class, Name, Signature );
+	}
+
 	inline void SetIntField(
 		JNIEnv *Env,
 		jobject Object,
@@ -233,6 +248,48 @@ namespace jniq {
 
 		Env->SetObjectField( Object, GetFieldID( Env, Object, Name, Signature ), Value );
 	}
+
+	class sObject
+	{
+	private:
+		qPMV( _jobject, O_, Object_ );
+	public:
+		void reset( bso::sBool = true )
+		{
+			Object_ = NULL;
+		}
+		qCDTOR( sObject );
+		void Init(
+			JNIEnv *Env,
+			jobject Object,
+			jclass Class )
+		{
+			if ( !Env->IsInstanceOf( Object, Class ) )
+				qRFwk();
+
+			Object_ = Object;
+		}
+		void Init(
+			JNIEnv *Env,
+			jobject Object,
+			const char *Class )
+		{
+			jclass Clazz = Env->FindClass( Class );
+
+			if ( Clazz == NULL )
+				qRFwk();
+
+			return Init( Env, Object, Clazz );
+		}
+		template <typename ...args> void CallVoidMethod(
+			JNIEnv *Env,
+			const char *Method,
+			const char *Signature,
+			args... Args )
+		{
+			return Env->CallVoidMethod( O_(), GetMethodID( Env, O_(), Method, Signature ), Args... );
+		}
+	};
 }
 
 #endif
