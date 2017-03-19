@@ -79,22 +79,34 @@ namespace jniobj {
 			CH( PrintStream )
 				void Println(
 					JNIEnv *Env,
-					jobject Object )
+					jobject Object ) const
 				{
 					return CallVoidMethod( Env, "println", "(Ljava/lang/Object;)V", Object );
 				}
 				void Println(
 					JNIEnv *Env,
-					const char *Text )
+					const char *Text ) const
 				{
 					return Println(Env, Env->NewStringUTF( Text ) );
 				}
-				void Flush( JNIEnv *Env )
+				void Flush( JNIEnv *Env ) const
 				{
 					return CallVoidMethod( Env, "flush", "()V" );
 				}
 			CF;
 			CH( InputStream )
+				int Read( JNIEnv *Env ) const
+				{
+					return CallIntMethod( Env, "read", "()I" );
+				}
+			int Read(
+				JNIEnv *Env,
+				jbyteArray b,
+				jint off,
+				jint len ) const
+				{
+					return CallIntMethod( Env, "read", "([BII)I", b, off, len );
+				}
 			CF;
 		}
 

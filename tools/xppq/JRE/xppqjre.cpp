@@ -315,18 +315,126 @@ ERRJEpilog
 SCLJRE_DEF( XPPQ );
 
 namespace {
-	void Test0_(
+	jobject Test0_(
 		JNIEnv *Env,
 		const scljre::sArguments & )
 	{
 		Print_( Env, "Youhou !!!");
+
+		return NULL;
 	}
 
-	void Test1_(
+	jobject Test1_(
 		JNIEnv *Env,
 		const scljre::sArguments & )
 	{
-		Print_( Env, "Youplobaoum !");
+		Print_( Env, "Youploom !");
+
+		return NULL;
+	}
+}
+
+namespace {
+	typedef fdr::rIDressedDriver rIDriver_;
+
+	class rInputStreamIDriver
+	: public rIDriver_
+	{
+	private:
+		jniobj::java::io::sInputStream Stream_;
+		qPMV( JNIEnv, E_, Env_ );
+	protected:
+		virtual fdr::sSize FDRRead(
+			fdr::sSize Maximum,
+			fdr::sByte *Buffer ) override
+		{
+		qRH
+			jbyteArray Array = NULL;
+		qRB
+			if ( Maximum > BSO_U32_MAX )
+				Maximum = BSO_S32_MAX;
+
+			Array = E_()->NewByteArray( (jint)Maximum );
+
+			if ( Array == NULL )
+				qRAlc();
+
+			Maximum = Stream_.Read( E_(), Array, 0, (jint)Maximum );
+
+			E_()->GetByteArrayRegion( Array, 0, (jint)Maximum, (jbyte *)Buffer );
+		qRR
+		qRT
+			// No need to 'delete' 'Array'.
+		qRE
+			return Maximum;
+		}
+		virtual void FDRDismiss( bso::sBool Unlock ) override
+		{}
+		virtual fdr::sTID FDRITake( fdr::sTID Owner ) override
+		{
+			return Owner;
+		}
+	public:
+		void reset( bso::sBool P = true )
+		{
+			rIDriver_::reset( P );
+			tol::reset( P, Stream_ );
+			Env_ = NULL;
+		}
+		qCVDTOR( rInputStreamIDriver );
+		void Init(
+			JNIEnv *Env,
+			jobject Stream )
+		{
+			rIDriver_::Init( fdr::ts_Default );
+			Stream_.Init( Env, Stream );
+			Env_ = Env;
+		}
+	};
+
+	class rProcessor
+	{
+	private:
+		rInputStreamIDriver Input_;
+		flw::sDressedIFlow<> Flow_;
+		xtf::extended_text_iflow__ XFlow_;
+		xpp::preprocessing_iflow___ PFlow_;
+	public:
+		void reset( bso::sBool P = true )
+		{
+			tol::reset( P, Input_, Flow_, XFlow_, PFlow_ );
+		}
+		void Init(
+			JNIEnv *Env,
+			jobject InputStream )
+		{
+			Input_.Init( Env, InputStream );
+			Flow_.Init( Input_ );
+			XFlow_.Init( Flow_, utf::f_Default );
+			PFlow_.Init(XFlow_, xpp::criterions___( str::wString() ) );
+		}
+		fdr::sByte Get( void )
+		{
+			return PFlow_.Get();
+		}
+		bso::sBool IsEOF( void )
+		{
+			return PFlow_.EndOfFlow();
+		}
+	};
+
+	jobject New_(
+		JNIEnv *Env,
+		const scljre::sArguments &Args )
+	{
+		rProcessor *Processor = new rProcessor;
+
+		if ( Processor == NULL )
+			qRAlc();
+
+		Processor->Init( Env, Args.Get( Env ) );
+
+		return Env->NewObject( Env->FindClass( "java/lang/Long" ), jniq::GetMethodID( Env, Env->FindClass( "java/lang/Long" ), "<init>", "(J)V" ), (jlong)Processor );
 	}
 }
 
@@ -334,6 +442,7 @@ void scljre::SCLJRERegister( sRegistrar &Registrar )
 {
 	Registrar.Register( Test0_ );
 	Registrar.Register( Test1_ );
+	Registrar.Register( New_ );
 }
 
 

@@ -78,26 +78,28 @@ qRFT
 qRFE( ERRFinal_( Env ) )
 }
 
-void scljre::Launch_(
+jobject scljre::Launch_(
 	JNIEnv *Env,
 	int Index,
 	jobjectArray Args )
 {
+	jobject Result;
 qRFH
 	sArguments Arguments;
 qRFB
 	if ( !Functions_.Exists( Index ) )
 		qRGnr();
 
-	Arguments.Init();
+	Arguments.Init( Args );
 
-	Functions_( Index )( Env, Arguments );
+	Result = Functions_( Index )( Env, Arguments );
 
 	if ( sclerror::IsErrorPending() )
 		qRAbort();	// To force the handling of a pending error.
 qRFR
 qRFT
 qRFE( ERRFinal_( Env ) )
+	return Result;
 }
 
 qGCTOR( scljre )

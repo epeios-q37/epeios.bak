@@ -35,6 +35,11 @@
 # include "str.h"
 # include "tol.h"
 
+# ifdef H
+#  #define JNIQ_H_ H
+#  undef H
+# endif
+
 
 namespace jniq {
 	const str::string_ &Convert(
@@ -281,15 +286,23 @@ namespace jniq {
 
 			return Init( Env, Object, Clazz );
 		}
-		template <typename ...args> void CallVoidMethod(
-			JNIEnv *Env,
-			const char *Method,
-			const char *Signature,
-			args... Args )
-		{
-			return Env->CallVoidMethod( O_(), GetMethodID( Env, O_(), Method, Signature ), Args... );
+# define H( type, name )\
+		template <typename ...args> type Call##name##Method(\
+			JNIEnv *Env,\
+			const char *Method,\
+			const char *Signature,\
+			args... Args ) const\
+		{\
+			return Env->Call##name##Method( O_(), GetMethodID( Env, O_(), Method, Signature ), Args... );\
 		}
+		H( void, Void );
+		H( jint, Int );
+# undef H
 	};
 }
+
+# ifdef JNIQ_H_
+#  define H JNIQ_H_
+# endif
 
 #endif

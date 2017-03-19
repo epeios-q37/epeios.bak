@@ -35,22 +35,41 @@
 namespace scljre {
 	void Register_( JNIEnv *Env );
 
-	void Launch_(
+	jobject Launch_(
 		JNIEnv *Env,
 		int Index,
 		jobjectArray Args );
 
 	class sArguments
 	{
+	private:
+		jobjectArray Args_;
+		mutable jint Index_;
 	public:
 		void reset( bso::sBool P = true )
-		{}
+		{
+			Args_ = NULL;
+			Index_ = 0;
+		}
 		qCDTOR( sArguments );
-		void Init( void )
-		{}
+		void Init( jobjectArray Args )
+		{
+			Args_ = Args;
+			Index_ = 1;	// First is skipped because it cointains the function index.
+		}
+		jobject Get( JNIEnv *Env ) const
+		{
+			if ( Args_ == NULL )
+				qRFwk();
+
+			if ( Index_ >= Env->GetArrayLength( Args_ ) )
+				qRFwk();
+
+			return Env->GetObjectArrayElement( Args_, Index_ );
+		}
 	};
 
-	typedef void (* sFunction_)( JNIEnv *, const sArguments &);
+	typedef jobject (* sFunction_)( JNIEnv *, const sArguments &);
 
 	class sRegistrar
 	{

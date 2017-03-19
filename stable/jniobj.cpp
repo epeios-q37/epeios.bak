@@ -29,6 +29,7 @@ using namespace jniobj;
 
 #define JAVA_IO JAVA "io" S
 const char *jniobj::java::io::sPrintStream::Name_ = JAVA_IO  "PrintStream";
+const char *jniobj::java::io::sInputStream::Name_ = JAVA_IO  "InputStream";
 
 #define JAVA_LANG JAVA "lang" S
 const char *jniobj::java::lang::sSystem::Name_ = JAVA_LANG "System";
