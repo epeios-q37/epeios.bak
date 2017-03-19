@@ -25,9 +25,6 @@ copt += -DE_DEBUG
 # For using <setjmp.h> instead of C++ exceptions.
 #copt += -DERR_JMPUSE
 	
-mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
-mods += scljre 
-mods += jniq jniobj 
 mods += ags aem bch bitbch bso 
 mods += cio cpe crptgr cslio crt 
 mods += ctn dir dte dtfbsc dtfptb 
@@ -41,6 +38,9 @@ mods += tys uys utf xtf llio
 mods += dlbrry plgn plgncore tht thtsub 
 mods += bomhdl cdgb64 fil fnm lcl 
 mods += rgstry stsfsm xml xpp 
+mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
+mods += scljre 
+mods += jniq jniobj 
 
 pmods += pllio 
 
@@ -349,7 +349,7 @@ ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20170318"\"
+copt += -DVERSION=\""20170319"\"
 copt += -DCOPYRIGHT_YEARS=\""2007-2017"\"
 copt += -DIDENTIFIER=\"""\"
 

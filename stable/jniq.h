@@ -52,6 +52,18 @@ namespace jniq {
 		JNIEnv *Env,
 		qCBUFFERr &Buffer );
 
+	inline jclass FindClass(
+		JNIEnv *Env,
+		const char *Name )
+	{
+		jclass Class = Env->FindClass( Name );
+
+		if ( Class == NULL )
+			qRFwk();
+
+		return Class;
+	}
+
 	inline jclass GetClass(
 		JNIEnv *Env,
 		jobject Object )
@@ -213,12 +225,7 @@ namespace jniq {
 		const char *Name,
 		const char *Signature )
 	{
-		jclass Class = Env->FindClass( ClassName );
-
-		if ( Class == NULL )
-			qRFwk();
-
-		return GetStaticObjectField( Env, Class, Name, Signature );
+		return GetStaticObjectField( Env, FindClass( Env, ClassName ), Name, Signature );
 	}
 
 	inline void SetIntField(
@@ -258,33 +265,63 @@ namespace jniq {
 	{
 	private:
 		qPMV( _jobject, O_, Object_ );
+		JNIEnv *Env_;	// Jusrt for the destructor.
 	public:
-		void reset( bso::sBool = true )
+		void reset( bso::sBool P = true )
 		{
+			if ( P ) { 
+				if ( Object_ != NULL )
+					if ( Env_ != NULL  )
+						Env_->DeleteGlobalRef( Object_ );
+			}
+				
 			Object_ = NULL;
+			Env_ = NULL;
 		}
 		qCDTOR( sObject );
 		void Init(
 			JNIEnv *Env,
 			jobject Object,
-			jclass Class )
+			jclass Class,
+			bso::sBool Take )
 		{
 			if ( !Env->IsInstanceOf( Object, Class ) )
 				qRFwk();
 
-			Object_ = Object;
+			if ( Take )
+				Object_ = Object;
+			else {
+				Object_ = Env->NewGlobalRef( Object );
+				Env_ = Env;
+			}
 		}
 		void Init(
 			JNIEnv *Env,
 			jobject Object,
-			const char *Class )
+			const char *Class,
+			bso::sBool Take )
 		{
-			jclass Clazz = Env->FindClass( Class );
-
-			if ( Clazz == NULL )
-				qRFwk();
-
-			return Init( Env, Object, Clazz );
+			return Init( Env, Object, FindClass( Env, Class ), Take );
+		}
+		operator jobject( void )
+		{
+			return O_();
+		}
+		template <typename ...args> void Init(
+			JNIEnv *Env,
+			jclass Class,
+			const char *Signature,
+			args... Args )
+		{
+			Init( Env, Env->NewObject( Class, GetMethodID( Env, Class, "<init>", Signature ), Args... ), Class, true );
+		}
+		template <typename ...args> void Init(
+			JNIEnv *Env,
+			const char *ClassName,
+			const char *Signature,
+			args... Args )
+		{
+			return Init(Env, FindClass( Env, ClassName ), Signature, Args... );
 		}
 # define H( type, name )\
 		template <typename ...args> type Call##name##Method(\
@@ -297,6 +334,7 @@ namespace jniq {
 		}
 		H( void, Void );
 		H( jint, Int );
+		H( jlong, Long );
 # undef H
 	};
 }

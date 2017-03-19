@@ -32,4 +32,6 @@ const char *jniobj::java::io::sPrintStream::Name_ = JAVA_IO  "PrintStream";
 const char *jniobj::java::io::sInputStream::Name_ = JAVA_IO  "InputStream";
 
 #define JAVA_LANG JAVA "lang" S
+const char *jniobj::java::lang::sInteger::Name_ = JAVA_LANG "Integer";
+const char *jniobj::java::lang::sLong::Name_ = JAVA_LANG "Long";
 const char *jniobj::java::lang::sSystem::Name_ = JAVA_LANG "System";

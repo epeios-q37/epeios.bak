@@ -83,7 +83,7 @@ jobject scljre::Launch_(
 	int Index,
 	jobjectArray Args )
 {
-	jobject Result;
+	jobject Result = NULL;
 qRFH
 	sArguments Arguments;
 qRFB

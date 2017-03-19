@@ -69,7 +69,7 @@ namespace jniobj {
 			JNIEnv *Env,\
 			jobject Object )\
 		{\
-			return sObject_::Init( Env, Object, Name_ );\
+			return sObject_::Init( Env, Object, Name_, false );\
 		}
 
 # define CF	}
@@ -95,15 +95,15 @@ namespace jniobj {
 				}
 			CF;
 			CH( InputStream )
-				int Read( JNIEnv *Env ) const
+				jint Read( JNIEnv *Env ) const
 				{
 					return CallIntMethod( Env, "read", "()I" );
 				}
-			int Read(
-				JNIEnv *Env,
-				jbyteArray b,
-				jint off,
-				jint len ) const
+				jint Read(
+					JNIEnv *Env,
+					jbyteArray b,
+					jint off,
+					jint len ) const
 				{
 					return CallIntMethod( Env, "read", "([BII)I", b, off, len );
 				}
@@ -111,6 +111,42 @@ namespace jniobj {
 		}
 
 		namespace lang {
+			CH( Integer )
+				sInteger(
+					JNIEnv *Env,
+					jint Value )
+				{
+					Init( Env, Value );
+				}
+				void Init(
+					JNIEnv *Env,
+					jint Value )
+				{
+					return sObject::Init( Env, Name_, "(I)V", Value );
+				}
+				jint IntValue( JNIEnv *Env ) const
+				{
+					return CallIntMethod(Env, "intValue", "()I");
+				}
+			CF;
+			CH( Long )
+				sLong(
+					JNIEnv *Env,
+					jlong Value )
+				{
+					Init( Env, Value );
+				}
+				void Init(
+					JNIEnv *Env,
+					jlong Value )
+				{
+					return sObject::Init( Env, Name_, "(J)V", Value );
+				}
+				jlong LongValue( JNIEnv *Env ) const
+				{
+					return CallLongMethod(Env, "longValue", "()J");
+				}
+			CF;
 			CH( System )
 				static io::sPrintStream Out( JNIEnv *Env )
 				{

@@ -55,7 +55,7 @@ namespace scljre {
 		void Init( jobjectArray Args )
 		{
 			Args_ = Args;
-			Index_ = 1;	// First is skipped because it cointains the function index.
+			Index_ = 0;
 		}
 		jobject Get( JNIEnv *Env ) const
 		{
@@ -65,7 +65,7 @@ namespace scljre {
 			if ( Index_ >= Env->GetArrayLength( Args_ ) )
 				qRFwk();
 
-			return Env->GetObjectArrayElement( Args_, Index_ );
+			return Env->GetObjectArrayElement( Args_, Index_++ );
 		}
 	};
 
@@ -82,6 +82,13 @@ namespace scljre {
 		{
 		}
 		void Register( sFunction_ Function );
+		template <typename function, typename ...functions> void Register(
+			function Function,
+			functions... Functions )
+		{
+			Register( Function );
+			Register( Functions... );
+		}
 	};
 
 	void SCLJRERegister( sRegistrar &Registrar );	// To overload by user.
@@ -96,13 +103,13 @@ namespace scljre {
 		scljre::Register_( Env );\
 	}\
 \
-	extern "C" JNIEXPORT void JNICALL Java_##name##_wrapper(\
+	extern "C" JNIEXPORT jobject JNICALL Java_##name##_wrapper(\
 		JNIEnv *Env,\
 		jclass,\
 		jint Index,\
 		jobjectArray Args )\
 	{\
-		scljre::Launch_( Env, Index, Args );\
+		return scljre::Launch_( Env, Index, Args );\
 	}
 
 

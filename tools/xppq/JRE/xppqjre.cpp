@@ -315,26 +315,6 @@ ERRJEpilog
 SCLJRE_DEF( XPPQ );
 
 namespace {
-	jobject Test0_(
-		JNIEnv *Env,
-		const scljre::sArguments & )
-	{
-		Print_( Env, "Youhou !!!");
-
-		return NULL;
-	}
-
-	jobject Test1_(
-		JNIEnv *Env,
-		const scljre::sArguments & )
-	{
-		Print_( Env, "Youploom !");
-
-		return NULL;
-	}
-}
-
-namespace {
 	typedef fdr::rIDressedDriver rIDriver_;
 
 	class rInputStreamIDriver
@@ -351,8 +331,8 @@ namespace {
 		qRH
 			jbyteArray Array = NULL;
 		qRB
-			if ( Maximum > BSO_U32_MAX )
-				Maximum = BSO_S32_MAX;
+			if ( Maximum > 5 )
+				Maximum = 5;
 
 			Array = E_()->NewByteArray( (jint)Maximum );
 
@@ -361,7 +341,10 @@ namespace {
 
 			Maximum = Stream_.Read( E_(), Array, 0, (jint)Maximum );
 
-			E_()->GetByteArrayRegion( Array, 0, (jint)Maximum, (jbyte *)Buffer );
+			if ( Maximum != -1 )
+				E_()->GetByteArrayRegion( Array, 0, (jint)Maximum, (jbyte *)Buffer );
+			else
+				Maximum = 0;
 		qRR
 		qRT
 			// No need to 'delete' 'Array'.
@@ -434,15 +417,34 @@ namespace {
 
 		Processor->Init( Env, Args.Get( Env ) );
 
-		return Env->NewObject( Env->FindClass( "java/lang/Long" ), jniq::GetMethodID( Env, Env->FindClass( "java/lang/Long" ), "<init>", "(J)V" ), (jlong)Processor );
+		return jniobj::java::lang::sLong( Env, (jlong)Processor );
+	}
+
+	jobject Delete_(
+		JNIEnv *Env,
+		const scljre::sArguments &Args )
+	{
+		delete (rProcessor *)jniobj::java::lang::sLong(Env, Args.Get( Env ) ).LongValue( Env );
+
+		return NULL;
+	}
+
+	jobject Read_(
+		JNIEnv *Env,
+		const scljre::sArguments &Args )
+	{
+		rProcessor &Processor = *(rProcessor *)jniobj::java::lang::sLong(Env, Args.Get( Env ) ).LongValue( Env );
+
+		if ( Processor.IsEOF() )
+			return jniobj::java::lang::sInteger( Env, (jint)-1 );
+		else
+			return jniobj::java::lang::sInteger( Env, Processor.Get() );
 	}
 }
 
 void scljre::SCLJRERegister( sRegistrar &Registrar )
 {
-	Registrar.Register( Test0_ );
-	Registrar.Register( Test1_ );
-	Registrar.Register( New_ );
+	Registrar.Register( New_,  Delete_,  Read_ );
 }
 
 

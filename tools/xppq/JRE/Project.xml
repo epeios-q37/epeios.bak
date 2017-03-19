@@ -20,12 +20,6 @@
   <Modules Group="Epeios" Path="h:/hg/epeios/stable/">
    <Modules Group="Core">
     <xpp:expand select="Core"/>
-    <Modules Group="SCL">
-     <xpp:expand select="SCL"/>
-    </Modules>
-    <Modules Group="JRE">
-     <xpp:expand select="JRE"/>
-    </Modules>
     <Module>bomhdl</Module>
     <Module>cdgb64</Module>
     <Module>fil</Module>
@@ -35,6 +29,12 @@
     <Module>stsfsm</Module>
     <Module>xml</Module>
     <Module>xpp</Module>
+   </Modules>
+   <Modules Group="SCL">
+    <xpp:expand select="SCL"/>
+   </Modules>
+   <Modules Group="JRE">
+    <xpp:expand select="JRE"/>
    </Modules>
   </Modules>
  </Modules>
