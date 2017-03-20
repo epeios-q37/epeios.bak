@@ -56,7 +56,9 @@ class XPPQ extends java.io.InputStream {
 	public static void main ( String[] args ) throws Exception
 	{
 		DisplayCompilationTime();
-		System.loadLibrary("x64/Debug/xppqjre");
+		System.out.println( System.getProperty("java.library.path")  );
+		System.out.println( System.getProperty("os.arch")  );
+		System.loadLibrary("xppqjre");
 		register();
 		XPPQ xppq = new XPPQ( new java.io.FileInputStream( "demo.xml" ) );
 		int c = 0;

@@ -19,8 +19,7 @@
     along with 'jexpp'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "jniq.h"
-#include "jniobj.h"
+#include "jre.h"
 
 #include "sclmisc.h"
 #include "scljre.h"
@@ -315,70 +314,10 @@ ERRJEpilog
 SCLJRE_DEF( XPPQ );
 
 namespace {
-	typedef fdr::rIDressedDriver rIDriver_;
-
-	class rInputStreamIDriver
-	: public rIDriver_
-	{
-	private:
-		jniobj::java::io::sInputStream Stream_;
-		qPMV( JNIEnv, E_, Env_ );
-	protected:
-		virtual fdr::sSize FDRRead(
-			fdr::sSize Maximum,
-			fdr::sByte *Buffer ) override
-		{
-		qRH
-			jbyteArray Array = NULL;
-		qRB
-			if ( Maximum > 5 )
-				Maximum = 5;
-
-			Array = E_()->NewByteArray( (jint)Maximum );
-
-			if ( Array == NULL )
-				qRAlc();
-
-			Maximum = Stream_.Read( E_(), Array, 0, (jint)Maximum );
-
-			if ( Maximum != -1 )
-				E_()->GetByteArrayRegion( Array, 0, (jint)Maximum, (jbyte *)Buffer );
-			else
-				Maximum = 0;
-		qRR
-		qRT
-			// No need to 'delete' 'Array'.
-		qRE
-			return Maximum;
-		}
-		virtual void FDRDismiss( bso::sBool Unlock ) override
-		{}
-		virtual fdr::sTID FDRITake( fdr::sTID Owner ) override
-		{
-			return Owner;
-		}
-	public:
-		void reset( bso::sBool P = true )
-		{
-			rIDriver_::reset( P );
-			tol::reset( P, Stream_ );
-			Env_ = NULL;
-		}
-		qCVDTOR( rInputStreamIDriver );
-		void Init(
-			JNIEnv *Env,
-			jobject Stream )
-		{
-			rIDriver_::Init( fdr::ts_Default );
-			Stream_.Init( Env, Stream );
-			Env_ = Env;
-		}
-	};
-
 	class rProcessor
 	{
 	private:
-		rInputStreamIDriver Input_;
+		jre::rInputStreamIDriver Input_;
 		flw::sDressedIFlow<> Flow_;
 		xtf::extended_text_iflow__ XFlow_;
 		xpp::preprocessing_iflow___ PFlow_;

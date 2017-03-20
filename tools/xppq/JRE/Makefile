@@ -40,7 +40,7 @@ mods += bomhdl cdgb64 fil fnm lcl
 mods += rgstry stsfsm xml xpp 
 mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
 mods += scljre 
-mods += jniq jniobj 
+mods += jniq jniobj jre 
 
 pmods += pllio 
 
@@ -79,6 +79,8 @@ Android=Android
 os=$(shell uname -o 2>/dev/null || uname -s)
 mach=$(shell uname -m)
 
+jdk = $(JDK)
+      
 
 ##########################
 # For Cygwin environment #
@@ -349,7 +351,7 @@ ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20170319"\"
+copt += -DVERSION=\""20170320"\"
 copt += -DCOPYRIGHT_YEARS=\""2007-2017"\"
 copt += -DIDENTIFIER=\"""\"
 
@@ -362,6 +364,8 @@ else
 endif
 
     
+src += :"$(jdk)include"
+      
 ox = o
 ds = :
 
