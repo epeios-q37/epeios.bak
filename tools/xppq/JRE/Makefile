@@ -339,6 +339,7 @@ ifeq ("$(os)","$(MacOS)")
 	endif
 	binary=lib$(name).dylib
 	lo += -dynamiclib
+	src += :"$(jdk)/include/darwin"
 
 	dest=/Users/csimon/bin/
 endif
