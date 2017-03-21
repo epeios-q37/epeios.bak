@@ -67,9 +67,10 @@ namespace jniobj {
 		}\
 		void Init(\
 			JNIEnv *Env,\
-			jobject Object )\
+			jobject Object,\
+			bso::sBool Take = false )\
 		{\
-			return sObject_::Init( Env, Object, Name_, false );\
+			return sObject_::Init( Env, Object, Name_, Take );\
 		}
 
 # define CF	}
@@ -146,6 +147,8 @@ namespace jniobj {
 				{
 					return CallLongMethod(Env, "longValue", "()J");
 				}
+			CF;
+			CH( String )
 			CF;
 			CH( System )
 				static io::sPrintStream Out( JNIEnv *Env )

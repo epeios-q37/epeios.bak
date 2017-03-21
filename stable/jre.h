@@ -34,6 +34,26 @@
 # include "fdr.h"
 
 namespace jre {
+
+	typedef jniobj::java::lang::sString sString_;
+
+	class rString
+	: public sString_
+	{
+	public:
+		void reset( bso::sBool P = true )
+		{
+			sString_::reset( P );
+		}
+		qCDTOR( rString );
+		void Init(
+			JNIEnv *Env, 
+			const char *Text )
+		{
+			sString::Init(Env, Env->NewStringUTF( Text ), true );
+		}
+	};
+
 	typedef fdr::rIDressedDriver rIDriver_;
 
 	class rInputStreamIDriver

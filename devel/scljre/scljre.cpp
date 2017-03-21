@@ -28,6 +28,43 @@
 using namespace scljre;
 
 namespace {
+	void Info_(str::dString Info )
+	{
+		qRH
+			flx::rStringOFlow BaseFlow;
+			txf::sOFlow Flow;
+		qRB
+			BaseFlow.Init( Info );
+			Flow.Init( BaseFlow );
+
+			Flow << sclmisc::SCLMISCProductName << " v" << SCLNJSProductVersion << " - Node v" NODE_VERSION_STRING " ABI v" NODE_STRINGIFY( NODE_MODULE_VERSION )  << txf::nl
+					<< txf::pad << "Build : " __DATE__ " " __TIME__ " (" <<  cpe::GetDescription() << ')';
+		qRR
+		qRT
+		qRE
+
+	}
+
+	jstring Info_( JNIEnv *Env )
+	{
+		qRH
+			flx::rStringOFlow BaseFlow;
+			txf::sOFlow Flow;
+		qRB
+			BaseFlow.Init( Info );
+			Flow.Init( BaseFlow );
+
+			Flow << sclmisc::SCLMISCProductName << " v" << SCLNJSProductVersion << " - Node v" NODE_VERSION_STRING " ABI v" NODE_STRINGIFY( NODE_MODULE_VERSION )  << txf::nl
+					<< txf::pad << "Build : " __DATE__ " " __TIME__ " (" <<  cpe::GetDescription() << ')';
+		qRR
+		qRT
+		qRE
+
+	}
+}
+
+
+namespace {
 	bch::qBUNCHwl( sFunction_ ) Functions_;
 }
 

@@ -33,6 +33,8 @@
 # include "err.h"
 
 namespace scljre {
+	jstring Info_( JNIEnv *Env );
+
 	void Register_( JNIEnv *Env );
 
 	jobject Launch_(

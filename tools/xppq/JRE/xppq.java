@@ -19,57 +19,72 @@
     along with 'XMLPreprocessorDemo.java'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-class XPPQ extends java.io.InputStream {
-	private Object processor;
-	private static void DisplayCompilationTime() throws Exception
-	{
-		System.out.println( new java.util.Date(new java.io.File(XPPQ.class.getClassLoader().getResource(XPPQ.class.getCanonicalName().replace('.', '/') + ".class").toURI()).lastModified()) );
-	}
-
+class XPPQ {
 	native private static void register();
 	native private static Object wrapper(
 		int index,
 		Object... objects);
 		
-	private void get( java.io.InputStream Stream )
+	static
 	{
-		processor = wrapper( 0, Stream );
+		System.loadLibrary("xppqjre");
+		register();
 	}
 	
-	private void release()
+	public Object getPreprocessor( java.io.InputStream stream )
 	{
-		wrapper( 1, processor );
-		
-		processor = null;
+		return wrapper( 0, stream );
+	}
+	
+	public void releasePreprocessor( Object object )
+	{
+		wrapper( 1, object );
+	}
+	
+	public int readFromPreprocessor( Object object )
+	{
+		return ((java.lang.Integer)wrapper( 2, object ) ).intValue();
+	}
+
+	public void finalize()
+	{
+	}
+}
+
+class XPPQPreprocessor extends java.io.InputStream {
+	private XPPQ xppq;
+	private Object processor;
+	public XPPQPreprocessor( java.io.InputStream Stream )
+	{
+		xppq = new XPPQ();
+		processor = xppq.getPreprocessor( Stream );
 	}
 	
 	public int read()
 	{
-		return ((java.lang.Integer)wrapper( 2, processor )).intValue();
+		return xppq.readFromPreprocessor( processor );
 	}
 	
-	public XPPQ( java.io.InputStream Stream )
+	public void finalize()
 	{
-		get( Stream );
+		xppq.releasePreprocessor( processor );
+	}
+}
+
+class XPPQDemo {
+	private static void DisplayCompilationTime() throws Exception
+	{
+		System.out.println( new java.util.Date(new java.io.File(XPPQDemo.class.getClassLoader().getResource(XPPQDemo.class.getCanonicalName().replace('.', '/') + ".class").toURI()).lastModified()) );
 	}
 
 	public static void main ( String[] args ) throws Exception
 	{
 		DisplayCompilationTime();
-		System.out.println( System.getProperty("java.library.path")  );
-		System.out.println( System.getProperty("os.arch")  );
-		System.loadLibrary("xppqjre");
-		register();
-		XPPQ xppq = new XPPQ( new java.io.FileInputStream( "demo.xml" ) );
+		XPPQPreprocessor xppq = new XPPQPreprocessor( new java.io.FileInputStream( "demo.xml" ) );
 		int c = 0;
 		while((c = xppq.read()) != -1) {
 		  System.out.print((char)c);
 		}
-	}
-	
-	public void finalize()
-	{
-		release();
 	}
 }
 
