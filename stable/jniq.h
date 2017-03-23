@@ -40,23 +40,34 @@
 #  undef H
 # endif
 
-
 namespace jniq {
+	void SetGlobalEnv( JNIEnv *Env );
+
+	JNIEnv *GetGlobalEnv( void );
+
+	inline JNIEnv *GetEnv( JNIEnv *Env = NULL )
+	{
+		if ( Env == NULL )
+			return GetGlobalEnv();
+		else
+			return Env;
+	}
+
 	const str::string_ &Convert(
 		jstring JString,
-		JNIEnv *Env,
-		str::string_ &String );
+		str::string_ &String,
+		JNIEnv *Env = NULL );
 
 	const char *Convert(
 		jstring JString,
-		JNIEnv *Env,
-		qCBUFFERr &Buffer );
+		qCBUFFERr &Buffer,
+		JNIEnv *Env = NULL );
 
 	inline jclass FindClass(
-		JNIEnv *Env,
-		const char *Name )
+		const char *Name,
+		JNIEnv *Env = NULL )
 	{
-		jclass Class = Env->FindClass( Name );
+		jclass Class = GetEnv( Env )->FindClass( Name );
 
 		if ( Class == NULL )
 			qRFwk();
@@ -65,10 +76,10 @@ namespace jniq {
 	}
 
 	inline jclass GetClass(
-		JNIEnv *Env,
-		jobject Object )
+		jobject Object,
+		JNIEnv *Env = NULL )
 	{
-		jclass Class = Env->GetObjectClass( Object );
+		jclass Class = GetEnv( Env )->GetObjectClass( Object );
 
 		if ( Class == NULL )
 			qRLbr();
@@ -77,12 +88,12 @@ namespace jniq {
 	}
 
 	inline jmethodID GetMethodID(
-		JNIEnv *Env,
 		jclass Class,
 		const char *Name,
-		const char *Signature )
+		const char *Signature,
+		JNIEnv *Env = NULL )
 	{
-		jmethodID MethodID = Env->GetMethodID( Class, Name, Signature );
+		jmethodID MethodID = GetEnv( Env )->GetMethodID( Class, Name, Signature );
 
 		if ( MethodID == NULL )
 			qRLbr();
@@ -91,21 +102,23 @@ namespace jniq {
 	}
 
 	inline jmethodID GetMethodID(
-		JNIEnv *Env,
 		jobject Object,
 		const char *Name,
-		const char *Signature )
+		const char *Signature,
+		JNIEnv *Env = NULL )
 	{
-		return GetMethodID( Env, GetClass( Env, Object ), Name, Signature );
+		Env = GetEnv( Env );
+
+		return GetMethodID( GetClass( Object, Env ), Name, Signature, Env );
 	}
 
 	inline jmethodID GetStaticMethodID(
-		JNIEnv *Env,
 		jclass Class,
 		const char *Name,
-		const char *Signature )
+		const char *Signature,
+		JNIEnv *Env = NULL )
 	{
-		jmethodID MethodID = Env->GetStaticMethodID( Class, Name, Signature );
+		jmethodID MethodID = GetEnv( Env )->GetStaticMethodID( Class, Name, Signature );
 
 		if ( MethodID == NULL )
 			qRLbr();
@@ -114,21 +127,23 @@ namespace jniq {
 	}
 
 	inline jmethodID GetStaticMethodID(
-		JNIEnv *Env,
 		jobject Object,
 		const char *Name,
-		const char *Signature )
+		const char *Signature,
+		JNIEnv *Env = NULL )
 	{
-		return GetStaticMethodID( Env, GetClass( Env, Object ), Name, Signature );
+		Env = GetEnv( Env );
+
+		return GetStaticMethodID( GetClass( Object, Env ), Name, Signature, Env );
 	}
 
 	inline jfieldID GetFieldID(
-		JNIEnv *Env,
 		jclass Class,
 		const char *Name,
-		const char *Signature )
+		const char *Signature,
+		JNIEnv *Env = NULL )
 	{
-		jfieldID FieldID = Env->GetFieldID( Class, Name, Signature );
+		jfieldID FieldID = GetEnv( Env )->GetFieldID( Class, Name, Signature );
 
 		if ( FieldID == NULL )
 			qRLbr();
@@ -137,21 +152,22 @@ namespace jniq {
 	}
 
 	inline jfieldID GetFieldID(
-		JNIEnv *Env,
 		jobject Object,
 		const char *Name,
-		const char *Signature )
+		const char *Signature,
+		JNIEnv *Env = NULL )
 	{
-		return GetFieldID( Env, GetClass( Env, Object ), Name, Signature );
+		Env = GetEnv( Env );
+		return GetFieldID( GetClass( Object, Env ), Name, Signature, Env );
 	}
 
 	inline jfieldID GetStaticFieldID(
-		JNIEnv *Env,
 		jclass Class,
 		const char *Name,
-		const char *Signature )
+		const char *Signature,
+		JNIEnv *Env = NULL )
 	{
-		jfieldID FieldID = Env->GetStaticFieldID( Class, Name, Signature );
+		jfieldID FieldID = GetEnv( Env )->GetStaticFieldID( Class, Name, Signature );
 
 		if ( FieldID == NULL )
 			qRLbr();
@@ -160,44 +176,54 @@ namespace jniq {
 	}
 
 	inline jint GetIntField(
-		JNIEnv *Env,
 		jobject Object,
-		const char *Name )
+		const char *Name,
+		JNIEnv *Env = NULL )
 	{
-		return Env->GetIntField( Object, GetFieldID( Env, Object, Name, "I" ) );
+		Env = GetEnv( Env );
+
+		return Env->GetIntField( Object, GetFieldID( Object, Name, "I", Env ) );
 	}
 
 	inline jint GetStaticIntField(
-		JNIEnv *Env,
 		jclass Class,
-		const char *Name )
+		const char *Name,
+		JNIEnv *Env = NULL )
 	{
-		return Env->GetStaticIntField( Class, GetStaticFieldID( Env, Class, Name, "I" ) );
+		Env = GetEnv( Env );
+
+		return Env->GetStaticIntField( Class, GetStaticFieldID( Class, Name, "I", Env ) );
 	}
 
 	inline jlong GetLongField(
-		JNIEnv *Env,
 		jobject Object,
-		const char *Name )
+		const char *Name,
+		JNIEnv *Env = NULL )
 	{
-		return Env->GetLongField( Object, GetFieldID( Env, Object, Name, "J" ) );
+		Env = GetEnv( Env );
+
+		return Env->GetLongField( Object, GetFieldID( Object, Name, "J", Env ) );
 	}
 
 	inline jlong GetStaticLongField(
-		JNIEnv *Env,
 		jclass Class,
-		const char *Name )
+		const char *Name,
+		JNIEnv *Env = NULL )
 	{
-		return Env->GetStaticLongField( Class, GetStaticFieldID( Env, Class, Name, "J" ) );
+		Env = GetEnv( Env );
+
+		return Env->GetStaticLongField( Class, GetStaticFieldID( Class, Name, "J", Env ) );
 	}
 
 	inline jobject GetObjectField(
-		JNIEnv *Env,
 		jobject Object,
 		const char *Name,
-		const char *Signature )
+		const char *Signature,
+		JNIEnv *Env = NULL )
 	{
-		jobject Field = Env->GetObjectField( Object, GetFieldID( Env, Object, Name, Signature ) );
+		Env = GetEnv( Env );
+
+		jobject Field = Env->GetObjectField( Object, GetFieldID( Object, Name, Signature, Env ) );
 
 		if ( Field == NULL )
 			qRLbr();
@@ -206,12 +232,14 @@ namespace jniq {
 	}
 
 	inline jobject GetStaticObjectField(
-		JNIEnv *Env,
 		jclass Class,
 		const char *Name,
-		const char *Signature )
+		const char *Signature,
+		JNIEnv *Env = NULL )
 	{
-		jobject Object = Env->GetStaticObjectField( Class, GetStaticFieldID( Env, Class, Name, Signature ) );;
+		Env = GetEnv( Env);
+
+		jobject Object = Env->GetStaticObjectField( Class, GetStaticFieldID( Class, Name, Signature, Env ) );
 
 		if ( Object == NULL )
 			qRLbr();
@@ -220,117 +248,145 @@ namespace jniq {
 	}
 
 	inline jobject GetStaticObjectField(
-		JNIEnv *Env,
 		const char *ClassName,
 		const char *Name,
-		const char *Signature )
+		const char *Signature,
+		JNIEnv *Env = NULL )
 	{
-		return GetStaticObjectField( Env, FindClass( Env, ClassName ), Name, Signature );
+		Env = GetEnv( Env );
+
+		return GetStaticObjectField( FindClass( ClassName, Env ), Name, Signature, Env );
 	}
 
 	inline void SetIntField(
-		JNIEnv *Env,
 		jobject Object,
 		const char *Name,
-		jint Value )
+		jint Value,
+		JNIEnv *Env = NULL )
 	{
-		Env->SetIntField( Object, GetFieldID( Env, Object, Name, "J" ), Value );
+		Env = GetEnv( Env );
+
+		Env->SetIntField( Object, GetFieldID( Object, Name, "J", Env ), Value );
 	}
 
 	inline void SetLongField(
-		JNIEnv *Env,
 		jobject Object,
 		const char *Name,
-		jlong Value )
+		jlong Value,
+		JNIEnv *Env = NULL )
 	{
-		Env->SetLongField( Object, GetFieldID( Env, Object, Name, "J" ), Value );
+		Env = GetEnv( Env );
+
+		Env->SetLongField( Object, GetFieldID( Object, Name, "J", Env ), Value );
 	}
 
 	inline void SetObjectField(
-		JNIEnv *Env,
 		jobject Object,
 		const char *Name,
 		const char *Signature,
-		jobject Value )
+		jobject Value,
+		JNIEnv *Env = NULL )
 	{
 		if ( ( Signature == NULL )
 			  || ( Signature[0] == 0 )
-			  ||( Signature[strlen( Signature )-1] != ';' ) )
+			  || ( Signature[strlen( Signature )-1] != ';' ) )
 			qRFwk();
 
-		Env->SetObjectField( Object, GetFieldID( Env, Object, Name, Signature ), Value );
+		Env = GetEnv( Env );
+
+		Env->SetObjectField( Object, GetFieldID( Object, Name, Signature ), Value );
 	}
 
 	class sObject
 	{
 	private:
 		qPMV( _jobject, O_, Object_ );
-		JNIEnv *Env_;	// Jusrt for the destructor.
 	public:
 		void reset( bso::sBool P = true )
 		{
 			if ( P ) { 
-				if ( Object_ != NULL )
-					if ( Env_ != NULL  )
-						Env_->DeleteGlobalRef( Object_ );
+				GetEnv( NULL )->DeleteGlobalRef( Object_ );
 			}
 				
 			Object_ = NULL;
-			Env_ = NULL;
 		}
 		qCDTOR( sObject );
 		void Init(
-			JNIEnv *Env,
 			jobject Object,
 			jclass Class,
-			bso::sBool Take )
+			JNIEnv *Env = NULL )
 		{
+			Env = GetEnv( Env );
+
 			if ( !Env->IsInstanceOf( Object, Class ) )
 				qRFwk();
 
-			if ( Take )
-				Object_ = Object;
-			else {
-				Object_ = Env->NewGlobalRef( Object );
-				Env_ = Env;
-			}
+			Object_ = Env->NewGlobalRef( Object );
 		}
 		void Init(
-			JNIEnv *Env,
 			jobject Object,
 			const char *Class,
-			bso::sBool Take )
+			JNIEnv *Env = NULL )
 		{
-			return Init( Env, Object, FindClass( Env, Class ), Take );
+			Env = GetEnv( Env );
+
+			return Init( Object, FindClass( Class, Env ), Env );
 		}
 		operator jobject( void )
 		{
 			return O_();
 		}
 		template <typename ...args> void Init(
+			jclass Class,
+			const char *Signature,
 			JNIEnv *Env,
+			args... Args )
+		{
+			Env = GetEnv( Env );
+
+			return Init( Env->NewObject( Class, GetMethodID( Class, "<init>", Signature, Env ), Args... ), Class, Env );
+		}
+		template <typename ...args> void Init(
 			jclass Class,
 			const char *Signature,
 			args... Args )
 		{
-			Init( Env, Env->NewObject( Class, GetMethodID( Env, Class, "<init>", Signature ), Args... ), Class, true );
+			return Init( Class, Signature, NULL, Args... );
 		}
 		template <typename ...args> void Init(
+			const char *ClassName,
+			const char *Signature,
 			JNIEnv *Env,
+			args... Args )
+		{
+			Env = GetEnv( Env );
+
+			return Init( FindClass( ClassName, Env ), Signature, Env, Args... );
+		}
+		template <typename ...args> void Init(
 			const char *ClassName,
 			const char *Signature,
 			args... Args )
 		{
-			return Init(Env, FindClass( Env, ClassName ), Signature, Args... );
+			return Init(  ClassName, Signature, (JNIEnv *)NULL, Args... );
 		}
 # define H( type, name )\
 		template <typename ...args> type Call##name##Method(\
+			const char *Method,\
+			const char *Signature,\
 			JNIEnv *Env,\
+			args... Args ) const\
+		{\
+			Env = GetEnv( Env );\
+\
+			return Env->Call##name##Method( O_(), GetMethodID( O_(), Method, Signature, Env ), Args... );\
+		}\
+		template <typename ...args> type Call##name##Method(\
 			const char *Method,\
 			const char *Signature,\
 			args... Args ) const\
 		{\
-			return Env->Call##name##Method( O_(), GetMethodID( Env, O_(), Method, Signature ), Args... );\
+			return Call##name##Method( Method, Signature, (JNIEnv *)NULL, Args... );\
 		}
 		H( void, Void );
 		H( jint, Int );

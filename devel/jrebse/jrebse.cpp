@@ -17,21 +17,22 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define JNIOBJ_COMPILATION_
+#define JREBSE_COMPILATION_
 
-#include "jniobj.h"
+#include "jrebse.h"
 
-using namespace jniobj;
+using namespace jrebse;
 
 #define S "/"
 
 #define JAVA "java" S
 
 #define JAVA_IO JAVA "io" S
-const char *jniobj::java::io::sPrintStream::Name_ = JAVA_IO  "PrintStream";
-const char *jniobj::java::io::sInputStream::Name_ = JAVA_IO  "InputStream";
+const char *jrebse::java::io::sPrintStream::Name_ = JAVA_IO  "PrintStream";
+const char *jrebse::java::io::sInputStream::Name_ = JAVA_IO  "InputStream";
 
 #define JAVA_LANG JAVA "lang" S
-const char *jniobj::java::lang::sInteger::Name_ = JAVA_LANG "Integer";
-const char *jniobj::java::lang::sLong::Name_ = JAVA_LANG "Long";
-const char *jniobj::java::lang::sSystem::Name_ = JAVA_LANG "System";
+const char *jrebse::java::lang::sInteger::Name_ = JAVA_LANG "Integer";
+const char *jrebse::java::lang::sLong::Name_ = JAVA_LANG "Long";
+const char *jrebse::java::lang::sSystem::Name_ = JAVA_LANG "System";
+

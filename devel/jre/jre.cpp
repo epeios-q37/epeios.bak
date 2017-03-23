@@ -29,19 +29,22 @@ fdr::sSize jre::rInputStreamIDriver::FDRRead(
 {
 qRH
 	jbyteArray Array = NULL;
+	JNIEnv *Env = NULL;
 qRB
 	if ( Maximum > 5 )
 		Maximum = 5;
 
-	Array = E_()->NewByteArray( (jint)Maximum );
+	Env = jniq::GetEnv( NULL );
+
+	Array = Env->NewByteArray( (jint)Maximum );
 
 	if ( Array == NULL )
 		qRAlc();
 
-	Maximum = Stream_.Read( E_(), Array, 0, (jint)Maximum );
+	Maximum = Stream_.Read( Array, 0, (jint)Maximum, Env );
 
 	if ( Maximum != -1 )
-		E_()->GetByteArrayRegion( Array, 0, (jint)Maximum, (jbyte *)Buffer );
+		Env->GetByteArrayRegion( Array, 0, (jint)Maximum, (jbyte *)Buffer );
 	else
 		Maximum = 0;
 qRR

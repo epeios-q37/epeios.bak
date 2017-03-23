@@ -36,7 +36,7 @@
 # define AUTHOR_CONTACT		"http://q37.info/contact/"
 # define OWNER_NAME			"Claude SIMON"
 # define OWNER_CONTACT		"http://q37.info/contact/"
-# define COPYRIGHT			COPYRIGHT_YEARS " " OWNER_NAME " (" OWNER_CONTACT ")"	
+# define COPYRIGHT			COPYRIGHT_YEARS " " OWNER_NAME " (" OWNER_CONTACT ")"
 
 /*
 static void Print_(
@@ -56,36 +56,30 @@ static void Print_(
 }
 */
 
-static void Print_(
-	JNIEnv *Env,
-	const char *Text )
+static void Print_( const char *Text )
 {
-	jniobj::java::lang::sSystem::Out( Env ).Println( Env, Text );
-	jniobj::java::lang::sSystem::Out( Env ).Flush( Env );
+	jre::java::lang::sSystem::Out().Println( Text );
+	jre::java::lang::sSystem::Out().Flush();
 }
 
 
-static void Print_(
-	JNIEnv *Env,
-	jobject Object )
+static void Print_( jobject Object )
 {
-	jniobj::java::lang::sSystem::Out( Env ).Println( Env, Object );
-	jniobj::java::lang::sSystem::Out( Env ).Flush( Env );
+	jre::java::lang::sSystem::Out().Println( Object );
+	jre::java::lang::sSystem::Out().Flush();
 }
 
 
-static void PrintNew_(
-	JNIEnv *Env,
-	jobject Object )
+static void PrintNew_( jobject Object )
 {
-	jniobj::java::io::sPrintStream Out;
+	jre::java::io::sPrintStream Out;
 
-	jclass System = Env->FindClass( "java/lang/System" );
+	jclass System = jniq::GetEnv( NULL )->FindClass( "java/lang/System" );
 
-	Out.Init( Env, jniq::GetStaticObjectField( Env, System, "out", "Ljava/io/PrintStream;" ) );
+	Out.Init( jniq::GetStaticObjectField( System, "out", "Ljava/io/PrintStream;" ) );
 
-	Out.Println(Env, Object );
-	Out.CallVoidMethod(Env, "flush", "()V", Object );
+	Out.Println( Object );
+	Out.CallVoidMethod( "flush", "()V", Object );
 }
 
 SCLJRE_DEF( XPPQ );
@@ -103,11 +97,9 @@ namespace {
 		{
 			tol::reset( P, Input_, Flow_, XFlow_, PFlow_ );
 		}
-		void Init(
-			JNIEnv *Env,
-			jobject InputStream )
+		void Init( jobject InputStream )
 		{
-			Input_.Init( Env, InputStream );
+			Input_.Init( InputStream );
 			Flow_.Init( Input_ );
 			XFlow_.Init( Flow_, utf::f_Default );
 			PFlow_.Init(XFlow_, xpp::criterions___( str::wString() ) );
@@ -131,16 +123,16 @@ namespace {
 		if ( Processor == NULL )
 			qRAlc();
 
-		Processor->Init( Env, Args.Get( Env ) );
+		Processor->Init( Args.Get() );
 
-		return jniobj::java::lang::sLong( Env, (jlong)Processor );
+		return jre::java::lang::sLong( (jlong)Processor );
 	}
 
 	jobject Delete_(
 		JNIEnv *Env,
 		const scljre::sArguments &Args )
 	{
-		delete (rProcessor *)jniobj::java::lang::sLong(Env, Args.Get( Env ) ).LongValue( Env );
+		delete (rProcessor *)jre::java::lang::sLong( Args.Get() ).LongValue();
 
 		return NULL;
 	}
@@ -149,12 +141,12 @@ namespace {
 		JNIEnv *Env,
 		const scljre::sArguments &Args )
 	{
-		rProcessor &Processor = *(rProcessor *)jniobj::java::lang::sLong(Env, Args.Get( Env ) ).LongValue( Env );
+		rProcessor &Processor = *(rProcessor *)jre::java::lang::sLong( Args.Get() ).LongValue();
 
 		if ( Processor.IsEOF() )
-			return jniobj::java::lang::sInteger( Env, (jint)-1 );
+			return jre::java::lang::sInteger( (jint)-1 );
 		else
-			return jniobj::java::lang::sInteger( Env, Processor.Get() );
+			return jre::java::lang::sInteger( Processor.Get() );
 	}
 }
 
@@ -166,3 +158,4 @@ void scljre::SCLJRERegister( sRegistrar &Registrar )
 
 const char *sclmisc::SCLMISCTargetName = NAME_LC;
 const char *sclmisc::SCLMISCProductName = NAME_MC;
+const char *scljre::SCLJREProductVersion = VERSION;

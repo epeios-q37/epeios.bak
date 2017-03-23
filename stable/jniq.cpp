@@ -23,14 +23,36 @@
 
 using namespace jniq;
 
+namespace {
+	JNIEnv *Env_ = NULL;
+}
+
+void jniq::SetGlobalEnv( JNIEnv *Env )
+{
+	if ( Env_ != NULL )
+		qRFwk();
+
+	Env_ = Env;
+}
+
+JNIEnv *jniq::GetGlobalEnv( void )
+{
+	if ( Env_ == NULL )
+		qRFwk();
+
+	return Env_;
+}
+
 const str::string_ &jniq::Convert(
 	jstring JString,
-	JNIEnv *Env,
-	str::string_ &String )
+	str::string_ &String,
+	JNIEnv *Env )
 {
 qRH
 	const char *Buffer = NULL;
 qRB
+	Env = GetEnv( Env );
+
 	if ( ( Buffer = Env->GetStringUTFChars( JString, NULL ) ) == NULL )
 		qRLbr();
 
@@ -45,15 +67,17 @@ qRE
 
 const char *jniq::Convert(
 	jstring JString,
-	JNIEnv *Env,
-	qCBUFFERr &Buffer )
+	qCBUFFERr &Buffer,
+	JNIEnv *Env )
 {
 qRH
 	str::string String;
 qRB
+	Env = GetEnv( Env );
+
 	String.Init();
 
-	Convert( JString, Env, String );
+	Convert( JString, String, Env );
 
 	String.Convert( Buffer );
 qRR

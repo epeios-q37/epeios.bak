@@ -40,7 +40,7 @@ mods += bomhdl cdgb64 fil fnm lcl
 mods += rgstry stsfsm xml xpp 
 mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
 mods += scljre 
-mods += jniq jniobj jre 
+mods += jniq jre jrebse 
 
 pmods += pllio 
 
@@ -352,7 +352,7 @@ ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20170320"\"
+copt += -DVERSION=\""20170323"\"
 copt += -DCOPYRIGHT_YEARS=\""2007-2017"\"
 copt += -DIDENTIFIER=\"""\"
 

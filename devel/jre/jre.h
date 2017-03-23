@@ -28,14 +28,16 @@
 #  define JRE_DBG
 # endif
 
-# include "jniobj.h"
+# include "jrebse.h"
 
 # include "err.h"
 # include "fdr.h"
 
 namespace jre {
 
-	typedef jniobj::java::lang::sString sString_;
+	using namespace jrebse;
+
+	typedef java::lang::sString sString_;
 
 	class rString
 	: public sString_
@@ -47,10 +49,12 @@ namespace jre {
 		}
 		qCDTOR( rString );
 		void Init(
-			JNIEnv *Env, 
-			const char *Text )
+			const char *Text,
+			JNIEnv *Env = NULL )
 		{
-			sString::Init(Env, Env->NewStringUTF( Text ), true );
+			Env = jniq::GetEnv( Env );
+
+			sString::Init( Env->NewStringUTF( Text ), Env );
 		}
 	};
 
@@ -60,8 +64,7 @@ namespace jre {
 	: public rIDriver_
 	{
 	private:
-		jniobj::java::io::sInputStream Stream_;
-		qPMV( JNIEnv, E_, Env_ );
+		java::io::sInputStream Stream_;
 	protected:
 		virtual fdr::sSize FDRRead(
 			fdr::sSize Maximum,
@@ -77,16 +80,14 @@ namespace jre {
 		{
 			rIDriver_::reset( P );
 			tol::reset( P, Stream_ );
-			Env_ = NULL;
 		}
 		qCVDTOR( rInputStreamIDriver );
 		void Init(
-			JNIEnv *Env,
-			jobject Stream )
+			jobject Stream,
+			JNIEnv *Env = NULL )
 		{
 			rIDriver_::Init( fdr::ts_Default );
-			Stream_.Init( Env, Stream );
-			Env_ = Env;
+			Stream_.Init( Stream, Env );
 		}
 	};
 }

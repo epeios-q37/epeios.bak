@@ -33,6 +33,8 @@
 # include "err.h"
 
 namespace scljre {
+	jstring Info_( JNIEnv *Env );
+
 	void Register_( JNIEnv *Env );
 
 	jobject Launch_(
@@ -57,10 +59,12 @@ namespace scljre {
 			Args_ = Args;
 			Index_ = 0;
 		}
-		jobject Get( JNIEnv *Env ) const
+		jobject Get( JNIEnv *Env = NULL ) const
 		{
 			if ( Args_ == NULL )
 				qRFwk();
+
+			Env = jniq::GetEnv( Env );
 
 			if ( Index_ >= Env->GetArrayLength( Args_ ) )
 				qRFwk();
@@ -92,7 +96,7 @@ namespace scljre {
 	};
 
 	void SCLJRERegister( sRegistrar &Registrar );	// To overload by user.
-	extern const char *SCLNJSProductVersion;	// To define by user.
+	extern const char *SCLJREProductVersion;	// To define by user.
 }
 
 #define SCLJRE_DEF( name )\

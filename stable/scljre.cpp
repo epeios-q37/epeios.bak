@@ -25,7 +25,52 @@
 #include "scllocale.h"
 #include "sclmisc.h"
 
+#include "str.h"
+
 using namespace scljre;
+
+namespace {
+	namespace{
+		void Info_(
+			jint Version,
+			str::dString &Info )
+		{
+		qRH
+			flx::rStringOFlow BaseFlow;
+			txf::sOFlow Flow;
+		qRB
+			BaseFlow.Init( Info );
+			Flow.Init( BaseFlow );
+
+			Flow << sclmisc::SCLMISCProductName << " v" << SCLJREProductVersion << " - JNI v" << ( ( Version & 0xff00 ) >> 16 ) << '.' << ( Version & 0xff )  << txf::nl
+				<< txf::pad << "Build : " __DATE__ " " __TIME__ " (" <<  cpe::GetDescription() << ')';
+		qRR
+		qRT
+		qRE
+		}
+	}
+	/*
+	jstring Info_( JNIEnv *Env )
+	{
+	qRH
+		str::wString Info;
+	qRB
+		Info.Init();
+		GetInfo_(Env->GetVersion(), Info )
+		BaseFlow.Init( Info );
+		Flow.Init( BaseFlow );
+
+		Env->GetVersion
+
+		Flow << sclmisc::SCLMISCProductName << " v" << SCLNJSProductVersion << " - Node v" NODE_VERSION_STRING " ABI v" NODE_STRINGIFY( NODE_MODULE_VERSION )  << txf::nl
+				<< txf::pad << "Build : " __DATE__ " " __TIME__ " (" <<  cpe::GetDescription() << ')';
+	qRR
+	qRT
+	qRE
+	}
+	*/
+}
+
 
 namespace {
 	bch::qBUNCHwl( sFunction_ ) Functions_;
@@ -73,6 +118,8 @@ qRFB
 
 	Functions_.Init();
 	scljre::SCLJRERegister( Registrar );
+
+	jniq::SetGlobalEnv( Env );
 qRFR
 qRFT
 qRFE( ERRFinal_( Env ) )

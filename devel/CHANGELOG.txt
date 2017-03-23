@@ -1,5 +1,8 @@
 CHANGELOG for the 'Epeios' framework.
 
+2017-03-23 :
+- 'JNIOBJ' -> 'JREBSE'.
+
 2017-03-17 :
 - SCLN -> SCLNJS.
 - V8Q, SCLNJS
