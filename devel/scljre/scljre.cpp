@@ -21,6 +21,8 @@
 
 #include "scljre.h"
 
+#include "jre.h"
+
 #include "sclerror.h"
 #include "scllocale.h"
 #include "sclmisc.h"
@@ -31,7 +33,7 @@ using namespace scljre;
 
 namespace {
 	namespace{
-		void Info_(
+		void GetInfo_(
 			jint Version,
 			str::dString &Info )
 		{
@@ -49,27 +51,29 @@ namespace {
 		qRE
 		}
 	}
-	/*
-	jstring Info_( JNIEnv *Env )
+
+	jstring GetInfo_( JNIEnv *Env )
 	{
+		jre::sString JString;
 	qRH
 		str::wString Info;
 	qRB
 		Info.Init();
-		GetInfo_(Env->GetVersion(), Info )
-		BaseFlow.Init( Info );
-		Flow.Init( BaseFlow );
+		GetInfo_( Env->GetVersion(), Info );
 
-		Env->GetVersion
-
-		Flow << sclmisc::SCLMISCProductName << " v" << SCLNJSProductVersion << " - Node v" NODE_VERSION_STRING " ABI v" NODE_STRINGIFY( NODE_MODULE_VERSION )  << txf::nl
-				<< txf::pad << "Build : " __DATE__ " " __TIME__ " (" <<  cpe::GetDescription() << ')';
+		JString.Init( Info );
 	qRR
 	qRT
 	qRE
+		return JString;
 	}
-	*/
 }
+
+jstring scljre::Info_( JNIEnv *Env )
+{
+	return GetInfo_( Env );
+}
+
 
 
 namespace {

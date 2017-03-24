@@ -70,18 +70,6 @@ static void Print_( jobject Object )
 }
 
 
-static void PrintNew_( jobject Object )
-{
-	jre::java::io::sPrintStream Out;
-
-	jclass System = jniq::GetEnv( NULL )->FindClass( "java/lang/System" );
-
-	Out.Init( jniq::GetStaticObjectField( System, "out", "Ljava/io/PrintStream;" ) );
-
-	Out.Println( Object );
-	Out.CallVoidMethod( "flush", "()V", Object );
-}
-
 SCLJRE_DEF( XPPQ );
 
 namespace {

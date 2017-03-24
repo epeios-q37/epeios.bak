@@ -20,6 +20,7 @@
 */
 
 class XPPQ {
+	native public static String info();
 	native private static void register();
 	native private static Object wrapper(
 		int index,
@@ -79,6 +80,7 @@ class XPPQDemo {
 
 	public static void main ( String[] args ) throws Exception
 	{
+		System.out.println( XPPQ.info() );
 		DisplayCompilationTime();
 		XPPQPreprocessor xppq = new XPPQPreprocessor( new java.io.FileInputStream( "demo.xml" ) );
 		int c = 0;

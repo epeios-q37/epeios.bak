@@ -31,33 +31,160 @@
 # include "err.h"
 # include "jniq.h"
 
+# ifdef H
+#  #define JNIBSE_H_ H
+#  undef H
+# endif
+
+
 namespace jrebse {
-	typedef jniq::sObject sObject_;
+	class sObject_
+	{
+	protected:
+		qPMV( _jobject, O_, Object_ );
+		virtual void reset_( bso::sBool P = true )
+		{}
+		virtual jobject Init_(
+			jobject Object,
+			JNIEnv *Env )
+		{
+			return Object;
+		}
+	public:
+		void reset( bso::sBool P = true )
+		{
+			reset_( P );
+
+			Object_ = NULL;
+		}
+		qCDTOR( sObject_ );
+		void Init(
+			jobject Object,
+			jclass Class,
+			JNIEnv *Env = NULL )
+		{
+			Env = jniq::GetEnv( Env );
+
+			if ( !Env->IsInstanceOf( Object, Class ) )
+				qRFwk();
+
+			Object_ = Init_( Object, Env );
+		}
+		void Init(
+			jobject Object,
+			const char *Class,
+			JNIEnv *Env = NULL )
+		{
+			Env = jniq::GetEnv( Env );
+
+			return Init( Object, jniq::FindClass( Class, Env ), Env );
+		}
+		operator jobject( void )
+		{
+			return O_();
+		}
+		template <typename ...args> void Init(
+			jclass Class,
+			const char *Signature,
+			JNIEnv *Env,
+			args... Args )
+		{
+			Env = jniq::GetEnv( Env );
+
+			return Init( Env->NewObject( Class, jniq::GetMethodID( Class, "<init>", Signature, Env ), Args... ), Class, Env );
+		}
+		template <typename ...args> void Init(
+			jclass Class,
+			const char *Signature,
+			args... Args )
+		{
+			return Init( Class, Signature, NULL, Args... );
+		}
+		template <typename ...args> void Init(
+			const char *ClassName,
+			const char *Signature,
+			JNIEnv *Env,
+			args... Args )
+		{
+			Env = jniq::GetEnv( Env );
+
+			return Init( jniq::FindClass( ClassName, Env ), Signature, Env, Args... );
+		}
+		template <typename ...args> void Init(
+			const char *ClassName,
+			const char *Signature,
+			args... Args )
+		{
+			return Init(  ClassName, Signature, (JNIEnv *)NULL, Args... );
+		}
+		jobject Object( void ) const
+		{
+			return O_();
+		}
+# define H( type, name )\
+		template <typename ...args> type Call##name##Method(\
+			const char *Method,\
+			const char *Signature,\
+			JNIEnv *Env,\
+			args... Args ) const\
+		{\
+			Env = jniq::GetEnv( Env );\
+\
+			return Env->Call##name##Method( O_(), jniq::GetMethodID( O_(), Method, Signature, Env ), Args... );\
+		}
+		H( void, Void );
+		H( jint, Int );
+		H( jlong, Long );
+# undef H
+	};
+
+	class rObject_
+	: public sObject_
+	{
+	protected:
+		virtual void reset_( bso::sBool P ) override
+		{
+			if ( P ) { 
+				jniq::GetEnv( NULL )->DeleteGlobalRef( Object_ );
+			}
+		}
+		virtual jobject Init_(
+			jobject Object,
+			JNIEnv_ *Env ) override
+		{
+			return jniq::GetEnv( Env )->NewGlobalRef( Object );
+		}
+	};
 
 # ifdef CH
-#  define JNIOBJ_CH_	CH
+#  define JREBSE_CH_	CH
 #  undef CH
 #endif
 
 # ifdef CF
-#  define JNIOBJ_CF_	CF
+#  define JREBSE_CF_	CF
 #  undef CF
 #endif
 
 
 # define CH( name )\
-	class s##name\
-	: public sObject_\
+	class name##Core_\
 	{\
-	private:\
+	protected:\
 		static const char *Name_;\
+	};\
+	\
+	template <typename object> class name##_\
+	: public object,\
+	  public name##Core_\
+	{\
 	public:\
 		void reset( bso::sBool P = true )\
 		{\
-			sObject_::reset( P );\
+			object::reset( P );\
 		}\
-		qCDTOR( s##name );\
-		s##name(\
+		qCDTOR( name##_ );\
+		name##_(\
 			jobject Object,\
 			JNIEnv *Env = NULL )\
 		{\
@@ -67,10 +194,13 @@ namespace jrebse {
 			jobject Object,\
 			JNIEnv *Env = NULL )\
 		{\
-			return sObject_::Init( Object, Name_, Env );\
+			return object::Init( Object, Name_, Env );\
 		}
 
-# define CF	}
+# define CF( name )\
+	};\
+	typedef name##_<jrebse::sObject_> s##name;\
+	typedef name##_<jrebse::rObject_> r##name;
 
 	namespace java {
 		namespace io {
@@ -79,7 +209,7 @@ namespace jrebse {
 					jobject Object,
 					JNIEnv *Env = NULL ) const
 				{
-					return CallVoidMethod( "println", "(Ljava/lang/Object;)V", Object, Env );
+					return object::CallVoidMethod( "println", "(Ljava/lang/Object;)V", Env, Object );
 				}
 				void Println(
 					const char *Text,
@@ -91,13 +221,13 @@ namespace jrebse {
 				}
 				void Flush( JNIEnv *Env = NULL ) const
 				{
-					return CallVoidMethod( "flush", "()V", Env );
+					return object::CallVoidMethod( "flush", "()V", Env );
 				}
-			CF;
+			CF( PrintStream );
 			CH( InputStream )
 				jint Read( JNIEnv *Env = NULL ) const
 				{
-					return CallIntMethod( "read", "()I", Env );
+					return object::CallIntMethod( "read", "()I", Env );
 				}
 				jint Read(
 					jbyteArray b,
@@ -105,14 +235,14 @@ namespace jrebse {
 					jint len,
 					JNIEnv *Env = NULL ) const
 				{
-					return CallIntMethod( "read", "([BII)I", b, off, len, Env );
+					return object::CallIntMethod( "read", "([BII)I", Env, b, off, len, Env );
 				}
-			CF;
+			CF( InputStream );
 		}
 
 		namespace lang {
 			CH( Integer )
-				sInteger(
+				Integer_(
 					jint Value,
 					JNIEnv *Env = NULL )
 				{
@@ -122,15 +252,15 @@ namespace jrebse {
 					jint Value,
 					JNIEnv *Env = NULL )
 				{
-					return sObject::Init( Name_, "(I)V", Value, Env );
+					return object::Init( Name_, "(I)V", Value, Env );
 				}
 				jint IntValue( JNIEnv *Env = NULL ) const
 				{
-					return CallIntMethod( "intValue", "()I", Env);
+					return object::CallIntMethod( "intValue", "()I", Env);
 				}
-			CF;
+			CF( Integer );
 			CH( Long )
-				sLong(
+				Long_(
 					jlong Value,
 					JNIEnv *Env = NULL )
 				{
@@ -140,15 +270,15 @@ namespace jrebse {
 					jlong Value,
 					JNIEnv *Env = NULL )
 				{
-					return sObject::Init( Name_, "(J)V", Value, Env );
+					return object::Init( Name_, "(J)V", Value, Env );
 				}
 				jlong LongValue( JNIEnv *Env = NULL ) const
 				{
-					return CallLongMethod( "longValue", "()J", Env );
+					return object::CallLongMethod( "longValue", "()J", Env );
 				}
-			CF;
+			CF( Long );
 			CH( String )
-			CF;
+			CF( String );
 			CH( System )
 				static io::sPrintStream Out( JNIEnv *Env = NULL )
 				{
@@ -156,17 +286,23 @@ namespace jrebse {
 
 					return io::sPrintStream( jniq::GetStaticObjectField( Name_, "out", "Ljava/io/PrintStream;", Env ), Env );
 				}
-			CF;
+			CF( System );
 		}
 	}
 
-# ifdef JNIOBJ_CH_
-#  define CH JNIOBJ_CH_
+# ifdef JREBSE_CH_
+#  define CH JREBSE_CH_
 #endif
 
-# ifdef JNIOBJ_CF_
-#  define CF JNIOBJ_CF_
+# ifdef JREBSE_CF_
+#  define CF JREBSE_CF_
 #endif
+
+# ifdef JNINSE_H_
+#  define H JNIBSE_H_
+# endif
+
+
 
 }
 

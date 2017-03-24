@@ -23,16 +23,20 @@
 
 using namespace jrebse;
 
+#define N( ns, hierarchy, name )\
+	const char *jrebse::ns::name##Core_::Name_ = hierarchy  #name;
+
 #define S "/"
 
 #define JAVA "java" S
 
 #define JAVA_IO JAVA "io" S
-const char *jrebse::java::io::sPrintStream::Name_ = JAVA_IO  "PrintStream";
-const char *jrebse::java::io::sInputStream::Name_ = JAVA_IO  "InputStream";
+N( java::io, JAVA_IO, PrintStream );
+N( java::io, JAVA_IO, InputStream );
 
 #define JAVA_LANG JAVA "lang" S
-const char *jrebse::java::lang::sInteger::Name_ = JAVA_LANG "Integer";
-const char *jrebse::java::lang::sLong::Name_ = JAVA_LANG "Long";
-const char *jrebse::java::lang::sSystem::Name_ = JAVA_LANG "System";
+N( java::lang, JAVA_LANG, Integer );
+N( java::lang, JAVA_LANG, Long );
+N( java::lang, JAVA_LANG, String );
+N( java::lang, JAVA_LANG, System );
 

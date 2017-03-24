@@ -100,6 +100,13 @@ namespace scljre {
 }
 
 #define SCLJRE_DEF( name )\
+	extern "C" JNIEXPORT jstring JNICALL Java_##name##_info(\
+		JNIEnv *Env,\
+		jclass)\
+	{\
+		return scljre::Info_( Env );\
+	}\
+\
 	extern "C" JNIEXPORT void JNICALL Java_##name##_register(\
 		JNIEnv *Env,\
 		jclass)\

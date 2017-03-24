@@ -39,7 +39,7 @@ namespace jre {
 
 	typedef java::lang::sString sString_;
 
-	class rString
+	class sString
 	: public sString_
 	{
 	public:
@@ -47,14 +47,30 @@ namespace jre {
 		{
 			sString_::reset( P );
 		}
-		qCDTOR( rString );
+		qCDTOR( sString );
 		void Init(
 			const char *Text,
 			JNIEnv *Env = NULL )
 		{
 			Env = jniq::GetEnv( Env );
 
-			sString::Init( Env->NewStringUTF( Text ), Env );
+			sString_::Init( Env->NewStringUTF( Text ), Env );
+		}
+		void Init(
+			const str::dString &Text,
+			JNIEnv *Env = NULL )
+		{
+		qRH
+			qCBUFFERr Buffer;
+		qRB
+			Init( Text.Convert( Buffer ), Env );
+		qRR
+		qRT
+		qRE
+		}
+		operator jstring( void ) const
+		{
+			return (jstring)Object();
 		}
 	};
 
@@ -64,7 +80,7 @@ namespace jre {
 	: public rIDriver_
 	{
 	private:
-		java::io::sInputStream Stream_;
+		java::io::rInputStream Stream_;
 	protected:
 		virtual fdr::sSize FDRRead(
 			fdr::sSize Maximum,

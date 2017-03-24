@@ -35,11 +35,6 @@
 # include "str.h"
 # include "tol.h"
 
-# ifdef H
-#  #define JNIQ_H_ H
-#  undef H
-# endif
-
 namespace jniq {
 	void SetGlobalEnv( JNIEnv *Env );
 
@@ -296,107 +291,6 @@ namespace jniq {
 
 		Env->SetObjectField( Object, GetFieldID( Object, Name, Signature ), Value );
 	}
-
-	class sObject
-	{
-	private:
-		qPMV( _jobject, O_, Object_ );
-	public:
-		void reset( bso::sBool P = true )
-		{
-			if ( P ) { 
-				GetEnv( NULL )->DeleteGlobalRef( Object_ );
-			}
-				
-			Object_ = NULL;
-		}
-		qCDTOR( sObject );
-		void Init(
-			jobject Object,
-			jclass Class,
-			JNIEnv *Env = NULL )
-		{
-			Env = GetEnv( Env );
-
-			if ( !Env->IsInstanceOf( Object, Class ) )
-				qRFwk();
-
-			Object_ = Env->NewGlobalRef( Object );
-		}
-		void Init(
-			jobject Object,
-			const char *Class,
-			JNIEnv *Env = NULL )
-		{
-			Env = GetEnv( Env );
-
-			return Init( Object, FindClass( Class, Env ), Env );
-		}
-		operator jobject( void )
-		{
-			return O_();
-		}
-		template <typename ...args> void Init(
-			jclass Class,
-			const char *Signature,
-			JNIEnv *Env,
-			args... Args )
-		{
-			Env = GetEnv( Env );
-
-			return Init( Env->NewObject( Class, GetMethodID( Class, "<init>", Signature, Env ), Args... ), Class, Env );
-		}
-		template <typename ...args> void Init(
-			jclass Class,
-			const char *Signature,
-			args... Args )
-		{
-			return Init( Class, Signature, NULL, Args... );
-		}
-		template <typename ...args> void Init(
-			const char *ClassName,
-			const char *Signature,
-			JNIEnv *Env,
-			args... Args )
-		{
-			Env = GetEnv( Env );
-
-			return Init( FindClass( ClassName, Env ), Signature, Env, Args... );
-		}
-		template <typename ...args> void Init(
-			const char *ClassName,
-			const char *Signature,
-			args... Args )
-		{
-			return Init(  ClassName, Signature, (JNIEnv *)NULL, Args... );
-		}
-# define H( type, name )\
-		template <typename ...args> type Call##name##Method(\
-			const char *Method,\
-			const char *Signature,\
-			JNIEnv *Env,\
-			args... Args ) const\
-		{\
-			Env = GetEnv( Env );\
-\
-			return Env->Call##name##Method( O_(), GetMethodID( O_(), Method, Signature, Env ), Args... );\
-		}\
-		template <typename ...args> type Call##name##Method(\
-			const char *Method,\
-			const char *Signature,\
-			args... Args ) const\
-		{\
-			return Call##name##Method( Method, Signature, (JNIEnv *)NULL, Args... );\
-		}
-		H( void, Void );
-		H( jint, Int );
-		H( jlong, Long );
-# undef H
-	};
 }
-
-# ifdef JNIQ_H_
-#  define H JNIQ_H_
-# endif
 
 #endif
