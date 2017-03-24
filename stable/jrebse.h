@@ -135,6 +135,7 @@ namespace jrebse {
 		H( void, Void );
 		H( jint, Int );
 		H( jlong, Long );
+		H( jobject, Object );
 # undef H
 	};
 
@@ -278,6 +279,12 @@ namespace jrebse {
 				}
 			CF( Long );
 			CH( String )
+				jstring Concat(
+					jstring String,
+					JNIEnv *Env = NULL )
+				{
+					return (jstring)object::CallObjectMethod( "concat", "(Ljava/lang/String;)Ljava/lang/String;", Env, String );
+				}
 			CF( String );
 			CH( System )
 				static io::sPrintStream Out( JNIEnv *Env = NULL )

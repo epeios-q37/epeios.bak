@@ -38,24 +38,6 @@
 # define OWNER_CONTACT		"http://q37.info/contact/"
 # define COPYRIGHT			COPYRIGHT_YEARS " " OWNER_NAME " (" OWNER_CONTACT ")"
 
-/*
-static void Print_(
-	JNIEnv *Env,
-	const char *Text )
-{
-	jclass System = Env->FindClass( "java/lang/System" );
-
-	jobject Out = jniq::GetStaticObjectField( Env, System, "out", "Ljava/io/PrintStream;" );
-
-	jcharArray Array = Env->NewCharArray( 1000 );
-	
-
-	Env->CallNonvirtualVoidMethod( Out, jniq::GetClass( Env, Out ), jniq::GetMethodID( Env, Out, "println", "(Ljava/lang/String;)V" ), Env->NewStringUTF( Text ) );
-
-	Env->CallNonvirtualVoidMethod( Out, jniq::GetClass( Env, Out ), jniq::GetMethodID( Env, Out, "flush", "()V" ) );
-}
-*/
-
 static void Print_( const char *Text )
 {
 	jre::java::lang::sSystem::Out().Println( Text );
@@ -69,44 +51,45 @@ static void Print_( jobject Object )
 	jre::java::lang::sSystem::Out().Flush();
 }
 
-
 SCLJRE_DEF( XPPQ );
 
-namespace {
-	class rProcessor
-	{
-	private:
-		jre::rInputStreamIDriver Input_;
-		flw::sDressedIFlow<> Flow_;
-		xtf::extended_text_iflow__ XFlow_;
-		xpp::preprocessing_iflow___ PFlow_;
-	public:
-		void reset( bso::sBool P = true )
+namespace processing_ {
+	namespace {
+		class rProcessor_
 		{
-			tol::reset( P, Input_, Flow_, XFlow_, PFlow_ );
-		}
-		void Init( jobject InputStream )
-		{
-			Input_.Init( InputStream );
-			Flow_.Init( Input_ );
-			XFlow_.Init( Flow_, utf::f_Default );
-			PFlow_.Init(XFlow_, xpp::criterions___( str::wString() ) );
-		}
-		fdr::sByte Get( void )
-		{
-			return PFlow_.Get();
-		}
-		bso::sBool IsEOF( void )
-		{
-			return PFlow_.EndOfFlow();
-		}
-	};
+		private:
+			jre::rInputStreamIDriver Input_;
+			flw::sDressedIFlow<> Flow_;
+			xtf::extended_text_iflow__ XFlow_;
+			xpp::preprocessing_iflow___ PFlow_;
+		public:
+			void reset( bso::sBool P = true )
+			{
+				tol::reset( P, Input_, Flow_, XFlow_, PFlow_ );
+			}
+			void Init( jobject InputStream )
+			{
+				Input_.Init( InputStream );
+				Flow_.Init( Input_ );
+				XFlow_.Init( Flow_, utf::f_Default );
+				PFlow_.Init(XFlow_, xpp::criterions___( str::wString() ) );
+			}
+			fdr::sByte Get( void )
+			{
+				return PFlow_.Get();
+			}
+			bso::sBool IsEOF( void )
+			{
+				return PFlow_.EndOfFlow();
+			}
+		};
+	}
 
-	jobject New_(
+	jobject New(
 		JNIEnv *Env,
 		const scljre::sArguments &Args )
 	{
-		rProcessor *Processor = new rProcessor;
+		rProcessor_ *Processor = new rProcessor_;
 
 		if ( Processor == NULL )
 			qRAlc();
@@ -116,20 +99,20 @@ namespace {
 		return jre::java::lang::sLong( (jlong)Processor );
 	}
 
-	jobject Delete_(
+	jobject Delete(
 		JNIEnv *Env,
 		const scljre::sArguments &Args )
 	{
-		delete (rProcessor *)jre::java::lang::sLong( Args.Get() ).LongValue();
+		delete (rProcessor_ *)jre::java::lang::sLong( Args.Get() ).LongValue();
 
 		return NULL;
 	}
 
-	jobject Read_(
+	jobject Read(
 		JNIEnv *Env,
 		const scljre::sArguments &Args )
 	{
-		rProcessor &Processor = *(rProcessor *)jre::java::lang::sLong( Args.Get() ).LongValue();
+		rProcessor_ &Processor = *(rProcessor_ *)jre::java::lang::sLong( Args.Get() ).LongValue();
 
 		if ( Processor.IsEOF() )
 			return jre::java::lang::sInteger( (jint)-1 );
@@ -138,9 +121,75 @@ namespace {
 	}
 }
 
+namespace parsing_ {
+	namespace {
+		class rParser_
+		{
+		private:
+			jre::rInputStreamIDriver Stream_;
+			flw::sDressedIFlow<> IFlow_;
+			xtf::sIFlow XFlow_;
+			xml::rParser Parser_;
+		public:
+			void reset( bso::sBool P = true )
+			{
+				tol::reset( P, Stream_, IFlow_, XFlow_, Parser_ );
+			}
+			qCDTOR( rParser_ );
+			void Init( jobject Stream )
+			{
+				Stream_.Init( Stream );
+				IFlow_.Init( Stream_ );
+				XFlow_.Init( IFlow_, utf::f_Default );
+				Parser_.Init( XFlow_, xml::eh_Default );
+			}
+		};
+	}
+
+	jobject New(
+		JNIEnv *Env,
+		const scljre::sArguments &Args )
+	{
+		rParser_ *Parser = new rParser_;
+
+		if ( Parser == NULL )
+			qRAlc();
+
+		Parser->Init( Args.Get() );
+
+		return jre::java::lang::sLong( (jlong)Parser );
+	}
+
+	jobject Delete(
+		JNIEnv *Env,
+		const scljre::sArguments &Args )
+	{
+		delete (rParser_ *)jre::java::lang::sLong( Args.Get() ).LongValue();
+
+		return NULL;
+	}
+
+	jobject Parse(
+		JNIEnv *Env,
+		const scljre::sArguments &Args )
+	{
+		jre::sString TagName, AttributeName, Value;
+
+		Args.InitAndGet( TagName, AttributeName, Value );
+
+		TagName.Concat("Hello ");
+		AttributeName.Concat("the ");
+		TagName.Concat(" World !!!" );
+
+		return jre::java::lang::sInteger( 10 );
+	}
+
+}
+
 void scljre::SCLJRERegister( sRegistrar &Registrar )
 {
-	Registrar.Register( New_,  Delete_,  Read_ );
+	Registrar.Register( processing_::New,  processing_::Delete,  processing_::Read );
+	Registrar.Register( parsing_::Parse );
 }
 
 

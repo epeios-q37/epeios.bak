@@ -44,9 +44,14 @@ class XPPQ {
 	
 	public int readFromPreprocessor( Object object )
 	{
-		return ((java.lang.Integer)wrapper( 2, object ) ).intValue();
+		return ((java.lang.Integer)wrapper( 2, object )).intValue();
 	}
-
+	
+	static public int parse( String tagName, String attributeName, String value )
+	{
+		return ((java.lang.Integer)wrapper( 3, tagName, attributeName, value )).intValue();
+	}
+	
 	public void finalize()
 	{
 	}
@@ -87,6 +92,14 @@ class XPPQDemo {
 		while((c = xppq.read()) != -1) {
 		  System.out.print((char)c);
 		}
+		
+		System.out.println();
+		
+		String tagName = new String(), attributeName = new String(), value = new String();
+		
+		XPPQ.parse( tagName, attributeName, value );
+		
+		System.out.println( tagName + attributeName + value );
 	}
 }
 

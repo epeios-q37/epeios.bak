@@ -68,9 +68,23 @@ namespace jre {
 		qRT
 		qRE
 		}
+		void Init(
+			jobject Object,
+			JNIEnv *Env = NULL )
+		{
+			sString_::Init( Object, Env );
+		}
 		operator jstring( void ) const
 		{
 			return (jstring)Object();
+		}
+		jstring Concat(
+			const char *Text,
+			JNIEnv *Env = NULL )
+		{
+			Env = jniq::GetEnv( Env );
+
+			return sString_::Concat( Env->NewStringUTF( Text ), Env );
 		}
 	};
 

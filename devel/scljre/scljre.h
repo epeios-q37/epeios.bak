@@ -71,6 +71,17 @@ namespace scljre {
 
 			return Env->GetObjectArrayElement( Args_, Index_++ );
 		}
+		template < typename arg> void InitAndGet( arg &Arg ) const
+		{
+			Arg.Init( Get() );
+		}
+		template < typename arg, typename ...args> void  InitAndGet(
+			arg &Arg,
+			args &...Args ) const
+		{
+			InitAndGet( Arg );
+			InitAndGet( Args... );
+		}
 	};
 
 	typedef jobject (* sFunction_)( JNIEnv *, const sArguments &);
