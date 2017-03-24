@@ -1,22 +1,20 @@
 /*
-	'jexpp' by Claude SIMON (claude.simon@zeusw.org)
-	XML Preprocessor library for 'XPPInputStream' JAVA component.
-	Copyright (C) 2007-2011 Claude SIMON
+	Copyright (C) 2007-2017 Claude SIMON (http://q37.info/contact/).
 
-	This file is part of the Epeios project (http://zeusw.org/epeios/).
+	This file is part of xppq.
 
-    'jexpp' is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+	xppq is free software: you can redistribute it and/or
+	modify it under the terms of the GNU Affero General Public License as
+	published by the Free Software Foundation, either version 3 of the
+	License, or (at your option) any later version.
 
-    'jexpp' is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+	xppq is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+	Affero General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with 'jexpp'.  If not, see <http://www.gnu.org/licenses/>.
+	You should have received a copy of the GNU Affero General Public License
+	along with xppq. If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "jre.h"
@@ -143,6 +141,10 @@ namespace parsing_ {
 				XFlow_.Init( IFlow_, utf::f_Default );
 				Parser_.Init( XFlow_, xml::eh_Default );
 			}
+			xml::rParser &operator()( void )
+			{
+				return Parser_;
+			}
 		};
 	}
 
@@ -173,15 +175,64 @@ namespace parsing_ {
 		JNIEnv *Env,
 		const scljre::sArguments &Args )
 	{
-		jre::sString TagName, AttributeName, Value;
+		jint Token = 0;
+	qRH
+		lcl::wMeaning Meaning;
+		lcl::locale Locale;
+		str::wString Error;
+		jre::sObject Data;
+	qRB
+		rParser_ &Parser = *(rParser_ *)jre::java::lang::sLong( Args.Get() ).LongValue();
 
-		Args.InitAndGet( TagName, AttributeName, Value );
+		Data.Init( Args.Get(), "XPPQData" );
 
-		TagName.Concat("Hello ");
-		AttributeName.Concat("the ");
-		TagName.Concat(" World !!!" );
+		switch ( Parser().Parse( xml::tfObvious ) ) {
+		case xml::t_Error:
+			Meaning.Init();
+			xml::GetMeaning( Parser().GetStatus(), Parser().Flow().Position(), Meaning );
+			Locale.Init();
+			Error.Init();
+			Locale.GetTranslation( Meaning, "", Error );
+			Data.Set( "value", jre::sString::Signature, jre::sString( Error ) );
+			break;
+		case xml::t_Processed:
+			break;
+		default:
+			Data.Set( "tagName", jre::sString::Signature, jre::sString( Parser().TagName() ) );
+			Data.Set( "attributeName", jre::sString::Signature, jre::sString( Parser().AttributeName() ) );
+			Data.Set( "value", jre::sString::Signature, jre::sString( Parser().Value() ) );
+			break;
+		}
 
-		return jre::java::lang::sInteger( 10 );
+		// If modified, modify also Java source file.
+		switch ( Parser().Token() ) {
+		case xml::t_Error:
+			Token = 0;
+			break;
+		case xml::t_Processed:
+			Token = 1;
+			break;
+		case xml::tStartTag:
+			Token = 2;
+			break;
+		case xml::tAttribute:
+			Token = 3;
+			break;
+		case xml::tValue:
+			Token = 4;
+			break;
+		case xml::tEndTag:
+			Token = 5;
+			break;
+		default:
+			qRGnr();
+			break;
+		}
+
+	qRR
+	qRT
+	qRE
+		return jre::java::lang::sInteger( Token );
 	}
 
 }
@@ -189,7 +240,7 @@ namespace parsing_ {
 void scljre::SCLJRERegister( sRegistrar &Registrar )
 {
 	Registrar.Register( processing_::New,  processing_::Delete,  processing_::Read );
-	Registrar.Register( parsing_::Parse );
+	Registrar.Register( parsing_::New, parsing_::Delete, parsing_::Parse );
 }
 
 

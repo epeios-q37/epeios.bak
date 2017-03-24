@@ -169,15 +169,16 @@ namespace jrebse {
 
 
 # define CH( name )\
-	class name##Core_\
+	class name\
 	{\
-	protected:\
-		static const char *Name_;\
+	public:\
+		static const char *Name;\
+		static const char *Signature;\
 	};\
 	\
 	template <typename object> class name##_\
 	: public object,\
-	  public name##Core_\
+	  public name\
 	{\
 	public:\
 		void reset( bso::sBool P = true )\
@@ -195,7 +196,7 @@ namespace jrebse {
 			jobject Object,\
 			JNIEnv *Env = NULL )\
 		{\
-			return object::Init( Object, Name_, Env );\
+			return object::Init( Object, Signature, Env );\
 		}
 
 # define CF( name )\
@@ -253,7 +254,7 @@ namespace jrebse {
 					jint Value,
 					JNIEnv *Env = NULL )
 				{
-					return object::Init( Name_, "(I)V", Value, Env );
+					return object::Init( Name, "(I)V", Value, Env );
 				}
 				jint IntValue( JNIEnv *Env = NULL ) const
 				{
@@ -271,13 +272,15 @@ namespace jrebse {
 					jlong Value,
 					JNIEnv *Env = NULL )
 				{
-					return object::Init( Name_, "(J)V", Value, Env );
+					return object::Init( Name, "(J)V", Value, Env );
 				}
 				jlong LongValue( JNIEnv *Env = NULL ) const
 				{
 					return object::CallLongMethod( "longValue", "()J", Env );
 				}
 			CF( Long );
+			CH( Object )
+			CF( Object );
 			CH( String )
 				jstring Concat(
 					jstring String,
@@ -291,7 +294,7 @@ namespace jrebse {
 				{
 					Env = jniq::GetEnv( Env );
 
-					return io::sPrintStream( jniq::GetStaticObjectField( Name_, "out", "Ljava/io/PrintStream;", Env ), Env );
+					return io::sPrintStream( jniq::GetStaticObjectField( Name, "out", "Ljava/io/PrintStream;", Env ), Env );
 				}
 			CF( System );
 		}

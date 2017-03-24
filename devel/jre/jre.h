@@ -34,8 +34,37 @@
 # include "fdr.h"
 
 namespace jre {
-
 	using namespace jrebse;
+
+	typedef  java::lang::sObject sObject_;
+
+	class sObject
+	: public sObject_
+	{
+	public:
+		void Set(
+			const char *Name,
+			const char *Signature,
+			jobject Value,
+			JNIEnv *Env = NULL )
+		{
+			jniq::SetObjectField( sObject_::Object(), Name, Signature, Value, Env );
+		}
+		jobject Get(
+			const char *Name,
+			const char *Signature,
+			JNIEnv *Env = NULL )
+		{
+			return jniq::GetObjectField( sObject_::Object(), Name, Signature, Env );
+		}
+		void Init(
+			jobject Object,
+			const char *Class,
+			JNIEnv *Env = NULL )
+		{
+			return sObject_::Init( Object, Signature, Env );
+		}
+	};
 
 	typedef java::lang::sString sString_;
 
@@ -48,6 +77,24 @@ namespace jre {
 			sString_::reset( P );
 		}
 		qCDTOR( sString );
+		sString(
+			const char *Text,
+			JNIEnv *Env = NULL )
+		{
+			Init( Text, Env );
+		}
+		sString(
+			const str::dString &Text,
+			JNIEnv *Env = NULL )
+		{
+			Init( Text, Env );
+		}
+		sString(
+			jobject Object,
+			JNIEnv *Env = NULL )
+		{
+			Init( Object, Env );
+		}
 		void Init(
 			const char *Text,
 			JNIEnv *Env = NULL )
