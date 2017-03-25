@@ -148,6 +148,10 @@ qRFB
 	if ( sclerror::IsErrorPending() )
 		qRAbort();	// To force the handling of a pending error.
 qRFR
+	if ( ERRType == err::t_Abort ) {
+		if ( jniq::GetEnv()->ExceptionOccurred() != NULL )
+			ERRRst();	// Let the Java exception do the error handling work.
+	}
 qRFT
 qRFE( ERRFinal_( Env ) )
 	return Result;

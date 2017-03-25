@@ -42,6 +42,16 @@ namespace scljre {
 		int Index,
 		jobjectArray Args );
 
+	inline void Throw( const char *Text )
+	{
+		JNIEnv *Env = jniq::GetEnv();
+
+		if ( Env->ExceptionOccurred() == NULL )
+			Env->ThrowNew( Env->FindClass( "java/lang/Exception"), Text );
+
+		qRAbort();
+	}
+
 	class sArguments
 	{
 	private:

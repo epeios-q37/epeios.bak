@@ -125,7 +125,7 @@ namespace processing_ {
 			Locale.Init();
 			Translation.Init();
 			Locale.GetTranslation( Meaning, "", Translation );
-			jniq::GetEnv()->ThrowNew( jniq::GetEnv()->FindClass( "java/lang/Exception" ), Translation.Convert( Buffer ) );
+			scljre::Throw( Translation.Convert( Buffer ) );
 		}
 	qRR
 	qRT
@@ -209,7 +209,7 @@ namespace parsing_ {
 			Locale.Init();
 			Error.Init();
 			Locale.GetTranslation( Meaning, "", Error );
-			jniq::GetEnv()->ThrowNew( jniq::GetEnv()->FindClass( "java/lang/Exception") , Error.Convert( Buffer ) );
+			scljre::Throw( Error.Convert( Buffer ) );
 			break;
 		case xml::t_Processed:
 			break;

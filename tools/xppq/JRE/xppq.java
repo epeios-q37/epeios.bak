@@ -140,13 +140,15 @@ class XPPQDemo {
 	
 	private static void test0( String fileName ) throws Exception
 	{
-		System.out.println( "No treatment ; to see the original file." );
+		System.out.println( "No treatment ; to see the original file :" );
+		System.out.println( "-----------------------------------------" );
 		dump( new java.io.FileInputStream( fileName ) );
 	}
 	
 	private static void test1( String fileName ) throws Exception
 	{
-		System.out.println( "Preprocessing the file." );
+		System.out.println( "Preprocessing the file :" );
+		System.out.println( "------------------------" );
 		dump( new XPPQPreprocessor( new java.io.FileInputStream( fileName ) ) );
 	}
 	
@@ -181,13 +183,15 @@ class XPPQDemo {
 
 	private static void test2( String fileName ) throws Exception
 	{
-		System.out.println( "XML parsing WITHOUT preprocessing" );
+		System.out.println( "XML parsing WITHOUT preprocessing :" );
+		System.out.println( "-----------------------------------" );
 		parse( new java.io.FileInputStream( fileName ) );
 	}
 
 	private static void test3( String fileName ) throws Exception
 	{
-		System.out.println( "XML parsing WITH preprocessing" );
+		System.out.println( "XML parsing WITH preprocessing :" );
+		System.out.println( "--------------------------------" );
 		parse( new XPPQPreprocessor( new java.io.FileInputStream( fileName ) ) );
 	}
 
