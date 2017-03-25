@@ -785,6 +785,10 @@ namespace xpp {
 		qRE
 
 		}
+		status__ Status( void ) const
+		{
+			return _Status;
+		}
 		const context___ &GetContext( context___ &Context ) const
 		{
 			Context.Coordinates = coords___( _Parser().Position(), _Parser().LocalizedFileName() );
@@ -825,6 +829,10 @@ namespace xpp {
 		const context___ &GetContext( context___ &Context ) const
 		{
 			return _FlowDriver.GetContext( Context );
+		}
+		status__ Status( void ) const
+		{
+			return _FlowDriver.Status();
 		}
 	};
 

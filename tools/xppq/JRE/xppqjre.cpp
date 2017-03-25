@@ -72,13 +72,9 @@ namespace processing_ {
 				XFlow_.Init( Flow_, utf::f_Default );
 				PFlow_.Init(XFlow_, xpp::criterions___( str::wString() ) );
 			}
-			fdr::sByte Get( void )
+			xpp::preprocessing_iflow___ &operator()( void )
 			{
-				return PFlow_.Get();
-			}
-			bso::sBool IsEOF( void )
-			{
-				return PFlow_.EndOfFlow();
+				return PFlow_;
 			}
 		};
 	}
@@ -110,12 +106,31 @@ namespace processing_ {
 		JNIEnv *Env,
 		const scljre::sArguments &Args )
 	{
+		jint Char = 0;
+	qRH
+		lcl::meaning Meaning;
+		lcl::locale Locale;
+		str::wString Translation;
+		qCBUFFERr Buffer;
+	qRB
 		rProcessor_ &Processor = *(rProcessor_ *)jre::java::lang::sLong( Args.Get() ).LongValue();
 
-		if ( Processor.IsEOF() )
-			return jre::java::lang::sInteger( (jint)-1 );
-		else
-			return jre::java::lang::sInteger( Processor.Get() );
+		if ( !Processor().EndOfFlow() )
+			Char = Processor().Get();
+		else if ( Processor().Status() == xpp::sOK )
+			Char = -1;
+		else {
+			Meaning.Init();
+			xpp::GetMeaning(Processor(), Meaning );
+			Locale.Init();
+			Translation.Init();
+			Locale.GetTranslation( Meaning, "", Translation );
+			jniq::GetEnv()->ThrowNew( jniq::GetEnv()->FindClass( "java/lang/Exception" ), Translation.Convert( Buffer ) );
+		}
+	qRR
+	qRT
+	qRE
+		return jre::java::lang::sInteger( Char );
 	}
 }
 
@@ -181,6 +196,7 @@ namespace parsing_ {
 		lcl::locale Locale;
 		str::wString Error;
 		jre::sObject Data;
+		qCBUFFERr Buffer;
 	qRB
 		rParser_ &Parser = *(rParser_ *)jre::java::lang::sLong( Args.Get() ).LongValue();
 
@@ -193,7 +209,7 @@ namespace parsing_ {
 			Locale.Init();
 			Error.Init();
 			Locale.GetTranslation( Meaning, "", Error );
-			Data.Set( "value", jre::sString::Signature, jre::sString( Error ) );
+			jniq::GetEnv()->ThrowNew( jniq::GetEnv()->FindClass( "java/lang/Exception") , Error.Convert( Buffer ) );
 			break;
 		case xml::t_Processed:
 			break;
@@ -207,22 +223,21 @@ namespace parsing_ {
 		// If modified, modify also Java source file.
 		switch ( Parser().Token() ) {
 		case xml::t_Error:
-			Token = 0;
 			break;
 		case xml::t_Processed:
-			Token = 1;
+			Token = 0;
 			break;
 		case xml::tStartTag:
-			Token = 2;
+			Token = 1;
 			break;
 		case xml::tAttribute:
-			Token = 3;
+			Token = 2;
 			break;
 		case xml::tValue:
-			Token = 4;
+			Token = 3;
 			break;
 		case xml::tEndTag:
-			Token = 5;
+			Token = 4;
 			break;
 		default:
 			qRGnr();

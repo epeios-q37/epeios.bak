@@ -100,12 +100,11 @@ class XPPQPreprocessor extends java.io.InputStream {
 class XPPQParser {
 	private XPPQ xppq;
 	// If modified, modify also C++ source file.
-	static final int ERROR		= 0;
-	static final int PROCESSED	= 1;
-	static final int START_TAG	= 2;
-	static final int ATTRIBUTE	= 3;
-	static final int VALUE		= 4;
-	static final int END_TAG	= 5;
+	static final int PROCESSED	= 0;
+	static final int START_TAG	= 1;
+	static final int ATTRIBUTE	= 2;
+	static final int VALUE		= 3;
+	static final int END_TAG	= 4;
 	public XPPQParser( java.io.InputStream Stream )
 	{
 		xppq = new XPPQ( XPPQ.getParser( Stream ) );
@@ -123,32 +122,43 @@ class XPPQParser {
 }
 
 class XPPQDemo {
-	private static void DisplayCompilationTime() throws Exception
+	private static void displayCompilationTime() throws Exception
 	{
 		System.out.println( new java.util.Date(new java.io.File(XPPQDemo.class.getClassLoader().getResource(XPPQDemo.class.getCanonicalName().replace('.', '/') + ".class").toURI()).lastModified()) );
 	}
-
-	public static void main ( String[] args ) throws Exception
+	
+	private static void dump( java.io.InputStream stream ) throws Exception
 	{
-		System.out.println( XPPQ.info() );
-		DisplayCompilationTime();
-		XPPQPreprocessor xppq = new XPPQPreprocessor( new java.io.FileInputStream( "demo.xml" ) );
 		int c = 0;
-		while((c = xppq.read()) != -1) {
-		  System.out.print((char)c);
+		
+		while( ( c = stream.read() ) != -1 ) {
+		  System.out.print( (char)c );
 		}
 		
 		System.out.println();
-		
+	}
+	
+	private static void test0( String fileName ) throws Exception
+	{
+		System.out.println( "No treatment ; to see the original file." );
+		dump( new java.io.FileInputStream( fileName ) );
+	}
+	
+	private static void test1( String fileName ) throws Exception
+	{
+		System.out.println( "Preprocessing the file." );
+		dump( new XPPQPreprocessor( new java.io.FileInputStream( fileName ) ) );
+	}
+	
+	private static void parse( java.io.InputStream stream ) throws Exception
+	{
 		XPPQData data = new XPPQData();
-		XPPQParser parser = new XPPQParser( new XPPQPreprocessor( new java.io.FileInputStream( "demo.xml" ) ) );
+		XPPQParser parser = new XPPQParser( stream );
 		
 		int token = parser.parse( data );
 		
 		while ( token != XPPQParser.PROCESSED ) {
 			switch ( token ) {
-			case XPPQParser.ERROR :
-				throw new Exception( data.value );
 			case XPPQParser.START_TAG :
 				System.out.print( "Start tag: '" + data.tagName + "'\n" );
 				break;
@@ -167,6 +177,59 @@ class XPPQDemo {
 		
 			token = parser.parse( data );
 		}
+	}
+
+	private static void test2( String fileName ) throws Exception
+	{
+		System.out.println( "XML parsing WITHOUT preprocessing" );
+		parse( new java.io.FileInputStream( fileName ) );
+	}
+
+	private static void test3( String fileName ) throws Exception
+	{
+		System.out.println( "XML parsing WITH preprocessing" );
+		parse( new XPPQPreprocessor( new java.io.FileInputStream( fileName ) ) );
+	}
+
+	public static void main ( String[] args ) throws Exception
+	{
+		System.out.println( XPPQ.info() );
+		System.out.println();
+		// displayCompilationTime();
+		
+		int test = 3;
+		
+		if ( args.length > 0 ) {
+			try {
+				test = Integer.parseInt( args[0] );
+			} catch ( NumberFormatException e) {
+				System.err.println( "'" + args[0] + "' is not a valid test id ; must be '0' to '3'.");
+				System.exit(1);
+			}
+		}
+		
+		String fileName = new String( "demo.xml" );
+		
+		switch ( test ) {
+		case 0:
+			test0( fileName );
+			break;
+		case 1:
+			test1( fileName );
+			break;
+		case 2:
+			test2( fileName );
+			break;
+		case 3:
+			test3( fileName );
+			break;
+		default:
+			System.err.println( "'" + args[0] + "' is not a valid test id ; must be '0' to '3'.");
+			System.exit(1);
+			break;
+		}
+
+			
 	}
 }
 
