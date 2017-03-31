@@ -111,7 +111,6 @@ namespace processing_ {
 		lcl::meaning Meaning;
 		lcl::locale Locale;
 		str::wString Translation;
-		qCBUFFERr Buffer;
 	qRB
 		rProcessor_ &Processor = *(rProcessor_ *)jre::java::lang::sLong( Args.Get() ).LongValue();
 
@@ -125,7 +124,7 @@ namespace processing_ {
 			Locale.Init();
 			Translation.Init();
 			Locale.GetTranslation( Meaning, "", Translation );
-			scljre::Throw( Translation.Convert( Buffer ) );
+			scljre::Throw( Translation );
 		}
 	qRR
 	qRT
@@ -196,7 +195,6 @@ namespace parsing_ {
 		lcl::locale Locale;
 		str::wString Error;
 		jre::sObject Data;
-		qCBUFFERr Buffer;
 	qRB
 		rParser_ &Parser = *(rParser_ *)jre::java::lang::sLong( Args.Get() ).LongValue();
 
@@ -209,7 +207,7 @@ namespace parsing_ {
 			Locale.Init();
 			Error.Init();
 			Locale.GetTranslation( Meaning, "", Error );
-			scljre::Throw( Error.Convert( Buffer ) );
+			scljre::Throw( Error );
 			break;
 		case xml::t_Processed:
 			break;

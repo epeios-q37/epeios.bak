@@ -52,6 +52,17 @@ namespace scljre {
 		qRAbort();
 	}
 
+	inline void Throw( const str::dString &Text )
+	{
+	qRH
+		qCBUFFERr Buffer;
+	qRB
+		Throw( Text.Convert( Buffer ) );
+	qRR
+	qRT
+	qRE
+	}
+
 	class sArguments
 	{
 	private:
