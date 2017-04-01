@@ -39,12 +39,7 @@
   </Modules>
  </Modules>
  <PreprocessorDefinitions>
-  <PreprocessorDefinition>ZEND_WIN32_FORCE_INLINE</PreprocessorDefinition>
-  <PreprocessorDefinition>ZTS=1</PreprocessorDefinition>
-  <PreprocessorDefinition>ZEND_WIN32=1</PreprocessorDefinition>
-  <PreprocessorDefinition>PHP_WIN32=1</PreprocessorDefinition>
-  <PreprocessorDefinition>ZEND_DEBUG=0</PreprocessorDefinition>
-  <PreprocessorDefinition>_USE_32BIT_TIME_T_=1</PreprocessorDefinition>
-  <PreprocessorDefinition>__STDC_LIMIT_MACROS</PreprocessorDefinition>
+  <!-- For 'TS' build. For 'NTS', comment below line. -->
+  <PreprocessorDefinition>ZTS</PreprocessorDefinition>
  </PreprocessorDefinitions>
 </Project>

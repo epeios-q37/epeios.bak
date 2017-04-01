@@ -90,7 +90,7 @@ namespace {
 // implementation of a custom my_function()
 PHP_FUNCTION(MyFunction)
 {
-    //RETURN_STRING("This is my function from the NEW XPPQ component.\n", 1);
+    RETURN_STRING("This is my function from the NEW XPPQ component !!!!\n", 1);
 
 	str::wString Location;
 
@@ -102,7 +102,7 @@ PHP_FUNCTION(MyFunction)
 
 	sclmisc::Initialize( Rack_, Location, qRPU );
 
-	cio::COut << "Hello !!!" << txf::nl << txf::commit;
+	cio::COut << "Hello !!!!" << txf::nl << txf::commit;
 }
 
 namespace sclmisc {

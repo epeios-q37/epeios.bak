@@ -61,17 +61,15 @@ CXXFLAGS += -O
 	
 copt += -DZEND_WIN32_FORCE_INLINE
 
-copt += -DZTS=1
-
 copt += -DZEND_WIN32=1
 
 copt += -DPHP_WIN32=1
 
+copt += -D__STDC_LIMIT_MACROS
+
 copt += -DZEND_DEBUG=0
 
-copt += -D_USE_32BIT_TIME_T_=1
-
-copt += -D__STDC_LIMIT_MACROS
+copt += -DZTS
 
 win=win
 win32=win32
@@ -357,7 +355,7 @@ ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20170331"\"
+copt += -DVERSION=\""20170401"\"
 copt += -DCOPYRIGHT_YEARS=\""2007-2017"\"
 copt += -DIDENTIFIER=\"""\"
 
