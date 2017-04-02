@@ -86,11 +86,60 @@ namespace {
 	}
 }
 
+void FillArray(
+	void **Array,
+	int Index,
+	void *Arg )
+{
+	Array[Index]=Arg;
+}
+
+void FillArray(
+	void **Array,
+	int Index )
+{
+}
+
+template <typename arg, typename ...args> void FillArray(
+	void **Array,
+	int Index,
+	arg &Arg,
+	args &...Args )
+{
+	FillArray( Array, Index, &Arg );
+
+	FillArray( Array, Index+1, Args... );
+}
+
+
+template <typename ...args> void Get(
+	int num_args TSRMLS_DC,
+	args &...Args )
+{
+	long *Array[sizeof...( Args)];
+	FillArray( (void **)Array, 0, Args... );
+
+	int num_varargs;
+	zval *varargs = NULL;
+
+	zend_parse_parameters( num_args TSRMLS_CC, "*", &varargs, &num_varargs );
+}
+
+
  
 // implementation of a custom my_function()
 PHP_FUNCTION(MyFunction)
 {
-    RETURN_STRING("This is my function from the NEW XPPQ component !!!!\n", 1);
+//    RETURN_STRING("This is my function from the NEW XPPQ component !!!!\n", 1);
+
+	long Long1 = 0, Long2 = 0;
+
+	Get( ZEND_NUM_ARGS() TSRMLS_CC, Long1, Long2 );
+
+//	zend_parse_parameters( ht , tsrm_ls, "l", &Long );
+
+	RETURN_LONG( Long2 );
+
 
 	str::wString Location;
 
