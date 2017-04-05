@@ -15,7 +15,7 @@
 #	You should have received a copy of the GNU Affero General Public License
 #	along with xppq. If not, see <http://www.gnu.org/licenses/>.
 
-name = xppqphp
+name = xppqznd
 
 
 # Epeios general debugging features
@@ -62,8 +62,6 @@ CXXFLAGS += -O
 copt += -DZEND_WIN32_FORCE_INLINE
 
 copt += -DZEND_WIN32=1
-
-copt += -DPHP_WIN32=1
 
 copt += -D__STDC_LIMIT_MACROS
 
