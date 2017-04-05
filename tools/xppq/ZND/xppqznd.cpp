@@ -25,9 +25,9 @@
 
 #include "sclmisc.h"
 
-# define NAME_MC			"XPPqPHP"
-# define NAME_LC			"xppqphp"
-# define NAME_UC			"XPPQPHP"
+# define NAME_MC			"XPPqZND"
+# define NAME_LC			"xppqznd"
+# define NAME_UC			"XPPQZND"
 # define WEBSITE_URL		"http://q37.info/"
 # define AUTHOR_NAME		"Claude SIMON"
 # define AUTHOR_CONTACT		"http://q37.info/contact/"
@@ -35,8 +35,8 @@
 # define OWNER_CONTACT		"http://q37.info/contact/"
 # define COPYRIGHT			COPYRIGHT_YEARS " " OWNER_NAME " (" OWNER_CONTACT ")"
 
-#define PHP_XPPQ_VERSION "1.0"
-#define PHP_XPPQ_EXTNAME "xppq"
+#define ZND_XPPQ_VERSION "1.0"
+#define ZND_XPPQ_EXTNAME "xppq"
 
 /*
 extern zend_module_entry xppq_module_entry;
@@ -56,7 +56,7 @@ zend_module_entry xppq_module_entry = {
 #if ZEND_MODULE_API_NO >= 20010901
     STANDARD_MODULE_HEADER,
 #endif
-    PHP_XPPQ_EXTNAME,
+    ZND_XPPQ_EXTNAME,
     my_functions,
     NULL, // name of the MINIT function or NULL if not applicable
     NULL, // name of the MSHUTDOWN function or NULL if not applicable
@@ -64,7 +64,7 @@ zend_module_entry xppq_module_entry = {
     NULL, // name of the RSHUTDOWN function or NULL if not applicable
     NULL, // name of the MINFO function or NULL if not applicable
 #if ZEND_MODULE_API_NO >= 20010901
-    PHP_XPPQ_VERSION,
+    ZND_XPPQ_VERSION,
 #endif
     STANDARD_MODULE_PROPERTIES
 };
