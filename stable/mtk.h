@@ -74,7 +74,7 @@ typedef void (* mtk__routine)(void *);
 #  define MTK__KEEP
 # else
 #  ifdef MTK__POSIX
-#   define MTK__KILL
+#   define MTK__KEEP
 #  else
 #   define MTK__KILL
 #  endif

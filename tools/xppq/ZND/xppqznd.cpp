@@ -18,7 +18,7 @@
 */
 
 
-// #include "php.h"
+#include "php.h"
 
 #include "zend_API.h"
 //#include "zend_modules.h"
@@ -91,9 +91,12 @@ namespace {
 
 void Get_(
 	zval **Val,
+	void ***tsrm_ls,
 	long &Long )
 {
 	zval **ZVal = NULL;
+	php_stream *Stream = NULL;
+	int le_myfile = 0;
 
 	long **L = NULL;
 
@@ -108,6 +111,12 @@ void Get_(
 		zend_hash_index_find( Z_ARRVAL_PP( Val ), 3, (void **)&ZVal );
 //		zend_hash_get_current_key_zval( , &ZVal);
 		break;
+	case IS_RESOURCE:
+		Long = Z_RESVAL_PP( Val );
+//		php_stream_from_zval( Stream, Val );
+		ZEND_FETCH_RESOURCE_NO_RETURN( Stream, php_stream *, Val, -1, "stram", php_file_le_stream());
+//		ZEND_FETCH_RESOURCE_NO_RETURN( File, FILE *, Val, -1, "standard-c-file", le_myfile );
+		break;
 	default:
 		qRFwk();
 		break;
@@ -117,19 +126,21 @@ void Get_(
 
 void Get_(
 	zval ***ZVals,
+	void ***tsrm_ls,
 	int Index )
 {
 }
 
 template <typename arg, typename ...args> void Get_(
 	zval ***ZVals,
+	void *** tsrm_ls,
 	int Index,
 	arg &Arg,
 	args &...Args )
 {
-	Get_( ZVals[Index], Arg );
+	Get_( ZVals[Index], tsrm_ls, Arg );
 
-	Get_( ZVals, Index+1, Args... );
+	Get_( ZVals, tsrm_ls, Index+1, Args... );
 }
 
 
@@ -142,7 +153,7 @@ template <typename ...args> void Get(
 
 	zend_parse_parameters( num_args TSRMLS_CC, "*", &varargs, &num_varargs );
 
-	Get_( varargs, 0, Args... );
+	Get_( varargs, tsrm_ls, 0, Args... );
 }
 
 

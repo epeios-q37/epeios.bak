@@ -69,6 +69,8 @@ copt += -DZEND_DEBUG=0
 
 copt += -DZTS
 
+copt += -DPHP_WIN32
+
 win=win
 win32=win32
 win64=win64
@@ -353,7 +355,7 @@ ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20170405"\"
+copt += -DVERSION=\""20170406"\"
 copt += -DCOPYRIGHT_YEARS=\""2007-2017"\"
 copt += -DIDENTIFIER=\"""\"
 

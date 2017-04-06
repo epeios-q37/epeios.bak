@@ -41,5 +41,6 @@
  <PreprocessorDefinitions>
   <!-- For 'TS' build. For 'NTS', comment below line. -->
   <PreprocessorDefinition>ZTS</PreprocessorDefinition>
+  <PreprocessorDefinition>PHP_WIN32</PreprocessorDefinition>
  </PreprocessorDefinitions>
 </Project>
