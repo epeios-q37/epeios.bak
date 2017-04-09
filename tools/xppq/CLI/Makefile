@@ -76,7 +76,9 @@ MacOS=Darwin
 Android=Android
 os=$(shell uname -o 2>/dev/null || uname -s)
 mach=$(shell uname -m)
-  
+ifdef EPEIOS_SRC
+endif
+
 
 ##########################
 # For Cygwin environment #
@@ -337,7 +339,7 @@ ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20170224"\"
+copt += -DVERSION=\""20170406"\"
 copt += -DCOPYRIGHT_YEARS=\""2007-2016"\"
 copt += -DIDENTIFIER=\""4e0195ad-2b3d-4fc2-8b1f-73a59bd765fe"\"
 

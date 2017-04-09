@@ -18,10 +18,10 @@
 */
 
 
-#include "php.h"
-
-#include "zend_API.h"
+#include "sclznd.h"
 //#include "zend_modules.h"
+
+#include "php.h"
 
 #include "sclmisc.h"
 
@@ -44,10 +44,12 @@ extern zend_module_entry xppq_module_entry;
  */
 // declaration of a custom my_function()
 ZEND_FUNCTION(MyFunction);
+ZEND_FUNCTION(Wrapper);
 // list of custom PHP functions provided by this extension
 // set {NULL, NULL, NULL} as the last record to mark the end of list
 static zend_function_entry my_functions[] = {
     ZEND_FE(MyFunction, NULL)
+    ZEND_FE(Wrapper, NULL)
     {NULL, NULL, NULL}
 };
  
@@ -112,9 +114,12 @@ void Get_(
 //		zend_hash_get_current_key_zval( , &ZVal);
 		break;
 	case IS_RESOURCE:
+		int C;
 		Long = Z_RESVAL_PP( Val );
 //		php_stream_from_zval( Stream, Val );
-		ZEND_FETCH_RESOURCE_NO_RETURN( Stream, php_stream *, Val, -1, "stram", php_file_le_stream());
+		ZEND_FETCH_RESOURCE_NO_RETURN( Stream, php_stream *, Val, -1, "stream", php_file_le_stream());
+		while ( ( C = php_stream_getc( Stream ) ) != -1 )
+			cio::COut << (char)C  << txf::commit;
 //		ZEND_FETCH_RESOURCE_NO_RETURN( File, FILE *, Val, -1, "standard-c-file", le_myfile );
 		break;
 	default:
@@ -155,13 +160,19 @@ template <typename ...args> void Get(
 
 	Get_( varargs, tsrm_ls, 0, Args... );
 }
-
-
  
 // implementation of a custom my_function()
 ZEND_FUNCTION(MyFunction)
 {
-//    RETURN_STRING("This is my function from the NEW XPPQ component !!!!\n", 1);
+
+	str::wString Location;
+
+	cio::Initialize( cio::GetConsoleSet() );
+	Rack_.Init( Error_, SCLError_, cio::GetSet( cio::t_Default ), Locale_ );
+
+	cio::COut << "Hello !!!!" << txf::nl << txf::commit;
+	
+	//    RETURN_STRING("This is my function from the NEW XPPQ component !!!!\n", 1);
 
 	long Long1 = 0, Long2 = 0;
 
@@ -171,20 +182,29 @@ ZEND_FUNCTION(MyFunction)
 
 	RETURN_LONG( Long2 );
 
-
-	str::wString Location;
-
-	cio::Initialize( cio::GetConsoleSet() );
-	Rack_.Init( Error_, SCLError_, cio::GetSet( cio::t_Default ), Locale_ );
-
-	Location.Init();
-	// TODO : Find a way to fill 'Location' with the path of the binary.
-
-	sclmisc::Initialize( Rack_, Location, qRPU );
-
-	cio::COut << "Hello !!!!" << txf::nl << txf::commit;
-
 //	zend_hash_get_current_data
+}
+
+void Test( sclznd::sArguments &Arguments )
+{
+	long Long1 = 0, Long2 = 0, Long3 = 0, Long4 = 0, Long5 = 5;
+	zendq::sArray Array;
+
+	Array.Init();
+
+	Arguments.Get( Long1, Long2, Array );
+	Array.Get( 0, Long3 );
+	Array.Get( 1, Long4 );
+	Array.Get( "toto", Long5 );
+
+	cio::COut << "SCLZND" << txf::pad << Long1 << txf::pad << Long2 << txf::pad << Long3 << txf::pad << Long4 << txf::pad << Long5 << txf::nl << txf::commit;
+
+
+}
+
+void sclznd::SCLZNDRegister( sRegistrar &Registrar )
+{
+	Registrar.Register( Test );
 }
 
 namespace sclmisc {

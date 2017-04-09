@@ -39,6 +39,7 @@ mods += dlbrry plgn tht bomhdl cdgb64
 mods += fil fnm lcl rgstry stsfsm 
 mods += xml xpp 
 mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
+mods += sclznd 
 
 pmods += pllio 
 
@@ -59,10 +60,6 @@ CXXFLAGS += -O
 
 ###############################
 	
-copt += -DZEND_WIN32_FORCE_INLINE
-
-copt += -DZEND_WIN32=1
-
 copt += -D__STDC_LIMIT_MACROS
 
 copt += -DZEND_DEBUG=0
@@ -355,7 +352,7 @@ ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20170406"\"
+copt += -DVERSION=\""20170409"\"
 copt += -DCOPYRIGHT_YEARS=\""2007-2017"\"
 copt += -DIDENTIFIER=\"""\"
 

@@ -32,14 +32,80 @@
 
 # ifdef CPE_S_WIN
 #  define ZEND_WIN32
+#  define ZEND_WIN32_FORCE_INLINE
 # endif
 
 // Note to developer : include 'h:\hg\ZNDIncludeDirectories.props' in the '.vcxproj'.
 # include "zend_API.h"
 
+# include "bso.h"
 # include "err.h"
+# include "tol.h"
 
 namespace zendq {
+	inline void Get(
+		zval *Val,
+		long &Long )
+	{
+		Long = Z_LVAL_P( Val );
+	}
+
+	class sArray {
+	private:
+		HashTable *Table_;
+	public:
+		void reset( bso::sBool P = true )
+		{
+			tol::reset( P, Table_ );
+		}
+		qCDTOR( sArray );
+		void Init( HashTable *Table = NULL )
+		{
+			Table_ = Table;
+		}
+		template <typename t> bso::sBool Get(
+			int Index,
+			t &Val,
+			qRPD )
+		{
+			zval **ZVal = NULL;
+
+			if ( Table_ == NULL )
+				qRFwk();
+
+			if ( zend_hash_index_find(Table_, Index, (void **)&ZVal) != SUCCESS ) {
+				if ( qRPT )
+					qRFwk();
+				else
+					return false;
+			}
+
+			zendq::Get( *ZVal, Val );
+
+			return true;
+		}
+		template <typename t> bso::sBool Get(
+			const char *Key,
+			t &Val,
+			qRPD )
+		{
+			zval **ZVal = NULL;
+
+			if ( Table_ == NULL )
+				qRFwk();
+
+			if ( zend_hash_find( Table_, Key, strlen( Key ) + 1, (void **)&ZVal ) != SUCCESS ) {
+				if ( qRPT )
+					qRFwk();
+				else
+					return false;
+			}
+
+			zendq::Get( *ZVal, Val );
+
+			return true;
+		}
+	};
 
 }
 
