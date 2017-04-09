@@ -40,6 +40,7 @@ mods += fil fnm lcl rgstry stsfsm
 mods += xml xpp 
 mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
 mods += sclznd 
+mods += phpq zendq 
 
 pmods += pllio 
 
@@ -65,8 +66,6 @@ copt += -D__STDC_LIMIT_MACROS
 copt += -DZEND_DEBUG=0
 
 copt += -DZTS
-
-copt += -DPHP_WIN32
 
 win=win
 win32=win32

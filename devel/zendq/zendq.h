@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-// From Zend (PHP related framework).
+// (From Zend (PHP related framework)).
 
 #ifndef ZENDQ_INC_
 # define ZENDQ_INC_
@@ -107,6 +107,61 @@ namespace zendq {
 		}
 	};
 
+	inline void Get(
+		zval **Val,
+		sArray &Array )
+	{
+		Array.Init( Z_ARRVAL_PP( Val ) );
+	}
+
+	template <typename t, int (* type_id)( void )> class sResource
+	{
+	private:
+		t *Pointer_;
+		void ***tsrm_ls_;
+	protected:
+		t *P_( void )
+		{
+			if ( Pointer_ == NULL )
+				qRFwk();
+
+			return Pointer_;
+		}
+		void ***T_( void )
+		{
+			if ( tsrm_ls_ == NULL )
+				qRFwk();
+
+			return tsrm_ls_;
+		}
+	public:
+		static const char *TypeName_;
+		int TypeId_;
+		void reset( bso::sBool P = true )
+		{
+			tol::reset( P, Pointer_);
+		}
+		qCDTOR( sResource );
+		void Init( void *Pointer = NULL )
+		{
+			TypeId_ = type_id();
+			Pointer_ = (t *)Pointer;
+		}
+	};
+
+	template <typename t, int (* type_id)( void )> inline void Get(
+		zval **Val,
+# ifdef ZTS
+		void ***tsrm_ls,
+# endif
+		sResource<t, type_id> &Resource )
+	{
+# ifdef ZTS
+		Resource.Init( zend_fetch_resource( Val, tsrm_ls, -1, Resource.TypeName_, NULL, 1, Resource.TypeId_ ) );
+# else
+		Resource.Init( zend_fetch_resource( Val, -1, Resource.TypeName_, NULL, 1, Resource.TypeId_ ) );
+# endif
+	}
 }
 
 #endif

@@ -41,29 +41,40 @@ namespace sclznd {
 		void ***tsrm_ls_;
 		int num_varargs_;
 		zval ***varargs_;
-		void Get_( int Index )
-		{
-		}
-		void Get_(
+		int Index_;
+		void SGet_( void )
+		{}
+		void SGet_(
 			zval **Val,
 			long &Long )
 		{
 			zendq::Get( *Val, Long );
 		}
-		void Get_(
+		void SGet_(
 			zval **Val,
 			zendq::sArray &Array )
 		{
-			Array.Init( Z_ARRVAL_PP( Val ) );
+			zendq::Get( Val, Array );;
 		}
-		template <typename arg, typename ...args> void Get_(
-			int Index,
+		template <typename t, int (* type_id)( void )> void SGet_(
+			zval **Val,
+			zendq::sResource<t, type_id> &Resource )
+		{
+# ifdef ZTS
+			zendq::Get( Val, tsrm_ls_, Resource );
+# else
+			zendq::Get( Val, Resource );
+# endif
+		}
+		void MGet_( void )
+		{}
+		template <typename arg, typename ...args> void MGet_(
 			arg &Arg,
 			args &...Args )
 		{
-			Get_( varargs_[Index], Arg );
+			SGet_( varargs_[Index_++], Arg );
 
-			Get_( Index+1, Args... );
+			MGet_( Args... );
 		}
 	public:
 		void reset( bso::sBool P = true )
@@ -71,6 +82,7 @@ namespace sclznd {
 			tsrm_ls_ = NULL;
 			num_varargs_ = 0;
 			varargs_ = NULL;
+			Index_ = 0;
 		}
 		qCDTOR( sArguments );
 		void Init(
@@ -78,13 +90,14 @@ namespace sclznd {
 			int num_varargs,
 			zval ***varargs )
  		{
-			tsrm_ls = tsrm_ls;
+			tsrm_ls_ = tsrm_ls;
 			num_varargs_ = num_varargs;
 			varargs_ = varargs;
+			Index_ = 0;
 		}
 		template <typename ...args> void Get( args &...Args )
 		{
-			Get_( 0, Args... );
+			MGet_( Args... );
 		}
 	};
 

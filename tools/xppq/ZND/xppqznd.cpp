@@ -21,7 +21,7 @@
 #include "sclznd.h"
 //#include "zend_modules.h"
 
-#include "php.h"
+#include "phpq.h"
 
 #include "sclmisc.h"
 
@@ -43,12 +43,10 @@ extern zend_module_entry xppq_module_entry;
 #define phpext_wppq_ptr &xppq_module_entry
  */
 // declaration of a custom my_function()
-ZEND_FUNCTION(MyFunction);
 ZEND_FUNCTION(Wrapper);
 // list of custom PHP functions provided by this extension
 // set {NULL, NULL, NULL} as the last record to mark the end of list
 static zend_function_entry my_functions[] = {
-    ZEND_FE(MyFunction, NULL)
     ZEND_FE(Wrapper, NULL)
     {NULL, NULL, NULL}
 };
@@ -72,134 +70,29 @@ zend_module_entry xppq_module_entry = {
 };
  
 ZEND_GET_MODULE(xppq)
-
-namespace {
-	err::err___ Error_;
-	sclerror::rError SCLError_;
-	scllocale::rRack Locale_;
-	sclmisc::sRack Rack_;
-
-	void ERRFinal_( void )
-	{
-		err::buffer__ Buffer;
-
-		const char *Message = err::Message( Buffer );
-
-		ERRRst();	// To avoid relaunching of current error by objects of the 'FLW' library.
-
-//		Env->ThrowNew( Env->FindClass( "java/lang/Exception" ), Message );
-	}
-}
-
-void Get_(
-	zval **Val,
-	void ***tsrm_ls,
-	long &Long )
-{
-	zval **ZVal = NULL;
-	php_stream *Stream = NULL;
-	int le_myfile = 0;
-
-	long **L = NULL;
-
-	switch ( Z_TYPE_P(*Val) ) {
-	case IS_LONG:
-		Long = Z_LVAL_PP( Val );
-		break;
-	case IS_ARRAY:
-		zend_hash_index_find( Z_ARRVAL_PP( Val ), 0, (void **)&ZVal );
-		zend_hash_index_find( Z_ARRVAL_PP( Val ), 1, (void **)&ZVal );
-		zend_hash_index_find( Z_ARRVAL_PP( Val ), 2, (void **)&ZVal );
-		zend_hash_index_find( Z_ARRVAL_PP( Val ), 3, (void **)&ZVal );
-//		zend_hash_get_current_key_zval( , &ZVal);
-		break;
-	case IS_RESOURCE:
-		int C;
-		Long = Z_RESVAL_PP( Val );
-//		php_stream_from_zval( Stream, Val );
-		ZEND_FETCH_RESOURCE_NO_RETURN( Stream, php_stream *, Val, -1, "stream", php_file_le_stream());
-		while ( ( C = php_stream_getc( Stream ) ) != -1 )
-			cio::COut << (char)C  << txf::commit;
-//		ZEND_FETCH_RESOURCE_NO_RETURN( File, FILE *, Val, -1, "standard-c-file", le_myfile );
-		break;
-	default:
-		qRFwk();
-		break;
-	}
-
-}
-
-void Get_(
-	zval ***ZVals,
-	void ***tsrm_ls,
-	int Index )
-{
-}
-
-template <typename arg, typename ...args> void Get_(
-	zval ***ZVals,
-	void *** tsrm_ls,
-	int Index,
-	arg &Arg,
-	args &...Args )
-{
-	Get_( ZVals[Index], tsrm_ls, Arg );
-
-	Get_( ZVals, tsrm_ls, Index+1, Args... );
-}
-
-
-template <typename ...args> void Get(
-	int num_args TSRMLS_DC,
-	args &...Args )
-{
-	int num_varargs;
-	zval ***varargs = NULL;
-
-	zend_parse_parameters( num_args TSRMLS_CC, "*", &varargs, &num_varargs );
-
-	Get_( varargs, tsrm_ls, 0, Args... );
-}
  
-// implementation of a custom my_function()
-ZEND_FUNCTION(MyFunction)
-{
-
-	str::wString Location;
-
-	cio::Initialize( cio::GetConsoleSet() );
-	Rack_.Init( Error_, SCLError_, cio::GetSet( cio::t_Default ), Locale_ );
-
-	cio::COut << "Hello !!!!" << txf::nl << txf::commit;
-	
-	//    RETURN_STRING("This is my function from the NEW XPPQ component !!!!\n", 1);
-
-	long Long1 = 0, Long2 = 0;
-
-	Get( ZEND_NUM_ARGS() TSRMLS_CC, Long1, Long2 );
-
-//	zend_parse_parameters( ht , tsrm_ls, "l", &Long );
-
-	RETURN_LONG( Long2 );
-
-//	zend_hash_get_current_data
-}
-
 void Test( sclznd::sArguments &Arguments )
 {
 	long Long1 = 0, Long2 = 0, Long3 = 0, Long4 = 0, Long5 = 5;
 	zendq::sArray Array;
+	phpq::sStream Stream;
 
 	Array.Init();
+	Stream.Init();
+	Arguments.Get( Long1, Long2, Array, Stream );
 
-	Arguments.Get( Long1, Long2, Array );
 	Array.Get( 0, Long3 );
 	Array.Get( 1, Long4 );
 	Array.Get( "toto", Long5 );
 
-	cio::COut << "SCLZND" << txf::pad << Long1 << txf::pad << Long2 << txf::pad << Long3 << txf::pad << Long4 << txf::pad << Long5 << txf::nl << txf::commit;
+	cio::COut << "SCLZND !" << txf::pad << Long1 << txf::pad << Long2 << txf::pad << Long3 << txf::pad << Long4 << txf::pad << Long5 << txf::nl << txf::commit;
 
+	int C;
 
+	while ( ( C = Stream.Get() ) != -1 )
+		cio::COut << (char)C;
+
+	cio::COut << txf::commit;
 }
 
 void sclznd::SCLZNDRegister( sRegistrar &Registrar )
