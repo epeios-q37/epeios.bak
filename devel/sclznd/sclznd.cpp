@@ -32,25 +32,59 @@
 using namespace sclznd;
 
 namespace {
-	bch::qBUNCHwl( sFunction_ ) Functions_;
+	bch::qBUNCHwl( sCallback_ ) Callbacks_;
 }
 
-void sclznd::sRegistrar::Register( sFunction_ Function )
+void sclznd::sRegistrar::Register( sCallback_ Callback )
 {
-	Functions_.Append( Function );
+	Callbacks_.Append( Callback );
 }
 
-ZEND_FUNCTION( Wrapper )
+namespace {
+	void Infos_( str::dString &Infos )
+	{
+	qRFH
+		flx::rStringOFlow SFlow;
+		txf::sOFlow TFlow;
+	qRFB
+		Infos.Init();
+		SFlow.Init( Infos );
+		TFlow.Init( SFlow );
+
+		TFlow << sclmisc::SCLMISCProductName << " v" << SCLZNDProductVersion << " - Zend v" << ZEND_VERSION << txf::nl
+			<< txf::pad << "Build : " __DATE__ " " __TIME__ " (" <<  cpe::GetDescription() << ')';
+	qRFR
+	qRFT
+	qRFE( sclmisc::ErrFinal() )
+	}
+}
+
+void sclznd::Infos_( zval *Return )
+{
+qRFH
+	str::wString Infos;
+	qCBUFFERr Buffer;
+qRFB
+	Infos.Init();
+	::Infos_( Infos );
+
+	ZVAL_STRING( Return ,Infos.Convert( Buffer ), 1 );
+qRFR
+qRFT
+qRFE( sclmisc::ErrFinal() )
+}
+
+
+void sclznd::Wrapper_(
+	long Index,
+	int num_varargs,
+	zval ***varargs
+	TSRMLS_DC )
 {
 qRFH
 	sArguments Arguments;
-	long Index = 0;
-	int num_varargs;
-	zval ***varargs = NULL;
 qRFB
-	zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "l*", &Index, &varargs, &num_varargs );
-
-	if ( !Functions_.Exists( Index ) )
+	if ( !Callbacks_.Exists( Index ) )
 		qRGnr();
 
 #ifdef ZTS
@@ -59,7 +93,7 @@ qRFB
 	Arguments.Init( NULL, num_varargs, varargs );
 #endif
 
-	Functions_( Index )( Arguments );
+	Callbacks_( Index )( Arguments );
 
 	if ( sclerror::IsErrorPending() )
 		qRAbort();	// To force the handling of a pending error.
@@ -67,6 +101,36 @@ qRFR
 qRFT
 qRFE( sclmisc::ErrFinal() )
 }
+
+ZEND_FUNCTION(Wrapper);
+
+
+namespace {
+
+	zend_module_entry ModuleEntry = {
+	#if ZEND_MODULE_API_NO >= 20010901
+		STANDARD_MODULE_HEADER,
+	#endif
+		sclmisc::SCLMISCProductName,
+		SCLZNDFunctions,
+		NULL, // name of the MINIT function or NULL if not applicable
+		NULL, // name of the MSHUTDOWN function or NULL if not applicable
+		NULL, // name of the RINIT function or NULL if not applicable
+		NULL, // name of the RSHUTDOWN function or NULL if not applicable
+		NULL, // name of the MINFO function or NULL if not applicable
+	#if ZEND_MODULE_API_NO >= 20010901
+		SCLZNDProductVersion,
+	#endif
+		STANDARD_MODULE_PROPERTIES
+	};
+}
+ 
+// the following code creates an entry for the module and registers it with Zend.
+ 
+extern "C" {
+	ZEND_DLEXPORT zend_module_entry *get_module(void) { return &ModuleEntry; }\
+}
+
 
 namespace {
 	namespace {
@@ -97,7 +161,7 @@ namespace {
 
 		Registrar.Init();
 
-		Functions_.Init();
+		Callbacks_.Init();
 		sclznd::SCLZNDRegister( Registrar );
 	qRFR
 	qRFT

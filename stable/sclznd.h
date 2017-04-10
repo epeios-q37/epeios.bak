@@ -36,6 +36,17 @@
 
 namespace sclznd {
 
+	void Infos_( zval *Infos );
+
+	void Wrapper_(
+		long Index,
+		int num_varargs,
+		zval ***varargs
+		TSRMLS_DC );
+}
+
+namespace sclznd {
+
 	class sArguments {
 	private:
 		void ***tsrm_ls_;
@@ -101,7 +112,7 @@ namespace sclznd {
 		}
 	};
 
-	typedef void (* sFunction_)( sArguments &Arguments );
+	typedef void (* sCallback_)( sArguments &Arguments );
 
 	class sRegistrar
 	{
@@ -113,17 +124,43 @@ namespace sclznd {
 		void Init( void )
 		{
 		}
-		void Register( sFunction_ Function );
-		template <typename function, typename ...functions> void Register(
-			function Function,
-			functions... Functions )
+		void Register( sCallback_ Callback );
+		template <typename callback, typename ...callbacks> void Register(
+			callback Callback,
+			callbacks... Callbacks )
 		{
-			Register( Function );
-			Register( Functions... );
+			Register( Callback );
+			Register( Callbacks... );
 		}
 	};
 
 	void SCLZNDRegister( sRegistrar &Registrar );	// To overload by user.
+	extern const char *SCLZNDProductVersion;	// To overload by user.
+	extern zend_function_entry SCLZNDFunctions[];	// To overload by user ; is made by using the 'SCLZND_DEF(...)' macro below.
 }
+
+#define SCLZND_DEF( name )\
+	ZEND_FUNCTION( name##Infos )\
+	{\
+		sclznd::Infos_( return_value );\
+	}\
+\
+	ZEND_FUNCTION( name##Wrapper )\
+	{\
+		long Index = 0;\
+		int num_varargs;\
+		zval ***varargs = NULL;\
+\
+		zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "l*", &Index, &varargs, &num_varargs );\
+\
+		sclznd::Wrapper_( Index, num_varargs, varargs TSRMLS_CC );\
+	}\
+\
+	zend_function_entry sclznd::SCLZNDFunctions[] = {\
+		ZEND_FE(name##Infos, NULL)\
+		ZEND_FE(name##Wrapper, NULL)\
+		{NULL, NULL, NULL}\
+	}
+
 
 #endif
