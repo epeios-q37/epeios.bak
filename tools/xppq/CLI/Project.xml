@@ -31,9 +31,10 @@
 	</Modules>
 	<SourceDirs>
 	</SourceDirs>
-	<Files/>
-	<Packing>
-  <CIDir>xppq-cli</CIDir>
+ <CI>
+  <Dir>xppq-cli</Dir>
+ </CI>
+ <Packing>
 		<WikiFiles>
 			<File Dir="computing/epeios/tools/" Desc="general description of xppq" Oddity="IsHome">xppq</File>
 			<File Dir="computing/epeios/tools/xppq/" Desc="the preprocessor directives">Directives</File>

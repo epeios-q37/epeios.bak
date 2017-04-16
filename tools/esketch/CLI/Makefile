@@ -30,14 +30,14 @@ mods += cio cpe crptgr cslio crt
 mods += ctn dir dte dtfbsc dtfptb 
 mods += epsmsc err fdr flf flsq 
 mods += flw flx ias idsq iof 
-mods += iop lst lstbch lstcrt lstctn 
-mods += mns mtx ntvstr que sdr 
-mods += stkbse stkbch stkctn str strng 
-mods += tagsbs tol txf tys uys 
-mods += utf xtf llio tht thtsub 
-mods += bomhdl cdgb64 dlbrry fil fnm 
-mods += lcl plgn plgncore rgstry stsfsm 
-mods += xml xpp 
+mods += iop lck lst lstbch lstcrt 
+mods += lstctn mns mtk mtx ntvstr 
+mods += que sdr stkbse stkbch stkctn 
+mods += str strng tagsbs tol txf 
+mods += tys uys utf xtf llio 
+mods += tht thtsub bomhdl cdgb64 dlbrry 
+mods += fil fnm lcl plgn plgncore 
+mods += rgstry stsfsm xml xpp 
 mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
 mods += scltool 
 mods += registry 
@@ -76,7 +76,9 @@ MacOS=Darwin
 Android=Android
 os=$(shell uname -o 2>/dev/null || uname -s)
 mach=$(shell uname -m)
-  
+ifdef EPEIOS_SRC
+endif
+
 
 ##########################
 # For Cygwin environment #
@@ -337,7 +339,7 @@ ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20161012"\"
+copt += -DVERSION=\""20170406"\"
 copt += -DCOPYRIGHT_YEARS=\""2016"\"
 copt += -DIDENTIFIER=\""effd756a-a901-46e8-939f-3f2a5e7986b0"\"
 

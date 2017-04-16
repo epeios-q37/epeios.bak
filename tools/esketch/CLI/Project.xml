@@ -29,7 +29,10 @@
 		<Module>registry</Module>
 	</Modules>
 	<Files/>
-	<Packing>
+ <CI>
+  <Dir>esketch-cli</Dir>
+ </CI>
+ <Packing>
 		<WikiFiles>
 			<File Dir="computing/epeios/tools/" WikiOddity="IsHome">esketch</File>
 			<File Dir="computing/epeios/tools/esketch/">Manual</File>
