@@ -60,22 +60,22 @@ namespace ogzplg {
 
 	/* Type */
 
-	qCDEF( char *, TypePluginTarget, OGZPLG_TYPE_PLUGIN_TARGET );
-	qCDEF( char *, TypePluginVersion, OGZPLG_TYPE_PLUGIN_VERSION );
+	static qCDEF( char *, TypePluginTarget, OGZPLG_TYPE_PLUGIN_TARGET );
+	static qCDEF( char *, TypePluginVersion, OGZPLG_TYPE_PLUGIN_VERSION );
 
 	typedef fCommon<ogztyp::cType> fTypePlugin;
 
 	/* Database */
 
-	qCDEF( char *, DatabasePluginTarget, OGZPLG_DATABASE_PLUGIN_TARGET );
-	qCDEF( char *, DatabasePluginVersion, OGZPLG_DATABASE_PLUGIN_VERSION );
+	static qCDEF( char *, DatabasePluginTarget, OGZPLG_DATABASE_PLUGIN_TARGET );
+	static qCDEF( char *, DatabasePluginVersion, OGZPLG_DATABASE_PLUGIN_VERSION );
 
 	typedef fCommon<ogzdtb::cDatabase> fDatabasePlugin;
 
 	/* Authentication */
 
-	qCDEF( char *, AuthenticationPluginTarget, OGZPLG_AUTHENTICATION_PLUGIN_TARGET );
-	qCDEF( char *, AuthenticationPluginVersion, OGZPLG_AUTHENTICATION_PLUGIN_VERSION );
+	static qCDEF( char *, AuthenticationPluginTarget, OGZPLG_AUTHENTICATION_PLUGIN_TARGET );
+	static qCDEF( char *, AuthenticationPluginVersion, OGZPLG_AUTHENTICATION_PLUGIN_VERSION );
 
 	typedef fCommon<ogzusr::cAuthentication> fAuthenticationPlugin;
 }
