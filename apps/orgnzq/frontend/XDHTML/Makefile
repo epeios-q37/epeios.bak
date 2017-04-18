@@ -30,19 +30,19 @@ mods += cio cpe crptgr cslio crt
 mods += ctn dir dte dtfbsc dtfptb 
 mods += epsmsc err fdr flf flsq 
 mods += flw flx ias idsq iof 
-mods += iop lst lstbch lstcrt lstctn 
-mods += mns mtx ntvstr que sdr 
-mods += stkbse stkbch stkctn str strng 
-mods += tagsbs tol txf tys uys 
-mods += utf xtf llio bomhdl cdgb64 
-mods += dlbrry fil fnm lcl plgn 
-mods += plgncore rgstry stsfsm xml xpp 
-mods += mtk tht strmrg 
+mods += iop lck lst lstbch lstcrt 
+mods += lstctn mns mtk mtx ntvstr 
+mods += que sdr stkbse stkbch stkctn 
+mods += str strng tagsbs tol txf 
+mods += tys uys utf xtf llio 
+mods += bomhdl cdgb64 dlbrry fil fnm 
+mods += lcl plgn plgncore rgstry stsfsm 
+mods += xml xpp tht thtsub strmrg 
 mods += csdrcc 
 mods += fblcmd fblcst fblfep fblfph fblfrd 
 mods += fblfrp fblovl fbltyp 
-mods += sclmisc sclerror scllocale sclrgstry sclxdhtml 
-mods += sclfrntnd 
+mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
+mods += sclxdhtml sclfrntnd 
 mods += xdhcmn xdhdws 
 mods += frdapi frdcllbck frdfrntnd frdmisc frdplgn 
 mods += frdrgstry frdinstc 
@@ -83,14 +83,14 @@ MinGW=Msys
 GNULinux=GNU/Linux
 Linux=Linux
 MacOS=Darwin
+Android=Android
 os=$(shell uname -o 2>/dev/null || uname -s)
 mach=$(shell uname -m)
-  
-src += :..
-
-src += :../..
-
-src += :../../..
+ifdef EPEIOS_SRC
+ src += :..
+ src += :../..
+ src += :../../..
+endif
 
 
 ##########################
@@ -171,9 +171,11 @@ endif
 ifeq ("$(os)","$(Cygwin)")
 
 	co += -std=gnu++11 -DUNICODE -D_FILE_OFFSET_BITS=64
-	libs += -lws2_32
-
-	LDFLAGS += -static
+	
+	ifneq ("$(target)","$(Android)")
+		libs += -lws2_32
+		LDFLAGS += -static
+	endif
 	
 	ifeq ("$(target)","$(win)")
 		ifeq ("$(mach)","i686")
@@ -205,13 +207,28 @@ ifeq ("$(os)","$(Cygwin)")
 			lo += -municode -m64
 			co += -m64
 		else
-			mods += $(pmods)
+			ifeq ("$(target)","$(Android)")
+				CXX = C:/Users/csimon/AppData/Local/Android/sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/bin/clang++.exe
+				mods += $(pmods)
+				binary=lib$(name).so
+				
+				lo += -target i686-none-linux-android -gcc-toolchain C:/Users/csimon/AppData/Local/Android/sdk/ndk-bundle/toolchains/x86-4.9/prebuilt/windows-x86_64 --sysroot=C:/Users/csimon/AppData/Local/Android/sdk/ndk-bundle/platforms/android-14/arch-x86 -fPIC -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security -fno-exceptions -fno-rtti -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security -fno-exceptions -fno-rtti -fexceptions -std=c++11 -O0 -fno-limit-debug-info -O0 -fno-limit-debug-info  -Wl,--build-id -Wl,--warn-shared-textrel -Wl,--fatal-warnings -Wl,--no-undefined -Wl,-z,noexecstack -Qunused-arguments -Wl,-z,relro -Wl,-z,now -Wl,--build-id -Wl,--warn-shared-textrel -Wl,--fatal-warnings -Wl,--no-undefined -Wl,-z,noexecstack -Qunused-arguments -Wl,-z,relro -Wl,-z,now -shared
+				
+				co += -target i686-none-linux-android -gcc-toolchain C:/Users/csimon/AppData/Local/Android/sdk/ndk-bundle/toolchains/x86-4.9/prebuilt/windows-x86_64 --sysroot=C:/Users/csimon/AppData/Local/Android/sdk/ndk-bundle/platforms/android-14/arch-x86  -DXXX_DEBUG -Ih:/hg/epeios/stable -isystem C:/Users/csimon/AppData/Local/Android/sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/include -isystem C:/Users/csimon/AppData/Local/Android/sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/libs/x86/include -isystem C:/Users/csimon/AppData/Local/Android/sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/include/backward -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security -fno-rtti -fexceptions -std=c++11 -O0 -fno-limit-debug-info  -fPIC -MD
+				
+				libs += -ldl -landroid -llog -lm "C:/Users/csimon/AppData/Local/Android/sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/libs/x86/libgnustl_static.a"
+			else
+				mods += $(pmods)
+			endif
 		endif
     
 	endif
 	
-	binary=$(name).dll
-	lo += -Wl,--kill-at -shared
+	ifneq ("$(target)","$(Android)")
+		binary=$(name).dll
+		lo += -Wl,--kill-at -shared
+	endif
+
 
 	dest=/cygdrive/h/bin/
 
@@ -340,9 +357,12 @@ endif
 ##########################
 		
 all: $(binary)
-	rm -f *.o
+	rm -rf *.o
+ifeq ("$(target)","$(Android)")
+	rm -rf *.d
+endif
 
-copt += -DVERSION=\""20160814"\"
+copt += -DVERSION=\""20170418"\"
 copt += -DCOPYRIGHT_YEARS=\""2016"\"
 copt += -DIDENTIFIER=\""c8c33276-5e09-4f11-bd1b-3283b0ef0697"\"
 
@@ -380,5 +400,9 @@ endif
 
 clean:
 	rm -rf *.o
+ifeq ("$(target)","$(Android)")
+	rm -rf *.d
+endif
+
 
 		

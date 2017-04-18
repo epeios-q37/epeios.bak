@@ -30,14 +30,14 @@ mods += cio cpe crptgr cslio crt
 mods += ctn dir dte dtfbsc dtfptb 
 mods += epsmsc err fdr flf flsq 
 mods += flw flx ias idsq iof 
-mods += iop lst lstbch lstcrt lstctn 
-mods += mns mtx ntvstr que sdr 
-mods += stkbse stkbch stkctn str strng 
-mods += tagsbs tol txf tys uys 
-mods += utf xtf llio bomhdl cdgb64 
-mods += dlbrry fil fnm lcl plgn 
-mods += plgncore rgstry stsfsm xml xpp 
-mods += tht thtsub 
+mods += iop lck lst lstbch lstcrt 
+mods += lstctn mns mtk mtx ntvstr 
+mods += que sdr stkbse stkbch stkctn 
+mods += str strng tagsbs tol txf 
+mods += tys uys utf xtf llio 
+mods += bomhdl cdgb64 dlbrry fil fnm 
+mods += lcl plgn plgncore rgstry stsfsm 
+mods += xml xpp tht thtsub 
 mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
 mods += sclplugin 
 mods += frdcllbck frdplgn 
@@ -78,12 +78,11 @@ MacOS=Darwin
 Android=Android
 os=$(shell uname -o 2>/dev/null || uname -s)
 mach=$(shell uname -m)
-  
-src += :../
-
-src += :../../
-
-src += :../../../
+ifdef EPEIOS_SRC
+ src += :../
+ src += :../../
+ src += :../../../
+endif
 
 
 ##########################
@@ -355,7 +354,7 @@ ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20161014"\"
+copt += -DVERSION=\""20170418"\"
 copt += -DCOPYRIGHT_YEARS=\""2016"\"
 copt += -DIDENTIFIER=\""10f0ae90-444e-4aff-8609-069115bda3fa"\"
 

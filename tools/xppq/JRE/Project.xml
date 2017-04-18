@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project xmlns:xpp="http://zeusw.org/epeios/xpp">
+<Project xmlns:xpp="http://q37.info/ns/xpp/" >
  <xpp:bloc>
   <!-- User definitions -->
   <xpp:define name="Version">
@@ -38,4 +38,10 @@
    </Modules>
   </Modules>
  </Modules>
+ <Files>
+  <File>demo.xml</File>
+ </Files>
+ <CI>
+  <Dir>xppq-java</Dir>
+ </CI>
 </Project>

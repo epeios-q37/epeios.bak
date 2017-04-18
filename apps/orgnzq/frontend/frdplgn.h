@@ -30,8 +30,8 @@
 # define FRDPLGN_XML_VERSION	"1"
 
 namespace frdplgn {
-	qCDEF( char *, XMLTarget, FRDPLGN_XML_TARGET );
-	qCDEF( char *, XMLVersion, FRDPLGN_XML_TARGET );
+	extern const char *XMLTarget;
+	extern const char *XMLVersion;
 
 	typedef frdcllbck::cXML sXML_;
 

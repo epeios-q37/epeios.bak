@@ -32,6 +32,7 @@
 
 namespace frdfrntnd {
 	typedef sclfrntnd::rFrontend rFrontend_;
+	typedef fblfrd::cFrontend cFrontend_;
 
 	using frdmisc::sType;
 	using frdmisc::dTypes;
@@ -51,7 +52,8 @@ namespace frdfrntnd {
 	qW( EntriesI1S );
 
 	class rFrontend
-	: public rFrontend_
+	: public rFrontend_,
+	  public cFrontend_
 	{
 	private:
 		frdmisc::wXTypes Types_;
@@ -61,7 +63,7 @@ namespace frdfrntnd {
 		void GetNumbers_( void );
 		void DumpNumbers_( xml::writer_ &Writer );
 	protected:
-		virtual void FBLFRDOnConnect( void ) override
+		virtual void FBLFRDOnConnection( void ) override
 		{
 			Statics.Init( *this );
 			Column.Init( *this );
@@ -71,7 +73,7 @@ namespace frdfrntnd {
 			GetTypes_();
 			GetNumbers_();
 		}
-		virtual void FBLFRDOnDisconnect( void ) override
+		virtual void FBLFRDOnDisconnection( void ) override
 		{
 			Statics.reset();
 			Column.reset();
@@ -100,7 +102,7 @@ namespace frdfrntnd {
 			const char *Language,
 			fblfrd::reporting_callback__ &ReportingCallback )
 		{
-			rFrontend_::Init( Kernel, Language, ReportingCallback );
+			rFrontend_::Init( Kernel, Language, *this, ReportingCallback );
 			Types_.Init();
 			Numbers_.Init();
 		}

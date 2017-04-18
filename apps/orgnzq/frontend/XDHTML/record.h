@@ -25,7 +25,7 @@
 # include "base.h"
 
 namespace record {
-	E_CDEF( char *, FieldsFrameId_, "Fields" );
+	extern const char *FieldsFrameId_;
 
 	BASE_ACD( DefineNewField );
 	BASE_ACD( BackToList );

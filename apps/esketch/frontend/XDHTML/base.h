@@ -76,7 +76,7 @@ namespace core {
 }
 
 namespace base {
-	E_CDEF( char *, Name, BASE_NAME );
+	extern const char *Name;
 
 	typedef sclxdhtml::cAction<core::rSession> cAction;
 

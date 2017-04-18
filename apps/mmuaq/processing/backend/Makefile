@@ -30,12 +30,12 @@ mods += cio cpe crptgr cslio crt
 mods += ctn dir dte dtfbsc dtfptb 
 mods += epsmsc err fdr flf flsq 
 mods += flw flx ias idsq iof 
-mods += iop lst lstbch lstcrt lstctn 
-mods += mns mtx ntvstr que sdr 
-mods += stkbse stkbch stkctn str strng 
-mods += tagsbs tol txf tys uys 
-mods += utf xtf llio tht thtsub 
-mods += lck mtk bomhdl cdgb64 dlbrry 
+mods += iop lck lst lstbch lstcrt 
+mods += lstctn mns mtk mtx ntvstr 
+mods += que sdr stkbse stkbch stkctn 
+mods += str strng tagsbs tol txf 
+mods += tys uys utf xtf llio 
+mods += tht thtsub bomhdl cdgb64 dlbrry 
 mods += fil fnm lcl plgn plgncore 
 mods += rgstry stsfsm xml xpp btr 
 mods += dtr htp sck txmtbl 
@@ -89,10 +89,10 @@ MacOS=Darwin
 Android=Android
 os=$(shell uname -o 2>/dev/null || uname -s)
 mach=$(shell uname -m)
-  
-src += :..
-
-src += :../..
+ifdef EPEIOS_SRC
+ src += :..
+ src += :../..
+endif
 
 
 ##########################
@@ -364,7 +364,7 @@ ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20170130"\"
+copt += -DVERSION=\""20170406"\"
 copt += -DCOPYRIGHT_YEARS=\""2016-2017"\"
 copt += -DIDENTIFIER=\""189de286-5b16-4d82-b398-595aaaa23053"\"
 

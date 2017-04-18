@@ -90,13 +90,11 @@
 						<xpp:expand value-of="BackendPath"/>
 						<xpp:bloc>orgnzqbkd</xpp:bloc>
 					</Backend>
-					<Backend id="q37.info" Alias="q37PredefinedBackend" Plugin="Straight">q37.info:57710</Backend>
-					<Backend id="LocalHost" Alias="LocalPredefinedBackend" Plugin="Straight">localhost:53700</Backend>
+					<Backend id="LocalHost" Alias="LocalPredefinedBackend" Plugin="Straight">localhost:53800</Backend>
 					<xpp:ifeq select="packing" value="no">
 						<xpp:bloc>
-							<Backend id="Proxy" Alias="ProxyPredefinedBackend" Plugin="Proxy">localhost:53710 orgnzq</Backend>
-							<Backend id="Mini" Alias="MiniPredefinedBackend" Plugin="Straight">mini:53700</Backend>
-							<Backend id="LinuxVM" Alias="LinuxVMPredefinedBackend" Plugin="Straight">192.168.44.131:53700</Backend>
+							<Backend id="Proxy" Alias="ProxyPredefinedBackend" Plugin="Proxy">localhost:53800 orgnzq</Backend>
+							<Backend id="LinuxVM" Alias="LinuxVMPredefinedBackend" Plugin="Straight">192.168.44.131:53800</Backend>
 						</xpp:bloc>
 					</xpp:ifeq>
 				</xpp:bloc>
@@ -190,14 +188,6 @@
 			<Translations text="EmbeddedBackendProject">
 				<Translation language="fr">avec moteur de traitement enclavé</Translation>
 				<Translation language="en">with embedded backend</Translation>
-			</Translations>
-			<Translations text="MiniPredefinedBackend">
-				<Translation language="fr">Moteur de traitement sur 'mini'</Translation>
-				<Translation language="en">Backend on 'mini'</Translation>
-			</Translations>
-			<Translations text="q37PredefinedBackend">
-				<Translation language="fr">Moteur de traitement sur q37.info</Translation>
-				<Translation language="en">Backend on q37.info</Translation>
 			</Translations>
 			<Translations text="LocalPredefinedBackend">
 				<Translation language="fr">Moteur de traitement local</Translation>

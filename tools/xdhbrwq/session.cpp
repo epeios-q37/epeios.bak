@@ -97,7 +97,7 @@ qRB
 
 	Data.Lock();
 
-	mtk::Launch( Launch_, &Data );
+	mtk::RawLaunch( Launch_, &Data );
 
 	Data.Lock();
 	

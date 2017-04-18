@@ -24,6 +24,9 @@
 
 using namespace frdplgn;
 
+qCDEF(char *, frdplgn::XMLTarget, FRDPLGN_XML_TARGET);
+qCDEF(char *, frdplgn::XMLVersion, FRDPLGN_XML_TARGET);
+
 const char *frdplgn::sXML::Label( void )
 {
 	return FRDPLGN_XML_TARGET " V" FRDPLGN_XML_VERSION " " CPE_DESCRIPTION;

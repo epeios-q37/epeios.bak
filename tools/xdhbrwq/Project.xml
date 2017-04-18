@@ -25,8 +25,6 @@
 				<Module>idxbtq</Module>
 				<Module>idxbtr</Module>
 				<Module>idxque</Module>
-				<Module>lck</Module>
-				<Module>mtk</Module>
 				<Module>sck</Module>
 				<Module>strmrg</Module>
 			</Modules>

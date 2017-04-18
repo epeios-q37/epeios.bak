@@ -23,6 +23,8 @@
 #include "registry.h"
 #include "sclfrntnd.h"
 
+E_CDEF(char *, record::FieldsFrameId_, "Fields");
+
 namespace {
 	E_CDEF( char *, XSLAffix_, "Record" );
 

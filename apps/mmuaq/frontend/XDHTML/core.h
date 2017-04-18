@@ -101,7 +101,7 @@ namespace core {
 	void SetAgentCasting( rSession &Session );
 
 	namespace folder {
-		qCDEF( char *, NameInputId, "FolderName" );
+		extern const char *NameInputId;
 
 		bso::sBool Apply( rSession &Session );
 	}

@@ -38,6 +38,8 @@
 
 using namespace core;
 
+qCDEF(char *, core::folder::NameInputId, "FolderName");
+
 core::core___ core::Core;
 
 sclxdhtml::rActionHelper core::OnNotConnectedAllowedActions;

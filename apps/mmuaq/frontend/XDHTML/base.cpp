@@ -27,6 +27,8 @@
 
 using namespace base;
 
+E_CDEF(char *, base::Name, BASE_NAME);
+
 void base::Register(
 	const char *Name,
 	cAction &Callback )

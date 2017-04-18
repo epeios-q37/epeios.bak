@@ -268,6 +268,8 @@ namespace frdinstc {
 		E_CVDTOR( rPanel );
 		void Init( rFrontend &Frontend )
 		{
+			Frontend_ = &Frontend;
+
 			Core_.Init( Frontend );
 
 			UnselectAll_();
@@ -426,7 +428,7 @@ namespace frdinstc {
 		qRH
 			rPanel *Panel = NULL;
 		qRB
-			rPanel *Panel = new rPanel;
+			Panel = new rPanel;
 
 			if ( Panel == NULL )
 				qRAlc();
