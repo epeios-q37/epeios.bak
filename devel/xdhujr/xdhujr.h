@@ -58,6 +58,7 @@ namespace xdhujr {
 		extern entry___ ElementFiller;
 		extern entry___ DocumentFiller;
 		extern entry___ CastingsFiller;
+		extern entry___ DataFiller;
 		extern entry___ DraggableSetter;
 		extern entry___ DroppableSetter;
 		extern entry___ EventHandlersSetter;

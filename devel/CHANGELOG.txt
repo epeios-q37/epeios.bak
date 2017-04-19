@@ -1,5 +1,9 @@
 CHANGELOG for the 'Epeios' framework.
 
+2017-04-19 :
+- XDHCMN, XDHDWS, XDHUJx ;
+	- Adding data filling handling.
+
 2017-03-24 :
 - TXF
 	- Adding missing 'int' variant for operator '<<'.

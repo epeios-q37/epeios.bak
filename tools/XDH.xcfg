@@ -179,6 +179,13 @@
 					castings;
 				]]>
 			</CastingsFiller>
+   <DataFiller>
+    <![CDATA[
+					log( "Data filling : '%Id%'" );
+					var dataRequests = fetchDataRequests( "%Id%" );
+					dataRequests;
+				]]>
+   </DataFiller>
 			<EventHandlersSetter>
 				<![CDATA[
 					setEventHandlers( %Ids_%, %Events_% );

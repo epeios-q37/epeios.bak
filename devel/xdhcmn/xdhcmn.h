@@ -86,6 +86,7 @@ namespace xdhcmn {
 		fAlert,				// XML, XSL, Title.
 		fConfirm,			// XML, XSL, Title.
 		fFillCastings,		// Id, XML, XSL.	// If 'Id' == 'NULL', applies to the document, otherwise applies to the element of id 'Id'.
+		fFillData,			// Id.				// If 'Id' == 'NULL', applies to the document, otherwise applies to the element of id 'Id'.
 		fFillElement,		// Id, XML, XSL.
 		fFillDocument,		// XML, XSL.
 		fSetProperty,		// Id, Name, Value.

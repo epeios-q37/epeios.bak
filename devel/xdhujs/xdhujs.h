@@ -47,6 +47,7 @@ namespace xdhujs {
 		snElementFiller,
 		snDocumentFiller,
 		snCastingsFiller,
+		snDataFiller,
 		snContentGetter,
 		snContentSetter,
 		snDialogAlert,

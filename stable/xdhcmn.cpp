@@ -40,6 +40,7 @@ const char *xdhcmn::GetLabel( function__ Function )
 	C( Alert );
 	C( Confirm );
 	C( FillCastings );
+	C( FillData );
 	C( FillElement );
 	C( FillDocument );
 	C( SetProperty );
@@ -57,7 +58,7 @@ const char *xdhcmn::GetLabel( function__ Function )
 		break;
 	}
 
-	return NULL;	// Pour viter un 'warning'.
+	return NULL;	// To avoid a warning.
 }
 
 void xdhcmn::Escape(

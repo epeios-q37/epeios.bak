@@ -1,1 +1,1 @@
-You will find here the source code of the *xppq* component (an *XML* parser and an [*XML* preprocessor](http://q37.info/s/t/xppq/) as [*JRE*](http://en.wikipedia.org/wiki/Java_virtual_machine)) (*Java*) package.
+You will find here the source code of the *xppq* component, an *XML* parser and [preprocessor](http://q37.info/s/t/xppq/), as [*JRE*](http://en.wikipedia.org/wiki/Java_virtual_machine) (*Java*) package.

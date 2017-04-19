@@ -92,16 +92,24 @@ namespace xdhdws {
 		}
 		void FillDocumentCastings(
 			const nstring___ &XML,
-			const nstring___ &XSL )
+			const nstring___ &XSL)
 		{
-			C_().Process( xdhcmn::fFillCastings, NULL, nstring___().Internal()(), XML.Internal()( ), XSL.Internal()( ) );
+			C_().Process(xdhcmn::fFillCastings, NULL, nstring___().Internal()(), XML.Internal()(), XSL.Internal()());
 		}
 		void FillElementCastings(
 			const nstring___ &Id,
 			const nstring___ &XML,
-			const nstring___ &XSL )
+			const nstring___ &XSL)
 		{
-			C_().Process( xdhcmn::fFillCastings, NULL, Id.Internal()( ), XML.Internal()( ), XSL.Internal()( ) );
+			C_().Process(xdhcmn::fFillCastings, NULL, Id.Internal()(), XML.Internal()(), XSL.Internal()());
+		}
+		void FillDocumentData( void )
+		{
+			C_().Process(xdhcmn::fFillData, NULL, nstring___().Internal()() );
+		}
+		void FillElementData( const nstring___ &Id )
+		{
+			C_().Process(xdhcmn::fFillData, NULL, Id.Internal()() );
 		}
 		void FillElement(
 			const nstring___ &Id,

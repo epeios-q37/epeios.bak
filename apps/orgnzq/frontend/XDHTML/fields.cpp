@@ -97,6 +97,8 @@ qRB
 	sclxdhtml::LoadXSLAndTranslateTags( rgstry::tentry___( registry::definition::XSLLayoutFile, XSLAffix_ ), Session.Registry(), XSL );
 
 	Session.FillElement( Id, XML, XSL );
+
+	Session.FillElementData( Id );
 qRR
 qRT
 qRE

@@ -351,7 +351,6 @@ qRH
 	TOL_CBUFFER___ Result;
 	str::string RawDigests;
 	xdhcmn::digest Castings;
-	xdhcmn::retriever__ Retriever;
 qRB
 	RawDigests.Init( Execute( Callback, xdhujs::snCastingsFiller, &Result, Id, XML, XSL ) );
 
@@ -376,6 +375,33 @@ static void FillCastings_(
 	FillCastings_( Callback, Id, XML, XSL );
 }
 
+
+static void FillData_(
+	callback__ &Callback,
+	const nchar__ *Id )
+{
+qRH
+	TOL_CBUFFER___ Result;
+	str::string RawDigests;
+qRB
+	RawDigests.Init( Execute(Callback, xdhujs::snDataFiller, &Result, Id ));
+
+	cio::COut << ">>>>>>>>>>>>>>>>> " << RawDigests << " <<<<<<<<<<<<<<<<<<<<<" << txf::nl << txf::commit;
+
+	// TODO.
+qRR
+qRT
+qRE
+}
+
+static void FillData_(
+	callback__ &Callback,
+	va_list List)
+{
+	const nchar__ *Id = va_arg(List, const nchar__ *);
+
+	FillData_( Callback, Id );
+}
 
 static void GetContent_(
 	callback__ &Callback,
@@ -553,6 +579,9 @@ static script_name__ Convert_( xdhcmn::function__ Function )
 	case xdhcmn::fFillCastings:
 		qRFwk();
 		break;
+	case xdhcmn::fFillData:
+		qRFwk();
+		break;
 	default:
 		qRFwk();
 		break;
@@ -599,7 +628,10 @@ void xdhujp::proxy_callback__::XDHCMNProcess(
 		FillElement_( C_(), List );
 		break;
 	case xdhcmn::fFillCastings:
-		FillCastings_( C_(), List );
+		FillCastings_( C_(), List);
+		break;
+	case xdhcmn::fFillData:
+		FillData_( C_(), List);
 		break;
 	default:
 		qRFwk();

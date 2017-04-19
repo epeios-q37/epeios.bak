@@ -57,7 +57,8 @@ entry___ xdhujr::script::content::Getter( "Getter", ContentScripts_ );
 
 entry___ xdhujr::script::ElementFiller( "ElementFiller", xdhujr::Scripts );
 entry___ xdhujr::script::DocumentFiller( "DocumentFiller", xdhujr::Scripts );
-entry___ xdhujr::script::CastingsFiller( "CastingsFiller", xdhujr::Scripts );
+entry___ xdhujr::script::CastingsFiller( "CastingsFiller", xdhujr::Scripts);
+entry___ xdhujr::script::DataFiller ("DataFiller", xdhujr::Scripts);
 
 entry___ xdhujr::script::DraggableSetter( "DraggableSetter", xdhujr::Scripts );
 entry___ xdhujr::script::DroppableSetter( "DroppableSetter", xdhujr::Scripts );

@@ -121,7 +121,10 @@ namespace {
 		while ( Row != qNIL ){
 			Entry.Init();
 			Callback.ToXML( RawEntries( Row ), Entry );
-			Writer.PutValue( Entry, "Entry" );
+			Writer.PushTag("Entry ");
+			Writer.PutAttribute("id", *Row);
+			Writer.PutValue( Entry );
+			Writer.PopTag();
 
 			Row = RawEntries.Next( Row );
 		}

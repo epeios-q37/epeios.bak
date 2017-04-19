@@ -45,6 +45,7 @@ const str::string_ &xdhujs::GetTaggedScript(
 	C( ElementFiller, ElementFiller );
 	C( DocumentFiller, DocumentFiller );
 	C( CastingsFiller, CastingsFiller );
+	C( DataFiller, DataFiller );
 	C( PropertySetter, property::Setter );
 	C( PropertyGetter, property::Getter );
 	C( AttributeSetter, attribute::Setter );
@@ -173,6 +174,7 @@ qRB
 	S( ElementFiller, Id_, XML_, XSL_, NULL );
 	S( DocumentFiller, XML_, XSL_, NULL );
 	S( CastingsFiller, Id_, XML_, XSL_, NULL );
+	S( DataFiller, Id_, NULL);
 	S( ContentSetter, Id_, Value_, NULL );
 	S( ContentGetter, Id_, NULL );
 	S( WidgetContentRetriever, Id_, Method_, NULL );
