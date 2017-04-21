@@ -79,7 +79,7 @@ Android=Android
 os=$(shell uname -o 2>/dev/null || uname -s)
 mach=$(shell uname -m)
 
-jdk = $(JDK)
+jdk = $(JAVA_HOME)/
       
 
 ##########################
@@ -347,6 +347,7 @@ endif
 ##########################
 		
 all: $(binary)
+	javac src/*.java -d .
 	rm -rf *.o
 ifeq ("$(target)","$(Android)")
 	rm -rf *.d
@@ -365,7 +366,7 @@ else
 endif
 
     
-src += :"$(jdk)include"
+src += :"$(jdk)include":"$(jdk)include/linux"
       
 ox = o
 ds = :
