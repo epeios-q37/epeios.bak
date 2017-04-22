@@ -102,13 +102,6 @@ namespace flx {
 		// Nombre de caractre pouvant encore tre lus.
 		bso::size__ Taille_;
 	protected:
-		// Mthode thoriquement inutile. Son type de retour est pass de 'void'  'int' pour dtecter les classes qui la surcharge. Sera supprim  terme.
-		virtual int FLXUnavailable( void )
-		{
-			qRFwk();
-
-			return 0;
-		}
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
 			fdr::byte__ *Buffer ) override
@@ -1031,7 +1024,7 @@ namespace flx {
 	protected:
 		virtual fdr::size__ FDRWrite(
 			const fdr::byte__ *Buffer,
-			fdr::size__ Maximum )
+			fdr::size__ Maximum ) override
 		{
 			mtx::Lock( _Write );
 
@@ -1043,11 +1036,11 @@ namespace flx {
 
 			return _Red;
 		}
-		virtual void FDRCommit( void )
+		virtual void FDRCommit( void ) override
 		{}
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
-			fdr::byte__ *Buffer )
+			fdr::byte__ *Buffer ) override
 		{
 
 			mtx::Lock( _Read );
@@ -1063,7 +1056,7 @@ namespace flx {
 
 			return Maximum;
 		}
-		virtual void FDRDismiss( void )
+		virtual void FDRDismiss( void ) override
 		{}
 	public:
 		void reset( bso::bool__ P = true )
@@ -1845,7 +1838,7 @@ namespace flx {
 		{
 			C_().Write( NULL, 0 );
 		}
-		virtual fdr::sTID FDROTake( fdr::sTID Owner ) 
+		virtual fdr::sTID FDROTake( fdr::sTID Owner )  override
 		{
 			return fdr::UndefinedTID;
 		}

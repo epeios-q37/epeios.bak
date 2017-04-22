@@ -231,6 +231,7 @@ endif
 #########################
 
 ifeq ("$(os)", "$(MinGW)")
+ 	src += :"$(jdk)include":"$(jdk)include/win32"
 
 	co += -DMSYS -std=gnu++11 -DUNICODE
 	lo += -municode
@@ -263,6 +264,7 @@ endif
 #############################
 
 ifeq ("$(os)","$(GNULinux)")
+ 	src += :"$(jdk)include":"$(jdk)include/linux"
 
 	co += -std=gnu++11 -DUNICODE -D_FILE_OFFSET_BITS=64
 	
@@ -294,6 +296,7 @@ endif
 #########################
 
 ifeq ("$(os)","$(Linux)")
+ 	src += :"$(jdk)include":"$(jdk)include/linux"
 
 	co += -std=gnu++11 -DUNICODE -D_FILE_OFFSET_BITS=64
 	
@@ -323,6 +326,8 @@ endif
 ##########################
 
 ifeq ("$(os)","$(MacOS)")
+ 	jdk=$(shell /usr/libexec/java_home)/
+	src += :"$(jdk)include":"$(jdk)include/darwin"
 
 	co += -std=gnu++11 -DUNICODE -D_FILE_OFFSET_BITS=64
 	
@@ -353,7 +358,7 @@ ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20170406"\"
+copt += -DVERSION=\""20170422"\"
 copt += -DCOPYRIGHT_YEARS=\""2007-2017"\"
 copt += -DIDENTIFIER=\"""\"
 
@@ -366,8 +371,6 @@ else
 endif
 
     
-src += :"$(jdk)include":"$(jdk)include/linux"
-      
 ox = o
 ds = :
 
