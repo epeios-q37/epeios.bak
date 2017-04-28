@@ -81,13 +81,13 @@ void base::sActionHelper::SCLXOnRefresh( core::rSession &Session )
 {
 	switch ( Session.Page() ) {
 	case core::pProlog:
-		prolog::SetLayout( Session );
+		prolog::Display( Session );
 		break;
 	case core::pLogin:
-		login::SetLayout( Session );
+		login::Display( Session );
 		break;
 	case core::pMain:
-		main::SetLayout( Session, true );
+		main::Display( Session, true );
 		break;
 	default:
 		qRGnr();

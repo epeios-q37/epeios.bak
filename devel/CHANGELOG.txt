@@ -1,8 +1,21 @@
 CHANGELOG for the 'Epeios' framework.
 
+2017-04-28 :
+- SCLXDHTML, XDHUJP, XDHUJR, XDHUJSn XDHUTL :
+	- Adaptation to changes in 'XDHCMN'.
+- XDHCMN :
+	- Replacing 'Fill...' by 'Fetch...Marks'.
+- XDHDWS :
+	- 'rack's now contains the 'target' string.
+
+2017-04-25 :
+- XDHDWS :
+	- The content rack related stuff becomes layout rack.
+	- The context rack related stuff becomes casting rack.
+
 2017-04-22 :
 - FLX :
-	- Adding missing 'ovveride'.
+	- Adding missing 'override'.
 
 2017-04-19 :
 - XDHCMN, XDHDWS, XDHUJx ;
@@ -97,7 +110,7 @@ CHANGELOG for the 'Epeios' framework.
 
 2017-02-08 :
 - DWTDCT :
-	- Fixing no retrieving of file begining with '.' ('.' and '..' are still not retrieved).
+	- Fixing no retrieving of file beginning with '.' ('.' and '..' are still not retrieved).
 - DWTGHT :
 	- Fixing bad ghost row retrieving.
 
@@ -114,7 +127,7 @@ CHANGELOG for the 'Epeios' framework.
 	- If a 'ghost' cannot be created (name too long, for example), this does no more interrupt the global ghost creation,
 	but the ghost is simply ignored.
 - MTK :
-	- Like under 'Windows', threads are no more keeped after been used.
+	- Like under 'Windows', threads are no more kept after been used.
 
 2017-01-29 :
 - FLX :
@@ -145,7 +158,7 @@ CHANGELOG for the 'Epeios' framework.
 - CIO, SCLBACKND, SCLTOOL :
 	- Adaptation to changes in 'FLX'.
 - FLX :
-	- Simplicication of all 'void' related stuff.
+	- Simplification of all 'void' related stuff.
 
 2017-01-17 :
 - DWTCPR :
@@ -157,7 +170,7 @@ CHANGELOG for the 'Epeios' framework.
 
 2017-01-13 :
 - FDR :
-	- Addding 'rIDriver::Drain()'.
+	- Adding 'rIDriver::Drain()'.
 
 2017-01-12 :
 - CSDBNC :
@@ -208,7 +221,7 @@ CHANGELOG for the 'Epeios' framework.
 
 2016-12-16 :
 - RGSTRY :
-	- Fixing bug intoduces by yesterday's modifications.
+	- Fixing bug introduced by yesterday's modifications.
 
 2016-12-15 :
 - RGSTRY :
@@ -296,7 +309,7 @@ CHANGELOG for the 'Epeios' framework.
 
 2016-11-14 :
 - FBLTYP :
-	- Redefintion of 'wString(s(Set))' to avoid some ambiguities.
+	- Redefinition of 'wString(s(Set))' to avoid some ambiguities.
 - LCL :
 	Redefinition of 'wMeaning' to avoid some ambiguities.
 - SCLMIC :
@@ -326,7 +339,7 @@ CHANGELOG for the 'Epeios' framework.
 
 2016-10-30 :
 - FBLBKD :
-	- Fixing bug occuring when on error during the reading of a flow frontend/backend parameter.
+	- Fixing bug occurring when on error during the reading of a flow frontend/backend parameter.
 - FLX :
 	- Error failed 'exec_oflow_driver___' writing does no more generate an error. The error will be handled upstream.
 
@@ -342,9 +355,9 @@ CHANGELOG for the 'Epeios' framework.
 - FDR :
 	- Fixing 'Take' issue.
 - FLW :
-	- Adding some (des|constr)uctor to be sure the rights ones are excuted.
+	- Adding some (des|constr)uctor to be sure the rights ones are executed.
 - FLX :
-	- Adaptation to chnages in 'FDR'.
+	- Adaptation to changes in 'FDR'.
 
 2016-10-27 :
 - FDR :
@@ -364,7 +377,7 @@ CHANGELOG for the 'Epeios' framework.
 	- Amelioration of error handling.
 - FDR :
 	- Adding 'Copy(...)' and 'Purge(...)'.
-	- Using thread ID instead of owning flow to handle thead-safety.
+	- Using thread ID instead of owning flow to handle thread-safety.
 - FLF :
 	- Adding some default parameter variants.
 - FLW, FLX :

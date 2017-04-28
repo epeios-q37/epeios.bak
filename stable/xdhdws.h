@@ -37,8 +37,8 @@ namespace xdhdws {
 	using xdhcmn::nchar__;
 	using xdhcmn::nstring___;
 
-	static E_CDEF( char *, ContentTagName, "Content" );
-	static E_CDEF( char *, ContextTagName, "Context" );
+	static E_CDEF( char *, LayoutTagName, "Layout" );
+	static E_CDEF( char *, CastingTagName, "Casting" );
 
 	class proxy__
 	{
@@ -90,39 +90,39 @@ namespace xdhdws {
 		qRE
 			return Confirmed;
 		}
-		void FillDocumentCastings(
+		void SetDocumentCasting(
 			const nstring___ &XML,
 			const nstring___ &XSL)
 		{
-			C_().Process(xdhcmn::fFillCastings, NULL, nstring___().Internal()(), XML.Internal()(), XSL.Internal()());
+			C_().Process(xdhcmn::fSetCasting, NULL, nstring___().Internal()(), XML.Internal()(), XSL.Internal()());
 		}
-		void FillElementCastings(
+		void SetElementCasting(
 			const nstring___ &Id,
 			const nstring___ &XML,
 			const nstring___ &XSL)
 		{
-			C_().Process(xdhcmn::fFillCastings, NULL, Id.Internal()(), XML.Internal()(), XSL.Internal()());
+			C_().Process(xdhcmn::fSetCasting, NULL, Id.Internal()(), XML.Internal()(), XSL.Internal()());
 		}
-		void FillDocumentData( void )
+		void SetDocumentData( void )
 		{
-			C_().Process(xdhcmn::fFillData, NULL, nstring___().Internal()() );
+			C_().Process(xdhcmn::fSetData, NULL, nstring___().Internal()() );
 		}
-		void FillElementData( const nstring___ &Id )
+		void SetElementData( const nstring___ &Id )
 		{
-			C_().Process(xdhcmn::fFillData, NULL, Id.Internal()() );
+			C_().Process(xdhcmn::fSetData, NULL, Id.Internal()() );
 		}
-		void FillElement(
+		void SetElementLayout(
 			const nstring___ &Id,
 			const nstring___ &XML,
 			const nstring___ &XSL )
 		{
-			C_().Process( xdhcmn::fFillElement, NULL, Id.Internal()( ), XML.Internal()( ), XSL.Internal()( ) );
+			C_().Process( xdhcmn::fSetLayout, NULL, Id.Internal()( ), XML.Internal()( ), XSL.Internal()( ) );
 		}
-		void FillDocument(
+		void SetDocumentLayout(
 			const nstring___ &XML,
 			const nstring___ &XSL )
 		{
-			C_().Process( xdhcmn::fFillDocument, NULL, XML.Internal()( ), XSL.Internal()( ) );
+			C_().Process(xdhcmn::fSetLayout, NULL, XML.Internal()( ), XSL.Internal()( ) );
 		}
 		const char *GetProperty(
 			const nstring___ &Id,
@@ -359,25 +359,25 @@ namespace xdhdws {
 	class rGenericRack
 	{
 	private:
-		flx::E_STRING_TOFLOW___ _Flow;
+		mutable flx::E_STRING_TOFLOW___ _Flow;
 		xml::writer _Writer;
+		str::wString Target_;
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_Writer.reset( P );
-			_Flow.reset( P );
+			tol::reset(P, _Writer, _Flow, Target_);
 		}
 		E_CDTOR( rGenericRack );
 		void Init(
 			const char *Generator,
 			const char *View,
 			const char *Background,
-			str::string_ &Target,
 			cCorpus &Callback )
 		{
 			tol::buffer__ Buffer;
 
-			_Flow.Init( Target );
+			Target_.Init();
+			_Flow.Init( Target_ );
 			_Writer.Init( _Flow, xml::oIndent, xml::e_Default );
 			_Writer.PushTag( "RichFrontEnd" );
 			_Writer.PutAttribute("View", View );
@@ -398,33 +398,37 @@ namespace xdhdws {
 		{
 			return _Writer;
 		}
-	};
-
-	class rContentRack
-	: public rGenericRack
-	{
-	public:
-		void Init(
-			const char *Generator,
-			const char *View,
-			str::string_ &Target,
-			cCorpus &Callback )
+		const str::dString &Target(void) const
 		{
-			rGenericRack::Init( Generator, View, ContentTagName, Target, Callback );
+			_Flow.Commit();
+
+			return Target_;
 		}
 	};
 
-	class rContextRack
+	class rLayoutRack
 	: public rGenericRack
 	{
 	public:
 		void Init(
 			const char *Generator,
 			const char *View,
-			str::string_ &Target,
 			cCorpus &Callback )
 		{
-			rGenericRack::Init( Generator, View, ContextTagName, Target, Callback );
+			rGenericRack::Init( Generator, View, LayoutTagName, Callback );
+		}
+	};
+
+	class rCastingRack
+	: public rGenericRack
+	{
+	public:
+		void Init(
+			const char *Generator,
+			const char *View,
+			cCorpus &Callback )
+		{
+			rGenericRack::Init( Generator, View, CastingTagName, Callback );
 		}
 	};
 
@@ -435,16 +439,15 @@ namespace xdhdws {
 	public:\
 		void Init(\
 			const char *View,\
-			str::string_ &Target,\
 			xdhdws::cCorpus &Callback )\
 		{\
-			xdhdws::r##Type##Rack::Init( Generator, View, Target, Callback );\
+			xdhdws::r##Type##Rack::Init( Generator, View, Callback );\
 		}\
 	};
 
 # define XDHDWS_RACKS( Generator )\
-	XDHDWS_RACK( Generator, Content );\
-	XDHDWS_RACK( Generator, Context )
+	XDHDWS_RACK( Generator, Layout );\
+	XDHDWS_RACK( Generator, Casting )
 }
 
 #endif

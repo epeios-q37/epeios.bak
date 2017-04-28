@@ -221,7 +221,7 @@ qRT
 qRE
 }
 
-static void FillDocumentOrElement_(
+static void SetLayout_(
 	callback__ &Callback,
 	const nchar__ *Id,	// If 'Id' != NULL, it's the id of the element to apply to, otherwise it applies to the document.
 	const nchar__ *XML,
@@ -233,10 +233,10 @@ qRH
 	xdhcmn::digest Digests, Events, Widgets;
 	xdhcmn::retriever__ Retriever;
 qRB
-	if ( Id == NULL )
-		RawDigests.Init( Execute( Callback, xdhujs::snDocumentFiller, &Result, XML, XSL ) );
+	if ( Id == NULL )	// Actually, testing if 'Id' is automagically replaced by 'Root' in this case.
+		RawDigests.Init( Execute( Callback, xdhujs::snEventsAndWidgetsFetcher, &Result, Id, XML, XSL ) );
 	else
-		RawDigests.Init( Execute( Callback, xdhujs::snElementFiller, &Result, Id, XML, XSL ) );
+		RawDigests.Init( Execute( Callback, xdhujs::snEventsAndWidgetsFetcher, &Result, Id, XML, XSL ) );
 
 	Digests.Init();
 	xdhcmn::Split( RawDigests, Digests );
@@ -257,18 +257,7 @@ qRT
 qRE
 }
 
-static void FillDocument_(
-	callback__ &Callback,
-	va_list List )
-{
-	// NOTA : we use variables, because if we put 'va_arg()' directly as parameter to below function, it's not sure that they are called in the correct order.
-	const nchar__ *XML = va_arg( List, const nchar__ * );
-	const nchar__ *XSL = va_arg( List, const nchar__ * );
-
-	FillDocumentOrElement_( Callback, NULL, XML, XSL );
-}
-
-static void FillElement_(
+static void SetLayout_(
 	callback__ &Callback,
 	va_list List )
 {
@@ -277,7 +266,7 @@ static void FillElement_(
 	const nchar__ *XML = va_arg( List, const nchar__ * );
 	const nchar__ *XSL = va_arg( List, const nchar__ * );
 
-	FillDocumentOrElement_( Callback, Id, XML, XSL );
+	SetLayout_( Callback, Id, XML, XSL );
 }
 
 static void HandleCastings_(
@@ -317,7 +306,7 @@ static void HandleCastings_(
 	CastingsTag.Append( " ]");
 }
 
-static void HandleCastings_(
+static void HandleCasts_(
 	callback__ &Callback,
 	const xdhcmn::digest_ &Descriptions )
 {
@@ -327,7 +316,7 @@ qRH
 qRB
 	Ids.Init();
 	Castings.Init();
-	xdhutl::FillCastings( Descriptions, Ids, Castings );
+	xdhutl::FillCasts( Descriptions, Ids, Castings );
 
 	if ( Ids.Amount() ) {
 		IdsTag.Init();
@@ -341,7 +330,7 @@ qRT
 qRE
 }
 
-static void FillCastings_(
+static void SetCasting_(
 	callback__ &Callback,
 	const nchar__ *Id,
 	const nchar__ *XML,
@@ -352,18 +341,18 @@ qRH
 	str::string RawDigests;
 	xdhcmn::digest Castings;
 qRB
-	RawDigests.Init( Execute( Callback, xdhujs::snCastingsFiller, &Result, Id, XML, XSL ) );
+	RawDigests.Init( Execute( Callback, xdhujs::snCastsFetcher, &Result, Id, XML, XSL ) );
 
 	Castings.Init();
 	xdhcmn::Split( RawDigests, Castings );
 
-	HandleCastings_( Callback, Castings );
+	HandleCasts_( Callback, Castings );
 qRR
 qRT
 qRE
 }
 
-static void FillCastings_(
+static void SetCasting_(
 	callback__ &Callback,
 	va_list List )
 {
@@ -372,11 +361,11 @@ static void FillCastings_(
 	const nchar__ *XML = va_arg( List, const nchar__ * );
 	const nchar__ *XSL = va_arg( List, const nchar__ * );
 
-	FillCastings_( Callback, Id, XML, XSL );
+	SetCasting_( Callback, Id, XML, XSL );
 }
 
 
-static void FillData_(
+static void SetData_(
 	callback__ &Callback,
 	const nchar__ *Id )
 {
@@ -384,7 +373,7 @@ qRH
 	TOL_CBUFFER___ Result;
 	str::string RawDigests;
 qRB
-	RawDigests.Init( Execute(Callback, xdhujs::snDataFiller, &Result, Id ));
+	RawDigests.Init( Execute(Callback, xdhujs::snContentsFetcher, &Result, Id ));
 
 	cio::COut << ">>>>>>>>>>>>>>>>> " << RawDigests << " <<<<<<<<<<<<<<<<<<<<<" << txf::nl << txf::commit;
 
@@ -394,13 +383,13 @@ qRT
 qRE
 }
 
-static void FillData_(
+static void SetData_(
 	callback__ &Callback,
 	va_list List)
 {
 	const nchar__ *Id = va_arg(List, const nchar__ *);
 
-	FillData_( Callback, Id );
+	SetData_( Callback, Id );
 }
 
 static void GetContent_(
@@ -570,16 +559,13 @@ static script_name__ Convert_( xdhcmn::function__ Function )
 	case xdhcmn::fSelect:
 		qRFwk();
 		break;
-	case xdhcmn::fFillDocument:
+	case xdhcmn::fSetLayout:
 		qRFwk();
 		break;
-	case xdhcmn::fFillElement:
+	case xdhcmn::fSetCasting:
 		qRFwk();
 		break;
-	case xdhcmn::fFillCastings:
-		qRFwk();
-		break;
-	case xdhcmn::fFillData:
+	case xdhcmn::fSetData:
 		qRFwk();
 		break;
 	default:
@@ -621,17 +607,14 @@ void xdhujp::proxy_callback__::XDHCMNProcess(
 	case xdhcmn::fSelect:
 		Select_( C_(), List);
 		break;
-	case xdhcmn::fFillDocument:
-		FillDocument_( C_(), List );
+	case xdhcmn::fSetLayout:
+		SetLayout_( C_(), List );
 		break;
-	case xdhcmn::fFillElement:
-		FillElement_( C_(), List );
+	case xdhcmn::fSetCasting:
+		SetCasting_( C_(), List);
 		break;
-	case xdhcmn::fFillCastings:
-		FillCastings_( C_(), List);
-		break;
-	case xdhcmn::fFillData:
-		FillData_( C_(), List);
+	case xdhcmn::fSetData:
+		SetData_( C_(), List);
 		break;
 	default:
 		qRFwk();

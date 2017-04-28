@@ -247,12 +247,12 @@ namespace xdhutl {
 		str::strings_ &Types,
 		str::strings_ &ParametersSets );
 
-	void FillCasting(
+	void FillCast(
 		const xdhcmn::digest_ &Description,
 		str::string_ &Id,
 		str::dStrings &Castings );
 
-	void FillCastings(
+	void FillCasts(
 		const xdhcmn::digest_ &Descriptions,
 		str::strings_ &Ids,
 		str::strings_ &Castings );

@@ -415,7 +415,7 @@ qRE
 }
 
 */
-void sclxdhtml::prolog::GetContent(
+void sclxdhtml::prolog::GetLayout(
 	sclfrntnd::rFrontend &Frontend,
 	xml::writer_ &Writer)
 {
@@ -436,7 +436,7 @@ qRE
 	return ProjectType;
 }
 
-void sclxdhtml::prolog::GetContext(
+void sclxdhtml::prolog::GetCasting(
 	proxy__ &Proxy,
 	xml::writer_ &Writer)
 {
@@ -532,7 +532,7 @@ const char *sclxdhtml::login::GetLabel( eBackendVisibility Visibility )
 }
 
 
-sclfrntnd::eLogin sclxdhtml::login::GetContent(
+sclfrntnd::eLogin sclxdhtml::login::GetLayout(
 	sclfrntnd::rFrontend &Frontend,
 	xml::writer_ &Writer)
 {
@@ -550,7 +550,7 @@ namespace {
 	}
 }
 
-void sclxdhtml::login::GetContext(
+void sclxdhtml::login::GetCasting(
 	proxy__ &Proxy,
 	eBackendVisibility Visibility,
 	xml::writer_ &Writer )

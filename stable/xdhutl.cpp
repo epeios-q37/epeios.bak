@@ -694,7 +694,7 @@ qRT
 qRE
 }
 
-void xdhutl::FillCasting(
+void xdhutl::FillCast(
 	const xdhcmn::digest_ &Description,
 	str::string_ &Id,
 	str::dStrings &Castings )
@@ -729,7 +729,7 @@ namespace  {
 	}
 }
 
-void xdhutl::FillCastings(
+void xdhutl::FillCasts(
 	const xdhcmn::digest_ &Descriptions,
 	str::strings_ &Ids,
 	str::strings_ &CastingsSet )
@@ -748,7 +748,7 @@ qRB
 
 		Id.Init();
 		Castings.Init();
-		FillCasting( Description, Id, Castings );
+		FillCast( Description, Id, Castings );
 
 		Fill_( Id, Castings, Ids, CastingsSet );
 	}

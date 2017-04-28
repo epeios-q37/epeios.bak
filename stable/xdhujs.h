@@ -40,14 +40,13 @@ namespace xdhujs {
 	using xdhcmn::nchar__;
 	using xdhcmn::nstring___;
 
-	E_ENUM( script_name ) {
+	E_ENUM(script_name) {
 		snAttributeGetter,
 		snAttributeRemover,
 		snAttributeSetter,
-		snElementFiller,
-		snDocumentFiller,
-		snCastingsFiller,
-		snDataFiller,
+		snEventsAndWidgetsFetcher,
+		snCastsFetcher,
+		snContentsFetcher,
 		snContentGetter,
 		snContentSetter,
 		snDialogAlert,

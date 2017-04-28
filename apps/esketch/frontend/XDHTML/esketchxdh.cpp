@@ -59,17 +59,17 @@ xdhcmn::session_callback__ *sclxdhtml::SCLXDHTMLRetrieveCallback(
 	case xdhcmn::mMonoUser:
 		switch ( sclfrntnd::HandleProject() ) {
 		case sclfrntnd::phNone:
-			::prolog::SetLayout( *Session );
+			::prolog::Display( *Session );
 			break;
 		case sclfrntnd::phLoad:
-			::login::SetLayout( *Session );
+			::login::Display( *Session );
 			break;
 		case sclfrntnd::phLogin:
 			Session->SetBackendVisibility( sclxdhtml::bvHide );
-			::login::SetLayout( *Session );
+			::login::Display( *Session );
 			break;
 		case sclfrntnd::phRun:
-			::main::SetLayout( *Session );
+			::main::Display( *Session );
 			break;
 		default:
 			qRGnr();

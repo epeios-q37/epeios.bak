@@ -138,16 +138,15 @@ namespace base {
 		E_CDTOR( rRack_ );
 		void Init(
 			const char *View,
-			str::string_ &Target,
 			core::rSession &Session )
 		{
 			Callback_.Init( Session );
-			rack::Init( View, Target, Callback_ );
+			rack::Init( View, Callback_ );
 		}
 	};
 
-	typedef rRack_<rContentRack_> rContentRack;
-	typedef rRack_<rContextRack_> rContextRack;
+	typedef rRack_<rLayoutRack_> rLayoutRack;
+	typedef rRack_<rCastingRack_> rCastingRack;
 }
 
 #endif

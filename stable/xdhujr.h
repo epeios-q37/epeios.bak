@@ -55,10 +55,11 @@ namespace xdhujr {
 		
 	namespace script {
 		extern entry___ Log;
-		extern entry___ ElementFiller;
-		extern entry___ DocumentFiller;
-		extern entry___ CastingsFiller;
-		extern entry___ DataFiller;
+		namespace fetcher {
+			extern entry___ EventsAndWidgets;
+			extern entry___ Casts;
+			extern entry___ Contents;
+		};
 		extern entry___ DraggableSetter;
 		extern entry___ DroppableSetter;
 		extern entry___ EventHandlersSetter;

@@ -80,7 +80,7 @@ namespace {
 	}
 }
 
-void record::SetLayout(
+void record::Display(
 	const char *Id,
 	core::rSession &Session )
 {
@@ -108,12 +108,12 @@ void record::SetFieldsCasting( core::rSession &Session )
 
 void record::SetFieldsLayout( core::rSession &Session )
 {
-	fields::SetLayout( FieldsFrameId_, Session );
+	fields::Display( FieldsFrameId_, Session );
 }
 
 void record::SetColumnLayout( core::rSession &Session )
 {
-	column::SetLayout( ColumnFrameId_, Session );
+	column::Display( ColumnFrameId_, Session );
 }
 
 #define AC( name ) BASE_AC( record, name )
@@ -130,6 +130,6 @@ AC( DefineNewField )
 AC( BackToList )
 {
 	Session.User.Panel().BackToList();
-	main::SetLayout( Session, true );
+	main::Display( Session, true );
 }
 

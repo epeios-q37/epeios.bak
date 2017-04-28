@@ -29,12 +29,12 @@ E_CDEF( char *, FieldFrameId_, "Field" );
 namespace {
 	E_CDEF( char *, XSLAffix_, "Fields" );
 
-	void GetContext_(
+	void GetCasting_(
 		core::rSession &Session,
 		str::string_ &XML )
 	{
 	qRH
-		base::rContextRack Rack;
+		base::rCastingRack Rack;
 	qRB
 		Rack.Init( XSLAffix_, XML, Session );
 
@@ -45,13 +45,13 @@ namespace {
 	qRE
 	}
 
-	void GetContent_(
+	void GetLayout_(
 		const sclrgstry::dRegistry &Registry,
 		core::rSession &Session,
 		str::string_ &XML )
 	{
 	qRH
-		base::rContentRack Rack;
+		base::rLayoutRack Rack;
 	qRB
 		Rack.Init( XSLAffix_, XML, Session );
 
@@ -72,7 +72,7 @@ qRH
 	str::string XML, XSL;
 qRB
 	XML.Init();
-	GetContext_( Session,  XML );
+	GetCasting_( Session,  XML );
 
 	XSL.Init();
 	sclxdhtml::LoadXSLAndTranslateTags(rgstry::tentry___( registry::definition::XSLCastingFile, XSLAffix_ ), Session.Registry() , XSL );
@@ -83,7 +83,7 @@ qRT
 qRE
 }
 
-void fields::SetLayout(
+void fields::Display(
 	const char *Id,
 	core::rSession &Session )
 {
@@ -91,7 +91,7 @@ qRH
 	str::string XML, XSL;
 qRB
 	XML.Init(); 
-	GetContent_( Session.Registry(), Session, XML );
+	GetLayout_( Session.Registry(), Session, XML );
 
 	XSL.Init();
 	sclxdhtml::LoadXSLAndTranslateTags( rgstry::tentry___( registry::definition::XSLLayoutFile, XSLAffix_ ), Session.Registry(), XSL );
@@ -106,7 +106,7 @@ qRE
 
 void fields::SetFieldLayout( core::rSession &Session )
 {
-	field::SetLayout( FieldFrameId_, Session );
+	field::Display( FieldFrameId_, Session );
 }
 
 void fields::SetFieldCasting( core::rSession &Session )

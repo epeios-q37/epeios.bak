@@ -510,11 +510,11 @@ namespace sclxdhtml {
 		static E_CDEF( char *, PredefinedProjectId, "PredefinedProject" );
 		static E_CDEF( char *, RemoteProjectId, "RemoteProject" );
 
-		void GetContent(
+		void GetLayout(
 			sclfrntnd::rFrontend &Frontend,
 			xml::writer_ &Writer );
 
-		void GetContext(
+		void GetCasting(
 			proxy__ &Proxy,
 			xml::writer_ &Writer );
 
@@ -537,11 +537,11 @@ namespace sclxdhtml {
 
 		const char *GetLabel( eBackendVisibility );
 
-		sclfrntnd::eLogin GetContent(
+		sclfrntnd::eLogin GetLayout(
 			sclfrntnd::rFrontend &Frontend,
 			xml::writer_ &Writer );
 
-		void GetContext(
+		void GetCasting(
 			proxy__ &Proxy,
 			eBackendVisibility Visibility,
 			xml::writer_ &Writer );

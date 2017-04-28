@@ -26,30 +26,23 @@
 namespace {
 	qCDEF( char *, XSLAffix_, "Main" );
 
-	void GetContext_(
+	void GetCasting_(
 		core::rSession &Session,
-		str::string_ &XML )
+		base::rCastingRack &Rack )
 	{
-	qRH
-		base::rContextRack Rack;
-	qRB
-		Rack.Init( XSLAffix_, XML, Session );
-
 		Rack().PushTag( "Test" );
 
-		Rack().PutAttribute("Enabled", (Session.User.TestButtonIsVisible() ? "true" : "false" ) );
-	qRR
-	qRT
-	qRE
+		Rack().PutAttribute( "Enabled", (Session.User.TestButtonIsVisible() ? "true" : "false" ) );
 	}
 
 	void SetCasting_( core::rSession &Session )
 	{
 	qRH
-		str::string XML, XSL;
+		base::rCastingRack Rack;
+		str::string XSL;
 	qRB
-		XML.Init();
-		GetContext_( Session,  XML );
+		Rack.Init( XSLAffix_, Session);
+		GetCasting_( Session, Rack );
 
 		XSL.Init();
 		sclxdhtml::LoadXSLAndTranslateTags(rgstry::tentry___( registry::definition::XSLCastingFile, XSLAffix_ ), Session.Registry() , XSL );
@@ -60,13 +53,13 @@ namespace {
 	qRE
 	}
 
-	void GetContent_(
+	void GetLayout_(
 		const sclrgstry::registry_ &Registry,
 		core::rSession &Session,
 		str::string_ &XML )
 	{
 	qRH
-		base::rContentRack Rack;
+		base::rLayoutRack Rack;
 	qRB
 		Rack.Init( XSLAffix_, XML, Session );
 	qRR
@@ -75,13 +68,13 @@ namespace {
 	}
 }
 
-void main::SetLayout( core::rSession &Session )
+void main::Display( core::rSession &Session )
 {
 qRH
 	str::string XML, XSL;
 qRB
 	XML.Init(); 
-	GetContent_( Session.Registry(), Session, XML );
+	GetLayout_( Session.Registry(), Session, XML );
 
 	XSL.Init();
 	sclxdhtml::LoadXSLAndTranslateTags( rgstry::tentry___( registry::definition::XSLLayoutFile, XSLAffix_ ), Session.Registry(), XSL );

@@ -66,7 +66,7 @@ namespace xdhcmn {
 	public:
 		void reset( bso::bool__ = true )
 		{
-			// Standadization.
+			// Standardization.
 		}
 		E_CVDTOR( session_callback__ );
 		void Init( void )
@@ -81,24 +81,23 @@ namespace xdhcmn {
 		}
 	};
 
-	enum function__ {		// Parameters :
-		fLog,				// Message,
-		fAlert,				// XML, XSL, Title.
-		fConfirm,			// XML, XSL, Title.
-		fFillCastings,		// Id, XML, XSL.	// If 'Id' == 'NULL', applies to the document, otherwise applies to the element of id 'Id'.
-		fFillData,			// Id.				// If 'Id' == 'NULL', applies to the document, otherwise applies to the element of id 'Id'.
-		fFillElement,		// Id, XML, XSL.
-		fFillDocument,		// XML, XSL.
-		fSetProperty,		// Id, Name, Value.
-		fGetProperty,		// Id, Name.
-		fSetAttribute,		// Id, Name, Value.
-		fGetAttribute,		// Id, Name.
-		fRemoveAttribute,	// Id, Name.
-		fSetContent,		// Id, Value.
-		fGetContent,		// Id.
-		fGetResult,			// Id.
-		fFocus,				// Id.
-		fSelect,			// Id.
+	enum function__ {				// Parameters :
+		fLog,					// Message,
+		fAlert,					// XML, XSL, Title.
+		fConfirm,				// XML, XSL, Title.
+		fSetCasting,			// Id, XML, XSL.	// If 'Id' == 'NULL', applies to the document, otherwise applies to the element of id 'Id'.
+		fSetData,			// Id.				// If 'Id' == 'NULL', applies to the document, otherwise applies to the element of id 'Id'.
+		fSetLayout,				// Id, XML, XSL.	// If 'Id' == 'NULL', applies to the document, otherwise applies to the element of id 'Id'.
+		fSetProperty,			// Id, Name, Value.
+		fGetProperty,			// Id, Name.
+		fSetAttribute,			// Id, Name, Value.
+		fGetAttribute,			// Id, Name.
+		fRemoveAttribute,		// Id, Name.
+		fSetContent,			// Id, Value.
+		fGetContent,			// Id.
+		fGetResult,				// Id.
+		fFocus,					// Id.
+		fSelect,				// Id.
 		f_amount,
 		f_Undefined
 	};

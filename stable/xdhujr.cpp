@@ -55,10 +55,10 @@ static entry___ ContentScripts_( "Content", xdhujr::Scripts );
 entry___ xdhujr::script::content::Setter( "Setter", ContentScripts_ );
 entry___ xdhujr::script::content::Getter( "Getter", ContentScripts_ );
 
-entry___ xdhujr::script::ElementFiller( "ElementFiller", xdhujr::Scripts );
-entry___ xdhujr::script::DocumentFiller( "DocumentFiller", xdhujr::Scripts );
-entry___ xdhujr::script::CastingsFiller( "CastingsFiller", xdhujr::Scripts);
-entry___ xdhujr::script::DataFiller ("DataFiller", xdhujr::Scripts);
+static entry___ FetcherScripts_("Fetcher", xdhujr::Scripts );
+entry___ xdhujr::script::fetcher::EventsAndWidgets( "EventsAndWidgets", FetcherScripts_ );
+entry___ xdhujr::script::fetcher::Casts( "Casts", FetcherScripts_ );
+entry___ xdhujr::script::fetcher::Contents("Contents", FetcherScripts_ );
 
 entry___ xdhujr::script::DraggableSetter( "DraggableSetter", xdhujr::Scripts );
 entry___ xdhujr::script::DroppableSetter( "DroppableSetter", xdhujr::Scripts );

@@ -33,7 +33,7 @@ namespace records {
 		BASE_ACR( DefineRecord );
 	}
 
-	void SetLayout(
+	void Display(
 		const char *Id,
 		core::rSession &Session );
 }

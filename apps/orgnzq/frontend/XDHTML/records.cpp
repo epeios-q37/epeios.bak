@@ -76,7 +76,7 @@ namespace {
 	}
 }
 
-void records::SetLayout(
+void records::Display(
 	const char *Id,
 	core::rSession &Session )
 {
@@ -105,7 +105,7 @@ AC( DefineNewRecord )
 {
 	Session.User.Panel().NewRecord();
 
-	main::SetLayout( Session );
+	main::Display( Session );
 	main::SetRecordLayout( Session );
 	record::SetFieldsLayout( Session );
 }
@@ -118,7 +118,7 @@ AC( DefineRecord )
 
 	Session.User.Panel().DefineRecord( Record );
 
-	main::SetLayout( Session );
+	main::Display( Session );
 	main::SetRecordLayout( Session );
 	record::SetFieldsLayout( Session );
 }

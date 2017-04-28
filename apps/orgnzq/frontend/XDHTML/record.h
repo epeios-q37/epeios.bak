@@ -36,7 +36,7 @@ namespace record {
 		BASE_ACR( BackToList );
 	}
 
-	void SetLayout(
+	void Display(
 		const char *Id,
 		core::rSession &Session );
 

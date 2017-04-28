@@ -80,7 +80,7 @@ namespace {
 	}
 }
 
-void login::SetLayout( core::rSession &Session )
+void login::Display( core::rSession &Session )
 {
 qRH
 	str::string XML, XSL;
@@ -135,7 +135,7 @@ qRB
 		Session.AlertT( "UnableToLogin" );
 		Session.Disconnect();
 	} else {
-		main::SetLayout( Session );
+		main::Display( Session );
 		main::SetRecordsLayout( Session );
 	}
 qRR
@@ -146,6 +146,6 @@ qRT
 
 AC( Dismiss )
 {
-	prolog::SetLayout( Session );
+	prolog::Display( Session );
 }
 

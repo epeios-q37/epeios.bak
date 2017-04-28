@@ -31,7 +31,7 @@ namespace column {
 		BASE_ACR( CreateField );
 	}
 
-	void SetLayout(
+	void Display(
 		const char *Id,
 		core::rSession &Session );
 }

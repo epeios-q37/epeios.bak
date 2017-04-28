@@ -74,7 +74,7 @@ namespace {
 	}
 }
 
-void frame::SetLayout(
+void frame::Display(
 	const char *Id,
 	core::rSession &Session )
 {

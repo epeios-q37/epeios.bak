@@ -29,12 +29,11 @@ E_CDEF(char *, XSLAffix_, "Global" );
 AC( About )
 {
 qRH
-	str::string XML, XSL;
-	base::rContentRack Rack;
+	str::string XSL;
+	base::rLayoutRack Rack;
 	str::string AboutTranslation;
 qRB
-	XML.Init();
-	Rack.Init( XSLAffix_, XML, Session );
+	Rack.Init( XSLAffix_, Session );
 
 	Rack().PushTag( "About" );
 	core::About( Session, Rack );
@@ -43,12 +42,12 @@ qRB
 	Rack.reset();
 
 	XSL.Init();
-	sclxdhtml::LoadXSLAndTranslateTags( rgstry::tentry___( registry::definition::XSLLayoutFile, "About" ), Session.IsConnected() ? Session.Registry() : sclxdhtml::GetRegistry(), XSL );
+	sclxdhtml::LoadXSLAndTranslateTags( rgstry::tentry___( registry::definition::XSLLayoutFile, "About" ), sclxdhtml::GetRegistry(), XSL );	// Potentialy outside session, so we use the global registry...
 
 	AboutTranslation.Init();
 	scllocale::GetTranslation("About...", Session.Language(), AboutTranslation );
 
-	Session.Alert( XML, XSL, AboutTranslation );
+	Session.Alert( Rack.Target(), XSL, AboutTranslation );
 qRR
 qRT
 qRE

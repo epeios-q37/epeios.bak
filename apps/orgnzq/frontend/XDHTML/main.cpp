@@ -79,7 +79,7 @@ namespace {
 	}
 }
 
-void main::SetLayout(
+void main::Display(
 	core::rSession &Session,
 	bso::sBool Refresh )
 {
@@ -129,12 +129,12 @@ qRE
 
 void main::SetRecordsLayout( core::rSession &Session )
 {
-	records::SetLayout( RecordsFrameId_, Session );
+	records::Display( RecordsFrameId_, Session );
 }
 
 void main::SetRecordLayout( core::rSession &Session )
 {
-	record::SetLayout( RecordFrameId_, Session );
+	record::Display( RecordFrameId_, Session );
 }
 
 #define AC( name ) BASE_AC( main, name )
@@ -143,7 +143,7 @@ AC( NewPanel )
 {
 	Session.User.NewPanel();
 
-	SetLayout( Session, true );
+	Display( Session, true );
 }
 
 AC( SelectPanel )
@@ -154,7 +154,7 @@ AC( SelectPanel )
 
 	Session.User.SelectPanel( Pos );
 
-	SetLayout( Session, true );
+	Display( Session, true );
 }
 
 AC( DragPanel )
@@ -183,7 +183,7 @@ AC( EndPanelDragging )
 {
 	Session.User.EndPanelDragging();
 
-	SetLayout( Session, true );
+	Display( Session, true );
 }
 
 AC( Template )

@@ -79,7 +79,7 @@ qRT
 qRE
 }
 
-void field::SetLayout(
+void field::Display(
 	const char *Id,
 	core::rSession &Session )
 {

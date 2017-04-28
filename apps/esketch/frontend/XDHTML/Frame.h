@@ -30,7 +30,7 @@ namespace frame {
 		BASE_ACR( Template );
 	};
 
-	void SetLayout(
+	void Display(
 		const char *Id,
 		core::rSession &Session );
 

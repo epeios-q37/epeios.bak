@@ -30,12 +30,12 @@
 namespace {
 	qCDEF(char *, XSLAffix_, "Prolog" );
 
-	void GetContext_(
+	void GetCasting_(
 		core::rSession &Session,
 		str::string_ &XML )
 	{
 	qRH
-		base::rContextRack Rack;
+		base::rCastingRack Rack;
 	qRB
 		Rack.Init( XSLAffix_, XML, Session );
 
@@ -51,7 +51,7 @@ namespace {
 		str::string XML, XSL;
 	qRB
 		XML.Init();
-		GetContext_( Session,  XML );
+		GetCasting_( Session,  XML );
 
 		XSL.Init();
 		sclxdhtml::LoadXSLAndTranslateTags(rgstry::tentry___( registry::definition::XSLCastingFile, XSLAffix_ ), sclxdhtml::GetRegistry(), XSL );	// Outside session, so we use the global registry...
@@ -62,13 +62,13 @@ namespace {
 	qRE
 	}
 
-	void GetContent_(
+	void GetLayout_(
 		const sclrgstry::registry_ &Registry,
 		core::rSession &Session,
 		str::string_ &XML )
 	{
 	qRH
-		base::rContentRack Rack;
+		base::rLayoutRack Rack;
 		TOL_CBUFFER___ Buffer;
 	qRB
 		Rack.Init( XSLAffix_, XML, Session );
@@ -78,15 +78,35 @@ namespace {
 	qRT
 	qRE
 	}
+
+	void SetLayout_(
+		const sclrgstry::registry_ &Registry,
+		core::rSession &Session )
+	{
+	qRH
+		str::string XML, XSL;
+	qRB
+		XML.Init();
+		GetLayout_( Registry, Session, XML);
+
+		XSL.Init();
+		sclxdhtml::LoadXSLAndTranslateTags(rgstry::tentry___(registry::definition::XSLLayoutFile, XSLAffix_), Registry, XSL);
+
+		Session.FetchDocumentEventsAndWidgets(.FillDocument( XML, XSL );
+	qRR
+	qRT
+	qRE
+	}
+
 }
 
-void prolog::SetLayout( core::rSession &Session )
+void prolog::Display( core::rSession &Session )
 {
 qRH
 	str::string XML, XSL;
 qRB
 	XML.Init();
-	GetContent_( sclxdhtml::GetRegistry(), Session, XML );	// Outside session, so we use the global registry...
+	GetLayout_( sclxdhtml::GetRegistry(), Session, XML );	// Outside session, so we use the global registry...
 
 	XSL.Init();
 	sclxdhtml::LoadXSLAndTranslateTags( rgstry::tentry___( registry::definition::XSLLayoutFile, XSLAffix_ ), sclxdhtml::GetRegistry(), XSL );	// Outside session, so we use the global registry...
@@ -116,6 +136,6 @@ AC( LoadProject )
 {
 	sclxdhtml::prolog::LoadProject( Session );
 
-	login::SetLayout( Session );
+	login::Display( Session );
 }
 

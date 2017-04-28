@@ -31,28 +31,15 @@
 namespace {
 	qCDEF( char *, XSLAffix_, "Login" );
 
-	void GetContext_(
-		core::rSession &Session,
-		str::string_ &XML )
-	{
-	qRH
-		base::rContextRack Rack;
-	qRB
-		Rack.Init( XSLAffix_, XML, Session );
-
-		sclxdhtml::login::GetContext( Session, Session.BackendVisibility(), Rack );
-	qRR
-	qRT
-	qRE
-	}
-
 	void SetCasting_( core::rSession &Session )
 	{
 	qRH
-		str::string XML, XSL;
+		base::rCastingRack Rack;
+		str::string XSL;
 	qRB
-		XML.Init();
-		GetContext_( Session,  XML );
+		Rack.Init(XSLAffix_, Session);
+
+		sclxdhtml::login::GetLayout( Session, Session.BackendVisibility(), Rack );
 
 		XSL.Init();
 		sclxdhtml::LoadXSLAndTranslateTags(rgstry::tentry___( registry::definition::XSLCastingFile, XSLAffix_ ), sclxdhtml::GetRegistry() , XSL );	// Outside session, so we use the global registry...
@@ -63,13 +50,13 @@ namespace {
 	qRE
 	}
 
-	static void GetContent_(
+	static void GetLayout_(
 		const sclrgstry::registry_ &Registry,
 		core::rSession &Session,
 		str::string_ &XML )
 	{
 	qRH
-		base::rContentRack Rack;
+		base::rLayoutRack Rack;
 		TOL_CBUFFER___ Buffer;
 	qRB
 		Rack.Init( XSLAffix_, XML, Session );
@@ -81,13 +68,13 @@ namespace {
 	}
 }
 
-void login::SetLayout( core::rSession &Session )
+void login::Display( core::rSession &Session )
 {
 qRH
 	str::string XML, XSL;
 qRB
 	XML.Init();
-	GetContent_( sclxdhtml::GetRegistry(), Session, XML );	// Outside session, so we use the global registry...
+	GetLayout_( sclxdhtml::GetRegistry(), Session, XML );	// Outside session, so we use the global registry...
 
 	XSL.Init();
 	sclxdhtml::LoadXSLAndTranslateTags( rgstry::tentry___( registry::definition::XSLLayoutFile, XSLAffix_ ), sclxdhtml::GetRegistry(), XSL );	// Outside session, so we use the global registry...
@@ -130,7 +117,7 @@ qRB
 	if ( !Session.Connect( fblfrd::compatibility_informations__( SKTINF_LC_AFFIX, ESKETCH_API_VERSION ), IncompatibilityInformations ) )
 		qRGnr();
 
-	main::SetLayout( Session );
+	main::Display( Session );
 qRR
 	Session.Disconnect();
 qRE
@@ -139,6 +126,6 @@ qRT
 
 AC( Dismiss )
 {
-	prolog::SetLayout( Session );
+	prolog::Display( Session );
 }
 

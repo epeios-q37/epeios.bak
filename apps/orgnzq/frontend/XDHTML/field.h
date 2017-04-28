@@ -43,7 +43,7 @@ namespace field {
 		const char *Id,
 		core::rSession &Session );
 
-	void SetLayout(
+	void Display(
 		const char *Id,
 		core::rSession &Session );
 }

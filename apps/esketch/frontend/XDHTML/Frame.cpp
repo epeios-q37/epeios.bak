@@ -29,13 +29,13 @@ namespace {
 }
 
 namespace layout_ {
-	static void GetContent(
+	static void GetLayout(
 		const sclrgstry::registry_ &Registry,
 		core::rSession &Session,
 		str::string_ &XML )
 	{
 	qRH
-		base::rContentRack Rack;
+		base::rLayoutRack Rack;
 	qRB
 		Rack.Init( XSLAffix_, XML, Session );
 	qRR
@@ -44,7 +44,7 @@ namespace layout_ {
 	}
 }
 
-void frame::SetLayout(
+void frame::Display(
 	const char *Id,
 	core::rSession &Session )
 {
@@ -52,7 +52,7 @@ qRH
 	str::string XML, XSL;
 qRB
 	XML.Init(); 
-	layout_::GetContent( Session.Registry(), Session, XML );
+	layout_::GetLayout( Session.Registry(), Session, XML );
 
 	XSL.Init();
 	sclxdhtml::LoadXSLAndTranslateTags( rgstry::tentry___( registry::definition::XSLLayoutFile, XSLAffix_ ), Session.Registry(), XSL );
@@ -66,12 +66,12 @@ qRE
 }
 
 namespace casting_ {
-	void GetContext(
+	void Get(
 		core::rSession &Session,
 		str::string_ &XML )
 	{
 	qRH
-		base::rContextRack Rack;
+		base::rCastingRack Rack;
 	qRB
 		Rack.Init( XSLAffix_, XML, Session );
 	qRR
@@ -88,7 +88,7 @@ qRH
 	str::string XML, XSL;
 qRB
 	XML.Init();
-	casting_::GetContext( Session,  XML );
+	casting_::Get( Session,  XML );
 
 	XSL.Init();
 	sclxdhtml::LoadXSLAndTranslateTags(rgstry::tentry___( registry::definition::XSLCastingFile, XSLAffix_ ), Session.Registry() , XSL );

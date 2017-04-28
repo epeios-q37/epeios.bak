@@ -41,7 +41,7 @@ namespace main {
 		BASE_ACR( Template );
 	}
 
-	void SetLayout(
+	void Display(
 		core::rSession &Session,
 		bso::sBool Refresh = false );
 	void SetRecordsLayout( core::rSession &Session );
