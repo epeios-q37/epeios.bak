@@ -357,6 +357,27 @@ qRT
 qRE
 }
 
+void sclxdhtml::SetElement_(
+	const xdhdws::nstring___ &Id,
+	sProxyDocumentFunction Function,
+	const rgstry::rEntry & Filename,
+	const char *FilenameTag,
+	const sclrgstry::registry_ &Registry,
+	xdhdws::rGenericRack &Rack,
+	xdhdws::proxy__ &Proxy, bso::char__ Marker)
+{
+qRH
+	str::wString XSL;
+qRB
+	XSL.Init();
+	sclxdhtml::LoadXSLAndTranslateTags( rgstry::tentry___( Filename, FilenameTag ), Registry, XSL, Marker );
+
+	Function( Proxy, Id, Rack.Target(), XSL);
+qRR
+qRT
+qRE
+}
+
 
 #if 0
 bso::bool__ sclxhtml::session___::XDHCBKXDHCBKLaunch(

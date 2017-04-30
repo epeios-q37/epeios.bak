@@ -23,65 +23,65 @@
 #include "registry.h"
 #include "sclfrntnd.h"
 
-namespace {
+namespace{
 	qCDEF( char *, XSLAffix_, "Main" );
+}
 
-	void GetCasting_(
+namespace layout_ {
+	void Get(
 		core::rSession &Session,
-		base::rCastingRack &Rack )
+		xml::dWriter &Writer )
 	{
-		Rack().PushTag( "Test" );
-
-		Rack().PutAttribute( "Enabled", (Session.User.TestButtonIsVisible() ? "true" : "false" ) );
 	}
+}
 
-	void SetCasting_( core::rSession &Session )
-	{
-	qRH
-		base::rCastingRack Rack;
-		str::string XSL;
-	qRB
-		Rack.Init( XSLAffix_, Session);
-		GetCasting_( Session, Rack );
+void main::SetLayout( core::rSession &Session )
+{
+qRH
+	base::rLayoutRack Rack;
+qRB
+	Rack.Init( XSLAffix_, Session );
 
-		XSL.Init();
-		sclxdhtml::LoadXSLAndTranslateTags(rgstry::tentry___( registry::definition::XSLCastingFile, XSLAffix_ ), Session.Registry() , XSL );
+	layout_::Get( Session, Rack() );
 
-		Session.FillDocumentCastings( XML, XSL );
-	qRR
-	qRT
-	qRE
-	}
+	base::SetDocumentLayout( XSLAffix_, Session.Registry(), Rack, Session );
+qRR
+qRT
+qRE
+}
 
-	void GetLayout_(
-		const sclrgstry::registry_ &Registry,
+namespace casting_ {
+	void Get(
 		core::rSession &Session,
-		str::string_ &XML )
+		xml::dWriter &Writer )
 	{
-	qRH
-		base::rLayoutRack Rack;
-	qRB
-		Rack.Init( XSLAffix_, XML, Session );
-	qRR
-	qRT
-	qRE
+		Writer.PushTag( "Test" );
+
+		Writer.PutAttribute( "Enabled", ( Session.User.TestButtonIsVisible() ? "true" : "false" ) );
 	}
+}
+
+void main::SetCasting( core::rSession &Session )
+{
+qRH
+	base::rCastingRack Rack;
+qRB
+	Rack.Init( XSLAffix_, Session );
+	casting_::Get( Session, Rack() );
+
+	base::SetDocumentCasting( XSLAffix_, Session.Registry(), Rack, Session );
+qRR
+qRT
+qRE
 }
 
 void main::Display( core::rSession &Session )
 {
 qRH
-	str::string XML, XSL;
 qRB
-	XML.Init(); 
-	GetLayout_( Session.Registry(), Session, XML );
+	SetLayout( Session );
 
-	XSL.Init();
-	sclxdhtml::LoadXSLAndTranslateTags( rgstry::tentry___( registry::definition::XSLLayoutFile, XSLAffix_ ), Session.Registry(), XSL );
-
-	Session.FillDocument( XML, XSL );
-
-	SetCasting_( Session );
+	SetCasting( Session );
 
 	Session.SwitchTo( core::pMain );
 qRR
@@ -106,13 +106,13 @@ AC( Submission )
 AC( ShowTestButton )
 {
 	Session.User.TestButtonIsVisible() = true;
-	SetCasting_( Session );
+	SetCasting( Session );
 }
 
 AC( HideTestButton )
 {
 	Session.User.TestButtonIsVisible() = false;
-	SetCasting_(Session );
+	SetCasting(Session );
 }
 
 AC( Testing )
