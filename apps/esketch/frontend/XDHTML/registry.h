@@ -21,6 +21,7 @@
 # define REGISTRY__INC
 
 # include "frdrgstry.h"
+# include "sclxdhtml.h"
 
 namespace registry {
 	using namespace frdrgstry;
@@ -31,10 +32,7 @@ namespace registry {
 
 	namespace definition {
 		using namespace frdrgstry::definition;
-		extern rEntry XSLLayoutFile;
-		extern rEntry XSLCastingFile;
 	}
-
 }
 
 #endif

@@ -40,6 +40,22 @@
 # define SCLXDHTML_DEFAULT_SUFFIX "xdh"
 
 namespace sclxdhtml {
+
+	namespace registry {
+		using rgstry::rEntry;
+
+		namespace parameter {
+			using namespace sclrgstry::parameter;
+		}
+
+		namespace definition {
+			using namespace sclrgstry::definition;
+
+			extern rEntry XSLLayoutFile;
+			extern rEntry XSLCastingFile;
+		}
+	}
+
 	const sclrgstry::registry_ &GetRegistry( void );
 
 	const char *GetLauncher( void );
@@ -513,55 +529,51 @@ namespace sclxdhtml {
 		const xdhdws::nstring___ &Id,
 		sProxyDocumentFunction Function,
 		const rgstry::rEntry &Filename,
-		const char *FilenameTag,
+		const char *Target,
 		const sclrgstry::registry_ &Registry,
 		xdhdws::rGenericRack &Rack,
 		xdhdws::proxy__ &Proxy, bso::char__ Marker );
 
 	inline void SetDocumentLayout(
-		const rgstry::rEntry &Filename,
-		const char *FilenameTag,
+		const char *Target,
 		const sclrgstry::registry_ &Registry,
 		xdhdws::rGenericRack &Rack,
 		xdhdws::proxy__ &Proxy,
 		bso::char__ Marker = '#' )
 	{
-		SetElement_( xdhdws::nstring___(), SetLayout_, Filename, FilenameTag, Registry, Rack, Proxy, Marker);
+		SetElement_( xdhdws::nstring___(), SetLayout_, registry::definition::XSLLayoutFile, Target, Registry, Rack, Proxy, Marker);
 	}
 
 	inline void SetElementLayout(
 		const xdhdws::nstring___ &Id,
-		const rgstry::rEntry &Filename,
-		const char *FilenameTag,
+		const char *Target,
 		const sclrgstry::registry_ &Registry,
 		xdhdws::rGenericRack &Rack,
 		xdhdws::proxy__ &Proxy,
 		bso::char__ Marker = '#' )
 	{
-		SetElement_( Id, SetLayout_, Filename, FilenameTag, Registry, Rack, Proxy, Marker );
+		SetElement_( Id, SetLayout_, registry::definition::XSLLayoutFile, Target, Registry, Rack, Proxy, Marker );
 	}
 
 	inline void SetDocumentCasting(
-		const rgstry::rEntry &Filename,
-		const char *FilenameTag,
+		const char *Target,
 		const sclrgstry::registry_ &Registry,
 		xdhdws::rGenericRack &Rack,
 		xdhdws::proxy__ &Proxy,
 		bso::char__ Marker = '#' )
 	{
-		SetElement_( xdhdws::nstring___(), SetCasting_, Filename, FilenameTag, Registry, Rack, Proxy, Marker );
+		SetElement_( xdhdws::nstring___(), SetCasting_, registry::definition::XSLCastingFile, Target, Registry, Rack, Proxy, Marker );
 	}
 
 	inline void SetElementCasting(
 		const xdhdws::nstring___ &Id,
-		const rgstry::rEntry &Filename,
-		const char *FilenameTag,
+		const char *Target,
 		const sclrgstry::registry_ &Registry,
 		xdhdws::rGenericRack &Rack,
 		xdhdws::proxy__ &Proxy,
 		bso::char__ Marker = '#' )
 	{
-		SetElement_( Id, SetCasting_, Filename, FilenameTag, Registry, Rack, Proxy, Marker );
+		SetElement_( Id, SetCasting_, registry::definition::XSLCastingFile, Target, Registry, Rack, Proxy, Marker );
 	}
 
 	void SCLXDHTMLInitialization( xdhcmn::mode__ Mode );	// To define by user.

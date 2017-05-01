@@ -44,7 +44,7 @@ qRB
 
 	layout_::Get( Session, Rack() );
 
-	base::SetDocumentLayout( XSLAffix_, Session.Registry(), Rack, Session );
+	sclxdhtml::SetDocumentLayout( XSLAffix_, Session.Registry(), Rack, Session );
 qRR
 qRT
 qRE
@@ -69,7 +69,7 @@ qRB
 	Rack.Init( XSLAffix_, Session );
 	casting_::Get( Session, Rack() );
 
-	base::SetDocumentCasting( XSLAffix_, Session.Registry(), Rack, Session );
+	sclxdhtml::SetDocumentCasting( XSLAffix_, Session.Registry(), Rack, Session );
 qRR
 qRT
 qRE

@@ -23,6 +23,23 @@
 
 using namespace sclxdhtml;
 
+namespace registry_ {
+	using rgstry::rEntry;
+
+	namespace definition_ {
+		namespace {
+			namespace {
+				rEntry XSLFilesSet_( "XSLFilesSet", sclrgstry::Definitions );
+			}
+
+			rEntry FreeXSLFiles_( "XSLFiles", XSLFilesSet_ );
+		}
+		rEntry TaggedXSLFiles( RGSTRY_TAGGING_ATTRIBUTE( "target" ), FreeXSLFiles_ );
+	}
+}
+
+rgstry::rEntry registry::definition::XSLLayoutFile( "Layout", registry_::definition_::TaggedXSLFiles );
+rgstry::rEntry registry::definition::XSLCastingFile( "Casting", registry_::definition_::TaggedXSLFiles );
 
 namespace {
 	E_CDEF(char *, StraightBackendType_, "Straight" );
@@ -361,7 +378,7 @@ void sclxdhtml::SetElement_(
 	const xdhdws::nstring___ &Id,
 	sProxyDocumentFunction Function,
 	const rgstry::rEntry & Filename,
-	const char *FilenameTag,
+	const char *Target,
 	const sclrgstry::registry_ &Registry,
 	xdhdws::rGenericRack &Rack,
 	xdhdws::proxy__ &Proxy, bso::char__ Marker)
@@ -370,7 +387,7 @@ qRH
 	str::wString XSL;
 qRB
 	XSL.Init();
-	sclxdhtml::LoadXSLAndTranslateTags( rgstry::tentry___( Filename, FilenameTag ), Registry, XSL, Marker );
+	sclxdhtml::LoadXSLAndTranslateTags( rgstry::tentry___( Filename, Target ), Registry, XSL, Marker );
 
 	Function( Proxy, Id, Rack.Target(), XSL);
 qRR

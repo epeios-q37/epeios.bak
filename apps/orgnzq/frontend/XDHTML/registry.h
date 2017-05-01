@@ -31,9 +31,6 @@ namespace registry {
 
 	namespace definition {
 		using namespace frdrgstry::definition;
-
-		extern rEntry XSLLayoutFile;
-		extern rEntry XSLCastingFile;
 	}
 }
 

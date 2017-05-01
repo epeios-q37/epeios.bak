@@ -20,8 +20,6 @@
 #ifndef BASE__INC
 # define BASE__INC
 
-# include "registry.h"
-
 # include "sclxdhtml.h"
 
 # include "sktfbc.h"
@@ -149,44 +147,6 @@ namespace base {
 
 	typedef rRack_<rLayoutRack_> rLayoutRack;
 	typedef rRack_<rCastingRack_> rCastingRack;
-
-	inline void SetDocumentLayout(
-		const char *FilenameTag,
-		const sclrgstry::registry_ &Registry,
-		xdhdws::rLayoutRack &Rack,
-		xdhdws::proxy__ &Proxy )
-	{
-		sclxdhtml::SetDocumentLayout( registry::definition::XSLLayoutFile, FilenameTag, Registry, Rack, Proxy );
-	}
-
-	inline void SetElementLayout(
-		const xdhdws::nstring___ &Id,
-		const char *FilenameTag,
-		const sclrgstry::registry_ &Registry,
-		xdhdws::rLayoutRack &Rack,
-		xdhdws::proxy__ &Proxy )
-	{
-		sclxdhtml::SetElementLayout( Id, registry::definition::XSLLayoutFile, FilenameTag, Registry, Rack, Proxy );
-	}
-
-	inline void SetDocumentCasting(
-		const char *FilenameTag,
-		const sclrgstry::registry_ &Registry,
-		xdhdws::rCastingRack &Rack,
-		xdhdws::proxy__ &Proxy )
-	{
-		sclxdhtml::SetDocumentCasting( registry::definition::XSLCastingFile, FilenameTag, Registry, Rack, Proxy );
-	}
-
-	inline void SetElementCasting(
-		const xdhdws::nstring___ &Id,
-		const char *FilenameTag,
-		const sclrgstry::registry_ &Registry,
-		xdhdws::rCastingRack &Rack,
-		xdhdws::proxy__ &Proxy )
-	{
-		sclxdhtml::SetElementCasting( Id, registry::definition::XSLCastingFile, FilenameTag, Registry, Rack, Proxy );
-	}
 }
 
 #endif
