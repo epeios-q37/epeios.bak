@@ -233,10 +233,7 @@ qRH
 	xdhcmn::digest Digests, Events, Widgets;
 	xdhcmn::retriever__ Retriever;
 qRB
-	if ( Id == NULL )	// Actually, testing if 'Id' is automagically replaced by 'Root' in this case.
-		RawDigests.Init( Execute( Callback, xdhujs::snEventsAndWidgetsFetcher, &Result, Id, XML, XSL ) );
-	else
-		RawDigests.Init( Execute( Callback, xdhujs::snEventsAndWidgetsFetcher, &Result, Id, XML, XSL ) );
+	RawDigests.Init( Execute( Callback, xdhujs::snEventsAndWidgetsFetcher, &Result, Id, XML, XSL ) );
 
 	Digests.Init();
 	xdhcmn::Split( RawDigests, Digests );

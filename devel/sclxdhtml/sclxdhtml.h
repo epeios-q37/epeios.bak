@@ -40,7 +40,6 @@
 # define SCLXDHTML_DEFAULT_SUFFIX "xdh"
 
 namespace sclxdhtml {
-
 	namespace registry {
 		using rgstry::rEntry;
 
@@ -534,6 +533,8 @@ namespace sclxdhtml {
 		xdhdws::rGenericRack &Rack,
 		xdhdws::proxy__ &Proxy, bso::char__ Marker );
 
+	extern const char *RootTagName_;
+
 	inline void SetDocumentLayout(
 		const char *Target,
 		const sclrgstry::registry_ &Registry,
@@ -541,7 +542,7 @@ namespace sclxdhtml {
 		xdhdws::proxy__ &Proxy,
 		bso::char__ Marker = '#' )
 	{
-		SetElement_( xdhdws::nstring___(), SetLayout_, registry::definition::XSLLayoutFile, Target, Registry, Rack, Proxy, Marker);
+		SetElement_( RootTagName_, SetLayout_, registry::definition::XSLLayoutFile, Target, Registry, Rack, Proxy, Marker);
 	}
 
 	inline void SetElementLayout(
@@ -562,7 +563,7 @@ namespace sclxdhtml {
 		xdhdws::proxy__ &Proxy,
 		bso::char__ Marker = '#' )
 	{
-		SetElement_( xdhdws::nstring___(), SetCasting_, registry::definition::XSLCastingFile, Target, Registry, Rack, Proxy, Marker );
+		SetElement_( RootTagName_, SetCasting_, registry::definition::XSLCastingFile, Target, Registry, Rack, Proxy, Marker );
 	}
 
 	inline void SetElementCasting(

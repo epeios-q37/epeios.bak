@@ -359,13 +359,13 @@ namespace xdhdws {
 	class rGenericRack
 	{
 	private:
+		str::wString Target_;
 		mutable flx::E_STRING_TOFLOW___ _Flow;
 		xml::writer _Writer;
-		str::wString Target_;
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			tol::reset(P, _Writer, _Flow, Target_);
+			tol::reset( P, Target_, _Flow, _Writer );
 		}
 		E_CDTOR( rGenericRack );
 		void Init(
@@ -398,8 +398,9 @@ namespace xdhdws {
 		{
 			return _Writer;
 		}
-		const str::dString &Target(void) const
+		const str::dString &Target(void)
 		{
+			_Writer.reset();	// To close all tags.
 			_Flow.Commit();
 
 			return Target_;

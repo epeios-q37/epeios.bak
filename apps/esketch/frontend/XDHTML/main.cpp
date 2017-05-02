@@ -25,13 +25,23 @@
 
 namespace{
 	qCDEF( char *, XSLAffix_, "Main" );
-}
 
-namespace layout_ {
-	void Get(
-		core::rSession &Session,
-		xml::dWriter &Writer )
-	{
+	namespace layout_ {
+		void Get(
+			core::rSession &Session,
+			xml::dWriter &Writer )
+		{}
+	}
+
+	namespace casting_ {
+		void Get(
+			core::rSession &Session,
+			xml::dWriter &Writer )
+		{
+			Writer.PushTag( "Test" );
+
+			Writer.PutAttribute( "Enabled", ( Session.User.TestButtonIsVisible() ? "true" : "false" ) );
+		}
 	}
 }
 
@@ -50,17 +60,6 @@ qRT
 qRE
 }
 
-namespace casting_ {
-	void Get(
-		core::rSession &Session,
-		xml::dWriter &Writer )
-	{
-		Writer.PushTag( "Test" );
-
-		Writer.PutAttribute( "Enabled", ( Session.User.TestButtonIsVisible() ? "true" : "false" ) );
-	}
-}
-
 void main::SetCasting( core::rSession &Session )
 {
 qRH
@@ -77,16 +76,11 @@ qRE
 
 void main::Display( core::rSession &Session )
 {
-qRH
-qRB
 	SetLayout( Session );
 
 	SetCasting( Session );
 
 	Session.SwitchTo( core::pMain );
-qRR
-qRT
-qRE
 }
 
 #define AC( name ) BASE_AC( main, name )

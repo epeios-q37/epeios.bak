@@ -28,103 +28,72 @@
 #include "sclfrntnd.h"
 
 namespace {
-	qCDEF(char *, XSLAffix_, "Prolog" );
+	qCDEF( char *, XSLAffix_, "Prolog" );
 
-	void GetCasting_(
-		core::rSession &Session,
-		str::string_ &XML )
-	{
-	qRH
-		base::rCastingRack Rack;
-	qRB
-		Rack.Init( XSLAffix_, XML, Session );
-
-		sclxdhtml::prolog::GetContext( Session, Rack );
-	qRR
-	qRT
-	qRE
+	namespace layout_ {
+		void Get(
+			core::rSession &Session,
+			xml::dWriter &Writer )
+		{
+			sclxdhtml::prolog::GetLayout( Session, Writer );
+		}
 	}
 
-	void SetCasting_( core::rSession &Session )
-	{
-	qRH
-		str::string XML, XSL;
-	qRB
-		XML.Init();
-		GetCasting_( Session,  XML );
-
-		XSL.Init();
-		sclxdhtml::LoadXSLAndTranslateTags(rgstry::tentry___( registry::definition::XSLCastingFile, XSLAffix_ ), sclxdhtml::GetRegistry(), XSL );	// Outside session, so we use the global registry...
-
-		Session.FillDocumentCastings( XML, XSL );
-	qRR
-	qRT
-	qRE
+	namespace casting_ {
+		void Get(
+			core::rSession &Session,
+			xml::dWriter &Writer )
+		{
+			sclxdhtml::prolog::GetCasting( Session, Writer );
+		}
 	}
-
-	void GetLayout_(
-		const sclrgstry::registry_ &Registry,
-		core::rSession &Session,
-		str::string_ &XML )
-	{
-	qRH
-		base::rLayoutRack Rack;
-		TOL_CBUFFER___ Buffer;
-	qRB
-		Rack.Init( XSLAffix_, XML, Session );
-
-		sclxdhtml::prolog::GetContent( Session, Rack );
-	qRR
-	qRT
-	qRE
-	}
-
-	void SetLayout_(
-		const sclrgstry::registry_ &Registry,
-		core::rSession &Session )
-	{
-	qRH
-		str::string XML, XSL;
-	qRB
-		XML.Init();
-		GetLayout_( Registry, Session, XML);
-
-		XSL.Init();
-		sclxdhtml::LoadXSLAndTranslateTags(rgstry::tentry___(registry::definition::XSLLayoutFile, XSLAffix_), Registry, XSL);
-
-		Session.FetchDocumentEventsAndWidgets(.FillDocument( XML, XSL );
-	qRR
-	qRT
-	qRE
-	}
-
 }
 
-void prolog::Display( core::rSession &Session )
+void prolog::SetLayout( core::rSession &Session )
 {
 qRH
-	str::string XML, XSL;
+	base::rLayoutRack Rack;
 qRB
-	XML.Init();
-	GetLayout_( sclxdhtml::GetRegistry(), Session, XML );	// Outside session, so we use the global registry...
+	Rack.Init( XSLAffix_, Session );
 
-	XSL.Init();
-	sclxdhtml::LoadXSLAndTranslateTags( rgstry::tentry___( registry::definition::XSLLayoutFile, XSLAffix_ ), sclxdhtml::GetRegistry(), XSL );	// Outside session, so we use the global registry...
+	layout_::Get( Session, Rack() );
 
-	Session.FillDocument( XML, XSL );
-
-	SetCasting_( Session );
-	Session.SwitchTo( core::pProlog );
+	sclxdhtml::SetDocumentLayout( XSLAffix_, Session.Registry(), Rack, Session );
 qRR
 qRT
 qRE
+}
+
+void prolog::SetCasting( core::rSession &Session )
+{
+	qRH
+		base::rCastingRack Rack;
+	qRB
+		Rack.Init( XSLAffix_, Session );
+	casting_::Get( Session, Rack() );
+
+	sclxdhtml::SetDocumentCasting( XSLAffix_, Session.Registry(), Rack, Session );
+	qRR
+		qRT
+		qRE
+}
+
+
+
+void prolog::Display( core::rSession &Session )
+{
+	SetLayout( Session );
+
+	SetCasting( Session );
+
+	Session.SwitchTo( core::pProlog );
 }
 
 #define AC( name ) BASE_AC( prolog, name )
 
 AC( SwitchProjectType )
 {
-	SetCasting_( Session );
+	SetCasting( Session );
 }
 
 AC( DisplayProjectFilename )

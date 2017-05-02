@@ -26,58 +26,41 @@
 
 namespace {
 	qCDEF( char *, XSLAffix_, "Frame" );
-}
 
-namespace layout_ {
-	static void GetLayout(
-		const sclrgstry::registry_ &Registry,
-		core::rSession &Session,
-		str::string_ &XML )
-	{
-	qRH
-		base::rLayoutRack Rack;
-	qRB
-		Rack.Init( XSLAffix_, XML, Session );
-	qRR
-	qRT
-	qRE
+	namespace layout_ {
+		void Get(
+			core::rSession &Session,
+			xml::dWriter &Writer )
+		{}
+	}
+
+	namespace casting_ {
+		void Get(
+			core::rSession &Session,
+			xml::dWriter &Writer )
+		{
+			Writer.PushTag( "Test" );
+
+			Writer.PutAttribute( "Enabled", ( Session.User.TestButtonIsVisible() ? "true" : "false" ) );
+		}
 	}
 }
 
-void frame::Display(
+void frame::SetLayout(
 	const char *Id,
 	core::rSession &Session )
 {
 qRH
-	str::string XML, XSL;
+	base::rLayoutRack Rack;
 qRB
-	XML.Init(); 
-	layout_::GetLayout( Session.Registry(), Session, XML );
+	Rack.Init( XSLAffix_, Session );
 
-	XSL.Init();
-	sclxdhtml::LoadXSLAndTranslateTags( rgstry::tentry___( registry::definition::XSLLayoutFile, XSLAffix_ ), Session.Registry(), XSL );
+	layout_::Get( Session, Rack() );
 
-	Session.FillElement( Id, XML, XSL );
-
-	SetCasting( Id, Session );
+	sclxdhtml::SetElementLayout( Id, XSLAffix_, Session.Registry(), Rack, Session );
 qRR
 qRT
 qRE
-}
-
-namespace casting_ {
-	void Get(
-		core::rSession &Session,
-		str::string_ &XML )
-	{
-	qRH
-		base::rCastingRack Rack;
-	qRB
-		Rack.Init( XSLAffix_, XML, Session );
-	qRR
-	qRT
-	qRE
-	}
 }
 
 void frame::SetCasting(
@@ -85,18 +68,24 @@ void frame::SetCasting(
 	core::rSession &Session )
 {
 qRH
-	str::string XML, XSL;
+	base::rCastingRack Rack;
 qRB
-	XML.Init();
-	casting_::Get( Session,  XML );
+	Rack.Init( XSLAffix_, Session );
+	casting_::Get( Session, Rack() );
 
-	XSL.Init();
-	sclxdhtml::LoadXSLAndTranslateTags(rgstry::tentry___( registry::definition::XSLCastingFile, XSLAffix_ ), Session.Registry() , XSL );
-
-	Session.FillElementCastings( Id, XML, XSL );
+	sclxdhtml::SetElementCasting( Id, XSLAffix_, Session.Registry(), Rack, Session );
 qRR
 qRT
 qRE
+}
+
+void frame::Display(
+	const char *Id,
+	core::rSession &Session )
+{
+	SetLayout( Id, Session );
+
+	SetCasting( Id, Session );
 }
 
 

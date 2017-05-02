@@ -395,6 +395,8 @@ qRT
 qRE
 }
 
+qCDEF( char *, sclxdhtml::RootTagName_, "Root" );
+
 
 #if 0
 bso::bool__ sclxhtml::session___::XDHCBKXDHCBKLaunch(
