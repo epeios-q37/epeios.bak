@@ -522,59 +522,165 @@ namespace sclxdhtml {
 		Proxy.SetElementCasting( Id, XML, XSL );
 	}
 
-	typedef void (* sProxyDocumentFunction)( xdhdws::proxy__ &Proxy, const xdhdws::nstring___ &Id, const xdhdws::nstring___ &XML, const xdhdws::nstring___ &XSL );
+	typedef void (* fSet)( xdhdws::proxy__ &Proxy, const xdhdws::nstring___ &Id, const xdhdws::nstring___ &XML, const xdhdws::nstring___ &XSL );
 
 	void SetElement_(
 		const xdhdws::nstring___ &Id,
-		sProxyDocumentFunction Function,
+		fSet Set,
 		const rgstry::rEntry &Filename,
 		const char *Target,
 		const sclrgstry::registry_ &Registry,
-		xdhdws::rGenericRack &Rack,
-		xdhdws::proxy__ &Proxy, bso::char__ Marker );
+		const str::dString &XML,
+		xdhdws::proxy__ &Proxy,
+		bso::char__ Marker );
 
 	extern const char *RootTagName_;
 
-	inline void SetDocumentLayout(
-		const char *Target,
-		const sclrgstry::registry_ &Registry,
-		xdhdws::rGenericRack &Rack,
-		xdhdws::proxy__ &Proxy,
-		bso::char__ Marker = '#' )
-	{
-		SetElement_( RootTagName_, SetLayout_, registry::definition::XSLLayoutFile, Target, Registry, Rack, Proxy, Marker);
-	}
+	// Following is not allowed, so is declared directly in the functions. Same for the 'Corpus' function.
+	// template <typename session> typedef void (* fDocument )( session *Session, xml::dWriter &Writer );
+	
+	template <typename session> class rRack_ {
+	private:
+		str::wString Target_;
+		mutable flx::E_STRING_TOFLOW___ _Flow;
+		xml::writer _Writer;
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			tol::reset( P, Target_, _Flow, _Writer );
+		}
+		E_CDTOR( rRack_ );
+		void Init(
+			const char *View,
+			const char *Background,
+			void( *Corpus )( session &Session, xml::dWriter &Writer ),
+			session &Session )
+		{
+			tol::buffer__ Buffer;
 
-	inline void SetElementLayout(
+			Target_.Init();
+			_Flow.Init( Target_ );
+			_Writer.Init( _Flow, xml::oIndent, xml::e_Default );
+			_Writer.PushTag( "RichFrontEnd" );
+			_Writer.PutAttribute( "View", View );
+			_Writer.PutAttribute( "Background", Background );
+			_Writer.PutAttribute( "Generator", sclmisc::SCLMISCTargetName );
+			_Writer.PutAttribute( "TimeStamp", tol::DateAndTime( Buffer ) );
+			_Writer.PutAttribute( "OS", cpe::GetOSDigest() );
+			_Writer.PushTag( "Corpus" );
+			Corpus( Session, _Writer );
+			_Writer.PopTag();
+			_Writer.PushTag( Background );
+		}
+		operator xml::writer_ &( )
+		{
+			return _Writer;
+		}
+		xml::writer_ &operator()( void )
+		{
+			return _Writer;
+		}
+		const str::dString &Target( void )
+		{
+			_Writer.reset();	// To close all tags.
+			_Flow.Commit();
+
+			return Target_;
+		}
+	};
+
+	template <typename session, typename rack> inline void SetElement_(
 		const xdhdws::nstring___ &Id,
 		const char *Target,
+		const rgstry::rEntry &Filename,
+		void( *Get )( session &Session, xml::dWriter &Writer ),
+		void( *Corpus )( session &Session, xml::dWriter &Writer ),
+		fSet Set,
 		const sclrgstry::registry_ &Registry,
-		xdhdws::rGenericRack &Rack,
-		xdhdws::proxy__ &Proxy,
+		session &Session,
 		bso::char__ Marker = '#' )
 	{
-		SetElement_( Id, SetLayout_, registry::definition::XSLLayoutFile, Target, Registry, Rack, Proxy, Marker );
+	qRH
+		rack Rack;
+	qRB
+		Rack.Init( Target, Corpus, Session );
+
+		Get( Session, Rack() );
+
+		SetElement_( Id, Set, Filename, Target, Registry, Rack.Target(), Session, Marker );
+	qRR
+	qRT
+	qRE
 	}
 
-	inline void SetDocumentCasting(
-		const char *Target,
-		const sclrgstry::registry_ &Registry,
-		xdhdws::rGenericRack &Rack,
-		xdhdws::proxy__ &Proxy,
-		bso::char__ Marker = '#' )
-	{
-		SetElement_( RootTagName_, SetCasting_, registry::definition::XSLCastingFile, Target, Registry, Rack, Proxy, Marker );
-	}
+	template <typename session> class rLayoutRack
+		: public rRack_<session> {
+	public:
+		void Init(
+			const char *View,
+			void( *Corpus )( session &Session, xml::dWriter &Writer ),
+			session &Session )
+		{
+			rRack_<session>::Init( View, "Layout", Corpus, Session );
+		}
+	};
 
-	inline void SetElementCasting(
+	template <typename session> inline void SetElementLayout(
 		const xdhdws::nstring___ &Id,
 		const char *Target,
+		void( *Get )( session &Session, xml::dWriter &Writer ),
+		void( *Corpus )( session &Session, xml::dWriter &Writer ),
 		const sclrgstry::registry_ &Registry,
-		xdhdws::rGenericRack &Rack,
-		xdhdws::proxy__ &Proxy,
+		session &Session,
 		bso::char__ Marker = '#' )
 	{
-		SetElement_( Id, SetCasting_, registry::definition::XSLCastingFile, Target, Registry, Rack, Proxy, Marker );
+		SetElement_<session, rLayoutRack<session>>( Id, Target, registry::definition::XSLLayoutFile, Get, Corpus, SetLayout_, Registry, Session, Marker );
+	}
+
+	template <typename session> inline void SetDocumentLayout(
+		const char *Target,
+		void( *Get )( session &Session, xml::dWriter &Writer ),
+		void( *Corpus )( session &Session, xml::dWriter &Writer ),
+		const sclrgstry::registry_ &Registry,
+		session &Session,
+		bso::char__ Marker = '#' )
+	{
+		SetElementLayout( RootTagName_, Target, Get, Corpus, Registry, Session, Marker );
+	}
+
+	template <typename session> class rCastingRack
+		: public rRack_<session> {
+	public:
+		void Init(
+			const char *View,
+			void( *Corpus )( session &Session, xml::dWriter &Writer ),
+			session &Session )
+		{
+			rRack_<session>::Init( View, "Casting", Corpus, Session );
+		}
+	};
+
+	template <typename session> inline void SetElementCasting(
+		const xdhdws::nstring___ &Id,
+		const char *Target,
+		void( *Get )( session &Session, xml::dWriter &Writer ),
+		void( *Corpus )( session &Session, xml::dWriter &Writer ),
+		const sclrgstry::registry_ &Registry,
+		session &Session,
+		bso::char__ Marker = '#' )
+	{
+		SetElement_<session, rCastingRack<session>> ( Id, Target, registry::definition::XSLCastingFile, Get, Corpus, SetCasting_, Registry, Session, Marker );
+	}
+
+	template <typename session> inline void SetDocumentCasting(
+		const char *Target,
+		void( *Get )( session &Session, xml::dWriter &Writer ),
+		void( *Corpus )( session &Session, xml::dWriter &Writer ),
+		const sclrgstry::registry_ &Registry,
+		session &Session,
+		bso::char__ Marker = '#' )
+	{
+		SetElementCasting( RootTagName_, Target, Get, Corpus, Registry, Session, Marker );
 	}
 
 	void SCLXDHTMLInitialization( xdhcmn::mode__ Mode );	// To define by user.

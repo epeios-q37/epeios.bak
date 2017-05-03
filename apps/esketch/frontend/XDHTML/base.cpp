@@ -73,7 +73,9 @@ bso::bool__ base::sActionHelper::SCLXOnClose( core::rSession &Session )
 	return Session.ConfirmT( "ClosingConfirmation" );
 }
 
-void base::sCorpusCallback::XDHDWSDump( xml::dWriter &Writer )
+void base::DumpCorpus(
+	core::rSession &Session,
+	xml::dWriter &Writer )
 {
 }
 

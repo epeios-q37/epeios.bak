@@ -50,33 +50,14 @@ void frame::SetLayout(
 	const char *Id,
 	core::rSession &Session )
 {
-qRH
-	base::rLayoutRack Rack;
-qRB
-	Rack.Init( XSLAffix_, Session );
-
-	layout_::Get( Session, Rack() );
-
-	sclxdhtml::SetElementLayout( Id, XSLAffix_, Session.Registry(), Rack, Session );
-qRR
-qRT
-qRE
+	sclxdhtml::SetElementLayout( Id, XSLAffix_, layout_::Get, base::DumpCorpus, Session.Registry(), Session );
 }
 
 void frame::SetCasting(
 	const char *Id,
 	core::rSession &Session )
 {
-qRH
-	base::rCastingRack Rack;
-qRB
-	Rack.Init( XSLAffix_, Session );
-	casting_::Get( Session, Rack() );
-
-	sclxdhtml::SetElementCasting( Id, XSLAffix_, Session.Registry(), Rack, Session );
-qRR
-qRT
-qRE
+	sclxdhtml::SetElementCasting( Id, XSLAffix_, layout_::Get, base::DumpCorpus, Session.Registry(), Session );
 }
 
 void frame::Display(

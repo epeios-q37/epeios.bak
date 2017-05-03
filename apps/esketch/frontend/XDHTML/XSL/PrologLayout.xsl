@@ -2,9 +2,14 @@
 <xsl:stylesheet	version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xpp="http://q37.info/ns/xpp/">
 	<xsl:output method="html" encoding="UTF-8"/>
 	<xsl:template match="/">
-		<xsl:apply-templates select="*/Layout"/>
-	</xsl:template>
+  <xsl:text>before</xsl:text>
+  <br/>
+  <xsl:apply-templates select="*/Layout"/>
+  <br/>
+  <xsl:text>after</xsl:text>
+ </xsl:template>
 	<xsl:template match="Layout">
+  <xsl:text>hello</xsl:text>
 		<span class="vcenter-out">
 			<span class="vcenter-in">
 				<fieldset title="#plgProjectToLoad#">

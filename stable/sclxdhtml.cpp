@@ -376,11 +376,11 @@ qRE
 
 void sclxdhtml::SetElement_(
 	const xdhdws::nstring___ &Id,
-	sProxyDocumentFunction Function,
+	fSet Set,
 	const rgstry::rEntry & Filename,
 	const char *Target,
 	const sclrgstry::registry_ &Registry,
-	xdhdws::rGenericRack &Rack,
+	const str::dString &XML,
 	xdhdws::proxy__ &Proxy, bso::char__ Marker)
 {
 qRH
@@ -389,7 +389,7 @@ qRB
 	XSL.Init();
 	sclxdhtml::LoadXSLAndTranslateTags( rgstry::tentry___( Filename, Target ), Registry, XSL, Marker );
 
-	Function( Proxy, Id, Rack.Target(), XSL);
+	Set( Proxy, Id, XML, XSL);
 qRR
 qRT
 qRE

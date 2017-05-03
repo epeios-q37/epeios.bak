@@ -30,10 +30,10 @@ AC( About )
 {
 qRH
 	str::string XSL;
-	base::rLayoutRack Rack;
+	sclxdhtml::rLayoutRack<core::rSession> Rack;
 	str::string AboutTranslation;
 qRB
-	Rack.Init( XSLAffix_, Session );
+	Rack.Init( XSLAffix_, base::DumpCorpus, Session );
 
 	Rack().PushTag( "About" );
 	core::About( Session, Rack );

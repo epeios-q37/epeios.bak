@@ -37,9 +37,6 @@ namespace xdhdws {
 	using xdhcmn::nchar__;
 	using xdhcmn::nstring___;
 
-	static E_CDEF( char *, LayoutTagName, "Layout" );
-	static E_CDEF( char *, CastingTagName, "Casting" );
-
 	class proxy__
 	{
 	private:
@@ -343,112 +340,6 @@ namespace xdhdws {
 			C_().Process( xdhcmn::fSelect, NULL, Id.Internal()( ) );
 		}
 	};
-
-	class cCorpus
-	{
-	protected:
-		virtual void XDHDWSDump( xml::writer_ &Writer ) = 0;
-	public:
-		qCALLBACK( Corpus );
-		void Dump( xml::writer_ &Writer )
-		{
-			XDHDWSDump( Writer );
-		}
-	};
-
-	class rGenericRack
-	{
-	private:
-		str::wString Target_;
-		mutable flx::E_STRING_TOFLOW___ _Flow;
-		xml::writer _Writer;
-	public:
-		void reset( bso::bool__ P = true )
-		{
-			tol::reset( P, Target_, _Flow, _Writer );
-		}
-		E_CDTOR( rGenericRack );
-		void Init(
-			const char *Generator,
-			const char *View,
-			const char *Background,
-			cCorpus &Callback )
-		{
-			tol::buffer__ Buffer;
-
-			Target_.Init();
-			_Flow.Init( Target_ );
-			_Writer.Init( _Flow, xml::oIndent, xml::e_Default );
-			_Writer.PushTag( "RichFrontEnd" );
-			_Writer.PutAttribute("View", View );
-			_Writer.PutAttribute("Background", Background );
-			_Writer.PutAttribute("Generator", Generator );
-			_Writer.PutAttribute("TimeStamp", tol::DateAndTime( Buffer ) );
-			_Writer.PutAttribute( "OS", cpe::GetOSDigest() );
-			_Writer.PushTag( "Corpus" );
-			Callback.Dump( _Writer );
-			_Writer.PopTag();
-			_Writer.PushTag( Background );
-		}
-		operator xml::writer_ &()
-		{
-			return _Writer;
-		}
-		xml::writer_ &operator()( void )
-		{
-			return _Writer;
-		}
-		const str::dString &Target(void)
-		{
-			_Writer.reset();	// To close all tags.
-			_Flow.Commit();
-
-			return Target_;
-		}
-	};
-
-	class rLayoutRack
-	: public rGenericRack
-	{
-	public:
-		void Init(
-			const char *Generator,
-			const char *View,
-			cCorpus &Callback )
-		{
-			rGenericRack::Init( Generator, View, LayoutTagName, Callback );
-		}
-	};
-
-	class rCastingRack
-	: public rGenericRack
-	{
-	public:
-		void Init(
-			const char *Generator,
-			const char *View,
-			cCorpus &Callback )
-		{
-			rGenericRack::Init( Generator, View, CastingTagName, Callback );
-		}
-	};
-
-# define XDHDWS_RACK( Generator, Type )\
-	class r##Type##Rack_\
-	: public xdhdws::r##Type##Rack\
-	{\
-	public:\
-		void Init(\
-			const char *View,\
-			xdhdws::cCorpus &Callback )\
-		{\
-			xdhdws::r##Type##Rack::Init( Generator, View, Callback );\
-		}\
-	};
-
-# define XDHDWS_RACKS( Generator )\
-	XDHDWS_RACK( Generator, Layout );\
-	XDHDWS_RACK( Generator, Casting )
 }
 
 #endif

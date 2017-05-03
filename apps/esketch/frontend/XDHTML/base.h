@@ -96,57 +96,9 @@ namespace base {
 		virtual bso::bool__ SCLXOnClose( core::rSession &Session ) override;
 	};
 
-	typedef xdhdws::cCorpus cCorpus_;
-
-	class sCorpusCallback
-	: public cCorpus_
-	{
-	private:
-		qRMV( core::rSession, S_,  Session_ );
-	protected:
-		/*
-		Deported to '.cpp' due to 'g++', which needs 'core::rSession' definition
-		on the declaration (where 'core::rSession' is only declared, but no defined),
-		and not on instanciation.
-		*/
-		virtual void XDHDWSDump( xml::writer_ &Writer ) override;
-	public:
-		void reset( bso::bool__ P = true )
-		{
-			tol::reset( P, Session_ );
-		}
-		E_CVDTOR( sCorpusCallback );
-		void Init( core::rSession &Session )
-		{
-			Session_ = &Session;
-		}
-	};
-
-	XDHDWS_RACKS( Name );
-
-	template <typename rack> class rRack_
-	: public rack
-	{
-	private:
-		sCorpusCallback Callback_;
-	public:
-		void reset( bso::bool__ P = true )
-		{
-			rack::reset( P );
-			Callback_.reset( P );
-		}
-		E_CDTOR( rRack_ );
-		void Init(
-			const char *View,
-			core::rSession &Session )
-		{
-			Callback_.Init( Session );
-			rack::Init( View, Callback_ );
-		}
-	};
-
-	typedef rRack_<rLayoutRack_> rLayoutRack;
-	typedef rRack_<rCastingRack_> rCastingRack;
+	void DumpCorpus(
+		core::rSession &Session,
+		xml::dWriter &Writer );
 }
 
 #endif

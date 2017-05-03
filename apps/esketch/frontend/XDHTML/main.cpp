@@ -47,31 +47,12 @@ namespace{
 
 void main::SetLayout( core::rSession &Session )
 {
-qRH
-	base::rLayoutRack Rack;
-qRB
-	Rack.Init( XSLAffix_, Session );
-
-	layout_::Get( Session, Rack() );
-
-	sclxdhtml::SetDocumentLayout( XSLAffix_, Session.Registry(), Rack, Session );
-qRR
-qRT
-qRE
+	sclxdhtml::SetDocumentLayout( XSLAffix_, layout_::Get, base::DumpCorpus, Session.Registry(), Session );
 }
 
 void main::SetCasting( core::rSession &Session )
 {
-qRH
-	base::rCastingRack Rack;
-qRB
-	Rack.Init( XSLAffix_, Session );
-	casting_::Get( Session, Rack() );
-
-	sclxdhtml::SetDocumentCasting( XSLAffix_, Session.Registry(), Rack, Session );
-qRR
-qRT
-qRE
+	sclxdhtml::SetDocumentCasting( XSLAffix_, casting_::Get, base::DumpCorpus, Session.Registry(), Session );
 }
 
 void main::Display( core::rSession &Session )

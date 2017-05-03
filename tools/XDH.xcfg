@@ -162,9 +162,9 @@
 					log( "Casting : '%Id%'" );
 					log( "%XML%" );
 					removeCastingChildren( document );
-					document.getElementById( "xdh-castings" ).appendChild( transformToFragment( "%XML%", "%XSL%" ) );
-					var castings = fetchCastings( "%Id%" );
-					castings;
+					document.getElementById( "xdh-casting" ).appendChild( transformToFragment( "%XML%", "%XSL%" ) );
+					var casting = fetchCasting( "%Id%" );
+					casting;
 				]]>
     </Casts>
     <Contents>
