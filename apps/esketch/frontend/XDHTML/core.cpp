@@ -68,7 +68,6 @@ void core::core___::Init( xdhcmn::mode__ Mode )
 	Register_();
 }
 
-
 void core::rInstancesCore::Init( frdfrntnd::rFrontend &Frontend )
 {
 qRH

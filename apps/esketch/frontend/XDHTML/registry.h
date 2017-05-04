@@ -21,6 +21,7 @@
 # define REGISTRY__INC
 
 # include "frdrgstry.h"
+
 # include "sclxdhtml.h"
 
 namespace registry {

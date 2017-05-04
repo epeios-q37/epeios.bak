@@ -87,7 +87,7 @@
 		</xsl:choose>
 	</xsl:template>
 	<xsl:template name="DOE">
-		<xsl:param name="Layout"/>
-		<xsl:value-of select="$Layout" disable-output-escaping="yes"/>
+		<xsl:param name="Content"/>
+		<xsl:value-of select="$Content" disable-output-escaping="yes"/>
 	</xsl:template>
 </xpp:bloc>

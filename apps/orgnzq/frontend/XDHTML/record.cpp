@@ -59,7 +59,7 @@ void record::SetCasting(
 	const char *Id,
 	core::rSession &Session )
 {
-	core::SetElementCasting( Id, XSLAffix_, layout_::Get, Session );
+	core::SetElementCasting( Id, XSLAffix_, casting_::Get, Session );
 }
 
 void record::Display(

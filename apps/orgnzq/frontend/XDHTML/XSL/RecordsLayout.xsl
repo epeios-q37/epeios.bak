@@ -33,7 +33,7 @@
 				<xsl:value-of select="@id"/>
 			</xsl:attribute>
 			<xsl:call-template name="DOE">
-				<xsl:with-param name="Layout" select="."/>
+				<xsl:with-param name="Content" select="."/>
 			</xsl:call-template>
 		</fieldset>
 	</xsl:template>
