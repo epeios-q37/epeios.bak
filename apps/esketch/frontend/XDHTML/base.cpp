@@ -73,12 +73,6 @@ bso::bool__ base::sActionHelper::SCLXOnClose( core::rSession &Session )
 	return Session.ConfirmT( "ClosingConfirmation" );
 }
 
-void base::DumpCorpus(
-	core::rSession &Session,
-	xml::dWriter &Writer )
-{
-}
-
 Q37_GCTOR( base )
 {
 }

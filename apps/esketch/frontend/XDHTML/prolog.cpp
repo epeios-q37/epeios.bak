@@ -51,12 +51,12 @@ namespace {
 
 void prolog::SetLayout( core::rSession &Session )
 {
-	sclxdhtml::SetDocumentLayout( XSLAffix_, layout_::Get, base::DumpCorpus, Session.Registry(), Session );
+	core::SetDocumentLayout( XSLAffix_, layout_::Get, Session );
 }
 
 void prolog::SetCasting( core::rSession &Session )
 {
-	sclxdhtml::SetDocumentCasting( XSLAffix_, casting_::Get, base::DumpCorpus, Session.Registry(), Session );
+	core::SetDocumentCasting( XSLAffix_, casting_::Get, Session );
 }
 
 void prolog::Display( core::rSession &Session )

@@ -61,6 +61,8 @@ namespace core {
 		qCVDTOR( rSession );
 	};
 
+	SCLXDHTML_DEF( core::rSession );
+
 	typedef sclxdhtml::core___<rSession> _core___;
 
 	class core___

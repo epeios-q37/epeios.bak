@@ -47,12 +47,12 @@ namespace{
 
 void main::SetLayout( core::rSession &Session )
 {
-	sclxdhtml::SetDocumentLayout( XSLAffix_, layout_::Get, base::DumpCorpus, Session.Registry(), Session );
+	core::SetDocumentLayout( XSLAffix_, layout_::Get, Session );
 }
 
 void main::SetCasting( core::rSession &Session )
 {
-	sclxdhtml::SetDocumentCasting( XSLAffix_, casting_::Get, base::DumpCorpus, Session.Registry(), Session );
+	core::SetDocumentCasting( XSLAffix_, casting_::Get, Session );
 }
 
 void main::Display( core::rSession &Session )

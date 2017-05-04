@@ -30,16 +30,14 @@ AC( About )
 {
 qRH
 	str::string XSL;
-	sclxdhtml::rLayoutRack<core::rSession> Rack;
+	sclxdhtml::rLayoutRack<core::rSession,core::sDump> Rack;
 	str::string AboutTranslation;
 qRB
-	Rack.Init( XSLAffix_, base::DumpCorpus, Session );
+	Rack.Init( XSLAffix_, Session );
 
 	Rack().PushTag( "About" );
 	core::About( Session, Rack );
 	Rack().PopTag();
-
-//	Rack.reset();
 
 	XSL.Init();
 	sclxdhtml::LoadXSLAndTranslateTags( rgstry::tentry___( registry::definition::XSLLayoutFile, "About" ), sclxdhtml::GetRegistry(), XSL );	// Potentialy outside session, so we use the global registry...

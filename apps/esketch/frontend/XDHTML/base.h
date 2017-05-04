@@ -95,10 +95,6 @@ namespace base {
 		virtual void SCLXOnRefresh( core::rSession &Session ) override;
 		virtual bso::bool__ SCLXOnClose( core::rSession &Session ) override;
 	};
-
-	void DumpCorpus(
-		core::rSession &Session,
-		xml::dWriter &Writer );
 }
 
 #endif

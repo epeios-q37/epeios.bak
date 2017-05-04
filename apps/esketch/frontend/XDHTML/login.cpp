@@ -52,12 +52,12 @@ namespace {
 
 void login::SetLayout( core::rSession &Session )
 {
-	sclxdhtml::SetDocumentLayout( XSLAffix_, layout_::Get, base::DumpCorpus, Session.Registry(), Session );
+	core::SetDocumentLayout( XSLAffix_, layout_::Get, Session );
 }
 
 void login::SetCasting( core::rSession &Session )
 {
-	sclxdhtml::SetDocumentCasting( XSLAffix_, casting_::Get, base::DumpCorpus, Session.Registry(), Session );
+	core::SetDocumentCasting( XSLAffix_, casting_::Get, Session );
 }
 
 void login::Display( core::rSession &Session )

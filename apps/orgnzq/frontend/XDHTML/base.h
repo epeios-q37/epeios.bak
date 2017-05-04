@@ -89,8 +89,7 @@ namespace base {
 		cAction &Callback );
 
 	class sActionHelper
-	: public sclxdhtml::cActionHelper<core::rSession>
-	{
+		: public sclxdhtml::cActionHelper<core::rSession> {
 	protected:
 		virtual bso::bool__ SCLXOnBeforeAction(
 			core::rSession &Session,
@@ -100,66 +99,9 @@ namespace base {
 		virtual bso::bool__ SCLXOnClose( core::rSession &Session ) override;
 	};
 
-	typedef xdhdws::cCorpus cCorpus_;
-
-	class sCorpusCallback
-	: public cCorpus_
-	{
-	private:
-		qRMV( frdfrntnd::rFrontend, F_,  Frontend_ );
-	protected:
-		virtual void XDHDWSDump( xml::writer_ &Writer ) override
-		{
-			if ( F_().IsConnected() )
-				F_().DumpCorpus( Writer );
-		}
-	public:
-		void reset( bso::bool__ P = true )
-		{
-			Frontend_ = NULL;
-		}
-		E_CVDTOR( sCorpusCallback );
-		void Init( frdfrntnd::rFrontend &Frontend )
-		{
-			Frontend_ = &Frontend;
-		}
-	};
-
-	XDHDWS_RACKS( Name );
-
-	void InitCallback_(
-		sCorpusCallback &Callback,
-		core::rSession &Session );
-
 	void DumpFocus_(
 		const core::rSession &Session,
 		xml::dWriter &Writer );
-
-	template <typename rack> class rRack_
-	: public rack
-	{
-	private:
-		sCorpusCallback Callback_;
-	public:
-		void reset( bso::bool__ P = true )
-		{
-			rack::reset( P );
-			Callback_.reset( P );
-		}
-		E_CDTOR( rRack_ );
-		void Init(
-			const char *View,
-			core::rSession &Session )
-		{
-			InitCallback_( Callback_, Session );
-			rack::Init( View, Callback_ );
-
-			DumpFocus_( Session, *this );
-		}
-	};
-
-	typedef rRack_<rLayoutRack_> rLayoutRack;
-	typedef rRack_<rCastingRack_> rCastingRack;
 }
 
 #endif
