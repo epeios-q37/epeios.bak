@@ -100,24 +100,6 @@ bso::bool__ base::sActionHelper::SCLXOnClose( core::rSession &Session )
 	return Session.ConfirmT( "ClosingConfirmation" );
 }
 
-void base::InitCallback_(
-	sCorpusCallback &Callback,
-	core::rSession &Session )
-{
-	Callback.Init( Session );
-}
-
-
-void base::DumpFocus_(
-	const core::rSession &Session,
-	xml::dWriter &Writer )
-{
-	if ( Session.User.HasPanel() )
-		if ( Session.User.Panel().GetFocus() != frdinstc::t_Undefined )
-			Writer.PutAttribute( "Focus", frdinstc::GetLabel( Session.User.Panel().GetFocus() ) );
-}
-
-
 Q37_GCTOR( base )
 {
 }

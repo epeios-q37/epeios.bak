@@ -22,15 +22,20 @@
 
 # include "frdrgstry.h"
 
+# include "sclxdhtml.h"
+
 namespace registry {
 	using namespace frdrgstry;
+	using namespace sclxdhtml::registry;
 
 	namespace parameter {
 		using namespace frdrgstry::parameter;
+		using namespace sclxdhtml::registry::parameter;
 	}
 
 	namespace definition {
 		using namespace frdrgstry::definition;
+		using namespace sclxdhtml::registry::definition;
 	}
 }
 

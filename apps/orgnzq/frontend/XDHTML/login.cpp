@@ -27,85 +27,51 @@
 #include "sclfrntnd.h"
 
 namespace {
-
 	E_CDEF( char *, XSLAffix_, "Login" );
 
-	void GetContext_(
-		core::rSession &Session,
-		str::string_ &XML )
-	{
-	qRH
-		base::rContextRack Rack;
-	qRB
-		Rack.Init( XSLAffix_, XML, Session );
-
-		sclxdhtml::login::GetContext( Session, Session.BackendVisibility(), Rack );
-	qRR
-	qRT
-	qRE
+	namespace layout_ {
+		void Get(
+			core::rSession &Session,
+			xml::dWriter &Writer )
+		{
+			sclxdhtml::login::GetLayout( Session, Writer );
+		}
 	}
 
-	void SetCasting_( core::rSession &Session )
-	{
-	qRH
-		str::string XML, XSL;
-	qRB
-		XML.Init();
-		GetContext_( Session, XML );
-
-		XSL.Init();
-		sclxdhtml::LoadXSLAndTranslateTags(rgstry::tentry___( registry::definition::XSLCastingFile, XSLAffix_ ), sclxdhtml::GetRegistry() , XSL );	// Outside session, so we use the global registry...
-
-		Session.FillDocumentCastings( XML, XSL );
-	qRR
-	qRT
-	qRE
+	namespace casting_ {
+		void Get(
+			core::rSession &Session,
+			xml::dWriter &Writer )
+		{
+			sclxdhtml::login::GetCasting( Session, Session.BackendVisibility(), Writer );
+		}
 	}
+}
 
-	void GetContent_(
-		const sclrgstry::dRegistry &Registry,
-		core::rSession &Session,
-		str::string_ &XML )
-	{
-	qRH
-		base::rContentRack Rack;
-		TOL_CBUFFER___ Buffer;
-	qRB
-		Rack.Init( XSLAffix_, XML, Session );
+void login::SetLayout( core::rSession &Session )
+{
+	core::SetDocumentLayout( XSLAffix_, layout_::Get, Session );
+}
 
-		sclxdhtml::login::GetContent( Session, Rack );
-	qRR
-	qRT
-	qRE
-	}
+void login::SetCasting( core::rSession &Session )
+{
+	core::SetDocumentCasting( XSLAffix_, casting_::Get, Session );
 }
 
 void login::Display( core::rSession &Session )
 {
-qRH
-	str::string XML, XSL;
-qRB
-	XML.Init();
-	GetContent_( sclxdhtml::GetRegistry(), Session, XML );	// Outside session, so we use the global registry...
+	SetLayout( Session );
 
-	XSL.Init();
-	sclxdhtml::LoadXSLAndTranslateTags( rgstry::tentry___( registry::definition::XSLLayoutFile, XSLAffix_ ), sclxdhtml::GetRegistry(), XSL );	// Outside session, so we use the global registry...
-
-	Session.FillDocument( XML, XSL );
-
-	SetCasting_( Session );
+	SetCasting( Session );
 
 	Session.SwitchTo( core::pLogin );
-qRR
-qRT
-qRE
 }
 
 #define AC( name ) BASE_AC( login, name )
 
 AC( SwitchBackendType )
 {
-	SetCasting_( Session );
+	SetCasting( Session );
 }
 
 AC( DisplayEmbeddedBackendFilename )

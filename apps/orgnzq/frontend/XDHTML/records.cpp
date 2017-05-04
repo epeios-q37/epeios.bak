@@ -24,79 +24,46 @@
 #include "sclfrntnd.h"
 
 namespace {
-
 	E_CDEF( char *, XSLAffix_, "Records" );
 
-	void GetContext_(
-		core::rSession &Session,
-		str::string_ &XML )
-	{
-	qRH
-		base::rContextRack Rack;
-	qRB
-		Rack.Init( XSLAffix_, XML, Session );
-	qRR
-	qRT
-	qRE
+	namespace layout_ {
+		void Get(
+			core::rSession &Session,
+			xml::dWriter &Writer )
+		{
+			Session.User.Panel().DumpRecords( Writer );
+		}
 	}
 
-	void SetCasting_(
-		const char *Id,
-		core::rSession &Session )
-	{
-	qRH
-		str::string XML, XSL;
-	qRB
-		XML.Init();
-		GetContext_( Session,  XML );
-
-		XSL.Init();
-		sclxdhtml::LoadXSLAndTranslateTags(rgstry::tentry___( registry::definition::XSLCastingFile, XSLAffix_ ), Session.Registry() , XSL );
-
-		Session.FillElementCastings( Id, XML, XSL );
-	qRR
-	qRT
-	qRE
+	namespace casting_ {
+		void Get(
+			core::rSession &Session,
+			xml::dWriter &Writer )
+		{}
 	}
+}
 
-	static void GetContent_(
-		const sclrgstry::dRegistry &Registry,
-		core::rSession &Session,
-		str::string_ &XML )
-	{
-	qRH
-		base::rContentRack Rack;
-	qRB
-		Rack.Init( XSLAffix_, XML, Session );
+void records::SetLayout(
+	const char *Id,
+	core::rSession &Session )
+{
+	core::SetElementLayout( Id, XSLAffix_, layout_::Get, Session );
+}
 
-		Session.User.Panel().DumpRecords( Rack );
-	qRR
-	qRT
-	qRE
-	}
+void records::SetCasting(
+	const char *Id,
+	core::rSession &Session )
+{
+	core::SetElementCasting( Id, XSLAffix_, layout_::Get, Session );
 }
 
 void records::Display(
 	const char *Id,
 	core::rSession &Session )
 {
-qRH
-	str::string XML, XSL;
-qRB
-	XML.Init(); 
-	GetContent_( Session.Registry(), Session, XML );
+	SetLayout( Id, Session );
 
-	XSL.Init();
-	sclxdhtml::LoadXSLAndTranslateTags( rgstry::tentry___( registry::definition::XSLLayoutFile, XSLAffix_ ), Session.Registry(), XSL );
-
-	Session.FillElement( Id, XML, XSL );
-
-	SetCasting_( Id, Session );
-
-//	Session.SwitchTo( core::fframe );
-qRR
-qRT
-qRE
+	SetCasting( Id, Session );
 }
 
 #define AC( name ) BASE_AC( records, name )

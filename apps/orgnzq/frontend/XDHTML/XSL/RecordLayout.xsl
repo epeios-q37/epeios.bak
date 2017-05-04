@@ -5,10 +5,10 @@
 				>
 	<xsl:output method="html" encoding="UTF-8" doctype-system="about:legacy-compat"/>
 	<xsl:template match="/">
-		<xsl:apply-templates select="*/Content"/>
+		<xsl:apply-templates select="*/Layout"/>
 		<xsl:apply-templates select="*/Corpus"/>
 	</xsl:template>
-	<xsl:template match="Content">
+	<xsl:template match="Layout">
 		<span class="vcenter-out">
 			<span class="vcenter-in">
 				<fieldset>

@@ -21,10 +21,3 @@
 
 using frdrgstry::rEntry;
 
-namespace {
-	rEntry XSLFilesSet_( "XSLFilesSet", sclrgstry::Definitions );
-	rEntry FreeXSLFiles_( "XSLFiles", XSLFilesSet_ );
-	rEntry TaggedXSLFiles(RGSTRY_TAGGING_ATTRIBUTE("target"), FreeXSLFiles_ );
-}
-
-rEntry registry::definition::XSLLayoutFile("Layout", TaggedXSLFiles );rEntry registry::definition::XSLCastingFile("Casting", TaggedXSLFiles );

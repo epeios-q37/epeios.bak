@@ -58,6 +58,22 @@ bso::bool__ core::rSession::XDHCMNLaunch(
 	return Core.Launch( *this, Id, Action );
 }
 
+void core::sDump::Corpus(
+	core::rSession &Session,
+	xml::dWriter &Writer )
+{
+	Session.DumpCorpus( Writer );
+}
+
+void core::sDump::Common(
+	core::rSession &Session,
+	xml::dWriter &Writer )
+{
+	if ( Session.User.HasPanel() )
+		if ( Session.User.Panel().GetFocus() != frdinstc::t_Undefined )
+			Writer.PutAttribute( "Focus", frdinstc::GetLabel( Session.User.Panel().GetFocus() ) );
+}
+
 #define V( value, tag )	Writer.PutValue( value, #tag );
 
 static void About_(

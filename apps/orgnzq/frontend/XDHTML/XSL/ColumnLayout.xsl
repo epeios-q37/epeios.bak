@@ -6,10 +6,10 @@
 	<xsl:output method="html" encoding="UTF-8" doctype-system="about:legacy-compat"/>
 	<xpp:expand href="functions.xsl"/>
 	<xsl:template match="/">
-		<xsl:apply-templates select="*/Content"/>
+		<xsl:apply-templates select="*/Layout"/>
 		<xsl:apply-templates select="*/Corpus"/>
 	</xsl:template>
-	<xsl:template match="Content">
+	<xsl:template match="Layout">
 	</xsl:template>
 	<xsl:template match="Corpus">
 		<span class="vcenter-out">

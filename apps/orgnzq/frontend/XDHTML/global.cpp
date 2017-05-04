@@ -30,7 +30,7 @@ AC( About )
 {
 qRH
 	str::string XSL;
-	base::rLayoutRack Rack;
+	sclxdhtml::rLayoutRack<core::rSession,core::sDump> Rack;
 	str::string AboutTranslation;
 qRB
 	Rack.Init( XSLAffix_, Session );
@@ -39,10 +39,8 @@ qRB
 	core::About( Session, Rack );
 	Rack().PopTag();
 
-	Rack.reset();
-
 	XSL.Init();
-	sclxdhtml::LoadXSLAndTranslateTags( rgstry::tentry___( registry::definition::XSLLayoutFile, "About" ), Session.IsConnected() ? Session.Registry() : sclxdhtml::GetRegistry(), XSL );
+	sclxdhtml::LoadXSLAndTranslateTags( rgstry::tentry___( registry::definition::XSLLayoutFile, "About" ), sclxdhtml::GetRegistry(), XSL );	// Potentialy outside session, so we use the global registry...
 
 	AboutTranslation.Init();
 	scllocale::GetTranslation("About...", Session.Language(), AboutTranslation );

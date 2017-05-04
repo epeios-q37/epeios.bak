@@ -23,7 +23,6 @@
 #include "registry.h"
 #include "sclfrntnd.h"
 
-
 namespace {
 	qCDEF( char *, XSLAffix_, "Frame" );
 
@@ -68,7 +67,6 @@ void frame::Display(
 
 	SetCasting( Id, Session );
 }
-
 
 #define AC( name ) BASE_AC( frame, name )
 

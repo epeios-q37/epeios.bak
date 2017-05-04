@@ -7,12 +7,12 @@
 	<xpp:expand href="functions.xsl"/>
 	<xsl:template name="DisplayEditableTextEntry">
 		<xsl:param name="Type"/>
-		<xsl:param name="Content"/>
+		<xsl:param name="Layout"/>
 		<span>
 			<xsl:choose>
 				<xsl:when test="$Type='Text'">
 					<textarea id="EditableEntry" >
-						<xsl:value-of select="$Content"/>
+						<xsl:value-of select="$Layout"/>
 					</textarea>
 				</xsl:when>
 				<xsl:when test="$Type='RichText'">
@@ -23,7 +23,7 @@
 							<!-- Alternative -->
 							<!--<xsl:text>jqte</xsl:text>-->
 						</xsl:attribute>
-						<xsl:value-of select="$Content"/>
+						<xsl:value-of select="$Layout"/>
 					</textarea>
 				</xsl:when>
 				<xsl:when test="$Type='Date'">
@@ -33,7 +33,7 @@
 							<xsl:text>datepicker|{language:'#fieldLanguage#', autoclose: true, todayHighlight: true, todayBtn: true,}</xsl:text>
 						</xsl:attribute>
 						<xsl:attribute name="Value">
-							<xsl:value-of select="$Content"/>
+							<xsl:value-of select="$Layout"/>
 						</xsl:attribute>
 					</input>
 				</xsl:when>
@@ -44,7 +44,7 @@
 							<xsl:text>timepicker|{#fieldTimePickerParameters#}</xsl:text>
 						</xsl:attribute>
 						<xsl:attribute name="Value">
-							<xsl:value-of select="$Content"/>
+							<xsl:value-of select="$Layout"/>
 						</xsl:attribute>
 					</input>
 				</xsl:when>
@@ -55,7 +55,7 @@
 		</span>
 	</xsl:template>
 	<xsl:template match="/">
-		<xsl:apply-templates select="*/Content/Field"/>
+		<xsl:apply-templates select="*/Layout/Field"/>
 	</xsl:template>
 	<xsl:template match="Field">
 		<xsl:variable name="Type">
@@ -109,20 +109,20 @@
 			<xsl:when test="@id=../@Selected or $Number='Mono'">
 				<xsl:call-template name="DisplayEditableTextEntry">
 					<xsl:with-param name="Type" select="$Type"/>
-					<xsl:with-param name="Content" select="."/>
+					<xsl:with-param name="Layout" select="."/>
 				</xsl:call-template>
 			</xsl:when>
 			<xsl:otherwise>
 				<fieldset title="#fieldDragAndDropTitle#" data-xdh-onevents="(dragstart|DragEntry)|(drop|DropEntry)|(dragend|EndEntryDragging)" data-xdh-casts="EntryDraggingCast|EntryDroppingCast">
-					<xsl:attribute name="data-xdh-content">
+					<xsl:attribute name="data-xdh-Layout">
 						<xsl:value-of select="@id"/>
 					</xsl:attribute>
 					<span data-xdh-onevent="DefineEntry">
-						<xsl:attribute name="data-xdh-content">
+						<xsl:attribute name="data-xdh-Layout">
 							<xsl:value-of select="@id"/>
 						</xsl:attribute>
 						<xsl:call-template name="DOE">
-							<xsl:with-param name="Content" select="."/>
+							<xsl:with-param name="Layout" select="."/>
 						</xsl:call-template>
 					</span>
 				</fieldset>

@@ -98,10 +98,6 @@ namespace base {
 		virtual void SCLXOnRefresh( core::rSession &Session ) override;
 		virtual bso::bool__ SCLXOnClose( core::rSession &Session ) override;
 	};
-
-	void DumpFocus_(
-		const core::rSession &Session,
-		xml::dWriter &Writer );
 }
 
 #endif

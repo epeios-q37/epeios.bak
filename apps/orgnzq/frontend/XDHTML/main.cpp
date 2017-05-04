@@ -29,79 +29,50 @@ namespace {
 	E_CDEF( char *, RecordsFrameId_, "Records" );
 	E_CDEF( char *, RecordFrameId_, "Record" );
 
-	void GetContext_(
-		core::rSession &Session,
-		str::string_ &XML )
-	{
-	qRH
-		base::rContextRack Rack;
-	qRB
-		Rack.Init( XSLAffix_, XML, Session );
-
-		if ( Session.User.IsPanelDraggingInProgress() )
-			Rack().PutValue( "InProgress", "Dragging" );
-	qRR
-	qRT
-	qRE
+	namespace layout_ {
+		void Get(
+			core::rSession &Session,
+			xml::dWriter &Writer )
+		{
+			Session.User.DumpPanels( Writer );
+		}
 	}
 
-	void SetCasting_( core::rSession &Session )
-	{
-	qRH
-		str::string XML, XSL;
-	qRB
-		XML.Init();
-		GetContext_( Session,  XML );
-
-		XSL.Init();
-		sclxdhtml::LoadXSLAndTranslateTags(rgstry::tentry___( registry::definition::XSLCastingFile, XSLAffix_ ), Session.Registry() , XSL );
-
-		Session.FillDocumentCastings( XML, XSL );
-	qRR
-	qRT
-	qRE
+	namespace casting_ {
+		void Get(
+			core::rSession &Session,
+			xml::dWriter &Writer )
+		{
+			if ( Session.User.IsPanelDraggingInProgress() )
+				Writer.PutValue( "InProgress", "Dragging" );
+		}
 	}
+}
 
-	void GetContent_(
-		const sclrgstry::dRegistry &Registry,
-		core::rSession &Session,
-		str::string_ &XML )
-	{
-	qRH
-		base::rContentRack Rack;
-	qRB
-		Rack.Init( XSLAffix_, XML, Session );
+void main::SetLayout( core::rSession &Session )
+{
+	core::SetDocumentLayout( XSLAffix_, layout_::Get, Session );
+}
 
-		Session.User.DumpPanels( Rack );
-	qRR
-	qRT
-	qRE
-	}
+void main::SetCasting( core::rSession &Session )
+{
+	core::SetDocumentCasting( XSLAffix_, casting_::Get, Session );
 }
 
 void main::Display(
 	core::rSession &Session,
 	bso::sBool Refresh )
 {
-qRH
-	str::string XML, XSL;
-qRB
-	XML.Init(); 
-	GetContent_( Session.Registry(), Session, XML );
+	SetLayout( Session );
 
-	XSL.Init();
-	sclxdhtml::LoadXSLAndTranslateTags( rgstry::tentry___( registry::definition::XSLLayoutFile, XSLAffix_ ), Session.Registry(), XSL );
-
-	Session.FillDocument( XML, XSL );
-
-	SetCasting_( Session );
+	SetCasting( Session );
 
 	if ( Refresh ) {
-		switch ( Session.User.Panel().Focus() )	{
+		switch ( Session.User.Panel().Focus() ) {
 		case frdinstc::tColumn:
 			main::SetRecordLayout( Session );
 			record::SetFieldsLayout( Session );
-			record::SetColumnLayout( Session);
+			record::SetColumnLayout( Session );
 			break;
 		case frdinstc::tField:
 			main::SetRecordLayout( Session );
@@ -122,9 +93,6 @@ qRB
 	}
 
 	Session.SwitchTo( core::pMain );
-qRR
-qRT
-qRE
 }
 
 void main::SetRecordsLayout( core::rSession &Session )
@@ -165,7 +133,7 @@ AC( DragPanel )
 
 	Session.User.DragPanel( Pos );
 
-	SetCasting_( Session );
+	SetCasting( Session );
 }
 
 AC( DropPanel )
@@ -176,7 +144,7 @@ AC( DropPanel )
 
 	Session.User.DropPanel( Pos );
 
-	SetCasting_( Session );
+	SetCasting( Session );
 }
 
 AC( EndPanelDragging )

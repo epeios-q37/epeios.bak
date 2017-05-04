@@ -6,9 +6,9 @@
 	<xsl:output method="html" encoding="UTF-8" doctype-system="about:legacy-compat"/>
 	<xpp:expand href="functions.xsl"/>
 	<xsl:template match="/">
-		<xsl:apply-templates select="*/Content"/>
+		<xsl:apply-templates select="*/Layout"/>
 	</xsl:template>
-	<xsl:template match="Content">
+	<xsl:template match="Layout">
 		<span class="vcenter-out">
 			<span class="vcenter-in">
 				<fieldset>
@@ -33,7 +33,7 @@
 				<xsl:value-of select="@id"/>
 			</xsl:attribute>
 			<xsl:call-template name="DOE">
-				<xsl:with-param name="Content" select="."/>
+				<xsl:with-param name="Layout" select="."/>
 			</xsl:call-template>
 		</fieldset>
 	</xsl:template>

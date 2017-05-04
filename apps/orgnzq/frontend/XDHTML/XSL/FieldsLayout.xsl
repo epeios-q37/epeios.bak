@@ -6,15 +6,15 @@
  <xsl:output method="html" encoding="UTF-8" doctype-system="about:legacy-compat"/>
  <xpp:expand href="functions.xsl"/>
  <xsl:template match="/">
-  <xsl:apply-templates select="*/Content"/>
+  <xsl:apply-templates select="*/Layout"/>
  </xsl:template>
  <!-- Functions -->
  <xsl:template name="ColumnLabel">
   <xsl:param name="Id"/>
-  <xsl:value-of select="/*/Content/Columns/Column[@id=$Id]/Label"/>
+  <xsl:value-of select="/*/Layout/Columns/Column[@id=$Id]/Label"/>
  </xsl:template>
  <!-- End of functions -->
- <xsl:template match="Content">
+ <xsl:template match="Layout">
   <span class="vcenter-out">
    <span class="vcenter-in">
     <xsl:apply-templates select="Fields"/>
@@ -45,16 +45,16 @@
  <xsl:template match="Field">
   <div style="display: flex;">
    <img title="#fieldsDragAndDropTitle#" style="width: 15px; height: 15px" src="js/cursor_drag_hand.png" data-xdh-onevents="(dragstart|DragField)|(drop|DropField)|(dragend|EndFieldDragging)" data-xdh-casts="FieldDraggingCast|FieldDroppingCast">
-    <xsl:attribute name="data-xdh-content">
+    <xsl:attribute name="data-xdh-Layout">
      <xsl:value-of select="@id"/>
     </xsl:attribute>
    </img>
    <fieldset style="width: 100%;">
-    <xsl:attribute name="data-xdh-content" >
+    <xsl:attribute name="data-xdh-Layout" >
      <xsl:value-of select="@id"/>
     </xsl:attribute>
     <legend data-xdh-onevent="DefineField">
-     <xsl:attribute name="data-xdh-content">
+     <xsl:attribute name="data-xdh-Layout">
       <xsl:value-of select="@id"/>
      </xsl:attribute>
      <xsl:call-template name="ColumnLabel">
@@ -95,7 +95,7 @@
     <xsl:value-of select="@id"/>
    </xsl:attribute>
    <xsl:call-template name="DOE">
-    <xsl:with-param name="Content">
+    <xsl:with-param name="Layout">
      <xsl:text>!! </xsl:text>
      <xsl:value-of select="."/>
     </xsl:with-param>

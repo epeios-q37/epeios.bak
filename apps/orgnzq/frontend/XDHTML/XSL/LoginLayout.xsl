@@ -5,9 +5,9 @@
 				>
 	<xsl:output method="html" encoding="UTF-8"/>
 	<xsl:template match="/">
-		<xsl:apply-templates select="*/Content"/>
+		<xsl:apply-templates select="*/Layout"/>
 	</xsl:template>
-	<xsl:template match="Content">
+	<xsl:template match="Layout">
 		<xsl:variable name="BackendType">
 			<xsl:choose>
 				<xsl:when test="Backend/@Type">

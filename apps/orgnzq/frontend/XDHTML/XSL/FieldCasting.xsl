@@ -4,9 +4,9 @@
 				>
 	<xsl:output method="html" encoding="UTF-8" doctype-system="about:legacy-compat"/>
 	<xsl:template match="/">
-		<xsl:apply-templates select="*/Context"/>
+		<xsl:apply-templates select="*/Casting"/>
 	</xsl:template>
-	<xsl:template match="Context">
+	<xsl:template match="Casting">
 		<xsl:choose>
 			<xsl:when test="Dragging='InProgress'">
 				<xdh-cast id="EntryDraggingCast" kind="Undraggable"/>

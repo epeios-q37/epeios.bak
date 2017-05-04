@@ -29,79 +29,49 @@ E_CDEF( char *, FieldFrameId_, "Field" );
 namespace {
 	E_CDEF( char *, XSLAffix_, "Fields" );
 
-	void GetCasting_(
-		core::rSession &Session,
-		str::string_ &XML )
-	{
-	qRH
-		base::rCastingRack Rack;
-	qRB
-		Rack.Init( XSLAffix_, XML, Session );
-
-		if ( Session.User.Panel().IsFieldDraggingInProgress() )
-			Rack().PutValue( "InProgress", "Dragging" );
-	qRR
-	qRT
-	qRE
+	namespace layout_ {
+		void Get(
+			core::rSession &Session,
+			xml::dWriter &Writer )
+		{
+			Session.User.Panel().DumpCurrentRecordColumns( Writer );
+			Session.User.Panel().DumpCurrentRecordFields( Writer );
+			Session.User.Panel().DumpColumnBuffer( Writer );
+		}
 	}
 
-	void GetLayout_(
-		const sclrgstry::dRegistry &Registry,
-		core::rSession &Session,
-		str::string_ &XML )
-	{
-	qRH
-		base::rLayoutRack Rack;
-	qRB
-		Rack.Init( XSLAffix_, XML, Session );
-
-		Session.User.Panel().DumpCurrentRecordColumns( Rack );
-		Session.User.Panel().DumpCurrentRecordFields( Rack );
-		Session.User.Panel().DumpColumnBuffer( Rack );
-	qRR
-	qRT
-	qRE
+	namespace casting_ {
+		void Get(
+			core::rSession &Session,
+			xml::dWriter &Writer )
+		{
+			if ( Session.User.Panel().IsFieldDraggingInProgress() )
+				Writer.PutValue( "InProgress", "Dragging" );
+		}
 	}
+}
+
+void fields::SetLayout(
+	const char *Id,
+	core::rSession &Session )
+{
+	core::SetElementLayout( Id, XSLAffix_, layout_::Get, Session );
 }
 
 void fields::SetCasting(
 	const char *Id,
 	core::rSession &Session )
 {
-qRH
-	str::string XML, XSL;
-qRB
-	XML.Init();
-	GetCasting_( Session,  XML );
-
-	XSL.Init();
-	sclxdhtml::LoadXSLAndTranslateTags(rgstry::tentry___( registry::definition::XSLCastingFile, XSLAffix_ ), Session.Registry() , XSL );
-
-	Session.FillElementCastings( Id, XML, XSL );
-qRR
-qRT
-qRE
+	core::SetElementCasting( Id, XSLAffix_, layout_::Get, Session );
 }
 
 void fields::Display(
 	const char *Id,
 	core::rSession &Session )
 {
-qRH
-	str::string XML, XSL;
-qRB
-	XML.Init(); 
-	GetLayout_( Session.Registry(), Session, XML );
+	SetLayout( Id, Session );
 
-	XSL.Init();
-	sclxdhtml::LoadXSLAndTranslateTags( rgstry::tentry___( registry::definition::XSLLayoutFile, XSLAffix_ ), Session.Registry(), XSL );
-
-	Session.FillElement( Id, XML, XSL );
-
-	Session.FillElementData( Id );
-qRR
-qRT
-qRE
+	SetCasting( Id, Session );
 }
 
 void fields::SetFieldLayout( core::rSession &Session )

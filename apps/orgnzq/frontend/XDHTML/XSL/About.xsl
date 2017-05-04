@@ -3,7 +3,7 @@
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 				xmlns="http://www.w3.org/1999/xhtml">
 	<xsl:output method="xml" encoding="UTF-8" doctype-system="about:legacy-compat"/>
-	<xsl:template match="Content">
+	<xsl:template match="Layout">
 		<xsl:apply-templates select="About"/>
 	</xsl:template>
 	<xsl:template match="About">

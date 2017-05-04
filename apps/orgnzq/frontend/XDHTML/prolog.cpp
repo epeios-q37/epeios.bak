@@ -29,81 +29,49 @@
 namespace {
 	E_CDEF(char *, XSLAffix_, "Prolog" );
 
-	void GetCasting_(
-		core::rSession &Session,
-		str::string_ &XML )
-	{
-	qRH
-		base::rCastingRack Rack;
-	qRB
-		Rack.Init( XSLAffix_, XML, Session );
-
-		sclxdhtml::prolog::GetContext( Session, Rack );
-	qRR
-	qRT
-	qRE
+	namespace layout_ {
+		void Get(
+			core::rSession &Session,
+			xml::dWriter &Writer )
+		{
+			sclxdhtml::prolog::GetLayout( Session, Writer );
+		}
 	}
 
-	void SetCasting_( core::rSession &Session )
-	{
-	qRH
-		str::string XML, XSL;
-	qRB
-		XML.Init();
-		GetCasting_( Session,  XML );
-
-		XSL.Init();
-		sclxdhtml::LoadXSLAndTranslateTags(rgstry::tentry___( registry::definition::XSLCastingFile, XSLAffix_ ), sclxdhtml::GetRegistry(), XSL );	// Outside session, so we use the global registry...
-
-		Session.FillDocumentCastings( XML, XSL );
-	qRR
-	qRT
-	qRE
+	namespace casting_ {
+		void Get(
+			core::rSession &Session,
+			xml::dWriter &Writer )
+		{
+			sclxdhtml::prolog::GetCasting( Session, Writer );
+		}
 	}
+}
 
-	void GetLayout_(
-		const sclrgstry::dRegistry &Registry,
-		core::rSession &Session,
-		str::string_ &XML )
-	{
-	qRH
-		base::rLayoutRack Rack;
-		TOL_CBUFFER___ Buffer;
-	qRB
-		Rack.Init( XSLAffix_, XML, Session );
+void prolog::SetLayout( core::rSession &Session )
+{
+	core::SetDocumentLayout( XSLAffix_, layout_::Get, Session );
+}
 
-		sclxdhtml::prolog::GetContent( Session, Rack );
-	qRR
-	qRT
-	qRE
-	}
+void prolog::SetCasting( core::rSession &Session )
+{
+	core::SetDocumentCasting( XSLAffix_, casting_::Get, Session );
 }
 
 void prolog::Display( core::rSession &Session )
 {
-qRH
-	str::string XML, XSL;
-qRB
-	XML.Init();
-	GetLayout_( sclxdhtml::GetRegistry(), Session, XML );	// Outside session, so we use the global registry...
+	SetLayout( Session );
 
-	XSL.Init();
-	sclxdhtml::LoadXSLAndTranslateTags( rgstry::tentry___( registry::definition::XSLLayoutFile, XSLAffix_ ), sclxdhtml::GetRegistry(), XSL );	// Outside session, so we use the global registry...
+	SetCasting( Session );
 
-	Session.FillDocument( XML, XSL );
-
-	SetCasting_( Session );
 	Session.SwitchTo( core::pProlog );
-qRR
-qRT
-qRE
 }
 
 #define AC( name ) BASE_AC( prolog, name )
 
 AC( SwitchProjectType )
 {
-	SetCasting_( Session );
+	SetCasting( Session );
 }
 
 AC( DisplayProjectFilename )

@@ -35,7 +35,11 @@ namespace login {
 		BASE_ACR( Dismiss );
 	}
 
-	void Display(	core::rSession &Session );
+	void SetLayout( core::rSession & Session );
+
+	void SetCasting( core::rSession & Session );
+
+	void Display( core::rSession &Session );
 }
 
 #endif
