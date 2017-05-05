@@ -73,7 +73,7 @@ void fields::Display(
 
 	SetCasting( Id, Session );
 
-	Session.SetDocumentData();
+	Session.SetContents( "Root" );
 }
 
 void fields::SetFieldLayout( core::rSession &Session )

@@ -44,9 +44,9 @@ qRT
 qRE
 }
 
-xdhcmn::session_callback__ *sclxdhtml::SCLXDHTMLRetrieveCallback(
+xdhcmn::cSession *sclxdhtml::SCLXDHTMLRetrieveCallback(
 	const char *Language,
-	xdhcmn::proxy_callback__ *ProxyCallback )
+	xdhcmn::cProxy *ProxyCallback )
 {
 	core::rSession *Session = new core::rSession;
 
@@ -87,7 +87,7 @@ xdhcmn::session_callback__ *sclxdhtml::SCLXDHTMLRetrieveCallback(
 	return Session;
 }
 
-void sclxdhtml::SCLXDHTMLReleaseCallback( xdhcmn::session_callback__ *Callback )
+void sclxdhtml::SCLXDHTMLReleaseCallback( xdhcmn::cSession *Callback )
 {
 	if ( Callback == NULL )
 		qRGnr();

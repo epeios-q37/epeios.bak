@@ -37,25 +37,25 @@ namespace xdhups {
 	typedef ntvstr::char__ nchar__;
 	typedef ntvstr::string___ nstring___;
 
-	typedef xdhcmn::session_callback__ _session_callback__;
+	typedef xdhcmn::cSession cSession_;
 
-	class session__
+	class sSession
 	{
 	private:
-		Q37_MRMDF( xdhcmn::session_callback__, C_, Callback_ );
+		Q37_MRMDF( cSession_, C_, Callback_ );
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			Callback_ = NULL;
 		}
-		E_CVDTOR( session__ );
-		void Init( xdhcmn::session_callback__ *Callback )
+		E_CVDTOR( sSession );
+		void Init( cSession_ *Callback )
 		{
 			reset();
 
 			Callback_ = Callback;
 		}
-		xdhcmn::session_callback__ *Callback( void ) const
+		cSession_ *Callback( void ) const
 		{
 			return Callback_;
 		}
@@ -71,7 +71,7 @@ namespace xdhups {
     {
     private:
 		dlbrry::dynamic_library___ Library_;
-		Q37_MRMDF( xdhcmn::downstream_callback__, C_, Callback_ );
+		Q37_MRMDF( xdhcmn::cDownstream, C_, Callback_ );
 		TOL_CBUFFER___ Buffer_;
     public:
         void reset( bso::bool__ P = true )
@@ -84,9 +84,9 @@ namespace xdhups {
 			xdhcmn::mode__ Mode,
 			const str::string_ &ModuleFileName,
 			const char *Identification );
-		xdhcmn::session_callback__ *RetrieveCallback(
+		cSession_ *RetrieveCallback(
 			const char *Language,
-			xdhcmn::proxy_callback__ *Callback )
+			xdhcmn::cProxy *Callback )
 		{
 			return C_().RetrieveCallback( Language, Callback );
 		}
@@ -94,7 +94,7 @@ namespace xdhups {
 		{
 			return C_().BaseLanguage( Buffer );
 		}
-		void ReleaseCallback( xdhcmn::session_callback__ *Callback )
+		void ReleaseCallback( cSession_ *Callback )
 		{
 			return C_().ReleaseCallback( Callback );
 		}

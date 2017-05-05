@@ -89,7 +89,7 @@
  </xsl:template>
  <xsl:template match="Entry" mode="Unboxed">
   <span>
-   <xsl:attribute name="data-xdh-data">
+   <xsl:attribute name="data-xdh-content">
     <xsl:value-of select="../../@id"/>
     <xsl:text> - </xsl:text>
     <xsl:value-of select="@id"/>

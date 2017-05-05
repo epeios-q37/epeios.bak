@@ -37,10 +37,10 @@ namespace xdhdws {
 	using xdhcmn::nchar__;
 	using xdhcmn::nstring___;
 
-	class proxy__
+	class sProxy
 	{
 	private:
-		Q37_MRMDF( xdhcmn::proxy_callback__, C_, Callback_ );
+		Q37_MRMDF( xdhcmn::cProxy, C_, Callback_ );
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -50,8 +50,8 @@ namespace xdhdws {
 
 			Callback_ = NULL;
 		}
-		E_CVDTOR( proxy__ );
-		void Init( xdhcmn::proxy_callback__ *Callback )	// 'Callback' is destroyed by a 'delete' when this object is dsetroyed.
+		E_CVDTOR( sProxy );
+		void Init( xdhcmn::cProxy *Callback )	// 'Callback' is destroyed by a 'delete' when this object is dsetroyed.
 		{
 			reset();
 
@@ -87,39 +87,25 @@ namespace xdhdws {
 		qRE
 			return Confirmed;
 		}
-		void SetDocumentCasting(
-			const nstring___ &XML,
-			const nstring___ &XSL)
-		{
-			C_().Process(xdhcmn::fSetCasting, NULL, nstring___().Internal()(), XML.Internal()(), XSL.Internal()());
-		}
-		void SetElementCasting(
-			const nstring___ &Id,
-			const nstring___ &XML,
-			const nstring___ &XSL)
-		{
-			C_().Process(xdhcmn::fSetCasting, NULL, Id.Internal()(), XML.Internal()(), XSL.Internal()());
-		}
-		void SetDocumentData( void )
-		{
-			C_().Process(xdhcmn::fSetData, NULL, nstring___().Internal()() );
-		}
-		void SetElementData( const nstring___ &Id )
-		{
-			C_().Process(xdhcmn::fSetData, NULL, Id.Internal()() );
-		}
-		void SetElementLayout(
+		void SetLayout(
 			const nstring___ &Id,
 			const nstring___ &XML,
 			const nstring___ &XSL )
 		{
 			C_().Process( xdhcmn::fSetLayout, NULL, Id.Internal()( ), XML.Internal()( ), XSL.Internal()( ) );
 		}
-		void SetDocumentLayout(
+		void SetCasting(
+			const nstring___ &Id,
 			const nstring___ &XML,
-			const nstring___ &XSL )
+			const nstring___ &XSL)
 		{
-			C_().Process(xdhcmn::fSetLayout, NULL, XML.Internal()( ), XSL.Internal()( ) );
+			C_().Process(xdhcmn::fSetCasting, NULL, Id.Internal()(), XML.Internal()(), XSL.Internal()());
+		}
+		void SetContents(
+			const nstring___ &Id,
+			xdhcmn::cContents &Contents )
+		{
+			C_().Process(xdhcmn::fSetContents, NULL, Id.Internal()(), &Contents );
 		}
 		const char *GetProperty(
 			const nstring___ &Id,

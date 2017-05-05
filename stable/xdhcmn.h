@@ -57,22 +57,14 @@ namespace xdhcmn {
 		m_Undefined
 	};
 
-	class session_callback__
+	class cSession
 	{
 	protected:
 		virtual bso::bool__ XDHCMNLaunch(
 			const char *Id,
 			const char *Action ) = 0;
 	public:
-		void reset( bso::bool__ = true )
-		{
-			// Standardization.
-		}
-		E_CVDTOR( session_callback__ );
-		void Init( void )
-		{
-			// Standardization.
-		}
+		qCALLBACK( Session );
 		bso::bool__ Launch(
 			const char *Id,
 			const char *Action )
@@ -85,9 +77,9 @@ namespace xdhcmn {
 		fLog,				// Message,
 		fAlert,				// XML, XSL, Title.
 		fConfirm,			// XML, XSL, Title.
-		fSetCasting,		// Id, XML, XSL.	// If 'Id' == 'NULL', applies to the document, otherwise applies to the element of id 'Id'.
-		fSetData,			// Id.				// If 'Id' == 'NULL', applies to the document, otherwise applies to the element of id 'Id'.
-		fSetLayout,			// Id, XML, XSL.	// If 'Id' == 'NULL', applies to the document, otherwise applies to the element of id 'Id'.
+		fSetCasting,		// Id, XML, XSL.
+		fSetContents,		// Id.
+		fSetLayout,			// Id, XML, XSL.
 		fSetProperty,		// Id, Name, Value.
 		fGetProperty,		// Id, Name.
 		fSetAttribute,		// Id, Name, Value.
@@ -104,7 +96,7 @@ namespace xdhcmn {
 
 	const char *GetLabel( function__ Function );
 
-	class proxy_callback__
+	class cProxy
 	{
 	protected:
 		virtual void XDHCMNProcess(
@@ -112,15 +104,7 @@ namespace xdhcmn {
 			TOL_CBUFFER___ *Result,
 			va_list List ) = 0;
 	public:
-		void reset( bso::bool__ = true )
-		{
-			// Standardization.
-		}
-		E_CVDTOR( proxy_callback__ );
-		void Init( void )
-		{
-			// Standardization.
-		}
+		qCALLBACK( Proxy );
 		void Process(
 			function__ Function,
 			TOL_CBUFFER___ *Result,
@@ -136,6 +120,22 @@ namespace xdhcmn {
 		qRT
 			va_end( List );
 		qRE
+		}
+	};
+
+	class cContents
+	{
+	protected:
+		virtual void XDHCMNGetContent(
+			const str::dString &Tag,
+			str::dString &Content ) = 0;
+	public:
+		qCALLBACK( Contents );
+		void GetContent(
+			const str::dString &Tag,
+			str::dString &Content )
+		{
+			return XDHCMNGetContent( Tag, Content );
 		}
 	};
 
@@ -184,25 +184,17 @@ namespace xdhcmn {
 	};
 #pragma pack( pop )
 
-	class downstream_callback__
+	class cDownstream
 	{
 	protected:
 		virtual void XDHCMNInitialize( const shared_data__ &Data ) = 0;
 		virtual void XDHCMNBaseLanguage( TOL_CBUFFER___ &Buffer ) = 0;
-		virtual session_callback__ *XDHCMNRetrieveCallback(
+		virtual cSession *XDHCMNRetrieveCallback(
 			const char *Language,
-			proxy_callback__ *ProxyCallback ) = 0;
-		virtual void XDHCMNReleaseCallback( session_callback__ *Callback ) = 0;
+			cProxy *Proxy ) = 0;
+		virtual void XDHCMNReleaseCallback( cSession *Session ) = 0;
 	public:
-		void reset( bso::bool__ = true )
-		{
-			// Standardisation.
-		}
-		E_CVDTOR( downstream_callback__ );
-		void Init( void )
-		{
-			// Standardisation.
-		}
+		qCALLBACK( Downstream )
 		void Initialize( const shared_data__ &Data )
 		{
 			return XDHCMNInitialize( Data );
@@ -213,19 +205,19 @@ namespace xdhcmn {
 
 			return Buffer;
 		}
-		session_callback__ *RetrieveCallback(
+		cSession *RetrieveCallback(
 			const char *Language,
-			proxy_callback__ *ProxyCallback )
+			cProxy *Proxy )
 		{
-			return XDHCMNRetrieveCallback( Language, ProxyCallback );
+			return XDHCMNRetrieveCallback( Language, Proxy );
 		}
-		void ReleaseCallback( session_callback__ *Callback )
+		void ReleaseCallback( cSession *Session )
 		{
-			return XDHCMNReleaseCallback( Callback );
+			return XDHCMNReleaseCallback( Session );
 		}
 	};
 
-	typedef downstream_callback__ *(retrieve)( void );
+	typedef cDownstream *(retrieve)( void );
 
 	void Escape(
 		const str::string_ &Source,

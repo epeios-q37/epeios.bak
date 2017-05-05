@@ -34,7 +34,7 @@
 # include "err.h"
 
 namespace xdhujp {
-	class callback__
+	class cJS
 	{
 	protected:
 		virtual void XDHUJPExecute(
@@ -43,15 +43,7 @@ namespace xdhujp {
 		virtual void XDHUJPGetWidgetAttributeName( TOL_CBUFFER___ &Buffer ) = 0;
 		virtual void XDHUJPGetResultAttributeName( TOL_CBUFFER___ &Buffer ) = 0;
 	public:
-		void reset( bso::bool__ = true )
-		{
-			// Standardization;
-		}
-		E_CVDTOR( callback__);
-		void Init( void )
-		{
-			// Standardization;
-		}
+		qCALLBACK( JS )
 		const char *Execute(
 			const str::string_ &Script,
 			TOL_CBUFFER___ *Buffer )
@@ -82,18 +74,18 @@ namespace xdhujp {
 	};
 
 	const char *Execute(
-		callback__ &Callback,
+		cJS &Callback,
 		xdhujs::script_name__ Script,
 		TOL_CBUFFER___ *Buffer,
 		... );
 
-	typedef xdhcmn::proxy_callback__ _proxy_callback__;
+	typedef xdhcmn::cProxy cProxy_;
 
-	class proxy_callback__
-	: public _proxy_callback__
+	class sProxyCallback
+	: public cProxy_
 	{
 	private:
-		Q37_MRMDF( callback__, C_, Callback_ );
+		Q37_MRMDF( cJS, C_, Callback_ );
 	protected:
 		virtual void XDHCMNProcess(
 			xdhcmn::function__ Function,
@@ -102,13 +94,11 @@ namespace xdhujp {
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_proxy_callback__::reset( P );
 			Callback_ = NULL;
 		}
-		E_CVDTOR( proxy_callback__);
-		void Init( callback__ &Callback )
+		E_CVDTOR( sProxyCallback );
+		void Init( cJS &Callback )
 		{
-			_proxy_callback__::Init();
 			Callback_ = &Callback;
 		}
 	};

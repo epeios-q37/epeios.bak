@@ -40,13 +40,13 @@
 # include "mtx.h"
 
 namespace session {
-	class session___;	// Predeclaration.
+	class rSession;	// Predeclaration.
 
 	struct shared_data__
 	{
 	private:
-		Q37_MRMDF( session___, S_, Session_ );
-		Q37_MRMDF( xdhcmn::session_callback__, C_, Callback_ );
+		Q37_MRMDF( rSession, S_, Session_ );
+		Q37_MRMDF( xdhcmn::cSession, C_, Callback_ );
 		mtx::handler___ _Mutex;
 		void _Lock( void )
 		{
@@ -91,8 +91,8 @@ namespace session {
 		void Init(
 			const str::string_ &Id,
 			const str::string_ &Action,
-			session___ &Session,
-			xdhcmn::session_callback__ &Callback )
+			rSession &Session,
+			xdhcmn::cSession &Callback )
 		{
 			Init();
 
@@ -121,13 +121,13 @@ namespace session {
 
 			return _GetAction();
 		}
-		xdhcmn::session_callback__ &Callback( void )
+		xdhcmn::cSession &Callback( void )
 		{
 			_Test();
 
 			return C_();
 		}
-		session___ &Session( void ) const
+		rSession &Session( void ) const
 		{
 			return S_();
 		}
@@ -226,16 +226,13 @@ namespace session {
 		}
 	};
 
-	typedef xdhujp::callback__ _js_callback__;
+	typedef xdhujp::cJS cJS_;
 
-	// Predeclaration.
-	class session___;
-
-	class js_callback__
-	: public _js_callback__
+	class sJS
+	: public cJS_
 	{
 	private:
-		Q37_MRMDF( session::session___, S_, Session_ );
+		Q37_MRMDF( session::rSession, S_, Session_ );
 	protected:
 		virtual void XDHUJPExecute(
 			const str::string_ &Script,
@@ -255,23 +252,21 @@ namespace session {
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_js_callback__::reset( P );
 			Session_ = NULL;
 		}
-		E_CVDTOR( js_callback__);
-		void Init( session___ &Session )
+		E_CVDTOR( sJS );
+		void Init( rSession &Session )
 		{
-			_js_callback__::Init();
 			Session_ = &Session;
 		}
 	};
 
 
-	class session___
+	class rSession
 	{
 	private:
-		js_callback__ _JSCallback;
-		Q37_MRMDF( xdhcmn::session_callback__, _SC, _SessionCallback );
+		sJS _JSCallback;
+		Q37_MRMDF( xdhcmn::cSession, _SC, _SessionCallback );
 		_mutexes___ _Mutexes;
 		str::string _Dispatch;
 		bso::bool__ _UpstreamCall;	// At 'true' when a upstream call (a call from JS when launching a action, or handling an event) is in progress.
@@ -296,8 +291,8 @@ namespace session {
 			_Dispatch.reset( P );
 			_UpstreamCall = false;
 		}
-		E_CDTOR( session___ );
-		void Init( xdhcmn::session_callback__ &SessionCallback )
+		E_CDTOR( rSession );
+		void Init( xdhcmn::cSession &SessionCallback )
 		{
 			_JSCallback.Init( *this );
 			_SessionCallback = &SessionCallback;
@@ -322,11 +317,11 @@ namespace session {
 
 			return _UpstreamCall;
 		}
-		js_callback__ &JSCallback( void )
+		cJS_ &JSCallback( void )
 		{
 			return _JSCallback;
 		}
-		xdhcmn::session_callback__ *SessionCallback( void ) const
+		xdhcmn::cSession *SessionCallback( void ) const
 		{
 			return _SessionCallback;
 		}
@@ -410,7 +405,7 @@ namespace session {
 		}
 	};
 
-	typedef lstbch::E_LBUNCHt_( session___ *, row__ ) _sessions_;
+	typedef lstbch::E_LBUNCHt_( rSession *, row__ ) _sessions_;
 	typedef que::E_MQUEUEt_( row__ ) _order_;
 	typedef bch::E_BUNCHt_( id__, row__ ) _ids_;
 	typedef idxbtq::E_INDEXt_( row__ ) _index_;
@@ -526,7 +521,7 @@ namespace session {
 		//f Remove the session id at position 'Position'.
 		void Close( row__ Row )
 		{
-			xdhcmn::session_callback__ *Callback = Sessions(Row)->SessionCallback();
+			xdhcmn::cSession *Callback = Sessions(Row)->SessionCallback();
 
 			if ( Callback != NULL )
 				_A().ReleaseCallback( Callback );
@@ -571,7 +566,7 @@ namespace session {
 				Order.BecomeNext( P, Order.Tail() );
 			}
 		}
-		// The session is always consdered as persistent, at least until next 'Touch(...)'.
+		// The session is always considered as persistent, at least until next 'Touch(...)'.
 		void MarkAsPersistent( row__ P )
 		{
 			timer__ Timer = Timers.Get( P );

@@ -514,10 +514,10 @@ namespace {
 }
 
 namespace {
-	typedef xdhujp::callback__ _callback__;
+	typedef xdhujp::cJS cJS_;
 
-	class callback__
-	: public _callback__
+	class sJS
+	: public cJS_
 	{
 	public:
 		Q37_MRMDF( agent___, _A, _Agent );
@@ -557,34 +557,32 @@ namespace {
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_callback__::reset( P );
 			_Agent = NULL;
 		}
-		E_CVDTOR( callback__);
+		E_CVDTOR( sJS );
 		void Init( agent___ &Agent )
 		{
-			_callback__::Init();
 			_Agent = &Agent;
 		}
 	};
 
-	callback__ Callback_;
+	sJS JS_;
 }
 
 void agent::agent___::_InitializeSession( void )
 {
 qRH
-	xdhujp::proxy_callback__ *ProxyCallback;
+	xdhujp::sProxyCallback *ProxyCallback;
 	qCBUFFERr Buffer;
 qRB
-	ProxyCallback = new xdhujp::proxy_callback__;	// Destruction is made by '_Session'.
+	ProxyCallback = new xdhujp::sProxyCallback;	// Destruction is made by '_Session'.
 
 	if ( ProxyCallback == NULL )
 		qRGnr();
 
-	::Callback_.Init( *this );
+	::JS_.Init( *this );
 
-	ProxyCallback->Init( ::Callback_ );
+	ProxyCallback->Init( ::JS_ );
 
 	_Session.Init( RetrieveCallback( Language( _LanguageBuffer ), ProxyCallback ) );
 	sclmisc::SetBaseLanguage( str::wString( BaseLanguage( Buffer ) ) );

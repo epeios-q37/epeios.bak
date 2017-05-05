@@ -34,7 +34,7 @@ using xdhutl::nchar__;
 using xdhujs::script_name__;
 
 static const char *Execute_(
-	callback__  &Callback,
+	cJS  &Callback,
 	script_name__ ScriptName,
 	TOL_CBUFFER___ *Buffer,
 	va_list List )
@@ -54,7 +54,7 @@ qRE
 }
 
 const char *xdhujp::Execute(
-	callback__  &Callback,
+	cJS  &Callback,
 	script_name__ ScriptName,
 	TOL_CBUFFER___ *Buffer,
 	... )
@@ -74,7 +74,7 @@ qRE
 }
 
 static void AlertConfirm_(
-	callback__ &Callback,
+	cJS &Callback,
 	script_name__ ScriptName,
 	TOL_CBUFFER___ *Result,
 	va_list List )
@@ -130,7 +130,7 @@ static void HandleEvents_(
 }
 
 static void HandleEvents_(
-	callback__ &Callback,
+	cJS &Callback,
 	const xdhcmn::digest_ &Descriptions )
 {
 qRH
@@ -196,7 +196,7 @@ static void HandleWidgets_(
 }
 
 static void HandleWidgets_(
-	callback__ &Callback,
+	cJS &Callback,
 	const xdhcmn::digest_ &Descriptions )
 {
 qRH
@@ -222,7 +222,7 @@ qRE
 }
 
 static void SetLayout_(
-	callback__ &Callback,
+	cJS &Callback,
 	const nchar__ *Id,	// If 'Id' != NULL, it's the id of the element to apply to, otherwise it applies to the document.
 	const nchar__ *XML,
 	const nchar__ *XSL )
@@ -255,7 +255,7 @@ qRE
 }
 
 static void SetLayout_(
-	callback__ &Callback,
+	cJS &Callback,
 	va_list List )
 {
 	// NOTA : we use variables, because if we put 'va_arg()' directly as parameter to below function, it's not sure that they are called in the correct order.
@@ -304,7 +304,7 @@ static void HandleCastings_(
 }
 
 static void HandleCasts_(
-	callback__ &Callback,
+	cJS &Callback,
 	const xdhcmn::digest_ &Descriptions )
 {
 qRH
@@ -328,7 +328,7 @@ qRE
 }
 
 static void SetCasting_(
-	callback__ &Callback,
+	cJS &Callback,
 	const nchar__ *Id,
 	const nchar__ *XML,
 	const nchar__ *XSL )
@@ -350,7 +350,7 @@ qRE
 }
 
 static void SetCasting_(
-	callback__ &Callback,
+	cJS &Callback,
 	va_list List )
 {
 	// NOTA : we use variables, because if we put 'va_arg()' directly as parameter to below function, it's not sure that they are called in the correct order.
@@ -362,9 +362,10 @@ static void SetCasting_(
 }
 
 
-static void SetData_(
-	callback__ &Callback,
-	const nchar__ *Id )
+static void SetContents_(
+	cJS &Callback,
+	const nchar__ *Id,
+	xdhcmn::cContents &Contents )
 {
 qRH
 	TOL_CBUFFER___ Result;
@@ -380,17 +381,18 @@ qRT
 qRE
 }
 
-static void SetData_(
-	callback__ &Callback,
+static void SetContents_(
+	cJS &Callback,
 	va_list List)
 {
 	const nchar__ *Id = va_arg(List, const nchar__ *);
+	xdhcmn::cContents *Contents = va_arg( List, xdhcmn::cContents * );
 
-	SetData_( Callback, Id );
+	SetContents_( Callback, Id, *Contents );
 }
 
 static void GetValue_(
-	callback__ &Callback,
+	cJS &Callback,
 	const nchar__ *Id,
 	TOL_CBUFFER___ *Result )
 {
@@ -417,7 +419,7 @@ qRE
 }
 
 static void GetValue_(
-	callback__ &Callback,
+	cJS &Callback,
 	TOL_CBUFFER___ *Value,
 	va_list List )
 {
@@ -425,7 +427,7 @@ static void GetValue_(
 }
 
 static void Focus_(
-	callback__ &Callback,
+	cJS &Callback,
 	const nchar__ *Id )
 {
 qRH
@@ -451,7 +453,7 @@ qRE
 }
 
 static void Select_(
-	callback__ &Callback,
+	cJS &Callback,
 	const nchar__ *Id )
 {
 qRH
@@ -477,21 +479,21 @@ qRE
 }
 
 static void Focus_(
-	callback__ &Callback,
+	cJS &Callback,
 	va_list List )
 {
 	Focus_( Callback, va_arg( List, const nchar__ * ) );
 }
 
 static void Select_(
-	callback__ &Callback,
+	cJS &Callback,
 	va_list List )
 {
 	Select_( Callback, va_arg( List, const nchar__ * ) );
 }
 
 static void GetResult_(
-	callback__ &Callback,
+	cJS &Callback,
 	const nchar__ *Id,
 	TOL_CBUFFER___ *Result )
 {
@@ -507,7 +509,7 @@ qRE
 }
 
 static void GetResult_(
-	callback__ &Callback,
+	cJS &Callback,
 	TOL_CBUFFER___ *Result,
 	va_list List )
 {
@@ -562,7 +564,7 @@ static script_name__ Convert_( xdhcmn::function__ Function )
 	case xdhcmn::fSetCasting:
 		qRFwk();
 		break;
-	case xdhcmn::fSetData:
+	case xdhcmn::fSetContents:
 		qRFwk();
 		break;
 	default:
@@ -573,7 +575,7 @@ static script_name__ Convert_( xdhcmn::function__ Function )
 	return xdhujs::sn_Undefined;	// To avoid a warning.
 }
 
-void xdhujp::proxy_callback__::XDHCMNProcess(
+void xdhujp::sProxyCallback::XDHCMNProcess(
 	xdhcmn::function__ Function,
 	TOL_CBUFFER___ *Result,
 	va_list List )
@@ -610,8 +612,8 @@ void xdhujp::proxy_callback__::XDHCMNProcess(
 	case xdhcmn::fSetCasting:
 		SetCasting_( C_(), List);
 		break;
-	case xdhcmn::fSetData:
-		SetData_( C_(), List);
+	case xdhcmn::fSetContents:
+		SetContents_( C_(), List);
 		break;
 	default:
 		qRFwk();

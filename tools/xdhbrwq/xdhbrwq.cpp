@@ -63,7 +63,7 @@ namespace {
 		namespace {
 			void HandleEvent_(
 				const query::pairs_ &Pairs,
-				session::session___ &Session,
+				session::rSession &Session,
 				str::string_ &Script )
 			{
 			qRH
@@ -90,7 +90,7 @@ namespace {
 
 			void HandleAction_(
 				const str::string_ &Action,
-				session::session___ &Session,
+				session::rSession &Session,
 				str::string_ &Script )
 			{
 				Session.UpstreamLaunch( str::string(), Action, Script );
@@ -98,7 +98,7 @@ namespace {
 
 			void Report_(
 				const str::string_ &Response,
-				session::session___ &Session,
+				session::rSession &Session,
 				str::string_ &Script )
 			{
 				Session.UpstreamReport( Response, Script );
@@ -117,7 +117,7 @@ namespace {
 			qRH
 				session::row__ Row = qNIL;
 				lck::exclusive_access___<session::sessions_unprotected_> Sessions;
-				session::session___ *Session = NULL;
+				session::rSession *Session = NULL;
 				err::buffer__ ERRBuffer;
 				str::string AbortMessage;
 			qRB

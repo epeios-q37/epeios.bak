@@ -35,12 +35,12 @@ namespace agent {
 	: public _agent___
     {
     private:
-		xdhups::session__ _Session;
+		xdhups::sSession _Session;
 		cef_browser_t *_Browser;
 		TOL_CBUFFER___ _LanguageBuffer;
 		void _Release( void )
 		{
-			xdhcmn::session_callback__ *Callback = _Session.Callback();
+			xdhcmn::cSession *Callback = _Session.Callback();
 
 			if ( Callback != NULL )
 				_agent___::ReleaseCallback( Callback );

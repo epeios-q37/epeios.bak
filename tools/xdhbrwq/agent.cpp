@@ -32,9 +32,6 @@
 
 using namespace agent;
 
-using misc::nchar__;
-using misc::nstring___;
 
-typedef xdhcmn::proxy_callback__ _proxy_callback__;
 
 

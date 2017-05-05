@@ -29,7 +29,7 @@ using namespace session;
 
 #define DIGITS "azertyuiopmlkjhgfdsqwxcvbnNBVCXWQSDFGHJKLMPOIUYTREZA9876543210"
 
-inline void session::js_callback__::XDHUJPExecute(
+inline void session::sJS::XDHUJPExecute(
 	const str::string_ &Script,
 	TOL_CBUFFER___ *Buffer )
 {
@@ -55,8 +55,8 @@ qRH
 	TOL_CBUFFER___ Id, Action;
 qRB
 	shared_data__ &Data = *(shared_data__ *)UP;
-	session___ &Session = Data.Session();
-	xdhcmn::session_callback__ &Callback = Data.Callback();
+	rSession &Session = Data.Session();
+	xdhcmn::cSession &Callback = Data.Callback();
 
 	Data.Id().Convert( Id );
 	Data.Action().Convert( Action );
@@ -79,7 +79,7 @@ qRT
 qRE
 }
 
-void session::session___::UpstreamLaunch(
+void session::rSession::UpstreamLaunch(
 	const str::string_ &Id,
 	const str::string_ &Action,
 	str::string_ &Script )
@@ -123,7 +123,7 @@ qRT
 qRE
 }
 
-void session::session___::UpstreamReport(
+void session::rSession::UpstreamReport(
 	const str::string_ &Response,	// Reponse from previous script.
 	str::string_ &Script )	// Script to execute. Empty if nothing to do.
 {
@@ -157,7 +157,7 @@ qRE
 }
 
 
-void session::session___::DownstreamExecute(
+void session::rSession::DownstreamExecute(
 	const str::string_ &Script,
 	str::string_ &Result )
 {	
@@ -240,20 +240,20 @@ row__ session::sessions_unprotected_::New(
 {
 	row__ Row = qNIL;
 qRH
-	xdhcmn::session_callback__ *SessionCallback = NULL;
-	session___ *Session = NULL;
-	xdhujp::proxy_callback__ *ProxyCallback = NULL;
+	xdhcmn::cSession *SessionCallback = NULL;
+	rSession *Session = NULL;
+	xdhujp::sProxyCallback *ProxyCallback = NULL;
 	timer__ Timer;
 	TOL_CBUFFER___ Buffer;
 qRB
 	Row = Sessions.New();
 
-	Session = new session::session___;
+	Session = new session::rSession;
 
 	if ( Session == NULL )
 		qRAlc();
 
-	ProxyCallback = new xdhujp::proxy_callback__;
+	ProxyCallback = new xdhujp::sProxyCallback;
 
 	if ( ProxyCallback == NULL )
 		qRAlc();

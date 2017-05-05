@@ -72,10 +72,10 @@ const char *sclxdhtml::GetLauncher( void )
 // Bien que dfinit dans un '.cpp', et propre  ce '.cpp', VC++ se mlange les pinceaux avec le 'callback__' dfinit dans 'scllocale.cpp', d'o le 'namespace'.
 namespace {
 
-	typedef xdhcmn::downstream_callback__ _downstream_callback__;
+	typedef xdhcmn::cDownstream cDownstream_;
 
-	class donwstream_callback_implementation__
-	: public _downstream_callback__
+	class sDownstream
+	: public cDownstream_
 	{
 	protected:
 		virtual void XDHCMNInitialize( const xdhcmn::shared_data__ &Data ) override
@@ -101,25 +101,23 @@ namespace {
 
 			strcpy( Buffer, Language );
 		}
-		virtual xdhcmn::session_callback__ *XDHCMNRetrieveCallback(
+		virtual xdhcmn::cSession *XDHCMNRetrieveCallback(
 			const char *Language,
-			xdhcmn::proxy_callback__ *ProxyCallback ) override
+			xdhcmn::cProxy *ProxyCallback ) override
 		{
 			return SCLXDHTMLRetrieveCallback( Language, ProxyCallback );
 		}
-		virtual void XDHCMNReleaseCallback( xdhcmn::session_callback__ *Callback ) override
+		virtual void XDHCMNReleaseCallback( xdhcmn::cSession *Callback ) override
 		{
 			return SCLXDHTMLReleaseCallback( Callback );
 		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			downstream_callback__::reset( P );
 		}
-		E_CVDTOR( donwstream_callback_implementation__ );
+		E_CVDTOR( sDownstream );
 		void Init( void )
 		{
-			downstream_callback__::Init();
 		}
 	};
 }
@@ -131,12 +129,12 @@ static inline void DoNothing_( void )
 
 DEF( XDHCMN_RETRIEVE_FUNCTION_NAME, xdhcmn::retrieve );
 
-xdhcmn::downstream_callback__ *XDHCMNRetrieve( void )
+xdhcmn::cDownstream *XDHCMNRetrieve( void )
 {
-	donwstream_callback_implementation__ *Callback = NULL;
+	sDownstream *Callback = NULL;
 qRFH
 qRFB
-	Callback = new donwstream_callback_implementation__;
+	Callback = new sDownstream;
 
 	if ( Callback == NULL )
 		qRAlc();
@@ -229,7 +227,7 @@ void sclxdhtml::Alert(
 	const ntvstr::string___ &XML,
 	const ntvstr::string___ &XSL,
 	const ntvstr::string___ &Title,
-	proxy__ &Proxy,
+	sProxy &Proxy,
 	const char *Language )
 {
 qRH
@@ -248,7 +246,7 @@ namespace{
 	void Alert_(
 		const ntvstr::string___ &Message,
 		const char *MessageLanguage,	// If != 'NULL', 'Message' is translated, otherwise it is displayed as is.
-		proxy__ &Proxy,
+		sProxy &Proxy,
 		const char *CloseTextLanguage )
 	{
 	qRH
@@ -269,14 +267,14 @@ namespace{
 void sclxdhtml::Alert(
 	const ntvstr::string___ &RawMessage,
 	const char *Language,
-	proxy__ &Proxy )
+	sProxy &Proxy )
 {
 	Alert_( RawMessage, Language, Proxy, Language );
 }
 
 void sclxdhtml::Alert(
 	const ntvstr::string___ &Message,
-	proxy__ &Proxy,
+	sProxy &Proxy,
 	const char *Language )
 {
 	Alert_( Message, NULL, Proxy, Language );
@@ -286,7 +284,7 @@ bso::bool__ sclxdhtml::Confirm(
 	const ntvstr::string___ &XML,
 	const ntvstr::string___ &XSL,
 	const ntvstr::string___ &Title,
-	proxy__ &Proxy,
+	sProxy &Proxy,
 	const char *Language )
 {
 	bso::bool__ Confirmation = false;
@@ -307,7 +305,7 @@ namespace {
 	bso::bool__ Confirm_(
 		const ntvstr::string___ &Message,
 		const char *MessageLanguage,	// If != 'NULL', 'Message' is translates, otherwise it is displayed as is.
-		proxy__ &Proxy,
+		sProxy &Proxy,
 		const char *CloseTextLanguage )
 	{
 		bso::bool__ Confirmation = false;
@@ -330,21 +328,21 @@ namespace {
 bso::bool__ sclxdhtml::Confirm(
 	const ntvstr::string___ &RawMessage,
 	const char *Language,
-	proxy__ &Proxy )
+	sProxy &Proxy )
 {
 	return Confirm_( RawMessage,  Language, Proxy, Language );
 }
 
 bso::bool__ sclxdhtml::Confirm(
 	const ntvstr::string___ &Message,
-	proxy__ &Proxy,
+	sProxy &Proxy,
 	const char *Language )
 {
 	return Confirm_( Message,  NULL, Proxy, Language );
 }
 
 void sclxdhtml::HandleError(
-	proxy__ &Proxy,
+	sProxy &Proxy,
 	const char *Language )
 {
 qRH
@@ -381,7 +379,7 @@ void sclxdhtml::SetElement_(
 	const char *Target,
 	const sclrgstry::registry_ &Registry,
 	const str::dString &XML,
-	xdhdws::proxy__ &Proxy, bso::char__ Marker)
+	xdhdws::sProxy &Proxy, bso::char__ Marker)
 {
 qRH
 	str::wString XSL;
@@ -441,7 +439,7 @@ qRE
 #endif
 /*
 void sclxdhtml::LaunchProject(
-	 proxy__ &Proxy,
+	sProxy &Proxy,
 	sclfrntnd::kernel___ &Kernel )
 {
 qRH
@@ -462,7 +460,7 @@ void sclxdhtml::prolog::GetLayout(
 	sclfrntnd::GetProjectsFeatures( Frontend.Language(), Writer );
 }
 
-static sclmisc::project_type__ GetProjectType_( proxy__ &Proxy )
+static sclmisc::project_type__ GetProjectType_( sProxy &Proxy )
 {
 	sclmisc::project_type__ ProjectType = sclmisc::pt_Undefined;
 qRH
@@ -477,7 +475,7 @@ qRE
 }
 
 void sclxdhtml::prolog::GetCasting(
-	proxy__ &Proxy,
+	sProxy &Proxy,
 	xml::writer_ &Writer)
 {
 	Writer.PushTag( "ProjectType ");
@@ -488,7 +486,7 @@ void sclxdhtml::prolog::GetCasting(
 }
 
 void sclxdhtml::prolog::DisplaySelectedProjectFilename(
-	proxy__ &Proxy,
+	sProxy &Proxy,
 	const char *Id )
 {
 qRH
@@ -515,7 +513,7 @@ qRE
 }
 
 sclmisc::project_type__ sclxdhtml::prolog::GetProjectFeatures(
-	proxy__ &Proxy,
+	sProxy &Proxy,
 	str::string_ &Feature )
 {
 	sclmisc::project_type__ Type = sclmisc::pt_Undefined;
@@ -544,7 +542,7 @@ qRE
 	return Type;
 }
 
-void sclxdhtml::prolog::LoadProject( proxy__ &Proxy )
+void sclxdhtml::prolog::LoadProject( sProxy &Proxy )
 {
 qRH
 	str::string ProjectFeature;
@@ -583,7 +581,7 @@ sclfrntnd::eLogin sclxdhtml::login::GetLayout(
 
 namespace {
 	const str::dString &GetBackendType_(
-		proxy__ &Proxy,
+		sProxy &Proxy,
 		str::dString &Type )
 	{
 		return Proxy.GetValue( login::BackendTypeId, Type );
@@ -591,7 +589,7 @@ namespace {
 }
 
 void sclxdhtml::login::GetCasting(
-	proxy__ &Proxy,
+	sProxy &Proxy,
 	eBackendVisibility Visibility,
 	xml::writer_ &Writer )
 {
@@ -635,7 +633,7 @@ namespace straight_ {
 }
 
 void sclxdhtml::login::GetBackendFeatures(
-	proxy__ &Proxy,
+	sProxy &Proxy,
 	sclfrntnd::rFeatures &Features )
 {
 qRH
@@ -673,7 +671,7 @@ qRE
 }
 
 void sclxdhtml::login::DisplaySelectedEmbeddedBackendFilename(
-	proxy__ &Proxy,
+	sProxy &Proxy,
 	const char *Id )
 {
 qRH

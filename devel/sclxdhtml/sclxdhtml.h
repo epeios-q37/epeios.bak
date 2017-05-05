@@ -221,42 +221,42 @@ namespace sclxdhtml {
 
 	typedef fblfrd::reporting_callback__ _reporting_callback__;
 
-	typedef xdhcmn::session_callback__ _session_callback__;
+	typedef xdhcmn::cSession cSession_;
 
-	using xdhdws::proxy__;
+	using xdhdws::sProxy;
 
 	void Alert(
 		const ntvstr::string___ &XML,
 		const ntvstr::string___ &XSL,
 		const ntvstr::string___ &Title,
-		proxy__ &Proxy,
+		sProxy &Proxy,
 		const char *Language );
 
 	void Alert(
 		const ntvstr::string___ &RawMessage,
 		const char *Language,
-		proxy__ &Proxy );	// Translates 'Message'.
+		sProxy &Proxy );	// Translates 'Message'.
 
 	void Alert(
 		const ntvstr::string___ &Message,
-		proxy__ &Proxy,
+		sProxy &Proxy,
 		const char *Language );	// Displays 'Message' as is. 'Language' is used for the closing text message.
 
 	bso::bool__ Confirm(
 		const ntvstr::string___ &XML,
 		const ntvstr::string___ &XSL,
 		const ntvstr::string___ &Title,
-		proxy__ &Proxy,
+		sProxy &Proxy,
 		const char *Language );
 
 	bso::bool__ Confirm(
 		const ntvstr::string___ &RawMessage,
 		const char *Language,
-		proxy__ &Proxy );
+		sProxy &Proxy );
 
 	bso::bool__ Confirm(
 		const ntvstr::string___ &Message,
-		proxy__ &Proxy,
+		sProxy &Proxy,
 		const char *Language );	// Displays 'Message' as is. 'Language' is used for the closing text message.
 
 
@@ -264,7 +264,7 @@ namespace sclxdhtml {
 	: public _reporting_callback__
 	{
 	private:
-		Q37_MRMDF( proxy__, P_, Proxy_ );
+		Q37_MRMDF( sProxy, P_, Proxy_ );
 		Q37_MPMDF( const char, L_, Language_ );
 	protected:
 		virtual void FBLFRDReport(
@@ -287,7 +287,7 @@ namespace sclxdhtml {
 		}
 		E_CVDTOR( reporting_callback__ );
 		void Init(
-			proxy__ &Proxy,
+			sProxy &Proxy,
 			const char *Language )
 		{
 			_reporting_callback__::Init();
@@ -297,7 +297,7 @@ namespace sclxdhtml {
 	};
 
 	void HandleError(
-		proxy__ &Proxy,
+		sProxy &Proxy,
 		const char *Language );
 
 	// To indicate if the backend dedicated part in the login page should or not be visible.
@@ -311,8 +311,8 @@ namespace sclxdhtml {
 
 	// User put in 'instances' all his own objects, instanciating all with a 'new' (by overloading 'SCLXHTMLNew(...)'), a 'delete' will be made automatically when unloading thie library.
 	template <typename instances, typename frontend, typename page, page UndefinedPage > class rSession
-	: public _session_callback__,
-	  public proxy__,
+	: public cSession_,
+	  public sProxy,
 	  public instances,
 	  public frontend
 	{
@@ -323,7 +323,6 @@ namespace sclxdhtml {
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_session_callback__::reset( P );
 			instances::reset( P );
 			frontend::reset( P );
 			Page_ = UndefinedPage;
@@ -334,12 +333,11 @@ namespace sclxdhtml {
 		void Init(
 			sclfrntnd::rKernel &Kernel,
 			const char *Language,
-			xdhcmn::proxy_callback__ *Callback )
+			xdhcmn::cProxy *Callback )
 		{
-			proxy__::Init( Callback );
+			sProxy::Init( Callback );
 			_ReportingCallback.Init( *this, Language );
 			frontend::Init( Kernel, Language, _ReportingCallback );
-			_session_callback__::Init();
 			Page_ = UndefinedPage;
 			// instances::Init( *this );	// Made on connection.
 			BackendVisibility_ = bvShow;	// By default, the backend part of the login page is shown.
@@ -505,24 +503,24 @@ namespace sclxdhtml {
 	}
 
 	inline void SetLayout_(
-		xdhdws::proxy__ &Proxy,
+		xdhdws::sProxy &Proxy,
 		const xdhcmn::nstring___ &Id,
 		const xdhcmn::nstring___ &XML,
 		const xdhcmn::nstring___ &XSL )
 	{
-		Proxy.SetElementLayout( Id, XML, XSL );
+		Proxy.SetLayout( Id, XML, XSL );
 	}
 
 	inline void SetCasting_(
-		xdhdws::proxy__ &Proxy,
+		xdhdws::sProxy &Proxy,
 		const xdhcmn::nstring___ &Id,
 		const xdhcmn::nstring___ &XML,
 		const xdhcmn::nstring___ &XSL )
 	{
-		Proxy.SetElementCasting( Id, XML, XSL );
+		Proxy.SetCasting( Id, XML, XSL );
 	}
 
-	typedef void (* fSet)( xdhdws::proxy__ &Proxy, const xdhdws::nstring___ &Id, const xdhdws::nstring___ &XML, const xdhdws::nstring___ &XSL );
+	typedef void (* fSet)( xdhdws::sProxy &Proxy, const xdhdws::nstring___ &Id, const xdhdws::nstring___ &XML, const xdhdws::nstring___ &XSL );
 
 	void SetElement_(
 		const xdhdws::nstring___ &Id,
@@ -531,7 +529,7 @@ namespace sclxdhtml {
 		const char *Target,
 		const sclrgstry::registry_ &Registry,
 		const str::dString &XML,
-		xdhdws::proxy__ &Proxy,
+		xdhdws::sProxy &Proxy,
 		bso::char__ Marker );
 
 	extern const char *RootTagName_;
@@ -765,11 +763,11 @@ namespace sclxdhtml {
 
 	void SCLXDHTMLInitialization( xdhcmn::mode__ Mode );	// To define by user.
 
-	xdhcmn::session_callback__ *SCLXDHTMLRetrieveCallback(
+	xdhcmn::cSession *SCLXDHTMLRetrieveCallback(
 		const char *Language,
-		xdhcmn::proxy_callback__ *ProxyCallback );	// To define by user.
+		xdhcmn::cProxy *ProxyCallback );	// To define by user.
 
-	void SCLXDHTMLReleaseCallback( xdhcmn::session_callback__ *Callback );	// To define by user.
+	void SCLXDHTMLReleaseCallback( xdhcmn::cSession *Callback );	// To define by user.
 
 	namespace prolog {
 		static E_CDEF( char *, ProjectTypeId, "ProjectType" );
@@ -781,18 +779,18 @@ namespace sclxdhtml {
 			xml::writer_ &Writer );
 
 		void GetCasting(
-			proxy__ &Proxy,
+			sProxy &Proxy,
 			xml::writer_ &Writer );
 
 		void DisplaySelectedProjectFilename(
-			proxy__ &Proxy,
+			sProxy &Proxy,
 			const char *Id );
 
 		sclmisc::project_type__ GetProjectFeatures(
-			proxy__ &Proxy,
+			sProxy &Proxy,
 			str::string_ &Feature );
 
-		void LoadProject( proxy__ &Proxy );
+		void LoadProject( sProxy &Proxy );
 	}
 
 	namespace login {
@@ -808,16 +806,16 @@ namespace sclxdhtml {
 			xml::writer_ &Writer );
 
 		void GetCasting(
-			proxy__ &Proxy,
+			sProxy &Proxy,
 			eBackendVisibility Visibility,
 			xml::writer_ &Writer );
 
 		void GetBackendFeatures(
-			proxy__ &Proxy,
+			sProxy &Proxy,
 			sclfrntnd::rFeatures &Features );
 
 		void DisplaySelectedEmbeddedBackendFilename(
-			proxy__ &Proxy,
+			sProxy &Proxy,
 			const char *Id );
 	}
 

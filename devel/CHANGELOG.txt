@@ -2,7 +2,9 @@ CHANGELOG for the 'Epeios' framework.
 
 2017-05-05 :
 - SCLXDHTML, XDHCMN, XDHDWS, XDHUJP, XDHUJR, XDHUJS :
-	- 'content' related features are renamed to 'value', ti avoid confusion of the new 'content' handling.
+	- 'content' related features are renamed to 'value', to avoid confusion of the new 'content' handling.
+- XDHDWS :
+	- Replacing 'Set(Element|Document)...' with a unique 'Set...' (equivalent to 'SetElement...').
 
 2017-04-28 :
 - SCLXDHTML, XDHUJP, XDHUJR, XDHUJSn XDHUTL :

@@ -54,8 +54,8 @@
 					]]>
     </Confirm>
     <!--
-						Below version doesn't work as is because of JS asynchronity,
-						and the fact that the UI is refreshed only when the returning from event handler!
+						Below version doesn't work as is because of JS asynchronicity,
+						and the fact that the UI is refreshed only when the returning from event handler !
 					-->
     <!--<Confirm>
 						<![CDATA[
@@ -168,8 +168,8 @@
     </Casts>
     <Contents>
      <![CDATA[
-					log( "Data filling : '%Id%'" );
-					var digest = fetchDataRequests( "%Id%" );
+					log( "Contents fetching : '%Id%'" );
+					var digest = fetchContents( "%Id%" );
 					digest;
 				]]>
     </Contents>
