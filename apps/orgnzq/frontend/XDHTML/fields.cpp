@@ -72,6 +72,8 @@ void fields::Display(
 	SetLayout( Id, Session );
 
 	SetCasting( Id, Session );
+
+	Session.SetDocumentData();
 }
 
 void fields::SetFieldLayout( core::rSession &Session )
@@ -100,7 +102,7 @@ AC( DefineField )
 {
 	frdinstc::sField Field = frdinstc::UndefinedField;
 	
-	Session.GetNumericalContent( Id, **Field );
+	Session.GetNumericalValue( Id, **Field );
 
 	Session.User.Panel().DefineField( Field );
 
@@ -116,7 +118,7 @@ namespace {
 	{
 		frdinstc::sField Field = frdinstc::UndefinedField;
 
-		Session.GetNumericalContent( Id, **Field );
+		Session.GetNumericalValue( Id, **Field );
 
 		return Field;
 	}

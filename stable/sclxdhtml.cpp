@@ -469,7 +469,7 @@ qRH
 	str::string Value;
 qRB
 	Value.Init();
-	ProjectType = sclmisc::GetProjectType( Proxy.GetContent( prolog::ProjectTypeId, Value ) );
+	ProjectType = sclmisc::GetProjectType( Proxy.GetValue( prolog::ProjectTypeId, Value ) );
 qRR
 qRT
 qRE
@@ -508,7 +508,7 @@ qRB
 		Retriever.GetString( FileName );
 
 	if ( FileName.Amount() != 0 )
-		Proxy.SetContent( RemoteProjectId, FileName );
+		Proxy.SetValue( RemoteProjectId, FileName );
 qRR
 qRT
 qRE
@@ -526,13 +526,13 @@ qRB
 	case sclmisc::ptNew:
 		break;
 	case sclmisc::ptRemote:
-		Feature.Append( Proxy.GetContent( RemoteProjectId, Buffer ) );
+		Feature.Append( Proxy.GetValue( RemoteProjectId, Buffer ) );
 		break;
 	case sclmisc::ptEmbedded:
 		qRVct();	// Not implemented yet.
 		break;
 	case sclmisc::ptPredefined:
-		Feature.Append( Proxy.GetContent( PredefinedProjectId, Buffer ) );
+		Feature.Append( Proxy.GetValue( PredefinedProjectId, Buffer ) );
 		break;
 	default:
 		qRFwk();
@@ -586,7 +586,7 @@ namespace {
 		proxy__ &Proxy,
 		str::dString &Type )
 	{
-		return Proxy.GetContent( login::BackendTypeId, Type );
+		return Proxy.GetValue( login::BackendTypeId, Type );
 	}
 }
 
@@ -660,7 +660,7 @@ qRB
 		} else
 			qRGnr();
 
-		Parameters.Append( Proxy.GetContent( BackendId, Buffer ) );
+		Parameters.Append( Proxy.GetValue( BackendId, Buffer ) );
 
 		if ( NormalizeStraightBackendFeature )
 			straight_::Normalize( Parameters );
@@ -693,7 +693,7 @@ qRB
 		Retriever.GetString( FileName );
 
 	if ( FileName.Amount() != 0 )
-		Proxy.SetContent( EmbeddedBackendId, FileName );
+		Proxy.SetValue( EmbeddedBackendId, FileName );
 qRR
 qRT
 qRE

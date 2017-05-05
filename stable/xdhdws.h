@@ -256,28 +256,28 @@ namespace xdhdws {
 		{
 			C_().Process( xdhcmn::fRemoveAttribute, NULL, Id.Internal()( ), Name.Internal()( ) );
 		}
-		const char *GetContent(
+		const char *GetValue(
 			const nstring___ &Id,
 			TOL_CBUFFER___ &Buffer )
 		{
-			C_().Process( xdhcmn::fGetContent, &Buffer, Id.Internal()( ) );
+			C_().Process( xdhcmn::fGetValue, &Buffer, Id.Internal()( ) );
 
 			return Buffer;
 		}
-		const str::string_ &GetContent(
+		const str::string_ &GetValue(
 			const nstring___ &Id,
-			str::string_ &Content )
+			str::string_ &Value )
 		{
 		qRH
 			TOL_CBUFFER___ Buffer;
 		qRB
-			Content.Append( GetContent( Id, Buffer ) );
+			Value.Append( GetValue( Id, Buffer ) );
 		qRR
 		qRT
 		qRE
-			return Content;
+			return Value;
 		}
-		template <typename type> bso::sBool GetNumericalContent(
+		template <typename type> bso::sBool GetNumericalValue(
 			const nstring___ &Id,
 			type &Value,
 			bso::sBool *Error = NULL )
@@ -289,7 +289,7 @@ namespace xdhdws {
 		qRB
 			RawValue.Init();
 
-			GetContent( Id, RawValue );
+			GetValue( Id, RawValue );
 
 			if ( RawValue.Amount() != 0 ) {
 				RawValue.ToNumber( Value, Error != NULL ? &ErrPos : NULL );
@@ -307,7 +307,7 @@ namespace xdhdws {
 		qRE
 			return !IsEmpty;
 		}
-		bso::sBool GetBooleanContent( const nstring___ &Id )
+		bso::sBool GetBooleanValue( const nstring___ &Id )
 		{
 			bso::sBool Value = false;
 		qRH
@@ -315,7 +315,7 @@ namespace xdhdws {
 		qRB
 			RawValue.Init();
 
-			GetContent( Id, RawValue );
+			GetValue( Id, RawValue );
 
 			if ( RawValue.Amount() != 0 ) {
 				Value = RawValue == "true";
@@ -325,11 +325,11 @@ namespace xdhdws {
 		qRE
 			return Value;
 		}
-		void SetContent(
+		void SetValue(
 			const nstring___ &Id,
 			const nstring___ &Value )
 		{
-			C_().Process( xdhcmn::fSetContent, NULL, Id.Internal()( ), Value.Internal()( ) );
+			C_().Process( xdhcmn::fSetValue, NULL, Id.Internal()( ), Value.Internal()( ) );
 		}
 		void Focus( const nstring___ &Id )
 		{

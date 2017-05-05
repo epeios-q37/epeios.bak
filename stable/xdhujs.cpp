@@ -50,9 +50,9 @@ const str::string_ &xdhujs::GetTaggedScript(
 	C( AttributeSetter, attribute::Setter );
 	C( AttributeGetter, attribute::Getter );
 	C( AttributeRemover, attribute::Remover );
-	C( WidgetContentRetriever, widget::ContentRetriever );
-	C( ContentSetter, content::Setter );
-	C( ContentGetter, content::Getter );
+	C( WidgetValueRetriever, widget::ValueRetriever );
+	C( ValueSetter, value::Setter );
+	C( ValueGetter, value::Getter );
 	C( WidgetFocuser, widget::Focuser );
 	C( WidgetSelector, widget::Selector );
 	C( Focuser, Focuser );
@@ -173,9 +173,9 @@ qRB
 	S( EventsAndWidgetsFetcher, Id_, XML_, XSL_, NULL );
 	S( CastsFetcher, Id_, XML_, XSL_, NULL );
 	S( ContentsFetcher, Id_, NULL);
-	S( ContentSetter, Id_, Value_, NULL );
-	S( ContentGetter, Id_, NULL );
-	S( WidgetContentRetriever, Id_, Method_, NULL );
+	S( ValueSetter, Id_, Value_, NULL );
+	S( ValueGetter, Id_, NULL );
+	S( WidgetValueRetriever, Id_, Method_, NULL );
 	S( WidgetFocuser, Id_, Method_, NULL );
 	S( WidgetSelector, Id_, Method_, NULL );
 	S( Focuser, Id_, NULL );

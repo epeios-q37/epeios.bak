@@ -51,9 +51,9 @@ entry___ xdhujr::script::attribute::Setter( "Setter", AttributeScripts_ );
 entry___ xdhujr::script::attribute::Getter( "Getter", AttributeScripts_ );
 entry___ xdhujr::script::attribute::Remover( "Remover", AttributeScripts_ );
 
-static entry___ ContentScripts_( "Content", xdhujr::Scripts );
-entry___ xdhujr::script::content::Setter( "Setter", ContentScripts_ );
-entry___ xdhujr::script::content::Getter( "Getter", ContentScripts_ );
+static entry___ ValueScripts_( "Value", xdhujr::Scripts );
+entry___ xdhujr::script::value::Setter( "Setter", ValueScripts_ );
+entry___ xdhujr::script::value::Getter( "Getter", ValueScripts_ );
 
 static entry___ FetcherScripts_("Fetcher", xdhujr::Scripts );
 entry___ xdhujr::script::fetcher::EventsAndWidgets( "EventsAndWidgets", FetcherScripts_ );
@@ -68,7 +68,7 @@ entry___ xdhujr::script::dialog::Alert( "Alert", DialogScripts_ );
 entry___ xdhujr::script::dialog::Confirm( "Confirm", DialogScripts_ );
 
 static entry___ WidgetScripts_( "Widget", xdhujr::Scripts );
-entry___ xdhujr::script::widget::ContentRetriever( "ContentRetriever", WidgetScripts_ );
+entry___ xdhujr::script::widget::ValueRetriever( "ValueRetriever", WidgetScripts_ );
 entry___ xdhujr::script::widget::Focuser( "Focuser", WidgetScripts_ );
 entry___ xdhujr::script::widget::Selector( "Selector", WidgetScripts_ );
 

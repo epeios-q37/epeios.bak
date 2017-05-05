@@ -47,8 +47,8 @@ namespace xdhujs {
 		snEventsAndWidgetsFetcher,
 		snCastsFetcher,
 		snContentsFetcher,
-		snContentGetter,
-		snContentSetter,
+		snValueGetter,
+		snValueSetter,
 		snDialogAlert,
 		snDialogConfirm,
 		snFocuser,
@@ -56,7 +56,7 @@ namespace xdhujs {
 		snLog,
 		snPropertyGetter,
 		snPropertySetter,
-		snWidgetContentRetriever,
+		snWidgetValueRetriever,
 		snWidgetFocuser,
 		snWidgetSelector,
 		snEventHandlersSetter,
@@ -115,12 +115,12 @@ namespace xdhujs {
 		GetScript( snAttributeSetter, &Script, Id.Internal()(), Name.Internal()(), Value.Internal()() );
 	}
 
-	inline void SetContent(
+	inline void SetValue(
 		const nstring___ &Id,
 		const nstring___ &Value,
 		str::string_ &Script )
 	{
-		GetScript( snContentSetter, &Script, Id.Internal()(), Value.Internal()() );
+		GetScript( snValueSetter, &Script, Id.Internal()(), Value.Internal()() );
 	}
 
 	inline void GetProperty(

@@ -41,13 +41,13 @@ namespace {
 
 	{
 	qRH
-		str::wString Content;
+		str::wString Value;
 	qRB
-		Content.Init();
+		Value.Init();
 
-		Session.GetContent( "EditableEntry", Content );
+		Session.GetValue( "EditableEntry", Value );
 
-		Session.User.Panel().UpdateEntry( Content );
+		Session.User.Panel().UpdateEntry( Value );
 
 		if ( !core::OnFieldDefiningAllowedActions.Search( Action ) )
 			Session.User.Panel().UpdateField();

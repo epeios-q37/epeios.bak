@@ -389,7 +389,7 @@ static void SetData_(
 	SetData_( Callback, Id );
 }
 
-static void GetContent_(
+static void GetValue_(
 	callback__ &Callback,
 	const nchar__ *Id,
 	TOL_CBUFFER___ *Result )
@@ -408,20 +408,20 @@ qRB
 		xdhutl::ExtractWidgetContentRetrievingMethod( Args, Method );
 
 	if ( Method.Amount() == 0 )
-		Execute( Callback, xdhujs::snContentGetter, Result, Id );
+		Execute( Callback, xdhujs::snValueGetter, Result, Id );
 	else
-		Execute( Callback, xdhujs::snWidgetContentRetriever, Result, Id, nstring___( Method ).Internal()() );
+		Execute( Callback, xdhujs::snWidgetValueRetriever, Result, Id, nstring___( Method ).Internal()() );
 qRR
 qRT
 qRE
 }
 
-static void GetContent_(
+static void GetValue_(
 	callback__ &Callback,
-	TOL_CBUFFER___ *Content,
+	TOL_CBUFFER___ *Value,
 	va_list List )
 {
-	GetContent_( Callback, va_arg( List, const nchar__ * ), Content );
+	GetValue_( Callback, va_arg( List, const nchar__ * ), Value );
 }
 
 static void Focus_(
@@ -541,10 +541,10 @@ static script_name__ Convert_( xdhcmn::function__ Function )
 	case xdhcmn::fRemoveAttribute:
 		return xdhujs::snAttributeRemover;
 		break;
-	case xdhcmn::fSetContent:
-		return xdhujs::snContentSetter;
+	case xdhcmn::fSetValue:
+		return xdhujs::snValueSetter;
 		break;
-	case xdhcmn::fGetContent:
+	case xdhcmn::fGetValue:
 		qRFwk();
 		break;
 	case xdhcmn::fGetResult:
@@ -584,7 +584,7 @@ void xdhujp::proxy_callback__::XDHCMNProcess(
 	case xdhcmn::fSetAttribute:
 	case xdhcmn::fGetAttribute:
 	case xdhcmn::fRemoveAttribute:
-	case xdhcmn::fSetContent:
+	case xdhcmn::fSetValue:
 	case xdhcmn::fLog:
 		Execute_( C_(), Convert_( Function ), Result, List );
 		break;
@@ -595,8 +595,8 @@ void xdhujp::proxy_callback__::XDHCMNProcess(
 	case xdhcmn::fGetResult:
 		GetResult_( C_(), Result, List );
 		break;
-	case xdhcmn::fGetContent:
-		GetContent_( C_(), Result, List );
+	case xdhcmn::fGetValue:
+		GetValue_( C_(), Result, List );
 		break;
 	case xdhcmn::fFocus:
 		Focus_( C_(), List);

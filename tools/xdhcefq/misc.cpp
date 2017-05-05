@@ -528,7 +528,7 @@ qRE
 	return Buffer;
 }
 
-void misc::SetContent(
+void misc::SetValue(
 	const nstring___ &Id,
 	const nstring___ &Value,
 	cef_frame_t *Frame )
@@ -537,7 +537,7 @@ qRH
 	str::string Script;
 qRB
 	Script.Init();
-	xdhujs::SetContent( Id, Value, Script );
+	xdhujs::SetValue( Id, Value, Script );
 
 	ExecuteJavascript( Script, NULL, Frame );
 qRR

@@ -114,11 +114,11 @@
 			</xsl:when>
 			<xsl:otherwise>
 				<fieldset title="#fieldDragAndDropTitle#" data-xdh-onevents="(dragstart|DragEntry)|(drop|DropEntry)|(dragend|EndEntryDragging)" data-xdh-casts="EntryDraggingCast|EntryDroppingCast">
-					<xsl:attribute name="data-xdh-content">
+					<xsl:attribute name="data-xdh-value">
 						<xsl:value-of select="@id"/>
 					</xsl:attribute>
 					<span data-xdh-onevent="DefineEntry">
-						<xsl:attribute name="data-xdh-content">
+						<xsl:attribute name="data-xdh-value">
 							<xsl:value-of select="@id"/>
 						</xsl:attribute>
 						<xsl:call-template name="DOE">

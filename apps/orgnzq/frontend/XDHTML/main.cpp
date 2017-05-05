@@ -118,7 +118,7 @@ AC( SelectPanel )
 {
 	frdinstc::sPPos Pos = qNIL;
 
-	Session.GetNumericalContent( Id, *Pos );
+	Session.GetNumericalValue( Id, *Pos );
 
 	Session.User.SelectPanel( Pos );
 
@@ -129,7 +129,7 @@ AC( DragPanel )
 {
 	frdinstc::sPPos Pos = qNIL;
 
-	Session.GetNumericalContent( Id, *Pos );
+	Session.GetNumericalValue( Id, *Pos );
 
 	Session.User.DragPanel( Pos );
 
@@ -140,7 +140,7 @@ AC( DropPanel )
 {
 	frdinstc::sPPos Pos = qNIL;
 
-	Session.GetNumericalContent( Id, *Pos );
+	Session.GetNumericalValue( Id, *Pos );
 
 	Session.User.DropPanel( Pos );
 

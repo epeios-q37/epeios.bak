@@ -81,23 +81,23 @@ namespace xdhcmn {
 		}
 	};
 
-	enum function__ {				// Parameters :
-		fLog,					// Message,
-		fAlert,					// XML, XSL, Title.
-		fConfirm,				// XML, XSL, Title.
-		fSetCasting,			// Id, XML, XSL.	// If 'Id' == 'NULL', applies to the document, otherwise applies to the element of id 'Id'.
+	enum function__ {		// Parameters :
+		fLog,				// Message,
+		fAlert,				// XML, XSL, Title.
+		fConfirm,			// XML, XSL, Title.
+		fSetCasting,		// Id, XML, XSL.	// If 'Id' == 'NULL', applies to the document, otherwise applies to the element of id 'Id'.
 		fSetData,			// Id.				// If 'Id' == 'NULL', applies to the document, otherwise applies to the element of id 'Id'.
-		fSetLayout,				// Id, XML, XSL.	// If 'Id' == 'NULL', applies to the document, otherwise applies to the element of id 'Id'.
-		fSetProperty,			// Id, Name, Value.
-		fGetProperty,			// Id, Name.
-		fSetAttribute,			// Id, Name, Value.
-		fGetAttribute,			// Id, Name.
-		fRemoveAttribute,		// Id, Name.
-		fSetContent,			// Id, Value.
-		fGetContent,			// Id.
-		fGetResult,				// Id.
-		fFocus,					// Id.
-		fSelect,				// Id.
+		fSetLayout,			// Id, XML, XSL.	// If 'Id' == 'NULL', applies to the document, otherwise applies to the element of id 'Id'.
+		fSetProperty,		// Id, Name, Value.
+		fGetProperty,		// Id, Name.
+		fSetAttribute,		// Id, Name, Value.
+		fGetAttribute,		// Id, Name.
+		fRemoveAttribute,	// Id, Name.
+		fSetValue,			// Id, Value.
+		fGetValue,			// Id.
+		fGetResult,			// Id.
+		fFocus,				// Id.
+		fSelect,			// Id.
 		f_amount,
 		f_Undefined
 	};

@@ -76,15 +76,15 @@ qRH
 	frdinstc::sNumber Number = frdinstc::UndefinedNumber;
 qRB
 	Label.Init();
-	Session.GetContent( "FieldLabel", Label );
+	Session.GetValue( "FieldLabel", Label );
 
 	Comment.Init();
-	Session.GetContent( "FieldComment", Comment );
+	Session.GetValue( "FieldComment", Comment );
 
-	if ( !Session.GetNumericalContent( "Type", **Type ) )
+	if ( !Session.GetNumericalValue( "Type", **Type ) )
 		sclmisc::ReportAndAbort( "FieldTypeIsRequired" );
 
-	if ( !Session.GetNumericalContent( "Number", **Number ) )
+	if ( !Session.GetNumericalValue( "Number", **Number ) )
 		sclmisc::ReportAndAbort( "FieldNumberIsRequired" );
 
 	Label.StripCharacter( ' ' );

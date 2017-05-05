@@ -26,19 +26,18 @@
 						]]>
     </Setter>
    </Attribute>
-   <Content>
+   <Value>
     <Getter>
      <![CDATA[
-							getContent( "%Id%" );
+							getValue( "%Id%" );
 						]]>
     </Getter>
     <Setter>
      <![CDATA[
-							setContent( "%Id%", "%Value%" );
+							setValue( "%Id%", "%Value%" );
 						]]>
     </Setter>
-   </Content>
-
+   </Value>
    <Dialog>
     <Alert>
      <![CDATA[
@@ -163,15 +162,15 @@
 					log( "%XML%" );
 					removeCastingChildren( document );
 					document.getElementById( "xdh-casting" ).appendChild( transformToFragment( "%XML%", "%XSL%" ) );
-					var casting = fetchCasting( "%Id%" );
-					casting;
+					var digest = fetchCasts( "%Id%" );
+					digest;
 				]]>
     </Casts>
     <Contents>
      <![CDATA[
 					log( "Data filling : '%Id%'" );
-					var dataRequests = fetchDataRequests( "%Id%" );
-					dataRequests;
+					var digest = fetchDataRequests( "%Id%" );
+					digest;
 				]]>
     </Contents>
    </Fetcher>
@@ -225,11 +224,11 @@
     </Setter>
    </Property>
    <Widget>
-    <ContentRetriever>
+    <ValueRetriever>
      <![CDATA[
 							jQuery( document.getElementById( "%Id%") ).%Method_%
 						]]>
-    </ContentRetriever>
+    </ValueRetriever>
     <Focuser>
      <![CDATA[
 							jQuery( document.getElementById( "%Id%") ).%Method_%

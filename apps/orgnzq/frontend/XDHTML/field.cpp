@@ -81,7 +81,7 @@ AC( DefineEntry )
 {
 	frdinstc::sEntry Entry = frdinstc::UndefinedEntry;
 
-	Session.GetNumericalContent( Id, **Entry );
+	Session.GetNumericalValue( Id, **Entry );
 
 	Session.User.Panel().DefineEntry( Entry );
 
@@ -95,7 +95,7 @@ namespace {
 	{
 		frdinstc::sEntry Entry = frdinstc::UndefinedEntry;
 
-		Session.GetNumericalContent( Id, **Entry );
+		Session.GetNumericalValue( Id, **Entry );
 
 		return Entry;
 	}

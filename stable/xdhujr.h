@@ -76,7 +76,7 @@ namespace xdhujr {
 			extern entry___ Getter;
 			extern entry___ Remover;
 		}
-		namespace content {
+		namespace value {
 			extern entry___ Setter;
 			extern entry___ Getter;
 		}
@@ -85,7 +85,7 @@ namespace xdhujr {
 			extern entry___ Confirm;
 		}
 		namespace widget {
-			extern entry___ ContentRetriever;
+			extern entry___ ValueRetriever;
 			extern entry___ Focuser;
 			extern entry___ Selector;
 		}

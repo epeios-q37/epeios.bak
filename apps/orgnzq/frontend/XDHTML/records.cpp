@@ -81,7 +81,7 @@ AC( DefineRecord )
 {
 	frdinstc::sRecord Record = frdinstc::UndefinedRecord;
 
-	Session.GetNumericalContent( Id, **Record );
+	Session.GetNumericalValue( Id, **Record );
 
 	Session.User.Panel().DefineRecord( Record );
 

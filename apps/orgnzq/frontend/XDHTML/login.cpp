@@ -97,7 +97,7 @@ qRB
 		qRGnr();
 
 	tol::Init( UserID, Password );
-	if ( !Session.User.Login( Session.GetContent("LoginUserID", UserID ), Session.GetContent( "LoginPassword", Password ) ) ) {
+	if ( !Session.User.Login( Session.GetValue("LoginUserID", UserID ), Session.GetValue( "LoginPassword", Password ) ) ) {
 		Session.AlertT( "UnableToLogin" );
 		Session.Disconnect();
 	} else {

@@ -48,8 +48,8 @@ const char *xdhcmn::GetLabel( function__ Function )
 	C( GetAttribute );
 	C( RemoveAttribute );
 	C( GetResult );
-	C( SetContent );
-	C( GetContent );
+	C( SetValue );
+	C( GetValue );
 	C( Focus );
 	C( Select );
 	default:

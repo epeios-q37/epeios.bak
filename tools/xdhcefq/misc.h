@@ -268,7 +268,7 @@ namespace misc {
 			qRGnr();
 	}
 
-	void SetContent(
+	void SetValue(
 		const nstring___ &Id,
 		const nstring___ &Value,
 		cef_frame_t *Frame );

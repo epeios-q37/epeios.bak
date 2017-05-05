@@ -71,11 +71,11 @@ AC( Submission )
 	str::string Test;
 	TOL_CBUFFER___ Buffer;
 
-	Test.Init( Session.GetContent( "Pattern", Buffer ) );
+	Test.Init( Session.GetValue( "Pattern", Buffer ) );
 
 	Session.User.ToUpper( Test );
 
-	Session.SetContent("Pattern", Test );
+	Session.SetValue("Pattern", Test );
 }
 
 AC( ShowTestButton )
