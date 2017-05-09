@@ -103,9 +103,9 @@ namespace xdhdws {
 		}
 		void SetContents(
 			const nstring___ &Id,
-			xdhcmn::cContents &Contents )
+			xdhcmn::cContent &ContentCallback )
 		{
-			C_().Process(xdhcmn::fSetContents, NULL, Id.Internal()(), &Contents );
+			C_().Process(xdhcmn::fSetContents, NULL, Id.Internal()(), &ContentCallback );
 		}
 		const char *GetProperty(
 			const nstring___ &Id,

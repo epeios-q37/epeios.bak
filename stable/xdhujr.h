@@ -60,11 +60,14 @@ namespace xdhujr {
 			extern entry___ Casts;
 			extern entry___ Contents;
 		};
+		namespace setter{
+			extern entry___ EventHandlers;
+			extern entry___ Casts;
+			extern entry___ Contents;
+		}
 		extern entry___ DraggableSetter;
 		extern entry___ DroppableSetter;
-		extern entry___ EventHandlersSetter;
 		extern entry___ WidgetsInstantiator;
-		extern entry___ CastsSetter;
 		extern entry___ Focuser;
 		extern entry___ Selector;
 		namespace property {

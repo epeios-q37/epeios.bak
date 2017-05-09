@@ -266,46 +266,54 @@ static void SetLayout_(
 	SetLayout_( Callback, Id, XML, XSL );
 }
 
-static void HandleCastings_(
+static void Merge_(
 	const str::strings_ &Ids,
-	const str::strings_ &Castings,
-	str::string_ &IdsTag,
-	str::string_ &CastingsTag )
+	const str::strings_ &Tags,
+	str::string_ &MergedIds,
+	str::string_ &MergedTags )
 {
+qRH
 	sdr::row__ Row = qNIL;
-
-	if ( Ids.Amount() != Castings.Amount() )
+	str::wString EscapedTag;
+qRB
+	if ( Ids.Amount() != Tags.Amount() )
 		qRFwk();
 
 	Row = Ids.First();
 
-	IdsTag.Append( "[ " );
-	CastingsTag.Append( "[ ");
+	MergedIds.Append( "[ " );
+	MergedTags.Append( "[ ");
 
 	while ( Row != qNIL ) {
-		IdsTag.Append('"');
-		IdsTag.Append(Ids( Row) );
-		IdsTag.Append('"');
+		MergedIds.Append('"');
+		MergedIds.Append( Ids( Row) );
+		MergedIds.Append('"');
 
-		CastingsTag.Append('"');
-		CastingsTag.Append( Castings( Row ) );
-		CastingsTag.Append('"');
+		EscapedTag.Init();
+		xdhcmn::Escape( Tags( Row ), EscapedTag, '"' );
+
+		MergedTags.Append('"');
+		MergedTags.Append( EscapedTag );
+		MergedTags.Append('"');
 
 		Row = Ids.Next( Row );
 
 		if ( Row != qNIL ) {
-			IdsTag.Append( ", " );
-			CastingsTag.Append( ", " );
+			MergedIds.Append( ", " );
+			MergedTags.Append( ", " );
 		}
 	}
 
-	IdsTag.Append( " ]" );
-	CastingsTag.Append( " ]");
+	MergedIds.Append( " ]" );
+	MergedTags.Append( " ]");
+qRR
+qRT
+qRE
 }
 
 static void HandleCasts_(
 	cJS &Callback,
-	const xdhcmn::digest_ &Descriptions )
+	const xdhcmn::digest_ &Digest )
 {
 qRH
 	str::strings Ids, Castings;
@@ -313,14 +321,13 @@ qRH
 qRB
 	Ids.Init();
 	Castings.Init();
-	xdhutl::FillCasts( Descriptions, Ids, Castings );
+	xdhutl::GetTags( Digest, Ids, Castings );
 
 	if ( Ids.Amount() ) {
-		IdsTag.Init();
-		CastingsTag.Init();
-		HandleCastings_( Ids, Castings, IdsTag, CastingsTag );
+		tol::Init( IdsTag, CastingsTag );
+		Merge_( Ids, Castings, IdsTag, CastingsTag );
 
-		Execute( Callback, xdhujs::snCastsSetter, NULL, nstring___( IdsTag ).Internal()(), nstring___( CastingsTag ).Internal()() );
+		Execute( Callback, xdhujs::snCastsSetter_, NULL, nstring___( IdsTag ).Internal()(), nstring___( CastingsTag ).Internal()() );
 	}
 qRR
 qRT
@@ -336,14 +343,14 @@ static void SetCasting_(
 qRH
 	TOL_CBUFFER___ Result;
 	str::string RawDigests;
-	xdhcmn::digest Castings;
+	xdhcmn::digest Digest;
 qRB
 	RawDigests.Init( Execute( Callback, xdhujs::snCastsFetcher, &Result, Id, XML, XSL ) );
 
-	Castings.Init();
-	xdhcmn::Split( RawDigests, Castings );
+	Digest.Init();
+	xdhcmn::Split( RawDigests, Digest );
 
-	HandleCasts_( Callback, Castings );
+	HandleCasts_( Callback, Digest );
 qRR
 qRT
 qRE
@@ -361,21 +368,49 @@ static void SetCasting_(
 	SetCasting_( Callback, Id, XML, XSL );
 }
 
+static void HandleContents_(
+	cJS &Callback,
+	const xdhcmn::digest_ &Digest,
+	xdhcmn::cContent &ContentCallback )
+{
+qRH
+	str::wStrings Ids, Tags, Contents;
+	str::wString IdsTag, ContentsTag;
+qRB
+	tol::Init( Ids, Tags );
+	xdhutl::GetTags( Digest, Ids, Tags );
+
+	if ( Ids.Amount() ) {
+		tol::Init( Contents );
+		ContentCallback.GetContents( Tags, Contents );
+
+		tol::Init( IdsTag, ContentsTag );
+		Merge_( Ids, Contents, IdsTag, ContentsTag );
+
+		Execute( Callback, xdhujs::snContentsSetter, NULL, nstring___( IdsTag ).Internal()( ), nstring___( ContentsTag ).Internal()( ) );
+	}
+qRR
+qRT
+qRE
+}
 
 static void SetContents_(
 	cJS &Callback,
 	const nchar__ *Id,
-	xdhcmn::cContents &Contents )
+	xdhcmn::cContent &ContentCallback )
 {
 qRH
 	TOL_CBUFFER___ Result;
-	str::string RawDigests;
+	str::string RawDigest;
+	strmrg::table Digest;
 qRB
-	RawDigests.Init( Execute(Callback, xdhujs::snContentsFetcher, &Result, Id ));
+	RawDigest.Init( Execute(Callback, xdhujs::snContentsFetcher, &Result, Id ));
 
-	cio::COut << ">>>>>>>>>>>>>>>>> " << RawDigests << " <<<<<<<<<<<<<<<<<<<<<" << txf::nl << txf::commit;
+	Digest.Init();
 
-	// TODO.
+	strmrg::Split( RawDigest, Digest );
+
+	HandleContents_( Callback, Digest, ContentCallback );
 qRR
 qRT
 qRE
@@ -386,9 +421,9 @@ static void SetContents_(
 	va_list List)
 {
 	const nchar__ *Id = va_arg(List, const nchar__ *);
-	xdhcmn::cContents *Contents = va_arg( List, xdhcmn::cContents * );
+	xdhcmn::cContent *ContentCallback = va_arg( List, xdhcmn::cContent * );
 
-	SetContents_( Callback, Id, *Contents );
+	SetContents_( Callback, Id, *ContentCallback );
 }
 
 static void GetValue_(

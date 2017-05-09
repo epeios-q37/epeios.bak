@@ -65,15 +65,39 @@ void fields::SetCasting(
 	core::SetElementCasting( Id, XSLAffix_, casting_::Get, Session );
 }
 
+namespace {
+	class sContent
+	: public xdhcmn::cContent
+	{
+	protected:
+		virtual void XDHCMNGetContent(
+			const str::dString &Tag,
+			str::dString &Content ) override
+		{
+			Content.Append( Tag );
+			Content.Append( " - Coucou !" );
+		}
+	public:
+		void reset( bso::sBool = true )
+		{}
+		qCVDTOR( sContent );
+		void Init( void )
+		{}
+	};
+}
+
 void fields::Display(
 	const char *Id,
 	core::rSession &Session )
 {
+	sContent Content;
+
 	SetLayout( Id, Session );
 
 	SetCasting( Id, Session );
 
-	Session.SetContents( "Root" );
+	Content.Init();
+	Session.SetContents( "Root", Content );
 }
 
 void fields::SetFieldLayout( core::rSession &Session )

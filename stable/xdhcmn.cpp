@@ -128,4 +128,25 @@ void xdhcmn::Escape(
     }
 }
 
+void xdhcmn::cContent::XDHCMNGetContents(
+	const str::dStrings &Tags,
+	str::dStrings &Contents )
+{
+qRH
+	str::wString Content;
+	sdr::sRow Row = qNIL;
+qRB
+	Row = Tags.First();
 
+	while ( Row != qNIL ) {
+		Content.Init();
+		GetContent( Tags( Row ), Content );
+
+		Contents.Append( Content );
+
+		Row = Tags.Next( Row );
+	}
+qRR
+qRT
+qRE
+}

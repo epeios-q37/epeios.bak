@@ -123,19 +123,28 @@ namespace xdhcmn {
 		}
 	};
 
-	class cContents
+	class cContent
 	{
 	protected:
 		virtual void XDHCMNGetContent(
 			const str::dString &Tag,
 			str::dString &Content ) = 0;
+		virtual void XDHCMNGetContents(
+			const str::dStrings &Tags,
+			str::dStrings &Contents );
 	public:
-		qCALLBACK( Contents );
+		qCALLBACK( Content );
 		void GetContent(
 			const str::dString &Tag,
 			str::dString &Content )
 		{
 			return XDHCMNGetContent( Tag, Content );
+		}
+		void GetContents(
+			const str::dStrings &Tags,
+			str::dStrings &Contents )
+		{
+			return XDHCMNGetContents( Tags, Contents );
 		}
 	};
 

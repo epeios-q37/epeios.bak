@@ -174,21 +174,28 @@
 				]]>
     </Contents>
    </Fetcher>
-   <EventHandlersSetter>
-    <![CDATA[
+   <Setter>
+    <EventHandlers>
+     <![CDATA[
 					setEventHandlers( %Ids_%, %Events_% );
 				]]>
-   </EventHandlersSetter>
+    </EventHandlers>
+    <Casts>
+     <![CDATA[
+					setCasts( %Ids_%, %Casts_% );
+				]]>
+    </Casts>
+    <Contents>
+     <![CDATA[
+					setContents( %Ids_%, %Contents_% );
+				]]>
+    </Contents>
+   </Setter>
    <WidgetsInstantiator>
     <![CDATA[
 					instantiateWidgets( %Ids_%, %Types_%, %ParametersSets_% );
 				]]>
    </WidgetsInstantiator>
-   <CastsSetter>
-    <![CDATA[
-					setCasts( %Ids_%, %Casts_% );
-				]]>
-   </CastsSetter>
    <!--<EventHandler>
 				<![CDATA[
 //						document.getElementById( "%Id%" ).setAttribute( "on%Event%", "handleEvent( event );" );	// Seems not to work under 'CEF'.

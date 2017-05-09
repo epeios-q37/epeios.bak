@@ -57,8 +57,9 @@ const str::string_ &xdhujs::GetTaggedScript(
 	C( WidgetSelector, widget::Selector );
 	C( Focuser, Focuser );
 	C( Selector, Selector );
-	C( EventHandlersSetter, EventHandlersSetter );
-	C( CastsSetter, CastsSetter );
+	C( EventHandlersSetter, setter::EventHandlers );
+	C( CastsSetter_, setter::Casts );
+	C( ContentsSetter, setter::Contents );
 	C( WidgetsInstantiator, WidgetsInstantiator );
 	default:
 		qRFwk();
@@ -142,6 +143,7 @@ D( Cast );
 D( Ids );
 D( Events );
 D( Casts );
+D( Contents );
 D( Types );
 D( ParametersSets );
 
@@ -181,7 +183,8 @@ qRB
 	S( Focuser, Id_, NULL );
 	S( Selector, Id_, NULL );
 	S( EventHandlersSetter, Ids_, Events_, NULL );
-	S( CastsSetter, Ids_, Casts_, NULL );
+	S( CastsSetter_, Ids_, Casts_, NULL );
+	S( ContentsSetter, Ids_, Contents_, NULL );
 	S( WidgetsInstantiator, Ids_, Types_, ParametersSets_, NULL );
 	default:
 		qRFwk();

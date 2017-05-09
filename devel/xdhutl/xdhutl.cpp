@@ -694,18 +694,18 @@ qRT
 qRE
 }
 
-void xdhutl::FillCast(
-	const xdhcmn::digest_ &Description,
+void xdhutl::GetTags(
+	const xdhcmn::digest_ &Digest,
 	str::string_ &Id,
-	str::dStrings &Castings )
+	str::dStrings &Tags )
 {
 qRH
 	xdhcmn::retriever__ Retriever;
 qRB
-	Retriever.Init( Description );
+	Retriever.Init( Digest );
 
 	Retriever.GetString( Id );
-	Retriever.GetStrings( Castings );
+	Retriever.GetStrings( Tags );
 qRR
 qRT
 qRE
@@ -714,43 +714,43 @@ qRE
 namespace  {
 	void Fill_(
 		const str::dString &Id,
-		const str::dStrings &Castings,
+		const str::dStrings &Tags,
 		str::dStrings &Ids,
-		str::dStrings &CastingsSet )
+		str::dStrings &TagsSet )
 	{
-		sdr::sRow Row = Castings.First();
+		sdr::sRow Row = Tags.First();
 
 		while ( Row != qNIL ) {
-			if ( Ids.Append(Id) != CastingsSet.Append( Castings( Row ) ) )
+			if ( Ids.Append( Id ) != TagsSet.Append( Tags( Row ) ) )
 				qRFwk();
 
-			Row = Castings.Next( Row );
+			Row = Tags.Next( Row );
 		}
 	}
 }
 
-void xdhutl::FillCasts(
-	const xdhcmn::digest_ &Descriptions,
+void xdhutl::GetTags(
+	const xdhcmn::digest_ &Digest,
 	str::strings_ &Ids,
-	str::strings_ &CastingsSet )
+	str::strings_ &TagsSet )
 {
 qRH
 	xdhcmn::retriever__ Retriever;
 	xdhcmn::digest Description;
 	str::string Id;
-	str::wStrings Castings; 
+	str::wStrings Tags; 
 qRB
-	Retriever.Init( Descriptions );
+	Retriever.Init( Digest );
 
 	while ( Retriever.Availability() != strmrg::aNone ) {
 		Description.Init();
 		Retriever.GetTable( Description );
 
 		Id.Init();
-		Castings.Init();
-		FillCast( Description, Id, Castings );
+		Tags.Init();
+		GetTags( Description, Id, Tags );
 
-		Fill_( Id, Castings, Ids, CastingsSet );
+		Fill_( Id, Tags, Ids, TagsSet );
 	}
 qRR
 qRT

@@ -247,15 +247,15 @@ namespace xdhutl {
 		str::strings_ &Types,
 		str::strings_ &ParametersSets );
 
-	void FillCast(
-		const xdhcmn::digest_ &Description,
-		str::string_ &Id,
-		str::dStrings &Castings );
+	void GetTags(
+		const xdhcmn::digest_ &Digest,
+		str::dString &Id,
+		str::dStrings &Tags );
 
-	void FillCasts(
-		const xdhcmn::digest_ &Descriptions,
-		str::strings_ &Ids,
-		str::strings_ &Castings );
+	void GetTags(
+		const xdhcmn::digest_ &Digest,
+		str::dStrings &Ids,
+		str::dStrings &Tags );
 }
 
 #endif
