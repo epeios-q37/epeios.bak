@@ -67,7 +67,7 @@ qRB
 	Ids.Init();
 	Labels.Init();
 
-	Statics.OGZGetTypes( Ids, Labels );
+	Statics.OGZGetTypes_1( Ids, Labels );
 
 	Fill_( Ids, Labels, Types_ );
 qRR
@@ -114,7 +114,7 @@ void frdfrntnd::rFrontend::GetNumbers_( void )
 {
 	Numbers_.Init();
 
-	Statics.OGZGetNumbers( Numbers_.Ids, Numbers_.Strings1 );
+	Statics.OGZGetNumbers_1( Numbers_.Ids, Numbers_.Strings1 );
 }
 
 void  frdfrntnd::rFrontend::DumpNumbers_( xml::writer_ &Writer )

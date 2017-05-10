@@ -128,7 +128,10 @@ namespace xdhcmn {
 	protected:
 		virtual void XDHCMNGetContent(
 			const str::dString &Tag,
-			str::dString &Content ) = 0;
+			str::dString &Content )
+		{
+			qRFwk();	// Called by below method, so if below method is not overridden, you have to override this one.
+		}
 		virtual void XDHCMNGetContents(
 			const str::dStrings &Tags,
 			str::dStrings &Contents );

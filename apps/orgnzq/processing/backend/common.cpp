@@ -42,6 +42,7 @@ const char *common::GetLabel( eMessage Message )
 	C( UnknownEntry );
 	C( UnknownFieldNumber );
 	C( UnknowFieldType );
+	C( InconsistentArguments );
 	default:
 		qRGnr();
 		break;

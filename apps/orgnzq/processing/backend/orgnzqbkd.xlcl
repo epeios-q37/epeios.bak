@@ -43,8 +43,11 @@
 		<Translation language="fr">Type de champ inconnu.</Translation>
 		<Translation language="en">Unknown field type.</Translation>
 	</Translations>
-
-	<!--
+ <Translations text="InconsistentArguments">
+  <Translation language="fr">Argument inconsistants.</Translation>
+  <Translation language="en">Inconsistent arguments.</Translation>
+ </Translations>
+ <!--
 <Translations text="">
 	<Translation language="fr"></Translation>
 	<Translation language="en"></Translation>

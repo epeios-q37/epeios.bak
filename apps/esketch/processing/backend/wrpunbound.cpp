@@ -27,9 +27,9 @@
 
 using namespace wrpunbound;
 
-#define M( message )	E_CDEF( char *, message, #message )
+#define M( message )	qCDEF( char *, message##_, #message )
 
-namespace message_ {
+namespace {
 	M( TestMessage );
 }
 
@@ -38,8 +38,8 @@ namespace message_ {
 using common::rStuff;
 
 #define DEC( name, version )\
-	static inline void name##_##version(\
-		fblbkd::backend___ &BaseBackend,\
+	static inline void unbound_##name##_##version(\
+		fblbkd::rBackend &BaseBackend,\
 		fblbkd::rRequest &Request )
 
 DEC( Test, 1 )
@@ -52,7 +52,7 @@ qRT
 qRE
 }
 
-#define D( name, version )	SKTINF_UC_SHORT #name "_" #version, ::name##_##version
+#define D( name, version )	SKTINF_UC_SHORT #name "_" #version, ::unbound_##name##_##version
 
 void wrpunbound::Inform( fblbkd::backend___ &Backend )
 {

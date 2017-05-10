@@ -30,12 +30,12 @@ mods += cio cpe crptgr cslio crt
 mods += ctn dir dte dtfbsc dtfptb 
 mods += epsmsc err fdr flf flsq 
 mods += flw flx ias idsq iof 
-mods += iop lst lstbch lstcrt lstctn 
-mods += mns mtx ntvstr que sdr 
-mods += stkbse stkbch stkctn str strng 
-mods += tagsbs tol txf tys uys 
-mods += utf xtf llio tht thtsub 
-mods += lck mtk bomhdl cdgb64 dlbrry 
+mods += iop lck lst lstbch lstcrt 
+mods += lstctn mns mtk mtx ntvstr 
+mods += que sdr stkbse stkbch stkctn 
+mods += str strng tagsbs tol txf 
+mods += tys uys utf xtf llio 
+mods += tht thtsub bomhdl cdgb64 dlbrry 
 mods += fil fnm lcl plgn plgncore 
 mods += rgstry stsfsm xml xpp 
 mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
@@ -85,10 +85,10 @@ MacOS=Darwin
 Android=Android
 os=$(shell uname -o 2>/dev/null || uname -s)
 mach=$(shell uname -m)
-  
-src += :..
-
-src += :../..
+ifdef EPEIOS_SRC
+ src += :..
+ src += :../..
+endif
 
 
 ##########################
@@ -240,7 +240,7 @@ endif
 #########################
 
 ifeq ("$(os)", "$(MinGW)")
-
+ 
 	co += -DMSYS -std=gnu++11 -DUNICODE
 	lo += -municode
 	
@@ -272,7 +272,7 @@ endif
 #############################
 
 ifeq ("$(os)","$(GNULinux)")
-
+ 
 	co += -std=gnu++11 -DUNICODE -D_FILE_OFFSET_BITS=64
 	
 	mods += $(pmods)
@@ -303,7 +303,7 @@ endif
 #########################
 
 ifeq ("$(os)","$(Linux)")
-
+ 
 	co += -std=gnu++11 -DUNICODE -D_FILE_OFFSET_BITS=64
 	
 	mods += $(pmods)
@@ -332,7 +332,7 @@ endif
 ##########################
 
 ifeq ("$(os)","$(MacOS)")
-
+ 
 	co += -std=gnu++11 -DUNICODE -D_FILE_OFFSET_BITS=64
 	
 	mods += $(pmods)
@@ -355,12 +355,13 @@ endif
 ##########################
 		
 all: $(binary)
+
 	rm -rf *.o
 ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20161027"\"
+copt += -DVERSION=\""20170510"\"
 copt += -DCOPYRIGHT_YEARS=\""2016"\"
 copt += -DIDENTIFIER=\""c8c33276-5e09-4f11-bd1b-3283b0ef0697"\"
 

@@ -35,12 +35,12 @@ using namespace wrpunbound;
 
 using common::rStuff;
 
-#define DEC( name )\
-	static inline void name(\
-		fblbkd::backend___ &BaseBackend,\
+#define DEC( name, version )\
+	static void name##_##version(\
+		fblbkd::rBackend &BaseBackend,\
 		fblbkd::rRequest &Request )
 
-DEC( Login )
+DEC( Login, 1 )
 {
 qRH
 	fbltyp::strings Labels;
@@ -83,7 +83,7 @@ namespace {
 	}
 }
 
-DEC( GetNumbers )
+DEC( GetNumbers, 1 )
 {
 qRH
 	fbltyp::wId8s Ids;
@@ -127,7 +127,7 @@ namespace {
 	}
 }
 
-DEC( GetTypes )
+DEC( GetTypes, 1 )
 {
 qRH
 qRB
@@ -189,7 +189,7 @@ namespace {
 	}
 }
 
-DEC( GetRecordColumns )
+DEC( GetRecordColumns, 1 )
 {
 qRH
 qRB
@@ -249,7 +249,7 @@ namespace {
 	}
 }
 
-DEC( GetRecordFields )
+DEC( GetRecordFields, 1 )
 {
 qRH
 qRB
@@ -262,7 +262,66 @@ qRT
 qRE
 }
 
-DEC( CreateRecord )
+namespace {
+	void GetEntries_(
+		ogzusr::sRow User,
+		const fbltyp::dIds &Fields,
+		const fbltyp::dIds &EntryIds,
+		const ogzdtb::mDatabase &Database,
+		fbltyp::dStrings &Entries )
+	{
+	qRH
+		sdr::sRow Row = qNIL;
+		ogzbsc::wData AllEntries;
+		ogzbsc::sFRow CurrentField = qNIL;
+		str::wString Empty;
+	qRB
+		if ( Fields.Amount() != EntryIds.Amount() )
+			REPORT( InconsistentArguments );
+
+		Empty.Init();
+	
+		Row = Fields.First();
+
+		while ( Row != qNIL ) {
+			if ( CurrentField != *Fields( Row ) ) {
+				CurrentField = *Fields( Row );
+
+				AllEntries.Init();
+				Database.GetEntries( User, CurrentField, AllEntries, qRPU );
+			}
+
+			if ( AllEntries.Exists( *EntryIds( Row ) ) )
+				Entries.Append( AllEntries( *EntryIds( Row ) ) );
+			else
+				Entries.Append( Empty );
+
+			Row = Fields.Next( Row );
+		}
+	qRR
+	qRT
+	qRE
+	}
+}
+
+DEC( GetEntries, 1 )
+{
+qRH
+	ogzfld::wRows Fields;
+qRB
+	STUFF;
+	DATABASE;
+
+	const fbltyp::dIds &Fields = Request.IdsIn();
+	const fbltyp::dIds &EntryIds = Request.IdsIn();
+
+	GetEntries_( Stuff.User(), Fields, EntryIds, Database, Request.StringsOut() );
+qRR
+qRT
+qRE
+}
+
+DEC( CreateRecord, 1 )
 {
 	USER;
 	DATABASE;
@@ -270,7 +329,7 @@ DEC( CreateRecord )
 	Request.IdOut() = *Database.NewRecord( User );
 }
 
-DEC( CreateField )
+DEC( CreateField, 1 )
 {
 	USER;
 	BACKEND;
@@ -287,7 +346,7 @@ DEC( CreateField )
 	Request.IdOut() = *FieldRow;
 }
 
-DEC( UpdateField )
+DEC( UpdateField, 1 )
 {
 	USER;
 	BACKEND;
@@ -345,7 +404,7 @@ namespace {
 	};
 }
 
-DEC( GetRecords )
+DEC( GetRecords, 1 )
 {
 qRH
 qRB
@@ -363,7 +422,7 @@ qRT
 qRE
 }
 
-DEC( MoveField )
+DEC( MoveField, 1 )
 {
 	USER;
 	DATABASE;
@@ -374,30 +433,30 @@ DEC( MoveField )
 	Database.MoveField( User, Record, Source, Target );
 }
 
-#define D( name )	OGZINF_UC_SHORT #name, ::name
+#define D( name, version )	OGZINF_UC_SHORT #name "_" #version, ::name##_##version
 
 void wrpunbound::Inform( fblbkd::backend___ &Backend )
 {
-	Backend.Add( D( Login ),
+	Backend.Add( D( Login, 1 ),
 			fblbkd::cString,	// Username.
 			fblbkd::cString,	// Password.
 		fblbkd::cEnd,
 			fblbkd::cBoolean,	// Success.
 		fblbkd::cEnd );
 
-	Backend.Add( D( GetNumbers ),
+	Backend.Add( D( GetNumbers, 1 ),
 		fblbkd::cEnd,
 			fblbkd::cId8s,		// Ids.
 			fblbkd::cStrings,	// Labels,
 		fblbkd::cEnd );
 
-	Backend.Add( D( GetTypes ),
+	Backend.Add( D( GetTypes, 1 ),
 		fblbkd::cEnd,
 			fblbkd::cIds,		// Ids.
 			fblbkd::cStrings,	// Labels.
 		fblbkd::cEnd );
 
-	Backend.Add( D( GetRecordColumns ),
+	Backend.Add( D( GetRecordColumns, 1 ),
 			fblbkd::cId,		// Id of the record .
 		fblbkd::cEnd,
 			fblbkd::cIds,		// Ids of the columns,
@@ -407,21 +466,28 @@ void wrpunbound::Inform( fblbkd::backend___ &Backend )
 			fblbkd::cStrings,	// Comments.
 		fblbkd::cEnd );
 
-	Backend.Add( D( GetRecordFields ),
-			fblbkd::cId,			// Record.
+	Backend.Add( D( GetRecordFields, 1 ),
+		fblbkd::cId,			// Record.
 		fblbkd::cEnd,
-			fblbkd::cIds,			// Fields.
-			fblbkd::cIds,			// The column for each fields.
-			fblbkd::cIds,			// The type of each field. More convenient to be here due to use of plugins for the types.
-			fblbkd::cStringsSet,	// The entries for each field.
+		fblbkd::cIds,			// Fields.
+		fblbkd::cIds,			// The column for each fields.
+		fblbkd::cIds,			// The type of each field. More convenient to be here due to use of plugins for the types.
+		fblbkd::cStringsSet,	// The entries for each field.
 		fblbkd::cEnd );
 
-	Backend.Add( D( CreateRecord ),
+	Backend.Add( D( GetEntries, 1 ),
+			fblbkd::cIds,		// Fields.
+			fblbkd::cIds,		// Entry id for each field.
+		fblbkd::cEnd,
+			fblbkd::cStrings,	// The entries for each field.
+		fblbkd::cEnd );
+
+	Backend.Add( D( CreateRecord, 1 ),
 		fblbkd::cEnd,
 			fblbkd::cId,	// The created Record.
 		fblbkd::cEnd );
 
-	Backend.Add( D( CreateField ),
+	Backend.Add( D( CreateField, 1 ),
 			fblbkd::cId,		// Record in which to create the new field.
 			fblbkd::cObject,	// Column object.
 			fblbkd::cObject,	// Field buffer object to update with.
@@ -429,7 +495,7 @@ void wrpunbound::Inform( fblbkd::backend___ &Backend )
 			fblbkd::cId,	// The created field.
 		fblbkd::cEnd );
 
-	Backend.Add( D( UpdateField ),
+	Backend.Add( D( UpdateField, 1 ),
 			fblbkd::cId,		// Id of the field to update.
 			fblbkd::cObject,	// Field buffer object to update with,
 		fblbkd::cEnd,
@@ -437,13 +503,13 @@ void wrpunbound::Inform( fblbkd::backend___ &Backend )
 			fblbkd::cBoolean,	// 'true' if the record was erased, because the field was empty and the last one.
 		fblbkd::cEnd );
 
-	Backend.Add( D( GetRecords ),
+	Backend.Add( D( GetRecords, 1 ),
 		fblbkd::cEnd,
 			fblbkd::cIds,		// Ids of the record.
 			fblbkd::cStrings,	// First entry of each record.
 		fblbkd::cEnd );
 
-	Backend.Add( D( MoveField ),
+	Backend.Add( D( MoveField, 1 ),
 			fblbkd::cId,		// Id of the record owning the fields to move.
 			fblbkd::cId,		// Id of yhe field to move.
 			fblbkd::cId,		// Id of the field which place is taken by the source field.

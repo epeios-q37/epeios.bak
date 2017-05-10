@@ -91,14 +91,14 @@
   <span>
    <xsl:attribute name="data-xdh-content">
     <xsl:value-of select="../../@id"/>
-    <xsl:text> - </xsl:text>
+    <xsl:text>;</xsl:text>
     <xsl:value-of select="@id"/>
    </xsl:attribute>
-   <xsl:call-template name="DOE">
+   <!--<xsl:call-template name="DOE">
     <xsl:with-param name="Content">
      <xsl:value-of select="."/>
     </xsl:with-param>
-   </xsl:call-template>
+   </xsl:call-template>-->
   </span>
  </xsl:template>
 </xsl:stylesheet>

@@ -52,14 +52,14 @@ void wrpcolumn::dColumn::HANDLE(
 	((f_manager)Module.Functions( Command ))( *this, Backend, Request );
 }
 
-#define DEC( name )	static void exported##name ARGS
+#define DEC( name, version )	static void exported##name##_##version ARGS
 
-DEC( New )
+DEC( New, 1 )
 {
 	Column().Init();
 }
 
-DEC( Fill )
+DEC( Fill, 1 )
 {
 	if ( Request.IdIn() == fbltyp::UndefinedId )
 		qRVct();
@@ -98,7 +98,7 @@ namespace {
 	}
 }
 
-DEC( Update )
+DEC( Update, 1 )
 {
 	const fbltyp::sId &Type = Request.IdIn();
 	const fbltyp::sId8 &Number = Request.Id8In();
@@ -124,25 +124,25 @@ namespace {
 	}
 }
 
-DEC( Get )
+DEC( Get, 1 )
 {
 	Get_( Column(), Request );
 }
 
-#define D( name )	#name, (void *)exported##name
+#define D( name, version )	#name "_" #version, (void *)exported##name##_##version
 
 void wrpcolumn::dColumn::NOTIFY( fblbkd::rModule &Module )
 {
-	Module.Add( D( New ),
+	Module.Add( D( New, 1 ),
 		fblbkd::cEnd,
 		fblbkd::cEnd );
 
-	Module.Add( D( Fill ),
+	Module.Add( D( Fill, 1 ),
 		fblbkd::cId,		// Column id. New column if == 'qNIL'.
 	fblbkd::cEnd,
 	fblbkd::cEnd );
 
-	Module.Add( D( Update ),
+	Module.Add( D( Update, 1 ),
 		fblbkd::cId,		// Field type.
 		fblbkd::cId8,		// Field number. ('ogzclm::eNumber').
 		fblbkd::cString,	// Label.
@@ -150,7 +150,7 @@ void wrpcolumn::dColumn::NOTIFY( fblbkd::rModule &Module )
 	fblbkd::cEnd,
 	fblbkd::cEnd );
 
-	Module.Add( D( Get ),
+	Module.Add( D( Get, 1 ),
 		fblbkd::cEnd,
 			fblbkd::cId,		// Type id.
 			fblbkd::cId8,		// Number id.

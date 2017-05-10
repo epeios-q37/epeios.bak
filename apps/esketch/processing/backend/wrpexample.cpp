@@ -36,9 +36,9 @@ using common::rStuff;
 const char *wrpexample::dMyObject::PREFIX = WRPEXAMPLE_MYOBJECT_PREFIX;
 const char *wrpexample::dMyObject::NAME = WRPEXAMPLE_MYOBJECT_NAME;
 
-#define M( message )	E_CDEF( char *, message, #message )
+#define M( message )	qCDEF( char *, message##_, #message )
 
-namespace message_ {
+namespace {
 	M( TestMessage );
 }
 
@@ -60,9 +60,10 @@ void wrpexample::dMyObject::HANDLE(
 	((f_manager)Module.Functions( Command ))( *this, Backend, Request );
 }
 
-#define DEC( name )	static void exported##name ARGS
 
-DEC( Test )
+#define DEC( name, version )	static void exported##name##_##version ARGS
+
+DEC( Test, 1 )
 {
 qRH
 qRB
@@ -72,7 +73,7 @@ qRT
 qRE
 }
 
-DEC( ToUC )
+DEC( ToUC, 1 )
 {
 qRH
 	str::string String;
@@ -87,17 +88,17 @@ qRT
 qRE
 }
 
-#define D( name )	#name, (void *)exported##name
+#define D( name, version )	#name "_" #version, (void *)exported##name##_##version
 
 void wrpexample::dMyObject::NOTIFY(	fblbkd::rModule &Module	)
 {
-	Module.Add( D( ToUC ),
+	Module.Add( D( ToUC, 1 ),
 			fblbkd::cString,
 		fblbkd::cEnd,
 			fblbkd::cString,
 		fblbkd::cEnd );
 
-	Module.Add( D( Test ),
+	Module.Add( D( Test, 1 ),
 		fblbkd::cEnd,
 		fblbkd::cEnd );
 }

@@ -45,6 +45,7 @@ namespace common {
 		mUnknownEntry,
 		mUnknownFieldNumber,
 		mUnknowFieldType,
+		mInconsistentArguments,
 		m_amount,
 		m_Undefined
 	};

@@ -69,20 +69,72 @@ namespace {
 	class sContent
 	: public xdhcmn::cContent
 	{
-	protected:
-		virtual void XDHCMNGetContent(
+	private:
+		qRMV( core::rSession, S_, Session_ );
+		void Convert_(
 			const str::dString &Tag,
-			str::dString &Content ) override
+			fbltyp::sId &Field,
+			fbltyp::sId &Entry )
 		{
-			Content.Append( Tag );
-			Content.Append( " - Coucou !" );
+			sdr::sRow Error = qNIL;
+
+			Tag.ToNumber( *Field, &Error );
+
+			if ( Error == qNIL )
+				qRGnr();
+
+			Error = Tag.Next( Error );
+
+			if ( Error == qNIL )
+				qRGnr();
+
+			Tag.ToNumber( *Entry, Error );
+		}
+		void Convert_(
+			const str::dStrings &Tags,
+			fbltyp::dIds &Fields,
+			fbltyp::dIds &Entries )
+		{
+			sdr::sRow Row = Tags.First();
+
+			fbltyp::sId Field = fbltyp::UndefinedId, Entry = fbltyp::UndefinedId;
+
+			while ( Row != qNIL ) {
+				Convert_( Tags( Row ), Field, Entry );
+
+				Fields.Append( Field );
+				Entries.Append( Entry );
+
+				Row = Tags.Next( Row );
+			}
+		}
+	protected:
+		virtual void XDHCMNGetContents(
+			const str::dStrings &Tags,
+			str::dStrings &Contents ) override
+		{
+		qRH
+			fbltyp::wIds Fields, Entries;
+		qRB
+			tol::Init( Fields, Entries );
+
+			Convert_( Tags, Fields, Entries );
+
+			S_().GetEntries( Fields, Entries, Contents );
+		qRR
+		qRT
+		qRE
 		}
 	public:
 		void reset( bso::sBool = true )
-		{}
+		{
+			Session_ = NULL;
+		}
 		qCVDTOR( sContent );
-		void Init( void )
-		{}
+		void Init( core::rSession &Session )
+		{
+			Session_ = &Session;
+		}
 	};
 }
 
@@ -96,7 +148,7 @@ void fields::Display(
 
 	SetCasting( Id, Session );
 
-	Content.Init();
+	Content.Init( Session );
 	Session.SetContents( "Root", Content );
 }
 

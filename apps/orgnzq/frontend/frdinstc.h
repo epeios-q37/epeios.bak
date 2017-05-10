@@ -54,11 +54,11 @@ namespace frdinstc {
 		}
 		void NewColumnBuffer( void ) const
 		{
-			ColumnBuffer_.New();
+			ColumnBuffer_.New_1();
 		}
 		void FillColumnBuffer( sColumn Column ) const
 		{
-			ColumnBuffer_.Fill( *Column	);
+			ColumnBuffer_.Fill_1( *Column	);
 		}
 		void UpdateColumnBuffer(
 			sType Type,
@@ -66,7 +66,7 @@ namespace frdinstc {
 			const str::dString &Label,
 			const str::dString &Comment ) const
 		{
-			ColumnBuffer_.Update( *Type, *Number, Label, Comment );
+			ColumnBuffer_.Update_1( *Type, *Number, Label, Comment );
 		}
 		void GetColumnBuffer(
 			sType &Type,
@@ -74,7 +74,7 @@ namespace frdinstc {
 			str::dString &Label,
 			str::dString &Comment ) const
 		{
-			ColumnBuffer_.Get( *Type, *Number, Label, Comment );
+			ColumnBuffer_.Get_1( *Type, *Number, Label, Comment );
 		}
 		bso::sBool UpdateFieldBufferEntry(
 			sEntry Entry,	// if undefined, new entry is created.
@@ -82,30 +82,30 @@ namespace frdinstc {
 		{
 			bso::sBool Removed = false;
 
-			FieldBuffer_.UpdateEntry( *Entry, Content, Removed );
+			FieldBuffer_.UpdateEntry_1( *Entry, Content, Removed );
 
 			return Removed;
 		}
 		void NewFieldBuffer( fbltyp::sObject ColumnBuffer )
 		{
-			FieldBuffer_.New( ColumnBuffer );
+			FieldBuffer_.New_1( ColumnBuffer );
 		}
 		void FillFieldBuffer( sField Field )	// 'Field' must be != 'UndefiendField'. For an new empty field, use 'NewFieldBuffer'.
 		{
-			FieldBuffer_.Fill( *Field );
+			FieldBuffer_.Fill_1( *Field );
 		}
 		void GetFieldBuffer(
 			sType &Type,
 			sNumber &Number,
 			dEntriesI1S &Entries ) const
 		{
-			FieldBuffer_.Get( *Type, *Number, Entries.Ids, Entries.Strings1 );
+			FieldBuffer_.Get_1( *Type, *Number, Entries.Ids, Entries.Strings1 );
 		}
 		void MoveEntry(
 			sEntry Source,
 			sEntry Target ) const
 		{
-			FieldBuffer_.MoveEntry( *Source, *Target );
+			FieldBuffer_.MoveEntry_1( *Source, *Target );
 		}
 	};
 

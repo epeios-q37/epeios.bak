@@ -322,6 +322,17 @@ namespace ogzdtb {
 				return true;
 			}
 		}
+		bso::sBool GetEntries(
+			sURow User,
+			sFRow Field,
+			dData &Entries,
+			qRPD ) const
+		{
+			ogztyp::sRow Type = qNIL;
+			ogzclm::eNumber Number = ogzclm::n_Undefined;
+
+			return GetEntries( User, Field, Entries, Type, Number, qRP );
+		}
 		bso::sBool GetEntries(	// Returns 'false' if 'Record' doesn't exists.
 			sURow User,
 			sRRow Record,

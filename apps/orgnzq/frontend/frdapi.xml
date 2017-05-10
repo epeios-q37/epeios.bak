@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--                    DON'T MODIFY !!! !
-    This document was generated the 14/10/2016 14:22:35
-    using barq V20160801 (http://q37.info/)
-    Build : Oct 13 2016 10:16:24 (Win32;MSC 1800;IA-32)
+    This document was generated the 10/05/2017 11:21:09
+    using barq V20161027 (http://q37.info/)
+    Build : Dec 21 2016 17:42:27 (Win32;MSC 1800;IA-32)
 -->
 <API target="orgnzq" TargetUppercased="ORGNZQ" ProtocolVersion="13" APIVersion="1">
  <Misc>
   <Generator>
    <Name>barq</Name>
-   <Version>20160801</Version>
-   <Build>Oct 13 2016 10:16:24 Win32;MSC 1800;IA-32</Build>
+   <Version>20161027</Version>
+   <Build>Dec 21 2016 17:42:27 Win32;MSC 1800;IA-32</Build>
    <URL>http://q37.info/</URL>
    <Author>
     <Name>Claude SIMON</Name>
@@ -18,19 +18,19 @@
    <Copyright>2016 Claude SIMON (http://q37.info/contact/)</Copyright>
   </Generator>
   <Backend>
-   <Details>orgnzqbkd 20161013 Build Oct 13 2016 09:22:25 - Win32;MSC 1800;IA-32</Details>
+   <Details>orgnzqbkd 20170417 Build May 10 2017 08:18:15 - Win32;MSC 1800;IA-32</Details>
    <Copyright>2015-2016 Claude SIMON (http://q37.info/contact/)</Copyright>
   </Backend>
   <Software>orgnzq V1.0</Software>
-  <Date>14/10/2016</Date>
-  <Time>14:22:35</Time>
+  <Date>10/05/2017</Date>
+  <Time>11:21:09</Time>
  </Misc>
  <Types>
   <Type Object="Master">
    <ID>65535</ID>
    <Prefix Default="" Lower="" Upper=""/>
    <Name Raw="" Underscored="" Mixedcased=""/>
-   <Commands Amount="12">
+   <Commands Amount="13">
     <Command>
      <Name>LoadSetupOfId_1</Name>
      <ID>18</ID>
@@ -56,7 +56,7 @@
      </Parameters>
     </Command>
     <Command>
-     <Name>OGZLogin</Name>
+     <Name>OGZLogin_1</Name>
      <ID>20</ID>
      <Parameters Amount="4" Position="4">
       <In>
@@ -78,7 +78,7 @@
      </Parameters>
     </Command>
     <Command>
-     <Name>OGZGetNumbers</Name>
+     <Name>OGZGetNumbers_1</Name>
      <ID>21</ID>
      <Parameters Amount="3" Position="8">
       <Out>
@@ -94,7 +94,7 @@
      </Parameters>
     </Command>
     <Command>
-     <Name>OGZGetTypes</Name>
+     <Name>OGZGetTypes_1</Name>
      <ID>22</ID>
      <Parameters Amount="3" Position="11">
       <Out>
@@ -110,7 +110,7 @@
      </Parameters>
     </Command>
     <Command>
-     <Name>OGZGetRecordColumns</Name>
+     <Name>OGZGetRecordColumns_1</Name>
      <ID>23</ID>
      <Parameters Amount="7" Position="14">
       <In>
@@ -144,7 +144,7 @@
      </Parameters>
     </Command>
     <Command>
-     <Name>OGZGetRecordFields</Name>
+     <Name>OGZGetRecordFields_1</Name>
      <ID>24</ID>
      <Parameters Amount="6" Position="21">
       <In>
@@ -174,9 +174,31 @@
      </Parameters>
     </Command>
     <Command>
-     <Name>OGZCreateRecord</Name>
+     <Name>OGZGetEntries_1</Name>
      <ID>25</ID>
-     <Parameters Amount="2" Position="27">
+     <Parameters Amount="4" Position="27">
+      <In>
+       <Parameter Discriminator="1" Type="Bunch">
+        <Name>ids</Name>
+        <ID>22</ID>
+       </Parameter>
+       <Parameter Discriminator="2" Type="Bunch">
+        <Name>ids</Name>
+        <ID>22</ID>
+       </Parameter>
+      </In>
+      <Out>
+       <Parameter Discriminator="1" Position="Last" Type="Container">
+        <Name>strings</Name>
+        <ID>26</ID>
+       </Parameter>
+      </Out>
+     </Parameters>
+    </Command>
+    <Command>
+     <Name>OGZCreateRecord_1</Name>
+     <ID>26</ID>
+     <Parameters Amount="2" Position="31">
       <Out>
        <Parameter Discriminator="1" Position="Last" Type="Static">
         <Name>id</Name>
@@ -186,9 +208,9 @@
      </Parameters>
     </Command>
     <Command>
-     <Name>OGZCreateField</Name>
-     <ID>26</ID>
-     <Parameters Amount="5" Position="29">
+     <Name>OGZCreateField_1</Name>
+     <ID>27</ID>
+     <Parameters Amount="5" Position="33">
       <In>
        <Parameter Discriminator="1" Type="Static">
         <Name>id</Name>
@@ -212,9 +234,9 @@
      </Parameters>
     </Command>
     <Command>
-     <Name>OGZUpdateField</Name>
-     <ID>27</ID>
-     <Parameters Amount="5" Position="34">
+     <Name>OGZUpdateField_1</Name>
+     <ID>28</ID>
+     <Parameters Amount="5" Position="38">
       <In>
        <Parameter Discriminator="1" Type="Static">
         <Name>id</Name>
@@ -238,9 +260,9 @@
      </Parameters>
     </Command>
     <Command>
-     <Name>OGZGetRecords</Name>
-     <ID>28</ID>
-     <Parameters Amount="3" Position="39">
+     <Name>OGZGetRecords_1</Name>
+     <ID>29</ID>
+     <Parameters Amount="3" Position="43">
       <Out>
        <Parameter Discriminator="1" Type="Bunch">
         <Name>ids</Name>
@@ -254,9 +276,9 @@
      </Parameters>
     </Command>
     <Command>
-     <Name>OGZMoveField</Name>
-     <ID>29</ID>
-     <Parameters Amount="4" Position="42">
+     <Name>OGZMoveField_1</Name>
+     <ID>30</ID>
+     <Parameters Amount="4" Position="46">
       <In>
        <Parameter Discriminator="1" Type="Static">
         <Name>id</Name>
@@ -281,12 +303,12 @@
    <Name Raw="Column" Underscored="Column" Mixedcased="Column"/>
    <Commands Amount="4">
     <Command>
-     <Name>New</Name>
+     <Name>New_1</Name>
      <ID>0</ID>
      <Parameters Amount="1" Position="0"/>
     </Command>
     <Command>
-     <Name>Fill</Name>
+     <Name>Fill_1</Name>
      <ID>1</ID>
      <Parameters Amount="2" Position="1">
       <In>
@@ -298,7 +320,7 @@
      </Parameters>
     </Command>
     <Command>
-     <Name>Update</Name>
+     <Name>Update_1</Name>
      <ID>2</ID>
      <Parameters Amount="5" Position="3">
       <In>
@@ -322,7 +344,7 @@
      </Parameters>
     </Command>
     <Command>
-     <Name>Get</Name>
+     <Name>Get_1</Name>
      <ID>3</ID>
      <Parameters Amount="5" Position="8">
       <Out>
@@ -353,7 +375,7 @@
    <Name Raw="Field" Underscored="Field" Mixedcased="Field"/>
    <Commands Amount="5">
     <Command>
-     <Name>New</Name>
+     <Name>New_1</Name>
      <ID>0</ID>
      <Parameters Amount="2" Position="0">
       <In>
@@ -365,7 +387,7 @@
      </Parameters>
     </Command>
     <Command>
-     <Name>Fill</Name>
+     <Name>Fill_1</Name>
      <ID>1</ID>
      <Parameters Amount="2" Position="2">
       <In>
@@ -377,7 +399,7 @@
      </Parameters>
     </Command>
     <Command>
-     <Name>Get</Name>
+     <Name>Get_1</Name>
      <ID>2</ID>
      <Parameters Amount="5" Position="4">
       <Out>
@@ -401,7 +423,7 @@
      </Parameters>
     </Command>
     <Command>
-     <Name>UpdateEntry</Name>
+     <Name>UpdateEntry_1</Name>
      <ID>3</ID>
      <Parameters Amount="4" Position="9">
       <In>
@@ -423,7 +445,7 @@
      </Parameters>
     </Command>
     <Command>
-     <Name>MoveEntry</Name>
+     <Name>MoveEntry_1</Name>
      <ID>4</ID>
      <Parameters Amount="3" Position="13">
       <In>

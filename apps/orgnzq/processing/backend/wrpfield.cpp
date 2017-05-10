@@ -45,9 +45,9 @@ void wrpfield::dField::HANDLE(
 	((f_manager)Module.Functions( Command ))( *this, Backend, Request );
 }
 
-#define DEC( name )	static void exported##name ARGS
+#define DEC( name, version )	static void exported##name##_##version ARGS
 
-DEC( New )
+DEC( New, 1 )
 {
 	BACKEND;
 	DATABASE;
@@ -64,7 +64,7 @@ DEC( New )
 	Field.Number() = Column.Number();
 }
 
-DEC( Fill )
+DEC( Fill, 1 )
 {
 	USER;
 	DATABASE;
@@ -82,7 +82,7 @@ DEC( Fill )
 		REPORT( NoSuchField );
 }
 
-DEC( UpdateEntry )
+DEC( UpdateEntry, 1 )
 {
 	sdr::sRow Row = *Request.IdIn();	// If == 'qNIL', new entry is created, unless for a mono field, where the entry is created/updated.
 	const str::dString &Entry = Request.StringIn();
@@ -152,7 +152,7 @@ namespace {
 	}
 }
 
-DEC( Get )
+DEC( Get, 1 )
 {
 	Request.IdOut() = *Field.Type();
 	Request.Id8Out() = Field.Number();
@@ -179,7 +179,7 @@ namespace{
 	}
 }
 
-DEC( Update )
+DEC( Update, 1 )
 {
 	sdr::sRow Row = *Request.IdIn();
 	const str::dString &Entry = Request.StringIn();
@@ -187,7 +187,7 @@ DEC( Update )
 	Update_( Row, Entry, Field );
 }
 
-DEC( MoveEntry )
+DEC( MoveEntry, 1 )
 {
 qRH
 	sdr::sRow Source = qNIL, Target= qNIL;
@@ -228,21 +228,21 @@ qRT
 qRE
 }
 
-#define D( name )	#name, (void *)exported##name
+#define D( name, version )	#name "_" #version, (void *)exported##name##_##version
 
 void wrpfield::dField::NOTIFY( fblbkd::rModule &Module )
 {
-	Module.Add( D( New ),
+	Module.Add( D( New, 1 ),
 			fblbkd::cObject,	// Column buffer id.
 		fblbkd::cEnd,
 		fblbkd::cEnd );
 
-	Module.Add( D( Fill ),
+	Module.Add( D( Fill, 1 ),
 			fblbkd::cId,		// Field id.
 		fblbkd::cEnd,
 		fblbkd::cEnd );
 
-	Module.Add( D( Get ),
+	Module.Add( D( Get, 1 ),
 		fblbkd::cEnd,
 			fblbkd::cId,		// Type.
 			fblbkd::cId8,		// Number.
@@ -250,14 +250,14 @@ void wrpfield::dField::NOTIFY( fblbkd::rModule &Module )
 			fblbkd::cStrings,	// Entries.	
 		fblbkd::cEnd );
 
-	Module.Add( D( UpdateEntry ),
+	Module.Add( D( UpdateEntry, 1 ),
 			fblbkd::cId,		// Id of entry to update ; if == 'qNIL', a new entry is created, unless it's a mono field, in which case the entry is updated/created.
 			fblbkd::cString,	// Then entry value.		
 		fblbkd::cEnd,
-		fblbkd::cBoolean,		// 'true' if entry was removed.
+			fblbkd::cBoolean,		// 'true' if entry was removed.
 		fblbkd::cEnd );
 
-	Module.Add( D( MoveEntry ),
+	Module.Add( D( MoveEntry, 1 ),
 			fblbkd::cId,	// Position of the entry to move.
 			fblbkd::cId,	// Position where to move the entry.
 		fblbkd::cEnd,
