@@ -17,6 +17,8 @@
 	along with xppq. If not, see <http://www.gnu.org/licenses/>.
 */
 
+"use strict"
+
 var xppq = null;
 
 if ( process.env.EPEIOS_SRC ) {
@@ -25,7 +27,7 @@ if ( process.env.EPEIOS_SRC ) {
   addonPath = '/build/Debug/';
  else
   addonPath = '/build/Release/';
- xppq = require( __dirname + addonPath + 'xppqnjs.node');
+  xppq = require( __dirname + addonPath + 'xppqnjs.node');
 } else {
  const binary = require( 'node-pre-gyp' );
  const path = require( 'path' );

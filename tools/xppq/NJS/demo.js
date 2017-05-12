@@ -1,5 +1,7 @@
 // You can submit an additional parameter of value from '0' to '4' as id of the test to launch.
 
+"use strict"
+
 const fs = require( 'fs');
 const stream = require( 'stream');
 const xppq = require( __dirname + '/xppq.js');
@@ -40,7 +42,8 @@ var arg = process.argv[2];
 if ( arg != undefined )
 	test = Number( arg );
 
-console.log( xppq.info() );
+// console.log( xppq.info() );
+console.log( xppq.extendedInfo() );
 
 const file = __dirname + '/demo.xml';
 

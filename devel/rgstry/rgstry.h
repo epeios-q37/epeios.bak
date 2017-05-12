@@ -969,7 +969,7 @@ namespace rgstry {
 			str::string_ &Value,
 			sdr::row__ *PathErrorRow = NULL ) const	// Nota : ne met 'Missing' à 'true' que lorque 'Path' n'existe pas. Si 'Missing' est à 'true', aucune action n'est réalisée.
 		{
-			return GetValue( Entry, Row, Missing, Value, PathErrorRow );
+			return GetValue( Entry, Row, Value, Missing, PathErrorRow );
 		}
 		bso::bool__ GetValues(
 			const path_ &Path,

@@ -2,6 +2,12 @@
 
 Fast *XML* parser and preprocessor addon for *Node.js*.
 
+## Status
+*GNU/Linux* & *OS X* : [![Travis CI](https://travis-ci.org/epeios-q37/xppq-node.png)](https://travis-ci.org/epeios-q37/xppq-node)
+ 
+*Windows* : [![AppVeyor](http://ci.appveyor.com/api/projects/status/github/epeios-q37/xppq-node)](http://ci.appveyor.com/project/epeios-q37/xppq-node)
+
+
 ## Install
 
 ```sh

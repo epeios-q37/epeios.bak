@@ -1,5 +1,9 @@
 CHANGELOG for the 'Epeios' framework.
 
+2017-05-12 :
+- RGSTRY :
+	- Fixing infinite auto-recursion bug.
+
 2017-05-05 :
 - SCLXDHTML, XDHCMN, XDHDWS, XDHUJP, XDHUJR, XDHUJS :
 	- 'content' related features are renamed to 'value', to avoid confusion of the new 'content' handling.
