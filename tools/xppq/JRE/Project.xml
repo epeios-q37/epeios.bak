@@ -40,6 +40,7 @@
  </Modules>
  <Files>
   <File>demo.xml</File>
+  <File>xppq.java</File>
  </Files>
  <CI>
   <Dir>xppq-java</Dir>
