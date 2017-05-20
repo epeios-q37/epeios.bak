@@ -39,6 +39,7 @@
   </Modules>
  </Modules>
  <Files>
+  <File>README.md</File>
   <File>esketch.java</File>
  </Files>
  <CI>

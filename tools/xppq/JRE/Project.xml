@@ -39,6 +39,7 @@
   </Modules>
  </Modules>
  <Files>
+  <File>README.md</File>
   <File>demo.xml</File>
   <File>xppq.java</File>
  </Files>
