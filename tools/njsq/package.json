@@ -1,0 +1,47 @@
+{
+  "name": "njsq",
+  "version": "2017.5.26",
+  "author": "Claude SIMON (http://q37.info/contact/)",
+  "description": "Node.js addon template.",
+  "main": "njsq.js",
+  "engines": {
+    "node": ">=4"
+  },
+  "binary": {
+    "module_name": "njsq",
+    "module_path": "./lib/{platform}-{arch}/",
+    "remote_path": "./epeios-q37/njsq-node/releases/download/{version}/",
+    "package_name": "{module_name}-v{version}-{node_abi}-{platform}-{arch}.tar.gz",
+    "host": "https://github.com"
+  },
+  "dependencies": {
+    "node-pre-gyp": "0.6.x"
+  },
+  "devDependencies": {
+    "aws-sdk": "2.x"
+  },
+  "scripts": {
+    "prepublish": "npm ls",
+    "preinstall": "npm install node-pre-gyp",
+    "install": "node-pre-gyp install --fallback-to-build",
+    "test": "node demo.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/epeios-q37/njsq-node.git"
+  },
+  "keywords": [
+    "addon",
+    "XML",
+    "parser",
+    "preprocessor",
+    "xpp",
+    "q37",
+    "epeios"
+  ],
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/epeios-q37/njsq-node/issues"
+  },
+  "homepage": "https://github.com/epeios-q37/njsq-node#readme"
+}

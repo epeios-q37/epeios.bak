@@ -509,6 +509,7 @@ namespace v8q {
 		{
 			return Core()->WriteUtf8( Buffer );
 		}
+		void Get( str::dString &String );
 	};
 
 	typedef v8q::sCore_<v8::External> sExternal_;

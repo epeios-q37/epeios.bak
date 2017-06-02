@@ -77,8 +77,8 @@ namespace flx {
 	template < typename bunch_, typename so__> class bunch_oflow___;
 	typedef bunch_oflow___<str::string_, bso::char__> rStringOFlow;
 
-	class string_text_oflow__;
-	typedef string_text_oflow__ fStrinfTOflow;
+	class string_text_oflow___;
+	typedef string_text_oflow___ rStringTOflow;
 
 	using flw::Copy;
 }

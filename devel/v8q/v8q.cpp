@@ -22,6 +22,7 @@
 #include "v8q.h"
 
 #include "ntvstr.h"
+#include "flx.h"
 
 using namespace v8q;
 
@@ -44,6 +45,19 @@ v8::Isolate *v8q::GetGlobalIsolate( void )
 		return v8::Isolate::GetCurrent();
 	else
 		return Isolate_;
+}
+
+void v8q::sString::Get( str::dString &String )
+{
+qRH
+	flx::rStringTOflow Flow;
+qRB
+	Flow.Init( String );
+
+	Flow << *this;
+qRR
+qRT
+qRE
 }
 
 txf::text_oflow__ &operator <<(

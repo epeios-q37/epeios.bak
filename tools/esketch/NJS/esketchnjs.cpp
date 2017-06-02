@@ -1,69 +1,67 @@
-// hello.cc
-#include <node.h>
+/*
+	Copyright (C) 2007-2017 Claude SIMON (http://q37.info/contact/).
 
-#include "cio.h"
-#include "scln.h"
-#include "v8qnjs.h"
+	This file is part of esketch.
+
+	esketch is free software: you can redistribute it and/or
+	modify it under the terms of the GNU Affero General Public License as
+	published by the Free Software Foundation, either version 3 of the
+	License, or (at your option) any later version.
+
+	esketch is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+	Affero General Public License for more details.
+
+	You should have received a copy of the GNU Affero General Public License
+	along with esketch. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#include "njsdws.h"
+
+#include "sclmisc.h"
+
+# define NAME_MC			"eSketchNJS"
+# define NAME_LC			"esketchnjs"
+# define NAME_UC			"ESKETCHNJS"
+# define WEBSITE_URL		"http://q37.info/"
+# define AUTHOR_NAME		"Claude SIMON"
+# define AUTHOR_CONTACT		"http://q37.info/contact/"
+# define OWNER_NAME			"Claude SIMON"
+# define OWNER_CONTACT		"http://q37.info/contact/"
+# define COPYRIGHT			COPYRIGHT_YEARS " " OWNER_NAME " (" OWNER_CONTACT ")"	
 
 namespace {
-	void Test0_( const v8q::sArguments &Arguments )
+	void ReturnArgument_( njsdws::sArguments &Arguments )
 	{
-		v8qnjs::sRStream Stream;
-		v8q::sFunction Test;
+	qRH
+		str::wString Input, Text;
+	qRB
+		Input.Init();
+		Arguments.Get( Input );
 
-		tol::Init( Stream, Test );
-		Arguments.Get( Stream, Test );
-  
-		Stream.OnData( Test );
+		Text.Init();
+		sclmisc::GetBaseTranslation( "Argument", Text, Input );
+
+		Arguments.SetReturnValue( Text );
+	qRR
+	qRT
+	qRE
 	}
 
-	void Test1_( const v8q::sArguments &Arguments )
-	{
-		v8qnjs::sRStream Stream;
-
-		Stream.Init();
-		Arguments.Get( Stream );
-  
-		v8q::sFunction Function;
-		Function.Init( v8q::Execute( "function display( chunk ) { process.stdout.write( chunk.toString().toUpperCase() ); } function getFunc() { return display; } try { getFunc(); } catch(err) { console.error( err.message );}" ) );
-		Stream.OnData( Function );
-	}
-
-	namespace {
-		void DisplayChunk_( const v8q::sFunctionInfos &Infos )
-		{
-		qRFH
-			v8qnjs::sBuffer Buffer;
-		qRFB
-			v8q::Get( Infos, Buffer );
-
-			cio::COut << Buffer;
-		qRFR
-		qRFT
-		qRFE( scln::ErrFinal() )
-		}
-	}
-	
-	void Test2_( const v8q::sArguments &Arguments )
-	{
-		v8qnjs::sRStream Stream;
-
-		Stream.Init();
-		Arguments.Get( Stream );
-  
-		v8q::sFunction Function;
-		Function.Init( DisplayChunk_ );
-		Stream.OnData( Function );
-	}
 }
 
-void scln::SCLNRegister( scln::sRegistrar &Registrar )
+/*
+
+void sclnjs::SCLNJSRegister( sclnjs::sRegistrar &Registrar )
 {
-	cio::Initialize(cio::GetConsoleSet() );
-	Registrar.Register( Test0_ );
-	Registrar.Register( Test1_ );
-	Registrar.Register( Test2_ );
+	Registrar.Register( ReturnArgument_ );
 }
 
-SCLN_MODULE( xppq );
+SCLNJS_MODULE( esketch );
 
+*/
+
+const char *sclmisc::SCLMISCTargetName = NAME_LC;
+const char *sclmisc::SCLMISCProductName = NAME_MC;
+// const char *sclnjs::SCLNJSProductVersion = VERSION;

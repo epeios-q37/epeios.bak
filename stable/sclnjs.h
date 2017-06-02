@@ -91,6 +91,10 @@ namespace sclnjs {
 		{
 			Get_( 1, A_(), Items... );
 		}
+		template <typename item> void SetReturnValue( const item &Item ) const
+		{
+			A_().GetReturnValue().Set( Item.Core() );
+		}
 		void This( v8q::sObject &This )
 		{
 			This.Init( A_().This() );
