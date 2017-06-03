@@ -31,7 +31,10 @@
 # include "err.h"
 # include "tol.h"
 
+# define NJSCMN_PROVIDE_FUNCTION_NAME		NJSCMNProvide
+
 namespace njscmn {
+
 	qENUM( Type )
 	{
 		tString,
@@ -64,6 +67,30 @@ namespace njscmn {
 			return NJSCMNSetReturnValue( Type, Value );
 		}
 	};
+
+	typedef void( *sFunction )( const cArguments & );
+
+	class cUpstream {
+	protected:
+		virtual void NJSCMNRegister( sFunction Function ) = 0;
+	public:
+		qCALLBACK( Upstream );
+		void Register( sFunction Function )
+		{
+			return NJSCMNRegister( Function );
+		}
+	};
+
+	class sSharedData {
+	public:
+		void Init( void )
+		{}
+	};
+
+	typedef  void ( fProvide )(
+		cUpstream *Callback,
+		sSharedData *Data );
+
 }
 
 #endif

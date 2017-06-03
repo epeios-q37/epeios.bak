@@ -96,4 +96,12 @@ namespace dlbrry {
 	}
 }
 
+/*************/
+/**** NEW ****/
+/*************/
+
+namespace dlbrry {
+	typedef dynamic_library___ rDynamicLibrary;
+}
+
 #endif

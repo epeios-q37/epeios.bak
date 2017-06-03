@@ -54,6 +54,12 @@ namespace {
 		COut << txf::pad << "Build : " __DATE__ " " __TIME__ << " (" << cpe::GetDescription() << ')' << txf::nl;
 	}
 
+	void Register_(
+		v8::Local<v8::Object> Exports,
+		v8::Local<v8::Value> Module,
+		void* priv );
+
+
 	typedef njscmn::cArguments cArguments_;
 
 	inline void GetString_(
@@ -117,12 +123,64 @@ namespace {
 		}
 	};
 
+	extern "C" typedef njscmn::fProvide fProvide_;
+
+	dlbrry::rDynamicLibrary Library_;
+
+	bso::bool__ Provide_(
+		const str::string_ &AddonFilename,
+		njscmn::cUpstream &Callback )
+	{
+		bso::bool__ Success = false;
+	qRH
+		njscmn::sSharedData Data;
+		fnm::name___ Location;
+		TOL_CBUFFER___ Buffer;
+	qRB
+		Location.Init();
+		Data.Init();
+
+		Library_.Init( AddonFilename );
+
+		fProvide_ *Provide = dlbrry::GetFunction<fProvide_ *>( E_STRING( NJSCMN_PROVIDE_FUNCTION_NAME ), Library_ );
+
+		if ( Provide == NULL )
+			qRReturn;
+
+	   Provide( &Callback, &Data );
+
+		Success = true;
+	qRR
+	qRT
+	qRE
+		return Success;
+	}
+
+	typedef njscmn::cUpstream cUpstream_;
+
+	class sUpstream_
+	: public cUpstream_
+	{
+	public:
+		void Init( void )
+		{}
+	} Upstream_;
+
 	void Launch_( void )
 	{
-		sArguments Arguments;
+	qRH
+		str::wString AddonFilename;
+	qRB
+		AddonFilename.Init();
+		sclmisc::MGetValue( registry::parameter::AddonFilename, AddonFilename );
 
-
+		Upstream_.Init();
+		Provide_( AddonFilename, Upstream_ );
+	qRR
+	qRT
+	qRE
 	}
+
 }
 
 #define C( name )\

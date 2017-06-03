@@ -229,7 +229,7 @@ endif
 #########################
 
 ifeq ("$(os)", "$(MinGW)")
-
+ 
 	co += -DMSYS -std=gnu++11 -DUNICODE
 	lo += -municode
 	
@@ -260,7 +260,7 @@ endif
 #############################
 
 ifeq ("$(os)","$(GNULinux)")
-
+ 
 	co += -std=gnu++11 -DUNICODE -D_FILE_OFFSET_BITS=64
 	
 	mods += $(pmods)
@@ -289,7 +289,7 @@ endif
 #########################
 
 ifeq ("$(os)","$(Linux)")
-
+ 
 	co += -std=gnu++11 -DUNICODE -D_FILE_OFFSET_BITS=64
 	
 	mods += $(pmods)
@@ -316,7 +316,7 @@ endif
 ##########################
 
 ifeq ("$(os)","$(MacOS)")
-
+ 
 	co += -std=gnu++11 -DUNICODE -D_FILE_OFFSET_BITS=64
 	
 	mods += $(pmods)
@@ -338,12 +338,13 @@ endif
 ##########################
 		
 all: $(binary)
+
 	rm -rf *.o
 ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20170406"\"
+copt += -DVERSION=\""20170522"\"
 copt += -DCOPYRIGHT_YEARS=\""2016"\"
 copt += -DIDENTIFIER=\""745b5fbb-030c-4ada-b516-bb3b246f711a"\"
 
