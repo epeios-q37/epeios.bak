@@ -39,7 +39,10 @@
     <Module>xpp</Module>
 			</Modules>
 		</Modules>
+  <Module>common</Module>
+  <Module>registrar</Module>
   <Module>registry</Module>
+  <Module>wrapper</Module>
 	</Modules>
 	<SourceDirs>
 	</SourceDirs>

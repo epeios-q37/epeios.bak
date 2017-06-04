@@ -17,9 +17,8 @@
 	along with esketch. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "njsdws.h"
-
 #include "sclmisc.h"
+#include "sclnjs.h"
 
 # define NAME_MC			"eSketchNJS"
 # define NAME_LC			"esketchnjs"
@@ -32,7 +31,7 @@
 # define COPYRIGHT			COPYRIGHT_YEARS " " OWNER_NAME " (" OWNER_CONTACT ")"	
 
 namespace {
-	void ReturnArgument_( njsdws::sArguments &Arguments )
+	void ReturnArgument_( sclnjs::sArguments &Arguments )
 	{
 	qRH
 		str::wString Input, Text;
@@ -51,16 +50,10 @@ namespace {
 
 }
 
-/*
-
 void sclnjs::SCLNJSRegister( sclnjs::sRegistrar &Registrar )
 {
 	Registrar.Register( ReturnArgument_ );
 }
-
-SCLNJS_MODULE( esketch );
-
-*/
 
 const char *sclmisc::SCLMISCTargetName = NAME_LC;
 const char *sclmisc::SCLMISCProductName = NAME_MC;

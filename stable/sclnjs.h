@@ -28,55 +28,58 @@
 #  define SCLNJS_DBG
 # endif
 
-// Note to developer : include 'h:\hg\NJSIncludeDirectories.props' in the '.vcxproj'.
-# include <node.h>
+# include "njs.h"
 
 # include "err.h"
-# include "v8q.h"
+# include "str.h"
 
 namespace sclnjs {
-	void ErrFinal( v8::Isolate *Isolate = NULL );
-	
-	void Register_(
-		v8::Local<v8::Object> Exports,
-		v8::Local<v8::Value> Module,
-		void* priv );
+	typedef njs::cArguments cArguments_;
 
-	template <typename item> inline void Get_(
+	inline void Get_(
 		int Index,
-		const v8::FunctionCallbackInfo<v8::Value> Infos,
-		item &Item )
-	{
-		if ( Index >= Infos.Length()  )
-			qRFwk();
+		cArguments_ &Arguments )
+	{}
 
-		Item.Init( Infos[Index] );
+	inline void Get_(
+		int Index,
+		cArguments_ &Arguments,
+		str::dString &Value )
+	{
+		return Arguments.GetValue( Index, njs::tString, &Value );
+	}
+
+	inline void Get_(
+		int Index,
+		cArguments_ &Arguments,
+		str::wString &Value )
+	{
+		return Get_( Index, Arguments, ( str::dString )Value );
 	}
 
 	template <typename item, typename ...items> inline void Get_(
 		int Index,
-		const v8::FunctionCallbackInfo<v8::Value> Infos,
+		cArguments_ &Arguments,
 		item &Item,
 		items &...Items )
 	{
-		Get_( Index, Infos, Item );
+		Get_( Index, Arguments, Item );
 
-		Get_( Index+1, Infos, Items... );
+		Get_( Index + 1, Arguments, Items... );
 	}
-
 
 	class sArguments {
 	private:
-		qRMV( const v8::FunctionCallbackInfo<v8::Value>, A_, Arguments_ );
+		qRMV( cArguments_, C_, Callback_ );
 	public:
 		void reset( bso::sBool P = true )
 		{
-			Arguments_ = NULL;
+			Callback_ = NULL;
 		}
 		qCDTOR( sArguments );
-		void Init( const v8::FunctionCallbackInfo<v8::Value> &Arguments )
+		void Init( cArguments_ &Callback )
 		{
-			Arguments_ = &Arguments;
+			Callback_ = &Callback;
 		}
 		template <typename item> void Get(
 			bso::sUInt Index,
@@ -85,52 +88,44 @@ namespace sclnjs {
 			if ( Index == 0 )
 				qRFwk();
 
-			Get_( Index, A_(), Item );
+			Get_( Index, C_(), Item );
 		}
 		template <typename ...items> inline void Get( items &...Items ) const
 		{
-			Get_( 1, A_(), Items... );
+			Get_( 1, C_(), Items... );
 		}
-		template <typename item> void SetReturnValue( const item &Item ) const
+		void SetReturnValue( const str::dString &Value )
 		{
-			A_().GetReturnValue().Set( Item.Core() );
-		}
-		void This( v8q::sObject &This )
-		{
-			This.Init( A_().This() );
-		}
-		v8::Isolate *Isolate( void ) const
-		{
-			return A_().GetIsolate();
+			C_().SetReturnValue( njs::tString, &Value );
 		}
 	};
 
-	typedef void (* sFunction_)( const sArguments &);
+	typedef void (fFunction)( sArguments &Arguments );
 
 	class sRegistrar
 	{
 	private:
-		qRMV( v8::Local<v8::Object>, E_, Exports_ );
+		qRMV( njs::cRegistrar, R_, Registrar_ );
 	public:
-		void reset( bso::sBool P = true )
+		void reset( bso::sBool = true )
 		{
-			tol::reset( P, Exports_ );
+			Registrar_ = NULL;
 		}
-		qCDTOR( sRegistrar )
-		void Init( v8::Local<v8::Object> &Exports )
+		qCDTOR( sRegistrar );
+		void Init( njs::cRegistrar &Registrar )
 		{
-			Exports_ = &Exports;
+			Registrar_ = &Registrar;
 		}
-		void Register( sFunction_ Function );
-		void Register(
-			const char *Name,
-			v8::FunctionCallback Function );
+		void Register( fFunction Function )
+		{
+			R_().Register( &Function );
+		}
 	};
 
 	void SCLNJSRegister( sRegistrar &Registrar );	// To overload by user.
+
 	extern const char *SCLNJSProductVersion;	// To define by user.
 }
 
-# define SCLNJS_MODULE( name ) NODE_MODULE( name, sclnjs::Register_ );
 
 #endif

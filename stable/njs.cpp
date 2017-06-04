@@ -17,9 +17,9 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define NJSDWS_COMPILATION_
+#define NJS_COMPILATION_
 
-#include "njsdws.h"
+#include "njs.h"
 
-using namespace njsdws;
+using namespace njs;
 

@@ -66,8 +66,8 @@ const char *sclxdhtml::GetLauncher( void )
 #ifdef CPE_S_WIN
 # define FUNCTION_SPEC __declspec(dllexport)
 #else
-#define FUNCTION_SPEC
-# endif
+# define FUNCTION_SPEC
+#endif
 
 // Bien que dfinit dans un '.cpp', et propre  ce '.cpp', VC++ se mlange les pinceaux avec le 'callback__' dfinit dans 'scllocale.cpp', d'o le 'namespace'.
 namespace {

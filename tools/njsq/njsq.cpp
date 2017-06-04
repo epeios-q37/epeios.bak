@@ -17,9 +17,10 @@
     along with 'NJSq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "registrar.h"
 #include "registry.h"
+#include "wrapper.h"
 
-#include "njscmn.h"
 #include "nodeq.h"
 
 #include "scltool.h"
@@ -47,167 +48,197 @@ using cio::CIn;
 # define COPYRIGHT			COPYRIGHT_YEARS " " OWNER_NAME " (" OWNER_CONTACT ")"	
 
 namespace {
-	void PrintHeader_( void )
-	{
-		COut << NAME_MC " V" VERSION << " (" WEBSITE_URL ")" << txf::nl;
-		COut << "Copyright (C) " COPYRIGHT << txf::nl;
-		COut << txf::pad << "Build : " __DATE__ " " __TIME__ << " (" << cpe::GetDescription() << ')' << txf::nl;
-	}
-
-	void Register_(
-		v8::Local<v8::Object> Exports,
-		v8::Local<v8::Value> Module,
-		void* priv );
-
-
-	typedef njscmn::cArguments cArguments_;
-
-	inline void GetString_(
-		int Index,
-		const v8::FunctionCallbackInfo<v8::Value> &Info,
-		str::dString &Value )
-	{
-	qRH
-		v8q::sString String;
-	qRB
-		String.Init( Info[Index] );
-
-		String.Get( Value );
-	qRR
-	qRT
-	qRE
-	}
-
-	void SetReturnValue_(
-		const v8::FunctionCallbackInfo<v8::Value> &Info,
-		const str::dString &Value )
-	{
-		Info.GetReturnValue().Set( v8q::sString( Value ).Core() );
-	}
-
-	class sArguments
-	: public cArguments_
-	{
-	private:
-		qRMV( const v8::FunctionCallbackInfo<v8::Value>, A_, Arguments_ );
-	protected:
-		virtual void NJSCMNGetValue(
-			int Index,
-			njscmn::eType Type,
-			void *Value ) override
+	namespace {
+		void GetExtendedInfo_( str::dString &Info )
 		{
-			if ( Index >= A_().Length() )
-				qRGnr();
+			qRH
+				flx::rStringOFlow BaseFlow;
+			txf::sOFlow Flow;
+			qRB
+				BaseFlow.Init( Info );
+			Flow.Init( BaseFlow );
 
-			switch ( Type ) {
-			case njscmn::tString:
-				GetString_( Index, A_(), *(str::dString * )Value );
-				break;
-			default:
-				qRGnr();
-				break;
-			}
+			Flow << NAME_MC << " v" << VERSION << " - Node v" NODE_VERSION_STRING " ABI v" NODE_STRINGIFY( NODE_MODULE_VERSION ) << txf::nl
+				<< txf::pad << "Build : " __DATE__ " " __TIME__ " (" << cpe::GetDescription() << ')';
+			qRR
+				qRT
+				qRE
 		}
-		virtual void NJSCMNSetReturnValue(
-			njscmn::eType Type,
-			const void *Value ) override
+		void GetInfo_( str::dString &Info )
 		{
-			switch ( Type ) {
-			case njscmn::tString:
-				SetReturnValue_( A_(), *( const str::dString * )Value );
-				break;
-			default:
-				qRGnr();
-				break;
-			}
+			qRH
+				flx::rStringOFlow BaseFlow;
+			txf::sOFlow Flow;
+			qRB
+				BaseFlow.Init( Info );
+			Flow.Init( BaseFlow );
+
+			Flow << NAME_MC << " v" << VERSION << " - Build : " __DATE__ " " __TIME__;
+			qRR
+				qRT
+				qRE
 		}
-	};
-
-	extern "C" typedef njscmn::fProvide fProvide_;
-
-	dlbrry::rDynamicLibrary Library_;
-
-	bso::bool__ Provide_(
-		const str::string_ &AddonFilename,
-		njscmn::cUpstream &Callback )
-	{
-		bso::bool__ Success = false;
-	qRH
-		njscmn::sSharedData Data;
-		fnm::name___ Location;
-		TOL_CBUFFER___ Buffer;
-	qRB
-		Location.Init();
-		Data.Init();
-
-		Library_.Init( AddonFilename );
-
-		fProvide_ *Provide = dlbrry::GetFunction<fProvide_ *>( E_STRING( NJSCMN_PROVIDE_FUNCTION_NAME ), Library_ );
-
-		if ( Provide == NULL )
-			qRReturn;
-
-	   Provide( &Callback, &Data );
-
-		Success = true;
-	qRR
-	qRT
-	qRE
-		return Success;
 	}
 
-	typedef njscmn::cUpstream cUpstream_;
-
-	class sUpstream_
-	: public cUpstream_
+	void GetExtendedInfo_( const v8::FunctionCallbackInfo<v8::Value>& Args )
 	{
-	public:
-		void Init( void )
-		{}
-	} Upstream_;
+		qRH
+			str::wString Info;
+		qRB
+			Info.Init();
 
-	void Launch_( void )
-	{
-	qRH
-		str::wString AddonFilename;
-	qRB
-		AddonFilename.Init();
-		sclmisc::MGetValue( registry::parameter::AddonFilename, AddonFilename );
+		GetExtendedInfo_( Info );
 
-		Upstream_.Init();
-		Provide_( AddonFilename, Upstream_ );
-	qRR
-	qRT
-	qRE
+		Args.GetReturnValue().Set( v8q::sString( Info ).Core() );
+		qRR
+			qRT
+			qRE
 	}
 
+	void GetInfo_( const v8::FunctionCallbackInfo<v8::Value>& Args )
+	{
+		qRH
+			str::wString Info;
+		qRB
+			Info.Init();
+
+		GetInfo_( Info );
+
+		Args.GetReturnValue().Set( v8q::sString( Info ).Core() );
+		qRR
+			qRT
+			qRE
+	}
 }
 
-#define C( name )\
-	else if ( Command == #name )\
-		name##_()
+namespace {
+	void GetParentModuleFilename_(
+		v8::Local<v8::Value> Module,
+		str::dString &Filename )
+	{
+		qRH
+			char *Buffer = NULL;
+		v8q::sString String;
+		qRB
+			String.Init( v8q::sObject( v8q::sObject( Module ).Get( "parent" ) ).Get( "filename" ) );
+		Buffer = (char *)malloc( String.Size() + 1 );
 
-int scltool::SCLTOOLMain(
-	const str::dString &Command,
-	const scltool::fOddities &Oddities )
+		if ( Buffer == NULL )
+			qRAlc();
+
+		String.Get( Buffer );
+
+		Filename.Append( Buffer, String.Size() );
+		qRR
+			qRT
+			if ( Buffer != NULL )
+				free( Buffer );
+		qRE
+	}
+}
+
+void GetParentModuleLocation_(
+	v8::Local<v8::Value> Module,
+	str::dString &Location )
 {
-	int ExitValue = EXIT_FAILURE;
-qRH
-qRB
-	if ( Command == "Version" )
-		PrintHeader_();
-	else if ( Command == "License" )
-		epsmsc::PrintLicense( NAME_MC );
-	C( Launch );
-	else
-		qRGnr();
+	qRH
+		str::wString Filename;
+	fnm::rName Path;
+	qRB
+		Filename.Init();
 
-	ExitValue = EXIT_SUCCESS;
+	GetParentModuleFilename_( Module, Filename );
+
+	Path.Init();
+	fnm::GetLocation( Filename, Path );
+
+	Path.UTF8( Location );
+	qRR
+		qRT
+		qRE
+}
+
+namespace {
+	err::err___ Error_;
+	sclerror::rError SCLError_;
+	scllocale::rRack Locale_;
+	sclmisc::sRack Rack_;
+}
+
+extern "C" typedef njs::fRegister fRegister_;
+
+dlbrry::rDynamicLibrary Library_;
+
+bso::bool__ Register_(
+	const str::string_ &AddonFilename,
+	njs::cRegistrar &Registrar )
+{
+	bso::bool__ Success = false;
+qRH
+	njs::sSharedData Data;
+	fnm::name___ Location;
+	TOL_CBUFFER___ Buffer;
+qRB
+	Location.Init();
+	Data.Init();
+
+	Library_.Init( AddonFilename );
+
+	fRegister_ *Register = dlbrry::GetFunction<fRegister_ *>( E_STRING( NJSCMN_REGISTER_FUNCTION_NAME ), Library_ );
+
+	if ( Register == NULL )
+		qRReturn;
+
+	wrapper::SetLauncher( Register( &Registrar, &Data ) );
+
+	Success = true;
 qRR
 qRT
 qRE
-	return ExitValue;
+	return Success;
 }
+
+
+void Register(
+	v8::Local<v8::Object> Exports,
+	v8::Local<v8::Value> Module,
+	void* priv )
+{
+qRFH
+	str::wString AddonFilename;
+	str::wString Location;
+	registrar::sRegistrar Registrar;
+qRFB
+	AddonFilename.Init();
+	sclmisc::MGetValue( registry::parameter::AddonFilename, AddonFilename );
+
+	NODE_SET_METHOD( Exports, "extendedInfo", GetExtendedInfo_ );
+	NODE_SET_METHOD( Exports, "info", GetInfo_ );
+	NODE_SET_METHOD( Exports, "_wrapper", wrapper::Launch );
+
+	cio::Initialize( cio::GetConsoleSet() );
+	Rack_.Init( Error_, SCLError_, cio::GetSet( cio::t_Default ), Locale_ );
+
+	Location.Init();
+	GetParentModuleLocation_( Module, Location );
+
+	sclmisc::Initialize( Rack_, Location, qRPU );
+
+	Registrar.Init();
+
+	common::Functions.Init();
+	Register_( AddonFilename, Registrar );
+	/*
+	error_::Initialize();
+
+	error_::Launch();
+	*/
+qRFR
+qRFT
+qRFE( common::ErrFinal() )
+}
+
+NODE_MODULE( njsq, Register );
 
 const char *sclmisc::SCLMISCTargetName = NAME_LC;
 const char *sclmisc::SCLMISCProductName = NAME_MC;

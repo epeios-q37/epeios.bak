@@ -17,38 +17,38 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-// Node.JS CoMmoN
+// Node.JS
+// This library is the shared part between the 'njsq' tool, and the 'sclnjs' library.
 
-#ifndef NJSCMN_INC_
-# define NJSCMN_INC_
+#ifndef NJS_INC_
+# define NJS_INC_
 
-# define NJSCMN_NAME		"NJSCMN"
+# define NJS_NAME		"NJS"
 
-# if defined( E_DEBUG ) && !defined( NJSCMN_NODBG )
-#  define NJSCMN_DBG
+# if defined( E_DEBUG ) && !defined( NJS_NODBG )
+#  define NJS_DBG
 # endif
 
 # include "err.h"
 # include "tol.h"
 
-# define NJSCMN_PROVIDE_FUNCTION_NAME		NJSCMNProvide
+# define NJS_REGISTER_FUNCTION_NAME		NJSRegister
 
-namespace njscmn {
-
+namespace njs {
 	qENUM( Type )
 	{
 		tString,
-		tamount,
-		t_Undefined
+			tamount,
+			t_Undefined
 	};
 
 	class cArguments {
 	protected:
-		virtual void NJSCMNGetValue(
+		virtual void NJSGetValue(
 			int Index,
 			eType Type,
 			void *Value ) = 0;
-		virtual void NJSCMNSetReturnValue(
+		virtual void NJSSetReturnValue(
 			eType Type,
 			const void *Value ) = 0;
 	public:
@@ -58,26 +58,40 @@ namespace njscmn {
 			eType Type,
 			void *Value )
 		{
-			return NJSCMNGetValue( Index, Type, Value );
+			return NJSGetValue( Index, Type, Value );
 		}
 		void SetReturnValue(
 			eType Type,
 			const void *Value )
 		{
-			return NJSCMNSetReturnValue( Type, Value );
+			return NJSSetReturnValue( Type, Value );
 		}
 	};
 
-	typedef void( *sFunction )( const cArguments & );
-
-	class cUpstream {
+	class cRegistrar {
 	protected:
-		virtual void NJSCMNRegister( sFunction Function ) = 0;
+		virtual void NJSRegister( void *Function ) = 0;
 	public:
-		qCALLBACK( Upstream );
-		void Register( sFunction Function )
+		qCALLBACK( Registrar );
+		void Register( void *Function )
 		{
-			return NJSCMNRegister( Function );
+			return NJSRegister( Function );
+		}
+	};
+
+	// Destroyed by launching by 'delete', so must be created with 'new' !
+	class cLauncher {
+	protected:
+		virtual void NJSLaunch(
+			void *Function,
+			cArguments &Arguments ) = 0;
+	public:
+		qCALLBACK( Launcher );
+		void Launch(
+			void *Function,
+			cArguments &Arguments )
+		{
+			return NJSLaunch( Function, Arguments );
 		}
 	};
 
@@ -87,10 +101,10 @@ namespace njscmn {
 		{}
 	};
 
-	typedef  void ( fProvide )(
-		cUpstream *Callback,
+	// Will be used as 'extern "C"', so no reference can be used (I suppose).
+	typedef cLauncher *(fRegister)(
+		cRegistrar *Registrar,
 		sSharedData *Data );
-
 }
 
 #endif
