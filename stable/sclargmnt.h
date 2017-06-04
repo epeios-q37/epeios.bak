@@ -47,18 +47,19 @@ namespace sclargmnt {
 		ua_Undefined,
 	};
 
+	const str::string_ &GetCommand( str::string_ &Command );
+
+	void PrintUsage( txf::text_oflow__ &Flow );
+
 	void FillRegistry(
 		const str::strings_ &Arguments,
 		first_argument__ FirstArgument,
 		unknown_arguments__ UnknownArguments );
 
-	const str::string_ &GetCommand( str::string_ &Command );
-
-	void PrintUsage( txf::text_oflow__ &Flow );
-
-	void Split(
-		const str::dString &Merged,
-		str::dStrings &Splitted );
+	void FillRegistry(
+		const str::dString &MergedArguments,
+		first_argument__ FirstArgument,
+		unknown_arguments__ UnknownArguments );
 
 	void Normalize(
 		const str::dString &Raw,

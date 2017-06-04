@@ -1,5 +1,10 @@
 CHANGELOG for the 'Epeios' framework.
 
+2017-06-04 :
+- SCLARGMNT :
+	- Adding 'FillRegistry(...)' variant.
+	- Removing useless function since adding above function.
+
 2017-05-12 :
 - RGSTRY :
 	- Fixing infinite auto-recursion bug.

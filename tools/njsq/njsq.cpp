@@ -25,6 +25,7 @@
 
 #include "scltool.h"
 #include "sclerror.h"
+#include "sclargmnt.h"
 
 #include "err.h"
 #include "cio.h"
@@ -82,32 +83,32 @@ namespace {
 
 	void GetExtendedInfo_( const v8::FunctionCallbackInfo<v8::Value>& Args )
 	{
-		qRH
-			str::wString Info;
-		qRB
-			Info.Init();
+	qRH
+		str::wString Info;
+	qRB
+		Info.Init();
 
 		GetExtendedInfo_( Info );
 
 		Args.GetReturnValue().Set( v8q::sString( Info ).Core() );
-		qRR
-			qRT
-			qRE
+	qRR
+	qRT
+	qRE
 	}
 
 	void GetInfo_( const v8::FunctionCallbackInfo<v8::Value>& Args )
 	{
-		qRH
-			str::wString Info;
-		qRB
-			Info.Init();
+	qRH
+		str::wString Info;
+	qRB
+		Info.Init();
 
 		GetInfo_( Info );
 
 		Args.GetReturnValue().Set( v8q::sString( Info ).Core() );
-		qRR
-			qRT
-			qRE
+	qRR
+	qRT
+	qRE
 	}
 }
 
@@ -116,11 +117,11 @@ namespace {
 		v8::Local<v8::Value> Module,
 		str::dString &Filename )
 	{
-		qRH
-			char *Buffer = NULL;
+	qRH
+		char *Buffer = NULL;
 		v8q::sString String;
-		qRB
-			String.Init( v8q::sObject( v8q::sObject( Module ).Get( "parent" ) ).Get( "filename" ) );
+	qRB
+		String.Init( v8q::sObject( v8q::sObject( Module ).Get( "parent" ) ).Get( "filename" ) );
 		Buffer = (char *)malloc( String.Size() + 1 );
 
 		if ( Buffer == NULL )
@@ -129,11 +130,11 @@ namespace {
 		String.Get( Buffer );
 
 		Filename.Append( Buffer, String.Size() );
-		qRR
-			qRT
-			if ( Buffer != NULL )
-				free( Buffer );
-		qRE
+	qRR
+	qRT
+		if ( Buffer != NULL )
+			free( Buffer );
+	qRE
 	}
 }
 
@@ -141,11 +142,11 @@ void GetParentModuleLocation_(
 	v8::Local<v8::Value> Module,
 	str::dString &Location )
 {
-	qRH
-		str::wString Filename;
+qRH
+	str::wString Filename;
 	fnm::rName Path;
-	qRB
-		Filename.Init();
+qRB
+	Filename.Init();
 
 	GetParentModuleFilename_( Module, Filename );
 
@@ -153,81 +154,101 @@ void GetParentModuleLocation_(
 	fnm::GetLocation( Filename, Path );
 
 	Path.UTF8( Location );
-	qRR
-		qRT
-		qRE
-}
-
-namespace {
-	err::err___ Error_;
-	sclerror::rError SCLError_;
-	scllocale::rRack Locale_;
-	sclmisc::sRack Rack_;
+qRR
+qRT
+qRE
 }
 
 extern "C" typedef njs::fRegister fRegister_;
 
 dlbrry::rDynamicLibrary Library_;
 
-bso::bool__ Register_(
-	const str::string_ &AddonFilename,
-	njs::cRegistrar &Registrar )
-{
-	bso::bool__ Success = false;
-qRH
-	njs::sSharedData Data;
-	fnm::name___ Location;
-	TOL_CBUFFER___ Buffer;
-qRB
-	Location.Init();
-	Data.Init();
-
-	Library_.Init( AddonFilename );
-
-	fRegister_ *Register = dlbrry::GetFunction<fRegister_ *>( E_STRING( NJSCMN_REGISTER_FUNCTION_NAME ), Library_ );
-
-	if ( Register == NULL )
-		qRReturn;
-
-	wrapper::SetLauncher( Register( &Registrar, &Data ) );
-
-	Success = true;
-qRR
-qRT
-qRE
-	return Success;
+namespace {
+	err::err___ qRRor_;
+	sclerror::rError SCLError_;
+	scllocale::rRack Locale_;
+	sclmisc::sRack Rack_;
 }
 
+namespace {
+	bso::bool__ Register_(
+		const str::string_ &AddonFilename,
+		njs::cRegistrar &Registrar )
+	{
+		bso::bool__ Success = false;
+	qRH
+		njs::sData Data;
+		fnm::name___ Location;
+		TOL_CBUFFER___ Buffer;
+	qRB
+		Location.Init();
+		Data.Init( Rack_, str::wString() );
 
-void Register(
+		Library_.Init( AddonFilename );
+
+		fRegister_ *Register = dlbrry::GetFunction<fRegister_ *>( E_STRING( NJS_REGISTER_FUNCTION_NAME ), Library_ );
+
+		if ( Register == NULL )
+			qRReturn;
+
+		wrapper::SetLauncher( Register( &Registrar, &Data ) );
+
+		Success = true;
+	qRR
+	qRT
+	qRE
+		return Success;
+	}
+
+	void Register_( const v8::FunctionCallbackInfo<v8::Value>& Info )
+	{
+	qRH
+		v8q::sString RawArguments;
+		str::wString Arguments;
+		str::wString AddonFilename;
+		registrar::sRegistrar Registrar;
+	qRB
+		RawArguments.Init( Info[0] );
+		
+		Arguments.Init();
+		RawArguments.Get( Arguments );
+
+		sclargmnt::FillRegistry( Arguments, sclargmnt::faIsArgument, sclargmnt::uaReport );
+
+		AddonFilename.Init();
+		sclmisc::MGetValue( registry::parameter::AddonFilename, AddonFilename );
+
+		Registrar.Init();
+		Register_( AddonFilename, Registrar );
+	qRR
+	qRT
+	qRE
+	}
+}
+
+void Start(
 	v8::Local<v8::Object> Exports,
 	v8::Local<v8::Value> Module,
 	void* priv )
 {
 qRFH
-	str::wString AddonFilename;
 	str::wString Location;
-	registrar::sRegistrar Registrar;
 qRFB
-	AddonFilename.Init();
-	sclmisc::MGetValue( registry::parameter::AddonFilename, AddonFilename );
-
 	NODE_SET_METHOD( Exports, "extendedInfo", GetExtendedInfo_ );
 	NODE_SET_METHOD( Exports, "info", GetInfo_ );
+	NODE_SET_METHOD( Exports, "launch", Register_ );
 	NODE_SET_METHOD( Exports, "_wrapper", wrapper::Launch );
 
 	cio::Initialize( cio::GetConsoleSet() );
-	Rack_.Init( Error_, SCLError_, cio::GetSet( cio::t_Default ), Locale_ );
+
+	Rack_.Init( qRRor_, SCLError_, cio::GetSet( cio::t_Default ), Locale_ );
 
 	Location.Init();
-	GetParentModuleLocation_( Module, Location );
+//	GetParentModuleLocation_( Module, Location );
 
-	sclmisc::Initialize( Rack_, Location, qRPU );
-
-	Registrar.Init();
+	sclmisc::Initialize( Rack_, "h:\\bin" );
 
 	common::Functions.Init();
-	Register_( AddonFilename, Registrar );
 	/*
 	error_::Initialize();
 
@@ -238,7 +259,15 @@ qRFT
 qRFE( common::ErrFinal() )
 }
 
-NODE_MODULE( njsq, Register );
+Q37_GCTOR( njsq )
+{
+	qRRor_.Init();
+	SCLError_.Init();
+	Locale_.Init();
+}
+
+
+NODE_MODULE( njsq, Start );
 
 const char *sclmisc::SCLMISCTargetName = NAME_LC;
 const char *sclmisc::SCLMISCProductName = NAME_MC;

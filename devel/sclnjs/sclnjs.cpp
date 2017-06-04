@@ -53,16 +53,18 @@ public:
 	{}
 };
 
-extern "C" FUNCTION_SPEC njs::fRegister NJS_REGISTER_FUCNTION_NAME;
+extern "C" FUNCTION_SPEC njs::fRegister NJS_REGISTER_FUNCTION_NAME;
 
 njs::cLauncher *NJSRegister(
 	njs::cRegistrar *RawRegistrar,
-	njs::sSharedData *Data )
+	njs::sData *Data )
 {
 	sLauncher_ *Launcher = NULL;
-	qRH
-		sRegistrar Registrar;
-qRB
+qRFH
+	sRegistrar Registrar;
+qRFB
+	sclmisc::Initialize( *Data->SCLRack, "h:\\bin " );
+
 	Launcher = new sLauncher_;
 
 	if ( Launcher == NULL )
@@ -73,11 +75,11 @@ qRB
 	Registrar.Init( *RawRegistrar );
 
 	sclnjs::SCLNJSRegister( Registrar );
-qRR
+qRFR
 	if ( Launcher != NULL )
 		delete Launcher;
-qRE
-qRT
+qRFT
+qRFE( sclmisc::ErrFinal() )
 	return Launcher;
 }
 

@@ -19,22 +19,23 @@
 
 "use strict"
 
-var esketch = null;
+var njsq = null;
 
 if ( process.env.EPEIOS_SRC ) {
  var addonPath = null;
  if ( process.platform == 'win32' )
-  addonPath = '/build/Debug/';
+  addonPath = 'h:/bin/';
  else
-  addonPath = '/build/Release/';
-  esketch = require( __dirname + addonPath + 'esketchnjs.node');
+  addonPath = '~/bin/';
+ njsq = require( addonPath + 'njsq.node');
 } else {
  const binary = require( 'node-pre-gyp' );
  const path = require( 'path' );
- const esketch_path = binary.find( path.resolve( path.join( __dirname, './package.json' ) ) );
- esketch = require( esketch_path );	
+ const njsq_path = binary.find( path.resolve( path.join( __dirname, './package.json' ) ) );
+ njsq = require( njsq_path );	
 }
 
-module.exports = esketch;
-module.exports.returnArgument = ( text ) => { return esketch._wrapper( 0, text ) };
+njsq.launch("esketchnjs");
+module.exports = njsq;
+module.exports.returnArgument = ( text ) => { return njsq._wrapper( 0, text ) };
 

@@ -29,6 +29,8 @@
 #  define NJS_DBG
 # endif
 
+# include "sclmisc.h"
+
 # include "err.h"
 # include "tol.h"
 
@@ -95,16 +97,52 @@ namespace njs {
 		}
 	};
 
-	class sSharedData {
+#pragma pack( push, 1)
+		// NOTA : If modified, increment 'PLGNCORE_SHARED_DATA_VERSION' !
+	class sData {
 	public:
-		void Init( void )
-		{}
+		const char *Version;	// Always first.
+		bso::size__ ControlValue;
+		sclmisc::sRack *SCLRack;
+		const str::string_ *Arguments;
+		void *UP;				// User pointer.
+		void reset( bso::bool__ P = true )
+		{
+			Version = NULL;
+			UP = NULL;
+			SCLRack = NULL;
+			Arguments = NULL;
+		}
+		E_CDTOR( sData );
+		sData(
+			sclmisc::sRack &Rack,
+			const str::dString &Arguments,
+			void *UP = NULL )
+		{
+			Init( Rack, Arguments, UP );
+		}
+		void Init(
+			sclmisc::sRack &SCLRack,
+			const str::string_ &Arguments,
+			void *UP = NULL )
+		{
+			Version = PLGNCORE_SHARED_DATA_VERSION;
+			ControlValue = Control();
+			this->SCLRack = &SCLRack;
+			this->Arguments = &Arguments;
+			this->UP = UP;
+		}
+		static bso::size__ Control( void )
+		{
+			return sizeof( sData );
+		}
 	};
+#pragma pack( pop )
 
 	// Will be used as 'extern "C"', so no reference can be used (I suppose).
 	typedef cLauncher *(fRegister)(
 		cRegistrar *Registrar,
-		sSharedData *Data );
+		sData *Data );
 }
 
 #endif

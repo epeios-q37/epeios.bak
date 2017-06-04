@@ -44,9 +44,17 @@ namespace sclnjs {
 	inline void Get_(
 		int Index,
 		cArguments_ &Arguments,
+		str::dString *Value )
+	{
+		return Arguments.GetValue( Index, njs::tString, Value );
+	}
+
+	inline void Get_(
+		int Index,
+		cArguments_ &Arguments,
 		str::dString &Value )
 	{
-		return Arguments.GetValue( Index, njs::tString, &Value );
+		return Get_( Index, Arguments, &Value );
 	}
 
 	inline void Get_(
@@ -54,7 +62,7 @@ namespace sclnjs {
 		cArguments_ &Arguments,
 		str::wString &Value )
 	{
-		return Get_( Index, Arguments, ( str::dString )Value );
+		return Get_( Index, Arguments, &Value );
 	}
 
 	template <typename item, typename ...items> inline void Get_(
@@ -118,7 +126,7 @@ namespace sclnjs {
 		}
 		void Register( fFunction Function )
 		{
-			R_().Register( &Function );
+			R_().Register( Function );
 		}
 	};
 
