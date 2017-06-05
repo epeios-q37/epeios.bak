@@ -182,7 +182,8 @@ namespace {
 		TOL_CBUFFER___ Buffer;
 	qRB
 		Location.Init();
-		Data.Init( Rack_, str::wString() );
+		fnm::GetLocation( AddonFilename, Location );
+		Data.Init( Rack_, Location, str::wString() );
 
 		Library_.Init( AddonFilename );
 
@@ -241,6 +242,10 @@ qRFB
 
 	cio::Initialize( cio::GetConsoleSet() );
 
+	qRRor_.Init();
+	SCLError_.Init();
+	Locale_.Init();
+
 	Rack_.Init( qRRor_, SCLError_, cio::GetSet( cio::t_Default ), Locale_ );
 
 	Location.Init();
@@ -258,14 +263,6 @@ qRFR
 qRFT
 qRFE( common::ErrFinal() )
 }
-
-Q37_GCTOR( njsq )
-{
-	qRRor_.Init();
-	SCLError_.Init();
-	Locale_.Init();
-}
-
 
 NODE_MODULE( njsq, Start );
 

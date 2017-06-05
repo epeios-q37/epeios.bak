@@ -97,38 +97,45 @@ namespace njs {
 		}
 	};
 
+#define NJS_DATA_VERSION	"1"
+
 #pragma pack( push, 1)
-		// NOTA : If modified, increment 'PLGNCORE_SHARED_DATA_VERSION' !
+	// NOTA : If modified, increment 'NJS_DATA_VERSION' !
 	class sData {
 	public:
 		const char *Version;	// Always first.
 		bso::size__ ControlValue;
 		sclmisc::sRack *SCLRack;
-		const str::string_ *Arguments;
+		const fnm::rName *Location;
+		const fnm::rName *Arguments;
 		void *UP;				// User pointer.
 		void reset( bso::bool__ P = true )
 		{
 			Version = NULL;
 			UP = NULL;
 			SCLRack = NULL;
+			Location = NULL;
 			Arguments = NULL;
 		}
 		E_CDTOR( sData );
 		sData(
 			sclmisc::sRack &Rack,
-			const str::dString &Arguments,
+			const fnm::rName &Location,
+			const fnm::rName &Arguments,
 			void *UP = NULL )
 		{
-			Init( Rack, Arguments, UP );
+			Init( Rack, Location, Arguments, UP );
 		}
 		void Init(
 			sclmisc::sRack &SCLRack,
-			const str::string_ &Arguments,
+			const fnm::rName &Location,
+			const fnm::rName &Arguments,
 			void *UP = NULL )
 		{
 			Version = PLGNCORE_SHARED_DATA_VERSION;
 			ControlValue = Control();
 			this->SCLRack = &SCLRack;
+			this->Location = &Location;
 			this->Arguments = &Arguments;
 			this->UP = UP;
 		}

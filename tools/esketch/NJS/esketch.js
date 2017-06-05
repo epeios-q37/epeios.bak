@@ -35,7 +35,7 @@ if ( process.env.EPEIOS_SRC ) {
  njsq = require( njsq_path );	
 }
 
-njsq.launch("esketchnjs");
+njsq.launch( "esketchnjs" );
 module.exports = njsq;
 module.exports.returnArgument = ( text ) => { return njsq._wrapper( 0, text ) };
 

@@ -63,7 +63,7 @@ njs::cLauncher *NJSRegister(
 qRFH
 	sRegistrar Registrar;
 qRFB
-	sclmisc::Initialize( *Data->SCLRack, "h:\\bin " );
+	sclmisc::Initialize( *Data->SCLRack, *Data->Location );
 
 	Launcher = new sLauncher_;
 
