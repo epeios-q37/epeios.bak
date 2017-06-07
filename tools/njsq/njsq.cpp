@@ -50,45 +50,31 @@ using cio::CIn;
 
 namespace {
 	namespace {
-		void GetExtendedInfo_( str::dString &Info )
+		void GetWrapperInfo_( str::dString &Info )
 		{
-			qRH
-				flx::rStringOFlow BaseFlow;
+		qRH
+			flx::rStringOFlow BaseFlow;
 			txf::sOFlow Flow;
-			qRB
-				BaseFlow.Init( Info );
+		qRB
+			BaseFlow.Init( Info );
 			Flow.Init( BaseFlow );
 
 			Flow << NAME_MC << " v" << VERSION << " - Node v" NODE_VERSION_STRING " ABI v" NODE_STRINGIFY( NODE_MODULE_VERSION ) << txf::nl
-				<< txf::pad << "Build : " __DATE__ " " __TIME__ " (" << cpe::GetDescription() << ')';
-			qRR
-				qRT
-				qRE
-		}
-		void GetInfo_( str::dString &Info )
-		{
-			qRH
-				flx::rStringOFlow BaseFlow;
-			txf::sOFlow Flow;
-			qRB
-				BaseFlow.Init( Info );
-			Flow.Init( BaseFlow );
-
-			Flow << NAME_MC << " v" << VERSION << " - Build : " __DATE__ " " __TIME__;
-			qRR
-				qRT
-				qRE
+			<< txf::pad << "Build : " __DATE__ " " __TIME__ " (" << cpe::GetDescription() << ')';
+		qRR
+		qRT
+		qRE
 		}
 	}
 
-	void GetExtendedInfo_( const v8::FunctionCallbackInfo<v8::Value>& Args )
+	void GetWrapperInfo_( const v8::FunctionCallbackInfo<v8::Value>& Args )
 	{
 	qRH
 		str::wString Info;
 	qRB
 		Info.Init();
 
-		GetExtendedInfo_( Info );
+		GetWrapperInfo_( Info );
 
 		Args.GetReturnValue().Set( v8q::sString( Info ).Core() );
 	qRR
@@ -96,14 +82,14 @@ namespace {
 	qRE
 	}
 
-	void GetInfo_( const v8::FunctionCallbackInfo<v8::Value>& Args )
+	void GetAddonInfo_( const v8::FunctionCallbackInfo<v8::Value>& Args )
 	{
 	qRH
 		str::wString Info;
 	qRB
 		Info.Init();
 
-		GetInfo_( Info );
+		wrapper::GetLauncherInfo( Info );
 
 		Args.GetReturnValue().Set( v8q::sString( Info ).Core() );
 	qRR
@@ -235,9 +221,9 @@ void Start(
 qRFH
 	str::wString Location;
 qRFB
-	NODE_SET_METHOD( Exports, "extendedInfo", GetExtendedInfo_ );
-	NODE_SET_METHOD( Exports, "info", GetInfo_ );
-	NODE_SET_METHOD( Exports, "launch", Register_ );
+	NODE_SET_METHOD( Exports, "wrapperInfo", GetWrapperInfo_ );
+	NODE_SET_METHOD( Exports, "addonInfo", GetAddonInfo_ );
+	NODE_SET_METHOD( Exports, "register", Register_ );
 	NODE_SET_METHOD( Exports, "_wrapper", wrapper::Launch );
 
 	cio::Initialize( cio::GetConsoleSet() );

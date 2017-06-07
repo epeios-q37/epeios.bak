@@ -48,6 +48,20 @@ protected:
 
 		((fFunction *)Function )( Arguments );
 	}
+	virtual void NJSInfo( str::dString &Info ) override
+	{
+	qRH
+		flx::rStringOFlow BaseFlow;
+		txf::sOFlow Flow;
+	qRB
+		BaseFlow.Init( Info );
+		Flow.Init( BaseFlow );
+
+		SCLNJSInfo( Flow );
+	qRR
+	qRT
+	qRE
+	}
 public:
 	void Init( void )
 	{}

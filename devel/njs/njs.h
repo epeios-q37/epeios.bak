@@ -87,6 +87,7 @@ namespace njs {
 		virtual void NJSLaunch(
 			void *Function,
 			cArguments &Arguments ) = 0;
+		virtual void NJSInfo( str::dString &Info ) = 0;
 	public:
 		qCALLBACK( Launcher );
 		void Launch(
@@ -94,6 +95,10 @@ namespace njs {
 			cArguments &Arguments )
 		{
 			return NJSLaunch( Function, Arguments );
+		}
+		void Info( str::dString &Info )
+		{
+			return NJSInfo( Info );
 		}
 	};
 

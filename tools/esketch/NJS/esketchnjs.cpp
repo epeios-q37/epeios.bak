@@ -30,6 +30,12 @@
 # define OWNER_CONTACT		"http://q37.info/contact/"
 # define COPYRIGHT			COPYRIGHT_YEARS " " OWNER_NAME " (" OWNER_CONTACT ")"	
 
+void sclnjs::SCLNJSInfo( txf::sOFlow &Flow )
+{
+	Flow << NAME_MC << " v" << VERSION << txf::nl
+		 << txf::pad << "Build : " __DATE__ " " __TIME__ " (" << cpe::GetDescription() << ')';
+}
+
 namespace {
 	void ReturnArgument_( sclnjs::sArguments &Arguments )
 	{
@@ -47,7 +53,6 @@ namespace {
 	qRT
 	qRE
 	}
-
 }
 
 void sclnjs::SCLNJSRegister( sclnjs::sRegistrar &Registrar )

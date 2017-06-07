@@ -130,7 +130,8 @@ namespace sclnjs {
 		}
 	};
 
-	void SCLNJSRegister( sRegistrar &Registrar );	// To overload by user.
+	void SCLNJSRegister( sRegistrar &Registrar );	// To define by user.
+	void SCLNJSInfo( txf::sOFlow &Flow );	// To define by user.
 
 	extern const char *SCLNJSProductVersion;	// To define by user.
 }

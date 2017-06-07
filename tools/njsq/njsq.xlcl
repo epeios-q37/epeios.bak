@@ -4,9 +4,14 @@
 	<xpp:expand value-of="q37.xpp"/>
 	<xpp:expand select="epeios.xlcl"/>
 	<Translations text="ProgramDescription">
-		<Translation language="fr">Mettre ici la description du programme en français !</Translation>
-		<Translation language="en">Put here the english description of the program !</Translation>
+		<Translation language="fr">'wrapper' pour 'addon' Node.js.</Translation>
+		<Translation language="en">Node.js addon wrapper.</Translation>
 	</Translations>
+ 	<Translations text="NoRegisteredAddon">
+		<Translation language="fr">('addon' non déclaré)</Translation>
+		<Translation language="en">(No registered addon)</Translation>
+	</Translations>
+
 	<!--
 	<Translations text="">
 		<Translation language="fr"></Translation>

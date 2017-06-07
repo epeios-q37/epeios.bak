@@ -2,7 +2,7 @@
   "name": "njsq",
   "version": "2017.5.26",
   "author": "Claude SIMON (http://q37.info/contact/)",
-  "description": "Node.js addon template.",
+  "description": "Node.js addon wrapper.",
   "main": "njsq.js",
   "engines": {
     "node": ">=4"
@@ -24,7 +24,7 @@
     "prepublish": "npm ls",
     "preinstall": "npm install node-pre-gyp",
     "install": "node-pre-gyp install --fallback-to-build",
-    "test": "node demo.js"
+    "test": "node test.js"
   },
   "repository": {
     "type": "git",

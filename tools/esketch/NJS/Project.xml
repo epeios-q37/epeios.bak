@@ -42,7 +42,7 @@
 	<SourceDirs>
 	</SourceDirs>
 	<Files>
-  <File>demo.js</File>
+  <File>test.js</File>
   <File>esketch.js</File>
  </Files>
 	<PreprocessorDefinitions>
