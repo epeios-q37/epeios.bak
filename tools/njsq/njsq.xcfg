@@ -5,7 +5,7 @@
 		<xpp:expand value-of="q37.xpp"/>
   <xpp:expand href="../../TOL.xcfg"/>
 		<Parameters>
-			<Language>fr</Language>
+			<Language>en</Language>
 			<Command>Launch</Command>
 			<!-- Default command -->
 		</Parameters>

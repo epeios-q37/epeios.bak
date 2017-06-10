@@ -23,7 +23,6 @@
 
 #include "nodeq.h"
 
-#include "scltool.h"
 #include "sclerror.h"
 #include "sclargmnt.h"
 

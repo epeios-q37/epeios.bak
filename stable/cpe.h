@@ -69,7 +69,7 @@
 # define CPE_SL_GNULINUX	"GNU/Linux"
 # define CPE_SL_LINUX		"Linux"
 # define CPE_SL_IOS			"iOS"
-# define CPE_SL_OSX			"OS X"
+# define CPE_SL_OSX			"macOS"
 # define CPE_SL_CYGWIN		"Cygwin"
 # define CPE_SL_WIN32		"Win32"
 # define CPE_SL_WIN64		"Win64"
