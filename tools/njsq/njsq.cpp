@@ -26,6 +26,7 @@
 #include "sclerror.h"
 #include "sclargmnt.h"
 
+#include "dir.h"
 #include "err.h"
 #include "cio.h"
 #include "epsmsc.h"
@@ -98,32 +99,75 @@ namespace {
 }
 
 namespace {
-	void GetParentModuleFilename_(
+
+	void InitWithModuleFilename_(
+		v8::Local<v8::Value> Module,
+		v8q::sString &Filename )
+	{
+		Filename.Init( v8q::sObject( Module ).Get( "filename" ) );
+	}
+
+	void GetModuleFilename_(
 		v8::Local<v8::Value> Module,
 		str::dString &Filename )
 	{
 	qRH
-		char *Buffer = NULL;
-		v8q::sString String;
+		v8q::sString V8Filename;
 	qRB
-		String.Init( v8q::sObject( v8q::sObject( Module ).Get( "parent" ) ).Get( "filename" ) );
-		Buffer = (char *)malloc( String.Size() + 1 );
+		InitWithModuleFilename_( Module, V8Filename );
 
-		if ( Buffer == NULL )
-			qRAlc();
-
-		String.Get( Buffer );
-
-		Filename.Append( Buffer, String.Size() );
+		V8Filename.Get( Filename );
 	qRR
 	qRT
-		if ( Buffer != NULL )
-			free( Buffer );
 	qRE
+	}
+
+	void GetParentModuleFilename_(
+		v8::Local<v8::Value> Module,
+		str::dString &Filename )
+	{
+		GetModuleFilename_( v8q::sObject( Module ).Get( "parent" ), Filename );
+	}
+
+	// Returns true if 'Filename' ends with '.node'.
+	bso::sBool HasNodeExtension_( const fnm::rName &Filename )
+	{
+		bso::sBool Has = false;
+	qRH
+		fnm::rName Extension;
+		str::wString Buffer;
+	qRB
+		Extension.Init();
+		fnm::GetExtension( Filename, Extension );
+
+		Buffer.Init();
+		Extension.UTF8( Buffer );
+
+		Has = Buffer == "node";
+	qRR
+	qRT
+	qRE
+		return Has;
+	}
+
+	void GetAddonFilename_(
+		v8::Local<v8::Value> Module,
+		str::dString &Filename )
+	{
+		Filename.Init();
+		GetModuleFilename_( Module, Filename );
+
+		if ( HasNodeExtension_( Filename ) ) {
+			Filename.Init();
+			GetParentModuleFilename_( Module, Filename );
+
+			if ( !HasNodeExtension_( Filename ) )
+				qRGnr();
+		}
 	}
 }
 
-void GetParentModuleLocation_(
+void GetAddonLocation_(
 	v8::Local<v8::Value> Module,
 	str::dString &Location )
 {
@@ -133,7 +177,7 @@ qRH
 qRB
 	Filename.Init();
 
-	GetParentModuleFilename_( Module, Filename );
+	GetAddonFilename_( Module, Filename );
 
 	Path.Init();
 	fnm::GetLocation( Filename, Path );
@@ -188,12 +232,12 @@ namespace {
 
 	void Register_( const v8::FunctionCallbackInfo<v8::Value>& Info )
 	{
-	qRH
+	qRFH
 		v8q::sString RawArguments;
 		str::wString Arguments;
 		str::wString AddonFilename;
 		registrar::sRegistrar Registrar;
-	qRB
+	qRFB
 		RawArguments.Init( Info[0] );
 		
 		Arguments.Init();
@@ -206,9 +250,9 @@ namespace {
 
 		Registrar.Init();
 		Register_( AddonFilename, Registrar );
-	qRR
-	qRT
-	qRE
+	qRFR
+	qRFT
+	qRFE( common::ErrFinal() )
 	}
 }
 
@@ -219,6 +263,7 @@ void Start(
 {
 qRFH
 	str::wString Location;
+	str::wString Filename;
 qRFB
 	NODE_SET_METHOD( Exports, "wrapperInfo", GetWrapperInfo_ );
 	NODE_SET_METHOD( Exports, "addonInfo", GetAddonInfo_ );
@@ -234,9 +279,9 @@ qRFB
 	Rack_.Init( qRRor_, SCLError_, cio::GetSet( cio::t_Default ), Locale_ );
 
 	Location.Init();
-//	GetParentModuleLocation_( Module, Location );
+	GetAddonLocation_( Module, Location );
 
-	sclmisc::Initialize( Rack_, "h:\\bin" );
+	sclmisc::Initialize( Rack_, Location );
 
 	common::Functions.Init();
 	/*

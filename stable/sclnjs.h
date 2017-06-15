@@ -126,7 +126,7 @@ namespace sclnjs {
 		}
 		void Register( fFunction Function )
 		{
-			R_().Register( Function );
+			R_().Register( (void *)Function );
 		}
 	};
 

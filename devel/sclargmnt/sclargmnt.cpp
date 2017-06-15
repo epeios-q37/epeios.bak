@@ -1172,12 +1172,12 @@ namespace {
 			flw::sIFlow &Flow,
 			str::dStrings &Splitted )
 		{
-			qRH
-				str::string Argument;
+		qRH
+			str::string Argument;
 			bso::bool__ Escape = false, Quoted = false;
 			bso::char__ C = 0;
-			qRB
-				Argument.Init();
+		qRB
+			Argument.Init();
 
 			while ( !Flow.EndOfFlow() ) {
 				C = Flow.Get();
@@ -1223,10 +1223,9 @@ namespace {
 
 			if ( Argument.Amount() != 0 )
 				Splitted.Append( Argument );
-
-			qRR
-				qRT
-				qRE
+		qRR
+		qRT
+		qRE
 		}
 	}
 

@@ -42,8 +42,6 @@
 	<SourceDirs>
 	</SourceDirs>
 	<Files>
-  <File>test.js</File>
-  <File>esketch.js</File>
  </Files>
 	<PreprocessorDefinitions>
 		<PreprocessorDefinition>E_ST</PreprocessorDefinition>
