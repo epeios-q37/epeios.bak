@@ -91,7 +91,7 @@ qRB
 	Basename.Init();
 	Buffer.UTF8( Basename );
 
-	Buffer.Init( fnm::GetExtension( Path ) );
+	Buffer.Init( fnm::OldGetExtension( Path ) );
 	Extension.Init();
 	Buffer.UTF8( Extension );
 

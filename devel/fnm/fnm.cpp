@@ -219,7 +219,7 @@ const nchar__ *fnm::GetBasename( const nchar__ *Filename )
 	return Repere;
 }
 
-const nchar__ *fnm::GetExtension( const nchar__ *Name )
+const nchar__ *fnm::OldGetExtension( const nchar__ *Name )
 {
 	return strrchr_( GetBasename( Name ), '.' );
 }
@@ -236,6 +236,11 @@ const name___ &fnm::Normalize( name___ &Path )
 	}
 
 	return Path;
+}
+
+const nchar__ * fnm::NewGetExtension( const nchar__ * Name )
+{
+	return strrchr_( GetBasename( Name ), '.' ) + 1;
 }
 
 const name___ &fnm::GetLocation(

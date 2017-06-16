@@ -9,7 +9,7 @@
   },
   "binary": {
     "module_name": "njsq",
-    "module_path": "./lib/{platform}-{arch}/",
+    "module_path": ".",
     "remote_path": "./epeios-q37/njsq/releases/download/vVER_TAG/",
     "package_name": "{module_name}-vVER_TAG-{node_abi}-{platform}-{arch}.tar.gz",
     "host": "https://github.com"

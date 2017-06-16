@@ -130,24 +130,24 @@ namespace {
 	}
 
 	// Returns true if 'Filename' ends with '.node'.
-	bso::sBool HasNodeExtension_( const fnm::rName &Filename )
+	bso::sBool IsNJSq_( const fnm::rName &Filename )
 	{
-		bso::sBool Has = false;
+		bso::sBool Is = false;
 	qRH
-		fnm::rName Extension;
+		fnm::rName Basename;
 		str::wString Buffer;
 	qRB
-		Extension.Init();
-		fnm::GetExtension( Filename, Extension );
+		Basename.Init();
+		fnm::GetBasename( Filename, Basename );
 
 		Buffer.Init();
-		Extension.UTF8( Buffer );
+		Basename.UTF8( Buffer );
 
-		Has = Buffer == "node";
+		Is = Buffer == NAME_LC ".node";
 	qRR
 	qRT
 	qRE
-		return Has;
+		return Is;
 	}
 
 	void GetAddonFilename_(
@@ -157,13 +157,8 @@ namespace {
 		Filename.Init();
 		GetModuleFilename_( Module, Filename );
 
-		if ( HasNodeExtension_( Filename ) ) {
-			Filename.Init();
-			GetParentModuleFilename_( Module, Filename );
-
-			if ( !HasNodeExtension_( Filename ) )
-				qRGnr();
-		}
+		if ( !IsNJSq_( Filename ) )
+			qRGnr();
 	}
 }
 

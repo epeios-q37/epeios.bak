@@ -102,13 +102,24 @@ namespace fnm {
 		return Basename = GetBasename( Filename.Internal() );
 	}
 
-	const nchar__ *GetExtension( const nchar__ *Name );
+	// Extension WITH heading '.'.
+	const nchar__ *OldGetExtension( const nchar__ *Name );
 
-	inline const name___ &GetExtension(
+	// Extension WITHOUT heading '.'.
+	const nchar__ *NewGetExtension( const nchar__ *Name );
+
+	inline const name___ &OldGetExtension(
 		const name___ &Name,
 		name___ &Extension )
 	{
-		return Extension = GetExtension( Name.Internal() );
+		return Extension = OldGetExtension( Name.Internal() );
+	}
+
+	inline const name___ &NewGetExtension(
+		const name___ &Name,
+		name___ &Extension )
+	{
+		return Extension = NewGetExtension( Name.Internal() );
 	}
 
 	const name___ &GetLocation(

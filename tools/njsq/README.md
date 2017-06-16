@@ -1,12 +1,8 @@
-# njsq
+# NJSq
 
-## Presentation
-
-*Node.js* addon wrapper.
+Node.js *addon* wrapper.
 
 For more information, see [http://q37.info/tools/njsq/](http://q37.info/tools/njsq/).
-
-## Status
 
 [![NPM](https://nodei.co/npm/njsq.png)](https://nodei.co/npm/njsq/)
 

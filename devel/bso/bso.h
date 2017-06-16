@@ -90,7 +90,7 @@ namespace bso {
 	typedef sBool bool__;
 
 # define BSO__DEF( type, name, value )\
-	static const type##__ name = value
+	const type##__ name = value
 
 # define BSO__MIN_MAX_DEF( type, name, affix )\
 	BSO__DEF( type, name##Min, affix##_MIN );\
@@ -204,15 +204,15 @@ namespace bso {
 // 'natural unsigned integer'
 # ifdef BSO__64
 	typedef u64__ uint__;
-	static const uint__ &UIntMin = U64Min;
-	static const uint__ &UIntMax = U64Max;
+	const uint__ UIntMin = U64Min;
+	const uint__ UIntMax = U64Max;
 #  define BSO_UINT_MAX		BSO_U64_MAX
 #  define BSO_UINT_MIN		BSO_U64_MIN
 //#  define BSO_UINT_SIZE		BSO_U64_SIZE
 # elif defined( BSO__32 )
 	typedef u32__ uint__;
-	static const uint__ &UIntMin = U32Min;
-	static const uint__ &UIntMax = U32Max;
+	const uint__ UIntMin = U32Min;
+	const uint__ UIntMax = U32Max;
 #  define BSO_UINT_MAX		BSO_U32_MAX
 #  define BSO_UINT_MIN		BSO_U32_MIN
 //#  define BSO_UINT_SIZE		BSO_U32_SIZE
@@ -315,14 +315,14 @@ namespace bso {
 // 'natural signed integer'
 # ifdef BSO__64
 	typedef s64__ sint__;
-	static const sint__ SIntMin = S64Min;
-	static const sint__ SIntMax = S64Max;
+	const sint__ SIntMin = S64Min;
+	const sint__ SIntMax = S64Max;
 #  define BSO_SINT_MAX		BSO_S64_MAX
 #  define BSO_SINT_MIN		BSO_S64_MIN
 # elif defined( BSO__32 )
 	typedef s32__ sint__;
-	static const sint__ SIntMin = S32Min;
-	static const sint__ SIntMax = S32Max;
+	const sint__ SIntMin = S32Min;
+	const sint__ SIntMax = S32Max;
 #  define BSO_SINT_MAX		BSO_S32_MAX
 #  define BSO_SINT_MIN		BSO_S32_MIN
 # else
@@ -331,8 +331,8 @@ namespace bso {
 
 	// Entier générique, comme facilité.
 	typedef uint__ int__;
-	static const int__ IntMin = UIntMin;
-	static const int__ IntMax = UIntMax;
+	const int__ IntMin = UIntMin;
+	const int__ IntMax = UIntMax;
 # define BSO_INT_MAX		BSO_UINT_MAX
 # define BSO_INT_MIN		BSO_UINT_MIN
 //# define BSO_INT_SIZE		BSO_UINT_SIZE
