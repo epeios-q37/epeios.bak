@@ -24,6 +24,7 @@ var affix = "esketch";
 // Begin of generic part.
 var njsq = null;
 var addonPath = null;
+var addonFilename = null;
 var path = require("path");
 
 if (process.env.EPEIOS_SRC) {
@@ -37,7 +38,9 @@ if (process.env.EPEIOS_SRC) {
     addonPath = __dirname;
 }
 
-njsq.register(path.join(addonPath, affix + "njs" ).replace(/\\/g, "\\\\").replace(/'/g, "\\'"));
+addonFilename = path.join(addonPath, affix + "njs").replace(/\\/g, "\\\\").replace(/'/g, "\\'");
+console.log(addonFilename);
+njsq.register(addonFilename);
 module.exports = njsq;
 // End of generic part.
 

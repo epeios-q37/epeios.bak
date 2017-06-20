@@ -58,13 +58,17 @@ using namespace dlbrry;
 static void BuildPath_(
 	const str::string_ &Location,
 	const str::string_ &Basename,
+	bso::sBool AddPrefix,
 	fnm::name___ &Path )
 {
 qRH
 	str::string NewBasename;
 qRB
-	NewBasename.Init();
-	NewBasename.Init( PREFIX );
+	if ( AddPrefix )
+		NewBasename.Init( PREFIX );
+	else
+		NewBasename.Init();
+
 	NewBasename.Append( Basename );
 
 	fnm::BuildPath( Location, NewBasename, EXT, Path );
@@ -75,6 +79,7 @@ qRE
 
 static void BuildCompleteLibraryFileName_(
 	const fnm::name___ &Path,
+	eNormalization Normalization,
 	fnm::name___ &NewPath )
 {
 qRH
@@ -97,14 +102,30 @@ qRB
 
 	if ( Extension == EXT )
 		NewPath = Path;
-	else
-		BuildPath_( Location, Basename, NewPath );
+	else {
+		switch ( Normalization ) {
+		case nNone:
+			NewPath = Path;
+			break;
+		case nExtOnly:
+			BuildPath_( Location, Basename, false, NewPath );
+			break;
+		case nPrefixAndExt:
+			BuildPath_( Location, Basename, true, NewPath );
+			break;
+		default:
+			qRFwk();
+			break;
+		}
+	}
 qRR
 qRT
 qRE
 }
 
-static library_handler__ PosixLoadLibrary_( const ntvstr::string___ &Name )
+static library_handler__ PosixLoadLibrary_(
+	const ntvstr::string___ &Name,
+	eNormalization Normalization )
 {
 	library_handler__ Handler = NULL;
 qRH
@@ -112,7 +133,7 @@ qRH
 qRB
 	Path.Init();
 
-	BuildCompleteLibraryFileName_( Name, Path );
+	BuildCompleteLibraryFileName_( Name, Normalization, Path );
 
 	Handler = dlopen( Path, RTLD_LAZY );
 qRR
@@ -171,7 +192,9 @@ namespace {
 }
 # endif
 
-bso::bool__ dlbrry::dynamic_library___::_LoadLibrary( const ntvstr::string___ &Name )
+bso::bool__ dlbrry::dynamic_library___::_LoadLibrary(
+	const ntvstr::string___ &Name,
+	eNormalization Normalization )
 {
 	if ( _LibraryHandler != NULL )
 		qRFwk();
@@ -180,7 +203,7 @@ bso::bool__ dlbrry::dynamic_library___::_LoadLibrary( const ntvstr::string___ &N
 	if ( ( _LibraryHandler = WinLoadLibrary( Name ) ) == NULL )
 		return false;
 #elif defined( TARGET_POSIX )
-	if ( ( _LibraryHandler = PosixLoadLibrary_( Name ) ) == NULL )
+	if ( ( _LibraryHandler = PosixLoadLibrary_( Name, Normalization ) ) == NULL )
 		return false;
 #else
 #	error

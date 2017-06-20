@@ -209,7 +209,11 @@ namespace {
 		fnm::GetLocation( AddonFilename, Location );
 		Data.Init( Rack_, Location, str::wString() );
 
-		Library_.Init( AddonFilename );
+//		cio::COut << __LOC__ << AddonFilename << txf::nl << txf::commit;
+
+		Library_.Init( AddonFilename, dlbrry::nExtOnly );
+
+//		cio::COut << __LOC__ << txf::nl << txf::commit;
 
 		fRegister_ *Register = dlbrry::GetFunction<fRegister_ *>( E_STRING( NJS_REGISTER_FUNCTION_NAME ), Library_ );
 

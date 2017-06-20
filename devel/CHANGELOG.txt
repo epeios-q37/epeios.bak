@@ -1,5 +1,9 @@
 CHANGELOG for the 'Epeios' framework.
 
+2017-06-20 :
+- DLBRRY :
+ - Introducing the 'Normalization' parameter.
+
 2017-06-04 :
 - SCLARGMNT :
 	- Adding 'FillRegistry(...)' variant.

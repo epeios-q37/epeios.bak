@@ -38,11 +38,24 @@
 namespace dlbrry {
 	typedef void *library_handler__;
 
+	// No effect under 'Windows'.
+	qENUM( Normalization )
+	{
+		nNone,			// No normalization,
+		nExtOnly,		// Add extension only. No effect if there is the extension is already present.
+		nPrefixAndExt,	// Add prefix and extension. No effect if there is the extension is already present.
+		n_amount,
+		n_Undefined,
+		n_Default = nPrefixAndExt,
+	};
+
 	class dynamic_library___
 	{
 	private:
 		library_handler__  _LibraryHandler;
-		bso::bool__ _LoadLibrary( const ntvstr::string___ &Name );
+		bso::bool__ _LoadLibrary(
+			const ntvstr::string___ &Name,
+			eNormalization Normalization );
 		bso::bool__ _UnloadLibrary( void  );
 	public:
 		void reset( bso::bool__ P = true )
@@ -66,17 +79,25 @@ namespace dlbrry {
 		}
 		bso::bool__ Init(
             const ntvstr::string___ &LibraryName,
+			eNormalization Normalization,
 			err::handling__ ERRHandling = err::h_Default )
 		{
 			reset();
 
-			if ( _LoadLibrary( LibraryName ) )
+			if ( _LoadLibrary( LibraryName, Normalization ) )
 				return true;
 
 			if ( ERRHandling != err::hUserDefined )
 				qRSys();
 
 			return false;
+		}
+		bso::bool__ Init(
+			const ntvstr::string___ &LibraryName,
+			err::handling__ ERRHandling,
+			eNormalization Normalization = n_Default )
+		{
+			return Init( LibraryName, Normalization, ERRHandling );
 		}
 		bso::bool__ IsInitialized( void ) const
 		{
