@@ -38,7 +38,8 @@
     <Module>xpp</Module>
 			</Modules>
 		</Modules>
-	</Modules>
+  <Module>registry</Module>
+ </Modules>
 	<SourceDirs>
 	</SourceDirs>
 	<Files>

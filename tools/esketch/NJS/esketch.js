@@ -39,7 +39,6 @@ if (process.env.EPEIOS_SRC) {
 }
 
 addonFilename = path.join(addonPath, affix + "njs").replace(/\\/g, "\\\\").replace(/'/g, "\\'");
-console.log(addonFilename);
 njsq.register(addonFilename);
 module.exports = njsq;
 // End of generic part.

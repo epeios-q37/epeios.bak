@@ -17,6 +17,8 @@
 	along with esketch. If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "registry.h"
+
 #include "sclmisc.h"
 #include "sclnjs.h"
 

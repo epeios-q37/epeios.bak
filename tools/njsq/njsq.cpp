@@ -255,6 +255,13 @@ namespace {
 	}
 }
 
+namespace {
+	void OnExit_( void *UP )
+	{
+		wrapper::DeleteLauncher();
+	}
+}
+
 void Start(
 	v8::Local<v8::Object> Exports,
 	v8::Local<v8::Value> Module,
@@ -283,6 +290,8 @@ qRFB
 	sclmisc::Initialize( Rack_, Location );
 
 	common::Functions.Init();
+
+	node::AtExit( OnExit_, NULL );
 	/*
 	error_::Initialize();
 
