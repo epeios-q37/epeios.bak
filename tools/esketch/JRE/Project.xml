@@ -14,7 +14,7 @@
  <xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
  <About>
   <Program>esketchjre</Program>
-  <Software>esketch</Software>
+  <Software>eSketch</Software>
  </About>
  <Modules>
   <Modules Group="Epeios" Path="h:/hg/epeios/stable/">
@@ -42,7 +42,7 @@
   <File>README.md</File>
   <File>esketch.java</File>
  </Files>
- <CI>
+ <RTW>
   <Dir>esketch-java</Dir>
- </CI>
+ </RTW>
 </Project>
