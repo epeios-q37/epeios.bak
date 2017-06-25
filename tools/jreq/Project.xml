@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns:xpp="http://q37.info/ns/xpp/" >
+ <xpp:bloc>
+  <!-- User definitions -->
+  <xpp:define name="Version">
+   <xpp:bloc>20150620</xpp:bloc>
+  </xpp:define>
+  <xpp:set name="Credits" value="Epeios"/>
+  <xpp:set name="Type" value="JREWrapper"/>
+  <xpp:define name="CopyrightYears">
+   <xpp:bloc>2017</xpp:bloc>
+  </xpp:define>
+ </xpp:bloc>
+ <xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
+ <About>
+  <Program>jreq</Program>
+  <Software>JREq</Software>
+ </About>
+ <Modules>
+  <Modules Group="Epeios" Path="h:/hg/epeios/stable/">
+   <Modules Group="Core">
+    <xpp:expand select="Core"/>
+    <Module>bomhdl</Module>
+    <Module>cdgb64</Module>
+    <Module>dlbrry</Module>
+    <Module>fil</Module>
+    <Module>fnm</Module>
+    <Module>jniq</Module>
+    <Module>jre</Module>
+    <Module>jrebse</Module>
+    <Module>lcl</Module>
+    <Module>plgn</Module>
+    <Module>plgncore</Module>
+    <Module>rgstry</Module>
+    <Module>stsfsm</Module>
+    <Module>tht</Module>
+    <Module>thtsub</Module>
+    <Module>xml</Module>
+    <Module>xpp</Module>
+   </Modules>
+   <Modules Group="SCL">
+    <xpp:expand select="SCL"/>
+   </Modules>
+  </Modules>
+ </Modules>
+ <Files>
+  <File>README.md</File>
+  <!-- '*.java' files are source files and will automatically packed as such. -->
+  <File Pack="No">jreq.java</File>
+ </Files>
+ <RTW>
+  <Dir>jreq</Dir>
+ </RTW>
+</Project>
