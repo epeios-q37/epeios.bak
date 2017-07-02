@@ -39,18 +39,18 @@ void sclnjs::SCLNJSInfo( txf::sOFlow &Flow )
 }
 
 namespace {
-	void ReturnArgument_( sclnjs::sArguments &Arguments )
+	void ReturnArgument_( sclnjs::sCaller &Caller )
 	{
 	qRH
 		str::wString Input, Text;
 	qRB
 		Input.Init();
-		Arguments.Get( Input );
+		Caller.GetArgument( Input );
 
 		Text.Init();
 		sclmisc::GetBaseTranslation( "Argument", Text, Input );
 
-		Arguments.SetReturnValue( Text );
+		Caller.SetReturnValue( Text );
 	qRR
 	qRT
 	qRE

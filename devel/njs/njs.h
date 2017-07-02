@@ -37,16 +37,15 @@
 # define NJS_REGISTER_FUNCTION_NAME		NJSRegister
 
 namespace njs {
-	qENUM( Type )
-	{
+	qENUM( Type ) {
 		tString,
-			tamount,
-			t_Undefined
+		tamount,
+		t_Undefined
 	};
 
-	class cArguments {
+	class cCaller {
 	protected:
-		virtual void NJSGetValue(
+		virtual void NJSGetArgument(
 			int Index,
 			eType Type,
 			void *Value ) = 0;
@@ -54,13 +53,13 @@ namespace njs {
 			eType Type,
 			const void *Value ) = 0;
 	public:
-		qCALLBACK( Arguments );
-		void GetValue(
+		qCALLBACK( Caller );
+		void GetArgument(
 			int Index,
 			eType Type,
 			void *Value )
 		{
-			return NJSGetValue( Index, Type, Value );
+			return NJSGetArgument( Index, Type, Value );
 		}
 		void SetReturnValue(
 			eType Type,
@@ -86,15 +85,15 @@ namespace njs {
 	protected:
 		virtual void NJSLaunch(
 			void *Function,
-			cArguments &Arguments ) = 0;
+			cCaller &Caller ) = 0;
 		virtual void NJSInfo( str::dString &Info ) = 0;
 	public:
 		qCALLBACK( Launcher );
 		void Launch(
 			void *Function,
-			cArguments &Arguments )
+			cCaller &Caller )
 		{
-			return NJSLaunch( Function, Arguments );
+			return NJSLaunch( Function, Caller );
 		}
 		void Info( str::dString &Info )
 		{

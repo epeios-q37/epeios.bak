@@ -58,14 +58,15 @@ namespace {
 
 	jstring GetInfo_( JNIEnv *Env )
 	{
-		jre::sString JString;
+		jstring JString;
 	qRH
 		str::wString Info;
+		qCBUFFERr Buffer;
 	qRB
 		Info.Init();
 		GetInfo_( Env->GetVersion(), Info );
 
-		JString.Init( Info );
+		JString = Env->NewStringUTF( Info.Convert( Buffer ) );
 	qRR
 	qRT
 	qRE

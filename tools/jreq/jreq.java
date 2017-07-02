@@ -29,9 +29,9 @@ class JREq {
 	
 	static
 	{
-		System.loadLibrary("jreq");
-		register();
-	}
+ 	System.loadLibrary("jreq");
+ 	register();
+ }
 	
 	public JREq( Object core )
 	{
@@ -51,8 +51,8 @@ class JREqTest {
 	
 	public static void main ( String[] args ) throws Exception
 	{
-		displayCompilationTime();
-		System.out.println( JREq.wrapperInfo() );
-	}
+ 	displayCompilationTime();
+ 	System.out.println( JREq.wrapperInfo() );
+ }
 }
 

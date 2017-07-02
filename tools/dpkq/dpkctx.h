@@ -55,7 +55,7 @@ namespace dpkctx {
 			S_.Session = S_.Cycle = 0;
 			S_.TimeStamp = 0;
 		}
-		void plug( bch::cHook &Hook )
+		void plug( bch::sHook &Hook )
 		{
 			Pool.plug( Hook );
 		}

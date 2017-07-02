@@ -53,7 +53,7 @@ void wrapper::SetLauncher( cLauncher *Launcher )
 bso::sBool wrapper::GetLauncherInfo( str::dString &Info )
 {
 	if ( Launcher_ == NULL ) {
-		sclmisc::GetBaseTranslation( common::message::NoRegisteredAddon, Info );
+		sclmisc::GetBaseTranslation( common::message::NoRegisteredComponent, Info );
 		return false;
 	}
 
@@ -63,7 +63,7 @@ bso::sBool wrapper::GetLauncherInfo( str::dString &Info )
 }
 
 
-typedef njs::cArguments cArguments_;
+typedef njs::cCaller cCaller_;
 
 inline void GetString_(
 	int Index,
@@ -89,12 +89,12 @@ void SetReturnValue_(
 }
 
 namespace {
-	class sArguments_
-	: public cArguments_ {
+	class sCaller_
+	: public cCaller_ {
 	private:
 		qRMV( const v8::FunctionCallbackInfo<v8::Value>, I_, Info_ );
 	protected:
-		virtual void NJSGetValue(
+		virtual void NJSGetArgument(
 			int Index,
 			njs::eType Type,
 			void *Value ) override
@@ -129,7 +129,7 @@ namespace {
 		{
 			Info_ = NULL;
 		}
-		qCDTOR( sArguments_ );
+		qCDTOR( sCaller_ );
 		void Init( const v8::FunctionCallbackInfo<v8::Value> &Info )
 		{
 			Info_ = &Info;
@@ -140,7 +140,7 @@ namespace {
 void wrapper::Launch( const v8::FunctionCallbackInfo<v8::Value>& Info )
 {
 qRFH
-	sArguments_ Arguments;
+	sCaller_ Caller;
 qRFB
 	if ( Info.Length() < 1 )
 		qRGnr();
@@ -153,9 +153,9 @@ qRFB
 	if ( !common::Functions.Exists( Index->Uint32Value() ) )
 		qRGnr();
 
-	Arguments.Init( Info );
+	Caller.Init( Info );
 
-	GetLauncher_().Launch( common::Functions( Index->Uint32Value()), Arguments );
+	GetLauncher_().Launch( common::Functions( Index->Uint32Value()), Caller );
 
 	if ( sclerror::IsErrorPending() )
 		qRAbort();	// To force the handling of a pending error.

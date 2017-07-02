@@ -29,7 +29,9 @@
 
 using namespace common;
 
-qCDEF( char *, common::message::NoRegisteredAddon, "NoRegisteredAddon" );
+#define MDEF( name ) qCDEF( char *, common::message::name, #name );
+
+MDEF( NoRegisteredComponent );
 
 rFunctions common::Functions;
 

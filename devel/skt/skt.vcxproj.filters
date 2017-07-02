@@ -59,11 +59,11 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="..\CHANGELOG.txt">
+    <None Include="..\CHANGELOG.md">
       <Filter>Resource Files</Filter>
-    </Text>
-    <Text Include="..\TODO.txt">
+    </None>
+    <None Include="..\TODO.md">
       <Filter>Resource Files</Filter>
-    </Text>
+    </None>
   </ItemGroup>
 </Project>

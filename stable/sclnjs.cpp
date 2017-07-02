@@ -40,13 +40,13 @@ class sLauncher_
 protected:
 	virtual void NJSLaunch(
 		void *Function,
-		cArguments_ &RawArguments ) override
+		cCaller_ &RawCaller ) override
 	{
-		sArguments Arguments;
+		sCaller Caller;
 
-		Arguments.Init( RawArguments );
+		Caller.Init( RawCaller );
 
-		((fFunction *)Function )( Arguments );
+		((fFunction *)Function )( Caller );
 	}
 	virtual void NJSInfo( str::dString &Info ) override
 	{

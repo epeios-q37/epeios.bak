@@ -34,62 +34,62 @@
 # include "str.h"
 
 namespace sclnjs {
-	typedef njs::cArguments cArguments_;
+	typedef njs::cCaller cCaller_;
 
-	inline void Get_(
+	inline void GetArgument_(
 		int Index,
-		cArguments_ &Arguments )
+		cCaller_ &Caller )
 	{}
 
-	inline void Get_(
+	inline void GetArgument_(
 		int Index,
-		cArguments_ &Arguments,
+		cCaller_ &Caller,
 		str::dString *Value )
 	{
-		return Arguments.GetValue( Index, njs::tString, Value );
+		return Caller.GetArgument( Index, njs::tString, Value );
 	}
 
-	inline void Get_(
+	inline void GetArgument_(
 		int Index,
-		cArguments_ &Arguments,
+		cCaller_ &Caller,
 		str::dString &Value )
 	{
-		return Get_( Index, Arguments, &Value );
+		return GetArgument_( Index, Caller, &Value );
 	}
 
-	inline void Get_(
+	inline void GetArgument_(
 		int Index,
-		cArguments_ &Arguments,
+		cCaller_ &Caller,
 		str::wString &Value )
 	{
-		return Get_( Index, Arguments, &Value );
+		return GetArgument_( Index, Caller, &Value );
 	}
 
-	template <typename item, typename ...items> inline void Get_(
+	template <typename item, typename ...items> inline void GetArgument_(
 		int Index,
-		cArguments_ &Arguments,
+		cCaller_ &Caller,
 		item &Item,
 		items &...Items )
 	{
-		Get_( Index, Arguments, Item );
+		GetArgument_( Index, Caller, Item );
 
-		Get_( Index + 1, Arguments, Items... );
+		GetArgument_( Index + 1, Caller, Items... );
 	}
 
-	class sArguments {
+	class sCaller {
 	private:
-		qRMV( cArguments_, C_, Callback_ );
+		qRMV( cCaller_, C_, Callback_ );
 	public:
 		void reset( bso::sBool P = true )
 		{
 			Callback_ = NULL;
 		}
-		qCDTOR( sArguments );
-		void Init( cArguments_ &Callback )
+		qCDTOR( sCaller );
+		void Init( cCaller_ &Callback )
 		{
 			Callback_ = &Callback;
 		}
-		template <typename item> void Get(
+		template <typename item> void GetArgument(
 			bso::sUInt Index,
 			item &Item ) const
 		{
@@ -98,9 +98,9 @@ namespace sclnjs {
 
 			Get_( Index, C_(), Item );
 		}
-		template <typename ...items> inline void Get( items &...Items ) const
+		template <typename ...items> inline void GetArgument( items &...Items ) const
 		{
-			Get_( 1, C_(), Items... );
+			GetArgument_( 1, C_(), Items... );
 		}
 		void SetReturnValue( const str::dString &Value )
 		{
@@ -108,7 +108,7 @@ namespace sclnjs {
 		}
 	};
 
-	typedef void (fFunction)( sArguments &Arguments );
+	typedef void (fFunction)( sCaller &Caller );
 
 	class sRegistrar
 	{

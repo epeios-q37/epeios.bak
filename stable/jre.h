@@ -17,7 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-// Java Runtime Environment
+// Java Runtime Environment.
+// This library is the shared part between the 'jreq' tool, and the 'scljre' library.
 
 #ifndef JRE_INC_
 # define JRE_INC_
@@ -30,143 +31,131 @@
 
 # include "jrebse.h"
 
+# include "sclmisc.h"
+
 # include "err.h"
 # include "fdr.h"
 
+# define JRE_REGISTER_FUNCTION_NAME		JRERegister
+
 namespace jre {
-	using namespace jrebse;
-
-	typedef  java::lang::sObject sObject_;
-
-	class sObject
-	: public sObject_
-	{
-	public:
-		void Set(
-			const char *Name,
-			const char *Signature,
-			jobject Value,
-			JNIEnv *Env = NULL )
-		{
-			jniq::SetObjectField( sObject_::Object(), Name, Signature, Value, Env );
-		}
-		jobject Get(
-			const char *Name,
-			const char *Signature,
-			JNIEnv *Env = NULL )
-		{
-			return jniq::GetObjectField( sObject_::Object(), Name, Signature, Env );
-		}
-		void Init(
-			jobject Object,
-			const char *Class,
-			JNIEnv *Env = NULL )
-		{
-			return sObject_::Init( Object, Signature, Env );
-		}
+	qENUM( Type ) {
+		tString,
+		tamount,
+		t_Undefined
 	};
 
-	typedef java::lang::sString sString_;
-
-	class sString
-	: public sString_
-	{
-	public:
-		void reset( bso::sBool P = true )
-		{
-			sString_::reset( P );
-		}
-		qCDTOR( sString );
-		sString(
-			const char *Text,
-			JNIEnv *Env = NULL )
-		{
-			Init( Text, Env );
-		}
-		sString(
-			const str::dString &Text,
-			JNIEnv *Env = NULL )
-		{
-			Init( Text, Env );
-		}
-		sString(
-			jobject Object,
-			JNIEnv *Env = NULL )
-		{
-			Init( Object, Env );
-		}
-		void Init(
-			const char *Text,
-			JNIEnv *Env = NULL )
-		{
-			Env = jniq::GetEnv( Env );
-
-			sString_::Init( Env->NewStringUTF( Text ), Env );
-		}
-		void Init(
-			const str::dString &Text,
-			JNIEnv *Env = NULL )
-		{
-		qRH
-			qCBUFFERr Buffer;
-		qRB
-			Init( Text.Convert( Buffer ), Env );
-		qRR
-		qRT
-		qRE
-		}
-		void Init(
-			jobject Object,
-			JNIEnv *Env = NULL )
-		{
-			sString_::Init( Object, Env );
-		}
-		operator jstring( void ) const
-		{
-			return (jstring)Object();
-		}
-		jstring Concat(
-			const char *Text,
-			JNIEnv *Env = NULL )
-		{
-			Env = jniq::GetEnv( Env );
-
-			return sString_::Concat( Env->NewStringUTF( Text ), Env );
-		}
-	};
-
-	typedef fdr::rIDressedDriver rIDriver_;
-
-	class rInputStreamIDriver
-	: public rIDriver_
-	{
-	private:
-		java::io::rInputStream Stream_;
+	class cArguments {
 	protected:
-		virtual fdr::sSize FDRRead(
-			fdr::sSize Maximum,
-			fdr::sByte *Buffer ) override;
-		virtual void FDRDismiss( bso::sBool Unlock ) override
-		{}
-		virtual fdr::sTID FDRITake( fdr::sTID Owner ) override
-		{
-			return Owner;
-		}
+		virtual void JREGetValue(
+			int Index,
+			eType Type,
+			void *Value ) = 0;
+		virtual void JRESetReturnValue(
+			eType Type,
+			const void *Value ) = 0;
 	public:
-		void reset( bso::sBool P = true )
+		qCALLBACK( Arguments );
+		void GetValue(
+			int Index,
+			eType Type,
+			void *Value )
 		{
-			rIDriver_::reset( P );
-			tol::reset( P, Stream_ );
+			return JREGetValue( Index, Type, Value );
 		}
-		qCVDTOR( rInputStreamIDriver );
-		void Init(
-			jobject Stream,
-			JNIEnv *Env = NULL )
+		void SetReturnValue(
+			eType Type,
+			const void *Value )
 		{
-			rIDriver_::Init( fdr::ts_Default );
-			Stream_.Init( Stream, Env );
+			return JRESetReturnValue( Type, Value );
 		}
 	};
+
+	class cRegistrar {
+	protected:
+		virtual void JRERegister( void *Function ) = 0;
+	public:
+		qCALLBACK( Registrar );
+		void Register( void *Function )
+		{
+			return JRERegister( Function );
+		}
+	};
+
+	// Destroyed by launching by 'delete', so must be created with 'new' !
+	class cLauncher {
+	protected:
+		virtual void JRELaunch(
+			void *Function,
+			cArguments &Arguments ) = 0;
+		virtual void JREInfo( str::dString &Info ) = 0;
+	public:
+		qCALLBACK( Launcher );
+		void Launch(
+			void *Function,
+			cArguments &Arguments )
+		{
+			return JRELaunch( Function, Arguments );
+		}
+		void Info( str::dString &Info )
+		{
+			return JREInfo( Info );
+		}
+	};
+
+#define JRE_DATA_VERSION	"1"
+
+#pragma pack( push, 1)
+	// NOTA : If modified, increment 'JRE_DATA_VERSION' !
+	class sData {
+	public:
+		const char *Version;	// Always first.
+		bso::size__ ControlValue;
+		sclmisc::sRack *SCLRack;
+		const fnm::rName *Location;
+		const fnm::rName *Arguments;
+		void *UP;				// User pointer.
+		void reset( bso::bool__ P = true )
+		{
+			Version = NULL;
+			UP = NULL;
+			SCLRack = NULL;
+			Location = NULL;
+			Arguments = NULL;
+		}
+		E_CDTOR( sData );
+		sData(
+			sclmisc::sRack &Rack,
+			const fnm::rName &Location,
+			const fnm::rName &Arguments,
+			void *UP = NULL )
+		{
+			Init( Rack, Location, Arguments, UP );
+		}
+		void Init(
+			sclmisc::sRack &SCLRack,
+			const fnm::rName &Location,
+			const fnm::rName &Arguments,
+			void *UP = NULL )
+		{
+			Version = PLGNCORE_SHARED_DATA_VERSION;
+			ControlValue = Control();
+			this->SCLRack = &SCLRack;
+			this->Location = &Location;
+			this->Arguments = &Arguments;
+			this->UP = UP;
+		}
+		static bso::size__ Control( void )
+		{
+			return sizeof( sData );
+		}
+	};
+#pragma pack( pop )
+
+	// Will be used as 'extern "C"', so no reference can be used (I suppose).
+	typedef cLauncher *(fRegister)(
+		cRegistrar *Registrar,
+		sData *Data );
 }
 
 #endif

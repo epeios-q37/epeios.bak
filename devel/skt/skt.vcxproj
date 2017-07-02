@@ -69,8 +69,8 @@
     <ClCompile Include="h:/hg/epeios/stable/tol.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="..\CHANGELOG.txt" />
-    <Text Include="..\TODO.txt" />
+    <None Include="..\CHANGELOG.md" />
+    <None Include="..\TODO.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
 </Project>

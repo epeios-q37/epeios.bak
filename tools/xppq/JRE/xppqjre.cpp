@@ -17,10 +17,10 @@
 	along with xppq. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "jre.h"
+#include "jre.old.h"
 
 #include "sclmisc.h"
-#include "scljre.h"
+#include "scljre.old.h"
 
 #include "iof.h"
 #include "xpp.h"

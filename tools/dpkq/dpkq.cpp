@@ -72,7 +72,7 @@ public:
 		Name.reset( P );
 		S_.Limit = 0;
 	}
-	void plug( str::cHook &Hook )
+	void plug( str::sHook &Hook )
 	{
 		Name.plug( Hook );
 	}

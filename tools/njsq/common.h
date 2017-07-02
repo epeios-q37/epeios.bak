@@ -29,7 +29,7 @@
 
 namespace common {
 	namespace message {
-		extern const char *NoRegisteredAddon;
+		extern const char *NoRegisteredComponent;
 	}
 
 	typedef bch::qBUNCHwl( void * ) rFunctions;

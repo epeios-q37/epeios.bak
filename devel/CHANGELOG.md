@@ -1,8 +1,16 @@
-CHANGELOG for the 'Epeios' framework.
+# *Epeios* changelog
+
+2017-07-02 :
+- *NJS* :
+  - `cArguments` -> `cCaller` (standardization issue).
+- *SCLNJS* :
+  - Adaptation to changes in *NJS*.
+
+(2017-06-29 : This file becomes a *markdown* file.)
 
 2017-06-20 :
 - DLBRRY :
- - Introducing the 'Normalization' parameter.
+  - Introducing the 'Normalization' parameter.
 
 2017-06-04 :
 - SCLARGMNT :

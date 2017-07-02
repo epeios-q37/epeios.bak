@@ -4,12 +4,12 @@
 	<xpp:expand value-of="q37.xpp"/>
 	<xpp:expand select="epeios.xlcl"/>
 	<Translations text="ProgramDescription">
-		<Translation language="fr">'wrapper' pour 'addon' Node.js.</Translation>
-		<Translation language="en">Node.js addon wrapper.</Translation>
+		<Translation language="fr">'wrapper' pour composant ('addon') Node.js.</Translation>
+		<Translation language="en">Node.js component (addon) wrapper.</Translation>
 	</Translations>
- 	<Translations text="NoRegisteredAddon">
-		<Translation language="fr">('addon' non déclaré)</Translation>
-		<Translation language="en">(No registered addon)</Translation>
+ 	<Translations text="NoRegisteredComponent">
+		<Translation language="fr">(pas de composant enregistré)</Translation>
+		<Translation language="en">(no registered component)</Translation>
 	</Translations>
 
 	<!--

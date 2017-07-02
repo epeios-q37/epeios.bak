@@ -82,7 +82,7 @@ namespace {
 	qRE
 	}
 
-	void GetAddonInfo_( const v8::FunctionCallbackInfo<v8::Value>& Args )
+	void GetComponentInfo_( const v8::FunctionCallbackInfo<v8::Value>& Args )
 	{
 	qRH
 		str::wString Info;
@@ -272,7 +272,7 @@ qRFH
 	str::wString Filename;
 qRFB
 	NODE_SET_METHOD( Exports, "wrapperInfo", GetWrapperInfo_ );
-	NODE_SET_METHOD( Exports, "addonInfo", GetAddonInfo_ );
+	NODE_SET_METHOD( Exports, "componentInfo", GetComponentInfo_ );
 	NODE_SET_METHOD( Exports, "register", Register_ );
 	NODE_SET_METHOD( Exports, "_wrapper", wrapper::Launch );
 

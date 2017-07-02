@@ -49,7 +49,7 @@ namespace dpkals {
 			S_.TableRow = qNIL;
 			S_.RecordRow = qNIL;
 		}
-		void plug( uys::cHook &Hook )
+		void plug( uys::sHook &Hook )
 		{
 			Label.plug( Hook );
 		}
@@ -111,7 +111,7 @@ namespace dpkals {
 
 			S_.TableRow = qNIL;
 		}
-		void plug( str::cHook &Hook )
+		void plug( str::sHook &Hook )
 		{
 			Label.plug( Hook );
 		}
