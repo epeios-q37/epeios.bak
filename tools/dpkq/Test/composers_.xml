@@ -12,7 +12,7 @@
 				<Surname>Bach</Surname>
 				<FirstNames>Johann Sebastian</FirstNames>
 			</Composer>
-			<Composer>
+			<Composer test="toto">
 				<Surname>Beethoven</Surname>
 				<FirstNames>Ludwig Van</FirstNames>
 			</Composer>

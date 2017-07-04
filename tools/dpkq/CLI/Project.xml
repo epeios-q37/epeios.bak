@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<xpp:bloc>
+		<!-- User definitions -->
+		<xpp:define name="Version">
+			<xpp:bloc>20150630</xpp:bloc>
+		</xpp:define>
+		<xpp:define name="CopyrightYears">
+			<xpp:bloc>2010-2016</xpp:bloc>
+		</xpp:define>
+		<xpp:set name="Credits" value="Epeios"/>
+		<xpp:set name="Type" value="Tool"/>
+	</xpp:bloc>
+	<xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
+	<About>
+		<Program>dpkq</Program>
+		<Software>dpkq</Software>
+		<UUID>394fda6e-03c2-4770-b819-57852b649521</UUID>
+	</About>
+	<Modules>
+		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
+			<Modules Group="Core">
+				<xpp:expand select="Core"/>
+			</Modules>
+			<Modules Group="SCL">
+				<xpp:expand select="SCL"/>
+			</Modules>
+		</Modules>
+		<Modules Group="DPK">
+			<Module>dpkals</Module>
+			<Module>dpkbsc</Module>
+			<Module>dpkctx</Module>
+			<Module>dpkrcd</Module>
+			<Module>dpktbl</Module>
+		</Modules>
+		<Module>registry</Module>
+	</Modules>
+	<Files>
+		<Files Group="Test" Path="Test/">
+			<File Pack="yes">common.xprj</File>
+			<Files Group="Collections">
+				<File Pack="yes">Collections.xprj</File>
+				<File Pack="yes">Collections.xsl</File>
+				<File Pack="yes">collections_.xml</File>
+				<File Pack="yes">Collections.xml</File>
+			</Files>
+			<Files Group="Composers">
+				<File Pack="yes">Composers.xprj</File>
+				<File Pack="yes">Composers.xsl</File>
+				<File Pack="yes">composers_.xml</File>
+				<File Pack="yes">Composers.xml</File>
+			</Files>
+			<Files Group="Elements">
+				<File Pack="yes">Elements.xprj</File>
+				<File Pack="yes">Elements.xsl</File>
+				<File Pack="yes">elements_.xml</File>
+				<File Pack="yes">Elements.xml</File>
+			</Files>
+			<Files Group="Instrumentations">
+				<File Pack="yes">Instrumentations.xprj</File>
+				<File Pack="yes">Instrumentations.xsl</File>
+				<File Pack="yes">instrumentations_.xml</File>
+				<File Pack="yes">Instrumentations.xml</File>
+			</Files>
+			<Files Group="Movements">
+				<File Pack="yes">Movements.xprj</File>
+				<File Pack="yes">Movements.xsl</File>
+				<File Pack="yes">movements_.xml</File>
+				<File Pack="yes">Movements.xml</File>
+			</Files>
+			<Files Group="Pieces">
+				<File Pack="yes">Pieces.xprj</File>
+				<File Pack="yes">Pieces.xsl</File>
+				<File Pack="yes">pieces_.xml</File>
+				<File Pack="yes">Pieces.xml</File>
+			</Files>
+		</Files>
+	</Files>
+	<Packing>
+		<WikiFiles Group="Doc" Path="Doc/">
+			<File Dir="computing/epeios/" Desc="compilation instructions">Compilation</File>
+			<File Dir="computing/epeios/tools/" Desc="general configuration instructions">Configuration</File>
+			<File Dir="computing/epeios/tools/dpkq/" Desc="description of the content of data files">Data</File>
+			<File Dir="computing/epeios/tools/" Desc="general description of dpkq" Oddity="IsHome">dpkq</File>
+			<File Dir="computing/epeios/tools/dpkq/" Desc="for working examples">Examples</File>
+			<File Dir="computing/epeios/tools/dpkq/" Desc="the user manual">Manual</File>
+			<File Dir="computing/epeios/tools/dpkq/" Desc="description of the output file">Output</File>
+		</WikiFiles>
+	</Packing>
+	<SourceDirs>
+	</SourceDirs>
+	<PreprocessorDefinitions>
+		<PreprocessorDefinition>E_ST</PreprocessorDefinition>
+	</PreprocessorDefinitions>
+</Project>

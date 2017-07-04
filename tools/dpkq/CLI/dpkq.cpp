@@ -349,7 +349,7 @@ namespace {
 		NormalizedPattern.Append( '$' );
 		NormalizedPattern.Append( Pattern );
 
-		Item = stsfsm::GetId( NormalizedPattern, Automat_, i_Undefined, i_amount );
+		Item = stsfsm::GetId( NormalizedPattern, Automat_, i_Undefined, i_amount, err::hUserDefined );
 	qRR
 	qRT
 	qRE
@@ -1946,6 +1946,7 @@ qRH
 	str::string Label, TableLabel;
 	id__ Id = 0;
 qRB
+
 	NamespaceLabel_.Init();
 	sclmisc::MGetValue( registry::NamespaceLabel, NamespaceLabel_ );
 	NamespaceLabel_.Append( ':' );
