@@ -41,7 +41,8 @@ mods += rgstry stsfsm xml xpp
 mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
 mods += scltool 
 mods += dpkals dpkbsc dpkctx dpkrcd dpktbl 
-mods += registry 
+mods += data_c data_d data_r 
+mods += common context data registry 
 
 pmods += pllio 
 
@@ -341,7 +342,7 @@ ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20170704"\"
+copt += -DVERSION=\""20170711"\"
 copt += -DCOPYRIGHT_YEARS=\""2010-2016"\"
 copt += -DIDENTIFIER=\""394fda6e-03c2-4770-b819-57852b649521"\"
 

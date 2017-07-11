@@ -33,7 +33,15 @@
 			<Module>dpkrcd</Module>
 			<Module>dpktbl</Module>
 		</Modules>
-		<Module>registry</Module>
+  <Module>common</Module>
+  <Module>context</Module>
+  <Module>data</Module>
+  <Modules Group="data">
+   <Module>data_c</Module>
+   <Module>data_d</Module>
+   <Module>data_r</Module>
+  </Modules>
+  <Module>registry</Module>
 	</Modules>
 	<Files>
 		<Files Group="Test" Path="Test/">
