@@ -17,6 +17,8 @@
     along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+# include "esketch.h"
+
 #include "registry.h"
 
 #include "scltool.h"
@@ -32,22 +34,6 @@
 using cio::CErr;
 using cio::COut;
 using cio::CIn;
-
-# define BEGIN
-// Ne pas enlever ce qu'il y a entre le 'BEGIN' ci-dessus et le 'END' ci-dessous !
-/* PLACEHOLDER */
-
-# define NAME_MC			"eSketch"
-# define NAME_UC			"ESKETCH"
-# define NAME_LC			"esketch"
-# define WEBSITE_URL		"http://q37.info/"
-# define AUTHOR_NAME		"Claude SIMON"
-# define AUTHOR_CONTACT		"http://q37.info/contact/"
-# define OWNER_NAME			"Claude SIMON"
-# define OWNER_CONTACT		"http://q37.info/contact/"
-# define COPYRIGHT			COPYRIGHT_YEARS " " OWNER_NAME " (" OWNER_CONTACT ")"	
-
-# define END
 
 namespace {
 	void PrintHeader_( void )

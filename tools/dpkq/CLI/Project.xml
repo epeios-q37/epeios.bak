@@ -3,10 +3,10 @@
 	<xpp:bloc>
 		<!-- User definitions -->
 		<xpp:define name="Version">
-			<xpp:bloc>20150630</xpp:bloc>
+			<xpp:bloc>(obsolete)</xpp:bloc>
 		</xpp:define>
 		<xpp:define name="CopyrightYears">
-			<xpp:bloc>2010-2016</xpp:bloc>
+			<xpp:bloc>2010-2017</xpp:bloc>
 		</xpp:define>
 		<xpp:set name="Credits" value="Epeios"/>
 		<xpp:set name="Type" value="Tool"/>
@@ -44,7 +44,7 @@
   <Module>registry</Module>
 	</Modules>
 	<Files>
-		<Files Group="Test" Path="Test/">
+		<Files Group="Test" Path="../Test/">
 			<File Pack="yes">common.xprj</File>
 			<Files Group="Collections">
 				<File Pack="yes">Collections.xprj</File>
@@ -100,4 +100,7 @@
 	<PreprocessorDefinitions>
 		<PreprocessorDefinition>E_ST</PreprocessorDefinition>
 	</PreprocessorDefinitions>
+ <RTW>
+  <Dir>dpkq-cli</Dir>
+ </RTW>
 </Project>
