@@ -32,6 +32,11 @@ namespace dpkctx {
 	typedef sdr::size__ amount__;
 #	define DPKCTX_AMOUNT_MAX	EPEIOS_SIZE_MAX
 
+	E_TMIMIC( rrows, box );
+
+	typedef bch::qBUNCHdl( box ) dBoxes;
+	qW( Boxes );
+
 	E_TMIMIC( rrows, pool );
 
 	class context_ {
