@@ -1,177 +1,175 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<Locales xmlns:xpp="http://q37.info/ns/xpp">
-	<Locale target="dpkq">
-		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
-		<xpp:expand value-of="q37.xpp"/>
-		<xpp:expand select="epeios.xlcl"/>
-		<Translations text="ProgramDescription">
-			<Translation language="fr">Piocheur de donnée basé sur le framework Epeios.</Translation>
-			<Translation language="en">Data picker based on the Epeios framework.</Translation>
-		</Translations>
-		<!-- Wordings -->
-		<Translations text="TableAliasWording">
-			<Translation language="fr">alias de table</Translation>
-			<Translation language="en">table alias</Translation>
-		</Translations>
-		<Translations text="TableLabelWording">
-			<Translation language="fr">label de table</Translation>
-			<Translation language="en">table label</Translation>
-		</Translations>
-		<Translations text="RecordAliasWording">
-			<Translation language="fr">alias d'entrée</Translation>
-			<Translation language="en">record alias</Translation>
-		</Translations>
-		<Translations text="RecordLabelWording">
-			<Translation language="fr">label d'entrée</Translation>
-			<Translation language="en">record label</Translation>
-		</Translations>
-		<Translations text="AliasLabelWording">
-			<Translation language="fr">label d'alias</Translation>
-			<Translation language="en">alias label</Translation>
-		</Translations>
-		<Translations text="DefaultRecordLabelTagWording">
-			<Translation language="fr">balise par défaut pour le label d'entrée</Translation>
-			<Translation language="en">default tag for record label</Translation>
-		</Translations>
+<Locale xmlns:xpp="http://q37.info/ns/xpp" target="dpkq">
+	<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
+	<xpp:expand value-of="q37.xpp"/>
+	<xpp:expand select="epeios.xlcl"/>
+	<Translations text="ProgramDescription">
+		<Translation language="fr">Piocheur de donnée basé sur le framework Epeios.</Translation>
+		<Translation language="en">Data picker based on the Epeios framework.</Translation>
+	</Translations>
+	<!-- Wordings -->
+	<Translations text="TableAliasWording">
+		<Translation language="fr">alias de table</Translation>
+		<Translation language="en">table alias</Translation>
+	</Translations>
+	<Translations text="TableLabelWording">
+		<Translation language="fr">label de table</Translation>
+		<Translation language="en">table label</Translation>
+	</Translations>
+	<Translations text="RecordAliasWording">
+		<Translation language="fr">alias d'entrée</Translation>
+		<Translation language="en">record alias</Translation>
+	</Translations>
+	<Translations text="RecordLabelWording">
+		<Translation language="fr">label d'entrée</Translation>
+		<Translation language="en">record label</Translation>
+	</Translations>
+	<Translations text="AliasLabelWording">
+		<Translation language="fr">label d'alias</Translation>
+		<Translation language="en">alias label</Translation>
+	</Translations>
+	<Translations text="DefaultRecordLabelTagWording">
+		<Translation language="fr">balise par défaut pour le label d'entrée</Translation>
+		<Translation language="en">default tag for record label</Translation>
+	</Translations>
 
-		<!-- Errors -->
-		<Translations text="GenericError">
-			<Translation language="fr">Erreur : %1.</Translation>
-			<Translation language="en">Error : %1.</Translation>
-		</Translations>
-		<Translations text="DataFileNotSpecifiedError">
-			<Translation language="fr">Fichier de données non spécifié</Translation>
-			<Translation language="en">Data file not specified</Translation>
-		</Translations>
-		<Translations text="OutputFileNotSpecifiedError">
-			<Translation language="fr">Fichier destination non spécifié</Translation>
-			<Translation language="en">Output file not specified</Translation>
-		</Translations>
-		<Translations text="ContextFileNotSpecifiedError">
-			<Translation language="fr">Fichier context non spécifié</Translation>
-			<Translation language="en">Context file not specified</Translation>
-		</Translations>
-		<Translations text="BadIdError">
-			<Translation language="fr">Mauvais identifiant</Translation>
-			<Translation language="en">Bad id</Translation>
-		</Translations>
-		<Translations text="RecordNotFoundError">
-			<Translation language="fr">Entrée introuvable</Translation>
-			<Translation language="en">Record not found</Translation>
-		</Translations>
-		<Translations text="TableNotFoundError">
-			<Translation language="fr">Table introuvable</Translation>
-			<Translation language="en">Table not found</Translation>
-		</Translations>
-		<Translations text="RecordAliasNotFoundError">
-			<Translation language="fr">Alias d'enregistrement introuvable</Translation>
-			<Translation language="en">Record alias not found</Translation>
-		</Translations>
-		<Translations text="TableAliasNotFoundError">
-			<Translation language="fr">Alias de table introuvable</Translation>
-			<Translation language="en">Table alias not found</Translation>
-		</Translations>
-		<Translations text="GenericError">
-			<Translation language="fr">Erreur : %1</Translation>
-			<Translation language="en">Error : %1</Translation>
-		</Translations>
-		<Translations text="ItemAlreadyDefinedError">
-			<Translation language="fr">%1 déjà défini</Translation>
-			<Translation language="en">%1 already defined</Translation>
-		</Translations>
-		<Translations text="ItemValueEmptyError">
-			<Translation language="fr">%1 vide</Translation>
-			<Translation language="en">%1 empty</Translation>
-		</Translations>
-		<Translations text="ItemsDefinedTogetherError">
-			<Translation language="fr">%1 et %2 définis simultanément</Translation>
-			<Translation language="en">%1 and %2 defined simultaneously</Translation>
-		</Translations>
-		<Translations text="TagNotAllowedHereError">
-			<Translation language="fr">balise non autorisée ici</Translation>
-			<Translation language="en">tag not allowed here</Translation>
-		</Translations>
-		<Translations text="UnknownAttributeError">
-			<Translation language="fr">attribut inconnu</Translation>
-			<Translation language="en">unknown attribute</Translation>
-		</Translations>
-		<Translations text="UnknownAttributeValueError">
-			<Translation language="fr">valeur d'attribut inconnue</Translation>
-			<Translation language="en">unknown attribute value</Translation>
-		</Translations>
-		<Translations text="BadAttributeValueError">
-			<Translation language="fr">mauvaise valeur d'attribut</Translation>
-			<Translation language="en">bad attribute value</Translation>
-		</Translations>
-		<Translations text="MissingRecordLabelError">
-			<Translation language="fr">label d'entrée manquant</Translation>
-			<Translation language="en">missing record label</Translation>
-		</Translations>
-		<Translations text="MissingInsertionParametersError">
-			<Translation language="fr">paramètres d'insertions lanquants</Translation>
-			<Translation language="en">missing insertion parameters</Translation>
-		</Translations>
-		<Translations text="ValueNotAllowedHereError">
-			<Translation language="fr">valeur non autorisée ici</Translation>
-			<Translation language="en">value not allowed here</Translation>
-		</Translations>
-		<Translations text="AttributeNotAllowedHereError">
-			<Translation language="fr">attribut non autorisé ici</Translation>
-			<Translation language="en">attribute not allowed here</Translation>
-		</Translations>
-		<Translations text="MissingTagError">
-			<Translation language="fr">balise manquante</Translation>
-			<Translation language="en">missing tag</Translation>
-		</Translations>
-		<Translations text="ForbiddenTagError">
-			<Translation language="fr">balise interdite</Translation>
-			<Translation language="en">forbidden tag</Translation>
-		</Translations>
-		<Translations text="CanNotBeUsedTogetherError">
-			<Translation language="fr">'%1' et '%2' ne peuvent être utilisés ensembles</Translation>
-			<Translation language="en">'%1' et '%2' can not be used together</Translation>
-		</Translations>
-		<Translations text="MissingTableReferenceError">
-			<Translation language="fr">réference de tabel manquante</Translation>
-			<Translation language="en">missing table reference</Translation>
-		</Translations>
-		<Translations text="MissingAliasLabelError">
-			<Translation language="fr">alias manquant</Translation>
-			<Translation language="en">missing alias</Translation>
-		</Translations>
-		<Translations text="IncompleteAliasDefinitionError">
-			<Translation language="fr">définition d'alias incomplète</Translation>
-			<Translation language="en">incomplete alias définition</Translation>
-		</Translations>
-		<Translations text="UnknownTagError">
-			<Translation language="fr">balise inconnue</Translation>
-			<Translation language="en">unknown tag</Translation>
-		</Translations>
-		<Translations text="UnexpectedAttributeError">
-			<Translation language="fr">attribut inattendu</Translation>
-			<Translation language="en">unexpected attribute</Translation>
-		</Translations>
-		<Translations text="MissingTableLabelError">
-			<Translation language="fr">label de table manquant</Translation>
-			<Translation language="en">missing table label</Translation>
-		</Translations>
-		<Translations text="NoDataError">
-			<Translation language="fr">pas de données dans le fichier '%1'</Translation>
-			<Translation language="en">no data in '%1' file</Translation>
-		</Translations>
-		<Translations text="NoRecordOfGivenIdError">
-			<Translation language="fr">Pas d'entrée d'identifiant '%1'</Translation>
-			<Translation language="en">No record of id '%1'</Translation>
-		</Translations>
-		<Translations text="BadGenericRecordLabelAlias">
-			<Translation language="fr">Mauvais libellé génerique d'alias de fiche.</Translation>
-			<Translation language="en">Bad generic record alias label.</Translation>
-		</Translations>
-		<!--
-		<Translations text="">
-		  <Translation language="fr"></Translation>
-		  <Translation language="en"></Translation>
-		</Translations>
-		-->
-	</Locale>
-</Locales>
+	<!-- Errors -->
+	<Translations text="GenericError">
+		<Translation language="fr">Erreur : %1.</Translation>
+		<Translation language="en">Error : %1.</Translation>
+	</Translations>
+	<Translations text="DataFileNotSpecifiedError">
+		<Translation language="fr">Fichier de données non spécifié</Translation>
+		<Translation language="en">Data file not specified</Translation>
+	</Translations>
+	<Translations text="OutputFileNotSpecifiedError">
+		<Translation language="fr">Fichier destination non spécifié</Translation>
+		<Translation language="en">Output file not specified</Translation>
+	</Translations>
+	<Translations text="ContextFileNotSpecifiedError">
+		<Translation language="fr">Fichier context non spécifié</Translation>
+		<Translation language="en">Context file not specified</Translation>
+	</Translations>
+	<Translations text="BadIdError">
+		<Translation language="fr">Mauvais identifiant</Translation>
+		<Translation language="en">Bad id</Translation>
+	</Translations>
+	<Translations text="RecordNotFoundError">
+		<Translation language="fr">Entrée introuvable</Translation>
+		<Translation language="en">Record not found</Translation>
+	</Translations>
+	<Translations text="TableNotFoundError">
+		<Translation language="fr">Table introuvable</Translation>
+		<Translation language="en">Table not found</Translation>
+	</Translations>
+	<Translations text="RecordAliasNotFoundError">
+		<Translation language="fr">Alias d'enregistrement introuvable</Translation>
+		<Translation language="en">Record alias not found</Translation>
+	</Translations>
+	<Translations text="TableAliasNotFoundError">
+		<Translation language="fr">Alias de table introuvable</Translation>
+		<Translation language="en">Table alias not found</Translation>
+	</Translations>
+	<Translations text="GenericError">
+		<Translation language="fr">Erreur : %1</Translation>
+		<Translation language="en">Error : %1</Translation>
+	</Translations>
+	<Translations text="ItemAlreadyDefinedError">
+		<Translation language="fr">%1 déjà défini</Translation>
+		<Translation language="en">%1 already defined</Translation>
+	</Translations>
+	<Translations text="ItemValueEmptyError">
+		<Translation language="fr">%1 vide</Translation>
+		<Translation language="en">%1 empty</Translation>
+	</Translations>
+	<Translations text="ItemsDefinedTogetherError">
+		<Translation language="fr">%1 et %2 définis simultanément</Translation>
+		<Translation language="en">%1 and %2 defined simultaneously</Translation>
+	</Translations>
+	<Translations text="TagNotAllowedHereError">
+		<Translation language="fr">balise non autorisée ici</Translation>
+		<Translation language="en">tag not allowed here</Translation>
+	</Translations>
+	<Translations text="UnknownAttributeError">
+		<Translation language="fr">attribut inconnu</Translation>
+		<Translation language="en">unknown attribute</Translation>
+	</Translations>
+	<Translations text="UnknownAttributeValueError">
+		<Translation language="fr">valeur d'attribut inconnue</Translation>
+		<Translation language="en">unknown attribute value</Translation>
+	</Translations>
+	<Translations text="BadAttributeValueError">
+		<Translation language="fr">mauvaise valeur d'attribut</Translation>
+		<Translation language="en">bad attribute value</Translation>
+	</Translations>
+	<Translations text="MissingRecordLabelError">
+		<Translation language="fr">label d'entrée manquant</Translation>
+		<Translation language="en">missing record label</Translation>
+	</Translations>
+	<Translations text="MissingInsertionParametersError">
+		<Translation language="fr">paramètres d'insertions lanquants</Translation>
+		<Translation language="en">missing insertion parameters</Translation>
+	</Translations>
+	<Translations text="ValueNotAllowedHereError">
+		<Translation language="fr">valeur non autorisée ici</Translation>
+		<Translation language="en">value not allowed here</Translation>
+	</Translations>
+	<Translations text="AttributeNotAllowedHereError">
+		<Translation language="fr">attribut non autorisé ici</Translation>
+		<Translation language="en">attribute not allowed here</Translation>
+	</Translations>
+	<Translations text="MissingTagError">
+		<Translation language="fr">balise manquante</Translation>
+		<Translation language="en">missing tag</Translation>
+	</Translations>
+	<Translations text="ForbiddenTagError">
+		<Translation language="fr">balise interdite</Translation>
+		<Translation language="en">forbidden tag</Translation>
+	</Translations>
+	<Translations text="CanNotBeUsedTogetherError">
+		<Translation language="fr">'%1' et '%2' ne peuvent être utilisés ensembles</Translation>
+		<Translation language="en">'%1' et '%2' can not be used together</Translation>
+	</Translations>
+	<Translations text="MissingTableReferenceError">
+		<Translation language="fr">réference de tabel manquante</Translation>
+		<Translation language="en">missing table reference</Translation>
+	</Translations>
+	<Translations text="MissingAliasLabelError">
+		<Translation language="fr">alias manquant</Translation>
+		<Translation language="en">missing alias</Translation>
+	</Translations>
+	<Translations text="IncompleteAliasDefinitionError">
+		<Translation language="fr">définition d'alias incomplète</Translation>
+		<Translation language="en">incomplete alias définition</Translation>
+	</Translations>
+	<Translations text="UnknownTagError">
+		<Translation language="fr">balise inconnue</Translation>
+		<Translation language="en">unknown tag</Translation>
+	</Translations>
+	<Translations text="UnexpectedAttributeError">
+		<Translation language="fr">attribut inattendu</Translation>
+		<Translation language="en">unexpected attribute</Translation>
+	</Translations>
+	<Translations text="MissingTableLabelError">
+		<Translation language="fr">label de table manquant</Translation>
+		<Translation language="en">missing table label</Translation>
+	</Translations>
+	<Translations text="NoDataError">
+		<Translation language="fr">pas de données dans le fichier '%1'</Translation>
+		<Translation language="en">no data in '%1' file</Translation>
+	</Translations>
+	<Translations text="NoRecordOfGivenIdError">
+		<Translation language="fr">Pas d'entrée d'identifiant '%1'</Translation>
+		<Translation language="en">No record of id '%1'</Translation>
+	</Translations>
+	<Translations text="BadGenericRecordLabelAlias">
+		<Translation language="fr">Mauvais libellé génerique d'alias de fiche.</Translation>
+		<Translation language="en">Bad generic record alias label.</Translation>
+	</Translations>
+	<!--
+	<Translations text="">
+	  <Translation language="fr"></Translation>
+	  <Translation language="en"></Translation>
+	</Translations>
+	-->
+</Locale>
