@@ -30,11 +30,21 @@ namespace dpkctx {
 	typedef bso::u8__ coeff__;
 
 	typedef sdr::size__ amount__;
+	typedef bso::sU8 sBoxId;
+
 #	define DPKCTX_AMOUNT_MAX	EPEIOS_SIZE_MAX
 
+	// Related to spaced repetition implementation.
+	// List of records which are in a box.
 	E_TMIMIC( rrows, box );
 
-	typedef bch::qBUNCHdl( box ) dBoxes;
+	// Box row.
+	qROW( BRow );
+
+	// The second box is at row 0, the third at row 1 and so on.
+	/* The content of the first box is not stored, as all records
+	which are not in the other boxes are considered as stored in the first box. */
+	typedef bch::qBUNCHd( box, sBRow ) dBoxes;
 	qW( Boxes );
 
 	E_TMIMIC( rrows, pool );
@@ -43,6 +53,7 @@ namespace dpkctx {
 	public:
 		struct s {
 			pool_::s Pool;
+			sBoxId BoxId;
 			amount__
 				Session,	// Amount of record of the current session.
 				Cycle;		// To ensure that, inside a cycle, a record is only picked once.
@@ -57,6 +68,7 @@ namespace dpkctx {
 		{
 			Pool.reset( P );
 
+			S_.BoxId = 0;
 			S_.Session = S_.Cycle = 0;
 			S_.TimeStamp = 0;
 		}
@@ -77,7 +89,7 @@ namespace dpkctx {
 
 			return *this;
 		}
-		void Init( void )
+		void Init( amount__ BoxAmount )
 		{
 			Pool.Init();
 
