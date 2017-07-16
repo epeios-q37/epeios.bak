@@ -185,8 +185,10 @@ static void RetrievePool_(
 
 void dpkctx::Retrieve(
 	xml::parser___ &Parser,
+	amount__ BoxesAmount,
 	context_ &Context )
 {
+	Context.AdjustBoxesAmount( BoxesAmount );
 	RetrievePool_( Parser, Context );
 }
 
@@ -251,6 +253,66 @@ static inline bso::bool__ IsNewSession_(
 		return difftime( time( NULL ), TimeStamp ) > ( Duration * 60 );
 }
 
+void dpkctx::context_::MoveToBox_(
+	const rrows_ &Records,
+	box_ &Box )
+{
+	sdr::sRow Row = Records.First();
+
+	while ( Row != qNIL ) 
+	{
+		Box.Append( Records( Row ) );
+
+		Row = Records.Next( Row );
+	}
+}
+
+void dpkctx::context_::MoveRecordsToBox_(
+	sBRow Source,
+	sBRow Target )
+{
+	ctn::qCITEMs( box_, sBRow ) Box;
+
+	Box.Init( Boxes );
+
+	MoveToBox_( Box( Source ), Boxes( Target ) );
+
+	Box.Flush();
+
+	Boxes( Source ).Init();
+}
+
+void dpkctx::context_::BringBackRecordsToBox_( sBRow Target )
+{
+	sBRow Row = Boxes.Last();
+
+	while ( ( Row != qNIL  ) && ( Row != Target ) )
+	{
+		MoveRecordsToBox_( Row, Target );
+		Row = Boxes.Previous( Row );
+	}
+
+	if ( Row == qNIL )
+		qRGnr();
+}
+
+void dpkctx::context_::AdjustBoxesAmount( amount__ Amount )
+{
+	switch ( Amount ) {
+	case 0:
+	case 1:
+		Boxes.Init();
+		break;
+	default:
+		if ( Boxes.Amount() > ( Amount - 1 ) )
+			BringBackRecordsToBox_( Amount - 2 );
+
+		if ( Boxes.Amount() != ( Amount - 1 ) )
+			Boxes.Allocate( Amount - 1 );
+
+		break;
+	}
+}
 
 rrow__ dpkctx::context_::Pick(
 	amount__ Amount,

@@ -44,14 +44,23 @@ namespace dpkctx {
 	// The second box is at row 0, the third at row 1 and so on.
 	/* The content of the first box is not stored, as all records
 	which are not in the other boxes are considered as stored in the first box. */
-	typedef bch::qBUNCHd( box, sBRow ) dBoxes;
+	typedef crt::qCRATEd( box_, sBRow ) dBoxes;
 	qW( Boxes );
 
 	E_TMIMIC( rrows, pool );
 
 	class context_ {
+	private:
+		void MoveToBox_(
+			const rrows_ & Records,
+			box_ & Box );
+		void MoveRecordsToBox_(
+			sBRow Source,
+			sBRow Target );
+		void BringBackRecordsToBox_( sBRow Target );	// Move all records in boxes after box 'Target', to box 'Target'.
 	public:
 		struct s {
+			dBoxes::s Boxes;
 			pool_::s Pool;
 			sBoxId BoxId;
 			amount__
@@ -59,14 +68,16 @@ namespace dpkctx {
 				Cycle;		// To ensure that, inside a cycle, a record is only picked once.
 			time_t TimeStamp;
 		} &S_;
+		dBoxes Boxes;
 		pool_ Pool;
 		context_( s &S )
 		: S_( S ),
+		  Boxes( S_.Boxes ),
 		  Pool( S.Pool )
 		{}
 		void reset( bso::bool__ P = true )
 		{
-			Pool.reset( P );
+			tol::reset( P, Boxes, Pool );
 
 			S_.BoxId = 0;
 			S_.Session = S_.Cycle = 0;
@@ -89,16 +100,18 @@ namespace dpkctx {
 
 			return *this;
 		}
-		void Init( amount__ BoxAmount )
+		void Init( void )
 		{
-			Pool.Init();
+			tol::Init( Boxes, Pool );
 
 			S_.Session = S_.Cycle = 0;
 			S_.TimeStamp = 0;
 		}
+		void AdjustBoxesAmount( amount__ Amount );	// '0' and '1' are identical : all boxes are erased, so all records are randomly picked.
 		rrow__ Pick(
 			amount__ Amount,
-			bso::uint__ SessionDuration );	// In minute; '0' for infinite.
+			bso::uint__ SessionDuration ); // In minute; '0' for infinite.
+		
 	};
 
 	E_AUTO( context );
@@ -109,6 +122,7 @@ namespace dpkctx {
 
 	void Retrieve(
 		xml::parser___ &Parser,
+		amount__ BoxesAmount,	// '0' and '1' are identical : all record are randomly picked.
 		context_ &Context );
 
 };
