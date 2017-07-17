@@ -98,22 +98,22 @@ namespace dpkrcd {
 
 	E_AUTO( record )
 
-	typedef ctn:: E_CONTAINERt_( record_, rrow__ ) records_;
+	typedef ctn:: E_CONTAINERt_( record_, sRRow ) records_;
 	E_AUTO( records )
 
-	inline rrow__ SearchRecord(
+	inline sRRow SearchRecord(
 		const str::string_ &Label,
 		const records_ &Records )
 	{
-		return SearchInMulti<records_, record_, rrow__>( Label, Records );
+		return SearchInMulti<records_, record_, sRRow>( Label, Records );
 	}
 
 	inline void Insert(
-		rrow__ Row,
+		sRRow Row,
 		const records_ &Records,
 		record_ &Record )
 	{
-		ctn::qCITEMs( record_, rrow__ ) SourceRecord;
+		ctn::qCITEMs( record_, sRRow ) SourceRecord;
 
 		SourceRecord.Init( Records );
 

@@ -36,7 +36,7 @@ namespace dpkctx {
 
 	// Related to spaced repetition implementation.
 	// List of records which are in a box.
-	E_TMIMIC( rrows, box );
+	qTMIMICdw( RRows, Box );
 
 	// Box row.
 	qROW( BRow );
@@ -44,16 +44,16 @@ namespace dpkctx {
 	// The second box is at row 0, the third at row 1 and so on.
 	/* The content of the first box is not stored, as all records
 	which are not in the other boxes are considered as stored in the first box. */
-	typedef crt::qCRATEd( box_, sBRow ) dBoxes;
+	typedef crt::qCRATEd( dBox, sBRow ) dBoxes;
 	qW( Boxes );
 
-	E_TMIMIC( rrows, pool );
+	qTMIMICdw( RRows, Pool );
 
 	class context_ {
 	private:
 		void MoveToBox_(
-			const rrows_ & Records,
-			box_ & Box );
+			const dRRows & Records,
+			dBox& Box );
 		void MoveRecordsToBox_(
 			sBRow Source,
 			sBRow Target );
@@ -61,7 +61,7 @@ namespace dpkctx {
 	public:
 		struct s {
 			dBoxes::s Boxes;
-			pool_::s Pool;
+			dPool::s Pool;
 			sBoxId BoxId;
 			amount__
 				Session,	// Amount of record of the current session.
@@ -69,7 +69,7 @@ namespace dpkctx {
 			time_t TimeStamp;
 		} &S_;
 		dBoxes Boxes;
-		pool_ Pool;
+		dPool Pool;
 		context_( s &S )
 		: S_( S ),
 		  Boxes( S_.Boxes ),
@@ -108,7 +108,7 @@ namespace dpkctx {
 			S_.TimeStamp = 0;
 		}
 		void AdjustBoxesAmount( amount__ Amount );	// '0' and '1' are identical : all boxes are erased, so all records are randomly picked.
-		rrow__ Pick(
+		sRRow Pick(
 			amount__ Amount,
 			bso::uint__ SessionDuration ); // In minute; '0' for infinite.
 		

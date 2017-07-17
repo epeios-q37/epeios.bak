@@ -31,9 +31,9 @@ namespace dpkbsc {
 	typedef bso::uint__ counter__;
 #define DPKBSC_COUNTER_MAX	BSO_UINT_MAX
 
-	E_ROW( rrow__ );	// 'record row'.
-	typedef bch::E_BUNCH_( rrow__ ) rrows_;
-	E_AUTO( rrows );
+	E_ROW( sRRow );	// 'record row'.
+	typedef bch::qBUNCHdl( sRRow ) dRRows;
+	qW( RRows );
 
 	E_ROW( trow__ );	// 'table row'.
 

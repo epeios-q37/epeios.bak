@@ -91,7 +91,7 @@ namespace dpktbl {
 		return SearchInMulti<tables_, table_, trow__>( Label, Tables );
 	}
 
-	inline rrow__ SearchRecord(
+	inline sRRow SearchRecord(
 		const str::string_ &Label,
 		trow__ TableRow,
 		const tables_ &Tables )
@@ -104,7 +104,7 @@ namespace dpktbl {
 	}
 
 	inline void Insert(
-		rrow__ RecordRow,
+		sRRow RecordRow,
 		trow__ TableRow,
 		const tables_ &Tables,
 		record_ &Record )

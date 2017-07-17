@@ -206,12 +206,12 @@ namespace {
 		}
 
 		static void Display_(
-			rrow__ Row,
+			sRRow Row,
 			const records_ &Records,
 			str::string_ &Label,
 			xml::writer_ &Writer )
 		{
-			ctn::qCITEMs( record_, rrow__ ) Record;
+			ctn::qCITEMs( record_, sRRow ) Record;
 
 			Record.Init( Records );
 
@@ -224,8 +224,8 @@ namespace {
 			const records_ &Records,
 			xml::writer_ &Writer )
 		{
-			ctn::qCITEMs( record_, rrow__ ) Record;
-			rrow__ Row = Records.First();
+			ctn::qCITEMs( record_, sRRow ) Record;
+			sRRow Row = Records.First();
 
 			Record.Init( Records );
 
@@ -238,13 +238,13 @@ namespace {
 
 		dpkbsc::counter__ GetSkippedAmount_(
 			dpkctx::amount__ SessionAmount,
-			const rrows_ &RecordRows,
+			const dRRows &RecordRows,
 			const records_ &Records )
 		{
 			dpkbsc::counter__ Skipped = 0;
 			sdr::row__ Row = RecordRows.Last();
-			rrow__ RecordRow = qNIL;
-			ctn::qCITEMs( record_, rrow__ ) Record;
+			sRRow RecordRow = qNIL;
+			ctn::qCITEMs( record_, sRRow ) Record;
 
 			Record.Init( Records );
 
@@ -276,9 +276,9 @@ namespace {
 			xml::writer_ &Writer )
 		{
 		qRH
-			rrow__ Row = qNIL;
+			sRRow Row = qNIL;
 			bso::integer_buffer__ Buffer;
-			ctn::qCITEMs( record_, rrow__ ) Record;
+			ctn::qCITEMs( record_, sRRow ) Record;
 			dpkbsc::counter__ Counter = 0;
 			lcl::meaning Meaning;
 		qRB

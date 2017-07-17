@@ -24,13 +24,20 @@
 
 using namespace dpkctx;
 
-typedef bitbch::E_BIT_BUNCHt_( rrow__ ) grid_;
-E_AUTO( grid );
+typedef bitbch::qBBUNCHd( sRRow ) dGrid;
+qW( Grid );
 
 #define COEFF	3	// 
 
 #define CONTEXT_TAG_NAME				"Context"
 #define CONTEXTE_TARGET_ATTRIBUTE_NAME	"target"
+
+#define BOXES_TAG_NAME	"Boxes"
+#define BOXES_AMOUT_ATTRIBUTE	"Amount"
+
+#define BOX_TAG_NAME	"Box"
+#define BOX_RECORDS_AMOUT_ATTRIBUTE	"RecordsAmount"
+
 
 #define POOL_TAG_NAME						"Pool"
 
@@ -43,7 +50,7 @@ E_AUTO( grid );
 #define RECORD_ID_ATTRIBUTE_NAME		"Id"
 
 void Dump_(
-	const rrows_ &Records,
+	const dRRows &Records,
 	xml::writer_ &Writer )
 {
 	sdr::row__ Row = Records.First();
@@ -60,9 +67,9 @@ void Dump_(
 // '<Record ...>/<Record>...
 //          ^
 //						 ^
-static rrow__ RetrieveRecordId_( xml::parser___ &Parser )
+static sRRow RetrieveRecordId_( xml::parser___ &Parser )
 {
-	rrow__ Id = qNIL;
+	sRRow Id = qNIL;
 	bso::bool__ Continue = true;
 	sdr::row__ Error = qNIL;
 
@@ -98,11 +105,11 @@ static rrow__ RetrieveRecordId_( xml::parser___ &Parser )
 //				   ^
 static void Retrieve_(
 	xml::parser___ &Parser,
-	rrows_ &Records )
+	dRRows &Records )
 {
 	bso::bool__ Continue = true;
 	sdr::row__ Error = qNIL;
-	rrow__ Row = qNIL;
+	sRRow Row = qNIL;
 
 	while ( Continue ) {
 		switch ( Parser.Parse( xml::tfObvious ) ) {
@@ -123,7 +130,7 @@ static void Retrieve_(
 }
 
 static void Dump_(
-	const pool_ &Pool,
+	const dPool &Pool,
 	amount__ SessionAmount,
 	amount__ CycleAmount,
 	time_t TimeStamp,
@@ -135,6 +142,40 @@ static void Dump_(
 	xml::PutAttribute( POOL_TIMESTAMP_ATTRIBUTE_NAME, TimeStamp, Writer );
 	Dump_( Pool, Writer );
 	Writer.PopTag();
+}
+
+namespace {
+	void Dump_(
+		const dBox &Box,
+		xml::writer_ &Writer )
+	{
+		sdr::sRow Row = Box.First();
+
+		Writer.PushTag( BOX_TAG_NAME );
+		Writer.PutAttribute( BOX_RECORDS_AMOUT_ATTRIBUTE, Box.Amount() );
+
+		::Dump_( *Box, Writer );
+
+		Writer.PopTag();
+	}
+
+	void Dump_(
+		const dBoxes &Boxes,
+		xml::writer_ &Writer )
+	{
+		sBRow Row = Boxes.First();
+
+		Writer.PushTag( BOXES_TAG_NAME );
+		Writer.PutAttribute( BOXES_AMOUT_ATTRIBUTE, Boxes.Amount() );
+
+		while ( Row != qNIL ) {
+			Dump_( Boxes( Row ), Writer );
+
+			Row = Boxes.Next( Row );
+		}
+
+		Writer.PopTag();
+	}
 }
 
 void dpkctx::Dump(
@@ -193,10 +234,10 @@ void dpkctx::Retrieve(
 }
 
 static amount__ Remove_(
-	const rrows_ &Records,
+	const dRRows &Records,
 	amount__ Amount,
 	amount__ TotalAmount,
-	grid_ &Grid )
+	dGrid &Grid )
 {
 	sdr::row__ Row = Records.Last();
 	amount__ Counter = 0;
@@ -213,9 +254,9 @@ static amount__ Remove_(
 	return Counter;
 }
 
-static rrow__ Pick_( const grid_ &Grid )
+static sRRow Pick_( const dGrid &Grid )
 {
-	rrow__ Row = qNIL;
+	sRRow Row = qNIL;
 
 	tol::InitializeRandomGenerator();
 
@@ -227,8 +268,8 @@ static rrow__ Pick_( const grid_ &Grid )
 }
 
 static void Add_(
-	const rrows_ &Source,
-	rrows_ &Target )
+	const dRRows &Source,
+	dRRows &Target )
 {
 	sdr::row__ Row = Source.First();
 	sdr::row__ Position = qNIL;
@@ -254,8 +295,8 @@ static inline bso::bool__ IsNewSession_(
 }
 
 void dpkctx::context_::MoveToBox_(
-	const rrows_ &Records,
-	box_ &Box )
+	const dRRows &Records,
+	dBox &Box )
 {
 	sdr::sRow Row = Records.First();
 
@@ -271,7 +312,7 @@ void dpkctx::context_::MoveRecordsToBox_(
 	sBRow Source,
 	sBRow Target )
 {
-	ctn::qCITEMs( box_, sBRow ) Box;
+	ctn::qCITEMs( dBox, sBRow ) Box;
 
 	Box.Init( Boxes );
 
@@ -314,13 +355,13 @@ void dpkctx::context_::AdjustBoxesAmount( amount__ Amount )
 	}
 }
 
-rrow__ dpkctx::context_::Pick(
+sRRow dpkctx::context_::Pick(
 	amount__ Amount,
 	bso::uint__ Duration )
 {
-	rrow__ Row = qNIL;
+	sRRow Row = qNIL;
 qRH
-	grid Grid;
+	wGrid Grid;
 	amount__ ToExclude = 0;	// Amount of last picked records to exclude.
 qRB
 	Grid.Init();

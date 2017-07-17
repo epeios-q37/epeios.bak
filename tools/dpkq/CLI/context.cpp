@@ -30,6 +30,7 @@ namespace {
 	static void Retrieve_(
 		xml::parser___ &Parser,
 		const char *AwaitedTarget,
+		dpkctx::amount__ BoxesAmount,
 		dpkctx::context_ &Context )
 	{
 	qRH
@@ -59,7 +60,7 @@ namespace {
 				if ( Target != AwaitedTarget )
 					qRGnr();
 
-				dpkctx::Retrieve( Parser, Context );
+				dpkctx::Retrieve( Parser, BoxesAmount, Context );
 				break;
 			case xml::t_Processed:
 				Continue = false;
@@ -77,6 +78,7 @@ namespace {
 
 void context::Retrieve(
 	const str::string_ &FileName,
+	dpkctx::amount__ BoxesAmount,
 	dpkctx::context_ &Context )
 {
 qRH
@@ -96,7 +98,7 @@ qRB
 
 	Parser.Init( XFlow, xml::eh_Default );
 
-	Retrieve_( Parser, NAME_LC, Context );
+	Retrieve_( Parser, NAME_LC, BoxesAmount, Context );
 qRR
 qRT
 qRE

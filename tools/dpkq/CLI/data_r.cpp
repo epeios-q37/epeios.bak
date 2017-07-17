@@ -272,7 +272,7 @@ namespace {
 		record_ &Record )
 
 	{
-		rrow__ Row = qNIL;
+		sRRow Row = qNIL;
 
 		Row = dpkrcd::SearchRecord( RecordLabel, Records );
 
@@ -742,7 +742,7 @@ namespace {
 		bso::bool__ Continue = true;
 		alias_type__ AliasType = at_Undefined;
 		trow__ TableRow = qNIL;
-		rrow__ RecordRow = qNIL;
+		sRRow RecordRow = qNIL;
 		record_alias RecordAlias;
 		table_alias TableAlias;
 		str::string TableAliasLabel, TableLabel, RecordLabel, AliasLabel;
@@ -864,8 +864,8 @@ namespace {
 	{
 	qRH
 		record_alias Alias;
-		ctn::qCITEMs( record_, rrow__ ) Record;
-		rrow__ Row = qNIL;
+		ctn::qCITEMs( record_, sRRow ) Record;
+		sRRow Row = qNIL;
 		str::string AliasLabel;
 		str::strings Tags, Values;
 		bso::integer_buffer__ Buffer;

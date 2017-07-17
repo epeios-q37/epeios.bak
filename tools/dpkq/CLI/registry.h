@@ -37,6 +37,7 @@ namespace registry {
 	extern entry___ XSL;
 	extern entry___ Context;
 	extern entry___ Viewer;
+	extern entry___ BoxesAmount;
 	extern entry___ SessionMaxDuration;
 
 	extern entry___ Id;

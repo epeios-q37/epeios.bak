@@ -1,5 +1,9 @@
 # *Epeios* changelog
 
+2017-07-17 :
+- *TOL* :
+  - Adding `qTMIMICS`.
+
 2017-07-02 :
 - *NJS* :
   - `cArguments` -> `cCaller` (standardization issue).

@@ -35,7 +35,7 @@ namespace dpkals {
 		struct s {
 			str::string_::s Label;
 			trow__ TableRow;
-			rrow__ RecordRow;
+			sRRow RecordRow;
 		}&S_;
 		str::string_ Label;
 		record_alias_( s &S )
@@ -75,7 +75,7 @@ namespace dpkals {
 		void Init(
 			const str::string_ &Label,
 			trow__ TableRow,
-			rrow__ RecordRow )
+			sRRow RecordRow )
 		{
 			reset();
 
@@ -85,7 +85,7 @@ namespace dpkals {
 			S_.RecordRow = RecordRow;
 		}
 		E_RODISCLOSE_( trow__, TableRow );
-		E_RODISCLOSE_( rrow__, RecordRow );
+		E_RODISCLOSE_( sRRow, RecordRow );
 	};
 
 	E_AUTO( record_alias );

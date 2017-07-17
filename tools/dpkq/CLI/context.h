@@ -24,8 +24,7 @@
 
 namespace context {
 	void Retrieve(
-		const str::string_ &FileName,
-		dpkctx::context_ & Context );
+		const str::string_ &FileName, dpkctx::amount__ BoxesAmount, dpkctx::context_ & Context );
 
 	void Dump(
 		const dpkctx::context_ &Context,

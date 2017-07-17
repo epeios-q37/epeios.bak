@@ -34,6 +34,7 @@ entry___ registry::Output( "Output", sclrgstry::Parameters );
 entry___ registry::XSL( "XSL", sclrgstry::Parameters );
 entry___ registry::Context( "Context", sclrgstry::Parameters );
 entry___ registry::Viewer( "Viewer", sclrgstry::Parameters );
+entry___ registry::BoxesAmount( "BoxesAmount", sclrgstry::Parameters );
 entry___ registry::SessionMaxDuration( "SessionMaxDuration", sclrgstry::Parameters );
 
 entry___ registry::Id( "Id", sclrgstry::Parameters );
