@@ -7,6 +7,7 @@
 			<XSL>Pieces.xsl</XSL>
 			<Context>.Pieces.xml</Context>
 			<SessionMaxDuration>600</SessionMaxDuration>
+   <BoxesAmount>3</BoxesAmount>
 		</Parameters>
 	</Project>
 </Projects>

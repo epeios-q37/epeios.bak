@@ -30,8 +30,6 @@ namespace dpkctx {
 	typedef bso::u8__ coeff__;
 
 	typedef sdr::size__ amount__;
-	typedef bso::sU8 sBoxId;
-	qCDEF( sBoxId, UndefinedBox, bso::U8Max );
 
 #	define DPKCTX_AMOUNT_MAX	EPEIOS_SIZE_MAX
 
@@ -54,7 +52,7 @@ namespace dpkctx {
 		struct s
 		: public dBoxes_::s
 		{
-			sBoxId Current;
+			sBRow Last;
 		} &S_;
 		dBoxes( s &S )
 		: S_( S ),
@@ -62,21 +60,21 @@ namespace dpkctx {
 		{}
 		void reset( bso::sBool P = true )
 		{
-			S_.Current = UndefinedBox;
+			S_.Last = qNIL;
 
 			dBoxes_::reset( P );
 		}
 		// 'Plug' methods are inherited.
 		dBoxes &operator =( const dBoxes &B )
 		{
-			S_.Current = B.S_.Current;
+			S_.Last = B.S_.Last;
 			dBoxes_::operator=( *this );
 
 			return *this;
 		}
 		void Init( void )
 		{
-			S_.Current = UndefinedBox;
+			S_.Last = qNIL;
 			dBoxes_::Init();
 		}
 	};

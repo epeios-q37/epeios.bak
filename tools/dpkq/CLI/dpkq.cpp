@@ -96,7 +96,6 @@ qRH
 	str::string OutputFilename;
 	str::string XSLFilename;
 	str::string ContextFilename;
-	dpkctx::amount__ BoxesAmount = 0;
 	bso::uint__ SessionMaxDuration = 0;
 	bso::bool__ Error = false;
 	str::string Label, TableLabel;
@@ -133,12 +132,13 @@ qRB
 		sclmisc::ReportAndAbort( "ContextFileNotSpecifiedError" );
 
 	Context.Init();
-	context::Retrieve( ContextFilename, BoxesAmount, Context);
+	context::Retrieve( ContextFilename, Context);
+	Context.AdjustBoxesAmount( sclmisc::OGetS8( registry::BoxesAmount, 0 ) );
+
 
 	Data.Init();
 	data::Retrieve( DataFilename, Data );
 
-	BoxesAmount = sclmisc::OGetS8( registry::BoxesAmount, 0 );
 	SessionMaxDuration = sclmisc::OGetUInt( registry::SessionMaxDuration, 0 );
 
 	Label.Init();
