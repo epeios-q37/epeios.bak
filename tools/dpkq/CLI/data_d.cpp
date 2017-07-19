@@ -305,11 +305,11 @@ namespace {
 						Writer.PutAttribute( "Amount", "1" );
 					}
 
-					xml::PutAttribute( "SessionAmount", Context.S_.Session, Writer );
-					xml::PutAttribute( "SessionSkippedAmount", GetSkippedAmount_( Context.S_.Session, Context.Pool, Records ), Writer );
+					xml::PutAttribute( "SessionAmount", Context.Pool.S_.Session, Writer );
+					xml::PutAttribute( "SessionSkippedAmount", GetSkippedAmount_( Context.Pool.S_.Session, Context.Pool, Records ), Writer );
 
-					xml::PutAttribute( "CycleAmount", Context.S_.Cycle, Writer );
-					xml::PutAttribute( "CycleSkippedAmount", GetSkippedAmount_( Context.S_.Cycle, Context.Pool, Records ), Writer );
+					xml::PutAttribute( "CycleAmount", Context.Pool.S_.Cycle, Writer );
+					xml::PutAttribute( "CycleSkippedAmount", GetSkippedAmount_( Context.Pool.S_.Cycle, Context.Pool, Records ), Writer );
 
 				} else {
 					if ( Id > Records.Amount() ) {

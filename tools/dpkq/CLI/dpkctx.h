@@ -31,6 +31,7 @@ namespace dpkctx {
 
 	typedef sdr::size__ amount__;
 	typedef bso::sU8 sBoxId;
+	qCDEF( sBoxId, UndefinedBox, bso::U8Max );
 
 #	define DPKCTX_AMOUNT_MAX	EPEIOS_SIZE_MAX
 
@@ -44,10 +45,85 @@ namespace dpkctx {
 	// The second box is at row 0, the third at row 1 and so on.
 	/* The content of the first box is not stored, as all records
 	which are not in the other boxes are considered as stored in the first box. */
-	typedef crt::qCRATEd( dBox, sBRow ) dBoxes;
-	qW( Boxes );
+	typedef crt::qCRATEd( dBox, sBRow ) dBoxes_;
 
-	qTMIMICdw( RRows, Pool );
+	class dBoxes
+	: public dBoxes_
+	{
+	public:
+		struct s
+		: public dBoxes_::s
+		{
+			sBoxId Current;
+		} &S_;
+		dBoxes( s &S )
+		: S_( S ),
+		dBoxes_( S )
+		{}
+		void reset( bso::sBool P = true )
+		{
+			S_.Current = UndefinedBox;
+
+			dBoxes_::reset( P );
+		}
+		// 'Plug' methods are inherited.
+		dBoxes &operator =( const dBoxes &B )
+		{
+			S_.Current = B.S_.Current;
+			dBoxes_::operator=( *this );
+
+			return *this;
+		}
+		void Init( void )
+		{
+			S_.Current = UndefinedBox;
+			dBoxes_::Init();
+		}
+	};
+
+	qTMIMICdw( RRows, Pool_ );
+
+	class dPool
+	: public dPool_
+	{
+	public:
+		struct s
+		: public dPool_::s
+		{
+			amount__
+				Session,	// Amount of record of the current session.
+				Cycle;		// To ensure that, inside a cycle, a record is only picked once.
+			time_t TimeStamp;
+		} &S_;
+		dPool( s &S )
+		: S_( S ),
+		  dPool_( S )
+		{}
+		void reset( bso::sBool P = true )
+		{
+			S_.Session = S_.Cycle = 0;
+			S_.TimeStamp = 0;
+
+			dPool_::reset( P );
+		}
+		// 'Plug' methods are inherited.
+		dPool &operator =( const dPool &P )
+		{
+			S_.Cycle = P.S_.Cycle;
+			S_.Session = P.S_.Session;
+			S_.TimeStamp = P.S_.TimeStamp;
+			dPool_::operator =( *this );
+
+			return *this;
+		}
+		void Init( void )
+		{
+			S_.Session = S_.Cycle = 0;
+			S_.TimeStamp = 0;
+
+			dPool_::Init();
+		}
+	};
 
 	class context_ {
 	private:
@@ -62,50 +138,32 @@ namespace dpkctx {
 		struct s {
 			dBoxes::s Boxes;
 			dPool::s Pool;
-			sBoxId BoxId;
-			amount__
-				Session,	// Amount of record of the current session.
-				Cycle;		// To ensure that, inside a cycle, a record is only picked once.
-			time_t TimeStamp;
-		} &S_;
+		};
 		dBoxes Boxes;
 		dPool Pool;
 		context_( s &S )
-		: S_( S ),
-		  Boxes( S_.Boxes ),
+		: Boxes( S.Boxes ),
 		  Pool( S.Pool )
 		{}
 		void reset( bso::bool__ P = true )
 		{
 			tol::reset( P, Boxes, Pool );
-
-			S_.BoxId = 0;
-			S_.Session = S_.Cycle = 0;
-			S_.TimeStamp = 0;
-		}
-		void plug( bch::sHook &Hook )
-		{
-			Pool.plug( Hook );
 		}
 		void plug( qASd *AS )
 		{
+			Boxes.plug( AS );
 			Pool.plug( AS );
 		}
 		context_ &operator =( const context_ &C )
 		{
+			Boxes = C.Boxes;
 			Pool = C.Pool;
-			S_.Cycle = C.S_.Cycle;
-			S_.Session = C.S_.Session;
-			S_.TimeStamp = C.S_.TimeStamp;
 
 			return *this;
 		}
 		void Init( void )
 		{
 			tol::Init( Boxes, Pool );
-
-			S_.Session = S_.Cycle = 0;
-			S_.TimeStamp = 0;
 		}
 		void AdjustBoxesAmount( amount__ Amount );	// '0' and '1' are identical : all boxes are erased, so all records are randomly picked.
 		sRRow Pick(
@@ -122,7 +180,6 @@ namespace dpkctx {
 
 	void Retrieve(
 		xml::parser___ &Parser,
-		amount__ BoxesAmount,	// '0' and '1' are identical : all record are randomly picked.
 		context_ &Context );
 
 };

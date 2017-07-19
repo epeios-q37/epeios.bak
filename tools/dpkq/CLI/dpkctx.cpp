@@ -32,24 +32,25 @@ qW( Grid );
 #define CONTEXT_TAG_NAME				"Context"
 #define CONTEXTE_TARGET_ATTRIBUTE_NAME	"target"
 
-#define BOXES_TAG_NAME	"Boxes"
+#define BOXES_TAG_NAME			"Boxes"
 #define BOXES_AMOUT_ATTRIBUTE	"Amount"
+#define BOXES_CURRENT_ATTRIBUTE "Current"
 
-#define BOX_TAG_NAME	"Box"
+#define BOX_TAG_NAME				"Box"
 #define BOX_RECORDS_AMOUT_ATTRIBUTE	"RecordsAmount"
 
 
-#define POOL_TAG_NAME						"Pool"
+#define POOL_TAG_NAME	"Pool"
 
 #define POOL_CYCLE_AMOUNT_ATTRIBUTE_NAME	"CycleAmount"
 #define POOL_SESSION_AMOUNT_ATTRIBUTE_NAME	"SessionAmount"
 #define POOL_TIMESTAMP_ATTRIBUTE_NAME		"TimeStamp"
 
 
-#define RECORD_TAG_NAME					"Record"
-#define RECORD_ID_ATTRIBUTE_NAME		"Id"
+#define RECORD_TAG_NAME				"Record"
+#define RECORD_ID_ATTRIBUTE_NAME	"Id"
 
-void Dump_(
+void DumpRecords_(
 	const dRRows &Records,
 	xml::writer_ &Writer )
 {
@@ -99,48 +100,15 @@ static sRRow RetrieveRecordId_( xml::parser___ &Parser )
 	return Id;
 }
 
-
-// '<... >...</...>...
-//        ^
-//				   ^
-static void Retrieve_(
-	xml::parser___ &Parser,
-	dRRows &Records )
-{
-	bso::bool__ Continue = true;
-	sdr::row__ Error = qNIL;
-	sRRow Row = qNIL;
-
-	while ( Continue ) {
-		switch ( Parser.Parse( xml::tfObvious ) ) {
-		case xml::tStartTag:
-			if ( Parser.TagName() != RECORD_TAG_NAME )
-				qRGnr();
-
-			Records.Append( RetrieveRecordId_( Parser ) );
-			break;
-		case xml::tEndTag:
-			Continue = false;
-			break;
-		default:
-			qRGnr();
-			break;
-		}
-	}
-}
-
 static void Dump_(
 	const dPool &Pool,
-	amount__ SessionAmount,
-	amount__ CycleAmount,
-	time_t TimeStamp,
 	xml::writer_ &Writer )
 {
 	Writer.PushTag( POOL_TAG_NAME );
-	xml::PutAttribute( POOL_SESSION_AMOUNT_ATTRIBUTE_NAME, SessionAmount, Writer );
-	xml::PutAttribute( POOL_CYCLE_AMOUNT_ATTRIBUTE_NAME, CycleAmount, Writer );
-	xml::PutAttribute( POOL_TIMESTAMP_ATTRIBUTE_NAME, TimeStamp, Writer );
-	Dump_( Pool, Writer );
+	xml::PutAttribute( POOL_SESSION_AMOUNT_ATTRIBUTE_NAME, Pool.S_.Session, Writer );
+	xml::PutAttribute( POOL_CYCLE_AMOUNT_ATTRIBUTE_NAME, Pool.S_.Cycle, Writer );
+	xml::PutAttribute( POOL_TIMESTAMP_ATTRIBUTE_NAME, Pool.S_.TimeStamp, Writer );
+	DumpRecords_( Pool, Writer );
 	Writer.PopTag();
 }
 
@@ -154,7 +122,7 @@ namespace {
 		Writer.PushTag( BOX_TAG_NAME );
 		Writer.PutAttribute( BOX_RECORDS_AMOUT_ATTRIBUTE, Box.Amount() );
 
-		::Dump_( *Box, Writer );
+		DumpRecords_( *Box, Writer );
 
 		Writer.PopTag();
 	}
@@ -167,6 +135,7 @@ namespace {
 
 		Writer.PushTag( BOXES_TAG_NAME );
 		Writer.PutAttribute( BOXES_AMOUT_ATTRIBUTE, Boxes.Amount() );
+		Writer.PutAttribute( BOXES_CURRENT_ATTRIBUTE, Boxes.S_.Current, UndefinedBox );
 
 		while ( Row != qNIL ) {
 			Dump_( Boxes( Row ), Writer );
@@ -182,36 +151,129 @@ void dpkctx::Dump(
 	const context_ &Context,
 	xml::writer_ &Writer )
 {
-	Dump_( Context.Pool, Context.S_.Session, Context.S_.Cycle, Context.S_.TimeStamp, Writer );
+	Dump_( Context.Boxes, Writer );
+	Dump_( Context.Pool, Writer );
 }
 
-static void RetrievePool_(
+namespace {
+	namespace {
+		void RetrieveRecords_(
+			xml::parser___ &Parser,
+			dRRows &Records )
+		{
+			bso::bool__ Continue = true;
+			sdr::row__ Error = qNIL;
+			sRRow Row = qNIL;
+
+			while ( Continue ) {
+				switch ( Parser.Parse( xml::tfObvious ) ) {
+				case xml::tStartTag:
+					if ( Parser.TagName() != RECORD_TAG_NAME )
+						qRGnr();
+
+					Records.Append( RetrieveRecordId_( Parser ) );
+					break;
+				case xml::tEndTag:
+					Continue = false;
+					break;
+				default:
+					qRGnr();
+					break;
+				}
+			}
+		}
+	}
+
+	void Retrieve_(
+		xml::rParser &Parser,
+		dPool &Pool )
+	{
+		bso::sBool Continue = true;
+
+		while ( Continue ) {
+			switch ( Parser.Parse( xml::tfObvious | xml::tfStartTagClosed ) ) {
+			case xml::tAttribute:
+				if ( Parser.AttributeName() == POOL_SESSION_AMOUNT_ATTRIBUTE_NAME )
+					Pool.S_.Session = Parser.Value().ToUInt();
+				else if ( Parser.AttributeName() == POOL_CYCLE_AMOUNT_ATTRIBUTE_NAME )
+					Pool.S_.Cycle = Parser.Value().ToUInt();
+				else if ( Parser.AttributeName() == POOL_TIMESTAMP_ATTRIBUTE_NAME )
+					Pool.S_.TimeStamp = Parser.Value().ToUInt();
+				else
+					qRGnr();
+				break;
+			case xml::tStartTagClosed:
+				RetrieveRecords_( Parser, Pool );
+				Continue = false;
+				break;
+			default:
+				qRGnr();
+				break;
+			}
+		}
+	}
+
+	namespace {
+		void RetrieveBoxesContent_(
+			xml::rParser &Parser,
+			dBoxes &Boxes )
+		{
+		qRH
+			wBox Box;
+		qRB
+			Box.Init();
+		qRR
+			RetrieveRecords_( Parser, Box );
+
+			Boxes.Append( Box );
+		qRT
+		qRE
+		}
+	}
+
+	void Retrieve_(
+		xml::rParser &Parser,
+		dBoxes &Boxes )
+	{
+		bso::sBool Continue = true;
+
+		while ( Continue ) {
+			switch ( Parser.Parse( xml::tfObvious | xml::tfEndTag ) ) {
+			case xml::tAttribute:
+				if ( Parser.AttributeName() == BOXES_CURRENT_ATTRIBUTE )
+					Boxes.S_.Current = Parser.Value().ToU8();
+				else if ( Parser.AttributeName() != BOXES_AMOUT_ATTRIBUTE )
+					qRGnr();
+				break;
+			case xml::tStartTagClosed:
+				RetrieveBoxesContent_( Parser, Boxes );
+				break;
+			case xml::tEndTag:
+				Continue = false;
+				break;
+			default:
+				qRGnr();
+				break;
+			}
+		}
+	}
+}
+
+static void Retrieve_(
 	xml::parser___ &Parser,
 	context_ &Context )
 {
-
-	bso::bool__ Continue = true;
+	bso::sBool Continue = true;
 
 	while ( Continue ) {
-		switch( Parser.Parse( xml::tfObvious | xml::tfStartTagClosed ) ) {
+		switch ( Parser.Parse( xml::tfStartTag | xml::tfEndTag ) ) {
 		case xml::tStartTag:
-			if ( Parser.TagName() != POOL_TAG_NAME )
-				qRGnr();
-
-			break;
-		case xml::tAttribute:
-			if ( Parser.AttributeName() == POOL_SESSION_AMOUNT_ATTRIBUTE_NAME )
-				Context.S_.Session = Parser.Value().ToUInt();
-			else if ( Parser.AttributeName() == POOL_CYCLE_AMOUNT_ATTRIBUTE_NAME )
-				Context.S_.Cycle = Parser.Value().ToUInt();
-			else if ( Parser.AttributeName() == POOL_TIMESTAMP_ATTRIBUTE_NAME )
-				Context.S_.TimeStamp = Parser.Value().ToUInt();
+			if ( Parser.TagName() == BOXES_TAG_NAME )
+				Retrieve_( Parser, Context.Boxes );
+			else if ( Parser.TagName() == POOL_TAG_NAME )
+				Retrieve_( Parser, Context.Pool );
 			else
 				qRGnr();
-
-			break;
-		case xml::tStartTagClosed:
-			Retrieve_( Parser, Context.Pool );
 			break;
 		case xml::tEndTag:
 			Continue = false;
@@ -223,14 +285,11 @@ static void RetrievePool_(
 	}
 }
 
-
 void dpkctx::Retrieve(
 	xml::parser___ &Parser,
-	amount__ BoxesAmount,
 	context_ &Context )
 {
-	Context.AdjustBoxesAmount( BoxesAmount );
-	RetrievePool_( Parser, Context );
+	Retrieve_( Parser, Context );
 }
 
 static amount__ Remove_(
@@ -369,22 +428,22 @@ qRB
 
 	Grid.Reset( true );
 
-	if ( ( S_.Session >= Amount ) || IsNewSession_( S_.TimeStamp, Duration ) ) {
-		if ( ( S_.Session < Amount ) && ( S_.Session > S_.Cycle ) )
-			S_.Cycle = S_.Session;
-		S_.Session = 0;
+	if ( ( Pool.S_.Session >= Amount ) || IsNewSession_( Pool.S_.TimeStamp, Duration ) ) {
+		if ( ( Pool.S_.Session < Amount ) && ( Pool.S_.Session > Pool.S_.Cycle ) )
+			Pool.S_.Cycle = Pool.S_.Session;
+		Pool.S_.Session = 0;
 	}
 
-	if ( S_.Cycle >= Amount )
-		S_.Cycle = 0;
+	if ( Pool.S_.Cycle >= Amount )
+		Pool.S_.Cycle = 0;
 
 	ToExclude = Amount / 3;
 
-	ToExclude = ( ToExclude > S_.Session ? ToExclude : S_.Session );
+	ToExclude = ( ToExclude > Pool.S_.Session ? ToExclude : Pool.S_.Session );
 
-	ToExclude = ( ToExclude > S_.Cycle ? ToExclude : S_.Cycle );
+	ToExclude = ( ToExclude > Pool.S_.Cycle ? ToExclude : Pool.S_.Cycle );
 
-	if ( ( S_.Cycle == 0) && ( S_.Session == 0 ) )
+	if ( ( Pool.S_.Cycle == 0) && ( Pool.S_.Session == 0 ) )
 		ToExclude = 0;
 
 	if ( Pool.Amount() != 0 )
@@ -394,10 +453,10 @@ qRB
 
 	Pool.Append( Row );
 
-	S_.Session++;
-	S_.Cycle++;
+	Pool.S_.Session++;
+	Pool.S_.Cycle++;
 
-	S_.TimeStamp = time( NULL );
+	Pool.S_.TimeStamp = time( NULL );
 qRR
 qRT
 qRE

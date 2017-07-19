@@ -60,7 +60,8 @@ namespace {
 				if ( Target != AwaitedTarget )
 					qRGnr();
 
-				dpkctx::Retrieve( Parser, BoxesAmount, Context );
+				dpkctx::Retrieve( Parser, Context );
+				Context.AdjustBoxesAmount( BoxesAmount );
 				break;
 			case xml::t_Processed:
 				Continue = false;
