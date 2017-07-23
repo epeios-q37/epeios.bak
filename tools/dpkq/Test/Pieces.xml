@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <dpk:data xmlns:dpk="http://q37.info/ns/dpk" xmlns:xpp="http://q37.info/ns/xpp">
-	<xpp:expand href="pieces_.xml"/>
+	<!--xpp:expand href="pieces_.xml"/-->
+	<xpp:expand href="pieces_test.xml"/>
 </dpk:data>

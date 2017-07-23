@@ -85,7 +85,6 @@ qRT
 qRE
 }
 
-
 void Process_( void )
 {
 qRH
@@ -95,7 +94,6 @@ qRH
 	dpkctx::context Context;
 	str::string OutputFilename;
 	str::string XSLFilename;
-	str::string ContextFilename;
 	bso::uint__ SessionMaxDuration = 0;
 	bso::bool__ Error = false;
 	str::string Label, TableLabel;
@@ -127,12 +125,8 @@ qRB
 	XSLFilename.Init();
 	sclmisc::OGetValue( registry::XSL, XSLFilename );
 
-	ContextFilename.Init();
-	if ( !sclmisc::BGetValue( registry::Context, ContextFilename ) )
-		sclmisc::ReportAndAbort( "ContextFileNotSpecifiedError" );
-
 	Context.Init();
-	context::Retrieve( ContextFilename, Context);
+	context::Retrieve( Context);
 	Context.AdjustBoxesAmount( sclmisc::OGetS8( registry::BoxesAmount, 0 ) );
 
 
@@ -145,9 +139,28 @@ qRB
 	TableLabel.Init();
 	Id = data::Display( Id, Data, XSLFilename, SessionMaxDuration, Label, TableLabel, Context, OutputFilename );
 
-	context::Dump( Context, ContextFilename);
+	context::Dump( Context );
 
 	LaunchViewer_( Id, *Data.Last() + 1, Label, TableLabel, DataFilename, OutputFilename, XSLFilename );
+qRR
+qRT
+qRE
+}
+
+void Demote_( void )
+{
+qRH
+	dpkctx::context Context;
+	sId RecordId = data::Undefined;
+qRB
+	Context.Init();
+	context::Retrieve( Context );
+
+	RecordId = sclmisc::OGetUInt( registry::Id, 0 );
+
+	Context.Demote( RecordId == 0 ? qNIL : RecordId - 1 );
+
+	context::Dump( Context );
 qRR
 qRT
 qRE
@@ -169,6 +182,7 @@ qRB
 	else if ( Command == "License" )
 		epsmsc::PrintLicense( NAME_MC );
 	C( Process );
+	C( Demote );
 	else
 		qRGnr();
 

@@ -23,13 +23,11 @@
 # include "dpkctx.h"
 
 namespace context {
-	void Retrieve(
-		const str::string_ &FileName,
-		dpkctx::context_ & Context );
+	// File from which the context is retrieved is red from the registry.
+	void Retrieve( dpkctx::context_ &Context );
 
-	void Dump(
-		const dpkctx::context_ &Context,
-		const str::string_ &FileName );
+	// File where the content is dumped is red from the registry.
+	void Dump( const dpkctx::context_ &Context );
 }
 
 #endif

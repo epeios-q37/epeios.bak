@@ -20,6 +20,8 @@
 
 #include "context.h"
 
+#include "registry.h"
+
 #include "dpkq.h"
 
 #include "sclmisc.h"
@@ -75,34 +77,50 @@ namespace {
 	}
 }
 
-void context::Retrieve(
-	const str::string_ &FileName,
-	dpkctx::context_ &Context )
+namespace {
+	void Retrieve_(
+		const str::string_ &FileName,
+		dpkctx::context_ &Context )
+	{
+	qRH
+		xml::parser___ Parser;
+		flf::file_iflow___ FFlow;
+		xtf::extended_text_iflow__ XFlow;
+	qRB
+		if ( !fil::Exists( FileName ) ) {
+			//		COut << "Unable to find context file '" << FileName << "'! It will be created at exit." << txf::nl;
+			qRReturn;
+		}
+
+		if ( FFlow.Init( FileName ) != tol::rSuccess )
+			sclmisc::ReportFileOpeningErrorAndAbort( FileName );
+
+		XFlow.Init( FFlow, utf::f_Default );
+
+		Parser.Init( XFlow, xml::eh_Default );
+
+		Retrieve_( Parser, NAME_LC, Context );
+	qRR
+	qRT
+	qRE
+	}
+}
+
+void context::Retrieve( dpkctx::context_ &Context )
 {
 qRH
-	xml::parser___ Parser;
-	flf::file_iflow___ FFlow;
-	xtf::extended_text_iflow__ XFlow;
+	str::wString Filename;
 qRB
-	if ( !fil::Exists( FileName ) ) {
-		//		COut << "Unable to find context file '" << FileName << "'! It will be created at exit." << txf::nl;
-		qRReturn;
-	}
+	Filename.Init();
 
-	if ( FFlow.Init( FileName ) != tol::rSuccess )
-		sclmisc::ReportFileOpeningErrorAndAbort( FileName );
+	if ( !sclmisc::BGetValue( registry::Context, Filename ) )
+		sclmisc::ReportAndAbort( "ContextFileNotSpecifiedError" );
 
-	XFlow.Init( FFlow, utf::f_Default );
-
-	Parser.Init( XFlow, xml::eh_Default );
-
-	Retrieve_( Parser, NAME_LC, Context );
+	Retrieve_( Filename, Context );
 qRR
 qRT
 qRE
 }
-
-
 
 namespace {
 	namespace {
@@ -145,21 +163,39 @@ namespace {
 	}
 }
 
-void context::Dump(
-	const dpkctx::context_ &Context,
-	const str::string_ &FileName )
+namespace {
+	void Dump_(
+		const dpkctx::context_ &Context,
+		const str::string_ &FileName )
+	{
+	qRH
+		bso::bool__ Backuped = false;
+	qRB
+		sclmisc::CreateBackupFile( FileName );
+
+		Backuped = true;
+
+		DumpWithoutBackup_( Context, FileName );
+	qRR
+		if ( Backuped )
+			sclmisc::RecoverBackupFile( FileName );
+	qRT
+	qRE
+	}
+}
+
+void context::Dump( const dpkctx::context_ &Context )
 {
 qRH
-	bso::bool__ Backuped = false;
+	str::wString Filename;
 qRB
-	sclmisc::CreateBackupFile( FileName );
+	Filename.Init();
 
-	Backuped = true;
+	if ( !sclmisc::BGetValue( registry::Context, Filename ) )
+		sclmisc::ReportAndAbort( "ContextFileNotSpecifiedError" );
 
-	DumpWithoutBackup_( Context, FileName );
+	Dump_( Context, Filename );
 qRR
-	if ( Backuped )
-		sclmisc::RecoverBackupFile( FileName );
 qRT
 qRE
 }

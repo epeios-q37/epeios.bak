@@ -167,6 +167,7 @@ namespace dpkctx {
 		sRRow Pick(
 			amount__ Amount,
 			bso::uint__ SessionDuration ); // In minute; '0' for infinite.
+		void Demote( sRRow Record );	// If == 'qNIL', demotes the last picked record.
 		
 	};
 

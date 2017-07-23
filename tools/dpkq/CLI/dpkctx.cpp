@@ -42,13 +42,14 @@ qW( Grid );
 
 #define POOL_TAG_NAME	"Pool"
 
+#define POOL_AMOUNT_ATTRIBUTE_NAME			"Amount"
 #define POOL_CYCLE_AMOUNT_ATTRIBUTE_NAME	"CycleAmount"
 #define POOL_SESSION_AMOUNT_ATTRIBUTE_NAME	"SessionAmount"
 #define POOL_TIMESTAMP_ATTRIBUTE_NAME		"TimeStamp"
 
 
 #define RECORD_TAG_NAME				"Record"
-#define RECORD_ID_ATTRIBUTE_NAME	"Id"
+#define RECORD_ROW_ATTRIBUTE_NAME	"Row"
 
 void DumpRecords_(
 	const dRRows &Records,
@@ -58,7 +59,7 @@ void DumpRecords_(
 
 	while ( Row != qNIL ) {
 		Writer.PushTag( RECORD_TAG_NAME );
-		xml::PutAttribute( RECORD_ID_ATTRIBUTE_NAME, *Records.Get( Row ), Writer );
+		xml::PutAttribute( RECORD_ROW_ATTRIBUTE_NAME, *Records.Get( Row ), Writer );
 		Writer.PopTag();
 
 		Row = Records.Next( Row );
@@ -77,7 +78,7 @@ static sRRow RetrieveRecordId_( xml::parser___ &Parser )
 	while ( Continue ) {
 		switch ( Parser.Parse( xml::tfObvious ) ) {
 		case xml::tAttribute:
-			if ( Parser.AttributeName() != RECORD_ID_ATTRIBUTE_NAME )
+			if ( Parser.AttributeName() != RECORD_ROW_ATTRIBUTE_NAME )
 				qRGnr();
 
 			Id = Parser.Value().ToUInt( &Error );
@@ -105,6 +106,7 @@ static void Dump_(
 	xml::writer_ &Writer )
 {
 	Writer.PushTag( POOL_TAG_NAME );
+	Writer.PutAttribute( POOL_AMOUNT_ATTRIBUTE_NAME, Pool.Amount() );
 	xml::PutAttribute( POOL_SESSION_AMOUNT_ATTRIBUTE_NAME, Pool.S_.Session, Writer );
 	xml::PutAttribute( POOL_CYCLE_AMOUNT_ATTRIBUTE_NAME, Pool.S_.Cycle, Writer );
 	xml::PutAttribute( POOL_TIMESTAMP_ATTRIBUTE_NAME, Pool.S_.TimeStamp, Writer );
@@ -199,7 +201,7 @@ namespace {
 					Pool.S_.Cycle = Parser.Value().ToUInt();
 				else if ( Parser.AttributeName() == POOL_TIMESTAMP_ATTRIBUTE_NAME )
 					Pool.S_.TimeStamp = Parser.Value().ToUInt();
-				else
+				else if( Parser.AttributeName() != POOL_AMOUNT_ATTRIBUTE_NAME )
 					qRGnr();
 				break;
 			case xml::tStartTagClosed:
@@ -453,64 +455,151 @@ namespace {
 		sBRow Get_(
 			sRRow Record,
 			dBoxes_ &Boxes,
-			sdr::sRow &BoxRow )	// Contains th row of 'Record' in the box at returned row (if != 'qNIL').
+			sdr::sRow &RowInBox )	// Contains th row of 'Record' in the box at returned row (if != 'qNIL').
 		{
 			sBRow Row = Boxes.First();
 
-			while ( ( Row != qNIL ) && ( ( BoxRow = Get_( Record, Boxes( Row ) ) ) == qNIL ) )
+			while ( ( Row != qNIL ) && ( ( RowInBox = Get_( Record, Boxes( Row ) ) ) == qNIL ) )
 				Row = Boxes.Next( Row );
 
 			return Row;
 		}
 	}
 
-	void Commit_(
+	// Return the row of the box where 'Record' is moved to.
+	sBRow Commit_(
 		sRRow Record,
 		dBoxes_ &Boxes )
 	{
-		sdr::sRow BoxRow = qNIL;
+		sdr::sRow RowInBox = qNIL;
 
-		sBRow Row = Get_( Record, Boxes, BoxRow );
+		sBRow BoxRow = Get_( Record, Boxes, RowInBox );
 
-		if ( Row == qNIL )
-			Row = Boxes.First();
+		if ( BoxRow == qNIL )
+			BoxRow = Boxes.First();
 		else {
-			if ( BoxRow == qNIL )
+			if ( RowInBox == qNIL )
 				qRGnr();
 
-			Boxes( Row ).Remove( BoxRow );
-			Row = Boxes.Next( Row );
+			Boxes( BoxRow ).Remove( RowInBox );
+			BoxRow = Boxes.Next( BoxRow );
 
-			if ( Row == qNIL )
-				Row = Boxes.Last();
+			if ( BoxRow == qNIL )
+				BoxRow = Boxes.Last();
 		}
 
-		if ( Row != qNIL )
-			Boxes( Row ).Append( Record );
+		if ( BoxRow != qNIL )
+			Boxes( BoxRow ).Append( Record );
+
+		return BoxRow;
 	}
 }
 
+namespace {
+	namespace {
+		void PurgeBox_(
+			dBox &Box,
+			amount__ Amount )
+		{
+			sdr::sRow Row = Box.First();
+
+			while ( ( Row != qNIL ) && Box.Exists( Row ) ) {
+				if ( *Box( Row ) >= Amount )
+					Box.Remove( Row );
+				else
+					Row = Box.Next( Row );
+			}
+		}
+	}
+
+	// Remove records which doesn't exist anymore.
+	void PurgeBoxes_(
+		dBoxes_ &Boxes,
+		amount__ Amount )
+	{
+		sBRow Row = Boxes.First();
+
+		while ( Row != qNIL ) {
+			PurgeBox_( Boxes( Row ), Amount );
+
+			Row = Boxes.Next( Row );
+		}
+	}
+
+	namespace {
+		void Remove_(
+			const dRRows &Rows,
+			dGrid &Grid )
+		{
+			sdr::sRow Row = Rows.First();
+
+			while ( Row != qNIL ) {
+				Grid.Store( false, Rows( Row ) );
+
+				Row = Rows.Next( Row );
+			}
+		}
+	}
+
+void RemoveBoxesContent_(
+	sBRow Row,
+	const dBoxes_ &Boxes,
+	dGrid &Grid )
+{
+	if ( Row == qNIL )
+		Row = Boxes.First();
+	else
+		Row = Boxes.Next( Row );
+
+	while ( Row != qNIL ) {
+		Remove_( Boxes( Row ), Grid );
+
+		Row = Boxes.Next( Row );
+	}
+}
+
+amount__ GetExcludedBoxesAmountOfRecords_(
+	const dBoxes_ &Boxes,
+	sBRow Row )
+{
+	amount__ Amount = 0;
+
+	if ( Row == qNIL )
+		Row = Boxes.First();
+	else
+		Row = Boxes.Next( Row );
+
+	while ( Row != qNIL ) {
+		Amount += Boxes( Row ).Amount();
+
+		Row = Boxes.Next( Row );
+	}
+
+	return Amount;
+}
+}
+
 sRRow dpkctx::context_::Pick(
-	amount__ Amount,
+	amount__ TotalAmount,
 	bso::uint__ Duration )
 {
 	sRRow Row = qNIL;
 qRH
 	wGrid Grid;
 	amount__ ToExclude = 0;	// Amount of last picked records to exclude.
+	amount__ AvailableAmount = 0;
 qRB
+	if ( TotalAmount == 0 )
+		qRGnr();
+
 	Grid.Init();
-	Grid.Allocate( Amount );
+	Grid.Allocate( TotalAmount );
 
 	Grid.Reset( true );
 
-	if ( ( Pool.S_.Session >= Amount ) || IsNewSession_( Pool.S_.TimeStamp, Duration ) ) {
-		if ( ( Pool.S_.Session < Amount ) && ( Pool.S_.Session > Pool.S_.Cycle ) )
-			Pool.S_.Cycle = Pool.S_.Session;
-		Pool.S_.Session = 0;
-	}
+	PurgeBoxes_( Boxes, TotalAmount );
 
-	if ( Pool.S_.Cycle >= Amount ) {
+	while ( TotalAmount <= GetExcludedBoxesAmountOfRecords_( Boxes, Boxes.S_.Last ) ) {
 		Pool.S_.Cycle = 0;
 
 		if ( Boxes.S_.Last == qNIL )
@@ -519,31 +608,88 @@ qRB
 			Boxes.S_.Last = Boxes.Next( Boxes.S_.Last );
 	}
 
-	ToExclude = Amount / 3;
+	AvailableAmount = TotalAmount - GetExcludedBoxesAmountOfRecords_( Boxes, Boxes.S_.Last );
+
+	if ( ( Pool.S_.Session >= AvailableAmount ) || IsNewSession_( Pool.S_.TimeStamp, Duration ) ) {
+		if ( ( Pool.S_.Session < AvailableAmount ) && ( Pool.S_.Session > Pool.S_.Cycle ) )
+			Pool.S_.Cycle = Pool.S_.Session;
+		Pool.S_.Session = 0;
+	}
+
+	if ( Pool.S_.Cycle >= AvailableAmount )
+		Pool.S_.Cycle = Pool.S_.Session;
+
+	ToExclude = TotalAmount / 3;
 
 	ToExclude = ( ToExclude > Pool.S_.Session ? ToExclude : Pool.S_.Session );
 
 	ToExclude = ( ToExclude > Pool.S_.Cycle ? ToExclude : Pool.S_.Cycle );
 
-	if ( ( Pool.S_.Cycle == 0) && ( Pool.S_.Session == 0 ) )
+	if ( ( Pool.S_.Cycle == 0 ) && ( Pool.S_.Session == 0 ) )
 		ToExclude = 0;
 
-	if ( Pool.Amount() != 0 )
-		Pool.Remove( Pool.First(), Pool.Amount() - Remove_( Pool, ToExclude, Amount, Grid ) );
+	ToExclude = Remove_( Pool, ToExclude, TotalAmount, Grid );
+
+	if ( Pool.Amount() > ToExclude )
+		Pool.Remove( Pool.First(), Pool.Amount() - ToExclude );
+	else
+		Pool.Init();
+
+	RemoveBoxesContent_( Boxes.S_.Last, Boxes, Grid );
 
 	Row = Pick_( Grid );
 
 	Pool.Append( Row );
 
-	Pool.S_.Session++;
-	Pool.S_.Cycle++;
-
 	Pool.S_.TimeStamp = time( NULL );
 
-	Commit_( Row, Boxes );
+	if ( *Commit_( Row, Boxes ) <= *Boxes.S_.Last ) {
+		Pool.S_.Session++;
+		Pool.S_.Cycle++;
+	}
+
 qRR
 qRT
 qRE
 	return Row;
+}
+
+namespace {
+	sBRow Demote_(
+		sRRow Record,
+		dBoxes_ &Boxes )
+	{
+		sdr::sRow Row = qNIL;
+
+		sBRow BoxRow = Get_( Record, Boxes, Row );
+
+		if ( Row != qNIL )
+			Boxes( BoxRow ).Remove( Row );
+
+		return BoxRow;
+	}
+
+	void Demote_(
+		sRRow Record,
+		context_ &Context )
+	{
+		sBRow BoxRow = Demote_( Record, Context.Boxes );
+
+		if ( *BoxRow <= *Context.Boxes.S_.Last ) {
+			Context.Pool.S_.Session++;
+			Context.Pool.S_.Cycle++;
+		}
+	}
+}
+
+void context_::Demote( sRRow Record )
+{
+	if ( Record == qNIL )
+		if ( Pool.Amount() != 0 )
+			Record = Pool( Pool.Last() );
+
+	if ( Record != qNIL )
+		Demote_( Record, *this );
+
 }
 
