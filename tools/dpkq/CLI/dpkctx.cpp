@@ -466,6 +466,22 @@ namespace {
 		}
 	}
 
+	bso::sBool IsIncluded_(
+		sRRow Record,
+		dBoxes &Boxes,
+		sBRow Last )
+	{
+		sdr::sRow Dummy = qNIL;
+		sBRow BoxRow = Get_( Record, Boxes, Dummy );
+
+		if ( BoxRow == qNIL )
+			return true;
+		else if ( Last == qNIL )
+			return BoxRow == qNIL;
+		else
+			return *BoxRow <= *Last;
+	}
+
 	// Return the row of the box where 'Record' is moved to.
 	sBRow Commit_(
 		sRRow Record,
@@ -541,44 +557,45 @@ namespace {
 		}
 	}
 
-void RemoveBoxesContent_(
-	sBRow Row,
-	const dBoxes_ &Boxes,
-	dGrid &Grid )
-{
-	if ( Row == qNIL )
-		Row = Boxes.First();
-	else
-		Row = Boxes.Next( Row );
+	void RemoveBoxesContent_(
+		sBRow Row,
+		const dBoxes_ &Boxes,
+		dGrid &Grid )
+	{
+		if ( Row == qNIL )
+			Row = Boxes.First();
+		else
+			Row = Boxes.Next( Row );
 
-	while ( Row != qNIL ) {
-		Remove_( Boxes( Row ), Grid );
+		while ( Row != qNIL ) {
+			Remove_( Boxes( Row ), Grid );
 
-		Row = Boxes.Next( Row );
+			Row = Boxes.Next( Row );
+		}
+	}
+
+	amount__ GetExcludedBoxesAmountOfRecords_(
+		const dBoxes_ &Boxes,
+		sBRow Row )
+	{
+		amount__ Amount = 0;
+
+		if ( Row == qNIL )
+			Row = Boxes.First();
+		else
+			Row = Boxes.Next( Row );
+
+		while ( Row != qNIL ) {
+			Amount += Boxes( Row ).Amount();
+
+			Row = Boxes.Next( Row );
+		}
+
+		return Amount;
 	}
 }
 
-amount__ GetExcludedBoxesAmountOfRecords_(
-	const dBoxes_ &Boxes,
-	sBRow Row )
-{
-	amount__ Amount = 0;
-
-	if ( Row == qNIL )
-		Row = Boxes.First();
-	else
-		Row = Boxes.Next( Row );
-
-	while ( Row != qNIL ) {
-		Amount += Boxes( Row ).Amount();
-
-		Row = Boxes.Next( Row );
-	}
-
-	return Amount;
-}
-}
-
+/*
 sRRow dpkctx::context_::Pick(
 	amount__ TotalAmount,
 	bso::uint__ Duration )
@@ -653,6 +670,80 @@ qRT
 qRE
 	return Row;
 }
+*/
+
+sRRow dpkctx::context_::Pick_(
+	amount__ Amount,
+	bso::uint__ Duration )
+{
+	sRRow Row = qNIL;
+qRH
+	wGrid Grid;
+	amount__ ToExclude = 0;	// Amount of last picked records to exclude.
+qRB
+	Grid.Init();
+	Grid.Allocate( Amount );
+
+	Grid.Reset( true );
+
+	if ( ( Pool.S_.Session >= Amount ) || IsNewSession_( Pool.S_.TimeStamp, Duration ) ) {
+		if ( ( Pool.S_.Session < Amount ) && ( Pool.S_.Session > Pool.S_.Cycle ) )
+			Pool.S_.Cycle = Pool.S_.Session;
+		Pool.S_.Session = 0;
+	}
+
+	if ( Pool.S_.Cycle >= Amount ) {
+		Pool.S_.Cycle = 0;
+
+		if ( Boxes.S_.Last == qNIL )
+			Boxes.S_.Last = Boxes.First();
+		else
+			Boxes.S_.Last = Boxes.Next( Boxes.S_.Last );
+	}
+
+
+	ToExclude = Amount / 3;
+
+	ToExclude = ( ToExclude > Pool.S_.Session ? ToExclude : Pool.S_.Session );
+
+	ToExclude = ( ToExclude > Pool.S_.Cycle ? ToExclude : Pool.S_.Cycle );
+
+	if ( ( Pool.S_.Cycle == 0 ) && ( Pool.S_.Session == 0 ) )
+		ToExclude = 0;
+
+	if ( Pool.Amount() != 0 )
+		Pool.Remove( Pool.First(), Pool.Amount() - Remove_( Pool, ToExclude, Amount, Grid ) );
+
+	Row = ::Pick_( Grid );
+
+	Pool.Append( Row );
+
+	Pool.S_.Session++;
+	Pool.S_.Cycle++;
+
+	Pool.S_.TimeStamp = time( NULL );
+qRR
+qRT
+qRE
+	return Row;
+}
+
+sRRow dpkctx::context_::Pick(
+	amount__ Amount,
+	bso::uint__ Duration )
+{
+	sRRow Row = qNIL;
+
+	PurgeBoxes_( Boxes, Amount );
+
+	do {
+		Row = Pick_( Amount, Duration );
+	} while ( !IsIncluded_( Row, Boxes, Boxes.S_.Last ) );
+
+	Commit_( Row, Boxes );
+
+	return Row;
+}
 
 namespace {
 	sBRow Demote_(
@@ -681,6 +772,7 @@ namespace {
 		}
 	}
 }
+
 
 void context_::Demote( sRRow Record )
 {

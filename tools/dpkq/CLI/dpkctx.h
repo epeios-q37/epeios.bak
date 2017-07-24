@@ -132,6 +132,9 @@ namespace dpkctx {
 			sBRow Source,
 			sBRow Target );
 		void BringBackRecordsToBox_( sBRow Target );	// Move all records in boxes after box 'Target', to box 'Target'.
+		sRRow Pick_(
+			amount__ Amount,
+			bso::uint__ SessionDuration ); // In minute; '0' for infinite.
 	public:
 		struct s {
 			dBoxes::s Boxes;
