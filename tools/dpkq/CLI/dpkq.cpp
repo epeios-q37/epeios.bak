@@ -53,6 +53,8 @@ using data::wData;
 void LaunchViewer_(
 	sId RecordId,
 	sId TableId,
+	dpkctx::sBRow LastBox,
+	dpkctx::sBRow ContainingBox,
 	const str::string_ &RecordLabel,
 	const str::string_ &TableLabel,
 	const str::string &DataFilename,
@@ -70,13 +72,15 @@ qRB
 
 	if ( ( Viewer.Amount() != 0 ) && ( OutputFilename.Amount() != 0 ) ) {
 		TaggedValues.Init();
-		TaggedValues.Append("RI", bso::Convert( RecordId, IBuffer ) );
-		TaggedValues.Append("RL", RecordLabel );
-		TaggedValues.Append("TI", bso::Convert( TableId, IBuffer ) );
-		TaggedValues.Append("TL", TableLabel);
-		TaggedValues.Append("Data",DataFilename );
-		TaggedValues.Append("XSL",XSLFilename );
-		TaggedValues.Append("Output",OutputFilename );
+		TaggedValues.Append( "RI", bso::Convert( RecordId, IBuffer ) );
+		TaggedValues.Append( "RL", RecordLabel );
+		TaggedValues.Append( "TI", bso::Convert( TableId, IBuffer ) );
+		TaggedValues.Append( "TL", TableLabel);
+		TaggedValues.Append( "LB", bso::Convert( LastBox == qNIL ? 0 : *LastBox + 1, IBuffer ) );
+		TaggedValues.Append( "CB", bso::Convert( ContainingBox == qNIL ? 0 : *ContainingBox + 1, IBuffer ) );
+		TaggedValues.Append( "Data", DataFilename );
+		TaggedValues.Append( "XSL", XSLFilename );
+		TaggedValues.Append( "Output",OutputFilename );
 		tagsbs::SubstituteLongTags( Viewer, TaggedValues, '$' );
 		tol::System( Viewer.Convert( SBuffer ) );
 	}
@@ -98,6 +102,7 @@ qRH
 	bso::bool__ Error = false;
 	str::string Label, TableLabel;
 	sId Id = 0;
+	dpkctx::sBRow BoxRow = qNIL;
 qRB
 	data::Initialize();
 
@@ -129,7 +134,6 @@ qRB
 	context::Retrieve( Context);
 	Context.AdjustBoxesAmount( sclmisc::OGetS8( registry::BoxesAmount, 0 ) );
 
-
 	Data.Init();
 	data::Retrieve( DataFilename, Data );
 
@@ -137,11 +141,11 @@ qRB
 
 	Label.Init();
 	TableLabel.Init();
-	Id = data::Display( Id, Data, XSLFilename, SessionMaxDuration, Label, TableLabel, Context, OutputFilename );
+	Id = data::Display( Id, Data, XSLFilename, SessionMaxDuration, Label, TableLabel, BoxRow, Context, OutputFilename );
 
 	context::Dump( Context );
 
-	LaunchViewer_( Id, *Data.Last() + 1, Label, TableLabel, DataFilename, OutputFilename, XSLFilename );
+	LaunchViewer_( Id, *Data.Last() + 1, Context.Boxes.S_.Last, BoxRow, Label, TableLabel, DataFilename, OutputFilename, XSLFilename );
 qRR
 qRT
 qRE

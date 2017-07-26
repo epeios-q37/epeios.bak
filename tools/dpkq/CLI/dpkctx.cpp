@@ -482,32 +482,32 @@ namespace {
 			return *BoxRow <= *Last;
 	}
 
-	// Return the row of the box where 'Record' is moved to.
+	// Return the row of the box where 'Record' is moved from.
 	sBRow Commit_(
 		sRRow Record,
 		dBoxes_ &Boxes )
 	{
 		sdr::sRow RowInBox = qNIL;
 
-		sBRow BoxRow = Get_( Record, Boxes, RowInBox );
+		sBRow OldBoxRow = Get_( Record, Boxes, RowInBox ), NewBoxRow = qNIL;
 
-		if ( BoxRow == qNIL )
-			BoxRow = Boxes.First();
+		if ( OldBoxRow == qNIL )
+			NewBoxRow = Boxes.First();
 		else {
 			if ( RowInBox == qNIL )
 				qRGnr();
 
-			Boxes( BoxRow ).Remove( RowInBox );
-			BoxRow = Boxes.Next( BoxRow );
+			Boxes( OldBoxRow ).Remove( RowInBox );
+			NewBoxRow = Boxes.Next( OldBoxRow );
 
-			if ( BoxRow == qNIL )
-				BoxRow = Boxes.Last();
+			if ( NewBoxRow == qNIL )
+				NewBoxRow = Boxes.Last();
 		}
 
-		if ( BoxRow != qNIL )
-			Boxes( BoxRow ).Append( Record );
+		if ( NewBoxRow != qNIL )
+			Boxes( NewBoxRow ).Append( Record );
 
-		return BoxRow;
+		return OldBoxRow;
 	}
 }
 
@@ -730,7 +730,8 @@ qRE
 
 sRRow dpkctx::context_::Pick(
 	amount__ Amount,
-	bso::uint__ Duration )
+	bso::uint__ Duration,
+	sBRow &BoxRow )
 {
 	sRRow Row = qNIL;
 
@@ -740,7 +741,7 @@ sRRow dpkctx::context_::Pick(
 		Row = Pick_( Amount, Duration );
 	} while ( !IsIncluded_( Row, Boxes, Boxes.S_.Last ) );
 
-	Commit_( Row, Boxes );
+	BoxRow = Commit_( Row, Boxes );
 
 	return Row;
 }

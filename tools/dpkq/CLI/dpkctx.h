@@ -169,7 +169,8 @@ namespace dpkctx {
 		void AdjustBoxesAmount( amount__ Amount );	// '0' and '1' are identical : all boxes are erased, so all records are randomly picked.
 		sRRow Pick(
 			amount__ Amount,
-			bso::uint__ SessionDuration ); // In minute; '0' for infinite.
+			bso::uint__ SessionDuration, // In minute; '0' for infinite.
+			sBRow &BoxRow );	// The row of the box containing the record (record probably moved to a new one).
 		void Demote( sRRow Record );	// If == 'qNIL', demotes the last picked record.
 		
 	};

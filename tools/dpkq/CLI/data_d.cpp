@@ -272,6 +272,7 @@ namespace {
 			bso::uint__ SessionMaxDuration,
 			const records_ &Records,
 			str::string_ &Label,
+			dpkctx::sBRow &BoxRow,
 			dpkctx::context_ &Context,
 			xml::writer_ &Writer )
 		{
@@ -294,7 +295,7 @@ namespace {
 			} else {
 				if ( Id == 0 ) {
 					do
-						Row = Context.Pick( Records.Amount(), SessionMaxDuration );
+						Row = Context.Pick( Records.Amount(), SessionMaxDuration, BoxRow );
 					while ( Record( Row ).GetSkip() && ( --Counter ) );
 
 					if ( !Counter ) {
@@ -338,12 +339,13 @@ namespace {
 			bso::uint__ SessionMaxDuration,
 			str::string_ &Label,
 			str::string_ &TableLabel,
+			dpkctx::sBRow &BoxRow,
 			dpkctx::context_ &Context,
 			xml::writer_ &Writer )
 		{
 			Writer.PushTag( TableLabel = Table.Label );
 
-			Id = Display_( Id, Table.Skipped(), SessionMaxDuration, Table.Records, Label, Context, Writer );
+			Id = Display_( Id, Table.Skipped(), SessionMaxDuration, Table.Records, Label, BoxRow, Context, Writer );
 
 			Writer.PopTag();
 
@@ -357,6 +359,7 @@ namespace {
 			bso::uint__ SessionMaxDuration,
 			str::string_ &Label,
 			str::string_ &TableLabel,
+			dpkctx::sBRow &BoxRow,
 			dpkctx::context_ &Context,
 			txf::text_oflow__ &Output )
 		{
@@ -424,7 +427,7 @@ namespace {
 
 			Writer.PushTag( "Data" );
 
-			Id = Display_( Id, Table( Data.Last() ), SessionMaxDuration, Label, TableLabel, Context, Writer );
+			Id = Display_( Id, Table( Data.Last() ), SessionMaxDuration, Label, TableLabel, BoxRow, Context, Writer );
 
 			Writer.PopTag();
 
@@ -442,6 +445,7 @@ namespace {
 			bso::uint__ SessionMaxDuration,
 			str::string_ &Label,
 			str::string_ &TableLabel,
+			dpkctx::sBRow &BoxRow,
 			dpkctx::context_ &Context,
 			const char *FileName )
 		{
@@ -454,7 +458,7 @@ namespace {
 
 			TFlow.Init( FFlow );
 
-			Id = Display_( Id, Data, XSLFileName, SessionMaxDuration, Label, TableLabel, Context, TFlow );
+			Id = Display_( Id, Data, XSLFileName, SessionMaxDuration, Label, TableLabel, BoxRow, Context, TFlow );
 		qRR
 		qRT
 		qRE
@@ -469,6 +473,7 @@ namespace {
 		bso::uint__ SessionMaxDuration,
 		str::string_ &Label,
 		str::string_ &TableLabel,
+		dpkctx::sBRow &BoxRow,
 		dpkctx::context_ &Context,
 		const char *FileName )
 	{
@@ -479,7 +484,7 @@ namespace {
 
 		Backuped = true;
 
-		Id = DisplayWithoutBackup_( Id, Data, XSLFileName, SessionMaxDuration, Label, TableLabel, Context, FileName );
+		Id = DisplayWithoutBackup_( Id, Data, XSLFileName, SessionMaxDuration, Label, TableLabel, BoxRow, Context, FileName );
 	qRR
 		if ( Backuped )
 			sclmisc::RecoverBackupFile( FileName );
@@ -501,6 +506,7 @@ sId data_d::Display(
 	bso::uint__ SessionMaxDuration,
 	str::string_ &Label,
 	str::string_ &TableLabel,
+	dpkctx::sBRow &BoxRow,
 	dpkctx::context_ &Context,
 	const str::string_ &OutputFileName )
 {
@@ -508,9 +514,9 @@ qRH
 	TOL_CBUFFER___ Buffer;
 qRB
 	if ( OutputFileName.Amount() == 0 )
-		Id = Display_( Id, Data, XSLFileName, SessionMaxDuration, Label, TableLabel, Context, cio::COut );
+		Id = Display_( Id, Data, XSLFileName, SessionMaxDuration, Label, TableLabel, BoxRow, Context, cio::COut );
 	else
-		Id = Display_( Id, Data, XSLFileName, SessionMaxDuration, Label, TableLabel, Context, OutputFileName.Convert( Buffer ) );
+		Id = Display_( Id, Data, XSLFileName, SessionMaxDuration, Label, TableLabel, BoxRow, Context, OutputFileName.Convert( Buffer ) );
 qRR
 qRT
 qRE
