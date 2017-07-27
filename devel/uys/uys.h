@@ -760,7 +760,7 @@ namespace uys {
 
 			_Data = NULL;
 		}
-		_untyped_storage___( s &S = *(s *)NULL )	// To simplify use in library 'BCH'
+		_untyped_storage___( s *S = NULL )	// To simplify use in library 'BCH'
 		{
 			reset( false );
 		}

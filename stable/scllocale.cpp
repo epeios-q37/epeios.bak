@@ -119,7 +119,7 @@ static level__ GetLevel_( target__ Target )
 		break;
 	}
 
-	return *(level__ *)NULL;	// Pour viter une 'warning'.
+	return rgstry::UndefinedLevel;	// Pour &viter une 'warning'.
 }
 
 void scllocale::Dump(

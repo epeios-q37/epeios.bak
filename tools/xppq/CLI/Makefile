@@ -144,6 +144,17 @@ endif
 
 ##########################
 		
+
+####################################
+# For Android (Termux) environment #
+####################################
+
+ifeq ("$(os)","$(Android)")
+
+endif
+
+#############################
+	
 ###################################
 ###################################
 ##### DON'T MODIFY BELOW !!! ######
@@ -333,6 +344,33 @@ endif
 
 ##########################
 		
+
+####################################
+# For Android (Termux) environment #
+####################################
+
+ifeq ("$(os)","$(Android)")
+ 
+	co += -std=gnu++11 -DUNICODE -D_FILE_OFFSET_BITS=64
+	
+	mods += $(pmods)
+
+	libs += -lpthread -ldl -lrt
+	
+	ifeq ("$(target)","$(IA_32)")
+		co += -m32
+		lo += -m32
+	else # 'ifeq' on other line due to GNU 3.80 (Maemo on N900).
+		ifeq ("$(target)","$(AMD64)")
+			co += -m64
+			lo += -m64
+		endif
+	endif
+	binary=$(name)
+endif
+
+#############################
+		
 all: $(binary)
 
 	rm -rf *.o
@@ -340,7 +378,7 @@ ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20170713"\"
+copt += -DVERSION=\""20170727"\"
 copt += -DCOPYRIGHT_YEARS=\""2007-2016"\"
 copt += -DIDENTIFIER=\""4e0195ad-2b3d-4fc2-8b1f-73a59bd765fe"\"
 

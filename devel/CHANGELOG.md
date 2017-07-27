@@ -1,12 +1,16 @@
 # *Epeios* changelog
 
 2017-07-27 :
-- *DIR*
+- *BCH*, *RGSTRY*, *UYS* :
+  - Getting rid of faulty `type &var = *(type *)NULL` parameter definitions.
+- *DIR* :
   - Fixing erroneous assignments.
-- *DTE*
+- *DTE* :
   - Fixing *clang++* warning.
-- *MTX*
+- *MTX* :
   - Fixing *clang++* warning.
+- *SCLLOCALE* :
+  - Fixing bad expression.
 
 2017-07-17 :
 - *TOL* :
@@ -927,7 +931,7 @@
 - FBLBKD :
 	- Using new 'tol::Crash()' function to crash the backend.
 - FBLFRD :
-	- IF the message returned by the backend is too long, it does no more génrate an error, but is truncated.
+	- IF the message returned by the backend is too long, it does no more gÃ©nrate an error, but is truncated.
 - PLGNCORE, SCLPLUGIN :
 	- The error is now intercepted when it occurs while relesing a plugin, and does no more crash the program.
 - TOL :
@@ -1129,7 +1133,7 @@
 2016-02-12 :
 - DWTCPR, DWTFTR :
 	- Adaptation to chages in 'STSFSM'.
-	% The 'Dump' functionnalitiés are always made in the current version.
+	% The 'Dump' functionnalitiÃ©s are always made in the current version.
 - GLOBAL :
 	- Applying new naming conventions.
 - XML :
@@ -2089,7 +2093,7 @@
 - CSDLES :
 	* Adaptation to changes in 'ERR'.
 - ERR :
-	* Removing all réference to 'CIO'. The final error handling had to be handled upstream (through the modified 'ERRFEpilog()' macro).
+	* Removing all rÃ©ference to 'CIO'. The final error handling had to be handled upstream (through the modified 'ERRFEpilog()' macro).
 - MTK :
 	* A uncaught exception will now terminate the program. All exceptions shoud be caught dowstream.
 - SCLDAEMON :
@@ -2135,7 +2139,7 @@
 
 2015-03-11 :
 - GLOBAL :
-	- Généralization of the use of the terms :
+	- GÃ©nÃ©ralization of the use of the terms :
 		- 'path' for, in a generic way, a file or a directory.
 		- 'directory' ('dir' in short) for a directory,
 		- 'filename' for a file name, with or without its location,
