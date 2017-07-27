@@ -20,7 +20,6 @@
 #define DTE__COMPILATION
 
 #include "dte.h"
-/*$BEGIN$*/
 
 #include <ctype.h>
 #include <time.h>
@@ -34,8 +33,8 @@
 
   0		  (1)	: Day reliability (0: no, 1: yes)
   1		  (1)	: Month reliability (0: no, 1: yes)
-  2		  (1)	: Year reliabilty (0: no, 1: yes)
-  3 - 4   (2)	: Meaningfullness (?) of the year.
+  2		  (1)	: Year reliability (0: no, 1: yes)
+  3 - 4   (2)	: Meaningfulness (?) of the year.
 				  ( 00 : only millenary is significant (1xxx).
 				    01 : only millenary and century is significant (19xx).
 					10 : only millenary, century, and decade is significant (196x).

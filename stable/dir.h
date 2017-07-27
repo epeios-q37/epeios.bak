@@ -453,7 +453,7 @@ namespace dir {
 		ULARGE_INTEGER RawSize;
 
 		if ( GetDiskFreeSpaceExW( Name.Internal(), &RawSize, NULL, NULL) == 0 ) {
-			if ( Handling = err::hThrowException )
+			if ( Handling == err::hThrowException )
 				qRFwk();
 			else
 				return false;
@@ -477,7 +477,7 @@ namespace dir {
 		ULARGE_INTEGER RawSize;
 
 		if ( GetDiskFreeSpaceExW( Name.Internal(), NULL, &RawSize, NULL ) == 0 ) {
-			if ( Handling = err::hThrowException )
+			if ( Handling == err::hThrowException )
 				qRFwk();
 			else
 				return false;

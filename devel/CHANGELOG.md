@@ -1,5 +1,13 @@
 # *Epeios* changelog
 
+2017-07-27 :
+- *DIR*
+  - Fixing erroneous assignments.
+- *DTE*
+  - Fixing *clang++* warning.
+- *MTX*
+  - Fixing *clang++* warning.
+
 2017-07-17 :
 - *TOL* :
   - Adding `qTMIMICS`.

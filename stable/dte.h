@@ -17,59 +17,40 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-//	$Id: dte.h,v 1.30 2013/04/11 19:36:48 csimon Exp $
+//D DaTE 
 
 #ifndef DTE__INC
-#define DTE__INC
+# define DTE__INC
 
-#define DTE_NAME		"DTE"
+# define DTE_NAME		"DTE"
 
-#define	DTE_VERSION	"$Revision: 1.30 $"
+# define	DTE_VERSION	"$Revision: 1.30 $"
 
-#define DTE_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
+# define DTE_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#if defined( E_DEBUG ) && !defined( DTE_NODBG )
-#define DTE_DBG
-#endif
+# if defined( E_DEBUG ) && !defined( DTE_NODBG )
+#  define DTE_DBG
+# endif
 
-/* Begin of automatic documentation generation part. */
-
-//V $Revision: 1.30 $
-//C Claude SIMON (http://zeusw.org/intl/contact.html)
-//R $Date: 2013/04/11 19:36:48 $
-
-/* End of automatic documentation generation part. */
-
-/* Addendum to the automatic documentation generation part. */
-//D DaTE 
-/* End addendum to automatic documentation generation part. */
-
-/*$BEGIN$*/
-
-/* Addendum to the automatic documentation generation part. */
-//D DaTE.
-/* End addendum to automatic documentation generation part. */
-
-
-#include "err.h"
-#include "flw.h"
-#include "bso.h"
-#include "txf.h"
+# include "err.h"
+# include "flw.h"
+# include "bso.h"
+# include "txf.h"
 
 //d An invalid date.
-#define DTE_INVALID_DATE	0
+# define DTE_INVALID_DATE	0
 
 /*d Decennia under which we consider we are in the XXI century,
 and over which we consider we are in the XX century. */
-#define DTE_DEFAULT_DECENNIA_LIMIT	90
+# define DTE_DEFAULT_DECENNIA_LIMIT	90
 
-#define DTE_CORE_SHIFT	5
+# define DTE_CORE_SHIFT	5
 
-#define DTE_SIGN_BIT_POSITION	31
+# define DTE_SIGN_BIT_POSITION	31
 
-#define DTE_SIGN_MASK	( 1 << DTE_SIGN_BIT_POSITION )
+# define DTE_SIGN_MASK	( 1 << DTE_SIGN_BIT_POSITION )
 
-#define DTE_CORE_MASK	( ( ~0 << DTE_CORE_SHIFT ) & ( ~DTE_SIGN_MASK ) )
+# define DTE_CORE_MASK	( ( (raw_date__)~0 << DTE_CORE_SHIFT ) & ( ~DTE_SIGN_MASK ) )
 
 
 namespace dte {
@@ -88,13 +69,11 @@ namespace dte {
 	typedef char buffer__[11];
 
 	enum format__ {
-		fDDMMYYYY,	//  la franaise ('25/11/2003').
-		fMMDDYYYY,	//  l'anglaise ('11/25/2003').
-		fYYYYMMDD,	// informatique ('2003/25/11').
+		fDDMMYYYY,	// ('25/11/2003').
+		fMMDDYYYY,	// ('11/25/2003').
+		fYYYYMMDD,	// ('2003/25/11').
 		f_amount,
-		f_Undefined,
-		f_Unknown,	// Format incommu.
-		f_Ambiguous	// Format indterminable.
+		f_Undefined
 	};
 
 	inline const char *GetLabel( format__ Format )
@@ -132,7 +111,7 @@ namespace dte {
 		else if ( _Compare( fYYYYMMDD, Label ) )
 			return fYYYYMMDD;
 		else
-			return f_Unknown;
+			return f_Undefined;
 	}
 
 	//c A date.

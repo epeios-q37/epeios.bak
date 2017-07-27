@@ -50,7 +50,7 @@ and over which we consider we are in the XX century. */
 
 # define DTE_SIGN_MASK	( 1 << DTE_SIGN_BIT_POSITION )
 
-# define DTE_CORE_MASK	( ( ~0 << DTE_CORE_SHIFT ) & ( ~DTE_SIGN_MASK ) )
+# define DTE_CORE_MASK	( ( (raw_date__)~0 << DTE_CORE_SHIFT ) & ( ~DTE_SIGN_MASK ) )
 
 
 namespace dte {
