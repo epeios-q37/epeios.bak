@@ -1,5 +1,14 @@
 # *Epeios* changelog
 
+2017-07-31 :
+- *CIO*
+- *DLBRRY*
+  - Fixing missing default parameter value.
+- *ERR*
+  - Fixing potential stack overflow situation.
+- *SCLPLUGIN*
+  - Adaptation to changes in *SCLARGMNT*.
+
 2017-07-27 :
 - *BCH*, *RGSTRY*, *UYS* :
   - Getting rid of faulty `type &var = *(type *)NULL` parameter definitions.

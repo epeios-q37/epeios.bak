@@ -79,7 +79,7 @@ namespace dlbrry {
 		}
 		bso::bool__ Init(
             const ntvstr::string___ &LibraryName,
-			eNormalization Normalization,
+			eNormalization Normalization = n_Default,
 			err::handling__ ERRHandling = err::h_Default )
 		{
 			reset();

@@ -65,13 +65,6 @@ _callback__ &PLGNCORE_RETRIEVE_CALLBACK_FUNCTION_NAME( void )
 }
 
 namespace {
-	void HandleArguments_(
-		const str::string_ &MergedArguments,
-		str::dStrings &SplittedArguments	)
-	{
-		sclargmnt::Split( MergedArguments, SplittedArguments );
-	}
-
 	void PreInitialize_( const plgncore::sData *Data )
 	{
 		if ( Data == NULL )
@@ -90,23 +83,17 @@ void sclplugin::callback__::PLGNCOREInitialize(
 	const rgstry::entry__ &Configuration )
 {
 qRH
-	str::wStrings Arguments;
 qRB
-	Arguments.Init();
-
 	PreInitialize_( Data );
 
 	if ( !sclmisc::IsInitialized() )
 		sclmisc::Initialize( *Data->SCLRack, Configuration );
-	else // Same plugin loaded several times from same excutable ; data is common,
+	else // Same plugin loaded several times from same executable ; data is common,
 		// so the 'Arguments' registry from the previous loading is erased.
 		sclrgstry::Reset( sclrgstry::lArguments );
 
 	if ( Data->Arguments->Amount() != 0 )
-		HandleArguments_( *Data->Arguments, Arguments );
-
-	if ( Arguments.Amount() != 0 )
-		sclargmnt::FillRegistry( Arguments, sclargmnt::faIsArgument, sclargmnt::uaReport );
+		sclargmnt::FillRegistry( *Data->Arguments, sclargmnt::faIsArgument, sclargmnt::uaReport );
 
 	sclmisc::DumpRegistriesAndOrLocalesIfRequired();
 qRR
@@ -119,9 +106,7 @@ void sclplugin::callback__::PLGNCOREInitialize(
 	const fnm::name___ &Directory )
 {
 qRH
-	str::wStrings Arguments;
 qRB
-	Arguments.Init();
 	PreInitialize_( Data );
 
 	if ( !sclmisc::IsInitialized() )
@@ -131,10 +116,7 @@ qRB
 		sclrgstry::Reset( sclrgstry::lArguments );
 
 	if ( Data->Arguments->Amount() != 0 )
-		HandleArguments_( *Data->Arguments, Arguments );
-
-	if ( Arguments.Amount() != 0 )
-		sclargmnt::FillRegistry( Arguments, sclargmnt::faIsArgument, sclargmnt::uaReport );
+		sclargmnt::FillRegistry( *Data->Arguments, sclargmnt::faIsArgument, sclargmnt::uaReport );
 
 	sclmisc::DumpRegistriesAndOrLocalesIfRequired();
 qRR

@@ -179,6 +179,11 @@ void err___::Set(
 
 	if ( ( !ERRHit() ) || !err::Concerned() )
 	{
+		if ( Mutex == NULL ) {
+			// In this situation, there will be a stack overflow. So we launch a SEGFAULT to facilitate the debugging.
+			*(int *)NULL = 0;
+		}
+
 		mtx::Lock( Mutex );
 
 		ThreadID = tht::GetTID();

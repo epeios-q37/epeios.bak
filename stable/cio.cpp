@@ -77,14 +77,16 @@ const set__ &cio::GetCurrentSet( void )
 static void InitializeConsole_( void )
 {
 #if defined( CPE_S_WIN )
-	if ( _setmode( _fileno( stdin ), _O_BINARY ) == -1 )
-		qRLbr();
+	if ( _fileno( stdin ) >= 0 ) {
+		if ( _setmode( _fileno( stdin ), _O_BINARY ) == -1 )
+			qRLbr();
 
-	if ( _setmode( _fileno( stdout ), _O_BINARY ) == -1 )
-		qRLbr();
+		if ( _setmode( _fileno( stdout ), _O_BINARY ) == -1 )
+			qRLbr();
 
-	if ( _setmode( _fileno( stderr ), _O_BINARY ) == -1 )
-		qRLbr();
+		if ( _setmode( _fileno( stderr ), _O_BINARY ) == -1 )
+			qRLbr();
+	}
 #endif
 	_VInDriver.Init( fdr::ts_Default, flx::aAllowed );
 	_VOutDriver.Init( fdr::ts_Default, flx::aAllowed );

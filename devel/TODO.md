@@ -1,4 +1,4 @@
-TODO for the 'Epeios' framework.
+# *Epeios* *todo* list
 
 FAST :
 - Study the possibility to adapt the framework to 'emscripten'.
