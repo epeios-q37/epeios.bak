@@ -1,12 +1,13 @@
 # *Epeios* changelog
 
 2017-07-31 :
-- *CIO*
-- *DLBRRY*
+- *CIO* :
+  - Adaptation to changes in *Visual Studio 2017*.
+- *DLBRRY* :
   - Fixing missing default parameter value.
-- *ERR*
+- *ERR* :
   - Fixing potential stack overflow situation.
-- *SCLPLUGIN*
+- *SCLPLUGIN* :
   - Adaptation to changes in *SCLARGMNT*.
 
 2017-07-27 :
