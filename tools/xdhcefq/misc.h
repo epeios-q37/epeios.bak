@@ -281,6 +281,11 @@ namespace misc {
 		cef_domnode_t *Node,
 		TOL_CBUFFER___ &Buffer );
 
+#if CHROME_BUILD < 2987
+# define cef_base_ref_counted_t cef_base_t
+# define _cef_base_ref_counted_t _cef_base_t
+#endif
+
 	inline void CEF_CALLBACK AddRef_( struct _cef_base_ref_counted_t* self )
 	{
 	}
