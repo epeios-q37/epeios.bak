@@ -1,4 +1,4 @@
-#	Copyright (C) 2014-2016 Claude SIMON (http://q37.info/contact/).
+#	Copyright (C) 2014-2017 Claude SIMON (http://q37.info/contact/).
 #
 #	This file is part of xdhcefq.
 #
@@ -403,8 +403,8 @@ ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20170731"\"
-copt += -DCOPYRIGHT_YEARS=\""2014-2016"\"
+copt += -DVERSION=\""20170803"\"
+copt += -DCOPYRIGHT_YEARS=\""2014-2017"\"
 copt += -DIDENTIFIER=\""968ea869-90d0-4e03-a4d9-10f4f73d50aa"\"
 
 src += :"$(cef)"	# Had to be here (before the 'src += ...' below),

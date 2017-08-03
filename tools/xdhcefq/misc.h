@@ -281,16 +281,16 @@ namespace misc {
 		cef_domnode_t *Node,
 		TOL_CBUFFER___ &Buffer );
 
-	inline void CEF_CALLBACK AddRef_( struct _cef_base_t* self )
+	inline void CEF_CALLBACK AddRef_( struct _cef_base_ref_counted_t* self )
 	{
 	}
 
-	inline  int CEF_CALLBACK Release_( struct _cef_base_t* self )
+	inline  int CEF_CALLBACK Release_( struct _cef_base_ref_counted_t* self )
 	{
 		return 0;
 	}
 
-	inline  int CEF_CALLBACK HasOneRef_( struct _cef_base_t* self )
+	inline  int CEF_CALLBACK HasOneRef_( struct _cef_base_ref_counted_t* self )
 	{
 		return 0;
 	}
@@ -300,7 +300,7 @@ namespace misc {
 		memset( T, 0, sizeof( t ) );
 	}
 
-	template <typename t> inline void SetBase( cef_base_t *Base )
+	template <typename t> inline void SetBase( cef_base_ref_counted_t *Base )
 	{
 		Base->size = sizeof( t );
 
