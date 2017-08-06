@@ -3,7 +3,7 @@
   "version": "SEM_VER_TAG",
   "author": "Claude SIMON (http://q37.info/contact/)",
   "description": "Node.js addon wrapper.",
-  "main": "njsq.js",
+  "main": "NJSq.js",
   "engines": {
     "node": ">=4"
   },

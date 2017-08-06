@@ -17,6 +17,8 @@
     along with 'NJSq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "njsq.h"
+
 #include "registrar.h"
 #include "registry.h"
 #include "wrapper.h"
@@ -37,16 +39,6 @@
 using cio::CErr;
 using cio::COut;
 using cio::CIn;
-
-# define NAME_MC			"NJSq"
-# define NAME_LC			"njsq"
-# define NAME_UC			"NJSQ"
-# define WEBSITE_URL		"http://q37.info"
-# define AUTHOR_NAME		"Claude SIMON"
-# define AUTHOR_CONTACT		"http://q37.info/contact/"
-# define OWNER_NAME			"Claude SIMON"
-# define OWNER_CONTACT		"http://q37.info/contact/"
-# define COPYRIGHT			COPYRIGHT_YEARS " " OWNER_NAME " (" OWNER_CONTACT ")"	
 
 namespace {
 	namespace {

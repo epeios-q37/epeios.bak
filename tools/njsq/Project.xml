@@ -48,8 +48,6 @@
   <Dir>njsq</Dir>
  </RTW>
 	<Files>
-  <File>test.js</File>
-  <File>njsq.js</File>
  </Files>
 	<PreprocessorDefinitions>
 		<PreprocessorDefinition>E_ST</PreprocessorDefinition>

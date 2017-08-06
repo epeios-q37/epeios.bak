@@ -181,7 +181,7 @@ void err___::Set(
 	{
 		if ( Mutex == NULL ) {
 			// In this situation, there will be a stack overflow. So we launch a SEGFAULT to facilitate the debugging.
-			*(int *)NULL = 0;
+			*(volatile int *)NULL = 0;
 		}
 
 		mtx::Lock( Mutex );

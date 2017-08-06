@@ -1,35 +1,43 @@
 # *Epeios* changelog
 
+2017-08-06 :
+- ERR :
+  - Fixing *clang* warning.
+
+2017-08-04 :
+- MTX :
+  - Adding missing `std::` reference introduced in previous change to this library.
+
 2017-07-31 :
-- *CIO* :
+- CIO :
   - Adaptation to changes in *Visual Studio 2017*.
-- *DLBRRY* :
+- DLBRRY :
   - Fixing missing default parameter value.
-- *ERR* :
+- ERR :
   - Fixing potential stack overflow situation.
-- *SCLPLUGIN* :
+- SCLPLUGIN :
   - Adaptation to changes in *SCLARGMNT*.
 
 2017-07-27 :
-- *BCH*, *RGSTRY*, *UYS* :
+- BCH, RGSTRY, UYS :
   - Getting rid of faulty `type &var = *(type *)NULL` parameter definitions.
-- *DIR* :
+- DIR :
   - Fixing erroneous assignments.
-- *DTE* :
-  - Fixing *clang++* warning.
-- *MTX* :
-  - Fixing *clang++* warning.
-- *SCLLOCALE* :
+- DTE :
+  - Fixing *clang* warning.
+- MTX :
+  - Fixing *clang* warning.
+- SCLLOCALE :
   - Fixing bad expression.
 
 2017-07-17 :
-- *TOL* :
+- TOL :
   - Adding `qTMIMICS`.
 
 2017-07-02 :
-- *NJS* :
+- NJS :
   - `cArguments` -> `cCaller` (standardization issue).
-- *SCLNJS* :
+- SCLNJS :
   - Adaptation to changes in *NJS*.
 
 (2017-06-29 : This file becomes a *markdown* file.)
@@ -1898,7 +1906,7 @@
 
 2015-04-28 :
 - GLOBAL :
-	- Fixing clang++ (LLVM) issues.
+	- Fixing *clang* issues.
 
 2015-04-24
 - GLOBAL :
