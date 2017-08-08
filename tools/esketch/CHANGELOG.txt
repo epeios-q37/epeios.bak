@@ -1,5 +1,0 @@
-CHANGELOG FOR THE esketch TOOL.
-
-See also the CHANGELOG for the Epeios framework.
-
-yyyy-mm-dd

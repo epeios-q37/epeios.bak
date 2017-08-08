@@ -183,7 +183,7 @@ namespace flw {
 		}
 		byte__ View( void )
 		{
-			byte__ C;
+			byte__ C = 0;
 
 			if ( View( 1, &C ) != 1 )
 				qRFwk();
@@ -192,7 +192,7 @@ namespace flw {
 		}
 		byte__ Get( void )
 		{
-			byte__ C;
+			byte__ C = 0;
 
 			if ( _D().Read( 1, &C, fdr::bBlocking ) != 1 )
 				qRFwk();

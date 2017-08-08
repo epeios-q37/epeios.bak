@@ -1,5 +1,9 @@
 # *Epeios* changelog
 
+2017-08-08 :
+- FLW :
+  - Initializing some variables, although not necessary, to fix some warnings issued when compiling a *node.js* *addon* on installation on a *POSIX* OS. 
+
 2017-08-06 :
 - ERR :
   - Fixing *clang* warning.

@@ -38,7 +38,7 @@ if (process.env.EPEIOS_SRC) {
     componentPath = __dirname;
 }
 
-componentFilename = path.join(componentPath, affix + "njs").replace(/\\/g, "\\\\").replace(/'/g, "\\'");
+componentFilename = path.join(componentPath, affix + "njs").replace(/\\/g, "\\\\").replace(/'/g, "\\'").replace(/ /g, "\\ ");
 njsq.register(componentFilename);
 module.exports = njsq;
 // End of generic part.
