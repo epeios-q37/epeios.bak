@@ -23,12 +23,12 @@
 # include "common.h"
 
 namespace registrar {
-	typedef njs::cRegistrar cRegistrar_;
+	typedef n4a::cRegistrar cRegistrar_;
 
 	class sRegistrar
 	: public cRegistrar_ {
 	protected:
-		virtual void NJSRegister( void *Function ) override;
+		virtual void N4ARegister( void *Function ) override;
 	public:
 		void Init( void )
 		{}

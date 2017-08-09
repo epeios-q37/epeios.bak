@@ -26,9 +26,9 @@
 using namespace wrapper;
 
 namespace {
-	using njs::cLauncher;
+	using n4a::cLauncher;
 
-	 cLauncher *Launcher_ = NULL;
+	cLauncher *Launcher_ = NULL;
 
 	cLauncher &GetLauncher_( void )
 	{
@@ -63,7 +63,7 @@ bso::sBool wrapper::GetLauncherInfo( str::dString &Info )
 }
 
 
-typedef njs::cCaller cCaller_;
+typedef n4a::cCaller cCaller_;
 
 inline void GetString_(
 	int Index,
@@ -77,8 +77,8 @@ inline void GetString_(
 
 		String.Get( Value );
 	qRR
-		qRT
-		qRE
+	qRT
+	qRE
 }
 
 void SetReturnValue_(
@@ -94,16 +94,16 @@ namespace {
 	private:
 		qRMV( const v8::FunctionCallbackInfo<v8::Value>, I_, Info_ );
 	protected:
-		virtual void NJSGetArgument(
+		virtual void N4AGetArgument(
 			int Index,
-			njs::eType Type,
+			n4a::eType Type,
 			void *Value ) override
 		{
 			if ( Index >= I_().Length() )
 				qRGnr();
 
 			switch ( Type ) {
-			case njs::tString:
+			case n4a::tString:
 				GetString_( Index, I_(), *( str::dString * )Value );
 				break;
 			default:
@@ -111,12 +111,12 @@ namespace {
 				break;
 			}
 		}
-		virtual void NJSSetReturnValue(
-			njs::eType Type,
+		virtual void N4ASetReturnValue(
+			n4a::eType Type,
 			const void *Value ) override
 		{
 			switch ( Type ) {
-			case njs::tString:
+			case n4a::tString:
 				SetReturnValue_( I_(), *( const str::dString * )Value );
 				break;
 			default:

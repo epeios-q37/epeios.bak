@@ -23,7 +23,7 @@
 # include "common.h"
 
 namespace wrapper {
-	void SetLauncher( njs::cLauncher *Launcher );
+	void SetLauncher( n4a::cLauncher *Launcher );
 
 	bso::sBool GetLauncherInfo( str::dString &Info );
 

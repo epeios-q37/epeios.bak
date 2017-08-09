@@ -175,7 +175,7 @@ qRT
 qRE
 }
 
-extern "C" typedef njs::fRegister fRegister_;
+extern "C" typedef n4a::fRegister fRegister_;
 
 dlbrry::rDynamicLibrary Library_;
 
@@ -189,11 +189,11 @@ namespace {
 namespace {
 	bso::bool__ Register_(
 		const str::string_ &AddonFilename,
-		njs::cRegistrar &Registrar )
+		n4a::cRegistrar &Registrar )
 	{
 		bso::bool__ Success = false;
 	qRH
-		njs::sData Data;
+		n4a::sData Data;
 		fnm::name___ Location;
 		TOL_CBUFFER___ Buffer;
 	qRB
@@ -226,7 +226,7 @@ namespace {
 	qRFH
 		v8q::sString RawArguments;
 		str::wString Arguments;
-		str::wString AddonFilename;
+		str::wString ComponentFilename;
 		registrar::sRegistrar Registrar;
 	qRFB
 		RawArguments.Init( Info[0] );
@@ -236,11 +236,11 @@ namespace {
 
 		sclargmnt::FillRegistry( Arguments, sclargmnt::faIsArgument, sclargmnt::uaReport );
 
-		AddonFilename.Init();
-		sclmisc::MGetValue( registry::parameter::AddonFilename, AddonFilename );
+		ComponentFilename.Init();
+		sclmisc::MGetValue( registry::parameter::ComponentFilename, ComponentFilename );
 
 		Registrar.Init();
-		Register_( AddonFilename, Registrar );
+		Register_( ComponentFilename, Registrar );
 	qRFR
 	qRFT
 	qRFE( common::ErrFinal() )

@@ -23,7 +23,7 @@
 // Note to developer : include 'h:\hg\NJSIncludeDirectories.props' in the '.vcxproj'.
 # include <node.h>
 
-#include "njs.h"
+#include "n4a.h"
 
 #include "bch.h"
 

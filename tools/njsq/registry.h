@@ -28,7 +28,7 @@ namespace registry {
 	namespace parameter {
 		using namespace sclrgstry::parameter;
 
-		extern rEntry AddonFilename;
+		extern rEntry ComponentFilename;
 	}
 
 	namespace definition {

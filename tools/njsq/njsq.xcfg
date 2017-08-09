@@ -47,11 +47,11 @@
 			<!-- Options : 'Path' ET 'Value'. -->
 			<Argument id="TestOption" Description="TestOptionDescription" long="option" short="o" Path="Option" Label="TestOptionLabel"/>
 			<!-- Arguments libres : 'Path' mais PAS de 'Value' (ni de 'short', ni de 'long'). -->
-			<Argument id="AddonArgument" Description="AddonArgumentDescription" Path="AddonFilename" Label="AddonArgumentLabel"/>
+			<Argument id="ComponentArgument" Description="ComponentArgumentDescription" Path="ComponentFilename" Label="ComponentArgumentLabel"/>
 			<!-- Affectations des arguments libres-->
 			<Layouts>
 				<Layout command="Launch">
-					<Link index="0" Target="AddonArgument"/>
+					<Link index="0" Target="ComponentArgument"/>
 				</Layout>
 			</Layouts>
 		</Arguments>

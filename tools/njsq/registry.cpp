@@ -21,5 +21,5 @@
 
 using namespace registry;
 
-rEntry registry::parameter::AddonFilename( "AddonFilename", sclrgstry::Parameters );
+rEntry registry::parameter::ComponentFilename( "ComponentFilename", sclrgstry::Parameters );
 

@@ -22,16 +22,16 @@
 #include "registry.h"
 
 #include "sclmisc.h"
-#include "sclnjs.h"
+#include "scln4a.h"
 
-void sclnjs::SCLNJSInfo( txf::sOFlow &Flow )
+void scln4a::SCLN4AInfo( txf::sOFlow &Flow )
 {
 	Flow << NAME_MC << " v" << VERSION << txf::nl
 		 << txf::pad << "Build : " __DATE__ " " __TIME__ " (" << cpe::GetDescription() << ')';
 }
 
 namespace {
-	void ReturnArgument_( sclnjs::sCaller &Caller )
+	void ReturnArgument_( scln4a::sCaller &Caller )
 	{
 	qRH
 		str::wString Input, Text;
@@ -49,11 +49,11 @@ namespace {
 	}
 }
 
-void sclnjs::SCLNJSRegister( sclnjs::sRegistrar &Registrar )
+void scln4a::SCLN4ARegister( scln4a::sRegistrar &Registrar )
 {
 	Registrar.Register( ReturnArgument_ );
 }
 
 const char *sclmisc::SCLMISCTargetName = NAME_LC;
 const char *sclmisc::SCLMISCProductName = NAME_MC;
-// const char *sclnjs::SCLNJSProductVersion = VERSION;
+// const char *scln4a::SCLN4AProductVersion = VERSION;

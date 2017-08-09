@@ -23,7 +23,7 @@
 
 using namespace registrar;
 
-void registrar::sRegistrar::NJSRegister( void *Function )
+void registrar::sRegistrar::N4ARegister( void *Function )
 {
 	common::Functions.Append( Function );
 }

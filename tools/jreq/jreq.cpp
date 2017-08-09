@@ -17,7 +17,10 @@
 	along with JREq. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "jre.h"
+#include "jreq.h"
+
+#include "jrebse.h"
+#include "n4a.h"
 
 #include "sclmisc.h"
 
@@ -25,15 +28,11 @@
 #include "xpp.h"
 #include "lcl.h"
 
-# define NAME_MC			"JREQ"
-# define NAME_LC			"jreq"
-# define NAME_UC			"JREq"
-# define WEBSITE_URL		"http://q37.info/"
-# define AUTHOR_NAME		"Claude SIMON"
-# define AUTHOR_CONTACT		"http://q37.info/contact/"
-# define OWNER_NAME			"Claude SIMON"
-# define OWNER_CONTACT		"http://q37.info/contact/"
-# define COPYRIGHT			COPYRIGHT_YEARS " " OWNER_NAME " (" OWNER_CONTACT ")"
+#define MDEF( name ) qCDEF( char *, name, #name );
+
+namespace messages_ {
+	MDEF( NoRegisteredComponent );
+}
 
 namespace {
 	namespace{
@@ -76,7 +75,7 @@ namespace {
 
 extern "C" JNIEXPORT jstring JNICALL Java_JREq_wrapperInfo(
 	JNIEnv *Env,
-	jclass)
+	jclass )
 {
 	return GetInfo_( Env );
 }
@@ -97,6 +96,26 @@ namespace {
 
 		Env->ThrowNew( Env->FindClass( "java/lang/Exception" ), Message );
 	}
+}
+
+extern "C" JNIEXPORT jstring JNICALL Java_JREq_componentInfo(
+	JNIEnv *Env,
+	jclass )
+{
+	jstring String;
+qRFH
+	str::wString Message;
+	qCBUFFERr Buffer;
+qRFB
+	Message.Init();
+
+	sclmisc::GetBaseTranslation( messages_::NoRegisteredComponent, Message );
+
+	String = Env->NewStringUTF( Message.Convert( Buffer ) );
+qRFR
+qRFT
+qRFE( ERRFinal_( Env ) )
+	return String;
 }
 
 extern "C" JNIEXPORT void JNICALL Java_JREq_register(

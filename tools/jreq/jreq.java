@@ -53,6 +53,7 @@ class JREqTest {
 	{
  	displayCompilationTime();
  	System.out.println( JREq.wrapperInfo() );
+ 	System.out.println( JREq.componentInfo() );
  }
 }
 

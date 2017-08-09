@@ -36,10 +36,11 @@ mods += que sdr stkbse stkbch stkctn
 mods += str strng tagsbs tol txf 
 mods += tys uys utf xtf llio 
 mods += bomhdl cdgb64 dlbrry fil fnm 
-mods += jniq jre jrebse lcl plgn 
+mods += jniq jrebse lcl n4a plgn 
 mods += plgncore rgstry stsfsm tht thtsub 
 mods += xml xpp 
 mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
+mods += registry 
 
 pmods += pllio 
 
@@ -141,6 +142,17 @@ endif
 
 ##########################
 		
+
+####################################
+# For Android (Termux) environment #
+####################################
+
+ifeq ("$(os)","$(Android)")
+
+endif
+
+#############################
+	
 ###################################
 ###################################
 ##### DON'T MODIFY BELOW !!! ######
@@ -345,6 +357,36 @@ endif
 
 ##########################
 		
+
+####################################
+# For Android (Termux) environment #
+####################################
+
+ifeq ("$(os)","$(Android)")
+ 	src += :"$(jdk)include":"$(jdk)include/linux"
+
+	co += -std=gnu++11 -DUNICODE -D_FILE_OFFSET_BITS=64
+	
+	mods += $(pmods)
+
+	libs += -lpthread -ldl -lrt
+	
+	ifeq ("$(target)","$(IA_32)")
+		co += -m32
+		lo += -m32
+	else # 'ifeq' on other line due to GNU 3.80 (Maemo on N900).
+		ifeq ("$(target)","$(AMD64)")
+			co += -m64
+			lo += -m64
+		endif
+	endif
+	binary=lib$(name).so
+	lo += -shared
+	co += -fPIC
+endif
+
+#############################
+		
 all: $(binary)
 	javac src/*.java -d .
 	rm -rf *.o
@@ -352,7 +394,7 @@ ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20170627"\"
+copt += -DVERSION=\""20170809"\"
 copt += -DCOPYRIGHT_YEARS=\""2017"\"
 copt += -DIDENTIFIER=\"""\"
 
