@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xpp:bloc xmlns:xpp="http://q37.info/ns/xpp/">
+ 	<Translations text="N4AUPS_NoRegisteredComponent">
+   <Translation language="fr">(pas de composant enregistré)</Translation>
+   <Translation language="en">(no registered component)</Translation>
+  </Translations>
+<!--
+	<Translations text="N4AUPS_">
+		<Translation language="fr"></Translation>
+		<Translation language="en"></Translation>
+	</Translations>
+	-->
+</xpp:bloc>

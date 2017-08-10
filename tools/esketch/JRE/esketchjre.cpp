@@ -17,52 +17,42 @@
 	along with esketch. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "jre.old.h"
-
-#include "sclmisc.h"
-#include "scljre.old.h"
+#include "esketchjre.h"
 
 #include "iof.h"
 #include "xpp.h"
 #include "lcl.h"
+#include "scln4a.h"
 
-# define NAME_MC			"eSketchJRE"
-# define NAME_LC			"esketchjre"
-# define NAME_UC			"ESKETCHJRE"
-# define WEBSITE_URL		"http://q37.info/"
-# define AUTHOR_NAME		"Claude SIMON"
-# define AUTHOR_CONTACT		"http://q37.info/contact/"
-# define OWNER_NAME			"Claude SIMON"
-# define OWNER_CONTACT		"http://q37.info/contact/"
-# define COPYRIGHT			COPYRIGHT_YEARS " " OWNER_NAME " (" OWNER_CONTACT ")"
-
-SCLJRE_DEF( eSketch );
+void scln4a::SCLN4AInfo( txf::sOFlow &Flow )
+{
+	Flow << NAME_MC << " v" << VERSION << txf::nl
+		 << txf::pad << "Build : " __DATE__ " " __TIME__ " (" << cpe::GetDescription() << ')';
+}
 
 namespace {
-	jobject getText_(
-		JNIEnv *Env,
-		const scljre::sArguments &Args )
+	void ReturnArgument_( scln4a::sCaller &Caller )
 	{
-		jre::sString JString;
 	qRH
-		str::wString Text;
+		str::wString Input, Text;
 	qRB
-		Text.Init();
-		sclmisc::GetBaseTranslation( "TheText", Text );
+		Input.Init();
+		Caller.GetArgument( Input );
 
-		JString.Init( Text );
+		Text.Init();
+		sclmisc::GetBaseTranslation( "Argument", Text, Input );
+
+		Caller.SetReturnValue( Text );
 	qRR
 	qRT
 	qRE
-		return JString;
 	}
 }
 
-void scljre::SCLJRERegister( sRegistrar &Registrar )
+void scln4a::SCLN4ARegister( scln4a::sRegistrar &Registrar )
 {
-	Registrar.Register( getText_  );
+	Registrar.Register( ReturnArgument_ );
 }
 
 const char *sclmisc::SCLMISCTargetName = NAME_LC;
 const char *sclmisc::SCLMISCProductName = NAME_MC;
-const char *scljre::SCLJREProductVersion = VERSION;

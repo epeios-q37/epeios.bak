@@ -33,9 +33,6 @@
    <Modules Group="SCL">
     <xpp:expand select="SCL"/>
    </Modules>
-   <Modules Group="JRE">
-    <xpp:expand select="JRE"/>
-   </Modules>
   </Modules>
  </Modules>
  <Files>

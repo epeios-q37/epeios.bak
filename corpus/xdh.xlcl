@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!-- $Id: scl.xlcl,v 1.6 2013/07/18 19:46:20 csimon Exp $ -->
-<xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
+<xpp:bloc xmlns:xpp="http://q37.info/ns/xpp/">
 	<!--
 	<xpp:expand href="xdh....xlcl"/>
 	-->

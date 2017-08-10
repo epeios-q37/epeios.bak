@@ -31,6 +31,8 @@
 #  define N4A_DBG
 # endif
 
+# define N4A_REGISTER_FUNCTION_NAME		N4ARegister
+
 # include "err.h"
 # include "sclmisc.h"
 # include "tol.h"

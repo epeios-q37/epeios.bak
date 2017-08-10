@@ -19,6 +19,8 @@
 
 #include "jreq.h"
 
+#include "wrapper.h"
+
 #include "jrebse.h"
 #include "n4a.h"
 
@@ -29,10 +31,6 @@
 #include "lcl.h"
 
 #define MDEF( name ) qCDEF( char *, name, #name );
-
-namespace messages_ {
-	MDEF( NoRegisteredComponent );
-}
 
 namespace {
 	namespace{
@@ -102,20 +100,20 @@ extern "C" JNIEXPORT jstring JNICALL Java_JREq_componentInfo(
 	JNIEnv *Env,
 	jclass )
 {
-	jstring String;
+	jstring JString;
 qRFH
-	str::wString Message;
+	str::wString Info;
 	qCBUFFERr Buffer;
 qRFB
-	Message.Init();
+	Info.Init();
 
-	sclmisc::GetBaseTranslation( messages_::NoRegisteredComponent, Message );
+	wrapper::GetLauncherInfo( Info );
 
-	String = Env->NewStringUTF( Message.Convert( Buffer ) );
+	JString = Env->NewStringUTF( Info.Convert( Buffer ) );
 qRFR
 qRFT
 qRFE( ERRFinal_( Env ) )
-	return String;
+	return JString;
 }
 
 extern "C" JNIEXPORT void JNICALL Java_JREq_register(

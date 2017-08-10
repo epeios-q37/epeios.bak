@@ -29,6 +29,7 @@
     <Module>jrebse</Module>
     <Module>lcl</Module>
     <Module>n4a</Module>
+    <Module>n4aups</Module>
     <Module>plgn</Module>
     <Module>plgncore</Module>
     <Module>rgstry</Module>
@@ -44,6 +45,7 @@
   </Modules>
   <Modules>
    <Module>registry</Module>
+   <Module>wrapper</Module>
   </Modules>
  </Modules>
  <Files>

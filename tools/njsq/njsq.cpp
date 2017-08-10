@@ -19,7 +19,6 @@
 
 #include "njsq.h"
 
-#include "registrar.h"
 #include "registry.h"
 #include "wrapper.h"
 
@@ -175,9 +174,12 @@ qRT
 qRE
 }
 
-extern "C" typedef n4a::fRegister fRegister_;
-
-dlbrry::rDynamicLibrary Library_;
+namespace {
+	void OnExit_( void *UP )
+	{
+		wrapper::DeleteLauncher();
+	}
+}
 
 namespace {
 	err::err___ qRRor_;
@@ -187,38 +189,31 @@ namespace {
 }
 
 namespace {
-	bso::bool__ Register_(
-		const str::string_ &AddonFilename,
-		n4a::cRegistrar &Registrar )
+	void ErrFinal_( v8::Isolate *Isolate = NULL )
 	{
-		bso::bool__ Success = false;
 	qRH
-		n4a::sData Data;
-		fnm::name___ Location;
-		TOL_CBUFFER___ Buffer;
+		str::wString Message;
+		err::buffer__ Buffer;
 	qRB
-		Location.Init();
-		fnm::GetLocation( AddonFilename, Location );
-		Data.Init( Rack_, Location, str::wString() );
+		Isolate = v8q::GetIsolate( Isolate );
 
-//		cio::COut << __LOC__ << AddonFilename << txf::nl << txf::commit;
+		Message.Init();
 
-		Library_.Init( AddonFilename, dlbrry::nExtOnly );
+		if ( ERRType != err::t_Abort ) {
+			Message.Append( err::Message( Buffer ) );
 
-//		cio::COut << __LOC__ << txf::nl << txf::commit;
+			ERRRst();	// To avoid relaunching of current error by objects of the 'FLW' library.
+		} else if ( sclerror::IsErrorPending() )
+			sclmisc::GetSCLBasePendingErrorTranslation( Message );
 
-		fRegister_ *Register = dlbrry::GetFunction<fRegister_ *>( E_STRING( NJS_REGISTER_FUNCTION_NAME ), Library_ );
-
-		if ( Register == NULL )
-			qRReturn;
-
-		wrapper::SetLauncher( Register( &Registrar, &Data ) );
-
-		Success = true;
+		if ( Isolate != NULL )
+			Isolate->ThrowException( v8::Exception::Error( v8q::ToString( Message ) ) );
+		else
+			cio::CErr << txf::nl << Message << txf::nl;
 	qRR
+		ERRRst();
 	qRT
 	qRE
-		return Success;
 	}
 
 	void Register_( const v8::FunctionCallbackInfo<v8::Value>& Info )
@@ -227,7 +222,6 @@ namespace {
 		v8q::sString RawArguments;
 		str::wString Arguments;
 		str::wString ComponentFilename;
-		registrar::sRegistrar Registrar;
 	qRFB
 		RawArguments.Init( Info[0] );
 		
@@ -239,18 +233,20 @@ namespace {
 		ComponentFilename.Init();
 		sclmisc::MGetValue( registry::parameter::ComponentFilename, ComponentFilename );
 
-		Registrar.Init();
-		Register_( ComponentFilename, Registrar );
+		wrapper::Register( ComponentFilename, Arguments, Rack_ );
 	qRFR
 	qRFT
-	qRFE( common::ErrFinal() )
+	qRFE( ErrFinal_() )
 	}
-}
 
-namespace {
-	void OnExit_( void *UP )
+	void Launch_( const v8::FunctionCallbackInfo<v8::Value>& Info )
 	{
-		wrapper::DeleteLauncher();
+	qRFH
+	qRFB
+		wrapper::Launch( Info );
+	qRFR
+	qRFT
+	qRFE( ErrFinal_() )
 	}
 }
 
@@ -281,8 +277,6 @@ qRFB
 
 	sclmisc::Initialize( Rack_, Location );
 
-	common::Functions.Init();
-
 	node::AtExit( OnExit_, NULL );
 	/*
 	error_::Initialize();
@@ -291,7 +285,7 @@ qRFB
 	*/
 qRFR
 qRFT
-qRFE( common::ErrFinal() )
+qRFE( ErrFinal_() )
 }
 
 NODE_MODULE( njsq, Start );

@@ -39,8 +39,7 @@ mods += dlbrry plgn plgncore tht thtsub
 mods += bomhdl cdgb64 fil fnm lcl 
 mods += rgstry stsfsm xml xpp 
 mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
-mods += scljre 
-mods += jniq jre jrebse 
+mods += scln4a 
 
 pmods += pllio 
 
@@ -79,8 +78,6 @@ Android=Android
 os=$(shell uname -o 2>/dev/null || uname -s)
 mach=$(shell uname -m)
 
-jdk = $(JAVA_HOME)/
-      
 
 ##########################
 # For Cygwin environment #
@@ -146,6 +143,17 @@ endif
 
 ##########################
 		
+
+####################################
+# For Android (Termux) environment #
+####################################
+
+ifeq ("$(os)","$(Android)")
+
+endif
+
+#############################
+	
 ###################################
 ###################################
 ##### DON'T MODIFY BELOW !!! ######
@@ -231,8 +239,7 @@ endif
 #########################
 
 ifeq ("$(os)", "$(MinGW)")
- 	src += :"$(jdk)include":"$(jdk)include/win32"
-
+ 
 	co += -DMSYS -std=gnu++11 -DUNICODE
 	lo += -municode
 	
@@ -264,8 +271,7 @@ endif
 #############################
 
 ifeq ("$(os)","$(GNULinux)")
- 	src += :"$(jdk)include":"$(jdk)include/linux"
-
+ 
 	co += -std=gnu++11 -DUNICODE -D_FILE_OFFSET_BITS=64
 	
 	mods += $(pmods)
@@ -296,8 +302,7 @@ endif
 #########################
 
 ifeq ("$(os)","$(Linux)")
- 	src += :"$(jdk)include":"$(jdk)include/linux"
-
+ 
 	co += -std=gnu++11 -DUNICODE -D_FILE_OFFSET_BITS=64
 	
 	mods += $(pmods)
@@ -326,9 +331,7 @@ endif
 ##########################
 
 ifeq ("$(os)","$(MacOS)")
- 	jdk=$(shell /usr/libexec/java_home)/
-	src += :"$(jdk)include":"$(jdk)include/darwin"
-
+ 
 	co += -std=gnu++11 -DUNICODE -D_FILE_OFFSET_BITS=64
 	
 	mods += $(pmods)
@@ -344,12 +347,40 @@ ifeq ("$(os)","$(MacOS)")
 	endif
 	binary=lib$(name).dylib
 	lo += -dynamiclib
-	src += :"$(jdk)/include/darwin"
 
 	dest=/Users/csimon/bin/
 endif
 
 ##########################
+		
+
+####################################
+# For Android (Termux) environment #
+####################################
+
+ifeq ("$(os)","$(Android)")
+ 
+	co += -std=gnu++11 -DUNICODE -D_FILE_OFFSET_BITS=64
+	
+	mods += $(pmods)
+
+	libs += -lpthread -ldl -lrt
+	
+	ifeq ("$(target)","$(IA_32)")
+		co += -m32
+		lo += -m32
+	else # 'ifeq' on other line due to GNU 3.80 (Maemo on N900).
+		ifeq ("$(target)","$(AMD64)")
+			co += -m64
+			lo += -m64
+		endif
+	endif
+	binary=lib$(name).so
+	lo += -shared
+	co += -fPIC
+endif
+
+#############################
 		
 all: $(binary)
 	javac src/*.java -d .
@@ -358,7 +389,7 @@ ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20170620"\"
+copt += -DVERSION=\""20170809"\"
 copt += -DCOPYRIGHT_YEARS=\""2007-2017"\"
 copt += -DIDENTIFIER=\"""\"
 

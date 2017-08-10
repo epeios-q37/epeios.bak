@@ -37,7 +37,7 @@ class eSketch {
 		this.core = core;
 	}
 	
-	public String getText()
+	public String returnArgument()
 	{
 		return (java.lang.String)wrapper( 0 );
 	}
@@ -61,7 +61,7 @@ class eSketchDemo {
 
 		eSketch Sketch = new eSketch( null );
 
-		System.out.println( Sketch.getText() );
+		System.out.println( Sketch.returnArgument() );
 	}
 
 }
