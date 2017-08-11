@@ -19,11 +19,13 @@
 
 #include "jreq.h"
 
+#include "registry.h"
 #include "wrapper.h"
 
 #include "jrebse.h"
 #include "n4a.h"
 
+#include "sclargmnt.h"
 #include "sclmisc.h"
 
 #include "iof.h"
@@ -107,7 +109,8 @@ qRFH
 qRFB
 	Info.Init();
 
-	wrapper::GetLauncherInfo( Info );
+	if ( !wrapper::GetLauncherInfo( Info ) )
+		sclmisc::GetBaseTranslation( "NoRegisteredComponent", Info );
 
 	JString = Env->NewStringUTF( Info.Convert( Buffer ) );
 qRFR
@@ -116,15 +119,13 @@ qRFE( ERRFinal_( Env ) )
 	return JString;
 }
 
-extern "C" JNIEXPORT void JNICALL Java_JREq_register(
+extern "C" JNIEXPORT void JNICALL Java_JREq_init(
 	JNIEnv *Env,
-	jclass)
+	jclass )
 {
 qRFH
 	str::wString Location;
 qRFB
-//	sRegistrar Registrar;
-
 	cio::Initialize( cio::GetConsoleSet() );
 	Rack_.Init( Error_, SCLError_, cio::GetSet( cio::t_Default ), Locale_ );
 
@@ -133,12 +134,30 @@ qRFB
 
 	sclmisc::Initialize( Rack_, Location, qRPU );
 
-//	Registrar.Init();
-
-//	Functions_.Init();
-//	scljre::SCLJRERegister( Registrar );
-
 	jniq::SetGlobalEnv( Env );
+qRFR
+qRFT
+qRFE( ERRFinal_( Env ) )
+}
+
+extern "C" JNIEXPORT void JNICALL Java_JREq_register(
+	JNIEnv *Env,
+	jclass,
+	jstring RawArguments )
+{
+qRFH
+	str::wString Arguments;
+	str::wString ComponentFilename;
+qRFB
+	Arguments.Init();
+	jniq::Convert( RawArguments, Arguments, Env );
+
+	sclargmnt::FillRegistry( Arguments, sclargmnt::faIsArgument, sclargmnt::uaReport );
+
+	ComponentFilename.Init();
+	sclmisc::MGetValue( registry::parameter::ComponentFilename, ComponentFilename );
+
+	wrapper::Register( ComponentFilename, Rack_ );
 qRFR
 qRFT
 qRFE( ERRFinal_( Env ) )
@@ -164,4 +183,4 @@ qGCTOR( jreq )
 	Error_.Init();
 	SCLError_.Init();
 	Locale_.Init();
-}
+};

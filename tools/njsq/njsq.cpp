@@ -80,7 +80,8 @@ namespace {
 	qRB
 		Info.Init();
 
-		wrapper::GetLauncherInfo( Info );
+		if ( !wrapper::GetLauncherInfo( Info ) )
+			sclmisc::GetBaseTranslation( "NoRegisteredComponent", Info );
 
 		Args.GetReturnValue().Set( v8q::sString( Info ).Core() );
 	qRR
@@ -233,7 +234,7 @@ namespace {
 		ComponentFilename.Init();
 		sclmisc::MGetValue( registry::parameter::ComponentFilename, ComponentFilename );
 
-		wrapper::Register( ComponentFilename, Arguments, Rack_ );
+		wrapper::Register( ComponentFilename, Rack_ );
 	qRFR
 	qRFT
 	qRFE( ErrFinal_() )

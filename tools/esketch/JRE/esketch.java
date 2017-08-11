@@ -17,9 +17,11 @@
 	along with eSketch. If not, see <http://www.gnu.org/licenses/>.
 */
 
-class eSketch {
-	native public static String info();
-	native private static void register();
+class JREq {
+	native public static String wrapperInfo();
+	native public static String componentInfo();
+	native private static void init();
+	native private static void register( String arguments );
 	native private static Object wrapper(
 		int index,
 		Object... objects);
@@ -28,26 +30,27 @@ class eSketch {
 	
 	static
 	{
-		System.loadLibrary("esketchjre");
-		register();
-	}
+ 	System.loadLibrary("jreq");
+ 	init();
+  register( "esketchjre");
+ }
 	
-	public eSketch( Object core )
+	public JREq( Object core )
 	{
 		this.core = core;
-	}
-	
-	public String returnArgument()
-	{
-		return (java.lang.String)wrapper( 0 );
 	}
 	
 	public void finalize()
 	{
 	}
+
+	public String returnArgument()
+	{
+		return (java.lang.String)wrapper( 0 );
+	}
 }
 
-class eSketchDemo {
+class eSketchTest {
 	private static void displayCompilationTime() throws Exception
 	{
 		System.out.println( new java.util.Date(new java.io.File(eSketchDemo.class.getClassLoader().getResource(eSketchDemo.class.getCanonicalName().replace('.', '/') + ".class").toURI()).lastModified()) );
@@ -55,13 +58,9 @@ class eSketchDemo {
 	
 	public static void main ( String[] args ) throws Exception
 	{
-		System.out.println( eSketch.info() );
-		System.out.println();
-		// displayCompilationTime();
-
-		eSketch Sketch = new eSketch( null );
-
-		System.out.println( Sketch.returnArgument() );
+ 	displayCompilationTime();
+ 	System.out.println( JREq.wrapperInfo() );
+ 	System.out.println( JREq.componentInfo() );
 	}
 
 }

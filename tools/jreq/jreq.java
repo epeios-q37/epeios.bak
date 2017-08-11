@@ -20,7 +20,8 @@
 class JREq {
 	native public static String wrapperInfo();
 	native public static String componentInfo();
-	native private static void register();
+	native private static void init();
+	native private static void register( String arguments );
 	native private static Object wrapper(
 		int index,
 		Object... objects);
@@ -30,7 +31,7 @@ class JREq {
 	static
 	{
  	System.loadLibrary("jreq");
- 	register();
+ 	init();
  }
 	
 	public JREq( Object core )

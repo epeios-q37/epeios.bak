@@ -21,9 +21,7 @@
 
 #include "n4aups.h"
 
-#include "sclargmnt.h"
 #include "sclmisc.h"
-
 
 using namespace n4aups;
 
@@ -54,14 +52,11 @@ cLauncher &n4aups::GetLauncher( void )
 
 bso::sBool n4aups::GetLauncherInfo( str::dString &Info )
 {
-	if ( Launcher_ == NULL ) {
-		sclmisc::GetBaseTranslation( N4AUPS_NAME "_NoRegisteredComponent", Info );
+	if ( Launcher_ != NULL ) {
+		Launcher_->Info( Info );
 		return false;
-	}
-
-	Launcher_->Info( Info );
-
-	return true;
+	} else
+		return false;
 }
 
 void n4aups::DeleteLauncher( void )
@@ -139,14 +134,11 @@ namespace {
 
 void n4aups::Register(
 	const fnm::rName &ComponentFilename,
-	const str::wString &Arguments,
 	sclmisc::sRack &Rack )
 {
 	sRegistrar_ Registrar;
 
 	Functions_.Init();
-
-	sclargmnt::FillRegistry( Arguments, sclargmnt::faIsArgument, sclargmnt::uaReport );
 
 	Registrar.Init();
 	Register_( ComponentFilename, Registrar, Rack );

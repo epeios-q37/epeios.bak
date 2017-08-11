@@ -42,7 +42,6 @@ namespace n4aups {
 
 	void Register(
 		const fnm::rName &ComponentFilename,
-		const str::wString &Argument,
 		sclmisc::sRack &Rack );
 
 	void *GetFunction( sdr::sRow Row );
