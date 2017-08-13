@@ -146,11 +146,9 @@ bso::sBool n4aups::Register(
 	if ( !Register_( ComponentFilename, Registrar, Rack ) ) {
 		if ( qRP == err::hThrowException )
 			qRFwk();
-		else
-			return false;
+		return false;
 	} else
 		return true;
-
 }
 
 void *n4aups::GetFunction( sdr::sRow Row )

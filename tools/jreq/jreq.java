@@ -17,45 +17,51 @@
 	along with JREq. If not, see <http://www.gnu.org/licenses/>.
 */
 
-class JREq {
+class Decl {
+ protected static String affix = ""; // We are not interested in a component.
+}
+
+
+// Begin of generic part.
+class JREq extends Decl {
 	native public static String wrapperInfo();
 	native public static String componentInfo();
-	native private static void init();
+	native private static void init( String location);
 	native private static void register( String arguments );
-	native private static Object wrapper(
+	native protected static Object wrapper(
 		int index,
 		Object... objects);
-		
-	public Object core;
-	
+
 	static
 	{
- 	System.load("h:/bin/jreq.dll");
- 	init();
-  register( "esketchjre");
+  String location = ".";
+
+ 	System.loadLibrary( "jreq" );
+
+  if ( System.getenv( "EPEIOS_SRC" ) != null ) {
+   if ( System.getProperty("os.name").startsWith( "Windows" ) )
+    location = "h:/bin";
+   else
+    location = "~/bin";
+  }
+
+ 	init( location );
+//  register( Decl.affix + "jre");
  }
-	
-	public JREq( Object core )
-	{
-		this.core = core;
-	}
-	
-	public void finalize()
-	{
-	}
 }
+// End of generic part.
 
 class JREqTest {
 	private static void displayCompilationTime() throws Exception
 	{
-		System.out.println( "Java build ('javac'): " + new java.util.Date(new java.io.File(JREqTest.class.getClassLoader().getResource(JREqTest.class.getCanonicalName().replace('.', '/') + ".class").toURI()).lastModified()) );
+		System.out.println( "Bytecode build : " + new java.util.Date(new java.io.File(JREqTest.class.getClassLoader().getResource(JREqTest.class.getCanonicalName().replace('.', '/') + ".class").toURI()).lastModified()) );
 	}
 	
 	public static void main ( String[] args ) throws Exception
 	{
- 	displayCompilationTime();
  	System.out.println( JREq.wrapperInfo() );
  	System.out.println( JREq.componentInfo() );
+ 	displayCompilationTime();
  }
 }
 

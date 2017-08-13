@@ -239,16 +239,6 @@ namespace {
 	qRFT
 	qRFE( ErrFinal_() )
 	}
-
-	void Launch_( const v8::FunctionCallbackInfo<v8::Value>& Info )
-	{
-	qRFH
-	qRFB
-		wrapper::Launch( Info );
-	qRFR
-	qRFT
-	qRFE( ErrFinal_() )
-	}
 }
 
 void Start(

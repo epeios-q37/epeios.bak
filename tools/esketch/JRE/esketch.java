@@ -17,7 +17,12 @@
 	along with eSketch. If not, see <http://www.gnu.org/licenses/>.
 */
 
-class JREq {
+class Decl {
+ protected static String affix = "esketch";
+}
+
+// Begin of generic part.
+class JREq extends Decl {
 	native public static String wrapperInfo();
 	native public static String componentInfo();
 	native private static void init( String location);
@@ -30,7 +35,7 @@ class JREq {
 	{
   String location = ".";
 
- 	System.loadLibrary("jreq");
+ 	System.loadLibrary( "jreq" );
 
   if ( System.getenv( "EPEIOS_SRC" ) != null ) {
    if ( System.getProperty("os.name").startsWith( "Windows" ) )
@@ -40,17 +45,17 @@ class JREq {
   }
 
  	init( location );
-  register( "esketchjre");
+  register( Decl.affix + "jre");
  }
 }
+// End of generic part.
 
 class eSketch extends JREq {
 	public static String returnArgument( String Text )
 	{
-		return (java.lang.String)JREq.wrapper( 0, Text  );
+		return (String)JREq.wrapper( 0, Text  );
 	}
 }
-
 
 class eSketchTest {
 	private static void displayBytecodeBuildTimestamp() throws Exception
@@ -65,6 +70,5 @@ class eSketchTest {
  	displayBytecodeBuildTimestamp();
  	System.out.println( eSketch.returnArgument( "Text from JAVA file" ) );
 	}
-
 }
 
