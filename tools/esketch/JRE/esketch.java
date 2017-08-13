@@ -22,46 +22,48 @@ class JREq {
 	native public static String componentInfo();
 	native private static void init( String location);
 	native private static void register( String arguments );
-	native private static Object wrapper(
+	native protected static Object wrapper(
 		int index,
 		Object... objects);
-		
-	public Object core;
-	
+
 	static
 	{
+  String location = ".";
+
  	System.loadLibrary("jreq");
- 	init( "h:/bin");
+
+  if ( System.getenv( "EPEIOS_SRC" ) != null ) {
+   if ( System.getProperty("os.name").startsWith( "Windows" ) )
+    location = "h:/bin";
+   else
+    location = "~/bin";
+  }
+
+ 	init( location );
   register( "esketchjre");
  }
-	
-	public JREq( Object core )
-	{
-		this.core = core;
-	}
-	
-	public void finalize()
-	{
-	}
+}
 
+class eSketch extends JREq {
 	public static String returnArgument( String Text )
 	{
-		return (java.lang.String)wrapper( 0, Text  );
+		return (java.lang.String)JREq.wrapper( 0, Text  );
 	}
 }
 
+
 class eSketchTest {
-	private static void displayCompilationTime() throws Exception
+	private static void displayBytecodeBuildTimestamp() throws Exception
 	{
-		System.out.println( new java.util.Date(new java.io.File(eSketchTest.class.getClassLoader().getResource(eSketchTest.class.getCanonicalName().replace('.', '/') + ".class").toURI()).lastModified()) );
+		System.out.println( "Bytecode build : " + new java.util.Date(new java.io.File(eSketchTest.class.getClassLoader().getResource(eSketchTest.class.getCanonicalName().replace('.', '/') + ".class").toURI()).lastModified()) );
 	}
 	
 	public static void main ( String[] args ) throws Exception
 	{
- 	displayCompilationTime();
- 	System.out.println( JREq.wrapperInfo() );
- 	System.out.println( JREq.componentInfo() );
- 	System.out.println( JREq.returnArgument( "Text from JAVA file" ) );
+ 	System.out.println( eSketch.wrapperInfo() );
+ 	System.out.println( eSketch.componentInfo() );
+ 	displayBytecodeBuildTimestamp();
+ 	System.out.println( eSketch.returnArgument( "Text from JAVA file" ) );
 	}
 
 }
