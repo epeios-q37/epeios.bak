@@ -20,7 +20,7 @@
 class JREq {
 	native public static String wrapperInfo();
 	native public static String componentInfo();
-	native private static void init();
+	native private static void init( String location);
 	native private static void register( String arguments );
 	native private static Object wrapper(
 		int index,
@@ -31,7 +31,7 @@ class JREq {
 	static
 	{
  	System.loadLibrary("jreq");
- 	init();
+ 	init( "h:/bin");
   register( "esketchjre");
  }
 	
@@ -44,16 +44,16 @@ class JREq {
 	{
 	}
 
-	public String returnArgument()
+	public static String returnArgument( String Text )
 	{
-		return (java.lang.String)wrapper( 0 );
+		return (java.lang.String)wrapper( 0, Text  );
 	}
 }
 
 class eSketchTest {
 	private static void displayCompilationTime() throws Exception
 	{
-		System.out.println( new java.util.Date(new java.io.File(eSketchDemo.class.getClassLoader().getResource(eSketchDemo.class.getCanonicalName().replace('.', '/') + ".class").toURI()).lastModified()) );
+		System.out.println( new java.util.Date(new java.io.File(eSketchTest.class.getClassLoader().getResource(eSketchTest.class.getCanonicalName().replace('.', '/') + ".class").toURI()).lastModified()) );
 	}
 	
 	public static void main ( String[] args ) throws Exception
@@ -61,6 +61,7 @@ class eSketchTest {
  	displayCompilationTime();
  	System.out.println( JREq.wrapperInfo() );
  	System.out.println( JREq.componentInfo() );
+ 	System.out.println( JREq.returnArgument( "Text from JAVA file" ) );
 	}
 
 }

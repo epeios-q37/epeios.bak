@@ -61,6 +61,8 @@ namespace {
 			n4a::eType Type,
 			void *Value ) override
 		{
+			Index++;	// The first one was the function id.
+
 			if ( Index >= I_().Length() )
 				qRGnr();
 

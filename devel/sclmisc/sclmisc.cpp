@@ -680,7 +680,7 @@ namespace {
 		qRPN )
 	{
 		bso::sBool Success = false;
-qRH
+	qRH
 		lcl::meaning Meaning;
 	qRB
 		Success = InitializeFlow_( CONFIGURATION_DEFAULT_FILENAME_SUFFIX, SuggestedDirectory, Flow, Directory );

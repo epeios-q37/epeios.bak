@@ -54,7 +54,7 @@ bso::sBool n4aups::GetLauncherInfo( str::dString &Info )
 {
 	if ( Launcher_ != NULL ) {
 		Launcher_->Info( Info );
-		return false;
+		return true;
 	} else
 		return false;
 }
@@ -132,16 +132,25 @@ namespace {
 
 }
 
-void n4aups::Register(
+bso::sBool n4aups::Register(
 	const fnm::rName &ComponentFilename,
-	sclmisc::sRack &Rack )
+	sclmisc::sRack &Rack,
+	qRPN )
 {
 	sRegistrar_ Registrar;
 
 	Functions_.Init();
 
 	Registrar.Init();
-	Register_( ComponentFilename, Registrar, Rack );
+
+	if ( !Register_( ComponentFilename, Registrar, Rack ) ) {
+		if ( qRP == err::hThrowException )
+			qRFwk();
+		else
+			return false;
+	} else
+		return true;
+
 }
 
 void *n4aups::GetFunction( sdr::sRow Row )

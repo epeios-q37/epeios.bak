@@ -30,8 +30,9 @@ class JREq {
 	
 	static
 	{
- 	System.loadLibrary("jreq");
+ 	System.load("h:/bin/jreq.dll");
  	init();
+  register( "esketchjre");
  }
 	
 	public JREq( Object core )

@@ -40,9 +40,10 @@ namespace n4aups {
 
 	void DeleteLauncher( void );
 
-	void Register(
+	bso::sBool Register(
 		const fnm::rName &ComponentFilename,
-		sclmisc::sRack &Rack );
+		sclmisc::sRack &Rack,
+		qRPD );
 
 	void *GetFunction( sdr::sRow Row );
 }

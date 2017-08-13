@@ -91,14 +91,12 @@ namespace scln4a {
 			bso::sUInt Index,
 			item &Item ) const
 		{
-			if ( Index == 0 )
-				qRFwk();
 
-			Get_( Index, C_(), Item );
+			GetArgument_( Index, C_(), Item );
 		}
 		template <typename ...items> inline void GetArgument( items &...Items ) const
 		{
-			GetArgument_( 1, C_(), Items... );
+			GetArgument_( 0, C_(), Items... );
 		}
 		void SetReturnValue( const str::dString &Value )
 		{

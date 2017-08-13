@@ -88,13 +88,25 @@ namespace {
 
 	void ERRFinal_( JNIEnv *Env )
 	{
-		err::buffer__ Buffer;
+	qRH
+		str::wString Message;
+		err::buffer__ RBuffer;
+		qCBUFFERr CBuffer;
+	qRB
+		Message.Init();
 
-		const char *Message = err::Message( Buffer );
+		if ( ERRType != err::t_Abort ) {
+			Message.Append( err::Message( RBuffer ) );
 
-		ERRRst();	// To avoid relaunching of current error by objects of the 'FLW' library.
+			ERRRst();	// To avoid relaunching of current error by objects of the 'FLW' library.
+		} else if ( sclerror::IsErrorPending() )
+			sclmisc::GetSCLBasePendingErrorTranslation( Message );
 
-		Env->ThrowNew( Env->FindClass( "java/lang/Exception" ), Message );
+		Env->ThrowNew( Env->FindClass( "java/lang/Exception" ), Message.Convert( CBuffer ) );
+	qRR
+		ERRRst();
+	qRT
+	qRE
 	}
 }
 
@@ -121,7 +133,8 @@ qRFE( ERRFinal_( Env ) )
 
 extern "C" JNIEXPORT void JNICALL Java_JREq_init(
 	JNIEnv *Env,
-	jclass )
+	jclass,
+	jstring RawLocation )
 {
 qRFH
 	str::wString Location;
@@ -130,9 +143,10 @@ qRFB
 	Rack_.Init( Error_, SCLError_, cio::GetSet( cio::t_Default ), Locale_ );
 
 	Location.Init();
+	jniq::Convert( RawLocation, Location, Env);
 	// TODO : Find a way to fill 'Location' with the path of the binary.
 
-	sclmisc::Initialize( Rack_, Location, qRPU );
+	sclmisc::Initialize( Rack_, Location );
 
 	jniq::SetGlobalEnv( Env );
 qRFR
@@ -169,10 +183,15 @@ extern "C" JNIEXPORT jobject JNICALL Java_JREq_wrapper(
 	jint Index,
 	jobjectArray Args )
 {
-//	return scljre::Launch_( Env, Index, Args );
-	return NULL;
+	jobject Return = NULL;
+qRFH
+qRFB
+	Return = wrapper::Launch( Index, Args );
+qRFR
+qRFT
+qRFE( ERRFinal_( Env ) )
+	return Return;
 }
-
 
 const char *sclmisc::SCLMISCTargetName = NAME_LC;
 const char *sclmisc::SCLMISCProductName = NAME_MC;
