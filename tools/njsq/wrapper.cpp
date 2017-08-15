@@ -19,13 +19,13 @@
 
 #include "wrapper.h"
 
-#include "n4aups.h"
+#include "n4allw.h"
 #include "sclerror.h"
 #include "v8q.h"
 
 using namespace wrapper;
 
-typedef n4a::cCaller cCaller_;
+typedef n4all::cCaller cCaller_;
 
 inline void GetString_(
 	int Index,
@@ -56,9 +56,9 @@ namespace {
 	private:
 		qRMV( const v8::FunctionCallbackInfo<v8::Value>, I_, Info_ );
 	protected:
-		virtual void N4AGetArgument(
+		virtual void N4ALLGetArgument(
 			int Index,
-			n4a::eType Type,
+			n4all::eType Type,
 			void *Value ) override
 		{
 			Index++;	// The first one was the function id.
@@ -67,7 +67,7 @@ namespace {
 				qRGnr();
 
 			switch ( Type ) {
-			case n4a::tString:
+			case n4all::tString:
 				GetString_( Index, I_(), *( str::dString * )Value );
 				break;
 			default:
@@ -75,12 +75,12 @@ namespace {
 				break;
 			}
 		}
-		virtual void N4ASetReturnValue(
-			n4a::eType Type,
+		virtual void N4ALLSetReturnValue(
+			n4all::eType Type,
 			const void *Value ) override
 		{
 			switch ( Type ) {
-			case n4a::tString:
+			case n4all::tString:
 				SetReturnValue_( I_(), *( const str::dString * )Value );
 				break;
 			default:
@@ -116,7 +116,7 @@ qRB
 
 	Caller.Init( Info );
 
-	n4aups::GetLauncher().Launch( n4aups::GetFunction( Index->Uint32Value()), Caller );
+	n4allw::GetLauncher().Launch( n4allw::GetFunction( Index->Uint32Value()), Caller );
 
 	if ( sclerror::IsErrorPending() )
 		qRAbort();	// To force the handling of a pending error.

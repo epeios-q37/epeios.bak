@@ -29,13 +29,13 @@ using namespace scln4a;
 # define FUNCTION_SPEC
 #endif
 
-typedef n4a::cLauncher cLauncher_;
+typedef n4all::cLauncher cLauncher_;
 
 class sLauncher_
 : public cLauncher_
 {
 protected:
-	virtual void N4ALaunch(
+	virtual void N4ALLLaunch(
 		void *Function,
 		cCaller_ &RawCaller ) override
 	{
@@ -45,7 +45,7 @@ protected:
 
 		((fFunction *)Function )( Caller );
 	}
-	virtual void N4AInfo( str::dString &Info ) override
+	virtual void N4ALLInfo( str::dString &Info ) override
 	{
 	qRH
 		flx::rStringOFlow BaseFlow;
@@ -64,11 +64,11 @@ public:
 	{}
 };
 
-extern "C" FUNCTION_SPEC n4a::fRegister N4A_REGISTER_FUNCTION_NAME;
+extern "C" FUNCTION_SPEC n4all::fRegister N4ALL_REGISTER_FUNCTION_NAME;
 
-n4a::cLauncher *N4ARegister(
-	n4a::cRegistrar *RawRegistrar,
-	n4a::sData *Data )
+n4all::cLauncher *N4ALLRegister(
+	n4all::cRegistrar *RawRegistrar,
+	n4all::sData *Data )
 {
 	sLauncher_ *Launcher = NULL;
 qRFH

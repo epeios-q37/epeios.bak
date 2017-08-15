@@ -17,9 +17,35 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define N4A_COMPILATION_
+// Native 4 (for) ALL Wrapper part
 
-#include "n4a.h"
+#ifndef N4ALLW_INC_
+# define N4ALLW_INC_
 
-using namespace n4a;
+# define N4ALLW_NAME		"N4ALLW"
 
+# if defined( E_DEBUG ) && !defined( N4ALLW_NODBG )
+#  define N4ALLW_DBG
+# endif
+
+# include "err.h"
+# include "n4all.h"
+
+namespace n4allw {
+	void SetLauncher( n4all::cLauncher *Launcher );
+
+	n4all::cLauncher &GetLauncher( void );
+
+	bso::sBool GetLauncherInfo( str::dString &Info );
+
+	void DeleteLauncher( void );
+
+	bso::sBool Register(
+		const fnm::rName &ComponentFilename,
+		sclmisc::sRack &Rack,
+		qRPD );
+
+	void *GetFunction( sdr::sRow Row );
+}
+
+#endif

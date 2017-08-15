@@ -21,7 +21,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "n4aups.h"
+#include "n4all.h"
 
 #include "err.h"
 #include "cio.h"
@@ -61,7 +61,7 @@ int main( int argc, char *argv[] )
 	int ExitValue = EXIT_SUCCESS;
 qRFH
 qRFB
-	COut << "Test of library " << N4AUPS_NAME << ' ' << __DATE__" "__TIME__"\n";
+	COut << "Test of library " << N4ALL_NAME << ' ' << __DATE__" "__TIME__"\n";
 
 	Generic( argc, argv );
 qRFR

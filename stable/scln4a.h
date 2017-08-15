@@ -29,10 +29,10 @@
 # endif
 
 # include "err.h"
-# include "n4a.h"
+# include "n4all.h"
 
 namespace scln4a {
-	typedef n4a::cCaller cCaller_;
+	typedef n4all::cCaller cCaller_;
 
 	inline void GetArgument_(
 		int Index,
@@ -44,7 +44,7 @@ namespace scln4a {
 		cCaller_ &Caller,
 		str::dString *Value )
 	{
-		return Caller.GetArgument( Index, n4a::tString, Value );
+		return Caller.GetArgument( Index, n4all::tString, Value );
 	}
 
 	inline void GetArgument_(
@@ -100,7 +100,7 @@ namespace scln4a {
 		}
 		void SetReturnValue( const str::dString &Value )
 		{
-			C_().SetReturnValue( n4a::tString, &Value );
+			C_().SetReturnValue( n4all::tString, &Value );
 		}
 	};
 
@@ -108,14 +108,14 @@ namespace scln4a {
 
 	class sRegistrar {
 	private:
-		qRMV( n4a::cRegistrar, R_, Registrar_ );
+		qRMV( n4all::cRegistrar, R_, Registrar_ );
 	public:
 		void reset( bso::sBool = true )
 		{
 			Registrar_ = NULL;
 		}
 		qCDTOR( sRegistrar );
-		void Init( n4a::cRegistrar &Registrar )
+		void Init( n4all::cRegistrar &Registrar )
 		{
 			Registrar_ = &Registrar;
 		}

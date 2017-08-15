@@ -20,16 +20,16 @@
 #ifndef WRAPPER__INC
 # define WRAPPER__INC
 
-# include "n4aups.h"
+# include "n4allw.h"
 
 // Note to developer : include 'h:\hg\NJSIncludeDirectories.props' in the '.vcxproj'.
 # include <node.h>
 
 namespace wrapper {
-	using n4aups::SetLauncher;
-	using n4aups::GetLauncherInfo;
-	using n4aups::DeleteLauncher;
-	using n4aups::Register;
+	using n4allw::SetLauncher;
+	using n4allw::GetLauncherInfo;
+	using n4allw::DeleteLauncher;
+	using n4allw::Register;
 
 	void Launch( const v8::FunctionCallbackInfo<v8::Value>& Info );
 }

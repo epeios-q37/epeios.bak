@@ -17,9 +17,9 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define N4A_COMPILATION_
+#define N4N_COMPILATION_
 
-#include "n4a.h"
+#include "n4n.h"
 
-using namespace n4a;
+using namespace n4n;
 

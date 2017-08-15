@@ -17,21 +17,19 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define N4AUPS_COMPILATION_
+#define N4ALLW_COMPILATION_
 
-#include "n4aups.h"
+#include "n4allw.h"
 
-#include "sclmisc.h"
-
-using namespace n4aups;
+using namespace n4allw;
 
 namespace {
-	using n4a::cLauncher;
+	using n4all::cLauncher;
 
 	cLauncher *Launcher_ = NULL;
 }
 
-void n4aups::SetLauncher( cLauncher *Launcher )
+void n4allw::SetLauncher( cLauncher *Launcher )
 {
 	if ( Launcher_ != NULL )
 		qRGnr();
@@ -42,7 +40,7 @@ void n4aups::SetLauncher( cLauncher *Launcher )
 	Launcher_ = Launcher;
 }
 
-cLauncher &n4aups::GetLauncher( void )
+cLauncher &n4allw::GetLauncher( void )
 {
 	if ( Launcher_ == NULL )
 		qRGnr();
@@ -50,7 +48,7 @@ cLauncher &n4aups::GetLauncher( void )
 	return *Launcher_;
 }
 
-bso::sBool n4aups::GetLauncherInfo( str::dString &Info )
+bso::sBool n4allw::GetLauncherInfo( str::dString &Info )
 {
 	if ( Launcher_ != NULL ) {
 		Launcher_->Info( Info );
@@ -59,7 +57,7 @@ bso::sBool n4aups::GetLauncherInfo( str::dString &Info )
 		return false;
 }
 
-void n4aups::DeleteLauncher( void )
+void n4allw::DeleteLauncher( void )
 {
 	if ( Launcher_ != NULL )
 		delete Launcher_;
@@ -74,13 +72,12 @@ namespace {
 		sclmisc::sRack Rack_;
 	}
 
-	typedef n4a::cRegistrar cRegistrar_;
+	typedef n4all::cRegistrar cRegistrar_;
 
 	class sRegistrar_
-	: public cRegistrar_
-	{
+		: public cRegistrar_ {
 	protected:
-		virtual void N4ARegister( void *Function ) override
+		virtual void N4ALLRegister( void *Function ) override
 		{
 			Functions_.Append( Function );
 		}
@@ -93,16 +90,16 @@ namespace {
 		dlbrry::rDynamicLibrary Library_;
 	}
 
-	extern "C" typedef n4a::fRegister fRegister_;
+	extern "C" typedef n4all::fRegister fRegister_;
 
 	bso::bool__ Register_(
 		const fnm::rName &ComponentFilename,
-		n4a::cRegistrar &Registrar,
+		n4all::cRegistrar &Registrar,
 		sclmisc::sRack &Rack )
 	{
 		bso::bool__ Success = false;
 	qRH
-		n4a::sData Data;
+		n4all::sData Data;
 		fnm::name___ Location;
 		TOL_CBUFFER___ Buffer;
 	qRB
@@ -116,7 +113,7 @@ namespace {
 
 		//		cio::COut << __LOC__ << txf::nl << txf::commit;
 
-		fRegister_ *Register = dlbrry::GetFunction<fRegister_ *>( E_STRING( N4A_REGISTER_FUNCTION_NAME ), Library_ );
+		fRegister_ *Register = dlbrry::GetFunction<fRegister_ *>( E_STRING( N4ALL_REGISTER_FUNCTION_NAME ), Library_ );
 
 		if ( Register == NULL )
 			qRReturn;
@@ -132,7 +129,7 @@ namespace {
 
 }
 
-bso::sBool n4aups::Register(
+bso::sBool n4allw::Register(
 	const fnm::rName &ComponentFilename,
 	sclmisc::sRack &Rack,
 	qRPN )
@@ -151,13 +148,14 @@ bso::sBool n4aups::Register(
 		return true;
 }
 
-void *n4aups::GetFunction( sdr::sRow Row )
+void *n4allw::GetFunction( sdr::sRow Row )
 {
 	if ( !Functions_.Exists( Row ) )
 		qRGnr();
 
 	return Functions_( Row );
 }
+
 
 
 

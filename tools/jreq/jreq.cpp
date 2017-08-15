@@ -23,7 +23,7 @@
 #include "wrapper.h"
 
 #include "jrebse.h"
-#include "n4a.h"
+#include "n4all.h"
 
 #include "sclargmnt.h"
 #include "sclmisc.h"

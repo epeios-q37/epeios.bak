@@ -17,35 +17,38 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-// Native For All UPStream
+// Native 4 Node.js
+// Extension to the 'N4A' library for 'Node.js'.
+// Common part between wrapper and component ('scln4n').
 
-#ifndef N4AUPS_INC_
-# define N4AUPS_INC_
+#ifndef N4N_INC_
+# define N4N_INC_
 
-# define N4AUPS_NAME		"N4AUPS"
+# define N4N_NAME		"N4N"
 
-# if defined( E_DEBUG ) && !defined( N4AUPS_NODBG )
-#  define N4AUPS_DBG
+# if defined( E_DEBUG ) && !defined( N4N_NODBG )
+#  define N4N_DBG
 # endif
 
 # include "err.h"
 # include "n4a.h"
 
-namespace n4aups {
-	void SetLauncher( n4a::cLauncher *Launcher );
+namespace n4n {
+	class sFunction {
 
-	n4a::cLauncher &GetLauncher( void );
+	};
 
-	bso::sBool GetLauncherInfo( str::dString &Info );
+	class cStream {
+	protected:
+		virtual void N4NOnReadable( sFunction &Callback ) = 0;
+	public:
+		qCALLBACK( Stream );
+		void OnReadable( sFunction &Callback )
+		{
+			return N4NOnReadable( Callback );
+		}
+	};
 
-	void DeleteLauncher( void );
-
-	bso::sBool Register(
-		const fnm::rName &ComponentFilename,
-		sclmisc::sRack &Rack,
-		qRPD );
-
-	void *GetFunction( sdr::sRow Row );
 }
 
 #endif
