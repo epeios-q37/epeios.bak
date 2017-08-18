@@ -1,0 +1,527 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Locale target="xppqnjs" xmlns:xpp="http://q37.info/ns/xpp">
+ <Translations message="CLNARG_HelpHintMessage">
+  <Translation language="fr">Essayez '%1 --help' pour plus d'informations</Translation>
+  <Translation language="en">Try '%1 --help' for more informations</Translation>
+ </Translations>
+ <Translations message="CLNARG_OptionWording">
+  <Translation language="fr">Option</Translation>
+  <Translation language="en">Option</Translation>
+ </Translations>
+ <Translations message="CLNARG_OptionsWording">
+  <Translation language="fr">Options</Translation>
+  <Translation language="en">Options</Translation>
+ </Translations>
+ <Translations message="CLNARG_ArgumentWording">
+  <Translation language="fr">Argument</Translation>
+  <Translation language="en">Argument</Translation>
+ </Translations>
+ <Translations message="CLNARG_ArgumentsWording">
+  <Translation language="fr">Arguments</Translation>
+  <Translation language="en">Arguments</Translation>
+ </Translations>
+ <Translations message="CLNARG_VersionCommandDescription">
+  <Translation language="fr">Affiche la version du programme</Translation>
+  <Translation language="en">Displays the version of the program</Translation>
+ </Translations>
+ <Translations message="CLNARG_LicenseCommandDescription">
+  <Translation language="fr">Affiche la licence du programme</Translation>
+  <Translation language="en">Displays the program license</Translation>
+ </Translations>
+ <Translations message="CLNARG_HelpCommandDescription">
+  <Translation language="fr">Affiche cette page</Translation>
+  <Translation language="en">Displays this page</Translation>
+ </Translations>
+ <Translations message="CLNARG_MissingCommandError">
+  <Translation language="fr">Commande manquante</Translation>
+  <Translation language="en">Missing command</Translation>
+ </Translations>
+ <Translations message="CLNARG_UnknownOptionError">
+  <Translation language="fr">Option '%1' inconnue</Translation>
+  <Translation language="en">Unkown '%1' option</Translation>
+ </Translations>
+ <Translations message="CLNARG_MissingOptionArgumentError">
+  <Translation language="fr">Argument manquant pour l'option '%1'</Translation>
+  <Translation language="en">Missing argument for '%1' option</Translation>
+ </Translations>
+ <Translations message="CLNARG_UnexpectedOptionError">
+  <Translation language="fr">Option '%1' inattendue</Translation>
+  <Translation language="en">Unexpected '%1' option</Translation>
+ </Translations>
+ <Translations message="CLNARG_WrongNumberOfArgumentsError">
+  <Translation language="fr">Nombre d'arguments incorrect</Translation>
+  <Translation language="en">Wrong number of arguments</Translation>
+ </Translations>
+ <Translations message="FIL_UnableToDuplicate">
+  <Translation language="fr">Impossible de dupliquer '%1'.</Translation>
+  <Translation language="en">Unable to duplicate '%1'.</Translation>
+ </Translations>
+ <Translations message="FIL_UnableToSuppress">
+  <Translation language="fr">Impossible de supprimer '%1'.</Translation>
+  <Translation language="en">Unable to suppress '%1'.</Translation>
+ </Translations>
+ <Translations message="FIL_UnableToRename">
+  <Translation language="fr">Impossible de renommer '%1'.</Translation>
+  <Translation language="en">Unable to rename '%1'.</Translation>
+ </Translations>
+ <Translations text="FRDKRN_ProjectParsingError">
+  <Translation language="fr">Lecture projet : %1</Translation>
+  <Translation language="en">Project reading : %1</Translation>
+ </Translations>
+ <Translations text="FRDKRN_ParametersParsingError">
+  <Translation language="fr">Lecture paramètres ; %1</Translation>
+  <Translation language="en">Parameters reading; %1</Translation>
+ </Translations>
+ <Translations text="FRDKRN_NoOrBadProjectId">
+  <Translation language="fr">Identifiant de projet absent ou incorrect ('%1').</Translation>
+  <Translation language="en">Bad Or no project id ('%1').</Translation>
+ </Translations>
+ <Translations text="FRDKRN_NoOrBadBackendDefinition">
+  <Translation language="fr">Pas de ou mauvaise définition du moteur de traitement ('backend').</Translation>
+  <Translation language="en">No or bad backend definition.</Translation>
+ </Translations>
+ <Translations text="FRDKRN_NoBackendLocation">
+  <Translation language="fr">Localisation du moteur de traitement ('backend') non définie.</Translation>
+  <Translation language="en">No backend location.</Translation>
+ </Translations>
+ <Translations text="FRDKRN_UnableToConnect">
+  <Translation language="fr">Impossible de se connecter au moteur de traitement ('backend') '%1'.</Translation>
+  <Translation language="en">Unable to connect to the backend '%1'.</Translation>
+ </Translations>
+ <Translations text="FRDKRN_IncompatibleBackend">
+  <Translation language="fr">Moteur de traitement ('backend') incompatible '%1'.</Translation>
+  <Translation language="en">Incompatible backend '%1'.</Translation>
+ </Translations>
+ <Translations text="FRDKRN_BackendError">
+  <Translation language="fr">Erreur du moteur de traitement ('backend') %1 : %2</Translation>
+  <Translation language="en">Error backend %1: %2</Translation>
+ </Translations>
+ <Translations text="FRDKRN_UnableToOpenFile">
+  <Translation language="fr">Impossible d'ouvrir le fichier '%1'.</Translation>
+  <Translation language="en">Unable to open file '%1'.</Translation>
+ </Translations>
+ <Translations text="FRDKRN_AuthorText">
+  <Translation language="fr">par %1 (%2)</Translation>
+  <Translation language="en">by %1 (%2)</Translation>
+ </Translations>
+ <Translations text="FRDKRN_AffiliatedSoftwareText">
+  <Translation language="fr">Fait partie de %1 (%2)</Translation>
+  <Translation language="en">Part of %1 (%2)</Translation>
+ </Translations>
+ <Translations text="MSCMDD_UnableToOpenMIDIInDevice">
+  <Translation language="fr">Impossible d'ouvrir le dispositif d'entrée MIDI</Translation>
+  <Translation language="en">Unable to open MIDI in device</Translation>
+ </Translations>
+ <Translations text="MSCMDD_UnableToOpenMIDIOutDevice">
+  <Translation language="fr">Impossible d'ouvrir le dispositif de sortie MIDI</Translation>
+  <Translation language="en">Unable to open MIDI out device</Translation>
+ </Translations>
+ <Translations message="MSCRMI_ErrorAtLineColumnInFile">
+  <Translation language="fr">Erreur à la ligne %1, colonne %2 dans le fichier '%3'</Translation>
+  <Translation language="en">Error at line %1, column %2 in file '%3'</Translation>
+ </Translations>
+ <Translations message="MSCRMI_ErrorAtLineColumn">
+  <Translation language="fr">Erreur à la ligne %1, colonne %2</Translation>
+  <Translation language="en">Error at line %1, column %2</Translation>
+ </Translations>
+ <Translations message="MSCRMI_ParserError">
+  <Translation language="fr">Erreur durant l'analyse</Translation>
+  <Translation language="en">Error during parsing</Translation>
+ </Translations>
+ <Translations message="MSCRMI_UnexpectedTag">
+  <Translation language="fr">Balise inattendue</Translation>
+  <Translation language="en">Unexpected tag</Translation>
+ </Translations>
+ <Translations message="MSCRMI_AttributeAlreadyDefined">
+  <Translation language="fr">Attribut déjà défini</Translation>
+  <Translation language="en">Attribute already defined</Translation>
+ </Translations>
+ <Translations message="MSCRMI_UnexpectedAttribute">
+  <Translation language="fr">Attribut inattendu</Translation>
+  <Translation language="en">Unexpected attribute</Translation>
+ </Translations>
+ <Translations message="MSCRMI_MissingAttribute">
+  <Translation language="fr">Attribut manquant</Translation>
+  <Translation language="en">Missing attribute</Translation>
+ </Translations>
+ <Translations message="MSCRMI_BadValue">
+  <Translation language="fr">Valeur incorrecte</Translation>
+  <Translation language="en">Bad value</Translation>
+ </Translations>
+ <Translations message="MSCRMI_ChecksumError">
+  <Translation language="fr">Somme de contrôle incorrecte</Translation>
+  <Translation language="en">Checksum error</Translation>
+ </Translations>
+ <Translations message="MSCRMI_IncorrectData">
+  <Translation language="fr">Données incorrectes</Translation>
+  <Translation language="en">Incorrect data</Translation>
+ </Translations>
+ <Translations text="PLGN_UnableToLoadLibrary">
+  <Translation language="fr">Echec chargement de la bibliothèque dynamique '%1'.</Translation>
+  <Translation language="en">Unable to load dynamic library '%1'.</Translation>
+ </Translations>
+ <Translations text="PLGN_BadLibraryContent">
+  <Translation language="fr">Contenu de la bibliothèque dynamique '%1' incorrect..</Translation>
+  <Translation language="en">Bad content of the '%1' dynamic library.</Translation>
+ </Translations>
+ <Translations text="PLGN_LibraryNotCompatible">
+  <Translation language="fr">La bibliothèque dynamique '%1' n'est pas compatible.</Translation>
+  <Translation language="en">The '%1' dynamic library is not compatible.</Translation>
+ </Translations>
+ <Translations text="PRXY_UnableToConnect">
+  <Translation language="fr">Echec connexion au 'proxy' à l'adresse '%1'.</Translation>
+  <Translation language="en">Unable to connect to 'proxy' at '%1'.</Translation>
+ </Translations>
+ <Translations text="PRXY_LostProxyConnexion">
+  <Translation language="fr">Perte de la connexion au 'proxy'.</Translation>
+  <Translation language="en">Lost proxy connection.</Translation>
+ </Translations>
+ <Translations message="RGSTRY_UnableToOpenFile">
+  <Translation language="fr">Impossible d'ouvrir le fichier '%1'</Translation>
+  <Translation language="en">Unable to open file '%1'</Translation>
+ </Translations>
+ <Translations message="RGSTRY_ParseError">
+  <Translation language="fr">%1</Translation>
+  <Translation language="en">%1</Translation>
+ </Translations>
+ <Translations message="RGSTRY_RootPathErreur">
+  <Translation language="fr">Erreur dans le chemin de la racine</Translation>
+  <Translation language="en">Root path error</Translation>
+ </Translations>
+ <Translations message="RGSTRY_UnableToFindRootPath">
+  <Translation language="fr">Impossible de trouver le chemin de la racine</Translation>
+  <Translation language="en">Unable to find root path</Translation>
+ </Translations>
+ <Translations text="SCLARGMNT_BadArgument">
+  <Translation language="fr">'%1' : argument incorrect.</Translation>
+  <Translation language="en">'%1' : bad argument.</Translation>
+ </Translations>
+ <Translations message="SCLARGMNT_BadArguments">
+  <Translation language="fr">Arguments incorrects.</Translation>
+  <Translation language="en">Bad arguments.</Translation>
+ </Translations>
+ <Translations text="SCLARGMNT_UnknownFlag">
+  <Translation language="fr">'%1' inconnu.</Translation>
+  <Translation language="en">'%1' unknown.</Translation>
+ </Translations>
+ <Translations text="SCLARGMNT_NoValueForFlag">
+  <Translation language="fr">Pas de valeur pour le fanion '%1' ('%1=&lt;valeur&gt;' si c'est une option).</Translation>
+  <Translation language="en">No value for '%1' flag ('%1=&lt;valeur&gt;' as an option).</Translation>
+ </Translations>
+ <Translations text="SCLARGMNT_BadPathForFlag">
+  <Translation language="fr">Mauvais chemin pour le fanion '%1'.</Translation>
+  <Translation language="en">Bad path for '%1' flag.</Translation>
+ </Translations>
+ <Translations text="SCLARGMNT_UnknownOption">
+  <Translation language="fr">Option '%1' inconnue.</Translation>
+  <Translation language="en">Unknown '%1' option.</Translation>
+ </Translations>
+ <Translations text="SCLARGMNT_NoPathForOption">
+  <Translation language="fr">Pas de chemin pour l'option '%1'.</Translation>
+  <Translation language="en">No path for '%1' option.</Translation>
+ </Translations>
+ <Translations text="SCLARGMNT_BadPathForOption">
+  <Translation language="fr">Mauvais chemin pour l'option '%1'.</Translation>
+  <Translation language="en">Bad path for '%1' option.</Translation>
+ </Translations>
+ <Translations text="SCLARGMNT_BadAmountOfArguments">
+  <Translation language="fr">Nombre d'arguments incorrects.</Translation>
+  <Translation language="en">Bad amount of arguments.</Translation>
+ </Translations>
+ <Translations text="SCLARGMNT_BadCommand">
+  <Translation language="fr">'%1' : bad command.</Translation>
+  <Translation language="en">'%1' : bad command.</Translation>
+ </Translations>
+ <Translations text="SCLARGMNT_NoPathForFlag">
+  <Translation language="fr">Pas de chemin pour le fanion '%1'.</Translation>
+  <Translation language="en">No path for '%1' flag.</Translation>
+ </Translations>
+ <Translations text="SCLARGMNT_NoPathForArgument">
+  <Translation language="fr">Pas de chemin pour l'argument '%1'.</Translation>
+  <Translation language="en">No path for '%1' argument.</Translation>
+ </Translations>
+ <Translations text="SCLARGMNT_BadPathForArgument">
+  <Translation language="fr">Mauvais chemin pour l'argument '%1'.</Translation>
+  <Translation language="en">Bad path for '%1' argument.</Translation>
+ </Translations>
+ <Translations text="SCLBACKND_BackendError">
+  <Translation language="fr">Erreur 'backend' : %1</Translation>
+  <Translation language="en">Backend error : %1</Translation>
+ </Translations>
+ <Translations text="SCLDAEMON_ModuleClosing">
+  <Translation language="fr">Veuillez patientez : module en cours de fermeture...</Translation>
+  <Translation language="en">Please wait : closing module ...</Translation>
+ </Translations>
+ <Translations text="SCLDAEMON_ModuleClosed">
+  <Translation language="fr">Module fermé.</Translation>
+  <Translation language="en">Module closed.</Translation>
+ </Translations>
+ <Translations text="SCLFRNTND_UnableToLoad">
+  <Translation language="fr">Impossible de charger '%1'.</Translation>
+  <Translation language="en">Unable to load '%1'.</Translation>
+ </Translations>
+ <Translations text="SCLFRNTND__NoOrBadBackendType">
+  <Translation language="fr">Type de moteur de traitement incorrect ou absent.</Translation>
+  <Translation language="en">Bad or no backend type.</Translation>
+ </Translations>
+ <Translations text="SCLFRNTND__MissingBackendDeclaration">
+  <Translation language="fr">Déclaration de moteur de traitement manquante.</Translation>
+  <Translation language="en">Missing backend declaration.</Translation>
+ </Translations>
+ <Translations text="SCLFRNTND_NoBackend">
+  <Translation language="fr">(Non connecté à un 'backend'.)</Translation>
+  <Translation language="en">(Not connected to a backend.)</Translation>
+ </Translations>
+ <Translations text="SCLFRNTND_RequestError">
+  <Translation language="fr">%1</Translation>
+  <Translation language="en">%1</Translation>
+ </Translations>
+ <Translations text="SCLFRNTND_BackendError">
+  <Translation language="fr">%1</Translation>
+  <Translation language="en">%1</Translation>
+ </Translations>
+ <Translations text="SCLFRNTND_Disconnection">
+  <Translation language="fr">Deconnexion !</Translation>
+  <Translation language="en">Disconnection !</Translation>
+ </Translations>
+ <Translations message="SCLLOCALE_LocaleParsingError ">
+  <Translation language="fr">Erreur lors du chargement de la 'locale' : %1.</Translation>
+  <Translation language="en">Error during loading of the locale : %1.</Translation>
+ </Translations>
+ <Translations message="SCLLOCALE__ConfigurationLocaleParsingError">
+  <Translation language="fr">Erreur lors du chargement de la 'locale' du fichier de configuration : %1.</Translation>
+  <Translation language="en">Error during loading of the configuration file locale : %1.</Translation>
+ </Translations>
+ <Translations message="SCLLOCALE__ProjectLocaleParsingError">
+  <Translation language="fr">Erreur lors du chargement de la 'locale' du projet : %1.</Translation>
+  <Translation language="en">Error during loading of the project locale : %1.</Translation>
+ </Translations>
+ <Translations text="SCLMISC_UnableToOpenConfigurationFile">
+  <Translation language="fr">Impossible d'ouvrir le fichier de configuration.</Translation>
+  <Translation language="en">Unable to open configuration file.</Translation>
+ </Translations>
+ <Translations text="SCLMISC_ConfigurationLocaleParsingError">
+  <Translation language="fr">Erreur durant l'analyse de la locale du fichier de configuration : %1</Translation>
+  <Translation language="en">Configuration locale parsing error : %1</Translation>
+ </Translations>
+ <Translations message="SCLMISC_UnableToOpenFile">
+  <Translation language="fr">Echec de l'ouverture du fichier '%1'</Translation>
+  <Translation language="en">Unable to open file '%1'</Translation>
+ </Translations>
+ <Translations text="SCLMISC_EmptyPredefinedProjectId">
+  <Translation language="fr">Identifiant de projet prédéfini vide.</Translation>
+  <Translation language="en">Empty predefined project id.</Translation>
+ </Translations>
+ <Translations text="SCLMISC_NoOrBadProjectFileNameInPredefinedProject">
+  <Translation language="fr">Pas de, ou mauvais nom de fichier projet défini dans le project prédefini d'identifiant '%1'.</Translation>
+  <Translation language="en">No or bad project file name defined in predefined project of id '%1'.</Translation>
+ </Translations>
+ <Translations text="SCLMISC_NoProjectFileSelected">
+  <Translation language="fr">Fichier de projet non spécifié.</Translation>
+  <Translation language="en">No specified project file.</Translation>
+ </Translations>
+ <Translations message="SCLRGSTRY_BadOrNoValueForEntry">
+  <Translation language="fr">Valeur absente ou incorrecte pour l'entrée '%1'.</Translation>
+  <Translation language="en">Bad or no value for entry '%1'.</Translation>
+ </Translations>
+ <Translations message="SCLRGSTRY_ParsingError">
+  <Translation language="fr">Erreur dans '%1' : %2.</Translation>
+  <Translation language="en">Error in '%1' : %2.</Translation>
+ </Translations>
+ <Translations text="SCLXDHTML_CloseText">
+  <Translation language="fr">Fermer</Translation>
+  <Translation language="en">Close</Translation>
+ </Translations>
+ <Translations text="SCLXDHTML_NoBackendDeclaration">
+  <Translation language="fr">Déclaration de moteur de traitement absente.</Translation>
+  <Translation language="en">No backend dclaration.</Translation>
+ </Translations>
+ <Translations text="SCLXHTML_Disconnected">
+  <Translation language="fr">Perte de la connection au 'backend' !</Translation>
+  <Translation language="en">Connexion to backend lost !</Translation>
+ </Translations>
+ <Translations text="XML_ErrorAtLineColumn">
+  <Translation language="fr">erreur ligne %2, colonne %3 : %1</Translation>
+  <Translation language="en">error line %2, column %3: %1</Translation>
+ </Translations>
+ <Translations text="XML_UnexpectedEOF">
+  <Translation language="fr">fin de fichier inattendue</Translation>
+  <Translation language="en">unexpected end of file</Translation>
+ </Translations>
+ <Translations text="XML_UnknownEntity">
+  <Translation language="fr">entité inconnue</Translation>
+  <Translation language="en">unknown entity</Translation>
+ </Translations>
+ <Translations text="XML_MissingEqualSign">
+  <Translation language="fr">'=' manquant</Translation>
+  <Translation language="en">missing '='</Translation>
+ </Translations>
+ <Translations text="XML_BadAttributeValueDelimiter">
+  <Translation language="fr">mauvais délimiteur d'attribut</Translation>
+  <Translation language="en">bad attribute delimiter</Translation>
+ </Translations>
+ <Translations text="XML_UnexpectedCharacter">
+  <Translation language="fr">caractère inattendu</Translation>
+  <Translation language="en">unexpected character</Translation>
+ </Translations>
+ <Translations text="XML_EmptyTagName">
+  <Translation language="fr">nom de balise vide</Translation>
+  <Translation language="en">empty tag name</Translation>
+ </Translations>
+ <Translations text="XML_MismatchedTag">
+  <Translation language="fr">balise non appariée</Translation>
+  <Translation language="en">mismatched tag</Translation>
+ </Translations>
+ <Translations text="XML_ErrorAtLineColumn">
+  <Translation language="fr">erreur ligne %2, colonne %3 : %1</Translation>
+  <Translation language="en">error line %2, column %3: %1</Translation>
+ </Translations>
+ <Translations text="XML_UnexpectedEOF">
+  <Translation language="fr">fin de fichier inattendue</Translation>
+  <Translation language="en">unexpected end of file</Translation>
+ </Translations>
+ <Translations text="XML_UnknownEntity">
+  <Translation language="fr">entité inconnue</Translation>
+  <Translation language="en">unknown entity</Translation>
+ </Translations>
+ <Translations text="XML_MissingEqualSign">
+  <Translation language="fr">'=' manquant</Translation>
+  <Translation language="en">missing '='</Translation>
+ </Translations>
+ <Translations text="XML_BadAttributeValueDelimiter">
+  <Translation language="fr">mauvais délimiteur d'attribut</Translation>
+  <Translation language="en">bad attribute delimiter</Translation>
+ </Translations>
+ <Translations text="XML_UnexpectedCharacter">
+  <Translation language="fr">caractère inattendu</Translation>
+  <Translation language="en">unexpected character</Translation>
+ </Translations>
+ <Translations text="XML_EmptyTagName">
+  <Translation language="fr">nom de balise vide</Translation>
+  <Translation language="en">empty tag name</Translation>
+ </Translations>
+ <Translations text="XML_MismatchedTag">
+  <Translation language="fr">balise non appariée</Translation>
+  <Translation language="en">mismatched tag</Translation>
+ </Translations>
+ <Translations text="XPP_ErrorAtLineColumn">
+  <Translation language="fr">%3 (ligne %1, colonne %2)</Translation>
+  <Translation language="en">%3 (line %1, column %2)</Translation>
+ </Translations>
+ <Translations text="XPP_ErrorInFileAtLineColumn">
+  <Translation language="fr">%4 (fichier '%1', ligne %2, colonne %3)</Translation>
+  <Translation language="en">%4 (file '%1', line %2, column %3)</Translation>
+ </Translations>
+ <Translations text="XPP_NoTagsAllowedHere">
+  <Translation language="fr">balises non autorisées ici</Translation>
+  <Translation language="en">no tag allowed here</Translation>
+ </Translations>
+ <Translations text="XPP_UnexpectedValue">
+  <Translation language="fr">valeur inattendue</Translation>
+  <Translation language="en">unexpected value</Translation>
+ </Translations>
+ <Translations text="XPP_UnknownDirective">
+  <Translation language="fr">directive inconnue</Translation>
+  <Translation language="en">unknown directive</Translation>
+ </Translations>
+ <Translations text="XPP_UnexpectedAttribute">
+  <Translation language="fr">attribut inattendu</Translation>
+  <Translation language="en">unexpected attribute</Translation>
+ </Translations>
+ <Translations text="XPP_MissingNameAttribute">
+  <Translation language="fr">attribut 'name' manquant</Translation>
+  <Translation language="en">missing 'name' attribute</Translation>
+ </Translations>
+ <Translations text="XPP_EmptyNameAttributeValue">
+  <Translation language="fr">valeur pour l'attribut 'name' absente</Translation>
+  <Translation language="en">'name' attribute value is empty</Translation>
+ </Translations>
+ <Translations text="XPP_MissingSelectOrHRefAttribute">
+  <Translation language="fr">attribut 'select' ou 'href' manquant</Translation>
+  <Translation language="en">missing 'select' or 'href' attribute</Translation>
+ </Translations>
+ <Translations text="XPP_EmptySelectOrHRefAttributeValue">
+  <Translation language="fr">valeur pour l'attribut 'select' ou 'href' absente</Translation>
+  <Translation language="en">'select' or 'href' attribute value is empty</Translation>
+ </Translations>
+ <Translations text="XPP_MissingSelectAttribute">
+  <Translation language="fr">attribut 'select' manquant</Translation>
+  <Translation language="en">missing 'select' attribute</Translation>
+ </Translations>
+ <Translations text="XPP_EmptySelectAttributeValue">
+  <Translation language="fr">valeur pour l'attribut 'select' absente</Translation>
+  <Translation language="en">'select' attribute value is epmpty</Translation>
+ </Translations>
+ <Translations text="XPP_MissingValueAttribute">
+  <Translation language="fr">attribut 'value' manquant</Translation>
+  <Translation language="en">missing 'value' attribute</Translation>
+ </Translations>
+ <Translations text="XPP_MissingValueOrValueOfAttribute">
+  <Translation language="fr">attribut 'value' ou 'value-of' manquant</Translation>
+  <Translation language="en">missing 'value' or 'value-of' attribute</Translation>
+ </Translations>
+ <Translations text="XPP_MissingNameAndValueAttributes">
+  <Translation language="fr">attributs 'name' et 'value' manquants</Translation>
+  <Translation language="en">missing 'name' and 'value' attributes</Translation>
+ </Translations>
+ <Translations text="XPP_MissingSelectAndValueAttributes">
+  <Translation language="fr">attributs 'select' et 'value' manquants</Translation>
+  <Translation language="en">missing 'select' and 'value' attributes</Translation>
+ </Translations>
+ <Translations text="XPP_MustBeEmpty">
+  <Translation language="fr">doit être vide</Translation>
+  <Translation language="en">must be empty</Translation>
+ </Translations>
+ <Translations text="XPP_TooManyTags">
+  <Translation language="fr">trop de balises</Translation>
+  <Translation language="en">too many tags</Translation>
+ </Translations>
+ <Translations text="XPP_UnableToOpenFile">
+  <Translation language="fr">impossible d'ouvrir le fichier</Translation>
+  <Translation language="en">unable to open file</Translation>
+ </Translations>
+ <Translations text="XPP_UnknownMacro">
+  <Translation language="fr">macro inconnue</Translation>
+  <Translation language="en">unknown macro</Translation>
+ </Translations>
+ <Translations text="XPP_BadAttributeDefinitionSyntax">
+  <Translation language="fr">mauvaise syntaxe pour une définition d'attribut</Translation>
+  <Translation language="en">bad attribute definition syntax</Translation>
+ </Translations>
+ <Translations text="XPP_BadCypherKey">
+  <Translation language="fr">mauvaise clef de cryptage</Translation>
+  <Translation language="en">bad cypher key</Translation>
+ </Translations>
+ <Translations text="XPP_MissingCypherKey">
+  <Translation language="fr">clef de cryptage manquante</Translation>
+  <Translation language="en">missing cypher key</Translation>
+ </Translations>
+ <Translations text="XPP_MissingKeyOrFormatAttribute">
+  <Translation language="fr">attribut 'key' ou 'format' manquant</Translation>
+  <Translation language="en">missing 'key' or 'format' attribute</Translation>
+ </Translations>
+ <Translations text="XPP_EmptyResult">
+  <Translation language="fr">Résultat vide.</Translation>
+  <Translation language="en">Empty result.</Translation>
+ </Translations>
+ <Translations text="XPP_CDataNestingForbidden">
+  <Translation language="fr">Les 'CDATA' ne peuvent pas être imbriqués</Translation>
+  <Translation language="en">Nesting from 'CDATA' are forbidden</Translation>
+ </Translations>
+ <Translations text="XPP_UnknownVariable">
+  <Translation language="fr">Variable inconnue</Translation>
+  <Translation language="en">Unknown variable</Translation>
+ </Translations>
+ <Translations text="XTF_UnsupportedEncoding">
+  <Translation language="fr">Encodage non pris en charge</Translation>
+  <Translation language="en">Unsupported uncoding</Translation>
+ </Translations>
+ <Translations text="XTF_UnexpectedEncoding">
+  <Translation language="fr">Encodage inattendu</Translation>
+  <Translation language="en">Unexpected encoding</Translation>
+ </Translations>
+ <Translations text="XTF_EncodingDiscrepancy">
+  <Translation language="fr">Divergence d'encodage</Translation>
+  <Translation language="en">Encoding discrepancy</Translation>
+ </Translations>
+</Locale>

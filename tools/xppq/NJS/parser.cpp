@@ -1,41 +1,31 @@
 /*
-	Copyright (C) 2007-2017 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 2016 by Claude SIMON (http://zeusw.org/epeios/contact.html).
 
-	This file is part of xppq.
+	This file is part of XPPq.
 
-	xppq is free software: you can redistribute it and/or
-	modify it under the terms of the GNU Affero General Public License as
-	published by the Free Software Foundation, either version 3 of the
-	License, or (at your option) any later version.
+    XPPq is free software: you can redistribute it and/or modify it
+    under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-	xppq is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-	Affero General Public License for more details.
+    XPPq is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
 
-	You should have received a copy of the GNU Affero General Public License
-	along with xppq. If not, see <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Affero General Public License
+    along with XPPq.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "parser.h"
 
 #include "common.h"
 
-#include "uvq.h"
-#include "nodeq.h"
-
-#include "sclnjs.h"
-
-#include "cio.h"
-#include "mtk.h"
-#include "tht.h"
-#include "lcl.h"
-#include "xml.h"
+using namespace parser;
 
 namespace {
 	namespace {
-		class rContent_
-		{
+		class rContent_ {
 		public:
 			xml::token__ Token;
 			str::wString
@@ -65,7 +55,7 @@ namespace {
 			lcl::wMeaning Meaning;
 			lcl::locale Locale;
 		qRB
-			Parser.Flow().UndelyingFlow().IDriver().ITake(tht::GetTID() );	// Between calls, the thread is not the same.
+			Parser.Flow().UndelyingFlow().IDriver().ITake( tht::GetTID() );	// Between calls, the thread is not the same.
 
 			Content.Init();
 
@@ -88,14 +78,13 @@ namespace {
 		}
 	}
 
-	class rRack_
-	{
+	class rRack_ {
 	private:
 		flw::sDressedIFlow<> IFlow_;
 		xtf::sIFlow XFlow_;
 		xml::rParser Parser_;
 		rContent_ Content_;
-		v8::Persistent<v8::Function> Function_;
+		qRMV( sclnjs::rCallback, C_, Callback_ );
 		common::sRelay Relay_;
 		bso::sBool First_;
 	public:
@@ -103,15 +92,12 @@ namespace {
 		str::wString Error;
 		void reset( bso::sBool P = true )
 		{
-			if ( P )
-				Function_.Reset();
-
-			tol::reset( P , IFlow_, XFlow_, Parser_, Content_, Relay_, First_, Error );
+			tol::reset( P, IFlow_, XFlow_, Parser_, Content_, Callback_, Relay_, First_, Error );
 		}
 		qCVDTOR( rRack_ );
-		void Init( v8q::sFunction &Function )
+		void Init( sclnjs::rCallback &Callback )
 		{
-			Function_.Reset(nodeq::GetIsolate(), Function.Core() );
+			Callback_ = &Callback;
 			tol::Init( Relay_, Content_, Error );
 			OFlow.Init( Relay_.Out );
 			IFlow_.Init( Relay_.In );
@@ -136,160 +122,181 @@ namespace {
 		}
 		bso::sBool SendToCallback( void )
 		{
-			nodeq::sFunction Function(v8::Local<v8::Function>::New( nodeq::GetIsolate(), Function_ ) );
-			nodeq::sNumber Token;
-
 			if ( Content_.Token == xml::t_Error ) {
-				Token.Init( 0 );
-				Function.Launch( Token, Content_.Tag, Content_.Attribute, Content_.Error );
-				XFlow_.UndelyingFlow().IDriver().ITake(tht::GetTID() );
+				C_().Launch( 0, Content_.Tag, Content_.Attribute, Content_.Error );
+				XFlow_.UndelyingFlow().IDriver().ITake( tht::GetTID() );
 				XFlow_.Dismiss();	// To avoid locker owner problem on destruction.
 				return true;
 			} else if ( Content_.Token == xml::t_Processed ) {
-				XFlow_.UndelyingFlow().IDriver().ITake(tht::GetTID() );
+				XFlow_.UndelyingFlow().IDriver().ITake( tht::GetTID() );
 				XFlow_.Dismiss();	// To avoid locker owner problem on destruction.
 				return true;
 			} else {
+				int Token = 0;
 				// Must match 'xppq.js'.
 				switch ( Content_.Token ) {
 				case xml::tStartTag:
-					Token.Init( 1 );
+					Token = 1;
 					break;
 				case xml::tAttribute:
-					Token.Init( 2 );
+					Token = 2;
 					break;
 				case xml::tValue:
-					Token.Init( 3 );
+					Token = 3;
 					break;
 				case xml::tEndTag:
-					Token.Init( 4 );
+					Token = 4;
 					break;
 				default:
 					qRGnr();
 					break;
 				}
 
-				Function.Launch( Token, Content_.Tag, Content_.Attribute, Content_.Value );
+				C_().Launch( Token, Content_.Tag, Content_.Attribute, Content_.Value );
 			}
 
 			return false;
 		}
 	};
 
-	typedef uvq::cASync cASync_;
+	typedef n4njs::cAsync cAsync_;
 
-	class rRackASyncCallback_
-	: public rRack_, 
-	  public cASync_
-	{
+	class rRackAsyncCallback_
+	: public rRack_,
+  	  public cAsync_ {
 	protected:
-		void UVQWork( void ) override
+		void N4NJSWork( void ) override
 		{
 			return rRack_::Read();
 		}
-		uvq::eBehavior UVQAfter( void ) override
+		n4njs::eBehavior N4NJSAfter( void ) override
 		{
 			if ( rRack_::SendToCallback() )
-				return uvq::bExitAndDelete;
+				return n4njs::bExitAndDelete;
 			else
-				return uvq::bRelaunch;
+				return n4njs::bRelaunch;
 		}
 	public:
 		void reset( bso::sBool P = true )
 		{
 			rRack_::reset( P );
 		}
-		qCVDTOR( rRackASyncCallback_ );
-		void Init( v8q::sFunction &Function )
+		qCVDTOR( rRackAsyncCallback_ );
+		void Init( sclnjs::rCallback &Callback )
 		{
-			rRack_::Init( Function );
+			rRack_::Init( Callback );
 		}
 	};
 #if 1
-	void OnReadable_( const v8q::sFunctionInfos &Infos )
+	void OnReadable_( sclnjs::sCaller &Caller )
 	{
-	qRFH
-		nodeq::sRStream This;
-		nodeq::sBuffer Chunk;
-	qRFB
-		This.Init(Infos.This() );
+	qRH
+		sclnjs::rRStream This;
+		sclnjs::rBuffer Chunk;
+	qRB
+		This.Init();
+		Caller.GetArgument( This );
 
-		rRack_ &Rack = *nodeq::sExternal<rRack_>( This.Get( "_rack" ) ).Value();
+		rRack_ &Rack = *(rRack_ *)This.Get( "_rack" );
 
 		Chunk.Init();
 
-		if ( This.Read( Chunk )  )
+		if ( This.Read( Chunk ) )
 			Rack.OFlow << Chunk;
 		else
 			Rack.OFlow.Commit();
-	qRFR
-	qRFT
-	qRFE( sclnjs::ErrFinal() )
+	qRR
+	qRT
+	qRE
 	}
 #else
 	void OnData_( const v8q::sFunctionInfos &Infos )
 	{
-	qRFH
-		nodeq::sRStream This;
+		qRFH
+			nodeq::sRStream This;
 		nodeq::sBuffer Chunk;
-	qRFB
-		This.Init(Infos.This() );
+		qRFB
+			This.Init( Infos.This() );
 
 		Chunk.Init();
 		v8q::Get( Infos, Chunk );
-		
+
 		rRack_ &Rack = *nodeq::sExternal<rRack_>( This.Get( "_rack" ) ).Value();
 
 		Rack.OFlow << Chunk;
-	qRFR
-	qRFT
-	qRFE( sclnjs::ErrFinal() )
+		qRFR
+			qRFT
+			qRFE( sclnjs::ErrFinal() )
 	}
 
 	void OnEnd_( const v8q::sFunctionInfos &Infos )
 	{
-	qRFH
-		nodeq::sRStream This;
-	qRFB
-		This.Init(Infos.This() );
+		qRFH
+			nodeq::sRStream This;
+		qRFB
+			This.Init( Infos.This() );
 
 		rRack_ &Rack = *nodeq::sExternal<rRack_>( This.Get( "_rack" ) ).Value();
 
 		Rack.OFlow.Commit();
-	qRFR
-	qRFT
-	qRFE( sclnjs::ErrFinal() )
+		qRFR
+			qRFT
+			qRFE( sclnjs::ErrFinal() )
 	}
 
 #endif
 }
 
-void parser::Parse( const sclnjs::sArguments &Arguments )
+void parser::OnReadable( sclnjs::sCaller &Caller )
 {
 qRH
-	nodeq::sRStream Source;
-	nodeq::sFunction Callback;
-	rRackASyncCallback_ *Rack = NULL;
+	sclnjs::rRStream This;
+	sclnjs::rBuffer Chunk;
 qRB
-	Rack = new rRackASyncCallback_;
+	tol::Init( This, Chunk );
+	Caller.GetArgument( This, Chunk );
+
+	rRack_ &Rack = *(rRack_ *)This.Get( "_rack" );
+
+	if ( Chunk.IsNull() )
+		Rack.OFlow.Commit();
+	else
+		Rack.OFlow << Chunk;
+qRR
+qRT
+qRE
+}
+
+
+void parser::Parse( sclnjs::sCaller &Caller )
+{
+qRH
+	sclnjs::rRStream Source;
+	sclnjs::rCallback Callback;
+	rRackAsyncCallback_ *Rack = NULL;
+	sclnjs::rAsyncLauncher Launcher;
+qRB
+	Rack = new rRackAsyncCallback_;
 
 	if ( Rack == NULL )
 		qRGnr();
 
 	tol::Init( Source, Callback );
-	Arguments.Get( Source, Callback );
+	Caller.GetArgument( Source, Callback );
 	Rack->Init( Callback );
 
-	Source.Set( "_rack", nodeq::sExternal<rRack_>( Rack ) );
+	Source.Set( "_rack", &Rack );
 
 #if 1
-	Source.OnReadable( OnReadable_ );
+//	Source.OnReadable( OnReadable_ );
+// The 'readable' event is implemented in the JS file. 
 # else // Doesn't always work. Sometimes, 'onend' event is not launched...
 	Source.OnData( OnData_ );
 	Source.OnEnd( OnEnd_ );
 #endif
 
-	uvq::Launch( *Rack );
+	Launcher.Init();
+	Launcher.Launch( *Rack );
 
 	Rack = NULL;
 qRR
@@ -298,6 +305,3 @@ qRT
 		delete Rack;
 qRE
 }
-
-
-

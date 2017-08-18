@@ -1,0 +1,20 @@
+os:
+- linux
+- osx
+
+dist: trusty
+
+language: node_js
+
+node_js:
+- "7"
+- "6"
+- "5"
+- "4"
+
+script:
+# Below commented commands are automatically done.
+#- npm install node-pre-gyp
+#- node-pre-gyp configure
+#- node-pre-gyp build
+- node demo.js

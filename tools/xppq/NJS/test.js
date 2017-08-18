@@ -1,50 +1,82 @@
-const fs = require( 'fs');
-const stream = require( 'stream');
-const xppq = require( './xppq.js');
+/* Original */
+/*
+const xppq = require('./XPPq.js');
 
-function write( text )
-{
-	process.stdout.write( text );
-}
-function callback( token, tag, attribute, value )
-{
-	switch ( token ) {
-	case xppq.tokens.START_TAG :
-		write( "Start tag: '" + tag + "'\n" );
-		break;
-	case xppq.tokens.ATTRIBUTE :
-		write( "Attribute: '" + attribute + "' = '" + value + "'\n" );
-		break;
-	case xppq.tokens.VALUE :
-		write( "Value:     '" + value.trim() + "'\n" );
-		break;
-	case xppq.tokens.END_TAG :
-		write( "End tag:   '" + tag + "'\n" );
-		break;
-	}
+console.log( xppq.componentInfo() ) ;
+console.log( xppq.wrapperInfo() );
+
+process.stdout.write( xppq.returnArgument( "Text from JS file" ) + '\n');
+*/
+
+// You can submit an additional parameter of value from '0' to '4' as id of the test to launch.
+
+"use strict"
+
+const fs = require('fs');
+const stream = require('stream');
+const xppq = require('./XPPq.js');
+
+function write(text) {
+    process.stdout.write(text);
 }
 
-function test( chunk ) {
-    write( chunk.toString().toLowerCase() );
+function callback(token, tag, attribute, value) {
+    switch (token) {
+        case xppq.tokens.ERROR:
+            write(">>> ERROR:  '" + value + "'\n");
+            break;
+        case xppq.tokens.START_TAG:
+            write("Start tag: '" + tag + "'\n");
+            break;
+        case xppq.tokens.ATTRIBUTE:
+            write("Attribute: '" + attribute + "' = '" + value + "'\n");
+            break;
+        case xppq.tokens.VALUE:
+            write("Value:     '" + value.trim() + "'\n");
+            break;
+        case xppq.tokens.END_TAG:
+            write("End tag:   '" + tag + "'\n");
+            break;
+        default:
+            throw ("Unknown token !!!");
+            break;
+    }
 }
 
-// new xppq.Stream( fs.createReadStream( 'test.xml' ) ).pipe( process.stdout );
+var test = 4;
 
-// new xppq.Stream( fs.createReadStream( 'result.xml' ) ).on( 'data', test );
+var arg = process.argv[2];
 
-class Relay extends stream.Readable {
- constructor( stream, options ) {
-  super( options );
-  stream.on( 'data', (chunk) => { this.push( chunk ); process.stdout.write( "\n>>>>> " + chunk + " <<<<<\n" ) } );
-  stream.on( 'end', () => { this.push( null ) } );
-  this._read = () => {process.nextTick(() => this.emit('error', new Error( 'Gni !')));}; 
- }
+if (arg != undefined)
+    test = Number(arg);
+
+onsole.log( xppq.componentInfo() );
+console.log( xppq.wrapperInfo() );
+
+const file = __dirname + '/demo.xml';
+
+switch (test) {
+    case 0:
+        console.log("No treatment ; to see the original file.\n");
+        fs.createReadStream(file).pipe(process.stdout);
+        break;
+    case 1:
+        console.log("Piping the preprocessing stream.\n");
+        new xppq.Stream(fs.createReadStream(file)).on('error', (err) => console.error('\n>>> ERROR : ' + err + '\n')).pipe(process.stdout);
+        break;
+    case 2:
+        console.log("Using the preprocessing stream with a callback, wich transforms to lower case.\n");
+        new xppq.Stream(fs.createReadStream(file)).on('data', (chunk) => write(chunk.toString().toLowerCase())).on('error', (err) => console.error('\n>>> ERROR : ' + err + '\n'));
+        break;
+    case 3:
+        console.log("XML parsing WITHOUT preprocessing.\n");
+        xppq.parse(fs.createReadStream(file), callback);
+        break;
+    case 4:
+        console.log("XML parsing WITH preprocessing.\n");
+        xppq.parse(new xppq.Stream(fs.createReadStream(file)).on('error', (err) => console.error('>>> ERROR : ' + err)), callback);
+        break;
+    default:
+        console.error("'" + arg + "' is not a valid test id ; must be '0' to '4'.");
+        break;
 }
-
-xppq.parse( new Relay( new fs.createReadStream( 'result.xml' ) ), callback );
-
-// xppq.parse( new xppq.Stream( fs.createReadStream( 'test.xml' ) ), callback );
-
-// TO FIX : doesn't work because file is too big.
-// xppq.parse( new xppq.Stream( fs.createReadStream( "H:/Misc/Training/Excerpts.xml" ) ), callback );
-

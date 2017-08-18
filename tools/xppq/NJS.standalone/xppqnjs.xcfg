@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Configurations xmlns:xpp="http://q37.info/ns/xpp">
+ <Configuration target="xppqnjs">
+  <Parameters>
+   <Language>en</Language>
+  </Parameters>
+  <Definitions/>
+  <Locale/>
+  <Arguments/>
+ </Configuration>
+</Configurations>

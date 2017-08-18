@@ -148,6 +148,17 @@ endif
 
 ##########################
 		
+
+####################################
+# For Android (Termux) environment #
+####################################
+
+ifeq ("$(os)","$(Android)")
+
+endif
+
+#############################
+	
 ###################################
 ###################################
 ##### DON'T MODIFY BELOW !!! ######
@@ -233,7 +244,7 @@ endif
 #########################
 
 ifeq ("$(os)", "$(MinGW)")
-
+ 
 	co += -DMSYS -std=gnu++11 -DUNICODE
 	lo += -municode
 	
@@ -265,7 +276,7 @@ endif
 #############################
 
 ifeq ("$(os)","$(GNULinux)")
-
+ 
 	co += -std=gnu++11 -DUNICODE -D_FILE_OFFSET_BITS=64
 	
 	mods += $(pmods)
@@ -296,7 +307,7 @@ endif
 #########################
 
 ifeq ("$(os)","$(Linux)")
-
+ 
 	co += -std=gnu++11 -DUNICODE -D_FILE_OFFSET_BITS=64
 	
 	mods += $(pmods)
@@ -325,7 +336,7 @@ endif
 ##########################
 
 ifeq ("$(os)","$(MacOS)")
-
+ 
 	co += -std=gnu++11 -DUNICODE -D_FILE_OFFSET_BITS=64
 	
 	mods += $(pmods)
@@ -347,13 +358,43 @@ endif
 
 ##########################
 		
+
+####################################
+# For Android (Termux) environment #
+####################################
+
+ifeq ("$(os)","$(Android)")
+ 
+	co += -std=gnu++11 -DUNICODE -D_FILE_OFFSET_BITS=64
+	
+	mods += $(pmods)
+
+	libs += -lpthread -ldl -lrt
+	
+	ifeq ("$(target)","$(IA_32)")
+		co += -m32
+		lo += -m32
+	else # 'ifeq' on other line due to GNU 3.80 (Maemo on N900).
+		ifeq ("$(target)","$(AMD64)")
+			co += -m64
+			lo += -m64
+		endif
+	endif
+	binary=lib$(name).so
+	lo += -shared
+	co += -fPIC
+endif
+
+#############################
+		
 all: $(binary)
+
 	rm -rf *.o
 ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20170406"\"
+copt += -DVERSION=\""20170812"\"
 copt += -DCOPYRIGHT_YEARS=\""2015-2016"\"
 copt += -DIDENTIFIER=\""48cdecce-27e7-4306-874b-6fd1b0ed655d"\"
 

@@ -14,41 +14,38 @@
 	<xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
 	<About>
 		<Program>xppqnjs</Program>
-		<Software>xppq</Software>
+		<Software>XPPq</Software>
 		<UUID>d6a723cb-e88f-4f2f-b429-3adc207f1d62</UUID>
 	</About>
-	<CI>
+	<RTW>
   <Dir>xppq-node</Dir>
- </CI>
+ </RTW>
  <Modules>
-		<Module>parser</Module>
-		<Module>stream</Module>
-		<Module>common</Module>
 		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
 			<Modules Group="Core">
 				<xpp:expand select="Core"/>
-    <Modules Group="SCL">
-     <xpp:expand select="SCL"/>
-    </Modules>
     <Module>bomhdl</Module>
     <Module>cdgb64</Module>
     <Module>fil</Module>
     <Module>fnm</Module>
     <Module>lcl</Module>
-    <Module>ntvstr</Module>
     <Module>rgstry</Module>
     <Module>stsfsm</Module>
     <Module>xml</Module>
     <Module>xpp</Module>
 			</Modules>
-		</Modules>
-	</Modules>
+   <Modules Group="SCL">
+    <xpp:expand select="SCL"/>
+   </Modules>
+  </Modules>
+  <Module>common</Module>
+  <Module>parser</Module>
+  <Module>registry</Module>
+ </Modules>
 	<SourceDirs>
 	</SourceDirs>
 	<Files>
-  <File>demo.xml</File>
-  <File>demo.js</File>
-  <File>xppq.js</File>
+  <File Path="../">CHANGELOG.md</File>
  </Files>
 	<PreprocessorDefinitions>
 		<PreprocessorDefinition>E_ST</PreprocessorDefinition>

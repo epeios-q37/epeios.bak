@@ -41,8 +41,8 @@ namespace n4all {
 	qENUM( Type )
 	{
 		tString,
-			tamount,
-			t_Undefined
+		tamount,
+		t_Undefined
 	};
 
 	class cCaller {

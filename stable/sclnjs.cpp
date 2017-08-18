@@ -21,81 +21,23 @@
 
 #include "sclnjs.h"
 
-#include "sclerror.h"
-#include "sclmisc.h"
-
 using namespace sclnjs;
 
-#ifdef CPE_S_WIN
-# define FUNCTION_SPEC __declspec(dllexport)
-#else
-# define FUNCTION_SPEC
-#endif
-
-typedef njs::cLauncher cLauncher_;
-
-class sLauncher_
-: public cLauncher_
+txf::text_oflow__ &operator <<(
+	txf::text_oflow__ &Flow,
+	rBuffer &Buffer )
 {
-protected:
-	virtual void NJSLaunch(
-		void *Function,
-		cCaller_ &RawCaller ) override
-	{
-		sCaller Caller;
+qRH
+	str::wString String;
+qRB
+	String.Init();
+	Buffer.ToString( String );
 
-		Caller.Init( RawCaller );
-
-		((fFunction *)Function )( Caller );
-	}
-	virtual void NJSInfo( str::dString &Info ) override
-	{
-	qRH
-		flx::rStringOFlow BaseFlow;
-		txf::sOFlow Flow;
-	qRB
-		BaseFlow.Init( Info );
-		Flow.Init( BaseFlow );
-
-		SCLNJSInfo( Flow );
-	qRR
-	qRT
-	qRE
-	}
-public:
-	void Init( void )
-	{}
-};
-
-extern "C" FUNCTION_SPEC njs::fRegister NJS_REGISTER_FUNCTION_NAME;
-
-njs::cLauncher *NJSRegister(
-	njs::cRegistrar *RawRegistrar,
-	njs::sData *Data )
-{
-	sLauncher_ *Launcher = NULL;
-qRFH
-	sRegistrar Registrar;
-qRFB
-	sclmisc::Initialize( *Data->SCLRack, *Data->Location );
-
-	Launcher = new sLauncher_;
-
-	if ( Launcher == NULL )
-		qRAlc();
-
-	Launcher->Init();
-
-	Registrar.Init( *RawRegistrar );
-
-	sclnjs::SCLNJSRegister( Registrar );
-qRFR
-	if ( Launcher != NULL )
-		delete Launcher;
-qRFT
-qRFE( sclmisc::ErrFinal() )
-	return Launcher;
+	Flow << String;
+qRR
+qRT
+qRE
+	return Flow;
 }
-
 
 

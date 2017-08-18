@@ -28,113 +28,148 @@
 #  define SCLNJS_DBG
 # endif
 
-# include "njs.h"
-
-# include "err.h"
-# include "str.h"
+# include "n4njs.h"
+# include "scln4a.h"
 
 namespace sclnjs {
-	typedef njs::cCaller cCaller_;
+	using scln4a::sCaller;
 
-	inline void GetArgument_(
-		int Index,
-		cCaller_ &Caller )
-	{}
-
-	inline void GetArgument_(
-		int Index,
-		cCaller_ &Caller,
-		str::dString *Value )
+	template <typename callback> class rBase_
 	{
-		return Caller.GetArgument( Index, njs::tString, Value );
-	}
-
-	inline void GetArgument_(
-		int Index,
-		cCaller_ &Caller,
-		str::dString &Value )
-	{
-		return GetArgument_( Index, Caller, &Value );
-	}
-
-	inline void GetArgument_(
-		int Index,
-		cCaller_ &Caller,
-		str::wString &Value )
-	{
-		return GetArgument_( Index, Caller, &Value );
-	}
-
-	template <typename item, typename ...items> inline void GetArgument_(
-		int Index,
-		cCaller_ &Caller,
-		item &Item,
-		items &...Items )
-	{
-		GetArgument_( Index, Caller, Item );
-
-		GetArgument_( Index + 1, Caller, Items... );
-	}
-
-	class sCaller {
 	private:
-		qRMV( cCaller_, C_, Callback_ );
+		callback *Callback_;
+	protected:
+		qRM( callback, C_, Callback_ );
 	public:
 		void reset( bso::sBool P = true )
 		{
+			if ( P )
+				if ( Callback_ != NULL )
+					delete Callback_;
+
+			tol::reset( P, Callback_ );
+		}
+		void Init( void )
+		{
 			Callback_ = NULL;
 		}
-		qCDTOR( sCaller );
-		void Init( cCaller_ &Callback )
+		void Assign( callback &Callback )
 		{
 			Callback_ = &Callback;
 		}
-		template <typename item> void GetArgument(
-			bso::sUInt Index,
-			item &Item ) const
+		callback &Callback( void )
 		{
-			if ( Index == 0 )
-				qRFwk();
-
-			Get_( Index, C_(), Item );
-		}
-		template <typename ...items> inline void GetArgument( items &...Items ) const
-		{
-			GetArgument_( 1, C_(), Items... );
-		}
-		void SetReturnValue( const str::dString &Value )
-		{
-			C_().SetReturnValue( njs::tString, &Value );
+			return C_();
 		}
 	};
 
-	typedef void (fFunction)( sCaller &Caller );
+	typedef rBase_<n4njs::cUCallback> rCallback_;
 
-	class sRegistrar
+	void Add_( n4njs::cUCallback & )
+	{}
+
+	void Add_(
+		n4njs::cUCallback &,
+		const int &i )
+	{
+		qRVct();
+	}
+
+	void Add_(
+		n4njs::cUCallback &,
+		const str::dString &String )
+	{
+		qRVct();
+	}
+
+	void Add_(
+		n4njs::cUCallback &Callback,
+		const str::wString &String )
+	{
+		Add_( Callback, *String );
+	}
+
+	class rCallback
+	: public rCallback_
 	{
 	private:
-		qRMV( njs::cRegistrar, R_, Registrar_ );
+		template <typename arg> void Add_( const arg &Arg )
+		{
+			sclnjs::Add_( C_(), Arg );
+		}
+		template <typename arg, typename ...args> void Add_(
+			const arg &Arg,
+			const args &...Args )
+		{
+			Add_( Arg );
+			Add_( Args... );
+		}
 	public:
-		void reset( bso::sBool = true )
+		template <typename ...args> void Launch( const args &...Args )
 		{
-			Registrar_ = NULL;
-		}
-		qCDTOR( sRegistrar );
-		void Init( njs::cRegistrar &Registrar )
-		{
-			Registrar_ = &Registrar;
-		}
-		void Register( fFunction Function )
-		{
-			R_().Register( (void *)Function );
+			Add_( Args... );
+			C_().Launch( n4njs::ctVoid );
 		}
 	};
 
-	void SCLNJSRegister( sRegistrar &Registrar );	// To define by user.
-	void SCLNJSInfo( txf::sOFlow &Flow );	// To define by user.
+	template <typename callback> class rCore_
+	: public rBase_<callback>
+	{
+	public:
+		void Set(
+			const char *Key,
+			void *Value )
+		{
+			return C_().Set( Key, Value );
+		}
+		void *Get( const char *Key )
+		{
+			return C_().Get( Key );
+		}
+	};
 
-	extern const char *SCLNJSProductVersion;	// To define by user.
+	typedef rCore_<n4njs::cUBuffer> rBuffer_;
+
+	class rBuffer
+	: public rBuffer_ {
+	public:
+		void ToString( str::dString &String )
+		{
+			return C_().ToString( String );
+		}
+		bso::sBool IsNull( void )
+		{
+			return C_().IsNull();
+		}
+	};
+
+	typedef rCore_<n4njs::cURStream> rRStream_;
+
+	class rRStream
+	: public rRStream_ {
+	public:
+		bso::sBool Read( rBuffer &Buffer )
+		{
+			return C_().Read( Buffer.Callback() );
+		}
+	};
+
+	typedef rCore_<n4njs::cUAsyncLauncher> rAsyncLauncher_;
+
+	class rAsyncLauncher
+	: public rAsyncLauncher_
+	{
+	public:
+		void Launch( n4njs::cAsync &Async )
+		{
+			C_().Launch( Async );
+		}
+	};
+
 }
 
+txf::text_oflow__ &operator <<(
+	txf::text_oflow__ &Flow,
+	const sclnjs::rBuffer &Buffer );
 
 #endif
