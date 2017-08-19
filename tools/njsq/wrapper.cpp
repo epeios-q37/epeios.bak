@@ -20,6 +20,8 @@
 #include "wrapper.h"
 
 #include "n4allw.h"
+#include "n4njs.h"
+#include "nodeq.h"
 #include "sclerror.h"
 #include "v8q.h"
 
@@ -27,20 +29,64 @@ using namespace wrapper;
 
 typedef n4all::cCaller cCaller_;
 
-inline void GetString_(
-	int Index,
-	const v8::FunctionCallbackInfo<v8::Value> &Info,
-	str::dString &Value )
-{
-	qRH
-		v8q::sString String;
-	qRB
-		String.Init( Info[Index] );
+namespace {
+	inline void GetString_(
+		int Index,
+		const v8::FunctionCallbackInfo<v8::Value> &Info,
+		str::dString &Value )
+	{
+		qRH
+			v8q::sString String;
+		qRB
+			String.Init( Info[Index] );
 
-		String.Get( Value );
+			String.Get( Value );
+		qRR
+		qRT
+		qRE
+	}
+
+	namespace {
+		class rRStream
+		: public n4njs::cURStream
+		{
+		private:
+			nodeq::sRStream Core_;
+		protected:
+			virtual bso::sBool NANJSRead( str::dString &Chunk ) override
+			{
+				return Core_.Read( Chunk );
+			}
+		public:
+			void reset( bso::sBool P = true )
+			{
+				tol::reset( P, Core_ );
+			}
+			qCVDTOR( rRStream );
+			void Init( v8::Local<v8::Value> Value )
+			{
+				Core_.Init( Value );
+			}
+		};
+	}
+
+	inline void GetStream_(
+		int Index,
+		const v8::FunctionCallbackInfo<v8::Value> &Info,
+		n4njs::cURStream *&Stream )
+	{
+	qRH
+	qRB
+		Stream = new rRStream;
+
+		if ( Stream == NULL )
+			qRAlc();
+
+		Stream->Init( Info[Index] );
 	qRR
 	qRT
 	qRE
+	}
 }
 
 void SetReturnValue_(
@@ -57,8 +103,8 @@ namespace {
 		qRMV( const v8::FunctionCallbackInfo<v8::Value>, I_, Info_ );
 	protected:
 		virtual void N4ALLGetArgument(
-			int Index,
-			n4all::eType Type,
+			bso::sU8 Index,
+			n4all::sEnum Type,
 			void *Value ) override
 		{
 			Index++;	// The first one was the function id.
@@ -70,13 +116,22 @@ namespace {
 			case n4all::tString:
 				GetString_( Index, I_(), *( str::dString * )Value );
 				break;
+			case n4njs::tStream:
+				GetStream_( Index, I_(), ( n4njs::cURStream **)Value );
+				break;
+			case n4njs::tBuffer:
+				GetBuffer_( Index, I_(), ( n4njs::cUBuffer **)Value );
+				break;
+			case n4njs::tCallback:
+				GetCallback_( Index, I_(), ( n4njs::cUCallback **)Value );
+				break;
 			default:
 				qRGnr();
 				break;
 			}
 		}
 		virtual void N4ALLSetReturnValue(
-			n4all::eType Type,
+			n4all::sEnum Type,
 			const void *Value ) override
 		{
 			switch ( Type ) {

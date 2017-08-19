@@ -26,6 +26,26 @@
 
 using namespace nodeq;
 
+void nodeq::sBuffer::ToString( str::dString &String ) const
+{
+qRH
+	char *Buffer = NULL;
+	int Size = 0;
+qRB
+	Buffer = (char *)malloc ( Size = String.Size() + 1 );
+
+	if ( Buffer == NULL )
+		qRAlc();
+
+	String.Append( Buffer );
+qRR
+qRT
+	if ( Buffer != NULL )
+		delete( Buffer );
+qRE
+}
+
+
 namespace {
 	void ConstFreeCallback_(
 		char* data,

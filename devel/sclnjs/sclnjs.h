@@ -53,9 +53,9 @@ namespace sclnjs {
 		{
 			Callback_ = NULL;
 		}
-		void Assign( callback &Callback )
+		void Assign( callback *Callback )
 		{
-			Callback_ = &Callback;
+			Callback_ = Callback;
 		}
 		callback &Callback( void )
 		{
@@ -65,24 +65,24 @@ namespace sclnjs {
 
 	typedef rBase_<n4njs::cUCallback> rCallback_;
 
-	void Add_( n4njs::cUCallback & )
+	inline void Add_( n4njs::cUCallback & )
 	{}
 
-	void Add_(
+	inline void Add_(
 		n4njs::cUCallback &,
 		const int &i )
 	{
 		qRVct();
 	}
 
-	void Add_(
+	inline void Add_(
 		n4njs::cUCallback &,
 		const str::dString &String )
 	{
 		qRVct();
 	}
 
-	void Add_(
+	inline void Add_(
 		n4njs::cUCallback &Callback,
 		const str::wString &String )
 	{
@@ -120,11 +120,11 @@ namespace sclnjs {
 			const char *Key,
 			void *Value )
 		{
-			return C_().Set( Key, Value );
+			return rBase_<callback>::C_().Set( Key, Value );
 		}
 		void *Get( const char *Key )
 		{
-			return C_().Get( Key );
+			return rBase_<callback>::C_().Get( Key );
 		}
 	};
 
@@ -148,9 +148,9 @@ namespace sclnjs {
 	class rRStream
 	: public rRStream_ {
 	public:
-		bso::sBool Read( rBuffer &Buffer )
+		bso::sBool Read( str::dString &Chunk )
 		{
-			return C_().Read( Buffer.Callback() );
+			return C_().Read( Chunk );
 		}
 	};
 
@@ -168,8 +168,27 @@ namespace sclnjs {
 
 }
 
+// Declaration of the handling of it own types.
+// Extends same namespace declared in 'scln4a.h'.
+namespace scln4 {
+	template <> void Get(
+		int Index,
+		cCaller_ &Caller,
+		sclnjs::rRStream &Stream );
+
+	template <> void Get(
+		int Index,
+		cCaller_ &Caller,
+		sclnjs::rBuffer &Buffer );
+
+	template <> void Get(
+		int Index,
+		cCaller_ &Caller,
+		sclnjs::rCallback &Callback );
+}
+
 txf::text_oflow__ &operator <<(
 	txf::text_oflow__ &Flow,
-	const sclnjs::rBuffer &Buffer );
+	sclnjs::rBuffer &Buffer );
 
 #endif

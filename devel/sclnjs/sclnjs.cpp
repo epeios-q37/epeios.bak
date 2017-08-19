@@ -23,6 +23,52 @@
 
 using namespace sclnjs;
 
+namespace {
+	template <typename callback, typename host> void Get_(
+		int Index,
+		n4all::cCaller &Caller,
+		n4all::sEnum Type,
+		host &Host )
+	{
+	qRH
+		callback *Callback = NULL;
+	qRB
+		Caller.GetArgument( Index, Type, &Callback );
+		Host.Assign( Callback );
+	qRR
+		if ( Callback != NULL )
+			delete Callback;
+	qRT
+	qRE
+	}
+}
+
+
+template <> void scln4::Get(
+	int Index,
+	cCaller_ &Caller,
+	sclnjs::rRStream &Stream )
+{
+	Get_<n4njs::cURStream>( Index, Caller, n4njs::tStream, Stream );
+}
+
+template <> void scln4::Get(
+	int Index,
+	cCaller_ &Caller,
+	sclnjs::rBuffer &Buffer )
+{
+	Get_<n4njs::cUBuffer>( Index, Caller, n4njs::tBuffer, Buffer );
+}
+
+template <> void scln4::Get(
+	int Index,
+	cCaller_ &Caller,
+	sclnjs::rCallback &Callback )
+{
+	Get_<n4njs::cUCallback>( Index, Caller, n4njs::tCallback, Callback );
+}
+
+
 txf::text_oflow__ &operator <<(
 	txf::text_oflow__ &Flow,
 	rBuffer &Buffer )

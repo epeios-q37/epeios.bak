@@ -37,6 +37,14 @@
 namespace n4njs {
 	using namespace n4all;
 
+	qENUM( Type )
+	{
+		t_First = n4all::t_amount,	// First types are those defined in 'n4all::eType'.
+			tStream = t_First,
+			tBuffer,
+			tCallback
+	};
+
 	qENUM( Behavior )
 	{
 		bRelaunch,	// Relaunches 'N4NJSWork'.
@@ -146,12 +154,12 @@ namespace n4njs {
 	: public cUCore_
 	{
 	protected:
-		virtual bso::sBool NANJSRead( cUBuffer &Buffer ) = 0;
+		virtual bso::sBool NANJSRead( str::dString &Chunk ) = 0;
 	public:
 		qCALLBACK( URStream );
-		bso::sBool Read( cUBuffer &Buffer )
+		bso::sBool Read( str::dString &Chunk )
 		{
-			return NANJSRead( Buffer );
+			return NANJSRead( Chunk );
 		}
 	};
 }

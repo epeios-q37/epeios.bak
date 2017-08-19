@@ -38,33 +38,35 @@
 # define N4ALL_REGISTER_FUNCTION_NAME		N4ALLRegister
 
 namespace n4all {
-	qENUM( Type )
-	{
+	typedef int sEnum;	// Type of an unspecified 'enum'.
+
+	// Base types ; will be extended.
+	qENUM( Type ) {
 		tString,
-		tamount,
+		t_amount,
 		t_Undefined
 	};
 
 	class cCaller {
 	protected:
 		virtual void N4ALLGetArgument(
-			int Index,
-			eType Type,
+			bso::sU8,
+			sEnum Type,
 			void *Value ) = 0;
 		virtual void N4ALLSetReturnValue(
-			eType Type,
+			sEnum Type,
 			const void *Value ) = 0;
 	public:
 		qCALLBACK( Caller );
 		void GetArgument(
 			int Index,
-			eType Type,
+			sEnum Type,
 			void *Value )
 		{
 			return N4ALLGetArgument( Index, Type, Value );
 		}
 		void SetReturnValue(
-			eType Type,
+			sEnum Type,
 			const void *Value )
 		{
 			return N4ALLSetReturnValue( Type, Value );

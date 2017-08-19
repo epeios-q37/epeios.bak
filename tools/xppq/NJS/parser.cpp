@@ -192,7 +192,7 @@ namespace {
 	{
 	qRH
 		sclnjs::rRStream This;
-		sclnjs::rBuffer Chunk;
+		str::wString Chunk;
 	qRB
 		This.Init();
 		Caller.GetArgument( This );
@@ -266,7 +266,6 @@ qRR
 qRT
 qRE
 }
-
 
 void parser::Parse( sclnjs::sCaller &Caller )
 {

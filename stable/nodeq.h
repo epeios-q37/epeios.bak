@@ -67,6 +67,7 @@ namespace nodeq {
 		{
 			String.Init( v8q::sObject( *this ).Launch( "toString" ) );
 		}
+		void ToString( str::dString &String ) const;
 	};
 
 	class sRStream
@@ -121,6 +122,20 @@ namespace nodeq {
 			Chunk.Init( Launch( "read", Isolate ) );
 
 			return !Chunk.IsNull();
+		}
+		bso::sBool Read(
+			str::dString &Chunk,
+			v8::Isolate *Isolate = NULL )
+		{
+			sBuffer RawChunk;
+
+			RawChunk.Init();
+
+			if ( Read( RawChunk, Isolate ) ) {
+				RawChunk.ToString( Chunk );
+				return true;
+			} else
+				return false;
 		}
 		bso::sBool Push(
 			v8::Local<v8::Value> Value,

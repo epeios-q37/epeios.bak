@@ -31,15 +31,22 @@
 # include "err.h"
 # include "n4all.h"
 
-namespace scln4a {
+// The content of this namespace will be completed by other libraries.
+namespace scln4 {
 	typedef n4all::cCaller cCaller_;
 
-	inline void GetArgument_(
+	// Will declare all needed version of this function, which can be defined in other libraries.
+	template <typename item> void Get(
+		int Index,
+		cCaller_ &Caller,
+		item &Item );
+
+	inline void Get(
 		int Index,
 		cCaller_ &Caller )
 	{}
 
-	inline void GetArgument_(
+	inline void Get(
 		int Index,
 		cCaller_ &Caller,
 		str::dString *Value )
@@ -47,20 +54,30 @@ namespace scln4a {
 		return Caller.GetArgument( Index, n4all::tString, Value );
 	}
 
-	inline void GetArgument_(
+	inline void Get(
 		int Index,
 		cCaller_ &Caller,
 		str::dString &Value )
 	{
-		return GetArgument_( Index, Caller, &Value );
+		return Get( Index, Caller, &Value );
 	}
 
-	inline void GetArgument_(
+	inline void Get(
 		int Index,
 		cCaller_ &Caller,
 		str::wString &Value )
 	{
-		return GetArgument_( Index, Caller, &Value );
+		return Get( Index, Caller, &Value );
+	}
+}
+
+namespace scln4a {
+	typedef n4all::cCaller cCaller_;
+
+	inline void GetArgument_(
+		int Index,
+		cCaller_ &Caller )
+	{
 	}
 
 	template <typename item, typename ...items> inline void GetArgument_(
@@ -69,7 +86,7 @@ namespace scln4a {
 		item &Item,
 		items &...Items )
 	{
-		GetArgument_( Index, Caller, Item );
+		scln4::Get( Index, Caller, Item );
 
 		GetArgument_( Index + 1, Caller, Items... );
 	}

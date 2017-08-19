@@ -1,5 +1,9 @@
 # *Epeios* changelog
 
+2017-08-19 :
+- NODEQ :
+  - Adding some `str::dString` variant methods.
+
 2017-08-09 :
 - N4A, NJS, SCLN4A, SCLNJS :
   - Moving *...NJS...* content to *...N4A...*, in an attempt to reuse the same libraries for all native components.
@@ -1515,7 +1519,7 @@
 
 2015-09-30 :
 - XDHUTL :
-	% 'FetchEventAbstracts(...)' now returns a boolen to report a key-related event without recognized key sequence.
+	% 'FetchEventAbstracts(...)' now returns a boolean to report a key-related event without recognized key sequence.
 
 2015-09-29 :
 - RGSTRY :
