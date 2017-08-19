@@ -47,45 +47,120 @@ namespace {
 	}
 
 	namespace {
-		class rRStream
-		: public n4njs::cURStream
+		template <typename callback, typename host> class rCore_
+		: public callback
 		{
-		private:
-			nodeq::sRStream Core_;
 		protected:
-			virtual bso::sBool NANJSRead( str::dString &Chunk ) override
+			host Core_;
+		protected:
+			virtual void N4NJSSet(
+				const char *Key,
+				void *Value ) override
 			{
-				return Core_.Read( Chunk );
+				v8::Isolate *Isolate = v8q::GetIsolate();
+
+				if ( !v8q::Expose( Core_.Core()->Set( v8q::GetContext(), v8q::ToString( Key, Isolate ), *( v8::Local<v8::Value> * )Value ) ) )
+					qRFwk();
+			}
+			virtual void *N4NJSGet( const char *Key ) override
+			{
+				v8::Isolate *Isolate = v8q::GetIsolate();
+
+				return &v8q::ToLocal( Core_.Core()->Get( v8q::GetContext( Isolate ), v8q::ToString( Key, Isolate ) ), Isolate );
 			}
 		public:
 			void reset( bso::sBool P = true )
 			{
 				tol::reset( P, Core_ );
 			}
-			qCVDTOR( rRStream );
+			qCVDTOR( rCore_ );
 			void Init( v8::Local<v8::Value> Value )
 			{
 				Core_.Init( Value );
 			}
 		};
+
+		template <typename host> inline host *Get_(
+			int Index,
+			const v8::FunctionCallbackInfo<v8::Value> &Info )
+		{
+			host *Stream = NULL;
+		qRH
+		qRB
+			Stream = new host;
+
+			if ( Stream == NULL )
+				qRAlc();
+
+			Stream->Init( Info[Index] );
+		qRR
+			if ( Stream != NULL )
+				delete Stream;
+		qRT
+		qRE
+			return Stream;
+		}
+
+		class rRStream_
+		: public rCore_<n4njs::cURStream, nodeq::sRStream>
+		{
+		protected:
+			virtual bso::sBool NANJSRead( str::dString &Chunk ) override
+			{
+				return Core_.Read( Chunk );
+			}
+		};
+
+		class rBuffer_
+		: public rCore_<n4njs::cUBuffer, nodeq::sBuffer> {
+		protected:
+			virtual void N4NJSToString( str::dString &String ) override;
+			virtual bso::sBool N4NJSIsNull( void ) override;
+		};
+
+		class rCallback_
+		: public n4njs::cUCallback
+		{
+		private:
+			nodeq::sFunction Core_;
+		protected:
+			virtual void N4NJSAdd(
+				n4njs::eCallbackType_ Type,
+				void *Value ) override;
+			virtual void *N4NJSLaunch( n4njs::eCallbackType_ Type ) override;	// Type is the expected type of the returned value.
+		public:
+			void reset( bso::sBool P = true )
+			{
+				tol::reset( P, Core_ );
+			}
+			qCVDTOR( rCallback_ );
+			void Init( v8::Local<v8::Value> Value )
+			{
+				Core_.Init( Value );
+			}
+		};
+
 	}
 
-	inline void GetStream_(
+	inline n4njs::cURStream *GetStream_(
 		int Index,
-		const v8::FunctionCallbackInfo<v8::Value> &Info,
-		n4njs::cURStream *&Stream )
+		const v8::FunctionCallbackInfo<v8::Value> &Info )
 	{
-	qRH
-	qRB
-		Stream = new rRStream;
+		return Get_<rRStream_>( Index, Info );
+	}
 
-		if ( Stream == NULL )
-			qRAlc();
+	inline n4njs::cUBuffer *GetBuffer_(
+		int Index,
+		const v8::FunctionCallbackInfo<v8::Value> &Info )
+	{
+		return Get_<rBuffer_>( Index, Info );
+	}
 
-		Stream->Init( Info[Index] );
-	qRR
-	qRT
-	qRE
+	inline n4njs::cUCallback *GetCallback_(
+		int Index,
+		const v8::FunctionCallbackInfo<v8::Value> &Info )
+	{
+		return Get_<rCallback_>( Index, Info );
 	}
 }
 
@@ -117,13 +192,13 @@ namespace {
 				GetString_( Index, I_(), *( str::dString * )Value );
 				break;
 			case n4njs::tStream:
-				GetStream_( Index, I_(), ( n4njs::cURStream **)Value );
+				(*(n4njs::cURStream **)Value) = GetStream_( Index, I_() );
 				break;
 			case n4njs::tBuffer:
-				GetBuffer_( Index, I_(), ( n4njs::cUBuffer **)Value );
+				(*( n4njs::cUBuffer ** )Value) = GetBuffer_( Index, I_() );
 				break;
 			case n4njs::tCallback:
-				GetCallback_( Index, I_(), ( n4njs::cUCallback **)Value );
+				( *( n4njs::cUCallback ** )Value ) = GetCallback_( Index, I_() );
 				break;
 			default:
 				qRGnr();
