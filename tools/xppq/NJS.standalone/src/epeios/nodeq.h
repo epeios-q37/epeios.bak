@@ -35,7 +35,7 @@ namespace nodeq {
 	using namespace v8q;
 
 	class sBuffer
-	: public sValue
+	: public sObject
 	{
 	public:
 		qCDTOR( sBuffer );
@@ -52,7 +52,7 @@ namespace nodeq {
 		{
 			Init( Data, Isolate );
 		}
-		using sValue::Init;
+		using sObject::Init;
 		void Init(
 			const char *Data,
 			size_t Length,
@@ -65,7 +65,7 @@ namespace nodeq {
 		}
 		void ToString( sString &String ) const
 		{
-			String.Init( v8q::sObject( *this ).Launch( "toString" ) );
+			String.Init( Launch( "toString" ) );
 		}
 	};
 
@@ -85,7 +85,7 @@ namespace nodeq {
 	public:
 		qCDTOR( sRStream );
 		/*
-			Both below event handler seems not to work properly. The 'onend' event semms not be always called. Use 'OnReadable' instead.
+			Both below event handler seems not to work properly. The 'onend' event seems not be always called. Use 'OnReadable' instead.
 		*/
 		void OnDataFail(
 			const sFunction &Callback,
@@ -118,9 +118,14 @@ namespace nodeq {
 			sBuffer &Chunk,
 			v8::Isolate *Isolate = NULL )
 		{
-			Chunk.Init( Launch( "read", Isolate ) );
+			v8q::sValue Value = Launch( "read", Isolate );
 
-			return !Chunk.IsNull();
+			if ( Value.IsNull() )
+				return false;
+			else {
+				Chunk.Init( Value.Core() );
+				return true;
+			}
 		}
 		bso::sBool Push(
 			v8::Local<v8::Value> Value,

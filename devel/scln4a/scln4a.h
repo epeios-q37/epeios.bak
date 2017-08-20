@@ -140,6 +140,13 @@ namespace scln4a {
 		{
 			R_().Register( (void *)Function );
 		}
+		template <typename function, typename ...functions> void Register(
+			function Function,
+			functions ...Functions )
+		{
+			Register( Function );
+			Register( Functions... );
+		}
 	};
 
 	void SCLN4ARegister( sRegistrar &Registrar );	// To define by user.

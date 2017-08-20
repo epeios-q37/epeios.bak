@@ -219,13 +219,13 @@ namespace {
 
 	void Register_( const v8::FunctionCallbackInfo<v8::Value>& Info )
 	{
-	qRFH
-		v8q::sString RawArguments;
+		qRFH
+			v8q::sString RawArguments;
 		str::wString Arguments;
 		str::wString ComponentFilename;
-	qRFB
-		RawArguments.Init( Info[0] );
-		
+		qRFB
+			RawArguments.Init( Info[0] );
+
 		Arguments.Init();
 		RawArguments.Get( Arguments );
 
@@ -235,6 +235,16 @@ namespace {
 		sclmisc::MGetValue( registry::parameter::ComponentFilename, ComponentFilename );
 
 		wrapper::Register( ComponentFilename, Rack_ );
+		qRFR
+			qRFT
+			qRFE( ErrFinal_() )
+	}
+
+	void Launch_( const v8::FunctionCallbackInfo<v8::Value>& Info )
+	{
+	qRFH
+	qRFB
+		wrapper::Launch( Info );
 	qRFR
 	qRFT
 	qRFE( ErrFinal_() )
@@ -253,7 +263,7 @@ qRFB
 	NODE_SET_METHOD( Exports, "wrapperInfo", GetWrapperInfo_ );
 	NODE_SET_METHOD( Exports, "componentInfo", GetComponentInfo_ );
 	NODE_SET_METHOD( Exports, "register", Register_ );
-	NODE_SET_METHOD( Exports, "_wrapper", wrapper::Launch );
+	NODE_SET_METHOD( Exports, "_wrapper", Launch_ );
 
 	cio::Initialize( cio::GetConsoleSet() );
 

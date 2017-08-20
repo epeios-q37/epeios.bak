@@ -23,7 +23,8 @@
 # include "sclnjs.h"
 
 namespace parser {
-	void OnReadable( sclnjs::sCaller &Caller );
+	void OnData( sclnjs::sCaller &Caller );	// Called when some data is available.
+	void OnEOD( sclnjs::sCaller &Caller );	// Called when no more data is available.
 	void Parse( sclnjs::sCaller &Caller );
 }
 

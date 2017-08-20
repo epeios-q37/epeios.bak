@@ -1,5 +1,11 @@
 # *Epeios* changelog
 
+2017-08-20 :
+- NODEQ :
+  - `sBuffer` is now base on `sObject` instead of `sValue`.
+- V8Q :
+  - Reworking so the objects hierarchy will match the one defined in the *v8* library.
+
 2017-08-19 :
 - NODEQ :
   - Adding some `str::dString` variant methods.
@@ -56,11 +62,11 @@
 
 2017-06-20 :
 - DLBRRY :
-  - Introducing the 'Normalization' parameter.
+  - Introducing the `Normalization` parameter.
 
 2017-06-04 :
 - SCLARGMNT :
-	- Adding 'FillRegistry(...)' variant.
+	- Adding `FillRegistry(...)` variant.
 	- Removing useless function since adding above function.
 
 2017-05-12 :
@@ -69,17 +75,17 @@
 
 2017-05-05 :
 - SCLXDHTML, XDHCMN, XDHDWS, XDHUJP, XDHUJR, XDHUJS :
-	- 'content' related features are renamed to 'value', to avoid confusion of the new 'content' handling.
+	- `content` related features are renamed to `value`, to avoid confusion of the new `content` handling.
 - XDHDWS :
-	- Replacing 'Set(Element|Document)...' with a unique 'Set...' (equivalent to 'SetElement...').
+	- Replacing `Set(Element|Document)...` with a unique `Set...` (equivalent to `SetElement...`).
 
 2017-04-28 :
 - SCLXDHTML, XDHUJP, XDHUJR, XDHUJSn XDHUTL :
-	- Adaptation to changes in 'XDHCMN'.
+	- Adaptation to changes in *XDHCMN*.
 - XDHCMN :
-	- Replacing 'Fill...' by 'Fetch...Marks'.
+	- Replacing `Fill...` by `Fetch...Marks`.
 - XDHDWS :
-	- 'rack's now contains the 'target' string.
+	- `rack`s now contains the `target` string.
 
 2017-04-25 :
 - XDHDWS :
@@ -88,7 +94,7 @@
 
 2017-04-22 :
 - FLX :
-	- Adding missing 'override'.
+	- Adding missing `override`.
 
 2017-04-19 :
 - XDHCMN, XDHDWS, XDHUJx ;
@@ -96,15 +102,15 @@
 
 2017-03-24 :
 - TXF
-	- Adding missing 'int' variant for operator '<<'.
+	- Adding missing `int` variant for operator `<<`.
 
 2017-03-23 :
-- 'JNIOBJ' -> 'JREBSE'.
+- `JNIOBJ` -> `JREBSE`.
 
 2017-03-17 :
 - SCLN -> SCLNJS.
 - V8Q, SCLNJS
-	- Moving 'v8q::sArguments' to 'sclnjs'.
+	- Moving `v8q::sArguments` to *SCLNJS*.
 
 2017-03-09 :
 - MSCMDD, MSCMDF, MSCMDM :
@@ -1141,7 +1147,7 @@
 
 2016-02-26 :
 - XML
-	* Adding 'vWriter::Put(...)' (retrieved from 'XPP' library) to put and indent XML data.
+	- Adding 'vWriter::Put(...)' (retrieved from 'XPP' library) to put and indent XML data.
 - XPP :
 	- Use of above new methods.
 
@@ -1163,11 +1169,11 @@
 2016-02-12 :
 - DWTCPR, DWTFTR :
 	- Adaptation to chages in 'STSFSM'.
-	% The 'Dump' functionnalitiés are always made in the current version.
+	- The 'Dump' functionnalitiés are always made in the current version.
 - GLOBAL :
 	- Applying new naming conventions.
 - XML :
-	* An 'iflow' can now be used as value.
+	- An 'iflow' can now be used as value.
 
 2016-02-03 :
 - MISC :
@@ -1177,32 +1183,32 @@
 
 2016-01-31 :
 - FLX :
-	* 'size_embedded_oflow[_driver]___' can be configured so the 'Commit()' is or not propagated to underlying flow.
+	- 'size_embedded_oflow[_driver]___' can be configured so the 'Commit()' is or not propagated to underlying flow.
 - FBLBRR, FBLFRP, PRXY :
 	- Adaptation to changes in 'FLX'.
 
 2016-01-30 :
 - IDS, STK :
-	* Adding files hook related features.
+	- Adding files hook related features.
 - LST :
-	# Fixing files hook bad released entries reading.
+	- Fixing files hook bad released entries reading.
 
 2016-01-27 :
 - CSDRCC, CSDRCU, CSDUCL, SCLFRNTND :
 	- Adaptation to undelying modules modifications.
 - PLGN, PLGNCORE, SCLMISC, SCLPLUGIN 
-	% 'Identification' -> 'Label'.
-	* Introducing 'Identifier', which is an UUID peculiar to each plugin.
+	- 'Identification' -> 'Label'.
+	- Introducing 'Identifier', which is an UUID peculiar to each plugin.
 
 2016-01-26 :
 - DWT...
 	- Ghosts are now files.
 - PLGN :
-	# Temporary workaround for twice (or mode) loaded plugin.
+	- Temporary workaround for twice (or mode) loaded plugin.
 - SCLARGMNT :
 	- Erasing 'Arguments' registry when the same plugin is loaded more that once from the same excutable.
 - SCLRGSTRY :
-	* Adding 'EraseArgumentsRegistry()'.
+	- Adding 'EraseArgumentsRegistry()'.
 
 2016-01-25 :
 - SCLMISC, SCLRGSTRY, SCLTOOL :
@@ -1216,17 +1222,17 @@
 
 2016-01-22 :
 - FBLBKF :
-	# Fixing bad order destruction in 'ram_module::reset()'
+	- Fixing bad order destruction in 'ram_module::reset()'
 	- Using the list bunch object rather than the combination of a list and a bunch for simplification.
 - FBLFRD :
-	* Adding 'universal_frontend___::Disconnect()'.
-	# Fixing incomplete deconnection.
+	- Adding 'universal_frontend___::Disconnect()'.
+	- Fixing incomplete deconnection.
 - GLOBAL :
 	- Applying new naming conventions.
 - PLGN :
-	# Fixing bad locale filling.
+	- Fixing bad locale filling.
 - SCLXDHTML :
-	# Fixing bad deconnection procedure.
+	- Fixing bad deconnection procedure.
 
 2016-01-21 :
 - GLOBAL :
@@ -1234,15 +1240,15 @@
 
 2016-01-20 :
 - FBLBKD, FBLBRD :
-	# Fixing Clang complainings.
+	- Fixing Clang complainings.
 - GLOBAL :
-	- Introducting new conventions.
+	- Introducing new conventions.
 - PLGN :	
-	# Fixing 'rRetrievers::Plugin(...)' wrong deletion.
+	- Fixing 'rRetrievers::Plugin(...)' wrong deletion.
 
 2016-01-19 :
 - PLGN :
-	# Fixing retrievers deleting.
+	- Fixing retrievers deleting.
 
 2016-01-18 :
 - GLOBAL :
@@ -1252,7 +1258,7 @@
 - GLOBAL :
 	- Introducing new naming conventions.
 - PLGN, SCLMISC, SCLRGSTRY :
-	* Introducing plugins set.
+	- Introducing plugins set.
 
 2016-01-16 :
 - GLOBAL :
@@ -1268,9 +1274,9 @@
 
 2016-01-13 :
 - CSDBNC :
-	% Adding 'flow___'.
+	- Adding 'flow___'.
 - SCLMISC :
-	* Adding the 'ErrFinal()' function retrieved from 'SCLTOOL'.
+	- Adding the 'ErrFinal()' function retrieved from 'SCLTOOL'.
 - SCLTOOL :
 	- Using the 'ErrFinal()' function from 'SCLMISC'.
 
@@ -1278,14 +1284,14 @@
 - CSDLEC :
 	- Adaptation to chnges in 'CSDLEO'.
 - CSDLEO :
-	% Removing the useless variadic parameter.
+	- Removing the useless variadic parameter.
 - CSDMNS :
 	'_callback___' -> 'callback___'.
 - SCLBACKND :
 	- Adaptation to changes in 'SCLDAEMON'.
 - SCLDAEMON :
 	- Adaptation to chnges in 'CSDLEO'.
-	* Handles now the muxed mode too.
+	- Handles now the muxed mode too.
 
 2016-01-08 :
 - CSDMNS :
@@ -1293,13 +1299,13 @@
 	- Standardisation of the optionality of the 'LogCallback' parameter.
 	- Adding missing methods to 'server___'.
 - SCLMISC :
-	# The plugin arguments were retrieved from the 'Filename' entry instead of the 'Arguments' one.
-	* The plugin arguments are now retrieved from the 'Parmeters/Plugin' entry value, and no more from the 'Definitions/Plugins/Plugin/Arguemnts' entry.
-	* The plugin id for a given target is now retrieved from the 'Id' attribute.
+	- The plugin arguments were retrieved from the 'Filename' entry instead of the 'Arguments' one.
+	- The plugin arguments are now retrieved from the 'Parmeters/Plugin' entry value, and no more from the 'Definitions/Plugins/Plugin/Arguemnts' entry.
+	- The plugin id for a given target is now retrieved from the 'Id' attribute.
 - SCLPLUGIN :
-	* The plugin arguments are now separated by a space, with '\' as escape character.
+	- The plugin arguments are now separated by a space, with '\' as escape character.
 - SCLRGSTRY :
-	% Removing/adding entries related to plugins needed to changes in 'SCLMISC'.
+	- Removing/adding entries related to plugins needed to changes in 'SCLMISC'.
 
 2016-01-06 :
 - 'CSDSNS' -> 'CSDMNS'.
@@ -1312,17 +1318,17 @@
 
 2016-01-03 :
 - PLGN :
-	% 'Init(...)' -> 'Initialize(...)'.
+	- 'Init(...)' -> 'Initialize(...)'.
 - RGSTRY :
-	* Adding 'Dump( const entry__ &, ... )'.
+	- Adding 'Dump( const entry__ &, ... )'.
 - SCLMISC :
-	* The plugin locale is now added to the main locale.
-	* Plugin arguments are now handled.
+	- The plugin locale is now added to the main locale.
+	- Plugin arguments are now handled.
 	- Adaptation to changes in 'PLGN'.
 
 2016-01-02 :
 - SCLRGSTRY :
-	% Adding 'Arguments' entry for the plugins.
+	- Adding 'Arguments' entry for the plugins.
 
 2015-12-21 :
 - CSDUCL, PLGN :
@@ -1330,19 +1336,19 @@
 
 2015-12-14 :
 - DIR :
-	* When trying to access a forbidden dirctory, it's assumed to be empty.
+	- When trying to access a forbidden dirctory, it's assumed to be empty.
 
 2015-12-09 :
 - SCLARGMNT, SCLBACKND, SCLMISC, SCLTOOL :
 	- Adaptation to changes in 'SCLRGSTRY'.
 - SCLRGSTRY :
-	* Adding 'Debug' entry.
-	% Introducing 'name__'.
-	% 'FillSetupRegistry(...)' -> 'FillWithSetup(...)'.
+	- Adding 'Debug' entry.
+	- Introducing 'name__'.
+	- 'FillSetupRegistry(...)' -> 'FillWithSetup(...)'.
 
 2015-12-08 :
 - BSO, TOL :
-	# Conversion from string to number are now more complete.
+	- Conversion from string to number are now more complete.
 - IAS :	
 	- Fixing CLang complainig.
 - RGSTRY :
@@ -1350,7 +1356,7 @@
 
 2015-12-05 :
 - TOL :
-	* Implementing 'Reset( tick__ &)' for mossiong plateform.
+	- Implementing 'Reset( tick__ &)' for mossiong plateform.
 
 2015-12-02 :
 - GLOBAL :
@@ -1359,7 +1365,7 @@
 
 2015-12-01 :
 - FLSQ
-	* When instanciated, 'file_storage___::Temoin_.Mode' is set to 'fil::m_Undefined', so it can be detected
+	- When instanciated, 'file_storage___::Temoin_.Mode' is set to 'fil::m_Undefined', so it can be detected
 	  that it's not yet initialized.
 - UYS :
 	- Adapting to changes in 'FLSQ'.
@@ -1367,8 +1373,8 @@
 2015-11-30 :
 - TOL :
 	- 'timer__' :
-		* Can now be disabled,
-		* right after initialization, is considered as elapsed, until call of 'Launch()'.
+		- Can now be disabled,
+		- right after initialization, is considered as elapsed, until call of 'Launch()'.
 
 2015-11-29 :
 - PLNGCORE :
@@ -1376,11 +1382,11 @@
 - PLNG :
 	- Adaptation to changes in 'PLNGCORE'.
 - SCLLOCALE :
-	* Adding 'Dump(...)'.
-	* Adding 'Fill(...)'.
-	% Removing 'Locale' suffix from functions.
+	- Adding 'Dump(...)'.
+	- Adding 'Fill(...)'.
+	- Removing 'Locale' suffix from functions.
 - SCLMISC :
-	% Modifying some 'Initialization(...)' functions, so, either the configuration registry is given, either the
+	- Modifying some 'Initialization(...)' functions, so, either the configuration registry is given, either the
 	  directory for configuration and locale file ; in thgis latter case, the content of the locale registry is
 	  returned. This functions are used for plugins, which locales are handled by the calling program.
 	- Adpattion to changes in 'SLLOCALE'.
@@ -1389,7 +1395,7 @@
 
 2015-11-27 :
 - XDHUTL :
-	# Automats were not filled.
+	- Automats were not filled.
 
 2015-11-26 :
 - CSDUCL :
@@ -1397,63 +1403,63 @@
 
 2015-11-25 :
 - CSDUCL :
-	# Fixing missing return value.
-	* Removing daemon features (replaced by remote features).
+	- Fixing missing return value.
+	- Removing daemon features (replaced by remote features).
 - ERR :
-	* 'err___::File' stores now the content of the string, and no more only the pointer, because of plugins	which may be
+	- 'err___::File' stores now the content of the string, and no more only the pointer, because of plugins	which may be
 	  unloaded before the error was handled, causing a segmentation fault (due to acces to data of the unlodad plugin).
 - SCLFRNTND :
-	* Adding handling of remote backend.
-	% Usign 'features___'.
+	- Adding handling of remote backend.
+	- Usign 'features___'.
 	- Adapting to changes in 'CSDUCL'.
 - SCLPLUGIN :
-	* Adding a initialization member called when the plugin is created.
+	- Adding a initialization member called when the plugin is created.
 - SCLXDHTML :
-	* Taking account of the remote access plugin.
+	- Taking account of the remote access plugin.
 
 2015-11-24 :
 - CSDUCL :
-	% Introducing 'CSDRMC'.
+	- Introducing 'CSDRMC'.
 - SCLFRNTND :
-	* Use of remote plugin instead of embedded daemon access.
+	- Use of remote plugin instead of embedded daemon access.
 
 2015-11-23 :
 - OLNG, PLGNCORE, SCLPLNG :
-	% Adding/changing arguments handling features.
+	- Adding/changing arguments handling features.
 - SCLARGMNT, SCLTOOL :
-	% Moving all argument handling code from 'SCLTOOL' to new library 'SCLARGMNT', in order to allow the use of arguments
+	- Moving all argument handling code from 'SCLTOOL' to new library 'SCLARGMNT', in order to allow the use of arguments
 	  to other program type as tools (in particulary plugins).
 
 2015-11-22 :
 - DLBRRY :
 	- Fixing 'clang' complaining.
 - SCLFRNTND :
-	% : As 'kernel___' instances are now handled externally, 'Connect(...)' functions has been replace by functions
+	- : As 'kernel___' instances are now handled externally, 'Connect(...)' functions has been replace by functions
 	    filling 'features___' instances.
 - SCLXDHTML :
-	% : 'login::GetBackendFeatures(...)' deals now with 'sclfrntnd::features___'.
+	- : 'login::GetBackendFeatures(...)' deals now with 'sclfrntnd::features___'.
 
 2015-11-19 :
 - SCLXDHTML :
-	* Adaptation to chnages in 'SCLFRNTND'.
-	% Changing 'GetBackendFeatures(...)' parameters.
+	- Adaptation to chnages in 'SCLFRNTND'.
+	- Changing 'GetBackendFeatures(...)' parameters.
 
 2015-11-18 :
 - FBLFRD :
-	% 'frontend___::Dismiss(...)' -> 'DismissFlow'.
+	- 'frontend___::Dismiss(...)' -> 'DismissFlow'.
 
 2015-11-17 :
 - SCLFRNTND :
-	% Exposing 'kernel___' in order to allow the access to several backend.
+	- Exposing 'kernel___' in order to allow the access to several backend.
 - CTN, DTR, IDWBTQ, LSTBCH, LSTCTN, UYS :
-	% Removing 'files_hook___' useless 'Bind()' member.
+	- Removing 'files_hook___' useless 'Bind()' member.
 - IAS :
-	% Removing 'files_hook___' useless 'Bind()' member.
-	# Some files were not created when storage was empty, albeit other files were created.
+	- Removing 'files_hook___' useless 'Bind()' member.
+	- Some files were not created when storage was empty, albeit other files were created.
 - SCLFRNTND :
-	* If the connection to the backend fails, writing of a error message to the console and aborting.
+	- If the connection to the backend fails, writing of a error message to the console and aborting.
 - TOL :
-	# Bad flavour handling.
+	- Bad flavour handling.
 
 2015-11-16 :
 - SCLBACKND :
@@ -1461,7 +1467,7 @@
 - SCLMISC, SCLTOOL :
 	- Adapting to changes in 'SCLRSTRY'.
 - SCLRGSTRY :
-	% Exposing setup registry handling with registry specification.
+	- Exposing setup registry handling with registry specification.
 
 2015-11-13 :
 - TOL :
@@ -1469,7 +1475,7 @@
 
 2015-11-12 :
 - DTR :
-	% Adding files hook related features.
+	- Adding files hook related features.
 - LSTBCH :
 	- Privatisation of mebers of 'struct hook_filenames___'
 
@@ -1487,11 +1493,11 @@
 - LTF :
 	- Adaptation to underlying modules.
 - SCLMISC, SCLTOOL :
-	% As 'SCLMISC' is now again aware of 'CIO', 'text_oflow_rack___' is moved from 'SCLTOOL' to 'SCLMISC'.
+	- As 'SCLMISC' is now again aware of 'CIO', 'text_oflow_rack___' is moved from 'SCLTOOL' to 'SCLMISC'.
 
 2015-11-03 :
 - SCLTOOL :
-	# For non-windows OSes, returns to CLI with failure value when success (and vice-versa).
+	- For non-windows OSes, returns to CLI with failure value when success (and vice-versa).
 
 2015-10-28 :
 - BTR, IDXBTR :
@@ -1505,7 +1511,7 @@
 
 2015-10-07 :
 - ERR :
-	# : Skip the 'qRR' for a 't_Return' error type.
+	- : Skip the 'qRR' for a 't_Return' error type.
 
 2015-10-06 :
 - DIR :
@@ -1513,25 +1519,25 @@
 
 2015-10-01 :
 - XDHUJR :
-	# 'XDHUJS' -> 'XDHUJR'.
+	- 'XDHUJS' -> 'XDHUJR'.
 - XDHUJS, XDHUJT :
 	- 'XDHUJT' becomes 'XDHUJS'.
 
 2015-09-30 :
 - XDHUTL :
-	% 'FetchEventAbstracts(...)' now returns a boolean to report a key-related event without recognized key sequence.
+	- 'FetchEventAbstracts(...)' now returns a boolean to report a key-related event without recognized key sequence.
 
 2015-09-29 :
 - RGSTRY :
-	% Adding 'tentry___[::Init](...)' variant.
+	- Adding 'tentry___[::Init](...)' variant.
 - SCLFRNTND :
 	- The language is now stored/retrieved in/from the registry.
 - XDH...
-	* Misc. changes.
+	- Misc. changes.
 
 2015-09-... :
 - XDH...
-	* Misc. changes.
+	- Misc. changes.
 
 2015-09-24 :
 - XDHCMN : 'args[)]' -> 'digest[_]'.
@@ -1545,47 +1551,47 @@
 
 2015-09-21 :
 - XDHCBK, XDHJSP, 
-	* Handling iframes through document with an id.
+	- Handling iframes through document with an id.
 - XDHJSP :
-	* Removing '(XDHJSP)HandleExtensions(...)' and '(XDHJSP)HandleCastings(...)'. Corresponding actions now made
+	- Removing '(XDHJSP)HandleExtensions(...)' and '(XDHJSP)HandleCastings(...)'. Corresponding actions now made
 	  when the document/frame and their casting are set.
 
 2015-09-20
 - XDHCBK, XDJ* :
-	* More changes so what called 'frame' is now an 'iframe' and no more an element's child.
+	- More changes so what called 'frame' is now an 'iframe' and no more an element's child.
 - SCLFRNTND, XDHCBK:
-	% Moving 'mode__' from 'SCLFRNTND' to 'XDHCBK'.
+	- Moving 'mode__' from 'SCLFRNTND' to 'XDHCBK'.
 - SCLXDHTML, XDHUPS :
 	- Adaptation to changes in underlying modules.
 - XDHDWS :
-	* Adaptation to changes in underlying modules.
+	- Adaptation to changes in underlying modules.
 
 2015-09-18 :
 - XDHCBK :
-	* Adding 'SetDocument' and 'SetFrame' as 'function'.
-	* The 'SetChildren' 'function' do no more act as 'SetDocument' when 'Id' == NULL.
-	* 'SetCasting' -> 'HandleCasting'.
-	* The 'HandleCasting' 'function' applies to a document (the root one or the one corresponding to an iframe)
+	- Adding 'SetDocument' and 'SetFrame' as 'function'.
+	- The 'SetChildren' 'function' do no more act as 'SetDocument' when 'Id' == NULL.
+	- 'SetCasting' -> 'HandleCasting'.
+	- The 'HandleCasting' 'function' applies to a document (the root one or the one corresponding to an iframe)
 	  when 'Id' == NULL, or the 'iframe' of id 'Id' when != NULL.
 - XDHJSP, XDHJSR, XDHJST :
-	* Adaptation to changes on 'XDHCBK'.
+	- Adaptation to changes on 'XDHCBK'.
 
 2015-09-07 :
 - FRDBSE, SCLFRNTND :
-	* Moved the content of 'FRDBSE' into 'SCLFRNTND'. 'FRDBSE' is no mode used.
+	- Moved the content of 'FRDBSE' into 'SCLFRNTND'. 'FRDBSE' is no mode used.
 - SCLXDHTML, XDHCBK, XDHDWS :
 	- Adaptation to changes in 'FRDBSE'/'SCLFRNTND'.'
 
 2015-09-16 :
 - FRDBS :
-	* Adding 'Fill(...)' functions.
-	* Adding 'Dump(...)' functions.
+	- Adding 'Fill(...)' functions.
+	- Adding 'Dump(...)' functions.
 - SCLMISC :
-	# Adding missing '&'.
+	- Adding missing '&'.
 
 2015-09-10 :
 - RGSTRY :
-	% Adding some variants of 'tentry___::tentry___(...)' and 'tentry___::Init(...)' methods.
+	- Adding some variants of 'tentry___::tentry___(...)' and 'tentry___::Init(...)' methods.
 
 2015-09-09
 - AEM, CDGB64, DTFPTB, FBLTYP :
@@ -1595,53 +1601,53 @@
 - BOMHDL, CRPTGR, CSDSNC, CSDUCL, FBLBKD, FLW, IOF, UTF, XTF :
 	- Adaptation to changes in 'FDR'.
 - BSO :
-	% 'raw__' becomes 'byte__' (in the meaning of 'unit of digital information').
+	- 'raw__' becomes 'byte__' (in the meaning of 'unit of digital information').
 - CIO, CSDLEC, CSDSNS, DTFBSC, FBLBRQ, FLX, SCK, STR, TXF, XML :
 	- Adaptation to changes in 'FLW'.
 - FRD, SDR :
 	- Adaptation to changes in 'BSO'.
-	% 'datum__' becomes 'byte__' (in the meaning of 'unit of digital information').
+	- 'datum__' becomes 'byte__' (in the meaning of 'unit of digital information').
 - PLGN :
-	% Adding 'retriever___::Init()' with alternative parameters.
+	- Adding 'retriever___::Init()' with alternative parameters.
 - RGSTRY :
-	% Adding 'multi_level_registry_::Convert( const tentry__ &, entry__ &)'.
+	- Adding 'multi_level_registry_::Convert( const tentry__ &, entry__ &)'.
 
 2015-09-06 :
 - CSDBNS, CSDSNS :
 	- Adaptation to changes in 'CSDSCB'.
 - CSDLEC :
-	* Passes now the executable which embed the server as 'Origin' parameter to server.
+	- Passes now the executable which embed the server as 'Origin' parameter to server.
 - CSDSCB, FBLBKD, NTVSTR, SCLBACKND, SCLDAEMON  :
-	% '[Client]Origin' parameter is now of type 'ntvstr::char__'.
+	- '[Client]Origin' parameter is now of type 'ntvstr::char__'.
 - CSDUCL :
 	- 'universal_client_core' -> 'universal_client_core___'
-	* Storing server location in 'universal_client_core___'.
+	- Storing server location in 'universal_client_core___'.
 - DIR :
-	% Adding 'GetSelPath[_](...)' function.
+	- Adding 'GetSelPath[_](...)' function.
 	- Adapting exsting functions to use above new function.
 - FBLOVL :
 	- Incrementing protocol version due to changes in 'STR'.
 - SCLFRNTND :
 	- Adaptation to changes in 'CSDUCL'.
-	% Moving 'kernel___' from '.h' to '.cpp'.
-	% Adding 'GetBackendLocation(...)' function.
+	- Moving 'kernel___' from '.h' to '.cpp'.
+	- Adding 'GetBackendLocation(...)' function.
 - STR
-	* The size of the string is embedded in the flow for the '<<' and '>>' operator.
+	- The size of the string is embedded in the flow for the '<<' and '>>' operator.
 
 2015-09-04 :
 - SCLRGSTRY :
-	# Fixing default ptoject entry value.
+	- Fixing default ptoject entry value.
 
 2015-08-27 :
 - XDHJST :
-	* Adding key-related events handling.
+	- Adding key-related events handling.
 
 2015-08-25 :
 - XDHJSP :
-	# Adding missing 'Log' features.
+	- Adding missing 'Log' features.
 - XDHJSR :
-	# Fixing 'Log'-related features.
-	* Adding key-related events handling.
+	- Fixing 'Log'-related features.
+	- Adding key-related events handling.
 
 2015-08-21 :
 - XDHJSP, XDHUPS,
@@ -1649,49 +1655,49 @@
 
 2015-08-18
 - SCLXDHTML :
-	* When no backend, subcomponent initialization are now still called.
+	- When no backend, subcomponent initialization are now still called.
 
 2015-08-16
 - CSDUCL :
-	# Add missing parameter.
+	- Add missing parameter.
 - XDHCBK :
-	% 'downstream_callback__' '[...]New(...)' becomes'[...]RetrieveCallback(...)'.
-	* Adding 'downstream_callback__::ReleaseCallback(...). So the 'delete' of an 'session_callback__' is made by the same module ('DLL', f. ex.) as its 'new'.
+	- 'downstream_callback__' '[...]New(...)' becomes'[...]RetrieveCallback(...)'.
+	- Adding 'downstream_callback__::ReleaseCallback(...). So the 'delete' of an 'session_callback__' is made by the same module ('DLL', f. ex.) as its 'new'.
 - SCLXDHTML, XDHUPS :
 	- Adaptation to changes in 'XDHCBK'.
 
 2015-08-04 :
 - CPE :
-	# Fixing Cygwin-related stuff.
+	- Fixing Cygwin-related stuff.
 - ERR :
-	% Removing deprecated 'qRPrm()'.
+	- Removing deprecated 'qRPrm()'.
 
 2015-08-04 :
 - XPP :
-	# Use of the correct 'PreservationLevel_' variable to know if variable replacement should be skipped or not.
+	- Use of the correct 'PreservationLevel_' variable to know if variable replacement should be skipped or not.
 
 2015-08-02 :
 - STSFSM :
-	# Add missing flush in 'Add(...)'.
+	- Add missing flush in 'Add(...)'.
 
 2015-08-01 :
 - SCLRGSTRY, SCLRGSTRY :
-	% 'OGetValue(...)' returns now a value which indicates if the entry exists or no (no more use of the 'Missing' parameter.)
+	- 'OGetValue(...)' returns now a value which indicates if the entry exists or no (no more use of the 'Missing' parameter.)
 
 2015-07-23 :
 - RGSTRY :
-	% Adding 'entry___::(Init|entry___)( const entry___ &)'.
+	- Adding 'entry___::(Init|entry___)( const entry___ &)'.
 
 2015-07-21 :
 - CSDUCL :
-	* Adaptation to changes to 'FRDBSE'.
-	% '...Plugin...' -> '...Library...'.
+	- Adaptation to changes to 'FRDBSE'.
+	- '...Plugin...' -> '...Library...'.
 - FRDBSE :
-	* Adding 'None' type of backend, when no backend is used.
+	- Adding 'None' type of backend, when no backend is used.
 - SCLFRNTND :
 	- Adaptation to changes in 'CSDUCL'.
 - XDHCBK :
-	% 'XDHCBKLaunch(...)' is now of type 'void' instead of 'bso::bool__'.
+	- 'XDHCBKLaunch(...)' is now of type 'void' instead of 'bso::bool__'.
 - XDHDWS :
 	- Adaptation to changes in 'FRDBSE'.
 - XDHUPS :
@@ -1699,30 +1705,30 @@
 
 2015-07-18 :
 - XDHCBK, XDHJST, XDHDWS :
-	* Moving 'GetDialogBasic()' related functionnalities from 'XDHDWS' to 'XDHCBK' to be available for 'XDHJST'.
+	- Moving 'GetDialogBasic()' related functionnalities from 'XDHDWS' to 'XDHCBK' to be available for 'XDHJST'.
 
 2015-07-07 :
 - XDHJST :
-	* : Adding 'TagName' parameters to 'GetEventsAbstract()' function to properly handle the default action.
+	- : Adding 'TagName' parameters to 'GetEventsAbstract()' function to properly handle the default action.
 
 2015-07-15 :
 - NTVSTR :
-	* The methods returning a 'const bso::char__ *' return now an empty string when core pointer == 'NULL'.
+	- The methods returning a 'const bso::char__ *' return now an empty string when core pointer == 'NULL'.
 
 2015-07-10 :
 - XPP :
-	* : Subsitutions occurs now to the 'href' and 'select' attributes of the 'expand' directive , and the 'value' attribute of the 'set' directive too.
+	- : Subsitutions occurs now to the 'href' and 'select' attributes of the 'expand' directive , and the 'value' attribute of the 'set' directive too.
 
 2015-07-09 :
 - BCH
-	% Adding 'Push()' method.
-	% Adding missing 'const' to 'Top()' method.
+	- Adding 'Push()' method.
+	- Adding missing 'const' to 'Top()' method.
 - XPP :
-	* Adding substitution handling in attribute value.
+	- Adding substitution handling in attribute value.
 
 2015-07-08 :
 - SCLXDHTML :
-	% Adding 'SCLXDHTML_DEFAULT_SUFFIX'.
+	- Adding 'SCLXDHTML_DEFAULT_SUFFIX'.
 
 2015-07-03
 - GLOBAL :
@@ -1731,12 +1737,12 @@
 
 2015-07-02 :
 - UYS :
-	% Adaptating to changes in 'TOL'.
+	- Adaptating to changes in 'TOL'.
 - GLOBAL :
 	- Fixing '_' beginning identifier issue.
 	- Adaptating to changes in 'UYS'.
 - TOL :
-	% Inntroducing new extended_enum mechanism.
+	- Inntroducing new extended_enum mechanism.
 - XDHCBK :
 	- Adding inclusion of missing <stdarg.h> header.
 - XDHDWS :
@@ -1744,11 +1750,11 @@
 
 2015-06-30
 - BSO :
-	% Fixing ambiguous 'Convert(...)' functions problem for POSIX but non-Darwin systems when compiling in 64 bits.
+	- Fixing ambiguous 'Convert(...)' functions problem for POSIX but non-Darwin systems when compiling in 64 bits.
 
 2015-06-28 :
 - TAGSBS :
-	% Introducing 'tvalues(_)' and related functions.
+	- Introducing 'tvalues(_)' and related functions.
 
 2015-06-24 :
 - BSO :
@@ -1761,7 +1767,7 @@
 
 2015-06-20 :
 - TOL
-	% 'E_ROW(...)' -> 'qROW(...)'
+	- 'E_ROW(...)' -> 'qROW(...)'
 - GLOBAL :
 	- Adaptation to changes in 'TOL'.
 
@@ -1777,7 +1783,7 @@
 
 2015-06-17 :
 - CPE :
-	% Rewritting.
+	- Rewritting.
 - GLOBAL :
 	- Adaptation to modifications in 'CPE'.
 
@@ -1787,20 +1793,20 @@
 
 2015-06-11 :
 - MTHTMC :
-	% :Introducing 'tokens__'.
+	- :Introducing 'tokens__'.
 
 2015-06-10 :
 - SCLLOCALE :
-	* A translation now ignores carriage returns, line feed and tabulations. They have to be explicitly set using '\n', '\t' and '\p' (padding, shorter as a tabulation.).
+	- A translation now ignores carriage returns, line feed and tabulations. They have to be explicitly set using '\n', '\t' and '\p' (padding, shorter as a tabulation.).
 - SCLMISC :
-	% Adding 'RefreshBaseLanguage().'
+	- Adding 'RefreshBaseLanguage().'
 - SCLTOOL :
-	* The base language is now updated with the registry content once the project/command-line arguments/setup-related data are uploaded in the registry.
+	- The base language is now updated with the registry content once the project/command-line arguments/setup-related data are uploaded in the registry.
 	This allows to change the language with the '--#Language=...' option, i.e. without having to modifiy the configuration file.
 
 2015-06-09 :
 - MTHTMC :
-	# timecode with separators are now handled correct.
+	- timecode with separators are now handled correct.
 
 2015-06-08 :
 - GLOBAL : 
@@ -1819,13 +1825,13 @@
 - MTHITG, MTHMTC :
 	- Updating.
 - RGSTRY, SCLMISC, SCLRGSTRY, :
-	% Adding the possibility to add a value (i.e. do not write out an existing value) to a registry.
+	- Adding the possibility to add a value (i.e. do not write out an existing value) to a registry.
 - SCLTOOL :
-	* With an 'Link' 'index' at "", it now handles undefined amount of arguments.
+	- With an 'Link' 'index' at "", it now handles undefined amount of arguments.
 
 2015-05-29 :
 - SCLTOOL :
-	% Simplification allowed by the fact that 'MinGW' is now called with unicode aware options.
+	- Simplification allowed by the fact that 'MinGW' is now called with unicode aware options.
 
 2015-05-28 (til...):
 - GLOBAL :
@@ -1834,27 +1840,27 @@
 
 2015-05-11 :
 - GLOBAL :
-	% Reorganization of the client/server modules and the ones which depends on them.
+	- Reorganization of the client/server modules and the ones which depends on them.
 - XDH...
-	* Reorganization of all the 'XDH'-related modules.
+	- Reorganization of all the 'XDH'-related modules.
 
 2015-05-09 :
 - XDH...
-	* Reorganization of all the 'XDH'-related modules.
+	- Reorganization of all the 'XDH'-related modules.
 
 2015-05-07 :
 - XDHAGT :
 	- Adaptation to changes in 'XDHCBK'.
 - XDHCBK :
-	% Adding 'upstream_callback__::(XDHCBK)New(...)' and 'upstream_callback__::(XDHCBK)Delete(...)' to handle user pointer.
+	- Adding 'upstream_callback__::(XDHCBK)New(...)' and 'upstream_callback__::(XDHCBK)Delete(...)' to handle user pointer.
 
 2015-05-06
 - CSDLEC :
-	# Fixing bug when in remote mode, by using changes in 'CSDLEO'.
+	- Fixing bug when in remote mode, by using changes in 'CSDLEO'.
 - CSDLEO :
-	* Removing useless 'callback__::(CSDLEO)ReleaseCallback(...)', as releasing is do by calling the destructor of the concerned 'csdscb::callback__callback__'.
-	* Removing useless 'Context' parameter of 'csdleo::callback__::(CSDLEO)RetrieveCallback(...)'.
-	# Fixing bug when in remote mode, by adding 'data__::Mode', which should be 'mEmbedded', except when used by the 'eDeamon' (name will change soon) tool.
+	- Removing useless 'callback__::(CSDLEO)ReleaseCallback(...)', as releasing is do by calling the destructor of the concerned 'csdscb::callback__callback__'.
+	- Removing useless 'Context' parameter of 'csdleo::callback__::(CSDLEO)RetrieveCallback(...)'.
+	- Fixing bug when in remote mode, by adding 'data__::Mode', which should be 'mEmbedded', except when used by the 'eDeamon' (name will change soon) tool.
 - SCLBACKND :
 	- Adaptation to changes in 'SCLDAEMON'.
 	-'SCLBACKNDNewCallback(...)' -> 'SCLBACKNDGetCallback(...)'.
@@ -1862,37 +1868,37 @@
 	- Adaptation to changes in 'CSDLEO'.
 	-'SCLDAEMONNewCallback(...)' -> 'SCLDAEMONGetCallback(...)'.
 - XDH...
-	* Adaptation to changes in 'XDHCBK'.
+	- Adaptation to changes in 'XDHCBK'.
 - XDHCBK :
 	- 'proxy_callback__' -> 'upstream_callback__'.
 	- 'session_callback__' -> 'downtream_callback__'.
-	% Merging 'callback__' with 'downstream_callback__'.
-	* A 'session_callback__' was created per session. Now, there is only one callback ('dwonstream_callback__') for all session.
+	- Merging 'callback__' with 'downstream_callback__'.
+	- A 'session_callback__' was created per session. Now, there is only one callback ('dwonstream_callback__') for all session.
 	  data owned by each session are passed through a user pointer.
 
 2015-05-05 :
 - SCLXDHTML, XDHAGT, XDHPXY :
 	- Adapting to changes in 'XDHCBK'.
 - XDHCBK :
-	% Append 'UP' ('User Pointer') parameter globally, which can be different for each 'session_callback__',
+	- Append 'UP' ('User Pointer') parameter globally, which can be different for each 'session_callback__',
 	so it is possible in 'proxy_callback__' to distinguish between each 'session_callback__'.
 - XDHJSP :
 	- Adapting to changes in 'XDHCBK'.
-	# Ficing bug from alert/confirm dialog box.
+	- Fixing bug from alert/confirm dialog box.
 
 2015-05-04 :
 - TOL:
-	* Adding 'Q37_M(P|R)MDF(...)' macros.
+	- Adding 'Q37_M(P|R)MDF(...)' macros.
 
 2015-05-03 :
 - XDHCBK :
-	% Adding 'Result' parameter to 'callback::XDHCBKProcess(...)'.
+	- Adding 'Result' parameter to 'callback::XDHCBKProcess(...)'.
 
 2015-05-01 :
 - DHTPROXY :
 	- Removing useless 'proxy__::_ProxyCallback' and related members.
 - TOL 
-	* Adding 'Q37_(P|R)MDF'.
+	- Adding 'Q37_(P|R)MDF'.
 - XHTCLLBK :
 	- Using 'Q37_(P|R)MDF'.
 	- Removing useless 'proxy_callback__' parameter from 'callback__:(XHTCLLBK)New(...)' method.
@@ -1901,7 +1907,7 @@
 - DHTJSBASED :
 	- Creation.
 - XHTAGENT, XHTCLLBK :
-	% Removing useless 'ExecuteJavascript' and 'GetLanguage' methods.
+	- Removing useless 'ExecuteJavascript' and 'GetLanguage' methods.
 	- Adding 'Log(...)' method.
 
 2015-04-30 :
@@ -1925,24 +1931,24 @@
 	- Rewritting global (con|de)structor using '__attribute__((((con|de)structor))' under Mac OS, as dynamic libraries under Mac OS
 	  does not execute global (con|de)structor when the library is loaded.
 - TOL :
-	% Adding 'Q37_G(C|D)TOR' macro to facilitate above changes.
+    - Adding 'Q37_G(C|D)TOR' macro to facilitate above changes.
 
 2015-04-22 :
 - FLW :
-	% Adding 'Driver(..)' methods.
+    - Adding 'Driver(..)' methods.
 	- Some simplification.
 - CIO :
-	% Adding 'set__' object.
-	% Adding 'Initialize(...)' function whixh takes a 'set__'.
-	% '_S(In|Out|Err)OutDriver' are from now on private.
+    - Adding 'set__' object.
+    - Adding 'Initialize(...)' function whixh takes a 'set__'.
+    - '_S(In|Out|Err)OutDriver' are from now on private.
 	- Standardisation of the 'In' ,'Out', 'Err' enumeration order.
-	% Adding functions to retrieve some predefined 'set__'s.
+    - Adding functions to retrieve some predefined 'set__'s.
 - CSDLEO :
-	* Adding 'CIO' member in 'shared_data__'.
+	- Adding 'CIO' member in 'shared_data__'.
 - PLGNCORE :
-	* Adding 'CIO' member in 'data__'.
+	- Adding 'CIO' member in 'data__'.
 - SCLMISC :
-	* Adding 'CIO' parameters to 'Initialize(...)' functions.
+	- Adding 'CIO' parameters to 'Initialize(...)' functions.
 - SCLDAEMON, SCLPLUGIN, SCLTOOL, SCLXHTML :
 	- Adaptation to changes in 'SCLMISC'.
 - XHTCLLBK :
@@ -1950,19 +1956,19 @@
 
 2015-04-21 :
 - SCLMISC :
-	# No more 'SEGFAULT' on early errors (missing configuration file, for example).
+	- No more 'SEGFAULT' on early errors (missing configuration file, for example).
 - SCLXHTML :
 	- Adaptation toi changes in 'XHTCLLBK'.
 - XHTCLLBK :
-	* Adding localization, where to search configuration ans locale file. Useful under Mac OS, where the executable is not necessary on the same place as the dynamic library.
+	- Adding localization, where to search configuration ans locale file. Useful under Mac OS, where the executable is not necessary on the same place as the dynamic library.
 
 2015-04-14 :
 - FDR :
-	% Fixing 'Xcode' complainings.
+    - Fixing 'Xcode' complainings.
 - FLW :
 	- Adaptation to changes in 'FRD'.
 - SCLRGSTRY :
-	# The location of the file given to 'LoadProject(...)' is now again used as base path for files included by the given project file.
+	- The location of the file given to 'LoadProject(...)' is now again used as base path for files included by the given project file.
 
 2015-04-13 :
 - GLOBAL :
@@ -1970,25 +1976,25 @@
 
 2015-04-12 :
 - DLBRRY :
-	* When guessing library filename, 'lib' is now also prepend to library affix for 'MacOS'.
+	- When guessing library filename, 'lib' is now also prepend to library affix for 'MacOS'.
 - RGSTRY :
-	% Adding method in 'multi_level_registry_' to find an entry in a given level.
-	% Removing 'PathErrorRow' where not useful.
+    - Adding method in 'multi_level_registry_' to find an entry in a given level.
+    - Removing 'PathErrorRow' where not useful.
 - SCLMISC :
-	* The embedded configuration, project,... corresponding locales are now directly pointing to the base registry,
+	- The embedded configuration, project,... corresponding locales are now directly pointing to the base registry,
 	  and no more duplicated.
 - SCLRGSTRY :
-	* 'Locale' section is now root sections, and no more 'Definitions' sub-section.
-	% Adding 'Arguments' entry.
+	- 'Locale' section is now root sections, and no more 'Definitions' sub-section.
+    - Adding 'Arguments' entry.
 - SCLTOOL :
 	- Using 'Arguments' entry from 'sclrgstry'.
-	* 'Arguments' section is now root section, and no more 'Definitions' sub-section.
+	- 'Arguments' section is now root section, and no more 'Definitions' sub-section.
 
 2015-04-09 :
 - BCH, CTN, LSTBCH, LSTCTN, UYS :
-	- Adaptation to chnages in 'FLS'.
+	- Adaptation to changes in 'FLS'.
 - DIR :
-	# Old 'CPE__MAC' replaced by new 'CPE_XCODE'.
+	- Old 'CPE__MAC' replaced by new 'CPE_XCODE'.
 - DTFPTB :
 	- Fixing 'Xcode' issues.
 - FLS :
@@ -1996,13 +2002,13 @@
 - STR, XPP :
 	- Fixing some 'Xcode' issues.
 - STRMRG :
-	# Fixing bad parameter name issues.
+	- Fixing bad parameter name issues.
 - STRNG
-	* Due to changes to 'FLS', removing the path for 'Xcode'.
+	- Due to changes to 'FLS', removing the path for 'Xcode'.
 
 2015-04-08 :
 - BSO :
-	# The size of the types were incorrect under Posix in 64 bits.
+	- The size of the types were incorrect under Posix in 64 bits.
 	- Use of '[u]int[8|16|32|64]_t'
 - DTE, TME :
 	- Fixing some issues due to the changes in 'BSO'.
@@ -2011,41 +2017,41 @@
 
 2015-04-07 :
 - DLBRRY :
-	* For 'POSIX' and 'Mac OS', to mimic 'Windows' behavior, the correct prefix and extension is added to the library filename when missing.
+	- For 'POSIX' and 'Mac OS', to mimic 'Windows' behavior, the correct prefix and extension is added to the library filename when missing.
 - PLGN :
-	- Adaptation to chnages in 'PLGNCORE'.
+	- Adaptation to changes in 'PLGNCORE'.
 - PLGNCORE, SCLPLUGIN :
-	* Removing useless 'Directory' entry in 'data__' since the configuration and locale is retrieved from caller.
+	- Removing useless 'Directory' entry in 'data__' since the configuration and locale is retrieved from caller.
 - RGSTRY :
-	* An empty level is now valid and correctly handled.
+	- An empty level is now valid and correctly handled.
 - SCLFRNTND :
-	* For the predefined items, their values are added in the XML dump.
+	- For the predefined items, their values are added in the XML dump.
 - SCLRGSTRY :
-	* The different levels are now created empty, and not embedded (except the arguments one).
+	- The different levels are now created empty, and not embedded (except the arguments one).
 
 2015-04-03 :
 - GLOBAL:
-	* The content of configuration and locale registries are now passed to the plugin, and no more red from a file.
+	- The content of configuration and locale registries are now passed to the plugin, and no more red from a file.
 - FRDRGY :
 	- Adaptation to changes in 'RGSTRY'.
 - RGSTRY :
-	% All 'Push...()' becomes 'Push()'.
-	* 'Erase(...)' can now be called on a imported level.
+	- All 'Push...()' becomes 'Push()'.
+	- 'Erase(...)' can now be called on a imported level.
 	- 'entry__' becomes 'entry__', because of its use outside of its module.
-	% Changing some method parameters so they use 'entry__'.
+	- Changing some method parameters so they use 'entry__'.
 - SCLLOCALE, SCLRGSTRY :
 	- Adaptation to changes in 'RGSTRY'.
-	% Adding the 'Set...(...)' functions.
+	- Adding the 'Set...(...)' functions.
 - SCLMISC :
-	% Adding 'Initialize(...)' function with 'rgstry::registry_' parameters.
+	- Adding 'Initialize(...)' function with 'rgstry::registry_' parameters.
 
 2015-03-30 :
 - FLX :
-	% Removing the use of 'FLXUnavailable(...)' from 'buffer_iflow_driver___'. To detect classes which overloaded it,
+	- Removing the use of 'FLXUnavailable(...)' from 'buffer_iflow_driver___'. To detect classes which overloaded it,
 	    the returning type is now 'int' instead of 'void'.
 - TOL :
-	% Removing 'Init()' in 'object_', to better take care to initialization of underlying object.
-	* Propagating 'reset(...)' in 'object_' to underlying object.
+	- Removing 'Init()' in 'object_', to better take care to initialization of underlying object.
+	- Propagating 'reset(...)' in 'object_' to underlying object.
 
 2015-03-29 :
 - FRD :
@@ -2061,9 +2067,9 @@
 
 2015-03-21 :
 - CSDLEO :
-	% Adding a '[CSDLEO]Initialize(...)' method to relieve the C API (for the same reason as below).
+	- Adding a '[CSDLEO]Initialize(...)' method to relieve the C API (for the same reason as below).
 - PLGNCORE, PLNG, SCLPLUGIN
-	% Because the C functions exposed by a dynamic library don't allow interruptions, to simplify error handling,
+	- Because the C functions exposed by a dynamic library don't allow interruptions, to simplify error handling,
 	  the API of a dynamic library will be exposed through a (C++) callback (except, of course, the function
 	  which provides this callback).
 - SCLDAEMON :
@@ -2072,7 +2078,7 @@
 
 2015-03-20 :
 - SCLMISC, SCLRGSTRY :
-	% Adding plugin features, as a standard way to retrieve a plugin reference from a configuration file.
+	- Adding plugin features, as a standard way to retrieve a plugin reference from a configuration file.
 
 
 2015-03-19
@@ -2080,7 +2086,7 @@
 	- Adding the label of the action corresponding to the closing of a program.
 - SCLXHTML :
 	- '[_]prelaunch_callback__' becomes '[_]action_helper_callback__'
-	% On above call, adding '...OnClose(...)'.
+	- On above call, adding '...OnClose(...)'.
 	- '...Prelaunch(...)' becomes '...OnBeforeAction(...)'.
 
 
@@ -2088,32 +2094,32 @@
 - CTN, IAS, LST, LSTBCH, LSTCTN :
 	- Adaptation to changes in 'UYS'.
 - CSDBNS :
-	* Adaptation to changes in 'ERR'. Errors are no more intercepted, so the program is terminated when a error occurs.
+	- Adaptation to changes in 'ERR'. Errors are no more intercepted, so the program is terminated when a error occurs.
 	  Not really happy about this behavior, but the errors should be intercepted downstream.
 - FLX :
-	* In 'void _(i|o)flow_driver___', 'Commit()' and 'Dismiss()' are always allowed, as they are automatically called
+	- In 'void _(i|o)flow_driver___', 'Commit()' and 'Dismiss()' are always allowed, as they are automatically called
 	  when the object is deleted.
-	% Use of 'access__' instead of a boolean.
+	- Use of 'access__' instead of a boolean.
 - FRDKRN :
-	* Adaptation to changes in 'CSDLEO'.
+	- Adaptation to changes in 'CSDLEO'.
 - SCLBACKND :
 	- Adaptation to changes in 'FLX'.
 - SCLRGSTRY :
-	# 'GetUnsigneNumber(...)' returns now the correct value.
+	- 'GetUnsigneNumber(...)' returns now the correct value.
 	- : Modifying 'GetSigneNumber_(...)' to take account of changes in 'STR'.
 - SCLTOOL :
-	* Retrieving signal handling from 'TOL'.
+	- Retrieving signal handling from 'TOL'.
 - STR :
-	% Some signed 'ToNumber' functions took limits parameters before the value to retrieve ; this is now modified to be
+	- Some signed 'ToNumber' functions took limits parameters before the value to retrieve ; this is now modified to be
 	    coherent with similar functions.
 - SCLTOOL :
 	- Adaptation to changes in 'FLX'.
 - SCLXHTML :
-	* Adaptation to changes to 'ERR'.
-	* The errors are no more intercepted, but passed to the calling code.
-	* Removing references to 'CIO'.
+	- Adaptation to changes to 'ERR'.
+	- The errors are no more intercepted, but passed to the calling code.
+	- Removing references to 'CIO'.
 - TOL :
-	* Moving signal handling to 'SCLTOOL'.
+	- Moving signal handling to 'SCLTOOL'.
 - UYS :
 	- Introducing 'mode__' to use instead 'fil::mode__'.
 	- Introducing 'behavior' to use instead of a boolean.
@@ -2121,50 +2127,50 @@
 
 2015-03-15 :
 - CSDLES :
-	* Adaptation to changes in 'ERR'.
+	- Adaptation to changes in 'ERR'.
 - ERR :
-	* Removing all réference to 'CIO'. The final error handling had to be handled upstream (through the modified 'ERRFEpilog()' macro).
+	- Removing all references to 'CIO'. The final error handling had to be handled upstream (through the modified 'ERRFEpilog()' macro).
 - MTK :
-	* A uncaught exception will now terminate the program. All exceptions shoud be caught dowstream.
+	- A uncaught exception will now terminate the program. All exceptions shoud be caught dowstream.
 - SCLDAEMON :
 	- Removing 'DisplayModuleClos(ing|ed)Message()' functions, to remove reference to 'CIO' (unavailable when the daemon is embedded).
 - SCLMISC :
-	* Removing all dependences to 'CIO'.
-	* Hence, moving 'text_oflow_rack___' to 'SCLTOOL'.
+	- Removing all dependences to 'CIO'.
+	- Hence, moving 'text_oflow_rack___' to 'SCLTOOL'.
 - SCLTOOL :
-	* Due to changes in 'ERR', the final error message printing is now supplied by this module.
-	* As one of the few (or the only one) to use the 'CIO' module, retrieving 'text_oflow_rack___' from 'SCLMISC'.
-	* Removing forgotten bug tracking feature.
+	- Due to changes in 'ERR', the final error message printing is now supplied by this module.
+	- As one of the few (or the only one) to use the 'CIO' module, retrieving 'text_oflow_rack___' from 'SCLMISC'.
+	- Removing forgotten bug tracking feature.
 
 
 2015-03-14 :
 - CSDLEO :
-	* No more 'C(Out|Err)' in the shared data, as the error handling object are now shared with the dynamic libraries.
+	- No more 'C(Out|Err)' in the shared data, as the error handling object are now shared with the dynamic libraries.
 - CSDLES :
-	* Adaptation to changes to 'CSDLEO'.
-	* The errors are no more intercepted, but passed from the dynamic library to the calling code.
+	- Adaptation to changes to 'CSDLEO'.
+	- The errors are no more intercepted, but passed from the dynamic library to the calling code.
 - FLX :
-	* For the 'void' drivers, by default (can be changed on initialization), an access to it launches an error.
+	- For the 'void' drivers, by default (can be changed on initialization), an access to it launches an error.
 
 
 2015-03-13 :
 - GLOBAL :
-	* Adaptation to changes in 'UYS'.
+	- Adaptation to changes in 'UYS'.
 - FNM :
-	* Handling the 'NULL' case fot 'Type_(...)' function.'
+	- Handling the 'NULL' case fot 'Type_(...)' function.'
 - NTVSTR :
-	* Change made the 11th active only for Windows, as g++ complains about.
+	- Change made the 11th active only for Windows, as g++ complains about.
 - TOL :
-	* Introducing 'E_XENUM', which simplifies error handling with 'enum's.
+	- Introducing 'E_XENUM', which simplifies error handling with 'enum's.
 - UYS :
-	* Using the new 'E_XENUM' from 'TOL'.
+	- Using the new 'E_XENUM' from 'TOL'.
 	- Renaming 'file_manager___' to 'file_hook___'
-	* Introducing 'hook_filenames___'.
+	- Introducing 'hook_filenames___'.
 
 
 2015-03-12 :
 - SCLPLUGIN
-	* Removing test feature.
+	- Removing test feature.
 
 
 2015-03-11 :
@@ -2177,7 +2183,7 @@
 		- 'location' for the location (the list of the parent directories) of a file,
 		- 'affix' the 'basename' of a file without its extension.
 - NTVSTR :
-	* Adding method for int, to avoid to have to cast NULL (defined as '0') into '(const ntvstr::char__ *)'.
+	- Adding method for int, to avoid to have to cast NULL (defined as '0') into '(const ntvstr::char__ *)'.
 		
 
 

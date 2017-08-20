@@ -233,53 +233,54 @@ namespace v8q {
 		return ToLocal( ToLocal( v8::Script::Compile( Context, ToString( Script, Isolate ) ), Isolate )->Run( Context ), Isolate );
 	}
 
-	template <typename t> class sCore_
+	template <typename item> class sData_
 	{
 	private:
-		v8::Local<t> Core_;
+		v8::Local<item> Core_;
 	protected:
 		void Init( v8::Local<v8::Value> Value )
 		{
-			Core_ = v8::Local<t>::Cast( Value );
+			Core_ = v8::Local<item>::Cast( Value );
 		}
 	public:
 		void reset( bso::sBool P = true )
 		{
 			Core_.Clear();
 		}
-		qCDTOR( sCore_ );
+		qCDTOR( sData_ );
 		void Init( void )
 		{
 			Core_.Clear();
 		}
-		v8::Local<t> Core( void ) const
+		v8::Local<item> Core( void ) const
 		{
 			return Core_;
 		}
 	};
 
-	typedef sCore_<v8::Value> sValue_;
-
-	class sValue
-	: public sValue_
+	template <typename item> class sValue_
+	: public sData_<item>
 	{
 	public:
-		qCDTOR( sValue );
-		sValue( v8::Local<v8::Value> Value )
+		qCDTOR( sValue_ );
+		sValue_( v8::Local<v8::Value> Value )
 		{
-			sValue_::Init( Value );
+			sData_<item>::Init( Value );
 		}
-		using sCore_<v8::Value>::Init;
+		using sData_<item>::Init;
 		bso::sBool IsNull( void ) const
 		{ 
 			return Core()->IsNull();
 		}
 	};
 
-	typedef sCore_<v8::Object> sObject_;
+	typedef sValue_<v8::Value> sValue;
 
-	class sObject
-	: public sObject_
+	// Predeclaration.
+	template <typename item> class sFunction_;
+
+	template <typename item> class sObject_
+	: public sValue_<item>
 	{
 	protected:
 		v8::Local<v8::Value> Launch_(
@@ -293,22 +294,22 @@ namespace v8q {
 			return ToLocal( Function->Call( GetContext( Isolate ), Core(), Argc, Argv ), Isolate );
 		}
 	public:
-		qCDTOR( sObject );
-		sObject( sValue Value )
+		qCDTOR( sObject_ );
+		sObject_( sValue Value )
 		{
 			Init( Value.Core() );
 		}
-		sObject( v8::Local<v8::Value> Value )
+		sObject_( v8::Local<v8::Value> Value )
 		{
 			Init( Value );
 		}
-		using sObject_::Init;
+		using sValue_<item>::Init;
 		void Init( v8::Local<v8::Value> Value )
 		{
 			if ( !Value->IsObject() )
 				qRFwk();
 
-			sObject_::Init( Value );
+			sValue_<item>::Init( Value );
 		}
 		v8::Local<v8::Value> Get(
 			const char *Key,
@@ -334,7 +335,7 @@ namespace v8q {
 		}
 		template <typename t> bso::sBool Set(
 			const char *Key,
-			sCore_<t> Value,
+			sValue_<t> Value,
 			v8::Isolate *Isolate = NULL,
 			qRPD )
 		{
@@ -394,41 +395,47 @@ namespace v8q {
 		}
 		void On(
 			const char *Event,
-			const class sFunction &Callback,
+			const class sFunction_<v8::Function> &Callback,
 			v8::Isolate *Isolate = NULL ) const
 		{
 			Launch( "on", Isolate, Event, Callback );
 		}
 	};
 
-	typedef sCore_<v8::Function> sFunction_;
+	typedef sObject_<v8::Object> sObject;
 
-	class sFunction
-	: public sFunction_
+	template <typename item> class sFunction_
+	: public sObject_<item>
 	{
 	public:
-		qCDTOR( sFunction );
-		sFunction( v8::FunctionCallback Callback )
+		qCDTOR( sFunction_ );
+		sFunction_( v8::FunctionCallback Callback )
 		{
 			Init( Callback );
 		}
-		sFunction( v8::Local<v8::Value> Value )
+		sFunction_( v8::Local<v8::Value> Value )
 		{
 			Init( Value );
 		}
-		using sFunction_::Init;
+		using sObject_<item>::Init;
 		void Init( v8::Local<v8::Value> Value )
 		{
 			if ( !Value->IsFunction() )
 				qRFwk();
 
-			sFunction_::Init( Value );
+			sObject_<item>::Init( Value );
 		}
 		void Init(
 			v8::FunctionCallback Function,
 			v8::Isolate *Isolate = NULL )
 		{
 			Init( v8::FunctionTemplate::New( GetIsolate( Isolate ), Function)->GetFunction() );
+		}
+		v8::Local<v8::Value> Launch(
+			v8::Local<v8::Value> *Argv,
+			int Argc )
+		{
+			return Core()->Call( Core(), Argc, Argv );
 		}
 		template <typename arg, typename ...args> v8::Local<v8::Value> Launch(
 			v8::Isolate *Isolate,
@@ -439,7 +446,7 @@ namespace v8q {
 
 			Set_( GetIsolate( Isolate ), Argv, 0, Arg, Args... );
 
-			return Core()->Call( Core(), 1 + sizeof...( Args ), Argv );
+			return Launch( Argv, 1 + sizeof...( Args ) );
 		}
 		template <typename ...args> v8::Local<v8::Value> Launch( args &...Args )
 		{
@@ -451,42 +458,46 @@ namespace v8q {
 		}
 	};
 
-	typedef sCore_<v8::String> sString_;
+	typedef sFunction_<v8::Function> sFunction;
 
-	class sString
-	: public sString_
+	template <typename item> qTCLONE( sValue_<item>, sPrimitive_ );
+
+	template <typename item> qTCLONE( sPrimitive_<item>, sName_ );
+
+	template <typename item> class sString_
+	: public sName_<item>
 	{
 	public:
-		qCDTOR( sString );
-		sString(
+		qCDTOR( sString_ );
+		sString_(
 			const char *String,
 			v8::Isolate *Isolate = NULL )
 		{
 			Init( String, Isolate );
 		}
-		sString(
+		sString_(
 			const str::dString &String,
 			v8::Isolate *Isolate = NULL )
 		{
 			Init( String, Isolate );
 		}
-		sString( v8::Local<v8::Value> Value )
+		sString_( v8::Local<v8::Value> Value )
 		{
 			Init( Value );
 		}
-		using sString_::Init;
+		using sName_<item>::Init;
 		void Init( v8::Local<v8::Value> Value )
 		{
 			if ( !Value->IsString() )
 				qRFwk();
 
-			sString_::Init( Value );
+			sName_<item>::Init( Value );
 		}
 		void Init(
 			const char *String,
 			v8::Isolate *Isolate = NULL )
 		{
-			sString_::Init( ToString( String , Isolate ) );
+			sName_<item>::Init( ToString( String , Isolate ) );
 		}
 		void Init(
 			const str::dString &String,
@@ -509,15 +520,45 @@ namespace v8q {
 		{
 			return Core()->WriteUtf8( Buffer );
 		}
+		void Get( str::dString &String );
 	};
 
-	typedef v8q::sCore_<v8::External> sExternal_;
+	typedef sString_<v8::String> sString;
 
-	template <typename t> class sExternal
-	: public v8q::sCore_<v8::External>
+	template <typename item, typename type> class sExternal_
+	: public sValue_<item>
 	{
 	public:
-		qCDTOR( sExternal );
+		qCDTOR( sExternal_ );
+		sExternal_( v8::Local<v8::Value> Value )
+		{
+			Init( Value );
+		}
+		sExternal_( sValue &Value )
+		{
+			Init( Value.Core() );
+		}
+		sExternal_( const type* External )
+		{
+			Init( External );
+		}
+		using sValue_<item>::Init;
+		void Init(
+			const type *External,
+			v8::Isolate *Isolate = NULL )
+		{
+			sValue_<item>::Init( v8::External::New( GetIsolate( Isolate ), (void *)External ) );
+		}
+		type *Value( void ) const
+		{
+			return (type *)Core()->Value();
+		}
+	};
+
+	template <typename type> class sExternal
+	: public sExternal_<qCOVER2( v8::External, type )>
+	{
+	public:
 		sExternal( v8::Local<v8::Value> Value )
 		{
 			Init( Value );
@@ -526,45 +567,32 @@ namespace v8q {
 		{
 			Init( Value.Core() );
 		}
-		sExternal( const t* External )
+		sExternal( const type* External )
 		{
 			Init( External );
 		}
-		using sExternal_::Init;
-		void Init(
-			const t *External,
-			v8::Isolate *Isolate = NULL )
-		{
-			sExternal_::Init( v8::External::New( GetIsolate( Isolate ), (void *)External ) );
-		}
-		t *Value( void ) const
-		{
-			return (t *)Core()->Value();
-		}
 	};
 
-	typedef sCore_<v8::Boolean> sBoolean_;
-
-	class sBoolean
-	: public sBoolean_
+	template <typename item> class sBoolean_
+	: public sPrimitive_<item>
 	{
 	public:
-		qCDTOR( sBoolean );
-		sBoolean( v8::Local<v8::Value> Value )
+		qCDTOR( sBoolean_ );
+		sBoolean_( v8::Local<v8::Value> Value )
 		{
 			Init( Value );
 		}
-		sBoolean( sValue &Value )
+		sBoolean_( sValue &Value )
 		{
 			Init( Value.Core() );
 		}
-		using sBoolean_::Init;
+		using sPrimitive_<item>::Init;
 		void Init( v8::Local<v8::Value> Value )
 		{
 			if ( !Value->IsBoolean() )
 				qRFwk();
 
-			sBoolean_::Init( Value );
+			sPrimitive_<item>::Init( Value );
 		}
 		void Init(
 			bool Boolean,
@@ -578,28 +606,28 @@ namespace v8q {
 		}
 	};
 
-	typedef sCore_<v8::Number> sNumber_;
+	typedef sBoolean_<v8::Boolean> sBoolean;
 
-	class sNumber
-	: public sNumber_
+	template <typename item> class sNumber_
+	: public sPrimitive_<item>
 	{
 	public:
-		qCDTOR( sNumber );
-		sNumber( v8::Local<v8::Value> Value )
+		qCDTOR( sNumber_ );
+		sNumber_( v8::Local<v8::Value> Value )
 		{
 			Init( Value );
 		}
-		sNumber( sValue &Value )
+		sNumber_( sValue &Value )
 		{
 			Init( Value.Core() );
 		}
-		using sNumber_::Init;
+		using sPrimitive_<item>::Init;
 		void Init( v8::Local<v8::Value> Value )
 		{
 			if ( !Value->IsNumber() )
 				qRFwk();
 
-			sNumber_::Init( Value );
+			sPrimitive_<item>::Init( Value );
 		}
 		void Init(
 			double Number,
@@ -612,6 +640,8 @@ namespace v8q {
 			return Core()->Value();
 		}
 	};
+
+	typedef sNumber_<v8::Number> sNumber;
 
 	typedef v8::FunctionCallbackInfo<v8::Value> sFunctionInfos;
 

@@ -40,9 +40,9 @@ namespace n4njs {
 	qENUM( Type )
 	{
 		t_First = n4all::t_amount,	// First types are those defined in 'n4all::eType'.
-			tStream = t_First,
-			tBuffer,
-			tCallback
+		tStream = t_First,
+		tBuffer,
+		tCallback
 	};
 
 	qENUM( Behavior )
@@ -83,34 +83,6 @@ namespace n4njs {
 		}
 	};
 
-	qENUM( CallbackType_ )
-	{
-		ctVoid,	// Only to specify no return value.
-		ct_amount,
-		ct_Undefined
-	};
-
-	// Callback for an upstream callback, i.e. which will be launched downstream.
-	class cUCallback {
-	protected:
-		virtual void N4NJSAdd(
-			eCallbackType_ Type,
-			void *Value ) = 0;
-		virtual void *N4NJSLaunch( eCallbackType_ Type ) = 0;	// Type is the expected type of the returned value.
-	public:
-		qCALLBACK( UCallback );
-		void Add(
-			eCallbackType_ Type,
-			void *Value )
-		{
-			return N4NJSAdd( Type, Value );
-		}
-		void *Launch( eCallbackType_ Type )
-		{
-			return N4NJSLaunch( Type );
-		}
-	};
-
 	// Base of the callbacks which will be defined upstream.
 	class cUCore_ {
 	protected:
@@ -137,16 +109,11 @@ namespace n4njs {
 	{
 	protected:
 		virtual void N4NJSToString( str::dString &String ) = 0;
-		virtual bso::sBool N4NJSIsNull( void ) = 0;
 	public:
 		qCALLBACK( UBuffer );
 		void ToString( str::dString &String )
 		{
 			return N4NJSToString( String );
-		}
-		bso::sBool IsNull( void )
-		{
-			return N4NJSIsNull();
 		}
 	};
 
@@ -160,6 +127,52 @@ namespace n4njs {
 		bso::sBool Read( str::dString &Chunk )
 		{
 			return NANJSRead( Chunk );
+		}
+	};
+
+	qENUM( ArgumentType_ )
+	{
+		atVoid,	// Only used to specify that the function does not return a value.
+		at_amount,
+		at_Undefined
+	};
+
+	class sArgument_ {
+	public:
+		eArgumentType_ Type;
+		void *Value;
+		void reset( bso::sBool P = true )
+		{
+			Type = at_Undefined;
+			Value = NULL;
+		}
+		qCDTOR( sArgument_ );
+		void Init( void )
+		{
+			Type = at_Undefined;
+			Value = NULL;
+		}
+	};
+
+	typedef bch::qBUNCHdl( sArgument_ ) dArguments_;
+
+	qW( Arguments_ );
+
+	// Callback for an upstream callback, i.e. which will be launched downstream.
+	class cUCallback
+	: public cUCore_
+	{
+	protected:
+		virtual void *N4NJSLaunch(
+			eArgumentType_ ReturnType,
+			dArguments_ &Arguments ) = 0;	// Type is the expected type of the returned value.
+	public:
+		qCALLBACK( UCallback );
+		void *Launch(
+			eArgumentType_ ReturnType,
+			dArguments_ &Arguments )
+		{
+			return N4NJSLaunch( ReturnType, Arguments );
 		}
 	};
 }

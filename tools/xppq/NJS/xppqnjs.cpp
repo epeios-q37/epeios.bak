@@ -19,6 +19,7 @@
 
 # include "xppqnjs.h"
 
+#include "parser.h"
 #include "registry.h"
 
 #include "sclmisc.h"
@@ -52,6 +53,7 @@ namespace {
 void scln4a::SCLN4ARegister( scln4a::sRegistrar &Registrar )
 {
 	Registrar.Register( ReturnArgument_ );
+	Registrar.Register( parser::OnData, parser::OnEOD, parser::Parse );
 }
 
 const char *sclmisc::SCLMISCTargetName = NAME_LC;

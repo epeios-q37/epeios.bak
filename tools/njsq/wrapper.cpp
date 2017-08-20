@@ -66,6 +66,7 @@ namespace {
 			{
 				v8::Isolate *Isolate = v8q::GetIsolate();
 
+				qRVct();
 				return &v8q::ToLocal( Core_.Core()->Get( v8q::GetContext( Isolate ), v8q::ToString( Key, Isolate ) ), Isolate );
 			}
 		public:
@@ -112,34 +113,40 @@ namespace {
 		};
 
 		class rBuffer_
-		: public rCore_<n4njs::cUBuffer, nodeq::sBuffer> {
+		: public rCore_<n4njs::cUBuffer, nodeq::sBuffer>
+		{
 		protected:
-			virtual void N4NJSToString( str::dString &String ) override;
-			virtual bso::sBool N4NJSIsNull( void ) override;
+			virtual void N4NJSToString( str::dString &String ) override
+			{
+				Core_.ToString( String );
+			}
 		};
 
 		class rCallback_
-		: public n4njs::cUCallback
+		: public rCore_<n4njs::cUCallback, nodeq::sFunction>
 		{
-		private:
-			nodeq::sFunction Core_;
 		protected:
-			virtual void N4NJSAdd(
-				n4njs::eCallbackType_ Type,
-				void *Value ) override;
-			virtual void *N4NJSLaunch( n4njs::eCallbackType_ Type ) override;	// Type is the expected type of the returned value.
-		public:
-			void reset( bso::sBool P = true )
+			virtual void *N4NJSLaunch(
+				n4njs::eArgumentType_ ReturnType,
+				n4njs::dArguments_ &Arguments ) override
 			{
-				tol::reset( P, Core_ );
-			}
-			qCVDTOR( rCallback_ );
-			void Init( v8::Local<v8::Value> Value )
-			{
-				Core_.Init( Value );
+			qRH
+				v8::Local<v8::Value> *Argv = NULL;
+				int Argc = 0;
+			qRB
+				Argc = Arguments.Amount();
+
+				if ( Argc != 0 )
+					qRVct();
+
+				Core_.Launch( Argv, Argc );
+			qRR
+			qRT
+				if ( Argv != NULL )
+					delete Argv;
+			qRE
 			}
 		};
-
 	}
 
 	inline n4njs::cURStream *GetStream_(

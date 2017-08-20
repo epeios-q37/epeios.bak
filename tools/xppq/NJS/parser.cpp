@@ -247,7 +247,7 @@ namespace {
 #endif
 }
 
-void parser::OnReadable( sclnjs::sCaller &Caller )
+void parser::OnData( sclnjs::sCaller &Caller )
 {
 qRH
 	sclnjs::rRStream This;
@@ -258,10 +258,23 @@ qRB
 
 	rRack_ &Rack = *(rRack_ *)This.Get( "_rack" );
 
-	if ( Chunk.IsNull() )
-		Rack.OFlow.Commit();
-	else
-		Rack.OFlow << Chunk;
+	Rack.OFlow << Chunk;
+qRR
+qRT
+qRE
+}
+
+void parser::OnEOD( sclnjs::sCaller &Caller )
+{
+qRH
+	sclnjs::rRStream This;
+qRB
+	tol::Init( This );
+	Caller.GetArgument( This );
+
+	rRack_ &Rack = *(rRack_ *)This.Get( "_rack" );
+
+	Rack.OFlow.Commit();
 qRR
 qRT
 qRE

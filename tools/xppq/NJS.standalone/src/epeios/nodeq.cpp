@@ -41,7 +41,7 @@ void nodeq::sBuffer::Init(
 	v8::Isolate *Isolate )
 {
 	Isolate = v8q::GetIsolate( Isolate );
-	sValue::Init( v8q::ToLocal( node::Buffer::New( Isolate, (char *)Data, Length, ConstFreeCallback_, NULL ) ) );
+	sObject::Init( v8q::ToLocal( node::Buffer::New( Isolate, (char *)Data, Length, ConstFreeCallback_, NULL ) ) );
 }
 
 

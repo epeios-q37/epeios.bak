@@ -65,50 +65,62 @@ namespace sclnjs {
 
 	typedef rBase_<n4njs::cUCallback> rCallback_;
 
-	inline void Add_( n4njs::cUCallback & )
+	inline void Add_( n4njs::dArguments_ &Arguments )
 	{}
 
 	inline void Add_(
-		n4njs::cUCallback &,
+		n4njs::dArguments_ &Arguments,
 		const int &i )
 	{
 		qRVct();
 	}
 
 	inline void Add_(
-		n4njs::cUCallback &,
+		n4njs::dArguments_ &Arguments,
 		const str::dString &String )
 	{
 		qRVct();
 	}
 
 	inline void Add_(
-		n4njs::cUCallback &Callback,
+		n4njs::dArguments_ &Arguments,
 		const str::wString &String )
 	{
-		Add_( Callback, *String );
+		Add_( Arguments, *String );
 	}
+
+	template <typename arg> inline void Add_(
+		n4njs::dArguments_ &Arguments,
+		const arg &Arg )
+	{
+		sclnjs::Add_( C_(), Arg );
+	}
+	template <typename arg, typename ...args> void Add_(
+		n4njs::dArguments_ &Arguments,
+		const arg &Arg,
+		const args &...Args )
+	{
+		Add_( Arguments, Arg );
+		Add_( Arguments, Args... );
+	}
+
 
 	class rCallback
 	: public rCallback_
 	{
-	private:
-		template <typename arg> void Add_( const arg &Arg )
-		{
-			sclnjs::Add_( C_(), Arg );
-		}
-		template <typename arg, typename ...args> void Add_(
-			const arg &Arg,
-			const args &...Args )
-		{
-			Add_( Arg );
-			Add_( Args... );
-		}
 	public:
 		template <typename ...args> void Launch( const args &...Args )
 		{
-			Add_( Args... );
-			C_().Launch( n4njs::ctVoid );
+		qRH
+			n4njs::wArguments_ Arguments;
+		qRB
+			Arguments.Init();
+			Add_( Arguments, Args... );
+
+			C_().Launch( n4njs::atVoid, Arguments );
+		qRR
+		qRT
+		qRE
 		}
 	};
 
@@ -136,10 +148,6 @@ namespace sclnjs {
 		void ToString( str::dString &String )
 		{
 			return C_().ToString( String );
-		}
-		bso::sBool IsNull( void )
-		{
-			return C_().IsNull();
 		}
 	};
 
