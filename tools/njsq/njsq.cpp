@@ -217,14 +217,23 @@ namespace {
 	qRE
 	}
 
+	namespace {
+		void Launch_( n4njs::cAsync &Async )
+		{
+			uvq::Launch( Async );
+		}
+
+		n4njs::gShared Shared_;
+	}
+
 	void Register_( const v8::FunctionCallbackInfo<v8::Value>& Info )
 	{
-		qRFH
-			v8q::sString RawArguments;
+	qRFH
+		v8q::sString RawArguments;
 		str::wString Arguments;
 		str::wString ComponentFilename;
-		qRFB
-			RawArguments.Init( Info[0] );
+	qRFB
+		RawArguments.Init( Info[0] );
 
 		Arguments.Init();
 		RawArguments.Get( Arguments );
@@ -234,10 +243,12 @@ namespace {
 		ComponentFilename.Init();
 		sclmisc::MGetValue( registry::parameter::ComponentFilename, ComponentFilename );
 
-		wrapper::Register( ComponentFilename, Rack_ );
-		qRFR
-			qRFT
-			qRFE( ErrFinal_() )
+		Shared_.Launcher = Launch_;
+
+		wrapper::Register( ComponentFilename, Rack_, Shared_ );
+	qRFR
+	qRFT
+	qRFE( ErrFinal_() )
 	}
 
 	void Launch_( const v8::FunctionCallbackInfo<v8::Value>& Info )

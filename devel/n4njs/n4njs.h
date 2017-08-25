@@ -33,9 +33,23 @@
 # include "err.h"
 # include "n4all.h"
 # include "tol.h"
+# include "uvqdcl.h"
 
 namespace n4njs {
 	using namespace n4all;
+	using uvq::cAsync;
+
+	typedef void( *fAsyncLauncher )(cAsync &);
+
+	struct gShared {
+	public:
+		fAsyncLauncher Launcher;
+		void reset( bso::sBool P = true )
+		{
+			Launcher = NULL;
+		}
+		qCDTOR( gShared );
+	};
 
 	qENUM( Type )
 	{
@@ -43,44 +57,6 @@ namespace n4njs {
 		tStream = t_First,
 		tBuffer,
 		tCallback
-	};
-
-	qENUM( Behavior )
-	{
-		bRelaunch,	// Relaunches 'N4NJSWork'.
-		bExitAndDelete,	// Exits and calls 'delete' on the object, which have to be instantiated with 'new'.
-		bExitOnly,	// Exits only.
-		b_amount,
-		b_Undefined
-	};
-
-	class cAsync {
-	protected:
-		// Note to 'v8' user : you can NOT access any of the 'v8' data from this method.
-		virtual void N4NJSWork( void ) = 0;
-		// Note to 'v8' user : you CAN access any of the 'v8' data from this method.
-		virtual eBehavior N4NJSAfter( void ) = 0;
-	public:
-		qCALLBACK( Async );
-		void Work( void )
-		{
-			return N4NJSWork();
-		}
-		eBehavior After( void )
-		{
-			return N4NJSAfter();
-		}
-	};
-
-	class cUAsyncLauncher {
-	protected:
-		virtual void N4NJSLaunch( cAsync &Async ) = 0;
-	public:
-		qCALLBACK( UAsyncLauncher );
-		void Launch( cAsync &Async )
-		{
-			return N4NJSLaunch( Async );
-		}
 	};
 
 	// Base of the callbacks which will be defined upstream.

@@ -43,6 +43,7 @@ namespace n4allw {
 	bso::sBool Register(
 		const fnm::rName &ComponentFilename,
 		sclmisc::sRack &Rack,
+		void *UP,
 		qRPD );
 
 	void *GetFunction( sdr::sRow Row );

@@ -21,6 +21,7 @@
 # define WRAPPER__INC
 
 # include "n4allw.h"
+# include "n4njs.h"
 
 // Note to developer : include 'h:\hg\NJSIncludeDirectories.props' in the '.vcxproj'.
 # include <node.h>
@@ -29,7 +30,16 @@ namespace wrapper {
 	using n4allw::SetLauncher;
 	using n4allw::GetLauncherInfo;
 	using n4allw::DeleteLauncher;
-	using n4allw::Register;
+
+	inline bso::sBool Register(
+		const fnm::rName &ComponentFilename,
+		sclmisc::sRack &Rack,
+		n4njs::gShared &Shared,
+		qRPD )
+	{
+		return n4allw::Register( ComponentFilename, Rack, &Shared, qRP );
+	}
+
 
 	void Launch( const v8::FunctionCallbackInfo<v8::Value>& Info );
 }

@@ -85,7 +85,7 @@ qRFB
 
 	Registrar.Init( *RawRegistrar );
 
-	scln4a::SCLN4ARegister( Registrar );
+	scln4a::SCLN4ARegister( Registrar, Data->UP );
 qRFR
 	if ( Launcher != NULL )
 		delete Launcher;

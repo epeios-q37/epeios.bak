@@ -50,7 +50,7 @@ namespace {
 	}
 }
 
-void scln4a::SCLN4ARegister( scln4a::sRegistrar &Registrar )
+void sclnjs::SCLNJSRegister( scln4a::sRegistrar &Registrar )
 {
 	Registrar.Register( ReturnArgument_ );
 	Registrar.Register( parser::OnData, parser::OnEOD, parser::Parse );

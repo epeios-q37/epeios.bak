@@ -159,22 +159,22 @@ namespace {
 		}
 	};
 
-	typedef n4njs::cAsync cAsync_;
+	typedef sclnjs::cAsync cAsync_;
 
 	class rRackAsyncCallback_
 	: public rRack_,
   	  public cAsync_ {
 	protected:
-		void N4NJSWork( void ) override
+		void SCLNJSWork( void ) override
 		{
 			return rRack_::Read();
 		}
-		n4njs::eBehavior N4NJSAfter( void ) override
+		sclnjs::eBehavior SCLNJSAfter( void ) override
 		{
 			if ( rRack_::SendToCallback() )
-				return n4njs::bExitAndDelete;
+				return sclnjs::bExitAndDelete;
 			else
-				return n4njs::bRelaunch;
+				return sclnjs::bRelaunch;
 		}
 	public:
 		void reset( bso::sBool P = true )
@@ -286,7 +286,6 @@ qRH
 	sclnjs::rRStream Source;
 	sclnjs::rCallback Callback;
 	rRackAsyncCallback_ *Rack = NULL;
-	sclnjs::rAsyncLauncher Launcher;
 qRB
 	Rack = new rRackAsyncCallback_;
 
@@ -297,7 +296,7 @@ qRB
 	Caller.GetArgument( Source, Callback );
 	Rack->Init( Callback );
 
-	Source.Set( "_rack", &Rack );
+	Source.Set( "_rack", Rack );
 
 #if 1
 //	Source.OnReadable( OnReadable_ );
@@ -307,8 +306,7 @@ qRB
 	Source.OnEnd( OnEnd_ );
 #endif
 
-	Launcher.Init();
-	Launcher.Launch( *Rack );
+	sclnjs::Launch( *Rack );
 
 	Rack = NULL;
 qRR

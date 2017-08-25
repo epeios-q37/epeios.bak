@@ -86,4 +86,31 @@ qRE
 	return Flow;
 }
 
+namespace {
+	n4njs::fAsyncLauncher Launcher_ = NULL;
+}
+
+void scln4a::SCLN4ARegister(
+	sRegistrar &Registrar,
+	void *UP )
+{
+	const n4njs::gShared &Shared = *( const n4njs::gShared* )UP;
+
+	if ( Shared.Launcher == NULL )
+		qRFwk();
+
+	Launcher_ = Shared.Launcher;
+
+	sclnjs::SCLNJSRegister( Registrar );
+}
+
+void sclnjs::Launch( cAsync &Async )
+{
+	return Launcher_( Async );
+}
+
+
+
+
+
 

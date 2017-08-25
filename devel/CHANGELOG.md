@@ -1,5 +1,9 @@
 # *Epeios* changelog
 
+2017-08-25 :
+- UVQ(DCL) :
+  - Moving the *UVQ* header ti *UVQDCL*.
+
 2017-08-20 :
 - NODEQ :
   - `sBuffer` is now base on `sObject` instead of `sValue`.

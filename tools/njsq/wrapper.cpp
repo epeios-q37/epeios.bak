@@ -59,15 +59,11 @@ namespace {
 			{
 				v8::Isolate *Isolate = v8q::GetIsolate();
 
-				if ( !v8q::Expose( Core_.Core()->Set( v8q::GetContext(), v8q::ToString( Key, Isolate ), *( v8::Local<v8::Value> * )Value ) ) )
-					qRFwk();
+				Core_.Set( Key, nodeq::sExternal<void>( Value ) );
 			}
 			virtual void *N4NJSGet( const char *Key ) override
 			{
-				v8::Isolate *Isolate = v8q::GetIsolate();
-
-				qRVct();
-				return &v8q::ToLocal( Core_.Core()->Get( v8q::GetContext( Isolate ), v8q::ToString( Key, Isolate ) ), Isolate );
+				return nodeq::sExternal<void>( Core_.Get( Key ) ).Value();
 			}
 		public:
 			void reset( bso::sBool P = true )

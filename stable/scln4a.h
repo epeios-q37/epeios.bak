@@ -149,7 +149,9 @@ namespace scln4a {
 		}
 	};
 
-	void SCLN4ARegister( sRegistrar &Registrar );	// To define by user.
+	void SCLN4ARegister(
+		sRegistrar &Registrar,
+		void *UP );	// To define by user.
 	void SCLN4AInfo( txf::sOFlow &Flow );	// To define by user.
 
 	extern const char *SCLN4AProductVersion;	// To define by user.

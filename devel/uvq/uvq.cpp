@@ -30,14 +30,14 @@
 # include "v8q.h"
 #endif
 
-
 using namespace uvq;
+
 namespace {
 	bso::sUInt Amount_ = 0;
 	namespace {
 		struct sWork_ {
 			uv_work_t Request;
-			cASync *Callbacks;
+			cAsync *Callbacks;
 			tht::rBlocker Blocker;
 			bso::sBool Error;
 		};
@@ -126,7 +126,7 @@ namespace {
 	}
 }
 
-void uvq::Launch( cASync &Callbacks )
+void uvq::Launch( cAsync &Callbacks )
 {
 	sWork_ *Work = new sWork_;
 

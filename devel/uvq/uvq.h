@@ -30,38 +30,6 @@
 
 # include "err.h"
 # include "tol.h"
-
-namespace uvq {
-
-	qENUM( Behavior ) {
-		bRelaunch,	// Relaunches 'UVWork'.
-		bExitAndDelete,	// Exits and calls 'delete' on the object, which have to be instantiated with 'new'.
-		bExitOnly,	// Exits only.
-		b_amount,
-		b_Undefined
-	};
-
-	class cASync {
-	protected:
-		// Note to 'v8' user : you can NOT access any of the 'v8' data from this method.
-		virtual void UVQWork( void ) = 0;
-		// Note to 'v8' user : you CAN access any of the 'v8' data from this method.
-		virtual eBehavior UVQAfter( void ) = 0;
-	public:
-		qCALLBACK( ASync );
-		void Work( void )
-		{
-			return UVQWork();
-		}
-		eBehavior After( void )
-		{
-			return UVQAfter();
-		}
-	};
-
-	void Launch( cASync &Callbacks );
-
-	bso::sUInt AmountPending( void );
-}
+# include "uvqdcl.h"
 
 #endif

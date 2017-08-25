@@ -17,19 +17,9 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-// From libuv
+#define UVQDCL_COMPILATION_
 
-#ifndef UVQ_INC_
-# define UVQ_INC_
+#include "uvqdcl.h"
 
-# define UVQ_NAME		"UVQ"
+using namespace uvq;
 
-# if defined( E_DEBUG ) && !defined( UVQ_NODBG )
-#  define UVQ_DBG
-# endif
-
-# include "err.h"
-# include "tol.h"
-# include "uvqdcl.h"
-
-#endif

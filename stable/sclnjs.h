@@ -30,9 +30,21 @@
 
 # include "n4njs.h"
 # include "scln4a.h"
+# include "uvqdcl.h"
+
+// Wrapping to 'UVQ' library;
+# define SCLNJSWork		UVQWork
+# define SCLNJSAfter	UVQAfter
 
 namespace sclnjs {
+	using n4njs::cAsync;
 	using scln4a::sCaller;
+	using scln4a::sRegistrar;
+	using uvq::eBehavior;
+
+	qCDEF( eBehavior, bExitAndDelete, uvq::bExitAndDelete );
+	qCDEF( eBehavior, bExitOnly, uvq::bExitOnly );
+	qCDEF( eBehavior, bRelaunch, uvq::bRelaunch );
 
 	template <typename callback> class rBase_
 	{
@@ -162,18 +174,9 @@ namespace sclnjs {
 		}
 	};
 
-	typedef rCore_<n4njs::cUAsyncLauncher> rAsyncLauncher_;
+	void Launch( cAsync &Async );
 
-	class rAsyncLauncher
-	: public rAsyncLauncher_
-	{
-	public:
-		void Launch( n4njs::cAsync &Async )
-		{
-			C_().Launch( Async );
-		}
-	};
-
+	void SCLNJSRegister( sRegistrar &Registrar );	// To define by user
 }
 
 // Declaration of the handling of it own types.

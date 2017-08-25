@@ -95,7 +95,8 @@ namespace {
 	bso::bool__ Register_(
 		const fnm::rName &ComponentFilename,
 		n4all::cRegistrar &Registrar,
-		sclmisc::sRack &Rack )
+		sclmisc::sRack &Rack,
+		void *UP )
 	{
 		bso::bool__ Success = false;
 	qRH
@@ -105,7 +106,7 @@ namespace {
 	qRB
 		Location.Init();
 		fnm::GetLocation( ComponentFilename, Location );
-		Data.Init( Rack, Location, str::wString() );
+		Data.Init( Rack, Location, str::wString(), UP );
 
 		//		cio::COut << __LOC__ << AddonFilename << txf::nl << txf::commit;
 
@@ -132,6 +133,7 @@ namespace {
 bso::sBool n4allw::Register(
 	const fnm::rName &ComponentFilename,
 	sclmisc::sRack &Rack,
+	void *UP,
 	qRPN )
 {
 	sRegistrar_ Registrar;
@@ -140,7 +142,7 @@ bso::sBool n4allw::Register(
 
 	Registrar.Init();
 
-	if ( !Register_( ComponentFilename, Registrar, Rack ) ) {
+	if ( !Register_( ComponentFilename, Registrar, Rack, UP ) ) {
 		if ( qRP == err::hThrowException )
 			qRFwk();
 		return false;
