@@ -95,9 +95,9 @@ namespace {
 			tol::reset( P, IFlow_, XFlow_, Parser_, Content_, Callback_, Relay_, First_, Error );
 		}
 		qCVDTOR( rRack_ );
-		void Init( sclnjs::rCallback &Callback )
+		void Init( sclnjs::rCallback *Callback )
 		{
-			Callback_ = &Callback;
+			Callback_ = Callback;
 			tol::Init( Relay_, Content_, Error );
 			OFlow.Init( Relay_.Out );
 			IFlow_.Init( Relay_.In );
@@ -182,7 +182,7 @@ namespace {
 			rRack_::reset( P );
 		}
 		qCVDTOR( rRackAsyncCallback_ );
-		void Init( sclnjs::rCallback &Callback )
+		void Init( sclnjs::rCallback *Callback )
 		{
 			rRack_::Init( Callback );
 		}
@@ -284,7 +284,7 @@ void parser::Parse( sclnjs::sCaller &Caller )
 {
 qRH
 	sclnjs::rRStream Source;
-	sclnjs::rCallback Callback;
+	sclnjs::rCallback *Callback = NULL;
 	rRackAsyncCallback_ *Rack = NULL;
 qRB
 	Rack = new rRackAsyncCallback_;
@@ -292,8 +292,13 @@ qRB
 	if ( Rack == NULL )
 		qRGnr();
 
-	tol::Init( Source, Callback );
-	Caller.GetArgument( Source, Callback );
+	Callback = new sclnjs::rCallback;
+
+	if ( Callback == NULL )
+		qRGnr();
+
+	tol::Init( Source, *Callback );
+	Caller.GetArgument( Source, *Callback );
 	Rack->Init( Callback );
 
 	Source.Set( "_rack", Rack );
@@ -307,11 +312,12 @@ qRB
 #endif
 
 	sclnjs::Launch( *Rack );
-
-	Rack = NULL;
 qRR
-qRT
 	if ( Rack != NULL )
 		delete Rack;
+
+	if ( Callback != NULL )
+		delete Callback;
+qRT
 qRE
 }

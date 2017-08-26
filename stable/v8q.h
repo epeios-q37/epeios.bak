@@ -62,14 +62,14 @@ namespace v8q {
 		v8::Isolate *Isolate = NULL )
 	{
 		v8::Local<v8::String> Result;
-		qRH
-			qCBUFFERr Buffer;
-		qRB
-			Result = ToString( String.Convert( Buffer ) );
-		qRR
-			qRT
-			qRE
-			return Result;
+	qRH
+		qCBUFFERr Buffer;
+	qRB
+		Result = ToString( String.Convert( Buffer ) );
+	qRR
+	qRT
+	qRE
+		return Result;
 	}
 
 	template <typename arg> inline void Set_(
@@ -105,13 +105,13 @@ namespace v8q {
 		int Position,
 		const str::dString &String )
 	{
-		qRH
-			TOL_CBUFFER___ Buffer;
-		qRB
-			Set_( Isolate, argv, Position, String.Convert( Buffer ) );
-		qRR
-			qRT
-			qRE
+	qRH
+		TOL_CBUFFER___ Buffer;
+	qRB
+		Set_( Isolate, argv, Position, String.Convert( Buffer ) );
+	qRR
+	qRT
+	qRE
 	}
 
 	inline void Set_(
@@ -233,37 +233,44 @@ namespace v8q {
 		return ToLocal( ToLocal( v8::Script::Compile( Context, ToString( Script, Isolate ) ), Isolate )->Run( Context ), Isolate );
 	}
 
-	template <typename item> class sData_ {
+	template <typename item> class sData_
+	{
 	private:
-		v8::Local<item> Core_;
+		v8::Persistent<item> Core_;
 	protected:
-		void Init( v8::Local<v8::Value> Value )
+		void Init(
+			v8::Local<v8::Value> Value,
+			v8::Isolate *Isolate = NULL )
 		{
-			Core_ = v8::Local<item>::Cast( Value );
+//			Core_ = v8::Local<item>::Cast( Value );
+			Core_.Reset( GetIsolate( Isolate ), v8::Local<item>::Cast( Value ) );
 		}
 	public:
 		void reset( bso::sBool P = true )
 		{
-			Core_.Clear();
+			Core_.Reset();
 		}
 		qCDTOR( sData_ );
 		void Init( void )
 		{
-			Core_.Clear();
+			Core_.Reset();
 		}
-		v8::Local<item> Core( void ) const
+		v8::Local<item> Core( v8::Isolate *Isolate = NULL ) const
 		{
-			return Core_;
+			return Core_.Get( GetIsolate( Isolate ) );
 		}
 	};
 
 	template <typename item> class sValue_
-		: public sData_<item> {
+	: public sData_<item>
+	{
 	public:
 		qCDTOR( sValue_ );
-		sValue_( v8::Local<v8::Value> Value )
+		sValue_(
+			v8::Local<v8::Value> Value,
+			v8::Isolate *Isolate = NULL )
 		{
-			sData_<item>::Init( Value );
+			sData_<item>::Init( Value, Isolate );
 		}
 		using sData_<item>::Init;
 		bso::sBool IsNull( void ) const
@@ -278,7 +285,8 @@ namespace v8q {
 	template <typename item> class sFunction_;
 
 	template <typename item> class sObject_
-		: public sValue_<item> {
+	: public sValue_<item>
+	{
 	protected:
 		v8::Local<v8::Value> Launch_(
 			const char *Method,
@@ -292,21 +300,30 @@ namespace v8q {
 		}
 	public:
 		qCDTOR( sObject_ );
-		sObject_( sValue Value )
+		sObject_(
+			sValue Value,
+			v8::Isolate *Isolate = NULL )
 		{
-			Init( Value.Core() );
+			Init( Value.Core(), Isolate );
 		}
-		sObject_( v8::Local<v8::Value> Value )
+		sObject_(
+			v8::Local<v8::Value> Value,
+			v8::Isolate *Isolate = NULL )
 		{
-			Init( Value );
+			Init( Value, Isolate );
 		}
-		using sValue_<item>::Init;
-		void Init( v8::Local<v8::Value> Value )
+		void Init( void )
+		{
+			sValue_<item>::Init();
+		}
+		void Init(
+			v8::Local<v8::Value> Value,
+			v8::Isolate *Isolate = NULL )
 		{
 			if ( !Value->IsObject() )
 				qRFwk();
 
-			sValue_<item>::Init( Value );
+			sValue_<item>::Init( Value, Isolate );
 		}
 		v8::Local<v8::Value> Get(
 			const char *Key,
@@ -402,24 +419,30 @@ namespace v8q {
 	typedef sObject_<v8::Object> sObject;
 
 	template <typename item> class sFunction_
-		: public sObject_<item> {
+	: public sObject_<item>
+	{
 	public:
 		qCDTOR( sFunction_ );
-		sFunction_( v8::FunctionCallback Callback )
+		sFunction_(
+			v8::FunctionCallback Callback,
+			v8::Isolate *Isolate = NULL )
 		{
-			Init( Callback );
+			Init( Callback, Isolate );
 		}
-		sFunction_( v8::Local<v8::Value> Value )
+		sFunction_(
+			v8::Local<v8::Value> Value,
+			v8::Isolate *Isolate = NULL )
 		{
-			Init( Value );
+			Init( Value, Isolate );
 		}
-		using sObject_<item>::Init;
-		void Init( v8::Local<v8::Value> Value )
+		void Init(
+			v8::Local<v8::Value> Value,
+			v8::Isolate *Isolate = NULL )
 		{
 			if ( !Value->IsFunction() )
 				qRFwk();
 
-			sObject_<item>::Init( Value );
+			sObject_<item>::Init( Value, Isolate );
 		}
 		void Init(
 			v8::FunctionCallback Function,
@@ -461,7 +484,8 @@ namespace v8q {
 	template <typename item> qTCLONE( sPrimitive_<item>, sName_ );
 
 	template <typename item> class sString_
-		: public sName_<item> {
+	: public sName_<item>
+	{
 	public:
 		qCDTOR( sString_ );
 		sString_(
@@ -476,17 +500,24 @@ namespace v8q {
 		{
 			Init( String, Isolate );
 		}
-		sString_( v8::Local<v8::Value> Value )
+		sString_(
+			v8::Local<v8::Value> Value,
+			v8::Isolate *Isolate = NULL )
 		{
-			Init( Value );
+			Init( Value, Isolate );
 		}
-		using sName_<item>::Init;
-		void Init( v8::Local<v8::Value> Value )
+		void Init( void )
+		{
+			sName_<item>::Init();
+		}
+		void Init(
+			v8::Local<v8::Value> Value,
+			v8::Isolate *Isolate = NULL )
 		{
 			if ( !Value->IsString() )
 				qRFwk();
 
-			sName_<item>::Init( Value );
+			sName_<item>::Init( Value, Isolate );
 		}
 		void Init(
 			const char *String,
@@ -521,27 +552,44 @@ namespace v8q {
 	typedef sString_<v8::String> sString;
 
 	template <typename item, typename type> class sExternal_
-		: public sValue_<item> {
+	: public sValue_<item>
+	{
 	public:
 		qCDTOR( sExternal_ );
-		sExternal_( v8::Local<v8::Value> Value )
+		sExternal_(
+			v8::Local<v8::Value> Value,
+			v8::Isolate *Isolate = NULL )
 		{
-			Init( Value );
+			Init( Value, Isolate );
 		}
-		sExternal_( sValue &Value )
+		sExternal_(
+			sValue &Value,
+			v8::Isolate *Isolate = NULL )
 		{
-			Init( Value.Core() );
+			Init( Value.Core(), Isolate );
 		}
-		sExternal_( const type* External )
+		sExternal_(
+			const type* External,
+			v8::Isolate *Isolate = NULL )
 		{
-			Init( External );
+			Init( External, Isolate );
 		}
-		using sValue_<item>::Init;
+		void Init( void )
+		{
+			sValue_<item>::Init();
+		}
+		void Init(
+			v8::Local<v8::Value> Value,
+			v8::Isolate *Isolate = NULL )
+		{
+			sValue_<item>::Init( Value, Isolate );
+		}
 		void Init(
 			const type *External,
 			v8::Isolate *Isolate = NULL )
 		{
-			sValue_<item>::Init( v8::External::New( GetIsolate( Isolate ), (void *)External ) );
+			Isolate = GetIsolate( Isolate );
+			Init( v8::External::New( GetIsolate( Isolate ), (void *)External ), Isolate );
 		}
 		type *Value( void ) const
 		{
@@ -550,47 +598,61 @@ namespace v8q {
 	};
 
 	template <typename type> class sExternal
-		: public sExternal_<qCOVER2( v8::External, type )> {
+	: public sExternal_<qCOVER2( v8::External, type )>
+	{
 	public:
-		sExternal( v8::Local<v8::Value> Value )
+		sExternal(
+			v8::Local<v8::Value> Value,
+			v8::Isolate *Isolate = NULL )
 		{
-			Init( Value );
+			Init( Value, Isolate );
 		}
-		sExternal( sValue &Value )
+		sExternal(
+			sValue &Value,
+			v8::Isolate *Isolate = NULL )
 		{
-			Init( Value.Core() );
+			Init( Value.Core(), Isolate );
 		}
-		sExternal( const type* External )
+		sExternal(
+			const type* External,
+			v8::Isolate *Isolate = NULL )
 		{
-			Init( External );
+			Init( External, Isolate );
 		}
 	};
 
 	template <typename item> class sBoolean_
-		: public sPrimitive_<item> {
+	: public sPrimitive_<item>
+	{
 	public:
 		qCDTOR( sBoolean_ );
-		sBoolean_( v8::Local<v8::Value> Value )
+		sBoolean_(
+			v8::Local<v8::Value> Value,
+			v8::Isolate *Isolate = NULL )
 		{
-			Init( Value );
+			Init( Value, Isolate );
 		}
-		sBoolean_( sValue &Value )
+		sBoolean_(
+			sValue &Value,
+			v8::Isolate *Isolate = NULL )
 		{
-			Init( Value.Core() );
+			Init( Value.Core(), Isolate );
 		}
-		using sPrimitive_<item>::Init;
-		void Init( v8::Local<v8::Value> Value )
+		void Init(
+			v8::Local<v8::Value> Value,
+			v8::Isolate *Isolate = NULL )
 		{
 			if ( !Value->IsBoolean() )
 				qRFwk();
 
-			sPrimitive_<item>::Init( Value );
+			sPrimitive_<item>::Init( Value, Isolate );
 		}
 		void Init(
 			bool Boolean,
 			v8::Isolate *Isolate = NULL )
 		{
-			Init( v8::Boolean::New( GetIsolate( Isolate ), Boolean ) );
+			Isolate = GetIsolate( Isolate );
+			Init( v8::Boolean::New( Isolate, Boolean ), Isolate );
 		}
 		bso::sBool operator *( void )
 		{
@@ -601,24 +663,30 @@ namespace v8q {
 	typedef sBoolean_<v8::Boolean> sBoolean;
 
 	template <typename item> class sNumber_
-		: public sPrimitive_<item> {
+	: public sPrimitive_<item>
+	{
 	public:
 		qCDTOR( sNumber_ );
-		sNumber_( v8::Local<v8::Value> Value )
+		sNumber_(
+			v8::Local<v8::Value> Value,
+			v8::Isolate *Isolate = NULL )
 		{
-			Init( Value );
+			Init( Value, Isolate );
 		}
-		sNumber_( sValue &Value )
+		sNumber_(
+			sValue &Value,
+			v8::Isolate *Isolate = NULL )
 		{
-			Init( Value.Core() );
+			Init( Value.Core(), Isolate );
 		}
-		using sPrimitive_<item>::Init;
-		void Init( v8::Local<v8::Value> Value )
+		void Init(
+			v8::Local<v8::Value> Value,
+			v8::Isolate *Isolate = NULL )
 		{
 			if ( !Value->IsNumber() )
 				qRFwk();
 
-			sPrimitive_<item>::Init( Value );
+			sPrimitive_<item>::Init( Value, Isolate );
 		}
 		void Init(
 			double Number,

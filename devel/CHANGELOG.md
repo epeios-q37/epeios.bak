@@ -2,7 +2,7 @@
 
 2017-08-25 :
 - UVQ(DCL) :
-  - Moving the *UVQ* header ti *UVQDCL*.
+  - Moving the *UVQ* header to *UVQDCL*.
 
 2017-08-20 :
 - NODEQ :

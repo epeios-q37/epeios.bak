@@ -77,21 +77,36 @@ namespace sclnjs {
 
 	typedef rBase_<n4njs::cUCallback> rCallback_;
 
+	inline void TestAndAdd_(
+		n4njs::dArguments_ &Arguments,
+		n4njs::eArgumentType_ Type,
+		void *Value )
+	{
+		n4njs::sArgument_ Argument;
+
+		if ( Value == NULL )
+			qRFwk();
+
+		Argument.Init( Type, Value );
+
+		Arguments.Add( Argument );
+	}
+
 	inline void Add_( n4njs::dArguments_ &Arguments )
 	{}
 
 	inline void Add_(
 		n4njs::dArguments_ &Arguments,
-		const int &i )
+		const int &Int )
 	{
-		qRVct();
+		TestAndAdd_( Arguments, n4njs::atInt, new int( Int ) );
 	}
 
 	inline void Add_(
 		n4njs::dArguments_ &Arguments,
 		const str::dString &String )
 	{
-		qRVct();
+		TestAndAdd_( Arguments, n4njs::atString, new str::wString( String ) );
 	}
 
 	inline void Add_(

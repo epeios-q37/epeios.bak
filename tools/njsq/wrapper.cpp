@@ -81,21 +81,21 @@ namespace {
 			int Index,
 			const v8::FunctionCallbackInfo<v8::Value> &Info )
 		{
-			host *Stream = NULL;
+			host *Host = NULL;
 		qRH
 		qRB
-			Stream = new host;
+			Host = new host;
 
-			if ( Stream == NULL )
+			if ( Host == NULL )
 				qRAlc();
 
-			Stream->Init( Info[Index] );
+			Host->Init( Info[Index] );
 		qRR
-			if ( Stream != NULL )
-				delete Stream;
+			if ( Host != NULL )
+				delete Host;
 		qRT
 		qRE
-			return Stream;
+			return Host;
 		}
 
 		class rRStream_
@@ -118,6 +118,72 @@ namespace {
 			}
 		};
 
+		namespace {
+			namespace {
+				namespace {
+					void Set_(
+						v8::Local<v8::Value> &Argv,
+						int *Value )
+					{
+						nodeq::sNumber Number;
+
+						Number.Init( *Value );
+
+						Argv = Number.Core();
+
+						delete Value;
+					}
+					void Set_(
+						v8::Local<v8::Value> &Argv,
+						str::wString *Value )
+					{
+					qRH
+						 qCBUFFERr Buffer;
+					qRB
+						Argv = v8q::ToString( Value->Convert( Buffer ) );
+					qRR
+					qRT
+//						delete Value;
+					qRE
+					}
+				}
+				void Set_(
+					v8::Local<v8::Value> &Argv,
+					const n4njs::sArgument_ &Argument )
+				{
+					if ( Argument.Value == NULL )
+						qRGnr();
+
+					switch ( Argument.Type ) {
+					case n4njs::atInt:
+						Set_( Argv, (int *)Argument.Value );
+						break;
+					case n4njs::atString:
+						Set_( Argv, (str::wString *)Argument.Value );
+						break;
+					default:
+						qRGnr();
+						break;
+					}
+				}
+			}
+
+			void Fill_(
+				v8::Local<v8::Value> *&Argv,
+				const n4njs::dArguments_ &Arguments )
+			{
+				sdr::sRow Row = Arguments.First();
+				int Index = 0;
+
+				while ( Row != qNIL ) {
+					Set_( Argv[Index++], Arguments( Row ) );
+
+					Row = Arguments.Next( Row );
+				}
+			}
+
+		}
+
 		class rCallback_
 		: public rCore_<n4njs::cUCallback, nodeq::sFunction>
 		{
@@ -132,8 +198,12 @@ namespace {
 			qRB
 				Argc = Arguments.Amount();
 
-				if ( Argc != 0 )
-					qRVct();
+				Argv = new v8::Local<v8::Value>[Argc];
+
+				if ( Argv == NULL )
+					qRAlc();
+
+				Fill_( Argv, Arguments );
 
 				Core_.Launch( Argv, Argc );
 			qRR

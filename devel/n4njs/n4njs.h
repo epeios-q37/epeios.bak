@@ -109,6 +109,8 @@ namespace n4njs {
 	qENUM( ArgumentType_ )
 	{
 		atVoid,	// Only used to specify that the function does not return a value.
+		atInt,
+		atString,
 		at_amount,
 		at_Undefined
 	};
@@ -123,10 +125,12 @@ namespace n4njs {
 			Value = NULL;
 		}
 		qCDTOR( sArgument_ );
-		void Init( void )
+		void Init(
+			eArgumentType_ Type = at_Undefined,
+			void *Value = NULL )
 		{
-			Type = at_Undefined;
-			Value = NULL;
+			this->Type = Type;
+			this->Value = Value;
 		}
 	};
 
