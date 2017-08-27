@@ -66,5 +66,5 @@ var tokens = {
 
 module.exports = njsq;
 // module.exports.Stream = Stream;
-module.exports.parse = (stream, callback) => { stream.on('readable', () => { var chunk = stream.read(); if ( chunk == null ) njsq._wrapper( 2, stream ); else njsq._wrapper( 1, stream, chunk ); }); njsq._wrapper(3, stream, callback) };
+module.exports.parse = (stream, callback) => { stream.on('readable', () => { var chunk = stream.read(); if ( chunk == null ) njsq._wrapper( 2, stream ); else njsq._wrapper(1, stream, chunk); } ); njsq._wrapper(3, stream, callback) };
 module.exports.tokens = tokens;

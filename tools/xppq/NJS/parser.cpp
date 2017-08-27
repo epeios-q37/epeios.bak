@@ -258,7 +258,7 @@ qRB
 
 	rRack_ &Rack = *(rRack_ *)This.Get( "_rack" );
 
-	Rack.OFlow << Chunk;
+	Rack.OFlow << Chunk << txf::commit;
 qRR
 qRT
 qRE

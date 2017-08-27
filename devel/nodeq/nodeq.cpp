@@ -26,18 +26,25 @@
 
 using namespace nodeq;
 
-void nodeq::sBuffer::ToString( str::dString &String ) const
+void nodeq::sBuffer::ToString( str::dString &Target ) const
 {
 qRH
+	sLocalString String;
 	char *Buffer = NULL;
 	int Size = 0;
 qRB
+	String.Init();
+	ToString( String );
+
 	Buffer = (char *)malloc ( Size = String.Size() + 1 );
 
 	if ( Buffer == NULL )
 		qRAlc();
 
-	String.Append( Buffer );
+	if ( Size != String.Get( Buffer ) )
+		qRFwk();
+
+	Target.Append( Buffer );
 qRR
 qRT
 	if ( Buffer != NULL )
@@ -61,7 +68,7 @@ void nodeq::sBuffer::Init(
 	v8::Isolate *Isolate )
 {
 	Isolate = v8q::GetIsolate( Isolate );
-	sObject::Init( v8q::ToLocal( node::Buffer::New( Isolate, (char *)Data, Length, ConstFreeCallback_, NULL ) ) );
+	rPersistentObject::Init( v8q::ToLocal( node::Buffer::New( Isolate, (char *)Data, Length, ConstFreeCallback_, NULL ) ) );
 }
 
 
@@ -70,7 +77,7 @@ txf::text_oflow__ &operator <<(
 	const sBuffer &Buffer)
 {
 qRH
-	sString String;
+	sLocalString String;
 qRB
 	String.Init();
 	Buffer.ToString( String );

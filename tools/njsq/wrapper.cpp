@@ -36,7 +36,7 @@ namespace {
 		str::dString &Value )
 	{
 		qRH
-			v8q::sString String;
+			v8q::sLocalString String;
 		qRB
 			String.Init( Info[Index] );
 
@@ -57,13 +57,19 @@ namespace {
 				const char *Key,
 				void *Value ) override
 			{
-				v8::Isolate *Isolate = v8q::GetIsolate();
+				nodeq::rPersistentExternal<void> External;
 
-				Core_.Set( Key, nodeq::sExternal<void>( Value ) );
+				External.Init( Value );
+
+				Core_.Set( Key, External );
 			}
 			virtual void *N4NJSGet( const char *Key ) override
 			{
-				return nodeq::sExternal<void>( Core_.Get( Key ) ).Value();
+				nodeq::rPersistentExternal<void> External;
+
+				External.Init( Core_.Get( Key ) );
+
+				return External.Value();
 			}
 		public:
 			void reset( bso::sBool P = true )
@@ -125,7 +131,7 @@ namespace {
 						v8::Local<v8::Value> &Argv,
 						int *Value )
 					{
-						nodeq::sNumber Number;
+						nodeq::sLocalNumber Number;
 
 						Number.Init( *Value );
 
@@ -185,7 +191,7 @@ namespace {
 		}
 
 		class rCallback_
-		: public rCore_<n4njs::cUCallback, nodeq::sFunction>
+		: public rCore_<n4njs::cUCallback, nodeq::rPersistentFunction>
 		{
 		protected:
 			virtual void *N4NJSLaunch(
@@ -241,7 +247,11 @@ void SetReturnValue_(
 	const v8::FunctionCallbackInfo<v8::Value> &Info,
 	const str::dString &Value )
 {
-	Info.GetReturnValue().Set( v8q::sString( Value ).Core() );
+	v8q::sLocalString String;
+
+	String.Init( Value );
+
+	Info.GetReturnValue().Set( String.Core() );
 }
 
 namespace {

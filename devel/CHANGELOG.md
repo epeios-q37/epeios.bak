@@ -1,5 +1,14 @@
 # *Epeios* changelog
 
+2017-08-27 :
+- V8Q :
+    - `sData_`and related exists now as persistent (use of `v8::Persistent`) and *local* (use of `v8::Local`).
+
+2017-08-26 :
+- V8Q :
+  - `sData_` and related becomes persistent (use of `v8::Persistent` instead of `v8::Local`).
+  - Adding missing `Isolate` default parameters.
+
 2017-08-25 :
 - UVQ(DCL) :
   - Moving the *UVQ* header to *UVQDCL*.

@@ -62,12 +62,15 @@ namespace {
 	{
 	qRH
 		str::wString Info;
+		v8q::sLocalString String;
 	qRB
 		Info.Init();
 
 		GetWrapperInfo_( Info );
 
-		Args.GetReturnValue().Set( v8q::sString( Info ).Core() );
+		String.Init( Info );
+
+		Args.GetReturnValue().Set( String.Core() );
 	qRR
 	qRT
 	qRE
@@ -77,13 +80,16 @@ namespace {
 	{
 	qRH
 		str::wString Info;
+		v8q::sLocalString String;
 	qRB
 		Info.Init();
 
 		if ( !wrapper::GetLauncherInfo( Info ) )
 			sclmisc::GetBaseTranslation( "NoRegisteredComponent", Info );
 
-		Args.GetReturnValue().Set( v8q::sString( Info ).Core() );
+		String.Init( Info );
+
+		Args.GetReturnValue().Set( String.Core() );
 	qRR
 	qRT
 	qRE
@@ -94,9 +100,13 @@ namespace {
 
 	void InitWithModuleFilename_(
 		v8::Local<v8::Value> Module,
-		v8q::sString &Filename )
+		v8q::sLocalString &Filename )
 	{
-		Filename.Init( v8q::sObject( Module ).Get( "filename" ) );
+		nodeq::sLocalObject Object;
+
+		Object.Init( Module );
+
+		Filename.Init( Object.Get( "filename" ) );
 	}
 
 	void GetModuleFilename_(
@@ -104,7 +114,7 @@ namespace {
 		str::dString &Filename )
 	{
 	qRH
-		v8q::sString V8Filename;
+		v8q::sLocalString V8Filename;
 	qRB
 		InitWithModuleFilename_( Module, V8Filename );
 
@@ -118,7 +128,11 @@ namespace {
 		v8::Local<v8::Value> Module,
 		str::dString &Filename )
 	{
-		GetModuleFilename_( v8q::sObject( Module ).Get( "parent" ), Filename );
+		nodeq::sLocalObject Object;
+
+		Object.Init( Module );
+
+		GetModuleFilename_( Object.Get( "parent" ), Filename );
 	}
 
 	// Returns true if 'Filename' ends with '.node'.
@@ -229,7 +243,7 @@ namespace {
 	void Register_( const v8::FunctionCallbackInfo<v8::Value>& Info )
 	{
 	qRFH
-		v8q::sString RawArguments;
+		v8q::sLocalString RawArguments;
 		str::wString Arguments;
 		str::wString ComponentFilename;
 	qRFB

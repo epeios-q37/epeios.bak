@@ -35,7 +35,7 @@ namespace nodeq {
 	using namespace v8q;
 
 	class sBuffer
-	: public sObject
+	: public rPersistentObject
 	{
 	public:
 		qCDTOR( sBuffer );
@@ -52,7 +52,7 @@ namespace nodeq {
 		{
 			Init( Data, Isolate );
 		}
-		using sObject::Init;
+		using rPersistentObject::Init;
 		void Init(
 			const char *Data,
 			size_t Length,
@@ -63,7 +63,7 @@ namespace nodeq {
 		{
 			Init(Data, strlen( Data ), Isolate );
 		}
-		void ToString( sString &String ) const
+		template <typename name> void ToString( xString_<name> &String ) const
 		{
 			String.Init( Launch( "toString" ) );
 		}
@@ -71,14 +71,14 @@ namespace nodeq {
 	};
 
 	class sRStream
-	: public sObject
+	: public sLocalObject
 	{
 	private:
 		bso::sBool Push_(
 			v8::Local<v8::Value> Value,
 			v8::Isolate *Isolate )
 		{
-			v8q::sBoolean Boolean;
+			v8q::sLocalBoolean Boolean;
 			Boolean.Init( Launch( "push", Isolate, Value ) );
 
 			return *Boolean;
@@ -88,28 +88,28 @@ namespace nodeq {
 		/*
 			Both below event handler seems not to work properly. The 'onend' event semms not be always called. Use 'OnReadable' instead.
 		*/
-		void OnDataFail(
-			const sFunction &Callback,
+		template <typename object> void OnDataFail(
+			const xFunction_<object> &Callback,
 			v8::Isolate *Isolate = NULL )
 		{
 			On( "data", Callback, Isolate );
 		}
-		void OnEndFail(
-			const sFunction &Callback,
+		template <typename object> void OnEndFail(
+			const xFunction_<object> &Callback,
 			v8::Isolate *Isolate = NULL )
 		{
 			On( "end", Callback, Isolate );
 		}
 		// Use below event handler rather as the two above one !
-		void OnReadable(
-			const sFunction &Callback,
+		template <typename object> void OnReadable(
+			const xFunction_<object> &Callback,
 			v8::Isolate *Isolate = NULL )
 		{
 			On( "readable", Callback, Isolate );
 		}
 		// This function is ONLY to implement a readable stream. Is called when data is required.
-		void OnRead(
-			const sFunction &Callback,
+		template <typename object> void OnRead(
+			const xFunction_<object> &Callback,
 			v8::Isolate *Isolate = NULL )
 		{
 			Set( "_read", Callback.Core(), Isolate );
@@ -119,7 +119,9 @@ namespace nodeq {
 			sBuffer &Chunk,
 			v8::Isolate *Isolate = NULL )
 		{
-			v8q::sValue Value = Launch( "read", Isolate );
+			v8q::sLocalValue Value;
+			
+			Value.Init( Launch( "read", Isolate ) );
 
 			if ( Value.IsNull() )
 				return false;
