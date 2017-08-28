@@ -15,7 +15,7 @@
     "host": "https://github.com"
   },
   "dependencies": {
-    "node-pre-gyp": "0.6.x"
+    "node-pre-gyp": "^0.6.36"
   },
   "devDependencies": {
     "aws-sdk": "2.x"

@@ -26,14 +26,24 @@
     </Modules>
     <Module>bomhdl</Module>
     <Module>cdgb64</Module>
+    <Module>dlbrry</Module>
     <Module>fil</Module>
     <Module>fnm</Module>
     <Module>lcl</Module>
     <Module>n4all</Module>
     <Module>n4allw</Module>
+    <Module>n4njs</Module>
+    <Module>nodeq</Module>
     <Module>ntvstr</Module>
+    <Module>plgn</Module>
+    <Module>plgncore</Module>
     <Module>rgstry</Module>
     <Module>stsfsm</Module>
+    <Module>tht</Module>
+    <Module>thtsub</Module>
+    <Module>uvq</Module>
+    <Module>uvqdcl</Module>
+    <Module>v8q</Module>
     <Module>xml</Module>
     <Module>xpp</Module>
 			</Modules>

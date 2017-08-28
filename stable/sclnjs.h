@@ -120,7 +120,7 @@ namespace sclnjs {
 		n4njs::dArguments_ &Arguments,
 		const arg &Arg )
 	{
-		sclnjs::Add_( C_(), Arg );
+		sclnjs::Add_( Arguments, Arg );
 	}
 	template <typename arg, typename ...args> void Add_(
 		n4njs::dArguments_ &Arguments,

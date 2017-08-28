@@ -34,29 +34,33 @@
 namespace nodeq {
 	using namespace v8q;
 
-	class sBuffer
-	: public rPersistentObject
+	template <typename object> class xBuffer_
+	: public object
 	{
 	public:
-		qCDTOR( sBuffer );
-		sBuffer( 
+		qCDTOR( xBuffer_ );
+		xBuffer_( 
 			const char *Data,
 			size_t Length,
 			v8::Isolate *Isolate = NULL )
 		{
 			Init( Data, Length, Isolate );
 		}
-		sBuffer( 
+		xBuffer_( 
 			const char *Data,
 			v8::Isolate *Isolate = NULL )
 		{
 			Init( Data, Isolate );
 		}
-		using rPersistentObject::Init;
+		using object::Init;
 		void Init(
 			const char *Data,
 			size_t Length,
-			v8::Isolate *Isolate = NULL );
+			v8::Isolate *Isolate = NULL )
+		{
+			Isolate = v8q::GetIsolate( Isolate );
+			object::Init( v8q::ToLocal( node::Buffer::New( Isolate, (char *)Data, Length, ConstFreeCallback_, NULL ) ) );
+		}
 		void Init(
 			const char *Data,
 			v8::Isolate *Isolate = NULL )
@@ -67,11 +71,38 @@ namespace nodeq {
 		{
 			String.Init( Launch( "toString" ) );
 		}
-		void ToString( str::dString &String ) const;
+		void ToString( str::dString &String ) const
+		{
+		qRH
+			sLocalString String;
+			char *Buffer = NULL;
+			int Size = 0;
+		qRB
+			String.Init();
+			ToString( String );
+
+			Buffer = (char *)malloc ( Size = String.Size() + 1 );
+
+			if ( Buffer == NULL )
+				qRAlc();
+
+			if ( Size != String.Get( Buffer ) )
+				qRFwk();
+
+			Target.Append( Buffer );
+		qRR
+		qRT
+			if ( Buffer != NULL )
+				delete( Buffer );
+		qRE
+		}
 	};
 
-	class sRStream
-	: public sLocalObject
+	typedef xBuffer_<v8q::rPObject> rPBuffer;
+	typedef xBuffer_<v8q::sLObject> sLBuffer;
+
+	template <typename object> class xRStream_
+	: public object
 	{
 	private:
 		bso::sBool Push_(
@@ -84,7 +115,7 @@ namespace nodeq {
 			return *Boolean;
 		}
 	public:
-		qCDTOR( sRStream );
+		qCDTOR( xRStream_ );
 		/*
 			Both below event handler seems not to work properly. The 'onend' event semms not be always called. Use 'OnReadable' instead.
 		*/
@@ -115,8 +146,8 @@ namespace nodeq {
 			Set( "_read", Callback.Core(), Isolate );
 		}
 		// 'true' : chunk available ; 'false' EOF ('Chunk' is NULL).
-		bso::sBool Read(
-			sBuffer &Chunk,
+		template <typename buffer> bso::sBool Read(
+			buffer &Chunk,
 			v8::Isolate *Isolate = NULL )
 		{
 			v8q::sLocalValue Value;
@@ -150,8 +181,8 @@ namespace nodeq {
 		{
 			return Push_( Value, Isolate );
 		}
-		bso::sBool Push(
-			const sBuffer &Buffer,
+		template <typename buffer> bso::sBool Push(
+			const buffer &Buffer,
 			v8::Isolate *Isolate = NULL )
 		{
 			return Push_( Buffer.Core(), Isolate );
@@ -161,10 +192,28 @@ namespace nodeq {
 			Push_( v8::Null( v8q::GetIsolate( Isolate ) ), Isolate );
 		}
 	};
+
+	typedef xRStream_<v8q::rPObject> rPRStream;
+	typedef xRStream_<v8q::sLObject> sLRStream;
+
 }
 
-txf::text_oflow__ &operator <<(
+template <typename object> inline txf::text_oflow__ &operator <<(
 	txf::text_oflow__ &Flow,
-	const nodeq::sBuffer &Buffer );
+	const nodeq::xBuffer_<object> &Buffer )
+{
+qRH
+	sLocalString String;
+qRB
+	String.Init();
+	Buffer.ToString( String );
+
+	Flow << String;
+qRR
+qRT
+qRE
+	return Flow;
+}
+
 
 #endif

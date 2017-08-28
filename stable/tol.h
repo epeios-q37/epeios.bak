@@ -1033,6 +1033,8 @@ public:\
 	class alias\
 	: public type\
 	{\
+	public:\
+		using type::type;\
 	}
 
 

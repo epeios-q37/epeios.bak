@@ -26,32 +26,6 @@
 
 using namespace nodeq;
 
-void nodeq::sBuffer::ToString( str::dString &Target ) const
-{
-qRH
-	sLocalString String;
-	char *Buffer = NULL;
-	int Size = 0;
-qRB
-	String.Init();
-	ToString( String );
-
-	Buffer = (char *)malloc ( Size = String.Size() + 1 );
-
-	if ( Buffer == NULL )
-		qRAlc();
-
-	if ( Size != String.Get( Buffer ) )
-		qRFwk();
-
-	Target.Append( Buffer );
-qRR
-qRT
-	if ( Buffer != NULL )
-		delete( Buffer );
-qRE
-}
-
 
 namespace {
 	void ConstFreeCallback_(
@@ -60,33 +34,6 @@ namespace {
 	{
 		// Does nothing, as called for const buffer on stack.
 	}
-}
-
-void nodeq::sBuffer::Init(
-	const char *Data,
-	size_t Length,
-	v8::Isolate *Isolate )
-{
-	Isolate = v8q::GetIsolate( Isolate );
-	rPersistentObject::Init( v8q::ToLocal( node::Buffer::New( Isolate, (char *)Data, Length, ConstFreeCallback_, NULL ) ) );
-}
-
-
-txf::text_oflow__ &operator <<(
-	txf::text_oflow__ &Flow,
-	const sBuffer &Buffer)
-{
-qRH
-	sLocalString String;
-qRB
-	String.Init();
-	Buffer.ToString( String );
-
-	Flow << String;
-qRR
-qRT
-qRE
-	return Flow;
 }
 
 

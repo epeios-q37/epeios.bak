@@ -233,7 +233,7 @@ namespace v8q {
 		return ToLocal( ToLocal( v8::Script::Compile( Context, ToString( Script, Isolate ) ), Isolate )->Run( Context ), Isolate );
 	}
 
-	template <typename item> class rPersistentData_
+	template <typename item> class rPData_
 	{
 	private:
 		v8::Persistent<item> Core_;
@@ -249,7 +249,7 @@ namespace v8q {
 		{
 			Core_.Reset();
 		}
-		qCDTOR( rPersistentData_ );
+		qCDTOR( rPData_ );
 		void Init( void )
 		{
 			Core_.Reset();
@@ -260,7 +260,7 @@ namespace v8q {
 		}
 	};
 
-	template <typename item> class sLocalData_
+	template <typename item> class sLData_
 	{
 	private:
 		v8::Local<item> Core_;
@@ -276,7 +276,7 @@ namespace v8q {
 		{
 			Core_.Clear();
 		}
-		qCDTOR( sLocalData_ );
+		qCDTOR( sLData_ );
 		void Init( void )
 		{
 			Core_.Clear();
@@ -305,12 +305,26 @@ namespace v8q {
 		}
 	};
 
+# ifdef T
+#  define V8Q_T_BUFFER_T_ T
+#  undef T
+# endif
+
+# define T( name, alias )\
+	template <typename item> qTCLONE( x##alias##_<rP##name##_<item>>, rP##alias##_ );\
+	template <typename item> qTCLONE( x##alias##_<sL##name##_<item>>, sL##alias##_ );\
+	typedef rP##alias##_<v8::alias> rP##alias;\
+	typedef sL##alias##_<v8::alias> sL##alias
+
+	T( Data, Value );
+
+/*
 	template <typename item> qTCLONE( xValue_<rPersistentData_<item>>, rPersistentValue_ );
 	template <typename item> qTCLONE( xValue_<sLocalData_<item>>, sLocalValue_ );
 
 	typedef rPersistentValue_<v8::Value> rPersistentValue;
 	typedef sLocalValue_<v8::Value> sLocalValue;
-
+*/
 	// Predeclaration.
 	template <typename object> class xFunction_;
 
@@ -446,11 +460,7 @@ namespace v8q {
 		}
 	};
 
-	template <typename item> qTCLONE( xObject_<rPersistentValue_<item>>, rPersistentObject_ );
-	template <typename item> qTCLONE( xObject_<sLocalValue_<item>>, sLocalObject_ );
-
-	typedef rPersistentObject_<v8::Object> rPersistentObject;
-	typedef sLocalObject_<v8::Object> sLocalObject;
+	T( Value, Object );
 
 	template <typename object> class xFunction_
 	: public object
@@ -511,21 +521,15 @@ namespace v8q {
 		}
 	};
 
-	template <typename item> qTCLONE( xFunction_<rPersistentObject_<item>>, rPersistentFunction_ );
-	template <typename item> qTCLONE( xFunction_<sLocalObject_<item>>, sLocalFunction_ );
-
-	typedef rPersistentFunction_<v8::Function> rPersistentFunction;
-	typedef sLocalFunction_<v8::Function> sLocalFunction;
+	T( Object, Function );
 
 	template <typename value> qTCLONE( value, xPrimitive_ );
 
-	template <typename item> qTCLONE( xPrimitive_<rPersistentValue_<item>>, rPersistentPrimitive_ );
-	template <typename item> qTCLONE( xPrimitive_<sLocalValue_<item>>, sLocalPrimitive_ );
+	T( Value, Primitive );
 
 	template <typename primitive> qTCLONE( primitive, xName_ );
 
-	template <typename item> qTCLONE( xName_<rPersistentPrimitive_<item>>, rPersistentName_ );
-	template <typename item> qTCLONE( xName_<sLocalPrimitive_<item>>, sLocalName_ );
+	T( Primitive, Name );
 
 	template <typename name> class xString_
 	: public name
@@ -604,15 +608,98 @@ namespace v8q {
 		}
 	};
 
-	template <typename item> qTCLONE( xString_<rPersistentName_<item>>, rPersistentString_ );
-	template <typename item> qTCLONE( xString_<sLocalName_<item>>, sLocalString_ );
+	T( Name, String );
 
-	typedef rPersistentString_<v8::String> rPersistentString;
-	typedef sLocalString_<v8::String> sLocalString;
+	template <typename primitive> class xBoolean_
+	: public primitive
+	{
+	public:
+		qCDTOR( xBoolean_ );
+		xBoolean_(
+			v8::Local<v8::Value> Value,
+			v8::Isolate *Isolate = NULL )
+		{
+			Init( Value, Isolate );
+		}
+		template <typename data> xBoolean_(
+			xValue_<data> &Value,
+			v8::Isolate *Isolate = NULL )
+		{
+			Init( Value.Core(), Isolate );
+		}
+		void Init(
+			v8::Local<v8::Value> Value,
+			v8::Isolate *Isolate = NULL )
+		{
+			if ( !Value->IsBoolean() )
+				qRFwk();
+
+			primitive::Init( Value, Isolate );
+		}
+		void Init(
+			bool Boolean,
+			v8::Isolate *Isolate = NULL )
+		{
+			Isolate = GetIsolate( Isolate );
+			Init( v8::Boolean::New( Isolate, Boolean ), Isolate );
+		}
+		bso::sBool operator *( void )
+		{
+			return Core()->Value();
+		}
+	};
+
+	T( Primitive, Boolean );
+
+	template <typename primitive> class xNumber_
+	: public primitive
+	{
+	public:
+		qCDTOR( xNumber_ );
+		xNumber_(
+			v8::Local<v8::Value> Value,
+			v8::Isolate *Isolate = NULL )
+		{
+			Init( Value, Isolate );
+		}
+		template <typename data> xNumber_(
+			xValue_<data> &Value,
+			v8::Isolate *Isolate = NULL )
+		{
+			Init( Value.Core(), Isolate );
+		}
+		void Init(
+			v8::Local<v8::Value> Value,
+			v8::Isolate *Isolate = NULL )
+		{
+			if ( !Value->IsNumber() )
+				qRFwk();
+
+			primitive::Init( Value, Isolate );
+		}
+		void Init(
+			double Number,
+			v8::Isolate *Isolate = NULL )
+		{
+			Init( v8::Number::New( GetIsolate( Isolate ), Number ) );
+		}
+		double operator *( void )
+		{
+			return Core()->Value();
+		}
+	};
+
+	T( Primitive, Number );
+
+# undef T
+
+# ifdef V8Q_T_BUFFER_T_
+#  define T V8Q_T_BUFFER_T_
+#  undef V8Q_T_BUFFER_T_
+# endif
 
 	template <typename value, typename type> class xExternal_
-	: public value
-	{
+		: public value {
 	public:
 		qCDTOR( xExternal_ );
 		xExternal_(
@@ -656,101 +743,11 @@ namespace v8q {
 		}
 	};
 
-	template <typename item, typename type> qTCLONE( xExternal_<qCOVER2( rPersistentValue_<item>,type>), rPersistentExternal_ );
-	template <typename item, typename type> qTCLONE( xExternal_<qCOVER2(sLocalValue_<item>,type>), sLocalExternal_ );
+	template <typename item, typename type> qTCLONE( xExternal_<qCOVER2( rPValue_<item>, type> ), rPExternal_ );
+	template <typename item, typename type> qTCLONE( xExternal_<qCOVER2( sLValue_<item>, type> ), sLExternal_ );
 
-	template <typename type> qTCLONE( rPersistentExternal_<qCOVER2(v8::External,type)>, rPersistentExternal );
-	template <typename type> qTCLONE( sLocalExternal_<qCOVER2(v8::External, type)>, sLocalExternal );
-
-	template <typename primitive> class xBoolean_
-	: public primitive
-	{
-	public:
-		qCDTOR( xBoolean_ );
-		xBoolean_(
-			v8::Local<v8::Value> Value,
-			v8::Isolate *Isolate = NULL )
-		{
-			Init( Value, Isolate );
-		}
-		template <typename data> xBoolean_(
-			xValue_<data> &Value,
-			v8::Isolate *Isolate = NULL )
-		{
-			Init( Value.Core(), Isolate );
-		}
-		void Init(
-			v8::Local<v8::Value> Value,
-			v8::Isolate *Isolate = NULL )
-		{
-			if ( !Value->IsBoolean() )
-				qRFwk();
-
-			primitive::Init( Value, Isolate );
-		}
-		void Init(
-			bool Boolean,
-			v8::Isolate *Isolate = NULL )
-		{
-			Isolate = GetIsolate( Isolate );
-			Init( v8::Boolean::New( Isolate, Boolean ), Isolate );
-		}
-		bso::sBool operator *( void )
-		{
-			return Core()->Value();
-		}
-	};
-
-	template <typename item> qTCLONE( xBoolean_<rPersistentPrimitive_<item>>, rPersistentBoolean_ );
-	template <typename item> qTCLONE( xBoolean_<sLocalPrimitive_<item>>, sLocalBoolean_ );
-
-	typedef rPersistentBoolean_<v8::Boolean> rPersistentBoolean;
-	typedef sLocalBoolean_<v8::Boolean> sLocalBoolean;
-
-	template <typename primitive> class xNumber_
-	: public primitive
-	{
-	public:
-		qCDTOR( xNumber_ );
-		xNumber_(
-			v8::Local<v8::Value> Value,
-			v8::Isolate *Isolate = NULL )
-		{
-			Init( Value, Isolate );
-		}
-		template <typename data> xNumber_(
-			xValue_<data> &Value,
-			v8::Isolate *Isolate = NULL )
-		{
-			Init( Value.Core(), Isolate );
-		}
-		void Init(
-			v8::Local<v8::Value> Value,
-			v8::Isolate *Isolate = NULL )
-		{
-			if ( !Value->IsNumber() )
-				qRFwk();
-
-			primitive::Init( Value, Isolate );
-		}
-		void Init(
-			double Number,
-			v8::Isolate *Isolate = NULL )
-		{
-			Init( v8::Number::New( GetIsolate( Isolate ), Number ) );
-		}
-		double operator *( void )
-		{
-			return Core()->Value();
-		}
-	};
-
-	template <typename item> qTCLONE( xNumber_<rPersistentPrimitive_<item>>, rPersistentNumber_ );
-	template <typename item> qTCLONE( xNumber_<sLocalPrimitive_<item>>, sLocalNumber_ );
-
-	typedef rPersistentNumber_<v8::Number> rPersistentNumber;
-	typedef sLocalNumber_<v8::Number> sLocalNumber;
-
+	template <typename type> qTCLONE( rPExternal_<qCOVER2( v8::External, type )>, rPExternal );
+	template <typename type> qTCLONE( sLExternal_<qCOVER2( v8::External, type )>, sLExternal );
 
 	typedef v8::FunctionCallbackInfo<v8::Value> sFunctionInfos;
 
@@ -863,7 +860,5 @@ qRT
 qRE
 	return Flow;
 }
-
-
 
 #endif

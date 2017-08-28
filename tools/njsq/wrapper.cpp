@@ -35,15 +35,7 @@ namespace {
 		const v8::FunctionCallbackInfo<v8::Value> &Info,
 		str::dString &Value )
 	{
-		qRH
-			v8q::sLocalString String;
-		qRB
-			String.Init( Info[Index] );
-
-			String.Get( Value );
-		qRR
-		qRT
-		qRE
+		v8q::sLString( Info[Index] ).Get( Value );
 	}
 
 	namespace {
