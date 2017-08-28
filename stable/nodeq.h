@@ -31,6 +31,9 @@
 # include "err.h"
 # include "v8q.h"
 
+// Note to developer : you have to add '<path_to_node>/src' as 'Additional Include Directory' in the 'devel' related project.
+#include <node_buffer.h>
+
 namespace nodeq {
 	using namespace v8q;
 
@@ -59,7 +62,8 @@ namespace nodeq {
 			v8::Isolate *Isolate = NULL )
 		{
 			Isolate = v8q::GetIsolate( Isolate );
-			object::Init( v8q::ToLocal( node::Buffer::New( Isolate, (char *)Data, Length, ConstFreeCallback_, NULL ) ) );
+			//			object::Init( v8q::ToLocal( node::Buffer::New( Isolate, (char *)Data, Length, ConstFreeCallback_, NULL ) ) );
+			object::Init( v8q::ToLocal( node::Buffer::New( Isolate, (char *)Data, Length, NULL, NULL ) ) );
 		}
 		void Init(
 			const char *Data,
@@ -71,10 +75,10 @@ namespace nodeq {
 		{
 			String.Init( Launch( "toString" ) );
 		}
-		void ToString( str::dString &String ) const
+		void ToString( str::dString &Target ) const
 		{
 		qRH
-			sLocalString String;
+			sLString String;
 			char *Buffer = NULL;
 			int Size = 0;
 		qRB
@@ -109,7 +113,7 @@ namespace nodeq {
 			v8::Local<v8::Value> Value,
 			v8::Isolate *Isolate )
 		{
-			v8q::sLocalBoolean Boolean;
+			v8q::sLBoolean Boolean;
 			Boolean.Init( Launch( "push", Isolate, Value ) );
 
 			return *Boolean;
@@ -150,7 +154,7 @@ namespace nodeq {
 			buffer &Chunk,
 			v8::Isolate *Isolate = NULL )
 		{
-			v8q::sLocalValue Value;
+			v8q::sLValue Value;
 			
 			Value.Init( Launch( "read", Isolate ) );
 
@@ -165,7 +169,7 @@ namespace nodeq {
 			str::dString &Chunk,
 			v8::Isolate *Isolate = NULL )
 		{
-			sBuffer RawChunk;
+			sLBuffer RawChunk;
 
 			RawChunk.Init();
 
@@ -203,7 +207,7 @@ template <typename object> inline txf::text_oflow__ &operator <<(
 	const nodeq::xBuffer_<object> &Buffer )
 {
 qRH
-	sLocalString String;
+	sLString String;
 qRB
 	String.Init();
 	Buffer.ToString( String );

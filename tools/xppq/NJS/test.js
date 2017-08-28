@@ -43,8 +43,8 @@ function callback(token, tag, attribute, value) {
     }
 }
 
-var test = 3;
-
+const file = __dirname + '/demo.xml';
+var test = 4;   // Default test.
 var arg = process.argv[2];
 
 if (arg != undefined)
@@ -52,9 +52,8 @@ if (arg != undefined)
 
 console.log( xppq.componentInfo() );
 console.log( xppq.wrapperInfo());
-console.log (xppq.returnArgument('Basic test') );
-
-const file = __dirname + '/demo.xml';
+console.log( xppq.returnArgument('Basic test : this text comes from the addon (native code), and is written from Javascript.' ) );
+console.log( '     ---------------' );
 
 switch (test) {
     case 0:
@@ -63,11 +62,11 @@ switch (test) {
         break;
     case 1:
         console.log("Piping the preprocessing stream.\n");
-//        new xppq.Stream(fs.createReadStream(file)).on('error', (err) => console.error('\n>>> ERROR : ' + err + '\n')).pipe(process.stdout);
+        new xppq.Stream(fs.createReadStream(file)).on('error', (err) => console.error('\n>>> ERROR : ' + err + '\n')).pipe(process.stdout);
         break;
     case 2:
         console.log("Using the preprocessing stream with a callback, which transforms to lower case.\n");
-//        new xppq.Stream(fs.createReadStream(file)).on('data', (chunk) => write(chunk.toString().toLowerCase())).on('error', (err) => console.error('\n>>> ERROR : ' + err + '\n'));
+        new xppq.Stream(fs.createReadStream(file)).on('data', (chunk) => write(chunk.toString().toLowerCase())).on('error', (err) => console.error('\n>>> ERROR : ' + err + '\n'));
         break;
     case 3:
         console.log("XML parsing WITHOUT preprocessing.\n");
@@ -75,7 +74,7 @@ switch (test) {
         break;
     case 4:
         console.log("XML parsing WITH preprocessing.\n");
-//        xppq.parse(new xppq.Stream(fs.createReadStream(file)).on('error', (err) => console.error('>>> ERROR : ' + err)), callback);
+        xppq.parse(new xppq.Stream(fs.createReadStream(file)).on('error', (err) => console.error('>>> ERROR : ' + err)), callback);
         break;
     default:
         console.error("'" + arg + "' is not a valid test id ; must be '0' to '4'.");

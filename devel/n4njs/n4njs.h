@@ -66,6 +66,7 @@ namespace n4njs {
 			const char *Key,
 			void *Value ) = 0;
 		virtual void *N4NJSGet( const char *Key ) = 0;
+		virtual void N4NJSEmitError( const str::dString &Message ) = 0;
 	public:
 		qCALLBACK( UCore_ );
 		void Set(
@@ -77,6 +78,10 @@ namespace n4njs {
 		void *Get( const char *Key )
 		{
 			return N4NJSGet( Key );
+		}
+		void EmitError( const str::dString &Message )
+		{
+			return N4NJSEmitError( Message );
 		}
 	};
 
@@ -97,12 +102,26 @@ namespace n4njs {
 	: public cUCore_
 	{
 	protected:
-		virtual bso::sBool NANJSRead( str::dString &Chunk ) = 0;
+		virtual bso::sBool N4NJSRead( str::dString &Chunk ) = 0;
+		virtual bso::sBool N4NJSPush(
+			void *Buffer,
+			bso::sSize Size ) = 0;
+		virtual void N4NJSEnd( void ) = 0;
 	public:
 		qCALLBACK( URStream );
 		bso::sBool Read( str::dString &Chunk )
 		{
-			return NANJSRead( Chunk );
+			return N4NJSRead( Chunk );
+		}
+		bso::sBool Push(
+			void *Buffer,
+			bso::sSize Size )
+		{
+			return N4NJSPush( Buffer, Size );
+		}
+		void End( void )
+		{
+			return N4NJSEnd();
 		}
 	};
 

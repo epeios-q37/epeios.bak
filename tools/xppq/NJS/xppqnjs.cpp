@@ -21,6 +21,7 @@
 
 #include "parser.h"
 #include "registry.h"
+#include "stream.h"
 
 #include "sclmisc.h"
 #include "scln4a.h"
@@ -54,6 +55,7 @@ void sclnjs::SCLNJSRegister( scln4a::sRegistrar &Registrar )
 {
 	Registrar.Register( ReturnArgument_ );
 	Registrar.Register( parser::OnData, parser::OnEOD, parser::Parse );
+	Registrar.Register( stream::OnData, stream::OnEOD, stream::OnRead, stream::Set );
 }
 
 const char *sclmisc::SCLMISCTargetName = NAME_LC;

@@ -46,14 +46,18 @@ module.exports = njsq;
 module.exports.returnArgument = (text) => { return njsq._wrapper( 0, text ) };
 
 const stream = require('stream');
-/*
+
 class Stream extends stream.Readable {
     constructor(stream, options) {
         super(options);
-        njsq._wrapper( 1, stream, this );
+        stream.on('readable', () => { var chunk = stream.read(); if (chunk == null) njsq._wrapper(5, stream); else njsq._wrapper(4, stream, chunk); });
+        njsq._wrapper( 7, stream, this );
+    }
+    _read(size) {
+        njsq._wrapper( 6, this );
     }
 }
-*/
+
 
 // If modified, modify also 'parser.cpp'.
 var tokens = {
@@ -65,6 +69,6 @@ var tokens = {
 };
 
 module.exports = njsq;
-// module.exports.Stream = Stream;
+module.exports.Stream = Stream;
 module.exports.parse = (stream, callback) => { stream.on('readable', () => { var chunk = stream.read(); if ( chunk == null ) njsq._wrapper( 2, stream ); else njsq._wrapper(1, stream, chunk); } ); njsq._wrapper(3, stream, callback) };
 module.exports.tokens = tokens;

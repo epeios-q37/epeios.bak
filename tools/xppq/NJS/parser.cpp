@@ -163,7 +163,8 @@ namespace {
 
 	class rRackAsyncCallback_
 	: public rRack_,
-  	  public cAsync_ {
+  	  public cAsync_
+	{
 	protected:
 		void SCLNJSWork( void ) override
 		{
@@ -188,6 +189,7 @@ namespace {
 		}
 	};
 #if 1
+	/*
 	void OnReadable_( sclnjs::sCaller &Caller )
 	{
 	qRH
@@ -209,6 +211,7 @@ namespace {
 	qRT
 	qRE
 	}
+	*/
 #else
 	void OnData_( const v8q::sFunctionInfos &Infos )
 	{
@@ -258,7 +261,7 @@ qRB
 
 	rRack_ &Rack = *(rRack_ *)This.Get( "_rack" );
 
-	Rack.OFlow << Chunk << txf::commit;
+	Rack.OFlow << Chunk;
 qRR
 qRT
 qRE

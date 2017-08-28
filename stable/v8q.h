@@ -766,7 +766,7 @@ namespace v8q {
 			xObject_<value> &Object,
 			v8::Isolate *Isolate = NULL )
 		{
-			sLocalObject Global;
+			sLObject Global;
 
 			Isolate = GetIsolate( Isolate );
 
@@ -818,7 +818,7 @@ namespace v8q {
 			v8::Isolate *Isolate,
 			const args &...Args )
 		{
-			sObject Process;
+			sLObject Process;
 
 			Isolate = GetIsolate( Isolate );
 

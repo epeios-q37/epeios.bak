@@ -21,11 +21,7 @@
 
 #include "nodeq.h"
 
-// Note to developer : you have to add '<path_to_node>/src' as 'Additional Include Directory' in the 'devel' related project.
-#include <node_buffer.h>
-
 using namespace nodeq;
-
 
 namespace {
 	void ConstFreeCallback_(

@@ -40,7 +40,7 @@ mods += thtsub bomhdl cdgb64 fil fnm
 mods += lcl rgstry stsfsm xml xpp 
 mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
 mods += scln4a sclnjs 
-mods += common parser registry 
+mods += common parser stream registry 
 
 pmods += pllio 
 

@@ -62,7 +62,7 @@ namespace {
 	{
 	qRH
 		str::wString Info;
-		v8q::sLocalString String;
+		v8q::sLString String;
 	qRB
 		Info.Init();
 
@@ -80,7 +80,7 @@ namespace {
 	{
 	qRH
 		str::wString Info;
-		v8q::sLocalString String;
+		v8q::sLString String;
 	qRB
 		Info.Init();
 
@@ -100,9 +100,9 @@ namespace {
 
 	void InitWithModuleFilename_(
 		v8::Local<v8::Value> Module,
-		v8q::sLocalString &Filename )
+		v8q::sLString &Filename )
 	{
-		nodeq::sLocalObject Object;
+		nodeq::sLObject Object;
 
 		Object.Init( Module );
 
@@ -114,7 +114,7 @@ namespace {
 		str::dString &Filename )
 	{
 	qRH
-		v8q::sLocalString V8Filename;
+		v8q::sLString V8Filename;
 	qRB
 		InitWithModuleFilename_( Module, V8Filename );
 
@@ -128,7 +128,7 @@ namespace {
 		v8::Local<v8::Value> Module,
 		str::dString &Filename )
 	{
-		nodeq::sLocalObject Object;
+		nodeq::sLObject Object;
 
 		Object.Init( Module );
 
@@ -243,7 +243,7 @@ namespace {
 	void Register_( const v8::FunctionCallbackInfo<v8::Value>& Info )
 	{
 	qRFH
-		v8q::sLocalString RawArguments;
+		v8q::sLString RawArguments;
 		str::wString Arguments;
 		str::wString ComponentFilename;
 	qRFB

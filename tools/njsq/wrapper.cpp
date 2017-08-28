@@ -35,10 +35,29 @@ namespace {
 		const v8::FunctionCallbackInfo<v8::Value> &Info,
 		str::dString &Value )
 	{
-		v8q::sLString( Info[Index] ).Get( Value );
+	qRH
+		v8q::sLString String;
+	qRB
+		String.Init( Info[Index] );
+
+		String.Get( Value );
+	qRR
+	qRT
+	qRE
 	}
 
 	namespace {
+		namespace {
+			void Error_( const v8::FunctionCallbackInfo<v8::Value>& info )
+			{
+				v8q::sLObject This;
+
+				This.Init( info[0] );
+
+				This.EmitError( info[1] );
+			}
+		}
+
 		template <typename callback, typename host> class rCore_
 		: public callback
 		{
@@ -49,7 +68,7 @@ namespace {
 				const char *Key,
 				void *Value ) override
 			{
-				nodeq::rPersistentExternal<void> External;
+				nodeq::rPExternal<void> External;
 
 				External.Init( Value );
 
@@ -57,11 +76,19 @@ namespace {
 			}
 			virtual void *N4NJSGet( const char *Key ) override
 			{
-				nodeq::rPersistentExternal<void> External;
+				nodeq::rPExternal<void> External;
 
 				External.Init( Core_.Get( Key ) );
 
 				return External.Value();
+			}
+			virtual void N4NJSEmitError( const str::dString &Message ) override
+			{
+				v8q::sLFunction Function;
+
+				Function.Init( Error_ );
+
+				v8q::process::NextTick( Function, *this, Message );
 			}
 		public:
 			void reset( bso::sBool P = true )
@@ -72,6 +99,10 @@ namespace {
 			void Init( v8::Local<v8::Value> Value )
 			{
 				Core_.Init( Value );
+			}
+			v8::Local<v8::Value> Core( void ) const
+			{
+				return Core_.Core();
 			}
 		};
 
@@ -97,17 +128,31 @@ namespace {
 		}
 
 		class rRStream_
-		: public rCore_<n4njs::cURStream, nodeq::sRStream>
+		: public rCore_<n4njs::cURStream, nodeq::rPRStream>
 		{
 		protected:
-			virtual bso::sBool NANJSRead( str::dString &Chunk ) override
+			virtual bso::sBool N4NJSRead( str::dString &Chunk ) override
 			{
 				return Core_.Read( Chunk );
+			}
+			virtual bso::sBool N4NJSPush(
+				void *Buffer,
+				bso::sSize Size ) override
+			{
+				nodeq::sLBuffer Buf;
+
+				Buf.Init( (const char *)Buffer, Size );
+
+				return Core_.Push( Buf );
+			}
+			virtual void N4NJSEnd( void ) override
+			{
+				return Core_.End();
 			}
 		};
 
 		class rBuffer_
-		: public rCore_<n4njs::cUBuffer, nodeq::sBuffer>
+		: public rCore_<n4njs::cUBuffer, nodeq::rPBuffer>
 		{
 		protected:
 			virtual void N4NJSToString( str::dString &String ) override
@@ -123,7 +168,7 @@ namespace {
 						v8::Local<v8::Value> &Argv,
 						int *Value )
 					{
-						nodeq::sLocalNumber Number;
+						nodeq::sLNumber Number;
 
 						Number.Init( *Value );
 
@@ -183,7 +228,7 @@ namespace {
 		}
 
 		class rCallback_
-		: public rCore_<n4njs::cUCallback, nodeq::rPersistentFunction>
+		: public rCore_<n4njs::cUCallback, nodeq::rPFunction>
 		{
 		protected:
 			virtual void *N4NJSLaunch(
@@ -239,7 +284,7 @@ void SetReturnValue_(
 	const v8::FunctionCallbackInfo<v8::Value> &Info,
 	const str::dString &Value )
 {
-	v8q::sLocalString String;
+	v8q::sLString String;
 
 	String.Init( Value );
 

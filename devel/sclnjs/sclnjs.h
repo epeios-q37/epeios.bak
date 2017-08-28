@@ -46,6 +46,12 @@ namespace sclnjs {
 	qCDEF( eBehavior, bExitOnly, uvq::bExitOnly );
 	qCDEF( eBehavior, bRelaunch, uvq::bRelaunch );
 
+	inline void ERRFinal( void )
+	{
+		// TODO.
+		qRVct();
+	}
+
 	template <typename callback> class rBase_
 	{
 	private:
@@ -159,11 +165,15 @@ namespace sclnjs {
 			const char *Key,
 			void *Value )
 		{
-			return rBase_<callback>::C_().Set( Key, Value );
+			return C_().Set( Key, Value );
 		}
 		void *Get( const char *Key )
 		{
-			return rBase_<callback>::C_().Get( Key );
+			return C_().Get( Key );
+		}
+		void EmitError( const str::dString &Message )
+		{
+			return C_().EmitError( Message );
 		}
 	};
 
@@ -186,6 +196,16 @@ namespace sclnjs {
 		bso::sBool Read( str::dString &Chunk )
 		{
 			return C_().Read( Chunk );
+		}
+		bso::sBool Push(
+			void *Buffer,
+			bso::sSize Size )
+		{
+			return C_().Push( Buffer, Size );
+		}
+		void End( void )
+		{
+			return C_().End();
 		}
 	};
 
