@@ -2,7 +2,7 @@
 
 [![NPM](https://nodei.co/npm/xppq.png)](https://nodei.co/npm/xppq/)
 
-This component is only a template to facilitate the creation of a [*Node.js*](http://en.wikipedia.org/wiki/Node.js) *addon*.
+*XML* parser and preprocessor as [*Node.js*](http://en.wikipedia.org/wiki/Node.js) *addon*.
 
 For more information, see [http://q37.info/tools/xppq/](http://q37.info/tools/xppq/).
 
