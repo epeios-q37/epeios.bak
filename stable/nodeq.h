@@ -41,6 +41,9 @@ namespace nodeq {
 	: public object
 	{
 	public:
+		using object::reset;
+		using object::Core;
+		using object::Launch;
 		qCDTOR( xBuffer_ );
 		xBuffer_( 
 			const char *Data,
@@ -119,32 +122,35 @@ namespace nodeq {
 			return *Boolean;
 		}
 	public:
+		using object::reset;
+		using object::Core;
+		using object::Launch;
 		qCDTOR( xRStream_ );
 		/*
 			Both below event handler seems not to work properly. The 'onend' event semms not be always called. Use 'OnReadable' instead.
 		*/
-		template <typename object> void OnDataFail(
-			const xFunction_<object> &Callback,
+		template <typename obj> void OnDataFail(
+			const xFunction_<obj> &Callback,
 			v8::Isolate *Isolate = NULL )
 		{
 			On( "data", Callback, Isolate );
 		}
-		template <typename object> void OnEndFail(
-			const xFunction_<object> &Callback,
+		template <typename obj> void OnEndFail(
+			const xFunction_<obj> &Callback,
 			v8::Isolate *Isolate = NULL )
 		{
 			On( "end", Callback, Isolate );
 		}
 		// Use below event handler rather as the two above one !
-		template <typename object> void OnReadable(
-			const xFunction_<object> &Callback,
+		template <typename obj> void OnReadable(
+			const xFunction_<obj> &Callback,
 			v8::Isolate *Isolate = NULL )
 		{
 			On( "readable", Callback, Isolate );
 		}
 		// This function is ONLY to implement a readable stream. Is called when data is required.
-		template <typename object> void OnRead(
-			const xFunction_<object> &Callback,
+		template <typename obj> void OnRead(
+			const xFunction_<obj> &Callback,
 			v8::Isolate *Isolate = NULL )
 		{
 			Set( "_read", Callback.Core(), Isolate );
@@ -207,7 +213,7 @@ template <typename object> inline txf::text_oflow__ &operator <<(
 	const nodeq::xBuffer_<object> &Buffer )
 {
 qRH
-	sLString String;
+	v8q::sLString String;
 qRB
 	String.Init();
 	Buffer.ToString( String );

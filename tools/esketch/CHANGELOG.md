@@ -1,9 +1,13 @@
 # *eSketch* changelog.
 
+2017-08-29 :
+- *esketchnjs* :
+  - Adaptation to changes to the *Native for all* related libraries.
+
 2017-08-09 :
-- *esketch-node* :
+- *esketchnjs* :
     - Using the *SCLN4A* library instead of *SCLNJS* one.
 
 2017-08-08 :
-- *esketch-node*
+- *esketchnjs*
 	- Fixing error occurring when the path to the component contains a space.

@@ -23,6 +23,7 @@
 
 using namespace nodeq;
 
+#if 0
 namespace {
 	void ConstFreeCallback_(
 		char* data,
@@ -31,5 +32,5 @@ namespace {
 		// Does nothing, as called for const buffer on stack.
 	}
 }
-
+#endif
 

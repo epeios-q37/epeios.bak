@@ -160,6 +160,8 @@ namespace sclnjs {
 	template <typename callback> class rCore_
 	: public rBase_<callback>
 	{
+	protected:
+		using rBase_<callback>::C_;
 	public:
 		void Set(
 			const char *Key,

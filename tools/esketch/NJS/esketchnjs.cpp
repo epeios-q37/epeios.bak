@@ -22,7 +22,7 @@
 #include "registry.h"
 
 #include "sclmisc.h"
-#include "scln4a.h"
+#include "sclnjs.h"
 
 void scln4a::SCLN4AInfo( txf::sOFlow &Flow )
 {
@@ -49,7 +49,7 @@ namespace {
 	}
 }
 
-void scln4a::SCLN4ARegister( scln4a::sRegistrar &Registrar )
+void sclnjs::SCLNJSRegister( scln4a::sRegistrar &Registrar )
 {
 	Registrar.Register( ReturnArgument_ );
 }

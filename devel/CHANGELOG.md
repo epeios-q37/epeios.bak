@@ -1,5 +1,11 @@
 # *Epeios* changelog
 
+2017-08-29 :
+- NODEQ, V8Q :
+  - Fixing issues occurring with *g++*.
+- TOL :
+  - With *g++*, The use of `qCOVERx(...)` doesn't work when a macro is calling another one.
+
 2017-08-27 :
 - V8Q :
     - `sData_`and related exists now as persistent (use of `v8::Persistent`) and *local* (use of `v8::Local`).

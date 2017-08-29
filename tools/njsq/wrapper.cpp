@@ -239,6 +239,9 @@ namespace {
 				v8::Local<v8::Value> *Argv = NULL;
 				int Argc = 0;
 			qRB
+				if ( ReturnType != n4njs::atVoid )
+					qRVct();
+
 				Argc = Arguments.Amount();
 
 				Argv = new v8::Local<v8::Value>[Argc];
@@ -254,6 +257,7 @@ namespace {
 				if ( Argv != NULL )
 					delete Argv;
 			qRE
+				return NULL;
 			}
 		};
 	}

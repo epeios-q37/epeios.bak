@@ -15,9 +15,15 @@ process.stdout.write( xppq.returnArgument( "Text from JS file" ) + '\n');
 const fs = require('fs');
 const stream = require('stream');
 const xppq = require('./XPPq.js');
+var indentLevel = 0;
 
 function write(text) {
     process.stdout.write(text);
+}
+
+function indent(level) {
+    while (level--)
+        write(' ');
 }
 
 function callback(token, tag, attribute, value) {
@@ -26,15 +32,21 @@ function callback(token, tag, attribute, value) {
             write(">>> ERROR:  '" + value + "'\n");
             break;
         case xppq.tokens.START_TAG:
+            indent(indentLevel);
             write("Start tag: '" + tag + "'\n");
+            indentLevel++;
             break;
         case xppq.tokens.ATTRIBUTE:
+            indent(indentLevel);
             write("Attribute: '" + attribute + "' = '" + value + "'\n");
             break;
         case xppq.tokens.VALUE:
+            indent(indentLevel);
             write("Value:     '" + value.trim() + "'\n");
             break;
         case xppq.tokens.END_TAG:
+            indentLevel--;
+            indent(indentLevel);
             write("End tag:   '" + tag + "'\n");
             break;
         default:
@@ -44,7 +56,7 @@ function callback(token, tag, attribute, value) {
 }
 
 const file = __dirname + '/demo.xml';
-var test = 4;   // Default test.
+var test = 4;   // Default test id.
 var arg = process.argv[2];
 
 if (arg != undefined)

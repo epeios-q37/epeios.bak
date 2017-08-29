@@ -29,6 +29,7 @@ along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 # endif
 
 # include "err.h"
+# include "flx.h"
 # include "str.h"
 # include "txf.h"
 
@@ -291,6 +292,8 @@ namespace v8q {
 	: public data
 	{
 	public:
+		using data::reset;
+		using data::Core;
 		qCDTOR( xValue_ );
 		xValue_(
 			v8::Local<v8::Value> Value,
@@ -338,11 +341,14 @@ namespace v8q {
 			int Argc,
 			v8::Local<v8::Value> Argv[] ) const
 		{
+			
 			v8::Local<v8::Function> Function = GetFunction( Core(), Method, Isolate );
 
 			return ToLocal( Function->Call( GetContext( Isolate ), Core(), Argc, Argv ), Isolate );
 		}
 	public:
+		using value::reset;
+		using value::Core;
 		qCDTOR( xObject_ );
 		template <typename data> xObject_(
 			xValue_<data> &Value,
@@ -466,6 +472,8 @@ namespace v8q {
 	: public object
 	{
 	public:
+		using object::reset;
+		using object::Core;
 		qCDTOR( xFunction_ );
 		xFunction_(
 			v8::FunctionCallback Callback,
@@ -535,6 +543,8 @@ namespace v8q {
 	: public name
 	{
 	public:
+		using name::reset;
+		using name::Core;
 		qCDTOR( xString_ );
 		xString_(
 			const char *String,
@@ -614,6 +624,8 @@ namespace v8q {
 	: public primitive
 	{
 	public:
+		using primitive::reset;
+		using primitive::Core;
 		qCDTOR( xBoolean_ );
 		xBoolean_(
 			v8::Local<v8::Value> Value,
@@ -655,6 +667,8 @@ namespace v8q {
 	: public primitive
 	{
 	public:
+		using primitive::reset;
+		using primitive::Core;
 		qCDTOR( xNumber_ );
 		xNumber_(
 			v8::Local<v8::Value> Value,
@@ -699,8 +713,10 @@ namespace v8q {
 # endif
 
 	template <typename value, typename type> class xExternal_
-		: public value {
+	: public value {
 	public:
+		using value::reset;
+		using value::Core;
 		qCDTOR( xExternal_ );
 		xExternal_(
 			v8::Local<v8::Value> Value,
@@ -743,8 +759,8 @@ namespace v8q {
 		}
 	};
 
-	template <typename item, typename type> qTCLONE( xExternal_<qCOVER2( rPValue_<item>, type> ), rPExternal_ );
-	template <typename item, typename type> qTCLONE( xExternal_<qCOVER2( sLValue_<item>, type> ), sLExternal_ );
+	template <typename item, typename type> qTCLONE( qCOVER2( xExternal_<rPValue_<item>, type > ), rPExternal_ );
+	template <typename item, typename type> qTCLONE( xExternal_<qCOVER2( sLValue_<item>, type )>, sLExternal_ );
 
 	template <typename type> qTCLONE( rPExternal_<qCOVER2( v8::External, type )>, rPExternal );
 	template <typename type> qTCLONE( sLExternal_<qCOVER2( v8::External, type )>, sLExternal );
@@ -790,7 +806,7 @@ namespace v8q {
 			v8::Isolate *Isolate,
 			const args &...Args )
 		{
-			sObject Console;
+			sLObject Console;
 
 			Isolate = GetIsolate( Isolate );
 

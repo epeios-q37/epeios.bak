@@ -496,7 +496,11 @@ qTMIMICw( type, alias )
 	{\
 	}
 
-# define qTCLONE( name, alias )	E_TTCLONE__( name, alias )
+# define qTCLONE( type, alias )\
+	class alias\
+	: public type\
+	{\
+	}
 
 # define qTCLONEd( type, alias )\
 	class alias\

@@ -123,7 +123,7 @@ namespace {
 	qRT
 	qRE
 	}
-
+#if 0
 	void GetParentModuleFilename_(
 		v8::Local<v8::Value> Module,
 		str::dString &Filename )
@@ -134,7 +134,7 @@ namespace {
 
 		GetModuleFilename_( Object.Get( "parent" ), Filename );
 	}
-
+#endif
 	// Returns true if 'Filename' ends with '.node'.
 	bso::sBool IsNJSq_( const fnm::rName &Filename )
 	{
@@ -155,7 +155,6 @@ namespace {
 	qRE
 		return Is;
 	}
-
 	void GetAddonFilename_(
 		v8::Local<v8::Value> Module,
 		str::dString &Filename )
