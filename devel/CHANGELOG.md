@@ -5,6 +5,9 @@
   - Fixing issues occurring with *g++*.
 - TOL :
   - With *g++*, The use of `qCOVERx(...)` doesn't work when a macro is calling another one.
+- V8Q :
+  - Fixing issues occurring with *clang++*.
+  - Fixing issue with *Node.js* v4.
 
 2017-08-27 :
 - V8Q :

@@ -257,7 +257,11 @@ namespace v8q {
 		}
 		v8::Local<item> Core( v8::Isolate *Isolate = NULL ) const
 		{
-			return Core_.Get( GetIsolate( Isolate ) );
+			// Do not exists in 'Node.js' v4.
+			// return Core_.Get( GetIsolate( Isolate ) );
+
+			// This is the definition of v8::Persistent<>::Get()' in 'Node.js' >v4.
+			return v8::Local<item>::New( GetIsolate( Isolate ), Core_ );
 		}
 	};
 
@@ -604,18 +608,8 @@ namespace v8q {
 		{
 			return Core()->WriteUtf8( Buffer );
 		}
-		void Get( str::dString &String )
-		{
-		qRH
-			flx::rStringTOflow Flow;
-		qRB
-			Flow.Init( String );
-
-			Flow << *this;
-		qRR
-		qRT
-		qRE
-		}
+		// Defined at bottom of this file.
+		void Get( str::dString &String );
 	};
 
 	T( Name, String );
@@ -876,5 +870,19 @@ qRT
 qRE
 	return Flow;
 }
+
+template <typename name> inline void v8q::xString_<name>::Get( str::dString &String )
+{
+qRH
+	flx::rStringTOflow Flow;
+qRB
+	Flow.Init( String );
+
+	Flow << *this;
+qRR
+qRT
+qRE
+}
+
 
 #endif
