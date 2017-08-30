@@ -58,6 +58,8 @@
  </RTW>
 	<Files>
  </Files>
+ <Doc>
+ </Doc>
 	<PreprocessorDefinitions>
 		<PreprocessorDefinition>E_ST</PreprocessorDefinition>
 	</PreprocessorDefinitions>
