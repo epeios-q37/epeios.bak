@@ -19,9 +19,9 @@
 
 #define SCLJRE_COMPILATION_
 
-#include "scljre.h"
+#include "scljre.old.h"
 
-#include "jre.h"
+#include "jre.old.h"
 
 #include "sclerror.h"
 #include "scllocale.h"
