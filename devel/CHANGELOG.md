@@ -1,5 +1,10 @@
 # *Epeios* changelog
 
+2017-08-31 :
+- MTX :
+  - Reverting a *clang++* workaround due to the fact that some older *clang++* version issues a linker error (see http://travis-ci.org/epeios-q37/xppq-cli/jobs/270384361).
+  - Adding some *pragma*s for *clang++*, as it is the only way to disable the warning visible at http://travis-ci.org/epeios-q37/xppq-cli/jobs/233135308.
+
 2017-08-29 :
 - NODEQ, V8Q :
   - Fixing issues occurring with *g++*.

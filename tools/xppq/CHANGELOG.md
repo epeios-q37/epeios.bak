@@ -1,5 +1,8 @@
 # *XPPq* changelog.
 
+2017-08-31 :
+- *XPPq* is now available as *Node.js* *addon*.
+
 2016-09-30 :
 - *AArch64* (*ARM* 64-bit) version available.
 

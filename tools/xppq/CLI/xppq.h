@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2007-2011 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 2007-2017 Claude SIMON (http://q37.info/contact/).
 
 	This file is part of XPPq.
 
@@ -17,23 +17,17 @@
 	along with XPPq. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef REGISTRY__INC
-# define REGISTRY__INC
+#ifndef XPPQ_INC_
+# define XPPQ_INC_
 
-# include "sclrgstry.h"
-
-namespace registry {
-	using namespace sclrgstry;
-
-	namespace {
-		using rgstry::entry___;
-	}
-	
-	extern entry___ Input;
-	extern entry___ Output;
-	extern entry___ Indentation;
-	extern entry___ Preserve;
-	extern entry___ Namespace;
-}
+# define NAME_MC			"XPPq"
+# define NAME_LC			"xppq"
+# define NAME_UC			"XPPQ"
+# define WEBSITE_URL		"http://q37.info/"
+# define AUTHOR_NAME		"Claude SIMON"
+# define AUTHOR_CONTACT		"http://q37.info/contact/"
+# define OWNER_NAME			"Claude SIMON"
+# define OWNER_CONTACT		"http://q37.info/contact/"
+# define COPYRIGHT			COPYRIGHT_YEARS " " OWNER_NAME " (" OWNER_CONTACT ")"	
 
 #endif

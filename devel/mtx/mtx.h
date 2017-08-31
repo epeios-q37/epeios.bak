@@ -180,10 +180,18 @@ namespace mtx {
 		bso::bool__ Destroy )
 	{
 # ifdef MTX__ATOMIC
-#  ifdef CPE_C_CLANG
+//#  ifdef CPE_C_CLANG
+# if FALSE	// Disabled as some old version of 'clang++' issues a linker error (see https://travis-ci.org/epeios-q37/xppq-cli/jobs/270384361).
 		std::atomic_init( &Counter, Value );	// Warning : there seems to be a bug in g++ header about this function.
 #  else
-		Counter = ATOMIC_VAR_INIT( Value );		// Is the correct way, but 'clang++' issues a warning.
+#   ifdef CPE_C_CLANG
+#    pragma clang diagnostic push
+#    pragma clang diagnostic ignored "-Wbraced-scalar-init"	// To disable warning visible at https://travis-ci.org/epeios-q37/xppq-cli/jobs/233135308.
+#   endif
+		Counter = ATOMIC_VAR_INIT( Value );		// Is the correct way, but 'clang++' issues a warning, hence the 'pragma's above and below.
+#   ifdef CPE_C_CLANG
+#    pragma clang diagnostic pop
+#   endif
 #  endif
 # elif defined( MTX__DARWIN )
 		Counter = Value;
