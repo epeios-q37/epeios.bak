@@ -1,6 +1,6 @@
 {
   "name": "njsq",
-  "version": "0.0.0",
+  "version": "SEM_VER_TAG",
   "author": "Claude SIMON (http://q37.info/contact/)",
   "description": "Node.js addon wrapper.",
   "main": "NJSq.js",
