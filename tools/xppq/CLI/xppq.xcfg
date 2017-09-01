@@ -61,7 +61,7 @@
 		<Arguments>
 			<xpp:expand select="TOL_Arguments"/>
 			<!-- Commandes : 'Value', mais pas de 'Path' (vaut alors 'Parameters/Command'). -->
-			<Argument id="ProcessCommand" Description="ProcessCommandDescription" long="process" Value="Process" Usage="[%NamespaceOption%] [%NoIndentationFlag%] [%PreserveFlag%] [%InputArgument% [%OutputArgument%]]"/>
+			<Argument id="ProcessCommand" Description="ProcessCommandDescription" long="process" short="p" Value="Process" Usage="[%NamespaceOption%] [%NoIndentationFlag%] [%PreserveFlag%] [%InputArgument% [%OutputArgument%]]"/>
 			<Argument id="EncryptCommand" Description="EncryptCommandDescription" long="encrypt" Value="Encrypt" Usage="[%NamespaceOption%] [%NoIndentationFlag%] [%PreserveFlag%] [%InputArgument% [%OutputArgument%]]"/>
 			<!-- Drapeaux : 'Path' ET 'Value'. -->
 			<Argument id="NoIndentationFlag" Description="NoIndentationFlagDescription" long="no-indent" Path="Indentation" Value="No"/>
