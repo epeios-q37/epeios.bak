@@ -53,7 +53,7 @@
 	</Modules>
 	<SourceDirs>
 	</SourceDirs>
-	<RTW>
+	<RTW Description="Node.js addon wrapper" Keywords="wrapper,libuv">
   <Dir>njsq</Dir>
  </RTW>
 	<Files>
