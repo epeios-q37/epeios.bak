@@ -17,7 +17,7 @@
 	along with XPPq. If not, see <http://www.gnu.org/licenses/>.
 */
 
-// Once installed, launch ''npm explore xppq -- node test.js'.
+// Once installed, launch 'npm explore xppq -- node test.js'.
 // You can submit an additional parameter of value from '0' to '4' as id of the test to launch.
 
 "use strict"
