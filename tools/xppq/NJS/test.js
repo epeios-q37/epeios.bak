@@ -36,10 +36,10 @@ const xml = '\
  <YetAnotherTag YetAnotherAttribute="YetAnotherAttributeValue">\n\
   <xpp:expand select="SomeMacro"/>\n\
  </YetAnotherTag>\n\
-</SomeTag>                                   \n\
+</SomeTag>\
 ';
 
-// const xml = "<R/>";
+//const xml = "<R/>";
 var out = "";
 
 class StringStream extends stream.Readable {
@@ -129,7 +129,7 @@ switch (test) {
         break;
     case 2:
         console.log("Using the preprocessing stream with a callback, which transforms to lower case.\n");
-        new xppq.Stream(getStream()).on('data', (chunk) => write(chunk.toString().toLowerCase())).on('error', (err) => console.error('\n>>> ERROR : ' + err + '\n'));
+        new xppq.Stream(getStream()).on('data', (chunk) => write(chunk.toString().toLowerCase()) ).on('error', (err) => console.error('\n>>> ERROR : ' + err + '\n')).on( 'end', () => console.log( out ) );
         break;
     case 3:
         console.log("XML parsing WITHOUT preprocessing.\n");
@@ -137,7 +137,7 @@ switch (test) {
         break;
     case 4:
         console.log("XML parsing WITH preprocessing.\n");
-        xppq.parse(getStream().on('error', (err) => console.error('>>> ERROR : ' + err)), callback);
+        xppq.parse(new xppq.Stream(getStream()).on('error', (err) => console.error('>>> ERROR : ' + err)), callback);
         break;
     default:
         console.error("'" + arg + "' is not a valid test id ; must be '0' to '4'.");

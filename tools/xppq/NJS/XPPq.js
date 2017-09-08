@@ -47,14 +47,25 @@ module.exports.returnArgument = (text) => { return njsq._wrapper( 0, text ) };
 
 const stream = require('stream');
 
+function onReadable(stream, onRead, onEnd) {
+    var chunk;
+
+    console.log("check " + onRead);
+
+    while ( (chunk = stream.read() ) != null)
+        njsq._wrapper(onRead, stream, chunk);
+
+    njsq._wrapper(onEnd, stream);
+}
+
 class Stream extends stream.Readable {
+    _read() {
+        njsq._wrapper(6, this);
+    }
     constructor(stream, options) {
         super(options);
-        stream.on('readable', () => { var chunk; while ( ( chunk = stream.read() ) != null ) njsq._wrapper(4, stream, chunk); njsq._wrapper(5, stream); });
+        stream.on('readable', () => onReadable(stream, 4, 5) );
         njsq._wrapper( 7, stream, this );
-    }
-    _read() {
-        njsq._wrapper( 6, this );
     }
 }
 
@@ -72,5 +83,5 @@ var tokens = {
 module.exports = njsq;
 module.exports.Stream = Stream;
 // module.exports.parse = (stream, callback) => { stream.on('readable', () => { const chunk = stream.read(); if ( chunk == null ) njsq._wrapper( 2, stream ); else njsq._wrapper(1, stream, chunk); } ); njsq._wrapper(3, stream, callback) };
-module.exports.parse = (stream, callback) => { stream.on('readable', () => { var chunk; while ((chunk = stream.read()) != null) njsq._wrapper(1, stream, chunk); njsq._wrapper(2, stream); }); njsq._wrapper(3, stream, callback) };
+module.exports.parse = (stream, callback) => { stream.on('readable', () => onReadable(stream, 1, 2) ); njsq._wrapper(3, stream, callback) };
 module.exports.tokens = tokens;

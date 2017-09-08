@@ -116,6 +116,7 @@ namespace {
 	{
 	private:
 		tht::rLocker Locker_;
+		tht::rBlocker Blocker_;
 		fdr::sByte Buffer_[100];
 		fdr::sSize Amount_;
 		bso::sBool Drained_;
@@ -126,7 +127,7 @@ namespace {
 	public:
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, Locker_, Drained_ );
+			tol::reset( P, Locker_, Blocker_, Drained_ );
 
 			Amount_ = 0;
 		}
@@ -134,6 +135,7 @@ namespace {
 		void Init( void )
 		{
 			Locker_.Init();
+			Blocker_.Init( true );
 			Amount_ = 0;
 			Drained_ = false;
 		}
@@ -146,6 +148,12 @@ namespace {
 		qRB
 			Locker.Init( Locker_ );
 
+			if ( Amount_ == 0 ) {
+				Locker.Unlock();
+				Blocker_.Wait();
+				Locker.Lock();
+			}
+
 			if ( Amount_ != 0 ) {
 				if ( Amount > Amount_ )
 					Amount = Amount_;
@@ -157,7 +165,7 @@ namespace {
 				if ( Amount_ != 0 )
 					memcpy( Buffer_, Buffer_ + Amount, Amount_ );
 			} else
-				Amount = 0;
+				qRGnr();
 		qRR
 		qRT
 		qRE
@@ -186,6 +194,8 @@ namespace {
 					memcpy( Buffer_ + Amount_, Buffer, Amount );
 
 					Amount_ += Amount;
+
+					Blocker_.Unblock();
 				}
 			}
 		qRR
@@ -276,7 +286,7 @@ namespace {
 		typedef common::sRelay sRelay_;
 	}
 
-	class rStreamRack_	// By naming it simply 'rRack_', VC++ debugger confuse it with 'rRack_' in 'parser.cpp', althought both are defined in an anonymous namespace !
+	class rStreamRack_	// By naming it simply 'rRack_', VC++ debugger confuse it with 'rRack_' in 'parser.cpp', although both are defined in an anonymous namespace !
 	{
 	private:
 		sRelay_ StreamRelay_, ProcessRelay_;
