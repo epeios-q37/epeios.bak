@@ -50,10 +50,10 @@ const stream = require('stream');
 class Stream extends stream.Readable {
     constructor(stream, options) {
         super(options);
-        stream.on('readable', () => { var chunk = stream.read(); if (chunk == null) njsq._wrapper(5, stream); else njsq._wrapper(4, stream, chunk); });
+        stream.on('readable', () => { var chunk; while ( ( chunk = stream.read() ) != null ) njsq._wrapper(4, stream, chunk); njsq._wrapper(5, stream); });
         njsq._wrapper( 7, stream, this );
     }
-    _read(size) {
+    _read() {
         njsq._wrapper( 6, this );
     }
 }
@@ -62,13 +62,15 @@ class Stream extends stream.Readable {
 // If modified, modify also 'parser.cpp'.
 var tokens = {
     ERROR: 0,
-    START_TAG: 1,
-    ATTRIBUTE: 2,
-    VALUE: 3,
-    END_TAG: 4
+    DONE: 1,
+    START_TAG: 2,
+    ATTRIBUTE: 3,
+    VALUE: 4,
+    END_TAG: 5
 };
 
 module.exports = njsq;
 module.exports.Stream = Stream;
-module.exports.parse = (stream, callback) => { stream.on('readable', () => { var chunk = stream.read(); if ( chunk == null ) njsq._wrapper( 2, stream ); else njsq._wrapper(1, stream, chunk); } ); njsq._wrapper(3, stream, callback) };
+// module.exports.parse = (stream, callback) => { stream.on('readable', () => { const chunk = stream.read(); if ( chunk == null ) njsq._wrapper( 2, stream ); else njsq._wrapper(1, stream, chunk); } ); njsq._wrapper(3, stream, callback) };
+module.exports.parse = (stream, callback) => { stream.on('readable', () => { var chunk; while ((chunk = stream.read()) != null) njsq._wrapper(1, stream, chunk); njsq._wrapper(2, stream); }); njsq._wrapper(3, stream, callback) };
 module.exports.tokens = tokens;

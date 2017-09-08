@@ -1,5 +1,10 @@
 # *XPPq* changelog.
 
+2017-09-08 :
+- *xppqnjs*
+  - Adding `DONE` tag corresponding to the reaching the end of the stream.
+  - Fixing bad `stream.Readable.readable` event handling.
+
 2017-08-31 :
 - *XPPq* is now available as *Node.js* *addon*.
 

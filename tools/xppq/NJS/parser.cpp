@@ -128,6 +128,7 @@ namespace {
 				XFlow_.Dismiss();	// To avoid locker owner problem on destruction.
 				return true;
 			} else if ( Content_.Token == xml::t_Processed ) {
+				C_().Launch( 1, Content_.Tag, Content_.Attribute, Content_.Value );
 				XFlow_.UndelyingFlow().IDriver().ITake( tht::GetTID() );
 				XFlow_.Dismiss();	// To avoid locker owner problem on destruction.
 				return true;
@@ -136,16 +137,16 @@ namespace {
 				// Must match 'xppq.js'.
 				switch ( Content_.Token ) {
 				case xml::tStartTag:
-					Token = 1;
-					break;
-				case xml::tAttribute:
 					Token = 2;
 					break;
-				case xml::tValue:
+				case xml::tAttribute:
 					Token = 3;
 					break;
-				case xml::tEndTag:
+				case xml::tValue:
 					Token = 4;
+					break;
+				case xml::tEndTag:
+					Token = 5;
 					break;
 				default:
 					qRGnr();
