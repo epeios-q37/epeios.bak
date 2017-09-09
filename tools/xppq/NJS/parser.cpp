@@ -134,7 +134,7 @@ namespace {
 				return true;
 			} else {
 				int Token = 0;
-				// Must match 'xppq.js'.
+				// Must match declaration in 'XPPq.js'.
 				switch ( Content_.Token ) {
 				case xml::tStartTag:
 					Token = 2;

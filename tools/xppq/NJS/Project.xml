@@ -41,6 +41,11 @@
   <Module>common</Module>
   <Module>parser</Module>
   <Module>stream</Module>
+  <Modules Group="Stream">
+   <Module>stream_d</Module>
+   <Module>stream_s</Module>
+   <Module>stream_u</Module>
+  </Modules>
   <Module>registry</Module>
  </Modules>
 	<SourceDirs>

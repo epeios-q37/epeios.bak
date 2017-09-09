@@ -47,6 +47,10 @@
 # define XPP__PREPROCESSOR_DEFAULT_NAMESPACE	"xpp"
 #endif
 
+/*************/
+/**** OLD ****/
+/*************/
+
 namespace xpp {
 
 	typedef bso::uint__ level__;	// Imbrication level.
@@ -923,5 +927,15 @@ namespace xpp {
 		str::string_ &Out,
 		const criterions___ &Criterions );
 }
+
+/*************/
+/**** NEW ****/
+/*************/
+
+namespace xpp {
+	typedef preprocessing_iflow___ rIFlow;
+	typedef criterions___ rCriterions;
+}
+
 
 #endif

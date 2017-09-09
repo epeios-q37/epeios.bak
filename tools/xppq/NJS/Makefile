@@ -41,6 +41,7 @@ mods += fil fnm lcl rgstry stsfsm
 mods += xml xpp 
 mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
 mods += scln4a sclnjs 
+mods += stream_d stream_s stream_u 
 mods += common parser stream registry 
 
 pmods += pllio 
@@ -391,7 +392,7 @@ ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20170901"\"
+copt += -DVERSION=\""20170909"\"
 copt += -DCOPYRIGHT_YEARS=\""2007-2017"\"
 copt += -DIDENTIFIER=\""d6a723cb-e88f-4f2f-b429-3adc207f1d62"\"
 
