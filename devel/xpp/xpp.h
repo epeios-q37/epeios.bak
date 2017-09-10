@@ -597,6 +597,14 @@ namespace xpp {
 		status__ Handle(
 			_extended_parser___ *&Parser,
 			str::string_ &Data );
+		xtf::extended_text_iflow__ &Flow( void )
+		{
+			return _Parser.Flow();
+		}
+		const xtf::extended_text_iflow__ &Flow( void ) const
+		{
+			return _Parser.Flow();
+		}
 		const str::string_ &DumpData_( void ) const
 		{
 			return _Parser.DumpData();
@@ -726,9 +734,7 @@ namespace xpp {
 		{}
 		virtual fdr::sTID FDRITake( fdr::sTID Owner ) override
 		{
-			qRVct();
-
-			return fdr::UndefinedTID;	// To avoid a warning.
+			return _Parser().Flow().UndelyingFlow().Take( Owner );
 		}
 	public:
 		void reset( bso::bool__ P = true )

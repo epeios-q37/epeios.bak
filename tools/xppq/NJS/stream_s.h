@@ -94,26 +94,76 @@ namespace stream_s {
 	typedef xpp::rIFlow rPreprocessor_;
 	typedef txf::rOFlow rOFlow_;
 
+	typedef sclnjs::cAsync cAsync_;
+
 	class rNewRack
 	: public rPreprocessor_,
-	  public rOFlow_
+	  public rOFlow_,
+	  public cAsync_
 	{
 	private:
+		bso::sBool IsFirst_;
+		tht::rBlocker Blocker_;
+		bso::sBool TestBlocker_;
+		qRMV( sclnjs::rRStream, S_, Stream_ );
 		flx::rFRelay<> Relay_;
 		flx::sIRelay IRelay_;
 		flx::sORelay ORelay_;
 		flw::sDressedIFlow<> IFlow_;
 		xtf::sIFlow XFlow_;
+		char Buffer_[100];
+		bso::sSize Amount_ = 0;
+	protected:
+		virtual void UVQWork( void ) override
+		{
+			if ( TestBlocker_ ) {
+				Blocker_.Wait();
+				TestBlocker_ = false;
+			}
+
+			if ( IsFirst_ ) {
+				DelayedInit();
+				IsFirst_ = false;
+			}
+
+			Take();
+
+			if ( !EndOfFlow() )
+				Amount_ = ReadUpTo( sizeof( Buffer_ ), Buffer_ );
+		}
+		// Note to 'v8' user : you CAN access any of the 'v8' data from this method.
+		virtual sclnjs::eBehavior UVQAfter( void ) override
+		{
+			if ( Amount_ == 0 ) {
+				S_().End();
+//				return sclnjs::bExitOnly;
+				return sclnjs::bExitAndDelete;
+			} else {
+				if ( !S_().Push( Buffer_, Amount_ ) )
+					TestBlocker_ = true;
+				Amount_ = 0;
+				return sclnjs::bRelaunch;
+			}
+		}
 	public:
 		void reset( bso::sBool P = true )
 		{
+			if ( P ) {
+				if ( Stream_ != NULL )
+					delete Stream_;
+			}
+
+			IsFirst_ = false;
+			Amount_ = 0;
+			TestBlocker_ = false;
+
 			rPreprocessor_::reset( P );
 			rOFlow_::reset( P );
 
-			tol::reset( P, XFlow_, IFlow_, ORelay_, IRelay_ );
+			tol::reset( P, Blocker_, XFlow_, IFlow_, ORelay_, IRelay_ );
 		}
 		qCDTOR( rNewRack );
-		void Init( void )
+		void Init( sclnjs::rRStream &Stream )
 		{
 			Relay_.Init();
 
@@ -122,11 +172,23 @@ namespace stream_s {
 
 			ORelay_.Init( Relay_ );
 			rOFlow_::Init( ORelay_ );
+
+			IsFirst_ = true;
+			Amount_ = 0;
+			Stream_ = &Stream;
+			TestBlocker_ = true;
+
+			Blocker_.Init( true );
 		}
 		void DelayedInit( void )
 		{
+			IsFirst_ = false;
 			XFlow_.Init( IFlow_, utf::f_Guess );
 			rPreprocessor_::Init( XFlow_, xpp::rCriterions( "" ) );
+		}
+		void Unblock( void )
+		{
+			Blocker_.Unblock();
 		}
 	};
 }

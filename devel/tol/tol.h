@@ -2329,6 +2329,33 @@ namespace tol {
 	}
 
 
+	template <typename arg> inline arg Same_(
+		arg Arg1,
+		arg Arg2 )
+	{
+		if ( Arg1 != Arg2 )
+			qRFwk();
+
+		return Arg1;
+	}
+
+	template <typename arg, typename... args> inline arg Same_(
+		arg Arg1,
+		arg Arg2,
+		args... Args )
+	{
+		return Same_( Arg1, Arg2 );
+
+		return Same_( Arg2, Args... );
+	}
+
+	// Issues an error if all arguments are not of same value, else returns this value.
+	template <typename arg, typename... args> inline arg Same(
+		arg Arg,
+		args... Args )
+	{
+		return Same_( Arg, Args... );
+	}
 }
 
 

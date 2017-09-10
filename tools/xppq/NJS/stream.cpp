@@ -123,7 +123,7 @@ qRB
 
 	Caller.GetArgument( Source, *This );
 
-	Rack->Init();
+	Rack->Init( *This );
 
 	Source.Set( "_rack0", Rack );
 	This->Set( "_rack0", Rack );
@@ -137,7 +137,7 @@ qRB
 
 //	This.OnRead( OnRead_ );
 
-//	sclnjs::Launch( *Rack );
+	sclnjs::Launch( *Rack );
 qRR
 	if ( Rack != NULL )
 		delete Rack;
