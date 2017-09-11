@@ -50,12 +50,17 @@ const stream = require('stream');
 function onReadable(stream, onRead, onEnd) {
     var chunk;
 
-    console.log("check " + onRead);
+/*    if ( ( chunk = stream.read() ) != null )
+        do njsq._wrapper(onRead, stream, chunk);
+        while ( ( chunk = stream.read() ) != null);
+    else
+        njsq._wrapper(onEnd, stream);
+*/
 
-    while ( (chunk = stream.read() ) != null)
+     if ( ( chunk = stream.read() ) != null )
         njsq._wrapper(onRead, stream, chunk);
-
-    njsq._wrapper(onEnd, stream);
+     else
+        njsq._wrapper(onEnd, stream);
 }
 
 class Stream extends stream.Readable {

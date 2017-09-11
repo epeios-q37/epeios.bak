@@ -26,10 +26,9 @@
 # include "stream_u.h"
 
 namespace stream {
-	using stream_u::NewOnData;
-	using stream_u::NewOnEOD;
-	using stream_d::NewOnRead;
-	void OldSet( sclnjs::sCaller &Caller );
+	using stream_u::OnData;
+	using stream_u::OnEOD;
+	using stream_d::OnRead;
 	void Set( sclnjs::sCaller &Caller );
 }
 

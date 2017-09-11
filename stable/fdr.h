@@ -211,13 +211,13 @@ namespace fdr {
 #ifdef FDR__TS
 			sTID Old = Owner_;
 
-			if ( Old != tht::Undefined ) {
+//			if ( Old != tht::Undefined ) {
 
 				if ( TID == tht::Undefined )
 					TID = tht::GetTID();
 
 				Owner_ = TID;
-			}
+//			}
 
 			return Old;
 #else
@@ -256,6 +256,10 @@ namespace fdr {
 # else
 			Unlock_( _Mutex );
 # endif
+		}
+		sTID Owner( void ) const
+		{
+			return Owner_;
 		}
 	};
 

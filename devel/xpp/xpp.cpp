@@ -1522,9 +1522,11 @@ sdr::size__ xpp::_preprocessing_iflow_driver___::FDRRead(
 				qRFwk();
 #endif
 			if ( _Parsers.Amount() != 0 ) {
+				tht::sTID Owner = _CurrentParser->Flow().UndelyingFlow().Owner();
 				utf::format__ Format = _CurrentParser->GetFormat();
 				delete _CurrentParser;
 				_CurrentParser = _Parsers.Pop();
+				_CurrentParser->Flow().UndelyingFlow().Take( Owner );
 				if ( Format != utf::f_Guess ) {
 					if ( _Parser().GetFormat() == utf::f_Guess )
 						_Parser().SetFormat( Format );
@@ -1552,6 +1554,7 @@ sdr::size__ xpp::_preprocessing_iflow_driver___::FDRRead(
 		}
 
 		if ( Parser != NULL ) {
+			_CurrentParser->Flow().UndelyingFlow().Take( Parser->Flow().UndelyingFlow().Owner() );
 			_Parsers.Push( _CurrentParser );
 			_CurrentParser = Parser;
 		}

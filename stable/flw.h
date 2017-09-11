@@ -159,6 +159,10 @@ namespace flw {
 
 			return _D().ITake( Owner );
 		}
+		tht::sTID Owner( void ) const
+		{
+			return _D().Owner();
+		}
 		bso::bool__ IsCacheEmpty( bso::size__ *Available = NULL ) const
 		{
 			return _D().IsCacheEmpty( Available );
@@ -464,6 +468,10 @@ namespace flw {
 			
 			return _D().OTake( tht::GetTID() );
 		}
+		tht::sTID Owner( void ) const
+		{
+			return _D().Owner();
+		}
 		fdr::oflow_driver_base___ &ODriver( void ) const
 		{
 			return _D();
@@ -624,6 +632,10 @@ namespace flw {
 				Owner = tht::GetTID();
 			
 			return tol::Same( iflow__::Take( Owner ), oflow__::Take( Owner ) );
+		}
+		tht::sTID Owner( void ) const
+		{
+			return tol::Same( iflow__::Owner(), oflow__::Owner() );
 		}
 	};
 

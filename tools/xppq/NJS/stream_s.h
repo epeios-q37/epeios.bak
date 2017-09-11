@@ -29,92 +29,26 @@
 # include "xtf.h"
 
 namespace stream_s {
-	class rContent_
-	{
-	private:
-		tht::rLocker Locker_;
-		tht::rBlocker Blocker_;
-		fdr::sByte Buffer_[100];
-		fdr::sSize Amount_;
-		bso::sBool Drained_;
-		fdr::sSize Size_( void )
-		{
-			return sizeof( Buffer_ );
-		}
-	public:
-		void reset( bso::sBool P = true )
-		{
-			tol::reset( P, Locker_, Blocker_, Drained_ );
 
-			Amount_ = 0;
-		}
-		qCDTOR( rContent_ );
-		void Init( void )
-		{
-			Locker_.Init();
-			Blocker_.Init( true );
-			Amount_ = 0;
-			Drained_ = false;
-		}
-		fdr::sSize C_Read(
-			fdr::sSize Amount,
-			fdr::sByte *Buffer );
-		fdr::sSize P_Write(
-			fdr::sByte *Buffer,
-			fdr::sSize Amount );
-		bso::sBool C_IsDrained( void )
-		{
-			return Drained_;
-		}
-	};
-
-	typedef common::sRelay sRelay_;
-
-	class rRack
-	{
-	private:
-		sRelay_ StreamRelay_, ProcessRelay_;
-		txf::rOFlow ProcessFlow_;
-		rContent_ Content_;
-		sclnjs::rRStream *Stream_;
-		fdr::sByte Buffer_[100];
-		fdr::sSize Amount_;	// Amount of data in the buffer.
-	public:
-		txf::rOFlow OFlow;
-		tht::rBlocker Blocker;
-		bso::sBool Wait;
-		str::wString Error;
-		void reset( bso::sBool P = true );
-		qCVDTOR( rRack );
-		void Init( sclnjs::rRStream &Stream );
-		void Retrieve( void );
-		bso::sBool Send( void );
-	};
+	extern const char *Id;
 
 	typedef xpp::rIFlow rPreprocessor_;
 	typedef txf::rOFlow rOFlow_;
 
-	typedef sclnjs::cAsync cAsync_;
-
-	class rNewRack
-	: public rPreprocessor_,
-	  public rOFlow_,
-	  public cAsync_
-	{
+	class rIn_
+	: public rPreprocessor_ {
 	private:
-		bso::sBool IsFirst_;
-		tht::rBlocker Blocker_;
-		bso::sBool TestBlocker_;
 		qRMV( sclnjs::rRStream, S_, Stream_ );
-		flx::rFRelay<> Relay_;
-		flx::sIRelay IRelay_;
-		flx::sORelay ORelay_;
-		flw::sDressedIFlow<> IFlow_;
-		xtf::sIFlow XFlow_;
+		bso::sBool IsFirst_;
+		bso::sBool TestBlocker_;
 		char Buffer_[100];
 		bso::sSize Amount_ = 0;
+		tht::rBlocker Blocker_;
+		flx::sIRelay Relay_;
+		flw::sDressedIFlow<> Flow_;
+		xtf::sIFlow XFlow_;
 	protected:
-		virtual void UVQWork( void ) override
+		void Read( void )
 		{
 			if ( TestBlocker_ ) {
 				Blocker_.Wait();
@@ -122,21 +56,18 @@ namespace stream_s {
 			}
 
 			if ( IsFirst_ ) {
-				DelayedInit();
 				IsFirst_ = false;
+				XFlow_.Init( Flow_, utf::f_Guess );
+				rPreprocessor_::Init( XFlow_, xpp::rCriterions( "" ) );
 			}
-
-			Take();
 
 			if ( !EndOfFlow() )
 				Amount_ = ReadUpTo( sizeof( Buffer_ ), Buffer_ );
 		}
-		// Note to 'v8' user : you CAN access any of the 'v8' data from this method.
-		virtual sclnjs::eBehavior UVQAfter( void ) override
+		sclnjs::eBehavior Send( void )
 		{
 			if ( Amount_ == 0 ) {
 				S_().End();
-//				return sclnjs::bExitOnly;
 				return sclnjs::bExitAndDelete;
 			} else {
 				if ( !S_().Push( Buffer_, Amount_ ) )
@@ -158,37 +89,89 @@ namespace stream_s {
 			TestBlocker_ = false;
 
 			rPreprocessor_::reset( P );
-			rOFlow_::reset( P );
 
-			tol::reset( P, Blocker_, XFlow_, IFlow_, ORelay_, IRelay_ );
+			tol::reset( P, Stream_, Blocker_, Relay_, Flow_, XFlow_ );
 		}
-		qCDTOR( rNewRack );
-		void Init( sclnjs::rRStream &Stream )
+		qCDTOR( rIn_ );
+		void Init(
+			sclnjs::rRStream &Stream,
+			flx::rRelay_ &Core )
 		{
-			Relay_.Init();
-
-			IRelay_.Init( Relay_ );
-			IFlow_.Init( IRelay_ );
-
-			ORelay_.Init( Relay_ );
-			rOFlow_::Init( ORelay_ );
-
-			IsFirst_ = true;
-			Amount_ = 0;
 			Stream_ = &Stream;
+			IsFirst_ = true;
 			TestBlocker_ = true;
+			Amount_ = 0;
 
 			Blocker_.Init( true );
-		}
-		void DelayedInit( void )
-		{
-			IsFirst_ = false;
-			XFlow_.Init( IFlow_, utf::f_Guess );
-			rPreprocessor_::Init( XFlow_, xpp::rCriterions( "" ) );
+
+			Relay_.Init( Core, fdr::tsDisabled );	// Will be handled from different thread, ('SCLNJSWork(...)'), so the thread-safety is disabled.
+			Flow_.Init( Relay_ );
+
+			// The rest will be initialized asynchronously, as it is blocking.
 		}
 		void Unblock( void )
 		{
 			Blocker_.Unblock();
+		}
+	};
+
+	class rOut_
+	: public rOFlow_
+	{
+	private:
+		flx::sORelay Relay_;
+		flx::rDASync<> Async_;
+	public:
+		void reset( bso::sBool P = true )
+		{
+			rOFlow_::reset( P );
+
+			tol::reset( P, Async_, Relay_ );
+		}
+		qCDTOR( rOut_ );
+		void Init( flx::rRelay_ &Core )
+		{
+			Relay_.Init( Core );
+			rOFlow_::Init( Async_.Init( Relay_ ) );
+		}
+	};
+
+
+	typedef sclnjs::cAsync cAsync_;
+
+	class rRack
+	: public rIn_,
+	  public rOut_,
+	  public cAsync_
+	{
+	private:
+		flx::rFRelay<> Relay_;
+	protected:
+		virtual void SCLNJSWork( void ) override
+		{
+			rIn_::Read();
+		}
+		// Note to 'v8' user : you CAN access any of the 'v8' data from this method.
+		virtual sclnjs::eBehavior SCLNJSAfter( void ) override
+		{
+			return rIn_::Send();
+		}
+	public:
+		void reset( bso::sBool P = true )
+		{
+			rIn_::reset( P );
+			rOut_::reset( P );
+
+			tol::reset( P, Relay_ );
+		}
+		qCDTOR( rRack );
+		void Init( sclnjs::rRStream &Stream )
+		{
+			Relay_.Init();
+
+			rIn_::Init( Stream, Relay_ );
+			rOut_::Init( Relay_ );
+
 		}
 	};
 }

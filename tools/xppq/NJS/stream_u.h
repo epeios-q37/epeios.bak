@@ -29,8 +29,6 @@ namespace stream_u {
 	// Both are called in the JS 'onReadable' function.
 	void OnData( sclnjs::sCaller &Caller );	// Called when some data is available.
 	void OnEOD( sclnjs::sCaller &Caller );	// Called when no more data is available.
-	void NewOnData( sclnjs::sCaller &Caller );	// Called when some data is available.
-	void NewOnEOD( sclnjs::sCaller &Caller );	// Called when no more data is available.
 }
 
 #endif

@@ -2344,9 +2344,7 @@ namespace tol {
 		arg Arg2,
 		args... Args )
 	{
-		return Same_( Arg1, Arg2 );
-
-		return Same_( Arg2, Args... );
+		return Same_( Same_( Arg1, Arg2 ), Args... );
 	}
 
 	// Issues an error if all arguments are not of same value, else returns this value.

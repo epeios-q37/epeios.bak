@@ -24,6 +24,10 @@
 using namespace parser;
 
 namespace {
+	qCDEF( char *, Id_, "_q37RackParser" );
+}
+
+namespace {
 	namespace {
 		class rContent_ {
 		public:
@@ -64,7 +68,7 @@ namespace {
 				Meaning.Init();
 				xml::GetMeaning( Parser.GetStatus(), Parser.Flow().Position(), Meaning );
 				Locale.Init();
-				Locale.GetTranslation( Meaning, "", Content.Error );
+				sclmisc::GetBaseTranslation( Meaning, Content.Error );
 				break;
 			default:
 				Content.Tag = Parser.TagName();
@@ -189,66 +193,6 @@ namespace {
 			rRack_::Init( Callback );
 		}
 	};
-#if 1
-	/*
-	void OnReadable_( sclnjs::sCaller &Caller )
-	{
-	qRH
-		sclnjs::rRStream This;
-		str::wString Chunk;
-	qRB
-		This.Init();
-		Caller.GetArgument( This );
-
-		rRack_ &Rack = *(rRack_ *)This.Get( "_rack" );
-
-		Chunk.Init();
-
-		if ( This.Read( Chunk ) )
-			Rack.OFlow << Chunk;
-		else
-			Rack.OFlow.Commit();
-	qRR
-	qRT
-	qRE
-	}
-	*/
-#else
-	void OnData_( const v8q::sFunctionInfos &Infos )
-	{
-		qRFH
-			nodeq::sRStream This;
-		nodeq::sBuffer Chunk;
-		qRFB
-			This.Init( Infos.This() );
-
-		Chunk.Init();
-		v8q::Get( Infos, Chunk );
-
-		rRack_ &Rack = *nodeq::sExternal<rRack_>( This.Get( "_rack" ) ).Value();
-
-		Rack.OFlow << Chunk;
-		qRFR
-			qRFT
-			qRFE( sclnjs::ErrFinal() )
-	}
-
-	void OnEnd_( const v8q::sFunctionInfos &Infos )
-	{
-		qRFH
-			nodeq::sRStream This;
-		qRFB
-			This.Init( Infos.This() );
-
-		rRack_ &Rack = *nodeq::sExternal<rRack_>( This.Get( "_rack" ) ).Value();
-
-		Rack.OFlow.Commit();
-		qRFR
-			qRFT
-			qRFE( sclnjs::ErrFinal() )
-	}
-
-#endif
 }
 
 void parser::OnData( sclnjs::sCaller &Caller )
@@ -260,7 +204,7 @@ qRB
 	tol::Init( This, Chunk );
 	Caller.GetArgument( This, Chunk );
 
-	rRack_ &Rack = *(rRack_ *)This.Get( "_rack" );
+	rRack_ &Rack = *(rRack_ *)This.Get( Id_ );
 
 	Rack.OFlow << Chunk;
 qRR
@@ -276,7 +220,7 @@ qRB
 	tol::Init( This );
 	Caller.GetArgument( This );
 
-	rRack_ &Rack = *(rRack_ *)This.Get( "_rack" );
+	rRack_ &Rack = *(rRack_ *)This.Get( Id_ );
 
 	Rack.OFlow.Commit();
 qRR
@@ -305,7 +249,7 @@ qRB
 	Caller.GetArgument( Source, *Callback );
 	Rack->Init( Callback );
 
-	Source.Set( "_rack", Rack );
+	Source.Set( Id_, Rack );
 
 #if 1
 //	Source.OnReadable( OnReadable_ );

@@ -55,7 +55,7 @@ void sclnjs::SCLNJSRegister( scln4a::sRegistrar &Registrar )
 {
 	Registrar.Register( ReturnArgument_ );
 	Registrar.Register( parser::OnData, parser::OnEOD, parser::Parse );
-	Registrar.Register( stream::NewOnData, stream::NewOnEOD, stream::NewOnRead, stream::Set );
+	Registrar.Register( stream::OnData, stream::OnEOD, stream::OnRead, stream::Set );
 }
 
 const char *sclmisc::SCLMISCTargetName = NAME_LC;

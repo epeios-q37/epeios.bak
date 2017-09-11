@@ -31,34 +31,10 @@ qRH
 	sclnjs::rRStream This;
 qRB
 	This.Init();
-	Caller.GetArgument( This );
-
-	rRack &Rack = *(rRack *)( This.Get( "_rack0" ) );
-
-	if ( Rack.Error.Amount() != 0 ) {
-		This.EmitError( Rack.Error );
-		Rack.Error.Init();
-	}
-
-	Rack.Blocker.Unblock();
-qRR
-qRE
-qRT
-}
-
-using stream_s::rNewRack;
-
-
-void stream_d::NewOnRead( sclnjs::sCaller &Caller )
-{
-qRH
-	sclnjs::rRStream This;
-qRB
-	This.Init();
 
 	Caller.GetArgument( This );
 
-	rNewRack &Rack = *(rNewRack *)( This.Get( "_rack0" ) );
+	rRack &Rack = *(rRack *)( This.Get( stream_s::Id ) );
 
 	Rack.Unblock();
 qRR

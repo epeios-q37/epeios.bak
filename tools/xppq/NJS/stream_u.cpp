@@ -34,9 +34,9 @@ qRB
 	tol::Init( This, Chunk );
 	Caller.GetArgument( This, Chunk );
 
-	rRack &Rack = *(rRack *)This.Get( "_rack0" );
+	rRack &Rack = *(rRack *)This.Get( stream_s::Id );
 
-	Rack.OFlow << Chunk;
+	Rack << Chunk;
 qRR
 qRT
 qRE
@@ -50,42 +50,7 @@ qRB
 	tol::Init( This );
 	Caller.GetArgument( This );
 
-	rRack &Rack = *(rRack *)This.Get( "_rack0" );
-
-	Rack.OFlow.Commit();
-qRR
-qRT
-qRE
-}
-
-using stream_s::rNewRack;
-
-void stream_u::NewOnData( sclnjs::sCaller &Caller )
-{
-qRH
-	sclnjs::rRStream This;
-	sclnjs::rBuffer Chunk;
-qRB
-	tol::Init( This, Chunk );
-	Caller.GetArgument( This, Chunk );
-
-	rNewRack &Rack = *(rNewRack *)This.Get( "_rack0" );
-
-	Rack << Chunk;
-qRR
-qRT
-qRE
-}
-
-void stream_u::NewOnEOD( sclnjs::sCaller &Caller )
-{
-qRH
-	sclnjs::rRStream This;
-qRB
-	tol::Init( This );
-	Caller.GetArgument( This );
-
-	rNewRack &Rack = *(rNewRack *)This.Get( "_rack0" );
+	rRack &Rack = *(rRack *)This.Get( stream_s::Id );
 
 	Rack.Commit();
 qRR
