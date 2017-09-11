@@ -48,15 +48,6 @@ qRB
 	Source.Set( stream_s::Id, Rack );
 	This->Set( stream_s::Id, Rack );
 
-#if 1
-//	Source.OnReadable( OnReadable_ );
-# else // Doesn't always work. Sometimes, 'onend' event is not launched...
-	Source.OnData( OnData_ );
-	Source.OnEnd( OnEnd_ );
-#endif
-
-//	This.OnRead( OnRead_ );
-
 	sclnjs::Launch( *Rack );
 qRR
 	if ( Rack != NULL )

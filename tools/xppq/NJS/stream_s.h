@@ -29,7 +29,6 @@
 # include "xtf.h"
 
 namespace stream_s {
-
 	extern const char *Id;
 
 	typedef xpp::rIFlow rPreprocessor_;
@@ -50,15 +49,15 @@ namespace stream_s {
 	protected:
 		void Read( void )
 		{
-			if ( TestBlocker_ ) {
-				Blocker_.Wait();
-				TestBlocker_ = false;
-			}
-
 			if ( IsFirst_ ) {
 				IsFirst_ = false;
 				XFlow_.Init( Flow_, utf::f_Guess );
 				rPreprocessor_::Init( XFlow_, xpp::rCriterions( "" ) );
+			}
+
+			if ( TestBlocker_ ) {
+				Blocker_.Wait( true );	// Waits until '_read()' is called.
+				TestBlocker_ = false;
 			}
 
 			if ( !EndOfFlow() )
@@ -102,7 +101,7 @@ namespace stream_s {
 			TestBlocker_ = true;
 			Amount_ = 0;
 
-			Blocker_.Init( true );
+			Blocker_.Init();
 
 			Relay_.Init( Core, fdr::tsDisabled );	// Will be handled from different thread, ('SCLNJSWork(...)'), so the thread-safety is disabled.
 			Flow_.Init( Relay_ );
@@ -111,7 +110,7 @@ namespace stream_s {
 		}
 		void Unblock( void )
 		{
-			Blocker_.Unblock();
+			Blocker_.Unblock( true );
 		}
 	};
 

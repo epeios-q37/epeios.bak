@@ -64,7 +64,7 @@ function onReadable(stream, onRead, onEnd) {
 }
 
 class Stream extends stream.Readable {
-    _read() {
+    _read(size) {
         njsq._wrapper(6, this);
     }
     constructor(stream, options) {
@@ -87,6 +87,5 @@ var tokens = {
 
 module.exports = njsq;
 module.exports.Stream = Stream;
-// module.exports.parse = (stream, callback) => { stream.on('readable', () => { const chunk = stream.read(); if ( chunk == null ) njsq._wrapper( 2, stream ); else njsq._wrapper(1, stream, chunk); } ); njsq._wrapper(3, stream, callback) };
 module.exports.parse = (stream, callback) => { stream.on('readable', () => onReadable(stream, 1, 2) ); njsq._wrapper(3, stream, callback) };
 module.exports.tokens = tokens;

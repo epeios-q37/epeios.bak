@@ -30,6 +30,7 @@ const xml = '\
 <?xml version="1.0" encoding="UTF-8"?>\n\
 <SomeTag xmlns:xpp="http://q37.info/ns/xpp/" AnAttribute="SomeAttributeValue">\n\
  <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
+ <!--SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
  <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
  <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
  <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
@@ -191,8 +192,7 @@ const xml = '\
  <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
  <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
  <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
+ <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag-->\n\
  <xpp:define name="SomeMacro">\n\
   <xpp:bloc>Some macro content !</xpp:bloc>\n\
  </xpp:define>\n\
@@ -269,7 +269,7 @@ if (arg != undefined)
     id = Number(arg);
 
 function getStream() {
-    if ( true )
+    if ( false )
         return new StringStream(xml);
     else
         return fs.createReadStream(file);

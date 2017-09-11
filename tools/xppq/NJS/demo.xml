@@ -732,9 +732,6 @@
  <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in file</SomeOtherTag>
  <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in file</SomeOtherTag>
  <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in file</SomeOtherTag>
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in file</SomeOtherTag>
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in file</SomeOtherTag>
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in file</SomeOtherTag>
  <xpp:define name="SomeMacro">
   <xpp:bloc>Some macro content !</xpp:bloc>
  </xpp:define>

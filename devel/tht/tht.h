@@ -296,7 +296,7 @@ namespace tht {
 				Core_.ThreadID = GetTID();
 			}
 		}
-		void Wait( void )
+		void Wait( bso::sBool IgnoreTarget = false )
 		{
 		qRH
 			rLockerHandler Locker;
@@ -306,7 +306,7 @@ namespace tht {
 			if ( Core_.ThreadID == Undefined ) {
 				Core_.Lock();
 				Core_.ThreadID = GetTID();
-			} else 	if ( Core_.ThreadID != GetTID() )
+			} else 	if ( !IgnoreTarget && ( Core_.ThreadID != GetTID() ) )
 				qRFwk();
 
 			Locker.Unlock();
@@ -322,14 +322,14 @@ namespace tht {
 		qRT
 		qRE
 		}
-		void Unblock( void )
+		void Unblock( bso::sBool IgnoreTarget = false )
 		{
 		qRH
 			rLockerHandler Locker;
 		qRB
 			Locker.Init( Locker_ );
 
-			if ( Core_.ThreadID == GetTID() )
+			if ( !IgnoreTarget && ( Core_.ThreadID == GetTID() ) )
 				qRFwk();
 
 			if ( Core_.ThreadID != Undefined )

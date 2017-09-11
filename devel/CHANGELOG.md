@@ -1,5 +1,9 @@
 # *Epeios* changelog
 
+2017-09-11 :
+  - THT :
+    - Adding `IgnoreTarget` parameter to some *Blocker* methods.
+
 2017-09-10 :
 - FLW :
   - Adding `Take()` methods.
