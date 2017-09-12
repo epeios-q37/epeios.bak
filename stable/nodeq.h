@@ -199,7 +199,8 @@ namespace nodeq {
 		}
 		void End( v8::Isolate *Isolate = NULL )
 		{
-			Push_( v8::Null( v8q::GetIsolate( Isolate ) ), Isolate );
+			Isolate = v8q::GetIsolate( Isolate );
+			Push_( v8::Null( Isolate ), Isolate );
 		}
 	};
 

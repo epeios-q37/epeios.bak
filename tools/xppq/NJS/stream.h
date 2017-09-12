@@ -27,8 +27,8 @@
 
 namespace stream {
 	using stream_u::OnData;
-	using stream_u::OnEOD;
-	using stream_d::OnRead;
+	using stream_u::OnEnd;
+	using stream_d::Read;
 	void Set( sclnjs::sCaller &Caller );
 }
 

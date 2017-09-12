@@ -1,8 +1,12 @@
 # *Epeios* changelog
 
+2017-09-12 :
+- SCLNJS
+  - Adding `rRStream::Push(...)` variant.
+
 2017-09-11 :
-  - THT :
-    - Adding `IgnoreTarget` parameter to some *Blocker* methods.
+- THT :
+  - Adding `IgnoreTarget` parameter to some *Blocker* methods.
 
 2017-09-10 :
 - FLW :

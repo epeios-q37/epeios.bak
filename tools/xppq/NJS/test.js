@@ -22,177 +22,19 @@
 
 "use strict"
 
-const fs = require('fs');
-const stream = require('stream');
-const xppq = require('./XPPq.js');
-var indentLevel = 0;
+var id = 4;   // Default test id.
+
+var inputs = {
+    STRING: 0,
+    FILE: 1,
+};
+
+const input = inputs.STRING;
+
 const xml = '\
 <?xml version="1.0" encoding="UTF-8"?>\n\
 <SomeTag xmlns:xpp="http://q37.info/ns/xpp/" AnAttribute="SomeAttributeValue">\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <!--SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag>\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue in a string</SomeOtherTag-->\n\
+ <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue (in a string)</SomeOtherTag>\n\
  <xpp:define name="SomeMacro">\n\
   <xpp:bloc>Some macro content !</xpp:bloc>\n\
  </xpp:define>\n\
@@ -202,14 +44,17 @@ const xml = '\
 </SomeTag>\
 ';
 
-//const xml = "<R/>";
+const fs = require('fs');
+const stream = require('stream');
+const xppq = require('./XPPq.js');
+var indentLevel = 0;
+
 var out = "";
 
 class StringStream extends stream.Readable {
     constructor(text, options) {
         super(options);
         this.text = text;
-        this.eos = false;
     }
     _read() {
         if (!this.eos) {
@@ -226,53 +71,62 @@ function write(text) {
 
 function indent(level) {
     while (level--)
-        write(' ');
+        write('.');
 }
 
 function callback(token, tag, attribute, value) {
     switch (token) {
-        case xppq.tokens.ERROR:
-            process.stdout.write(">>> ERROR  :'" + value + "'\n");
-            break;
-        case xppq.tokens.DONE:
-            process.stdout.write(out);
-            break;
-        case xppq.tokens.START_TAG:
-            indent(indentLevel);
-            write("Start tag :'" + tag + "'\n");
-            indentLevel++;
-            break;
-        case xppq.tokens.ATTRIBUTE:
-            indent(indentLevel);
-            write("Attribute :'" + attribute + "' = '" + value + "'\n");
-            break;
-        case xppq.tokens.VALUE:
-            indent(indentLevel);
-            write("Value     :'" + value.trim() + "'\n");
-            break;
-        case xppq.tokens.END_TAG:
-            indentLevel--;
-            indent(indentLevel);
-            write("End tag   :'" + tag + "'\n");
-            break;
-        default:
-            throw ("Unknown token !!!");
-            break;
+    case xppq.tokens.ERROR:
+        throw("ERROR :'" + value + "'\n");
+        break;
+    case xppq.tokens.DONE:
+        process.stdout.write(out);
+        break;
+    case xppq.tokens.START_TAG:
+        write("Start tag");
+        indent(indentLevel);
+        write(":'" + tag + "'\n");
+        indentLevel++;
+        break;
+    case xppq.tokens.ATTRIBUTE:
+        write("Attribute");
+        indent(indentLevel);
+        write(":'" + attribute + "' = '" + value + "'\n");
+        break;
+    case xppq.tokens.VALUE:
+        write("Value    ");
+        indent(indentLevel);
+        write(":'" + value.trim() + "'\n");
+        break;
+    case xppq.tokens.END_TAG:
+        indentLevel--;
+        write("End tag  ");
+        indent(indentLevel);
+        write(":'" + tag + "'\n");
+        break;
+    default:
+        throw ("Unknown token !!!");
+        break;
     }
 }
 
-const file = __dirname + '/demo.xml';
-var id = 4;   // Default test id.
-var arg = process.argv[2];
+const arg = process.argv[2];
 
 if (arg != undefined)
     id = Number(arg);
 
 function getStream() {
-    if ( false )
+    switch (input) {
+    case inputs.STRING:
         return new StringStream(xml);
-    else
-        return fs.createReadStream(file);
+        break;
+    case inputs.FILE:
+        return fs.createReadStream( __dirname + '/demo.xml' );
+        break;
+    default:
+        throw ("Bad input type...");
+        break;
+    }
 }
 
 console.log( xppq.componentInfo() );
@@ -282,29 +136,29 @@ console.log('     ---------------');
 
 function test( id ) {
     switch ( id ) {
-        case 0:
-            console.log("No treatment ; to see the original file.\n");
-            getStream().pipe(process.stdout);
-            break;
-        case 1:
-            console.log("Piping the preprocessing stream.\n");
-            new xppq.Stream(getStream()).on('error', (err) => console.error('\n>>> ERROR : ' + err + '\n')).pipe(process.stdout);
-            break;
-        case 2:
-            console.log("Using the preprocessing stream with a callback, which transforms to lower case.\n");
-            new xppq.Stream(getStream()).on('data', (chunk) => write(chunk.toString().toLowerCase())).on('error', (err) => console.error('\n>>> ERROR : ' + err + '\n')).on('end', () => console.log(out));
-            break;
-        case 3:
-            console.log("XML parsing WITHOUT preprocessing.\n");
-            xppq.parse(getStream(), callback);
-            break;
-        case 4:
-            console.log("XML parsing WITH preprocessing.\n");
-            xppq.parse(new xppq.Stream(getStream()).on('error', (err) => console.error('>>> ERROR : ' + err)), callback);
-            break;
-        default:
-            console.error("'" + arg + "' is not a valid test id ; must be '0' to '4'.");
-            break;
+    case 0:
+        console.log("No treatment ; to see the original XML data.\n");
+        getStream().pipe(process.stdout);
+        break;
+    case 1:
+        console.log("Piping the preprocessing stream.\n");
+        new xppq.Stream(getStream()).on('error', (err) => console.error('\n>>> ERROR : ' + err + '\n')).pipe(process.stdout);
+        break;
+    case 2:
+        console.log("Using the preprocessing stream with a callback, which transforms to lower case.\n");
+        new xppq.Stream(getStream()).on('data', (chunk) => write(chunk.toString().toLowerCase())).on('error', (err) => console.error('\n>>> ERROR : ' + err + '\n')).on('end', () => console.log(out));
+        break;
+    case 3:
+        console.log("XML parsing WITHOUT preprocessing.\n");
+        xppq.parse(getStream(), callback);
+        break;
+    case 4:
+        console.log("XML parsing WITH preprocessing.\n");
+        xppq.parse(new xppq.Stream(getStream()).on('error', (err) => console.error('>>> ERROR : ' + err)), callback);
+        break;
+    default:
+        console.log("'" + id + "' is not a valid test id ; must be '0' to '4'.");
+        break;
     }
 }
 

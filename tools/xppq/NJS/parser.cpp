@@ -212,7 +212,7 @@ qRT
 qRE
 }
 
-void parser::OnEOD( sclnjs::sCaller &Caller )
+void parser::OnEnd( sclnjs::sCaller &Caller )
 {
 qRH
 	sclnjs::rRStream This;

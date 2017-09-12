@@ -104,13 +104,22 @@ void scln4a::SCLN4ARegister(
 	sclnjs::SCLNJSRegister( Registrar );
 }
 
+
+bso::sBool sclnjs::rRStream::Push( const str::dString &SBuffer )
+{
+	bso::sBool Result = false;
+qRH
+	qCBUFFERr Buffer;
+qRB
+	Result = Push( (void *)SBuffer.Convert( Buffer ), SBuffer.Amount() );
+qRR
+qRT
+qRE
+	return Result;
+}
+
+
 void sclnjs::Launch( cAsync &Async )
 {
 	return Launcher_( Async );
 }
-
-
-
-
-
-

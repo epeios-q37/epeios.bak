@@ -47,7 +47,7 @@ module.exports.returnArgument = (text) => { return njsq._wrapper( 0, text ) };
 
 const stream = require('stream');
 
-function onReadable(stream, onRead, onEnd) {
+function onReadable(stream, onData, onEnd) {
     var chunk;
 
 /*    if ( ( chunk = stream.read() ) != null )
@@ -58,22 +58,38 @@ function onReadable(stream, onRead, onEnd) {
 */
 
      if ( ( chunk = stream.read() ) != null )
-        njsq._wrapper(onRead, stream, chunk);
+        njsq._wrapper(onData, stream, chunk);
      else
         njsq._wrapper(onEnd, stream);
+}
+
+var modes = {
+    READABLE: 0,
+    DATA_END: 1
+};
+
+function overload( mode, stream, onData, onEnd )
+{
+    if ( mode == modes.READABLE )
+        stream.on('readable', () => onReadable(stream, onData, onEnd) );
+    else if ( mode == modes.DATA_END ) {
+        stream.on('data', (chunk) => { njsq._wrapper(onData, stream, chunk); process.stdout.write(""); }); // The 'process.stdout.write("")' will do nothing, but the parser stalls when parsing the preprocessor output if missing.
+        stream.on('end', () => njsq._wrapper(onEnd, stream) );
+    } else
+        throw "Unknown mode..."
 }
 
 class Stream extends stream.Readable {
     _read(size) {
         njsq._wrapper(6, this);
+//        this.push(null);
     }
     constructor(stream, options) {
         super(options);
-        stream.on('readable', () => onReadable(stream, 4, 5) );
-        njsq._wrapper( 7, stream, this );
+        overload( modes.DATA_END, stream, 4, 5);
+        njsq._wrapper(7, stream, this);
     }
 }
-
 
 // If modified, modify also 'parser.cpp'.
 var tokens = {
@@ -87,5 +103,5 @@ var tokens = {
 
 module.exports = njsq;
 module.exports.Stream = Stream;
-module.exports.parse = (stream, callback) => { stream.on('readable', () => onReadable(stream, 1, 2) ); njsq._wrapper(3, stream, callback) };
+module.exports.parse = (stream, callback) => { overload( modes.READABLE, stream, 1, 2); njsq._wrapper(3, stream, callback) };
 module.exports.tokens = tokens;

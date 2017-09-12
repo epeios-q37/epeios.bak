@@ -42,7 +42,7 @@ qRT
 qRE
 }
 
-void stream_u::OnEOD( sclnjs::sCaller &Caller )
+void stream_u::OnEnd( sclnjs::sCaller &Caller )
 {
 qRH
 	sclnjs::rRStream This;

@@ -25,7 +25,7 @@ using namespace stream_d;
 
 using stream_s::rRack;
 
-void stream_d::OnRead( sclnjs::sCaller &Caller )
+void stream_d::Read( sclnjs::sCaller &Caller )
 {
 qRH
 	sclnjs::rRStream This;

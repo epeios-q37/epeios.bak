@@ -17,7 +17,7 @@
 	along with eSketch. If not, see <http://www.gnu.org/licenses/>.
 */
 
-// Once installed ('npm install esketch'), launch ''npm explore xppq -- node test.js'.
+// Once installed ('npm install esketch'), launch 'npm explore esketch -- node test.js'.
 
 const esketch = require('./eSketch.js');
 

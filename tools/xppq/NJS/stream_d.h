@@ -26,7 +26,7 @@
 # include "sclnjs.h"
 
 namespace stream_d {
-	void OnRead( sclnjs::sCaller &Caller );	// Called when asked for data, in the JS '_read()') function.
+	void Read( sclnjs::sCaller &Caller );	// Called when asked for data, in the JS '_read()') function.
 }
 
 #endif

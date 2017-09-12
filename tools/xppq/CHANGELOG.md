@@ -1,8 +1,14 @@
 # *XPPq* changelog.
 
+2017-09-12 :
+- *xppqnjs*
+  - Simplification in the hope it will help to fix some bugs.
+  - Workaround for some bugs, because there are some incoherencies in *Node.js* (see comments in source files) !
+  - Fixing bad translation of error messages.
+
 2017-09-08 :
 - *xppqnjs*
-  - Adding `DONE` tag corresponding to the reaching the end of the stream.
+  - Adding `DONE` tag, corresponding to the reaching the end of the stream.
   - Fixing bad `stream.Readable.readable` event handling.
 
 2017-08-31 :

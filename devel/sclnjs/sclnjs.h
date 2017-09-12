@@ -205,6 +205,7 @@ namespace sclnjs {
 		{
 			return C_().Push( Buffer, Size );
 		}
+		bso::sBool Push( const str::dString &Buffer );
 		void End( void )
 		{
 			return C_().End();
