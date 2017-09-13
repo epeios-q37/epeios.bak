@@ -114,4 +114,4 @@ function test(id) {
 test(3);  // 0 to 3.
 
 // Only displayed in 'Runkit'.
-"Click below on the left little triangle...";
+"Click on the below left little triangle...";

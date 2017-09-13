@@ -1,6 +1,6 @@
 # XPPq
 
-[![NPM](https://nodei.co/npm/xppq.png)](https://nodei.co/npm/xppq/)
+[![NPM](http://nodei.co/npm/xppq.png)](http://q37.info/npm/xppq/)
 
 *XML* parser and preprocessor as [*Node.js*](http://en.wikipedia.org/wiki/Node.js) *addon*.
 

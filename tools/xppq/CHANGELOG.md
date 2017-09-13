@@ -1,5 +1,9 @@
 # *XPPq* changelog.
 
+2017-09-13 :
+- *xppqnjs*
+    - Adding file for *Runkit* (`runkit.js`).
+
 2017-09-12 :
 - *xppqnjs*
   - Simplification in the hope it will help to fix some bugs.
