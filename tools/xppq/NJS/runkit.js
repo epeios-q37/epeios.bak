@@ -1,3 +1,4 @@
+// The XML data which will be parsed/preprocessed.
 const xml = '\
 <?xml version="1.0" encoding="UTF-8"?>\n\
 <SomeTag xmlns:xpp="http://q37.info/ns/xpp/" AnAttribute="SomeAttributeValue">\n\
@@ -17,6 +18,7 @@ var indentLevel = 0;
 
 var out = "";
 
+// Little class to make a string 'streamable'.
 class StringStream extends stream.Readable {
     constructor(text, options) {
         super(options);
@@ -40,12 +42,14 @@ function indent(level) {
         write('.');
 }
 
+// Called by the XML parser, to handle each XML token.
 function callback(token, tag, attribute, value) {
     switch (token) {
         case xppq.tokens.ERROR:
             throw ("ERROR :'" + value + "'\n");
             break;
         case xppq.tokens.DONE:
+            // 'Runkit' doesn't handle 'process.stdout.write(...)', hence the use of 'console.log(...)'.
             console.log(out);
             break;
         case xppq.tokens.START_TAG:
@@ -75,11 +79,6 @@ function callback(token, tag, attribute, value) {
             break;
     }
 }
-
-const arg = process.argv[2];
-
-if (arg != undefined)
-    id = Number(arg);
 
 function getStream() {
     return new StringStream(xml);
@@ -113,4 +112,6 @@ function test(id) {
 }
 
 test(3);  // 0 to 3.
-"Click on the below left little triangle...";
+
+// Only displayed in 'Runkit'.
+"Click below on the left little triangle...";

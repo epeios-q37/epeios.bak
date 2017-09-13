@@ -1,3 +1,4 @@
+// The XML data which will be parsed/preprocessed.
 const xml = '\
 <?xml version="1.0" encoding="UTF-8"?>\n\
 <SomeTag xmlns:xpp="http://q37.info/ns/xpp/" AnAttribute="SomeAttributeValue">\n\
@@ -17,6 +18,7 @@ var indentLevel = 0;
 
 var out = "";
 
+// Little class to make a string 'streamable'.
 class StringStream extends stream.Readable {
     constructor(text, options) {
         super(options);
@@ -40,46 +42,43 @@ function indent(level) {
         write('.');
 }
 
+// Called by the XML parser, to handle each XML token.
 function callback(token, tag, attribute, value) {
     switch (token) {
-        case xppq.tokens.ERROR:
-            throw ("ERROR :'" + value + "'\n");
-            break;
-        case xppq.tokens.DONE:
-            console.log(out);
-            break;
-        case xppq.tokens.START_TAG:
-            write("Start tag");
-            indent(indentLevel);
-            write(": '" + tag + "'\n");
-            indentLevel++;
-            break;
-        case xppq.tokens.ATTRIBUTE:
-            write("Attribute");
-            indent(indentLevel);
-            write(": '" + attribute + "' = '" + value + "'\n");
-            break;
-        case xppq.tokens.VALUE:
-            write("Value    ");
-            indent(indentLevel);
-            write(": '" + value.trim() + "'\n");
-            break;
-        case xppq.tokens.END_TAG:
-            indentLevel--;
-            write("End tag  ");
-            indent(indentLevel);
-            write(": '" + tag + "'\n");
-            break;
-        default:
-            throw ("Unknown token !!!");
-            break;
+    case xppq.tokens.ERROR:
+        throw ("ERROR :'" + value + "'\n");
+        break;
+    case xppq.tokens.DONE:
+        // 'Runkit' doesn't handle 'process.stdout.write(...)', hence the use of 'console.log(...)'.
+        console.log(out);
+        break;
+    case xppq.tokens.START_TAG:
+        write("Start tag");
+        indent(indentLevel);
+        write(": '" + tag + "'\n");
+        indentLevel++;
+        break;
+    case xppq.tokens.ATTRIBUTE:
+        write("Attribute");
+        indent(indentLevel);
+        write(": '" + attribute + "' = '" + value + "'\n");
+        break;
+    case xppq.tokens.VALUE:
+        write("Value    ");
+        indent(indentLevel);
+        write(": '" + value.trim() + "'\n");
+        break;
+    case xppq.tokens.END_TAG:
+        indentLevel--;
+        write("End tag  ");
+        indent(indentLevel);
+        write(": '" + tag + "'\n");
+        break;
+    default:
+        throw ("Unknown token !!!");
+        break;
     }
 }
-
-const arg = process.argv[2];
-
-if (arg != undefined)
-    id = Number(arg);
 
 function getStream() {
     return new StringStream(xml);
@@ -113,4 +112,6 @@ function test(id) {
 }
 
 test(3);  // 0 to 3.
+
+// Only displayed in 'Runkit'.
 "Click below on the left little triangle...";
