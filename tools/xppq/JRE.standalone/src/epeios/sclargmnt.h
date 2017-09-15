@@ -1,0 +1,68 @@
+/*
+	Copyright (C) 1999-2017 Claude SIMON (http://q37.info/contact/).
+
+	This file is part of the Epeios framework.
+
+	The Epeios framework is free software: you can redistribute it and/or
+	modify it under the terms of the GNU Affero General Public License as
+	published by the Free Software Foundation, either version 3 of the
+	License, or (at your option) any later version.
+
+	The Epeios framework is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+	Affero General Public License for more details.
+
+	You should have received a copy of the GNU Affero General Public License
+	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
+*/
+
+#ifndef SCLARGMNT__INC
+# define SCLARGMNT__INC
+
+# define SCLARGMNT_NAME		"SCLARGMNT"
+
+# if defined( E_DEBUG ) && !defined( SCLARGMNT_NODBG )
+#  define SCLARGMNT_DBG
+# endif
+
+// SoCLe ARGuMeNTs
+
+# include "err.h"
+# include "txf.h"
+# include "str.h"
+
+namespace sclargmnt {
+	E_ENUM( first_argument ) {
+		faIsCommand,	// The first argument is the command (when arguments come from the CLI).
+		faIsArgument,	// The first argument is really a argument (when arguments come from another source).
+		fa_amount,
+		fa_Undefined
+	};
+
+	E_ENUM( unknown_arguments ) {
+		uaIgnore,	// Ignore unknown arguments; useful when using CEF, for example.
+		uaReport,	// report uknown arguments.
+		ua_amount,
+		ua_Undefined,
+	};
+
+	void FillRegistry(
+		const str::strings_ &Arguments,
+		first_argument__ FirstArgument,
+		unknown_arguments__ UnknownArguments );
+
+	const str::string_ &GetCommand( str::string_ &Command );
+
+	void PrintUsage( txf::text_oflow__ &Flow );
+
+	void Split(
+		const str::dString &Merged,
+		str::dStrings &Splitted );
+
+	void Normalize(
+		const str::dString &Raw,
+		str::dString &Normalized );
+}
+
+#endif
