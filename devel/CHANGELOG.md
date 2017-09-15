@@ -1,7 +1,13 @@
 # *Epeios* changelog
 
+2017-09-15:
+- MTHITG :
+    - Upgrading.
+- SCLJRE
+  - Introducing `SCLNJSInfo(...)`.
+
 2017-09-12 :
-- SCLNJS
+- SCLNJS :
   - Adding `rRStream::Push(...)` variant.
 
 2017-09-11 :

@@ -214,6 +214,7 @@ namespace sclnjs {
 
 	void Launch( cAsync &Async );
 
+	void SCLNJSInfo( txf::sOFlow &Flow );	// To define by user.
 	void SCLNJSRegister( sRegistrar &Registrar );	// To define by user
 }
 

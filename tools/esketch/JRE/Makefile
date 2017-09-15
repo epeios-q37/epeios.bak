@@ -39,7 +39,7 @@ mods += dlbrry n4all plgn plgncore tht
 mods += thtsub bomhdl cdgb64 fil fnm 
 mods += lcl rgstry stsfsm xml xpp 
 mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
-mods += scln4a 
+mods += scln4a scljre 
 
 pmods += pllio 
 
@@ -389,7 +389,7 @@ ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20170815"\"
+copt += -DVERSION=\""20170915"\"
 copt += -DCOPYRIGHT_YEARS=\""2007-2017"\"
 copt += -DIDENTIFIER=\"""\"
 

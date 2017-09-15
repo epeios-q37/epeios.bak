@@ -1,5 +1,8 @@
 # *XPPq* changelog.
 
+2017-09-15 :
+- *xppqnjs*
+    - Adaptation to changes in underlying libraries.
 2017-09-13 :
 - *xppqnjs*
     - Adding file for *Runkit* (`runkit.js`).

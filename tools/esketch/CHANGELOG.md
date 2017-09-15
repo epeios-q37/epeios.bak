@@ -1,5 +1,9 @@
 # *eSketch* changelog.
 
+2017-09-15 :
+- *esketchnjs*
+  - Adaptation to changes in underlying libraries.
+
 2017-08-29 :
 - *esketchnjs* :
   - Adaptation to changes to the *Native for all* related libraries.

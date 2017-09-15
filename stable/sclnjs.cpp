@@ -90,6 +90,11 @@ namespace {
 	n4njs::fAsyncLauncher Launcher_ = NULL;
 }
 
+void scln4a::SCLN4AInfo( txf::sOFlow &Flow )
+{
+	return SCLNJSInfo( Flow );
+}
+
 void scln4a::SCLN4ARegister(
 	sRegistrar &Registrar,
 	void *UP )
@@ -101,7 +106,7 @@ void scln4a::SCLN4ARegister(
 
 	Launcher_ = Shared.Launcher;
 
-	sclnjs::SCLNJSRegister( Registrar );
+	SCLNJSRegister( Registrar );
 }
 
 

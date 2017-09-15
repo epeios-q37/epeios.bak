@@ -17,28 +17,9 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define SCLJRE_COMPILATION_
+#define N4JRE_COMPILATION_
 
-#include "scljre.h"
+#include "n4jre.h"
 
-#include "sclerror.h"
-#include "scllocale.h"
-#include "sclmisc.h"
+using namespace n4jre;
 
-#include "str.h"
-
-using namespace scljre;
-
-void scln4a::SCLN4AInfo( txf::sOFlow &Flow )
-{
-	return SCLJREInfo( Flow );
-}
-
-void scln4a::SCLN4ARegister(
-	sRegistrar &Registrar,
-	void *UP )
-{
-	const n4jre::gShared &Shared = *( const n4jre::gShared* )UP;
-
-	SCLJRERegister( Registrar );
-}

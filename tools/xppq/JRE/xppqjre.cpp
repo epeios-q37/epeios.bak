@@ -17,39 +17,18 @@
 	along with xppq. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "jre.old.h"
+#include "xppqjre.h"
 
 #include "sclmisc.h"
-#include "scljre.old.h"
+#include "scljre.h"
 
 #include "iof.h"
 #include "xpp.h"
 #include "lcl.h"
 
-# define NAME_MC			"XPPqJRE"
-# define NAME_LC			"xppqjre"
-# define NAME_UC			"XPPQJRE"
-# define WEBSITE_URL		"http://q37.info/"
-# define AUTHOR_NAME		"Claude SIMON"
-# define AUTHOR_CONTACT		"http://q37.info/contact/"
-# define OWNER_NAME			"Claude SIMON"
-# define OWNER_CONTACT		"http://q37.info/contact/"
-# define COPYRIGHT			COPYRIGHT_YEARS " " OWNER_NAME " (" OWNER_CONTACT ")"
+using namespace scljre;
 
-static void Print_( const char *Text )
-{
-	jre::java::lang::sSystem::Out().Println( Text );
-	jre::java::lang::sSystem::Out().Flush();
-}
-
-
-static void Print_( jobject Object )
-{
-	jre::java::lang::sSystem::Out().Println( Object );
-	jre::java::lang::sSystem::Out().Flush();
-}
-
-SCLJRE_DEF( XPPQ );
+/*
 
 namespace processing_ {
 	namespace {
@@ -133,12 +112,14 @@ namespace processing_ {
 	}
 }
 
+*/
+
 namespace parsing_ {
 	namespace {
 		class rParser_
 		{
 		private:
-			jre::rInputStreamIDriver Stream_;
+			rInputStreamIDriver Stream_;
 			flw::sDressedIFlow<> IFlow_;
 			xtf::sIFlow XFlow_;
 			xml::rParser Parser_;
@@ -148,7 +129,7 @@ namespace parsing_ {
 				tol::reset( P, Stream_, IFlow_, XFlow_, Parser_ );
 			}
 			qCDTOR( rParser_ );
-			void Init( jobject Stream )
+			void Init( cObject *Stream )
 			{
 				Stream_.Init( Stream );
 				IFlow_.Init( Stream_ );
@@ -162,43 +143,64 @@ namespace parsing_ {
 		};
 	}
 
-	jobject New(
-		JNIEnv *Env,
-		const scljre::sArguments &Args )
+	jobject New( const sCaller &Caller )
 	{
-		rParser_ *Parser = new rParser_;
+		rParser_ *Parser = NULL;
+	qRH
+		cObject *Stream = NULL;
+	qRB
+		Parser = new rParser_;
 
 		if ( Parser == NULL )
 			qRAlc();
 
-		Parser->Init( Args.Get() );
+		Caller.GetArgument( Stream );
 
-		return jre::java::lang::sLong( (jlong)Parser );
+		Parser->Init( Stream );
+	qRR
+		if ( Parser != NULL )
+			delete Parser;	// Deletes also 'Stream' if set.
+		else if ( Stream != NULL )
+			delete Stream;
+	qRT
+	qRE
+		return Long( (jlong)Parser );
 	}
 
-	jobject Delete(
-		JNIEnv *Env,
-		const scljre::sArguments &Args )
+	jobject Delete( const sCaller &Caller )
 	{
-		delete (rParser_ *)jre::java::lang::sLong( Args.Get() ).LongValue();
+	qRH
+		cObject *LongObject;
+		scljre::java::lang::sLong Long;
+	qRB
+		Caller.GetArgument( LongObject );
+		Long.Init( LongObject );
 
-		return NULL;
+		delete (rParser_ *)Long.LongValue();
+	qRR
+	qRT
+	qRE
+		return Null();
 	}
 
-	jobject Parse(
-		JNIEnv *Env,
-		const scljre::sArguments &Args )
+	jobject Parse( const sCaller &Caller )
 	{
 		jint Token = 0;
 	qRH
+		cObject *LongObject = NULL;
+		cObject *DataObject = NULL;
+		scljre::java::lang::sLong Long;
 		lcl::wMeaning Meaning;
 		lcl::locale Locale;
 		str::wString Error;
-		jre::sObject Data;
+		scljre::sObject Data;
 	qRB
-		rParser_ &Parser = *(rParser_ *)jre::java::lang::sLong( Args.Get() ).LongValue();
+		Caller.GetArgument( LongObject );
+		Long.Init( LongObject );
+		rParser_ &Parser = *(rParser_ *)Long.LongValue();
 
-		Data.Init( Args.Get(), "XPPQData" );
+		Caller.GetArgument( DataObject );
+		Data.Init( "XPPqData", DataObject );
 
 		switch ( Parser().Parse( xml::tfObvious ) ) {
 		case xml::t_Error:
@@ -207,14 +209,14 @@ namespace parsing_ {
 			Locale.Init();
 			Error.Init();
 			Locale.GetTranslation( Meaning, "", Error );
-			scljre::Throw( Error );
+			Throw( Error );
 			break;
 		case xml::t_Processed:
 			break;
 		default:
-			Data.Set( "tagName", jre::sString::Signature, jre::sString( Parser().TagName() ) );
-			Data.Set( "attributeName", jre::sString::Signature, jre::sString( Parser().AttributeName() ) );
-			Data.Set( "value", jre::sString::Signature, jre::sString( Parser().Value() ) );
+			Data.Set( "tagName", scljre::sString( Parser().TagName() ) );
+			Data.Set( "attributeName", scljre::sString( Parser().AttributeName() ) );
+			Data.Set( "value", scljre::sString( Parser().Value() ) );
 			break;
 		}
 
@@ -245,7 +247,7 @@ namespace parsing_ {
 	qRR
 	qRT
 	qRE
-		return jre::java::lang::sInteger( Token );
+		return Integer( Token );
 	}
 
 }
@@ -253,7 +255,7 @@ namespace parsing_ {
 void scljre::SCLJRERegister( sRegistrar &Registrar )
 {
 	Registrar.Register( processing_::New,  processing_::Delete,  processing_::Read );
-	Registrar.Register( parsing_::New, parsing_::Delete, parsing_::Parse );
+//	Registrar.Register( parsing_::New, parsing_::Delete, parsing_::Parse );
 }
 
 

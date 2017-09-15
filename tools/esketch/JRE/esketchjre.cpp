@@ -22,9 +22,9 @@
 #include "iof.h"
 #include "xpp.h"
 #include "lcl.h"
-#include "scln4a.h"
+#include "scljre.h"
 
-void scln4a::SCLN4AInfo( txf::sOFlow &Flow )
+void scljre::SCLJREInfo( txf::sOFlow &Flow )
 {
 	Flow << NAME_MC << " v" << VERSION << txf::nl
 		 << txf::pad << "Build : " __DATE__ " " __TIME__ " (" << cpe::GetDescription() << ')';
@@ -49,7 +49,7 @@ namespace {
 	}
 }
 
-void scln4a::SCLN4ARegister( scln4a::sRegistrar &Registrar )
+void scljre::SCLJRERegister( scln4a::sRegistrar &Registrar )
 {
 	Registrar.Register( ReturnArgument_ );
 }

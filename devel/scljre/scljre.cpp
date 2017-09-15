@@ -21,8 +21,6 @@
 
 #include "scljre.h"
 
-#include "jre.h"
-
 #include "sclerror.h"
 #include "scllocale.h"
 #include "sclmisc.h"
@@ -31,138 +29,16 @@
 
 using namespace scljre;
 
-namespace {
-	namespace{
-		void GetInfo_(
-			jint Version,
-			str::dString &Info )
-		{
-		qRH
-			flx::rStringOFlow BaseFlow;
-			txf::sOFlow Flow;
-		qRB
-			BaseFlow.Init( Info );
-			Flow.Init( BaseFlow );
-
-			Flow << sclmisc::SCLMISCProductName << " v" << SCLJREProductVersion << " - JNI v" << ( ( Version & 0xff00 ) >> 16 ) << '.' << ( Version & 0xff )  << txf::nl
-				<< txf::pad << "Build : " __DATE__ " " __TIME__ " (" <<  cpe::GetDescription() << ')';
-		qRR
-		qRT
-		qRE
-		}
-	}
-
-	jstring GetInfo_( JNIEnv *Env )
-	{
-		jre::sString JString;
-	qRH
-		str::wString Info;
-	qRB
-		Info.Init();
-		GetInfo_( Env->GetVersion(), Info );
-
-		JString.Init( Info );
-	qRR
-	qRT
-	qRE
-		return JString;
-	}
-}
-
-jstring scljre::Info_( JNIEnv *Env )
+void scln4a::SCLN4AInfo( txf::sOFlow &Flow )
 {
-	return GetInfo_( Env );
+	return SCLJREInfo( Flow );
 }
 
-
-
-namespace {
-	bch::qBUNCHwl( sFunction_ ) Functions_;
-}
-
-void scljre::sRegistrar::Register( sFunction_ Function )
+void scln4a::SCLN4ARegister(
+	sRegistrar &Registrar,
+	void *UP )
 {
-	Functions_.Append( Function );
+	const n4jre::gShared &Shared = *( const n4jre::gShared* )UP;
+
+	SCLJRERegister( Registrar );
 }
-
-namespace {
-	err::err___ Error_;
-	sclerror::rError SCLError_;
-	scllocale::rRack Locale_;
-	sclmisc::sRack Rack_;
-
-	void ERRFinal_( JNIEnv *Env )
-	{
-		err::buffer__ Buffer;
-
-		const char *Message = err::Message( Buffer );
-
-		ERRRst();	// To avoid relaunching of current error by objects of the 'FLW' library.
-
-		Env->ThrowNew( Env->FindClass( "java/lang/Exception" ), Message );
-	}
-}
-
-void scljre::Register_( JNIEnv *Env )
-{
-qRFH
-	str::wString Location;
-qRFB
-	sRegistrar Registrar;
-
-	cio::Initialize( cio::GetConsoleSet() );
-	Rack_.Init( Error_, SCLError_, cio::GetSet( cio::t_Default ), Locale_ );
-
-	Location.Init();
-	// TODO : Find a way to fill 'Location' with the path of the binary.
-
-	sclmisc::Initialize( Rack_, Location, qRPU );
-
-	Registrar.Init();
-
-	Functions_.Init();
-	scljre::SCLJRERegister( Registrar );
-
-	jniq::SetGlobalEnv( Env );
-qRFR
-qRFT
-qRFE( ERRFinal_( Env ) )
-}
-
-jobject scljre::Launch_(
-	JNIEnv *Env,
-	int Index,
-	jobjectArray Args )
-{
-	jobject Result = NULL;
-qRFH
-	sArguments Arguments;
-qRFB
-	if ( !Functions_.Exists( Index ) )
-		qRGnr();
-
-	Arguments.Init( Args );
-
-	Result = Functions_( Index )( Env, Arguments );
-
-	if ( sclerror::IsErrorPending() )
-		qRAbort();	// To force the handling of a pending error.
-qRFR
-	if ( ERRType == err::t_Abort ) {
-		if ( jniq::GetEnv()->ExceptionOccurred() != NULL )
-			ERRRst();	// Let the Java exception do the error handling work.
-	}
-qRFT
-qRFE( ERRFinal_( Env ) )
-	return Result;
-}
-
-qGCTOR( scljre )
-{
-	Error_.Init();
-	SCLError_.Init();
-	Locale_.Init();
-}
-
-
-

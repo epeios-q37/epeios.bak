@@ -1,30 +1,30 @@
 /*
 	Copyright (C) 2007-2017 Claude SIMON (http://q37.info/contact/).
 
-	This file is part of xppq.
+	This file is part of XPPq.
 
-	xppq is free software: you can redistribute it and/or
+	XPPq is free software: you can redistribute it and/or
 	modify it under the terms of the GNU Affero General Public License as
 	published by the Free Software Foundation, either version 3 of the
 	License, or (at your option) any later version.
 
-	xppq is distributed in the hope that it will be useful,
+	XPPq is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 	Affero General Public License for more details.
 
 	You should have received a copy of the GNU Affero General Public License
-	along with xppq. If not, see <http://www.gnu.org/licenses/>.
+	along with XPPq. If not, see <http://www.gnu.org/licenses/>.
 */
 
-class XPPQData {
+class XPPqData {
 	public String
 		tagName,
 		attributeName,
 		value;
 };
 
-class XPPQ {
+class XPPq {
 	native public static String info();
 	native private static void register();
 	native private static Object wrapper(
@@ -39,7 +39,7 @@ class XPPQ {
 		register();
 	}
 	
-	public XPPQ( Object core )
+	public XPPq( Object core )
 	{
 		this.core = core;
 	}
@@ -69,7 +69,7 @@ class XPPQ {
 		wrapper( 4, core );
 	}
 	
-	public int parse( XPPQData data )
+	public int parse( XPPqData data )
 	{
 		return ( (java.lang.Integer)wrapper( 5, core, data ) ).intValue();
 	}
@@ -79,11 +79,11 @@ class XPPQ {
 	}
 }
 
-class XPPQPreprocessor extends java.io.InputStream {
-	private XPPQ xppq;
-	public XPPQPreprocessor( java.io.InputStream Stream )
+class XPPqPreprocessor extends java.io.InputStream {
+	private XPPq xppq;
+	public XPPqPreprocessor( java.io.InputStream Stream )
 	{
-		xppq = new XPPQ( XPPQ.getPreprocessor( Stream ) );
+		xppq = new XPPQ( XPPq.getPreprocessor( Stream ) );
 	}
 	
 	public int read()
@@ -97,20 +97,20 @@ class XPPQPreprocessor extends java.io.InputStream {
 	}
 }
 
-class XPPQParser {
-	private XPPQ xppq;
+class XPPqParser {
+	private XPPq xppq;
 	// If modified, modify also C++ source file.
 	static final int PROCESSED	= 0;
 	static final int START_TAG	= 1;
 	static final int ATTRIBUTE	= 2;
 	static final int VALUE		= 3;
 	static final int END_TAG	= 4;
-	public XPPQParser( java.io.InputStream Stream )
+	public XPPqParser( java.io.InputStream Stream )
 	{
-		xppq = new XPPQ( XPPQ.getParser( Stream ) );
+		xppq = new XPPq( XPPq.getParser( Stream ) );
 	}
 	
-	public int parse( XPPQData data )
+	public int parse( XPPqData data )
 	{
 		return xppq.parse( data  );
 	}
@@ -121,7 +121,7 @@ class XPPQParser {
 	}
 }
 
-class XPPQDemo {
+class XPPqTest {
 	private static void displayCompilationTime() throws Exception
 	{
 		System.out.println( new java.util.Date(new java.io.File(XPPQDemo.class.getClassLoader().getResource(XPPQDemo.class.getCanonicalName().replace('.', '/') + ".class").toURI()).lastModified()) );
@@ -144,14 +144,14 @@ class XPPQDemo {
 		System.out.println( "-----------------------------------------" );
 		dump( new java.io.FileInputStream( fileName ) );
 	}
-	
+	/*
 	private static void test1( String fileName ) throws Exception
 	{
 		System.out.println( "Preprocessing the file :" );
 		System.out.println( "------------------------" );
 		dump( new XPPQPreprocessor( new java.io.FileInputStream( fileName ) ) );
 	}
-	
+	*/
 	private static void parse( java.io.InputStream stream ) throws Exception
 	{
 		XPPQData data = new XPPQData();
@@ -187,14 +187,14 @@ class XPPQDemo {
 		System.out.println( "-----------------------------------" );
 		parse( new java.io.FileInputStream( fileName ) );
 	}
-
+ 
 	private static void test3( String fileName ) throws Exception
 	{
 		System.out.println( "XML parsing WITH preprocessing :" );
 		System.out.println( "--------------------------------" );
 		parse( new XPPQPreprocessor( new java.io.FileInputStream( fileName ) ) );
 	}
-
+ 
 	public static void main ( String[] args ) throws Exception
 	{
 		System.out.println( XPPQ.info() );

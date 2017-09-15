@@ -17,49 +17,27 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-//	$Id: mthitg.h,v 1.3 2013/04/14 14:37:29 csimon Exp $
-
-#ifndef MTHITG__INC
-#define MTHITG__INC
-
-#define MTHITG_NAME		"MTHITG"
-
-#define	MTHITG_VERSION	"$Revision: 1.3 $"
-
-#define MTHITG_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
-
-#if defined( E_DEBUG ) && !defined( MTHITG_NODBG )
-#define MTHITG_DBG
-#endif
-
-/* Begin of automatic documentation generation part. */
-
-//V $Revision: 1.3 $
-//C Claude SIMON (http://zeusw.org/intl/contact.html)
-//R $Date: 2013/04/14 14:37:29 $
-
-/* End of automatic documentation generation part. */
-
-/* Addendum to the automatic documentation generation part. */
 //D MaTH InTeGer 
-/* End addendum to automatic documentation generation part. */
 
-/*$BEGIN$*/
+#ifndef MTHITG_INC_
+# define MTHITG_INC_
 
-/* Addendum to the automatic documentation generation part. */
-//D MaTH InTeGer
-/* End addendum to automatic documentation generation part. */
+# define MTHITG_NAME		"MTHITG"
 
-#include "ias.h"
-#include "err.h"
-#include "flw.h"
-#include "bso.h"
-#include "bch.h"
+# if defined( E_DEBUG ) && !defined( MTHITG_NODBG )
+#  define MTHITG_DBG
+# endif
 
-#define MTHITG_MAX_SIZE	((base__)( 0xffffU >> 1 ))
+# include "ias.h"
+# include "err.h"
+# include "flw.h"
+# include "bso.h"
+# include "bch.h"
 
-#define MTHITG_SIGN_POS	((base__)15U)
-#define MTHITG_SIGN_MASK	((base__)( 1U << MTHITG_SIGN_POS ))
+# define MTHITG_MAX_SIZE	((base__)( 0xffffU >> 1 ))
+
+# define MTHITG_SIGN_POS	((base__)15U)
+# define MTHITG_SIGN_MASK	((base__)( 1U << MTHITG_SIGN_POS ))
 
 
 namespace mthitg {
@@ -69,7 +47,7 @@ namespace mthitg {
 	class integer;
 	class integer_;
 
-	// Prdclaration.
+	// Predclaration.
 
 	int Comp_(
 		const integer_ &Op1,
@@ -92,6 +70,7 @@ namespace mthitg {
 		const integer_ &Op1,
 		const integer_ &Op2 );
 
+	using bch::sHook;
 	
 	//c An integer.
 	class integer_ {
@@ -182,11 +161,11 @@ namespace mthitg {
 			Core.reset( P );
 			S_.Size = 0;
 		}
-		void plug( qSD__ &SD )
+		void plug( sHook &Hook )
 		{
-			Core.plug( SD );
+			Core.plug( Hook );
 		}
-		void plug( qAS_ &AS )
+		void plug( qASd *AS )
 		{
 			Core.plug( AS );
 		}
@@ -463,35 +442,35 @@ inline mthitg::integer operator %(
 }
 
 inline mthitg::integer operator +=(
- mthitg::integer_ &I1,
+	mthitg::integer_ &I1,
 	 const mthitg::integer_ &I2 )
 {
 	return I1  = I1 + I2;
 }
 
 inline mthitg::integer operator -=(
- mthitg::integer_ &I1,
+	mthitg::integer_ &I1,
 	 const mthitg::integer_ &I2 )
 {
 	return I1  = I1 - I2;
 }
 
 inline mthitg::integer operator *=(
- mthitg::integer_ &I1,
+	mthitg::integer_ &I1,
 	 const mthitg::integer_ &I2 )
 {
 	return I1  = I1 * I2;
 }
 
 inline mthitg::integer operator /=(
- mthitg::integer_ &I1,
+	mthitg::integer_ &I1,
 	 const mthitg::integer_ &I2 )
 {
 	return I1  = I1 / I2;
 }
 
 inline mthitg::integer operator %=(
- mthitg::integer_ &I1,
+	mthitg::integer_ &I1,
 	 const mthitg::integer_ &I2 )
 {
 	return I1  = I1 % I2;
@@ -539,6 +518,4 @@ txf::text_oflow__ &operator <<(
 	txf::text_oflow__ &OFlow,
 	const mthitg::integer_ &Integer );
 
-
-/*$END$*/
 #endif

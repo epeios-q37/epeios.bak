@@ -23,7 +23,7 @@
 #include "wrapper.h"
 
 #include "jrebse.h"
-#include "n4all.h"
+#include "n4jre.h"
 
 #include "sclargmnt.h"
 #include "sclmisc.h"
@@ -154,6 +154,10 @@ qRFT
 qRFE( ERRFinal_( Env ) )
 }
 
+namespace {
+	n4jre::gShared Shared_;
+}
+
 extern "C" JNIEXPORT void JNICALL Java_JREq_register(
 	JNIEnv *Env,
 	jclass,
@@ -171,7 +175,7 @@ qRFB
 	ComponentFilename.Init();
 	sclmisc::MGetValue( registry::parameter::ComponentFilename, ComponentFilename );
 
-	wrapper::Register( ComponentFilename, Rack_ );
+	wrapper::Register( ComponentFilename, Rack_, &Shared_ );
 qRFR
 qRFT
 qRFE( ERRFinal_( Env ) )
