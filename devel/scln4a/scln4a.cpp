@@ -29,63 +29,21 @@ using namespace scln4a;
 # define FUNCTION_SPEC
 #endif
 
-typedef n4all::cLauncher cLauncher_;
-
-class sLauncher_
-: public cLauncher_
-{
-protected:
-	virtual void N4ALLLaunch(
-		void *Function,
-		cCaller_ &RawCaller ) override
-	{
-		sCaller Caller;
-
-		Caller.Init( RawCaller );
-
-		((fFunction *)Function )( Caller );
-	}
-	virtual void N4ALLInfo( str::dString &Info ) override
-	{
-	qRH
-		flx::rStringOFlow BaseFlow;
-		txf::sOFlow Flow;
-	qRB
-		BaseFlow.Init( Info );
-		Flow.Init( BaseFlow );
-
-		SCLN4AInfo( Flow );
-	qRR
-	qRT
-	qRE
-	}
-public:
-	void Init( void )
-	{}
-};
-
 extern "C" FUNCTION_SPEC n4all::fRegister N4ALL_REGISTER_FUNCTION_NAME;
 
 n4all::cLauncher *N4ALLRegister(
 	n4all::cRegistrar *RawRegistrar,
 	n4all::sData *Data )
 {
-	sLauncher_ *Launcher = NULL;
+	n4all::cLauncher *Launcher = NULL;
 qRFH
 	sRegistrar Registrar;
 qRFB
 	sclmisc::Initialize( *Data->SCLRack, *Data->Location );
 
-	Launcher = new sLauncher_;
-
-	if ( Launcher == NULL )
-		qRAlc();
-
-	Launcher->Init();
-
 	Registrar.Init( *RawRegistrar );
 
-	scln4a::SCLN4ARegister( Registrar, Data->UP );
+	Launcher = scln4a::SCLN4ARegister( Registrar, Data->UP );
 qRFR
 	if ( Launcher != NULL )
 		delete Launcher;

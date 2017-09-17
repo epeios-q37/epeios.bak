@@ -1,5 +1,11 @@
 # *Epeios* changelog
 
+2017-09-17 :
+- N4ALL:
+  - Deporting some code to *N4...* libraries.
+- N4NJS, SCLN4A, SCLNJS:
+  - Upgrading.
+
 2017-09-15:
 - MTHITG :
     - Upgrading.

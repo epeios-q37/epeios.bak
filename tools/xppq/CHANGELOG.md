@@ -1,5 +1,9 @@
 # *XPPq* changelog.
 
+2017-09-17 :
+- *xppqnjs*
+  - Upgrading.
+
 2017-09-15 :
 - *xppqnjs*
     - Adaptation to changes in underlying libraries.

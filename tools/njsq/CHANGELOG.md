@@ -1,5 +1,8 @@
 # *NJSq* changelog
 
+2017-09-17 :
+- Upgrading.
+
 2017-08-29 :
 - Improvements.
 

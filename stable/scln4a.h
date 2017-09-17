@@ -46,13 +46,12 @@ namespace scln4 {
 		cCaller_ &Caller )
 	{}
 
-	inline void Get(
+	// 'String' variants declared here, as it will be needed by all the 'sln4...' libraries.
+	// Definition will be made in this libraries.
+	void Get(
 		int Index,
 		cCaller_ &Caller,
-		str::dString *Value )
-	{
-		return Caller.GetArgument( Index, n4all::tString, Value );
-	}
+		str::dString *Value );
 
 	inline void Get(
 		int Index,
@@ -115,17 +114,18 @@ namespace scln4a {
 		{
 			GetArgument_( 0, C_(), Items... );
 		}
-		void SetReturnValue( const str::dString &Value )
-		{
-			C_().SetReturnValue( n4all::tString, &Value );
-		}
+		// Declared here, as it will be needed by all the 'sln4...' libraries.
+		// Definition will be made in this libraries.
+		void SetReturnValue( const str::dString &Value );
 	};
-
-	typedef void ( fFunction )( sCaller &Caller );
 
 	class sRegistrar {
 	private:
 		qRMV( n4all::cRegistrar, R_, Registrar_ );
+		void Register_( void *Function )
+		{
+			R_().Register( Function );
+		}
 	public:
 		void reset( bso::sBool = true )
 		{
@@ -136,23 +136,21 @@ namespace scln4a {
 		{
 			Registrar_ = &Registrar;
 		}
-		void Register( fFunction Function )
-		{
-			R_().Register( (void *)Function );
-		}
+		// Termination function.
+		void Register()
+		{}
 		template <typename function, typename ...functions> void Register(
 			function Function,
 			functions ...Functions )
 		{
-			Register( Function );
+			Register_( Function );
 			Register( Functions... );
 		}
 	};
 
-	void SCLN4ARegister(
+	n4all::cLauncher *SCLN4ARegister(
 		sRegistrar &Registrar,
 		void *UP );	// To define by user.
-	void SCLN4AInfo( txf::sOFlow &Flow );	// To define by user.
 
 	extern const char *SCLN4AProductVersion;	// To define by user.
 }

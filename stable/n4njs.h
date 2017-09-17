@@ -39,24 +39,26 @@ namespace n4njs {
 	using namespace n4all;
 	using uvq::cAsync;
 
-	typedef void( *fAsyncLauncher )(cAsync &);
+	typedef void( *fAsync )(cAsync &);
 
 	struct gShared {
 	public:
-		fAsyncLauncher Launcher;
+		fAsync Async;
 		void reset( bso::sBool P = true )
 		{
-			Launcher = NULL;
+			Async = NULL;
 		}
 		qCDTOR( gShared );
 	};
 
 	qENUM( Type )
 	{
-		t_First = n4all::t_amount,	// First types are those defined in 'n4all::eType'.
-		tStream = t_First,
+		tString,
+		tStream,
 		tBuffer,
-		tCallback
+		tCallback,
+		t_amount,
+		t_Undefined
 	};
 
 	// Base of the callbacks which will be defined upstream.
