@@ -38,8 +38,6 @@
 
 namespace sclnjs {
 	using n4njs::cAsync;
-	using scln4a::sCaller;
-	using scln4a::sRegistrar;
 	using uvq::eBehavior;
 
 	qCDEF( eBehavior, bExitAndDelete, uvq::bExitAndDelete );
@@ -213,6 +211,46 @@ namespace sclnjs {
 	};
 
 	void Launch( cAsync &Async );
+
+	typedef scln4a::sCaller sCaller_;
+
+	class sCaller
+	: public sCaller_
+	{
+	private:
+		// Termination method.
+		inline void GetArgument_( int Index )
+		{}
+		template <typename item, typename ...items> inline void GetArgument_(
+			int Index,
+			item &Item,
+			items &...Items )
+		{
+			scln4::Get( Index, C_(), Item );
+
+			GetArgument_( Index + 1, Items... );
+		}
+	public:
+		// 'reset(...)', 'Init(...)' from sCaller_.
+		template <typename item> void GetArgument(
+			bso::sUInt Index,
+			item &Item ) const
+		{
+			GetArgument_( Index, Item );
+		}
+		template <typename ...items> inline void GetArgument( items &...Items )
+		{
+			GetArgument_( 0, Items... );
+		}
+		void SetReturnValue( const str::dString &Value )
+		{
+			C_().SetReturnValue( n4njs::tString, &Value );
+		}
+	};
+
+	typedef void ( fFunction )( sCaller &Caller );
+
+	typedef scln4a::sRegistrar<fFunction> sRegistrar;
 
 	void SCLNJSInfo( txf::sOFlow &Flow );	// To define by user.
 	void SCLNJSRegister( sRegistrar &Registrar );	// To define by user

@@ -39,7 +39,7 @@ namespace n4njs {
 	using namespace n4all;
 	using uvq::cAsync;
 
-	typedef void( *fAsync )(cAsync &);
+	typedef void(* fAsync)(cAsync &);
 
 	struct gShared {
 	public:

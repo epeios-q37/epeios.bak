@@ -31,7 +31,7 @@ void sclnjs::SCLNJSInfo( txf::sOFlow &Flow )
 }
 
 namespace {
-	void ReturnArgument_( scln4a::sCaller &Caller )
+	void ReturnArgument_( sclnjs::sCaller &Caller )
 	{
 	qRH
 		str::wString Input, Text;
@@ -49,7 +49,7 @@ namespace {
 	}
 }
 
-void sclnjs::SCLNJSRegister( scln4a::sRegistrar &Registrar )
+void sclnjs::SCLNJSRegister( sclnjs::sRegistrar &Registrar )
 {
 	Registrar.Register( ReturnArgument_ );
 }

@@ -31,45 +31,52 @@
 # include "n4jre.h"
 # include "scln4a.h"
 
+#ifdef H
+#  define SCLJRE_H_ H
+#  undef H
+# endif
+
 namespace scljre {
-	using scln4a::sCaller;
 	using namespace n4jre;
+
+	cObject *New(
+		const char *Class,
+		const char *Signature,
+		int ArgC,
+		sValue *ArgV );
+
+	// Termination method.
+	inline void Fill_(
+		int Indice,
+		sValue *Values )
+	{}
+
+	template <typename arg, typename ...args> inline void Fill_(
+		int Indice,
+		sValue *Values,
+		arg &Arg,
+		args&... Args )
+	{
+		Values[Indice].Init( Arg );
+		Fill_( Indice + 1, Values, Args... );
+	}
+
+	template <typename ...args> cObject *New(
+		const char *Class,
+		const char *Signature,
+		args&... Args )
+	{
+		sValue Values[sizeof...(args)+1];	/// '+1' only to avoid attempt to create a array of size 0.
+		Values[sizeof...( args )].Type = t_Undefined;
+
+		Fill_( 0, Values, Args... );
+
+		return New( Class, Signature, sizeof...( args ), Values );
+	}
 
 	class sObject {
 	private:
 		qRMV( cObject, O_, Object_ );
-		void Set_(
-			sValue_ &Value,
-			jbyteArray Content )
-		{
-			Value.Init( tByteArray, Content );
-		}
-		void Set_(
-			sValue_ &Value,
-			jstring Content )
-		{
-			Value.Init( tString, Content );
-		}
-		void Set_(
-			sValue_ &Value,
-			jint Content )
-		{
-			Value.Init( tByteArray, &Content );
-		}
-		// Termination version of below method.
-		void Fill_(
-			int Indice,
-			sValue_ *Values )
-		{}
-		template <typename arg, typename ...args> void Fill_(
-			int Indice,
-			sValue_ *Values,
-			const arg &Arg,
-			const args&... Args )
-		{
-			Set_( Values[Indice], Arg );
-			Fill_( Indice + 1, Values, Args... );
-		}
 	public:
 		void reset( bso::sBool P = true )
 		{
@@ -89,10 +96,14 @@ namespace scljre {
 
 			Object_ = Object;
 		}
+		cObject *Object( void )
+		{
+			return &O_();
+		}
 		void Set(
 			const char *Name,
 			const char *Signature,
-			jobject Value )
+			sJObject Value )
 		{
 			return O_().Set( Name, Signature, Value );
 		}
@@ -100,73 +111,50 @@ namespace scljre {
 			const char *Name,
 			object &Object )
 		{
+			qRVct();
 			Set( Name, NULL, Object );
 		}
-		template <typename ...args> jint CallIntMethod(
+		template <typename object, typename ...args> void CallObjectMethod(
 			const char *Method,
 			const char *Signature,
-			const args&... Args )
+			object &Object,
+			args&... Args )
 		{
-			sValue_ Values[sizeof...(args)+1];	/// '+1' only to avoid attempt to create a array of size 0.
+			sValue Values[sizeof...(args)+1];	/// '+1' only to avoid attempt to create a array of size 0.
+			sValue Return;
+
+			Values[sizeof...( args )].Type = t_Undefined;
 
 			Fill_( 0, Values, Args... );
 
-			return O_().CallIntMethod( Method, Signature, Values );
+			Return.Init( Object );
+
+			O_().CallObjectMethod( Method, Signature, Return, sizeof...( args ), Values );
 		}
-		template <typename ...args> jlong CallLongMethod(
+		template <typename ...args> sJInt CallIntMethod(
 			const char *Method,
 			const char *Signature,
-			const args&... Args )
+			args&... Args )
 		{
-			sValue_ Values[sizeof...(args)+1];	/// '+1' only to avoid attempt to create a array of size 0.
+			sValue Values[sizeof...(args)+1];	/// '+1' only to avoid attempt to create a array of size 0.
+			Values[sizeof...( args )].Type = t_Undefined;
 
 			Fill_( 0, Values, Args... );
 
-			return O_().CallLongMethod( Method, Signature, Values );
+			return O_().CallIntMethod( Method, Signature, sizeof...( args ), Values );
 		}
-		template <typename ...args> jobject CallObjectMethod(
+		template <typename ...args> sJLong CallLongMethod(
 			const char *Method,
 			const char *Signature,
-			const args&... Args )
+			args&... Args )
 		{
-			sValue_ Values[sizeof...(args)+1];	/// '+1' only to avoid attempt to create a array of size 0.
+			sValue Values[sizeof...(args)+1];	/// '+1' only to avoid attempt to create a array of size 0.
 
 			Fill_( 0, Values, Args... );
 
-			return O_().CallObjectMethod( Method, Signature, Values );
+			return O_().CallLongMethod( Method, Signature, sizeof...( args ), Values );
 		}
 	};
-
-
-	/*
-	class sObject_ {
-	private:
-	qRMV( cObject, C_, Callback_ );
-	# define H( type, name )\
-	type Call##name##Method_(\
-	const char *Method,\
-	const char *Signature,\
-	const sValue_ *Values )\
-	{\
-	return C_().Call##name##Method( Method, Signature, Values );\
-	}
-	H( void, Void );
-	H( int, Int );
-	H( long, Long );
-	H( object, Object );
-	# undef H
-	public:
-	void reset( bso::sBool = true )
-	{
-	Callback_ = NULL;
-	}
-	qCDTOR( sObjec_t );
-	void Init( void )
-	{
-	Callback_ = NULL;
-	}
-	};
-	*/
 
 	namespace java {
 		namespace io {
@@ -183,19 +171,20 @@ namespace scljre {
 				{
 					Object_.Init( NULL, Object );
 				}
-				jint Read( void )
+				sJInt Read( void )
 				{
 					return Object_.CallIntMethod( "read", "()I" );
 				}
-				jint Read(
-					jbyteArray b,
-					jint off,
-					jint len )
+				sJInt Read(
+					rJByteArray &b,
+					sJInt off,
+					sJInt len )
 				{
 					return Object_.CallIntMethod( "read", "([BII)I", b, off, len );
 				}
 			};
 		}
+
 		namespace lang {
 			class sInteger {
 			private:
@@ -210,7 +199,7 @@ namespace scljre {
 				{
 					Object_.Init( NULL, Object );
 				}
-				jint IntValue( void )
+				sJInt IntValue( void )
 				{
 					return Object_.CallIntMethod( "intValue", "()I" );
 				}
@@ -229,7 +218,7 @@ namespace scljre {
 				{
 					Object_.Init( NULL, Object );
 				}
-				jlong LongValue( void )
+				sJLong LongValue( void )
 				{
 					return Object_.CallLongMethod( "longValue", "()J" );
 				}
@@ -248,13 +237,21 @@ namespace scljre {
 				{
 					Object_.Init( NULL, Object );
 				}
-				jlong LongValue( void )
+				void Init(
+					rJByteArray &bytes,
+					rJString &charsetName )
 				{
-					return Object_.CallLongMethod( "longValue", "()J" );
+					Init( New( "Ljava/lang/String;", "([BLjava/lang/String;)V", bytes, charsetName ) );
 				}
-				jstring Concat( jstring String )
+				void GetBytes(
+					rJString &charsetName,
+					rJByteArray &Result )
 				{
-					return (jstring)Object_.CallObjectMethod( "concat", "(Ljava/lang/String;)Ljava/lang/String;", String );
+					return Object_.CallObjectMethod( "getBytes", "(Ljava/lang/String;)[B", Result, charsetName );
+				}
+				sObject Object( void )
+				{
+					return Object_;
 				}
 			};
 		}
@@ -278,7 +275,7 @@ namespace scljre {
 		{
 			Init( Text );
 		}
-		sString( jobject *Object )
+		sString( sJObject *Object )
 		{
 			Init( Object );
 		}
@@ -296,23 +293,10 @@ namespace scljre {
 		qRT
 		qRE
 		}
-		void Init( jobject *Object )
+		void Init( sJObject *Object )
 		{
 			qRVct();
 //			sString_::Init( Object );
-		}
-		operator jstring( void ) const
-		{
-			qRVct();
-//			return (jstring)Object();
-			return NULL;
-		}
-		jstring Concat( const char *Text )
-		{
-			qRVct();
-			// return sString_::Concat( Env->NewStringUTF( Text ), Env );
-
-			return NULL;
 		}
 	};
 
@@ -348,14 +332,70 @@ namespace scljre {
 
 	void Throw( const str::dString &Text );
 
-	jobject Object( const char *Name );
-	jobject Integer( jint Integer );
-	jobject Long( jlong Long );
-	jobject Null( void );
+//	sJObject Object( const char *Name );
+	sJObject String( const str::dString &UTF );
+	sJObject Integer( sJInt Integer );
+	sJObject Long( sJLong Long );
+	sJObject Null( void );
 
-	using scln4a::sRegistrar;
+	typedef scln4a::sCaller sCaller_;
+
+	class sCaller
+	: public sCaller_ {
+	private:
+		bso::sU8 Index_;
+	public:
+		void reset( bso::sBool P = true )
+		{
+			sCaller_::reset( P );
+			Index_ = 0;
+		}
+		qCDTOR( sCaller );
+		void Init( n4all::cCaller &Caller )
+		{
+			sCaller_::Init( Caller );
+
+			Index_ = 0;
+		}
+		sJObject Get( void )
+		{
+			sJObject Object;
+
+			C_().GetArgument( Index_++, n4jre::t_Undefined, &Object );
+
+			return Object;
+		}
+		void Get( str::dString &String )
+		{
+		qRH
+			scljre::java::lang::sString JString;
+			rJString Charset;
+			rJByteArray Result;
+		qRB
+			Charset.Init( sizeof( "UTF-8" ), "UTF-8", n4jre::hOriginal );
+			JString.Init( Get() );
+
+			Result.Init();
+			JString.GetBytes( Charset, Result );
+
+			String.Append( (bso::char__ *)Result.Core(), Result.Size() );
+		qRR
+		qRT
+		qRE
+		}
+	};
+
+
+	typedef sJObject ( fFunction )( sCaller &Caller );
+
+	typedef scln4a::sRegistrar<fFunction> sRegistrar;
+
 	void SCLJREInfo( txf::sOFlow &Flow );	// To define by user.
 	void SCLJRERegister( sRegistrar &Registrar );	// To define by user
 }
+
+# ifdef SCLJRE_H_
+#  define H SCLJRE_H_
+# endif
 
 #endif

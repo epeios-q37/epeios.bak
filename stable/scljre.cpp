@@ -29,16 +29,113 @@
 
 using namespace scljre;
 
-void scln4a::SCLN4AInfo( txf::sOFlow &Flow )
-{
-	return SCLJREInfo( Flow );
+namespace {
+	typedef n4all::cLauncher cLauncher_;
+
+	class sLauncher_
+	: public cLauncher_ {
+	protected:
+		virtual void N4ALLLaunch(
+			void *Function,
+			n4all::cCaller &RawCaller ) override
+		{
+			sCaller Caller;
+			sJObject Return;
+
+			Caller.Init( RawCaller );
+
+			Return = ( (fFunction *)Function )( Caller );
+
+			RawCaller.SetReturnValue( n4jre::t_Undefined, Return );	// 'sJObject' is a generic type, so no type is specified.
+		}
+		virtual void N4ALLInfo( str::dString &Info ) override
+		{
+		qRH
+			flx::rStringOFlow BaseFlow;
+			txf::sOFlow Flow;
+		qRB
+			BaseFlow.Init( Info );
+			Flow.Init( BaseFlow );
+
+			SCLJREInfo( Flow );
+		qRR
+		qRT
+		qRE
+		}
+	public:
+		void Init( void )
+		{}
+	};
 }
 
-void scln4a::SCLN4ARegister(
-	sRegistrar &Registrar,
+namespace {
+	n4jre::fNew New_ = NULL;
+}
+
+cObject *scljre::New(
+	const char *ClassName,
+	const char *Signature,
+	int ArgC,
+	sValue *ArgV )
+{
+	if ( New_ == NULL )
+		qRFwk();
+
+	return New_( ClassName, Signature, ArgC, ArgV );
+}
+
+
+
+n4all::cLauncher *scln4a::SCLN4ARegister(
+	n4all::cRegistrar &RegistrarCallback,
 	void *UP )
 {
+	n4all::cLauncher *Launcher = NULL;
+qRH
+	scljre::sRegistrar Registrar;
+qRB
 	const n4jre::gShared &Shared = *( const n4jre::gShared* )UP;
 
+	if ( Shared.New == NULL )
+		qRFwk();
+
+	New_ = Shared.New;
+
+	Registrar.Init( RegistrarCallback );
 	SCLJRERegister( Registrar );
+
+	Launcher = new sLauncher_;
+
+	if ( Launcher == NULL )
+		qRAlc();
+qRR
+	if ( Launcher != NULL )
+		delete Launcher;
+qRT
+qRE
+	return Launcher;
 }
+
+sJObject scljre::String( const str::dString &UTF )
+{
+	scljre::java::lang::sString JString;
+qRH
+	rJString Charset;
+	rJByteArray Bytes;
+qRB
+	Charset.Init( sizeof( "UTF-8" ), "UTF-8", n4jre::hOriginal );
+
+	if ( UTF.Amount() > LONG_MAX )
+		qRLmt();
+
+	Bytes.Init( (long)UTF.Amount() );
+
+	UTF.Recall( UTF.First(), UTF.Amount(), (char *)Bytes.Core() );
+
+	JString.Init( Bytes, Charset );
+qRR
+qRT
+qRE
+	return JString.Object().Object();
+}
+

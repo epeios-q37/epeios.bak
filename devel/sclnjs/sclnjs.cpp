@@ -76,11 +76,6 @@ template <> void scln4::Get(
 	Get_<n4njs::cUCallback>( Index, Caller, n4njs::tCallback, Callback );
 }
 
-void scln4a::sCaller::SetReturnValue( const str::dString &Value )
-{
-	C_().SetReturnValue( n4njs::tString, &Value );
-}
-
 txf::text_oflow__ &operator <<(
 	txf::text_oflow__ &Flow,
 	rBuffer &Buffer )
@@ -105,8 +100,6 @@ namespace {
 namespace {
 	typedef n4all::cLauncher cLauncher_;
 
-	typedef void ( fFunction_ )( sCaller &Caller );
-
 	class sLauncher_
 	: public cLauncher_ {
 	protected:
@@ -118,7 +111,7 @@ namespace {
 
 			Caller.Init( RawCaller );
 
-			( (fFunction_ *)Function )( Caller );
+			( (fFunction *)Function )( Caller );
 		}
 		virtual void N4ALLInfo( str::dString &Info ) override
 		{
@@ -140,13 +133,13 @@ namespace {
 	};
 }
 
-
 n4all::cLauncher *scln4a::SCLN4ARegister(
-	sRegistrar &Registrar,
+	n4all::cRegistrar &RegistrarCallback,
 	void *UP )
 {
 	n4all::cLauncher *Launcher = NULL;
 qRH
+	sclnjs::sRegistrar Registrar;
 qRB
 	const n4njs::gShared &Shared = *( const n4njs::gShared* )UP;
 
@@ -154,6 +147,8 @@ qRB
 		qRFwk();
 
 	Async_ = Shared.Async;
+
+	Registrar.Init( RegistrarCallback );
 
 	SCLNJSRegister( Registrar );
 

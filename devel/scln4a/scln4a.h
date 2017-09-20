@@ -71,61 +71,9 @@ namespace scln4 {
 }
 
 namespace scln4a {
-	typedef n4all::cCaller cCaller_;
-
-	inline void GetArgument_(
-		int Index,
-		cCaller_ &Caller )
-	{
-	}
-
-	template <typename item, typename ...items> inline void GetArgument_(
-		int Index,
-		cCaller_ &Caller,
-		item &Item,
-		items &...Items )
-	{
-		scln4::Get( Index, Caller, Item );
-
-		GetArgument_( Index + 1, Caller, Items... );
-	}
-
-	class sCaller {
-	private:
-		qRMV( cCaller_, C_, Callback_ );
-	public:
-		void reset( bso::sBool P = true )
-		{
-			Callback_ = NULL;
-		}
-		qCDTOR( sCaller );
-		void Init( cCaller_ &Callback )
-		{
-			Callback_ = &Callback;
-		}
-		template <typename item> void GetArgument(
-			bso::sUInt Index,
-			item &Item ) const
-		{
-
-			GetArgument_( Index, C_(), Item );
-		}
-		template <typename ...items> inline void GetArgument( items &...Items ) const
-		{
-			GetArgument_( 0, C_(), Items... );
-		}
-		// Declared here, as it will be needed by all the 'sln4...' libraries.
-		// Definition will be made in this libraries.
-		void SetReturnValue( const str::dString &Value );
-	};
-
-	class sRegistrar {
+	template <typename function> class sRegistrar {
 	private:
 		qRMV( n4all::cRegistrar, R_, Registrar_ );
-		void Register_( void *Function )
-		{
-			R_().Register( Function );
-		}
 	public:
 		void reset( bso::sBool = true )
 		{
@@ -139,17 +87,33 @@ namespace scln4a {
 		// Termination function.
 		void Register()
 		{}
-		template <typename function, typename ...functions> void Register(
+		template <typename ...functions> void Register(
 			function Function,
 			functions ...Functions )
 		{
-			Register_( Function );
+			R_().Register( Function );
 			Register( Functions... );
 		}
 	};
 
+	class sCaller {
+	protected:
+		qRMV( n4all::cCaller, C_, Callback_ );
+	public:
+		void reset( bso::sBool P = true )
+		{
+			Callback_ = NULL;
+		}
+		qCDTOR( sCaller );
+		void Init( n4all::cCaller &Callback )
+		{
+			Callback_ = &Callback;
+		}
+	};
+
+
 	n4all::cLauncher *SCLN4ARegister(
-		sRegistrar &Registrar,
+		n4all::cRegistrar &Registrar,
 		void *UP );	// To define by user.
 
 	extern const char *SCLN4AProductVersion;	// To define by user.

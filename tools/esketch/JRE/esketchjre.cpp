@@ -31,25 +31,28 @@ void scljre::SCLJREInfo( txf::sOFlow &Flow )
 }
 
 namespace {
-	void ReturnArgument_( scln4a::sCaller &Caller )
+	scljre::sJObject ReturnArgument_( scljre::sCaller &Caller )
 	{
+		scljre::sJObject Return;
 	qRH
 		str::wString Input, Text;
 	qRB
 		Input.Init();
-		Caller.GetArgument( Input );
+
+		Caller.Get( Input );
 
 		Text.Init();
 		sclmisc::GetBaseTranslation( "Argument", Text, Input );
 
-		Caller.SetReturnValue( Text );
+		Return = scljre::String( Text );
 	qRR
 	qRT
 	qRE
+		return Return;
 	}
 }
 
-void scljre::SCLJRERegister( scln4a::sRegistrar &Registrar )
+void scljre::SCLJRERegister( scljre::sRegistrar &Registrar )
 {
 	Registrar.Register( ReturnArgument_ );
 }

@@ -175,6 +175,8 @@ qRFB
 	ComponentFilename.Init();
 	sclmisc::MGetValue( registry::parameter::ComponentFilename, ComponentFilename );
 
+	Shared_.New = wrapper::New;
+
 	wrapper::Register( ComponentFilename, Rack_, &Shared_ );
 qRFR
 qRFT

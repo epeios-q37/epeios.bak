@@ -40,92 +40,237 @@
 # endif
 
 namespace n4jre {
-	typedef long jint;
-	typedef __int64 jlong;
-	typedef signed char jbyte;
-	typedef bso::sByte *jbyteArray;
-	class jobject_ {};
-	typedef jobject_ *jobject;
-	class jstring_
-	: public jobject_
-	{};
-	typedef jstring_ *jstring;
+	// As defined in the 'Java' headers.
+	typedef signed char sJByte;
+	typedef long sJInt;
+	typedef __int64 sJLong;
 
-	struct gShared {
+	qENUM( Handling )
+	{
+		hCopy,		// Data are copied.
+		hOriginal,	// Data are referenced.
+		h_amount,
+		h_Undefined
+	};
+
+	template <typename type> class rJArray_
+	{
+	private:
+		long Size_;	// If < 0, 'Core_' is a reference and should not be freed.
+		union {
+			type *V;
+			const type *C;
+		} Core_;
+		// Should be optimized, by using 'realloc()'.
+		void Init_( long Size )
+		{
+			reset();
+
+			if ( Size != 0 ) {
+//				Core_.V = (type *)malloc( Size * sizeof( type ) );
+				Core_.V = new type[Size];
+				if ( Core_.V == NULL )
+					qRAlc();
+			}
+		}
 	public:
 		void reset( bso::sBool P = true )
 		{
+			if ( P ) {
+				if ( false && ( Core_.V != NULL ) && ( Size_ > 0 ) )
+					//					free( Core_.V );
+					delete( Core_.V );
+			}
+
+			Core_.V = NULL;
+			Size_ = 0;
 		}
-		qCDTOR( gShared );
+		qCDTOR( rJArray_ );
+		void Init( void )
+		{
+			reset();
+		}
+		void Init(
+			long Size,
+			const type *Buffer,
+			eHandling Handling )
+		{
+			reset();
+
+			if ( Size != 0 ) {
+				if ( Buffer == NULL )
+					qRFwk();
+
+				switch ( Handling ) {
+				case hCopy:
+					Init_( Size );
+					memcpy( Core_.V, Buffer, sizeof( type ) * Size );
+					Size_ = Size;
+					break;
+				case hOriginal:
+					Core_.C = Buffer;
+					Size_ = -Size;
+					break;
+				default:
+					qRFwk();
+					break;
+				}
+			}
+		}
+		void Init( long Size )
+		{
+			Init_( Size );
+			Size_ = Size;
+		}
+		long Size( void ) const
+		{
+			return ( Size_ < 0 ? -Size_ : Size_ );
+		}
+		const type *Core( void ) const
+		{
+			return Core_.C;
+		}
+		type *Core( void )
+		{
+			if ( Size_ < 0 )
+				qRFwk();
+
+			return Core_.V;
+		}
 	};
+
+	typedef rJArray_<bso::sChar> rJString;
+	typedef rJArray_<sJByte> rJByteArray;
 
 	qENUM( Type_ )
 	{
-		tByteArray,
+		tByte,
+		tInt,
+		tLong,
 		tString,
+		tByteArray,
 		t_amount,
 		t_Undefined
 	};
 
-	struct sValue_ {
+
+	struct sValue {
 	public:
 		eType_ Type;
-		void *Content;
+		union {
+			sJByte Byte;
+			sJInt Int;
+			sJLong Long;
+			void *Generic;
+			rJString *String;
+			rJByteArray *ByteArray;
+		};
 		void reset( bso::sBool = true )
 		{
 			Type = t_Undefined;
-			Content = NULL;
+			Generic = NULL;
 		}
-		qCDTOR( sValue_ );
-		template <typename content> void Init(
-			eType_ Type = t_Undefined,
-			content *Content = NULL )
+		qCDTOR( sValue );
+		void Init( void )
 		{
-			this->Type = Type;
-			this->Content = (void *)Content;
+			this->Type = t_Undefined;
+			Generic = NULL;
+		}
+		void Init( sJByte Byte )
+		{
+			Type = tByte;
+			this->Byte = Byte;
+		}
+		void Init( sJInt Int )
+		{
+			Type = tInt;
+			this->Int = Int;
+		}
+		void Init( sJLong Long )
+		{
+			Type = tLong;
+			this->Long = Long;
+		}
+		void Init( rJString &String )
+		{
+			Type = tString;
+			this->String = &String;
+		}
+		void Init( rJByteArray &ByteArray )
+		{
+			Type = tByteArray;
+			this->ByteArray = &ByteArray;
 		}
 	};
 
-	class object {};
-
 	class cObject {
 	protected:
-		virtual void N4JREInit( const sValue_ *Values ) = 0;
 		virtual void N4JRESet(
 			const char *Name,
 			const char *Signature,
-			jobject Value ) = 0;
+			cObject *Value ) = 0;
+		virtual void N4JRECallObjectMethod(
+			const char *Method,
+			const char *Signature,
+			sValue &Object,	// Will contain the returned object.
+			int ArgC,
+			sValue *ArgV ) = 0;
 # define H( type, name )\
 	protected:\
 		virtual type N4JRECall##name##Method(\
 			const char *Method,\
 			const char *Signature,\
-			const sValue_ *Values ) const = 0;\
+			int ArgC,\
+			sValue *ArgV ) = 0;\
 	public:\
 		type Call##name##Method(\
 			const char *Method,\
 			const char *Signature,\
-			const sValue_ *Values )\
+			int ArgC,\
+			sValue *ArgV )\
 		{\
-			return N4JRECall##name##Method( Method, Signature, Values );\
+			return N4JRECall##name##Method( Method, Signature, ArgC, ArgV );\
 		}
 		H( void, Void );
-		H( jint, Int );
-		H( jlong, Long );
-		H( jobject, Object );
+		H( sJInt, Int );
+		H( sJLong, Long );
 # undef H
 	public:
-		void Init( const sValue_ *Values )
-		{
-			return N4JREInit( Values );
-		}
 		void Set(
 			const char *Name,
 			const char *Signature,
-			jobject Value )
+			cObject *Value )
 		{
 			return N4JRESet( Name, Signature, Value );
 		}
+		void CallObjectMethod(
+			const char *Method,
+			const char *Signature,
+			sValue &Object,	// Will contain the returned object.
+			int ArgC,
+			sValue *ArgV )
+		{
+			return N4JRECallObjectMethod( Method, Signature, Object, ArgC, ArgV );
+		}
+	};
+
+	typedef cObject sJObject_;
+	typedef sJObject_* sJObject;
+
+	typedef cObject *(* fNew )(
+		const char *Class,
+		const char *Signature,
+		int ArgC,
+		sValue *ArgV );
+
+	struct gShared {
+	public:
+		fNew New;
+		void reset( bso::sBool P = true )
+		{
+			New = NULL;
+		}
+		qCDTOR( gShared );
 	};
 }
 

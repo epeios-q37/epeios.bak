@@ -32,18 +32,15 @@ using namespace scln4a;
 extern "C" FUNCTION_SPEC n4all::fRegister N4ALL_REGISTER_FUNCTION_NAME;
 
 n4all::cLauncher *N4ALLRegister(
-	n4all::cRegistrar *RawRegistrar,
+	n4all::cRegistrar *Registrar,
 	n4all::sData *Data )
 {
 	n4all::cLauncher *Launcher = NULL;
 qRFH
-	sRegistrar Registrar;
 qRFB
 	sclmisc::Initialize( *Data->SCLRack, *Data->Location );
 
-	Registrar.Init( *RawRegistrar );
-
-	Launcher = scln4a::SCLN4ARegister( Registrar, Data->UP );
+	Launcher = scln4a::SCLN4ARegister( *Registrar, Data->UP );
 qRFR
 	if ( Launcher != NULL )
 		delete Launcher;

@@ -40,7 +40,6 @@
 namespace n4all {
 	typedef int sType;	// Generic type of type.
 
-
 	class cCaller {
 	protected:
 		virtual void N4ALLGetArgument(
