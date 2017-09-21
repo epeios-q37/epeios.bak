@@ -53,6 +53,13 @@ namespace n4jre {
 		h_Undefined
 	};
 
+	typedef void *( *fMalloc )( size_t Size );
+	typedef void( *fFree )( void *Pointer );
+
+	// Both below function have to be defined by user.
+	extern fMalloc N4JREMalloc;
+	extern fFree N4JREFree;
+
 	template <typename type> class rJArray_
 	{
 	private:
@@ -67,8 +74,7 @@ namespace n4jre {
 			reset();
 
 			if ( Size != 0 ) {
-//				Core_.V = (type *)malloc( Size * sizeof( type ) );
-				Core_.V = new type[Size];
+				Core_.V = (type *)N4JREMalloc( Size * sizeof( type ) );
 				if ( Core_.V == NULL )
 					qRAlc();
 			}
@@ -77,9 +83,8 @@ namespace n4jre {
 		void reset( bso::sBool P = true )
 		{
 			if ( P ) {
-				if ( false && ( Core_.V != NULL ) && ( Size_ > 0 ) )
-					//					free( Core_.V );
-					delete( Core_.V );
+				if ( ( Core_.V != NULL ) && ( Size_ > 0 ) )
+					N4JREFree( Core_.V );
 			}
 
 			Core_.V = NULL;
@@ -257,18 +262,27 @@ namespace n4jre {
 	typedef cObject sJObject_;
 	typedef sJObject_* sJObject;
 
-	typedef cObject *(* fNew )(
+	typedef cObject *(* fNewObject )(
 		const char *Class,
 		const char *Signature,
 		int ArgC,
 		sValue *ArgV );
 
+	typedef void( *fDelete )( cObject * );
+
 	struct gShared {
 	public:
-		fNew New;
+		fNewObject NewObject;
+		// Below three functions purpose is that resources allocation/deallocation occurs in the same binary, otherwise there would be crashes.
+		fDelete Delete;
+		fMalloc Malloc;
+		fFree Free;
 		void reset( bso::sBool P = true )
 		{
-			New = NULL;
+			NewObject = NULL;
+			Delete = NULL;
+			Malloc = NULL;
+			Free = NULL;
 		}
 		qCDTOR( gShared );
 	};

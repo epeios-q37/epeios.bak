@@ -158,6 +158,17 @@ namespace {
 	n4jre::gShared Shared_;
 }
 
+n4jre::fMalloc n4jre::N4JREMalloc = malloc;
+n4jre::fFree n4jre::N4JREFree = free;
+
+namespace {
+	inline void Delete_( n4jre::cObject *Object )
+	{
+		delete Object;
+	}
+}
+
+
 extern "C" JNIEXPORT void JNICALL Java_JREq_register(
 	JNIEnv *Env,
 	jclass,
@@ -175,7 +186,10 @@ qRFB
 	ComponentFilename.Init();
 	sclmisc::MGetValue( registry::parameter::ComponentFilename, ComponentFilename );
 
-	Shared_.New = wrapper::New;
+	Shared_.NewObject = wrapper::NewObject;
+	Shared_.Delete = Delete_;
+	Shared_.Malloc = n4jre::N4JREMalloc;
+	Shared_.Free = n4jre::N4JREFree;
 
 	wrapper::Register( ComponentFilename, Rack_, &Shared_ );
 qRFR

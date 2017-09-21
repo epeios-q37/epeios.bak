@@ -39,11 +39,7 @@
 namespace scljre {
 	using namespace n4jre;
 
-	cObject *New(
-		const char *Class,
-		const char *Signature,
-		int ArgC,
-		sValue *ArgV );
+	extern n4jre::fNewObject NewObject_;
 
 	// Termination method.
 	inline void Fill_(
@@ -71,8 +67,10 @@ namespace scljre {
 
 		Fill_( 0, Values, Args... );
 
-		return New( Class, Signature, sizeof...( args ), Values );
+		return NewObject_( Class, Signature, sizeof...( args ), Values );
 	}
+
+	extern n4jre::fDelete Delete_;
 
 	class sObject {
 	private:
@@ -81,16 +79,14 @@ namespace scljre {
 		void reset( bso::sBool P = true )
 		{
 			if ( P ) {
-				if ( Object_ != NULL )
-					delete Object_;
+				if ( false && ( Object_ != NULL ) )
+					Delete_( Object_ );
 			}
 
 			Object_ = NULL;
 		}
 		qCDTOR( sObject );
-		void Init(
-			const char *Name,
-			n4jre::cObject *Object )
+		void Init( n4jre::cObject *Object )
 		{
 			reset();
 
@@ -169,7 +165,7 @@ namespace scljre {
 				qCDTOR( sInputStream );
 				void Init( n4jre::cObject *Object )
 				{
-					Object_.Init( NULL, Object );
+					Object_.Init( Object );
 				}
 				sJInt Read( void )
 				{
@@ -197,7 +193,7 @@ namespace scljre {
 				qCDTOR( sInteger );
 				void Init( n4jre::cObject *Object )
 				{
-					Object_.Init( NULL, Object );
+					Object_.Init( Object );
 				}
 				sJInt IntValue( void )
 				{
@@ -216,7 +212,7 @@ namespace scljre {
 				qCDTOR( sLong );
 				void Init( n4jre::cObject *Object )
 				{
-					Object_.Init( NULL, Object );
+					Object_.Init( Object );
 				}
 				sJLong LongValue( void )
 				{
@@ -235,7 +231,7 @@ namespace scljre {
 				qCDTOR( sString );
 				void Init( n4jre::cObject *Object )
 				{
-					Object_.Init( NULL, Object );
+					Object_.Init( Object );
 				}
 				void Init(
 					rJByteArray &bytes,
@@ -249,7 +245,7 @@ namespace scljre {
 				{
 					return Object_.CallObjectMethod( "getBytes", "(Ljava/lang/String;)[B", Result, charsetName );
 				}
-				sObject Object( void )
+				sObject &Object( void )
 				{
 					return Object_;
 				}

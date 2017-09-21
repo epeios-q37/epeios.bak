@@ -68,23 +68,23 @@ namespace {
 	};
 }
 
+n4jre::fNewObject scljre::NewObject_ = NULL;
+n4jre::fDelete scljre::Delete_ = NULL;
+
+n4jre::fMalloc n4jre::N4JREMalloc = NULL;
+n4jre::fFree n4jre::N4JREFree = NULL;
+
 namespace {
-	n4jre::fNew New_ = NULL;
+	template <typename function> void Assign_(
+		const function &Source,
+		function &Target )
+	{
+		if ( Source == NULL )
+			qRFwk();
+
+		Target = Source;
+	}
 }
-
-cObject *scljre::New(
-	const char *ClassName,
-	const char *Signature,
-	int ArgC,
-	sValue *ArgV )
-{
-	if ( New_ == NULL )
-		qRFwk();
-
-	return New_( ClassName, Signature, ArgC, ArgV );
-}
-
-
 
 n4all::cLauncher *scln4a::SCLN4ARegister(
 	n4all::cRegistrar &RegistrarCallback,
@@ -96,10 +96,10 @@ qRH
 qRB
 	const n4jre::gShared &Shared = *( const n4jre::gShared* )UP;
 
-	if ( Shared.New == NULL )
-		qRFwk();
-
-	New_ = Shared.New;
+	Assign_( Shared.NewObject, NewObject_ );
+	Assign_( Shared.Delete, Delete_ );
+	Assign_( Shared.Malloc, n4jre::N4JREMalloc );
+	Assign_( Shared.Free, n4jre::N4JREFree );
 
 	Registrar.Init( RegistrarCallback );
 	SCLJRERegister( Registrar );
@@ -118,10 +118,11 @@ qRE
 
 sJObject scljre::String( const str::dString &UTF )
 {
-	scljre::java::lang::sString JString;
+	sJObject Object = NULL;
 qRH
 	rJString Charset;
 	rJByteArray Bytes;
+	scljre::java::lang::sString JString; 
 qRB
 	Charset.Init( sizeof( "UTF-8" ), "UTF-8", n4jre::hOriginal );
 
@@ -133,9 +134,13 @@ qRB
 	UTF.Recall( UTF.First(), UTF.Amount(), (char *)Bytes.Core() );
 
 	JString.Init( Bytes, Charset );
+
+	Object =  JString.Object().Object();
+
+	JString.reset( false );	// So the underlying object is not destroyed, as it will be used later.
 qRR
 qRT
 qRE
-	return JString.Object().Object();
+	return Object;
 }
 
