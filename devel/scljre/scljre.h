@@ -79,7 +79,7 @@ namespace scljre {
 		void reset( bso::sBool P = true )
 		{
 			if ( P ) {
-				if ( false && ( Object_ != NULL ) )
+				if ( Object_ != NULL )
 					Delete_( Object_ );
 			}
 
