@@ -17,6 +17,10 @@
 	along with XPPq. If not, see <http://www.gnu.org/licenses/>.
 */
 
+class Decl {
+ protected static String affix = "xppq";
+}
+
 class XPPqData {
 	public String
 		tagName,
@@ -24,56 +28,72 @@ class XPPqData {
 		value;
 };
 
-class XPPq {
-	native public static String info();
-	native private static void register();
-	native private static Object wrapper(
+// Begin of generic part.
+class JREq extends Decl {
+	native public static String wrapperInfo();
+	native public static String componentInfo();
+	native private static void init( String location);
+	native private static void register( String arguments );
+	native protected static Object wrapper(
 		int index,
 		Object... objects);
-		
-	public Object core;
-	
+
 	static
 	{
-		System.loadLibrary("xppqjre");
-		register();
-	}
-	
+  String location = ".";
+
+ 	System.loadLibrary( "jreq" );
+
+  if ( System.getenv( "EPEIOS_SRC" ) != null ) {
+   if ( System.getProperty("os.name").startsWith( "Windows" ) )
+    location = "h:/bin";
+   else
+    location = "~/bin";
+  }
+
+ 	init( location );
+  register( Decl.affix + "jre");
+ }
+}
+// End of generic part.
+
+class XPPq extends JREq {
+	public Object core;
 	public XPPq( Object core )
 	{
 		this.core = core;
 	}
 	
-	static public Object getPreprocessor( java.io.InputStream stream )
+	static public Object getParser( java.io.InputStream stream )
 	{
 		return wrapper( 0, stream );
 	}
 	
-	public void releasePreprocessor()
+	public void releaseParser()
 	{
 		wrapper( 1, core );
 	}
 	
-	public int readFromPreprocessor()
+	public int parse( XPPqData data )
 	{
-		return ( (java.lang.Integer)wrapper( 2, core ) ).intValue();
+		return ( (java.lang.Integer)wrapper( 2, core, data ) ).intValue();
 	}
 	
-	static public Object getParser( java.io.InputStream stream )
+	static public Object getPreprocessor( java.io.InputStream stream )
 	{
 		return wrapper( 3, stream );
 	}
 	
-	public void releaseParser()
+	public void releasePreprocessor()
 	{
 		wrapper( 4, core );
 	}
 	
-	public int parse( XPPqData data )
+	public int readFromPreprocessor()
 	{
-		return ( (java.lang.Integer)wrapper( 5, core, data ) ).intValue();
+		return ( (java.lang.Integer)wrapper( 5, core ) ).intValue();
 	}
-	
+
 	public void finalize()
 	{
 	}
@@ -83,7 +103,7 @@ class XPPqPreprocessor extends java.io.InputStream {
 	private XPPq xppq;
 	public XPPqPreprocessor( java.io.InputStream Stream )
 	{
-		xppq = new XPPQ( XPPq.getPreprocessor( Stream ) );
+		xppq = new XPPq( XPPq.getPreprocessor( Stream ) );
 	}
 	
 	public int read()
@@ -122,9 +142,9 @@ class XPPqParser {
 }
 
 class XPPqTest {
-	private static void displayCompilationTime() throws Exception
+	private static void displayBytecodeBuildTimestamp() throws Exception
 	{
-		System.out.println( new java.util.Date(new java.io.File(XPPQDemo.class.getClassLoader().getResource(XPPQDemo.class.getCanonicalName().replace('.', '/') + ".class").toURI()).lastModified()) );
+		System.out.println( "Bytecode build : " + new java.util.Date(new java.io.File(XPPqTest.class.getClassLoader().getResource(XPPqTest.class.getCanonicalName().replace('.', '/') + ".class").toURI()).lastModified()) );
 	}
 	
 	private static void dump( java.io.InputStream stream ) throws Exception
@@ -149,28 +169,28 @@ class XPPqTest {
 	{
 		System.out.println( "Preprocessing the file :" );
 		System.out.println( "------------------------" );
-		dump( new XPPQPreprocessor( new java.io.FileInputStream( fileName ) ) );
+		dump( new XPPqPreprocessor( new java.io.FileInputStream( fileName ) ) );
 	}
 	*/
 	private static void parse( java.io.InputStream stream ) throws Exception
 	{
-		XPPQData data = new XPPQData();
-		XPPQParser parser = new XPPQParser( stream );
+		XPPqData data = new XPPqData();
+		XPPqParser parser = new XPPqParser( stream );
 		
 		int token = parser.parse( data );
 		
-		while ( token != XPPQParser.PROCESSED ) {
+		while ( token != XPPqParser.PROCESSED ) {
 			switch ( token ) {
-			case XPPQParser.START_TAG :
+			case XPPqParser.START_TAG :
 				System.out.print( "Start tag: '" + data.tagName + "'\n" );
 				break;
-			case XPPQParser.ATTRIBUTE :
+			case XPPqParser.ATTRIBUTE :
 				System.out.print( "Attribute: '" + data.attributeName + "' = '" + data.value + "'\n" );
 				break;
-			case XPPQParser.VALUE :
+			case XPPqParser.VALUE :
 				System.out.print( "Value:     '" + data.value.trim() + "'\n" );
 				break;
-			case XPPQParser.END_TAG :
+			case XPPqParser.END_TAG :
 				System.out.print( "End tag:   '" + data.tagName + "'\n" );
 				break;
 			default:
@@ -192,14 +212,14 @@ class XPPqTest {
 	{
 		System.out.println( "XML parsing WITH preprocessing :" );
 		System.out.println( "--------------------------------" );
-		parse( new XPPQPreprocessor( new java.io.FileInputStream( fileName ) ) );
+		parse( new XPPqPreprocessor( new java.io.FileInputStream( fileName ) ) );
 	}
  
 	public static void main ( String[] args ) throws Exception
 	{
-		System.out.println( XPPQ.info() );
-		System.out.println();
-		// displayCompilationTime();
+ 	System.out.println( XPPq.wrapperInfo() );
+ 	System.out.println( XPPq.componentInfo() );
+ 	displayBytecodeBuildTimestamp();
 		
 		int test = 3;
 		
@@ -219,7 +239,7 @@ class XPPqTest {
 			test0( fileName );
 			break;
 		case 1:
-			test1( fileName );
+//			test1( fileName );
 			break;
 		case 2:
 			test2( fileName );
@@ -232,8 +252,6 @@ class XPPqTest {
 			System.exit(1);
 			break;
 		}
-
-			
 	}
 }
 

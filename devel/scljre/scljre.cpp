@@ -29,6 +29,31 @@
 
 using namespace scljre;
 
+fdr::sSize scljre::rInputStreamIDriver::FDRRead(
+	fdr::sSize Maximum,
+	fdr::sByte *Buffer )
+{
+qRH
+	n4jre::rJByteArray Array;
+qRB
+	if ( Maximum > 5 )
+		Maximum = 5;
+
+	Array.Init( (long)Maximum );
+
+	Maximum = Stream_.Read( Array, 0, (long)Maximum );
+
+	if ( Maximum != -1 )
+		memcpy( Buffer, Array.Core(), Array.Size() );
+	else
+		Maximum = 0;
+qRR
+qRT
+	// No need to 'delete' 'Array'.
+qRE
+	return Maximum;
+}
+
 namespace {
 	typedef n4all::cLauncher cLauncher_;
 
@@ -116,6 +141,11 @@ qRE
 	return Launcher;
 }
 
+void scljre::Throw( const str::dString & Text )
+{
+	qRVct();
+}
+
 sJObject scljre::String( const str::dString &UTF )
 {
 	sJObject Object = NULL;
@@ -143,4 +173,40 @@ qRT
 qRE
 	return Object;
 }
+
+sJObject scljre::Integer( sJInt Value )
+{
+	sJObject Object = NULL;
+
+	scljre::java::lang::sInteger Integer;
+
+	Integer.Init( Value );
+
+	Object = Integer.Object().Object();
+
+	Integer.reset( false );
+
+	return Object;
+}
+
+sJObject scljre::Long( sJLong Value )
+{
+	sJObject Object = NULL;
+
+	scljre::java::lang::sLong Long;
+
+	Long.Init( Value );
+
+	Object = Long.Object().Object();
+
+	Long.reset( false );
+
+	return Object;
+}
+
+sJObject scljre::Null( void )
+{
+	return New( NULL, NULL );
+}
+
 

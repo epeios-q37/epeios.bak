@@ -195,9 +195,17 @@ namespace scljre {
 				{
 					Object_.Init( Object );
 				}
+				void Init( sJInt Integer )
+				{
+					Init( New( "Ljava/lang/Integer;", "(I)V", Integer ) );
+				}
 				sJInt IntValue( void )
 				{
 					return Object_.CallIntMethod( "intValue", "()I" );
+				}
+				sObject &Object( void )
+				{
+					return Object_;
 				}
 			};
 
@@ -214,10 +222,19 @@ namespace scljre {
 				{
 					Object_.Init( Object );
 				}
+				void Init( sJLong Long )
+				{
+					Init( New( "Ljava/lang/Long;", "(J)V", Long ) );
+				}
 				sJLong LongValue( void )
 				{
 					return Object_.CallLongMethod( "longValue", "()J" );
 				}
+				sObject &Object( void )
+				{
+					return Object_;
+				}
+
 			};
 
 			class sString {

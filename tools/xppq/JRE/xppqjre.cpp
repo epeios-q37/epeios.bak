@@ -28,6 +28,12 @@
 
 using namespace scljre;
 
+void scljre::SCLJREInfo( txf::sOFlow &Flow )
+{
+	Flow << NAME_MC << " v" << VERSION << txf::nl
+		<< txf::pad << "Build : " __DATE__ " " __TIME__ " (" << cpe::GetDescription() << ')';
+}
+
 /*
 
 namespace processing_ {
@@ -143,7 +149,7 @@ namespace parsing_ {
 		};
 	}
 
-	jobject New( const sCaller &Caller )
+	scljre::sJObject New( sCaller &Caller )
 	{
 		rParser_ *Parser = NULL;
 	qRH
@@ -154,9 +160,7 @@ namespace parsing_ {
 		if ( Parser == NULL )
 			qRAlc();
 
-		Caller.GetArgument( Stream );
-
-		Parser->Init( Stream );
+		Parser->Init( Caller.Get() );
 	qRR
 		if ( Parser != NULL )
 			delete Parser;	// Deletes also 'Stream' if set.
@@ -164,17 +168,15 @@ namespace parsing_ {
 			delete Stream;
 	qRT
 	qRE
-		return Long( (jlong)Parser );
+		return Long( (scljre::sJLong)Parser );
 	}
 
-	jobject Delete( const sCaller &Caller )
+	scljre::sJObject Delete( sCaller &Caller )
 	{
 	qRH
-		cObject *LongObject;
 		scljre::java::lang::sLong Long;
 	qRB
-		Caller.GetArgument( LongObject );
-		Long.Init( LongObject );
+		Long.Init( Caller.Get() );
 
 		delete (rParser_ *)Long.LongValue();
 	qRR
@@ -183,24 +185,59 @@ namespace parsing_ {
 		return Null();
 	}
 
-	jobject Parse( const sCaller &Caller )
+	void Init_(
+		scljre::java::lang::sString &String,
+		const str::dString &Content )
 	{
-		jint Token = 0;
 	qRH
-		cObject *LongObject = NULL;
-		cObject *DataObject = NULL;
+		rJString CharsetName;
+		scljre::rJByteArray Array;
+	qRB
+		CharsetName.Init( sizeof( "UTF-8" ), "UTF-8", n4jre::hOriginal );
+
+		if ( Content.Amount() > LONG_MAX )
+			qRLmt();
+
+		Array.Init( (long)Content.Amount() );
+
+		if ( Content.Amount() != 0 )
+			Content.Recall( Content.First(), Content.Amount(), (char *)Array.Core() );
+
+		String.Init( Array, CharsetName );
+	qRR
+	qRT
+	qRE
+	}
+
+	void Set_(
+		const char *Name,
+		const str::dString &Value,
+		scljre::sObject &Data )
+	{
+	qRH
+		scljre::java::lang::sString String;
+	qRB
+		Init_( String, Value );
+		Data.Set( Name, "Ljava/lang/String;", String.Object().Object() );
+	qRR
+	qRT
+	qRE
+	}
+
+	scljre::sJObject Parse( sCaller &Caller )
+	{
+		sJInt Token = 0;
+	qRH
 		scljre::java::lang::sLong Long;
 		lcl::wMeaning Meaning;
 		lcl::locale Locale;
 		str::wString Error;
 		scljre::sObject Data;
 	qRB
-		Caller.GetArgument( LongObject );
-		Long.Init( LongObject );
+		Long.Init( Caller.Get() );
 		rParser_ &Parser = *(rParser_ *)Long.LongValue();
 
-		Caller.GetArgument( DataObject );
-		Data.Init( "XPPqData", DataObject );
+		Data.Init( Caller.Get() );
 
 		switch ( Parser().Parse( xml::tfObvious ) ) {
 		case xml::t_Error:
@@ -214,9 +251,9 @@ namespace parsing_ {
 		case xml::t_Processed:
 			break;
 		default:
-			Data.Set( "tagName", scljre::sString( Parser().TagName() ) );
-			Data.Set( "attributeName", scljre::sString( Parser().AttributeName() ) );
-			Data.Set( "value", scljre::sString( Parser().Value() ) );
+			Set_( "tagName", Parser().TagName(), Data );
+			Set_( "attributeName", Parser().AttributeName(), Data );
+			Set_( "value", Parser().Value(), Data );
 			break;
 		}
 
@@ -254,11 +291,10 @@ namespace parsing_ {
 
 void scljre::SCLJRERegister( sRegistrar &Registrar )
 {
-	Registrar.Register( processing_::New,  processing_::Delete,  processing_::Read );
-//	Registrar.Register( parsing_::New, parsing_::Delete, parsing_::Parse );
+	Registrar.Register( parsing_::New, parsing_::Delete, parsing_::Parse );
+//	Registrar.Register( processing_::New,  processing_::Delete,  processing_::Read );
 }
 
 
 const char *sclmisc::SCLMISCTargetName = NAME_LC;
 const char *sclmisc::SCLMISCProductName = NAME_MC;
-const char *scljre::SCLJREProductVersion = VERSION;
