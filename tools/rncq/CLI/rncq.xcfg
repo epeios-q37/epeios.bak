@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Configurations xmlns:xpp="http://q37.info/ns/xpp/" >
-	<Configuration target="esketch">
+	<Configuration target="rncq">
 		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
 		<xpp:expand value-of="q37.xpp"/>
   <xpp:expand href="../../../TOL.xcfg"/>
@@ -41,17 +41,17 @@
 		<Arguments>
 			<xpp:expand select="TOL_Arguments"/>
 			<!-- Commandes : pas de 'Path' (vaut 'Parameters/Command'), ni de 'Value'. -->
-			<Argument id="TestCommand" Description="TestCommandDescription" long="test" short="t" Value="Test" Usage="%TestFlag% %TestOption% %TestArgument%"/>
+			<Argument id="TestCommand" Description="TestCommandDescription" long="test" short="t" Value="Test" Usage="%TestFlag% %TestOption% %ExpressionArgument%"/>
 			<!-- Fanaux : 'Path', mais pas de 'Value'. -->
 			<Argument id="TestFlag" Description="TestFlagDescription" long="flag" short="f" Path="Flag" Value="TestFlag"/>
 			<!-- Options : 'Path' ET 'Value'. -->
 			<Argument id="TestOption" Description="TestOptionDescription" long="option" short="o" Path="Option" Label="TestOptionLabel"/>
 			<!-- Arguments libres : 'Path' mais PAS de 'Value' (ni de 'short', ni de 'long'). -->
-			<Argument id="TestArgument" Description="TestArgumentDescription" Path="Test" Label="TestArgumentLabel"/>
+			<Argument id="ExpressionArgument" Description="ExpressionArgumentDescription" Path="Expression" Label="ExpressionArgumentLabel"/>
 			<!-- Affectations des arguments libres-->
 			<Layouts>
 				<Layout command="Test">
-					<Link index="0" Target="TestArgument"/>
+					<Link index="0" Target="ExpressionArgument"/>
 				</Layout>
 			</Layouts>
 		</Arguments>

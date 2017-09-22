@@ -45,7 +45,15 @@ namespace {
 
 	void Test_( void )
 	{
-		cio::COut << "Test" << txf::nl;
+	qRH
+		str::wString Test;
+	qRB
+		Test.Init();
+		sclmisc::OGetValue( registry::parameter::Test, Test );
+		cio::COut << "Test :'" << Test << "'" << txf::nl;
+	qRR
+	qRT
+	qRE
 	}
 }
 

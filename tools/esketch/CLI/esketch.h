@@ -1,7 +1,7 @@
 /*
 	Copyright (C) 2016 by Claude SIMON (http://zeusw.org/epeios/contact.html).
 
-	This file is part of 'eSketch.
+	This file is part of 'eSketch'.
 
     'eSketch' is free software: you can redistribute it and/or modify it
     under the terms of the GNU Affero General Public License as published
@@ -17,23 +17,24 @@
     along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef REGISTRY__INC
-# define REGISTRY__INC
+#ifndef ESKETCH_INC_
+# define ESKETCH_INC_
 
-# include "sclrgstry.h"
+# define BEGIN
+// Don't remove what between above 'BEGIN' and below 'END'.
+/* PLACEHOLDER */
 
-namespace registry {
-	using namespace sclrgstry;
+# define NAME_MC			"eSketch"
+# define NAME_UC			"ESKETCH"
+# define NAME_LC			"esketch"
+# define WEBSITE_URL		"http://q37.info/"
+# define AUTHOR_NAME		"Claude SIMON"
+# define AUTHOR_CONTACT		"http://q37.info/contact/"
+# define OWNER_NAME			"Claude SIMON"
+# define OWNER_CONTACT		"http://q37.info/contact/"
+# define COPYRIGHT			COPYRIGHT_YEARS " " OWNER_NAME " (" OWNER_CONTACT ")"	
 
-	namespace parameter {
-		using namespace sclrgstry::parameter;
-
-		extern rEntry Test;
-	}
-
-	namespace definition {
-		using namespace sclrgstry::definition;
-	}
-}
+# define END
 
 #endif
+

@@ -19,6 +19,8 @@
 
 #include "esketchjre.h"
 
+#include "registry.h"
+
 #include "iof.h"
 #include "xpp.h"
 #include "lcl.h"

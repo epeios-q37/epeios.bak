@@ -1,5 +1,13 @@
 # *Epeios* changelog
 
+2017-09-22 :
+- MTHFRC, MTHRTN
+  - Renaming *MTHFRC* to *MTHRTN*.
+- MTHITG :
+  - Adding `dInteger::Init(...)`variants.
+- XTF :
+  - Adding `sIFlow` methods variants.
+
 2017-09-17 :
 - N4ALL:
   - Deporting some code to *N4...* libraries.

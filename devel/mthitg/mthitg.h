@@ -39,6 +39,10 @@
 # define MTHITG_SIGN_POS	((base__)15U)
 # define MTHITG_SIGN_MASK	((base__)( 1U << MTHITG_SIGN_POS ))
 
+/*************/
+/**** OLD ****/
+/*************/
+
 
 namespace mthitg {
 	typedef bso::u16__	base__;
@@ -176,6 +180,8 @@ namespace mthitg {
 			
 			return *this;
 		}
+		void Init( flw::sIFlow &Flow );
+		void Init( const str::dString &Integer );
 		void Init( const integer_ &Integer )
 		{
 			reset();
@@ -517,5 +523,15 @@ inline bso::bool__ operator <=(
 txf::text_oflow__ &operator <<(
 	txf::text_oflow__ &OFlow,
 	const mthitg::integer_ &Integer );
+
+/*************/
+/**** NEW ****/
+/*************/
+
+namespace mthitg {
+	typedef integer_ dInteger;
+	typedef integer wInteger;
+}
+
 
 #endif

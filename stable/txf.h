@@ -337,7 +337,7 @@ namespace txf {
 		{
 			char C[40];
 
-			sprintf( C, "%LG", E );
+			sprintf( C, "%.20LG", E );
 
 			return operator <<( C );
 		}
@@ -470,6 +470,27 @@ namespace txf {
 		{
 			Flow_.Init( Driver );
 			text_oflow__::Init( Flow_ );
+		}
+	};
+
+	// As parameter.
+	typedef text_iflow__ sIFlow;
+
+	class rIFlow
+	: public text_iflow__ {
+	private:
+		flw::sDressedIFlow<> Flow_;
+	public:
+		void reset( bso::sBool P = true )
+		{
+			text_iflow__::reset( P );
+			tol::reset( P, Flow_ );
+		}
+		qCDTOR( rIFlow );
+		void Init( fdr::rIDriver &Driver )
+		{
+			Flow_.Init( Driver );
+			text_iflow__::Init( Flow_ );
 		}
 	};
 }

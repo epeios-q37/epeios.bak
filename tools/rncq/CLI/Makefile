@@ -1,21 +1,21 @@
-#	Copyright (C) 2007-2017 Claude SIMON (http://q37.info/contact/).
+#	Copyright (C) 2016 Claude SIMON (http://q37.info/contact/).
 #
-#	This file is part of eSketch.
+#	This file is part of RNCq.
 #
-#	eSketch is free software: you can redistribute it and/or
+#	RNCq is free software: you can redistribute it and/or
 #	modify it under the terms of the GNU Affero General Public License
 #	published by the Free Software Foundation, either version 3 of the
 #	License, or (at your option) any later version.
 #
-#	eSketch is distributed in the hope that it will be useful,
+#	RNCq is distributed in the hope that it will be useful,
 #	but WITHOUT ANY WARRANTY; without even the implied warranty of
 #	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 #	Affero General Public License for more details.
 #
 #	You should have received a copy of the GNU Affero General Public License
-#	along with eSketch. If not, see <http://www.gnu.org/licenses/>.
+#	along with RNCq. If not, see <http://www.gnu.org/licenses/>.
 
-name = esketchjre
+name = rncq
 
 
 # Epeios general debugging features
@@ -25,6 +25,7 @@ copt += -DE_DEBUG
 # For using <setjmp.h> instead of C++ exceptions.
 #copt += -DERR_JMPUSE
 	
+mods += mthitg mthrtn 
 mods += ags aem bch bitbch bso 
 mods += cio cpe crptgr cslio crt 
 mods += ctn dir dte dtfbsc dtfptb 
@@ -35,11 +36,11 @@ mods += lstctn mns mtk mtx ntvstr
 mods += que sdr stkbse stkbch stkctn 
 mods += str strng tagsbs tol txf 
 mods += tys uys utf xtf llio 
-mods += dlbrry n4all plgn plgncore tht 
-mods += thtsub bomhdl cdgb64 fil fnm 
-mods += lcl rgstry stsfsm xml xpp 
+mods += tht thtsub bomhdl cdgb64 dlbrry 
+mods += fil fnm lcl plgn plgncore 
+mods += rgstry stsfsm xml xpp 
 mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
-mods += scln4a scljre 
+mods += scltool 
 mods += registry 
 
 pmods += pllio 
@@ -61,9 +62,7 @@ CXXFLAGS += -O
 
 ###############################
 	
-# Required for JRE Component.
-
-copt += -DQ_JRE
+copt += -DE_ST
 
 win=win
 win32=win32
@@ -78,6 +77,8 @@ MacOS=Darwin
 Android=Android
 os=$(shell uname -o 2>/dev/null || uname -s)
 mach=$(shell uname -m)
+ifdef EPEIOS_SRC
+endif
 
 
 ##########################
@@ -222,11 +223,7 @@ ifeq ("$(os)","$(Cygwin)")
     
 	endif
 	
-	ifneq ("$(target)","$(Android)")
-		binary=$(name).dll
-		lo += -Wl,--kill-at -shared
-	endif
-
+	binary=$(name).exe
 
 	dest=/cygdrive/h/bin/
 
@@ -258,8 +255,7 @@ ifeq ("$(os)", "$(MinGW)")
 		endif
 	endif
 
-	binary=$(name).dll
-	lo += -Wl,--kill-at -shared
+	binary=$(name).exe
 
 	dest=/h/bin/
 endif
@@ -288,9 +284,7 @@ ifeq ("$(os)","$(GNULinux)")
 			lo += -m64
 		endif
 	endif
-	binary=lib$(name).so
-	lo += -shared
-	co += -fPIC
+	binary=$(name)
 
 	dest=/home/csimon/bin/
 endif
@@ -319,9 +313,7 @@ ifeq ("$(os)","$(Linux)")
 			lo += -m64
 		endif
 	endif
-	binary=lib$(name).so
-	lo += -shared
-	co += -fPIC
+	binary=$(name)
 endif
 
 #############################
@@ -346,8 +338,7 @@ ifeq ("$(os)","$(MacOS)")
 			lo += -m64
 		endif
 	endif
-	binary=lib$(name).dylib
-	lo += -dynamiclib
+	binary=$(name)
 
 	dest=/Users/csimon/bin/
 endif
@@ -376,23 +367,21 @@ ifeq ("$(os)","$(Android)")
 			lo += -m64
 		endif
 	endif
-	binary=lib$(name).so
-	lo += -shared
-	co += -fPIC
+	binary=$(name)
 endif
 
 #############################
 		
 all: $(binary)
-	javac src/*.java -d .
+
 	rm -rf *.o
 ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
 copt += -DVERSION=\""20170922"\"
-copt += -DCOPYRIGHT_YEARS=\""2007-2017"\"
-copt += -DIDENTIFIER=\"""\"
+copt += -DCOPYRIGHT_YEARS=\""2016"\"
+copt += -DIDENTIFIER=\""effd756a-a901-46e8-939f-3f2a5e7986b0"\"
 
 ifndef EPEIOS_SRC
 	src += :src:src/epeios

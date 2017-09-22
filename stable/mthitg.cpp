@@ -21,6 +21,8 @@
 
 #include "mthitg.h"
 
+#include "flx.h"
+
 #include <math.h>
 
 using namespace mthitg;
@@ -354,6 +356,40 @@ integer mthitg::Div_(
 	return Result;
 }
 
+
+void mthitg::integer_::Init( flw::sIFlow &Flow )
+{
+	if ( Flow.EndOfFlow() )
+		return;
+
+	bso::sBool IsNegative = false;
+
+	switch ( Flow.View() ) {
+	case '-':
+		IsNegative = true;
+	case '+':
+		Flow.Skip();
+	default:
+		break;
+	}
+
+	while ( !Flow.EndOfFlow() && isdigit( Flow.View() ) ) {
+		*this =Mul( wInteger( 10 ) );
+		*this =Add( wInteger( Flow.Get() - '0' ) );
+	}
+}
+
+void mthitg::integer_::Init( const str::dString &Integer )
+{
+qRH
+	flx::sStringIFlow Flow;
+qRB
+	Flow.Init( Integer );
+	Init( Flow );
+qRR
+qRT
+qRE
+}
 
 integer integer_::Add( const integer_ &Op2 ) const
 {
