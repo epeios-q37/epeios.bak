@@ -27,7 +27,7 @@
 # define NAME_MC			"eSketch"
 # define NAME_UC			"ESKETCH"
 # define NAME_LC			"esketch"
-# define WEBSITE_URL		"http://q37.info/"
+# define WEBSITE_URL		"http://q37.info/tools/esketch/"
 # define AUTHOR_NAME		"Claude SIMON"
 # define AUTHOR_CONTACT		"http://q37.info/contact/"
 # define OWNER_NAME			"Claude SIMON"

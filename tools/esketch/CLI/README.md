@@ -1,7 +1,7 @@
 # esketch-cli
 ... with command-line interface.
 
-Go to [homepage](http://q37.info/s/t/esketch/) for more information.
+Go to [http://q37.info/tools/esketch/](http://q37.info/s/t/esketch/) for more information.
 
 ## Status
 *GNU/Linux* & *OS X* : [![Travis CI](https://travis-ci.org/epeios-q37/esketch-cli.png)](https://travis-ci.org/epeios-q37/esketch-cli)

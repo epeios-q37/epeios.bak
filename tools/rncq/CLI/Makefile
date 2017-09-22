@@ -25,7 +25,6 @@ copt += -DE_DEBUG
 # For using <setjmp.h> instead of C++ exceptions.
 #copt += -DERR_JMPUSE
 	
-mods += mthitg mthrtn 
 mods += ags aem bch bitbch bso 
 mods += cio cpe crptgr cslio crt 
 mods += ctn dir dte dtfbsc dtfptb 
@@ -38,7 +37,8 @@ mods += str strng tagsbs tol txf
 mods += tys uys utf xtf llio 
 mods += tht thtsub bomhdl cdgb64 dlbrry 
 mods += fil fnm lcl plgn plgncore 
-mods += rgstry stsfsm xml xpp 
+mods += rgstry stsfsm xml xpp mthitg 
+mods += mthrtn stkcrt 
 mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
 mods += scltool 
 mods += registry 

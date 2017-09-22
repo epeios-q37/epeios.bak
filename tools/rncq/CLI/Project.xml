@@ -6,7 +6,7 @@
 			<xpp:bloc>(Obsolete ; generated automatically)</xpp:bloc>
 		</xpp:define>
 		<xpp:define name="CopyrightYears">
-			<xpp:bloc>2016</xpp:bloc>
+			<xpp:bloc>2017</xpp:bloc>
 		</xpp:define>
 		<xpp:set name="Credits" value="Epeios"/>
 		<xpp:set name="Type" value="Tool"/>
@@ -21,10 +21,9 @@
 		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
 			<Modules Group="Core">
 				<xpp:expand select="Core"/>
-    <Modules Group="MTH">
-     <Module>mthitg</Module>
-     <Module>mthrtn</Module>
-    </Modules>
+    <Module>mthitg</Module>
+    <Module>mthrtn</Module>
+    <Module>stkcrt</Module>
 			</Modules>
 			<Modules Group="SCL">
 				<xpp:expand select="SCL"/>

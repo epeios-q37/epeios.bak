@@ -27,7 +27,7 @@
 # define NAME_MC			"RNCq"
 # define NAME_UC			"RNCQ"
 # define NAME_LC			"rncq"
-# define WEBSITE_URL		"http://q37.info/"
+# define WEBSITE_URL		"http://q37.info/tools/rncq/"
 # define AUTHOR_NAME		"Claude SIMON"
 # define AUTHOR_CONTACT		"http://q37.info/contact/"
 # define OWNER_NAME			"Claude SIMON"
