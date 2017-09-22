@@ -146,26 +146,55 @@ void scljre::Throw( const str::dString & Text )
 	qRVct();
 }
 
+sJObject scljre::Null( void )
+{
+	return New( NULL, NULL );
+}
+
+namespace {
+	template <typename primitive, typename wrapper> sJObject Wrap_( primitive Value )
+	{
+		sJObject Object = NULL;
+	qRH
+		wrapper Wrapper;
+	qRB
+		Wrapper.Init( Value );
+
+		Object = Wrapper();
+
+		Wrapper.reset( false );
+	qRR
+	qRT
+	qRE
+		return Object;
+	}
+}
+
+sJObject scljre::Integer( sJInt Value )
+{
+	return Wrap_<sJInt, java::lang::rInteger>( Value );
+}
+
+sJObject scljre::Long( sJLong Value )
+{
+	return Wrap_<sJLong, java::lang::rLong>( Value );
+}
+
 sJObject scljre::String( const str::dString &UTF )
 {
 	sJObject Object = NULL;
 qRH
 	rJString Charset;
 	rJByteArray Bytes;
-	scljre::java::lang::sString JString; 
+	scljre::java::lang::rString JString;
 qRB
-	Charset.Init( sizeof( "UTF-8" ), "UTF-8", n4jre::hOriginal );
+	Charset.Init( "UTF-8", n4jre::hOriginal );
 
-	if ( UTF.Amount() > LONG_MAX )
-		qRLmt();
-
-	Bytes.Init( (long)UTF.Amount() );
-
-	UTF.Recall( UTF.First(), UTF.Amount(), (char *)Bytes.Core() );
+	Bytes.Init( UTF );
 
 	JString.Init( Bytes, Charset );
 
-	Object =  JString.Object().Object();
+	Object = JString();
 
 	JString.reset( false );	// So the underlying object is not destroyed, as it will be used later.
 qRR
@@ -173,40 +202,3 @@ qRT
 qRE
 	return Object;
 }
-
-sJObject scljre::Integer( sJInt Value )
-{
-	sJObject Object = NULL;
-
-	scljre::java::lang::sInteger Integer;
-
-	Integer.Init( Value );
-
-	Object = Integer.Object().Object();
-
-	Integer.reset( false );
-
-	return Object;
-}
-
-sJObject scljre::Long( sJLong Value )
-{
-	sJObject Object = NULL;
-
-	scljre::java::lang::sLong Long;
-
-	Long.Init( Value );
-
-	Object = Long.Object().Object();
-
-	Long.reset( false );
-
-	return Object;
-}
-
-sJObject scljre::Null( void )
-{
-	return New( NULL, NULL );
-}
-
-

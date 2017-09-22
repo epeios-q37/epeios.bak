@@ -72,7 +72,7 @@ namespace scljre {
 
 	extern n4jre::fDelete Delete_;
 
-	class sObject {
+	class rObject {
 	private:
 		qRMV( cObject, O_, Object_ );
 	public:
@@ -85,14 +85,14 @@ namespace scljre {
 
 			Object_ = NULL;
 		}
-		qCDTOR( sObject );
+		qCDTOR( rObject );
 		void Init( n4jre::cObject *Object )
 		{
 			reset();
 
 			Object_ = Object;
 		}
-		cObject *Object( void )
+		cObject *operator()( void )
 		{
 			return &O_();
 		}
@@ -152,49 +152,67 @@ namespace scljre {
 		}
 	};
 
+	class rCore_ {
+	protected:
+		rObject Object_;
+	public:
+		void reset( bso::sBool P = true )
+		{
+			Object_.reset( P );
+		}
+		qCDTOR( rCore_ );
+		void Init( n4jre::cObject *Object )
+		{
+			Object_.Init( Object );
+		}
+		cObject *operator()( void )
+		{
+			return Object_.operator()();
+		}
+	};
+
+
+# ifdef B
+#  define SCKJRE_B_ B
+# undef B
+# endif
+
+# ifdef A
+#  define SCKJRE_A_ A
+# undef A
+# endif
+
+// Before
+# define B( name )\
+	class r##name\
+	: public rCore_\
+	{\
+	public:\
+		using rCore_::Init
+
+// After
+# define A	}
+
+
 	namespace java {
 		namespace io {
-			class sInputStream {
-			private:
-				sObject Object_;
-			public:
-				void reset( bso::sBool P = true )
-				{
-					Object_.reset( P );
-				}
-				qCDTOR( sInputStream );
-				void Init( n4jre::cObject *Object )
-				{
-					Object_.Init( Object );
-				}
-				sJInt Read( void )
-				{
-					return Object_.CallIntMethod( "read", "()I" );
-				}
-				sJInt Read(
-					rJByteArray &b,
-					sJInt off,
-					sJInt len )
-				{
-					return Object_.CallIntMethod( "read", "([BII)I", b, off, len );
-				}
-			};
+			B( InputStream );
+			sJInt Read( void )
+			{
+				return Object_.CallIntMethod( "read", "()I" );
+			}
+			sJInt Read(
+				rJByteArray &b,
+				sJInt off,
+				sJInt len )
+			{
+				return Object_.CallIntMethod( "read", "([BII)I", b, off, len );
+			}
+			A;
 		}
 
 		namespace lang {
-			class sInteger {
-			private:
-				sObject Object_;
-			public:
-				void reset( bso::sBool P = true )
-				{
-					Object_.reset( P );
-				}
-				qCDTOR( sInteger );
-				void Init( n4jre::cObject *Object )
-				{
-					Object_.Init( Object );
-				}
+			B( Integer );
 				void Init( sJInt Integer )
 				{
 					Init( New( "Ljava/lang/Integer;", "(I)V", Integer ) );
@@ -203,25 +221,9 @@ namespace scljre {
 				{
 					return Object_.CallIntMethod( "intValue", "()I" );
 				}
-				sObject &Object( void )
-				{
-					return Object_;
-				}
-			};
+			A;
 
-			class sLong {
-			private:
-				sObject Object_;
-			public:
-				void reset( bso::sBool P = true )
-				{
-					Object_.reset( P );
-				}
-				qCDTOR( sLong );
-				void Init( n4jre::cObject *Object )
-				{
-					Object_.Init( Object );
-				}
+			B( Long );
 				void Init( sJLong Long )
 				{
 					Init( New( "Ljava/lang/Long;", "(J)V", Long ) );
@@ -230,26 +232,9 @@ namespace scljre {
 				{
 					return Object_.CallLongMethod( "longValue", "()J" );
 				}
-				sObject &Object( void )
-				{
-					return Object_;
-				}
+			A;
 
-			};
-
-			class sString {
-			private:
-				sObject Object_;
-			public:
-				void reset( bso::sBool P = true )
-				{
-					Object_.reset( P );
-				}
-				qCDTOR( sString );
-				void Init( n4jre::cObject *Object )
-				{
-					Object_.Init( Object );
-				}
+			B( String );
 				void Init(
 					rJByteArray &bytes,
 					rJString &charsetName )
@@ -262,14 +247,21 @@ namespace scljre {
 				{
 					return Object_.CallObjectMethod( "getBytes", "(Ljava/lang/String;)[B", Result, charsetName );
 				}
-				sObject &Object( void )
-				{
-					return Object_;
-				}
-			};
+			A;
 		}
 	}
 
+# undef B
+# undef A
+
+# ifdef SCLJRE_B_
+# define B SCLJRE_B_
+# endif
+
+# ifdef SCLJRE_A_
+# define A SCLJRE_A_
+# endif
+/*
 	typedef java::lang::sString sString_;
 
 	class sString
@@ -312,13 +304,19 @@ namespace scljre {
 //			sString_::Init( Object );
 		}
 	};
+*/
+
+	sJObject Null( void );
+	sJObject Integer( sJInt Integer );
+	sJObject Long( sJLong Long );
+	sJObject String( const str::dString &UTF );
 
 	typedef fdr::rIDressedDriver rIDriver_;
 
 	class rInputStreamIDriver
 	: public rIDriver_ {
 	private:
-		java::io::sInputStream Stream_;
+		java::io::rInputStream Stream_;
 	protected:
 		virtual fdr::sSize FDRRead(
 			fdr::sSize Maximum,
@@ -344,12 +342,6 @@ namespace scljre {
 	};
 
 	void Throw( const str::dString &Text );
-
-//	sJObject Object( const char *Name );
-	sJObject String( const str::dString &UTF );
-	sJObject Integer( sJInt Integer );
-	sJObject Long( sJLong Long );
-	sJObject Null( void );
 
 	typedef scln4a::sCaller sCaller_;
 
@@ -381,7 +373,7 @@ namespace scljre {
 		void Get( str::dString &String )
 		{
 		qRH
-			scljre::java::lang::sString JString;
+			scljre::java::lang::rString JString;
 			rJString Charset;
 			rJByteArray Result;
 		qRB
@@ -406,6 +398,8 @@ namespace scljre {
 	void SCLJREInfo( txf::sOFlow &Flow );	// To define by user.
 	void SCLJRERegister( sRegistrar &Registrar );	// To define by user
 }
+
+# define SCLJRE_F( name ) scljre::sJObject name( scljre::sCaller &Caller )
 
 # ifdef SCLJRE_H_
 #  define H SCLJRE_H_

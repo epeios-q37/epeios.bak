@@ -144,8 +144,41 @@ namespace n4jre {
 		}
 	};
 
-	typedef rJArray_<bso::sChar> rJString;
-	typedef rJArray_<sJByte> rJByteArray;
+	template <typename type> class rJBytes_
+	: public rJArray_<type>
+	{
+	public:
+		using rJArray_::Init;
+		void Init(
+			const char *Buffer,
+			eHandling Handling )
+		{
+			size_t Size = strlen( Buffer );
+
+			if ( Size > LONG_MAX )
+				qRLmt();
+
+			rJArray_::Init( (long)Size, (const type *)Buffer, Handling );
+		}
+		void Init( const str::dString &String )
+		{
+		qRH
+			qCBUFFERr Buffer;
+		qRB
+			Init( String.Convert( Buffer ), hCopy );
+		qRR
+		qRT
+		qRE
+		}
+	};
+
+	class rJByteArray
+	: public rJBytes_<sJByte>
+	{};
+
+	class rJString
+	: public rJBytes_<char>
+	{};
 
 	qENUM( Type_ )
 	{

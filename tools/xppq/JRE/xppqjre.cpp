@@ -34,92 +34,6 @@ void scljre::SCLJREInfo( txf::sOFlow &Flow )
 		<< txf::pad << "Build : " __DATE__ " " __TIME__ " (" << cpe::GetDescription() << ')';
 }
 
-/*
-
-namespace processing_ {
-	namespace {
-		class rProcessor_
-		{
-		private:
-			jre::rInputStreamIDriver Input_;
-			flw::sDressedIFlow<> Flow_;
-			xtf::extended_text_iflow__ XFlow_;
-			xpp::preprocessing_iflow___ PFlow_;
-		public:
-			void reset( bso::sBool P = true )
-			{
-				tol::reset( P, Input_, Flow_, XFlow_, PFlow_ );
-			}
-			void Init( jobject InputStream )
-			{
-				Input_.Init( InputStream );
-				Flow_.Init( Input_ );
-				XFlow_.Init( Flow_, utf::f_Default );
-				PFlow_.Init(XFlow_, xpp::criterions___( str::wString() ) );
-			}
-			xpp::preprocessing_iflow___ &operator()( void )
-			{
-				return PFlow_;
-			}
-		};
-	}
-
-	jobject New(
-		JNIEnv *Env,
-		const scljre::sArguments &Args )
-	{
-		rProcessor_ *Processor = new rProcessor_;
-
-		if ( Processor == NULL )
-			qRAlc();
-
-		Processor->Init( Args.Get() );
-
-		return jre::java::lang::sLong( (jlong)Processor );
-	}
-
-	jobject Delete(
-		JNIEnv *Env,
-		const scljre::sArguments &Args )
-	{
-		delete (rProcessor_ *)jre::java::lang::sLong( Args.Get() ).LongValue();
-
-		return NULL;
-	}
-
-	jobject Read(
-		JNIEnv *Env,
-		const scljre::sArguments &Args )
-	{
-		jint Char = 0;
-	qRH
-		lcl::meaning Meaning;
-		lcl::locale Locale;
-		str::wString Translation;
-	qRB
-		rProcessor_ &Processor = *(rProcessor_ *)jre::java::lang::sLong( Args.Get() ).LongValue();
-
-		if ( !Processor().EndOfFlow() )
-			Char = Processor().Get();
-		else if ( Processor().Status() == xpp::sOK )
-			Char = -1;
-		else {
-			Meaning.Init();
-			xpp::GetMeaning(Processor(), Meaning );
-			Locale.Init();
-			Translation.Init();
-			Locale.GetTranslation( Meaning, "", Translation );
-			scljre::Throw( Translation );
-		}
-	qRR
-	qRT
-	qRE
-		return jre::java::lang::sInteger( Char );
-	}
-}
-
-*/
-
 namespace parsing_ {
 	namespace {
 		class rParser_
@@ -149,7 +63,7 @@ namespace parsing_ {
 		};
 	}
 
-	scljre::sJObject New( sCaller &Caller )
+	SCLJRE_F( New )
 	{
 		rParser_ *Parser = NULL;
 	qRH
@@ -171,10 +85,10 @@ namespace parsing_ {
 		return Long( (scljre::sJLong)Parser );
 	}
 
-	scljre::sJObject Delete( sCaller &Caller )
+	SCLJRE_F( Delete )
 	{
 	qRH
-		scljre::java::lang::sLong Long;
+		scljre::java::lang::rLong Long;
 	qRB
 		Long.Init( Caller.Get() );
 
@@ -185,54 +99,50 @@ namespace parsing_ {
 		return Null();
 	}
 
-	void Init_(
-		scljre::java::lang::sString &String,
-		const str::dString &Content )
-	{
-	qRH
-		rJString CharsetName;
-		scljre::rJByteArray Array;
-	qRB
-		CharsetName.Init( sizeof( "UTF-8" ), "UTF-8", n4jre::hOriginal );
+	namespace {
+		void Init_(
+			scljre::java::lang::rString &String,
+			const str::dString &Content )
+		{
+		qRH
+			rJString CharsetName;
+			scljre::rJByteArray Array;
+		qRB
+			CharsetName.Init( "UTF-8", n4jre::hOriginal );
 
-		if ( Content.Amount() > LONG_MAX )
-			qRLmt();
+			Array.Init( Content );
 
-		Array.Init( (long)Content.Amount() );
+			String.Init( Array, CharsetName );
+		qRR
+		qRT
+		qRE
+		}
 
-		if ( Content.Amount() != 0 )
-			Content.Recall( Content.First(), Content.Amount(), (char *)Array.Core() );
-
-		String.Init( Array, CharsetName );
-	qRR
-	qRT
-	qRE
+		void Set_(
+			const char *Name,
+			const str::dString &Value,
+			scljre::rObject &Data )
+		{
+		qRH
+			scljre::java::lang::rString String;
+		qRB
+			Init_( String, Value );
+			Data.Set( Name, "Ljava/lang/String;", String() );
+		qRR
+		qRT
+		qRE
+		}
 	}
 
-	void Set_(
-		const char *Name,
-		const str::dString &Value,
-		scljre::sObject &Data )
-	{
-	qRH
-		scljre::java::lang::sString String;
-	qRB
-		Init_( String, Value );
-		Data.Set( Name, "Ljava/lang/String;", String.Object().Object() );
-	qRR
-	qRT
-	qRE
-	}
-
-	scljre::sJObject Parse( sCaller &Caller )
+	SCLJRE_F( Parse )
 	{
 		sJInt Token = 0;
 	qRH
-		scljre::java::lang::sLong Long;
+		scljre::java::lang::rLong Long;
 		lcl::wMeaning Meaning;
 		lcl::locale Locale;
 		str::wString Error;
-		scljre::sObject Data;
+		scljre::rObject Data;
 	qRB
 		Long.Init( Caller.Get() );
 		rParser_ &Parser = *(rParser_ *)Long.LongValue();
@@ -289,10 +199,104 @@ namespace parsing_ {
 
 }
 
+namespace processing_ {
+	namespace {
+		class rProcessor_
+		{
+		private:
+			scljre::rInputStreamIDriver Input_;
+			flw::sDressedIFlow<> Flow_;
+			xtf::extended_text_iflow__ XFlow_;
+			xpp::preprocessing_iflow___ PFlow_;
+		public:
+			void reset( bso::sBool P = true )
+			{
+				tol::reset( P, Input_, Flow_, XFlow_, PFlow_ );
+			}
+			void Init( cObject *InputStream )
+			{
+				Input_.Init( InputStream );
+				Flow_.Init( Input_ );
+				XFlow_.Init( Flow_, utf::f_Default );
+				PFlow_.Init(XFlow_, xpp::criterions___( str::wString() ) );
+			}
+			xpp::preprocessing_iflow___ &operator()( void )
+			{
+				return PFlow_;
+			}
+		};
+	}
+
+	SCLJRE_F( New )
+	{
+		rProcessor_ *Processor = NULL;
+	qRH
+	qRB
+		Processor = new rProcessor_;
+
+		if ( Processor == NULL )
+			qRAlc();
+
+		Processor->Init( Caller.Get() );
+	qRR
+		if ( Processor != NULL )
+			delete Processor;
+	qRT
+	qRE
+		return scljre::Long( (scljre::sJLong)Processor );
+	}
+
+	SCLJRE_F( Delete )
+	{
+	qRH
+		scljre::java::lang::rLong Long;
+	qRB
+		Long.Init( Caller.Get() );
+
+		delete (rProcessor_ *)Long.LongValue();
+	qRR
+	qRT
+	qRE
+		return Null();
+	}
+
+	SCLJRE_F( Read )
+	{
+		sJByte Char = 0;
+	qRH
+		scljre::java::lang::rLong Long;
+		lcl::meaning Meaning;
+		lcl::locale Locale;
+		str::wString Translation;
+	qRB
+		Long.Init( Caller.Get() );
+
+		rProcessor_ &Processor = *(rProcessor_ *)Long.LongValue();
+
+		if ( !Processor().EndOfFlow() )
+			Char = Processor().Get();
+		else if ( Processor().Status() == xpp::sOK )
+			Char = -1;
+		else {
+			Meaning.Init();
+			xpp::GetMeaning(Processor(), Meaning );
+			Locale.Init();
+			Translation.Init();
+			Locale.GetTranslation( Meaning, "", Translation );
+			scljre::Throw( Translation );
+		}
+	qRR
+	qRT
+	qRE
+		return Integer( Char );
+	}
+}
+
+
 void scljre::SCLJRERegister( sRegistrar &Registrar )
 {
 	Registrar.Register( parsing_::New, parsing_::Delete, parsing_::Parse );
-//	Registrar.Register( processing_::New,  processing_::Delete,  processing_::Read );
+	Registrar.Register( processing_::New,  processing_::Delete,  processing_::Read );
 }
 
 

@@ -164,14 +164,14 @@ class XPPqTest {
 		System.out.println( "-----------------------------------------" );
 		dump( new java.io.FileInputStream( fileName ) );
 	}
-	/*
+	
 	private static void test1( String fileName ) throws Exception
 	{
 		System.out.println( "Preprocessing the file :" );
 		System.out.println( "------------------------" );
 		dump( new XPPqPreprocessor( new java.io.FileInputStream( fileName ) ) );
 	}
-	*/
+	
 	private static void parse( java.io.InputStream stream ) throws Exception
 	{
 		XPPqData data = new XPPqData();
@@ -220,6 +220,8 @@ class XPPqTest {
  	System.out.println( XPPq.wrapperInfo() );
  	System.out.println( XPPq.componentInfo() );
  	displayBytecodeBuildTimestamp();
+  System.out.println();
+
 		
 		int test = 3;
 		
@@ -239,7 +241,7 @@ class XPPqTest {
 			test0( fileName );
 			break;
 		case 1:
-//			test1( fileName );
+			test1( fileName );
 			break;
 		case 2:
 			test2( fileName );
