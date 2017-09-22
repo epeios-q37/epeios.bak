@@ -39,7 +39,8 @@
 namespace scljre {
 	using namespace n4jre;
 
-	extern n4jre::fNewObject NewObject_;
+	extern n4jre::fNew_Object New_Object_;
+	extern n4jre::fThrow Throw_;
 
 	// Termination method.
 	inline void Fill_(
@@ -67,10 +68,17 @@ namespace scljre {
 
 		Fill_( 0, Values, Args... );
 
-		return NewObject_( Class, Signature, sizeof...( args ), Values );
+		return New_Object_( Class, Signature, sizeof...( args ), Values );
 	}
 
 	extern n4jre::fDelete Delete_;
+
+	inline void Throw( const char *Message )
+	{
+		return Throw_( Message );
+	}
+
+	void Throw( const str::dString &Text );
 
 	class rObject {
 	private:
@@ -261,50 +269,6 @@ namespace scljre {
 # ifdef SCLJRE_A_
 # define A SCLJRE_A_
 # endif
-/*
-	typedef java::lang::sString sString_;
-
-	class sString
-	: public sString_ {
-	public:
-		void reset( bso::sBool P = true )
-		{
-			sString_::reset( P );
-		}
-		qCDTOR( sString );
-		sString( const char *Text )
-		{
-			Init( Text );
-		}
-		sString( const str::dString &Text )
-		{
-			Init( Text );
-		}
-		sString( sJObject *Object )
-		{
-			Init( Object );
-		}
-		void Init( const char *Text )
-		{
-			qRVct();
-		}
-		void Init( const str::dString &Text )
-		{
-		qRH
-			qCBUFFERr Buffer;
-		qRB
-			Init( Text.Convert( Buffer ) );
-		qRR
-		qRT
-		qRE
-		}
-		void Init( sJObject *Object )
-		{
-			qRVct();
-//			sString_::Init( Object );
-		}
-	};
-*/
 
 	sJObject Null( void );
 	sJObject Integer( sJInt Integer );
@@ -340,8 +304,6 @@ namespace scljre {
 			Stream_.Init( Object );
 		}
 	};
-
-	void Throw( const str::dString &Text );
 
 	typedef scln4a::sCaller sCaller_;
 

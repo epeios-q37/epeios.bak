@@ -31,14 +31,13 @@ void scljre::SCLJREInfo( txf::sOFlow &Flow )
 }
 
 namespace {
-	scljre::sJObject ReturnArgument_( scljre::sCaller &Caller )
+	SCLJRE_F( ReturnArgument_ )
 	{
 		scljre::sJObject Return;
 	qRH
 		str::wString Input, Text;
 	qRB
 		Input.Init();
-
 		Caller.Get( Input );
 
 		Text.Init();

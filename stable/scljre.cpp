@@ -93,8 +93,9 @@ namespace {
 	};
 }
 
-n4jre::fNewObject scljre::NewObject_ = NULL;
+n4jre::fNew_Object scljre::New_Object_ = NULL;
 n4jre::fDelete scljre::Delete_ = NULL;
+n4jre::fThrow scljre::Throw_ = NULL;
 
 n4jre::fMalloc n4jre::N4JREMalloc = NULL;
 n4jre::fFree n4jre::N4JREFree = NULL;
@@ -121,10 +122,11 @@ qRH
 qRB
 	const n4jre::gShared &Shared = *( const n4jre::gShared* )UP;
 
-	Assign_( Shared.NewObject, NewObject_ );
+	Assign_( Shared.New_Object, New_Object_ );
 	Assign_( Shared.Delete, Delete_ );
 	Assign_( Shared.Malloc, n4jre::N4JREMalloc );
 	Assign_( Shared.Free, n4jre::N4JREFree );
+	Assign_( Shared.Throw, Throw_ );
 
 	Registrar.Init( RegistrarCallback );
 	SCLJRERegister( Registrar );
@@ -141,9 +143,15 @@ qRE
 	return Launcher;
 }
 
-void scljre::Throw( const str::dString & Text )
+void scljre::Throw( const str::dString &Message )
 {
-	qRVct();
+qRH
+	qCBUFFERr Buffer;
+qRB
+	Throw( Message.Convert( Buffer ) );
+qRR
+qRT
+qRE
 }
 
 sJObject scljre::Null( void )

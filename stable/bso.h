@@ -712,6 +712,9 @@ namespace bso {
 	typedef u32__ sU32;
 	typedef s32__ sS32;
 
+	typedef u64__ sU64;
+	typedef s64__ sS64;
+
 	typedef sUInt sFlag;
 
 	typedef char__ sChar;

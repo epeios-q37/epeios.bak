@@ -41,9 +41,9 @@
 
 namespace n4jre {
 	// As defined in the 'Java' headers.
-	typedef signed char sJByte;
-	typedef long sJInt;
-	typedef __int64 sJLong;
+	typedef bso::sS8 sJByte;
+	typedef bso::sS32 sJInt;
+	typedef bso::sS64 sJLong;
 
 	qENUM( Handling )
 	{
@@ -148,7 +148,7 @@ namespace n4jre {
 	: public rJArray_<type>
 	{
 	public:
-		using rJArray_::Init;
+		using rJArray_<type>::Init;
 		void Init(
 			const char *Buffer,
 			eHandling Handling )
@@ -158,7 +158,7 @@ namespace n4jre {
 			if ( Size > LONG_MAX )
 				qRLmt();
 
-			rJArray_::Init( (long)Size, (const type *)Buffer, Handling );
+			rJArray_<type>::Init( (long)Size, (const type *)Buffer, Handling );
 		}
 		void Init( const str::dString &String )
 		{
@@ -274,6 +274,7 @@ namespace n4jre {
 		H( sJLong, Long );
 # undef H
 	public:
+		qCALLBACK( Object );
 		void Set(
 			const char *Name,
 			const char *Signature,
@@ -295,7 +296,7 @@ namespace n4jre {
 	typedef cObject sJObject_;
 	typedef sJObject_* sJObject;
 
-	typedef cObject *(* fNewObject )(
+	typedef cObject *(* fNew_Object )(
 		const char *Class,
 		const char *Signature,
 		int ArgC,
@@ -303,19 +304,24 @@ namespace n4jre {
 
 	typedef void( *fDelete )( cObject * );
 
+	typedef void ( *fThrow )( const char *Message );
+
+
 	struct gShared {
 	public:
-		fNewObject NewObject;
+		fNew_Object New_Object;
 		// Below three functions purpose is that resources allocation/deallocation occurs in the same binary, otherwise there would be crashes.
 		fDelete Delete;
 		fMalloc Malloc;
 		fFree Free;
+		fThrow Throw;
 		void reset( bso::sBool P = true )
 		{
-			NewObject = NULL;
+			New_Object = NULL;
 			Delete = NULL;
 			Malloc = NULL;
 			Free = NULL;
+			Throw = NULL;
 		}
 		qCDTOR( gShared );
 	};

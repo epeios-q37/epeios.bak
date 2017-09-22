@@ -166,6 +166,15 @@ namespace {
 	{
 		delete Object;
 	}
+	inline void Throw_( const char *Message )
+	{
+		JNIEnv *Env = jniq::GetEnv();
+
+		if ( Env->ExceptionOccurred() == NULL )
+			Env->ThrowNew( Env->FindClass( "java/lang/Exception"), Message );
+
+//		qRAbort();
+	}
 }
 
 
@@ -186,10 +195,11 @@ qRFB
 	ComponentFilename.Init();
 	sclmisc::MGetValue( registry::parameter::ComponentFilename, ComponentFilename );
 
-	Shared_.NewObject = wrapper::NewObject;
+	Shared_.New_Object = wrapper::NewObject;
 	Shared_.Delete = Delete_;
 	Shared_.Malloc = n4jre::N4JREMalloc;
 	Shared_.Free = n4jre::N4JREFree;
+	Shared_.Throw = Throw_;
 
 	wrapper::Register( ComponentFilename, Rack_, &Shared_ );
 qRFR

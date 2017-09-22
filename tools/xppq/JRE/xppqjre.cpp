@@ -282,7 +282,7 @@ namespace processing_ {
 			xpp::GetMeaning(Processor(), Meaning );
 			Locale.Init();
 			Translation.Init();
-			Locale.GetTranslation( Meaning, "", Translation );
+			sclmisc::GetBaseTranslation( Meaning, Translation );
 			scljre::Throw( Translation );
 		}
 	qRR
@@ -292,13 +292,11 @@ namespace processing_ {
 	}
 }
 
-
 void scljre::SCLJRERegister( sRegistrar &Registrar )
 {
 	Registrar.Register( parsing_::New, parsing_::Delete, parsing_::Parse );
 	Registrar.Register( processing_::New,  processing_::Delete,  processing_::Read );
 }
-
 
 const char *sclmisc::SCLMISCTargetName = NAME_LC;
 const char *sclmisc::SCLMISCProductName = NAME_MC;

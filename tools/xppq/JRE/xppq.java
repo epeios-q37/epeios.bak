@@ -106,6 +106,7 @@ class XPPqPreprocessor extends java.io.InputStream {
 		xppq = new XPPq( XPPq.getPreprocessor( Stream ) );
 	}
 	
+ // To optimize by using the buffer.
 	public int read()
 	{
 		return xppq.readFromPreprocessor();
@@ -158,19 +159,21 @@ class XPPqTest {
 		System.out.println();
 	}
 	
-	private static void test0( String fileName ) throws Exception
+	private static void test0( java.io.InputStream stream ) throws Exception
 	{
 		System.out.println( "No treatment ; to see the original file :" );
 		System.out.println( "-----------------------------------------" );
-		dump( new java.io.FileInputStream( fileName ) );
+		dump( stream );
 	}
 	
-	private static void test1( String fileName ) throws Exception
+	private static void test1( java.io.InputStream stream ) throws Exception
 	{
 		System.out.println( "Preprocessing the file :" );
 		System.out.println( "------------------------" );
-		dump( new XPPqPreprocessor( new java.io.FileInputStream( fileName ) ) );
+		dump( new XPPqPreprocessor( stream ) );
 	}
+
+ static private int indent = 0;
 	
 	private static void parse( java.io.InputStream stream ) throws Exception
 	{
@@ -201,20 +204,43 @@ class XPPqTest {
 		}
 	}
 
-	private static void test2( String fileName ) throws Exception
+	private static void test2( java.io.InputStream stream) throws Exception
 	{
 		System.out.println( "XML parsing WITHOUT preprocessing :" );
 		System.out.println( "-----------------------------------" );
-		parse( new java.io.FileInputStream( fileName ) );
+		parse( stream );
 	}
  
-	private static void test3( String fileName ) throws Exception
+	private static void test3( java.io.InputStream stream ) throws Exception
 	{
 		System.out.println( "XML parsing WITH preprocessing :" );
 		System.out.println( "--------------------------------" );
-		parse( new XPPqPreprocessor( new java.io.FileInputStream( fileName ) ) );
+//		parse( new XPPqPreprocessor( new java.io.FileInputStream( fileName ) ) );
+		parse( new XPPqPreprocessor( stream ) );
 	}
- 
+
+ private static String xml = 
+"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+"<SomeTag xmlns:xpp=\"http://q37.info/ns/xpp/\" AnAttribute=\"SomeAttributeValue\">\n" +
+" <SomeOtherTag AnotherAttribute=\"AnotherAttributeValue\">TagValue</SomeOtherTag>\n" +
+" <xpp:define name=\"SomeMacro\">\n" +
+"  <xpp:bloc>Some macro content from string !</xpp:bloc>\n" +
+" </xpp:define>\n" +
+" <YetAnotherTag YetAnotherAttribute=\"YetAnotherAttributeValue\">\n" +
+"  <xpp:expand select=\"SomeMacro\"/>\n" +
+" </YetAnotherTag>\n" +
+"</SomeTag>\n"
+ ;
+
+
+ private static java.io.InputStream getStream() throws Exception
+ {
+  if ( false )
+   return new java.io.FileInputStream( "demo.xml" );
+  else
+   return new java.io.ByteArrayInputStream( xml.getBytes() );
+ }
+
 	public static void main ( String[] args ) throws Exception
 	{
  	System.out.println( XPPq.wrapperInfo() );
@@ -238,16 +264,16 @@ class XPPqTest {
 		
 		switch ( test ) {
 		case 0:
-			test0( fileName );
+			test0( getStream() );
 			break;
 		case 1:
-			test1( fileName );
+			test1( getStream() );
 			break;
 		case 2:
-			test2( fileName );
+			test2( getStream() );
 			break;
 		case 3:
-			test3( fileName );
+			test3( getStream() );
 			break;
 		default:
 			System.err.println( "'" + args[0] + "' is not a valid test id ; must be '0' to '3'.");

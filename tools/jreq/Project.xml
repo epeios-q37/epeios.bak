@@ -30,6 +30,7 @@
     <Module>lcl</Module>
     <Module>n4all</Module>
     <Module>n4allw</Module>
+    <Module>n4jre</Module>
     <Module>plgn</Module>
     <Module>plgncore</Module>
     <Module>rgstry</Module>
@@ -52,7 +53,7 @@
   <File>README.md</File>
   <File>CHANGELOG.md</File>
   <!-- '*.java' files are source files and will automatically packed as such. -->
-  <File Pack="No">jreq.java</File>
+  <File Pack="No">JREq.java</File>
  </Files>
  <RTW>
   <Dir>jreq</Dir>
