@@ -90,7 +90,7 @@ namespace {
 
 			Integer.Init( String );
 
-			Result = String.ToLF();
+		//	Result = String.ToLF();
 
 //			cio::COut << String << txf::tab << Integer << txf::nl;
 		qRR
@@ -234,7 +234,8 @@ namespace {
 
 		Result.Init();
 		Float = Evaluate_( Expression, Result );
-		cio::COut << '=' << Result.N << '/' << txf::nl << Result.D << txf::nl << Result.ToLongFloat() << txf::tab << Float << txf::nl;
+		cio::COut << '=' << Result.N << '/' << txf::nl << Result.D << txf::nl << txf::commit;
+		cio::COut << Result.ToLongFloat() << txf::tab << Float << txf::nl;
 	qRR
 	qRT
 	qRE

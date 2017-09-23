@@ -51,28 +51,35 @@ namespace mthitg {
 	class integer;
 	class integer_;
 
-	// Predclaration.
+	// Predeclaration.
 
-	int Comp_(
-		const integer_ &Op1,
-		const integer_ &Op2 );
-	integer Divide_(
+	// Following 4 below functions ignores the sign of the operands (works with absolute values).
+	integer_ &Div_(
 		const integer_ &Num,
 		const integer_ &Den,
-		integer_ &Rest );
-	integer Div_(
-		const integer_ &Num,
-		const integer_ &Den,
-		integer_ &Rest );
-	integer Add_(
+		integer_ &Quotient,
+		integer_ *Remainder );
+	integer_ &Add_(
+		const integer_ &Op1,
+		const integer_ &Op2,
+		integer_ &Result );
+	// Although operands sign is ignored, the result is signed.
+	integer_ &Sub_(
+		const integer_ &Op1,
+		const integer_ &Op2,
+		integer_ &Result );
+	integer_ &Mul_(
+		const integer_ &Op1,
+		const integer_ &Op2,
+		integer_ &Result );
+
+	bso::sign__ Comp(
 		const integer_ &Op1,
 		const integer_ &Op2 );
-	integer Sub_(
+	integer_ &Add(
 		const integer_ &Op1,
-		const integer_ &Op2 );
-	integer Mul_(
-		const integer_ &Op1,
-		const integer_ &Op2 );
+		const integer_ &Op2,
+		integer_ &Result );
 
 	using bch::sHook;
 	
@@ -83,21 +90,6 @@ namespace mthitg {
 		{
 			return S_.Size & ~MTHITG_SIGN_MASK;
 		}
-		size__ _GetRealSize( void ) const
-		{
-			size__ Size = _GetRawSize();
-
-			if ( Size == 0 )
-				qRFwk();
-
-			while ( ( Size-- ) && !Core( Size ) );
-
-			return Size + 1;
-		}
-		bso::bool__ _GetSignFlag( void ) const
-		{
-			return ( ( S_.Size & MTHITG_SIGN_MASK ) >> MTHITG_SIGN_POS ) != 0;
-		}
 		size__ PutSize_( size__ Size )
 		{
 			S_.Size = ( ( S_.Size & MTHITG_SIGN_MASK ) | Size );
@@ -107,30 +99,31 @@ namespace mthitg {
 		size__ PutSignFlag_( bso::bool__ Sign )
 		{
 			S_.Size = ( ( S_.Size & ~MTHITG_SIGN_MASK ) | ( Sign << MTHITG_SIGN_POS ) );
-			return _GetSignFlag();
+
+			return GetSignFlag();
 		}
 		void Adjust_( aem::mode__ Mode = aem::m_Default );
 		void Dup_( const integer_ &Interger );
-		friend int Comp_(
+		friend bso::sign__ Comp(
 			const integer_ &Num,
 			const integer_ &Den );
-		friend integer Divide_(
+		friend integer_ &Div_(
 			const integer_ &Num,
 			const integer_ &Den,
-			integer_ &Rest );
-		friend integer Div_(
-			const integer_ &Num,
-			const integer_ &Den,
-			integer_ &Rest );
-		friend integer Add_(
+			integer_ &Quotient,
+			integer_ *Remainder );
+		friend integer_ &Add_(
 			const integer_ &Op1,
-			const integer_ &Op2 );
-		friend integer Sub_(
+			const integer_ &Op2,
+			integer_ &Result );
+		friend integer_ &Sub_(
 			const integer_ &Op1,
-			const integer_ &Op2 );
-		friend integer Mul_(
+			const integer_ &Op2,
+			integer_ &Result );
+		friend integer_ &Mul_(
 			const integer_ &Op1,
-			const integer_ &Op2 );
+			const integer_ &Op2,
+			integer_ &Result );
 		bso::u32__ _GetAbsULong( void )	// Valeur absolue en 'ulong'.
 		{
 			Adjust_();
@@ -150,10 +143,10 @@ namespace mthitg {
 		//o The core.
 		bch::E_BUNCH_( base__ ) Core;
 		struct s {
-			/* The most significant is the sign (0:+, 1:-) (this are not smileys).
+			bch::E_BUNCH_( base__ )::s Core;
+			/* The most significant is the sign ('0':'+', '1':'-').
 			Other bits are the size, in word, of the integer. If this bits are all
 			at 0, then the integer is invalid. */
-			bch::E_BUNCH_( base__ )::s Core;
 			size__ Size;
 		} &S_;
 		integer_( s &S )
@@ -243,6 +236,7 @@ namespace mthitg {
 				PutSize_( 2 );
 			}
 		}
+		/*
 		integer Add( const integer_ &Op ) const;
 		integer Sub( const integer_ &Op ) const;
 		integer Mul( const integer_ &Op ) const;
@@ -250,18 +244,43 @@ namespace mthitg {
 		integer Mod( const integer_ &Op ) const;
 		integer Abs( void ) const;
 		integer operator -( void ) const;
-		int operator !( void ) const
+		*/
+		int operator !( void ) const	
 		{
-			return _GetRealSize() == 0;
+			return GetSize() == 0;
 		}
-		//f Return true if valid, fasle otherwise.
+		size__ GetSize( void ) const
+		{
+			size__ Size = _GetRawSize();
+
+			if ( Size == 0 )
+				qRFwk();
+
+			while ( ( Size-- ) && !Core( Size ) );
+
+			return Size + 1;
+		}
 		bso::bool__ IsValid( void ) const
 		{
 			return _GetRawSize() != 0;
 		}
+		// 'true': negative, 'false': '0' or positive.
+		bso::bool__ GetSignFlag( void ) const
+		{
+			return ( ( S_.Size & MTHITG_SIGN_MASK ) >> MTHITG_SIGN_POS ) != 0;
+		}
+		bso::sign__ GetSign( void ) const
+		{
+			if ( GetSize() == 0 )
+				return 0;
+			else if ( GetSignFlag() )
+				return -1;
+			else
+				return 1;
+		}
 		bso::u32__ GetU32( void )
 		{
-			if ( _GetSignFlag() )
+			if ( GetSignFlag() )
 				qRFwk();
 
 			return _GetAbsULong();
@@ -273,28 +292,39 @@ namespace mthitg {
 			if ( Value > BSO_S32_MAX )
 				qRFwk();
 
-			if ( _GetSignFlag() )
+			if ( GetSignFlag() )
 				return -(bso::s32__)Value;
 			else
 				return Value;
 		}
-		bso::lfloat__ GetLongFloat( void ) const;
-		bso::sign__ GetSign( void ) const
+		bso::lfloat__ GetLongFloat( qRPD ) const;
+		void Negate( void )
 		{
-			if ( _GetRealSize() == 0 )
-				return 0;
-			else if ( _GetSignFlag() )
-				return -1;
-			else
-				return 1;
+			switch ( GetSign() ) {
+			case -1:
+				PutSignFlag_( true );
+				break;
+			case 0:
+				break;
+			case 1:
+				PutSignFlag_( false );
+				break;
+			default:
+				qRFwk();
+				break;
+			}
+		}
+		void Abs( void )
+		{
+			PutSignFlag_( false );
 		}
 	};			
 		
-	inline int Compare(
+	inline bso::sign__ Compare(
 		const integer_ &Op1,
 		const integer_ &Op2 )
 	{
-		return 	Comp_( Op1, Op2 );
+		return 	Comp( Op1, Op2 );
 	}
 	
 	class integer
@@ -346,30 +376,41 @@ namespace mthitg {
 		}
 	};		
 
-	inline integer integer_::operator -( void ) const 
-	{
-		integer R = *this;
-
-		if ( GetSign() )
-			R.PutSignFlag_( !R._GetSignFlag() );
-
-		return R;
-	}
-
-	inline integer integer_::Abs( void ) const
-	{
-		integer R = *this;
-		R.PutSignFlag_( false );
-
-		return R;
-	}
-
 	void PGCD(
 		const integer_ &Op1,
 		const integer_ &Op2,
 		integer_ &Result );
 
-	inline integer PGCD(
+	integer_ &Div(
+		const integer_ &Num,
+		const integer_ &Den,
+		integer_ &Quotient,
+		integer_ *Remainder = NULL );
+	inline integer_ &Div(
+		const integer_ &Num,
+		const integer_ &Den,
+		integer &Quotient,
+		integer_ &Remainder )
+	{
+		return Div( Num, Den, Quotient, &Remainder );
+	}	integer_ &Add(
+		const integer_ &Op1,
+		const integer_ &Op2,
+		integer_ &Result );
+	integer_ &Sub(
+		const integer_ &Op1,
+		const integer_ &Op2,
+		integer_ &Result );
+	integer_ &Mul(
+		const integer_ &Op1,
+		const integer_ &Op2,
+		integer_ &Result );
+	integer_ &Mod(
+		const integer_ &Op1,
+		const integer_ &Op2,
+		integer_ &Result );
+
+	inline integer_ &PGCD(
 		const integer_ &Op1,
 		const integer_ &Op2 )
 	{
@@ -381,70 +422,66 @@ namespace mthitg {
 
 		return Result;
 	}
-
-	inline void Add(
-		const integer_ &Op1,
-		const integer_ &Op2,
-		integer_ &Result )
-	{
-		Result = Op1.Add( Op2 );
-	}
-
-	inline void Sub(
-		const integer_ &Op1,
-		const integer_ &Op2,
-		integer_ &Result )
-	{
-		Result = Op1.Sub( Op2 );
-	}
-
-	inline void Mul(
-		const integer_ &Op1,
-		const integer_ &Op2,
-		integer_ &Result )
-	{
-		Result = Op1.Mul( Op2 );
-	}
 }
+
 
 inline mthitg::integer Abs( const mthitg::integer_ &I )
 {
-	return I.Abs();
+	mthitg::integer Result;
+	Result.Init( I );
+	Result.Abs();
+
+	return Result;
 }
 
 inline mthitg::integer operator +(
 	const mthitg::integer_ &Op1,
 	const mthitg::integer_ &Op2 )
 {
-	return Op1.Add( Op2 );
+	mthitg::integer Result;
+	Result.Init();
+
+	return Add( Op1, Op2, Result );
 }
 
 inline mthitg::integer operator -(
 	const mthitg::integer_ &Op1,
 	const mthitg::integer_ &Op2 )
 {
-	return Op1.Sub( Op2 );
+	mthitg::integer Result;
+	Result.Init();
+
+	return Sub( Op1, Op2, Result );
 }
 
 inline mthitg::integer operator *(
 	const mthitg::integer_ &Op1,
 	const mthitg::integer_ &Op2 )
 {
-	return Op1.Mul( Op2 );
+	mthitg::integer Result;
+	Result.Init();
+
+	return Mul( Op1, Op2, Result );
 }
 
 inline mthitg::integer operator /(
 	const mthitg::integer_ &Op1,
 	const mthitg::integer_ &Op2 )
 {
-	return Op1.Div( Op2 );
+	mthitg::integer Result;
+	Result.Init();
+
+	return Div( Op1, Op2, Result );
 }
 
 inline mthitg::integer operator %(
 	const mthitg::integer_ &Op1,
 	const mthitg::integer_ &Op2 )
 {
-	return Op1.Mod( Op2 );
+	mthitg::integer Result;
+	Result.Init();
+
+	return Mod( Op1, Op2, Result );
 }
 
 inline mthitg::integer operator +=(
@@ -486,39 +523,38 @@ inline bso::bool__ operator ==(
 	const mthitg::integer_ &Op1,
 	const mthitg::integer_ &Op2 )
 {
-	return mthitg::Comp_( Op1, Op2 ) == 0;
+	return mthitg::Comp( Op1, Op2 ) == 0;
 }	
 inline bso::bool__ operator !=(
 	const mthitg::integer_ &Op1,
 	const mthitg::integer_ &Op2 )
 {
-	return mthitg::Comp_( Op1, Op2 ) != 0;
+	return mthitg::Comp( Op1, Op2 ) != 0;
 }	
 inline bso::bool__ operator >=(
 	const mthitg::integer_ &Op1,
 	const mthitg::integer_ &Op2 )
 {
-	return mthitg::Comp_( Op1, Op2 ) >= 0;
+	return mthitg::Comp( Op1, Op2 ) >= 0;
 }	
 inline bso::bool__ operator >(
 	const mthitg::integer_ &Op1,
 	const mthitg::integer_ &Op2 )
 {
-	return mthitg::Comp_( Op1, Op2 ) > 0;
+	return mthitg::Comp( Op1, Op2 ) > 0;
 }	
 inline bso::bool__ operator <(
 	const mthitg::integer_ &Op1,
 	const mthitg::integer_ &Op2 )
 {
-	return mthitg::Comp_( Op1, Op2 ) < 0;
+	return mthitg::Comp( Op1, Op2 ) < 0;
 }	
 inline bso::bool__ operator <=(
 	const mthitg::integer_ &Op1,
 	const mthitg::integer_ &Op2 )
 {
-	return mthitg::Comp_( Op1, Op2 ) <= 0;
+	return mthitg::Comp( Op1, Op2 ) <= 0;
 }	
-
 
 txf::text_oflow__ &operator <<(
 	txf::text_oflow__ &OFlow,
