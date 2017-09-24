@@ -65,7 +65,11 @@
 
 # include "bso.h"
 
-// Predcleration
+// Predeclarations
+namespace uys {
+	struct sHook;
+}
+
 namespace ags {
 	class aggregated_storage_;
 }
@@ -650,9 +654,13 @@ namespace tol {
 //			S_.Object.reset( P );	// The object is already destroyed by the one which features the reference.
 		}
 		qCVDTOR( dObject );
-		void plug( class ags::aggregated_storage_ * )
+		void plug( uys::sHook &Hook )
 		{
-			// Pour des raisons de standardisation.
+			// Standardization.
+		}
+		void plug( ags::aggregated_storage_ *AS )
+		{
+			// Standardization.
 		}
 		dObject &operator =( const dObject &O )
 		{

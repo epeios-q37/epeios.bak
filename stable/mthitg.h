@@ -374,7 +374,14 @@ namespace mthitg {
 
 			integer_::Init( Seed );
 		}
-	};		
+		integer( const str::dString &Seed )
+		: integer_( S_ )
+		{
+			reset( false );
+
+			integer_::Init( Seed );
+		}
+	};
 
 	void PGCD(
 		const integer_ &Op1,
@@ -409,7 +416,7 @@ namespace mthitg {
 		const integer_ &Op1,
 		const integer_ &Op2,
 		integer_ &Result );
-
+/*
 	inline integer_ &PGCD(
 		const integer_ &Op1,
 		const integer_ &Op2 )
@@ -422,6 +429,7 @@ namespace mthitg {
 
 		return Result;
 	}
+	*/
 }
 
 

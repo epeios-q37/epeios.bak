@@ -400,7 +400,7 @@ qRB
 		break;
 	}
 
-	Inter.Init( *this );
+	Inter.Init( 0 );
 
 	while ( !Flow.EndOfFlow() && isdigit( Flow.View() ) ) {
 		Mul( Ten, Inter, Inter );
@@ -421,6 +421,9 @@ void mthitg::integer_::Init( const str::dString &Integer )
 qRH
 	flx::sStringIFlow Flow;
 qRB
+	S_.Size = 0;
+	Core.Init();
+
 	Flow.Init( Integer );
 	Init( Flow );
 qRR

@@ -720,5 +720,9 @@ namespace bso {
 	typedef char__ sChar;
 
 	const bso::sSize SizeMax = BSO_SIZE_MAX;
+
+	typedef sfloat__ sSFloat;
+	typedef float__ sFloat;
+	typedef lfloat__ sLFloat;
 }
 #endif

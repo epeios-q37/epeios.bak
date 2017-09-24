@@ -1,5 +1,9 @@
 # *Epeios* changelog
 
+2017-09-24 :
+- TOL:
+  - Upgrading `dObject<>`.
+
 2017-09-22 :
 - MTHFRC, MTHRTN
   - Renaming *MTHFRC* to *MTHRTN*.

@@ -84,6 +84,11 @@ namespace mthrtn {
 
 			operator =( R );
 		}
+		// Handles only integer for now. To modify so it will handle decimal numbers.
+		void Init( const str::dString &Rational )
+		{
+			Init( t( Rational ), t( 1 ) );
+		}
 		int operator !( void ) const
 		{
 			return !N;

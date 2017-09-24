@@ -337,7 +337,7 @@ namespace txf {
 		{
 			char C[40];
 
-			sprintf( C, "%.20LG", E );
+			sprintf( C, "%LG", E );
 
 			return operator <<( C );
 		}

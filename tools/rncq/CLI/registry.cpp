@@ -22,3 +22,4 @@
 using namespace registry;
 
 rEntry registry::parameter::Expression( "Expression", sclrgstry::Parameters );
+rEntry registry::parameter::Float( "Float", sclrgstry::Parameters );
