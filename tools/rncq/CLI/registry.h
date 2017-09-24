@@ -28,7 +28,8 @@ namespace registry {
 	namespace parameter {
 		using namespace sclrgstry::parameter;
 
-		extern rEntry Expression;
+		extern rEntry Expression;	// Expression to evaluate.
+		extern rEntry Float;		// Using float : "No", "Result" to display result with float, "All" for the calculation be made with floats.
 	}
 
 	namespace definition {

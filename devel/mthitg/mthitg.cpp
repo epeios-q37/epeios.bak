@@ -351,26 +351,24 @@ qRB
 	if ( Den > Num )
 	{
 		Remainder = Num;
-		qRReturn;
-	}
+	} else {
+		size__ DenSize = Den.GetSize(), NumSize = Num.GetSize();
 
-	size__ DenSize = Den.GetSize(), NumSize = Num.GetSize();
-	
-	Remainder.Core.Allocate( DenSize );
+		Remainder.Core.Allocate( DenSize );
 
-	Remainder.PutSize_( DenSize );
-	Remainder.PutSignFlag_( false );
+		Remainder.PutSize_( DenSize );
+		Remainder.PutSignFlag_( false );
 
-	Remainder.Core.Store( Num.Core, DenSize, 0, I = NumSize - DenSize );
-	
-	while( I-- )
-	{
+		Remainder.Core.Store( Num.Core, DenSize, 0, I = NumSize - DenSize );
+
+		while ( I-- ) {
+			Divide_( Remainder, Den, Result, Remainder );
+			Mul_( Remainder, TenThousendHex, Remainder );
+			Add_( Remainder, integer( Num.Core( I ) ), Remainder );
+		}
+
 		Divide_( Remainder, Den, Result, Remainder );
-		Mul_( Remainder, TenThousendHex, Remainder );
-		Add_( Remainder, integer( Num.Core( I ) ), Remainder );
 	}
-
-	Divide_( Remainder, Den, Result, Remainder );
 
 	Quotient = Result;
 
@@ -611,6 +609,7 @@ integer Exp(
 	return Res;
 }
 
+# if 0
 txf::text_oflow__ &operator <<(
 	txf::text_oflow__ &Flow,
 	const integer_ &Integer )
@@ -656,4 +655,39 @@ qRE
 	return Flow;
 
 }
+#else
+txf::text_oflow__ &operator <<(
+	txf::text_oflow__ &Flow,
+	const integer_ &Integer )
+{
+qRH
+	integer I, R, Ten;
+	str::wString String;
+qRB
+	I.Init( Integer );
 
+	Ten.Init( 10 );
+
+	if ( !I ) {
+		Flow << 0UL;
+		qRReturn;
+	} else if ( I.GetSign() == -1 )	{
+		Flow << '-';
+		I.Negate();
+	}
+
+	String.Init();
+
+	while ( I.GetSign() != 0 ) {
+		R.Init();
+		Div( I, Ten, I, R );
+		String.InsertAt( R.GetU32() + '0', 0 );
+	}
+
+	Flow << String;
+qRR
+qRT
+qRE
+	return Flow;
+}
+#endif

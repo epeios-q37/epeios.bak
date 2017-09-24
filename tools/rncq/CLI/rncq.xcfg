@@ -7,6 +7,7 @@
 		<Parameters>
 			<Language>fr</Language>
 			<Command>Test</Command>
+   <Float>No</Float>
 			<!-- Default command -->
 		</Parameters>
 		<Definitions>
@@ -45,7 +46,7 @@
 			<!-- Fanaux : 'Path', mais pas de 'Value'. -->
 			<Argument id="TestFlag" Description="TestFlagDescription" long="flag" short="f" Path="Flag" Value="TestFlag"/>
 			<!-- Options : 'Path' ET 'Value'. -->
-			<Argument id="TestOption" Description="TestOptionDescription" long="option" short="o" Path="Option" Label="TestOptionLabel"/>
+			<Argument id="FloatOption" Description="FloatOptionDescription" long="float" short="f" Path="Float" Label="FloatOptionLabel"/>
 			<!-- Arguments libres : 'Path' mais PAS de 'Value' (ni de 'short', ni de 'long'). -->
 			<Argument id="ExpressionArgument" Description="ExpressionArgumentDescription" Path="Expression" Label="ExpressionArgumentLabel"/>
 			<!-- Affectations des arguments libres-->

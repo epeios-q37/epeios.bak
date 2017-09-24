@@ -42,8 +42,8 @@ namespace mthrtn {
 		};
 		t_ D, N;
 		dRational_( s &S )
-			: D( S.D ),
-			N( S.N )
+		: D( S.D ),
+		  N( S.N )
 		{}
 		void reset( bso::bool__ P = true )
 		{
@@ -107,37 +107,50 @@ namespace mthrtn {
 
 			return 0;	// To avoid a 'warning'.
 		}
-		integer ToInteger( void ) const
+		void ToInteger( integer_ &Result ) const
 		{
-			return N / D;
+			Div( N, D, Result );
 		}
-		bso::lfloat__ ToLongFloat( void ) const
+		bso::lfloat__ GetLongFloat( qRPD ) const
 		{
-			return N.GetLongFloat() / D.GetLongFloat();
+			bso::lfloat__ Result = 0;
+		qRH
+			integer Q, R;
+		qRB
+			Q.Init();
+			R.Init();
+
+			Div( N, D, Q, R );
+
+			Result = Q.GetLongFloat( qRP ) + R.GetLongFloat( qRP ) / D.GetLongFloat( qRP );
+		qRR
+		qRE
+		qRT
+			return Result;
 		}
 		const dRational_ &Simplify( void );	// Defined later.
 	};
 
 	qW2( Rational_ )
 
-		template <typename t, typename t_> inline void Mul(
-			const dRational_<t, t_> &Op1,
-			const dRational_<t, t_> &Op2,
-			dRational_<t, t_> &Result )
+	template <typename t, typename t_> inline void Mul(
+		const dRational_<t, t_> &Op1,
+		const dRational_<t, t_> &Op2,
+		dRational_<t, t_> &Result )
 	{
-		qRH
-			t N, D;
-		qRB
-			N.Init();
+	qRH
+		t N, D;
+	qRB
+		N.Init();
 		Mul( Op1.N, Op2.N, N );
 
 		D.Init();
 		Mul( Op1.D, Op2.D, D );
 
 		Result.Init( N, D );
-		qRR
-			qRT
-			qRE
+	qRR
+	qRT
+	qRE
 	}
 
 	template <typename t, typename t_> inline void Div(
@@ -145,19 +158,19 @@ namespace mthrtn {
 		const dRational_<t, t_> &Op2,
 		dRational_<t, t_> &Result )
 	{
-		qRH
-			t N, D;
-		qRB
-			N.Init();
+	qRH
+		t N, D;
+	qRB
+		N.Init();
 		Mul( Op1.N, Op2.D, N );
 
 		D.Init();
 		Mul( Op1.D, Op2.N, D );
 
 		Result.Init( N, D );
-		qRR
-			qRT
-			qRE
+	qRR
+	qRT
+	qRE
 	}
 
 	template <typename t, typename t_> inline void Add(
@@ -165,10 +178,10 @@ namespace mthrtn {
 		const dRational_<t, t_> &Op2,
 		dRational_<t, t_> &Result )
 	{
-		qRH
-			t N, D, T1, T2;
-		qRB
-			T1.Init();
+	qRH
+		t N, D, T1, T2;
+	qRB
+		T1.Init();
 		Mul( Op1.N, Op2.D, T1 );
 
 		T2.Init();
@@ -181,9 +194,9 @@ namespace mthrtn {
 		Mul( Op1.D, Op2.D, D );
 
 		Result.Init( N, D );
-		qRR
-			qRT
-			qRE
+	qRR
+	qRT
+	qRE
 	}
 
 	template <typename t, typename t_> inline void Sub(
@@ -191,10 +204,10 @@ namespace mthrtn {
 		const dRational_<t, t_> &Op2,
 		dRational_<t, t_> &Result )
 	{
-		qRH
-			t N, D, T1, T2;
-		qRB
-			T1.Init();
+	qRH
+		t N, D, T1, T2;
+	qRB
+		T1.Init();
 		Mul( Op1.N, Op2.D, T1 );
 
 		T2.Init();
@@ -207,20 +220,20 @@ namespace mthrtn {
 		Mul( Op1.D, Op2.D, D );
 
 		Result.Init( N, D );
-		qRR
-			qRT
-			qRE
+	qRR
+	qRT
+	qRE
 	}
 
 	typedef dRational_<integer, integer_> dRational;
 
 	class wRational
-		: public dRational {
+	: public dRational {
 	private:
 		s S_;
 	public:
 		wRational( void )
-			: dRational( S_ )
+		: dRational( S_ )
 		{
 			reset( false );
 		}
