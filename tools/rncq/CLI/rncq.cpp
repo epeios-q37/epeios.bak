@@ -405,7 +405,7 @@ namespace {
 				Result.Init();
 				Evaluate_<mthrtn::dRational, mthrtn::wRational, dRationals_, wRationals_>( IFlow, Result );
 
-				Result.Simplify();
+//				Result.Simplify();
 
 				if ( sclmisc::BGetBoolean( registry::parameter::ToFloat ) )
 					Print_( Result.GetLongFloat(), OFlow );

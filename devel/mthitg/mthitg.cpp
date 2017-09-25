@@ -39,27 +39,22 @@ namespace {
 		bso::u32__ Inf = 0UL, Sup = 0x10000UL, Rep = 0x10000UL >> 1;
 		integer Inter, Comp;
 	qRB
-		Inter.Init();
-		Comp.Init();
-
-		Inter = 0;
-		Comp = 0;
+		Inter.Init( 0 );
 
 		for (;;) {
-			Inter.Init();
 			Mul_( Den, integer( Rep ), Inter );
-			Sub_( Num, Inter, Inter );
-			if ( Inter < Comp ) {
+			Sub( Num, Inter, Inter );
+			if ( Inter.GetSignFlag() ) {	// If negative.
 				Sup = Rep;
 				Rep = ( Sup + Inf ) >> 1;
-			} else if ( Inter >= Den ) {
+			} else if ( mthitg::Comp( Inter, Den, true ) >= 0 ) {	// 'Inter' >= 'Den'.
 				Inf = Rep;
 				Rep = Inf + ( ( Sup - Inf ) >> 1 );
 				// '( Sup + Inf ) >> 1' doesn't work : overflow.
 				// nor '( Sup >> 1 ) + ( Inf >> 1 )' : loss of precision.
 			} else {
-				Mul_( Result, TenThousandHex, Result );
-				Add_( Result, integer( Rep ), Result );
+				Mul( Result, TenThousandHex, Result );
+				Add( Result, integer( Rep ), Result );
 				Remainder = Inter;
 				qRReturn;
 			}
@@ -186,18 +181,23 @@ integer_ &mthitg::Sub_(
 qRH
 	integer Res;
 	unsigned Indice = 0;
-	size__ Limite;
+	size__ Limite = 0, MaxSize = 0, MinSize = 0;
 	bso::u32__ Inter = 0;
 	const integer_ *Max = &Op1, *Min = &Op2;
 qRB
 	Res.Init( 0 );
 
-	if ( Comp( *Max, *Min, true ) == -1 ) {
+	if ( Op1.GetSignFlag() )
 		Res.PutSignFlag_( true );
+
+	if ( Comp( *Max, *Min, true ) == -1 ) {
+		Res.PutSignFlag_( !Res.GetSignFlag() );
 		Max = &Op2;
 		Min = &Op1;
 	}
-	size__ MaxSize = Max->GetSize(), MinSize = Min->GetSize();
+
+	MaxSize = Max->GetSize();
+	MinSize = Min->GetSize();
 
 	if ( MaxSize == 0 ) {
 		Result = Res;
