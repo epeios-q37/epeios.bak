@@ -29,7 +29,9 @@ namespace registry {
 		using namespace sclrgstry::parameter;
 
 		extern rEntry Expression;	// Expression to evaluate.
-		extern rEntry Float;		// Using float : "No", "Result" to display result with float, "All" for the calculation be made with floats.
+		extern rEntry RPN;			// It 'true', expression is in RPN.
+		extern rEntry ToFloat;		// It 'true', the result is converted to float.
+		extern rEntry UseFloat;		// if 'true', calculation are made using floats.
 	}
 
 	namespace definition {

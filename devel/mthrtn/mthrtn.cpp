@@ -32,8 +32,8 @@ qRB
 
 	mthitg::PGCD( Rational.N, Rational.D, PGCD );
 
-	Rational.N /= PGCD;
-	Rational.D /= PGCD;
+	mthitg::Div( Rational.N, PGCD, Rational.N );
+	mthitg::Div( Rational.D, PGCD, Rational.D );
 qRR
 qRT
 qRE

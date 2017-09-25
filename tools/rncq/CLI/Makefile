@@ -1,4 +1,4 @@
-#	Copyright (C) 2016 Claude SIMON (http://q37.info/contact/).
+#	Copyright (C) 2017 Claude SIMON (http://q37.info/contact/).
 #
 #	This file is part of RNCq.
 #
@@ -379,8 +379,8 @@ ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20170922"\"
-copt += -DCOPYRIGHT_YEARS=\""2016"\"
+copt += -DVERSION=\""20170924"\"
+copt += -DCOPYRIGHT_YEARS=\""2017"\"
 copt += -DIDENTIFIER=\""effd756a-a901-46e8-939f-3f2a5e7986b0"\"
 
 ifndef EPEIOS_SRC

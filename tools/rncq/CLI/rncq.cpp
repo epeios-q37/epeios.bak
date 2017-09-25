@@ -93,16 +93,22 @@ namespace {
 			typedef stkbch::qBSTACKdl( bso::sChar ) dOperators_;
 			qW( Operators_ );
 
+			inline void SkipSpaces_( xtf::sIFlow &Flow )
+			{
+				while ( !Flow.EndOfFlow() && ( Flow.View() == ' ' ) )
+					Flow.Get();
+			}
+
 			void GetNumber_(
 				xtf::sIFlow &Flow,
-				str::dString *Number )
+				str::dString &Number )
 			{
 				if ( Flow.EndOfFlow() )
 					return;
 
 				switch ( Flow.View() ) {
 				case '-':
-					Number->Append( '-' );
+					Number.Append( '-' );
 				case '+':
 					Flow.Get();
 				default:
@@ -110,26 +116,22 @@ namespace {
 				}
 
 				while ( !Flow.EndOfFlow() && isdigit( Flow.View() ) )
-					Number->Append( Flow.Get() );
+					Number.Append( Flow.Get() );
+
+				if ( !Flow.EndOfFlow() ) {
+					bso::sChar C = Flow.View();
+					if ( ( C == '.' ) || ( C == ',' ) ) {
+						Number.Append( Flow.Get() );
+
+						while ( !Flow.EndOfFlow() && isdigit( Flow.View() ) )
+							Number.Append( Flow.Get() );
+					}
+				}
 			} 
 
-			inline void GetNumber_(
+			void  GetNumber_(
 				xtf::sIFlow &Flow,
-				str::dString &Number )
-			{
-				return GetNumber_( Flow, &Number );
-			}
-
-			inline void GetNumber_(
-				xtf::sIFlow &Flow,
-				str::wString &Number )
-			{
-				return GetNumber_( Flow, &Number );
-			}
-
-			template <typename type> void  GetNumber_(
-				xtf::sIFlow &Flow,
-				type &Number )
+				dFloat &Number )
 			{
 			qRH
 				str::wString String;
@@ -141,6 +143,13 @@ namespace {
 			qRR
 			qRT
 			qRE
+			}
+
+			void GetNumber_(
+				xtf::sIFlow &Flow,
+				mthrtn::dRational &Number )
+			{
+				Number.Init( Flow.UndelyingFlow() );
 			}
 
 			inline void Add_(
@@ -276,7 +285,7 @@ namespace {
 
 				template <typename dnumber, typename wnumber, typename dnumbers, typename wnumbers> void Evaluate(
 					xtf::sIFlow &Flow,
-					dnumber &Rational )
+					dnumber &Result )
 				{
 				qRH
 					wnumbers Numbers;
@@ -284,6 +293,8 @@ namespace {
 					wOperators_ Operators;
 					bso::sChar Operator = 0;
 				qRB
+					SkipSpaces_( Flow );
+
 					Numbers.Init();
 					Operators.Init();
 
@@ -291,13 +302,19 @@ namespace {
 					GetNumber_( Flow, Number );
 					Numbers.Push( Number );
 
+					SkipSpaces_( Flow );
+
 					while ( !Flow.EndOfFlow() ) {
 						Operator = Flow.Get();
 						Operators.Push( Operator );
 
+						SkipSpaces_( Flow );
+
 						Number.Init();
 						GetNumber_( Flow, Number );
 						Numbers.Push( Number );
+
+						SkipSpaces_( Flow );
 
 						Handle_<dnumber, wnumber, dnumbers>( Numbers, Operators );
 					}
@@ -305,7 +322,7 @@ namespace {
 					if ( Numbers.Amount() != 1 )
 						qRFwk();
 
-					Numbers.Pop( Rational );
+					Numbers.Pop( Result );
 				qRR
 				qRT
 				qRE
@@ -315,7 +332,7 @@ namespace {
 			namespace rpn_ {
 				template <typename dnumber, typename wnumber, typename dnumbers, typename wnumbers> void Evaluate(
 					xtf::sIFlow &Flow,
-					dnumber &Rational )
+					dnumber &Result )
 				{
 				qRH
 					wnumbers Numbers;
@@ -323,6 +340,8 @@ namespace {
 					wOperators_ Operators;
 					bso::sChar Operator = 0;
 				qRB
+					SkipSpaces_( Flow );
+
 					Numbers.Init();
 					Operators.Init();
 
@@ -330,27 +349,28 @@ namespace {
 					GetNumber_( Flow, Number );
 					Numbers.Push( Number );
 
+					SkipSpaces_( Flow );
+
 					while ( !Flow.EndOfFlow() ) {
 						if ( isdigit( Flow.View() ) ) {
 							Number.Init();
 							GetNumber_( Flow, Number );
 							Numbers.Push( Number );
+
+							SkipSpaces_( Flow );
+
 						} else {
 							Operator = Flow.Get();
+							Handle_<wnumber, dnumbers>( Numbers, Operator );
 
-							if ( Operator == '@' ) {
-								Number.Init();
-								GetNumber_( Flow, Number );
-								Numbers.Push( Number );
-							} else
-								Handle_<wnumber, dnumbers>( Numbers, Operator );
+							SkipSpaces_( Flow );
 						}
 					}
 
 					if ( Numbers.Amount() != 1 )
 						qRFwk();
 
-					Numbers.Pop( Rational );
+					Numbers.Pop( Result );
 				qRR
 				qRT
 				qRE
@@ -361,7 +381,10 @@ namespace {
 				xtf::sIFlow &Flow,
 				dnumber &Number )
 			{
-				rpn_::Evaluate<dnumber, wnumber, dnumbers, wnumbers>( Flow, Number );
+				if ( sclmisc::BGetBoolean( registry::parameter::RPN ) )
+					rpn_::Evaluate<dnumber, wnumber, dnumbers, wnumbers>( Flow, Number );
+				else
+					algebraic_::Evaluate<dnumber, wnumber, dnumbers, wnumbers>( Flow, Number );
 			}
 
 			typedef stkcrt::qCSTACKdl( mthrtn::dRational ) dRationals_;
@@ -374,7 +397,6 @@ namespace {
 		namespace rational_ {
 			void Evaluate(
 				xtf::sIFlow &IFlow,
-				bso::sBool ResultWithFloat,
 				txf::sOFlow &OFlow )
 			{
 			qRH
@@ -385,7 +407,7 @@ namespace {
 
 				Result.Simplify();
 
-				if ( ResultWithFloat )
+				if ( sclmisc::BGetBoolean( registry::parameter::ToFloat ) )
 					Print_( Result.GetLongFloat(), OFlow );
 				else
 					OFlow << Result.N << " / " << Result.D << txf::nl;
@@ -413,49 +435,6 @@ namespace {
 			}
 		}
 
-		namespace floatp_ {
-			qENUM( Involvement )
-			{
-				iNo,		//	No involvement at all.
-				iResult,	// Conversion of the result.
-				iAll,		// All calculation are made with floats.
-				i_amount,
-				i_Undefined
-			};
-
-			namespace {
-				stsfsm::wAutomat Automat_;
-
-				const char *GetLabel_( eInvolvement Involvement )
-				{
-					switch ( Involvement ) {
-#define C( name )	case i##name : return #name; break
-						C( No );
-						C( Result );
-						C( All );
-#undef C
-					default:
-						qRFwk();
-						break;
-					}
-
-					return NULL;	// To avoid a warning.
-				}
-			}
-
-			void Fill( void )
-			{
-				Automat_.Init();
-
-				stsfsm::Fill( Automat_, i_amount, GetLabel_ );
-			}
-
-			eInvolvement GetInvolvement( const str::dString &Pattern )
-			{
-				return stsfsm::GetId( Pattern, Automat_, i_Undefined, i_amount );
-			}
-		}
-
 		void Evaluate_(
 			const str::dString &Expression,
 			txf::sOFlow &Flow )
@@ -469,24 +448,10 @@ namespace {
 			SFlow.Init( Expression );
 			XFlow.Init( SFlow, utf::f_Guess );
 
-			floatp_::Fill();
-			Involvement.Init();
-			sclmisc::MGetValue( registry::parameter::Float, Involvement );
-
-			switch ( floatp_::GetInvolvement( Involvement ) ) {
-			case floatp_::iNo:
-				rational_::Evaluate( XFlow, false, Flow );
-				break;
-			case floatp_::iResult:
-				rational_::Evaluate( XFlow, true, Flow );
-				break;
-			case floatp_::iAll:
+			if ( sclmisc::BGetBoolean( registry::parameter::UseFloat ) )
 				float_::Evaluate( XFlow, cio::COut );
-				break;
-			default:
-				REPORT( BadFloatInvolvement );
-				break;
-			}
+			else
+				rational_::Evaluate( XFlow, Flow );
 		qRR
 		qRT
 		qRE

@@ -112,6 +112,10 @@ struct feeder__ {
 	{
 		return Buffer[Position++];
 	}
+	bso::char__ View( void )
+	{
+		return Buffer[Position];
+	}
 };
 
 

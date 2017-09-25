@@ -43,7 +43,6 @@
 /**** OLD ****/
 /*************/
 
-
 namespace mthitg {
 	typedef bso::u16__	base__;
 	typedef bso::u16__	size__;
@@ -75,7 +74,8 @@ namespace mthitg {
 
 	bso::sign__ Comp(
 		const integer_ &Op1,
-		const integer_ &Op2 );
+		const integer_ &Op2,
+		bso::sBool IgnoreSign = false );
 	integer_ &Add(
 		const integer_ &Op1,
 		const integer_ &Op2,
@@ -106,7 +106,8 @@ namespace mthitg {
 		void Dup_( const integer_ &Interger );
 		friend bso::sign__ Comp(
 			const integer_ &Num,
-			const integer_ &Den );
+			const integer_ &Den,
+			bso::sBool IgnoreSign );
 		friend integer_ &Div_(
 			const integer_ &Num,
 			const integer_ &Den,
@@ -128,14 +129,20 @@ namespace mthitg {
 		{
 			Adjust_();
 
-			if ( _GetRawSize() == 0 )
+			switch ( _GetRawSize() ) {
+			case 0:
 				return 0;
-			else if ( _GetRawSize() == 1 )
+				break;
+			case 1:
 				return Core( Core.First() );
-			else if ( _GetRawSize() == 2 )
+				break;
+			case 2:
 				return Core( Core.First() ) | ( Core( Core.First( 1 ) ) << 16UL );
-			else
+				break;
+			default:
 				qRFwk();
+				break;
+			}
 
 			return 0;	// To avoid a 'warning'.
 		}
@@ -302,12 +309,12 @@ namespace mthitg {
 		{
 			switch ( GetSign() ) {
 			case -1:
-				PutSignFlag_( true );
+				PutSignFlag_( false );
 				break;
 			case 0:
 				break;
 			case 1:
-				PutSignFlag_( false );
+				PutSignFlag_( true );
 				break;
 			default:
 				qRFwk();
@@ -324,7 +331,7 @@ namespace mthitg {
 		const integer_ &Op1,
 		const integer_ &Op2 )
 	{
-		return 	Comp( Op1, Op2 );
+		return Comp( Op1, Op2 );
 	}
 	
 	class integer
@@ -400,7 +407,8 @@ namespace mthitg {
 		integer_ &Remainder )
 	{
 		return Div( Num, Den, Quotient, &Remainder );
-	}	integer_ &Add(
+	}
+	integer_ &Add(
 		const integer_ &Op1,
 		const integer_ &Op2,
 		integer_ &Result );
@@ -575,6 +583,10 @@ txf::text_oflow__ &operator <<(
 namespace mthitg {
 	typedef integer_ dInteger;
 	typedef integer wInteger;
+
+// Often used constants.
+	extern wInteger Ten;
+	extern wInteger TenThousandHex;
 }
 
 
