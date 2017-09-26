@@ -20,23 +20,33 @@
 #ifndef RNCCMN_INC_
 # define RNCCMN_INC_
 
+# include "rncflt.h"
+# include "rncrtn.h"
+
 # include "bso.h"
 # include "stkbch.h"
+# include "xtf.h"
 
 namespace rnccmn {
 	typedef stkbch::qBSTACKdl( bso::sChar ) dOperators;
 	qW( Operators );
 
-	template <typename wnumber, typename dnumbers> bso::sBool Handle_(
+	inline void SkipSpaces( xtf::sIFlow &Flow )
+	{
+		while ( !Flow.EndOfFlow() && ( Flow.View() == ' ' ) )
+			Flow.Get();
+	}
+
+	template <typename wnumber, typename dnumbers> bso::sBool Handle(
 		dnumbers &Numbers,
 		bso::sChar Operator )
 	{
 		bso::sBool Success = true;
-		qRH
-			wnumber Op1, Op2, Result;
-		qRB
-			if ( Numbers.Amount() < 2 )
-				qRFwk();
+	qRH
+		wnumber Op1, Op2, Result;
+	qRB
+		if ( Numbers.Amount() < 2 )
+			qRFwk();
 
 		Op1.Init();
 		Op2.Init();
@@ -48,18 +58,19 @@ namespace rnccmn {
 
 		switch ( Operator ) {
 		case '+':
-			Add_( Op1, Op2, Result );
+			rnc::Add( Op1, Op2, Result );
 			break;
 		case '-':
-			Sub_( Op1, Op2, Result );
+			rnc::Sub( Op1, Op2, Result );
 			break;
 		case '*':
 		case 'x':
-			Mul_( Op1, Op2, Result );
+		case 'X':
+			rnc::Mul( Op1, Op2, Result );
 			break;
 		case ':':
 		case '/':
-			Div_( Op1, Op2, Result );
+			rnc::Div( Op1, Op2, Result );
 			break;
 		default:
 			Success = false;
@@ -67,10 +78,10 @@ namespace rnccmn {
 		}
 
 		Numbers.Push( Result );
-		qRR
-			qRT
-			qRE
-			return Success;
+	qRR
+	qRT
+	qRE
+		return Success;
 	}
 }
 

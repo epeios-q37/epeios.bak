@@ -55,7 +55,24 @@ namespace rncflt {
 	typedef stkcrt::qMCSTACKdl( dFloat_ ) dFloats;
 	qW( Floats );
 
-	inline bso::sBool GetNumber_(
+	inline void Print(
+		bso::lfloat__ Float,
+		txf::sOFlow &Flow )
+	{
+		char Buffer[1000];
+
+		sprintf( Buffer, "%LF", Float );
+		Flow << Buffer << txf::nl;
+
+		sprintf( Buffer, "%LG", Float );
+		Flow << Buffer;
+	}
+}
+
+namespace rnc{
+	using rncflt::dFloat;
+
+	inline bso::sBool GetNumber(
 		xtf::sIFlow &Flow,
 		str::dString &Number )
 	{
@@ -87,9 +104,9 @@ namespace rncflt {
 		return true;
 	}
 
-	inline bso::sBool GetNumber_(
+	inline bso::sBool GetNumber(
 		xtf::sIFlow &Flow,
-		dFloat &Number )
+		rncflt::dFloat &Number )
 	{
 		bso::sBool Success = false;
 	qRH
@@ -97,7 +114,7 @@ namespace rncflt {
 	qRB
 		String.Init();
 
-		if ( Success = GetNumber_( Flow, String ) )
+		if ( ( Success = GetNumber( Flow, String ) ) )	// '( ( ... ) )' to avoid a warning by 'clang'.
 			Success = Number.Init( String );
 	qRR
 	qRT
@@ -105,7 +122,7 @@ namespace rncflt {
 		return Success;
 	}
 
-	inline void Add_(
+	inline void Add(
 		const dFloat &Op1,
 		const dFloat &Op2,
 		dFloat &Result )
@@ -113,7 +130,7 @@ namespace rncflt {
 		Result.S_.Object = Op1.S_.Object + Op2.S_.Object;
 	}
 
-	inline void Sub_(
+	inline void Sub(
 		const dFloat &Op1,
 		const dFloat &Op2,
 		dFloat &Result )
@@ -121,7 +138,7 @@ namespace rncflt {
 		Result.S_.Object = Op1.S_.Object - Op2.S_.Object;
 	}
 
-	inline void Mul_(
+	inline void Mul(
 		const dFloat &Op1,
 		const dFloat &Op2,
 		dFloat &Result )
@@ -129,25 +146,12 @@ namespace rncflt {
 		Result.S_.Object = Op1.S_.Object * Op2.S_.Object;
 	}
 
-	inline void Div_(
+	inline void Div(
 		const dFloat &Op1,
 		const dFloat &Op2,
 		dFloat &Result )
 	{
 		Result.S_.Object = Op1.S_.Object / Op2.S_.Object;
-	}
-
-	inline void Print_(
-		bso::lfloat__ Float,
-		txf::sOFlow &Flow )
-	{
-		char Buffer[1000];
-
-		sprintf( Buffer, "%LF", Float );
-		Flow << Buffer << txf::nl;
-
-		sprintf( Buffer, "%LG", Float );
-		Flow << Buffer;
 	}
 }
 

@@ -33,7 +33,7 @@ namespace rncalg {
 		dnumbers &Numbers,
 		dOperators &Operators )
 	{
-		return rnccmn::Handle_<wnumber, dnumbers>( Numbers, Operators.Pop() );
+		return rnccmn::Handle<wnumber, dnumbers>( Numbers, Operators.Pop() );
 	}
 
 	template <typename dnumber, typename wnumber, typename dnumbers, typename wnumbers> bso::sBool Evaluate(
@@ -47,30 +47,30 @@ namespace rncalg {
 		wOperators Operators;
 		bso::sChar Operator = 0;
 	qRB
-		SkipSpaces_( Flow );
+		rnccmn::SkipSpaces( Flow );
 
 		Numbers.Init();
 		Operators.Init();
 
 		Number.Init();
-		if ( !GetNumber_( Flow, Number ) )
+		if ( !rnc::GetNumber( Flow, Number ) )
 			qRReturn;
 		Numbers.Push( Number );
 
-		SkipSpaces_( Flow );
+		rnccmn::SkipSpaces( Flow );
 
 		while ( !Flow.EndOfFlow() ) {
 			Operator = Flow.Get();
 			Operators.Push( Operator );
 
-			SkipSpaces_( Flow );
+			rnccmn::SkipSpaces( Flow );
 
 			Number.Init();
-			if ( !GetNumber_( Flow, Number ) )
+			if ( !rnc::GetNumber( Flow, Number ) )
 				qRReturn;
 			Numbers.Push( Number );
 
-			SkipSpaces_( Flow );
+			rnccmn::SkipSpaces( Flow );
 
 			if ( !Handle_<dnumber, wnumber, dnumbers>( Numbers, Operators ) )
 				qRReturn;

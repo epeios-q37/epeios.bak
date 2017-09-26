@@ -44,9 +44,6 @@ using cio::COut;
 using cio::CIn;
 
 namespace {
-	using namespace rncflt;
-	using namespace rncrtn;
-
 	void PrintHeader_( void )
 	{
 		COut << NAME_MC " V" VERSION << " (" WEBSITE_URL ")" << txf::nl;
@@ -66,14 +63,6 @@ namespace {
 # define REPORT( m )	sclmisc::ReportAndAbort( message_::m )
 
 		namespace {
-
-			inline void SkipSpaces_( xtf::sIFlow &Flow )
-			{
-				while ( !Flow.EndOfFlow() && ( Flow.View() == ' ' ) )
-					Flow.Get();
-			}
-
-
 			template <typename dnumber, typename wnumber, typename dnumbers, typename wnumbers> bso::sBool Evaluate_(
 				xtf::sIFlow &Flow,
 				dnumber &Number )
@@ -96,11 +85,11 @@ namespace {
 			qRB
 				Result.Init();
 
-				if ( Success = Evaluate_<mthrtn::dRational, mthrtn::wRational, dRationals, wRationals>( IFlow, Result ) ) {
+				if ( ( Success = Evaluate_<mthrtn::dRational, mthrtn::wRational, rncrtn::dRationals, rncrtn::wRationals>( IFlow, Result ) ) ) {	// '( ( ... ) )' to avoid a warning by 'clang'.
 					Result.Simplify();
 
 					if ( sclmisc::BGetBoolean( registry::parameter::ToFloat ) )
-						Print_( Result.GetLongFloat(), OFlow );
+						rncflt::Print( Result.GetLongFloat(), OFlow );
 					else
 						OFlow << Result.N << " / " << Result.D << txf::nl;
 					}
@@ -118,12 +107,12 @@ namespace {
 			{
 				bso::sBool Success = false;
 			qRH
-				wFloat Result;
+				rncflt::wFloat Result;
 			qRB
 				Result.Init();
-				Success = Evaluate_<dFloat, wFloat, dFloats, wFloats>( IFlow, Result );
+				Success = Evaluate_<rncflt::dFloat, rncflt::wFloat, rncflt::dFloats, rncflt::wFloats>( IFlow, Result );
 
-				Print_( Result.S_.Object, OFlow );
+				rncflt::Print( Result.S_.Object, OFlow );
 			qRR
 			qRT
 			qRE
@@ -156,7 +145,7 @@ namespace {
 		}
 	}
 
-	void Test_( void )
+	void Evaluate_( void )
 	{
 	qRH
 		str::wString Expression;
@@ -188,7 +177,7 @@ qRB
 		PrintHeader_();
 	else if ( Command == "License" )
 		epsmsc::PrintLicense( NAME_MC );
-	C( Test );
+	C( Evaluate );
 	else
 		qRGnr();
 

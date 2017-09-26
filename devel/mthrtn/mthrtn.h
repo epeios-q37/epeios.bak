@@ -29,8 +29,8 @@
 # endif
 
 # include "err.h"
-
-#include "mthitg.h"
+# include "flx.h"
+# include "mthitg.h"
 
 namespace mthrtn {
 	using namespace mthitg;
