@@ -1,7 +1,7 @@
 /*
 	Copyright (C) 2016 by Claude SIMON (http://zeusw.org/epeios/contact.html).
 
-	This file is part of 'RNCq.
+	This file is part of 'RNCq'.
 
     'RNCq' is free software: you can redistribute it and/or modify it
     under the terms of the GNU Affero General Public License as published
@@ -17,26 +17,7 @@
     along with 'RNCq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef REGISTRY_INC_
-# define REGISTRY_INC_
+#include "rncflt.h"
 
-# include "sclrgstry.h"
+using namespace rncflt;
 
-namespace registry {
-	using namespace sclrgstry;
-
-	namespace parameter {
-		using namespace sclrgstry::parameter;
-
-		extern rEntry Expression;	// Expression to evaluate.
-		extern rEntry RPN;			// It 'true', expression is in RPN.
-		extern rEntry ToFloat;		// It 'true', the result is converted to float.
-		extern rEntry UseFloat;		// if 'true', calculation are made using floats.
-	}
-
-	namespace definition {
-		using namespace sclrgstry::definition;
-	}
-}
-
-#endif

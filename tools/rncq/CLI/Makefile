@@ -41,6 +41,7 @@ mods += rgstry stsfsm xml xpp mthitg
 mods += mthrtn stkcrt 
 mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
 mods += scltool 
+mods += rncalg rnccmn rncflt rncrpn 
 mods += registry 
 
 pmods += pllio 
@@ -78,6 +79,7 @@ Android=Android
 os=$(shell uname -o 2>/dev/null || uname -s)
 mach=$(shell uname -m)
 ifdef EPEIOS_SRC
+ src += :..
 endif
 
 
@@ -379,7 +381,7 @@ ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20170924"\"
+copt += -DVERSION=\""20170926"\"
 copt += -DCOPYRIGHT_YEARS=\""2017"\"
 copt += -DIDENTIFIER=\""effd756a-a901-46e8-939f-3f2a5e7986b0"\"
 

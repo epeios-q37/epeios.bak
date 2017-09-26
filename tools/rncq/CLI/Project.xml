@@ -29,6 +29,12 @@
 				<xpp:expand select="SCL"/>
 			</Modules>
 		</Modules>
+  <Modules Group="RNC" Path="../">
+   <Module>rncalg</Module>
+   <Module>rnccmn</Module>
+   <Module>rncflt</Module>
+   <Module>rncrpn</Module>
+  </Modules>
 		<Module>registry</Module>
 	</Modules>
 	<Files/>
@@ -44,7 +50,8 @@
 		</WikiFiles>
 	</Packing>
 	<SourceDirs>
-	</SourceDirs>
+  <SourceDir>..</SourceDir>
+ </SourceDirs>
 	<PreprocessorDefinitions>
 		<PreprocessorDefinition>E_ST</PreprocessorDefinition>
 	</PreprocessorDefinitions>

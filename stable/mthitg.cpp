@@ -37,26 +37,28 @@ namespace {
 	{
 	qRH
 		bso::u32__ Inf = 0UL, Sup = 0x10000UL, Rep = 0x10000UL >> 1;
-		integer Inter, Comp;
+		integer Inter;
 	qRB
 		Inter.Init( 0 );
 
 		for (;;) {
 			Mul_( Den, integer( Rep ), Inter );
-			Sub( Num, Inter, Inter );
-			if ( Inter.GetSignFlag() ) {	// If negative.
+			if ( Comp( Num, Inter, true ) < 0 ) {	// If negative.
 				Sup = Rep;
 				Rep = ( Sup + Inf ) >> 1;
-			} else if ( mthitg::Comp( Inter, Den, true ) >= 0 ) {	// 'Inter' >= 'Den'.
-				Inf = Rep;
-				Rep = Inf + ( ( Sup - Inf ) >> 1 );
-				// '( Sup + Inf ) >> 1' doesn't work : overflow.
-				// nor '( Sup >> 1 ) + ( Inf >> 1 )' : loss of precision.
 			} else {
-				Mul( Result, TenThousandHex, Result );
-				Add( Result, integer( Rep ), Result );
-				Remainder = Inter;
-				qRReturn;
+				Sub( Num, Inter, Inter );
+				if ( mthitg::Comp( Inter, Den, true ) >= 0 ) {	// 'Inter' >= 'Den'.
+					Inf = Rep;
+					Rep = Inf + ( ( Sup - Inf ) >> 1 );
+					// '( Sup + Inf ) >> 1' doesn't work : overflow.
+					// nor '( Sup >> 1 ) + ( Inf >> 1 )' : loss of precision.
+				} else {
+					Mul( Result, TenThousandHex, Result );
+					Add( Result, integer( Rep ), Result );
+					Remainder = Inter;
+					qRReturn;
+				}
 			}
 		}
 	qRR
@@ -677,5 +679,5 @@ qRE
 #endif
 
 wInteger mthitg::Ten( 10 );
-wInteger mthitg::TenThousandHex( 0x1000 );
+wInteger mthitg::TenThousandHex( 0x10000 );
 

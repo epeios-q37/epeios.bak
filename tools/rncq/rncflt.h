@@ -17,26 +17,10 @@
     along with 'RNCq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef REGISTRY_INC_
-# define REGISTRY_INC_
+#ifndef RNCFLT_INC_
+# define RNCFLT_INC_
 
-# include "sclrgstry.h"
-
-namespace registry {
-	using namespace sclrgstry;
-
-	namespace parameter {
-		using namespace sclrgstry::parameter;
-
-		extern rEntry Expression;	// Expression to evaluate.
-		extern rEntry RPN;			// It 'true', expression is in RPN.
-		extern rEntry ToFloat;		// It 'true', the result is converted to float.
-		extern rEntry UseFloat;		// if 'true', calculation are made using floats.
-	}
-
-	namespace definition {
-		using namespace sclrgstry::definition;
-	}
+namespace rncflt {
 }
 
 #endif

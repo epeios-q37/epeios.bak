@@ -21,6 +21,9 @@
 
 #include "registry.h"
 
+#include "rncalg.h"
+#include "rncrpn.h"
+
 #include "scltool.h"
 #include "sclerror.h"
 #include "sclmisc.h"
@@ -51,7 +54,7 @@ namespace {
 #define D( name )	qCDEF( char *, name, #name )
 			D( Overflow );
 			D( SyntaxError );
-			D( BadFloatInvolvement );
+			D( BadExpression );
 #undef D
 		}
 
@@ -90,21 +93,18 @@ namespace {
 
 			qW( Float );
 
-			typedef stkbch::qBSTACKdl( bso::sChar ) dOperators_;
-			qW( Operators_ );
-
 			inline void SkipSpaces_( xtf::sIFlow &Flow )
 			{
 				while ( !Flow.EndOfFlow() && ( Flow.View() == ' ' ) )
 					Flow.Get();
 			}
 
-			void GetNumber_(
+			bso::sBool GetNumber_(
 				xtf::sIFlow &Flow,
 				str::dString &Number )
 			{
 				if ( Flow.EndOfFlow() )
-					return;
+					return true;
 
 				switch ( Flow.View() ) {
 				case '-':
@@ -127,29 +127,35 @@ namespace {
 							Number.Append( Flow.Get() );
 					}
 				}
+
+				return true;
 			} 
 
-			void  GetNumber_(
+			bso::sBool GetNumber_(
 				xtf::sIFlow &Flow,
 				dFloat &Number )
 			{
+				bso::sBool Success = false;
 			qRH
 				str::wString String;
 			qRB
 				String.Init();
-				GetNumber_( Flow, String );
 
-				Number.Init( String );
+				if ( Success = GetNumber_( Flow, String ) )
+					Number.Init( String );
 			qRR
 			qRT
 			qRE
+				return Success;
 			}
 
-			void GetNumber_(
+			bso::sBool GetNumber_(
 				xtf::sIFlow &Flow,
 				mthrtn::dRational &Number )
 			{
 				Number.Init( Flow.UndelyingFlow() );
+
+				return true;
 			}
 
 			inline void Add_(
@@ -229,162 +235,15 @@ namespace {
 				Flow << Buffer;
 			}
 
-			template <typename wnumber, typename dnumbers> void Handle_(
-				dnumbers &Numbers,
-				bso::sChar Operator )
-			{
-			qRH
-				wnumber Op1, Op2, Result;
-			qRB
-				if ( Numbers.Amount() < 2 )
-					qRFwk();
 
-				Op1.Init();
-				Op2.Init();
-
-				Result.Init();
-
-				Numbers.Pop( Op2 );
-				Numbers.Pop( Op1 );
-
-				switch ( Operator ) {
-				case '+':
-					Add_( Op1, Op2, Result );
-					break;
-				case '-':
-					Sub_( Op1, Op2, Result );
-					break;
-				case '*':
-				case 'x':
-					Mul_( Op1, Op2, Result );
-					break;
-				case ':':
-				case '/':
-					Div_( Op1, Op2, Result );
-					break;
-				default:
-					qRFwk();
-					break;
-				}
-
-				Numbers.Push( Result );
-			qRR
-			qRT
-			qRE
-			}
-
-			namespace algebraic_ {
-				namespace {
-					template <typename dnumber, typename wnumber, typename dnumbers> void Handle_(
-						dnumbers &Numbers,
-						dOperators_ &Operators )
-					{
-						::Handle_<wnumber, dnumbers>( Numbers, Operators.Pop() );
-					}
-				}
-
-				template <typename dnumber, typename wnumber, typename dnumbers, typename wnumbers> void Evaluate(
-					xtf::sIFlow &Flow,
-					dnumber &Result )
-				{
-				qRH
-					wnumbers Numbers;
-					wnumber Number;
-					wOperators_ Operators;
-					bso::sChar Operator = 0;
-				qRB
-					SkipSpaces_( Flow );
-
-					Numbers.Init();
-					Operators.Init();
-
-					Number.Init();
-					GetNumber_( Flow, Number );
-					Numbers.Push( Number );
-
-					SkipSpaces_( Flow );
-
-					while ( !Flow.EndOfFlow() ) {
-						Operator = Flow.Get();
-						Operators.Push( Operator );
-
-						SkipSpaces_( Flow );
-
-						Number.Init();
-						GetNumber_( Flow, Number );
-						Numbers.Push( Number );
-
-						SkipSpaces_( Flow );
-
-						Handle_<dnumber, wnumber, dnumbers>( Numbers, Operators );
-					}
-
-					if ( Numbers.Amount() != 1 )
-						qRFwk();
-
-					Numbers.Pop( Result );
-				qRR
-				qRT
-				qRE
-				}
-			}
-
-			namespace rpn_ {
-				template <typename dnumber, typename wnumber, typename dnumbers, typename wnumbers> void Evaluate(
-					xtf::sIFlow &Flow,
-					dnumber &Result )
-				{
-				qRH
-					wnumbers Numbers;
-					wnumber Number;
-					wOperators_ Operators;
-					bso::sChar Operator = 0;
-				qRB
-					SkipSpaces_( Flow );
-
-					Numbers.Init();
-					Operators.Init();
-
-					Number.Init();
-					GetNumber_( Flow, Number );
-					Numbers.Push( Number );
-
-					SkipSpaces_( Flow );
-
-					while ( !Flow.EndOfFlow() ) {
-						if ( isdigit( Flow.View() ) ) {
-							Number.Init();
-							GetNumber_( Flow, Number );
-							Numbers.Push( Number );
-
-							SkipSpaces_( Flow );
-
-						} else {
-							Operator = Flow.Get();
-							Handle_<wnumber, dnumbers>( Numbers, Operator );
-
-							SkipSpaces_( Flow );
-						}
-					}
-
-					if ( Numbers.Amount() != 1 )
-						qRFwk();
-
-					Numbers.Pop( Result );
-				qRR
-				qRT
-				qRE
-				}
-			}
-
-			template <typename dnumber, typename wnumber, typename dnumbers, typename wnumbers> void Evaluate_(
+			template <typename dnumber, typename wnumber, typename dnumbers, typename wnumbers> bso::sBool Evaluate_(
 				xtf::sIFlow &Flow,
 				dnumber &Number )
 			{
 				if ( sclmisc::BGetBoolean( registry::parameter::RPN ) )
-					rpn_::Evaluate<dnumber, wnumber, dnumbers, wnumbers>( Flow, Number );
+					return rncrpn::Evaluate<dnumber, wnumber, dnumbers, wnumbers>( Flow, Number );
 				else
-					algebraic_::Evaluate<dnumber, wnumber, dnumbers, wnumbers>( Flow, Number );
+					return rncalg::Evaluate<dnumber, wnumber, dnumbers, wnumbers>( Flow, Number );
 			}
 
 			typedef stkcrt::qCSTACKdl( mthrtn::dRational ) dRationals_;
@@ -395,43 +254,48 @@ namespace {
 		}
 
 		namespace rational_ {
-			void Evaluate(
+			bso::sBool Evaluate(
 				xtf::sIFlow &IFlow,
 				txf::sOFlow &OFlow )
 			{
+				bso::sBool Success = false;
 			qRH
 				mthrtn::wRational Result;
 			qRB
 				Result.Init();
-				Evaluate_<mthrtn::dRational, mthrtn::wRational, dRationals_, wRationals_>( IFlow, Result );
 
-//				Result.Simplify();
+				if ( Success = Evaluate_<mthrtn::dRational, mthrtn::wRational, dRationals_, wRationals_>( IFlow, Result ) ) {
+					Result.Simplify();
 
-				if ( sclmisc::BGetBoolean( registry::parameter::ToFloat ) )
-					Print_( Result.GetLongFloat(), OFlow );
-				else
-					OFlow << Result.N << " / " << Result.D << txf::nl;
-			qRR
-			qRT
-			qRE
+					if ( sclmisc::BGetBoolean( registry::parameter::ToFloat ) )
+						Print_( Result.GetLongFloat(), OFlow );
+					else
+						OFlow << Result.N << " / " << Result.D << txf::nl;
+					}
+				qRR
+					qRT
+					qRE
+					return Success;
 			}
 		}
 
 		namespace float_ {
-			void Evaluate(
+			bso::sBool Evaluate(
 				xtf::sIFlow &IFlow,
 				txf::sOFlow &OFlow )
 			{
+				bso::sBool Success = false;
 			qRH
 				wFloat Result;
 			qRB
 				Result.Init();
-				Evaluate_<dFloat, wFloat, dFloats_, wFloats_>( IFlow, Result );
+				Success = Evaluate_<dFloat, wFloat, dFloats_, wFloats_>( IFlow, Result );
 
 				Print_( Result.S_.Object, OFlow );
 			qRR
 			qRT
 			qRE
+				return Success;
 			}
 		}
 
@@ -442,16 +306,18 @@ namespace {
 		qRH
 			flx::sStringIFlow SFlow;
 			xtf::sIFlow XFlow;
-			bso::sBool Float = false;
-			str::wString Involvement;
+			bso::sBool Success = false;
 		qRB
 			SFlow.Init( Expression );
 			XFlow.Init( SFlow, utf::f_Guess );
 
 			if ( sclmisc::BGetBoolean( registry::parameter::UseFloat ) )
-				float_::Evaluate( XFlow, cio::COut );
+				Success = float_::Evaluate( XFlow, cio::COut );
 			else
-				rational_::Evaluate( XFlow, Flow );
+				Success = rational_::Evaluate( XFlow, Flow );
+
+			if ( !Success )
+				REPORT( BadExpression );
 		qRR
 		qRT
 		qRE

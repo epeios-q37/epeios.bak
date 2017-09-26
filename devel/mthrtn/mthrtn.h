@@ -218,6 +218,11 @@ namespace mthrtn {
 		D.Init();
 		Mul( Op1.D, Op2.N, D );
 
+		if ( D.GetSign() < 0 ) {
+			D.Negate();
+			N.Negate();
+		}
+
 		Result.Init( N, D );
 	qRR
 	qRT
