@@ -20,7 +20,135 @@
 #ifndef RNCFLT_INC_
 # define RNCFLT_INC_
 
+# include "stkcrt.h"
+# include "str.h"
+# include "tol.h"
+# include "xtf.h"
+
 namespace rncflt {
+	typedef tol::dObject<bso::sLFloat> dFloat_;
+
+	class dFloat
+	: public dFloat_ {
+	public:
+		struct s
+		: public dFloat_::s {};
+		dFloat( s &S )
+		: dFloat_( S )
+		{}
+		void Init( void )
+		{
+			S_.Object = 0;
+		}
+		bso::sBool Init( const str::dString &Value )
+		{
+			sdr::sRow P = qNIL;
+
+			S_.Object = Value.ToLF( &P );
+
+			return  P == qNIL;
+		}
+	};
+
+	qW( Float );
+
+	typedef stkcrt::qMCSTACKdl( dFloat_ ) dFloats;
+	qW( Floats );
+
+	inline bso::sBool GetNumber_(
+		xtf::sIFlow &Flow,
+		str::dString &Number )
+	{
+		if ( Flow.EndOfFlow() )
+			return true;
+
+		switch ( Flow.View() ) {
+		case '-':
+			Number.Append( '-' );
+		case '+':
+			Flow.Get();
+		default:
+			break;
+		}
+
+		while ( !Flow.EndOfFlow() && isdigit( Flow.View() ) )
+			Number.Append( Flow.Get() );
+
+		if ( !Flow.EndOfFlow() ) {
+			bso::sChar C = Flow.View();
+			if ( ( C == '.' ) || ( C == ',' ) ) {
+				Number.Append( Flow.Get() );
+
+				while ( !Flow.EndOfFlow() && isdigit( Flow.View() ) )
+					Number.Append( Flow.Get() );
+			}
+		}
+
+		return true;
+	}
+
+	inline bso::sBool GetNumber_(
+		xtf::sIFlow &Flow,
+		dFloat &Number )
+	{
+		bso::sBool Success = false;
+	qRH
+		str::wString String;
+	qRB
+		String.Init();
+
+		if ( Success = GetNumber_( Flow, String ) )
+			Success = Number.Init( String );
+	qRR
+	qRT
+	qRE
+		return Success;
+	}
+
+	inline void Add_(
+		const dFloat &Op1,
+		const dFloat &Op2,
+		dFloat &Result )
+	{
+		Result.S_.Object = Op1.S_.Object + Op2.S_.Object;
+	}
+
+	inline void Sub_(
+		const dFloat &Op1,
+		const dFloat &Op2,
+		dFloat &Result )
+	{
+		Result.S_.Object = Op1.S_.Object - Op2.S_.Object;
+	}
+
+	inline void Mul_(
+		const dFloat &Op1,
+		const dFloat &Op2,
+		dFloat &Result )
+	{
+		Result.S_.Object = Op1.S_.Object * Op2.S_.Object;
+	}
+
+	inline void Div_(
+		const dFloat &Op1,
+		const dFloat &Op2,
+		dFloat &Result )
+	{
+		Result.S_.Object = Op1.S_.Object / Op2.S_.Object;
+	}
+
+	inline void Print_(
+		bso::lfloat__ Float,
+		txf::sOFlow &Flow )
+	{
+		char Buffer[1000];
+
+		sprintf( Buffer, "%LF", Float );
+		Flow << Buffer << txf::nl;
+
+		sprintf( Buffer, "%LG", Float );
+		Flow << Buffer;
+	}
 }
 
 #endif

@@ -424,20 +424,6 @@ namespace mthitg {
 		const integer_ &Op1,
 		const integer_ &Op2,
 		integer_ &Result );
-/*
-	inline integer_ &PGCD(
-		const integer_ &Op1,
-		const integer_ &Op2 )
-	{
-		integer Result;
-
-		Result.Init();
-
-		PGCD( Op1, Op2, Result );
-
-		return Result;
-	}
-	*/
 }
 
 

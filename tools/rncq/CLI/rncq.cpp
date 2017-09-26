@@ -23,6 +23,8 @@
 
 #include "rncalg.h"
 #include "rncrpn.h"
+#include "rncflt.h"
+#include "rncrtn.h"
 
 #include "scltool.h"
 #include "sclerror.h"
@@ -42,6 +44,9 @@ using cio::COut;
 using cio::CIn;
 
 namespace {
+	using namespace rncflt;
+	using namespace rncrtn;
+
 	void PrintHeader_( void )
 	{
 		COut << NAME_MC " V" VERSION << " (" WEBSITE_URL ")" << txf::nl;
@@ -61,178 +66,11 @@ namespace {
 # define REPORT( m )	sclmisc::ReportAndAbort( message_::m )
 
 		namespace {
-			typedef tol::dObject<bso::sLFloat> dFloat_;
-
-			class dFloat
-			: public dFloat_
-			{
-			public:
-				struct s
-				: public dFloat_::s {};
-				dFloat( s &S )
-				: dFloat_( S )
-				{}
-				void Init( void )
-				{
-					S_.Object = 0;
-				}
-				void Init( const str::dString &Value )
-				{
-					sdr::sRow P = qNIL;
-
-					S_.Object = Value.ToLF( &P );
-
-					if ( P != qNIL ) {
-						if ( isdigit( *P ) )
-							REPORT( Overflow );
-						else
-							REPORT( SyntaxError );
-					}
-				}
-			};
-
-			qW( Float );
 
 			inline void SkipSpaces_( xtf::sIFlow &Flow )
 			{
 				while ( !Flow.EndOfFlow() && ( Flow.View() == ' ' ) )
 					Flow.Get();
-			}
-
-			bso::sBool GetNumber_(
-				xtf::sIFlow &Flow,
-				str::dString &Number )
-			{
-				if ( Flow.EndOfFlow() )
-					return true;
-
-				switch ( Flow.View() ) {
-				case '-':
-					Number.Append( '-' );
-				case '+':
-					Flow.Get();
-				default:
-					break;
-				}
-
-				while ( !Flow.EndOfFlow() && isdigit( Flow.View() ) )
-					Number.Append( Flow.Get() );
-
-				if ( !Flow.EndOfFlow() ) {
-					bso::sChar C = Flow.View();
-					if ( ( C == '.' ) || ( C == ',' ) ) {
-						Number.Append( Flow.Get() );
-
-						while ( !Flow.EndOfFlow() && isdigit( Flow.View() ) )
-							Number.Append( Flow.Get() );
-					}
-				}
-
-				return true;
-			} 
-
-			bso::sBool GetNumber_(
-				xtf::sIFlow &Flow,
-				dFloat &Number )
-			{
-				bso::sBool Success = false;
-			qRH
-				str::wString String;
-			qRB
-				String.Init();
-
-				if ( Success = GetNumber_( Flow, String ) )
-					Number.Init( String );
-			qRR
-			qRT
-			qRE
-				return Success;
-			}
-
-			bso::sBool GetNumber_(
-				xtf::sIFlow &Flow,
-				mthrtn::dRational &Number )
-			{
-				Number.Init( Flow.UndelyingFlow() );
-
-				return true;
-			}
-
-			inline void Add_(
-				const mthrtn::dRational &Op1,
-				const mthrtn::dRational &Op2,
-				mthrtn::dRational &Result )
-			{
-				mthrtn::Add( Op1, Op2, Result );
-			}
-
-			inline void Sub_(
-				const mthrtn::dRational &Op1,
-				const mthrtn::dRational &Op2,
-				mthrtn::dRational &Result )
-			{
-				mthrtn::Sub( Op1, Op2, Result );
-			}
-
-			inline void Mul_(
-				const mthrtn::dRational &Op1,
-				const mthrtn::dRational &Op2,
-				mthrtn::dRational &Result )
-			{
-				mthrtn::Mul( Op1, Op2, Result );
-			}
-
-			inline void Div_(
-				const mthrtn::dRational &Op1,
-				const mthrtn::dRational &Op2,
-				mthrtn::dRational &Result )
-			{
-				mthrtn::Div( Op1, Op2, Result );
-			}
-
-			inline void Add_(
-				const dFloat &Op1,
-				const dFloat &Op2,
-				dFloat &Result )
-			{
-				Result.S_.Object = Op1.S_.Object + Op2.S_.Object;
-			}
-
-			inline void Sub_(
-				const dFloat &Op1,
-				const dFloat &Op2,
-				dFloat &Result )
-			{
-				Result.S_.Object = Op1.S_.Object - Op2.S_.Object;
-			}
-
-			inline void Mul_(
-				const dFloat &Op1,
-				const dFloat &Op2,
-				dFloat &Result )
-			{
-				Result.S_.Object = Op1.S_.Object * Op2.S_.Object;
-			}
-
-			inline void Div_(
-				const dFloat &Op1,
-				const dFloat &Op2,
-				dFloat &Result )
-			{
-				Result.S_.Object = Op1.S_.Object / Op2.S_.Object;
-			}
-
-			inline void Print_(
-				bso::lfloat__ Float,
-				txf::sOFlow &Flow )
-			{
-				char Buffer[1000];
-
-				sprintf( Buffer, "%LF", Float );
-				Flow << Buffer << txf::nl;
-
-				sprintf( Buffer, "%LG", Float );
-				Flow << Buffer;
 			}
 
 
@@ -245,12 +83,6 @@ namespace {
 				else
 					return rncalg::Evaluate<dnumber, wnumber, dnumbers, wnumbers>( Flow, Number );
 			}
-
-			typedef stkcrt::qCSTACKdl( mthrtn::dRational ) dRationals_;
-
-			qW( Rationals_ );
-			typedef stkcrt::qMCSTACKdl( dFloat_ ) dFloats_;
-			qW( Floats_ );
 		}
 
 		namespace rational_ {
@@ -264,7 +96,7 @@ namespace {
 			qRB
 				Result.Init();
 
-				if ( Success = Evaluate_<mthrtn::dRational, mthrtn::wRational, dRationals_, wRationals_>( IFlow, Result ) ) {
+				if ( Success = Evaluate_<mthrtn::dRational, mthrtn::wRational, dRationals, wRationals>( IFlow, Result ) ) {
 					Result.Simplify();
 
 					if ( sclmisc::BGetBoolean( registry::parameter::ToFloat ) )
@@ -289,7 +121,7 @@ namespace {
 				wFloat Result;
 			qRB
 				Result.Init();
-				Success = Evaluate_<dFloat, wFloat, dFloats_, wFloats_>( IFlow, Result );
+				Success = Evaluate_<dFloat, wFloat, dFloats, wFloats>( IFlow, Result );
 
 				Print_( Result.S_.Object, OFlow );
 			qRR

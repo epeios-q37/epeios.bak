@@ -43,7 +43,7 @@ namespace {
 
 		for (;;) {
 			Mul_( Den, integer( Rep ), Inter );
-			if ( Comp( Num, Inter, true ) < 0 ) {	// If negative.
+			if ( Comp( Num, Inter, true ) < 0 ) {	// 'Num' < 'Inter'.
 				Sup = Rep;
 				Rep = ( Sup + Inf ) >> 1;
 			} else {
@@ -52,7 +52,7 @@ namespace {
 					Inf = Rep;
 					Rep = Inf + ( ( Sup - Inf ) >> 1 );
 					// '( Sup + Inf ) >> 1' doesn't work : overflow.
-					// nor '( Sup >> 1 ) + ( Inf >> 1 )' : loss of precision.
+					// Nor '( Sup >> 1 ) + ( Inf >> 1 )' : loss of precision.
 				} else {
 					Mul( Result, TenThousandHex, Result );
 					Add( Result, integer( Rep ), Result );

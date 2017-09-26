@@ -34,6 +34,7 @@
    <Module>rnccmn</Module>
    <Module>rncflt</Module>
    <Module>rncrpn</Module>
+   <Module>rncrtn</Module>
   </Modules>
 		<Module>registry</Module>
 	</Modules>

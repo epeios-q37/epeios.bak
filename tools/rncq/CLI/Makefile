@@ -41,7 +41,7 @@ mods += rgstry stsfsm xml xpp mthitg
 mods += mthrtn stkcrt 
 mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
 mods += scltool 
-mods += rncalg rnccmn rncflt rncrpn 
+mods += rncalg rnccmn rncflt rncrpn rncrtn 
 mods += registry 
 
 pmods += pllio 

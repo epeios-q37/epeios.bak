@@ -218,11 +218,6 @@ namespace mthrtn {
 		D.Init();
 		Mul( Op1.D, Op2.N, D );
 
-		if ( D.GetSign() < 0 ) {
-			D.Negate();
-			N.Negate();
-		}
-
 		Result.Init( N, D );
 	qRR
 	qRT
@@ -327,11 +322,12 @@ namespace mthrtn {
 		}
 	};
 
-	void Simplify( dRational &dRational );
+	// Reduce the fraction and put the sign, if negative to the numerator.
+	void Normalize( dRational &dRational );
 
 	template <typename t, typename t_> const dRational_<t, t_> &dRational_<t, t_>::Simplify( void )
 	{
-		mthrtn::Simplify( *this );
+		mthrtn::Normalize( *this );
 
 		return *this;
 	}

@@ -23,7 +23,7 @@
 
 using namespace mthrtn;
 
-void mthrtn::Simplify( dRational &Rational )
+void mthrtn::Normalize( dRational &Rational )
 {
 qRH
 	integer PGCD;
@@ -31,6 +31,9 @@ qRB
 	PGCD.Init();
 
 	mthitg::PGCD( Rational.N, Rational.D, PGCD );
+
+	if ( Rational.D.GetSign() < 0 )
+		PGCD.Negate();
 
 	mthitg::Div( Rational.N, PGCD, Rational.N );
 	mthitg::Div( Rational.D, PGCD, Rational.D );
