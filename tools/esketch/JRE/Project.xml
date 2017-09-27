@@ -37,9 +37,8 @@
   <Module>registry</Module>
  </Modules>
  <Files>
-  <File>README.md</File>
-  <!-- '*.java' files are source files and will automatically packed as such. -->
-  <File Pack="No">eSketch.java</File>
+  <!-- NOTA : '*.java' files will automatically be packed as such. -->
+  <!--File Pack="No">eSketch.java</File-->
  </Files>
  <RTW>
   <Dir>esketch-java</Dir>

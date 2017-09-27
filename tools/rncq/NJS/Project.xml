@@ -55,7 +55,6 @@
   <SourceDir>..</SourceDir>
  </SourceDirs>
  <Files>
-  <File Path="../">CHANGELOG.md</File>
  </Files>
 	<PreprocessorDefinitions>
 		<PreprocessorDefinition>E_ST</PreprocessorDefinition>

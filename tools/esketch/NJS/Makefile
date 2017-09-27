@@ -1,4 +1,4 @@
-#	Copyright (C) 2007-2017 Claude SIMON (http://q37.info/contact/).
+#	Copyright (C) 2017 Claude SIMON (http://q37.info/contact/).
 #
 #	This file is part of eSketch.
 #
@@ -391,8 +391,8 @@ ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20170912"\"
-copt += -DCOPYRIGHT_YEARS=\""2007-2017"\"
+copt += -DVERSION=\""20170926"\"
+copt += -DCOPYRIGHT_YEARS=\""2017"\"
 copt += -DIDENTIFIER=\""d6a723cb-e88f-4f2f-b429-3adc207f1d62"\"
 
 ifndef EPEIOS_SRC

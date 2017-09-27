@@ -8,7 +8,7 @@ const exprRPN = "784512.8456120 8456120.48651320 * 84651320.896451320 - 84651230
 if ( true )
     rncq.evaluateALG(exprALG, (result) => console.log(result));
 else
-    rncq.evaluateRPN(expression, (result) => console.log(result));
+    rncq.evaluateRPN(exprRPN, (result) => console.log(result));
 
 // Only displayed in 'Runkit'.
 "Click on the below left little triangle(s)...";

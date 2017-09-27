@@ -32,12 +32,12 @@ process.stdout.write(rncq.returnArgument("Text from JS file") + '\n');
 
 // 'true' : 'expr' must be algebraic ('1 + 2 * 3').
 // 'false' : 'expr' must be RPN ('1 2 + 3 *').
-if ( false ) {
+if ( true ) {
     if (expr == undefined)
         expr = exprALG;
-    rncq.evaluateALG(expr, (result) => process.stdout.write(result));
+    rncq.evaluateALG(expr, (result) => process.stdout.write(result + "\n"));
 } else {
     if (expr == undefined)
         expr = exprRPN;
-    rncq.evaluateRPN(expr, (result) => process.stdout.write(result));
+    rncq.evaluateRPN(expr, (result) => process.stdout.write(result + "\n"));
 }
