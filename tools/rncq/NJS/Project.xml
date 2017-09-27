@@ -32,7 +32,6 @@
     <Module>lcl</Module>
     <Module>mthitg</Module>
     <Module>mthrtn</Module>
-    <Module>stkcrt</Module>
     <Module>rgstry</Module>
     <Module>stsfsm</Module>
     <Module>xml</Module>
@@ -48,6 +47,7 @@
    <Module>rncflt</Module>
    <Module>rncrpn</Module>
    <Module>rncrtn</Module>
+   <Module>rnctol</Module>
   </Modules>
   <Module>registry</Module>
  </Modules>

@@ -13,8 +13,8 @@
  </xpp:bloc>
  <xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
  <About>
-  <Program>xppqjre</Program>
-  <Software>xppq</Software>
+  <Program>rncqjre</Program>
+  <Software>RNCq</Software>
  </About>
  <Modules>
   <Modules Group="Epeios" Path="h:/hg/epeios/stable/">
@@ -25,6 +25,8 @@
     <Module>fil</Module>
     <Module>fnm</Module>
     <Module>lcl</Module>
+    <Module>mthitg</Module>
+    <Module>mthrtn</Module>
     <Module>rgstry</Module>
     <Module>stsfsm</Module>
     <Module>xml</Module>
@@ -34,11 +36,22 @@
     <xpp:expand select="SCL"/>
    </Modules>
   </Modules>
+  <Modules Group="RNC" Path="../">
+   <Module>rncalg</Module>
+   <Module>rnccmn</Module>
+   <Module>rncflt</Module>
+   <Module>rncrpn</Module>
+   <Module>rncrtn</Module>
+   <Module>rnctol</Module>
+  </Modules>
+  <Module>registry</Module>
  </Modules>
  <Files>
-  <File>demo.xml</File>
  </Files>
- <CI>
-  <Dir>xppq-java</Dir>
- </CI>
+ <SourceDirs>
+  <SourceDir>..</SourceDir>
+ </SourceDirs>
+ <RTW>
+  <Dir>rncq-java</Dir>
+ </RTW>
 </Project>

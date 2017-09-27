@@ -2,7 +2,7 @@
 
 ## Presentation
 
-This component is only a template to facilitate the creation of a [*JRE*](http://en.wikipedia.org/wiki/Java_virtual_machine) (*Java*) component and has no other use.
+This component is only a template to facilitate the creation of a [*JRE*](http://q37.info/s/x/JRE/) (*Java*) component and has no other use.
 
 For more information, see http://q37.info/tools/esketch/.
 

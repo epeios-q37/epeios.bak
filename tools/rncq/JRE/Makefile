@@ -1,4 +1,4 @@
-#	Copyright (C) 2017 Claude SIMON (http://q37.info/contact/).
+#	Copyright (C) 2007-2017 Claude SIMON (http://q37.info/contact/).
 #
 #	This file is part of RNCq.
 #
@@ -15,7 +15,7 @@
 #	You should have received a copy of the GNU Affero General Public License
 #	along with RNCq. If not, see <http://www.gnu.org/licenses/>.
 
-name = rncqnjs
+name = rncqjre
 
 
 # Epeios general debugging features
@@ -35,12 +35,12 @@ mods += lstctn mns mtk mtx ntvstr
 mods += que sdr stkbse stkbch stkcrt 
 mods += stkctn str strng tagsbs tol 
 mods += txf tys uys utf xtf 
-mods += llio dlbrry n4all n4njs plgn 
-mods += plgncore tht thtsub uvqdcl bomhdl 
-mods += cdgb64 fil fnm lcl mthitg 
-mods += mthrtn rgstry stsfsm xml xpp 
+mods += llio dlbrry n4all n4jre plgn 
+mods += plgncore tht thtsub bomhdl cdgb64 
+mods += fil fnm lcl mthitg mthrtn 
+mods += rgstry stsfsm xml xpp 
 mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
-mods += scln4a sclnjs 
+mods += scln4a scljre 
 mods += rncalg rnccmn rncflt rncrpn rncrtn 
 mods += rnctol 
 mods += registry 
@@ -64,7 +64,9 @@ CXXFLAGS += -O
 
 ###############################
 	
-copt += -DE_ST
+# Required for JRE Component.
+
+copt += -DQ_JRE
 
 win=win
 win32=win32
@@ -388,15 +390,15 @@ endif
 #############################
 		
 all: $(binary)
-
+	javac src/*.java -d .
 	rm -rf *.o
 ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
 copt += -DVERSION=\""20170927"\"
-copt += -DCOPYRIGHT_YEARS=\""2017"\"
-copt += -DIDENTIFIER=\""d6a723cb-e88f-4f2f-b429-3adc207f1d62"\"
+copt += -DCOPYRIGHT_YEARS=\""2007-2017"\"
+copt += -DIDENTIFIER=\"""\"
 
 ifndef EPEIOS_SRC
 	src += :src:src/epeios

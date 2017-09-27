@@ -1,4 +1,4 @@
-# *XPPq* changelog.
+# *XPPq* changelog
 
 2017-09-26 :
 - *xppqnjs*:

@@ -1,0 +1,33 @@
+/*
+	Copyright (C) 2016 by Claude SIMON (http://zeusw.org/epeios/contact.html).
+
+	This file is part of 'RNCq.
+
+    'RNCq' is free software: you can redistribute it and/or modify it
+    under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    'RNCq' is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with 'RNCq'.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#ifndef RNCTOL_INC_
+# define RNCTOL_INC_
+
+# include "bso.h"
+# include "str.h"
+
+namespace rnctol {
+	bso::sBool Evaluate(
+		str::dString &Expression,
+		bso::sBool RPN,
+		str::dString &Result );
+}
+
+#endif
