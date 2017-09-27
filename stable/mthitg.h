@@ -148,7 +148,6 @@ namespace mthitg {
 		}
 	public:
 		//o The core.
-		bch::E_BUNCH_( base__ ) Core;
 		struct s {
 			bch::E_BUNCH_( base__ )::s Core;
 			/* The most significant is the sign ('0':'+', '1':'-').
@@ -156,6 +155,7 @@ namespace mthitg {
 			at 0, then the integer is invalid. */
 			size__ Size;
 		} &S_;
+		bch::E_BUNCH_( base__ ) Core;
 		integer_( s &S )
 		: S_( S ),
 		  Core( S.Core )
@@ -190,36 +190,6 @@ namespace mthitg {
 
 			this->operator =( Integer );
 		}
-		//f Initialization.
-		void Init( bso::s32__ Seed = 0 )
-		{
-			S_.Size = 0;
-			Core.Init();
-
-			if ( Seed < 0 )
-			{
-				Seed = -Seed;
-				PutSignFlag_( true );
-			}
-			else
-				PutSignFlag_( false );
-
-			if ( Seed < 0x10000UL )
-			{
-				Core.Allocate( 1 );
-
-				Core.Store( (base__)Seed, 0 );
-				PutSize_( 1 );
-			}
-			else
-			{
-				Core.Allocate( 2 );
-
-				Core.Store( (base__)( Seed % 0x10000UL ), 0 );
-				Core.Store( (base__)( Seed >> 16 ), 1 );
-				PutSize_( 2 );
-			}
-		}
 		void Init( bso::u32__ Seed )
 		{
 			S_.Size = 0;
@@ -243,15 +213,16 @@ namespace mthitg {
 				PutSize_( 2 );
 			}
 		}
-		/*
-		integer Add( const integer_ &Op ) const;
-		integer Sub( const integer_ &Op ) const;
-		integer Mul( const integer_ &Op ) const;
-		integer Div( const integer_ &Op ) const;
-		integer Mod( const integer_ &Op ) const;
-		integer Abs( void ) const;
-		integer operator -( void ) const;
-		*/
+		void Init( bso::s32__ Seed = 0 )
+		{
+			if ( Seed < 0 ) {
+				Seed = -Seed;
+				PutSignFlag_( true );
+			} else
+				PutSignFlag_( false );
+
+			Init( (bso::u32__)Seed );
+		}
 		int operator !( void ) const	
 		{
 			return GetSize() == 0;

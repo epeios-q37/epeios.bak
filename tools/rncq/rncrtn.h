@@ -35,9 +35,12 @@ namespace rnc {
 		xtf::sIFlow &Flow,
 		mthrtn::dRational &Number )
 	{
-		Number.Init( Flow.UndelyingFlow() );
+		if ( !Flow.EndOfFlow() ) {
+			Number.Init( Flow.UndelyingFlow() );
 
-		return true;
+			return true;
+		} else
+			return false;
 	}
 
 	inline void Add(

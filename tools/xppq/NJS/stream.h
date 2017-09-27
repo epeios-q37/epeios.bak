@@ -29,7 +29,7 @@ namespace stream {
 	using stream_u::OnData;
 	using stream_u::OnEnd;
 	using stream_d::Read;
-	void Set( sclnjs::sCaller &Caller );
+	SCLNJS_F( Set );
 }
 
 #endif

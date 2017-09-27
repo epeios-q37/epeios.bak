@@ -96,6 +96,11 @@ namespace {
 		str::wString Error;
 		void reset( bso::sBool P = true )
 		{
+			if ( P ) {
+				if ( Callback_ != NULL )
+					delete Callback_;
+			}
+
 			tol::reset( P, IFlow_, XFlow_, Parser_, Content_, Callback_, Relay_, First_, Error );
 		}
 		qCVDTOR( rRack_ );

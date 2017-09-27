@@ -1,5 +1,9 @@
 # *XPPq* changelog.
 
+2017-09-26 :
+- *xppqnjs*:
+  - Adding missing deletion of the callback given to the parser.
+
 2017-09-17 :
 - *xppqnjs*
   - Upgrading.

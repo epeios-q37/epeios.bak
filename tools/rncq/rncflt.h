@@ -77,7 +77,7 @@ namespace rnc{
 		str::dString &Number )
 	{
 		if ( Flow.EndOfFlow() )
-			return true;
+			return false;
 
 		switch ( Flow.View() ) {
 		case '-':

@@ -77,7 +77,11 @@ namespace rncalg {
 		}
 
 		if ( Numbers.Amount() != 1 )
-			qRFwk();
+			qRReturn;
+
+		if ( Operators.Amount() != 0 )
+			qRReturn;
+
 
 		Numbers.Pop( Result );
 

@@ -46,7 +46,7 @@ namespace rnccmn {
 		wnumber Op1, Op2, Result;
 	qRB
 		if ( Numbers.Amount() < 2 )
-			qRFwk();
+			qRReturn;
 
 		Op1.Init();
 		Op2.Init();

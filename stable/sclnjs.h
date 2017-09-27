@@ -279,4 +279,6 @@ txf::text_oflow__ &operator <<(
 	txf::text_oflow__ &Flow,
 	sclnjs::rBuffer &Buffer );
 
+# define SCLNJS_F( name ) void name( sclnjs::sCaller &Caller )
+
 #endif

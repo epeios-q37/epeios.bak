@@ -31,7 +31,7 @@ void sclnjs::SCLNJSInfo( txf::sOFlow &Flow )
 }
 
 namespace {
-	void ReturnArgument_( sclnjs::sCaller &Caller )
+	SCLNJS_F( ReturnArgument_ )
 	{
 	qRH
 		str::wString Input, Text;

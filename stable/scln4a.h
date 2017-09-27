@@ -91,7 +91,7 @@ namespace scln4a {
 			function Function,
 			functions ...Functions )
 		{
-			R_().Register( Function );
+			R_().Register( (void *)Function );
 			Register( Functions... );
 		}
 	};
