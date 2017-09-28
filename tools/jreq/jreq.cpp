@@ -146,6 +146,8 @@ qRFB
 	jniq::Convert( RawLocation, Location, Env);
 	// TODO : Find a way to fill 'Location' with the path of the binary.
 
+//	cio::COut << ">>>>>>>>> " << Location << txf::nl << txf::commit;
+
 	sclmisc::Initialize( Rack_, Location );
 
 	jniq::SetGlobalEnv( Env );

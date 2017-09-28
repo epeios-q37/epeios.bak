@@ -32,13 +32,13 @@ mods += epsmsc err fdr flf flsq
 mods += flw flx ias idsq iof 
 mods += iop lck lst lstbch lstcrt 
 mods += lstctn mns mtk mtx ntvstr 
-mods += que sdr stkbse stkbch stkctn 
-mods += str strng tagsbs tol txf 
-mods += tys uys utf xtf llio 
-mods += bomhdl cdgb64 dlbrry fil fnm 
-mods += jniq jrebse lcl n4all n4allw 
-mods += n4jre plgn plgncore rgstry stsfsm 
-mods += tht thtsub xml xpp 
+mods += que sdr stkbse stkbch stkcrt 
+mods += stkctn str strng tagsbs tol 
+mods += txf tys uys utf xtf 
+mods += llio bomhdl cdgb64 dlbrry fil 
+mods += fnm jniq jrebse lcl n4all 
+mods += n4allw n4jre plgn plgncore rgstry 
+mods += stsfsm tht thtsub xml xpp 
 mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
 mods += registry wrapper 
 
@@ -388,13 +388,17 @@ endif
 #############################
 		
 all: $(binary)
+ifdef EPEIOS_SRC
+	javac *.java
+else
 	javac src/*.java -d .
+endif
 	rm -rf *.o
 ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20170922"\"
+copt += -DVERSION=\""20170928"\"
 copt += -DCOPYRIGHT_YEARS=\""2017"\"
 copt += -DIDENTIFIER=\"""\"
 
