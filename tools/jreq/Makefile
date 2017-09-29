@@ -25,20 +25,20 @@ copt += -DE_DEBUG
 # For using <setjmp.h> instead of C++ exceptions.
 #copt += -DERR_JMPUSE
 	
-mods += ags aem bch bitbch bso 
-mods += cio cpe crptgr cslio crt 
-mods += ctn dir dte dtfbsc dtfptb 
-mods += epsmsc err fdr flf flsq 
-mods += flw flx ias idsq iof 
-mods += iop lck lst lstbch lstcrt 
+mods += ags aem bch bitbch bomhdl 
+mods += bso cdgb64 cio cpe crptgr 
+mods += cslio crt ctn dir dte 
+mods += dtfbsc dtfptb epsmsc err fdr 
+mods += fil flf flsq flw flx 
+mods += fnm ias idsq iof iop 
+mods += lcl lck lst lstbch lstcrt 
 mods += lstctn mns mtk mtx ntvstr 
-mods += que sdr stkbse stkbch stkcrt 
-mods += stkctn str strng tagsbs tol 
-mods += txf tys uys utf xtf 
-mods += llio bomhdl cdgb64 dlbrry fil 
-mods += fnm jniq jrebse lcl n4all 
-mods += n4allw n4jre plgn plgncore rgstry 
-mods += stsfsm tht thtsub xml xpp 
+mods += que rgstry sdr stkbse stkbch 
+mods += stkcrt stkctn str strng stsfsm 
+mods += tagsbs tht tol txf tys 
+mods += uys utf xml xpp xtf 
+mods += llio dlbrry jniq jrebse n4all 
+mods += n4allw n4jre plgn plgncore 
 mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
 mods += registry wrapper 
 
@@ -398,7 +398,7 @@ ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20170928"\"
+copt += -DVERSION=\""20170929"\"
 copt += -DCOPYRIGHT_YEARS=\""2017"\"
 copt += -DIDENTIFIER=\"""\"
 
