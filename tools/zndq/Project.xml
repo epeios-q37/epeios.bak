@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns:xpp="http://q37.info/ns/xpp/" >
+ <xpp:bloc>
+  <!-- User definitions -->
+  <xpp:define name="Version">
+   <xpp:bloc>(Obsolete)</xpp:bloc>
+  </xpp:define>
+  <xpp:set name="Credits" value="Epeios"/>
+  <xpp:set name="Type" value="ZNDWrapper"/>
+  <xpp:define name="CopyrightYears">
+   <xpp:bloc>2017</xpp:bloc>
+  </xpp:define>
+ </xpp:bloc>
+ <xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
+ <About>
+  <Program>zndq</Program>
+  <Software>ZNDq</Software>
+ </About>
+ <Modules>
+  <Modules Group="Epeios" Path="h:/hg/epeios/stable/">
+   <Modules Group="Core">
+    <xpp:expand select="Core"/>
+   </Modules>
+   <Module>dlbrry</Module>
+   <Module>plgn</Module>
+   <Modules Group="SCL">
+    <xpp:expand select="SCL"/>
+   </Modules>
+  </Modules>
+  <Modules>
+   <Module>registry</Module>
+  </Modules>
+ </Modules>
+ <Files>
+  <File>README.md</File>
+  <File>CHANGELOG.md</File>
+  <!-- '*.java' files are source files and will automatically packed as such. -->
+  <File Pack="No">ZNDq.php</File>
+  <File>config.m4</File>
+ </Files>
+ <RTW>
+  <Dir>zndq</Dir>
+ </RTW>
+</Project>

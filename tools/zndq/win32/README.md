@@ -1,0 +1,1 @@
+`config.w32` needs to be in a subdirectory of the given directory to `buildconf.bat --add-modules-dir=...` in order to be taken in account !

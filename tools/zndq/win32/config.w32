@@ -1,0 +1,4 @@
+ARG_ENABLE("zndq", "ZNDq support", "no");
+if (PHP_ZNDQ != "no") {
+    EXTENSION("zndq", "../zndq.cpp", true, '/DVERSION="20171005"');
+}
