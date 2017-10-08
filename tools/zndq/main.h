@@ -20,8 +20,13 @@
 #ifndef MAIN_INC_
 # define MAIN_INC_
 
+// Do NOT include any Epeios related header, as this header is included along PHP header,
+// 'See comment in 'zndq.cpp').
+
 namespace main {
-	const char * GetInfo( const char * PHPVersion );
+	void Init( void );
+	const char *WrapperInfo( const char * PHPVersion );
+	const char *ComponentInfo( const char * PHPVersion );
 }
 
 #endif

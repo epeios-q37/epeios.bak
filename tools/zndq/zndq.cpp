@@ -36,9 +36,19 @@
 #include "php.h"
 
 extern "C" {
-	PHP_FUNCTION( infoWrapper )
+	PHP_FUNCTION( init )
 	{
-		RETURN_STRING( main::GetInfo( PHP_VERSION ) );
+		main::Init();
+	}
+
+	PHP_FUNCTION( wrapperInfo )
+	{
+		RETURN_STRING( main::WrapperInfo( PHP_VERSION ) );
+	}
+
+	PHP_FUNCTION( componentInfo )
+	{
+		RETURN_STRING( main::ComponentInfo( PHP_VERSION ) );
 	}
 }
 
@@ -46,7 +56,9 @@ extern zend_module_entry zndq_module_entry;
 #define phpext_zenq_ptr &zenq_module_entry
 
 static zend_function_entry zndq_functions[] = {
-	PHP_FE( infoWrapper, NULL )
+	PHP_FE( init, NULL )
+	PHP_FE( wrapperInfo, NULL )
+	PHP_FE( componentInfo, NULL )
 {
 	NULL, NULL, NULL
 }

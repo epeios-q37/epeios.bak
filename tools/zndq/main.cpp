@@ -1,4 +1,3 @@
-#include "main.h"
 /*
 	Copyright (C) 2017 by Claude SIMON (http://zeusw.org/epeios/contact.html).
 
@@ -22,11 +21,23 @@
 
 #include "zndq.h"
 
+#include "n4allw.h"
 #include "sclmisc.h"
 
 using namespace main;
 
 namespace{
+	err::err___ Error_;
+	sclerror::rError SCLError_;
+	scllocale::rRack Locale_;
+	sclmisc::sRack Rack_;
+
+	void ERRFinal_( void )
+	{
+		sclmisc::ErrFinal();
+	}
+
+
 	void GetInfo_(
 		const char *PHPVersion,
 		str::dString &Info )
@@ -46,12 +57,32 @@ namespace{
 	}
 }
 
-const char *main::GetInfo( const char *PHPVersion )
+void main::Init( void )
+{
+qRFH;
+	str::wString Location;
+qRFB;
+	cio::Initialize( cio::GetConsoleSet() );
+	Rack_.Init( Error_, SCLError_, cio::GetSet( cio::t_Default ), Locale_ );
+
+	Location.Init();
+//	jniq::Convert( RawLocation, Location, Env );
+	// TODO : Find a way to fill 'Location' with the path of the binary.
+
+	//	cio::COut << ">>>>>>>>> " << Location << txf::nl << txf::commit;
+
+	sclmisc::Initialize( Rack_, Location );
+qRFR;
+qRFT;
+qRFE( ERRFinal_() );
+}
+
+const char *main::WrapperInfo( const char *PHPVersion )
 {
 	static char Buffer[1000];
-qRH
+qRH;
 	str::wString Info;
-qRB
+qRB;
 	Info.Init();
 	GetInfo_( PHPVersion, Info );
 
@@ -60,11 +91,40 @@ qRB
 
 	Info.Recall( Info.First(), Info.Amount(), Buffer );
 	Buffer[Info.Amount()] = 0;
-qRR
-qRT
-qRE
+qRR;
+qRT;
+qRE;
+	return Buffer;
+}
+
+const char *main::ComponentInfo( const char *PHPVersion )
+{
+	static char Buffer[1000];
+qRFH;
+	str::wString Info;
+qRFB;
+	Info.Init();
+
+	if ( !n4allw::GetLauncherInfo( Info ) )
+		sclmisc::GetBaseTranslation( "NoRegisteredComponent", Info );
+
+	if ( Info.Amount() >= sizeof( Buffer ) )
+		qRLmt();
+
+	Info.Recall( Info.First(), Info.Amount(), Buffer );
+	Buffer[Info.Amount()] = 0;
+qRFR;
+qRFT;
+qRFE( ERRFinal_() );
 	return Buffer;
 }
 
 const char *sclmisc::SCLMISCTargetName = NAME_LC;
 const char *sclmisc::SCLMISCProductName = NAME_MC;
+
+qGCTOR( njsq )
+{
+	Error_.Init();
+	SCLError_.Init();
+	Locale_.Init();
+};

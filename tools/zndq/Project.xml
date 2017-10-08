@@ -21,8 +21,9 @@
    <Modules Group="Core">
     <xpp:expand select="Core"/>
    </Modules>
-   <Module>dlbrry</Module>
-   <Module>plgn</Module>
+			<Module>dlbrry</Module>
+			<Module>n4allw</Module>
+			<Module>plgn</Module>
    <Modules Group="SCL">
     <xpp:expand select="SCL"/>
    </Modules>
@@ -35,9 +36,10 @@
  <Files>
   <File>README.md</File>
   <File>CHANGELOG.md</File>
-  <!-- '*.java' files are source files and will automatically packed as such. -->
+  <!-- '*.php' files are source files and will automatically packed as such. -->
   <File Pack="No">ZNDq.php</File>
-  <File>config.m4</File>
+		<File Pack="No">test.php</File>
+		<File>config.m4</File>
  </Files>
  <RTW>
   <Dir>zndq</Dir>
