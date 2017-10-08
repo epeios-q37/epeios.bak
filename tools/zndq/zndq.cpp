@@ -17,11 +17,15 @@
 	along with ZNDq. If not, see <http://www.gnu.org/licenses/>.
 */
 
-# include "zndq.h"
+#include "zndq.h"
 
-#ifdef HAVE_CONFIG_H
+// No inclusion of Epeios related header, to avoid redefinition errors and warnings.
+
+# include "main.h"
+
+#ifdef HAVE_CONFIG_H	// Used under 'POSIX' environment.
 # include "config.h"
-#else
+#else	// Used under 'Windows'.
 # define ZEND_WIN32	1
 # define PHP_WIN32	1
 # define ZEND_DEBUG	0
@@ -29,12 +33,12 @@
 # define ZTS
 #endif
 
-# include "php.h"
+#include "php.h"
 
 extern "C" {
 	PHP_FUNCTION( infoWrapper )
 	{
-		RETURN_STRING( "Hello World the World !!!" );
+		RETURN_STRING( main::GetInfo( PHP_VERSION ) );
 	}
 }
 
@@ -48,6 +52,7 @@ static zend_function_entry zndq_functions[] = {
 }
 };
 
+// To 'stringify' the 'VERSION' macro content below.
 # define STR_(x) #x
 # define STR(x) STR_(x)
 
@@ -63,15 +68,11 @@ zend_module_entry zndq_module_entry = {
 	NULL,
 	NULL,
 #if ZEND_MODULE_API_NO >= 20010901
+	// Do not manage to define the value of the 'VERSION' macro
+	// as a string in the 'config.m4' file, so it is 'stringified' here.
 	STR( VERSION ),
 #endif
 	STANDARD_MODULE_PROPERTIES
 };
 
 ZEND_GET_MODULE( zndq )
-
-namespace sclmisc {
-	const char *SCLMISCTargetName = NAME_LC;
-	const char *SCLMISCProductName = NAME_MC;
-}
-

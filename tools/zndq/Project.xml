@@ -28,6 +28,7 @@
    </Modules>
   </Modules>
   <Modules>
+   <Module>main</Module>
    <Module>registry</Module>
   </Modules>
  </Modules>
