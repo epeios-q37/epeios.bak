@@ -36,7 +36,12 @@
 // 'See comment in 'zndq.cpp').
 
 namespace main {
+	void ThrowGenericError( void );
+
 	void Init( void );
+	void Register(
+		const char *Arguments,
+		int ArgumentsLength );
 	const char *WrapperInfo( const char * PHPVersion );
 	const char *ComponentInfo( const char * PHPVersion );
 	void Launch(

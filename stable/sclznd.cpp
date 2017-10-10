@@ -32,147 +32,63 @@
 using namespace sclznd;
 
 namespace {
-	bch::qBUNCHwl( sCallback_ ) Callbacks_;
-}
+	typedef n4all::cLauncher cLauncher_;
 
-void sclznd::sRegistrar::Register( sCallback_ Callback )
-{
-	Callbacks_.Append( Callback );
-}
+	class sLauncher_
+	: public cLauncher_ {
+	protected:
+		virtual void N4ALLLaunch(
+			void *Function,
+			n4all::cCaller &RawCaller ) override
+		{
+			sCaller Caller;
 
-namespace {
-	void Infos_( str::dString &Infos )
-	{
-	qRFH
-		flx::rStringOFlow SFlow;
-		txf::sOFlow TFlow;
-	qRFB
-		Infos.Init();
-		SFlow.Init( Infos );
-		TFlow.Init( SFlow );
+			Caller.Init( RawCaller );
 
-		TFlow << sclmisc::SCLMISCProductName << " v" << SCLZNDProductVersion << " - Zend v" << ZEND_VERSION << txf::nl
-			<< txf::pad << "Build : " __DATE__ " " __TIME__ " (" <<  cpe::GetDescription() << ')';
-	qRFR
-	qRFT
-	qRFE( sclmisc::ErrFinal() )
-	}
-}
+			( (fFunction *)Function )( Caller );
+		}
+		virtual void N4ALLInfo( str::dString &Info ) override
+		{
+		qRH
+			flx::rStringOFlow BaseFlow;
+			txf::sOFlow Flow;
+		qRB
+			BaseFlow.Init( Info );
+			Flow.Init( BaseFlow );
 
-void sclznd::Infos_( zval *Return )
-{
-qRFH
-	str::wString Infos;
-	qCBUFFERr Buffer;
-qRFB
-	Infos.Init();
-	::Infos_( Infos );
-
-	ZVAL_STRING( Return ,Infos.Convert( Buffer ), 1 );
-qRFR
-qRFT
-qRFE( sclmisc::ErrFinal() )
-}
-
-
-void sclznd::Wrapper_(
-	long Index,
-	int num_varargs,
-	zval ***varargs
-	TSRMLS_DC )
-{
-qRFH
-	sArguments Arguments;
-qRFB
-	if ( !Callbacks_.Exists( Index ) )
-		qRGnr();
-
-#ifdef ZTS
-	Arguments.Init( tsrm_ls, num_varargs, varargs );
-#else
-	Arguments.Init( NULL, num_varargs, varargs );
-#endif
-
-	Callbacks_( Index )( Arguments );
-
-	if ( sclerror::IsErrorPending() )
-		qRAbort();	// To force the handling of a pending error.
-qRFR
-qRFT
-qRFE( sclmisc::ErrFinal() )
-}
-
-ZEND_FUNCTION(Wrapper);
-
-
-namespace {
-
-	zend_module_entry ModuleEntry = {
-	#if ZEND_MODULE_API_NO >= 20010901
-		STANDARD_MODULE_HEADER,
-	#endif
-		sclmisc::SCLMISCProductName,
-		SCLZNDFunctions,
-		NULL, // name of the MINIT function or NULL if not applicable
-		NULL, // name of the MSHUTDOWN function or NULL if not applicable
-		NULL, // name of the RINIT function or NULL if not applicable
-		NULL, // name of the RSHUTDOWN function or NULL if not applicable
-		NULL, // name of the MINFO function or NULL if not applicable
-	#if ZEND_MODULE_API_NO >= 20010901
-		SCLZNDProductVersion,
-	#endif
-		STANDARD_MODULE_PROPERTIES
+			SCLZNDInfo( Flow );
+		qRR
+		qRT
+		qRE
+		}
+	public:
+		void Init( void )
+		{}
 	};
 }
- 
-// the following code creates an entry for the module and registers it with Zend.
- 
-extern "C" {
-	ZEND_DLEXPORT zend_module_entry *get_module(void) { return &ModuleEntry; }\
-}
 
-
-namespace {
-	namespace {
-		err::err___ Error_;
-		sclerror::rError SCLError_;
-		scllocale::rRack Locale_;
-		sclmisc::sRack Rack_;
-	}
-
-	void Initialize_( void )
-	{
-	qRFH
-		str::wString Location;
-	qRFB
-		sRegistrar Registrar;
-
-		Error_.Init();
-		SCLError_.Init();
-		Locale_.Init();
-
-		cio::Initialize( cio::GetConsoleSet() );
-		Rack_.Init( Error_, SCLError_, cio::GetSet( cio::t_Default ), Locale_ );
-
-		Location.Init();
-		// TODO : Find a way to fill 'Location' with the path of the binary.
-
-		sclmisc::Initialize( Rack_, Location, qRPU );
-
-		Registrar.Init();
-
-		Callbacks_.Init();
-		sclznd::SCLZNDRegister( Registrar );
-	qRFR
-	qRFT
-	qRFE( sclmisc::ErrFinal() )
-	}
-}
-
-qGCTOR( sclznd )
+n4all::cLauncher *scln4a::SCLN4ARegister(
+	n4all::cRegistrar &RegistrarCallback,
+	void *UP )
 {
-	Initialize_();
+	n4all::cLauncher *Launcher = NULL;
+qRH
+	sclznd::sRegistrar Registrar;
+qRB
+	const n4znd::gShared &Shared = *( const n4znd::gShared* )UP;
+
+	Registrar.Init( RegistrarCallback );
+	SCLZNDRegister( Registrar );
+
+	Launcher = new sLauncher_;
+
+	if ( Launcher == NULL )
+		qRAlc();
+qRR
+	if ( Launcher != NULL )
+		delete Launcher;
+qRT
+qRE
+	return Launcher;
 }
-
-
 

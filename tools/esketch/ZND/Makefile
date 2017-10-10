@@ -15,7 +15,7 @@
 #	You should have received a copy of the GNU Affero General Public License
 #	along with eSketch. If not, see <http://www.gnu.org/licenses/>.
 
-name = esketchjre
+name = esketchznd
 
 
 # Epeios general debugging features
@@ -37,10 +37,10 @@ mods += que rgstry sdr stkbse stkbch
 mods += stkcrt stkctn str strng stsfsm 
 mods += tagsbs tht thtsub tol txf 
 mods += tys uys utf xml xpp 
-mods += xtf llio dlbrry n4all n4jre 
+mods += xtf llio dlbrry n4all n4znd 
 mods += plgn plgncore 
 mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
-mods += scln4a scljre 
+mods += scln4a sclznd 
 mods += registry 
 
 pmods += pllio 
@@ -62,9 +62,9 @@ CXXFLAGS += -O
 
 ###############################
 	
-# Required for JRE Component.
+copt += -D__STDC_LIMIT_MACROS
 
-copt += -DQ_JRE
+copt += -DZEND_DEBUG=0
 
 win=win
 win32=win32
@@ -385,17 +385,12 @@ endif
 #############################
 		
 all: $(binary)
-ifdef EPEIOS_SRC
-	javac *.java
-else
-	javac src/*.java -d .
-endif
 	rm -rf *.o
 ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20171008"\"
+copt += -DVERSION=\""20171010"\"
 copt += -DCOPYRIGHT_YEARS=\""2007-2017"\"
 copt += -DIDENTIFIER=\"""\"
 

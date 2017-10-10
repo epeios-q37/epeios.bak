@@ -28,139 +28,50 @@
 #  define SCLZND_DBG
 # endif
 
-# include "zendq.h"
-
 # include "bso.h"
 # include "err.h"
+# include "n4znd.h"
+# include "scln4a.h"
 # include "tol.h"
 
 namespace sclznd {
+	typedef scln4a::sCaller sCaller_;
 
-	void Infos_( zval *Infos );
-
-	void Wrapper_(
-		long Index,
-		int num_varargs,
-		zval ***varargs
-		TSRMLS_DC );
-}
-
-namespace sclznd {
-
-	class sArguments {
+	class sCaller
+	: public sCaller_ {
 	private:
-		void ***tsrm_ls_;
-		int num_varargs_;
-		zval ***varargs_;
-		int Index_;
-		void SGet_( void )
-		{}
-		void SGet_(
-			zval **Val,
-			long &Long )
-		{
-			zendq::Get( *Val, Long );
-		}
-		void SGet_(
-			zval **Val,
-			zendq::sArray &Array )
-		{
-			zendq::Get( Val, Array );;
-		}
-		template <typename t, int (* type_id)( void )> void SGet_(
-			zval **Val,
-			zendq::sResource<t, type_id> &Resource )
-		{
-# ifdef ZTS
-			zendq::Get( Val, tsrm_ls_, Resource );
-# else
-			zendq::Get( Val, Resource );
-# endif
-		}
-		void MGet_( void )
-		{}
-		template <typename arg, typename ...args> void MGet_(
-			arg &Arg,
-			args &...Args )
-		{
-			SGet_( varargs_[Index_++], Arg );
-
-			MGet_( Args... );
-		}
+		bso::sU8 Index_;
 	public:
 		void reset( bso::sBool P = true )
 		{
-			tsrm_ls_ = NULL;
-			num_varargs_ = 0;
-			varargs_ = NULL;
+			sCaller_::reset( P );
 			Index_ = 0;
 		}
-		qCDTOR( sArguments );
-		void Init(
-			void ***tsrm_ls,
-			int num_varargs,
-			zval ***varargs )
- 		{
-			tsrm_ls_ = tsrm_ls;
-			num_varargs_ = num_varargs;
-			varargs_ = varargs;
-			Index_ = 0;
-		}
-		template <typename ...args> void Get( args &...Args )
+		qCDTOR( sCaller );
+		void Init( n4all::cCaller &Caller )
 		{
-			MGet_( Args... );
+			sCaller_::Init( Caller );
+
+			Index_ = 0;
+		}
+		void Get( str::dString &String )
+		{
+			C_().GetArgument( Index_++, n4znd::tString, &String );
+		}
+		void SetReturnValue( const str::dString &String )
+		{
+			C_().SetReturnValue( n4znd::tString, &String );
 		}
 	};
 
-	typedef void (* sCallback_)( sArguments &Arguments );
+	typedef void ( fFunction )( sCaller &Caller );
 
-	class sRegistrar
-	{
-	public:
-		void reset( bso::sBool P = true )
-		{
-		}
-		qCDTOR( sRegistrar );
-		void Init( void )
-		{
-		}
-		void Register( sCallback_ Callback );
-		template <typename callback, typename ...callbacks> void Register(
-			callback Callback,
-			callbacks... Callbacks )
-		{
-			Register( Callback );
-			Register( Callbacks... );
-		}
-	};
+	typedef scln4a::sRegistrar<fFunction> sRegistrar;
 
-	void SCLZNDRegister( sRegistrar &Registrar );	// To overload by user.
-	extern const char *SCLZNDProductVersion;	// To overload by user.
-	extern zend_function_entry SCLZNDFunctions[];	// To overload by user ; is made by using the 'SCLZND_DEF(...)' macro below.
+	void SCLZNDInfo( txf::sOFlow &Flow );	// To define by user.
+	void SCLZNDRegister( sRegistrar &Registrar );	// To define by user
 }
 
-#define SCLZND_DEF( name )\
-	ZEND_FUNCTION( name##Infos )\
-	{\
-		sclznd::Infos_( return_value );\
-	}\
-\
-	ZEND_FUNCTION( name##Wrapper )\
-	{\
-		long Index = 0;\
-		int num_varargs;\
-		zval ***varargs = NULL;\
-\
-		zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "l*", &Index, &varargs, &num_varargs );\
-\
-		sclznd::Wrapper_( Index, num_varargs, varargs TSRMLS_CC );\
-	}\
-\
-	zend_function_entry sclznd::SCLZNDFunctions[] = {\
-		ZEND_FE(name##Infos, NULL)\
-		ZEND_FE(name##Wrapper, NULL)\
-		{NULL, NULL, NULL}\
-	}
-
+# define SCLZND_F( name ) void name( sclznd::sCaller &Caller )
 
 #endif

@@ -3,17 +3,17 @@
  <xpp:bloc>
   <!-- User definitions -->
   <xpp:define name="Version">
-			<xpp:bloc>(Obsolete entry)</xpp:bloc>
-		</xpp:define>
+   <xpp:bloc>(Obsolete entry)</xpp:bloc>
+  </xpp:define>
   <xpp:set name="Credits" value="Epeios"/>
-  <xpp:set name="Type" value="JREComponent"/>
+  <xpp:set name="Type" value="ZNDComponent"/>
   <xpp:define name="CopyrightYears">
    <xpp:bloc>2007-2017</xpp:bloc>
   </xpp:define>
  </xpp:bloc>
  <xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
  <About>
-  <Program>esketchjre</Program>
+  <Program>esketchznd</Program>
   <Software>eSketch</Software>
  </About>
  <Modules>
@@ -28,10 +28,10 @@
   <Module>registry</Module>
  </Modules>
  <Files>
-  <!-- NOTA : '*.java' files will automatically be packed as such. -->
-  <!--File Pack="No">eSketch.java</File-->
+  <!-- NOTA : '*.php' files will automatically be packed as such. -->
+  <!--File Pack="No">eSketch.php</File-->
  </Files>
  <RTW>
-  <Dir>esketch-java</Dir>
+  <Dir>esketch-php</Dir>
  </RTW>
 </Project>

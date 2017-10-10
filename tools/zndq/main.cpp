@@ -19,11 +19,13 @@
 
 #include "main.h"
 
+#include "registry.h"
 #include "zndq.h"
 
 #include "n4znd.h"
 #include "n4allw.h"
 #include "sclmisc.h"
+#include "sclargmnt.h"
 
 using namespace main;
 
@@ -58,6 +60,12 @@ namespace{
 	}
 }
 
+// To avoid inclusion of 'err.h' in the caller source file.
+void main::ThrowGenericError( void )
+{
+	qRGnr();
+}
+
 void main::Init( void )
 {
 qRFH;
@@ -76,6 +84,42 @@ qRFB;
 qRFR;
 qRFT;
 qRFE( ERRFinal_() );
+}
+
+namespace {
+	namespace {
+		n4znd::gShared Shared_;
+	}
+	void Register_( const str::dString &Arguments )
+	{
+	qRH;
+		str::wString ComponentFilename;
+	qRB;
+		sclargmnt::FillRegistry( Arguments, sclargmnt::faIsArgument, sclargmnt::uaReport );
+
+		ComponentFilename.Init();
+		sclmisc::MGetValue( registry::parameter::ComponentFilename, ComponentFilename );
+
+		n4allw::Register( ComponentFilename, Rack_, &Shared_ );
+	qRR;
+	qRT;
+	qRE;
+	}
+}
+
+void main::Register(
+	const char *RawArguments,
+	int Length )
+{
+qRH;
+	str::wString Arguments;
+qRB;
+	Arguments.Init();
+
+	Arguments.Append( RawArguments, Length );
+qRR;
+qRT;
+qRE;
 }
 
 const char *main::WrapperInfo( const char *PHPVersion )

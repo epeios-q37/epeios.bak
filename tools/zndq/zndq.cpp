@@ -23,38 +23,58 @@
 
 # include "main.h"
 
-extern "C" {
-	PHP_FUNCTION( ZNDq_init )
-	{
-		main::Init();
-	}
 
-	PHP_FUNCTION( ZNDq_wrapperInfo )
-	{
-		RETURN_STRING( main::WrapperInfo( PHP_VERSION ) );
-	}
-
-	PHP_FUNCTION( ZNDq_componentInfo )
-	{
-		RETURN_STRING( main::ComponentInfo( PHP_VERSION ) );
-	}
-	PHP_FUNCTION( ZNDq_wrapper )
-	{
-		long Index = 0;
-		int num_varargs;
-		zval ***varargs = NULL;
-
-		zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "l*", &Index, &varargs, &num_varargs );
-
-		main::Launch( Index, num_varargs, varargs, return_value TSRMLS_CC );
-	}
+PHP_FUNCTION( ZNDq_init )
+{
+	main::Init();
 }
+
+PHP_FUNCTION( ZNDq_wrapperInfo )
+{
+	RETURN_STRING( main::WrapperInfo( PHP_VERSION ) );
+}
+
+PHP_FUNCTION( ZNDq_componentInfo )
+{
+	RETURN_STRING( main::ComponentInfo( PHP_VERSION ) );
+}
+
+PHP_FUNCTION( ZNDq_register )
+{
+	char *String = NULL;
+	int Length;
+/*
+	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "s", &String, &Length ) != SUCCESS )
+		main::ThrowGenericError();
+*/
+	zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "s", &String, &Length );
+
+	// String contains a list of arguments, as defined in the configuration file for the 'Launch' command.
+
+//		main::Register( String, Length );
+
+	RETURN_TRUE;
+}
+
+PHP_FUNCTION( ZNDq_wrapper )
+{
+	long Index = 0;
+	int num_varargs;
+	zval ***varargs = NULL;
+
+	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "l*", &Index, &varargs, &num_varargs ) != SUCCESS )
+		main::ThrowGenericError();
+
+	main::Launch( Index, num_varargs, varargs, return_value TSRMLS_CC );
+}
+
 
 extern zend_module_entry zndq_module_entry;
 #define phpext_zenq_ptr &zenq_module_entry
 
 static zend_function_entry zndq_functions[] = {
 	PHP_FE( ZNDq_init, NULL )
+	PHP_FE( ZNDq_register, NULL )
 	PHP_FE( ZNDq_wrapperInfo, NULL )
 	PHP_FE( ZNDq_componentInfo, NULL )
 	PHP_FE( ZNDq_wrapper, NULL )
