@@ -468,7 +468,9 @@ qRH
 qRB
 	Caller.Init( Args );
 
-	n4allw::GetLauncher().Launch( n4allw::GetFunction( Index ), Caller );
+	n4allw::Launch( Index, Caller );
+
+//	n4allw::GetLauncher().Launch( n4allw::GetFunction( Index ), Caller );
 
 	if ( sclerror::IsErrorPending() )
 		qRAbort();	// To force the handling of a pending error.

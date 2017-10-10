@@ -23,32 +23,30 @@
 
 # include "main.h"
 
-#ifdef HAVE_CONFIG_H	// Used under 'POSIX' environment.
-# include "config.h"
-#else	// Used under 'Windows'.
-# define ZEND_WIN32	1
-# define PHP_WIN32	1
-# define ZEND_DEBUG	0
-# define ZEND_WIN32_FORCE_INLINE
-# define ZTS
-#endif
-
-#include "php.h"
-
 extern "C" {
-	PHP_FUNCTION( init )
+	PHP_FUNCTION( ZNDq_init )
 	{
 		main::Init();
 	}
 
-	PHP_FUNCTION( wrapperInfo )
+	PHP_FUNCTION( ZNDq_wrapperInfo )
 	{
 		RETURN_STRING( main::WrapperInfo( PHP_VERSION ) );
 	}
 
-	PHP_FUNCTION( componentInfo )
+	PHP_FUNCTION( ZNDq_componentInfo )
 	{
 		RETURN_STRING( main::ComponentInfo( PHP_VERSION ) );
+	}
+	PHP_FUNCTION( ZNDq_wrapper )
+	{
+		long Index = 0;
+		int num_varargs;
+		zval ***varargs = NULL;
+
+		zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "l*", &Index, &varargs, &num_varargs );
+
+		main::Launch( Index, num_varargs, varargs, return_value TSRMLS_CC );
 	}
 }
 
@@ -56,9 +54,10 @@ extern zend_module_entry zndq_module_entry;
 #define phpext_zenq_ptr &zenq_module_entry
 
 static zend_function_entry zndq_functions[] = {
-	PHP_FE( init, NULL )
-	PHP_FE( wrapperInfo, NULL )
-	PHP_FE( componentInfo, NULL )
+	PHP_FE( ZNDq_init, NULL )
+	PHP_FE( ZNDq_wrapperInfo, NULL )
+	PHP_FE( ZNDq_componentInfo, NULL )
+	PHP_FE( ZNDq_wrapper, NULL )
 {
 	NULL, NULL, NULL
 }

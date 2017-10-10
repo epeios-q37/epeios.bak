@@ -26,9 +26,7 @@
 # include "jniq.h"
 
 namespace wrapper {
-	using n4allw::SetLauncher;
 	using n4allw::GetLauncherInfo;
-	using n4allw::DeleteLauncher;
 	using n4allw::Register;
 
 	n4jre::cObject *NewObject(

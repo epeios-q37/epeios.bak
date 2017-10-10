@@ -20,6 +20,18 @@
 #ifndef MAIN_INC_
 # define MAIN_INC_
 
+#ifdef HAVE_CONFIG_H	// Used under 'POSIX' environment.
+# include "config.h"
+#else	// Used under 'Windows'.
+# define ZEND_WIN32	1
+# define PHP_WIN32	1
+# define ZEND_DEBUG	0
+# define ZEND_WIN32_FORCE_INLINE
+# define ZTS
+#endif
+
+#include "php.h"
+
 // Do NOT include any Epeios related header, as this header is included along PHP header,
 // 'See comment in 'zndq.cpp').
 
@@ -27,6 +39,12 @@ namespace main {
 	void Init( void );
 	const char *WrapperInfo( const char * PHPVersion );
 	const char *ComponentInfo( const char * PHPVersion );
+	void Launch(
+		long Index,
+		int num_varargs,
+		zval ***varargs,
+		zval *return_value
+		TSRMLS_DC );
 }
 
 #endif

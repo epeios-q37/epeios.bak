@@ -17,43 +17,39 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-// Native 4 (for) ALL Wrapper part
+// Native 4(for) ZeND
+// Extension of the 'N4ALL' library for use with PHP.
+// Common part between wrapper and component ('scln4a').
 
-#ifndef N4ALLW_INC_
-# define N4ALLW_INC_
+#ifndef N4ZND_INC_
+# define N4ZND_INC_
 
-# define N4ALLW_NAME		"N4ALLW"
+# define N4ZND_NAME		"N4ZND"
 
-# if defined( E_DEBUG ) && !defined( N4ALLW_NODBG )
-#  define N4ALLW_DBG
+# if defined( E_DEBUG ) && !defined( N4ZND_NODBG )
+#  define N4ZND_DBG
 # endif
 
 # include "err.h"
 # include "n4all.h"
 
-namespace n4allw {
-	void SetLauncher( n4all::cLauncher *Launcher );
+namespace n4znd {
 
-	n4all::cLauncher &GetLauncher( void );
-
-	bso::sBool GetLauncherInfo( str::dString &Info );
-
-	void DeleteLauncher( void );
-
-	bso::sBool Register(
-		const fnm::rName &ComponentFilename,
-		sclmisc::sRack &Rack,
-		void *UP,
-		qRPD );
-
-	void *GetFunction( sdr::sRow Row );
-
-	inline void Launch(
-		sdr::sRow Row,
-		n4all::cCaller &Caller )
+	qENUM( Type )
 	{
-		return GetLauncher().Launch( GetFunction( Row ), Caller );
-	}
+		tString,
+			t_amount,
+			t_Undefined
+	};
+
+	struct gShared
+	{
+	public:
+		void reset( bso::sBool = true )
+		{}
+		qCDTOR( gShared );
+	};
+
 }
 
 #endif

@@ -1,5 +1,9 @@
 # *Epeios* changelog
 
+2017-10-10 :
+- N4ALLW :
+  - Adding `Launch(...)`.
+
 2017-09-27 :
 - MTHITG :
   - Fixing *g++* warning (displayed under *npm* compilation).

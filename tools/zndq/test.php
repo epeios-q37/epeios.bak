@@ -1,5 +1,6 @@
 <?php
-init();
-echo wrapperInfo() . "\n";
-echo componentInfo() . "\n";
+require "ZNDq.php";
+
+echo ZNDq::wrapperInfo() . "\n";
+echo ZNDq::componentInfo() . "\n";
 ?>

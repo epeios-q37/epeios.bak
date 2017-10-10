@@ -17,43 +17,9 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-// Native 4 (for) ALL Wrapper part
+#define N4ZND_COMPILATION_
 
-#ifndef N4ALLW_INC_
-# define N4ALLW_INC_
+#include "n4znd.h"
 
-# define N4ALLW_NAME		"N4ALLW"
+using namespace n4znd;
 
-# if defined( E_DEBUG ) && !defined( N4ALLW_NODBG )
-#  define N4ALLW_DBG
-# endif
-
-# include "err.h"
-# include "n4all.h"
-
-namespace n4allw {
-	void SetLauncher( n4all::cLauncher *Launcher );
-
-	n4all::cLauncher &GetLauncher( void );
-
-	bso::sBool GetLauncherInfo( str::dString &Info );
-
-	void DeleteLauncher( void );
-
-	bso::sBool Register(
-		const fnm::rName &ComponentFilename,
-		sclmisc::sRack &Rack,
-		void *UP,
-		qRPD );
-
-	void *GetFunction( sdr::sRow Row );
-
-	inline void Launch(
-		sdr::sRow Row,
-		n4all::cCaller &Caller )
-	{
-		return GetLauncher().Launch( GetFunction( Row ), Caller );
-	}
-}
-
-#endif

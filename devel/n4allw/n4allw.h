@@ -47,6 +47,13 @@ namespace n4allw {
 		qRPD );
 
 	void *GetFunction( sdr::sRow Row );
+
+	inline void Launch(
+		sdr::sRow Row,
+		n4all::cCaller &Caller )
+	{
+		return GetLauncher().Launch( GetFunction( Row ), Caller );
+	}
 }
 
 #endif

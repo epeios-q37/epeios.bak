@@ -21,6 +21,7 @@
 
 #include "zndq.h"
 
+#include "n4znd.h"
 #include "n4allw.h"
 #include "sclmisc.h"
 
@@ -117,6 +118,115 @@ qRFR;
 qRFT;
 qRFE( ERRFinal_() );
 	return Buffer;
+}
+
+namespace {
+	typedef n4all::cCaller cCaller_;
+
+	void Get_(
+		const zval *Val,
+		str::dString &String )
+	{
+		if ( Z_TYPE_P( Val ) != IS_STRING )
+			qRGnr();
+
+		String.Append( Z_STRVAL_P( Val ), Z_STRLEN_P( Val ) );
+	}
+
+	template <typename type> inline void Get_(
+		zval ***varargs,
+		int Index,
+		void *Value )
+	{
+		return Get_( *varargs[Index], *(type *)Value );
+	}
+
+	class sCaller_
+	: public cCaller_
+	{
+	private:
+		void ***tsrm_ls_;
+		int num_varargs_;
+		zval ***varargs_;
+		zval *return_value_;
+	protected:
+		virtual void N4ALLGetArgument(
+			bso::sU8 Index,
+			n4all::sType Type,
+			void *Value ) override
+		{
+			if ( Index >= num_varargs_ )
+				qRGnr();
+
+			switch ( Type ) {
+			case n4znd::tString:
+				Get_<str::dString>( varargs_, Index, Value );
+				break;
+			default:
+				qRGnr();
+				break;
+
+			}
+
+		}
+		virtual void N4ALLSetReturnValue(
+			n4all::sType Type,
+			const void *Value ) override
+		{
+		qRH;
+			qCBUFFERr Buffer;
+		qRB;
+			if ( Type != n4znd::tString )
+				qRGnr();
+
+			ZVAL_STRING( return_value_, ( ( str::dString * )Value )->Convert( Buffer ) );
+		qRR;
+		qRT;
+		qRE;
+		}
+	public:
+		void reset( bso::sBool P = true )
+		{
+			tsrm_ls_ = NULL;
+			num_varargs_ = 0;
+			varargs_ = NULL;
+			return_value_ = NULL;
+		}
+		qCDTOR( sCaller_ );
+		void Init(
+			void ***tsrm_ls,
+			int num_varargs,
+			zval ***varargs,
+			zval *return_value )
+		{
+			tsrm_ls_ = tsrm_ls;
+			num_varargs_ = num_varargs;
+			varargs_ = varargs;
+			return_value_ = return_value;
+		}
+	};
+
+}
+
+void main::Launch(
+	long Index,
+	int num_varargs,
+	zval ***varargs,
+	zval *return_value TSRMLS_DC )
+{
+qRH;
+	sCaller_ Caller;
+qRB;
+#ifdef ZTS
+//	Caller.Init( trsrm_ls, num_varargs, varargs );	// 'tsrm_ls' no more available in 'ZTS' !?
+	Caller.Init( NULL, num_varargs, varargs, return_value );	// 'tsrm_ls' no more available in 'ZTS' !?
+#else
+	Caller.Init( trsrm_ls, num_varargs, varargs );	// 'tsrm_ls' no more available in 'ZTS' !?
+#endif
+	n4allw::Launch( Index, Caller );
+qRR;
+qRT;
+qRE;
 }
 
 const char *sclmisc::SCLMISCTargetName = NAME_LC;
