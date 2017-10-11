@@ -42,8 +42,8 @@ namespace main {
 	void Register(
 		const char *Arguments,
 		size_t ArgumentsLength );
-	const char *WrapperInfo( const char * PHPVersion );
-	const char *ComponentInfo( const char * PHPVersion );
+	const char *WrapperInfo( void );
+	const char *ComponentInfo( void );
 	void Launch(
 		zend_long Index,
 		int num_varargs,

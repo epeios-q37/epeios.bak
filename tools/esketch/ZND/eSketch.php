@@ -4,7 +4,8 @@ $ZNDq_affix="esketch";	// We are not interested in a extension;
 
 // Begin of generic part.
 ZNDq_init();
-ZNDq_register( $ZNDq_affix . "znd" );
+ZNDq_register( "./lib" . $ZNDq_affix . "znd.so" );
+echo "Yo !";
 
 class ZNDq {
 	static public function wrapperInfo()
@@ -18,10 +19,6 @@ class ZNDq {
 	static protected function register( $arguments )
 	{
 		return ZNDq_register( $arguments );
-	}
-	static protected function wrapper( $id, ...$param )
-	{
-		return ZNDq_wrapper( $id, $param );
 	}
 }
 // End of generic part.

@@ -41,9 +41,7 @@ namespace{
 	}
 
 
-	void GetInfo_(
-		const char *PHPVersion,
-		str::dString &Info )
+	void GetInfo_( str::dString &Info )
 	{
 	qRH
 		flx::rStringOFlow BaseFlow;
@@ -52,8 +50,12 @@ namespace{
 		BaseFlow.Init( Info );
 		Flow.Init( BaseFlow );
 
-		Flow << sclmisc::SCLMISCProductName << " v" << VERSION << " - PHP v" << PHPVersion << txf::nl
-			<< txf::pad << "Build : " __DATE__ " " __TIME__ " (" <<  cpe::GetDescription() << ')';
+		Flow << sclmisc::SCLMISCProductName << " v" << VERSION << " - PHP v" << PHP_VERSION 
+#ifdef CPE_S_WIN
+			", Compiler ID: " PHP_COMPILER_ID
+			 << txf::nl
+#endif
+			 << txf::pad << "Build : " __DATE__ " " __TIME__ " (" <<  cpe::GetDescription() << ')';
 	qRR
 	qRT
 	qRE
@@ -75,10 +77,8 @@ qRFB;
 	Rack_.Init( Error_, SCLError_, cio::GetSet( cio::t_Default ), Locale_ );
 
 	Location.Init();
-//	jniq::Convert( RawLocation, Location, Env );
 	// TODO : Find a way to fill 'Location' with the path of the binary.
 
-	//	cio::COut << ">>>>>>>>> " << Location << txf::nl << txf::commit;
 
 	sclmisc::Initialize( Rack_, Location );
 qRFR;
@@ -125,14 +125,14 @@ qRT;
 qRE;
 }
 
-const char *main::WrapperInfo( const char *PHPVersion )
+const char *main::WrapperInfo( void )
 {
 	static char Buffer[1000];
 qRH;
 	str::wString Info;
 qRB;
 	Info.Init();
-	GetInfo_( PHPVersion, Info );
+	GetInfo_( Info );
 
 	if ( Info.Amount() >= sizeof( Buffer ) )
 		qRLmt();
@@ -145,7 +145,7 @@ qRE;
 	return Buffer;
 }
 
-const char *main::ComponentInfo( const char *PHPVersion )
+const char *main::ComponentInfo( void )
 {
 	static char Buffer[1000];
 qRFH;
@@ -268,7 +268,7 @@ qRB;
 //	Caller.Init( trsrm_ls, num_varargs, varargs );	// 'tsrm_ls' no more available in 'ZTS' !?
 	Caller.Init( NULL, num_varargs, varargs, return_value );	// 'tsrm_ls' no more available in 'ZTS' !?
 #else
-	Caller.Init( trsrm_ls, num_varargs, varargs );	// 'tsrm_ls' no more available in 'ZTS' !?
+	Caller.Init( NULL, num_varargs, varargs, return_value );	// 'tsrm_ls' no more available in 'ZTS' !?
 #endif
 	n4allw::Launch( Index, Caller );
 qRR;

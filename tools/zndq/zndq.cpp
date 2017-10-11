@@ -23,8 +23,8 @@
 
 # include "main.h"
 
-#if PHP_MAJOR_VERSION != 6
-# error "Does actually only work with PHP 7 ; the usually available documentation is only about PHP 5, and there are important differences with PHP 7. See http://wiki.php.net/phpng-upgrading"
+#if PHP_MAJOR_VERSION != 7
+# error "Does actually only work with PHP 7. The usually available documentation about extensions is only about PHP 5, and there are important differences with PHP 7. See http://wiki.php.net/phpng-upgrading"
 #endif
 
 
@@ -35,12 +35,12 @@ PHP_FUNCTION( ZNDq_init )
 
 PHP_FUNCTION( ZNDq_wrapperInfo )
 {
-	RETURN_STRING( main::WrapperInfo( PHP_VERSION ) );
+	RETURN_STRING( main::WrapperInfo() );
 }
 
 PHP_FUNCTION( ZNDq_componentInfo )
 {
-	RETURN_STRING( main::ComponentInfo( PHP_VERSION ) );
+	RETURN_STRING( main::ComponentInfo() );
 }
 
 PHP_FUNCTION( ZNDq_register )
