@@ -41,13 +41,13 @@ namespace main {
 	void Init( void );
 	void Register(
 		const char *Arguments,
-		int ArgumentsLength );
+		size_t ArgumentsLength );
 	const char *WrapperInfo( const char * PHPVersion );
 	const char *ComponentInfo( const char * PHPVersion );
 	void Launch(
-		long Index,
+		zend_long Index,
 		int num_varargs,
-		zval ***varargs,
+		zval **varargs,
 		zval *return_value
 		TSRMLS_DC );
 }

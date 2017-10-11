@@ -90,6 +90,7 @@ namespace {
 	namespace {
 		n4znd::gShared Shared_;
 	}
+
 	void Register_( const str::dString &Arguments )
 	{
 	qRH;
@@ -109,7 +110,7 @@ namespace {
 
 void main::Register(
 	const char *RawArguments,
-	int Length )
+	size_t Length )
 {
 qRH;
 	str::wString Arguments;
@@ -117,6 +118,8 @@ qRB;
 	Arguments.Init();
 
 	Arguments.Append( RawArguments, Length );
+
+	Register_( Arguments );
 qRR;
 qRT;
 qRE;
@@ -168,7 +171,7 @@ namespace {
 	typedef n4all::cCaller cCaller_;
 
 	void Get_(
-		const zval *Val,
+		zval *Val,
 		str::dString &String )
 	{
 		if ( Z_TYPE_P( Val ) != IS_STRING )
@@ -178,11 +181,11 @@ namespace {
 	}
 
 	template <typename type> inline void Get_(
-		zval ***varargs,
+		zval **varargs,
 		int Index,
 		void *Value )
 	{
-		return Get_( *varargs[Index], *(type *)Value );
+		return Get_( varargs[Index], *(type *)Value );
 	}
 
 	class sCaller_
@@ -191,7 +194,7 @@ namespace {
 	private:
 		void ***tsrm_ls_;
 		int num_varargs_;
-		zval ***varargs_;
+		zval **varargs_;
 		zval *return_value_;
 	protected:
 		virtual void N4ALLGetArgument(
@@ -240,7 +243,7 @@ namespace {
 		void Init(
 			void ***tsrm_ls,
 			int num_varargs,
-			zval ***varargs,
+			zval **varargs,
 			zval *return_value )
 		{
 			tsrm_ls_ = tsrm_ls;
@@ -253,9 +256,9 @@ namespace {
 }
 
 void main::Launch(
-	long Index,
+	zend_long Index,
 	int num_varargs,
-	zval ***varargs,
+	zval **varargs,
 	zval *return_value TSRMLS_DC )
 {
 qRH;

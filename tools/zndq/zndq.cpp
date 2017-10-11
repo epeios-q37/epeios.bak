@@ -23,6 +23,10 @@
 
 # include "main.h"
 
+#if PHP_MAJOR_VERSION != 6
+# error "Does actually only work with PHP 7 ; the usually available documentation is only about PHP 5, and there are important differences with PHP 7. See http://wiki.php.net/phpng-upgrading"
+#endif
+
 
 PHP_FUNCTION( ZNDq_init )
 {
@@ -41,31 +45,34 @@ PHP_FUNCTION( ZNDq_componentInfo )
 
 PHP_FUNCTION( ZNDq_register )
 {
-	char *String = NULL;
-	int Length;
-/*
-	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "s", &String, &Length ) != SUCCESS )
+
+	zend_string *String;
+
+	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "S", &String ) != SUCCESS )
 		main::ThrowGenericError();
-*/
-	zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "s", &String, &Length );
 
-	// String contains a list of arguments, as defined in the configuration file for the 'Launch' command.
-
-//		main::Register( String, Length );
+	// 'String->val' contains a list of arguments, as defined in the configuration file for the 'Launch' command.
+	main::Register( String->val, String->len );
 
 	RETURN_TRUE;
 }
 
 PHP_FUNCTION( ZNDq_wrapper )
 {
-	long Index = 0;
+	zend_long Index = 0;
 	int num_varargs;
-	zval ***varargs = NULL;
+	zval *varargs = NULL;
 
 	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "l*", &Index, &varargs, &num_varargs ) != SUCCESS )
 		main::ThrowGenericError();
 
-	main::Launch( Index, num_varargs, varargs, return_value TSRMLS_CC );
+	if ( num_varargs != 1 )
+		main::ThrowGenericError();
+
+	if ( Z_TYPE( varargs[0] ) != IS_STRING )
+		main::ThrowGenericError();
+
+	main::Launch( Index, num_varargs, &varargs, return_value TSRMLS_CC );
 }
 
 

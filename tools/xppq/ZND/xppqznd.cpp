@@ -18,7 +18,7 @@
 */
 
 
-#include "sclznd.h"
+#include "sclznd.old.h"
 //#include "zend_modules.h"
 
 #include "phpq.h"

@@ -29,7 +29,7 @@ class ZNDq {
 class eSketch extends ZNDq {
 	static public function returnArgument( $argument )
 	{
-	 return ZNDq::wrapper( 0, $argument );
+	 return ZNDq_wrapper( 0, $argument );
 	}
 }
 ?>
