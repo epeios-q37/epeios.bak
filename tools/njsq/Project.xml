@@ -28,7 +28,9 @@
     <Module>n4all</Module>
     <Module>n4allw</Module>
     <Module>n4njs</Module>
+    <Module>nodeq</Module>
     <Module>plgn</Module>
+    <Module>plgncore</Module>
     <Module>uvq</Module>
     <Module>uvqdcl</Module>
     <Module>v8q</Module>

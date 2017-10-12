@@ -110,7 +110,7 @@ namespace {
 
 		//		cio::COut << __LOC__ << AddonFilename << txf::nl << txf::commit;
 
-		Library_.Init( ComponentFilename, dlbrry::nExtOnly );
+		Library_.Init( ComponentFilename, dlbrry::nPrefixAndExt );
 
 		//		cio::COut << __LOC__ << txf::nl << txf::commit;
 

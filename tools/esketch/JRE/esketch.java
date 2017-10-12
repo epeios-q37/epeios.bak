@@ -43,10 +43,10 @@ class JREq extends JREqDecl {
    location = "h:/bin";
   else if ( osName.contains( "mac" ) ) {
    location = "/Users/bin";
-   prefix = "lib";
+//   prefix = "lib";
   } else {
    location = "/home/csimon/bin";
-   prefix= "lib";
+//   prefix= "lib";
   }
 
   if ( System.getenv( "EPEIOS_SRC" ) == null ) {

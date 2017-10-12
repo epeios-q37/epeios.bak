@@ -1,5 +1,9 @@
 # *Epeios* changelog
 
+2017-10-12 :
+- N4ALLW
+  - `Register(...)` now automagically add the correct prefix and extension for the *Java*/*Node.js*/*PHP* component/addon/extension.
+
 2017-10-10 :
 - N4ALLW :
   - Adding `Launch(...)`.
