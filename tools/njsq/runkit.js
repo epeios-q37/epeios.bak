@@ -1,3 +1,3 @@
 const njsq = require('njsq');
 
-console.log( njsq.componentInfo() + "\n" + njsq.wrapperInfo() );
+console.log( njsq.wrapperInfo() + "\n" + njsq.componentInfo() );

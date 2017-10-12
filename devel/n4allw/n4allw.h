@@ -42,6 +42,7 @@ namespace n4allw {
 
 	bso::sBool Register(
 		const fnm::rName &ComponentFilename,
+		dlbrry::eNormalization Normalization,
 		sclmisc::sRack &Rack,
 		void *UP,
 		qRPD );

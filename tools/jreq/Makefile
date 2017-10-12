@@ -35,10 +35,10 @@ mods += lcl lck lst lstbch lstcrt
 mods += lstctn mns mtk mtx ntvstr 
 mods += que rgstry sdr stkbse stkbch 
 mods += stkcrt stkctn str strng stsfsm 
-mods += tagsbs tht tol txf tys 
-mods += uys utf xml xpp xtf 
-mods += llio dlbrry jniq jrebse n4all 
-mods += n4allw n4jre plgn plgncore 
+mods += tagsbs tht thtsub tol txf 
+mods += tys uys utf xml xpp 
+mods += xtf llio dlbrry jniq jrebse 
+mods += n4all n4allw n4jre plgn plgncore 
 mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
 mods += registry wrapper 
 
@@ -398,7 +398,7 @@ ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20170929"\"
+copt += -DVERSION=\""20171012"\"
 copt += -DCOPYRIGHT_YEARS=\""2017"\"
 copt += -DIDENTIFIER=\"""\"
 

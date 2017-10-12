@@ -203,7 +203,7 @@ qRFB
 	Shared_.Free = n4jre::N4JREFree;
 	Shared_.Throw = Throw_;
 
-	wrapper::Register( ComponentFilename, Rack_, &Shared_ );
+	wrapper::Register( ComponentFilename, dlbrry::nPrefixAndExt, Rack_, &Shared_ );
 qRFR
 qRFT
 qRFE( ERRFinal_( Env ) )

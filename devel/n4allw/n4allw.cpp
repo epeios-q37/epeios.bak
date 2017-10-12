@@ -94,6 +94,7 @@ namespace {
 
 	bso::bool__ Register_(
 		const fnm::rName &ComponentFilename,
+		dlbrry::eNormalization Normalization,
 		n4all::cRegistrar &Registrar,
 		sclmisc::sRack &Rack,
 		void *UP )
@@ -110,7 +111,7 @@ namespace {
 
 		//		cio::COut << __LOC__ << AddonFilename << txf::nl << txf::commit;
 
-		Library_.Init( ComponentFilename, dlbrry::nPrefixAndExt );
+		Library_.Init( ComponentFilename, Normalization );
 
 		//		cio::COut << __LOC__ << txf::nl << txf::commit;
 
@@ -132,6 +133,7 @@ namespace {
 
 bso::sBool n4allw::Register(
 	const fnm::rName &ComponentFilename,
+	dlbrry::eNormalization Normalization,
 	sclmisc::sRack &Rack,
 	void *UP,
 	qRPN )
@@ -142,7 +144,7 @@ bso::sBool n4allw::Register(
 
 	Registrar.Init();
 
-	if ( !Register_( ComponentFilename, Registrar, Rack, UP ) ) {
+	if ( !Register_( ComponentFilename, Normalization, Registrar, Rack, UP ) ) {
 		if ( qRP == err::hThrowException )
 			qRFwk();
 		return false;

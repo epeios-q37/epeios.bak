@@ -35,7 +35,6 @@ class JREq extends JREqDecl {
 	{
   String location = "";
   String osName = System.getProperty("os.name").toLowerCase();
-  String prefix = "";
 
  	System.loadLibrary( "jreq" );
 
@@ -43,10 +42,8 @@ class JREq extends JREqDecl {
    location = "h:/bin";
   else if ( osName.contains( "mac" ) ) {
    location = "/Users/bin";
-//   prefix = "lib";
   } else {
    location = "/home/csimon/bin";
-//   prefix= "lib";
   }
 
   if ( System.getenv( "EPEIOS_SRC" ) == null ) {
@@ -54,13 +51,8 @@ class JREq extends JREqDecl {
   }
 
  	init( location );
-  register( "./" + prefix + JREqDecl.affix + "jre");
-/*
-  try {
-  System.out.println(new java.io.File(RNCqTest.class.getClassLoader().getResource(RNCqTest.class.getCanonicalName().replace('.', '/') + ".class").toURI()).getParent());
-  } catch (Exception e){}
- */
-  }
+  register( "./" + JREqDecl.affix + "jre");
+ }
 }
 // End of generic part.
 

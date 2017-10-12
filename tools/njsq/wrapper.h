@@ -37,7 +37,7 @@ namespace wrapper {
 		n4njs::gShared &Shared,
 		qRPD )
 	{
-		return n4allw::Register( ComponentFilename, Rack, &Shared, qRP );
+		return n4allw::Register( ComponentFilename, dlbrry::nExtOnly, Rack, &Shared, qRP );
 	}
 
 

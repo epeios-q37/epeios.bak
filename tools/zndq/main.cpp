@@ -101,7 +101,7 @@ namespace {
 		ComponentFilename.Init();
 		sclmisc::MGetValue( registry::parameter::ComponentFilename, ComponentFilename );
 
-		n4allw::Register( ComponentFilename, Rack_, &Shared_ );
+		n4allw::Register( ComponentFilename, dlbrry::nPrefixAndExt, Rack_, &Shared_ );
 	qRR;
 	qRT;
 	qRE;

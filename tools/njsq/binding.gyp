@@ -2,7 +2,6 @@
  "variables": {
   "stable": "../../stable/",
   "ext": "node",
-  "prefix": "",
  },
  "conditions": [
   [
@@ -66,7 +65,7 @@
    "type": "none",
    "copies": [
     {
-     "files": [ "<(PRODUCT_DIR)/<(prefix)<(module_name).<(ext)" ],
+     "files": [ "<(PRODUCT_DIR)/<(module_name).<(ext)" ],
      "destination": "<(module_path)"
     }
    ]
