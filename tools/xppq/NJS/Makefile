@@ -38,9 +38,7 @@ mods += stkcrt stkctn str strng stsfsm
 mods += tagsbs tht thtsub tol txf 
 mods += tys uys utf xml xpp 
 mods += xtf llio dlbrry n4all n4njs 
-mods += plgn plgncore uvqdcl bomhdl cdgb64 
-mods += fil fnm lcl rgstry stsfsm 
-mods += xml xpp 
+mods += plgn plgncore uvqdcl 
 mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
 mods += scln4a sclnjs 
 mods += stream_d stream_s stream_u 
@@ -393,7 +391,7 @@ ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20170929"\"
+copt += -DVERSION=\""20171008"\"
 copt += -DCOPYRIGHT_YEARS=\""2007-2017"\"
 copt += -DIDENTIFIER=\""d6a723cb-e88f-4f2f-b429-3adc207f1d62"\"
 
