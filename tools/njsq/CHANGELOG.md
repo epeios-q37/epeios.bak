@@ -1,5 +1,8 @@
 # *NJSq* changelog
 
+2017-10-13 :
+- New publication to synchronize the *NPM* package with the latest files.
+
 2017-10-12 :
 - Upgrading.
 
