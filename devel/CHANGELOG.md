@@ -1,5 +1,13 @@
 # *Epeios* changelog
 
+2017-10-18 :
+- TOL :
+    - Surrounding class definition in `qG(C|D)TOR(...)` with anonymous namespace, so that such defined global (con|de)structor will not be shared between different librarires under *GNU/Linux*.
+
+2017-10-17 :
+- SCLLOCALE
+  - Fixing error under *POSIX* systems, on which `RackPointer_` seems to be shared between all dynamic libraries !
+
 2017-10-12 :
 - N4ALLW
   - New parameter on `Register(...)` to indicate how the prefix and extension for the *Java*/*Node.js*/*PHP* component/addon/extension should be normalized.

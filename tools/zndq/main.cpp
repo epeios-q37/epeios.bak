@@ -53,9 +53,8 @@ namespace{
 		Flow << sclmisc::SCLMISCProductName << " v" << VERSION << " - PHP v" << PHP_VERSION 
 #ifdef CPE_S_WIN
 			", Compiler ID: " PHP_COMPILER_ID
-			 << txf::nl
 #endif
-			 << txf::pad << "Build : " __DATE__ " " __TIME__ " (" <<  cpe::GetDescription() << ')';
+			<< txf::nl << txf::pad << "Build : " __DATE__ " " __TIME__ " (" <<  cpe::GetDescription() << ')';
 	qRR
 	qRT
 	qRE

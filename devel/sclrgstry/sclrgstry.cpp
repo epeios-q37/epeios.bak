@@ -140,7 +140,9 @@ namespace {
 		{
 			reset();
 		}
-	} LastingRegistryLockerCallback_;
+	};
+
+	sLastingRegistryLockerCallback_ LastingRegistryLockerCallback_;
 }
 
 registry_ &sclrgstry::GetRWCommonRegistry( void )
@@ -857,8 +859,4 @@ Q37_GCTOR( sclrgstry )
 	SetupLevel_ = Registry_.Create();
 	ArgumentsLevel_ = Registry_.CreateEmbedded();
 	RuntimeLevel_ = Registry_.CreateEmbedded();
-}
-
-namespace {
-
 }

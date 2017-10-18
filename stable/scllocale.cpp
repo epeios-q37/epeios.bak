@@ -31,9 +31,9 @@
 using namespace scllocale;
 
 namespace {
-	using lcl::level__;
-
 	rRack *RackPointer_ = NULL;
+
+	using lcl::level__;
 
 	rRack &Rack_( void )
 	{
@@ -52,7 +52,11 @@ namespace {
 void scllocale::SetLocale( rRack &Rack )
 {
 	if ( RackPointer_ != NULL )
-		qRFwk();
+#ifdef CPE_S_POSIX	// Under 'Posix' (at least under 'GNU/Linux') 'RackPointer_' is shared between libraries,
+		// so it may be already set by the caller.
+		if ( RackPointer_ != &Rack )
+#endif
+			qRFwk();
 
 	RackPointer_ = &Rack;
 }
@@ -75,7 +79,7 @@ const char *scllocale::GetLabel( target__ Target )
 		break;
 	}
 
-	return NULL;	// To avois a warning.
+	return NULL;	// To avoid a warning.
 }
 
 

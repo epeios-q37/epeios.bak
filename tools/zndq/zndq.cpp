@@ -45,7 +45,6 @@ PHP_FUNCTION( ZNDq_componentInfo )
 
 PHP_FUNCTION( ZNDq_register )
 {
-
 	zend_string *String;
 
 	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "S", &String ) != SUCCESS )
@@ -53,8 +52,6 @@ PHP_FUNCTION( ZNDq_register )
 
 	// 'String->val' contains a list of arguments, as defined in the configuration file for the 'Launch' command.
 	main::Register( String->val, String->len );
-
-	RETURN_TRUE;
 }
 
 PHP_FUNCTION( ZNDq_wrapper )
