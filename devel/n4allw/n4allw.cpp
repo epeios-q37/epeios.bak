@@ -75,7 +75,8 @@ namespace {
 	typedef n4all::cRegistrar cRegistrar_;
 
 	class sRegistrar_
-		: public cRegistrar_ {
+	: public cRegistrar_
+	{
 	protected:
 		virtual void N4ALLRegister( void *Function ) override
 		{

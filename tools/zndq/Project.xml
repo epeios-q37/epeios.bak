@@ -22,9 +22,12 @@
     <xpp:expand select="Core"/>
    </Modules>
 			<Module>dlbrry</Module>
+			<Module>n4all</Module>
 			<Module>n4allw</Module>
+			<Module>n4znd</Module>
 			<Module>plgn</Module>
-   <Modules Group="SCL">
+			<Module>plgncore</Module>
+			<Modules Group="SCL">
     <xpp:expand select="SCL"/>
    </Modules>
   </Modules>

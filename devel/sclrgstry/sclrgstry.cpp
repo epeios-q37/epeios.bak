@@ -140,9 +140,7 @@ namespace {
 		{
 			reset();
 		}
-	};
-
-	sLastingRegistryLockerCallback_ LastingRegistryLockerCallback_;
+	} LastingRegistryLockerCallback_;
 }
 
 registry_ &sclrgstry::GetRWCommonRegistry( void )
