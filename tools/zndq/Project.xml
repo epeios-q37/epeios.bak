@@ -45,7 +45,7 @@
 		<!-- Some replacement had to be made by 'RTW'. -->
 		<File Pack="No">config.m4</File>
  </Files>
- <RTW>
+ <RTW Description="PHP extension wrapper" Keywords="wrapper">
   <Dir>zndq</Dir>
  </RTW>
 </Project>
