@@ -27,7 +27,9 @@
 # define PHP_WIN32	1
 # define ZEND_DEBUG	0
 # define ZEND_WIN32_FORCE_INLINE
-# define ZTS
+# ifndef APPVEYOR
+ # define ZTS
+#endif
 #endif
 
 #include "php.h"

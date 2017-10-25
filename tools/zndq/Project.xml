@@ -42,7 +42,8 @@
   <!-- '*.php' files are source files and will automatically packed as such. -->
   <File Pack="No">ZNDq.php</File>
 		<File Pack="No">test.php</File>
-		<File>config.m4</File>
+		<!-- Some replacement had to be made by 'RTW'. -->
+		<File Pack="No">config.m4</File>
  </Files>
  <RTW>
   <Dir>zndq</Dir>
