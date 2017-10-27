@@ -1,7 +1,2 @@
 # *JREq* changelog
 
-
-
-
-
-

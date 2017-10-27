@@ -98,7 +98,8 @@ namespace {
 		dlbrry::eNormalization Normalization,
 		n4all::cRegistrar &Registrar,
 		sclmisc::sRack &Rack,
-		void *UP )
+		void *UP,
+		bso::sBool SkipComponentUnloading )
 	{
 		bso::bool__ Success = false;
 	qRH
@@ -113,6 +114,9 @@ namespace {
 		//		cio::COut << __LOC__ << AddonFilename << txf::nl << txf::commit;
 
 		Library_.Init( ComponentFilename, Normalization );
+
+		if ( SkipComponentUnloading )
+			Library_.SkipUnloading();
 
 		//		cio::COut << __LOC__ << txf::nl << txf::commit;
 
@@ -137,6 +141,7 @@ bso::sBool n4allw::Register(
 	dlbrry::eNormalization Normalization,
 	sclmisc::sRack &Rack,
 	void *UP,
+	bso::sBool SkipComponentUnloading,
 	qRPN )
 {
 	sRegistrar_ Registrar;
@@ -145,7 +150,7 @@ bso::sBool n4allw::Register(
 
 	Registrar.Init();
 
-	if ( !Register_( ComponentFilename, Normalization, Registrar, Rack, UP ) ) {
+	if ( !Register_( ComponentFilename, Normalization, Registrar, Rack, UP, SkipComponentUnloading ) ) {
 		if ( qRP == err::hThrowException )
 			qRFwk();
 		return false;

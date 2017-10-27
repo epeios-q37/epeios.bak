@@ -53,6 +53,8 @@ namespace dlbrry {
 	{
 	private:
 		library_handler__  _LibraryHandler;
+		bso::sBool SkipUnloading_;	// When at true, the destructor will not unload the library
+									// (will be done when quitting the program).
 		bso::bool__ _LoadLibrary(
 			const ntvstr::string___ &Name,
 			eNormalization Normalization );
@@ -61,12 +63,13 @@ namespace dlbrry {
 		void reset( bso::bool__ P = true )
 		{
 			if ( P ) {
-				if ( _LibraryHandler != DLBRRY_UNDEFINED ) {
+				if ( ( _LibraryHandler != DLBRRY_UNDEFINED ) && !SkipUnloading_ ) {
 					if ( !_UnloadLibrary() )
 						qRSys();
 				}
 			}
 
+			SkipUnloading_ = false;
 			_LibraryHandler = NULL;
 		}
 		dynamic_library___( void )
@@ -77,6 +80,10 @@ namespace dlbrry {
 		{
 			reset();
 		}
+		// By calling this method under 'GNU/Linux' (and other 'POSIX' OSes?),
+		// the 'CIO' global objects ('cio::COut' for example) are set to 'NULL',
+		// in both the caller and the callee (which are the same under 'GNU/Linux')
+		// and hence can not be used until be set appropriately again !
 		bso::bool__ Init(
             const ntvstr::string___ &LibraryName,
 			eNormalization Normalization = n_Default,
@@ -102,6 +109,11 @@ namespace dlbrry {
 		bso::bool__ IsInitialized( void ) const
 		{
 			return _LibraryHandler != DLBRRY_UNDEFINED;
+
+		}
+		void SkipUnloading( bso::sBool Flag = true )
+		{
+			SkipUnloading_ = Flag;
 		}
 		void *GetFunction( const char *FunctionName );
 	};

@@ -45,6 +45,7 @@ namespace n4allw {
 		dlbrry::eNormalization Normalization,
 		sclmisc::sRack &Rack,
 		void *UP,
+		bso::sBool SkipComponenentUnloading,	// The component will be unloaded when quitting the program, and not explicitly (at true only for a 'PHP' workaround under 'GNU/Linux').
 		qRPD );
 
 	void *GetFunction( sdr::sRow Row );

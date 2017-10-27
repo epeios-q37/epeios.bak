@@ -219,7 +219,7 @@ bso::bool__ dlbrry::dynamic_library___::_UnloadLibrary( void  )
 	if ( !FreeLibrary( (HMODULE)_LibraryHandler) )
 		return false;
 #elif defined( TARGET_POSIX )
-	if ( dlclose( _LibraryHandler ) != 0 ) {
+	if ( dlclose( _LibraryHandler ) == -1 ) {
 //		const char *Error = dlerror();	// Facilite le dbogage.
 		return false;
 	}

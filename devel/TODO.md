@@ -1,40 +1,42 @@
-# *Epeios* *todo* list
+# *Epeios* TODO
 
-FAST :
+FAST:
 - Study the possibility to adapt the framework to 'emscripten'.
 
 MIDDLE
-- CSDL... :
+- CSDL...:
 	- Reimplementation ; has no more to do with embedded library.
-- ERR :
-	Handling of 'qRReturn' when an error is already in progress.
-- Flow :
+- ERR:
+	Handling of `qRReturn` when an error is already in progress.
+- Flow:
 	- Reimplementing flow handling to be based on driver rather then on flow.
 	- Implement the possibility to read/write in a flow without blocking (even without reading/writing a minimal amout of data).
-- LOG :
+- LOG:
 	Reimplement log handling to put is as part of 'SCLMISC' (depends if it's a file log or a console log).
-- SCL... :
+- N4ALLW:
+  - Sometimes, the path to the component can be `~/bin/` (*PHP*, *Java*), and sometime it must be `/home/csimon/bin/` (*Node.js*).
+- SCL...:
 	- Renaming ('SCLxyyy...' to 'SCLx').
 	- Implementing better thread-safety for the registry, in peculiar the common registry as defined in 'SCLRGSTRY'/'SCLMISC'.
-- SCLTOOL :
+- SCLTOOL:
 	- implementation of the possibility to display a free text defined in the configuration file for '--help' command.
 	- implementation of the displaying of options which are common to all commands, to avoid to put them in each command definition
 	  ('--verbose' in 'mmuaq', for example, or the '-s|--setup' option).
-- STR :
+- STR:
 	- Implementing the number conversion in another library based on a flow as input.
-- UVQ :
+- UVQ:
 	- Launch each 'work callback' in a 'mkt' thread, so that only one 'uv' thread will be used (only 'UV_THREADPOOL_SIZE' threads are available with 'uv').
-- XDHTML :
+- XDHTML:
 	- Implementing data filling in a second pass through a 'data-xdh' attribute (like event and cast handling); should fix Mozilla issue.
 	- Implement a solution which prevent that an 'Enter' (or other touch) event on a text box is also applied to a potential alert box reporting an error,
 	  preventing this box to be displayed. Currently, there is a workaround in the 'handleEvent' function from the 'xdhtml.js' file.
 	- Expose in the XML flow the nature of the interface (desktop, web, touchscreen, mobile...).
 
 
-LONG :
-- 'XPP' :
+LONG:
+- XPP:
 	- Reimplement in a simplified manner.
-- Socket :
+- Socket:
 	- Adaptation of the network related libraries to IPv6.
 
 DISMISSED :
@@ -47,22 +49,22 @@ DISMISSED :
 
 --------------------------------------------------------------------
 
-IN PROGRESS :
+IN PROGRESS:
 
-SUSPENDED :
-- XDHTML
+SUSPENDED:
+- XDHTML:
 	- Implementation for Android.
-- Flow :
+- Flow:
 	- Implementing flow variations (TXF, XTF, FLX libraries) to take a driver, not a flow ; the needed flow will be instantiated internally.
 
 	
-MADE :
-2016-09-24 :
+MADE:
+2016-09-24:
 - Adding detection of 'crate' using as list without being a list (use of 'CRT' instead of 'LSTCRT' ; accessing a 'CRT' item with 'qNIL' row).
 
-2016-09-02 :
-- Fixing errors occuring when compiling using WSL (Widows Subsystem for Linux).
+2016-09-02:
+- Fixing errors occurring when compiling using WSL (Widows Subsystem for Linux).
 
-2016-08-22 :
+2016-08-22:
 - Fixing errors which occurs in backends on regular deconnection from frontend.
 

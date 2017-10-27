@@ -20,13 +20,13 @@
   <Modules Group="Epeios" Path="h:/hg/epeios/stable/">
    <Modules Group="Core">
     <xpp:expand select="Core"/>
-   </Modules>
-			<Module>dlbrry</Module>
-			<Module>n4all</Module>
-			<Module>n4allw</Module>
-			<Module>n4znd</Module>
-			<Module>plgn</Module>
-			<Module>plgncore</Module>
+				<Module>dlbrry</Module>
+				<Module>n4all</Module>
+				<Module>n4allw</Module>
+				<Module>n4znd</Module>
+				<Module>plgn</Module>
+				<Module>plgncore</Module>
+			</Modules>
 			<Modules Group="SCL">
     <xpp:expand select="SCL"/>
    </Modules>
@@ -38,8 +38,9 @@
  </Modules>
  <Files>
   <File>README.md</File>
-  <File>CHANGELOG.md</File>
-  <!-- '*.php' files are source files and will automatically packed as such. -->
+		<File>CHANGELOG.md</File>
+		<File>TODO.md</File>
+		<!-- '*.php' files are source files and will automatically packed as such. -->
   <File Pack="No">ZNDq.php</File>
 		<File Pack="No">test.php</File>
 		<!-- Some replacement had to be made by 'RTW'. -->
