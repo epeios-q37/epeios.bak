@@ -19,6 +19,8 @@
 
 #include "xppqznd.h"
 
+#include "parser.h"
+#include "processor.h"
 #include "registry.h"
 
 #include "iof.h"
@@ -33,93 +35,31 @@ void sclznd::SCLZNDInfo( txf::sOFlow &Flow )
 }
 
 namespace {
-	SCLZND_F( ReturnArgument_ )
-	{
-	qRH
-		str::wString Input, Text;
-	qRB
-		Input.Init();
-		Caller.Get( Input );
+	namespace base_ {
+		SCLZND_F( ReturnArgument )
+		{
+		qRH;
+			str::wString Input, Text;
+		qRB;
+			Input.Init();
+			Caller.Get( Input );
 
-		Text.Init();
-		sclmisc::GetBaseTranslation( "Argument", Text, Input );
+			Text.Init();
+			sclmisc::GetBaseTranslation( "Argument", Text, Input );
 
-		Caller.SetReturnValue( Text );
-	qRR
-	qRT
-	qRE
-	}
-	SCLZND_F( ProcessingNew_ )
-	{
-	qRH;
-		sclznd::rStreamDriver *Stream = NULL;
-	qRB;
-		if ( ( Stream = new sclznd::rStreamDriver ) == NULL )
-			qRAlc();
-
-		Stream->Init( Caller );
-
-		Caller.SetReturnValue( (bso::sU64)Stream );
-	qRR;
-		if ( Stream != NULL )
-			delete Stream;
-	qRT;
-	qRE;
-	}
-
-	SCLZND_F( ProcessingRead_ )
-	{
-	qRH;
-		bso::sS64 Long = 0, Count = 0;
-		flw::sDressedIFlow<> Stream;
-		str::wString Buffer;
-	qRB;
-		Caller.Get( Long );
-
-		if ( Long == 0 )
-			qRGnr();
-
-		Stream.Init( *( sclznd::rStreamDriver * )Long );
-
-		Caller.Get( Count );
-
-		Buffer.Init();
-
-		while ( Count-- && !Stream.EndOfFlow() )
-			Buffer.Append( Stream.Get() );
-
-		str::ToUpper( Buffer );
-
-		Caller.SetReturnValue( Buffer );
-	qRR;
-	qRT;
-	qRE;
-	}
-
-	SCLZND_F( ProcessingEOF_ )
-	{
-	qRH;
-		bso::sS64 Long = 0;
-		flw::sDressedIFlow<> Stream;
-	qRB;
-		Caller.Get( Long );
-
-		if ( Long == 0 )
-			qRGnr();
-
-		Stream.Init( *( sclznd::rStreamDriver * )Long );
-
-		Caller.SetReturnValue( Stream.EndOfFlow() );
-	qRR;
-	qRT;
-	qRE;
+			Caller.SetReturnValue( Text );
+		qRR;
+		qRT;
+		qRE;
+		}
 	}
 }
 
 void sclznd::SCLZNDRegister( sclznd::sRegistrar &Registrar )
 {
-	Registrar.Register( ReturnArgument_ );
-	Registrar.Register( ProcessingNew_, ProcessingRead_, ProcessingEOF_ );
+	Registrar.Register( base_::ReturnArgument );
+	Registrar.Register( processor::New, processor::EndOfFlow, processor::Read, processor::Delete );
+	Registrar.Register( parser::New, parser::Parse, parser::TagName, parser::AttributeName, parser::Value, parser::Delete );
 }
 
 const char *sclmisc::SCLMISCTargetName = NAME_LC;

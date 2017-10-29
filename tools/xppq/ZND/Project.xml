@@ -25,7 +25,9 @@
     <xpp:expand select="SCL"/>
    </Modules>
   </Modules>
-  <Module>registry</Module>
+		<Module>parser</Module>
+		<Module>processor</Module>
+		<Module>registry</Module>
  </Modules>
  <Files>
   <!-- NOTA : '*.php' files will automatically be packed as such. -->

@@ -124,7 +124,7 @@ class XPPqParser {
 	static final int PROCESSED	= 0;
 	static final int START_TAG	= 1;
 	static final int ATTRIBUTE	= 2;
-	static final int VALUE		= 3;
+	static final int VALUE	= 3;
 	static final int END_TAG	= 4;
 	public XPPqParser( java.io.InputStream Stream )
 	{

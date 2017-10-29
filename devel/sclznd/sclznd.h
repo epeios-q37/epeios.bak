@@ -78,7 +78,7 @@ namespace sclznd {
 		{
 			C_().SetReturnValue( n4znd::tString, &String );
 		}
-		void SetReturnValue( bso::sU64 Long )
+		void SetReturnValue( bso::sS64 Long )
 		{
 			C_().SetReturnValue( n4znd::tLong, &Long );
 		}
@@ -149,6 +149,11 @@ namespace sclznd {
 			Driver_ = Caller.GetStream();
 		}
 	};
+
+	inline void Throw( const str::dString &Message )
+	{
+		qRVct();
+	}
 
 	void SCLZNDInfo( txf::sOFlow &Flow );	// To define by user.
 	void SCLZNDRegister( sRegistrar &Registrar );	// To define by user

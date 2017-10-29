@@ -1,21 +1,15 @@
 <?php
 
-class ZNDqDecl {
-	protected $affix="";	// We are not interested in a extension;
-}
+zndq_Init();
 
-// Begin of generic part.
-ZNDq_Init();
-
-class ZNDq extends ZNDqDecl {
+class ZNDq {
 	static public function wrapperInfo()
 	{
-		return ZNDq_wrapperInfo(); 
+		return zndq_wrapper_info(); 
 	}
 	static public function componentInfo()
 	{
-		return ZNDq_componentInfo(); 
+		return zndq_component_info(); 
 	}
 }
-// End of generic part.
 ?>

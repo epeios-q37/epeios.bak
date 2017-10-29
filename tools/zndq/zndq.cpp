@@ -30,22 +30,22 @@ and there are important differences with PHP 7. See http://wiki.php.net/phpng-up
 #endif
 
 
-PHP_FUNCTION( ZNDq_init )
+PHP_FUNCTION( zndq_init )
 {
 	main::Init();
 }
 
-PHP_FUNCTION( ZNDq_wrapperInfo )
+PHP_FUNCTION( zndq_wrapper_info )
 {
 	RETURN_STRING( main::WrapperInfo() );
 }
 
-PHP_FUNCTION( ZNDq_componentInfo )
+PHP_FUNCTION( zndq_component_info )
 {
 	RETURN_STRING( main::ComponentInfo() );
 }
 
-PHP_FUNCTION( ZNDq_register )
+PHP_FUNCTION( zndq_register )
 {
 	zend_string *String;
 
@@ -56,7 +56,7 @@ PHP_FUNCTION( ZNDq_register )
 	main::Register( String->val, String->len );
 }
 
-PHP_FUNCTION( ZNDq_wrapper )
+PHP_FUNCTION( zndq_wrapper )
 {
 	zend_long Index = 0;
 	int num_varargs;
@@ -73,11 +73,11 @@ extern zend_module_entry zndq_module_entry;
 #define phpext_zenq_ptr &zenq_module_entry
 
 static zend_function_entry zndq_functions[] = {
-	PHP_FE( ZNDq_init, NULL )
-	PHP_FE( ZNDq_register, NULL )
-	PHP_FE( ZNDq_wrapperInfo, NULL )
-	PHP_FE( ZNDq_componentInfo, NULL )
-	PHP_FE( ZNDq_wrapper, NULL )
+	PHP_FE( zndq_init, NULL )
+	PHP_FE( zndq_register, NULL )
+	PHP_FE( zndq_wrapper_info, NULL )
+	PHP_FE( zndq_component_info, NULL )
+	PHP_FE( zndq_wrapper, NULL )
 {
 	NULL, NULL, NULL
 }
