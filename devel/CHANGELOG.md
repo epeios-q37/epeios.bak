@@ -1,10 +1,16 @@
 # *Epeios* changelog
 
+2017-10-29:
+- N4ZND, SCLZND
+  - Implementing *Stream* object, and *Long* and *Bool*(ean) types.
+- SCLJRE :
+  - Introducing the new standard where objects are initialized with the `sCaller`, and not the result of one of its method.
+
 2017-10-27:
 - DLBRRY:
     - Adding the possibility to skip library unloading in destructor (*PHP* workaround on *GNU/Linux* systems).
 - N4ALLW:
-  - Propagating cahnge in *DLBRRY*.
+  - Propagating change in *DLBRRY*.
 
 2017-10-18:
 - TOL:
@@ -2019,7 +2025,7 @@
 
 2015-04-24
 - GLOBAL:
-	- Rewritting global (con|de)structor using '__attribute__((((con|de)structor))' under Mac OS, as dynamic libraries under Mac OS
+	- Rewritten global (con|de)structor using '__attribute__((((con|de)structor))' under Mac OS, as dynamic libraries under Mac OS
 	  does not execute global (con|de)structor when the library is loaded.
 - TOL:
     - Adding 'Q37_G(C|D)TOR' macro to facilitate above changes.
@@ -2030,9 +2036,9 @@
 	- Some simplification.
 - CIO:
     - Adding 'set__' object.
-    - Adding 'Initialize(...)' function whixh takes a 'set__'.
+    - Adding 'Initialize(...)' function which takes a 'set__'.
     - '_S(In|Out|Err)OutDriver' are from now on private.
-	- Standardisation of the 'In' ,'Out', 'Err' enumeration order.
+	- Standardization of the 'In' ,'Out', 'Err' enumeration order.
     - Adding functions to retrieve some predefined 'set__'s.
 - CSDLEO:
 	- Adding 'CIO' member in 'shared_data__'.
@@ -2043,7 +2049,7 @@
 - SCLDAEMON, SCLPLUGIN, SCLTOOL, SCLXHTML:
 	- Adaptation to changes in 'SCLMISC'.
 - XHTCLLBK:
-	- Adding '(_)CIO' member in 'shared_data__'.
+	- Adding `(_)CIO` member in `shared_data__`.
 
 2015-04-21:
 - SCLMISC:

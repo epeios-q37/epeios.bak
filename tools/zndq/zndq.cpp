@@ -65,13 +65,7 @@ PHP_FUNCTION( ZNDq_wrapper )
 	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "l*", &Index, &varargs, &num_varargs ) != SUCCESS )
 		main::ThrowGenericError();
 
-	if ( num_varargs != 1 )
-		main::ThrowGenericError();
-
-	if ( Z_TYPE( varargs[0] ) != IS_STRING )
-		main::ThrowGenericError();
-
-	main::Launch( Index, num_varargs, &varargs, return_value TSRMLS_CC );
+	main::Launch( Index, num_varargs, varargs, return_value TSRMLS_CC );
 }
 
 

@@ -49,7 +49,7 @@ namespace main {
 	void Launch(
 		zend_long Index,
 		int num_varargs,
-		zval **varargs,
+		zval *varargs,
 		zval *return_value
 		TSRMLS_DC );
 }

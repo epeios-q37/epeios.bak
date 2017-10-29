@@ -259,53 +259,7 @@ namespace scljre {
 		}
 	}
 
-# undef B
-# undef A
-
-# ifdef SCLJRE_B_
-# define B SCLJRE_B_
-# endif
-
-# ifdef SCLJRE_A_
-# define A SCLJRE_A_
-# endif
-
-	sJObject Null( void );
-	sJObject Integer( sJInt Integer );
-	sJObject Long( sJLong Long );
-	sJObject String( const str::dString &UTF );
-
-	typedef fdr::rIDressedDriver rIDriver_;
-
-	class rInputStreamIDriver
-	: public rIDriver_ {
-	private:
-		java::io::rInputStream Stream_;
-	protected:
-		virtual fdr::sSize FDRRead(
-			fdr::sSize Maximum,
-			fdr::sByte *Buffer ) override;
-		virtual void FDRDismiss( bso::sBool Unlock ) override
-		{}
-		virtual fdr::sTID FDRITake( fdr::sTID Owner ) override
-		{
-			return Owner;
-		}
-	public:
-		void reset( bso::sBool P = true )
-		{
-			rIDriver_::reset( P );
-			tol::reset( P, Stream_ );
-		}
-		qCVDTOR( rInputStreamIDriver );
-		void Init( cObject *Object )
-		{
-			rIDriver_::Init( fdr::ts_Default );
-			Stream_.Init( Object );
-		}
-	};
-
-	typedef scln4a::sCaller sCaller_;
+		typedef scln4a::sCaller sCaller_;
 
 	class sCaller
 	: public sCaller_ {
@@ -352,8 +306,54 @@ namespace scljre {
 		}
 	};
 
-
 	typedef sJObject ( fFunction )( sCaller &Caller );
+
+# undef B
+# undef A
+
+# ifdef SCLJRE_B_
+# define B SCLJRE_B_
+# endif
+
+# ifdef SCLJRE_A_
+# define A SCLJRE_A_
+# endif
+
+	sJObject Null( void );
+	sJObject Integer( sJInt Integer );
+	sJObject Long( sJLong Long );
+	sJObject String( const str::dString &UTF );
+
+	typedef fdr::rIDressedDriver rIDriver_;
+
+	class rInputStreamIDriver
+	: public rIDriver_ {
+	private:
+		java::io::rInputStream Stream_;
+	protected:
+		virtual fdr::sSize FDRRead(
+			fdr::sSize Maximum,
+			fdr::sByte *Buffer ) override;
+		virtual void FDRDismiss( bso::sBool Unlock ) override
+		{}
+		virtual fdr::sTID FDRITake( fdr::sTID Owner ) override
+		{
+			return Owner;
+		}
+	public:
+		void reset( bso::sBool P = true )
+		{
+			rIDriver_::reset( P );
+			tol::reset( P, Stream_ );
+		}
+		qCVDTOR( rInputStreamIDriver );
+		void Init( sCaller &Caller )
+		{
+			rIDriver_::Init( fdr::ts_Default );
+			Stream_.Init( Caller.Get() );
+		}
+	};
+
 
 	typedef scln4a::sRegistrar<fFunction> sRegistrar;
 

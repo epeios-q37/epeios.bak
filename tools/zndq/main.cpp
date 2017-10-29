@@ -116,17 +116,17 @@ void main::Register(
 	const char *RawArguments,
 	size_t Length )
 {
-qRH;
+qRFH;
 	str::wString Arguments;
-qRB;
+qRFB;
 	Arguments.Init();
 
 	Arguments.Append( RawArguments, Length );
 
 	Register_( Arguments );
-qRR;
-qRT;
-qRE;
+qRFR;
+qRFT;
+qRFE( ERRFinal_() );
 }
 
 const char *main::WrapperInfo( void )
@@ -175,17 +175,124 @@ namespace {
 	typedef n4all::cCaller cCaller_;
 
 	void Get_(
-		zval *Val,
+		zval &Val,
 		str::dString &String )
 	{
-		if ( Z_TYPE_P( Val ) != IS_STRING )
+		if ( Z_TYPE( Val ) != IS_STRING )
 			qRGnr();
 
-		String.Append( Z_STRVAL_P( Val ), Z_STRLEN_P( Val ) );
+		String.Append( Z_STRVAL( Val ), Z_STRLEN( Val ) );
+	}
+
+	typedef fdr::rIODressedDriver rDriver_;
+
+	class rStream_
+	: public rDriver_
+	{
+	private:
+		qPMV( php_stream, S_, Stream_ );
+	protected:
+		virtual fdr::sSize FDRRead(
+			fdr::sSize Maximum,
+			fdr::sByte *Buffer ) override
+		{
+			if ( php_stream_eof( S_() ) )
+				return 0;
+			else
+				return php_stream_read( S_(), (char *)Buffer, Maximum );
+		}
+		virtual void FDRDismiss( bso::sBool Unlock ) override
+		{
+			// Nothing to do !
+		}
+		virtual fdr::sTID FDRITake( fdr::sTID Owner ) override
+		{
+			// Nothing to do !
+
+			return THT_UNDEFINED_THREAD_ID;
+		}
+		virtual fdr::sSize FDRWrite(
+			const fdr::sByte *Buffer,
+			fdr::sSize Maximum ) override
+		{
+			return php_stream_write( S_(), (char *)Buffer, Maximum );
+		}
+		virtual void FDRCommit( bso::sBool Unlock ) override
+		{
+			php_stream_flush( S_() );
+		}
+		virtual fdr::sTID FDROTake( fdr::sTID Owner ) override
+		{
+			// Nothing to do !
+
+			return THT_UNDEFINED_THREAD_ID;
+		}
+	public:
+		void reset( bso::sBool P = true )
+		{
+			rDriver_::reset( P );
+			Stream_ = NULL;
+		}
+		qCVDTOR( rStream_ );
+		void Init( php_stream *Stream )
+		{
+			rDriver_::Init( fdr::ts_Default );
+			Stream_ = Stream;
+		}
+	};
+
+	void Get_(
+		zval &Val,
+		fdr::rIODriver *&Driver )
+	{
+	qRH;
+		php_stream *RawStream = NULL;
+		rStream_ *Stream = NULL;
+	qRB;
+		if ( Z_TYPE( Val ) != IS_RESOURCE )
+			qRGnr();
+
+		php_stream_from_zval_no_verify( RawStream, &Val );
+
+		Stream = new rStream_;
+
+		if ( Stream == NULL )
+			qRAlc();
+
+		Stream->Init( RawStream );
+
+		Driver = Stream;
+	qRR;
+		if ( Stream != NULL )
+			delete Stream;
+	qRT;
+	qRE;
+	}
+
+	void Get_(
+		zval &Val,
+		bso::sS64 &Long )
+	{
+		if ( Z_TYPE( Val ) != IS_LONG )
+			qRGnr();
+
+		Long = Z_LVAL( Val );
+	}
+
+	void Get_(
+		zval &Val,
+		bso::sBool &Bool )
+	{
+		if ( Z_TYPE( Val ) == IS_TRUE )
+			Bool = true;
+		else if ( Z_TYPE( Val ) == IS_FALSE )
+			Bool = false;
+		else
+			qRGnr();
 	}
 
 	template <typename type> inline void Get_(
-		zval **varargs,
+		zval *varargs,
 		int Index,
 		void *Value )
 	{
@@ -198,7 +305,7 @@ namespace {
 	private:
 		void ***tsrm_ls_;
 		int num_varargs_;
-		zval **varargs_;
+		zval *varargs_;
 		zval *return_value_;
 	protected:
 		virtual void N4ALLGetArgument(
@@ -213,12 +320,19 @@ namespace {
 			case n4znd::tString:
 				Get_<str::dString>( varargs_, Index, Value );
 				break;
+			case n4znd::tStream:
+				Get_<fdr::rIODriver *>( varargs_, Index, Value );
+				break;
+			case n4znd::tLong:
+				Get_<bso::sS64>( varargs_, Index, Value );
+				break;
+			case n4znd::tBool:
+				Get_<bso::sBool>( varargs_, Index, Value );
+				break;
 			default:
 				qRGnr();
 				break;
-
 			}
-
 		}
 		virtual void N4ALLSetReturnValue(
 			n4all::sType Type,
@@ -227,10 +341,21 @@ namespace {
 		qRH;
 			qCBUFFERr Buffer;
 		qRB;
-			if ( Type != n4znd::tString )
+			switch ( Type ) {
+			case n4znd::tString:
+				ZVAL_STRING( return_value_, ( ( str::dString * )Value )->Convert( Buffer ) );
+				break;
+			case n4znd::tLong:
+				ZVAL_LONG( return_value_, *( bso::sS64 * )Value );
+				break;
+			case n4znd::tBool:
+				ZVAL_BOOL( return_value_, *( bso::sBool * )Value );
+				break;
+			default:
 				qRGnr();
+				break;
+			}
 
-			ZVAL_STRING( return_value_, ( ( str::dString * )Value )->Convert( Buffer ) );
 		qRR;
 		qRT;
 		qRE;
@@ -247,7 +372,7 @@ namespace {
 		void Init(
 			void ***tsrm_ls,
 			int num_varargs,
-			zval **varargs,
+			zval *varargs,
 			zval *return_value )
 		{
 			tsrm_ls_ = tsrm_ls;
@@ -262,12 +387,12 @@ namespace {
 void main::Launch(
 	zend_long Index,
 	int num_varargs,
-	zval **varargs,
+	zval *varargs,
 	zval *return_value TSRMLS_DC )
 {
-qRH;
+qRFH;
 	sCaller_ Caller;
-qRB;
+qRFB;
 #ifdef ZTS
 //	Caller.Init( trsrm_ls, num_varargs, varargs );	// 'tsrm_ls' no more available in 'ZTS' !?
 	Caller.Init( NULL, num_varargs, varargs, return_value );	// 'tsrm_ls' no more available in 'ZTS' !?
@@ -275,9 +400,9 @@ qRB;
 	Caller.Init( NULL, num_varargs, varargs, return_value );	// 'tsrm_ls' no more available in 'ZTS' !?
 #endif
 	n4allw::Launch( Index, Caller );
-qRR;
-qRT;
-qRE;
+qRFR;
+qRFT;
+qRFE( ERRFinal_() );
 }
 
 const char *sclmisc::SCLMISCTargetName = NAME_LC;

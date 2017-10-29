@@ -1,5 +1,9 @@
 # *XPPq* changelog
 
+2017-10-29:
+- *xppqjre*:
+  - Adaptation to changes in *SCLJRE*.
+
 2017-09-26 :
 - *xppqnjs*:
   - Adding missing deletion of the callback given to the parser.
