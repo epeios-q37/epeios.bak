@@ -150,7 +150,7 @@ namespace sclznd {
 		}
 	};
 
-	inline void Throw( const str::dString &Message )
+	inline void Die( const str::dString &Message )
 	{
 		qRVct();
 	}

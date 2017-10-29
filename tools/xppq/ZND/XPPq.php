@@ -88,28 +88,31 @@ class XPPq extends ZNDq {
 }
 
 class XPPqPreprocessor {
-				var $stream = 0;
+				var $stream;
+				var $processor = 0;
     function stream_open($path, $mode, $options, &$opened_path)
     {
         $url = parse_url( $path );
-        $this->stream = XPPq::processorNew($GLOBALS[$url["host"]]);
+								$this->stream = $GLOBALS[$url["host"]];
+        $this->processor = XPPq::processorNew( $this->stream );
 
 								return true;
     }
-
-    function stream_read($count)
+    function stream_read( $count )
     {
-					    return XPPq::processorRead( $this->stream, $count );
+					    return XPPq::processorRead( $this->processor, $count );
     }
-
     function stream_eof()
     {
-					    return XPPq::processorEOF( $this->stream );
+					    return XPPq::processorEOF( $this->processor );
     }
-
+				function stream_stat()
+				{
+					return fstat( $this->stream );
+				}
 				function __destruct()
 				{
-						XPPq::processorDelete( $this->stream );
+						XPPq::processorDelete( $this->processor );
 				}
 }
 

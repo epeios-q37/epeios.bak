@@ -3,7 +3,7 @@ require "XPPq.php";
 
 echo ZNDq::componentInfo() . "\n" . ZNDq::wrapperInfo() . "\n";
 
-echo XPPq::returnArgument( "Argument from the PHP file !") . "\n";
+echo XPPq::returnArgument( "Argument from the PHP file !") . "\n\n";
 
 $XML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" .
 "<SomeTag xmlns:xpp=\"http://q37.info/ns/xpp/\" AnAttribute=\"SomeAttributeValue\">\n" .
@@ -16,25 +16,6 @@ $XML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" .
 " </YetAnotherTag>\n" .
 "</SomeTag>\n"
  ;
-
-	function getStream()
-	{
-	if ( false )
-	 return fopen( 'data://text/plain,' . $GLOBALS["XML"], 'r' );
-	else {
-		$GLOBALS["fxml"] = fopen( 'data://text/plain,' . $GLOBALS["XML"], 'r' );
-	//	$fxml = fopen('Project.xml', 'r' );
-		 return fopen( "xpp://fxml", 'r' );
-		}
-	}
-
-	$stream = getStream();
-
-	while ( !feof( $stream ) ) {
-    echo fgets( $stream );
-}
-
-echo "\n\n";
 
 /*
 function f( &$text )
@@ -51,7 +32,8 @@ function f( &$text )
 	echo $test . " !" . "\n";
 	*/
 
-	$parser = XPPq::parserNew( getStream() );
+function parse( $stream ) {
+	$parser = XPPq::parserNew( $stream );
 
 	$token = XPPq::parserParse( $parser );
 
@@ -61,7 +43,7 @@ function f( &$text )
 			echo "Start tag: '" . XPPqParser::tagName( $parser ) . "'\n";
 			break;
 		case XPPqParser::ATTRIBUTE :
-			echo  "Attribute: '" . XPPqParser::attributeName( $parser ) . "' = '" . data.value . "'\n";
+			echo  "Attribute: '" . XPPqParser::attributeName( $parser ) . "' = '" . trim( XPPqParser::Value( $parser ) ) . "'\n";
 			break;
 		case XPPqParser::VALUE :
 			echo  "Value:     '" . trim( XPPqParser::Value( $parser ) ) . "'\n";
@@ -77,4 +59,77 @@ function f( &$text )
 	}
 
 	XPPqParser::delete( $parser );
+}
+
+function getStream() {
+	if ( true )
+			return fopen( 'data://text/plain,' . $GLOBALS["XML"], 'r' );
+		else 
+		 return fopen('Project.xml', 'r' );
+}
+
+function getProcessedStream( $stream )
+{
+ $GLOBALS["XMLStream"] = $stream; 
+	return fopen( "xpp://XMLStream", 'r' );
+}
+
+function test0( $stream )
+{
+ echo "No treatment ; to see the original file :\n";
+	echo "-----------------------------------------\n";
+	echo stream_get_contents( $stream ) . "\n";
+}
+
+function test1( $stream )
+{
+	echo "Preprocessing the file :\n";
+	echo "------------------------\n";
+	echo stream_get_contents( getProcessedStream( $stream ) ) . "\n";
+}
+
+function test2( $stream )
+{
+	echo "XML parsing WITHOUT preprocessing :\n";
+	echo "-----------------------------------\n";
+	parse( $stream );
+}
+
+function test3( $stream )
+{
+	echo "XML parsing WITH preprocessing :\n";
+	echo "--------------------------------\n";
+		parse( getProcessedStream( $stream ) );
+}
+
+$argc = $_SERVER["argc"];
+$argv = $_SERVER["argv"];
+
+$test = 3;
+
+if ( $argc >= 2 ) {
+	if ( !is_numeric( $argv[1] ) )
+	 die( "'" . $argv[1] . "' is not a valid test id ; must be '0' to '3'." );
+	else
+	 $test = (int)$argv[1];
+}
+
+switch ( $test ) {
+case 0:
+	test0( getStream() );
+	break;
+case 1:
+	test1( getStream() );
+	break;
+case 2:
+	test2( getStream() );
+	break;
+case 3:
+	test3( getStream() );
+	break;
+default:
+	die( "'" . $test . "' is not a valid test id ; must be '0' to '3'." );
+	break;
+}
+
 ?>

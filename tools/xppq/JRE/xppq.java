@@ -173,8 +173,6 @@ class XPPqTest {
 		dump( new XPPqPreprocessor( stream ) );
 	}
 
- static private int indent = 0;
-	
 	private static void parse( java.io.InputStream stream ) throws Exception
 	{
 		XPPqData data = new XPPqData();
@@ -276,7 +274,7 @@ class XPPqTest {
 			test3( getStream() );
 			break;
 		default:
-			System.err.println( "'" + args[0] + "' is not a valid test id ; must be '0' to '3'.");
+			System.err.println( "'" + test + "' is not a valid test id ; must be '0' to '3'.");
 			System.exit(1);
 			break;
 		}
