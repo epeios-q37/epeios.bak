@@ -1,6 +1,8 @@
 # *Epeios* changelog
 
 2017-10-29:
+- BSO:
+ - Fixing *clang* warning.
 - N4ZND, SCLZND
   - Implementing *Stream* object, and *Long* and *Bool*(ean) types.
 - SCLJRE :

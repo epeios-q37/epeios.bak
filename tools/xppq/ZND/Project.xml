@@ -33,7 +33,7 @@
   <!-- NOTA : '*.php' files will automatically be packed as such. -->
   <!--File Pack="No">XPPq.php</File-->
  </Files>
- <RTW Description="PHP extension template" Keywords="template">
-  <Dir>xppq-php</Dir>
+	<RTW Description="XML parser and preprocessor" Keywords="XML,parser,preprocessor,xpp">
+		<Dir>xppq-php</Dir>
  </RTW>
 </Project>

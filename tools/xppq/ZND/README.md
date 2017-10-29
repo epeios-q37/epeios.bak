@@ -2,7 +2,7 @@
 
 ## Presentation
 
-*XML* parser and preprocessor as [*Zend*](http://q37.info/s/x/Zend_engine/) (*PHP*) extension.
+The *Epeios* XML [preprocessor](http://q37.info/s/t/xppq/) and parser as [*Zend*](http://q37.info/s/x/Zend_engine/) (*PHP*) extension.
 
 For more information, see http://q37.info/tools/xppq/.
 

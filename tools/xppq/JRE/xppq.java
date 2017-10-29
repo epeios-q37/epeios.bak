@@ -186,7 +186,7 @@ class XPPqTest {
 				System.out.print( "Start tag: '" + data.tagName + "'\n" );
 				break;
 			case XPPqParser.ATTRIBUTE :
-				System.out.print( "Attribute: '" + data.attributeName + "' = '" + data.value + "'\n" );
+				System.out.print( "Attribute: '" + data.attributeName + "' = '" + data.value.trim() + "'\n" );
 				break;
 			case XPPqParser.VALUE :
 				System.out.print( "Value:     '" + data.value.trim() + "'\n" );

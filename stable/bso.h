@@ -31,7 +31,9 @@
 # include <stdint.h>
 # include <float.h>
 
-# define __STDC_FORMAT_MACROS 1	// Needed by below header with the 'mingw' compiler.
+# ifndef __STDC_FORMAT_MACROS
+#  define __STDC_FORMAT_MACROS	// Needed by below header with the 'mingw' compiler.
+# endif
 # include <inttypes.h>
 
 

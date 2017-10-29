@@ -29,7 +29,7 @@
  <Files>
   <File>demo.xml</File>
  </Files>
- <CI>
-  <Dir>xppq-java</Dir>
- </CI>
+	<RTW Description="XML parser and preprocessor" Keywords="XML,parser,preprocessor,xpp">
+		<Dir>xppq-java</Dir>
+ </RTW>
 </Project>
