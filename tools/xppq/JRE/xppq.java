@@ -15,7 +15,7 @@
 
 	You should have received a copy of the GNU Affero General Public License
 	along with XPPq. If not, see <http://www.gnu.org/licenses/>.
-*/
+*/ 
 
 class Decl {
  protected static String affix = "xppq";
@@ -245,8 +245,7 @@ class XPPqTest {
  	System.out.println( XPPq.componentInfo() );
  	displayBytecodeBuildTimestamp();
   System.out.println();
-
-		
+				
 		int test = 3;
 		
 		if ( args.length > 0 ) {
