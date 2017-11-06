@@ -21,5 +21,5 @@
 
 using namespace registry;
 
-rEntry registry::parameter::ComponentFilename( "ComponentFilename", sclrgstry::Parameters );
+rEntry registry::parameter::ModuleFilename( "ModuleFilename", sclrgstry::Parameters );
 

@@ -22,18 +22,22 @@
 
 # include "sclrgstry.h"
 
+# include "xdhujr.h"
+
 namespace registry {
 	using namespace sclrgstry;
 
 	namespace parameter {
 		using namespace sclrgstry::parameter;
 
-		extern rEntry ComponentFilename;
+		extern rEntry ModuleFilename;
 	}
 
 	namespace definition {
 		using namespace sclrgstry::definition;
 	}
+
+	using namespace xdhujr;
 }
 
 #endif

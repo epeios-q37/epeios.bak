@@ -34,6 +34,8 @@
 #include "xpp.h"
 #include "fnm.h"
 #include "flf.h"
+#include "xdhujp.h"
+#include "xdhups.h"
 
 using cio::CErr;
 using cio::COut;
@@ -232,6 +234,110 @@ namespace {
 	}
 }
 
+namespace {
+	typedef xdhujp::cJS cJS_;
+
+	class sJS
+	: public cJS_ {
+	protected:
+		virtual void XDHUJPExecute(
+			const str::string_ &Script,
+			TOL_CBUFFER___ *Return ) override
+		{
+		qRH;
+			qCBUFFERr Buffer;
+			v8::Local<v8::Value> V8Return;
+		qRB;
+			V8Return = v8q::Execute( Script.Convert( Buffer ), v8q::GetIsolate() );
+
+			if ( Return != NULL ) {
+				qRVct();
+			}
+		qRR;
+		qRT;
+		qRE;
+		}
+		virtual void XDHUJPGetWidgetAttributeName( TOL_CBUFFER___ &Buffer ) override
+		{
+			sclmisc::MGetValue( registry::custom_item::attribute_name::Widget, Buffer );
+		}
+		virtual void XDHUJPGetResultAttributeName( TOL_CBUFFER___ &Buffer ) override
+		{
+			sclmisc::MGetValue( registry::custom_item::attribute_name::Result, Buffer );
+		}
+		/*
+		virtual void XDHJSPHandleExtensions( const xdhcbk::nstring___ &Id ) override
+		{
+		HandleExtensions_( Id, _A() );
+		}
+		virtual void XDHJSPHandleCastings( const xdhcbk::nstring___ &Id ) override
+		{
+		HandleCastings_(Id, _A() );
+		}
+		*/
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			// Standardization.
+		}
+		E_CVDTOR( sJS );
+		void Init( void )
+		{
+			// Standardization.
+		}
+	};
+
+	sJS JS_;
+	xdhups::sSession Session_;
+	xdhups::agent___ Agent_;
+	TOL_CBUFFER___ _LanguageBuffer;
+
+	void InitializeSession_( void )
+	{
+	qRH;
+		xdhujp::sProxyCallback *ProxyCallback;
+		qCBUFFERr Buffer;
+	qRB;
+		ProxyCallback = new xdhujp::sProxyCallback;	// Destruction is made by '_Session'.
+
+		if ( ProxyCallback == NULL )
+			qRGnr();
+
+		::JS_.Init();
+
+		ProxyCallback->Init( ::JS_ );
+
+		Agent_.Init( xdhcmn::mMonoUser, str::wString( "h:/bin/esketchxdh" ), "(dummy)" );
+
+		Session_.Init( Agent_.RetrieveCallback( Agent_.BaseLanguage( _LanguageBuffer ), ProxyCallback ) );
+		sclmisc::SetBaseLanguage( str::wString( Agent_.BaseLanguage( Buffer ) ) );
+	qRR;
+		if ( ProxyCallback != NULL )
+			delete ProxyCallback;
+	qRT;
+	qRE;
+	}
+
+	void Execute_( const v8::FunctionCallbackInfo<v8::Value>& Args )
+	{
+	qRH
+		v8q::sLString String;
+		str::wString Script;
+	qRB
+		String.Init( Args[0] );
+
+		Script.Init();
+		String.Get( Script );
+
+		Script.Append( ";alert('Yeah!');" );
+
+		JS_.Execute( Script );
+	qRR
+	qRT
+	qRE
+	}
+}
+
 void Start(
 	v8::Local<v8::Object> Exports,
 	v8::Local<v8::Value> Module,
@@ -243,7 +349,8 @@ qRFH
 qRFB
 	NODE_SET_METHOD( Exports, "wrapperInfo", GetWrapperInfo_ );
 	NODE_SET_METHOD( Exports, "moduleInfo", GetModuleInfo_ );
-/*
+	NODE_SET_METHOD( Exports, "execute", Execute_ );
+
 	cio::Initialize( cio::GetConsoleSet() );
 
 	qRRor_.Init();
@@ -258,12 +365,6 @@ qRFB
 	sclmisc::Initialize( Rack_, Location );
 
 	node::AtExit( OnExit_, NULL );
-	*/
-	/*
-	error_::Initialize();
-
-	error_::Launch();
-	*/
 qRFR
 qRFT
 qRFE( ErrFinal_() )
