@@ -2,6 +2,9 @@
 <html>
   <head>
     <meta charset="UTF-8">
+	<!-- Without below line, 'jQuery' isn't load correctly. -->
+	<!-- From http://stackoverflow.com/questions/32621988/electron-jquery-is-not-defined -->
+	<script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
 
 		<!-- If modified, report modification in 'xdh_prolog.php' from 'xdhbrwq' -->
 		<!-- BEGIN -->

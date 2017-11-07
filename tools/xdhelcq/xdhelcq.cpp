@@ -327,7 +327,7 @@ namespace {
 
 		ProxyCallback->Init( ::JS_ );
 
-		Agent_.Init( xdhcmn::mMonoUser, str::wString( "h:/bin/esketchxdh" ), "(dummy)" );
+		Agent_.Init( xdhcmn::mMonoUser, str::wString( "h:/bin/orgnzqxdh" ), "(dummy)" );
 
 		Session_.Init( Agent_.RetrieveCallback( Agent_.BaseLanguage( _LanguageBuffer ), ProxyCallback ) );
 		sclmisc::SetBaseLanguage( str::wString( Agent_.BaseLanguage( Buffer ) ) );
