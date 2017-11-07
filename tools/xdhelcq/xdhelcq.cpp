@@ -36,6 +36,7 @@
 #include "flf.h"
 #include "xdhujp.h"
 #include "xdhups.h"
+#include "xdhutl.h"
 
 using cio::CErr;
 using cio::COut;
@@ -247,11 +248,30 @@ namespace {
 		qRH;
 			qCBUFFERr Buffer;
 			v8::Local<v8::Value> V8Return;
+			v8::Local<v8::String> String;
+			bso::integer_buffer__ IBuffer;
 		qRB;
 			V8Return = v8q::Execute( Script.Convert( Buffer ), v8q::GetIsolate() );
 
 			if ( Return != NULL ) {
-				qRVct();
+				if ( !V8Return->IsNullOrUndefined() ) {
+					if ( V8Return->IsString() ) {
+						if ( !( String = V8Return->ToString() ).IsEmpty() ) {
+							Return->Malloc( String->Utf8Length() + 1 );	// '+ 1' for the NULL termination character.
+							String->WriteUtf8( *Return );
+						} else
+							Return->reset();
+					} else if ( V8Return->IsInt32() ) {
+						str::string( bso::Convert( ( bso::int__ )V8Return->IntegerValue(), IBuffer ) ).Convert( *Return );
+					} else if ( V8Return ->IsBoolean() ) {
+						if ( V8Return->ToBoolean()->IsTrue() )
+							str::string( "true" ).Convert( *Return );
+						else
+							str::string( "false" ).Convert( *Return );
+					} else
+						Return->reset();
+				} else
+					Return->reset();
 			}
 		qRR;
 		qRT;
@@ -338,6 +358,51 @@ namespace {
 	}
 }
 
+namespace {
+	namespace {
+		bso::bool__ HandleEvent_( const str::string_  &Digest )
+		{
+			bso::bool__ Stop = true;
+		qRH
+			str::string Id;
+			xdhutl::event_abstract Abstract;
+			TOL_CBUFFER___ IdBuffer, ActionBuffer;
+		qRB
+			Id.Init();
+			Abstract.Init();
+			if ( xdhutl::FetchEventAbstract(Digest, Id, Abstract) ) {
+				if ( xdhutl::IsPredefined( Abstract.Action() ) )
+					qRVct();	//  HandlePredefinedAction_( Abstract.Action(), Abstract.UserAction, _B(), Id, Abstract.Args );
+				else if ( Abstract.Action() == xdhutl::a_User )
+					Stop = Session_.Launch( Id.Convert( IdBuffer ), Abstract.UserAction.Convert( ActionBuffer ) );
+				else
+					qRGnr();
+			}
+		qRR
+		qRT
+		qRE
+			return Stop;
+		}
+	}
+
+	void LaunchEvent_( const v8::FunctionCallbackInfo<v8::Value>& Args )
+	{
+	qRH
+		v8q::sLString String;
+		str::wString Digest;
+	qRB
+		String.Init( Args[0] );
+
+		Digest.Init();
+		String.Get( Digest );
+	
+		HandleEvent_( Digest );
+	qRR
+	qRT
+	qRE
+	}
+}
+
 void Start(
 	v8::Local<v8::Object> Exports,
 	v8::Local<v8::Value> Module,
@@ -350,6 +415,7 @@ qRFB
 	NODE_SET_METHOD( Exports, "wrapperInfo", GetWrapperInfo_ );
 	NODE_SET_METHOD( Exports, "moduleInfo", GetModuleInfo_ );
 	NODE_SET_METHOD( Exports, "execute", Execute_ );
+	NODE_SET_METHOD( Exports, "launchEvent", LaunchEvent_ );
 
 	cio::Initialize( cio::GetConsoleSet() );
 
@@ -363,6 +429,8 @@ qRFB
 	GetAddonLocation_( Module, Location );
 
 	sclmisc::Initialize( Rack_, Location );
+
+	InitializeSession_();
 
 	node::AtExit( OnExit_, NULL );
 qRFR

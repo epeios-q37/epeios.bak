@@ -1,5 +1,9 @@
 # *Epeios* changelog
 
+2017-11-07:
+- STRMRG:
+  - Patching `retriever___::GetTable()` to avoid an error when there are no data.
+
 2017-10-29:
 - BSO:
  - Fixing *clang* warning.
