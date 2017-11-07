@@ -1,5 +1,8 @@
 Changelog for the 'barq' tool.
 
-2016-08-01 :
+2017-11-07:
+- Adaptation to changes in the underlying libraries.
+
+2016-08-01:
 - Adaptation to changes in the underlying libraries.
 

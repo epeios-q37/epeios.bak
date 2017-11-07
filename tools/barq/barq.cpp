@@ -516,14 +516,14 @@ protected:
 };
 
 namespace {
-	typedef fblfrd::universal_frontend___ _universal_frontend___;
+	typedef fblfrd::cFrontend cFrontend_;
 
-	class universal_frontend___
-	: public _universal_frontend___ 
+	class sFrontend_
+	: public cFrontend_
 	{
 	protected:
-		virtual void FBLFRDOnConnect( void ) override {}
-		virtual void FBLFRDOnDisconnect( void ) override {}
+		virtual void FBLFRDOnConnection( void ) override {}
+		virtual void FBLFRDOnDisconnection( void ) override {}
 	};
 }
 
@@ -570,7 +570,8 @@ qRH
 	csdrcc::rDriver *Driver = NULL;
 	str::wString PluginFilename;
 	flw::sDressedIOFlow<> Flow;
-	universal_frontend___ Frontend;
+	fblfrd::universal_frontend___ Frontend;
+	sFrontend_ Dummy;
 	fblfrd::incompatibility_informations DummyIncompatibilityInformations;
 	fblfrd::compatibility_informations__ DummyCompatibilityInformations;
 	dummy_reporting_callbacks__ DummyReportingFunctions;
@@ -590,7 +591,7 @@ qRB
 	DummyIncompatibilityInformations.Init();
 
 	DummyReportingFunctions.Init();
-	Frontend.Init( str::wString(), DummyReportingFunctions );
+	Frontend.Init( str::wString(), Dummy, DummyReportingFunctions );
 
 	if ( !Frontend.Connect( "",  Flow, GetMode_( Command ), DummyCompatibilityInformations, DummyIncompatibilityInformations ) ) {
 		Meaning.Init();
@@ -617,6 +618,8 @@ qRR
 	}
 qRT
 	Frontend.Disconnect();
+
+	Flow.reset();
 
 	if ( Driver != NULL )
 		Retriever.Plugin().Delete( Driver );

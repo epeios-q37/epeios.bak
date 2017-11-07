@@ -1,8 +1,8 @@
 /* DON'T MODIFY : computer-generated file ! */
 /*
-	API from : esketchbkd V20161014 Build Oct 14 2016 09:07:21 - Win32;MSC 1800;IA-32
+	API from : esketchbkd V20171029 Build Nov  7 2017 10:27:31 - Win64;MSC 1911;AMD64
 
-	This file was generated using barq 20161013 (Build Oct 14 2016 15:13:31 Win32;MSC 1800;IA-32)
+	This file was generated using barq 20171107 (Build Nov  7 2017 10:45:46 Win64;MSC 1911;AMD64)
 */
 
 #ifndef ESKETCH__INC
@@ -138,12 +138,12 @@ namespace esketch {
 			CommandsDetails.Init();
 
 			CommandDetail.Init();
-			CommandDetail.Name = "ToUC";;
+			CommandDetail.Name = "ToUC_1";;
 			CommandDetail.Casts.Append( Parameters + 0, 3 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
-			CommandDetail.Name = "Test";;
+			CommandDetail.Name = "Test_1";;
 			CommandDetail.Casts.Append( Parameters + 3, 1 );
 			CommandsDetails.Append( CommandDetail );
 
@@ -199,7 +199,7 @@ namespace esketch {
 
 			_ID = Common_->GetNewObject();
 		}
-		void ToUC( 
+		void ToUC_1( 
 			const fblfrd::string_ &In1,
 			fblfrd::string_ &Out1 ) const
 		{
@@ -212,7 +212,7 @@ namespace esketch {
 
 			Common_->Frontend().Handle();
 		}
-		void Test( void ) const
+		void Test_1( void ) const
 		{
 			Common_->Frontend().PushHeader( _ID, Common_->Commands()[1] );
 

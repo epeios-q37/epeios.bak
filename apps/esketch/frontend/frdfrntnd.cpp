@@ -34,7 +34,7 @@ qRH
 qRB
 	Result.Init();
 
-	Object_.ToUC( String, Result );
+	Object_.ToUC_1( String, Result );
 
 	String = Result;
 qRR

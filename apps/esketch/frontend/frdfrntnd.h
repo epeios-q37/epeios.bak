@@ -98,7 +98,7 @@ namespace frdfrntnd {
 		dString &ToUpper( dString &String );
 		void TestMessage( void )
 		{
-			Object_.Test();
+			Object_.Test_1();
 		}
 	};
 
