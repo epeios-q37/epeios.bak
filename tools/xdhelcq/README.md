@@ -13,6 +13,8 @@ For more information, see [http://q37.info/tools/xdhelcq/](http://q37.info/tools
 
 ## Note for the developer and maintainer of this wrapper.
 
+Install, **in this directory, without the `-g` option**, the *NPM* packages `electron` and `electron-rebuild` (`npm install electron electron-rebuild`). You can then launch `DVLGenGYP`. `electron` (and also `electron-rebuild`) will be in `nodes_modules/.bin/`.
+
 Handle:
  
   * <https://electron.atom.io/docs/tutorial/using-native-node-modules/>

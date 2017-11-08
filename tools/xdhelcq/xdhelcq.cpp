@@ -310,14 +310,18 @@ namespace {
 	sJS JS_;
 	xdhups::sSession Session_;
 	xdhups::agent___ Agent_;
-	TOL_CBUFFER___ _LanguageBuffer;
+	TOL_CBUFFER___ LanguageBuffer_, IdentificationBuffer_;
 
 	void InitializeSession_( void )
 	{
 	qRH;
-		xdhujp::sProxyCallback *ProxyCallback;
+		xdhujp::sProxyCallback *ProxyCallback = NULL;
 		qCBUFFERr Buffer;
+		str::wString ModuleFilename, Identification;
 	qRB;
+		ModuleFilename.Init();
+		sclmisc::MGetValue( registry::parameter::ModuleFilename, ModuleFilename );
+
 		ProxyCallback = new xdhujp::sProxyCallback;	// Destruction is made by '_Session'.
 
 		if ( ProxyCallback == NULL )
@@ -327,9 +331,13 @@ namespace {
 
 		ProxyCallback->Init( ::JS_ );
 
-		Agent_.Init( xdhcmn::mMonoUser, str::wString( "h:/bin/orgnzqxdh" ), "(dummy)" );
+		Identification.Init( NAME_LC " V" VERSION );
+		Identification.Append( " - Node v" NODE_VERSION_STRING "; ABI v" NODE_STRINGIFY( NODE_MODULE_VERSION ) " - " );
+		Identification.Append( "Build " __DATE__ " " __TIME__ " - " );
+		Identification.Append( cpe::GetDescription() );
+		Agent_.Init( xdhcmn::mMonoUser, ModuleFilename, Identification.Convert( IdentificationBuffer_ ) );
 
-		Session_.Init( Agent_.RetrieveCallback( Agent_.BaseLanguage( _LanguageBuffer ), ProxyCallback ) );
+		Session_.Init( Agent_.RetrieveCallback( Agent_.BaseLanguage( LanguageBuffer_ ), ProxyCallback ) );
 		sclmisc::SetBaseLanguage( str::wString( Agent_.BaseLanguage( Buffer ) ) );
 	qRR;
 		if ( ProxyCallback != NULL )

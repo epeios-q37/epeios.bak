@@ -6,6 +6,7 @@
   <xpp:expand href="../../TOL.xcfg"/>
 		<xpp:expand href="../XDH.xcfg"/>
 		<Parameters>
+   <ModuleFilename>h:/bin/esketchxdh</ModuleFilename>
 			<Language>en</Language>
 			<Command>Launch</Command>
 			<!-- Default command -->
