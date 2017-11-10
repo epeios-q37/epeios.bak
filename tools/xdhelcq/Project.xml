@@ -9,7 +9,7 @@
 			<xpp:bloc>2017</xpp:bloc>
 		</xpp:define>
 		<xpp:set name="Credits" value="Epeios"/>
-		<xpp:set name="Type" value="NJSWrapper"/>
+		<xpp:set name="Type" value="ELCWrapper"/>
 	</xpp:bloc>
 	<xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
 	<About>
@@ -47,7 +47,7 @@
 	</Modules>
 	<SourceDirs>
 	</SourceDirs>
-	<RTW Description="Node.js addon wrapper" Keywords="wrapper,libuv">
+	<RTW Description="'XDHTML' 'Electron' wrapper." Keywords="electron,XDHTML,wrapper,native,desktop,ui">
   <Dir>xdhelcq</Dir>
  </RTW>
 	<Files>
