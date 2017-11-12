@@ -1,5 +1,11 @@
 # *Epeios* changelog
 
+2017-11-12:
+- CSDLEC:
+  - Adding missing `override`.
+- CSDULC:
+  - Fixing a *Clang* warning.
+
 2017-11-07:
 - STRMRG:
   - Patching `retriever___::GetTable()` to avoid an error when there are no data.

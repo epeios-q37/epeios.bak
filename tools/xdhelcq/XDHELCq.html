@@ -107,7 +107,21 @@ function launchEvent( digest )
   <body id="Root" data-xdh-onevents="(keypress|About|SC+a)(keypress|Q37Refresh|SC+r)">
     <script>
 attachDebugger();
-const xdhelcq = require( 'h:/bin/xdhelcq.node' );
+
+var xdhelcqPath = null;
+
+if ( process.env.EPEIOS_SRC ) {
+ var addonPath = null;
+ if ( process.platform == 'win32' )
+  addonPath = 'h:/bin/';
+ else
+  addonPath = '~/bin/';
+ xdhelcqPath = addonPath + 'xdhelcq.node';
+} else {
+ xdhelcqPath = './xdhelcq.node';
+}
+
+const xdhelcq =require( xdhelcqPath );
 	</script>
   </body>
 </html>

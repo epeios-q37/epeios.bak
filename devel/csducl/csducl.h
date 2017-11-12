@@ -127,7 +127,8 @@ namespace csducl {
 				break;
 			}
 
-			return *(flw::ioflow__ *)NULL;	// Pour viter un 'warning'.
+			qRFbd();	// To be sure that we never execute line below.
+			return _RemoteFlow;	// It doesn't matter that _'RemoteFlow' is not set, because this code is never executed; it's only here to avoid a warning.
 		}
 	protected:
 		virtual fdr::size__ FDRRead(
