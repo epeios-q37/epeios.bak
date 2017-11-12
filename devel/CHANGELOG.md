@@ -5,6 +5,8 @@
   - Adding missing `override`.
 - CSDULC:
   - Fixing a *Clang* warning.
+- V8Q:
+  - (**reverted**; was already partially handled and will find another way to fix this issue) Fixing an issue which sometimes occurs under *macOS* depending on the used *Node.js* version.
 
 2017-11-07:
 - STRMRG:
