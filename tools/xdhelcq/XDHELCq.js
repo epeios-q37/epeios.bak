@@ -2,6 +2,8 @@ const {app, BrowserWindow} = require('electron')
 const path = require('path')
 const url = require('url')
 
+console.log( process.argv );
+
 /*
 
 if ( process.env.EPEIOS_SRC ) {

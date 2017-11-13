@@ -100,6 +100,18 @@ function launchEvent( digest )
 {
 	xdhelcq.launchEvent( digest );
 }
+function initialize( arguments ) {
+	var mergedArguments = "";
+	var length = arguments.length;
+	
+	while ( length-- ) {
+		mergedArguments = '"' + arguments[length] + '" ' + mergedArguments;
+	}
+	
+	console.log( mergedArguments );
+	xdhelcq.initialize( mergedArguments );
+}
+
 	</script>
     <title>Hello World!</title>
     <!-- END -->
@@ -122,6 +134,8 @@ if ( process.env.EPEIOS_SRC ) {
 }
 
 const xdhelcq =require( xdhelcqPath );
+console.log( require('electron').remote.process.argv );
+initialize( require('electron').remote.process.argv );
 	</script>
   </body>
 </html>

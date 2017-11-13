@@ -6,7 +6,7 @@
   <xpp:expand href="../../TOL.xcfg"/>
 		<xpp:expand href="../XDH.xcfg"/>
 		<Parameters>
-   <ModuleFilename>h:/bin/esketchxdh</ModuleFilename>
+   <!--ModuleFilename>h:/bin/esketchxdh</ModuleFilename-->
 			<Language>en</Language>
 			<Command>Launch</Command>
 			<!-- Default command -->
@@ -42,18 +42,12 @@
 		</Locale>
 		<Arguments>
 			<xpp:expand select="TOL_Arguments"/>
-			<!-- Commandes : pas de 'Path' (vaut 'Parameters/Command'), ni de 'Value'. -->
-			<Argument id="LaunchCommand" Description="LaunchCommandDescription" long="launch" short="l" Value="Launch" Usage="%TestFlag% %TestOption% %TestArgument%"/>
-			<!-- Fanaux : 'Path', mais pas de 'Value'. -->
-			<Argument id="TestFlag" Description="TestFlagDescription" long="flag" short="f" Path="Flag" Value="TestFlag"/>
-			<!-- Options : 'Path' ET 'Value'. -->
-			<Argument id="TestOption" Description="TestOptionDescription" long="option" short="o" Path="Option" Label="TestOptionLabel"/>
-			<!-- Arguments libres : 'Path' mais PAS de 'Value' (ni de 'short', ni de 'long'). -->
-			<Argument id="ComponentArgument" Description="ComponentArgumentDescription" Path="ComponentFilename" Label="ComponentArgumentLabel"/>
-			<!-- Affectations des arguments libres-->
+			<!-- Command -->
+			<Argument id="LaunchCommand" Description="LaunchCommandDescription" long="launch" short="l" Value="Launch" Usage="%ModuleFilenameOption%"/>
+			<!-- Options -->
+			<Argument id="ModuleFilenameOption" Description="ModuleFilenameOptionDescription" long="module" short="m" Path="ModuleFilename" Label="ModuleFilenameOptionLabel"/>
 			<Layouts>
 				<Layout command="Launch">
-					<Link index="0" Target="ComponentArgument"/>
 				</Layout>
 			</Layouts>
 		</Arguments>
