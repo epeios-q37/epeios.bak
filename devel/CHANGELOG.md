@@ -1,5 +1,9 @@
 # *Epeios* changelog
 
+2017-11-13:
+- LOG:
+  - Becomes *LOGQ*, to avoid some conflict.
+
 2017-11-12:
 - CSDLEC:
   - Adding missing `override`.

@@ -108,7 +108,7 @@ function initialize( arguments ) {
 		mergedArguments = '"' + arguments[length] + '" ' + mergedArguments;
 	}
 	
-	console.log( mergedArguments );
+//	console.log( mergedArguments );
 	xdhelcq.initialize( mergedArguments );
 }
 
@@ -134,7 +134,7 @@ if ( process.env.EPEIOS_SRC ) {
 }
 
 const xdhelcq =require( xdhelcqPath );
-console.log( require('electron').remote.process.argv );
+// console.log( require('electron').remote.process.argv );
 initialize( require('electron').remote.process.argv );
 	</script>
   </body>

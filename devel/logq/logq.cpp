@@ -17,9 +17,9 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define LOG__COMPILATION
+#define LOGQ_COMPILATION_
 
-#include "log.h"
+#include "logq.h"
 
-using namespace log;
+using namespace logq;
 
