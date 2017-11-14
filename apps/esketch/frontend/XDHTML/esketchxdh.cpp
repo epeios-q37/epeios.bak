@@ -17,6 +17,8 @@
     along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "esketchxdh.h"
+
 #include "sclxdhtml.h"
 #include "sclmisc.h"
 

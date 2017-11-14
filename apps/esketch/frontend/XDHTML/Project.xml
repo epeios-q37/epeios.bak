@@ -95,6 +95,9 @@
 		<File>../esketchfrd.xcfg</File>
 		<File>../esketchfrd.xlcl</File>
 	</Files>
+	<RTW Description="eSketch" Keywords="keyword1,keyword2">
+		<Dir>esketchxdh</Dir>
+	</RTW>
 	<Packing>
 		<WikiFiles>
 			<File Dir="computing/epeios/apps/esketch/" Desc="general description of esketchxdh" Oddity="IsHome">esketchxdh</File>
