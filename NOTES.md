@@ -5,7 +5,7 @@
 Cette section est pour la publication *web* (plus précisément, sur *Github*) d'un composant logiciel.
 
 ``` xml
-<RTW Description="DESCRIPTION'" Keywords="KEYWORDS">
+<RTW Description="DESCRIPTION" Keywords="KEYWORDS">
  <Dir>DIR</Dir>
 </RTW>
 ```
