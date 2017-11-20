@@ -21,7 +21,6 @@
 # define WRPUNBOUND__INC
 
 # include "sktbsc.h"
-# include "sktinf.h"
 
 # include "fblbkd.h"
 

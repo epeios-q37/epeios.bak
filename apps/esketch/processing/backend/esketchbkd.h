@@ -17,48 +17,13 @@
     along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "wrpunbound.h"
+#ifndef ESKETCHBKD_INC_
+# define ESKETCHBKD_INC_
 
-#include "esketchbkd.h"
-#include "registry.h"
-#include "dir.h"
-#include "fnm.h"
+# include "sktinf.h"
 
-#include "sclmisc.h"
+# define BACKEND_NAME	SKTINF_LC_AFFIX	"bkd"
+# define COPYRIGHT		COPYRIGHT_YEARS " " SKTINF_OWNER_NAME " (" SKTINF_OWNER_CONTACT ")"	
+# define API_VERSION	"1"
 
-using namespace wrpunbound;
-
-#define M( message )	qCDEF( char *, message##_, #message )
-
-namespace {
-	M( TestMessage );
-}
-
-#undef M
-
-using common::rStuff;
-
-#define DEC( name, version )\
-	static inline void unbound_##name##_##version(\
-		fblbkd::rBackend &BaseBackend,\
-		fblbkd::rRequest &Request )
-
-DEC( Test, 1 )
-{
-qRH
-qRB
-	REPORT( TestMessage );
-qRR
-qRT
-qRE
-}
-
-#define D( name, version )	SKTINF_UC_SHORT #name "_" #version, ::unbound_##name##_##version
-
-void wrpunbound::Inform( fblbkd::backend___ &Backend )
-{
-	Backend.Add( D( Test, 1 ),
-		fblbkd::cEnd,
-		fblbkd::cEnd );
-}
-
+#endif

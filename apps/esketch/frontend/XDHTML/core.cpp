@@ -133,13 +133,13 @@ qRB
 	V( sclxdhtml::GetLauncher(), Launcher );
 
 	Writer.PushTag("Software" )	;
-	Writer.PutValue( BASE_SOFTWARE_NAME, "Name" );
-	Writer.PutValue( BASE_SOFTWARE_VERSION, "Version" );
+	Writer.PutValue( SOFTWARE_NAME, "Name" );
+	Writer.PutValue( SOFTWARE_VERSION, "Version" );
 	Writer.PopTag();
 
 	Writer.PushTag( "Frontend" );
 
-	V( BASE_NAME, Name );
+	V( NAME, Name );
 	V( VERSION, Version );
 
 	Build.Init();
@@ -150,14 +150,14 @@ qRB
 
 
 	Writer.PushTag( "Author" );
-	V( BASE_AUTHOR_NAME, Name );
-	V( BASE_AUTHOR_CONTACT, Contact );
+	V( AUTHOR_NAME, Name );
+	V( AUTHOR_CONTACT, Contact );
 	Writer.PopTag();
 	Writer.PushTag( "Copyright" );
-	V( BASE_COPYRIGHT_YEARS, Years );
+	V( COPYRIGHT_YEARS, Years );
 	Writer.PushTag( "Owner ");
-	V( BASE_OWNER_NAME, Name );
-	V( BASE_OWNER_CONTACT, Contact );
+	V( OWNER_NAME, Name );
+	V( OWNER_CONTACT, Contact );
 	Writer.PopTag();
 	Writer.PopTag();
 	Writer.PopTag();

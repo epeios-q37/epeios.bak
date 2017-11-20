@@ -20,7 +20,6 @@
 #ifndef FRDFRNTND__INC
 # define FRDFRNTND__INC
 
-# include "sktinf.h"
 # include "frdapi.h"
 
 # include "frdrgstry.h"

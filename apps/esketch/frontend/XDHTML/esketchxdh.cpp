@@ -97,5 +97,5 @@ void sclxdhtml::SCLXDHTMLReleaseCallback( xdhcmn::cSession *Callback )
 	delete Callback;
 }
 
-const char *sclmisc::SCLMISCTargetName = BASE_NAME;
+const char *sclmisc::SCLMISCTargetName = NAME;
 const char *sclmisc::SCLMISCProductName = SKTINF_MC_AFFIX;
