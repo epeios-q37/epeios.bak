@@ -134,7 +134,10 @@ namespace sclfrntnd {
 		const str::dString &AboutPlugin( str::dString &About );
 		fblovl::eMode Mode( void )
 		{
-			return P_().Mode();
+			if ( Retriever_.IsReady() )
+				return P_().Mode();
+			else
+				return fblovl::mNone;
 		}
 		csdrcc::rDriver *New( void )
 		{

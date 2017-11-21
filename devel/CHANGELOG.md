@@ -1,5 +1,9 @@
 # *Epeios* changelog
 
+2017-11-21:
+- SCLFRNTND:
+  - Fixing bad handling when no backend is selected.
+
 2017-11-20:
 - SCLMISC:
   - Adding target to the message displayed when unable to load locale or configuration file.
