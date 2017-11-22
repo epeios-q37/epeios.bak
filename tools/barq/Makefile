@@ -25,19 +25,19 @@ copt += -DE_DEBUG
 # For using <setjmp.h> instead of C++ exceptions.
 #copt += -DERR_JMPUSE
 	
-mods += ags aem bch bitbch bso 
-mods += cio cpe crptgr cslio crt 
-mods += ctn dir dte dtfbsc dtfptb 
-mods += epsmsc err fdr flf flsq 
-mods += flw flx ias idsq iof 
-mods += iop lst lstbch lstcrt lstctn 
-mods += mns mtx ntvstr que sdr 
-mods += stkbse stkbch stkctn str strng 
-mods += tagsbs tol txf tys uys 
-mods += utf xtf llio tht thtsub 
-mods += bomhdl cdgb64 dlbrry fil fnm 
-mods += lcl plgn plgncore rgstry stsfsm 
-mods += xml xpp 
+mods += ags aem bch bitbch bomhdl 
+mods += bso cdgb64 cio cpe crptgr 
+mods += cslio crt ctn dir dte 
+mods += dtfbsc dtfptb epsmsc err fdr 
+mods += fil flf flsq flw flx 
+mods += fnm ias idsq iof iop 
+mods += lcl lck lst lstbch lstcrt 
+mods += lstctn mns mtk mtx ntvstr 
+mods += que rgstry sdr stkbse stkbch 
+mods += stkcrt stkctn str strng stsfsm 
+mods += tagsbs tht thtsub tol txf 
+mods += tys uys utf xml xpp 
+mods += xtf llio dlbrry plgn plgncore 
 mods += csdrcc 
 mods += fblcmd fblcst fblfep fblfph fblfrd 
 mods += fblfrp fblovl fbltyp fblfaq 
@@ -79,7 +79,9 @@ MacOS=Darwin
 Android=Android
 os=$(shell uname -o 2>/dev/null || uname -s)
 mach=$(shell uname -m)
-  
+ifdef EPEIOS_SRC
+endif
+
 
 ##########################
 # For Cygwin environment #
@@ -145,6 +147,17 @@ endif
 
 ##########################
 		
+
+####################################
+# For Android (Termux) environment #
+####################################
+
+ifeq ("$(os)","$(Android)")
+
+endif
+
+#############################
+	
 ###################################
 ###################################
 ##### DON'T MODIFY BELOW !!! ######
@@ -226,7 +239,7 @@ endif
 #########################
 
 ifeq ("$(os)", "$(MinGW)")
-
+ 
 	co += -DMSYS -std=gnu++11 -DUNICODE
 	lo += -municode
 	
@@ -257,7 +270,7 @@ endif
 #############################
 
 ifeq ("$(os)","$(GNULinux)")
-
+ 
 	co += -std=gnu++11 -DUNICODE -D_FILE_OFFSET_BITS=64
 	
 	mods += $(pmods)
@@ -286,7 +299,7 @@ endif
 #########################
 
 ifeq ("$(os)","$(Linux)")
-
+ 
 	co += -std=gnu++11 -DUNICODE -D_FILE_OFFSET_BITS=64
 	
 	mods += $(pmods)
@@ -313,7 +326,7 @@ endif
 ##########################
 
 ifeq ("$(os)","$(MacOS)")
-
+ 
 	co += -std=gnu++11 -DUNICODE -D_FILE_OFFSET_BITS=64
 	
 	mods += $(pmods)
@@ -334,13 +347,40 @@ endif
 
 ##########################
 		
+
+####################################
+# For Android (Termux) environment #
+####################################
+
+ifeq ("$(os)","$(Android)")
+ 
+	co += -std=gnu++11 -DUNICODE -D_FILE_OFFSET_BITS=64
+	
+	mods += $(pmods)
+
+	libs += -lpthread -ldl -lrt
+	
+	ifeq ("$(target)","$(IA_32)")
+		co += -m32
+		lo += -m32
+	else # 'ifeq' on other line due to GNU 3.80 (Maemo on N900).
+		ifeq ("$(target)","$(AMD64)")
+			co += -m64
+			lo += -m64
+		endif
+	endif
+	binary=$(name)
+endif
+
+#############################
+		
 all: $(binary)
 	rm -rf *.o
 ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20161027"\"
+copt += -DVERSION=\""20171107"\"
 copt += -DCOPYRIGHT_YEARS=\""2016"\"
 copt += -DIDENTIFIER=\""415e08c8-aab6-4ea0-9259-ae8e160a5800"\"
 

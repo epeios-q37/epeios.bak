@@ -20,16 +20,7 @@
   <Modules Group="Epeios" Path="h:/hg/epeios/stable/">
    <Modules Group="Core">
     <xpp:expand select="Core"/>
-    <Module>bomhdl</Module>
-    <Module>cdgb64</Module>
-    <Module>fil</Module>
-    <Module>fnm</Module>
-    <Module>lcl</Module>
-    <Module>rgstry</Module>
-    <Module>stsfsm</Module>
-    <Module>xml</Module>
-    <Module>xpp</Module>
-   </Modules>
+    </Modules>
    <Modules Group="SCL">
     <xpp:expand select="SCL"/>
    </Modules>
@@ -38,7 +29,7 @@
  <Files>
   <File>demo.xml</File>
  </Files>
- <CI>
-  <Dir>xppq-java</Dir>
- </CI>
+	<RTW Description="XML parser and preprocessor" Keywords="XML,parser,preprocessor,xpp">
+		<Dir>xppq-java</Dir>
+ </RTW>
 </Project>

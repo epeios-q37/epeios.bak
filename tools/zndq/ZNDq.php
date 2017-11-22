@@ -1,21 +1,31 @@
 <?php
+/*
+	Copyright (C) 2017 by Claude SIMON (http://zeusw.org/epeios/contact.html).
 
-class ZNDqDecl {
-	protected $affix="";	// We are not interested in a extension;
-}
+	This file is part of ZNDq.
 
-// Begin of generic part.
-ZNDq_Init();
+	ZNDq is free software: you can redistribute it and/or modify it
+	under the terms of the GNU Affero General Public License as published
+	by the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
 
-class ZNDq extends ZNDqDecl {
-	static public function wrapperInfo()
-	{
-		return ZNDq_wrapperInfo(); 
+	ZNDq is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU Affero General Public License for more details.
+
+	You should have received a copy of the GNU Affero General Public License
+	along with ZNDq.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+zndq_Init();
+
+class ZNDq {
+	static public function wrapperInfo() {
+		return zndq_wrapper_info();
 	}
-	static public function componentInfo()
-	{
-		return ZNDq_componentInfo(); 
+	static public function componentInfo() {
+		return zndq_component_info();
 	}
 }
-// End of generic part.
 ?>

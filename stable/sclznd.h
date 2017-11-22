@@ -58,15 +58,102 @@ namespace sclznd {
 		{
 			C_().GetArgument( Index_++, n4znd::tString, &String );
 		}
+		fdr::rIODriver *GetStream( void )
+		{
+			fdr::rIODriver *Driver = NULL;
+
+			C_().GetArgument( Index_++, n4znd::tStream, &Driver );
+
+			return Driver;
+		}
+		void Get( bso::sS64 &Long )
+		{
+			C_().GetArgument( Index_++, n4znd::tLong, &Long );
+		}
+		void Get( bso::sBool &Bool )
+		{
+			C_().GetArgument( Index_++, n4znd::tBool, &Bool );
+		}
 		void SetReturnValue( const str::dString &String )
 		{
 			C_().SetReturnValue( n4znd::tString, &String );
+		}
+		void SetReturnValue( bso::sS64 Long )
+		{
+			C_().SetReturnValue( n4znd::tLong, &Long );
+		}
+		void SetReturnValue( bso::sBool Bool )
+		{
+			C_().SetReturnValue( n4znd::tBool, &Bool );
 		}
 	};
 
 	typedef void ( fFunction )( sCaller &Caller );
 
 	typedef scln4a::sRegistrar<fFunction> sRegistrar;
+
+	typedef fdr::rIODressedDriver rDriver_;
+
+	class rStreamDriver
+	: public rDriver_
+	{
+	private:
+		qRMV( fdr::rIODriver, D_, Driver_ );
+	protected:
+		virtual fdr::sSize FDRRead(
+			fdr::sSize Maximum,
+			fdr::sByte *Buffer ) override
+		{
+			return D_().Read( Maximum, Buffer, fdr::bNonBlocking );
+		}
+		virtual void FDRDismiss( bso::sBool Unlock ) override
+		{
+			D_().Dismiss( Unlock );
+		}
+		virtual fdr::sTID FDRITake( fdr::sTID Owner ) override
+		{
+			return D_().ITake( Owner );
+		}
+		virtual fdr::sSize FDRWrite(
+			const fdr::sByte *Buffer,
+			fdr::sSize Maximum ) override
+		{
+			return D_().Write( Buffer, Maximum );
+		}
+		virtual void FDRCommit( bso::sBool Unlock ) override
+		{
+			D_().Commit( Unlock );
+		}
+		virtual fdr::sTID FDROTake( fdr::sTID Owner ) override
+		{
+			return D_().OTake( Owner );
+		}
+	public:
+		void reset( bso::sBool P = true )
+		{
+			rDriver_::reset( P );
+
+			if ( P ) {
+				if ( Driver_ != NULL )
+					delete Driver_;
+			}
+
+			Driver_ = NULL;
+		}
+		qCVDTOR( rStreamDriver );
+		void Init( sCaller &Caller )
+		{
+			reset();
+
+			rDriver_::Init( fdr::ts_Default );
+			Driver_ = Caller.GetStream();
+		}
+	};
+
+	inline void Throw( const str::dString &Message )
+	{
+		qRVct();
+	}
 
 	void SCLZNDInfo( txf::sOFlow &Flow );	// To define by user.
 	void SCLZNDRegister( sRegistrar &Registrar );	// To define by user

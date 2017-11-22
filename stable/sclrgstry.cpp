@@ -858,7 +858,3 @@ Q37_GCTOR( sclrgstry )
 	ArgumentsLevel_ = Registry_.CreateEmbedded();
 	RuntimeLevel_ = Registry_.CreateEmbedded();
 }
-
-namespace {
-
-}

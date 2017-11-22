@@ -663,8 +663,10 @@ namespace {
 
 		if ( !Success && qRPT ) {
 			Meaning.Init();
-			Meaning.SetValue( "" );	// Ne sera pas traduit, puisque la locale n'a pas pu tre lu.
-			Meaning.AddTag( "Unable to open locale file" );	// Ceci remplacera le '%0' ci-dessus.
+			Meaning.SetValue( "" );	// Will not be translated, as the locale file could not be red.
+			// Both tags below will replace the '%0' above.
+			Meaning.AddTag( "Unable to open locale file" );	
+			Meaning.AddTag( SCLMISCTargetName );
 			ReportAndAbort( Meaning );
 		}
 	qRR
@@ -680,20 +682,21 @@ namespace {
 		qRPN )
 	{
 		bso::sBool Success = false;
-	qRH
-		lcl::meaning Meaning;
-	qRB
-		Success = InitializeFlow_( CONFIGURATION_DEFAULT_FILENAME_SUFFIX, SuggestedDirectory, Flow, Directory );
+		qRH
+			lcl::meaning Meaning;
+		qRB
+			Success = InitializeFlow_( CONFIGURATION_DEFAULT_FILENAME_SUFFIX, SuggestedDirectory, Flow, Directory );
 
 		if ( !Success && qRPT ) {
 			Meaning.Init();
 			Meaning.SetValue( SCLMISC_NAME "_UnableToOpenConfigurationFile" );
+			Meaning.AddTag( sclmisc::SCLMISCTargetName );
 			ReportAndAbort( Meaning );
 		}
-	qRR
-	qRT
-	qRE
-		return Success;
+		qRR
+			qRT
+			qRE
+			return Success;
 	}
 }
 

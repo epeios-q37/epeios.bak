@@ -1,8 +1,8 @@
 /* DON'T MODIFY : computer-generated file ! */
 /*
-	API from : orgnzqbkd 20170417 Build May 10 2017 08:18:15 - Win32;MSC 1800;IA-32
+	API from : orgnzqbkd 20171029 Build Nov  7 2017 10:10:09 - Win64;MSC 1911;AMD64
 
-	This file was generated using barq 20161027 (Build Dec 21 2016 17:42:27 Win32;MSC 1800;IA-32)
+	This file was generated using barq 20171107 (Build Nov  7 2017 10:45:46 Win64;MSC 1911;AMD64)
 */
 
 #ifndef ORGNZQ__INC

@@ -31,7 +31,7 @@
   <!-- NOTA : '*.php' files will automatically be packed as such. -->
   <!--File Pack="No">eSketch.php</File-->
  </Files>
- <RTW>
+ <RTW Description="PHP extension template" Keywords="template">
   <Dir>esketch-php</Dir>
  </RTW>
 </Project>

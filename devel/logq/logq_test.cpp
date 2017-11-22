@@ -21,11 +21,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "log.h"
+#include "logq.h"
 
 #include "err.h"
 #include "cio.h"
-#include "tht.h"
 
 using cio::CIn;
 using cio::COut;
@@ -34,30 +33,7 @@ using cio::CErr;
 void Generic( int argc, char *argv[] )
 {
 qRH
-	log::rLog Log;
-//	char Message[] = "0coucou0coucou0coucou0coucou0coucou0coucou0coucou0coucou0coucoucou0coucoucou0coucoucou0coucoucou0coucoucou0coucoucou0coucoucou0coucoucou0cou5";
-	char Message[] = "oucou0coucou0coucou0coucou0coucou0coucou0coucou0coucou0coabcdrfgtyh0";
-//	char Message[] = "0coucou0coucou0coucou0coucou0coucou0coucou0co";
-	ltf::line_text_oflow___<>LTF;
 qRB
-	Log.Init( cio::COut );
-	LTF.Init( cio::COut );
-
-	while ( true ) {
-		if ( !( rand() % 5 ) )
-			Message[strlen(Message)-1] = ( ( Message[strlen(Message)-1] - '0' + 1) % 10 ) + '0';
-# if 0
-		LTF.CR();
-		LTF << Message;
-		LTF.Commit();
-# else
-		Log << Message;
-		Log.Commit();
-# endif
-
-		tht::Defer( 300 );
-	}
-		
 qRR
 qRT
 qRE
@@ -85,14 +61,12 @@ int main( int argc, char *argv[] )
 	int ExitValue = EXIT_SUCCESS;
 qRFH
 qRFB
-	cio::Initialize( cio::tConsole );
-	COut << "Test of library " << LOG_NAME << ' ' << __DATE__" "__TIME__"\n" << txf::commit;
+	COut << "Test of library " << LOGQ_NAME << ' ' << __DATE__" "__TIME__"\n";
 
 	Generic( argc, argv );
 qRFR
 	ExitValue = EXIT_FAILURE;
 qRFT
-	cio::COut.Commit();
 qRFE( ErrFinal_() )
 	return ExitValue;
 }

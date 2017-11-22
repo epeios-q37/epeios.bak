@@ -322,9 +322,11 @@ namespace strmrg {
 			ctn::qCMITEMs( _item_, _irow__ ) Item;
 			Item.Init( _I() );
 
-			strmrg::GetTable( Item( _R()( _Row ) ), _I(), s_(), Table );
+			if ( _Row != qNIL ) {
+				strmrg::GetTable( Item( _R()( _Row ) ), _I(), s_(), Table );
 
-			_Row = _R().Next( _Row );
+				_Row = _R().Next( _Row );
+			}
 		}
 		void Skip( void )
 		{

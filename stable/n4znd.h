@@ -31,16 +31,10 @@
 # endif
 
 # include "err.h"
+# include "fdr.h"
 # include "n4all.h"
 
 namespace n4znd {
-
-	qENUM( Type )
-	{
-		tString,
-			t_amount,
-			t_Undefined
-	};
 
 	struct gShared
 	{
@@ -50,6 +44,14 @@ namespace n4znd {
 		qCDTOR( gShared );
 	};
 
+	qENUM( Type ) {
+		tString,
+		tStream,
+		tLong,
+		tBool,
+		t_amount,
+		t_Undefined
+	};
 }
 
 #endif

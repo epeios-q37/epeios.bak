@@ -18,10 +18,11 @@
 */
 
 #include "wrpunbound.h"
+
+#include "esketchbkd.h"
 #include "registry.h"
 #include "dir.h"
 #include "fnm.h"
-#include "sktinf.h"
 
 #include "sclmisc.h"
 

@@ -15,7 +15,7 @@
 
 	You should have received a copy of the GNU Affero General Public License
 	along with XPPq. If not, see <http://www.gnu.org/licenses/>.
-*/
+*/ 
 
 class Decl {
  protected static String affix = "xppq";
@@ -124,7 +124,7 @@ class XPPqParser {
 	static final int PROCESSED	= 0;
 	static final int START_TAG	= 1;
 	static final int ATTRIBUTE	= 2;
-	static final int VALUE		= 3;
+	static final int VALUE	= 3;
 	static final int END_TAG	= 4;
 	public XPPqParser( java.io.InputStream Stream )
 	{
@@ -173,8 +173,6 @@ class XPPqTest {
 		dump( new XPPqPreprocessor( stream ) );
 	}
 
- static private int indent = 0;
-	
 	private static void parse( java.io.InputStream stream ) throws Exception
 	{
 		XPPqData data = new XPPqData();
@@ -188,7 +186,7 @@ class XPPqTest {
 				System.out.print( "Start tag: '" + data.tagName + "'\n" );
 				break;
 			case XPPqParser.ATTRIBUTE :
-				System.out.print( "Attribute: '" + data.attributeName + "' = '" + data.value + "'\n" );
+				System.out.print( "Attribute: '" + data.attributeName + "' = '" + data.value.trim() + "'\n" );
 				break;
 			case XPPqParser.VALUE :
 				System.out.print( "Value:     '" + data.value.trim() + "'\n" );
@@ -247,8 +245,7 @@ class XPPqTest {
  	System.out.println( XPPq.componentInfo() );
  	displayBytecodeBuildTimestamp();
   System.out.println();
-
-		
+				
 		int test = 3;
 		
 		if ( args.length > 0 ) {
@@ -276,7 +273,7 @@ class XPPqTest {
 			test3( getStream() );
 			break;
 		default:
-			System.err.println( "'" + args[0] + "' is not a valid test id ; must be '0' to '3'.");
+			System.err.println( "'" + test + "' is not a valid test id ; must be '0' to '3'.");
 			System.exit(1);
 			break;
 		}

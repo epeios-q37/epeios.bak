@@ -111,7 +111,8 @@ void sclfrntnd::GetFrontendPluginFilename(
 	const str::string_ &Id,
 	str::string_ &Filename )
 {
-	sclmisc::MGetValue( rgstry::tentry___( definition_::frontend_plugins::tagged_plugin::Path, Id ), Filename );
+	if ( Id.Amount() != 0 )
+		sclmisc::MGetValue( rgstry::tentry___( definition_::frontend_plugins::tagged_plugin::Path, Id ), Filename );
 }
 
 

@@ -17,6 +17,8 @@
     along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "esketchxdh.h"
+
 #include "sclxdhtml.h"
 #include "sclmisc.h"
 
@@ -95,5 +97,5 @@ void sclxdhtml::SCLXDHTMLReleaseCallback( xdhcmn::cSession *Callback )
 	delete Callback;
 }
 
-const char *sclmisc::SCLMISCTargetName = BASE_NAME;
+const char *sclmisc::SCLMISCTargetName = NAME;
 const char *sclmisc::SCLMISCProductName = SKTINF_MC_AFFIX;

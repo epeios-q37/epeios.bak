@@ -17,12 +17,12 @@
     along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "esketchbkd.h"
+
 #include "wrpexample.h"
 #include "registry.h"
 #include "dir.h"
 #include "fnm.h"
-
-#include "sktinf.h"
 
 #include "common.h"
 

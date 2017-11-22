@@ -19,26 +19,26 @@
 
 // LOGging
 
-#ifndef LOG__INC
-# define LOG__INC
+#ifndef LOGQ_INC_
+# define LOGQ_INC_
 
-# define LOG_NAME		"LOG"
+# define LOGQ_NAME		"LOGQ"
 
-# if defined( E_DEBUG ) && !defined( LOG_NODBG )
-#  define LOG_DBG
+# if defined( E_DEBUG ) && !defined( LOGQ_NODBG )
+#  define LOGQ_DBG
 # endif
 
 # include "err.h"
-
+# include "fdr.h"
 # include "ltf.h"
 
-# define LOG_DEFAULT_SIZE	1000
+# define LOGQ_DEFAULT_SIZE	1000
 
-namespace log {
+namespace logq {
 
 	typedef fdr::oflow_driver_base___ rFDRiver_;
 	
-	template <int size = LOG_DEFAULT_SIZE> class rFDriver
+	template <int size = LOGQ_DEFAULT_SIZE> class rFDriver
 	: public rFDRiver_
 	{
 	private:
@@ -171,7 +171,7 @@ namespace log {
 		}
 	};
 
-	template <int size = LOG_DEFAULT_SIZE> class rLogRack
+	template <int size = LOGQ_DEFAULT_SIZE> class rLogRack
 	: public rTFlow_
 	{
 	private:
@@ -189,7 +189,6 @@ namespace log {
 			rTFlow_::Init( OFlow_ );
 		}
 	};
-
 }
 
 #endif

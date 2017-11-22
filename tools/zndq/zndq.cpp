@@ -24,28 +24,29 @@
 # include "main.h"
 
 #if PHP_MAJOR_VERSION != 7
-# error "Does actually only work with PHP 7. The usually available documentation about extensions is only about PHP 5, and there are important differences with PHP 7. See http://wiki.php.net/phpng-upgrading"
+# error "Does actually only work with PHP 7. \
+The usually available documentation about extensions is only about PHP 5, \
+and there are important differences with PHP 7. See http://wiki.php.net/phpng-upgrading"
 #endif
 
 
-PHP_FUNCTION( ZNDq_init )
+PHP_FUNCTION( zndq_init )
 {
 	main::Init();
 }
 
-PHP_FUNCTION( ZNDq_wrapperInfo )
+PHP_FUNCTION( zndq_wrapper_info )
 {
 	RETURN_STRING( main::WrapperInfo() );
 }
 
-PHP_FUNCTION( ZNDq_componentInfo )
+PHP_FUNCTION( zndq_component_info )
 {
 	RETURN_STRING( main::ComponentInfo() );
 }
 
-PHP_FUNCTION( ZNDq_register )
+PHP_FUNCTION( zndq_register )
 {
-
 	zend_string *String;
 
 	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "S", &String ) != SUCCESS )
@@ -53,11 +54,9 @@ PHP_FUNCTION( ZNDq_register )
 
 	// 'String->val' contains a list of arguments, as defined in the configuration file for the 'Launch' command.
 	main::Register( String->val, String->len );
-
-	RETURN_TRUE;
 }
 
-PHP_FUNCTION( ZNDq_wrapper )
+PHP_FUNCTION( zndq_wrapper )
 {
 	zend_long Index = 0;
 	int num_varargs;
@@ -66,13 +65,7 @@ PHP_FUNCTION( ZNDq_wrapper )
 	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "l*", &Index, &varargs, &num_varargs ) != SUCCESS )
 		main::ThrowGenericError();
 
-	if ( num_varargs != 1 )
-		main::ThrowGenericError();
-
-	if ( Z_TYPE( varargs[0] ) != IS_STRING )
-		main::ThrowGenericError();
-
-	main::Launch( Index, num_varargs, &varargs, return_value TSRMLS_CC );
+	main::Launch( Index, num_varargs, varargs, return_value TSRMLS_CC );
 }
 
 
@@ -80,11 +73,11 @@ extern zend_module_entry zndq_module_entry;
 #define phpext_zenq_ptr &zenq_module_entry
 
 static zend_function_entry zndq_functions[] = {
-	PHP_FE( ZNDq_init, NULL )
-	PHP_FE( ZNDq_register, NULL )
-	PHP_FE( ZNDq_wrapperInfo, NULL )
-	PHP_FE( ZNDq_componentInfo, NULL )
-	PHP_FE( ZNDq_wrapper, NULL )
+	PHP_FE( zndq_init, NULL )
+	PHP_FE( zndq_register, NULL )
+	PHP_FE( zndq_wrapper_info, NULL )
+	PHP_FE( zndq_component_info, NULL )
+	PHP_FE( zndq_wrapper, NULL )
 {
 	NULL, NULL, NULL
 }

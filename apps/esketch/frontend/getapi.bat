@@ -16,6 +16,6 @@ REM    You should have received a copy of the GNU General Public License
 REM    along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
 REM
 
-REM barq -d localhost:2000 ogzapi.xml
+REM barq -s localhost:2000 ogzapi.xml
 barq -e h:\bin\esketchbkd frdapi.xml
 sabcmd file://H:\hg\epeios\stable\frd4cpp.xsl frdapi.xml frdapi.h

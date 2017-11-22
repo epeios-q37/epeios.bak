@@ -1,3 +1,15 @@
-You will find here the source code of the *xppq* component (an *XML* parser and an [*XML* preprocessor](http://q37.info/s/t/xppq/)) as [*Zend*](https://en.wikipedia.org/wiki/Zend_Engine) (*PHP*) extension.
+# xppq-php
 
-You may also be interested by the [source code of the *Epeios* modules](http://q37.info/s/s/epeios/), which are used by this components.
+## Presentation
+
+The *Epeios* XML [preprocessor](http://q37.info/s/t/xppq/) and parser as [*Zend*](http://q37.info/s/x/Zend_engine/) (*PHP*) extension.
+
+For more information, see http://q37.info/tools/xppq/.
+
+## Status
+*GNU/Linux* & *OS X* : [![Travis CI](https://travis-ci.org/epeios-q37/xppq-php.png)](https://travis-ci.org/epeios-q37/xppq-php)
+ 
+*Windows* : [![AppVeyor](http://ci.appveyor.com/api/projects/status/github/epeios-q37/xppq-php)](http://ci.appveyor.com/project/epeios-q37/xppq-php)
+
+
+

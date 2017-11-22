@@ -11,4 +11,8 @@ For more information, see [http://q37.info/tools/njsq/](http://q37.info/tools/nj
 *Windows* : [![AppVeyor](http://ci.appveyor.com/api/projects/status/github/epeios-q37/njsq)](http://ci.appveyor.com/project/epeios-q37/njsq)
 
 
+## Note for the developer and maintainer of this *addon*.
 
+When changing the version of *Node.js*, you must launch `DVLGenGYP` to regenerate the correct build files.  
+
+ 

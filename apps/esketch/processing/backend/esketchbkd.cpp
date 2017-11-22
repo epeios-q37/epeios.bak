@@ -17,12 +17,13 @@
     along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "esketchbkd.h"
+
 #include "sclbacknd.h"
 #include "sclmisc.h"
 
 #include "registry.h"
 #include "sktfbc.h"
-#include "sktinf.h"
 
 #include "fdr.h"
 
@@ -30,10 +31,6 @@
 
 #include "wrpunbound.h"
 #include "wrpexample.h"
-
-#define BACKEND_NAME	SKTINF_LC_AFFIX	"bkd"
-#define COPYRIGHT		COPYRIGHT_YEARS " " SKTINF_OWNER_NAME " (" SKTINF_OWNER_CONTACT ")"	
-#define API_VERSION		"1"
 
 typedef sclbacknd::rCallback rCallback_;
 

@@ -301,7 +301,7 @@ void mtk::RawLaunchAndKeep(
 	Common.UP = UP;
 	
 	if ( Common.Amount == 0 )
-		mtk::RawLaunchAndKill( Launcher_, NULL ); 
+		mtk::RawLaunchAndKill( Launcher_, NULL );
 	else
 		mtx::Unlock( Common.Thread );
 		

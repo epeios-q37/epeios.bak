@@ -11,7 +11,7 @@
 				<xpp:ifeq select="ostype" value="linux-gnu">
 					<xpp:set name="env" value="linux"/>
 				</xpp:ifeq>
-				<xpp:ifeq select="ostype" value="darwin15">
+				<xpp:ifeq select="ostype" value="darwin17">
 					<xpp:set name="env" value="mac"/>
 				</xpp:ifeq>
 				<xpp:set name="packing" value="no"/>

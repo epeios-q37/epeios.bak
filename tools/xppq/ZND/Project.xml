@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project xmlns:xpp="http://zeusw.org/epeios/xpp">
+<Project xmlns:xpp="http://q37.info/ns/xpp/" >
  <xpp:bloc>
   <!-- User definitions -->
   <xpp:define name="Version">
-   <xpp:bloc>20150620</xpp:bloc>
+   <xpp:bloc>(Obsolete entry)</xpp:bloc>
   </xpp:define>
   <xpp:set name="Credits" value="Epeios"/>
   <xpp:set name="Type" value="ZNDComponent"/>
@@ -14,32 +14,26 @@
  <xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
  <About>
   <Program>xppqznd</Program>
-  <Software>xppq</Software>
+  <Software>XPPq</Software>
  </About>
  <Modules>
   <Modules Group="Epeios" Path="h:/hg/epeios/stable/">
    <Modules Group="Core">
     <xpp:expand select="Core"/>
-    <Module>bomhdl</Module>
-    <Module>cdgb64</Module>
-    <Module>fil</Module>
-    <Module>fnm</Module>
-    <Module>lcl</Module>
-    <Module>rgstry</Module>
-    <Module>stsfsm</Module>
-    <Module>xml</Module>
-    <Module>xpp</Module>
    </Modules>
    <Modules Group="SCL">
     <xpp:expand select="SCL"/>
    </Modules>
-   <Modules Group="ZND">
-    <xpp:expand select="ZND"/>
-   </Modules>
   </Modules>
+		<Module>parser</Module>
+		<Module>processor</Module>
+		<Module>registry</Module>
  </Modules>
- <PreprocessorDefinitions>
-  <!-- For 'TS' build. For 'NTS', comment below line. -->
-  <PreprocessorDefinition>ZTS</PreprocessorDefinition>
- </PreprocessorDefinitions>
+ <Files>
+  <!-- NOTA : '*.php' files will automatically be packed as such. -->
+  <!--File Pack="No">XPPq.php</File-->
+ </Files>
+	<RTW Description="XML parser and preprocessor" Keywords="XML,parser,preprocessor,xpp">
+		<Dir>xppq-php</Dir>
+ </RTW>
 </Project>

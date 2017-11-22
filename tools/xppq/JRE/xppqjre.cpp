@@ -49,9 +49,9 @@ namespace parsing_ {
 				tol::reset( P, Stream_, IFlow_, XFlow_, Parser_ );
 			}
 			qCDTOR( rParser_ );
-			void Init( cObject *Stream )
+			void Init( sCaller &Caller )
 			{
-				Stream_.Init( Stream );
+				Stream_.Init( Caller );
 				IFlow_.Init( Stream_ );
 				XFlow_.Init( IFlow_, utf::f_Default );
 				Parser_.Init( XFlow_, xml::eh_Default );
@@ -74,7 +74,7 @@ namespace parsing_ {
 		if ( Parser == NULL )
 			qRAlc();
 
-		Parser->Init( Caller.Get() );
+		Parser->Init( Caller );
 	qRR
 		if ( Parser != NULL )
 			delete Parser;	// Deletes also 'Stream' if set.
@@ -213,9 +213,9 @@ namespace processing_ {
 			{
 				tol::reset( P, Input_, Flow_, XFlow_, PFlow_ );
 			}
-			void Init( cObject *InputStream )
+			void Init( sCaller &Caller )
 			{
-				Input_.Init( InputStream );
+				Input_.Init( Caller );
 				Flow_.Init( Input_ );
 				XFlow_.Init( Flow_, utf::f_Default );
 				PFlow_.Init(XFlow_, xpp::criterions___( str::wString() ) );
@@ -237,7 +237,7 @@ namespace processing_ {
 		if ( Processor == NULL )
 			qRAlc();
 
-		Processor->Init( Caller.Get() );
+		Processor->Init( Caller );
 	qRR
 		if ( Processor != NULL )
 			delete Processor;

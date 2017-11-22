@@ -20,27 +20,15 @@
 #ifndef BASE__INC
 # define BASE__INC
 
+# include "esketchxdh.h"
+
 # include "sclxdhtml.h"
 
 # include "sktfbc.h"
-# include "sktinf.h"
 
 # include "frdfrntnd.h"
 
 # include "xdhdws.h"
-
-# define BASE_NAME				SKTINF_LC_AFFIX	SCLXDHTML_DEFAULT_SUFFIX
-# define BASE_AUTHOR_NAME		SKTINF_AUTHOR_NAME
-# define BASE_AUTHOR_CONTACT	SKTINF_AUTHOR_CONTACT
-# define BASE_OWNER_NAME		SKTINF_OWNER_NAME
-# define BASE_OWNER_CONTACT		SKTINF_OWNER_CONTACT
-# define BASE_COPYRIGHT_YEARS	COPYRIGHT_YEARS
-# define BASE_COPYRIGHT			BASE_COPYRIGHT_YEARS " " BASE_OWNER_NAME " (" BASE_OWNER_CONTACT ")"
-# define BASE_SOFTWARE_NAME		SKTINF_SOFTWARE_NAME
-# define BASE_SOFTWARE_VERSION	SKTINF_SOFTWARE_VERSION
-# define BASE_SOFTWARE_DETAILS	SKTINF_SOFTWARE_NAME " V" SKTINF_SOFTWARE_VERSION
-# define BASE_SOFTWARE_URL		SKTINF_SOFTWARE_URL
-
 
 /***** Macros dealing with actions ****/
 // Declaration.

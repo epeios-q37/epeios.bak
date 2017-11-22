@@ -94,7 +94,7 @@ une requte de manire trs intense (bombardage de 'push' 'join'). C'est comme si l
 		}
 		virtual fdr::size__ FDRWrite(
 			const fdr::byte__ *Buffer,
-			fdr::size__ Maximum )
+			fdr::size__ Maximum ) override
 		{
 			_Write.Append( Buffer, Maximum );
 

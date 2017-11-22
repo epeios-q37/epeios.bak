@@ -20,7 +20,6 @@
 #ifndef FRDFRNTND__INC
 # define FRDFRNTND__INC
 
-# include "sktinf.h"
 # include "frdapi.h"
 
 # include "frdrgstry.h"
@@ -98,7 +97,7 @@ namespace frdfrntnd {
 		dString &ToUpper( dString &String );
 		void TestMessage( void )
 		{
-			Object_.Test();
+			Object_.Test_1();
 		}
 	};
 
