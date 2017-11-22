@@ -56,7 +56,8 @@ namespace {
 			xdhcmn::CloseActionLabel,
 			global::About, global::Test,
 			prolog::DisplayProjectFilename, prolog::LoadProject, prolog::SwitchProjectType,	// All 'prolog'-related actions are allowed.
-			login::Dismiss, login::DisplayEmbeddedBackendFilename, login::Connect, login::SwitchBackendType );	// All 'login'-related actions too.
+			login::Dismiss, login::DisplayEmbeddedBackendFilename, login::Connect, login::SwitchBackendType,	// All 'login'-related actions too.
+			main::HideTestButton, main::ShowTestButton );
 	};
 }
 
