@@ -6,7 +6,6 @@
 		<xsl:apply-templates select="*/Corpus"/>
 	</xsl:template>
 	<xsl:template match="Layout">
-		<button type="button" data-xdh-onevent="Template">coucou</button>
 		<xsl:apply-templates select="Fields"/>
 	</xsl:template>
 	<xsl:template match="Fields">
@@ -28,12 +27,16 @@
 								<xsl:attribute name="data-xdh-widget">
 									<xsl:text>ckeditor|{enterMode : CKEDITOR.ENTER_BR, linkShowTargetTab: false, language: '#fieldsLanguage#', startupFocus : true,}|val\(\)|ckeditor\(\).editor.focus\(\)</xsl:text>
 									</xsl:attribute>
-								<xsl:value-of select="."/>
+								<xsl:attribute name="data-xdh-content">
+									<xsl:value-of select="@id"/>
+								</xsl:attribute>
 							</textarea>
 						</xsl:when>
 						<xsl:when test="@id='JQTE'">
 							<textarea id="EditableEntry" data-xdh-widget="jqte" autofocus="true">
-								<xsl:value-of select="."/>
+								<xsl:attribute name="data-xdh-content">
+									<xsl:value-of select="@id"/>
+								</xsl:attribute>
 							</textarea>
 						</xsl:when>
 						<xsl:when test="@id='Datepicker'">
@@ -42,8 +45,8 @@
 									<!-- 'xsl:attribute' due to presence of '{' and '}'. -->
 									<xsl:text>datepicker|{language:'#fieldsLanguage#', autoclose: true, todayHighlight: true, todayBtn: true,}</xsl:text>
 								</xsl:attribute>
-								<xsl:attribute name="Value">
-									<xsl:value-of select="."/>
+								<xsl:attribute name="data-xdh-content">
+									<xsl:value-of select="@id"/>
 								</xsl:attribute>
 							</input>
 						</xsl:when>
@@ -53,20 +56,23 @@
 									<!-- 'xsl:attribute' due to presence of '{' and '}'. -->
 									<xsl:text>timepicker|{#fieldsTimePickerParameters#}</xsl:text>
 								</xsl:attribute>
-								<xsl:attribute name="Value">
-									<xsl:value-of select="."/>
+								<xsl:attribute name="data-xdh-content">
+									<xsl:value-of select="@id"/>
 								</xsl:attribute>
 							</input>
 						</xsl:when>
 					</xsl:choose>
 				</xsl:when>
 				<xsl:otherwise>
-					<xsl:value-of select="." disable-output-escaping="yes"/>
+					<span>
+						<xsl:attribute name="data-xdh-content">
+							<xsl:value-of select="@id"/>
+						</xsl:attribute>
+					</span>
 				</xsl:otherwise>
 			</xsl:choose>
 		</fieldset>
 	</xsl:template>
-
 	<xsl:template match="Corpus">
 	</xsl:template>
 </xsl:stylesheet>

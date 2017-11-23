@@ -170,6 +170,7 @@
      <![CDATA[
 					log( "Contents fetching : '%Id%'" );
 					var digest = fetchContents( "%Id%" );
+					log( digest );
 					digest;
 				]]>
     </Contents>

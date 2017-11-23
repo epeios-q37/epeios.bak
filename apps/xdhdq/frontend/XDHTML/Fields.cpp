@@ -49,8 +49,6 @@ namespace {
 
 				Writer.PutAttribute( "id", GetLabel( (eField)i ) );
 
-				Writer.PutValue( Session.User.GetContent( (eField)i ) );
-
 				Writer.PopTag();
 			}
 
@@ -84,13 +82,54 @@ void fields::SetCasting(
 	core::SetElementCasting( Id, XSLAffix_, casting_::Get, Session );
 }
 
+namespace {
+	class sContent
+	: public xdhcmn::cContent
+	{
+	private:
+		qRMV( core::rSession, S_, Session_ );
+		const str::dString &GetContent_( const str::dString &Id )
+		{
+			return S_().User.GetContent( GetField( Id ) );
+		}
+	protected:
+		virtual void XDHCMNGetContents(
+			const str::dStrings &Tags,
+			str::dStrings &Contents ) override
+		{
+			sdr::sRow Row = Tags.First();
+
+			while ( Row != qNIL ) {
+				Contents.Append( GetContent_( Tags( Row ) ) );
+
+				Row = Tags.Next( Row );
+			}
+		}
+	public:
+		void reset( bso::sBool = true )
+		{
+			Session_ = NULL;
+		}
+		qCVDTOR( sContent );
+		void Init( core::rSession &Session )
+		{
+			Session_ = &Session;
+		}
+	};
+}
+
 void fields::Display(
 	const char *Id,
 	core::rSession &Session )
 {
+	sContent Content;
+
 	SetLayout( Id, Session );
 
 	SetCasting( Id, Session );
+
+	Content.Init( Session );
+	Session.SetContents( Id, Content );
 }
 
 #define AC( name ) BASE_AC( fields, name )
@@ -98,12 +137,12 @@ void fields::Display(
 AC( Edit )
 {
 	Session.User.SetField( GetField( str::string( Id ) ) );
-	main::SetFieldsLayout( Session );
+	main::DisplayFields( Session );
 }
 
 AC( Refresh )
 {
-	main::SetFieldsLayout( Session );
+	main::DisplayFields( Session );
 }
 
 

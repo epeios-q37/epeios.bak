@@ -42,7 +42,7 @@ namespace main {
 
 	void Display( core::rSession &Session );
 
-	void SetFieldsLayout( core::rSession &Session );
+	void DisplayFields( core::rSession &Session );
 }
 
 #endif

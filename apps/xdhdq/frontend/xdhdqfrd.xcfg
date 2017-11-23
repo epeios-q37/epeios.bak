@@ -7,7 +7,7 @@
 		<xpp:bloc>
 			<xpp:expand select="FRD_Parameters"/>
 			<Project Handling="Run"/>
-			<Backend Type="Predefined">No</Backend>
+			<Backend Type="None"/>
 		</xpp:bloc>
 	</xpp:define>
 	<xpp:define name="Definitions">

@@ -69,9 +69,9 @@ void main::Display( core::rSession &Session )
 	Session.SwitchTo( core::pMain );
 }
 
-void main::SetFieldsLayout( core::rSession &Session )
+void main::DisplayFields( core::rSession &Session )
 {
-	fields::SetLayout( FieldsFrameId_, Session );
+	fields::Display( FieldsFrameId_, Session );
 }
 
 #define AC( name ) BASE_AC( main, name )
