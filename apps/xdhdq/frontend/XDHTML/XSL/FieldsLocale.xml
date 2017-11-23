@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xpp:bloc xmlns:xpp="http://q37.info/ns/xpp">
+	<Translations text="fieldsLanguage">
+		<Translation language="fr">fr</Translation>
+		<Translation language="en">en</Translation>
+	</Translations>
+	<Translations text="fieldsTimePickerParameters">
+		<Translation language="fr">timeFormat: 'H:i',</Translation>
+		<Translation language="en"></Translation>
+	</Translations>
+	<!--
+	<Translations text="frame">
+		<Translation language="fr"></Translation>
+		<Translation language="en"></Translation>
+	</Translations>
+-->
+</xpp:bloc>

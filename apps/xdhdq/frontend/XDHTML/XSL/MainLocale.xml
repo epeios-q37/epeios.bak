@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xpp:bloc xmlns:xpp="http://q37.info/ns/xpp/">
+	<Translations text="mainCastingTestingTitle">
+		<Translation language="fr">Test du système de 'casting'.</Translation>
+		<Translation language="en">Testing of the 'casting' system.</Translation>
+	</Translations>
+	<Translations text="mainCastingTestingLegend">
+		<Translation language="fr">Test 'casting'</Translation>
+		<Translation language="en">'casting' testing</Translation>
+	</Translations>
+	<Translations text="mainDisplayErrorMessage">
+		<Translation language="fr">Affiche message d'erreur.</Translation>
+		<Translation language="en">Display error message.</Translation>
+	</Translations>
+	<Translations text="mainTest">
+		<Translation language="fr">Test</Translation>
+		<Translation language="en">Test</Translation>
+	</Translations>
+	<Translations text="mainHideShowTestButton">
+		<Translation language="fr">Cliquez sur ce texte pour afficher le bouton de test (sortir du cadre le cache).</Translation>
+		<Translation language="en">Click on this text to show test button (moving away hides it)</Translation>
+	</Translations>
+	<!--
+	<Translations text="main">
+		<Translation language="fr"></Translation>
+		<Translation language="en"></Translation>
+	</Translations>
+-->
+</xpp:bloc>

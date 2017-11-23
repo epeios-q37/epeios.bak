@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xpp:bloc xmlns:xpp="http://q37.info/ns/xpp">
+	<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
+	<xpp:expand value-of="q37.xpp"/>
+	<xpp:expand select="epeios.xlcl"/>
+	<Translations text="FRD_NotImplementedYet">
+		<Translation language="fr">Non encore implémenté !</Translation>
+		<Translation language="en">Not implemented yet !</Translation>
+	</Translations>
+	<Translations text="FRD_RemotePredefinedBackend">
+		<Translation language="fr">Backend distant</Translation>
+		<Translation language="en">Remote backend</Translation>
+	</Translations>
+	<Translations text="FRD_EmbeddedPredefinedBackend">
+		<Translation language="fr">Backend enclavé</Translation>
+		<Translation language="en">Embedded backend</Translation>
+	</Translations>
+	<!--
+	<Translations text="">
+		<Translation language="fr"></Translation>
+		<Translation language="en"></Translation>
+	</Translations>
+	-->
+</xpp:bloc>

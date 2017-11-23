@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Configurations xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
+	<xpp:expand value-of="q37.xpp"/>
+	<xpp:expand href="../xdhdqfrd.xcfg"/>
+	<xpp:expand href="../../../XDH.xcfg"/>
+	<Configuration target="xdhdqxdh">
+		<xpp:bloc>
+			<!-- Macros and variables -->
+			<xpp:bloc preserve="yes">
+				<xpp:define name="XSLRootDir">
+					<xpp:bloc>
+						<xpp:expand select="XSLRootDirHeader"/>
+						<xpp:bloc>epeios/apps/xdhdq/frontend/XDHTML/XSL/</xpp:bloc>
+					</xpp:bloc>
+				</xpp:define>
+				<xpp:define name="XSLRootDirHeader">
+					<xpp:bloc>
+						<xpp:ifeq select="env" value="windows">
+							<xpp:bloc>H:/hg/</xpp:bloc>
+						</xpp:ifeq>
+						<xpp:ifeq select="env" value="linux">
+							<xpp:bloc>/home/csimon/</xpp:bloc>
+						</xpp:ifeq>
+						<xpp:ifeq select="env" value="mac">
+							<xpp:bloc>/Users/csimon/</xpp:bloc>
+						</xpp:ifeq>
+					</xpp:bloc>
+				</xpp:define>
+			</xpp:bloc>
+		</xpp:bloc>
+		<Parameters>
+			<xpp:expand select="Parameters"/>
+			<xpp:expand select="XDH_Parameters"/>
+			<Language>fr</Language>
+		</Parameters>
+		<Definitions>
+			<xpp:expand select="Definitions"/>
+			<xpp:expand select="XDH_Definitions"/>
+			<xpp:bloc preserve="yes">
+				<XSLFilesSet>
+					<XSLFiles target="About">
+						<Layout>
+							<xpp:expand select="XSLRootDir"/>
+							<xpp:bloc>About.xsl</xpp:bloc>
+						</Layout>
+						<!-- No 'casting' XSL -->
+					</XSLFiles>
+					<XSLFiles target="Fields">
+						<Layout>
+							<xpp:expand select="XSLRootDir"/>
+							<xpp:bloc>FieldsLayout.xsl</xpp:bloc>
+						</Layout>
+						<Casting>
+							<xpp:expand select="XSLRootDir"/>
+							<xpp:bloc>FieldsCasting.xsl</xpp:bloc>
+						</Casting>
+					</XSLFiles>
+					<XSLFiles target="Prolog">
+						<Layout>
+							<xpp:expand select="XSLRootDir"/>
+							<xpp:bloc>PrologLayout.xsl</xpp:bloc>
+						</Layout>
+						<Casting>
+							<xpp:expand select="XSLRootDir"/>
+							<xpp:bloc>PrologCasting.xsl</xpp:bloc>
+						</Casting>
+					</XSLFiles>
+					<XSLFiles target="Login">
+						<Layout>
+							<xpp:expand select="XSLRootDir"/>
+							<xpp:bloc>LoginLayout.xsl</xpp:bloc>
+						</Layout>
+						<Casting>
+							<xpp:expand select="XSLRootDir"/>
+							<xpp:bloc>LoginCasting.xsl</xpp:bloc>
+						</Casting>
+					</XSLFiles>
+					<XSLFiles target="Main">
+						<Layout>
+							<xpp:expand select="XSLRootDir"/>
+							<xpp:bloc>MainLayout.xsl</xpp:bloc>
+						</Layout>
+						<Casting>
+							<xpp:expand select="XSLRootDir"/>
+							<xpp:bloc>MainCasting.xsl</xpp:bloc>
+						</Casting>
+					</XSLFiles>
+				</XSLFilesSet>
+			</xpp:bloc>
+		</Definitions>
+		<Locale>
+			<xpp:expand select="Locale"/>
+			<xpp:expand select="XDH_Locale"/>
+			<xpp:bloc>
+				<!-- About -->
+				<Translations text="aBy">
+					<Translation language="fr">par</Translation>
+					<Translation language="en">by</Translation>
+				</Translations>
+				<Translations text="aLauncher">
+					<Translation language="fr">Lanceur</Translation>
+					<Translation language="en">Launcher</Translation>
+				</Translations>
+				<Translations text="aBackend">
+					<Translation language="fr">Moteur de traitement</Translation>
+					<Translation language="en">Backend</Translation>
+				</Translations>
+			</xpp:bloc>
+			<xpp:bloc>
+				<!-- Prolog : in 'XDH.xcfg : XDH_Locale'-->
+			</xpp:bloc>
+			<xpp:bloc>
+				<!-- Login : in 'XDH.xcfg : XDH_Locale'-->
+			</xpp:bloc>
+			<xpp:expand href="XSL/MainLocale.xml"/>
+			<xpp:expand href="XSL/FieldsLocale.xml"/>
+		</Locale>
+	</Configuration>
+</Configurations>

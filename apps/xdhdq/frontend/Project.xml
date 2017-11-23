@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<xpp:set name="Type" value="Bundle"/>
+	<xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
+	<Dependencies Target="xdhdq">
+		<Dependency Dir="XDHTML/"/>
+		<Dependency Dir="CLI/"/>
+		<xpp:bloc marker="$">
+			<Dependency Dir="$EpeiosPluginsDir$frontend/" Ext="plugins/frontend"/>
+			<Dependency Dir="$EpeiosToolsDir$xdhbrwq/" Ext="xdhbrwq/"/>
+			<Dependency Dir="$EpeiosToolsDir$xdhcefq/" Ext="xdhcefq/"/>
+		</xpp:bloc>
+	</Dependencies>
+</Project>
