@@ -19,8 +19,8 @@
 
 // TeST
 
-#ifndef TST__INC
-# define TST__INC
+#ifndef TST_INC_
+# define TST_INC_
 
 # define TST_NAME		"TST"
 

@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define TST__COMPILATION
+#define TST_COMPILATION_
 
 #include "tst.h"
 
