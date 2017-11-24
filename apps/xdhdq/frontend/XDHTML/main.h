@@ -23,14 +23,12 @@
 # include "base.h"
 
 namespace main {
-	BASE_ACD( Submission );
 	BASE_ACD( ShowTestButton );
 	BASE_ACD( HideTestButton );
 	BASE_ACD( Testing );
 
 	inline void Register( void  )
 	{
-		BASE_ACR( Submission );
 		BASE_ACR( ShowTestButton );
 		BASE_ACR( HideTestButton );
 		BASE_ACR( Testing );

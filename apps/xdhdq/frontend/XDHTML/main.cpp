@@ -76,18 +76,6 @@ void main::DisplayFields( core::rSession &Session )
 
 #define AC( name ) BASE_AC( main, name )
 
-AC( Submission )
-{
-	str::string Test;
-	TOL_CBUFFER___ Buffer;
-
-	Test.Init( Session.GetValue( "Pattern", Buffer ) );
-
-	Session.User.ToUpper( Test );
-
-	Session.SetValue("Pattern", Test );
-}
-
 AC( ShowTestButton )
 {
 	Session.User.TestButtonIsVisible() = true;
@@ -97,7 +85,7 @@ AC( ShowTestButton )
 AC( HideTestButton )
 {
 	Session.User.TestButtonIsVisible() = false;
-	SetCasting(Session );
+	SetCasting( Session );
 }
 
 AC( Testing )
