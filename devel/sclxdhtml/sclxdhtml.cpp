@@ -379,7 +379,9 @@ void sclxdhtml::SetElement_(
 	const char *Target,
 	const sclrgstry::registry_ &Registry,
 	const str::dString &XML,
-	xdhdws::sProxy &Proxy, bso::char__ Marker)
+	xdhdws::sProxy &Proxy,
+	xdhcmn::cContent *Content,
+	bso::char__ Marker )
 {
 qRH
 	str::wString XSL;
@@ -387,7 +389,7 @@ qRB
 	XSL.Init();
 	sclxdhtml::LoadXSLAndTranslateTags( rgstry::tentry___( Filename, Target ), Registry, XSL, Marker );
 
-	Set( Proxy, Id, XML, XSL);
+	Set( Proxy, Id, XML, XSL, Content );
 qRR
 qRT
 qRE

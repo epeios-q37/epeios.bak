@@ -221,51 +221,6 @@ qRT
 qRE
 }
 
-static void SetLayout_(
-	cJS &Callback,
-	const nchar__ *Id,	// If 'Id' != NULL, it's the id of the element to apply to, otherwise it applies to the document.
-	const nchar__ *XML,
-	const nchar__ *XSL )
-{
-qRH
-	TOL_CBUFFER___ Result;
-	str::string RawDigests;
-	xdhcmn::digest Digests, Events, Widgets;
-	xdhcmn::retriever__ Retriever;
-qRB
-	RawDigests.Init( Execute( Callback, xdhujs::snEventsAndWidgetsFetcher, &Result, Id, XML, XSL ) );
-
-	Digests.Init();
-	xdhcmn::Split( RawDigests, Digests );
-
-	Retriever.Init( Digests );
-
-	Events.Init();
-	Retriever.GetTable( Events );
-
-	Widgets.Init();
-	Retriever.GetTable( Widgets );
-
-	HandleEvents_( Callback, Events );
-
-	HandleWidgets_( Callback, Widgets );
-qRR
-qRT
-qRE
-}
-
-static void SetLayout_(
-	cJS &Callback,
-	va_list List )
-{
-	// NOTA : we use variables, because if we put 'va_arg()' directly as parameter to below function, it's not sure that they are called in the correct order.
-	const nchar__ *Id = va_arg( List, const nchar__ * );
-	const nchar__ *XML = va_arg( List, const nchar__ * );
-	const nchar__ *XSL = va_arg( List, const nchar__ * );
-
-	SetLayout_( Callback, Id, XML, XSL );
-}
-
 static void Merge_(
 	const str::strings_ &Ids,
 	const str::strings_ &Tags,
@@ -309,6 +264,104 @@ qRB
 qRR
 qRT
 qRE
+}
+
+static void HandleContents_(
+	cJS &Callback,
+	const xdhcmn::digest_ &Digest,
+	xdhcmn::cContent &ContentCallback )
+{
+qRH
+	str::wStrings Ids, Tags, Contents;
+	str::wString IdsTag, ContentsTag;
+qRB
+	tol::Init( Ids, Tags );
+	xdhutl::GetTags( Digest, Ids, Tags );
+
+	if ( Ids.Amount() ) {
+		tol::Init( Contents );
+		ContentCallback.GetContents( Tags, Contents );
+
+		tol::Init( IdsTag, ContentsTag );
+		Merge_( Ids, Contents, IdsTag, ContentsTag );
+
+		Execute( Callback, xdhujs::snContentsSetter, NULL, nstring___( IdsTag ).Internal()( ), nstring___( ContentsTag ).Internal()( ) );
+	}
+qRR
+qRT
+qRE
+}
+
+static void SetContents_(
+	cJS &Callback,
+	const nchar__ *Id,
+	xdhcmn::cContent &ContentCallback )
+{
+qRH
+	TOL_CBUFFER___ Result;
+	str::string RawDigest;
+	strmrg::table Digest;
+qRB
+	RawDigest.Init( Execute(Callback, xdhujs::snContentsFetcher, &Result, Id ));
+
+	Digest.Init();
+
+	strmrg::Split( RawDigest, Digest );
+
+	HandleContents_( Callback, Digest, ContentCallback );
+qRR
+qRT
+qRE
+}
+
+static void SetLayout_(
+	cJS &Callback,
+	const nchar__ *Id,	// If 'Id' != NULL, it's the id of the element to apply to, otherwise it applies to the document.
+	const nchar__ *XML,
+	const nchar__ *XSL,
+	xdhcmn::cContent *Content )
+{
+qRH
+	TOL_CBUFFER___ Result;
+	str::string RawDigests;
+	xdhcmn::digest Digests, Events, Widgets;
+	xdhcmn::retriever__ Retriever;
+qRB
+	RawDigests.Init( Execute( Callback, xdhujs::snEventsAndWidgetsFetcher, &Result, Id, XML, XSL ) );
+
+	Digests.Init();
+	xdhcmn::Split( RawDigests, Digests );
+
+	Retriever.Init( Digests );
+
+	Events.Init();
+	Retriever.GetTable( Events );
+
+	Widgets.Init();
+	Retriever.GetTable( Widgets );
+
+	HandleEvents_( Callback, Events );
+
+	if ( Content != NULL )
+		SetContents_( Callback, Id, *Content );
+
+	HandleWidgets_( Callback, Widgets );
+qRR
+qRT
+qRE
+}
+
+static void SetLayout_(
+	cJS &Callback,
+	va_list List )
+{
+	// NOTA : we use variables, because if we put 'va_arg()' directly as parameter to below function, it's not sure that they are called in the correct order.
+	const nchar__ *Id = va_arg( List, const nchar__ * );
+	const nchar__ *XML = va_arg( List, const nchar__ * );
+	const nchar__ *XSL = va_arg( List, const nchar__ * );
+	xdhcmn::cContent *Content = va_arg( List, xdhcmn::cContent * );
+
+	SetLayout_( Callback, Id, XML, XSL, Content );
 }
 
 static void HandleCasts_(
@@ -366,54 +419,6 @@ static void SetCasting_(
 	const nchar__ *XSL = va_arg( List, const nchar__ * );
 
 	SetCasting_( Callback, Id, XML, XSL );
-}
-
-static void HandleContents_(
-	cJS &Callback,
-	const xdhcmn::digest_ &Digest,
-	xdhcmn::cContent &ContentCallback )
-{
-qRH
-	str::wStrings Ids, Tags, Contents;
-	str::wString IdsTag, ContentsTag;
-qRB
-	tol::Init( Ids, Tags );
-	xdhutl::GetTags( Digest, Ids, Tags );
-
-	if ( Ids.Amount() ) {
-		tol::Init( Contents );
-		ContentCallback.GetContents( Tags, Contents );
-
-		tol::Init( IdsTag, ContentsTag );
-		Merge_( Ids, Contents, IdsTag, ContentsTag );
-
-		Execute( Callback, xdhujs::snContentsSetter, NULL, nstring___( IdsTag ).Internal()( ), nstring___( ContentsTag ).Internal()( ) );
-	}
-qRR
-qRT
-qRE
-}
-
-static void SetContents_(
-	cJS &Callback,
-	const nchar__ *Id,
-	xdhcmn::cContent &ContentCallback )
-{
-qRH
-	TOL_CBUFFER___ Result;
-	str::string RawDigest;
-	strmrg::table Digest;
-qRB
-	RawDigest.Init( Execute(Callback, xdhujs::snContentsFetcher, &Result, Id ));
-
-	Digest.Init();
-
-	strmrg::Split( RawDigest, Digest );
-
-	HandleContents_( Callback, Digest, ContentCallback );
-qRR
-qRT
-qRE
 }
 
 static void SetContents_(

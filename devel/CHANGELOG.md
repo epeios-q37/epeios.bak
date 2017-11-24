@@ -1,5 +1,9 @@
 # *Epeios* changelog
 
+2017-11-24:
+- SCLXDHTML, XDHDWS, XDHUJP :
+  - Introducing the possibility to put the content before handling widgets (*jQuery* related stuff) when setting the layout, or some widget (*jQTE*, for example) are not properly pre-filled. 
+
 2017-11-21:
 - SCLFRNTND:
   - Fixing bad handling when no backend is selected.

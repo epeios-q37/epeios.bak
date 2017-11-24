@@ -13,12 +13,13 @@
 						<div data-xdh-onevent="ShowTestButton">
 							<text>#mainHideShowTestButton#</text>
 						</div>
-						<div>
-							<button data-xdh-onevent="Testing" data-xdh-cast="TestButtonCasting" title="#mainDisplayErrorMessage#">#mainTest#</button>
+						<div data-xdh-cast="TestButtonCasting">
+							<button data-xdh-onevent="Testing" title="#mainDisplayErrorMessage#">#mainTest#</button>
+							<text>#mainTestExplanation#</text>
 						</div>
 					</fieldset>
-					<div id="Fields"/>
 				</span>
+				<div id="Fields"/>
 			</span>
 		</span>
 	</xsl:template>

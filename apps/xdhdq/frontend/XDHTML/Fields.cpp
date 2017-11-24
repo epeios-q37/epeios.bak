@@ -68,24 +68,9 @@ namespace {
 	}
 }
 
-void fields::SetLayout(
-	const char *Id,
-	core::rSession &Session )
-{
-	core::SetElementLayout( Id, XSLAffix_, layout_::Get, Session );
-}
-
-void fields::SetCasting(
-	const char *Id,
-	core::rSession &Session )
-{
-	core::SetElementCasting( Id, XSLAffix_, casting_::Get, Session );
-}
-
 namespace {
 	class sContent
-	: public xdhcmn::cContent
-	{
+		: public xdhcmn::cContent {
 	private:
 		qRMV( core::rSession, S_, Session_ );
 		const str::dString &GetContent_( const str::dString &Id )
@@ -118,18 +103,31 @@ namespace {
 	};
 }
 
-void fields::Display(
+void fields::SetLayout(
 	const char *Id,
 	core::rSession &Session )
 {
 	sContent Content;
 
+	Content.Init( Session );
+
+	core::SetElementLayout( Id, XSLAffix_, layout_::Get, Content, Session );
+}
+
+void fields::SetCasting(
+	const char *Id,
+	core::rSession &Session )
+{
+	core::SetElementCasting( Id, XSLAffix_, casting_::Get, Session );
+}
+
+void fields::Display(
+	const char *Id,
+	core::rSession &Session )
+{
 	SetLayout( Id, Session );
 
 	SetCasting( Id, Session );
-
-	Content.Init( Session );
-	Session.SetContents( Id, Content );
 }
 
 #define AC( name ) BASE_AC( fields, name )

@@ -90,9 +90,10 @@ namespace xdhdws {
 		void SetLayout(
 			const nstring___ &Id,
 			const nstring___ &XML,
-			const nstring___ &XSL )
+			const nstring___ &XSL,
+			xdhcmn::cContent *ContentCallback )
 		{
-			C_().Process( xdhcmn::fSetLayout, NULL, Id.Internal()( ), XML.Internal()( ), XSL.Internal()( ) );
+			C_().Process( xdhcmn::fSetLayout, NULL, Id.Internal()( ), XML.Internal()( ), XSL.Internal()( ), ContentCallback );
 		}
 		void SetCasting(
 			const nstring___ &Id,

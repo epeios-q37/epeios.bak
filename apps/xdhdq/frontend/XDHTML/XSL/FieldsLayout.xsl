@@ -37,6 +37,7 @@
 								<xsl:attribute name="data-xdh-content">
 									<xsl:value-of select="@id"/>
 								</xsl:attribute>
+								<xsl:text>Coucou !</xsl:text>
 							</textarea>
 						</xsl:when>
 						<xsl:when test="@id='Datepicker'">
