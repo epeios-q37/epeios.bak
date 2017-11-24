@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project xmlns:xpp="http://q37.info/ns/xpp/">
+	<xpp:bloc>
+		<!-- User definitions -->
+		<xpp:define name="Version">
+			<xpp:bloc>(Obsolete ; generated automatically)</xpp:bloc>
+		</xpp:define>
+		<xpp:define name="CopyrightYears">
+			<xpp:bloc>2016</xpp:bloc>
+		</xpp:define>
+		<xpp:set name="Credits" value="Epeios"/>
+		<xpp:set name="Type" value="CLI"/>
+	</xpp:bloc>
+	<xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
+	<About>
+		<Program>esketchcli</Program>
+		<Software>esketchcli</Software>
+		<UUID>64b22e6b-c01f-4bc0-a7b0-8989c6a24f26</UUID>
+	</About>
+	<Modules>
+		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
+			<Modules Group="Core">
+				<xpp:expand select="Core"/>
+			</Modules>
+   <Modules Group="CSD">
+    <xpp:expand select="CSDF"/>
+   </Modules>
+   <Modules Group="FBL">
+    <xpp:expand select="FBLF"/>
+   </Modules>
+   <Modules Group="SCL">
+				<xpp:expand select="SCL"/>
+			</Modules>
+		</Modules>
+  <Modules Group="FRD" Path="../">
+   <Module>frdapi</Module>
+   <Module>frdfrntnd</Module>
+   <Module>frdrgstry</Module>
+  </Modules>
+  <Modules Group="SKT" Path="../../">
+   <Module>sktinf</Module>
+  </Modules>
+  <Module>registry</Module>
+	</Modules>
+ <Files>
+  <File>../esketchfrd.xcfg</File>
+  <File>../esketchfrd.xlcl</File>
+ </Files>
+	<SourceDirs>
+  <SourceDir>../</SourceDir>
+  <SourceDir>../../</SourceDir>
+ </SourceDirs>
+	<PreprocessorDefinitions>
+		<PreprocessorDefinition>E_ST</PreprocessorDefinition>
+	</PreprocessorDefinitions>
+</Project>
