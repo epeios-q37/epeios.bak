@@ -66,16 +66,77 @@ void main::Display( core::rSession &Session )
 
 #define AC( name ) BASE_AC( main, name )
 
+namespace {
+	class sContent
+	: public xdhcmn::cContent {
+	private:
+		qRMV( core::rSession, S_, Session_ );
+	protected:
+		virtual void XDHCMNGetContents(
+			const str::dStrings &Tags,
+			str::dStrings &Contents ) override
+		{
+		qRH;
+			str::string Test;
+			TOL_CBUFFER___ Buffer;
+		qRB;
+			Test.Init( S_().GetValue( "Pattern", Buffer ) );
+
+			S_().User.ToUpper( Test );
+
+			Contents.Append( Test );
+		qRR;
+		qRT;
+		qRE;
+		}	public:
+		void reset( bso::sBool = true )
+		{
+			Session_ = NULL;
+		}
+		qCVDTOR( sContent );
+		void Init( core::rSession &Session )
+		{
+			Session_ = &Session;
+		}
+	};
+
+	void SubmissionNew_(
+		const char *Id,
+		core::rSession &Session )
+	{
+		sContent Content;
+
+		Content.Init( Session );
+
+		Session.SetContents( Id, Content );
+	}
+
+	void SubmissionOld_(
+		const char *Id,
+		core::rSession &Session )
+	{
+	qRH;
+		str::string Test;
+		TOL_CBUFFER___ Buffer;
+	qRB;
+		Test.Init( Session.GetValue( "Pattern", Buffer ) );
+
+		Session.User.ToUpper( Test );
+
+		Session.SetValue( "Pattern", Test );
+	qRR;
+	qRT;
+	qRE;
+	}
+}
+
 AC( Submission )
 {
-	str::string Test;
-	TOL_CBUFFER___ Buffer;
-
-	Test.Init( Session.GetValue( "Pattern", Buffer ) );
-
-	Session.User.ToUpper( Test );
-
-	Session.SetValue("Pattern", Test );
+#if 1
+	SubmissionNew_( Id, Session );
+#else
+	SubmissionOld_( Id, Session );
+#endif
 }
 
 AC( ShowTestButton )

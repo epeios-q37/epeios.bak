@@ -20,7 +20,7 @@
 #ifndef XDHELCQ_INC_
 # define XDHELCQ_INC_
 
-# define NAME_MC			"XDHELCq"
+# define NAME_MC			"XDHElcQ"
 # define NAME_LC			"xdhelcq"
 # define NAME_UC			"XDHELCQ"
 # define WEBSITE_URL		"http://q37.info"

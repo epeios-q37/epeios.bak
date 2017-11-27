@@ -157,7 +157,6 @@
     </EventsAndWidgets>
     <Casts>
      <![CDATA[
-					// Edge executes this script in loop !!!
 					log( "Casting : '%Id%'" );
 					log( "%XML%" );
 					removeCastingChildren( document );
