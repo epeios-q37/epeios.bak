@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<xpp:bloc>
+		<!-- User definitions -->
+		<xpp:define name="Version">
+			<xpp:bloc>(Obsolete ; generated automatically)</xpp:bloc>
+		</xpp:define>
+		<xpp:define name="CopyrightYears">
+			<xpp:bloc>2017</xpp:bloc>
+		</xpp:define>
+	</xpp:bloc>
+	<xpp:set name="Credits" value="Epeios"/>
+	<xpp:set name="Type" value="XDHTML"/>
+	<xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
+	<About>
+		<Program>xdhqxdh</Program>
+		<Software>XDHq</Software>
+		<UUID>5f3ad6c6-4f0d-428d-9c00-678e1ed3967f</UUID>
+	</About>
+	<Modules>
+		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
+			<Modules Group="Core">
+				<xpp:expand select="Core"/>
+				<Module>sck</Module>
+			</Modules>
+			<Modules Group="CSD">
+				<xpp:expand select="CSDF"/>
+				<Module>csdbnc</Module>
+				<Module>csdcmn</Module>
+			</Modules>
+			<Modules Group="FBL">
+				<xpp:expand select="FBLF"/>
+			</Modules>
+			<Modules Group="SCL">
+				<xpp:expand select="SCL"/>
+			</Modules>
+			<Modules Group="XDHTML">
+				<xpp:expand select="XDH"/>
+			</Modules>
+		</Modules>
+		<Module>registry</Module>
+		<Module Path="../">prtcl</Module>
+	</Modules>
+	<SourceDirs>
+		<SourceDir>..</SourceDir>
+	</SourceDirs>
+	<Files>
+	</Files>
+	<RTW Description="eSketch" Keywords="keyword1,keyword2">
+		<Dir>xdhqxdh</Dir>
+	</RTW>
+	<PreprocessorDefinitions>
+	</PreprocessorDefinitions>
+</Project>
