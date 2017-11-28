@@ -28,7 +28,6 @@ using namespace prtcl;
 const char *prtcl::GetLabel( eRequest Request )
 {
 	switch ( Request ) {
-	C( Next_1 );
 	C( Launch_1 );
 	default:
 		qRFwk();
@@ -92,6 +91,7 @@ const char *prtcl::GetLabel( eAnswer Answer )
 		C( OK_1 );
 		C( Error_1 );
 		C( SetLayout_1 );
+		C( SetCasting_1 );
 	default:
 		qRFwk();
 		break;

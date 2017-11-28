@@ -45,7 +45,6 @@ qRB;
 
 	csdcmn::SendProtocol( prtcl::ProtocolId, prtcl::ProtocolVersion, Client_ );
 
-	prtcl::PutRequest( prtcl::rNext_1, Client_ );
 	Client_.Commit();
 qRR;
 qRT;
@@ -98,9 +97,9 @@ namespace {
 		flw::sRFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
-		qRH;
+	qRH;
 		str::wString Id, XML, XSL;
-		qRB;
+	qRB;
 		tol::Init( Id, XML, XSL );
 
 		prtcl::Get( Flow, Id );
@@ -109,9 +108,29 @@ namespace {
 		Flow.Dismiss();
 
 		Proxy.SetLayout( Id, XML, XSL, NULL );
-		qRR;
-		qRT;
-		qRE;
+	qRR;
+	qRT;
+	qRE;
+	}
+
+	void SetCasting_(
+		flw::sRFlow &Flow,
+		xdhdws::sProxy &Proxy )
+	{
+	qRH;
+		str::wString Id, XML, XSL;
+	qRB;
+		tol::Init( Id, XML, XSL );
+
+		prtcl::Get( Flow, Id );
+		prtcl::Get( Flow, XML );
+		prtcl::Get( Flow, XSL );
+		Flow.Dismiss();
+
+		Proxy.SetCasting( Id, XML, XSL );
+	qRR;
+	qRT;
+	qRE;
 	}
 
 	class rSession_
@@ -125,8 +144,8 @@ namespace {
 		{
 			prtcl::PutRequest( prtcl::rLaunch_1, Client_ );
 
-			Client_.Write( Id, strlen( Id ) + 1 );		// +1 for final 0.
-			Client_.Write( Action, strlen( Id ) + 1 );	// +1 for final 0.
+			prtcl::Put( Id, Client_ );
+			prtcl::Put( Action, Client_ );
 			Client_.Commit();
 
 			while( true  )
@@ -139,7 +158,10 @@ namespace {
 					break;
 				case prtcl::aSetLayout_1:
 					SetLayout_( Client_, *this );
-					prtcl::PutRequest( prtcl::rNext_1, Client_ );
+					Client_.Commit();
+					break;
+				case prtcl::aSetCasting_1:
+					SetCasting_( Client_, *this );
 					Client_.Commit();
 					break;
 				default:
@@ -177,6 +199,11 @@ xdhcmn::cSession *sclxdhtml::SCLXDHTMLRetrieveCallback(
 		qRGnr();
 
 	SetLayout_( Client_, *Session );
+
+	if ( prtcl::GetAnswer( Client_ ) != prtcl::aOK_1 )
+		qRGnr();
+
+	Client_.Dismiss();
 
 	return Session;
 }

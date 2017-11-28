@@ -44,8 +44,6 @@
 	<SourceDirs>
 		<SourceDir>..</SourceDir>
 	</SourceDirs>
-	<Files>
-	</Files>
 	<RTW Description="eSketch" Keywords="keyword1,keyword2">
 		<Dir>xdhqxdh</Dir>
 	</RTW>

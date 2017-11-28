@@ -31,6 +31,12 @@
 		<Module Path="../">prtcl</Module>
   <Module>registry</Module>
  </Modules>
+	<Files>
+		<Files Group="XSL" Path="../XSL/">
+			<File>MainLayout.xsl</File>
+			<File>MainCasting.xsl</File>
+		</Files>
+	</Files>
 	<SourceDirs>
 		<SourceDir>..</SourceDir>
 	</SourceDirs>

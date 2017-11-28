@@ -21,6 +21,12 @@ class JREqDecl {
  protected static String affix = "xdhq";
 }
 
+class XDHqData {
+	public String
+		id,
+		action;
+};
+
 // Begin of generic part.
 class JREq extends JREqDecl {
 	native public static String wrapperInfo();
@@ -33,17 +39,17 @@ class JREq extends JREqDecl {
 
 	static
 	{
-  String location = "";
-  String osName = System.getProperty("os.name").toLowerCase();
+		String location = "";
+		String osName = System.getProperty("os.name").toLowerCase();
 
- 	System.loadLibrary( "jreq" );
+		System.loadLibrary( "jreq" );
 
-  if ( osName.contains( "windows" ) )
-   location = "h:/bin";
-  else if ( osName.contains( "mac" ) ) {
-   location = "/Users/bin";
+		if ( osName.contains( "windows" ) )
+			location = "h:/bin";
+		else if ( osName.contains( "mac" ) ) {
+			location = "/Users/bin";
   } else {
-   location = "/home/csimon/bin";
+	location = "/home/csimon/bin";
   }
 
   if ( System.getenv( "EPEIOS_SRC" ) == null ) {
@@ -67,6 +73,26 @@ class XDHq extends JREq {
 	{
 		JREq.wrapper( 1, XML, XSL );
 	}
+	public static void destructor()
+	{
+		JREq.wrapper( 2 );
+	}
+	public static void getAction( XDHqData data )
+	{
+		JREq.wrapper( 3, data );
+	}
+	public static void setLayout(
+		String XML,
+		String XSL )
+	{
+		JREq.wrapper( 4, XML, XSL );
+	}
+	public static void setCasting(
+		String XML,
+		String XSL )
+	{
+		JREq.wrapper( 5, XML, XSL );
+	}
 }
 
 class XDHqTest {
@@ -77,11 +103,27 @@ class XDHqTest {
 	
 	public static void main ( String[] args ) throws Exception
 	{
+		XDHqData data = new XDHqData();
  		System.out.println( XDHq.wrapperInfo() );
  		System.out.println( XDHq.componentInfo() );
  		displayBytecodeBuildTimestamp();
  		System.out.println( XDHq.returnArgument( "Text from JAVA file" ) );
-		XDHq.initialize( "<Root/>", "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <xsl:stylesheet	version=\"1.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xpp=\"http://q37.info/ns/xpp/\"> 	<xsl:output method=\"html\" encoding=\"UTF-8\"/> 	<xsl:template match=\"/\"> 				<fieldset title=\"#plgProjectToLoad#\"> 					<legend>Coucou from JAVA !!!</legend> 				</fieldset> 	</xsl:template> ");
+		XDHq.initialize( "<Root><Layout/></Root>", "../XSL/MainLayout.xsl");
+		for(;;) {
+			XDHq.getAction( data );
+			System.out.println( data.action + " : " + data.id );
+
+			switch ( data.action ) {
+			case "ShowTestButton":
+				XDHq.setCasting( "<Root><Casting><Test Enabled=\"true\"/></Casting></Root>", "../XSL/MainCasting.xsl" );
+				break;
+			case "HideTestButton":
+				XDHq.setCasting( "<Root><Casting><Test Enabled=\"false\"/></Casting></Root>", "../XSL/MainCasting.xsl" );
+				break;
+			}
+		}
+
+//		XDHq.destructor();
 	}
 }
 

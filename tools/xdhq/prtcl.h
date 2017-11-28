@@ -30,7 +30,6 @@ namespace prtcl {
 	qCDEF( bso::sU8, ProtocolVersion, 0 );
 
 	qENUM( Request ) {
-		rNext_1,	// Next action.
 		rLaunch_1,	// Launch event.
 		r_amount,
 		r_Undefined
@@ -51,6 +50,7 @@ namespace prtcl {
 		aOK_1,
 		aError_1,
 		aSetLayout_1,
+		aSetCasting_1,
 		a_amount,
 		a_Undefined
 	};
