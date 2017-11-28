@@ -21,7 +21,7 @@
 		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
 			<Modules Group="Core">
 				<xpp:expand select="Core"/>
-    <Module>log</Module>
+    <Module>logq</Module>
     <Module>ltf</Module>
     <Module>prxybase</Module>
 				<Module>sck</Module>

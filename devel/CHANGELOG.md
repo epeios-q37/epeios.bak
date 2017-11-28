@@ -1,5 +1,9 @@
 # *Epeios* changelog
 
+2017-11-28:
+- FLW:
+  - Adding `R`(ead) and `W`(rite) prefix as synonym for `I`(nput) and `O`(utput).
+
 2017-11-24:
 - SCLXDHTML, XDHDWS, XDHUJP :
   - Introducing the possibility to put the content before handling widgets (*jQuery* related stuff) when setting the layout, or some widget (*jQTE*, for example) are not properly pre-filled. 

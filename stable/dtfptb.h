@@ -188,8 +188,6 @@ DTFPTB__M( 64, BSO_U64_MAX, BSO_S64_MIN, BSO_S64_MAX )
 	{
 		return FGet( Flow, Int );
 	}
-
-
 }
 
 /*$END$*/

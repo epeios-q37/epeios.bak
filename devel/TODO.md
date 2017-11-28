@@ -31,6 +31,7 @@ MIDDLE
 	- Implement a solution which prevent that an 'Enter' (or other touch) event on a text box is also applied to a potential alert box reporting an error,
 	  preventing this box to be displayed. Currently, there is a workaround in the 'handleEvent' function from the 'xdhtml.js' file.
 	- Expose in the XML flow the nature of the interface (desktop, web, touchscreen, mobile...).
+- DTFPTB: optimize string handlig.
 
 
 LONG:

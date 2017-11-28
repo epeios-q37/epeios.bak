@@ -33,7 +33,7 @@
 #include "err.h"
 #include "flf.h"
 #include "fnm.h"
-#include "log.h"
+#include "logq.h"
 #include "mtk.h"
 #include "lstbch.h"
 #include "xpp.h"
@@ -53,9 +53,9 @@ using cio::CIn;
 # define COPYRIGHT			COPYRIGHT_YEARS " " OWNER_NAME " (" OWNER_CONTACT ")"	
 
 namespace {
-	log::rFDriver<> Log_;
+	logq::rFDriver<> Log_;
 
-	typedef log::rLogRack<> rLogRack_;
+	typedef logq::rLogRack<> rLogRack_;
 }
 
 namespace {
