@@ -4,7 +4,7 @@
 		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
 		<xpp:expand value-of="q37.xpp"/>
 		<Parameters>
-			<Language>fr</Language>
+			<Language>en</Language>
 			<Command>Test</Command>
 			<HostService>localhost:12345</HostService>
 			<!-- Default command -->

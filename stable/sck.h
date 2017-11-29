@@ -111,6 +111,8 @@ namespace sck {
 
 	typedef bso::u16__	duration__;
 
+	qCDEF( duration__, NoTimeout, SCK_INFINITE );
+
 	/* NOTA: Les deux dclarations ci-dessous ont t mise en place pour simplifier
 	l'usage des sockets sous Windows. En effet, ce dernier, et lui seul, ne ralise
 	pas automatiquement l'initialisation de la couche rseau. Cette bibliothque,
@@ -336,7 +338,7 @@ namespace sck {
 			socket__ Socket,
 			bso::sBool TakeOwnership,
 			fdr::thread_safety__ ThreadSafety,
-			duration__ Timeout )	// En secondes.
+			duration__ Timeout = NoTimeout )	// En secondes.
 		{
 			reset();
 		
@@ -376,7 +378,7 @@ namespace sck {
 		void Init(
 			socket__ Socket,
 			bso::sBool TakeOwnership,
-			duration__ Timeout ) // En secondes.
+			duration__ Timeout = NoTimeout ) // En secondes.
 		{
 			reset();
 
@@ -392,9 +394,6 @@ namespace sck {
 			return _Driver.EpochTimeStamp();
 		}
 	};
-
-	qCDEF( duration__, NoTimeout, SCK_INFINITE );
-
 }
 
 /**************/
@@ -403,5 +402,7 @@ namespace sck {
 
 namespace sck {
 	typedef duration__ sTimeout;
+
+	typedef socket__ sSocket;
 }
 #endif

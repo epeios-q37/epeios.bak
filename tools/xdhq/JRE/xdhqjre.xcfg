@@ -9,6 +9,7 @@
 		<Definitions>
 		</Definitions>
 		<Locale>
+			<xpp:expand href="../XSL/MainLocale.xml"/>
 		</Locale>
 		<Arguments>
 		</Arguments>

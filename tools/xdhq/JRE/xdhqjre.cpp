@@ -57,26 +57,39 @@ namespace {
 
 	namespace {
 		csdbns::rListener Listener_;
-		sck::socket_ioflow___ Flow_;
+
+		struct rRack_ {
+			sck::socket_ioflow___ Flow;
+			qCBUFFERr Language;
+			void reset( bso::sBool P = true )
+			{
+				tol::reset( P, Flow, Language );
+			}
+			qCDTOR( rRack_ );
+			void Init( sck::sSocket Socket )
+			{
+			qRH;
+				csdcmn::sVersion Version = csdcmn::UndefinedVersion;
+				str::wString Language;
+			qRB;
+				Flow.Init( Socket, true );
+
+				if ( ( Version = csdcmn::GetProtocolVersion( prtcl::ProtocolId, Flow ) ) != prtcl::ProtocolVersion )
+					qRGnr();
+
+				Language.Init();
+				prtcl::Get( Flow, Language );
+
+				Flow.Dismiss();
+				Language.Convert( this->Language );
+			qRR;
+			qRT;
+			qRE;
+			}
+		};
 	}
 
 	namespace {
-		void GetFile_(
-			const fnm::rName &Filename,
-			str::dString &Content )
-		{
-		qRH;
-			flf::rIFlow FFlow;
-			flx::rStringOFlow SFlow;
-		qRB;
-			FFlow.Init( Filename, err::h_Default );
-			SFlow.Init( Content );
-			flw::Copy( FFlow, SFlow );
-		qRR
-		qRT;
-		qRE;
-		}
-
 		void SetElementWithXSLContent_(
 			prtcl::eAnswer Answer,
 			const str::dString &Id,
@@ -96,13 +109,14 @@ namespace {
 			const str::dString &Id,
 			const str::dString &XML,
 			const str::dString &XSLFilename,
+			const char *Language,
 			flw::sWFlow &Flow )
 		{
 		qRH;
 			str::wString XSL;
 		qRB;
 			XSL.Init();
-			GetFile_( XSLFilename, XSL );
+			sclmisc::LoadAndTranslateTags( XSLFilename, Language, XSL, '#' );
 
 			SetElementWithXSLContent_( Answer, Id, XML, XSL, Flow );
 		qRR;
@@ -114,6 +128,7 @@ namespace {
 			prtcl::eAnswer Answer,
 			const str::dString &Id,
 			scljre::sCaller &Caller,
+			const char *Language,
 			flw::sWFlow &Flow )
 		{
 		qRH;
@@ -124,7 +139,7 @@ namespace {
 			Caller.Get( XML );
 			Caller.Get( XSLFilename );
 
-			SetElement_( Answer, Id, XML, XSLFilename, Flow );
+			SetElement_( Answer, Id, XML, XSLFilename, Language, Flow );
 		qRR;
 		qRT;
 		qRE;
@@ -133,6 +148,7 @@ namespace {
 		void SetElement_(
 			prtcl::eAnswer Answer,
 			scljre::sCaller &Caller,
+			const char *Language,
 			flw::sWFlow &Flow )
 		{
 		qRH;
@@ -141,48 +157,65 @@ namespace {
 			tol::Init( Id );
 			Caller.Get( Id );
 
-			SetElement_( Answer, Id, Caller, Flow );
+			SetElement_( Answer, Id, Caller, Language, Flow );
 		qRR;
 		qRT;
 		qRE;
-		}
-
-		void SetDocument_(
-			prtcl::eAnswer Answer,
-			scljre::sCaller &Caller,
-			flw::sWFlow &Flow )
-		{
-			SetElement_( Answer, str::wString( "Root" ), Caller, Flow );
 		}
 	}
 
 	SCLJRE_F( Initialize_ )
 	{
 	qRH;
-		const char *IP = NULL;
 		csdcmn::sVersion Version = csdcmn::UndefinedVersion;
+		scljre::java::lang::rShort Port;
 	qRB;
-		Listener_.Init( 12345 );
-		Flow_.Init( Listener_.GetConnection( IP ), false, sck::NoTimeout );
+		Port.Init( Caller.Get() );
 
-		if ( ( Version = csdcmn::GetProtocolVersion( prtcl::ProtocolId, Flow_ ) ) != prtcl::ProtocolVersion )
-			qRGnr();
-
-		Flow_.Dismiss();
-
-		SetDocument_( prtcl::aSetLayout_1, Caller, Flow_ );
+		Listener_.Init( Port.ShortValue() );
 	qRR;
 	qRT;
 	qRE;
 		return scljre::Integer( 0 );
 	}
 
-	SCLJRE_F( Finalize_ )
+	SCLJRE_F( New_ )
 	{
-		Flow_.reset();
-		Listener_.reset();
+		rRack_ *Rack;
+	qRH;
+		const char *IP = NULL;
+	qRB;
+		Rack = new rRack_;
 
-		return scljre::Integer( 0 );
+		if ( Rack == NULL )
+			qRGnr();
+
+		Rack->Init( Listener_.GetConnection( IP ) );
+	qRR;
+		if ( Rack != NULL )
+			delete Rack;
+	qRT;
+	qRE;
+		return scljre::Long( (scljre::sJLong)Rack );
+	}
+
+	SCLJRE_F( Delete_ )
+	{
+	qRH;
+		scljre::java::lang::rLong Long;
+		rRack_ *Rack = NULL;
+	qRB;
+		Long.Init( Caller.Get() );
+		Rack = (rRack_ *)Long.LongValue();
+
+		if ( Rack == NULL )
+			qRGnr();
+
+		delete Rack;
+	qRR;
+	qRT;
+	qRE;
+		return scljre::Null();
 	}
 
 	namespace {
@@ -254,37 +287,68 @@ namespace {
 		}
 	}
 
+	namespace {
+		rRack_ &GetRack_( scljre::sCaller &Caller )
+		{
+			rRack_ *Rack = NULL;
+		qRH;
+			scljre::java::lang::rLong Long;
+		qRB;
+			Long.Init( Caller.Get() );
+
+			Rack = (rRack_ *)Long.LongValue();
+
+			if ( Rack == NULL )
+				qRGnr();
+		qRR;
+		qRT;
+		qRE;
+			return *Rack;
+		}
+
+		flw::sRWFlow &GetFlow_( scljre::sCaller &Caller )
+		{
+			return GetRack_( Caller ).Flow;
+		}
+	}
+
 	SCLJRE_F( GetAction_ )
 	{
-		prtcl::PutAnswer( prtcl::aOK_1, Flow_ );
-		Flow_.Commit();
-		GetAction_( Flow_, Caller );
+		flw::sRWFlow &Flow = GetFlow_( Caller );
 
-		return scljre::Integer( 0 );
+		prtcl::PutAnswer( prtcl::aOK_1, Flow );
+		Flow.Commit();
+		GetAction_( Flow, Caller );
+
+		return scljre::Null();
 	}
 
 	SCLJRE_F( SetLayout_ )
 	{
-		SetDocument_( prtcl::aSetLayout_1, Caller, Flow_ );
+		rRack_ &Rack = GetRack_( Caller );
 
-		return scljre::Integer( 0 );
+		SetElement_( prtcl::aSetLayout_1, Caller, Rack.Language, Rack.Flow );
+
+		return scljre::Null();
 	}
-
 
 	SCLJRE_F( SetCasting_ )
 	{
-		SetDocument_( prtcl::aSetCasting_1, Caller, Flow_ );
+		rRack_ &Rack = GetRack_( Caller );
 
-		return scljre::Integer( 0 );
+		SetElement_( prtcl::aSetCasting_1, Caller, Rack.Language, Rack.Flow );
+
+		return scljre::Null();
 	}
+
 }
 
 void scljre::SCLJRERegister( scljre::sRegistrar &Registrar )
 {
-	Registrar.Register( ReturnArgument_ );
-	Registrar.Register( Initialize_, Finalize_ );
-	Registrar.Register( GetAction_ );
-	Registrar.Register( SetLayout_, SetCasting_ );
+	Registrar.Register( ReturnArgument_ );	// 0
+	Registrar.Register( Initialize_, New_, Delete_ );	// 1 - 3
+	Registrar.Register( GetAction_ );	// 4
+	Registrar.Register( SetLayout_, SetCasting_ );	// 5 - 6
 }
 
 const char *sclmisc::SCLMISCTargetName = NAME_LC;

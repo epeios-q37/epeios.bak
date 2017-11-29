@@ -29,26 +29,11 @@
 #include "sclmisc.h"
 
 namespace {
-	csdbnc::rIOFlow Client_;
+
 }
 
 void sclxdhtml::SCLXDHTMLInitialization( xdhcmn::mode__ Mode )
 {
-qRH;
-	qCBUFFERr Buffer;
-	str::wString HostService;
-qRB;
-	HostService.Init();
-	sclmisc::MGetValue( ::registry::parameter::HostService, HostService );
-
-	Client_.Init( HostService.Convert( Buffer ), sck::NoTimeout, err::h_Default );
-
-	csdcmn::SendProtocol( prtcl::ProtocolId, prtcl::ProtocolVersion, Client_ );
-
-	Client_.Commit();
-qRR;
-qRT;
-qRE;
 }
  
 namespace {
@@ -137,6 +122,8 @@ namespace {
 	: public xdhcmn::cSession,
 	  public xdhdws::sProxy
 	{
+	private:
+		csdbnc::rIOFlow Client_;
 	protected:
 		virtual bso::bool__ XDHCMNLaunch(
 			const char *Id,
@@ -177,9 +164,37 @@ namespace {
 			xdhdws::sProxy::reset( P );
 		}
 		qCVDTOR( rSession_ )
-		void Init( xdhcmn::cProxy *Callback )
+		void Init(
+			xdhcmn::cProxy *Callback,
+			const char *Language )
 		{
+		qRH;
+			qCBUFFERr Buffer;
+			str::wString HostService;
+		qRB;
+			HostService.Init();
+			sclmisc::MGetValue( ::registry::parameter::HostService, HostService );
+
+			Client_.Init( HostService.Convert( Buffer ), sck::NoTimeout, err::h_Default );
+
+			csdcmn::SendProtocol( prtcl::ProtocolId, prtcl::ProtocolVersion, Client_ );
+
+			prtcl::Put( Language, Client_ );
+
+			Client_.Commit();
+
 			xdhdws::sProxy::Init( Callback );
+		qRR;
+		qRT;
+		qRE;
+		}
+		operator flw::sIOFlow &( void )
+		{
+			return Client_;
+		}
+		flw::sIOFlow &Client( void )
+		{
+			return Client_;
 		}
 	};
 }
@@ -193,17 +208,17 @@ xdhcmn::cSession *sclxdhtml::SCLXDHTMLRetrieveCallback(
 	if ( Session == NULL )
 		qRGnr();
 
-	Session->Init( ProxyCallback );
+	Session->Init( ProxyCallback, Language );
 
-	if ( prtcl::GetAnswer( Client_ ) != prtcl::aSetLayout_1 )
+	if ( prtcl::GetAnswer( *Session ) != prtcl::aSetLayout_1 )
 		qRGnr();
 
-	SetLayout_( Client_, *Session );
+	SetLayout_( *Session, *Session );
 
-	if ( prtcl::GetAnswer( Client_ ) != prtcl::aOK_1 )
+	if ( prtcl::GetAnswer( *Session ) != prtcl::aOK_1 )
 		qRGnr();
 
-	Client_.Dismiss();
+	Session->Client().Dismiss();
 
 	return Session;
 }

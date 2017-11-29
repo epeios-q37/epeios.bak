@@ -94,7 +94,9 @@ namespace {
 }
 
 n4jre::fNew_Object scljre::New_Object_ = NULL;
-n4jre::fDelete scljre::Delete_ = NULL;
+namespace {
+	n4jre::fDelete Delete_ = NULL;
+}
 n4jre::fThrow scljre::Throw_ = NULL;
 
 n4jre::fMalloc n4jre::N4JREMalloc = NULL;
@@ -154,9 +156,20 @@ qRT
 qRE
 }
 
+void scljre::rObject::reset( bso::sBool P )
+{
+	if ( P ) {
+		if ( Object_ != NULL )
+			Delete_( Object_ );
+	}
+
+	Object_ = NULL;
+}
+
+
 sJObject scljre::Null( void )
 {
-	return New( NULL, NULL );
+	return NULL;
 }
 
 namespace {

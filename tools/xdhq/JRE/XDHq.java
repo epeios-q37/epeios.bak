@@ -63,35 +63,81 @@ class JREq extends JREqDecl {
 // End of generic part.
 
 class XDHq extends JREq {
+	private Object core;
+	static private String root;
 	public static String returnArgument( String Text )
 	{
 		return (String)JREq.wrapper( 0, Text  );
 	}
-	public static void initialize(
-		String XML,
-		String XSL )
+	public static void initialize( short port )
 	{
-		JREq.wrapper( 1, XML, XSL );
+		JREq.wrapper( 1,  port );
+		root = "Root";
 	}
-	public static void destructor()
+	public XDHq()
 	{
-		JREq.wrapper( 2 );
+		core = JREq.wrapper( 2 );
 	}
-	public static void getAction( XDHqData data )
+	public void finalize()
 	{
-		JREq.wrapper( 3, data );
+		JREq.wrapper( 3, core );
 	}
-	public static void setLayout(
-		String XML,
-		String XSL )
+	public void getAction( XDHqData data )
 	{
-		JREq.wrapper( 4, XML, XSL );
+		JREq.wrapper( 4, core, data );
 	}
-	public static void setCasting(
-		String XML,
-		String XSL )
+	public void setElementLayout(
+		String id,
+		String xml,
+		String xslFilename )
 	{
-		JREq.wrapper( 5, XML, XSL );
+		JREq.wrapper( 5, core, id, xml, xslFilename );
+	}
+	public void setElementCasting(
+		String id,
+		String xml,
+		String xslFilename )
+	{
+		JREq.wrapper( 6, core, id, xml, xslFilename );
+	}
+	public void setDocumentLayout(
+		String xml,
+		String xslFilename )
+	{
+		setElementLayout( root, xml, xslFilename);
+	}
+	public void setDocumentCasting(
+		String xml,
+		String xslFilename )
+	{
+		setElementCasting( root, xml, xslFilename);
+	}
+}
+
+class XDHqClient extends java.lang.Thread
+{
+	public void run()
+	{
+		XDHq xdhq = new XDHq();
+		XDHqData data = new XDHqData();
+
+		xdhq.setDocumentLayout( "<Root><Layout/></Root>", "../XSL/MainLayout.xsl");
+
+ 		System.out.println( "Client started..." );
+
+		for(;;) {
+			xdhq.getAction( data );
+			System.out.println( data.action + " : " + data.id );
+
+			switch ( data.action ) {
+			case "ShowTestButton":
+				xdhq.setDocumentCasting( "<Root><Casting><Test Enabled=\"true\"/></Casting></Root>", "../XSL/MainCasting.xsl" );
+				break;
+			case "HideTestButton":
+				xdhq.setDocumentCasting( "<Root><Casting><Test Enabled=\"false\"/></Casting></Root>", "../XSL/MainCasting.xsl" );
+				break;
+			}
+		}
 	}
 }
 
@@ -103,27 +149,18 @@ class XDHqTest {
 	
 	public static void main ( String[] args ) throws Exception
 	{
-		XDHqData data = new XDHqData();
  		System.out.println( XDHq.wrapperInfo() );
  		System.out.println( XDHq.componentInfo() );
  		displayBytecodeBuildTimestamp();
  		System.out.println( XDHq.returnArgument( "Text from JAVA file" ) );
-		XDHq.initialize( "<Root><Layout/></Root>", "../XSL/MainLayout.xsl");
+
+		XDHq.initialize( (short)12345 );
+
+		XDHqClient client = new XDHqClient();
+
 		for(;;) {
-			XDHq.getAction( data );
-			System.out.println( data.action + " : " + data.id );
-
-			switch ( data.action ) {
-			case "ShowTestButton":
-				XDHq.setCasting( "<Root><Casting><Test Enabled=\"true\"/></Casting></Root>", "../XSL/MainCasting.xsl" );
-				break;
-			case "HideTestButton":
-				XDHq.setCasting( "<Root><Casting><Test Enabled=\"false\"/></Casting></Root>", "../XSL/MainCasting.xsl" );
-				break;
-			}
+			client.run();
 		}
-
-//		XDHq.destructor();
 	}
 }
 

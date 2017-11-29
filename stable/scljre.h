@@ -71,8 +71,6 @@ namespace scljre {
 		return New_Object_( Class, Signature, sizeof...( args ), Values );
 	}
 
-	extern n4jre::fDelete Delete_;
-
 	inline void Throw( const char *Message )
 	{
 		return Throw_( Message );
@@ -84,15 +82,7 @@ namespace scljre {
 	private:
 		qRMV( cObject, O_, Object_ );
 	public:
-		void reset( bso::sBool P = true )
-		{
-			if ( P ) {
-				if ( Object_ != NULL )
-					Delete_( Object_ );
-			}
-
-			Object_ = NULL;
-		}
+		void reset( bso::sBool P = true );
 		qCDTOR( rObject );
 		void Init( n4jre::cObject *Object )
 		{
@@ -134,6 +124,18 @@ namespace scljre {
 			Return.Init( Object );
 
 			O_().CallObjectMethod( Method, Signature, Return, sizeof...( args ), Values );
+		}
+		template <typename ...args> sJShort CallShortMethod(
+			const char *Method,
+			const char *Signature,
+			args&... Args )
+		{
+			sValue Values[sizeof...(args)+1];	/// '+1' only to avoid attempt to create a array of size 0.
+			Values[sizeof...( args )].Type = t_Undefined;
+
+			Fill_( 0, Values, Args... );
+
+			return O_().CallShortMethod( Method, Signature, sizeof...( args ), Values );
 		}
 		template <typename ...args> sJInt CallIntMethod(
 			const char *Method,
@@ -220,6 +222,17 @@ namespace scljre {
 		}
 
 		namespace lang {
+			B( Short );
+				void Init( sJShort Short )
+				{
+					Init( New( "Ljava/lang/Short;", "(S)V", Short ) );
+				}
+				sJShort ShortValue( void )
+				{
+					return Object_.CallShortMethod( "shortValue", "()S" );
+				}
+			A;
+
 			B( Integer );
 				void Init( sJInt Integer )
 				{

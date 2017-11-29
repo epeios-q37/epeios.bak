@@ -1,5 +1,14 @@
 # *Epeios* changelog
 
+2017-11-29:
+- N4JRE, SCLJRE:
+  - Adding *Short* *Java* type related stuff.
+- SCK:
+  - Adding default timout parameter.
+- SCLJRE:
+  - Fixing `Null()`, according modification of `JREq`.
+  - Moving `Delete_` to *.cpp* to avoid some confusion by compilators when user declares some function of some name.
+
 2017-11-28:
 - FLW:
   - Adding `R`(ead) and `W`(rite) prefix as synonym for `I`(nput) and `O`(utput).

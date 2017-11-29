@@ -33,8 +33,9 @@
  </Modules>
 	<Files>
 		<Files Group="XSL" Path="../XSL/">
-			<File>MainLayout.xsl</File>
 			<File>MainCasting.xsl</File>
+			<File>MainLayout.xsl</File>
+			<File>MainLocale.xsl</File>
 		</Files>
 	</Files>
 	<SourceDirs>

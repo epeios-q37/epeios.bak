@@ -311,6 +311,16 @@ namespace {
 			}
 		qRE
 		}
+		virtual n4jre::sJShort N4JRECallShortMethod(
+			const char *Method,
+			const char *Signature,
+			int ArgC,
+			n4jre::sValue *ArgV ) override
+		{
+			JNIEnv *Env = jniq::GetEnv();
+
+			return CallMethod_<jshort>( Method, Signature, ArgC, ArgV, Env->functions->CallShortMethodA, Env );
+		}
 		virtual n4jre::sJInt N4JRECallIntMethod(
 			const char *Method,
 			const char *Signature,
@@ -396,9 +406,12 @@ namespace {
 			if ( Type != n4jre::t_Undefined )
 				qRGnr();
 
-			rObject_ *Object = (rObject_ *)Value;
+			if ( Value != NULL ) {
+				rObject_ *Object = (rObject_ *)Value;
 
-			ReturnedValue_ = Object->Object();
+				ReturnedValue_ = Object->Object();
+			} else
+				ReturnedValue_ = NULL;
 		}
 	public:
 		void reset( bso::sBool = true )

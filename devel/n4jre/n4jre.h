@@ -42,6 +42,7 @@
 namespace n4jre {
 	// As defined in the 'Java' headers.
 	typedef bso::sS8 sJByte;
+	typedef bso::sS16 sJShort;
 	typedef bso::sS32 sJInt;
 	typedef bso::sS64 sJLong;
 
@@ -270,6 +271,7 @@ namespace n4jre {
 			return N4JRECall##name##Method( Method, Signature, ArgC, ArgV );\
 		}
 		H( void, Void );
+		H( sJShort, Short );
 		H( sJInt, Int );
 		H( sJLong, Long );
 # undef H
