@@ -114,14 +114,16 @@ class XDHq extends JREq {
 	}
 }
 
-class XDHqClient extends java.lang.Thread
+class XDHqThread extends java.lang.Thread
 {
+	private XDHq xdhq;
+	public XDHqThread( XDHq xdhq )
+	{
+		this.xdhq = xdhq;
+	}
 	public void run()
 	{
-		XDHq xdhq = new XDHq();
 		XDHqData data = new XDHqData();
-
-		xdhq.setDocumentLayout( "<Root><Layout/></Root>", "../XSL/MainLayout.xsl");
 
  		System.out.println( "Client started..." );
 
@@ -130,6 +132,11 @@ class XDHqClient extends java.lang.Thread
 			System.out.println( data.action + " : " + data.id );
 
 			switch ( data.action ) {
+			case "":
+			case "Connect":
+				xdhq.setDocumentLayout( "<Root><Layout/></Root>", "../XSL/MainLayout.xsl");
+				xdhq.setDocumentCasting( "<Root><Casting><Test Enabled=\"false\"/></Casting></Root>", "../XSL/MainCasting.xsl" );
+				break;
 			case "ShowTestButton":
 				xdhq.setDocumentCasting( "<Root><Casting><Test Enabled=\"true\"/></Casting></Root>", "../XSL/MainCasting.xsl" );
 				break;
@@ -156,10 +163,11 @@ class XDHqTest {
 
 		XDHq.initialize( (short)12345 );
 
-		XDHqClient client = new XDHqClient();
-
 		for(;;) {
-			client.run();
+	 		System.out.println( "Avant" );
+			java.lang.Thread thread = new XDHqThread( new XDHq() );
+			thread.start();
+	 		System.out.println( "Aprés" );
 		}
 	}
 }

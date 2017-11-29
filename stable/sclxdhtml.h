@@ -825,6 +825,7 @@ namespace sclxdhtml {
 
 	xdhcmn::cSession *SCLXDHTMLRetrieveCallback(
 		const char *Language,
+		xdhcmn::mode__ Mode,
 		xdhcmn::cProxy *ProxyCallback );	// To define by user.
 
 	void SCLXDHTMLReleaseCallback( xdhcmn::cSession *Callback );	// To define by user.

@@ -8,6 +8,8 @@
 - SCLJRE:
   - Fixing `Null()`, according modification of `JREq`.
   - Moving `Delete_` to *.cpp* to avoid some confusion by compilators when user declares some function of some name.
+ - SCLXDHTML:
+   - Adding `Mode` parameter handling for `SCLXDHTMLRetrieveCallback`.
 
 2017-11-28:
 - FLW:

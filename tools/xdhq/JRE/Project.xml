@@ -30,12 +30,13 @@
   </Modules>
 		<Module Path="../">prtcl</Module>
   <Module>registry</Module>
- </Modules>
+		<Module>xdhp</Module>
+	</Modules>
 	<Files>
 		<Files Group="XSL" Path="../XSL/">
 			<File>MainCasting.xsl</File>
 			<File>MainLayout.xsl</File>
-			<File>MainLocale.xsl</File>
+			<File>MainLocale.xml</File>
 		</Files>
 	</Files>
 	<SourceDirs>

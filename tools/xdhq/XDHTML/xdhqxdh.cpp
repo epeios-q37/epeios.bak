@@ -90,7 +90,6 @@ namespace {
 		prtcl::Get( Flow, Id );
 		prtcl::Get( Flow, XML );
 		prtcl::Get( Flow, XSL );
-		Flow.Dismiss();
 
 		Proxy.SetLayout( Id, XML, XSL, NULL );
 	qRR;
@@ -110,7 +109,6 @@ namespace {
 		prtcl::Get( Flow, Id );
 		prtcl::Get( Flow, XML );
 		prtcl::Get( Flow, XSL );
-		Flow.Dismiss();
 
 		Proxy.SetCasting( Id, XML, XSL );
 	qRR;
@@ -124,44 +122,56 @@ namespace {
 	{
 	private:
 		csdbnc::rIOFlow Client_;
+		bso::sBool NotFirstCall_;
 	protected:
 		virtual bso::bool__ XDHCMNLaunch(
 			const char *Id,
 			const char *Action ) override
 		{
+			bso::sBool Return = false;
+			bso::sBool Continue = true;
+
+			if ( !NotFirstCall_ ) {
+				if ( prtcl::GetAnswer( Client_ ) != prtcl::aOK_1 )
+					qRGnr();
+
+				Client_.Dismiss();
+
+				NotFirstCall_ = true;
+			}
+
 			prtcl::PutRequest( prtcl::rLaunch_1, Client_ );
 
 			prtcl::Put( Id, Client_ );
 			prtcl::Put( Action, Client_ );
 			Client_.Commit();
 
-			while( true  )
+			while( Continue )
 				switch ( prtcl::GetAnswer( Client_ ) ) {
 				case prtcl::aOK_1:
-					return true;
-					break;
+					Return = true;
 				case prtcl::aError_1:
-					return false;
+					Continue = false;
+					Client_.Dismiss();
 					break;
 				case prtcl::aSetLayout_1:
 					SetLayout_( Client_, *this );
-					Client_.Commit();
 					break;
 				case prtcl::aSetCasting_1:
 					SetCasting_( Client_, *this );
-					Client_.Commit();
 					break;
 				default:
 					qRGnr();
 					break;
 			}
 
-			return false;	// To avoid a warning;
+			return Return;
 		}
 	public:
 		void reset( bso::sBool P = true )
 		{
 			xdhdws::sProxy::reset( P );
+			NotFirstCall_ = false;
 		}
 		qCVDTOR( rSession_ )
 		void Init(
@@ -184,6 +194,8 @@ namespace {
 			Client_.Commit();
 
 			xdhdws::sProxy::Init( Callback );
+
+			NotFirstCall_ = false;
 		qRR;
 		qRT;
 		qRE;
@@ -201,24 +213,21 @@ namespace {
 
 xdhcmn::cSession *sclxdhtml::SCLXDHTMLRetrieveCallback(
 	const char *Language,
+	xdhcmn::mode__ Mode,
 	xdhcmn::cProxy *ProxyCallback )
 {
 	rSession_ *Session = new rSession_;
+	bso::sBool Continue = true;
 
 	if ( Session == NULL )
 		qRGnr();
 
 	Session->Init( ProxyCallback, Language );
 
-	if ( prtcl::GetAnswer( *Session ) != prtcl::aSetLayout_1 )
-		qRGnr();
-
-	SetLayout_( *Session, *Session );
-
-	if ( prtcl::GetAnswer( *Session ) != prtcl::aOK_1 )
-		qRGnr();
-
-	Session->Client().Dismiss();
+	// WARNING ! In 'MultiUser' mode, 'ProxyCallback' is not correctly set yet!
+	if ( Mode == xdhcmn::mMonoUser ) {
+		Session->Launch( "", "" );
+	}
 
 	return Session;
 }

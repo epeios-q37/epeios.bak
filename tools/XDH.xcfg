@@ -149,12 +149,8 @@
      <![CDATA[
 						log( "'%Id%'" );
 						log( "%XML%" );
-						log( "%XSL%" );
-						log( "1" );
 						removeChildren( "%Id%" );
-						log( "2" );
 						document.getElementById( "%Id%" ).appendChild( transformToFragment( "%XML%", "%XSL%" ) );"";
-						log( "3" );
 						var digests = fetchEventHandlersAndWidgets( "%Id%" );
 						digests;
 					]]>

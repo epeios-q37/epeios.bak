@@ -59,7 +59,7 @@
 			<!-- No 'Pack="yes"', because the whole 'htdocs' directory is packed directly by the 'pack' tool.-->
 			<File>index.html</File>
 			<File>xdhbrwq.js</File>
-			<File Path="js/">xdhtml.js</File>
+			<File Path="../../../corpus/js/">xdhtml.js</File>
 			<File>xdh.php</File>
 			<File>xdh_prolog.php</File>
 		</Files>

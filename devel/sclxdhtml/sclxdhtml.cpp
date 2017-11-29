@@ -77,11 +77,15 @@ namespace {
 	class sDownstream
 	: public cDownstream_
 	{
+	private:
+		xdhcmn::mode__ Mode_;
 	protected:
 		virtual void XDHCMNInitialize( const xdhcmn::shared_data__ &Data ) override
 		{
 			if ( Launcher_ != NULL )
 				qRFwk();
+
+			Mode_ = Data.Mode();
 
 			if ( Launcher_ == NULL ) {
 				Launcher_ = Data.LauncherIdentification();
@@ -105,7 +109,7 @@ namespace {
 			const char *Language,
 			xdhcmn::cProxy *ProxyCallback ) override
 		{
-			return SCLXDHTMLRetrieveCallback( Language, ProxyCallback );
+			return SCLXDHTMLRetrieveCallback( Language, Mode_, ProxyCallback );
 		}
 		virtual void XDHCMNReleaseCallback( xdhcmn::cSession *Callback ) override
 		{
@@ -114,10 +118,12 @@ namespace {
 	public:
 		void reset( bso::bool__ P = true )
 		{
+			Mode_ = xdhcmn::m_Undefined;
 		}
 		E_CVDTOR( sDownstream );
 		void Init( void )
 		{
+			Mode_ = xdhcmn::m_Undefined;
 		}
 	};
 }
