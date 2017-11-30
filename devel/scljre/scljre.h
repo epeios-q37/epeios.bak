@@ -337,6 +337,74 @@ namespace scljre {
 	sJObject Long( sJLong Long );
 	sJObject String( const str::dString &UTF );
 
+	// To ease the handling of user object. 
+	template <typename t> inline sJObject ConvertUO( const t* UO )
+	{
+		return Long( (sJLong)UO );
+	}
+
+	template <typename t> inline sJObject ConvertUO( const t& UO )
+	{
+		return ConvertUO<t>( &UO );
+	}
+
+	template <typename t, typename... args> inline sJObject CreateUO( args& ...Args )
+	{
+		t *UO;
+	qRH;
+	qRB;
+		UO = new t;
+
+		if ( UO == NULL )
+			qRAlc();
+
+		UO->Init( Args... );
+	qRR;
+	qRT;
+	qRE;
+		return scljre::ConvertUO<t>( UO );
+	}
+
+	template <typename t> inline t *GetUOP( sJObject Object )
+	{
+		t *UO = NULL;
+	qRH;
+		scljre::java::lang::rLong Long;
+	qRB;
+		Long.Init( Object );
+
+		UO = (t *)Long.LongValue();
+
+		if ( UO == NULL )
+			qRGnr();
+	qRR;
+	qRT;
+	qRE;
+		return UO;
+	}
+
+	template <typename t> t *GetUOP( scljre::sCaller &Caller )
+	{
+		return GetUOP<t>( Caller.Get() );
+	}
+
+	template <typename t> inline t &GetUO( sJObject Object )
+	{
+		return *GetUOP<t>( Object );
+	}
+
+	template <typename t> t &GetUO( scljre::sCaller &Caller )
+	{
+		return *GetUOP<t>( Caller );
+	}
+
+	template <typename t> inline sJObject DeleteUO( scljre::sCaller &Caller )
+	{
+		delete GetUOP<t>( Caller );
+
+		return Null();
+	}
+
 	typedef fdr::rIDressedDriver rIDriver_;
 
 	class rInputStreamIDriver

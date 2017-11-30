@@ -295,7 +295,7 @@ namespace processing_ {
 void scljre::SCLJRERegister( sRegistrar &Registrar )
 {
 	Registrar.Register( parsing_::New, parsing_::Delete, parsing_::Parse );
-	Registrar.Register( processing_::New,  processing_::Delete,  processing_::Read );
+	Registrar.Register( processing_::New, processing_::Delete,  processing_::Read );
 }
 
 const char *sclmisc::SCLMISCTargetName = NAME_LC;

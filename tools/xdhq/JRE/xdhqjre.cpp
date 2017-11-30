@@ -20,6 +20,7 @@
 #include "xdhqjre.h"
 
 #include "registry.h"
+#include "treep.h"
 #include "xdhp.h"
 
 #include "iof.h"
@@ -58,9 +59,8 @@ void scljre::SCLJRERegister( scljre::sRegistrar &Registrar )
 {
 	Registrar.Register( ReturnArgument_ );	// 0
 	// 'XDHP' related stuff.
-	Registrar.Register( xdhp::Initialize, xdhp::New, xdhp::Delete );	// 1 - 3
-	Registrar.Register( xdhp::GetAction );	// 4
-	Registrar.Register( xdhp::SetLayout, xdhp::SetCasting );	// 5 - 6
+	Registrar.Register( treep::New, treep::Delete, treep::PushTag, treep::PopTag, treep::PutValue, treep::PutAttribute );	// 1 - 6
+	Registrar.Register( xdhp::Initialize, xdhp::New, xdhp::Delete, xdhp::GetAction, xdhp::SetLayout, xdhp::SetCasting );	// 7 - 12
 }
 
 const char *sclmisc::SCLMISCTargetName = NAME_LC;

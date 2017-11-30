@@ -41,7 +41,7 @@ mods += xtf llio dlbrry n4all n4jre
 mods += plgn plgncore sck csdbns csdcmn 
 mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
 mods += scln4a scljre 
-mods += prtcl registry xdhp 
+mods += prtcl registry treep xdhp 
 
 pmods += pllio 
 

@@ -1,5 +1,13 @@
 # *Epeios* changelog
 
+2017-11-30:
+- FLX, TXF:
+  - Introducing `R` (read) and `W` (write) prefixed objects.
+- SCK:
+  - Introducing `Undefined`.
+- SCLJRE:
+  - Introducing some function to ease the handling of user data.
+
 2017-11-29:
 - N4JRE, SCLJRE:
   - Adding *Short* *Java* type related stuff.

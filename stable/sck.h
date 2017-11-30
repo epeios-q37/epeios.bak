@@ -404,5 +404,7 @@ namespace sck {
 	typedef duration__ sTimeout;
 
 	typedef socket__ sSocket;
+
+	qCDEF( sSocket, Undefined, SCK_INVALID_SOCKET );
 }
 #endif

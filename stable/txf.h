@@ -453,6 +453,7 @@ namespace txf {
 namespace txf {
 	// As parameter.
 	typedef text_oflow__ sOFlow;
+	typedef text_oflow__ sWFlow;
 
 	class rOFlow
 	: public text_oflow__
@@ -473,8 +474,11 @@ namespace txf {
 		}
 	};
 
+	typedef rOFlow rWFlow;
+
 	// As parameter.
 	typedef text_iflow__ sIFlow;
+	typedef text_iflow__ sRFlow;
 
 	class rIFlow
 	: public text_iflow__ {
@@ -493,6 +497,8 @@ namespace txf {
 			text_iflow__::Init( Flow_ );
 		}
 	};
+
+	typedef rIFlow rRFlow;
 }
 
 

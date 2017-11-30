@@ -19,9 +19,12 @@
 
 #include "xdhp.h"
 
+#include "treep.h"
+
+#include "prtcl.h"
+
 #include "csdbns.h"
 #include "csdcmn.h"
-#include "prtcl.h"
 
 using namespace xdhp;
 
@@ -78,60 +81,31 @@ namespace {
 
 SCLJRE_F( xdhp::New )
 {
-	rRack_ *Rack;
+	scljre::sJObject Object = NULL;
 qRH;
 	const char *IP = NULL;
+	sck::sSocket Socket = sck::Undefined;
 qRB;
-	Rack = new rRack_;
+	Socket = Listener_.GetConnection( IP );
 
-	if ( Rack == NULL )
-		qRGnr();
-
-	Rack->Init( Listener_.GetConnection( IP ) );
+	Object = scljre::CreateUO<rRack_>( Socket );
 qRR;
-	if ( Rack != NULL )
-		delete Rack;
+	if ( Socket != sck::Undefined )
+		sck::Close( Socket );
 qRT;
 qRE;
-	return scljre::Long( (scljre::sJLong)Rack );
+	return Object;	
 }
 
 SCLJRE_F( xdhp::Delete )
 {
-qRH;
-	scljre::java::lang::rLong Long;
-	rRack_ *Rack = NULL;
-qRB;
-	Long.Init( Caller.Get() );
-	Rack = (rRack_ *)Long.LongValue();
-
-	if ( Rack == NULL )
-		qRGnr();
-
-	delete Rack;
-qRR;
-qRT;
-qRE;
-	return scljre::Null();
+	return scljre::DeleteUO<rRack_>( Caller );
 }
 
 namespace {
 	rRack_ &GetRack_( scljre::sCaller &Caller )
 	{
-		rRack_ *Rack = NULL;
-		qRH;
-		scljre::java::lang::rLong Long;
-		qRB;
-		Long.Init( Caller.Get() );
-
-		Rack = (rRack_ *)Long.LongValue();
-
-		if ( Rack == NULL )
-			qRGnr();
-		qRR;
-		qRT;
-		qRE;
-		return *Rack;
+		return scljre::GetUO<rRack_>( Caller );
 	}
 
 	flw::sRWFlow &GetFlow_( scljre::sCaller &Caller )
@@ -268,7 +242,7 @@ namespace {
 	qRB;
 		tol::Init( XML, XSLFilename );
 
-		Caller.Get( XML );
+		treep::GetXML( Caller, XML );
 		Caller.Get( XSLFilename );
 
 		SetElement_( Answer, Id, XML, XSLFilename, Language, Flow );

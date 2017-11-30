@@ -62,6 +62,54 @@ class JREq extends JREqDecl {
 }
 // End of generic part.
 
+class JREqTree extends JREq {
+	private Object core;
+	public JREqTree( String background)
+	{
+		core = JREq.wrapper( 1, background );
+	}
+	public void finalize()
+	{
+		JREq.wrapper( 2, core );
+	}
+	public void pushTag( String name )
+	{
+		JREq.wrapper( 3, core, name );
+	}
+	public void popTag()
+	{
+		JREq.wrapper( 4, core );
+	}
+	public void putValue( String value )
+	{
+		JREq.wrapper( 5, core, value );
+	}
+	public void putAttribute(
+		String name,
+		String value )
+	{
+		JREq.wrapper( 6, core, name, value );
+	}
+	Object core()
+	{
+		return core;
+	}
+}
+
+class JREqLayoutTree extends JREqTree {
+	public JREqLayoutTree()
+	{
+		super( "Layout" );
+	}
+}
+
+class JREqCastingTree extends JREqTree {
+	public JREqCastingTree()
+	{
+		super( "Casting");
+	}
+}
+
 class XDHq extends JREq {
 	private Object core;
 	static private String root;
@@ -71,46 +119,46 @@ class XDHq extends JREq {
 	}
 	public static void initialize( short port )
 	{
-		JREq.wrapper( 1,  port );
+		JREq.wrapper( 7,  port );
 		root = "Root";
 	}
 	public XDHq()
 	{
-		core = JREq.wrapper( 2 );
+		core = JREq.wrapper( 8 );
 	}
 	public void finalize()
 	{
-		JREq.wrapper( 3, core );
+		JREq.wrapper( 9, core );
 	}
 	public void getAction( XDHqData data )
 	{
-		JREq.wrapper( 4, core, data );
+		JREq.wrapper( 10, core, data );
 	}
 	public void setElementLayout(
 		String id,
-		String xml,
+		JREqLayoutTree tree,
 		String xslFilename )
 	{
-		JREq.wrapper( 5, core, id, xml, xslFilename );
+		JREq.wrapper( 11, core, id, tree.core(), xslFilename );
 	}
 	public void setElementCasting(
 		String id,
-		String xml,
+		JREqCastingTree tree,
 		String xslFilename )
 	{
-		JREq.wrapper( 6, core, id, xml, xslFilename );
+		JREq.wrapper( 12, core, id, tree.core(), xslFilename );
 	}
 	public void setDocumentLayout(
-		String xml,
+		JREqLayoutTree tree,
 		String xslFilename )
 	{
-		setElementLayout( root, xml, xslFilename);
+		setElementLayout( root, tree, xslFilename);
 	}
 	public void setDocumentCasting(
-		String xml,
+		JREqCastingTree tree,
 		String xslFilename )
 	{
-		setElementCasting( root, xml, xslFilename);
+		setElementCasting( root, tree, xslFilename);
 	}
 }
 
@@ -120,6 +168,28 @@ class XDHqThread extends java.lang.Thread
 	public XDHqThread( XDHq xdhq )
 	{
 		this.xdhq = xdhq;
+	}
+	private void setCasting(
+		boolean enabled,
+		String xslFilename )
+	{
+		JREqCastingTree tree = new JREqCastingTree();
+		tree.pushTag( "Test" );
+
+		if ( enabled )
+			tree.putAttribute( "Enabled", "true" );
+		else
+			tree.putAttribute( "Enabled", "false" );
+
+		xdhq.setDocumentCasting( tree, xslFilename );
+	}
+	private void connect()
+	{
+		JREqLayoutTree tree = new JREqLayoutTree();
+
+		xdhq.setDocumentLayout( tree, "../XSL/MainLayout.xsl");
+		setCasting( false, "../XSL/MainCasting.xsl" );
+
 	}
 	public void run()
 	{
@@ -134,14 +204,13 @@ class XDHqThread extends java.lang.Thread
 			switch ( data.action ) {
 			case "":
 			case "Connect":
-				xdhq.setDocumentLayout( "<Root><Layout/></Root>", "../XSL/MainLayout.xsl");
-				xdhq.setDocumentCasting( "<Root><Casting><Test Enabled=\"false\"/></Casting></Root>", "../XSL/MainCasting.xsl" );
+				connect();
 				break;
 			case "ShowTestButton":
-				xdhq.setDocumentCasting( "<Root><Casting><Test Enabled=\"true\"/></Casting></Root>", "../XSL/MainCasting.xsl" );
+				setCasting( true, "../XSL/MainCasting.xsl" );
 				break;
 			case "HideTestButton":
-				xdhq.setDocumentCasting( "<Root><Casting><Test Enabled=\"false\"/></Casting></Root>", "../XSL/MainCasting.xsl" );
+				setCasting( false, "../XSL/MainCasting.xsl" );
 				break;
 			}
 		}

@@ -30,6 +30,7 @@
   </Modules>
 		<Module Path="../">prtcl</Module>
   <Module>registry</Module>
+		<Module>treep</Module>
 		<Module>xdhp</Module>
 	</Modules>
 	<Files>

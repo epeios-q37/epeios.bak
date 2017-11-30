@@ -73,12 +73,23 @@
 namespace flx {
 	template < typename bunch_, typename so__,int  CacheSize = FLX_BUNCH_BUFFER_SIZE> class bunch_iflow__;
 	typedef bunch_iflow__<str::string_, bso::char__> sStringIFlow;
+	typedef sStringIFlow sStringRFlow;
 
 	template < typename bunch_, typename so__> class bunch_oflow___;
 	typedef bunch_oflow___<str::string_, bso::char__> rStringOFlow;
+	typedef rStringOFlow rStringWFlow;
 
 	class string_text_oflow___;
-	typedef string_text_oflow___ rStringTOflow;
+	typedef string_text_oflow___ rStringTOFlow;
+	typedef rStringTOFlow rStringTWFlow;
+
+	class string_text_iflow___;
+	typedef string_text_iflow___ rStringTIFlow;
+	typedef rStringTIFlow rStringTIFlow;
+
+	class string_text_oflow___;
+	typedef string_text_oflow___ rStringTOFlow;
+	typedef rStringTOFlow rStringTWFlow;
 
 	using flw::Copy;
 }
