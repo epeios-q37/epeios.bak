@@ -117,9 +117,9 @@ class XDHq extends JREq {
 	{
 		return (String)JREq.wrapper( 0, Text  );
 	}
-	public static void initialize( short port )
+	public static void initialize( String arguments )
 	{
-		JREq.wrapper( 7,  port );
+		JREq.wrapper( 7, arguments );
 		root = "Root";
 	}
 	public XDHq()
@@ -130,23 +130,27 @@ class XDHq extends JREq {
 	{
 		JREq.wrapper( 9, core );
 	}
+	public void set( Object object )
+	{
+		JREq.wrapper( 10, core, object );
+	}
 	public void getAction( XDHqData data )
 	{
-		JREq.wrapper( 10, core, data );
+		JREq.wrapper( 11, core, data );
 	}
 	public void setElementLayout(
 		String id,
 		JREqLayoutTree tree,
 		String xslFilename )
 	{
-		JREq.wrapper( 11, core, id, tree.core(), xslFilename );
+		JREq.wrapper( 12, core, id, tree.core(), xslFilename );
 	}
 	public void setElementCasting(
 		String id,
 		JREqCastingTree tree,
 		String xslFilename )
 	{
-		JREq.wrapper( 12, core, id, tree.core(), xslFilename );
+		JREq.wrapper( 13, core, id, tree.core(), xslFilename );
 	}
 	public void setDocumentLayout(
 		JREqLayoutTree tree,
@@ -168,6 +172,7 @@ class XDHqThread extends java.lang.Thread
 	public XDHqThread( XDHq xdhq )
 	{
 		this.xdhq = xdhq;
+		xdhq.set( this );
 	}
 	private void setCasting(
 		boolean enabled,
@@ -215,6 +220,9 @@ class XDHqThread extends java.lang.Thread
 			}
 		}
 	}
+	public void test() {
+		System.out.println( "Essai from void method!"  );
+	}
 }
 
 class XDHqTest {
@@ -230,7 +238,7 @@ class XDHqTest {
  		displayBytecodeBuildTimestamp();
  		System.out.println( XDHq.returnArgument( "Text from JAVA file" ) );
 
-		XDHq.initialize( (short)12345 );
+		XDHq.initialize( "12345" );
 
 		for(;;) {
 	 		System.out.println( "Avant" );

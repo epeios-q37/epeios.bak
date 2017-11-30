@@ -21,3 +21,4 @@
 
 using namespace registry;
 
+rEntry registry::parameter::Service( "Service", sclrgstry::Parameters );

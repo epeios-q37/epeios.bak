@@ -19,9 +19,12 @@
 
 #include "xdhp.h"
 
+#include "registry.h"
 #include "treep.h"
 
 #include "prtcl.h"
+
+#include "sclargmnt.h"
 
 #include "csdbns.h"
 #include "csdcmn.h"
@@ -36,11 +39,14 @@ SCLJRE_F( xdhp::Initialize )
 {
 qRH;
 	csdcmn::sVersion Version = csdcmn::UndefinedVersion;
-	scljre::java::lang::rShort Port;
+	str::wString Arguments;
 qRB;
-	Port.Init( Caller.Get() );
+	Arguments.Init();
+	Caller.Get( Arguments );
 
-	Listener_.Init( Port.ShortValue() );
+	sclargmnt::FillRegistry( Arguments, sclargmnt::faIsArgument, sclargmnt::uaReport );
+
+	Listener_.Init( sclmisc::MGetU16( registry::parameter::Service ) );
 qRR;
 qRT;
 qRE;
@@ -51,9 +57,10 @@ namespace {
 	struct rRack_ {
 		sck::socket_ioflow___ Flow;
 		qCBUFFERr Language;
+		scljre::rObject Object;
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, Flow, Language );
+			tol::reset( P, Flow, Language, Object );
 		}
 		qCDTOR( rRack_ );
 		void Init( sck::sSocket Socket )
@@ -72,9 +79,15 @@ namespace {
 
 			Flow.Dismiss();
 			Language.Convert( this->Language );
+
+			// Object is intialized specifically in the 'Set()' method.
 		qRR;
 		qRT;
 		qRE;
+		}
+		void Set( scljre::cObject *Object )
+		{
+			this->Object.Init( Object );
 		}
 	};
 }
@@ -112,6 +125,17 @@ namespace {
 	{
 		return GetRack_( Caller ).Flow;
 	}
+}
+
+SCLJRE_F( xdhp::Set )
+{
+	rRack_ &Rack = GetRack_( Caller );
+
+	Rack.Set( Caller.Get() );
+
+	Rack.Object.CallVoidMethod( "test", "()V" );
+
+	return scljre::Null();
 }
 
 namespace {

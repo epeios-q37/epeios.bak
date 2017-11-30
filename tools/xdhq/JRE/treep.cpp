@@ -53,7 +53,6 @@ namespace {
 			PutAttribute( "Generator", sclmisc::SCLMISCTargetName );
 			PutAttribute( "TimeStamp", tol::DateAndTime( Buffer ) );
 			PutAttribute( "OS", cpe::GetOSDigest() );
-			PushTag( Background );
 		}
 		const str::dString &GetXML( str::dString &XML )
 		{

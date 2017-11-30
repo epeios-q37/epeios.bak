@@ -2,10 +2,7 @@
 <!-- NO BOM !! -->
 <xsl:stylesheet	version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<xsl:output method="html" encoding="UTF-8"/>
-	<xsl:template match="/">
-		<xsl:apply-templates select="*/Casting"/>
-	</xsl:template>
-	<xsl:template match="Casting">
+	<xsl:template match="/XDHTML[@Background='Casting']">
 		<xsl:choose>
 			<xsl:when test="Test/@Enabled='true'">
 				<xdh-cast id="TestButtonCasting" kind="Plain"/>

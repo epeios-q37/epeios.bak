@@ -28,6 +28,7 @@ namespace xdhp {
 	SCLJRE_F( Initialize );
 	SCLJRE_F( New );
 	SCLJRE_F( Delete );
+	SCLJRE_F( Set );
 	SCLJRE_F( GetAction );
 	SCLJRE_F( SetLayout );
 	SCLJRE_F( SetCasting );

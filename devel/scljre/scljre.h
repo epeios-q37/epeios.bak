@@ -125,6 +125,19 @@ namespace scljre {
 
 			O_().CallObjectMethod( Method, Signature, Return, sizeof...( args ), Values );
 		}
+		template <typename ...args> void CallVoidMethod(
+			const char *Method,
+			const char *Signature,
+			args&... Args )
+		{
+			sValue Values[sizeof...(args)+1];	/// '+1' only to avoid attempt to create a array of size 0.
+
+			Values[sizeof...( args )].Type = t_Undefined;
+
+			Fill_( 0, Values, Args... );
+
+			O_().CallVoidMethod( Method, Signature, sizeof...( args ), Values );
+		}
 		template <typename ...args> sJShort CallShortMethod(
 			const char *Method,
 			const char *Signature,
