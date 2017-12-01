@@ -28,7 +28,10 @@
     <xpp:expand select="SCL"/>
    </Modules>
   </Modules>
-		<Module Path="../">prtcl</Module>
+		<Modules Group="XDH" Path="../">
+			<Module>prtcl</Module>
+			<Module>server</Module>
+		</Modules>
   <Module>registry</Module>
 		<Module>treep</Module>
 		<Module>xdhp</Module>

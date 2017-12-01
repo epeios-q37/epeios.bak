@@ -199,10 +199,10 @@ namespace {
 						qRGnr();
 
 					switch ( Argument.Type ) {
-					case n4njs::atInt:
+					case n4njs::tInt:
 						Set_( Argv, (int *)Argument.Value );
 						break;
-					case n4njs::atString:
+					case n4njs::tString:
 						Set_( Argv, (str::wString *)Argument.Value );
 						break;
 					default:
@@ -233,14 +233,14 @@ namespace {
 		{
 		protected:
 			virtual void *N4NJSLaunch(
-				n4njs::eArgumentType_ ReturnType,
+				n4njs::eType ReturnType,
 				n4njs::dArguments_ &Arguments ) override
 			{
 			qRH
 				v8::Local<v8::Value> *Argv = NULL;
 				int Argc = 0;
 			qRB
-				if ( ReturnType != n4njs::atVoid )
+				if ( ReturnType != n4njs::tVoid )
 					qRVct();
 
 				Argc = Arguments.Amount();

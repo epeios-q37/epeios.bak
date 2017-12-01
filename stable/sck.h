@@ -402,9 +402,11 @@ namespace sck {
 
 namespace sck {
 	typedef duration__ sTimeout;
-
 	typedef socket__ sSocket;
 
 	qCDEF( sSocket, Undefined, SCK_INVALID_SOCKET );
+
+	typedef socket_ioflow_driver___ rRWFlowDriver;
+	typedef socket_ioflow___ rRWFlow;
 }
 #endif

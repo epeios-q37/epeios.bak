@@ -17,8 +17,12 @@
     along with 'XDHq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PRTCL__INC
-# define PRTCL__INC
+// PRoToCoL
+// Unlike other modules in the same directory, this one is shared between client and server.
+// Other modules are only for the server part of the software.
+
+#ifndef PRTCL_INC_
+# define PRTCL_INC_
 
 # include "csdcmn.h"
 # include "flw.h"

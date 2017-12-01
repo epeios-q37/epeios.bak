@@ -22,7 +22,7 @@
 #include "registry.h"
 #include "treep.h"
 
-#include "prtcl.h"
+#include "server.h"
 
 #include "sclargmnt.h"
 
@@ -38,7 +38,6 @@ namespace {
 SCLJRE_F( xdhp::Listen )
 {
 qRH;
-	csdcmn::sVersion Version = csdcmn::UndefinedVersion;
 	str::wString Arguments;
 qRB;
 	Arguments.Init();
@@ -55,7 +54,7 @@ qRE;
 
 namespace {
 	struct rRack_ {
-		sck::socket_ioflow___ Flow;
+		sck::rRWFlow Flow;
 		qCBUFFERr Language;
 		scljre::rObject Object;
 		void reset( bso::sBool P = true )
@@ -66,18 +65,13 @@ namespace {
 		void Init( sck::sSocket Socket )
 		{
 		qRH;
-			csdcmn::sVersion Version = csdcmn::UndefinedVersion;
 			str::wString Language;
 		qRB;
 			Flow.Init( Socket, true );
 
-			if ( ( Version = csdcmn::GetProtocolVersion( prtcl::ProtocolId, Flow ) ) != prtcl::ProtocolVersion )
-				qRGnr();
-
 			Language.Init();
-			prtcl::Get( Flow, Language );
 
-			Flow.Dismiss();
+			server::Handshake( Flow, Language );
 			Language.Convert( this->Language );
 
 			// Object is intialized specifically in the 'Set()' method.
@@ -139,19 +133,6 @@ SCLJRE_F( xdhp::Set )
 }
 
 namespace {
-	void GetAction_(
-		flw::sRFlow &Flow,
-		str::wString &Id,
-		str::wString &Action )
-	{
-		if ( prtcl::GetRequest( Flow ) != prtcl::rLaunch_1 )
-			qRGnr();
-
-		prtcl::Get( Flow, Id );
-		prtcl::Get( Flow, Action );
-		Flow.Dismiss();
-	}
-
 	namespace {
 		void Init_(
 			scljre::java::lang::rString &String,
@@ -188,7 +169,7 @@ namespace {
 	}
 
 	void GetAction_(
-		flw::sRFlow &Flow,
+		flw::sRWFlow &Flow,
 		scljre::sCaller &Caller )
 	{
 	qRH;
@@ -196,7 +177,7 @@ namespace {
 		scljre::rObject Data;
 	qRB;
 		tol::Init( Id, Action );
-		GetAction_( Flow, Id, Action );
+		server::GetAction( Flow, Id, Action );
 
 		Data.Init( Caller.Get() );
 		Set_( "id", Id, Data );
@@ -207,55 +188,17 @@ namespace {
 	}
 }
 
-
 SCLJRE_F( xdhp::GetAction )
 {
 	flw::sRWFlow &Flow = GetFlow_( Caller );
-
-	prtcl::PutAnswer( prtcl::aOK_1, Flow );
-	Flow.Commit();
 	GetAction_( Flow, Caller );
 
 	return scljre::Null();
 }
 
 namespace {
-	void SetElementWithXSLContent_(
-		prtcl::eAnswer Answer,
-		const str::dString &Id,
-		const str::dString &XML,
-		const str::dString &XSL,
-		flw::sWFlow &Flow )
-	{
-		prtcl::PutAnswer( Answer, Flow );
-		prtcl::Put( Id, Flow );
-		prtcl::Put( XML, Flow );
-		prtcl::Put( XSL, Flow );
-		Flow.Commit();
-	}
-
 	void SetElement_(
-		prtcl::eAnswer Answer,
-		const str::dString &Id,
-		const str::dString &XML,
-		const str::dString &XSLFilename,
-		const char *Language,
-		flw::sWFlow &Flow )
-	{
-	qRH;
-		str::wString XSL;
-	qRB;
-		XSL.Init();
-		sclmisc::LoadAndTranslateTags( XSLFilename, Language, XSL, '#' );
-
-		SetElementWithXSLContent_( Answer, Id, XML, XSL, Flow );
-	qRR;
-	qRT;
-	qRE;
-	}
-
-	void SetElement_(
-		prtcl::eAnswer Answer,
+		server::fSet Set,
 		const str::dString &Id,
 		scljre::sCaller &Caller,
 		const char *Language,
@@ -269,14 +212,14 @@ namespace {
 		treep::GetXML( Caller, XML );
 		Caller.Get( XSLFilename );
 
-		SetElement_( Answer, Id, XML, XSLFilename, Language, Flow );
+		Set( Id, XML, XSLFilename, Language, Flow );
 	qRR;
 	qRT;
 	qRE;
 	}
 
 	void SetElement_(
-		prtcl::eAnswer Answer,
+		server::fSet Set,
 		scljre::sCaller &Caller,
 		const char *Language,
 		flw::sWFlow &Flow )
@@ -287,7 +230,7 @@ namespace {
 		tol::Init( Id );
 		Caller.Get( Id );
 
-		SetElement_( Answer, Id, Caller, Language, Flow );
+		SetElement_( Set, Id, Caller, Language, Flow );
 	qRR;
 	qRT;
 	qRE;
@@ -299,7 +242,7 @@ SCLJRE_F( xdhp::SetLayout )
 {
 	rRack_ &Rack = GetRack_( Caller );
 
-	SetElement_( prtcl::aSetLayout_1, Caller, Rack.Language, Rack.Flow );
+	SetElement_( server::SetElementLayout, Caller, Rack.Language, Rack.Flow );
 
 	return scljre::Null();
 }
@@ -308,7 +251,7 @@ SCLJRE_F( xdhp::SetCasting )
 {
 	rRack_ &Rack = GetRack_( Caller );
 
-	SetElement_( prtcl::aSetCasting_1, Caller, Rack.Language, Rack.Flow );
+	SetElement_( server::SetElementCasting, Caller, Rack.Language, Rack.Flow );
 
 	return scljre::Null();
 }

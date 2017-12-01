@@ -3,6 +3,11 @@
 2017-12-01:
 - N4NJS, NODEQ, SCLNJS:
   - Adding handling of generic object type.
+- N4NJS:
+  - Merging `eArgumentType_` with `eType`.
+- SCLNJS:
+  - Handling return value when calling a callback.
+  - Adaptation to changes in *N4NJS*.
 
 2017-11-30:
 - FLX, TXF:

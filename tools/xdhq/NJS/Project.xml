@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<xpp:bloc>
+		<!-- User definitions -->
+		<xpp:define name="Version">
+			<xpp:bloc>(Obsolete)</xpp:bloc>
+		</xpp:define>
+		<xpp:define name="CopyrightYears">
+			<xpp:bloc>2017</xpp:bloc>
+		</xpp:define>
+		<xpp:set name="Credits" value="Epeios"/>
+		<xpp:set name="Type" value="NJSComponent"/>
+	</xpp:bloc>
+	<xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
+	<About>
+		<Program>xdhqnjs</Program>
+		<Software>XDHq</Software>
+		<UUID>d6a723cb-e88f-4f2f-b429-3adc207f1d62</UUID>
+	</About>
+ <!-- NO SPACE in 'Keywords' attribute !!! ("a,b,c", NOT "a, b, c")-->
+	<RTW Description="Node.js addon template" Keywords="template">
+  <Dir>xdhq-node</Dir>
+ </RTW>
+ <Modules>
+		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
+			<Modules Group="Core">
+				<xpp:expand select="Core"/>
+				<Module>csdbns</Module>
+				<Module>csdcmn</Module>
+				<Module>sck</Module>
+			</Modules>
+   <Modules Group="SCL">
+    <xpp:expand select="SCL"/>
+   </Modules>
+  </Modules>
+		<Modules Group="XDH" Path="../">
+			<Module>prtcl</Module>
+			<Module>server</Module>
+		</Modules>
+		<Module>registry</Module>
+		<Module>treep</Module>
+		<Module>xdhp</Module>
+	</Modules>
+	<SourceDirs>
+		<SourceDir>..</SourceDir>
+	</SourceDirs>
+	<Files>
+  <!-- NOTA : '*.js' files will automatically be packed. -->
+  <!--File Pack="No">XDHq.js</File-->
+ </Files>
+	<PreprocessorDefinitions>
+		<PreprocessorDefinition>E_ST</PreprocessorDefinition>
+	</PreprocessorDefinitions>
+</Project>

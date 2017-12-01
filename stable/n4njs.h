@@ -53,7 +53,9 @@ namespace n4njs {
 
 	qENUM( Type )
 	{
+		tVoid,	// Only used to specify that the function does not return a value.
 		tObject,	// Generic object; sort of superclass.
+		tInt,
 		tString,
 		tStream,
 		tBuffer,
@@ -130,27 +132,18 @@ namespace n4njs {
 		}
 	};
 
-	qENUM( ArgumentType_ )
-	{
-		atVoid,	// Only used to specify that the function does not return a value.
-		atInt,
-		atString,
-		at_amount,
-		at_Undefined
-	};
-
 	class sArgument_ {
 	public:
-		eArgumentType_ Type;
+		eType Type;
 		void *Value;
 		void reset( bso::sBool P = true )
 		{
-			Type = at_Undefined;
+			Type = t_Undefined;
 			Value = NULL;
 		}
 		qCDTOR( sArgument_ );
 		void Init(
-			eArgumentType_ Type = at_Undefined,
+			eType Type = t_Undefined,
 			void *Value = NULL )
 		{
 			this->Type = Type;
@@ -168,12 +161,12 @@ namespace n4njs {
 	{
 	protected:
 		virtual void *N4NJSLaunch(
-			eArgumentType_ ReturnType,
+			eType ReturnType,
 			dArguments_ &Arguments ) = 0;	// Type is the expected type of the returned value.
 	public:
 		qCALLBACK( UCallback );
 		void *Launch(
-			eArgumentType_ ReturnType,
+			eType ReturnType,
 			dArguments_ &Arguments )
 		{
 			return N4NJSLaunch( ReturnType, Arguments );

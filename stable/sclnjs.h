@@ -83,7 +83,7 @@ namespace sclnjs {
 
 	inline void TestAndAdd_(
 		n4njs::dArguments_ &Arguments,
-		n4njs::eArgumentType_ Type,
+		n4njs::eType Type,
 		void *Value )
 	{
 		n4njs::sArgument_ Argument;
@@ -103,14 +103,14 @@ namespace sclnjs {
 		n4njs::dArguments_ &Arguments,
 		const int &Int )
 	{
-		TestAndAdd_( Arguments, n4njs::atInt, new int( Int ) );
+		TestAndAdd_( Arguments, n4njs::tInt, new int( Int ) );
 	}
 
 	inline void Add_(
 		n4njs::dArguments_ &Arguments,
 		const str::dString &String )
 	{
-		TestAndAdd_( Arguments, n4njs::atString, new str::wString( String ) );
+		TestAndAdd_( Arguments, n4njs::tString, new str::wString( String ) );
 	}
 
 	inline void Add_(
@@ -140,7 +140,9 @@ namespace sclnjs {
 	: public rCallback_
 	{
 	public:
-		template <typename ...args> void Launch( const args &...Args )
+		template <typename ...args> void Launch(
+			n4njs::eType ReturnType,
+			const args &...Args )
 		{
 		qRH
 			n4njs::wArguments_ Arguments;
@@ -148,7 +150,7 @@ namespace sclnjs {
 			Arguments.Init();
 			Add_( Arguments, Args... );
 
-			C_().Launch( n4njs::atVoid, Arguments );
+			C_().Launch( ReturnType, Arguments );
 		qRR
 		qRT
 		qRE

@@ -132,12 +132,12 @@ namespace {
 		bso::sBool SendToCallback( void )
 		{
 			if ( Content_.Token == xml::t_Error ) {
-				C_().Launch( 0, Content_.Tag, Content_.Attribute, Content_.Error );
+				C_().Launch( n4njs::tVoid, 0, Content_.Tag, Content_.Attribute, Content_.Error );
 				XFlow_.UndelyingFlow().IDriver().ITake( tht::GetTID() );
 				XFlow_.Dismiss();	// To avoid locker owner problem on destruction.
 				return true;
 			} else if ( Content_.Token == xml::t_Processed ) {
-				C_().Launch( 1, Content_.Tag, Content_.Attribute, Content_.Value );
+				C_().Launch( n4njs::tVoid, 1, Content_.Tag, Content_.Attribute, Content_.Value );
 				XFlow_.UndelyingFlow().IDriver().ITake( tht::GetTID() );
 				XFlow_.Dismiss();	// To avoid locker owner problem on destruction.
 				return true;
@@ -162,7 +162,7 @@ namespace {
 					break;
 				}
 
-				C_().Launch( Token, Content_.Tag, Content_.Attribute, Content_.Value );
+				C_().Launch( n4njs::tVoid, Token, Content_.Tag, Content_.Attribute, Content_.Value );
 			}
 
 			return false;
