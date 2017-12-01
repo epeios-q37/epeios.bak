@@ -177,6 +177,8 @@ namespace sclnjs {
 		}
 	};
 
+	typedef rCore_<n4njs::cUObject> rObject;
+
 	typedef rCore_<n4njs::cUBuffer> rBuffer_;
 
 	class rBuffer
@@ -259,6 +261,11 @@ namespace sclnjs {
 // Declaration of the handling of it own types.
 // Extends same namespace declared in 'scln4a.h'.
 namespace scln4 {
+	template <> void Get(
+		int Index,
+		cCaller_ &Caller,
+		sclnjs::rObject &Object );
+
 	template <> void Get(
 		int Index,
 		cCaller_ &Caller,

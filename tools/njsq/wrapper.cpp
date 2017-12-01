@@ -127,6 +127,17 @@ namespace {
 			return Host;
 		}
 
+		typedef rCore_<n4njs::cUObject, nodeq::rPObject> rObject_;
+
+		class rBuffer_
+		: public rCore_<n4njs::cUBuffer, nodeq::rPBuffer> {
+		protected:
+			virtual void N4NJSToString( str::dString &String ) override
+			{
+				Core_.ToString( String );
+			}
+		};
+
 		class rRStream_
 		: public rCore_<n4njs::cURStream, nodeq::rPRStream>
 		{
@@ -148,16 +159,6 @@ namespace {
 			virtual void N4NJSEnd( void ) override
 			{
 				return Core_.End();
-			}
-		};
-
-		class rBuffer_
-		: public rCore_<n4njs::cUBuffer, nodeq::rPBuffer>
-		{
-		protected:
-			virtual void N4NJSToString( str::dString &String ) override
-			{
-				Core_.ToString( String );
 			}
 		};
 
@@ -262,11 +263,11 @@ namespace {
 		};
 	}
 
-	inline n4njs::cURStream *GetStream_(
+	inline n4njs::cUObject *GetObject_(
 		int Index,
 		const v8::FunctionCallbackInfo<v8::Value> &Info )
 	{
-		return Get_<rRStream_>( Index, Info );
+		return Get_<rObject_>( Index, Info );
 	}
 
 	inline n4njs::cUBuffer *GetBuffer_(
@@ -274,6 +275,13 @@ namespace {
 		const v8::FunctionCallbackInfo<v8::Value> &Info )
 	{
 		return Get_<rBuffer_>( Index, Info );
+	}
+
+	inline n4njs::cURStream *GetStream_(
+		int Index,
+		const v8::FunctionCallbackInfo<v8::Value> &Info )
+	{
+		return Get_<rRStream_>( Index, Info );
 	}
 
 	inline n4njs::cUCallback *GetCallback_(
@@ -316,11 +324,14 @@ namespace {
 			case n4njs::tString:
 				GetString_( Index, I_(), *( str::dString * )Value );
 				break;
-			case n4njs::tStream:
-				(*(n4njs::cURStream **)Value ) = GetStream_( Index, I_() );
+			case n4njs::tObject:
+				( *( n4njs::cUObject ** )Value ) = GetObject_( Index, I_() );
 				break;
 			case n4njs::tBuffer:
 				(*( n4njs::cUBuffer ** )Value ) = GetBuffer_( Index, I_() );
+				break;
+			case n4njs::tStream:
+				( *( n4njs::cURStream ** )Value ) = GetStream_( Index, I_() );
 				break;
 			case n4njs::tCallback:
 				( *( n4njs::cUCallback ** )Value ) = GetCallback_( Index, I_() );

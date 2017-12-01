@@ -105,6 +105,9 @@ namespace nodeq {
 		}
 	};
 
+	typedef xBuffer_<v8q::rPObject> rPObject;
+	typedef xBuffer_<v8q::sLObject> sLObject;
+
 	typedef xBuffer_<v8q::rPObject> rPBuffer;
 	typedef xBuffer_<v8q::sLObject> sLBuffer;
 

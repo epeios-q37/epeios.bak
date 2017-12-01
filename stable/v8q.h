@@ -874,7 +874,7 @@ qRE
 template <typename name> inline void v8q::xString_<name>::Get( str::dString &String )
 {
 qRH
-	flx::rStringTOflow Flow;
+	flx::rStringTOFlow Flow;
 qRB
 	Flow.Init( String );
 

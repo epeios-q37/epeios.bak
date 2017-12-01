@@ -1,5 +1,9 @@
 # *Epeios* changelog
 
+2017-12-01:
+- N4NJS, NODEQ, SCLNJS:
+  - Adding handling of generic object type.
+
 2017-11-30:
 - FLX, TXF:
   - Introducing `R` (read) and `W` (write) prefixed objects.
@@ -7,6 +11,7 @@
   - Introducing `Undefined`.
 - SCLJRE:
   - Introducing some function to ease the handling of user data.
+  - Adding `rObject::CallVoidMethod(...)` .
 
 2017-11-29:
 - N4JRE, SCLJRE:

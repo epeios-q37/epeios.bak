@@ -1,5 +1,8 @@
 # *NJSq* changelog
 
+2017-12-01:
+- Adding handling of generic object.
+
 2017-10-13 :
 - New publication to synchronize the *NPM* package with the latest files.
 

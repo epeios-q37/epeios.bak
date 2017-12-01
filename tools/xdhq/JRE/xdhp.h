@@ -25,7 +25,7 @@
 # include "scljre.h"
 
 namespace xdhp {
-	SCLJRE_F( Initialize );
+	SCLJRE_F( Listen );
 	SCLJRE_F( New );
 	SCLJRE_F( Delete );
 	SCLJRE_F( Set );

@@ -200,7 +200,7 @@ namespace {
 	};
 }
 
-void parser::OnData( sclnjs::sCaller &Caller )
+SCLNJS_F( parser::OnData )
 {
 qRH
 	sclnjs::rRStream This;
@@ -217,7 +217,7 @@ qRT
 qRE
 }
 
-void parser::OnEnd( sclnjs::sCaller &Caller )
+SCLNJS_F( parser::OnEnd )
 {
 qRH
 	sclnjs::rRStream This;
@@ -233,7 +233,7 @@ qRT
 qRE
 }
 
-void parser::Parse( sclnjs::sCaller &Caller )
+SCLNJS_F( parser::Parse )
 {
 qRH
 	sclnjs::rRStream Source;

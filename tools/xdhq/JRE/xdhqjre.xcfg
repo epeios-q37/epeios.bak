@@ -19,6 +19,7 @@
 				<Layout command="Process">
 					<Link index="0" Target="ServiceArgument"/>
 				</Layout>
-			</Layouts>		</Arguments>
+			</Layouts>
+		</Arguments>
 	</Configuration>
 </Configurations>

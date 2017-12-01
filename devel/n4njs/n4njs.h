@@ -53,6 +53,7 @@ namespace n4njs {
 
 	qENUM( Type )
 	{
+		tObject,	// Generic object; sort of superclass.
 		tString,
 		tStream,
 		tBuffer,
@@ -86,6 +87,8 @@ namespace n4njs {
 			return N4NJSEmitError( Message );
 		}
 	};
+
+	typedef cUCore_ cUObject;
 
 	class cUBuffer
 	: public cUCore_

@@ -55,6 +55,14 @@ namespace {
 template <> void scln4::Get(
 	int Index,
 	cCaller_ &Caller,
+	sclnjs::rObject &Object )
+{
+	Get_<n4njs::cUObject>( Index, Caller, n4njs::tObject, Object );
+}
+
+template <> void scln4::Get(
+	int Index,
+	cCaller_ &Caller,
 	sclnjs::rRStream &Stream )
 {
 	Get_<n4njs::cURStream>( Index, Caller, n4njs::tStream, Stream );

@@ -344,5 +344,6 @@ namespace csdbns {
 namespace csdbns {
 	typedef server___ rServer;
 	typedef listener___ rListener;
+	typedef port__ sService;
 }
 #endif

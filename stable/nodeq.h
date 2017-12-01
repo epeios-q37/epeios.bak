@@ -105,6 +105,9 @@ namespace nodeq {
 		}
 	};
 
+	typedef xBuffer_<v8q::rPObject> rPObject;
+	typedef xBuffer_<v8q::sLObject> sLObject;
+
 	typedef xBuffer_<v8q::rPObject> rPBuffer;
 	typedef xBuffer_<v8q::sLObject> sLBuffer;
 
@@ -199,8 +202,7 @@ namespace nodeq {
 		}
 		void End( v8::Isolate *Isolate = NULL )
 		{
-			Isolate = v8q::GetIsolate( Isolate );
-			Push_( v8::Null( Isolate ), Isolate );
+			Push_( v8::Null( v8q::GetIsolate( Isolate ) ), Isolate );
 		}
 	};
 

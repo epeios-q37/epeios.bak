@@ -35,7 +35,7 @@ namespace {
 	csdbns::rListener Listener_;
 }
 
-SCLJRE_F( xdhp::Initialize )
+SCLJRE_F( xdhp::Listen )
 {
 qRH;
 	csdcmn::sVersion Version = csdcmn::UndefinedVersion;
