@@ -106,9 +106,7 @@ namespace {
 			}
 		};
 
-		template <typename host> inline host *Get_(
-			int Index,
-			const v8::FunctionCallbackInfo<v8::Value> &Info )
+		template <typename host> inline host *Get_( const v8::Local<v8::Value> Value )
 		{
 			host *Host = NULL;
 		qRH
@@ -118,13 +116,20 @@ namespace {
 			if ( Host == NULL )
 				qRAlc();
 
-			Host->Init( Info[Index] );
+			Host->Init( Value );
 		qRR
 			if ( Host != NULL )
 				delete Host;
 		qRT
 		qRE
 			return Host;
+		}
+
+		template <typename host> inline host *Get_(
+			int Index,
+			const v8::FunctionCallbackInfo<v8::Value> &Info )
+		{
+			return Get_<host>( Info[Index] );
 		}
 
 		typedef rCore_<n4njs::cUObject, nodeq::rPObject> rObject_;
@@ -167,7 +172,7 @@ namespace {
 				namespace {
 					void Set_(
 						v8::Local<v8::Value> &Argv,
-						int *Value )
+						const int *Value )
 					{
 						nodeq::sLNumber Number;
 
@@ -177,9 +182,10 @@ namespace {
 
 						delete Value;
 					}
+
 					void Set_(
 						v8::Local<v8::Value> &Argv,
-						str::wString *Value )
+						const str::wString *Value )
 					{
 					qRH
 						 qCBUFFERr Buffer;
@@ -189,6 +195,13 @@ namespace {
 					qRT
 //						delete Value;
 					qRE
+					}
+
+					void Set_(
+						v8::Local<v8::Value> &Argv,
+						const n4njs::cUObject *Object )
+					{
+						Argv = ( (rObject_ *)Object )->Core();
 					}
 				}
 				void Set_(
@@ -200,10 +213,13 @@ namespace {
 
 					switch ( Argument.Type ) {
 					case n4njs::tInt:
-						Set_( Argv, (int *)Argument.Value );
+						Set_( Argv, (const int *)Argument.Value );
 						break;
 					case n4njs::tString:
-						Set_( Argv, (str::wString *)Argument.Value );
+						Set_( Argv, (const str::wString *)Argument.Value );
+						break;
+					case n4njs::tObject:
+						Set_( Argv, (const n4njs::cUObject *)Argument.Value );
 						break;
 					default:
 						qRGnr();
@@ -232,17 +248,16 @@ namespace {
 		: public rCore_<n4njs::cUCallback, nodeq::rPFunction>
 		{
 		protected:
-			virtual void *N4NJSLaunch(
+			virtual n4njs::cUCore_ *N4NJSLaunch(
 				n4njs::eType ReturnType,
-				n4njs::dArguments_ &Arguments ) override
+				const n4njs::dArguments_ &Arguments ) override
 			{
+				n4njs::cUCore_ *ReturnCallback = NULL;
 			qRH
 				v8::Local<v8::Value> *Argv = NULL;
 				int Argc = 0;
+				v8::Local<v8::Value> Return;
 			qRB
-				if ( ReturnType != n4njs::tVoid )
-					qRVct();
-
 				Argc = Arguments.Amount();
 
 				Argv = new v8::Local<v8::Value>[Argc];
@@ -252,13 +267,23 @@ namespace {
 
 				Fill_( Argv, Arguments );
 
-				Core_.Launch( Argv, Argc );
+				Return = Core_.Launch( Argv, Argc );
+
+				switch( ReturnType ) {
+				case n4njs::tVoid:
+					break;
+				case n4njs::tObject:
+					ReturnCallback = Get_<rObject_>( Return );
+					break;
+				}
 			qRR
+				if ( ReturnCallback != NULL )
+					delete ReturnCallback;
 			qRT
 				if ( Argv != NULL )
 					delete Argv;
 			qRE
-				return NULL;
+				return ReturnCallback;
 			}
 		};
 	}

@@ -44,14 +44,14 @@ module.exports = njsq;
 // End of generic part.
 
 class Tree {
-	constructor() {
-		njsq_.wrapper( 1, this );
+	constructor( background ) {
+		njsq._wrapper( 1, this, background );
 	}
 	pushTag(name) {
-		njsq_.wrapper(3, this, name);
+		njsq._wrapper(3, this, name);
 	}
 	popTag() {
-		njsq_.wrapper(4);
+		njsq._wrapper(4);
 	}
 	putValue( value ) {
 		njsq._wrapper(5, this);
@@ -62,8 +62,8 @@ class Tree {
 }
 
 class XDH {
-	constructor() {
-		njsq_.wrapper(7, this);
+	setLayout(id, xml, xslFilename) {
+		njsq._wrapper( 9, this, id, xml, xslFilename);
 	}
 }
 
@@ -72,5 +72,6 @@ class XDH {
 module.exports.returnArgument = (text) => { return njsq._wrapper(0, text); };
 module.exports.Tree = Tree;
 module.exports.register = ( tag, callback ) => { njsq._wrapper( 7, tag, callback ); };
-module.exports.listen = (callback, args) => { njsq._wrapper( 8, callback, args ); };
+module.exports.listen = (callback, args) => { njsq._wrapper(8, callback, args); };
+module.exports.XDH = XDH;
 

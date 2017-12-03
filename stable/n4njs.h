@@ -160,14 +160,14 @@ namespace n4njs {
 	: public cUCore_
 	{
 	protected:
-		virtual void *N4NJSLaunch(
+		virtual cUCore_ *N4NJSLaunch(
 			eType ReturnType,
-			dArguments_ &Arguments ) = 0;	// Type is the expected type of the returned value.
+			const dArguments_ &Arguments ) = 0;	// Type is the expected type of the returned value.
 	public:
 		qCALLBACK( UCallback );
-		void *Launch(
+		cUCore_ *Launch(
 			eType ReturnType,
-			dArguments_ &Arguments )
+			const dArguments_ &Arguments )
 		{
 			return N4NJSLaunch( ReturnType, Arguments );
 		}

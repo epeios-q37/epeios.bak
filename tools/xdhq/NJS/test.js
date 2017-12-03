@@ -26,24 +26,31 @@ console.log( xdhq.wrapperInfo() );
 
 process.stdout.write(xdhq.returnArgument("Text from JS file") + '\n');
 
-function callback()
-{
+function callback() {
 	console.log("Connection detected !");
+
+	return new xdhq.XDH();
 }
 
-function connect( id )
-{
+function connect( xdh, id ) {
+	var xml = new xdhq.Tree( "Layout" );
+
+	xdh.setLayout("Root", xml, "../XSL/MainLayout.xsl");
+
 	console.log("Connect : " + id );
 }
+
+function testing(xdh, id) {
+	console.log("Testing : " + id);
+}
+
 
 function main()
 {
 	xdhq.register("Connect", connect);
+//	xdhq.register("Testing", testing);
+
 	xdhq.listen(callback, "12345");
-
-	console.log("coucou");
-
-//	while ( true );
 }
 
 main();

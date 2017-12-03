@@ -69,7 +69,7 @@ namespace {
 namespace {
 	typedef sclnjs::rCore_<n4njs::cUCore_> rObject_;
 
-	qCDEF( char *, Id_, "_q37Rack" );
+	qCDEF( char *, Id_, "_q37TreeRack" );
 }
 
 SCLNJS_F( treep::New )
@@ -79,9 +79,9 @@ qRH;
 	str::wString Background;
 	rRack_ *Rack = NULL;
 qRB;
-	tol::Init( Background, Object );
+	tol::Init( Object, Background );
 	Background.Init();
-	Caller.GetArgument( Background, Object );
+	Caller.GetArgument( Object, Background );
 
 	Rack = new rRack_;
 

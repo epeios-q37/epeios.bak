@@ -33,6 +33,8 @@
 using namespace xdhp;
 
 namespace {
+	typedef sclnjs::cAsync cAsync_;
+
 	lstbch::qLBUNCHwl( sclnjs::rCallback * ) Callbacks_;
 	stsfsm::wAutomat Automat_;
 
@@ -55,8 +57,73 @@ namespace {
 	}
 }
 
-namespace {
-	class rListeningRack_ {
+namespace action_ {
+	qCDEF( char *, Id, "_q37ActionRack" );
+
+	class rRack {
+	private:
+		qCBUFFERr Language_;
+	public:
+		sck::rRWFlow Flow;
+		sclnjs::rObject Object;
+		void reset( bso::sBool P = true )
+		{
+			tol::reset( P, Flow, Language_ );
+		}
+		qCDTOR( rRack );
+		void Init(
+			sck::sSocket Socket,
+			sclnjs::rCallback &Callback )
+		{
+		qRH;
+			str::wString Language;
+		qRB;
+			Flow.Init( Socket, true );
+
+			Language.Init();
+			server::Handshake( Flow, Language );
+
+			Language.Convert( Language_ );
+
+			Object.Init();
+			Callback.ObjectLaunch( Object );
+
+			Object.Set( Id, this );
+		qRR;
+		qRT;
+		qRE;
+		}
+		void GetAction(
+			str::dString &Id,
+			str::dString &Action )
+		{
+			server::GetAction( Flow, Id, Action );
+		}
+	};
+
+	class rAsyncCallback
+	: public rRack,
+	  public cAsync_
+	{
+	private:
+		str::wString Id_, Action_;
+	protected:
+		void SCLNJSWork( void ) override
+		{
+			tol::Init( Id_, Action_ );
+			rRack::GetAction( Id_, Action_ );
+		}
+		sclnjs::eBehavior SCLNJSAfter( void ) override
+		{
+			Get_( Action_ )->VoidLaunch( Object,  Id_ );
+
+			return sclnjs::bRelaunch;
+		}
+	};
+}
+
+namespace listening_ {
+	class rRack {
 	private:
 		qRMV( sclnjs::rCallback, C_, Callback_ );
 		csdbns::rListener Listener_;
@@ -73,7 +140,7 @@ namespace {
 			tol::reset( P, Listener_, Callback_, Language_ );
 			Socket_ = sck::Undefined;
 		}
-		qCDTOR( rListeningRack_ );
+		qCDTOR( rRack );
 		void Init(
 			csdbns::sService Service,
 			sclnjs::rCallback *Callback )
@@ -90,37 +157,36 @@ namespace {
 		void HandleConnection( void )
 		{
 		qRH;
+			action_::rAsyncCallback *Action = NULL;
 		qRB;
-			ActionCallback = new rActionAsyncCallback_;
+			Action = new action_::rAsyncCallback;
 
-			if ( ActionCallback == NULL )
+			if ( Action == NULL )
 				qRAlc();
 
-			ActionCallback->Init( Socket_ );
+			Action->Init( Socket_, C_() );
 
-			sclnjs::Launch( *ActionCallback );
-
-			C_().Launch();
+			sclnjs::Launch( *Action );
 		qRR;
-			if ( ActionCallback != NULL )
-				delete ActionCallback;
+			if ( Action != NULL )
+				delete Action;
 		qRT;
 		qRE;
 		}
 	};
 
-	class rListeningAsyncCallback_
-	: public rListeningRack_,
+	class rAsyncCallback
+	: public rRack,
 	  public cAsync_
 	{
 	protected:
 		void SCLNJSWork( void ) override
 		{
-			rListeningRack_::GetConnection();
+			rRack::GetConnection();
 		}
 		sclnjs::eBehavior SCLNJSAfter( void ) override
 		{
-			rListeningRack_::HandleConnection();
+			rRack::HandleConnection();
 
 			return sclnjs::bRelaunch;
 		}
@@ -156,7 +222,7 @@ qRH;
 	csdcmn::sVersion Version = csdcmn::UndefinedVersion;
 	sclnjs::rCallback *Callback = NULL;
 	str::wString Arguments;
-	rListeningAsyncCallback_ *ListeningCallback = NULL;
+	listening_::rAsyncCallback *Listening = NULL;
 qRB;
 	Callback = new sclnjs::rCallback;
 
@@ -168,84 +234,22 @@ qRB;
 
 	sclargmnt::FillRegistry( Arguments, sclargmnt::faIsArgument, sclargmnt::uaReport );
 
-	ListeningCallback = new rListeningAsyncCallback_;
+	Listening = new listening_::rAsyncCallback;
 
-	if ( ListeningCallback == NULL )
+	if ( Listening == NULL )
 		qRAlc();
 
-	ListeningCallback->Init( sclmisc::MGetU16( registry::parameter::Service ), Callback );
-	sclnjs::Launch( *ListeningCallback );
+	Listening->Init( sclmisc::MGetU16( registry::parameter::Service ), Callback );
+	sclnjs::Launch( *Listening );
 qRR
-	if ( ListeningCallback != NULL )
-		delete ListeningCallback;
+	if ( Listening != NULL )
+		delete Listening;
 
 	if ( Callback != NULL )
 		delete Callback;
 qRT
 qRE
 }
-
-namespace {
-	class rActionRack_ {
-	private:
-		sck::rRWFlow Flow_;
-		qCBUFFERr Language_;
-	public:
-		void reset( bso::sBool P = true )
-		{
-			tol::reset( P, Flow_, Language_ );
-		}
-		qCDTOR( rActionRack_ );
-		void Init( sck::sSocket Socket )
-		{
-			qRH;
-			str::wString Language;
-			qRB;
-			Flow_.Init( Socket, true );
-
-			Language.Init();
-			server::Handshake( Flow_, Language );
-
-			Language.Convert( Language_ );
-			qRR;
-			qRT;
-			qRE;
-		}
-		void GetAction(
-			str::dString &Id,
-			str::dString &Action )
-		{
-			server::GetAction( Flow_, Id, Action );
-		}
-	};
-
-	typedef sclnjs::cAsync cAsync_;
-
-	class rActionAsyncCallback_
-		: public rActionRack_,
-		public cAsync_ {
-	private:
-		str::wString Id_, Action_;
-	protected:
-		void SCLNJSWork( void ) override
-		{
-			tol::Init( Id_, Action_ );
-			rActionRack_::GetAction( Id_, Action_ );
-		}
-		sclnjs::eBehavior SCLNJSAfter( void ) override
-		{
-			Get_( Action_ )->Launch( Id_ );
-
-			return sclnjs::bRelaunch;
-		}
-	};
-}
-
-
-
-SCLNJS_F( xdhp::New )
-{}
-
 
 namespace {
 	void SetElement_(
@@ -286,14 +290,31 @@ namespace {
 	qRT;
 	qRE;
 	}
+
+	action_::rRack GetActionRack_( sclnjs::sCaller &Caller )
+	{
+		action_::rRack *Rack = NULL;
+	qRH;
+		sclnjs::rObject Object;
+	qRB;
+		Object.Init();
+		Caller.GetArgument( Object );
+
+		Rack = ( action_::rRack * )Object.Get( action_::Id );
+
+		if ( Rack == NULL )
+			qRGnr();
+	qRR;
+	qRT;
+	qRE;
+		return *Rack;
+	}
 }
 
-
-SCLNJS_F( SetLayout )
+SCLNJS_F( xdhp::SetLayout )
 {
-	SetElement_( server::SetElementLayout, Caller, "en", )
+	SetElement_( server::SetElementLayout, Caller, "en", GetActionRack_( Caller ).Flow );
 }
-
 
 qGCTOR( xdhp )
 {

@@ -45,9 +45,14 @@
 		<SourceDir>..</SourceDir>
 	</SourceDirs>
 	<Files>
-  <!-- NOTA : '*.js' files will automatically be packed. -->
-  <!--File Pack="No">XDHq.js</File-->
- </Files>
+		<!-- NOTA : '*.js' files will automatically be packed. -->
+		<!--File Pack="No">XDHq.js</File-->
+		<Files Group="XSL" Path="../XSL/">
+			<File>MainCasting.xsl</File>
+			<File>MainLayout.xsl</File>
+			<File>MainLocale.xml</File>
+		</Files>
+	</Files>
 	<PreprocessorDefinitions>
 		<PreprocessorDefinition>E_ST</PreprocessorDefinition>
 	</PreprocessorDefinitions>

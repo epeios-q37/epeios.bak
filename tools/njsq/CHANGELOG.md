@@ -1,5 +1,8 @@
 # *NJSq* changelog
 
+2017-12-03:
+- Handling returned value when calling a callback.
+
 2017-12-01:
 - Adding handling of generic object.
 - Adaptation to changes in underlying modules.

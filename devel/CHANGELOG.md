@@ -1,5 +1,9 @@
 # *Epeios* changelog
 
+2017-12-03:
+- N4NJS:
+  - Handling return value when calling a callback.
+  
 2017-12-01:
 - N4NJS, NODEQ, SCLNJS:
   - Adding handling of generic object type.
