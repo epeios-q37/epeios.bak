@@ -48,6 +48,7 @@ qRE
 
 xdhcmn::cSession *sclxdhtml::SCLXDHTMLRetrieveCallback(
 	const char *Language,
+	xdhcmn::mode__ Mode,
 	xdhcmn::cProxy *ProxyCallback )
 {
 	core::rSession *Session = new core::rSession;
@@ -57,7 +58,7 @@ xdhcmn::cSession *sclxdhtml::SCLXDHTMLRetrieveCallback(
 
 	Session->Init( core::Kernel(), Language, ProxyCallback );
 
-	switch ( core::Core.Mode() ) {
+	switch ( Mode ) {
 	case xdhcmn::mMonoUser:
 		switch ( sclfrntnd::HandleProject() ) {
 		case sclfrntnd::phNone:
