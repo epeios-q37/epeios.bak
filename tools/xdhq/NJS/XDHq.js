@@ -61,17 +61,37 @@ class Tree {
 	}
 }
 
-class XDH {
-	setLayout(id, xml, xslFilename) {
-		njsq._wrapper( 9, this, id, xml, xslFilename);
+class LayoutTree extends Tree {
+	constructor() {
+		super("Layout");
 	}
 }
 
+class CastingTree extends Tree {
+	constructor() {
+		super("Casting");
+	}
+}
 
+class XDH {
+	set(fid, tree, xslFilename, id) {
+		if ( !id )
+			id = "Root";
+
+		njsq._wrapper(fid, this, id, tree, xslFilename);
+	}
+	setLayout(tree, xslFilename, id) {
+		this.set(9, tree, xslFilename, id);
+	}
+	setCasting(tree, xslFilename, id) {
+		this.set(10, tree, xslFilename, id);
+	}
+}
 
 module.exports.returnArgument = (text) => { return njsq._wrapper(0, text); };
-module.exports.Tree = Tree;
-module.exports.register = ( tag, callback ) => { njsq._wrapper( 7, tag, callback ); };
+module.exports.LayoutTree = LayoutTree;
+module.exports.CastingTree = CastingTree;
+module.exports.register = (tag, callback) => { njsq._wrapper(7, tag, callback); };
 module.exports.listen = (callback, args) => { njsq._wrapper(8, callback, args); };
 module.exports.XDH = XDH;
 

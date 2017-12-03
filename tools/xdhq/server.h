@@ -36,8 +36,8 @@ namespace server {
 
 	typedef void(* fSet)( SERVER_SETP_ );
 
-	void SetElementLayout( SERVER_SETP_ );
-	void SetElementCasting( SERVER_SETP_ );
+	void SetLayout( SERVER_SETP_ );
+	void SetCasting( SERVER_SETP_ );
 }
 
 #endif

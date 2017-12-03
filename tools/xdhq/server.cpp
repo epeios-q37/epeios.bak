@@ -55,7 +55,7 @@ void server::GetAction(
 }
 
 namespace {
-	void SetElementWithXSLContent_(
+	void SetWithXSLContent_(
 		prtcl::eAnswer Answer,
 		const str::dString &Id,
 		const str::dString &XML,
@@ -69,7 +69,7 @@ namespace {
 		Flow.Commit();
 	}
 
-	void SetElement_(
+	void Set_(
 		prtcl::eAnswer Answer,
 		const str::dString &Id,
 		const str::dString &XML,
@@ -83,30 +83,30 @@ namespace {
 		XSL.Init();
 		sclmisc::LoadAndTranslateTags( XSLFilename, Language, XSL, '#' );
 
-		SetElementWithXSLContent_( Answer, Id, XML, XSL, Flow );
+		SetWithXSLContent_( Answer, Id, XML, XSL, Flow );
 	qRR;
 	qRT;
 	qRE;
 	}
 }
 
-void server::SetElementLayout(
+void server::SetLayout(
 	const str::dString &Id,
 	const str::dString &XML,
 	const str::dString &XSLFilename,
 	const char *Language,
 	flw::sWFlow &Flow )
 {
-	SetElement_( prtcl::aSetLayout_1, Id, XML, XSLFilename, Language, Flow );
+	Set_( prtcl::aSetLayout_1, Id, XML, XSLFilename, Language, Flow );
 }
 
-void server::SetElementCasting(
+void server::SetCasting(
 	const str::dString &Id,
 	const str::dString &XML,
 	const str::dString &XSLFilename,
 	const char *Language,
 	flw::sWFlow &Flow )
 {
-	SetElement_( prtcl::aSetCasting_1, Id, XML, XSLFilename, Language, Flow );
+	Set_( prtcl::aSetCasting_1, Id, XML, XSLFilename, Language, Flow );
 }
 

@@ -50,10 +50,10 @@ namespace {
 	{
 		sdr::sRow Row = stsfsm::GetId( Tag, Automat_ );
 
-		if ( Row == qNIL )
-			qRGnr();
-
-		return Callbacks_( Row );
+		if ( Row != qNIL )
+			return Callbacks_( Row );
+		else
+			return NULL;
 	}
 }
 
@@ -62,13 +62,13 @@ namespace action_ {
 
 	class rRack {
 	private:
-		qCBUFFERr Language_;
 	public:
 		sck::rRWFlow Flow;
 		sclnjs::rObject Object;
+		qCBUFFERr Language;
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, Flow, Language_ );
+			tol::reset( P, Flow, Language );
 		}
 		qCDTOR( rRack );
 		void Init(
@@ -83,7 +83,7 @@ namespace action_ {
 			Language.Init();
 			server::Handshake( Flow, Language );
 
-			Language.Convert( Language_ );
+			Language.Convert( this->Language );
 
 			Object.Init();
 			Callback.ObjectLaunch( Object );
@@ -115,7 +115,12 @@ namespace action_ {
 		}
 		sclnjs::eBehavior SCLNJSAfter( void ) override
 		{
-			Get_( Action_ )->VoidLaunch( Object,  Id_ );
+			sclnjs::rCallback *Callback = Get_( Action_ );
+			
+			if ( Callback != NULL )
+				Callback->VoidLaunch( Object, Id_ );
+
+			// TODO : report not found callback.
 
 			return sclnjs::bRelaunch;
 		}
@@ -291,7 +296,7 @@ namespace {
 	qRE;
 	}
 
-	action_::rRack GetActionRack_( sclnjs::sCaller &Caller )
+	action_::rRack &GetActionRack_( sclnjs::sCaller &Caller )
 	{
 		action_::rRack *Rack = NULL;
 	qRH;
@@ -313,7 +318,14 @@ namespace {
 
 SCLNJS_F( xdhp::SetLayout )
 {
-	SetElement_( server::SetElementLayout, Caller, "en", GetActionRack_( Caller ).Flow );
+	action_::rRack &Rack = GetActionRack_( Caller );
+	SetElement_( server::SetLayout, Caller, Rack.Language, Rack.Flow );
+}
+
+SCLNJS_F( xdhp::SetCasting )
+{
+	action_::rRack &Rack = GetActionRack_( Caller );
+	SetElement_( server::SetCasting, Caller, Rack.Language, Rack.Flow );
 }
 
 qGCTOR( xdhp )

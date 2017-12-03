@@ -51,9 +51,9 @@ qRE
 
 static void Launch_( void *UP )
 {
-qRH
+qRFH;
 	TOL_CBUFFER___ Id, Action;
-qRB
+qRFB;
 	shared_data__ &Data = *(shared_data__ *)UP;
 	rSession &Session = Data.Session();
 	xdhcmn::cSession &Callback = Data.Callback();
@@ -74,9 +74,9 @@ qRB
 	Session.UnlockUpstream();
 
 	Session.Unlock();
-qRR
-qRT
-qRE
+qRFR;
+qRFT;
+qRFE( sclmisc::ErrFinal() );
 }
 
 void session::rSession::UpstreamLaunch(

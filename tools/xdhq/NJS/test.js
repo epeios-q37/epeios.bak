@@ -26,29 +26,56 @@ console.log( xdhq.wrapperInfo() );
 
 process.stdout.write(xdhq.returnArgument("Text from JS file") + '\n');
 
+class MyData extends xdhq.XDH {
+	constructor() {
+		super();
+		this.timestamp = new Date();
+	}
+}
+
+function handleTestButton(xdh, enabled) {
+	var tree = new xdhq.CastingTree();
+
+	tree.pushTag("Test");
+	if (enabled)
+		tree.putAttribute("Enabled", "true");
+	else
+		tree.putAttribute("Enabled", "false");
+
+	xdh.setCasting(tree, "../XSL/MainCasting.xsl");
+}
+
 function callback() {
 	console.log("Connection detected !");
 
-	return new xdhq.XDH();
+	return new MyData();
 }
 
 function connect( xdh, id ) {
-	var xml = new xdhq.Tree( "Layout" );
+	var tree = new xdhq.LayoutTree();
 
-	xdh.setLayout("Root", xml, "../XSL/MainLayout.xsl");
-
-	console.log("Connect : " + id );
+	xdh.setLayout(tree, "../XSL/MainLayout.xsl");
+	handleTestButton(xdh, false);
 }
 
 function testing(xdh, id) {
-	console.log("Testing : " + id);
+	console.log("Testing : " + xdh.timestamp);
 }
 
+function hideTestButton(xdh, id) {
+	handleTestButton(xdh, false);
+}
+
+function showTestButton(xdh, id) {
+	handleTestButton(xdh, true);
+}
 
 function main()
 {
 	xdhq.register("Connect", connect);
-//	xdhq.register("Testing", testing);
+	xdhq.register("Testing", testing);
+	xdhq.register("ShowTestButton", showTestButton);
+	xdhq.register("HideTestButton", hideTestButton);
 
 	xdhq.listen(callback, "12345");
 }
