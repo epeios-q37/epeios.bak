@@ -50,7 +50,7 @@ namespace {
 
 		if ((  Field != f_Undefined ) && ( strcmp( Action, main::HideTestButton.Name ) ) ) {
 			Content.Init();
-			Session.GetValue( "EditableEntry", Content );
+			Session.GetValue( instc::GetLabel( Field ), Content );
 
 			Session.User.SetContent( Field, Content );
 

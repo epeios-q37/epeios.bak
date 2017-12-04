@@ -386,7 +386,6 @@ void sclxdhtml::SetElement_(
 	const sclrgstry::registry_ &Registry,
 	const str::dString &XML,
 	xdhdws::sProxy &Proxy,
-	xdhcmn::cContent *Content,
 	bso::char__ Marker )
 {
 qRH
@@ -395,72 +394,59 @@ qRB
 	XSL.Init();
 	sclxdhtml::LoadXSLAndTranslateTags( rgstry::tentry___( Filename, Target ), Registry, XSL, Marker );
 
-	Set( Proxy, Id, XML, XSL, Content );
+	Set( Proxy, Id, XML, XSL );
 qRR
 qRT
 qRE
 }
+
+void sclxdhtml::SetContents(
+	const xdhdws::nstring___ &Id,
+	const str::dStrings &Tags,
+	const str::dStrings &Contents,
+	xdhdws::sProxy & Proxy )
+{
+qRH;
+	str::wString MergedTags, MergedContents;
+qRB;
+	if ( Tags.Amount() != Contents.Amount() )
+		qRGnr();
+
+	MergedTags.Init();
+	xdhcmn::FlatMerge( Tags, MergedTags, false );
+
+	MergedContents.Init();
+	xdhcmn::FlatMerge( Contents, MergedContents, true );	// Used as is in an JS script, hence last argument at 'true'.
+
+	SetContents_( Proxy, Id, MergedTags, MergedContents );
+qRR;
+qRT;
+qRE;
+}
+
+void sclxdhtml::SetContents(
+	const xdhdws::nstring___ &Id,
+	const str::dString &Tag,
+	const str::dString &Content,
+	xdhdws::sProxy & Proxy )
+{
+qRH;
+	str::wStrings Tags, Contents;
+qRB;
+	tol::Init( Tags, Contents );
+
+	Tags.Append( Tag );
+	Contents.Append( Content );
+
+	SetContents( Id, Tags, Contents, Proxy );
+qRR;
+qRT;
+qRE;
+}
+
 
 qCDEF( char *, sclxdhtml::RootTagName_, "Root" );
 
-
-#if 0
-bso::bool__ sclxhtml::session___::XDHCBKXDHCBKLaunch(
-	const char *Id,
-	const char *Action )
-{
-	bso::bool__ Success = false;
-qRH
-	str::string Message;
-	err::buffer__ ErrBuffer;
-qRB
-		if ( _OnBeforeAction( Id, Action ) )
-			if ( !strcmp( Action, xdhcmn::CloseActionLabel ) )
-				Success = _OnClose();	// Dans ce cas, si 'Success' est  'false', la fermeture de l'application est suspendue.
-			else
-				Success = _Handler.Launch( Id, Action );
-qRR
-#if 0
-	switch ( ERRType ) {
-	case err::t_Abort:
-		Message.Init();
-		if ( sclerror::GetPendingErrorTranslation( _L(), Message, err::hUserDefined ) ) {
-			sclerror::ResetPendingError();
-			_A().RawAlert( Message );
-		} 
-		break;
-	case err::t_Free:
-	case err::t_Return:
-		_A().RawAlert( "???" );
-		break;
-	default:
-		_A().RawAlert( err::Message( ErrBuffer ) );
-		break;
-	}
-
-	ERRRst();
-# endif
-qRT
-qRE
-	return Success;
-}
-#endif
-/*
-void sclxdhtml::LaunchProject(
-	sProxy &Proxy,
-	sclfrntnd::kernel___ &Kernel )
-{
-qRH
-	str::string BackendFeature;
-qRB
-	BackendFeature.Init();
-	sclfrntnd::LaunchProject( Kernel, xdhdws::login::GetBackendFeatures( Proxy, BackendFeature ), BackendFeature );
-qRR
-qRT
-qRE
-}
-
-*/
 void sclxdhtml::prolog::GetLayout(
 	sclfrntnd::rFrontend &Frontend,
 	xml::writer_ &Writer)

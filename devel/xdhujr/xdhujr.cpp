@@ -56,9 +56,9 @@ entry___ xdhujr::script::value::Setter( "Setter", ValueScripts_ );
 entry___ xdhujr::script::value::Getter( "Getter", ValueScripts_ );
 
 static entry___ FetcherScripts_("Fetcher", xdhujr::Scripts );
-entry___ xdhujr::script::fetcher::EventsAndWidgets( "EventsAndWidgets", FetcherScripts_ );
+entry___ xdhujr::script::fetcher::Events( "Events", FetcherScripts_ );
 entry___ xdhujr::script::fetcher::Casts( "Casts", FetcherScripts_ );
-entry___ xdhujr::script::fetcher::Contents("Contents", FetcherScripts_ );
+entry___ xdhujr::script::fetcher::ContentsAndWidgets("ContentsAndWidgets", FetcherScripts_ );
 
 static entry___ SetterScripts_( "Setter", xdhujr::Scripts );
 entry___ xdhujr::script::setter::EventHandlers( "EventHandlers", SetterScripts_ );

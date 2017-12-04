@@ -1,5 +1,25 @@
 # *Epeios* changelog
 
+2017-12-04:
+- *Common*:
+  - **$** : Reworking of the content handling setting to handle correctly the widgets.
+
+- SCLXDHTML:
+  - **$**.
+
+- XDHCMN:
+   - **$**,
+   - Adding `Flat(Merge|Split(...))`functions.
+ 
+- XDHDWS:
+   - **$**.
+
+- XDHUJR:
+   - **$**.
+
+- XDHUJS:
+   - **$**.
+
 2017-12-03:
 - N4NJS:
   - Handling return value when calling a callback.

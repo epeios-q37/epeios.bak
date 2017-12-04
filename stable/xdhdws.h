@@ -90,10 +90,9 @@ namespace xdhdws {
 		void SetLayout(
 			const nstring___ &Id,
 			const nstring___ &XML,
-			const nstring___ &XSL,
-			xdhcmn::cContent *ContentCallback )
+			const nstring___ &XSL )
 		{
-			C_().Process( xdhcmn::fSetLayout, NULL, Id.Internal()( ), XML.Internal()( ), XSL.Internal()( ), ContentCallback );
+			C_().Process( xdhcmn::fSetLayout, NULL, Id.Internal()( ), XML.Internal()( ), XSL.Internal()( ) );
 		}
 		void SetCasting(
 			const nstring___ &Id,
@@ -104,9 +103,10 @@ namespace xdhdws {
 		}
 		void SetContents(
 			const nstring___ &Id,
-			xdhcmn::cContent &ContentCallback )
+			const nstring___ &Tags,
+			const nstring___ &Contents )
 		{
-			C_().Process(xdhcmn::fSetContents, NULL, Id.Internal()(), &ContentCallback );
+			C_().Process(xdhcmn::fSetContents, NULL, Id.Internal()(), Tags.Internal()(), Contents.Internal()() );
 		}
 		const char *GetProperty(
 			const nstring___ &Id,

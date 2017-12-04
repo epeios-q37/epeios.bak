@@ -128,25 +128,142 @@ void xdhcmn::Escape(
     }
 }
 
-void xdhcmn::cContent::XDHCMNGetContents(
-	const str::dStrings &Tags,
-	str::dStrings &Contents )
+void xdhcmn::FlatMerge(
+	const str::dStrings &Splitted,
+	str::dString &Merged,
+	bso::sBool AsJSArray )
 {
 qRH
-	str::wString Content;
-	sdr::sRow Row = qNIL;
+	sdr::row__ Row = qNIL;
+	str::wString Escaped;
 qRB
-	Row = Tags.First();
+	Row = Splitted.First();
+
+	if ( AsJSArray )
+		Merged.Append( "[ " );
 
 	while ( Row != qNIL ) {
-		Content.Init();
-		GetContent( Tags( Row ), Content );
 
-		Contents.Append( Content );
+		Merged.Append('"');
 
-		Row = Tags.Next( Row );
+		Escaped.Init();
+		xdhcmn::Escape( Splitted( Row ), Escaped, '"' );
+		Merged.Append( Escaped );
+
+		Merged.Append('"');
+
+		Row = Splitted.Next( Row );
+
+		if ( Row != qNIL )
+			Merged.Append( ", " );
 	}
+
+	if ( AsJSArray )
+		Merged.Append( " ]" );
 qRR
 qRT
 qRE
 }
+
+void xdhcmn::FlatSplit(
+	flw::sIFlow &Flow,
+	str::dStrings &Splitted )
+{
+qRH;
+	bso::sBool Escaped = false, Quoted = false;
+	bso::sChar Char = 0;
+	str::wString Item;
+qRB;
+	Item.Init();
+	
+	while ( !Flow.EndOfFlow() ) {
+		Char = Flow.Get();
+
+		if ( Escaped ) {
+			switch ( Char ) {
+			case 'b':
+				Char = 8;
+				break;
+			case 't':
+				Char = '9';
+				break;
+			case 'n':
+				Char = 10;
+				break;
+			case 'f':
+				Char = 12;
+				break;
+			case 'r':
+				Char = 13;
+				break;
+			case '\'':
+			case '"':
+			case '\\':
+				// 'Char' is put as is.
+				break;
+			default:
+				qRFwk();
+				break;
+			}
+
+			Item.Append( Char );
+			Escaped = false;
+		} else {
+			switch ( Char ) {
+			case '"':
+				if ( Quoted ) {
+					Splitted.Append( Item );
+					Item.Init();
+					Quoted = false;
+				} else
+					Quoted = true;
+				break;
+			case ' ':
+				if ( Quoted )
+					Item.Append( ' ' );
+				break;
+			case ',':
+				if ( Quoted )
+					Item.Append( ',' );
+				break;
+			case '\\':
+				if ( !Quoted )
+					qRFwk();
+				Escaped = true;
+			default:
+				if ( !Quoted )
+					qRFwk();
+				else
+					Item.Append( Char );
+				break;
+			}
+		}
+	}
+
+	if ( Quoted )
+		qRFwk();
+	else if ( Escaped )
+		qRFwk();
+	else if ( Item.Amount() != 0 )
+		Splitted.Append( Item );
+qRR;
+qRT;
+qRE;
+}
+
+void xdhcmn::FlatSplit(
+	const str::dString &Merged,
+	str::dStrings &Splitted )
+{
+qRH;
+	flx::sStringIFlow Flow;
+qRB;
+	Flow.Init( Merged );
+
+	FlatSplit( Flow, Splitted );
+qRR;
+qRT;
+qRE;
+}
+
+

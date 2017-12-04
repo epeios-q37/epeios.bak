@@ -17,12 +17,10 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-function attachDebugger()
-{
-	alert( "Attach debugger !" );
+function attachDebugger() {
+	alert("Attach debugger !");
 }
 
-function log( message )
-{
-	console.log( message );
+function log(message) {
+	console.log(message);
 }

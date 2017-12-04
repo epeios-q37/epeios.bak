@@ -145,19 +145,28 @@
 				]]>
    </DroppableSetter>
    <Fetcher>
-    <EventsAndWidgets>
+    <Events>
      <![CDATA[
-						log( "'%Id%'" );
+						log( "Events : '%Id%'" );
 						log( "%XML%" );
 						removeChildren( "%Id%" );
 						document.getElementById( "%Id%" ).appendChild( transformToFragment( "%XML%", "%XSL%" ) );"";
-						var digests = fetchEventHandlersAndWidgets( "%Id%" );
+						var digests = fetchEventHandlers( "%Id%" );
 						digests;
 					]]>
-    </EventsAndWidgets>
-    <Casts>
+    </Events>
+				<ContentsAndWidgets>
+					<![CDATA[
+					log( "Contents and widget fetching : '%Id%'" );
+					var digest = fetchContentsAndWidgets( "%Id%" );
+					log( "Contents : " + digest );
+					digest;
+				]]>
+				</ContentsAndWidgets>
+				<Casts>
      <![CDATA[
-					log( "Casting : '%Id%'" );
+					log( "Casting :: '%Id%'" );
+					log( "coucuo" );
 					log( "%XML%" );
 					removeCastingChildren( document );
 					document.getElementById( "xdh-casting" ).appendChild( transformToFragment( "%XML%", "%XSL%" ) );
@@ -165,14 +174,6 @@
 					digest;
 				]]>
     </Casts>
-    <Contents>
-     <![CDATA[
-					log( "Contents fetching : '%Id%'" );
-					var digest = fetchContents( "%Id%" );
-					log( digest );
-					digest;
-				]]>
-    </Contents>
    </Fetcher>
    <Setter>
     <EventHandlers>

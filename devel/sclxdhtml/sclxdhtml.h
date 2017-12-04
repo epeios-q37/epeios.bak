@@ -506,23 +506,30 @@ namespace sclxdhtml {
 		xdhdws::sProxy &Proxy,
 		const xdhcmn::nstring___ &Id,
 		const xdhcmn::nstring___ &XML,
-		const xdhcmn::nstring___ &XSL,
-		xdhcmn::cContent *ContentCallback )
+		const xdhcmn::nstring___ &XSL )
 	{
-		Proxy.SetLayout( Id, XML, XSL, ContentCallback );
+		Proxy.SetLayout( Id, XML, XSL );
+	}
+
+	inline void SetContents_(
+		xdhdws::sProxy &Proxy,
+		const xdhcmn::nstring___ &Id,
+		const xdhcmn::nstring___ &Tags,
+		const xdhcmn::nstring___ &Contents )
+	{
+		Proxy.SetContents( Id, Tags, Contents );
 	}
 
 	inline void SetCasting_(
 		xdhdws::sProxy &Proxy,
 		const xdhcmn::nstring___ &Id,
 		const xdhcmn::nstring___ &XML,
-		const xdhcmn::nstring___ &XSL,
-		xdhcmn::cContent * ) // Not used !
+		const xdhcmn::nstring___ &XSL ) // Not used !
 	{
 		Proxy.SetCasting( Id, XML, XSL );
 	}
 
-	typedef void (* fSet)( xdhdws::sProxy &Proxy, const xdhdws::nstring___ &Id, const xdhdws::nstring___ &XML, const xdhdws::nstring___ &XSL, xdhcmn::cContent *Content );
+	typedef void (* fSet)( xdhdws::sProxy &Proxy, const xdhdws::nstring___ &Id, const xdhdws::nstring___ &XML, const xdhdws::nstring___ &XSL );
 
 	void SetElement_(
 		const xdhdws::nstring___ &Id,
@@ -532,8 +539,19 @@ namespace sclxdhtml {
 		const sclrgstry::registry_ &Registry,
 		const str::dString &XML,
 		xdhdws::sProxy &Proxy,
-		xdhcmn::cContent *Content,
 		bso::char__ Marker );
+
+	void SetContents(
+		const xdhdws::nstring___ &Id, 
+		const str::dStrings &Tags,
+		const str::dStrings &Contents,
+		xdhdws::sProxy &Proxy );
+
+	void SetContents(
+		const xdhdws::nstring___ &Id, 
+		const str::dString &Tag,
+		const str::dString &Content,
+		xdhdws::sProxy & Proxy );
 
 	extern const char *RootTagName_;
 
@@ -597,7 +615,6 @@ namespace sclxdhtml {
 		const rgstry::rEntry &Filename,
 		void( *Get )( session &Session, xml::dWriter &Writer ),
 		fSet Set,
-		xdhcmn::cContent *Content,
 		const sclrgstry::registry_ &Registry,
 		session &Session,
 		bso::char__ Marker = '#' )
@@ -609,7 +626,7 @@ namespace sclxdhtml {
 
 		Get( Session, Rack() );
 
-		SetElement_( Id, Set, Filename, Target, Registry, Rack.Target(), Session, Content, Marker );
+		SetElement_( Id, Set, Filename, Target, Registry, Rack.Target(), Session, Marker );
 	qRR
 	qRT
 	qRE
@@ -632,22 +649,9 @@ namespace sclxdhtml {
 		void(* Get)( session &Session, xml::dWriter &Writer ),
 		const sclrgstry::registry_ &Registry,
 		session &Session,
-		bso::char__ Marker = '#',
-		xdhcmn::cContent *Content = NULL )
-	{
-		SetElement_<session,rLayoutRack<session,dump>>( Id, Target, registry::definition::XSLLayoutFile, Get, SetLayout_, Content, Registry, Session, Marker );
-	}
-
-	template <typename session, typename dump> inline void SetElementLayout(
-		const xdhdws::nstring___ &Id,
-		const char *Target,
-		void( *Get )( session &Session, xml::dWriter &Writer ),
-		xdhcmn::cContent &Content,
-		const sclrgstry::registry_ &Registry,
-		session &Session,
 		bso::char__ Marker = '#' )
 	{
-		SetElementLayout<session, dump>( Id, Target, Get, Registry, Session, Marker, &Content );
+		SetElement_<session,rLayoutRack<session,dump>>( Id, Target, registry::definition::XSLLayoutFile, Get, SetLayout_, Registry, Session, Marker );
 	}
 
 	template <typename session, typename dump> inline void SetDocumentLayout(
@@ -655,21 +659,9 @@ namespace sclxdhtml {
 		void(* Get )( session &Session, xml::dWriter &Writer ),
 		const sclrgstry::registry_ &Registry,
 		session &Session,
-		bso::char__ Marker = '#',
-		xdhcmn::cContent *Content = NULL )
-	{
-		SetElementLayout<session,dump>( RootTagName_, Target, Get, Registry, Session, Marker, Content );
-	}
-
-	template <typename session, typename dump> inline void SetDocumentLayout(
-		const char *Target,
-		void( *Get )( session &Session, xml::dWriter &Writer ),
-		xdhcmn::cContent &Content,
-		const sclrgstry::registry_ &Registry,
-		session &Session,
 		bso::char__ Marker = '#' )
 	{
-		SetDocumentLayout<session, dump>( Target, Get, Registry, Session, Marker, &Content );
+		SetElementLayout<session,dump>( RootTagName_, Target, Get, Registry, Session, Marker );
 	}
 
 	template <typename session, typename dump> class rCastingRack
@@ -692,7 +684,7 @@ namespace sclxdhtml {
 		session &Session,
 		bso::char__ Marker = '#' )
 	{
-		SetElement_<session, rCastingRack<session,dump>>( Id, Target, registry::definition::XSLCastingFile, Get, SetCasting_, NULL, Registry, Session, Marker );
+		SetElement_<session, rCastingRack<session,dump>>( Id, Target, registry::definition::XSLCastingFile, Get, SetCasting_, Registry, Session, Marker );
 	}
 
 	template <typename session, typename dump> inline void SetDocumentCasting(
@@ -732,27 +724,6 @@ namespace sclxdhtml {
 		const xdhdws::nstring___ &Id,\
 		const char *Target,\
 		fGet Get,\
-		xdhcmn::cContent &Content,\
-		session &Session,\
-		const sclrgstry::dRegistry &Registry )\
-	{\
-		sclxdhtml::SetElementLayout<session, sDump>( Id, Target, Get, Content, Registry, Session );\
-	}\
-\
-	inline void SetElementLayout(\
-		const xdhdws::nstring___ &Id,\
-		const char *Target,\
-		fGet Get,\
-		xdhcmn::cContent &Content,\
-		session &Session )\
-	{\
-		SetElementLayout( Id, Target, Get, Content, Session, Session.Registry() );\
-	}\
-\
-	inline void SetElementLayout(\
-		const xdhdws::nstring___ &Id,\
-		const char *Target,\
-		fGet Get,\
 		session &Session )\
 	{\
 		SetElementLayout( Id, Target, Get, Session, Session.Registry() );\
@@ -765,16 +736,6 @@ namespace sclxdhtml {
 		const sclrgstry::dRegistry &Registry )\
 	{\
 		sclxdhtml::SetDocumentLayout<session, sDump>( Target, Get, Registry, Session );\
-	}\
-\
-	inline void SetDocumentLayout(\
-		const char *Target,\
-		fGet Get,\
-		xdhcmn::cContent &Content,\
-		session &Session,\
-		const sclrgstry::dRegistry &Registry )\
-	{\
-		sclxdhtml::SetDocumentLayout<session, sDump>( Target, Get, Content, Registry, Session );\
 	}\
 \
 	inline void SetDocumentLayout(\

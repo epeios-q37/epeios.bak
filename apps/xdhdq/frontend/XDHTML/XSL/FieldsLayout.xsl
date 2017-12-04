@@ -14,16 +14,16 @@
 	<xsl:template match="Field">
 		<fieldset>
 			<legend data-xdh-onevent="Edit" style="cursor: pointer;">
-				<xsl:attribute name="id">
-					<xsl:value-of select="@id"/>
-				</xsl:attribute>
 				<xsl:value-of select="@id"/>
 			</legend>
 			<xsl:choose>
 				<xsl:when test="../@Editable=@id">
 					<xsl:choose>
 						<xsl:when test="@id='CKEditor'">
-							<textarea id="EditableEntry"  data-xdh-onevent="focusout|Refresh">
+							<textarea>
+								<xsl:attribute name="id">
+									<xsl:value-of select="@id"/>
+								</xsl:attribute>
 								<xsl:attribute name="data-xdh-widget">
 									<xsl:text>ckeditor|{enterMode : CKEDITOR.ENTER_BR, linkShowTargetTab: false, language: '#fieldsLanguage#', startupFocus : true,}|val\(\)|ckeditor\(\).editor.focus\(\)</xsl:text>
 									</xsl:attribute>
@@ -33,14 +33,20 @@
 							</textarea>
 						</xsl:when>
 						<xsl:when test="@id='JQTE'">
-							<textarea id="EditableEntry" data-xdh-widget="jqte" autofocus="true">
+							<textarea data-xdh-widget="jqte" autofocus="true">
+								<xsl:attribute name="id">
+									<xsl:value-of select="@id"/>
+								</xsl:attribute>
 								<xsl:attribute name="data-xdh-content">
 									<xsl:value-of select="@id"/>
 								</xsl:attribute>
 							</textarea>
 						</xsl:when>
 						<xsl:when test="@id='Datepicker'">
-							<input id="EditableEntry">
+							<input>
+								<xsl:attribute name="id">
+									<xsl:value-of select="@id"/>
+								</xsl:attribute>
 								<xsl:attribute name="data-xdh-widget">
 									<!-- 'xsl:attribute' due to presence of '{' and '}'. -->
 									<xsl:text>datepicker|{language:'#fieldsLanguage#', autoclose: true, todayHighlight: true, todayBtn: true,}</xsl:text>
@@ -51,7 +57,10 @@
 							</input>
 						</xsl:when>
 						<xsl:when test="@id='Timepicker'">
-							<input id="EditableEntry">
+							<input>
+								<xsl:attribute name="id">
+									<xsl:value-of select="@id"/>
+								</xsl:attribute>
 								<xsl:attribute name="data-xdh-widget">
 									<!-- 'xsl:attribute' due to presence of '{' and '}'. -->
 									<xsl:text>timepicker|{#fieldsTimePickerParameters#}</xsl:text>

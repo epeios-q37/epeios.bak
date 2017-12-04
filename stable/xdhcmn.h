@@ -123,34 +123,6 @@ namespace xdhcmn {
 		}
 	};
 
-	class cContent
-	{
-	protected:
-		virtual void XDHCMNGetContent(
-			const str::dString &Tag,
-			str::dString &Content )
-		{
-			qRFwk();	// Called by below method, so if below method is not overridden, you have to override this one.
-		}
-		virtual void XDHCMNGetContents(
-			const str::dStrings &Tags,
-			str::dStrings &Contents );
-	public:
-		qCALLBACK( Content );
-		void GetContent(
-			const str::dString &Tag,
-			str::dString &Content )
-		{
-			return XDHCMNGetContent( Tag, Content );
-		}
-		void GetContents(
-			const str::dStrings &Tags,
-			str::dStrings &Contents )
-		{
-			return XDHCMNGetContents( Tags, Contents );
-		}
-	};
-
 #pragma pack( push, 1)
 	// NOTA : is modified, increment 'CSDLEO_SHARED_DATA_VERSION' !
 	class shared_data__
@@ -234,7 +206,7 @@ namespace xdhcmn {
 	void Escape(
 		const str::string_ &Source,
 		str::string_ &Target,
-		bso::char__ Delimiter,	// Devrait tre '\'', '"' ou 0. Si 0, chappe '\'' et '\"', sinon chappe 'Delimiter'.
+		bso::char__ Delimiter,	// Should be '\'', '"' or 0. If 0, escapes '\'' and '\"', otherwise escapes 'Delimiter'.
 		bso::char__ EscapeChar = strmrg::DefaultEscapeToken );
 #if 0
 	void Unescape(
@@ -251,7 +223,21 @@ namespace xdhcmn {
 
 	using strmrg::retriever__;
 
+	// Merge 'Splitted', delimited by '"', and separated by ','.
+	void FlatMerge(
+		const str::dStrings &Splitted,
+		str::dString &Merged,
+		bso::sBool AsJSArray );	// If 'true', the splitted items are enclosed between '[]', so the result can be used as JS array; above function does then NOT work.
 
+	// Reverse of above (if 'AsJSArray' was to 'false').
+	void FlatSplit(
+		flw::sIFlow &Flow,
+		str::dStrings &Splitted );
+
+	// Variant of above.
+	void FlatSplit(
+		const str::dString &Merged,
+		str::dStrings &Splitted );
 }
 
 #endif

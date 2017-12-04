@@ -25,6 +25,8 @@
 #include "registry.h"
 #include "sclfrntnd.h"
 
+using namespace fields;
+
 using namespace instc;
 
 namespace {
@@ -67,7 +69,7 @@ namespace {
 		}
 	}
 }
-
+/*
 namespace {
 	class sContent
 		: public xdhcmn::cContent {
@@ -102,23 +104,64 @@ namespace {
 		}
 	};
 }
+*/
+
+namespace {
+	void GetContent_(
+		instc::eField Field,
+		core::rSession &Session,
+		str::dString &Tag,
+		str::dString &Content )
+	{
+		Tag.Append( instc::GetLabel( Field ) );
+		Content.Append( Session.User.GetContent( Field ) );
+	}
+
+	void GetContents_(
+		core::rSession &Session,
+		str::dStrings &Tags,
+		str::dStrings &Contents )
+	{
+	qRH;
+		int Field = instc::f_amount;
+		str::wString Tag, Content;
+	qRB;
+		while ( Field-- ) {
+			tol::Init( Tag, Content );
+
+			GetContent_( (instc::eField)Field, Session, Tag, Content );
+
+			Tags.Append( Tag );
+			Contents.Append( Content );
+		}
+	qRR;
+	qRT;
+	qRE;
+	}
+}
 
 void fields::SetLayout(
 	const char *Id,
 	core::rSession &Session )
 {
-	sContent Content;
+qRH;
+	str::wStrings Tags, Contents;
+qRB;
+	SetElementLayout( Id, XSLAffix_, layout_::Get, Session );
 
-	Content.Init( Session );
-
-	core::SetElementLayout( Id, XSLAffix_, layout_::Get, Content, Session );
+	tol::Init( Tags, Contents );
+	GetContents_( Session, Tags, Contents );
+	SetContents( Id, Tags, Contents, Session );
+qRR;
+qRT;
+qRE;
 }
 
 void fields::SetCasting(
 	const char *Id,
 	core::rSession &Session )
 {
-	core::SetElementCasting( Id, XSLAffix_, casting_::Get, Session );
+	SetElementCasting( Id, XSLAffix_, casting_::Get, Session );
 }
 
 void fields::Display(
