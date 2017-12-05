@@ -94,15 +94,15 @@ namespace xdhdws {
 		{
 			C_().Process( xdhcmn::fSetLayout, NULL, Id.Internal()( ), XML.Internal()( ), XSL.Internal()( ) );
 		}
-		void HandleWidgets( const nstring___ &Id )
+		void SetWidgets( const nstring___ &Id )
 		{
-			C_().Process(xdhcmn::fHandleWidgets, NULL, Id.Internal()());
+			C_().Process(xdhcmn::fSetWidgets, NULL, Id.Internal()());
 		}
-		void SetContents_(
+		void SetContents(
 			const nstring___ &Ids,
 			const nstring___ &Contents )
 		{
-			C_().Process(xdhcmn::fSetContents_, NULL, Ids.Internal()(), Contents.Internal()() );
+			C_().Process(xdhcmn::fSetContents, NULL, Ids.Internal()(), Contents.Internal()() );
 		}
 		void SetCasting(
 			const nstring___ &Id,

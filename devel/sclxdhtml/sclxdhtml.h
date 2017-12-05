@@ -584,7 +584,7 @@ namespace sclxdhtml {
 		const xdhcmn::nstring___ &Ids,
 		const xdhcmn::nstring___ &Contents )
 	{
-		Proxy.SetContents_( Ids, Contents );
+		Proxy.SetContents( Ids, Contents );
 	}
 
 	inline void SetCasting_(

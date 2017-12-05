@@ -275,7 +275,7 @@ qRT
 qRE
 }
 
-static void HandleWidgets_(
+static void SetWidgets_(
 	cJS &Callback,
 	va_list List )
 {
@@ -537,10 +537,10 @@ static script_name__ Convert_( xdhcmn::function__ Function )
 	case xdhcmn::fSetLayout:
 		qRFwk();
 		break;
-	case xdhcmn::fHandleWidgets:
+	case xdhcmn::fSetWidgets:
 		qRFwk();
 		break;
-	case xdhcmn::fSetContents_:
+	case xdhcmn::fSetContents:
 		qRFwk();
 		break;
 	case xdhcmn::fSetCasting:
@@ -588,10 +588,10 @@ void xdhujp::sProxyCallback::XDHCMNProcess(
 	case xdhcmn::fSetLayout:
 		SetLayout_( C_(), List );
 		break;
-	case xdhcmn::fHandleWidgets:
-		HandleWidgets_( C_(), List);
+	case xdhcmn::fSetWidgets:
+		SetWidgets_( C_(), List);
 		break;
-	case xdhcmn::fSetContents_:
+	case xdhcmn::fSetContents:
 		SetContents_( C_(), List);
 		break;
 	case xdhcmn::fSetCasting:

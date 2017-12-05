@@ -116,7 +116,7 @@ qRB;
 	tol::Init( Ids, Contents );
 	GetContents_( Session, Ids, Contents );
 	Session.SetContents( Ids, Contents );
-	Session.HandleWidgets( Id );
+	Session.SetWidgets( Id );
 qRR;
 qRT;
 qRE;

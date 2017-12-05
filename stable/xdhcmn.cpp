@@ -40,8 +40,8 @@ const char *xdhcmn::GetLabel( function__ Function )
 	C( Alert );
 	C( Confirm );
 	C( SetLayout );
-	C( HandleWidgets );
-	C( SetContents_ );
+	C( SetWidgets );
+	C( SetContents );
 	C( SetCasting );
 	C( SetProperty );
 	C( GetProperty );
