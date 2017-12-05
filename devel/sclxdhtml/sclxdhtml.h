@@ -449,11 +449,17 @@ namespace sclxdhtml {
 		{
 			sclxdhtml::SetContents_( Ids, Contents, *this );
 		}
-		void SetContents(
+		void SetContent(
 			const str::dString &Id,
 			const str::dString &Content )
 		{
 			sclxdhtml::SetContent_( Id, Content, *this );
+		}
+		void SetContent(
+			const char *Id,
+			const str::dString &Content )
+		{
+			sclxdhtml::SetContent_( str::wString( Id ), Content, *this );
 		}
 		void SetElementCasting(
 			const xdhdws::nstring___ &Id,
@@ -485,7 +491,7 @@ namespace sclxdhtml {
 		}
 	};
 
-	template <typename session> class core___
+	template <typename session> class rCore
 	{
 	private:
 		action_handler<session> _Handler;
@@ -513,7 +519,7 @@ namespace sclxdhtml {
 			_Mode = xdhcmn::m_Undefined;
 			_ActionHelperCallback = NULL;
 		}
-		E_CVDTOR( core___ )
+		E_CVDTOR( rCore )
 		void Init(
 			xdhcmn::mode__ Mode,
 			cActionHelper<session> &ActionHelperCallback )
@@ -760,91 +766,6 @@ namespace sclxdhtml {
 		bso::char__ Marker = '#' )
 	{
 		SetElementCasting<session,dump>( RootTagName_, Target, Get, Registry, Session, Marker );
-	}
-
-#define SCLXDHTML_DEF( session )\
-	class sDump {\
-	public:\
-		static void Corpus(\
-			session &Session,\
-			xml::dWriter &Writer );\
-		static void Common(\
-			session &Session,\
-			xml::dWriter &Writer );\
-	};\
-\
-	typedef void( *fGet )( session &Session, xml::dWriter &Writer );\
-\
-	inline void SetElementLayout(\
-		const xdhdws::nstring___ &Id,\
-		const char *Target,\
-		fGet Get,\
-		session &Session,\
-		const sclrgstry::dRegistry &Registry )\
-	{\
-		sclxdhtml::SetElementLayout<session, sDump>( Id, Target, Get, Registry, Session );\
-	}\
-\
-	inline void SetElementLayout(\
-		const xdhdws::nstring___ &Id,\
-		const char *Target,\
-		fGet Get,\
-		session &Session )\
-	{\
-		SetElementLayout( Id, Target, Get, Session, Session.Registry() );\
-	}\
-\
-	inline void SetDocumentLayout(\
-		const char *Target,\
-		fGet Get,\
-		session &Session,\
-		const sclrgstry::dRegistry &Registry )\
-	{\
-		sclxdhtml::SetDocumentLayout<session, sDump>( Target, Get, Registry, Session );\
-	}\
-\
-	inline void SetDocumentLayout(\
-		const char *Target,\
-		fGet Get,\
-		session &Session )\
-	{\
-		SetDocumentLayout( Target, Get, Session, Session.Registry() );\
-	}\
-\
-	inline void SetElementCasting(\
-		const xdhdws::nstring___ &Id,\
-		const char *Target,\
-		fGet Get,\
-		session &Session,\
-		const sclrgstry::dRegistry &Registry )\
-	{\
-		sclxdhtml::SetElementCasting<session, sDump>( Id, Target, Get, Registry, Session );\
-	}\
-\
-	inline void SetElementCasting(\
-		const xdhdws::nstring___ &Id,\
-		const char *Target,\
-		fGet Get,\
-		session &Session )\
-	{\
-		SetElementCasting( Id, Target, Get, Session, Session.Registry() );\
-	}\
-\
-	inline void SetDocumentCasting(\
-		const char *Target,\
-		fGet Get,\
-		session &Session,\
-		const sclrgstry::dRegistry &Registry )\
-	{\
-		sclxdhtml::SetDocumentCasting<session, sDump>( Target, Get, Registry, Session );\
-	}\
-\
-	inline void SetDocumentCasting(\
-		const char *Target,\
-		fGet Get,\
-		session &Session )\
-	{\
-		SetDocumentCasting( Target, Get, Session, Session.Registry() );\
 	}
 
 	void SCLXDHTMLInitialization( xdhcmn::mode__ Mode );	// To define by user.

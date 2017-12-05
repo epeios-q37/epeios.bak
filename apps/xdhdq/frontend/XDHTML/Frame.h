@@ -30,7 +30,9 @@ namespace frame {
 		BASE_ACR( Template );
 	};
 
-	void SetLayout( const char * Id, core::rSession_ & Session );
+	void SetLayout(
+		const char * Id,
+		core::rSession_ & Session );
 
 	void SetCasting(
 		const char *Id,

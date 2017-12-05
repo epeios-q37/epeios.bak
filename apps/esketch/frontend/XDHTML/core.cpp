@@ -31,7 +31,7 @@
 
 using namespace core;
 
-core::core___ core::Core;
+core::rCore core::Core;
 
 sclxdhtml::rActionHelper core::OnNotConnectedAllowedActions;
 
@@ -62,14 +62,14 @@ namespace {
 }
 
 
-void core::core___::Init( xdhcmn::mode__ Mode )
+void core::rCore::Init( xdhcmn::mode__ Mode )
 {
 	ActionHelperCallback_.Init();
-	_core___::Init( Mode, ActionHelperCallback_ );
+	rCore_::Init( Mode, ActionHelperCallback_ );
 	Register_();
 }
 
-void core::rInstancesCore::Init( frdfrntnd::rFrontend &Frontend )
+void core::rInstances::Init( frdfrntnd::rFrontend &Frontend )
 {
 qRH
 qRB
@@ -79,7 +79,7 @@ qRT
 qRE
 }
 
-bso::bool__ core::rSession::XDHCMNLaunch(
+bso::bool__ core::rSession_::XDHCMNLaunch(
 	const char *Id,
 	const char *Action )
 {
@@ -87,12 +87,12 @@ bso::bool__ core::rSession::XDHCMNLaunch(
 }
 
 void core::sDump::Corpus(
-	core::rSession &Session,
+	core::rInstances &Session,
 	xml::dWriter &Writer )
 {}
 
 void core::sDump::Common(
-	core::rSession &Session,
+	core::rInstances &Session,
 	xml::dWriter &Writer )
 {}
 

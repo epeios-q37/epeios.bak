@@ -2,10 +2,11 @@
 
 2017-12-05:
 - *Common*:
-  - **$** : Reworking of the content handling setting to handle correctly the widgets (continued).
+  - **$** : reworking of the content handling setting to handle correctly the widgets (continued).
 - SCLXDHTML:
   - **$**,
-  - some function are becoming `rSession` methods. 
+  - some function are becoming `rSession` methods,
+  - simplification.
 - XDHCMN:
   - **$**.
 - XDHDWS:

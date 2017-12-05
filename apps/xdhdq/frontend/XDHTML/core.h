@@ -28,7 +28,7 @@
 namespace core {
 	extern sclxdhtml::rActionHelper OnNotConnectedAllowedActions;
 
-	enum page__ {
+	qENUM( Page ) {
 		pProlog,
 		pLogin,
 		pMain,
@@ -36,7 +36,7 @@ namespace core {
 		p_Undefined
 	};
 
-	class rInstancesCore
+	class rInstances
 	{
 	public:
 		instc::rUser User;
@@ -44,21 +44,21 @@ namespace core {
 		{
 			User.reset( P );
 		}
-		E_CVDTOR( rInstancesCore );
+		E_CVDTOR( rInstances );
 		void Init( frdfrntnd::rFrontend &Frontend );
 	};
 
 	class sDump {
 	public:
 		static void Corpus(
-			rInstancesCore &Instances,
+			rInstances &Instances,
 			xml::dWriter &Writer );
 		static void Common(
-			rInstancesCore &Instances,
+			rInstances &Instances,
 			xml::dWriter &Writer );
 	};
 
-	typedef sclxdhtml::rSession<rInstancesCore, frdfrntnd::rFrontend, page__, p_Undefined, sDump> rSession;
+	typedef sclxdhtml::rSession<rInstances, frdfrntnd::rFrontend, ePage, p_Undefined, sDump> rSession;
 
 	class rSession_
 	: public rSession
@@ -71,13 +71,10 @@ namespace core {
 		qCVDTOR( rSession_ );
 	};
 
+	typedef sclxdhtml::rCore<rSession_> rCore_;
 
-//	SCLXDHTML_DEF( core::rSession );
-
-	typedef sclxdhtml::core___<rSession_> _core___;
-
-	class core___
-	: public _core___
+	class rCore
+	: public rCore_
 	{
 	private:
 		base::sActionHelper ActionHelperCallback_;
@@ -86,11 +83,11 @@ namespace core {
 		{
 			ActionHelperCallback_.reset( P );
 		}
-		E_CDTOR( core___ );
+		E_CDTOR( rCore );
 		void Init( xdhcmn::mode__ Mode );
 	};
 
-	extern core___ Core;
+	extern rCore Core;
 
 	sclfrntnd::rKernel &Kernel( void );
 

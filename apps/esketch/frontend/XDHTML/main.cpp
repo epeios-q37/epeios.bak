@@ -45,17 +45,17 @@ namespace{
 	}
 }
 
-void main::SetLayout( core::rSession &Session )
+void main::SetLayout( core::rSession_ &Session )
 {
-	core::SetDocumentLayout( XSLAffix_, layout_::Get, Session );
+	Session.SetDocumentLayout( XSLAffix_, layout_::Get );
 }
 
-void main::SetCasting( core::rSession &Session )
+void main::SetCasting( core::rSession_ &Session )
 {
-	core::SetDocumentCasting( XSLAffix_, casting_::Get, Session );
+	Session.SetDocumentCasting( XSLAffix_, casting_::Get );
 }
 
-void main::Display( core::rSession &Session )
+void main::Display( core::rSession_ &Session )
 {
 	SetLayout( Session );
 
@@ -67,72 +67,17 @@ void main::Display( core::rSession &Session )
 #define AC( name ) BASE_AC( main, name )
 
 namespace {
-	class sContent
-	: public xdhcmn::cContent {
-	private:
-		qRMV( core::rSession, S_, Session_ );
-	protected:
-		virtual void XDHCMNGetContents(
-			const str::dStrings &Tags,
-			str::dStrings &Contents ) override
-		{
-		qRH;
-			str::string Test;
-			TOL_CBUFFER___ Buffer;
-		qRB;
-			Test.Init( S_().GetValue( "Pattern", Buffer ) );
-
-			S_().User.ToUpper( Test );
-
-			Contents.Append( Test );
-		qRR;
-		qRT;
-		qRE;
-		}	public:
-		void reset( bso::sBool = true )
-		{
-			Session_ = NULL;
-		}
-		qCVDTOR( sContent );
-		void Init( core::rSession &Session )
-		{
-			Session_ = &Session;
-		}
-	};
-
-	void SubmissionNew_(
+	void Submission_(
 		const char *Id,
 		core::rSession &Session )
 	{
 	qRH;
 		str::wString Content;
 	qRB;
-	qRR;
-	qRT;
-	qRE;
-	}
-	}
-	{
-		sContent Content;
-
-		Content.Init( Session );
-
-		Session.SetContents( Id, Content );
-	}
-
-	void SubmissionOld_(
-		const char *Id,
-		core::rSession &Session )
-	{
-	qRH;
-		str::string Test;
-		TOL_CBUFFER___ Buffer;
-	qRB;
-		Test.Init( Session.GetValue( "Pattern", Buffer ) );
-
-		Session.User.ToUpper( Test );
-
-		Session.SetValue( "Pattern", Test );
+		Content.Init();
+		Session.GetValue( "Pattern", Content );
+		Session.User.ToUpper( Content );
+		Session.SetContent( "Pattern", Content );
 	qRR;
 	qRT;
 	qRE;
@@ -141,11 +86,7 @@ namespace {
 
 AC( Submission )
 {
-#if 1
-	SubmissionNew_( Id, Session );
-#else
-	SubmissionOld_( Id, Session );
-#endif
+	Submission_( Id, Session );
 }
 
 AC( ShowTestButton )

@@ -47,21 +47,21 @@ namespace {
 
 void frame::SetLayout(
 	const char *Id,
-	core::rSession &Session )
+	core::rSession_ &Session )
 {
-	core::SetElementLayout( Id, XSLAffix_, layout_::Get, Session );
+	Session.SetElementLayout( Id, XSLAffix_, layout_::Get );
 }
 
 void frame::SetCasting(
 	const char *Id,
-	core::rSession &Session )
+	core::rSession_ &Session )
 {
-	core::SetElementCasting( Id, XSLAffix_, casting_::Get, Session );
+	Session.SetElementCasting( Id, XSLAffix_, casting_::Get );
 }
 
 void frame::Display(
 	const char *Id,
-	core::rSession &Session )
+	core::rSession_ &Session )
 {
 	SetLayout( Id, Session );
 

@@ -38,7 +38,7 @@
 	{\
 	protected:\
 		virtual void SCLXLaunch(\
-			core::rSession &Session,\
+			core::rSession_ &Session,\
 			const char *Id ) override;\
 	public:\
 		static const char *Name;\
@@ -53,35 +53,32 @@
 	owner::s##name owner::name;\
 	const char *owner::s##name::Name = #name;\
 	void owner::s##name::SCLXLaunch(\
-		core::rSession &Session,\
+		core::rSession_ &Session,\
 		const char *Id )
 /**********/
 
-// Predeclaration.
-
 namespace core {
-	class rSession;
+	class rSession_;
 }
 
 namespace base {
 	extern const char *Name;
 
-	typedef sclxdhtml::cAction<core::rSession> cAction;
+	typedef sclxdhtml::cAction<core::rSession_> cAction;
 
 	void Register(
 		const char *Name,
 		cAction &Callback );
 
 	class sActionHelper
-	: public sclxdhtml::cActionHelper<core::rSession>
-	{
+	: public sclxdhtml::cActionHelper<core::rSession_> {
 	protected:
 		virtual bso::bool__ SCLXOnBeforeAction(
-			core::rSession &Session,
+			core::rSession_ &Session,
 			const char *Id,
 			const char *Action ) override;
-		virtual void SCLXOnRefresh( core::rSession &Session ) override;
-		virtual bso::bool__ SCLXOnClose( core::rSession &Session ) override;
+		virtual void SCLXOnRefresh( core::rSession_ &Session ) override;
+		virtual bso::sBool SCLXOnClose( core::rSession_ &Session ) override;
 	};
 }
 
