@@ -310,7 +310,7 @@ namespace sclxdhtml {
 
 
 	// User put in 'instances' all his own objects, instanciating all with a 'new' (by overloading 'SCLXHTMLNew(...)'), a 'delete' will be made automatically when unloading thie library.
-	template <typename instances, typename frontend, typename page, page UndefinedPage > class rSession
+	template <typename instances, typename frontend, typename page, page UndefinedPage, typename dump > class rSession
 	: public cSession_,
 	  public sProxy,
 	  public instances,
@@ -415,6 +415,74 @@ namespace sclxdhtml {
 		}
 		qRWDISCLOSEr( eBackendVisibility, BackendVisibility );
 		qRODISCLOSEr( page, Page );
+		void SetElementLayout(
+			const xdhdws::nstring___ &Id,
+			const char *Target,
+			void( *Get )( rSession &Session, xml::dWriter &Writer ),
+			const sclrgstry::dRegistry &Registry )
+		{
+			sclxdhtml::SetElementLayout<rSession, dump>( Id, Target, Get, Registry, *this );
+		}
+		void SetElementLayout(
+			const xdhdws::nstring___ &Id,
+			const char *Target,
+			void( *Get )( rSession &Session, xml::dWriter &Writer ) )
+		{
+			SetElementLayout( Id, Target, Get, Registry() );
+		}
+		inline void SetDocumentLayout(
+			const char *Target,
+			void( *Get )( rSession &Session, xml::dWriter &Writer ),
+			const sclrgstry::dRegistry &Registry )
+		{
+			sclxdhtml::SetDocumentLayout<rSession, dump>( Target, Get, Registry, *this );
+		}
+		void SetDocumentLayout(
+			const char *Target,
+			void( *Get )( rSession &Session, xml::dWriter &Writer ) )
+		{
+			SetDocumentLayout( Target, Get, Registry() );
+		}
+		void SetContents(
+			const str::dStrings &Ids,
+			const str::dStrings &Contents )
+		{
+			sclxdhtml::SetContents_( Ids, Contents, *this );
+		}
+		void SetContents(
+			const str::dString &Id,
+			const str::dString &Content )
+		{
+			sclxdhtml::SetContent_( Id, Content, *this );
+		}
+		void SetElementCasting(
+			const xdhdws::nstring___ &Id,
+			const char *Target,
+			void( *Get )( rSession &Session, xml::dWriter &Writer ),
+			const sclrgstry::dRegistry &Registry )
+		{
+			sclxdhtml::SetElementCasting<rSession, dump>( Id, Target, Get, Registry, *this );
+		}
+		void SetElementCasting(
+			const xdhdws::nstring___ &Id,
+			const char *Target,
+			void( *Get )( rSession &Session, xml::dWriter &Writer ) )
+		{
+			SetElementCasting( Id, Target, Get, Registry() );
+		}
+		inline void SetDocumentCasting(
+			const char *Target,
+			void( *Get )( rSession &Session, xml::dWriter &Writer ),
+			const sclrgstry::dRegistry &Registry )
+		{
+			sclxdhtml::SetDocumentCasting<rSession, dump>( Target, Get, Registry, *this );
+		}
+		void SetDocumentCasting(
+			const char *Target,
+			void( *Get )( rSession &Session, xml::dWriter &Writer ) )
+		{
+			SetDocumentCasting( Target, Get, Registry() );
+		}
 	};
 
 	template <typename session> class core___
@@ -513,11 +581,10 @@ namespace sclxdhtml {
 
 	inline void SetContents_(
 		xdhdws::sProxy &Proxy,
-		const xdhcmn::nstring___ &Id,
-		const xdhcmn::nstring___ &Tags,
+		const xdhcmn::nstring___ &Ids,
 		const xdhcmn::nstring___ &Contents )
 	{
-		Proxy.SetContents( Id, Tags, Contents );
+		Proxy.SetContents_( Ids, Contents );
 	}
 
 	inline void SetCasting_(
@@ -541,17 +608,15 @@ namespace sclxdhtml {
 		xdhdws::sProxy &Proxy,
 		bso::char__ Marker );
 
-	void SetContents(
-		const xdhdws::nstring___ &Id, 
-		const str::dStrings &Tags,
-		const str::dStrings &Contents,
+	void SetContents_(
+		const str::dStrings & Ids,
+ 		const str::dStrings &Contents,
 		xdhdws::sProxy &Proxy );
 
-	void SetContents(
-		const xdhdws::nstring___ &Id, 
-		const str::dString &Tag,
+	void SetContent_(
+		const str::dString &Id,
 		const str::dString &Content,
-		xdhdws::sProxy & Proxy );
+		xdhdws::sProxy &Proxy );
 
 	extern const char *RootTagName_;
 

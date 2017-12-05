@@ -400,45 +400,43 @@ qRT
 qRE
 }
 
-void sclxdhtml::SetContents(
-	const xdhdws::nstring___ &Id,
-	const str::dStrings &Tags,
+void sclxdhtml::SetContents_(
+	const str::dStrings &Ids,
 	const str::dStrings &Contents,
 	xdhdws::sProxy & Proxy )
 {
 qRH;
-	str::wString MergedTags, MergedContents;
+	str::wString MergedIds, MergedContents;
 qRB;
-	if ( Tags.Amount() != Contents.Amount() )
+	if ( Ids.Amount() != Contents.Amount() )
 		qRGnr();
 
-	MergedTags.Init();
-	xdhcmn::FlatMerge( Tags, MergedTags, false );
+	MergedIds.Init();
+	xdhcmn::FlatMerge( Ids, MergedIds, true );	// Used as is in an JS script, hence last argument at 'true'.
 
 	MergedContents.Init();
 	xdhcmn::FlatMerge( Contents, MergedContents, true );	// Used as is in an JS script, hence last argument at 'true'.
 
-	SetContents_( Proxy, Id, MergedTags, MergedContents );
+	SetContents_( Proxy, MergedIds, MergedContents );
 qRR;
 qRT;
 qRE;
 }
 
-void sclxdhtml::SetContents(
-	const xdhdws::nstring___ &Id,
-	const str::dString &Tag,
+void sclxdhtml::SetContent_(
+	const str::dString &Id,
 	const str::dString &Content,
-	xdhdws::sProxy & Proxy )
+	xdhdws::sProxy &Proxy )
 {
 qRH;
-	str::wStrings Tags, Contents;
+	str::wStrings Ids, Contents;
 qRB;
-	tol::Init( Tags, Contents );
+	tol::Init( Ids, Contents );
 
-	Tags.Append( Tag );
+	Ids.Append( Id );
 	Contents.Append( Content );
 
-	SetContents( Id, Tags, Contents, Proxy );
+	SetContents_( Ids, Contents, Proxy );
 qRR;
 qRT;
 qRE;

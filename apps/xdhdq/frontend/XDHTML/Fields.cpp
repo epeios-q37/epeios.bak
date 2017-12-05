@@ -69,42 +69,6 @@ namespace {
 		}
 	}
 }
-/*
-namespace {
-	class sContent
-		: public xdhcmn::cContent {
-	private:
-		qRMV( core::rSession, S_, Session_ );
-		const str::dString &GetContent_( const str::dString &Id )
-		{
-			return S_().User.GetContent( GetField( Id ) );
-		}
-	protected:
-		virtual void XDHCMNGetContents(
-			const str::dStrings &Tags,
-			str::dStrings &Contents ) override
-		{
-			sdr::sRow Row = Tags.First();
-
-			while ( Row != qNIL ) {
-				Contents.Append( GetContent_( Tags( Row ) ) );
-
-				Row = Tags.Next( Row );
-			}
-		}
-	public:
-		void reset( bso::sBool = true )
-		{
-			Session_ = NULL;
-		}
-		qCVDTOR( sContent );
-		void Init( core::rSession &Session )
-		{
-			Session_ = &Session;
-		}
-	};
-}
-*/
 
 namespace {
 	void GetContent_(
@@ -142,16 +106,17 @@ namespace {
 
 void fields::SetLayout(
 	const char *Id,
-	core::rSession &Session )
+	core::rSession_ &Session )
 {
 qRH;
-	str::wStrings Tags, Contents;
+	str::wStrings Ids, Contents;
 qRB;
-	SetElementLayout( Id, XSLAffix_, layout_::Get, Session );
+	Session.SetElementLayout( Id, XSLAffix_, layout_::Get );
 
-	tol::Init( Tags, Contents );
-	GetContents_( Session, Tags, Contents );
-	SetContents( Id, Tags, Contents, Session );
+	tol::Init( Ids, Contents );
+	GetContents_( Session, Ids, Contents );
+	Session.SetContents( Ids, Contents );
+	Session.HandleWidgets( Id );
 qRR;
 qRT;
 qRE;
@@ -159,14 +124,14 @@ qRE;
 
 void fields::SetCasting(
 	const char *Id,
-	core::rSession &Session )
+	core::rSession_ &Session )
 {
-	SetElementCasting( Id, XSLAffix_, casting_::Get, Session );
+	Session.SetElementCasting( Id, XSLAffix_, casting_::Get );
 }
 
 void fields::Display(
 	const char *Id,
-	core::rSession &Session )
+	core::rSession_ &Session )
 {
 	SetLayout( Id, Session );
 
@@ -177,8 +142,15 @@ void fields::Display(
 
 AC( Edit )
 {
-	Session.User.SetField( GetField( str::string( Id ) ) );
+qRH;
+	str::wString FieldId;
+qRB;
+	FieldId.Init( Id+6 );
+	Session.User.SetField( GetField( FieldId ) );
 	main::DisplayFields( Session );
+qRR;
+qRT;
+qRE;
 }
 
 AC( Refresh )

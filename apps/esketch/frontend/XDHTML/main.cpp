@@ -104,6 +104,15 @@ namespace {
 		const char *Id,
 		core::rSession &Session )
 	{
+	qRH;
+		str::wString Content;
+	qRB;
+	qRR;
+	qRT;
+	qRE;
+	}
+	}
+	{
 		sContent Content;
 
 		Content.Init( Session );

@@ -51,7 +51,7 @@ xdhcmn::cSession *sclxdhtml::SCLXDHTMLRetrieveCallback(
 	xdhcmn::mode__ Mode,
 	xdhcmn::cProxy *ProxyCallback )
 {
-	core::rSession *Session = new core::rSession;
+	core::rSession_ *Session = new core::rSession_;
 
 	if ( Session == NULL )
 		qRGnr();

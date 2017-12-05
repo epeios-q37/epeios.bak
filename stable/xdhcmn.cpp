@@ -39,9 +39,10 @@ const char *xdhcmn::GetLabel( function__ Function )
 	switch ( Function ) {
 	C( Alert );
 	C( Confirm );
-	C( SetCasting );
-	C( SetContents );
 	C( SetLayout );
+	C( HandleWidgets );
+	C( SetContents_ );
+	C( SetCasting );
 	C( SetProperty );
 	C( GetProperty );
 	C( SetAttribute );

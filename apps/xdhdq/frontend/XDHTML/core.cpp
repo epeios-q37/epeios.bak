@@ -83,7 +83,7 @@ qRT
 qRE
 }
 
-bso::bool__ core::rSession::XDHCMNLaunch(
+bso::bool__ core::rSession_::XDHCMNLaunch(
 	const char *Id,
 	const char *Action )
 {
@@ -91,12 +91,12 @@ bso::bool__ core::rSession::XDHCMNLaunch(
 }
 
 void core::sDump::Corpus(
-	core::rSession &Session,
+	rInstancesCore &Instances,
 	xml::dWriter &Writer )
 {}
 
 void core::sDump::Common(
-	core::rSession &Session,
+	rInstancesCore &Instances,
 	xml::dWriter &Writer )
 {}
 

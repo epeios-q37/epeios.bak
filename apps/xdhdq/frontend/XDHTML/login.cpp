@@ -50,17 +50,17 @@ namespace {
 	}
 }
 
-void login::SetLayout( core::rSession &Session )
+void login::SetLayout( core::rSession_ &Session )
 {
-	core::SetDocumentLayout( XSLAffix_, layout_::Get, Session );
+	Session.SetDocumentLayout( XSLAffix_, layout_::Get );
 }
 
-void login::SetCasting( core::rSession &Session )
+void login::SetCasting( core::rSession_ &Session )
 {
-	core::SetDocumentCasting( XSLAffix_, casting_::Get, Session );
+	Session.SetDocumentCasting( XSLAffix_, casting_::Get );
 }
 
-void login::Display( core::rSession &Session )
+void login::Display( core::rSession_ &Session )
 {
 	SetLayout( Session );
 

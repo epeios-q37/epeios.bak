@@ -77,9 +77,10 @@ namespace xdhcmn {
 		fLog,				// Message,
 		fAlert,				// XML, XSL, Title.
 		fConfirm,			// XML, XSL, Title.
-		fSetCasting,		// Id, XML, XSL.
-		fSetContents,		// Id.
 		fSetLayout,			// Id, XML, XSL.
+		fSetContents_,		// Ids, Contents.
+		fHandleWidgets,		// Id.
+		fSetCasting,		// Id, XML, XSL.
 		fSetProperty,		// Id, Name, Value.
 		fGetProperty,		// Id, Name.
 		fSetAttribute,		// Id, Name, Value.

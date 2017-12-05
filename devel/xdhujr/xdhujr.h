@@ -57,8 +57,8 @@ namespace xdhujr {
 		extern entry___ Log;
 		namespace fetcher {
 			extern entry___ Events;
+			extern entry___ Widgets;
 			extern entry___ Casts;
-			extern entry___ ContentsAndWidgets;
 		};
 		namespace setter{
 			extern entry___ EventHandlers;

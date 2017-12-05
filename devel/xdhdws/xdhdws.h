@@ -94,19 +94,22 @@ namespace xdhdws {
 		{
 			C_().Process( xdhcmn::fSetLayout, NULL, Id.Internal()( ), XML.Internal()( ), XSL.Internal()( ) );
 		}
+		void HandleWidgets( const nstring___ &Id )
+		{
+			C_().Process(xdhcmn::fHandleWidgets, NULL, Id.Internal()());
+		}
+		void SetContents_(
+			const nstring___ &Ids,
+			const nstring___ &Contents )
+		{
+			C_().Process(xdhcmn::fSetContents_, NULL, Ids.Internal()(), Contents.Internal()() );
+		}
 		void SetCasting(
 			const nstring___ &Id,
 			const nstring___ &XML,
-			const nstring___ &XSL)
+			const nstring___ &XSL )
 		{
-			C_().Process(xdhcmn::fSetCasting, NULL, Id.Internal()(), XML.Internal()(), XSL.Internal()());
-		}
-		void SetContents(
-			const nstring___ &Id,
-			const nstring___ &Tags,
-			const nstring___ &Contents )
-		{
-			C_().Process(xdhcmn::fSetContents, NULL, Id.Internal()(), Tags.Internal()(), Contents.Internal()() );
+			C_().Process( xdhcmn::fSetCasting, NULL, Id.Internal()( ), XML.Internal()( ), XSL.Internal()( ) );
 		}
 		const char *GetProperty(
 			const nstring___ &Id,

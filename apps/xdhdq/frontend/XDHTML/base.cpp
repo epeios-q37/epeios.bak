@@ -63,7 +63,7 @@ namespace {
 }
 
 bso::bool__ base::sActionHelper::SCLXOnBeforeAction(
-	core::rSession &Session,
+	core::rSession_ &Session,
 	const char *Id,
 	const char *Action )
 {
@@ -81,7 +81,7 @@ bso::bool__ base::sActionHelper::SCLXOnBeforeAction(
 	}
 }
 
-void base::sActionHelper::SCLXOnRefresh( core::rSession &Session )
+void base::sActionHelper::SCLXOnRefresh( core::rSession_ &Session )
 {
 	switch ( Session.Page() ) {
 	case core::pProlog:
@@ -99,7 +99,7 @@ void base::sActionHelper::SCLXOnRefresh( core::rSession &Session )
 	}
 }
 
-bso::bool__ base::sActionHelper::SCLXOnClose( core::rSession &Session )
+bso::bool__ base::sActionHelper::SCLXOnClose( core::rSession_ &Session )
 {
 	return Session.ConfirmT( "ClosingConfirmation" );
 }

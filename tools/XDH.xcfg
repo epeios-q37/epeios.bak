@@ -155,14 +155,14 @@
 						digests;
 					]]>
     </Events>
-				<ContentsAndWidgets>
+				<Widgets>
 					<![CDATA[
-					log( "Contents and widget fetching : '%Id%'" );
-					var digest = fetchContentsAndWidgets( "%Id%" );
-					log( "Contents : " + digest );
+					log( "Widgest fetching : '%Id%'" );
+					var digest = fetchWidgets( "%Id%" );
+					log( "Widgets : " + digest );
 					digest;
 				]]>
-				</ContentsAndWidgets>
+				</Widgets>
 				<Casts>
      <![CDATA[
 					log( "Casting :: '%Id%'" );

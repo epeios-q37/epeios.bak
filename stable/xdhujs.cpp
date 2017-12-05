@@ -43,8 +43,8 @@ const str::string_ &xdhujs::GetTaggedScript(
 	C( DialogAlert, dialog::Alert );
 	C( DialogConfirm, dialog::Confirm );
 	C( EventsFetcher, fetcher::Events );
+	C( WidgetsFetcher, fetcher::Widgets );
 	C( CastsFetcher, fetcher::Casts );
-	C( ContentsAndWidgetsFetcher, fetcher::ContentsAndWidgets );
 	C( PropertySetter, property::Setter );
 	C( PropertyGetter, property::Getter );
 	C( AttributeSetter, attribute::Setter );
@@ -173,8 +173,8 @@ qRB
 	S( PropertySetter, Id_, Name_, Value_, NULL );
 	S( PropertyGetter, Id_, Name_, NULL );
 	S( EventsFetcher, Id_, XML_, XSL_, NULL );
+	S( WidgetsFetcher, Id_, NULL );
 	S( CastsFetcher, Id_, XML_, XSL_, NULL );
-	S( ContentsAndWidgetsFetcher, Id_, NULL);
 	S( ValueSetter, Id_, Value_, NULL );
 	S( ValueGetter, Id_, NULL );
 	S( WidgetValueRetriever, Id_, Method_, NULL );

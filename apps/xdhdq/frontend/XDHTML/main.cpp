@@ -48,19 +48,19 @@ namespace{
 	}
 }
 
-void main::SetLayout( core::rSession &Session )
+void main::SetLayout( core::rSession_ &Session )
 {
-	core::SetDocumentLayout( XSLAffix_, layout_::Get, Session );
+	Session.SetDocumentLayout( XSLAffix_, layout_::Get );
 	fields::SetLayout( FieldsFrameId_, Session );
 }
 
-void main::SetCasting( core::rSession &Session )
+void main::SetCasting( core::rSession_ &Session )
 {
-	core::SetDocumentCasting( XSLAffix_, casting_::Get, Session );
+	Session.SetDocumentCasting( XSLAffix_, casting_::Get );
 	fields::SetCasting( FieldsFrameId_, Session );
 }
 
-void main::Display( core::rSession &Session )
+void main::Display( core::rSession_ &Session )
 {
 	SetLayout( Session );
 
@@ -69,7 +69,7 @@ void main::Display( core::rSession &Session )
 	Session.SwitchTo( core::pMain );
 }
 
-void main::DisplayFields( core::rSession &Session )
+void main::DisplayFields( core::rSession_ &Session )
 {
 	fields::Display( FieldsFrameId_, Session );
 }

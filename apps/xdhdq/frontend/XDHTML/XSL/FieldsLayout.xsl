@@ -14,6 +14,10 @@
 	<xsl:template match="Field">
 		<fieldset>
 			<legend data-xdh-onevent="Edit" style="cursor: pointer;">
+				<xsl:attribute name="id">
+					<xsl:text>Frame.</xsl:text>
+					<xsl:value-of select="@id"/>
+				</xsl:attribute>
 				<xsl:value-of select="@id"/>
 			</legend>
 			<xsl:choose>
@@ -27,17 +31,11 @@
 								<xsl:attribute name="data-xdh-widget">
 									<xsl:text>ckeditor|{enterMode : CKEDITOR.ENTER_BR, linkShowTargetTab: false, language: '#fieldsLanguage#', startupFocus : true,}|val\(\)|ckeditor\(\).editor.focus\(\)</xsl:text>
 									</xsl:attribute>
-								<xsl:attribute name="data-xdh-content">
-									<xsl:value-of select="@id"/>
-								</xsl:attribute>
 							</textarea>
 						</xsl:when>
 						<xsl:when test="@id='JQTE'">
 							<textarea data-xdh-widget="jqte" autofocus="true">
 								<xsl:attribute name="id">
-									<xsl:value-of select="@id"/>
-								</xsl:attribute>
-								<xsl:attribute name="data-xdh-content">
 									<xsl:value-of select="@id"/>
 								</xsl:attribute>
 							</textarea>
@@ -51,9 +49,6 @@
 									<!-- 'xsl:attribute' due to presence of '{' and '}'. -->
 									<xsl:text>datepicker|{language:'#fieldsLanguage#', autoclose: true, todayHighlight: true, todayBtn: true,}</xsl:text>
 								</xsl:attribute>
-								<xsl:attribute name="data-xdh-content">
-									<xsl:value-of select="@id"/>
-								</xsl:attribute>
 							</input>
 						</xsl:when>
 						<xsl:when test="@id='Timepicker'">
@@ -65,16 +60,13 @@
 									<!-- 'xsl:attribute' due to presence of '{' and '}'. -->
 									<xsl:text>timepicker|{#fieldsTimePickerParameters#}</xsl:text>
 								</xsl:attribute>
-								<xsl:attribute name="data-xdh-content">
-									<xsl:value-of select="@id"/>
-								</xsl:attribute>
 							</input>
 						</xsl:when>
 					</xsl:choose>
 				</xsl:when>
 				<xsl:otherwise>
 					<span>
-						<xsl:attribute name="data-xdh-content">
+						<xsl:attribute name="id">
 							<xsl:value-of select="@id"/>
 						</xsl:attribute>
 					</span>

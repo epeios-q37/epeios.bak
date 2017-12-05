@@ -32,15 +32,17 @@ namespace fields {
 		BASE_ACR( Refresh );
 	};
 
-	void SetLayout( const char * Id, core::rSession & Session );
+	void SetLayout(
+		const char * Id,
+		core::rSession_ &Session );
 
 	void SetCasting(
 		const char *Id,
-		core::rSession &Session );
+		core::rSession_ &Session );
 
 	void Display(
 		const char *Id,
-		core::rSession &Session );
+		core::rSession_ &Session );
 }
 
 #endif

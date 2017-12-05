@@ -1,22 +1,34 @@
 # *Epeios* changelog
 
+2017-12-05:
+- *Common*:
+  - **$** : Reworking of the content handling setting to handle correctly the widgets (continued).
+- SCLXDHTML:
+  - **$**,
+  - some function are becoming `rSession` methods. 
+- XDHCMN:
+  - **$**.
+- XDHDWS:
+  - **$**.
+- XDHUJP:
+  - **$**.
+- XDHUJS:
+  - **$**.
+- XDHUJR:
+  - **$**.
+
 2017-12-04:
 - *Common*:
   - **$** : Reworking of the content handling setting to handle correctly the widgets.
-
 - SCLXDHTML:
   - **$**.
-
 - XDHCMN:
    - **$**,
    - Adding `Flat(Merge|Split(...))`functions.
- 
 - XDHDWS:
    - **$**.
-
 - XDHUJR:
    - **$**.
-
 - XDHUJS:
    - **$**.
 

@@ -49,17 +49,17 @@ namespace {
 	}
 }
 
-void prolog::SetLayout( core::rSession &Session )
+void prolog::SetLayout( core::rSession_ &Session )
 {
-	core::SetDocumentLayout( XSLAffix_, layout_::Get, Session );
+	Session.SetDocumentLayout( XSLAffix_, layout_::Get );
 }
 
-void prolog::SetCasting( core::rSession &Session )
+void prolog::SetCasting( core::rSession_ &Session )
 {
-	core::SetDocumentCasting( XSLAffix_, casting_::Get, Session );
+	Session.SetDocumentCasting( XSLAffix_, casting_::Get );
 }
 
-void prolog::Display( core::rSession &Session )
+void prolog::Display( core::rSession_ &Session )
 {
 	SetLayout( Session );
 

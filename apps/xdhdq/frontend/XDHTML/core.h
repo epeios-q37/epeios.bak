@@ -48,22 +48,33 @@ namespace core {
 		void Init( frdfrntnd::rFrontend &Frontend );
 	};
 
-	typedef sclxdhtml::rSession<rInstancesCore, frdfrntnd::rFrontend, page__, p_Undefined> rSession_;
+	class sDump {
+	public:
+		static void Corpus(
+			rInstancesCore &Instances,
+			xml::dWriter &Writer );
+		static void Common(
+			rInstancesCore &Instances,
+			xml::dWriter &Writer );
+	};
 
-	class rSession
-	: public rSession_
+	typedef sclxdhtml::rSession<rInstancesCore, frdfrntnd::rFrontend, page__, p_Undefined, sDump> rSession;
+
+	class rSession_
+	: public rSession
 	{
 	protected:
 		virtual bso::bool__ XDHCMNLaunch(
 			const char *Id,
 			const char *Action ) override;
 	public:
-		qCVDTOR( rSession );
+		qCVDTOR( rSession_ );
 	};
 
-	SCLXDHTML_DEF( core::rSession );
 
-	typedef sclxdhtml::core___<rSession> _core___;
+//	SCLXDHTML_DEF( core::rSession );
+
+	typedef sclxdhtml::core___<rSession_> _core___;
 
 	class core___
 	: public _core___
