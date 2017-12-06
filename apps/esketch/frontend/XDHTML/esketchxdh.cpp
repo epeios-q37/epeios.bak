@@ -51,12 +51,12 @@ xdhcmn::cSession *sclxdhtml::SCLXDHTMLRetrieveCallback(
 	xdhcmn::mode__ Mode,
 	xdhcmn::cProxy *ProxyCallback )
 {
-	core::rSession_ *Session = new core::rSession_;
+	core::rSession *Session = new core::rSession;
 
 	if ( Session == NULL )
 		qRGnr();
 
-	Session->Init( core::Kernel(), Language, ProxyCallback );
+	Session->Init( core::Kernel(), Language, ProxyCallback, core::Core );
 
 	switch ( Mode ) {
 	case xdhcmn::mMonoUser:

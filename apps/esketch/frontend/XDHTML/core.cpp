@@ -79,13 +79,6 @@ qRT
 qRE
 }
 
-bso::bool__ core::rSession_::XDHCMNLaunch(
-	const char *Id,
-	const char *Action )
-{
-	return Core.Launch( *this, Id, Action );
-}
-
 void core::sDump::Corpus(
 	core::rInstances &Session,
 	xml::dWriter &Writer )
@@ -176,4 +169,42 @@ qRE
 qGCTOR( core )
 {
 	OnNotConnectedAllowedActions.Init();
+}
+
+bso::bool__ core::sActionHelper::SCLXOnBeforeAction(
+	rSession &Session,
+	const char *Id,
+	const char *Action )
+{
+	if ( !Session.IsConnected() ) {
+		if ( !core::OnNotConnectedAllowedActions.Search( Action ) ) {
+			Session.AlertT( "ActionNeedsBackend" );
+			return false;
+		} else
+			return true;
+	} else
+		return true;
+}
+
+void core::sActionHelper::SCLXOnRefresh( rSession &Session )
+{
+	switch ( Session.Page() ) {
+	case base::pProlog:
+		prolog::Display( Session );
+		break;
+	case base::pLogin:
+		login::Display( Session );
+		break;
+	case base::pMain:
+		main::Display( Session );
+		break;
+	default:
+		qRGnr();
+		break;
+	}
+}
+
+bso::bool__ core::sActionHelper::SCLXOnClose( rSession &Session )
+{
+	return Session.ConfirmT( "ClosingConfirmation" );
 }

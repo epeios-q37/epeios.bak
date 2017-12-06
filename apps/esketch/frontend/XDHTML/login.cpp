@@ -50,23 +50,23 @@ namespace {
 	}
 }
 
-void login::SetLayout( core::rSession_ &Session )
+void login::SetLayout( core::rSession &Session )
 {
 	Session.SetDocumentLayout( XSLAffix_, layout_::Get );
 }
 
-void login::SetCasting( core::rSession_ &Session )
+void login::SetCasting( core::rSession &Session )
 {
 	Session.SetDocumentCasting( XSLAffix_, casting_::Get );
 }
 
-void login::Display( core::rSession_ &Session )
+void login::Display( core::rSession &Session )
 {
 	SetLayout( Session );
 
 	SetCasting( Session );
 
-	Session.SwitchTo( core::pLogin );
+	Session.SwitchTo( base::pLogin );
 }
 
 #define AC( name ) BASE_AC( login, name )

@@ -49,23 +49,23 @@ namespace {
 	}
 }
 
-void prolog::SetLayout( core::rSession_ &Session )
+void prolog::SetLayout( core::rSession &Session )
 {
 	Session.SetDocumentLayout( XSLAffix_, layout_::Get );
 }
 
-void prolog::SetCasting( core::rSession_ &Session )
+void prolog::SetCasting( core::rSession &Session )
 {
 	Session.SetDocumentCasting( XSLAffix_, casting_::Get );
 }
 
-void prolog::Display( core::rSession_ &Session )
+void prolog::Display( core::rSession &Session )
 {
 	SetLayout( Session );
 
 	SetCasting( Session );
 
-	Session.SwitchTo( core::pProlog );
+	Session.SwitchTo( base::pProlog );
 }
 
 #define AC( name ) BASE_AC( prolog, name )

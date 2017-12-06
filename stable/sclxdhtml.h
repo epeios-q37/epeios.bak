@@ -498,13 +498,13 @@ namespace sclxdhtml {
 		page Page_;	// Current page;
 		reporting_callback__ _ReportingCallback;
 		eBackendVisibility BackendVisibility_;
-		class rCore<rSession> *Core_;
+		qRMV( class rCore<rSession>, C_, Core_ );
 	protected:
 		bso::bool__ XDHCMNLaunch(
 			const char *Id,
 			const char *Action ) override
 		{
-			return Core_->Launch( *this, Id, Action );
+			return C_().Launch( *this, Id, Action );
 		}
 	public:
 		void reset( bso::bool__ P = true )
@@ -514,12 +514,14 @@ namespace sclxdhtml {
 			Page_ = UndefinedPage;
 			_ReportingCallback.reset( P );
 			BackendVisibility_ = bv_Undefined;
+			Core_ = NULL;
 		}
 		qCVDTOR( rSession )
 			void Init(
 				sclfrntnd::rKernel &Kernel,
 				const char *Language,
-				xdhcmn::cProxy *Callback )
+				xdhcmn::cProxy *Callback,
+				class rCore<rSession> &Core )
 		{
 			sProxy::Init( Callback );
 			_ReportingCallback.Init( *this, Language );
@@ -527,6 +529,7 @@ namespace sclxdhtml {
 			Page_ = UndefinedPage;
 			// instances::Init( *this );	// Made on connection.
 			BackendVisibility_ = bvShow;	// By default, the backend part of the login page is shown.
+			Core_ = &Core;
 		}
 		bso::bool__ Connect(
 			const fblfrd::compatibility_informations__ &CompatibilityInformations,

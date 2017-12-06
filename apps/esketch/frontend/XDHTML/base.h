@@ -38,7 +38,7 @@
 	{\
 	protected:\
 		virtual void SCLXLaunch(\
-			core::rSession_ &Session,\
+			core::rSession &Session,\
 			const char *Id ) override;\
 	public:\
 		static const char *Name;\
@@ -53,33 +53,35 @@
 	owner::s##name owner::name;\
 	const char *owner::s##name::Name = #name;\
 	void owner::s##name::SCLXLaunch(\
-		core::rSession_ &Session,\
+		core::rSession &Session,\
 		const char *Id )
 /**********/
 
+namespace base {
+	qENUM( Page )
+	{
+		pProlog,
+			pLogin,
+			pMain,
+			p_amount,
+			p_Undefined
+	};
+}
+
 namespace core {
-	class rSession_;
+	class rInstances;
+	class sDump;
+	typedef sclxdhtml::rSession<rInstances, frdfrntnd::rFrontend, base::ePage, base::p_Undefined, sDump> rSession;
 }
 
 namespace base {
 	extern const char *Name;
 
-	typedef sclxdhtml::cAction<core::rSession_> cAction;
+	typedef sclxdhtml::cAction<core::rSession> cAction;
 
 	void Register(
 		const char *Name,
 		cAction &Callback );
-
-	class sActionHelper
-	: public sclxdhtml::cActionHelper<core::rSession_> {
-	protected:
-		virtual bso::bool__ SCLXOnBeforeAction(
-			core::rSession_ &Session,
-			const char *Id,
-			const char *Action ) override;
-		virtual void SCLXOnRefresh( core::rSession_ &Session ) override;
-		virtual bso::sBool SCLXOnClose( core::rSession_ &Session ) override;
-	};
 }
 
 #endif
