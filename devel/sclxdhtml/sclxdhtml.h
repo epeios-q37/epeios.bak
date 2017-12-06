@@ -1,20 +1,20 @@
 /*
-	Copyright (C) 1999-2017 Claude SIMON (http://q37.info/contact/).
+Copyright (C) 1999-2017 Claude SIMON (http://q37.info/contact/).
 
-	This file is part of the Epeios framework.
+This file is part of the Epeios framework.
 
-	The Epeios framework is free software: you can redistribute it and/or
-	modify it under the terms of the GNU Affero General Public License as
-	published by the Free Software Foundation, either version 3 of the
-	License, or (at your option) any later version.
+The Epeios framework is free software: you can redistribute it and/or
+modify it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
 
-	The Epeios framework is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-	Affero General Public License for more details.
+The Epeios framework is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+Affero General Public License for more details.
 
-	You should have received a copy of the GNU Affero General Public License
-	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
+You should have received a copy of the GNU Affero General Public License
+along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
 #ifndef SCLXDHTML__INC
@@ -59,8 +59,7 @@ namespace sclxdhtml {
 
 	const char *GetLauncher( void );
 
-	template <typename session> class cAction
-	{
+	template <typename session> class cAction {
 	protected:
 		virtual void SCLXLaunch(
 			session &Session,
@@ -79,8 +78,7 @@ namespace sclxdhtml {
 
 	template <typename session> E_TTCLONE_( bch::E_BUNCHt_( cAction<session> *, crow__ ), action_callbacks_ );
 
-	template <typename session> class action_handler_
-	{
+	template <typename session> class action_handler_ {
 	private:
 		cAction<session> *_Get( const str::string_ &Action ) const
 		{
@@ -99,7 +97,7 @@ namespace sclxdhtml {
 		stsfsm::automat_ Automat;
 		action_callbacks_<session> Callbacks;
 		action_handler_( s &S )
-		: Automat( S.Automat ),
+			: Automat( S.Automat ),
 			Callbacks( S.Callbacks )
 		{}
 		void reset( bso::bool__ P = true )
@@ -112,7 +110,7 @@ namespace sclxdhtml {
 			Automat.plug( AS );
 			Callbacks.plug( AS );
 		}
-		action_handler_ &operator =(const action_handler_ &AH )
+		action_handler_ &operator =( const action_handler_ &AH )
 		{
 			Automat = AH.Automat;
 			Callbacks = AH.Callbacks;
@@ -135,7 +133,7 @@ namespace sclxdhtml {
 			const char *Id,
 			const char *Action )
 		{
-			cAction<session> *Callback = _Get( str::string(  Action ) );
+			cAction<session> *Callback = _Get( str::string( Action ) );
 
 			if ( Callback == NULL )
 				qRFwk();	// L'action affecte  un vnement n'existe pas. Contrler le fichier '.xsl'.
@@ -146,8 +144,7 @@ namespace sclxdhtml {
 
 	E_AUTO1( action_handler );
 
-	template <typename session> class cActionHelper
-	{
+	template <typename session> class cActionHelper {
 	protected:
 		virtual bso::bool__ SCLXOnBeforeAction(
 			session &Session,
@@ -182,8 +179,7 @@ namespace sclxdhtml {
 		}
 	};
 
-	class rActionHelper
-	{
+	class rActionHelper {
 	private:
 		stsfsm::wAutomat Automat_;
 	public:
@@ -261,8 +257,7 @@ namespace sclxdhtml {
 
 
 	class reporting_callback__
-	: public _reporting_callback__
-	{
+		: public _reporting_callback__ {
 	private:
 		Q37_MRMDF( sProxy, P_, Proxy_ );
 		Q37_MPMDF( const char, L_, Language_ );
@@ -272,9 +267,9 @@ namespace sclxdhtml {
 			const char *Message ) override
 		{
 			if ( Reply == fblovl::rDisconnected )
-				Alert("SCLXHTML_Disconnected", L_(), P_() );
+				Alert( "SCLXHTML_Disconnected", L_(), P_() );
 			else {
-//				sclmisc::ReportAndAbort( Message );
+				//				sclmisc::ReportAndAbort( Message );
 				Alert( Message, P_(), L_() );
 				qRAbort();
 			}
@@ -301,308 +296,17 @@ namespace sclxdhtml {
 		const char *Language );
 
 	// To indicate if the backend dedicated part in the login page should or not be visible.
-	qENUM( BackendVisibility ) {
-		bvHide,	
-		bvShow,
-		bv_amount,
-		bv_Undefined
+	qENUM( BackendVisibility )
+	{
+		bvHide,
+			bvShow,
+			bv_amount,
+			bv_Undefined
 	};
 
+	extern const char *RootTagName_;
 
-	// User put in 'instances' all his own objects, instanciating all with a 'new' (by overloading 'SCLXHTMLNew(...)'), a 'delete' will be made automatically when unloading thie library.
-	template <typename instances, typename frontend, typename page, page UndefinedPage, typename dump > class rSession
-	: public cSession_,
-	  public sProxy,
-	  public instances,
-	  public frontend
-	{
-	private:
-		page Page_;	// Current page;
-		reporting_callback__ _ReportingCallback;
-		eBackendVisibility BackendVisibility_;
-	public:
-		void reset( bso::bool__ P = true )
-		{
-			instances::reset( P );
-			frontend::reset( P );
-			Page_ = UndefinedPage;
-			_ReportingCallback.reset( P );
-			BackendVisibility_ = bv_Undefined;
-		}
-		qCVDTOR( rSession )
-		void Init(
-			sclfrntnd::rKernel &Kernel,
-			const char *Language,
-			xdhcmn::cProxy *Callback )
-		{
-			sProxy::Init( Callback );
-			_ReportingCallback.Init( *this, Language );
-			frontend::Init( Kernel, Language, _ReportingCallback );
-			Page_ = UndefinedPage;
-			// instances::Init( *this );	// Made on connection.
-			BackendVisibility_ = bvShow;	// By default, the backend part of the login page is shown.
-		}
-		bso::bool__ Connect(
-			const fblfrd::compatibility_informations__ &CompatibilityInformations,
-			fblfrd::incompatibility_informations_ &IncompatibilityInformations )
-		{
-			if ( !frontend::Connect( CompatibilityInformations, IncompatibilityInformations ) )
-				return false;
-
-			// if ( frontend::IsConnected() )	// It's to each subcomponent to decide what to do when not connected.
-			instances::Init( *this );
-			
-			return true;
-		}
-		void Disconnect( void )
-		{
-			instances::reset();
-
-			frontend::Disconnect();
-		}
-		const char *Language( void )
-		{
-			return frontend::Language();
-		}
-		void SwitchTo( page Page = UndefinedPage )
-		{
-			if ( Page != UndefinedPage )
-				Page_ = Page;
-			else
-				qRFwk();
-		}
-		const str::string_ &GetTranslation(
-			const char *Message,
-			str::string_ &Translation )
-		{
-			return scllocale::GetTranslation( Message, Language(), Translation );
-		}
-		void AlertU( const ntvstr::string___ &Message )	// Displays 'Message' as is.
-		{
-			sclxdhtml::Alert ( Message, *this, Language() );
-		}
-		void AlertT( const ntvstr::string___ &RawMessage )	// Translates 'RawMessage'.
-		{
-			sclxdhtml::Alert ( RawMessage, Language(), *this );
-		}
-		void Alert(
-			const ntvstr::string___ &XML,
-			const ntvstr::string___ &XSL,
-			const ntvstr::string___ &Title )
-		{
-			sclxdhtml::Alert( XML, XSL, Title, *this, Language() );
-		}
-		template <typename i> void Alert( i I )
-		{
-			bso::bInt Buffer;
-
-			AlertU( bso::Convert( I, Buffer ) ); 
-		}
-		bso::bool__ ConfirmU( const ntvstr::string___ &Message )	// Displays 'Message' as is.
-		{
-			return sclxdhtml::Confirm( Message, *this, Language() );
-		}
-		bso::bool__ ConfirmT( const ntvstr::string___ &RawMessage )	// Translates 'RawMessage'.
-		{
-			return sclxdhtml::Confirm( RawMessage, Language(), *this );
-		}
-		bso::bool__ Confirm(
-			const ntvstr::string___ &XML,
-			const ntvstr::string___ &XSL,
-			const ntvstr::string___ &Title )
-		{
-			return sclxdhtml::Confirm( XML, XSL, Title, this, Language() );
-		}
-		qRWDISCLOSEr( eBackendVisibility, BackendVisibility );
-		qRODISCLOSEr( page, Page );
-		void SetElementLayout(
-			const xdhdws::nstring___ &Id,
-			const char *Target,
-			void( *Get )( rSession &Session, xml::dWriter &Writer ),
-			const sclrgstry::dRegistry &Registry )
-		{
-			sclxdhtml::SetElementLayout<rSession, dump>( Id, Target, Get, Registry, *this );
-		}
-		void SetElementLayout(
-			const xdhdws::nstring___ &Id,
-			const char *Target,
-			void( *Get )( rSession &Session, xml::dWriter &Writer ) )
-		{
-			SetElementLayout( Id, Target, Get, Registry() );
-		}
-		inline void SetDocumentLayout(
-			const char *Target,
-			void( *Get )( rSession &Session, xml::dWriter &Writer ),
-			const sclrgstry::dRegistry &Registry )
-		{
-			sclxdhtml::SetDocumentLayout<rSession, dump>( Target, Get, Registry, *this );
-		}
-		void SetDocumentLayout(
-			const char *Target,
-			void( *Get )( rSession &Session, xml::dWriter &Writer ) )
-		{
-			SetDocumentLayout( Target, Get, Registry() );
-		}
-		void SetContents(
-			const str::dStrings &Ids,
-			const str::dStrings &Contents )
-		{
-			sclxdhtml::SetContents_( Ids, Contents, *this );
-		}
-		void SetContent(
-			const str::dString &Id,
-			const str::dString &Content )
-		{
-			sclxdhtml::SetContent_( Id, Content, *this );
-		}
-		void SetContent(
-			const char *Id,
-			const str::dString &Content )
-		{
-			sclxdhtml::SetContent_( str::wString( Id ), Content, *this );
-		}
-		void SetElementCasting(
-			const xdhdws::nstring___ &Id,
-			const char *Target,
-			void( *Get )( rSession &Session, xml::dWriter &Writer ),
-			const sclrgstry::dRegistry &Registry )
-		{
-			sclxdhtml::SetElementCasting<rSession, dump>( Id, Target, Get, Registry, *this );
-		}
-		void SetElementCasting(
-			const xdhdws::nstring___ &Id,
-			const char *Target,
-			void( *Get )( rSession &Session, xml::dWriter &Writer ) )
-		{
-			SetElementCasting( Id, Target, Get, Registry() );
-		}
-		inline void SetDocumentCasting(
-			const char *Target,
-			void( *Get )( rSession &Session, xml::dWriter &Writer ),
-			const sclrgstry::dRegistry &Registry )
-		{
-			sclxdhtml::SetDocumentCasting<rSession, dump>( Target, Get, Registry, *this );
-		}
-		void SetDocumentCasting(
-			const char *Target,
-			void( *Get )( rSession &Session, xml::dWriter &Writer ) )
-		{
-			SetDocumentCasting( Target, Get, Registry() );
-		}
-	};
-
-	template <typename session> class rCore
-	{
-	private:
-		action_handler<session> _Handler;
-		xdhcmn::mode__ _Mode;
-		Q37_MRMDF( cActionHelper<session>, _AH, _ActionHelperCallback );
-		bso::bool__ _OnBeforeAction(
-			session &Session,
-			const char *Id,
-			const char *Action )
-		{
-			return _AH().OnBeforeAction( Session, Id, Action );
-		}
-		void _OnRefresh( session &Session )
-		{
-			return _AH().OnRefresh( Session );
-		}
-		bso::bool__ _OnClose( session &Session )
-		{
-			return _AH().OnClose( Session );
-		}
-	public:
-		void reset( bso::bool__ P = true )
-		{
-			_Handler.reset( P );
-			_Mode = xdhcmn::m_Undefined;
-			_ActionHelperCallback = NULL;
-		}
-		E_CVDTOR( rCore )
-		void Init(
-			xdhcmn::mode__ Mode,
-			cActionHelper<session> &ActionHelperCallback )
-		{
-			_ActionHelperCallback = &ActionHelperCallback;
-			_Mode = Mode;
-			_Handler.Init();
-		}
-		void AddActionCallback(
-			const char *ActionName,
-			cAction<session> &Callback )
-		{
-			_Handler.Add( ActionName, Callback );
-		}
-		bso::bool__ Launch(
-			session &Session,
-			const char *Id,
-			const char *Action )
-		{
-			bso::bool__ Success = true;
-		qRH
-			TOL_CBUFFER___ Buffer;
-		qRB
-			if ( !strcmp( Action, xdhcmn::RefreshActionLabel) ) {
-				_OnRefresh( Session );
-			} else if ( _OnBeforeAction( Session, Id, Action) ) {
-				if ( !strcmp( Action, xdhcmn::CloseActionLabel ) )
-					Success = _OnClose( Session );	// Dans ce cas, si 'Success' est  'false', la fermeture de l'application est suspendue.
-				else
-# if 0
-					Success = _Handler.Launch( Session, Id, Action );
-# else
-					_Handler.Launch( Session, Id, Action );
-# endif
-			}
-		qRR
-			HandleError( Session, Session.Language() );
-		qRT
-		qRE
-			return Success;
-		}
-		E_RODISCLOSE__( xdhcmn::mode__, Mode );
-	};
-
-
-	/*********************************/
-
-	inline void LoadXSLAndTranslateTags(
-		const rgstry::tentry__ &FileName,
-		const sclrgstry::registry_ &Registry,
-		str::string_ &String,
-		bso::char__ Marker = '#' )
-	{
-		sclmisc::LoadXMLAndTranslateTags( FileName, Registry, String, Marker );
-	}
-
-	inline void SetLayout_(
-		xdhdws::sProxy &Proxy,
-		const xdhcmn::nstring___ &Id,
-		const xdhcmn::nstring___ &XML,
-		const xdhcmn::nstring___ &XSL )
-	{
-		Proxy.SetLayout( Id, XML, XSL );
-	}
-
-	inline void SetContents_(
-		xdhdws::sProxy &Proxy,
-		const xdhcmn::nstring___ &Ids,
-		const xdhcmn::nstring___ &Contents )
-	{
-		Proxy.SetContents( Ids, Contents );
-	}
-
-	inline void SetCasting_(
-		xdhdws::sProxy &Proxy,
-		const xdhcmn::nstring___ &Id,
-		const xdhcmn::nstring___ &XML,
-		const xdhcmn::nstring___ &XSL ) // Not used !
-	{
-		Proxy.SetCasting( Id, XML, XSL );
-	}
-
-	typedef void (* fSet)( xdhdws::sProxy &Proxy, const xdhdws::nstring___ &Id, const xdhdws::nstring___ &XML, const xdhdws::nstring___ &XSL );
+	typedef void( *fSet )( xdhdws::sProxy &Proxy, const xdhdws::nstring___ &Id, const xdhdws::nstring___ &XML, const xdhdws::nstring___ &XSL );
 
 	void SetElement_(
 		const xdhdws::nstring___ &Id,
@@ -616,7 +320,7 @@ namespace sclxdhtml {
 
 	void SetContents_(
 		const str::dStrings & Ids,
- 		const str::dStrings &Contents,
+		const str::dStrings &Contents,
 		xdhdws::sProxy &Proxy );
 
 	void SetContent_(
@@ -624,10 +328,29 @@ namespace sclxdhtml {
 		const str::dString &Content,
 		xdhdws::sProxy &Proxy );
 
-	extern const char *RootTagName_;
 
-	// Following is not allowed, so is declared directly in the functions.
-	// template <typename session> typedef void (* fDocument )( session *Session, xml::dWriter &Writer );
+	template <typename session, typename rack> inline void SetElement_(
+		const xdhdws::nstring___ &Id,
+		const char *Target,
+		const rgstry::rEntry &Filename,
+		void( *Get )( session &Session, xml::dWriter &Writer ),
+		fSet Set,
+		const sclrgstry::registry_ &Registry,
+		session &Session,
+		bso::char__ Marker = '#' )
+	{
+	qRH;
+		rack Rack;
+	qRB;
+		Rack.Init( Target, Session );
+
+		Get( Session, Rack() );
+
+		SetElement_( Id, Set, Filename, Target, Registry, Rack.Target(), Session, Marker );
+	qRR;
+	qRT;
+	qRE;
+	}
 
 	template <typename session, typename dump> class rRack_ {
 	private:
@@ -680,72 +403,66 @@ namespace sclxdhtml {
 		}
 	};
 
-	template <typename session, typename rack> inline void SetElement_(
-		const xdhdws::nstring___ &Id,
-		const char *Target,
-		const rgstry::rEntry &Filename,
-		void( *Get )( session &Session, xml::dWriter &Writer ),
-		fSet Set,
-		const sclrgstry::registry_ &Registry,
-		session &Session,
-		bso::char__ Marker = '#' )
-	{
-	qRH
-		rack Rack;
-	qRB
-		Rack.Init( Target, Session );
-
-		Get( Session, Rack() );
-
-		SetElement_( Id, Set, Filename, Target, Registry, Rack.Target(), Session, Marker );
-	qRR
-	qRT
-	qRE
-	}
-
 	template <typename session, typename dump> class rLayoutRack
-	: public rRack_<session,dump> {
+	: public rRack_<session, dump> {
 	public:
 		void Init(
 			const char *View,
 			session &Session )
 		{
-			rRack_<session,dump>::Init( View, "Layout", Session );
+			rRack_<session, dump>::Init( View, "Layout", Session );
 		}
 	};
+
+	inline void SetLayout_(
+		xdhdws::sProxy &Proxy,
+		const xdhcmn::nstring___ &Id,
+		const xdhcmn::nstring___ &XML,
+		const xdhcmn::nstring___ &XSL )
+	{
+		Proxy.SetLayout( Id, XML, XSL );
+	}
 
 	template <typename session, typename dump> inline void SetElementLayout(
 		const xdhdws::nstring___ &Id,
 		const char *Target,
-		void(* Get)( session &Session, xml::dWriter &Writer ),
+		void( *Get )( session &Session, xml::dWriter &Writer ),
 		const sclrgstry::registry_ &Registry,
 		session &Session,
 		bso::char__ Marker = '#' )
 	{
-		SetElement_<session,rLayoutRack<session,dump>>( Id, Target, registry::definition::XSLLayoutFile, Get, SetLayout_, Registry, Session, Marker );
+		SetElement_<session, rLayoutRack<session, dump>>( Id, Target, registry::definition::XSLLayoutFile, Get, SetLayout_, Registry, Session, Marker );
 	}
 
 	template <typename session, typename dump> inline void SetDocumentLayout(
 		const char *Target,
-		void(* Get )( session &Session, xml::dWriter &Writer ),
+		void( *Get )( session &Session, xml::dWriter &Writer ),
 		const sclrgstry::registry_ &Registry,
 		session &Session,
 		bso::char__ Marker = '#' )
 	{
-		SetElementLayout<session,dump>( RootTagName_, Target, Get, Registry, Session, Marker );
+		SetElementLayout<session, dump>( RootTagName_, Target, Get, Registry, Session, Marker );
 	}
 
 	template <typename session, typename dump> class rCastingRack
-	: public rRack_<session,dump>
-	{
+		: public rRack_<session, dump> {
 	public:
 		void Init(
 			const char *View,
 			session &Session )
 		{
-			rRack_<session,dump>::Init( View, "Casting", Session );
+			rRack_<session, dump>::Init( View, "Casting", Session );
 		}
 	};
+
+	inline void SetCasting_(
+		xdhdws::sProxy &Proxy,
+		const xdhcmn::nstring___ &Id,
+		const xdhcmn::nstring___ &XML,
+		const xdhcmn::nstring___ &XSL ) // Not used !
+	{
+		Proxy.SetCasting( Id, XML, XSL );
+	}
 
 	template <typename session, typename dump> inline void SetElementCasting(
 		const xdhdws::nstring___ &Id,
@@ -755,7 +472,7 @@ namespace sclxdhtml {
 		session &Session,
 		bso::char__ Marker = '#' )
 	{
-		SetElement_<session, rCastingRack<session,dump>>( Id, Target, registry::definition::XSLCastingFile, Get, SetCasting_, Registry, Session, Marker );
+		SetElement_<session, rCastingRack<session, dump>>( Id, Target, registry::definition::XSLCastingFile, Get, SetCasting_, Registry, Session, Marker );
 	}
 
 	template <typename session, typename dump> inline void SetDocumentCasting(
@@ -765,7 +482,291 @@ namespace sclxdhtml {
 		session &Session,
 		bso::char__ Marker = '#' )
 	{
-		SetElementCasting<session,dump>( RootTagName_, Target, Get, Registry, Session, Marker );
+		SetElementCasting<session, dump>( RootTagName_, Target, Get, Registry, Session, Marker );
+	}
+
+	template <typename session> class rCore;
+
+	// User put in 'instances' all his own objects, instantiating all with a 'new' (by overloading 'SCLXHTMLNew(...)'), a 'delete' will be made automatically when unloading the library.
+	template <typename instances, typename frontend, typename page, page UndefinedPage, typename dump > class rSession
+	: public cSession_,
+	  public sProxy,
+	  public instances,
+	  public frontend
+	{
+	private:
+		page Page_;	// Current page;
+		reporting_callback__ _ReportingCallback;
+		eBackendVisibility BackendVisibility_;
+		class rCore<rSession> *Core_;
+	protected:
+		bso::bool__ XDHCMNLaunch(
+			const char *Id,
+			const char *Action ) override
+		{
+			return Core_->Launch( *this, Id, Action );
+		}
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			instances::reset( P );
+			frontend::reset( P );
+			Page_ = UndefinedPage;
+			_ReportingCallback.reset( P );
+			BackendVisibility_ = bv_Undefined;
+		}
+		qCVDTOR( rSession )
+			void Init(
+				sclfrntnd::rKernel &Kernel,
+				const char *Language,
+				xdhcmn::cProxy *Callback )
+		{
+			sProxy::Init( Callback );
+			_ReportingCallback.Init( *this, Language );
+			frontend::Init( Kernel, Language, _ReportingCallback );
+			Page_ = UndefinedPage;
+			// instances::Init( *this );	// Made on connection.
+			BackendVisibility_ = bvShow;	// By default, the backend part of the login page is shown.
+		}
+		bso::bool__ Connect(
+			const fblfrd::compatibility_informations__ &CompatibilityInformations,
+			fblfrd::incompatibility_informations_ &IncompatibilityInformations )
+		{
+			if ( !frontend::Connect( CompatibilityInformations, IncompatibilityInformations ) )
+				return false;
+
+			// if ( frontend::IsConnected() )	// It's to each subcomponent to decide what to do when not connected.
+			instances::Init( *this );
+
+			return true;
+		}
+		void Disconnect( void )
+		{
+			instances::reset();
+
+			frontend::Disconnect();
+		}
+		const char *Language( void )
+		{
+			return frontend::Language();
+		}
+		void SwitchTo( page Page = UndefinedPage )
+		{
+			if ( Page != UndefinedPage )
+				Page_ = Page;
+			else
+				qRFwk();
+		}
+		const str::string_ &GetTranslation(
+			const char *Message,
+			str::string_ &Translation )
+		{
+			return scllocale::GetTranslation( Message, Language(), Translation );
+		}
+		void AlertU( const ntvstr::string___ &Message )	// Displays 'Message' as is.
+		{
+			sclxdhtml::Alert( Message, *this, Language() );
+		}
+		void AlertT( const ntvstr::string___ &RawMessage )	// Translates 'RawMessage'.
+		{
+			sclxdhtml::Alert( RawMessage, Language(), *this );
+		}
+		void Alert(
+			const ntvstr::string___ &XML,
+			const ntvstr::string___ &XSL,
+			const ntvstr::string___ &Title )
+		{
+			sclxdhtml::Alert( XML, XSL, Title, *this, Language() );
+		}
+		template <typename i> void Alert( i I )
+		{
+			bso::bInt Buffer;
+
+			AlertU( bso::Convert( I, Buffer ) );
+		}
+		bso::bool__ ConfirmU( const ntvstr::string___ &Message )	// Displays 'Message' as is.
+		{
+			return sclxdhtml::Confirm( Message, *this, Language() );
+		}
+		bso::bool__ ConfirmT( const ntvstr::string___ &RawMessage )	// Translates 'RawMessage'.
+		{
+			return sclxdhtml::Confirm( RawMessage, Language(), *this );
+		}
+		bso::bool__ Confirm(
+			const ntvstr::string___ &XML,
+			const ntvstr::string___ &XSL,
+			const ntvstr::string___ &Title )
+		{
+			return sclxdhtml::Confirm( XML, XSL, Title, this, Language() );
+		}
+		qRWDISCLOSEr( eBackendVisibility, BackendVisibility );
+		qRODISCLOSEr( page, Page );
+		void SetElementLayout(
+			const xdhdws::nstring___ &Id,
+			const char *Target,
+			void( *Get )( rSession &Session, xml::dWriter &Writer ),
+			const sclrgstry::dRegistry &Registry )
+		{
+			sclxdhtml::SetElementLayout<rSession, dump>( Id, Target, Get, Registry, *this );
+		}
+		void SetElementLayout(
+			const xdhdws::nstring___ &Id,
+			const char *Target,
+			void( *Get )( rSession &Session, xml::dWriter &Writer ) )
+		{
+			SetElementLayout( Id, Target, Get, frontend::Registry() );
+		}
+		inline void SetDocumentLayout(
+			const char *Target,
+			void( *Get )( rSession &Session, xml::dWriter &Writer ),
+			const sclrgstry::dRegistry &Registry )
+		{
+			sclxdhtml::SetDocumentLayout<rSession, dump>( Target, Get, Registry, *this );
+		}
+		void SetDocumentLayout(
+			const char *Target,
+			void( *Get )( rSession &Session, xml::dWriter &Writer ) )
+		{
+			SetDocumentLayout( Target, Get, frontend::Registry() );
+		}
+		void SetContents(
+			const str::dStrings &Ids,
+			const str::dStrings &Contents )
+		{
+			sclxdhtml::SetContents_( Ids, Contents, *this );
+		}
+		void SetContent(
+			const str::dString &Id,
+			const str::dString &Content )
+		{
+			sclxdhtml::SetContent_( Id, Content, *this );
+		}
+		void SetContent(
+			const char *Id,
+			const str::dString &Content )
+		{
+			sclxdhtml::SetContent_( str::wString( Id ), Content, *this );
+		}
+		void SetElementCasting(
+			const xdhdws::nstring___ &Id,
+			const char *Target,
+			void( *Get )( rSession &Session, xml::dWriter &Writer ),
+			const sclrgstry::dRegistry &Registry )
+		{
+			sclxdhtml::SetElementCasting<rSession, dump>( Id, Target, Get, Registry, *this );
+		}
+		void SetElementCasting(
+			const xdhdws::nstring___ &Id,
+			const char *Target,
+			void( *Get )( rSession &Session, xml::dWriter &Writer ) )
+		{
+			SetElementCasting( Id, Target, Get, frontend::Registry() );
+		}
+		inline void SetDocumentCasting(
+			const char *Target,
+			void( *Get )( rSession &Session, xml::dWriter &Writer ),
+			const sclrgstry::dRegistry &Registry )
+		{
+			sclxdhtml::SetDocumentCasting<rSession, dump>( Target, Get, Registry, *this );
+		}
+		void SetDocumentCasting(
+			const char *Target,
+			void( *Get )( rSession &Session, xml::dWriter &Writer ) )
+		{
+			SetDocumentCasting( Target, Get, frontend::Registry() );
+		}
+	};
+
+	template <typename session> class rCore {
+	private:
+		action_handler<session> _Handler;
+		xdhcmn::mode__ _Mode;
+		Q37_MRMDF( cActionHelper<session>, _AH, _ActionHelperCallback );
+		bso::bool__ _OnBeforeAction(
+			session &Session,
+			const char *Id,
+			const char *Action )
+		{
+			return _AH().OnBeforeAction( Session, Id, Action );
+		}
+		void _OnRefresh( session &Session )
+		{
+			return _AH().OnRefresh( Session );
+		}
+		bso::bool__ _OnClose( session &Session )
+		{
+			return _AH().OnClose( Session );
+		}
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			_Handler.reset( P );
+			_Mode = xdhcmn::m_Undefined;
+			_ActionHelperCallback = NULL;
+		}
+		E_CVDTOR( rCore )
+			void Init(
+				xdhcmn::mode__ Mode,
+				cActionHelper<session> &ActionHelperCallback )
+		{
+			_ActionHelperCallback = &ActionHelperCallback;
+			_Mode = Mode;
+			_Handler.Init();
+		}
+		void AddActionCallback(
+			const char *ActionName,
+			cAction<session> &Callback )
+		{
+			_Handler.Add( ActionName, Callback );
+		}
+		bso::bool__ Launch(
+			session &Session,
+			const char *Id,
+			const char *Action )
+		{
+			bso::bool__ Success = true;
+			qRH
+				TOL_CBUFFER___ Buffer;
+			qRB
+				if ( !strcmp( Action, xdhcmn::RefreshActionLabel ) ) {
+					_OnRefresh( Session );
+				} else if ( _OnBeforeAction( Session, Id, Action ) ) {
+					if ( !strcmp( Action, xdhcmn::CloseActionLabel ) )
+						Success = _OnClose( Session );	// Dans ce cas, si 'Success' est  'false', la fermeture de l'application est suspendue.
+					else
+# if 0
+						Success = _Handler.Launch( Session, Id, Action );
+# else
+						_Handler.Launch( Session, Id, Action );
+# endif
+				}
+				qRR
+					HandleError( Session, Session.Language() );
+				qRT
+					qRE
+					return Success;
+		}
+		E_RODISCLOSE__( xdhcmn::mode__, Mode );
+	};
+
+
+	/*********************************/
+
+	inline void LoadXSLAndTranslateTags(
+		const rgstry::tentry__ &FileName,
+		const sclrgstry::registry_ &Registry,
+		str::string_ &String,
+		bso::char__ Marker = '#' )
+	{
+		sclmisc::LoadXMLAndTranslateTags( FileName, Registry, String, Marker );
+	}
+
+	inline void SetContents_(
+		xdhdws::sProxy &Proxy,
+		const xdhcmn::nstring___ &Ids,
+		const xdhcmn::nstring___ &Contents )
+	{
+		Proxy.SetContents( Ids, Contents );
 	}
 
 	void SCLXDHTMLInitialization( xdhcmn::mode__ Mode );	// To define by user.
