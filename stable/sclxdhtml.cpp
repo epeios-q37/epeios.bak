@@ -78,7 +78,7 @@ namespace {
 	: public cDownstream_
 	{
 	private:
-		xdhcmn::mode__ Mode_;
+		xdhcmn::eMode Mode_;
 	protected:
 		virtual void XDHCMNInitialize( const xdhcmn::shared_data__ &Data ) override
 		{

@@ -81,7 +81,7 @@ namespace xdhups {
         }
         E_CDTOR( agent___ );
 		bso::bool__ Init(
-			xdhcmn::mode__ Mode,
+			xdhcmn::eMode Mode,
 			const str::string_ &ModuleFileName,
 			const char *Identification );
 		cSession_ *RetrieveCallback(

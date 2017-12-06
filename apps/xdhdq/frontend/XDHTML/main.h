@@ -34,13 +34,13 @@ namespace main {
 		BASE_ACR( Testing );
 	};
 
-	void SetLayout( core::rSession_ &Session );
+	void SetLayout( core::rSession &Session );
 
-	void SetCasting( core::rSession_ &Session );
+	void SetCasting( core::rSession &Session );
 
-	void Display( core::rSession_ &Session );
+	void Display( core::rSession &Session );
 
-	void DisplayFields( core::rSession_ &Session );
+	void DisplayFields( core::rSession &Session );
 }
 
 #endif

@@ -26,7 +26,7 @@ using namespace xdhups;
 extern "C" typedef xdhcmn::retrieve retrieve;
 
 bso::bool__ xdhups::agent___::Init(
-	xdhcmn::mode__ Mode,
+	xdhcmn::eMode Mode,
 	const str::string_ &ModuleFileName,
 	const char *Identification )
 {

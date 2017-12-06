@@ -61,10 +61,10 @@ namespace base {
 	qENUM( Page )
 	{
 		pProlog,
-			pLogin,
-			pMain,
-			p_amount,
-			p_Undefined
+		pLogin,
+		pMain,
+		p_amount,
+		p_Undefined
 	};
 }
 

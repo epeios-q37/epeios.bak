@@ -61,11 +61,10 @@ namespace {
 	};
 }
 
-
-void core::rCore::Init( xdhcmn::mode__ Mode )
+void core::rCore::Init( xdhcmn::eMode Mode )
 {
 	ActionHelperCallback_.Init();
-	rCore_::Init( Mode, ActionHelperCallback_ );
+	sclxdhtml::rCore<rSession>::Init( Mode, ActionHelperCallback_ );
 	Register_();
 }
 
@@ -166,11 +165,6 @@ qRT
 qRE
 }
 
-qGCTOR( core )
-{
-	OnNotConnectedAllowedActions.Init();
-}
-
 bso::bool__ core::sActionHelper::SCLXOnBeforeAction(
 	rSession &Session,
 	const char *Id,
@@ -207,4 +201,9 @@ void core::sActionHelper::SCLXOnRefresh( rSession &Session )
 bso::bool__ core::sActionHelper::SCLXOnClose( rSession &Session )
 {
 	return Session.ConfirmT( "ClosingConfirmation" );
+}
+
+qGCTOR( core )
+{
+	OnNotConnectedAllowedActions.Init();
 }

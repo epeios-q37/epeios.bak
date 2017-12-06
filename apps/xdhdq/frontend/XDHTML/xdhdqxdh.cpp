@@ -29,7 +29,7 @@
 #include "main.h"
 #include "prolog.h"
 
-void sclxdhtml::SCLXDHTMLInitialization( xdhcmn::mode__ Mode )
+void sclxdhtml::SCLXDHTMLInitialization( xdhcmn::eMode Mode )
 {
 qRH
 	sclfrntnd::rFeatures Features;
@@ -48,15 +48,15 @@ qRE
 
 xdhcmn::cSession *sclxdhtml::SCLXDHTMLRetrieveCallback(
 	const char *Language,
-	xdhcmn::mode__ Mode,
+	xdhcmn::eMode Mode,
 	xdhcmn::cProxy *ProxyCallback )
 {
-	core::rSession_ *Session = new core::rSession_;
+	core::rSession *Session = new core::rSession;
 
 	if ( Session == NULL )
 		qRGnr();
 
-	Session->Init( core::Kernel(), Language, ProxyCallback );
+	Session->Init( core::Kernel(), Language, ProxyCallback, core::Core );
 
 	switch ( Mode ) {
 	case xdhcmn::mMonoUser:

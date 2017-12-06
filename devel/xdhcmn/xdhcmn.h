@@ -50,7 +50,7 @@ namespace xdhcmn {
 	static E_CDEF( char *, CloseActionLabel, "Q37Close" );
 	static E_CDEF( char *, RefreshActionLabel, "Q37Refresh" );
 
-	E_ENUM( mode ) {
+	qENUM( Mode ) {
 		mMonoUser,	// One use only. The content of the project (i.e. which backend type to use) is defined by the user.
 		mMultiUser,	// Several users. The project (which defines the backend to use) is predefiend in the configuration file.
 		m_amount,
@@ -131,7 +131,7 @@ namespace xdhcmn {
 	private:
 		const char *_Version;	// Toujours en premire position.
 		bso::uint__ _Control;	// Une valeur relative au contenu de la structure,  des fins de test primaire de compatibilit.
-		mode__ _Mode;
+		eMode _Mode;
 		const char *_LauncherIdentification;
 		const char *_Localization;
 		sclmisc::sRack SCLRack_;
@@ -147,7 +147,7 @@ namespace xdhcmn {
 		}
 		E_CDTOR( shared_data__ );
 		void Init(
-			mode__ Mode,
+			eMode Mode,
 			const char *LauncherIdentification,
 			const char *Localization )
 		{
@@ -165,7 +165,7 @@ namespace xdhcmn {
 		qRWDISCLOSEs( sclmisc::sRack, SCLRack );
 		Q37_PMDF( const char, LauncherIdentification, _LauncherIdentification );
 		Q37_PMDF( const char, Localization, _Localization );
-		E_RODISCLOSE__( mode__, Mode );
+		E_RODISCLOSE__( eMode, Mode );
 	};
 #pragma pack( pop )
 

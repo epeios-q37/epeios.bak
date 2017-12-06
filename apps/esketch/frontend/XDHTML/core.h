@@ -52,10 +52,9 @@ namespace core {
 
 	typedef sclxdhtml::rSession < rInstances, frdfrntnd::rFrontend, base::ePage, base::p_Undefined, sDump > rSession;
 
-	typedef sclxdhtml::rCore<rSession> rCore_;
-
 	class sActionHelper
-	: public sclxdhtml::cActionHelper<core::rSession> {
+	: public sclxdhtml::cActionHelper<core::rSession>
+	{
 	protected:
 		virtual bso::bool__ SCLXOnBeforeAction(
 			core::rSession &Session,
@@ -66,7 +65,7 @@ namespace core {
 	};
 
 	class rCore
-	: public rCore_
+	: public sclxdhtml::rCore<rSession>
 	{
 	private:
 		sActionHelper ActionHelperCallback_;
@@ -76,7 +75,7 @@ namespace core {
 			ActionHelperCallback_.reset( P );
 		}
 		E_CDTOR( rCore );
-		void Init( xdhcmn::mode__ Mode );
+		void Init( xdhcmn::eMode Mode );
 	};
 
 	extern rCore Core;

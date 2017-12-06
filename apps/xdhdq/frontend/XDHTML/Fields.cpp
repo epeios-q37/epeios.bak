@@ -106,7 +106,7 @@ namespace {
 
 void fields::SetLayout(
 	const char *Id,
-	core::rSession_ &Session )
+	core::rSession &Session )
 {
 qRH;
 	str::wStrings Ids, Contents;
@@ -124,14 +124,14 @@ qRE;
 
 void fields::SetCasting(
 	const char *Id,
-	core::rSession_ &Session )
+	core::rSession &Session )
 {
 	Session.SetElementCasting( Id, XSLAffix_, casting_::Get );
 }
 
 void fields::Display(
 	const char *Id,
-	core::rSession_ &Session )
+	core::rSession &Session )
 {
 	SetLayout( Id, Session );
 

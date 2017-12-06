@@ -28,14 +28,6 @@
 namespace core {
 	extern sclxdhtml::rActionHelper OnNotConnectedAllowedActions;
 
-	qENUM( Page ) {
-		pProlog,
-		pLogin,
-		pMain,
-		p_amount,
-		p_Undefined
-	};
-
 	class rInstances
 	{
 	public:
@@ -58,33 +50,32 @@ namespace core {
 			xml::dWriter &Writer );
 	};
 
-	typedef sclxdhtml::rSession<rInstances, frdfrntnd::rFrontend, ePage, p_Undefined, sDump> rSession;
+	typedef sclxdhtml::rSession < rInstances, frdfrntnd::rFrontend, base::ePage, base::p_Undefined, sDump > rSession;
 
-	class rSession_
-	: public rSession
+	class sActionHelper
+	: public sclxdhtml::cActionHelper<core::rSession>
 	{
 	protected:
-		virtual bso::bool__ XDHCMNLaunch(
+		virtual bso::bool__ SCLXOnBeforeAction(
+			core::rSession &Session,
 			const char *Id,
 			const char *Action ) override;
-	public:
-		qCVDTOR( rSession_ );
+		virtual void SCLXOnRefresh( core::rSession &Session ) override;
+		virtual bso::sBool SCLXOnClose( core::rSession &Session ) override;
 	};
 
-	typedef sclxdhtml::rCore<rSession_> rCore_;
-
 	class rCore
-	: public rCore_
+	: public sclxdhtml::rCore<rSession>
 	{
 	private:
-		base::sActionHelper ActionHelperCallback_;
+		sActionHelper ActionHelperCallback_;
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			ActionHelperCallback_.reset( P );
 		}
 		E_CDTOR( rCore );
-		void Init( xdhcmn::mode__ Mode );
+		void Init( xdhcmn::eMode Mode );
 	};
 
 	extern rCore Core;

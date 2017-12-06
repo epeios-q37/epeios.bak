@@ -683,7 +683,7 @@ namespace sclxdhtml {
 	template <typename session> class rCore {
 	private:
 		action_handler<session> _Handler;
-		xdhcmn::mode__ _Mode;
+		xdhcmn::eMode _Mode;
 		Q37_MRMDF( cActionHelper<session>, _AH, _ActionHelperCallback );
 		bso::bool__ _OnBeforeAction(
 			session &Session,
@@ -709,7 +709,7 @@ namespace sclxdhtml {
 		}
 		E_CVDTOR( rCore )
 			void Init(
-				xdhcmn::mode__ Mode,
+				xdhcmn::eMode Mode,
 				cActionHelper<session> &ActionHelperCallback )
 		{
 			_ActionHelperCallback = &ActionHelperCallback;
@@ -749,7 +749,7 @@ namespace sclxdhtml {
 					qRE
 					return Success;
 		}
-		E_RODISCLOSE__( xdhcmn::mode__, Mode );
+		E_RODISCLOSE__( xdhcmn::eMode, Mode );
 	};
 
 
@@ -772,11 +772,11 @@ namespace sclxdhtml {
 		Proxy.SetContents( Ids, Contents );
 	}
 
-	void SCLXDHTMLInitialization( xdhcmn::mode__ Mode );	// To define by user.
+	void SCLXDHTMLInitialization( xdhcmn::eMode Mode );	// To define by user.
 
 	xdhcmn::cSession *SCLXDHTMLRetrieveCallback(
 		const char *Language,
-		xdhcmn::mode__ Mode,
+		xdhcmn::eMode Mode,
 		xdhcmn::cProxy *ProxyCallback );	// To define by user.
 
 	void SCLXDHTMLReleaseCallback( xdhcmn::cSession *Callback );	// To define by user.

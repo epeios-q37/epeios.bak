@@ -34,15 +34,15 @@ namespace fields {
 
 	void SetLayout(
 		const char * Id,
-		core::rSession_ &Session );
+		core::rSession &Session );
 
 	void SetCasting(
 		const char *Id,
-		core::rSession_ &Session );
+		core::rSession &Session );
 
 	void Display(
 		const char *Id,
-		core::rSession_ &Session );
+		core::rSession &Session );
 }
 
 #endif

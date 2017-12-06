@@ -48,28 +48,28 @@ namespace{
 	}
 }
 
-void main::SetLayout( core::rSession_ &Session )
+void main::SetLayout( core::rSession &Session )
 {
 	Session.SetDocumentLayout( XSLAffix_, layout_::Get );
 	fields::SetLayout( FieldsFrameId_, Session );
 }
 
-void main::SetCasting( core::rSession_ &Session )
+void main::SetCasting( core::rSession &Session )
 {
 	Session.SetDocumentCasting( XSLAffix_, casting_::Get );
 	fields::SetCasting( FieldsFrameId_, Session );
 }
 
-void main::Display( core::rSession_ &Session )
+void main::Display( core::rSession &Session )
 {
 	SetLayout( Session );
 
 	SetCasting( Session );
 
-	Session.SwitchTo( core::pMain );
+	Session.SwitchTo( base::pMain );
 }
 
-void main::DisplayFields( core::rSession_ &Session )
+void main::DisplayFields( core::rSession &Session )
 {
 	fields::Display( FieldsFrameId_, Session );
 }

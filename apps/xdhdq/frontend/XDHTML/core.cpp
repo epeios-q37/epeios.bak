@@ -33,6 +33,8 @@
 
 using namespace core;
 
+using namespace instc;
+
 core::rCore core::Core;
 
 sclxdhtml::rActionHelper core::OnNotConnectedAllowedActions;
@@ -65,11 +67,10 @@ namespace {
 	};
 }
 
-
-void core::rCore::Init( xdhcmn::mode__ Mode )
+void core::rCore::Init( xdhcmn::eMode Mode )
 {
 	ActionHelperCallback_.Init();
-	rCore_::Init( Mode, ActionHelperCallback_ );
+	sclxdhtml::rCore<rSession>::Init( Mode, ActionHelperCallback_ );
 	Register_();
 }
 
@@ -81,13 +82,6 @@ qRB
 qRR
 qRT
 qRE
-}
-
-bso::bool__ core::rSession_::XDHCMNLaunch(
-	const char *Id,
-	const char *Action )
-{
-	return Core.Launch( *this, Id, Action );
 }
 
 void core::sDump::Corpus(
@@ -175,6 +169,73 @@ qRB
 qRR
 qRT
 qRE
+}
+
+bso::bool__ core::sActionHelper::SCLXOnClose( core::rSession &Session )
+{
+	return Session.ConfirmT( "ClosingConfirmation" );
+}
+
+namespace {
+	void RetrieveContent_(
+		core::rSession &Session,
+		const char *Action )
+	{
+	qRH;
+		eField Field = f_Undefined;
+		str::wString Content;
+	qRB;
+		Field = Session.User.GetField();
+
+		if ((  Field != f_Undefined ) && ( strcmp( Action, main::HideTestButton.Name ) ) ) {
+			Content.Init();
+			Session.GetValue( instc::GetLabel( Field ), Content );
+
+			Session.User.SetContent( Field, Content );
+
+			Session.User.ResetField();
+		}
+	qRR;
+	qRT;
+	qRE;
+	}
+}
+
+bso::bool__ core::sActionHelper::SCLXOnBeforeAction(
+	core::rSession &Session,
+	const char *Id,
+	const char *Action )
+{
+	if ( !Session.IsConnected() ) {
+		if ( !core::OnNotConnectedAllowedActions.Search( Action ) ) {
+			Session.AlertT( "ActionNeedsBackend" );
+			return false;
+		} else {
+			RetrieveContent_( Session, Action );
+			return true;
+		}
+	} else {
+		RetrieveContent_( Session, Action );
+		return true;
+	}
+}
+
+void core::sActionHelper::SCLXOnRefresh( core::rSession &Session )
+{
+	switch ( Session.Page() ) {
+	case base::pProlog:
+		prolog::Display( Session );
+		break;
+	case base::pLogin:
+		login::Display( Session );
+		break;
+	case base::pMain:
+		main::Display( Session );
+		break;
+	default:
+		qRGnr();
+		break;
+	}
 }
 
 qGCTOR( core )
