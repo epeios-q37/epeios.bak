@@ -682,10 +682,10 @@ namespace {
 		qRPN )
 	{
 		bso::sBool Success = false;
-		qRH
-			lcl::meaning Meaning;
-		qRB
-			Success = InitializeFlow_( CONFIGURATION_DEFAULT_FILENAME_SUFFIX, SuggestedDirectory, Flow, Directory );
+	qRH;
+		lcl::meaning Meaning;
+	qRB;
+		Success = InitializeFlow_( CONFIGURATION_DEFAULT_FILENAME_SUFFIX, SuggestedDirectory, Flow, Directory );
 
 		if ( !Success && qRPT ) {
 			Meaning.Init();
@@ -693,10 +693,10 @@ namespace {
 			Meaning.AddTag( sclmisc::SCLMISCTargetName );
 			ReportAndAbort( Meaning );
 		}
-		qRR
-			qRT
-			qRE
-			return Success;
+	qRR;
+	qRT;
+	qRE;
+		return Success;
 	}
 }
 
@@ -1066,29 +1066,46 @@ qRE
 }
 
 void sclmisc::LoadXMLAndTranslateTags(
-	const rgstry::tentry__ &FileNameEntry,
-	const sclrgstry::registry_ &Registry,
+	const fnm::rName &Filename,
+	const char *Language,
 	str::string_ &String,
 	char Marker )
 {
-qRH
-	str::string FileName, Unprocessed, Untranslated;
+qRH;
+	str::string Unprocessed, Untranslated;
 	fnm::name___ FileNameLocation;
-	TOL_CBUFFER___ Buffer;
-qRB
-	FileName.Init();
+qRB;
 	Unprocessed.Init();
-	Load_( FileNameEntry, Registry, Unprocessed, FileName );
+	Load( Filename, Unprocessed );
 
-	fnm::GetLocation( FileName, FileNameLocation );
+	fnm::GetLocation( Filename, FileNameLocation );
 
 	Untranslated.Init();
 	xpp::Process( Unprocessed, xml::oIndent, Untranslated, xpp::criterions___( FileNameLocation ) );
 
-	scllocale::TranslateTags( Untranslated, sclrgstry::GetLanguage_( Registry, Buffer ), String, Marker );
-qRR
-qRT
-qRE
+	scllocale::TranslateTags( Untranslated, Language, String, Marker );
+qRR;
+qRT;
+qRE;
+}
+
+void sclmisc::LoadXMLAndTranslateTags(
+	const rgstry::tentry__ &FilenameEntry,
+	const sclrgstry::registry_ &Registry,
+	str::string_ &String,
+	char Marker )
+{
+qRH;
+	str::string Filename;
+	TOL_CBUFFER___ Buffer;
+qRB;
+	Filename.Init();
+	sclrgstry::MGetValue( Registry, FilenameEntry, Filename );
+
+	LoadXMLAndTranslateTags( Filename, sclrgstry::GetLanguage_( Registry, Buffer ), String, Marker );
+qRR;
+qRT;
+qRE;
 }
 
 const sclrgstry::registry_ &sclmisc::GetRegistry( void )

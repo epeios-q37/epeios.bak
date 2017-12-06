@@ -1,5 +1,9 @@
 # *Epeios* changelog
 
+2017-12-06:
+- SCLMISC:
+  - Adding variant of `LoadXMLAndTranslateTags(...)`.
+
 2017-12-05:
 - *Common*:
   - **$** : reworking of the content handling setting to handle correctly the widgets (continued).

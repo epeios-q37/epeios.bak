@@ -86,6 +86,12 @@ class XDH {
 	setCasting(tree, xslFilename, id) {
 		this.set(10, tree, xslFilename, id);
 	}
+	getContent(id) {
+		return njsq._wrapper(11, this, id);
+	}
+	setContent(id, content) {
+		return njsq._wrapper(12, this, id, content);
+	}
 }
 
 module.exports.returnArgument = (text) => { return njsq._wrapper(0, text); };

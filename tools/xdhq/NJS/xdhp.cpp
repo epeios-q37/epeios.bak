@@ -305,7 +305,7 @@ namespace {
 		Object.Init();
 		Caller.GetArgument( Object );
 
-		Rack = ( action_::rRack * )Object.Get( action_::Id );
+		Rack = (action_::rRack * )Object.Get( action_::Id );
 
 		if ( Rack == NULL )
 			qRGnr();
@@ -316,16 +316,53 @@ namespace {
 	}
 }
 
+#define RACK	action_::rRack &Rack = GetActionRack_( Caller )
+
 SCLNJS_F( xdhp::SetLayout )
 {
-	action_::rRack &Rack = GetActionRack_( Caller );
+	RACK;
 	SetElement_( server::SetLayout, Caller, Rack.Language, Rack.Flow );
 }
 
 SCLNJS_F( xdhp::SetCasting )
 {
-	action_::rRack &Rack = GetActionRack_( Caller );
+	RACK;
 	SetElement_( server::SetCasting, Caller, Rack.Language, Rack.Flow );
+}
+
+SCLNJS_F( xdhp::GetContent )
+{
+qRH;
+	str::wString Id, Content;
+qRB;
+	RACK;
+
+	Id.Init();
+	Caller.GetArgument( Id );
+
+	Content.Init();
+	server::GetContent( Id, Rack.Flow, Content );
+
+	Caller.SetReturnValue( Content );
+qRR;
+qRT;
+qRE;
+}
+
+SCLNJS_F( xdhp::SetContent )
+{
+qRH;
+	str::wString Id, Content;
+qRB;
+	RACK;
+
+	tol::Init( Id, Content );
+	Caller.GetArgument( Id, Content );
+
+	server::SetContent( Id, Content, Rack.Flow );
+qRR;
+qRT;
+qRE;
 }
 
 qGCTOR( xdhp )

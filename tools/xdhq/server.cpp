@@ -81,7 +81,7 @@ namespace {
 		str::wString XSL;
 	qRB;
 		XSL.Init();
-		sclmisc::LoadAndTranslateTags( XSLFilename, Language, XSL, '#' );
+		sclmisc::LoadXMLAndTranslateTags( XSLFilename, Language, XSL, '#' );
 
 		SetWithXSLContent_( Answer, Id, XML, XSL, Flow );
 	qRR;
@@ -110,3 +110,26 @@ void server::SetCasting(
 	Set_( prtcl::aSetCasting_1, Id, XML, XSLFilename, Language, Flow );
 }
 
+void server::GetContent(
+	const str::dString &Id,
+	flw::sRWFlow &Flow,
+	str::dString &Content )
+{
+	prtcl::PutAnswer( prtcl::aGetContent_1, Flow );
+	prtcl::Put( Id, Flow );
+	Flow.Commit();
+
+	prtcl::Get( Flow, Content );
+	Flow.Dismiss();
+}
+
+void server::SetContent(
+	const str::dString &Id,
+	const str::dString &Content,
+	flw::sWFlow &Flow )
+{
+	prtcl::PutAnswer( prtcl::aSetContent_1, Flow );
+	prtcl::Put( Id, Flow );
+	prtcl::Put( Content, Flow );
+	Flow.Commit();
+}

@@ -38,6 +38,16 @@ namespace server {
 
 	void SetLayout( SERVER_SETP_ );
 	void SetCasting( SERVER_SETP_ );
+
+	void GetContent(
+		const str::dString &Id,
+		flw::sRWFlow &Flow,
+		str::dString &Content );
+
+	void SetContent(
+		const str::dString &Id,
+		const str::dString &Content,
+		flw::sWFlow &Flow );
 }
 
 #endif

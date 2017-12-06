@@ -32,7 +32,7 @@ namespace {
 
 }
 
-void sclxdhtml::SCLXDHTMLInitialization( xdhcmn::mode__ Mode )
+void sclxdhtml::SCLXDHTMLInitialization( xdhcmn::eMode Mode )
 {
 }
  
@@ -91,7 +91,7 @@ namespace {
 		prtcl::Get( Flow, XML );
 		prtcl::Get( Flow, XSL );
 
-		Proxy.SetLayout( Id, XML, XSL, NULL );
+		Proxy.SetLayout( Id, XML, XSL );
 	qRR;
 	qRT;
 	qRE;
@@ -111,6 +111,53 @@ namespace {
 		prtcl::Get( Flow, XSL );
 
 		Proxy.SetCasting( Id, XML, XSL );
+	qRR;
+	qRT;
+	qRE;
+	}
+
+	void GetContent_(
+		flw::sRWFlow &Flow,
+		xdhdws::sProxy &Proxy )
+	{
+	qRH;
+		str::wString Id, Content;
+	qRB;
+		Id.Init();
+		prtcl::Get( Flow, Id );
+
+		Content.Init();
+		Proxy.GetValue( Id, Content );
+
+		prtcl::Put( Content, Flow );
+		Flow.Commit();
+	qRR;
+	qRT;
+	qRE;
+	}
+
+	void SetContent_(
+		flw::sRFlow &Flow,
+		xdhdws::sProxy &Proxy )
+	{
+	qRH;
+		str::wString Id, Content;
+		str::wStrings Ids, Contents;
+	qRB;
+		tol::Init( Id, Content );
+		prtcl::Get( Flow, Id );
+		prtcl::Get( Flow, Content );
+
+		tol::Init( Ids, Contents );
+		Ids.Append( Id );
+		Contents.Append( Content );
+
+		tol::Init( Id, Content );
+
+		xdhcmn::FlatMerge( Ids, Id, true );
+		xdhcmn::FlatMerge( Contents, Content, true );
+
+		Proxy.SetContents( Id, Content );
 	qRR;
 	qRT;
 	qRE;
@@ -159,6 +206,12 @@ namespace {
 					break;
 				case prtcl::aSetCasting_1:
 					SetCasting_( Client_, *this );
+					break;
+				case prtcl::aGetContent_1:
+					GetContent_( Client_, *this );
+					break;
+				case prtcl::aSetContent_1:
+					SetContent_( Client_, *this );
 					break;
 				default:
 					qRGnr();
@@ -213,7 +266,7 @@ namespace {
 
 xdhcmn::cSession *sclxdhtml::SCLXDHTMLRetrieveCallback(
 	const char *Language,
-	xdhcmn::mode__ Mode,
+	xdhcmn::eMode Mode,
 	xdhcmn::cProxy *ProxyCallback )
 {
 	rSession_ *Session = new rSession_;
