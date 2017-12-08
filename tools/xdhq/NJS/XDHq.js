@@ -116,11 +116,8 @@ function pushIdsAndItems( idsAndItems, itemType, ids, items )
 	}
 }
 
-function callWrapperWithIdsAndItems( fid, itemType, idOrIdsAndItems, item )
+function callWrapperWithIdsAndItems( idOrIdsAndItems, item, itemType, ids, items )
 {
-	var ids = new Array();
-	var items = new Array();
-
 	if ((typeof idOrIdsAndItems === "string") && (typeof item === itemType)) {
 		ids.push(idOrIdsAndItems);
 		items.push( item );
@@ -128,14 +125,23 @@ function callWrapperWithIdsAndItems( fid, itemType, idOrIdsAndItems, item )
 		pushIdsAndItems(idOrIdsAndItems, itemType, ids, items);	// Mixed array not implemented yet.
 	} else
 		throw( "Error in parameters.");
-
-	njsq._wrapper(fid, ids, items);
 }
+
+function register( idOrIdsAndItems, item )
+{
+	var tags = new Array();
+	var callbacks = new Array();
+
+	callWrapperWithIdsAndItems(idOrIdsAndItems, item, "function", tags, callbacks);
+
+	njsq._wrapper(7, tags, callbacks);
+}
+
 
 module.exports.returnArgument = (text) => { return njsq._wrapper(0, text); };
 module.exports.LayoutTree = LayoutTree;
 module.exports.CastingTree = CastingTree;
-module.exports.register = (idOrIdsAndItems, item) => { callWrapperWithIdsAndItems(7, "function", idOrIdsAndItems, item); };
+module.exports.register = register;
 module.exports.listen = (callback, args) => { njsq._wrapper(8, callback, args); };
 module.exports.XDH = XDH;
 
