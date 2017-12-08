@@ -62,11 +62,10 @@ void n4njs::Delete( dCallbacks &Callbacks )
 
 		if ( Callback != NULL ) {
 			delete Callback;
-
 			Callbacks.Store( NULL, Row );
+		}
 
 			Row = Callbacks.Next( Row );
-		}
 	}
 }
 

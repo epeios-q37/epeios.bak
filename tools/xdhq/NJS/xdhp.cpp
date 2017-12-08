@@ -46,6 +46,22 @@ namespace {
 			qRGnr();
 	}
 
+	void Add_(
+		const str::dStrings &Tags,
+		const n4njs::dCallbacks &Callbacks )
+	{
+		sdr::sRow Row = Tags.First();
+
+		if ( Tags.Amount() != Callbacks.Amount() )
+			qRGnr();
+
+		while ( Row != qNIL ) {
+			Add_( Tags( Row ), Callbacks( Row ) );
+
+			Row = Tags.Next( Row );
+		}
+	}
+
 	n4njs::cUCallback *Get_( const str::dString &Tag )
 	{
 		sdr::sRow Row = stsfsm::GetId( Tag, Automat_ );
@@ -202,16 +218,16 @@ SCLNJS_F( xdhp::Register )
 {
 qRH;
 	csdcmn::sVersion Version = csdcmn::UndefinedVersion;
-	str::wString Tag;
-	n4njs::cUCallback *Callback = NULL;
+	sclnjs::rStrings Tags;
+	sclnjs::rCallbacks Callbacks;
 qRB;
-	tol::Init( Tag );
-	Caller.GetArgument( Tag, Callback );
+	tol::Init( Tags, Callbacks );
+	Caller.GetArgument( Tags, Callbacks );
 
-	Add_( Tag, Callback );
+	Add_( Tags.Get(), Callbacks.Get() );
+
+	Callbacks.reset( false );	// So the stored callbacks survive.
 qRR
-	if ( Callback != NULL )
-		delete Callback;
 qRT
 qRE
 }

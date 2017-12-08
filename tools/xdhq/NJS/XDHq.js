@@ -94,10 +94,48 @@ class XDH {
 	}
 }
 
+function isFunction(functionToCheck) {
+	var getType = {};
+	return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
+}
+
+function pushIdAndItem( idAndItem, itemType, ids, items ) {
+	if ( ( idAndItem instanceof Array ) && ( idAndItem.length === 2 ) && ( typeof idAndItem[0] === "string" ) && ( typeof idAndItem[1] === itemType ) ) {
+		ids.push( idAndItem[0] );
+		items.push( idAndItem[1] );
+	} else
+		throw( "Error in parameters.");
+}
+
+function pushIdsAndItems( idsAndItems, itemType, ids, items )
+{
+	var length = idsAndItems.length;
+
+	while (length--) {
+		pushIdAndItem( idsAndItems[length], itemType, ids , items );
+	}
+}
+
+function callWrapperWithIdsAndItems( fid, itemType, idOrIdsAndItems, item )
+{
+	var ids = new Array();
+	var items = new Array();
+
+	if ((typeof idOrIdsAndItems === "string") && (typeof item === itemType)) {
+		ids.push(idOrIdsAndItems);
+		items.push( item );
+	} else if ((idOrIdsAndItems instanceof Array) && (typeof item === "undefined")) {
+		pushIdsAndItems(idOrIdsAndItems, itemType, ids, items);	// Mixed array not implemented yet.
+	} else
+		throw( "Error in parameters.");
+
+	njsq._wrapper(fid, ids, items);
+}
+
 module.exports.returnArgument = (text) => { return njsq._wrapper(0, text); };
 module.exports.LayoutTree = LayoutTree;
 module.exports.CastingTree = CastingTree;
-module.exports.register = (tag, callback) => { njsq._wrapper(7, tag, callback); };
+module.exports.register = (idOrIdsAndItems, item) => { callWrapperWithIdsAndItems(7, "function", idOrIdsAndItems, item); };
 module.exports.listen = (callback, args) => { njsq._wrapper(8, callback, args); };
 module.exports.XDH = XDH;
 

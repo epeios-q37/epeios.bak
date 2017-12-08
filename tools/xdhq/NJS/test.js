@@ -76,11 +76,13 @@ function submission(xdh, id) {
 
 function main()
 {
-	xdhq.register("Connect", connect);
-	xdhq.register("Testing", testing);
-	xdhq.register("ShowTestButton", showTestButton);
-	xdhq.register("HideTestButton", hideTestButton);
-	xdhq.register("Submission", submission);
+	xdhq.register("Connect", connect);	// Testing.
+	xdhq.register([
+		["Testing", testing],
+		["ShowTestButton", showTestButton],
+		["HideTestButton", hideTestButton],
+		["Submission", submission],
+	]);
 
 	xdhq.listen(callback, "12345");
 }

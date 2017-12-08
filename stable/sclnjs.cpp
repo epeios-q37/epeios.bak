@@ -88,6 +88,22 @@ qRE;
 template <> void scln4::Get(
 	int Index,
 	cCaller_ &Caller,
+	sclnjs::rStrings &Strings )
+{
+	Get_<n4njs::cUStrings>( Index, Caller, n4njs::tStrings, Strings );
+}
+
+template <> void scln4::Get(
+	int Index,
+	cCaller_ &Caller,
+	sclnjs::rCallbacks &Callbacks )
+{
+	Get_<n4njs::cUCallbacks>( Index, Caller, n4njs::tCallbacks, Callbacks );
+}
+
+template <> void scln4::Get(
+	int Index,
+	cCaller_ &Caller,
 	sclnjs::rObject &Object )
 {
 	Get_<n4njs::cUObject>( Index, Caller, n4njs::tObject, Object );

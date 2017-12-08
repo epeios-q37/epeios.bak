@@ -50,7 +50,7 @@ namespace sclnjs {
 		qRVct();
 	}
 
-	template <typename callback> class rBase_
+	template <typename callback> class rCore_
 	{
 	protected:
 		qRMV( callback, C_, Callback_ );
@@ -63,6 +63,7 @@ namespace sclnjs {
 
 			tol::reset( P, Callback_ );
 		}
+		qCVDTOR( rCore_ );
 		void Init( void )
 		{
 			Callback_ = NULL;
@@ -77,7 +78,19 @@ namespace sclnjs {
 		}
 	};
 
-	typedef rBase_<n4njs::cUCallback> rCallback_;
+	template <typename type, typename callback> class rBase_
+	: public rCore_<callback>
+	{
+	public:
+		const type &Get( void ) const
+		{
+			return C_().Get();
+		}
+		void Set( const type &Item )
+		{
+			C_().Set( Item );
+		}
+	};
 
 	inline void TestAndAdd_(
 		n4njs::dArguments &Arguments,
@@ -97,15 +110,15 @@ namespace sclnjs {
 	template <typename callback> void TestAndAdd_(
 		n4njs::dArguments &Arguments,
 		n4njs::eType Type,
-		const rBase_<callback> &Base )
+		const rCore_<callback> &Base )
 	{
 		TestAndAdd_( Arguments, Type, &Base.Callback() );
 	}
 
-	template <typename callback> class rCore_
-	: public rBase_<callback> {
+	template <typename callback> class rObject_
+	: public rCore_<callback> {
 	protected:
-		using rBase_<callback>::C_;
+		using rCore_<callback>::C_;
 	public:
 		void Set(
 			const char *Key,
@@ -124,6 +137,7 @@ namespace sclnjs {
 
 	};
 
+	// Termination function for variadics.
 	inline void TestAndAdd_( n4njs::dArguments &Arguments )
 	{}
 
@@ -148,9 +162,11 @@ namespace sclnjs {
 		TestAndAdd_( Arguments, *String );
 	}
 
-	typedef rBase_<n4njs::cUString> rString;
-	typedef rBase_<n4njs::cUStrings> rStrings;
-	typedef rCore_<n4njs::cUObject> rObject;
+	typedef rBase_<str::dString, n4njs::cUString> rString;
+	typedef rBase_<str::dStrings, n4njs::cUStrings> rStrings;
+	typedef rBase_<n4njs::dCallbacks, n4njs::cUCallbacks> rCallbacks;
+	typedef rObject_<n4njs::cUObject> rObject;
+	typedef rObject_<n4njs::cUCallback> rCallback_;
 
 	inline void TestAndAdd_(
 		n4njs::dArguments &Arguments,

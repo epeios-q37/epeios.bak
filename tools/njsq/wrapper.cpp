@@ -428,7 +428,18 @@ namespace {
 		}
 	}
 
-	typedef rBase<n4njs::cUCallbacks, n4njs::dCallbacks, n4njs::wCallbacks> rCallbacks;
+	class rCallbacks
+	: public rBase<n4njs::cUCallbacks, n4njs::dCallbacks, n4njs::wCallbacks>
+	{
+	public:
+		void reset( bso::sBool P = true )
+		{
+			if ( P ) {
+				n4njs::Delete( Expose() );
+			}
+		}
+		qCVDTOR( rCallbacks );
+	};
 
 	inline n4njs::cUCallbacks *GetCallbacks_( const v8::Local<v8::Array> &Array )
 	{
