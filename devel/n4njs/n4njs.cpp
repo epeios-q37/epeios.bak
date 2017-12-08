@@ -23,3 +23,52 @@
 
 using namespace n4njs;
 
+namespace {
+	namespace {
+		template <typename t> inline void Delete_( t *&P )
+		{
+			if ( P != NULL )
+				delete P;
+		}
+	}
+
+	template <typename t> inline void Delete_( void *&P )
+	{
+		Delete_<t>( (t *&)P );
+	}
+}
+
+void n4njs::Delete( n4njs::dArguments &Arguments )
+{
+	sArgument Argument;
+
+	sdr::sRow Row = Arguments.First();
+
+	while ( Row != qNIL ) {
+		Arguments.Recall( Row, Argument );
+
+		Argument.reset();
+
+		Row = Arguments.Next( Row );
+	}
+}
+
+void n4njs::Delete( dCallbacks &Callbacks )
+{
+	sdr::sRow Row = Callbacks.First();
+
+	while ( Row != qNIL ) {
+		cUCallback *Callback = Callbacks( Row );
+
+		if ( Callback != NULL ) {
+			delete Callback;
+
+			Callbacks.Store( NULL, Row );
+
+			Row = Callbacks.Next( Row );
+		}
+	}
+}
+
+
+

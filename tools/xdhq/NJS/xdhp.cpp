@@ -35,18 +35,18 @@ using namespace xdhp;
 namespace {
 	typedef sclnjs::cAsync cAsync_;
 
-	lstbch::qLBUNCHwl( sclnjs::rCallback * ) Callbacks_;
+	lstbch::qLBUNCHwl( n4njs::cUCallback * ) Callbacks_;
 	stsfsm::wAutomat Automat_;
 
 	void Add_(
 		const str::dString &Tag,
-		sclnjs::rCallback *Callback )
+		n4njs::cUCallback *Callback )
 	{
 		if ( stsfsm::Add( Tag, *Callbacks_.Add( Callback ), Automat_ ) != stsfsm::UndefinedId )
 			qRGnr();
 	}
 
-	sclnjs::rCallback *Get_( const str::dString &Tag )
+	n4njs::cUCallback *Get_( const str::dString &Tag )
 	{
 		sdr::sRow Row = stsfsm::GetId( Tag, Automat_ );
 
@@ -115,10 +115,10 @@ namespace action_ {
 		}
 		sclnjs::eBehavior SCLNJSAfter( void ) override
 		{
-			sclnjs::rCallback *Callback = Get_( Action_ );
+			n4njs::cUCallback *Callback = Get_( Action_ );
 			
 			if ( Callback != NULL )
-				Callback->VoidLaunch( Object, Id_ );
+				sclnjs::VoidLaunch( *Callback, Object, Id_ );
 
 			// TODO : report not found callback.
 
@@ -203,15 +203,10 @@ SCLNJS_F( xdhp::Register )
 qRH;
 	csdcmn::sVersion Version = csdcmn::UndefinedVersion;
 	str::wString Tag;
-	sclnjs::rCallback *Callback = NULL;
+	n4njs::cUCallback *Callback = NULL;
 qRB;
-	Callback = new sclnjs::rCallback;
-
-	if ( Callback == NULL )
-		qRGnr();
-
-	tol::Init( Tag, *Callback );
-	Caller.GetArgument( Tag, *Callback );
+	tol::Init( Tag );
+	Caller.GetArgument( Tag, Callback );
 
 	Add_( Tag, Callback );
 qRR

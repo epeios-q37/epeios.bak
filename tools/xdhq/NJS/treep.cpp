@@ -67,7 +67,7 @@ namespace {
 }
 
 namespace {
-	typedef sclnjs::rCore_<n4njs::cUCore_> rObject_;
+	typedef sclnjs::rObject rObject_;
 
 	qCDEF( char *, Id_, "_q37TreeRack" );
 }

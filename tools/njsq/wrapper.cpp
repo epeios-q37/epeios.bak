@@ -30,20 +30,120 @@ using namespace wrapper;
 typedef n4all::cCaller cCaller_;
 
 namespace {
-	inline void GetString_(
-		int Index,
-		const v8::FunctionCallbackInfo<v8::Value> &Info,
-		str::dString &Value )
+	template <typename cbase, typename dbase, typename wbase> class rBase
+	: public cbase
 	{
+	private:
+		wbase Base_;
+	protected:
+		virtual void N4NJSSet( const dbase &Base ) override
+		{
+			Base_ = Base;
+		}
+		virtual const dbase &N4NJSGet( void ) const override
+		{
+			return Base_;
+		}
+	public:
+		void reset( bso::sBool P = true )
+		{
+			Base_.reset( P );
+		}
+		qCVDTOR( rBase );
+		void Init( void )
+		{
+			Base_.Init();
+		}
+		dbase &Expose( void )
+		{
+			return Base_;
+		}
+		const dbase &Expose( void ) const
+		{
+			return Base_;
+		}
+	};
+
+	typedef rBase<n4njs::cUString, str::dString, str::wString> rString;
+
+	inline n4njs::cUString *GetString_( const v8::Local<v8::Value> &Value )
+	{
+		rString *StringCallback = NULL;
 	qRH
 		v8q::sLString String;
 	qRB
-		String.Init( Info[Index] );
+		StringCallback = new rString;
 
-		String.Get( Value );
+		if ( StringCallback == NULL )
+			qRAlc();
+
+		StringCallback->Init();
+
+		String.Init( Value );
+
+		String.Get( StringCallback->Expose() );
 	qRR
+		if ( StringCallback != NULL )
+			delete StringCallback;
 	qRT
 	qRE
+		return StringCallback;
+	}
+
+	inline n4njs::cUString *GetString_(
+		int Index,
+		const v8::FunctionCallbackInfo<v8::Value> &Info )
+	{
+		return GetString_( Info[Index] );
+	}
+
+	typedef rBase<n4njs::cUStrings, str::dStrings, str::wStrings> rStrings;
+
+	inline n4njs::cUStrings *GetStrings_( const v8::Local<v8::Array> &Array )
+	{
+		rStrings *StringsCallback = NULL;
+	qRH;
+		uint32_t Length = 0;
+		v8q::sLString String;
+	qRB;
+		StringsCallback = new rStrings;
+
+		if ( StringsCallback == NULL )
+			qRAlc();
+
+		StringsCallback->Init();
+
+		Length = Array->Length();
+
+		if ( Length != 0 ) {
+			StringsCallback->Expose().New( Length );
+
+			while ( Length-- ) {
+				String.Init( Array->Get( Length ) );
+				String.Get( StringsCallback->Expose()( Length ) ); 
+			}
+		}
+	qRR;
+		if ( StringsCallback != NULL )
+			delete StringsCallback;
+	qRT;
+	qRE;
+		return StringsCallback;
+	}
+
+	inline n4njs::cUStrings *GetStrings_( const v8::Local<v8::Value> &Value )
+	{
+		if ( !Value->IsArray() )
+			qRGnr();
+
+		return GetStrings_( v8::Local<v8::Array>::Cast( Value ) );
+	}
+
+	inline n4njs::cUStrings *GetStrings_(
+		int Index,
+		const v8::FunctionCallbackInfo<v8::Value> &Info )
+	{
+		return GetStrings_( Info[Index] );
 	}
 
 	namespace {
@@ -179,13 +279,11 @@ namespace {
 						Number.Init( *Value );
 
 						Argv = Number.Core();
-
-						delete Value;
 					}
 
 					void Set_(
 						v8::Local<v8::Value> &Argv,
-						const str::wString *Value )
+						const str::dString *Value )
 					{
 					qRH
 						 qCBUFFERr Buffer;
@@ -193,9 +291,9 @@ namespace {
 						Argv = v8q::ToString( Value->Convert( Buffer ) );
 					qRR
 					qRT
-//						delete Value;
 					qRE
 					}
+
 
 					void Set_(
 						v8::Local<v8::Value> &Argv,
@@ -204,19 +302,20 @@ namespace {
 						Argv = ( (rObject_ *)Object )->Core();
 					}
 				}
+
 				void Set_(
 					v8::Local<v8::Value> &Argv,
-					const n4njs::sArgument_ &Argument )
+					const n4njs::sArgument &Argument )
 				{
-					if ( Argument.Value == NULL )
+					if ( Argument.Value== NULL )
 						qRGnr();
 
 					switch ( Argument.Type ) {
 					case n4njs::tInt:
 						Set_( Argv, (const int *)Argument.Value );
 						break;
-					case n4njs::tString:
-						Set_( Argv, (const str::wString *)Argument.Value );
+					case n4njs::tString_:
+						Set_( Argv, (const str::dString *)Argument.Value );
 						break;
 					case n4njs::tObject:
 						Set_( Argv, (const n4njs::cUObject *)Argument.Value );
@@ -230,7 +329,7 @@ namespace {
 
 			void Fill_(
 				v8::Local<v8::Value> *&Argv,
-				const n4njs::dArguments_ &Arguments )
+				const n4njs::dArguments &Arguments )
 			{
 				sdr::sRow Row = Arguments.First();
 				int Index = 0;
@@ -241,18 +340,17 @@ namespace {
 					Row = Arguments.Next( Row );
 				}
 			}
-
 		}
 
 		class rCallback_
 		: public rCore_<n4njs::cUCallback, nodeq::rPFunction>
 		{
 		protected:
-			virtual n4njs::cUCore_ *N4NJSLaunch(
+			virtual n4njs::cUObject *N4NJSLaunch(
 				n4njs::eType ReturnType,
-				const n4njs::dArguments_ &Arguments ) override
+				const n4njs::dArguments &Arguments ) override
 			{
-				n4njs::cUCore_ *ReturnCallback = NULL;
+				n4njs::cUObject *CallbackReturn = NULL;
 			qRH
 				v8::Local<v8::Value> *Argv = NULL;
 				int Argc = 0;
@@ -273,17 +371,17 @@ namespace {
 				case n4njs::tVoid:
 					break;
 				case n4njs::tObject:
-					ReturnCallback = Get_<rObject_>( Return );
+					CallbackReturn = Get_<rObject_>( Return );
 					break;
 				}
 			qRR
-				if ( ReturnCallback != NULL )
-					delete ReturnCallback;
+				if ( CallbackReturn != NULL )
+					delete CallbackReturn;
 			qRT
 				if ( Argv != NULL )
 					delete Argv;
 			qRE
-				return ReturnCallback;
+				return CallbackReturn;
 			}
 		};
 	}
@@ -309,11 +407,77 @@ namespace {
 		return Get_<rRStream_>( Index, Info );
 	}
 
+	inline n4njs::cUCallback *GetCallback_( const v8::Local<v8::Value> &Value )
+	{
+		return Get_<rCallback_>( Value );
+	}
+
 	inline n4njs::cUCallback *GetCallback_(
 		int Index,
 		const v8::FunctionCallbackInfo<v8::Value> &Info )
 	{
-		return Get_<rCallback_>( Index, Info );
+		return GetCallback_( Info[Index] );
+	}
+
+	inline void Delete_( n4njs::cUCallback *&Callback )
+	{
+		if ( Callback != NULL ) {
+			delete Callback;
+
+			Callback = NULL;
+		}
+	}
+
+	typedef rBase<n4njs::cUCallbacks, n4njs::dCallbacks, n4njs::wCallbacks> rCallbacks;
+
+	inline n4njs::cUCallbacks *GetCallbacks_( const v8::Local<v8::Array> &Array )
+	{
+		rCallbacks *Callbacks = NULL;
+	qRH;
+		uint32_t Length = 0;
+	qRB;
+		Callbacks = new rCallbacks;
+
+		if ( Callbacks == NULL )
+			qRAlc();
+
+		Callbacks->Init();
+
+		Length = Array->Length();
+
+		if ( Length != 0 ) {
+			Callbacks->Expose().New( Length );
+
+			Callbacks->Expose().FillWith( NULL );
+
+			while ( Length-- ) {
+				Callbacks->Expose().Store( GetCallback_( Array->Get( Length ) ), Length );
+			}
+		}
+	qRR;
+		if ( Callbacks != NULL ) {
+			n4njs::Delete( Callbacks->Expose() );
+
+			delete Callbacks;
+		}
+	qRT;
+	qRE;
+		return Callbacks;
+	}
+
+	inline n4njs::cUCallbacks *GetCallbacks_( const v8::Local<v8::Value> &Value )
+	{
+		if ( !Value->IsArray() )
+			qRGnr();
+
+		return GetCallbacks_( v8::Local<v8::Array>::Cast( Value ) );
+	}
+
+	inline n4njs::cUCallbacks *GetCallbacks_(
+		int Index,
+		const v8::FunctionCallbackInfo<v8::Value> &Info )
+	{
+		return GetCallbacks_( Info[Index] );
 	}
 }
 
@@ -344,22 +508,27 @@ namespace {
 			if ( Index >= I_().Length() )
 				qRGnr();
 
-
 			switch ( Type ) {
-			case n4njs::tString:
-				GetString_( Index, I_(), *( str::dString * )Value );
+			case n4njs::tString_:
+				( *( n4njs::cUString ** )Value ) = GetString_( Index, I_() );
+				break;
+			case n4njs::tStrings:
+				( *( n4njs::cUStrings ** )Value ) = GetStrings_( Index, I_() );
 				break;
 			case n4njs::tObject:
-				( *( n4njs::cUObject ** )Value ) = GetObject_( Index, I_() );
+				( *(n4njs::cUObject **)Value ) = GetObject_( Index, I_() );
 				break;
 			case n4njs::tBuffer:
-				(*( n4njs::cUBuffer ** )Value ) = GetBuffer_( Index, I_() );
+				(*(n4njs::cUBuffer **)Value ) = GetBuffer_( Index, I_() );
 				break;
-			case n4njs::tStream:
-				( *( n4njs::cURStream ** )Value ) = GetStream_( Index, I_() );
+			case n4njs::tRStream:
+				( *(n4njs::cURStream **)Value ) = GetStream_( Index, I_() );
 				break;
-			case n4njs::tCallback:
-				( *( n4njs::cUCallback ** )Value ) = GetCallback_( Index, I_() );
+			case n4njs::tCallback_:
+				( *(n4njs::cUCallback **)Value ) = GetCallback_( Index, I_() );
+				break;
+			case n4njs::tCallbacks:
+				( *( n4njs::cUCallbacks **)Value ) = GetCallbacks_( Index, I_() );
 				break;
 			default:
 				qRGnr();
@@ -371,7 +540,7 @@ namespace {
 			const void *Value ) override
 		{
 			switch ( Type ) {
-			case n4njs::tString:
+			case n4njs::tString_:
 				SetReturnValue_( I_(), *( const str::dString * )Value );
 				break;
 			default:

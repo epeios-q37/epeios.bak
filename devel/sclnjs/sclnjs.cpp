@@ -23,15 +23,24 @@
 
 using namespace sclnjs;
 
-void scln4::Get(
-	int Index,
-	cCaller_ &Caller,
-	str::dString *Value )
-{
-	Caller.GetArgument( Index, n4njs::tString, Value );
-}
-
 namespace {
+	template <typename callback> callback *Get_(
+		int Index,
+		n4all::cCaller &Caller,
+		n4njs::eType Type )
+	{
+		callback *Callback = NULL;
+	qRH;
+	qRB;
+		Caller.GetArgument( Index, Type, &Callback );
+	qRR;
+		if ( Callback != NULL )
+			delete Callback;
+	qRT;
+	qRE;
+		return Callback;
+	}
+
 	template <typename callback, typename host> void Get_(
 		int Index,
 		n4all::cCaller &Caller,
@@ -41,7 +50,7 @@ namespace {
 	qRH
 		callback *Callback = NULL;
 	qRB
-		Caller.GetArgument( Index, Type, &Callback );
+		Callback = Get_<callback>( Index, Caller, Type );
 		Host.Assign( Callback );
 	qRR
 		if ( Callback != NULL )
@@ -51,6 +60,30 @@ namespace {
 	}
 }
 
+template <> void scln4::Get(
+	int Index,
+	cCaller_ &Caller,
+	sclnjs::rString &String )
+{
+	Get_<n4njs::cUString>( Index, Caller, n4njs::tString_, String );
+}
+
+void scln4::Get(
+	int Index,
+	cCaller_ &Caller,
+	str::dString *Target )
+{
+qRH;
+	sclnjs::rString String;
+qRB;
+	String.Init();
+	Get( Index, Caller, String );
+
+	*Target = String.Callback().Get();
+qRR;
+qRT;
+qRE;
+}
 
 template <> void scln4::Get(
 	int Index,
@@ -65,7 +98,7 @@ template <> void scln4::Get(
 	cCaller_ &Caller,
 	sclnjs::rRStream &Stream )
 {
-	Get_<n4njs::cURStream>( Index, Caller, n4njs::tStream, Stream );
+	Get_<n4njs::cURStream>( Index, Caller, n4njs::tRStream, Stream );
 }
 
 template <> void scln4::Get(
@@ -79,9 +112,17 @@ template <> void scln4::Get(
 template <> void scln4::Get(
 	int Index,
 	cCaller_ &Caller,
+	n4njs::cUCallback *&Callback )
+{
+	Callback = Get_<n4njs::cUCallback>( Index, Caller, n4njs::tCallback_ );
+}
+
+template <> void scln4::Get(
+	int Index,
+	cCaller_ &Caller,
 	sclnjs::rCallback &Callback )
 {
-	Get_<n4njs::cUCallback>( Index, Caller, n4njs::tCallback, Callback );
+	Get_<n4njs::cUCallback>( Index, Caller, n4njs::tCallback_, Callback );
 }
 
 txf::text_oflow__ &operator <<(
@@ -185,7 +226,6 @@ qRT
 qRE
 	return Result;
 }
-
 
 void sclnjs::Launch( cAsync &Async )
 {

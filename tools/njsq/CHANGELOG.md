@@ -1,5 +1,8 @@
 # *NJSq* changelog
 
+2017-12-08:
+- Handling *callbacks* and strings as parameters.
+
 2017-12-03:
 - Handling returned value when calling a callback.
 

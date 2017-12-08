@@ -1,5 +1,19 @@
 # *Epeios* changelog
 
+2017-12-08:
+- *Common*:
+  - **$**: Unifying argument handling.
+- N4NJS:
+  - **$**.
+- SCLNJS:
+  - **$**.
+
+2017-12-07:
+- *Common*:
+  - **$** : adding strings and callbacks handling.
+- N4NJS:
+  - **$**.
+
 2017-12-06:
 - SCLMISC:
   - Adding variant of `LoadXMLAndTranslateTags(...)`.

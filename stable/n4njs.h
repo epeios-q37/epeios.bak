@@ -54,18 +54,64 @@ namespace n4njs {
 	qENUM( Type )
 	{
 		tVoid,	// Only used to specify that the function does not return a value.
-		tObject,	// Generic object; sort of superclass.
 		tInt,
-		tString,
-		tStream,
+		tString_,
+		tStrings,
+		tObject,	// Generic object; sort of superclass.
+		tRStream,
 		tBuffer,
-		tCallback,
+		tCallback_,
+		tCallbacks,
 		t_amount,
 		t_Undefined
 	};
 
-	// Base of the callbacks which will be defined upstream.
-	class cUCore_ {
+	class sArgument {
+	public:
+		eType Type;
+		const void *Value;
+		void reset( bso::sBool P = true )
+		{
+			Type = t_Undefined;
+			Value = NULL;
+		}
+		qCDTOR( sArgument );
+		void Init(
+			eType Type = t_Undefined,
+			const void *Value = NULL )
+		{
+			this->Type = Type;
+			this->Value = Value;
+		}
+	};
+
+	typedef bch::qBUNCHdl( sArgument ) dArguments;
+	qW( Arguments );
+
+	void Delete( n4njs::dArguments &Arguments );
+
+	template <typename t> class cUBase_
+	{
+	protected:
+		virtual const t &N4NJSGet( void ) const = 0;
+		virtual void N4NJSSet( const t &Value ) = 0;
+	public:
+		qCALLBACK( UBase_ );
+		const t &Get( void ) const
+		{
+			return N4NJSGet();
+		}
+		void Set( const t &Value )
+		{
+			return N4NJSSet( Value );
+		}
+	};
+
+	typedef cUBase_<int> cUInt;
+	typedef cUBase_<str::dString> cUString;
+	typedef cUBase_<str::dStrings> cUStrings;
+
+	class cUObject {
 	protected:
 		virtual void N4NJSSet(
 			const char *Key,
@@ -73,7 +119,7 @@ namespace n4njs {
 		virtual void *N4NJSGet( const char *Key ) = 0;
 		virtual void N4NJSEmitError( const str::dString &Message ) = 0;
 	public:
-		qCALLBACK( UCore_ );
+		qCALLBACK( UObject );
 		void Set(
 			const char *Key,
 			void *Value )
@@ -90,10 +136,8 @@ namespace n4njs {
 		}
 	};
 
-	typedef cUCore_ cUObject;
-
 	class cUBuffer
-	: public cUCore_
+	: public cUObject
 	{
 	protected:
 		virtual void N4NJSToString( str::dString &String ) = 0;
@@ -106,7 +150,7 @@ namespace n4njs {
 	};
 
 	class cURStream
-	: public cUCore_
+	: public cUObject
 	{
 	protected:
 		virtual bso::sBool N4NJSRead( str::dString &Chunk ) = 0;
@@ -132,46 +176,30 @@ namespace n4njs {
 		}
 	};
 
-	class sArgument_ {
-	public:
-		eType Type;
-		void *Value;
-		void reset( bso::sBool P = true )
-		{
-			Type = t_Undefined;
-			Value = NULL;
-		}
-		qCDTOR( sArgument_ );
-		void Init(
-			eType Type = t_Undefined,
-			void *Value = NULL )
-		{
-			this->Type = Type;
-			this->Value = Value;
-		}
-	};
-
-	typedef bch::qBUNCHdl( sArgument_ ) dArguments_;
-
-	qW( Arguments_ );
-
 	// Callback for an upstream callback, i.e. which will be launched downstream.
 	class cUCallback
-	: public cUCore_
+	: public cUObject
 	{
 	protected:
-		virtual cUCore_ *N4NJSLaunch(
+		virtual cUObject *N4NJSLaunch(
 			eType ReturnType,
-			const dArguments_ &Arguments ) = 0;	// Type is the expected type of the returned value.
+			const dArguments &Arguments ) = 0;	// Type is the expected type of the returned value.
 	public:
 		qCALLBACK( UCallback );
-		cUCore_ *Launch(
+		cUObject *Launch(
 			eType ReturnType,
-			const dArguments_ &Arguments )
+			const dArguments &Arguments )
 		{
 			return N4NJSLaunch( ReturnType, Arguments );
 		}
 	};
+
+	typedef bch::qBUNCHdl(cUCallback *) dCallbacks;
+	qW( Callbacks );
+
+	void Delete( dCallbacks &Callbacks );
+
+	typedef cUBase_<dCallbacks> cUCallbacks;
 }
 
 #endif
