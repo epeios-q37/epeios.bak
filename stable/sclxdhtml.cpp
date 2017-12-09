@@ -458,7 +458,7 @@ qRB;
 
 	while ( Row != qNIL ) {
 		MergedTags.Append( Casts( Row ).Tag );
-#pragma message( __LOC__ "Will not work, but curious on what append and why the compiler doensn't complain !")
+#pragma message( __LOC__ "Will not work, but curious on what happend and why the compiler doensn't complain !")
 		MergedValues.Append( Casts( Row ).Value() );
 
 		Row = Casts.Next( Row );

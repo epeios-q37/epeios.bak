@@ -5,6 +5,8 @@
   - **$**:  new *casting* handling (continued),
 - SCLXDHTML:
   - **$**.
+- XDHUJP:
+  - **$**.
 
 2017-12-08:
 - *Common*:

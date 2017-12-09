@@ -309,21 +309,108 @@ static void SetContents_(
 	SetContents_( Callback, Ids, Contents );
 }
 
+namespace{
+	namespace {
+		// TODO: to optimize.
+		sdr::sRow Find_(
+			const str::dString &Tag,
+			const str::dStrings Tags )
+		{
+			sdr::sRow Row = str::Search( Tag, Tags );
+
+			if ( Row == qNIL )
+				qRFwk();
+
+			return Row;
+
+		}
+
+		void GetId_(
+			const str::dStrings &Ids,
+			const str::dStrings &Tags,
+			const str::dString &Tag,
+			str::dString &Id )
+		{
+			Id = Ids( Find_( Tag, Tags ) );
+		}
+	}
+
+	void MatchTagsWithIds_(
+		const xdhcmn::digest_ &Digest,
+		const str::dStrings &SourceTags,
+		str::dStrings &TargetIds )
+	{
+	qRH;
+		str::wStrings Ids, Tags;
+		sdr::sRow Row = qNIL;
+		str::wString TargetId;
+	qRB;
+		tol::Init( Ids, Tags );
+		xdhutl::GetTags( Digest, Ids, Tags );
+
+		Row = SourceTags.First();
+
+		while ( Row != qNIL ) {
+			TargetId.Init();
+
+			GetId_( Ids, Tags, SourceTags( Row ), TargetId );
+
+			TargetIds.Append( TargetId );
+		}
+	qRR;
+	qRT;
+	qRE;
+	}
+
+	void MatchTagsWithIds_(
+		const xdhcmn::digest_ &Digest,
+		const str::dString &MergedTags,
+		str::dString &MergedIds )
+	{
+	qRH;
+	str::wStrings Tags, Ids;
+	qRB;
+		Tags.Init();
+		xdhcmn::FlatSplit( MergedTags, Tags );
+
+		Ids.Init();
+		MatchTagsWithIds_( Digest, Tags, Ids );
+
+		xdhcmn::FlatMerge( Ids, MergedIds, true );
+	qRR;
+	qRT;
+	qRE;
+	}
+
+}
+
 static void SetCasts_(
 	cJS &Callback,
 	const nchar__ *Id,
-	const nchar__ *Tags,
+	const nchar__ *RawTags,
 	const nchar__ *Casts )
 {
 qRH
-	TOL_CBUFFER___ Result;
+	ntvstr::rBuffer Result;
+	str::wString RawDigest;
+	xdhcmn::digest Digest;
+	str::wString Ids, Tags;	// Merged.
 qRB
-	Execute( Callback, xdhujs::snCastsSetter, NULL, Id, Tags, Casts );
+	RawDigest.Init( Execute( Callback, xdhujs::snCastsFetcher, &Result, Id ) );
+
+	Digest.Init();
+	xdhcmn::Split( RawDigest, Digest );
+
+	nstring___( RawTags ).UTF8( Tags );
+
+	Ids.Init();
+	MatchTagsWithIds_( Digest, Tags, Ids );
+
+	Execute( Callback, xdhujs::snCastsSetter, NULL, Id, nstring___( Ids ).Internal()(), Casts );
 qRR
 qRT
 qRE
 }
-
 static void SetCasts_(
 	cJS &Callback,
 	va_list List )
