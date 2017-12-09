@@ -52,7 +52,10 @@ void main::SetLayout( core::rSession &Session )
 
 void main::SetCasting( core::rSession &Session )
 {
-	Session.SetDocumentCasting( XSLAffix_, casting_::Get );
+	if ( Session.User.TestButtonIsVisible() )
+		Session.SetDocumentCast( str::wString( "TestBoutonCasting" ), sclxdhtml::cPlain );
+	else
+		Session.SetDocumentCast( str::wString( "TestBoutonCasting" ), sclxdhtml::cHidden );
 }
 
 void main::Display( core::rSession &Session )

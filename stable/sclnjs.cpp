@@ -65,7 +65,7 @@ template <> void scln4::Get(
 	cCaller_ &Caller,
 	sclnjs::rString &String )
 {
-	Get_<n4njs::cUString>( Index, Caller, n4njs::tString_, String );
+	Get_<n4njs::cUString>( Index, Caller, n4njs::tString, String );
 }
 
 void scln4::Get(
@@ -91,6 +91,23 @@ template <> void scln4::Get(
 	sclnjs::rStrings &Strings )
 {
 	Get_<n4njs::cUStrings>( Index, Caller, n4njs::tStrings, Strings );
+}
+
+void scln4::Get(
+	int Index,
+	cCaller_ &Caller,
+	str::dStrings *Target )
+{
+qRH;
+	sclnjs::rStrings Strings;
+qRB;
+	Strings.Init();
+	Get( Index, Caller, Strings );
+
+	*Target = Strings.Callback().Get();
+qRR;
+qRT;
+qRE;
 }
 
 template <> void scln4::Get(
@@ -130,7 +147,7 @@ template <> void scln4::Get(
 	cCaller_ &Caller,
 	n4njs::cUCallback *&Callback )
 {
-	Callback = Get_<n4njs::cUCallback>( Index, Caller, n4njs::tCallback_ );
+	Callback = Get_<n4njs::cUCallback>( Index, Caller, n4njs::tCallback );
 }
 
 template <> void scln4::Get(
@@ -138,7 +155,7 @@ template <> void scln4::Get(
 	cCaller_ &Caller,
 	sclnjs::rCallback &Callback )
 {
-	Get_<n4njs::cUCallback>( Index, Caller, n4njs::tCallback_, Callback );
+	Get_<n4njs::cUCallback>( Index, Caller, n4njs::tCallback, Callback );
 }
 
 txf::text_oflow__ &operator <<(

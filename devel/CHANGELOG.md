@@ -1,12 +1,29 @@
 # *Epeios* changelog
 
+2017-12-09:
+- *Common*:
+  - **$**:  new *casting* handling (continued),
+- SCLXDHTML:
+  - **$**.
+
 2017-12-08:
 - *Common*:
-  - **$**: Unifying argument handling.
+  - **$1**: unifying argument handling,
+  - **$2**: new *casting* handling,
 - N4NJS:
-  - **$**.
+  - **$1**,
+- SCLN4A:
+  - **$1**,
 - SCLNJS:
-  - **$**.
+  - **$1**,
+- SCLXDHTML:
+  - **$2**.
+- XDHCMN:
+  - **$2**.
+- XDHDWS:
+  - **$2**.
+- XDHUJP:
+  - **$2**.
 
 2017-12-07:
 - *Common*:

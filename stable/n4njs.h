@@ -55,12 +55,12 @@ namespace n4njs {
 	{
 		tVoid,	// Only used to specify that the function does not return a value.
 		tInt,
-		tString_,
+		tString,
 		tStrings,
 		tObject,	// Generic object; sort of superclass.
 		tRStream,
 		tBuffer,
-		tCallback_,
+		tCallback,
 		tCallbacks,
 		t_amount,
 		t_Undefined

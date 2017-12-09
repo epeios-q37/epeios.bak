@@ -28,7 +28,7 @@ namespace xdhp {
 	SCLNJS_F( SetLayout );
 	SCLNJS_F( SetCasting );
 	SCLNJS_F( GetContent );
-	SCLNJS_F( SetContent );
+	SCLNJS_F( SetContents );
 }
 
 #endif

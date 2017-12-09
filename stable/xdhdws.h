@@ -104,12 +104,12 @@ namespace xdhdws {
 		{
 			C_().Process(xdhcmn::fSetContents, NULL, Ids.Internal()(), Contents.Internal()() );
 		}
-		void SetCasting(
+		void SetCasts(
 			const nstring___ &Id,
-			const nstring___ &XML,
-			const nstring___ &XSL )
+			const nstring___ &Tags,
+			const nstring___ &Casts )
 		{
-			C_().Process( xdhcmn::fSetCasting, NULL, Id.Internal()( ), XML.Internal()( ), XSL.Internal()( ) );
+			C_().Process( xdhcmn::fSetCasts, NULL, Id.Internal()( ), Tags.Internal()( ), Casts.Internal()() );
 		}
 		const char *GetProperty(
 			const nstring___ &Id,

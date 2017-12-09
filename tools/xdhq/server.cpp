@@ -123,13 +123,13 @@ void server::GetContent(
 	Flow.Dismiss();
 }
 
-void server::SetContent(
-	const str::dString &Id,
-	const str::dString &Content,
+void server::SetContents(
+	const str::dStrings &Ids,
+	const str::dStrings &Contents,
 	flw::sWFlow &Flow )
 {
 	prtcl::PutAnswer( prtcl::aSetContent_1, Flow );
-	prtcl::Put( Id, Flow );
-	prtcl::Put( Content, Flow );
+	prtcl::Put( Ids, Flow );
+	prtcl::Put( Contents, Flow );
 	Flow.Commit();
 }

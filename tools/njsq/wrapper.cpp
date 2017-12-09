@@ -314,7 +314,7 @@ namespace {
 					case n4njs::tInt:
 						Set_( Argv, (const int *)Argument.Value );
 						break;
-					case n4njs::tString_:
+					case n4njs::tString:
 						Set_( Argv, (const str::dString *)Argument.Value );
 						break;
 					case n4njs::tObject:
@@ -520,7 +520,7 @@ namespace {
 				qRGnr();
 
 			switch ( Type ) {
-			case n4njs::tString_:
+			case n4njs::tString:
 				( *( n4njs::cUString ** )Value ) = GetString_( Index, I_() );
 				break;
 			case n4njs::tStrings:
@@ -535,7 +535,7 @@ namespace {
 			case n4njs::tRStream:
 				( *(n4njs::cURStream **)Value ) = GetStream_( Index, I_() );
 				break;
-			case n4njs::tCallback_:
+			case n4njs::tCallback:
 				( *(n4njs::cUCallback **)Value ) = GetCallback_( Index, I_() );
 				break;
 			case n4njs::tCallbacks:
@@ -551,7 +551,7 @@ namespace {
 			const void *Value ) override
 		{
 			switch ( Type ) {
-			case n4njs::tString_:
+			case n4njs::tString:
 				SetReturnValue_( I_(), *( const str::dString * )Value );
 				break;
 			default:

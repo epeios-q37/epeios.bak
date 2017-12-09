@@ -309,62 +309,31 @@ static void SetContents_(
 	SetContents_( Callback, Ids, Contents );
 }
 
-static void HandleCasts_(
-	cJS &Callback,
-	const xdhcmn::digest_ &Digest )
-{
-qRH
-	str::strings Ids, Castings;
-	str::string IdsTag, CastingsTag;
-qRB
-	Ids.Init();
-	Castings.Init();
-	xdhutl::GetTags( Digest, Ids, Castings );
-
-	if ( Ids.Amount() ) {
-		tol::Init( IdsTag, CastingsTag );
-		xdhcmn::FlatMerge( Ids, IdsTag, true );
-		xdhcmn::FlatMerge( Castings, CastingsTag, true );
-
-		Execute( Callback, xdhujs::snCastsSetter_, NULL, nstring___( IdsTag ).Internal()(), nstring___( CastingsTag ).Internal()() );
-	}
-qRR
-qRT
-qRE
-}
-
-static void SetCasting_(
+static void SetCasts_(
 	cJS &Callback,
 	const nchar__ *Id,
-	const nchar__ *XML,
-	const nchar__ *XSL )
+	const nchar__ *Tags,
+	const nchar__ *Casts )
 {
 qRH
 	TOL_CBUFFER___ Result;
-	str::string RawDigests;
-	xdhcmn::digest Digest;
 qRB
-	RawDigests.Init( Execute( Callback, xdhujs::snCastsFetcher, &Result, Id, XML, XSL ) );
-
-	Digest.Init();
-	xdhcmn::Split( RawDigests, Digest );
-
-	HandleCasts_( Callback, Digest );
+	Execute( Callback, xdhujs::snCastsSetter, NULL, Id, Tags, Casts );
 qRR
 qRT
 qRE
 }
 
-static void SetCasting_(
+static void SetCasts_(
 	cJS &Callback,
 	va_list List )
 {
 	// NOTA : we use variables, because if we put 'va_arg()' directly as parameter to below function, it's not sure that they are called in the correct order.
 	const nchar__ *Id = va_arg( List, const nchar__ * );
-	const nchar__ *XML = va_arg( List, const nchar__ * );
-	const nchar__ *XSL = va_arg( List, const nchar__ * );
+	const nchar__ *Tags = va_arg( List, const nchar__ * );
+	const nchar__ *Casts = va_arg( List, const nchar__ * );
 
-	SetCasting_( Callback, Id, XML, XSL );
+	SetCasts_( Callback, Id, Tags, Casts );
 }
 
 static void GetValue_(
@@ -543,7 +512,7 @@ static script_name__ Convert_( xdhcmn::function__ Function )
 	case xdhcmn::fSetContents:
 		qRFwk();
 		break;
-	case xdhcmn::fSetCasting:
+	case xdhcmn::fSetCasts:
 		qRFwk();
 		break;
 	default:
@@ -594,8 +563,8 @@ void xdhujp::sProxyCallback::XDHCMNProcess(
 	case xdhcmn::fSetContents:
 		SetContents_( C_(), List);
 		break;
-	case xdhcmn::fSetCasting:
-		SetCasting_( C_(), List );
+	case xdhcmn::fSetCasts:
+		SetCasts_( C_(), List );
 		break;
 	default:
 		qRFwk();

@@ -442,8 +442,74 @@ qRT;
 qRE;
 }
 
+void sclxdhtml::SetCasts_(
+	const xdhdws::nstring___ &Id,
+	const dCasts &Casts,
+	xdhdws::sProxy &Proxy )
+{
+qRH;
+	str::wStrings Tags, Values;
+	sdr::sRow Row = qNIL;
+	str::wString MergedTags, MergedValues;
+qRB;
+	tol::Init( Tags, Values );
 
-qCDEF( char *, sclxdhtml::RootTagName_, "Root" );
+	Row = Casts.First();
+
+	while ( Row != qNIL ) {
+		MergedTags.Append( Casts( Row ).Tag );
+#pragma message( __LOC__ "Will not work, but curious on what append and why the compiler doensn't complain !")
+		MergedValues.Append( Casts( Row ).Value() );
+
+		Row = Casts.Next( Row );
+	}
+
+	MergedTags.Init();
+	xdhcmn::FlatMerge( Tags, MergedTags, true );
+
+	MergedValues.Init();
+	xdhcmn::FlatMerge( Values, MergedValues, true );
+
+	Proxy.SetCasts( Id, MergedTags, MergedValues );
+qRR;
+qRT;
+qRE;
+}
+
+void sclxdhtml::SetCast_(
+	const xdhdws::nstring___ &Id,
+	const dCast &Cast,
+	xdhdws::sProxy &Proxy )
+{
+qRH;
+	wCasts Casts;
+qRB;
+	Casts.Init();
+	Casts.Append( Cast );
+
+	SetCasts_( Id, Casts, Proxy );
+qRR;
+qRT;
+qRE;
+}
+
+void sclxdhtml::SetCast_(
+	const xdhdws::nstring___ &Id,
+	const str::dString &Tag,
+	eCast Value,
+	xdhdws::sProxy &Proxy )
+{
+qRH;
+	wCast Cast;
+qRB;
+	Cast.Init( Tag, Value );
+	SetCast_( Id, Cast, Proxy );
+qRR;
+qRT;
+qRE;
+}
+
+qCDEF( char *, sclxdhtml::RootTagId_, "Root" );
 
 void sclxdhtml::prolog::GetLayout(
 	sclfrntnd::rFrontend &Frontend,
@@ -466,16 +532,45 @@ qRE
 	return ProjectType;
 }
 
-void sclxdhtml::prolog::GetCasting(
+#define CAST( name )\
+	Cast.Init( #name "Cast", name );\
+	Casts.Append( Cast )
+
+void sclxdhtml::prolog::GetCasts(
 	sProxy &Proxy,
-	xml::writer_ &Writer)
+	dCasts &Casts )
 {
-	Writer.PushTag( "ProjectType ");
+qRH;
+	eCast NewProject = c_Undefined, PredefinedProject = c_Undefined, UserProject = c_Undefined;
+	wCast Cast;
+qRB;
+	switch ( GetProjectType_( Proxy ) ) {
+	case sclmisc::ptNew:
+		NewProject = cVanished;
+		PredefinedProject = cHidden;
+		UserProject = cHidden;
+	case sclmisc::ptPredefined:
+		NewProject = cPlain;
+		PredefinedProject = cPlain;
+		UserProject = cHidden;
+	case sclmisc::ptRemote:
+		NewProject = cPlain;
+		PredefinedProject = cHidden;
+		UserProject = cPlain;
+	default:
+		qRFwk();
+		break;
+	}
 
-	Writer.PutValue( sclmisc::GetLabel( GetProjectType_( Proxy ) ) );
-
-	Writer.PopTag();
+	CAST( NewProject );
+	CAST( PredefinedProject );
+	CAST( UserProject );
+qRR;
+qRT;
+qRE;
 }
+
+#undef CAST
 
 void sclxdhtml::prolog::DisplaySelectedProjectFilename(
 	sProxy &Proxy,
@@ -580,26 +675,66 @@ namespace {
 	}
 }
 
-void sclxdhtml::login::GetCasting(
+#define CAST( name )\
+	Cast.Init( #name "BackendCast", name );\
+	Casts.Append( Cast )
+
+void sclxdhtml::login::GetCasts(
 	sProxy &Proxy,
 	eBackendVisibility Visibility,
-	xml::writer_ &Writer )
+	dCasts &Casts )
 {
-qRH
+qRH;
 	str::wString Type;
-qRB
-	Writer.PushTag( "Backend" );
-
+	eCast
+		None = c_Undefined,
+		Straight = c_Undefined,
+		Embedded = c_Undefined,
+		Predefined = c_Undefined,
+		Visible = c_Undefined;
+	wCast Cast;
+qRB;
 	Type.Init();
-	Writer.PutAttribute( "Type", GetBackendType_( Proxy, Type ) );
 
-	Writer.PutAttribute( "Visibility", GetLabel( Visibility ) );
+	if ( Type == "None" ) {
+		None = cVanished;
+		Straight = cHidden;
+		Embedded = cHidden;
+		Predefined = cHidden;
+	} else if ( Type == "Straight" ) {
+		None = cPlain;
+		Straight = cPlain;
+		Embedded = cHidden;
+		Predefined = cHidden;
+	} else if ( Type == "Embedded" ) {
+		None = cPlain;
+		Straight = cHidden;
+		Embedded = cPlain;
+		Predefined = cHidden;
+	} else if ( Type == "Predefined" ) {
+		None = cPlain;
+		Straight = cHidden;
+		Embedded = cHidden;
+		Predefined = cPlain;
+	} else
+		qRFwk();
 
-	Writer.PopTag();
-qRR
-qRT
-qRE
+	if ( Visibility == bvShow )
+		Visible = cPlain;
+	else
+		Visible = cHidden;
+
+	CAST( None );
+	CAST( Straight );
+	CAST( Embedded );
+	CAST( Predefined );
+	CAST( Visible );
+qRR;
+qRT;
+qRE;
 }
+
+#undef CAST
 
 namespace straight_ {
 	namespace {

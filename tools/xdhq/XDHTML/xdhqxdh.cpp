@@ -144,13 +144,9 @@ namespace {
 		str::wString Id, Content;
 		str::wStrings Ids, Contents;
 	qRB;
-		tol::Init( Id, Content );
-		prtcl::Get( Flow, Id );
-		prtcl::Get( Flow, Content );
-
 		tol::Init( Ids, Contents );
-		Ids.Append( Id );
-		Contents.Append( Content );
+		prtcl::Get( Flow, Ids );
+		prtcl::Get( Flow, Contents );
 
 		tol::Init( Id, Content );
 

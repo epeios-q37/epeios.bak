@@ -60,7 +60,7 @@ namespace xdhujs {
 		snWidgetFocuser,
 		snWidgetSelector,
 		snEventHandlersSetter,
-		snCastsSetter_,
+		snCastsSetter,
 		snContentsSetter,
 		snWidgetsInstantiator,
 		sn_amount,

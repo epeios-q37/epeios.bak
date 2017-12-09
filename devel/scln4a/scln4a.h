@@ -46,7 +46,7 @@ namespace scln4 {
 		cCaller_ &Caller )
 	{}
 
-	// 'String' variants declared here, as it will be needed by all the 'sln4...' libraries.
+	// 'String(s)' variants declared here, as it will be needed by all the 'sln4...' libraries.
 	// Definition will be made in this libraries.
 	void Get(
 		int Index,
@@ -65,6 +65,27 @@ namespace scln4 {
 		int Index,
 		cCaller_ &Caller,
 		str::wString &Value )
+	{
+		return Get( Index, Caller, &Value );
+	}
+
+	void Get(
+		int Index,
+		cCaller_ &Caller,
+		str::dStrings *Value );
+
+	inline void Get(
+		int Index,
+		cCaller_ &Caller,
+		str::dStrings &Value )
+	{
+		return Get( Index, Caller, &Value );
+	}
+
+	inline void Get(
+		int Index,
+		cCaller_ &Caller,
+		str::wStrings &Value )
 	{
 		return Get( Index, Caller, &Value );
 	}

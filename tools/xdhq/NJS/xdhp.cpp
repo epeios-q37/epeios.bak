@@ -360,17 +360,17 @@ qRT;
 qRE;
 }
 
-SCLNJS_F( xdhp::SetContent )
+SCLNJS_F( xdhp::SetContents )
 {
 qRH;
-	str::wString Id, Content;
+	str::wStrings Ids, Contents;
 qRB;
 	RACK;
 
-	tol::Init( Id, Content );
-	Caller.GetArgument( Id, Content );
+	tol::Init( Ids, Contents );
+	Caller.GetArgument( Ids, Contents );
 
-	server::SetContent( Id, Content, Rack.Flow );
+	server::SetContents( Ids, Contents, Rack.Flow );
 qRR;
 qRT;
 qRE;

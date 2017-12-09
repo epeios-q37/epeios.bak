@@ -21,6 +21,7 @@
 # define SERVER_INC_
 
 # include "flw.h"
+# include "str.h"
 
 namespace server {
 	void Handshake(
@@ -44,9 +45,9 @@ namespace server {
 		flw::sRWFlow &Flow,
 		str::dString &Content );
 
-	void SetContent(
-		const str::dString &Id,
-		const str::dString &Content,
+	void SetContents(
+		const str::dStrings &Ids,
+		const str::dStrings &Contents,
 		flw::sWFlow &Flow );
 }
 

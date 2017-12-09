@@ -35,11 +35,84 @@ along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 # include "sclrgstry.h"
 # include "sclmisc.h"
 
+# include "crt.h"
 # include "err.h"
 
 # define SCLXDHTML_DEFAULT_SUFFIX "xdh"
 
 namespace sclxdhtml {
+	qENUM( Cast )
+	{
+		cPlain,
+		cDisabled,
+		cHidden,
+		cVanished,
+		cDraggable,
+		cUndraggable,
+		cDroppable,
+		cUndroppable,
+		cStill,
+		c_amount,
+		c_Undefined
+	};
+
+	class dCast {
+	public:
+		str::dString Tag;
+		struct s {
+			str::dString::s Tag;
+			eCast Value;
+		} &S_;
+		dCast( s &S )
+		: S_( S ),
+		  Tag( S.Tag )
+		{}
+		void reset( bool P = true )
+		{
+			Tag.reset( P );
+			S_.Value = c_Undefined;
+		}
+		void plug( str::sHook &Hook )
+		{
+			Tag.plug( Hook );
+		}
+		void plug( qASd *AS )
+		{
+			Tag.plug( AS );
+		}
+		dCast &operator =( const dCast &C )
+		{
+			Tag = C.Tag;
+			S_.Value = C.S_.Value;
+
+			return *this;
+		}
+		void Init( void )
+		{
+			Tag.Init();
+			S_.Value = c_Undefined;
+		}
+		void Init(
+			const str::dString &Tag,
+			eCast Value )
+		{
+			this->Tag.Init( Tag );
+			S_.Value = Value;
+		}
+		void Init(
+			const char *Tag,
+			eCast Value )
+		{
+			Init( str::wString( Tag ), Value );
+		}
+		qRODISCLOSEd( eCast, Value );
+	};
+
+	qW( Cast );
+
+	typedef crt::qMCRATEdl( dCast ) dCasts;
+	qW( Casts );
+
 	namespace registry {
 		using rgstry::rEntry;
 
@@ -136,7 +209,7 @@ namespace sclxdhtml {
 			cAction<session> *Callback = _Get( str::string( Action ) );
 
 			if ( Callback == NULL )
-				qRFwk();	// L'action affecte  un vnement n'existe pas. Contrler le fichier '.xsl'.
+				qRFwk();	// An event has no associated action. Check the'.xsl' file.
 
 			return Callback->Launch( Session, Id );
 		}
@@ -155,12 +228,12 @@ namespace sclxdhtml {
 	public:
 		void reset( bso::bool__ = true )
 		{
-			// Standardisation.
+			// Standardization.
 		}
 		E_CVDTOR( cActionHelper );
 		void Init( void )
 		{
-			// Standardisation.
+			// Standardization.
 		}
 		bso::bool__ OnBeforeAction(
 			session &Session,
@@ -257,7 +330,7 @@ namespace sclxdhtml {
 
 
 	class reporting_callback__
-		: public _reporting_callback__ {
+	: public _reporting_callback__ {
 	private:
 		Q37_MRMDF( sProxy, P_, Proxy_ );
 		Q37_MPMDF( const char, L_, Language_ );
@@ -299,12 +372,12 @@ namespace sclxdhtml {
 	qENUM( BackendVisibility )
 	{
 		bvHide,
-			bvShow,
-			bv_amount,
-			bv_Undefined
+		bvShow,
+		bv_amount,
+		bv_Undefined
 	};
 
-	extern const char *RootTagName_;
+	extern const char *RootTagId_;
 
 	typedef void( *fSet )( xdhdws::sProxy &Proxy, const xdhdws::nstring___ &Id, const xdhdws::nstring___ &XML, const xdhdws::nstring___ &XSL );
 
@@ -328,6 +401,21 @@ namespace sclxdhtml {
 		const str::dString &Content,
 		xdhdws::sProxy &Proxy );
 
+	void SetCasts_(
+		const xdhdws::nstring___ &Id,
+		const dCasts &Casts,
+		xdhdws::sProxy &Proxy );
+
+	void SetCast_(
+		const xdhdws::nstring___ &Id,
+		const dCast &Cast,
+		xdhdws::sProxy &Proxy );
+
+	void SetCast_(
+		const xdhdws::nstring___ &Id,
+		const str::dString &Tag,
+		eCast Value,
+		xdhdws::sProxy &Proxy );
 
 	template <typename session, typename rack> inline void SetElement_(
 		const xdhdws::nstring___ &Id,
@@ -352,7 +440,8 @@ namespace sclxdhtml {
 	qRE;
 	}
 
-	template <typename session, typename dump> class rRack_ {
+	template <typename session, typename dump> class rRack_
+	{
 	private:
 		str::wString Target_;
 		mutable flx::E_STRING_TOFLOW___ _Flow;
@@ -441,48 +530,7 @@ namespace sclxdhtml {
 		session &Session,
 		bso::char__ Marker = '#' )
 	{
-		SetElementLayout<session, dump>( RootTagName_, Target, Get, Registry, Session, Marker );
-	}
-
-	template <typename session, typename dump> class rCastingRack
-		: public rRack_<session, dump> {
-	public:
-		void Init(
-			const char *View,
-			session &Session )
-		{
-			rRack_<session, dump>::Init( View, "Casting", Session );
-		}
-	};
-
-	inline void SetCasting_(
-		xdhdws::sProxy &Proxy,
-		const xdhcmn::nstring___ &Id,
-		const xdhcmn::nstring___ &XML,
-		const xdhcmn::nstring___ &XSL ) // Not used !
-	{
-		Proxy.SetCasting( Id, XML, XSL );
-	}
-
-	template <typename session, typename dump> inline void SetElementCasting(
-		const xdhdws::nstring___ &Id,
-		const char *Target,
-		void( *Get )( session &Session, xml::dWriter &Writer ),
-		const sclrgstry::registry_ &Registry,
-		session &Session,
-		bso::char__ Marker = '#' )
-	{
-		SetElement_<session, rCastingRack<session, dump>>( Id, Target, registry::definition::XSLCastingFile, Get, SetCasting_, Registry, Session, Marker );
-	}
-
-	template <typename session, typename dump> inline void SetDocumentCasting(
-		const char *Target,
-		void( *Get )( session &Session, xml::dWriter &Writer ),
-		const sclrgstry::registry_ &Registry,
-		session &Session,
-		bso::char__ Marker = '#' )
-	{
-		SetElementCasting<session, dump>( RootTagName_, Target, Get, Registry, Session, Marker );
+		SetElementLayout<session, dump>( RootTagId_, Target, Get, Registry, Session, Marker );
 	}
 
 	template <typename session> class rCore;
@@ -514,6 +562,7 @@ namespace sclxdhtml {
 			Page_ = UndefinedPage;
 			_ReportingCallback.reset( P );
 			BackendVisibility_ = bv_Undefined;
+			sProxy::reset();
 			Core_ = NULL;
 		}
 		qCVDTOR( rSession )
@@ -650,33 +699,38 @@ namespace sclxdhtml {
 		{
 			sclxdhtml::SetContent_( str::wString( Id ), Content, *this );
 		}
-		void SetElementCasting(
+		void SetElementCasts(
 			const xdhdws::nstring___ &Id,
-			const char *Target,
-			void( *Get )( rSession &Session, xml::dWriter &Writer ),
-			const sclrgstry::dRegistry &Registry )
+			const dCasts &Casts )
 		{
-			sclxdhtml::SetElementCasting<rSession, dump>( Id, Target, Get, Registry, *this );
+			sclxdhtml::SetCasts_( Id, Casts, *this );
 		}
-		void SetElementCasting(
+		void SetElementCast(
 			const xdhdws::nstring___ &Id,
-			const char *Target,
-			void( *Get )( rSession &Session, xml::dWriter &Writer ) )
+			const dCast &Cast )
 		{
-			SetElementCasting( Id, Target, Get, frontend::Registry() );
+			sclxdhtml::SetCasts_( Id, Cast, *this );
 		}
-		inline void SetDocumentCasting(
-			const char *Target,
-			void( *Get )( rSession &Session, xml::dWriter &Writer ),
-			const sclrgstry::dRegistry &Registry )
+		void SetElementCast(
+			const xdhdws::nstring___ &Id,
+			const str::dString &Tag,
+			eCast Value )
 		{
-			sclxdhtml::SetDocumentCasting<rSession, dump>( Target, Get, Registry, *this );
+			sclxdhtml::SetCasts_( Id, Tag, Value, *this );
 		}
-		void SetDocumentCasting(
-			const char *Target,
-			void( *Get )( rSession &Session, xml::dWriter &Writer ) )
+		void SetDocumentCasts( const dCasts &Casts )
 		{
-			SetDocumentCasting( Target, Get, frontend::Registry() );
+			sclxdhtml::SetCasts_( RootTagId_, Casts, *this );
+		}
+		void SetDocumentCast( const dCast &Cast )
+		{
+			sclxdhtml::SetCasts_( RootTagId_, Cast, *this );
+		}
+		void SetDocumentCast(
+			const str::dString &Tag,
+			eCast Value )
+		{
+			sclxdhtml::SetCast_( RootTagId_, Tag, Value, *this );
 		}
 	};
 
@@ -790,9 +844,9 @@ namespace sclxdhtml {
 			sclfrntnd::rFrontend &Frontend,
 			xml::writer_ &Writer );
 
-		void GetCasting(
+		void GetCasts(
 			sProxy &Proxy,
-			xml::writer_ &Writer );
+			dCasts &Casts );
 
 		void DisplaySelectedProjectFilename(
 			sProxy &Proxy,
@@ -817,10 +871,10 @@ namespace sclxdhtml {
 			sclfrntnd::rFrontend &Frontend,
 			xml::writer_ &Writer );
 
-		void GetCasting(
+		void GetCasts(
 			sProxy &Proxy,
 			eBackendVisibility Visibility,
-			xml::writer_ &Writer );
+			dCasts &Casts );
 
 		void GetBackendFeatures(
 			sProxy &Proxy,

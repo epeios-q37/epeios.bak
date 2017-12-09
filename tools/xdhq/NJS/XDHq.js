@@ -73,6 +73,32 @@ class CastingTree extends Tree {
 	}
 }
 
+function pushIdAndItem(idAndItem, itemType, ids, items) {
+	if ((idAndItem instanceof Array) && (idAndItem.length === 2) && (typeof idAndItem[0] === "string") && (typeof idAndItem[1] === itemType)) {
+		ids.push(idAndItem[0]);
+		items.push(idAndItem[1]);
+	} else
+		throw ("Error in parameters.");
+}
+
+function pushIdsAndItems(idsAndItems, itemType, ids, items) {
+	var length = idsAndItems.length;
+
+	while (length--) {
+		pushIdAndItem(idsAndItems[length], itemType, ids, items);
+	}
+}
+
+function callWrapperWithIdsAndItems(idOrIdsAndItems, item, itemType, ids, items) {
+	if ((typeof idOrIdsAndItems === "string") && (typeof item === itemType)) {
+		ids.push(idOrIdsAndItems);
+		items.push(item);
+	} else if ((idOrIdsAndItems instanceof Array) && (typeof item === "undefined")) {
+		pushIdsAndItems(idOrIdsAndItems, itemType, ids, items);	// Mixed array not implemented yet.
+	} else
+		throw ("Error in parameters.");
+}
+
 class XDH {
 	set(fid, tree, xslFilename, id) {
 		if ( !id )
@@ -89,46 +115,17 @@ class XDH {
 	getContent(id) {
 		return njsq._wrapper(11, this, id);
 	}
-	setContent(id, content) {
-		return njsq._wrapper(12, this, id, content);
+	setContent(idOrIdsAndContents, content) {
+		var ids = new Array();
+		var contents = new Array();
+
+		callWrapperWithIdsAndItems(idOrIdsAndContents, content, "string", ids, contents);
+
+		return njsq._wrapper(12, this, ids, contents);
 	}
 }
 
-function isFunction(functionToCheck) {
-	var getType = {};
-	return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
-}
-
-function pushIdAndItem( idAndItem, itemType, ids, items ) {
-	if ( ( idAndItem instanceof Array ) && ( idAndItem.length === 2 ) && ( typeof idAndItem[0] === "string" ) && ( typeof idAndItem[1] === itemType ) ) {
-		ids.push( idAndItem[0] );
-		items.push( idAndItem[1] );
-	} else
-		throw( "Error in parameters.");
-}
-
-function pushIdsAndItems( idsAndItems, itemType, ids, items )
-{
-	var length = idsAndItems.length;
-
-	while (length--) {
-		pushIdAndItem( idsAndItems[length], itemType, ids , items );
-	}
-}
-
-function callWrapperWithIdsAndItems( idOrIdsAndItems, item, itemType, ids, items )
-{
-	if ((typeof idOrIdsAndItems === "string") && (typeof item === itemType)) {
-		ids.push(idOrIdsAndItems);
-		items.push( item );
-	} else if ((idOrIdsAndItems instanceof Array) && (typeof item === "undefined")) {
-		pushIdsAndItems(idOrIdsAndItems, itemType, ids, items);	// Mixed array not implemented yet.
-	} else
-		throw( "Error in parameters.");
-}
-
-function register( idOrIdsAndItems, item )
-{
+function register(idOrIdsAndItems, item) {
 	var tags = new Array();
 	var callbacks = new Array();
 
@@ -136,7 +133,6 @@ function register( idOrIdsAndItems, item )
 
 	njsq._wrapper(7, tags, callbacks);
 }
-
 
 module.exports.returnArgument = (text) => { return njsq._wrapper(0, text); };
 module.exports.LayoutTree = LayoutTree;

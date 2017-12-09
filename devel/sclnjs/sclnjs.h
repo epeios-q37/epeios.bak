@@ -152,7 +152,7 @@ namespace sclnjs {
 		n4njs::dArguments &Arguments,
 		const str::dString &String )
 	{
-		TestAndAdd_( Arguments, n4njs::tString_, &String );
+		TestAndAdd_( Arguments, n4njs::tString, &String );
 	}
 
 	inline void TestAndAdd_(
@@ -337,7 +337,7 @@ namespace sclnjs {
 		}
 		void SetReturnValue( const str::dString &Value )
 		{
-			C_().SetReturnValue( n4njs::tString_, &Value );
+			C_().SetReturnValue( n4njs::tString, &Value );
 		}
 	};
 

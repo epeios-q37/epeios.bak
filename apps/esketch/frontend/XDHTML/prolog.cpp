@@ -38,15 +38,6 @@ namespace {
 			sclxdhtml::prolog::GetLayout( Session, Writer );
 		}
 	}
-
-	namespace casting_ {
-		void Get(
-			core::rSession &Session,
-			xml::dWriter &Writer )
-		{
-			sclxdhtml::prolog::GetCasting( Session, Writer );
-		}
-	}
 }
 
 void prolog::SetLayout( core::rSession &Session )
@@ -56,7 +47,16 @@ void prolog::SetLayout( core::rSession &Session )
 
 void prolog::SetCasting( core::rSession &Session )
 {
-	Session.SetDocumentCasting( XSLAffix_, casting_::Get );
+qRH;
+	sclxdhtml::wCasts Casts;
+qRB;
+	Casts.Init();
+	sclxdhtml::prolog::GetCasts( Session, Casts );
+
+	Session.SetDocumentCasts( Casts );
+qRR;
+qRT;
+qRE;
 }
 
 void prolog::Display( core::rSession &Session )

@@ -80,7 +80,7 @@ namespace xdhcmn {
 		fSetLayout,			// Id, XML, XSL.
 		fSetContents,		// Ids, Contents.
 		fSetWidgets,		// Id.
-		fSetCasting,		// Id, XML, XSL.
+		fSetCasts,			// Ids, Casts.
 		fSetProperty,		// Id, Name, Value.
 		fGetProperty,		// Id, Name.
 		fSetAttribute,		// Id, Name, Value.

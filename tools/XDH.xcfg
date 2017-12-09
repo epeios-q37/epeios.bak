@@ -166,10 +166,6 @@
 				<Casts>
      <![CDATA[
 					log( "Casting :: '%Id%'" );
-					log( "coucuo" );
-					log( "%XML%" );
-					removeCastingChildren( document );
-					document.getElementById( "xdh-casting" ).appendChild( transformToFragment( "%XML%", "%XSL%" ) );
 					var digest = fetchCasts( "%Id%" );
 					digest;
 				]]>
