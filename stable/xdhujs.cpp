@@ -174,7 +174,7 @@ qRB
 	S( PropertyGetter, Id_, Name_, NULL );
 	S( EventsFetcher, Id_, XML_, XSL_, NULL );
 	S( WidgetsFetcher, Id_, NULL );
-	S( CastsFetcher, Id_, XML_, XSL_, NULL );
+	S( CastsFetcher, Id_, NULL );
 	S( ValueSetter, Id_, Value_, NULL );
 	S( ValueGetter, Id_, NULL );
 	S( WidgetValueRetriever, Id_, Method_, NULL );

@@ -41,76 +41,58 @@ along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 # define SCLXDHTML_DEFAULT_SUFFIX "xdh"
 
 namespace sclxdhtml {
-	qENUM( Cast )
-	{
-		cPlain,
-		cDisabled,
-		cHidden,
-		cVanished,
-		cDraggable,
-		cUndraggable,
-		cDroppable,
-		cUndroppable,
-		cStill,
-		c_amount,
-		c_Undefined
-	};
-
 	class dCast {
 	public:
-		str::dString Tag;
+		str::dString
+			Tag,
+			Value;
 		struct s {
-			str::dString::s Tag;
-			eCast Value;
+			str::dString::s
+				Tag,
+				Value;
 		} &S_;
 		dCast( s &S )
 		: S_( S ),
-		  Tag( S.Tag )
+		  Tag( S.Tag ),
+		  Value( S.Value )
 		{}
 		void reset( bool P = true )
 		{
-			Tag.reset( P );
-			S_.Value = c_Undefined;
-		}
-		void plug( str::sHook &Hook )
-		{
-			Tag.plug( Hook );
+			tol::reset( P, Tag, Value );
 		}
 		void plug( qASd *AS )
 		{
-			Tag.plug( AS );
+			tol::plug( AS, Tag, Value );
 		}
 		dCast &operator =( const dCast &C )
 		{
 			Tag = C.Tag;
-			S_.Value = C.S_.Value;
+			Value = C.Value;
 
 			return *this;
 		}
 		void Init( void )
 		{
-			Tag.Init();
-			S_.Value = c_Undefined;
+			tol::Init( Tag, Value );
 		}
 		void Init(
 			const str::dString &Tag,
-			eCast Value )
+			const str::dString &Value )
 		{
 			this->Tag.Init( Tag );
-			S_.Value = Value;
+			this->Value.Init( Value );
 		}
 		void Init(
 			const char *Tag,
-			eCast Value )
+			const char *Value )
 		{
-			Init( str::wString( Tag ), Value );
+			Init( str::wString( Tag ), str::wString( Value ) );
 		}
-		qRODISCLOSEd( eCast, Value );
 	};
 
 	qW( Cast );
 
-	typedef crt::qMCRATEdl( dCast ) dCasts;
+	typedef crt::qCRATEdl( dCast ) dCasts;
 	qW( Casts );
 
 	namespace registry {
@@ -414,8 +396,17 @@ namespace sclxdhtml {
 	void SetCast_(
 		const xdhdws::nstring___ &Id,
 		const str::dString &Tag,
-		eCast Value,
+		const str::dString &Value,
 		xdhdws::sProxy &Proxy );
+
+	inline void SetCast_(
+		const xdhdws::nstring___ &Id,
+		const char *Tag,
+		const char *Value,
+		xdhdws::sProxy &Proxy )
+	{
+		return SetCast_( Id, str::wString( Tag ), str::wString( Value ), Proxy );
+	}
 
 	template <typename session, typename rack> inline void SetElement_(
 		const xdhdws::nstring___ &Id,
@@ -714,7 +705,14 @@ namespace sclxdhtml {
 		void SetElementCast(
 			const xdhdws::nstring___ &Id,
 			const str::dString &Tag,
-			eCast Value )
+			const str::dString &Value )
+		{
+			sclxdhtml::SetCasts_( Id, Tag, Value, *this );
+		}
+		void SetElementCast(
+			const xdhdws::nstring___ &Id,
+			const char *Tag,
+			const char *Value )
 		{
 			sclxdhtml::SetCasts_( Id, Tag, Value, *this );
 		}
@@ -728,7 +726,13 @@ namespace sclxdhtml {
 		}
 		void SetDocumentCast(
 			const str::dString &Tag,
-			eCast Value )
+			const str::dString &Value )
+		{
+			sclxdhtml::SetCast_( RootTagId_, Tag, Value, *this );
+		}
+		void SetDocumentCast(
+			const char *Tag,
+			const char *Value )
 		{
 			sclxdhtml::SetCast_( RootTagId_, Tag, Value, *this );
 		}

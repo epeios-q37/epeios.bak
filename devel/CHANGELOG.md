@@ -1,12 +1,22 @@
 # *Epeios* changelog
 
+2017-12-10:
+- *Common*:
+  - **$1**: fixing some bugs following the development of below new features,
+- SCLXDHTML:
+  - **$1**,
+- XDHUJP:
+  - **$1**,
+- XDHUJS:
+  - **$1**,
+
 2017-12-09:
 - *Common*:
   - **$**:  new *casting* handling (continued),
 - SCLXDHTML:
-  - **$**.
+  - **$**,
 - XDHUJP:
-  - **$**.
+  - **$**,
 
 2017-12-08:
 - *Common*:

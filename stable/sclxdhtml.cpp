@@ -457,15 +457,14 @@ qRB;
 	Row = Casts.First();
 
 	while ( Row != qNIL ) {
-		MergedTags.Append( Casts( Row ).Tag );
-#pragma message( __LOC__ "Will not work, but curious on what happend and why the compiler doensn't complain !")
-		MergedValues.Append( Casts( Row ).Value() );
+		Tags.Append( Casts( Row ).Tag );
+		Values.Append( Casts( Row ).Value );
 
 		Row = Casts.Next( Row );
 	}
 
 	MergedTags.Init();
-	xdhcmn::FlatMerge( Tags, MergedTags, true );
+	xdhcmn::FlatMerge( Tags, MergedTags, false );
 
 	MergedValues.Init();
 	xdhcmn::FlatMerge( Values, MergedValues, true );
@@ -496,7 +495,7 @@ qRE;
 void sclxdhtml::SetCast_(
 	const xdhdws::nstring___ &Id,
 	const str::dString &Tag,
-	eCast Value,
+	const str::dString &Value,
 	xdhdws::sProxy &Proxy )
 {
 qRH;
@@ -533,7 +532,7 @@ qRE
 }
 
 #define CAST( name )\
-	Cast.Init( #name "Cast", name );\
+	Cast.Init( str::wString( #name "Cast" ), name );\
 	Casts.Append( Cast )
 
 void sclxdhtml::prolog::GetCasts(
@@ -541,22 +540,26 @@ void sclxdhtml::prolog::GetCasts(
 	dCasts &Casts )
 {
 qRH;
-	eCast NewProject = c_Undefined, PredefinedProject = c_Undefined, UserProject = c_Undefined;
+	str::wString NewProject, PredefinedProject, UserProject;
 	wCast Cast;
 qRB;
+tol::Init( NewProject, PredefinedProject, UserProject );
+
 	switch ( GetProjectType_( Proxy ) ) {
 	case sclmisc::ptNew:
-		NewProject = cVanished;
-		PredefinedProject = cHidden;
-		UserProject = cHidden;
+		NewProject = "Vanished";
+		PredefinedProject = "Hidden";
+		UserProject = "Hidden";
 	case sclmisc::ptPredefined:
-		NewProject = cPlain;
-		PredefinedProject = cPlain;
-		UserProject = cHidden;
+		NewProject = "Plain";
+		PredefinedProject = "Plain";
+		UserProject = "Hidden";
 	case sclmisc::ptRemote:
-		NewProject = cPlain;
-		PredefinedProject = cHidden;
-		UserProject = cPlain;
+		NewProject = "Plain";
+		PredefinedProject = "Hidden";
+		UserProject = "Plain";
+	case sclmisc::ptEmbedded:
+		break;
 	default:
 		qRFwk();
 		break;
@@ -676,7 +679,7 @@ namespace {
 }
 
 #define CAST( name )\
-	Cast.Init( #name "BackendCast", name );\
+	Cast.Init( str::wString( #name "BackendCast" ), name );\
 	Casts.Append( Cast )
 
 void sclxdhtml::login::GetCasts(
@@ -686,43 +689,40 @@ void sclxdhtml::login::GetCasts(
 {
 qRH;
 	str::wString Type;
-	eCast
-		None = c_Undefined,
-		Straight = c_Undefined,
-		Embedded = c_Undefined,
-		Predefined = c_Undefined,
-		Visible = c_Undefined;
+	str::wString None, Straight, Embedded, Predefined, Visible;
 	wCast Cast;
 qRB;
-	Type.Init();
+	tol::Init( Type, None, Straight, Embedded, Predefined, Visible );
+
+	GetBackendType_( Proxy, Type );
 
 	if ( Type == "None" ) {
-		None = cVanished;
-		Straight = cHidden;
-		Embedded = cHidden;
-		Predefined = cHidden;
+		None = "Vanished";
+		Straight = "Hidden";
+		Embedded = "Hidden";
+		Predefined = "Hidden";
 	} else if ( Type == "Straight" ) {
-		None = cPlain;
-		Straight = cPlain;
-		Embedded = cHidden;
-		Predefined = cHidden;
+		None = "Plain";
+		Straight = "Plain";
+		Embedded = "Hidden";
+		Predefined = "Hidden";
 	} else if ( Type == "Embedded" ) {
-		None = cPlain;
-		Straight = cHidden;
-		Embedded = cPlain;
-		Predefined = cHidden;
+		None = "Plain";
+		Straight = "Hidden";
+		Embedded = "Plain";
+		Predefined = "Hidden";
 	} else if ( Type == "Predefined" ) {
-		None = cPlain;
-		Straight = cHidden;
-		Embedded = cHidden;
-		Predefined = cPlain;
+		None = "Plain";
+		Straight = "Hidden";
+		Embedded = "Hidden";
+		Predefined = "Plain";
 	} else
 		qRFwk();
 
 	if ( Visibility == bvShow )
-		Visible = cPlain;
+		Visible = "Plain";
 	else
-		Visible = cHidden;
+		Visible = "Hidden";
 
 	CAST( None );
 	CAST( Straight );

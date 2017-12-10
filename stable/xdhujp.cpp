@@ -314,7 +314,7 @@ namespace{
 		// TODO: to optimize.
 		sdr::sRow Find_(
 			const str::dString &Tag,
-			const str::dStrings Tags )
+			const str::dStrings &Tags )
 		{
 			sdr::sRow Row = str::Search( Tag, Tags );
 
@@ -356,6 +356,8 @@ namespace{
 			GetId_( Ids, Tags, SourceTags( Row ), TargetId );
 
 			TargetIds.Append( TargetId );
+
+			Row = SourceTags.Next( Row );
 		}
 	qRR;
 	qRT;
@@ -368,7 +370,7 @@ namespace{
 		str::dString &MergedIds )
 	{
 	qRH;
-	str::wStrings Tags, Ids;
+		str::wStrings Tags, Ids;
 	qRB;
 		Tags.Init();
 		xdhcmn::FlatSplit( MergedTags, Tags );
@@ -401,12 +403,13 @@ qRB
 	Digest.Init();
 	xdhcmn::Split( RawDigest, Digest );
 
+	Tags.Init();
 	nstring___( RawTags ).UTF8( Tags );
 
 	Ids.Init();
 	MatchTagsWithIds_( Digest, Tags, Ids );
 
-	Execute( Callback, xdhujs::snCastsSetter, NULL, Id, nstring___( Ids ).Internal()(), Casts );
+	Execute( Callback, xdhujs::snCastsSetter, NULL, nstring___( Ids ).Internal()(), Casts );
 qRR
 qRT
 qRE

@@ -53,9 +53,9 @@ void main::SetLayout( core::rSession &Session )
 void main::SetCasting( core::rSession &Session )
 {
 	if ( Session.User.TestButtonIsVisible() )
-		Session.SetDocumentCast( str::wString( "TestBoutonCasting" ), sclxdhtml::cPlain );
+		Session.SetDocumentCast( "TestButtonCasting", "Plain" );
 	else
-		Session.SetDocumentCast( str::wString( "TestBoutonCasting" ), sclxdhtml::cHidden );
+		Session.SetDocumentCast( "TestButtonCasting", "Hidden" );
 }
 
 void main::Display( core::rSession &Session )

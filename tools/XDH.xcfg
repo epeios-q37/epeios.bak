@@ -179,6 +179,7 @@
     </EventHandlers>
     <Casts>
      <![CDATA[
+					console.log( "%Ids% : %Casts%" );
 					setCasts( %Ids_%, %Casts_% );
 				]]>
     </Casts>
