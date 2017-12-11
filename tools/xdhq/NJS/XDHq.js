@@ -110,8 +110,13 @@ class XDH {
 	setLayout(tree, xslFilename, id) {
 		this.set(9, tree, xslFilename, id);
 	}
-	getContent(id) {
-		return njsq._wrapper(10, this, id);
+	getContents(idOrIds) {
+		if (typeof idOrIds === "string")
+			return njsq._wrapper(10, this, new Array( idOrIds ) )[0];
+		else if ( idOrIds instanceof Array )
+			return njsq._wrapper(10, this, idOrIds );
+		else
+			throw "Bad argument !";
 	}
 	setContent(idOrIdsAndContents, content) {
 		var ids = new Array();

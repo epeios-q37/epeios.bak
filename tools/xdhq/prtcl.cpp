@@ -91,8 +91,8 @@ const char *prtcl::GetLabel( eAnswer Answer )
 		C( OK_1 );
 		C( Error_1 );
 		C( SetLayout_1 );
-		C( GetContent_1 );
-		C( SetContent_1 );
+		C( GetContents_1 );
+		C( SetContents_1 );
 		C( SetCasts_1 );
 	default:
 		qRFwk();

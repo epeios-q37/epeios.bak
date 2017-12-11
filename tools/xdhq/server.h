@@ -39,10 +39,10 @@ namespace server {
 
 	void SetLayout( SERVER_SETP_ );
 
-	void GetContent(
-		const str::dString &Id,
+	void GetContents(
+		const str::dStrings &Ids,
 		flw::sRWFlow &Flow,
-		str::dString &Content );
+		str::dStrings &Contents );
 
 	void SetContents(
 		const str::dStrings &Ids,

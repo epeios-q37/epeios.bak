@@ -503,6 +503,13 @@ void SetReturnValue_(
 	Info.GetReturnValue().Set( String.Core() );
 }
 
+void SetReturnValue_(
+	const v8::FunctionCallbackInfo<v8::Value> &Info,
+	const str::dStrings &Values )
+{
+	Info.GetReturnValue().Set( v8q::ToArray( Values ) );
+}
+
 namespace {
 	class sCaller_
 	: public cCaller_ {
@@ -553,6 +560,9 @@ namespace {
 			switch ( Type ) {
 			case n4njs::tString:
 				SetReturnValue_( I_(), *( const str::dString * )Value );
+				break;
+			case n4njs::tStrings:
+				SetReturnValue_( I_(), *( const str::dStrings * )Value );
 				break;
 			default:
 				qRGnr();

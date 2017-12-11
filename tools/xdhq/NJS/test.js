@@ -49,7 +49,7 @@ function callback() {
 function connect( xdh, id ) {
 	var tree = new xdhq.LayoutTree();
 
-	xdh.setLayout(tree, "../XSL/MainLayout.xsl");
+	xdh.setLayout(tree, "../XSL/Main.xsl");
 	handleTestButton(xdh, false);
 }
 
@@ -66,7 +66,7 @@ function showTestButton(xdh, id) {
 }
 
 function submission(xdh, id) {
-	xdh.setContent( "Pattern", xdh.getContent( "Pattern" ).toUpperCase() );
+	xdh.setContent( "Pattern", xdh.getContents( "Pattern" ).toUpperCase() );
 }
 
 function main()

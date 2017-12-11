@@ -97,27 +97,53 @@ namespace {
 	qRE;
 	}
 
-	void GetContent_(
+	namespace {
+		void GetContents_(
+			const str::dStrings &Ids,
+			xdhdws::sProxy &Proxy,
+			str::dStrings &Contents )
+		{
+		qRH;
+			str::wString Content;
+			sdr::sRow Row = qNIL;
+		qRB;
+			Row = Ids.First();
+
+			while ( Row != qNIL ) {
+				Content.Init();
+				Proxy.GetValue( Ids( Row ), Content );
+
+				Contents.Append( Content );
+
+				Row = Ids.Next( Row );
+			}
+		qRR;
+		qRT;
+		qRE;
+		}
+	}
+
+	void GetContents_(
 		flw::sRWFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 	qRH;
-		str::wString Id, Content;
+		str::wStrings Ids, Contents;
 	qRB;
-		Id.Init();
-		prtcl::Get( Flow, Id );
+		Ids.Init();
+		prtcl::Get( Flow, Ids );
 
-		Content.Init();
-		Proxy.GetValue( Id, Content );
+		Contents.Init();
+		GetContents_( Ids, Proxy, Contents );
 
-		prtcl::Put( Content, Flow );
+		prtcl::Put( Contents, Flow );
 		Flow.Commit();
 	qRR;
 	qRT;
 	qRE;
 	}
 
-	void SetContent_(
+	void SetContents_(
 		flw::sRFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
@@ -205,11 +231,11 @@ namespace {
 				case prtcl::aSetLayout_1:
 					SetLayout_( Client_, *this );
 					break;
-				case prtcl::aGetContent_1:
-					GetContent_( Client_, *this );
+				case prtcl::aGetContents_1:
+					GetContents_( Client_, *this );
 					break;
-				case prtcl::aSetContent_1:
-					SetContent_( Client_, *this );
+				case prtcl::aSetContents_1:
+					SetContents_( Client_, *this );
 					break;
 				case prtcl::aSetCasts_1:
 					SetCasts_( Client_, *this );

@@ -335,20 +335,20 @@ SCLNJS_F( xdhp::SetLayout )
 	SetElement_( server::SetLayout, Caller, Rack.Language, Rack.Flow );
 }
 
-SCLNJS_F( xdhp::GetContent )
+SCLNJS_F( xdhp::GetContents )
 {
 qRH;
-	str::wString Id, Content;
+	str::wStrings Ids, Contents;
 qRB;
 	RACK;
 
-	Id.Init();
-	Caller.GetArgument( Id );
+	Ids.Init();
+	Caller.GetArgument( Ids );
 
-	Content.Init();
-	server::GetContent( Id, Rack.Flow, Content );
+	Contents.Init();
+	server::GetContents( Ids, Rack.Flow, Contents );
 
-	Caller.SetReturnValue( Content );
+	Caller.SetReturnValue( Contents );
 qRR;
 qRT;
 qRE;

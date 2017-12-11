@@ -100,16 +100,16 @@ void server::SetLayout(
 	Set_( prtcl::aSetLayout_1, Id, XML, XSLFilename, Language, Flow );
 }
 
-void server::GetContent(
-	const str::dString &Id,
+void server::GetContents(
+	const str::dStrings &Ids,
 	flw::sRWFlow &Flow,
-	str::dString &Content )
+	str::dStrings &Contents )
 {
-	prtcl::PutAnswer( prtcl::aGetContent_1, Flow );
-	prtcl::Put( Id, Flow );
+	prtcl::PutAnswer( prtcl::aGetContents_1, Flow );
+	prtcl::Put( Ids, Flow );
 	Flow.Commit();
 
-	prtcl::Get( Flow, Content );
+	prtcl::Get( Flow, Contents );
 	Flow.Dismiss();
 }
 
@@ -118,7 +118,7 @@ void server::SetContents(
 	const str::dStrings &Contents,
 	flw::sWFlow &Flow )
 {
-	prtcl::PutAnswer( prtcl::aSetContent_1, Flow );
+	prtcl::PutAnswer( prtcl::aSetContents_1, Flow );
 	prtcl::Put( Ids, Flow );
 	prtcl::Put( Contents, Flow );
 	Flow.Commit();

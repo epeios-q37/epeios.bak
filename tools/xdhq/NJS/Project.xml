@@ -48,9 +48,8 @@
 		<!-- NOTA : '*.js' files will automatically be packed. -->
 		<!--File Pack="No">XDHq.js</File-->
 		<Files Group="XSL" Path="../XSL/">
-			<File>MainCasting.xsl</File>
-			<File>MainLayout.xsl</File>
-			<File>MainLocale.xml</File>
+			<File>Main.xsl</File>
+			<File>Main.xml</File>
 		</Files>
 	</Files>
 	<PreprocessorDefinitions>

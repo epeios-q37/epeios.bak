@@ -5,6 +5,8 @@
   - **$**: finalization of below new features (continued),
 - SCLXDHTML:
   - **$**,
+- V8Q:
+  - Implementing `ToArray(...)`.
 - XDHUJP:
   - **$**,
 

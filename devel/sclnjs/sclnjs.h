@@ -339,6 +339,10 @@ namespace sclnjs {
 		{
 			C_().SetReturnValue( n4njs::tString, &Value );
 		}
+		void SetReturnValue( const str::dStrings &Values )
+		{
+			C_().SetReturnValue( n4njs::tStrings, &Values );
+		}
 	};
 
 	typedef void ( fFunction )( sCaller &Caller );

@@ -51,6 +51,11 @@ namespace v8q {
 			return Isolate;
 	}
 
+	inline v8::Local<v8::Context> GetContext( v8::Isolate *Isolate = NULL )
+	{
+		return GetIsolate( Isolate )->GetCurrentContext();
+	}
+
 	inline v8::Local<v8::String> ToString(
 		const char *String,
 		v8::Isolate *Isolate = NULL )
@@ -71,6 +76,24 @@ namespace v8q {
 	qRT
 	qRE
 		return Result;
+	}
+
+	inline v8::Local<v8::Array> ToArray(
+		const str::dStrings &Strings,
+		v8::Isolate *Isolate = NULL )
+	{
+		sdr::sRow Row = Strings.First();
+		Isolate = GetIsolate( Isolate );
+
+		v8::Local<v8::Array> Array = v8::Array::New( Isolate, Strings.Amount() );
+
+		while ( Row != qNIL ) {
+			Array->Set( GetContext( Isolate ), *Row, ToString( Strings( Row ), Isolate ) );
+
+			Row = Strings.Next( Row );
+		}
+
+		return Array;
 	}
 
 	template <typename arg> inline void Set_(
@@ -208,11 +231,6 @@ namespace v8q {
 	{
 		Isolate = GetIsolate( Isolate );
 		return ToFunction( Object->Get( Context, ToString( Key, Isolate ) ), Isolate );
-	}
-
-	inline v8::Local<v8::Context> GetContext( v8::Isolate *Isolate = NULL )
-	{
-		return GetIsolate( Isolate )->GetCurrentContext();
 	}
 
 	inline v8::Local<v8::Function> GetFunction(
@@ -591,13 +609,13 @@ namespace v8q {
 			const str::dString &String,
 			v8::Isolate *Isolate = NULL )
 		{
-			qRH
-				TOL_CBUFFER___ Buffer;
-			qRB
-				Init( String.Convert( Buffer ), Isolate );
-			qRR
-				qRT
-				qRE
+		qRH;
+			TOL_CBUFFER___ Buffer;
+		qRB;
+			Init( String.Convert( Buffer ), Isolate );
+		qRR;
+		qRT;
+		qRE;
 		}
 		// NOT the number of char, but the size of the string in bytes, WITHOUT NULL terminating char.
 		int Size( void ) const
