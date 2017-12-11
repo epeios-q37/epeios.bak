@@ -540,25 +540,26 @@ void sclxdhtml::prolog::GetCasts(
 	dCasts &Casts )
 {
 qRH;
-	str::wString NewProject, PredefinedProject, UserProject;
+	str::wString NewProject, PredefinedProjects, UserProject;
 	wCast Cast;
 qRB;
-tol::Init( NewProject, PredefinedProject, UserProject );
+	tol::Init( NewProject, PredefinedProjects, UserProject );
 
 	switch ( GetProjectType_( Proxy ) ) {
 	case sclmisc::ptNew:
 		NewProject = "Vanished";
-		PredefinedProject = "Hidden";
+		PredefinedProjects = "Hidden";
 		UserProject = "Hidden";
+		break;
 	case sclmisc::ptPredefined:
 		NewProject = "Plain";
-		PredefinedProject = "Plain";
+		PredefinedProjects = "Plain";
 		UserProject = "Hidden";
+		break;
 	case sclmisc::ptRemote:
 		NewProject = "Plain";
-		PredefinedProject = "Hidden";
+		PredefinedProjects = "Hidden";
 		UserProject = "Plain";
-	case sclmisc::ptEmbedded:
 		break;
 	default:
 		qRFwk();
@@ -566,7 +567,7 @@ tol::Init( NewProject, PredefinedProject, UserProject );
 	}
 
 	CAST( NewProject );
-	CAST( PredefinedProject );
+	CAST( PredefinedProjects );
 	CAST( UserProject );
 qRR;
 qRT;

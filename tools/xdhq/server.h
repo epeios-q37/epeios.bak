@@ -38,7 +38,6 @@ namespace server {
 	typedef void(* fSet)( SERVER_SETP_ );
 
 	void SetLayout( SERVER_SETP_ );
-	void SetCasting( SERVER_SETP_ );
 
 	void GetContent(
 		const str::dString &Id,
@@ -48,6 +47,12 @@ namespace server {
 	void SetContents(
 		const str::dStrings &Ids,
 		const str::dStrings &Contents,
+		flw::sWFlow &Flow );
+
+	void SetCasts(
+		const str::dString &Id,
+		const str::dStrings &Tags,
+		const str::dStrings &Values,
 		flw::sWFlow &Flow );
 }
 

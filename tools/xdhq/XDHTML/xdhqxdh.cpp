@@ -97,25 +97,6 @@ namespace {
 	qRE;
 	}
 
-	void SetCasting_(
-		flw::sRFlow &Flow,
-		xdhdws::sProxy &Proxy )
-	{
-	qRH;
-		str::wString Id, XML, XSL;
-	qRB;
-		tol::Init( Id, XML, XSL );
-
-		prtcl::Get( Flow, Id );
-		prtcl::Get( Flow, XML );
-		prtcl::Get( Flow, XSL );
-
-		Proxy.SetCasting( Id, XML, XSL );
-	qRR;
-	qRT;
-	qRE;
-	}
-
 	void GetContent_(
 		flw::sRWFlow &Flow,
 		xdhdws::sProxy &Proxy )
@@ -141,19 +122,43 @@ namespace {
 		xdhdws::sProxy &Proxy )
 	{
 	qRH;
-		str::wString Id, Content;
 		str::wStrings Ids, Contents;
-	qRB;
+		str::wString MergedIds, MergedContents;
+		qRB;
 		tol::Init( Ids, Contents );
 		prtcl::Get( Flow, Ids );
 		prtcl::Get( Flow, Contents );
 
-		tol::Init( Id, Content );
+		tol::Init( MergedIds, MergedContents );
 
-		xdhcmn::FlatMerge( Ids, Id, true );
-		xdhcmn::FlatMerge( Contents, Content, true );
+		xdhcmn::FlatMerge( Ids, MergedIds, true );
+		xdhcmn::FlatMerge( Contents, MergedContents, true );
 
-		Proxy.SetContents( Id, Content );
+		Proxy.SetContents( MergedIds, MergedContents );
+	qRR;
+	qRT;
+	qRE;
+	}
+
+	void SetCasts_(
+		flw::sRFlow &Flow,
+		xdhdws::sProxy &Proxy )
+	{
+	qRH;
+		str::wString Id, MergedTags, MergedValues;
+		str::wStrings Tags, Values;
+	qRB;
+		tol::Init( Id, Tags, Values );
+
+		prtcl::Get( Flow, Id );
+		prtcl::Get( Flow, Tags );
+		prtcl::Get( Flow, Values );
+
+		tol::Init( MergedTags, MergedValues );
+		xdhcmn::FlatMerge( Tags, MergedTags, false );
+		xdhcmn::FlatMerge( Values, MergedValues, true );
+
+		Proxy.SetCasts( Id, MergedTags, MergedValues );
 	qRR;
 	qRT;
 	qRE;
@@ -200,14 +205,14 @@ namespace {
 				case prtcl::aSetLayout_1:
 					SetLayout_( Client_, *this );
 					break;
-				case prtcl::aSetCasting_1:
-					SetCasting_( Client_, *this );
-					break;
 				case prtcl::aGetContent_1:
 					GetContent_( Client_, *this );
 					break;
 				case prtcl::aSetContent_1:
 					SetContent_( Client_, *this );
+					break;
+				case prtcl::aSetCasts_1:
+					SetCasts_( Client_, *this );
 					break;
 				default:
 					qRGnr();

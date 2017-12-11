@@ -54,9 +54,9 @@ namespace prtcl {
 		aOK_1,
 		aError_1,
 		aSetLayout_1,
-		aSetCasting_1,
 		aGetContent_1,
 		aSetContent_1,
+		aSetCasts_1,
 		a_amount,
 		a_Undefined
 	};

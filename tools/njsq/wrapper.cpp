@@ -119,7 +119,7 @@ namespace {
 			StringsCallback->Expose().New( Length );
 
 			while ( Length-- ) {
-				String.Init( Array->Get( Length ) );
+				String.Init( v8q::ToLocal( Array->Get( v8q::GetContext(), Length ) ) );
 				String.Get( StringsCallback->Expose()( Length ) ); 
 			}
 		}

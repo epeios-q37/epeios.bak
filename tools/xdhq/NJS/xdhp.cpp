@@ -335,12 +335,6 @@ SCLNJS_F( xdhp::SetLayout )
 	SetElement_( server::SetLayout, Caller, Rack.Language, Rack.Flow );
 }
 
-SCLNJS_F( xdhp::SetCasting )
-{
-	RACK;
-	SetElement_( server::SetCasting, Caller, Rack.Language, Rack.Flow );
-}
-
 SCLNJS_F( xdhp::GetContent )
 {
 qRH;
@@ -371,6 +365,23 @@ qRB;
 	Caller.GetArgument( Ids, Contents );
 
 	server::SetContents( Ids, Contents, Rack.Flow );
+qRR;
+qRT;
+qRE;
+}
+
+SCLNJS_F( xdhp::SetCasts )
+{
+qRH;
+	str::wString Id;
+	str::wStrings Tags, Values;
+qRB;
+	RACK;
+
+	tol::Init( Id, Tags, Values );
+	Caller.GetArgument( Id, Tags, Values );
+
+	server::SetCasts( Id, Tags, Values, Rack.Flow );
 qRR;
 qRT;
 qRE;

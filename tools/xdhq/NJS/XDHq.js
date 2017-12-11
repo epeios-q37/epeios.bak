@@ -73,28 +73,29 @@ class CastingTree extends Tree {
 	}
 }
 
-function pushIdAndItem(idAndItem, itemType, ids, items) {
-	if ((idAndItem instanceof Array) && (idAndItem.length === 2) && (typeof idAndItem[0] === "string") && (typeof idAndItem[1] === itemType)) {
-		ids.push(idAndItem[0]);
-		items.push(idAndItem[1]);
+function pushLabelAndItem(labelAndItem, itemType, labels, items) {
+	if ((labelAndItem instanceof Array) && (labelAndItem.length === 2) && (typeof labelAndItem[0] === "string") && (typeof labelAndItem[1] === itemType)) {
+		labels.push(labelAndItem[0]);
+		items.push(labelAndItem[1]);
 	} else
 		throw ("Error in parameters.");
 }
 
-function pushIdsAndItems(idsAndItems, itemType, ids, items) {
-	var length = idsAndItems.length;
+function pushLabelsAndItems(labelsAndItems, itemType, labels, items) {
+	var length = labelsAndItems.length;
 
 	while (length--) {
-		pushIdAndItem(idsAndItems[length], itemType, ids, items);
+		pushLabelAndItem(labelsAndItems[length], itemType, labels, items);
 	}
 }
 
-function callWrapperWithIdsAndItems(idOrIdsAndItems, item, itemType, ids, items) {
-	if ((typeof idOrIdsAndItems === "string") && (typeof item === itemType)) {
-		ids.push(idOrIdsAndItems);
+// '[a,b],[c,d],[e,f]' => '[a,c,e],[b,d,f]'
+function normalize(labelOrLabelsAndItems, item, itemType, labels, items) {
+	if ((typeof labelOrLabelsAndItems === "string") && (typeof item === itemType)) {
+		labels.push(labelOrLabelsAndItems);
 		items.push(item);
-	} else if ((idOrIdsAndItems instanceof Array) && (typeof item === "undefined")) {
-		pushIdsAndItems(idOrIdsAndItems, itemType, ids, items);	// Mixed array not implemented yet.
+	} else if ((labelOrLabelsAndItems instanceof Array) && (typeof item === "undefined")) {
+		pushLabelsAndItems(labelOrLabelsAndItems, itemType, labels, items);	// Mixed array not implemented yet.
 	} else
 		throw ("Error in parameters.");
 }
@@ -109,19 +110,24 @@ class XDH {
 	setLayout(tree, xslFilename, id) {
 		this.set(9, tree, xslFilename, id);
 	}
-	setCasting(tree, xslFilename, id) {
-		this.set(10, tree, xslFilename, id);
-	}
 	getContent(id) {
-		return njsq._wrapper(11, this, id);
+		return njsq._wrapper(10, this, id);
 	}
 	setContent(idOrIdsAndContents, content) {
 		var ids = new Array();
 		var contents = new Array();
 
-		callWrapperWithIdsAndItems(idOrIdsAndContents, content, "string", ids, contents);
+		normalize(idOrIdsAndContents, content, "string", ids, contents);
 
-		return njsq._wrapper(12, this, ids, contents);
+		return njsq._wrapper(11, this, ids, contents);
+	}
+	setCasts(id, tagOrTagsAndValues, value) {
+		var tags = new Array();
+		var values = new Array();
+
+		normalize(tagOrTagsAndValues, value, "string", tags, values);
+
+		njsq._wrapper(12, this, id, tags, values);
 	}
 }
 
@@ -129,7 +135,7 @@ function register(idOrIdsAndItems, item) {
 	var tags = new Array();
 	var callbacks = new Array();
 
-	callWrapperWithIdsAndItems(idOrIdsAndItems, item, "function", tags, callbacks);
+	normalize(idOrIdsAndItems, item, "function", tags, callbacks);
 
 	njsq._wrapper(7, tags, callbacks);
 }

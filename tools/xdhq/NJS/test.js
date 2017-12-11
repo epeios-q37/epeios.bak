@@ -34,15 +34,10 @@ class MyData extends xdhq.XDH {
 }
 
 function handleTestButton(xdh, enabled) {
-	var tree = new xdhq.CastingTree();
-
-	tree.pushTag("Test");
 	if (enabled)
-		tree.putAttribute("Enabled", "true");
+		xdh.setCasts("Root", "TestButtonCasting", "Plain" );
 	else
-		tree.putAttribute("Enabled", "false");
-
-	xdh.setCasting(tree, "../XSL/MainCasting.xsl");
+		xdh.setCasts("Root", "TestButtonCasting", "Hide" );
 }
 
 function callback() {

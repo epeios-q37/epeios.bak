@@ -312,26 +312,16 @@ static void SetContents_(
 namespace{
 	namespace {
 		// TODO: to optimize.
-		sdr::sRow Find_(
-			const str::dString &Tag,
-			const str::dStrings &Tags )
-		{
-			sdr::sRow Row = str::Search( Tag, Tags );
-
-			if ( Row == qNIL )
-				qRFwk();
-
-			return Row;
-
-		}
-
 		void GetId_(
 			const str::dStrings &Ids,
 			const str::dStrings &Tags,
 			const str::dString &Tag,
 			str::dString &Id )
 		{
-			Id = Ids( Find_( Tag, Tags ) );
+			sdr::sRow Row = str::Search( Tag, Tags );
+
+			if ( Row != qNIL )
+				Id = Ids( Row );
 		}
 	}
 
