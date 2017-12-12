@@ -51,10 +51,10 @@ class Tree {
 		njsq._wrapper(3, this, name);
 	}
 	popTag() {
-		njsq._wrapper(4);
+		njsq._wrapper(4, this);
 	}
 	putValue( value ) {
-		njsq._wrapper(5, this);
+		njsq._wrapper(5, this, value.toString());
 	}
 	putAttribute(name, value) {
 		njsq._wrapper(6, this, name, value);
@@ -133,6 +133,18 @@ class XDH {
 		normalize(tagOrTagsAndValues, value, "string", tags, values);
 
 		njsq._wrapper(12, this, id, tags, values);
+	}
+	getAttribute(id, name) {
+		return njsq._wrapper(13, this, id, name);
+	}
+	setAttribute(id, name, value) {
+		njsq._wrapper(14, this, id, name, value);
+	}
+	getProperty(id, name) {
+		return njsq._wrapper(15, this, id, name);
+	}
+	setProperty(id, name, value) {
+		njsq._wrapper(16, this, id, name, value);
 	}
 }
 

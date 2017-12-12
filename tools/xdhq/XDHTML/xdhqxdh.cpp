@@ -190,6 +190,85 @@ namespace {
 	qRE;
 	}
 
+	void GetAttribute_(
+		flw::sRWFlow &Flow,
+		xdhdws::sProxy &Proxy )
+	{
+	qRH;
+		str::wString Id, Name, Value;
+	qRB;
+		tol::Init( Id, Name );
+		prtcl::Get( Flow, Id );
+		prtcl::Get( Flow, Name );
+
+		Value.Init();
+		Proxy.GetAttribute( Id, Name, Value );
+
+		prtcl::Put( Value, Flow );
+		Flow.Commit();
+	qRR;
+	qRT;
+	qRE;
+	}
+
+	void SetAttribute_(
+		flw::sRFlow &Flow,
+		xdhdws::sProxy &Proxy )
+	{
+	qRH;
+		str::wString Id, Name, Value;
+	qRB;
+		tol::Init( Id, Name, Value );
+		prtcl::Get( Flow, Id );
+		prtcl::Get( Flow, Name );
+		prtcl::Get( Flow, Value );
+
+		Proxy.SetAttribute( Id, Name, Value );
+	qRR;
+	qRT;
+	qRE;
+	}
+
+
+	void GetProperty_(
+		flw::sRWFlow &Flow,
+		xdhdws::sProxy &Proxy )
+	{
+	qRH;
+		str::wString Id, Name, Value;
+	qRB;
+		tol::Init( Id, Name );
+		prtcl::Get( Flow, Id );
+		prtcl::Get( Flow, Name );
+
+		Value.Init();
+		Proxy.GetProperty( Id, Name, Value );
+
+		prtcl::Put( Value, Flow );
+		Flow.Commit();
+	qRR;
+	qRT;
+	qRE;
+	}
+
+	void SetProperty_(
+		flw::sRFlow &Flow,
+		xdhdws::sProxy &Proxy )
+	{
+	qRH;
+		str::wString Id, Name, Value;
+	qRB;
+		tol::Init( Id, Name, Value );
+		prtcl::Get( Flow, Id );
+		prtcl::Get( Flow, Name );
+		prtcl::Get( Flow, Value );
+
+		Proxy.SetProperty( Id, Name, Value );
+	qRR;
+	qRT;
+	qRE;
+	}
+
 	class rSession_
 	: public xdhcmn::cSession,
 	  public xdhdws::sProxy
@@ -198,6 +277,7 @@ namespace {
 		csdbnc::rIOFlow Client_;
 		bso::sBool NotFirstCall_;
 	protected:
+
 		virtual bso::bool__ XDHCMNLaunch(
 			const char *Id,
 			const char *Action ) override
@@ -220,6 +300,11 @@ namespace {
 			prtcl::Put( Action, Client_ );
 			Client_.Commit();
 
+# define H( name )\
+	case prtcl::a##name##_1:\
+		name##_( Client_, *this );\
+		break
+
 			while( Continue )
 				switch ( prtcl::GetAnswer( Client_ ) ) {
 				case prtcl::aOK_1:
@@ -228,22 +313,20 @@ namespace {
 					Continue = false;
 					Client_.Dismiss();
 					break;
-				case prtcl::aSetLayout_1:
-					SetLayout_( Client_, *this );
-					break;
-				case prtcl::aGetContents_1:
-					GetContents_( Client_, *this );
-					break;
-				case prtcl::aSetContents_1:
-					SetContents_( Client_, *this );
-					break;
-				case prtcl::aSetCasts_1:
-					SetCasts_( Client_, *this );
-					break;
+				H( SetLayout );
+				H( GetContents );
+				H( SetContents );
+				H( SetCasts );
+				H( GetAttribute );
+				H( SetAttribute );
+				H( GetProperty );
+				H( SetProperty );
 				default:
 					qRGnr();
 					break;
 			}
+
+#undef H
 
 			return Return;
 		}

@@ -124,7 +124,6 @@ void server::SetContents(
 	Flow.Commit();
 }
 
-
 void server::SetCasts(
 	const str::dString &Id,
 	const str::dStrings &Tags,
@@ -138,3 +137,58 @@ void server::SetCasts(
 	Flow.Commit();
 }
 
+void server::GetAttribute(
+	const str::dString &Id,
+	const str::dString &Name,
+	flw::sRWFlow &Flow,
+	str::dString &Value )
+{
+	prtcl::PutAnswer( prtcl::aGetAttribute_1, Flow );
+	prtcl::Put( Id, Flow );
+	prtcl::Put( Name, Flow );
+	Flow.Commit();
+
+	prtcl::Get( Flow, Value );
+	Flow.Dismiss();
+}
+
+void server::SetAttribute(
+	const str::dString &Id,
+	const str::dString &Name,
+	const str::dString &Value,
+	flw::sWFlow &Flow )
+{
+	prtcl::PutAnswer( prtcl::aSetAttribute_1, Flow );
+	prtcl::Put( Id, Flow );
+	prtcl::Put( Name, Flow );
+	prtcl::Put( Value, Flow );
+	Flow.Commit();
+}
+
+void server::GetProperty(
+	const str::dString &Id,
+	const str::dString &Name,
+	flw::sRWFlow &Flow,
+	str::dString &Value )
+{
+	prtcl::PutAnswer( prtcl::aGetProperty_1, Flow );
+	prtcl::Put( Id, Flow );
+	prtcl::Put( Name, Flow );
+	Flow.Commit();
+
+	prtcl::Get( Flow, Value );
+	Flow.Dismiss();
+}
+
+void server::SetProperty(
+	const str::dString &Id,
+	const str::dString &Name,
+	const str::dString &Value,
+	flw::sWFlow &Flow )
+{
+	prtcl::PutAnswer( prtcl::aSetProperty_1, Flow );
+	prtcl::Put( Id, Flow );
+	prtcl::Put( Name, Flow );
+	prtcl::Put( Value, Flow );
+	Flow.Commit();
+}

@@ -32,7 +32,8 @@ if ( isset($_REQUEST["_prolog"]) ) {
 	if ( $prolog == '' )
 		$prolog = $target;
 
-	$head = './' . $prolog . '.head.xhtml';
+	$head = $prolog . '/head.xhtml';
+	$body = $prolog . '/body.xhtml';
 
 	require 'prolog.php';
 

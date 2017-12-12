@@ -387,6 +387,77 @@ qRT;
 qRE;
 }
 
+SCLNJS_F( xdhp::GetAttribute )
+{
+qRH;
+	str::wString Id, Name, Value;
+qRB;
+	RACK;
+
+	tol::Init( Id, Name );
+	Caller.GetArgument( Id, Name );
+
+	Value.Init();
+	server::GetAttribute( Id, Name, Rack.Flow, Value );
+
+	Caller.SetReturnValue( Value );
+qRR;
+qRT;
+qRE;
+}
+
+SCLNJS_F( xdhp::SetAttribute )
+{
+qRH;
+	str::wString Id, Name, Value;
+qRB;
+	RACK;
+
+	tol::Init( Id, Name, Value );
+	Caller.GetArgument( Id, Name, Value );
+
+	server::SetAttribute( Id, Name, Value, Rack.Flow );
+qRR;
+qRT;
+qRE;
+}
+
+SCLNJS_F( xdhp::GetProperty )
+{
+qRH;
+	str::wString Id, Name, Value;
+qRB;
+	RACK;
+
+	tol::Init( Id, Name );
+	Caller.GetArgument( Id, Name );
+
+	Value.Init();
+	server::GetProperty( Id, Name, Rack.Flow, Value );
+
+	Caller.SetReturnValue( Value );
+qRR;
+qRT;
+qRE;
+}
+
+SCLNJS_F( xdhp::SetProperty )
+{
+qRH;
+	str::wString Id, Name, Value;
+qRB;
+	RACK;
+
+	tol::Init( Id, Name, Value );
+	Caller.GetArgument( Id, Name, Value );
+
+	Value.Init();
+	server::SetProperty( Id, Name, Value, Rack.Flow );
+qRR;
+qRT;
+qRE;
+}
+
 qGCTOR( xdhp )
 {
 	Automat_.Init();

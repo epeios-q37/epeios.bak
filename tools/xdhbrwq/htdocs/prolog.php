@@ -12,7 +12,10 @@
 			<script src="xdhbrwq.js"></script>
 			<script>handleQuery("xdh.php?_target=' . $target . '&_language=' . $language . '&_action=' . $action . '")</script>
 		</head>
-		<body id="Root" data-xdh-onevents="(keypress|About|SC+a)(keypress|Q37Refresh|SC+r)">
+		<!--body id="Root" data-xdh-onevents="(keypress|About|SC+a)(keypress|Q37Refresh|SC+r)"-->
+		<body id="Root">
+			<!-- ' . $body . ' -->
+' . file_get_contents( $body ) . '
 			<input type="hidden" id="LoginUserID" value="' . $UserID . '"/>
 			<input type="hidden" id="LoginPassword" value="' . $Password . '"/>
 		</body>

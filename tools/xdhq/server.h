@@ -54,6 +54,30 @@ namespace server {
 		const str::dStrings &Tags,
 		const str::dStrings &Values,
 		flw::sWFlow &Flow );
+
+	void GetAttribute(
+		const str::dString &Id,
+		const str::dString &Name,
+		flw::sRWFlow &Flow,
+		str::dString &Value );
+
+	void SetAttribute(
+		const str::dString &Id,
+		const str::dString &Name,
+		const str::dString &Value,
+		flw::sWFlow &Flow );
+
+	void GetProperty(
+		const str::dString &Id,
+		const str::dString &Name,
+		flw::sRWFlow &Flow,
+		str::dString &Value );
+
+	void SetProperty(
+		const str::dString &Id,
+		const str::dString &Name,
+		const str::dString &Value,
+		flw::sWFlow &Flow );
 }
 
 #endif

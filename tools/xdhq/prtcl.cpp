@@ -94,6 +94,10 @@ const char *prtcl::GetLabel( eAnswer Answer )
 		C( GetContents_1 );
 		C( SetContents_1 );
 		C( SetCasts_1 );
+		C( GetAttribute_1 );
+		C( SetAttribute_1 );
+		C( GetProperty_1 );
+		C( SetProperty_1 );
 	default:
 		qRFwk();
 		break;

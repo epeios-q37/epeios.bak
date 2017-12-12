@@ -55,7 +55,8 @@ void sclnjs::SCLNJSRegister( sclnjs::sRegistrar &Registrar )
 {
 	Registrar.Register( ReturnArgument_ );
 	Registrar.Register( treep::New, treep::Delete, treep::PushTag, treep::PopTag, treep::PutValue, treep::PutAttribute );	// 1 - 6
-	Registrar.Register( xdhp::Register, xdhp::Listen, xdhp::SetLayout, xdhp::GetContents, xdhp::SetContents, xdhp::SetCasts );
+	Registrar.Register( xdhp::Register, xdhp::Listen, xdhp::SetLayout, xdhp::GetContents, xdhp::SetContents, xdhp::SetCasts ); // 7 - 12
+	Registrar.Register( xdhp::GetAttribute, xdhp::SetAttribute, xdhp::GetProperty, xdhp::SetProperty );	// 13 - 16
 }
 
 const char *sclmisc::SCLMISCTargetName = NAME_LC;

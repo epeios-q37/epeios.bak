@@ -61,7 +61,7 @@
 			<File Path="../../../corpus/js/">xdhtml.js</File>
 			<File>xdh.php</File>
 			<File>prolog.php</File>
-			<File>xdh.head.xhtml</File>
+			<File Path="xdh/">head.xhtml</File>
 		</Files>
 		<File Path="../">XDH.xcfg</File>
 	</Files>

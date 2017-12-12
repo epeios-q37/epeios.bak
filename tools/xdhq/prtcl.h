@@ -57,6 +57,10 @@ namespace prtcl {
 		aGetContents_1,
 		aSetContents_1,
 		aSetCasts_1,
+		aSetAttribute_1,
+		aGetAttribute_1,
+		aSetProperty_1,
+		aGetProperty_1,
 		a_amount,
 		a_Undefined
 	};
