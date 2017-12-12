@@ -27,8 +27,14 @@ if ( isset($_REQUEST["_prolog"]) ) {
 	$language = $_REQUEST["_language"];
 	$UserID = $_REQUEST["UserID"];
 	$Password = $_REQUEST["Password"];
+	$prolog = $_REQUEST["_prolog"];
 
-	require 'xdh_prolog.php';
+	if ( $prolog == '' )
+		$prolog = $target;
+
+	$head = './' . $prolog . '.head.xhtml';
+
+	require 'prolog.php';
 
 	echo $out;
 } else {
