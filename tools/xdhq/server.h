@@ -44,9 +44,13 @@ namespace server {
 		flw::sRWFlow &Flow,
 		str::dStrings &Contents );
 
-	void SetContents(
+	void SetContents_(
 		const str::dStrings &Ids,
 		const str::dStrings &Contents,
+		flw::sWFlow &Flow );
+
+	void SetWidgets(
+		const str::dString &Id,
 		flw::sWFlow &Flow );
 
 	void SetCasts(

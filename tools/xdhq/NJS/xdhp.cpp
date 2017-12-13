@@ -354,7 +354,7 @@ qRT;
 qRE;
 }
 
-SCLNJS_F( xdhp::SetContents )
+SCLNJS_F( xdhp::SetContents_ )
 {
 qRH;
 	str::wStrings Ids, Contents;
@@ -364,7 +364,23 @@ qRB;
 	tol::Init( Ids, Contents );
 	Caller.GetArgument( Ids, Contents );
 
-	server::SetContents( Ids, Contents, Rack.Flow );
+	server::SetContents_( Ids, Contents, Rack.Flow );
+qRR;
+qRT;
+qRE;
+}
+
+SCLNJS_F( xdhp::SetWidgets )
+{
+qRH;
+	str::wString Id;
+qRB;
+	RACK;
+
+	Id.Init();
+	Caller.GetArgument( Id );
+
+	server::SetWidgets( Id, Rack.Flow );
 qRR;
 qRT;
 qRE;

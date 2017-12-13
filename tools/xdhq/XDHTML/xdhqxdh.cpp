@@ -143,14 +143,14 @@ namespace {
 	qRE;
 	}
 
-	void SetContents_(
+	void SetContents__(
 		flw::sRFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 	qRH;
 		str::wStrings Ids, Contents;
 		str::wString MergedIds, MergedContents;
-		qRB;
+	qRB;
 		tol::Init( Ids, Contents );
 		prtcl::Get( Flow, Ids );
 		prtcl::Get( Flow, Contents );
@@ -161,6 +161,22 @@ namespace {
 		xdhcmn::FlatMerge( Contents, MergedContents, true );
 
 		Proxy.SetContents( MergedIds, MergedContents );
+	qRR;
+	qRT;
+	qRE;
+	}
+
+	void SetWidgets_(
+		flw::sRFlow &Flow,
+		xdhdws::sProxy &Proxy )
+	{
+	qRH;
+		str::wString Id;
+	qRB;
+		Id.Init();
+		prtcl::Get( Flow, Id );
+
+		Proxy.SetWidgets( Id );
 	qRR;
 	qRT;
 	qRE;
@@ -315,7 +331,8 @@ namespace {
 					break;
 				H( SetLayout );
 				H( GetContents );
-				H( SetContents );
+				H( SetContents_ );
+				H( SetWidgets );
 				H( SetCasts );
 				H( GetAttribute );
 				H( SetAttribute );

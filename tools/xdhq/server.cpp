@@ -113,14 +113,23 @@ void server::GetContents(
 	Flow.Dismiss();
 }
 
-void server::SetContents(
+void server::SetContents_(
 	const str::dStrings &Ids,
 	const str::dStrings &Contents,
 	flw::sWFlow &Flow )
 {
-	prtcl::PutAnswer( prtcl::aSetContents_1, Flow );
+	prtcl::PutAnswer( prtcl::aSetContents__1, Flow );
 	prtcl::Put( Ids, Flow );
 	prtcl::Put( Contents, Flow );
+	Flow.Commit();
+}
+
+void server::SetWidgets(
+	const str::dString &Id,
+	flw::sWFlow &Flow )
+{
+	prtcl::PutAnswer( prtcl::aSetWidgets_1, Flow );
+	prtcl::Put( Id, Flow );
 	Flow.Commit();
 }
 

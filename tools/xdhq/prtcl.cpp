@@ -92,7 +92,8 @@ const char *prtcl::GetLabel( eAnswer Answer )
 		C( Error_1 );
 		C( SetLayout_1 );
 		C( GetContents_1 );
-		C( SetContents_1 );
+		C( SetContents__1 );
+		C( SetWidgets_1 );
 		C( SetCasts_1 );
 		C( GetAttribute_1 );
 		C( SetAttribute_1 );

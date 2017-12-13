@@ -57,7 +57,7 @@ class Tree {
 		njsq._wrapper(5, this, value.toString());
 	}
 	putAttribute(name, value) {
-		njsq._wrapper(6, this, name, value);
+		njsq._wrapper(6, this, name, value.toString());
 	}
 }
 
@@ -101,11 +101,14 @@ function normalize(labelOrLabelsAndItems, item, itemType, labels, items) {
 }
 
 class XDH {
+	normalize(id) {
+		if (!id)
+			return "Root";
+		else
+			return id;
+	}
 	set(fid, tree, xslFilename, id) {
-		if ( !id )
-			id = "Root";
-
-		njsq._wrapper(fid, this, id, tree, xslFilename);
+		njsq._wrapper(fid, this, this.normalize(id), tree, xslFilename);
 	}
 	setLayout(tree, xslFilename, id) {
 		this.set(9, tree, xslFilename, id);
@@ -118,7 +121,10 @@ class XDH {
 		else
 			throw "Bad argument !";
 	}
-	setContent(idOrIdsAndContents, content) {
+	getContent(id) {
+		return this.getContents([id]);
+	}
+	setContents(idOrIdsAndContents, content) {
 		var ids = new Array();
 		var contents = new Array();
 
@@ -126,25 +132,28 @@ class XDH {
 
 		return njsq._wrapper(11, this, ids, contents);
 	}
+	setWidgets(id) {
+		njsq._wrapper(12, this, this.normalize(id));
+	}
 	setCasts(id, tagOrTagsAndValues, value) {
 		var tags = new Array();
 		var values = new Array();
 
 		normalize(tagOrTagsAndValues, value, "string", tags, values);
 
-		njsq._wrapper(12, this, id, tags, values);
+		njsq._wrapper(13, this, id, tags, values);
 	}
 	getAttribute(id, name) {
-		return njsq._wrapper(13, this, id, name);
+		return njsq._wrapper(14, this, id, name);
 	}
 	setAttribute(id, name, value) {
-		njsq._wrapper(14, this, id, name, value);
+		njsq._wrapper(15, this, id, name, value);
 	}
 	getProperty(id, name) {
-		return njsq._wrapper(15, this, id, name);
+		return njsq._wrapper(16, this, id, name);
 	}
 	setProperty(id, name, value) {
-		njsq._wrapper(16, this, id, name, value);
+		njsq._wrapper(17, this, id, name, value);
 	}
 }
 
