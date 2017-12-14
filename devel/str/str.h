@@ -648,9 +648,10 @@ namespace str {
 # endif
 	template <typename row> inline row Search(
 		const str::string &String,
-		const ctn::mono_container_<str::string_,row> &Strings )
+		const ctn::mono_container_<str::string_,row> &Strings,
+		sdr::sRow First = qNIL )
 	{
-		return ctn::Search<row, string_>( String, Strings );
+		return ctn::Search<row, string_>( String, Strings, First );
 	}
 
 	inline sdr::sRow NewAndInit( str::dStrings &Strings )

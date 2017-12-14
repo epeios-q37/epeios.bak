@@ -165,8 +165,9 @@
 				</Widgets>
 				<Casts>
      <![CDATA[
-					log( "Casting :: '%Id%'" );
+					log( "Fetching casts : '%Id%'" );
 					var digest = fetchCasts( "%Id%" );
+					log( digest );
 					digest;
 				]]>
     </Casts>

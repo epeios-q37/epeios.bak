@@ -122,7 +122,7 @@ class XDH {
 			throw "Bad argument !";
 	}
 	getContent(id) {
-		return this.getContents([id]);
+		return this.getContents([id])[0];
 	}
 	setContents(idOrIdsAndContents, content) {
 		var ids = new Array();
@@ -142,6 +142,9 @@ class XDH {
 		normalize(tagOrTagsAndValues, value, "string", tags, values);
 
 		njsq._wrapper(13, this, id, tags, values);
+	}
+	setCast(id, tag, value) {
+		this.setCasts(id, [[tag, value]]);
 	}
 	getAttribute(id, name) {
 		return njsq._wrapper(14, this, id, name);

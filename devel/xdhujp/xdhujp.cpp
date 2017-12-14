@@ -312,42 +312,44 @@ static void SetContents_(
 namespace{
 	namespace {
 		// TODO: to optimize.
-		void GetId_(
-			const str::dStrings &Ids,
-			const str::dStrings &Tags,
+		void GetIds_(
+			const str::dStrings &AllTags,	// All the tags ..
+			const str::dStrings &AllIds,		// with the corresponding ids.
 			const str::dString &Tag,
-			str::dString &Id )
+			const str::dString &Value,
+			str::dStrings &Ids,
+			str::dStrings &Values )
 		{
-			sdr::sRow Row = str::Search( Tag, Tags );
+			sdr::sRow Row = AllTags.First();
 
-			if ( Row != qNIL )
-				Id = Ids( Row );
+			while ( ( Row != qNIL ) && ( ( Row = str::Search( Tag, AllTags, Row ) ) != qNIL ) ) {
+				Ids.Append( AllIds( Row ) );
+				Values.Append( Value );
+				Row = AllTags.Next( Row );
+			}
 		}
 	}
 
 	void MatchTagsWithIds_(
 		const xdhcmn::digest_ &Digest,
-		const str::dStrings &SourceTags,
-		str::dStrings &TargetIds )
+		const str::dStrings &Tags,
+		const str::dStrings &Values,
+		str::dStrings &Ids,
+		str::dStrings &CorrespondingValues )
 	{
 	qRH;
-		str::wStrings Ids, Tags;
+		str::wStrings AllIds, AllTags;
 		sdr::sRow Row = qNIL;
-		str::wString TargetId;
 	qRB;
-		tol::Init( Ids, Tags );
-		xdhutl::GetTags( Digest, Ids, Tags );
+		tol::Init( AllIds, AllTags );
+		xdhutl::GetTags( Digest, AllIds, AllTags );
 
-		Row = SourceTags.First();
+		Row = Tags.First();
 
 		while ( Row != qNIL ) {
-			TargetId.Init();
+			GetIds_( AllTags, AllIds, Tags( Row ), Values( Row ), Ids, CorrespondingValues );
 
-			GetId_( Ids, Tags, SourceTags( Row ), TargetId );
-
-			TargetIds.Append( TargetId );
-
-			Row = SourceTags.Next( Row );
+			Row = Tags.Next( Row );
 		}
 	qRR;
 	qRT;
@@ -357,36 +359,58 @@ namespace{
 	void MatchTagsWithIds_(
 		const xdhcmn::digest_ &Digest,
 		const str::dString &MergedTags,
-		str::dString &MergedIds )
+		const str::dString &MergedValues,
+		str::dStrings &Ids,
+		str::dStrings &CorrespondingValues)
 	{
 	qRH;
-		str::wStrings Tags, Ids;
+		str::wStrings Tags, Values;
 	qRB;
 		Tags.Init();
 		xdhcmn::FlatSplit( MergedTags, Tags );
 
-		Ids.Init();
-		MatchTagsWithIds_( Digest, Tags, Ids );
+		Values.Init();
+		xdhcmn::FlatSplit( MergedValues, Values );
 
-		xdhcmn::FlatMerge( Ids, MergedIds, true );
+		MatchTagsWithIds_( Digest, Tags, Values, Ids, CorrespondingValues );
 	qRR;
 	qRT;
 	qRE;
 	}
 
+	
+	void MatchTagsWithIds_(
+		const xdhcmn::digest_ &Digest,
+		const str::dString &MergedTags,
+		const str::dString &MergedValues,
+		str::dString &MergedIds,
+		str::dString &CorrespondingMergedValues)
+	{
+	qRH;
+		str::wStrings Ids, Values;
+	qRB;
+		tol::Init( Ids, Values );
+		MatchTagsWithIds_( Digest, MergedTags, MergedValues, Ids, Values );
+
+		xdhcmn::FlatMerge( Ids, MergedIds, true );
+		xdhcmn::FlatMerge( Values, CorrespondingMergedValues, true );
+	qRR;
+	qRT;
+	qRE;
+	}
 }
 
 static void SetCasts_(
 	cJS &Callback,
 	const nchar__ *Id,
 	const nchar__ *RawTags,
-	const nchar__ *Casts )
+	const nchar__ *RawValues )
 {
 qRH
 	ntvstr::rBuffer Result;
 	str::wString RawDigest;
 	xdhcmn::digest Digest;
-	str::wString Ids, Tags;	// Merged.
+	str::wString Tags, Values, Ids, CorrespondingValues;	// Merged.
 qRB
 	RawDigest.Init( Execute( Callback, xdhujs::snCastsFetcher, &Result, Id ) );
 
@@ -396,10 +420,13 @@ qRB
 	Tags.Init();
 	nstring___( RawTags ).UTF8( Tags );
 
-	Ids.Init();
-	MatchTagsWithIds_( Digest, Tags, Ids );
+	Values.Init();
+	nstring___( RawValues ).UTF8( Values );
 
-	Execute( Callback, xdhujs::snCastsSetter, NULL, nstring___( Ids ).Internal()(), Casts );
+	tol::Init( Ids, CorrespondingValues );
+	MatchTagsWithIds_( Digest, Tags, Values, Ids, CorrespondingValues );
+
+	Execute( Callback, xdhujs::snCastsSetter, NULL, nstring___( Ids ).Internal()(), nstring___( CorrespondingValues ).Internal()() );
 qRR
 qRT
 qRE

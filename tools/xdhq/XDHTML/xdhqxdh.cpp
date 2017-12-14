@@ -198,7 +198,7 @@ namespace {
 
 		tol::Init( MergedTags, MergedValues );
 		xdhcmn::FlatMerge( Tags, MergedTags, false );
-		xdhcmn::FlatMerge( Values, MergedValues, true );
+		xdhcmn::FlatMerge( Values, MergedValues, false );
 
 		Proxy.SetCasts( Id, MergedTags, MergedValues );
 	qRR;

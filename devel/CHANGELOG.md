@@ -1,5 +1,15 @@
 # *Epeios* changelog
 
+2017-12-14:
+- *Common*:
+  - **$**: adding optional `First` parameter to `Search(...)` functions.
+- CTN:
+  - **$**,
+- STR:
+  - **$**,
+- XDHUJP:
+  - finalization of below new features (continued),
+
 2017-12-11:
 - *Common*:
   - **$**: finalization of below new features (continued),

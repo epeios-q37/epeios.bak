@@ -138,6 +138,8 @@ namespace xdhutl {
 	{
 		if ( Name == "SELECT" )
 			Event.Append( "change" );
+		else if ( Name == "INPUT" )
+			Event.Append( "change" );
 		else
 			Event.Append( "click" );
 	}

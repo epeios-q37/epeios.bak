@@ -1151,9 +1151,11 @@ namespace ctn {
 
 	template <typename row, typename item, typename container> inline row Search_(
 		const item &Item,
-		const container &Container )
+		const container &Container,
+		row Row )
 	{
-		row Row = Container.First();
+		if ( Row == qNIL )
+			Row = Container.First();
 
 		while ( ( Row != qNIL ) && ( Container( Row ) != Item ) )
 			Row = Container.Next( Row );
@@ -1163,16 +1165,18 @@ namespace ctn {
 
 	template <typename row, typename item> inline row Search(
 		const item &Item,
-		const ctn::mono_container_<item, row> &Container )
+		const ctn::mono_container_<item, row> &Container,
+		sdr::sRow First = qNIL )
 	{
-		return Search_<row, item, ctn::mono_container_<item, row>>( Item, Container );
+		return Search_<row, item, ctn::mono_container_<item, row>>( Item, Container, First );
 	}
 
 	template <typename row, typename item> inline row Search(
 		const item &Item,
-		const ctn::poly_container_<item, row> &Container )
+		const ctn::poly_container_<item, row> &Container,
+		sdr::sRow First = qNIL )
 	{
-		return Search_<row, item, ctn::poly_container_<item, row>>( Item, Container );
+		return Search_<row, item, ctn::poly_container_<item, row>>( Item, Container, First );
 	}
 
 # endif
