@@ -1,5 +1,12 @@
 # *Epeios* changelog
 
+2017-12-15:
+- SCLNJS:
+  - functions handling `dArguments` become methods attached to `dArguments`; this will simplify below new feature,
+  - a callback can now be launched with all their arguments stored in a `dArguments`object.
+- TOL:
+  - Adding `*` operator to wrapped (`qW(...)`) object to expose the unwrapped version (`d...`) of the object; this facilitates the disambiguation when using template variadics,
+
 2017-12-14:
 - *Common*:
   - **$**: adding optional `First` parameter to `Search(...)` functions.

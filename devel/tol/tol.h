@@ -240,6 +240,14 @@ public:\
 		d##name::operator =( O );\
 \
 		return *this;\
+	}\
+	const d##name &operator *( void ) const\
+	{\
+		return *this;\
+	}\
+	d##name &operator *( void )\
+	{\
+		return *this;\
 	}
 
 // Wraps 'vName' to make it instantiable.
