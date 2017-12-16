@@ -34,7 +34,13 @@ namespace {
 				flw::sWFlow &Flow,
 				server_::rArguments &Arguments )
 			{
-				::server::layout::set::S( Arguments.Id, Arguments.XML, Arguments.XSL, Arguments.Language, Flow );
+				::server::layout::set::S( Arguments.Id, Arguments.XML, Arguments.XSLFilename, Arguments.Language, Flow );
+			}
+			void GetContents_(
+				flw::sWFlow &Flow,
+				server_::rArguments &Arguments )
+			{
+				::server::contents::get::S( Arguments.Ids, Flow );
 			}
 		}
 
@@ -42,10 +48,12 @@ namespace {
 			flw::sWFlow &Flow,
 			server_::rServer &Server )
 		{
-			switch ( Server.Id ) {
+			switch ( Server.Request ) {
 			case server_::rSetLayout:
 				SetLayout_( Flow, Server.Arguments );
 				break;
+			case server_::rGetContents:
+
 			default:
 				qRGnr();
 				break;
@@ -61,14 +69,32 @@ namespace {
 			{
 				::server::layout::set::R( Flow );
 			}
+			void getContents_(
+				flw::sRFlow &Flow,
+				sclnjs::dArguments &Arguments )
+			{
+			qRH;
+				str::wStrings Contents;
+			qRB;
+				Contents.Init();
+				::server::contents::get::R( Flow, Contents );
+
+				Arguments.Add( Contents );
+			qRR;
+			qRT;
+			qRE;
+			}
 		}
 
-		void Process(
+		bso::sBool Process(
 			server_::eRequest Id,
 			flw::sRFlow &Flow,
 			sclnjs::dArguments &Arguments )
 		{
 			switch ( Id ) {
+			case server_::r_Undefined:	// New action is launched.
+				return false;
+				break;
 			case server_::rSetLayout:
 				SetLayout_( Flow, Arguments );
 				break;
@@ -76,6 +102,8 @@ namespace {
 				qRGnr();
 				break;
 			}
+
+			return true;
 		}
 	}
 }
@@ -98,13 +126,7 @@ qRB;
 
 	Flow.Init( *IODriver );
 
-	::server::GetAction( Flow, Id, Action );
-	Data->JS.Arguments.Add( Id, Action );
-
-	S_().SetData( Data );
-
-	S_().WaitForCompletion();
-	send_::Process( Flow, Data->Server );
+	S_().Upstream( Data );
 qRR;
 	if ( Data != NULL )
 		delete Data;
@@ -127,11 +149,19 @@ qRB;
 	Flow.Init( *IODriver );
 
 	Data.JS.Arguments.Init();
-	recv_::Process( Data.Server.Id, Flow, Data.JS.Arguments );
 
-	S_().SetData( &Data );
+	Data.JS.Arguments.Add( Data.XDH );
 
-	S_().WaitForCompletion();
+	if ( !recv_::Process( Data.Server.Request, Flow, Data.JS.Arguments ) )
+		::server::GetAction( Flow, Data.JS.Id, Data.JS.Action );
+
+	Data.Lock();
+
+	S_().Upstream( &Data );
+
+	Data.Lock();
+	Data.Unlock();
+
 	send_::Process( Flow, Data.Server );
 qRR;
 qRT;
@@ -150,3 +180,5 @@ bso::sBool xdh_ups::rProcessing::CSDSCBPostProcess( void *UP )
 
 	return false;
 }
+
+

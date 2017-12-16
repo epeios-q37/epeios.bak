@@ -76,70 +76,29 @@ namespace {
 
 	class rRack_ {
 	private:
-		xdh_ups::rSharing UpstreamSharing_;
 		xdh_ups::rProcessing Processing_;
 		csdmxs::rCallback Callback_;
 		csdbns::rServer Server_;
-		qCBUFFERr Language_;
-		sclnjs::rCallback ConnectCallback_;
-		sclnjs::rCallback *PendingCallback_;
-		sclnjs::dArguments *PendingCallbackArguments_;
-		sclnjs::rObject XDH_;	// The by the user overloaded 'XDH' JS class.
 	public:
+		xdh_ups::rSharing Sharing;
+		sclnjs::rCallback ConnectCallback;
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, UpstreamSharing_, Processing_, Callback_, Server_, Language_, ConnectCallback_, PendingCallback_ );
+			tol::reset( P, Sharing, Processing_, Callback_, Server_, ConnectCallback );
 		}
 		qCDTOR( rRack_ );
 		void Init(
 			csdbns::sService Service,
 			sclnjs::rCallback &ConnectCallback )
 		{
-			UpstreamSharing_.Init();
-			Processing_.Init( UpstreamSharing_ );
+			Sharing.Init();
+			Processing_.Init( Sharing );
 			Callback_.Init( Processing_ );
 			Server_.Init( Service, Callback_ );
-			ConnectCallback_.Init();
-			ConnectCallback_ = ConnectCallback;
-			PendingCallback_ = NULL;
+			ConnectCallback.Init();
+			ConnectCallback = ConnectCallback;
 		}
-		void PrepareCalling( void )
-		{
-			xdh_ups::js::rJS &JS = UpstreamSharing_.GetData().JS;
-
-			if ( JS.Callback != NULL )
-				PendingCallback_ = JS.Callback;
-
-			PendingCallbackArguments_ = &JS.Arguments;
-		}
-		void LaunchCalling( void )
-		{
-			if ( PendingCallback_ == NULL ) {// First call, on a fresh connection; we use the 'ConnectCallback_'.
-				XDH_.Init();
-				ConnectCallback_.ObjectLaunch( XDH_, *PendingCallbackArguments_ );
-				XDH_.Set( Id_, this );
-			} else {
-				PendingCallback_->VoidLaunch( *PendingCallbackArguments_ );	// As the callback are asynchronous, they never returns an value.
-			}
-		}
-	};
-
-	class rAsyncCallback_
-	: public rRack_,
-	  public cAsync_
-	{
-	protected:
-		void SCLNJSWork( void ) override
-		{
-			rRack_::PrepareCalling();
-		}
-		sclnjs::eBehavior SCLNJSAfter( void ) override
-		{
-			rRack_::LaunchCalling();
-
-			return sclnjs::bRelaunch;
-		}
-	};
+	} Rack_;
 }
 
 SCLNJS_F( xdhp::Register )
@@ -160,64 +119,74 @@ qRT
 qRE
 }
 
+namespace {
+	void HandleConnection_( void )
+	{
+		xdh_ups::rData &Data = Rack_.Sharing.ReadJS();
+
+		Rack_.ConnectCallback.ObjectLaunch( Data.XDH, Data.JS.Arguments );
+
+		Data.XDH.Set( Id_, &Data );
+	}
+}
+
 SCLNJS_F( xdhp::Listen )
 {
 qRH;
 	csdcmn::sVersion Version = csdcmn::UndefinedVersion;
 	sclnjs::rCallback Callback;
 	str::wString Arguments;
-	rAsyncCallback_ *ARack = NULL;
 qRB;
 	tol::Init( Callback, Arguments );
 	Caller.GetArgument( Callback, Arguments );
 
 	sclargmnt::FillRegistry( Arguments, sclargmnt::faIsArgument, sclargmnt::uaReport );
 
-	ARack = new rAsyncCallback_;
-
-	if ( ARack == NULL )
-		qRAlc();
-
-	ARack->Init( sclmisc::MGetU16( registry::parameter::Service ), Callback );
+	Rack_.Init( sclmisc::MGetU16( registry::parameter::Service ), Callback );
 
 	Callback.reset( false );	// To avoid the destruction of contained items, as their are now managed by 'Listening'.
-	sclnjs::Launch( *ARack );
+
+	HandleConnection_();
+
+	while ( true ) {
+		xdh_ups::rData &Data = Rack_.Sharing.ReadJS();
+		sclnjs::rCallback *PendingCallback = &Data.JS.Callback;
+
+		Data.JS.Callback.reset( false );
+
+		if ( PendingCallback == NULL ) {
+			Callback.Init();
+			Callback.Assign( Get_( Data.JS.Action ) );
+			Callback.ObjectLaunch( Data.XDH, Data.JS.Id );
+		} else
+			PendingCallback->VoidLaunch( Data.JS.Arguments );
+
+		Data.Unlock();
+	}
 qRR
-	if ( ARack != NULL )
-		delete ARack;
 qRT
 qRE
 }
 
 namespace layout_ {
 	namespace {
-		void Set_ (
+		void Set_(
 			const str::dString &Id,
 			sclnjs::sCaller &Caller,
-			const str::dString,
-			flw::sWFlow &Flow )
+			xdh_ups::rData &Data )
 		{
-		qRH;
-			str::wString XML, XSLFilename;
-			sclnjs::rCallback Callback;
-		qRB;
-			XML.Init();
-			treep::GetXML( Caller, XML );
+			Data.Server.Arguments.Init();
 
-			tol::Init( XSLFilename, Callback );
-			Caller.GetArgument( XSLFilename, Callback );
+			treep::GetXML( Caller, Data.Server.Arguments.XML );
 
-			Set( Id, XML, XSLFilename, Language, Flow );
-		qRR;
-		qRT;
-		qRE;
+			Caller.GetArgument( Data.Server.Arguments.XSLFilename, Data.JS.Callback );
+			Data.Server.Request = xdh_ups::server::rSetLayout;
 		}
+	}
 
-	void SetElement_(
-		server::fSet Set,
+	void Set(
 		sclnjs::sCaller &Caller,
-		const char *Language,
-		flw::sWFlow &Flow )
+		xdh_ups::rData &Data )
 	{
 	qRH;
 		str::wString Id;
@@ -225,38 +194,40 @@ namespace layout_ {
 		tol::Init( Id );
 		Caller.GetArgument( Id );
 
-		SetElement_( Set, Id, Caller, Language, Flow );
+		Set_( Id, Caller, Data );
 	qRR;
 	qRT;
 	qRE;
 	}
+}
 
-	rRack_ &GetRack_( sclnjs::sCaller &Caller )
+namespace {
+	xdh_ups::rData &GetData_( sclnjs::sCaller &Caller )
 	{
-		rRack_ *Rack = NULL;
+		xdh_ups::rData *Data = NULL;
 	qRH;
 		sclnjs::rObject Object;
 	qRB;
 		Object.Init();
 		Caller.GetArgument( Object );
 
-		Rack = (rRack_ * )Object.Get( Id_ );
+		Data = (xdh_ups::rData * )Object.Get( Id_ );
 
-		if ( Rack == NULL )
+		if ( Data == NULL )
 			qRGnr();
 	qRR;
 	qRT;
 	qRE;
-		return *Rack;
+		return *Data;
 	}
 }
 
-#define RACK	rRack_ &Rack = GetRack_( Caller )
+#define DATA	xdh_ups::rData &Data = GetData_( Caller )
 
 SCLNJS_F( xdhp::SetLayout )
 {
-	RACK;
-	SetElement_( server::SetLayout, Caller, Rack.Language, Rack.Flow );
+	DATA;
+	layout_::Set( Caller, Data );
 }
 
 SCLNJS_F( xdhp::GetContents )

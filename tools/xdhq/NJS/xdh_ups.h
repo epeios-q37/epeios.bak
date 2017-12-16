@@ -31,18 +31,20 @@ namespace xdh_ups {
 		struct rJS
 		{
 		public:
-			sclnjs::rCallback *Callback;
+			sclnjs::rCallback Callback;
 			sclnjs::wArguments Arguments;
+			str::wString	// For the launching of an action.
+				Id,
+				Action;
 			void reset( bso::sBool P = true )
 			{
-				Callback = NULL;
+				tol::reset( P, Callback, Arguments, Id, Action );
 				Arguments.reset( P );
 			}
 			qCDTOR( rJS );
 			void Init( void )
 			{
-				Callback = NULL;
-				Arguments.Init();
+				tol::Init( Callback, Arguments, Id, Action );
 			}
 		};
 	}
@@ -51,39 +53,41 @@ namespace xdh_ups {
 		qENUM( Request )
 		{
 			rSetLayout,
-				r_amount,
-				r_Undefined
+			rGetContents,
+			r_amount,
+			r_Undefined
 		};
 
 		struct rArguments
 		{
 		public:
-			str::wString Id, XML, XSL, Language;
+			str::wString Id, XML, XSLFilename, Language;
+			str::wStrings Ids;
 			void reset( bso::sBool P = true )
 			{
-				tol::reset( Id, XML, XSL, Language );
+				tol::reset( Id, XML, XSLFilename, Language, Ids );
 			}
 			qCDTOR( rArguments );
 			void Init( void )
 			{
-				tol::Init( Id, XML, XSL, Language );
+				tol::Init( Id, XML, XSLFilename, Language, Ids );
 			}
 		};
 
 		struct rServer
 		{
 		public:
-			eRequest Id;
+			eRequest Request;
 			rArguments Arguments;
 			void reset( bso::sBool P = true )
 			{
-				Id = r_Undefined;
+				Request = r_Undefined;
 				Arguments.reset( P );
 			}
 			qCDTOR( rServer );
 			void Init( void )
 			{
-				Id = r_Undefined;
+				Request = r_Undefined;
 				Arguments.Init();
 			}
 		};
@@ -91,40 +95,57 @@ namespace xdh_ups {
 
 	struct rData
 	{
+	private:
+		mtx::rHandler Lock_;
 	public:
 		js::rJS JS;
 		server::rServer Server;
+		sclnjs::rObject XDH;	// User overloaded 'XDH' JS class.
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, JS, Server );
+			if ( P ) {
+				if ( Lock_ != mtx::UndefinedHandler )
+					mtx::Delete( Lock_ );
+			}
+
+			tol::reset( P, JS, Server, XDH );
+			Lock_ = NULL;
 		}
 		qCDTOR( rData );
 		void Init( void )
 		{
-			tol::Init( JS, Server );
+			reset();
+
+			tol::Init( JS, Server, XDH );
+			Lock_ = mtx::Create();
+		}
+		void Lock( void )
+		{
+			mtx::Lock( Lock_ );
+		}
+		void Unlock( void )
+		{
+			mtx::Unlock( Lock_ );
 		}
 	};
 
 	class rSharing
 	{
 	private:
-		mtx::rHandler Set_, Get_, Completion_;
+		mtx::rHandler Server_, JS_;	// Server upstream, JS, server downstream.
 		rData *Data_;
 	public:
 		void reset( bso::sBool P = true )
 		{
 			if ( P ) {
-				if ( Set_ != mtx::UndefinedHandler )
-					mtx::Delete( Set_ );
+				if ( Server_ != mtx::UndefinedHandler )
+					mtx::Delete( Server_ );
 
-				if ( Get_ != mtx::UndefinedHandler )
-					mtx::Delete( Get_ );
-
-				if ( Completion_ != mtx::UndefinedHandler )
-					mtx::Delete( Completion_ );
+				if ( JS_ != mtx::UndefinedHandler )
+					mtx::Delete( JS_ );
 			}
 
-			Set_ = Get_ = Completion_ = NULL;
+			Server_ = JS_ = NULL;
 			Data_ = NULL;
 		}
 		qCDTOR( rSharing );
@@ -132,17 +153,17 @@ namespace xdh_ups {
 		{
 			reset();
 
-			Set_ = mtx::Create();
-			Get_ = mtx::Create();
-			Completion_ = mtx::Create();
+			Server_ = mtx::Create();
+			JS_ = mtx::Create();
 
 			Data_ = NULL;
 
-			mtx::Lock( Get_ );
+			mtx::Lock( JS_ );
 		}
-		void SetData( rData *Data )
+		// Called by server.
+		void Upstream( rData *Data )
 		{
-			mtx::Lock( Set_ );
+			mtx::Lock( Server_ );
 
 			if ( Data_ != NULL )
 				qRGnr();
@@ -152,32 +173,20 @@ namespace xdh_ups {
 
 			Data_ = Data;
 
-			mtx::Unlock( Get_ );
-			mtx::Lock( Set_ );
-			mtx::Lock( Completion_ );
+			mtx::Unlock( JS_ );
 		}
-		rData &GetData( void )
+		rData &ReadJS( void )
 		{
-			mtx::Lock( Get_ );
+			mtx::Lock( JS_ );
 
-			rData *Data = Data_;
+			rData &Data = *Data_;
 
-			if ( Data == NULL )
-				qRGnr();
+			mtx::Unlock( Server_ );
 
-			mtx::Unlock( Set_ );
+			if ( Data_ == NULL )
+				qRFwk();
 
-			mtx::Lock( Get_ );
-
-			return *Data;
-		}
-		void ReportCompletion( void )
-		{
-			mtx::Unlock( Completion_ );
-		}
-		void WaitForCompletion( void )
-		{
-			mtx::Lock( Completion_ );
+			return *Data_;
 		}
 	};
 

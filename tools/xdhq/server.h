@@ -20,6 +20,8 @@
 #ifndef SERVER_INC_
 # define SERVER_INC_
 
+# include "prtcl.h"
+
 # include "flw.h"
 # include "str.h"
 
@@ -61,49 +63,247 @@ namespace server {
 		}
 	}
 
-	void GetContents(
-		const str::dStrings &Ids,
-		flw::sRWFlow &Flow,
-		str::dStrings &Contents );
+	namespace contents {
+		namespace set {
+			void S(
+				const str::dStrings &Ids,
+				const str::dStrings &Contents,
+				flw::sWFlow &Flow );
 
-	void SetContents_(
-		const str::dStrings &Ids,
-		const str::dStrings &Contents,
-		flw::sWFlow &Flow );
+			inline void R( flw::sRFlow &Flow )
+			{}
+		}
 
-	void SetWidgets(
-		const str::dString &Id,
-		flw::sWFlow &Flow );
+		inline void Set(
+			const str::dStrings &Ids,
+			const str::dStrings &Contents,
+			flw::sRWFlow &Flow )
+		{
+			set::S( Ids, Contents, Flow );
+			set::R( Flow );
+		}
 
-	void SetCasts(
-		const str::dString &Id,
-		const str::dStrings &Tags,
-		const str::dStrings &Values,
-		flw::sWFlow &Flow );
+		namespace get {
+			void S(
+				const str::dStrings &Ids,
+				flw::sWFlow &Flow );
 
-	void GetAttribute(
-		const str::dString &Id,
-		const str::dString &Name,
-		flw::sRWFlow &Flow,
-		str::dString &Value );
+			void R(
+				flw::sRFlow &Flow,
+				str::dStrings &Contents );
+		}
 
-	void SetAttribute(
-		const str::dString &Id,
-		const str::dString &Name,
-		const str::dString &Value,
-		flw::sWFlow &Flow );
+		inline void Get(
+			const str::dStrings &Id,
+			flw::sRWFlow &Flow,
+			str::dStrings &Contents )
+		{
+			get::S( Id, Flow );
+			get::R( Flow, Contents );
+		}
+	}
 
-	void GetProperty(
-		const str::dString &Id,
-		const str::dString &Name,
-		flw::sRWFlow &Flow,
-		str::dString &Value );
+	namespace widgets {
+		namespace dress {
+			void S(
+				const str::dString &Id,
+				flw::sWFlow &Flow );
 
-	void SetProperty(
-		const str::dString &Id,
-		const str::dString &Name,
-		const str::dString &Value,
-		flw::sWFlow &Flow );
+			inline void R( flw::sRFlow &Flow )
+			{}
+		}
+
+		inline void DressWidgets(
+			const str::dString &Id,
+			flw::sRWFlow &Flow )
+		{
+			dress::S( Id, Flow );
+			dress::R( Flow );
+		}
+	}
+
+	namespace casts {
+		namespace set 
+		{ 
+			void S(
+				const str::dString &Id,
+				const str::dStrings &Tags,
+				const str::dStrings &Values,
+				flw::sWFlow &Flow );
+
+			inline void R( flw::sRFlow &Flow )
+			{}
+		}
+		
+		inline void SetCasts(
+			const str::dString &Id,
+			const str::dStrings &Tags,
+			const str::dStrings &Values,
+			flw::sRWFlow &Flow )
+		{
+			set::S( Id, Tags, Values, Flow );
+			set::R( Flow );
+		}
+	}
+
+	namespace ap_ {
+		namespace set {
+			void S(
+				prtcl::eAnswer Answer,
+				const str::dString &Id,
+				const str::dString &Name,
+				const str::dString &Value,
+				flw::sWFlow &Flow );
+
+			inline void R( flw::sRFlow &Flow )
+			{}
+		}
+
+		inline void Set(
+			prtcl::eAnswer Answer,
+			const str::dString &Id,
+			const str::dString &Name,
+			const str::dString &Value,
+			flw::sRWFlow &Flow )
+		{
+			set::S( Answer, Id, Name, Value, Flow );
+			set::R( Flow );
+		}
+
+		namespace get {
+			void S(
+				prtcl::eAnswer Answer,
+				const str::dString &Id,
+				const str::dString &Name,
+				flw::sWFlow &Flow );
+
+			inline void R(
+				flw::sRFlow &Flow,
+				str::dString &Value );
+		}
+
+		inline void Get(
+			prtcl::eAnswer Answer,
+			const str::dString &Id,
+			const str::dString &Name,
+			flw::sRWFlow &Flow,
+			str::dString &Value )
+		{
+			get::S( Answer, Id, Name, Flow );
+			get::R( Flow, Value );
+		}
+
+	}
+
+	namespace attribute {
+		namespace set {
+			inline void S(
+				const str::dString &Id,
+				const str::dString &Name,
+				const str::dString &Value,
+				flw::sWFlow &Flow )
+			{
+				ap_::set::S( prtcl::aSetAttribute_1, Id, Name, Value, Flow );
+			}
+
+			inline void R( flw::sRFlow &Flow )
+			{
+				ap_::set::R( Flow );
+			}
+
+			inline void Set(
+				const str::dString &Id,
+				const str::dString &Name,
+				const str::dString &Value,
+				flw::sRWFlow &Flow )
+			{
+				set::S( Id, Name, Value, Flow );
+				set::R( Flow );
+			}
+		}
+
+		namespace get {
+			inline void S(
+				const str::dString &Id,
+				const str::dString &Name,
+				flw::sWFlow &Flow )
+			{
+				ap_::get::S( prtcl::aGetAttribute_1, Id, Name, Flow );
+			}
+
+			inline void R(
+				flw::sRFlow &Flow,
+				str::dString &Value )
+			{
+				ap_::get::R( Flow, Value );
+			}
+
+			inline void Set(
+				const str::dString &Id,
+				const str::dString &Name,
+				const str::dString &Value,
+				flw::sRWFlow &Flow )
+			{
+				set::S( Id, Name, Value, Flow );
+				set::R( Flow );
+			}
+		}
+
+		namespace property {
+			namespace set {
+				inline void S(
+					const str::dString &Id,
+					const str::dString &Name,
+					const str::dString &Value,
+					flw::sWFlow &Flow )
+				{
+					ap_::set::S( prtcl::aSetProperty_1, Id, Name, Value, Flow );
+				}
+
+				inline void R( flw::sRFlow &Flow )
+				{
+					ap_::set::R( Flow );
+				}
+
+				inline void Set(
+					const str::dString &Id,
+					const str::dString &Name,
+					const str::dString &Value,
+					flw::sRWFlow &Flow )
+				{
+					set::S( Id, Name, Value, Flow );
+					set::R( Flow );
+				}
+			}
+
+			namespace get {
+				inline void S(
+					const str::dString &Id,
+					const str::dString &Name,
+					flw::sWFlow &Flow )
+				{
+					ap_::get::S( prtcl::aGetProperty_1, Id, Name, Flow );
+				}
+
+				inline void R(
+					flw::sRFlow &Flow,
+					str::dString &Value )
+				{
+					ap_::get::R( Flow, Value );
+				}
+
+				inline void Set(
+					const str::dString &Id,
+					const str::dString &Name,
+					const str::dString &Value,
+					flw::sRWFlow &Flow )
+				{
+					set::S( Id, Name, Value, Flow );
+					set::R( Flow );
+				}
+			}
+		}
+	}
 }
 
 #endif

@@ -101,44 +101,48 @@ void server::layout::set::S(
 	Set_( prtcl::aSetLayout_1, Id, XML, XSLFilename, Language, Flow );
 }
 
-void server::GetContents(
+void server::contents::get::S(
 	const str::dStrings &Ids,
-	flw::sRWFlow &Flow,
-	str::dStrings &Contents )
+	flw::sWFlow &Flow )
 {
 	prtcl::PutAnswer( prtcl::aGetContents_1, Flow );
 	prtcl::Put( Ids, Flow );
 	Flow.Commit();
+}
 
+void server::contents::get::R(
+	flw::sRFlow &Flow,
+	str::dStrings &Contents )
+{
 	prtcl::Get( Flow, Contents );
 	Flow.Dismiss();
 }
 
-void server::SetContents_(
-	const str::dStrings &Ids,
-	const str::dStrings &Contents,
-	flw::sWFlow &Flow )
+void server::contents::set::S(
+	const str::dStrings & Ids,
+	const str::dStrings & Contents,
+	flw::sWFlow & Flow )
 {
-	prtcl::PutAnswer( prtcl::aSetContents__1, Flow );
+	prtcl::PutAnswer( prtcl::aSetContents_1, Flow );
 	prtcl::Put( Ids, Flow );
 	prtcl::Put( Contents, Flow );
 	Flow.Commit();
 }
 
-void server::SetWidgets(
+void server::widgets::dress::S(
 	const str::dString &Id,
 	flw::sWFlow &Flow )
 {
-	prtcl::PutAnswer( prtcl::aSetWidgets_1, Flow );
+	prtcl::PutAnswer( prtcl::aDressWidgets_1, Flow );
 	prtcl::Put( Id, Flow );
 	Flow.Commit();
 }
 
-void server::SetCasts(
+void server::casts::set::S(
 	const str::dString &Id,
 	const str::dStrings &Tags,
 	const str::dStrings &Values,
-	flw::sWFlow &Flow )
+	flw::sWFlow & Flow )
 {
 	prtcl::PutAnswer( prtcl::aSetCasts_1, Flow );
 	prtcl::Put( Id, Flow );
@@ -147,58 +151,37 @@ void server::SetCasts(
 	Flow.Commit();
 }
 
-void server::GetAttribute(
-	const str::dString &Id,
-	const str::dString &Name,
-	flw::sRWFlow &Flow,
-	str::dString &Value )
-{
-	prtcl::PutAnswer( prtcl::aGetAttribute_1, Flow );
-	prtcl::Put( Id, Flow );
-	prtcl::Put( Name, Flow );
-	Flow.Commit();
-
-	prtcl::Get( Flow, Value );
-	Flow.Dismiss();
-}
-
-void server::SetAttribute(
+void server::ap_::set::S(
+	prtcl::eAnswer Answer,
 	const str::dString &Id,
 	const str::dString &Name,
 	const str::dString &Value,
 	flw::sWFlow &Flow )
 {
-	prtcl::PutAnswer( prtcl::aSetAttribute_1, Flow );
+	prtcl::PutAnswer( Answer, Flow );
 	prtcl::Put( Id, Flow );
 	prtcl::Put( Name, Flow );
 	prtcl::Put( Value, Flow );
 	Flow.Commit();
 }
 
-void server::GetProperty(
+void server::ap_::get::S(
+	prtcl::eAnswer Answer,
 	const str::dString &Id,
 	const str::dString &Name,
-	flw::sRWFlow &Flow,
-	str::dString &Value )
+	flw::sWFlow &Flow )
 {
-	prtcl::PutAnswer( prtcl::aGetProperty_1, Flow );
+	prtcl::PutAnswer( Answer, Flow );
 	prtcl::Put( Id, Flow );
 	prtcl::Put( Name, Flow );
 	Flow.Commit();
+}
 
+void server::ap_::get::R(
+	flw::sRFlow &Flow,
+	str::dString &Value )
+{
 	prtcl::Get( Flow, Value );
 	Flow.Dismiss();
 }
 
-void server::SetProperty(
-	const str::dString &Id,
-	const str::dString &Name,
-	const str::dString &Value,
-	flw::sWFlow &Flow )
-{
-	prtcl::PutAnswer( prtcl::aSetProperty_1, Flow );
-	prtcl::Put( Id, Flow );
-	prtcl::Put( Name, Flow );
-	prtcl::Put( Value, Flow );
-	Flow.Commit();
-}

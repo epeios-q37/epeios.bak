@@ -66,11 +66,19 @@ namespace sclnjs {
 		qCVDTOR( rCore_ );
 		void Init( void )
 		{
+			reset();
 			Callback_ = NULL;
 		}
 		void Assign( callback *Callback )
 		{
+			if ( HasAssignation() )
+				qRFwk();
+
 			Callback_ = Callback;
+		}
+		bso::sBool HasAssignation( void ) const
+		{
+			return Callback_ != NULL;
 		}
 		callback &Callback( void ) const
 		{
