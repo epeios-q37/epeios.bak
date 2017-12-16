@@ -33,11 +33,33 @@ namespace server {
 		str::dString &Id,
 		str::dString &Action );
 
-#define SERVER_SETP_ 	const str::dString &, const str::dString &, const str::dString &, const char *, flw::sWFlow &Flow
+	// '...S' Send the request.
+	// '...R' get the response.
 
-	typedef void(* fSet)( SERVER_SETP_ );
+	namespace layout {
+		namespace set {
+			void S(
+				const str::dString &Id,
+				const str::dString &XML,
+				const str::dString &XSL,
+				const str::dString &Language,
+				flw::sWFlow &Flow );
 
-	void SetLayout( SERVER_SETP_ );
+			inline void R( flw::sRFlow &Flow )
+			{}
+		}
+
+		inline void Set(
+			const str::dString &Id,
+			const str::dString &XML,
+			const str::dString &XSL,
+			const str::dString &Language,
+			flw::sRWFlow &Flow )
+		{
+			set::S( Id, XML, XSL, Language, Flow );
+			set::R( Flow );
+		}
+	}
 
 	void GetContents(
 		const str::dStrings &Ids,

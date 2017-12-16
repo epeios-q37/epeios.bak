@@ -306,11 +306,21 @@ namespace sclnjs {
 		{
 			return sclnjs::VoidLaunch( C_(), Args... );
 		}
+		void VoidLaunch( const dArguments &Arguments )
+		{
+			return sclnjs::VoidLaunch( C_(), Arguments );
+		}
 		template <typename ...args> void ObjectLaunch(
 			rObject &Object,
 			const args &...Args )
 		{
 			return sclnjs::ObjectLaunch( Object, C_(), Args... );
+		}
+		void ObjectLaunch(
+			rObject &Object,
+			const dArguments &Arguments )
+		{
+			return sclnjs::ObjectLaunch( Object, C_(), Arguments );
 		}
 	};
 
@@ -373,31 +383,6 @@ namespace sclnjs {
 
 	void SCLNJSInfo( txf::sOFlow &Flow );	// To define by user.
 	void SCLNJSRegister( sRegistrar &Registrar );	// To define by user
-}
-
-// Declaration of the handling of it own types.
-// Extends same namespace declared in 'scln4a.h'.
-namespace scln4 {
-/*	template <> void Get(
-		int Index,
-		cCaller_ &Caller,
-		sclnjs::rObject &Object );
-
-	template <> void Get(
-		int Index,
-		cCaller_ &Caller,
-		sclnjs::rRStream &Stream );
-
-	template <> void Get(
-		int Index,
-		cCaller_ &Caller,
-		sclnjs::rBuffer &Buffer );
-
-	template <> void Get(
-		int Index,
-		cCaller_ &Caller,
-		sclnjs::rCallback &Callback );
-		*/
 }
 
 txf::text_oflow__ &operator <<(

@@ -74,14 +74,15 @@ namespace {
 		const str::dString &Id,
 		const str::dString &XML,
 		const str::dString &XSLFilename,
-		const char *Language,
+		const str::dString &Language,
 		flw::sWFlow &Flow )
 	{
 	qRH;
 		str::wString XSL;
+		qCBUFFERr Buffer;
 	qRB;
 		XSL.Init();
-		sclmisc::LoadXMLAndTranslateTags( XSLFilename, Language, XSL, '#' );
+		sclmisc::LoadXMLAndTranslateTags( XSLFilename, Language.Convert( Buffer ), XSL, '#' );
 
 		SetWithXSLContent_( Answer, Id, XML, XSL, Flow );
 	qRR;
@@ -90,11 +91,11 @@ namespace {
 	}
 }
 
-void server::SetLayout(
+void server::layout::set::S(
 	const str::dString &Id,
 	const str::dString &XML,
 	const str::dString &XSLFilename,
-	const char *Language,
+	const str::dString &Language,
 	flw::sWFlow &Flow )
 {
 	Set_( prtcl::aSetLayout_1, Id, XML, XSLFilename, Language, Flow );

@@ -17,24 +17,15 @@
     along with XDHq.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// TREE Primitives.
+// XDH DoWnStream.
+// Stuff related to the JS part.
 
-#ifndef TREEP_INC_
-# define TREEP_INC_
+#ifndef XDH_DWS_INC_
+# define XDH_DWS_INC_
 
-# include "sclnjs.h"
+# include"sclnjs.h"
 
-namespace treep {
-	SCLNJS_F( New );
-	SCLNJS_F( Delete );
-	SCLNJS_F( PushTag );
-	SCLNJS_F( PopTag );
-	SCLNJS_F( PutValue );
-	SCLNJS_F( PutAttribute );
-
-	const str::dString &GetXML(
-		sclnjs::sCaller &Caller,
-		str::dString &XML );
+namespace xdh_dws {
 }
 
 #endif

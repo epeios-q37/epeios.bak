@@ -43,7 +43,7 @@ mods += sck
 mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
 mods += scln4a sclnjs 
 mods += prtcl server 
-mods += registry treep xdhp 
+mods += registry treep xdhp xdh_dws xdh_ups 
 
 pmods += pllio 
 
@@ -393,7 +393,7 @@ ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20171211"\"
+copt += -DVERSION=\""20171216"\"
 copt += -DCOPYRIGHT_YEARS=\""2017"\"
 copt += -DIDENTIFIER=\""d6a723cb-e88f-4f2f-b429-3adc207f1d62"\"
 

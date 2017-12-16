@@ -21,14 +21,12 @@
 
 #include "registry.h"
 #include "treep.h"
+#include "xdh_ups.h"
 
-#include "server.h"
-
-#include "csdcmn.h"
 #include "csdbns.h"
-
+#include "csdcmn.h"
+#include "csdmxs.h"
 #include "sclargmnt.h"
-#include "sclmisc.h"
 
 using namespace xdhp;
 
@@ -73,141 +71,71 @@ namespace {
 	}
 }
 
-namespace action_ {
-	qCDEF( char *, Id, "_q37ActionRack" );
+namespace {
+	qCDEF( char *, Id_, "_q37Rack" );
 
-	class rRack {
+	class rRack_ {
 	private:
-	public:
-		sck::rRWFlow Flow;
-		sclnjs::rObject Object;
-		qCBUFFERr Language;
-		void reset( bso::sBool P = true )
-		{
-			tol::reset( P, Flow, Language );
-		}
-		qCDTOR( rRack );
-		void Init(
-			sck::sSocket Socket,
-			sclnjs::rCallback &Callback )
-		{
-		qRH;
-			str::wString Language;
-		qRB;
-			Flow.Init( Socket, true );
-
-			Language.Init();
-			server::Handshake( Flow, Language );
-
-			Language.Convert( this->Language );
-
-			Object.Init();
-			Callback.ObjectLaunch( Object );
-
-			Object.Set( Id, this );
-		qRR;
-		qRT;
-		qRE;
-		}
-		void GetAction(
-			str::dString &Id,
-			str::dString &Action )
-		{
-			server::GetAction( Flow, Id, Action );
-		}
-	};
-
-	class rAsyncCallback
-	: public rRack,
-	  public cAsync_
-	{
-	private:
-		str::wString Id_, Action_;
-	protected:
-		void SCLNJSWork( void ) override
-		{
-			tol::Init( Id_, Action_ );
-			rRack::GetAction( Id_, Action_ );
-		}
-		sclnjs::eBehavior SCLNJSAfter( void ) override
-		{
-			n4njs::cUCallback *Callback = Get_( Action_ );
-			
-			if ( Callback != NULL )
-				sclnjs::VoidLaunch( *Callback, Object, Id_ );
-
-			// TODO : report not found callback.
-
-			return sclnjs::bRelaunch;
-		}
-	};
-}
-
-namespace listening_ {
-	class rRack {
-	private:
-		qRMV( sclnjs::rCallback, C_, Callback_ );
-		csdbns::rListener Listener_;
-		sck::sSocket Socket_;
+		xdh_ups::rSharing UpstreamSharing_;
+		xdh_ups::rProcessing Processing_;
+		csdmxs::rCallback Callback_;
+		csdbns::rServer Server_;
 		qCBUFFERr Language_;
+		sclnjs::rCallback ConnectCallback_;
+		sclnjs::rCallback *PendingCallback_;
+		sclnjs::dArguments *PendingCallbackArguments_;
+		sclnjs::rObject XDH_;	// The by the user overloaded 'XDH' JS class.
 	public:
 		void reset( bso::sBool P = true )
 		{
-			if ( P ) {
-				if ( Callback_ != NULL )
-					delete Callback_;
-			} 
-
-			tol::reset( P, Listener_, Callback_, Language_ );
-			Socket_ = sck::Undefined;
+			tol::reset( P, UpstreamSharing_, Processing_, Callback_, Server_, Language_, ConnectCallback_, PendingCallback_ );
 		}
-		qCDTOR( rRack );
+		qCDTOR( rRack_ );
 		void Init(
 			csdbns::sService Service,
-			sclnjs::rCallback *Callback )
+			sclnjs::rCallback &ConnectCallback )
 		{
-			Callback_ = Callback;
-			Listener_.Init( Service );
-			Socket_ = sck::Undefined;
+			UpstreamSharing_.Init();
+			Processing_.Init( UpstreamSharing_ );
+			Callback_.Init( Processing_ );
+			Server_.Init( Service, Callback_ );
+			ConnectCallback_.Init();
+			ConnectCallback_ = ConnectCallback;
+			PendingCallback_ = NULL;
 		}
-		void GetConnection( void )
+		void PrepareCalling( void )
 		{
-			const char *IP = NULL;
-			Socket_ = Listener_.GetConnection( IP );
+			xdh_ups::js::rJS &JS = UpstreamSharing_.GetData().JS;
+
+			if ( JS.Callback != NULL )
+				PendingCallback_ = JS.Callback;
+
+			PendingCallbackArguments_ = &JS.Arguments;
 		}
-		void HandleConnection( void )
+		void LaunchCalling( void )
 		{
-		qRH;
-			action_::rAsyncCallback *Action = NULL;
-		qRB;
-			Action = new action_::rAsyncCallback;
-
-			if ( Action == NULL )
-				qRAlc();
-
-			Action->Init( Socket_, C_() );
-
-			sclnjs::Launch( *Action );
-		qRR;
-			if ( Action != NULL )
-				delete Action;
-		qRT;
-		qRE;
+			if ( PendingCallback_ == NULL ) {// First call, on a fresh connection; we use the 'ConnectCallback_'.
+				XDH_.Init();
+				ConnectCallback_.ObjectLaunch( XDH_, *PendingCallbackArguments_ );
+				XDH_.Set( Id_, this );
+			} else {
+				PendingCallback_->VoidLaunch( *PendingCallbackArguments_ );	// As the callback are asynchronous, they never returns an value.
+			}
 		}
 	};
 
-	class rAsyncCallback
-	: public rRack,
+	class rAsyncCallback_
+	: public rRack_,
 	  public cAsync_
 	{
 	protected:
 		void SCLNJSWork( void ) override
 		{
-			rRack::GetConnection();
+			rRack_::PrepareCalling();
 		}
 		sclnjs::eBehavior SCLNJSAfter( void ) override
 		{
-			rRack::HandleConnection();
+			rRack_::LaunchCalling();
 
 			return sclnjs::bRelaunch;
 		}
@@ -236,58 +164,54 @@ SCLNJS_F( xdhp::Listen )
 {
 qRH;
 	csdcmn::sVersion Version = csdcmn::UndefinedVersion;
-	sclnjs::rCallback *Callback = NULL;
+	sclnjs::rCallback Callback;
 	str::wString Arguments;
-	listening_::rAsyncCallback *Listening = NULL;
+	rAsyncCallback_ *ARack = NULL;
 qRB;
-	Callback = new sclnjs::rCallback;
-
-	if ( Callback == NULL )
-		qRGnr();
-
-	tol::Init( *Callback, Arguments );
-	Caller.GetArgument( *Callback, Arguments );
+	tol::Init( Callback, Arguments );
+	Caller.GetArgument( Callback, Arguments );
 
 	sclargmnt::FillRegistry( Arguments, sclargmnt::faIsArgument, sclargmnt::uaReport );
 
-	Listening = new listening_::rAsyncCallback;
+	ARack = new rAsyncCallback_;
 
-	if ( Listening == NULL )
+	if ( ARack == NULL )
 		qRAlc();
 
-	Listening->Init( sclmisc::MGetU16( registry::parameter::Service ), Callback );
-	sclnjs::Launch( *Listening );
-qRR
-	if ( Listening != NULL )
-		delete Listening;
+	ARack->Init( sclmisc::MGetU16( registry::parameter::Service ), Callback );
 
-	if ( Callback != NULL )
-		delete Callback;
+	Callback.reset( false );	// To avoid the destruction of contained items, as their are now managed by 'Listening'.
+	sclnjs::Launch( *ARack );
+qRR
+	if ( ARack != NULL )
+		delete ARack;
 qRT
 qRE
 }
 
-namespace {
-	void SetElement_(
-		server::fSet Set,
-		const str::dString &Id,
-		sclnjs::sCaller &Caller,
-		const char *Language,
-		flw::sWFlow &Flow )
-	{
-	qRH;
-		str::wString XML, XSLFilename;
-	qRB;
-		tol::Init( XML, XSLFilename );
+namespace layout_ {
+	namespace {
+		void Set_ (
+			const str::dString &Id,
+			sclnjs::sCaller &Caller,
+			const str::dString,
+			flw::sWFlow &Flow )
+		{
+		qRH;
+			str::wString XML, XSLFilename;
+			sclnjs::rCallback Callback;
+		qRB;
+			XML.Init();
+			treep::GetXML( Caller, XML );
 
-		treep::GetXML( Caller, XML );
-		Caller.GetArgument( XSLFilename );
+			tol::Init( XSLFilename, Callback );
+			Caller.GetArgument( XSLFilename, Callback );
 
-		Set( Id, XML, XSLFilename, Language, Flow );
-	qRR;
-	qRT;
-	qRE;
-	}
+			Set( Id, XML, XSLFilename, Language, Flow );
+		qRR;
+		qRT;
+		qRE;
+		}
 
 	void SetElement_(
 		server::fSet Set,
@@ -307,16 +231,16 @@ namespace {
 	qRE;
 	}
 
-	action_::rRack &GetActionRack_( sclnjs::sCaller &Caller )
+	rRack_ &GetRack_( sclnjs::sCaller &Caller )
 	{
-		action_::rRack *Rack = NULL;
+		rRack_ *Rack = NULL;
 	qRH;
 		sclnjs::rObject Object;
 	qRB;
 		Object.Init();
 		Caller.GetArgument( Object );
 
-		Rack = (action_::rRack * )Object.Get( action_::Id );
+		Rack = (rRack_ * )Object.Get( Id_ );
 
 		if ( Rack == NULL )
 			qRGnr();
@@ -327,7 +251,7 @@ namespace {
 	}
 }
 
-#define RACK	action_::rRack &Rack = GetActionRack_( Caller )
+#define RACK	rRack_ &Rack = GetRack_( Caller )
 
 SCLNJS_F( xdhp::SetLayout )
 {

@@ -17,6 +17,8 @@
     along with XDHq.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+// XDH Primitives.
+
 #ifndef XDHP_INC_
 # define XDHP_INC_
 

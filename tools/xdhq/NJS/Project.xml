@@ -40,6 +40,8 @@
 		<Module>registry</Module>
 		<Module>treep</Module>
 		<Module>xdhp</Module>
+		<Module>xdh_dws</Module>
+		<Module>xdh_ups</Module>
 	</Modules>
 	<SourceDirs>
 		<SourceDir>..</SourceDir>
