@@ -132,10 +132,10 @@ namespace xdh_cmn {
 		qRMV( rSharing, S_, Sharing_ );
 	protected:
 		virtual void *CSDSCBPreProcess(
-			fdr::rIODriver *IODriver,
+			fdr::rRWDriver *IODriver,
 			const ntvstr::char__ *Origin ) override;
 		virtual csdscb::eAction CSDSCBProcess(
-			fdr::rIODriver *IODriver,
+			fdr::rRWDriver *IODriver,
 			void *UP ) override;
 		virtual bso::sBool CSDSCBPostProcess( void *UP ) override;
 	public:

@@ -80,7 +80,7 @@ namespace sclmisc {
 		return sclerror::GetPendingErrorTranslation( GetBaseLanguage(), Translation, ErrHandling );
 	}
 
-	bso::sBool DisplaySCLBasePendingError( txf::sOFlow &Flow = cio::CErr );
+	bso::sBool DisplaySCLBasePendingError( txf::sWFlow &Flow = cio::CErr );
 
 	// To use as 'action' parameter for the 'qRFE(...)' macro to display the file/line of an error.
 	void ErrFinal( void );
@@ -224,7 +224,7 @@ namespace sclmisc {
 
 	// Deletes the file which contains the lasting registry.
 	void DumpLastingRegistryFile(
-		txf::sOFlow &Flow,
+		txf::sWFlow &Flow,
 		const char *Target = SCLMISCTargetName,
 		const char *Product = SCLMISCProductName,
 		const char *Organization = SCLMISCOrganizationName );
@@ -765,7 +765,7 @@ namespace sclmisc {
 		}
 		E_CDTOR( rODriverRack );
 		// !!! Don't forget the 'HandleError()' in 'qRR'. !!!
-		fdr::rODriver &Init( const fnm::name___ &FileName );
+		fdr::rWDriver &Init( const fnm::name___ &FileName );
 		void HandleError( void );	// A appeler  partir de 'qRR'.
 		bso::sBool IsFile( void ) const
 		{
@@ -785,7 +785,7 @@ namespace sclmisc {
 		}
 		E_CDTOR( rIDriverRack );
 		// !!! Don't forget the 'HandleError()' in 'qRR'. !!!
-		fdr::rIDriver &Init( const fnm::name___ &FileName );
+		fdr::rRDriver &Init( const fnm::name___ &FileName );
 		void HandleError( void )	// To call from' qRR'.
 		{
 			// Does nothing. For simetry with 'rODriverRack'.

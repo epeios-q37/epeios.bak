@@ -257,7 +257,7 @@ bso::bool__ flx::exec_ioflow_driver___::Init(
 }
 
 const str::dString &flx::GetString(
-	fdr::rIDriver &Driver,
+	fdr::rRDriver &Driver,
 	str::dString &String )
 {
 qRH
@@ -272,7 +272,7 @@ qRE
 	return String;
 }
 
-fdr::sSize flx::rIOMonitor::FDRRead(
+fdr::sSize flx::rRWMonitor::FDRRead(
 	fdr::sSize Maximum,
 	fdr::sByte *Buffer )
 {
@@ -307,7 +307,7 @@ qRE
 	return Maximum;
 }
 
-void flx::rIOMonitor::FDRDismiss( bso::sBool Unlock )
+void flx::rRWMonitor::FDRDismiss( bso::sBool Unlock )
 {
 	if ( Undismissed_ ) {
 		if ( M_().In.After != NULL )
@@ -320,12 +320,12 @@ void flx::rIOMonitor::FDRDismiss( bso::sBool Unlock )
 	return ID_().Dismiss( Unlock );
 }
 
-fdr::sTID flx::rIOMonitor::FDRITake( fdr::sTID Owner )
+fdr::sTID flx::rRWMonitor::FDRITake( fdr::sTID Owner )
 {
 	return ID_().ITake( Owner );
 }
 
-fdr::sSize flx::rIOMonitor::FDRWrite(
+fdr::sSize flx::rRWMonitor::FDRWrite(
 	const fdr::sByte *Buffer,
 	fdr::sSize Maximum )
 {
@@ -352,7 +352,7 @@ fdr::sSize flx::rIOMonitor::FDRWrite(
 	return Maximum;
 }
 
-void flx::rIOMonitor::FDRCommit( bso::sBool Unlock )
+void flx::rRWMonitor::FDRCommit( bso::sBool Unlock )
 {
 	if ( IsOut_() ) {
 		if ( Uncommited_ ) {
@@ -366,15 +366,15 @@ void flx::rIOMonitor::FDRCommit( bso::sBool Unlock )
 	Uncommited_ = false;
 }
 
-fdr::sTID flx::rIOMonitor::FDROTake( fdr::sTID Owner )
+fdr::sTID flx::rRWMonitor::FDROTake( fdr::sTID Owner )
 {
 	return OD_().OTake( Owner );
 }
 
 namespace async_ {
 	struct rData {
-		fdr::rIDriver *IDriver;
-		fdr::rODriver *ODriver;
+		fdr::rRDriver *IDriver;
+		fdr::rWDriver *ODriver;
 		void reset( bso::sBool P = true )
 		{
 			tol::reset( P, IDriver, ODriver );
@@ -387,8 +387,8 @@ namespace async_ {
 		mtk::gBlocker &Blocker )
 	{
 	qRH
-		flw::sDressedIFlow<> IFlow;
-		flw::sDressedOFlow<> OFlow;
+		flw::sDressedRFlow<> IFlow;
+		flw::sDressedWFlow<> OFlow;
 		fdr::sByte Buffer[100];
 		rData &Data = *(rData *)UP;
 	qRB
@@ -407,9 +407,9 @@ namespace async_ {
 	}
 }
 
-fdr::rODriver &flx::rASync_::Init(
+fdr::rWDriver &flx::rASync_::Init(
 	rRelay_ &Relay,
-	fdr::rODriver &ODriver )
+	fdr::rWDriver &ODriver )
 {
 qRH
 	async_::rData Data;

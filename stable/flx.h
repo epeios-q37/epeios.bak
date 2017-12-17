@@ -389,7 +389,7 @@ namespace flx {
 			_Driver.Init( Bunch, fdr::tsDisabled, Position );
 			standalone_iflow__<>::Init( _Driver );
 		}
-		flw::sIFlow &operator *( void )
+		flw::sRFlow &operator *( void )
 		{
 			return *this;
 		}
@@ -1382,7 +1382,7 @@ namespace flx {
 /***************/
 
 namespace flx {
-	class cSizeDelimitedOFlow
+	class cSizeDelimitedWFlow
 	{
 	protected:
 		virtual void FLXOnEOF( void ) = 0;
@@ -1391,7 +1391,7 @@ namespace flx {
 		{
 			return FLXOnEOF();
 		}
-		qCALLBACK( SizeDelimitedOFlow );
+		qCALLBACK( SizeDelimitedWFlow );
 	};
 
 	class rSizeDelimitedIDriver
@@ -1399,8 +1399,8 @@ namespace flx {
 	{
 	private:
 		fdr::sSize Size_;
-		flw::sDressedIFlow<> Flow_;
-		cSizeDelimitedOFlow *Callback_;
+		flw::sDressedRFlow<> Flow_;
+		cSizeDelimitedWFlow *Callback_;
 	protected:
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
@@ -1440,8 +1440,8 @@ namespace flx {
 		qCVDTOR( rSizeDelimitedIDriver );
 		void Init(
 			fdr::sSize Size,
-			fdr::rIDriver &Driver,
-			cSizeDelimitedOFlow *Callback,
+			fdr::rRDriver &Driver,
+			cSizeDelimitedWFlow *Callback,
 			fdr::thread_safety__ ThreadSafety )
 		{
 			_idriver___::Init( ThreadSafety );
@@ -1452,32 +1452,32 @@ namespace flx {
 		}
 	};
 
-	typedef flw::sDressedIFlow<> sDressedIFlow_;
+	typedef flw::sDressedRFlow<> sDressedRFlow_;
 
-	class rSizeDelimitedOFlow
-	: public sDressedIFlow_
+	class rSizeDelimitedWFlow
+	: public sDressedRFlow_
 	{
 	private:
 		rSizeDelimitedIDriver Driver_;
 	public:
 		void reset( bso::sBool P = true )
 		{
-			sDressedIFlow_::reset( P );
+			sDressedRFlow_::reset( P );
 			tol::reset( P, Driver_ );
 		}
-		qCDTOR( rSizeDelimitedOFlow );
+		qCDTOR( rSizeDelimitedWFlow );
 		void Init(
 			fdr::sSize Size,
-			fdr::rIDriver &Driver,
-			cSizeDelimitedOFlow *Callback = NULL )
+			fdr::rRDriver &Driver,
+			cSizeDelimitedWFlow *Callback = NULL )
 		{
 			Driver_.Init( Size, Driver, Callback, fdr::ts_Default );
-			sDressedIFlow_::Init( Driver_ );
+			sDressedRFlow_::Init( Driver_ );
 		}
 		void Init(
 			fdr::sSize Size,
-			fdr::rIDriver &Driver,
-			cSizeDelimitedOFlow &Callback )
+			fdr::rRDriver &Driver,
+			cSizeDelimitedWFlow &Callback )
 		{
 			Init( Size, Driver, &Callback );
 		}
@@ -1488,7 +1488,7 @@ namespace flx {
 
 	// Put the content of 'Driver' into 'String' until EOF.
 	const str::dString &GetString(
-		fdr::rIDriver &Driver,
+		fdr::rRDriver &Driver,
 		str::dString &String );
 
 	// Channel(s) to monitor.
@@ -1501,7 +1501,7 @@ namespace flx {
 		c_Undefined
 	};
 
-	typedef fdr::rIODressedDriver rIODriver_;
+	typedef fdr::rRWDressedDriver rRWDriver_;
 
 	struct sMarkers {
 		struct {
@@ -1518,16 +1518,16 @@ namespace flx {
 	};
 
 	// Write to console the input and/or output data. For text based protocol exchanges (like HTTP, IMAP, POP...).
-	class rIOMonitor
-	: public rIODriver_
+	class rRWMonitor
+	: public rRWDriver_
 	{
 	private:
 		tht::rLocker Locker_;
-		qRMV( fdr::rIDriver, ID_, IDriver_ );
-		qRMV( fdr::rODriver, OD_, ODriver_ );
+		qRMV( fdr::rRDriver, ID_, IDriver_ );
+		qRMV( fdr::rWDriver, OD_, ODriver_ );
 		qRMV( const sMarkers, M_, Markers_ );
-		qRMV( txf::sOFlow, FI_, FlowI_ );
-		qRMV( txf::sOFlow, FO_, FlowO_ );
+		qRMV( txf::sWFlow, FI_, FlowI_ );
+		qRMV( txf::sWFlow, FO_, FlowO_ );
 		bso::sBool Uncommited_;
 		bso::sBool Undismissed_;
 		bso::sBool IsIn_( void ) const
@@ -1550,11 +1550,11 @@ namespace flx {
 		virtual void FDRCommit( bso::sBool Unlock ) override;
 		virtual fdr::sTID FDROTake( fdr::sTID Owner ) override;
 		void Init_(
-			fdr::rIDriver *IDriver,
-			fdr::rODriver *ODriver,
+			fdr::rRDriver *RDriver,
+			fdr::rWDriver *WDriver,
 			const sMarkers &Markers,	// NOT duplicated !
-			txf::sOFlow *FlowI,
-			txf::sOFlow *FlowO )	// Two different flow, in case one instance is share between two differtent threads.
+			txf::sWFlow *FlowI,
+			txf::sWFlow *FlowO )	// Two different flow, in case one instance is share between two differtent threads.
 		{
 			reset();
 
@@ -1562,9 +1562,9 @@ namespace flx {
 
 			Uncommited_ = false;
 			Undismissed_ = false;
-			rIODriver_::Init( fdr::ts_Default );
-			IDriver_ = IDriver;
-			ODriver_ = ODriver;
+			rRWDriver_::Init( fdr::ts_Default );
+			IDriver_ = RDriver;
+			ODriver_ = WDriver;
 			Markers_ = &Markers;
 			FlowI_ = FlowI;
 			FlowO_ = FlowO;
@@ -1580,45 +1580,45 @@ namespace flx {
 			}
 
 			tol::reset( P, Locker_, IDriver_, ODriver_, Markers_, FlowI_, FlowO_, Uncommited_, Undismissed_ );
-			rIODriver_::reset( P );
+			rRWDriver_::reset( P );
 		}
-		qCVDTOR( rIOMonitor );
+		qCVDTOR( rRWMonitor );
 		void Init(
-			fdr::rIDriver &IDriver,
-			fdr::rODriver &ODriver,
+			fdr::rRDriver &IDriver,
+			fdr::rWDriver &ODriver,
 			const sMarkers &Markers,	// NOT duplicated !
-			txf::sOFlow &FlowI,
-			txf::sOFlow &FlowO )	// Two different flow, in case one instance is share between two differtent threads.
+			txf::sWFlow &FlowI,
+			txf::sWFlow &FlowO )	// Two different flow, in case one instance is share between two differtent threads.
 		{
 			Init_( &IDriver, &ODriver, Markers, &FlowI, &FlowO );
 		}
 		void Init(
-			fdr::rIODriver &Driver,
+			fdr::rRWDriver &Driver,
 			const sMarkers &Markers,	// NOT duplicated !
-			txf::sOFlow &FlowI,
-			txf::sOFlow &FlowO )	// Two different flow, in case one instance is share between two differtent threads.
+			txf::sWFlow &FlowI,
+			txf::sWFlow &FlowO )	// Two different flow, in case one instance is share between two differtent threads.
 		{
 			Init_( &Driver, &Driver, Markers, &FlowI, &FlowO );
 		}
 		void Init(
-			fdr::rIDriver &Driver,
+			fdr::rRDriver &Driver,
 			const sMarkers &Markers,	// NOT duplicated !
-			txf::sOFlow &Flow )
+			txf::sWFlow &Flow )
 		{
 			Init_( &Driver, NULL, Markers, &Flow, NULL );
 		}
 		void Init(
-			fdr::rODriver &Driver,
+			fdr::rWDriver &Driver,
 			const sMarkers &Markers,	// NOT duplicated !
-			txf::sOFlow &Flow )
+			txf::sWFlow &Flow )
 		{
 			Init_( NULL, &Driver, Markers, NULL, &Flow );
 		}
 		void Init(
-			fdr::rIODriver &Driver,
+			fdr::rRWDriver &Driver,
 			eChannel Channel,
 			const sMarkers &Markers,	// NOT duplicated !
-			txf::sOFlow &Flow )
+			txf::sWFlow &Flow )
 		{
 			switch ( Channel ) {
 			case cNone:
@@ -1790,7 +1790,7 @@ namespace flx {
 		} 
 	};
 
-	typedef fdr::rIDressedDriver rIDriver_;
+	typedef fdr::rRDressedDriver rIDriver_;
 
 	class sIRelay
 	: public rIDriver_
@@ -1826,7 +1826,7 @@ namespace flx {
 		}
 	};
 
-	typedef fdr::rODressedDriver rODriver_;
+	typedef fdr::rWDressedDriver rODriver_;
 
 	class sORelay
 	: public rODriver_
@@ -1937,9 +1937,9 @@ namespace flx {
 			tol::reset( P, In_, Out_ );
 		}
 		qCDTOR( rASync_ );
-		fdr::rODriver &Init(
+		fdr::rWDriver &Init(
 			rRelay_ &Relay,
-			fdr::rODriver &Driver );
+			fdr::rWDriver &Driver );
 	};
 
 	// Fixed-size buffer asynchrone output.
@@ -1954,7 +1954,7 @@ namespace flx {
 			rASync_::reset( P );
 		}
 		qCDTOR( rFASync );
-		fdr::rODriver &Init( fdr::rODriver &Driver )
+		fdr::rWDriver &Init( fdr::rWDriver &Driver )
 		{
 			Relay_.Init();
 			return rASync_::Init( Relay_, Driver );
@@ -1973,7 +1973,7 @@ namespace flx {
 			rASync_::reset( P );
 		}
 		qCDTOR( rDASync );
-		fdr::rODriver &Init( fdr::rODriver &Driver )
+		fdr::rWDriver &Init( fdr::rWDriver &Driver )
 		{
 			Relay_.Init();
 			return rASync_::Init( Relay_, Driver );

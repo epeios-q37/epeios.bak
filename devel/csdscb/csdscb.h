@@ -60,10 +60,10 @@ namespace csdscb {
 			return false;
 		}
 		virtual void *CSDSCBPreProcess(
-			fdr::rIODriver *IODriver,
+			fdr::rRWDriver *IODriver,
 			const ntvstr::char__ *Origin ) = 0;	// If set to true, it means that the 'Flow' will be destructed downstream.
 		virtual eAction CSDSCBProcess(
-			fdr::rIODriver *IODriver,
+			fdr::rRWDriver *IODriver,
 			void *UP ) = 0;
 		// If the returned value is 'true', the underlying socket will be closed.
 		// Usefull when the socket reading and writing are not handled by the same thread, so the other thread may not be wait indefinatly ( used in 'prxyq').
@@ -78,13 +78,13 @@ namespace csdscb {
 			return CSDSCBPluginOverride( Id, Arguments, Timeout );
 		}
 		void *PreProcess(
-			fdr::rIODriver *IODriver,
+			fdr::rRWDriver *IODriver,
 			const ntvstr::char__ *Origin )
 		{
 			return CSDSCBPreProcess( IODriver, Origin );
 		}
 		eAction Process(
-			fdr::rIODriver *IODriver,
+			fdr::rRWDriver *IODriver,
 			void *UP )
 		{
 			return CSDSCBProcess( IODriver, UP );

@@ -250,20 +250,20 @@ namespace {
 			Q37_MRMDF( session::sessions___, S_, Sessions_ );
 		protected:
 			void *CSDSCBPreProcess(
-				fdr::rIODriver *IODriver,
+				fdr::rRWDriver *IODriver,
 				const ntvstr::char__ *Origin ) override
 			{
 				return NULL;
 			}
 			csdscb::action__ CSDSCBProcess(
-				fdr::rIODriver *IODriver,
+				fdr::rRWDriver *IODriver,
 				void *UP ) override
 			{
 			qRH
 				query::pairs Pairs;
 				str::string Response;
 				TOL_CBUFFER___ Buffer;
-				flw::sDressedIOFlow<> Flow;
+				flw::sDressedRWFlow<> Flow;
 			qRB
 				Flow.Init( *IODriver );
 				Pairs.Init();

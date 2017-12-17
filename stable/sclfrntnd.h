@@ -156,7 +156,7 @@ namespace sclfrntnd {
 		}
 	};
 
-	typedef flw::sDressedIOFlow<> sDressedIOFlow_;
+	typedef flw::sDressedRWFlow<> sDressedIOFlow_;
 
 	class rIOFlow_
 	: public sDressedIOFlow_

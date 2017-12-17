@@ -342,6 +342,12 @@ namespace sclnjs {
 		{
 			return sclnjs::ObjectLaunch( Object, C_(), Arguments );
 		}
+		void ObjectLaunch(
+			rObject &Object,
+			const wArguments &Arguments )
+		{
+			return sclnjs::ObjectLaunch( Object, C_(), *Arguments );
+		}
 	};
 
 	void Launch( cAsync &Async );
@@ -401,7 +407,7 @@ namespace sclnjs {
 
 	typedef scln4a::sRegistrar<fFunction> sRegistrar;
 
-	void SCLNJSInfo( txf::sOFlow &Flow );	// To define by user.
+	void SCLNJSInfo( txf::sWFlow &Flow );	// To define by user.
 	void SCLNJSRegister( sRegistrar &Registrar );	// To define by user
 }
 

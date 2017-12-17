@@ -108,8 +108,8 @@ namespace {
 			Sharing.Init();
 			Processing_.Init( Sharing );
 			Server_.Init( Service, Processing_ );
-			ConnectCallback.Init();
-			ConnectCallback = ConnectCallback;
+			this->ConnectCallback.Init();
+			this->ConnectCallback = ConnectCallback;
 			mtk::Launch( LaunchServer_, &Server_ );
 		}
 	} Rack_;
@@ -133,19 +133,6 @@ qRT
 qRE
 }
 
-namespace {
-	void HandleConnection_( void )
-	{
-		xdh_cmn::rData &Data = Rack_.Sharing.ReadJS();
-
-		Rack_.ConnectCallback.ObjectLaunch( Data.XDH, Data.JS.Arguments );
-
-		Data.XDH.Set( Id_, &Data );
-
-		Data.Unlock();
-	}
-}
-
 SCLNJS_F( xdhp::Listen )
 {
 qRH;
@@ -160,9 +147,7 @@ qRB;
 
 	Rack_.Init( sclmisc::MGetU16( registry::parameter::Service ), Callback );
 
-	Callback.reset( false );	// To avoid the destruction of contained items, as their are now managed by 'Listening'.
-
-	HandleConnection_();
+	Callback.reset( false );	// To avoid the destruction of contained items, as their are now managed by the rack.
 
 	while ( true ) {
 		xdh_cmn::rData &Data = Rack_.Sharing.ReadJS();
@@ -170,12 +155,16 @@ qRB;
 
 		Data.JS.Callback.reset( false );
 
-		if ( !PendingCallback->HasAssignation() ) {
+		if ( PendingCallback->HasAssignation() ) {	// There is a pending action launched from callbac.
+			PendingCallback->VoidLaunch( Data.JS.Arguments );
+		} else if ( Data.JS.Action.Amount() != 0 ) {	// No pending action, but an event was launched.
 			Callback.Init();
 			Callback.Assign( Get_( Data.JS.Action ) );
 			Callback.ObjectLaunch( Data.XDH, Data.JS.Id );
-		} else
-			PendingCallback->VoidLaunch( Data.JS.Arguments );
+		} else {	// A new connection was open.
+			Rack_.ConnectCallback.ObjectLaunch( Data.XDH, Data.JS.Arguments );
+			Data.XDH.Set( Id_, &Data );
+		}
 
 		Data.Unlock();
 	}

@@ -183,9 +183,9 @@ namespace cio {
 		return Target() != t_Undefined;
 	}
 
-	fdr::rIDriver &GetInDriver( void );
-	fdr::rODriver &GetOutDriver( void );
-	fdr::rODriver &GetErrDriver( void );
+	fdr::rRDriver &GetInDriver( void );
+	fdr::rWDriver &GetOutDriver( void );
+	fdr::rWDriver &GetErrDriver( void );
 }
 
 #endif

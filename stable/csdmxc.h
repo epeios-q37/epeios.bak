@@ -89,7 +89,7 @@ namespace csdmxc {
 #endif
 	}
 
-	using fdr::rIODriver;
+	typedef fdr::rRWDriver rDriver_;
 
 	typedef stkbch::qBSTACKdl( void * )	dUPs;
 	qW( UPs );
@@ -152,7 +152,7 @@ namespace csdmxc {
 	{
 	protected:
 		virtual void *CSDMXCNew( void ) = 0;
-		virtual rIODriver &CSDMXCExtractDriver( void *UP ) = 0;
+		virtual rDriver_ &CSDMXCExtractDriver( void *UP ) = 0;
 		virtual void CSDMXCRelease( void *UP ) = 0;
 		virtual time_t CSDMXCEpochTimeStamp( void *UP )	// By default, the connection is always in use.
 		{
@@ -163,7 +163,7 @@ namespace csdmxc {
 		{
 			return CSDMXCNew();
 		}
-		virtual rIODriver &ExtractDriver( void *UP )
+		virtual rDriver_ &ExtractDriver( void *UP )
 		{
 			return CSDMXCExtractDriver( UP );
 		}
@@ -318,7 +318,7 @@ qRE
 
 			return UP;
 		}
-		rIODriver &ExtractDriver( void *UP )
+		rDriver_ &ExtractDriver( void *UP )
 		{
 			return C_().ExtractDriver( UP );
 		}
@@ -352,14 +352,14 @@ qRE
 		}
 	};
 
-	class _driver___
+	class rRWDriver
 	: public fdr::ioflow_driver___<>
 	{
 	private:
 		void *UP_;
 		qRMV( rCore, C_, Core_ );
-		flw::sDressedIOFlow<> Flow_;
-		rIODriver &Driver_( void )
+		flw::sDressedRWFlow<> Flow_;
+		rDriver_ &Driver_( void )
 		{
 			if ( UP_ == NULL )
 				qRFwk();
@@ -499,7 +499,7 @@ qRE
 				Id_ = CSDMXB_UNDEFINED;
 				Core_ = NULL;
 			}
-			qCVDTOR( _driver___ );
+			qCVDTOR( rRWDriver );
 			void Init(
 				rCore &Core,
 				fdr::thread_safety__ ThreadSafety )
@@ -512,11 +512,11 @@ qRE
 			}
 	};
 
-	class rIOFlow
+	class rRWFlow
 	: public flw::ioflow__
 	{
 	private:
-		_driver___ _Driver;
+		rRWDriver _Driver;
 		flw::byte__ _Cache[CSDMXC_DEFAULT_CACHE_SIZE];
 	public:
 		void reset( bso::bool__ P = true )
@@ -524,7 +524,7 @@ qRE
 			flw::ioflow__::reset( P );
 			_Driver.reset( P );
 		}
-		qCDTOR( rIOFlow );
+		qCDTOR( rRWFlow );
 		void Init( rCore &Core )
 		{
 			reset();

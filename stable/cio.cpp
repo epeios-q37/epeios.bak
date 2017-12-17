@@ -179,17 +179,17 @@ target__ cio::Target( void )
 	return ::Target_;
 }
 
-fdr::rIDriver &cio::GetInDriver( void )
+fdr::rRDriver &cio::GetInDriver( void )
 {
 	return _SInDriver;
 }
 
-fdr::rODriver &cio::GetOutDriver( void )
+fdr::rWDriver &cio::GetOutDriver( void )
 {
 	return _SOutDriver;
 }
 
-fdr::rODriver &cio::GetErrDriver( void )
+fdr::rWDriver &cio::GetErrDriver( void )
 {
 	return _SErrDriver;
 }

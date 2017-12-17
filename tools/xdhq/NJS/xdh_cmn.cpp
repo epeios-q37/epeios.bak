@@ -24,7 +24,7 @@
 using namespace xdh_cmn;
 
 void *xdh_cmn::rProcessing::CSDSCBPreProcess(
-	fdr::rIODriver *IODriver,
+	fdr::rRWDriver *IODriver,
 	const ntvstr::char__ *Origin )
 {
 	rData *Data = NULL;
@@ -40,8 +40,14 @@ qRB;
 	Data->Init();
 
 	Flow.Init( *IODriver );
+	server::Handshake( Flow, Data->Language );
+
+	Data->Lock();
 
 	S_().Upstream( Data );
+
+	Data->Lock();
+	Data->Unlock();
 qRR;
 	if ( Data != NULL )
 		delete Data;
@@ -51,7 +57,7 @@ qRE;
 }
 
 csdscb::eAction xdh_cmn::rProcessing::CSDSCBProcess(
-	fdr::rIODriver *IODriver,
+	fdr::rRWDriver *IODriver,
 	void *UP )
 {
 qRH;
@@ -65,10 +71,7 @@ qRB;
 
 	Data.JS.Arguments.Init();
 
-	if ( Data.XDH.HasAssignation() )	// If not, this is the first call (new connection).
-		Data.JS.Arguments.Add( Data.XDH );
-	else
-		server::Handshake( Flow, Data.Language );
+	Data.JS.Arguments.Add( Data.XDH );
 
 	if ( !xdh_ups::Recv( Data.Server.Request, Flow, Data.JS.Arguments ) )
 		server::GetAction( Flow, Data.JS.Id, Data.JS.Action );

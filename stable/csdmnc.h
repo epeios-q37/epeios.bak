@@ -43,7 +43,7 @@
 #endif
 
 namespace csdmnc {
-	typedef csdbnc::rIODriver rIODriver_;
+	typedef csdbnc::rRWDriver rDriver_;
 
 	typedef csdmxc::cCallback cCallback_;
 
@@ -53,33 +53,33 @@ namespace csdmnc {
 	private:
 		qCBUFFERr HostService_;
 		sck::duration__ Timeout_;
-		rIODriver_ *DriverAsPointer_( void *UP )
+		rDriver_ *DriverAsPointer_( void *UP )
 		{
 			if ( UP == NULL )
 				qRFwk();
 
-			return (rIODriver_ *)UP;
+			return (rDriver_ *)UP;
 		}
-		rIODriver_ &D_( void *UP )
+		rDriver_ &D_( void *UP )
 		{
 			return *DriverAsPointer_( UP );
 		}
 	protected:
 		virtual void *CSDMXCNew( void ) override
 		{
-			rIODriver_ *IODriver = new rIODriver_;
+			rDriver_ *Driver = new rDriver_;
 
-			if ( IODriver == NULL )
+			if ( Driver == NULL )
 				qRAlc();
 
-			if ( !IODriver->Init( HostService_, Timeout_, err::hUserDefined ) ) {
-				delete IODriver;
-				IODriver = NULL;
+			if ( !Driver->Init( HostService_, Timeout_, err::hUserDefined ) ) {
+				delete Driver;
+				Driver = NULL;
 			}
 
-			return IODriver;
+			return Driver;
 		}
-		virtual csdmxc::rIODriver &CSDMXCExtractDriver( void *UP ) override
+		virtual csdmxc::rDriver_ &CSDMXCExtractDriver( void *UP ) override
 		{
 			return D_( UP );
 		}
@@ -143,8 +143,8 @@ namespace csdmnc {
 		}
 	};
 
-	using csdmxc::rIOFlow;
-
+	using csdmxc::rRWDriver;
+	using csdmxc::rRWFlow;
 }
 
 #endif

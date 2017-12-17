@@ -70,7 +70,7 @@ qRE
 
 void csdcmn::Put_(
 	const str::dStrings &Strings,
-	flw::sOFlow &Flow )
+	flw::sWFlow &Flow )
 {
 	sdr::sRow Row = Strings.First();
 
@@ -84,7 +84,7 @@ void csdcmn::Put_(
 }
 
 void csdcmn::Get_(
-	flw::sIFlow &Flow,
+	flw::sRFlow &Flow,
 	str::dStrings &Strings )
 {
 qRH
@@ -105,8 +105,6 @@ qRB
 qRR
 qRT
 qRE
-
-
 }
 
 

@@ -134,7 +134,7 @@ const fnm::rName &dir::GetAppDataPath( fnm::rName &Path )
 
 namespace {
 	void BuildParts_(
-		flw::sIFlow &Flow,
+		flw::sRFlow &Flow,
 		str::dStrings &Parts )
 	{
 	qRH

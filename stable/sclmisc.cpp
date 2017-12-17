@@ -118,7 +118,7 @@ void sclmisc::ErrFinal( void )
 		ERRRst();
 }
 
-bso::bool__ sclmisc::DisplaySCLBasePendingError( txf::sOFlow &Flow )
+bso::bool__ sclmisc::DisplaySCLBasePendingError( txf::sWFlow &Flow )
 {
 	bso::bool__ Exists = false;
 qRH
@@ -436,7 +436,7 @@ namespace {
 	{
 	qRH
 		flf::rOFlow Flow;
-		txf::sOFlow TFlow;
+		txf::sWFlow TFlow;
 		xml::wWriter Writer;
 		tol::bDateAndTime Buffer;
 	qRB
@@ -462,7 +462,7 @@ namespace {
 	{
 	qRH
 		flf::rOFlow Flow;
-		txf::sOFlow TFlow;
+		txf::sWFlow TFlow;
 		xml::wWriter Writer;
 	qRB
 		if ( !GetRegistry().IsEmpty( Level ) ) {
@@ -498,7 +498,7 @@ void sclmisc::StoreLastingRegistry( void )
 }
 
 void sclmisc::DumpLastingRegistryFile(
-	txf::sOFlow &OFlow,
+	txf::sWFlow &OFlow,
 	const char *Target,
 	const char *Product,
 	const char *Organization )
@@ -1507,7 +1507,7 @@ qRT
 qRE
 }
 
-fdr::rODriver &sclmisc::rODriverRack::Init( const fnm::name___ &FileName )
+fdr::rWDriver &sclmisc::rODriverRack::Init( const fnm::name___ &FileName )
 {
 	Filename_.Init( FileName );
 
@@ -1532,7 +1532,7 @@ void sclmisc::rODriverRack::HandleError( void )
 }
 
 
-fdr::rIDriver &sclmisc::rIDriverRack::Init( const fnm::name___ &FileName )
+fdr::rRDriver &sclmisc::rIDriverRack::Init( const fnm::name___ &FileName )
 {
 	Filename_.Init( FileName );
 

@@ -277,13 +277,13 @@ namespace cdgb64 {
 		eFlavor Flavor,
 		str::string_ &Encoded );
 
-	typedef fdr::rIFlow rIFlowDriver_;
+	typedef fdr::rRFlow rIFlowDriver_;
 
 	class rSkippingIFlowDriver_
 	: public rIFlowDriver_
 	{
 	private:
-		qRMV( flw::sIFlow, F_, Flow_ );
+		qRMV( flw::sRFlow, F_, Flow_ );
 	protected:
 		virtual fdr::sSize FDRRead(
 			fdr::sSize Maximum,
@@ -325,7 +325,7 @@ namespace cdgb64 {
 		}
 		qCVDTOR( rSkippingIFlowDriver_ );
 		void Init(
-			flw::sIFlow &Flow, 
+			flw::sRFlow &Flow, 
 			fdr::eThreadSafety ThreadSafety )
 		{
 			rIFlowDriver_::Init( ThreadSafety );
@@ -405,7 +405,7 @@ namespace cdgb64 {
 	{
 	private:
 		rSkippingIFlowDriver_ SkippingIFlowDriver_;
-		flw::sDressedIFlow<> SkippingIFlow_;
+		flw::sDressedRFlow<> SkippingIFlow_;
 		fdr::byte__ _Cache[4];
 		bso::u8__ _Size;
 	protected:
@@ -520,7 +520,7 @@ namespace cdgb64 {
 	: public encoding_oflow_driver___
 	{
 	private:
-		flw::sDressedOFlow<> Flow_;
+		flw::sDressedWFlow<> Flow_;
 	public:
 		void reset( bso::sBool P = true )
 		{
@@ -529,7 +529,7 @@ namespace cdgb64 {
 		}
 		qCVDTOR( rEncodingODriver );
 		void Init(
-			fdr::rODriver &Driver,
+			fdr::rWDriver &Driver,
 			eFlavor Flavor,
 			fdr::thread_safety__ ThreadSafety = fdr::ts_Default )
 		{
@@ -542,7 +542,7 @@ namespace cdgb64 {
 	: public decoding_iflow_driver___
 	{
 	private:
-		flw::sDressedIFlow<> Flow_;
+		flw::sDressedRFlow<> Flow_;
 	public:
 		void reset( bso::sBool P = true )
 		{
@@ -551,7 +551,7 @@ namespace cdgb64 {
 		}
 		qCVDTOR( rDecodingIDriver );
 		void Init(
-			fdr::rIDriver &Driver,
+			fdr::rRDriver &Driver,
 			fdr::thread_safety__ ThreadSafety = fdr::ts_Default )
 		{
 			Flow_.Init( Driver );

@@ -721,24 +721,14 @@ inline flw::oflow__ &operator <<(
 namespace flw {
 	typedef flw::byte__ sByte;
 
-	typedef flw::iflow__ sIFlow;
-	template <int Dummy = 0> qTCLONEs( standalone_iflow__<Dummy>, sDressedIFlow );
-
-	typedef flw::oflow__ sOFlow;
-	template <int CacheSize = FLW__OUTPUT_CACHE_SIZE> qTCLONEs( standalone_oflow__<CacheSize>, sDressedOFlow );
-
-	typedef flw::ioflow__ sIOFlow;
-	template <int OutCacheSize = FLW__OUTPUT_CACHE_SIZE> qTCLONEs( standalone_ioflow__<OutCacheSize>, sDressedIOFlow );
-
 	typedef flw::iflow__ sRFlow;
-	template <int Dummy = 0> qTCLONEs( standalone_iflow__<Dummy>, sDressedIRlow );
+	template <int Dummy = 0> qTCLONEs( standalone_iflow__<Dummy>, sDressedRFlow );
 
 	typedef flw::oflow__ sWFlow;
 	template <int CacheSize = FLW__OUTPUT_CACHE_SIZE> qTCLONEs( standalone_oflow__<CacheSize>, sDressedWFlow );
 
 	typedef flw::ioflow__ sRWFlow;
 	template <int OutCacheSize = FLW__OUTPUT_CACHE_SIZE> qTCLONEs( standalone_ioflow__<OutCacheSize>, sDressedRWFlow );
-
 }
 
 #endif

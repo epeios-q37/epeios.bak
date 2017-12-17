@@ -234,7 +234,7 @@ namespace csdbnc {
 namespace csdbnc {
 	typedef sck::socket_ioflow_driver___ rDriver_;
 
-	class rIODriver
+	class rRWDriver
 	: public rDriver_
 	{
 	private:
@@ -245,7 +245,7 @@ namespace csdbnc {
 			rDriver_::reset( P );
 			tol::reset( P, Socket_ );
 		}
-		qCVDTOR( rIODriver );
+		qCVDTOR( rRWDriver );
 		bso::bool__ Init(
 			const char *Host,
 			const char *Service,
@@ -275,6 +275,6 @@ namespace csdbnc {
 		}
 	};
 
-	typedef flow___ rIOFlow;
+	typedef flow___ rRWFlow;
 }
 #endif

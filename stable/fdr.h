@@ -718,18 +718,18 @@ namespace fdr {
 
 namespace fdr {
 # if 1	// Deprecated.
-	typedef fdr::iflow_driver___<> rIFlow;
-	typedef fdr::oflow_driver___<> rOFlow; 
-	typedef fdr::ioflow_driver___<> rFlow;
+	typedef fdr::iflow_driver___<> rRFlow;
+	typedef fdr::oflow_driver___<> rWFlow; 
+	typedef fdr::ioflow_driver___<> rRWFlow;
 # endif
 
-	typedef fdr::iflow_driver_base___ rIDriver;
-	typedef fdr::oflow_driver_base___ rODriver; 
-	typedef fdr::ioflow_driver_base___ rIODriver;
+	typedef fdr::iflow_driver_base___ rRDriver;
+	typedef fdr::oflow_driver_base___ rWDriver; 
+	typedef fdr::ioflow_driver_base___ rRWDriver;
 
-	typedef fdr::iflow_driver___<> rIDressedDriver;
-	typedef fdr::oflow_driver___<> rODressedDriver;
-	typedef fdr::ioflow_driver___<> rIODressedDriver;
+	typedef fdr::iflow_driver___<> rRDressedDriver;
+	typedef fdr::oflow_driver___<> rWDressedDriver;
+	typedef fdr::ioflow_driver___<> rRWDressedDriver;
 
 	typedef fdr::size__ sSize;
 	typedef fdr::byte__ sByte;
@@ -737,27 +737,27 @@ namespace fdr {
 	typedef fdr::thread_safety__ eThreadSafety;
 
 	void Copy_(
-		rIDriver &IDriver,
+		rRDriver &RDriver,
 		sByte *Buffer,
 		sSize BufferSize,
-		rODriver &ODriver );
+		rWDriver &WDriver );
 
 
 	template <int BufferSize = 1024> inline void Copy(
-		fdr::rIDriver &IDriver,
-		fdr::rODriver &ODriver )
+		fdr::rRDriver &RDriver,
+		fdr::rWDriver &WDriver )
 	{
 		fdr::byte__ Buffer[BufferSize];
 
-		Copy_( IDriver, Buffer, BufferSize, ODriver );
+		Copy_( RDriver, Buffer, BufferSize, WDriver );
 	}
 
 	void Purge_(
-		rIDriver &IDriver,
+		rRDriver &RDriver,
 		sByte *Buffer,
 		sSize BufferSize );
 
-	template <int BufferSize = 1024> inline void Purge( fdr::rIDriver &Driver )
+	template <int BufferSize = 1024> inline void Purge( fdr::rRDriver &Driver )
 	{
 		fdr::byte__ Buffer[BufferSize];
 

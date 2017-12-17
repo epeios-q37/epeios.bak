@@ -280,7 +280,7 @@ qRE
 		void _Clean( void );	// Appelle le 'PostProcess' pour tous les objets utilisateurs.
 	protected:
 		virtual void *CSDSCBPreProcess(
-			fdr::rIODriver *IODriver,
+			fdr::rRWDriver *IODriver,
 			const ntvstr::char__ *Origin ) override
 		{
 			_Origin.Init( Origin );
@@ -295,7 +295,7 @@ qRE
 			return Data;
 		}
 		virtual csdscb::action__ CSDSCBProcess(
-			fdr::rIODriver *IODriver,
+			fdr::rRWDriver *IODriver,
 			void *UP ) override
 		{
 			csdscb::action__ MainAction = csdscb::aContinue;
@@ -304,7 +304,7 @@ qRE
 			csdscb::action__ Action = csdscb::aContinue;
 			rData_ &Data = *(rData_ *)UP;
 			bso::sBool OwnerShipTaken = false;
-			flw::sDressedIOFlow<> Flow;
+			flw::sDressedRWFlow<> Flow;
 		qRB
 #ifdef CSDMXS_DBG
 			if ( UP == NULL )

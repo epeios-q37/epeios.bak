@@ -53,7 +53,7 @@ namespace csdcmn {
 	// Facilities.
 
 	inline const str::dString &Get_(
-		flw::sIFlow &Flow,
+		flw::sRFlow &Flow,
 		str::dString &String )
 	{
 		bso::sSize Size = 0;
@@ -67,14 +67,14 @@ namespace csdcmn {
 	}
 
 	inline const str::dString &Get(
-		flw::sIFlow &Flow,
+		flw::sRFlow &Flow,
 		str::dString &String )
 	{
 		return Get_( Flow, String );
 	}
 
 	inline const str::dString &Get(
-		flw::sIFlow &Flow,
+		flw::sRFlow &Flow,
 		str::wString &String )
 	{
 		return Get_( Flow, String );
@@ -82,7 +82,7 @@ namespace csdcmn {
 
 	inline void Put_(
 		const str::dString &String,
-		flw::sOFlow &Flow )
+		flw::sWFlow &Flow )
 	{
 		dtfptb::VPut( String.Amount(), Flow );
 
@@ -97,56 +97,56 @@ namespace csdcmn {
 
 	inline void Put(
 		const str::dString &String,
-		flw::sOFlow &Flow )
+		flw::sWFlow &Flow )
 	{
 		return Put_( String, Flow );
 	}
 
 	inline void Put(
 		const str::wString &String,
-		flw::sOFlow &Flow )
+		flw::sWFlow &Flow )
 	{
 		return Put_( String, Flow );
 	}
 
 	inline void Put(
 		const char *String,
-		flw::sOFlow &Flow )
+		flw::sWFlow &Flow )
 	{
 		return Put_( str::wString( String ), Flow );
 	}
 
 	void Put_(
 		const str::dStrings &Strings,
-		flw::sOFlow &Flow );
+		flw::sWFlow &Flow );
 
 	inline void Put(
 		const str::dStrings &Strings,
-		flw::sOFlow &Flow )
+		flw::sWFlow &Flow )
 	{
 		return Put_( Strings, Flow );
 	}
 
 	inline void Put(
 		const str::wStrings &Strings,
-		flw::sOFlow &Flow )
+		flw::sWFlow &Flow )
 	{
 		return Put_( Strings, Flow );
 	}
 
 	void Get_(
-		flw::sIFlow &Flow,
+		flw::sRFlow &Flow,
 		str::dStrings &Strings );
 
 	inline void Get(
-		flw::sIFlow &Flow,
+		flw::sRFlow &Flow,
 		str::dStrings &Strings )
 	{
 		Get_( Flow, Strings );
 	}
 
 	inline void Get(
-		flw::sIFlow &Flow,
+		flw::sRFlow &Flow,
 		str::wStrings &Strings )
 	{
 		Get_( Flow, Strings );
@@ -154,13 +154,13 @@ namespace csdcmn {
 
 	template <typename integer> void Put(
 		integer Integer,
-		flw::sOFlow &Flow )
+		flw::sWFlow &Flow )
 	{
 		return dtfptb::VPut( Integer, Flow );
 	}
 
 	template <typename integer> integer Get(
-		flw::sIFlow &Flow,
+		flw::sRFlow &Flow,
 		integer &Integer )
 	{
 		return dtfptb::VGet( Flow, Integer );

@@ -301,44 +301,47 @@ namespace {
 	  public xdhdws::sProxy
 	{
 	private:
-		csdmnc::rIOFlow Client_;
+		csdmnc::rRWDriver Driver_;
 		bso::sBool NotFirstCall_;
 	protected:
-
 		virtual bso::bool__ XDHCMNLaunch(
 			const char *Id,
 			const char *Action ) override
 		{
 			bso::sBool Return = false;
+		qRH;
 			bso::sBool Continue = true;
+			flw::sDressedRWFlow<> Flow;
+		qRB;
+			Flow.Init( Driver_ );
 
 			if ( !NotFirstCall_ ) {
-				if ( prtcl::GetAnswer( Client_ ) != prtcl::aOK_1 )
+				if ( prtcl::GetAnswer( Flow ) != prtcl::aOK_1 )
 					qRGnr();
 
-				Client_.Dismiss();
+				Flow.Dismiss();
 
 				NotFirstCall_ = true;
 			}
 
-			prtcl::PutRequest( prtcl::rLaunch_1, Client_ );
+			prtcl::PutRequest( prtcl::rLaunch_1, Flow );
 
-			prtcl::Put( Id, Client_ );
-			prtcl::Put( Action, Client_ );
-			Client_.Commit();
+			prtcl::Put( Id, Flow );
+			prtcl::Put( Action, Flow );
+			Flow.Commit();
 
 # define H( name )\
 	case prtcl::a##name##_1:\
-		name##_( Client_, *this );\
+		name##_( Flow, *this );\
 		break
 
 			while( Continue )
-				switch ( prtcl::GetAnswer( Client_ ) ) {
+				switch ( prtcl::GetAnswer( Flow ) ) {
 				case prtcl::aOK_1:
 					Return = true;
 				case prtcl::aError_1:
 					Continue = false;
-					Client_.Dismiss();
+					Flow.Dismiss();
 					break;
 				H( SetLayout );
 				H( GetContents );
@@ -355,9 +358,11 @@ namespace {
 			}
 
 #undef H
-
+		qRR;
+		qRT;
+		qRE;
 			return Return;
-		}
+	}
 	public:
 		void reset( bso::sBool P = true )
 		{
@@ -365,29 +370,37 @@ namespace {
 			NotFirstCall_ = false;
 		}
 		qCVDTOR( rSession_ )
-		void Init(
-			xdhcmn::cProxy *Callback,
-			const char *Language )
+			void Init(
+				xdhcmn::cProxy *Callback,
+				const char *Language )
 		{
-			Client_.Init( Core_ );
+		qRH;
+			flw::sDressedWFlow<> Flow;
+		qRB;
+			Driver_.Init( Core_, fdr::ts_Default );
 
-			csdcmn::SendProtocol( prtcl::ProtocolId, prtcl::ProtocolVersion, Client_ );
+			Flow.Init( Driver_ );
 
-			prtcl::Put( Language, Client_ );
+			csdcmn::SendProtocol( prtcl::ProtocolId, prtcl::ProtocolVersion, Flow );
 
-			Client_.Commit();
+			prtcl::Put( Language, Flow );
+
+			Flow.Commit();
 
 			xdhdws::sProxy::Init( Callback );
 
 			NotFirstCall_ = false;
+		qRR;
+		qRT;
+		qRE;
 		}
-		operator flw::sIOFlow &( void )
+		operator fdr::rRWDriver &( void )
 		{
-			return Client_;
+			return Driver_;
 		}
-		flw::sIOFlow &Client( void )
+		fdr::rRWDriver &Driver( void )
 		{
-			return Client_;
+			return Driver_;
 		}
 	};
 }

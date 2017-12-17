@@ -26,7 +26,7 @@
 #include "sclmisc.h"
 #include "sclnjs.h"
 
-void sclnjs::SCLNJSInfo( txf::sOFlow &Flow )
+void sclnjs::SCLNJSInfo( txf::sWFlow &Flow )
 {
 	Flow << NAME_MC << " v" << VERSION << txf::nl
 		 << txf::pad << "Build : " __DATE__ " " __TIME__ " (" << cpe::GetDescription() << ')';
