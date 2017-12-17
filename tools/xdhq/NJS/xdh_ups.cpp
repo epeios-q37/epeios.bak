@@ -23,162 +23,209 @@
 
 using namespace xdh_ups;
 
-namespace server_ {
-	using namespace xdh_ups::server;
-}
-
-namespace {
-	namespace send_ {
-		namespace {
-			void SetLayout_(
-				flw::sWFlow &Flow,
-				server_::rArguments &Arguments )
-			{
-				::server::layout::set::S( Arguments.Id, Arguments.XML, Arguments.XSLFilename, Arguments.Language, Flow );
-			}
-			void GetContents_(
-				flw::sWFlow &Flow,
-				server_::rArguments &Arguments )
-			{
-				::server::contents::get::S( Arguments.Ids, Flow );
-			}
-		}
-
-		void Process(
+namespace send_ {
+	namespace {
+		void SetLayout_(
 			flw::sWFlow &Flow,
-			server_::rServer &Server )
+			rArguments &Arguments )
 		{
-			switch ( Server.Request ) {
-			case server_::rSetLayout:
-				SetLayout_( Flow, Server.Arguments );
-				break;
-			case server_::rGetContents:
-
-			default:
-				qRGnr();
-				break;
-			}
+			server::layout::set::S( Arguments.Id, Arguments.XML, Arguments.XSLFilename, Arguments.Language, Flow );
+		}
+		void GetContents_(
+			flw::sWFlow &Flow,
+			rArguments &Arguments )
+		{
+			server::contents::get::S( Arguments.Ids, Flow );
+		}
+		void SetContents_(
+			flw::sWFlow &Flow,
+			rArguments &Arguments )
+		{
+			server::contents::set::S( Arguments.Ids, Arguments.Contents, Flow );
+		}
+		void DressWidgets_(
+			flw::sWFlow &Flow,
+			rArguments &Arguments )
+		{
+			server::widgets::dress::S( Arguments.Id, Flow );
+		}
+		void SetCasts_(
+			flw::sWFlow &Flow,
+			rArguments &Arguments )
+		{
+			server::casts::set::S( Arguments.Id, Arguments.Tags, Arguments.Values, Flow );
+		}
+		void GetAttribute_(
+			flw::sWFlow &Flow,
+			rArguments &Arguments )
+		{
+			server::attribute::get::S( Arguments.Id, Arguments.Name, Flow );
+		}
+		void SetAttribute_(
+			flw::sWFlow &Flow,
+			rArguments &Arguments )
+		{
+			server::attribute::set::S( Arguments.Id, Arguments.Name, Arguments.Value, Flow );
+		}
+		void GetProperty_(
+			flw::sWFlow &Flow,
+			rArguments &Arguments )
+		{
+			server::property::get::S( Arguments.Id, Arguments.Name, Flow );
+		}
+		void SetProperty_(
+			flw::sWFlow &Flow,
+			rArguments &Arguments )
+		{
+			server::property::set::S( Arguments.Id, Arguments.Name, Arguments.Value, Flow );
 		}
 	}
+}
 
-	namespace recv_ {
-		namespace {
-			void SetLayout_(
-				flw::sRFlow &Flow,
-				sclnjs::dArguments &Agruments )
-			{
-				::server::layout::set::R( Flow );
-			}
-			void getContents_(
-				flw::sRFlow &Flow,
-				sclnjs::dArguments &Arguments )
-			{
-			qRH;
-				str::wStrings Contents;
-			qRB;
-				Contents.Init();
-				::server::contents::get::R( Flow, Contents );
+#define H( name )\
+	case r##name:\
+		send_::name##_( Flow, Server.Arguments );\
+		break
 
-				Arguments.Add( Contents );
-			qRR;
-			qRT;
-			qRE;
-			}
+void xdh_ups::Send(
+	flw::sWFlow &Flow,
+	rServer &Server )
+{
+	switch ( Server.Request ) {
+		H( SetLayout );
+		H( GetContents );
+		H( SetContents );
+		H( DressWidgets );
+		H( SetCasts );
+		H( GetAttribute );
+		H( SetAttribute );
+		H( GetProperty );
+		H( SetProperty );
+	default:
+		qRGnr();
+		break;
+	}
+}
+
+#undef H
+
+
+namespace recv_ {
+	namespace {
+		void SetLayout_(
+			flw::sRFlow &Flow,
+			sclnjs::dArguments &Agruments )
+		{
+			server::layout::set::R( Flow );
 		}
-
-		bso::sBool Process(
-			server_::eRequest Id,
+		void GetContents_(
 			flw::sRFlow &Flow,
 			sclnjs::dArguments &Arguments )
 		{
-			switch ( Id ) {
-			case server_::r_Undefined:	// New action is launched.
-				return false;
-				break;
-			case server_::rSetLayout:
-				SetLayout_( Flow, Arguments );
-				break;
-			default:
-				qRGnr();
-				break;
-			}
+		qRH;
+			str::wStrings Contents;
+		qRB;
+			Contents.Init();
+			server::contents::get::R( Flow, Contents );
 
-			return true;
+			Arguments.Add( Contents );
+		qRR;
+		qRT;
+		qRE;
+		}
+		void SetContents_(
+			flw::sRFlow &Flow,
+			sclnjs::dArguments &Agruments )
+		{
+			server::contents::set::R( Flow );
+		}
+		void DressWidgets_(
+			flw::sRFlow &Flow,
+			sclnjs::dArguments &Agruments )
+		{
+			server::widgets::dress::R( Flow );
+		}
+		void SetCasts_(
+			flw::sRFlow &Flow,
+			sclnjs::dArguments &Agruments )
+		{
+			server::casts::set::R( Flow );
+		}
+		void GetAttribute_(
+			flw::sRFlow &Flow,
+			sclnjs::dArguments &Arguments )
+		{
+		qRH;
+			str::wString Value;
+		qRB;
+			Value.Init();
+			server::attribute::get::R( Flow, Value );
+
+			Arguments.Add( Value );
+		qRR;
+		qRT;
+		qRE;
+		}
+		void SetAttribute_(
+			flw::sRFlow &Flow,
+			sclnjs::dArguments &Agruments )
+		{
+			server::attribute::set::R( Flow );
+		}
+		void GetProperty_(
+			flw::sRFlow &Flow,
+			sclnjs::dArguments &Arguments )
+		{
+		qRH;
+			str::wString Value;
+		qRB;
+			Value.Init();
+			server::property::get::R( Flow, Value );
+
+			Arguments.Add( Value );
+		qRR;
+		qRT;
+		qRE;
+		}
+		void SetProperty_(
+			flw::sRFlow &Flow,
+			sclnjs::dArguments &Agruments )
+		{
+			server::property::set::R( Flow );
 		}
 	}
 }
 
-void *xdh_ups::rProcessing::CSDSCBPreProcess(
-	fdr::rIODriver *IODriver,
-	const ntvstr::char__ *Origin )
+#define H( name )\
+	case r##name:\
+		recv_::name##_( Flow, Arguments );\
+		break
+
+bso::sBool xdh_ups::Recv(
+	eRequest Id,
+	flw::sRFlow &Flow,
+	sclnjs::dArguments &Arguments )
 {
-	rData *Data = NULL;
-qRH;
-	flw::sDressedRWFlow<> Flow;
-	str::wString Id, Action;
-qRB;
-	Data = new rData;
-
-	if ( Data == NULL )
-		qRAlc();
-
-	Data->Init();
-
-	Flow.Init( *IODriver );
-
-	S_().Upstream( Data );
-qRR;
-	if ( Data != NULL )
-		delete Data;
-qRT;
-qRE;
-	return Data;
-}
-
-csdscb::eAction xdh_ups::rProcessing::CSDSCBProcess(
-	fdr::rIODriver *IODriver,
-	void *UP )
-{
-qRH;
-	flw::sDressedRWFlow<> Flow;
-	rData &Data = *(rData *)UP;
-qRB;
-	if ( UP == NULL )
+	switch ( Id ) {
+	case r_Undefined:	// New action is launched.
+		return false;
+		break;
+	H( SetLayout );
+	H( GetContents );
+	H( SetContents );
+	H( DressWidgets );
+	H( SetCasts );
+	H( GetAttribute );
+	H( SetAttribute );
+	H( GetProperty );
+	H( SetProperty );
+	default:
 		qRGnr();
+		break;
+	}
 
-	Flow.Init( *IODriver );
-
-	Data.JS.Arguments.Init();
-
-	Data.JS.Arguments.Add( Data.XDH );
-
-	if ( !recv_::Process( Data.Server.Request, Flow, Data.JS.Arguments ) )
-		::server::GetAction( Flow, Data.JS.Id, Data.JS.Action );
-
-	Data.Lock();
-
-	S_().Upstream( &Data );
-
-	Data.Lock();
-	Data.Unlock();
-
-	send_::Process( Flow, Data.Server );
-qRR;
-qRT;
-qRE;
-	return csdscb::aContinue;
+	return true;
 }
 
-bso::sBool xdh_ups::rProcessing::CSDSCBPostProcess( void *UP )
-{
-	rData *Data = (rData *)UP;
-
-	if ( Data == NULL )
-		qRGnr();
-
-	delete Data;
-
-	return false;
-}
-
+#undef H
 

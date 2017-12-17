@@ -42,7 +42,7 @@ const char *csdmxs::GetLabel( eLog Log )
 	}
 }
 
-void csdmxs::rCallback::_Clean( void )
+void csdmxs::rProcessing::_Clean( void )
 {
 	sdr::row__ Row = Core_.UPs.First();
 

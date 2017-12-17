@@ -49,8 +49,8 @@ function callback() {
 function connect( xdh, id ) {
 	var tree = new xdhq.LayoutTree();
 
-	xdh.setLayout(tree, "../XSL/Main.xsl");
-	handleTestButton(xdh, false);
+	xdh.setLayout(tree, "../XSL/Main.xsl", () => { console.log('coucou'); } );
+//	handleTestButton(xdh, false);
 }
 
 function testing(xdh, id) {

@@ -25,9 +25,12 @@
 		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
 			<Modules Group="Core">
 				<xpp:expand select="Core"/>
+				<Module>sck</Module>
+			</Modules>
+			<Modules Group="CSD">
 				<Module>csdbns</Module>
 				<Module>csdcmn</Module>
-				<Module>sck</Module>
+				<Module>csdmxs</Module>
 			</Modules>
    <Modules Group="SCL">
     <xpp:expand select="SCL"/>
@@ -40,6 +43,7 @@
 		<Module>registry</Module>
 		<Module>treep</Module>
 		<Module>xdhp</Module>
+		<Module>xdh_cmn</Module>
 		<Module>xdh_dws</Module>
 		<Module>xdh_ups</Module>
 	</Modules>

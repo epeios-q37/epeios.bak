@@ -270,7 +270,7 @@ qRE
 	};
 
 
-	class rCallback
+	class rProcessing
 	: public cProcessing
 	{
 	private:
@@ -380,7 +380,7 @@ qRE
 			Callback_ = NULL;
 			_Origin.reset( P );
 		}
-		qCVDTOR( rCallback );
+		qCVDTOR( rProcessing );
 		void Init(
 			cProcessing &Callback,
 			cLog *LogCallback = NULL )

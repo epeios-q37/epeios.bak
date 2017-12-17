@@ -27,6 +27,7 @@
 				<xpp:expand select="CSDF"/>
 				<Module>csdbnc</Module>
 				<Module>csdcmn</Module>
+				<Module>csdmxc</Module>
 			</Modules>
 			<Modules Group="FBL">
 				<xpp:expand select="FBLF"/>

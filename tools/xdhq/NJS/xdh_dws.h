@@ -26,6 +26,25 @@
 # include"sclnjs.h"
 
 namespace xdh_dws {
+	struct rJS
+	{
+	public:
+		sclnjs::rCallback Callback;
+		sclnjs::wArguments Arguments;
+		str::wString	// For the launching of an action.
+			Id,
+			Action;
+		void reset( bso::sBool P = true )
+		{
+			tol::reset( P, Callback, Arguments, Id, Action );
+			Arguments.reset( P );
+		}
+		qCDTOR( rJS );
+		void Init( void )
+		{
+			tol::Init( Callback, Arguments, Id, Action );
+		}
+	};
 }
 
 #endif

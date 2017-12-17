@@ -275,7 +275,7 @@ qRT
 qRE
 }
 
-static void SetWidgets_(
+static void DressWidgets_(
 	cJS &Callback,
 	va_list List )
 {
@@ -613,7 +613,7 @@ static script_name__ Convert_( xdhcmn::function__ Function )
 	case xdhcmn::fSetLayout:
 		qRFwk();
 		break;
-	case xdhcmn::fSetWidgets:
+	case xdhcmn::fDressWidgets:
 		qRFwk();
 		break;
 	case xdhcmn::fSetContents:
@@ -664,8 +664,8 @@ void xdhujp::sProxyCallback::XDHCMNProcess(
 	case xdhcmn::fSetLayout:
 		SetLayout_( C_(), List );
 		break;
-	case xdhcmn::fSetWidgets:
-		SetWidgets_( C_(), List);
+	case xdhcmn::fDressWidgets:
+		DressWidgets_( C_(), List);
 		break;
 	case xdhcmn::fSetContents:
 		SetContents_( C_(), List);

@@ -177,7 +177,7 @@ namespace server {
 				const str::dString &Name,
 				flw::sWFlow &Flow );
 
-			inline void R(
+			void R(
 				flw::sRFlow &Flow,
 				str::dString &Value );
 		}
@@ -248,59 +248,59 @@ namespace server {
 				set::R( Flow );
 			}
 		}
+	}
 
-		namespace property {
-			namespace set {
-				inline void S(
-					const str::dString &Id,
-					const str::dString &Name,
-					const str::dString &Value,
-					flw::sWFlow &Flow )
-				{
-					ap_::set::S( prtcl::aSetProperty_1, Id, Name, Value, Flow );
-				}
-
-				inline void R( flw::sRFlow &Flow )
-				{
-					ap_::set::R( Flow );
-				}
-
-				inline void Set(
-					const str::dString &Id,
-					const str::dString &Name,
-					const str::dString &Value,
-					flw::sRWFlow &Flow )
-				{
-					set::S( Id, Name, Value, Flow );
-					set::R( Flow );
-				}
+	namespace property {
+		namespace set {
+			inline void S(
+				const str::dString &Id,
+				const str::dString &Name,
+				const str::dString &Value,
+				flw::sWFlow &Flow )
+			{
+				ap_::set::S( prtcl::aSetProperty_1, Id, Name, Value, Flow );
 			}
 
-			namespace get {
-				inline void S(
-					const str::dString &Id,
-					const str::dString &Name,
-					flw::sWFlow &Flow )
-				{
-					ap_::get::S( prtcl::aGetProperty_1, Id, Name, Flow );
-				}
+			inline void R( flw::sRFlow &Flow )
+			{
+				ap_::set::R( Flow );
+			}
 
-				inline void R(
-					flw::sRFlow &Flow,
-					str::dString &Value )
-				{
-					ap_::get::R( Flow, Value );
-				}
+			inline void Set(
+				const str::dString &Id,
+				const str::dString &Name,
+				const str::dString &Value,
+				flw::sRWFlow &Flow )
+			{
+				set::S( Id, Name, Value, Flow );
+				set::R( Flow );
+			}
+		}
 
-				inline void Set(
-					const str::dString &Id,
-					const str::dString &Name,
-					const str::dString &Value,
-					flw::sRWFlow &Flow )
-				{
-					set::S( Id, Name, Value, Flow );
-					set::R( Flow );
-				}
+		namespace get {
+			inline void S(
+				const str::dString &Id,
+				const str::dString &Name,
+				flw::sWFlow &Flow )
+			{
+				ap_::get::S( prtcl::aGetProperty_1, Id, Name, Flow );
+			}
+
+			inline void R(
+				flw::sRFlow &Flow,
+				str::dString &Value )
+			{
+				ap_::get::R( Flow, Value );
+			}
+
+			inline void Set(
+				const str::dString &Id,
+				const str::dString &Name,
+				const str::dString &Value,
+				flw::sRWFlow &Flow )
+			{
+				set::S( Id, Name, Value, Flow );
+				set::R( Flow );
 			}
 		}
 	}

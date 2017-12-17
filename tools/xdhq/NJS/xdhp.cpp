@@ -21,11 +21,12 @@
 
 #include "registry.h"
 #include "treep.h"
-#include "xdh_ups.h"
+#include "xdh_cmn.h"
 
 #include "csdbns.h"
 #include "csdcmn.h"
-#include "csdmxs.h"
+#include "csdmns.h"
+#include "mtk.h"
 #include "sclargmnt.h"
 
 using namespace xdhp;
@@ -69,6 +70,20 @@ namespace {
 		else
 			return NULL;
 	}
+
+	void LaunchServer_(
+		void *UP,
+		mtk::gBlocker &Blocker )
+	{
+		if ( UP == NULL )
+			qRFwk();
+
+		csdmns::rServer &Server = *(csdmns::rServer *)UP;
+
+		Blocker.Release();
+
+		Server.Process();
+	}
 }
 
 namespace {
@@ -76,15 +91,14 @@ namespace {
 
 	class rRack_ {
 	private:
-		xdh_ups::rProcessing Processing_;
-		csdmxs::rCallback Callback_;
-		csdbns::rServer Server_;
+		xdh_cmn::rProcessing Processing_;
+		csdmns::rServer Server_;
 	public:
-		xdh_ups::rSharing Sharing;
+		xdh_cmn::rSharing Sharing;
 		sclnjs::rCallback ConnectCallback;
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, Sharing, Processing_, Callback_, Server_, ConnectCallback );
+			tol::reset( P, Sharing, Processing_, Server_, ConnectCallback );
 		}
 		qCDTOR( rRack_ );
 		void Init(
@@ -93,10 +107,10 @@ namespace {
 		{
 			Sharing.Init();
 			Processing_.Init( Sharing );
-			Callback_.Init( Processing_ );
-			Server_.Init( Service, Callback_ );
+			Server_.Init( Service, Processing_ );
 			ConnectCallback.Init();
 			ConnectCallback = ConnectCallback;
+			mtk::Launch( LaunchServer_, &Server_ );
 		}
 	} Rack_;
 }
@@ -122,11 +136,13 @@ qRE
 namespace {
 	void HandleConnection_( void )
 	{
-		xdh_ups::rData &Data = Rack_.Sharing.ReadJS();
+		xdh_cmn::rData &Data = Rack_.Sharing.ReadJS();
 
 		Rack_.ConnectCallback.ObjectLaunch( Data.XDH, Data.JS.Arguments );
 
 		Data.XDH.Set( Id_, &Data );
+
+		Data.Unlock();
 	}
 }
 
@@ -149,12 +165,12 @@ qRB;
 	HandleConnection_();
 
 	while ( true ) {
-		xdh_ups::rData &Data = Rack_.Sharing.ReadJS();
+		xdh_cmn::rData &Data = Rack_.Sharing.ReadJS();
 		sclnjs::rCallback *PendingCallback = &Data.JS.Callback;
 
 		Data.JS.Callback.reset( false );
 
-		if ( PendingCallback == NULL ) {
+		if ( !PendingCallback->HasAssignation() ) {
 			Callback.Init();
 			Callback.Assign( Get_( Data.JS.Action ) );
 			Callback.ObjectLaunch( Data.XDH, Data.JS.Id );
@@ -168,50 +184,17 @@ qRT
 qRE
 }
 
-namespace layout_ {
-	namespace {
-		void Set_(
-			const str::dString &Id,
-			sclnjs::sCaller &Caller,
-			xdh_ups::rData &Data )
-		{
-			Data.Server.Arguments.Init();
-
-			treep::GetXML( Caller, Data.Server.Arguments.XML );
-
-			Caller.GetArgument( Data.Server.Arguments.XSLFilename, Data.JS.Callback );
-			Data.Server.Request = xdh_ups::server::rSetLayout;
-		}
-	}
-
-	void Set(
-		sclnjs::sCaller &Caller,
-		xdh_ups::rData &Data )
-	{
-	qRH;
-		str::wString Id;
-	qRB;
-		tol::Init( Id );
-		Caller.GetArgument( Id );
-
-		Set_( Id, Caller, Data );
-	qRR;
-	qRT;
-	qRE;
-	}
-}
-
 namespace {
-	xdh_ups::rData &GetData_( sclnjs::sCaller &Caller )
+	xdh_cmn::rData &GetData_( sclnjs::sCaller &Caller )
 	{
-		xdh_ups::rData *Data = NULL;
+		xdh_cmn::rData *Data = NULL;
 	qRH;
 		sclnjs::rObject Object;
 	qRB;
 		Object.Init();
 		Caller.GetArgument( Object );
 
-		Data = (xdh_ups::rData * )Object.Get( Id_ );
+		Data = (xdh_cmn::rData * )Object.Get( Id_ );
 
 		if ( Data == NULL )
 			qRGnr();
@@ -222,151 +205,89 @@ namespace {
 	}
 }
 
-#define DATA	xdh_ups::rData &Data = GetData_( Caller )
+#define DATA\
+	xdh_cmn::rData &Data = GetData_( Caller );\
+	xdh_ups::rServer &Server = Data.Server;\
+	xdh_dws::rJS &JS = Data.JS;\
+	xdh_ups::rArguments &Arguments = Server.Arguments;\
+	Arguments.Init();
+	
 
 SCLNJS_F( xdhp::SetLayout )
 {
 	DATA;
-	layout_::Set( Caller, Data );
+
+	Caller.GetArgument( Arguments.Id );
+
+	treep::GetXML( Caller, Arguments.XML );
+
+	Caller.GetArgument( Server.Arguments.XSLFilename, JS.Callback );
+	Arguments.Language = Data.Language;
+	Server.Request = xdh_ups::rSetLayout;
 }
 
 SCLNJS_F( xdhp::GetContents )
 {
-qRH;
-	str::wStrings Ids, Contents;
-qRB;
-	RACK;
+	DATA;
 
-	Ids.Init();
-	Caller.GetArgument( Ids );
-
-	Contents.Init();
-	server::GetContents( Ids, Rack.Flow, Contents );
-
-	Caller.SetReturnValue( Contents );
-qRR;
-qRT;
-qRE;
+	Caller.GetArgument( Arguments.Ids );
+	Server.Request = xdh_ups::rGetContents;
 }
 
-SCLNJS_F( xdhp::SetContents_ )
+SCLNJS_F( xdhp::SetContents )
 {
-qRH;
-	str::wStrings Ids, Contents;
-qRB;
-	RACK;
+	DATA;
 
-	tol::Init( Ids, Contents );
-	Caller.GetArgument( Ids, Contents );
-
-	server::SetContents_( Ids, Contents, Rack.Flow );
-qRR;
-qRT;
-qRE;
+	Caller.GetArgument( Arguments.Ids, Arguments.Contents, JS.Callback );
+	Server.Request = xdh_ups::rSetContents;
 }
 
-SCLNJS_F( xdhp::SetWidgets )
+SCLNJS_F( xdhp::DressWidgets )
 {
-qRH;
-	str::wString Id;
-qRB;
-	RACK;
+	DATA;
 
-	Id.Init();
-	Caller.GetArgument( Id );
-
-	server::SetWidgets( Id, Rack.Flow );
-qRR;
-qRT;
-qRE;
+	Caller.GetArgument( Arguments.Id, JS.Callback );
+	Server.Request = xdh_ups::rDressWidgets;
 }
 
 SCLNJS_F( xdhp::SetCasts )
 {
-qRH;
-	str::wString Id;
-	str::wStrings Tags, Values;
-qRB;
-	RACK;
+	DATA;
 
-	tol::Init( Id, Tags, Values );
-	Caller.GetArgument( Id, Tags, Values );
-
-	server::SetCasts( Id, Tags, Values, Rack.Flow );
-qRR;
-qRT;
-qRE;
+	Caller.GetArgument( Arguments.Id, Arguments.Tags, Arguments.Values, JS.Callback );
+	Server.Request = xdh_ups::rSetCasts;
 }
 
 SCLNJS_F( xdhp::GetAttribute )
 {
-qRH;
-	str::wString Id, Name, Value;
-qRB;
-	RACK;
+	DATA;
 
-	tol::Init( Id, Name );
-	Caller.GetArgument( Id, Name );
-
-	Value.Init();
-	server::GetAttribute( Id, Name, Rack.Flow, Value );
-
-	Caller.SetReturnValue( Value );
-qRR;
-qRT;
-qRE;
+	Caller.GetArgument( Arguments.Id, Arguments.Name, JS.Callback );
+	Server.Request = xdh_ups::rGetAttribute;
 }
 
 SCLNJS_F( xdhp::SetAttribute )
 {
-qRH;
-	str::wString Id, Name, Value;
-qRB;
-	RACK;
+	DATA;
 
-	tol::Init( Id, Name, Value );
-	Caller.GetArgument( Id, Name, Value );
-
-	server::SetAttribute( Id, Name, Value, Rack.Flow );
-qRR;
-qRT;
-qRE;
+	Caller.GetArgument( Arguments.Id, Arguments.Name, Arguments.Value, JS.Callback );
+	Server.Request = xdh_ups::rSetAttribute;
 }
 
 SCLNJS_F( xdhp::GetProperty )
 {
-qRH;
-	str::wString Id, Name, Value;
-qRB;
-	RACK;
+	DATA;
 
-	tol::Init( Id, Name );
-	Caller.GetArgument( Id, Name );
-
-	Value.Init();
-	server::GetProperty( Id, Name, Rack.Flow, Value );
-
-	Caller.SetReturnValue( Value );
-qRR;
-qRT;
-qRE;
+	Caller.GetArgument( Arguments.Id, Arguments.Name, JS.Callback );
+	Server.Request = xdh_ups::rGetProperty;
 }
 
 SCLNJS_F( xdhp::SetProperty )
 {
-qRH;
-	str::wString Id, Name, Value;
-qRB;
-	RACK;
+	DATA;
 
-	tol::Init( Id, Name, Value );
-	Caller.GetArgument( Id, Name, Value );
-
-	Value.Init();
-	server::SetProperty( Id, Name, Value, Rack.Flow );
-qRR;
-qRT;
-qRE;
+	Caller.GetArgument( Arguments.Id, Arguments.Name, Arguments.Value, JS.Callback );
+	Server.Request = xdh_ups::rSetProperty;
 }
 
 qGCTOR( xdhp )

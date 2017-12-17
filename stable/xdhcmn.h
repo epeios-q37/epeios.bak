@@ -79,7 +79,7 @@ namespace xdhcmn {
 		fConfirm,			// XML, XSL, Title.
 		fSetLayout,			// Id, XML, XSL.
 		fSetContents,		// Ids, Contents.
-		fSetWidgets,		// Id.
+		fDressWidgets,		// Id.
 		fSetCasts,			// Ids, Casts.
 		fSetProperty,		// Id, Name, Value.
 		fGetProperty,		// Id, Name.

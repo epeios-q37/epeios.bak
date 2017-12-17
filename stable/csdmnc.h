@@ -143,7 +143,7 @@ namespace csdmnc {
 		}
 	};
 
-	using csdmxc::rClientIOFlow;
+	using csdmxc::rIOFlow;
 
 }
 

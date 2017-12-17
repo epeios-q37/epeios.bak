@@ -46,39 +46,43 @@ namespace csdmns {
 	{
 	private:
 		csdbns::server___ Server_;
-		rCallback Callback_;
+		rProcessing Processing_;
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			Callback_.reset( P );
+			Processing_.reset( P );
 			Server_.reset( P );
 		}
 		E_CDTOR( server___ );
 		void Init(
 			fPort Port,
-			fCallback_ &Callback,
-			fLogCallback *LogCallback = NULL )
+			cProcessing &Processing,
+			cLog *Log = NULL )
 		{
-			Callback_.Init( Callback, LogCallback );
+			Processing_.Init( Processing, Log );
 
-			Server_.Init( Port, Callback_ );
+			Server_.Init( Port, Processing_ );
 		}
 		void Init(
 			fPort Port,
-			fCallback_ &Callback,
-			fLogCallback &LogCallback )
+			cProcessing &Processing,
+			cLog &Log )
 		{
-			Init( Port, Callback, &LogCallback );
+			Init( Port, Processing, &Log );
 		}
 		bso::bool__ LaunchService( const char *ServiceName )
 		{
 			return Server_.LaunchService( ServiceName );
 		}
-		void Process( sck::duration__ Timeout = SCK_INFINITE )
+		void Process(
+			const bso::sBool *Freeze = NULL,
+			sck::duration__ Timeout = SCK_INFINITE )
 		{
-			Server_.Process( Timeout );
+			Server_.Process( Freeze, Timeout );
 		}
 	};
+
+	typedef server___ rServer;
 }
 
 #endif

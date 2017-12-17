@@ -512,7 +512,7 @@ qRE
 			}
 	};
 
-	class rClientIOFlow
+	class rIOFlow
 	: public flw::ioflow__
 	{
 	private:
@@ -524,7 +524,7 @@ qRE
 			flw::ioflow__::reset( P );
 			_Driver.reset( P );
 		}
-		qCDTOR( rClientIOFlow );
+		qCDTOR( rIOFlow );
 		void Init( rCore &Core )
 		{
 			reset();

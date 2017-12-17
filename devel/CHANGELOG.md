@@ -1,5 +1,13 @@
 # *Epeios* changelog
 
+2017-12-17:
+- SCLNJS:
+  - handling Strings.
+
+2017-12-16:
+- SCLNJS:
+  - adding `rCore_::HasAssignation`,
+
 2017-12-15:
 - SCLNJS:
   - functions handling `dArguments` become methods attached to `dArguments`; this will simplify below new feature,

@@ -23,17 +23,28 @@
 
 #include "prtcl.h"
 
-#include "csdbnc.h"
+#include "csdmnc.h"
 #include "csdcmn.h"
 
 #include "sclmisc.h"
 
 namespace {
-
+	csdmnc::rCore Core_;
 }
 
 void sclxdhtml::SCLXDHTMLInitialization( xdhcmn::eMode Mode )
 {
+qRH;
+	qCBUFFERr Buffer;
+	str::wString HostService;
+qRB;
+	HostService.Init();
+	sclmisc::MGetValue( ::registry::parameter::HostService, HostService );
+
+	Core_.Init( HostService.Convert( Buffer ), 0, sck::NoTimeout );
+qRR;
+qRT;
+qRE;
 }
  
 namespace {
@@ -143,7 +154,7 @@ namespace {
 	qRE;
 	}
 
-	void SetContents__(
+	void SetContents_(
 		flw::sRFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
@@ -166,7 +177,7 @@ namespace {
 	qRE;
 	}
 
-	void SetWidgets_(
+	void DressWidgets_(
 		flw::sRFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
@@ -176,7 +187,7 @@ namespace {
 		Id.Init();
 		prtcl::Get( Flow, Id );
 
-		Proxy.SetWidgets( Id );
+		Proxy.DressWidgets( Id );
 	qRR;
 	qRT;
 	qRE;
@@ -290,7 +301,7 @@ namespace {
 	  public xdhdws::sProxy
 	{
 	private:
-		csdbnc::rIOFlow Client_;
+		csdmnc::rIOFlow Client_;
 		bso::sBool NotFirstCall_;
 	protected:
 
@@ -331,8 +342,8 @@ namespace {
 					break;
 				H( SetLayout );
 				H( GetContents );
-				H( SetContents_ );
-				H( SetWidgets );
+				H( SetContents );
+				H( DressWidgets );
 				H( SetCasts );
 				H( GetAttribute );
 				H( SetAttribute );
@@ -358,14 +369,7 @@ namespace {
 			xdhcmn::cProxy *Callback,
 			const char *Language )
 		{
-		qRH;
-			qCBUFFERr Buffer;
-			str::wString HostService;
-		qRB;
-			HostService.Init();
-			sclmisc::MGetValue( ::registry::parameter::HostService, HostService );
-
-			Client_.Init( HostService.Convert( Buffer ), sck::NoTimeout, err::h_Default );
+			Client_.Init( Core_ );
 
 			csdcmn::SendProtocol( prtcl::ProtocolId, prtcl::ProtocolVersion, Client_ );
 
@@ -376,9 +380,6 @@ namespace {
 			xdhdws::sProxy::Init( Callback );
 
 			NotFirstCall_ = false;
-		qRR;
-		qRT;
-		qRE;
 		}
 		operator flw::sIOFlow &( void )
 		{

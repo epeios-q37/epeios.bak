@@ -167,6 +167,14 @@ namespace sclnjs {
 		{
 			TestAndAdd_( *String );
 		}
+		inline void TestAndAdd_( const str::dStrings &Strings )
+		{
+			TestAndAdd_( n4njs::tStrings, &Strings );
+		}
+		inline void TestAndAdd_( const str::wStrings &Strings )
+		{
+			TestAndAdd_( *Strings );
+		}
 		inline void TestAndAdd_( const rObject &Object )
 		{
 			TestAndAdd_( n4njs::tObject, Object );
@@ -317,6 +325,10 @@ namespace sclnjs {
 		void VoidLaunch( const dArguments &Arguments )
 		{
 			return sclnjs::VoidLaunch( C_(), Arguments );
+		}
+		void VoidLaunch( const wArguments &Arguments )
+		{
+			return VoidLaunch( *Arguments );
 		}
 		template <typename ...args> void ObjectLaunch(
 			rObject &Object,

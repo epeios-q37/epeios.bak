@@ -94,9 +94,9 @@ namespace xdhdws {
 		{
 			C_().Process( xdhcmn::fSetLayout, NULL, Id.Internal()( ), XML.Internal()( ), XSL.Internal()( ) );
 		}
-		void SetWidgets( const nstring___ &Id )
+		void DressWidgets( const nstring___ &Id )
 		{
-			C_().Process(xdhcmn::fSetWidgets, NULL, Id.Internal()());
+			C_().Process(xdhcmn::fDressWidgets, NULL, Id.Internal()());
 		}
 		void SetContents(
 			const nstring___ &Ids,
