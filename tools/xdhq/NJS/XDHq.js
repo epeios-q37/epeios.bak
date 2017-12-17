@@ -107,11 +107,11 @@ class XDH {
 		else
 			return id;
 	}
-	set(fid, tree, xslFilename, id) {
-		njsq._wrapper(fid, this, this.normalize(id), tree, xslFilename);
+	set(fid, id, tree, xslFilename, callback ) {
+		njsq._wrapper(fid, this, id, tree, xslFilename, callback);
 	}
-	setLayout(tree, xslFilename, id, callback) {
-		this.set(9, tree, xslFilename, id, callback);
+	setLayout(id, tree, xslFilename, callback) {
+		this.set(9, id, tree, xslFilename, callback);
 	}
 	getContents(idOrIds) {
 		if (typeof idOrIds === "string")

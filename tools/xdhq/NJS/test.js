@@ -49,7 +49,9 @@ function callback() {
 function connect( xdh, id ) {
 	var tree = new xdhq.LayoutTree();
 
-	xdh.setLayout(tree, "../XSL/Main.xsl", () => { console.log('coucou'); } );
+//	console.log( ":::: " + tree._q37TreeRack);
+
+	xdh.setLayout("Root", tree, "../XSL/Main.xsl", () => { console.log('coucou'); } );
 //	handleTestButton(xdh, false);
 }
 

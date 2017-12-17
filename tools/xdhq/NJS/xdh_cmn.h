@@ -121,7 +121,9 @@ namespace xdh_cmn {
 			if ( Data_ == NULL )
 				qRFwk();
 
-			return *Data_;
+			Data_ = NULL;
+
+			return Data;
 		}
 	};
 

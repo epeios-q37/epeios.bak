@@ -410,7 +410,8 @@ namespace v8q {
 			v8::Isolate *Isolate = NULL,
 			qRPD )
 		{
-			if ( !Expose( Core()->Set( GetContext(), v8q::ToString( Key, Isolate ), Value ) ) ) {
+			Isolate = GetIsolate( Isolate );
+			if ( !Expose( Core()->Set( GetContext( Isolate ), v8q::ToString( Key, Isolate ), Value ) ) ) {
 				if ( qRPU )
 					qRFwk();
 				else

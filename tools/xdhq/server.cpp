@@ -43,9 +43,6 @@ void server::GetAction(
 	str::dString &Id,
 	str::dString &Action )
 {
-	prtcl::PutAnswer( prtcl::aOK_1, Flow );
-	Flow.Commit();
-
 	if ( prtcl::GetRequest( Flow ) != prtcl::rLaunch_1 )
 		qRGnr();
 

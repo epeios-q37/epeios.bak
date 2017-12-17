@@ -45,7 +45,7 @@ namespace {
 		{
 		qRH
 			flx::rStringOFlow BaseFlow;
-			txf::sOFlow Flow;
+			txf::sWFlow Flow;
 		qRB
 			BaseFlow.Init( Info );
 			Flow.Init( BaseFlow );

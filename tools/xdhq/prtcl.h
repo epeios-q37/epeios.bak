@@ -34,7 +34,8 @@ namespace prtcl {
 	qCDEF( bso::sU8, ProtocolVersion, 0 );
 
 	qENUM( Request ) {
-		rLaunch_1,	// Launch event.
+		rLaunch_1,	// Event was launched.
+		rReady_1,	// Potential pending data are available, and client is available for new action.
 		r_amount,
 		r_Undefined
 	};

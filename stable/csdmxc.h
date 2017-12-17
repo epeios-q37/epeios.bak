@@ -386,15 +386,24 @@ qRE
 		bso::sBool Commit_( bso::sBool Unlock )
 		{
 			Flow_.Commit( Unlock );
+			tht::sTID Unlocked = !Flow_.IDriver().IsLocked();	/* Below operation will lock the read driver,
+																so we have to unlock it when it was now already locked,
+																so another thread will be able to take the ownership. */
 
 			if ( Id_ == CSDMXB_UNDEFINED ) {
 				Id_ = GetId( Flow_ );
+				if ( Unlocked )
+					Flow_.IDriver().Unlock();
 				return true;
-			} else if ( Flow_.EndOfFlow() )
+			} else if ( Flow_.EndOfFlow() ) {
+				if ( Unlocked )
+					Flow_.IDriver().Unlock();
 				return false;
-			else if ( Flow_.Get() == 0 )
+			} else if ( Flow_.Get() == 0 ) {
+				if ( Unlocked )
+					Flow_.IDriver().Unlock();
 				return true;
-			else
+			}  else
 				qRFwk();
 
 			return false;	// To avoid a 'warning'.

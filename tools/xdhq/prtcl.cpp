@@ -29,6 +29,7 @@ const char *prtcl::GetLabel( eRequest Request )
 {
 	switch ( Request ) {
 	C( Launch_1 );
+	C( Ready_1 );
 	default:
 		qRFwk();
 		break;

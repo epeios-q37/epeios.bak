@@ -371,6 +371,8 @@ namespace {
 				case n4njs::tVoid:
 					break;
 				case n4njs::tObject:
+					if ( Return.IsEmpty() )
+						qRGnr();
 					CallbackReturn = Get_<rObject_>( Return );
 					break;
 				}

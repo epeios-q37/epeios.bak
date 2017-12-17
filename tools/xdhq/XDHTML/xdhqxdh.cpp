@@ -90,7 +90,7 @@ namespace {
 	};
 
 	void SetLayout_(
-		flw::sRFlow &Flow,
+		flw::sRWFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 	qRH;
@@ -103,6 +103,11 @@ namespace {
 		prtcl::Get( Flow, XSL );
 
 		Proxy.SetLayout( Id, XML, XSL );
+
+		Flow.Dismiss();
+
+		prtcl::PutRequest( prtcl::rReady_1, Flow );
+		Flow.Commit();
 	qRR;
 	qRT;
 	qRE;
@@ -147,6 +152,9 @@ namespace {
 		Contents.Init();
 		GetContents_( Ids, Proxy, Contents );
 
+		Flow.Dismiss();
+
+		prtcl::PutRequest( prtcl::rReady_1, Flow );
 		prtcl::Put( Contents, Flow );
 		Flow.Commit();
 	qRR;
@@ -155,7 +163,7 @@ namespace {
 	}
 
 	void SetContents_(
-		flw::sRFlow &Flow,
+		flw::sRWFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 	qRH;
@@ -172,13 +180,18 @@ namespace {
 		xdhcmn::FlatMerge( Contents, MergedContents, true );
 
 		Proxy.SetContents( MergedIds, MergedContents );
+
+		Flow.Dismiss();
+
+		prtcl::PutRequest( prtcl::rReady_1, Flow );
+		Flow.Commit();
 	qRR;
 	qRT;
 	qRE;
 	}
 
 	void DressWidgets_(
-		flw::sRFlow &Flow,
+		flw::sRWFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 	qRH;
@@ -188,13 +201,18 @@ namespace {
 		prtcl::Get( Flow, Id );
 
 		Proxy.DressWidgets( Id );
+
+		Flow.Dismiss();
+
+		prtcl::PutRequest( prtcl::rReady_1, Flow );
+		Flow.Commit();
 	qRR;
 	qRT;
 	qRE;
 	}
 
 	void SetCasts_(
-		flw::sRFlow &Flow,
+		flw::sRWFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 	qRH;
@@ -212,6 +230,11 @@ namespace {
 		xdhcmn::FlatMerge( Values, MergedValues, false );
 
 		Proxy.SetCasts( Id, MergedTags, MergedValues );
+
+		Flow.Dismiss();
+
+		prtcl::PutRequest( prtcl::rReady_1, Flow );
+		Flow.Commit();
 	qRR;
 	qRT;
 	qRE;
@@ -231,6 +254,9 @@ namespace {
 		Value.Init();
 		Proxy.GetAttribute( Id, Name, Value );
 
+		Flow.Dismiss();
+
+		prtcl::PutRequest( prtcl::rReady_1, Flow );
 		prtcl::Put( Value, Flow );
 		Flow.Commit();
 	qRR;
@@ -239,7 +265,7 @@ namespace {
 	}
 
 	void SetAttribute_(
-		flw::sRFlow &Flow,
+		flw::sRWFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 	qRH;
@@ -251,6 +277,11 @@ namespace {
 		prtcl::Get( Flow, Value );
 
 		Proxy.SetAttribute( Id, Name, Value );
+
+		Flow.Dismiss();
+
+		prtcl::PutRequest( prtcl::rReady_1, Flow );
+		Flow.Commit();
 	qRR;
 	qRT;
 	qRE;
@@ -271,6 +302,9 @@ namespace {
 		Value.Init();
 		Proxy.GetProperty( Id, Name, Value );
 
+		Flow.Dismiss();
+
+		prtcl::PutRequest( prtcl::rReady_1, Flow );
 		prtcl::Put( Value, Flow );
 		Flow.Commit();
 	qRR;
@@ -279,7 +313,7 @@ namespace {
 	}
 
 	void SetProperty_(
-		flw::sRFlow &Flow,
+		flw::sRWFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 	qRH;
@@ -291,6 +325,11 @@ namespace {
 		prtcl::Get( Flow, Value );
 
 		Proxy.SetProperty( Id, Name, Value );
+
+		Flow.Dismiss();
+
+		prtcl::PutRequest( prtcl::rReady_1, Flow );
+		Flow.Commit();
 	qRR;
 	qRT;
 	qRE;
@@ -370,9 +409,9 @@ namespace {
 			NotFirstCall_ = false;
 		}
 		qCVDTOR( rSession_ )
-			void Init(
-				xdhcmn::cProxy *Callback,
-				const char *Language )
+		void Init(
+			xdhcmn::cProxy *Callback,
+			const char *Language )
 		{
 		qRH;
 			flw::sDressedWFlow<> Flow;
@@ -390,6 +429,10 @@ namespace {
 			xdhdws::sProxy::Init( Callback );
 
 			NotFirstCall_ = false;
+
+			Flow.reset();
+
+			Driver_.Dismiss( true );
 		qRR;
 		qRT;
 		qRE;

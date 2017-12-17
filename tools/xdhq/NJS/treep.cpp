@@ -28,7 +28,7 @@ using namespace treep;
 namespace {
 	typedef xml::wWriter rWriter_;
 
-	struct rRack_
+	struct rTreeRack_
 	: public rWriter_
 	{
 	private:
@@ -40,7 +40,7 @@ namespace {
 			rWriter_::reset( P );
 			tol::reset( P, XML_, Flow_ );
 		}
-		qCDTOR( rRack_ );
+		qCDTOR( rTreeRack_ );
 		void Init( const str::dString &Background )
 		{
 			tol::bDateAndTime Buffer;
@@ -77,13 +77,13 @@ SCLNJS_F( treep::New )
 qRH;
 	rObject_ Object;
 	str::wString Background;
-	rRack_ *Rack = NULL;
+	rTreeRack_ *Rack = NULL;
 qRB;
 	tol::Init( Object, Background );
 	Background.Init();
 	Caller.GetArgument( Object, Background );
 
-	Rack = new rRack_;
+	Rack = new rTreeRack_;
 
 	if ( Rack == NULL )
 		qRAlc();
@@ -104,16 +104,16 @@ SCLNJS_F( treep::Delete )
 }
 
 namespace {
-	rRack_ &GetRack_( sclnjs::sCaller &Caller )
+	rTreeRack_ &GetRack_( sclnjs::sCaller &Caller )
 	{
-		rRack_ *Rack = NULL;
+		rTreeRack_ *Rack = NULL;
 	qRH;
 		rObject_ Object;
 	qRB;
 		tol::Init( Object );
 		Caller.GetArgument( Object );
 
-		Rack = (rRack_ *)Object.Get( Id_ );
+		Rack = (rTreeRack_ *)Object.Get( Id_ );
 
 		if ( Rack == NULL )
 			qRGnr();
@@ -129,7 +129,7 @@ SCLNJS_F( treep::PushTag )
 qRH;
 	str::wString Tag;
 qRB;
-	rRack_ &Rack = GetRack_( Caller );
+	rTreeRack_ &Rack = GetRack_( Caller );
 
 	Tag.Init();
 	Caller.GetArgument( Tag );
@@ -150,7 +150,7 @@ SCLNJS_F( treep::PutValue )
 qRH;
 	str::wString Value;
 qRB;
-	rRack_ &Rack = GetRack_( Caller );
+	rTreeRack_ &Rack = GetRack_( Caller );
 
 	Value.Init();
 	Caller.GetArgument( Value );
@@ -166,7 +166,7 @@ SCLNJS_F( treep::PutAttribute )
 qRH;
 	str::wString Name, Value;
 qRB;
-	rRack_ &Rack = GetRack_( Caller );
+	rTreeRack_ &Rack = GetRack_( Caller );
 
 	tol::Init( Name, Value );
 

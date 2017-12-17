@@ -325,7 +325,11 @@ qRE
 				if ( OwnerShipTaken )
 					qRFwk();
 				Core_.Store( SUP, Id );
+#if 0
 				Action = Callback_->Process( IODriver, SUP );
+#else
+				Action = csdscb::aContinue;
+#endif
 			} else if ( Id == CSDMXB_PING ) {
 				Flow.Put( (flw::byte__)0 );
 				Flow.Commit();

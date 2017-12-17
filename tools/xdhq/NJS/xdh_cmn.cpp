@@ -48,6 +48,9 @@ qRB;
 
 	Data->Lock();
 	Data->Unlock();
+
+	prtcl::PutAnswer( prtcl::aOK_1, Flow );
+	Flow.Commit();
 qRR;
 	if ( Data != NULL )
 		delete Data;
@@ -84,6 +87,7 @@ qRB;
 	Data.Unlock();
 
 	xdh_ups::Send( Flow, Data.Server );
+	Data.Server.Request = xdh_ups::r_Undefined;
 qRR;
 qRT;
 qRE;

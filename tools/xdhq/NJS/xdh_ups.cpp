@@ -206,25 +206,29 @@ bso::sBool xdh_ups::Recv(
 	flw::sRFlow &Flow,
 	sclnjs::dArguments &Arguments )
 {
-	switch ( Id ) {
-	case r_Undefined:	// New action is launched.
-		return false;
-		break;
-	H( SetLayout );
-	H( GetContents );
-	H( SetContents );
-	H( DressWidgets );
-	H( SetCasts );
-	H( GetAttribute );
-	H( SetAttribute );
-	H( GetProperty );
-	H( SetProperty );
-	default:
+	if ( prtcl::GetRequest( Flow ) != prtcl::rReady_1 )
 		qRGnr();
-		break;
-	}
 
-	return true;
+	if ( Id == r_Undefined )	// A new event has be detected.
+		return false;
+	else {
+		switch ( Id ) {
+		H( SetLayout );
+		H( GetContents );
+		H( SetContents );
+		H( DressWidgets );
+		H( SetCasts );
+		H( GetAttribute );
+		H( SetAttribute );
+		H( GetProperty );
+		H( SetProperty );
+		default:
+			qRGnr();
+			break;
+		}
+
+		return true;
+	}
 }
 
 #undef H

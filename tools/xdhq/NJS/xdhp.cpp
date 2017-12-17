@@ -87,9 +87,9 @@ namespace {
 }
 
 namespace {
-	qCDEF( char *, Id_, "_q37Rack" );
+	qCDEF( char *, Id_, "_q37XDHRack" );
 
-	class rRack_ {
+	class rXDHRack_ {
 	private:
 		xdh_cmn::rProcessing Processing_;
 		csdmns::rServer Server_;
@@ -100,7 +100,7 @@ namespace {
 		{
 			tol::reset( P, Sharing, Processing_, Server_, ConnectCallback );
 		}
-		qCDTOR( rRack_ );
+		qCDTOR( rXDHRack_ );
 		void Init(
 			csdbns::sService Service,
 			sclnjs::rCallback &ConnectCallback )
@@ -151,16 +151,14 @@ qRB;
 
 	while ( true ) {
 		xdh_cmn::rData &Data = Rack_.Sharing.ReadJS();
-		sclnjs::rCallback *PendingCallback = &Data.JS.Callback;
 
-		Data.JS.Callback.reset( false );
-
-		if ( PendingCallback->HasAssignation() ) {	// There is a pending action launched from callbac.
-			PendingCallback->VoidLaunch( Data.JS.Arguments );
-		} else if ( Data.JS.Action.Amount() != 0 ) {	// No pending action, but an event was launched.
+		if ( Data.JS.Callback.HasAssignation() ) {	// There is a pending action launched from callbac.
+			Data.JS.Callback.VoidLaunch( Data.JS.Arguments );
+			Data.JS.Callback.reset();
+		} else if ( Data.JS.Action.Amount() != 0 ) {	// No pending query, but an action was launched.
 			Callback.Init();
 			Callback.Assign( Get_( Data.JS.Action ) );
-			Callback.ObjectLaunch( Data.XDH, Data.JS.Id );
+			Callback.VoidLaunch( Data.XDH, Data.JS.Id );
 		} else {	// A new connection was open.
 			Rack_.ConnectCallback.ObjectLaunch( Data.XDH, Data.JS.Arguments );
 			Data.XDH.Set( Id_, &Data );

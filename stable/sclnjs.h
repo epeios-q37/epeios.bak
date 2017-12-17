@@ -57,11 +57,12 @@ namespace sclnjs {
 	public:
 		void reset( bso::sBool P = true )
 		{
-			if ( P )
+			if ( P ) {
 				if ( Callback_ != NULL )
 					delete Callback_;
+			}
 
-			tol::reset( P, Callback_ );
+			Callback_ = NULL;
 		}
 		qCVDTOR( rCore_ );
 		void Init( void )

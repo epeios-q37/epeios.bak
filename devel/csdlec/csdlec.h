@@ -139,7 +139,7 @@ une requte de manire trs intense (bombardage de 'push' 'join'). C'est comme si l
 	private:
 		csdscb::callback__ *_Callback;
 		void *UP_;
-		fdr::rIODriver *IODriver_;
+		fdr::rRWDriver *IODriver_;
 		bso::bool__ _DataAvailable;
 		void _Create( void )
 		{
@@ -202,7 +202,7 @@ une requte de manire trs intense (bombardage de 'push' 'join'). C'est comme si l
 		}
 		void Init(
 			csdscb::callback__ &Callback,
-			fdr::rIODriver *IODriver,
+			fdr::rRWDriver *IODriver,
 			fdr::thread_safety__ ThreadSafety )
 		{
 			reset();

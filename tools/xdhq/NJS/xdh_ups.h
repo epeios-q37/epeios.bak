@@ -38,7 +38,7 @@ namespace xdh_ups {
 		rSetAttribute,
 		rGetProperty,
 		rSetProperty,
-			r_amount,
+		r_amount,
 		r_Undefined
 	};
 
