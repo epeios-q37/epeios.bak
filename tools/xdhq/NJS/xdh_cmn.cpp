@@ -79,6 +79,8 @@ qRB;
 	if ( !xdh_ups::Recv( Data.Server.Request, Flow, Data.JS.Arguments ) )
 		server::GetAction( Flow, Data.JS.Id, Data.JS.Action );
 
+	Data.Server.Request = xdh_ups::r_Undefined;
+
 	Data.Lock();
 
 	S_().Upstream( &Data );
@@ -86,8 +88,8 @@ qRB;
 	Data.Lock();
 	Data.Unlock();
 
-	xdh_ups::Send( Flow, Data.Server );
-	Data.Server.Request = xdh_ups::r_Undefined;
+	if ( !xdh_ups::Send( Flow, Data.Server ) )
+		prtcl::PutAnswer( prtcl::aOK_1, Flow );
 qRR;
 qRT;
 qRE;

@@ -135,13 +135,13 @@ class XDH {
 	setWidgets(id) {
 		njsq._wrapper(12, this, this.normalize(id));
 	}
-	setCasts(id, tagOrTagsAndValues, value) {
+	setCasts(id, tagOrTagsAndValues, value, callback) {
 		var tags = new Array();
 		var values = new Array();
 
 		normalize(tagOrTagsAndValues, value, "string", tags, values);
 
-		njsq._wrapper(13, this, id, tags, values);
+		njsq._wrapper(13, this, id, tags, values, callback);
 	}
 	setCast(id, tag, value) {
 		this.setCasts(id, [[tag, value]]);

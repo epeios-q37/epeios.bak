@@ -76,7 +76,7 @@ namespace xdh_ups {
 		}
 	};
 
-	void Send(
+	bso::sBool Send(
 		flw::sWFlow &Flow,
 		rServer & Server );
 

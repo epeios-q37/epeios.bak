@@ -87,24 +87,29 @@ namespace send_ {
 		send_::name##_( Flow, Server.Arguments );\
 		break
 
-void xdh_ups::Send(
+bso::sBool xdh_ups::Send(
 	flw::sWFlow &Flow,
 	rServer &Server )
 {
 	switch ( Server.Request ) {
-		H( SetLayout );
-		H( GetContents );
-		H( SetContents );
-		H( DressWidgets );
-		H( SetCasts );
-		H( GetAttribute );
-		H( SetAttribute );
-		H( GetProperty );
-		H( SetProperty );
+	case r_Undefined:
+		return false;
+		break;
+	H( SetLayout );
+	H( GetContents );
+	H( SetContents );
+	H( DressWidgets );
+	H( SetCasts );
+	H( GetAttribute );
+	H( SetAttribute );
+	H( GetProperty );
+	H( SetProperty );
 	default:
 		qRGnr();
 		break;
 	}
+
+	return true;
 }
 
 #undef H
@@ -206,12 +211,12 @@ bso::sBool xdh_ups::Recv(
 	flw::sRFlow &Flow,
 	sclnjs::dArguments &Arguments )
 {
-	if ( prtcl::GetRequest( Flow ) != prtcl::rReady_1 )
-		qRGnr();
-
 	if ( Id == r_Undefined )	// A new event has be detected.
 		return false;
 	else {
+		if ( prtcl::GetRequest( Flow ) != prtcl::rReady_1 )
+			qRGnr();
+
 		switch ( Id ) {
 		H( SetLayout );
 		H( GetContents );

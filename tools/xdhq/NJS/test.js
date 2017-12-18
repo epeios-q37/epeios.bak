@@ -30,14 +30,17 @@ class MyData extends xdhq.XDH {
 	constructor() {
 		super();
 		this.timestamp = new Date();
+		this.showButton = false;
 	}
 }
 
-function handleTestButton(xdh, enabled) {
-	if (enabled)
-		xdh.setCasts("Root", "TestButtonCasting", "Plain" );
+function handleTestButton(xdh) {
+	console.log("button handling");
+
+	if (xdh.showButton )
+		xdh.setCasts("Root", "TestButtonCasting", "Plain", (xdh) => { console.log('plain'); });
 	else
-		xdh.setCasts("Root", "TestButtonCasting", "Hide" );
+		xdh.setCasts("Root", "TestButtonCasting", "Hide", (xdh) => { console.log('hide'); });
 }
 
 function callback() {
@@ -51,8 +54,8 @@ function connect( xdh, id ) {
 
 //	console.log( ":::: " + tree._q37TreeRack);
 
-	xdh.setLayout("Root", tree, "../XSL/Main.xsl", () => { console.log('coucou'); } );
-//	handleTestButton(xdh, false);
+	xdh.setLayout("Root", tree, "../XSL/Main.xsl",
+		handleTestButton );
 }
 
 function testing(xdh, id) {
@@ -60,11 +63,13 @@ function testing(xdh, id) {
 }
 
 function hideTestButton(xdh, id) {
-	handleTestButton(xdh, false);
+	xdh.showButton = false;
+	handleTestButton(xdh);
 }
 
 function showTestButton(xdh, id) {
-	handleTestButton(xdh, true);
+	xdh.showButton = true;
+	handleTestButton(xdh);
 }
 
 function submission(xdh, id) {

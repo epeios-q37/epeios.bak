@@ -151,14 +151,19 @@ qRB;
 
 	while ( true ) {
 		xdh_cmn::rData &Data = Rack_.Sharing.ReadJS();
+		Callback.Init();
+		Callback = Data.JS.Callback;
+		Data.JS.Callback.reset( false );
 
-		if ( Data.JS.Callback.HasAssignation() ) {	// There is a pending action launched from callbac.
-			Data.JS.Callback.VoidLaunch( Data.JS.Arguments );
-			Data.JS.Callback.reset();
+		if ( Callback.HasAssignation() ) {	// There is a pending action launched from callback.
+			Callback.VoidLaunch( Data.JS.Arguments );
+			Callback.reset();
 		} else if ( Data.JS.Action.Amount() != 0 ) {	// No pending query, but an action was launched.
 			Callback.Init();
 			Callback.Assign( Get_( Data.JS.Action ) );
 			Callback.VoidLaunch( Data.XDH, Data.JS.Id );
+			Callback.reset( false );
+			tol::Init( Data.JS.Id, Data.JS.Action );
 		} else {	// A new connection was open.
 			Rack_.ConnectCallback.ObjectLaunch( Data.XDH, Data.JS.Arguments );
 			Data.XDH.Set( Id_, &Data );
