@@ -85,7 +85,7 @@ function nop( xdh ) {
 	console.log( arguments.callee );
 }
 
-function callback() {
+function onConnection() {
 	console.log( arguments.callee );
 	console.log("Connection detected !");
 
@@ -162,7 +162,7 @@ function handleImage( xdh, result ) {
 		xdh.setAttribute( xdh.imageToHandle, 'class', 'image', nop );
 }
 
-function acEnlarge( xdh, id ) {
+function acHandlePicture( xdh, id ) {
 	console.log( arguments.callee );
 	xdh.imageToHandle = id;
 	xdh.getAttribute( id, 'class', handleImage );
@@ -197,14 +197,14 @@ function main()
 	console.log( arguments.callee );
 	xdhq.register("Connect", acConnect);	// Testing.
 	xdhq.register([
-		["Enlarge", acEnlarge],
+		["HandlePicture", acHandlePicture],
 		["DisplayRecord", acDisplayRecord],
 		["ToList", acToList],
 		["Submit", acSubmit],
 		["ToggleMaps", acToggleMaps],
 	]);
 
-	xdhq.listen(callback, "12345");
+	xdhq.listen(onConnection, "12345");
 }
 
 main();

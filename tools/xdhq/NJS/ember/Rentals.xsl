@@ -64,7 +64,7 @@
   <li>
    <div class="ember-view">
     <article class="listing">
-     <a class="image" data-xdh-onevent="Enlarge">
+     <a class="image" data-xdh-onevent="HandlePicture">
       <img alt="">
        <xsl:attribute name="src">
         <xsl:value-of select="image"/>

@@ -3,8 +3,6 @@
 <xsl:stylesheet	version="1.0" xmlns="http://www.w3.org/1999/xhtml" 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xpp="http://q37.info/ns/xpp/">
  <xsl:output method="html" encoding="UTF-8"/>
  <xsl:template match="/XDHTML[@Background='Layout']">
-  <!--div id="mapdiv" style="height: 1000px"></div-->
-  <!--script>map('mapdiv');</script-->
   <div class="menu">
    <a class="ember-view">
     <h1>
