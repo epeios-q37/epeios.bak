@@ -119,82 +119,62 @@ namespace recv_ {
 	namespace {
 		void SetLayout_(
 			flw::sRFlow &Flow,
-			sclnjs::dArguments &Agruments )
+			xdh_dws::rArguments &Arguments )
 		{
 			server::layout::set::R( Flow );
 		}
+
 		void GetContents_(
 			flw::sRFlow &Flow,
-			sclnjs::dArguments &Arguments )
+			xdh_dws::rArguments &Arguments )
 		{
-		qRH;
-			str::wStrings Contents;
-		qRB;
-			Contents.Init();
-			server::contents::get::R( Flow, Contents );
-
-			Arguments.Add( Contents );
-		qRR;
-		qRT;
-		qRE;
+			server::contents::get::R( Flow, Arguments.Contents() );
 		}
+
 		void SetContents_(
 			flw::sRFlow &Flow,
-			sclnjs::dArguments &Agruments )
+			xdh_dws::rArguments &Arguments )
 		{
 			server::contents::set::R( Flow );
 		}
+
 		void DressWidgets_(
 			flw::sRFlow &Flow,
-			sclnjs::dArguments &Agruments )
+			xdh_dws::rArguments &Arguments )
 		{
 			server::widgets::dress::R( Flow );
 		}
+
 		void SetCasts_(
 			flw::sRFlow &Flow,
-			sclnjs::dArguments &Agruments )
+			xdh_dws::rArguments &Arguments )
 		{
 			server::casts::set::R( Flow );
 		}
+
 		void GetAttribute_(
 			flw::sRFlow &Flow,
-			sclnjs::dArguments &Arguments )
+			xdh_dws::rArguments &Arguments )
 		{
-		qRH;
-			str::wString Value;
-		qRB;
-			Value.Init();
-			server::attribute::get::R( Flow, Value );
-
-			Arguments.Add( Value );
-		qRR;
-		qRT;
-		qRE;
+			server::attribute::get::R( Flow, Arguments.Value() );
 		}
+
 		void SetAttribute_(
 			flw::sRFlow &Flow,
-			sclnjs::dArguments &Agruments )
+			xdh_dws::rArguments &Arguments )
 		{
 			server::attribute::set::R( Flow );
 		}
+
 		void GetProperty_(
 			flw::sRFlow &Flow,
-			sclnjs::dArguments &Arguments )
+			xdh_dws::rArguments &Arguments )
 		{
-		qRH;
-			str::wString Value;
-		qRB;
-			Value.Init();
-			server::property::get::R( Flow, Value );
-
-			Arguments.Add( Value );
-		qRR;
-		qRT;
-		qRE;
+			server::property::get::R( Flow, Arguments.Value() );
 		}
 		void SetProperty_(
 			flw::sRFlow &Flow,
-			sclnjs::dArguments &Agruments )
+			xdh_dws::rArguments &Arguments )
 		{
 			server::property::set::R( Flow );
 		}
@@ -209,7 +189,7 @@ namespace recv_ {
 bso::sBool xdh_ups::Recv(
 	eRequest Id,
 	flw::sRFlow &Flow,
-	sclnjs::dArguments &Arguments )
+	xdh_dws::rArguments &Arguments )
 {
 	if ( Id == r_Undefined )	// A new event has be detected.
 		return false;

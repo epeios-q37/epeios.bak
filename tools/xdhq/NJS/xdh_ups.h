@@ -25,6 +25,7 @@
 
 # include "csdscb.h"
 # include "sclnjs.h"
+# include "xdh_dws.h"
 
 namespace xdh_ups {
 	qENUM( Request )
@@ -82,8 +83,8 @@ namespace xdh_ups {
 
 	bso::sBool Recv(
 		eRequest Id,
-		flw::sRFlow & Flow,
-		sclnjs::dArguments & Arguments );
+		flw::sRFlow &Flow,
+		xdh_dws::rArguments &Arguments );
 }
 
 #endif

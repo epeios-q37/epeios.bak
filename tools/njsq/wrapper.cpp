@@ -294,12 +294,39 @@ namespace {
 					qRE
 					}
 
-
 					void Set_(
 						v8::Local<v8::Value> &Argv,
 						const n4njs::cUObject *Object )
 					{
 						Argv = ( (rObject_ *)Object )->Core();
+					}
+
+					void Set_(
+						v8::Local<v8::Value> &Argv,
+						const str::dStrings *Value )
+					{
+					qRH;
+						qCBUFFERr Buffer;
+						sdr::sRow Row = qNIL;
+					qRB;
+						if ( Value->Amount() > bso::U32Max )
+							qRLmt();
+
+						v8::Local<v8::Array> Array = v8::Array::New( v8q::GetIsolate(), Value->Amount() );
+
+						Row = Value->First();
+
+						while ( Row != qNIL ) {
+							Array->Set( v8q::GetContext(), (int32_t)*Row, v8q::ToString( Value->operator()( Row ).Convert( Buffer ) ) );
+
+							Row = Value->Next( Row );
+
+						}
+
+						Argv = Array;
+					qRR;
+					qRT;
+					qRE;
 					}
 				}
 
@@ -319,6 +346,9 @@ namespace {
 						break;
 					case n4njs::tObject:
 						Set_( Argv, (const n4njs::cUObject *)Argument.Value );
+						break;
+					case n4njs::tStrings:
+						Set_( Argv, (const str::dStrings *)Argument.Value );
 						break;
 					default:
 						qRGnr();

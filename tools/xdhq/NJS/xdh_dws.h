@@ -26,11 +26,50 @@
 # include"sclnjs.h"
 
 namespace xdh_dws {
+
+	class rArguments
+	{
+	private:
+		sclnjs::wArguments Core_;
+		str::wString Value_;
+		str::wStrings Contents_;
+	public:
+		void reset( bso::sBool P = true )
+		{
+			tol::reset( P, Core_, Value_, Contents_  );
+		}
+		qCDTOR( rArguments );
+		void Init( void )
+		{
+			tol::Init( Core_, Value_, Contents_  );
+		}
+		void Add( sclnjs::rObject &Object )
+		{
+			Core_.Add( Object );
+		}
+		str::dString &Value( void )
+		{
+			Core_.Add( Value_ );
+
+			return Value_;
+		}
+		str::wStrings &Contents( void )
+		{
+			Core_.Add( Contents_ );
+
+			return Contents_;
+		}
+		const sclnjs::dArguments &Core( void ) const
+		{
+			return Core_;
+		}
+	};
+
 	struct rJS
 	{
 	public:
 		sclnjs::rCallback Callback;
-		sclnjs::wArguments Arguments;
+		rArguments Arguments;
 		str::wString	// For the launching of an action.
 			Id,
 			Action;

@@ -113,27 +113,27 @@ class XDH {
 	setLayout(id, tree, xslFilename, callback) {
 		this.set(9, id, tree, xslFilename, callback);
 	}
-	getContents(idOrIds) {
+	getContents(idOrIds, callback) {
 		if (typeof idOrIds === "string")
-			return njsq._wrapper(10, this, new Array( idOrIds ) )[0];
+			njsq._wrapper(10, this, new Array( idOrIds ), callback );
 		else if ( idOrIds instanceof Array )
-			return njsq._wrapper(10, this, idOrIds );
+			njsq._wrapper(10, this, idOrIds, callback );
 		else
 			throw "Bad argument !";
 	}
-	getContent(id) {
-		return this.getContents([id])[0];
+	getContent(id, callback) {
+		return this.getContents([id], (xdh, result) => { callback( xdh, result[0]); } );
 	}
-	setContents(idOrIdsAndContents, content) {
+	setContents(idOrIdsAndContents, content, callback) {
 		var ids = new Array();
 		var contents = new Array();
 
 		normalize(idOrIdsAndContents, content, "string", ids, contents);
 
-		return njsq._wrapper(11, this, ids, contents);
+		njsq._wrapper(11, this, ids, contents, callback );
 	}
-	setWidgets(id) {
-		njsq._wrapper(12, this, this.normalize(id));
+	setWidgets(id, callback ) {
+		njsq._wrapper(12, this, this.normalize(id), calklback );
 	}
 	setCasts(id, tagOrTagsAndValues, value, callback) {
 		var tags = new Array();
@@ -143,14 +143,14 @@ class XDH {
 
 		njsq._wrapper(13, this, id, tags, values, callback);
 	}
-	setCast(id, tag, value) {
-		this.setCasts(id, [[tag, value]]);
+	setCast(id, tag, value, callback ) {
+		this.setCasts(id, [[tag, value]], "", callback );
 	}
-	getAttribute(id, name) {
-		return njsq._wrapper(14, this, id, name);
+	getAttribute(id, name, callback) {
+		return njsq._wrapper(14, this, id, name, callback);
 	}
-	setAttribute(id, name, value) {
-		njsq._wrapper(15, this, id, name, value);
+	setAttribute(id, name, value, callback) {
+		njsq._wrapper(15, this, id, name, value, callback);
 	}
 	getProperty(id, name) {
 		return njsq._wrapper(16, this, id, name);

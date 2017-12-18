@@ -41,6 +41,8 @@ function handleTestButton(xdh) {
 		xdh.setCasts("Root", "TestButtonCasting", "Plain", (xdh) => { console.log('plain'); });
 	else
 		xdh.setCasts("Root", "TestButtonCasting", "Hide", (xdh) => { console.log('hide'); });
+
+	console.log("Hi !");
 }
 
 function callback() {
@@ -73,7 +75,14 @@ function showTestButton(xdh, id) {
 }
 
 function submission(xdh, id) {
-	xdh.setContent( "Pattern", xdh.getContents( "Pattern" ).toUpperCase() );
+	xdh.getContent( "Pattern",
+					 (xdh, result) => {
+					 	console.log("Result: " + result);
+					 	xdh.setContents("Pattern", result.toUpperCase(),
+										(xdh) => {
+											console.log("Submission");
+										});
+					 } );
 }
 
 function main()

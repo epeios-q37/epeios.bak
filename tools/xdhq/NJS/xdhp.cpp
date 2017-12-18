@@ -156,8 +156,8 @@ qRB;
 		Data.JS.Callback.reset( false );
 
 		if ( Callback.HasAssignation() ) {	// There is a pending action launched from callback.
-			Callback.VoidLaunch( Data.JS.Arguments );
-			Callback.reset();
+			Callback.VoidLaunch( Data.JS.Arguments.Core() );
+			Callback.reset( false );
 		} else if ( Data.JS.Action.Amount() != 0 ) {	// No pending query, but an action was launched.
 			Callback.Init();
 			Callback.Assign( Get_( Data.JS.Action ) );
@@ -165,7 +165,7 @@ qRB;
 			Callback.reset( false );
 			tol::Init( Data.JS.Id, Data.JS.Action );
 		} else {	// A new connection was open.
-			Rack_.ConnectCallback.ObjectLaunch( Data.XDH, Data.JS.Arguments );
+			Rack_.ConnectCallback.ObjectLaunch( Data.XDH, Data.JS.Arguments.Core() );
 			Data.XDH.Set( Id_, &Data );
 		}
 
@@ -222,7 +222,7 @@ SCLNJS_F( xdhp::GetContents )
 {
 	DATA;
 
-	Caller.GetArgument( Arguments.Ids );
+	Caller.GetArgument( Arguments.Ids, JS.Callback );
 	Server.Request = xdh_ups::rGetContents;
 }
 
