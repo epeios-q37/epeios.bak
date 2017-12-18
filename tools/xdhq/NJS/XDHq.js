@@ -132,8 +132,8 @@ class XDH {
 
 		njsq._wrapper(11, this, ids, contents, callback );
 	}
-	setWidgets(id, callback ) {
-		njsq._wrapper(12, this, this.normalize(id), calklback );
+	dressWidgets(id, callback ) {
+		njsq._wrapper(12, this, this.normalize(id), callback );
 	}
 	setCasts(id, tagOrTagsAndValues, value, callback) {
 		var tags = new Array();
