@@ -10,9 +10,9 @@ MIDDLE
 	Handling of `qRReturn` when an error is already in progress.
 - Flow:
 	- Reimplementing flow handling to be based on driver rather then on flow.
-	- Implement the possibility to read/write in a flow without blocking (even without reading/writing a minimal amout of data).
+	- Implement the possibility to read/write in a flow without blocking (even without reading/writing a minimal amount of data).
 - LOG:
-	Reimplement log handling to put is as part of 'SCLMISC' (depends if it's a file log or a console log).
+	Reimplementation of log handling to put is as part of 'SCLMISC' (depends if it's a file log or a console log).
 - N4ALLW:
   - Sometimes, the path to the component can be `~/bin/` (*PHP*, *Java*), and sometime it must be `/home/csimon/bin/` (*Node.js*).
 - SCL...:
@@ -31,12 +31,12 @@ MIDDLE
 	- Implement a solution which prevent that an 'Enter' (or other touch) event on a text box is also applied to a potential alert box reporting an error,
 	  preventing this box to be displayed. Currently, there is a workaround in the 'handleEvent' function from the 'xdhtml.js' file.
 	- Expose in the XML flow the nature of the interface (desktop, web, touchscreen, mobile...).
-- DTFPTB: optimize string handlig.
+- DTFPTB: optimize string handling.
 
 
 LONG:
 - XPP:
-	- Reimplement in a simplified manner.
+	- Reimplementation in a simplified manner.
 - Socket:
 	- Adaptation of the network related libraries to IPv6.
 

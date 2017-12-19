@@ -40,6 +40,46 @@ using cio::COut;
 using cio::CIn;
 
 namespace {
+	void ErrFinal_( v8::Isolate *Isolate = NULL )
+	{
+	qRH
+		str::wString Message;
+		err::buffer__ Buffer;
+	qRB
+		Isolate = v8q::GetIsolate( Isolate );
+
+		Message.Init();
+
+		if ( ERRType != err::t_Abort ) {
+			Message.Append( err::Message( Buffer ) );
+
+			ERRRst();	// To avoid relaunching of current error by objects of the 'FLW' library.
+		} else if ( sclerror::IsErrorPending() )
+			sclmisc::GetSCLBasePendingErrorTranslation( Message );
+
+		if ( Isolate != NULL )
+			Isolate->ThrowException( v8::Exception::Error( v8q::ToString( Message ) ) );
+		else
+			cio::CErr << txf::nl << Message << txf::nl;
+	qRR
+		ERRRst();
+	qRT
+	qRE
+	}
+
+	wrapper::rLauncher &GetLauncher_( const v8::FunctionCallbackInfo<v8::Value>& Args )
+	{
+		if ( Args.Length() < 1 )
+			qRGnr();
+
+		if ( !Args[0]->IsExternal() )
+			qRGnr();
+
+		return *(wrapper::rLauncher *)v8q::ToExternal( Args[0] )->Value();
+	}
+}
+
+namespace {
 	namespace {
 		void GetWrapperInfo_( str::dString &Info )
 		{
@@ -78,21 +118,21 @@ namespace {
 
 	void GetComponentInfo_( const v8::FunctionCallbackInfo<v8::Value>& Args )
 	{
-	qRH
+	qRFH;
 		str::wString Info;
 		v8q::sLString String;
-	qRB
+	qRFB;
 		Info.Init();
 
-		if ( !wrapper::GetLauncherInfo( Info ) )
+		if ( !GetLauncher_( Args ).GetInfo( Info ) )
 			sclmisc::GetBaseTranslation( "NoRegisteredComponent", Info );
 
 		String.Init( Info );
 
 		Args.GetReturnValue().Set( String.Core() );
-	qRR
-	qRT
-	qRE
+	qRFR;
+	qRFT;
+	qRFE( ErrFinal_() );
 	}
 }
 
@@ -189,13 +229,6 @@ qRE
 }
 
 namespace {
-	void OnExit_( void *UP )
-	{
-		wrapper::DeleteLauncher();
-	}
-}
-
-namespace {
 	err::err___ qRRor_;
 	sclerror::rError SCLError_;
 	scllocale::rRack Locale_;
@@ -203,33 +236,6 @@ namespace {
 }
 
 namespace {
-	void ErrFinal_( v8::Isolate *Isolate = NULL )
-	{
-	qRH
-		str::wString Message;
-		err::buffer__ Buffer;
-	qRB
-		Isolate = v8q::GetIsolate( Isolate );
-
-		Message.Init();
-
-		if ( ERRType != err::t_Abort ) {
-			Message.Append( err::Message( Buffer ) );
-
-			ERRRst();	// To avoid relaunching of current error by objects of the 'FLW' library.
-		} else if ( sclerror::IsErrorPending() )
-			sclmisc::GetSCLBasePendingErrorTranslation( Message );
-
-		if ( Isolate != NULL )
-			Isolate->ThrowException( v8::Exception::Error( v8q::ToString( Message ) ) );
-		else
-			cio::CErr << txf::nl << Message << txf::nl;
-	qRR
-		ERRRst();
-	qRT
-	qRE
-	}
-
 	namespace {
 		void Async_( n4njs::cAsync &Async )
 		{
@@ -239,14 +245,15 @@ namespace {
 		n4njs::gShared Shared_;
 	}
 
-	void Register_( const v8::FunctionCallbackInfo<v8::Value>& Info )
+	void Register_( const v8::FunctionCallbackInfo<v8::Value>& Args )
 	{
-	qRFH
+	qRFH;
 		v8q::sLString RawArguments;
 		str::wString Arguments;
 		str::wString ComponentFilename;
-	qRFB
-		RawArguments.Init( Info[0] );
+		wrapper::rLauncher *Launcher = NULL;
+	qRFB;
+		RawArguments.Init( Args[0] );
 
 		Arguments.Init();
 		RawArguments.Get( Arguments );
@@ -258,17 +265,25 @@ namespace {
 
 		Shared_.Async = Async_;
 
-		wrapper::Register( ComponentFilename, Rack_, Shared_ );
-	qRFR
-	qRFT
-	qRFE( ErrFinal_() )
+		if ( ( Launcher = new wrapper::rLauncher) == NULL )
+			qRAlc();
+
+		Launcher->Register( ComponentFilename, Rack_, Shared_ );
+
+		Args.GetReturnValue().Set( v8q::ToExternal( Launcher ) );
+	qRFR;
+		if ( Launcher != 0 )
+			delete Launcher;
+	qRFT;
+	qRFE( ErrFinal_() );
+
 	}
 
-	void Launch_( const v8::FunctionCallbackInfo<v8::Value>& Info )
+	void Wrapper_( const v8::FunctionCallbackInfo<v8::Value>& Args )
 	{
 	qRFH
 	qRFB
-		wrapper::Launch( Info );
+		GetLauncher_( Args ).Launch( Args );
 	qRFR
 	qRFT
 	qRFE( ErrFinal_() )
@@ -284,10 +299,10 @@ qRFH
 	str::wString Location;
 	str::wString Filename;
 qRFB
-	NODE_SET_METHOD( Exports, "wrapperInfo", GetWrapperInfo_ );
-	NODE_SET_METHOD( Exports, "componentInfo", GetComponentInfo_ );
-	NODE_SET_METHOD( Exports, "register", Register_ );
-	NODE_SET_METHOD( Exports, "_wrapper", Launch_ );
+	NODE_SET_METHOD( Exports, "_wrapperInfo", GetWrapperInfo_ );
+	NODE_SET_METHOD( Exports, "_componentInfo", GetComponentInfo_ );
+	NODE_SET_METHOD( Exports, "_register", Register_ );
+	NODE_SET_METHOD( Exports, "_wrapper", Wrapper_ );
 
 	cio::Initialize( cio::GetConsoleSet() );
 
@@ -302,8 +317,8 @@ qRFB
 
 	sclmisc::Initialize( Rack_, Location );
 
-	node::AtExit( OnExit_, NULL );
 	/*
+	node::AtExit( OnExit_, NULL );
 	error_::Initialize();
 
 	error_::Launch();

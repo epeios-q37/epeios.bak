@@ -57,7 +57,7 @@ namespace rncflt {
 
 	inline void Print(
 		bso::lfloat__ Float,
-		txf::sOFlow &Flow )
+		txf::sWFlow &Flow )
 	{
 		char Buffer[1000];
 

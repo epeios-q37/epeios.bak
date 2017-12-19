@@ -24,48 +24,7 @@
 using namespace n4allw;
 
 namespace {
-	using n4all::cLauncher;
-
-	cLauncher *Launcher_ = NULL;
-}
-
-void n4allw::SetLauncher( cLauncher *Launcher )
-{
-	if ( Launcher_ != NULL )
-		qRGnr();
-
-	if ( Launcher == NULL )
-		qRGnr();
-
-	Launcher_ = Launcher;
-}
-
-cLauncher &n4allw::GetLauncher( void )
-{
-	if ( Launcher_ == NULL )
-		qRGnr();
-
-	return *Launcher_;
-}
-
-bso::sBool n4allw::GetLauncherInfo( str::dString &Info )
-{
-	if ( Launcher_ != NULL ) {
-		Launcher_->Info( Info );
-		return true;
-	} else
-		return false;
-}
-
-void n4allw::DeleteLauncher( void )
-{
-	if ( Launcher_ != NULL )
-		delete Launcher_;
-}
-
-namespace {
 	namespace {
-		bch::qBUNCHwl( void * ) Functions_;
 		err::err___ qRRor_;
 		sclerror::rError SCLError_;
 		scllocale::rRack Locale_;
@@ -74,91 +33,32 @@ namespace {
 
 	typedef n4all::cRegistrar cRegistrar_;
 
-	class sRegistrar_
+	class rRegistrar_
 	: public cRegistrar_
 	{
+	private:
+		qRMV( dFunctions_, F_, Functions_ );
 	protected:
 		virtual void N4ALLRegister( void *Function ) override
 		{
-			Functions_.Append( Function );
+			F_().Append( Function );
 		}
 	public:
-		void Init( void )
-		{}
+		void reset( bso::sBool P = true )
+		{
+			Functions_ = NULL;
+		}
+		qCVDTOR( rRegistrar_ )
+			void Init( dFunctions_ & Functions )
+		{
+			Functions_ = &Functions;
+		}
 	};
 
-	namespace {
-		dlbrry::rDynamicLibrary Library_;
-	}
-
 	extern "C" typedef n4all::fRegister fRegister_;
-
-	bso::bool__ Register_(
-		const fnm::rName &ComponentFilename,
-		dlbrry::eNormalization Normalization,
-		n4all::cRegistrar &Registrar,
-		sclmisc::sRack &Rack,
-		void *UP,
-		bso::sBool SkipComponentUnloading )
-	{
-		bso::bool__ Success = false;
-	qRH
-		n4all::sData Data;
-		fnm::name___ Location;
-		TOL_CBUFFER___ Buffer;
-	qRB
-		Location.Init();
-		fnm::GetLocation( ComponentFilename, Location );
-		Data.Init( Rack, Location, str::wString(), UP );
-
-		//		cio::COut << __LOC__ << AddonFilename << txf::nl << txf::commit;
-
-		Library_.Init( ComponentFilename, Normalization );
-
-		if ( SkipComponentUnloading )
-			Library_.SkipUnloading();
-
-		//		cio::COut << __LOC__ << txf::nl << txf::commit;
-
-		fRegister_ *Register = dlbrry::GetFunction<fRegister_ *>( E_STRING( N4ALL_REGISTER_FUNCTION_NAME ), Library_ );
-
-		if ( Register == NULL )
-			qRReturn;
-
-		SetLauncher( Register( &Registrar, &Data ) );
-
-		Success = true;
-	qRR
-	qRT
-	qRE
-		return Success;
-	}
-
 }
 
-bso::sBool n4allw::Register(
-	const fnm::rName &ComponentFilename,
-	dlbrry::eNormalization Normalization,
-	sclmisc::sRack &Rack,
-	void *UP,
-	bso::sBool SkipComponentUnloading,
-	qRPN )
-{
-	sRegistrar_ Registrar;
-
-	Functions_.Init();
-
-	Registrar.Init();
-
-	if ( !Register_( ComponentFilename, Normalization, Registrar, Rack, UP, SkipComponentUnloading ) ) {
-		if ( qRP == err::hThrowException )
-			qRFwk();
-		return false;
-	} else
-		return true;
-}
-
-void *n4allw::GetFunction( sdr::sRow Row )
+void *n4allw::rLauncher::GetFunction_( sdr::sRow Row )
 {
 	if ( !Functions_.Exists( Row ) )
 		qRGnr();
@@ -166,6 +66,72 @@ void *n4allw::GetFunction( sdr::sRow Row )
 	return Functions_( Row );
 }
 
+bso::bool__ n4allw::rLauncher::Register_(
+	const fnm::rName &ComponentFilename,
+	dlbrry::eNormalization Normalization,
+	n4all::cRegistrar &Registrar,
+	sclmisc::sRack &Rack,
+	void *UP,
+	bso::sBool SkipComponentUnloading )
+{
+	bso::bool__ Success = false;
+qRH
+	n4all::sData Data;
+	fnm::name___ Location;
+	TOL_CBUFFER___ Buffer;
+qRB
+	Location.Init();
+	fnm::GetLocation( ComponentFilename, Location );
+	Data.Init( Rack, Location, str::wString(), UP );
 
+	//		cio::COut << __LOC__ << AddonFilename << txf::nl << txf::commit;
 
+	Library_.Init( ComponentFilename, Normalization );
 
+	if ( SkipComponentUnloading )
+		Library_.SkipUnloading();
+
+	//		cio::COut << __LOC__ << txf::nl << txf::commit;
+
+	fRegister_ *Register = dlbrry::GetFunction<fRegister_ *>( E_STRING( N4ALL_REGISTER_FUNCTION_NAME ), Library_ );
+
+	if ( Register == NULL )
+		qRReturn;
+
+	if ( Launcher_ != NULL )
+		qRGnr();
+
+	Launcher_ = Register( &Registrar, &Data );
+
+	Success = true;
+qRR
+qRT
+qRE
+	return Success;
+}
+
+bso::sBool n4allw::rLauncher::Init(
+	const fnm::rName &ComponentFilename,
+	dlbrry::eNormalization Normalization,
+	sclmisc::sRack &Rack,
+	void *UP,
+	bso::sBool SkipComponentUnloading,
+	qRPN )
+{
+	bso::sBool Return = false;
+qRH;
+	rRegistrar_ Registrar;
+qRB;
+	Functions_.Init();
+	Registrar.Init( Functions_ );
+
+	if ( !Register_( ComponentFilename, Normalization, Registrar, Rack, UP, SkipComponentUnloading ) ) {
+		if ( qRP == err::hThrowException )
+			qRFwk();
+	} else
+		Return = true;
+qRR;
+qRT;
+qRE;
+	return Return;
+}

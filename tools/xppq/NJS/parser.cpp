@@ -84,7 +84,7 @@ namespace {
 
 	class rRack_ {
 	private:
-		flw::sDressedIFlow<> IFlow_;
+		flw::sDressedRFlow<> IFlow_;
 		xtf::sIFlow XFlow_;
 		xml::rParser Parser_;
 		rContent_ Content_;
@@ -92,7 +92,7 @@ namespace {
 		common::sRelay Relay_;
 		bso::sBool First_;
 	public:
-		txf::rOFlow OFlow;
+		txf::rWFlow OFlow;
 		str::wString Error;
 		void reset( bso::sBool P = true )
 		{

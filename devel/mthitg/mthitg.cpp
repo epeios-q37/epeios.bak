@@ -368,7 +368,7 @@ qRE
 	return Quotient;
 }
 
-void mthitg::integer_::Init( flw::sIFlow &Flow )
+void mthitg::integer_::Init( flw::sRFlow &Flow )
 {
 	if ( Flow.EndOfFlow() )
 		return;

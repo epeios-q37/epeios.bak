@@ -56,11 +56,41 @@ namespace v8q {
 		return GetIsolate( Isolate )->GetCurrentContext();
 	}
 
+	template <typename t> inline v8::Local<t> ToLocal(
+		v8::MaybeLocal<t> V,
+		v8::Isolate *Isolate = NULL )
+	{
+		if ( V.IsEmpty() )
+			return v8::Null( GetIsolate( Isolate ) );
+		else
+			return V.ToLocalChecked();
+	}
+
+	inline v8::Local<v8::Object> ToLocal(
+		v8::MaybeLocal<v8::Object> Object,
+		v8::Isolate *Isolate = NULL )
+	{
+		if ( Object.IsEmpty() )
+			qRFwk();
+
+		return Object.ToLocalChecked();
+	}
+
+	inline v8::Local<v8::String> ToLocal(
+		v8::MaybeLocal<v8::String> String,
+		v8::Isolate *Isolate = NULL )
+	{
+		if ( String.IsEmpty() )
+			qRFwk();
+
+		return String.ToLocalChecked();
+	}
+
 	inline v8::Local<v8::String> ToString(
 		const char *String,
 		v8::Isolate *Isolate = NULL )
 	{
-		return v8::String::NewFromUtf8( GetIsolate( Isolate ), String );
+		return ToLocal( v8::String::NewFromUtf8( GetIsolate( Isolate ), String, v8::NewStringType::kNormal ) );
 	}
 
 	inline v8::Local<v8::String> ToString(
@@ -159,42 +189,46 @@ namespace v8q {
 		Set_( Isolate, argv, Position + 1, Args... );
 	}
 
-	template <typename t> inline v8::Local<t> ToLocal(
-		v8::MaybeLocal<t> V,
-		v8::Isolate *Isolate = NULL )
-	{
-		if ( V.IsEmpty() )
-			return v8::Null( GetIsolate( Isolate ) );
-		else
-			return V.ToLocalChecked();
-	}
-
-	inline v8::Local<v8::Script> ToLocal(
-		v8::MaybeLocal<v8::Script> Script,
-		v8::Isolate *Isolate = NULL )
-	{
-		if ( Script.IsEmpty() )
-			qRFwk();
-
-		return Script.ToLocalChecked();
-	}
-
-	inline v8::Local<v8::Object> ToLocal(
-		v8::MaybeLocal<v8::Object> Object,
-		v8::Isolate *Isolate = NULL )
-	{
-		if ( Object.IsEmpty() )
-			qRFwk();
-
-		return Object.ToLocalChecked();
-	}
-
 	template <typename t> t Expose( v8::Maybe<t> V )
 	{
 		if ( !V.IsJust() )
 			qRFwk();
 
 		return V.FromJust();
+	}
+
+	inline bso::sBool IsExternal( v8::Local<v8::Value> Value )
+	{
+		return Value->IsExternal();
+	}
+
+	inline bso::sBool IsExternal( v8::MaybeLocal<v8::Value> Value )
+	{
+		return IsExternal( Value.ToLocalChecked() );
+	}
+
+	inline v8::Local<v8::External> ToExternal( v8::Local<v8::Value> Value )
+	{
+		if ( !IsExternal( Value ) )
+			qRFwk();
+
+		return v8::Local<v8::External>::Cast( Value );
+	}
+
+	inline v8::Local<v8::External> ToExternal(
+		v8::MaybeLocal<v8::Value> Value,
+		v8::Isolate *Isolate = NULL )
+	{
+		return ToExternal( ToLocal( Value, Isolate ) );
+	}
+
+	inline v8::Local<v8::External> ToExternal(
+		void *Value,
+		v8::Isolate *Isolate = NULL )
+	{
+		Isolate = GetIsolate( Isolate );
+
+		return ToExternal( v8::External::New( Isolate, Value ), Isolate );
 	}
 
 	inline bso::sBool IsFunction( v8::Local<v8::Value> Value )
@@ -222,7 +256,6 @@ namespace v8q {
 		return ToFunction( ToLocal( Value, Isolate ) );
 	}
 
-
 	inline v8::Local<v8::Function> GetFunction(
 		v8::Local<v8::Context> Context,
 		v8::Local<v8::Object> Object,
@@ -241,6 +274,15 @@ namespace v8q {
 		return GetFunction( GetContext( Isolate ), Object, Key, Isolate );
 	}
 
+	inline v8::Local<v8::Script> ToLocal(
+		v8::MaybeLocal<v8::Script> Script,
+		v8::Isolate *Isolate = NULL )
+	{
+		if ( Script.IsEmpty() )
+			qRFwk();
+
+		return Script.ToLocalChecked();
+	}
 
 	inline v8::Local<v8::Value> Execute(
 		const char *Script,

@@ -31,7 +31,7 @@
 namespace stream_s {
 	extern const char *Id;
 
-	typedef txf::rOFlow rOFlow_;
+	typedef txf::rWFlow rOFlow_;
 
 	class rIn_ {
 	private:
@@ -40,7 +40,7 @@ namespace stream_s {
 		str::wString Buffer_;
 		tht::rBlocker Blocker_;
 		flx::sIRelay Relay_;
-		flw::sDressedIFlow<> Flow_;
+		flw::sDressedRFlow<> Flow_;
 		xtf::sIFlow XFlow_;
 		xpp::rIFlow Preprocessor_;
 	protected:

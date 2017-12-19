@@ -1,5 +1,21 @@
 # *Epeios* changelog
 
+2017-12-19:
+- *Common*:
+  - **$1**: more that one wrapper can now be loaded together,
+  - **$2**: adaptation to modifications of underlying modules,
+- MTHITG:
+  - **$2**,
+- MTHRTNn:
+  - **$2**,
+- N4ALL:
+  - **$1**,
+- SCLNJS:
+  - fixing some issues due to previous modifications of this module,
+- V8Q:
+  - adding `v8::External` related functions,
+  - fixing some *v8* coming deprecating issue on string object.
+
 2017-12-17:
 - SCLNJS:
   - handling Strings.

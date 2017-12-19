@@ -405,6 +405,9 @@ namespace {
 						qRGnr();
 					CallbackReturn = Get_<rObject_>( Return );
 					break;
+				default:
+					qRVct();
+					break;
 				}
 			qRR
 				if ( CallbackReturn != NULL )
@@ -553,7 +556,7 @@ namespace {
 			n4all::sType Type,
 			void *Value ) override
 		{
-			Index++;	// The first one was the function id.
+			Index+=2;	// First argument is the launcher, second the function id.
 
 			if ( Index >= I_().Length() )
 				qRGnr();
@@ -614,22 +617,22 @@ namespace {
 	};
 }
 
-void wrapper::Launch( const v8::FunctionCallbackInfo<v8::Value>& Info )
+void wrapper::rLauncher::Launch( const v8::FunctionCallbackInfo<v8::Value>& Info )
 {
 qRH
 	sCaller_ Caller;
 qRB
-	if ( Info.Length() < 1 )
+	if ( Info.Length() < 2 )
 		qRGnr();
 
-	if ( !Info[0]->IsUint32() )
+	if ( !Info[1]->IsUint32() )
 		qRGnr();
 
-	v8::Local<v8::Uint32> Index = v8::Local<v8::Uint32>::Cast(Info[0] );
+	v8::Local<v8::Uint32> Index = v8::Local<v8::Uint32>::Cast(Info[1] );
 
 	Caller.Init( Info );
 
-	n4allw::Launch( Index->Uint32Value(), Caller );
+	rLauncher_::Launch( Index->Uint32Value(), Caller );
 
 //	n4allw::GetLauncher().Launch( n4allw::GetFunction( Index->Uint32Value() ), Caller );
 

@@ -1,32 +1,35 @@
 # *NJSq* changelog
 
+2017-12-19:
+- the wrapper can now be loaded more than one; two *addon*s based on this wrapper can now be used together.
+
 2017-12-08:
-- Handling *callbacks* and strings as parameters.
+- handling *callbacks* and strings as parameters,
 
 2017-12-03:
-- Handling returned value when calling a callback.
+- handling returned value when calling a callback,
 
 2017-12-01:
-- Adding handling of generic object.
-- Adaptation to changes in underlying modules.
+- adding handling of generic object,
+- adaptation to changes in underlying modules,
 
 2017-10-13 :
-- New publication to synchronize the *NPM* package with the latest files.
+- New publication to synchronize the *NPM* package with the latest files,
 
 2017-10-12 :
-- Upgrading.
+- upgrading,
 
 2017-10-10 :
-- Using new `n4allw::Launch(...)` function.
+- using new `n4allw::Launch(...)` function,
 
 2017-09-17 :
-- Upgrading.
+- upgrading,
 
 2017-08-29 :
-- Improvements.
+- improvements,
 
 2017-08-10 :
-- Some code is moved to *N4AUPS* library.
+- Some code is moved to *N4AUPS* library,
 
 2017-08-09 :
-- Using *N4A* library instead of *NJS* one.
+- using *N4A* library instead of *NJS* one.

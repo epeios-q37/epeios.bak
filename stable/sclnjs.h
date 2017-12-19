@@ -214,7 +214,7 @@ namespace sclnjs {
 		}
 	};
 
-	typedef rCore_<n4njs::cURStream> rRStream_;
+	typedef rObject_<n4njs::cURStream> rRStream_;
 
 	class rRStream
 	: public rRStream_ {

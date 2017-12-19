@@ -39,11 +39,12 @@ if (process.env.EPEIOS_SRC) {
 }
 
 componentFilename = path.join(componentPath, affix + "njs").replace(/\\/g, "\\\\").replace(/'/g, "\\'").replace(/ /g, "\\ ");
-njsq.register(componentFilename);
-module.exports = njsq;
+const rncq = njsq._register(componentFilename);
+module.exports.componentInfo = () => njsq._componentInfo(rncq);
+module.exports.wrapperInfo = () => njsq._wrapperInfo();
 // End of generic part.
 
-module.exports.returnArgument = (text) => { return njsq._wrapper(0, text) };
-module.exports.evaluateALG = ( expression, callback ) => { njsq._wrapper( 1, expression, callback ); };
-module.exports.evaluateRPN = (expression, callback) => { njsq._wrapper( 2, expression, callback); };
+module.exports.returnArgument = (text) => { return njsq._wrapper(rncq, 0, text) };
+module.exports.evaluateALG = ( expression, callback ) => { njsq._wrapper( rncq, 1, expression, callback ); };
+module.exports.evaluateRPN = (expression, callback) => { njsq._wrapper( rncq, 2, expression, callback); };
 

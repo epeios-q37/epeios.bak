@@ -180,7 +180,7 @@ namespace mthitg {
 			
 			return *this;
 		}
-		void Init( flw::sIFlow &Flow );
+		void Init( flw::sRFlow &Flow );
 		void Init( const str::dString &Integer );
 		void Init( const integer_ &Integer )
 		{

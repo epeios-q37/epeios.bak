@@ -35,5 +35,11 @@ if ( process.env.EPEIOS_SRC ) {
  njsq = require( njsq_path );	
 }
 
+/*
+Do not modify line below !!!
+During development, we access directly 'njsq.node', but, in production,
+we access to it through this file, so it must expose exactly the same functions
+as 'njsq.node'.
+*/
 module.exports = njsq;
 

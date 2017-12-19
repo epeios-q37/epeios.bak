@@ -27,21 +27,22 @@
 # include <node.h>
 
 namespace wrapper {
-	using n4allw::SetLauncher;
-	using n4allw::GetLauncherInfo;
-	using n4allw::DeleteLauncher;
+	typedef n4allw::rLauncher rLauncher_;
 
-	inline bso::sBool Register(
-		const fnm::rName &ComponentFilename,
-		sclmisc::sRack &Rack,
-		n4njs::gShared &Shared,
-		qRPD )
+	class rLauncher
+	: public rLauncher_
 	{
-		return n4allw::Register( ComponentFilename, dlbrry::nExtOnly, Rack, &Shared, qRP );
-	}
-
-
-	void Launch( const v8::FunctionCallbackInfo<v8::Value>& Info );
+	public:
+		bso::sBool Register(
+			const fnm::rName &ComponentFilename,
+			sclmisc::sRack &Rack,
+			n4njs::gShared &Shared,
+			qRPD )
+		{
+			return rLauncher_::Init( ComponentFilename, dlbrry::nExtOnly, Rack, &Shared, qRP );
+		}
+		void Launch( const v8::FunctionCallbackInfo<v8::Value>& Info );
+	};
 }
 
 #endif

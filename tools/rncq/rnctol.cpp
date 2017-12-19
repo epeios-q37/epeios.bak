@@ -29,7 +29,7 @@ namespace {
 	bso::sBool Evaluate_(
 		xtf::sIFlow &XFlow,
 		bso::sBool RPN,
-		txf::sOFlow &OFlow )
+		txf::sWFlow &OFlow )
 	{
 		bso::sBool Success = false;
 	qRH
@@ -60,7 +60,7 @@ namespace {
 	{
 		bso::sBool Success = false;
 	qRH
-		flx::rStringTOflow OFlow;
+		flx::rStringTWFlow OFlow;
 	qRB
 		OFlow.Init( Result );
 

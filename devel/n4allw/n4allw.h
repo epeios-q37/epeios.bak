@@ -32,30 +32,64 @@
 # include "n4all.h"
 
 namespace n4allw {
-	void SetLauncher( n4all::cLauncher *Launcher );
+	typedef bch::qBUNCHdl( void * ) dFunctions_;
+	qW( Functions_ );
 
-	n4all::cLauncher &GetLauncher( void );
-
-	bso::sBool GetLauncherInfo( str::dString &Info );
-
-	void DeleteLauncher( void );
-
-	bso::sBool Register(
-		const fnm::rName &ComponentFilename,
-		dlbrry::eNormalization Normalization,
-		sclmisc::sRack &Rack,
-		void *UP,
-		bso::sBool SkipComponenentUnloading,	// The component will be unloaded when quitting the program, and not explicitly (at true only for a 'PHP' workaround under 'GNU/Linux').
-		qRPD );
-
-	void *GetFunction( sdr::sRow Row );
-
-	inline void Launch(
-		sdr::sRow Row,
-		n4all::cCaller &Caller )
+	class rLauncher
 	{
-		return GetLauncher().Launch( GetFunction( Row ), Caller );
-	}
+	private:
+		dlbrry::rDynamicLibrary Library_;
+		qRMV( n4all::cLauncher, L_, Launcher_ );
+		void *GetFunction_( sdr::sRow Row );
+		wFunctions_ Functions_;
+		bso::bool__ Register_(
+			const fnm::rName &ComponentFilename,
+			dlbrry::eNormalization Normalization,
+			n4all::cRegistrar &Registrar,
+			sclmisc::sRack & Rack,
+			void * UP,
+			bso::sBool SkipComponentUnloading );
+	public:
+		void reset( bso::sBool P = true )
+		{
+			if ( P ) {
+				if ( Launcher_ != NULL )
+					delete Launcher_;
+			}
+
+			tol::reset( P, Library_, Functions_ );
+			Launcher_ = NULL;
+		}
+		qCDTOR( rLauncher );
+		void Init( void )
+		{
+			reset();
+
+			Functions_.Init();
+			// 'Library' will be 'Init(...)' later.
+		}
+		bso::sBool Init(
+			const fnm::rName &ComponentFilename,
+			dlbrry::eNormalization Normalization,
+			sclmisc::sRack &Rack,
+			void *UP,
+			bso::sBool SkipComponenentUnloading,	// The component will be unloaded when quitting the program, and not explicitly (at true only for a 'PHP' workaround under 'GNU/Linux').
+			qRPD );
+		inline void Launch(
+			sdr::sRow Row,
+			n4all::cCaller &Caller )
+		{
+			return L_().Launch( GetFunction_( Row ), Caller );
+		}
+		bso::sBool GetInfo( str::dString &Info ) const
+		{
+			if ( Launcher_ != NULL ) {
+				L_().Info( Info );
+				return true;
+			} else
+				return false;
+		}
+	};
 }
 
 #endif

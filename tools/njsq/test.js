@@ -21,5 +21,4 @@
 
 const njsq = require( './NJSq.js');
 
-console.log( njsq.wrapperInfo() );
-console.log( njsq.componentInfo() );
+console.log( njsq._wrapperInfo() );
