@@ -296,8 +296,6 @@ namespace {
 
 	}
 
-
-
 	void Process_( void )
 	{
 	qRH

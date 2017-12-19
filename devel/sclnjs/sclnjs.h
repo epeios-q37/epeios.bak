@@ -422,6 +422,11 @@ namespace scln4 {
 	template <> void Get(
 		int Index,
 		cCaller_ &Caller,
+		sclnjs::rString &String );
+
+	template <> void Get(
+		int Index,
+		cCaller_ &Caller,
 		sclnjs::rRStream &Stream );
 
 	template <> void Get(
@@ -457,10 +462,7 @@ txf::text_oflow__ &operator <<(
 # define SCLNJS_F( name ) void name( sclnjs::sCaller &Caller )
 
 namespace scln4 {
-	template <> void Get(
-		int Index,
-		cCaller_ &Caller,
-		sclnjs::rString &String );
+
 
 }
 

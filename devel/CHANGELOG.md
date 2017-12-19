@@ -12,6 +12,7 @@
   - **$1**,
 - SCLNJS:
   - fixing some issues due to previous modifications of this module,
+  - fixing some *g++*/*Clang* issues,
 - V8Q:
   - adding `v8::External` related functions,
   - fixing some *v8* coming deprecating issue on string object.
