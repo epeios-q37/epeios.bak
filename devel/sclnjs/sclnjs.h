@@ -93,11 +93,11 @@ namespace sclnjs {
 	public:
 		const type &Get( void ) const
 		{
-			return C_().Get();
+			return rCore_<callback>::C_().Get();
 		}
 		void Set( const type &Item )
 		{
-			C_().Set( Item );
+			rCore_<callback>::C_().Set( Item );
 		}
 	};
 
@@ -412,10 +412,56 @@ namespace sclnjs {
 	void SCLNJSRegister( sRegistrar &Registrar );	// To define by user
 }
 
+// Required by g++ and Clang, (but not by VC++).
+namespace scln4 {
+	template <> void Get(
+		int Index,
+		cCaller_ &Caller,
+		sclnjs::rObject &Object );
+
+	template <> void Get(
+		int Index,
+		cCaller_ &Caller,
+		sclnjs::rRStream &Stream );
+
+	template <> void Get(
+		int Index,
+		cCaller_ &Caller,
+		sclnjs::rBuffer &Buffer );
+
+	template <> void Get(
+		int Index,
+		cCaller_ &Caller,
+		sclnjs::rCallback &Callback );
+
+	template <> void Get(
+		int Index,
+		cCaller_ &Caller,
+		sclnjs::rStrings &Strings );
+
+	template <> void Get(
+		int Index,
+		cCaller_ &Caller,
+		sclnjs::rCallbacks &Callbacks );
+
+	template <> void Get(
+		int Index,
+		cCaller_ &Caller,
+		n4njs::cUCallback *&Callback );
+}
+
 txf::text_oflow__ &operator <<(
 	txf::text_oflow__ &Flow,
 	sclnjs::rBuffer &Buffer );
 
 # define SCLNJS_F( name ) void name( sclnjs::sCaller &Caller )
+
+namespace scln4 {
+	template <> void Get(
+		int Index,
+		cCaller_ &Caller,
+		sclnjs::rString &String );
+
+}
 
 #endif

@@ -39,25 +39,25 @@ if (process.env.EPEIOS_SRC) {
 }
 
 componentFilename = path.join(componentPath, affix + "njs").replace(/\\/g, "\\\\").replace(/'/g, "\\'").replace(/ /g, "\\ ");
-njsq.register(componentFilename);
+const xdhq = njsq._register(componentFilename);
 module.exports = njsq;
 // End of generic part.
 
 class Tree {
 	constructor( background ) {
-		njsq._wrapper( 1, this, background );
+		njsq._wrapper(xdhq, 1, this, background );
 	}
 	pushTag(name) {
-		njsq._wrapper(3, this, name);
+		njsq._wrapper(xdhq, 3, this, name);
 	}
 	popTag() {
-		njsq._wrapper(4, this);
+		njsq._wrapper(xdhq, 4, this);
 	}
 	putValue( value ) {
-		njsq._wrapper(5, this, value.toString());
+		njsq._wrapper(xdhq, 5, this, value.toString());
 	}
 	putAttribute(name, value) {
-		njsq._wrapper(6, this, name, value.toString());
+		njsq._wrapper(xdhq, 6, this, name, value.toString());
 	}
 }
 
@@ -108,16 +108,16 @@ class XDH {
 			return id;
 	}
 	set(fid, id, tree, xslFilename, callback ) {
-		njsq._wrapper(fid, this, id, tree, xslFilename, callback);
+		njsq._wrapper(xdhq, fid, this, id, tree, xslFilename, callback);
 	}
 	setLayout(id, tree, xslFilename, callback) {
 		this.set(9, id, tree, xslFilename, callback);
 	}
 	getContents(idOrIds, callback) {
 		if (typeof idOrIds === "string")
-			njsq._wrapper(10, this, new Array( idOrIds ), callback );
+			njsq._wrapper(xdhq, 10, this, new Array(idOrIds), callback);
 		else if ( idOrIds instanceof Array )
-			njsq._wrapper(10, this, idOrIds, callback );
+			njsq._wrapper(xdhq, 10, this, idOrIds, callback);
 		else
 			throw "Bad argument !";
 	}
@@ -130,10 +130,10 @@ class XDH {
 
 		normalize(idOrIdsAndContents, content, "string", ids, contents);
 
-		njsq._wrapper(11, this, ids, contents, callback );
+		njsq._wrapper(xdhq, 11, this, ids, contents, callback);
 	}
 	dressWidgets(id, callback ) {
-		njsq._wrapper(12, this, this.normalize(id), callback );
+		njsq._wrapper(xdhq, 12, this, this.normalize(id), callback);
 	}
 	setCasts(id, tagOrTagsAndValues, value, callback) {
 		var tags = new Array();
@@ -141,22 +141,22 @@ class XDH {
 
 		normalize(tagOrTagsAndValues, value, "string", tags, values);
 
-		njsq._wrapper(13, this, id, tags, values, callback);
+		njsq._wrapper(xdhq, 13, this, id, tags, values, callback);
 	}
 	setCast(id, tag, value, callback ) {
 		this.setCasts(id, [[tag, value]], "", callback );
 	}
 	getAttribute(id, name, callback) {
-		return njsq._wrapper(14, this, id, name, callback);
+		return njsq._wrapper(xdhq, 14, this, id, name, callback);
 	}
 	setAttribute(id, name, value, callback) {
-		njsq._wrapper(15, this, id, name, value, callback);
+		njsq._wrapper(xdhq, 15, this, id, name, value, callback);
 	}
 	getProperty(id, name) {
-		return njsq._wrapper(16, this, id, name);
+		return njsq._wrapper(xdhq, 16, this, id, name);
 	}
 	setProperty(id, name, value) {
-		njsq._wrapper(17, this, id, name, value);
+		njsq._wrapper(xdhq, 17, this, id, name, value);
 	}
 }
 
@@ -166,13 +166,16 @@ function register(idOrIdsAndItems, item) {
 
 	normalize(idOrIdsAndItems, item, "function", tags, callbacks);
 
-	njsq._wrapper(7, tags, callbacks);
+	njsq._wrapper(xdhq, 7, tags, callbacks);
 }
 
-module.exports.returnArgument = (text) => { return njsq._wrapper(0, text); };
+module.exports.componentInfo = () => njsq._componentInfo(xdhq);
+module.exports.wrapperInfo = () => njsq._wrapperInfo();
+module.exports.returnArgument = (text) => { return njsq._wrapper(xdhq, 0, text) };
+
 module.exports.LayoutTree = LayoutTree;
 module.exports.CastingTree = CastingTree;
 module.exports.register = register;
-module.exports.listen = (callback, args) => { njsq._wrapper(8, callback, args); };
+module.exports.listen = (callback, args) => { njsq._wrapper(xdhq, 8, callback, args); };
 module.exports.XDH = XDH;
 
