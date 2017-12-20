@@ -40,24 +40,27 @@ else {
 }
 
 zndq_init();
-zndq_register(str_replace(' ', '\ ', str_replace('\\', '/', $zndq_path)) . $zndq_affix . "znd");
 
 class ZNDq {
+	static public $launcher = 0;
 	static public function wrapperInfo() {
 		return zndq_wrapper_info();
 	}
 	static public function componentInfo() {
-		return zndq_component_info();
+		return zndq_component_info( ZNDq::$launcher );
 	}
 	static protected function register($arguments) {
 		return zndq_register($arguments);
 	}
 }
+
+ZNDq::$launcher = zndq_register(str_replace(' ', '\ ', str_replace('\\', '/', $zndq_path)) . $zndq_affix . "znd");
+
 /**** End of generic part. ****/
 
 class eSketch extends ZNDq {
 	static public function returnArgument($argument) {
-		return ZNDq_wrapper(0, $argument);
+		return ZNDq_wrapper( ZNDq::$launcher, 0, $argument);
 	}
 }
 ?>

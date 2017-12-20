@@ -58,9 +58,9 @@ namespace sclznd {
 		{
 			C_().GetArgument( Index_++, n4znd::tString, &String );
 		}
-		fdr::rIODriver *GetStream( void )
+		fdr::rRWDriver *GetStream( void )
 		{
-			fdr::rIODriver *Driver = NULL;
+			fdr::rRWDriver *Driver = NULL;
 
 			C_().GetArgument( Index_++, n4znd::tStream, &Driver );
 
@@ -92,13 +92,13 @@ namespace sclznd {
 
 	typedef scln4a::sRegistrar<fFunction> sRegistrar;
 
-	typedef fdr::rIODressedDriver rDriver_;
+	typedef fdr::rRWDressedDriver rDriver_;
 
 	class rStreamDriver
 	: public rDriver_
 	{
 	private:
-		qRMV( fdr::rIODriver, D_, Driver_ );
+		qRMV( fdr::rRWDriver, D_, Driver_ );
 	protected:
 		virtual fdr::sSize FDRRead(
 			fdr::sSize Maximum,
@@ -150,12 +150,12 @@ namespace sclznd {
 		}
 	};
 
-	inline void Throw( const str::dString &Message )
+	inline void Die( const str::dString &Message )
 	{
 		qRVct();
 	}
 
-	void SCLZNDInfo( txf::sOFlow &Flow );	// To define by user.
+	void SCLZNDInfo( txf::sWFlow &Flow );	// To define by user.
 	void SCLZNDRegister( sRegistrar &Registrar );	// To define by user
 }
 

@@ -41,12 +41,13 @@ namespace main {
 	void ThrowGenericError( void );
 
 	void Init( void );
-	void Register(
+	zend_long Register(
 		const char *Arguments,
 		size_t ArgumentsLength );
 	const char *WrapperInfo( void );
-	const char *ComponentInfo( void );
+	const char *ComponentInfo( zend_long Launcher  );
 	void Launch(
+		zend_long Launcher,
 		zend_long Index,
 		int num_varargs,
 		zval *varargs,

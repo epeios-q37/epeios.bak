@@ -42,7 +42,12 @@ PHP_FUNCTION( zndq_wrapper_info )
 
 PHP_FUNCTION( zndq_component_info )
 {
-	RETURN_STRING( main::ComponentInfo() );
+	zend_long Launcher = 0;
+
+	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "l", &Launcher ) != SUCCESS )
+		main::ThrowGenericError();
+
+	RETURN_STRING( main::ComponentInfo( Launcher ) );
 }
 
 PHP_FUNCTION( zndq_register )
@@ -53,19 +58,19 @@ PHP_FUNCTION( zndq_register )
 		main::ThrowGenericError();
 
 	// 'String->val' contains a list of arguments, as defined in the configuration file for the 'Launch' command.
-	main::Register( String->val, String->len );
+	RETURN_LONG( main::Register( String->val, String->len ) )
 }
 
 PHP_FUNCTION( zndq_wrapper )
 {
-	zend_long Index = 0;
+	zend_long Launcher = 0, Index = 0;
 	int num_varargs;
 	zval *varargs = NULL;
 
-	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "l*", &Index, &varargs, &num_varargs ) != SUCCESS )
+	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "ll*", &Launcher, &Index, &varargs, &num_varargs ) != SUCCESS )
 		main::ThrowGenericError();
 
-	main::Launch( Index, num_varargs, varargs, return_value TSRMLS_CC );
+	main::Launch( Launcher, Index, num_varargs, varargs, return_value TSRMLS_CC );
 }
 
 

@@ -26,7 +26,7 @@
 #include "lcl.h"
 #include "sclznd.h"
 
-void sclznd::SCLZNDInfo( txf::sOFlow &Flow )
+void sclznd::SCLZNDInfo( txf::sWFlow &Flow )
 {
 	Flow << NAME_MC << " v" << VERSION << txf::nl
 		 << txf::pad << "Build : " __DATE__ " " __TIME__ " (" << cpe::GetDescription() << ')';

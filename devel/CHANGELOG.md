@@ -1,7 +1,7 @@
 # *Epeios* changelog
 
 2017-12-20:
-- SCLJRE:
+- SCLJRE, SCLZND:
   - adaptation to changes in underlying modules,
 
 2017-12-19:
