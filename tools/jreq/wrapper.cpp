@@ -470,8 +470,8 @@ qRE
 	return Object;
 }
 
-
 jobject wrapper::Launch(
+	rLauncher &Launcher,
 	jint Index,
 	jobjectArray &Args )
 {
@@ -481,7 +481,7 @@ qRH
 qRB
 	Caller.Init( Args );
 
-	n4allw::Launch( Index, Caller );
+	Launcher.Launch( Index, Caller );
 
 //	n4allw::GetLauncher().Launch( n4allw::GetFunction( Index ), Caller );
 

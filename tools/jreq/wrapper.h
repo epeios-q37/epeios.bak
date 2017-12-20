@@ -26,8 +26,7 @@
 # include "jniq.h"
 
 namespace wrapper {
-	using n4allw::GetLauncherInfo;
-	using n4allw::Register;
+	using n4allw::rLauncher;
 
 	n4jre::cObject *NewObject(
 		const char * ClassName,
@@ -35,6 +34,7 @@ namespace wrapper {
 		int ArgC, n4jre::sValue * ArgV );
 
 	jobject Launch(
+		rLauncher &Launcher,
 		jint Index,
 		jobjectArray &Args );
 }

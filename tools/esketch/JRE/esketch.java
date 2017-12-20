@@ -23,11 +23,13 @@ class JREqDecl {
 
 // Begin of generic part.
 class JREq extends JREqDecl {
+	static long launcher = 0;
 	native public static String wrapperInfo();
-	native public static String componentInfo();
+	native public static String componentInfo( long launcher );
 	native private static void init( String location);
-	native private static void register( String arguments );
+	native private static long register( String arguments );
 	native protected static Object wrapper(
+		long launcher,
 		int index,
 		Object... objects);
 
@@ -51,7 +53,7 @@ class JREq extends JREqDecl {
   }
 
  	init( location );
-  register( "./" + JREqDecl.affix + "jre");
+  launcher = register( "./" + JREqDecl.affix + "jre");
  }
 }
 // End of generic part.
@@ -59,7 +61,7 @@ class JREq extends JREqDecl {
 class eSketch extends JREq {
 	public static String returnArgument( String Text )
 	{
-		return (String)JREq.wrapper( 0, Text  );
+		return (String)JREq.wrapper( launcher, 0, Text  );
 	}
 }
 
@@ -72,7 +74,7 @@ class eSketchTest {
 	public static void main ( String[] args ) throws Exception
 	{
  	System.out.println( eSketch.wrapperInfo() );
- 	System.out.println( eSketch.componentInfo() );
+ 	System.out.println( eSketch.componentInfo( JREq.launcher) );
  	displayBytecodeBuildTimestamp();
  	System.out.println( eSketch.returnArgument( "Text from JAVA file" ) );
 	}

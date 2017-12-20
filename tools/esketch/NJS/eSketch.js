@@ -39,9 +39,10 @@ if (process.env.EPEIOS_SRC) {
 }
 
 componentFilename = path.join(componentPath, affix + "njs").replace(/\\/g, "\\\\").replace(/'/g, "\\'").replace(/ /g, "\\ ");
-njsq.register(componentFilename);
-module.exports = njsq;
+const esketch = njsq._register(componentFilename);
+module.exports.componentInfo = () => njsq._componentInfo(esketch);
+module.exports.wrapperInfo = () => njsq._wrapperInfo();
 // End of generic part.
 
-module.exports.returnArgument = (text) => { return njsq._wrapper(0, text) };
+module.exports.returnArgument = (text) => { return njsq._wrapper(esketch, 0, text) };
 

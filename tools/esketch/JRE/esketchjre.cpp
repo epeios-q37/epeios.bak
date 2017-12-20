@@ -26,7 +26,7 @@
 #include "lcl.h"
 #include "scljre.h"
 
-void scljre::SCLJREInfo( txf::sOFlow &Flow )
+void scljre::SCLJREInfo( txf::sWFlow &Flow )
 {
 	Flow << NAME_MC << " v" << VERSION << txf::nl
 		 << txf::pad << "Build : " __DATE__ " " __TIME__ " (" << cpe::GetDescription() << ')';

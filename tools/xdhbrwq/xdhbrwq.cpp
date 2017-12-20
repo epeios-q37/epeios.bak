@@ -152,11 +152,11 @@ namespace {
 					Continue = false;
 					ERRRst();
 				} else if ( ERRType == err::t_Abort ) {
-						AbortMessage.Init();
-						sclmisc::GetSCLBasePendingErrorTranslation( AbortMessage );
-						misc::Report( AbortMessage, Script );
-						Continue = false;
-						ERRRst();
+					AbortMessage.Init();
+					sclmisc::GetSCLBasePendingErrorTranslation( AbortMessage );
+					misc::Report( AbortMessage, Script );
+					Continue = false;
+					ERRRst();
 				}
 			qRT
 				if ( Session != NULL )

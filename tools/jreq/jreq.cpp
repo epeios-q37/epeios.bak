@@ -35,6 +35,16 @@
 #define MDEF( name ) qCDEF( char *, name, #name );
 
 namespace {
+	wrapper::rLauncher &GetLauncher_( jlong Long )
+	{
+		if ( Long == 0 )
+			qRGnr();
+
+		return *(wrapper::rLauncher *)Long;
+	}
+}
+
+namespace {
 	namespace{
 		void GetInfo_(
 			jint Version,
@@ -42,7 +52,7 @@ namespace {
 		{
 		qRH
 			flx::rStringOFlow BaseFlow;
-			txf::sOFlow Flow;
+			txf::sWFlow Flow;
 		qRB
 			BaseFlow.Init( Info );
 			Flow.Init( BaseFlow );
@@ -112,7 +122,8 @@ namespace {
 
 extern "C" JNIEXPORT jstring JNICALL Java_JREq_componentInfo(
 	JNIEnv *Env,
-	jclass )
+	jclass,
+	jlong Launcher )
 {
 	jstring JString;
 qRFH
@@ -121,7 +132,7 @@ qRFH
 qRFB
 	Info.Init();
 
-	if ( !wrapper::GetLauncherInfo( Info ) )
+	if ( !GetLauncher_( Launcher ).GetInfo( Info ) )
 		sclmisc::GetBaseTranslation( "NoRegisteredComponent", Info );
 
 	JString = Env->NewStringUTF( Info.Convert( Buffer ) );
@@ -180,15 +191,16 @@ namespace {
 }
 
 
-extern "C" JNIEXPORT void JNICALL Java_JREq_register(
+extern "C" JNIEXPORT jlong JNICALL Java_JREq_register(
 	JNIEnv *Env,
 	jclass,
 	jstring RawArguments )
 {
-qRFH
+	wrapper::rLauncher *Launcher = NULL;
+qRFH;
 	str::wString Arguments;
 	str::wString ComponentFilename;
-qRFB
+qRFB;
 	Arguments.Init();
 	jniq::Convert( RawArguments, Arguments, Env );
 
@@ -203,22 +215,31 @@ qRFB
 	Shared_.Free = n4jre::N4JREFree;
 	Shared_.Throw = Throw_;
 
-	wrapper::Register( ComponentFilename, dlbrry::nPrefixAndExt, Rack_, &Shared_, false );
-qRFR
-qRFT
+	Launcher = new wrapper::rLauncher;
+
+	if ( Launcher == NULL )
+		qRAlc();
+
+	Launcher->Init(ComponentFilename, dlbrry::nPrefixAndExt, Rack_, &Shared_, false);
+qRFR;
+	if ( Launcher != NULL )
+		delete Launcher;
+qRFT;
 qRFE( ERRFinal_( Env ) )
+	return (jlong)Launcher;
 }
 
 extern "C" JNIEXPORT jobject JNICALL Java_JREq_wrapper(
 	JNIEnv *Env,
 	jclass,
+	jlong Launcher, 
 	jint Index,
 	jobjectArray Args )
 {
 	jobject Return = NULL;
 qRFH
 qRFB
-	Return = wrapper::Launch( Index, Args );
+	Return = wrapper::Launch( GetLauncher_( Launcher ), Index, Args );
 qRFR
 qRFT
 qRFE( ERRFinal_( Env ) )

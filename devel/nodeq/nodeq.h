@@ -209,6 +209,106 @@ namespace nodeq {
 	typedef xRStream_<v8q::rPObject> rPRStream;
 	typedef xRStream_<v8q::sLObject> sLRStream;
 
+
+# if 0
+	template <typename object> class xWStream_
+	: public object
+	{
+	private:
+		bso::sBool Write_(
+			v8::Local<v8::Value> Value,
+			v8::Isolate *Isolate )
+		{
+			v8q::sLBoolean Boolean;
+			Boolean.Init( Launch( "write", Isolate, Value ) );
+
+			return *Boolean;
+		}
+	public:
+		using object::reset;
+		using object::Core;
+		using object::Launch;
+		qCDTOR( xWStream_ );
+		/*
+		Both below event handler seems not to work properly. The 'onend' event semms not be always called. Use 'OnReadable' instead.
+		*/
+		template <typename obj> void OnDataFail(
+			const xFunction_<obj> &Callback,
+			v8::Isolate *Isolate = NULL )
+		{
+			On( "data", Callback, Isolate );
+		}
+		template <typename obj> void OnEndFail(
+			const xFunction_<obj> &Callback,
+			v8::Isolate *Isolate = NULL )
+		{
+			On( "end", Callback, Isolate );
+		}
+		// Use below event handler rather as the two above one !
+		template <typename obj> void OnReadable(
+			const xFunction_<obj> &Callback,
+			v8::Isolate *Isolate = NULL )
+		{
+			On( "readable", Callback, Isolate );
+		}
+		// This function is ONLY to implement a readable stream. Is called when data is required.
+		template <typename obj> void OnRead(
+			const xFunction_<obj> &Callback,
+			v8::Isolate *Isolate = NULL )
+		{
+			Set( "_read", Callback.Core(), Isolate );
+		}
+		// 'true' : chunk available ; 'false' EOF ('Chunk' is NULL).
+		template <typename buffer> bso::sBool Read(
+			buffer &Chunk,
+			v8::Isolate *Isolate = NULL )
+		{
+			v8q::sLValue Value;
+
+			Value.Init( Launch( "read", Isolate ) );
+
+			if ( Value.IsNull() )
+				return false;
+			else {
+				Chunk.Init( Value.Core() );
+				return true;
+			}
+		}
+		bso::sBool Read(
+			str::dString &Chunk,
+			v8::Isolate *Isolate = NULL )
+		{
+			sLBuffer RawChunk;
+
+			RawChunk.Init();
+
+			if ( Read( RawChunk, Isolate ) ) {
+				RawChunk.ToString( Chunk );
+				return true;
+			} else
+				return false;
+		}
+		bso::sBool Push(
+			v8::Local<v8::Value> Value,
+			v8::Isolate *Isolate = NULL )
+		{
+			return Push_( Value, Isolate );
+		}
+		template <typename buffer> bso::sBool Push(
+			const buffer &Buffer,
+			v8::Isolate *Isolate = NULL )
+		{
+			return Push_( Buffer.Core(), Isolate );
+		}
+		void End( v8::Isolate *Isolate = NULL )
+		{
+			Push_( v8::Null( v8q::GetIsolate( Isolate ) ), Isolate );
+		}
+	};
+
+	typedef xWStream_<v8q::rPObject> rPWStream;
+	typedef x>Stream_<v8q::sLObject> sLWStream;
+#endif
 }
 
 template <typename object> inline txf::text_oflow__ &operator <<(

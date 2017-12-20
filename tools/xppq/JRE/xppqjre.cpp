@@ -28,7 +28,7 @@
 
 using namespace scljre;
 
-void scljre::SCLJREInfo( txf::sOFlow &Flow )
+void scljre::SCLJREInfo( txf::sWFlow &Flow )
 {
 	Flow << NAME_MC << " v" << VERSION << txf::nl
 		<< txf::pad << "Build : " __DATE__ " " __TIME__ " (" << cpe::GetDescription() << ')';
@@ -39,8 +39,8 @@ namespace parsing_ {
 		class rParser_
 		{
 		private:
-			rInputStreamIDriver Stream_;
-			flw::sDressedIFlow<> IFlow_;
+			rInputStreamRDriver Stream_;
+			flw::sDressedRFlow<> IFlow_;
 			xtf::sIFlow XFlow_;
 			xml::rParser Parser_;
 		public:
@@ -204,8 +204,8 @@ namespace processing_ {
 		class rProcessor_
 		{
 		private:
-			scljre::rInputStreamIDriver Input_;
-			flw::sDressedIFlow<> Flow_;
+			scljre::rInputStreamRDriver Input_;
+			flw::sDressedRFlow<> Flow_;
 			xtf::extended_text_iflow__ XFlow_;
 			xpp::preprocessing_iflow___ PFlow_;
 		public:

@@ -30,10 +30,11 @@ class XDHqData {
 // Begin of generic part.
 class JREq extends JREqDecl {
 	native public static String wrapperInfo();
-	native public static String componentInfo();
+	native public static String componentInfo( long launcher );
 	native private static void init( String location);
-	native private static void register( String arguments );
+	native private static long register( String arguments );
 	native protected static Object wrapper(
+		long launcher,
 		int index,
 		Object... objects);
 

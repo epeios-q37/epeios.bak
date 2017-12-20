@@ -418,9 +418,9 @@ namespace scljre {
 		return Null();
 	}
 
-	typedef fdr::rIDressedDriver rIDriver_;
+	typedef fdr::rRDressedDriver rIDriver_;
 
-	class rInputStreamIDriver
+	class rInputStreamRDriver
 	: public rIDriver_ {
 	private:
 		java::io::rInputStream Stream_;
@@ -440,7 +440,7 @@ namespace scljre {
 			rIDriver_::reset( P );
 			tol::reset( P, Stream_ );
 		}
-		qCVDTOR( rInputStreamIDriver );
+		qCVDTOR( rInputStreamRDriver );
 		void Init( sCaller &Caller )
 		{
 			rIDriver_::Init( fdr::ts_Default );
@@ -451,7 +451,7 @@ namespace scljre {
 
 	typedef scln4a::sRegistrar<fFunction> sRegistrar;
 
-	void SCLJREInfo( txf::sOFlow &Flow );	// To define by user.
+	void SCLJREInfo( txf::sWFlow &Flow );	// To define by user.
 	void SCLJRERegister( sRegistrar &Registrar );	// To define by user
 }
 

@@ -30,11 +30,13 @@ class XPPqData {
 
 // Begin of generic part.
 class JREq extends Decl {
+	static long launcher = 0;
 	native public static String wrapperInfo();
-	native public static String componentInfo();
+	native public static String componentInfo( long launcher );
 	native private static void init( String location);
-	native private static void register( String arguments );
+	native private static long register( String arguments );
 	native protected static Object wrapper(
+		long launcher,
 		int index,
 		Object... objects);
 
@@ -52,7 +54,7 @@ class JREq extends Decl {
   }
 
  	init( location );
-  register( Decl.affix + "jre");
+  launcher = register( Decl.affix + "jre");
  }
 }
 // End of generic part.
@@ -66,32 +68,32 @@ class XPPq extends JREq {
 	
 	static public Object getParser( java.io.InputStream stream )
 	{
-		return wrapper( 0, stream );
+		return wrapper( JREq.launcher, 0, stream );
 	}
 	
 	public void releaseParser()
 	{
-		wrapper( 1, core );
+		wrapper( JREq.launcher,1, core );
 	}
 	
 	public int parse( XPPqData data )
 	{
-		return ( (java.lang.Integer)wrapper( 2, core, data ) ).intValue();
+		return ( (java.lang.Integer)wrapper( JREq.launcher,2, core, data ) ).intValue();
 	}
 	
 	static public Object getPreprocessor( java.io.InputStream stream )
 	{
-		return wrapper( 3, stream );
+		return wrapper( JREq.launcher,3, stream );
 	}
 	
 	public void releasePreprocessor()
 	{
-		wrapper( 4, core );
+		wrapper( JREq.launcher, 4, core );
 	}
 	
 	public int readFromPreprocessor()
 	{
-		return ( (java.lang.Integer)wrapper( 5, core ) ).intValue();
+		return ( (java.lang.Integer)wrapper( JREq.launcher, 5, core ) ).intValue();
 	}
 
 	public void finalize()
@@ -242,7 +244,7 @@ class XPPqTest {
 	public static void main ( String[] args ) throws Exception
 	{
  	System.out.println( XPPq.wrapperInfo() );
- 	System.out.println( XPPq.componentInfo() );
+ 	System.out.println( XPPq.componentInfo( JREq.launcher ) );
  	displayBytecodeBuildTimestamp();
   System.out.println();
 				

@@ -1,5 +1,9 @@
 # *Epeios* changelog
 
+2017-12-20:
+- SCLJRE:
+  - adaptation to changes in underlying modules,
+
 2017-12-19:
 - *Common*:
   - **$1**: more that one wrapper can now be loaded together,
