@@ -38,9 +38,9 @@ function handleTestButton(xdh) {
 	console.log("button handling");
 
 	if (xdh.showButton )
-		xdh.setCasts("Root", "TestButtonCasting", "Plain", (xdh) => { console.log('plain'); });
+		xdh.setCasts("Root", "TestButtonCasting", "Plain", () => { console.log("hi!");console.log('plain'); });
 	else
-		xdh.setCasts("Root", "TestButtonCasting", "Hide", (xdh) => { console.log('hide'); });
+		xdh.setCasts("Root", "TestButtonCasting", "Hide", () => { console.log('hide'); });
 
 	console.log("Hi !");
 }
@@ -57,7 +57,7 @@ function connect( xdh, id ) {
 //	console.log( ":::: " + tree._q37TreeRack);
 
 	xdh.setLayout("Root", tree, "../XSL/Main.xsl",
-		handleTestButton );
+		() => handleTestButton( xdh ) );
 }
 
 function testing(xdh, id) {
@@ -76,10 +76,11 @@ function showTestButton(xdh, id) {
 
 function submission(xdh, id) {
 	xdh.getContent( "Pattern",
-					 (xdh, result) => {
+					 (result) => {
 					 	console.log("Result: " + result);
 					 	xdh.setContents("Pattern", result.toUpperCase(),
-										(xdh) => {
+										() => {
+											xdh.getContent(("Pattern"), (result) => console.log(result));
 											console.log("Submission");
 										});
 					 } );

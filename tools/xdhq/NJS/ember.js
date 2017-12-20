@@ -81,7 +81,7 @@ class MyData extends xdhq.XDH {
 	}
 }
 
-function nop( xdh ) {
+function nop() {
 	console.log( arguments.callee );
 }
 
@@ -93,7 +93,6 @@ function onConnection() {
 }
 
 function push(rental,id,tree) {
-	console.log( arguments.callee );
 	tree.pushTag('Rental');
 	tree.putAttribute('id',id);
 	for (var prop in rental) {
@@ -132,7 +131,7 @@ function displayList( xdh ) {
 	
 	tree.popTag();
 	
-	xdh.setLayout( "Rentals", tree, "ember/Rentals.xsl", (xdh) => { xdh.dressWidgets( "Rentals", handleMapsCast ); } );
+	xdh.setLayout( "Rentals", tree, "ember/Rentals.xsl", () => { xdh.dressWidgets( "Rentals", () => handleMapsCast( xdh ) ); } );
 }
 
 function displayRecord( xdh, id ) {
@@ -151,7 +150,7 @@ function acConnect( xdh, id ) {
 	console.log( arguments.callee );
 	var tree = new xdhq.LayoutTree();
 	
-	xdh.setLayout( "Root", tree, "ember/Main.xsl", (xdh) => { displayList( xdh ); });
+	xdh.setLayout( "Root", tree, "ember/Main.xsl", () => { displayList( xdh ); });
 }
 
 function handleImage( xdh, result ) {
@@ -165,7 +164,7 @@ function handleImage( xdh, result ) {
 function acHandlePicture( xdh, id ) {
 	console.log( arguments.callee );
 	xdh.imageToHandle = id;
-	xdh.getAttribute( id, 'class', handleImage );
+	xdh.getAttribute( id, 'class', ( result ) => handleImage( xdh, result ) );
 }
 
 function handleRecord( xdh, result ) {
@@ -174,7 +173,7 @@ function handleRecord( xdh, result ) {
 }
 
 function acDisplayRecord( xdh, id ) {
-	xdh.getContent( id, handleRecord );
+	xdh.getContent( id, (result) => handleRecord( xdh, result ) );
 }
 
 function acToList( xdh, id ) {
@@ -184,12 +183,12 @@ function acToList( xdh, id ) {
 
 function acSubmit( xdh, id ) {
 	console.log( arguments.callee );
-	xdh.getContent( "Pattern", (xdh,result) => { xdh.pattern = result.toLowerCase(); displayList( xdh );});
+	xdh.getContent( "Pattern", (result) => { xdh.pattern = result.toLowerCase(); displayList( xdh );});
 }
 
 function acToggleMaps( xdh, id ) {
 	console.log( arguments.callee );
-	xdh.getContent( id, ( xdh, result ) => { xdh.hideMaps = result; handleMapsCast( xdh ); } );
+	xdh.getContent( id, ( result ) => { xdh.hideMaps = result; handleMapsCast( xdh ); } );
 }
 	
 function main()

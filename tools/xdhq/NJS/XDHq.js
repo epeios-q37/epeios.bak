@@ -122,7 +122,7 @@ class XDH {
 			throw "Bad argument !";
 	}
 	getContent(id, callback) {
-		return this.getContents([id], (xdh, result) => { callback( xdh, result[0]); } );
+		return this.getContents([id], (result) => { callback(result[0]); } );
 	}
 	setContents(idOrIdsAndContents, content, callback) {
 		var ids = new Array();

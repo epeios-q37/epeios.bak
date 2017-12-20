@@ -155,10 +155,10 @@ qRB;
 		Callback = Data.JS.Callback;
 		Data.JS.Callback.reset( false );
 
-		if ( Callback.HasAssignation() ) {	// There is a pending action launched from callback.
+		if ( Callback.HasAssignation() ) {	// There is a pending callback.
 			Callback.VoidLaunch( Data.JS.Arguments.Core() );
 			Callback.reset( false );
-		} else if ( Data.JS.Action.Amount() != 0 ) {	// No pending query, but an action was launched.
+		} else if ( Data.JS.Action.Amount() != 0 ) {	// No pending callback, but an action has to be handled launched.
 			Callback.Init();
 			Callback.Assign( Get_( Data.JS.Action ) );
 			Callback.VoidLaunch( Data.XDH, Data.JS.Id );
@@ -171,9 +171,9 @@ qRB;
 
 		Data.Unlock();
 	}
-qRR
-qRT
-qRE
+qRR;
+qRT;
+qRE;
 }
 
 namespace {

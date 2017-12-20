@@ -57,6 +57,7 @@
 			<File>Main.xsl</File>
 			<File>Main.xml</File>
 		</Files>
+		<File>ember.js</File>
 	</Files>
 	<PreprocessorDefinitions>
 		<PreprocessorDefinition>E_ST</PreprocessorDefinition>

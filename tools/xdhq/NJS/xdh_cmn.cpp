@@ -74,8 +74,6 @@ qRB;
 
 	Data.JS.Arguments.Init();
 
-	Data.JS.Arguments.Add( Data.XDH );
-
 	if ( !xdh_ups::Recv( Data.Server.Request, Flow, Data.JS.Arguments ) )
 		server::GetAction( Flow, Data.JS.Id, Data.JS.Action );
 
