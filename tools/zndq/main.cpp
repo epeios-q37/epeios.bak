@@ -112,9 +112,9 @@ namespace {
 		ComponentFilename.Init();
 		sclmisc::MGetValue( registry::parameter::ComponentFilename, ComponentFilename );
 
-// #ifdef CPE_S_GNULINUX
+#ifdef CPE_S_GNULINUX
 		SkipComponentUnloading = true;	// Temporary workaround (I hope) to avoid 'SegFault' under 'GNU/Linux'.
-// #endif
+#endif
 		Launcher = new n4allw::rLauncher;
 
 		if ( Launcher == NULL )

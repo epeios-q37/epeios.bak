@@ -1,4 +1,9 @@
+
 # *Epeios* changelog
+
+2017-12-21:
+- SCLXDHTML
+  - fixing issue with casting.
 
 2017-12-20:
 - SCLJRE, SCLZND:

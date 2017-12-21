@@ -39,15 +39,6 @@ namespace {
 			sclxdhtml::login::GetLayout( Session, Writer );
 		}
 	}
-
-	namespace casting_ {
-		void Get(
-			core::rSession &Session,
-			xml::dWriter &Writer )
-		{
-			sclxdhtml::login::GetCasting( Session, Session.BackendVisibility(), Writer );
-		}
-	}
 }
 
 void login::SetLayout( core::rSession &Session )
@@ -57,7 +48,17 @@ void login::SetLayout( core::rSession &Session )
 
 void login::SetCasting( core::rSession &Session )
 {
-	Session.SetDocumentCasting( XSLAffix_, casting_::Get );
+qRH;
+	sclxdhtml::wCasts Casts;
+qRB;
+	Casts.Init();
+
+	sclxdhtml::login::GetCasts( Session, Session.BackendVisibility(), Casts );
+
+	Session.SetDocumentCasts( Casts );
+qRR;
+qRT;
+qRE;
 }
 
 void login::Display( core::rSession &Session )

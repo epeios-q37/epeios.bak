@@ -467,7 +467,7 @@ qRB;
 	xdhcmn::FlatMerge( Tags, MergedTags, false );
 
 	MergedValues.Init();
-	xdhcmn::FlatMerge( Values, MergedValues, true );
+	xdhcmn::FlatMerge( Values, MergedValues, false );
 
 	Proxy.SetCasts( Id, MergedTags, MergedValues );
 qRR;

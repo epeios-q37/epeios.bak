@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Configurations xmlns:xpp="http://q37.info/ns/xpp">
+	<Configuration target="xdhwebqnjs">
+		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
+		<xpp:expand value-of="q37.xpp"/>
+		<xpp:expand href="../../XDH.xcfg"/>
+		<Parameters>
+			<Command>Process</Command>
+			<Language>en</Language>
+		</Parameters>
+		<Definitions>
+		</Definitions>
+		<Locale>
+		</Locale>
+		<Arguments>
+			<Argument id="ProcessCommand" Description="ProcessCommandDescription" long="process" Value="Process" Usage=" %ModuleFilenameArgument%"/>
+			<Argument id="ModuleFilenameArgument" Description="ModuleFilenameArgumentDescription" Path="ModuleFilename" Label="ModuleFilenameArgumentLabel"/>
+			<Layouts>
+				<Layout command="Process">
+					<Link index="0" Target="ModuleFilenameArgument"/>
+				</Layout>
+			</Layouts>
+		</Arguments>	</Configuration>
+</Configurations>

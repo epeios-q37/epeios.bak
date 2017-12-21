@@ -32,17 +32,6 @@ namespace {
 			xml::dWriter &Writer )
 		{}
 	}
-
-	namespace casting_ {
-		void Get(
-			core::rSession &Session,
-			xml::dWriter &Writer )
-		{
-			Writer.PushTag( "Test" );
-
-			Writer.PutAttribute( "Enabled", ( Session.User.TestButtonIsVisible() ? "true" : "false" ) );
-		}
-	}
 }
 
 void frame::SetLayout(
@@ -56,7 +45,6 @@ void frame::SetCasting(
 	const char *Id,
 	core::rSession &Session )
 {
-	Session.SetElementCasting( Id, XSLAffix_, casting_::Get );
 }
 
 void frame::Display(
