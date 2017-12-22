@@ -36,8 +36,8 @@
     <xpp:expand select="SCL"/>
    </Modules>
   </Modules>
-		<Modules Group="XDH" Path="../">
-			<Module>prtcl</Module>
+		<Modules Group="Shared" Path="../">
+			<Module Path="../">prtcl</Module>
 			<Module>server</Module>
 		</Modules>
 		<Module>registry</Module>
@@ -49,6 +49,7 @@
 	</Modules>
 	<SourceDirs>
 		<SourceDir>..</SourceDir>
+		<SourceDir>../..</SourceDir>
 	</SourceDirs>
 	<Files>
 		<!-- NOTA : '*.js' files will automatically be packed. -->

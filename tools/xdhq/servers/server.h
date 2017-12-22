@@ -113,7 +113,7 @@ namespace server {
 			{}
 		}
 
-		inline void DressWidgets(
+		inline void Dress(
 			const str::dString &Id,
 			flw::sRWFlow &Flow )
 		{
@@ -135,7 +135,7 @@ namespace server {
 			{}
 		}
 		
-		inline void SetCasts(
+		inline void Set(
 			const str::dString &Id,
 			const str::dStrings &Tags,
 			const str::dStrings &Values,

@@ -1,4 +1,4 @@
-#	Copyright (C) 2007-2017 Claude SIMON (http://q37.info/contact/).
+#	Copyright (C) 2017 Claude SIMON (http://q37.info/contact/).
 #
 #	This file is part of XDHq.
 #
@@ -15,7 +15,7 @@
 #	You should have received a copy of the GNU Affero General Public License
 #	along with XDHq. If not, see <http://www.gnu.org/licenses/>.
 
-name = xdhqjre
+name = xdhqnjs
 
 
 # Epeios general debugging features
@@ -37,12 +37,14 @@ mods += que rgstry sdr stkbse stkbch
 mods += stkcrt stkctn str strng stsfsm 
 mods += tagsbs tht thtsub tol txf 
 mods += tys uys utf xml xpp 
-mods += xtf llio dlbrry n4all n4jre 
-mods += plgn plgncore sck csdbns csdcmn 
+mods += xtf llio dlbrry n4all n4njs 
+mods += plgn plgncore uvqdcl sck 
+mods += csdbns csdcmn csdmxs 
 mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
-mods += scln4a scljre 
+mods += scln4a sclnjs 
 mods += prtcl server 
-mods += registry treep xdhp 
+mods += registry treep xdhp xdh_cmn xdh_dws 
+mods += xdh_ups 
 
 pmods += pllio 
 
@@ -63,9 +65,7 @@ CXXFLAGS += -O
 
 ###############################
 	
-# Required for JRE Component.
-
-copt += -DQ_JRE
+copt += -DE_ST
 
 win=win
 win32=win32
@@ -82,6 +82,7 @@ os=$(shell uname -o 2>/dev/null || uname -s)
 mach=$(shell uname -m)
 ifdef EPEIOS_SRC
  src += :..
+ src += :../..
 endif
 
 
@@ -389,19 +390,14 @@ endif
 #############################
 		
 all: $(binary)
-ifdef EPEIOS_SRC
-	javac *.java
-else
-	javac src/*.java -d .
-endif
 	rm -rf *.o
 ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20171201"\"
-copt += -DCOPYRIGHT_YEARS=\""2007-2017"\"
-copt += -DIDENTIFIER=\"""\"
+copt += -DVERSION=\""20171222"\"
+copt += -DCOPYRIGHT_YEARS=\""2017"\"
+copt += -DIDENTIFIER=\""d6a723cb-e88f-4f2f-b429-3adc207f1d62"\"
 
 ifndef EPEIOS_SRC
 	src += :src:src/epeios

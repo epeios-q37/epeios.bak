@@ -25,7 +25,7 @@ const stream = require('stream');
 const fs = require('fs');
 const path = require('path');
 
-var affix = "xdhwebq";
+var firstAction = "";
 
 // Begin of generic part.
 var njsq = null;
@@ -43,7 +43,7 @@ if (process.env.EPEIOS_SRC) {
     componentPath = __dirname;
 }
 
-componentFilename = path.join(componentPath, affix + "njs").replace(/\\/g, "\\\\").replace(/'/g, "\\'").replace(/ /g, "\\ ");
+componentFilename = path.join(componentPath, "xdhwebqnjs").replace(/\\/g, "\\\\").replace(/'/g, "\\'").replace(/ /g, "\\ ");
 const xdhwebq = njsq._register(componentFilename);
 module.exports.componentInfo = () => njsq._componentInfo(xdhwebq);
 module.exports.wrapperInfo = () => njsq._wrapperInfo();
@@ -58,7 +58,7 @@ function put(keysAndValues, keys, values) {
 
 function serveQuery(query)
 {
-	if ( !('_prolog' in query)) {
+	if ( ('_action' in query) && ( query['_action'] != '' ) ) {
 		var keys = new Array();
 		var values = new Array();
 
@@ -86,7 +86,7 @@ function serveQuery(query)
 		</style>\
 		<script src="js/xdhtml.js"></script>\
 		<script src="js/xdhwebq.js"></script>\
-		<script>handleQuery("?_action=Connect")</script>\
+		<script>handleQuery("?_action=' + firstAction + '")</script>\
 	</head>\
 	<body id="Root">\
 	</body>\
@@ -164,7 +164,27 @@ function serve(req, res) {
 		serveFile(`.${pathname}`, res);
 }
 
+function launch( action, service) {
+	if ( typeof action === "string" )
+		firstAction = action;
+	else
+		throw ("First argument must be the name of the action to launch at connection !");
+
+	if (service === undefined)
+		service = 8080;
+	else if ( !Number.isInteger( service ) )
+		throw "Second argument, if provided, is the port to listen to (8080 by default ) !";
+
+	http.createServer(function (req, res) {
+		serve(req, res);
+	}).listen(service);
+
+}
+
+
+njsq._wrapper(xdhwebq, 1, "h:/bin/xdhqxdh");
+
 module.exports.returnArgument = (text) => njsq._wrapper(xdhwebq, 0, text);
-module.exports.init = (args) => njsq._wrapper( xdhwebq, 1, args );
 module.exports.serve = serve;
+module.exports.launch = launch;
 

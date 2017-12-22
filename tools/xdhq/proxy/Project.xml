@@ -13,6 +13,7 @@
 	<xpp:set name="Type" value="XDHTML"/>
 	<xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
 	<About>
+		<!-- 'DVL' related commands tests below value to introduce some hacks !!!  -->
 		<Program>xdhqxdh</Program>
 		<Software>XDHq</Software>
 		<UUID>5f3ad6c6-4f0d-428d-9c00-678e1ed3967f</UUID>
@@ -27,6 +28,8 @@
 				<xpp:expand select="CSDF"/>
 				<Module>csdbnc</Module>
 				<Module>csdcmn</Module>
+				<Module>csdmnc</Module>
+				<Module>csdmxb</Module>
 				<Module>csdmxc</Module>
 			</Modules>
 			<Modules Group="FBL">
@@ -45,7 +48,7 @@
 	<SourceDirs>
 		<SourceDir>..</SourceDir>
 	</SourceDirs>
-	<RTW Description="eSketch" Keywords="keyword1,keyword2">
+	<RTW Description="XDHTML proxy" Keywords="XDHTML,proxy">
 		<Dir>xdhqxdh</Dir>
 	</RTW>
 	<PreprocessorDefinitions>

@@ -20,18 +20,13 @@
 // Once installed ('npm install xdhwebq'), launch 'npm explore xdhwebq -- node test.js'.
 
 const xdhwebq = require('./XDHWebQ.js');
-const http = require('http');
 
 console.log( xdhwebq.componentInfo() ) ;
 console.log( xdhwebq.wrapperInfo() );
 
-process.stdout.write(xdhwebq.returnArgument("Text from JS file") + '\n');
+// process.stdout.write(xdhwebq.returnArgument("Text from JS file") + '\n');
 
-xdhwebq.init("h:/bin/xdhqxdh");
-
-http.createServer(function (req, res) {
-	xdhwebq.serve(req, res);
-}).listen(8080); //the server object listens on port 8080 
+xdhwebq.launch( "Connect" );
 
 
 

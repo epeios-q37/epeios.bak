@@ -55,7 +55,7 @@ qRE;
 namespace {
 	struct rRack_ {
 		sck::rRWFlow Flow;
-		qCBUFFERr Language;
+		str::wString Language;
 		scljre::rObject Object;
 		void reset( bso::sBool P = true )
 		{
@@ -64,20 +64,12 @@ namespace {
 		qCDTOR( rRack_ );
 		void Init( sck::sSocket Socket )
 		{
-		qRH;
-			str::wString Language;
-		qRB;
 			Flow.Init( Socket, true );
 
 			Language.Init();
 
 			server::Handshake( Flow, Language );
-			Language.Convert( this->Language );
-
-			// Object is intialized specifically in the 'Set()' method.
-		qRR;
-		qRT;
-		qRE;
+			// Object is initialized specifically in the 'Set()' method.
 		}
 		void Set( scljre::cObject *Object )
 		{
@@ -198,11 +190,10 @@ SCLJRE_F( xdhp::GetAction )
 
 namespace {
 	void SetElement_(
-		server::fSet Set,
 		const str::dString &Id,
 		scljre::sCaller &Caller,
-		const char *Language,
-		flw::sWFlow &Flow )
+		const str::dString &Language,
+		flw::sRWFlow &Flow )
 	{
 	qRH;
 		str::wString XML, XSLFilename;
@@ -212,17 +203,16 @@ namespace {
 		treep::GetXML( Caller, XML );
 		Caller.Get( XSLFilename );
 
-		Set( Id, XML, XSLFilename, Language, Flow );
+		server::layout::Set( Id, XML, XSLFilename, Language, Flow );
 	qRR;
 	qRT;
 	qRE;
 	}
 
 	void SetElement_(
-		server::fSet Set,
 		scljre::sCaller &Caller,
-		const char *Language,
-		flw::sWFlow &Flow )
+		const str::dString &Language,
+		flw::sRWFlow &Flow )
 	{
 	qRH;
 		str::wString Id;
@@ -230,31 +220,36 @@ namespace {
 		tol::Init( Id );
 		Caller.Get( Id );
 
-		SetElement_( Set, Id, Caller, Language, Flow );
+		SetElement_( Id, Caller, Language, Flow );
 	qRR;
 	qRT;
 	qRE;
 	}
 }
 
-
 SCLJRE_F( xdhp::SetLayout )
 {
 	rRack_ &Rack = GetRack_( Caller );
 
-	SetElement_( server::SetElementLayout, Caller, Rack.Language, Rack.Flow );
+	SetElement_( Caller, Rack.Language, Rack.Flow );
 
 	return scljre::Null();
 }
 
 SCLJRE_F( xdhp::SetCasting )
 {
-	rRack_ &Rack = GetRack_( Caller );
-
-	SetElement_( server::SetElementCasting, Caller, Rack.Language, Rack.Flow );
-
+qRH;
+	str::wString Id;
+	str::wStrings Tags, Values;
+qRB;
+	tol::Init( Id, Tags, Values );
+	server::casts::Set( Id, Tags, Values, GetRack_( Caller ).Flow );
+qRR;
+qRT;
+qRE;
 	return scljre::Null();
 }
+
 
 
 

@@ -28,8 +28,8 @@
     <xpp:expand select="SCL"/>
    </Modules>
   </Modules>
-		<Modules Group="XDH" Path="../">
-			<Module>prtcl</Module>
+		<Modules Group="Shared" Path="../">
+			<Module Path="../">prtcl</Module>
 			<Module>server</Module>
 		</Modules>
   <Module>registry</Module>
@@ -45,6 +45,7 @@
 	</Files>
 	<SourceDirs>
 		<SourceDir>..</SourceDir>
+		<SourceDir>../..</SourceDir>
 	</SourceDirs>
  <Files>
   <!-- NOTA : '*.java' files will automatically be packed as such. -->
