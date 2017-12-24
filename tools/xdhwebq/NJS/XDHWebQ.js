@@ -17,7 +17,37 @@
 	along with XDHWebQ. If not, see <http://www.gnu.org/licenses/>.
 */
 
-"use strict"
+/* Some logging facilities */
+Object.defineProperty(global, '__stack', {
+	get: function () {
+		var orig = Error.prepareStackTrace;
+		Error.prepareStackTrace = function (_, stack) {
+			return stack;
+		};
+		var err = new Error;
+		Error.captureStackTrace(err, arguments.callee);
+		var stack = err.stack;
+		Error.prepareStackTrace = orig;
+		return stack;
+	}
+});
+
+Object.defineProperty(global, '__line', {
+	get: function () {
+		return __stack[2].getLineNumber();
+	}
+});
+
+Object.defineProperty(global, '__function', {
+	get: function () {
+		return __stack[2].getFunctionName();
+	}
+});
+
+function LOG() {
+	console.log("--> " + __function + ": " + __line + " (" + __filename + ")");
+}
+/**/
 
 const http = require('http');
 const url = require('url');
@@ -56,16 +86,8 @@ function put(keysAndValues, keys, values) {
 	}
 }
 
-function serveQuery(query)
-{
-	if ( ('_action' in query) && ( query['_action'] != '' ) ) {
-		var keys = new Array();
-		var values = new Array();
-
-		put(query, keys, values);
-		return njsq._wrapper(xdhwebq, 2, keys, values);
-	} else {
-		return '\
+function prolog() {
+	return '\
 <!DOCTYPE html>\
 <html>\
 	<head>\
@@ -85,12 +107,31 @@ function serveQuery(query)
 		</style>\
 		<script src="js/xdhtml.js"></script>\
 		<script src="js/xdhwebq.js"></script>\
-		<script>handleQuery("?_action=' + firstAction + '")</script>\
+		<script>handleQuery("?_action='
+		+ firstAction +
+		'")</script>\
 	</head>\
 	<body id="Root">\
 	</body>\
 </html>\
 		';
+}
+
+function serveQuery(query, res)
+{
+	LOG();
+	var response = "";
+	console.log(query);
+	if ( ('_action' in query) && ( query['_action'] != '' ) ) {
+		var keys = new Array();
+		var values = new Array();
+
+		put(query, keys, values);
+
+		new StringStream(njsq._wrapper(xdhwebq, 2, keys, values)).pipe(res);
+//		njsq._wrapper(xdhwebq, 3, keys, values, (result) => new StringStream(result ).pipe(res));
+	} else {
+		new StringStream(prolog()).pipe(res);
 	}
 }
 
@@ -110,6 +151,7 @@ class StringStream extends stream.Readable {
 }
 
 function serveFile(pathname, res) {
+	LOG();
 	const mimeType = {
 		'.ico': 'image/x-icon',
 		'.html': 'text/html',
@@ -123,8 +165,8 @@ function serveFile(pathname, res) {
 		'.svg': 'image/svg+xml',
 		'.pdf': 'application/pdf',
 		'.doc': 'application/msword',
-		'.eot': 'appliaction/vnd.ms-fontobject',
-		'.ttf': 'aplication/font-sfnt'
+		'.eot': 'application/vnd.ms-fontobject',
+		'.ttf': 'application/font-sfnt'
 	};
 	fs.exists(pathname, function (exist) {
 		if (!exist) {
@@ -154,18 +196,19 @@ function serveFile(pathname, res) {
 }
 
 function serve(req, res) {
+	LOG();
 	const parsedUrl = url.parse(req.url, true);
 	const pathname = parsedUrl.pathname;
 
 	if (pathname == '/') {
-		new StringStream(serveQuery(parsedUrl.query)).pipe(res);
-//		serveQuery(parsedUrl.query, (response) => new StringStream(response).pipe(res));
+		serveQuery(parsedUrl.query,res);
 	} else
 		serveFile(`.${pathname}`, res);
 }
 
 function launch( action, service) {
-	if ( typeof action === "string" )
+	LOG();
+	if (typeof action === "string")
 		firstAction = action;
 	else
 		throw ("First argument must be the name of the action to launch at connection !");
@@ -177,7 +220,7 @@ function launch( action, service) {
 
 	http.createServer(function (req, res) {
 		serve(req, res);
-	}).listen(service);
+	}).listen(service).on( 'error', (error) => console.log( "http request served by other program" ) );
 
 }
 
@@ -187,4 +230,9 @@ njsq._wrapper(xdhwebq, 1, "h:/bin/xdhqxdh");
 module.exports.returnArgument = (text) => njsq._wrapper(xdhwebq, 0, text);
 module.exports.serve = serve;
 module.exports.launch = launch;
+
+console.log(process.argv);
+
+launch("Connect");
+
 

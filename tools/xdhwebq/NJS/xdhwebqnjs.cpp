@@ -82,8 +82,7 @@ namespace {
 	qRE;
 	}
 
-#if 1
-	SCLNJS_F( Handle_ )
+	SCLNJS_F( HandleS_ )
 	{
 	qRH;
 		str::wStrings Keys, Values;
@@ -104,7 +103,7 @@ namespace {
 	qRT;
 	qRE;
 	}
-#else
+
 	namespace {
 		struct rRack_
 			: public sclnjs::cAsync
@@ -112,11 +111,15 @@ namespace {
 		protected:
 			virtual void UVQWork( void ) override
 			{
+				cio::COut << txf::tab << ">>>>>> " __LOC__ << txf::nl << txf::commit;
 				xdhwebq::Handle( Pairs, Sessions_, Response );
+				cio::COut << txf::tab << "<<<<<< " __LOC__ << txf::nl << txf::commit;
 			}
 			virtual sclnjs::eBehavior UVQAfter( void ) override
 			{
+				cio::COut << txf::tab << ">>>>>> " __LOC__ << txf::nl << txf::commit;
 				Callback.VoidLaunch( Response );
+				cio::COut << txf::tab << "<<<<<< " __LOC__ << txf::nl << txf::commit;
 				return sclnjs::bExitAndDelete;
 			}
 		public:
@@ -135,7 +138,7 @@ namespace {
 		};
 	}
 
-	SCLNJS_F( Handle_ )
+	SCLNJS_F( HandleA_ )
 	{
 	qRH;
 		str::wStrings Keys, Values;
@@ -153,7 +156,7 @@ namespace {
 
 		Caller.GetArgument( Rack->Callback );
 		Rack->Pairs.Add( Keys, Values );
-#if 1
+#if 0
 		Rack->Work();
 		Rack->After();
 		delete Rack;
@@ -166,14 +169,12 @@ namespace {
 	qRT;
 	qRE;
 	}
-
-#endif
 }
 
 void sclnjs::SCLNJSRegister( sclnjs::sRegistrar &Registrar )
 {
 	Registrar.Register( ReturnArgument_ );
-	Registrar.Register( Init, Handle_ );
+	Registrar.Register( Init, HandleS_, HandleA_ );
 }
 
 const char *sclmisc::SCLMISCTargetName = NAME_LC;

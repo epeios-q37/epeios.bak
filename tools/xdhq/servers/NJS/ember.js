@@ -17,10 +17,43 @@
 	along with XDHq. If not, see <http://www.gnu.org/licenses/>.
 */
 
-// Once installed ('npm install xdhq'), launch 'npm explore xdhq -- node test.js'.
+/* Some logging facilities */
+
+Object.defineProperty(global, '__stack', {
+	get: function() {
+		var orig = Error.prepareStackTrace;
+		Error.prepareStackTrace = function(_, stack) {
+			return stack;
+		};
+		var err = new Error;
+		Error.captureStackTrace(err, arguments.callee);
+		var stack = err.stack;
+		Error.prepareStackTrace = orig;
+		return stack;
+	}
+});
+
+Object.defineProperty(global, '__line', {
+	get: function() {
+		return __stack[2].getLineNumber();
+	}
+});
+
+Object.defineProperty(global, '__function', {
+	get: function() {
+		return __stack[2].getFunctionName();
+	}
+});
+
+function LOG() {
+	console.log( "--> " + __function + ": " +  __line + " (" + __filename + ")" );
+}
+/**/
 
 const xdhq = require('./XDHq.js');
-const xdhwebq = require('../../../xdhwebq/NJS/XDHWebQ.js');
+// const xdhwebq = require('../../../xdhwebq/NJS/XDHWebQ.js');
+require('child_process').fork('../../../xdhwebq/NJS/XDHWebQ.js', [12345]);
+
 
 console.log( xdhq.componentInfo() ) ;
 console.log( xdhq.wrapperInfo() );
@@ -83,11 +116,11 @@ class MyData extends xdhq.XDH {
 }
 
 function nop() {
-	console.log( arguments.callee );
+	LOG();
 }
 
 function onConnection() {
-	console.log( arguments.callee );
+	LOG();
 	console.log("Connection detected !");
 
 	return new MyData();
@@ -106,7 +139,7 @@ function push(rental,id,tree) {
 }
 
 function handleMapsCast( xdh ) {
-	console.log( arguments.callee );
+	LOG();
 	var value = "";
 	
 	if ( xdh.hideMaps == "false" )
@@ -118,7 +151,7 @@ function handleMapsCast( xdh ) {
 }
 
 function displayList( xdh ) {
-	console.log( arguments.callee );
+	LOG();
 	var tree = new xdhq.LayoutTree();
 	var i = rentals.length;
 	
@@ -136,7 +169,7 @@ function displayList( xdh ) {
 }
 
 function displayRecord( xdh, id ) {
-	console.log( arguments.callee );
+	LOG();
 	var tree = new xdhq.LayoutTree();
 	
 	tree.pushTag("Rentals");
@@ -148,29 +181,29 @@ function displayRecord( xdh, id ) {
 }
 
 function acConnect( xdh, id ) {
-	console.log( arguments.callee );
+	LOG();
 	var tree = new xdhq.LayoutTree();
 	
 	xdh.setLayout( "Root", tree, "ember/Main.xsl", () => { displayList( xdh ); });
 }
 
 function handleImage( xdh, result ) {
-	console.log( arguments.callee );
-	if ( result == 'image' )
+	LOG();
+	if (result == 'image')
 		xdh.setAttribute( xdh.imageToHandle, 'class', 'image wide', nop );
 	else
 		xdh.setAttribute( xdh.imageToHandle, 'class', 'image', nop );
 }
 
 function acHandlePicture( xdh, id ) {
-	console.log( arguments.callee );
+	LOG();
 	xdh.imageToHandle = id;
 	xdh.getAttribute( id, 'class', ( result ) => handleImage( xdh, result ) );
 }
 
 function handleRecord( xdh, result ) {
-	console.log( arguments.callee );
-	displayRecord( xdh, parseInt( result ) );
+	LOG();
+	displayRecord(xdh, parseInt(result));
 }
 
 function acDisplayRecord( xdh, id ) {
@@ -178,23 +211,23 @@ function acDisplayRecord( xdh, id ) {
 }
 
 function acToList( xdh, id ) {
-	console.log( arguments.callee );
-	displayList( xdh );
+	LOG();
+	displayList(xdh);
 }
 
 function acSubmit( xdh, id ) {
-	console.log( arguments.callee );
-	xdh.getContent( "Pattern", (result) => { xdh.pattern = result.toLowerCase(); displayList( xdh );});
+	LOG();
+	xdh.getContent("Pattern", (result) => { xdh.pattern = result.toLowerCase(); displayList(xdh); });
 }
 
 function acToggleMaps( xdh, id ) {
-	console.log( arguments.callee );
-	xdh.getContent( id, ( result ) => { xdh.hideMaps = result; handleMapsCast( xdh ); } );
+	LOG();
+	xdh.getContent(id, (result) => { xdh.hideMaps = result; handleMapsCast(xdh); });
 }
 	
 function main()
 {
-	console.log( arguments.callee );
+	LOG();
 	xdhq.register("Connect", acConnect);	// Testing.
 	xdhq.register([
 		["HandlePicture", acHandlePicture],
@@ -205,7 +238,6 @@ function main()
 	]);
 
 	xdhq.listen(onConnection, "12345");
-//	xdhwebq.launch("Connect");
 }
 
 main();
