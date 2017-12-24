@@ -150,8 +150,11 @@
 						log( "Events : '%Id%'" );
 						log( "%XML%" );
 						removeChildren( "%Id%" );
+						console.log('av');
 						document.getElementById( "%Id%" ).appendChild( transformToFragment( "%XML%", "%XSL%" ) );"";
+						console.log('ap');
 						var digests = fetchEventHandlers( "%Id%" );
+						console.log("Digests: ", digests);
 						digests;
 					]]>
     </Events>

@@ -20,6 +20,7 @@
 // Once installed ('npm install xdhq'), launch 'npm explore xdhq -- node test.js'.
 
 const xdhq = require('./XDHq.js');
+const xdhwebq = require('../../xdhebq/NJS/XDHWebQ.js');
 
 console.log( xdhq.componentInfo() ) ;
 console.log( xdhq.wrapperInfo() );
@@ -96,6 +97,7 @@ function main()
 		["Submission", submission],
 	]);
 
+	xdhwebq.launch("Connect");
 	xdhq.listen(callback, "12345");
 }
 

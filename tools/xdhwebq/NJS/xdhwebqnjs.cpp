@@ -82,6 +82,7 @@ namespace {
 	qRE;
 	}
 
+#if 1
 	SCLNJS_F( Handle_ )
 	{
 	qRH;
@@ -103,6 +104,70 @@ namespace {
 	qRT;
 	qRE;
 	}
+#else
+	namespace {
+		struct rRack_
+			: public sclnjs::cAsync
+		{
+		protected:
+			virtual void UVQWork( void ) override
+			{
+				xdhwebq::Handle( Pairs, Sessions_, Response );
+			}
+			virtual sclnjs::eBehavior UVQAfter( void ) override
+			{
+				Callback.VoidLaunch( Response );
+				return sclnjs::bExitAndDelete;
+			}
+		public:
+			xdhwebq::wPairs Pairs;
+			sclnjs::rCallback Callback;
+			str::wString Response;
+			void reset( bso::sBool P = true )
+			{
+				tol::reset( P, Pairs, Callback, Response );
+			}
+			qCVDTOR( rRack_ );
+			void Init( void )
+			{
+				tol::Init( Pairs, Callback, Response );
+			}
+		};
+	}
+
+	SCLNJS_F( Handle_ )
+	{
+	qRH;
+		str::wStrings Keys, Values;
+		rRack_ *Rack = NULL;
+	qRB;
+		tol::Init( Keys, Values );
+		Caller.GetArgument( Keys, Values );
+
+		Rack = new rRack_;
+
+		if ( Rack == NULL )
+			qRAlc();
+
+		Rack->Init();
+
+		Caller.GetArgument( Rack->Callback );
+		Rack->Pairs.Add( Keys, Values );
+#if 1
+		Rack->Work();
+		Rack->After();
+		delete Rack;
+#else
+		sclnjs::Launch( *Rack );
+#endif
+	qRR;
+		if ( Rack != NULL )
+			delete Rack;
+	qRT;
+	qRE;
+	}
+
+#endif
 }
 
 void sclnjs::SCLNJSRegister( sclnjs::sRegistrar &Registrar )

@@ -63,8 +63,7 @@ function serveQuery(query)
 		var values = new Array();
 
 		put(query, keys, values);
-		let res = njsq._wrapper(xdhwebq, 2, keys, values);
-		return res;
+		return njsq._wrapper(xdhwebq, 2, keys, values);
 	} else {
 		return '\
 <!DOCTYPE html>\
@@ -160,6 +159,7 @@ function serve(req, res) {
 
 	if (pathname == '/') {
 		new StringStream(serveQuery(parsedUrl.query)).pipe(res);
+//		serveQuery(parsedUrl.query, (response) => new StringStream(response).pipe(res));
 	} else
 		serveFile(`.${pathname}`, res);
 }

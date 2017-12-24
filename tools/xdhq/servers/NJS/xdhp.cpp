@@ -1,4 +1,4 @@
-/*
+﻿/*
 	Copyright (C) 2017 by Claude SIMON (http://zeusw.org/epeios/contact.html).
 
 	This file is part of XDHq.
@@ -86,6 +86,7 @@ namespace {
 	}
 }
 
+#if 0
 namespace {
 	qCDEF( char *, Id_, "_q37XDHRack" );
 
@@ -114,6 +115,90 @@ namespace {
 		}
 	} Rack_;
 }
+#else
+namespace {
+	qCDEF( char *, Id_, "_q37XDHRack" );
+
+	class rXDHRack_
+	: public sclnjs::cAsync
+	{
+	private:
+		xdh_cmn::rProcessing Processing_;
+		csdmns::rServer Server_;
+		qRMV( xdh_cmn::rData, D_, Data_ );
+	protected:
+		virtual void UVQWork( void ) override
+		{
+			WaitForData();
+		}
+		virtual sclnjs::eBehavior UVQAfter( void ) override
+		{
+			HandleData();
+
+			return sclnjs::bRelaunch;
+		}
+	public:
+		xdh_cmn::rSharing Sharing;
+		sclnjs::rCallback ConnectCallback;
+		void reset( bso::sBool P = true )
+		{
+			tol::reset( P, Sharing, Processing_, Server_, ConnectCallback );
+			Data_ = NULL;
+		}
+		qCDTOR( rXDHRack_ );
+		void Init(
+			csdbns::sService Service,
+			sclnjs::rCallback &ConnectCallback )
+		{
+			Sharing.Init();
+			Processing_.Init( Sharing );
+			Server_.Init( Service, Processing_ );
+			this->ConnectCallback.Init();
+			this->ConnectCallback = ConnectCallback;
+			mtk::Launch( LaunchServer_, &Server_ );
+			Data_ = NULL;
+		}
+		void WaitForData( void )
+		{
+			if ( Data_ != NULL )
+				qRGnr();
+
+			Data_ = &Sharing.ReadJS();
+		}
+		void HandleData( void )
+		{
+		qRH;
+			sclnjs::rCallback Callback;
+		qRB;
+			xdh_cmn::rData &Data = D_();
+			Callback.Init();
+			Callback = Data.JS.Callback;
+			Data.JS.Callback.reset( false );
+
+			if ( Callback.HasAssignation() ) {	// There is a pending callback.
+				Callback.VoidLaunch( Data.JS.Arguments.Core() );
+				Callback.reset( false );
+			} else if ( Data.JS.Action.Amount() != 0 ) {	// No pending callback, but an action has to be handled launched.
+				Callback.Init();
+				Callback.Assign( Get_( Data.JS.Action ) );
+				Callback.VoidLaunch( Data.XDH, Data.JS.Id );
+				Callback.reset( false );
+				tol::Init( Data.JS.Id, Data.JS.Action );
+			} else {	// A new connection was open.
+				Rack_.ConnectCallback.ObjectLaunch( Data.XDH, Data.JS.Arguments.Core() );
+				Data.XDH.Set( Id_, &Data );
+			}
+
+			Data.Unlock();
+			Data_ = NULL;
+		qRR;
+		qRT;
+		qRE;
+		}
+	} Rack_;
+}
+#endif
+
 
 SCLNJS_F( xdhp::Register )
 {
@@ -133,6 +218,8 @@ qRT
 qRE
 }
 
+
+#if 0
 SCLNJS_F( xdhp::Listen )
 {
 qRH;
@@ -175,6 +262,36 @@ qRR;
 qRT;
 qRE;
 }
+#else
+SCLNJS_F( xdhp::Listen )
+{
+qRH;
+	csdcmn::sVersion Version = csdcmn::UndefinedVersion;
+	str::wString Arguments;
+	sclnjs::rCallback Callback;
+qRB;
+	tol::Init( Callback, Arguments );
+	Caller.GetArgument( Callback, Arguments );
+
+	sclargmnt::FillRegistry( Arguments, sclargmnt::faIsArgument, sclargmnt::uaReport );
+
+	Rack_.Init( sclmisc::MGetU16( registry::parameter::Service ), Callback );
+
+	Callback.reset( false );	// To avoid the destruction of contained items, as their are now managed by the rack.
+
+#if 0
+	while ( true ) {
+		Rack_.WaitForData();
+		Rack_.HandleData();
+	}
+#else
+	sclnjs::Launch( Rack_ );
+#endif
+qRR;
+qRT;
+qRE;
+}
+#endif
 
 namespace {
 	xdh_cmn::rData &GetData_( sclnjs::sCaller &Caller )
