@@ -21,17 +21,20 @@
 
 var affix = "xdhq";
 
-// Begin of generic part.
 var njsq = null;
 var componentPath = null;
 var componentFilename = null;
 var path = require("path");
+var xslPath = "./"
 
 if (process.env.EPEIOS_SRC) {
-    if (process.platform == 'win32')
-        componentPath = 'h:/bin/';
-    else
-        componentPath = '~/bin/';
+	if (process.platform == 'win32') {
+		componentPath = 'h:/bin/';
+		xslPath = "h:/hg/epeios/tools/xdhq/servers/";
+	} else {
+		componentPath = '~/bin/';
+		xslPath = "~/hg/epeios/tools/xdhq/servers/";
+	}
     njsq = require(componentPath + 'njsq.node');
 } else {
     njsq = require('njsq');
@@ -41,7 +44,6 @@ if (process.env.EPEIOS_SRC) {
 componentFilename = path.join(componentPath, affix + "njs").replace(/\\/g, "\\\\").replace(/'/g, "\\'").replace(/ /g, "\\ ");
 const xdhq = njsq._register(componentFilename);
 module.exports = njsq;
-// End of generic part.
 
 class Tree {
 	constructor( background ) {
@@ -81,6 +83,7 @@ function pushLabelAndItem(labelAndItem, itemType, labels, items) {
 		throw ("Error in parameters.");
 }
 
+// '[a,b],[c,d],[e,f]' => '[a,c,e],[b,d,f]'
 function pushLabelsAndItems(labelsAndItems, itemType, labels, items) {
 	var length = labelsAndItems.length;
 
@@ -89,15 +92,14 @@ function pushLabelsAndItems(labelsAndItems, itemType, labels, items) {
 	}
 }
 
-// '[a,b],[c,d],[e,f]' => '[a,c,e],[b,d,f]'
-function normalize(labelOrLabelsAndItems, item, itemType, labels, items) {
-	if ((typeof labelOrLabelsAndItems === "string") && (typeof item === itemType)) {
-		labels.push(labelOrLabelsAndItems);
-		items.push(item);
-	} else if ((labelOrLabelsAndItems instanceof Array) && (typeof item === "undefined")) {
-		pushLabelsAndItems(labelOrLabelsAndItems, itemType, labels, items);	// Mixed array not implemented yet.
-	} else
-		throw ("Error in parameters.");
+function nop() {
+}
+
+function normalize(callback) {
+	if (typeof callback === "undefined")
+		return nop;
+	else
+		return callback;
 }
 
 class XDH {
@@ -107,50 +109,45 @@ class XDH {
 		else
 			return id;
 	}
-	set(fid, id, tree, xslFilename, callback ) {
-		njsq._wrapper(xdhq, fid, this, id, tree, xslFilename, callback);
+	set(fid, id, tree, xslFilename, callback) {
+		njsq._wrapper(xdhq, fid, this, id, tree, path.join( xslPath, xslFilename ), normalize(callback));
 	}
 	setLayout(id, tree, xslFilename, callback) {
-		this.set(9, id, tree, xslFilename, callback);
+		this.set(9, id, tree, xslFilename, normalize(callback));
 	}
-	getContents(idOrIds, callback) {
-		if (typeof idOrIds === "string")
-			njsq._wrapper(xdhq, 10, this, new Array(idOrIds), callback);
-		else if ( idOrIds instanceof Array )
-			njsq._wrapper(xdhq, 10, this, idOrIds, callback);
-		else
-			throw "Bad argument !";
+	getContents(ids, callback )  {
+		njsq._wrapper(xdhq, 10, this, ids, normalize( callback) );
 	}
-	getContent(id, callback) {
-		return this.getContents([id], (result) => { callback(result[0]); } );
+	getContent(id, callback ) {
+		return this.getContents([id], (result) => { normalize(callback)(result[0]); } );
 	}
-	setContents(idOrIdsAndContents, content, callback) {
+	setContents(idsAndContents, callback) {
 		var ids = new Array();
 		var contents = new Array();
 
-		normalize(idOrIdsAndContents, content, "string", ids, contents);
+		pushLabelsAndItems(idsAndContents, "string", ids, contents);
 
-		njsq._wrapper(xdhq, 11, this, ids, contents, callback);
+		njsq._wrapper(xdhq, 11, this, ids, contents, normalize(callback));
 	}
 	dressWidgets(id, callback ) {
-		njsq._wrapper(xdhq, 12, this, this.normalize(id), callback);
+		njsq._wrapper(xdhq, 12, this, this.normalize(id), normalize(callback));
 	}
-	setCasts(id, tagOrTagsAndValues, value, callback) {
+	setCasts(id, tagsAndValues, callback ) {
 		var tags = new Array();
 		var values = new Array();
 
-		normalize(tagOrTagsAndValues, value, "string", tags, values);
+		pushLabelsAndItems(tagsAndValues, "string", tags, values);
 
-		njsq._wrapper(xdhq, 13, this, id, tags, values, callback);
+		njsq._wrapper(xdhq, 13, this, id, tags, values, normalize(callback));
 	}
 	setCast(id, tag, value, callback ) {
-		this.setCasts(id, [[tag, value]], "", callback );
+		this.setCasts(id, [[tag, value]], normalize(callback) );
 	}
-	getAttribute(id, name, callback) {
-		return njsq._wrapper(xdhq, 14, this, id, name, callback);
+	getAttribute(id, name, callback ) {
+		return njsq._wrapper(xdhq, 14, this, id, name, normalize(callback));
 	}
-	setAttribute(id, name, value, callback) {
-		njsq._wrapper(xdhq, 15, this, id, name, value, callback);
+	setAttribute(id, name, value, callback ) {
+		njsq._wrapper(xdhq, 15, this, id, name, value, normalize(callback));
 	}
 	getProperty(id, name) {
 		return njsq._wrapper(xdhq, 16, this, id, name);
@@ -160,11 +157,11 @@ class XDH {
 	}
 }
 
-function register(idOrIdsAndItems, item) {
+function register(idsAndItems) {
 	var tags = new Array();
 	var callbacks = new Array();
 
-	normalize(idOrIdsAndItems, item, "function", tags, callbacks);
+	pushLabelsAndItems(idsAndItems, "function", tags, callbacks);
 
 	njsq._wrapper(xdhq, 7, tags, callbacks);
 }

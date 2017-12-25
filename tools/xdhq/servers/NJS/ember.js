@@ -51,8 +51,9 @@ function LOG() {
 /**/
 
 const xdhq = require('./XDHq.js');
+
 // const xdhwebq = require('../../../xdhwebq/NJS/XDHWebQ.js');
-require('child_process').fork('../../../xdhwebq/NJS/XDHWebQ.js', [12345]);
+require('child_process').fork('../../../xdhwebq/NJS/XDHWebQ.js', ["Connect"]);
 
 
 console.log( xdhq.componentInfo() ) ;
@@ -115,10 +116,6 @@ class MyData extends xdhq.XDH {
 	}
 }
 
-function nop() {
-	LOG();
-}
-
 function onConnection() {
 	LOG();
 	console.log("Connection detected !");
@@ -147,7 +144,7 @@ function handleMapsCast( xdh ) {
 	else
 		value = "Hidden";
 	
-	xdh.setCasts( "Rentals", "MapCast", value, nop );
+	xdh.setCast( "Rentals", "MapCast", value );
 }
 
 function displayList( xdh ) {
@@ -156,7 +153,8 @@ function displayList( xdh ) {
 	var i = rentals.length;
 	
 	tree.pushTag("Rentals");
-	tree.putAttribute("Mode", "List" );
+	tree.putAttribute("Mode", "List");
+	tree.putAttribute("HideMaps", xdh.hideMaps);
 	
 	while ( i-- ) {
 		if ( rentals[i]['city'].toLowerCase().startsWith( xdh.pattern ) )
@@ -177,7 +175,7 @@ function displayRecord( xdh, id ) {
 	push(rentals[id],id,tree);
 	tree.popTag();
 	
-	xdh.setLayout( "Rentals", tree, "ember/Rentals.xsl", nop );
+	xdh.setLayout( "Rentals", tree, "ember/Rentals.xsl" );
 }
 
 function acConnect( xdh, id ) {
@@ -190,9 +188,9 @@ function acConnect( xdh, id ) {
 function handleImage( xdh, result ) {
 	LOG();
 	if (result == 'image')
-		xdh.setAttribute( xdh.imageToHandle, 'class', 'image wide', nop );
+		xdh.setAttribute( xdh.imageToHandle, 'class', 'image wide' );
 	else
-		xdh.setAttribute( xdh.imageToHandle, 'class', 'image', nop );
+		xdh.setAttribute( xdh.imageToHandle, 'class', 'image' );
 }
 
 function acHandlePicture( xdh, id ) {
@@ -228,8 +226,8 @@ function acToggleMaps( xdh, id ) {
 function main()
 {
 	LOG();
-	xdhq.register("Connect", acConnect);	// Testing.
 	xdhq.register([
+		["Connect", acConnect],
 		["HandlePicture", acHandlePicture],
 		["DisplayRecord", acDisplayRecord],
 		["ToList", acToList],

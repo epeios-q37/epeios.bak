@@ -17,6 +17,8 @@
 	along with XDHWebQ. If not, see <http://www.gnu.org/licenses/>.
 */
 
+// NOT TO CONFUSE WITH '../js/xdhwebq.js', which is red by the web browser.
+
 /* Some logging facilities */
 Object.defineProperty(global, '__stack', {
 	get: function () {
@@ -59,19 +61,34 @@ var firstAction = "";
 
 // Begin of generic part.
 var njsq = null;
-var componentPath = null;
-var componentFilename = null;
+var componentPath = "";
+var componentFilename = "";
+var xdhqxdhPath = "";
 
 if (process.env.EPEIOS_SRC) {
-    if (process.platform == 'win32')
-        componentPath = 'h:/bin/';
-    else
-        componentPath = '~/bin/';
-    njsq = require(componentPath + 'njsq.node');
+	if (process.platform == 'win32') {
+		componentPath = 'h:/bin/';
+		epeiosPath = "h:/hg/epeios/"
+	}  else {
+		componentPath = '~/bin/';
+		epeiosPath = "~/hg/epeios/"
+	}
+	njsq = require(componentPath + 'njsq.node');
+	xdhtmlJSPath = epeiosPath + "corpus/js/";
+	xdhwebqJSPath = epeiosPath + "tools/xdhwebq/js/";
+	cdnPath = epeiosPath + "tools/xdhq/servers/cdn";	// No final '/'.
+	xdhqxdhPath = componentPath;
 } else {
     njsq = require('njsq');
     componentPath = __dirname;
+    xdhtmlJSPath = __dirname;
+    xdhwebqJSPath = __dirname;
+    cdnPath = "CDN/";	// No final '/'.
+    xdhqwdhPath = require('xdhqxdh');
 }
+
+const xdhtmlJSFilename = xdhtmlJSPath + "xdhtml.js"
+const xdhwebqJSFilename = xdhwebqJSPath + "xdhwebq.js"
 
 componentFilename = path.join(componentPath, "xdhwebqnjs").replace(/\\/g, "\\\\").replace(/'/g, "\\'").replace(/ /g, "\\ ");
 const xdhwebq = njsq._register(componentFilename);
@@ -86,27 +103,24 @@ function put(keysAndValues, keys, values) {
 	}
 }
 
+function userHead() {
+	try {
+		return fs.readFileSync(path.join( cdnPath, "head.html" ) );
+	} catch (err) {
+		return "";
+	}
+}
+
 function prolog() {
 	return '\
 <!DOCTYPE html>\
 <html>\
 	<head>\
 		<meta charset="UTF-8" />\
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">\
-		<title>MegaRentals</title>\
-		<meta name="description" content=""/>\
-		<meta name="viewport" content="width=device-width, initial-scale=1"/>\
-		<link integrity="" rel="stylesheet" href="ember/assets/vendor.css"/>\
-		<style>.tomster {\
-			background:url(ember/assets/q37.png) no-repeat;\
-			background-size:contain;\
-			height:150px;\
-			width:150px;\
-			top:-50px\
-		}\
-		</style>\
-		<script src="js/xdhtml.js"></script>\
-		<script src="js/xdhwebq.js"></script>\
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">'
+		+ userHead() + 
+		'<script src="xdh/xdhtml.js"></script>\
+		<script src="xdh/xdhwebq.js"></script>\
 		<script>handleQuery("?_action='
 		+ firstAction +
 		'")</script>\
@@ -150,24 +164,25 @@ class StringStream extends stream.Readable {
 	}
 }
 
+const mimeType = {
+	'.ico': 'image/x-icon',
+	'.html': 'text/html',
+	'.js': 'text/javascript',
+	'.json': 'application/json',
+	'.css': 'text/css',
+	'.png': 'image/png',
+	'.jpg': 'image/jpeg',
+	'.wav': 'audio/wav',
+	'.mp3': 'audio/mpeg',
+	'.svg': 'image/svg+xml',
+	'.pdf': 'application/pdf',
+	'.doc': 'application/msword',
+	'.eot': 'application/vnd.ms-fontobject',
+	'.ttf': 'application/font-sfnt'
+};
+
 function serveFile(pathname, res) {
 	LOG();
-	const mimeType = {
-		'.ico': 'image/x-icon',
-		'.html': 'text/html',
-		'.js': 'text/javascript',
-		'.json': 'application/json',
-		'.css': 'text/css',
-		'.png': 'image/png',
-		'.jpg': 'image/jpeg',
-		'.wav': 'audio/wav',
-		'.mp3': 'audio/mpeg',
-		'.svg': 'image/svg+xml',
-		'.pdf': 'application/pdf',
-		'.doc': 'application/msword',
-		'.eot': 'application/vnd.ms-fontobject',
-		'.ttf': 'application/font-sfnt'
-	};
 	fs.exists(pathname, function (exist) {
 		if (!exist) {
 			// if the file is not found, return 404
@@ -185,7 +200,7 @@ function serveFile(pathname, res) {
 				res.statusCode = 500;
 				res.end(`Error getting the file: ${err}.`);
 			} else {
-				// based on the URL path, extract the file extention. e.g. .js, .doc, ...
+				// based on the URL path, extract the file extension. e.g. .js, .doc, ...
 				const ext = path.parse(pathname).ext;
 				// if the file is found, set Content-type and send data
 				res.setHeader('Content-type', mimeType[ext] || 'text/plain');
@@ -200,10 +215,15 @@ function serve(req, res) {
 	const parsedUrl = url.parse(req.url, true);
 	const pathname = parsedUrl.pathname;
 
-	if (pathname == '/') {
-		serveQuery(parsedUrl.query,res);
-	} else
-		serveFile(`.${pathname}`, res);
+	if (pathname == '/')
+		serveQuery(parsedUrl.query, res);
+	else if (pathname == '/xdh/xdhwebq.js')
+		serveFile(xdhwebqJSFilename, res);
+	else if (pathname == '/xdh/xdhtml.js')
+		serveFile(xdhtmlJSFilename, res);
+	else
+		serveFile(`${cdnPath}${pathname}`, res);
+
 }
 
 function launch( action, service) {
@@ -225,7 +245,7 @@ function launch( action, service) {
 }
 
 
-njsq._wrapper(xdhwebq, 1, "h:/bin/xdhqxdh");
+njsq._wrapper(xdhwebq, 1, xdhqxdhPath+ "xdhqxdh");
 
 module.exports.returnArgument = (text) => njsq._wrapper(xdhwebq, 0, text);
 module.exports.serve = serve;

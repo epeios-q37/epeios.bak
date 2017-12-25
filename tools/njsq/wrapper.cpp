@@ -206,7 +206,9 @@ namespace {
 			}
 		};
 
-		template <typename host> inline host *Get_( const v8::Local<v8::Value> Value )
+		template <typename host> inline host *Get_(
+			const v8::Local<v8::Value> Value,
+			bso::sBool *Success = NULL )
 		{
 			host *Host = NULL;
 		qRH
