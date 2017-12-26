@@ -49,11 +49,17 @@ namespace send_ {
 		{
 			server::widgets::dress::S( Arguments.Id, Flow );
 		}
-		void SetCasts_(
+		void SetCastsByIds_(
 			flw::sWFlow &Flow,
 			rArguments &Arguments )
 		{
-			server::casts::set::S( Arguments.Id, Arguments.Tags, Arguments.Values, Flow );
+			server::casts_by_ids::set::S( Arguments.Ids, Arguments.Values, Flow );
+		}
+		void SetCastsByTags_(
+			flw::sWFlow &Flow,
+			rArguments &Arguments )
+		{
+			server::casts_by_tags::set::S( Arguments.Id, Arguments.Tags, Arguments.Values, Flow );
 		}
 		void GetAttribute_(
 			flw::sWFlow &Flow,
@@ -99,7 +105,8 @@ bso::sBool xdh_ups::Send(
 	H( GetContents );
 	H( SetContents );
 	H( DressWidgets );
-	H( SetCasts );
+	H( SetCastsByIds );
+	H( SetCastsByTags );
 	H( GetAttribute );
 	H( SetAttribute );
 	H( GetProperty );
@@ -145,11 +152,18 @@ namespace recv_ {
 			server::widgets::dress::R( Flow );
 		}
 
-		void SetCasts_(
+		void SetCastsByIds_(
 			flw::sRFlow &Flow,
 			xdh_dws::rArguments &Arguments )
 		{
-			server::casts::set::R( Flow );
+			server::casts_by_ids::set::R( Flow );
+		}
+
+		void SetCastsByTags_(
+			flw::sRFlow &Flow,
+			xdh_dws::rArguments &Arguments )
+		{
+			server::casts_by_tags::set::R( Flow );
 		}
 
 		void GetAttribute_(
@@ -202,7 +216,8 @@ bso::sBool xdh_ups::Recv(
 		H( GetContents );
 		H( SetContents );
 		H( DressWidgets );
-		H( SetCasts );
+		H( SetCastsByIds );
+		H( SetCastsByTags );
 		H( GetAttribute );
 		H( SetAttribute );
 		H( GetProperty );

@@ -1,6 +1,18 @@
 
 # *Epeios* changelog
 
+2017-12-26:
+- *Common*:
+  - **$**: *casts* can now be set by ids or by tags,
+- SCLXDHTML:
+  - **$**,
+- XDHCMN:
+  - **$**,
+- XDHDWS:
+  - **$**,
+- XDHUJP:
+  - **$**,
+
 2017-12-21:
 - SCLXDHTML
   - fixing issue with casting.

@@ -57,7 +57,8 @@
 	<Files>
   <!-- NOTA : '*.js' files will automatically be packed. -->
   <!--File Pack="No">XDHWebQ.js</File-->
- </Files>
+		<File Path="../../" Pack="No">XDH.xcfg</File>
+	</Files>
 	<PreprocessorDefinitions>
 		<PreprocessorDefinition>E_ST</PreprocessorDefinition>
 	</PreprocessorDefinitions>

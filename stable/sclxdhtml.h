@@ -374,7 +374,7 @@ namespace sclxdhtml {
 		bso::char__ Marker );
 
 	void SetContents_(
-		const str::dStrings & Ids,
+		const str::dStrings &Ids,
 		const str::dStrings &Contents,
 		xdhdws::sProxy &Proxy );
 
@@ -383,29 +383,39 @@ namespace sclxdhtml {
 		const str::dString &Content,
 		xdhdws::sProxy &Proxy );
 
-	void SetCasts_(
+	void SetCastsByIds_(
+		const str::dStrings &Ids,
+		const str::dStrings &Values,
+		xdhdws::sProxy &Proxy );
+
+	void SetCastsByTags_(
 		const xdhdws::nstring___ &Id,
 		const dCasts &Casts,
 		xdhdws::sProxy &Proxy );
 
-	void SetCast_(
+	void SetCastById_(
+		const xdhdws::nstring___ &Id,
+		const xdhdws::nstring___ &Value,
+		xdhdws::sProxy &Proxy );
+
+	void SetCastByTag_(
 		const xdhdws::nstring___ &Id,
 		const dCast &Cast,
 		xdhdws::sProxy &Proxy );
 
-	void SetCast_(
+	void SetCastByTag_(
 		const xdhdws::nstring___ &Id,
 		const str::dString &Tag,
 		const str::dString &Value,
 		xdhdws::sProxy &Proxy );
 
-	inline void SetCast_(
+	inline void SetCastByTag_(
 		const xdhdws::nstring___ &Id,
 		const char *Tag,
 		const char *Value,
 		xdhdws::sProxy &Proxy )
 	{
-		return SetCast_( Id, str::wString( Tag ), str::wString( Value ), Proxy );
+		return SetCastByTag_( Id, str::wString( Tag ), str::wString( Value ), Proxy );
 	}
 
 	template <typename session, typename rack> inline void SetElement_(

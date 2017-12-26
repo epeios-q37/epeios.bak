@@ -211,7 +211,36 @@ namespace {
 	qRE;
 	}
 
-	void SetCasts_(
+	void SetCastsByIds_(
+		flw::sRWFlow &Flow,
+		xdhdws::sProxy &Proxy )
+	{
+	qRH;
+		str::wString MergedIds, MergedValues;
+		str::wStrings Ids, Values;
+	qRB;
+		tol::Init( Ids, Values );
+
+		prtcl::Get( Flow, Ids );
+		prtcl::Get( Flow, Values );
+
+		tol::Init( MergedIds, MergedValues );
+		xdhcmn::FlatMerge( Ids, MergedIds, true );
+		xdhcmn::FlatMerge( Values, MergedValues, true );
+
+		Proxy.SetCastsByIds( MergedIds, MergedValues );
+
+		Flow.Dismiss();
+
+		prtcl::PutRequest( prtcl::rReady_1, Flow );
+		Flow.Commit();
+	qRR;
+	qRT;
+	qRE;
+	}
+
+
+	void SetCastsByTags_(
 		flw::sRWFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
@@ -229,7 +258,7 @@ namespace {
 		xdhcmn::FlatMerge( Tags, MergedTags, false );
 		xdhcmn::FlatMerge( Values, MergedValues, false );
 
-		Proxy.SetCasts( Id, MergedTags, MergedValues );
+		Proxy.SetCastsByTags( Id, MergedTags, MergedValues );
 
 		Flow.Dismiss();
 
@@ -386,7 +415,8 @@ namespace {
 				H( GetContents );
 				H( SetContents );
 				H( DressWidgets );
-				H( SetCasts );
+				H( SetCastsByIds );
+				H( SetCastsByTags );
 				H( GetAttribute );
 				H( SetAttribute );
 				H( GetProperty );

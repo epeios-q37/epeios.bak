@@ -122,9 +122,30 @@ namespace server {
 		}
 	}
 
-	namespace casts {
+	namespace casts_by_ids {
 		namespace set 
 		{ 
+			void S(
+				const str::dStrings &Ids,
+				const str::dStrings &Values,
+				flw::sWFlow &Flow );
+
+			inline void R( flw::sRFlow &Flow )
+			{}
+		}
+		
+		inline void Set(
+			const str::dStrings &Ids,
+			const str::dStrings &Values,
+			flw::sRWFlow &Flow )
+		{
+			set::S( Ids, Values, Flow );
+			set::R( Flow );
+		}
+	}
+
+	namespace casts_by_tags {
+		namespace set {
 			void S(
 				const str::dString &Id,
 				const str::dStrings &Tags,
@@ -134,7 +155,7 @@ namespace server {
 			inline void R( flw::sRFlow &Flow )
 			{}
 		}
-		
+
 		inline void Set(
 			const str::dString &Id,
 			const str::dStrings &Tags,

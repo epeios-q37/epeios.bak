@@ -144,7 +144,7 @@ function handleMapsCast( xdh ) {
 	else
 		value = "Hidden";
 	
-	xdh.setCast( "Rentals", "MapCast", value );
+	xdh.setCastByTag( "Rentals", "MapCast", value );
 }
 
 function displayList( xdh ) {

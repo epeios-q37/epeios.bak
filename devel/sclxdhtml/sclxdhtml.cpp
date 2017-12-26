@@ -442,7 +442,27 @@ qRT;
 qRE;
 }
 
-void sclxdhtml::SetCasts_(
+void sclxdhtml::SetCastsByIds_(
+	const str::dStrings &Ids,
+	const str::dStrings &Values, 
+	xdhdws::sProxy &Proxy )
+{
+qRH;
+	str::wString MergedIds, MergedValues;
+qRB;
+	MergedIds.Init();
+	xdhcmn::FlatMerge( Ids, MergedIds, true );
+
+	MergedValues.Init();
+	xdhcmn::FlatMerge( Values, MergedValues, true );
+
+	Proxy.SetCastsByIds( MergedIds, MergedValues );
+qRR;
+qRT;
+qRE;
+}
+
+void sclxdhtml::SetCastsByTags_(
 	const xdhdws::nstring___ &Id,
 	const dCasts &Casts,
 	xdhdws::sProxy &Proxy )
@@ -469,13 +489,38 @@ qRB;
 	MergedValues.Init();
 	xdhcmn::FlatMerge( Values, MergedValues, false );
 
-	Proxy.SetCasts( Id, MergedTags, MergedValues );
+	Proxy.SetCastsByTags( Id, MergedTags, MergedValues );
 qRR;
 qRT;
 qRE;
 }
 
-void sclxdhtml::SetCast_(
+void sclxdhtml::SetCastById_(
+	const xdhdws::nstring___ &RawId,
+	const xdhdws::nstring___ &RawValue,
+	xdhdws::sProxy &Proxy )
+{
+qRH;
+	str::wString Id, Value;
+	str::wStrings Ids, Values;
+qRB;
+	Id.Init();
+	RawId.UTF8( Id );
+	Ids.Init();
+	Ids.Append( Id );
+
+	Value.Init();
+	RawValue.UTF8( Value );
+	Values.Init();
+	Values.Append( Value );
+
+	SetCastsByIds_( Ids, Values, Proxy );
+qRR;
+qRT;
+qRE;
+}
+
+void sclxdhtml::SetCastByTag_(
 	const xdhdws::nstring___ &Id,
 	const dCast &Cast,
 	xdhdws::sProxy &Proxy )
@@ -486,13 +531,13 @@ qRB;
 	Casts.Init();
 	Casts.Append( Cast );
 
-	SetCasts_( Id, Casts, Proxy );
+	SetCastsByTags_( Id, Casts, Proxy );
 qRR;
 qRT;
 qRE;
 }
 
-void sclxdhtml::SetCast_(
+void sclxdhtml::SetCastByTag_(
 	const xdhdws::nstring___ &Id,
 	const str::dString &Tag,
 	const str::dString &Value,
@@ -502,7 +547,7 @@ qRH;
 	wCast Cast;
 qRB;
 	Cast.Init( Tag, Value );
-	SetCast_( Id, Cast, Proxy );
+	SetCastByTag_( Id, Cast, Proxy );
 qRR;
 qRT;
 qRE;

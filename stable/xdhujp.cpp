@@ -309,6 +309,30 @@ static void SetContents_(
 	SetContents_( Callback, Ids, Contents );
 }
 
+static void SetCastsByIds_(
+	cJS &Callback,
+	const nchar__ *Ids,
+	const nchar__ *Casts )
+{
+qRH;
+qRB;
+	Execute( Callback, xdhujs::snCastsSetter, NULL, nstring___( Ids ).Internal()(), nstring___( Casts ).Internal()() );
+qRR;
+qRT;
+qRE;
+}
+
+static void SetCastsByIds_(
+	cJS &Callback,
+	va_list List )
+{
+	// NOTA : we use variables, because if we put 'va_arg()' directly as parameter to below function, it's not sure that they are called in the correct order.
+	const nchar__ *Ids = va_arg( List, const nchar__ * );
+	const nchar__ *Casts = va_arg( List, const nchar__ * );
+
+	SetCastsByIds_( Callback, Ids, Casts );
+}
+
 namespace{
 	namespace {
 		// TODO: to optimize.
@@ -400,7 +424,7 @@ namespace{
 	}
 }
 
-static void SetCasts_(
+static void SetCastsByTags_(
 	cJS &Callback,
 	const nchar__ *Id,
 	const nchar__ *RawTags,
@@ -431,7 +455,8 @@ qRR
 qRT
 qRE
 }
-static void SetCasts_(
+
+static void SetCastsByTags_(
 	cJS &Callback,
 	va_list List )
 {
@@ -440,7 +465,7 @@ static void SetCasts_(
 	const nchar__ *Tags = va_arg( List, const nchar__ * );
 	const nchar__ *Casts = va_arg( List, const nchar__ * );
 
-	SetCasts_( Callback, Id, Tags, Casts );
+	SetCastsByTags_( Callback, Id, Tags, Casts );
 }
 
 static void GetValue_(
@@ -619,9 +644,10 @@ static script_name__ Convert_( xdhcmn::function__ Function )
 	case xdhcmn::fSetContents:
 		qRFwk();
 		break;
-	case xdhcmn::fSetCasts:
+	case xdhcmn::fSetCastsByIds:
 		qRFwk();
 		break;
+	case xdhcmn::fSetCastsByTags:
 	default:
 		qRFwk();
 		break;
@@ -670,8 +696,11 @@ void xdhujp::sProxyCallback::XDHCMNProcess(
 	case xdhcmn::fSetContents:
 		SetContents_( C_(), List);
 		break;
-	case xdhcmn::fSetCasts:
-		SetCasts_( C_(), List );
+	case xdhcmn::fSetCastsByIds:
+		SetCastsByIds_( C_(), List );
+		break;
+	case xdhcmn::fSetCastsByTags:
+		SetCastsByTags_( C_(), List );
 		break;
 	default:
 		qRFwk();

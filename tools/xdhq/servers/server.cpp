@@ -135,13 +135,24 @@ void server::widgets::dress::S(
 	Flow.Commit();
 }
 
-void server::casts::set::S(
+void server::casts_by_ids::set::S(
+	const str::dStrings &Ids,
+	const str::dStrings &Values,
+	flw::sWFlow & Flow )
+{
+	prtcl::PutAnswer( prtcl::aSetCastsByIds_1, Flow );
+	prtcl::Put( Ids, Flow );
+	prtcl::Put( Values, Flow );
+	Flow.Commit();
+}
+
+void server::casts_by_tags::set::S(
 	const str::dString &Id,
 	const str::dStrings &Tags,
 	const str::dStrings &Values,
 	flw::sWFlow & Flow )
 {
-	prtcl::PutAnswer( prtcl::aSetCasts_1, Flow );
+	prtcl::PutAnswer( prtcl::aSetCastsByTags_1, Flow );
 	prtcl::Put( Id, Flow );
 	prtcl::Put( Tags, Flow );
 	prtcl::Put( Values, Flow );

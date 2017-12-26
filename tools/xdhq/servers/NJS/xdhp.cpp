@@ -359,12 +359,20 @@ SCLNJS_F( xdhp::DressWidgets )
 	Server.Request = xdh_ups::rDressWidgets;
 }
 
-SCLNJS_F( xdhp::SetCasts )
+SCLNJS_F( xdhp::SetCastsByIds )
+{
+	DATA;
+
+	Caller.GetArgument( Arguments.Ids, Arguments.Values, JS.Callback );
+	Server.Request = xdh_ups::rSetCastsByIds;
+}
+
+SCLNJS_F( xdhp::SetCastsByTags )
 {
 	DATA;
 
 	Caller.GetArgument( Arguments.Id, Arguments.Tags, Arguments.Values, JS.Callback );
-	Server.Request = xdh_ups::rSetCasts;
+	Server.Request = xdh_ups::rSetCastsByTags;
 }
 
 SCLNJS_F( xdhp::GetAttribute )

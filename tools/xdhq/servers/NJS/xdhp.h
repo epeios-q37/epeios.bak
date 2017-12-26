@@ -31,7 +31,8 @@ namespace xdhp {
 	SCLNJS_F( GetContents );
 	SCLNJS_F( SetContents );
 	SCLNJS_F( DressWidgets );
-	SCLNJS_F( SetCasts );
+	SCLNJS_F( SetCastsByIds );
+	SCLNJS_F( SetCastsByTags );
 	SCLNJS_F( GetAttribute );
 	SCLNJS_F( SetAttribute );
 	SCLNJS_F( GetProperty );
