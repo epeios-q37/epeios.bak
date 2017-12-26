@@ -6,7 +6,7 @@
 		<Parameters>
 			<Language>en</Language>
 			<Command>Test</Command>
-			<HostService>localhost:12345</HostService>
+			<HostService>localhost:53752</HostService>
 			<!-- Default command -->
 		</Parameters>
 		<Definitions>

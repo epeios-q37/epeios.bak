@@ -51,13 +51,24 @@ function LOG() {
 }
 /**/
 
+console.log(process.argv);
+
+var firstAction = "";
+var rootDir;
+
+if (process.argv.length < 4 )
+	throw "To less arguments !";
+else {
+	rootDir = process.argv[2];
+	firstAction = process.argv[3];
+}
+
+
 const http = require('http');
 const url = require('url');
 const stream = require('stream');
 const fs = require('fs');
 const path = require('path');
-
-var firstAction = "";
 
 // Begin of generic part.
 var njsq = null;
@@ -76,14 +87,14 @@ if (process.env.EPEIOS_SRC) {
 	njsq = require(componentPath + 'njsq.node');
 	xdhtmlJSPath = epeiosPath + "corpus/js/";
 	xdhwebqJSPath = epeiosPath + "tools/xdhwebq/js/";
-	cdnPath = epeiosPath + "tools/xdhq/servers/cdn";	// No final '/'.
+	cdnPath = path.resolve( epeiosPath, "tools/xdhq/servers/cdn/", rootDir );	// No final '/'.
 	xdhqxdhPath = componentPath;
 } else {
     njsq = require('njsq');
     componentPath = __dirname;
     xdhtmlJSPath = __dirname;
     xdhwebqJSPath = __dirname;
-    cdnPath = "CDN/";	// No final '/'.
+    cdnPath = path.resolve(rootPath);	// No final '/'.
     xdhqwdhPath = require('xdhqxdh');
 }
 
@@ -125,7 +136,7 @@ function prolog() {
 		+ firstAction +
 		'")</script>\
 	</head>\
-	<body id="Root">\
+	<body id="XDHRoot">\
 	</body>\
 </html>\
 		';
@@ -183,6 +194,7 @@ const mimeType = {
 
 function serveFile(pathname, res) {
 	LOG();
+	console.log( ">>>>>>>>>>>> " + pathname);
 	fs.exists(pathname, function (exist) {
 		if (!exist) {
 			// if the file is not found, return 404
@@ -226,13 +238,8 @@ function serve(req, res) {
 
 }
 
-function launch( action, service) {
+function launch( service ) {
 	LOG();
-	if (typeof action === "string")
-		firstAction = action;
-	else
-		throw ("First argument must be the name of the action to launch at connection !");
-
 	if (service === undefined)
 		service = 8080;
 	else if ( !Number.isInteger( service ) )
@@ -245,14 +252,12 @@ function launch( action, service) {
 }
 
 
-njsq._wrapper(xdhwebq, 1, xdhqxdhPath+ "xdhqxdh");
+njsq._wrapper(xdhwebq, 1, xdhqxdhPath + "xdhqxdh");
 
 module.exports.returnArgument = (text) => njsq._wrapper(xdhwebq, 0, text);
 module.exports.serve = serve;
 module.exports.launch = launch;
 
-console.log(process.argv);
-
-launch("Connect");
+launch(process.argv[4]);
 
 

@@ -52,11 +52,7 @@ function LOG() {
 
 const xdhq = require('./XDHq.js');
 
-// const xdhwebq = require('../../../xdhwebq/NJS/XDHWebQ.js');
-require('child_process').fork('../../../xdhwebq/NJS/XDHWebQ.js', ["Connect"]);
-
-
-console.log( xdhq.componentInfo() ) ;
+console.log(xdhq.componentInfo());
 console.log( xdhq.wrapperInfo() );
 
 // process.stdout.write(xdhq.returnArgument("Text from JS file") + '\n');
@@ -163,7 +159,7 @@ function displayList( xdh ) {
 	
 	tree.popTag();
 	
-	xdh.setLayout( "Rentals", tree, "ember/Rentals.xsl", () => { xdh.dressWidgets( "Rentals", () => handleMapsCast( xdh ) ); } );
+	xdh.setLayout( "Rentals", tree, "Rentals.xsl", () => { xdh.dressWidgets( "Rentals", () => handleMapsCast( xdh ) ); } );
 }
 
 function displayRecord( xdh, id ) {
@@ -175,14 +171,14 @@ function displayRecord( xdh, id ) {
 	push(rentals[id],id,tree);
 	tree.popTag();
 	
-	xdh.setLayout( "Rentals", tree, "ember/Rentals.xsl" );
+	xdh.setLayout( "Rentals", tree, "Rentals.xsl" );
 }
 
 function acConnect( xdh, id ) {
 	LOG();
 	var tree = new xdhq.LayoutTree();
 	
-	xdh.setLayout( "Root", tree, "ember/Main.xsl", () => { displayList( xdh ); });
+	xdh.setLayout( "", tree, "Main.xsl", () => { displayList( xdh ); });
 }
 
 function handleImage( xdh, result ) {
@@ -235,7 +231,7 @@ function main()
 		["ToggleMaps", acToggleMaps],
 	]);
 
-	xdhq.listen(onConnection, "12345");
+	xdhq.launch( onConnection, "ember", "Connect" );
 }
 
 main();

@@ -52,8 +52,6 @@ function handleQuery( query ) {
 		var xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
 	}
 	
-	log("yyyy");
-
 	xmlhttp.onreadystatechange=function()
 	{
 		if (xmlhttp.readyState==4 && xmlhttp.status==200) {

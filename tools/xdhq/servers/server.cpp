@@ -52,7 +52,7 @@ void server::GetAction(
 }
 
 namespace {
-	void SetWithXSLContent_(
+	void SetWithXSLContentOrFilename_(
 		prtcl::eAnswer Answer,
 		const str::dString &Id,
 		const str::dString &XML,
@@ -66,7 +66,8 @@ namespace {
 		Flow.Commit();
 	}
 
-	void Set_(
+	// The XSL content is send.
+	void SetWithXSLContent_(
 		prtcl::eAnswer Answer,
 		const str::dString &Id,
 		const str::dString &XML,
@@ -81,10 +82,22 @@ namespace {
 		XSL.Init();
 		sclmisc::LoadXMLAndTranslateTags( XSLFilename, Language.Convert( Buffer ), XSL, '#' );
 
-		SetWithXSLContent_( Answer, Id, XML, XSL, Flow );
+		SetWithXSLContentOrFilename_( Answer, Id, XML, XSL, Flow );
 	qRR;
 	qRT;
 	qRE;
+	}
+
+	// The XSL filename is send.
+	void SetWithXSLFilename_(
+		prtcl::eAnswer Answer,
+		const str::dString &Id,
+		const str::dString &XML,
+		const str::dString &XSLFilename,
+		const str::dString &Language,
+		flw::sWFlow &Flow )
+	{
+		SetWithXSLContentOrFilename_( Answer, Id, XML, XSLFilename, Flow );
 	}
 }
 
@@ -95,7 +108,8 @@ void server::layout::set::S(
 	const str::dString &Language,
 	flw::sWFlow &Flow )
 {
-	Set_( prtcl::aSetLayout_1, Id, XML, XSLFilename, Language, Flow );
+//	SetWithXSLContent_( prtcl::aSetLayout_1, Id, XML, XSLFilename, Language, Flow );
+	SetWithXSLFilename_( prtcl::aSetLayout_1, Id, XML, XSLFilename, Language, Flow );
 }
 
 void server::contents::get::S(

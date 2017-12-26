@@ -103,14 +103,8 @@ function normalize(callback) {
 }
 
 class XDH {
-	normalize(id) {
-		if (!id)
-			return "Root";
-		else
-			return id;
-	}
 	set(fid, id, tree, xslFilename, callback) {
-		njsq._wrapper(xdhq, fid, this, id, tree, path.join( xslPath, xslFilename ), normalize(callback));
+		njsq._wrapper(xdhq, fid, this, id, tree, xslFilename, normalize(callback));
 	}
 	setLayout(id, tree, xslFilename, callback) {
 		this.set(9, id, tree, xslFilename, normalize(callback));
@@ -130,7 +124,7 @@ class XDH {
 		njsq._wrapper(xdhq, 11, this, ids, contents, normalize(callback));
 	}
 	dressWidgets(id, callback ) {
-		njsq._wrapper(xdhq, 12, this, this.normalize(id), normalize(callback));
+		njsq._wrapper(xdhq, 12, this, id, normalize(callback));
 	}
 	setCastsByIds(idsAndValues, callback ) {
 		var ids = new Array();
@@ -177,6 +171,12 @@ function register(idsAndItems) {
 	njsq._wrapper(xdhq, 7, tags, callbacks);
 }
 
+function launch( callback, rootDir, action ) {
+	njsq._wrapper(xdhq, 8, callback, "53752" );
+
+	require('child_process').fork('../../../xdhwebq/NJS/XDHWebQ.js', [rootDir, action]);
+}
+
 module.exports.componentInfo = () => njsq._componentInfo(xdhq);
 module.exports.wrapperInfo = () => njsq._wrapperInfo();
 module.exports.returnArgument = (text) => { return njsq._wrapper(xdhq, 0, text) };
@@ -184,6 +184,6 @@ module.exports.returnArgument = (text) => { return njsq._wrapper(xdhq, 0, text) 
 module.exports.LayoutTree = LayoutTree;
 module.exports.CastingTree = CastingTree;
 module.exports.register = register;
-module.exports.listen = (callback, args) => { njsq._wrapper(xdhq, 8, callback, args); };
+module.exports.launch = launch;
 module.exports.XDH = XDH;
 
