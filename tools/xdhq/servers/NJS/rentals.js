@@ -231,7 +231,7 @@ function main()
 		["ToggleMaps", acToggleMaps],
 	]);
 
-	xdhq.launch( onConnection, "ember", "Connect" );
+	xdhq.launch( onConnection, "rentals", "Connect" );
 }
 
 main();

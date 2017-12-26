@@ -83,7 +83,10 @@
      <xsl:call-template name="Details"/>
      <div class="ember-view">
       <div>
-       <div class="map" style="overflow: hidden;" data-xdh-cast="MapCast">
+       <div class="map" style="overflow: hidden;" data-xdh-cast="MapCast" data-xdh-display-reminder="">
+       <xsl:if test="/XDHTML/Rentals/@HideMaps='true'">
+        <xsl:attribute name="style">display: none;</xsl:attribute>
+       </xsl:if>
         <div style="height: 100%; width: 100%; position: absolute; top: 0px; left: 0px; background-color: rgb(229, 227, 223);">
          <xsl:attribute name="id">
           <xsl:value-of select="id"/>

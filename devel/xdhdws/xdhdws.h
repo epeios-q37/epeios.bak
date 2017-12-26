@@ -108,7 +108,7 @@ namespace xdhdws {
 			const nstring___ &Ids,
 			const nstring___ &Casts )
 		{
-			C_().Process( xdhcmn::fSetCastsByTags, NULL, Ids.Internal()(), Casts.Internal()() );
+			C_().Process( xdhcmn::fSetCastsByIds, NULL, Ids.Internal()(), Casts.Internal()() );
 		}
 		void SetCastsByTags(
 			const nstring___ &Id,

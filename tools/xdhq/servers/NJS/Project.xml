@@ -54,11 +54,23 @@
 	<Files>
 		<!-- NOTA : '*.js' files will automatically be packed. -->
 		<!--File Pack="No">XDHq.js</File-->
-		<Files Group="XSL" Path="../XSL/">
-			<File>Main.xsl</File>
-			<File>Main.xml</File>
+		<Files Group="Rentals">
+			<File>rentals.js</File>
+			<Files Path="../cdn/rentals/">
+				<File>head.html</File>
+				<File>Main.xsl</File>
+				<File>Rentals.xsl</File>
+			</Files>
 		</Files>
-		<File>ember.js</File>
+		<Files Group="TODOs">
+			<File>todos.js</File>
+			<Files Path="../cdn/todos/">
+				<File>head.html</File>
+				<File>Main.xsl</File>
+				<File>Todos.xsl</File>
+				<File>Todo.xsl</File>
+			</Files>
+		</Files>
 	</Files>
 	<PreprocessorDefinitions>
 		<PreprocessorDefinition>E_ST</PreprocessorDefinition>
