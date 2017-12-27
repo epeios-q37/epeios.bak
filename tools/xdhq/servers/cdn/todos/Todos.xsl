@@ -28,28 +28,13 @@
 							</p>
 						</div>
 						<span style="display: flex; flex-direction: column;">
-							<button data-xdh-onevent="Edit">
-								<xsl:attribute name="data-xdh-value">
-									<xsl:value-of select="@id"/>
-								</xsl:attribute>
-								<xsl:text>Edit</xsl:text>
-							</button>
-							<button data-xdh-onevent="Delete">
-								<xsl:attribute name="data-xdh-value">
-									<xsl:value-of select="@id"/>
-								</xsl:attribute>
-								<xsl:text>Delete</xsl:text>
-							</button>
+							<button data-xdh-onevent="Edit" data-xdh-value="{@id}">Edit</button>
+							<button data-xdh-onevent="Delete" data-xdh-value="{@id}">Delete</button>
 						</span>
 					</article>
 				</div>
 			</span>
-			<span>
-				<xsl:attribute name="id">
-					<xsl:text>Edit.</xsl:text>
-					<xsl:value-of select="@id"/>
-				</xsl:attribute>
-			</span>
+			<span id="Edit.{@id}"/>
 			</li>
 	</xsl:template>
 </xsl:stylesheet>

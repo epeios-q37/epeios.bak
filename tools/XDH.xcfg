@@ -1,63 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- For tools which deal with XDHTML interfaces -->
 <xpp:bloc xmlns:xpp="http://q37.info/ns/xpp">
- <Definitions>
-  <CustomItems>
-   <AttributeNames>
-    <Widget>data-xdh-widget</Widget>
-    <Result>data-xdh-result</Result>
-   </AttributeNames>
-  </CustomItems>
-  <Scripts>
-   <Attribute>
-    <Getter>
-     <![CDATA[
+	<Definitions>
+		<CustomItems>
+			<AttributeNames>
+				<Widget>data-xdh-widget</Widget>
+				<Result>data-xdh-result</Result>
+			</AttributeNames>
+		</CustomItems>
+		<Scripts>
+			<Attribute>
+				<Getter>
+					<![CDATA[
 							document.getElementById( "%Id%" ).getAttribute("%Name%");
 						]]>
-    </Getter>
-    <Remover>
-     <![CDATA[
+				</Getter>
+				<Remover>
+					<![CDATA[
 							document.getElementById( "%Id%" ).removeAttribute( "%Name%" );
 						]]>
-    </Remover>
-    <Setter>
-     <![CDATA[
+				</Remover>
+				<Setter>
+					<![CDATA[
 							document.getElementById( "%Id%" ).setAttribute("%Name%", "%Value%");
 						]]>
-    </Setter>
-   </Attribute>
-   <Value>
-    <Getter>
-     <![CDATA[
+				</Setter>
+			</Attribute>
+			<Value>
+				<Getter>
+					<![CDATA[
 							getValue( "%Id%" );
 						]]>
-    </Getter>
-    <Setter>
-     <![CDATA[
+				</Getter>
+				<Setter>
+					<![CDATA[
 							setValue( "%Id%", "%Value%" );
 						]]>
-    </Setter>
-   </Value>
-   <Dialog>
-    <Alert>
-     <![CDATA[
+				</Setter>
+			</Value>
+			<Dialog>
+				<Alert>
+					<![CDATA[
 						// log( "%XML%" );
 						dialog = document.createElement( "span" );
 						dialog.innerHTML = transformToHTML( "%XML%", "%XSL%" );
 						$(dialog).dialog({modal: true},{title: "%Title%"},{width: "auto"} ,{closeText: "%CloseText%"});
 					]]>
-    </Alert>
-    <!-- Ugly. Will try to solve problem with the below alternative. -->
-    <Confirm>
-     <![CDATA[
+				</Alert>
+				<!-- Ugly. Will try to solve problem with the below alternative. -->
+				<Confirm>
+					<![CDATA[
 							confirm( transformToText( "%XML%", "%XSL%" ).trim() );
 					]]>
-    </Confirm>
-    <!--
+				</Confirm>
+				<!--
 						Below version doesn't work as is because of JS asynchronicity,
 						and the fact that the UI is refreshed only when the returning from event handler !
 					-->
-    <!--<Confirm>
+				<!--<Confirm>
 						<![CDATA[
 						var response;
 						( function ()
@@ -77,8 +77,8 @@
 						} );
 						]]>
 					</Confirm>-->
-   </Dialog>
-   <!--<DraggableSetter>
+			</Dialog>
+			<!--<DraggableSetter>
 				<![CDATA[
 					var element = document.getElementById( "%Id%" );
 					element.setAttribute( "draggable", "true" );
@@ -117,8 +117,8 @@
 					);
 				]]>
 			</DroppableSetter>-->
-   <DraggableSetter>
-    <![CDATA[
+			<DraggableSetter>
+				<![CDATA[
 				var element = document.getElementById( "%Id%" );
 //				element.setAttribute( "draggable", "true" );
 				if ( false )
@@ -131,9 +131,9 @@
 					.on( 'click', function( event ) { log( '-->click' );event.stopImmediatePropagation();event.stopPropagation(); } )
 					;
 				]]>
-   </DraggableSetter>
-   <DroppableSetter>
-    <![CDATA[
+			</DraggableSetter>
+			<DroppableSetter>
+				<![CDATA[
 				var element = document.getElementById( "%Id%" );
 //				element.setAttribute( "ondragover", "event.preventDefault();" );
 				if ( false )
@@ -143,10 +143,10 @@
 					)
 					.on( 'drop', function( event ) { log( 'drop : ' + event.target.id + " ; " + event.relatedTarget.id ); launchEvent( event.target, "drop" );} );
 				]]>
-   </DroppableSetter>
-   <Fetcher>
-    <Events>
-     <![CDATA[
+			</DroppableSetter>
+			<Fetcher>
+				<Events>
+					<![CDATA[
 						log( "Events : '%Id%'" );
 						log( "%XML%" );
 						removeChildren( "%Id%" );
@@ -157,7 +157,7 @@
 						console.log("Digests: ", digests);
 						digests;
 					]]>
-    </Events>
+				</Events>
 				<Widgets>
 					<![CDATA[
 					log( "Widgest fetching : '%Id%'" );
@@ -167,88 +167,88 @@
 				]]>
 				</Widgets>
 				<Casts>
-     <![CDATA[
+					<![CDATA[
 					log( "Fetching casts : '%Id%'" );
 					var digest = fetchCasts( "%Id%" );
 					log( digest );
 					digest;
 				]]>
-    </Casts>
-   </Fetcher>
-   <Setter>
-    <EventHandlers>
-     <![CDATA[
+				</Casts>
+			</Fetcher>
+			<Setter>
+				<EventHandlers>
+					<![CDATA[
 					setEventHandlers( %Ids_%, %Events_% );
 				]]>
-    </EventHandlers>
-    <Casts>
-     <![CDATA[
+				</EventHandlers>
+				<Casts>
+					<![CDATA[
 					console.log( "%Ids% : %Casts%" );
 					setCasts( %Ids_%, %Casts_% );
 				]]>
-    </Casts>
-    <Contents>
-     <![CDATA[
+				</Casts>
+				<Contents>
+					<![CDATA[
 					setContents( %Ids_%, %Contents_% );
 				]]>
-    </Contents>
-   </Setter>
-   <WidgetsInstantiator>
-    <![CDATA[
+				</Contents>
+			</Setter>
+			<WidgetsInstantiator>
+				<![CDATA[
 					instantiateWidgets( %Ids_%, %Types_%, %ParametersSets_% );
 				]]>
-   </WidgetsInstantiator>
-   <!--<EventHandler>
+			</WidgetsInstantiator>
+			<!--<EventHandler>
 				<![CDATA[
 //						document.getElementById( "%Id%" ).setAttribute( "on%Event%", "handleEvent( event );" );	// Seems not to work under 'CEF'.
 //						document.getElementById( "%Id%" ).on%Event%=handleEvent;
 						document.getElementById( "%Id%" ).addEventListener( "%Event%", handleEvent );
 					]]>
 			</EventHandler>-->
-   <Focuser>
-    <![CDATA[
+			<Focuser>
+				<![CDATA[
 						jQuery(document.getElementById( "%Id%" )).focus();
 					]]>
-   </Focuser>
-   <Selector>
-    <![CDATA[
+			</Focuser>
+			<Selector>
+				<![CDATA[
 						jQuery(document.getElementById( "%Id%" )).select();
 					]]>
-   </Selector>
-   <Log>
-    <![CDATA[
+			</Selector>
+			<Log>
+				<![CDATA[
 						log( "%Message%" );
 					]]>
-   </Log>
-   <Property>
-    <Getter>
-     <![CDATA[
+			</Log>
+			<Property>
+				<Getter>
+					<![CDATA[
 							document.getElementById( "%Id%" ).%Name_%;
 						]]>
-    </Getter>
-    <Setter>
-     <![CDATA[
+				</Getter>
+				<Setter>
+					<![CDATA[
 							document.getElementById( "%Id%" ).%Name_% = %Value_%;
 						]]>
-    </Setter>
-   </Property>
-   <Widget>
-    <ValueRetriever>
-     <![CDATA[
+				</Setter>
+			</Property>
+			<Widget>
+				<ValueRetriever>
+					<![CDATA[
 							jQuery( document.getElementById( "%Id%") ).%Method_%
 						]]>
-    </ValueRetriever>
-    <Focuser>
-     <![CDATA[
+				</ValueRetriever>
+				<Focuser>
+					<![CDATA[
 							jQuery( document.getElementById( "%Id%") ).%Method_%
 						]]>
-    </Focuser>
-    <Selector>
-     <![CDATA[
+				</Focuser>
+				<Selector>
+					<![CDATA[
 							jQuery( document.getElementById( "%Id%") ).%Method_%
 						]]>
-    </Selector>
-   </Widget>
-  </Scripts>
- </Definitions>
+				</Selector>
+			</Widget>
+		</Scripts>
+	</Definitions>
 </xpp:bloc>
