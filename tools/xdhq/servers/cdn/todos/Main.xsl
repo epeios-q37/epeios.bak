@@ -21,6 +21,7 @@
    <div style="display: flex; width: 80%; margin: auto;">
     <input id="Pattern"  data-xdh-cast="EditionCast" placeholder="Filter By Title" class="light ember-text-field ember-view" type="text" data-xdh-onevent="Search"/>
     <input type="checkbox" data-xdh-cast="EditionCast" data-xdh-onevent="ToggleDescriptions"/>
+				<button data-xdh-value="0" data-xdh-onevent="Edit" data-xdh-cast="EditionCast">Create</button>
    </div>
    <div id="Todos"/>
   </div>

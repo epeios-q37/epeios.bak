@@ -7,7 +7,11 @@
 					<article class="listing" style="display: flex; width:100%; justify-content: space-between;align-items: center;">
 						<div>
 							<input type="text" id="Title"/>
-							<textarea id="Description"/>
+							<textarea id="Description">
+								<xsl:attribute name="data-xdh-widget">
+									<xsl:text>ckeditor|{enterMode : CKEDITOR.ENTER_BR, linkShowTargetTab: false}|val\(\)|</xsl:text>
+								</xsl:attribute>
+							</textarea>
 						</div>
 						<span style="display: flex; flex-direction: column;">
 							<button data-xdh-onevent="Submit">Submit</button>

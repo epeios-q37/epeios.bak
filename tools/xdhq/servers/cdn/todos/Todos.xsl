@@ -7,6 +7,10 @@
 	</xsl:template>
 	<xsl:template match="Todos">
 		<ul>
+			<li>
+				<span id="View.0"/>
+				<span id="Edit.0"/>
+			</li>
 			<xsl:apply-templates select="Todo"/>
 		</ul>
 	</xsl:template>
@@ -20,7 +24,7 @@
 								<xsl:value-of select="title"/>
 							</h3>
 							<p id="Description.{@id}" data-xdh-cast="DescriptionCast">
-								<xsl:value-of select="description"/>
+								<xsl:value-of select="description" disable-output-escaping="yes"/>
 							</p>
 						</div>
 						<span style="display: flex; flex-direction: column;">
@@ -31,6 +35,6 @@
 				</div>
 			</span>
 			<span id="Edit.{@id}"/>
-			</li>
+		</li>
 	</xsl:template>
 </xsl:stylesheet>
