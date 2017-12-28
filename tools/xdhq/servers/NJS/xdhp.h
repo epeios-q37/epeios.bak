@@ -32,7 +32,7 @@ namespace xdhp {
 	SCLNJS_F( SetLayout );
 	SCLNJS_F( GetContents );
 	SCLNJS_F( SetContents );
-	SCLNJS_F( DressWidgets_ );
+	SCLNJS_F( DressWidgets );
 	SCLNJS_F( SetCastsByIds );
 	SCLNJS_F( SetCastsByTags );
 	SCLNJS_F( GetAttribute );

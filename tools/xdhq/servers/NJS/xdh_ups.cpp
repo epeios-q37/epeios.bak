@@ -55,11 +55,11 @@ namespace send_ {
 		{
 			server::contents::set::S( Arguments.Ids, Arguments.Contents, Flow );
 		}
-		void DressWidgets__(
+		void DressWidgets_(
 			flw::sWFlow &Flow,
 			rArguments &Arguments )
 		{
-			server::widgets::dress::S_( Arguments.Id, Flow );
+			server::widgets::dress::S( Arguments.Id, Flow );
 		}
 		void SetCastsByIds_(
 			flw::sWFlow &Flow,
@@ -118,7 +118,7 @@ bso::sBool xdh_ups::Send(
 	H( SetLayout );
 	H( GetContents );
 	H( SetContents );
-	H( DressWidgets_ );
+	H( DressWidgets );
 	H( SetCastsByIds );
 	H( SetCastsByTags );
 	H( GetAttribute );
@@ -173,11 +173,11 @@ namespace recv_ {
 			server::contents::set::R( Flow );
 		}
 
-		void DressWidgets__(
+		void DressWidgets_(
 			flw::sRFlow &Flow,
 			xdh_dws::rArguments &Arguments )
 		{
-			server::widgets::dress::R_( Flow );
+			server::widgets::dress::R( Flow );
 		}
 
 		void SetCastsByIds_(
@@ -245,7 +245,7 @@ bso::sBool xdh_ups::Recv(
 		H( SetLayout );
 		H( GetContents );
 		H( SetContents );
-		H( DressWidgets_ );
+		H( DressWidgets );
 		H( SetCastsByIds );
 		H( SetCastsByTags );
 		H( GetAttribute );

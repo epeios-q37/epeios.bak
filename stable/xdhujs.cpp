@@ -34,7 +34,7 @@ using namespace xdhujs;
 		sclmisc::MGetValue( xdhujr::script::entry, Buffer );\
 		break
 
-const str::string_ &xdhujs::GetTaggedScript_(
+const str::string_ &xdhujs::GetTaggedScript(
 	script_name__ Script,
 	str::string_ &Buffer )
 {
@@ -164,7 +164,7 @@ qRH
 	str::string TaggedScript;
 qRB
 	TaggedScript.Init();
-	GetTaggedScript_( ScriptName, TaggedScript );
+	GetTaggedScript( ScriptName, TaggedScript );
 
 	switch ( ScriptName ) {
 	S( Execute, Value_, NULL );

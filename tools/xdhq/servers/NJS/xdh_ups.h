@@ -35,7 +35,7 @@ namespace xdh_ups {
 		rSetLayout,
 		rGetContents,
 		rSetContents,
-		rDressWidgets_,
+		rDressWidgets,
 		rSetCastsByIds,
 		rSetCastsByTags,
 		rGetAttribute,

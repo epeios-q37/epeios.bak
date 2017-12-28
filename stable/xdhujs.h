@@ -68,7 +68,7 @@ namespace xdhujs {
 		sn_Undefined,
 	};
 
-	const str::string_ &GetTaggedScript_(
+	const str::string_ &GetTaggedScript(
 		script_name__ ScriptName,
 		str::string_ &Script );
 
@@ -82,7 +82,7 @@ namespace xdhujs {
 		str::string_ *Script,	// Was '&Script', but should not work due 'va_start(...)' restrictions concerning references (but it worked under MSVC).
 		... );
 
-	inline void DialogAlert_(
+	inline void DialogAlert(
 		const nstring___ &XML,
 		const nstring___ &XSL,
 		const nstring___ &Title,

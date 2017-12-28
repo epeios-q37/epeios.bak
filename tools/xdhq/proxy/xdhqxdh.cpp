@@ -243,7 +243,7 @@ namespace {
 	qRE;
 	}
 
-	void DressWidgets__(
+	void DressWidgets_(
 		flw::sRWFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
@@ -469,7 +469,7 @@ namespace {
 				H( SetLayout );
 				H( GetContents );
 				H( SetContents );
-				H( DressWidgets_ );
+				H( DressWidgets );
 				H( SetCastsByIds );
 				H( SetCastsByTags );
 				H( GetAttribute );

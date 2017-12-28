@@ -56,7 +56,7 @@ void sclnjs::SCLNJSRegister( sclnjs::sRegistrar &Registrar )
 	Registrar.Register( ReturnArgument_ );
 	Registrar.Register( treep::New, treep::Delete, treep::PushTag, treep::PopTag, treep::PutValue, treep::PutAttribute );	// 1 - 6
 	Registrar.Register( xdhp::Register, xdhp::Listen );	// 7 - 8
-	Registrar.Register( xdhp::Alert, xdhp::Confirm, xdhp::SetLayout, xdhp::GetContents, xdhp::SetContents, xdhp::DressWidgets_, xdhp::SetCastsByIds, xdhp::SetCastsByTags ); // 9 - 16
+	Registrar.Register( xdhp::Alert, xdhp::Confirm, xdhp::SetLayout, xdhp::GetContents, xdhp::SetContents, xdhp::DressWidgets, xdhp::SetCastsByIds, xdhp::SetCastsByTags ); // 9 - 16
 	Registrar.Register( xdhp::GetAttribute, xdhp::SetAttribute, xdhp::GetProperty, xdhp::SetProperty );	// 17 - 20
 }
 

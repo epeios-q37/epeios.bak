@@ -166,11 +166,11 @@ void server::contents::set::S(
 	Flow.Commit();
 }
 
-void server::widgets::dress::S_(
+void server::widgets::dress::S(
 	const str::dString &Id,
 	flw::sWFlow &Flow )
 {
-	prtcl::PutAnswer( prtcl::aDressWidgets__1, Flow );
+	prtcl::PutAnswer( prtcl::aDressWidgets_1, Flow );
 	prtcl::Put( Id, Flow );
 	Flow.Commit();
 }

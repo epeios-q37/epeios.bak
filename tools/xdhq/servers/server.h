@@ -141,11 +141,11 @@ namespace server {
 
 	namespace widgets {
 		namespace dress {
-			void S_(
+			void S(
 				const str::dString &Id,
 				flw::sWFlow &Flow );
 
-			inline void R_( flw::sRFlow &Flow )
+			inline void R( flw::sRFlow &Flow )
 			{}
 		}
 
@@ -153,8 +153,8 @@ namespace server {
 			const str::dString &Id,
 			flw::sRWFlow &Flow )
 		{
-			dress::S_( Id, Flow );
-			dress::R_( Flow );
+			dress::S( Id, Flow );
+			dress::R( Flow );
 		}
 	}
 

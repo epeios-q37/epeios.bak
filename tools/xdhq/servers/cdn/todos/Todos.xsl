@@ -12,11 +12,7 @@
 	</xsl:template>
 	<xsl:template match="Todo">
 		<li>
-			<span>
-				<xsl:attribute name="id">
-					<xsl:text>View.</xsl:text>
-					<xsl:value-of select="@id"/>
-				</xsl:attribute>
+			<span id="View.{@id}">
 				<div class="ember-view">
 					<article class="listing" style="display: flex; width:100%; justify-content: space-between;align-items: center;">
 						<div>

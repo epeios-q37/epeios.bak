@@ -59,7 +59,7 @@ namespace prtcl {
 		aSetLayout_1,
 		aGetContents_1,
 		aSetContents_1,
-		aDressWidgets__1,
+		aDressWidgets_1,
 		aSetCastsByIds_1,
 		aSetCastsByTags_1,
 		aSetAttribute_1,

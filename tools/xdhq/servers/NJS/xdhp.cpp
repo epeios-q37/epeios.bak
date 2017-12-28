@@ -370,12 +370,12 @@ SCLNJS_F( xdhp::SetContents )
 	Server.Request = xdh_ups::rSetContents;
 }
 
-SCLNJS_F( xdhp::DressWidgets_ )
+SCLNJS_F( xdhp::DressWidgets )
 {
 	DATA;
 
 	Caller.GetArgument( Arguments.Id, JS.Callback );
-	Server.Request = xdh_ups::rDressWidgets_;
+	Server.Request = xdh_ups::rDressWidgets;
 }
 
 SCLNJS_F( xdhp::SetCastsByIds )

@@ -6,12 +6,8 @@
 				<div class="ember-view">
 					<article class="listing" style="display: flex; width:100%; justify-content: space-between;align-items: center;">
 						<div>
-							<input type="text">
-								<xsl:attribute name="id">Title</xsl:attribute>
-							</input>
-							<textarea>
-								<xsl:attribute name="id">Description</xsl:attribute>
-							</textarea>
+							<input type="text" id="Title"/>
+							<textarea id="Description"/>
 						</div>
 						<span style="display: flex; flex-direction: column;">
 							<button data-xdh-onevent="Submit">Submit</button>
