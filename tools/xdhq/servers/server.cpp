@@ -112,6 +112,32 @@ void server::layout::set::S(
 	SetWithXSLFilename_( prtcl::aSetLayout_1, Id, XML, XSLFilename, Language, Flow );
 }
 
+void server::alert::S(
+	const str::dString &Message,
+	flw::sWFlow &Flow )
+{
+	prtcl::PutAnswer( prtcl::aAlert_1, Flow );
+	prtcl::Put( Message, Flow );
+	Flow.Commit();
+}
+
+void server::confirm::S(
+	const str::dString &Message,
+	flw::sWFlow &Flow )
+{
+	prtcl::PutAnswer( prtcl::aConfirm_1, Flow );
+	prtcl::Put( Message, Flow );
+	Flow.Commit();
+}
+
+void server::confirm::R(
+	flw::sRFlow &Flow,
+	str::dString &Response )
+{
+	prtcl::Get( Flow, Response );
+	Flow.Dismiss();
+}
+
 void server::contents::get::S(
 	const str::dStrings &Ids,
 	flw::sWFlow &Flow )
@@ -140,11 +166,11 @@ void server::contents::set::S(
 	Flow.Commit();
 }
 
-void server::widgets::dress::S(
+void server::widgets::dress::S_(
 	const str::dString &Id,
 	flw::sWFlow &Flow )
 {
-	prtcl::PutAnswer( prtcl::aDressWidgets_1, Flow );
+	prtcl::PutAnswer( prtcl::aDressWidgets__1, Flow );
 	prtcl::Put( Id, Flow );
 	Flow.Commit();
 }
@@ -206,4 +232,5 @@ void server::ap_::get::R(
 	prtcl::Get( Flow, Value );
 	Flow.Dismiss();
 }
+
 

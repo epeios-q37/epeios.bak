@@ -37,6 +37,8 @@ using namespace xdhcmn;
 const char *xdhcmn::GetLabel( function__ Function )
 {
 	switch ( Function ) {
+	C( Execute );
+	C( Log );
 	C( Alert );
 	C( Confirm );
 	C( SetLayout );

@@ -19,8 +19,8 @@
   </div>
   <div class="list-filter ember-view">
    <div style="display: flex; width: 80%; margin: auto;">
-    <input id="Pattern" placeholder="Filter By Title" class="light ember-text-field ember-view" type="text" data-xdh-onevent="Search"/>
-    <input type="checkbox" data-xdh-onevent="ToggleDescriptions"/>
+    <input id="Pattern"  data-xdh-cast="EditionCast" placeholder="Filter By Title" class="light ember-text-field ember-view" type="text" data-xdh-onevent="Search"/>
+    <input type="checkbox" data-xdh-cast="EditionCast" data-xdh-onevent="ToggleDescriptions"/>
    </div>
    <div id="Todos"/>
   </div>

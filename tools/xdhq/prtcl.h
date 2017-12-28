@@ -54,10 +54,12 @@ namespace prtcl {
 	{
 		aOK_1,
 		aError_1,
+		aAlert_1,
+		aConfirm_1,
 		aSetLayout_1,
 		aGetContents_1,
 		aSetContents_1,
-		aDressWidgets_1,
+		aDressWidgets__1,
 		aSetCastsByIds_1,
 		aSetCastsByTags_1,
 		aSetAttribute_1,

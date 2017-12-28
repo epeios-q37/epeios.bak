@@ -27,10 +27,12 @@
 namespace xdhp {
 	SCLNJS_F( Register );
 	SCLNJS_F( Listen );
+	SCLNJS_F( Alert );
+	SCLNJS_F( Confirm );
 	SCLNJS_F( SetLayout );
 	SCLNJS_F( GetContents );
 	SCLNJS_F( SetContents );
-	SCLNJS_F( DressWidgets );
+	SCLNJS_F( DressWidgets_ );
 	SCLNJS_F( SetCastsByIds );
 	SCLNJS_F( SetCastsByTags );
 	SCLNJS_F( GetAttribute );

@@ -20,16 +20,16 @@
 				<div class="ember-view">
 					<article class="listing" style="display: flex; width:100%; justify-content: space-between;align-items: center;">
 						<div>
-							<h3>
+							<h3 id="Title.{@id}">
 								<xsl:value-of select="title"/>
 							</h3>
-							<p class="description" data-xdh-cast="DescriptionCast">
+							<p id="Description.{@id}" data-xdh-cast="DescriptionCast">
 								<xsl:value-of select="description"/>
 							</p>
 						</div>
 						<span style="display: flex; flex-direction: column;">
-							<button data-xdh-onevent="Edit" data-xdh-value="{@id}">Edit</button>
-							<button data-xdh-onevent="Delete" data-xdh-value="{@id}">Delete</button>
+							<button data-xdh-onevent="Edit" data-xdh-value="{@id}" data-xdh-cast="EditionCast">Edit</button>
+							<button data-xdh-onevent="Delete" data-xdh-value="{@id}" data-xdh-cast="EditionCast">Delete</button>
 						</span>
 					</article>
 				</div>

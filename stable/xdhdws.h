@@ -57,6 +57,14 @@ namespace xdhdws {
 
 			Callback_ = Callback;
 		}
+		const char *Execute(
+			const nstring___ &Message,
+			TOL_CBUFFER___ &Buffer )
+		{
+			C_().Process( xdhcmn::fExecute, &Buffer, Message.Internal()() );
+
+			return Buffer;
+		}
 		void Log( const nstring___ &Message )
 		{
 			C_().Process( xdhcmn::fLog, NULL, Message.Internal()() );

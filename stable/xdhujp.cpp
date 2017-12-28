@@ -596,6 +596,9 @@ static void GetResult_(
 static script_name__ Convert_( xdhcmn::function__ Function )
 {
 	switch ( Function ) {
+	case xdhcmn::fExecute:
+		return xdhujs::snExecute;
+		break;
 	case xdhcmn::fLog:
 		return xdhujs::snLog;
 		break;
@@ -662,6 +665,7 @@ void xdhujp::sProxyCallback::XDHCMNProcess(
 	va_list List )
 {
 	switch ( Function ) {
+	case xdhcmn::fExecute:
 	case xdhcmn::fSetProperty:
 	case xdhcmn::fGetProperty:
 	case xdhcmn::fSetAttribute:

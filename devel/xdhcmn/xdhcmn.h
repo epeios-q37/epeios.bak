@@ -74,6 +74,7 @@ namespace xdhcmn {
 	};
 
 	enum function__ {		// Parameters :
+		fExecute,			// Script,
 		fLog,				// Message,
 		fAlert,				// XML, XSL, Title.
 		fConfirm,			// XML, XSL, Title.

@@ -31,21 +31,28 @@ namespace xdh_dws {
 	{
 	private:
 		sclnjs::wArguments Core_;
+		str::wString Response_;
 		str::wString Value_;
 		str::wStrings Contents_;
 	public:
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, Core_, Value_, Contents_  );
+			tol::reset( P, Core_, Response_, Value_, Contents_  );
 		}
 		qCDTOR( rArguments );
 		void Init( void )
 		{
-			tol::Init( Core_, Value_, Contents_  );
+			tol::Init( Core_, Response_, Value_, Contents_  );
 		}
 		void Add( sclnjs::rObject &Object )
 		{
 			Core_.Add( Object );
+		}
+		str::dString &Response( void )
+		{
+			Core_.Add( Response_ );
+
+			return Response_;
 		}
 		str::dString &Value( void )
 		{

@@ -34,11 +34,14 @@ using namespace xdhujs;
 		sclmisc::MGetValue( xdhujr::script::entry, Buffer );\
 		break
 
-const str::string_ &xdhujs::GetTaggedScript(
+const str::string_ &xdhujs::GetTaggedScript_(
 	script_name__ Script,
 	str::string_ &Buffer )
 {
 	switch ( Script ) {
+	case snExecute:
+		Buffer = "%Value_%";	// The script to execute is given as is.
+		break;
 	C( Log, Log );
 	C( DialogAlert, dialog::Alert );
 	C( DialogConfirm, dialog::Confirm );
@@ -161,9 +164,10 @@ qRH
 	str::string TaggedScript;
 qRB
 	TaggedScript.Init();
-	GetTaggedScript( ScriptName, TaggedScript );
+	GetTaggedScript_( ScriptName, TaggedScript );
 
 	switch ( ScriptName ) {
+	S( Execute, Value_, NULL );
 	S( Log, Message_, NULL );
 	S( DialogAlert, XML_, XSL_, Title_, CloseText_, NULL );
 	S( DialogConfirm, XML_, XSL_, Title_, CloseText_, NULL );

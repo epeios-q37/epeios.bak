@@ -1,6 +1,20 @@
 
 # *Epeios* changelog
 
+2017-12-28:
+- *Common*:
+  - **$** : adding `Execute` function,
+- CDSDCMN:
+  - adding `Put(...)` variant to resolve some template ambiguity,
+- XDHCMN:
+  - **$**,
+- XDHDWS:
+  - **$**,
+- XDHUJP:
+  - **$**,
+- XDHUJS:
+  - **$**,
+
 2017-12-26:
 - *Common*:
   - **$**: *casts* can now be set by ids or by tags,

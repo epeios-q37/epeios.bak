@@ -91,10 +91,12 @@ const char *prtcl::GetLabel( eAnswer Answer )
 	switch ( Answer ) {
 		C( OK_1 );
 		C( Error_1 );
+		C( Alert_1 );
+		C( Confirm_1 );
 		C( SetLayout_1 );
 		C( GetContents_1 );
 		C( SetContents_1 );
-		C( DressWidgets_1 );
+		C( DressWidgets__1 );
 		C( SetCastsByIds_1 );
 		C( SetCastsByTags_1 );
 		C( GetAttribute_1 );

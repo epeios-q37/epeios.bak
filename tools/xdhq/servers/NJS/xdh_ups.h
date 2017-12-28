@@ -30,10 +30,12 @@
 namespace xdh_ups {
 	qENUM( Request )
 	{
+		rAlert,
+		rConfirm,
 		rSetLayout,
 		rGetContents,
 		rSetContents,
-		rDressWidgets,
+		rDressWidgets_,
 		rSetCastsByIds,
 		rSetCastsByTags,
 		rGetAttribute,
@@ -47,16 +49,16 @@ namespace xdh_ups {
 	struct rArguments
 	{
 	public:
-		str::wString Id, XML, XSLFilename, Language, Name, Value;
+		str::wString Message, Id, XML, XSLFilename, Language, Name, Value;
 		str::wStrings Ids, Contents, Tags, Values;
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( Id, XML, XSLFilename, Language, Name, Value, Ids, Contents, Tags, Values );
+			tol::reset( Message, Id, XML, XSLFilename, Language, Name, Value, Ids, Contents, Tags, Values );
 		}
 		qCDTOR( rArguments );
 		void Init( void )
 		{
-			tol::Init( Id, XML, XSLFilename, Language, Name, Value, Ids, Contents, Tags, Values );
+			tol::Init( Message, Id, XML, XSLFilename, Language, Name, Value, Ids, Contents, Tags, Values );
 		}
 	};
 

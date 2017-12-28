@@ -41,6 +41,7 @@ namespace xdhujs {
 	using xdhcmn::nstring___;
 
 	E_ENUM(script_name) {
+		snExecute,
 		snAttributeGetter,
 		snAttributeRemover,
 		snAttributeSetter,
@@ -67,7 +68,7 @@ namespace xdhujs {
 		sn_Undefined,
 	};
 
-	const str::string_ &GetTaggedScript(
+	const str::string_ &GetTaggedScript_(
 		script_name__ ScriptName,
 		str::string_ &Script );
 
@@ -81,7 +82,7 @@ namespace xdhujs {
 		str::string_ *Script,	// Was '&Script', but should not work due 'va_start(...)' restrictions concerning references (but it worked under MSVC).
 		... );
 
-	inline void DialogAlert(
+	inline void DialogAlert_(
 		const nstring___ &XML,
 		const nstring___ &XSL,
 		const nstring___ &Title,

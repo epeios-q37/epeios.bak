@@ -103,14 +103,17 @@ function normalize(callback) {
 }
 
 class XDH {
-	set(fid, id, tree, xslFilename, callback) {
-		njsq._wrapper(xdhq, fid, this, id, tree, xslFilename, normalize(callback));
+	alert(message, callback) {
+		njsq._wrapper(xdhq, 9, this, message, normalize(callback));
+	}
+	confirm(message, callback) {
+		njsq._wrapper(xdhq, 10, this, message, (result) => normalize(callback)( result == "true" ));
 	}
 	setLayout(id, tree, xslFilename, callback) {
-		this.set(9, id, tree, xslFilename, normalize(callback));
+		njsq._wrapper(xdhq, 11, this, id, tree, xslFilename, normalize(callback));
 	}
 	getContents(ids, callback )  {
-		njsq._wrapper(xdhq, 10, this, ids, normalize( callback) );
+		njsq._wrapper(xdhq, 12, this, ids, normalize( callback) );
 	}
 	getContent(id, callback ) {
 		return this.getContents([id], (result) => { normalize(callback)(result[0]); } );
@@ -121,10 +124,13 @@ class XDH {
 
 		pushLabelsAndItems(idsAndContents, "string", ids, contents);
 
-		njsq._wrapper(xdhq, 11, this, ids, contents, normalize(callback));
+		njsq._wrapper(xdhq, 13, this, ids, contents, normalize(callback));
 	}
-	dressWidgets(id, callback ) {
-		njsq._wrapper(xdhq, 12, this, id, normalize(callback));
+	setContent(id, content, callback) {
+		return this.setContents([[id,content]], normalize(callback));
+	}
+	dressWidgets(id, callback) {
+		njsq._wrapper(xdhq, 14, this, id, normalize(callback));
 	}
 	setCastsByIds(idsAndValues, callback ) {
 		var ids = new Array();
@@ -132,7 +138,7 @@ class XDH {
 
 		pushLabelsAndItems(idsAndValues, "string", ids, values);
 
-		njsq._wrapper(xdhq, 13, this, ids, values, normalize(callback));
+		njsq._wrapper(xdhq, 15, this, ids, values, normalize(callback));
 	}
 	setCastById(id, value, callback ) {
 		this.setCastsByIds([[id, value]], normalize(callback) );
@@ -143,22 +149,22 @@ class XDH {
 
 		pushLabelsAndItems(tagsAndValues, "string", tags, values);
 
-		njsq._wrapper(xdhq, 14, this, id, tags, values, normalize(callback));
+		njsq._wrapper(xdhq, 16, this, id, tags, values, normalize(callback));
 	}
 	setCastByTag(id, tag, value, callback) {
 		this.setCastsByTags(id, [[tag, value]], normalize(callback));
 	}
 	getAttribute(id, name, callback) {
-		return njsq._wrapper(xdhq, 15, this, id, name, normalize(callback));
+		return njsq._wrapper(xdhq, 17, this, id, name, normalize(callback));
 	}
 	setAttribute(id, name, value, callback ) {
-		njsq._wrapper(xdhq, 16, this, id, name, value, normalize(callback));
+		njsq._wrapper(xdhq, 18, this, id, name, value, normalize(callback));
 	}
 	getProperty(id, name) {
-		return njsq._wrapper(xdhq, 17, this, id, name);
+		return njsq._wrapper(xdhq, 19, this, id, name);
 	}
 	setProperty(id, name, value) {
-		njsq._wrapper(xdhq, 18, this, id, name, value);
+		njsq._wrapper(xdhq, 20, this, id, name, value);
 	}
 }
 

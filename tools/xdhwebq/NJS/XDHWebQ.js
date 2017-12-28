@@ -51,8 +51,6 @@ function LOG() {
 }
 /**/
 
-console.log(process.argv);
-
 var firstAction = "";
 var rootDir;
 
@@ -146,7 +144,6 @@ function serveQuery(query, res)
 {
 	LOG();
 	var response = "";
-	console.log(query);
 	if ( ('_action' in query) && ( query['_action'] != '' ) ) {
 		var keys = new Array();
 		var values = new Array();
@@ -194,7 +191,6 @@ const mimeType = {
 
 function serveFile(pathname, res) {
 	LOG();
-	console.log( ">>>>>>>>>>>> " + pathname);
 	fs.exists(pathname, function (exist) {
 		if (!exist) {
 			// if the file is not found, return 404

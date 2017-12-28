@@ -89,6 +89,59 @@ namespace {
 		d_Undefined
 	};
 
+	void Alert_(
+		flw::sRWFlow &Flow,
+		xdhdws::sProxy &Proxy )
+	{
+	qRH;
+		str::wString Message, Script;
+		qCBUFFERr Buffer;
+	qRB;
+		Message.Init();
+		prtcl::Get( Flow, Message );
+
+		Script.Init( "window.alert(\"");
+		xdhcmn::Escape( Message, Script, '"' );
+		Script.Append( "\");'';");
+
+		Proxy.Execute( Script, Buffer );
+
+		Flow.Dismiss();
+
+		prtcl::PutRequest( prtcl::rReady_1, Flow );
+		Flow.Commit();
+	qRR;
+	qRT;
+	qRE;
+	}
+
+	void Confirm_(
+		flw::sRWFlow &Flow,
+		xdhdws::sProxy &Proxy )
+	{
+	qRH;
+		str::wString Message, Script;
+		qCBUFFERr Buffer;
+	qRB;
+		Message.Init();
+		prtcl::Get( Flow, Message );
+
+		Script.Init( "if ( window.confirm(\"");
+		xdhcmn::Escape( Message, Script, '"' );
+		Script.Append( "\") ) 'true'; else 'false';");
+
+		Proxy.Execute( Script, Buffer );
+
+		Flow.Dismiss();
+
+		prtcl::PutRequest( prtcl::rReady_1, Flow );
+		prtcl::Put( (char *)Buffer(), Flow );
+		Flow.Commit();
+	qRR;
+	qRT;
+	qRE;
+	}
+
 	void SetLayout_(
 		flw::sRWFlow &Flow,
 		xdhdws::sProxy &Proxy )
@@ -190,7 +243,7 @@ namespace {
 	qRE;
 	}
 
-	void DressWidgets_(
+	void DressWidgets__(
 		flw::sRWFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
@@ -400,7 +453,7 @@ namespace {
 
 # define H( name )\
 	case prtcl::a##name##_1:\
-		name##_( Flow, *this );\
+		::name##_( Flow, *this );\
 		break
 
 			while( Continue )
@@ -411,10 +464,12 @@ namespace {
 					Continue = false;
 					Flow.Dismiss();
 					break;
+				H( Alert );
+				H( Confirm );
 				H( SetLayout );
 				H( GetContents );
 				H( SetContents );
-				H( DressWidgets );
+				H( DressWidgets_ );
 				H( SetCastsByIds );
 				H( SetCastsByTags );
 				H( GetAttribute );
@@ -425,7 +480,6 @@ namespace {
 					qRGnr();
 					break;
 			}
-
 #undef H
 		qRR;
 		qRT;

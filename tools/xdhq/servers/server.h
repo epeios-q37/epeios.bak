@@ -38,6 +38,42 @@ namespace server {
 	// '...S' Send the request.
 	// '...R' get the response.
 
+	namespace alert {
+		void S(
+			const str::dString &Message,
+			flw::sWFlow &Flow );
+
+		inline void R( flw::sRFlow &Flow )
+		{}
+	}
+
+	inline void Alert(
+		const str::dString &Script,
+		flw::sRWFlow &Flow )
+	{
+		alert::S( Script, Flow );
+		alert::R( Flow );
+	}
+
+	namespace confirm {
+		void S(
+			const str::dString &Message,
+			flw::sWFlow &Flow );
+
+		void R(
+			flw::sRFlow &Flow,
+			str::dString &Response );
+	}
+
+	inline void Confirm(
+		const str::dString &Script,
+		flw::sRWFlow &Flow,
+		str::dString &Response )
+	{
+		confirm::S( Script, Flow );
+		confirm::R( Flow, Response );
+	}
+	
 	namespace layout {
 		namespace set {
 			void S(
@@ -105,11 +141,11 @@ namespace server {
 
 	namespace widgets {
 		namespace dress {
-			void S(
+			void S_(
 				const str::dString &Id,
 				flw::sWFlow &Flow );
 
-			inline void R( flw::sRFlow &Flow )
+			inline void R_( flw::sRFlow &Flow )
 			{}
 		}
 
@@ -117,8 +153,8 @@ namespace server {
 			const str::dString &Id,
 			flw::sRWFlow &Flow )
 		{
-			dress::S( Id, Flow );
-			dress::R( Flow );
+			dress::S_( Id, Flow );
+			dress::R_( Flow );
 		}
 	}
 

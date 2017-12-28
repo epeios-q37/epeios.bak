@@ -25,6 +25,18 @@ using namespace xdh_ups;
 
 namespace send_ {
 	namespace {
+		void Alert_(
+			flw::sWFlow &Flow,
+			rArguments &Arguments )
+		{
+			server::alert::S( Arguments.Message, Flow );
+		}
+		void Confirm_(
+			flw::sWFlow &Flow,
+			rArguments &Arguments )
+		{
+			server::confirm::S( Arguments.Message, Flow );
+		}
 		void SetLayout_(
 			flw::sWFlow &Flow,
 			rArguments &Arguments )
@@ -43,11 +55,11 @@ namespace send_ {
 		{
 			server::contents::set::S( Arguments.Ids, Arguments.Contents, Flow );
 		}
-		void DressWidgets_(
+		void DressWidgets__(
 			flw::sWFlow &Flow,
 			rArguments &Arguments )
 		{
-			server::widgets::dress::S( Arguments.Id, Flow );
+			server::widgets::dress::S_( Arguments.Id, Flow );
 		}
 		void SetCastsByIds_(
 			flw::sWFlow &Flow,
@@ -101,10 +113,12 @@ bso::sBool xdh_ups::Send(
 	case r_Undefined:
 		return false;
 		break;
+	H( Alert );
+	H( Confirm );
 	H( SetLayout );
 	H( GetContents );
 	H( SetContents );
-	H( DressWidgets );
+	H( DressWidgets_ );
 	H( SetCastsByIds );
 	H( SetCastsByTags );
 	H( GetAttribute );
@@ -124,6 +138,20 @@ bso::sBool xdh_ups::Send(
 
 namespace recv_ {
 	namespace {
+		void Alert_(
+			flw::sRFlow &Flow,
+			xdh_dws::rArguments &Arguments )
+		{
+			server::alert::R( Flow );
+		}
+
+		void Confirm_(
+			flw::sRFlow &Flow,
+			xdh_dws::rArguments &Arguments )
+		{
+			server::confirm::R( Flow, Arguments.Response() );
+		}
+
 		void SetLayout_(
 			flw::sRFlow &Flow,
 			xdh_dws::rArguments &Arguments )
@@ -145,11 +173,11 @@ namespace recv_ {
 			server::contents::set::R( Flow );
 		}
 
-		void DressWidgets_(
+		void DressWidgets__(
 			flw::sRFlow &Flow,
 			xdh_dws::rArguments &Arguments )
 		{
-			server::widgets::dress::R( Flow );
+			server::widgets::dress::R_( Flow );
 		}
 
 		void SetCastsByIds_(
@@ -212,10 +240,12 @@ bso::sBool xdh_ups::Recv(
 			qRGnr();
 
 		switch ( Id ) {
+		H( Alert );
+		H( Confirm );
 		H( SetLayout );
 		H( GetContents );
 		H( SetContents );
-		H( DressWidgets );
+		H( DressWidgets_ );
 		H( SetCastsByIds );
 		H( SetCastsByTags );
 		H( GetAttribute );

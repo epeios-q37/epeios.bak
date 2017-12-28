@@ -320,7 +320,26 @@ namespace {
 	xdh_dws::rJS &JS = Data.JS;\
 	xdh_ups::rArguments &Arguments = Server.Arguments;\
 	Arguments.Init();
-	
+
+SCLNJS_F( xdhp::Alert )
+{
+	DATA;
+
+	Caller.GetArgument( Arguments.Message, JS.Callback );
+
+	Server.Request = xdh_ups::rAlert;
+}
+
+SCLNJS_F( xdhp::Confirm )
+{
+	DATA;
+
+	Caller.GetArgument( Arguments.Message, JS.Callback );
+
+	Server.Request = xdh_ups::rConfirm;
+}
+
+
 
 SCLNJS_F( xdhp::SetLayout )
 {
@@ -351,12 +370,12 @@ SCLNJS_F( xdhp::SetContents )
 	Server.Request = xdh_ups::rSetContents;
 }
 
-SCLNJS_F( xdhp::DressWidgets )
+SCLNJS_F( xdhp::DressWidgets_ )
 {
 	DATA;
 
 	Caller.GetArgument( Arguments.Id, JS.Callback );
-	Server.Request = xdh_ups::rDressWidgets;
+	Server.Request = xdh_ups::rDressWidgets_;
 }
 
 SCLNJS_F( xdhp::SetCastsByIds )

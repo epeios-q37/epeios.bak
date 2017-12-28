@@ -116,6 +116,13 @@ namespace csdcmn {
 		return Put_( str::wString( String ), Flow );
 	}
 
+	inline void Put(
+		char *String,
+		flw::sWFlow &Flow )
+	{
+		return Put( (const char *)String, Flow );
+	}
+
 	void Put_(
 		const str::dStrings &Strings,
 		flw::sWFlow &Flow );
