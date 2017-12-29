@@ -11,6 +11,7 @@
 								<xsl:attribute name="data-xdh-widget">
 									<xsl:text>ckeditor|{enterMode : CKEDITOR.ENTER_BR, linkShowTargetTab: false}|val\(\)|</xsl:text>
 								</xsl:attribute>
+								<xsl:text>This text should not be necessary, but without it, Microsoft Edge eats following buttons (https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/11041419/)</xsl:text>
 							</textarea>
 						</div>
 						<span style="display: flex; flex-direction: column;">
