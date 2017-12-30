@@ -6,7 +6,7 @@
 				<div class="ember-view">
 					<article class="listing" style="display: flex; width:100%; justify-content: space-between;align-items: center;">
 						<div>
-							<input type="text" id="Title"/>
+							<input type="text" id="Title" placeholder="Title"/>
 							<textarea id="Description">
 								<xsl:attribute name="data-xdh-widget">
 									<xsl:text>ckeditor|{enterMode : CKEDITOR.ENTER_BR, linkShowTargetTab: false}|val\(\)|</xsl:text>

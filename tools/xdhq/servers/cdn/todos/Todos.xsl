@@ -2,7 +2,7 @@
 <!-- NO BOM !! -->
 <xsl:stylesheet	version="1.0" xmlns="http://www.w3.org/1999/xhtml" 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xpp="http://q37.info/ns/xpp/">
 	<xsl:output method="html" encoding="UTF-8"/>
-	<xsl:template match="/XDHTML[@Background='Layout']">
+	<xsl:template match="/XDHTML">
 		<xsl:apply-templates select="Todos"/>
 	</xsl:template>
 	<xsl:template match="Todos">
@@ -17,14 +17,15 @@
 	<xsl:template match="Todo">
 		<li>
 			<span id="View.{@id}">
-				<div class="ember-view">
+				<div>
 					<article class="listing" style="display: flex; width:100%; justify-content: space-between;align-items: center;">
 						<div>
 							<h3 id="Title.{@id}">
 								<xsl:value-of select="title"/>
 							</h3>
 							<p id="Description.{@id}" data-xdh-cast="DescriptionCast">
-								<xsl:value-of select="description" disable-output-escaping="yes"/>
+								<!-- Could use following line but 'disable-output-escaping' does not work with Firefox (https://bugzilla.mozilla.org/show_bug.cgi?id=98168)	-->
+								<!-- xsl:value-of select="description" disable-output-escaping="yes"/-->
 							</p>
 						</div>
 						<span style="display: flex; flex-direction: column;">

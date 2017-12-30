@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xpp:bloc xmlns:xpp="http://q37.info/ns/xpp">
+	<xpp:expand href="../XDH.xcfg"/>
+	<Definitions>
+		<Scripts>
+			<Fallback>
+				<![CDATA[
+					window.alert("Lost current session! Opening new session!");location.reload();
+    ]]>
+			</Fallback>
+		</Scripts>
+	</Definitions>
+</xpp:bloc>

@@ -116,20 +116,23 @@ function handleDescriptionsCast(xdh) {
 function displayList(xdh) {
 	LOG();
 	var tree = new xdhq.LayoutTree();
-	var i = 1;
+	var i = 1 ;
+	var contents = new Array();
 
 	tree.pushTag("Todos");
 	tree.putAttribute("HideDescriptions", xdh.hideDescriptions);
 
 	while (i < xdh.todos.length) {
-		if (xdh.todos[i]['title'].toLowerCase().startsWith(xdh.pattern))
+		if (xdh.todos[i]['title'].toLowerCase().startsWith(xdh.pattern)) {
 			push(xdh.todos[i], i, tree);
+			contents.push(["Description." + i, xdh.todos[i]['description']]);
+		}
 		i++;
 	}
 
 	tree.popTag();
 
-	xdh.setLayout("Todos", tree, "Todos.xsl", () => { xdh.setCastByTag("", "EditionCast", "Plain", () => handleDescriptionsCast(xdh) ) });
+	xdh.setLayout("Todos", tree, "Todos.xsl", () => { xdh.setCastByTag("", "EditionCast", "Plain", () => xdh.setContents(contents, () => handleDescriptionsCast(xdh) ) ) } );
 }
 
 function acConnect(xdh, id) {

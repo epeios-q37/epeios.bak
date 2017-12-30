@@ -3,7 +3,7 @@
 	<Configuration target="xdhwebqnjs">
 		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
 		<xpp:expand value-of="q37.xpp"/>
-		<xpp:expand href="../../XDH.xcfg"/>
+		<xpp:expand href="../xdhwebq.xcfg"/>
 		<Parameters>
 			<Command>Process</Command>
 			<Language>en</Language>
