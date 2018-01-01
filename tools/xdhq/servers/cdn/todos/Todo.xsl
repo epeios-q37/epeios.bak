@@ -6,7 +6,9 @@
 		<div>
 			<article class="listing" style="display: flex; width:100%; justify-content: space-between;align-items: center;">
 				<div>
-					<input type="text" id="Title" placeholder="Title"/>
+					<span class="list-filter">
+						<input type="text" id="Title" placeholder="Title"/>
+					</span>
 					<textarea id="Description">
 						<xsl:attribute name="data-xdh-widget">
 							<xsl:text>ckeditor|{enterMode : CKEDITOR.ENTER_BR, linkShowTargetTab: false}|val\(\)|</xsl:text>
