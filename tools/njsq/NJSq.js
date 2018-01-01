@@ -42,5 +42,3 @@ we access to it through this file, so it must expose exactly the same functions
 as 'njsq.node'.
 */
 module.exports = njsq;
-console.log( "Yo !" );
-

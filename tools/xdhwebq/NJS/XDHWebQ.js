@@ -19,7 +19,7 @@
 
 // NOT TO CONFUSE WITH '../js/xdhwebq.js', which is red by the web browser.
 
-/* Some logging facilities */
+/* Some log facilities */
 Object.defineProperty(global, '__stack', {
 	get: function () {
 		var orig = Error.prepareStackTrace;
@@ -47,7 +47,7 @@ Object.defineProperty(global, '__function', {
 });
 
 function LOG() {
-	console.log("--> " + __function + ": " + __line + " (" + __filename + ")");
+//	console.log("--> " + __function + ": " + __line + " (" + __filename + ")");
 }
 /**/
 
@@ -55,7 +55,7 @@ var firstAction = "";
 var rootDir;
 
 if (process.argv.length < 4 )
-	throw "To less arguments !";
+	throw "Too few arguments !";
 else {
 	rootDir = process.argv[2];
 	firstAction = process.argv[3];
@@ -92,8 +92,8 @@ if (process.env.EPEIOS_SRC) {
     componentPath = __dirname;
     xdhtmlJSPath = __dirname;
     xdhwebqJSPath = __dirname;
-    cdnPath = path.resolve(rootPath);	// No final '/'.
-    xdhqwdhPath = require('xdhqxdh');
+    cdnPath = path.resolve(rootDir);	// No final '/'.
+    xdhqxdhPath = require('xdhqxdh');
 }
 
 const xdhtmlJSFilename = xdhtmlJSPath + "xdhtml.js"
@@ -255,5 +255,3 @@ module.exports.serve = serve;
 module.exports.launch = launch;
 
 launch(process.argv[4]);
-
-

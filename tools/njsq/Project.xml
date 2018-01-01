@@ -3,7 +3,7 @@
 	<xpp:bloc>
 		<!-- User definitions -->
 		<xpp:define name="Version">
-			<xpp:bloc>20150620</xpp:bloc>
+			<xpp:bloc/>
 		</xpp:define>
 		<xpp:define name="CopyrightYears">
 			<xpp:bloc>2017</xpp:bloc>

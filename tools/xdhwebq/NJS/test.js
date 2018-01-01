@@ -26,7 +26,3 @@ console.log( xdhwebq.wrapperInfo() );
 
 // process.stdout.write(xdhwebq.returnArgument("Text from JS file") + '\n');
 
-xdhwebq.launch( "Connect" );
-
-
-
