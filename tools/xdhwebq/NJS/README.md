@@ -1,8 +1,6 @@
-# XDHWebQ
+ XDHWebQ
 
 [![NPM](https://nodei.co/npm/xdhwebq.png)](https://nodei.co/npm/xdhwebq/)
-
-This component is only a template to facilitate the creation of a [*Node.js*](http://en.wikipedia.org/wiki/Node.js) *addon*.
 
 For more information, see [http://q37.info/tools/xdhwebq/](http://q37.info/tools/xdhwebq/).
 

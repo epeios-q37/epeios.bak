@@ -3,7 +3,7 @@
 	<xpp:bloc>
 		<!-- User definitions -->
 		<xpp:define name="Version">
-			<xpp:bloc>(Obsolete ; generated automatically)</xpp:bloc>
+			<xpp:bloc/>
 		</xpp:define>
 		<xpp:define name="CopyrightYears">
 			<xpp:bloc>2017</xpp:bloc>
@@ -48,6 +48,9 @@
 	<SourceDirs>
 		<SourceDir>..</SourceDir>
 	</SourceDirs>
+	<Files>
+		<File>XDHq.js</File>
+	</Files>
 	<RTW Description="XDHTML proxy" Keywords="XDHTML,proxy">
 		<Dir>xdhqxdh</Dir>
 	</RTW>

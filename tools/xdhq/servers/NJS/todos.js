@@ -65,18 +65,19 @@ class MyData extends xdhq.XDH {
 		this.hideDescriptions = "false";
 		this.id = 0;
 		this.todos = [
+			// First one must be empty.
 			{
 				title: '',
 				description: '',
 			}, {
-				title: 'title 1',
-				description: 'description 1',
+				title: 'Improve design',
+				description: "Tastes and colors... (aka 'I wish I knew more about CSS...')",
 			}, {
-				title: 'title 2',
-				description: 'description 2',
+				title: 'Fixing bugs',
+				description: 'There are bugs ? Really ?',
 			}, {
-				title: 'title 3',
-				description: 'description 3',
+				title: 'Implement new functionalities',
+				description: 'Although it\'s almost perfect...',
 			}
 		];
 	}

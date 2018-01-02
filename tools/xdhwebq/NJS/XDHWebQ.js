@@ -19,6 +19,8 @@
 
 // NOT TO CONFUSE WITH '../js/xdhwebq.js', which is red by the web browser.
 
+'use strict'
+
 /* Some log facilities */
 Object.defineProperty(global, '__stack', {
 	get: function () {
@@ -52,15 +54,12 @@ function LOG() {
 /**/
 
 var firstAction = "";
-var rootDir;
+var rootDir = "";
 
-if (process.argv.length < 4 )
-	throw "Too few arguments !";
-else {
+if (process.argv.length >= 4) {
 	rootDir = process.argv[2];
 	firstAction = process.argv[3];
 }
-
 
 const http = require('http');
 const url = require('url');
@@ -72,7 +71,11 @@ const path = require('path');
 var njsq = null;
 var componentPath = "";
 var componentFilename = "";
-var xdhqxdhPath = "";
+var xdhqxdhModule = "";
+var epeiosPath = "";
+var xdhtmlJSPath = "";
+var xdhwebqJSPath = "";
+var cdnPath = "";
 
 if (process.env.EPEIOS_SRC) {
 	if (process.platform == 'win32') {
@@ -86,14 +89,14 @@ if (process.env.EPEIOS_SRC) {
 	xdhtmlJSPath = epeiosPath + "corpus/js/";
 	xdhwebqJSPath = epeiosPath + "tools/xdhwebq/js/";
 	cdnPath = path.resolve( epeiosPath, "tools/xdhq/servers/cdn/", rootDir );	// No final '/'.
-	xdhqxdhPath = componentPath;
+	xdhqxdhModule = epeiosPath + "tools/xdhq/proxy/XDHq.js";
 } else {
     njsq = require('njsq');
     componentPath = __dirname;
     xdhtmlJSPath = __dirname;
     xdhwebqJSPath = __dirname;
     cdnPath = path.resolve(rootDir);	// No final '/'.
-    xdhqxdhPath = require('xdhqxdh');
+    xdhqxdhModule = 'xdhqxdh';
 }
 
 const xdhtmlJSFilename = xdhtmlJSPath + "xdhtml.js"
@@ -239,7 +242,7 @@ function launch( service ) {
 	if (service === undefined)
 		service = 8080;
 	else if ( !Number.isInteger( service ) )
-		throw "Second argument, if provided, is the port to listen to (8080 by default ) !";
+		throw "Argument, if provided, is the port to listen to (8080 by default ) !";
 
 	http.createServer(function (req, res) {
 		serve(req, res);
@@ -247,11 +250,12 @@ function launch( service ) {
 
 }
 
-
-njsq._wrapper(xdhwebq, 1, xdhqxdhPath + "xdhqxdh");
+if ((typeof firstAction === "string") && (firstAction != "")) {
+	njsq._wrapper(xdhwebq, 1, require(xdhqxdhModule));
+	launch(process.argv[4]);
+}
 
 module.exports.returnArgument = (text) => njsq._wrapper(xdhwebq, 0, text);
 module.exports.serve = serve;
 module.exports.launch = launch;
 
-launch(process.argv[4]);
