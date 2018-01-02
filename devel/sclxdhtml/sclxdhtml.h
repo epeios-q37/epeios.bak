@@ -704,47 +704,47 @@ namespace sclxdhtml {
 			const xdhdws::nstring___ &Id,
 			const dCasts &Casts )
 		{
-			sclxdhtml::SetCasts_( Id, Casts, *this );
+			sclxdhtml::SetCastsByTags_( Id, Casts, *this );
 		}
 		void SetElementCast(
 			const xdhdws::nstring___ &Id,
 			const dCast &Cast )
 		{
-			sclxdhtml::SetCasts_( Id, Cast, *this );
+			sclxdhtml::SetCastsByTags_( Id, Cast, *this );
 		}
 		void SetElementCast(
 			const xdhdws::nstring___ &Id,
 			const str::dString &Tag,
 			const str::dString &Value )
 		{
-			sclxdhtml::SetCasts_( Id, Tag, Value, *this );
+			sclxdhtml::SetCastByTag_( Id, Tag, Value, *this );
 		}
 		void SetElementCast(
 			const xdhdws::nstring___ &Id,
 			const char *Tag,
 			const char *Value )
 		{
-			sclxdhtml::SetCasts_( Id, Tag, Value, *this );
+			sclxdhtml::SetCastByTag_( Id, Tag, Value, *this );
 		}
 		void SetDocumentCasts( const dCasts &Casts )
 		{
-			sclxdhtml::SetCasts_( RootTagId_, Casts, *this );
+			sclxdhtml::SetCastsByTags_( RootTagId_, Casts, *this );
 		}
 		void SetDocumentCast( const dCast &Cast )
 		{
-			sclxdhtml::SetCasts_( RootTagId_, Cast, *this );
+			sclxdhtml::SetCastByTag_( RootTagId_, Cast, *this );
 		}
 		void SetDocumentCast(
 			const str::dString &Tag,
 			const str::dString &Value )
 		{
-			sclxdhtml::SetCast_( RootTagId_, Tag, Value, *this );
+			sclxdhtml::SetCastByTag_( RootTagId_, Tag, Value, *this );
 		}
 		void SetDocumentCast(
 			const char *Tag,
 			const char *Value )
 		{
-			sclxdhtml::SetCast_( RootTagId_, Tag, Value, *this );
+			sclxdhtml::SetCastByTag_( RootTagId_, Tag, Value, *this );
 		}
 	};
 

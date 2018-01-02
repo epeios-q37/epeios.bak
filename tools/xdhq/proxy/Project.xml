@@ -11,6 +11,7 @@
 	</xpp:bloc>
 	<xpp:set name="Credits" value="Epeios"/>
 	<xpp:set name="Type" value="XDHTML"/>
+	<xpp:set name="_UserFiles" value="yes"/>
 	<xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
 	<About>
 		<!-- 'DVL' related commands tests below value to introduce some hacks !!!  -->
@@ -49,9 +50,20 @@
 		<SourceDir>..</SourceDir>
 	</SourceDirs>
 	<Files>
+		<File Path="../">README.md</File>
+		<File>CHANGELOG.md</File>
+		<File>runkit.js</File>
+		<File>test.js</File>
 		<File>XDHq.js</File>
 	</Files>
-	<RTW Description="XDHTML proxy" Keywords="XDHTML,proxy">
+	<NodeJS>
+		<Deps>
+			<Regular>
+				<Dep>xdhwebq</Dep>
+			</Regular>
+		</Deps>
+	</NodeJS>
+	<RTW Description="XDHTML proxy" Keywords="UnJS,XDHTML,proxy">
 		<Dir>xdhqxdh</Dir>
 	</RTW>
 	<PreprocessorDefinitions>

@@ -24,5 +24,5 @@ const xdhwebq = require('./XDHWebQ.js');
 console.log( xdhwebq.componentInfo() ) ;
 console.log( xdhwebq.wrapperInfo() );
 
-// process.stdout.write(xdhwebq.returnArgument("Text from JS file") + '\n');
+process.stdout.write(xdhwebq.returnArgument("Text from JS file") + '\n');
 

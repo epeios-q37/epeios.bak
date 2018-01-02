@@ -17,7 +17,7 @@
     along with 'XDHq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "XDHqxdh.h"
+#include "xdhqxdh.h"
 
 #include "registry.h"
 

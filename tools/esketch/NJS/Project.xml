@@ -3,7 +3,7 @@
 	<xpp:bloc>
 		<!-- User definitions -->
 		<xpp:define name="Version">
-			<xpp:bloc>(Obsolete)</xpp:bloc>
+			<xpp:bloc/>
 		</xpp:define>
 		<xpp:define name="CopyrightYears">
 			<xpp:bloc>2017</xpp:bloc>
@@ -35,8 +35,6 @@
 	<SourceDirs>
 	</SourceDirs>
 	<Files>
-  <!-- NOTA : '*.js' files will automatically be packed. -->
-  <!--File Pack="No">eSketch.js</File-->
  </Files>
 	<PreprocessorDefinitions>
 		<PreprocessorDefinition>E_ST</PreprocessorDefinition>

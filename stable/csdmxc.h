@@ -386,7 +386,7 @@ qRE
 		bso::sBool Commit_( bso::sBool Unlock )
 		{
 			Flow_.Commit( Unlock );
-			tht::sTID Unlocked = !Flow_.IDriver().IsLocked();	/* Below operation will lock the read driver,
+			bso::sBool Unlocked = !Flow_.IDriver().IsLocked();	/* Below operation will lock the read driver,
 																so we have to unlock it when it was now already locked,
 																so another thread will be able to take the ownership. */
 

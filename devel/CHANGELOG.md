@@ -1,6 +1,12 @@
 
 # *Epeios* changelog
 
+2018-01-02:
+- CSDMXC:
+  - Fixing bad variable type,
+- SCLXDHTML:
+  - Fixing missing update due to previous modification,
+  
 2017-12-28:
 - *Common*:
   - **$** : adding `Execute` function,
