@@ -67,8 +67,6 @@ const unjs = require(unjsId);
 const Tree = unjs.Tree;
 const UnJS = unjs.UnJS;
 
-// process.stdout.write(xdhq.returnArgument("Text from JS file") + '\n');
-
 class MyData extends UnJS {
 	constructor() {
 		super();
@@ -129,7 +127,7 @@ function handleDescriptionsCast(unjs) {
 function displayList(unjs) {
 	LOG();
 	var tree = new Tree();
-	var i = 1 ;
+	var i = 1;	// 0 skipped, as it serves as buffer for the new one.
 	var contents = new Array();
 
 	tree.pushTag("Notes");
@@ -145,23 +143,41 @@ function displayList(unjs) {
 
 	tree.popTag();
 
-	unjs.setLayout("Notes", tree, "Notes.xsl", () => { unjs.setCastByTag("", "EditionCast", "Plain", () => unjs.setContents(contents, () => handleDescriptionsCast(unjs))) });
+	unjs.setLayout("Notes", tree, "Notes.xsl",
+		() => unjs.setCastByTag("", "EditionCast", "Plain",
+			() => unjs.setContents(contents,
+				() => handleDescriptionsCast(unjs)
+			)
+		)
+	);
 }
 
 function acConnect(unjs, id) {
 	LOG();
 
-	unjs.setLayout("", new Tree(), "Main.xsl", () => { displayList(unjs); });
+	unjs.setLayout("", new Tree(), "Main.xsl",
+		() => displayList(unjs)
+	);
 }
 
 function acSearch(unjs, id) {
 	LOG();
-	unjs.getContent("Pattern", (result) => { unjs.pattern = result.toLowerCase(); displayList(unjs); });
+	unjs.getContent("Pattern",
+		(result) => {
+			unjs.pattern = result.toLowerCase();
+			displayList(unjs);
+		}
+	);
 }
 
 function acToggleDescriptions(unjs, id) {
 	LOG();
-	unjs.getContent(id, (result) => { unjs.hideDescriptions = result; handleDescriptionsCast(unjs); });
+	unjs.getContent(id,
+		(result) => {
+			unjs.hideDescriptions = result;
+			handleDescriptionsCast(unjs);
+		}
+	);
 }
 
 function view(unjs, id) {
@@ -171,7 +187,12 @@ function view(unjs, id) {
 			["View." + id, "Plain"],
 			["Edit." + id, "Hide"]],
 		() => unjs.setCastByTag("", "EditionCast", "Plain",
-			() => { unjs.setContent("Edit." + id, ""); unjs.id = -1; }));
+			() => {
+				unjs.setContent("Edit." + id, "");
+				unjs.id = -1;
+			}
+		)
+	);
 }
 
 function edit(unjs, id) {
@@ -179,18 +200,28 @@ function edit(unjs, id) {
 	unjs.id = parseInt(id);
 	unjs.setLayout("Edit." + id, new Tree(), "Note.xsl",
 		() => unjs.setContents(
-			[["Title", unjs.notes[unjs.id]['title']],
-			["Description", unjs.notes[unjs.id]['description']]],
+			[
+				["Title", unjs.notes[unjs.id]['title']],
+				["Description", unjs.notes[unjs.id]['description']]
+			],
 			() => unjs.setCastsByIds(
 				[
 					["Edit." + id, "Plain"],
-					["View." + id, "Hide"]],
-				() => unjs.setCastByTag("", "EditionCast", "Disabled", () => unjs.dressWidgets("Notes")))));
+					["View." + id, "Hide"]
+				],
+				() => unjs.setCastByTag("", "EditionCast", "Disabled",
+					() => unjs.dressWidgets("Notes")
+				)
+			)
+		)
+	);
 }
 
 function acEdit(unjs, id) {
 	LOG();
-	unjs.getContent(id, (result) => edit(unjs, result));
+	unjs.getContent(id,
+		(result) => edit(unjs, result)
+	);
 }
 
 function acDelete(unjs, id) {
@@ -198,8 +229,13 @@ function acDelete(unjs, id) {
 	unjs.confirm("Are you sure you want to delete this entry ?",
 		(response) => {
 			if (response) unjs.getContent(id,
-				(result) => { unjs.notes.splice(parseInt(result), 1); displayList(unjs); });
-		});
+				(result) => {
+					unjs.notes.splice(parseInt(result), 1);
+					displayList(unjs);
+				}
+			);
+		}
+	);
 }
 
 function acSubmit(unjs, id) {
@@ -209,7 +245,7 @@ function acSubmit(unjs, id) {
 			var title = result[0].trim();
 			var description = result[1];
 
-			if ( title != '') {
+			if (title != '') {
 				unjs.notes[unjs.id]['title'] = title;
 				unjs.notes[unjs.id]['description'] = description;
 				if (unjs.id == 0) {
@@ -218,7 +254,8 @@ function acSubmit(unjs, id) {
 				} else {
 					unjs.setContents(
 						[["Title." + unjs.id, title], ["Description." + unjs.id, description]],
-					() => view(unjs, unjs.id));
+						() => view(unjs, unjs.id)
+					);
 				}
 			} else
 				unjs.alert("Title can not be empty !");
@@ -231,7 +268,10 @@ function acCancel(unjs, id) {
 		(result) => {
 			if ((unjs.notes[unjs.id]['title'] != result[0]) || (unjs.notes[unjs.id]['description'] != result[1]))
 				unjs.confirm("Are you sure you want to cancel your modifications ?",
-					(response) => { if (response == true) view(unjs, unjs.id) });
+					(response) => {
+						if (response == true) view(unjs, unjs.id);
+					}
+				);
 			else
 				view(unjs, unjs.id);
 		});
