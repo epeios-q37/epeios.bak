@@ -75,7 +75,7 @@ class MyData extends UnJS {
 		this.hideDescriptions = "false";
 		this.id = 0;
 		this.notes = [
-			// First one must be empty.
+			// First one must be empty; it is used as buffer for new entries.
 			{
 				title: '',
 				description: '',
@@ -185,7 +185,8 @@ function view(unjs, id) {
 	unjs.setCastsByIds(
 		[
 			["View." + id, "Plain"],
-			["Edit." + id, "Hide"]],
+			["Edit." + id, "Hide"]
+		],
 		() => unjs.setCastByTag("", "EditionCast", "Plain",
 			() => {
 				unjs.setContent("Edit." + id, "");
@@ -253,7 +254,10 @@ function acSubmit(unjs, id) {
 					displayList(unjs);
 				} else {
 					unjs.setContents(
-						[["Title." + unjs.id, title], ["Description." + unjs.id, description]],
+						[
+							["Title." + unjs.id, title],
+							["Description." + unjs.id, description]
+						],
 						() => view(unjs, unjs.id)
 					);
 				}

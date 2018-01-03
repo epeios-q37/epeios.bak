@@ -15,7 +15,7 @@
 		<div class="jumbo">
 			<div class="right q37"/>
 			<h2>Welcome!</h2>
-			<p>Take some notes with this app. based on <i>UnJS</i>!</p>
+			<p>Take some notes with this <i>UnJS</i>!</p>
 			<a href="http://q37.info/UnJS/" class="button">
 				<xsl:text>    About   </xsl:text>
 			</a>
