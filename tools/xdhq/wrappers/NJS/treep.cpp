@@ -41,7 +41,7 @@ namespace {
 			tol::reset( P, XML_, Flow_ );
 		}
 		qCDTOR( rTreeRack_ );
-		void Init( const str::dString &Background )
+		void Init( void )
 		{
 			tol::bDateAndTime Buffer;
 			XML_.Init();
@@ -49,7 +49,6 @@ namespace {
 			rWriter_::Init( Flow_, xml::lCompact, xml::e_Default );
 
 			PushTag( "XDHTML" );
-			PutAttribute( "Background", Background );
 			PutAttribute( "Generator", sclmisc::SCLMISCTargetName );
 			PutAttribute( "TimeStamp", tol::DateAndTime( Buffer ) );
 			PutAttribute( "OS", cpe::GetOSDigest() );
@@ -76,19 +75,17 @@ SCLNJS_F( treep::New )
 {
 qRH;
 	rObject_ Object;
-	str::wString Background;
 	rTreeRack_ *Rack = NULL;
 qRB;
-	tol::Init( Object, Background );
-	Background.Init();
-	Caller.GetArgument( Object, Background );
+	tol::Init( Object );
+	Caller.GetArgument( Object );
 
 	Rack = new rTreeRack_;
 
 	if ( Rack == NULL )
 		qRAlc();
 
-	Rack->Init( Background );
+	Rack->Init();
 
 	Object.Set( Id_, Rack );
 qRR;

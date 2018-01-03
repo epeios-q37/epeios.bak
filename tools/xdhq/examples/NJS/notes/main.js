@@ -129,7 +129,7 @@ function handleDescriptionsCast(xdh) {
 
 function displayList(xdh) {
 	LOG();
-	var tree = new xdhq.LayoutTree();
+	var tree = new xdhq.Tree();
 	var i = 1 ;
 	var contents = new Array();
 
@@ -152,7 +152,7 @@ function displayList(xdh) {
 function acConnect(xdh, id) {
 	LOG();
 
-	xdh.setLayout("", new xdhq.LayoutTree(), "Main.xsl", () => { displayList(xdh); });
+	xdh.setLayout("", new xdhq.Tree(), "Main.xsl", () => { displayList(xdh); });
 }
 
 function acSearch(xdh, id) {
@@ -179,7 +179,7 @@ function edit(xdh, id) {
 	LOG();
 	console.log(">>>>>>>>> ", id)
 	xdh.id = parseInt(id);
-	xdh.setLayout("Edit." + id, new xdhq.LayoutTree(), "Note.xsl",
+	xdh.setLayout("Edit." + id, new xdhq.Tree(), "Note.xsl",
 		() => xdh.setContents(
 			[["Title", xdh.notes[xdh.id]['title']],
 			["Description", xdh.notes[xdh.id]['description']]],

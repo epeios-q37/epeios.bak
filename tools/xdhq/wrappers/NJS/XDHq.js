@@ -46,8 +46,8 @@ const xdhq = njsq._register(componentFilename);
 module.exports = njsq;
 
 class Tree {
-	constructor( background ) {
-		njsq._wrapper(xdhq, 1, this, background );
+	constructor() {
+		njsq._wrapper(xdhq, 1, this );
 	}
 	pushTag(name) {
 		njsq._wrapper(xdhq, 3, this, name);
@@ -60,18 +60,6 @@ class Tree {
 	}
 	putAttribute(name, value) {
 		njsq._wrapper(xdhq, 6, this, name, value.toString());
-	}
-}
-
-class LayoutTree extends Tree {
-	constructor() {
-		super("Layout");
-	}
-}
-
-class CastingTree extends Tree {
-	constructor() {
-		super("Casting");
 	}
 }
 
@@ -187,8 +175,7 @@ module.exports.componentInfo = () => njsq._componentInfo(xdhq);
 module.exports.wrapperInfo = () => njsq._wrapperInfo();
 module.exports.returnArgument = (text) => { return njsq._wrapper(xdhq, 0, text) };
 
-module.exports.LayoutTree = LayoutTree;
-module.exports.CastingTree = CastingTree;
+module.exports.Tree = Tree;
 module.exports.register = register;
 module.exports.launch = launch;
 module.exports.XDH = XDH;
