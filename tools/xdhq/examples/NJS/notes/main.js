@@ -1,20 +1,20 @@
 /*
 	Copyright (C) 2007-2017 Claude SIMON (http://q37.info/contact/).
 
-	This file is part of XDHq.
+	This file is part of UnJS.
 
-	XDHq is free software: you can redistribute it and/or
+	UnJS is free software: you can redistribute it and/or
 	modify it under the terms of the GNU Affero General Public License as
 	published by the Free Software Foundation, either version 3 of the
 	License, or (at your option) any later version.
 
-	XDHq is distributed in the hope that it will be useful,
+	UnJS is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 	Affero General Public License for more details.
 
 	You should have received a copy of the GNU Affero General Public License
-	along with XDHq. If not, see <http://www.gnu.org/licenses/>.
+	along with UnJS If not, see <http://www.gnu.org/licenses/>.
 */
 
 /* Some logging facilities */
@@ -50,7 +50,7 @@ function LOG() {
 }
 /**/
 
-var xdhId = "";
+var unjsId = "";
 
 if (process.env.EPEIOS_SRC) {
 	if (process.platform == 'win32')
@@ -58,19 +58,18 @@ if (process.env.EPEIOS_SRC) {
 	else
 		epeiosPath = "~/hg/epeios/"
 
-	xdhId = epeiosPath + "tools/xdhq/wrappers/NJS/XDHq.js";
+	unjsId = epeiosPath + "tools/xdhq/UnJS/NJS/UnJS.js";
 } else {
-	xdhqxdhId = 'xdhq';
+	unjsId = 'unjs';
 }
 
-const xdhq = require(xdhId);
-
-console.log(xdhq.componentInfo());
-console.log(xdhq.wrapperInfo());
+const unjs = require(unjsId);
+const Tree = unjs.Tree;
+const UnJS = unjs.UnJS;
 
 // process.stdout.write(xdhq.returnArgument("Text from JS file") + '\n');
 
-class MyData extends xdhq.XDH {
+class MyData extends UnJS {
 	constructor() {
 		super();
 		this.timestamp = new Date();
@@ -115,134 +114,132 @@ function push(note, id, tree) {
 	tree.popTag();
 }
 
-function handleDescriptionsCast(xdh) {
+function handleDescriptionsCast(unjs) {
 	LOG();
 	var value = "";
 
-	if (xdh.hideDescriptions == "false")
+	if (unjs.hideDescriptions == "false")
 		value = "Plain";
 	else
 		value = "Hidden";
 
-	xdh.setCastByTag("Notes", "DescriptionCast", value);
+	unjs.setCastByTag("Notes", "DescriptionCast", value);
 }
 
-function displayList(xdh) {
+function displayList(unjs) {
 	LOG();
-	var tree = new xdhq.Tree();
+	var tree = new Tree();
 	var i = 1 ;
 	var contents = new Array();
 
 	tree.pushTag("Notes");
-	tree.putAttribute("HideDescriptions", xdh.hideDescriptions);
+	tree.putAttribute("HideDescriptions", unjs.hideDescriptions);
 
-	while (i < xdh.notes.length) {
-		if (xdh.notes[i]['title'].toLowerCase().startsWith(xdh.pattern)) {
-			push(xdh.notes[i], i, tree);
-			contents.push(["Description." + i, xdh.notes[i]['description']]);
+	while (i < unjs.notes.length) {
+		if (unjs.notes[i]['title'].toLowerCase().startsWith(unjs.pattern)) {
+			push(unjs.notes[i], i, tree);
+			contents.push(["Description." + i, unjs.notes[i]['description']]);
 		}
 		i++;
 	}
 
 	tree.popTag();
 
-	xdh.setLayout("Notes", tree, "Notes.xsl", () => { xdh.setCastByTag("", "EditionCast", "Plain", () => xdh.setContents(contents, () => handleDescriptionsCast(xdh) ) ) } );
+	unjs.setLayout("Notes", tree, "Notes.xsl", () => { unjs.setCastByTag("", "EditionCast", "Plain", () => unjs.setContents(contents, () => handleDescriptionsCast(unjs))) });
 }
 
-function acConnect(xdh, id) {
+function acConnect(unjs, id) {
 	LOG();
 
-	xdh.setLayout("", new xdhq.Tree(), "Main.xsl", () => { displayList(xdh); });
+	unjs.setLayout("", new Tree(), "Main.xsl", () => { displayList(unjs); });
 }
 
-function acSearch(xdh, id) {
+function acSearch(unjs, id) {
 	LOG();
-	xdh.getContent("Pattern", (result) => { xdh.pattern = result.toLowerCase(); displayList(xdh); });
+	unjs.getContent("Pattern", (result) => { unjs.pattern = result.toLowerCase(); displayList(unjs); });
 }
 
-function acToggleDescriptions(xdh, id) {
+function acToggleDescriptions(unjs, id) {
 	LOG();
-	xdh.getContent(id, (result) => { xdh.hideDescriptions = result; handleDescriptionsCast(xdh); });
+	unjs.getContent(id, (result) => { unjs.hideDescriptions = result; handleDescriptionsCast(unjs); });
 }
 
-function view(xdh, id) {
+function view(unjs, id) {
 	LOG();
-	xdh.setCastsByIds(
+	unjs.setCastsByIds(
 		[
 			["View." + id, "Plain"],
 			["Edit." + id, "Hide"]],
-		() => xdh.setCastByTag("", "EditionCast", "Plain",
-			() => { xdh.setContent("Edit." + id, ""); xdh.id = -1; }));
+		() => unjs.setCastByTag("", "EditionCast", "Plain",
+			() => { unjs.setContent("Edit." + id, ""); unjs.id = -1; }));
 }
 
-function edit(xdh, id) {
+function edit(unjs, id) {
 	LOG();
-	console.log(">>>>>>>>> ", id)
-	xdh.id = parseInt(id);
-	xdh.setLayout("Edit." + id, new xdhq.Tree(), "Note.xsl",
-		() => xdh.setContents(
-			[["Title", xdh.notes[xdh.id]['title']],
-			["Description", xdh.notes[xdh.id]['description']]],
-			() => xdh.setCastsByIds(
+	unjs.id = parseInt(id);
+	unjs.setLayout("Edit." + id, new Tree(), "Note.xsl",
+		() => unjs.setContents(
+			[["Title", unjs.notes[unjs.id]['title']],
+			["Description", unjs.notes[unjs.id]['description']]],
+			() => unjs.setCastsByIds(
 				[
 					["Edit." + id, "Plain"],
 					["View." + id, "Hide"]],
-				() => xdh.setCastByTag("", "EditionCast", "Disabled", () => xdh.dressWidgets("Notes" )))));
+				() => unjs.setCastByTag("", "EditionCast", "Disabled", () => unjs.dressWidgets("Notes")))));
 }
 
-function acEdit(xdh, id) {
+function acEdit(unjs, id) {
 	LOG();
-	xdh.getContent(id, (result) => edit(xdh, result));
+	unjs.getContent(id, (result) => edit(unjs, result));
 }
 
-function acDelete(xdh, id) {
+function acDelete(unjs, id) {
 	LOG();
-	xdh.confirm("Are you sure you want to delete this entry ?",
+	unjs.confirm("Are you sure you want to delete this entry ?",
 		(response) => {
-			if (response) xdh.getContent(id,
-				(result) => { xdh.notes.splice(parseInt(result), 1); displayList(xdh); });
+			if (response) unjs.getContent(id,
+				(result) => { unjs.notes.splice(parseInt(result), 1); displayList(unjs); });
 		});
 }
 
-function acSubmit(xdh, id) {
+function acSubmit(unjs, id) {
 	LOG();
-	xdh.getContents(["Title", "Description"],
+	unjs.getContents(["Title", "Description"],
 		(result) => {
 			var title = result[0].trim();
 			var description = result[1];
 
 			if ( title != '') {
-				xdh.notes[xdh.id]['title'] = title;
-				xdh.notes[xdh.id]['description'] = description;
-				if (xdh.id == 0) {
-					xdh.notes.unshift({ title: '' , description: '' });
-					console.log(">>>>>>> " , xdh.notes);
-					displayList(xdh);
+				unjs.notes[unjs.id]['title'] = title;
+				unjs.notes[unjs.id]['description'] = description;
+				if (unjs.id == 0) {
+					unjs.notes.unshift({ title: '', description: '' });
+					displayList(unjs);
 				} else {
-					xdh.setContents(
-						[["Title." + xdh.id, title], ["Description." + xdh.id, description]],
-					() => view(xdh, xdh.id));
+					unjs.setContents(
+						[["Title." + unjs.id, title], ["Description." + unjs.id, description]],
+					() => view(unjs, unjs.id));
 				}
 			} else
-				xdh.alert("Title can not be empty !");
+				unjs.alert("Title can not be empty !");
 		});
 }
 
-function acCancel(xdh, id) {
+function acCancel(unjs, id) {
 	LOG();
-	xdh.getContents(["Title", "Description"],
+	unjs.getContents(["Title", "Description"],
 		(result) => {
-			if ((xdh.notes[xdh.id]['title'] != result[0]) || (xdh.notes[xdh.id]['description'] != result[1]))
-				xdh.confirm("Are you sure you want to cancel your modifications ?",
-					(response) => { if (response == true) view(xdh, xdh.id) });
+			if ((unjs.notes[unjs.id]['title'] != result[0]) || (unjs.notes[unjs.id]['description'] != result[1]))
+				unjs.confirm("Are you sure you want to cancel your modifications ?",
+					(response) => { if (response == true) view(unjs, unjs.id) });
 			else
-				view(xdh, xdh.id);
+				view(unjs, unjs.id);
 		});
 }
 
 function main() {
 	LOG();
-	xdhq.register([
+	unjs.register([
 		["Connect", acConnect],
 		["ToggleDescriptions", acToggleDescriptions],
 		["Search", acSearch],
@@ -252,7 +249,7 @@ function main() {
 		["Cancel", acCancel],
 	]);
 
-	xdhq.launch(newSession, "notes", "Connect");
+	unjs.launch(newSession, "notes", "Connect");
 }
 
 main();

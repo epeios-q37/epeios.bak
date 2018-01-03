@@ -25,17 +25,20 @@ var njsq = null;
 var componentPath = null;
 var componentFilename = null;
 var path = require("path");
-var xslPath = "./"
+var xslPath = "./";
+var epeiosToolsPath = "";
 
 if (process.env.EPEIOS_SRC) {
 	if (process.platform == 'win32') {
 		componentPath = 'h:/bin/';
-		xslPath = "h:/hg/epeios/tools/xdhq/servers/";
+		epeiosToolsPath = "h:/hg/epeios/tools/";
+		xslPath = path.join(epeiosToolsPath, "xdhq/servers/");
 	} else {
 		componentPath = '~/bin/';
-		xslPath = "~/hg/epeios/tools/xdhq/servers/";
+		epeiosPath = "~/hg/epeios/tools/";
+		xslPath = path.join( epeiosToolsPath, "xdhq/servers/" );
 	}
-    njsq = require(componentPath + 'njsq.node');
+	njsq = require(componentPath + 'njsq.node');
 } else {
     njsq = require('njsq');
     componentPath = __dirname;
@@ -165,10 +168,8 @@ function register(idsAndItems) {
 	njsq._wrapper(xdhq, 7, tags, callbacks);
 }
 
-function launch( callback, rootDir, action ) {
+function launch( callback ) {
 	njsq._wrapper(xdhq, 8, callback, "53752" );
-
-	require('child_process').fork('../../../xdhwebq/NJS/XDHWebQ.js', [rootDir, action]);
 }
 
 module.exports.componentInfo = () => njsq._componentInfo(xdhq);
