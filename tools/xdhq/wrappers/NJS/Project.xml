@@ -62,13 +62,13 @@
 				<File>Rentals.xsl</File>
 			</Files>
 		</Files>
-		<Files Group="TODOs">
-			<File>todos.js</File>
-			<Files Path="../cdn/todos/">
+		<Files Group="Notes">
+			<File Path="../../examples/NJS/notes/">main.js</File>
+			<Files Path="../../examples/common/notes/">
 				<File>head.html</File>
 				<File>Main.xsl</File>
-				<File>Todos.xsl</File>
-				<File>Todo.xsl</File>
+				<File>Notes.xsl</File>
+				<File>Note.xsl</File>
 			</Files>
 		</Files>
 	</Files>

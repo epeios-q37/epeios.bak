@@ -3,18 +3,18 @@
 <xsl:stylesheet	version="1.0" xmlns="http://www.w3.org/1999/xhtml" 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xpp="http://q37.info/ns/xpp/">
 	<xsl:output method="html" encoding="UTF-8"/>
 	<xsl:template match="/XDHTML">
-		<xsl:apply-templates select="Todos"/>
+		<xsl:apply-templates select="Notes"/>
 	</xsl:template>
-	<xsl:template match="Todos">
+	<xsl:template match="Notes">
 		<ul>
 			<li>
 				<span id="View.0"/>
 				<span id="Edit.0"/>
 			</li>
-			<xsl:apply-templates select="Todo"/>
+			<xsl:apply-templates select="Note"/>
 		</ul>
 	</xsl:template>
-	<xsl:template match="Todo">
+	<xsl:template match="Note">
 		<li>
 			<span id="View.{@id}">
 				<div>

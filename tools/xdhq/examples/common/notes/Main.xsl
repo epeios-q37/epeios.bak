@@ -8,16 +8,16 @@
 		<div class="menu">
 			<a>
 				<h1>
-					<em>Todos</em>
+					<em>Notes</em>
 				</h1>
 			</a>
 		</div>
 		<div class="jumbo">
 			<div class="right q37"/>
 			<h2>Welcome!</h2>
-			<p>This is an example of use of the XDHTML technology !</p>
-			<a href="http://q37.info/" class="button">
-				<xsl:text>    About Us   </xsl:text>
+			<p>Take some notes with this app. based on <i>UnJS</i>!</p>
+			<a href="http://q37.info/UnJS/" class="button">
+				<xsl:text>    About   </xsl:text>
 			</a>
 		</div>
 		<div>
@@ -32,6 +32,6 @@
 				<button data-xdh-value="0" data-xdh-onevent="Edit" data-xdh-cast="EditionCast">Create</button>
 			</div>
 		</div>
-		<div id="Todos"/>
+		<div id="Notes"/>
 	</xsl:template>
 </xsl:stylesheet>

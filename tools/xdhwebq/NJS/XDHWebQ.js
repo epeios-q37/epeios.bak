@@ -71,7 +71,7 @@ const path = require('path');
 var njsq = null;
 var componentPath = "";
 var componentFilename = "";
-var xdhqxdhModule = "";
+var xdhqxdhId = "";
 var epeiosPath = "";
 var xdhtmlJSPath = "";
 var xdhwebqJSPath = "";
@@ -88,15 +88,15 @@ if (process.env.EPEIOS_SRC) {
 	njsq = require(componentPath + 'njsq.node');
 	xdhtmlJSPath = epeiosPath + "corpus/js/";
 	xdhwebqJSPath = epeiosPath + "tools/xdhwebq/js/";
-	cdnPath = path.resolve( epeiosPath, "tools/xdhq/servers/cdn/", rootDir );	// No final '/'.
-	xdhqxdhModule = epeiosPath + "tools/xdhq/proxy/XDHq.js";
+	cdnPath = path.resolve( epeiosPath, "tools/xdhq/examples/common/", rootDir );	// No final '/'.
+	xdhqxdhId = epeiosPath + "tools/xdhq/proxy/XDHq.js";
 } else {
     njsq = require('njsq');
     componentPath = __dirname;
     xdhtmlJSPath = __dirname;
     xdhwebqJSPath = __dirname;
     cdnPath = path.resolve(rootDir);	// No final '/'.
-    xdhqxdhModule = 'xdhqxdh';
+    xdhqxdhId = 'xdhqxdh';
 }
 
 const xdhtmlJSFilename = xdhtmlJSPath + "xdhtml.js"
@@ -251,7 +251,7 @@ function launch( service ) {
 }
 
 if ((typeof firstAction === "string") && (firstAction != "")) {
-	njsq._wrapper(xdhwebq, 1, require(xdhqxdhModule));
+	njsq._wrapper(xdhwebq, 1, require(xdhqxdhId));
 	launch(process.argv[4]);
 }
 
