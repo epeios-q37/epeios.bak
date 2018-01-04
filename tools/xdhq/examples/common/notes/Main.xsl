@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- NO BOM !! -->
 <xsl:stylesheet version="1.0" 
 	xmlns="http://www.w3.org/1999/xhtml" 
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -13,9 +12,9 @@
 			</a>
 		</div>
 		<div class="jumbo">
-			<div class="right q37"/>
+			<a class="right q37" href="http://q37.info/"/>
 			<h2>Welcome!</h2>
-			<p>Take some notes with this <i>UnJS</i>!</p>
+			<p>Take some notes with <i>UnJS</i>!</p>
 			<a href="http://q37.info/UnJS/" class="button">
 				<xsl:text>    About   </xsl:text>
 			</a>

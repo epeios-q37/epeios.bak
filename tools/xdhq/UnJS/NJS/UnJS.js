@@ -23,25 +23,25 @@ var xdhqId = "";
 var xdhwebqId = "";
 
 if (process.env.EPEIOS_SRC) {
-    var epeiosToolsPath = "";
-    if (process.platform == 'win32')
-        epeiosToolsPath = "h:/hg/epeios/tools/";
-    else
-        epeiosToolsPath = "~/hg/epeios/tools/";
+	var epeiosToolsPath = "";
+	if (process.platform == 'win32')
+		epeiosToolsPath = "h:/hg/epeios/tools/";
+	else
+		epeiosToolsPath = "~/hg/epeios/tools/";
 
-    xdhwebqId = epeiosToolsPath + "xdhwebq/NJS/XDHWebQ.js";
-    xdhqId = epeiosToolsPath + "xdhq/wrappers/NJS/XDHq.js";
+	xdhwebqId = epeiosToolsPath + "xdhwebq/NJS/XDHWebQ.js";
+	xdhqId = epeiosToolsPath + "xdhq/wrappers/NJS/XDHq.js";
 } else {
-    xdhwebqId = "xdhwebq";
-    xdhqId = "xdhqxdh";
+	xdhwebqId = "xdhwebq";
+	xdhqId = "xdhqxdh";
 }
 
 const xdhwebq = require(xdhwebqId);
 const xdhq = require(xdhqId);
 
 function launch(callback, rootDir, action) {
-    xdhq.launch(callback);
-    require('child_process').fork(require(xdhwebqId), [rootDir, action]);
+	xdhq.launch(callback);
+	require('child_process').fork(require(xdhwebqId), [rootDir, action]);
 }
 
 module.exports.register = xdhq.register;

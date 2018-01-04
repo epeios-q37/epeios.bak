@@ -328,7 +328,6 @@ p {
 .q37 {
     background: url(q37.png) no-repeat;
     background-size: contain;
-    height: 150px;
-    width: 150px;
-    top: -50px
+    top: -50px;
+    border-radius: 10%;
    }

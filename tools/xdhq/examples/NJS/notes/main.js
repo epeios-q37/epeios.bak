@@ -81,7 +81,7 @@ class MyData extends UnJS {
 				description: '',
 			}, {
 				title: 'Improve design',
-				description: 'Tastes and colors... (aka &laquo;I wish I knew more about CSS...&raquo;)',
+				description: 'Tastes and colors... (aka &laquo;CSS aren&rsquo;t my cup of tea...&raquo;)',
 			}, {
 				title: 'Fixing bugs',
 				description: 'There are bugs ? Really ?',

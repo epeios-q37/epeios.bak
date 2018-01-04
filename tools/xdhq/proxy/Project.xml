@@ -63,7 +63,7 @@
 			</Regular>
 		</Deps>
 	</NodeJS>
-	<RTW Description="XDHTML proxy" Keywords="UnJS,XDHTML,proxy">
+	<RTW Description="'XDHTML' proxy" Keywords="XDHTML,proxy">
 		<Dir>xdhqxdh</Dir>
 	</RTW>
 	<PreprocessorDefinitions>
