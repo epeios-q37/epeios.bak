@@ -23,11 +23,12 @@
 		<Dir>unjs-node</Dir>
 	</RTW>
 	<NodeJS>
-	<Deps>
-	<Regular>
-	<Dep>xdhqxdh</Dep>
-	<Dep>xdhq</Dep>
-	</Regular>
-	</Deps>
+		<Deps>
+			<Regular>
+				<Dep>xdhqxdh</Dep>
+				<Dep>xdhq</Dep>
+				<Dep>xdhwebq</Dep>
+			</Regular>
+		</Deps>
 	</NodeJS>
 </Project>

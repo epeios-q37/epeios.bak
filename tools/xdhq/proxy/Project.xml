@@ -56,13 +56,6 @@
 		<File>test.js</File>
 		<File>XDHq.js</File>
 	</Files>
-	<NodeJS>
-		<Deps>
-			<Regular>
-				<Dep>xdhwebq</Dep>
-			</Regular>
-		</Deps>
-	</NodeJS>
 	<RTW Description="'XDHTML' proxy" Keywords="XDHTML,proxy">
 		<Dir>xdhq</Dir>
 	</RTW>
