@@ -30,4 +30,4 @@ if (process.env.EPEIOS_SRC) {
 	path = __dirname;
 }
 
-module.exports = require('path').join(path, "xdhqxdh").replace(/\\/g, "\\\\").replace(/'/g, "\\'").replace(/ /g, "\\ ");
+module.exports.fileName = require('path').join(path, "xdhqxdh").replace(/\\/g, "\\\\").replace(/'/g, "\\'").replace(/ /g, "\\ ");

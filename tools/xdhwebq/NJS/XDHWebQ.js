@@ -63,15 +63,16 @@ if (process.env.EPEIOS_SRC) {
 } else {
     njsq = require('njsq');
     componentPath = __dirname;
-    xdhtmlJSPath = __dirname;
-    xdhwebqJSPath = __dirname;
+    let jsPath = path.join( __dirname, "js");
+    xdhtmlJSPath = jsPath;
+    xdhwebqJSPath = jsPath;
     cdnPath = path.resolve(rootDir);	// No final '/'.
     xdhqxdhId = 'xdhqxdh';
     selfPath = __dirname;
 }
 
-const xdhtmlJSFilename = xdhtmlJSPath + "xdhtml.js"
-const xdhwebqJSFilename = xdhwebqJSPath + "xdhwebq.js"
+const xdhtmlJSFilename = path.join(xdhtmlJSPath, "xdhtml.js");
+const xdhwebqJSFilename = path.join(xdhwebqJSPath, "xdhwebq.js");
 
 componentFilename = path.join(componentPath, "xdhwebqnjs").replace(/\\/g, "\\\\").replace(/'/g, "\\'").replace(/ /g, "\\ ");
 const xdhwebq = njsq._register(componentFilename);
@@ -218,12 +219,12 @@ function launch( service ) {
 }
 
 if ((typeof firstAction === "string") && (firstAction != "")) {
-	njsq._wrapper(xdhwebq, 1, require(xdhqxdhId));
+	njsq._wrapper(xdhwebq, 1, require(xdhqxdhId).fileName);
 	launch(process.argv[4]);
 }
 
 module.exports.returnArgument = (text) => njsq._wrapper(xdhwebq, 0, text);
 module.exports.serve = serve;
 module.exports.launch = launch;
-module.exports = path.normalize(path.join(selfPath, "XDHWebQ.js" ));
+module.exports.fileName = path.normalize(path.join(selfPath, "XDHWebQ.js" ));
 

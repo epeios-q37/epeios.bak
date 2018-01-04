@@ -33,7 +33,7 @@ if (process.env.EPEIOS_SRC) {
 	xdhqId = epeiosToolsPath + "xdhq/wrappers/NJS/XDHq.js";
 } else {
 	xdhwebqId = "xdhwebq";
-	xdhqId = "xdhqxdh";
+	xdhqId = "xdhq";
 }
 
 const xdhwebq = require(xdhwebqId);
@@ -41,7 +41,7 @@ const xdhq = require(xdhqId);
 
 function launch(callback, rootDir, action) {
 	xdhq.launch(callback);
-	require('child_process').fork(require(xdhwebqId), [rootDir, action]);
+	require('child_process').fork(require(xdhwebqId).fileName, [rootDir, action]);
 }
 
 module.exports.register = xdhq.register;

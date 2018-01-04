@@ -185,7 +185,7 @@ namespace {
 				Callback.reset( false );
 				tol::Init( Data.JS.Id, Data.JS.Action );
 			} else {	// A new connection was open.
-				Rack_.ConnectCallback.ObjectLaunch( Data.XDH, Data.JS.Arguments.Core() );
+				ConnectCallback.ObjectLaunch( Data.XDH, Data.JS.Arguments.Core() );
 				Data.XDH.Set( Id_, &Data );
 			}
 
