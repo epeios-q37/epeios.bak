@@ -1,5 +1,7 @@
-# *UnJS*
+# *UnJSq*
 
-[![NPM](https://nodei.co/npm/unjs.png)](https://nodei.co/npm/unjs/)
+An easy way to develop web application's frontend with *Node.js*.
 
-For more information, see [http://q37.info/unjs/](http://q37.info/unjs/).
+[![NPM](https://nodei.co/npm/unjsq.png)](https://nodei.co/npm/unjsq/)
+
+For more information, see [http://q37.info/unjsq/](http://q37.info/unjsq/).

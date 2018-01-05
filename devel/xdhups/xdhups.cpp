@@ -28,6 +28,7 @@ extern "C" typedef xdhcmn::retrieve retrieve;
 bso::bool__ xdhups::agent___::Init(
 	xdhcmn::eMode Mode,
 	const str::string_ &ModuleFileName,
+	dlbrry::eNormalization Normalization,
 	const char *Identification )
 {
 	bso::bool__ Success = false;
@@ -39,7 +40,7 @@ qRB
 	Location.Init();
 	Data.Init( Mode, Identification, fnm::GetLocation( ModuleFileName, Location ).UTF8( Buffer ) );
 
-	Library_.Init( ModuleFileName );
+	Library_.Init( ModuleFileName, Normalization );
 
 	retrieve *Retrieve = dlbrry::GetFunction<retrieve *>( E_STRING( XDHCMN_RETRIEVE_FUNCTION_NAME ), Library_ );
 

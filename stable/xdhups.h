@@ -83,6 +83,7 @@ namespace xdhups {
 		bso::bool__ Init(
 			xdhcmn::eMode Mode,
 			const str::string_ &ModuleFileName,
+			dlbrry::eNormalization Normalization,	// Usually 'dlbrry::n_Default', except when used for 'Node.js' (set to 'dlbrry::nExtOnly').
 			const char *Identification );
 		cSession_ *RetrieveCallback(
 			const char *Language,

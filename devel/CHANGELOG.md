@@ -1,6 +1,12 @@
 
 # *Epeios* changelog
 
+2018-01-05:
+- V8Q:
+  - fixing *g++* warning,
+- XDHUPS:
+  - adding `dlbrry::eNormalization` parameter to `agent___::Init(...)`, due to fact that *Node.js* (*node-pre-gyp*) does not prepend dynamic libraries with the usual `lib` prefix under *POSIX*.
+
 2018-01-02:
 - CSDMXC:
   - Fixing bad variable type,

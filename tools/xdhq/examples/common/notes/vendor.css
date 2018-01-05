@@ -324,10 +324,3 @@ p {
 .relative {
     position: relative;
 }
-
-.q37 {
-    background: url(q37.png) no-repeat;
-    background-size: contain;
-    top: -50px;
-    border-radius: 10%;
-   }

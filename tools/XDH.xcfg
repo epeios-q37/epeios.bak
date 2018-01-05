@@ -41,7 +41,6 @@
 			<Dialog>
 				<Alert>
 					<![CDATA[
-						// log( "%XML%" );
 						dialog = document.createElement( "span" );
 						dialog.innerHTML = transformToHTML( "%XML%", "%XSL%" );
 						$(dialog).dialog({modal: true},{title: "%Title%"},{width: "auto"} ,{closeText: "%CloseText%"});
@@ -147,30 +146,21 @@
 			<Fetcher>
 				<Events>
 					<![CDATA[
-						log( "Events : '%Id%'" );
-						log( "%XML%" );
 						removeChildren( "%Id%" );
-						console.log('av');
 						getElement( "%Id%" ).appendChild( transformToFragment( "%XML%", "%XSL%" ) );"";
-						console.log('ap');
 						var digests = fetchEventHandlers( "%Id%" );
-						console.log("Digests: ", digests);
 						digests;
 					]]>
 				</Events>
 				<Widgets>
 					<![CDATA[
-					log( "Widgest fetching : '%Id%'" );
 					var digest = fetchWidgets( "%Id%" );
-					log( "Widgets : " + digest );
 					digest;
 				]]>
 				</Widgets>
 				<Casts>
 					<![CDATA[
-					log( "Fetching casts : '%Id%'" );
 					var digest = fetchCasts( "%Id%" );
-					log( digest );
 					digest;
 				]]>
 				</Casts>
@@ -183,7 +173,6 @@
 				</EventHandlers>
 				<Casts>
 					<![CDATA[
-					console.log( "%Ids% : %Casts%" );
 					setCasts( %Ids_%, %Casts_% );
 				]]>
 				</Casts>
