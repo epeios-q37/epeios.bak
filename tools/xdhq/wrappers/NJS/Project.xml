@@ -3,7 +3,7 @@
 	<xpp:bloc>
 		<!-- User definitions -->
 		<xpp:define name="Version">
-			<xpp:bloc>20180104-a</xpp:bloc>
+			<xpp:bloc/>
 		</xpp:define>
 		<xpp:define name="CopyrightYears">
 			<xpp:bloc>2017</xpp:bloc>
@@ -65,6 +65,13 @@
 				<File>Rentals.xsl</File>
 			</Files>
 		</Files-->
+		<Files Group="Blank">
+			<File Path="../../examples/NJS/blank/">main.js</File>
+			<Files Path="../../examples/common/blank/">
+				<File>head.html</File>
+				<File>Main.xsl</File>
+			</Files>
+		</Files>
 		<Files Group="Notes">
 			<File Path="../../examples/NJS/notes/">main.js</File>
 			<Files Path="../../examples/common/notes/">

@@ -4,23 +4,22 @@
 	<xpp:bloc>
 		<!-- User definitions -->
 		<xpp:define name="Version">
-			<xpp:bloc>0.1.0</xpp:bloc>
+			<xpp:bloc>0.0.1</xpp:bloc>
 		</xpp:define>
 		<xpp:define name="CopyrightYears">
 			<xpp:bloc>2018</xpp:bloc>
 		</xpp:define>
 		<xpp:set name="Credits" value="Epeios"/>
-		<xpp:set name="Type" value="UnJS"/>
+		<xpp:set name="Type" value="UnJSq"/>
 	</xpp:bloc>
 	<xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
 	<About>
-		<Program>unjsnjs</Program>
-		<Software>UnJS</Software>
+		<Software>UnJSq</Software>
 		<UUID>45ce6ec4-6d3d-428b-9764-cc1f5588eaf6</UUID>
 	</About>
 	<!-- NO SPACE in 'Keywords' attribute !!! ("a,b,c", NOT "a, b, c")-->
-	<RTW Description="Module to handle web application frontends" Keywords="XDHTML,UnJS,web,frontend">
-		<Dir>unjs-node</Dir>
+	<RTW Description="Module to handle web application frontends" Keywords="XDHTML,UnJSq,web,frontend">
+		<Dir>unjsq-node</Dir>
 	</RTW>
 	<NodeJS>
 		<Deps>

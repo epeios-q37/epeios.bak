@@ -25,7 +25,7 @@
 							</h3>
 							<p id="Description.{@id}" data-xdh-cast="DescriptionCast">
 								<!-- 'disable-output-escaping' does not work with Firefox (https://bugzilla.mozilla.org/show_bug.cgi?id=98168)	-->
-								<xsl:value-of select="description" disable-output-escaping="yes"/>
+								<!--xsl:value-of select="description" disable-output-escaping="yes"/-->
 							</p>
 						</div>
 						<span style="display: flex; flex-direction: column;">

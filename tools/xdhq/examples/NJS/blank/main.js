@@ -1,23 +1,23 @@
 /*
 	Copyright (C) 2007-2017 Claude SIMON (http://q37.info/contact/).
 
-	This file is part of UnJS.
+	This file is part of UnJSq.
 
-	UnJS is free software: you can redistribute it and/or
+	UnJSq is free software: you can redistribute it and/or
 	modify it under the terms of the GNU Affero General Public License as
 	published by the Free Software Foundation, either version 3 of the
 	License, or (at your option) any later version.
 
-	UnJS is distributed in the hope that it will be useful,
+	UnJSq is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 	Affero General Public License for more details.
 
 	You should have received a copy of the GNU Affero General Public License
-	along with UnJS If not, see <http://www.gnu.org/licenses/>.
+	along with UnJSq If not, see <http://www.gnu.org/licenses/>.
 */
 
-var unjsId = "";
+var unjsqId = "";
 
 if (process.env.EPEIOS_SRC) {
 	if (process.platform == 'win32')
@@ -25,16 +25,16 @@ if (process.env.EPEIOS_SRC) {
 	else
 		epeiosPath = "~/hg/epeios/"
 
-	unjsId = epeiosPath + "tools/xdhq/UnJS/NJS/UnJS.js";
+	unjsqId = epeiosPath + "tools/xdhq/UnJSq/NJS/UnJSq.js";
 } else {
-	unjsId = 'unjs';
+	unjsqId = 'unjsq';
 }
 
-const unjs = require(unjsId);
-const Tree = unjs.Tree;
-const UnJS = unjs.UnJS;
+const unjsq = require(unjsqId);
+const Tree = unjsq.Tree;
+const DOM = unjsq.DOM;
 
-class MyData extends UnJS {
+class MyData extends DOM {
 	constructor() {
 		super();
 		this.timestamp = new Date();
@@ -47,35 +47,35 @@ function newSession() {
 	return new MyData();
 }
 
-function acConnect(unjs, id) {
-	unjs.setLayout("", new Tree(), "Main.xsl",
-		() => unjs.setCastById("Input", "Hide")
+function acConnect(dom, id) {
+	dom.setLayout("", new Tree(), "Main.xsl",
+		() => dom.setCastById("Input", "Hide")
 	);
 }
 
-function acSubmit(unjs, id) {
-	unjs.getContent("Pattern",
-		(result) => unjs.setContent("Pattern", result.toUpperCase())
+function acSubmit(dom, id) {
+	dom.getContent("Pattern",
+		(result) => dom.setContent("Pattern", result.toUpperCase())
 	);
 }
 
-function acShowInput(unjs, id) {
-	unjs.setCastById("Input", "Plain");
+function acShowInput(dom, id) {
+	dom.setCastById("Input", "Plain");
 }
 
-function acHideInput(unjs, id) {
-	unjs.setCastById("Input", "Hide");
+function acHideInput(dom, id) {
+	dom.setCastById("Input", "Hide");
 }
 
 function main() {
-	unjs.register([
+	unjsq.register([
 		["Connect", acConnect],
 		["Submit", acSubmit],
 		["HideInput", acHideInput],
 		["ShowInput", acShowInput],
 	]);
 
-	unjs.launch(newSession, "blank", "Connect");
+	unjsq.launch(newSession, "blank", "Connect");
 }
 
 main();

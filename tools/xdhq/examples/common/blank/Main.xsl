@@ -8,8 +8,7 @@
 		<span class="vcenter-out">
 			<span class="vcenter-in">
 				<span data-xdh-onevent="mouseleave|HideInput">
-					<fieldset title="Converter">
-						<legend>To upper case converter</legend>
+					<fieldset>
 						<div data-xdh-onevent="ShowInput">
 							<text>Clicking on this text shows an input field, leaving this frame hides it.</text>
 						</div>
