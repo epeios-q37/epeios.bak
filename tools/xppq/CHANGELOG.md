@@ -1,4 +1,9 @@
 # *XPPq* changelog
+
+2018-01-06::
+- *xppqnjs*:
+  - adaptation to modification of used components.
+
 2017-12-19:
 - *xppqnjs*:
   - adaptation to modification of used components.
