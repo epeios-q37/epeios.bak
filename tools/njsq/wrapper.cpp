@@ -319,7 +319,8 @@ namespace {
 						Row = Value->First();
 
 						while ( Row != qNIL ) {
-							Array->Set( v8q::GetContext(), (int32_t)*Row, v8q::ToString( Value->operator()( Row ).Convert( Buffer ) ) );
+							if ( !Array->Set( v8q::GetContext(), (int32_t)*Row, v8q::ToString( Value->operator()( Row ).Convert( Buffer ) ) ).FromJust() )
+								qRGnr();
 
 							Row = Value->Next( Row );
 

@@ -1,7 +1,10 @@
 # *NJSq* changelog
 
+2018-01-09:
+- fixing *Clang* warning.
+
 2017-12-19:
-- the wrapper can now be loaded more than once; two *addon*s based on this wrapper can now be used together.
+- the wrapper can now be loaded more than once; two *addon*s based on this wrapper can now be used together,
 
 2017-12-08:
 - handling *callbacks* and strings as parameters,
