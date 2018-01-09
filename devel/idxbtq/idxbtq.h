@@ -159,15 +159,27 @@ namespace idxbtq {
 		}
 		r First(
 			r Root,
-			btr::level__ &Level = *(btr::level__ *)NULL ) const
+			btr::level__ *Level = NULL ) const
 		{
 			return E_IBTREEt_( r )::First( Root, Level );
 		}
+		r First(
+			r Root,
+			btr::level__ &Level ) const
+		{
+			return First( Root, &Level );
+		}
 		r Last(
 			r Root,
-			btr::level__ &Level = *(btr::level__ *)NULL ) const
+			btr::level__ *Level = NULL ) const
 		{
 			return E_IBTREEt_( r )::Last( Root, Level );
+		}
+		r Last(
+			r Root,
+			btr::level__ &Level ) const
+		{
+			return Last( Root, &Level );
 		}
 		r Next( r Current ) const
 		{
