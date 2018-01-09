@@ -189,7 +189,8 @@ namespace session {
 				break;
 			}
 
-			return *(mtx::handler___ *)NULL;	// To avoid a 'warning'.
+			qRGnr();
+			return _Global;	// Never called, just to avoid a 'warning'.
 		}
 	public:
 		void reset( bso::bool__ P = true )
