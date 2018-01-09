@@ -311,9 +311,11 @@ namespace btr {
 		{
 			return SearchMostLeftNode_( Node, &Level );
 		}
-		sdr::row_t__ SearchMostLeftNode( sdr::row_t__ Node ) const
+		sdr::row_t__ SearchMostLeftNode(
+			sdr::row_t__ Node,
+			level__ *Level = NULL ) const
 		{
-			return SearchMostLeftNode_( Node, NULL );
+			return SearchMostLeftNode_( Node, Level );
 		}
 		sdr::row_t__ SearchMostRightNode(
 			sdr::row_t__ Node,
@@ -321,9 +323,11 @@ namespace btr {
 		{
 			return SearchMostRightNode_( Node, &Level );
 		}
-		sdr::row_t__ SearchMostRightNode( sdr::row_t__ Node ) const
+		sdr::row_t__ SearchMostRightNode(
+			sdr::row_t__ Node,
+			level__ *Level = NULL) const
 		{
-			return SearchMostRightNode_( Node, NULL );
+			return SearchMostRightNode_( Node, Level );
 		}
 		void PrintStructure(
 			sdr::row_t__ Racine,
@@ -856,9 +860,21 @@ namespace btr {
 		{
 			return Nodes.SearchMostLeftNode( *Node, Level );
 		}
+		r SearchMostLeftNode(
+			r Node,
+			level__ *Level ) const
+		{
+			return Nodes.SearchMostLeftNode( *Node, Level );
+		}
 		r SearchMostRightNode(
 			r Node,
 			level__ &Level ) const
+		{
+			return Nodes.SearchMostRightNode( *Node, Level );
+		}
+		r SearchMostRightNode(
+			r Node,
+			level__ *Level ) const
 		{
 			return Nodes.SearchMostRightNode( *Node, Level );
 		}

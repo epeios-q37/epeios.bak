@@ -1,6 +1,10 @@
 # *Epeios* changelog
 
 2018-01-09:
+- BTR:
+  - adding some default parameter to ease the modification in *IDXBTR* (see below),
+- IDXBTR:
+  - getting rid of faulty `type &var = *(type *)NULL` parameter definitions,
 - TOL:
   - adding a feature to ease the temporary disabling of the `system` function message warning.
 - V8Q:
