@@ -240,7 +240,7 @@ namespace idxbtr {
 					BaseTree.BecomeLeft( Fils, Pere );
 
 					if ( Fille != qNIL )
-						BaseTree.BecomeRight( Fille, _SearchMostRightNode( Fils, *(btr::level__ *)NULL ) );
+						BaseTree.BecomeRight( Fille, _SearchMostRightNode( Fils, NULL ) );
 				}
 				else if ( Fille != qNIL )
 					BaseTree.BecomeLeft( Fille, Pere );
@@ -254,7 +254,7 @@ namespace idxbtr {
 					BaseTree.BecomeRight( Fille, Pere );
 
 					if ( Fils != qNIL )
-						BaseTree.BecomeLeft( Fils, _SearchMostLeftNode( Fille, *(btr::level__ *)NULL ) );
+						BaseTree.BecomeLeft( Fils, _SearchMostLeftNode( Fille, NULL ) );
 				}
 				else if ( Fils != qNIL )
 					BaseTree.BecomeRight( Fils, Pere );
@@ -264,7 +264,7 @@ namespace idxbtr {
 				if ( Fils != qNIL )
 				{
 					if ( Fille != qNIL )
-						BaseTree.BecomeRight( Fille, _SearchMostRightNode( Fils, *(btr::level__ *)NULL ) );
+						BaseTree.BecomeRight( Fille, _SearchMostRightNode( Fils, NULL ) );
 
 					return Fils;
 				}
