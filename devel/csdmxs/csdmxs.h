@@ -363,7 +363,7 @@ qRE
 		qRE
 			return MainAction;	// Always 'aContinue', because we want to keep the physical connection, even when the logical connection was closed.
 		}
-		virtual bso::sBool CSDSCBPostProcess( void *UP )
+		virtual bso::sBool CSDSCBPostProcess( void *UP ) override
 		{
 			if ( UP == NULL )
 				qRFwk();
