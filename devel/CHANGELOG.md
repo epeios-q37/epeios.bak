@@ -1,5 +1,10 @@
-
 # *Epeios* changelog
+
+2018-01-09:
+- TOL:
+  - adding a feature to ease the temporary disabling of the `system` function message warning.
+- V8Q:
+  - fixing issue with the `v8.h` use of the `system` command (see above),
 
 2018-01-05:
 - V8Q:

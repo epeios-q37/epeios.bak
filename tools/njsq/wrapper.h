@@ -24,7 +24,7 @@
 # include "n4njs.h"
 
 // Note to developer : include 'h:\hg\NJSIncludeDirectories.props' in the '.vcxproj'.
-# include <node.h>
+# include "nodeq.h"
 
 namespace wrapper {
 	typedef n4allw::rLauncher rLauncher_;

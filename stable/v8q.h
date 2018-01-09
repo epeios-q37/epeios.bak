@@ -33,9 +33,17 @@ along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 # include "str.h"
 # include "txf.h"
 
+// If 'TOL' was already included, we have to 'undefine' the 'system' macro it creates due to 'v8.h' using this function.
+# ifdef TOL_SYSTEM_MACRO
+#  undef system
+# endif
 // Note to developer : include 'h:\hg\NJSIncludeDirectories.props' in the '.vcxproj'.
 # include <v8.h>
-// Put after above line due to redefinition of 'System(...)'.
+// Restoring the 'system' macro defined by 'TOL', if it was already included.
+# ifdef TOL_SYSTEM_MACRO
+#  define system TOL_SYSTEM_MACRO
+# endif
+// Put after above line due to redefinition of 'system(...)'.
 # include "tol.h"
 
 namespace v8q {
