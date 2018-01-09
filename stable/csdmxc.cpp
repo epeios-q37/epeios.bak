@@ -56,7 +56,7 @@ namespace {
 	qRB
 		Flow.Init( Callback.ExtractDriver( UP ) );
 
-		if ( ( tol::EpochTime( false ) - Callback.EpochTimeStamp( UP ) ) >= Delay )
+		if ( ( tol::EpochTime( false ) - Callback.EpochTimeStamp( UP ) ) >= Delay ) {
 			if ( !Flow.OFlowIsLocked() ) {
 				PutId( CSDMXB_PING, Flow );
 				Flow.Commit();
@@ -65,11 +65,11 @@ namespace {
 					qRFwk();
 
 				Flow.Dismiss();
-			}
-			else {
+			} else {
 				Flow.Commit( false );
 				Flow.Dismiss( false );
 			}
+		}
 	qRR
 	qRT
 	qRE

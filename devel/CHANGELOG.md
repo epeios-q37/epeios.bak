@@ -5,6 +5,8 @@
   - **$**: getting rid of faulty `type &var = *(type *)NULL` parameter definitions,
 - BTR:
   - adding some default parameter to ease the modification in *IDXBTR* (see below),
+- CSDMXC:
+  - fixing *clang* warning,
 - IDXBTR:
   - **$**,
 - IDXBTQ:
