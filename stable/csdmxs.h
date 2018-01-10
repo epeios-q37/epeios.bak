@@ -302,7 +302,6 @@ qRE
 		qRH
 			sId Id = CSDMXB_UNDEFINED;
 			csdscb::action__ Action = csdscb::aContinue;
-			rData_ &Data = *(rData_ *)UP;
 			bso::sBool OwnerShipTaken = false;
 			flw::sDressedRWFlow<> Flow;
 		qRB

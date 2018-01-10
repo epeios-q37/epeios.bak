@@ -1,5 +1,9 @@
 # *Epeios* changelog
 
+2018-01-10:
+- XDHUTL:
+  - fixing *Clang* warning,
+
 2018-01-09:
 - *common*:
   - **$**: getting rid of faulty `type &var = *(type *)NULL` parameter definitions,

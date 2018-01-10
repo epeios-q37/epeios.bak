@@ -183,7 +183,6 @@ qRH
 	str::string Keys;
 	bso::bool__ RetrieveKeys = false;
 	str::string KeyShortcut;
-	sdr::row__ PlusPos = qNIL;
 qRB
 	Retriever.Init( Description );
 	Keys.Init();
