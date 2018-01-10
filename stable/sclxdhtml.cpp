@@ -442,115 +442,47 @@ qRT;
 qRE;
 }
 
-void sclxdhtml::SetCastsByIds_(
-	const str::dStrings &Ids,
-	const str::dStrings &Values, 
+xdhcmn::sIndex sclxdhtml::AddCSSRule_(
+	const str::dString &Rule,
 	xdhdws::sProxy &Proxy )
 {
-qRH;
-	str::wString MergedIds, MergedValues;
-qRB;
-	MergedIds.Init();
-	xdhcmn::FlatMerge( Ids, MergedIds, true );
-
-	MergedValues.Init();
-	xdhcmn::FlatMerge( Values, MergedValues, true );
-
-	Proxy.SetCastsByIds( MergedIds, MergedValues );
-qRR;
-qRT;
-qRE;
+	return Proxy.AddCSSRule( Rule );
 }
 
-void sclxdhtml::SetCastsByTags_(
-	const xdhdws::nstring___ &Id,
-	const dCasts &Casts,
+void sclxdhtml::RemoveCSSRule_(
+	xdhcmn::sIndex Index,
 	xdhdws::sProxy &Proxy )
 {
-qRH;
-	str::wStrings Tags, Values;
-	sdr::sRow Row = qNIL;
-	str::wString MergedTags, MergedValues;
-qRB;
-	tol::Init( Tags, Values );
-
-	Row = Casts.First();
-
-	while ( Row != qNIL ) {
-		Tags.Append( Casts( Row ).Tag );
-		Values.Append( Casts( Row ).Value );
-
-		Row = Casts.Next( Row );
-	}
-
-	MergedTags.Init();
-	xdhcmn::FlatMerge( Tags, MergedTags, false );
-
-	MergedValues.Init();
-	xdhcmn::FlatMerge( Values, MergedValues, false );
-
-	Proxy.SetCastsByTags( Id, MergedTags, MergedValues );
-qRR;
-qRT;
-qRE;
+	Proxy.RemoveCSSRule( Index );
 }
 
-void sclxdhtml::SetCastById_(
-	const xdhdws::nstring___ &RawId,
-	const xdhdws::nstring___ &RawValue,
-	xdhdws::sProxy &Proxy )
+void sclxdhtml::PopCSSRule_( xdhdws::sProxy &Proxy )
 {
-qRH;
-	str::wString Id, Value;
-	str::wStrings Ids, Values;
-qRB;
-	Id.Init();
-	RawId.UTF8( Id );
-	Ids.Init();
-	Ids.Append( Id );
-
-	Value.Init();
-	RawValue.UTF8( Value );
-	Values.Init();
-	Values.Append( Value );
-
-	SetCastsByIds_( Ids, Values, Proxy );
-qRR;
-qRT;
-qRE;
+	Proxy.PopCSSRule();
 }
 
-void sclxdhtml::SetCastByTag_(
-	const xdhdws::nstring___ &Id,
-	const dCast &Cast,
+void sclxdhtml::AddClass(
+	const str::dString &Id,
+	const str::dString &Class,
 	xdhdws::sProxy &Proxy )
 {
-qRH;
-	wCasts Casts;
-qRB;
-	Casts.Init();
-	Casts.Append( Cast );
-
-	SetCastsByTags_( Id, Casts, Proxy );
-qRR;
-qRT;
-qRE;
+	Proxy.AddClass( Id, Class );
 }
 
-void sclxdhtml::SetCastByTag_(
-	const xdhdws::nstring___ &Id,
-	const str::dString &Tag,
-	const str::dString &Value,
+void sclxdhtml::RemoveClass(
+	const str::dString &Id,
+	const str::dString &Class,
 	xdhdws::sProxy &Proxy )
 {
-qRH;
-	wCast Cast;
-qRB;
-	Cast.Init( Tag, Value );
-	SetCastByTag_( Id, Cast, Proxy );
-qRR;
-qRT;
-qRE;
+	Proxy.RemoveClass(Id, Class );
+}
+
+void sclxdhtml::ToggleClass(
+	const str::dString &Id,
+	const str::dString &Class,
+	xdhdws::sProxy &Proxy )
+{
+	Proxy.ToggleClass( Id, Class );
 }
 
 qCDEF( char *, sclxdhtml::RootTagId_, "Root" );
@@ -575,51 +507,6 @@ qRT
 qRE
 	return ProjectType;
 }
-
-#define CAST( name )\
-	Cast.Init( str::wString( #name "Cast" ), name );\
-	Casts.Append( Cast )
-
-void sclxdhtml::prolog::GetCasts(
-	sProxy &Proxy,
-	dCasts &Casts )
-{
-qRH;
-	str::wString NewProject, PredefinedProjects, UserProject;
-	wCast Cast;
-qRB;
-	tol::Init( NewProject, PredefinedProjects, UserProject );
-
-	switch ( GetProjectType_( Proxy ) ) {
-	case sclmisc::ptNew:
-		NewProject = "Vanished";
-		PredefinedProjects = "Hidden";
-		UserProject = "Hidden";
-		break;
-	case sclmisc::ptPredefined:
-		NewProject = "Plain";
-		PredefinedProjects = "Plain";
-		UserProject = "Hidden";
-		break;
-	case sclmisc::ptRemote:
-		NewProject = "Plain";
-		PredefinedProjects = "Hidden";
-		UserProject = "Plain";
-		break;
-	default:
-		qRFwk();
-		break;
-	}
-
-	CAST( NewProject );
-	CAST( PredefinedProjects );
-	CAST( UserProject );
-qRR;
-qRT;
-qRE;
-}
-
-#undef CAST
 
 void sclxdhtml::prolog::DisplaySelectedProjectFilename(
 	sProxy &Proxy,
@@ -723,64 +610,6 @@ namespace {
 		return Proxy.GetValue( login::BackendTypeId, Type );
 	}
 }
-
-#define CAST( name )\
-	Cast.Init( str::wString( #name "BackendCast" ), name );\
-	Casts.Append( Cast )
-
-void sclxdhtml::login::GetCasts(
-	sProxy &Proxy,
-	eBackendVisibility Visibility,
-	dCasts &Casts )
-{
-qRH;
-	str::wString Type;
-	str::wString None, Straight, Embedded, Predefined, Visible;
-	wCast Cast;
-qRB;
-	tol::Init( Type, None, Straight, Embedded, Predefined, Visible );
-
-	GetBackendType_( Proxy, Type );
-
-	if ( Type == "None" ) {
-		None = "Vanished";
-		Straight = "Hidden";
-		Embedded = "Hidden";
-		Predefined = "Hidden";
-	} else if ( Type == "Straight" ) {
-		None = "Plain";
-		Straight = "Plain";
-		Embedded = "Hidden";
-		Predefined = "Hidden";
-	} else if ( Type == "Embedded" ) {
-		None = "Plain";
-		Straight = "Hidden";
-		Embedded = "Plain";
-		Predefined = "Hidden";
-	} else if ( Type == "Predefined" ) {
-		None = "Plain";
-		Straight = "Hidden";
-		Embedded = "Hidden";
-		Predefined = "Plain";
-	} else
-		qRFwk();
-
-	if ( Visibility == bvShow )
-		Visible = "Plain";
-	else
-		Visible = "Hidden";
-
-	CAST( None );
-	CAST( Straight );
-	CAST( Embedded );
-	CAST( Predefined );
-	CAST( Visible );
-qRR;
-qRT;
-qRE;
-}
-
-#undef CAST
 
 namespace straight_ {
 	namespace {

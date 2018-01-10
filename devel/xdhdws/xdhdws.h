@@ -36,6 +36,7 @@
 namespace xdhdws {
 	using xdhcmn::nchar__;
 	using xdhcmn::nstring___;
+	using xdhcmn::rNString;
 
 	class sProxy
 	{
@@ -112,18 +113,54 @@ namespace xdhdws {
 		{
 			C_().Process(xdhcmn::fSetContents, NULL, Ids.Internal()(), Contents.Internal()() );
 		}
-		void SetCastsByIds(
-			const nstring___ &Ids,
-			const nstring___ &Casts )
+		xdhcmn::sIndex AddCSSRule( const rNString &Rule )
 		{
-			C_().Process( xdhcmn::fSetCastsByIds, NULL, Ids.Internal()(), Casts.Internal()() );
+			xdhcmn::sIndex Index = 0;
+		qRH;
+			TOL_CBUFFER___ Buffer;
+		qRB;
+			C_().Process( xdhcmn::fAddCSSRule, &Buffer, Rule.Internal()() );
+
+			str::wString( Buffer ).ToNumber( *Index );
+		qRR;
+		qRT;
+		qRE;
+			return Index;
 		}
-		void SetCastsByTags(
-			const nstring___ &Id,
-			const nstring___ &Tags,
-			const nstring___ &Casts )
+		void RemoveCSSRule( xdhcmn::sIndex Index )
 		{
-			C_().Process( xdhcmn::fSetCastsByTags, NULL, Id.Internal()( ), Tags.Internal()( ), Casts.Internal()() );
+		qRH;
+			rNString SBuffer;
+			bso::bInteger Buffer;
+		qRB;
+			SBuffer.Init( bso::Convert( *Index, Buffer ) );
+
+			C_().Process( xdhcmn::fRemoveCSSRule, NULL, SBuffer.Internal()() );
+		qRR;
+		qRT;
+		qRE;
+		}
+		void PopCSSRule( void )
+		{
+			C_().Process( xdhcmn::fPopCSSRule, NULL );
+		}
+		void AddClass(
+			const rNString &Id,
+			const rNString &Class )
+		{
+			C_().Process( xdhcmn::fAddClass, NULL, Id.Internal()(), Class.Internal()() );
+		}
+		void RemoveClass(
+			const rNString &Id,
+			const rNString &Class )
+		{
+			C_().Process( xdhcmn::fRemoveClass, NULL, Id.Internal()(), Class.Internal()() );
+		}
+		void ToggleClass(
+			const rNString &Id,
+			const rNString &Class )
+		{
+			C_().Process( xdhcmn::fToggleClass, NULL, Id.Internal()(), Class.Internal()() );
 		}
 		const char *GetProperty(
 			const nstring___ &Id,

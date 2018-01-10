@@ -41,60 +41,6 @@ along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 # define SCLXDHTML_DEFAULT_SUFFIX "xdh"
 
 namespace sclxdhtml {
-	class dCast {
-	public:
-		str::dString
-			Tag,
-			Value;
-		struct s {
-			str::dString::s
-				Tag,
-				Value;
-		} &S_;
-		dCast( s &S )
-		: S_( S ),
-		  Tag( S.Tag ),
-		  Value( S.Value )
-		{}
-		void reset( bool P = true )
-		{
-			tol::reset( P, Tag, Value );
-		}
-		void plug( qASd *AS )
-		{
-			tol::plug( AS, Tag, Value );
-		}
-		dCast &operator =( const dCast &C )
-		{
-			Tag = C.Tag;
-			Value = C.Value;
-
-			return *this;
-		}
-		void Init( void )
-		{
-			tol::Init( Tag, Value );
-		}
-		void Init(
-			const str::dString &Tag,
-			const str::dString &Value )
-		{
-			this->Tag.Init( Tag );
-			this->Value.Init( Value );
-		}
-		void Init(
-			const char *Tag,
-			const char *Value )
-		{
-			Init( str::wString( Tag ), str::wString( Value ) );
-		}
-	};
-
-	qW( Cast );
-
-	typedef crt::qCRATEdl( dCast ) dCasts;
-	qW( Casts );
-
 	namespace registry {
 		using rgstry::rEntry;
 
@@ -383,40 +329,30 @@ namespace sclxdhtml {
 		const str::dString &Content,
 		xdhdws::sProxy &Proxy );
 
-	void SetCastsByIds_(
-		const str::dStrings &Ids,
-		const str::dStrings &Values,
+	xdhcmn::sIndex AddCSSRule_(
+		const str::dString &Rule,
 		xdhdws::sProxy &Proxy );
 
-	void SetCastsByTags_(
-		const xdhdws::nstring___ &Id,
-		const dCasts &Casts,
+	 void RemoveCSSRule_(
+		xdhcmn::sIndex Index,
 		xdhdws::sProxy &Proxy );
 
-	void SetCastById_(
-		const xdhdws::nstring___ &Id,
-		const xdhdws::nstring___ &Value,
-		xdhdws::sProxy &Proxy );
+	 void PopCSSRule_( xdhdws::sProxy &Proxy );
 
-	void SetCastByTag_(
-		const xdhdws::nstring___ &Id,
-		const dCast &Cast,
-		xdhdws::sProxy &Proxy );
+	 void AddClass(
+		 const str::dString &Id,
+		 const str::dString &Class,
+		 xdhdws::sProxy &Proxy );
 
-	void SetCastByTag_(
-		const xdhdws::nstring___ &Id,
-		const str::dString &Tag,
-		const str::dString &Value,
-		xdhdws::sProxy &Proxy );
+	 void RemoveClass(
+		 const str::dString &Id,
+		 const str::dString &Class,
+		 xdhdws::sProxy &Proxy );
 
-	inline void SetCastByTag_(
-		const xdhdws::nstring___ &Id,
-		const char *Tag,
-		const char *Value,
-		xdhdws::sProxy &Proxy )
-	{
-		return SetCastByTag_( Id, str::wString( Tag ), str::wString( Value ), Proxy );
-	}
+	 void ToggleClass(
+		 const str::dString &Id,
+		 const str::dString &Class,
+		 xdhdws::sProxy &Proxy );
 
 	template <typename session, typename rack> inline void SetElement_(
 		const xdhdws::nstring___ &Id,
@@ -700,52 +636,6 @@ namespace sclxdhtml {
 		{
 			sclxdhtml::SetContent_( str::wString( Id ), Content, *this );
 		}
-		void SetElementCasts(
-			const xdhdws::nstring___ &Id,
-			const dCasts &Casts )
-		{
-			sclxdhtml::SetCastsByTags_( Id, Casts, *this );
-		}
-		void SetElementCast(
-			const xdhdws::nstring___ &Id,
-			const dCast &Cast )
-		{
-			sclxdhtml::SetCastsByTags_( Id, Cast, *this );
-		}
-		void SetElementCast(
-			const xdhdws::nstring___ &Id,
-			const str::dString &Tag,
-			const str::dString &Value )
-		{
-			sclxdhtml::SetCastByTag_( Id, Tag, Value, *this );
-		}
-		void SetElementCast(
-			const xdhdws::nstring___ &Id,
-			const char *Tag,
-			const char *Value )
-		{
-			sclxdhtml::SetCastByTag_( Id, Tag, Value, *this );
-		}
-		void SetDocumentCasts( const dCasts &Casts )
-		{
-			sclxdhtml::SetCastsByTags_( RootTagId_, Casts, *this );
-		}
-		void SetDocumentCast( const dCast &Cast )
-		{
-			sclxdhtml::SetCastByTag_( RootTagId_, Cast, *this );
-		}
-		void SetDocumentCast(
-			const str::dString &Tag,
-			const str::dString &Value )
-		{
-			sclxdhtml::SetCastByTag_( RootTagId_, Tag, Value, *this );
-		}
-		void SetDocumentCast(
-			const char *Tag,
-			const char *Value )
-		{
-			sclxdhtml::SetCastByTag_( RootTagId_, Tag, Value, *this );
-		}
 	};
 
 	template <typename session> class rCore {
@@ -858,10 +748,6 @@ namespace sclxdhtml {
 			sclfrntnd::rFrontend &Frontend,
 			xml::writer_ &Writer );
 
-		void GetCasts(
-			sProxy &Proxy,
-			dCasts &Casts );
-
 		void DisplaySelectedProjectFilename(
 			sProxy &Proxy,
 			const char *Id );
@@ -884,11 +770,6 @@ namespace sclxdhtml {
 		sclfrntnd::eLogin GetLayout(
 			sclfrntnd::rFrontend &Frontend,
 			xml::writer_ &Writer );
-
-		void GetCasts(
-			sProxy &Proxy,
-			eBackendVisibility Visibility,
-			dCasts &Casts );
 
 		void GetBackendFeatures(
 			sProxy &Proxy,

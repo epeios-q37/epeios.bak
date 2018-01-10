@@ -47,7 +47,6 @@ const str::string_ &xdhujs::GetTaggedScript(
 	C( DialogConfirm, dialog::Confirm );
 	C( EventsFetcher, fetcher::Events );
 	C( WidgetsFetcher, fetcher::Widgets );
-	C( CastsFetcher, fetcher::Casts );
 	C( PropertySetter, property::Setter );
 	C( PropertyGetter, property::Getter );
 	C( AttributeSetter, attribute::Setter );
@@ -61,9 +60,14 @@ const str::string_ &xdhujs::GetTaggedScript(
 	C( Focuser, Focuser );
 	C( Selector, Selector );
 	C( EventHandlersSetter, setter::EventHandlers );
-	C( CastsSetter, setter::Casts );
 	C( ContentsSetter, setter::Contents );
 	C( WidgetsInstantiator, WidgetsInstantiator );
+	C( CSSRuleAdder, css_rule::Add );
+	C( CSSRuleRemover, css_rule::Remove );
+	C( CSSRulePopper, css_rule::Pop );
+	C( ClassAdder, classq::Add );
+	C( ClassRemover, classq::Remove );
+	C( ClassToggler, classq::Toggle );
 	default:
 		qRFwk();
 		break;
@@ -149,6 +153,9 @@ D( Casts );
 D( Contents );
 D( Types );
 D( ParametersSets );
+D( Rule );
+D( Row );
+D( Class );
 
 #define S( name, ... )\
 	case sn##name:\
@@ -178,7 +185,6 @@ qRB
 	S( PropertyGetter, Id_, Name_, NULL );
 	S( EventsFetcher, Id_, XML_, XSL_, NULL );
 	S( WidgetsFetcher, Id_, NULL );
-	S( CastsFetcher, Id_, NULL );
 	S( ValueSetter, Id_, Value_, NULL );
 	S( ValueGetter, Id_, NULL );
 	S( WidgetValueRetriever, Id_, Method_, NULL );
@@ -187,9 +193,14 @@ qRB
 	S( Focuser, Id_, NULL );
 	S( Selector, Id_, NULL );
 	S( EventHandlersSetter, Ids_, Events_, NULL );
-	S( CastsSetter, Ids_, Casts_, NULL );
 	S( ContentsSetter, Ids_, Contents_, NULL );
 	S( WidgetsInstantiator, Ids_, Types_, ParametersSets_, NULL );
+	S( CSSRuleAdder, Rule_, NULL );
+	S( CSSRuleRemover, Row_ );
+	S( CSSRulePopper, NULL );
+	S( ClassAdder, Id_, Class_, NULL );
+	S( ClassRemover, Id_, Class_, NULL );
+	S( ClassToggler, Id_, Class_, NULL );
 	default:
 		qRFwk();
 		break;

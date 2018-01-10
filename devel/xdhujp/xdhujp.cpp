@@ -309,30 +309,6 @@ static void SetContents_(
 	SetContents_( Callback, Ids, Contents );
 }
 
-static void SetCastsByIds_(
-	cJS &Callback,
-	const nchar__ *Ids,
-	const nchar__ *Casts )
-{
-qRH;
-qRB;
-	Execute( Callback, xdhujs::snCastsSetter, NULL, nstring___( Ids ).Internal()(), nstring___( Casts ).Internal()() );
-qRR;
-qRT;
-qRE;
-}
-
-static void SetCastsByIds_(
-	cJS &Callback,
-	va_list List )
-{
-	// NOTA : we use variables, because if we put 'va_arg()' directly as parameter to below function, it's not sure that they are called in the correct order.
-	const nchar__ *Ids = va_arg( List, const nchar__ * );
-	const nchar__ *Casts = va_arg( List, const nchar__ * );
-
-	SetCastsByIds_( Callback, Ids, Casts );
-}
-
 namespace{
 	namespace {
 		// TODO: to optimize.
@@ -422,50 +398,6 @@ namespace{
 	qRT;
 	qRE;
 	}
-}
-
-static void SetCastsByTags_(
-	cJS &Callback,
-	const nchar__ *Id,
-	const nchar__ *RawTags,
-	const nchar__ *RawValues )
-{
-qRH
-	ntvstr::rBuffer Result;
-	str::wString RawDigest;
-	xdhcmn::digest Digest;
-	str::wString Tags, Values, Ids, CorrespondingValues;	// Merged.
-qRB
-	RawDigest.Init( Execute( Callback, xdhujs::snCastsFetcher, &Result, Id ) );
-
-	Digest.Init();
-	xdhcmn::Split( RawDigest, Digest );
-
-	Tags.Init();
-	nstring___( RawTags ).UTF8( Tags );
-
-	Values.Init();
-	nstring___( RawValues ).UTF8( Values );
-
-	tol::Init( Ids, CorrespondingValues );
-	MatchTagsWithIds_( Digest, Tags, Values, Ids, CorrespondingValues );
-
-	Execute( Callback, xdhujs::snCastsSetter, NULL, nstring___( Ids ).Internal()(), nstring___( CorrespondingValues ).Internal()() );
-qRR
-qRT
-qRE
-}
-
-static void SetCastsByTags_(
-	cJS &Callback,
-	va_list List )
-{
-	// NOTA : we use variables, because if we put 'va_arg()' directly as parameter to below function, it's not sure that they are called in the correct order.
-	const nchar__ *Id = va_arg( List, const nchar__ * );
-	const nchar__ *Tags = va_arg( List, const nchar__ * );
-	const nchar__ *Casts = va_arg( List, const nchar__ * );
-
-	SetCastsByTags_( Callback, Id, Tags, Casts );
 }
 
 static void GetValue_(
@@ -593,6 +525,99 @@ static void GetResult_(
 	GetResult_( Callback, va_arg( List, const nchar__ * ), Result );
 }
 
+namespace {
+	void AddCSSRule_(
+		cJS &Callback,
+		const nchar__ *Rule,
+		TOL_CBUFFER___ *Index )
+	{
+	qRH;
+	qRB;
+		Execute( Callback, xdhujs::snCSSRuleAdder, Index, nstring___( Rule ).Internal()() );
+	qRR;
+	qRT;
+	qRE;
+	}
+}
+
+void AddCSSRule_(
+	cJS &Callback,
+	TOL_CBUFFER___ *Result,
+	va_list List )
+{
+	AddCSSRule_( Callback, va_arg( List, const nchar__ * ), Result );
+}
+
+
+namespace {
+	void RemoveCSSRule_(
+		cJS &Callback,
+		const nchar__ *Index )
+	{
+	qRH;
+	qRB;
+		Execute( Callback, xdhujs::snCSSRuleRemover, NULL, nstring___( Index ).Internal()() );
+	qRR;
+	qRT;
+	qRE;
+	}
+}
+
+static void RemoveCSSRule_(
+	cJS &Callback,
+	va_list List )
+{
+	RemoveCSSRule_( Callback, va_arg( List, const nchar__ * ) );
+}
+
+namespace {
+	void PopCSSRule_( cJS &Callback )
+	{
+	qRH;
+	qRB;
+		Execute( Callback, xdhujs::snCSSRuleRemover, NULL );
+	qRR;
+	qRT;
+	qRE;
+	}
+}
+
+static void PopCSSRule_(
+	cJS &Callback,
+	va_list List )
+{
+	PopCSSRule_( Callback );
+}
+
+namespace {
+	void HandleClass_(
+		cJS &Callback,
+		xdhujs::script_name__ ScriptName,
+		const nchar__ *Id,
+		const nchar__ *Class )
+	{
+	qRH;
+	qRB;
+		Execute( Callback, ScriptName, NULL, nstring___( Id ).Internal()(), nstring___( Class ).Internal()() );
+	qRR;
+	qRT;
+	qRE;
+	}
+}
+
+
+static void HandleClass_(
+	cJS &Callback,
+	xdhujs::script_name__ ScriptName,
+	va_list List )
+{
+	// NOTA : we use variables, because if we put 'va_arg()' directly as parameter to below function, it's not sure that they are called in the correct order.
+	const nchar__ *Id = va_arg( List, const nchar__ * );
+	const nchar__ *Class = va_arg( List, const nchar__ * );
+
+	HandleClass_( Callback, ScriptName, Id, Class );
+}
+
 static script_name__ Convert_( xdhcmn::function__ Function )
 {
 	switch ( Function ) {
@@ -647,10 +672,21 @@ static script_name__ Convert_( xdhcmn::function__ Function )
 	case xdhcmn::fSetContents:
 		qRFwk();
 		break;
-	case xdhcmn::fSetCastsByIds:
+	case xdhcmn::fAddCSSRule:
 		qRFwk();
 		break;
-	case xdhcmn::fSetCastsByTags:
+	case xdhcmn::fRemoveCSSRule:
+		qRFwk();
+		break;
+	case xdhcmn::fAddClass:
+		qRFwk();
+		break;
+	case xdhcmn::fRemoveClass:
+		qRFwk();
+		break;
+	case xdhcmn::fToggleClass:
+		qRFwk();
+		break;
 	default:
 		qRFwk();
 		break;
@@ -700,11 +736,23 @@ void xdhujp::sProxyCallback::XDHCMNProcess(
 	case xdhcmn::fSetContents:
 		SetContents_( C_(), List);
 		break;
-	case xdhcmn::fSetCastsByIds:
-		SetCastsByIds_( C_(), List );
+	case xdhcmn::fAddCSSRule:
+		AddCSSRule_( C_(), Result, List );
 		break;
-	case xdhcmn::fSetCastsByTags:
-		SetCastsByTags_( C_(), List );
+	case xdhcmn::fRemoveCSSRule:
+		RemoveCSSRule_( C_(), List );
+		break;
+	case xdhcmn::fPopCSSRule:
+		PopCSSRule_( C_(), List );
+		break;
+	case xdhcmn::fAddClass:
+		HandleClass_( C_(), xdhujs::snClassAdder, List );
+		break;
+	case xdhcmn::fRemoveClass:
+		HandleClass_( C_(), xdhujs::snClassRemover, List );
+		break;
+	case xdhcmn::fToggleClass:
+		HandleClass_( C_(), xdhujs::snClassToggler, List );
 		break;
 	default:
 		qRFwk();

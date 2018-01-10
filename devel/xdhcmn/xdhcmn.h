@@ -46,6 +46,8 @@ namespace xdhcmn {
 	// NOTA : not used by this module, but by other 'upstream' and 'downtream' 'XDH...' modules.
 	typedef ntvstr::char__ nchar__;
 	typedef ntvstr::string___ nstring___;
+	typedef ntvstr::rString rNString;
+	qMIMICs( bso::sU16, sIndex );	// For the 'CSS' rules.
 
 	static E_CDEF( char *, CloseActionLabel, "Q37Close" );
 	static E_CDEF( char *, RefreshActionLabel, "Q37Refresh" );
@@ -81,8 +83,12 @@ namespace xdhcmn {
 		fSetLayout,			// Id, XML, XSL.
 		fSetContents,		// Ids, Contents.
 		fDressWidgets,		// Id.
-		fSetCastsByIds,		// Ids, Casts.
-		fSetCastsByTags,	// Id, Tags, Casts.
+		fAddCSSRule,		// Rule,
+		fRemoveCSSRule,		// Index,
+		fPopCSSRule,		// (nothing),
+		fAddClass,			// Id, Class,
+		fRemoveClass,		// Id, Class,
+		fToggleClass,		// Id, Class,
 		fSetProperty,		// Id, Name, Value.
 		fGetProperty,		// Id, Name.
 		fSetAttribute,		// Id, Name, Value.

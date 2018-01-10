@@ -58,11 +58,9 @@ entry___ xdhujr::script::value::Getter( "Getter", ValueScripts_ );
 static entry___ FetcherScripts_("Fetcher", xdhujr::Scripts );
 entry___ xdhujr::script::fetcher::Events( "Events", FetcherScripts_ );
 entry___ xdhujr::script::fetcher::Widgets( "Widgets", FetcherScripts_ );
-entry___ xdhujr::script::fetcher::Casts( "Casts", FetcherScripts_ );
 
 static entry___ SetterScripts_( "Setter", xdhujr::Scripts );
 entry___ xdhujr::script::setter::EventHandlers( "EventHandlers", SetterScripts_ );
-entry___ xdhujr::script::setter::Casts( "Casts", SetterScripts_ );
 entry___ xdhujr::script::setter::Contents( "Contents", SetterScripts_ );
 
 
@@ -83,4 +81,12 @@ entry___ xdhujr::script::Focuser( "Focuser", Scripts );
 entry___ xdhujr::script::Selector( "Selector", Scripts );
 entry___ xdhujr::script::WidgetsInstantiator( "WidgetsInstantiator",Scripts );
 
+static rEntry CSSRule_( "CSSRule", xdhujr::Scripts );
+rEntry xdhujr::script::css_rule::Add( "Add", CSSRule_ );
+rEntry xdhujr::script::css_rule::Remove( "Remove", CSSRule_ );
+rEntry xdhujr::script::css_rule::Pop( "Pop", CSSRule_ );
 
+static rEntry Class_( "Class", xdhujr::Scripts );
+rEntry xdhujr::script::classq::Add( "Add", Class_ );
+rEntry xdhujr::script::classq::Remove( "Remove", Class_ );
+rEntry xdhujr::script::classq::Toggle( "Toggle", Class_ );

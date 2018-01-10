@@ -54,17 +54,9 @@ void main::SetLayout( core::rSession &Session )
 	fields::SetLayout( FieldsFrameId_, Session );
 }
 
-void main::SetCasting( core::rSession &Session )
-{
-	Session.SetDocumentCasting( XSLAffix_, casting_::Get );
-	fields::SetCasting( FieldsFrameId_, Session );
-}
-
 void main::Display( core::rSession &Session )
 {
 	SetLayout( Session );
-
-	SetCasting( Session );
 
 	Session.SwitchTo( base::pMain );
 }
@@ -79,13 +71,12 @@ void main::DisplayFields( core::rSession &Session )
 AC( ShowTestButton )
 {
 	Session.User.TestButtonIsVisible() = true;
-	SetCasting( Session );
+	Session.AddCSSRule( )
 }
 
 AC( HideTestButton )
 {
 	Session.User.TestButtonIsVisible() = false;
-	SetCasting( Session );
 }
 
 AC( Testing )

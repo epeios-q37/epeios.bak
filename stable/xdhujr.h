@@ -33,6 +33,7 @@
 
 namespace xdhujr {
 	using rgstry::entry___;
+	using rgstry::rEntry;
 
 	extern entry___ CustomItems;
 
@@ -58,11 +59,9 @@ namespace xdhujr {
 		namespace fetcher {
 			extern entry___ Events;
 			extern entry___ Widgets;
-			extern entry___ Casts;
 		};
 		namespace setter{
 			extern entry___ EventHandlers;
-			extern entry___ Casts;
 			extern entry___ Contents;
 		}
 		extern entry___ DraggableSetter;
@@ -92,6 +91,20 @@ namespace xdhujr {
 			extern entry___ Focuser;
 			extern entry___ Selector;
 		}
+		namespace css_rule {
+			extern rEntry
+				Add,
+				Remove,
+				Pop;
+		}
+		// 'classq' instead of more logical 'class', because the latter is a reserved keyword.
+		namespace classq	{
+			extern rEntry
+				Add,
+				Remove,
+				Toggle;
+
+		};
 	}
 
 }

@@ -36,10 +36,6 @@ namespace fields {
 		const char * Id,
 		core::rSession &Session );
 
-	void SetCasting(
-		const char *Id,
-		core::rSession &Session );
-
 	void Display(
 		const char *Id,
 		core::rSession &Session );
