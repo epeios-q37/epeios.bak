@@ -82,9 +82,9 @@ entry___ xdhujr::script::Selector( "Selector", Scripts );
 entry___ xdhujr::script::WidgetsInstantiator( "WidgetsInstantiator",Scripts );
 
 static rEntry CSSRule_( "CSSRule", xdhujr::Scripts );
-rEntry xdhujr::script::css_rule::Add( "Add", CSSRule_ );
+rEntry xdhujr::script::css_rule::Insert( "Insert", CSSRule_ );
+rEntry xdhujr::script::css_rule::Append( "Append", CSSRule_ );
 rEntry xdhujr::script::css_rule::Remove( "Remove", CSSRule_ );
-rEntry xdhujr::script::css_rule::Pop( "Pop", CSSRule_ );
 
 static rEntry Class_( "Class", xdhujr::Scripts );
 rEntry xdhujr::script::classq::Add( "Add", Class_ );

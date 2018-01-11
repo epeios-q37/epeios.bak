@@ -442,11 +442,19 @@ qRT;
 qRE;
 }
 
-xdhcmn::sIndex sclxdhtml::AddCSSRule_(
+void sclxdhtml::InsertCSSRule_(
+	const str::dString &Rule,
+	xdhcmn::sIndex Index,
+	xdhdws::sProxy &Proxy )
+{
+	return Proxy.InsertCSSRule( Rule, Index );
+}
+
+xdhcmn::sIndex sclxdhtml::AppendCSSRule_(
 	const str::dString &Rule,
 	xdhdws::sProxy &Proxy )
 {
-	return Proxy.AddCSSRule( Rule );
+	return Proxy.AppendCSSRule( Rule );
 }
 
 void sclxdhtml::RemoveCSSRule_(
@@ -454,11 +462,6 @@ void sclxdhtml::RemoveCSSRule_(
 	xdhdws::sProxy &Proxy )
 {
 	Proxy.RemoveCSSRule( Index );
-}
-
-void sclxdhtml::PopCSSRule_( xdhdws::sProxy &Proxy )
-{
-	Proxy.PopCSSRule();
 }
 
 void sclxdhtml::AddClass(

@@ -329,15 +329,18 @@ namespace sclxdhtml {
 		const str::dString &Content,
 		xdhdws::sProxy &Proxy );
 
-	xdhcmn::sIndex AddCSSRule_(
+	void InsertCSSRule_(
 		const str::dString &Rule,
-		xdhdws::sProxy &Proxy );
-
-	 void RemoveCSSRule_(
 		xdhcmn::sIndex Index,
 		xdhdws::sProxy &Proxy );
 
-	 void PopCSSRule_( xdhdws::sProxy &Proxy );
+	xdhcmn::sIndex AppendCSSRule_(
+		const str::dString &Rule,
+		xdhdws::sProxy &Proxy );
+	
+	void RemoveCSSRule_(
+		xdhcmn::sIndex Index,
+		xdhdws::sProxy &Proxy );
 
 	 void AddClass(
 		 const str::dString &Id,

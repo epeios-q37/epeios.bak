@@ -93,9 +93,9 @@ namespace xdhujr {
 		}
 		namespace css_rule {
 			extern rEntry
-				Add,
-				Remove,
-				Pop;
+				Insert,
+				Append,
+				Remove;
 		}
 		// 'classq' instead of more logical 'class', because the latter is a reserved keyword.
 		namespace classq	{

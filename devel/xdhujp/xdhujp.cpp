@@ -526,27 +526,54 @@ static void GetResult_(
 }
 
 namespace {
-	void AddCSSRule_(
+	void InsertCSSRule_(
 		cJS &Callback,
 		const nchar__ *Rule,
-		TOL_CBUFFER___ *Index )
+		const nchar__ *Index )
 	{
 	qRH;
 	qRB;
-		Execute( Callback, xdhujs::snCSSRuleAdder, Index, nstring___( Rule ).Internal()() );
+		Execute( Callback, xdhujs::snCSSRuleInserter, NULL, nstring___( Rule ).Internal()(), nstring___( Index ).Internal()() );
 	qRR;
 	qRT;
 	qRE;
 	}
 }
 
-void AddCSSRule_(
+void InsertCSSRule_(
+	cJS &Callback,
+	va_list List )
+{
+	// NOTA : we use variables, because if we put 'va_arg()' directly as parameter to below function, it's not sure that they are called in the correct order.
+	const nchar__ *Rule = va_arg( List, const nchar__ * );
+	const nchar__ *Index = va_arg( List, const nchar__ * );
+
+	InsertCSSRule_( Callback, Rule, Index );
+}
+
+namespace {
+	void AppendCSSRule_(
+		cJS &Callback,
+		const nchar__ *Rule,
+		TOL_CBUFFER___ *Index )
+	{
+	qRH;
+	qRB;
+		Execute( Callback, xdhujs::snCSSRuleAppender, Index, Rule );
+	qRR;
+	qRT;
+	qRE;
+	}
+}
+
+static void AppendCSSRule_(
 	cJS &Callback,
 	TOL_CBUFFER___ *Result,
 	va_list List )
 {
-	AddCSSRule_( Callback, va_arg( List, const nchar__ * ), Result );
+	AppendCSSRule_( Callback, va_arg( List, const nchar__ * ), Result );
 }
+
 
 
 namespace {
@@ -568,25 +595,6 @@ static void RemoveCSSRule_(
 	va_list List )
 {
 	RemoveCSSRule_( Callback, va_arg( List, const nchar__ * ) );
-}
-
-namespace {
-	void PopCSSRule_( cJS &Callback )
-	{
-	qRH;
-	qRB;
-		Execute( Callback, xdhujs::snCSSRuleRemover, NULL );
-	qRR;
-	qRT;
-	qRE;
-	}
-}
-
-static void PopCSSRule_(
-	cJS &Callback,
-	va_list List )
-{
-	PopCSSRule_( Callback );
 }
 
 namespace {
@@ -672,7 +680,10 @@ static script_name__ Convert_( xdhcmn::function__ Function )
 	case xdhcmn::fSetContents:
 		qRFwk();
 		break;
-	case xdhcmn::fAddCSSRule:
+	case xdhcmn::fInsertCSSRule:
+		qRFwk();
+		break;
+	case xdhcmn::fAppendCSSRule:
 		qRFwk();
 		break;
 	case xdhcmn::fRemoveCSSRule:
@@ -736,14 +747,14 @@ void xdhujp::sProxyCallback::XDHCMNProcess(
 	case xdhcmn::fSetContents:
 		SetContents_( C_(), List);
 		break;
-	case xdhcmn::fAddCSSRule:
-		AddCSSRule_( C_(), Result, List );
+	case xdhcmn::fInsertCSSRule:
+		InsertCSSRule_( C_(), List );
+		break;
+	case xdhcmn::fAppendCSSRule:
+		AppendCSSRule_( C_(), Result, List );
 		break;
 	case xdhcmn::fRemoveCSSRule:
 		RemoveCSSRule_( C_(), List );
-		break;
-	case xdhcmn::fPopCSSRule:
-		PopCSSRule_( C_(), List );
 		break;
 	case xdhcmn::fAddClass:
 		HandleClass_( C_(), xdhujs::snClassAdder, List );

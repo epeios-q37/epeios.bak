@@ -62,9 +62,9 @@ const str::string_ &xdhujs::GetTaggedScript(
 	C( EventHandlersSetter, setter::EventHandlers );
 	C( ContentsSetter, setter::Contents );
 	C( WidgetsInstantiator, WidgetsInstantiator );
-	C( CSSRuleAdder, css_rule::Add );
+	C( CSSRuleInserter, css_rule::Insert );
+	C( CSSRuleAppender, css_rule::Append );
 	C( CSSRuleRemover, css_rule::Remove );
-	C( CSSRulePopper, css_rule::Pop );
 	C( ClassAdder, classq::Add );
 	C( ClassRemover, classq::Remove );
 	C( ClassToggler, classq::Toggle );
@@ -154,7 +154,7 @@ D( Contents );
 D( Types );
 D( ParametersSets );
 D( Rule );
-D( Row );
+D( Index );
 D( Class );
 
 #define S( name, ... )\
@@ -195,9 +195,9 @@ qRB
 	S( EventHandlersSetter, Ids_, Events_, NULL );
 	S( ContentsSetter, Ids_, Contents_, NULL );
 	S( WidgetsInstantiator, Ids_, Types_, ParametersSets_, NULL );
-	S( CSSRuleAdder, Rule_, NULL );
-	S( CSSRuleRemover, Row_ );
-	S( CSSRulePopper, NULL );
+	S( CSSRuleInserter, Rule_, Index_, NULL );
+	S( CSSRuleAppender, Rule_, NULL );
+	S( CSSRuleRemover, Index_ );
 	S( ClassAdder, Id_, Class_, NULL );
 	S( ClassRemover, Id_, Class_, NULL );
 	S( ClassToggler, Id_, Class_, NULL );

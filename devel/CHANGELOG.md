@@ -2,6 +2,20 @@
 
 2018-01-10:
 - *common*:
+  - **$**: replacing *cast* related operations handling by operations on *CSS* related classes and rules (continued),
+- XDHCMN:
+  - **$**,
+- XDHDWS:
+  - **$**,
+- XDHUJP:
+  - **$**,
+- XDHUJR:
+  - **$**,
+- XDHUJS:
+  - **$**,
+
+2018-01-10:
+- *common*:
   - **$**: replacing *cast* related operations handling by operations on *CSS* related classes and rules,
 - XDHCMN:
   - **$**,
@@ -10,6 +24,8 @@
 - XDHUJP:
   - **$**,
 - XDHUJR:
+  - **$**,
+- XDHUJS:
   - **$**,
 - XDHUTL:
   - fixing *Clang* warning,

@@ -158,12 +158,6 @@
 					digest;
 				]]>
 				</Widgets>
-				<Casts>
-					<![CDATA[
-					var digest = fetchCasts( "%Id%" );
-					digest;
-				]]>
-				</Casts>
 			</Fetcher>
 			<Setter>
 				<EventHandlers>
@@ -171,11 +165,6 @@
 					setEventHandlers( %Ids_%, %Events_% );
 				]]>
 				</EventHandlers>
-				<Casts>
-					<![CDATA[
-					setCasts( %Ids_%, %Casts_% );
-				]]>
-				</Casts>
 				<Contents>
 					<![CDATA[
 					setContents( %Ids_%, %Contents_% );
@@ -238,6 +227,40 @@
 						]]>
 				</Selector>
 			</Widget>
+			<CSSRules>
+				<Insert>
+					<![CDATA[
+							insertCSSRule( "%Rule%", %Index% );
+						]]>
+				</Insert>
+				<Append>
+					<![CDATA[
+							insertCSSRule( "%Rule%", -1 ).ToString();
+						]]>
+				</Append>
+				<Remove>
+					<![CDATA[
+							removeCSSRule( %Index% );
+						]]>
+				</Remove>
+			</CSSRules>
+			<Class>
+				<Add>
+					<![CDATA[
+							document.getElementById( "%Id% ).classList.add( "%Class% );
+						]]>
+				</Add>
+				<Remove>
+					<![CDATA[
+							document.getElementById( "%Id% ).classList.remove( "%Class% );
+						]]>
+				</Remove>
+				<Toggle>
+					<![CDATA[
+							document.getElementById( "%Id% ).classList.toggle( "%Class% );
+						]]>
+				</Toggle>
+			</Class>
 		</Scripts>
 	</Definitions>
 </xpp:bloc>

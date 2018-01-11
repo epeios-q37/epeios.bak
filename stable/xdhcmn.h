@@ -83,9 +83,9 @@ namespace xdhcmn {
 		fSetLayout,			// Id, XML, XSL.
 		fSetContents,		// Ids, Contents.
 		fDressWidgets,		// Id.
-		fAddCSSRule,		// Rule,
-		fRemoveCSSRule,		// Index,
-		fPopCSSRule,		// (nothing),
+		fInsertCSSRule,		// Rule, Index.
+		fAppendCSSRule,		// Rule.
+		fRemoveCSSRule,		// Index.
 		fAddClass,			// Id, Class,
 		fRemoveClass,		// Id, Class,
 		fToggleClass,		// Id, Class,

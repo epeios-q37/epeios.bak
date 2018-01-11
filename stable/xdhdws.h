@@ -113,13 +113,27 @@ namespace xdhdws {
 		{
 			C_().Process(xdhcmn::fSetContents, NULL, Ids.Internal()(), Contents.Internal()() );
 		}
-		xdhcmn::sIndex AddCSSRule( const rNString &Rule )
+		void InsertCSSRule(
+			const rNString &Rule,
+			xdhcmn::sIndex Index )
+		{
+		qRH;
+			rNString SBuffer;
+			bso::bInteger IBuffer;
+		qRB;
+			SBuffer.Init( bso::Convert( *Index, IBuffer ) );
+			C_().Process( xdhcmn::fInsertCSSRule, NULL, Rule.Internal()(), SBuffer.Internal()() );
+		qRR;
+		qRT;
+		qRE;
+		}
+		xdhcmn::sIndex AppendCSSRule( const rNString &Rule )
 		{
 			xdhcmn::sIndex Index = 0;
 		qRH;
 			TOL_CBUFFER___ Buffer;
 		qRB;
-			C_().Process( xdhcmn::fAddCSSRule, &Buffer, Rule.Internal()() );
+			C_().Process( xdhcmn::fAppendCSSRule, &Buffer, Rule.Internal()() );
 
 			str::wString( Buffer ).ToNumber( *Index );
 		qRR;
@@ -139,10 +153,6 @@ namespace xdhdws {
 		qRR;
 		qRT;
 		qRE;
-		}
-		void PopCSSRule( void )
-		{
-			C_().Process( xdhcmn::fPopCSSRule, NULL );
 		}
 		void AddClass(
 			const rNString &Id,
