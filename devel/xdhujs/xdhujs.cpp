@@ -197,7 +197,7 @@ qRB
 	S( WidgetsInstantiator, Ids_, Types_, ParametersSets_, NULL );
 	S( CSSRuleInserter, Rule_, Index_, NULL );
 	S( CSSRuleAppender, Rule_, NULL );
-	S( CSSRuleRemover, Index_ );
+	S( CSSRuleRemover, Index_, NULL );
 	S( ClassAdder, Id_, Class_, NULL );
 	S( ClassRemover, Id_, Class_, NULL );
 	S( ClassToggler, Id_, Class_, NULL );

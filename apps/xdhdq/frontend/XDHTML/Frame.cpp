@@ -41,19 +41,11 @@ void frame::SetLayout(
 	Session.SetElementLayout( Id, XSLAffix_, layout_::Get );
 }
 
-void frame::SetCasting(
-	const char *Id,
-	core::rSession &Session )
-{
-}
-
 void frame::Display(
 	const char *Id,
 	core::rSession &Session )
 {
 	SetLayout( Id, Session );
-
-	SetCasting( Id, Session );
 }
 
 #define AC( name ) BASE_AC( frame, name )

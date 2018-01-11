@@ -122,20 +122,11 @@ qRT;
 qRE;
 }
 
-void fields::SetCasting(
-	const char *Id,
-	core::rSession &Session )
-{
-	Session.SetElementCasting( Id, XSLAffix_, casting_::Get );
-}
-
 void fields::Display(
 	const char *Id,
 	core::rSession &Session )
 {
 	SetLayout( Id, Session );
-
-	SetCasting( Id, Session );
 }
 
 #define AC( name ) BASE_AC( fields, name )

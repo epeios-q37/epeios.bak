@@ -227,7 +227,7 @@
 						]]>
 				</Selector>
 			</Widget>
-			<CSSRules>
+			<CSSRule>
 				<Insert>
 					<![CDATA[
 							insertCSSRule( "%Rule%", %Index% );
@@ -235,7 +235,7 @@
 				</Insert>
 				<Append>
 					<![CDATA[
-							insertCSSRule( "%Rule%", -1 ).ToString();
+							insertCSSRule( "%Rule%", -1 ).toString();
 						]]>
 				</Append>
 				<Remove>
@@ -243,7 +243,7 @@
 							removeCSSRule( %Index% );
 						]]>
 				</Remove>
-			</CSSRules>
+			</CSSRule>
 			<Class>
 				<Add>
 					<![CDATA[

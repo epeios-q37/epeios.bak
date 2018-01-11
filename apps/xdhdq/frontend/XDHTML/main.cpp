@@ -71,12 +71,15 @@ void main::DisplayFields( core::rSession &Session )
 AC( ShowTestButton )
 {
 	Session.User.TestButtonIsVisible() = true;
-	Session.AddCSSRule( )
+
+	Session.RemoveCSSRule(0);
 }
 
 AC( HideTestButton )
 {
 	Session.User.TestButtonIsVisible() = false;
+
+	Session.AppendCSSRule( ".button {display: none;}" );
 }
 
 AC( Testing )

@@ -13,8 +13,8 @@
 						<div data-xdh-onevent="ShowTestButton">
 							<text>#mainHideShowTestButton#</text>
 						</div>
-						<div data-xdh-cast="TestButtonCasting">
-							<button data-xdh-onevent="Testing" title="#mainDisplayErrorMessage#">#mainTest#</button>
+						<div class="button">
+							<button  data-xdh-onevent="Testing" title="#mainDisplayErrorMessage#">#mainTest#</button>
 							<text>#mainTestExplanation#</text>
 						</div>
 					</fieldset>
