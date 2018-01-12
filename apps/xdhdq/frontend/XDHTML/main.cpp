@@ -57,6 +57,7 @@ void main::SetLayout( core::rSession &Session )
 void main::Display( core::rSession &Session )
 {
 	SetLayout( Session );
+	Session.AddClass( "Input", "hidden" );
 
 	Session.SwitchTo( base::pMain );
 }
@@ -72,14 +73,14 @@ AC( ShowTestButton )
 {
 	Session.User.TestButtonIsVisible() = true;
 
-	Session.RemoveCSSRule(0);
+	Session.RemoveClass( "Input", "hidden" );
 }
 
 AC( HideTestButton )
 {
 	Session.User.TestButtonIsVisible() = false;
 
-	Session.AppendCSSRule( ".button {display: none;}" );
+	Session.AddClass( "Input", "hidden" );
 }
 
 AC( Testing )

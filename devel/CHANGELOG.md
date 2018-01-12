@@ -1,8 +1,26 @@
 # *Epeios* changelog
 
-2018-01-10:
+2018-01-12:
+- *common*:
+  - **$**:
+    - improving *CSS* classes and rules handling,
+    - adding element disabling/enabling features,
+- SCLXDHTML:
+  - **$**,
+- XDHCMN:
+  - **$**,
+- XDHDWS:
+  - **$**,
+- XDHUJP:
+  - **$**,
+- XDHUJS:
+  - **$**,
+
+2018-01-11:
 - *common*:
   - **$**: replacing *cast* related operations handling by operations on *CSS* related classes and rules (continued),
+- SCLXDHTML:
+  - **$**,
 - XDHCMN:
   - **$**,
 - XDHDWS:
@@ -17,6 +35,8 @@
 2018-01-10:
 - *common*:
   - **$**: replacing *cast* related operations handling by operations on *CSS* related classes and rules,
+- SCLXDHTML:
+  - **$**,
 - XDHCMN:
   - **$**,
 - XDHDWS:

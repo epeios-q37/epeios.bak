@@ -25,8 +25,10 @@
 			</span>
 			<div style="margin: auto; display: flex; justify-content: space-around; width: 50%;">
 				<span>
-					<input type="checkbox" data-xdh-cast="EditionCast" data-xdh-onevent="ToggleDescriptions"/>
-					<label> Hide descriptions </label>
+					<label>
+						<input type="checkbox" data-xdh-cast="EditionCast" data-xdh-onevent="ToggleDescriptions"/>
+						<span> Hide descriptions </span>
+					</label>
 				</span>
 				<button data-xdh-value="0" data-xdh-onevent="Edit" data-xdh-cast="EditionCast">Create</button>
 			</div>

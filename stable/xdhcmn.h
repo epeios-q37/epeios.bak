@@ -86,9 +86,11 @@ namespace xdhcmn {
 		fInsertCSSRule,		// Rule, Index.
 		fAppendCSSRule,		// Rule.
 		fRemoveCSSRule,		// Index.
-		fAddClass,			// Id, Class,
-		fRemoveClass,		// Id, Class,
-		fToggleClass,		// Id, Class,
+		fAddClasses,		// Ids, Classes.
+		fRemoveClasses,		// Ids, Classes.
+		fToggleClasses,		// Ids, Classes.
+		fEnableElements,	// Ids.
+		fDisableElements,	// Ids.
 		fSetProperty,		// Id, Name, Value.
 		fGetProperty,		// Id, Name.
 		fSetAttribute,		// Id, Name, Value.

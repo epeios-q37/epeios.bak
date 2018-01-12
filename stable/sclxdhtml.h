@@ -220,42 +220,113 @@ namespace sclxdhtml {
 
 	typedef xdhcmn::cSession cSession_;
 
-	using xdhdws::sProxy;
-
-	void Alert(
-		const ntvstr::string___ &XML,
-		const ntvstr::string___ &XSL,
-		const ntvstr::string___ &Title,
-		sProxy &Proxy,
-		const char *Language );
-
-	void Alert(
-		const ntvstr::string___ &RawMessage,
-		const char *Language,
-		sProxy &Proxy );	// Translates 'Message'.
-
-	void Alert(
-		const ntvstr::string___ &Message,
-		sProxy &Proxy,
-		const char *Language );	// Displays 'Message' as is. 'Language' is used for the closing text message.
-
-	bso::bool__ Confirm(
-		const ntvstr::string___ &XML,
-		const ntvstr::string___ &XSL,
-		const ntvstr::string___ &Title,
-		sProxy &Proxy,
-		const char *Language );
-
-	bso::bool__ Confirm(
-		const ntvstr::string___ &RawMessage,
-		const char *Language,
-		sProxy &Proxy );
-
-	bso::bool__ Confirm(
-		const ntvstr::string___ &Message,
-		sProxy &Proxy,
-		const char *Language );	// Displays 'Message' as is. 'Language' is used for the closing text message.
-
+	class sProxy
+	{
+	private:
+		xdhdws::sProxy Core_;
+	public:
+		void reset( bso::sBool P = true )
+		{
+			tol::reset( P, Core_ );
+		}
+		qCDTOR( sProxy );
+		void Init( xdhcmn::cProxy &Proxy )
+		{
+			Core_.Init( &Proxy );
+		}
+		void Alert(
+			const ntvstr::string___ &XML,
+			const ntvstr::string___ &XSL,
+			const ntvstr::string___ &Title,
+			const char *Language );
+		void AlertT(
+			const ntvstr::string___ &RawMessage,
+			const char *Language );	// Translates 'Message'.
+		void AlertU(
+			const ntvstr::string___ &Message,
+			const char *Language );	// Displays 'Message' as is. 'Language' is used for the closing text message.
+		bso::bool__ Confirm(
+			const ntvstr::string___ &XML,
+			const ntvstr::string___ &XSL,
+			const ntvstr::string___ &Title,
+			const char *Language );
+		bso::bool__ ConfirmT(
+			const ntvstr::string___ &RawMessage,
+			const char *Language );
+		bso::bool__ ConfirmU(
+			const ntvstr::string___ &Message,
+			const char *Language );	// Displays 'Message' as is. 'Language' is used for the closing text message.
+		void SetValue(
+			const ntvstr::rString &Id,
+			const ntvstr::rString &Value )
+		{
+			Core_.SetValue( Id, Value );
+		}
+		const str::dString &GetValue(
+			const ntvstr::rString &Id,
+			str::dString &Value )
+		{
+			return Core_.GetValue( Id, Value );
+		}
+		const char *GetValue(
+			const ntvstr::rString &Id,
+			qCBUFFERr &Value )
+		{
+			return Core_.GetValue( Id, Value );
+		}
+		const str::dString &GetResult(
+			const ntvstr::rString &Id,
+			str::dString &Result )
+		{
+			return Core_.GetResult( Id, Result );
+		}
+		const char *GetResult(
+			const ntvstr::rString &Id,
+			qCBUFFERr &Result )
+		{
+			return Core_.GetResult( Id, Result );
+		}
+		void SetLayout(
+			const xdhdws::nstring___ &Id,
+			const rgstry::rEntry &Filename,
+			const char *Target,
+			const sclrgstry::registry_ &Registry,
+			const str::dString &XML,
+			bso::char__ Marker );
+		void SetContents(
+			const str::dStrings &Ids,
+			const str::dStrings &Contents );
+		void SetContent(
+			const str::dString &Id,
+			const str::dString &Content );
+		void InsertCSSRule(
+			const str::dString &Rule,
+			xdhcmn::sIndex Index );
+		xdhcmn::sIndex AppendCSSRule( const str::dString &Rule );
+		void RemoveCSSRule( xdhcmn::sIndex Index );
+		void AddClasses(
+			const str::dStrings &Ids,
+			const str::dStrings &Classes );
+		void AddClass(
+			const str::dString &Id,
+			const str::dString &Class );
+		void RemoveClasses(
+			const str::dStrings &Ids,
+			const str::dStrings &Classes );
+		void RemoveClass(
+			const str::dString &Id,
+			const str::dString &Class );
+		void ToggleClasses(
+			const str::dStrings &Idss,
+			const str::dStrings &Classes );
+		void ToggleClass(
+			const str::dString &Id,
+			const str::dString &Class );
+		void EnableElements( const str::dStrings &Ids );
+		void EnableElement( const str::dString &Id );
+		void DisableElements( const str::dStrings &Ids );
+		void DisableElement( const str::dString &Id);
+	};
 
 	class reporting_callback__
 	: public _reporting_callback__ {
@@ -268,10 +339,10 @@ namespace sclxdhtml {
 			const char *Message ) override
 		{
 			if ( Reply == fblovl::rDisconnected )
-				Alert( "SCLXHTML_Disconnected", L_(), P_() );
+				P_().AlertT( "SCLXHTML_Disconnected", L_() );
 			else {
 				//				sclmisc::ReportAndAbort( Message );
-				Alert( Message, P_(), L_() );
+				P_().AlertU( Message, L_() );
 				qRAbort();
 			}
 		}
@@ -309,53 +380,6 @@ namespace sclxdhtml {
 
 	typedef void( *fSet )( xdhdws::sProxy &Proxy, const xdhdws::nstring___ &Id, const xdhdws::nstring___ &XML, const xdhdws::nstring___ &XSL );
 
-	void SetElement_(
-		const xdhdws::nstring___ &Id,
-		fSet Set,
-		const rgstry::rEntry &Filename,
-		const char *Target,
-		const sclrgstry::registry_ &Registry,
-		const str::dString &XML,
-		xdhdws::sProxy &Proxy,
-		bso::char__ Marker );
-
-	void SetContents_(
-		const str::dStrings &Ids,
-		const str::dStrings &Contents,
-		xdhdws::sProxy &Proxy );
-
-	void SetContent_(
-		const str::dString &Id,
-		const str::dString &Content,
-		xdhdws::sProxy &Proxy );
-
-	void InsertCSSRule_(
-		const str::dString &Rule,
-		xdhcmn::sIndex Index,
-		xdhdws::sProxy &Proxy );
-
-	xdhcmn::sIndex AppendCSSRule_(
-		const str::dString &Rule,
-		xdhdws::sProxy &Proxy );
-	
-	void RemoveCSSRule_(
-		xdhcmn::sIndex Index,
-		xdhdws::sProxy &Proxy );
-
-	 void AddClass(
-		 const str::dString &Id,
-		 const str::dString &Class,
-		 xdhdws::sProxy &Proxy );
-
-	 void RemoveClass(
-		 const str::dString &Id,
-		 const str::dString &Class,
-		 xdhdws::sProxy &Proxy );
-
-	 void ToggleClass(
-		 const str::dString &Id,
-		 const str::dString &Class,
-		 xdhdws::sProxy &Proxy );
 
 	template <typename session, typename rack> inline void SetElement_(
 		const xdhdws::nstring___ &Id,
@@ -557,18 +581,18 @@ namespace sclxdhtml {
 		}
 		void AlertU( const ntvstr::string___ &Message )	// Displays 'Message' as is.
 		{
-			sclxdhtml::Alert( Message, *this, Language() );
+			sProxy::AlertU( Message, Language() );
 		}
 		void AlertT( const ntvstr::string___ &RawMessage )	// Translates 'RawMessage'.
 		{
-			sclxdhtml::Alert( RawMessage, Language(), *this );
+			sProxy::AlertT( RawMessage, Language() );
 		}
 		void Alert(
 			const ntvstr::string___ &XML,
 			const ntvstr::string___ &XSL,
 			const ntvstr::string___ &Title )
 		{
-			sclxdhtml::Alert( XML, XSL, Title, *this, Language() );
+			sProxy::Alert( XML, XSL, Title, Language() );
 		}
 		template <typename i> void Alert( i I )
 		{
@@ -578,18 +602,18 @@ namespace sclxdhtml {
 		}
 		bso::bool__ ConfirmU( const ntvstr::string___ &Message )	// Displays 'Message' as is.
 		{
-			return sclxdhtml::Confirm( Message, *this, Language() );
+			return sProxy::ConfirmU( Message, Language() );
 		}
 		bso::bool__ ConfirmT( const ntvstr::string___ &RawMessage )	// Translates 'RawMessage'.
 		{
-			return sclxdhtml::Confirm( RawMessage, Language(), *this );
+			return sProxy::ConfirmT( RawMessage, Language() );
 		}
 		bso::bool__ Confirm(
 			const ntvstr::string___ &XML,
 			const ntvstr::string___ &XSL,
 			const ntvstr::string___ &Title )
 		{
-			return sclxdhtml::Confirm( XML, XSL, Title, this, Language() );
+			return sProxy::Confirm( XML, XSL, Title, Language() );
 		}
 		qRWDISCLOSEr( eBackendVisibility, BackendVisibility );
 		qRODISCLOSEr( page, Page );

@@ -154,23 +154,31 @@ namespace xdhdws {
 		qRT;
 		qRE;
 		}
-		void AddClass(
-			const rNString &Id,
-			const rNString &Class )
+		void AddClasses(
+			const rNString &Ids,
+			const rNString &Classes )
 		{
-			C_().Process( xdhcmn::fAddClass, NULL, Id.Internal()(), Class.Internal()() );
+			C_().Process( xdhcmn::fAddClasses, NULL, Ids.Internal()(), Classes.Internal()() );
 		}
-		void RemoveClass(
-			const rNString &Id,
-			const rNString &Class )
+		void RemoveClasses(
+			const rNString &Ids,
+			const rNString &Classes )
 		{
-			C_().Process( xdhcmn::fRemoveClass, NULL, Id.Internal()(), Class.Internal()() );
+			C_().Process( xdhcmn::fRemoveClasses, NULL, Ids.Internal()(), Classes.Internal()() );
 		}
-		void ToggleClass(
-			const rNString &Id,
-			const rNString &Class )
+		void ToggleClasses(
+			const rNString &Ids,
+			const rNString &Classes )
 		{
-			C_().Process( xdhcmn::fToggleClass, NULL, Id.Internal()(), Class.Internal()() );
+			C_().Process( xdhcmn::fToggleClasses, NULL, Ids.Internal()(), Classes.Internal()() );
+		}
+		void EnableElements( const rNString &Ids )
+		{
+			C_().Process( xdhcmn::fEnableElements, NULL, Ids.Internal()() );
+		}
+		void DisableElements( const rNString &Ids )
+		{
+			C_().Process( xdhcmn::fDisableElements, NULL, Ids.Internal()() );
 		}
 		const char *GetProperty(
 			const nstring___ &Id,

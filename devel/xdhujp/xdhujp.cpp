@@ -598,15 +598,15 @@ static void RemoveCSSRule_(
 }
 
 namespace {
-	void HandleClass_(
+	void HandleClasses_(
 		cJS &Callback,
 		xdhujs::script_name__ ScriptName,
-		const nchar__ *Id,
-		const nchar__ *Class )
+		const nchar__ *Ids,
+		const nchar__ *Classes )
 	{
 	qRH;
 	qRB;
-		Execute( Callback, ScriptName, NULL, nstring___( Id ).Internal()(), nstring___( Class ).Internal()() );
+		Execute( Callback, ScriptName, NULL, nstring___( Ids ).Internal()(), nstring___( Classes ).Internal()() );
 	qRR;
 	qRT;
 	qRE;
@@ -614,16 +614,58 @@ namespace {
 }
 
 
-static void HandleClass_(
+static void HandleClasses_(
 	cJS &Callback,
 	xdhujs::script_name__ ScriptName,
 	va_list List )
 {
 	// NOTA : we use variables, because if we put 'va_arg()' directly as parameter to below function, it's not sure that they are called in the correct order.
-	const nchar__ *Id = va_arg( List, const nchar__ * );
-	const nchar__ *Class = va_arg( List, const nchar__ * );
+	const nchar__ *Ids = va_arg( List, const nchar__ * );
+	const nchar__ *Classes = va_arg( List, const nchar__ * );
 
-	HandleClass_( Callback, ScriptName, Id, Class );
+	HandleClasses_( Callback, ScriptName, Ids, Classes );
+}
+
+namespace {
+	void EnableElements_(
+		cJS &Callback,
+		const nchar__ *Ids )
+	{
+	qRH;
+	qRB;
+		Execute( Callback, xdhujs::snElementsEnabler, NULL, nstring___( Ids ).Internal()() );
+	qRR;
+	qRT;
+	qRE;
+	}
+}
+
+static void EnableElements_(
+	cJS &Callback,
+	va_list List )
+{
+	EnableElements_( Callback, va_arg( List, const nchar__ * ) );
+}
+
+namespace {
+	void DisableElements_(
+		cJS &Callback,
+		const nchar__ *Ids )
+	{
+	qRH;
+	qRB;
+		Execute( Callback, xdhujs::snElementsDisabler, NULL, nstring___( Ids ).Internal()() );
+	qRR;
+	qRT;
+	qRE;
+	}
+}
+
+static void DisableElements_(
+	cJS &Callback,
+	va_list List )
+{
+	EnableElements_( Callback, va_arg( List, const nchar__ * ) );
 }
 
 static script_name__ Convert_( xdhcmn::function__ Function )
@@ -689,13 +731,19 @@ static script_name__ Convert_( xdhcmn::function__ Function )
 	case xdhcmn::fRemoveCSSRule:
 		qRFwk();
 		break;
-	case xdhcmn::fAddClass:
+	case xdhcmn::fAddClasses:
 		qRFwk();
 		break;
-	case xdhcmn::fRemoveClass:
+	case xdhcmn::fRemoveClasses:
 		qRFwk();
 		break;
-	case xdhcmn::fToggleClass:
+	case xdhcmn::fToggleClasses:
+		qRFwk();
+		break;
+	case xdhcmn::fEnableElements:
+		qRFwk();
+		break;
+	case xdhcmn::fDisableElements:
 		qRFwk();
 		break;
 	default:
@@ -756,14 +804,20 @@ void xdhujp::sProxyCallback::XDHCMNProcess(
 	case xdhcmn::fRemoveCSSRule:
 		RemoveCSSRule_( C_(), List );
 		break;
-	case xdhcmn::fAddClass:
-		HandleClass_( C_(), xdhujs::snClassAdder, List );
+	case xdhcmn::fAddClasses:
+		HandleClasses_( C_(), xdhujs::snClassesAdder, List );
 		break;
-	case xdhcmn::fRemoveClass:
-		HandleClass_( C_(), xdhujs::snClassRemover, List );
+	case xdhcmn::fRemoveClasses:
+		HandleClasses_( C_(), xdhujs::snClassesRemover, List );
 		break;
-	case xdhcmn::fToggleClass:
-		HandleClass_( C_(), xdhujs::snClassToggler, List );
+	case xdhcmn::fToggleClasses:
+		HandleClasses_( C_(), xdhujs::snClassesToggler, List );
+		break;
+	case xdhcmn::fEnableElements:
+		EnableElements_( C_(), List );
+		break;
+	case xdhcmn::fDisableElements:
+		DisableElements_( C_(), List );
 		break;
 	default:
 		qRFwk();

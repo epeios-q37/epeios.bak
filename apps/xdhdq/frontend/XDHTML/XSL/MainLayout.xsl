@@ -13,7 +13,7 @@
 						<div data-xdh-onevent="ShowTestButton">
 							<text>#mainHideShowTestButton#</text>
 						</div>
-						<div class="button">
+						<div id="Input">
 							<button  data-xdh-onevent="Testing" title="#mainDisplayErrorMessage#">#mainTest#</button>
 							<text>#mainTestExplanation#</text>
 						</div>

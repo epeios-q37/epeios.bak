@@ -97,14 +97,18 @@ namespace xdhujr {
 				Append,
 				Remove;
 		}
-		// 'classq' instead of more logical 'class', because the latter is a reserved keyword.
-		namespace classq	{
+		namespace classes	{
 			extern rEntry
 				Add,
 				Remove,
 				Toggle;
 
 		};
+		namespace elements {
+			extern rEntry
+				Enable,
+				Disable;
+		}
 	}
 
 }

@@ -247,17 +247,17 @@
 			<Class>
 				<Add>
 					<![CDATA[
-							document.getElementById( "%Id% ).classList.add( "%Class% );
+							document.getElementById( "%Id%" ).classList.add( "%Class%" );
 						]]>
 				</Add>
 				<Remove>
 					<![CDATA[
-							document.getElementById( "%Id% ).classList.remove( "%Class% );
+							document.getElementById( "%Id%" ).classList.remove( "%Class%" );
 						]]>
 				</Remove>
 				<Toggle>
 					<![CDATA[
-							document.getElementById( "%Id% ).classList.toggle( "%Class% );
+							document.getElementById( "%Id%" ).classList.toggle( "%Class%" );
 						]]>
 				</Toggle>
 			</Class>

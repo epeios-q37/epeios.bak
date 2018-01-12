@@ -65,9 +65,11 @@ const str::string_ &xdhujs::GetTaggedScript(
 	C( CSSRuleInserter, css_rule::Insert );
 	C( CSSRuleAppender, css_rule::Append );
 	C( CSSRuleRemover, css_rule::Remove );
-	C( ClassAdder, classq::Add );
-	C( ClassRemover, classq::Remove );
-	C( ClassToggler, classq::Toggle );
+	C( ClassesAdder, classes::Add );
+	C( ClassesRemover, classes::Remove );
+	C( ClassesToggler, classes::Toggle );
+	C( ElementsEnabler, elements::Enable );
+	C( ElementsDisabler, elements::Disable );
 	default:
 		qRFwk();
 		break;
@@ -155,7 +157,7 @@ D( Types );
 D( ParametersSets );
 D( Rule );
 D( Index );
-D( Class );
+D( Classes );
 
 #define S( name, ... )\
 	case sn##name:\
@@ -198,9 +200,11 @@ qRB
 	S( CSSRuleInserter, Rule_, Index_, NULL );
 	S( CSSRuleAppender, Rule_, NULL );
 	S( CSSRuleRemover, Index_, NULL );
-	S( ClassAdder, Id_, Class_, NULL );
-	S( ClassRemover, Id_, Class_, NULL );
-	S( ClassToggler, Id_, Class_, NULL );
+	S( ClassesAdder, Ids_, Classes_, NULL );
+	S( ClassesRemover, Ids_, Classes_, NULL );
+	S( ClassesToggler, Ids_, Classes_, NULL );
+	S( ElementsEnabler, Ids_, NULL );
+	S( ElementsDisabler, Ids_, NULL );
 	default:
 		qRFwk();
 		break;

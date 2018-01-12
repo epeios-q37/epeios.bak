@@ -229,11 +229,10 @@ namespace {
 	}
 }
 
-void sclxdhtml::Alert(
+void sclxdhtml::sProxy::Alert(
 	const ntvstr::string___ &XML,
 	const ntvstr::string___ &XSL,
 	const ntvstr::string___ &Title,
-	sProxy &Proxy,
 	const char *Language )
 {
 qRH
@@ -242,7 +241,7 @@ qRB
 	CloseText.Init();
 	scllocale::GetTranslation( SCLXDHTML_NAME "_CloseText", Language, CloseText );
 
-	Proxy.Alert( XML, XSL, Title, CloseText );
+	Core_.Alert( XML, XSL, Title, CloseText );
 qRR
 qRT
 qRE
@@ -263,34 +262,31 @@ namespace{
 
 		SetXMLAndXSL_( Message, MessageLanguage, XML, XSL );
 
-		Alert(XML, XSL, ntvstr::string___(), Proxy, CloseTextLanguage );
+		Proxy.Alert(XML, XSL, ntvstr::string___(), CloseTextLanguage );
 	qRR
 	qRT
 	qRE
 	}
 }
 
-void sclxdhtml::Alert(
+void sclxdhtml::sProxy::AlertT(
 	const ntvstr::string___ &RawMessage,
-	const char *Language,
-	sProxy &Proxy )
-{
-	Alert_( RawMessage, Language, Proxy, Language );
-}
-
-void sclxdhtml::Alert(
-	const ntvstr::string___ &Message,
-	sProxy &Proxy,
 	const char *Language )
 {
-	Alert_( Message, NULL, Proxy, Language );
+	Alert_( RawMessage, Language, *this, Language );
 }
 
-bso::bool__ sclxdhtml::Confirm(
+void sclxdhtml::sProxy::AlertU(
+	const ntvstr::string___ &Message,
+	const char *Language )
+{
+	Alert_( Message, NULL, *this, Language );
+}
+
+bso::bool__ sclxdhtml::sProxy::Confirm(
 	const ntvstr::string___ &XML,
 	const ntvstr::string___ &XSL,
 	const ntvstr::string___ &Title,
-	sProxy &Proxy,
 	const char *Language )
 {
 	bso::bool__ Confirmation = false;
@@ -300,7 +296,7 @@ qRB
 	CloseText.Init();
 	scllocale::GetTranslation( SCLXDHTML_NAME "_CloseText", Language, CloseText );
 
-	Confirmation = Proxy.Confirm( XML, XSL, Title, CloseText );
+	Confirmation = Core_.Confirm( XML, XSL, Title, CloseText );
 qRR
 qRT
 qRE
@@ -323,7 +319,7 @@ namespace {
 
 		SetXMLAndXSL_( Message, MessageLanguage, XML, XSL );
 
-		Confirmation = Confirm( XML, XSL, ntvstr::string___(), Proxy, CloseTextLanguage );
+		Confirmation = Proxy.Confirm( XML, XSL, ntvstr::string___(), CloseTextLanguage );
 	qRR
 	qRT
 	qRE
@@ -331,20 +327,18 @@ namespace {
 	}
 }
 
-bso::bool__ sclxdhtml::Confirm(
+bso::bool__ sclxdhtml::sProxy::ConfirmT(
 	const ntvstr::string___ &RawMessage,
-	const char *Language,
-	sProxy &Proxy )
-{
-	return Confirm_( RawMessage,  Language, Proxy, Language );
-}
-
-bso::bool__ sclxdhtml::Confirm(
-	const ntvstr::string___ &Message,
-	sProxy &Proxy,
 	const char *Language )
 {
-	return Confirm_( Message,  NULL, Proxy, Language );
+	return Confirm_( RawMessage,  Language, *this, Language );
+}
+
+bso::bool__ sclxdhtml::sProxy::ConfirmU(
+	const ntvstr::string___ &Message,
+	const char *Language )
+{
+	return Confirm_( Message,  NULL, *this, Language );
 }
 
 void sclxdhtml::HandleError(
@@ -360,15 +354,15 @@ qRB
 		Message.Init();
 		if ( sclerror::GetPendingErrorTranslation( Language, Message, err::hUserDefined ) ) {
 			sclerror::ResetPendingError();
-			Alert( Message, Proxy, Language );
+			Proxy.AlertU( Message, Language );
 		} 
 		break;
 	case err::t_Free:
 	case err::t_Return:
-		Alert( "???", Proxy, Language );
+		Proxy.AlertU( "???", Language );
 		break;
 	default:
-		Alert( err::Message( ErrBuffer ), Proxy, Language );
+		Proxy.AlertU( err::Message( ErrBuffer ), Language );
 		break;
 	}
 
@@ -378,14 +372,12 @@ qRT
 qRE
 }
 
-void sclxdhtml::SetElement_(
+void sclxdhtml::sProxy::SetLayout(
 	const xdhdws::nstring___ &Id,
-	fSet Set,
 	const rgstry::rEntry & Filename,
 	const char *Target,
 	const sclrgstry::registry_ &Registry,
 	const str::dString &XML,
-	xdhdws::sProxy &Proxy,
 	bso::char__ Marker )
 {
 qRH
@@ -394,16 +386,15 @@ qRB
 	XSL.Init();
 	sclxdhtml::LoadXSLAndTranslateTags( rgstry::tentry___( Filename, Target ), Registry, XSL, Marker );
 
-	Set( Proxy, Id, XML, XSL );
+	Core_.SetLayout( Id, XML, XSL );
 qRR
 qRT
 qRE
 }
 
-void sclxdhtml::SetContents_(
+void sclxdhtml::sProxy::SetContents(
 	const str::dStrings &Ids,
-	const str::dStrings &Contents,
-	xdhdws::sProxy & Proxy )
+	const str::dStrings &Contents )
 {
 qRH;
 	str::wString MergedIds, MergedContents;
@@ -417,16 +408,15 @@ qRB;
 	MergedContents.Init();
 	xdhcmn::FlatMerge( Contents, MergedContents, true );	// Used as is in an JS script, hence last argument at 'true'.
 
-	SetContents_( Proxy, MergedIds, MergedContents );
+	Core_.SetContents(  MergedIds, MergedContents );
 qRR;
 qRT;
 qRE;
 }
 
-void sclxdhtml::SetContent_(
+void sclxdhtml::sProxy::SetContent(
 	const str::dString &Id,
-	const str::dString &Content,
-	xdhdws::sProxy &Proxy )
+	const str::dString &Content )
 {
 qRH;
 	str::wStrings Ids, Contents;
@@ -436,56 +426,173 @@ qRB;
 	Ids.Append( Id );
 	Contents.Append( Content );
 
-	SetContents_( Ids, Contents, Proxy );
+	SetContents( Ids, Contents );
 qRR;
 qRT;
 qRE;
 }
 
-void sclxdhtml::InsertCSSRule_(
+void sclxdhtml::sProxy::InsertCSSRule(
 	const str::dString &Rule,
-	xdhcmn::sIndex Index,
-	xdhdws::sProxy &Proxy )
+	xdhcmn::sIndex Index )
 {
-	return Proxy.InsertCSSRule( Rule, Index );
+	return Core_.InsertCSSRule( Rule, Index );
 }
 
-xdhcmn::sIndex sclxdhtml::AppendCSSRule_(
-	const str::dString &Rule,
-	xdhdws::sProxy &Proxy )
+xdhcmn::sIndex sclxdhtml::sProxy::AppendCSSRule( const str::dString &Rule )
 {
-	return Proxy.AppendCSSRule( Rule );
+	return Core_.AppendCSSRule( Rule );
 }
 
-void sclxdhtml::RemoveCSSRule_(
-	xdhcmn::sIndex Index,
-	xdhdws::sProxy &Proxy )
+void sclxdhtml::sProxy::RemoveCSSRule( xdhcmn::sIndex Index )
 {
-	Proxy.RemoveCSSRule( Index );
+	Core_.RemoveCSSRule( Index );
 }
 
-void sclxdhtml::AddClass(
+namespace {
+	void HandleClasses_(
+		const str::dStrings &Ids,
+		const str::dStrings &Classes,
+		void (xdhdws::sProxy::* Method)(
+			const xdhcmn::rNString &Ids,
+			const xdhcmn::rNString &Classes ),
+		xdhdws::sProxy &Proxy )
+	{
+	qRH;
+		str::wString MergedIds, MergedClasses;
+	qRB;
+		MergedIds.Init();
+		xdhcmn::FlatMerge( Ids, MergedIds, true );	// Passed as is to a JS script, hence 'true'.
+
+		MergedClasses.Init();
+		xdhcmn::FlatMerge( Ids, MergedClasses, true );	// Passed as is to a JS script, hence 'true'.
+
+		(Proxy.*Method)( MergedIds, MergedClasses );
+	qRR;
+	qRT;
+	qRE;
+	}
+
+	void HandleClass_(
+		const str::dString &Id,
+		const str::dString &Class,
+		void (sProxy::*Method)(
+			const str::dStrings &Ids,
+			const str::dStrings &Classes ),
+		sProxy &Proxy )
+	{
+	qRH;
+		str::wStrings Ids, Classes;
+	qRB;
+		Ids.Init();
+		Ids.Append( Id );
+
+		Classes.Init();
+		Classes.Append( Id );
+
+		(Proxy.*Method)( Ids, Classes );
+	qRR;
+	qRT;
+	qRE;
+	}
+}
+
+void sclxdhtml::sProxy::AddClasses(
+	const str::dStrings &Ids,
+	const str::dStrings& Classes )
+{
+	HandleClasses_( Ids, Classes, &xdhdws::sProxy::AddClasses, Core_ );
+}
+
+void sclxdhtml::sProxy::AddClass(
 	const str::dString &Id,
-	const str::dString &Class,
-	xdhdws::sProxy &Proxy )
+	const str::dString &Class )
 {
-	Proxy.AddClass( Id, Class );
+	HandleClass_( Id, Class, &sProxy::AddClasses, *this );
 }
 
-void sclxdhtml::RemoveClass(
-	const str::dString &Id,
-	const str::dString &Class,
-	xdhdws::sProxy &Proxy )
+void sclxdhtml::sProxy::RemoveClasses(
+	const str::dStrings &Ids,
+	const str::dStrings& Classes )
 {
-	Proxy.RemoveClass(Id, Class );
+	HandleClasses_( Ids, Classes, &xdhdws::sProxy::RemoveClasses, Core_ );
 }
 
-void sclxdhtml::ToggleClass(
+void sclxdhtml::sProxy::RemoveClass(
 	const str::dString &Id,
-	const str::dString &Class,
-	xdhdws::sProxy &Proxy )
+	const str::dString &Class )
 {
-	Proxy.ToggleClass( Id, Class );
+	HandleClass_( Id, Class, &sProxy::RemoveClasses, *this );
+}
+
+void sclxdhtml::sProxy::ToggleClasses(
+	const str::dStrings &Ids,
+	const str::dStrings& Classes )
+{
+	HandleClasses_( Ids, Classes, &xdhdws::sProxy::ToggleClasses, Core_ );
+}
+
+void sclxdhtml::sProxy::ToggleClass(
+	const str::dString &Id,
+	const str::dString &Class )
+{
+	HandleClass_( Id, Class, &sProxy::ToggleClasses, *this );
+}
+
+namespace {
+	void HandleElements_(
+		const str::dStrings &Ids,
+		void (xdhdws::sProxy::* Method)( const xdhcmn::rNString &Ids ),
+		xdhdws::sProxy &Proxy )
+	{
+	qRH;
+		str::wString MergedIds;
+	qRB;
+		MergedIds.Init();
+		xdhcmn::FlatMerge( Ids, MergedIds, true );	// Passed as is to a JS script, hence 'true'.
+
+		(Proxy.*Method)( MergedIds );
+	qRR;
+	qRT;
+	qRE;
+	}
+
+	void HandleElement_(
+		const str::dString &Id,
+		void (sProxy::*Method)( const str::dStrings &Ids ),
+		sProxy &Proxy )
+	{
+	qRH;
+		str::wStrings Ids;
+	qRB;
+		Ids.Init();
+		Ids.Append( Id );
+
+		(Proxy.*Method)( Ids );
+	qRR;
+	qRT;
+	qRE;
+	}
+}
+
+void sclxdhtml::sProxy::EnableElements( const str::dStrings &Ids )
+{
+	HandleElements_( Ids, &xdhdws::sProxy::EnableElements, Core_ );
+}
+
+void sclxdhtml::sProxy::EnableElement(	const str::dString &Id )
+{
+	HandleElement_( Id, &sProxy::EnableElements, *this );
+}
+
+void sclxdhtml::sProxy::DisableElements( const str::dStrings &Ids )
+{
+	HandleElements_( Ids, &xdhdws::sProxy::EnableElements, Core_ );
+}
+
+void sclxdhtml::sProxy::DisableElement( const str::dString &Id )
+{
+	HandleElement_( Id, &sProxy::DisableElements, *this );
 }
 
 qCDEF( char *, sclxdhtml::RootTagId_, "Root" );

@@ -86,7 +86,11 @@ rEntry xdhujr::script::css_rule::Insert( "Insert", CSSRule_ );
 rEntry xdhujr::script::css_rule::Append( "Append", CSSRule_ );
 rEntry xdhujr::script::css_rule::Remove( "Remove", CSSRule_ );
 
-static rEntry Class_( "Class", xdhujr::Scripts );
-rEntry xdhujr::script::classq::Add( "Add", Class_ );
-rEntry xdhujr::script::classq::Remove( "Remove", Class_ );
-rEntry xdhujr::script::classq::Toggle( "Toggle", Class_ );
+static rEntry Classes_( "Classes", xdhujr::Scripts );
+rEntry xdhujr::script::classes::Add( "Add", Classes_ );
+rEntry xdhujr::script::classes::Remove( "Remove", Classes_ );
+rEntry xdhujr::script::classes::Toggle( "Toggle", Classes_ );
+
+static rEntry Elements_( "Elements", xdhujr::Scripts );
+rEntry xdhujr::script::elements::Enable( "Enable", Elements_ );
+rEntry xdhujr::script::elements::Disable( "Disable", Elements_ );
