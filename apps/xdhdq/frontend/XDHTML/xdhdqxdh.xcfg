@@ -38,55 +38,28 @@
 			<xpp:expand select="Definitions"/>
 			<xpp:expand select="XDH_Definitions"/>
 			<xpp:bloc preserve="yes">
-				<XSLFilesSet>
-					<XSLFiles target="About">
-						<Layout>
+				<XSLFiles>
+					<XSLFile target="About">
 							<xpp:expand select="XSLRootDir"/>
 							<xpp:bloc>About.xsl</xpp:bloc>
-						</Layout>
-						<!-- No 'casting' XSL -->
-					</XSLFiles>
-					<XSLFiles target="Fields">
-						<Layout>
+					</XSLFile>
+					<XSLFile target="Fields">
 							<xpp:expand select="XSLRootDir"/>
 							<xpp:bloc>FieldsLayout.xsl</xpp:bloc>
-						</Layout>
-						<Casting>
-							<xpp:expand select="XSLRootDir"/>
-							<xpp:bloc>FieldsCasting.xsl</xpp:bloc>
-						</Casting>
-					</XSLFiles>
-					<XSLFiles target="Prolog">
-						<Layout>
+					</XSLFile>
+					<XSLFile target="Prolog">
 							<xpp:expand select="XSLRootDir"/>
 							<xpp:bloc>PrologLayout.xsl</xpp:bloc>
-						</Layout>
-						<Casting>
-							<xpp:expand select="XSLRootDir"/>
-							<xpp:bloc>PrologCasting.xsl</xpp:bloc>
-						</Casting>
-					</XSLFiles>
-					<XSLFiles target="Login">
-						<Layout>
+					</XSLFile>
+					<XSLFile target="Login">
 							<xpp:expand select="XSLRootDir"/>
 							<xpp:bloc>LoginLayout.xsl</xpp:bloc>
-						</Layout>
-						<Casting>
-							<xpp:expand select="XSLRootDir"/>
-							<xpp:bloc>LoginCasting.xsl</xpp:bloc>
-						</Casting>
-					</XSLFiles>
-					<XSLFiles target="Main">
-						<Layout>
+					</XSLFile>
+					<XSLFile target="Main">
 							<xpp:expand select="XSLRootDir"/>
 							<xpp:bloc>MainLayout.xsl</xpp:bloc>
-						</Layout>
-						<Casting>
-							<xpp:expand select="XSLRootDir"/>
-							<xpp:bloc>MainCasting.xsl</xpp:bloc>
-						</Casting>
-					</XSLFiles>
-				</XSLFilesSet>
+					</XSLFile>
+				</XSLFiles>
 			</xpp:bloc>
 		</Definitions>
 		<Locale>

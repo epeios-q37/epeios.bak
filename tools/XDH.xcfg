@@ -244,23 +244,23 @@
 						]]>
 				</Remove>
 			</CSSRule>
-			<Class>
+			<Classes>
 				<Add>
 					<![CDATA[
-							document.getElementById( "%Id%" ).classList.add( "%Class%" );
+							addClasses( %Ids_%, %Classes_% );
 						]]>
 				</Add>
 				<Remove>
 					<![CDATA[
-							document.getElementById( "%Id%" ).classList.remove( "%Class%" );
+							removeClasses( %Ids_%, %Classes_% );
 						]]>
 				</Remove>
 				<Toggle>
 					<![CDATA[
-							document.getElementById( "%Id%" ).classList.toggle( "%Class%" );
+							toggleClasses( %Ids_% , %Classes_% );
 						]]>
 				</Toggle>
-			</Class>
+			</Classes>
 		</Scripts>
 	</Definitions>
 </xpp:bloc>

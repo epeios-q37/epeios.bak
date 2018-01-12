@@ -18,7 +18,7 @@
 		<li>
 			<span id="View.{@id}">
 				<div>
-					<article class="listing" style="display: flex; width:100%; justify-content: space-between;align-items: center;">
+					<article disabled="disabled" class="listing" style="display: flex; width:100%; justify-content: space-between;align-items: center;">
 						<div>
 							<h3 id="Title.{@id}">
 								<xsl:value-of select="title"/>
@@ -29,7 +29,7 @@
 							</p>
 						</div>
 						<span style="display: flex; flex-direction: column;">
-							<button data-xdh-onevent="Edit" data-xdh-value="{@id}" data-xdh-cast="EditionCast">Edit</button>
+							<button  disabled="disabled" data-xdh-onevent="Edit" data-xdh-value="{@id}" data-xdh-cast="EditionCast">Edit</button>
 							<button data-xdh-onevent="Delete" data-xdh-value="{@id}" data-xdh-cast="EditionCast">Delete</button>
 						</span>
 					</article>

@@ -51,8 +51,7 @@ namespace sclxdhtml {
 		namespace definition {
 			using namespace sclrgstry::definition;
 
-			extern rEntry XSLLayoutFile;
-			extern rEntry XSLCastingFile;
+			extern rEntry XSLFile;
 		}
 	}
 
@@ -224,15 +223,47 @@ namespace sclxdhtml {
 	{
 	private:
 		xdhdws::sProxy Core_;
+	protected:
+		void SetLayout_(
+			const xdhdws::nstring___ &Id,
+			const rgstry::rEntry &Filename,
+			const char *Target,
+			const sclrgstry::registry_ &Registry,
+			const str::dString &XML,
+			bso::char__ Marker );
+		template <typename session, typename rack> void SetLayout_(
+			const xdhdws::nstring___ &Id,
+			const char *Target,
+			const sclrgstry::registry_ &Registry,
+			void( *Get )(session &Session, xml::dWriter &Writer),
+			session &Session,
+			bso::char__ Marker = '#' )
+			{
+			qRH;
+				rack Rack;
+			qRB;
+				Rack.Init( Target, Session );
+
+				Get( Session, Rack() );
+
+				SetLayout_( Id, registry::definition::XSLFile, Target, Registry, Rack.Target(), Marker );
+			qRR;
+			qRT;
+			qRE;
+			}
 	public:
 		void reset( bso::sBool P = true )
 		{
 			tol::reset( P, Core_ );
 		}
 		qCDTOR( sProxy );
-		void Init( xdhcmn::cProxy &Proxy )
+		void Init( xdhcmn::cProxy *Proxy )
 		{
-			Core_.Init( &Proxy );
+			Core_.Init( Proxy );
+		}
+		void Log( const ntvstr::rString &Message )
+		{
+			Core_.Log( Message );
 		}
 		void Alert(
 			const ntvstr::string___ &XML,
@@ -286,13 +317,6 @@ namespace sclxdhtml {
 		{
 			return Core_.GetResult( Id, Result );
 		}
-		void SetLayout(
-			const xdhdws::nstring___ &Id,
-			const rgstry::rEntry &Filename,
-			const char *Target,
-			const sclrgstry::registry_ &Registry,
-			const str::dString &XML,
-			bso::char__ Marker );
 		void SetContents(
 			const str::dStrings &Ids,
 			const str::dStrings &Contents );
@@ -310,22 +334,52 @@ namespace sclxdhtml {
 		void AddClass(
 			const str::dString &Id,
 			const str::dString &Class );
+		void AddClass(
+			const char *Id,
+			const char *Class )
+		{
+			AddClass( str::wString( Id ), str::wString( Class ) );
+		}
 		void RemoveClasses(
 			const str::dStrings &Ids,
 			const str::dStrings &Classes );
 		void RemoveClass(
 			const str::dString &Id,
 			const str::dString &Class );
+		void RemoveClass(
+			const char *Id,
+			const char *Class )
+		{
+			RemoveClass( str::wString( Id ), str::wString( Class ) );
+		}
 		void ToggleClasses(
 			const str::dStrings &Idss,
 			const str::dStrings &Classes );
 		void ToggleClass(
 			const str::dString &Id,
 			const str::dString &Class );
+		void ToggleClass(
+			const char *Id,
+			const char *Class )
+		{
+			ToggleClass( str::wString( Id ), str::wString( Class ) );
+		}
 		void EnableElements( const str::dStrings &Ids );
 		void EnableElement( const str::dString &Id );
+		void EnableElement( const char *Id )
+		{
+			EnableElement( str::wString( Id ) );
+		}
 		void DisableElements( const str::dStrings &Ids );
 		void DisableElement( const str::dString &Id);
+		void DisableElement( const char *Id )
+		{
+			DisableElement( str::wString( Id ) );
+		}
+		void DressWidgets( const ntvstr::rString &Id )
+		{
+			Core_.DressWidgets( Id );
+		}
 	};
 
 	class reporting_callback__
@@ -376,35 +430,7 @@ namespace sclxdhtml {
 		bv_Undefined
 	};
 
-	extern const char *RootTagId_;
-
-	typedef void( *fSet )( xdhdws::sProxy &Proxy, const xdhdws::nstring___ &Id, const xdhdws::nstring___ &XML, const xdhdws::nstring___ &XSL );
-
-
-	template <typename session, typename rack> inline void SetElement_(
-		const xdhdws::nstring___ &Id,
-		const char *Target,
-		const rgstry::rEntry &Filename,
-		void( *Get )( session &Session, xml::dWriter &Writer ),
-		fSet Set,
-		const sclrgstry::registry_ &Registry,
-		session &Session,
-		bso::char__ Marker = '#' )
-	{
-	qRH;
-		rack Rack;
-	qRB;
-		Rack.Init( Target, Session );
-
-		Get( Session, Rack() );
-
-		SetElement_( Id, Set, Filename, Target, Registry, Rack.Target(), Session, Marker );
-	qRR;
-	qRT;
-	qRE;
-	}
-
-	template <typename session, typename dump> class rRack_
+	template <typename session, typename dump> class rRack
 	{
 	private:
 		str::wString Target_;
@@ -415,10 +441,9 @@ namespace sclxdhtml {
 		{
 			tol::reset( P, Target_, _Flow, _Writer );
 		}
-		E_CDTOR( rRack_ );
+		E_CDTOR( rRack );
 		void Init(
 			const char *View,
-			const char *Background,
 			session &Session )
 		{
 			tol::buffer__ Buffer;
@@ -429,17 +454,16 @@ namespace sclxdhtml {
 			_Writer.Init( _Flow, xml::oIndent, xml::e_Default );
 			_Writer.PushTag( "XDHTML" );
 			_Writer.PutAttribute( "View", View );
-			_Writer.PutAttribute( "Background", Background );
 			_Writer.PutAttribute( "Generator", sclmisc::SCLMISCTargetName );
 			_Writer.PutAttribute( "TimeStamp", tol::DateAndTime( Buffer ) );
 			_Writer.PutAttribute( "OS", cpe::GetOSDigest() );
 			Mark = _Writer.PushTag( "Corpus" );
 			dump::Corpus( Session, _Writer );
 			_Writer.PopTag( Mark );
-			_Writer.PushTag( Background );
+			_Writer.PushTag( "Layout" );
 			dump::Common( Session, _Writer );
 		}
-		operator xml::writer_ &( )
+		operator xml::writer_ &()
 		{
 			return _Writer;
 		}
@@ -456,51 +480,12 @@ namespace sclxdhtml {
 		}
 	};
 
-	template <typename session, typename dump> class rLayoutRack
-	: public rRack_<session, dump> {
-	public:
-		void Init(
-			const char *View,
-			session &Session )
-		{
-			rRack_<session, dump>::Init( View, "Layout", Session );
-		}
-	};
-
-	inline void SetLayout_(
-		xdhdws::sProxy &Proxy,
-		const xdhcmn::nstring___ &Id,
-		const xdhcmn::nstring___ &XML,
-		const xdhcmn::nstring___ &XSL )
-	{
-		Proxy.SetLayout( Id, XML, XSL );
-	}
-
-	template <typename session, typename dump> inline void SetElementLayout(
-		const xdhdws::nstring___ &Id,
-		const char *Target,
-		void( *Get )( session &Session, xml::dWriter &Writer ),
-		const sclrgstry::registry_ &Registry,
-		session &Session,
-		bso::char__ Marker = '#' )
-	{
-		SetElement_<session, rLayoutRack<session, dump>>( Id, Target, registry::definition::XSLLayoutFile, Get, SetLayout_, Registry, Session, Marker );
-	}
-
-	template <typename session, typename dump> inline void SetDocumentLayout(
-		const char *Target,
-		void( *Get )( session &Session, xml::dWriter &Writer ),
-		const sclrgstry::registry_ &Registry,
-		session &Session,
-		bso::char__ Marker = '#' )
-	{
-		SetElementLayout<session, dump>( RootTagId_, Target, Get, Registry, Session, Marker );
-	}
-
 	template <typename session> class rCore;
 
+	extern const char *RootTagId_;
+
 	// User put in 'instances' all his own objects, instantiating all with a 'new' (by overloading 'SCLXHTMLNew(...)'), a 'delete' will be made automatically when unloading the library.
-	template <typename instances, typename frontend, typename page, page UndefinedPage, typename dump > class rSession
+	template <typename instances, typename frontend, typename page, page UndefinedPage, typename dump> class rSession
 	: public cSession_,
 	  public sProxy,
 	  public instances,
@@ -623,7 +608,7 @@ namespace sclxdhtml {
 			void( *Get )( rSession &Session, xml::dWriter &Writer ),
 			const sclrgstry::dRegistry &Registry )
 		{
-			sclxdhtml::SetElementLayout<rSession, dump>( Id, Target, Get, Registry, *this );
+			sProxy::SetLayout_<rSession, rRack<rSession,dump>>( Id, Target, Registry, Get, *this );
 		}
 		void SetElementLayout(
 			const xdhdws::nstring___ &Id,
@@ -637,7 +622,7 @@ namespace sclxdhtml {
 			void( *Get )( rSession &Session, xml::dWriter &Writer ),
 			const sclrgstry::dRegistry &Registry )
 		{
-			sclxdhtml::SetDocumentLayout<rSession, dump>( Target, Get, Registry, *this );
+			SetElementLayout( RootTagId_, Target, Get, Registry );
 		}
 		void SetDocumentLayout(
 			const char *Target,
@@ -649,19 +634,19 @@ namespace sclxdhtml {
 			const str::dStrings &Ids,
 			const str::dStrings &Contents )
 		{
-			sclxdhtml::SetContents_( Ids, Contents, *this );
+			sProxy::SetContents( Ids, Contents );
 		}
 		void SetContent(
 			const str::dString &Id,
 			const str::dString &Content )
 		{
-			sclxdhtml::SetContent_( Id, Content, *this );
+			sProxy::SetContent( Id, Content );
 		}
 		void SetContent(
 			const char *Id,
 			const str::dString &Content )
 		{
-			sclxdhtml::SetContent_( str::wString( Id ), Content, *this );
+			SetContent( str::wString( Id ), Content );
 		}
 	};
 

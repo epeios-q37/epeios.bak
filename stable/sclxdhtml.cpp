@@ -23,23 +23,18 @@
 
 using namespace sclxdhtml;
 
-namespace registry_ {
+namespace {
 	using rgstry::rEntry;
 
-	namespace definition_ {
+	namespace {
 		namespace {
-			namespace {
-				rEntry XSLFilesSet_( "XSLFilesSet", sclrgstry::Definitions );
-			}
-
-			rEntry FreeXSLFiles_( "XSLFiles", XSLFilesSet_ );
+			rEntry XSLFiles_( "XSLFiles", sclrgstry::Definitions );
 		}
-		rEntry TaggedXSLFiles( RGSTRY_TAGGING_ATTRIBUTE( "target" ), FreeXSLFiles_ );
+		rEntry UntaggedXSLFile_( "XSLFile", XSLFiles_ );
 	}
 }
 
-rgstry::rEntry registry::definition::XSLLayoutFile( "Layout", registry_::definition_::TaggedXSLFiles );
-rgstry::rEntry registry::definition::XSLCastingFile( "Casting", registry_::definition_::TaggedXSLFiles );
+rgstry::rEntry registry::definition::XSLFile( RGSTRY_TAGGING_ATTRIBUTE( "target" ), UntaggedXSLFile_ );
 
 namespace {
 	E_CDEF(char *, StraightBackendType_, "Straight" );
@@ -372,7 +367,7 @@ qRT
 qRE
 }
 
-void sclxdhtml::sProxy::SetLayout(
+void sclxdhtml::sProxy::SetLayout_(
 	const xdhdws::nstring___ &Id,
 	const rgstry::rEntry & Filename,
 	const char *Target,
@@ -465,7 +460,7 @@ namespace {
 		xdhcmn::FlatMerge( Ids, MergedIds, true );	// Passed as is to a JS script, hence 'true'.
 
 		MergedClasses.Init();
-		xdhcmn::FlatMerge( Ids, MergedClasses, true );	// Passed as is to a JS script, hence 'true'.
+		xdhcmn::FlatMerge( Classes, MergedClasses, true );	// Passed as is to a JS script, hence 'true'.
 
 		(Proxy.*Method)( MergedIds, MergedClasses );
 	qRR;
@@ -488,7 +483,7 @@ namespace {
 		Ids.Append( Id );
 
 		Classes.Init();
-		Classes.Append( Id );
+		Classes.Append( Class );
 
 		(Proxy.*Method)( Ids, Classes );
 	qRR;
@@ -595,7 +590,7 @@ void sclxdhtml::sProxy::DisableElement( const str::dString &Id )
 	HandleElement_( Id, &sProxy::DisableElements, *this );
 }
 
-qCDEF( char *, sclxdhtml::RootTagId_, "Root" );
+qCDEF( char *, sclxdhtml::RootTagId_, "XDHRoot" );
 
 void sclxdhtml::prolog::GetLayout(
 	sclfrntnd::rFrontend &Frontend,

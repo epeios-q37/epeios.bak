@@ -158,48 +158,99 @@ namespace server {
 		}
 	}
 
-	namespace casts_by_ids {
-		namespace set 
+	namespace classes {
+		namespace add 
 		{ 
 			void S(
 				const str::dStrings &Ids,
-				const str::dStrings &Values,
+				const str::dStrings &Classes,
 				flw::sWFlow &Flow );
 
 			inline void R( flw::sRFlow &Flow )
 			{}
 		}
 		
-		inline void Set(
+		inline void Add(
 			const str::dStrings &Ids,
-			const str::dStrings &Values,
+			const str::dStrings &Classes,
 			flw::sRWFlow &Flow )
 		{
-			set::S( Ids, Values, Flow );
-			set::R( Flow );
+			add::S( Ids, Classes, Flow );
+			add::R( Flow );
 		}
-	}
 
-	namespace casts_by_tags {
-		namespace set {
+		namespace remove {
 			void S(
-				const str::dString &Id,
-				const str::dStrings &Tags,
-				const str::dStrings &Values,
+				const str::dStrings &Ids,
+				const str::dStrings &Classes,
 				flw::sWFlow &Flow );
 
 			inline void R( flw::sRFlow &Flow )
 			{}
 		}
 
-		inline void Set(
-			const str::dString &Id,
-			const str::dStrings &Tags,
-			const str::dStrings &Values,
+		inline void Remove(
+			const str::dStrings &Ids,
+			const str::dStrings &Classes,
 			flw::sRWFlow &Flow )
 		{
-			set::S( Id, Tags, Values, Flow );
-			set::R( Flow );
+			remove::S( Ids, Classes, Flow );
+			remove::R( Flow );
+		}
+
+		namespace toggle {
+			void S(
+				const str::dStrings &Ids,
+				const str::dStrings &Classes,
+				flw::sWFlow &Flow );
+
+			inline void R( flw::sRFlow &Flow )
+			{}
+		}
+
+		inline void Toggle(
+			const str::dStrings &Ids,
+			const str::dStrings &Classes,
+			flw::sRWFlow &Flow )
+		{
+			toggle::S( Ids, Classes, Flow );
+			toggle::R( Flow );
+		}
+	}
+
+	namespace elements {
+		namespace enable {
+			void S(
+				const str::dStrings &Ids,
+				flw::sWFlow &Flow );
+
+			inline void R( flw::sRFlow &Flow )
+			{}
+		}
+
+		inline void Enable(
+			const str::dStrings &Ids,
+			flw::sRWFlow &Flow )
+		{
+			enable::S( Ids, Flow );
+			enable::R( Flow );
+		}
+
+		namespace disable {
+			void S(
+				const str::dStrings &Ids,
+				flw::sWFlow &Flow );
+
+			inline void R( flw::sRFlow &Flow )
+			{}
+		}
+
+		inline void Disable(
+			const str::dStrings &Id,
+			flw::sRWFlow &Flow )
+		{
+			disable::S( Id, Flow );
+			disable::R( Flow );
 		}
 	}
 

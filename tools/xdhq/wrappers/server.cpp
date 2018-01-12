@@ -175,29 +175,70 @@ void server::widgets::dress::S(
 	Flow.Commit();
 }
 
-void server::casts_by_ids::set::S(
-	const str::dStrings &Ids,
-	const str::dStrings &Values,
-	flw::sWFlow & Flow )
-{
-	prtcl::PutAnswer( prtcl::aSetCastsByIds_1, Flow );
-	prtcl::Put( Ids, Flow );
-	prtcl::Put( Values, Flow );
-	Flow.Commit();
+namespace {
+	void HandleClasses_(
+		const str::dStrings &Ids,
+		const str::dStrings &Classes,
+		prtcl::eAnswer Answer,
+		flw::sWFlow & Flow )
+	{
+		prtcl::PutAnswer( Answer, Flow );
+		prtcl::Put( Ids, Flow );
+		prtcl::Put( Classes, Flow );
+		Flow.Commit();
+	}
 }
 
-void server::casts_by_tags::set::S(
-	const str::dString &Id,
-	const str::dStrings &Tags,
-	const str::dStrings &Values,
+void server::classes::add::S(
+	const str::dStrings &Ids,
+	const str::dStrings &Classes,
 	flw::sWFlow & Flow )
 {
-	prtcl::PutAnswer( prtcl::aSetCastsByTags_1, Flow );
-	prtcl::Put( Id, Flow );
-	prtcl::Put( Tags, Flow );
-	prtcl::Put( Values, Flow );
-	Flow.Commit();
+	HandleClasses_( Ids, Classes, prtcl::aAddClasses_1, Flow );
 }
+
+void server::classes::remove::S(
+	const str::dStrings &Ids,
+	const str::dStrings &Classes,
+	flw::sWFlow & Flow )
+{
+	HandleClasses_( Ids, Classes, prtcl::aRemoveClasses_1, Flow );
+}
+
+void server::classes::toggle::S(
+	const str::dStrings &Ids,
+	const str::dStrings &Classes,
+	flw::sWFlow & Flow )
+{
+	HandleClasses_( Ids, Classes, prtcl::aToggleClasses_1, Flow );
+}
+
+namespace {
+	void HandleElements_(
+		const str::dStrings &Ids,
+		prtcl::eAnswer Answer,
+		flw::sWFlow & Flow )
+	{
+		prtcl::PutAnswer( Answer, Flow );
+		prtcl::Put( Ids, Flow );
+		Flow.Commit();
+	}
+}
+
+void server::elements::enable::S(
+	const str::dStrings &Ids,
+	flw::sWFlow & Flow )
+{
+	HandleElements_( Ids, prtcl::aEnableElements_1, Flow );
+}
+
+void server::elements::disable::S(
+	const str::dStrings &Ids,
+	flw::sWFlow & Flow )
+{
+	HandleElements_( Ids, prtcl::aDisableElements_1, Flow );
+}
+
 
 void server::ap_::set::S(
 	prtcl::eAnswer Answer,

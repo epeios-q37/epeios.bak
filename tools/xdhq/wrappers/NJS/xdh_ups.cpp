@@ -61,17 +61,35 @@ namespace send_ {
 		{
 			server::widgets::dress::S( Arguments.Id, Flow );
 		}
-		void SetCastsByIds_(
+		void AddClasses_(
 			flw::sWFlow &Flow,
 			rArguments &Arguments )
 		{
-			server::casts_by_ids::set::S( Arguments.Ids, Arguments.Values, Flow );
+			server::classes::add::S( Arguments.Ids, Arguments.Classes, Flow );
 		}
-		void SetCastsByTags_(
+		void RemoveClasses_(
 			flw::sWFlow &Flow,
 			rArguments &Arguments )
 		{
-			server::casts_by_tags::set::S( Arguments.Id, Arguments.Tags, Arguments.Values, Flow );
+			server::classes::remove::S( Arguments.Ids, Arguments.Classes, Flow );
+		}
+		void ToggleClasses_(
+			flw::sWFlow &Flow,
+			rArguments &Arguments )
+		{
+			server::classes::toggle::S( Arguments.Ids, Arguments.Classes, Flow );
+		}
+		void EnableElements_(
+			flw::sWFlow &Flow,
+			rArguments &Arguments )
+		{
+			server::elements::enable::S( Arguments.Ids, Flow );
+		}
+		void DisableElements_(
+			flw::sWFlow &Flow,
+			rArguments &Arguments )
+		{
+			server::elements::enable::S( Arguments.Ids, Flow );
 		}
 		void GetAttribute_(
 			flw::sWFlow &Flow,
@@ -119,8 +137,11 @@ bso::sBool xdh_ups::Send(
 	H( GetContents );
 	H( SetContents );
 	H( DressWidgets );
-	H( SetCastsByIds );
-	H( SetCastsByTags );
+	H( AddClasses );
+	H( RemoveClasses );
+	H( ToggleClasses );
+	H( EnableElements );
+	H( DisableElements );
 	H( GetAttribute );
 	H( SetAttribute );
 	H( GetProperty );
@@ -180,18 +201,39 @@ namespace recv_ {
 			server::widgets::dress::R( Flow );
 		}
 
-		void SetCastsByIds_(
+		void AddClasses_(
 			flw::sRFlow &Flow,
 			xdh_dws::rArguments &Arguments )
 		{
-			server::casts_by_ids::set::R( Flow );
+			server::classes::add::R( Flow );
 		}
 
-		void SetCastsByTags_(
+		void RemoveClasses_(
 			flw::sRFlow &Flow,
 			xdh_dws::rArguments &Arguments )
 		{
-			server::casts_by_tags::set::R( Flow );
+			server::classes::remove::R( Flow );
+		}
+
+		void ToggleClasses_(
+			flw::sRFlow &Flow,
+			xdh_dws::rArguments &Arguments )
+		{
+			server::classes::toggle::R( Flow );
+		}
+
+		void EnableElements_(
+			flw::sRFlow &Flow,
+			xdh_dws::rArguments &Arguments )
+		{
+			server::elements::enable::R( Flow );
+		}
+
+		void DisableElements_(
+			flw::sRFlow &Flow,
+			xdh_dws::rArguments &Arguments )
+		{
+			server::elements::disable::R( Flow );
 		}
 
 		void GetAttribute_(
@@ -246,8 +288,11 @@ bso::sBool xdh_ups::Recv(
 		H( GetContents );
 		H( SetContents );
 		H( DressWidgets );
-		H( SetCastsByIds );
-		H( SetCastsByTags );
+		H( AddClasses );
+		H( RemoveClasses );
+		H( ToggleClasses );
+		H( EnableElements );
+		H( DisableElements );
 		H( GetAttribute );
 		H( SetAttribute );
 		H( GetProperty );

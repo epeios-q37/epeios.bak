@@ -264,62 +264,101 @@ namespace {
 	qRE;
 	}
 
-	void SetCastsByIds_(
-		flw::sRWFlow &Flow,
-		xdhdws::sProxy &Proxy )
-	{
-	qRH;
-		str::wString MergedIds, MergedValues;
-		str::wStrings Ids, Values;
-	qRB;
-		tol::Init( Ids, Values );
+	namespace {
+		void HandleClasses_(
+			flw::sRWFlow &Flow,
+			void (xdhdws::sProxy::* Method)(
+				const xdhdws::rNString &Ids,
+				const xdhdws::rNString &Classes),
+			xdhdws::sProxy &Proxy )
+		{
+		qRH;
+			str::wStrings Ids, Classes;
+			str::wString MergedIds, MergedClasses;
+		qRB;
+			tol::Init( Ids, Classes );
 
-		prtcl::Get( Flow, Ids );
-		prtcl::Get( Flow, Values );
+			prtcl::Get( Flow, Ids );
+			prtcl::Get( Flow, Classes );
 
-		tol::Init( MergedIds, MergedValues );
-		xdhcmn::FlatMerge( Ids, MergedIds, true );
-		xdhcmn::FlatMerge( Values, MergedValues, true );
+			tol::Init( MergedIds, MergedClasses );
+			xdhcmn::FlatMerge( Ids, MergedIds, true );
+			xdhcmn::FlatMerge( Classes, MergedClasses, true );
 
-		Proxy.SetCastsByIds( MergedIds, MergedValues );
+			(Proxy.*Method)( MergedIds, MergedClasses );
 
-		Flow.Dismiss();
+			Flow.Dismiss();
 
-		prtcl::PutRequest( prtcl::rReady_1, Flow );
-		Flow.Commit();
-	qRR;
-	qRT;
-	qRE;
+			prtcl::PutRequest( prtcl::rReady_1, Flow );
+			Flow.Commit();
+		qRR;
+		qRT;
+		qRE;
+		}
 	}
 
-
-	void SetCastsByTags_(
+	void AddClasses_(
 		flw::sRWFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
-	qRH;
-		str::wString Id, MergedTags, MergedValues;
-		str::wStrings Tags, Values;
-	qRB;
-		tol::Init( Id, Tags, Values );
+		HandleClasses_( Flow, &xdhdws::sProxy::AddClasses, Proxy );
+	}
 
-		prtcl::Get( Flow, Id );
-		prtcl::Get( Flow, Tags );
-		prtcl::Get( Flow, Values );
+	void RemoveClasses_(
+		flw::sRWFlow &Flow,
+		xdhdws::sProxy &Proxy )
+	{
+		HandleClasses_( Flow, &xdhdws::sProxy::RemoveClasses, Proxy );
+	}
 
-		tol::Init( MergedTags, MergedValues );
-		xdhcmn::FlatMerge( Tags, MergedTags, false );
-		xdhcmn::FlatMerge( Values, MergedValues, false );
+	void ToggleClasses_(
+		flw::sRWFlow &Flow,
+		xdhdws::sProxy &Proxy )
+	{
+		HandleClasses_( Flow, &xdhdws::sProxy::RemoveClasses, Proxy );
+	}
 
-		Proxy.SetCastsByTags( Id, MergedTags, MergedValues );
+	namespace {
+		void HandleElements_(
+			flw::sRWFlow &Flow,
+			void (xdhdws::sProxy::* Method)( const xdhdws::rNString &Ids ),
+			xdhdws::sProxy &Proxy )
+		{
+		qRH;
+			str::wStrings Ids;
+			str::wString MergedIds;
+		qRB;
+			tol::Init( Ids );
 
-		Flow.Dismiss();
+			prtcl::Get( Flow, Ids );
 
-		prtcl::PutRequest( prtcl::rReady_1, Flow );
-		Flow.Commit();
-	qRR;
-	qRT;
-	qRE;
+			tol::Init( MergedIds );
+			xdhcmn::FlatMerge( Ids, MergedIds, true );
+
+			(Proxy.*Method)( MergedIds );
+
+			Flow.Dismiss();
+
+			prtcl::PutRequest( prtcl::rReady_1, Flow );
+			Flow.Commit();
+		qRR;
+		qRT;
+		qRE;
+		}
+	}
+
+	void EnableElements_(
+		flw::sRWFlow &Flow,
+		xdhdws::sProxy &Proxy )
+	{
+		HandleElements_( Flow, &xdhdws::sProxy::EnableElements, Proxy );
+	}
+
+	void DisableElements_(
+		flw::sRWFlow &Flow,
+		xdhdws::sProxy &Proxy )
+	{
+		HandleElements_( Flow, &xdhdws::sProxy::EnableElements, Proxy );
 	}
 
 	void GetAttribute_(
@@ -470,8 +509,11 @@ namespace {
 				H( GetContents );
 				H( SetContents );
 				H( DressWidgets );
-				H( SetCastsByIds );
-				H( SetCastsByTags );
+				H( AddClasses );
+				H( RemoveClasses );
+				H( ToggleClasses );
+				H( EnableElements );
+				H( DisableElements );
 				H( GetAttribute );
 				H( SetAttribute );
 				H( GetProperty );

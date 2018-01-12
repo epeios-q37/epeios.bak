@@ -49,7 +49,7 @@ function newSession() {
 
 function acConnect(dom, id) {
 	dom.setLayout("", new Tree(), "Main.xsl",
-		() => dom.setCastById("Input", "Hide")
+		() => dom.addClass("Input", "hidden")
 	);
 }
 
@@ -60,11 +60,11 @@ function acSubmit(dom, id) {
 }
 
 function acShowInput(dom, id) {
-	dom.setCastById("Input", "Plain");
+	dom.removeClass("Input", "hidden");
 }
 
 function acHideInput(dom, id) {
-	dom.setCastById("Input", "Hide");
+	dom.addClass("Input", "hidden");
 }
 
 function main() {

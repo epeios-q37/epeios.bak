@@ -36,8 +36,11 @@ namespace xdh_ups {
 		rGetContents,
 		rSetContents,
 		rDressWidgets,
-		rSetCastsByIds,
-		rSetCastsByTags,
+		rAddClasses,
+		rRemoveClasses,
+		rToggleClasses,
+		rEnableElements,
+		rDisableElements,
 		rGetAttribute,
 		rSetAttribute,
 		rGetProperty,
@@ -50,15 +53,15 @@ namespace xdh_ups {
 	{
 	public:
 		str::wString Message, Id, XML, XSLFilename, Language, Name, Value;
-		str::wStrings Ids, Contents, Tags, Values;
+		str::wStrings Ids, Contents, Tags, Values, Classes;
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( Message, Id, XML, XSLFilename, Language, Name, Value, Ids, Contents, Tags, Values );
+			tol::reset( Message, Id, XML, XSLFilename, Language, Name, Value, Ids, Contents, Tags, Values, Classes );
 		}
 		qCDTOR( rArguments );
 		void Init( void )
 		{
-			tol::Init( Message, Id, XML, XSLFilename, Language, Name, Value, Ids, Contents, Tags, Values );
+			tol::Init( Message, Id, XML, XSLFilename, Language, Name, Value, Ids, Contents, Tags, Values, Classes );
 		}
 	};
 

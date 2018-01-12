@@ -97,8 +97,11 @@ const char *prtcl::GetLabel( eAnswer Answer )
 		C( GetContents_1 );
 		C( SetContents_1 );
 		C( DressWidgets_1 );
-		C( SetCastsByIds_1 );
-		C( SetCastsByTags_1 );
+		C( AddClasses_1 );
+		C( RemoveClasses_1 );
+		C( ToggleClasses_1 );
+		C( EnableElements_1 );
+		C( DisableElements_1 );
 		C( GetAttribute_1 );
 		C( SetAttribute_1 );
 		C( GetProperty_1 );

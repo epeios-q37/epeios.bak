@@ -79,14 +79,6 @@ function push(note, id, tree) {
 }
 
 function handleDescriptionsCast(dom) {
-	var value = "";
-
-	if (dom.hideDescriptions == "false")
-		value = "Plain";
-	else
-		value = "Hidden";
-
-	dom.setCastByTag("Notes", "DescriptionCast", value);
 }
 
 function displayList(dom) {
@@ -108,11 +100,9 @@ function displayList(dom) {
 	tree.popTag();
 
 	dom.setLayout("Notes", tree, "Notes.xsl",
-		() => dom.setCastByTag("", "EditionCast", "Plain",
 			() => dom.setContents(contents,
 				() => handleDescriptionsCast(dom)
 			)
-		)
 	);
 }
 

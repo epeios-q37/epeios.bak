@@ -378,20 +378,44 @@ SCLNJS_F( xdhp::DressWidgets )
 	Server.Request = xdh_ups::rDressWidgets;
 }
 
-SCLNJS_F( xdhp::SetCastsByIds )
+SCLNJS_F( xdhp::AddClasses )
 {
 	DATA;
 
-	Caller.GetArgument( Arguments.Ids, Arguments.Values, JS.Callback );
-	Server.Request = xdh_ups::rSetCastsByIds;
+	Caller.GetArgument( Arguments.Ids, Arguments.Classes, JS.Callback );
+	Server.Request = xdh_ups::rAddClasses;
 }
 
-SCLNJS_F( xdhp::SetCastsByTags )
+SCLNJS_F( xdhp::RemoveClasses )
 {
 	DATA;
 
-	Caller.GetArgument( Arguments.Id, Arguments.Tags, Arguments.Values, JS.Callback );
-	Server.Request = xdh_ups::rSetCastsByTags;
+	Caller.GetArgument( Arguments.Ids, Arguments.Classes, JS.Callback );
+	Server.Request = xdh_ups::rRemoveClasses;
+}
+
+SCLNJS_F( xdhp::ToggleClasses )
+{
+	DATA;
+
+	Caller.GetArgument( Arguments.Ids, Arguments.Classes, JS.Callback );
+	Server.Request = xdh_ups::rToggleClasses;
+}
+
+SCLNJS_F( xdhp::EnableElements )
+{
+	DATA;
+
+	Caller.GetArgument( Arguments.Ids, JS.Callback );
+	Server.Request = xdh_ups::rEnableElements;
+}
+
+SCLNJS_F( xdhp::DisableElements )
+{
+	DATA;
+
+	Caller.GetArgument( Arguments.Ids, JS.Callback );
+	Server.Request = xdh_ups::rDisableElements;
 }
 
 SCLNJS_F( xdhp::GetAttribute )
