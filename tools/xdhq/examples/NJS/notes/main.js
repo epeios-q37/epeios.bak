@@ -17,9 +17,13 @@
 	along with UnJSq If not, see <http://www.gnu.org/licenses/>.
 */
 
+"use strict"
+
 var unjsqId = "";
 
 if (process.env.EPEIOS_SRC) {
+	let epeiosPath = "";
+
 	if (process.platform == 'win32')
 		epeiosPath = "h:/hg/epeios/"
 	else
@@ -34,12 +38,14 @@ const unjsq = require(unjsqId);
 const Tree = unjsq.Tree;
 const DOM = unjsq.DOM;
 
+const viewModeElements = ["Pattern", "CreateButton", "DescriptionToggling", "ViewButtonsOnHover"];
+
 class MyData extends DOM {
 	constructor() {
 		super();
 		this.timestamp = new Date();
 		this.pattern = "";
-		this.hideDescriptions = "false";
+		this.hideDescriptions = false;
 		this.id = 0;
 		this.notes = [
 			// First one must be empty; it is used as buffer for new entries.
@@ -78,16 +84,20 @@ function push(note, id, tree) {
 	tree.popTag();
 }
 
-function handleDescriptionsCast(dom) {
+function handleDescriptions(dom) {
+	if (dom.hideDescriptions )
+		dom.disableElement("ViewDescriptions");
+	else
+		dom.enableElement("ViewDescriptions");
 }
 
 function displayList(dom) {
 	var tree = new Tree();
-	var i = 1;	// 0 skipped, as it serves as buffer for the new one.
+	var i = 1;	// 0 skipped, as it serves as buffer for the new ones.
 	var contents = new Array();
 
 	tree.pushTag("Notes");
-	tree.putAttribute("HideDescriptions", dom.hideDescriptions);
+	tree.putAttribute("HideDescriptions", dom.hideDescriptions );
 
 	while (i < dom.notes.length) {
 		if (dom.notes[i]['title'].toLowerCase().startsWith(dom.pattern)) {
@@ -100,9 +110,11 @@ function displayList(dom) {
 	tree.popTag();
 
 	dom.setLayout("Notes", tree, "Notes.xsl",
-			() => dom.setContents(contents,
-				() => handleDescriptionsCast(dom)
+		() => dom.setContents(contents,
+			() => dom.enableElements( viewModeElements,
+				() => handleDescriptions(dom )
 			)
+		)
 	);
 }
 
@@ -124,24 +136,19 @@ function acSearch(dom, id) {
 function acToggleDescriptions(dom, id) {
 	dom.getContent(id,
 		(result) => {
-			dom.hideDescriptions = result;
-			handleDescriptionsCast(dom);
+			dom.hideDescriptions = result == "true";
+			handleDescriptions(dom);
 		}
 	);
 }
 
 function view(dom, id) {
-	dom.setCastsByIds(
-		[
-			["View." + id, "Plain"],
-			["Edit." + id, "Hide"]
-		],
-		() => dom.setCastByTag("", "EditionCast", "Plain",
+	dom.enableElements(
+		viewModeElements,
 			() => {
 				dom.setContent("Edit." + id, "");
 				dom.id = -1;
 			}
-		)
 	);
 }
 
@@ -153,14 +160,9 @@ function edit(dom, id) {
 				["Title", dom.notes[dom.id]['title']],
 				["Description", dom.notes[dom.id]['description']]
 			],
-			() => dom.setCastsByIds(
-				[
-					["Edit." + id, "Plain"],
-					["View." + id, "Hide"]
-				],
-				() => dom.setCastByTag("", "EditionCast", "Disabled",
-					() => dom.dressWidgets("Notes")
-				)
+			() => dom.disableElements(
+				viewModeElements,
+				() => dom.dressWidgets("Notes")
 			)
 		)
 	);

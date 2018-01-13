@@ -358,7 +358,7 @@ namespace {
 		flw::sRWFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
-		HandleElements_( Flow, &xdhdws::sProxy::EnableElements, Proxy );
+		HandleElements_( Flow, &xdhdws::sProxy::DisableElements, Proxy );
 	}
 
 	void GetAttribute_(

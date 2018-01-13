@@ -261,6 +261,18 @@
 						]]>
 				</Toggle>
 			</Classes>
+			<Elements>
+				<Enable>
+					<![CDATA[
+							enableElements( %Ids_% );
+						]]>
+				</Enable>
+				<Disable>
+					<![CDATA[
+							disableElements( %Ids_% );
+						]]>
+				</Disable>
+			</Elements>
 		</Scripts>
 	</Definitions>
 </xpp:bloc>

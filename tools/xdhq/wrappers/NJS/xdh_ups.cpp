@@ -89,7 +89,7 @@ namespace send_ {
 			flw::sWFlow &Flow,
 			rArguments &Arguments )
 		{
-			server::elements::enable::S( Arguments.Ids, Flow );
+			server::elements::disable::S( Arguments.Ids, Flow );
 		}
 		void GetAttribute_(
 			flw::sWFlow &Flow,

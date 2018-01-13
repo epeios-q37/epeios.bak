@@ -665,7 +665,7 @@ static void DisableElements_(
 	cJS &Callback,
 	va_list List )
 {
-	EnableElements_( Callback, va_arg( List, const nchar__ * ) );
+	DisableElements_( Callback, va_arg( List, const nchar__ * ) );
 }
 
 static script_name__ Convert_( xdhcmn::function__ Function )

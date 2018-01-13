@@ -153,13 +153,13 @@ class XDH {
 		njsq._wrapper(xdhq, 18, this, ids, normalize(callback));
 	}
 	enableElement(id, callback) {
-		this.enableElements([[id, callback]]);
+		this.enableElements([id], callback);
 	}
 	disableElements(ids, callback) {
 		njsq._wrapper(xdhq, 19, this, ids, normalize(callback));
 	}
 	disableElement(id, callback) {
-		this.disableElements([[id, callback]]);
+		this.disableElements([id], callback);
 	}
 	getAttribute(id, name, callback) {
 		return njsq._wrapper(xdhq, 20, this, id, name, normalize(callback));
