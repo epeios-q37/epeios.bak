@@ -57,7 +57,7 @@ if (process.env.EPEIOS_SRC) {
 	njsq = require(componentPath + 'njsq.node');
 	xdhtmlJSPath = epeiosPath + "corpus/js/";
 	xdhwebqJSPath = epeiosPath + "tools/xdhwebq/js/";
-	cdnPath = path.resolve( epeiosPath, "tools/xdhq/examples/common/", rootDir );	// No final '/'.
+	cdnPath = path.resolve(epeiosPath, "tools/xdhq/examples/common/", path.relative(path.resolve(epeiosPath, "tools/xdhq/examples/NJS/"), path.resolve(rootDir)));	// No final '/'.
 	xdhqxdhId = epeiosPath + "tools/xdhq/proxy/XDHq.js";
 	selfPath = epeiosPath + "tools/xdhwebq/NJS";
 } else {

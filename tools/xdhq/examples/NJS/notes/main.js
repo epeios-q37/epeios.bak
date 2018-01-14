@@ -238,7 +238,7 @@ function main() {
 		["Cancel", acCancel],
 	]);
 
-	unjsq.launch(newSession, "notes", "Connect");
+	unjsq.launch(newSession, "Connect");
 }
 
 main();

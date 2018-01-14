@@ -17,7 +17,9 @@
 	along with UnJSq. If not, see <http://www.gnu.org/licenses/>.
 */
 
-'use strict'
+"use strict"
+
+const path = require( 'path' );
 
 var xdhqId = "";
 var xdhwebqId = "";
@@ -39,7 +41,12 @@ if (process.env.EPEIOS_SRC) {
 const xdhwebq = require(xdhwebqId);
 const xdhq = require(xdhqId);
 
-function launch(callback, rootDir, action) {
+function launch(callback, action) {
+//	var rootDir = path.dirname(process.argv[1]);
+	var rootDir = path.dirname(process.argv[1]);
+//	var rootDir = "notes";
+//	console.log( rootDir );
+	
 	xdhq.launch(callback);
 	require('child_process').fork(require(xdhwebqId).fileName, [rootDir, action]);
 }

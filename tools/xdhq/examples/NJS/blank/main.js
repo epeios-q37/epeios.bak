@@ -75,7 +75,7 @@ function main() {
 		["ShowInput", acShowInput],
 	]);
 
-	unjsq.launch(newSession, "blank", "Connect");
+	unjsq.launch(newSession, "Connect");
 }
 
 main();
