@@ -17,18 +17,14 @@
                 border-radius: 10%;
         }
 
-        article[data-type="View"] button {
-                display: none;
-        }
-
         p[id^="Description."] {
                 display: none;
         }
-</style>
-<style id="ViewButtonsOnHover">
-        article[data-type="View"]:hover button {
-                display: block;
-        }
+
+        /* To display buttons on click on tactile devices */
+      .hide-buttons {
+       display: none;
+      }
 </style>
 <style id="ViewDescriptions">
         p[id^="Description."] {

@@ -18,8 +18,8 @@
 		<li>
 			<span id="View.{@id}">
 				<div>
-					<article data-type="View" class="listing" style="display: flex; width:100%; justify-content: space-between;align-items: center;">
-						<div>
+					<article class="listing" style="display: flex; width:100%; justify-content: space-between;align-items: center;"  data-xdh-onevents="ShowButtons|(mouseout|HideButtons)" data-xdh-value="{@id}">
+						<div> 
 							<h3 id="Title.{@id}">
 								<xsl:value-of select="title"/>
 							</h3>
@@ -28,7 +28,7 @@
 								<!--xsl:value-of select="description" disable-output-escaping="yes"/-->
 							</p>
 						</div>
-						<span style="display: flex; flex-direction: row;">
+						<span id="Buttons.{@id}" style="flex-direction: row;" class="hide-buttons">
 							<button data-xdh-onevent="Edit" data-xdh-value="{@id}">Edit</button>
 							<span style="display:inline-block; width: 10px;"/>
 							<button data-xdh-onevent="Delete" data-xdh-value="{@id}">Delete</button>
