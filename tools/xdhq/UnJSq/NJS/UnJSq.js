@@ -42,13 +42,8 @@ const xdhwebq = require(xdhwebqId);
 const xdhq = require(xdhqId);
 
 function launch(callback, action) {
-//	var rootDir = path.dirname(process.argv[1]);
-	var rootDir = path.dirname(process.argv[1]);
-//	var rootDir = "notes";
-//	console.log( rootDir );
-	
 	xdhq.launch(callback);
-	require('child_process').fork(require(xdhwebqId).fileName, [rootDir, action]);
+	require('child_process').fork(require(xdhwebqId).fileName, [path.dirname(process.argv[1]), action]);
 }
 
 module.exports.register = xdhq.register;

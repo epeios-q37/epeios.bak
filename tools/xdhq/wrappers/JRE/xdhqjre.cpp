@@ -59,7 +59,11 @@ void scljre::SCLJRERegister( scljre::sRegistrar &Registrar )
 {
 	Registrar.Register( ReturnArgument_ );	// 0
 	Registrar.Register( treep::New, treep::Delete, treep::PushTag, treep::PopTag, treep::PutValue, treep::PutAttribute );	// 1 - 6
-	Registrar.Register( xdhp::Listen, xdhp::New, xdhp::Delete, xdhp::Set, xdhp::GetAction, xdhp::SetLayout, xdhp::SetCasting );	// 7 - 13
+	Registrar.Register( xdhp::Listen, xdhp::New, xdhp::Delete, xdhp::Set, xdhp::GetAction );	// 7 - 11
+	Registrar.Register( xdhp::Alert, xdhp::Confirm, xdhp::SetLayout, xdhp::GetContents, xdhp::SetContents, xdhp::DressWidgets ); //12 - 17
+	Registrar.Register( xdhp::AddClasses, xdhp::RemoveClasses, xdhp::ToggleClasses, xdhp::EnableElements, xdhp::DisableElements );	// 18 - 22.
+	Registrar.Register( xdhp::GetAttribute, xdhp::SetAttribute, xdhp::GetProperty, xdhp::SetProperty );	// 23 - 26.
+
 }
 
 const char *sclmisc::SCLMISCTargetName = NAME_LC;

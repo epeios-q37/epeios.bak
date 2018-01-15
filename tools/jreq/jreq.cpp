@@ -83,7 +83,7 @@ namespace {
 	}
 }
 
-extern "C" JNIEXPORT jstring JNICALL Java_JREq_wrapperInfo(
+extern "C" JNIEXPORT jstring JNICALL Java_info_q37_jreq_Wrapper_wrapperInfo(
 	JNIEnv *Env,
 	jclass )
 {
@@ -120,7 +120,7 @@ namespace {
 	}
 }
 
-extern "C" JNIEXPORT jstring JNICALL Java_JREq_componentInfo(
+extern "C" JNIEXPORT jstring JNICALL Java_info_q37_jreq_Wrapper_componentInfo(
 	JNIEnv *Env,
 	jclass,
 	jlong Launcher )
@@ -142,7 +142,7 @@ qRFE( ERRFinal_( Env ) )
 	return JString;
 }
 
-extern "C" JNIEXPORT void JNICALL Java_JREq_init(
+extern "C" JNIEXPORT void JNICALL Java_info_q37_jreq_Wrapper_init(
 	JNIEnv *Env,
 	jclass,
 	jstring RawLocation )
@@ -191,7 +191,7 @@ namespace {
 }
 
 
-extern "C" JNIEXPORT jlong JNICALL Java_JREq_register(
+extern "C" JNIEXPORT jlong JNICALL Java_info_q37_jreq_Wrapper_register(
 	JNIEnv *Env,
 	jclass,
 	jstring RawArguments )
@@ -229,7 +229,7 @@ qRFE( ERRFinal_( Env ) )
 	return (jlong)Launcher;
 }
 
-extern "C" JNIEXPORT jobject JNICALL Java_JREq_wrapper(
+extern "C" JNIEXPORT jobject JNICALL Java_info_q37_jreq_Wrapper_wrap(
 	JNIEnv *Env,
 	jclass,
 	jlong Launcher, 

@@ -1,4 +1,4 @@
-Changelog for the *XDHTML* wrappers.
+*Changelog* for the *XDHTML* wrappers.
 
 2018-01-14:
 - *xdhqnjs*
@@ -7,4 +7,4 @@ Changelog for the *XDHTML* wrappers.
 2018-01-13:
 - *xdhqnjs*
   - replacing the *cast* system handling with a system based on *CSS* styles and classes,
-  - adding functions to (en|dis)able elements.
+  - adding functions to (en|dis)able elements (including styles).

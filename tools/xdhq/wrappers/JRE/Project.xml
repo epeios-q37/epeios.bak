@@ -50,7 +50,11 @@
  <Files>
   <!-- NOTA : '*.java' files will automatically be packed as such. -->
   <!--File Pack="No">XDHq.java</File-->
- </Files>
+		<File Pack="No">DOM.java</File>
+		<File Pack="No">Event.java</File>
+		<File Pack="No">Test.java</File>
+		<File Pack="No">Tree.java</File>
+	</Files>
  <RTW>
   <Dir>xdhq-java</Dir>
  </RTW>

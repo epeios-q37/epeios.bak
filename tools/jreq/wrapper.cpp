@@ -311,6 +311,16 @@ namespace {
 			}
 		qRE
 		}
+		virtual n4jre::sJBoolean N4JRECallBooleanMethod(
+			const char *Method,
+			const char *Signature,
+			int ArgC,
+			n4jre::sValue *ArgV ) override
+		{
+			JNIEnv *Env = jniq::GetEnv();
+
+			return CallMethod_<jboolean>( Method, Signature, ArgC, ArgV, Env->functions->CallBooleanMethod, Env );
+		}
 		virtual n4jre::sJShort N4JRECallShortMethod(
 			const char *Method,
 			const char *Signature,

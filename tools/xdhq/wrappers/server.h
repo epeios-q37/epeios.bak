@@ -48,10 +48,10 @@ namespace server {
 	}
 
 	inline void Alert(
-		const str::dString &Script,
+		const str::dString &Message,
 		flw::sRWFlow &Flow )
 	{
-		alert::S( Script, Flow );
+		alert::S( Message, Flow );
 		alert::R( Flow );
 	}
 
@@ -66,11 +66,11 @@ namespace server {
 	}
 
 	inline void Confirm(
-		const str::dString &Script,
+		const str::dString &Message,
 		flw::sRWFlow &Flow,
 		str::dString &Response )
 	{
-		confirm::S( Script, Flow );
+		confirm::S( Message, Flow );
 		confirm::R( Flow, Response );
 	}
 	

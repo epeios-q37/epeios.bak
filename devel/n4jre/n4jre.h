@@ -40,7 +40,8 @@
 # endif
 
 namespace n4jre {
-	// As defined in the 'Java' headers.
+	// Inspired from the 'Java' headers.
+	typedef unsigned char	sJBoolean;
 	typedef bso::sS8 sJByte;
 	typedef bso::sS16 sJShort;
 	typedef bso::sS32 sJInt;
@@ -271,6 +272,7 @@ namespace n4jre {
 			return N4JRECall##name##Method( Method, Signature, ArgC, ArgV );\
 		}
 		H( void, Void );
+		H( sJBoolean, Boolean );
 		H( sJShort, Short );
 		H( sJInt, Int );
 		H( sJLong, Long );

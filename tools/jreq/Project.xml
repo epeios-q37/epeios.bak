@@ -42,8 +42,9 @@
   <File>README.md</File>
   <File>CHANGELOG.md</File>
   <!-- '*.java' files are source files and will automatically packed as such. -->
-  <File Pack="No">JREq.java</File>
- </Files>
+		<File Pack="No">JREq.java</File>
+		<File Pack="No">Test.java</File>
+	</Files>
  <RTW>
   <Dir>jreq</Dir>
  </RTW>

@@ -339,8 +339,6 @@ SCLNJS_F( xdhp::Confirm )
 	Server.Request = xdh_ups::rConfirm;
 }
 
-
-
 SCLNJS_F( xdhp::SetLayout )
 {
 	DATA;

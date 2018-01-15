@@ -113,9 +113,12 @@ namespace {
 	}
 }
 
+#define RACK	rRack_ &Rack = GetRack_( Caller )
+#define FLOW	flw::sRWFlow &Flow = GetFlow_( Caller )
+
 SCLJRE_F( xdhp::Set )
 {
-	rRack_ &Rack = GetRack_( Caller );
+	RACK;
 
 	Rack.Set( Caller.Get() );
 
@@ -182,14 +185,52 @@ namespace {
 
 SCLJRE_F( xdhp::GetAction )
 {
-	flw::sRWFlow &Flow = GetFlow_( Caller );
+	FLOW;
 	GetAction_( Flow, Caller );
 
 	return scljre::Null();
 }
 
+SCLJRE_F( xdhp::Alert )
+{
+qRH;
+	str::wString Message;
+qRB;
+	FLOW;
+
+	Message.Init();
+	Caller.Get( Message );
+
+	server::Alert( Message, Flow );
+qRR;
+qRT;
+qRE;
+return scljre::Null();
+}
+
+SCLJRE_F( xdhp::Confirm )
+{
+	bso::sBool Return = false;
+qRH;
+	str::wString Message, Response;
+qRB;
+	FLOW;
+
+	Message.Init();
+	Caller.Get( Message );
+
+	Response.Init();
+	server::Confirm( Message, Flow, Response );
+
+	Return = Response == "true";
+qRR;
+qRT;
+qRE;
+	return scljre::Boolean( Return );
+}
+
 namespace {
-	void SetElement_(
+	void SetLayout_(
 		const str::dString &Id,
 		scljre::sCaller &Caller,
 		const str::dString &Language,
@@ -209,7 +250,7 @@ namespace {
 	qRE;
 	}
 
-	void SetElement_(
+	void SetLayout_(
 		scljre::sCaller &Caller,
 		const str::dString &Language,
 		flw::sRWFlow &Flow )
@@ -220,7 +261,7 @@ namespace {
 		tol::Init( Id );
 		Caller.Get( Id );
 
-		SetElement_( Id, Caller, Language, Flow );
+		SetLayout_( Id, Caller, Language, Flow );
 	qRR;
 	qRT;
 	qRE;
@@ -229,30 +270,41 @@ namespace {
 
 SCLJRE_F( xdhp::SetLayout )
 {
-	rRack_ &Rack = GetRack_( Caller );
+	RACK;
 
-	SetElement_( Caller, Rack.Language, Rack.Flow );
+	SetLayout_( Caller, Rack.Language, Rack.Flow );
 
 	return scljre::Null();
 }
 
-SCLJRE_F( xdhp::SetCasting )
+SCLJRE_F( GetContents )
 {
 qRH;
-	str::wString Id;
-	str::wStrings Tags, Values;
+	str::wStrings Ids, Contents;
 qRB;
-	tol::Init( Id, Tags, Values );
-	server::casts::Set( Id, Tags, Values, GetRack_( Caller ).Flow );
+	FLOW;
+
+	Ids.Init();
+	Caller.Get( Ids );
+
+	Contents.Init();
+	server::contents::Get( Ids, Flow, Contents );
 qRR;
 qRT;
 qRE;
-	return scljre::Null();
 }
 
-
-
-
+SCLJRE_F( SetContents );
+SCLJRE_F( DressWidgets );
+SCLJRE_F( AddClasses );
+SCLJRE_F( RemoveClasses );
+SCLJRE_F( ToggleClasses );
+SCLJRE_F( EnableElements );
+SCLJRE_F( DisableElements );
+SCLJRE_F( GetAttribute );
+SCLJRE_F( SetAttribute );
+SCLJRE_F( GetProperty );
+SCLJRE_F( SetProperty );
 
 
 

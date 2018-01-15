@@ -9,9 +9,9 @@
 		</Parameters>
 		<Definitions>
 		</Definitions>
-		<Locale>
+		<!--Locale>
 			<xpp:expand href="../XSL/MainLocale.xml"/>
-		</Locale>
+		</Locale-->
 		<Arguments>
 			<Argument id="ProcessCommand" Description="ProcessCommandDescription" long="process" Value="Process" Usage="%ServiceArgument%"/>
 			<Argument id="ServiceArgument" Description="ServiceArgumentDescription" Path="Service" Label="ServiceArgumentLabel"/>

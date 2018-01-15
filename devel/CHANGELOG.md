@@ -1,5 +1,13 @@
 # *Epeios* changelog
 
+2018-01-15:
+- *common*:
+  - **$**: adding handling of booleans,
+- N4JRE:
+  - **$**,
+- SCLJRE:
+  - **$**,
+
 2018-01-12:
 - *common*:
   - **$**:

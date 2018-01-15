@@ -191,6 +191,11 @@ namespace {
 	}
 }
 
+sJObject scljre::Boolean( sJBoolean Value )
+{
+	return Wrap_<sJBoolean, java::lang::rBoolean>( Value );
+}
+
 sJObject scljre::Integer( sJInt Value )
 {
 	return Wrap_<sJInt, java::lang::rInteger>( Value );

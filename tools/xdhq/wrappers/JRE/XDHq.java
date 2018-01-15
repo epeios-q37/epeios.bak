@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2007-2017 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 2017 Claude SIMON (http://q37.info/contact/).
 
 	This file is part of XDHq.
 
@@ -17,236 +17,107 @@
 	along with XDHq. If not, see <http://www.gnu.org/licenses/>.
 */
 
-class JREqDecl {
- protected static String affix = "xdhq";
-}
+package info.q37.xdhq;
 
-class XDHqData {
-	public String
-		id,
-		action;
-};
+import info.q37.jreq.JREq;
 
-// Begin of generic part.
-class JREq extends JREqDecl {
-	native public static String wrapperInfo();
-	native public static String componentInfo( long launcher );
-	native private static void init( String location);
-	native private static long register( String arguments );
-	native protected static Object wrapper(
-		long launcher,
-		int index,
-		Object... objects);
-
-	static
-	{
-		String location = "";
-		String osName = System.getProperty("os.name").toLowerCase();
-
-		System.loadLibrary( "jreq" );
-
-		if ( osName.contains( "windows" ) )
-			location = "h:/bin";
-		else if ( osName.contains( "mac" ) ) {
-			location = "/Users/bin";
-  } else {
-	location = "/home/csimon/bin";
-  }
-
-  if ( System.getenv( "EPEIOS_SRC" ) == null ) {
-   location = ".";
-  }
-
- 	init( location );
-  register( "./" + JREqDecl.affix + "jre");
- }
-}
-// End of generic part.
-
-class JREqTree extends JREq {
-	private Object core;
-	public JREqTree( String background)
-	{
-		core = JREq.wrapper( 1, background );
+public class XDHq extends info.q37.jreq.JREq {
+	static private long launcher;
+	static {
+		launcher = JREq.register( "xdhq" );
 	}
-	public void finalize()
-	{
-		JREq.wrapper( 2, core );
+	static public Object wrap(int index, Object... objects) {
+		return JREq.wrap( launcher, index, objects );
 	}
-	public void pushTag( String name )
-	{
-		JREq.wrapper( 3, core, name );
+	static public String componentInfo(){
+		return JREq.componentInfo( launcher );
 	}
-	public void popTag()
+	static public String returnArgument( String argument )
 	{
-		JREq.wrapper( 4, core );
-	}
-	public void putValue( String value )
-	{
-		JREq.wrapper( 5, core, value );
-	}
-	public void putAttribute(
-		String name,
-		String value )
-	{
-		JREq.wrapper( 6, core, name, value );
-	}
-	Object core()
-	{
-		return core;
+		return (String)wrap( 0, argument );
 	}
 }
 
-class JREqLayoutTree extends JREqTree {
-	public JREqLayoutTree()
-	{
-		super( "Layout" );
-	}
-}
+/*
 
-class JREqCastingTree extends JREqTree {
-	public JREqCastingTree()
-	{
-		super( "Casting");
-	}
-}
 
-class XDHq extends JREq {
-	private Object core;
-	static private String root;
-	public static String returnArgument( String Text )
-	{
-		return (String)JREq.wrapper( 0, Text  );
-	}
-	public static void initialize( String arguments )
-	{
-		JREq.wrapper( 7, arguments );
-		root = "Root";
-	}
-	public XDHq()
-	{
-		core = JREq.wrapper( 8 );
-	}
-	public void finalize()
-	{
-		JREq.wrapper( 9, core );
-	}
-	public void set( Object object )
-	{
-		JREq.wrapper( 10, core, object );
-	}
-	public void getAction( XDHqData data )
-	{
-		JREq.wrapper( 11, core, data );
-	}
-	public void setElementLayout(
-		String id,
-		JREqLayoutTree tree,
-		String xslFilename )
-	{
-		JREq.wrapper( 12, core, id, tree.core(), xslFilename );
-	}
-	public void setElementCasting(
-		String id,
-		JREqCastingTree tree,
-		String xslFilename )
-	{
-		JREq.wrapper( 13, core, id, tree.core(), xslFilename );
-	}
-	public void setDocumentLayout(
-		JREqLayoutTree tree,
-		String xslFilename )
-	{
-		setElementLayout( root, tree, xslFilename);
-	}
-	public void setDocumentCasting(
-		JREqCastingTree tree,
-		String xslFilename )
-	{
-		setElementCasting( root, tree, xslFilename);
-	}
-}
-
-class XDHqThread extends java.lang.Thread
-{
+class XDHqThread extends java.lang.Thread {
 	private XDHq xdhq;
-	public XDHqThread( XDHq xdhq )
-	{
+
+	public XDHqThread(XDHq xdhq) {
 		this.xdhq = xdhq;
-		xdhq.set( this );
+		xdhq.set(this);
 	}
-	private void setCasting(
-		boolean enabled,
-		String xslFilename )
-	{
+
+	private void setCasting(boolean enabled, String xslFilename) {
 		JREqCastingTree tree = new JREqCastingTree();
-		tree.pushTag( "Test" );
+		tree.pushTag("Test");
 
-		if ( enabled )
-			tree.putAttribute( "Enabled", "true" );
+		if (enabled)
+			tree.putAttribute("Enabled", "true");
 		else
-			tree.putAttribute( "Enabled", "false" );
+			tree.putAttribute("Enabled", "false");
 
-		xdhq.setDocumentCasting( tree, xslFilename );
+		xdhq.setDocumentCasting(tree, xslFilename);
 	}
-	private void connect()
-	{
+
+	private void connect() {
 		JREqLayoutTree tree = new JREqLayoutTree();
 
-		xdhq.setDocumentLayout( tree, "../XSL/MainLayout.xsl");
-		setCasting( false, "../XSL/MainCasting.xsl" );
+		xdhq.setDocumentLayout(tree, "../XSL/MainLayout.xsl");
+		setCasting(false, "../XSL/MainCasting.xsl");
 
 	}
-	public void run()
-	{
+
+	public void run() {
 		XDHqData data = new XDHqData();
 
- 		System.out.println( "Client started..." );
+		System.out.println("Client started...");
 
-		for(;;) {
-			xdhq.getAction( data );
-			System.out.println( data.action + " : " + data.id );
+		for (;;) {
+			xdhq.getAction(data);
+			System.out.println(data.action + " : " + data.id);
 
-			switch ( data.action ) {
+			switch (data.action) {
 			case "":
 			case "Connect":
 				connect();
 				break;
 			case "ShowTestButton":
-				setCasting( true, "../XSL/MainCasting.xsl" );
+				setCasting(true, "../XSL/MainCasting.xsl");
 				break;
 			case "HideTestButton":
-				setCasting( false, "../XSL/MainCasting.xsl" );
+				setCasting(false, "../XSL/MainCasting.xsl");
 				break;
 			}
 		}
 	}
+
 	public void test() {
-		System.out.println( "Essai from void method!"  );
+		System.out.println("Essai from void method!");
 	}
 }
 
 class XDHqTest {
-	private static void displayBytecodeBuildTimestamp() throws Exception
-	{
-		System.out.println( "Bytecode build : " + new java.util.Date(new java.io.File(XDHqTest.class.getClassLoader().getResource(XDHqTest.class.getCanonicalName().replace('.', '/') + ".class").toURI()).lastModified()) );
+	private static void displayBytecodeBuildTimestamp() throws Exception {
+		System.out.println("Bytecode build : " + new java.util.Date(new java.io.File(XDHqTest.class.getClassLoader()
+				.getResource(XDHqTest.class.getCanonicalName().replace('.', '/') + ".class").toURI()).lastModified()));
 	}
-	
-	public static void main ( String[] args ) throws Exception
-	{
- 		System.out.println( XDHq.wrapperInfo() );
- 		System.out.println( XDHq.componentInfo() );
- 		displayBytecodeBuildTimestamp();
- 		System.out.println( XDHq.returnArgument( "Text from JAVA file" ) );
 
-		XDHq.initialize( "12345" );
+	public static void main(String[] args) throws Exception {
+		System.out.println(XDHq.wrapperInfo());
+		System.out.println(XDHq.componentInfo());
+		displayBytecodeBuildTimestamp();
+		System.out.println(XDHq.returnArgument("Text from JAVA file"));
 
-		for(;;) {
-	 		System.out.println( "Avant" );
-			java.lang.Thread thread = new XDHqThread( new XDHq() );
+		XDHq.initialize("12345");
+
+		for (;;) {
+			System.out.println("Avant");
+			java.lang.Thread thread = new XDHqThread(new XDHq());
 			thread.start();
-	 		System.out.println( "Aprés" );
+			System.out.println("Aprï¿½s");
 		}
 	}
 }
-
+*/

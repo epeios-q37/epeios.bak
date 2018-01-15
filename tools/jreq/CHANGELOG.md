@@ -1,5 +1,8 @@
 # *JREq* changelog
 
+2018-01-15:
+- adding handling of booleans,
+
 2017-12-20:
 - the wrapper can now be loaded more than once; two *Java* component based on this wrapper can now be used together,
 
@@ -12,9 +15,3 @@
 
 2017-10-10:
 - using new `n4allw::Launch(...)` function.
-
-
-
-
-
-

@@ -138,6 +138,18 @@ namespace scljre {
 
 			O_().CallVoidMethod( Method, Signature, sizeof...( args ), Values );
 		}
+		template <typename ...args> sJBoolean CallBooleanMethod(
+			const char *Method,
+			const char *Signature,
+			args&... Args )
+		{
+			sValue Values[sizeof...(args)+1];	/// '+1' only to avoid attempt to create a array of size 0.
+			Values[sizeof...(args)].Type = t_Undefined;
+
+			Fill_( 0, Values, Args... );
+
+			return O_().CallBooleanMethod( Method, Signature, sizeof...(args), Values );
+		}
 		template <typename ...args> sJShort CallShortMethod(
 			const char *Method,
 			const char *Signature,
@@ -235,6 +247,17 @@ namespace scljre {
 		}
 
 		namespace lang {
+			B( Boolean );
+				void Init( sJBoolean Boolean )
+				{
+					Init( New( "Ljava/lang/Boolean;", "(Z)V", Boolean ) );
+				}
+				sJBoolean BooleanValue( void )
+				{
+					return Object_.CallBooleanMethod( "booleanValue", "()Z" );
+				}
+			A;
+
 			B( Short );
 				void Init( sJShort Short )
 				{
@@ -285,7 +308,7 @@ namespace scljre {
 		}
 	}
 
-		typedef scln4a::sCaller sCaller_;
+	typedef scln4a::sCaller sCaller_;
 
 	class sCaller
 	: public sCaller_ {
@@ -346,6 +369,7 @@ namespace scljre {
 # endif
 
 	sJObject Null( void );
+	sJObject Boolean( sJBoolean Boolean );
 	sJObject Integer( sJInt Integer );
 	sJObject Long( sJLong Long );
 	sJObject String( const str::dString &UTF );
