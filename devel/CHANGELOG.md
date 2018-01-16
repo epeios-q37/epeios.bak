@@ -1,5 +1,15 @@
 # *Epeios* changelog
 
+2018-01-16:
+- *common*:
+  - **$**: array handling,
+- JNIQ:
+  - **$**,
+- N4JRE:
+  - **$**,
+- SCLJRE:
+  - **$**,
+
 2018-01-15:
 - *common*:
   - **$**: adding handling of booleans,

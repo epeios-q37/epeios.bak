@@ -51,11 +51,33 @@ namespace {
 	qRE
 		return Return;
 	}
+
+	SCLJRE_F( TestStrings_ )
+	{
+	qRH;
+		str::wStrings Strings;
+	qRB;
+		Strings.Init();
+
+		Caller.Get( Strings );
+
+		sdr::sRow Row = Strings.First();
+
+		while ( Row != qNIL ) {
+			cio::COut << Strings( Row ) << txf::nl << txf::commit;
+
+			Row = Strings.Next( Row );
+		}
+	qRR;
+	qRT;
+	qRE;
+		return scljre::Null();
+	}
 }
 
 void scljre::SCLJRERegister( scljre::sRegistrar &Registrar )
 {
-	Registrar.Register( ReturnArgument_ );
+	Registrar.Register( ReturnArgument_, TestStrings_ );
 }
 
 const char *sclmisc::SCLMISCTargetName = NAME_LC;

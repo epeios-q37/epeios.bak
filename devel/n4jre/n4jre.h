@@ -40,12 +40,13 @@
 # endif
 
 namespace n4jre {
-	// Inspired from the 'Java' headers.
-	typedef unsigned char	sJBoolean;
+	// Mimics the 'Java' headers.
+	typedef unsigned char sJBoolean;
 	typedef bso::sS8 sJByte;
 	typedef bso::sS16 sJShort;
 	typedef bso::sS32 sJInt;
 	typedef bso::sS64 sJLong;
+	typedef long sJSize;
 
 	qENUM( Handling )
 	{
@@ -62,6 +63,7 @@ namespace n4jre {
 	extern fMalloc N4JREMalloc;
 	extern fFree N4JREFree;
 
+	// Only for primitive types.
 	template <typename type> class rJArray_
 	{
 	private:
@@ -255,6 +257,9 @@ namespace n4jre {
 			sValue &Object,	// Will contain the returned object.
 			int ArgC,
 			sValue *ArgV ) = 0;
+		// Both below methods works only on objects array ('jobjectsArray' casted to 'jobject').
+		virtual sJSize N4JREGetLength( void ) = 0;
+		virtual cObject *N4JREGetElement( sJSize Index ) = 0;
 # define H( type, name )\
 	protected:\
 		virtual type N4JRECall##name##Method(\
@@ -295,6 +300,14 @@ namespace n4jre {
 		{
 			return N4JRECallObjectMethod( Method, Signature, Object, ArgC, ArgV );
 		}
+		sJSize GetLength( void )
+		{
+			return N4JREGetLength();
+		}
+		cObject *GetElement( sJSize Index )
+		{
+			return N4JREGetElement( Index );
+		}
 	};
 
 	typedef cObject sJObject_;
@@ -309,7 +322,6 @@ namespace n4jre {
 	typedef void( *fDelete )( cObject * );
 
 	typedef void ( *fThrow )( const char *Message );
-
 
 	struct gShared {
 	public:

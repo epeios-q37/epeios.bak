@@ -26,7 +26,7 @@ public class XDHq extends info.q37.jreq.JREq {
 	static {
 		launcher = JREq.register( "xdhq" );
 	}
-	static public Object wrap(int index, Object... objects) {
+	static private Object wrap(int index, Object... objects) {
 		return JREq.wrap( launcher, index, objects );
 	}
 	static public String componentInfo(){

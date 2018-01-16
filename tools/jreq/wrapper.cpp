@@ -288,6 +288,26 @@ namespace {
 
 			Set_( JObject, Env, Object );
 		}
+		virtual n4jre::sJSize N4JREGetLength( void ) override
+		{
+			return jniq::GetLength( Object_, jniq::GetEnv() );
+		}
+		virtual cObject *N4JREGetElement( n4jre::sJSize Index ) override
+		{
+			rObject_ *Object = NULL;
+		qRH;
+		qRB;
+			if ( ( Object = new rObject_ ) == NULL  )
+				qRAlc();
+
+			Object->Init( jniq::GetElement( Object_, Index, jniq::GetEnv() ) );
+		qRR;
+			if ( Object != NULL )
+				delete Object;
+		qRT;
+		qRE;
+			return Object;
+		}
 		virtual void N4JRECallVoidMethod(
 			const char *Method,
 			const char *Signature,

@@ -17,51 +17,26 @@
 	along with eSketch. If not, see <http://www.gnu.org/licenses/>.
 */
 
-class JREqDecl {
- protected static String affix = "esketch";
-}
+import info.q37.jreq.JREq;
 
-// Begin of generic part.
-class JREq extends JREqDecl {
-	static long launcher = 0;
-	native public static String wrapperInfo();
-	native public static String componentInfo( long launcher );
-	native private static void init( String location);
-	native private static long register( String arguments );
-	native protected static Object wrapper(
-		long launcher,
-		int index,
-		Object... objects);
-
-	static
+public class eSketch extends info.q37.jreq.JREq {
+	static private long launcher;
+	static {
+		launcher = JREq.register( "esketch" );
+	}
+	static private Object wrap(int index, Object... objects) {
+		return JREq.wrap( launcher, index, objects );
+	}
+	static public String componentInfo(){
+		return JREq.componentInfo( launcher );
+	}
+	static public String returnArgument( String argument )
 	{
-  String location = "";
-  String osName = System.getProperty("os.name").toLowerCase();
-
- 	System.loadLibrary( "jreq" );
-
-  if ( osName.contains( "windows" ) )
-   location = "h:/bin";
-  else if ( osName.contains( "mac" ) ) {
-   location = "/Users/bin";
-  } else {
-   location = "/home/csimon/bin";
-  }
-
-  if ( System.getenv( "EPEIOS_SRC" ) == null ) {
-   location = ".";
-  }
-
- 	init( location );
-  launcher = register( "./" + JREqDecl.affix + "jre");
- }
-}
-// End of generic part.
-
-class eSketch extends JREq {
-	public static String returnArgument( String Text )
+		return (String)wrap( 0, argument );
+	}
+	static public void testStrings( String strings[])
 	{
-		return (String)JREq.wrapper( launcher, 0, Text  );
+		wrap( 1, (Object)strings );
 	}
 }
 
@@ -74,9 +49,10 @@ class eSketchTest {
 	public static void main ( String[] args ) throws Exception
 	{
  	System.out.println( eSketch.wrapperInfo() );
- 	System.out.println( eSketch.componentInfo( JREq.launcher) );
+ 	System.out.println( eSketch.componentInfo() );
  	displayBytecodeBuildTimestamp();
  	System.out.println( eSketch.returnArgument( "Text from JAVA file" ) );
+	eSketch.testStrings( new String[] {"H", "o"});
 	}
 }
 

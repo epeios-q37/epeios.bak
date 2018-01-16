@@ -108,6 +108,15 @@ namespace scljre {
 			qRVct();
 			Set( Name, NULL, Object );
 		}
+		// 2 below methods are for only arrays.
+		sJSize GetLength( void )
+		{
+			return O_().GetLength();
+		}
+		cObject *GetElement( sJSize Index )
+		{
+			return O_().GetElement( Index );
+		}
 		template <typename object, typename ...args> void CallObjectMethod(
 			const char *Method,
 			const char *Signature,
@@ -314,6 +323,26 @@ namespace scljre {
 	: public sCaller_ {
 	private:
 		bso::sU8 Index_;
+		void Get_(
+			cObject *Object,
+			str::dString &String )
+		{
+		qRH;
+			scljre::java::lang::rString JString;
+			rJString Charset;
+			rJByteArray Result;
+		qRB;
+			Charset.Init( sizeof( "UTF-8" ), "UTF-8", n4jre::hOriginal );
+			JString.Init( Object );
+
+			Result.Init();
+			JString.GetBytes( Charset, Result );
+
+			String.Append( (bso::char__ *)Result.Core(), Result.Size() );
+		qRR;
+		qRT;
+		qRE;
+		}
 	public:
 		void reset( bso::sBool P = true )
 		{
@@ -337,21 +366,28 @@ namespace scljre {
 		}
 		void Get( str::dString &String )
 		{
-		qRH
+			Get_( Get(), String );
+		}
+		void Get( str::dStrings &Strings )
+		{
+		qRH;
+			rObject Object;
 			scljre::java::lang::rString JString;
-			rJString Charset;
-			rJByteArray Result;
-		qRB
-			Charset.Init( sizeof( "UTF-8" ), "UTF-8", n4jre::hOriginal );
-			JString.Init( Get() );
+			n4jre::sJSize Length = 0, Index = 0;
+			str::wString String;
+		qRB;
+			Object.Init( Get() );
 
-			Result.Init();
-			JString.GetBytes( Charset, Result );
+			Length = Object.GetLength();
 
-			String.Append( (bso::char__ *)Result.Core(), Result.Size() );
-		qRR
-		qRT
-		qRE
+			while ( Index < Length ) {
+				String.Init();
+				Get_( Object.GetElement( Index++ ), String );
+				Strings.Append( String );
+			}
+		qRR;
+		qRT;
+		qRE;
 		}
 	};
 
