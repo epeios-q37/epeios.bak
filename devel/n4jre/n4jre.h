@@ -46,7 +46,9 @@ namespace n4jre {
 	typedef bso::sS16 sJShort;
 	typedef bso::sS32 sJInt;
 	typedef bso::sS64 sJLong;
+
 	typedef long sJSize;
+	qCDEF( long, SizeMax, LONG_MAX );
 
 	qENUM( Handling )
 	{

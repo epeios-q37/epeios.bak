@@ -17,17 +17,22 @@
                 border-radius: 10%;
         }
 
+       .note-view {
+        display: none;
+       }
+
         p[id^="Description."] {
                 display: none;
         }
 
-        /* To display buttons on click on tactile devices */
-      .hide-buttons {
-       display: none;
-      }
 </style>
 <style id="ViewDescriptions">
         p[id^="Description."] {
                 display: block;
         }
+</style>
+<style id="ViewNotes">
+ .note-view {
+display: flex;
+ }
 </style>

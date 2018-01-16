@@ -30,7 +30,7 @@
 						<span> Hide descriptions </span>
 					</label>
 				</span>
-				<button id="CreateButton" data-xdh-value="0" data-xdh-onevent="Edit" data-xdh-cast="EditionCast">Create</button>
+				<button class="button" id="CreateButton" data-xdh-value="0" data-xdh-onevent="Edit">Create</button>
 			</div>
 		</div>
 		<div id="Notes"/>

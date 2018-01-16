@@ -238,12 +238,15 @@ qRH;
 	rObject Object;
 	sdr::sRow Row = qNIL;
 qRB;
-	Object.Init( NewObjectArray_( Strings.Amount(), "Ljava/lang/String;" ) );
+	if ( Strings.Amount() > n4jre::SizeMax )
+		qRLmt();
+
+	Object.Init( NewObjectArray_( (sJSize)Strings.Amount(), "Ljava/lang/String;" ) );
 
 	Row = Strings.First();
 
 	while ( Row != qNIL ) {
-		Object.SetElement( *Row, String( Strings( Row ) ) );
+		Object.SetElement( (sJSize)*Row, String( Strings( Row ) ) );
 
 		Row = Strings.Next( Row );
 	}

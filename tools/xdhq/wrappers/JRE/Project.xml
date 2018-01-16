@@ -37,10 +37,12 @@
 		<Module>xdhp</Module>
 	</Modules>
 	<Files>
-		<Files Group="XSL" Path="../XSL/">
-			<File>MainCasting.xsl</File>
-			<File>MainLayout.xsl</File>
-			<File>MainLocale.xml</File>
+		<Files Group="Blank">
+			<File Path="../../examples/JRE/blank/">Main.java</File>
+			<Files Path="../../examples/common/blank/">
+				<File>head.html</File>
+				<File>Main.xsl</File>
+			</Files>
 		</Files>
 	</Files>
 	<SourceDirs>

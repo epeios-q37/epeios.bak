@@ -318,16 +318,16 @@ namespace server {
 			{
 				ap_::set::R( Flow );
 			}
+		}
 
-			inline void Set(
-				const str::dString &Id,
-				const str::dString &Name,
-				const str::dString &Value,
-				flw::sRWFlow &Flow )
-			{
-				set::S( Id, Name, Value, Flow );
-				set::R( Flow );
-			}
+		inline void Set(
+			const str::dString &Id,
+			const str::dString &Name,
+			const str::dString &Value,
+			flw::sRWFlow &Flow )
+		{
+			set::S( Id, Name, Value, Flow );
+			set::R( Flow );
 		}
 
 		namespace get {
@@ -345,16 +345,16 @@ namespace server {
 			{
 				ap_::get::R( Flow, Value );
 			}
+		}
 
-			inline void Set(
-				const str::dString &Id,
-				const str::dString &Name,
-				const str::dString &Value,
-				flw::sRWFlow &Flow )
-			{
-				set::S( Id, Name, Value, Flow );
-				set::R( Flow );
-			}
+		inline void Get(
+			const str::dString &Id,
+			const str::dString &Name,
+			flw::sRWFlow &Flow,
+			str::dString &Value )
+		{
+			get::S( Id, Name, Flow );
+			get::R( Flow, Value );
 		}
 	}
 
@@ -373,16 +373,16 @@ namespace server {
 			{
 				ap_::set::R( Flow );
 			}
+		}
 
-			inline void Set(
-				const str::dString &Id,
-				const str::dString &Name,
-				const str::dString &Value,
-				flw::sRWFlow &Flow )
-			{
-				set::S( Id, Name, Value, Flow );
-				set::R( Flow );
-			}
+		inline void Set(
+			const str::dString &Id,
+			const str::dString &Name,
+			const str::dString &Value,
+			flw::sRWFlow &Flow )
+		{
+			set::S( Id, Name, Value, Flow );
+			set::R( Flow );
 		}
 
 		namespace get {
@@ -400,16 +400,16 @@ namespace server {
 			{
 				ap_::get::R( Flow, Value );
 			}
+		}
 
-			inline void Set(
-				const str::dString &Id,
-				const str::dString &Name,
-				const str::dString &Value,
-				flw::sRWFlow &Flow )
-			{
-				set::S( Id, Name, Value, Flow );
-				set::R( Flow );
-			}
+		inline void Get(
+			const str::dString &Id,
+			const str::dString &Name,
+			flw::sRWFlow &Flow,
+			str::dString &Value )
+		{
+			get::S( Id, Name, Flow );
+			get::R( Flow, Value );
 		}
 	}
 }

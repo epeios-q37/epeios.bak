@@ -277,8 +277,9 @@ SCLJRE_F( xdhp::SetLayout )
 	return scljre::Null();
 }
 
-SCLJRE_F( GetContents )
+SCLJRE_F( xdhp::GetContents )
 {
+	scljre::sJObject Buffer = NULL;
 qRH;
 	str::wStrings Ids, Contents;
 qRB;
@@ -289,22 +290,192 @@ qRB;
 
 	Contents.Init();
 	server::contents::Get( Ids, Flow, Contents );
+
+	Buffer = scljre::Strings( Contents );
 qRR;
 qRT;
 qRE;
+	return Buffer;
 }
 
-SCLJRE_F( SetContents );
-SCLJRE_F( DressWidgets );
-SCLJRE_F( AddClasses );
-SCLJRE_F( RemoveClasses );
-SCLJRE_F( ToggleClasses );
-SCLJRE_F( EnableElements );
-SCLJRE_F( DisableElements );
-SCLJRE_F( GetAttribute );
-SCLJRE_F( SetAttribute );
-SCLJRE_F( GetProperty );
-SCLJRE_F( SetProperty );
+SCLJRE_F( xdhp::SetContents )
+{
+qRH;
+	str::wStrings Ids, Contents;
+qRB;
+	FLOW;
+
+	tol::Init( Ids, Contents );
+	Caller.Get( Ids, Contents );
+
+	server::contents::Set( Ids, Contents, Flow );
+qRR;
+qRT;
+qRE;
+	return scljre::Null();
+}
+
+SCLJRE_F( xdhp::DressWidgets )
+{
+qRH;
+	str::wString Id;
+qRB;
+	FLOW;
+
+	tol::Init( Id );
+	Caller.Get( Id );
+
+	server::widgets::Dress( Id, Flow );
+qRR;
+qRT;
+qRE;
+	return scljre::Null();
+}
+
+namespace {
+	scljre::sJObject HandleClasses_(
+		scljre::sCaller &Caller,
+		void( *Function )(
+			const str::dStrings &Ids,
+			const str::dStrings &Classes,
+			flw::sRWFlow &Flow) )
+	{
+	qRH;
+		str::wStrings Ids, Classes;
+	qRB;
+		FLOW;
+
+		tol::Init( Ids, Classes );
+		Caller.Get( Ids, Classes );
+
+		Function( Ids, Classes, Flow );
+	qRR;
+	qRT;
+	qRE;
+		return scljre::Null();
+	}
+}
+
+SCLJRE_F( xdhp::AddClasses )
+{
+	return HandleClasses_( Caller, server::classes::Add );
+}
+
+SCLJRE_F( xdhp::RemoveClasses )
+{
+	return HandleClasses_( Caller, server::classes::Remove );
+}
+
+SCLJRE_F( xdhp::ToggleClasses )
+{
+	return HandleClasses_( Caller, server::classes::Toggle );
+}
+
+namespace {
+	scljre::sJObject HandleElements_(
+		scljre::sCaller &Caller,
+		void( *Function )(
+			const str::dStrings &Ids,
+			flw::sRWFlow &Flow) )
+	{
+	qRH;
+		str::wStrings Ids;
+	qRB;
+		FLOW;
+
+		tol::Init( Ids );
+		Caller.Get( Ids );
+
+		Function( Ids, Flow );
+	qRR;
+	qRT;
+	qRE;
+		return scljre::Null();
+	}
+}
+
+SCLJRE_F( xdhp::EnableElements )
+{
+	return HandleElements_( Caller, server::elements::Enable );
+}
+
+SCLJRE_F( xdhp::DisableElements )
+{
+	return HandleElements_( Caller, server::elements::Disable );
+}
+
+namespace {
+	scljre::sJObject Get_(
+		scljre::sCaller &Caller,
+		void( *Function )(
+			const str::dString &Id,
+			const str::dString &Name,
+			flw::sRWFlow &Flow,
+			str::dString &Value ) )
+	{
+		scljre::sJObject Return = NULL;
+	qRH;
+		str::wString Id, Name, Value;
+	qRB;
+		FLOW;
+
+		tol::Init( Id, Name );
+		Caller.Get( Id, Name );
+
+		tol::Init( Value );
+		Function( Id, Name, Flow, Value );
+
+		Return = scljre::String( Value );
+	qRR;
+	qRT;
+	qRE;
+		return Return;
+	}
+
+	scljre::sJObject Set_(
+		scljre::sCaller &Caller,
+		void( *Function )(
+			const str::dString &Id,
+			const str::dString &Name,
+			const str::dString &Value,
+			flw::sRWFlow &Flow ) )
+	{
+	qRH;
+		str::wString Id, Name, Value;
+	qRB;
+		FLOW;
+
+		tol::Init( Id, Name, Value );
+		Caller.Get( Id, Name, Value );
+
+		Function( Id, Name, Value, Flow );
+	qRR;
+	qRT;
+	qRE;
+		return scljre::Null();
+	}
+
+}
+
+SCLJRE_F( xdhp::GetAttribute )
+{
+	return Get_( Caller, server::attribute::Get );
+}
+
+SCLJRE_F( xdhp::SetAttribute )
+{
+	return Set_( Caller, server::attribute::Set );
+}
+
+SCLJRE_F( xdhp::GetProperty )
+{
+	return Get_( Caller, server::property::Get );
+}
+
+SCLJRE_F( xdhp::SetProperty )
+{
+	return Set_( Caller, server::property::Set );
+}
 
 
 

@@ -2,7 +2,7 @@
 
 2018-01-16:
 - *common*:
-  - **$**: array handling,
+  - **$**: handling array of strings,
 - JNIQ:
   - **$**,
 - N4JRE:

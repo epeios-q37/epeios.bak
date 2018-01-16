@@ -296,9 +296,16 @@ namespace jniq {
 		type Array,
 		JNIEnv *Env = NULL )
 	{
+		jsize Length = 0;
+
 		Env = GetEnv( Env );
 
-		return Env->GetArrayLength( Array );
+		Length = Env->GetArrayLength( Array );
+
+		if ( Length < 0 )
+			qRFwk();	// Probably 'Array' is NOT an array (bad casting).
+
+		return Length;
 	}
 
 	template <typename type> inline jobject GetElement(

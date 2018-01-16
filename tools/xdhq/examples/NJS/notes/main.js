@@ -38,7 +38,7 @@ const unjsq = require(unjsqId);
 const Tree = unjsq.Tree;
 const DOM = unjsq.DOM;
 
-const viewModeElements = ["Pattern", "CreateButton", "DescriptionToggling"];
+const viewModeElements = ["Pattern", "CreateButton", "DescriptionToggling", "ViewNotes"];
 
 class MyData extends DOM {
 	constructor() {
@@ -227,21 +227,6 @@ function acCancel(dom, id) {
 		});
 }
 
-function acShowButtons(dom, id) {
-	console.log("Buutons !!!");
-	dom.getContent(id,
-		(result) => { console.log(result); dom.removeClass("Buttons." + result, "hide-buttons"); }
-		);
-}
-
-
-function acHideButtons(dom, id) {
-	console.log("Buutons !!!");
-	dom.getContent(id,
-		(result) => { console.log(result); dom.addClass("Buttons." + result, "hide-buttons"); }
-		);
-}
-
 function main() {
 	unjsq.register([
 		["Connect", acConnect],
@@ -251,8 +236,6 @@ function main() {
 		["Delete", acDelete],
 		["Submit", acSubmit],
 		["Cancel", acCancel],
-		["ShowButtons", acShowButtons],
-		["HideButtons", acHideButtons],
 	]);
 
 	unjsq.launch(newSession, "Connect");

@@ -350,6 +350,31 @@ namespace scljre {
 		qRT;
 		qRE;
 		}
+		void Get_( str::dString &String )
+		{
+			Get_( Get(), String );
+		}
+		void Get_( str::dStrings &Strings )
+		{
+		qRH;
+			rObject Object;
+			scljre::java::lang::rString JString;
+			n4jre::sJSize Length = 0, Index = 0;
+			str::wString String;
+		qRB;
+			Object.Init( Get() );
+
+			Length = Object.GetLength();
+
+			while ( Index < Length ) {
+				String.Init();
+				Get_( Object.GetElement( Index++ ), String );
+				Strings.Append( String );
+			}
+		qRR;
+		qRT;
+		qRE;
+		}
 	public:
 		void reset( bso::sBool P = true )
 		{
@@ -373,28 +398,18 @@ namespace scljre {
 		}
 		void Get( str::dString &String )
 		{
-			Get_( Get(), String );
+			return Get_( String );
 		}
 		void Get( str::dStrings &Strings )
 		{
-		qRH;
-			rObject Object;
-			scljre::java::lang::rString JString;
-			n4jre::sJSize Length = 0, Index = 0;
-			str::wString String;
-		qRB;
-			Object.Init( Get() );
-
-			Length = Object.GetLength();
-
-			while ( Index < Length ) {
-				String.Init();
-				Get_( Object.GetElement( Index++ ), String );
-				Strings.Append( String );
-			}
-		qRR;
-		qRT;
-		qRE;
+			return Get_( Strings );
+		}
+		template <typename arg, typename ...args> void Get(
+			arg &Arg,
+			args&... Args )
+		{
+			Get_( Arg );
+			Get( Args... );
 		}
 	};
 
