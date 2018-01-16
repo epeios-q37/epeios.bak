@@ -209,7 +209,8 @@ qRFB;
 	ComponentFilename.Init();
 	sclmisc::MGetValue( registry::parameter::ComponentFilename, ComponentFilename );
 
-	Shared_.New_Object = wrapper::NewObject;
+	Shared_.NewObject = wrapper::NewObject;
+	Shared_.NewObjectArray = wrapper::NewObjectArray;
 	Shared_.Delete = Delete_;
 	Shared_.Malloc = n4jre::N4JREMalloc;
 	Shared_.Free = n4jre::N4JREFree;

@@ -308,6 +308,12 @@ namespace {
 		qRE;
 			return Object;
 		}
+		virtual void N4JRESetElement(
+			n4jre::sJSize Index,
+			cObject *Object ) override
+		{
+			jniq::SetElement( Object_, Index, ((rObject_ *)Object)->Object_ );
+		}
 		virtual void N4JRECallVoidMethod(
 			const char *Method,
 			const char *Signature,
@@ -499,6 +505,36 @@ qRT
 qRE
 	return Object;
 }
+
+n4jre::cObject *wrapper::NewObjectArray(
+	n4jre::sJSize Length,
+	const char *ClassName )
+{
+	rObject_ *Object = NULL;
+qRH;
+	JNIEnv *Env = NULL;
+	jclass Class = NULL;
+qRB;
+	Env = jniq::GetEnv();
+	Class = jniq::FindClass( ClassName, Env );
+
+	Object = ::new rObject_;
+
+	if ( Object == NULL )
+		qRAlc();
+
+	if ( (ClassName == NULL) || (*ClassName == 0) )
+		qRGnr();
+
+	Object->Init( Env->NewObjectArray( Length, Class, NULL ) );
+qRR
+	if ( Object != NULL )
+		delete Object;
+qRT
+qRE
+	return Object;
+}
+
 
 jobject wrapper::Launch(
 	rLauncher &Launcher,

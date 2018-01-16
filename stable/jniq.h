@@ -311,6 +311,17 @@ namespace jniq {
 		return Env->GetObjectArrayElement( Array, Index );
 	}
 
+	template <typename type> inline void SetElement(
+		type Array,
+		jsize Index,
+		jobject Object,
+		JNIEnv *Env = NULL )
+	{
+		Env = GetEnv( Env );
+
+		return Env->SetObjectArrayElement( Array, Index, Object );
+	}
+
 	// Don't know what happens if 'Array' isn't a 'jobjectArray' !
 	inline jsize GetLength(
 		jobject Array,
@@ -325,6 +336,15 @@ namespace jniq {
 		JNIEnv *Env = NULL )
 	{
 		return GetElement( (jobjectArray)Array, Index, Env );
+	}
+
+	inline void SetElement(
+		jobject Array,
+		jsize Index,
+		jobject Object,
+		JNIEnv *Env = NULL )
+	{
+		return SetElement( (jobjectArray)Array, Index, Object, Env );
 	}
 }
 

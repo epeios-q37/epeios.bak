@@ -54,6 +54,7 @@ namespace {
 
 	SCLJRE_F( TestStrings_ )
 	{
+		scljre::sJObject Return;
 	qRH;
 		str::wStrings Strings;
 	qRB;
@@ -64,14 +65,16 @@ namespace {
 		sdr::sRow Row = Strings.First();
 
 		while ( Row != qNIL ) {
-			cio::COut << Strings( Row ) << txf::nl << txf::commit;
+			str::ToUpper( Strings( Row ) );
 
 			Row = Strings.Next( Row );
 		}
+
+		Return = scljre::Strings( Strings );
 	qRR;
 	qRT;
 	qRE;
-		return scljre::Null();
+		return Return;
 	}
 }
 

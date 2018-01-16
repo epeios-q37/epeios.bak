@@ -33,6 +33,10 @@ namespace wrapper {
 		const char * Signature,
 		int ArgC, n4jre::sValue * ArgV );
 
+	n4jre::cObject *NewObjectArray(
+		n4jre::sJSize Length,
+		const char * ClassName );
+
 	jobject Launch(
 		rLauncher &Launcher,
 		jint Index,

@@ -34,13 +34,21 @@ public class eSketch extends info.q37.jreq.JREq {
 	{
 		return (String)wrap( 0, argument );
 	}
-	static public void testStrings( String strings[])
+	static public String [] testStrings( String strings[])
 	{
-		wrap( 1, (Object)strings );
+		return (String [])wrap( 1, (Object)strings );
 	}
 }
 
 class eSketchTest {
+	private static void display( String[] Strings )
+	{
+		int index = 0;
+
+		while ( index < Strings.length ) {
+			System.out.print( Strings[index++]);
+		}
+	}
 	private static void displayBytecodeBuildTimestamp() throws Exception
 	{
 		System.out.println( "Bytecode build : " + new java.util.Date(new java.io.File(eSketchTest.class.getClassLoader().getResource(eSketchTest.class.getCanonicalName().replace('.', '/') + ".class").toURI()).lastModified()) );
@@ -52,7 +60,7 @@ class eSketchTest {
  	System.out.println( eSketch.componentInfo() );
  	displayBytecodeBuildTimestamp();
  	System.out.println( eSketch.returnArgument( "Text from JAVA file" ) );
-	eSketch.testStrings( new String[] {"H", "o"});
+	display(eSketch.testStrings( new String[] {"Hello ", "the ", "world !"}));
 	}
 }
 

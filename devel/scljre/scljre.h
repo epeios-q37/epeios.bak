@@ -39,7 +39,8 @@
 namespace scljre {
 	using namespace n4jre;
 
-	extern n4jre::fNew_Object New_Object_;
+	extern n4jre::fNewObject NewObject_;
+	extern n4jre::fNewObjectArray NewObjectArray_;
 	extern n4jre::fThrow Throw_;
 
 	// Termination method.
@@ -68,7 +69,7 @@ namespace scljre {
 
 		Fill_( 0, Values, Args... );
 
-		return New_Object_( Class, Signature, sizeof...( args ), Values );
+		return NewObject_( Class, Signature, sizeof...( args ), Values );
 	}
 
 	inline void Throw( const char *Message )
@@ -116,6 +117,12 @@ namespace scljre {
 		cObject *GetElement( sJSize Index )
 		{
 			return O_().GetElement( Index );
+		}
+		void SetElement(
+			sJSize Index,
+			cObject * Object )
+		{
+			return O_().SetElement( Index, Object );
 		}
 		template <typename object, typename ...args> void CallObjectMethod(
 			const char *Method,
@@ -409,6 +416,7 @@ namespace scljre {
 	sJObject Integer( sJInt Integer );
 	sJObject Long( sJLong Long );
 	sJObject String( const str::dString &UTF );
+	sJObject Strings( const str::dStrings &Strings );
 
 	// To ease the handling of user object. 
 	template <typename t> inline sJObject ConvertUO( const t* UO )

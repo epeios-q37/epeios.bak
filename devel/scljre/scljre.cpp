@@ -93,7 +93,8 @@ namespace {
 	};
 }
 
-n4jre::fNew_Object scljre::New_Object_ = NULL;
+n4jre::fNewObject scljre::NewObject_ = NULL;
+n4jre::fNewObjectArray scljre::NewObjectArray_ = NULL;
 namespace {
 	n4jre::fDelete Delete_ = NULL;
 }
@@ -124,7 +125,8 @@ qRH
 qRB
 	const n4jre::gShared &Shared = *( const n4jre::gShared* )UP;
 
-	Assign_( Shared.New_Object, New_Object_ );
+	Assign_( Shared.NewObject, NewObject_ );
+	Assign_( Shared.NewObjectArray, NewObjectArray_ );
 	Assign_( Shared.Delete, Delete_ );
 	Assign_( Shared.Malloc, n4jre::N4JREMalloc );
 	Assign_( Shared.Free, n4jre::N4JREFree );
@@ -228,3 +230,30 @@ qRT
 qRE
 	return Object;
 }
+
+sJObject scljre::Strings( const str::dStrings &Strings )
+{
+	sJObject Buffer = NULL;
+qRH;
+	rObject Object;
+	sdr::sRow Row = qNIL;
+qRB;
+	Object.Init( NewObjectArray_( Strings.Amount(), "Ljava/lang/String;" ) );
+
+	Row = Strings.First();
+
+	while ( Row != qNIL ) {
+		Object.SetElement( *Row, String( Strings( Row ) ) );
+
+		Row = Strings.Next( Row );
+	}
+
+	Buffer = Object();
+
+	Object.reset( false );	// So the underlying object is not destroyed, as it will be used later.
+qRR;
+qRT;
+qRE;
+	return Buffer;
+}
+
