@@ -41,6 +41,22 @@ namespace sclznd {
 	: public sCaller_ {
 	private:
 		bso::sU8 Index_;
+		void Get_( str::dString &String )
+		{
+			C_().GetArgument( Index_++, n4znd::tString, &String );
+		}
+		void Get_( bso::sS64 &Long )
+		{
+			C_().GetArgument( Index_++, n4znd::tLong, &Long );
+		}
+		void Get_( bso::sBool &Bool )
+		{
+			C_().GetArgument( Index_++, n4znd::tBool, &Bool );
+		}
+		void Get_( str::dStrings &Strings )
+		{
+			C_().GetArgument( Index_++, n4znd::tStrings, &Strings );
+		}
 	public:
 		void reset( bso::sBool P = true )
 		{
@@ -56,7 +72,7 @@ namespace sclznd {
 		}
 		void Get( str::dString &String )
 		{
-			C_().GetArgument( Index_++, n4znd::tString, &String );
+			Get_( String );
 		}
 		fdr::rRWDriver *GetStream( void )
 		{
@@ -68,15 +84,25 @@ namespace sclznd {
 		}
 		void Get( bso::sS64 &Long )
 		{
-			C_().GetArgument( Index_++, n4znd::tLong, &Long );
+			Get_( Long );
 		}
 		void Get( bso::sBool &Bool )
 		{
-			C_().GetArgument( Index_++, n4znd::tBool, &Bool );
+			Get_( Bool );
 		}
 		void Get( str::dStrings &Strings )
 		{
-			C_().GetArgument( Index_++, n4znd::tStrings, &Strings );
+			Get_( Strings );
+		}
+		// Termination method for below lethod.
+		void Get( void )
+		{}
+		template <typename arg, typename ...args> void Get(
+			arg &Arg,
+			args&... Args )
+		{
+			Get_( Arg );
+			Get( Args... );
 		}
 		void SetReturnValue( const str::dString &String )
 		{

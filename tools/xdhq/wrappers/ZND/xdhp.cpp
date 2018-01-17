@@ -131,68 +131,26 @@ namespace {
 #define RACK	rRack_ &Rack = GetRack_( Caller )
 #define FLOW	flw::sRWFlow &Flow = GetFlow_( Caller )
 
-namespace {
-	namespace {
-		void Init_(
-			scljre::java::lang::rString &String,
-			const str::dString &Content )
-		{
-		qRH
-			scljre::rJString CharsetName;
-			scljre::rJByteArray Array;
-		qRB
-			CharsetName.Init( "UTF-8", n4jre::hOriginal );
-
-			Array.Init( Content );
-
-			String.Init( Array, CharsetName );
-		qRR
-		qRT
-		qRE
-		}
-
-		void Set_(
-			const char *Name,
-			const str::dString &Value,
-			scljre::rObject &Data )
-		{
-		qRH
-			scljre::java::lang::rString String;
-		qRB
-			Init_( String, Value );
-			Data.Set( Name, "Ljava/lang/String;", String() );
-		qRR
-		qRT
-		qRE
-		}
-	}
-
-	void GetAction_(
-		flw::sRWFlow &Flow,
-		scljre::sCaller &Caller )
-	{
-	qRH;
-		str::wString Id, Action;
-		scljre::rObject Data;
-	qRB;
-		tol::Init( Id, Action );
-		server::GetAction( Flow, Id, Action );
-
-		Data.Init( Caller.Get() );
-		Set_( "id", Id, Data );
-		Set_( "action", Action, Data );
-	qRR;
-	qRT;
-	qRE;
-	}
-}
-
 SCLZND_F( xdhp::GetAction )
 {
+qRH;
+	str::wString Id, Action;
+	str::wStrings Strings;
+qRB;
 	FLOW;
-	GetAction_( Flow, Caller );
 
-	return scljre::Null();
+	tol::Init( Id, Action );
+	server::GetAction( Flow, Id, Action );
+
+	Strings.Init();
+
+	Strings.Append( Id );
+	Strings.Append( Action );
+
+	Caller.SetReturnValue( Strings );
+qRR;
+qRT;
+qRE;
 }
 
 SCLZND_F( xdhp::Alert )
@@ -209,7 +167,6 @@ qRB;
 qRR;
 qRT;
 qRE;
-return scljre::Null();
 }
 
 SCLZND_F( xdhp::Confirm )
@@ -226,17 +183,16 @@ qRB;
 	Response.Init();
 	server::Confirm( Message, Flow, Response );
 
-	Return = Response == "true";
+	Caller.SetReturnValue( Response == "true" );
 qRR;
 qRT;
 qRE;
-	return scljre::Boolean( Return );
 }
 
 namespace {
 	void SetLayout_(
 		const str::dString &Id,
-		scljre::sCaller &Caller,
+		sclznd::sCaller &Caller,
 		const str::dString &Language,
 		flw::sRWFlow &Flow )
 	{
@@ -255,7 +211,7 @@ namespace {
 	}
 
 	void SetLayout_(
-		scljre::sCaller &Caller,
+		sclznd::sCaller &Caller,
 		const str::dString &Language,
 		flw::sRWFlow &Flow )
 	{
@@ -277,13 +233,10 @@ SCLZND_F( xdhp::SetLayout )
 	RACK;
 
 	SetLayout_( Caller, Rack.Language, Rack.Flow );
-
-	return scljre::Null();
 }
 
 SCLZND_F( xdhp::GetContents )
 {
-	scljre::sJObject Buffer = NULL;
 qRH;
 	str::wStrings Ids, Contents;
 qRB;
@@ -295,11 +248,10 @@ qRB;
 	Contents.Init();
 	server::contents::Get( Ids, Flow, Contents );
 
-	Buffer = scljre::Strings( Contents );
+	Caller.SetReturnValue( Contents );
 qRR;
 qRT;
 qRE;
-	return Buffer;
 }
 
 SCLZND_F( xdhp::SetContents )
@@ -316,7 +268,6 @@ qRB;
 qRR;
 qRT;
 qRE;
-	return scljre::Null();
 }
 
 SCLZND_F( xdhp::DressWidgets )
@@ -333,12 +284,11 @@ qRB;
 qRR;
 qRT;
 qRE;
-	return scljre::Null();
 }
 
 namespace {
-	scljre::sJObject HandleClasses_(
-		scljre::sCaller &Caller,
+	void HandleClasses_(
+		sclznd::sCaller &Caller,
 		void( *Function )(
 			const str::dStrings &Ids,
 			const str::dStrings &Classes,
@@ -356,28 +306,27 @@ namespace {
 	qRR;
 	qRT;
 	qRE;
-		return scljre::Null();
 	}
 }
 
 SCLZND_F( xdhp::AddClasses )
 {
-	return HandleClasses_( Caller, server::classes::Add );
+	HandleClasses_( Caller, server::classes::Add );
 }
 
 SCLZND_F( xdhp::RemoveClasses )
 {
-	return HandleClasses_( Caller, server::classes::Remove );
+	HandleClasses_( Caller, server::classes::Remove );
 }
 
 SCLZND_F( xdhp::ToggleClasses )
 {
-	return HandleClasses_( Caller, server::classes::Toggle );
+	HandleClasses_( Caller, server::classes::Toggle );
 }
 
 namespace {
-	scljre::sJObject HandleElements_(
-		scljre::sCaller &Caller,
+	void HandleElements_(
+		sclznd::sCaller &Caller,
 		void( *Function )(
 			const str::dStrings &Ids,
 			flw::sRWFlow &Flow) )
@@ -394,30 +343,28 @@ namespace {
 	qRR;
 	qRT;
 	qRE;
-		return scljre::Null();
 	}
 }
 
 SCLZND_F( xdhp::EnableElements )
 {
-	return HandleElements_( Caller, server::elements::Enable );
+	HandleElements_( Caller, server::elements::Enable );
 }
 
 SCLZND_F( xdhp::DisableElements )
 {
-	return HandleElements_( Caller, server::elements::Disable );
+	HandleElements_( Caller, server::elements::Disable );
 }
 
 namespace {
-	scljre::sJObject Get_(
-		scljre::sCaller &Caller,
+	void Get_(
+		sclznd::sCaller &Caller,
 		void( *Function )(
 			const str::dString &Id,
 			const str::dString &Name,
 			flw::sRWFlow &Flow,
 			str::dString &Value ) )
 	{
-		scljre::sJObject Return = NULL;
 	qRH;
 		str::wString Id, Name, Value;
 	qRB;
@@ -429,15 +376,14 @@ namespace {
 		tol::Init( Value );
 		Function( Id, Name, Flow, Value );
 
-		Return = scljre::String( Value );
+		Caller.SetReturnValue( Value );
 	qRR;
 	qRT;
 	qRE;
-		return Return;
 	}
 
-	scljre::sJObject Set_(
-		scljre::sCaller &Caller,
+	void Set_(
+		sclznd::sCaller &Caller,
 		void( *Function )(
 			const str::dString &Id,
 			const str::dString &Name,
@@ -456,29 +402,28 @@ namespace {
 	qRR;
 	qRT;
 	qRE;
-		return scljre::Null();
 	}
 
 }
 
 SCLZND_F( xdhp::GetAttribute )
 {
-	return Get_( Caller, server::attribute::Get );
+	Get_( Caller, server::attribute::Get );
 }
 
 SCLZND_F( xdhp::SetAttribute )
 {
-	return Set_( Caller, server::attribute::Set );
+	Set_( Caller, server::attribute::Set );
 }
 
 SCLZND_F( xdhp::GetProperty )
 {
-	return Get_( Caller, server::property::Get );
+	Get_( Caller, server::property::Get );
 }
 
 SCLZND_F( xdhp::SetProperty )
 {
-	return Set_( Caller, server::property::Set );
+	Set_( Caller, server::property::Set );
 }
 
 

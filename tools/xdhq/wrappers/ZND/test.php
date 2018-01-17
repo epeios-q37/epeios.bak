@@ -19,7 +19,6 @@
 	along with XDHq.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 require "XDHq.php";
 
 echo XDHq::info() . "\n" . XDHq::wrapperInfo() . "\n";

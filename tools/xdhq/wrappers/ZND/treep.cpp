@@ -44,12 +44,8 @@ namespace {
 SCLZND_F( treep::New )
 {
 qRH;
-	str::wString Background;
 	rTreeRack_ *Rack = NULL;
 qRB;
-	Background.Init();
-	Caller.Get( Background );
-
 	Rack = new rTreeRack_;
 
 	if ( Rack == NULL )
