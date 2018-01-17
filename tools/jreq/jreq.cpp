@@ -230,7 +230,7 @@ qRFE( ERRFinal_( Env ) )
 	return (jlong)Launcher;
 }
 
-extern "C" JNIEXPORT jobject JNICALL Java_info_q37_jreq_Wrapper_wrap(
+extern "C" JNIEXPORT jobject JNICALL Java_info_q37_jreq_Wrapper_call(
 	JNIEnv *Env,
 	jclass,
 	jlong Launcher, 
@@ -240,7 +240,7 @@ extern "C" JNIEXPORT jobject JNICALL Java_info_q37_jreq_Wrapper_wrap(
 	jobject Return = NULL;
 qRFH
 qRFB
-	Return = wrapper::Launch( GetLauncher_( Launcher ), Index, Args );
+	Return = wrapper::Call( GetLauncher_( Launcher ), Index, Args );
 qRFR
 qRFT
 qRFE( ERRFinal_( Env ) )

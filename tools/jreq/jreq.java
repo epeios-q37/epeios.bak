@@ -30,7 +30,7 @@ class Wrapper {
 
 	native protected static long register(String arguments);
 
-	native protected static Object wrap(long launcher, int index, Object... objects);
+	native protected static Object call(long launcher, int index, Object... objects);
 	static protected String getLocation()
 	{
 		String osName = System.getProperty("os.name").toLowerCase();

@@ -42,6 +42,7 @@
 		<Modules Group="Shared" Path="../">
 			<Module Path="../">prtcl</Module>
 			<Module>server</Module>
+			<Module>tree</Module>
 		</Modules>
 		<Module>registry</Module>
 		<Module>treep</Module>

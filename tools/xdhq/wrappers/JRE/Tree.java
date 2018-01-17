@@ -24,8 +24,8 @@ import info.q37.xdhq.XDHq;
 class Tree {
 	private Object core;
 
-	public Tree(String background) {
-		core = XDHq.wrap(1, background);
+	public Tree() {
+		core = XDHq.wrap(1);
 	}
 
 	public void finalize() {

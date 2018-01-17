@@ -37,7 +37,7 @@ namespace wrapper {
 		n4jre::sJSize Length,
 		const char * ClassName );
 
-	jobject Launch(
+	jobject Call(
 		rLauncher &Launcher,
 		jint Index,
 		jobjectArray &Args );

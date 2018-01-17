@@ -15,7 +15,7 @@
 #	You should have received a copy of the GNU Affero General Public License
 #	along with XDHq. If not, see <http://www.gnu.org/licenses/>.
 
-name = xdhqjre
+name = xdhqznd
 
 
 # Epeios general debugging features
@@ -37,10 +37,10 @@ mods += que rgstry sdr stkbse stkbch
 mods += stkcrt stkctn str strng stsfsm 
 mods += tagsbs tht thtsub tol txf 
 mods += tys uys utf xml xpp 
-mods += xtf llio dlbrry n4all n4jre 
-mods += plgn plgncore sck csdbns csdcmn 
+mods += xtf llio dlbrry n4all n4znd 
+mods += plgn plgncore 
 mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
-mods += scln4a scljre 
+mods += scln4a sclznd 
 mods += prtcl server tree 
 mods += registry treep xdhp 
 
@@ -63,9 +63,9 @@ CXXFLAGS += -O
 
 ###############################
 	
-# Required for JRE Component.
+copt += -D__STDC_LIMIT_MACROS
 
-copt += -DQ_JRE
+copt += -DZEND_DEBUG=0
 
 win=win
 win32=win32
@@ -390,11 +390,6 @@ endif
 #############################
 		
 all: $(binary)
-ifdef EPEIOS_SRC
-	javac *.java
-else
-	javac src/*.java -d .
-endif
 	rm -rf *.o
 ifeq ("$(target)","$(Android)")
 	rm -rf *.d

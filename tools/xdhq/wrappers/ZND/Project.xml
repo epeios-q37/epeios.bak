@@ -3,27 +3,24 @@
  <xpp:bloc>
   <!-- User definitions -->
   <xpp:define name="Version">
-			<xpp:bloc>(Obsolete entry)</xpp:bloc>
-		</xpp:define>
+   <xpp:bloc>(Obsolete entry)</xpp:bloc>
+  </xpp:define>
   <xpp:set name="Credits" value="Epeios"/>
-  <xpp:set name="Type" value="JREComponent"/>
+  <xpp:set name="Type" value="ZNDComponent"/>
   <xpp:define name="CopyrightYears">
    <xpp:bloc>2007-2017</xpp:bloc>
   </xpp:define>
  </xpp:bloc>
  <xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
  <About>
-  <Program>xdhqjre</Program>
+  <Program>xdhqznd</Program>
   <Software>XDHq</Software>
  </About>
  <Modules>
   <Modules Group="Epeios" Path="h:/hg/epeios/stable/">
    <Modules Group="Core">
     <xpp:expand select="Core"/>
-				<Module>sck</Module>
-				<Module>csdbns</Module>
-				<Module>csdcmn</Module>
-			</Modules>
+   </Modules>
    <Modules Group="SCL">
     <xpp:expand select="SCL"/>
    </Modules>
@@ -33,32 +30,19 @@
 			<Module>server</Module>
 			<Module>tree</Module>
 		</Modules>
-  <Module>registry</Module>
+		<Module>registry</Module>
 		<Module>treep</Module>
 		<Module>xdhp</Module>
 	</Modules>
-	<Files>
-		<Files Group="Blank">
-			<File Path="../../examples/JRE/blank/">Main.java</File>
-			<Files Path="../../examples/common/blank/">
-				<File>head.html</File>
-				<File>Main.xsl</File>
-			</Files>
-		</Files>
-	</Files>
 	<SourceDirs>
 		<SourceDir>..</SourceDir>
 		<SourceDir>../..</SourceDir>
 	</SourceDirs>
- <Files>
-  <!-- NOTA : '*.java' files will automatically be packed as such. -->
-  <!--File Pack="No">XDHq.java</File-->
-		<File Pack="No">DOM.java</File>
-		<File Pack="No">Event.java</File>
-		<File Pack="No">Test.java</File>
-		<File Pack="No">Tree.java</File>
-	</Files>
- <RTW>
-  <Dir>xdhq-java</Dir>
+	<Files>
+  <!-- NOTA : '*.php' files will automatically be packed as such. -->
+  <!--File Pack="No">XDHq.php</File-->
+ </Files>
+ <RTW Description="PHP extension template" Keywords="template">
+  <Dir>xdhq-php</Dir>
  </RTW>
 </Project>

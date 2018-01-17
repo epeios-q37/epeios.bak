@@ -185,7 +185,7 @@ namespace {
 	class sLauncher_
 	: public cLauncher_ {
 	protected:
-		virtual void N4ALLLaunch(
+		virtual void N4ALLCall(
 			void *Function,
 			n4all::cCaller &RawCaller ) override
 		{

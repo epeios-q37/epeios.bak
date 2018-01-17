@@ -41,7 +41,7 @@ namespace wrapper {
 		{
 			return rLauncher_::Init( ComponentFilename, dlbrry::nExtOnly, Rack, &Shared, qRP );
 		}
-		void Launch( const v8::FunctionCallbackInfo<v8::Value>& Info );
+		void Call( const v8::FunctionCallbackInfo<v8::Value>& Info );
 	};
 }
 

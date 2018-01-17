@@ -19,6 +19,8 @@
 
 #include "treep.h"
 
+#include "tree.h"
+
 #include "txf.h"
 #include "xml.h"
 #include "flx.h"
@@ -26,60 +28,20 @@
 using namespace treep;
 
 namespace {
-	typedef xml::wWriter rWriter_;
-
 	struct rRack_
-	: public rWriter_
+	: public tree::rRack
 	{
-	private:
-		flx::rStringTOFlow Flow_;
-		str::wString XML_;
 	public:
-		void reset( bso::sBool P = true )
+		void Init( void )
 		{
-			rWriter_::reset( P );
-			tol::reset( P, XML_, Flow_ );
-		}
-		qCDTOR( rRack_ );
-		void Init( const str::dString &Background )
-		{
-			tol::bDateAndTime Buffer;
-			XML_.Init();
-			Flow_.Init( XML_ );
-			rWriter_::Init( Flow_, xml::lCompact, xml::e_Default );
-
-			PushTag( "XDHTML" );
-			PutAttribute( "Background", Background );
-			PutAttribute( "Generator", sclmisc::SCLMISCTargetName );
-			PutAttribute( "TimeStamp", tol::DateAndTime( Buffer ) );
-			PutAttribute( "OS", cpe::GetOSDigest() );
-		}
-		const str::dString &GetXML( str::dString &XML )
-		{
-			rWriter_::reset();
-			Flow_.reset();
-			XML = XML_;
-			XML_.reset();
-			
-			return XML;
+			tree::rRack::Init( sclmisc::SCLMISCTargetName );
 		}
 	};
 }
 
 SCLJRE_F( treep::New )
 {
-	scljre::sJObject Return = NULL;
-qRH;
-	str::wString Background;
-qRB;
-	Background.Init();
-	Caller.Get( Background );
-
-	Return = scljre::CreateUO<rRack_>( Background );
-qRR;
-qRT;
-qRE;
-	return Return;
+	return scljre::CreateUO<rRack_>();
 }
 
 SCLJRE_F( treep::Delete )

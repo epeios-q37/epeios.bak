@@ -35,7 +35,7 @@ namespace {
 	csdbns::rListener Listener_;
 }
 
-SCLJRE_F( xdhp::Listen )
+SCLZND_F( xdhp::Listen )
 {
 qRH;
 	str::wString Arguments;
@@ -49,17 +49,15 @@ qRB;
 qRR;
 qRT;
 qRE;
-	return scljre::Null();
 }
 
 namespace {
 	struct rRack_ {
 		sck::rRWFlow Flow;
 		str::wString Language;
-		scljre::rObject Object;
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, Flow, Language, Object );
+			tol::reset( P, Flow, Language );
 		}
 		qCDTOR( rRack_ );
 		void Init( sck::sSocket Socket )
@@ -71,43 +69,60 @@ namespace {
 			server::Handshake( Flow, Language );
 			// Object is initialized specifically in the 'Set()' method.
 		}
-		void Set( scljre::cObject *Object )
-		{
-			this->Object.Init( Object );
-		}
 	};
 }
 
-SCLJRE_F( xdhp::New )
+SCLZND_F( xdhp::New )
 {
-	scljre::sJObject Object = NULL;
 qRH;
 	const char *IP = NULL;
 	sck::sSocket Socket = sck::Undefined;
+	rRack_ *Rack = NULL;
 qRB;
 	Socket = Listener_.GetConnection( IP );
 
-	Object = scljre::CreateUO<rRack_>( Socket );
+	if ( (Rack = new rRack_) == NULL )
+		qRAlc();
+
+	Rack->Init( Socket );
+
+	Caller.SetReturnValue( Rack );
 qRR;
 	if ( Socket != sck::Undefined )
 		sck::Close( Socket );
+
+	if ( Rack != NULL )
+		delete Rack;
 qRT;
 qRE;
-	return Object;	
 }
 
-SCLJRE_F( xdhp::Delete )
+SCLZND_F( xdhp::Delete )
 {
-	return scljre::DeleteUO<rRack_>( Caller );
+	bso::sS64 Long = 0;
+
+	Caller.Get( Long );
+
+	if ( Long == 0 )
+		qRGnr();
+
+	delete (rRack_ * )Long;
 }
 
 namespace {
-	rRack_ &GetRack_( scljre::sCaller &Caller )
+	rRack_ &GetRack_( sclznd::sCaller &Caller )
 	{
-		return scljre::GetUO<rRack_>( Caller );
+		bso::sS64 Long = 0;
+
+		Caller.Get( Long );
+
+		if ( Long == 0 )
+			qRGnr();
+
+		return *(rRack_ *)Long;
 	}
 
-	flw::sRWFlow &GetFlow_( scljre::sCaller &Caller )
+	flw::sRWFlow &GetFlow_( sclznd::sCaller &Caller )
 	{
 		return GetRack_( Caller ).Flow;
 	}
@@ -115,17 +130,6 @@ namespace {
 
 #define RACK	rRack_ &Rack = GetRack_( Caller )
 #define FLOW	flw::sRWFlow &Flow = GetFlow_( Caller )
-
-SCLJRE_F( xdhp::Set )
-{
-	RACK;
-
-	Rack.Set( Caller.Get() );
-
-	Rack.Object.CallVoidMethod( "test", "()V" );
-
-	return scljre::Null();
-}
 
 namespace {
 	namespace {
@@ -183,7 +187,7 @@ namespace {
 	}
 }
 
-SCLJRE_F( xdhp::GetAction )
+SCLZND_F( xdhp::GetAction )
 {
 	FLOW;
 	GetAction_( Flow, Caller );
@@ -191,7 +195,7 @@ SCLJRE_F( xdhp::GetAction )
 	return scljre::Null();
 }
 
-SCLJRE_F( xdhp::Alert )
+SCLZND_F( xdhp::Alert )
 {
 qRH;
 	str::wString Message;
@@ -208,7 +212,7 @@ qRE;
 return scljre::Null();
 }
 
-SCLJRE_F( xdhp::Confirm )
+SCLZND_F( xdhp::Confirm )
 {
 	bso::sBool Return = false;
 qRH;
@@ -268,7 +272,7 @@ namespace {
 	}
 }
 
-SCLJRE_F( xdhp::SetLayout )
+SCLZND_F( xdhp::SetLayout )
 {
 	RACK;
 
@@ -277,7 +281,7 @@ SCLJRE_F( xdhp::SetLayout )
 	return scljre::Null();
 }
 
-SCLJRE_F( xdhp::GetContents )
+SCLZND_F( xdhp::GetContents )
 {
 	scljre::sJObject Buffer = NULL;
 qRH;
@@ -298,7 +302,7 @@ qRE;
 	return Buffer;
 }
 
-SCLJRE_F( xdhp::SetContents )
+SCLZND_F( xdhp::SetContents )
 {
 qRH;
 	str::wStrings Ids, Contents;
@@ -315,7 +319,7 @@ qRE;
 	return scljre::Null();
 }
 
-SCLJRE_F( xdhp::DressWidgets )
+SCLZND_F( xdhp::DressWidgets )
 {
 qRH;
 	str::wString Id;
@@ -356,17 +360,17 @@ namespace {
 	}
 }
 
-SCLJRE_F( xdhp::AddClasses )
+SCLZND_F( xdhp::AddClasses )
 {
 	return HandleClasses_( Caller, server::classes::Add );
 }
 
-SCLJRE_F( xdhp::RemoveClasses )
+SCLZND_F( xdhp::RemoveClasses )
 {
 	return HandleClasses_( Caller, server::classes::Remove );
 }
 
-SCLJRE_F( xdhp::ToggleClasses )
+SCLZND_F( xdhp::ToggleClasses )
 {
 	return HandleClasses_( Caller, server::classes::Toggle );
 }
@@ -394,12 +398,12 @@ namespace {
 	}
 }
 
-SCLJRE_F( xdhp::EnableElements )
+SCLZND_F( xdhp::EnableElements )
 {
 	return HandleElements_( Caller, server::elements::Enable );
 }
 
-SCLJRE_F( xdhp::DisableElements )
+SCLZND_F( xdhp::DisableElements )
 {
 	return HandleElements_( Caller, server::elements::Disable );
 }
@@ -457,22 +461,22 @@ namespace {
 
 }
 
-SCLJRE_F( xdhp::GetAttribute )
+SCLZND_F( xdhp::GetAttribute )
 {
 	return Get_( Caller, server::attribute::Get );
 }
 
-SCLJRE_F( xdhp::SetAttribute )
+SCLZND_F( xdhp::SetAttribute )
 {
 	return Set_( Caller, server::attribute::Set );
 }
 
-SCLJRE_F( xdhp::GetProperty )
+SCLZND_F( xdhp::GetProperty )
 {
 	return Get_( Caller, server::property::Get );
 }
 
-SCLJRE_F( xdhp::SetProperty )
+SCLZND_F( xdhp::SetProperty )
 {
 	return Set_( Caller, server::property::Set );
 }

@@ -77,7 +77,9 @@ void main::ThrowGenericError( void )
 	qRGnr();
 }
 
-void main::Init( void )
+void main::Init(
+	const char *RawLocation,
+	size_t Length )
 {
 qRFH;
 	str::wString Location;
@@ -86,7 +88,7 @@ qRFB;
 	Rack_.Init( Error_, SCLError_, cio::GetSet( cio::t_Default ), Locale_ );
 
 	Location.Init();
-	// TODO : Find a way to fill 'Location' with the path of the binary.
+	Location.Append( RawLocation, Length );
 
 
 	sclmisc::Initialize( Rack_, Location );
@@ -404,7 +406,7 @@ namespace {
 
 }
 
-void main::Launch(
+void main::Call(
 	zend_long Launcher,
 	zend_long Index,
 	int num_varargs,
@@ -420,7 +422,7 @@ qRFB;
 #else
 	Caller.Init( NULL, num_varargs, varargs, return_value );	// 'tsrm_ls' no more available in 'ZTS' !?
 #endif
-	GetLauncher_( Launcher ).Launch( Index, Caller );
+	GetLauncher_( Launcher ).Call( Index, Caller );
 qRFR;
 qRFT;
 qRFE( ERRFinal_() );

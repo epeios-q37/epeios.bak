@@ -80,17 +80,17 @@ namespace n4all {
 	// Destroyed by launching by 'delete', so must be created with 'new' !
 	class cLauncher {
 	protected:
-		virtual void N4ALLLaunch(
+		virtual void N4ALLCall(
 			void *Function,
 			cCaller &Caller ) = 0;
 		virtual void N4ALLInfo( str::dString &Info ) = 0;
 	public:
 		qCALLBACK( Launcher );
-		void Launch(
+		void Call(
 			void *Function,
 			cCaller &Caller )
 		{
-			return N4ALLLaunch( Function, Caller );
+			return N4ALLCall( Function, Caller );
 		}
 		void Info( str::dString &Info )
 		{

@@ -536,7 +536,7 @@ qRE
 }
 
 
-jobject wrapper::Launch(
+jobject wrapper::Call(
 	rLauncher &Launcher,
 	jint Index,
 	jobjectArray &Args )
@@ -547,7 +547,7 @@ qRH
 qRB
 	Caller.Init( Args );
 
-	Launcher.Launch( Index, Caller );
+	Launcher.Call( Index, Caller );
 
 //	n4allw::GetLauncher().Launch( n4allw::GetFunction( Index ), Caller );
 

@@ -16,9 +16,9 @@ For more information, see [http://q37.info/tools/zndq/](http://q37.info/tools/zn
 ## *POSIX*
 
 For *POSIX* systems, you have to use the standard procedure for *PHP* extensions, namely :
-- `phpize`,
-- `./configure`,
-- `make`.
+ - `phpize`,
+ - `./configure`,
+ - `make`.
 
 To generate the right `config.m4` file, launch `DVLGenM4`.
 

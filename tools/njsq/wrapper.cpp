@@ -620,7 +620,7 @@ namespace {
 	};
 }
 
-void wrapper::rLauncher::Launch( const v8::FunctionCallbackInfo<v8::Value>& Info )
+void wrapper::rLauncher::Call( const v8::FunctionCallbackInfo<v8::Value>& Info )
 {
 qRH
 	sCaller_ Caller;
@@ -635,7 +635,7 @@ qRB
 
 	Caller.Init( Info );
 
-	rLauncher_::Launch( Index->Uint32Value(), Caller );
+	rLauncher_::Call( Index->Uint32Value(), Caller );
 
 //	n4allw::GetLauncher().Launch( n4allw::GetFunction( Index->Uint32Value() ), Caller );
 

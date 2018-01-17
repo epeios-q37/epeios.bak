@@ -18,11 +18,40 @@
 	along with ZNDq.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-zndq_Init();
+if (getenv("EPEIOS_SRC") === false)
+	$zndq_location = realpath(dirname(__FILE__)) . '/';
+else {
+	switch (strtoupper(substr(php_uname('s') , 0, 3))) {
+		case "WIN":
+			$zndq_location = "h:\\bin\\";
+		break;
+		case "LIN":
+			$zndq_location = "/home/csimon/bin/";
+		break;
+		case "DAR":
+			$zndq_location = "/Users/csimon/bin/";
+		break;
+		default:
+			echo "Unknown OS !!!\n";
+		break;
+	}
+}
+
+zndq_init( $zndq_location );
 
 class ZNDq {
+	static public function register( $extension ) {
+		return zndq_register(str_replace(' ', '\ ', str_replace('\\', '/', $zndq_location)) . $extension . "znd");	
+	}
 	static public function wrapperInfo() {
 		return zndq_wrapper_info();
+	}
+	static protected function componentInfo( $launcher ) {
+		return zndq_component_info( $launcher );
+	}
+	static protected function call( $launcher, $index, ...$param )
+	{
+		return zndq_call( $launcher, $index, ...$param );
 	}
 }
 ?>

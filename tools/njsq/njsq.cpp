@@ -279,11 +279,11 @@ namespace {
 
 	}
 
-	void Wrapper_( const v8::FunctionCallbackInfo<v8::Value>& Args )
+	void Call_( const v8::FunctionCallbackInfo<v8::Value>& Args )
 	{
 	qRFH
 	qRFB
-		GetLauncher_( Args ).Launch( Args );
+		GetLauncher_( Args ).Call( Args );
 	qRFR
 	qRFT
 	qRFE( ErrFinal_() )
@@ -302,7 +302,7 @@ qRFB
 	NODE_SET_METHOD( Exports, "_wrapperInfo", GetWrapperInfo_ );
 	NODE_SET_METHOD( Exports, "_componentInfo", GetComponentInfo_ );
 	NODE_SET_METHOD( Exports, "_register", Register_ );
-	NODE_SET_METHOD( Exports, "_wrapper", Wrapper_ );
+	NODE_SET_METHOD( Exports, "_call", Call_ );
 
 	cio::Initialize( cio::GetConsoleSet() );
 

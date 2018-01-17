@@ -32,7 +32,12 @@ and there are important differences with PHP 7. See http://wiki.php.net/phpng-up
 
 PHP_FUNCTION( zndq_init )
 {
-	main::Init();
+	zend_string *String;
+
+	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "S", &String ) != SUCCESS )
+		main::ThrowGenericError();
+
+	main::Init( String->val, String->len );
 }
 
 PHP_FUNCTION( zndq_wrapper_info )
@@ -61,7 +66,7 @@ PHP_FUNCTION( zndq_register )
 	RETURN_LONG( main::Register( String->val, String->len ) )
 }
 
-PHP_FUNCTION( zndq_wrapper )
+PHP_FUNCTION( zndq_call )
 {
 	zend_long Launcher = 0, Index = 0;
 	int num_varargs;
@@ -70,7 +75,7 @@ PHP_FUNCTION( zndq_wrapper )
 	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "ll*", &Launcher, &Index, &varargs, &num_varargs ) != SUCCESS )
 		main::ThrowGenericError();
 
-	main::Launch( Launcher, Index, num_varargs, varargs, return_value TSRMLS_CC );
+	main::Call( Launcher, Index, num_varargs, varargs, return_value TSRMLS_CC );
 }
 
 
@@ -82,7 +87,7 @@ static zend_function_entry zndq_functions[] = {
 	PHP_FE( zndq_register, NULL )
 	PHP_FE( zndq_wrapper_info, NULL )
 	PHP_FE( zndq_component_info, NULL )
-	PHP_FE( zndq_wrapper, NULL )
+	PHP_FE( zndq_call, NULL )
 {
 	NULL, NULL, NULL
 }
