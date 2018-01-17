@@ -49,6 +49,7 @@ namespace n4znd {
 		tStream,
 		tLong,
 		tBool,
+		tStrings,
 		t_amount,
 		t_Undefined
 	};

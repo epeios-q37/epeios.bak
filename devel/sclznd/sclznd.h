@@ -74,6 +74,10 @@ namespace sclznd {
 		{
 			C_().GetArgument( Index_++, n4znd::tBool, &Bool );
 		}
+		void Get( str::dStrings &Strings )
+		{
+			C_().GetArgument( Index_++, n4znd::tStrings, &Strings );
+		}
 		void SetReturnValue( const str::dString &String )
 		{
 			C_().SetReturnValue( n4znd::tString, &String );
@@ -85,6 +89,10 @@ namespace sclznd {
 		void SetReturnValue( bso::sBool Bool )
 		{
 			C_().SetReturnValue( n4znd::tBool, &Bool );
+		}
+		void SetReturnValue( const str::dStrings &Strings )
+		{
+			C_().SetReturnValue( n4znd::tStrings, &Strings );
 		}
 	};
 

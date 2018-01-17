@@ -1,5 +1,13 @@
 # *Epeios* changelog
 
+2018-01-17:
+- *common*:
+  - **$**: handling array of strings,
+- N4ZND:
+  - **$**,
+- SCLZND:
+  - **$**,
+
 2018-01-16:
 - *common*:
   - **$**: handling array of strings,

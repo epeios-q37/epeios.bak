@@ -18,49 +18,47 @@
 	along with eSketch.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-$zndq_affix = "esketch";
+function getZNDq() {
+	if (getenv("EPEIOS_SRC") === false)
+		$zndq_path = realpath(dirname(__FILE__)) . '/';
+	else {
+		switch (strtoupper(substr(php_uname('s') , 0, 3))) {
+			case "WIN":
+				$epeios_path = "h:\\hg\\epeios\\";
+			break;
+			case "LIN":
+				$epeios_path = "/home/csimon/hg/epeios/";
+			break;
+			case "DAR":
+				$epeios_path = "/Users/csimon/hg/epeios/";
+			break;
+			default:
+				echo "Unknown OS !!!\n";
+			break;
+		}
 
-/***** Begin of generic part. ****/
-if (getenv("EPEIOS_SRC") === false) $zndq_path = realpath(dirname(__FILE__)) . '/';
-else {
-	switch (strtoupper(substr(php_uname('s') , 0, 3))) {
-		case "WIN":
-			$zndq_path = "h:\\bin\\";
-		break;
-		case "LIN":
-			$zndq_path = "/home/csimon/bin/";
-		break;
-		case "DAR":
-			$zndq_path = "/Users/csimon/bin/";
-		break;
-		default:
-			echo "Unknown OS !!!\n";
-		break;
+		$zndq_path = $epeios_path . "tools/zndq/";
 	}
+
+	require( $zndq_path . "ZNDq.php");
 }
 
-zndq_init();
-
-class ZNDq {
-	static public $launcher = 0;
-	static public function wrapperInfo() {
-		return zndq_wrapper_info();
-	}
-	static public function componentInfo() {
-		return zndq_component_info( ZNDq::$launcher );
-	}
-	static protected function register($arguments) {
-		return zndq_register($arguments);
-	}
-}
-
-ZNDq::$launcher = zndq_register(str_replace(' ', '\ ', str_replace('\\', '/', $zndq_path)) . $zndq_affix . "znd");
-
-/**** End of generic part. ****/
+getZNDq();
 
 class eSketch extends ZNDq {
+	static private $launcher;
+	static function init() {
+		self::$launcher = ZNDq::register( "esketch" );
+	}
+	static public function info() {
+		return ZNDq::componentInfo( self::$launcher );
+	}
 	static public function returnArgument($argument) {
-		return ZNDq_wrapper( ZNDq::$launcher, 0, $argument);
+		return ZNDq::call(self::$launcher, 0, $argument);
+	}
+	static public function TestStrings( array $array ) {
+		return ZNDq::call(self::$launcher, 1, $array );
 	}
 }
-?>
+
+eSketch::init();

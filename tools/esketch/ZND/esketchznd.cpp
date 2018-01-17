@@ -49,11 +49,35 @@ namespace {
 	qRT
 	qRE
 	}
+
+	SCLZND_F( TestStrings_ )
+	{
+	qRH;
+		str::wStrings Strings;
+		sdr::sRow Row = qNIL;
+	qRB;
+		Strings.Init();
+
+		Caller.Get( Strings );
+
+		Row = Strings.First();
+
+		while ( Row != qNIL ) {
+			str::ToUpper( Strings( Row ) );
+
+			Row = Strings.Next( Row );
+		}
+
+		Caller.SetReturnValue( Strings );
+	qRR;
+	qRT;
+	qRE;
+	}
 }
 
 void sclznd::SCLZNDRegister( sclznd::sRegistrar &Registrar )
 {
-	Registrar.Register( ReturnArgument_ );
+	Registrar.Register( ReturnArgument_, TestStrings_ );
 }
 
 const char *sclmisc::SCLMISCTargetName = NAME_LC;

@@ -179,8 +179,7 @@ qRFH;
 qRFB;
 	Info.Init();
 
-	if ( GetLauncher_( Launcher ).GetInfo( Info ) )
-		sclmisc::GetBaseTranslation( "NoRegisteredComponent", Info );
+	GetLauncher_( Launcher ).GetInfo( Info );
 
 	if ( Info.Amount() >= sizeof( Buffer ) )
 		qRLmt();
@@ -313,6 +312,38 @@ namespace {
 			qRGnr();
 	}
 
+	void Get_(
+		zend_array *Array,
+		str::dStrings &Strings )
+	{
+	qRH;
+		uint32_t Index = 0;
+		str::wString String;
+	qRB;
+		while ( Index < Array->nNumOfElements ) {
+			String.Init();
+
+			Get_( Array->arData[Index].val, String );
+
+			Strings.Append( String );
+
+			Index++;
+		}
+	qRR;
+	qRT;
+	qRE;
+	}
+
+	void Get_(
+		zval &Val,
+		str::dStrings &Strings )
+	{
+		if ( Z_TYPE( Val ) != IS_ARRAY )
+			qRGnr();
+
+		Get_( Z_ARRVAL( Val ), Strings );
+	}
+
 	template <typename type> inline void Get_(
 		zval *varargs,
 		int Index,
@@ -329,6 +360,25 @@ namespace {
 		int num_varargs_;
 		zval *varargs_;
 		zval *return_value_;
+		void SetReturnValue_( const str::dStrings &Strings )
+		{
+		qRH;
+			sdr::sRow Row = qNIL;
+			qCBUFFERr Buffer;
+		qRB;
+			array_init( return_value_ );
+
+			Row = Strings.First();
+
+			while ( Row != qNIL ) {
+				add_index_stringl( return_value_, *Row, Strings( Row ).Convert( Buffer ), Strings( Row ).Amount() );
+
+				Row = Strings.Next( Row );
+			}
+		qRR;
+		qRT;
+		qRE;
+		}
 	protected:
 		virtual void N4ALLGetArgument(
 			bso::sU8 Index,
@@ -351,6 +401,9 @@ namespace {
 			case n4znd::tBool:
 				Get_<bso::sBool>( varargs_, Index, Value );
 				break;
+			case n4znd::tStrings:
+				Get_<str::dStrings>( varargs_, Index, Value );
+				break;
 			default:
 				qRGnr();
 				break;
@@ -372,6 +425,9 @@ namespace {
 				break;
 			case n4znd::tBool:
 				ZVAL_BOOL( return_value_, *( bso::sBool * )Value );
+				break;
+			case n4znd::tStrings:
+				SetReturnValue_( *(str::dStrings *)Value );
 				break;
 			default:
 				qRGnr();

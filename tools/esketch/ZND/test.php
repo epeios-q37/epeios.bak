@@ -19,10 +19,11 @@
 	along with eSketch.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 require "eSketch.php";
 
-echo ZNDq::componentInfo() . "\n" . ZNDq::wrapperInfo() . "\n";
+echo eSketch::info() . "\n" . eSketch::wrapperInfo() . "\n";
 
-echo eSketch::returnArgument( "Argument from the PHP file !") . "\n";
+echo eSketch::returnArgument( "Argument from the PHP file !!!") . "\n";
+
+print_r( eSketch::TestStrings( array( "Hello ", "the ", "World", "!!!"  )) );
 ?>
