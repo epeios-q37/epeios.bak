@@ -21,7 +21,7 @@
 
 require "eSketch.php";
 
-echo eSketch::info() . "\n" . eSketch::wrapperInfo() . "\n";
+echo eSketch::componentInfo() . "\n" . eSketch::wrapperInfo() . "\n";
 
 echo eSketch::returnArgument( "Argument from the PHP file !!!") . "\n";
 

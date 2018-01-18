@@ -20,6 +20,8 @@
 #include "xdhqznd.h"
 
 #include "registry.h"
+#include "treep.h"
+#include "xdhp.h"
 
 #include "iof.h"
 #include "xpp.h"
@@ -53,7 +55,12 @@ namespace {
 
 void sclznd::SCLZNDRegister( sclznd::sRegistrar &Registrar )
 {
-	Registrar.Register( ReturnArgument_ );
+	Registrar.Register( ReturnArgument_ );	// 0.
+	Registrar.Register( treep::New, treep::Delete, treep::PushTag, treep::PopTag, treep::PutValue, treep::PutAttribute );	// 1 - 6.
+	Registrar.Register( xdhp::Listen, xdhp::New, xdhp::Delete, xdhp::GetAction );	// 7 - 10.
+	Registrar.Register( xdhp::Alert, xdhp::Confirm, xdhp::SetLayout, xdhp::GetContents, xdhp::SetContents, xdhp::DressWidgets ); // 11 - 16.
+	Registrar.Register( xdhp::AddClasses, xdhp::RemoveClasses, xdhp::ToggleClasses, xdhp::EnableElements, xdhp::DisableElements );	// 17 - 21.
+	Registrar.Register( xdhp::GetAttribute, xdhp::SetAttribute, xdhp::GetProperty, xdhp::SetProperty );	// 22 - 25.
 }
 
 const char *sclmisc::SCLMISCTargetName = NAME_LC;

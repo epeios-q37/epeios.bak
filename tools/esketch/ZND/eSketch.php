@@ -45,20 +45,29 @@ function getZNDq() {
 
 getZNDq();
 
-class eSketch extends ZNDq {
+class eSketchWrapper extends ZNDq {
 	static private $launcher;
 	static function init() {
-		self::$launcher = ZNDq::register( "esketch" );
+		self::$launcher = parent::register_( "esketch" );
 	}
-	static public function info() {
-		return ZNDq::componentInfo( self::$launcher );
+	static public function componentInfo() {
+		return parent::componentInfo_( self::$launcher );
 	}
-	static public function returnArgument($argument) {
-		return ZNDq::call(self::$launcher, 0, $argument);
-	}
-	static public function TestStrings( array $array ) {
-		return ZNDq::call(self::$launcher, 1, $array );
+	static protected function call( $id, ...$args ) {
+		return parent::call_( self::$launcher, $id, ...$args );
 	}
 }
 
-eSketch::init();
+eSketchWrapper::init();
+
+class eSketch extends eSketchWrapper {
+	static public function returnArgument($argument) {
+		return parent::call(0, $argument);
+	}
+	static public function TestStrings( array $array ) {
+		return parent::call(1, $array );
+	}
+}
+
+?>
+

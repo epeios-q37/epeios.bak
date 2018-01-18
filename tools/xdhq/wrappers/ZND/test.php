@@ -21,7 +21,7 @@
 
 require "XDHq.php";
 
-echo XDHq::info() . "\n" . XDHq::wrapperInfo() . "\n";
+echo XDHq::componentInfo() . "\n" . XDHq::wrapperInfo() . "\n";
 
 echo XDHq::returnArgument( "Argument from the PHP file !!!") . "\n";
 ?>

@@ -39,17 +39,18 @@ else {
 
 zndq_init( $zndq_location );
 
+// Some method are suffixed with '_', so we can use the name without final '_' in subclasses.
 class ZNDq {
-	static public function register( $extension ) {
+	static protected function register_( $extension ) {
 		return zndq_register(str_replace(' ', '\ ', str_replace('\\', '/', $zndq_location)) . $extension . "znd");	
 	}
 	static public function wrapperInfo() {
 		return zndq_wrapper_info();
 	}
-	static protected function componentInfo( $launcher ) {
+	static protected function componentInfo_( $launcher ) {
 		return zndq_component_info( $launcher );
 	}
-	static protected function call( $launcher, $index, ...$param )
+	static protected function call_( $launcher, $index, ...$param )
 	{
 		return zndq_call( $launcher, $index, ...$param );
 	}
