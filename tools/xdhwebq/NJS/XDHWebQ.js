@@ -124,8 +124,8 @@ function serveQuery(query, res)
 
 		put(query, keys, values);
 
-		new StringStream(njsq._wrapper(xdhwebq, 2, keys, values)).pipe(res);
-//		njsq._wrapper(xdhwebq, 3, keys, values, (result) => new StringStream(result ).pipe(res));
+		new StringStream(njsq._call(xdhwebq, 2, keys, values)).pipe(res);
+		//		njsq._call(xdhwebq, 3, keys, values, (result) => new StringStream(result ).pipe(res));
 	} else {
 		new StringStream(prolog()).pipe(res);
 	}
@@ -214,16 +214,16 @@ function launch( service ) {
 
 	http.createServer(function (req, res) {
 		serve(req, res);
-	}).listen(service).on( 'error', (error) => console.log( "http request served by other program" ) );
+	}).listen(service).on( 'error', (error) => console.log( "http requests served by other program" ) );
 
 }
 
 if ((typeof firstAction === "string") && (firstAction != "")) {
-	njsq._wrapper(xdhwebq, 1, require(xdhqxdhId).fileName);
+	njsq._call(xdhwebq, 1, require(xdhqxdhId).fileName);
 	launch(process.argv[4]);
 }
 
-module.exports.returnArgument = (text) => njsq._wrapper(xdhwebq, 0, text);
+module.exports.returnArgument = (text) => njsq._call(xdhwebq, 0, text);
 module.exports.serve = serve;
 module.exports.launch = launch;
 module.exports.fileName = path.normalize(path.join(selfPath, "XDHWebQ.js" ));
