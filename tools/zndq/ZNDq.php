@@ -18,6 +18,8 @@
 	along with ZNDq.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+global $zndq_location;
+
 if (getenv("EPEIOS_SRC") === false)
 	$zndq_location = realpath(dirname(__FILE__)) . '/';
 else {
@@ -42,7 +44,8 @@ zndq_init( $zndq_location );
 // Some method are suffixed with '_', so we can use the name without final '_' in subclasses.
 class ZNDq {
 	static protected function register_( $extension ) {
-		return zndq_register(str_replace(' ', '\ ', str_replace('\\', '/', $zndq_location)) . $extension . "znd");	
+		global $zndq_location;
+		return zndq_register(str_replace(' ', '\\ ', str_replace('\\', '/', $zndq_location)) . $extension . "znd");	
 	}
 	static public function wrapperInfo() {
 		return zndq_wrapper_info();

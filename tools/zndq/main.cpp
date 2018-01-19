@@ -90,6 +90,7 @@ qRFB;
 	Location.Init();
 	Location.Append( RawLocation, Length );
 
+//	cio::COut << ">>>>>" << txf::pad << Location << txf::nl << txf::commit;
 
 	sclmisc::Initialize( Rack_, Location );
 qRFR;
