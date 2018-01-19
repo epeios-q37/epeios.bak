@@ -24,7 +24,10 @@
 				<Module>csdbns</Module>
 				<Module>csdcmn</Module>
 			</Modules>
-   <Modules Group="SCL">
+			<Modules Group="CSD">
+				<Module>csdmxs</Module>
+			</Modules>
+			<Modules Group="SCL">
     <xpp:expand select="SCL"/>
    </Modules>
   </Modules>
@@ -44,7 +47,24 @@
 	<Files>
   <!-- NOTA : '*.php' files will automatically be packed as such. -->
   <!--File Pack="No">XDHq.php</File-->
- </Files>
+		<Files Group="Blank">
+			<File Path="../../examples/ZND/blank/">main.php</File>
+			<Files Path="../../examples/common/blank/">
+				<File>head.html</File>
+				<File>Main.xsl</File>
+			</Files>
+		</Files>
+		<Files Group="Notes">
+			<File Path="../../examples/ZND/notes/">main.php</File>
+			<Files Path="../../examples/common/notes/">
+				<File>head.html</File>
+				<File>Main.xsl</File>
+				<File>Notes.xsl</File>
+				<File>Note.xsl</File>
+			</Files>
+		</Files>
+
+	</Files>
  <RTW Description="PHP extension template" Keywords="template">
   <Dir>xdhq-php</Dir>
  </RTW>

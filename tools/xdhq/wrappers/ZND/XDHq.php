@@ -72,10 +72,10 @@ class XDHq extends XDHqWrapper {
 class XDHQTree extends XDHqWrapper {
 	private $core;
 	function __construct() {
-		$core = parent::call( 1 );
+		$this->core = parent::_call( 1 );
 	}
 	private function call( $id, ...$args ) {
-		return parent::_call( $id, self::$core, ...$args );
+		return parent::_call( $id, $this->core, ...$args );
 	}
 	function __destruct() {
 		self::call( 2 );
@@ -94,30 +94,31 @@ class XDHQTree extends XDHqWrapper {
 		self::call( 6, $name, $value );
 	}
 	function getCore() {
-		return self::$core;
+		return $this->core;
 	}
 }
 
 class XDHqDOM extends XDHqWrapper {
 	private $core;
-	private function split( array $keysAndValues, array $keys, array $values ) {
+	private function split( array $keysAndValues, array &$keys, array &$values ) {
 		while ($item = current($keysAndValues)) {
-			$keys[] = key( $$keysAndValues );
-			$value[] = $item;
-			next($array);
+			$keys[] = key( $keysAndValues );
+			$values[] = $item;
+
+			next($keysAndValues);
 		}
 	}
 	function __construct() {
-		$core = parent::call( 8 );
+		$this->core = parent::_call( 8 );
 	}
 	private function call( $id, ...$args ) {
-		return parent::_call( $id, self::$core, ...$args );
+		return parent::_call( $id, $this->core, ...$args );
 	}
 	function __destruct() {
 		self::call( 9 );
 	}
 	function getAction( $id ) {
-		$return = parent::call( 10 );
+		$return = self::call( 10 );
 
 		$id = $return[0];
 
@@ -130,7 +131,7 @@ class XDHqDOM extends XDHqWrapper {
 		return self::call( 12, $message );
 	}
 	function setLayout( $id, XDHqTree $tree, string $xslFilename ) {
-		self::call( 13, $id, $tree.getCore(), $xslFilename );
+		self::call( 13, $id, $tree->getCore(), $xslFilename );
 	}
 	function getContents( array $ids ) {
 		return self::call( 14,$ids );
@@ -156,7 +157,10 @@ class XDHqDOM extends XDHqWrapper {
 		$ids = array();
 		$classes = array();
 
-		sel::split( $idsAndClasses, $ids, $classes );
+		self::split( $idsAndClasses, $ids, $classes );
+
+		print_r( $ids );
+		print_r( $classes );
 
 		self::call( $fid, $ids, $classes );
 	}
@@ -164,22 +168,22 @@ class XDHqDOM extends XDHqWrapper {
 		self::handleClasses( $fid, [ $id => $class ] );
 	}
 	function addClasses( array $idsAndClasses ) {
-		handleClasses( 17, $idsAndClasses );
+		self::handleClasses( 17, $idsAndClasses );
 	}
 	function addClass( string $id, string $class  ) {
-		handleClass( 17, $id, $class );
+		self::handleClass( 17, $id, $class );
 	}
 	function removeClasses( array $idsAndClasses ) {
-		handleClasses( 18, $idsAndClasses );
+		self::handleClasses( 18, $idsAndClasses );
 	}
 	function removeClass( string $id, string $class  ) {
-		handleClass( 18, $id, $class );
+		self::handleClass( 18, $id, $class );
 	}
 	function toggleClasses( array $idsAndClasses ) {
-		handleClasses( 19, $idsAndClasses );
+		self::handleClasses( 19, $idsAndClasses );
 	}
 	function toggleClass( string $id, string $class  ) {
-		handleClass( 19, $id, $class );
+		self::handleClass( 19, $id, $class );
 	}
 	function enableElements( array $ids ) {
 		self::call( 20, $ids );

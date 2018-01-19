@@ -63,12 +63,12 @@ function acSubmit(dom, id) {
 	);
 }
 
-function acShowInput(dom, id) {
-	dom.removeClass("Input", "hidden");
-}
-
 function acHideInput(dom, id) {
 	dom.addClass("Input", "hidden");
+}
+
+function acShowInput(dom, id) {
+	dom.removeClass("Input", "hidden");
 }
 
 function main() {

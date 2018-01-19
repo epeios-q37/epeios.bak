@@ -30,7 +30,6 @@ void *xdh_cmn::rProcessing::CSDSCBPreProcess(
 	rData *Data = NULL;
 qRH;
 	flw::sDressedRWFlow<> Flow;
-	str::wString Id, Action;
 qRB;
 	Data = new rData;
 

@@ -26,13 +26,208 @@
 
 #include "sclargmnt.h"
 
-#include "csdbns.h"
+#include "csdmns.h"
 #include "csdcmn.h"
+#include "mtk.h"
 
 using namespace xdhp;
 
 namespace {
-	csdbns::rListener Listener_;
+
+	class rComm_	// ...unication.
+	{
+	private:
+		mtx::rHandler Read_, Write_;
+		str::wString Language_;
+		fdr::rRWDriver *Driver_;
+	public:
+		void reset( bso::sBool P = true )
+		{
+			if ( P ) {
+				if ( Read_ != mtx::UndefinedHandler )
+					mtx::Delete( Read_ );
+
+				if ( Write_ != mtx::UndefinedHandler )
+					mtx::Delete( Write_ );
+			}
+
+			tol::reset( P, Language_, Driver_ );
+			Read_ = Write_ = mtx::UndefinedHandler;
+		}
+		qCDTOR( rComm_ );
+		void Init( const str::dString &Language )
+		{
+			reset();
+
+			Read_ = mtx::Create();
+			Write_ = mtx::Create();
+
+			mtx::Lock( Read_ );
+
+			Language_.Init( Language );
+			Driver_ = NULL;
+		}
+		qRODISCLOSEr( str::dString, Language );
+		void Write( fdr::rRWDriver *Driver )	// If 'Driver' == NULL, it only waits for dismissal.
+		{
+			mtx::Lock( Write_ );
+
+			if ( ( Driver_ != NULL ) && ( Driver != NULL ) )
+				qRGnr();
+
+			Driver_ = Driver;
+
+			if ( Driver == NULL )
+				mtx::Unlock( Write_ );
+			else
+				mtx::Unlock( Read_ );
+		}
+		fdr::rRWDriver *Read( void )
+		{
+			mtx::Lock( Read_ );
+
+			if ( Driver_ == NULL )
+				qRGnr();
+
+			return Driver_;
+		}
+		void Dismiss( void )
+		{
+			mtx::Unlock( Write_ );
+		}
+	};
+
+	class rConn_	// ...exion.
+	{
+	private:
+		mtx::rHandler Read_, Write_;
+		rComm_ *Comm_;
+	public:
+		void reset( bso::sBool P = true )
+		{
+			if ( P ) {
+				if ( Read_ != mtx::UndefinedHandler )
+					mtx::Delete( Read_ );
+
+				if ( Write_ != mtx::UndefinedHandler )
+					mtx::Delete( Write_ );
+			}
+
+			Read_ = Write_ = mtx::UndefinedHandler;
+			Comm_ = NULL;
+		}
+		qCDTOR( rConn_ );
+		void Init( void )
+		{
+			reset();
+
+			Read_ = mtx::Create();
+			Write_ = mtx::Create();
+
+			mtx::Lock( Read_ );
+
+			Comm_ = NULL;
+		}
+		void Write( rComm_ *Comm )
+		{
+			mtx::Lock( Write_ );
+
+			if ( Comm_ != NULL )
+				qRGnr();
+
+			Comm_ = Comm;
+
+			mtx::Unlock( Read_ );
+		}
+		rComm_ *Read( void )
+		{
+			rComm_ *Comm = NULL;
+
+			mtx::Lock( Read_ );
+
+			if ( Comm_ == NULL )
+				qRGnr();
+
+			Comm = Comm_;
+
+			mtx::Unlock( Write_ );
+
+			return Comm;
+		}
+	} Conn_;
+
+	typedef csdmns::cProcessing cProcessing_;
+
+	class sProcessing
+	: public cProcessing_
+	{
+	protected:
+		virtual void *CSDSCBPreProcess(
+			fdr::rRWDriver *IODriver,
+			const ntvstr::char__ *Origin ) override
+		{
+			rComm_ *Comm = NULL;
+		qRH;
+			flw::sDressedRWFlow<> Flow;
+			str::wString Language;
+		qRB;
+			Flow.Init( *IODriver );
+			Language.Init();
+			server::Handshake( Flow, Language );
+
+			Comm = new rComm_;
+
+			if ( Comm == NULL )
+				qRAlc();
+
+			Comm->Init( Language );
+
+			prtcl::PutAnswer( prtcl::aOK_1, Flow );
+			Flow.Commit();
+
+			Conn_.Write( Comm );
+		qRR;
+			if ( Comm != NULL )
+				delete Comm;
+		qRT;
+		qRE;
+			return Comm;
+		}
+		virtual csdscb::eAction CSDSCBProcess(
+			fdr::rRWDriver *IODriver,
+			void *UP ) override
+		{
+			if ( UP == NULL )
+				qRGnr();
+
+			rComm_ &Comm = *(rComm_ *)UP;
+
+			Comm.Write( IODriver );
+
+			Comm.Write( NULL );	// Wait for dismissal.
+
+			return csdscb::aContinue;
+		}
+		virtual bso::sBool CSDSCBPostProcess( void *UP ) override
+		{
+			if ( UP == NULL )
+				qRGnr();
+
+			delete (rComm_ *)UP;
+
+			return true;
+		}
+	public:
+		void Init( void )
+		{}
+	} Processing_;
+
+	csdmns::rServer Server_;
+
+	void Process_( void * )
+	{
+		Server_.Process();
+	}
 }
 
 SCLZND_F( xdhp::Listen )
@@ -45,29 +240,108 @@ qRB;
 
 	sclargmnt::FillRegistry( Arguments, sclargmnt::faIsArgument, sclargmnt::uaReport );
 
-	Listener_.Init( sclmisc::MGetU16( registry::parameter::Service ) );
+	Processing_.Init();
+	Conn_.Init();
+
+	Server_.Init( sclmisc::MGetU16( registry::parameter::Service ), Processing_ );
+
+	mtk::RawLaunch( Process_, NULL );
 qRR;
 qRT;
 qRE;
 }
 
 namespace {
+	namespace {
+		typedef fdr::rRWDressedDriver rRWDriver_;
+
+		class rDriver_
+		: public rRWDriver_
+		{
+		private:
+			qRMV( rComm_, C_, Comm_ );
+			qRMV( fdr::rRWDriver, D_, Driver_ );
+		protected:
+			virtual fdr::sSize FDRRead(
+				fdr::sSize Maximum,
+				fdr::sByte *Buffer ) override
+			{
+				if ( Driver_ == NULL ) {
+					Driver_ = C_().Read();
+				}
+
+				D_().ITake( tht::GetTID() );
+				return D_().Read( Maximum, Buffer, fdr::bNonBlocking );
+			}
+			virtual void FDRDismiss( bso::sBool Unlock ) override
+			{
+				D_().Dismiss( Unlock );
+			}
+			virtual tht::sTID FDRITake( fdr::sTID Owner ) override
+			{
+				return D_().ITake( Owner );
+			}
+			virtual fdr::sSize FDRWrite(
+				const fdr::sByte *Buffer,
+				fdr::sSize Maximum ) override
+			{
+				if ( Driver_ == NULL ) {
+					Driver_ = C_().Read();
+				}
+
+				D_().OTake( tht::GetTID() );
+				return D_().Write( Buffer, Maximum );
+			}
+			virtual void FDRCommit( bso::sBool Unlock ) override
+			{
+				D_().Commit( Unlock );
+				C_().Dismiss();
+				Driver_ = NULL;
+			}
+			virtual tht::sTID FDROTake( tht::sTID Owner ) override
+			{
+				return D_().OTake( Owner );
+			}
+		public:
+			void reset( bso::sBool P = true )
+			{
+				rRWDriver_::reset( P );
+
+				tol::reset( P, Comm_, Driver_ );
+			}
+			qCVDTOR( rDriver_ );
+			void Init( rComm_ *Comm )
+			{
+				rRWDriver_::Init( fdr::ts_Default );
+
+				Driver_ = NULL;
+				Comm_ = Comm;
+			}
+			const str::dString &Language( void ) const
+			{
+				return C_().Language();
+			}
+		};
+	}
 	struct rRack_ {
-		sck::rRWFlow Flow;
-		str::wString Language;
+	private:
+		rDriver_ Driver_;
+	public:
+		flw::sDressedRWFlow<> Flow;
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, Flow, Language );
+			tol::reset( P, Driver_, Flow );
 		}
 		qCDTOR( rRack_ );
-		void Init( sck::sSocket Socket )
+		void Init( rComm_ *Comm )
 		{
-			Flow.Init( Socket, true );
+			Driver_.Init( Comm );
+			Flow.Init( Driver_ );
 
-			Language.Init();
-
-			server::Handshake( Flow, Language );
-			// Object is initialized specifically in the 'Set()' method.
+		}
+		const str::dString &Language( void ) const
+		{
+			return Driver_.Language();
 		}
 	};
 }
@@ -75,22 +349,15 @@ namespace {
 SCLZND_F( xdhp::New )
 {
 qRH;
-	const char *IP = NULL;
-	sck::sSocket Socket = sck::Undefined;
 	rRack_ *Rack = NULL;
 qRB;
-	Socket = Listener_.GetConnection( IP );
-
 	if ( (Rack = new rRack_) == NULL )
 		qRAlc();
 
-	Rack->Init( Socket );
+	Rack->Init( Conn_.Read() );
 
-	Caller.SetReturnValue( Rack );
+	Caller.SetReturnValue( (bso::sS64)Rack );
 qRR;
-	if ( Socket != sck::Undefined )
-		sck::Close( Socket );
-
 	if ( Rack != NULL )
 		delete Rack;
 qRT;
@@ -232,7 +499,7 @@ SCLZND_F( xdhp::SetLayout )
 {
 	RACK;
 
-	SetLayout_( Caller, Rack.Language, Rack.Flow );
+	SetLayout_( Caller, Rack.Language(), Rack.Flow );
 }
 
 SCLZND_F( xdhp::GetContents )
@@ -425,6 +692,5 @@ SCLZND_F( xdhp::SetProperty )
 {
 	Set_( Caller, server::property::Set );
 }
-
 
 

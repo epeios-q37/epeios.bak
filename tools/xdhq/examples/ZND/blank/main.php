@@ -46,9 +46,30 @@ function getUnJSq() {
 getUnJSq();
 
 function main() {
-	UnJSq.listen();
+	UnJSq::listen();
 
-	echo "Yo !";
+	$DOM = new UnJSqDOM();
+
+	while ( true ) {
+		switch( $DOM->getAction( $id ) ) {
+		case "Connect":
+			$DOM->setLayout( "", new UnJSqTree(), "Main.xsl" );
+			$DOM->addClass("Input", "hidden");
+			break;
+		case "Submit":
+			$DOM->setContent( "Pattern", strtoupper( $DOM->getContent( "Pattern" ) ) );
+			break;
+		case "HideInput":
+			$DOM->addClass( "Input", "hidden" );
+			break;
+		case "ShowInput":
+			$DOM->removeClass( "Input", "hidden" );
+			break;
+		default:
+			die( "???" );
+			break;
+		}
+	}
 }
 
 main();

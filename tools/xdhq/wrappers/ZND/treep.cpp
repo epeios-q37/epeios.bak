@@ -53,7 +53,7 @@ qRB;
 
 	Rack->Init();
 
-	Caller.SetReturnValue( Rack );
+	Caller.SetReturnValue( (bso::sS64)Rack );
 qRR;
 qRT;
 qRE;
