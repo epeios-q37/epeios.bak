@@ -17,9 +17,13 @@
 	along with UnJSq If not, see <http://www.gnu.org/licenses/>.
 */
 
+"use strict"
+
 var unjsqId = "";
 
 if (process.env.EPEIOS_SRC) {
+	let epeiosPath = "";
+
 	if (process.platform == 'win32')
 		epeiosPath = "h:/hg/epeios/"
 	else

@@ -24,8 +24,34 @@ const path = require( 'path' );
 var xdhqId = "";
 var xdhwebqId = "";
 
-if (process.env.EPEIOS_SRC) {
-	var epeiosToolsPath = "";
+function isDev() {
+	if (process.env.EPEIOS_SRC)
+		return true;
+	else
+		return false;
+}
+
+function getEpeiosPath() {
+	if ( isDev ) {
+		if (process.platform == 'win32') {
+			return "h:/hg/epeios/"
+		} else {
+			return "~/hg/epeios/"
+		}
+	} else
+		throw "Error !";
+}
+
+function getRealDir( dir ) {
+	if ( isDev() ) {
+		let epeiosPath = getEpeiosPath();
+		return path.resolve(epeiosPath, "tools/xdhq/examples/common/", path.relative(path.resolve(epeiosPath, "tools/xdhq/examples/NJS/"), path.resolve(dir)));	// No final '/'.
+	} else
+		return path.resolve( dir );
+}
+
+if (isDev()) {
+	let epeiosToolsPath = "";
 	if (process.platform == 'win32')
 		epeiosToolsPath = "h:/hg/epeios/tools/";
 	else
@@ -43,7 +69,7 @@ const xdhq = require(xdhqId);
 
 function launch(callback, action) {
 	xdhq.launch(callback);
-	require('child_process').fork(require(xdhwebqId).fileName, [path.dirname(process.argv[1]), action]);
+	require('child_process').fork(require(xdhwebqId).fileName, [getRealDir(path.dirname(process.argv[1])), action]);
 }
 
 module.exports.register = xdhq.register;
