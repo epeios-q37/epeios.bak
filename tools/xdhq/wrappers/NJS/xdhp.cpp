@@ -127,17 +127,17 @@ namespace {
 		csdmns::rServer Server_;
 		qRMV( xdh_cmn::rData, D_, Data_ );
 		void SetCallbackArguments_(
-			const xdh_ups::rReturn &Return,
+			const proxy::rReturn &Return,
 			sclnjs::dArguments &Arguments )
 		{
 			switch ( Return.GetType() ) {
-			case xdh_ups::tString:
+			case prxy_recv::tString:
 				Arguments.Add( Return.GetString() );
 				break;
-			case xdh_ups::tStrings:
+			case prxy_recv::tStrings:
 				Arguments.Add( Return.GetStrings() );
 				break;
-			case xdh_ups::t_Undefined:
+			case prxy_recv::t_Undefined:
 				break;
 			default:
 				qRGnr();
@@ -339,7 +339,7 @@ namespace {
 
 #define DATA_ARGS\
 	xdh_cmn::rData &Data = GetData_( Caller );\
-	xdh_ups::rArguments &Arguments = Data.Arguments;\
+	proxy::rArguments &Arguments = Data.Arguments;\
 	Arguments.Init();
 
 SCLNJS_F( xdhp::Alert )
@@ -348,7 +348,7 @@ SCLNJS_F( xdhp::Alert )
 
 	Caller.GetArgument( Arguments.Message, Data.Callback );
 
-	Data.Request = xdh_ups::rAlert;
+	Data.Request = prxy_cmn::rAlert;
 }
 
 SCLNJS_F( xdhp::Confirm )
@@ -357,7 +357,7 @@ SCLNJS_F( xdhp::Confirm )
 
 	Caller.GetArgument( Arguments.Message, Data.Callback );
 
-	Data.Request = xdh_ups::rConfirm;
+	Data.Request = prxy_cmn::rConfirm;
 }
 
 SCLNJS_F( xdhp::SetLayout )
@@ -370,7 +370,7 @@ SCLNJS_F( xdhp::SetLayout )
 
 	Caller.GetArgument( Arguments.XSLFilename, Data.Callback );
 	Arguments.Language = Data.Language;
-	Data.Request = xdh_ups::rSetLayout;
+	Data.Request = prxy_cmn::rSetLayout;
 }
 
 SCLNJS_F( xdhp::GetContents )
@@ -378,7 +378,7 @@ SCLNJS_F( xdhp::GetContents )
 	DATA_ARGS;
 
 	Caller.GetArgument( Arguments.Ids, Data.Callback );
-	Data.Request = xdh_ups::rGetContents;
+	Data.Request = prxy_cmn::rGetContents;
 }
 
 SCLNJS_F( xdhp::SetContents )
@@ -386,7 +386,7 @@ SCLNJS_F( xdhp::SetContents )
 	DATA_ARGS;
 
 	Caller.GetArgument( Arguments.Ids, Arguments.Contents, Data.Callback );
-	Data.Request = xdh_ups::rSetContents;
+	Data.Request = prxy_cmn::rSetContents;
 }
 
 SCLNJS_F( xdhp::DressWidgets )
@@ -394,7 +394,7 @@ SCLNJS_F( xdhp::DressWidgets )
 	DATA_ARGS;
 
 	Caller.GetArgument( Arguments.Id, Data.Callback );
-	Data.Request = xdh_ups::rDressWidgets;
+	Data.Request = prxy_cmn::rDressWidgets;
 }
 
 SCLNJS_F( xdhp::AddClasses )
@@ -402,7 +402,7 @@ SCLNJS_F( xdhp::AddClasses )
 	DATA_ARGS;
 
 	Caller.GetArgument( Arguments.Ids, Arguments.Classes, Data.Callback );
-	Data.Request = xdh_ups::rAddClasses;
+	Data.Request = prxy_cmn::rAddClasses;
 }
 
 SCLNJS_F( xdhp::RemoveClasses )
@@ -410,7 +410,7 @@ SCLNJS_F( xdhp::RemoveClasses )
 	DATA_ARGS;
 
 	Caller.GetArgument( Arguments.Ids, Arguments.Classes, Data.Callback );
-	Data.Request = xdh_ups::rRemoveClasses;
+	Data.Request = prxy_cmn::rRemoveClasses;
 }
 
 SCLNJS_F( xdhp::ToggleClasses )
@@ -418,7 +418,7 @@ SCLNJS_F( xdhp::ToggleClasses )
 	DATA_ARGS;
 
 	Caller.GetArgument( Arguments.Ids, Arguments.Classes, Data.Callback );
-	Data.Request = xdh_ups::rToggleClasses;
+	Data.Request = prxy_cmn::rToggleClasses;
 }
 
 SCLNJS_F( xdhp::EnableElements )
@@ -426,7 +426,7 @@ SCLNJS_F( xdhp::EnableElements )
 	DATA_ARGS;
 
 	Caller.GetArgument( Arguments.Ids, Data.Callback );
-	Data.Request = xdh_ups::rEnableElements;
+	Data.Request = prxy_cmn::rEnableElements;
 }
 
 SCLNJS_F( xdhp::DisableElements )
@@ -434,7 +434,7 @@ SCLNJS_F( xdhp::DisableElements )
 	DATA_ARGS;
 
 	Caller.GetArgument( Arguments.Ids, Data.Callback );
-	Data.Request = xdh_ups::rDisableElements;
+	Data.Request = prxy_cmn::rDisableElements;
 }
 
 SCLNJS_F( xdhp::GetAttribute )
@@ -442,7 +442,7 @@ SCLNJS_F( xdhp::GetAttribute )
 	DATA_ARGS;
 
 	Caller.GetArgument( Arguments.Id, Arguments.Name, Data.Callback );
-	Data.Request = xdh_ups::rGetAttribute;
+	Data.Request = prxy_cmn::rGetAttribute;
 }
 
 SCLNJS_F( xdhp::SetAttribute )
@@ -450,7 +450,7 @@ SCLNJS_F( xdhp::SetAttribute )
 	DATA_ARGS;
 
 	Caller.GetArgument( Arguments.Id, Arguments.Name, Arguments.Value, Data.Callback );
-	Data.Request = xdh_ups::rSetAttribute;
+	Data.Request = prxy_cmn::rSetAttribute;
 }
 
 SCLNJS_F( xdhp::GetProperty )
@@ -458,7 +458,7 @@ SCLNJS_F( xdhp::GetProperty )
 	DATA_ARGS;
 
 	Caller.GetArgument( Arguments.Id, Arguments.Name, Data.Callback );
-	Data.Request = xdh_ups::rGetProperty;
+	Data.Request = prxy_cmn::rGetProperty;
 }
 
 SCLNJS_F( xdhp::SetProperty )
@@ -466,7 +466,7 @@ SCLNJS_F( xdhp::SetProperty )
 	DATA_ARGS;
 
 	Caller.GetArgument( Arguments.Id, Arguments.Name, Arguments.Value, Data.Callback );
-	Data.Request = xdh_ups::rSetProperty;
+	Data.Request = prxy_cmn::rSetProperty;
 }
 
 qGCTOR( xdhp )

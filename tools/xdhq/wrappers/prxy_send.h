@@ -17,35 +17,32 @@
     along with 'XDHq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PROXY_INC_
-# define PROXY_INC_
+#ifndef PRXY_SEND_INC_
+# define PRXY_SEND_INC_
 
-# include "prtcl.h"
+# include "prxy_cmn.h"
 
-# include "prxy_send.h"
-# include "prxy_recv.h"
+namespace prxy_send {
+	struct rArguments
+	{
+	public:
+		str::wString Message, Id, XML, XSLFilename, Language, Name, Value;
+		str::wStrings Ids, Contents, Tags, Values, Classes;
+		void reset( bso::sBool P = true )
+		{
+			tol::reset( Message, Id, XML, XSLFilename, Language, Name, Value, Ids, Contents, Tags, Values, Classes );
+		}
+		qCDTOR( rArguments );
+		void Init( void )
+		{
+			tol::Init( Message, Id, XML, XSLFilename, Language, Name, Value, Ids, Contents, Tags, Values, Classes );
+		}
+	};
 
-# include "flw.h"
-# include "str.h"
-
-namespace proxy {
-	void Handshake(
-		flw::sRFlow &Flow,
-		str::dString &Language );
-
-	void GetAction(
-		flw::sRWFlow &Flow,
-		str::dString &Id,
-		str::dString &Action );
-
-	using prxy_cmn::eRequest;
-	using prxy_cmn::r_Undefined;
-
-	using prxy_send::rArguments;
-	using prxy_send::Send;
-
-	using prxy_recv::rReturn;
-	using prxy_recv::Recv;
+	bso::sBool Send(
+		prxy_cmn::eRequest Request,
+		flw::sWFlow &Flow,
+		const rArguments &Arguments );
 }
 
 #endif

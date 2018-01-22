@@ -23,7 +23,10 @@
 #ifndef XDH_CMN_INC_
 # define XDH_CMN_INC_
 
-# include "xdh_ups.h"
+# include "proxy.h"
+
+# include "csdscb.h"
+# include "sclnjs.h"
 
 namespace xdh_cmn {
 	struct rData
@@ -32,12 +35,12 @@ namespace xdh_cmn {
 		mtx::rHandler Lock_;
 	public:
 		sclnjs::rCallback Callback;
-		xdh_ups::rReturn Return;
+		proxy::rReturn Return;
 		str::wString	// For the launching of an action.
 			Id,
 			Action;
-		xdh_ups::eRequest Request;
-		xdh_ups::rArguments Arguments;
+		proxy::eRequest Request;
+		proxy::rArguments Arguments;
 		sclnjs::rObject XDH;	// User overloaded 'XDH' JS class.
 		str::wString Language;
 		void reset( bso::sBool P = true )
@@ -48,7 +51,7 @@ namespace xdh_cmn {
 			}
 
 			tol::reset( P, Callback, Return, Id, Action, Arguments, XDH, Language );
-			Request = xdh_ups::r_Undefined;
+			Request = proxy::r_Undefined;
 			Lock_ = NULL;
 		}
 		qCDTOR( rData );
@@ -57,7 +60,7 @@ namespace xdh_cmn {
 			reset();
 
 			tol::Init( Callback, Return, Id, Action, Arguments, XDH, Language );
-			Request = xdh_ups::r_Undefined;
+			Request = proxy::r_Undefined;
 			Lock_ = mtx::Create();
 		}
 		void Lock( void )

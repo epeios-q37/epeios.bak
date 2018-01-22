@@ -73,10 +73,10 @@ qRB;
 
 	Data.Return.Init();
 
-	if ( !xdh_ups::Recv( Data.Request, Flow, Data.Return ) )
+	if ( !proxy::Recv( Data.Request, Flow, Data.Return ) )
 		proxy::GetAction( Flow, Data.Id, Data.Action );
 
-	Data.Request = xdh_ups::r_Undefined;
+	Data.Request = proxy::r_Undefined;
 
 	Data.Lock();
 
@@ -85,7 +85,7 @@ qRB;
 	Data.Lock();
 	Data.Unlock();
 
-	if ( !xdh_ups::Send( Data.Request, Flow, Data.Arguments ) )
+	if ( !proxy::Send( Data.Request, Flow, Data.Arguments ) )
 		prtcl::PutAnswer( prtcl::aOK_1, Flow );
 qRR;
 qRT;
