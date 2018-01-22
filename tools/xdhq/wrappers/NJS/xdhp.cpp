@@ -20,8 +20,8 @@
 #include "xdhp.h"
 
 #include "registry.h"
+#include "proxy.h"
 #include "treep.h"
-#include "xdh_cmn.h"
 
 #include "csdbns.h"
 #include "csdcmn.h"
@@ -119,13 +119,38 @@ namespace {
 namespace {
 	qCDEF( char *, Id_, "_q37XDHRack" );
 
+	namespace {
+		typedef proxy::rData rPData_;
+	}
+
+	class rData_
+	: public rPData_
+	{
+	public:
+		sclnjs::rCallback Callback;
+		sclnjs::rObject XDH;	// User overloaded 'XDH' JS class.
+		void reset( bso::sBool P = true )
+		{
+			rPData_::reset( P );
+			tol::reset( P, Callback, XDH );
+		}
+		qCDTOR( rData_ );
+		void Init( void )
+		{
+			rPData_::reset();
+
+			tol::Init( Callback, XDH );
+		}
+	};
+
+
 	class rXDHRack_
 	: public sclnjs::cAsync
 	{
 	private:
-		xdh_cmn::rProcessing<xdh_cmn::rData> Processing_;
+		proxy::rProcessing<rData_> Processing_;
 		csdmns::rServer Server_;
-		qRMV( xdh_cmn::rData, D_, Data_ );
+		qRMV( rData_, D_, Data_ );
 		void SetCallbackArguments_(
 			const proxy::rReturn &Return,
 			sclnjs::dArguments &Arguments )
@@ -156,7 +181,7 @@ namespace {
 			return sclnjs::bRelaunch;
 		}
 	public:
-		xdh_cmn::rSharing<xdh_cmn::rData> Sharing;
+		proxy::rSharing<rData_> Sharing;
 		sclnjs::rCallback ConnectCallback;
 		void reset( bso::sBool P = true )
 		{
@@ -189,26 +214,26 @@ namespace {
 			sclnjs::rCallback Callback;
 			sclnjs::wArguments Arguments;
 		qRB;
-			xdh_cmn::rData &Data = D_();
+			rData_ &Data = D_();
 			Callback.Init();
 			Callback = Data.Callback;
 			Data.Callback.reset( false );
 
 			switch ( Data.GetAndResetStatus() ) {
-			case xdh_cmn::sPending:
+			case proxy::sPending:
 				Arguments.Init();
 				SetCallbackArguments_( Data.Return, Arguments );
 				Callback.VoidLaunch( Arguments );
 				Callback.reset( false );
 				break;
-			case xdh_cmn::sAction:
+			case proxy::sAction:
 				Callback.Init();
 				Callback.Assign( Get_( Data.Action ) );
 				Callback.VoidLaunch( Data.XDH, Data.Id );
 				Callback.reset( false );
 				tol::Init( Data.Id, Data.Action );
 				break;
-			case xdh_cmn::sNew:
+			case proxy::sNew:
 				Arguments.Init();
 				SetCallbackArguments_( Data.Return, Arguments );
 				ConnectCallback.ObjectLaunch( Data.XDH, Arguments );
@@ -324,16 +349,16 @@ qRE;
 #endif
 
 namespace {
-	xdh_cmn::rData &GetData_( sclnjs::sCaller &Caller )
+	rData_ &GetData_( sclnjs::sCaller &Caller )
 	{
-		xdh_cmn::rData *Data = NULL;
+		rData_ *Data = NULL;
 	qRH;
 		sclnjs::rObject Object;
 	qRB;
 		Object.Init();
 		Caller.GetArgument( Object );
 
-		Data = (xdh_cmn::rData * )Object.Get( Id_ );
+		Data = (rData_ * )Object.Get( Id_ );
 
 		if ( Data == NULL )
 			qRGnr();
@@ -345,7 +370,7 @@ namespace {
 }
 
 #define DATA_ARGS\
-	xdh_cmn::rData &Data = GetData_( Caller );\
+	rData_ &Data = GetData_( Caller );\
 	proxy::rArguments &Arguments = Data.Arguments;\
 	Arguments.Init();
 

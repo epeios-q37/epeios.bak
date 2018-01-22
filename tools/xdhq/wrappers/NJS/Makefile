@@ -45,7 +45,7 @@ mods += sclargmnt sclmisc sclerror scllocale sclrgstry
 mods += scln4a sclnjs 
 mods += prtcl proxy prxy_cmn prxy_recv prxy_send 
 mods += tree 
-mods += registry treep xdhp xdh_cmn 
+mods += registry treep xdhp 
 
 pmods += pllio 
 

@@ -50,3 +50,87 @@ void proxy::GetAction(
 	prtcl::Get( Flow, Action );
 	Flow.Dismiss();
 }
+
+void *proxy::rProcessing_::CSDSCBPreProcess(
+	fdr::rRWDriver *IODriver,
+	const ntvstr::char__ *Origin )
+{
+	rData *Data = NULL;
+qRH;
+	flw::sDressedRWFlow<> Flow;
+qRB;
+	Data = PRXYNew();
+
+	if ( Data == NULL )
+		qRAlc();
+
+	Data->Init();
+
+	Flow.Init( *IODriver );
+	proxy::Handshake( Flow, Data->Language );
+
+	Data->Lock();
+
+	S_().Upstream( Data );
+
+	Data->Lock();
+	Data->Unlock();
+
+	prtcl::PutAnswer( prtcl::aOK_1, Flow );
+	Flow.Commit();
+qRR;
+	if ( Data != NULL )
+		delete Data;
+qRT;
+qRE;
+	return Data;
+}
+
+csdscb::eAction proxy::rProcessing_::CSDSCBProcess(
+	fdr::rRWDriver *IODriver,
+	void *UP )
+{
+qRH;
+	flw::sDressedRWFlow<> Flow;
+	rData &Data = *(rData *)UP;
+qRB;
+	if ( UP == NULL )
+		qRGnr();
+
+	Flow.Init( *IODriver );
+
+	Data.Return.Init();
+
+	if ( !proxy::Recv( Data.Request, Flow, Data.Return ) )
+		proxy::GetAction( Flow, Data.Id, Data.Action );
+
+	//Data.Request = proxy::r_Undefined;
+
+	Data.Lock();
+
+	S_().Upstream( &Data );
+
+	Data.Lock();
+	Data.Unlock();
+
+	if ( !proxy::Send( Data.Request, Flow, Data.Arguments ) )
+		prtcl::PutAnswer( prtcl::aOK_1, Flow );
+qRR;
+qRT;
+qRE;
+	return csdscb::aContinue;
+}
+
+bso::sBool proxy::rProcessing_::CSDSCBPostProcess( void *UP )
+{
+	rData *Data = (rData *)UP;
+
+	if ( Data == NULL )
+		qRGnr();
+
+	PRXYDelete( Data );
+
+	return false;
+}
+
+

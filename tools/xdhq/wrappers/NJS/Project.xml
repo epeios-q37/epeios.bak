@@ -50,7 +50,6 @@
 		<Module>registry</Module>
 		<Module>treep</Module>
 		<Module>xdhp</Module>
-		<Module>xdh_cmn</Module>
 	</Modules>
 	<SourceDirs>
 		<SourceDir>..</SourceDir>
