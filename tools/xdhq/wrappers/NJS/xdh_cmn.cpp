@@ -23,15 +23,15 @@
 
 using namespace xdh_cmn;
 
-void *xdh_cmn::rProcessing::CSDSCBPreProcess(
+void *xdh_cmn::rProcessing_::CSDSCBPreProcess(
 	fdr::rRWDriver *IODriver,
 	const ntvstr::char__ *Origin )
 {
-	rData *Data = NULL;
+	rData_ *Data = NULL;
 qRH;
 	flw::sDressedRWFlow<> Flow;
 qRB;
-	Data = new rData;
+	Data = PRXYNew();
 
 	if ( Data == NULL )
 		qRAlc();
@@ -58,13 +58,13 @@ qRE;
 	return Data;
 }
 
-csdscb::eAction xdh_cmn::rProcessing::CSDSCBProcess(
+csdscb::eAction xdh_cmn::rProcessing_::CSDSCBProcess(
 	fdr::rRWDriver *IODriver,
 	void *UP )
 {
 qRH;
 	flw::sDressedRWFlow<> Flow;
-	rData &Data = *(rData *)UP;
+	rData_ &Data = *(rData_ *)UP;
 qRB;
 	if ( UP == NULL )
 		qRGnr();
@@ -76,7 +76,7 @@ qRB;
 	if ( !proxy::Recv( Data.Request, Flow, Data.Return ) )
 		proxy::GetAction( Flow, Data.Id, Data.Action );
 
-	Data.Request = proxy::r_Undefined;
+	//Data.Request = proxy::r_Undefined;
 
 	Data.Lock();
 
@@ -93,14 +93,14 @@ qRE;
 	return csdscb::aContinue;
 }
 
-bso::sBool xdh_cmn::rProcessing::CSDSCBPostProcess( void *UP )
+bso::sBool xdh_cmn::rProcessing_::CSDSCBPostProcess( void *UP )
 {
-	rData *Data = (rData *)UP;
+	rData_ *Data = (rData_ *)UP;
 
 	if ( Data == NULL )
 		qRGnr();
 
-	delete Data;
+	PRXYDelete( Data );
 
 	return false;
 }

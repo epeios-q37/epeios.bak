@@ -135,17 +135,17 @@ namespace {
 		break
 
 bso::sBool prxy_recv::Recv(
-	eRequest Id,
+	eRequest Request,
 	flw::sRFlow &Flow,
 	rReturn &Return )
 {
-	if ( Id == r_Undefined )	// A new event has be detected.
+	if ( Request == r_Undefined )	// A new event has be detected.
 		return false;
 	else {
 		if ( prtcl::GetRequest( Flow ) != prtcl::rReady_1 )
 			qRGnr();
 
-		switch ( Id ) {
+		switch ( Request ) {
 		H( Alert );
 		H( Confirm );
 		H( SetLayout );

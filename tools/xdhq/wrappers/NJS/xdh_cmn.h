@@ -29,19 +29,26 @@
 # include "sclnjs.h"
 
 namespace xdh_cmn {
-	struct rData
+
+	qENUM( Status ) {
+		sNew,		// New connexion.
+		sAction,	// Action to be handled.
+		sPending,	// A response of an action has to be handled.
+		s_amount,
+		s_Undefined
+	};
+
+	struct rData_
 	{
 	private:
 		mtx::rHandler Lock_;
 	public:
-		sclnjs::rCallback Callback;
 		proxy::rReturn Return;
 		str::wString	// For the launching of an action.
 			Id,
 			Action;
 		proxy::eRequest Request;
 		proxy::rArguments Arguments;
-		sclnjs::rObject XDH;	// User overloaded 'XDH' JS class.
 		str::wString Language;
 		void reset( bso::sBool P = true )
 		{
@@ -50,18 +57,28 @@ namespace xdh_cmn {
 					mtx::Delete( Lock_ );
 			}
 
-			tol::reset( P, Callback, Return, Id, Action, Arguments, XDH, Language );
+			tol::reset( P, Return, Id, Action, Arguments, Language );
 			Request = proxy::r_Undefined;
 			Lock_ = NULL;
 		}
-		qCDTOR( rData );
+		qCDTOR( rData_ );
 		void Init( void )
 		{
 			reset();
 
-			tol::Init( Callback, Return, Id, Action, Arguments, XDH, Language );
+			tol::Init( Return, Id, Action, Arguments, Language );
 			Request = proxy::r_Undefined;
 			Lock_ = mtx::Create();
+		}
+		eStatus GetAndResetStatus( void )
+		{
+			if ( Request != prxy_cmn::r_Undefined ) {
+				Request = prxy_cmn::r_Undefined;
+				return sPending;
+			} else if ( Action.Amount() != 0 )
+				return sAction;
+			else
+				return sNew;
 		}
 		void Lock( void )
 		{
@@ -73,11 +90,11 @@ namespace xdh_cmn {
 		}
 	};
 
-	class rSharing
+	class rSharing_
 	{
 	private:
 		mtx::rHandler Server_, JS_;	// Server upstream, JS, server downstream.
-		rData *Data_;
+		rData_ *Data_;
 	public:
 		void reset( bso::sBool P = true )
 		{
@@ -92,7 +109,7 @@ namespace xdh_cmn {
 			Server_ = JS_ = NULL;
 			Data_ = NULL;
 		}
-		qCDTOR( rSharing );
+		qCDTOR( rSharing_ );
 		void Init( void )
 		{
 			reset();
@@ -105,7 +122,7 @@ namespace xdh_cmn {
 			mtx::Lock( JS_ );
 		}
 		// Called by server.
-		void Upstream( rData *Data )
+		void Upstream( rData_ *Data )
 		{
 			mtx::Lock( Server_ );
 
@@ -119,11 +136,11 @@ namespace xdh_cmn {
 
 			mtx::Unlock( JS_ );
 		}
-		rData &ReadJS( void )
+		rData_ *ReadJS( void )
 		{
 			mtx::Lock( JS_ );
 
-			rData &Data = *Data_;
+			rData_ *Data = Data_;
 
 			mtx::Unlock( Server_ );
 
@@ -136,11 +153,25 @@ namespace xdh_cmn {
 		}
 	};
 
-	class rProcessing
+	template <typename data> class rSharing
+	: public rSharing_
+	{
+	public:
+		void Upstream( data *Data )
+		{
+			rSharing_::Upstream( Data );
+		}
+		data *ReadJS( void )
+		{
+			return (data *)rSharing_::ReadJS();
+		}
+	};
+
+	class rProcessing_
 	: public csdscb::cProcessing
 	{
 	private:
-		qRMV( rSharing, S_, Sharing_ );
+		qRMV( rSharing_, S_, Sharing_ );
 	protected:
 		virtual void *CSDSCBPreProcess(
 			fdr::rRWDriver *IODriver,
@@ -149,16 +180,51 @@ namespace xdh_cmn {
 			fdr::rRWDriver *IODriver,
 			void *UP ) override;
 		virtual bso::sBool CSDSCBPostProcess( void *UP ) override;
+		virtual rData_ *PRXYNew( void ) = 0;
+		virtual void PRXYDelete( rData_ *Data ) = 0;
 	public:
 		void reset( bso::sBool P = true )
 		{}
-		qCVDTOR( rProcessing );
-		void Init( rSharing &Sharing )
+		qCVDTOR( rProcessing_ );
+		void Init( rSharing_ &Sharing )
 		{
 			Sharing_ = &Sharing;
 		}
 	};
 
+	template <typename data> class rProcessing
+	: public rProcessing_
+	{
+	protected:
+		virtual rData_ *PRXYNew( void ) override
+		{
+			return new data;
+		}
+		virtual void PRXYDelete( rData_ *Data ) override
+		{
+			delete (data *)Data;
+		}
+	};
+
+	struct rData
+	: public rData_
+	{
+	public:
+		sclnjs::rCallback Callback;
+		sclnjs::rObject XDH;	// User overloaded 'XDH' JS class.
+		void reset( bso::sBool P = true )
+		{
+			rData_::reset( P );
+			tol::reset( P, Callback, XDH );
+		}
+		qCDTOR( rData );
+		void Init( void )
+		{
+			rData_::reset();
+
+			tol::Init( Callback, XDH );
+		}
+	};
 }
 
 #endif

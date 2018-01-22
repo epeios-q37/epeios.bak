@@ -89,7 +89,7 @@ namespace prxy_recv {
 	};
 
 	bso::sBool Recv(
-		prxy_cmn::eRequest Id,
+		prxy_cmn::eRequest Request,
 		flw::sRFlow &Flow,
 		rReturn &Return );
 }

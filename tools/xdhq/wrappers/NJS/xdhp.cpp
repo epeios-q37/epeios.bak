@@ -123,7 +123,7 @@ namespace {
 	: public sclnjs::cAsync
 	{
 	private:
-		xdh_cmn::rProcessing Processing_;
+		xdh_cmn::rProcessing<xdh_cmn::rData> Processing_;
 		csdmns::rServer Server_;
 		qRMV( xdh_cmn::rData, D_, Data_ );
 		void SetCallbackArguments_(
@@ -156,7 +156,7 @@ namespace {
 			return sclnjs::bRelaunch;
 		}
 	public:
-		xdh_cmn::rSharing Sharing;
+		xdh_cmn::rSharing<xdh_cmn::rData> Sharing;
 		sclnjs::rCallback ConnectCallback;
 		void reset( bso::sBool P = true )
 		{
@@ -181,7 +181,7 @@ namespace {
 			if ( Data_ != NULL )
 				qRGnr();
 
-			Data_ = &Sharing.ReadJS();
+			Data_ = Sharing.ReadJS();
 		}
 		void HandleData( void )
 		{
@@ -194,22 +194,29 @@ namespace {
 			Callback = Data.Callback;
 			Data.Callback.reset( false );
 
-			if ( Callback.HasAssignation() ) {	// There is a pending callback.
+			switch ( Data.GetAndResetStatus() ) {
+			case xdh_cmn::sPending:
 				Arguments.Init();
 				SetCallbackArguments_( Data.Return, Arguments );
 				Callback.VoidLaunch( Arguments );
 				Callback.reset( false );
-			} else if ( Data.Action.Amount() != 0 ) {	// No pending callback, but an action has to be handled.
+				break;
+			case xdh_cmn::sAction:
 				Callback.Init();
 				Callback.Assign( Get_( Data.Action ) );
 				Callback.VoidLaunch( Data.XDH, Data.Id );
 				Callback.reset( false );
 				tol::Init( Data.Id, Data.Action );
-			} else {	// A new connection was open.
+				break;
+			case xdh_cmn::sNew:
 				Arguments.Init();
 				SetCallbackArguments_( Data.Return, Arguments );
 				ConnectCallback.ObjectLaunch( Data.XDH, Arguments );
 				Data.XDH.Set( Id_, &Data );
+				break;
+			default:
+				qRGnr();
+				break;
 			}
 
 			Data.Unlock();
