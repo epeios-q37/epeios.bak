@@ -111,20 +111,36 @@ namespace proxy {
 	class rSharing_
 	{
 	private:
-		mtx::rHandler Server_, JS_;	// Server upstream, JS, server downstream.
+		mtx::rHandler Write_, Read_;
 		rData *Data_;
+	protected:
+		rData *Read( void )
+		{
+			mtx::Lock( Read_ );
+
+			rData *Data = Data_;
+
+			mtx::Unlock( Write_ );
+
+			if ( Data_ == NULL )
+				qRFwk();
+
+			Data_ = NULL;
+
+			return Data;
+		}
 	public:
 		void reset( bso::sBool P = true )
 		{
 			if ( P ) {
-				if ( Server_ != mtx::UndefinedHandler )
-					mtx::Delete( Server_ );
+				if ( Write_ != mtx::UndefinedHandler )
+					mtx::Delete( Write_ );
 
-				if ( JS_ != mtx::UndefinedHandler )
-					mtx::Delete( JS_ );
+				if ( Read_ != mtx::UndefinedHandler )
+					mtx::Delete( Read_ );
 			}
 
-			Server_ = JS_ = NULL;
+			Write_ = Read_ = NULL;
 			Data_ = NULL;
 		}
 		qCDTOR( rSharing_ );
@@ -132,17 +148,16 @@ namespace proxy {
 		{
 			reset();
 
-			Server_ = mtx::Create();
-			JS_ = mtx::Create();
+			Write_ = mtx::Create();
+			Read_ = mtx::Create();
 
 			Data_ = NULL;
 
-			mtx::Lock( JS_ );
+			mtx::Lock( Read_ );
 		}
-		// Called by server.
-		void Upstream( rData *Data )
+		void Write( rData *Data )
 		{
-			mtx::Lock( Server_ );
+			mtx::Lock( Write_ );
 
 			if ( Data_ != NULL )
 				qRGnr();
@@ -152,22 +167,7 @@ namespace proxy {
 
 			Data_ = Data;
 
-			mtx::Unlock( JS_ );
-		}
-		rData *ReadJS( void )
-		{
-			mtx::Lock( JS_ );
-
-			rData *Data = Data_;
-
-			mtx::Unlock( Server_ );
-
-			if ( Data_ == NULL )
-				qRFwk();
-
-			Data_ = NULL;
-
-			return Data;
+			mtx::Unlock( Read_ );
 		}
 	};
 
@@ -175,13 +175,9 @@ namespace proxy {
 	: public rSharing_
 	{
 	public:
-		void Upstream( data *Data )
+		data *Read( void )
 		{
-			rSharing_::Upstream( Data );
-		}
-		data *ReadJS( void )
-		{
-			return (data *)rSharing_::ReadJS();
+			return (data *)rSharing_::Read();
 		}
 	};
 

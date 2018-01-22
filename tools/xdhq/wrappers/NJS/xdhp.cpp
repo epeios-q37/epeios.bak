@@ -206,7 +206,7 @@ namespace {
 			if ( Data_ != NULL )
 				qRGnr();
 
-			Data_ = Sharing.ReadJS();
+			Data_ = Sharing.Read();
 		}
 		void HandleData( void )
 		{

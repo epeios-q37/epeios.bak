@@ -71,7 +71,7 @@ qRB;
 
 	Data->Lock();
 
-	S_().Upstream( Data );
+	S_().Write( Data );
 
 	Data->Lock();
 	Data->Unlock();
@@ -108,7 +108,7 @@ qRB;
 
 	Data.Lock();
 
-	S_().Upstream( &Data );
+	S_().Write( &Data );
 
 	Data.Lock();
 	Data.Unlock();
