@@ -17,15 +17,15 @@
     along with 'XDHq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SERVER_INC_
-# define SERVER_INC_
+#ifndef PROXY_INC_
+# define PROXY_INC_
 
 # include "prtcl.h"
 
 # include "flw.h"
 # include "str.h"
 
-namespace server {
+namespace proxy {
 	void Handshake(
 		flw::sRFlow &Flow,
 		str::dString &Language );

@@ -25,7 +25,6 @@
 
 # include "csdscb.h"
 # include "sclnjs.h"
-# include "xdh_dws.h"
 
 namespace xdh_ups {
 	qENUM( Request )
@@ -65,32 +64,81 @@ namespace xdh_ups {
 		}
 	};
 
-	struct rServer
+	bso::sBool Send(
+		eRequest Request,
+		flw::sWFlow &Flow,
+		const rArguments &Arguments );
+
+
+	qENUM( Type )
 	{
-	public:
-		eRequest Request;
-		rArguments Arguments;
-		void reset( bso::sBool P = true )
-		{
-			Request = r_Undefined;
-			Arguments.reset( P );
-		}
-		qCDTOR( rServer );
-		void Init( void )
-		{
-			Request = r_Undefined;
-			Arguments.Init();
-		}
+		tString,
+		tStrings,
+		t_amount,
+		t_Undefined
 	};
 
-	bso::sBool Send(
-		flw::sWFlow &Flow,
-		rServer & Server );
+	class rReturn
+	{
+	private:
+		eType Type_;
+		str::wString String_;
+		str::wStrings Strings_;
+		void Test_( eType Type ) const
+		{
+			if ( Type_ != Type )
+				qRGnr();
+		}
+	public:
+		void reset( bso::sBool P = true )
+		{
+			tol::reset( P, String_, Strings_ );
+			Type_ = t_Undefined;
+		}
+		qCDTOR( rReturn );
+		void Init( void )
+		{
+			tol::Init( String_, Strings_ );
+			Type_ = t_Undefined;
+		}
+		str::dString &StringToSet( void )
+		{
+			Test_( t_Undefined );
+
+			Type_ = tString;
+
+			return String_;
+		}
+		str::dStrings &StringsToSet( void )
+		{
+			Test_( t_Undefined );
+
+			Type_ = tStrings;
+
+			return Strings_;
+		}
+		eType GetType( void ) const
+		{
+			return Type_;
+		}
+		const str::dString &GetString( void ) const
+		{
+			Test_( tString );
+
+			return String_;
+		}
+		const str::dStrings &GetStrings( void ) const
+		{
+			Test_( tStrings );
+
+			return Strings_;
+		}
+	};
 
 	bso::sBool Recv(
 		eRequest Id,
 		flw::sRFlow &Flow,
-		xdh_dws::rArguments &Arguments );
+		rReturn &Return );
 }
 
 #endif

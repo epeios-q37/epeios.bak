@@ -19,7 +19,7 @@
 
 #include "xdh_cmn.h"
 
-#include "server.h"
+#include "proxy.h"
 
 using namespace xdh_cmn;
 
@@ -39,7 +39,7 @@ qRB;
 	Data->Init();
 
 	Flow.Init( *IODriver );
-	server::Handshake( Flow, Data->Language );
+	proxy::Handshake( Flow, Data->Language );
 
 	Data->Lock();
 
@@ -71,12 +71,12 @@ qRB;
 
 	Flow.Init( *IODriver );
 
-	Data.JS.Arguments.Init();
+	Data.Return.Init();
 
-	if ( !xdh_ups::Recv( Data.Server.Request, Flow, Data.JS.Arguments ) )
-		server::GetAction( Flow, Data.JS.Id, Data.JS.Action );
+	if ( !xdh_ups::Recv( Data.Request, Flow, Data.Return ) )
+		proxy::GetAction( Flow, Data.Id, Data.Action );
 
-	Data.Server.Request = xdh_ups::r_Undefined;
+	Data.Request = xdh_ups::r_Undefined;
 
 	Data.Lock();
 
@@ -85,7 +85,7 @@ qRB;
 	Data.Lock();
 	Data.Unlock();
 
-	if ( !xdh_ups::Send( Flow, Data.Server ) )
+	if ( !xdh_ups::Send( Data.Request, Flow, Data.Arguments ) )
 		prtcl::PutAnswer( prtcl::aOK_1, Flow );
 qRR;
 qRT;

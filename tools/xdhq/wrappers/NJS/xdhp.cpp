@@ -126,6 +126,24 @@ namespace {
 		xdh_cmn::rProcessing Processing_;
 		csdmns::rServer Server_;
 		qRMV( xdh_cmn::rData, D_, Data_ );
+		void SetCallbackArguments_(
+			const xdh_ups::rReturn &Return,
+			sclnjs::dArguments &Arguments )
+		{
+			switch ( Return.GetType() ) {
+			case xdh_ups::tString:
+				Arguments.Add( Return.GetString() );
+				break;
+			case xdh_ups::tStrings:
+				Arguments.Add( Return.GetStrings() );
+				break;
+			case xdh_ups::t_Undefined:
+				break;
+			default:
+				qRGnr();
+				break;
+			}
+		}
 	protected:
 		virtual void UVQWork( void ) override
 		{
@@ -169,23 +187,28 @@ namespace {
 		{
 		qRH;
 			sclnjs::rCallback Callback;
+			sclnjs::wArguments Arguments;
 		qRB;
 			xdh_cmn::rData &Data = D_();
 			Callback.Init();
-			Callback = Data.JS.Callback;
-			Data.JS.Callback.reset( false );
+			Callback = Data.Callback;
+			Data.Callback.reset( false );
 
 			if ( Callback.HasAssignation() ) {	// There is a pending callback.
-				Callback.VoidLaunch( Data.JS.Arguments.Core() );
+				Arguments.Init();
+				SetCallbackArguments_( Data.Return, Arguments );
+				Callback.VoidLaunch( Arguments );
 				Callback.reset( false );
-			} else if ( Data.JS.Action.Amount() != 0 ) {	// No pending callback, but an action has to be handled launched.
+			} else if ( Data.Action.Amount() != 0 ) {	// No pending callback, but an action has to be handled.
 				Callback.Init();
-				Callback.Assign( Get_( Data.JS.Action ) );
-				Callback.VoidLaunch( Data.XDH, Data.JS.Id );
+				Callback.Assign( Get_( Data.Action ) );
+				Callback.VoidLaunch( Data.XDH, Data.Id );
 				Callback.reset( false );
-				tol::Init( Data.JS.Id, Data.JS.Action );
+				tol::Init( Data.Id, Data.Action );
 			} else {	// A new connection was open.
-				ConnectCallback.ObjectLaunch( Data.XDH, Data.JS.Arguments.Core() );
+				Arguments.Init();
+				SetCallbackArguments_( Data.Return, Arguments );
+				ConnectCallback.ObjectLaunch( Data.XDH, Arguments );
 				Data.XDH.Set( Id_, &Data );
 			}
 
@@ -314,138 +337,136 @@ namespace {
 	}
 }
 
-#define DATA\
+#define DATA_ARGS\
 	xdh_cmn::rData &Data = GetData_( Caller );\
-	xdh_ups::rServer &Server = Data.Server;\
-	xdh_dws::rJS &JS = Data.JS;\
-	xdh_ups::rArguments &Arguments = Server.Arguments;\
+	xdh_ups::rArguments &Arguments = Data.Arguments;\
 	Arguments.Init();
 
 SCLNJS_F( xdhp::Alert )
 {
-	DATA;
+	DATA_ARGS;
 
-	Caller.GetArgument( Arguments.Message, JS.Callback );
+	Caller.GetArgument( Arguments.Message, Data.Callback );
 
-	Server.Request = xdh_ups::rAlert;
+	Data.Request = xdh_ups::rAlert;
 }
 
 SCLNJS_F( xdhp::Confirm )
 {
-	DATA;
+	DATA_ARGS;
 
-	Caller.GetArgument( Arguments.Message, JS.Callback );
+	Caller.GetArgument( Arguments.Message, Data.Callback );
 
-	Server.Request = xdh_ups::rConfirm;
+	Data.Request = xdh_ups::rConfirm;
 }
 
 SCLNJS_F( xdhp::SetLayout )
 {
-	DATA;
+	DATA_ARGS;
 
 	Caller.GetArgument( Arguments.Id );
 
 	treep::GetXML( Caller, Arguments.XML );
 
-	Caller.GetArgument( Server.Arguments.XSLFilename, JS.Callback );
+	Caller.GetArgument( Arguments.XSLFilename, Data.Callback );
 	Arguments.Language = Data.Language;
-	Server.Request = xdh_ups::rSetLayout;
+	Data.Request = xdh_ups::rSetLayout;
 }
 
 SCLNJS_F( xdhp::GetContents )
 {
-	DATA;
+	DATA_ARGS;
 
-	Caller.GetArgument( Arguments.Ids, JS.Callback );
-	Server.Request = xdh_ups::rGetContents;
+	Caller.GetArgument( Arguments.Ids, Data.Callback );
+	Data.Request = xdh_ups::rGetContents;
 }
 
 SCLNJS_F( xdhp::SetContents )
 {
-	DATA;
+	DATA_ARGS;
 
-	Caller.GetArgument( Arguments.Ids, Arguments.Contents, JS.Callback );
-	Server.Request = xdh_ups::rSetContents;
+	Caller.GetArgument( Arguments.Ids, Arguments.Contents, Data.Callback );
+	Data.Request = xdh_ups::rSetContents;
 }
 
 SCLNJS_F( xdhp::DressWidgets )
 {
-	DATA;
+	DATA_ARGS;
 
-	Caller.GetArgument( Arguments.Id, JS.Callback );
-	Server.Request = xdh_ups::rDressWidgets;
+	Caller.GetArgument( Arguments.Id, Data.Callback );
+	Data.Request = xdh_ups::rDressWidgets;
 }
 
 SCLNJS_F( xdhp::AddClasses )
 {
-	DATA;
+	DATA_ARGS;
 
-	Caller.GetArgument( Arguments.Ids, Arguments.Classes, JS.Callback );
-	Server.Request = xdh_ups::rAddClasses;
+	Caller.GetArgument( Arguments.Ids, Arguments.Classes, Data.Callback );
+	Data.Request = xdh_ups::rAddClasses;
 }
 
 SCLNJS_F( xdhp::RemoveClasses )
 {
-	DATA;
+	DATA_ARGS;
 
-	Caller.GetArgument( Arguments.Ids, Arguments.Classes, JS.Callback );
-	Server.Request = xdh_ups::rRemoveClasses;
+	Caller.GetArgument( Arguments.Ids, Arguments.Classes, Data.Callback );
+	Data.Request = xdh_ups::rRemoveClasses;
 }
 
 SCLNJS_F( xdhp::ToggleClasses )
 {
-	DATA;
+	DATA_ARGS;
 
-	Caller.GetArgument( Arguments.Ids, Arguments.Classes, JS.Callback );
-	Server.Request = xdh_ups::rToggleClasses;
+	Caller.GetArgument( Arguments.Ids, Arguments.Classes, Data.Callback );
+	Data.Request = xdh_ups::rToggleClasses;
 }
 
 SCLNJS_F( xdhp::EnableElements )
 {
-	DATA;
+	DATA_ARGS;
 
-	Caller.GetArgument( Arguments.Ids, JS.Callback );
-	Server.Request = xdh_ups::rEnableElements;
+	Caller.GetArgument( Arguments.Ids, Data.Callback );
+	Data.Request = xdh_ups::rEnableElements;
 }
 
 SCLNJS_F( xdhp::DisableElements )
 {
-	DATA;
+	DATA_ARGS;
 
-	Caller.GetArgument( Arguments.Ids, JS.Callback );
-	Server.Request = xdh_ups::rDisableElements;
+	Caller.GetArgument( Arguments.Ids, Data.Callback );
+	Data.Request = xdh_ups::rDisableElements;
 }
 
 SCLNJS_F( xdhp::GetAttribute )
 {
-	DATA;
+	DATA_ARGS;
 
-	Caller.GetArgument( Arguments.Id, Arguments.Name, JS.Callback );
-	Server.Request = xdh_ups::rGetAttribute;
+	Caller.GetArgument( Arguments.Id, Arguments.Name, Data.Callback );
+	Data.Request = xdh_ups::rGetAttribute;
 }
 
 SCLNJS_F( xdhp::SetAttribute )
 {
-	DATA;
+	DATA_ARGS;
 
-	Caller.GetArgument( Arguments.Id, Arguments.Name, Arguments.Value, JS.Callback );
-	Server.Request = xdh_ups::rSetAttribute;
+	Caller.GetArgument( Arguments.Id, Arguments.Name, Arguments.Value, Data.Callback );
+	Data.Request = xdh_ups::rSetAttribute;
 }
 
 SCLNJS_F( xdhp::GetProperty )
 {
-	DATA;
+	DATA_ARGS;
 
-	Caller.GetArgument( Arguments.Id, Arguments.Name, JS.Callback );
-	Server.Request = xdh_ups::rGetProperty;
+	Caller.GetArgument( Arguments.Id, Arguments.Name, Data.Callback );
+	Data.Request = xdh_ups::rGetProperty;
 }
 
 SCLNJS_F( xdhp::SetProperty )
 {
-	DATA;
+	DATA_ARGS;
 
-	Caller.GetArgument( Arguments.Id, Arguments.Name, Arguments.Value, JS.Callback );
-	Server.Request = xdh_ups::rSetProperty;
+	Caller.GetArgument( Arguments.Id, Arguments.Name, Arguments.Value, Data.Callback );
+	Data.Request = xdh_ups::rSetProperty;
 }
 
 qGCTOR( xdhp )

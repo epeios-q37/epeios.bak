@@ -43,9 +43,8 @@ mods += csdbns csdcmn csdmns csdmxb csdmxs
 mods += csdscb 
 mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
 mods += scln4a sclnjs 
-mods += prtcl server tree 
-mods += registry treep xdhp xdh_cmn xdh_dws 
-mods += xdh_ups 
+mods += prtcl proxy tree 
+mods += registry treep xdhp xdh_cmn xdh_ups 
 
 pmods += pllio 
 
@@ -396,7 +395,7 @@ ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20180118"\"
+copt += -DVERSION=\""20180122"\"
 copt += -DCOPYRIGHT_YEARS=\""2017"\"
 copt += -DIDENTIFIER=\""d6a723cb-e88f-4f2f-b429-3adc207f1d62"\"
 

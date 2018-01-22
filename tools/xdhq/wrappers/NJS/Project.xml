@@ -41,14 +41,13 @@
   </Modules>
 		<Modules Group="Shared" Path="../">
 			<Module Path="../">prtcl</Module>
-			<Module>server</Module>
+			<Module>proxy</Module>
 			<Module>tree</Module>
 		</Modules>
 		<Module>registry</Module>
 		<Module>treep</Module>
 		<Module>xdhp</Module>
 		<Module>xdh_cmn</Module>
-		<Module>xdh_dws</Module>
 		<Module>xdh_ups</Module>
 	</Modules>
 	<SourceDirs>

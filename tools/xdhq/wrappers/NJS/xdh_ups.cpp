@@ -19,7 +19,7 @@
 
 #include "xdh_ups.h"
 
-#include "server.h"
+#include "proxy.h"
 
 using namespace xdh_ups;
 
@@ -27,107 +27,108 @@ namespace send_ {
 	namespace {
 		void Alert_(
 			flw::sWFlow &Flow,
-			rArguments &Arguments )
+			const rArguments &Arguments )
 		{
-			server::alert::S( Arguments.Message, Flow );
+			proxy::alert::S( Arguments.Message, Flow );
 		}
 		void Confirm_(
 			flw::sWFlow &Flow,
-			rArguments &Arguments )
+			const rArguments &Arguments )
 		{
-			server::confirm::S( Arguments.Message, Flow );
+			proxy::confirm::S( Arguments.Message, Flow );
 		}
 		void SetLayout_(
 			flw::sWFlow &Flow,
-			rArguments &Arguments )
+			const rArguments &Arguments )
 		{
-			server::layout::set::S( Arguments.Id, Arguments.XML, Arguments.XSLFilename, Arguments.Language, Flow );
+			proxy::layout::set::S( Arguments.Id, Arguments.XML, Arguments.XSLFilename, Arguments.Language, Flow );
 		}
 		void GetContents_(
 			flw::sWFlow &Flow,
-			rArguments &Arguments )
+			const rArguments &Arguments )
 		{
-			server::contents::get::S( Arguments.Ids, Flow );
+			proxy::contents::get::S( Arguments.Ids, Flow );
 		}
 		void SetContents_(
 			flw::sWFlow &Flow,
-			rArguments &Arguments )
+			const rArguments &Arguments )
 		{
-			server::contents::set::S( Arguments.Ids, Arguments.Contents, Flow );
+			proxy::contents::set::S( Arguments.Ids, Arguments.Contents, Flow );
 		}
 		void DressWidgets_(
 			flw::sWFlow &Flow,
-			rArguments &Arguments )
+			const rArguments &Arguments )
 		{
-			server::widgets::dress::S( Arguments.Id, Flow );
+			proxy::widgets::dress::S( Arguments.Id, Flow );
 		}
 		void AddClasses_(
 			flw::sWFlow &Flow,
-			rArguments &Arguments )
+			const rArguments &Arguments )
 		{
-			server::classes::add::S( Arguments.Ids, Arguments.Classes, Flow );
+			proxy::classes::add::S( Arguments.Ids, Arguments.Classes, Flow );
 		}
 		void RemoveClasses_(
 			flw::sWFlow &Flow,
-			rArguments &Arguments )
+			const rArguments &Arguments )
 		{
-			server::classes::remove::S( Arguments.Ids, Arguments.Classes, Flow );
+			proxy::classes::remove::S( Arguments.Ids, Arguments.Classes, Flow );
 		}
 		void ToggleClasses_(
 			flw::sWFlow &Flow,
-			rArguments &Arguments )
+			const rArguments &Arguments )
 		{
-			server::classes::toggle::S( Arguments.Ids, Arguments.Classes, Flow );
+			proxy::classes::toggle::S( Arguments.Ids, Arguments.Classes, Flow );
 		}
 		void EnableElements_(
 			flw::sWFlow &Flow,
-			rArguments &Arguments )
+			const rArguments &Arguments )
 		{
-			server::elements::enable::S( Arguments.Ids, Flow );
+			proxy::elements::enable::S( Arguments.Ids, Flow );
 		}
 		void DisableElements_(
 			flw::sWFlow &Flow,
-			rArguments &Arguments )
+			const rArguments &Arguments )
 		{
-			server::elements::disable::S( Arguments.Ids, Flow );
+			proxy::elements::disable::S( Arguments.Ids, Flow );
 		}
 		void GetAttribute_(
 			flw::sWFlow &Flow,
-			rArguments &Arguments )
+			const rArguments &Arguments )
 		{
-			server::attribute::get::S( Arguments.Id, Arguments.Name, Flow );
+			proxy::attribute::get::S( Arguments.Id, Arguments.Name, Flow );
 		}
 		void SetAttribute_(
 			flw::sWFlow &Flow,
-			rArguments &Arguments )
+			const rArguments &Arguments )
 		{
-			server::attribute::set::S( Arguments.Id, Arguments.Name, Arguments.Value, Flow );
+			proxy::attribute::set::S( Arguments.Id, Arguments.Name, Arguments.Value, Flow );
 		}
 		void GetProperty_(
 			flw::sWFlow &Flow,
-			rArguments &Arguments )
+			const rArguments &Arguments )
 		{
-			server::property::get::S( Arguments.Id, Arguments.Name, Flow );
+			proxy::property::get::S( Arguments.Id, Arguments.Name, Flow );
 		}
 		void SetProperty_(
 			flw::sWFlow &Flow,
-			rArguments &Arguments )
+			const rArguments &Arguments )
 		{
-			server::property::set::S( Arguments.Id, Arguments.Name, Arguments.Value, Flow );
+			proxy::property::set::S( Arguments.Id, Arguments.Name, Arguments.Value, Flow );
 		}
 	}
 }
 
 #define H( name )\
 	case r##name:\
-		send_::name##_( Flow, Server.Arguments );\
+		send_::name##_( Flow, Arguments );\
 		break
 
 bso::sBool xdh_ups::Send(
+	eRequest Request,
 	flw::sWFlow &Flow,
-	rServer &Server )
+	const rArguments &Arguments )
 {
-	switch ( Server.Request ) {
+	switch ( Request ) {
 	case r_Undefined:
 		return false;
 		break;
@@ -161,119 +162,119 @@ namespace recv_ {
 	namespace {
 		void Alert_(
 			flw::sRFlow &Flow,
-			xdh_dws::rArguments &Arguments )
+			rReturn &Return )
 		{
-			server::alert::R( Flow );
+			proxy::alert::R( Flow );
 		}
 
 		void Confirm_(
 			flw::sRFlow &Flow,
-			xdh_dws::rArguments &Arguments )
+			rReturn &Return )
 		{
-			server::confirm::R( Flow, Arguments.Response() );
+			proxy::confirm::R( Flow, Return.StringToSet() );
 		}
 
 		void SetLayout_(
 			flw::sRFlow &Flow,
-			xdh_dws::rArguments &Arguments )
+			rReturn &Return )
 		{
-			server::layout::set::R( Flow );
+			proxy::layout::set::R( Flow );
 		}
 
 		void GetContents_(
 			flw::sRFlow &Flow,
-			xdh_dws::rArguments &Arguments )
+			rReturn &Return )
 		{
-			server::contents::get::R( Flow, Arguments.Contents() );
+			proxy::contents::get::R( Flow, Return.StringsToSet() );
 		}
 
 		void SetContents_(
 			flw::sRFlow &Flow,
-			xdh_dws::rArguments &Arguments )
+			rReturn &Return )
 		{
-			server::contents::set::R( Flow );
+			proxy::contents::set::R( Flow );
 		}
 
 		void DressWidgets_(
 			flw::sRFlow &Flow,
-			xdh_dws::rArguments &Arguments )
+			rReturn &Return )
 		{
-			server::widgets::dress::R( Flow );
+			proxy::widgets::dress::R( Flow );
 		}
 
 		void AddClasses_(
 			flw::sRFlow &Flow,
-			xdh_dws::rArguments &Arguments )
+			rReturn &Return )
 		{
-			server::classes::add::R( Flow );
+			proxy::classes::add::R( Flow );
 		}
 
 		void RemoveClasses_(
 			flw::sRFlow &Flow,
-			xdh_dws::rArguments &Arguments )
+			rReturn &Return )
 		{
-			server::classes::remove::R( Flow );
+			proxy::classes::remove::R( Flow );
 		}
 
 		void ToggleClasses_(
 			flw::sRFlow &Flow,
-			xdh_dws::rArguments &Arguments )
+			rReturn &Return )
 		{
-			server::classes::toggle::R( Flow );
+			proxy::classes::toggle::R( Flow );
 		}
 
 		void EnableElements_(
 			flw::sRFlow &Flow,
-			xdh_dws::rArguments &Arguments )
+			rReturn &Return )
 		{
-			server::elements::enable::R( Flow );
+			proxy::elements::enable::R( Flow );
 		}
 
 		void DisableElements_(
 			flw::sRFlow &Flow,
-			xdh_dws::rArguments &Arguments )
+			rReturn &Return )
 		{
-			server::elements::disable::R( Flow );
+			proxy::elements::disable::R( Flow );
 		}
 
 		void GetAttribute_(
 			flw::sRFlow &Flow,
-			xdh_dws::rArguments &Arguments )
+			rReturn &Return )
 		{
-			server::attribute::get::R( Flow, Arguments.Value() );
+			proxy::attribute::get::R( Flow, Return.StringToSet() );
 		}
 
 		void SetAttribute_(
 			flw::sRFlow &Flow,
-			xdh_dws::rArguments &Arguments )
+			rReturn &Return )
 		{
-			server::attribute::set::R( Flow );
+			proxy::attribute::set::R( Flow );
 		}
 
 		void GetProperty_(
 			flw::sRFlow &Flow,
-			xdh_dws::rArguments &Arguments )
+			rReturn &Return )
 		{
-			server::property::get::R( Flow, Arguments.Value() );
+			proxy::property::get::R( Flow, Return.StringToSet() );
 		}
 		void SetProperty_(
 			flw::sRFlow &Flow,
-			xdh_dws::rArguments &Arguments )
+			rReturn &Return )
 		{
-			server::property::set::R( Flow );
+			proxy::property::set::R( Flow );
 		}
 	}
 }
 
 #define H( name )\
 	case r##name:\
-		recv_::name##_( Flow, Arguments );\
+		recv_::name##_( Flow, Return );\
 		break
 
 bso::sBool xdh_ups::Recv(
 	eRequest Id,
 	flw::sRFlow &Flow,
-	xdh_dws::rArguments &Arguments )
+	rReturn &Return )
 {
 	if ( Id == r_Undefined )	// A new event has be detected.
 		return false;

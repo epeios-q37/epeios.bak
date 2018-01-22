@@ -17,15 +17,15 @@
     along with 'XDHq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "server.h"
+#include "proxy.h"
 
 #include "prtcl.h"
 
 #include "sclmisc.h"
 
-using namespace server;
+using namespace proxy;
 
-void server::Handshake(
+void proxy::Handshake(
 	flw::sRFlow &Flow,
 	str::dString & Language )
 {
@@ -38,7 +38,7 @@ void server::Handshake(
 	Flow.Dismiss();
 }
 
-void server::GetAction(
+void proxy::GetAction(
 	flw::sRWFlow &Flow,
 	str::dString &Id,
 	str::dString &Action )
@@ -101,7 +101,7 @@ namespace {
 	}
 }
 
-void server::layout::set::S(
+void proxy::layout::set::S(
 	const str::dString &Id,
 	const str::dString &XML,
 	const str::dString &XSLFilename,
@@ -112,7 +112,7 @@ void server::layout::set::S(
 	SetWithXSLFilename_( prtcl::aSetLayout_1, Id, XML, XSLFilename, Language, Flow );
 }
 
-void server::alert::S(
+void proxy::alert::S(
 	const str::dString &Message,
 	flw::sWFlow &Flow )
 {
@@ -121,7 +121,7 @@ void server::alert::S(
 	Flow.Commit();
 }
 
-void server::confirm::S(
+void proxy::confirm::S(
 	const str::dString &Message,
 	flw::sWFlow &Flow )
 {
@@ -130,7 +130,7 @@ void server::confirm::S(
 	Flow.Commit();
 }
 
-void server::confirm::R(
+void proxy::confirm::R(
 	flw::sRFlow &Flow,
 	str::dString &Response )
 {
@@ -138,7 +138,7 @@ void server::confirm::R(
 	Flow.Dismiss();
 }
 
-void server::contents::get::S(
+void proxy::contents::get::S(
 	const str::dStrings &Ids,
 	flw::sWFlow &Flow )
 {
@@ -147,7 +147,7 @@ void server::contents::get::S(
 	Flow.Commit();
 }
 
-void server::contents::get::R(
+void proxy::contents::get::R(
 	flw::sRFlow &Flow,
 	str::dStrings &Contents )
 {
@@ -155,7 +155,7 @@ void server::contents::get::R(
 	Flow.Dismiss();
 }
 
-void server::contents::set::S(
+void proxy::contents::set::S(
 	const str::dStrings & Ids,
 	const str::dStrings & Contents,
 	flw::sWFlow & Flow )
@@ -166,7 +166,7 @@ void server::contents::set::S(
 	Flow.Commit();
 }
 
-void server::widgets::dress::S(
+void proxy::widgets::dress::S(
 	const str::dString &Id,
 	flw::sWFlow &Flow )
 {
@@ -189,7 +189,7 @@ namespace {
 	}
 }
 
-void server::classes::add::S(
+void proxy::classes::add::S(
 	const str::dStrings &Ids,
 	const str::dStrings &Classes,
 	flw::sWFlow & Flow )
@@ -197,7 +197,7 @@ void server::classes::add::S(
 	HandleClasses_( Ids, Classes, prtcl::aAddClasses_1, Flow );
 }
 
-void server::classes::remove::S(
+void proxy::classes::remove::S(
 	const str::dStrings &Ids,
 	const str::dStrings &Classes,
 	flw::sWFlow & Flow )
@@ -205,7 +205,7 @@ void server::classes::remove::S(
 	HandleClasses_( Ids, Classes, prtcl::aRemoveClasses_1, Flow );
 }
 
-void server::classes::toggle::S(
+void proxy::classes::toggle::S(
 	const str::dStrings &Ids,
 	const str::dStrings &Classes,
 	flw::sWFlow & Flow )
@@ -225,14 +225,14 @@ namespace {
 	}
 }
 
-void server::elements::enable::S(
+void proxy::elements::enable::S(
 	const str::dStrings &Ids,
 	flw::sWFlow & Flow )
 {
 	HandleElements_( Ids, prtcl::aEnableElements_1, Flow );
 }
 
-void server::elements::disable::S(
+void proxy::elements::disable::S(
 	const str::dStrings &Ids,
 	flw::sWFlow & Flow )
 {
@@ -240,7 +240,7 @@ void server::elements::disable::S(
 }
 
 
-void server::ap_::set::S(
+void proxy::ap_::set::S(
 	prtcl::eAnswer Answer,
 	const str::dString &Id,
 	const str::dString &Name,
@@ -254,7 +254,7 @@ void server::ap_::set::S(
 	Flow.Commit();
 }
 
-void server::ap_::get::S(
+void proxy::ap_::get::S(
 	prtcl::eAnswer Answer,
 	const str::dString &Id,
 	const str::dString &Name,
@@ -266,7 +266,7 @@ void server::ap_::get::S(
 	Flow.Commit();
 }
 
-void server::ap_::get::R(
+void proxy::ap_::get::R(
 	flw::sRFlow &Flow,
 	str::dString &Value )
 {

@@ -24,7 +24,6 @@
 # define XDH_CMN_INC_
 
 # include "xdh_ups.h"
-# include "xdh_dws.h"
 
 namespace xdh_cmn {
 	struct rData
@@ -32,8 +31,13 @@ namespace xdh_cmn {
 	private:
 		mtx::rHandler Lock_;
 	public:
-		xdh_dws::rJS JS;
-		xdh_ups::rServer Server;
+		sclnjs::rCallback Callback;
+		xdh_ups::rReturn Return;
+		str::wString	// For the launching of an action.
+			Id,
+			Action;
+		xdh_ups::eRequest Request;
+		xdh_ups::rArguments Arguments;
 		sclnjs::rObject XDH;	// User overloaded 'XDH' JS class.
 		str::wString Language;
 		void reset( bso::sBool P = true )
@@ -43,7 +47,8 @@ namespace xdh_cmn {
 					mtx::Delete( Lock_ );
 			}
 
-			tol::reset( P, JS, Server, XDH, Language );
+			tol::reset( P, Callback, Return, Id, Action, Arguments, XDH, Language );
+			Request = xdh_ups::r_Undefined;
 			Lock_ = NULL;
 		}
 		qCDTOR( rData );
@@ -51,7 +56,8 @@ namespace xdh_cmn {
 		{
 			reset();
 
-			tol::Init( JS, Server, XDH, Language );
+			tol::Init( Callback, Return, Id, Action, Arguments, XDH, Language );
+			Request = xdh_ups::r_Undefined;
 			Lock_ = mtx::Create();
 		}
 		void Lock( void )
