@@ -30,23 +30,8 @@
 # include "str.h"
 
 namespace proxy {
-	void Handshake(
-		flw::sRFlow &Flow,
-		str::dString &Language );
-
-	void GetAction(
-		flw::sRWFlow &Flow,
-		str::dString &Id,
-		str::dString &Action );
-
-	using prxy_cmn::eRequest;
-	using prxy_cmn::r_Undefined;
-
 	using prxy_send::rArguments;
-	using prxy_send::Send;
-
 	using prxy_recv::rReturn;
-	using prxy_recv::Recv;
 
 	qENUM( Status ) {
 		sNew,		// New connexion.
@@ -61,12 +46,12 @@ namespace proxy {
 	private:
 		mtx::rHandler Lock_;
 	public:
-		proxy::rReturn Return;
+		rReturn Return;
 		str::wString	// For the launching of an action.
 			Id,
 			Action;
-		proxy::eRequest Request;
-		proxy::rArguments Arguments;
+		prxy_cmn::eRequest Request;
+		rArguments Arguments;
 		str::wString Language;
 		void reset( bso::sBool P = true )
 		{
@@ -76,7 +61,7 @@ namespace proxy {
 			}
 
 			tol::reset( P, Return, Id, Action, Arguments, Language );
-			Request = proxy::r_Undefined;
+			Request = prxy_cmn::r_Undefined;
 			Lock_ = NULL;
 		}
 		qCDTOR( rData );
@@ -85,7 +70,7 @@ namespace proxy {
 			reset();
 
 			tol::Init( Return, Id, Action, Arguments, Language );
-			Request = proxy::r_Undefined;
+			Request = prxy_cmn::r_Undefined;
 			Lock_ = mtx::Create();
 		}
 		eStatus GetAndResetStatus( void )

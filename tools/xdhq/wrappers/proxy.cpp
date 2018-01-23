@@ -25,30 +25,32 @@
 
 using namespace proxy;
 
-void proxy::Handshake(
-	flw::sRFlow &Flow,
-	str::dString & Language )
-{
-	csdcmn::sVersion Version = csdcmn::UndefinedVersion;
+namespace {
+	void Handshake_(
+		flw::sRFlow &Flow,
+		str::dString & Language )
+	{
+		csdcmn::sVersion Version = csdcmn::UndefinedVersion;
 
-	if ( ( Version = csdcmn::GetProtocolVersion( prtcl::ProtocolId, Flow ) ) != prtcl::ProtocolVersion )
-		qRGnr();
+		if ( (Version = csdcmn::GetProtocolVersion( prtcl::ProtocolId, Flow )) != prtcl::ProtocolVersion )
+			qRGnr();
 
-	prtcl::Get( Flow, Language );
-	Flow.Dismiss();
-}
+		prtcl::Get( Flow, Language );
+		Flow.Dismiss();
+	}
 
-void proxy::GetAction(
-	flw::sRWFlow &Flow,
-	str::dString &Id,
-	str::dString &Action )
-{
-	if ( prtcl::GetRequest( Flow ) != prtcl::rLaunch_1 )
-		qRGnr();
+	void GetAction_(
+		flw::sRWFlow &Flow,
+		str::dString &Id,
+		str::dString &Action )
+	{
+		if ( prtcl::GetRequest( Flow ) != prtcl::rLaunch_1 )
+			qRGnr();
 
-	prtcl::Get( Flow, Id );
-	prtcl::Get( Flow, Action );
-	Flow.Dismiss();
+		prtcl::Get( Flow, Id );
+		prtcl::Get( Flow, Action );
+		Flow.Dismiss();
+	}
 }
 
 void *proxy::rProcessing_::CSDSCBPreProcess(
@@ -67,7 +69,7 @@ qRB;
 	Data->Init();
 
 	Flow.Init( *IODriver );
-	proxy::Handshake( Flow, Data->Language );
+	Handshake_( Flow, Data->Language );
 
 	Data->Lock();
 
@@ -101,10 +103,8 @@ qRB;
 
 	Data.Return.Init();
 
-	if ( !proxy::Recv( Data.Request, Flow, Data.Return ) )
-		proxy::GetAction( Flow, Data.Id, Data.Action );
-
-	//Data.Request = proxy::r_Undefined;
+	if ( prxy_recv::Recv( Data.Request, Flow, Data.Return ) )
+		GetAction_( Flow, Data.Id, Data.Action );
 
 	Data.Lock();
 
@@ -113,7 +113,7 @@ qRB;
 	Data.Lock();
 	Data.Unlock();
 
-	if ( !proxy::Send( Data.Request, Flow, Data.Arguments ) )
+	if ( !prxy_send::Send( Data.Request, Flow, Data.Arguments ) )
 		prtcl::PutAnswer( prtcl::aOK_1, Flow );
 qRR;
 qRT;
