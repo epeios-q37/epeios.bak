@@ -22,7 +22,7 @@
 #include "registry.h"
 #include "treep.h"
 
-#include "server.h"
+#include "proxy.h"
 
 #include "sclargmnt.h"
 
@@ -34,194 +34,16 @@ using namespace xdhp;
 
 namespace {
 
-	class rComm_	// ...unication.
-	{
-	private:
-		mtx::rHandler Read_, Write_;
-		str::wString Language_;
-		fdr::rRWDriver *Driver_;
-	public:
-		void reset( bso::sBool P = true )
-		{
-			if ( P ) {
-				if ( Read_ != mtx::UndefinedHandler )
-					mtx::Delete( Read_ );
+	namespace {
+		typedef proxy::rData rPData_;
+	}
 
-				if ( Write_ != mtx::UndefinedHandler )
-					mtx::Delete( Write_ );
-			}
+	class rData_
+		: public rPData_
+	{};
 
-			tol::reset( P, Language_, Driver_ );
-			Read_ = Write_ = mtx::UndefinedHandler;
-		}
-		qCDTOR( rComm_ );
-		void Init( const str::dString &Language )
-		{
-			reset();
-
-			Read_ = mtx::Create();
-			Write_ = mtx::Create();
-
-			mtx::Lock( Read_ );
-
-			Language_.Init( Language );
-			Driver_ = NULL;
-		}
-		qRODISCLOSEr( str::dString, Language );
-		void Write( fdr::rRWDriver *Driver )	// If 'Driver' == NULL, it only waits for dismissal.
-		{
-			mtx::Lock( Write_ );
-
-			if ( ( Driver_ != NULL ) && ( Driver != NULL ) )
-				qRGnr();
-
-			Driver_ = Driver;
-
-			if ( Driver == NULL )
-				mtx::Unlock( Write_ );
-			else
-				mtx::Unlock( Read_ );
-		}
-		fdr::rRWDriver *Read( void )
-		{
-			mtx::Lock( Read_ );
-
-			if ( Driver_ == NULL )
-				qRGnr();
-
-			return Driver_;
-		}
-		void Dismiss( void )
-		{
-			mtx::Unlock( Write_ );
-		}
-	};
-
-	class rConn_	// ...exion.
-	{
-	private:
-		mtx::rHandler Read_, Write_;
-		rComm_ *Comm_;
-	public:
-		void reset( bso::sBool P = true )
-		{
-			if ( P ) {
-				if ( Read_ != mtx::UndefinedHandler )
-					mtx::Delete( Read_ );
-
-				if ( Write_ != mtx::UndefinedHandler )
-					mtx::Delete( Write_ );
-			}
-
-			Read_ = Write_ = mtx::UndefinedHandler;
-			Comm_ = NULL;
-		}
-		qCDTOR( rConn_ );
-		void Init( void )
-		{
-			reset();
-
-			Read_ = mtx::Create();
-			Write_ = mtx::Create();
-
-			mtx::Lock( Read_ );
-
-			Comm_ = NULL;
-		}
-		void Write( rComm_ *Comm )
-		{
-			mtx::Lock( Write_ );
-
-			if ( Comm_ != NULL )
-				qRGnr();
-
-			Comm_ = Comm;
-
-			mtx::Unlock( Read_ );
-		}
-		rComm_ *Read( void )
-		{
-			rComm_ *Comm = NULL;
-
-			mtx::Lock( Read_ );
-
-			if ( Comm_ == NULL )
-				qRGnr();
-
-			Comm = Comm_;
-
-			mtx::Unlock( Write_ );
-
-			return Comm;
-		}
-	} Conn_;
-
-	typedef csdmns::cProcessing cProcessing_;
-
-	class sProcessing
-	: public cProcessing_
-	{
-	protected:
-		virtual void *CSDSCBPreProcess(
-			fdr::rRWDriver *IODriver,
-			const ntvstr::char__ *Origin ) override
-		{
-			rComm_ *Comm = NULL;
-		qRH;
-			flw::sDressedRWFlow<> Flow;
-			str::wString Language;
-		qRB;
-			Flow.Init( *IODriver );
-			Language.Init();
-			server::Handshake( Flow, Language );
-
-			Comm = new rComm_;
-
-			if ( Comm == NULL )
-				qRAlc();
-
-			Comm->Init( Language );
-
-			prtcl::PutAnswer( prtcl::aOK_1, Flow );
-			Flow.Commit();
-
-			Conn_.Write( Comm );
-		qRR;
-			if ( Comm != NULL )
-				delete Comm;
-		qRT;
-		qRE;
-			return Comm;
-		}
-		virtual csdscb::eAction CSDSCBProcess(
-			fdr::rRWDriver *IODriver,
-			void *UP ) override
-		{
-			if ( UP == NULL )
-				qRGnr();
-
-			rComm_ &Comm = *(rComm_ *)UP;
-
-			Comm.Write( IODriver );
-
-			Comm.Write( NULL );	// Wait for dismissal.
-
-			return csdscb::aContinue;
-		}
-		virtual bso::sBool CSDSCBPostProcess( void *UP ) override
-		{
-			if ( UP == NULL )
-				qRGnr();
-
-			delete (rComm_ *)UP;
-
-			return true;
-		}
-	public:
-		void Init( void )
-		{}
-	} Processing_;
-
+	proxy::rSharing<rData_> Sharing_;
+	proxy::rProcessing<rData_> Processing_;
 	csdmns::rServer Server_;
 
 	void Process_( void * )
@@ -240,9 +62,8 @@ qRB;
 
 	sclargmnt::FillRegistry( Arguments, sclargmnt::faIsArgument, sclargmnt::uaReport );
 
-	Processing_.Init();
-	Conn_.Init();
-
+	Sharing_.Init();
+	Processing_.Init( Sharing_ );
 	Server_.Init( sclmisc::MGetU16( registry::parameter::Service ), Processing_ );
 
 	mtk::RawLaunch( Process_, NULL );
