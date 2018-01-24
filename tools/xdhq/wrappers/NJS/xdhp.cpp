@@ -137,7 +137,7 @@ namespace {
 		qCDTOR( rData_ );
 		void Init( void )
 		{
-			rPData_::reset();
+			rPData_::Init();
 
 			tol::Init( Callback, XDH );
 		}

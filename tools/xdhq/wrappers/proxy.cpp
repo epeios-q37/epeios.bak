@@ -103,7 +103,7 @@ qRB;
 
 	Data.Return.Init();
 
-	if ( prxy_recv::Recv( Data.Request, Flow, Data.Return ) )
+	if ( !prxy_recv::Recv( Data.Request, Flow, Data.Return ) )
 		GetAction_( Flow, Data.Id, Data.Action );
 
 	Data.Lock();
