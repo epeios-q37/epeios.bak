@@ -33,14 +33,6 @@ namespace proxy {
 	using prxy_send::rArguments;
 	using prxy_recv::rReturn;
 
-	qENUM( Status ) {
-		sNew,		// New connexion.
-		sAction,	// Action to be handled.
-		sPending,	// A response of an action has to be handled.
-		s_amount,
-		s_Undefined
-	};
-
 	struct rData
 	{
 	private:
@@ -73,16 +65,6 @@ namespace proxy {
 			Request = prxy_cmn::r_Undefined;
 			Lock_ = mtx::Create();
 		}
-		eStatus GetAndResetStatus( void )
-		{
-			if ( Request != prxy_cmn::r_Undefined ) {
-				Request = prxy_cmn::r_Undefined;
-				return sPending;
-			} else if ( Action.Amount() != 0 )
-				return sAction;
-			else
-				return sNew;
-		}
 		void Lock( void )
 		{
 			mtx::Lock( Lock_ );
@@ -93,84 +75,9 @@ namespace proxy {
 		}
 	};
 
-	class rSharing_
-	{
-	private:
-		mtx::rHandler Write_, Read_;
-		rData *Data_;
-	protected:
-		rData *Read( void )
-		{
-			mtx::Lock( Read_ );
-
-			rData *Data = Data_;
-
-			mtx::Unlock( Write_ );
-
-			if ( Data_ == NULL )
-				qRFwk();
-
-			Data_ = NULL;
-
-			return Data;
-		}
-	public:
-		void reset( bso::sBool P = true )
-		{
-			if ( P ) {
-				if ( Write_ != mtx::UndefinedHandler )
-					mtx::Delete( Write_ );
-
-				if ( Read_ != mtx::UndefinedHandler )
-					mtx::Delete( Read_ );
-			}
-
-			Write_ = Read_ = NULL;
-			Data_ = NULL;
-		}
-		qCDTOR( rSharing_ );
-		void Init( void )
-		{
-			reset();
-
-			Write_ = mtx::Create();
-			Read_ = mtx::Create();
-
-			Data_ = NULL;
-
-			mtx::Lock( Read_ );
-		}
-		void Write( rData *Data )
-		{
-			mtx::Lock( Write_ );
-
-			if ( Data_ != NULL )
-				qRGnr();
-
-			if ( Data == NULL )
-				qRGnr();
-
-			Data_ = Data;
-
-			mtx::Unlock( Read_ );
-		}
-	};
-
-	template <typename data> class rSharing
-	: public rSharing_
-	{
-	public:
-		data *Read( void )
-		{
-			return (data *)rSharing_::Read();
-		}
-	};
-
-	class rProcessing_
+	class rProcessing
 	: public csdscb::cProcessing
 	{
-	private:
-		qRMV( rSharing_, S_, Sharing_ );
 	protected:
 		virtual void *CSDSCBPreProcess(
 			fdr::rRWDriver *IODriver,
@@ -180,31 +87,15 @@ namespace proxy {
 			void *UP ) override;
 		virtual bso::sBool CSDSCBPostProcess( void *UP ) override;
 		virtual rData *PRXYNew( void ) = 0;
-		virtual void PRXYDelete( rData *Data ) = 0;
+		virtual void PRXYOnAction( rData *Data ) = 0;
+		virtual void PRXYOnPending( rData *Data ) = 0;
 	public:
 		void reset( bso::sBool P = true )
 		{}
-		qCVDTOR( rProcessing_ );
-		void Init( rSharing_ &Sharing )
-		{
-			Sharing_ = &Sharing;
-		}
+		qCVDTOR( rProcessing );
+		void Init( void )
+		{}
 	};
-
-	template <typename data> class rProcessing
-	: public rProcessing_
-	{
-	protected:
-		virtual rData *PRXYNew( void ) override
-		{
-			return new data;
-		}
-		virtual void PRXYDelete( rData *Data ) override
-		{
-			delete (data *)Data;
-		}
-	};
-
 }
 
 #endif

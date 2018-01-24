@@ -134,7 +134,7 @@ namespace {
 			rPData_::reset( P );
 			tol::reset( P, Callback, XDH );
 		}
-		qCDTOR( rData_ );
+		qCVDTOR( rData_ );
 		void Init( void )
 		{
 			rPData_::Init();
@@ -143,12 +143,132 @@ namespace {
 		}
 	};
 
+	sclnjs::rCallback ConnectCallback_;
+
+	qENUM( Status_ ) {
+		sNew,		// New connexion.
+		sAction,	// Action to be handled.
+		sPending,	// A response of an action has to be handled.
+		s_amount,
+		s_Undefined
+	};
+
+	class rSharing_
+	{
+	private:
+		mtx::rHandler Write_, Read_;
+		proxy::rData *Data_;
+		eStatus_ Status_;
+	public:
+		void reset( bso::sBool P = true )
+		{
+			if ( P ) {
+				if ( Write_ != mtx::UndefinedHandler )
+					mtx::Delete( Write_ );
+
+				if ( Read_ != mtx::UndefinedHandler )
+					mtx::Delete( Read_ );
+			}
+
+			Write_ = Read_ = NULL;
+			Data_ = NULL;
+			Status_ = s_Undefined;
+		}
+		qCDTOR( rSharing_ );
+		void Init( void )
+		{
+			reset();
+
+			Write_ = mtx::Create();
+			Read_ = mtx::Create();
+
+			Data_ = NULL;
+			Status_ = s_Undefined;
+
+			mtx::Lock( Read_ );
+		}
+		void Write(
+			proxy::rData *Data,
+			eStatus_ Status )
+		{
+			mtx::Lock( Write_ );
+
+			if ( Data_ != NULL )
+				qRGnr();
+
+			if ( Data == NULL )
+				qRGnr();
+
+			Data_ = Data;
+			Status_ = Status;
+
+			mtx::Unlock( Read_ );
+		}
+		eStatus_ GetStatusAndReset( void )
+		{
+			eStatus_ Status = Status_;
+
+			if ( Status >= s_amount)
+				qRGnr();
+
+			Status_ = s_Undefined;
+
+			return Status;
+		}
+		proxy::rData *Read( void )
+		{
+			mtx::Lock( Read_ );
+
+			proxy::rData *Data = Data_;
+
+			mtx::Unlock( Write_ );
+
+			if ( Data_ == NULL )
+				qRFwk();
+
+			Data_ = NULL;
+
+			return Data;
+		}
+		} Sharing_;
+
+	namespace {
+		typedef proxy::rProcessing rPProcessing_;
+
+		class rProcessing_
+		: public rPProcessing_
+		{
+		protected:
+			proxy::rData *PRXYNew( void ) override
+			{
+				rData_ *Data = new rData_;
+
+				if ( Data == NULL )
+					qRAlc();
+
+				Data->Init();
+
+				::Sharing_.Write( Data, sNew );
+
+				return Data;
+			}
+			void PRXYOnAction( proxy::rData *Data ) override
+			{
+				::Sharing_.Write( Data, sAction );
+			}
+			void PRXYOnPending( proxy::rData *Data ) override
+			{
+				::Sharing_.Write( Data, sPending );
+			}
+		};
+	}
+
 
 	class rXDHRack_
 	: public sclnjs::cAsync
 	{
 	private:
-		proxy::rProcessing<rData_> Processing_;
+		rProcessing_ Processing_;
 		csdmns::rServer Server_;
 		qRMV( rData_, D_, Data_ );
 		void SetCallbackArguments_(
@@ -181,23 +301,16 @@ namespace {
 			return sclnjs::bRelaunch;
 		}
 	public:
-		proxy::rSharing<rData_> Sharing;
-		sclnjs::rCallback ConnectCallback;
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, Sharing, Processing_, Server_, ConnectCallback );
+			tol::reset( P, Processing_, Server_ );
 			Data_ = NULL;
 		}
 		qCDTOR( rXDHRack_ );
-		void Init(
-			csdbns::sService Service,
-			sclnjs::rCallback &ConnectCallback )
+		void Init( csdbns::sService Service )
 		{
-			Sharing.Init();
-			Processing_.Init( Sharing );
+			Processing_.Init();
 			Server_.Init( Service, Processing_ );
-			this->ConnectCallback.Init();
-			this->ConnectCallback = ConnectCallback;
 			mtk::Launch( LaunchServer_, &Server_ );
 			Data_ = NULL;
 		}
@@ -206,7 +319,7 @@ namespace {
 			if ( Data_ != NULL )
 				qRGnr();
 
-			Data_ = Sharing.Read();
+			Data_ = (rData_ *)Sharing_.Read();
 		}
 		void HandleData( void )
 		{
@@ -219,24 +332,22 @@ namespace {
 			Callback = Data.Callback;
 			Data.Callback.reset( false );
 
-			switch ( Data.GetAndResetStatus() ) {
-			case proxy::sPending:
+			switch ( Sharing_.GetStatusAndReset() ) {
+			case sPending:
 				Arguments.Init();
 				SetCallbackArguments_( Data.Return, Arguments );
 				Callback.VoidLaunch( Arguments );
 				Callback.reset( false );
 				break;
-			case proxy::sAction:
+			case sAction:
 				Callback.Init();
 				Callback.Assign( Get_( Data.Action ) );
 				Callback.VoidLaunch( Data.XDH, Data.Id );
 				Callback.reset( false );
 				tol::Init( Data.Id, Data.Action );
 				break;
-			case proxy::sNew:
-				Arguments.Init();
-				SetCallbackArguments_( Data.Return, Arguments );
-				ConnectCallback.ObjectLaunch( Data.XDH, Arguments );
+			case sNew:
+				ConnectCallback_.ObjectLaunch( Data.XDH );
 				Data.XDH.Set( Id_, &Data );
 				break;
 			default:
@@ -323,16 +434,13 @@ SCLNJS_F( xdhp::Listen )
 qRH;
 	csdcmn::sVersion Version = csdcmn::UndefinedVersion;
 	str::wString Arguments;
-	sclnjs::rCallback Callback;
 qRB;
-	tol::Init( Callback, Arguments );
-	Caller.GetArgument( Callback, Arguments );
+	tol::Init( Arguments );
+	Caller.GetArgument( ConnectCallback_, Arguments );
 
 	sclargmnt::FillRegistry( Arguments, sclargmnt::faIsArgument, sclargmnt::uaReport );
 
-	Rack_.Init( sclmisc::MGetU16( registry::parameter::Service ), Callback );
-
-	Callback.reset( false );	// To avoid the destruction of contained items, as their are now managed by the rack.
+	Rack_.Init( sclmisc::MGetU16( registry::parameter::Service ) );
 
 #if 0
 	while ( true ) {
@@ -505,4 +613,6 @@ qGCTOR( xdhp )
 {
 	Automat_.Init();
 	Callbacks_.Init();
+	ConnectCallback_.Init();
+	Sharing_.Init();
 }

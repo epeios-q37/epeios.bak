@@ -53,7 +53,7 @@ namespace {
 	}
 }
 
-void *proxy::rProcessing_::CSDSCBPreProcess(
+void *proxy::rProcessing::CSDSCBPreProcess(
 	fdr::rRWDriver *IODriver,
 	const ntvstr::char__ *Origin )
 {
@@ -66,14 +66,10 @@ qRB;
 	if ( Data == NULL )
 		qRAlc();
 
-	Data->Init();
-
 	Flow.Init( *IODriver );
 	Handshake_( Flow, Data->Language );
 
 	Data->Lock();
-
-	S_().Write( Data );
 
 	Data->Lock();
 	Data->Unlock();
@@ -88,7 +84,7 @@ qRE;
 	return Data;
 }
 
-csdscb::eAction proxy::rProcessing_::CSDSCBProcess(
+csdscb::eAction proxy::rProcessing::CSDSCBProcess(
 	fdr::rRWDriver *IODriver,
 	void *UP )
 {
@@ -103,12 +99,15 @@ qRB;
 
 	Data.Return.Init();
 
-	if ( !prxy_recv::Recv( Data.Request, Flow, Data.Return ) )
+	if ( prxy_recv::Recv( Data.Request, Flow, Data.Return ) ) {
+		Data.Request = prxy_cmn::r_Undefined;
+		Data.Lock();
+		PRXYOnPending( &Data );
+	}  else {
 		GetAction_( Flow, Data.Id, Data.Action );
-
-	Data.Lock();
-
-	S_().Write( &Data );
+		Data.Lock();
+		PRXYOnAction( &Data );
+	}
 
 	Data.Lock();
 	Data.Unlock();
@@ -121,14 +120,14 @@ qRE;
 	return csdscb::aContinue;
 }
 
-bso::sBool proxy::rProcessing_::CSDSCBPostProcess( void *UP )
+bso::sBool proxy::rProcessing::CSDSCBPostProcess( void *UP )
 {
 	rData *Data = (rData *)UP;
 
 	if ( Data == NULL )
 		qRGnr();
 
-	PRXYDelete( Data );
+	delete Data;
 
 	return false;
 }
