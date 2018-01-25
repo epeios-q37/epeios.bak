@@ -123,28 +123,6 @@ namespace {
 		typedef proxy::rData rPData_;
 	}
 
-	class rData_
-	: public rPData_
-	{
-	public:
-		sclnjs::rCallback Callback;
-		sclnjs::rObject XDH;	// User overloaded 'XDH' JS class.
-		void reset( bso::sBool P = true )
-		{
-			rPData_::reset( P );
-			tol::reset( P, Callback, XDH );
-		}
-		qCVDTOR( rData_ );
-		void Init( void )
-		{
-			rPData_::Init();
-
-			tol::Init( Callback, XDH );
-		}
-	};
-
-	sclnjs::rCallback ConnectCallback_;
-
 	qENUM( Status_ ) {
 		sNew,		// New connexion.
 		sAction,	// Action to be handled.
@@ -153,93 +131,41 @@ namespace {
 		s_Undefined
 	};
 
-	class rSharing_
+	class rData_
+	: public rPData_
 	{
-	private:
-		mtx::rHandler Write_, Read_;
-		proxy::rData *Data_;
-		eStatus_ Status_;
 	public:
+		sclnjs::rCallback Callback;
+		sclnjs::rObject XDH;	// User overloaded 'XDH' JS class.
+		eStatus_ Status;
 		void reset( bso::sBool P = true )
 		{
-			if ( P ) {
-				if ( Write_ != mtx::UndefinedHandler )
-					mtx::Delete( Write_ );
-
-				if ( Read_ != mtx::UndefinedHandler )
-					mtx::Delete( Read_ );
-			}
-
-			Write_ = Read_ = NULL;
-			Data_ = NULL;
-			Status_ = s_Undefined;
+			rPData_::reset( P );
+			tol::reset( P, Callback, XDH );
+			Status = s_Undefined;
 		}
-		qCDTOR( rSharing_ );
+		qCVDTOR( rData_ );
 		void Init( void )
 		{
-			reset();
+			rPData_::Init();
 
-			Write_ = mtx::Create();
-			Read_ = mtx::Create();
-
-			Data_ = NULL;
-			Status_ = s_Undefined;
-
-			mtx::Lock( Read_ );
+			tol::Init( Callback, XDH );
+			Status = s_Undefined;
 		}
-		void Write(
-			proxy::rData *Data,
-			eStatus_ Status )
-		{
-			mtx::Lock( Write_ );
+	};
 
-			if ( Data_ != NULL )
-				qRGnr();
+	sclnjs::rCallback ConnectCallback_;
 
-			if ( Data == NULL )
-				qRGnr();
-
-			Data_ = Data;
-			Status_ = Status;
-
-			mtx::Unlock( Read_ );
-		}
-		eStatus_ GetStatusAndReset( void )
-		{
-			eStatus_ Status = Status_;
-
-			if ( Status >= s_amount)
-				qRGnr();
-
-			Status_ = s_Undefined;
-
-			return Status;
-		}
-		proxy::rData *Read( void )
-		{
-			mtx::Lock( Read_ );
-
-			proxy::rData *Data = Data_;
-
-			mtx::Unlock( Write_ );
-
-			if ( Data_ == NULL )
-				qRFwk();
-
-			Data_ = NULL;
-
-			return Data;
-		}
-		} Sharing_;
+	proxy::rSharing<rData_> Sharing_;
 
 	namespace {
-		typedef proxy::rProcessing rPProcessing_;
+		typedef proxy::rProcessing<rData_> rPProcessing_;
 
 		class rProcessing_
 		: public rPProcessing_
 		{
 		protected:
-			proxy::rData *PRXYNew( void ) override
+			rData_ *PRXYNew( void ) override
 			{
 				rData_ *Data = new rData_;
 
@@ -247,22 +173,24 @@ namespace {
 					qRAlc();
 
 				Data->Init();
+				Data->Status = sNew;
 
-				::Sharing_.Write( Data, sNew );
+				Sharing_.Write( Data );
 
 				return Data;
 			}
-			void PRXYOnAction( proxy::rData *Data ) override
+			void PRXYOnAction( rData_ *Data ) override
 			{
-				::Sharing_.Write( Data, sAction );
+				Data->Status = sAction;
+				::Sharing_.Write( Data );
 			}
-			void PRXYOnPending( proxy::rData *Data ) override
+			void PRXYOnPending( rData_ *Data ) override
 			{
-				::Sharing_.Write( Data, sPending );
+				Data->Status = sPending;
+				Sharing_.Write( Data );
 			}
 		};
 	}
-
 
 	class rXDHRack_
 	: public sclnjs::cAsync
@@ -332,7 +260,7 @@ namespace {
 			Callback = Data.Callback;
 			Data.Callback.reset( false );
 
-			switch ( Sharing_.GetStatusAndReset() ) {
+			switch ( Data.Status ) {
 			case sPending:
 				Arguments.Init();
 				SetCallbackArguments_( Data.Return, Arguments );
@@ -355,6 +283,7 @@ namespace {
 				break;
 			}
 
+			Data.Status = s_Undefined;
 			Data.Unlock();
 			Data_ = NULL;
 		qRR;

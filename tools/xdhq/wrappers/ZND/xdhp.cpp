@@ -42,8 +42,30 @@ namespace {
 		: public rPData_
 	{};
 
-	proxy::rSharing<rData_> Sharing_;
-	proxy::rProcessing<rData_> Processing_;
+	namespace {
+		typedef proxy::rProcessing rPProcessing_;
+
+		class rProcessing_
+		: public rPProcessing_
+		{
+		protected:
+			proxy::rData *PRXYNew( void ) override
+			{
+				rData_ *Data = new rData_;
+
+				Data->Init();
+
+				return Data;
+			}
+			void PRXYOnAction( proxy::rData *Data ) override
+			{
+			}
+			void PRXYOnPending( proxy::rData *Data ) override
+			{
+			}
+		} Processing_;
+	}
+
 	csdmns::rServer Server_;
 
 	void Process_( void * )
@@ -62,8 +84,7 @@ qRB;
 
 	sclargmnt::FillRegistry( Arguments, sclargmnt::faIsArgument, sclargmnt::uaReport );
 
-	Sharing_.Init();
-	Processing_.Init( Sharing_ );
+	Processing_.Init();
 	Server_.Init( sclmisc::MGetU16( registry::parameter::Service ), Processing_ );
 
 	mtk::RawLaunch( Process_, NULL );
@@ -513,5 +534,6 @@ SCLZND_F( xdhp::SetProperty )
 {
 	Set_( Caller, server::property::Set );
 }
+
 
 
