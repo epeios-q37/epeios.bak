@@ -46,6 +46,8 @@
 
 /*$BEGIN$*/
 
+# error "OBSOLETE !!! Use 'MTHRTN' instead."
+
 #include "err.h"
 #include "flw.h"
 #include "tol.h"

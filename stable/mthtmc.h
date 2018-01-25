@@ -17,54 +17,32 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-//	$Id: mthtmc.h,v 1.1 2010/07/15 18:26:44 csimon Exp $
-
 #ifndef MTHTMC__INC
-#define MTHTMC__INC
+# define MTHTMC__INC
 
-#define MTHTMC_NAME		"MTHTMC"
+# define MTHTMC_NAME		"MTHTMC"
 
-#define	MTHTMC_VERSION	"$Revision: 1.1 $"
-
-#define MTHTMC_OWNER		"Claude SIMON"
-
-#if defined( E_DEBUG ) && !defined( MTHTMC_NODBG )
-#define MTHTMC_DBG
-#endif
-
-/* Begin of automatic documentation generation part. */
-
-//V $Revision: 1.1 $
-//C Claude SIMON (csimon at zeusw dot org)
-//R $Date: 2010/07/15 18:26:44 $
-
-/* End of automatic documentation generation part. */
-
-/* Addendum to the automatic documentation generation part. */
 //D MaTH TiMeCode 
-/* End addendum to automatic documentation generation part. */
 
-/*$BEGIN$*/
-
-#include "err.h"
-#include "flw.h"
-#include "tol.h"
-#include "str.h"
-#include "mthitg.h"
-#include "mthfrc.h"
+# include "err.h"
+# include "flw.h"
+# include "tol.h"
+# include "str.h"
+# include "mthitg.h"
+# include "mthrtn.h"
 
 namespace mthtmc {
 	typedef mthitg::integer_ frame_count_;
 	typedef mthitg::integer frame_count;
 
-	using mthfrc::fraction_;
-	using mthfrc::fraction;
+	using mthrtn::dRational;
+	using mthrtn::wRational;
 
-	typedef fraction_ period_;
-	typedef fraction period;
+	typedef dRational dPeriod;
+	typedef wRational wPeriod;
 
-	typedef period_ timecode_;
-	typedef period timecode;
+	typedef dPeriod dTimecode;
+	typedef wPeriod wTimecode;
 
 
 	enum type__ {
@@ -78,7 +56,7 @@ namespace mthtmc {
 		t_Undefined
 	};
 
-	class xfps_	// Extended fps.
+	class dXFPS	// Extended fps.
 	{
 	public:
 		struct s {
@@ -86,7 +64,7 @@ namespace mthtmc {
 			type__ Type;
 		} &S_;
 		frame_count_ FPS;
-		xfps_( s &S )
+		dXFPS( s &S )
 		: S_( S ),
 		  FPS( S.FPS )
 		{}
@@ -96,11 +74,11 @@ namespace mthtmc {
 
 			S_.Type = t_Undefined;
 		}
-		void plug( qAS_ &AS )
+		void plug( qASd *AS )
 		{
 			FPS.plug( AS );
 		}
-		xfps_ &operator =( const xfps_ &XFPS )
+		dXFPS &operator =( const dXFPS &XFPS )
 		{
 			FPS = XFPS.FPS;
 
@@ -114,7 +92,7 @@ namespace mthtmc {
 
 			FPS.Init();
 		}
-		void Init( const xfps_ &XFPS )
+		void Init( const dXFPS &XFPS )
 		{
 			Init();
 
@@ -151,11 +129,11 @@ namespace mthtmc {
 		}
 	};
 
-	E_AUTO( xfps );
+	qW( XFPS );
 
 	inline void Convert(
-		const xfps_ &XFPS,
-		period_ &Period )
+		const dXFPS &XFPS,
+		dPeriod &Period )
 	{
 		switch( XFPS.GetType() ) {
 		case tNDF:
@@ -168,7 +146,7 @@ namespace mthtmc {
 			}
 		case tNRT:
 			Period.Init( mthitg::integer( 1001 ), XFPS.FPS * mthitg::integer( 1000 ) );
-			Simplify( Period );
+			Normalize( Period );
 			break;
 		default:
 			qRFwk();
@@ -178,18 +156,18 @@ namespace mthtmc {
 
 	inline void Convert(
 		const frame_count_ &FrameCount,
-		const period_ &Period,
-		timecode_ &Timecode )
+		const dPeriod &Period,
+		dTimecode &Timecode )
 	{
 		Timecode.Init( FrameCount * Period.N, Period.D );
 
-		mthfrc::Simplify( Timecode );
+		mthrtn::Normalize( Timecode );
 	}
 
 	void Convert(
 		const frame_count_ &FrameCount,
-		const xfps_ &XFPS,
-		timecode_ &Timecode );
+		const dXFPS &XFPS,
+		dTimecode &Timecode );
 
 	typedef bso::u32__ base__;
 
@@ -199,8 +177,8 @@ namespace mthtmc {
 		base__ M,
 		base__ S,
 		const frame_count_ &F,
-		const xfps_ &XFPS,
-		timecode_ &Timecode );
+		const dXFPS &XFPS,
+		dTimecode &Timecode );
 
 	inline void Convert(
 		base__ D,
@@ -208,8 +186,8 @@ namespace mthtmc {
 		base__ M,
 		base__ S,
 		base__ F,
-		const xfps_ &XFPS,
-		timecode_ &Timecode )
+		const dXFPS &XFPS,
+		dTimecode &Timecode )
 	{
 		Convert( D, H, M, S, frame_count( F ), XFPS, Timecode );
 	}
@@ -217,8 +195,8 @@ namespace mthtmc {
 	bso::bool__ Convert(
 		const str::string_ &String,
 		sdr::row__ &Position,
-		const xfps_ &DefaultXFPS,
-		timecode_ &Timecode );	// If the 'XFPS' is bot stored in 'String', then 'DefaultXFPS' is used.
+		const dXFPS &DefaultXFPS,
+		dTimecode &Timecode );	// If the 'XFPS' is bot stored in 'String', then 'DefaultXFPS' is used.
 
 	struct tokens__ {
 		char
@@ -262,16 +240,16 @@ namespace mthtmc {
 
 	//f Return a string representation of 'TCI' following 'Standard' and 'Format'.
 	bso::bool__ Display(
-		const timecode_ &Timecode,
-		const xfps_ &XFPS,
+		const dTimecode &Timecode,
+		const dXFPS &XFPS,
 		const str::string_ &Format,
 		const tokens__ &Tokens,
 		txf::text_oflow__ &TFlow );
 
 	 inline void Add(
-		const timecode_ &Timecode1,
-		const timecode_ &Timecode2,
-		timecode_ &Result )
+		const dTimecode &Timecode1,
+		const dTimecode &Timecode2,
+		dTimecode &Result )
 	 {
 		 Result = Timecode1 + Timecode2;
 	 }

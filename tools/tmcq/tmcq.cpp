@@ -35,7 +35,7 @@ using cio::CErr;
 using cio::COut;
 using cio::CIn;
 
-# define NAME_MC			"tmcq"
+# define NAME_MC			"TMCq"
 # define NAME_LC			"tmcq"
 # define NAME_UC			"TMCQ"
 # define WEBSITE_URL		"http://q37.info/"
@@ -76,12 +76,12 @@ namespace {
 		const mthtmc::tokens__ &Tokens )
 	{
 	qRH
-		ctn::E_CMITEM( str::string_ ) Item;
+		ctn::qCMITEMsl( str::string_ ) Item;
 		sdr::row__ Row = qNIL;
-		mthtmc::xfps OutputXFPS, XFPS;
-		mthtmc::timecode Timecode, TotalTimecode;
+		mthtmc::wXFPS OutputXFPS, XFPS;
+		mthtmc::wTimecode Timecode, TotalTimecode;
 		sdr::row__ Position = qNIL;
-		mthtmc::period Period;
+		mthtmc::wPeriod Period;
 	qRB
 		Row = Items.First();
 
@@ -169,7 +169,7 @@ namespace {
 		sclmisc::MGetValue( registry::FPS, FPS );
 
 		FormatAlias.Init();
-		sclmisc::OGetValue( registry::FormatAlias, FormatAlias, &Missing );
+		Missing = sclmisc::OGetValue( registry::FormatAlias, FormatAlias ) == NULL;
 
 		Format.Init();
 		if ( Missing )
@@ -248,4 +248,5 @@ qRE
 }
 
 const char *sclmisc::SCLMISCTargetName = NAME_LC;
+const char *sclmisc::SCLMISCProductName = NAME_MC;
 

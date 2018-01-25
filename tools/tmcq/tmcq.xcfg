@@ -3,7 +3,7 @@
 	<Configuration target="tmcq">
 		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
 		<xpp:expand value-of="q37.xpp"/>
-		<xpp:expand select="epeios.xcfg"/>
+		<xpp:expand href="../../TOL.xcfg"/>
 		<Parameters>
 			<Language>en</Language>
 			<Command>Process</Command>
@@ -18,7 +18,7 @@
 			</PredefinedFormats>
 		</Definitions>
 		<Locale>
-			<xpp:expand select="Locale"/>
+			<xpp:expand select="TOL_Locale"/>
 			<Translations text="ProcessCommandDescription">
 				<Translation language="fr">Convertit la somme des timecodes.</Translation>
 				<Translation language="en">Converts the sum of the timecodes. </Translation>
@@ -79,7 +79,7 @@
 			-->
 		</Locale>
 		<Arguments>
-			<xpp:expand select="Arguments"/>
+			<xpp:expand select="TOL_Arguments"/>
 			<!-- Commandes : pas de 'Path' (vaut 'Parameters/Command'), ni de 'Value'. -->
 			<Argument id="ProcessCommand" Description="ProcessCommandDescription" long="process" Value="Process" Usage="[%FormatAliasOption%|%FormatOption%] [%TokensOption%] %FPSArgument% %TimecodeArgument% [%TimecodeArgument% [...]]"/>
 			<Argument id="FormatHelpCommand" Description="FormatHelpCommandDescription" long="help-format" Value="HelpFormat" Usage=""/>

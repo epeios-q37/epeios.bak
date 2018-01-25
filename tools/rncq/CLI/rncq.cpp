@@ -77,7 +77,7 @@ namespace {
 		namespace rational_ {
 			bso::sBool Evaluate(
 				xtf::sIFlow &IFlow,
-				txf::sOFlow &OFlow )
+				txf::sWFlow &OFlow )
 			{
 				bso::sBool Success = false;
 			qRH
@@ -103,7 +103,7 @@ namespace {
 		namespace float_ {
 			bso::sBool Evaluate(
 				xtf::sIFlow &IFlow,
-				txf::sOFlow &OFlow )
+				txf::sWFlow &OFlow )
 			{
 				bso::sBool Success = false;
 			qRH
@@ -122,7 +122,7 @@ namespace {
 
 		void Evaluate_(
 			const str::dString &Expression,
-			txf::sOFlow &Flow )
+			txf::sWFlow &Flow )
 		{
 		qRH
 			flx::sStringIFlow SFlow;

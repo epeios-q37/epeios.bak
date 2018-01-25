@@ -60,7 +60,7 @@ static inline bso::bool__ TestPosition_(
 	}
 }
 
-bso::bool__ xfps_::Init(
+bso::bool__ dXFPS::Init(
 	const str::string_ &String,
 	sdr::row__ &Position )
 {
@@ -108,7 +108,7 @@ static void Convert_(
 	base__ M,
 	base__ S,
 	const integer_ &F,
-	const xfps_ &XFPS,
+	const dXFPS &XFPS,
 	frame_count_ &FrameCount )
 {
 qRH
@@ -147,8 +147,8 @@ void mthtmc::Convert(
 	base__ M,
 	base__ S,
 	const integer_ &F,
-	const xfps_ &XFPS,
-	timecode_ &Timecode )
+	const dXFPS &XFPS,
+	dTimecode &Timecode )
 {
 qRH
 	frame_count FrameCount;
@@ -164,11 +164,11 @@ qRE
 
 void mthtmc::Convert(
 	const frame_count_ &FrameCount,
-	const xfps_ &XFPS,
-	timecode_ &Timecode )
+	const dXFPS &XFPS,
+	dTimecode &Timecode )
 {
 qRH
-	period Period;
+	wPeriod Period;
 qRB
 	Period.Init();
 	Convert( XFPS, Period );
@@ -182,13 +182,13 @@ qRE
 bso::bool__ mthtmc::Convert(
 	const str::string_ &String,
 	sdr::row__ &Position,
-	const xfps_ &DefaultXFPS,
-	timecode_ &Timecode )
+	const dXFPS &DefaultXFPS,
+	dTimecode &Timecode )
 {
 	bso::bool__ Success = false;
 qRH
 	base__ D = 0, H = 0, M = 0, S = 0, F = 0;
-	xfps XFPS;
+	wXFPS XFPS;
 qRB
 
 #ifdef MTHTMC_DBG
@@ -407,8 +407,8 @@ qRE
 }
 
 static void ExtractAndAdjust_(
-	const timecode_ &Timecode,
-	const period_ &Period,
+	const dTimecode &Timecode,
+	const dPeriod &Period,
 	const frame_count_ &FPS,
 	type__ Type,
 	bso::u32__ &D,
@@ -416,7 +416,7 @@ static void ExtractAndAdjust_(
 	bso::u8__ &M,
 	bso::u8__ &S,
 	frame_count_ &F,
-	fraction_ &Rest )
+	dRational &Rest )
 {
 qRH
 	mthitg::integer FrameCount;
@@ -475,15 +475,15 @@ qRE
 }
 
 static void Extract_(
-	const timecode_ &Timecode,
-	const period_ &Period,
+	const dTimecode &Timecode,
+	const dPeriod &Period,
 	const frame_count_ &FPS,
 	bso::u32__ &D,
 	bso::u8__ &H,
 	bso::u8__ &M,
 	bso::u8__ &S,
 	frame_count_ &F,
-	fraction_ &Rest )
+	dRational &Rest )
 {
 qRH
 	mthitg::integer FrameCount;
@@ -512,13 +512,13 @@ qRE
 }
 
 static void Round_(
-	const timecode_ &ToConvert,
+	const dTimecode &ToConvert,
 	const frame_count_ &FPS,
-	const period_ &Period,
+	const dPeriod &Period,
 	round_target__ Target,
 	bso::sign__ Type,	// -1 : floor, 0 : mathematic, 1 : ceil.
 	bso::u8__ Precision,
-	timecode_ &Converted )
+	dTimecode &Converted )
 {
 qRH
 	bso::u32__ Fract = 0;
@@ -527,9 +527,9 @@ qRH
 	bso::u8__ M = 0;
 	bso::u8__ S = 0;
 	frame_count F;
-	fraction FractPeriod, FrameRemainder;
+	wRational FractPeriod, FrameRemainder;
 	bso::lfloat__ TimeRemainder = 0;
-	period Buffer;
+	wPeriod Buffer;
 qRB
 	if ( Precision > 9 )
 		qRFwk();
@@ -582,7 +582,7 @@ qRB
 		break;
 	}
 
-	Converted = ( ( fraction( ( ( ( ( ( ( integer( D ) * integer( 24 ) ) + integer( H ) ) * integer( 60 ) ) + integer( M ) ) * integer( 60 ) ) + integer( S ) ) * FPS ) + fraction( F  ) ) * Period + fraction( Fract ) * FractPeriod );
+	Converted = ( ( wRational( ( ( ( ( ( ( integer( D ) * integer( 24 ) ) + integer( H ) ) * integer( 60 ) ) + integer( M ) ) * integer( 60 ) ) + integer( S ) ) * FPS ) + wRational( F  ) ) * Period + wRational( Fract ) * FractPeriod );
 
 	Converted.Simplify();
 qRR
@@ -593,8 +593,8 @@ qRE
 
 static inline void Display_(
 	const integer_ &Value,
-	const fraction_ &RawRemainder,
-	bso::sign__ Rounding,	// -1 : floor, 0 : mathematic, 1 : ceil.
+	const dRational &RawRemainder,
+	bso::sign__ Rounding,	// -1 : floor, 0 : mathematic, 1 : ceiling.
 	bso::char__ DecimalSeparator,
 	bso::u8__ Width,
 	bso::u8__ Precision,
@@ -603,7 +603,7 @@ static inline void Display_(
 qRH
 	char Buffer[100];
 	integer I;
-	fraction Offset, Remainder;
+	wRational Offset, Remainder;
 qRB
 	Remainder.Init();
 
@@ -641,11 +641,11 @@ qRB
 			case -1:
 				break;
 			case 0:
-				if ( ( Remainder.N.Mod( Remainder.D ) * integer( 2 ) ) >= Remainder.D )
+				if ( ( ( Remainder.N % Remainder.D ) * integer( 2 ) ) >= Remainder.D )
 					Remainder.N += Remainder.D;	// Remainder += 1;
 				break;
 			case 1:
-				if ( Remainder.N.Mod( Remainder.D ).GetSign() != 0 )
+				if ( ( Remainder.N % Remainder.D ).GetSign() != 0 )
 					Remainder.N += Remainder.D;	// Remainder += 1;
 				break;
 			default:
@@ -691,17 +691,17 @@ qRE
 #define D_( i, f )	Display_( ( i ), ( f ), -1, DecimalSeparator, Width, ( Precision == UNDEFINED_PRECISION ? DEFAULT_PRECISION : Precision ), TOFlow )
 
 bso::bool__ mthtmc::Display(
-	const timecode_ &RawTimecode,
-	const xfps_ &XFPS,
+	const dTimecode &RawTimecode,
+	const dXFPS &XFPS,
 	const str::string_ &Format,
 	const tokens__ &Tokens,
 	txf::text_oflow__ &TOFlow )
 {
 	bso::bool__ Success = false;
 qRH
-	fraction FrameRemainder;
-	integer F;
-	fraction TimeRemainder;
+	wRational FrameRemainder;
+	integer F, Buffer;
+	wRational TimeRemainder;
 	bso::char__ C;
 	bso::u32__ D;
 	bso::u8__ H, M, S, Width = 1, Precision = UNDEFINED_PRECISION;
@@ -709,8 +709,8 @@ qRH
 	bso::bool__ RoundingPending = false;
 	bso::char__ DecimalSeparator = Tokens.DS;
 	bso::sign__ Rounding = 0;
-	timecode Timecode;
-	period Period;
+	wTimecode Timecode;
+	wPeriod Period;
 qRB
 	FrameRemainder.Init();
 	F.Init();
@@ -805,19 +805,19 @@ qRB
 				break;
 			case 'd':
 			case 'D':
-				D_(  integer( D ), ( fraction( H * 60 * 60 + M * 60 + S ) + TimeRemainder ) / fraction( integer( 60 * 60 * 24 ) ) );
+				D_(  integer( D ), ( wRational( H * 60 * 60 + M * 60 + S ) + TimeRemainder ) / wRational( integer( 60 * 60 * 24 ) ) );
 				break;
 			case 'h':
-				D_( integer( H ), ( fraction( M * 60 + S ) + TimeRemainder ) / fraction( 60 * 60 )  );
+				D_( integer( H ), (wRational( M * 60 + S ) + TimeRemainder ) / wRational( 60 * 60 )  );
 				break;
 			case 'H':
-				D_( integer( H + 24 * D ), ( fraction( M * 60 + S ) + TimeRemainder ) / fraction( 60 * 60 )  );
+				D_( integer( H + 24 * D ), (wRational( M * 60 + S ) + TimeRemainder ) / wRational( 60 * 60 )  );
 				break;
 			case 'm':
-				D_( integer( M ), ( fraction( S ) + TimeRemainder ) / fraction( 60 ) );
+				D_( integer( M ), (wRational( S ) + TimeRemainder ) / wRational( 60 ) );
 				break;
 			case 'M':
-				D_( integer( M ) + integer( 60 * ( H + 24 * D ) ), ( fraction( S ) + TimeRemainder ) / fraction( 60 ) );
+				D_( integer( M ) + integer( 60 * ( H + 24 * D ) ), (wRational( S ) + TimeRemainder ) / wRational( 60 ) );
 				break;
 			case 's':
 				D_( integer( S ), TimeRemainder );
@@ -829,7 +829,9 @@ qRB
 				D_( F, FrameRemainder );
 				break;
 			case 'F':
-				D_( ( Timecode / Period ).GetInteger(), FrameRemainder );
+				Buffer.Init();
+				(Timecode / Period).ToInteger( Buffer );
+				D_( Buffer, FrameRemainder );
 				break;
 			case 'r':	// Remainder as float.
 				TOFlow << ( Timecode - RawTimecode ).GetLongFloat();

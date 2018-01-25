@@ -1,5 +1,9 @@
 # *Epeios* changelog
 
+2018-01-25:
+- MTHTMC
+  - Using *MTHRTN* instead of *MTHFRC*,
+
 2018-01-17:
 - *common*:
   - **$**: handling array of strings,
