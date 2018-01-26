@@ -3,8 +3,13 @@
 2018-01-26:
 - NODEQ:
   - adaptation to modification in *V8Q*,
+ - N4NJS
+  - reporting missing callback,
+- SCLNJS:
+  - adaptation to modifications in *N4NJS*,
 - V8Q:
-  - a value and derived can now be initialized with an undefined value; usefull to handle callback parameter, when none is provided by user,
+  - a value and derived can now be initialized with an undefined value; useful to handle callback parameter, when none is provided by user,
+  - consolidation of the emptiness of an object,
 
 2018-01-25:
 - MTHTMC

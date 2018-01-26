@@ -83,31 +83,21 @@ function pushLabelsAndItems(labelsAndItems, itemType, labels, items) {
 	}
 }
 
-function nop() {
-}
-
-function normalize(callback) {
-/*	if (typeof callback === "undefined")
-		return nop;
-	else
-		*/return callback;
-}
-
 class XDH {
 	alert(message, callback) {
-		njsq._call(xdhq, 9, this, message, normalize(callback));
+		njsq._call(xdhq, 9, this, message, callback);
 	}
 	confirm(message, callback) {
-		njsq._call(xdhq, 10, this, message, (result) => normalize(callback)(result == "true"));
+		njsq._call(xdhq, 10, this, message, (result) => callback(result == "true"));
 	}
 	setLayout(id, tree, xslFilename, callback) {
-		njsq._call(xdhq, 11, this, id, tree, xslFilename, normalize(callback));
+		njsq._call(xdhq, 11, this, id, tree, xslFilename, callback);
 	}
 	getContents(ids, callback) {
-		njsq._call(xdhq, 12, this, ids, normalize(callback));
+		njsq._call(xdhq, 12, this, ids, callback);
 	}
 	getContent(id, callback) {
-		return this.getContents([id], (result) => { normalize(callback)(result[0]); });
+		return this.getContents([id], (result) => { callback(result[0]); });
 	}
 	setContents(idsAndContents, callback) {
 		var ids = new Array();
@@ -115,13 +105,13 @@ class XDH {
 
 		pushLabelsAndItems(idsAndContents, "string", ids, contents);
 
-		njsq._call(xdhq, 13, this, ids, contents, normalize(callback));
+		njsq._call(xdhq, 13, this, ids, contents, callback);
 	}
 	setContent(id, content, callback) {
-		return this.setContents([[id, content]], normalize(callback));
+		return this.setContents([[id, content]], callback);
 	}
 	dressWidgets(id, callback) {
-		njsq._call(xdhq, 14, this, id, normalize(callback));
+		njsq._call(xdhq, 14, this, id, callback);
 	}
 	handleClasses(idsAndClasses, fid, callback) {
 		var ids = new Array();
@@ -129,7 +119,7 @@ class XDH {
 
 		pushLabelsAndItems(idsAndClasses, "string", ids, classes);
 
-		njsq._call(xdhq, fid, this, ids, classes, normalize(callback));
+		njsq._call(xdhq, fid, this, ids, classes, callback);
 	}
 	addClasses(idsAndClasses, callback) {
 		this.handleClasses(idsAndClasses, 15, callback);
@@ -150,23 +140,22 @@ class XDH {
 		this.toggleClasses([[id, clas]], callback);
 	}
 	enableElements(ids, callback) {
-//		njsq._call(xdhq, 18, this, ids, normalize(callback));
 		njsq._call(xdhq, 18, this, ids, callback);
 	}
 	enableElement(id, callback) {
 		this.enableElements([id], callback);
 	}
 	disableElements(ids, callback) {
-		njsq._call(xdhq, 19, this, ids, normalize(callback));
+		njsq._call(xdhq, 19, this, ids, callback);
 	}
 	disableElement(id, callback) {
 		this.disableElements([id], callback);
 	}
 	getAttribute(id, name, callback) {
-		return njsq._call(xdhq, 20, this, id, name, normalize(callback));
+		return njsq._call(xdhq, 20, this, id, name, callback);
 	}
 	setAttribute(id, name, value, callback) {
-		njsq._call(xdhq, 21, this, id, name, value, normalize(callback));
+		njsq._call(xdhq, 21, this, id, name, value, callback);
 	}
 	getProperty(id, name) {
 		return njsq._call(xdhq, 22, this, id, name);

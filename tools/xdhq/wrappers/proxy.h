@@ -163,6 +163,7 @@ namespace proxy {
 				PRXYOnPending( &Data );
 			} else {
 				Data.Recv.WriteBegin();
+				tol::Init( Data.Recv.Id, Data.Recv.Action );
 				GetAction_( Flow, Data.Recv.Id, Data.Recv.Action );
 				Data.Recv.WriteEnd();
 				PRXYOnAction( &Data );

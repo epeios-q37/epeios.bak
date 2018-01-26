@@ -264,10 +264,10 @@ namespace {
 			case sPending:
 				Arguments.Init();
 				Data.Recv.ReadBegin();
-				if ( Callback.HasAssignation() )
-					SetCallbackArguments_( Data.Recv.Return, Arguments );
+				SetCallbackArguments_( Data.Recv.Return, Arguments );
 				Data.Recv.ReadEnd();
-				Callback.VoidLaunch( Arguments );
+				if ( !Callback.VoidLaunch( Arguments ) )
+					Data.Sent.WriteDismiss();
 				Callback.reset( false );
 				break;
 			case sAction:

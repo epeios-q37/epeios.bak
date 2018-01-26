@@ -380,6 +380,11 @@ namespace tht {
 		{
 			mtx::Unlock( Read_ );
 		}
+		void WriteDismiss( void )
+		{
+			WriteBegin();
+			WriteEnd();
+		}
 		void ReadBegin( void )
 		{
 			mtx::Lock( Read_ );
@@ -388,7 +393,11 @@ namespace tht {
 		{
 			mtx::Unlock( Write_ );
 		}
-
+		void ReadDismiss( void )
+		{
+			ReadBegin();
+			ReadEnd();
+		}
 	};
 	
 }

@@ -2,7 +2,7 @@
 
 2018-01-26:
 - adaptation to modifications in underlying libraries,
-- a callback parameter can now be undefined, 
+- a callback parameter can now be undefined,
 
 2018-01-09:
 - fixing *Clang* warning,

@@ -167,7 +167,7 @@ namespace nodeq {
 			
 			Object.Init( Launch( "read", Isolate ) );
 
-			if ( Object.IsNull() )
+			if ( Object.IsEmpty() )
 				return false;
 			else {
 				Chunk.Init( Object.Core() );

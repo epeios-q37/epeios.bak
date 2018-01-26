@@ -183,14 +183,16 @@ namespace n4njs {
 	protected:
 		virtual cUObject *N4NJSLaunch(
 			eType ReturnType,
+			bso::sBool *IsEmpty,	// Set to 'true' if the callback was not set (the corresponding JS parameter was absent).
 			const dArguments &Arguments ) = 0;	// Type is the expected type of the returned value.
 	public:
 		qCALLBACK( UCallback );
 		cUObject *Launch(
 			eType ReturnType,
+			bso::sBool *IsEmpty,	// Set to 'true' if the callback was not set (the corresponding JS parameter was absent).
 			const dArguments &Arguments )
 		{
-			return N4NJSLaunch( ReturnType, Arguments );
+			return N4NJSLaunch( ReturnType, IsEmpty, Arguments );
 		}
 	};
 

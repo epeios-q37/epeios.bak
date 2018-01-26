@@ -385,6 +385,7 @@ namespace {
 		protected:
 			virtual n4njs::cUObject *N4NJSLaunch(
 				n4njs::eType ReturnType,
+				bso::sBool *IsEmpty,
 				const n4njs::dArguments &Arguments ) override
 			{
 				n4njs::cUObject *CallbackReturn = NULL;
@@ -402,19 +403,23 @@ namespace {
 
 				Fill_( Argv, Arguments );
 
-				Return = Core_.Launch( Argv, Argc );
+				if ( Core_.IsEmpty() )
+					*IsEmpty = true;
+				else {
+					Return = Core_.Launch( Argv, Argc );
 
-				switch( ReturnType ) {
-				case n4njs::tVoid:
-					break;
-				case n4njs::tObject:
-					if ( Return.IsEmpty() )
-						qRGnr();
-					CallbackReturn = Get_<rObject_>( Return, true );
-					break;
-				default:
-					qRVct();
-					break;
+					switch ( ReturnType ) {
+					case n4njs::tVoid:
+						break;
+					case n4njs::tObject:
+						if ( Return.IsEmpty() )
+							qRGnr();
+						CallbackReturn = Get_<rObject_>( Return, true );
+						break;
+					default:
+						qRVct();
+						break;
+					}
 				}
 			qRR
 				if ( CallbackReturn != NULL )

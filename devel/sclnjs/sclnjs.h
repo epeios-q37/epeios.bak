@@ -237,16 +237,17 @@ namespace sclnjs {
 	};
 
 	// Launch with 'dArguments' as arguments.
-	template <typename ret_item, typename ret> void Launch_(
+	template <typename ret_item, typename ret> bso::sBool Launch_(
 		ret_item &ReturnItem,
 		n4njs::eType ReturnType,
 		n4njs::cUCallback &Callback,
 		const dArguments &Arguments )
 	{
+		bso::sBool IsEmpty = false;
 	qRH;
 		ret *Return = NULL;
 	qRB;
-		Return = (ret *)Callback.Launch( ReturnType, Arguments );
+		Return = (ret *)Callback.Launch( ReturnType, &IsEmpty, Arguments );
 
 		ReturnItem.Assign( Return );
 	qRR;
@@ -254,6 +255,7 @@ namespace sclnjs {
 			delete Return;
 	qRT;
 	qRE;
+	return !IsEmpty;
 	}
 
 	// Launch with variadics as arguments.
@@ -276,11 +278,15 @@ namespace sclnjs {
 	}
 
 
-	void inline VoidLaunch(
+	inline bso::sBool VoidLaunch(
 		n4njs::cUCallback &Callback,
 		const dArguments &Arguments )
 	{
-		Callback.Launch( n4njs::tVoid, Arguments );
+		bso::sBool IsEmpty = false;
+
+		Callback.Launch( n4njs::tVoid, &IsEmpty, Arguments );
+
+		return !IsEmpty;
 	}
 
 	template <typename ...args> void inline VoidLaunch(
@@ -323,11 +329,11 @@ namespace sclnjs {
 		{
 			return sclnjs::VoidLaunch( C_(), Args... );
 		}
-		void VoidLaunch( const dArguments &Arguments )
+		bso::sBool VoidLaunch( const dArguments &Arguments )
 		{
 			return sclnjs::VoidLaunch( C_(), Arguments );
 		}
-		void VoidLaunch( const wArguments &Arguments )
+		bso::sBool VoidLaunch( const wArguments &Arguments )
 		{
 			return VoidLaunch( *Arguments );
 		}

@@ -350,6 +350,17 @@ namespace v8q {
 			// This is the definition of v8::Persistent<>::Get()' in 'Node.js' >v4.
 			return v8::Local<item>::New( GetIsolate( Isolate ), Core_ );
 		}
+		bso::sBool IsEmpty( v8::Isolate *Isolate = NULL ) const
+		{
+			Isolate = GetIsolate( Isolate );
+
+			if ( Core_.IsEmpty() )
+				return true;
+			else if ( Core_.Get( Isolate )->IsNull() )
+				return true;
+			else
+				return Core_.Get( Isolate )->IsUndefined();
+		}
 	};
 
 	template <typename item> class sLData_
@@ -380,6 +391,15 @@ namespace v8q {
 		{
 			return Core_;
 		}
+		bso::sBool IsEmpty( void ) const
+		{
+			if ( Core_.IsEmpty() )
+				return true;
+			else if ( Core()->IsNull() )
+				return true;
+			else
+				return Core()->IsUndefined();
+		}
 	};
 
 	template <typename data> class xValue_
@@ -388,6 +408,7 @@ namespace v8q {
 	public:
 		using data::reset;
 		using data::Core;
+		using data::IsEmpty;
 		qCDTOR( xValue_ );
 		xValue_(
 			v8::Local<v8::Value> Value,
@@ -396,10 +417,6 @@ namespace v8q {
 			data::Init( Value, Isolate );
 		}
 		using data::Init;
-		bso::sBool IsNull( void ) const
-		{
-			return Core()->IsNull();
-		}
 	};
 
 # ifdef T
