@@ -264,7 +264,8 @@ namespace {
 			case sPending:
 				Arguments.Init();
 				Data.Recv.ReadBegin();
-				SetCallbackArguments_( Data.Recv.Return, Arguments );
+				if ( Callback.HasAssignation() )
+					SetCallbackArguments_( Data.Recv.Return, Arguments );
 				Data.Recv.ReadEnd();
 				Callback.VoidLaunch( Arguments );
 				Callback.reset( false );

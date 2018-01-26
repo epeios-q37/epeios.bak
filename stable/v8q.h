@@ -342,6 +342,8 @@ namespace v8q {
 		}
 		v8::Local<item> Core( v8::Isolate *Isolate = NULL ) const
 		{
+			if ( Core_.IsEmpty() )
+				qRFwk();
 			// Do not exists in 'Node.js' v4.
 			// return Core_.Get( GetIsolate( Isolate ) );
 
