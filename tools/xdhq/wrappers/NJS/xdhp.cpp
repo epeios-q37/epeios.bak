@@ -261,14 +261,11 @@ namespace {
 			Data.Callback.reset( false );
 
 			switch ( Data.Status ) {
-			case sPending:
-				Arguments.Init();
+			case sNew:
 				Data.Recv.ReadBegin();
-				SetCallbackArguments_( Data.Recv.Return, Arguments );
+				ConnectCallback_.ObjectLaunch( Data.XDH );
+				Data.XDH.Set( Id_, &Data );
 				Data.Recv.ReadEnd();
-				if ( !Callback.VoidLaunch( Arguments ) )
-					Data.Sent.WriteDismiss();
-				Callback.reset( false );
 				break;
 			case sAction:
 				Callback.Init();
@@ -276,13 +273,19 @@ namespace {
 				Callback.Assign( Get_( Data.Recv.Action ) );
 				Callback.VoidLaunch( Data.XDH, Data.Recv.Id );
 				Data.Recv.ReadEnd();
+				if ( !Data.IsTherePendingRequest() )
+					Data.Sent.WriteDismiss();
 				Callback.reset( false );
 				break;
-			case sNew:
+			case sPending:
+				Arguments.Init();
 				Data.Recv.ReadBegin();
-				ConnectCallback_.ObjectLaunch( Data.XDH );
-				Data.XDH.Set( Id_, &Data );
+				SetCallbackArguments_( Data.Recv.Return, Arguments );
 				Data.Recv.ReadEnd();
+				Callback.VoidLaunch( Arguments );
+				if ( !Data.IsTherePendingRequest() )
+					Data.Sent.WriteDismiss();
+				Callback.reset( false );
 				break;
 			default:
 				qRGnr();

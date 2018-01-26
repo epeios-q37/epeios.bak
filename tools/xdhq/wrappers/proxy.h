@@ -98,6 +98,10 @@ namespace proxy {
 			tol::Init( Recv, Sent, Language );
 			Request = prxy_cmn::r_Undefined;
 		}
+		bso::sBool IsTherePendingRequest( void ) const
+		{
+			return Request != prxy_cmn::r_Undefined;
+		}
 	};
 
 	void Handshake_(
