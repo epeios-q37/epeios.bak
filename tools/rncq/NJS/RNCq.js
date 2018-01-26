@@ -44,7 +44,7 @@ module.exports.componentInfo = () => njsq._componentInfo(rncq);
 module.exports.wrapperInfo = () => njsq._wrapperInfo();
 // End of generic part.
 
-module.exports.returnArgument = (text) => { return njsq._wrapper(rncq, 0, text) };
-module.exports.evaluateALG = ( expression, callback ) => { njsq._wrapper( rncq, 1, expression, callback ); };
-module.exports.evaluateRPN = (expression, callback) => { njsq._wrapper( rncq, 2, expression, callback); };
+module.exports.returnArgument = (text) => { return njsq._call(rncq, 0, text) };
+module.exports.evaluateALG = ( expression, callback ) => { njsq._call( rncq, 1, expression, callback ); };
+module.exports.evaluateRPN = (expression, callback) => { njsq._call( rncq, 2, expression, callback); };
 

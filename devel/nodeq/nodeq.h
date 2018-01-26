@@ -163,14 +163,14 @@ namespace nodeq {
 			buffer &Chunk,
 			v8::Isolate *Isolate = NULL )
 		{
-			v8q::sLValue Value;
+			v8q::sLObject Object;
 			
-			Value.Init( Launch( "read", Isolate ) );
+			Object.Init( Launch( "read", Isolate ) );
 
-			if ( Value.IsNull() )
+			if ( Object.IsNull() )
 				return false;
 			else {
-				Chunk.Init( Value.Core() );
+				Chunk.Init( Object.Core() );
 				return true;
 			}
 		}

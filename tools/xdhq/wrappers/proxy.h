@@ -33,45 +33,70 @@ namespace proxy {
 	using prxy_send::rArguments;
 	using prxy_recv::rReturn;
 
-	struct rData
+	typedef tht::rReadWrite rControl_;
+
+	// Data received from proxy.
+	class rRecv
+	: public rControl_
 	{
 	private:
-		mtx::rHandler Lock_;
 	public:
 		rReturn Return;
 		str::wString	// For the launching of an action.
 			Id,
 			Action;
-		prxy_cmn::eRequest Request;
+		void reset( bso::sBool P = true )
+		{
+			rControl_::reset( P );
+			tol::reset( Return, Id, Action );
+		}
+		qCDTOR( rRecv );
+		void Init( void )
+		{
+			rControl_::Init();
+			tol::Init(  Return, Id, Action );
+		}
+	};
+
+	// Data sent to proxy.
+	class rSent
+	: public rControl_
+	{
+	public:
 		rArguments Arguments;
+		void reset( bso::sBool P = true )
+		{
+			rControl_::reset( P );
+			tol::reset( P, Arguments );
+		}
+		qCDTOR( rSent );
+		void Init( void )
+		{
+			rControl_::Init();
+			tol::Init( Arguments );
+		}
+	};
+
+
+	struct rData
+	{
+	public:
+		rRecv Recv;
+		rSent Sent;
+		prxy_cmn::eRequest Request;
 		str::wString Language;
 		void reset( bso::sBool P = true )
 		{
-			if ( P ) {
-				if ( Lock_ != mtx::UndefinedHandler )
-					mtx::Delete( Lock_ );
-			}
-
-			tol::reset( P, Return, Id, Action, Arguments, Language );
+			tol::reset( P, Recv, Sent, Language );
 			Request = prxy_cmn::r_Undefined;
-			Lock_ = NULL;
 		}
 		qCDTOR( rData );
 		void Init( void )
 		{
 			reset();
 
-			tol::Init( Return, Id, Action, Arguments, Language );
+			tol::Init( Recv, Sent, Language );
 			Request = prxy_cmn::r_Undefined;
-			Lock_ = mtx::Create();
-		}
-		void Lock( void )
-		{
-			mtx::Lock( Lock_ );
-		}
-		void Unlock( void )
-		{
-			mtx::Unlock( Lock_ );
 		}
 	};
 
@@ -101,13 +126,11 @@ namespace proxy {
 			if ( Data == NULL )
 				qRAlc();
 
+			Data->Recv.WriteBegin();
+			Data->Recv.WriteEnd();
+
 			Flow.Init( *IODriver );
 			Handshake_( Flow, Data->Language );
-
-			Data->Lock();
-
-			Data->Lock();
-			Data->Unlock();
 
 			prtcl::PutAnswer( prtcl::aOK_1, Flow );
 			Flow.Commit();
@@ -131,23 +154,29 @@ namespace proxy {
 
 			Flow.Init( *IODriver );
 
-			Data.Return.Init();
-
-			if ( prxy_recv::Recv( Data.Request, Flow, Data.Return ) ) {
+			if ( Data.Request != prxy_cmn::r_Undefined ) {
+				Data.Recv.WriteBegin();
+				Data.Recv.Return.Init();
+				prxy_recv::Recv( Data.Request, Flow, Data.Recv.Return );
 				Data.Request = prxy_cmn::r_Undefined;
-				Data.Lock();
+				Data.Recv.WriteEnd();
 				PRXYOnPending( &Data );
-			}  else {
-				GetAction_( Flow, Data.Id, Data.Action );
-				Data.Lock();
+			} else {
+				Data.Recv.WriteBegin();
+				GetAction_( Flow, Data.Recv.Id, Data.Recv.Action );
+				Data.Recv.WriteEnd();
 				PRXYOnAction( &Data );
 			}
 
-			Data.Lock();
-			Data.Unlock();
+			Data.Sent.ReadBegin();
 
-			if ( !prxy_send::Send( Data.Request, Flow, Data.Arguments ) )
+			// 'Data.Request' is set by the 'PRXYOn...' method above.
+			if ( Data.Request != prxy_cmn::r_Undefined )
+				prxy_send::Send( Data.Request, Flow, Data.Sent.Arguments );
+			else
 				prtcl::PutAnswer( prtcl::aOK_1, Flow );
+
+			Data.Sent.ReadEnd();
 		qRR;
 		qRT;
 		qRE;
@@ -178,37 +207,22 @@ namespace proxy {
 	template <typename data> class rSharing
 	{
 	private:
-		mtx::rHandler Write_, Read_;
+		rControl_ Control_;
 		data *Data_;
 	public:
 		void reset( bso::sBool P = true )
 		{
-			if ( P ) {
-				if ( Write_ != mtx::UndefinedHandler )
-					mtx::Delete( Write_ );
-
-				if ( Read_ != mtx::UndefinedHandler )
-					mtx::Delete( Read_ );
-			}
-
-			Write_ = Read_ = NULL;
-			Data_ = NULL;
+			tol::reset( P, Control_, Data_ );
 		}
 		qCDTOR( rSharing );
 		void Init( void )
 		{
-			reset();
-
-			Write_ = mtx::Create();
-			Read_ = mtx::Create();
-
+			Control_.Init();
 			Data_ = NULL;
-
-			mtx::Lock( Read_ );
 		}
 		void Write( data *Data )
 		{
-			mtx::Lock( Write_ );
+			Control_.WriteBegin();
 
 			if ( Data_ != NULL )
 				qRGnr();
@@ -218,15 +232,16 @@ namespace proxy {
 
 			Data_ = Data;
 
-			mtx::Unlock( Read_ );
+			Control_.WriteEnd();
+
 		}
 		data *Read( void )
 		{
-			mtx::Lock( Read_ );
+			Control_.ReadBegin();
 
 			data *Data = Data_;
 
-			mtx::Unlock( Write_ );
+			Control_.ReadEnd();
 
 			if ( Data_ == NULL )
 				qRFwk();

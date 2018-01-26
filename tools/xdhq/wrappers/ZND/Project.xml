@@ -33,7 +33,7 @@
   </Modules>
 		<Modules Group="Shared" Path="../">
 			<Module Path="../">prtcl</Module>
-			<Module>server</Module>
+			<Module>proxy</Module>
 			<Module>tree</Module>
 		</Modules>
 		<Module>registry</Module>

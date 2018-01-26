@@ -134,39 +134,36 @@ namespace {
 		name##_( Flow, Return );\
 		break
 
-bso::sBool prxy_recv::Recv(
+void prxy_recv::Recv(
 	eRequest Request,
 	flw::sRFlow &Flow,
 	rReturn &Return )
 {
-	if ( Request == r_Undefined )	// A new event has be detected.
-		return false;
-	else {
-		if ( prtcl::GetRequest( Flow ) != prtcl::rReady_1 )
-			qRGnr();
+	if ( prtcl::GetRequest( Flow ) != prtcl::rReady_1 )
+		qRGnr();
 
-		switch ( Request ) {
-		H( Alert );
-		H( Confirm );
-		H( SetLayout );
-		H( GetContents );
-		H( SetContents );
-		H( DressWidgets );
-		H( AddClasses );
-		H( RemoveClasses );
-		H( ToggleClasses );
-		H( EnableElements );
-		H( DisableElements );
-		H( GetAttribute );
-		H( SetAttribute );
-		H( GetProperty );
-		H( SetProperty );
-		default:
-			qRGnr();
-			break;
-		}
-
-		return true;
+	switch ( Request ) {
+	case r_Undefined:
+		qRGnr();
+		break;
+	H( Alert );
+	H( Confirm );
+	H( SetLayout );
+	H( GetContents );
+	H( SetContents );
+	H( DressWidgets );
+	H( AddClasses );
+	H( RemoveClasses );
+	H( ToggleClasses );
+	H( EnableElements );
+	H( DisableElements );
+	H( GetAttribute );
+	H( SetAttribute );
+	H( GetProperty );
+	H( SetProperty );
+	default:
+		qRGnr();
+		break;
 	}
 }
 

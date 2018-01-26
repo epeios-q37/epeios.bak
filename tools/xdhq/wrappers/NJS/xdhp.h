@@ -27,6 +27,7 @@
 namespace xdhp {
 	SCLNJS_F( Register );
 	SCLNJS_F( Listen );
+	SCLNJS_F( Dismiss );
 	SCLNJS_F( Alert );
 	SCLNJS_F( Confirm );
 	SCLNJS_F( SetLayout );

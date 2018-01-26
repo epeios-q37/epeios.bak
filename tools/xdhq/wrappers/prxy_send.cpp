@@ -121,14 +121,14 @@ namespace {
 		name##_( Flow, Arguments );\
 		break
 
-bso::sBool prxy_send::Send(
+void prxy_send::Send(
 	eRequest Request,
 	flw::sWFlow &Flow,
 	const rArguments &Arguments )
 {
 	switch ( Request ) {
 	case r_Undefined:
-		return false;
+		qRGnr();
 		break;
 	H( Alert );
 	H( Confirm );
@@ -149,8 +149,6 @@ bso::sBool prxy_send::Send(
 		qRGnr();
 		break;
 	}
-
-	return true;
 }
 
 #undef H

@@ -42,7 +42,7 @@ componentFilename = path.join(componentPath, affix + "njs").replace(/\\/g, "\\\\
 const xppq = njsq._register(componentFilename);
 // End of generic part.
 
-module.exports.returnArgument = (text) => { return njsq._wrapper( xppq, 0, text ) };
+module.exports.returnArgument = (text) => { return njsq._call( xppq, 0, text ) };
 
 const stream = require('stream');
 
@@ -50,16 +50,16 @@ function onReadable(stream, onData, onEnd) {
     var chunk;
 
 /*    if ( ( chunk = stream.read() ) != null )
-        do njsq._wrapper(xppq,onRead, stream, chunk);
+        do njsq._call(xppq,onRead, stream, chunk);
         while ( ( chunk = stream.read() ) != null);
     else
-        njsq._wrapper(xppq,onEnd, stream);
+        njsq._call(xppq,onEnd, stream);
 */
 
      if ( ( chunk = stream.read() ) != null )
-     	njsq._wrapper(xppq, onData, stream, chunk);
+     	njsq._call(xppq, onData, stream, chunk);
      else
-     	njsq._wrapper(xppq, onEnd, stream);
+     	njsq._call(xppq, onEnd, stream);
 }
 
 var modes = {
@@ -72,21 +72,21 @@ function overload( mode, stream, onData, onEnd )
     if ( mode == modes.READABLE )
         stream.on('readable', () => onReadable(stream, onData, onEnd) );
     else if ( mode == modes.DATA_END ) {
-    	stream.on('data', (chunk) => { njsq._wrapper(xppq, onData, stream, chunk); process.stdout.write(""); }); // The 'process.stdout.write("")' will do nothing, but the parser stalls when parsing the preprocessor output if missing.
-    	stream.on('end', () => njsq._wrapper(xppq, onEnd, stream));
+    	stream.on('data', (chunk) => { njsq._call(xppq, onData, stream, chunk); process.stdout.write(""); }); // The 'process.stdout.write("")' will do nothing, but the parser stalls when parsing the preprocessor output if missing.
+    	stream.on('end', () => njsq._call(xppq, onEnd, stream));
     } else
         throw "Unknown mode..."
 }
 
 class Stream extends stream.Readable {
     _read(size) {
-    	njsq._wrapper(xppq, 6, this);
+    	njsq._call(xppq, 6, this);
 //        this.push(null);
     }
     constructor(stream, options) {
         super(options);
         overload( modes.DATA_END, stream, 4, 5);
-        njsq._wrapper(xppq, 7, stream, this);
+        njsq._call(xppq, 7, stream, this);
     }
 }
 
@@ -103,5 +103,5 @@ var tokens = {
 module.exports.componentInfo = () => njsq._componentInfo(xppq);
 module.exports.wrapperInfo = () => njsq._wrapperInfo();
 module.exports.Stream = Stream;
-module.exports.parse = (stream, callback) => { overload(modes.READABLE, stream, 1, 2); njsq._wrapper(xppq, 3, stream, callback) };
+module.exports.parse = (stream, callback) => { overload(modes.READABLE, stream, 1, 2); njsq._call(xppq, 3, stream, callback) };
 module.exports.tokens = tokens;

@@ -39,32 +39,41 @@ namespace {
 	}
 
 	class rData_
-		: public rPData_
-	{};
+	: public rPData_
+	{
+	private:
+
+	};
 
 	namespace {
-		typedef proxy::rProcessing rPProcessing_;
-
-		class rProcessing_
-		: public rPProcessing_
-		{
-		protected:
-			proxy::rData *PRXYNew( void ) override
-			{
-				rData_ *Data = new rData_;
-
-				Data->Init();
-
-				return Data;
-			}
-			void PRXYOnAction( proxy::rData *Data ) override
-			{
-			}
-			void PRXYOnPending( proxy::rData *Data ) override
-			{
-			}
-		} Processing_;
+		typedef proxy::rProcessing<rData_> rPProcessing_;
 	}
+
+	proxy::rSharing<rData_> Sharing_;
+
+	class rProcessing_
+	: public rPProcessing_
+	{
+	protected:
+		rData_ *PRXYNew( void ) override
+		{
+			rData_ *Data = new rData_;
+
+			Data->Init();
+
+			Sharing_.Write( Data );
+
+			return Data;
+		}
+		void PRXYOnAction( rData_ *Data ) override
+		{
+			Sharing_.Write( Data );
+		}
+		void PRXYOnPending( rData_ *Data ) override
+		{
+			Sharing_.Write( Data );
+		}
+	} Processing_;
 
 	csdmns::rServer Server_;
 
@@ -93,117 +102,9 @@ qRT;
 qRE;
 }
 
-namespace {
-	namespace {
-		typedef fdr::rRWDressedDriver rRWDriver_;
-
-		class rDriver_
-		: public rRWDriver_
-		{
-		private:
-			qRMV( rComm_, C_, Comm_ );
-			qRMV( fdr::rRWDriver, D_, Driver_ );
-		protected:
-			virtual fdr::sSize FDRRead(
-				fdr::sSize Maximum,
-				fdr::sByte *Buffer ) override
-			{
-				if ( Driver_ == NULL ) {
-					Driver_ = C_().Read();
-				}
-
-				D_().ITake( tht::GetTID() );
-				return D_().Read( Maximum, Buffer, fdr::bNonBlocking );
-			}
-			virtual void FDRDismiss( bso::sBool Unlock ) override
-			{
-				D_().Dismiss( Unlock );
-			}
-			virtual tht::sTID FDRITake( fdr::sTID Owner ) override
-			{
-				return D_().ITake( Owner );
-			}
-			virtual fdr::sSize FDRWrite(
-				const fdr::sByte *Buffer,
-				fdr::sSize Maximum ) override
-			{
-				if ( Driver_ == NULL ) {
-					Driver_ = C_().Read();
-				}
-
-				D_().OTake( tht::GetTID() );
-				return D_().Write( Buffer, Maximum );
-			}
-			virtual void FDRCommit( bso::sBool Unlock ) override
-			{
-				D_().Commit( Unlock );
-				C_().Dismiss();
-				Driver_ = NULL;
-			}
-			virtual tht::sTID FDROTake( tht::sTID Owner ) override
-			{
-				return D_().OTake( Owner );
-			}
-		public:
-			void reset( bso::sBool P = true )
-			{
-				rRWDriver_::reset( P );
-
-				tol::reset( P, Comm_, Driver_ );
-			}
-			qCVDTOR( rDriver_ );
-			void Init( rComm_ *Comm )
-			{
-				rRWDriver_::Init( fdr::ts_Default );
-
-				Driver_ = NULL;
-				Comm_ = Comm;
-			}
-			const str::dString &Language( void ) const
-			{
-				return C_().Language();
-			}
-		};
-	}
-	struct rRack_ {
-	private:
-		rDriver_ Driver_;
-	public:
-		flw::sDressedRWFlow<> Flow;
-		void reset( bso::sBool P = true )
-		{
-			tol::reset( P, Driver_, Flow );
-		}
-		qCDTOR( rRack_ );
-		void Init( rComm_ *Comm )
-		{
-			Driver_.Init( Comm );
-			Flow.Init( Driver_ );
-
-		}
-		const str::dString &Language( void ) const
-		{
-			return Driver_.Language();
-		}
-	};
-}
-
 SCLZND_F( xdhp::New )
 {
-qRH;
-	rRack_ *Rack = NULL;
-qRB;
-	if ( (Rack = new rRack_) == NULL )
-		qRAlc();
-
-	Rack->Init( Conn_.Read() );
-
-	Caller.SetReturnValue( (bso::sS64)Rack );
-qRR;
-	if ( Rack != NULL )
-		delete Rack;
-qRT;
-qRE;
+	Caller.SetReturnValue( (bso::sS64)Sharing_.Read() );
 }
 
 SCLZND_F( xdhp::Delete )
@@ -219,7 +120,7 @@ SCLZND_F( xdhp::Delete )
 }
 
 namespace {
-	rRack_ &GetRack_( sclznd::sCaller &Caller )
+	rData_ &GetData_( sclznd::sCaller &Caller )
 	{
 		bso::sS64 Long = 0;
 
@@ -228,17 +129,11 @@ namespace {
 		if ( Long == 0 )
 			qRGnr();
 
-		return *(rRack_ *)Long;
-	}
-
-	flw::sRWFlow &GetFlow_( sclznd::sCaller &Caller )
-	{
-		return GetRack_( Caller ).Flow;
+		return *(rData_ *)Long;
 	}
 }
 
-#define RACK	rRack_ &Rack = GetRack_( Caller )
-#define FLOW	flw::sRWFlow &Flow = GetFlow_( Caller )
+#define DATA	rData_ &Data = GetData_( Caller )
 
 SCLZND_F( xdhp::GetAction )
 {
@@ -246,9 +141,10 @@ qRH;
 	str::wString Id, Action;
 	str::wStrings Strings;
 qRB;
-	FLOW;
+	DATA;
 
 	tol::Init( Id, Action );
+	proxy::
 	server::GetAction( Flow, Id, Action );
 
 	Strings.Init();
@@ -533,6 +429,11 @@ SCLZND_F( xdhp::GetProperty )
 SCLZND_F( xdhp::SetProperty )
 {
 	Set_( Caller, server::property::Set );
+}
+
+qCDTOR( xdhp )
+{
+	tol::Init( Sharing_, Processing_  );
 }
 
 

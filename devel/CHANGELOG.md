@@ -1,8 +1,16 @@
 # *Epeios* changelog
 
+2018-01-26:
+- NODEQ:
+  - adaptation to modification in *V8Q*,
+- V8Q:
+  - a value and derived can now be initialized with an undefined value; usefull to handle callback parameter, when none is provided by user,
+
 2018-01-25:
 - MTHTMC
-  - Using *MTHRTN* instead of *MTHFRC*,
+  - using *MTHRTN* instead of *MTHFRC*,
+- THT:
+  - introducing `rReadWrite`,
 
 2018-01-17:
 - *common*:

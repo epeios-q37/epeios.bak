@@ -339,6 +339,58 @@ namespace tht {
 		qRE
 		}
 	};
+
+	// One can read only when one has write, and one can write only if previous writing was red.
+	class rReadWrite
+	{
+	private:
+		mtx::rHandler Write_, Read_;
+		void Delete_( mtx::rHandler Handler )
+		{
+			if ( Handler != mtx::UndefinedHandler )
+				mtx::Delete( Handler );
+		}
+
+	public:
+		void reset( bso::sBool P = true )
+		{
+			if ( P ) {
+				Delete_( Write_ );
+				Delete_( Read_ );
+			}
+
+			Write_ = Read_ = mtx::UndefinedHandler;
+		}
+		qCDTOR( rReadWrite );
+		void Init( void )
+		{
+			Delete_( Write_ );
+			Delete_( Read_ );
+
+			Write_ = mtx::Create();
+			Read_ = mtx::Create();
+
+			mtx::Lock( Read_ );
+		}
+		void WriteBegin( void )
+		{
+			mtx::Lock( Write_ );
+		}
+		void WriteEnd( void )
+		{
+			mtx::Unlock( Read_ );
+		}
+		void ReadBegin( void )
+		{
+			mtx::Lock( Read_ );
+		}
+		void ReadEnd( void )
+		{
+			mtx::Unlock( Write_ );
+		}
+
+	};
+	
 }
 
 #endif

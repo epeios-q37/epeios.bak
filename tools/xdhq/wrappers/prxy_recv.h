@@ -88,7 +88,7 @@ namespace prxy_recv {
 		}
 	};
 
-	bso::sBool Recv(
+	void Recv(
 		prxy_cmn::eRequest Request,
 		flw::sRFlow &Flow,
 		rReturn &Return );

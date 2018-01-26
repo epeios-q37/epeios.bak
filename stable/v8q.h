@@ -303,6 +303,19 @@ namespace v8q {
 		return ToLocal( ToLocal( v8::Script::Compile( Context, ToString( Script, Isolate ) ), Isolate )->Run( Context ), Isolate );
 	}
 
+	template <typename type> v8::Local<type> Cast_(
+		v8::Local<v8::Value> Value,
+		bso::sBool UndefinedForbidden,
+		bool (v8::Value::*Function)(void) const )
+	{
+		if ( ((*Value)->*Function)() )
+			return v8::Local<type>::Cast( Value );
+		else if ( UndefinedForbidden )
+			qRFwk();
+
+		return v8::Local<type>();
+	}
+
 	template <typename item> class rPData_
 	{
 	private:
@@ -310,9 +323,12 @@ namespace v8q {
 	protected:
 		void Init(
 			v8::Local<v8::Value> Value,
+			bso::sBool UndefinedForbidden,
+			bool (v8::Value::*Function)(void) const,
 			v8::Isolate *Isolate = NULL )
 		{
-			Core_.Reset( GetIsolate( Isolate ), v8::Local<item>::Cast( Value ) );
+//			Core_.Reset( GetIsolate( Isolate ), v8::Local<item>::Cast( Value ) );
+			Core_.Reset( GetIsolate( Isolate ), Cast_<item>( Value, UndefinedForbidden, Function ) );
 		}
 	public:
 		void reset( bso::sBool P = true )
@@ -341,9 +357,12 @@ namespace v8q {
 	protected:
 		void Init(
 			v8::Local<v8::Value> Value,
+			bso::sBool UndefinedForbidden,
+			bool (v8::Value::*Function)(void) const,
 			v8::Isolate *Isolate = NULL )
 		{
-			Core_ = v8::Local<item>::Cast( Value );
+//			Core_ = v8::Local<item>::Cast( Value );
+			Core_ = Cast_<item>( Value, UndefinedForbidden, Function );
 		}
 	public:
 		void reset( bso::sBool P = true )
@@ -441,12 +460,24 @@ namespace v8q {
 		}
 		void Init(
 			v8::Local<v8::Value> Value,
+			bso::sBool UndefinedForbidden,
+			bool (v8::Value::*Function)(void) const,
 			v8::Isolate *Isolate = NULL )
 		{
-			if ( !Value->IsObject() )
-				qRFwk();
-
-			value::Init( Value, Isolate );
+			value::Init( Value, UndefinedForbidden, Function, Isolate ); 
+		}
+		void Init(
+			v8::Local<v8::Value> Value,
+			bso::sBool UndefinedForbidden,
+			v8::Isolate *Isolate = NULL )
+		{
+			Init( Value, UndefinedForbidden, &v8::Value::IsObject, Isolate );
+		}
+		void Init(
+			v8::Local<v8::Value> Value,
+			v8::Isolate *Isolate = NULL )
+		{
+			Init( Value, true, Isolate );
 		}
 		v8::Local<v8::Value> Get(
 			const char *Key,
@@ -563,12 +594,16 @@ namespace v8q {
 		}
 		void Init(
 			v8::Local<v8::Value> Value,
+			bso::sBool UndefinedForbidden,
 			v8::Isolate *Isolate = NULL )
 		{
-			if ( !Value->IsFunction() )
-				qRFwk();
-
-			object::Init( Value, Isolate );
+			object::Init( Value, UndefinedForbidden, &v8::Value::IsFunction, Isolate );
+		}
+		void Init(
+			v8::Local<v8::Value> Value,
+			v8::Isolate *Isolate = NULL )
+		{
+			Init( Value, true, Isolate );
 		}
 		void Init(
 			v8::FunctionCallback Function,
@@ -644,18 +679,24 @@ namespace v8q {
 		}
 		void Init(
 			v8::Local<v8::Value> Value,
+			bso::sBool UndefinedForbidden,
 			v8::Isolate *Isolate = NULL )
 		{
-			if ( !Value->IsString() )
-				qRFwk();
-
-			name::Init( Value, Isolate );
+			name::Init( Value, UndefinedForbidden, &v8::Value::IsString, Isolate );
+		}
+		void Init(
+			v8::Local<v8::Value> Value,
+			v8::Isolate *Isolate = NULL )
+		{
+			Init( Value, true, Isolate );
 		}
 		void Init(
 			const char *String,
 			v8::Isolate *Isolate = NULL )
 		{
-			name::Init( ToString( String, Isolate ) );
+			Isolate = GetIsolate( Isolate );
+
+			Init( ToString( String, Isolate ), Isolate );
 		}
 		void Init(
 			const str::dString &String,
@@ -705,12 +746,16 @@ namespace v8q {
 		}
 		void Init(
 			v8::Local<v8::Value> Value,
+			bso::sBool UndefinedForbidden,
 			v8::Isolate *Isolate = NULL )
 		{
-			if ( !Value->IsBoolean() )
-				qRFwk();
-
-			primitive::Init( Value, Isolate );
+			primitive::Init( Value, UndefinedForbidden, &v8::Value::IsBoolean, Isolate );
+		}
+		void Init(
+			v8::Local<v8::Value> Value,
+			v8::Isolate *Isolate = NULL )
+		{
+			Init( Value, true, Isolate );
 		}
 		void Init(
 			bool Boolean,
@@ -748,12 +793,16 @@ namespace v8q {
 		}
 		void Init(
 			v8::Local<v8::Value> Value,
+			bso::sBool UndefinedForbidden,
 			v8::Isolate *Isolate = NULL )
 		{
-			if ( !Value->IsNumber() )
-				qRFwk();
-
-			primitive::Init( Value, Isolate );
+			primitive::Init( Value, UndefinedForbidden, &v8::Value::IsNumber, Isolate );
+		}
+		void Init(
+			v8::Local<v8::Value> Value,
+			v8::Isolate *Isolate = NULL )
+		{
+			Init( Value, true, Isolate );
 		}
 		void Init(
 			double Number,
@@ -806,9 +855,16 @@ namespace v8q {
 		}
 		void Init(
 			v8::Local<v8::Value> Value,
+			bso::sBool UndefinedForbidden,
 			v8::Isolate *Isolate = NULL )
 		{
-			value::Init( Value, Isolate );
+			value::Init( Value, UndefinedForbidden, &v8::Value::IsExternal, Isolate );
+		}
+		void Init(
+			v8::Local<v8::Value> Value,
+			v8::Isolate *Isolate = NULL )
+		{
+			Init( Value, true, Isolate );
 		}
 		void Init(
 			const type *External,

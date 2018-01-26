@@ -39,7 +39,7 @@ namespace prxy_send {
 		}
 	};
 
-	bso::sBool Send(
+	void Send(
 		prxy_cmn::eRequest Request,
 		flw::sWFlow &Flow,
 		const rArguments &Arguments );

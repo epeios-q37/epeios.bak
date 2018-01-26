@@ -87,10 +87,10 @@ function nop() {
 }
 
 function normalize(callback) {
-	if (typeof callback === "undefined")
+/*	if (typeof callback === "undefined")
 		return nop;
 	else
-		return callback;
+		*/return callback;
 }
 
 class XDH {
@@ -150,7 +150,8 @@ class XDH {
 		this.toggleClasses([[id, clas]], callback);
 	}
 	enableElements(ids, callback) {
-		njsq._call(xdhq, 18, this, ids, normalize(callback));
+//		njsq._call(xdhq, 18, this, ids, normalize(callback));
+		njsq._call(xdhq, 18, this, ids, callback);
 	}
 	enableElement(id, callback) {
 		this.enableElements([id], callback);
