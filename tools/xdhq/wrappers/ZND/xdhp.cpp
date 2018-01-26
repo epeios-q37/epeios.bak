@@ -66,13 +66,9 @@ namespace {
 			return Data;
 		}
 		void PRXYOnAction( rData_ *Data ) override
-		{
-			Sharing_.Write( Data );
-		}
+		{}
 		void PRXYOnPending( rData_ *Data ) override
-		{
-			Sharing_.Write( Data );
-		}
+		{}
 	} Processing_;
 
 	csdmns::rServer Server_;
@@ -116,7 +112,7 @@ SCLZND_F( xdhp::Delete )
 	if ( Long == 0 )
 		qRGnr();
 
-	delete (rRack_ * )Long;
+	delete (rData_ * )Long;
 }
 
 namespace {
@@ -133,26 +129,29 @@ namespace {
 	}
 }
 
-#define DATA	rData_ &Data = GetData_( Caller )
+#define ARGS_BEGIN\
+	rData_ &Data = GetData_( Caller );\
+	Data.Sent.WriteBegin();\
+	proxy::rArguments &Arguments = Data.Sent.Arguments;\
+	Arguments.Init();
+
+#define ARGS_END	Data.Sent.WriteEnd()
 
 SCLZND_F( xdhp::GetAction )
 {
 qRH;
-	str::wString Id, Action;
 	str::wStrings Strings;
 qRB;
-	DATA;
+	ARGS_BEGIN;
+	Data.Recv.ReadBegin();
 
-	tol::Init( Id, Action );
-	proxy::
-	server::GetAction( Flow, Id, Action );
-
-	Strings.Init();
-
-	Strings.Append( Id );
-	Strings.Append( Action );
+	Strings.Append( Data.Recv.Id );
+	Strings.Append( Data.Recv.Id );
 
 	Caller.SetReturnValue( Strings );
+
+	Data.Recv.ReadEnd();
+	ARGS_END;
 qRR;
 qRT;
 qRE;
@@ -163,12 +162,14 @@ SCLZND_F( xdhp::Alert )
 qRH;
 	str::wString Message;
 qRB;
-	FLOW;
+	ARGS_BEGIN;
 
 	Message.Init();
 	Caller.Get( Message );
 
 	server::Alert( Message, Flow );
+
+	ARGS_END;
 qRR;
 qRT;
 qRE;
