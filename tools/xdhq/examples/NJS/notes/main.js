@@ -159,7 +159,7 @@ function edit(dom, id) {
 			{
 				"Title": dom.notes[dom.id]['title'],
 				"Description": dom.notes[dom.id]['description'],
-		},
+			},
 			() => dom.disableElements(
 				viewModeElements,
 				() => dom.dressWidgets("Notes")
@@ -190,8 +190,8 @@ function acDelete(dom, id) {
 function acSubmit(dom, id) {
 	dom.getContents(["Title", "Description"],
 		(result) => {
-			var title = result[0].trim();
-			var description = result[1];
+			var title = result['Title'].trim();
+			var description = result['Description'];
 
 			if (title != '') {
 				dom.notes[dom.id]['title'] = title;
@@ -200,22 +200,23 @@ function acSubmit(dom, id) {
 					dom.notes.unshift({ title: '', description: '' });
 					displayList(dom);
 				} else {
-					let content = {};
+					let contents = {};
 					contents["Title." + dom.id] = title;
 					contents["Description." + dom.id] = description;
-					dom.setContents( contents,
+					dom.setContents(contents,
 						() => view(dom, dom.id)
 					);
 				}
 			} else
 				dom.alert("Title can not be empty !");
-		});
+		}
+	);
 }
 
 function acCancel(dom, id) {
 	dom.getContents(["Title", "Description"],
 		(result) => {
-			if ((dom.notes[dom.id]['title'] != result[0]) || (dom.notes[dom.id]['description'] != result[1]))
+			if ((dom.notes[dom.id]['title'] != result['Title']) || (dom.notes[dom.id]['description'] != result['Description']))
 				dom.confirm("Are you sure you want to cancel your modifications ?",
 					(response) => {
 						if (response == true) view(dom, dom.id);
@@ -223,19 +224,22 @@ function acCancel(dom, id) {
 				);
 			else
 				view(dom, dom.id);
-		});
+		}
+	);
 }
 
 function main() {
-	unjsq.register({
-		"Connect": acConnect,
-		"ToggleDescriptions": acToggleDescriptions,
-		"Search": acSearch,
-		"Edit": acEdit,
-		"Delete": acDelete,
-		"Submit": acSubmit,
-		"Cancel": acCancel,
-	});
+	unjsq.register(
+		{
+			"Connect": acConnect,
+			"ToggleDescriptions": acToggleDescriptions,
+			"Search": acSearch,
+			"Edit": acEdit,
+			"Delete": acDelete,
+			"Submit": acSubmit,
+			"Cancel": acCancel,
+		}
+	);
 
 	unjsq.launch(newSession, "Connect");
 }

@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2007-2017 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 2017 Claude SIMON (http://q37.info/contact/).
 
 	This file is part of XDHq.
 
@@ -66,12 +66,34 @@ class Tree {
 	}
 }
 
-// {'a': b, 'c': d, 'e': f} -> ['a','c','e'][b,d,f]}
+// {'a': b, 'c': d, 'e': f} -> ['a','c','e'] [b,d,f]
 function split(keysAndValues, keys, values) {
 	for (var prop in keysAndValues) {
 		keys.push(prop);
 		values.push(keysAndValues[prop]);
 	}
+}
+
+// ['a', 'b', 'c'] ['d', 'e', 'f'] -> { 'a': 'd', 'b': 'e', 'c': 'f' }
+function unsplit(keys, values) {
+	var i = 0;
+	var keysValues = {};
+
+	while (i < keys.length) {
+		keysValues[keys[i]] = values[i];
+		i++;
+	}
+
+	return keysValues;
+}
+
+// 'key', value -> { 'key': value } 
+function merge(key, value) {
+	var keyValue = {};
+
+	keyValue[key] = value;
+
+	return keyValue;
 }
 
 class XDH {
@@ -85,10 +107,12 @@ class XDH {
 		njsq._call(xdhq, 11, this, id, tree, xslFilename, callback);
 	}
 	getContents(ids, callback) {
-		njsq._call(xdhq, 12, this, ids, callback);
+		njsq._call(xdhq, 12, this, ids,
+			(contents) => callback(unsplit(ids, contents))
+		);
 	}
 	getContent(id, callback) {
-		return this.getContents([id], (result) => { callback(result[0]); });
+		return this.getContents([id], (result) => { callback(result[id]); });
 	}
 	setContents(idsAndContents, callback) {
 		var ids = [];
@@ -99,13 +123,12 @@ class XDH {
 		njsq._call(xdhq, 13, this, ids, contents, callback);
 	}
 	setContent(id, content, callback) {
-		return this.setContents({ id: content }, callback);
+		return this.setContents(merge(id, content), callback);
 	}
 	dressWidgets(id, callback) {
 		njsq._call(xdhq, 14, this, id, callback);
 	}
 	handleClasses(idsAndClasses, fid, callback) {
-		console.log(idsAndClasses);
 		var ids = [];
 		var classes = [];
 
@@ -117,19 +140,19 @@ class XDH {
 		this.handleClasses(idsAndClasses, 15, callback);
 	}
 	addClass(id, clas, callback) {
-		this.addClasses(new Object()[id] = clas, callback);
+		this.addClasses(merge(id, clas), callback);
 	}
 	removeClasses(idsAndClasses, callback) {
 		this.handleClasses(idsAndClasses, 16, callback);
 	}
 	removeClass(id, clas, callback) {
-		this.removeClasses({id: clas}, callback);
+		this.removeClasses(merge(id, clas), callback);
 	}
 	toggleClasses(idsAndClasses, callback) {
 		this.handleClasses(idsAndClasses, 17, callback);
 	}
 	toggleClass(id, clas, callback) {
-		this.toggleClasses({id: clas}, callback);
+		this.toggleClasses(merge(id, clas), callback);
 	}
 	enableElements(ids, callback) {
 		njsq._call(xdhq, 18, this, ids, callback);
@@ -178,4 +201,3 @@ module.exports.Tree = Tree;
 module.exports.register = register;
 module.exports.launch = launch;
 module.exports.XDH = XDH;
-
