@@ -72,12 +72,12 @@ function acShowInput(dom, id) {
 }
 
 function main() {
-	unjsq.register([
-		["Connect", acConnect],
-		["Submit", acSubmit],
-		["HideInput", acHideInput],
-		["ShowInput", acShowInput],
-	]);
+	unjsq.register({
+		"Connect": acConnect,
+		"Submit": acSubmit,
+		"HideInput": acHideInput,
+		"ShowInput": acShowInput,
+	});
 
 	unjsq.launch(newSession, "Connect");
 }

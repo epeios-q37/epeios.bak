@@ -85,7 +85,7 @@ function push(note, id, tree) {
 }
 
 function handleDescriptions(dom) {
-	if (dom.hideDescriptions )
+	if (dom.hideDescriptions)
 		dom.disableElement("ViewDescriptions");
 	else
 		dom.enableElement("ViewDescriptions");
@@ -94,15 +94,15 @@ function handleDescriptions(dom) {
 function displayList(dom) {
 	var tree = new Tree();
 	var i = 1;	// 0 skipped, as it serves as buffer for the new ones.
-	var contents = new Array();
+	var contents = {};
 
 	tree.pushTag("Notes");
-	tree.putAttribute("HideDescriptions", dom.hideDescriptions );
+	tree.putAttribute("HideDescriptions", dom.hideDescriptions);
 
 	while (i < dom.notes.length) {
 		if (dom.notes[i]['title'].toLowerCase().startsWith(dom.pattern)) {
 			push(dom.notes[i], i, tree);
-			contents.push(["Description." + i, dom.notes[i]['description']]);
+			contents["Description." + i] = dom.notes[i]['description'];
 		}
 		i++;
 	}
@@ -111,8 +111,8 @@ function displayList(dom) {
 
 	dom.setLayout("Notes", tree, "Notes.xsl",
 		() => dom.setContents(contents,
-			() => dom.enableElements( viewModeElements,
-				() => handleDescriptions(dom )
+			() => dom.enableElements(viewModeElements,
+				() => handleDescriptions(dom)
 			)
 		)
 	);
@@ -145,10 +145,10 @@ function acToggleDescriptions(dom, id) {
 function view(dom, id) {
 	dom.enableElements(
 		viewModeElements,
-			() => {
-				dom.setContent("Edit." + id, "");
-				dom.id = -1;
-			}
+		() => {
+			dom.setContent("Edit." + id, "");
+			dom.id = -1;
+		}
 	);
 }
 
@@ -156,10 +156,10 @@ function edit(dom, id) {
 	dom.id = parseInt(id);
 	dom.setLayout("Edit." + id, new Tree(), "Note.xsl",
 		() => dom.setContents(
-			[
-				["Title", dom.notes[dom.id]['title']],
-				["Description", dom.notes[dom.id]['description']]
-			],
+			{
+				"Title": dom.notes[dom.id]['title'],
+				"Description": dom.notes[dom.id]['description'],
+		},
 			() => dom.disableElements(
 				viewModeElements,
 				() => dom.dressWidgets("Notes")
@@ -200,11 +200,10 @@ function acSubmit(dom, id) {
 					dom.notes.unshift({ title: '', description: '' });
 					displayList(dom);
 				} else {
-					dom.setContents(
-						[
-							["Title." + dom.id, title],
-							["Description." + dom.id, description]
-						],
+					let content = {};
+					contents["Title." + dom.id] = title;
+					contents["Description." + dom.id] = description;
+					dom.setContents( contents,
 						() => view(dom, dom.id)
 					);
 				}
@@ -228,15 +227,15 @@ function acCancel(dom, id) {
 }
 
 function main() {
-	unjsq.register([
-		["Connect", acConnect],
-		["ToggleDescriptions", acToggleDescriptions],
-		["Search", acSearch],
-		["Edit", acEdit],
-		["Delete", acDelete],
-		["Submit", acSubmit],
-		["Cancel", acCancel],
-	]);
+	unjsq.register({
+		"Connect": acConnect,
+		"ToggleDescriptions": acToggleDescriptions,
+		"Search": acSearch,
+		"Edit": acEdit,
+		"Delete": acDelete,
+		"Submit": acSubmit,
+		"Cancel": acCancel,
+	});
 
 	unjsq.launch(newSession, "Connect");
 }

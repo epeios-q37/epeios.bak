@@ -129,310 +129,206 @@ namespace {
 	}
 }
 
-#define ARGS_BEGIN\
-	rData_ &Data = GetData_( Caller );\
-	Data.Sent.WriteBegin();\
-	proxy::rArguments &Arguments = Data.Sent.Arguments;\
-	Arguments.Init();
-
-#define ARGS_END	Data.Sent.WriteEnd()
-
 SCLZND_F( xdhp::GetAction )
 {
 qRH;
 	str::wStrings Strings;
 qRB;
-	ARGS_BEGIN;
+	rData_ &Data = GetData_( Caller );
 	Data.Recv.ReadBegin();
 
 	Strings.Append( Data.Recv.Id );
 	Strings.Append( Data.Recv.Id );
 
-	Caller.SetReturnValue( Strings );
-
 	Data.Recv.ReadEnd();
-	ARGS_END;
+
+	Caller.SetReturnValue( Strings );
 qRR;
 qRT;
 qRE;
 }
 
+#define BEGIN( request )\
+	rData_ &Data = GetData_( Caller );\
+	Data.Sent.WriteBegin();\
+	Data.Request = prxy_cmn::r##request;\
+	proxy::rArguments &Arguments = Data.Sent.Arguments;\
+	Arguments.Init();
+
+#define SWITCH	Data.Sent.WriteEnd();Data.Recv.ReadBegin(); proxy::rReturn &Return = Data.Recv.Return
+
+#define END	Data.Recv.ReadEnd()
+
+
 SCLZND_F( xdhp::Alert )
 {
-qRH;
-	str::wString Message;
-qRB;
-	ARGS_BEGIN;
+	BEGIN( Alert );
 
-	Message.Init();
-	Caller.Get( Message );
+	Caller.Get( Arguments.Message );
 
-	server::Alert( Message, Flow );
+	SWITCH;
 
-	ARGS_END;
-qRR;
-qRT;
-qRE;
+	END;
 }
 
 SCLZND_F( xdhp::Confirm )
 {
-	bso::sBool Return = false;
-qRH;
-	str::wString Message, Response;
-qRB;
-	FLOW;
+	BEGIN( Confirm );
 
-	Message.Init();
-	Caller.Get( Message );
+	Caller.Get( Arguments.Message );
+	
+	SWITCH;
 
-	Response.Init();
-	server::Confirm( Message, Flow, Response );
+	Caller.SetReturnValue( Return.GetString() );
 
-	Caller.SetReturnValue( Response == "true" );
-qRR;
-qRT;
-qRE;
-}
-
-namespace {
-	void SetLayout_(
-		const str::dString &Id,
-		sclznd::sCaller &Caller,
-		const str::dString &Language,
-		flw::sRWFlow &Flow )
-	{
-	qRH;
-		str::wString XML, XSLFilename;
-	qRB;
-		tol::Init( XML, XSLFilename );
-
-		treep::GetXML( Caller, XML );
-		Caller.Get( XSLFilename );
-
-		server::layout::Set( Id, XML, XSLFilename, Language, Flow );
-	qRR;
-	qRT;
-	qRE;
-	}
-
-	void SetLayout_(
-		sclznd::sCaller &Caller,
-		const str::dString &Language,
-		flw::sRWFlow &Flow )
-	{
-	qRH;
-		str::wString Id;
-	qRB;
-		tol::Init( Id );
-		Caller.Get( Id );
-
-		SetLayout_( Id, Caller, Language, Flow );
-	qRR;
-	qRT;
-	qRE;
-	}
+	END;
 }
 
 SCLZND_F( xdhp::SetLayout )
 {
-	RACK;
+	BEGIN( SetLayout );
 
-	SetLayout_( Caller, Rack.Language(), Rack.Flow );
+	Caller.Get( Arguments.Id );
+	treep::GetXML( Caller, Arguments.XML );
+	Caller.Get( Arguments.XSLFilename );
+
+	SWITCH;
+	END;
 }
 
 SCLZND_F( xdhp::GetContents )
 {
-qRH;
-	str::wStrings Ids, Contents;
-qRB;
-	FLOW;
+	BEGIN( GetContents );
 
-	Ids.Init();
-	Caller.Get( Ids );
+	Caller.Get( Arguments.Ids );
 
-	Contents.Init();
-	server::contents::Get( Ids, Flow, Contents );
+	SWITCH;
 
-	Caller.SetReturnValue( Contents );
-qRR;
-qRT;
-qRE;
+	Caller.SetReturnValue( Return.GetStrings() );
+
+	END;
 }
 
 SCLZND_F( xdhp::SetContents )
 {
-qRH;
-	str::wStrings Ids, Contents;
-qRB;
-	FLOW;
+	BEGIN( SetContents );
 
-	tol::Init( Ids, Contents );
-	Caller.Get( Ids, Contents );
+	Caller.Get( Arguments.Ids, Arguments.Contents );
 
-	server::contents::Set( Ids, Contents, Flow );
-qRR;
-qRT;
-qRE;
+	SWITCH;
+
+	Caller.SetReturnValue( Return.GetStrings() );
+
+	END;
 }
 
 SCLZND_F( xdhp::DressWidgets )
 {
-qRH;
-	str::wString Id;
-qRB;
-	FLOW;
+	BEGIN( DressWidgets );
 
-	tol::Init( Id );
-	Caller.Get( Id );
+	Caller.Get( Arguments.Id );
 
-	server::widgets::Dress( Id, Flow );
-qRR;
-qRT;
-qRE;
-}
-
-namespace {
-	void HandleClasses_(
-		sclznd::sCaller &Caller,
-		void( *Function )(
-			const str::dStrings &Ids,
-			const str::dStrings &Classes,
-			flw::sRWFlow &Flow) )
-	{
-	qRH;
-		str::wStrings Ids, Classes;
-	qRB;
-		FLOW;
-
-		tol::Init( Ids, Classes );
-		Caller.Get( Ids, Classes );
-
-		Function( Ids, Classes, Flow );
-	qRR;
-	qRT;
-	qRE;
-	}
+	SWITCH;
+	END;
 }
 
 SCLZND_F( xdhp::AddClasses )
 {
-	HandleClasses_( Caller, server::classes::Add );
+	BEGIN( AddClasses );
+
+	Caller.Get( Arguments.Ids, Arguments.Classes );
+
+	SWITCH;
+	END;
 }
 
 SCLZND_F( xdhp::RemoveClasses )
 {
-	HandleClasses_( Caller, server::classes::Remove );
+	BEGIN( RemoveClasses );
+
+	Caller.Get( Arguments.Ids, Arguments.Classes );
+
+	SWITCH;
+	END;
 }
 
 SCLZND_F( xdhp::ToggleClasses )
 {
-	HandleClasses_( Caller, server::classes::Toggle );
-}
+	BEGIN( ToggleClasses );
 
-namespace {
-	void HandleElements_(
-		sclznd::sCaller &Caller,
-		void( *Function )(
-			const str::dStrings &Ids,
-			flw::sRWFlow &Flow) )
-	{
-	qRH;
-		str::wStrings Ids;
-	qRB;
-		FLOW;
+	Caller.Get( Arguments.Ids, Arguments.Classes );
 
-		tol::Init( Ids );
-		Caller.Get( Ids );
-
-		Function( Ids, Flow );
-	qRR;
-	qRT;
-	qRE;
-	}
+	SWITCH;
+	END;
 }
 
 SCLZND_F( xdhp::EnableElements )
 {
-	HandleElements_( Caller, server::elements::Enable );
+	BEGIN( EnableElements );
+
+	Caller.Get( Arguments.Ids );
+
+	SWITCH;
+	END;
 }
 
 SCLZND_F( xdhp::DisableElements )
 {
-	HandleElements_( Caller, server::elements::Disable );
-}
+	BEGIN( DisableElements );
 
-namespace {
-	void Get_(
-		sclznd::sCaller &Caller,
-		void( *Function )(
-			const str::dString &Id,
-			const str::dString &Name,
-			flw::sRWFlow &Flow,
-			str::dString &Value ) )
-	{
-	qRH;
-		str::wString Id, Name, Value;
-	qRB;
-		FLOW;
+	Caller.Get( Arguments.Ids );
 
-		tol::Init( Id, Name );
-		Caller.Get( Id, Name );
-
-		tol::Init( Value );
-		Function( Id, Name, Flow, Value );
-
-		Caller.SetReturnValue( Value );
-	qRR;
-	qRT;
-	qRE;
-	}
-
-	void Set_(
-		sclznd::sCaller &Caller,
-		void( *Function )(
-			const str::dString &Id,
-			const str::dString &Name,
-			const str::dString &Value,
-			flw::sRWFlow &Flow ) )
-	{
-	qRH;
-		str::wString Id, Name, Value;
-	qRB;
-		FLOW;
-
-		tol::Init( Id, Name, Value );
-		Caller.Get( Id, Name, Value );
-
-		Function( Id, Name, Value, Flow );
-	qRR;
-	qRT;
-	qRE;
-	}
-
+	SWITCH;
+	END;
 }
 
 SCLZND_F( xdhp::GetAttribute )
 {
-	Get_( Caller, server::attribute::Get );
+	BEGIN( GetAttribute );
+
+	Caller.Get( Arguments.Id, Arguments.Name );
+
+	SWITCH;
+
+	Caller.SetReturnValue( Return.GetString() );
+
+	END;
 }
 
 SCLZND_F( xdhp::SetAttribute )
 {
-	Set_( Caller, server::attribute::Set );
+	BEGIN( SetAttribute );
+
+	Caller.Get( Arguments.Id, Arguments.Name, Arguments.Value );
+
+	SWITCH;
+	END;
 }
 
 SCLZND_F( xdhp::GetProperty )
 {
-	Get_( Caller, server::property::Get );
+	BEGIN( GetProperty );
+
+	Caller.Get( Arguments.Id, Arguments.Name );
+
+	SWITCH;
+
+	Caller.SetReturnValue( Return.GetString() );
+
+	END;
 }
 
 SCLZND_F( xdhp::SetProperty )
 {
-	Set_( Caller, server::property::Set );
+	BEGIN( SetAttribute );
+
+	Caller.Get( Arguments.Id, Arguments.Name, Arguments.Value );
+
+	SWITCH;
+	END;
 }
 
-qCDTOR( xdhp )
+qGCTOR( xdhp )
 {
 	tol::Init( Sharing_, Processing_  );
 }

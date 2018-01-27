@@ -66,20 +66,11 @@ class Tree {
 	}
 }
 
-function pushLabelAndItem(labelAndItem, itemType, labels, items) {
-	if ((labelAndItem instanceof Array) && (labelAndItem.length === 2) && (typeof labelAndItem[0] === "string") && (typeof labelAndItem[1] === itemType)) {
-		labels.push(labelAndItem[0]);
-		items.push(labelAndItem[1]);
-	} else
-		throw ("Error in parameters.");
-}
-
-// '[a,b],[c,d],[e,f]' => '[a,c,e],[b,d,f]'
-function pushLabelsAndItems(labelsAndItems, itemType, labels, items) {
-	var length = labelsAndItems.length;
-
-	while (length--) {
-		pushLabelAndItem(labelsAndItems[length], itemType, labels, items);
+// {'a': b, 'c': d, 'e': f} -> ['a','c','e'][b,d,f]}
+function split(keysAndValues, keys, values) {
+	for (var prop in keysAndValues) {
+		keys.push(prop);
+		values.push(keysAndValues[prop]);
 	}
 }
 
@@ -100,24 +91,25 @@ class XDH {
 		return this.getContents([id], (result) => { callback(result[0]); });
 	}
 	setContents(idsAndContents, callback) {
-		var ids = new Array();
-		var contents = new Array();
+		var ids = [];
+		var contents = [];
 
-		pushLabelsAndItems(idsAndContents, "string", ids, contents);
+		split(idsAndContents, ids, contents);
 
 		njsq._call(xdhq, 13, this, ids, contents, callback);
 	}
 	setContent(id, content, callback) {
-		return this.setContents([[id, content]], callback);
+		return this.setContents({ id: content }, callback);
 	}
 	dressWidgets(id, callback) {
 		njsq._call(xdhq, 14, this, id, callback);
 	}
 	handleClasses(idsAndClasses, fid, callback) {
-		var ids = new Array();
-		var classes = new Array();
+		console.log(idsAndClasses);
+		var ids = [];
+		var classes = [];
 
-		pushLabelsAndItems(idsAndClasses, "string", ids, classes);
+		split(idsAndClasses, ids, classes);
 
 		njsq._call(xdhq, fid, this, ids, classes, callback);
 	}
@@ -125,19 +117,19 @@ class XDH {
 		this.handleClasses(idsAndClasses, 15, callback);
 	}
 	addClass(id, clas, callback) {
-		this.addClasses([[id, clas]], callback);
+		this.addClasses(new Object()[id] = clas, callback);
 	}
 	removeClasses(idsAndClasses, callback) {
 		this.handleClasses(idsAndClasses, 16, callback);
 	}
 	removeClass(id, clas, callback) {
-		this.removeClasses([[id, clas]], callback);
+		this.removeClasses({id: clas}, callback);
 	}
 	toggleClasses(idsAndClasses, callback) {
 		this.handleClasses(idsAndClasses, 17, callback);
 	}
 	toggleClass(id, clas, callback) {
-		this.toggleClasses([[id, clas]], callback);
+		this.toggleClasses({id: clas}, callback);
 	}
 	enableElements(ids, callback) {
 		njsq._call(xdhq, 18, this, ids, callback);
@@ -166,10 +158,10 @@ class XDH {
 }
 
 function register(idsAndItems) {
-	var tags = new Array();
-	var callbacks = new Array();
+	var tags = [];
+	var callbacks = [];
 
-	pushLabelsAndItems(idsAndItems, "function", tags, callbacks);
+	split(idsAndItems, tags, callbacks);
 
 	njsq._call(xdhq, 7, tags, callbacks);
 }
