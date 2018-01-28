@@ -101,13 +101,12 @@ class XDHQTree extends XDHqWrapper {
 class XDHqDOM extends XDHqWrapper {
 	private $core;
 	private function split( array $keysAndValues, array &$keys, array &$values ) {
-		while ($item = current($keysAndValues)) {
-			$keys[] = key( $keysAndValues );
-			$values[] = $item;
-
-			next($keysAndValues);
+		foreach ($keysAndValues as $key => $value) {
+			$keys[] = $key;
+			$values[] = $value;
 		}
 	}
+	private function unsplit( )
 	function __construct() {
 		$this->core = parent::_call( 8 );
 	}
@@ -117,7 +116,7 @@ class XDHqDOM extends XDHqWrapper {
 	function __destruct() {
 //		self::call( 9 );
 	}
-	function getAction( $id ) {
+	function getAction( &$id ) {
 		$return = self::call( 10 );
 
 		$id = $return[0];
@@ -128,28 +127,29 @@ class XDHqDOM extends XDHqWrapper {
 		self::call( 11, $message );
 	}
 	function confirm( $message ) {
-		return self::call( 12, $message );
+		return self::call( 12, $message ) === "true";
 	}
 	function setLayout( $id, XDHqTree $tree, string $xslFilename ) {
 		self::call( 13, $id, $tree->getCore(), $xslFilename );
 	}
 	function getContents( array $ids ) {
-		return self::call( 14,$ids );
+		self::unsplit($ids,self::call( 14,$ids ));
 	}
 	function getContent( string $id ) {
-		return self::getContents( array( $id ) )[0];
+		return self::getContents( array( $id ) )[$id];
 	}
 	function setContents( array $idsAndContents ) {
 		$ids = array();
 		$contents = array();
 
 		self::split( $idsAndContents, $ids, $contents );
+
 		self::call( 15, $ids, $contents );
 	}
 	function setContent( $id, $content ) {
 		self::setContents( [ $id => $content ] );
 	}
-	function dressWidgets( array $id ) {
+	function dressWidgets( string $id ) {
 		return self::call( 16, $id );
 	}
 	private function handleClasses( $fid, array $idsAndClasses ) {
@@ -186,7 +186,7 @@ class XDHqDOM extends XDHqWrapper {
 	function enableElement( string $id ) {
 		self::enableElements( array( $id ) );
 	}
-	function disableElements( aray $ids ) {
+	function disableElements( array $ids ) {
 		self::call( 21, $ids  );
 	}
 	function disableElement( string $id ) {

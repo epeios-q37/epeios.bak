@@ -45,9 +45,12 @@ function getUnJSq() {
 
 getUnJSq();
 
+$viewModeElements = ["Pattern", "CreateButton", "DescriptionToggling", "ViewNotes"];
+
 class MyData extends UnJSqDOM {
 	public $pattern = "";
 	public $hideDescriptions = false;
+	public $id = 0;
 	public $notes = array(
 		// First one must be empty; it is used as buffer for new entries.
 		array (
@@ -69,7 +72,7 @@ class MyData extends UnJSqDOM {
 	);
 }
 
-function push($note, $id, &$tree) {
+function push($note, $id, $tree) {
 	$tree->pushTag('Note');
 	$tree->putAttribute('id', $id);
 
@@ -82,28 +85,57 @@ function push($note, $id, &$tree) {
 	$tree->popTag();
 }
 
+function handleDescriptions($dom) {
+	if ($dom->hideDescriptions)
+		$dom->disableElement("ViewDescriptions");
+	else
+		$dom->enableElement("ViewDescriptions");
+}
+
 function displayList( $dom ) {
+	global $viewModeElements;
 	$tree = new UnJSqTree();
 	$i = 1;	// 0 skipped, as it serves as buffer for the new ones.
 	$contents = array();
 
 	$tree->pushTag( "Notes" );
-	$tree->putAttribute( "HideDescriptions", $dom.hideDescriptions );
+	$tree->putAttribute( "HideDescriptions", $dom->hideDescriptions );
 
 	$count = count($dom->notes );
 
 	while ( $i < $count ) {
-		if ( substr($dom->notes[$i]['title'],0,strlen($dom->pattern) ) === $dom->pattern ) {
+		if ( substr(strtolower($dom->notes[$i]['title']),0,strlen($dom->pattern) ) === $dom->pattern ) {
 			push( $dom->notes[$i], $i, $tree);
 			$contents["Description." . $i] = $dom->notes[$i]['description'];
 		}
 		$i++;
 	}
 
-	var_dump( $contents );
-
 	$dom->setLayout( "Notes", $tree, "Notes.xsl");
 	$dom->setContents( $contents );
+	$dom->enableElements( $viewModeElements );
+}
+
+function view($dom, $id) {
+	global $viewModeElements;
+
+	$dom->enableElements( $viewModeElements );
+	$dom->setContent("Edit." . $id, "");
+	$dom->id = -1;
+}
+
+function edit($dom, $id) {
+	global $viewModeElements;
+
+	$dom->id = intval($id);
+	$dom->setLayout("Edit." . $id, new UnJSqTree(), "Note.xsl" );
+	$dom->setContents(
+			[
+				"Title" => $dom->notes[$dom->id]['title'],
+				"Description" => $dom->notes[$dom->id]['description'],
+			] );
+	$dom->disableElements( $viewModeElements );
+	$dom->dressWidgets("Notes");
 }
 
 function main() {
@@ -117,6 +149,54 @@ function main() {
 			$dom->setLayout( "", new UnJSqTree(), "Main.xsl" );
 			displayList( $dom );
 			break;
+		case "ToggleDescriptions":
+			$dom->hideDescriptions = $dom->getContent($id) == "true";
+			handleDescriptions($dom);
+			break;
+		case "Search":
+			$dom->pattern = strtolower( $dom->getContent( "Pattern" ) );
+			displayList($dom);
+			break;
+		case "Edit":
+			edit( $dom, $dom->getContent($id));
+			break;
+		case "Delete":
+			if ( $dom->confirm("Are you sure you want to delete this entry ?" ) ) {
+				array_splice($dom->notes,intval($dom->getContent($id)),1);
+				displayList($dom);
+			}
+			break;
+		case "Submit":
+			$result = $dom->getContents(["Title", "Description"]);
+
+			$title = trime($result['Title']);
+			$description = $result['Description'];
+
+			if ($title != '') {
+				$dom->notes[$dom->id]['title'] = $title;
+				$om->notes[$dom->id]['description'] = $description;
+				if ($dom->id == 0) {
+					array_insert( $dom->notes, 0, [ 'title' => '', 'description' => '' ] );
+					displayList($dom);
+				} else {
+					$contents = [];
+					$contents["Title." . $dom->id] = $title;
+					$contents["Description." . $dom->id] = $description;
+					$dom->setContents($contents);
+					view($dom, $dom->id);
+				}
+			} else
+				$dom->alert("Title can not be empty !");
+			break;
+		case "Cancel":
+			$result = $dom->getContents(["Title", "Description"]);
+			var_dump( $result );
+			if (($dom->notes[$dom->id]['title'] != $result['Title']) or ($dom->notes[$dom->id]['description'] != $result['Description'])) {
+				if ( $dom->confirm("Are you sure you want to cancel your modifications ?" ) )
+					view($dom, $dom->id);
+			} else
+				view($dom, $dom->id);
+		break;
 		default:
 			die( "???" );
 			break;
