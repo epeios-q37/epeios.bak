@@ -115,7 +115,7 @@ class XDHqDOM extends XDHqWrapper {
 		return parent::_call( $id, $this->core, ...$args );
 	}
 	function __destruct() {
-		self::call( 9 );
+//		self::call( 9 );
 	}
 	function getAction( $id ) {
 		$return = self::call( 10 );
@@ -144,7 +144,6 @@ class XDHqDOM extends XDHqWrapper {
 		$contents = array();
 
 		self::split( $idsAndContents, $ids, $contents );
-
 		self::call( 15, $ids, $contents );
 	}
 	function setContent( $id, $content ) {
@@ -158,10 +157,6 @@ class XDHqDOM extends XDHqWrapper {
 		$classes = array();
 
 		self::split( $idsAndClasses, $ids, $classes );
-
-		print_r( $ids );
-		print_r( $classes );
-
 		self::call( $fid, $ids, $classes );
 	}
 	private function handleClass( $fid, $id, $class ) {

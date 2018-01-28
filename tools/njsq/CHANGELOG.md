@@ -1,5 +1,8 @@
 # *NJSq* changelog
 
+2018-01-27:
+- adaptation to modifications in underlying libraries,
+
 2018-01-26:
 - adaptation to modifications in underlying libraries,
 - a callback parameter can now be undefined,

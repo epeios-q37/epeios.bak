@@ -348,9 +348,8 @@ namespace tht {
 		void Delete_( mtx::rHandler Handler )
 		{
 			if ( Handler != mtx::UndefinedHandler )
-				mtx::Delete( Handler );
+				mtx::Delete( Handler, true );
 		}
-
 	public:
 		void reset( bso::sBool P = true )
 		{

@@ -327,8 +327,15 @@ namespace v8q {
 			bool (v8::Value::*Function)(void) const,
 			v8::Isolate *Isolate = NULL )
 		{
-//			Core_.Reset( GetIsolate( Isolate ), v8::Local<item>::Cast( Value ) );
 			Core_.Reset( GetIsolate( Isolate ), Cast_<item>( Value, UndefinedForbidden, Function ) );
+		}
+		v8::Local<item> Get_( v8::Isolate *Isolate ) const
+		{
+			// Do not exists in 'Node.js' v4.
+			// return Core_.Get( GetIsolate( Isolate ) );
+
+			// This is the definition of v8::Persistent<>::Get()' in 'Node.js' >v4.
+			return v8::Local<item>::New( Isolate, Core_ );
 		}
 	public:
 		void reset( bso::sBool P = true )
@@ -344,22 +351,21 @@ namespace v8q {
 		{
 			if ( Core_.IsEmpty() )
 				qRFwk();
-			// Do not exists in 'Node.js' v4.
-			// return Core_.Get( GetIsolate( Isolate ) );
 
-			// This is the definition of v8::Persistent<>::Get()' in 'Node.js' >v4.
-			return v8::Local<item>::New( GetIsolate( Isolate ), Core_ );
+			return Get_( GetIsolate( Isolate ) );
 		}
 		bso::sBool IsEmpty( v8::Isolate *Isolate = NULL ) const
 		{
-			Isolate = GetIsolate( Isolate );
-
 			if ( Core_.IsEmpty() )
 				return true;
-			else if ( Core_.Get( Isolate )->IsNull() )
-				return true;
-			else
-				return Core_.Get( Isolate )->IsUndefined();
+			else {
+				v8::Local<item> Item = Get_( GetIsolate( Isolate ) );
+
+				if ( Item->IsNull() )
+					return true;
+				else
+					return Item->IsUndefined();
+			}
 		}
 	};
 
@@ -374,7 +380,6 @@ namespace v8q {
 			bool (v8::Value::*Function)(void) const,
 			v8::Isolate *Isolate = NULL )
 		{
-//			Core_ = v8::Local<item>::Cast( Value );
 			Core_ = Cast_<item>( Value, UndefinedForbidden, Function );
 		}
 	public:

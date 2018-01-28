@@ -19,7 +19,7 @@
 
 "use strict"
 
-const path = require( 'path' );
+const path = require('path');
 
 var xdhqId = "";
 var xdhwebqId = "";
@@ -32,7 +32,7 @@ function isDev() {
 }
 
 function getEpeiosPath() {
-	if ( isDev ) {
+	if (isDev) {
 		if (process.platform == 'win32') {
 			return "h:/hg/epeios/"
 		} else {
@@ -42,12 +42,12 @@ function getEpeiosPath() {
 		throw "Error !";
 }
 
-function getRealDir( dir ) {
-	if ( isDev() ) {
+function getRealDir(dir) {
+	if (isDev()) {
 		let epeiosPath = getEpeiosPath();
 		return path.resolve(epeiosPath, "tools/xdhq/examples/common/", path.relative(path.resolve(epeiosPath, "tools/xdhq/examples/NJS/"), path.resolve(dir)));	// No final '/'.
 	} else
-		return path.resolve( dir );
+		return path.resolve(dir);
 }
 
 if (isDev()) {

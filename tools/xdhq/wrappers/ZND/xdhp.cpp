@@ -41,8 +41,19 @@ namespace {
 	class rData_
 	: public rPData_
 	{
-	private:
-
+	public:
+		bso::sBool FirstCall;
+		void reset( bso::sBool P = true )
+		{
+			rPData_::reset( P );
+			FirstCall = false;
+		}
+		qCDTOR( rData_ );
+		void Init( void )
+		{
+			rPData_::Init();
+			FirstCall = true;
+		}
 	};
 
 	namespace {
@@ -100,7 +111,9 @@ qRE;
 
 SCLZND_F( xdhp::New )
 {
-	Caller.SetReturnValue( (bso::sS64)Sharing_.Read() );
+	rData_ *Data = Sharing_.Read();
+	Caller.SetReturnValue( (bso::sS64)Data );
+	Data->Recv.ReadDismiss();
 }
 
 SCLZND_F( xdhp::Delete )
@@ -135,10 +148,16 @@ qRH;
 	str::wStrings Strings;
 qRB;
 	rData_ &Data = GetData_( Caller );
-	Data.Recv.ReadBegin();
 
+	if ( !Data.FirstCall ) {
+		Data.Sent.WriteDismiss();
+	} else
+		Data.FirstCall = false;
+	
+	Data.Recv.ReadBegin();
+	Strings.Init();
 	Strings.Append( Data.Recv.Id );
-	Strings.Append( Data.Recv.Id );
+	Strings.Append( Data.Recv.Action );
 
 	Data.Recv.ReadEnd();
 
@@ -216,8 +235,6 @@ SCLZND_F( xdhp::SetContents )
 	Caller.Get( Arguments.Ids, Arguments.Contents );
 
 	SWITCH;
-
-	Caller.SetReturnValue( Return.GetStrings() );
 
 	END;
 }

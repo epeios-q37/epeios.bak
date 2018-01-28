@@ -23,17 +23,17 @@ function getUnJSq() {
 		$zndq_path = realpath(dirname(__FILE__)) . '/';
 	else {
 		switch (strtoupper(substr(php_uname('s') , 0, 3))) {
-			case "WIN":
-				$epeios_path = "h:\\hg\\epeios\\";
-			break;
-			case "LIN":
-				$epeios_path = "/home/csimon/hg/epeios/";
-			break;
-			case "DAR":
-				$epeios_path = "/Users/csimon/hg/epeios/";
-			break;
-			default:
-				echo "Unknown OS !!!\n";
+		case "WIN":
+			$epeios_path = "h:\\hg\\epeios\\";
+		break;
+		case "LIN":
+			$epeios_path = "/home/csimon/hg/epeios/";
+		break;
+		case "DAR":
+			$epeios_path = "/Users/csimon/hg/epeios/";
+		break;
+		default:
+			echo "Unknown OS !!!\n";
 			break;
 		}
 
@@ -48,22 +48,22 @@ getUnJSq();
 function main() {
 	UnJSq::listen();
 
-	$DOM = new UnJSqDOM();
+	$dom = new UnJSqDOM();
 
 	while ( true ) {
-		switch( $DOM->getAction( $id ) ) {
+		switch( $dom->getAction( $id ) ) {
 		case "Connect":
-			$DOM->setLayout( "", new UnJSqTree(), "Main.xsl" );
-			$DOM->addClass("Input", "hidden");
+			$dom->setLayout( "", new UnJSqTree(), "Main.xsl" );
+			$dom->addClass("Input", "hidden");
 			break;
 		case "Submit":
-			$DOM->setContent( "Pattern", strtoupper( $DOM->getContent( "Pattern" ) ) );
+			$dom->setContent( "Pattern", strtoupper( $dom->getContent( "Pattern" ) ) );
 			break;
 		case "HideInput":
-			$DOM->addClass( "Input", "hidden" );
+			$dom->addClass( "Input", "hidden" );
 			break;
 		case "ShowInput":
-			$DOM->removeClass( "Input", "hidden" );
+			$dom->removeClass( "Input", "hidden" );
 			break;
 		default:
 			die( "???" );

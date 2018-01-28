@@ -24,7 +24,6 @@
 var firstAction = "";
 var rootDir = "";
 
-
 const http = require('http');
 const url = require('url');
 const stream = require('stream');
@@ -47,7 +46,7 @@ function isDev() {
 }
 
 function getEpeiosPath() {
-	if ( isDev ) {
+	if (isDev()) {
 		if (process.platform == 'win32') {
 			return "h:/hg/epeios/"
 		} else {
@@ -58,7 +57,7 @@ function getEpeiosPath() {
 }
 
 function getComponentPath() {
-	if (isDev) {
+	if (isDev()) {
 		if (process.platform == 'win32') {
 			return 'h:/bin/';
 		} else {
@@ -75,18 +74,18 @@ function getSelfPath() {
 		return __dirname;
 }
 
-if (isDev) {
+if (isDev()) {
 	let epeiosPath = getEpeiosPath();
-	njsq = require( getComponentPath() + 'njsq.node');
+	njsq = require(getComponentPath() + 'njsq.node');
 	xdhtmlJSPath = epeiosPath + "corpus/js/";
 	xdhwebqJSPath = epeiosPath + "tools/xdhwebq/js/";
 	xdhqxdhId = epeiosPath + "tools/xdhq/proxy/XDHq.js";
 } else {
-    njsq = require('njsq');
-    let jsPath = path.join( __dirname, "js");
-    xdhtmlJSPath = jsPath;
-    xdhwebqJSPath = jsPath;
-    xdhqxdhId = 'xdhqxdh';
+	njsq = require('njsq');
+	let jsPath = path.join(__dirname, "js");
+	xdhtmlJSPath = jsPath;
+	xdhwebqJSPath = jsPath;
+	xdhqxdhId = 'xdhqxdh';
 }
 
 const xdhtmlJSFilename = path.join(xdhtmlJSPath, "xdhtml.js");
@@ -106,7 +105,7 @@ function put(keysAndValues, keys, values) {
 
 function userHead() {
 	try {
-		return fs.readFileSync(path.join( cdnPath, "head.html" ) );
+		return fs.readFileSync(path.join(cdnPath, "head.html"));
 	} catch (err) {
 		return "";
 	}
@@ -119,7 +118,7 @@ function prolog() {
 	<head>\
 		<meta charset="UTF-8" />\
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">'
-		+ userHead() + 
+		+ userHead() +
 		'<script src="xdh/xdhtml.js"></script>\
 		<script src="xdh/xdhwebq.js"></script>\
 		<script>handleQuery("?_action='
@@ -132,10 +131,9 @@ function prolog() {
 		';
 }
 
-function serveQuery(query, res)
-{
+function serveQuery(query, res) {
 	var response = "";
-	if ( ('_action' in query) && ( query['_action'] != '' ) ) {
+	if (('_action' in query) && (query['_action'] != '')) {
 		var keys = new Array();
 		var values = new Array();
 
@@ -227,17 +225,18 @@ function launch(dir, action, service) {
 	cdnPath = path.resolve(dir);
 	firstAction = action;
 
-//	console.log(cdnPath, firstAction);
-
 	if (service === undefined)
 		service = 8080;
-	else if ( !Number.isInteger( service ) )
+	else if (!Number.isInteger(service))
 		throw "Argument, if provided, is the port to listen to (8080 by default ) !";
 
-	http.createServer(function (req, res) {
-		serve(req, res);
-	}).listen(service).on( 'error', (error) => console.log( "http requests served by other program" ) );
+	njsq._call(xdhwebq, 1, require(xdhqxdhId).fileName);
 
+	http.createServer(
+		function (req, res) {
+			serve(req, res);
+		}
+	).listen(service).on('error', (error) => console.log("http requests served by other program"));
 }
 
 if (require.main === module) {
@@ -250,11 +249,10 @@ if (require.main === module) {
 	// Required as a module
 }
 
-njsq._call(xdhwebq, 1, require(xdhqxdhId).fileName);
 
 
 module.exports.returnArgument = (text) => njsq._call(xdhwebq, 0, text);
 module.exports.serve = serve;
 module.exports.launch = launch;
-module.exports.fileName = path.normalize(path.join(getSelfPath(), "XDHWebQ.js" ));
+module.exports.fileName = path.normalize(path.join(getSelfPath(), "XDHWebQ.js"));
 

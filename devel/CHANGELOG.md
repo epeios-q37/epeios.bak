@@ -1,5 +1,9 @@
 # *Epeios* changelog
 
+2018-01-27:
+- V8Q:
+  - fixing missing method in *Node.js* v4,
+
 2018-01-26:
 - NODEQ:
   - adaptation to modification in *V8Q*,

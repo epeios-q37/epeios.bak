@@ -54,7 +54,7 @@ namespace proxy {
 		void Init( void )
 		{
 			rControl_::Init();
-			tol::Init(  Return, Id, Action );
+			tol::Init( Return, Id, Action );
 		}
 	};
 
@@ -130,8 +130,7 @@ namespace proxy {
 			if ( Data == NULL )
 				qRAlc();
 
-			Data->Recv.WriteBegin();
-			Data->Recv.WriteEnd();
+			Data->Recv.WriteDismiss();
 
 			Flow.Init( *IODriver );
 			Handshake_( Flow, Data->Language );
@@ -246,12 +245,12 @@ namespace proxy {
 
 			data *Data = Data_;
 
-			Control_.ReadEnd();
-
 			if ( Data_ == NULL )
 				qRFwk();
 
 			Data_ = NULL;
+
+			Control_.ReadEnd();
 
 			return Data;
 		}
