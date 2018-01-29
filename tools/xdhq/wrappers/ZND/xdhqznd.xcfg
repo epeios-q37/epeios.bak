@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Configurations xmlns:xpp="http://q37.info/ns/xpp">
+	<Configuration target="xdhqznd">
+		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
+		<xpp:expand value-of="q37.xpp"/>
+		<Parameters>
+			<Language>en</Language>
+			<Command>Process</Command>
+		</Parameters>
+		<Definitions>
+		</Definitions>
+		<Locale>
+		</Locale>
+		<Arguments>
+			<Argument id="ProcessCommand" Description="ProcessCommandDescription" long="process" Value="Process" Usage="%ServiceArgument%"/>
+			<Argument id="ServiceArgument" Description="ServiceArgumentDescription" Path="Service" Label="ServiceArgumentLabel"/>
+			<Layouts>
+				<Layout command="Process">
+					<Link index="0" Target="ServiceArgument"/>
+				</Layout>
+			</Layouts>
+		</Arguments>
+	</Configuration>
+</Configurations>
