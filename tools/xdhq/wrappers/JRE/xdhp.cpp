@@ -22,17 +22,74 @@
 #include "registry.h"
 #include "treep.h"
 
-#include "server.h"
+#include "proxy.h"
 
 #include "sclargmnt.h"
 
-#include "csdbns.h"
+#include "csdmns.h"
 #include "csdcmn.h"
+#include "mtk.h"
 
 using namespace xdhp;
 
 namespace {
-	csdbns::rListener Listener_;
+	namespace {
+		typedef proxy::rData rPData_;
+	}
+
+	class rData_
+	: public rPData_
+	{
+	public:
+		bso::sBool FirstCall;
+		scljre::rObject Object;
+		void reset( bso::sBool P = true )
+		{
+			rPData_::reset( P );
+			tol::reset( P, Object );
+			FirstCall = false;
+		}
+		qCDTOR( rData_ );
+		void Init( void )
+		{
+			rPData_::Init();
+			FirstCall = true;
+			// 'Object' will be initialized later.
+		}
+	};
+
+	namespace {
+		typedef proxy::rProcessing<rData_> rPProcessing_;
+	}
+
+	proxy::rSharing<rData_> Sharing_;
+
+	class rProcessing_
+	: public rPProcessing_
+	{
+	protected:
+		rData_ *PRXYNew( void ) override
+		{
+			rData_ *Data = new rData_;
+
+			Data->Init();
+
+			Sharing_.Write( Data );
+
+			return Data;
+		}
+		void PRXYOnAction( rData_ *Data ) override
+		{}
+		void PRXYOnPending( rData_ *Data ) override
+		{}
+	} Processing_;
+
+	csdmns::rServer Server_;
+
+	void Process_( void * )
+	{
+		Server_.Process();
+	}
 }
 
 SCLJRE_F( xdhp::Listen )
@@ -45,84 +102,45 @@ qRB;
 
 	sclargmnt::FillRegistry( Arguments, sclargmnt::faIsArgument, sclargmnt::uaReport );
 
-	Listener_.Init( sclmisc::MGetU16( registry::parameter::Service ) );
+	Processing_.Init();
+	Server_.Init( sclmisc::MGetU16( registry::parameter::Service ), Processing_ );
+
+	mtk::RawLaunch( Process_, NULL );
 qRR;
 qRT;
 qRE;
 	return scljre::Null();
 }
 
-namespace {
-	struct rRack_ {
-		sck::rRWFlow Flow;
-		str::wString Language;
-		scljre::rObject Object;
-		void reset( bso::sBool P = true )
-		{
-			tol::reset( P, Flow, Language, Object );
-		}
-		qCDTOR( rRack_ );
-		void Init( sck::sSocket Socket )
-		{
-			Flow.Init( Socket, true );
-
-			Language.Init();
-
-			server::Handshake( Flow, Language );
-			// Object is initialized specifically in the 'Set()' method.
-		}
-		void Set( scljre::cObject *Object )
-		{
-			this->Object.Init( Object );
-		}
-	};
-}
 
 SCLJRE_F( xdhp::New )
 {
-	scljre::sJObject Object = NULL;
-qRH;
-	const char *IP = NULL;
-	sck::sSocket Socket = sck::Undefined;
-qRB;
-	Socket = Listener_.GetConnection( IP );
+	rData_ *Data = Sharing_.Read();
 
-	Object = scljre::CreateUO<rRack_>( Socket );
-qRR;
-	if ( Socket != sck::Undefined )
-		sck::Close( Socket );
-qRT;
-qRE;
-	return Object;	
+	return scljre::ConvertUO<rData_>( Sharing_.Read() );
 }
 
 SCLJRE_F( xdhp::Delete )
 {
-	return scljre::DeleteUO<rRack_>( Caller );
+	return scljre::DeleteUO<rData_>( Caller );
 }
 
 namespace {
-	rRack_ &GetRack_( scljre::sCaller &Caller )
+	rData_ &GetData_( scljre::sCaller &Caller )
 	{
-		return scljre::GetUO<rRack_>( Caller );
-	}
-
-	flw::sRWFlow &GetFlow_( scljre::sCaller &Caller )
-	{
-		return GetRack_( Caller ).Flow;
+		return scljre::GetUO<rData_>( Caller );
 	}
 }
 
-#define RACK	rRack_ &Rack = GetRack_( Caller )
-#define FLOW	flw::sRWFlow &Flow = GetFlow_( Caller )
+#define DATA	rData_ &Data = GetData_( Caller )
 
 SCLJRE_F( xdhp::Set )
 {
-	RACK;
+	DATA;
 
-	Rack.Set( Caller.Get() );
+	Data.Object.Init( Caller.Get() );
 
-	Rack.Object.CallVoidMethod( "test", "()V" );
+	Data.Object.CallVoidMethod( "test", "()V" );
 
 	return scljre::Null();
 }
@@ -165,10 +183,10 @@ namespace {
 
 	void GetAction_(
 		flw::sRWFlow &Flow,
-		scljre::sCaller &Caller )
+		const str::dString &Id,
+		const str::dString &Action )
 	{
 	qRH;
-		str::wString Id, Action;
 		scljre::rObject Data;
 	qRB;
 		tol::Init( Id, Action );
@@ -185,8 +203,28 @@ namespace {
 
 SCLJRE_F( xdhp::GetAction )
 {
-	FLOW;
-	GetAction_( Flow, Caller );
+qRH;
+	str::wStrings Strings;
+qRB;
+	DATA;
+
+	if ( !Data.FirstCall ) {
+		Data.Sent.WriteDismiss();
+	} else
+		Data.FirstCall = false;
+	
+	Data.Recv.ReadBegin();
+	Strings.Init();
+	Strings.Append( Data.Recv.Id );
+	Strings.Append( Data.Recv.Action );
+
+	Data.Recv.ReadEnd();
+
+	Caller.SetReturnValue( Strings );
+qRR;
+qRT;
+qRE;
+}
 
 	return scljre::Null();
 }

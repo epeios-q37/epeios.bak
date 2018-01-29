@@ -28,12 +28,10 @@
 
 #include "csdmns.h"
 #include "csdcmn.h"
-#include "mtk.h"
 
 using namespace xdhp;
 
 namespace {
-
 	namespace {
 		typedef proxy::rData rPData_;
 	}
