@@ -106,7 +106,19 @@ class XDHqDOM extends XDHqWrapper {
 			$values[] = $value;
 		}
 	}
-	private function unsplit( )
+	private function unsplit( array $keys, array $values ) {
+		$count = count( $keys );
+		$i = 0;
+		$keysAndValues = [];
+
+		while ( $i < $count ) {
+			$keysAndValues[$keys[$i]] = $values[$i];
+
+			$i++;
+		}
+
+		return $keysAndValues;
+	}
 	function __construct() {
 		$this->core = parent::_call( 8 );
 	}
@@ -133,7 +145,7 @@ class XDHqDOM extends XDHqWrapper {
 		self::call( 13, $id, $tree->getCore(), $xslFilename );
 	}
 	function getContents( array $ids ) {
-		self::unsplit($ids,self::call( 14,$ids ));
+		return self::unsplit($ids,self::call( 14,$ids ));
 	}
 	function getContent( string $id ) {
 		return self::getContents( array( $id ) )[$id];

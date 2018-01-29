@@ -51,7 +51,7 @@ class MyData extends UnJSqDOM {
 	public $pattern = "";
 	public $hideDescriptions = false;
 	public $id = 0;
-	public $notes = array(
+	public $notes = [
 		// First one must be empty; it is used as buffer for new entries.
 		array (
 			'title' => '',
@@ -69,7 +69,7 @@ class MyData extends UnJSqDOM {
 			'title' => 'Implement new functionalities',
 			'description' =>  "Although it&rsquo;s almost perfect..., isn&rsquo;t it ?",
 		)
-	);
+	];
 }
 
 function push($note, $id, $tree) {
@@ -169,17 +169,16 @@ function main() {
 		case "Submit":
 			$result = $dom->getContents(["Title", "Description"]);
 
-			$title = trime($result['Title']);
+			$title = trim($result['Title']);
 			$description = $result['Description'];
 
 			if ($title != '') {
 				$dom->notes[$dom->id]['title'] = $title;
-				$om->notes[$dom->id]['description'] = $description;
+				$dom->notes[$dom->id]['description'] = $description;
 				if ($dom->id == 0) {
-					array_insert( $dom->notes, 0, [ 'title' => '', 'description' => '' ] );
+					array_unshift( $dom->notes, [ 'title' => '', 'description' => '' ] );
 					displayList($dom);
 				} else {
-					$contents = [];
 					$contents["Title." . $dom->id] = $title;
 					$contents["Description." . $dom->id] = $description;
 					$dom->setContents($contents);
