@@ -164,47 +164,28 @@ namespace {
 		qRT
 		qRE
 		}
-
-		void Set_(
-			const char *Name,
-			const str::dString &Value,
-			scljre::rObject &Data )
-		{
-		qRH
-			scljre::java::lang::rString String;
-		qRB
-			Init_( String, Value );
-			Data.Set( Name, "Ljava/lang/String;", String() );
-		qRR
-		qRT
-		qRE
-		}
 	}
 
-	void GetAction_(
-		flw::sRWFlow &Flow,
-		const str::dString &Id,
-		const str::dString &Action )
+	void Set_(
+		const char *Name,
+		const str::dString &Value,
+		scljre::rObject &Data )
 	{
-	qRH;
-		scljre::rObject Data;
-	qRB;
-		tol::Init( Id, Action );
-		server::GetAction( Flow, Id, Action );
-
-		Data.Init( Caller.Get() );
-		Set_( "id", Id, Data );
-		Set_( "action", Action, Data );
-	qRR;
-	qRT;
-	qRE;
+	qRH
+		scljre::java::lang::rString String;
+	qRB
+		Init_( String, Value );
+		Data.Set( Name, "Ljava/lang/String;", String() );
+	qRR
+	qRT
+	qRE
 	}
 }
 
 SCLJRE_F( xdhp::GetAction )
 {
 qRH;
-	str::wStrings Strings;
+	scljre::rObject Object;
 qRB;
 	DATA;
 
@@ -212,38 +193,41 @@ qRB;
 		Data.Sent.WriteDismiss();
 	} else
 		Data.FirstCall = false;
+
+	Object.Init( Caller.Get() );
 	
 	Data.Recv.ReadBegin();
-	Strings.Init();
-	Strings.Append( Data.Recv.Id );
-	Strings.Append( Data.Recv.Action );
-
+	Set_( "id", Data.Recv.Id, Object );
+	Set_( "action", Data.Recv.Action, Object );
 	Data.Recv.ReadEnd();
-
-	Caller.SetReturnValue( Strings );
 qRR;
 qRT;
 qRE;
-}
-
 	return scljre::Null();
 }
 
+#define BEGIN( request )\
+	rData_ &Data = GetData_( Caller );\
+	Data.Sent.WriteBegin();\
+	Data.Request = prxy_cmn::r##request;\
+	proxy::rArguments &Arguments = Data.Sent.Arguments;\
+	Arguments.Init();
+
+#define SWITCH	Data.Sent.WriteEnd();Data.Recv.ReadBegin(); proxy::rReturn &Return = Data.Recv.Return
+
+#define END	Data.Recv.ReadEnd()
+
 SCLJRE_F( xdhp::Alert )
 {
-qRH;
-	str::wString Message;
-qRB;
-	FLOW;
+	BEGIN( Alert );
 
-	Message.Init();
-	Caller.Get( Message );
+	Caller.Get( Arguments.Message );
 
-	server::Alert( Message, Flow );
-qRR;
-qRT;
-qRE;
-return scljre::Null();
+	SWITCH;
+
+	END;
+
+	return scljre::Null();
 }
 
 SCLJRE_F( xdhp::Confirm )

@@ -82,6 +82,14 @@
 				<File>Note.xsl</File>
 			</Files>
 		</Files>
+		<Files Group="TodoMVC">
+			<File Path="../../examples/NJS/TodoMVC/">main.js</File>
+			<Files Path="../../examples/common/TodoMVC/">
+				<File>head.html</File>
+				<File>Main.xsl</File>
+				<File>Todos.xsl</File>
+			</Files>
+		</Files>
 	</Files>
 	<PreprocessorDefinitions>
 		<PreprocessorDefinition>E_ST</PreprocessorDefinition>

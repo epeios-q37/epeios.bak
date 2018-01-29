@@ -28,6 +28,7 @@
 
 #include "csdmns.h"
 #include "csdcmn.h"
+#include "mtk.h"
 
 using namespace xdhp;
 
@@ -184,7 +185,6 @@ SCLZND_F( xdhp::Alert )
 	Caller.Get( Arguments.Message );
 
 	SWITCH;
-
 	END;
 }
 

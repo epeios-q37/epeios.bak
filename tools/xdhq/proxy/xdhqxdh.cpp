@@ -315,7 +315,7 @@ namespace {
 		flw::sRWFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
-		HandleClasses_( Flow, &xdhdws::sProxy::RemoveClasses, Proxy );
+		HandleClasses_( Flow, &xdhdws::sProxy::ToggleClasses, Proxy );
 	}
 
 	namespace {
