@@ -135,38 +135,38 @@ class XDHqDOM extends XDHqWrapper {
 
 		return $return[1];
 	}
-	function alert( $message ) {
+	function alert( string $message ) {
 		self::call( 11, $message );
 	}
-	function confirm( $message ) {
+	function confirm( string $message ) {
 		return self::call( 12, $message ) === "true";
 	}
-	function setLayout( $id, XDHqTree $tree, string $xslFilename ) {
+	function setLayout(string  $id, XDHqTree $tree, string $xslFilename ) {
 		self::call( 13, $id, $tree->getCore(), $xslFilename );
 	}
 	function getContents( array $ids ) {
 		return self::unsplit($ids,self::call( 14,$ids ));
 	}
 	function getContent( string $id ) {
-		return self::getContents( array( $id ) )[$id];
+		return self::getContents( [$id] )[$id];
 	}
 	function setContents( array $idsAndContents ) {
-		$ids = array();
-		$contents = array();
+		$ids = [];
+		$contents = [];
 
 		self::split( $idsAndContents, $ids, $contents );
 
 		self::call( 15, $ids, $contents );
 	}
-	function setContent( $id, $content ) {
+	function setContent( string $id, string $content ) {
 		self::setContents( [ $id => $content ] );
 	}
 	function dressWidgets( string $id ) {
 		return self::call( 16, $id );
 	}
 	private function handleClasses( $fid, array $idsAndClasses ) {
-		$ids = array();
-		$classes = array();
+		$ids = [];
+		$classes = [];
 
 		self::split( $idsAndClasses, $ids, $classes );
 		self::call( $fid, $ids, $classes );

@@ -53,22 +53,22 @@ class MyData extends UnJSqDOM {
 	public $id = 0;
 	public $notes = [
 		// First one must be empty; it is used as buffer for new entries.
-		array (
+		[
 			'title' => '',
 			'description' => '',
-		),
-		array (
+		],
+		[
 			'title' => 'Improve design',
 			'description' => 'Tastes and colors... (aka &laquo;CSS aren&rsquo;t my cup of tea...&raquo;)',
-		),
-		array( 
+		],
+		[ 
 			'title' => 'Fixing bugs',
 			'description' => 'There are bugs ? Really ?',
-		),
-		array (
+		],
+		[
 			'title' => 'Implement new functionalities',
 			'description' =>  "Although it&rsquo;s almost perfect..., isn&rsquo;t it ?",
-		)
+		]
 	];
 }
 
@@ -96,7 +96,7 @@ function displayList( $dom ) {
 	global $viewModeElements;
 	$tree = new UnJSqTree();
 	$i = 1;	// 0 skipped, as it serves as buffer for the new ones.
-	$contents = array();
+	$contents = [];
 
 	$tree->pushTag( "Notes" );
 	$tree->putAttribute( "HideDescriptions", $dom->hideDescriptions );
@@ -154,7 +154,7 @@ function main() {
 			handleDescriptions($dom);
 			break;
 		case "Search":
-			$dom->pattern = strtolower( $dom->getContent( "Pattern" ) );
+		$dom->pattern = strtolower( $dom->getContent( "Pattern" ) );
 			displayList($dom);
 			break;
 		case "Edit":
@@ -189,7 +189,6 @@ function main() {
 			break;
 		case "Cancel":
 			$result = $dom->getContents(["Title", "Description"]);
-			var_dump( $result );
 			if (($dom->notes[$dom->id]['title'] != $result['Title']) or ($dom->notes[$dom->id]['description'] != $result['Description'])) {
 				if ( $dom->confirm("Are you sure you want to cancel your modifications ?" ) )
 					view($dom, $dom->id);
