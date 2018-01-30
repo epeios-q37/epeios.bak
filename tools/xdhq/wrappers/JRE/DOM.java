@@ -21,36 +21,38 @@ package info.q37.xdhq;
 
 import info.q37.xdhq.*;
 
-class DOM {
+public class DOM {
 	private Object core;
 	static private String root;
 
 	public static String returnArgument(String Text) {
-		return (String) XDHq.wrap(0, Text);
+		return (String) XDHq.call(0, Text);
 	}
 
 	public static void initialize(String arguments) {
-		XDHq.wrap(7, arguments);
+		XDHq.call(7, arguments);
 		root = "Root";
 	}
 
 	public DOM() {
-		core = XDHq.wrap(8);
+		core = XDHq.call(8);
 	}
 
 	public void finalize() {
-		XDHq.wrap(9, core);
+		XDHq.call(9, core);
 	}
 
 	public void set(Object object) {
-		XDHq.wrap(10, core, object);
+		XDHq.call(10, core, object);
 	}
 
 	public void getAction(info.q37.xdhq.Event data) {
-		XDHq.wrap(11, core, data);
+		XDHq.call(11, core, data);
 	}
 
 	public void setLayout(String id, Tree tree, String xslFilename) {
-		XDHq.wrap(12, core, id, tree.core(), xslFilename);
+		XDHq.call(12, core, id, tree.core(), xslFilename);
 	}
+
+	function addClass( Strings )
 }

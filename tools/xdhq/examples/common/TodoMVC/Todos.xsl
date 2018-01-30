@@ -10,9 +10,14 @@
 	</xsl:template>
 	<xsl:template match="Todo">
 		<li id="Todo.{@id}">
-			<xsl:if test="@completed='true'">
+			<xsl:choose>
+			<xsl:when test="@completed='true'">
 				<xsl:attribute name="class">completed</xsl:attribute>
-			</xsl:if>
+			</xsl:when>
+				<xsl:otherwise>
+					<xsl:attribute name="class">active</xsl:attribute>
+				</xsl:otherwise>
+			</xsl:choose>
 			<div class="view">
 				<input class="toggle" type="checkbox" id="{@id}" data-xdh-onevent="Toggle">
 					<xsl:if test="@completed='true'">

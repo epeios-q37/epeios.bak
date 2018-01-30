@@ -19,7 +19,7 @@
 
 package info.q37.xdhq;
 
-class Event {
+public class Event {
 	public String
 		id,
 		action;

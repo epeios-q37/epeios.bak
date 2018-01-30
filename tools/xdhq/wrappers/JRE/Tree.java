@@ -21,31 +21,31 @@ package info.q37.xdhq;
 
 import info.q37.xdhq.XDHq;
 
-class Tree {
+public class Tree {
 	private Object core;
 
 	public Tree() {
-		core = XDHq.wrap(1);
+		core = XDHq.call(1);
 	}
 
 	public void finalize() {
-		XDHq.wrap(2, core);
+		XDHq.call(2, core);
 	}
 
 	public void pushTag(String name) {
-		XDHq.wrap(3, core, name);
+		XDHq.call(3, core, name);
 	}
 
 	public void popTag() {
-		XDHq.wrap(4, core);
+		XDHq.call(4, core);
 	}
 
 	public void putValue(String value) {
-		XDHq.wrap(5, core, value);
+		XDHq.call(5, core, value);
 	}
 
 	public void putAttribute(String name, String value) {
-		XDHq.wrap(6, core, name, value);
+		XDHq.call(6, core, name, value);
 	}
 
 	Object core() {

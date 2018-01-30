@@ -139,7 +139,7 @@ class XDHqDOM extends XDHqWrapper {
 		self::call( 11, $message );
 	}
 	function confirm( string $message ) {
-		return self::call( 12, $message ) === "true";
+		return self::call( 12, $message );
 	}
 	function setLayout(string  $id, XDHqTree $tree, string $xslFilename ) {
 		self::call( 13, $id, $tree->getCore(), $xslFilename );

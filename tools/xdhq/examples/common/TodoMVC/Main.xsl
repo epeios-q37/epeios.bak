@@ -19,16 +19,16 @@
 				<span class="todo-count" id="Count"></span>
 				<ul class="filters">
 					<li>
-						<a href="#/" class="selected">All</a>
+						<a style="cursor: pointer;" id="All" class="selected" data-xdh-onevent="All">All</a>
 					</li>
 					<li>
-						<a href="#/active">Active</a>
+						<a style="cursor: pointer;" id="Active" data-xdh-onevent="Active">Active</a>
 					</li>
 					<li>
-						<a href="#/completed">Completed</a>
+						<a style="cursor: pointer;" id="Complete" data-xdh-onevent="Completed">Completed</a>
 					</li>
 				</ul>
-				<button class="clear-completed">Clear completed</button>
+				<button class="clear-completed" data-xdh-onevent="Clear">Clear completed</button>
 			</footer>
 		</section>
 		<footer class="info">

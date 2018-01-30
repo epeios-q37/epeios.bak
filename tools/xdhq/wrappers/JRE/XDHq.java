@@ -26,14 +26,17 @@ public class XDHq extends info.q37.jreq.JREq {
 	static {
 		launcher = JREq.register( "xdhq" );
 	}
-	static private Object wrap(int index, Object... objects) {
-		return JREq.wrap( launcher, index, objects );
+	static protected Object call(int index, Object... objects) {
+		return JREq.call( launcher, index, objects );
 	}
 	static public String componentInfo(){
 		return JREq.componentInfo( launcher );
 	}
 	static public String returnArgument( String argument )
 	{
-		return (String)wrap( 0, argument );
+		return (String)call( 0, argument );
+	}
+	static public void listen() {
+		call( 7, "53752");
 	}
 }

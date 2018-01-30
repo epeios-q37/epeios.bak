@@ -47,6 +47,7 @@ class MyData extends DOM {
 	constructor() {
 		super();
 		this.timestamp = new Date();
+		this.exclude = null;
 		this.todos = [
 			{
 				"completed": true,
@@ -83,7 +84,8 @@ function displayTodos(dom) {
 	tree.pushTag("Todos");
 
 	while (i < dom.todos.length) {
-		push(dom.todos[i], i, tree);
+		if ( dom.exclude === null || ( dom.todos[i]['completed'] != dom.exclude ) )
+			push(dom.todos[i], i, tree);
 		i++;
 	}
 
@@ -113,7 +115,9 @@ function newSession() {
 }
 
 function acConnect(dom, id) {
-	dom.setLayout("", new Tree(), "Main.xsl", () => displayTodos(dom) );
+	dom.setLayout("", new Tree(), "Main.xsl",
+		() => displayTodos(dom)
+	);
 }
 
 function acSubmit(dom, id) {
@@ -142,7 +146,61 @@ function acDestroy(dom, id) {
 }
 
 function acToggle(dom, id) {
-	dom.toggleClass("Todo." + id, "completed");
+	var i = parseInt( id );
+
+	dom.todos[i]['completed'] = !dom.todos[i]['completed'];
+
+	dom.toggleClass("Todo." + id, "completed", () => { if (dom.exclude != null) displayTodos(dom) } );
+}
+
+function acAll(dom, id) {
+	dom.exclude = null;
+	dom.addClass( "All", "selected",
+		() => dom.removeClasses(
+			{
+				"Active": "selected",
+				"Complete": "selected"
+			},
+			() => displayTodos(dom)
+		)
+	)
+}
+
+function acActive(dom, id) {
+	dom.exclude = true;
+	dom.addClass("Active", "selected",
+		() => dom.removeClasses(
+			{
+				"All": "selected",
+				"Complete": "selected"
+			},
+			() => displayTodos(dom )
+		)
+	)
+}
+
+function acComplete(dom, id) {
+	dom.exclude = false;
+	dom.addClass("Complete", "selected",
+		() => dom.removeClasses(
+			{
+				"All": "selected",
+				"Active": "selected"
+			},
+			() => displayTodos(dom)
+		)
+	)
+}
+
+function acClear(dom, id) {
+	var i = 0;
+
+	while (i < dom.todos.length) {
+		dom.todos[i++]['completed'] = false;
+	}
+
+	displayTodos(dom);
+
 }
 
 function main() {
@@ -152,6 +210,10 @@ function main() {
 			"Submit": acSubmit,
 			"Destroy": acDestroy,
 			"Toggle": acToggle,
+			"All": acAll,
+			"Active": acActive,
+			"Complete": acComplete,
+			"Clear": acClear,
 		}
 	);
 

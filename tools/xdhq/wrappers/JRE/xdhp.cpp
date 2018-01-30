@@ -232,69 +232,31 @@ SCLJRE_F( xdhp::Alert )
 
 SCLJRE_F( xdhp::Confirm )
 {
-	bso::sBool Return = false;
-qRH;
-	str::wString Message, Response;
-qRB;
-	FLOW;
+	bso::sBool Response = false;
 
-	Message.Init();
-	Caller.Get( Message );
+	BEGIN( Alert );
 
-	Response.Init();
-	server::Confirm( Message, Flow, Response );
+	Caller.Get( Arguments.Message );
 
-	Return = Response == "true";
-qRR;
-qRT;
-qRE;
-	return scljre::Boolean( Return );
-}
+	SWITCH;
 
-namespace {
-	void SetLayout_(
-		const str::dString &Id,
-		scljre::sCaller &Caller,
-		const str::dString &Language,
-		flw::sRWFlow &Flow )
-	{
-	qRH;
-		str::wString XML, XSLFilename;
-	qRB;
-		tol::Init( XML, XSLFilename );
+	Response = Return.GetString() == "true";
 
-		treep::GetXML( Caller, XML );
-		Caller.Get( XSLFilename );
+	END;
 
-		server::layout::Set( Id, XML, XSLFilename, Language, Flow );
-	qRR;
-	qRT;
-	qRE;
-	}
-
-	void SetLayout_(
-		scljre::sCaller &Caller,
-		const str::dString &Language,
-		flw::sRWFlow &Flow )
-	{
-	qRH;
-		str::wString Id;
-	qRB;
-		tol::Init( Id );
-		Caller.Get( Id );
-
-		SetLayout_( Id, Caller, Language, Flow );
-	qRR;
-	qRT;
-	qRE;
-	}
+	return scljre::Boolean( Response );
 }
 
 SCLJRE_F( xdhp::SetLayout )
 {
-	RACK;
+	BEGIN( SetLayout );
 
-	SetLayout_( Caller, Rack.Language, Rack.Flow );
+	Caller.Get( Arguments.Id );
+	treep::GetXML( Caller, Arguments.XML );
+	Caller.Get( Arguments.XSLFilename );
+
+	SWITCH;
+	END;
 
 	return scljre::Null();
 }
@@ -302,202 +264,165 @@ SCLJRE_F( xdhp::SetLayout )
 SCLJRE_F( xdhp::GetContents )
 {
 	scljre::sJObject Buffer = NULL;
-qRH;
-	str::wStrings Ids, Contents;
-qRB;
-	FLOW;
 
-	Ids.Init();
-	Caller.Get( Ids );
+	BEGIN( GetContents );
 
-	Contents.Init();
-	server::contents::Get( Ids, Flow, Contents );
+	Caller.Get( Arguments.Ids );
 
-	Buffer = scljre::Strings( Contents );
-qRR;
-qRT;
-qRE;
+	SWITCH;
+
+	Buffer = scljre::Strings( Return.GetStrings() );
+
+	END;
+
 	return Buffer;
 }
 
 SCLJRE_F( xdhp::SetContents )
 {
-qRH;
-	str::wStrings Ids, Contents;
-qRB;
-	FLOW;
+	BEGIN( SetContents );
 
-	tol::Init( Ids, Contents );
-	Caller.Get( Ids, Contents );
+	Caller.Get( Arguments.Ids, Arguments.Contents );
 
-	server::contents::Set( Ids, Contents, Flow );
-qRR;
-qRT;
-qRE;
+	SWITCH;
+	END;
+
 	return scljre::Null();
 }
 
 SCLJRE_F( xdhp::DressWidgets )
 {
-qRH;
-	str::wString Id;
-qRB;
-	FLOW;
+	BEGIN( DressWidgets );
 
-	tol::Init( Id );
-	Caller.Get( Id );
+	Caller.Get( Arguments.Id );
 
-	server::widgets::Dress( Id, Flow );
-qRR;
-qRT;
-qRE;
+	SWITCH;
+	END;
+
 	return scljre::Null();
-}
-
-namespace {
-	scljre::sJObject HandleClasses_(
-		scljre::sCaller &Caller,
-		void( *Function )(
-			const str::dStrings &Ids,
-			const str::dStrings &Classes,
-			flw::sRWFlow &Flow) )
-	{
-	qRH;
-		str::wStrings Ids, Classes;
-	qRB;
-		FLOW;
-
-		tol::Init( Ids, Classes );
-		Caller.Get( Ids, Classes );
-
-		Function( Ids, Classes, Flow );
-	qRR;
-	qRT;
-	qRE;
-		return scljre::Null();
-	}
 }
 
 SCLJRE_F( xdhp::AddClasses )
 {
-	return HandleClasses_( Caller, server::classes::Add );
+	BEGIN( AddClasses );
+
+	Caller.Get( Arguments.Ids, Arguments.Classes );
+
+	SWITCH;
+	END;
+
+	return scljre::Null();
 }
 
 SCLJRE_F( xdhp::RemoveClasses )
 {
-	return HandleClasses_( Caller, server::classes::Remove );
+	BEGIN( RemoveClasses );
+
+	Caller.Get( Arguments.Ids, Arguments.Classes );
+
+	SWITCH;
+	END;
+
+	return scljre::Null();
 }
 
 SCLJRE_F( xdhp::ToggleClasses )
 {
-	return HandleClasses_( Caller, server::classes::Toggle );
-}
+	BEGIN( ToggleClasses );
 
-namespace {
-	scljre::sJObject HandleElements_(
-		scljre::sCaller &Caller,
-		void( *Function )(
-			const str::dStrings &Ids,
-			flw::sRWFlow &Flow) )
-	{
-	qRH;
-		str::wStrings Ids;
-	qRB;
-		FLOW;
+	Caller.Get( Arguments.Ids, Arguments.Classes );
 
-		tol::Init( Ids );
-		Caller.Get( Ids );
+	SWITCH;
+	END;
 
-		Function( Ids, Flow );
-	qRR;
-	qRT;
-	qRE;
-		return scljre::Null();
-	}
+	return scljre::Null();
 }
 
 SCLJRE_F( xdhp::EnableElements )
 {
-	return HandleElements_( Caller, server::elements::Enable );
+	BEGIN( EnableElements );
+
+	Caller.Get( Arguments.Ids );
+
+	SWITCH;
+	END;
+
+	return scljre::Null();
 }
 
 SCLJRE_F( xdhp::DisableElements )
 {
-	return HandleElements_( Caller, server::elements::Disable );
-}
+	BEGIN( DisableElements );
 
-namespace {
-	scljre::sJObject Get_(
-		scljre::sCaller &Caller,
-		void( *Function )(
-			const str::dString &Id,
-			const str::dString &Name,
-			flw::sRWFlow &Flow,
-			str::dString &Value ) )
-	{
-		scljre::sJObject Return = NULL;
-	qRH;
-		str::wString Id, Name, Value;
-	qRB;
-		FLOW;
+	Caller.Get( Arguments.Ids );
 
-		tol::Init( Id, Name );
-		Caller.Get( Id, Name );
+	SWITCH;
+	END;
 
-		tol::Init( Value );
-		Function( Id, Name, Flow, Value );
-
-		Return = scljre::String( Value );
-	qRR;
-	qRT;
-	qRE;
-		return Return;
-	}
-
-	scljre::sJObject Set_(
-		scljre::sCaller &Caller,
-		void( *Function )(
-			const str::dString &Id,
-			const str::dString &Name,
-			const str::dString &Value,
-			flw::sRWFlow &Flow ) )
-	{
-	qRH;
-		str::wString Id, Name, Value;
-	qRB;
-		FLOW;
-
-		tol::Init( Id, Name, Value );
-		Caller.Get( Id, Name, Value );
-
-		Function( Id, Name, Value, Flow );
-	qRR;
-	qRT;
-	qRE;
-		return scljre::Null();
-	}
-
+	return scljre::Null();
 }
 
 SCLJRE_F( xdhp::GetAttribute )
 {
-	return Get_( Caller, server::attribute::Get );
+	scljre::sJObject Buffer = NULL;
+
+	BEGIN( GetAttribute );
+
+	Caller.Get( Arguments.Id, Arguments.Name );
+
+	SWITCH;
+
+	Buffer = scljre::String( Return.GetString() );
+
+	END;
+
+	return Buffer;
 }
 
 SCLJRE_F( xdhp::SetAttribute )
 {
-	return Set_( Caller, server::attribute::Set );
+	BEGIN( SetAttribute );
+
+	Caller.Get( Arguments.Id, Arguments.Name, Arguments.Value );
+
+	SWITCH;
+	END;
+
+	return scljre::Null();
 }
 
 SCLJRE_F( xdhp::GetProperty )
 {
-	return Get_( Caller, server::property::Get );
+	scljre::sJObject Buffer = NULL;
+
+	BEGIN( GetProperty );
+
+	Caller.Get( Arguments.Id, Arguments.Name );
+
+	SWITCH;
+
+	Buffer = scljre::String( Return.GetString() );
+
+	END;
+
+	return Buffer;
 }
 
 SCLJRE_F( xdhp::SetProperty )
 {
-	return Set_( Caller, server::property::Set );
+	BEGIN( SetAttribute );
+
+	Caller.Get( Arguments.Id, Arguments.Name, Arguments.Value );
+
+	SWITCH;
+	END;
+
+	return scljre::Null();
 }
 
+qGCTOR( xdhp )
+{
+	tol::Init( Sharing_, Processing_ );
+}
 
 

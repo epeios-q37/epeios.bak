@@ -196,7 +196,7 @@ SCLZND_F( xdhp::Confirm )
 	
 	SWITCH;
 
-	Caller.SetReturnValue( Return.GetString() );
+	Caller.SetReturnValue( Return.GetString() == "true" );
 
 	END;
 }

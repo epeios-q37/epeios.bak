@@ -21,10 +21,10 @@
    <Modules Group="Core">
     <xpp:expand select="Core"/>
 				<Module>sck</Module>
-				<Module>csdbns</Module>
-				<Module>csdcmn</Module>
 			</Modules>
 			<Modules Group="CSD">
+				<Module>csdbns</Module>
+				<Module>csdcmn</Module>
 				<Module>csdmxs</Module>
 			</Modules>
 			<Modules Group="SCL">
