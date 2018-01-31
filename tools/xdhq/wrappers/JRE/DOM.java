@@ -20,18 +20,23 @@
 package info.q37.xdhq;
 
 import info.q37.xdhq.*;
+import java.util.*;
 
 public class DOM {
 	private Object core;
-	static private String root;
 
-	public static String returnArgument(String Text) {
-		return (String) XDHq.call(0, Text);
-	}
+	private String[][] split( String[][] idsAndClasses ) {
+		List<String> ids = new ArrayList<String>();
+		List<String> classes = new ArrayList<String>();
 
-	public static void initialize(String arguments) {
-		XDHq.call(7, arguments);
-		root = "Root";
+		for( String[] idAndClass : idsAndClasses ) {
+			ids.add( idAndClass[0] );
+			classes.add( idAndClass[1] );
+		}
+
+		String [][] ret = { (String [])ids.toArray(), (String [])classes.toArray() };
+
+		return ret;
 	}
 
 	public DOM() {
@@ -42,17 +47,76 @@ public class DOM {
 		XDHq.call(9, core);
 	}
 
+	private Object call( int index, Object... objects) {
+		return XDHq.call( index, core, objects  );
+	}
+
 	public void set(Object object) {
-		XDHq.call(10, core, object);
+		call(10, object);
 	}
 
 	public void getAction(info.q37.xdhq.Event data) {
-		XDHq.call(11, core, data);
+		call(11, data);
 	}
 
 	public void setLayout(String id, Tree tree, String xslFilename) {
-		XDHq.call(12, core, id, tree.core(), xslFilename);
+		call(12, id, tree.core(), xslFilename);
 	}
 
-	function addClass( Strings )
+	public String[] getContents( String[] ids ) {
+		return (String [])call( 15, (Object [])ids );
+	}
+
+	public String getContent( String id ) {
+		String ids[] = { id };
+
+		return getContents( ids )[0];
+	}
+
+	public void setContents( String[][] idsAndContents ) {
+		String splittedIdsAndContents[][] = split( idsAndContents );
+
+		call( 16, splittedIdsAndContents[0], splittedIdsAndContents[1] );
+	}
+
+	public void setContent( String id, String content ) {
+		String idsAndContents[][] = { { id, content } };
+
+		setContents( idsAndContents );
+	}
+
+	private void handleClasses( int index, String[][] idsAndClasses) {
+		String splittedIdsAndClasses[][] = split( idsAndClasses );
+
+		call( index, splittedIdsAndClasses[0], splittedIdsAndClasses[1] );
+	}
+
+	private void handleClass( int Index, String id, String clas ) {
+		String idAndClass[][] = { { id, clas } };
+		handleClasses( Index, idAndClass );
+	}
+
+	public void addClasses( String[][] idsAndClasses ) {
+		handleClasses( 17, idsAndClasses );
+	}
+
+	public void addClass( String id, String clas ) {
+		handleClass( 17, id, clas );
+	}
+
+	public void removeClasses( String[][] idsAndClasses ) {
+		handleClasses( 18, idsAndClasses );
+	}
+
+	public void removeClass( String id, String clas ) {
+		handleClass( 18, id, clas );
+	}
+
+	public void toggleClasses( String[][] idsAndClasses ) {
+		handleClasses( 19, idsAndClasses );
+	}
+
+	public void toggleClass( String id, String clas ) {
+		handleClass( 19, id, clas );
+	}
 }
