@@ -352,7 +352,7 @@ namespace scljre {
 		}
 		void Get_( str::dString &String )
 		{
-			Get_( Get(), String );
+			Get_( GetObject(), String );
 		}
 		void Get_( str::dStrings &Strings )
 		{
@@ -362,7 +362,7 @@ namespace scljre {
 			n4jre::sJSize Length = 0, Index = 0;
 			str::wString String;
 		qRB;
-			Object.Init( Get() );
+			Object.Init( GetObject() );
 
 			Length = Object.GetLength();
 
@@ -375,6 +375,8 @@ namespace scljre {
 		qRT;
 		qRE;
 		}
+		// Termination method.
+		void Get( void ) {}
 	public:
 		void reset( bso::sBool P = true )
 		{
@@ -388,11 +390,19 @@ namespace scljre {
 
 			Index_ = 0;
 		}
-		sJObject Get( void )
+		void Get( sJObject &Object )
+		{
+			C_().GetArgument( Index_++, n4jre::t_Undefined, &Object );
+		}
+		/*
+		Not simply called 'Get()', otherwise it will be called
+		as termination method from below template variadics method
+		*/
+		sJObject GetObject( void )
 		{
 			sJObject Object;
 
-			C_().GetArgument( Index_++, n4jre::t_Undefined, &Object );
+			Get( Object );
 
 			return Object;
 		}
@@ -481,7 +491,7 @@ namespace scljre {
 
 	template <typename t> t *GetUOP( scljre::sCaller &Caller )
 	{
-		return GetUOP<t>( Caller.Get() );
+		return GetUOP<t>( Caller.GetObject() );
 	}
 
 	template <typename t> inline t &GetUO( sJObject Object )
@@ -527,7 +537,7 @@ namespace scljre {
 		void Init( sCaller &Caller )
 		{
 			rIDriver_::Init( fdr::ts_Default );
-			Stream_.Init( Caller.Get() );
+			Stream_.Init( Caller.GetObject() );
 		}
 	};
 

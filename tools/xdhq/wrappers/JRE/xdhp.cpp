@@ -115,8 +115,6 @@ qRE;
 
 SCLJRE_F( xdhp::New )
 {
-	rData_ *Data = Sharing_.Read();
-
 	return scljre::ConvertUO<rData_>( Sharing_.Read() );
 }
 
@@ -138,7 +136,7 @@ SCLJRE_F( xdhp::Set )
 {
 	DATA;
 
-	Data.Object.Init( Caller.Get() );
+	Data.Object.Init( Caller.GetObject() );
 
 	Data.Object.CallVoidMethod( "test", "()V" );
 
@@ -194,7 +192,7 @@ qRB;
 	} else
 		Data.FirstCall = false;
 
-	Object.Init( Caller.Get() );
+	Object.Init( Caller.GetObject() );
 	
 	Data.Recv.ReadBegin();
 	Set_( "id", Data.Recv.Id, Object );

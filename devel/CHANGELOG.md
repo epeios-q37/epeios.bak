@@ -1,5 +1,9 @@
 # *Epeios* changelog
 
+2018-01-31:
+- SCLJRE:
+  - fixing parameter mess with template variadics,
+
 2018-01-27:
 - V8Q:
   - fixing missing method in *Node.js* v4,

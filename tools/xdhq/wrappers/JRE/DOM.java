@@ -40,7 +40,9 @@ public class DOM {
 	}
 
 	public DOM() {
+		System.out.println( "Av.!");
 		core = XDHq.call(8);
+		System.out.println( "Ap.!");
 	}
 
 	public void finalize() {
