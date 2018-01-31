@@ -24,6 +24,7 @@ public class Test {
 	}
 
 	public static void main(String[] args) throws Exception {
+		System.out.println("Yo h !!!");
 		System.out.println(info.q37.xdhq.XDHq.componentInfo());
 		System.out.println(info.q37.jreq.JREq.wrapperInfo());
 		displayBytecodeBuildTimestamp();
