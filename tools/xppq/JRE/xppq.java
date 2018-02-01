@@ -17,9 +17,7 @@
 	along with XPPq. If not, see <http://www.gnu.org/licenses/>.
 */ 
 
-class Decl {
- protected static String affix = "xppq";
-}
+import info.q37.jreq.*;
 
 class XPPqData {
 	public String
@@ -28,38 +26,27 @@ class XPPqData {
 		value;
 };
 
-// Begin of generic part.
-class JREq extends Decl {
-	static long launcher = 0;
-	native public static String wrapperInfo();
-	native public static String componentInfo( long launcher );
-	native private static void init( String location);
-	native private static long register( String arguments );
-	native protected static Object wrapper(
-		long launcher,
-		int index,
-		Object... objects);
-
-	static
+class XPPqWrapper extends JREq {
+	static private long launcher;
+	static {
+		launcher = JREq.register( "xppq" );
+	}
+	static protected Object call(int index, Object... objects) {
+		return JREq.call( launcher, index, objects );
+	}
+	static public String componentInfo(){
+		return JREq.componentInfo( launcher );
+	}
+	static public String returnArgument( String argument )
 	{
-  String location = ".";
-
- 	System.loadLibrary( "jreq" );
-
-  if ( System.getenv( "EPEIOS_SRC" ) != null ) {
-   if ( System.getProperty("os.name").startsWith( "Windows" ) )
-    location = "h:/bin";
-   else
-    location = "~/bin";
-  }
-
- 	init( location );
-  launcher = register( Decl.affix + "jre");
- }
+		return (String)call( 0, argument );
+	}
+	static public void listen() {
+		call( 7, "53752");
+	}
 }
-// End of generic part.
 
-class XPPq extends JREq {
+class XPPq extends XPPqWrapper {
 	public Object core;
 	public XPPq( Object core )
 	{
@@ -68,32 +55,32 @@ class XPPq extends JREq {
 	
 	static public Object getParser( java.io.InputStream stream )
 	{
-		return wrapper( JREq.launcher, 0, stream );
+		return call( 0, stream );
 	}
 	
 	public void releaseParser()
 	{
-		wrapper( JREq.launcher,1, core );
+		call( 1, core );
 	}
 	
 	public int parse( XPPqData data )
 	{
-		return ( (java.lang.Integer)wrapper( JREq.launcher,2, core, data ) ).intValue();
+		return ( (java.lang.Integer)call( 2, core, data ) ).intValue();
 	}
 	
 	static public Object getPreprocessor( java.io.InputStream stream )
 	{
-		return wrapper( JREq.launcher,3, stream );
+		return call( 3, stream );
 	}
 	
 	public void releasePreprocessor()
 	{
-		wrapper( JREq.launcher, 4, core );
+		call( 4, core );
 	}
 	
 	public int readFromPreprocessor()
 	{
-		return ( (java.lang.Integer)wrapper( JREq.launcher, 5, core ) ).intValue();
+		return ( (java.lang.Integer)call( 5, core ) ).intValue();
 	}
 
 	public void finalize()
@@ -135,6 +122,7 @@ class XPPqParser {
 	
 	public int parse( XPPqData data )
 	{
+		System.out.println( data.tagName.getClass().getName() );
 		return xppq.parse( data  );
 	}
 	
@@ -244,7 +232,7 @@ class XPPqTest {
 	public static void main ( String[] args ) throws Exception
 	{
  	System.out.println( XPPq.wrapperInfo() );
- 	System.out.println( XPPq.componentInfo( JREq.launcher ) );
+ 	System.out.println( XPPq.componentInfo() );
  	displayBytecodeBuildTimestamp();
   System.out.println();
 				

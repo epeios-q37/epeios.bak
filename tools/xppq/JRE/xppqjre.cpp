@@ -90,7 +90,7 @@ namespace parsing_ {
 	qRH
 		scljre::java::lang::rLong Long;
 	qRB
-		Long.Init( Caller.Get() );
+		Long.Init( Caller.GetObject() );
 
 		delete (rParser_ *)Long.LongValue();
 	qRR
@@ -144,10 +144,10 @@ namespace parsing_ {
 		str::wString Error;
 		scljre::rObject Data;
 	qRB
-		Long.Init( Caller.Get() );
+		Long.Init( Caller.GetObject() );
 		rParser_ &Parser = *(rParser_ *)Long.LongValue();
 
-		Data.Init( Caller.Get() );
+		Data.Init( Caller.GetObject() );
 
 		switch ( Parser().Parse( xml::tfObvious ) ) {
 		case xml::t_Error:
@@ -251,7 +251,7 @@ namespace processing_ {
 	qRH
 		scljre::java::lang::rLong Long;
 	qRB
-		Long.Init( Caller.Get() );
+		Long.Init( Caller.GetObject() );
 
 		delete (rProcessor_ *)Long.LongValue();
 	qRR
@@ -269,7 +269,7 @@ namespace processing_ {
 		lcl::locale Locale;
 		str::wString Translation;
 	qRB
-		Long.Init( Caller.Get() );
+		Long.Init( Caller.GetObject() );
 
 		rProcessor_ &Processor = *(rProcessor_ *)Long.LongValue();
 

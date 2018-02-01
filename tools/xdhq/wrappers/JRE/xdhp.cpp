@@ -130,11 +130,9 @@ namespace {
 	}
 }
 
-#define DATA	rData_ &Data = GetData_( Caller )
-
 SCLJRE_F( xdhp::Set )
 {
-	DATA;
+	rData_ &Data = GetData_( Caller );
 
 	Data.Object.Init( Caller.GetObject() );
 
@@ -183,20 +181,20 @@ namespace {
 SCLJRE_F( xdhp::GetAction )
 {
 qRH;
-	scljre::rObject Object;
+	scljre::rObject Event;
 qRB;
-	DATA;
+	rData_ &Data = GetData_( Caller );
 
 	if ( !Data.FirstCall ) {
 		Data.Sent.WriteDismiss();
 	} else
 		Data.FirstCall = false;
 
-	Object.Init( Caller.GetObject() );
+	Event.Init( Caller.GetObject() );
 	
 	Data.Recv.ReadBegin();
-	Set_( "id", Data.Recv.Id, Object );
-	Set_( "action", Data.Recv.Action, Object );
+	Set_( "id", Data.Recv.Id, Event );
+	Set_( "action", Data.Recv.Action, Event );
 	Data.Recv.ReadEnd();
 qRR;
 qRT;

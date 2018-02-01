@@ -34,7 +34,7 @@ public class DOM {
 			classes.add( idAndClass[1] );
 		}
 
-		String [][] ret = { (String [])ids.toArray(), (String [])classes.toArray() };
+		String [][] ret = { ids.toArray( new String[0] ), classes.toArray(new String[0]) };
 
 		return ret;
 	}
@@ -50,19 +50,34 @@ public class DOM {
 	}
 
 	private Object call( int index, Object... objects) {
-		return XDHq.call( index, core, objects  );
+		// With below line, 'objects' is one argument, and is not exploded.
+		 // return XDHq.call( index, core, objects );
+
+		switch ( objects.length ) {
+		case 1:
+			return XDHq.call( index, core, objects[0] );
+		case 2:
+			return XDHq.call( index, core, objects[0], objects[1] );
+		case 3:
+			return XDHq.call( index, core, objects[0], objects[1], objects[2] );
+		default:
+			System.err.println( "Missing case !");
+			System.exit( 1 );
+			return null;
+		}
+
 	}
 
 	public void set(Object object) {
 		call(10, object);
 	}
 
-	public void getAction(info.q37.xdhq.Event data) {
+	public void getAction(info.q37.xdhq.XDHqEvent data) {
 		call(11, data);
 	}
 
 	public void setLayout(String id, Tree tree, String xslFilename) {
-		call(12, id, tree.core(), xslFilename);
+		call(14, id, tree.core(), xslFilename);
 	}
 
 	public String[] getContents( String[] ids ) {
@@ -99,26 +114,26 @@ public class DOM {
 	}
 
 	public void addClasses( String[][] idsAndClasses ) {
-		handleClasses( 17, idsAndClasses );
-	}
-
-	public void addClass( String id, String clas ) {
-		handleClass( 17, id, clas );
-	}
-
-	public void removeClasses( String[][] idsAndClasses ) {
 		handleClasses( 18, idsAndClasses );
 	}
 
-	public void removeClass( String id, String clas ) {
+	public void addClass( String id, String clas ) {
 		handleClass( 18, id, clas );
 	}
 
-	public void toggleClasses( String[][] idsAndClasses ) {
+	public void removeClasses( String[][] idsAndClasses ) {
 		handleClasses( 19, idsAndClasses );
 	}
 
-	public void toggleClass( String id, String clas ) {
+	public void removeClass( String id, String clas ) {
 		handleClass( 19, id, clas );
+	}
+
+	public void toggleClasses( String[][] idsAndClasses ) {
+		handleClasses( 20, idsAndClasses );
+	}
+
+	public void toggleClass( String id, String clas ) {
+		handleClass( 20, id, clas );
 	}
 }

@@ -28,6 +28,7 @@ public class XDHq extends info.q37.jreq.JREq {
 	}
 	static protected Object call(int index, Object... objects) {
 		return JREq.call( launcher, index, objects );
+
 	}
 	static public String componentInfo(){
 		return JREq.componentInfo( launcher );
