@@ -60,7 +60,15 @@ class MyData extends DOM {
 //		this.todos = [];
 	}
 	itemsLeft() {
-		return this.todos.length;
+		var i = this.todos.length;
+		var count = 0;
+
+		while (i--) {
+			if (!this.todos[i]['completed'])
+				count++;
+		}
+
+		return count;
 	}
 }
 
@@ -75,6 +83,31 @@ function push(todo, id, tree) {
 
 	tree.putValue(todo["label"]);
 	tree.popTag();
+}
+
+function displayCount(dom, count) {
+	switch (count) {
+	case 0:
+		dom.setContent("Count", "");
+		break;
+	case 1:
+		dom.setContent("Count", "1 item left");
+		break;
+	default:
+		dom.setContent("Count", dom.itemsLeft() + " items left");
+		break;
+	}
+}
+
+function handleCount(dom) {
+	var count = dom.itemsLeft();
+
+	if ( count != dom.todos.length )
+		dom.disableElement( "HideClearCompleted",
+			() => displayCount(dom, count))
+	else
+		dom.enableElement("HideClearCompleted",
+			() => displayCount(dom, count))
 }
 
 function displayTodos(dom) {
@@ -92,19 +125,7 @@ function displayTodos(dom) {
 	tree.popTag();
 
 	dom.setLayout("Todos", tree, "Todos.xsl",
-		() => {
-			switch (dom.itemsLeft()) {
-				case 0:
-					dom.setContent("Count", "");
-					break;
-				case 1:
-					dom.setContent("Count", "1 item left");
-					break;
-				default:
-					dom.setContent("Count", dom.itemsLeft() + " items left");
-					break;
-			}
-		}
+		() => handleCount( dom )
 	);
 }
 
@@ -124,13 +145,15 @@ function acSubmit(dom, id) {
 	dom.getContent(id,
 		(content) => dom.setContent(id, "",
 			() => {
-				dom.todos.unshift(
-					{
-						"completed": false,
-						"label": content
-					}
-				);
-				displayTodos(dom);
+				if (content.trim() != "") {
+					dom.todos.unshift(
+						{
+							"completed": false,
+							"label": content
+						}
+					);
+					displayTodos(dom);
+				}
 			}
 		)
 	);
@@ -150,7 +173,14 @@ function acToggle(dom, id) {
 
 	dom.todos[i]['completed'] = !dom.todos[i]['completed'];
 
-	dom.toggleClass("Todo." + id, "completed", () => { if (dom.exclude != null) displayTodos(dom) } );
+	dom.toggleClass("Todo." + id, "completed",
+		() => {
+			if (dom.exclude != null)
+				displayTodos(dom);
+			else
+				handleCount(dom);
+		}
+	);
 }
 
 function acAll(dom, id) {
@@ -196,11 +226,27 @@ function acClear(dom, id) {
 	var i = 0;
 
 	while (i < dom.todos.length) {
-		dom.todos[i++]['completed'] = false;
+		if (dom.todos[i]['completed'] )
+			dom.todos.splice(i, 1);
+		else
+			i++;
 	}
 
 	displayTodos(dom);
 
+}
+
+function acEdit(dom, id) {
+	dom.getContent( id,
+		( content ) => dom.addClasses(
+				{
+					["View." + content]: "hide",
+					[id]: "editing"
+				},
+				() => dom.setContent("Input." + content, dom.todos[parseInt(content)]['label']
+			)
+		)
+	);
 }
 
 function main() {
@@ -214,6 +260,7 @@ function main() {
 			"Active": acActive,
 			"Complete": acComplete,
 			"Clear": acClear,
+			"Edit": acEdit,
 		}
 	);
 

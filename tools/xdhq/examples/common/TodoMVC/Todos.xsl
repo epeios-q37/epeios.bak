@@ -9,7 +9,7 @@
 			<xsl:apply-templates select="Todo"/>
 	</xsl:template>
 	<xsl:template match="Todo">
-		<li id="Todo.{@id}">
+		<li class="view" id="Todo.{@id}" data-xdh-onevent="dblclick|Edit" data-xdh-value="{@id}">
 			<xsl:choose>
 			<xsl:when test="@completed='true'">
 				<xsl:attribute name="class">completed</xsl:attribute>
@@ -18,7 +18,7 @@
 					<xsl:attribute name="class">active</xsl:attribute>
 				</xsl:otherwise>
 			</xsl:choose>
-			<div class="view">
+			<span id="View.{@id}">
 				<input class="toggle" type="checkbox" id="{@id}" data-xdh-onevent="Toggle">
 					<xsl:if test="@completed='true'">
 						<xsl:attribute name="checked"></xsl:attribute>
@@ -28,7 +28,8 @@
 					<xsl:value-of select="."/>
 				</label>
 				<button data-xdh-value="{@id}" class="destroy" data-xdh-onevent="Destroy"/>
-			</div>
+			</span>
+				<input id="Input.{@id}" class="edit" autofocus=""/>
 		</li>
 	</xsl:template>
 </xsl:stylesheet>
