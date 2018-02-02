@@ -49,6 +49,8 @@ public class DOM {
 		XDHq.call(9, core);
 	}
 
+	// Not very elegant !
+	/*
 	private Object call( int index, Object... objects) {
 		// With below line, 'objects' is one argument, and is not exploded.
 		 // return XDHq.call( index, core, objects );
@@ -65,23 +67,24 @@ public class DOM {
 			System.exit( 1 );
 			return null;
 		}
-
 	}
+	*/
 
 	public void set(Object object) {
-		call(10, object);
+		XDHq.call(10, core, object);
 	}
 
-	public void getAction(info.q37.xdhq.XDHqEvent data) {
-		call(11, data);
+	public void getAction(Event data) {
+		XDHq.call(11, core, data);
 	}
 
 	public void setLayout(String id, Tree tree, String xslFilename) {
-		call(14, id, tree.core(), xslFilename);
+		XDHq.call(14, core, id, tree.core(), xslFilename);
 	}
 
 	public String[] getContents( String[] ids ) {
-		return (String [])call( 15, (Object [])ids );
+//		return (String [])call( 15, core, (Object [])ids );
+		return (String [])XDHq.call( 15, core, ids );
 	}
 
 	public String getContent( String id ) {
@@ -93,7 +96,7 @@ public class DOM {
 	public void setContents( String[][] idsAndContents ) {
 		String splittedIdsAndContents[][] = split( idsAndContents );
 
-		call( 16, splittedIdsAndContents[0], splittedIdsAndContents[1] );
+		XDHq.call( 16, core, splittedIdsAndContents[0], splittedIdsAndContents[1] );
 	}
 
 	public void setContent( String id, String content ) {
@@ -105,7 +108,7 @@ public class DOM {
 	private void handleClasses( int index, String[][] idsAndClasses) {
 		String splittedIdsAndClasses[][] = split( idsAndClasses );
 
-		call( index, splittedIdsAndClasses[0], splittedIdsAndClasses[1] );
+		XDHq.call( index, core, splittedIdsAndClasses[0], splittedIdsAndClasses[1] );
 	}
 
 	private void handleClass( int Index, String id, String clas ) {

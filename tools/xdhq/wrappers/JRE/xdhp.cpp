@@ -115,7 +115,13 @@ qRE;
 
 SCLJRE_F( xdhp::New )
 {
-	return scljre::ConvertUO<rData_>( Sharing_.Read() );
+	rData_ *Data = Sharing_.Read();
+
+	scljre::sJObject Object = scljre::ConvertUO<rData_>( Data );
+
+	Data->Recv.ReadDismiss();
+
+	return Object;
 }
 
 SCLJRE_F( xdhp::Delete )

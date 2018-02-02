@@ -23,8 +23,4 @@ public class Event {
 	public String
 		id,
 		action;
-		public Event() {
-			id = new String();
-			action = new String();
-		}
 };
