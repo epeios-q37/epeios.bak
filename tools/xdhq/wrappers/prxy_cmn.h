@@ -28,6 +28,7 @@ namespace prxy_cmn {
 
 	qENUM( Request )
 	{
+		rExecute,
 		rAlert,
 		rConfirm,
 		rSetLayout,
@@ -39,16 +40,37 @@ namespace prxy_cmn {
 		rToggleClasses,
 		rEnableElements,
 		rDisableElements,
-		rGetAttribute,
 		rSetAttribute,
-		rGetProperty,
+		rGetAttribute,
+		rRemoveAttribute,
 		rSetProperty,
+		rGetProperty,
+		rFocus,
 		r_amount,
 		r_Undefined
 	};
 
 	// '...S' Send the request.
 	// '...R' get the response.
+
+	namespace execute {
+		void S(
+			const str::dString &Script,
+			flw::sWFlow &Flow );
+
+		void R(
+			flw::sRFlow &Flow,
+			str::dString &Return );
+	}
+
+	inline void Execute(
+		const str::dString &Script,
+		flw::sRWFlow &Flow,
+		str::dString &Return )
+	{
+		execute::S( Script, Flow );
+		execute::R( Flow, Return );
+	}
 
 	namespace alert {
 		void S(
@@ -322,7 +344,7 @@ namespace prxy_cmn {
 				const str::dString &Value,
 				flw::sWFlow &Flow )
 			{
-				ap_::set::S( prtcl::aSetAttribute_1, Id, Name, Value, Flow );
+				ap_::set::S( prtcl::aSetAttribute__1, Id, Name, Value, Flow );
 			}
 
 			inline void R( flw::sRFlow &Flow )
@@ -366,6 +388,25 @@ namespace prxy_cmn {
 		{
 			get::S( Id, Name, Flow );
 			get::R( Flow, Value );
+		}
+
+		namespace remove {
+			void S(
+				const str::dString &Id,
+				const str::dString &Name,
+				flw::sWFlow &Flow );
+
+			inline void R( flw::sRFlow &Flow )
+			{}
+		}
+
+		inline void Remove(
+			const str::dString &Id,
+			const str::dString &Name,
+			flw::sRWFlow &Flow )
+		{
+			remove::S( Id, Name, Flow );
+			remove::R( Flow );
 		}
 	}
 
@@ -423,6 +464,24 @@ namespace prxy_cmn {
 			get::R( Flow, Value );
 		}
 	}
+
+	namespace focus {
+		void S(
+			const str::dString &Id,
+			flw::sWFlow &Flow );
+
+		inline void R( flw::sRFlow &Flow )
+		{}
+	}
+
+	inline void Focus(
+		const str::dString &Id,
+		flw::sRWFlow &Flow )
+	{
+		focus::S( Id, Flow );
+		focus::R( Flow );
+	}
+
 }
 
 #endif

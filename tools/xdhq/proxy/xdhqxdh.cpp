@@ -89,6 +89,29 @@ namespace {
 		d_Undefined
 	};
 
+	void Execute_(
+		flw::sRWFlow &Flow,
+		xdhdws::sProxy &Proxy )
+	{
+	qRH;
+		str::wString Script;
+		qCBUFFERr Buffer;
+	qRB;
+		Script.Init();
+		prtcl::Get( Flow, Script );
+
+		Proxy.Execute( Script, Buffer );
+
+		Flow.Dismiss();
+
+		prtcl::PutRequest( prtcl::rReady_1, Flow );
+		prtcl::Put( (char *)Buffer(), Flow );
+		Flow.Commit();
+	qRR;
+	qRT;
+	qRE;
+	}
+
 	void Alert_(
 		flw::sRWFlow &Flow,
 		xdhdws::sProxy &Proxy )
@@ -361,6 +384,29 @@ namespace {
 		HandleElements_( Flow, &xdhdws::sProxy::DisableElements, Proxy );
 	}
 
+	void SetAttribute__(
+		flw::sRWFlow &Flow,
+		xdhdws::sProxy &Proxy )
+	{
+	qRH;
+		str::wString Id, Name, Value;
+	qRB;
+		tol::Init( Id, Name, Value );
+		prtcl::Get( Flow, Id );
+		prtcl::Get( Flow, Name );
+		prtcl::Get( Flow, Value );
+
+		Proxy.SetAttribute( Id, Name, Value );
+
+		Flow.Dismiss();
+
+		prtcl::PutRequest( prtcl::rReady_1, Flow );
+		Flow.Commit();
+	qRR;
+	qRT;
+	qRE;
+	}
+
 	void GetAttribute_(
 		flw::sRWFlow &Flow,
 		xdhdws::sProxy &Proxy )
@@ -385,7 +431,29 @@ namespace {
 	qRE;
 	}
 
-	void SetAttribute_(
+	void RemoveAttribute_(
+		flw::sRWFlow &Flow,
+		xdhdws::sProxy &Proxy )
+	{
+	qRH;
+		str::wString Id, Name;
+	qRB;
+		tol::Init( Id, Name );
+		prtcl::Get( Flow, Id );
+		prtcl::Get( Flow, Name );
+
+		Proxy.RemoveAttribute( Id, Name );
+
+		Flow.Dismiss();
+
+		prtcl::PutRequest( prtcl::rReady_1, Flow );
+		Flow.Commit();
+	qRR;
+	qRT;
+	qRE;
+	}
+
+	void SetProperty_(
 		flw::sRWFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
@@ -397,7 +465,7 @@ namespace {
 		prtcl::Get( Flow, Name );
 		prtcl::Get( Flow, Value );
 
-		Proxy.SetAttribute( Id, Name, Value );
+		Proxy.SetProperty( Id, Name, Value );
 
 		Flow.Dismiss();
 
@@ -407,7 +475,6 @@ namespace {
 	qRT;
 	qRE;
 	}
-
 
 	void GetProperty_(
 		flw::sRWFlow &Flow,
@@ -433,19 +500,17 @@ namespace {
 	qRE;
 	}
 
-	void SetProperty_(
+	void Focus_(
 		flw::sRWFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 	qRH;
-		str::wString Id, Name, Value;
+		str::wString Id;
 	qRB;
-		tol::Init( Id, Name, Value );
+		tol::Init( Id );
 		prtcl::Get( Flow, Id );
-		prtcl::Get( Flow, Name );
-		prtcl::Get( Flow, Value );
 
-		Proxy.SetProperty( Id, Name, Value );
+		Proxy.Focus( Id );
 
 		Flow.Dismiss();
 
@@ -503,6 +568,7 @@ namespace {
 					Continue = false;
 					Flow.Dismiss();
 					break;
+				H( Execute );
 				H( Alert );
 				H( Confirm );
 				H( SetLayout );
@@ -514,10 +580,12 @@ namespace {
 				H( ToggleClasses );
 				H( EnableElements );
 				H( DisableElements );
+				H( SetAttribute_ );
 				H( GetAttribute );
-				H( SetAttribute );
-				H( GetProperty );
+				H( RemoveAttribute );
 				H( SetProperty );
+				H( GetProperty );
+				H( Focus );
 				default:
 					qRGnr();
 					break;

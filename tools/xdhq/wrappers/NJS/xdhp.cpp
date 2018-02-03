@@ -413,39 +413,45 @@ namespace {
 	}
 }
 
-#define ARGS_BEGIN\
+#define ARGS_BEGIN( request )\
 	rData_ &Data = GetData_( Caller );\
 	Data.Sent.WriteBegin();\
+	Data.Request = prxy_cmn::r##request;\
 	proxy::rArguments &Arguments = Data.Sent.Arguments;\
 	Arguments.Init();
 
 #define ARGS_END	Data.Sent.WriteEnd()
 
+SCLNJS_F( xdhp::Execute )
+{
+	ARGS_BEGIN( Execute );
+
+	Caller.GetArgument( Arguments.Script, Data.Callback );
+
+	ARGS_END;
+}
+
 SCLNJS_F( xdhp::Alert )
 {
-	ARGS_BEGIN;
+	ARGS_BEGIN( Alert );
 
 	Caller.GetArgument( Arguments.Message, Data.Callback );
-
-	Data.Request = prxy_cmn::rAlert;
 
 	ARGS_END;
 }
 
 SCLNJS_F( xdhp::Confirm )
 {
-	ARGS_BEGIN;
+	ARGS_BEGIN( Confirm );
 
 	Caller.GetArgument( Arguments.Message, Data.Callback );
-
-	Data.Request = prxy_cmn::rConfirm;
 
 	ARGS_END;
 }
 
 SCLNJS_F( xdhp::SetLayout )
 {
-	ARGS_BEGIN;
+	ARGS_BEGIN( SetLayout );;
 
 	Caller.GetArgument( Arguments.Id );
 
@@ -453,104 +459,94 @@ SCLNJS_F( xdhp::SetLayout )
 
 	Caller.GetArgument( Arguments.XSLFilename, Data.Callback );
 	Arguments.Language = Data.Language;
-	Data.Request = prxy_cmn::rSetLayout;
 
 	ARGS_END;
 }
 
 SCLNJS_F( xdhp::GetContents )
 {
-	ARGS_BEGIN;
+	ARGS_BEGIN( GetContents );
 
 	Caller.GetArgument( Arguments.Ids, Data.Callback );
-	Data.Request = prxy_cmn::rGetContents;
 
 	ARGS_END;
 }
 
 SCLNJS_F( xdhp::SetContents )
 {
-	ARGS_BEGIN;
+	ARGS_BEGIN( SetContents );
 
 	Caller.GetArgument( Arguments.Ids, Arguments.Contents, Data.Callback );
-	Data.Request = prxy_cmn::rSetContents;
 
 	ARGS_END;
 }
 
 SCLNJS_F( xdhp::DressWidgets )
 {
-	ARGS_BEGIN;
+	ARGS_BEGIN( DressWidgets );
 
 	Caller.GetArgument( Arguments.Id, Data.Callback );
-	Data.Request = prxy_cmn::rDressWidgets;
 
 	ARGS_END;
 }
 
 SCLNJS_F( xdhp::AddClasses )
 {
-	ARGS_BEGIN;
+	ARGS_BEGIN( AddClasses );
 
 	Caller.GetArgument( Arguments.Ids, Arguments.Classes, Data.Callback );
-	Data.Request = prxy_cmn::rAddClasses;
 
 	ARGS_END;
 }
 
 SCLNJS_F( xdhp::RemoveClasses )
 {
-	ARGS_BEGIN;
+	ARGS_BEGIN( RemoveClasses );
 
 	Caller.GetArgument( Arguments.Ids, Arguments.Classes, Data.Callback );
-	Data.Request = prxy_cmn::rRemoveClasses;
 
 	ARGS_END;
 }
 
 SCLNJS_F( xdhp::ToggleClasses )
 {
-	ARGS_BEGIN;
+	ARGS_BEGIN( ToggleClasses );
 
 	Caller.GetArgument( Arguments.Ids, Arguments.Classes, Data.Callback );
-	Data.Request = prxy_cmn::rToggleClasses;
 
 	ARGS_END;
 }
 
 SCLNJS_F( xdhp::EnableElements )
 {
-	ARGS_BEGIN;
+	ARGS_BEGIN( EnableElements );
 
 	Caller.GetArgument( Arguments.Ids, Data.Callback );
-	Data.Request = prxy_cmn::rEnableElements;
 
 	ARGS_END;
 }
 
 SCLNJS_F( xdhp::DisableElements )
 {
-	ARGS_BEGIN;
+	ARGS_BEGIN( DisableElements );
 
 	Caller.GetArgument( Arguments.Ids, Data.Callback );
-	Data.Request = prxy_cmn::rDisableElements;
 
 	ARGS_END;
 }
 
 SCLNJS_F( xdhp::GetAttribute )
 {
-	ARGS_BEGIN;
+	ARGS_BEGIN( GetAttribute );
 
 	Caller.GetArgument( Arguments.Id, Arguments.Name, Data.Callback );
-	Data.Request = prxy_cmn::rGetAttribute;
 
 	ARGS_END;
 }
 
 SCLNJS_F( xdhp::SetAttribute )
 {
-	ARGS_BEGIN;
+	ARGS_BEGIN( SetAttribute );
 
 	Caller.GetArgument( Arguments.Id, Arguments.Name, Arguments.Value, Data.Callback );
 	Data.Request = prxy_cmn::rSetAttribute;
@@ -558,22 +554,38 @@ SCLNJS_F( xdhp::SetAttribute )
 	ARGS_END;
 }
 
-SCLNJS_F( xdhp::GetProperty )
+SCLNJS_F( xdhp::RemoveAttribute )
 {
-	ARGS_BEGIN;
+	ARGS_BEGIN( RemoveAttribute );
 
 	Caller.GetArgument( Arguments.Id, Arguments.Name, Data.Callback );
-	Data.Request = prxy_cmn::rGetProperty;
+
+	ARGS_END;
+}
+
+SCLNJS_F( xdhp::GetProperty )
+{
+	ARGS_BEGIN( GetProperty );
+
+	Caller.GetArgument( Arguments.Id, Arguments.Name, Data.Callback );
 
 	ARGS_END;
 }
 
 SCLNJS_F( xdhp::SetProperty )
 {
-	ARGS_BEGIN;
+	ARGS_BEGIN( SetProperty );
 
 	Caller.GetArgument( Arguments.Id, Arguments.Name, Arguments.Value, Data.Callback );
-	Data.Request = prxy_cmn::rSetProperty;
+
+	ARGS_END;
+}
+
+SCLNJS_F( xdhp::Focus )
+{
+	ARGS_BEGIN( Focus );
+
+	Caller.GetArgument( Arguments.Id, Data.Callback );
 
 	ARGS_END;
 }

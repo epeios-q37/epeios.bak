@@ -23,6 +23,49 @@
 
 using namespace prxy_cmn;
 
+void prxy_cmn::execute::S(
+	const str::dString &Script,
+	flw::sWFlow &Flow )
+{
+	prtcl::PutAnswer( prtcl::aExecute_1, Flow );
+	prtcl::Put( Script, Flow );
+	Flow.Commit();
+}
+
+void prxy_cmn::execute::R(
+	flw::sRFlow &Flow,
+	str::dString &Return )
+{
+	prtcl::Get( Flow, Return );
+	Flow.Dismiss();
+}
+
+void prxy_cmn::alert::S(
+	const str::dString &Message,
+	flw::sWFlow &Flow )
+{
+	prtcl::PutAnswer( prtcl::aAlert_1, Flow );
+	prtcl::Put( Message, Flow );
+	Flow.Commit();
+}
+
+void prxy_cmn::confirm::S(
+	const str::dString &Message,
+	flw::sWFlow &Flow )
+{
+	prtcl::PutAnswer( prtcl::aConfirm_1, Flow );
+	prtcl::Put( Message, Flow );
+	Flow.Commit();
+}
+
+void prxy_cmn::confirm::R(
+	flw::sRFlow &Flow,
+	str::dString &Response )
+{
+	prtcl::Get( Flow, Response );
+	Flow.Dismiss();
+}
+
 namespace {
 	void SetWithXSLContentOrFilename_(
 		prtcl::eAnswer Answer,
@@ -82,32 +125,6 @@ void prxy_cmn::layout::set::S(
 {
 	//	SetWithXSLContent_( prtcl::aSetLayout_1, Id, XML, XSLFilename, Language, Flow );
 	SetWithXSLFilename_( prtcl::aSetLayout_1, Id, XML, XSLFilename, Language, Flow );
-}
-
-void prxy_cmn::alert::S(
-	const str::dString &Message,
-	flw::sWFlow &Flow )
-{
-	prtcl::PutAnswer( prtcl::aAlert_1, Flow );
-	prtcl::Put( Message, Flow );
-	Flow.Commit();
-}
-
-void prxy_cmn::confirm::S(
-	const str::dString &Message,
-	flw::sWFlow &Flow )
-{
-	prtcl::PutAnswer( prtcl::aConfirm_1, Flow );
-	prtcl::Put( Message, Flow );
-	Flow.Commit();
-}
-
-void prxy_cmn::confirm::R(
-	flw::sRFlow &Flow,
-	str::dString &Response )
-{
-	prtcl::Get( Flow, Response );
-	Flow.Dismiss();
 }
 
 void prxy_cmn::contents::get::S(
@@ -244,5 +261,25 @@ void prxy_cmn::ap_::get::R(
 {
 	prtcl::Get( Flow, Value );
 	Flow.Dismiss();
+}
+
+void prxy_cmn::attribute::remove::S(
+	const str::dString &Id,
+	const str::dString &Name,
+	flw::sWFlow &Flow )
+{
+	prtcl::PutAnswer( prtcl::aRemoveAttribute_1, Flow );
+	prtcl::Put( Id, Flow );
+	prtcl::Put( Name, Flow );
+	Flow.Commit();
+}
+
+void prxy_cmn::focus::S(
+	const str::dString &Id,
+	flw::sWFlow &Flow )
+{
+	prtcl::PutAnswer( prtcl::aFocus_1, Flow );
+	prtcl::Put( Id, Flow );
+	Flow.Commit();
 }
 

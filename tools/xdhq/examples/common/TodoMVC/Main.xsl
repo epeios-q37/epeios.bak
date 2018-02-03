@@ -8,7 +8,7 @@
 		<section class="todoapp">
 			<header class="header">
 				<h1>todos</h1>
-				<input class="new-todo" placeholder="What needs to be done?" autofocus="" data-xdh-onevent="Submit"/>
+				<input id="Input" class="new-todo" placeholder="What needs to be done?" autofocus="" data-xdh-onevent="keypress|Submit|Enter"/>
 			</header>
 			<section class="main">
 				<input class="toggle-all" type="checkbox"/>
@@ -36,8 +36,6 @@
 			<p>
 				Created by <a href="http://q37.info/contact/">Claude SIMON</a>
 			</p>
-			<!--p>
-				Part of <a href="http://todomvc.com">TodoMVC</a>
-			</p-->
-		</footer>	</xsl:template>
+		</footer>
+	</xsl:template>
 </xsl:stylesheet>

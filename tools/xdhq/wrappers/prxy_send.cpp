@@ -24,6 +24,12 @@ using namespace prxy_send;
 using namespace prxy_cmn;
 
 namespace {
+	void Execute_(
+		flw::sWFlow &Flow,
+		const rArguments &Arguments )
+	{
+		execute::S( Arguments.Script, Flow );
+	}
 	void Alert_(
 		flw::sWFlow &Flow,
 		const rArguments &Arguments )
@@ -90,17 +96,29 @@ namespace {
 	{
 		elements::disable::S( Arguments.Ids, Flow );
 	}
+	void SetAttribute_(
+		flw::sWFlow &Flow,
+		const rArguments &Arguments )
+	{
+		attribute::set::S( Arguments.Id, Arguments.Name, Arguments.Value, Flow );
+	}
 	void GetAttribute_(
 		flw::sWFlow &Flow,
 		const rArguments &Arguments )
 	{
 		attribute::get::S( Arguments.Id, Arguments.Name, Flow );
 	}
-	void SetAttribute_(
+	void RemoveAttribute_(
 		flw::sWFlow &Flow,
 		const rArguments &Arguments )
 	{
-		attribute::set::S( Arguments.Id, Arguments.Name, Arguments.Value, Flow );
+		attribute::remove::S( Arguments.Id, Arguments.Name, Flow );
+	}
+	void SetProperty_(
+		flw::sWFlow &Flow,
+		const rArguments &Arguments )
+	{
+		property::set::S( Arguments.Id, Arguments.Name, Arguments.Value, Flow );
 	}
 	void GetProperty_(
 		flw::sWFlow &Flow,
@@ -108,11 +126,11 @@ namespace {
 	{
 		property::get::S( Arguments.Id, Arguments.Name, Flow );
 	}
-	void SetProperty_(
+	void Focus_(
 		flw::sWFlow &Flow,
 		const rArguments &Arguments )
 	{
-		property::set::S( Arguments.Id, Arguments.Name, Arguments.Value, Flow );
+		focus::S( Arguments.Id, Flow );
 	}
 }
 
@@ -130,6 +148,7 @@ void prxy_send::Send(
 	case r_Undefined:
 		qRGnr();
 		break;
+	H( Execute );
 	H( Alert );
 	H( Confirm );
 	H( SetLayout );
@@ -141,10 +160,12 @@ void prxy_send::Send(
 	H( ToggleClasses );
 	H( EnableElements );
 	H( DisableElements );
-	H( GetAttribute );
 	H( SetAttribute );
-	H( GetProperty );
+	H( GetAttribute );
+	H( RemoveAttribute );
 	H( SetProperty );
+	H( GetProperty );
+	H( Focus );
 	default:
 		qRGnr();
 		break;

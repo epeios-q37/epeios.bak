@@ -91,6 +91,7 @@ const char *prtcl::GetLabel( eAnswer Answer )
 	switch ( Answer ) {
 		C( OK_1 );
 		C( Error_1 );
+		C( Execute_1 );
 		C( Alert_1 );
 		C( Confirm_1 );
 		C( SetLayout_1 );
@@ -102,10 +103,12 @@ const char *prtcl::GetLabel( eAnswer Answer )
 		C( ToggleClasses_1 );
 		C( EnableElements_1 );
 		C( DisableElements_1 );
+		C( SetAttribute__1 );
 		C( GetAttribute_1 );
-		C( SetAttribute_1 );
-		C( GetProperty_1 );
+		C( RemoveAttribute_1 );
 		C( SetProperty_1 );
+		C( GetProperty_1 );
+		C( Focus_1 );
 	default:
 		qRFwk();
 		break;

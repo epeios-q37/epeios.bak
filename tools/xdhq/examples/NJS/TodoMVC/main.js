@@ -19,7 +19,7 @@
 
 /*
 This is the Node.js UnJSq (http://q47.info/UnJSq/) version
-of the TodoMVC (http://todomvc.com) project
+of the TodoMVC application (http://todomvc.com).
 */
 
 "use strict"
@@ -48,16 +48,19 @@ class MyData extends DOM {
 		super();
 		this.timestamp = new Date();
 		this.exclude = null;
-		this.todos = [
-			{
-				"completed": true,
-				"label": "Note 1"
-			},  {
-				"completed": false,
-				"label": "Note 2"
-			}
-		];
-//		this.todos = [];
+		this.id = -1;
+		/*		
+				this.todos = [
+					{
+						"completed": true,
+						"label": "Note 1"
+					}, {
+						"completed": false,
+						"label": "Note 2"
+					}
+				];
+		*/
+		this.todos = [];
 	}
 	itemsLeft() {
 		var i = this.todos.length;
@@ -74,12 +77,14 @@ class MyData extends DOM {
 
 function push(todo, id, tree) {
 	var i = 0;
+
 	tree.pushTag('Todo');
 	tree.putAttribute('id', id);
-	if ( todo["completed"])
-		tree.putAttribute( "completed", "true");
+
+	if (todo["completed"])
+		tree.putAttribute("completed", "true");
 	else
-		tree.putAttribute( "completed", "false");
+		tree.putAttribute("completed", "false");
 
 	tree.putValue(todo["label"]);
 	tree.popTag();
@@ -87,37 +92,41 @@ function push(todo, id, tree) {
 
 function displayCount(dom, count) {
 	switch (count) {
-	case 0:
-		dom.setContent("Count", "");
-		break;
-	case 1:
-		dom.setContent("Count", "1 item left");
-		break;
-	default:
-		dom.setContent("Count", dom.itemsLeft() + " items left");
-		break;
+		case 0:
+			dom.setContent("Count", "");
+			break;
+		case 1:
+			dom.setContent("Count", "1 item left");
+			break;
+		default:
+			dom.setContent("Count", dom.itemsLeft() + " items left");
+			break;
 	}
 }
 
 function handleCount(dom) {
 	var count = dom.itemsLeft();
 
-	if ( count != dom.todos.length )
-		dom.disableElement( "HideClearCompleted",
-			() => displayCount(dom, count))
+	if (count != dom.todos.length)
+		dom.disableElement("HideClearCompleted",
+			() => displayCount(dom, count)
+		)
 	else
 		dom.enableElement("HideClearCompleted",
-			() => displayCount(dom, count))
+			() => displayCount(dom, count)
+		)
 }
 
 function displayTodos(dom) {
 	var tree = new Tree();
 	var i = 0;
 
+	dom.id = -1;
+
 	tree.pushTag("Todos");
 
 	while (i < dom.todos.length) {
-		if ( dom.exclude === null || ( dom.todos[i]['completed'] != dom.exclude ) )
+		if (dom.exclude === null || (dom.todos[i]['completed'] != dom.exclude))
 			push(dom.todos[i], i, tree);
 		i++;
 	}
@@ -125,7 +134,9 @@ function displayTodos(dom) {
 	tree.popTag();
 
 	dom.setLayout("Todos", tree, "Todos.xsl",
-		() => handleCount( dom )
+		() => dom.focus("Input",
+			() => handleCount(dom)
+		)
 	);
 }
 
@@ -142,21 +153,49 @@ function acConnect(dom, id) {
 }
 
 function acSubmit(dom, id) {
-	dom.getContent(id,
-		(content) => dom.setContent(id, "",
-			() => {
-				if (content.trim() != "") {
-					dom.todos.unshift(
-						{
-							"completed": false,
-							"label": content
-						}
-					);
-					displayTodos(dom);
+	if (dom.id == -1)
+		dom.getContent("Input",
+			(content) => dom.setContent("Input", "",
+				() => {
+					if (content.trim() != "") {
+						dom.todos.unshift(
+							{
+								"completed": false,
+								"label": content
+							}
+						);
+						displayTodos(dom);
+					} else
+						dom.focus("Input");
 				}
-			}
-		)
-	);
+			)
+		);
+	else {
+		let id = dom.id;
+		dom.id = -1;
+
+		dom.getContent("Input." + id,
+			(content) => dom.setContent("Input." + id, "",
+				() => {
+					if (content.trim() != "") {
+						dom.todos[id]['label'] = content;
+						dom.setContent("Label." + id, content,
+							() => dom.removeClasses(
+								{
+									["View." + id]: "hide",
+									["Todo." + id]: "editing"
+								}
+							),
+							() => dom.focus("Input")
+						);
+					} else {
+						dom.todos.splice(id, 1);
+						displayTodos(dom);
+					}
+				}
+			)
+		);
+	}
 }
 
 function acDestroy(dom, id) {
@@ -169,7 +208,7 @@ function acDestroy(dom, id) {
 }
 
 function acToggle(dom, id) {
-	var i = parseInt( id );
+	var i = parseInt(id);
 
 	dom.todos[i]['completed'] = !dom.todos[i]['completed'];
 
@@ -185,7 +224,7 @@ function acToggle(dom, id) {
 
 function acAll(dom, id) {
 	dom.exclude = null;
-	dom.addClass( "All", "selected",
+	dom.addClass("All", "selected",
 		() => dom.removeClasses(
 			{
 				"Active": "selected",
@@ -198,19 +237,21 @@ function acAll(dom, id) {
 
 function acActive(dom, id) {
 	dom.exclude = true;
+
 	dom.addClass("Active", "selected",
 		() => dom.removeClasses(
 			{
 				"All": "selected",
 				"Complete": "selected"
 			},
-			() => displayTodos(dom )
+			() => displayTodos(dom)
 		)
 	)
 }
 
 function acComplete(dom, id) {
 	dom.exclude = false;
+
 	dom.addClass("Complete", "selected",
 		() => dom.removeClasses(
 			{
@@ -226,25 +267,41 @@ function acClear(dom, id) {
 	var i = 0;
 
 	while (i < dom.todos.length) {
-		if (dom.todos[i]['completed'] )
+		if (dom.todos[i]['completed'])
 			dom.todos.splice(i, 1);
 		else
 			i++;
 	}
 
 	displayTodos(dom);
-
 }
 
 function acEdit(dom, id) {
-	dom.getContent( id,
-		( content ) => dom.addClasses(
-				{
-					["View." + content]: "hide",
-					[id]: "editing"
-				},
-				() => dom.setContent("Input." + content, dom.todos[parseInt(content)]['label']
-			)
+	dom.getContent(id,
+		(content) => dom.addClasses(
+			{
+				["View." + content]: "hide",
+				[id]: "editing"
+			},
+			() => {
+				dom.id = parseInt(content);
+				dom.setContent("Input." + content, dom.todos[dom.id]['label'],
+					() => dom.focus("Input." + content))
+			}
+		)
+	);
+}
+
+function acCancel(dom, id) {
+	var id = dom.id;
+	dom.id = -1;
+	dom.setContent("Input." + id, "",
+		() => dom.removeClasses(
+			{
+				["View." + id]: "hide",
+				["Todo." + id]: "editing"
+			},
+			() => dom.focus("Input")
 		)
 	);
 }
@@ -261,6 +318,7 @@ function main() {
 			"Complete": acComplete,
 			"Clear": acClear,
 			"Edit": acEdit,
+			"Cancel": acCancel,
 		}
 	);
 

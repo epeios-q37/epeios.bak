@@ -54,6 +54,7 @@ namespace prtcl {
 	{
 		aOK_1,
 		aError_1,
+		aExecute_1,
 		aAlert_1,
 		aConfirm_1,
 		aSetLayout_1,
@@ -65,10 +66,12 @@ namespace prtcl {
 		aToggleClasses_1,
 		aEnableElements_1,
 		aDisableElements_1,
-		aSetAttribute_1,
+		aSetAttribute__1,
 		aGetAttribute_1,
+		aRemoveAttribute_1,
 		aSetProperty_1,
 		aGetProperty_1,
+		aFocus_1,
 		a_amount,
 		a_Undefined
 	};

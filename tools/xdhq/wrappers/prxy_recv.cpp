@@ -24,6 +24,13 @@ using namespace prxy_recv;
 using namespace prxy_cmn;
 
 namespace {
+	void Execute_(
+		flw::sRFlow &Flow,
+		rReturn &Return )
+	{
+		execute::R( Flow, Return.StringToSet() );
+	}
+
 	void Alert_(
 		flw::sRFlow &Flow,
 		rReturn &Return )
@@ -101,6 +108,13 @@ namespace {
 		elements::disable::R( Flow );
 	}
 
+	void SetAttribute_(
+		flw::sRFlow &Flow,
+		rReturn &Return )
+	{
+		attribute::set::R( Flow );
+	}
+
 	void GetAttribute_(
 		flw::sRFlow &Flow,
 		rReturn &Return )
@@ -108,11 +122,18 @@ namespace {
 		attribute::get::R( Flow, Return.StringToSet() );
 	}
 
-	void SetAttribute_(
+	void RemoveAttribute_(
 		flw::sRFlow &Flow,
 		rReturn &Return )
 	{
-		attribute::set::R( Flow );
+		attribute::remove::R( Flow );
+	}
+
+	void SetProperty_(
+		flw::sRFlow &Flow,
+		rReturn &Return )
+	{
+		property::set::R( Flow );
 	}
 
 	void GetProperty_(
@@ -121,12 +142,14 @@ namespace {
 	{
 		property::get::R( Flow, Return.StringToSet() );
 	}
-	void SetProperty_(
+
+	void Focus_(
 		flw::sRFlow &Flow,
 		rReturn &Return )
 	{
-		property::set::R( Flow );
+		focus::R( Flow );
 	}
+
 }
 
 #define H( name )\
@@ -146,6 +169,7 @@ void prxy_recv::Recv(
 	case r_Undefined:
 		qRGnr();
 		break;
+	H( Execute );
 	H( Alert );
 	H( Confirm );
 	H( SetLayout );
@@ -161,6 +185,7 @@ void prxy_recv::Recv(
 	H( SetAttribute );
 	H( GetProperty );
 	H( SetProperty );
+	H( Focus );
 	default:
 		qRGnr();
 		break;
