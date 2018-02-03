@@ -19,7 +19,7 @@
 
 /*
 This is the Node.js UnJSq (http://q47.info/UnJSq/) version
-of the TodoMVC application (http://todomvc.com).
+of the TodoMVC application (http://todomvc.com/).
 */
 
 "use strict"

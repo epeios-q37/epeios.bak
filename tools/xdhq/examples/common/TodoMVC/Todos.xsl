@@ -29,7 +29,7 @@
 				</label>
 				<button data-xdh-value="{@id}" class="destroy" data-xdh-onevent="Destroy"/>
 			</span>
-				<input id="Input.{@id}" class="edit" type="text"/>
+				<input id="Input.{@id}" class="edit"/>
 		</li>
 	</xsl:template>
 </xsl:stylesheet>

@@ -66,7 +66,7 @@ namespace prtcl {
 		aToggleClasses_1,
 		aEnableElements_1,
 		aDisableElements_1,
-		aSetAttribute__1,
+		aSetAttribute_1,
 		aGetAttribute_1,
 		aRemoveAttribute_1,
 		aSetProperty_1,

@@ -344,7 +344,7 @@ namespace prxy_cmn {
 				const str::dString &Value,
 				flw::sWFlow &Flow )
 			{
-				ap_::set::S( prtcl::aSetAttribute__1, Id, Name, Value, Flow );
+				ap_::set::S( prtcl::aSetAttribute_1, Id, Name, Value, Flow );
 			}
 
 			inline void R( flw::sRFlow &Flow )

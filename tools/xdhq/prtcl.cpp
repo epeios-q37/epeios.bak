@@ -103,7 +103,7 @@ const char *prtcl::GetLabel( eAnswer Answer )
 		C( ToggleClasses_1 );
 		C( EnableElements_1 );
 		C( DisableElements_1 );
-		C( SetAttribute__1 );
+		C( SetAttribute_1 );
 		C( GetAttribute_1 );
 		C( RemoveAttribute_1 );
 		C( SetProperty_1 );

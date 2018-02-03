@@ -384,7 +384,7 @@ namespace {
 		HandleElements_( Flow, &xdhdws::sProxy::DisableElements, Proxy );
 	}
 
-	void SetAttribute__(
+	void SetAttribute_(
 		flw::sRWFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
@@ -580,7 +580,7 @@ namespace {
 				H( ToggleClasses );
 				H( EnableElements );
 				H( DisableElements );
-				H( SetAttribute_ );
+				H( SetAttribute );
 				H( GetAttribute );
 				H( RemoveAttribute );
 				H( SetProperty );
