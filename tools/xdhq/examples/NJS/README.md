@@ -1,14 +1,15 @@
 # *UnJSq* demonstration applications for *Node.js*.
 
+Running:
   * Retrieve this repository,
-  * open a terminal and go to the root directory of the retrieved repository,
-  * launch `npm init -y` (or create you own `package.json`),  
-  * launch `npm install unjsq` (except under *Windows*, you will need a *C++* compiler),
+  * launch `npm install`,
   * launch `node notes/main.js`,
-  * open in a web browser <http://localhost:8080/>.
+  * open <http://localhost:8080/> in a web browser.
   
+Except under *Windows*, you will need a *C++* compiler for the installation to succeed.
+
 For minimal *UnJSq* application demonstration, instead of `node notes/main.js`, launch `node blank/main.js`.
 
-Modifying the content of the `blank` directory is an easy way to create your own *UnJSq* application.
+Modifying the content of the `blank` directory is a good way to create your own *UnJSq* based application.
 
 For more information on *UnJSq*, see <http://q37.info/UnJSq/>.

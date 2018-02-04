@@ -1,4 +1,4 @@
-A pure *Node.js* version of the *TodoMVC* (<http://todomvc.com/>) application.
+A *Node.js* version of the *TodoMVC* (<http://todomvc.com/>) application.
 
 Running:
 * retrieve this repository,
@@ -6,9 +6,9 @@ Running:
 * launch `node main.js`,
 * <http://localhost:8080/>.
 
-Made with *UnJSq* (<http://q37.info/UnJSq/>), a new innovative *Node.js* module to develop Web frontends:
+Made with *UnJSq* (<http://q37.info/UnJSq/>), a new and innovative  way to develop Web frontends with *Node.js*:
 * **without** the need of a *JavaScript* framework,
-* **without** reloading the page on each action (**not** a *CGI* library) !
+* **without** reloading the page on each action (*UnJSq* is **not** a *CGI* library) !
 
 
 
