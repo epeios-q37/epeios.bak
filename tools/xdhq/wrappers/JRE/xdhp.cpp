@@ -124,11 +124,6 @@ SCLJRE_F( xdhp::New )
 	return Object;
 }
 
-SCLJRE_F( xdhp::Delete )
-{
-	return scljre::DeleteUO<rData_>( Caller );
-}
-
 namespace {
 	rData_ &GetData_( scljre::sCaller &Caller )
 	{
@@ -219,6 +214,23 @@ qRE;
 
 #define END	Data.Recv.ReadEnd()
 
+SCLJRE_F( xdhp::Execute )
+{
+	scljre::sJObject Buffer = NULL;
+
+	BEGIN( Execute );
+
+	Caller.Get( Arguments.Script );
+
+	SWITCH;
+
+	Buffer = scljre::String( Return.GetString() );
+
+	END;
+
+	return Buffer;
+}
+
 SCLJRE_F( xdhp::Alert )
 {
 	BEGIN( Alert );
@@ -226,7 +238,6 @@ SCLJRE_F( xdhp::Alert )
 	Caller.Get( Arguments.Message );
 
 	SWITCH;
-
 	END;
 
 	return scljre::Null();
@@ -364,6 +375,18 @@ SCLJRE_F( xdhp::DisableElements )
 	return scljre::Null();
 }
 
+SCLJRE_F( xdhp::SetAttribute )
+{
+	BEGIN( SetAttribute );
+
+	Caller.Get( Arguments.Id, Arguments.Name, Arguments.Value );
+
+	SWITCH;
+	END;
+
+	return scljre::Null();
+}
+
 SCLJRE_F( xdhp::GetAttribute )
 {
 	scljre::sJObject Buffer = NULL;
@@ -381,7 +404,19 @@ SCLJRE_F( xdhp::GetAttribute )
 	return Buffer;
 }
 
-SCLJRE_F( xdhp::SetAttribute )
+SCLJRE_F( xdhp::RemoveAttribute )
+{
+	BEGIN( RemoveAttribute );
+
+	Caller.Get( Arguments.Id, Arguments.Name );
+
+	SWITCH;
+	END;
+
+	return scljre::Null();
+}
+
+SCLJRE_F( xdhp::SetProperty )
 {
 	BEGIN( SetAttribute );
 
@@ -410,11 +445,11 @@ SCLJRE_F( xdhp::GetProperty )
 	return Buffer;
 }
 
-SCLJRE_F( xdhp::SetProperty )
+SCLJRE_F( xdhp::Focus )
 {
-	BEGIN( SetAttribute );
+	BEGIN( Focus );
 
-	Caller.Get( Arguments.Id, Arguments.Name, Arguments.Value );
+	Caller.Get( Arguments.Id );
 
 	SWITCH;
 	END;

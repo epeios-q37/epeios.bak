@@ -27,9 +27,9 @@
 namespace xdhp {
 	SCLJRE_F( Listen );
 	SCLJRE_F( New );
-	SCLJRE_F( Delete );
 	SCLJRE_F( Set );
 	SCLJRE_F( GetAction );
+	SCLJRE_F( Execute );
 	SCLJRE_F( Alert );
 	SCLJRE_F( Confirm );
 	SCLJRE_F( SetLayout );
@@ -41,10 +41,12 @@ namespace xdhp {
 	SCLJRE_F( ToggleClasses );
 	SCLJRE_F( EnableElements );
 	SCLJRE_F( DisableElements );
-	SCLJRE_F( GetAttribute );
 	SCLJRE_F( SetAttribute );
-	SCLJRE_F( GetProperty );
+	SCLJRE_F( GetAttribute );
+	SCLJRE_F( RemoveAttribute );
 	SCLJRE_F( SetProperty );
+	SCLJRE_F( GetProperty );
+	SCLJRE_F( Focus );
 }
 
 #endif

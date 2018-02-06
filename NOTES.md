@@ -15,3 +15,6 @@ Cette section est pour la publication *web* (plus précisément, sur *Github*) d
   * `DIR` : le nom du *repository* *GitHub* (sera également le nom du répertoire dans `H:\RTW\`).
 
   `DESCRIPTION` et `KEYWORDS` ne seront pas systématiquement utilisés, mais `DIR` doit être correctement défini. Pour certains types de composants, en plus des mots-clefs définis dans `KEYWORD`, d'autres mots-clefs peuvent être automatiquement ajoutés.
+
+
+  <file://h:/hg/epeios/notes.md>

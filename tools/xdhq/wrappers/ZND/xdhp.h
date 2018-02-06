@@ -27,8 +27,8 @@
 namespace xdhp {
 	SCLZND_F( Listen );
 	SCLZND_F( New );
-	SCLZND_F( Delete );
 	SCLZND_F( GetAction );
+	SCLZND_F( Execute );
 	SCLZND_F( Alert );
 	SCLZND_F( Confirm );
 	SCLZND_F( SetLayout );
@@ -40,10 +40,12 @@ namespace xdhp {
 	SCLZND_F( ToggleClasses );
 	SCLZND_F( EnableElements );
 	SCLZND_F( DisableElements );
-	SCLZND_F( GetAttribute );
 	SCLZND_F( SetAttribute );
-	SCLZND_F( GetProperty );
+	SCLZND_F( GetAttribute );
+	SCLZND_F( RemoveAttribute );
 	SCLZND_F( SetProperty );
+	SCLZND_F( GetProperty );
+	SCLZND_F( Focus );
 }
 
 #endif

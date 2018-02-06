@@ -115,18 +115,6 @@ SCLZND_F( xdhp::New )
 	Data->Recv.ReadDismiss();
 }
 
-SCLZND_F( xdhp::Delete )
-{
-	bso::sS64 Long = 0;
-
-	Caller.Get( Long );
-
-	if ( Long == 0 )
-		qRGnr();
-
-	delete (rData_ * )Long;
-}
-
 namespace {
 	rData_ &GetData_( sclznd::sCaller &Caller )
 	{
@@ -176,6 +164,20 @@ qRE;
 #define SWITCH	Data.Sent.WriteEnd();Data.Recv.ReadBegin(); proxy::rReturn &Return = Data.Recv.Return
 
 #define END	Data.Recv.ReadEnd()
+
+SCLZND_F( xdhp::Execute )
+{
+	BEGIN( Execute );
+
+	Caller.Get( Arguments.Script );
+
+	SWITCH;
+
+	Caller.SetReturnValue( Return.GetString() );
+
+	END;
+}
+
 
 
 SCLZND_F( xdhp::Alert )
@@ -297,6 +299,16 @@ SCLZND_F( xdhp::DisableElements )
 	END;
 }
 
+SCLZND_F( xdhp::SetAttribute )
+{
+	BEGIN( SetAttribute );
+
+	Caller.Get( Arguments.Id, Arguments.Name, Arguments.Value );
+
+	SWITCH;
+	END;
+}
+
 SCLZND_F( xdhp::GetAttribute )
 {
 	BEGIN( GetAttribute );
@@ -310,7 +322,17 @@ SCLZND_F( xdhp::GetAttribute )
 	END;
 }
 
-SCLZND_F( xdhp::SetAttribute )
+SCLZND_F( xdhp::RemoveAttribute )
+{
+	BEGIN( RemoveAttribute );
+
+	Caller.Get( Arguments.Id, Arguments.Name );
+
+	SWITCH;
+	END;
+}
+
+SCLZND_F( xdhp::SetProperty )
 {
 	BEGIN( SetAttribute );
 
@@ -333,11 +355,11 @@ SCLZND_F( xdhp::GetProperty )
 	END;
 }
 
-SCLZND_F( xdhp::SetProperty )
+SCLZND_F( xdhp::Focus )
 {
-	BEGIN( SetAttribute );
+	BEGIN( Focus );
 
-	Caller.Get( Arguments.Id, Arguments.Name, Arguments.Value );
+	Caller.Get( Arguments.Id );
 
 	SWITCH;
 	END;

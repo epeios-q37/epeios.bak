@@ -44,6 +44,7 @@
 		<Module>xdhp</Module>
 	</Modules>
 	<Files>
+		<File>NOTES.md</File>
 		<Files Group="Blank">
 			<File Path="../../examples/JRE/blank/">Main.java</File>
 			<Files Path="../../examples/common/blank/">

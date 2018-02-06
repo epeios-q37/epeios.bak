@@ -40,9 +40,7 @@ public class DOM {
 	}
 
 	public DOM() {
-		System.out.println( "Av.!");
 		core = XDHq.call(8);
-		System.out.println( "Ap.!");
 	}
 
 	public void finalize() {
@@ -71,11 +69,23 @@ public class DOM {
 	*/
 
 	public void set(Object object) {
-		XDHq.call(10, core, object);
+		XDHq.call(9, core, object);
 	}
 
 	public void getAction(Event data) {
-		XDHq.call(11, core, data);
+		XDHq.call(10, core, data);
+	}
+
+	public String execute(String script) {
+		return (String)XDHq.call(11, core, script);
+	}
+
+	public void alert( String message ) {
+		XDHq.call(12, core, message);
+	}
+
+	public boolean confirm( String message ) {
+		return XDHq.call(13, core, message) == "true";
 	}
 
 	public void setLayout(String id, Tree tree, String xslFilename) {
@@ -83,7 +93,6 @@ public class DOM {
 	}
 
 	public String[] getContents( String[] ids ) {
-//		return (String [])call( 15, core, (Object [])ids );
 		return (String [])XDHq.call( 15, core, ids );
 	}
 
@@ -103,6 +112,10 @@ public class DOM {
 		String idsAndContents[][] = { { id, content } };
 
 		setContents( idsAndContents );
+	}
+
+	public void dressWidgest( String id ) {
+		XDHq.call( 17, core, id );
 	}
 
 	private void handleClasses( int index, String[][] idsAndClasses) {
@@ -138,5 +151,49 @@ public class DOM {
 
 	public void toggleClass( String id, String clas ) {
 		handleClass( 20, id, clas );
+	}
+
+	public void enableElements( String[] ids ) {
+		XDHq.call( 21, core, ids );
+	}
+
+	public void enableElement( String id ) {
+		String ids[] = { id };
+
+		enableElements( ids );
+	}
+
+	public void disableElements( String[] ids ) {
+		XDHq.call( 22, core, ids );
+	}
+
+	public void disableElement( String id ) {
+		String ids[] = { id };
+
+		disableElements( ids );
+	}
+
+	public void setAttribute( String id, String name, String value ) {
+		XDHq.call( 23, core, id, name, value );
+	}
+
+	public String  getAttribute( String id, String name ) {
+		return (String)XDHq.call( 24, core, id, name );
+	}
+
+	public void removeAttribute( String id, String name ) {
+		XDHq.call( 25, core, id, name );
+	}
+
+	public void setProperty( String id, String name, String value ) {
+		XDHq.call( 26, core, id, name, value );
+	}
+
+	public String getProperty( String id, String name ) {
+		return (String)XDHq.call( 27, core, id, name );
+	}
+
+	public void focus( String id ) {
+		XDHq.call( 28, core, id );
 	}
 }

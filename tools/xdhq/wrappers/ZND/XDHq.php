@@ -125,15 +125,15 @@ class XDHqDOM extends XDHqWrapper {
 	private function call( $id, ...$args ) {
 		return parent::_call( $id, $this->core, ...$args );
 	}
-	function __destruct() {
-//		self::call( 9 );
-	}
 	function getAction( &$id ) {
-		$return = self::call( 10 );
+		$return = self::call( 9 );
 
 		$id = $return[0];
 
 		return $return[1];
+	}
+	function execute( $script ) {
+		return self::call( 10 );
 	}
 	function alert( string $message ) {
 		self::call( 11, $message );
@@ -204,17 +204,23 @@ class XDHqDOM extends XDHqWrapper {
 	function disableElement( string $id ) {
 		self::disableElements( array( $id ) );
 	}
-	function getAttribute( string $id ) {
-		return sel::call( 22, $id );
-	}
 	function setAttribute( string $id, string $value ) {
-		return parent::call( 23, $id, $value );
+		return parent::call( 22, $id, $value );
 	}
-	function getProperty( string $id ) {
-		return parent::call( 24, $id );
+	function getAttribute( string $id ) {
+		return sel::call( 23, $id );
+	}
+	function removeAttribute( string $id ) {
+		sel::call( 24, $id );
 	}
 	function setProperty( string $id, string $value ) {
 		return parent::call( 25, $id , $value );
+	}
+	function getProperty( string $id ) {
+		return parent::call( 26, $id );
+	}
+	function focus( string $id ) {
+		return parent::call( 27, $id );
 	}
 }
 ?>
