@@ -60,8 +60,8 @@ void sclznd::SCLZNDRegister( sclznd::sRegistrar &Registrar )
 	Registrar.Register( xdhp::Listen, xdhp::New, xdhp::GetAction, xdhp::Execute );	// 7 - 10.
 	Registrar.Register( xdhp::Alert, xdhp::Confirm, xdhp::SetLayout, xdhp::GetContents, xdhp::SetContents, xdhp::DressWidgets ); // 11 - 16.
 	Registrar.Register( xdhp::AddClasses, xdhp::RemoveClasses, xdhp::ToggleClasses, xdhp::EnableElements, xdhp::DisableElements );	// 17 - 21.
-	Registrar.Register( xdhp::SetAttribute, xdhp::GetAttribute, xdhp::RemoveAttribute, xdhp::SetProperty, xdhp::GetProperty );	// 22 - 25.
-	Registrar.Register( xdhp::Focus );	// 26.
+	Registrar.Register( xdhp::SetAttribute, xdhp::GetAttribute, xdhp::RemoveAttribute, xdhp::SetProperty, xdhp::GetProperty );	// 22 - 26.
+	Registrar.Register( xdhp::Focus );	// 27.
 }
 
 const char *sclmisc::SCLMISCTargetName = NAME_LC;

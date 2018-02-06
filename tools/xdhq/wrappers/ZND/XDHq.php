@@ -205,22 +205,22 @@ class XDHqDOM extends XDHqWrapper {
 		self::disableElements( array( $id ) );
 	}
 	function setAttribute( string $id, string $value ) {
-		return parent::call( 22, $id, $value );
+		return self::call( 22, $id, $value );
 	}
 	function getAttribute( string $id ) {
-		return sel::call( 23, $id );
+		return self::call( 23, $id );
 	}
 	function removeAttribute( string $id ) {
-		sel::call( 24, $id );
+		self::call( 24, $id );
 	}
 	function setProperty( string $id, string $value ) {
-		return parent::call( 25, $id , $value );
+		return self::call( 25, $id , $value );
 	}
 	function getProperty( string $id ) {
-		return parent::call( 26, $id );
+		return self::call( 26, $id );
 	}
 	function focus( string $id ) {
-		return parent::call( 27, $id );
+		self::call( 27, $id );
 	}
 }
 ?>

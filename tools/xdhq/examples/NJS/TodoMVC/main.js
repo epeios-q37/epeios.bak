@@ -76,8 +76,6 @@ class MyData extends DOM {
 }
 
 function push(todo, id, tree) {
-	var i = 0;
-
 	tree.pushTag('Todo');
 	tree.putAttribute('id', id);
 
@@ -91,17 +89,20 @@ function push(todo, id, tree) {
 }
 
 function displayCount(dom, count) {
+	var text = "";
+
 	switch (count) {
 		case 0:
-			dom.setContent("Count", "");
 			break;
 		case 1:
-			dom.setContent("Count", "1 item left");
+			text = "1 item left";
 			break;
 		default:
-			dom.setContent("Count", dom.itemsLeft() + " items left");
+			text = dom.itemsLeft() + " items left";
 			break;
 	}
+
+	dom.setContent("Count", text);
 }
 
 function handleCount(dom) {

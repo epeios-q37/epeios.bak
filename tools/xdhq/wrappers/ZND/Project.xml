@@ -66,7 +66,14 @@
 				<File>Note.xsl</File>
 			</Files>
 		</Files>
-
+		<Files Group="TodoMVC">
+			<File Path="../../examples/ZND/TodoMVC/">main.php</File>
+			<Files Path="../../examples/common/TodoMVC/">
+				<File>head.html</File>
+				<File>Main.xsl</File>
+				<File>Todos.xsl</File>
+			</Files>
+		</Files>
 	</Files>
  <RTW Description="PHP extension template" Keywords="template">
   <Dir>xdhq-php</Dir>
