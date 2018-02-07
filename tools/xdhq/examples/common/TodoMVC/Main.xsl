@@ -25,7 +25,7 @@
 						<a style="cursor: pointer;" id="Active" data-xdh-onevent="Active">Active</a>
 					</li>
 					<li>
-						<a style="cursor: pointer;" id="Complete" data-xdh-onevent="Completed">Completed</a>
+						<a style="cursor: pointer;" id="Completed" data-xdh-onevent="Completed">Completed</a>
 					</li>
 				</ul>
 				<button class="clear-completed" data-xdh-onevent="Clear">Clear completed</button>

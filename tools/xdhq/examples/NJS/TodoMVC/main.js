@@ -98,7 +98,7 @@ function displayCount(dom, count) {
 			text = "1 item left";
 			break;
 		default:
-			text = dom.itemsLeft() + " items left";
+			text = count + " items left";
 			break;
 	}
 
@@ -229,7 +229,7 @@ function acAll(dom, id) {
 		() => dom.removeClasses(
 			{
 				"Active": "selected",
-				"Complete": "selected"
+				"Completed": "selected"
 			},
 			() => displayTodos(dom)
 		)
@@ -243,17 +243,17 @@ function acActive(dom, id) {
 		() => dom.removeClasses(
 			{
 				"All": "selected",
-				"Complete": "selected"
+				"Completed": "selected"
 			},
 			() => displayTodos(dom)
 		)
 	)
 }
 
-function acComplete(dom, id) {
+function acCompleted(dom, id) {
 	dom.exclude = false;
 
-	dom.addClass("Complete", "selected",
+	dom.addClass("Completed", "selected",
 		() => dom.removeClasses(
 			{
 				"All": "selected",
@@ -316,7 +316,7 @@ function main() {
 			"Toggle": acToggle,
 			"All": acAll,
 			"Active": acActive,
-			"Complete": acComplete,
+			"Completed": acCompleted,
 			"Clear": acClear,
 			"Edit": acEdit,
 			"Cancel": acCancel,

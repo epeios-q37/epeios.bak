@@ -47,6 +47,7 @@ getUnJSq();
 
 class DOM extends UnJSqDOM {
 	public $exclude = NULL;
+	public $id = -1;
 	public $todos = [
 		[
 			'completed' => true,
@@ -72,7 +73,7 @@ class DOM extends UnJSqDOM {
 
 function push( $todo, $id, $tree ) {
 	$tree->pushTag( 'Todo' );
-	$tree->putAttribute ('id', id );
+	$tree->putAttribute ('id', $id );
 
 	if ( $todo['completed'])
 		$tree->putAttribute( 'completed', 'true' );
@@ -132,6 +133,136 @@ function displayTodos( $dom ) {
 	handleCount( $dom );
 }
 
+function submit( $dom ) {
+	if ( $dom->id == -1 ) {
+		$content = $dom->getContent( "Input");
+		$dom->setContent( "Input", "" );
+
+		if ( trim( $content ) != "" ) {
+			array_unshift( $dom->todos, [
+				'completed' => false,
+				'label' => $content
+			] );
+			displayTodos( $dom );
+		} else 
+			$dom->focus( "Input" );
+	} else {
+		$id = $dom->id;
+		$dom->id = -1;
+
+		$content = $dom->getContent( "Input." . id );
+		$dom->setContent( "Input." . id, "" );
+
+		if ( trim( $content) == "" ) {
+			$dom->todos[id]['label'] = $content;
+
+			$dom->setContent( "Label." . $id, $content );
+
+			$dom->removeClasses( [
+				'View.' . id => "hide",
+				'Todo.' . id => "editing"
+				] );
+			$dom->focus( "Input");
+		} else {
+			array_splice( $dom->todos, id, 1 );
+			displayTodos( $dom );
+		}
+	}
+}
+
+function toggle( $dom, $id ) {
+	$i = intval( $id );
+
+	$dom->todos[$i]['completed'] = !$dom->todos[$i]['completed'];
+
+	$dom->toggleClass( "Todo." . $id, "completed" );
+
+	if ( !is_null( $dom->exclude ) )
+		displayTodos( $dom );
+	else
+		handleCount( $dom );
+}
+
+function all( $dom ) {
+	$dom->exclude = null;
+
+	$dom->addClass( "All", "selected");
+	$dom->removeClasses( [
+		'Active' => "selected",
+		'Completed' => "selected" 
+	]);
+
+	displayTodos( $dom );
+}
+
+function active( $dom ) {
+	$dom->exclude = true;
+
+	$dom->addClass( "Active", "selected");
+	$dom->removeClasses( [
+		'All' => "selected",
+		'Completed' => "selected" 
+	]);
+
+	displayTodos( $dom );
+}
+
+function completed( $dom ) {
+	$dom->exclude = false;
+
+	$dom->addClass( "Completed", "selected");
+	$dom->removeClasses( [
+		'All' => "selected" ,
+		'Active' => "selected"
+	]);
+
+	displayTodos( $dom );
+}
+
+function clear( $dom ) {
+	$i = 0;
+	$count = count( $dom->todos );
+
+	while ( $i < $count ) {
+		if ( $dom->todos[$i]['completed']) {
+			array_splice( $dom->todos, $i, 1 );
+			$count--;
+		} else
+			$i++;
+	}
+
+	displayTodos( $dom );
+}
+
+function edit( $dom, $id ) {
+	if ( $dom->id != -1 )
+		cancel( $dom );
+
+	$content = $dom->getContent( $id );
+	$dom->id = intval( $content);
+
+	$dom->addClasses( [
+		"View." . $content => "hide",
+		$id => "editing"
+	] );
+
+	$dom->setContent( "Input." . $content, $dom->todos[$dom->id]['label']);
+	$dom->focus( "Input." . $content );
+}
+
+function cancel( $dom ) {
+	$id = $dom->id;
+	$dom->id = -1;
+
+	$dom->setContent(  "Input." . $id, "" );
+	$dom->removeClasse( [
+		'View.' . $id => 'hide',
+		'Todo.' . $id => 'editing'
+	]);
+
+	$dom->focus( "Input");
+}
+
 function main() {
 	UnJSq::listen();
 
@@ -143,6 +274,34 @@ function main() {
 			$dom->setLayout( "", new UnJSqTree(), "Main.xsl" );
 			displayTodos( $dom );
 			break;
+		case "Submit":
+			submit( $dom );
+			break;
+		case "Destroy":
+			array_splice( $dom->todos, intval( $dom->getContent( $id ) ), 1 );
+			displayTodos( $dom );
+			break;
+		case "Toggle":
+			toggle( $dom, $id );
+			break;
+		case "All":
+			all( $dom );
+			break;
+		case "Active":
+			active( $dom );
+			break;
+		case "Completed":
+			completed( $dom );
+			break;
+		case "Clear":
+			clear( $dom );
+			break;
+		case "Edit":
+			edit( $dom, $id );
+			break;
+		case "Cancel":
+			cancel( $dom );
+			break;
 		default:
 			die( "???" );
 			break;
@@ -151,5 +310,4 @@ function main() {
 }
 
 main();
-
 ?>
