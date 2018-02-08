@@ -232,14 +232,6 @@ function clear( $dom ) {
 }
 
 function edit( $dom, $id ) {
-	if ( $dom->id != -1 ) {
-		$dom->setContent(  "Input." . $dom->id, "" );
-		$dom->removeClasses( [
-			'View.' . $dom->id => 'hide',
-			'Todo.' . $dom->id => 'editing'
-		]);
-	}
-
 	$content = $dom->getContent( $id );
 	$dom->id = intval( $content);
 

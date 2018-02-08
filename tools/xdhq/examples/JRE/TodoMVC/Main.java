@@ -1,3 +1,4 @@
+
 /*
 	Copyright (C) 2007-2017 Claude SIMON (http://q37.info/contact/).
 
@@ -23,50 +24,52 @@ import java.util.*;
 class Todo {
 	public boolean completed;
 	public String label;
-	Todo( String label, boolean completed ) {
+
+	Todo(String label, boolean completed) {
 		this.completed = completed;
 		this.label = label;
 	}
-	Todo( String label ) {
-		this( label, false );
+
+	Todo(String label) {
+		this(label, false);
 	}
 }
 
 class Thread extends java.lang.Thread {
 	private DOM dom;
 	private Boolean exclude;
-	private int id = -1;
+	private int index = -1;
 	private List<Todo> todos;
 
 	private int itemsLeft() {
 		int count = 0;
-		Iterator<Todo> Todo = todos.iterator();
+		Iterator<Todo> it = todos.iterator();
 
-		while ( Todo.hasNext() ) {
-			if ( Todo.next().completed )
+		while (it.hasNext()) {
+			if (!it.next().completed)
 				count++;
 		}
 
 		return count;
 	}
 
-	private void push( Todo todo, int id, Tree tree ) {
-		tree.pushTag( "Todo" );
-		tree.putAttribute( "id", id );
+	private void push(Todo todo, int id, Tree tree) {
+		tree.pushTag("Todo");
+		tree.putAttribute("id", id);
 
-		if ( todo.completed )
-			tree.putAttribute( "completed", "true");
+		if (todo.completed)
+			tree.putAttribute("completed", "true");
 		else
-			tree.putAttribute( "completed", "false");
+			tree.putAttribute("completed", "false");
 
-		tree.putValue( todo.label );
+		tree.putValue(todo.label);
 		tree.popTag();
 	}
 
-	private void displayCount( int count ) {
+	private void displayCount(int count) {
 		String text = "";
 
-		switch( count ) {
+		switch (count) {
 		case 0:
 			break;
 		case 1:
@@ -77,97 +80,159 @@ class Thread extends java.lang.Thread {
 			break;
 		}
 
-		dom.setContent( "Count", text );
+		dom.setContent("Count", text);
 	}
 
 	private void handleCount() {
 		int count = itemsLeft();
 
-		if ( count != todos.size() )
-			dom.disableElement( "HideClearCompleted");
+		if (count != todos.size())
+			dom.disableElement("HideClearCompleted");
 		else
-			dom.enableElement( "HideClearCompleted");
+			dom.enableElement("HideClearCompleted");
 
-		displayCount( count );
+		displayCount(count);
 	}
 
 	private void displayTodos() {
 		Tree tree = new Tree();
-		ListIterator<Todo> it = todos.listIterator();
+		ListIterator<Todo> li = todos.listIterator();
 
-		tree.pushTag( "Todos");
+		tree.pushTag("Todos");
 
-		while ( it.hasNext() ) {
-			int index =  it.nextIndex();
+		while (li.hasNext()) {
+			int index = li.nextIndex();
 
-			Todo todo = it.next();
+			Todo todo = li.next();
 
-			if ( ( exclude == null ) || ( todo.completed != exclude ) )
-				push( todo, index, tree );
+			if ((exclude == null) || (todo.completed != exclude))
+				push(todo, index, tree);
 		}
 
 		tree.popTag();
 
-		dom.setLayout( "Todos", tree, "Todos.xsl");
+		dom.setLayout("Todos", tree, "Todos.xsl");
 		handleCount();
 	}
 
 	private void submitNew() {
-		String content = dom.getContent( "Input");
-		dom.setContent( "Input", "" );
+		String content = dom.getContent("Input");
+		dom.setContent("Input", "");
 
-		if ( content.trim() != "" ) {
-			todos.add(0, new Todo( content ) );
+		if (!"".equals(content.trim())) {
+			todos.add(0, new Todo(content));
 			displayTodos();
 		}
 	}
 
 	private void submitModification() {
-		int id = this.id;
-		this.id = -1;
+		int index = this.index;
+		this.index = -1;
 
-		String content = dom.getContent( "Input." + id );
-		dom.setContent( "Input." + id, "" );
+		String content = dom.getContent("Input." + index);
+		dom.setContent("Input." + index, "");
 
-		if ( content.trim() != "" ) {
-			todos.set( id, new Todo( content, todos.get( id ).completed) );
+		if (!"".equals(content.trim())) {
+			todos.set(index, new Todo(content, todos.get(index).completed));
 
-			dom.setContent( "Label." + id, content );
+			dom.setContent("Label." + index, content);
 
-			String idsAndClasses[][] = {
-				{ "View." + id, "hide" },
-				{ "Todo." + id, "editing"}
-			};
+			String idsAndClasses[][] = { { "View." + index, "hide" }, { "Todo." + index, "editing" } };
 
-			dom.removeClasses( idsAndClasses );
+			dom.removeClasses(idsAndClasses);
 		} else {
-			todos.remove( id );
+			todos.remove(index);
 			displayTodos();
 		}
 	}
 
-	private void toggle( String id ) {
-		int index = Integer.parseInt( id );
-		Todo todo = todos.get( index );
+	private void toggle(String id) {
+		int index = Integer.parseInt(id);
+		Todo todo = todos.get(index);
 
 		todo.completed = !todo.completed;
 
-		todos.set( index, todo );
+		todos.set(index, todo);
 
-		dom.toggleClass( "Todo." + id, "completed");
+		dom.toggleClass("Todo." + id, "completed");
 
-		if ( exclude != null )
+		if (exclude != null)
 			displayTodos();
 		else
 			handleCount();
+	}
+
+	private void all() {
+		String idsAndClasses[][] = { { "Active", "selected" }, { "Completed", "selected" } };
+
+		exclude = null;
+
+		dom.addClass("All", "selected");
+		dom.removeClasses(idsAndClasses);
+
+		displayTodos();
+	}
+
+	private void active() {
+		String idsAndClasses[][] = { { "All", "selected" }, { "Completed", "selected" } };
+
+		exclude = true;
+
+		dom.addClass("Active", "selected");
+		dom.removeClasses(idsAndClasses);
+
+		displayTodos();
+	}
+
+	private void completed() {
+		String idsAndClasses[][] = { { "All", "selected" }, { "Active", "selected" } };
+
+		exclude = false;
+
+		dom.addClass("Completed", "selected");
+		dom.removeClasses(idsAndClasses);
+
+		displayTodos();
+	}
+
+	private void clear() {
+		ListIterator<Todo> li = todos.listIterator();
+
+		while (li.hasNext()) {
+			if (li.next().completed)
+				li.remove();
+		}
+
+		displayTodos();
+	}
+
+	private void edit(String id) {
+		String content = dom.getContent(id);
+		String idsAndClasses[][] = { { "View." + content, "hide" }, { id, "editing" } };
+
+		index = Integer.parseInt(content);
+
+		dom.addClasses(idsAndClasses);
+		dom.setContent("Input." + content, todos.get(index).label);
+		dom.focus("Input." + content);
+	}
+
+	private void cancel() {
+		int index = this.index;
+		String idsAndClasses[][] = { { "View." + index, "hide" }, { "Todo." + index, "editing" } };
+
+		this.index = -1;
+
+		dom.setContent("Input." + index, "");
+		dom.removeClasses(idsAndClasses);
 	}
 
 	public Thread(DOM dom) {
 		this.dom = dom;
 		todos = new ArrayList<Todo>();
 
-		todos.add( new Todo( "Todo 1", true ) );
-		todos.add( new Todo( "Todo 2") );
+		todos.add(new Todo("Todo 1", true));
+		todos.add(new Todo("Todo 2"));
 	}
 
 	public void run() {
@@ -179,24 +244,43 @@ class Thread extends java.lang.Thread {
 			switch (dom.getAction(event)) {
 			case "Connect":
 				dom.setLayout("", new Tree(), "Main.xsl");
-				dom.focus( "Input");
+				dom.focus("Input");
 				displayTodos();
 				break;
 			case "Submit":
-				if ( id == -1 )
+				if (index == -1)
 					submitNew();
 				else
 					submitModification();
 				break;
 			case "Destroy":
-				todos.remove( Integer.parseInt( dom.getContent( event.id) ) );
+				todos.remove(Integer.parseInt(dom.getContent(event.id)));
+				displayTodos();
 				break;
 			case "Toggle":
-				toggle( event.id );
+				toggle(event.id);
+				break;
+			case "All":
+				all();
+				break;
+			case "Active":
+				active();
+				break;
+			case "Completed":
+				completed();
+				break;
+			case "Clear":
+				clear();
+				break;
+			case "Edit":
+				edit(event.id);
+				break;
+			case "Cancel":
+				cancel();
 				break;
 			default:
-				System.out.println( "No or unknown action !");
-				System.exit( 1 );
+				System.out.println("No or unknown action !");
+				System.exit(1);
 				break;
 			}
 		}

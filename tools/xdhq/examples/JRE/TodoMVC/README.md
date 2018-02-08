@@ -1,4 +1,4 @@
-A *JAva* version of the *TodoMVC* (<http://todomvc.com/>) application.
+A *Java* version of the *TodoMVC* (<http://todomvc.com/>) application.
 
 <!--
 Running:
@@ -8,7 +8,7 @@ Running:
 * <http://localhost:8080/>.
 -->
 
-Made with *UnJSq* (<http://q37.info/UnJSq/>), a new and innovative way to develop Web frontends with *Node.js*:
+Made with *UnJSq* (<http://q37.info/UnJSq/>), a new and innovative way to develop Web frontends:
 * **without** the need of a *JavaScript* framework,
 * **without** reloading the page on each action (*UnJSq* is **not** a *CGI* library) !
 
