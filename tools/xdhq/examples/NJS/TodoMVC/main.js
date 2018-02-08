@@ -49,17 +49,15 @@ class MyData extends DOM {
 		this.timestamp = new Date();
 		this.exclude = null;
 		this.id = -1;
-		/*		
-				this.todos = [
-					{
-						"completed": true,
-						"label": "Note 1"
-					}, {
-						"completed": false,
-						"label": "Note 2"
-					}
-				];
-		*/
+		this.todos = [
+			{
+				"completed": true,
+				"label": "Note 1"
+			}, {
+				"completed": false,
+				"label": "Note 2"
+			}
+		];
 		this.todos = [];
 	}
 	itemsLeft() {
@@ -135,9 +133,7 @@ function displayTodos(dom) {
 	tree.popTag();
 
 	dom.setLayout("Todos", tree, "Todos.xsl",
-		() => dom.focus("Input",
-			() => handleCount(dom)
-		)
+		() => handleCount(dom)
 	);
 }
 
@@ -149,53 +145,60 @@ function newSession() {
 
 function acConnect(dom, id) {
 	dom.setLayout("", new Tree(), "Main.xsl",
-		() => displayTodos(dom)
+		() => dom.focus( "Input"),
+			() => displayTodos(dom)
+	);
+}
+
+function submitNew(dom) {
+	dom.getContent("Input",
+		(content) => dom.setContent("Input", "",
+			() => {
+				if (content.trim() != "") {
+					dom.todos.unshift(
+						{
+							"completed": false,
+							"label": content
+						}
+					);
+					displayTodos(dom);
+				}
+			}
+		)
+	);
+}
+
+function submitModification(dom) {
+	let id = dom.id;
+	dom.id = -1;
+
+	dom.getContent("Input." + id,
+		(content) => dom.setContent("Input." + id, "",
+			() => {
+				if (content.trim() != "") {
+					dom.todos[id]['label'] = content;
+					dom.setContent("Label." + id, content,
+						() => dom.removeClasses(
+							{
+								["View." + id]: "hide",
+								["Todo." + id]: "editing"
+							}
+						)
+					);
+				} else {
+					dom.todos.splice(id, 1);
+					displayTodos(dom);
+				}
+			}
+		)
 	);
 }
 
 function acSubmit(dom, id) {
-	if (dom.id == -1)
-		dom.getContent("Input",
-			(content) => dom.setContent("Input", "",
-				() => {
-					if (content.trim() != "") {
-						dom.todos.unshift(
-							{
-								"completed": false,
-								"label": content
-							}
-						);
-						displayTodos(dom);
-					} else
-						dom.focus("Input");
-				}
-			)
-		);
-	else {
-		let id = dom.id;
-		dom.id = -1;
-
-		dom.getContent("Input." + id,
-			(content) => dom.setContent("Input." + id, "",
-				() => {
-					if (content.trim() != "") {
-						dom.todos[id]['label'] = content;
-						dom.setContent("Label." + id, content,
-							() => dom.removeClasses(
-								{
-									["View." + id]: "hide",
-									["Todo." + id]: "editing"
-								}
-							),
-							() => dom.focus("Input")
-						);
-					} else {
-						dom.todos.splice(id, 1);
-						displayTodos(dom);
-					}
-				}
-			)
-		);
+	if (dom.id == -1) {
+		submitNew(dom);
+	} else {
+		submitModification(dom);
 	}
 }
 
@@ -225,6 +228,7 @@ function acToggle(dom, id) {
 
 function acAll(dom, id) {
 	dom.exclude = null;
+
 	dom.addClass("All", "selected",
 		() => dom.removeClasses(
 			{
@@ -296,13 +300,13 @@ function acEdit(dom, id) {
 function acCancel(dom, id) {
 	var id = dom.id;
 	dom.id = -1;
+
 	dom.setContent("Input." + id, "",
 		() => dom.removeClasses(
 			{
 				["View." + id]: "hide",
 				["Todo." + id]: "editing"
-			},
-			() => dom.focus("Input")
+			}
 		)
 	);
 }

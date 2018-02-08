@@ -69,6 +69,7 @@
 		<Files Group="Blank">
 			<File Path="../../examples/NJS/blank/">main.js</File>
 			<Files Path="../../examples/common/blank/">
+				<File>CHANGELOG.md</File>
 				<File>head.html</File>
 				<File>Main.xsl</File>
 			</Files>
@@ -76,6 +77,7 @@
 		<Files Group="Notes">
 			<File Path="../../examples/NJS/notes/">main.js</File>
 			<Files Path="../../examples/common/notes/">
+				<File>CHANGELOG.md</File>
 				<File>head.html</File>
 				<File>Main.xsl</File>
 				<File>Notes.xsl</File>
@@ -83,10 +85,15 @@
 			</Files>
 		</Files>
 		<Files Group="TodoMVC">
-			<File Path="../../examples/NJS/TodoMVC/">main.js</File>
+			<Files Path="../../examples/NJS/TodoMVC/">
+				<File>main.js</File>
+				<File>README.md</File>
+			</Files>
 			<Files Path="../../examples/common/TodoMVC/">
+				<File>CHANGELOG.md</File>
 				<File>head.html</File>
 				<File>Main.xsl</File>
+				<File>NOTES.md</File>
 				<File>Todos.xsl</File>
 			</Files>
 		</Files>

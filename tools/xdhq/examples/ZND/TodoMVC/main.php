@@ -129,44 +129,41 @@ function displayTodos( $dom ) {
 	$tree->popTag();
 
 	$dom->setLayout( "Todos", $tree, "Todos.xsl");
-	$dom->focus( "Input");
 	handleCount( $dom );
 }
 
-function submit( $dom ) {
-	if ( $dom->id == -1 ) {
-		$content = $dom->getContent( "Input");
-		$dom->setContent( "Input", "" );
+function submitNew( $dom ) {
+	$content = $dom->getContent( "Input");
+	$dom->setContent( "Input", "" );
 
-		if ( trim( $content ) != "" ) {
-			array_unshift( $dom->todos, [
-				'completed' => false,
-				'label' => $content
+	if ( trim( $content ) != "" ) {
+		array_unshift( $dom->todos, [
+			'completed' => false,
+			'label' => $content
+		] );
+		displayTodos( $dom );
+	}
+}
+
+function submitModification( $dom) {
+	$id = $dom->id;
+	$dom->id = -1;
+
+	$content = $dom->getContent( "Input." . $id );
+	$dom->setContent( "Input." . $id, "" );
+
+	if ( trim( $content) != "" ) {
+		$dom->todos[$id]['label'] = $content;
+
+		$dom->setContent( "Label." . $id, $content );
+
+		$dom->removeClasses( [
+			'View.' . $id => "hide",
+			'Todo.' . $id => "editing"
 			] );
-			displayTodos( $dom );
-		} else 
-			$dom->focus( "Input" );
 	} else {
-		$id = $dom->id;
-		$dom->id = -1;
-
-		$content = $dom->getContent( "Input." . id );
-		$dom->setContent( "Input." . id, "" );
-
-		if ( trim( $content) == "" ) {
-			$dom->todos[id]['label'] = $content;
-
-			$dom->setContent( "Label." . $id, $content );
-
-			$dom->removeClasses( [
-				'View.' . id => "hide",
-				'Todo.' . id => "editing"
-				] );
-			$dom->focus( "Input");
-		} else {
-			array_splice( $dom->todos, id, 1 );
-			displayTodos( $dom );
-		}
+		array_splice( $dom->todos, $id, 1 );
+		displayTodos( $dom );
 	}
 }
 
@@ -235,8 +232,13 @@ function clear( $dom ) {
 }
 
 function edit( $dom, $id ) {
-	if ( $dom->id != -1 )
-		cancel( $dom );
+	if ( $dom->id != -1 ) {
+		$dom->setContent(  "Input." . $dom->id, "" );
+		$dom->removeClasses( [
+			'View.' . $dom->id => 'hide',
+			'Todo.' . $dom->id => 'editing'
+		]);
+	}
 
 	$content = $dom->getContent( $id );
 	$dom->id = intval( $content);
@@ -255,12 +257,10 @@ function cancel( $dom ) {
 	$dom->id = -1;
 
 	$dom->setContent(  "Input." . $id, "" );
-	$dom->removeClasse( [
+	$dom->removeClasses( [
 		'View.' . $id => 'hide',
 		'Todo.' . $id => 'editing'
 	]);
-
-	$dom->focus( "Input");
 }
 
 function main() {
@@ -272,10 +272,14 @@ function main() {
 		switch( $dom->getAction( $id ) ) {
 		case "Connect":
 			$dom->setLayout( "", new UnJSqTree(), "Main.xsl" );
+			$dom->focus( "Input" );
 			displayTodos( $dom );
 			break;
 		case "Submit":
-			submit( $dom );
+			if ( $dom->id == -1 )
+				submitNew( $dom );
+			else
+				submitModification( $dom );
 			break;
 		case "Destroy":
 			array_splice( $dom->todos, intval( $dom->getContent( $id ) ), 1 );

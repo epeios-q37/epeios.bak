@@ -50,9 +50,11 @@
 	<Files>
   <!-- NOTA : '*.php' files will automatically be packed as such. -->
   <!--File Pack="No">XDHq.php</File-->
+		<File Path="../../UnJSq/ZND/">UnJSq.php</File>
 		<Files Group="Blank">
 			<File Path="../../examples/ZND/blank/">main.php</File>
 			<Files Path="../../examples/common/blank/">
+				<File>CHANGELOG.md</File>
 				<File>head.html</File>
 				<File>Main.xsl</File>
 			</Files>
@@ -60,6 +62,7 @@
 		<Files Group="Notes">
 			<File Path="../../examples/ZND/notes/">main.php</File>
 			<Files Path="../../examples/common/notes/">
+				<File>CHANGELOG.md</File>
 				<File>head.html</File>
 				<File>Main.xsl</File>
 				<File>Notes.xsl</File>
@@ -67,10 +70,15 @@
 			</Files>
 		</Files>
 		<Files Group="TodoMVC">
-			<File Path="../../examples/ZND/TodoMVC/">main.php</File>
+			<Files Path="../../examples/ZND/TodoMVC/">
+				<File>main.php</File>
+				<File>README.md</File>
+			</Files>
 			<Files Path="../../examples/common/TodoMVC/">
+				<File>CHANGELOG.md</File>
 				<File>head.html</File>
 				<File>Main.xsl</File>
+				<File>NOTES.md</File>
 				<File>Todos.xsl</File>
 			</Files>
 		</Files>

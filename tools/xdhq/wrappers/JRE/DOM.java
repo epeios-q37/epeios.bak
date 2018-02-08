@@ -19,7 +19,6 @@
 
 package info.q37.xdhq;
 
-import info.q37.xdhq.*;
 import java.util.*;
 
 public class DOM {
