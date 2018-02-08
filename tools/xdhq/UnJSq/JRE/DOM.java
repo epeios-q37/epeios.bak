@@ -17,42 +17,6 @@
 	along with XDHq. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package info.q37.xdhq;
+package info.q37.unjsq;
 
-import info.q37.xdhq.XDHq;
-
-public class Tree {
-	private Object core;
-
-	public Tree() {
-		core = XDHq.call(1);
-	}
-
-	public void finalize() {
-		XDHq.call(2, core);
-	}
-
-	public void pushTag(String name) {
-		XDHq.call(3, core, name);
-	}
-
-	public void popTag() {
-		XDHq.call(4, core);
-	}
-
-	public void putValue(String value) {
-		XDHq.call(5, core, value);
-	}
-
-	public void putAttribute(String name, String value) {
-		XDHq.call(6, core, name, value);
-	}
-
-	public void putAttribute( String name, int value ) {
-		putAttribute( name, String.valueOf( value ) );
-	}
-
-	Object core() {
-		return core;
-	}
-}
+public class DOM extends info.q37.xdhq.DOM {};

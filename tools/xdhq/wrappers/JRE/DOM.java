@@ -71,8 +71,10 @@ public class DOM {
 		XDHq.call(9, core, object);
 	}
 
-	public void getAction(Event data) {
-		XDHq.call(10, core, data);
+	public String getAction(Event event) {
+		XDHq.call(10, core, event);
+
+		return event.action;
 	}
 
 	public String execute(String script) {
