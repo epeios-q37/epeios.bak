@@ -289,7 +289,7 @@ class Thread extends java.lang.Thread {
 
 class TodoMVC {
 	public static void main(String[] args) throws Exception {
-		UnJSq.listen();
+		UnJSq.listen( "TodoMVC" );
 
 		for (;;) {
 			java.lang.Thread thread = new Thread(new DOM());

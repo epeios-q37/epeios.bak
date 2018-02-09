@@ -19,4 +19,26 @@
 
 package info.q37.unjsq;
 
-public class UnJSq extends info.q37.xdhq.XDHq {};
+public class UnJSq extends info.q37.xdhq.XDHq {
+	private static Process httpd = null;
+
+	public static void listen(String dir) {
+		try {
+			Runtime runtime = Runtime.getRuntime();
+			httpd = runtime.exec("node httpd " + dir, null,
+					new java.io.File("h:/hg/epeios/tools/xdhq/examples/common/"));
+			runtime.addShutdownHook(new Thread() {
+				public void run() {
+					httpd.destroy();
+				}
+			});
+		} catch (java.io.IOException e) {
+			e.printStackTrace();
+		}
+		info.q37.xdhq.XDHq.listen();
+	}
+
+	public static void listen() {
+		UnJSq.listen(".");
+	}
+};

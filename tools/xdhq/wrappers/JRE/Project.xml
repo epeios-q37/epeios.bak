@@ -46,16 +46,25 @@
 	<Files>
 		<File>NOTES.md</File>
 		<Files Group="Blank">
-			<File Path="../../examples/JRE/blank/">Main.java</File>
+			<File Path="../../examples/JRE/blank/">main.java</File>
 			<Files Path="../../examples/common/blank/">
 				<File>CHANGELOG.md</File>
 				<File>head.html</File>
 				<File>Main.xsl</File>
 			</Files>
 		</Files>
-		<Files Group="TodoMVC">
+		<Files Group="Notes">
+			<File Path="../../examples/JRE/notes/">main.java</File>
+			<Files Path="../../examples/common/notes/">
+				<File>CHANGELOG.md</File>
+				<File>head.html</File>
+				<File>Main.xsl</File>
+				<File>Notes.xsl</File>
+				<File>Note.xsl</File>
+			</Files>
+		</Files>		<Files Group="TodoMVC">
 			<Files Path="../../examples/JRE/TodoMVC/">
-				<File>Main.java</File>
+				<File>main.java</File>
 				<File>README.md</File>
 			</Files>
 			<Files Path="../../examples/common/TodoMVC/">
@@ -66,7 +75,6 @@
 				<File>Todos.xsl</File>
 			</Files>
 		</Files>
-
 	</Files>
 	<SourceDirs>
 		<SourceDir>..</SourceDir>

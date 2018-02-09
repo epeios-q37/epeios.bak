@@ -104,7 +104,7 @@ function displayList( $dom ) {
 	$count = count($dom->notes );
 
 	while ( $i < $count ) {
-		if ( substr(strtolower($dom->notes[$i]['title']),0,strlen($dom->pattern) ) === $dom->pattern ) {
+		if ( strtolower(substr($dom->notes[$i]['title'],0,strlen($dom->pattern))) === $dom->pattern ) {
 			push( $dom->notes[$i], $i, $tree);
 			$contents["Description." . $i] = $dom->notes[$i]['description'];
 		}
@@ -154,7 +154,7 @@ function main() {
 			handleDescriptions($dom);
 			break;
 		case "Search":
-		$dom->pattern = strtolower( $dom->getContent( "Pattern" ) );
+			$dom->pattern = strtolower( $dom->getContent( "Pattern" ) );
 			displayList($dom);
 			break;
 		case "Edit":
