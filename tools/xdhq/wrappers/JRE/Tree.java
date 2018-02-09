@@ -48,6 +48,10 @@ public class Tree {
 		XDHq.call(6, core, name, value);
 	}
 
+	public void putAttribute(String name, boolean value) {
+		putAttribute( name, String.valueOf( value ) );
+	}
+
 	public void putAttribute( String name, int value ) {
 		putAttribute( name, String.valueOf( value ) );
 	}

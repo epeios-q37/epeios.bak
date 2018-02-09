@@ -22,21 +22,22 @@ import java.util.*;
 
 class Note {
 	String
-		title,
-		description;
-	public void Note( string title, string description ) {
+		title = "",
+		description = "";
+	public Note( String title, String description ) {
 		this.title = title;
 		this.description = description;
 	}
+	public Note() {}
 }
 
 class Thread extends java.lang.Thread {
 	private DOM dom;
 	private String pattern = "";
-	private boolean hideDescription = false;
-	private index = 0;
+	private boolean hideDescriptions = false;
+	private int index = 0;
 	private String viewModeElements[] = { "Pattern", "CreateButton", "DescriptionToggling", "ViewNotes" };
-	public List<Note> notes;
+	private List<Note> notes;
 
 	private void push( Note note, int index, Tree tree ) {
 		tree.pushTag( "Note");
@@ -53,8 +54,8 @@ class Thread extends java.lang.Thread {
 		tree.popTag();
 	}
 
-	private void handleDescription() {
-		if ( hideDescription )
+	private void handleDescriptions() {
+		if ( hideDescriptions )
 			dom.disableElement( "ViewDescriptions");
 		else
 			dom.enableElement( "ViewDescriptions");
@@ -63,41 +64,87 @@ class Thread extends java.lang.Thread {
 	private void displayList() {
 		Tree tree = new Tree();
 		List<String []> idsAndContents = new ArrayList<String []>();
-		ListIterator<Note> li = notes.getIterator( 1 );	// 0 skipped, as it serves as buffer for the new notes.
+		ListIterator<Note> li = notes.listIterator( 1 );	// 0 skipped, as it serves as buffer for the new notes.
 
 		tree.pushTag( "Notes");
-		tree.putAttribute( "HideDescriptions", hideDescriptions);
+		tree.putAttribute( "HideDescriptions", "tutu");
 
 		while ( li.hasNext() ) {
 			int index = li.nextIndex();
-			Note note = it.next();
-			int size = pattern.size();
+			Note note = li.next();
+			int length = pattern.length();
 
-			if ( ( size == 0 ) || pattern.equals(note.title.substring(0, size - 1).toLowerCase() ) {
+			if ( ( length == 0 ) || pattern.equals(note.title.substring(0, length).toLowerCase() ) ) {
 				push( note, index, tree );
 				String idAndContent[] = { "Description." + index, note.description };
 				idsAndContents.add( idAndContent );
 			}
-
-			dom.setLayout( "Notes", tree, "Notes.xsl");
-			dom.setContent( idsAndContents.toArray() );
-			dom.enableElement( viewModeElements );
 		}
+
+		dom.setLayout( "Notes", tree, "Notes.xsl");
+		dom.setContents( idsAndContents.toArray( new String[0][0] ) );
+		dom.enableElements( viewModeElements );
+	}
+
+	private void view() {
+		dom.enableElements( viewModeElements );
+		dom.setContent( "Edit." + index , "" );
+		index = -1;
 	}
 
 	private void edit( String id ) {
+		index = Integer.parseInt( id );
 		Note note = notes.get( index );
+
 		String idsAndContents[][] = {
 			{ "Title", note.title },
 			{ "Description", note.description }
 		};
 
-		index = Integer.parseInit( id );
-
-		dom.setLayout( "Edit." + id, new Tree, "Note.xsl");
+		dom.setLayout( "Edit." + id, new Tree(), "Note.xsl");
 		dom.setContents( idsAndContents );
 		dom.disableElements( viewModeElements );
 		dom.dressWidgets( "Notes");
+	}
+
+	private void submit() {
+		String ids[] = { "Title", "Description"};
+		String result[] = dom.getContents( ids );
+
+		String title = result[0].trim();
+		String description = result[1];
+
+		if ( !"".equals( title ) ) {
+			notes.set(index,new Note( title, description ));
+
+			if ( index == 0 ) {
+				notes.add(0, new Note() );
+				displayList();
+			} else {
+				String idsAndContents[][] = {
+					{ "Title." + index, title },
+					{ "Description." + index, description }
+				};
+
+				dom.setContents( idsAndContents );
+				view();
+			}
+		} else
+			dom.alert("Title can not be empty !");
+	}
+
+	private void cancel() {
+		Note note = notes.get( index );
+		String ids[] = { "Title", "Description" };
+		String result[] = dom.getContents( ids );
+		String title = result[0].trim();
+		String description = result[1];
+
+		if ( !title.equals(note.title) || !description.equals(note.description) ) {
+			if ( dom.confirm("Are you sure you want to cancel your modifications ?" ) )
+				view();
+		} else
+			view();
 	}
 
 	public Thread(DOM dom) {
@@ -107,7 +154,7 @@ class Thread extends java.lang.Thread {
 
 		// First must be empty as it used as buffer for the new notes.
 		notes.add( new Note() );
-		notes.add( new Note( "Improve design", "Tastes and colors... (aka &laquo;CSS aren&rsquo;t my cup of tea...&raquo;)" ) ),
+		notes.add( new Note( "Improve design", "Tastes and colors... (aka &laquo;CSS aren&rsquo;t my cup of tea...&raquo;)" ) );
 		notes.add( new Note( "Fixing bugs", "There are bugs ? Really ?" ) );
 		notes.add( new Note( "Implement new functionalities", "Although it&rsquo;s almost perfect..., isn&rsquo;t it ?" ) );
 	}
@@ -124,23 +171,28 @@ class Thread extends java.lang.Thread {
 				displayList();
 				break;
 			case "ToggleDescriptions":
-				dom.hideDescriptions = "true".equals( dom.getContents( event.id ));
+				hideDescriptions = "true".equals( dom.getContent( event.id ));
 				handleDescriptions();
+				break;
 			case "Search":
-				dom.pattern = dom.getContent( "Pattern").toLowerCase();
+				pattern = dom.getContent( "Pattern").toLowerCase();
 				displayList();
 				break;
 			case "Edit":
 				edit( dom.getContent( event.id ));
 				break;
 			case "Delete":
-				if ( dom.confirm(("Are you sure you want to delete this entry ?" )) {
+				if ( dom.confirm("Are you sure you want to delete this entry ?" )) {
 					notes.remove(Integer.parseInt(dom.getContent(event.id)));
-					displayNotes();
+					displayList();
 				}
 				break;
 			case "Submit":
-				
+				submit();
+				break;
+			case "Cancel":
+				cancel();
+				break;
 			default:
 				System.out.println( "No or unknown action !");
 				System.exit( 1 );

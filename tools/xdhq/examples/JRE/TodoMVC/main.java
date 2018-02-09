@@ -57,10 +57,7 @@ class Thread extends java.lang.Thread {
 		tree.pushTag("Todo");
 		tree.putAttribute("id", id);
 
-		if (todo.completed)
-			tree.putAttribute("completed", "true");
-		else
-			tree.putAttribute("completed", "false");
+		tree.putAttribute("completed", todo.completed);
 
 		tree.putValue(todo.label);
 		tree.popTag();

@@ -247,7 +247,7 @@ SCLJRE_F( xdhp::Confirm )
 {
 	bso::sBool Response = false;
 
-	BEGIN( Alert );
+	BEGIN( Confirm );
 
 	Caller.Get( Arguments.Message );
 

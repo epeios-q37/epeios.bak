@@ -86,7 +86,7 @@ public class DOM {
 	}
 
 	public boolean confirm( String message ) {
-		return XDHq.call(13, core, message) == "true";
+		return (Boolean)XDHq.call(13, core, message);
 	}
 
 	public void setLayout(String id, Tree tree, String xslFilename) {
@@ -115,7 +115,7 @@ public class DOM {
 		setContents( idsAndContents );
 	}
 
-	public void dressWidgest( String id ) {
+	public void dressWidgets( String id ) {
 		XDHq.call( 17, core, id );
 	}
 

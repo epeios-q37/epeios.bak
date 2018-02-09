@@ -116,11 +116,11 @@ function displayList( $dom ) {
 	$dom->enableElements( $viewModeElements );
 }
 
-function view($dom, $id) {
+function view($dom) {
 	global $viewModeElements;
 
 	$dom->enableElements( $viewModeElements );
-	$dom->setContent("Edit." . $id, "");
+	$dom->setContent("Edit." . $dom->id, "");
 	$dom->id = -1;
 }
 
@@ -182,7 +182,7 @@ function main() {
 					$contents["Title." . $dom->id] = $title;
 					$contents["Description." . $dom->id] = $description;
 					$dom->setContents($contents);
-					view($dom, $dom->id);
+					view($dom);
 				}
 			} else
 				$dom->alert("Title can not be empty !");
@@ -191,9 +191,9 @@ function main() {
 			$result = $dom->getContents(["Title", "Description"]);
 			if (($dom->notes[$dom->id]['title'] != $result['Title']) or ($dom->notes[$dom->id]['description'] != $result['Description'])) {
 				if ( $dom->confirm("Are you sure you want to cancel your modifications ?" ) )
-					view($dom, $dom->id);
+					view($dom);
 			} else
-				view($dom, $dom->id);
+				view($dom);
 		break;
 		default:
 			die( "???" );

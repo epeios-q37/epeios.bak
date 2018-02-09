@@ -18,7 +18,7 @@
 
  Pour contourner ce problème, lancer avec de la manière suivante :
   * pour lancer uniquement : `cmd /c start java <class>`,
-  * pour compiler puis lancer en cas de succés : `javac *.java && cmd /c start java <class>`.
+  * pour compiler puis lancer en cas de succés : `javac *.java >&1 | head && cmd /c start java <class>`.
 
  ### `CLASSPATH` pour le développement
 
