@@ -142,11 +142,11 @@ function acToggleDescriptions(dom, id) {
 	);
 }
 
-function view(dom, id) {
+function view(dom) {
 	dom.enableElements(
 		viewModeElements,
 		() => {
-			dom.setContent("Edit." + id, "");
+			dom.setContent("Edit." + dom.id, "");
 			dom.id = -1;
 		}
 	);
@@ -204,7 +204,7 @@ function acSubmit(dom, id) {
 					contents["Title." + dom.id] = title;
 					contents["Description." + dom.id] = description;
 					dom.setContents(contents,
-						() => view(dom, dom.id)
+						() => view(dom)
 					);
 				}
 			} else
@@ -219,11 +219,11 @@ function acCancel(dom, id) {
 			if ((dom.notes[dom.id]['title'] != result['Title']) || (dom.notes[dom.id]['description'] != result['Description']))
 				dom.confirm("Are you sure you want to cancel your modifications ?",
 					(response) => {
-						if (response == true) view(dom, dom.id);
+						if (response == true) view(dom);
 					}
 				);
 			else
-				view(dom, dom.id);
+				view(dom);
 		}
 	);
 }
