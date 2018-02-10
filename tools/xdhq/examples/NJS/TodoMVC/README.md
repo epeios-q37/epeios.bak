@@ -2,8 +2,8 @@ A *Node.js* version of the *TodoMVC* (<http://todomvc.com/>) application.
 
 There is also a version for:
 
-* *PHP*: http://github.com/epeios-q37/todomvc-php,
-* *Java*: http://github.com/epeios-q37/todomvc-java.
+* *PHP*: <http://github.com/epeios-q37/todomvc-php>,
+* *Java*: <http://github.com/epeios-q37/todomvc-java>.
 
 Running:
 
