@@ -1,26 +1,15 @@
 A *Node.js* version of the *TodoMVC* (<http://todomvc.com/>) application.
 
+There is also a version for:
+
+* *PHP*: http://github.com/epeios-q37/todomvc-php,
+* *Java*: http://github.com/epeios-q37/todomvc-java.
+
 Running:
+
 * retrieve this repository,
-* launch `npm install`,
-* launch `node main.js`,
+* `npm install`,
+* `node main.js`,
 * <http://localhost:8080/>.
 
-Made with *UnJSq* (<http://q37.info/UnJSq/>), a new and innovative  way to develop Web frontends:
-* **without** the need of a *JavaScript* framework,
-* **without** reloading the page on each action (*UnJSq* is **not** a *CGI* library) !
-
-Also available for:
-  * *PHP*: http://github.com/epeios-q37/todomvc-php,
-  * *Java*: http://github.com/epeios-q37/todomvc-java.
-
-
-
-
-
-
-
-
-
-
-
+###### Made with *UnJSq* (<http://q37.info/UnJSq/>), a new and innovative library to develop Web *frontends* <u>without</u> the need of a *JavaScript* framework!

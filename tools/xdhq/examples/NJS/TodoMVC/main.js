@@ -48,7 +48,7 @@ class MyData extends DOM {
 		super();
 		this.timestamp = new Date();
 		this.exclude = null;
-		this.id = -1;
+		this.index = -1;
 		this.todos = [
 			{
 				"completed": true,
@@ -120,7 +120,7 @@ function displayTodos(dom) {
 	var tree = new Tree();
 	var i = 0;
 
-	dom.id = -1;
+	dom.index = -1;
 
 	tree.pushTag("Todos");
 
@@ -169,8 +169,8 @@ function submitNew(dom) {
 }
 
 function submitModification(dom) {
-	let id = dom.id;
-	dom.id = -1;
+	let id = dom.index;
+	dom.index = -1;
 
 	dom.getContent("Input." + id,
 		(content) => dom.setContent("Input." + id, "",
@@ -195,7 +195,7 @@ function submitModification(dom) {
 }
 
 function acSubmit(dom, id) {
-	if (dom.id == -1) {
+	if (dom.index == -1) {
 		submitNew(dom);
 	} else {
 		submitModification(dom);
@@ -289,8 +289,8 @@ function acEdit(dom, id) {
 				[id]: "editing"
 			},
 			() => {
-				dom.id = parseInt(content);
-				dom.setContent("Input." + content, dom.todos[dom.id]['label'],
+				dom.index = parseInt(content);
+				dom.setContent("Input." + content, dom.todos[dom.index]['label'],
 					() => dom.focus("Input." + content))
 			}
 		)
@@ -298,8 +298,8 @@ function acEdit(dom, id) {
 }
 
 function acCancel(dom, id) {
-	var id = dom.id;
-	dom.id = -1;
+	var id = dom.index;
+	dom.index = -1;
 
 	dom.setContent("Input." + id, "",
 		() => dom.removeClasses(
