@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project 
+	xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<xpp:bloc>
+		<!-- User definitions -->
+		<xpp:define name="Version">
+			<xpp:bloc/>
+		</xpp:define>
+		<xpp:define name="CopyrightYears">
+			<xpp:bloc>2018</xpp:bloc>
+		</xpp:define>
+		<About>
+		<Software>UnJSqDemosPHP</Software>
+		</About>
+		<xpp:set name="Credits" value="Epeios"/>
+		<xpp:set name="Type" value="UnJSqDemosPHP"/>
+	</xpp:bloc>
+	<xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
+	<About>
+		<UUID>ffcb57c1-c238-42f4-a382-f15aaa068727</UUID>
+	</About>
+	<!-- NO SPACE in 'Keywords' attribute !!! ("a,b,c", NOT "a, b, c")-->
+	<RTW Description="Demonstration applications of 'UnJSq'for 'PHP'." Keywords="Demo,UnJSq,PHP">
+		<Dir>unjsq-demos-php</Dir>
+	</RTW>
+  	<!-- Although a 'PHP' app., there is a 'NodeJS' section because 'npm' is currently used as package manager. -->
+<NodeJS>
+  <Deps>
+   <Regular>
+    <Dep>unjsqznd</Dep>
+   </Regular>
+  </Deps>
+ </NodeJS>
+	</Project>

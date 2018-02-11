@@ -75,7 +75,11 @@
 			</Files>
 		</Files>
 		<Files Group="Notes">
-			<File Path="../../examples/NJS/notes/">main.js</File>
+			<Files Path="../../examples/NJS/">
+				<File Path="notes/">main.js</File>
+				<File>NOTES.md</File>
+				<File>README.md</File>
+			</Files>
 			<Files Path="../../examples/common/notes/">
 				<File>CHANGELOG.md</File>
 				<File>head.html</File>

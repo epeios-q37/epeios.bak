@@ -54,7 +54,11 @@
 			</Files>
 		</Files>
 		<Files Group="Notes">
-			<File Path="../../examples/JRE/notes/">main.java</File>
+			<Files Path="../../examples/JRE/">
+				<File Path="notes/">main.java</File>
+				<File>NOTES.md</File>
+				<File>README.md</File>
+			</Files>
 			<Files Path="../../examples/common/notes/">
 				<File>CHANGELOG.md</File>
 				<File>head.html</File>

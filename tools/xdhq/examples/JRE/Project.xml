@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project 
+	xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<xpp:bloc>
+		<!-- User definitions -->
+		<xpp:define name="Version">
+			<xpp:bloc/>
+		</xpp:define>
+		<xpp:define name="CopyrightYears">
+			<xpp:bloc>2018</xpp:bloc>
+		</xpp:define>
+		<About>
+		<Software>UnJSqDemosJava</Software>
+		</About>
+		<xpp:set name="Credits" value="Epeios"/>
+		<xpp:set name="Type" value="UnJSqDemosJava"/>
+	</xpp:bloc>
+	<xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
+	<About>
+		<UUID>87b5b9a5-de30-4fce-a858-ea8dd0f788b9</UUID>
+	</About>
+	<!-- NO SPACE in 'Keywords' attribute !!! ("a,b,c", NOT "a, b, c")-->
+	<RTW Description="Demonstration applications of 'UnJSq' for 'Java'." Keywords="Demo,UnJSq,Java">
+		<Dir>unjsq-demos-java</Dir>
+	</RTW>
+  	<!-- Although a 'Java' app., there is a 'NodeJS' section because 'npm' is currently used as package manager. -->
+<NodeJS>
+  <Deps>
+   <Regular>
+    <Dep>unjsqjre</Dep>
+   </Regular>
+  </Deps>
+ </NodeJS>
+	</Project>

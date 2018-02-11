@@ -60,7 +60,11 @@
 			</Files>
 		</Files>
 		<Files Group="Notes">
-			<File Path="../../examples/ZND/notes/">main.php</File>
+			<Files Path="../../examples/ZND/">
+				<File Path="notes/">main.php</File>
+				<File>NOTES.md</File>
+				<File>README.md</File>
+			</Files>
 			<Files Path="../../examples/common/notes/">
 				<File>CHANGELOG.md</File>
 				<File>head.html</File>
