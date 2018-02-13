@@ -33,9 +33,7 @@
 		</section>
 		<footer class="info">
 			<p>Double-click to edit a todo</p>
-			<p>
-				Created by <a href="http://q37.info/contact/">Claude SIMON</a>
-			</p>
+			<p>Created with <a style="font-style: italic;" href="http://q37.info/UnJSq/">UnJSq</a>!</p>
 		</footer>
 	</xsl:template>
 </xsl:stylesheet>

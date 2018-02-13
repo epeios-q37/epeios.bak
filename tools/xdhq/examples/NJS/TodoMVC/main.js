@@ -18,7 +18,7 @@
 */
 
 /*
-This is the Node.js UnJSq (http://q47.info/UnJSq/) version
+This is the Node.js UnJSq (http://q37.info/UnJSq/) version
 of the TodoMVC application (http://todomvc.com/).
 */
 

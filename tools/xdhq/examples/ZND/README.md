@@ -1,14 +1,12 @@
-# *UnJSq* demonstration applications for *PHP*.
+# *UnJSq* demonstration applications for *PHP*
 
-<!--
-Running:
-  * Retrieve this repository,
-  * launch `npm install`,
-  * launch `node notes/main.js`,
-  * open <http://localhost:8080/> in a web browser.
---> 
+## Running:
 
+(*Work in progress*)
+  
 Except under *Windows*, you will need a *C++* compiler for the installation to succeed.
+
+## Misc.
 
 For minimal *UnJSq* application demonstration, instead of `php notes/main.js`, launch `php blank/main.js`.
 

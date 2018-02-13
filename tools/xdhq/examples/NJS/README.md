@@ -2,7 +2,6 @@
 
 There is also a version for:
   * *Java* : <http://github.com/epeios-q37/unjsq-demos-java/>,
-  * *Node.js* : <http://github.com/epeios-q37/unjsq-demos-node/>,
   * *PHP* : <http://github.com/epeios-q37/unjsq-demos-php/>.
 
 ## Running:

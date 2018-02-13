@@ -1,3 +1,4 @@
+
 /*
 	Copyright (C) 2007-2017 Claude SIMON (http://q37.info/contact/).
 
@@ -35,20 +36,20 @@ class Thread extends java.lang.Thread {
 			switch (dom.getAction(event)) {
 			case "Connect":
 				dom.setLayout("", new Tree(), "Main.xsl");
-				dom.addClass( "Input", "hidden");
+				dom.addClass("Input", "hidden");
 				break;
 			case "Submit":
-				dom.setContent( "Pattern", dom.getContent( "Pattern" ).toUpperCase() );
+				dom.setContent("Pattern", dom.getContent("Pattern").toUpperCase());
 				break;
 			case "HideInput":
-				dom.addClass( "Input", "hidden");
+				dom.addClass("Input", "hidden");
 				break;
 			case "ShowInput":
-				dom.removeClass( "Input", "hidden");
+				dom.removeClass("Input", "hidden");
 				break;
 			default:
-				System.out.println( "No or unknown action !");
-				System.exit( 1 );
+				System.out.println("No or unknown action !");
+				System.exit(1);
 				break;
 			}
 		}
@@ -71,7 +72,7 @@ class Blank {
 		displayBytecodeBuildTimestamp();
 		System.out.println(UnJSq.returnArgument("Text from JAVA file"));
 
-		UnJSq.listen( "blank" );
+		UnJSq.listen("blank");
 
 		for (;;) {
 			java.lang.Thread thread = new Thread(new DOM());
