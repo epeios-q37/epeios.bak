@@ -22,10 +22,12 @@ Dépendences :
   * *wrapper* *XDHTML*,
   * `xdhq/wrapper/NJS/`
   * <http://github.com/epeios-q37/xdhq-node/>,
-  * <https://www.npmjs.com/package/xdhq/>,
+  * <https://www.npmjs.com/package/xdhq/>  (anciennement, <https://www.npmjs.com/package/xdhqnjs/>
 
 * *unjsq* :
 	* *wrapper* *XDHTML* + serveur *httpd*,
 	* `xdhq/UnJSq/NJS/`
 	* <http://github.com/epeios-q37/unjsq-node/>,
 	* <https://www.npmjs.com/package/unjsq/>.
+
+*NOTA* : le paquet *NPM* *xdhq* a été renommé en *xdhqnjs*, et *unjsq* en *unjsqnjs*.

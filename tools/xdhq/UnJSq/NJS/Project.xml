@@ -14,6 +14,7 @@
 	</xpp:bloc>
 	<xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
 	<About>
+	 <Program>unjsqnjs</Program>
 		<Software>UnJSq</Software>
 		<UUID>45ce6ec4-6d3d-428b-9764-cc1f5588eaf6</UUID>
 	</About>
@@ -25,7 +26,7 @@
 		<Deps>
 			<Regular>
 				<Dep>xdhqxdh</Dep>
-				<Dep>xdhq</Dep>
+				<Dep>xdhqnjs</Dep>
 				<Dep>xdhwebq</Dep>
 			</Regular>
 		</Deps>

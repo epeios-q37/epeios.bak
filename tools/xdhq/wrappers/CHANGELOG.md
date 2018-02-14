@@ -1,5 +1,9 @@
 *Changelog* for the *XDHTML* wrappers.
 
+2018-02-14:
+- *xdhqnjs*:
+  - changing *NPM* package name from *xdhq* to *xdhqnjs* due to coming *Java* and *PHP* version,
+
 2018-01-14:
 - *xdhqnjs*
   - all the files served by the *httpd* server are automatically now relative to the directory containing the main *JS* script; it's no more required to give this directory as parameter of the `launch(...)` method,
