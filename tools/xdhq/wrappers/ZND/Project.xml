@@ -86,6 +86,8 @@
 				<File>Todos.xsl</File>
 			</Files>
 		</Files>
+		<File Path="../../UnJSq/ZND/">UnJSq.php</File>
+		<File>NOTES.md</File>
 	</Files>
  <RTW Description="PHP extension template" Keywords="template">
   <Dir>xdhq-php</Dir>

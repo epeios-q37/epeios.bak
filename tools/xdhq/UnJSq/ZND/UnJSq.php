@@ -45,7 +45,14 @@ function getXDHq() {
 
 getXDHq();
 
-class UnJSq extends XDHq {};
+class UnJSq extends XDHq {
+	public static function listen( string $dir = "" ) {
+		echo "Yo !\n";
+		popen( "start node h:/hg/epeios/tools/xdhq/examples/common/httpd.js h:/hg/epeios/tools/xdhq/examples/common/TodoMVC", "r" );
+		echo "Year :\n";
+		parent::listen();
+	}
+};
 
 class UnJSqTree extends XDHqTree {};
 

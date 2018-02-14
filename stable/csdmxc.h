@@ -385,28 +385,31 @@ qRE
 		}
 		bso::sBool Commit_( bso::sBool Unlock )
 		{
+			bso::sBool Return = false;
+		qRH;
+			bso::sBool Unlocked = false;
+		qRB;
+			Unlocked = !Flow_.IDriver().IsLocked();	/* Below operation will lock the read driver,
+													so we have to unlock it when it was now already locked,
+													so another thread will be able to take the ownership. */
 			Flow_.Commit( Unlock );
-			bso::sBool Unlocked = !Flow_.IDriver().IsLocked();	/* Below operation will lock the read driver,
-																so we have to unlock it when it was now already locked,
-																so another thread will be able to take the ownership. */
 
+		
 			if ( Id_ == CSDMXB_UNDEFINED ) {
 				Id_ = GetId( Flow_ );
-				if ( Unlocked )
-					Flow_.IDriver().Unlock();
-				return true;
-			} else if ( Flow_.EndOfFlow() ) {
-				if ( Unlocked )
-					Flow_.IDriver().Unlock();
-				return false;
-			} else if ( Flow_.Get() == 0 ) {
-				if ( Unlocked )
-					Flow_.IDriver().Unlock();
-				return true;
-			}  else
-				qRFwk();
-
-			return false;	// To avoid a 'warning'.
+				Return = true;
+			} else if ( !Flow_.EndOfFlow() ) {
+				if ( Flow_.Get() == 0 ) {
+					Return = true;
+				} else
+					qRFwk();
+			}
+		qRR;
+		qRT;
+			if ( Unlocked )
+				Flow_.IDriver().Unlock();
+		qRE;
+			return Return;
 		}
 		void GiveUp_( void )
 		{

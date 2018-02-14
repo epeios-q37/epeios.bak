@@ -1,5 +1,9 @@
 # *Epeios* changelog
 
+2018-02-14:
+- CSDMXC
+  - a failing server is no more blocking; however, the request has to be relaunched, an automatic reconnection has yet to be implemented.
+
 2018-01-31:
 - SCLJRE:
   - fixing parameter mess with template variadics,

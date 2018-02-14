@@ -88,10 +88,18 @@
   <!-- NOTA : '*.java' files will automatically be packed as such. -->
   <!--File Pack="No">XDHq.java</File-->
 		<Files Group="JAVA">
-		<File Pack="No">DOM.java</File>
-		<File Pack="No">Event.java</File>
-		<File Pack="No">Test.java</File>
-		<File Pack="No">Tree.java</File>
+			<Files Group="UnJSq" Path="../../UnJSq/JRE/">
+				<File Pack="No">DOM.java</File>
+				<File Pack="No">Event.java</File>
+				<File Pack="No">Tree.java</File>
+				<File Pack="No">UnJSq.java</File>
+			</Files>
+			<Files Group="XDHq">
+				<File Pack="No">DOM.java</File>
+				<File Pack="No">Event.java</File>
+				<File Pack="No">Test.java</File>
+				<File Pack="No">Tree.java</File>
+			</Files>
 		</Files>
 	</Files>
  <RTW>
