@@ -235,9 +235,11 @@ namespace {
 			Data_ = NULL;
 		}
 		qCDTOR( rXDHRack_ );
-		void Init( csdbns::sService Service )
+		void Init(
+			csdbns::sService Service,
+			const str::dString &NewSessionAction )
 		{
-			Processing_.Init();
+			Processing_.Init( NewSessionAction );
 			Server_.Init( Service, Processing_ );
 			mtk::Launch( LaunchServer_, &Server_ );
 			Data_ = NULL;
@@ -369,14 +371,14 @@ SCLNJS_F( xdhp::Listen )
 {
 qRH;
 	csdcmn::sVersion Version = csdcmn::UndefinedVersion;
-	str::wString Arguments;
+	str::wString Arguments, Action;
 qRB;
-	tol::Init( Arguments );
-	Caller.GetArgument( ConnectCallback_, Arguments );
+	tol::Init( Arguments, Action );
+	Caller.GetArgument( ConnectCallback_, Arguments, Action );
 
 	sclargmnt::FillRegistry( Arguments, sclargmnt::faIsArgument, sclargmnt::uaReport );
 
-	Rack_.Init( sclmisc::MGetU16( registry::parameter::Service ) );
+	Rack_.Init( sclmisc::MGetU16( registry::parameter::Service ), Action );
 
 #if 0
 	while ( true ) {

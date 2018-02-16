@@ -82,10 +82,11 @@ static void AlertConfirm_(
 	// NOTA : we use variables, because if we put 'va_arg()' directly as parameter to below function, it's not sure that they are called in the correct order.
 	const nchar__ *XML = va_arg( List, const nchar__ * );
 	const nchar__ *XSL = va_arg( List, const nchar__ * );
+	const nchar__ *Path = va_arg( List, const nchar__ * );
 	const nchar__ *Title = va_arg( List, const nchar__ * );
 	const nchar__ *CloseText = va_arg( List, const nchar__ * );
 
-	Execute( Callback, ScriptName, Result, XML, XSL, Title, CloseText );
+	Execute( Callback, ScriptName, Result, XML, XSL, Path, Title, CloseText );
 }
 
 static void Append_(
@@ -199,14 +200,15 @@ static void SetLayout_(
 	cJS &Callback,
 	const nchar__ *Id,	// If 'Id' != NULL, it's the id of the element to apply to, otherwise it applies to the document.
 	const nchar__ *XML,
-	const nchar__ *XSL )
+	const nchar__ *XSL,
+	const nchar__ *Path )
 {
 qRH
 	TOL_CBUFFER___ Result;
 	str::string RawDigest;
 	xdhcmn::digest Digest;
 qRB
-	RawDigest.Init( Execute( Callback, xdhujs::snEventsFetcher, &Result, Id, XML, XSL ) );
+	RawDigest.Init( Execute( Callback, xdhujs::snEventsFetcher, &Result, Id, XML, XSL, Path ) );
 
 	Digest.Init();
 	xdhcmn::Split( RawDigest, Digest );
@@ -225,8 +227,9 @@ static void SetLayout_(
 	const nchar__ *Id = va_arg( List, const nchar__ * );
 	const nchar__ *XML = va_arg( List, const nchar__ * );
 	const nchar__ *XSL = va_arg( List, const nchar__ * );
+	const nchar__ *Path = va_arg( List, const nchar__ * );
 
-	SetLayout_( Callback, Id, XML, XSL );
+	SetLayout_( Callback, Id, XML, XSL, Path );
 }
 
 static void HandleWidgets_(

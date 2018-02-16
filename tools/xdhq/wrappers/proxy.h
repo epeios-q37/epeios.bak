@@ -116,6 +116,9 @@ namespace proxy {
 	template <typename data> class rProcessing
 	: public csdscb::cProcessing
 	{
+	private:
+		// Action to launch on a new session.
+		str::wString NewSessionAction_;
 	protected:
 		virtual void *CSDSCBPreProcess(
 			fdr::rRWDriver *IODriver,
@@ -168,6 +171,12 @@ namespace proxy {
 				Data.Recv.WriteBegin();
 				tol::Init( Data.Recv.Id, Data.Recv.Action );
 				GetAction_( Flow, Data.Recv.Id, Data.Recv.Action );
+				if ( Data.Recv.Action.Amount() == 0 ) {
+					if ( Data.Recv.Id.Amount() == 0 )
+						Data.Recv.Action = NewSessionAction_;
+					else
+						qRGnr();
+				}
 				Data.Recv.WriteEnd();
 				PRXYOnAction( &Data );
 			}
@@ -202,10 +211,14 @@ namespace proxy {
 		virtual void PRXYOnPending( data *Data ) = 0;
 	public:
 		void reset( bso::sBool P = true )
-		{}
+		{
+			tol::reset( P, NewSessionAction_ );
+		}
 		qCVDTOR( rProcessing );
-		void Init( void )
-		{}
+		void Init( const str::dString &NewSessionAction )
+		{
+			NewSessionAction_.Init( NewSessionAction );
+		}
 	};
 
 	template <typename data> class rSharing

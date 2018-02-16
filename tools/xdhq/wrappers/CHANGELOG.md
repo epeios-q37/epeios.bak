@@ -1,5 +1,9 @@
 *Changelog* for the *XDHTML* wrappers.
 
+2018-02-16:
+- *common*:
+  - handles now the action to launch on a new session; this action is launched when the action parameter on a query is empty or absent,
+
 2018-02-14:
 - *xdhqnjs*:
   - changing *NPM* package name from *xdhq* to *xdhqnjs* due to coming *Java* and *PHP* version,

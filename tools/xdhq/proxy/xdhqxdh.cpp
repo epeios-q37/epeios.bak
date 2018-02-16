@@ -527,7 +527,7 @@ namespace {
 	{
 	private:
 		csdmnc::rRWDriver Driver_;
-		bso::sBool NotFirstCall_;
+		bso::sBool FirstCall_;
 	protected:
 		virtual bso::bool__ XDHCMNLaunch(
 			const char *Id,
@@ -540,13 +540,13 @@ namespace {
 		qRB;
 			Flow.Init( Driver_ );
 
-			if ( !NotFirstCall_ ) {
+			if ( FirstCall_ ) {
 				if ( prtcl::GetAnswer( Flow ) != prtcl::aOK_1 )
 					qRGnr();
 
 				Flow.Dismiss();
 
-				NotFirstCall_ = true;
+				FirstCall_ = false;
 			}
 
 			prtcl::PutRequest( prtcl::rLaunch_1, Flow );
@@ -600,7 +600,7 @@ namespace {
 		void reset( bso::sBool P = true )
 		{
 			xdhdws::sProxy::reset( P );
-			NotFirstCall_ = false;
+			FirstCall_ = false;
 		}
 		qCVDTOR( rSession_ )
 		void Init(
@@ -622,7 +622,7 @@ namespace {
 
 			xdhdws::sProxy::Init( Callback );
 
-			NotFirstCall_ = false;
+			FirstCall_ = true;
 
 			Flow.reset();
 

@@ -18,16 +18,16 @@ Dépendences :
   * <http://github.com/epeios-q37/xdhq/>,
   * <http://www.npmjs.com/package/xdhqxdh/>,
 
-* *xdhqnjs* :
+* *xdhqjre* :
   * *wrapper* *XDHTML*,
-  * `xdhq/wrapper/NJS/`
-  * <http://github.com/epeios-q37/xdhq-node/>,
-  * <https://www.npmjs.com/package/xdhq/>,
+  * `xdhq/wrapper/JRE/`
+  * <http://github.com/epeios-q37/xdhq-java/>,
+  * <https://www.npmjs.com/package/xdhqjre/>,
 
-* *unjsqnjs* :
+* *unjsqjre* :
 	* *wrapper* *XDHTML* + serveur *httpd*,
-	* `xdhq/UnJSq/NJS/`
-	* <http://github.com/epeios-q37/unjsq-node/>,
-	* <https://www.npmjs.com/package/unjsqnjs>.
+	* `xdhq/UnJSq/JRE/`
+	* <http://github.com/epeios-q37/unjsq-java/>,
+	* <https://www.npmjs.com/package/unjsqjre/>.
 
 *NOTA* : le paquet *NPM* *xdhq* a été renommé en *xdhqnjs*, et *unjsq* en *unjsqnjs*.

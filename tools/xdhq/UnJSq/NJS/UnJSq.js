@@ -68,8 +68,8 @@ const xdhwebq = require(xdhwebqId);
 const xdhq = require(xdhqId);
 
 function launch(callback, action) {
-	xdhq.launch(callback);
-	require('child_process').fork(require(xdhwebqId).fileName, [getRealDir(path.dirname(process.argv[1])), action]);
+	xdhq.launch(callback,action);
+	require('child_process').fork(require(xdhwebqId).fileName, [getRealDir(path.dirname(process.argv[1]))]);
 }
 
 module.exports.register = xdhq.register;

@@ -1,5 +1,18 @@
 # *Epeios* changelog
 
+2018-02-16:
+- *common*:
+  - **$**: a path parameter is now coming along with *XSL* parameter, for the desktop version be able to load the file.
+- SCLXDHTML:
+  - adaptation to modifications in underlying modules,
+- XDHDWS:
+  - **$**,
+- XDHUJP:
+  - **$**,
+- XDHUJS:
+  - **$**,
+  - commenting out some obsolete functions,
+
 2018-02-14:
 - CSDMXC
   - a failing server is no more blocking; however, the request has to be relaunched, an automatic reconnection has yet to be implemented.

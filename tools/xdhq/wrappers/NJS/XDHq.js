@@ -201,8 +201,8 @@ function register(idsAndItems) {
 	njsq._call(xdhq, 7, tags, callbacks);
 }
 
-function launch(callback) {
-	njsq._call(xdhq, 8, callback, "53752");
+function launch(callback,action) {
+	njsq._call(xdhq, 8, callback, "53752",action);
 }
 
 module.exports.componentInfo = () => njsq._componentInfo(xdhq);

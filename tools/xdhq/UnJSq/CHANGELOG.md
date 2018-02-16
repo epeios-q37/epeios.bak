@@ -1,4 +1,6 @@
-Changelog for *UnJS*.
+# CHANGELOG for *UnJS*
+
+<mark>*Common to all langages... !*</mark>
 
 2018-02-03:
 - adding `Execute`, `Focus`, `RemoveAttribute`,

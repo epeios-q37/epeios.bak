@@ -215,15 +215,36 @@ namespace sclxdhtml {
 		}
 	};
 
-	typedef fblfrd::reporting_callback__ _reporting_callback__;
+	typedef fblfrd::reporting_callback__ sReporting_;
 
 	typedef xdhcmn::cSession cSession_;
 
-	class sProxy
+	class rProxy
 	{
 	private:
 		xdhdws::sProxy Core_;
+		str::wString XSLPath_;
 	protected:
+		void Alert_(
+			const ntvstr::string___ &XML,
+			const ntvstr::string___ &XSL,
+			const ntvstr::string___ &XSLPath,
+			const ntvstr::string___ &Title,
+			const char *Language );
+		void Alert_(
+			const ntvstr::string___ &Message,
+			const char *MessageLanguage,	// If != 'NULL', 'Message' is translated, otherwise it is displayed as is.
+			const char *CloseTextLanguage );
+		bso::bool__ Confirm_(
+			const ntvstr::string___ &XML,
+			const ntvstr::string___ &XSL,
+			const ntvstr::string___ &XSLPath,
+			const ntvstr::string___ &Title,
+			const char *Language );
+		bso::sBool Confirm_(
+			const ntvstr::string___ &Message,
+			const char *MessageLanguage,	// If != 'NULL', 'Message' is translated, otherwise it is displayed as is.
+			const char *CloseTextLanguage );
 		void SetLayout_(
 			const xdhdws::nstring___ &Id,
 			const rgstry::rEntry &Filename,
@@ -254,12 +275,15 @@ namespace sclxdhtml {
 	public:
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, Core_ );
+			tol::reset( P, Core_, XSLPath_ );
 		}
-		qCDTOR( sProxy );
-		void Init( xdhcmn::cProxy *Proxy )
+		qCDTOR( rProxy );
+		void Init(
+			xdhcmn::cProxy *Proxy,
+			const str::dString &XSLPath )
 		{
 			Core_.Init( Proxy );
+			XSLPath_.Init( XSLPath );
 		}
 		void Log( const ntvstr::rString &Message )
 		{
@@ -269,7 +293,10 @@ namespace sclxdhtml {
 			const ntvstr::string___ &XML,
 			const ntvstr::string___ &XSL,
 			const ntvstr::string___ &Title,
-			const char *Language );
+			const char *Language )
+		{
+			Alert_( XML, XSL, Title, XSLPath_, Language );
+		}
 		void AlertT(
 			const ntvstr::string___ &RawMessage,
 			const char *Language );	// Translates 'Message'.
@@ -280,7 +307,10 @@ namespace sclxdhtml {
 			const ntvstr::string___ &XML,
 			const ntvstr::string___ &XSL,
 			const ntvstr::string___ &Title,
-			const char *Language );
+			const char *Language )
+		{
+			Confirm_( XML, XSL, XSLPath_, Title, Language );
+		}
 		bso::bool__ ConfirmT(
 			const ntvstr::string___ &RawMessage,
 			const char *Language );
@@ -382,10 +412,10 @@ namespace sclxdhtml {
 		}
 	};
 
-	class reporting_callback__
-	: public _reporting_callback__ {
+	class rReporting
+	: public sReporting_ {
 	private:
-		Q37_MRMDF( sProxy, P_, Proxy_ );
+		Q37_MRMDF( rProxy, P_, Proxy_ );
 		Q37_MPMDF( const char, L_, Language_ );
 	protected:
 		virtual void FBLFRDReport(
@@ -403,22 +433,22 @@ namespace sclxdhtml {
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_reporting_callback__::reset( P );
+			sReporting_::reset( P );
 			Proxy_ = NULL;
 		}
-		E_CVDTOR( reporting_callback__ );
+		E_CVDTOR( rReporting );
 		void Init(
-			sProxy &Proxy,
+			rProxy &Proxy,
 			const char *Language )
 		{
-			_reporting_callback__::Init();
+			sReporting_::Init();
 			Proxy_ = &Proxy;
 			Language_ = Language;
 		}
 	};
 
 	void HandleError(
-		sProxy &Proxy,
+		rProxy &Proxy,
 		const char *Language );
 
 	// To indicate if the backend dedicated part in the login page should or not be visible.
@@ -493,7 +523,7 @@ namespace sclxdhtml {
 	{
 	private:
 		page Page_;	// Current page;
-		reporting_callback__ _ReportingCallback;
+		rReporting Reporting_;
 		eBackendVisibility BackendVisibility_;
 		qRMV( class rCore<rSession>, C_, Core_ );
 	protected:
@@ -761,14 +791,14 @@ namespace sclxdhtml {
 			xml::writer_ &Writer );
 
 		void DisplaySelectedProjectFilename(
-			sProxy &Proxy,
+			rProxy &Proxy,
 			const char *Id );
 
 		sclmisc::project_type__ GetProjectFeatures(
-			sProxy &Proxy,
+			rProxy &Proxy,
 			str::string_ &Feature );
 
-		void LoadProject( sProxy &Proxy );
+		void LoadProject( rProxy &Proxy );
 	}
 
 	namespace login {
@@ -784,11 +814,11 @@ namespace sclxdhtml {
 			xml::writer_ &Writer );
 
 		void GetBackendFeatures(
-			sProxy &Proxy,
+			rProxy &Proxy,
 			sclfrntnd::rFeatures &Features );
 
 		void DisplaySelectedEmbeddedBackendFilename(
-			sProxy &Proxy,
+			rProxy &Proxy,
 			const char *Id );
 	}
 

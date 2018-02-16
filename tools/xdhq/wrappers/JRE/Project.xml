@@ -1,25 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project xmlns:xpp="http://q37.info/ns/xpp/" >
- <xpp:bloc>
-  <!-- User definitions -->
-  <xpp:define name="Version">
-			<xpp:bloc>(Obsolete entry)</xpp:bloc>
+<Project 
+	xmlns:xpp="http://q37.info/ns/xpp/">
+	<xpp:bloc>
+		<!-- User definitions -->
+		<xpp:define name="Version">
+			<xpp:bloc/>
 		</xpp:define>
-  <xpp:set name="Credits" value="Epeios"/>
-  <xpp:set name="Type" value="JREComponent"/>
-  <xpp:define name="CopyrightYears">
-   <xpp:bloc>2007-2017</xpp:bloc>
-  </xpp:define>
- </xpp:bloc>
- <xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
- <About>
-  <Program>xdhqjre</Program>
-  <Software>XDHq</Software>
- </About>
- <Modules>
-  <Modules Group="Epeios" Path="h:/hg/epeios/stable/">
-   <Modules Group="Core">
-    <xpp:expand select="Core"/>
+		<xpp:set name="Credits" value="Epeios"/>
+		<xpp:set name="Type" value="JREComponent"/>
+		<xpp:define name="CopyrightYears">
+			<xpp:bloc>2007-2017</xpp:bloc>
+		</xpp:define>
+	</xpp:bloc>
+	<xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
+	<About>
+		<Program>xdhqjre</Program>
+		<Software>XDHq</Software>
+	</About>
+	<Modules>
+		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
+			<Modules Group="Core">
+				<xpp:expand select="Core"/>
 				<Module>sck</Module>
 			</Modules>
 			<Modules Group="CSD">
@@ -28,9 +29,9 @@
 				<Module>csdmxs</Module>
 			</Modules>
 			<Modules Group="SCL">
-    <xpp:expand select="SCL"/>
-   </Modules>
-  </Modules>
+				<xpp:expand select="SCL"/>
+			</Modules>
+		</Modules>
 		<Modules Group="Shared" Path="../">
 			<Module Path="../">prtcl</Module>
 			<Module>proxy</Module>
@@ -45,38 +46,53 @@
 	</Modules>
 	<Files>
 		<File>NOTES.md</File>
-		<Files Group="Blank">
-			<File Path="../../examples/JRE/blank/">main.java</File>
-			<Files Path="../../examples/common/blank/">
-				<File>CHANGELOG.md</File>
-				<File>head.html</File>
-				<File>Main.xsl</File>
-			</Files>
-		</Files>
-		<Files Group="Notes">
-			<Files Path="../../examples/JRE/">
-				<File Path="notes/">main.java</File>
+		<Files Group="UnJSq">
+			<Files Path="../../UnJSq/JRE/">
+				<File Path="../">CHANGELOG.md</File>
 				<File>NOTES.md</File>
+				<File>Project.xml</File>
 				<File>README.md</File>
 			</Files>
-			<Files Path="../../examples/common/notes/">
-				<File>CHANGELOG.md</File>
-				<File>head.html</File>
-				<File>Main.xsl</File>
-				<File>Notes.xsl</File>
-				<File>Note.xsl</File>
+			<Files Group="Blank">
+				<File Path="../../examples/JRE/blank/">main.java</File>
+				<Files Path="../../examples/common/blank/">
+					<File>CHANGELOG.md</File>
+					<File>head.html</File>
+					<File>Main.xsl</File>
+				</Files>
 			</Files>
-		</Files>		<Files Group="TodoMVC">
-			<Files Path="../../examples/JRE/TodoMVC/">
-				<File>main.java</File>
-				<File>README.md</File>
+			<Files Group="Notes">
+				<Files Path="../../examples/JRE/">
+					<File Path="notes/">main.java</File>
+					<File>NOTES.md</File>
+					<File>README.md</File>
+				</Files>
+				<Files Path="../../examples/common/notes/">
+					<File>CHANGELOG.md</File>
+					<File>head.html</File>
+					<File>Main.xsl</File>
+					<File>Notes.xsl</File>
+					<File>Note.xsl</File>
+				</Files>
 			</Files>
-			<Files Path="../../examples/common/TodoMVC/">
-				<File>CHANGELOG.md</File>
-				<File>head.html</File>
-				<File>Main.xsl</File>
-				<File>NOTES.md</File>
-				<File>Todos.xsl</File>
+			<Files Group="TodoMVC">
+				<Files Path="../../examples/JRE/TodoMVC/">
+					<File>main.java</File>
+					<File>README.md</File>
+				</Files>
+				<Files Path="../../examples/common/TodoMVC/">
+					<File>CHANGELOG.md</File>
+					<File>head.html</File>
+					<File>Main.xsl</File>
+					<File>NOTES.md</File>
+					<File>Todos.xsl</File>
+				</Files>
+			</Files>
+			<Files Group="JAVA" Path="../../UnJSq/JRE/">
+				<File Pack="No">DOM.java</File>
+				<File Pack="No">Event.java</File>
+				<File Pack="No">Tree.java</File>
+				<File Pack="No">UnJSq.java</File>
 			</Files>
 		</Files>
 	</Files>
@@ -84,25 +100,17 @@
 		<SourceDir>..</SourceDir>
 		<SourceDir>../..</SourceDir>
 	</SourceDirs>
- <Files>
-  <!-- NOTA : '*.java' files will automatically be packed as such. -->
-  <!--File Pack="No">XDHq.java</File-->
+	<Files>
+		<!-- NOTA : '*.java' files will automatically be packed as such. -->
+		<!--File Pack="No">XDHq.java</File-->
 		<Files Group="JAVA">
-			<Files Group="UnJSq" Path="../../UnJSq/JRE/">
-				<File Pack="No">DOM.java</File>
-				<File Pack="No">Event.java</File>
-				<File Pack="No">Tree.java</File>
-				<File Pack="No">UnJSq.java</File>
-			</Files>
-			<Files Group="XDHq">
-				<File Pack="No">DOM.java</File>
-				<File Pack="No">Event.java</File>
-				<File Pack="No">Test.java</File>
-				<File Pack="No">Tree.java</File>
-			</Files>
+			<File Pack="No">DOM.java</File>
+			<File Pack="No">Event.java</File>
+			<File Pack="No">Test.java</File>
+			<File Pack="No">Tree.java</File>
 		</Files>
 	</Files>
- <RTW>
-  <Dir>xdhq-java</Dir>
- </RTW>
+	<RTW>
+		<Dir>xdhq-java</Dir>
+	</RTW>
 </Project>

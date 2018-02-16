@@ -26,7 +26,7 @@
  <NodeJS>
   <Deps>
    <Regular>
-    <Dep>unjsq</Dep>
+    <Dep>unjsqnjs</Dep>
     <Dep>todomvc-app-css</Dep>
     <Dep>todomvc-common</Dep>
    </Regular>
