@@ -2,7 +2,7 @@ const { app, BrowserWindow } = require('electron')
 const path = require('path')
 const url = require('url')
 
-console.log(process.argv);
+console.log("!!!!", process.argv);
 
 /*
 
@@ -47,18 +47,72 @@ function createWindow() {
   let html = [
     '<!DOCTYPE html>',
     '<html>',
-    '	<head>',
-    '		<meta charset="UTF-8" />',
-    '		<meta http-equiv="X-UA-Compatible" content="IE=edge" />',
-    '		<script src="corpus/js/xdhtml.js"></script>',
-    '		<script src="tools/xdhelcq/XDHELCq.js"></script>',
-    '		<script>handleQuery("?_action=")</script>',
-    '	</head>',
-    '	<body id="XDHRoot">',
-    '	</body>'
+    ' <head>',
+    ' <meta charset="UTF-8" />',
+    '	<meta http-equiv="X-UA-Compatible" content="IE=edge" />',
+    '	<script src="file://h:/hg/epeios/corpus/js/xdhtml.js"></script>',
+    ' <script>',
+    ' function attachDebugger()',
+    ' {',
+	  '  alert( "Attach debugger !" );',
+    ' }',
+    ' function log( message )',
+    ' {',
+    '  console.log( message );',
+    ' }',
+    ' function launchEvent( digest )',
+    ' {',
+    '  xdhelcq.launchEvent( digest );',
+    ' }',
+    ' function initialize( arguments ) {',
+    '  var mergedArguments = "";',
+    '  var length = arguments.length;',
+    '',
+    '   while ( length-- ) {',
+    ' 	 mergedArguments = \'"\' + arguments[length] + \'" \' + mergedArguments;',
+    '	  }',
+    '',
+    '  //	console.log( mergedArguments );',
+    '	 xdhelcq.initialize( mergedArguments );',
+    ' }',
+    'function userHead() {',
+    ' try {',
+    '  return require(fs) .readFileSync("head.html");',
+    ' } catch (err) {',
+    '  return "";',
+    ' }',
+    '}',
+    '',
+    '</script>',
+    '</head>',
+    '<body id="XDHRoot">',
+    '<script>',
+    'attachDebugger();',
+    '',
+    'var xdhelcqPath = null;',
+    '',
+    'if ( process.env.EPEIOS_SRC ) {',
+    ' var addonPath = null;',
+    ' if ( process.platform == \'win32\' )',
+    '  addonPath =\'h:/bin/\';',
+    ' else',
+    '  addonPath = \'~/bin/\';',
+    ' xdhelcqPath = addonPath + \'xdhelcq.node\';',
+    '} else {',
+    ' xdhelcqPath = \'./xdhelcq.node\';',
+    '}',
+    '',
+    'const xdhelcq =require( xdhelcqPath );',
+    '// console.log( require(\'electron\').remote.process.argv );',
+    'initialize( require(\'electron\').remote.process.argv );',
+    '	</script>',
+    '</body>',
   ].join("\n");
 
-  win.loadURL("data:text/html;charset=utf-8," + encodeURI(html), {baseURLForDataURL: "file://h:/hg/epeios/"});
+  console.log( "Av.");
+  win.loadURL("data:text/html;charset=utf-8," + encodeURI(html), {baseURLForDataURL: "file://h:/hg/epeios/tools/xdhq/examples/common/blank/"});
+//  win.loadURL("data:text/html;charset=utf-8," + encodeURI(html));
+console.log( "Ap.");
 
   // Open the DevTools.
   win.webContents.openDevTools()
