@@ -146,7 +146,6 @@ D( Value );
 D( Method );
 D( XML );
 D( XSL );
-D( Path );
 D( Title );
 D( CloseText );
 D( Cast );
@@ -179,14 +178,14 @@ qRB
 	switch ( ScriptName ) {
 	S( Execute, Value_, NULL );
 	S( Log, Message_, NULL );
-	S( DialogAlert, XML_, XSL_, Path_, Title_, CloseText_, NULL );
-	S( DialogConfirm, XML_, XSL_, Path_, Title_, CloseText_, NULL );
+	S( DialogAlert, XML_, XSL_, Title_, CloseText_, NULL );
+	S( DialogConfirm, XML_, XSL_, Title_, CloseText_, NULL );
 	S( AttributeSetter, Id_, Name_, Value_, NULL  );
 	S( AttributeGetter, Id_, Name_, NULL  );
 	S( AttributeRemover, Id_, Name_, NULL  );
 	S( PropertySetter, Id_, Name_, Value_, NULL );
 	S( PropertyGetter, Id_, Name_, NULL );
-	S( EventsFetcher, Id_, XML_, XSL_, Path_, NULL );
+	S( EventsFetcher, Id_, XML_, XSL_, NULL );
 	S( WidgetsFetcher, Id_, NULL );
 	S( ValueSetter, Id_, Value_, NULL );
 	S( ValueGetter, Id_, NULL );

@@ -36,11 +36,29 @@ function createWindow() {
   win = new BrowserWindow({ width: 800, height: 600 })
 
   // and load the index.html of the app.
+  /*
   win.loadURL(url.format({
     pathname: path.join(__dirname, 'XDHELCq.html'),
     protocol: 'file:',
     slashes: true
   }))
+  */
+
+  let html = [
+    '<!DOCTYPE html>',
+    '<html>',
+    '	<head>',
+    '		<meta charset="UTF-8" />',
+    '		<meta http-equiv="X-UA-Compatible" content="IE=edge" />',
+    '		<script src="corpus/js/xdhtml.js"></script>',
+    '		<script src="tools/xdhelcq/XDHELCq.js"></script>',
+    '		<script>handleQuery("?_action=")</script>',
+    '	</head>',
+    '	<body id="XDHRoot">',
+    '	</body>'
+  ].join("\n");
+
+  win.loadURL("data:text/html;charset=utf-8," + encodeURI(html), {baseURLForDataURL: "file://h:/hg/epeios/"});
 
   // Open the DevTools.
   win.webContents.openDevTools()

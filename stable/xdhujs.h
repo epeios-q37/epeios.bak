@@ -91,12 +91,11 @@ namespace xdhujs {
 	inline void DialogAlert(
 		const nstring___ &XML,
 		const nstring___ &XSL,
-		const nstring___ &Path,
 		const nstring___ &Title,
 		const nstring___ &CloseText,
 		str::string_ &Script )
 	{
-		GetScript( snDialogAlert, &Script, XML.Internal()(), XSL.Internal()(), Path.Internal()(), Title.Internal()(), CloseText.Internal()() );
+		GetScript( snDialogAlert, &Script, XML.Internal()(), XSL.Internal()(), Title.Internal()(), CloseText.Internal()() );
 	}
 
 	inline void RemoveAttribute(

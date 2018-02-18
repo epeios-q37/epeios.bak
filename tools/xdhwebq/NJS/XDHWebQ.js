@@ -111,26 +111,25 @@ function userHead() {
 }
 
 function prolog() {
-	return '\
-<!DOCTYPE html>\
-<html>\
-	<head>\
-		<meta charset="UTF-8" />\
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">'
-		+ userHead() +
-		'<script src="xdh/xdhtml.js"></script>\
-		<script src="xdh/xdhwebq.js"></script>\
-		<script>handleQuery("?_action=")</script>\
-	</head>\
-	<body id="XDHRoot">\
-	</body>\
-</html>\
-		';
+	return [
+	'<!DOCTYPE html>',
+	'<html>',
+	'	<head>',
+	'		<meta charset="UTF-8" />',
+	'		<meta http-equiv="X-UA-Compatible" content="IE=edge" />',
+	userHead(),
+	'		<script src="xdh/xdhtml.js"></script>',
+	'		<script src="xdh/xdhwebq.js"></script>',
+	'		<script>handleQuery("?_action=")</script>',
+	'	</head>',
+	'	<body id="XDHRoot">',
+	'	</body>'
+].join("\n");
 }
 
 function serveQuery(query, res) {
 	var response = "";
-	if (('_action' in query) && (query['_action'] != '')) {
+	if ('_action' in query ) {
 		var keys = new Array();
 		var values = new Array();
 

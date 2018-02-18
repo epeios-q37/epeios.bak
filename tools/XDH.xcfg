@@ -42,14 +42,14 @@
 				<Alert>
 					<![CDATA[
 						dialog = document.createElement( "span" );
-						dialog.innerHTML = transformToHTML( "%XML%", "%XSL%", "%Path%" );
+						dialog.innerHTML = transformToHTML( "%XML%", "%XSL%" );
 						$(dialog).dialog({modal: true},{title: "%Title%"},{width: "auto"} ,{closeText: "%CloseText%"});
 					]]>
 				</Alert>
 				<!-- Ugly. Will try to solve problem with the below alternative. -->
 				<Confirm>
 					<![CDATA[
-							confirm( transformToText( "%XML%", "%XSL%", "%Path%" ).trim() );
+							confirm( transformToText( "%XML%", "%XSL%" ).trim() );
 					]]>
 				</Confirm>
 				<!--
@@ -147,7 +147,7 @@
 				<Events>
 					<![CDATA[
 						removeChildren( "%Id%" );
-						getElement( "%Id%" ).appendChild( transformToFragment( "%XML%", "%XSL%", "%Path%" ) );"";
+						getElement( "%Id%" ).appendChild( transformToFragment( "%XML%", "%XSL%" ) );"";
 						var digests = fetchEventHandlers( "%Id%" );
 						digests;
 					]]>

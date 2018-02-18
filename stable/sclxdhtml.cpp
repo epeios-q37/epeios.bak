@@ -224,10 +224,9 @@ namespace {
 	}
 }
 
-void sclxdhtml::rProxy::Alert_(
+void sclxdhtml::sProxy::Alert_(
 	const ntvstr::string___ &XML,
 	const ntvstr::string___ &XSL,
-	const ntvstr::string___ &XSLPath,
 	const ntvstr::string___ &Title,
 	const char *Language )
 {
@@ -237,13 +236,13 @@ qRB
 	CloseText.Init();
 	scllocale::GetTranslation( SCLXDHTML_NAME "_CloseText", Language, CloseText );
 
-	Core_.Alert( XML, XSL, XSLPath, Title, CloseText );
+	Core_.Alert( XML, XSL, Title, CloseText );
 qRR
 qRT
 qRE
 }
 
-void sclxdhtml::rProxy::Alert_(
+void sclxdhtml::sProxy::Alert_(
 	const ntvstr::string___ &Message,
 	const char *MessageLanguage,	// If != 'NULL', 'Message' is translated, otherwise it is displayed as is.
 	const char *CloseTextLanguage )
@@ -256,31 +255,29 @@ qRB
 
 	SetXMLAndXSL_( Message, MessageLanguage, XML, XSL );
 
-	// Passing an empty XSL filename will induce the use of the 'Path' parameter as XSL content.
-	Alert_(XML, ntvstr::string___(), XSL, ntvstr::string___(), CloseTextLanguage );
+	Alert_(XML, XSL, ntvstr::string___(), CloseTextLanguage );
 qRR
 qRT
 qRE
 }
 
-void sclxdhtml::rProxy::AlertT(
+void sclxdhtml::sProxy::AlertT(
 	const ntvstr::string___ &RawMessage,
 	const char *Language )
 {
 	Alert_( RawMessage, Language, Language );
 }
 
-void sclxdhtml::rProxy::AlertU(
+void sclxdhtml::sProxy::AlertU(
 	const ntvstr::string___ &Message,
 	const char *Language )
 {
 	Alert_( Message, NULL, Language );
 }
 
-bso::bool__ sclxdhtml::rProxy::Confirm_(
+bso::bool__ sclxdhtml::sProxy::Confirm_(
 	const ntvstr::string___ &XML,
 	const ntvstr::string___ &XSL,
-	const ntvstr::string___ &XSLPath,
 	const ntvstr::string___ &Title,
 	const char *Language )
 {
@@ -291,14 +288,14 @@ qRB
 	CloseText.Init();
 	scllocale::GetTranslation( SCLXDHTML_NAME "_CloseText", Language, CloseText );
 
-	Confirmation = Core_.Confirm( XML, XSL, XSLPath, Title, CloseText );
+	Confirmation = Core_.Confirm( XML, XSL, Title, CloseText );
 qRR
 qRT
 qRE
 	return Confirmation;
 }
 
-bso::bool__ sclxdhtml::rProxy::Confirm_(
+bso::bool__ sclxdhtml::sProxy::Confirm_(
 	const ntvstr::string___ &Message,
 	const char *MessageLanguage,	// If != 'NULL', 'Message' is translates, otherwise it is displayed as is.
 	const char *CloseTextLanguage )
@@ -312,8 +309,7 @@ qRB
 
 	SetXMLAndXSL_( Message, MessageLanguage, XML, XSL );
 
-	// Passing an empty XSL filename will induce the use of the 'Path' parameter as XSL content.
-	Confirmation = Confirm_( XML, ntvstr::string___(), XSL, ntvstr::string___(), CloseTextLanguage );
+	Confirmation = Confirm_( XML, XSL, ntvstr::string___(), CloseTextLanguage );
 qRR
 qRT
 qRE
@@ -321,14 +317,14 @@ qRE
 }
 
 
-bso::bool__ sclxdhtml::rProxy::ConfirmT(
+bso::bool__ sclxdhtml::sProxy::ConfirmT(
 	const ntvstr::string___ &RawMessage,
 	const char *Language )
 {
-	return Confirm_( RawMessage,  Language, Language );
+	return Confirm_( RawMessage, Language, Language );
 }
 
-bso::bool__ sclxdhtml::rProxy::ConfirmU(
+bso::bool__ sclxdhtml::sProxy::ConfirmU(
 	const ntvstr::string___ &Message,
 	const char *Language )
 {
@@ -336,7 +332,7 @@ bso::bool__ sclxdhtml::rProxy::ConfirmU(
 }
 
 void sclxdhtml::HandleError(
-	rProxy &Proxy,
+	sProxy &Proxy,
 	const char *Language )
 {
 qRH
@@ -366,7 +362,7 @@ qRT
 qRE
 }
 
-void sclxdhtml::rProxy::SetLayout_(
+void sclxdhtml::sProxy::SetLayout_(
 	const xdhdws::nstring___ &Id,
 	const rgstry::rEntry & Filename,
 	const char *Target,
@@ -380,13 +376,13 @@ qRB
 	XSL.Init();
 	sclxdhtml::LoadXSLAndTranslateTags( rgstry::tentry___( Filename, Target ), Registry, XSL, Marker );
 
-	Core_.SetLayout( Id, XML, XSL, XSLPath_ );
+	Core_.SetLayout( Id, XML, XSL );
 qRR
 qRT
 qRE
 }
 
-void sclxdhtml::rProxy::SetContents(
+void sclxdhtml::sProxy::SetContents(
 	const str::dStrings &Ids,
 	const str::dStrings &Contents )
 {
@@ -408,7 +404,7 @@ qRT;
 qRE;
 }
 
-void sclxdhtml::rProxy::SetContent(
+void sclxdhtml::sProxy::SetContent(
 	const str::dString &Id,
 	const str::dString &Content )
 {
@@ -426,19 +422,19 @@ qRT;
 qRE;
 }
 
-void sclxdhtml::rProxy::InsertCSSRule(
+void sclxdhtml::sProxy::InsertCSSRule(
 	const str::dString &Rule,
 	xdhcmn::sIndex Index )
 {
 	return Core_.InsertCSSRule( Rule, Index );
 }
 
-xdhcmn::sIndex sclxdhtml::rProxy::AppendCSSRule( const str::dString &Rule )
+xdhcmn::sIndex sclxdhtml::sProxy::AppendCSSRule( const str::dString &Rule )
 {
 	return Core_.AppendCSSRule( Rule );
 }
 
-void sclxdhtml::rProxy::RemoveCSSRule( xdhcmn::sIndex Index )
+void sclxdhtml::sProxy::RemoveCSSRule( xdhcmn::sIndex Index )
 {
 	Core_.RemoveCSSRule( Index );
 }
@@ -470,10 +466,10 @@ namespace {
 	void HandleClass_(
 		const str::dString &Id,
 		const str::dString &Class,
-		void (rProxy::*Method)(
+		void (sProxy::*Method)(
 			const str::dStrings &Ids,
 			const str::dStrings &Classes ),
-		rProxy &Proxy )
+		sProxy &Proxy )
 	{
 	qRH;
 		str::wStrings Ids, Classes;
@@ -491,46 +487,46 @@ namespace {
 	}
 }
 
-void sclxdhtml::rProxy::AddClasses(
+void sclxdhtml::sProxy::AddClasses(
 	const str::dStrings &Ids,
 	const str::dStrings& Classes )
 {
 	HandleClasses_( Ids, Classes, &xdhdws::sProxy::AddClasses, Core_ );
 }
 
-void sclxdhtml::rProxy::AddClass(
+void sclxdhtml::sProxy::AddClass(
 	const str::dString &Id,
 	const str::dString &Class )
 {
-	HandleClass_( Id, Class, &rProxy::AddClasses, *this );
+	HandleClass_( Id, Class, &sProxy::AddClasses, *this );
 }
 
-void sclxdhtml::rProxy::RemoveClasses(
+void sclxdhtml::sProxy::RemoveClasses(
 	const str::dStrings &Ids,
 	const str::dStrings& Classes )
 {
 	HandleClasses_( Ids, Classes, &xdhdws::sProxy::RemoveClasses, Core_ );
 }
 
-void sclxdhtml::rProxy::RemoveClass(
+void sclxdhtml::sProxy::RemoveClass(
 	const str::dString &Id,
 	const str::dString &Class )
 {
-	HandleClass_( Id, Class, &rProxy::RemoveClasses, *this );
+	HandleClass_( Id, Class, &sProxy::RemoveClasses, *this );
 }
 
-void sclxdhtml::rProxy::ToggleClasses(
+void sclxdhtml::sProxy::ToggleClasses(
 	const str::dStrings &Ids,
 	const str::dStrings& Classes )
 {
 	HandleClasses_( Ids, Classes, &xdhdws::sProxy::ToggleClasses, Core_ );
 }
 
-void sclxdhtml::rProxy::ToggleClass(
+void sclxdhtml::sProxy::ToggleClass(
 	const str::dString &Id,
 	const str::dString &Class )
 {
-	HandleClass_( Id, Class, &rProxy::ToggleClasses, *this );
+	HandleClass_( Id, Class, &sProxy::ToggleClasses, *this );
 }
 
 namespace {
@@ -553,8 +549,8 @@ namespace {
 
 	void HandleElement_(
 		const str::dString &Id,
-		void (rProxy::*Method)( const str::dStrings &Ids ),
-		rProxy &Proxy )
+		void (sProxy::*Method)( const str::dStrings &Ids ),
+		sProxy &Proxy )
 	{
 	qRH;
 		str::wStrings Ids;
@@ -569,24 +565,24 @@ namespace {
 	}
 }
 
-void sclxdhtml::rProxy::EnableElements( const str::dStrings &Ids )
+void sclxdhtml::sProxy::EnableElements( const str::dStrings &Ids )
 {
 	HandleElements_( Ids, &xdhdws::sProxy::EnableElements, Core_ );
 }
 
-void sclxdhtml::rProxy::EnableElement(	const str::dString &Id )
+void sclxdhtml::sProxy::EnableElement(	const str::dString &Id )
 {
-	HandleElement_( Id, &rProxy::EnableElements, *this );
+	HandleElement_( Id, &sProxy::EnableElements, *this );
 }
 
-void sclxdhtml::rProxy::DisableElements( const str::dStrings &Ids )
+void sclxdhtml::sProxy::DisableElements( const str::dStrings &Ids )
 {
 	HandleElements_( Ids, &xdhdws::sProxy::EnableElements, Core_ );
 }
 
-void sclxdhtml::rProxy::DisableElement( const str::dString &Id )
+void sclxdhtml::sProxy::DisableElement( const str::dString &Id )
 {
-	HandleElement_( Id, &rProxy::DisableElements, *this );
+	HandleElement_( Id, &sProxy::DisableElements, *this );
 }
 
 qCDEF( char *, sclxdhtml::RootTagId_, "XDHRoot" );
@@ -598,7 +594,7 @@ void sclxdhtml::prolog::GetLayout(
 	sclfrntnd::GetProjectsFeatures( Frontend.Language(), Writer );
 }
 
-static sclmisc::project_type__ GetProjectType_( rProxy &Proxy )
+static sclmisc::project_type__ GetProjectType_( sProxy &Proxy )
 {
 	sclmisc::project_type__ ProjectType = sclmisc::pt_Undefined;
 qRH
@@ -613,7 +609,7 @@ qRE
 }
 
 void sclxdhtml::prolog::DisplaySelectedProjectFilename(
-	rProxy &Proxy,
+	sProxy &Proxy,
 	const char *Id )
 {
 qRH
@@ -640,7 +636,7 @@ qRE
 }
 
 sclmisc::project_type__ sclxdhtml::prolog::GetProjectFeatures(
-	rProxy &Proxy,
+	sProxy &Proxy,
 	str::string_ &Feature )
 {
 	sclmisc::project_type__ Type = sclmisc::pt_Undefined;
@@ -669,7 +665,7 @@ qRE
 	return Type;
 }
 
-void sclxdhtml::prolog::LoadProject( rProxy &Proxy )
+void sclxdhtml::prolog::LoadProject( sProxy &Proxy )
 {
 qRH
 	str::string ProjectFeature;
@@ -708,7 +704,7 @@ sclfrntnd::eLogin sclxdhtml::login::GetLayout(
 
 namespace {
 	const str::dString &GetBackendType_(
-		rProxy &Proxy,
+		sProxy &Proxy,
 		str::dString &Type )
 	{
 		return Proxy.GetValue( login::BackendTypeId, Type );
@@ -739,7 +735,7 @@ namespace straight_ {
 }
 
 void sclxdhtml::login::GetBackendFeatures(
-	rProxy &Proxy,
+	sProxy &Proxy,
 	sclfrntnd::rFeatures &Features )
 {
 qRH
@@ -777,7 +773,7 @@ qRE
 }
 
 void sclxdhtml::login::DisplaySelectedEmbeddedBackendFilename(
-	rProxy &Proxy,
+	sProxy &Proxy,
 	const char *Id )
 {
 qRH

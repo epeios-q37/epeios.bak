@@ -219,16 +219,13 @@ namespace sclxdhtml {
 
 	typedef xdhcmn::cSession cSession_;
 
-	class rProxy
+	class sProxy
 	{
 	private:
 		xdhdws::sProxy Core_;
-		str::wString XSLPath_;
-	protected:
 		void Alert_(
 			const ntvstr::string___ &XML,
 			const ntvstr::string___ &XSL,
-			const ntvstr::string___ &XSLPath,
 			const ntvstr::string___ &Title,
 			const char *Language );
 		void Alert_(
@@ -238,7 +235,6 @@ namespace sclxdhtml {
 		bso::bool__ Confirm_(
 			const ntvstr::string___ &XML,
 			const ntvstr::string___ &XSL,
-			const ntvstr::string___ &XSLPath,
 			const ntvstr::string___ &Title,
 			const char *Language );
 		bso::sBool Confirm_(
@@ -275,15 +271,12 @@ namespace sclxdhtml {
 	public:
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, Core_, XSLPath_ );
+			tol::reset( P, Core_ );
 		}
-		qCDTOR( rProxy );
-		void Init(
-			xdhcmn::cProxy *Proxy,
-			const str::dString &XSLPath )
+		qCDTOR( sProxy );
+		void Init( xdhcmn::cProxy *Proxy )
 		{
 			Core_.Init( Proxy );
-			XSLPath_.Init( XSLPath );
 		}
 		void Log( const ntvstr::rString &Message )
 		{
@@ -295,7 +288,7 @@ namespace sclxdhtml {
 			const ntvstr::string___ &Title,
 			const char *Language )
 		{
-			Alert_( XML, XSL, Title, XSLPath_, Language );
+			Alert_( XML, XSL, Title, Language );
 		}
 		void AlertT(
 			const ntvstr::string___ &RawMessage,
@@ -309,7 +302,7 @@ namespace sclxdhtml {
 			const ntvstr::string___ &Title,
 			const char *Language )
 		{
-			Confirm_( XML, XSL, XSLPath_, Title, Language );
+			Confirm_( XML, XSL, Title, Language );
 		}
 		bso::bool__ ConfirmT(
 			const ntvstr::string___ &RawMessage,
@@ -412,10 +405,10 @@ namespace sclxdhtml {
 		}
 	};
 
-	class rReporting
+	class sReporting
 	: public sReporting_ {
 	private:
-		Q37_MRMDF( rProxy, P_, Proxy_ );
+		Q37_MRMDF( sProxy, P_, Proxy_ );
 		Q37_MPMDF( const char, L_, Language_ );
 	protected:
 		virtual void FBLFRDReport(
@@ -436,9 +429,9 @@ namespace sclxdhtml {
 			sReporting_::reset( P );
 			Proxy_ = NULL;
 		}
-		E_CVDTOR( rReporting );
+		E_CVDTOR( sReporting );
 		void Init(
-			rProxy &Proxy,
+			sProxy &Proxy,
 			const char *Language )
 		{
 			sReporting_::Init();
@@ -448,7 +441,7 @@ namespace sclxdhtml {
 	};
 
 	void HandleError(
-		rProxy &Proxy,
+		sProxy &Proxy,
 		const char *Language );
 
 	// To indicate if the backend dedicated part in the login page should or not be visible.
@@ -523,7 +516,7 @@ namespace sclxdhtml {
 	{
 	private:
 		page Page_;	// Current page;
-		rReporting Reporting_;
+		sReporting Reporting_;
 		eBackendVisibility BackendVisibility_;
 		qRMV( class rCore<rSession>, C_, Core_ );
 	protected:
@@ -791,14 +784,14 @@ namespace sclxdhtml {
 			xml::writer_ &Writer );
 
 		void DisplaySelectedProjectFilename(
-			rProxy &Proxy,
+			sProxy &Proxy,
 			const char *Id );
 
 		sclmisc::project_type__ GetProjectFeatures(
-			rProxy &Proxy,
+			sProxy &Proxy,
 			str::string_ &Feature );
 
-		void LoadProject( rProxy &Proxy );
+		void LoadProject( sProxy &Proxy );
 	}
 
 	namespace login {
@@ -814,11 +807,11 @@ namespace sclxdhtml {
 			xml::writer_ &Writer );
 
 		void GetBackendFeatures(
-			rProxy &Proxy,
+			sProxy &Proxy,
 			sclfrntnd::rFeatures &Features );
 
 		void DisplaySelectedEmbeddedBackendFilename(
-			rProxy &Proxy,
+			sProxy &Proxy,
 			const char *Id );
 	}
 

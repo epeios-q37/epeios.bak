@@ -1,8 +1,20 @@
 # *Epeios* changelog
 
+2018-02-18:
+- *common*:
+  - **$**: reverting path parameter handling,
+- SCLXDHTML:
+  - adaptation to modifications in underlying modules,
+- XDHDWS:
+  - **$**,
+- XDHUJP:
+  - **$**,
+- XDHUJS:
+  - **$**,
+
 2018-02-16:
 - *common*:
-  - **$**: a path parameter is now coming along with *XSL* parameter, for the desktop version be able to load the file.
+  - **$**: a path parameter is now coming along with *XSL* parameter, for the desktop version be able to load the file,
 - SCLXDHTML:
   - adaptation to modifications in underlying modules,
 - XDHDWS:

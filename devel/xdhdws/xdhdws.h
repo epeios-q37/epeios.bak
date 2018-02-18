@@ -73,16 +73,14 @@ namespace xdhdws {
 		void Alert(
 			const nstring___ &XML,
 			const nstring___ &XSL,
-			const nstring___ &Path,
 			const nstring___ &Title,
 			const nstring___ &CloseText )
 		{
-			C_().Process( xdhcmn::fAlert, NULL, XML.Internal()(), XSL.Internal()(), Path.Internal()(), Title.Internal()(), CloseText.Internal()() );
+			C_().Process( xdhcmn::fAlert, NULL, XML.Internal()(), XSL.Internal()(), Title.Internal()(), CloseText.Internal()() );
 		}
 		bso::bool__ Confirm(
 			const nstring___ &XML,
 			const nstring___ &XSL,
-			const nstring___ &Path,
 			const nstring___ &Title,
 			const nstring___ &CloseText )
 		{
@@ -90,7 +88,7 @@ namespace xdhdws {
 		qRH
 			TOL_CBUFFER___ Buffer;
 		qRB
-			C_().Process( xdhcmn::fConfirm, &Buffer, XML.Internal()(), XSL.Internal()(), Path.Internal()(), Title.Internal()(), CloseText.Internal()() );
+			C_().Process( xdhcmn::fConfirm, &Buffer, XML.Internal()(), XSL.Internal()(), Title.Internal()(), CloseText.Internal()() );
 
 			Confirmed = !strcmp( "true", Buffer );
 		qRR
@@ -101,10 +99,9 @@ namespace xdhdws {
 		void SetLayout(
 			const nstring___ &Id,
 			const nstring___ &XML,
-			const nstring___ &XSL,
-			const nstring___ &Path )
+			const nstring___ &XSL )
 		{
-			C_().Process( xdhcmn::fSetLayout, NULL, Id.Internal()(), XML.Internal()(), XSL.Internal()(), Path.Internal()() );
+			C_().Process( xdhcmn::fSetLayout, NULL, Id.Internal()(), XML.Internal()(), XSL.Internal()() );
 		}
 		void DressWidgets( const nstring___ &Id )
 		{

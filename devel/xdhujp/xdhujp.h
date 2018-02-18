@@ -94,7 +94,7 @@ namespace xdhujp {
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			Callback_ = NULL;
+			tol::reset( P, Callback_ );
 		}
 		E_CVDTOR( sProxyCallback );
 		void Init( cJS &Callback )

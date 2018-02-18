@@ -118,7 +118,7 @@ namespace {
 				HandleEvent_( Pairs, *Session, Script );
 			else if ( Action == "_Next" )
 				Report_( Response, *Session, Script );
-			else if ( Action.Amount() )
+			else
 				HandleAction_( Action, *Session, Script );
 		qRR;
 			if ( ERRFailure() ) {
