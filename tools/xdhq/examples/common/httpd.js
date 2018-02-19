@@ -46,4 +46,4 @@ if (process.env.EPEIOS_SRC) {
 	xdhwebqId = "xdhwebq";
 }
 
-require(xdhwebqId).launch(process.argv[2], "Connect");
+require(xdhwebqId).launch(process.argv[2]);

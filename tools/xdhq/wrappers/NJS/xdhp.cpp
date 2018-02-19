@@ -594,8 +594,5 @@ SCLNJS_F( xdhp::Focus )
 
 qGCTOR( xdhp )
 {
-	Automat_.Init();
-	Callbacks_.Init();
-	ConnectCallback_.Init();
-	Sharing_.Init();
+	tol::Init( Automat_, Callbacks_, ConnectCallback_, Sharing_ );
 }

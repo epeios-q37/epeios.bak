@@ -656,10 +656,10 @@ xdhcmn::cSession *sclxdhtml::SCLXDHTMLRetrieveCallback(
 	Session->Init( ProxyCallback, Language );
 
 	// WARNING ! In 'MultiUser' mode, 'ProxyCallback' is not correctly set yet!
-	if ( Mode == xdhcmn::mMonoUser ) {
+/*	if ( Mode == xdhcmn::mMonoUser ) {
 		Session->Launch( "", "" );
 	}
-
+*/
 	return Session;
 }
 

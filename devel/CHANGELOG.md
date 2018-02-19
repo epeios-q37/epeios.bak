@@ -1,5 +1,9 @@
 # *Epeios* changelog
 
+2018-02-19:
+- XDHUTL
+  - fixing bug occurring when event label size too small,
+
 2018-02-18:
 - *common*:
   - **$**: reverting path parameter handling,

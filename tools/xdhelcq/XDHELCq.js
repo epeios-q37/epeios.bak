@@ -1,8 +1,26 @@
-const { app, BrowserWindow } = require('electron')
-const path = require('path')
-const url = require('url')
+const { app, BrowserWindow } = require('electron');
+const path = require('path');
+const url = require('url');
+const fs = require('fs');
 
-console.log("!!!!", process.argv);
+const args = process.argv;
+
+console.log( args );
+
+function help() {
+  process.stdout.write( ". -m=h:/bin/xdhqxdh/ <dir>");
+  process.exit(-1 );
+}
+
+if ( args.length < 4 )
+  help();
+else if (args[3][0] == '-' )
+  help();
+
+const cdnPath = path.posix.join( "H:/hg/epeios/tools/xdhq/examples/common/", args[3], '/' );
+
+console.log( cdnPath );
+
 
 /*
 
@@ -29,7 +47,7 @@ console.log( xdhelcq.wrapperInfo() );
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let win
+let win;
 
 function createWindow() {
   // Create the browser window.
@@ -44,75 +62,15 @@ function createWindow() {
   }))
   */
 
-  let html = [
-    '<!DOCTYPE html>',
-    '<html>',
-    ' <head>',
-    ' <meta charset="UTF-8" />',
-    '	<meta http-equiv="X-UA-Compatible" content="IE=edge" />',
-    '	<script src="file://h:/hg/epeios/corpus/js/xdhtml.js"></script>',
-    ' <script>',
-    ' function attachDebugger()',
-    ' {',
-	  '  alert( "Attach debugger !" );',
-    ' }',
-    ' function log( message )',
-    ' {',
-    '  console.log( message );',
-    ' }',
-    ' function launchEvent( digest )',
-    ' {',
-    '  xdhelcq.launchEvent( digest );',
-    ' }',
-    ' function initialize( arguments ) {',
-    '  var mergedArguments = "";',
-    '  var length = arguments.length;',
-    '',
-    '   while ( length-- ) {',
-    ' 	 mergedArguments = \'"\' + arguments[length] + \'" \' + mergedArguments;',
-    '	  }',
-    '',
-    '  //	console.log( mergedArguments );',
-    '	 xdhelcq.initialize( mergedArguments );',
-    ' }',
-    'function userHead() {',
-    ' try {',
-    '  return require(fs) .readFileSync("head.html");',
-    ' } catch (err) {',
-    '  return "";',
-    ' }',
-    '}',
-    '',
-    '</script>',
-    '</head>',
-    '<body id="XDHRoot">',
-    '<script>',
-    'attachDebugger();',
-    '',
-    'var xdhelcqPath = null;',
-    '',
-    'if ( process.env.EPEIOS_SRC ) {',
-    ' var addonPath = null;',
-    ' if ( process.platform == \'win32\' )',
-    '  addonPath =\'h:/bin/\';',
-    ' else',
-    '  addonPath = \'~/bin/\';',
-    ' xdhelcqPath = addonPath + \'xdhelcq.node\';',
-    '} else {',
-    ' xdhelcqPath = \'./xdhelcq.node\';',
-    '}',
-    '',
-    'const xdhelcq =require( xdhelcqPath );',
-    '// console.log( require(\'electron\').remote.process.argv );',
-    'initialize( require(\'electron\').remote.process.argv );',
-    '	</script>',
-    '</body>',
-  ].join("\n");
+  let head = fs.readFileSync( path.join( cdnPath, "head.html") );
+  let html = fs.readFileSync("XDHELCq.html", "utf8").replace( "<!-- $USER_HEAD -->", head );
 
-  console.log( "Av.");
-  win.loadURL("data:text/html;charset=utf-8," + encodeURI(html), {baseURLForDataURL: "file://h:/hg/epeios/tools/xdhq/examples/common/blank/"});
-//  win.loadURL("data:text/html;charset=utf-8," + encodeURI(html));
-console.log( "Ap.");
+//  console.log( html );
+
+  win.loadURL("data:text/html;charset=utf-8," + encodeURI(html), { baseURLForDataURL: "file://" + cdnPath });
+//  win.loadURL("data:text/html;charset=utf-8," + encodeURI(html), { baseURLForDataURL: "file://h:/hg/epeios/tools/xdhq/examples/common/blank/" });
+
+  //  win.loadURL("data:text/html;charset=utf-8," + encodeURI(html));
 
   // Open the DevTools.
   win.webContents.openDevTools()

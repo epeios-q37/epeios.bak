@@ -92,14 +92,14 @@ namespace {
 SCLZND_F( xdhp::Listen )
 {
 qRH;
-	str::wString Arguments;
+	str::wString Arguments, NewSessionAction;
 qRB;
-	Arguments.Init();
-	Caller.Get( Arguments );
+tol::Init( Arguments, NewSessionAction );
+	Caller.Get( Arguments, NewSessionAction );
 
 	sclargmnt::FillRegistry( Arguments, sclargmnt::faIsArgument, sclargmnt::uaReport );
 
-	Processing_.Init();
+	Processing_.Init( NewSessionAction );
 	Server_.Init( sclmisc::MGetU16( registry::parameter::Service ), Processing_ );
 
 	mtk::RawLaunch( Process_, NULL );
@@ -367,7 +367,7 @@ SCLZND_F( xdhp::Focus )
 
 qGCTOR( xdhp )
 {
-	tol::Init( Sharing_, Processing_  );
+	tol::Init( Sharing_ );
 }
 
 

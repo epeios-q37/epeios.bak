@@ -399,14 +399,18 @@ namespace {
 		qRB
 			Id.Init();
 			Abstract.Init();
-			if ( xdhutl::FetchEventAbstract(Digest, Id, Abstract) ) {
-				if ( xdhutl::IsPredefined( Abstract.Action() ) )
-					qRVct();	//  HandlePredefinedAction_( Abstract.Action(), Abstract.UserAction, _B(), Id, Abstract.Args );
-				else if ( Abstract.Action() == xdhutl::a_User )
-					Stop = Session_.Launch( Id.Convert( IdBuffer ), Abstract.UserAction.Convert( ActionBuffer ) );
-				else
-					qRGnr();
-			}
+			if ( Digest.Amount() != 0 ) {
+				if ( xdhutl::FetchEventAbstract( Digest, Id, Abstract ) ) {
+					if ( xdhutl::IsPredefined( Abstract.Action() ) )
+						qRVct();	//  HandlePredefinedAction_( Abstract.Action(), Abstract.UserAction, _B(), Id, Abstract.Args );
+					else if ( Abstract.Action() == xdhutl::a_User )
+						Stop = Session_.Launch( Id.Convert( IdBuffer ), Abstract.UserAction.Convert( ActionBuffer ) );
+					else
+						qRGnr();
+				}
+			} else
+				Stop = Session_.Launch( IdBuffer, ActionBuffer );
+
 		qRR
 		qRT
 		qRE

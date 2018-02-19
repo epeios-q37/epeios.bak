@@ -256,7 +256,7 @@ function cancel( $dom ) {
 }
 
 function main() {
-	UnJSq::listen();
+	UnJSq::listen( "Connect" );
 
 	$dom = new DOM();
 

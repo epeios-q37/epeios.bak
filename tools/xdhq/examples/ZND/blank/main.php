@@ -46,7 +46,7 @@ function getUnJSq() {
 getUnJSq();
 
 function main() {
-	UnJSq::listen();
+	UnJSq::listen( "Connect" );
 
 	$dom = new UnJSqDOM();
 

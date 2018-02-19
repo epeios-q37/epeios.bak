@@ -145,8 +145,9 @@ function newSession() {
 
 function acConnect(dom, id) {
 	dom.setLayout("", new Tree(), "Main.xsl",
-		() => dom.focus( "Input"),
+		() => dom.focus("Input",
 			() => displayTodos(dom)
+		)
 	);
 }
 
