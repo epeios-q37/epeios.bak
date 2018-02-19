@@ -22,7 +22,7 @@ package info.q37.unjsq;
 public class UnJSq extends info.q37.xdhq.XDHq {
 	private static Process httpd = null;
 
-	public static void listen(String dir) {
+	public static void listen(String newSessionAction, String dir) {
 		try {
 			Runtime runtime = Runtime.getRuntime();
 			httpd = runtime.exec("node httpd " + dir, null,
@@ -35,10 +35,10 @@ public class UnJSq extends info.q37.xdhq.XDHq {
 		} catch (java.io.IOException e) {
 			e.printStackTrace();
 		}
-		info.q37.xdhq.XDHq.listen();
+		info.q37.xdhq.XDHq.listen( newSessionAction );
 	}
 
-	public static void listen() {
-		UnJSq.listen(".");
+	public static void listen(String newSessionAction) {
+		UnJSq.listen(newSessionAction, ".");
 	}
 };

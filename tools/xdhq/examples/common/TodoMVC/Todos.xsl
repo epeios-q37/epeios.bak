@@ -23,7 +23,7 @@
 			<span id="View.{@id}">
 				<input class="toggle" type="checkbox" id="{@id}" data-xdh-onevent="Toggle">
 					<xsl:if test="@completed='true'">
-						<xsl:attribute name="checked"></xsl:attribute>
+						<xsl:attribute name="checked"/>
 					</xsl:if>
 				</input>
 				<label id="Label.{@id}">

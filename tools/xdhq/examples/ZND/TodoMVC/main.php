@@ -256,7 +256,7 @@ function cancel( $dom ) {
 }
 
 function main() {
-	UnJSq::listen( "Connect" );
+	UnJSq::listen( "Connect", "TodoMVC" );
 
 	$dom = new DOM();
 

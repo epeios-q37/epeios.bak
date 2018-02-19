@@ -72,7 +72,7 @@ class Blank {
 		displayBytecodeBuildTimestamp();
 		System.out.println(UnJSq.returnArgument("Text from JAVA file"));
 
-		UnJSq.listen("blank");
+		UnJSq.listen("Connect", "blank");
 
 		for (;;) {
 			java.lang.Thread thread = new Thread(new DOM());

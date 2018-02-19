@@ -204,7 +204,7 @@ class Thread extends java.lang.Thread {
 
 class Notes {
 	public static void main(String[] args) throws Exception {
-		UnJSq.listen( "notes" );
+		UnJSq.listen( "Connect", "notes" );
 
 		for (;;) {
 			java.lang.Thread thread = new Thread(new DOM());

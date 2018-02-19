@@ -1,9 +1,11 @@
 # Notes about *XDHELCq*
 
-*Electron* is located in `node_modules/.bin/electron`.
+*Electron* path is `node_modules/.bin/electron`.
 
 The module has to be launched as value of the `--module|-m` flag.
 
 The module must be given <u>with</u> path, or the locale/configuration files will not be found.
 
-Example to launch the *UnJSq* frontend: `nodes_module/.bin/electron . -m=h:/bin/xdhqxdh`.
+As last argument, the subdirectory which contains all the file red directly by *Electron*.
+
+Example to launch the *UnJSq* frontend for *TodoMVC* : `nodes_module/.bin/electron . -m=h:/bin/xdhqxdh TodoMVC`.

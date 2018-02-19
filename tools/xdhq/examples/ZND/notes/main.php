@@ -139,7 +139,7 @@ function edit($dom, $id) {
 }
 
 function main() {
-	UnJSq::listen( "Connect" );
+	UnJSq::listen( "Connect", "notes" );
 
 	$dom = new MyData();
 

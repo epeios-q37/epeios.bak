@@ -45,9 +45,13 @@ function getXDHq() {
 
 getXDHq();
 
+    set_error_handler(function ($errno, $errstr) {
+       return strpos($errstr, 'Declaration of') === 0;
+    }, E_WARNING);
+
 class UnJSq extends XDHq {
-	public static function listen( string $newSessionAction ) {
-		popen( "start node h:/hg/epeios/tools/xdhq/examples/common/httpd.js h:/hg/epeios/tools/xdhq/examples/common/TodoMVC", "r" );
+	public static function listen( string $newSessionAction, string $dir ) {
+		popen( "start node h:/hg/epeios/tools/xdhq/examples/common/httpd.js h:/hg/epeios/tools/xdhq/examples/common/" . $dir, "r" );
 		parent::listen( $newSessionAction);
 	}
 };
