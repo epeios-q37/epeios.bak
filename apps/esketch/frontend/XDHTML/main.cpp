@@ -50,19 +50,9 @@ void main::SetLayout( core::rSession &Session )
 	Session.SetDocumentLayout( XSLAffix_, layout_::Get );
 }
 
-void main::SetCasting( core::rSession &Session )
-{
-	if ( Session.User.TestButtonIsVisible() )
-		Session.SetDocumentCast( "TestButtonCasting", "Plain" );
-	else
-		Session.SetDocumentCast( "TestButtonCasting", "Hidden" );
-}
-
 void main::Display( core::rSession &Session )
 {
 	SetLayout( Session );
-
-	SetCasting( Session );
 
 	Session.SwitchTo( base::pMain );
 }
@@ -95,13 +85,11 @@ AC( Submission )
 AC( ShowTestButton )
 {
 	Session.User.TestButtonIsVisible() = true;
-	SetCasting( Session );
 }
 
 AC( HideTestButton )
 {
 	Session.User.TestButtonIsVisible() = false;
-	SetCasting(Session );
 }
 
 AC( Testing )

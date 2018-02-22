@@ -241,6 +241,7 @@ namespace sclxdhtml {
 			const ntvstr::string___ &Message,
 			const char *MessageLanguage,	// If != 'NULL', 'Message' is translated, otherwise it is displayed as is.
 			const char *CloseTextLanguage );
+	protected:
 		void SetLayout_(
 			const xdhdws::nstring___ &Id,
 			const rgstry::rEntry &Filename,
@@ -532,7 +533,7 @@ namespace sclxdhtml {
 			instances::reset( P );
 			frontend::reset( P );
 			Page_ = UndefinedPage;
-			_ReportingCallback.reset( P );
+			Reporting_.reset( P );
 			BackendVisibility_ = bv_Undefined;
 			sProxy::reset();
 			Core_ = NULL;
@@ -545,8 +546,8 @@ namespace sclxdhtml {
 				class rCore<rSession> &Core )
 		{
 			sProxy::Init( Callback );
-			_ReportingCallback.Init( *this, Language );
-			frontend::Init( Kernel, Language, _ReportingCallback );
+			Reporting_.Init( *this, Language );
+			frontend::Init( Kernel, Language, Reporting_ );
 			Page_ = UndefinedPage;
 			// instances::Init( *this );	// Made on connection.
 			BackendVisibility_ = bvShow;	// By default, the backend part of the login page is shown.

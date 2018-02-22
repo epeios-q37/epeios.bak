@@ -17,7 +17,7 @@ if ( args.length < 4 )
 else if (args[3][0] == '-' )
   help();
 
-const cdnPath = path.posix.join( "H:/hg/epeios/tools/xdhq/examples/common/", args[3], '/' );
+const cdnPath = path.posix.join( args[3], '/' );
 
 console.log( cdnPath );
 
@@ -61,9 +61,15 @@ function createWindow() {
     slashes: true
   }))
   */
+  
+   // Open the DevTools.
+  win.webContents.openDevTools();
+  
+  console.log( cdnPath );
+
 
   let head = fs.readFileSync( path.join( cdnPath, "head.html") );
-  let html = fs.readFileSync("XDHELCq.html", "utf8").replace( "<!-- $USER_HEAD -->", head );
+  let html = fs.readFileSync( path.join( __dirname, "XDHELCq.html" ), "utf8").replace( "<!-- $USER_HEAD -->", head );
 
 //  console.log( html );
 
@@ -71,9 +77,6 @@ function createWindow() {
 //  win.loadURL("data:text/html;charset=utf-8," + encodeURI(html), { baseURLForDataURL: "file://h:/hg/epeios/tools/xdhq/examples/common/blank/" });
 
   //  win.loadURL("data:text/html;charset=utf-8," + encodeURI(html));
-
-  // Open the DevTools.
-  win.webContents.openDevTools()
 
   // Emitted when the window is closed.
   win.on('closed', () => {

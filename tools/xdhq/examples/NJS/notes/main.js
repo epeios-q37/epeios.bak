@@ -37,6 +37,7 @@ if (process.env.EPEIOS_SRC) {
 const unjsq = require(unjsqId);
 const Tree = unjsq.Tree;
 const DOM = unjsq.DOM;
+var type = unjsq.types.WEB;
 
 const viewModeElements = ["Pattern", "CreateButton", "DescriptionToggling", "ViewNotes"];
 
@@ -241,7 +242,9 @@ function main() {
 		}
 	);
 
-	unjsq.launch(newSession, "Connect");
+	const type = unjsq.types.WEB;	// or 'DESKTOP'.
+
+	unjsq.launch(newSession, "Connect", type);
 }
 
 main();

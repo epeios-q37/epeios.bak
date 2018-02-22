@@ -42,6 +42,8 @@ if (process.env.EPEIOS_SRC) {
 const unjsq = require(unjsqId);
 const Tree = unjsq.Tree;
 const DOM = unjsq.DOM;
+var type = unjsq.types.WEB;
+
 
 class MyData extends DOM {
 	constructor() {
@@ -328,7 +330,10 @@ function main() {
 		}
 	);
 
-	unjsq.launch(newSession, "Connect");
+//	Uncomment for desktop version.
+//	type = unjsq.types.DESKTOP;
+
+	unjsq.launch(newSession, "Connect", type);
 }
 
 main();

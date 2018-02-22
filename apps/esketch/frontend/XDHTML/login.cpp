@@ -46,26 +46,9 @@ void login::SetLayout( core::rSession &Session )
 	Session.SetDocumentLayout( XSLAffix_, layout_::Get );
 }
 
-void login::SetCasting( core::rSession &Session )
-{
-qRH;
-	sclxdhtml::wCasts Casts;
-qRB;
-	Casts.Init();
-
-	sclxdhtml::login::GetCasts( Session, Session.BackendVisibility(), Casts );
-
-	Session.SetDocumentCasts( Casts );
-qRR;
-qRT;
-qRE;
-}
-
 void login::Display( core::rSession &Session )
 {
 	SetLayout( Session );
-
-	SetCasting( Session );
 
 	Session.SwitchTo( base::pLogin );
 }
@@ -74,7 +57,6 @@ void login::Display( core::rSession &Session )
 
 AC( SwitchBackendType )
 {
-	SetCasting( Session );
 }
 
 AC( DisplayEmbeddedBackendFilename )

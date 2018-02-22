@@ -81,7 +81,9 @@ function main() {
 		}
 	);
 
-	unjsq.launch(newSession, "Connect");
+	const type = unjsq.types.DESKTOP_AND_WEB;
+
+	unjsq.launch(newSession, "Connect", type );
 }
 
 main();

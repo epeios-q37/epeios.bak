@@ -45,25 +45,9 @@ void prolog::SetLayout( core::rSession &Session )
 	Session.SetDocumentLayout( XSLAffix_, layout_::Get );
 }
 
-void prolog::SetCasting( core::rSession &Session )
-{
-qRH;
-	sclxdhtml::wCasts Casts;
-qRB;
-	Casts.Init();
-	sclxdhtml::prolog::GetCasts( Session, Casts );
-
-	Session.SetDocumentCasts( Casts );
-qRR;
-qRT;
-qRE;
-}
-
 void prolog::Display( core::rSession &Session )
 {
 	SetLayout( Session );
-
-	SetCasting( Session );
 
 	Session.SwitchTo( base::pProlog );
 }
@@ -72,7 +56,6 @@ void prolog::Display( core::rSession &Session )
 
 AC( SwitchProjectType )
 {
-	SetCasting( Session );
 }
 
 AC( DisplayProjectFilename )

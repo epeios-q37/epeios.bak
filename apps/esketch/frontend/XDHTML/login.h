@@ -37,8 +37,6 @@ namespace login {
 
 	void SetLayout( core::rSession &Session );
 
-	void SetCasting( core::rSession &Session );
-
 	void Display( core::rSession &Session );
 }
 
