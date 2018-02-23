@@ -45,15 +45,15 @@ namespace {
 
 	void Test_( void )
 	{
-	qRH
+	qRH;
 		str::wString Test;
-	qRB
+	qRB;
 		Test.Init();
 		sclmisc::OGetValue( registry::parameter::Test, Test );
 		cio::COut << "Test :'" << Test << "'" << txf::nl;
-	qRR
-	qRT
-	qRE
+	qRR;
+	qRT;
+	qRE;
 	}
 }
 
@@ -66,8 +66,8 @@ int scltool::SCLTOOLMain(
 	const scltool::fOddities &Oddities )
 {
 	int ExitValue = EXIT_FAILURE;
-qRH
-qRB
+qRH;
+qRB;
 	if ( Command == "Version" )
 		PrintHeader_();
 	else if ( Command == "License" )
@@ -77,9 +77,9 @@ qRB
 		qRGnr();
 
 	ExitValue = EXIT_SUCCESS;
-qRR
-qRT
-qRE
+qRR;
+qRT;
+qRE;
 	return ExitValue;
 }
 

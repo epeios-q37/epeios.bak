@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project xmlns:xpp="http://q37.info/ns/xpp/">
+	<xpp:bloc>
+		<!-- User definitions -->
+		<xpp:define name="Version">
+			<xpp:bloc>(Obsolete ; generated automatically)</xpp:bloc>
+		</xpp:define>
+		<xpp:define name="CopyrightYears">
+			<xpp:bloc>2017</xpp:bloc>
+		</xpp:define>
+		<xpp:set name="Credits" value="Epeios"/>
+		<xpp:set name="Type" value="Tool"/>
+	</xpp:bloc>
+	<xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
+	<About>
+		<Program>mppq</Program>
+		<Software>MPPq</Software>
+		<UUID>effd756a-a901-46e8-939f-3f2a5e7986b0</UUID>
+	</About>
+	<Modules>
+		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
+			<Modules Group="Core">
+				<xpp:expand select="Core"/>
+			</Modules>
+			<Modules Group="SCL">
+				<xpp:expand select="SCL"/>
+			</Modules>
+		</Modules>
+		<Module>registry</Module>
+	</Modules>
+	<Files/>
+ <RTW>
+  <Dir>mppq-cli</Dir>
+ </RTW>
+ <Packing>
+		<WikiFiles>
+			<File Dir="computing/epeios/tools/" WikiOddity="IsHome">mppq</File>
+			<File Dir="computing/epeios/tools/mppq/">Manual</File>
+			<File Dir="computing/epeios/">Compilation</File>
+			<File Dir="computing/epeios/tools/">Configuration</File>
+		</WikiFiles>
+	</Packing>
+	<SourceDirs>
+	</SourceDirs>
+	<PreprocessorDefinitions>
+		<PreprocessorDefinition>E_ST</PreprocessorDefinition>
+	</PreprocessorDefinitions>
+</Project>
