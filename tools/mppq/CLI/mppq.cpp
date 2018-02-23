@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2016 by Claude SIMON (http://zeusw.org/epeios/contact.html).
+	Copyright (C) 2018 by Claude SIMON (http://zeusw.org/epeios/contact.html).
 
 	This file is part of 'MPPq'.
 
@@ -63,8 +63,6 @@ namespace {
 				Row = Slide.Next( Row );
 			}
 		}
-
-		Flow << "---" << txf::nl;
 	}
 
 	bso::sBool IsListItem_( const str::dString &Line )
@@ -115,8 +113,12 @@ namespace {
 		sdr::sRow Row = Slide.First();
 
 		while ( Row != qNIL ) {
-			if ( IsListItem_( Slide( Row ) ) )
-				Display_( Row, Slide, Flow );
+			if (IsListItem_(Slide(Row))) {
+				Display_(Row, Slide, Flow);
+
+				// 'Marp' slide separator.
+				Flow << "---" << txf::nl;
+			}
 
 			Row = Slide.Next( Row );
 		}

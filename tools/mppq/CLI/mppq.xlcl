@@ -4,8 +4,8 @@
 	<xpp:expand value-of="q37.xpp"/>
 	<xpp:expand select="epeios.xlcl"/>
 	<Translations text="ProgramDescription">
-		<Translation language="fr">Mettre ici la description du programme en français !</Translation>
-		<Translation language="en">Put here the english description of the program !</Translation>
+		<Translation language="fr">Processeur de présentations en markdown.</Translation>
+		<Translation language="en">Markdown presentation processor.</Translation>
 	</Translations>
 	<!--
 	<Translations text="">

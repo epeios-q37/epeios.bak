@@ -140,7 +140,7 @@ namespace htp {
 	{
 	private:
 		fdr::size__ Size_;	// Size of current chunk.
-		qRMV( flw::sIFlow, F_, Flow_ );
+		qRMV( flw::sRFlow, F_, Flow_ );
 	protected:
 		fdr::size__ FDRRead(
 			fdr::size__ Maximum,
@@ -195,7 +195,7 @@ namespace htp {
 	{
 	private:
 		fdr::size__ Size_;	// Size of current chunk.
-		qRMV( flw::sIFlow, F_, Flow_ );
+		qRMV( flw::sRFlow, F_, Flow_ );
 		bso::sBool GetSize_( void  );
 	protected:
 		fdr::size__ FDRRead(
@@ -253,7 +253,7 @@ namespace htp {
 	private:
 		rBlocFlow BlocFlow_;
 		rChunkFlow ChunkFlow_;
-		flw::sDressedIFlow<> Flow_;
+		flw::sDressedRFlow<> Flow_;
 		void FillField_( flw::iflow__ &IFlow );
 		bso::sU16 StatusCode_;
 	public:

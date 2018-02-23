@@ -35,7 +35,7 @@
 namespace sclc {
 	template <typename source, typename ... tags> inline void Display(
 		const source &Source,
-		txf::sOFlow &Flow,
+		txf::sWFlow &Flow,
 		const tags &... Tags )
 	{
 	qRH

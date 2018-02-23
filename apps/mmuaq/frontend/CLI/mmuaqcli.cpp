@@ -265,7 +265,7 @@ namespace {
 			const dAgents &Agents,
 			const str::dStrings &Names,
 			const fbltyp::dBooleans &Enabled,
-			txf::sOFlow &Flow )
+			txf::sWFlow &Flow )
 		{
 			sdr::sRow Row = Agents.First();
 
@@ -377,7 +377,7 @@ namespace {
 		namespace {
 			void Display_(
 				const char *Label,
-				txf::sOFlow &Flow )
+				txf::sWFlow &Flow )
 			{
 			qRH
 				str::wString Message;
@@ -395,7 +395,7 @@ namespace {
 			const str::dStrings &Names,
 			sFolder Root,
 			sFolder Inbox,
-			txf::sOFlow &Flow )
+			txf::sWFlow &Flow )
 		{
 			folder::sId Folder = folder::Undefined;
 			sdr::sRow Row = Folders.First();
@@ -470,7 +470,7 @@ namespace {
 			const mail::dIds &Mails,
 			const str::dStrings &Subjects,
 			const agent::dIds &Agents,
-			txf::sOFlow &Flow )
+			txf::sWFlow &Flow )
 		{
 			if ( Mails.Amount() != Subjects.Amount() )
 				qRGnr();
