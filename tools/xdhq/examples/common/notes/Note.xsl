@@ -2,8 +2,7 @@
 <!-- NO BOM !! -->
 <xsl:stylesheet version="1.0" 
 	xmlns="http://www.w3.org/1999/xhtml" 
-	xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-	xmlns:xpp="http://q37.info/ns/xpp/">
+	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<xsl:output method="html" encoding="UTF-8"/>
 	<xsl:template match="/XDHTML">
 		<div>
@@ -23,7 +22,7 @@
 				<div style="display: flex; justify-content: space-around;">
 					<button class="button" data-xdh-onevent="Submit">Submit</button>
 					<span></span>
-					<button  class="button" data-xdh-onevent="Cancel">Cancel</button>
+					<button class="button" data-xdh-onevent="Cancel">Cancel</button>
 				</div>
 			</article>
 		</div>

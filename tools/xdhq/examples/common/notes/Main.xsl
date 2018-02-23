@@ -14,7 +14,11 @@
 		<div class="jumbo">
 			<a class="right q37" href="http://q37.info/"/>
 			<h2>Welcome!</h2>
-			<p>Let's take some notes with <span style="font-style: oblique; font-weight: bold;">UnJSq</span>!</p>
+			<p>
+				<span>Let's take some notes with </span>
+				<span style="font-style: oblique; font-weight: bold;">UnJSq</span>
+				<span>!</span>
+			</p>
 			<a href="http://q37.info/UnJSq/" class="button">
 				<xsl:text>    About   </xsl:text>
 			</a>

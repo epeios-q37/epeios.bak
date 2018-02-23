@@ -182,7 +182,7 @@ class XDH {
 		njsq._call(xdhq, 22, this, id, name, value, callback);
 	}
 	setProperty(id, name, value, callback) {
-		njsq._call(xdhq, 24, this, id, name, value, callback );
+		njsq._call(xdhq, 24, this, id, name, value, callback);
 	}
 	getProperty(id, name, callback) {
 		return njsq._call(xdhq, 25, this, id, name, callback);
@@ -201,8 +201,8 @@ function register(idsAndItems) {
 	njsq._call(xdhq, 7, tags, callbacks);
 }
 
-function launch(callback,action) {
-	njsq._call(xdhq, 8, callback, "53752",action);
+function launch(callback, action) {
+	njsq._call(xdhq, 8, callback, "53752", action);
 }
 
 module.exports.componentInfo = () => njsq._componentInfo(xdhq);

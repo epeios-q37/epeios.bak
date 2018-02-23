@@ -5,45 +5,19 @@ const fs = require('fs');
 
 const args = process.argv;
 
-console.log( args );
+// console.log( args );
 
 function help() {
-  process.stdout.write( ". -m=h:/bin/xdhqxdh/ <dir>");
-  process.exit(-1 );
+  process.stdout.write(". -m=h:/bin/xdhqxdh/ <dir>");
+  process.exit(-1);
 }
 
-if ( args.length < 4 )
+if (args.length < 4)
   help();
-else if (args[3][0] == '-' )
+else if (args[3][0] == '-')
   help();
 
-const cdnPath = path.posix.join( args[3], '/' );
-
-console.log( cdnPath );
-
-
-/*
-
-if ( process.env.EPEIOS_SRC ) {
- var addonPath = null;
- if ( process.platform == 'win32' )
-  addonPath = 'h:/bin/';
- else
-  addonPath = '~/bin/';
- const xdhelcq = require( addonPath + 'xdhelcq.node');
-} else {
- const binary = require( 'node-pre-gyp' );
- const path = require( 'path' );
- const xdhelcq_path = binary.find( path.resolve( path.join( __dirname, './package.json' ) ) );
- xdhelcq = require( xdhelcq_path );	
-}
-
-*/
-/*
-const xdhelcq = require( 'h:\\bin\\xdhelcq.node');
-
-console.log( xdhelcq.wrapperInfo() );
-*/
+const cdnPath = path.posix.join(args[3], '/');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -53,30 +27,14 @@ function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({ width: 800, height: 600 })
 
-  // and load the index.html of the app.
-  /*
-  win.loadURL(url.format({
-    pathname: path.join(__dirname, 'XDHELCq.html'),
-    protocol: 'file:',
-    slashes: true
-  }))
-  */
-  
-   // Open the DevTools.
-  win.webContents.openDevTools();
-  
-  console.log( cdnPath );
 
+  // Open the DevTools.
+  //  win.webContents.openDevTools();
 
-  let head = fs.readFileSync( path.join( cdnPath, "head.html") );
-  let html = fs.readFileSync( path.join( __dirname, "XDHELCq.html" ), "utf8").replace( "<!-- $USER_HEAD -->", head );
-
-//  console.log( html );
+  let head = fs.readFileSync(path.join(cdnPath, "head.html"));
+  let html = fs.readFileSync(path.join(__dirname, "XDHELCq.html"), "utf8").replace("<!-- $USER_HEAD -->", head);
 
   win.loadURL("data:text/html;charset=utf-8," + encodeURI(html), { baseURLForDataURL: "file://" + cdnPath });
-//  win.loadURL("data:text/html;charset=utf-8," + encodeURI(html), { baseURLForDataURL: "file://h:/hg/epeios/tools/xdhq/examples/common/blank/" });
-
-  //  win.loadURL("data:text/html;charset=utf-8," + encodeURI(html));
 
   // Emitted when the window is closed.
   win.on('closed', () => {

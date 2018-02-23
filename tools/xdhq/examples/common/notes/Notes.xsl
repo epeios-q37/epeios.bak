@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- NO BOM !! -->
-<xsl:stylesheet	version="1.0" xmlns="http://www.w3.org/1999/xhtml" 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xpp="http://q37.info/ns/xpp/">
+<xsl:stylesheet version="1.0" 
+	xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<xsl:output method="html" encoding="UTF-8"/>
 	<xsl:template match="/XDHTML">
 		<xsl:apply-templates select="Notes"/>
@@ -19,7 +21,7 @@
 			<span id="View.{@id}">
 				<div>
 					<article class="listing note-view" style="width:100%; justify-content: space-between;align-items: center;" data-xdh-value="{@id}">
-						<div> 
+						<div>
 							<h3 id="Title.{@id}">
 								<xsl:value-of select="title"/>
 							</h3>

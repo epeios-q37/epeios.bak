@@ -32,8 +32,10 @@
 		</section>
 		<footer class="info">
 			<p>Double-click to edit a todo</p>
-			<p>Created with 
-				<a style="font-style: italic;" href="http://q37.info/UnJSq/">UnJSq</a>!
+			<p>
+				<span>Created with </span>
+				<a style="font-style: italic;" href="http://q37.info/UnJSq/">UnJSq</a>
+				<span>!</span>
 			</p>
 		</footer>
 	</xsl:template>

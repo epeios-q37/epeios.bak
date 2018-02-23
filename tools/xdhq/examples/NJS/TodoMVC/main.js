@@ -42,8 +42,7 @@ if (process.env.EPEIOS_SRC) {
 const unjsq = require(unjsqId);
 const Tree = unjsq.Tree;
 const DOM = unjsq.DOM;
-var type = unjsq.types.WEB;
-
+const type = null;
 
 class MyData extends DOM {
 	constructor() {
@@ -330,8 +329,8 @@ function main() {
 		}
 	);
 
-//	Uncomment for desktop version.
-//	type = unjsq.types.DESKTOP;
+	// Uncomment below line for desktop interface. Default is web (port 8080).
+	//	const type = unjsq.types.DESKTOP;
 
 	unjsq.launch(newSession, "Connect", type);
 }

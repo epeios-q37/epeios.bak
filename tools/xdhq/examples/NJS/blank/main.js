@@ -37,6 +37,7 @@ if (process.env.EPEIOS_SRC) {
 const unjsq = require(unjsqId);
 const Tree = unjsq.Tree;
 const DOM = unjsq.DOM;
+const type = null;
 
 class MyData extends DOM {
 	constructor() {
@@ -52,9 +53,7 @@ function newSession() {
 }
 
 function acConnect(dom, id) {
-	dom.setLayout("", new Tree(), "Main.xsl",
-		() => dom.addClass("Input", "hidden")
-	);
+	dom.setLayout("", new Tree(), "Main.xsl");
 }
 
 function acSubmit(dom, id) {
@@ -81,9 +80,10 @@ function main() {
 		}
 	);
 
-	const type = unjsq.types.DESKTOP_AND_WEB;
+	// Uncomment below line for desktop interface. Default is web (port 8080).
+	//	const type = unjsq.types.DESKTOP;
 
-	unjsq.launch(newSession, "Connect", type );
+	unjsq.launch(newSession, "Connect", type);
 }
 
 main();

@@ -67,25 +67,25 @@ if (isDev()) {
 	xdhqId = epeiosToolsPath + "xdhq/wrappers/NJS/XDHq.js";
 	xdhwebqId = epeiosToolsPath + "xdhwebq/NJS/XDHWebQ.js";
 	xdhelcqPath = epeiosToolsPath + "xdhelcq/";
-	xdhelcqBin = path.join( binPath, "xdhqxdh" );
+	xdhelcqBin = path.join(binPath, "xdhqxdh");
 	electronBin = xdhelcqPath + "node_modules/electron/dist/electron";
 } else {
 	xdhqId = "xdhq";
 	xdhwebqId = "xdhwebq";
 	xdhelcqPath = require("xdhelcq").path;
 	xdhelcqBin = require("xdhelcq").bin;
-	electronBin = require( "electron");
+	electronBin = require("electron");
 }
 
 const xdhwebq = require(xdhwebqId);
 const xdhq = require(xdhqId);
 
-function launchWeb( dir ) {
+function launchWeb(dir) {
 	require('child_process').fork(require(xdhwebqId).fileName, [dir]);
 }
 
-function launchDesktop( dir ) {
-	require('child_process').spawn(electronBin, [xdhelcqPath, "-m=" + xdhelcqBin, dir ]).on('close', function (code) {
+function launchDesktop(dir) {
+	require('child_process').spawn(electronBin, [xdhelcqPath, "-m=" + xdhelcqBin, dir]).on('close', function (code) {
 		process.exit(code)
 	});
 }
@@ -98,46 +98,48 @@ const types = {
 
 module.exports.types = types;
 
+const defaultType = types.WEB;
 
-function launch(callback, action, type = types.WEB ) {
+function launch(callback, action, type) {
 	var dir = getRealDir(path.dirname(process.argv[1]));
-	xdhq.launch(callback,action);
+	xdhq.launch(callback, action);
 
-	if ( process.argv.length > 2 ) {
-		switch ( process.argv[2] ) {
-		case "0":
-			break;
-		case "1":
-			type = types.DESKTOP;
-			break;
-		case "2":
-			type = types.WEB;
-			break;
-		case "3":
-			type = types.DESKTOP_AND_WEB;
-			break;
-		default:
-			throw( "Unknown type !");
-			break;
-		}
+	if (type === null) {
+		if (process.argv.length > 2) {
+			switch (process.argv[2]) {
+				case "0":
+					type = defaultType;
+					break;
+				case "1":
+					type = types.DESKTOP;
+					break;
+				case "2":
+					type = types.WEB;
+					break;
+				case "3":
+					type = types.DESKTOP_AND_WEB;
+					break;
+				default:
+					throw ("Unknown type !");
+					break;
+			}
+		} else
+			type = defaultType;
 	}
 
-
-	console.log( dir );
-
-	switch ( type ) {
+	switch (type) {
 		case types.DESKTOP:
-			launchDesktop( dir );
+			launchDesktop(dir);
 			break;
 		case types.WEB:
-			launchWeb( dir );
+			launchWeb(dir);
 			break;
 		case types.DESKTOP_AND_WEB:
-			launchDesktop( dir );
-			launchWeb( dir );
+			launchDesktop(dir);
+			launchWeb(dir);
 			break;
 		default:
-			throw( "Unknown type !");
+			throw ("Unknown type !");
 			break;
 	}
 }
