@@ -19,4 +19,5 @@
 
 package info.q37.unjsq;
 
-public class DOM extends info.q37.xdhq.DOM {};
+public class DOM extends info.q37.xdhq.DOM {
+};

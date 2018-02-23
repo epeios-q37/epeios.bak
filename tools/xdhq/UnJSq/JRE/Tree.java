@@ -19,4 +19,5 @@
 
 package info.q37.unjsq;
 
-public class Tree extends info.q37.xdhq.Tree {};
+public class Tree extends info.q37.xdhq.Tree {
+};

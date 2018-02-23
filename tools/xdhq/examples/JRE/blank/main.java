@@ -1,4 +1,3 @@
-
 /*
 	Copyright (C) 2007-2017 Claude SIMON (http://q37.info/contact/).
 
@@ -67,12 +66,16 @@ class Blank {
 	}
 
 	public static void main(String[] args) throws Exception {
+		UnJSq.Type type = UnJSq.Type.DEFAULT;
 		System.out.println(UnJSq.wrapperInfo());
 		System.out.println(UnJSq.componentInfo());
 		displayBytecodeBuildTimestamp();
 		System.out.println(UnJSq.returnArgument("Text from JAVA file"));
 
-		UnJSq.listen("Connect", "blank");
+		// Uncomment for desktop interface. Default is web (port 8080).
+		// type = UnJSq.Type.DESKTOP;
+
+		UnJSq.listen("Connect", "blank", type, args );
 
 		for (;;) {
 			java.lang.Thread thread = new Thread(new DOM());

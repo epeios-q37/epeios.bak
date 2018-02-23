@@ -20,12 +20,10 @@
 package info.q37.unjsq;
 
 public class UnJSq extends info.q37.xdhq.XDHq {
-	private static Process httpd = null;
-
-	public static void listen(String newSessionAction, String dir) {
+	private static void launchWeb(String dir) {
 		try {
 			Runtime runtime = Runtime.getRuntime();
-			httpd = runtime.exec("node httpd " + dir, null,
+			Process httpd = runtime.exec("node httpd " + dir, null,
 					new java.io.File("h:/hg/epeios/tools/xdhq/examples/common/"));
 			runtime.addShutdownHook(new Thread() {
 				public void run() {
@@ -35,10 +33,84 @@ public class UnJSq extends info.q37.xdhq.XDHq {
 		} catch (java.io.IOException e) {
 			e.printStackTrace();
 		}
-		info.q37.xdhq.XDHq.listen( newSessionAction );
 	}
 
-	public static void listen(String newSessionAction) {
-		UnJSq.listen(newSessionAction, ".");
+	private static void launchDesktop(String dir) {
+		try {
+			Runtime runtime = Runtime.getRuntime();
+			Process electron = runtime.exec(
+					"h:/hg/epeios/tools/xdhelcq/node_modules/electron/dist/electron . -m=h:/bin/xdhqxdh h:/hg/epeios/tools/xdhq/examples/common/"
+							+ dir,
+					null, new java.io.File("h:/hg/epeios/tools/xdhelcq"));
+			runtime.addShutdownHook(new Thread() {
+				public void run() {
+					electron.destroy();
+				}
+			});
+		} catch (java.io.IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public enum Type {
+		DEFAULT, DESKTOP, WEB, DESKTOP_AND_WEB
+	};
+
+	private static final Type defaultType = Type.WEB;
+
+	private static void listen(String newSessionAction, String dir, Type type, String arg) {
+		info.q37.xdhq.XDHq.listen(newSessionAction);
+
+		if (type == Type.DEFAULT) {
+			type = defaultType;
+
+			if (arg.length() > 0) {
+				switch (arg) {
+				case "0":
+					break;
+				case "1":
+					type = Type.DESKTOP;
+					break;
+				case "2":
+					type = Type.WEB;
+					break;
+				case "3":
+					type = Type.DESKTOP_AND_WEB;
+					break;
+				default:
+					System.out.println("Unknown type !");
+					System.exit(1);
+					break;
+				}
+			}
+		}
+
+		switch (type) {
+		case DESKTOP:
+			launchDesktop(dir);
+			break;
+		case WEB:
+			launchWeb(dir);
+			break;
+		case DESKTOP_AND_WEB:
+			launchDesktop(dir);
+			launchWeb(dir);
+			break;
+		default:
+			System.out.println("Unknown type !");
+			System.exit(1);
+			break;
+		}
+	}
+
+	public static void listen(String newSessionAction, String dir, Type type, String[] args) {
+		if (args.length > 0)
+			listen(newSessionAction, dir, type, args[0]);
+		else
+			listen(newSessionAction, dir, type, "");
+	}
+
+	public static void listen(String newSessionAction, Type type, String[] args) {
+		listen(newSessionAction, ".", type, args);
 	}
 };

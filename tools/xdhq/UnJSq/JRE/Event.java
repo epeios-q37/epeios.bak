@@ -19,4 +19,5 @@
 
 package info.q37.unjsq;
 
-public class Event extends info.q37.xdhq.Event {};
+public class Event extends info.q37.xdhq.Event {
+};

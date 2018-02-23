@@ -1,6 +1,5 @@
-
 /*
-	Copyright (C) 2007-2017 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 2018 Claude SIMON (http://q37.info/contact/).
 
 	This file is part of UnJSq.
 
@@ -286,7 +285,12 @@ class Thread extends java.lang.Thread {
 
 class TodoMVC {
 	public static void main(String[] args) throws Exception {
-		UnJSq.listen("Connect", "TodoMVC");
+		UnJSq.Type type = UnJSq.Type.DEFAULT;
+
+		// Uncomment for desktop interface. Default is web (port 8080).
+		// type = UnJSq.Type.DESKTOP;
+
+		UnJSq.listen("Connect", "TodoMVC", type, args);
 
 		for (;;) {
 			java.lang.Thread thread = new Thread(new DOM());
