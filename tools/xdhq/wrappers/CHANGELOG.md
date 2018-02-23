@@ -1,8 +1,8 @@
 *CHANGELOG* for the *XDHTML* wrappers (*all languages*).
 
 2018-02-23:
-- *xdhqnjs*, *xdhqjre*:
-  - desktop version (*Electron*) can now be launched by modifying the app. source,
+- all:
+  - desktop interface (*Electron*) can now be launched, instead of the default web one, by modifying the application source,
 
 2018-02-19:
 - *xdhqznd*

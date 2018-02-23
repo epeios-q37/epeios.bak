@@ -33,7 +33,7 @@ function getXDHq() {
 				$epeios_path = "/Users/csimon/hg/epeios/";
 			break;
 			default:
-				echo "Unknown OS !!!\n";
+				die( "Unknown OS !!!");
 			break;
 		}
 
@@ -45,14 +45,70 @@ function getXDHq() {
 
 getXDHq();
 
-    set_error_handler(function ($errno, $errstr) {
-       return strpos($errstr, 'Declaration of') === 0;
-    }, E_WARNING);
+set_error_handler(function ($errno, $errstr) {
+    return strpos($errstr, 'Declaration of') === 0;
+}, E_WARNING);
 
 class UnJSq extends XDHq {
-	public static function listen( string $newSessionAction, string $dir ) {
+	const DESKTOP = 1;
+	const WEB = 2;
+	const DESKTOP_AND_WEB = 3;
+	const DEFAULT = UnJSq::WEB;
+
+	private static function launchWeb( $dir ) {
 		popen( "start node h:/hg/epeios/tools/xdhq/examples/common/httpd.js h:/hg/epeios/tools/xdhq/examples/common/" . $dir, "r" );
+	}
+
+	private static function launchDesktop( $dir ) {
+		popen( "start h:/hg/epeios/tools/xdhelcq/node_modules/electron/dist/electron h:/hg/epeios/tools/xdhelcq/ -m=h:/bin/xdhqxdh h:/hg/epeios/tools/xdhq/examples/common/" . $dir, "r" );
+	}
+
+	public static function listen( string $newSessionAction, string $dir, $type = null ) {
+		global $argv;
+
+		if ( $type === null ) {
+			$type = UnJSq::DEFAULT;
+
+			if ( count( $argv ) > 1 ) {
+				switch ( $argv[1] ) {
+				case "0":
+					break;
+				case "1":
+					$type = UnJSq::DESKTOP;
+					break;
+				case "2":
+					$type = UnJSq::WEB;
+					break;
+				case "3":
+					$type = UnJSq::DESKTOP_AND_WEB;
+					break;
+				default:
+					die( "Unknown type !");
+					break;
+				}
+			}
+		}
+
+		var_dump( $type );
+
 		parent::listen( $newSessionAction);
+
+		switch( $type ) {
+		case UnJSq::DESKTOP:
+			UnJSq::launchDesktop( $dir );
+			break;
+		case UnJSq::WEB:
+			UnJSq::launchWeb( $dir );
+			break;
+		case UnJSq::DESKTOP_AND_WEB:
+			UnJSq::launchDesktop( $dir );
+			UnJSq::launchWeb( $dir );
+			break;
+		default:
+			die( "Unknown type !!!");
+			break;
+		}
+
 	}
 };
 

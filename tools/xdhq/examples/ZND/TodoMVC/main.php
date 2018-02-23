@@ -256,7 +256,12 @@ function cancel( $dom ) {
 }
 
 function main() {
-	UnJSq::listen( "Connect", "TodoMVC" );
+	$type = null;
+
+	// Uncomment below for desktop interface. Default is web (port: 8080).
+	// $type = UnJSq::DESKTOP;
+
+	UnJSq::listen( "Connect", "TodoMVC", $type );
 
 	$dom = new DOM();
 

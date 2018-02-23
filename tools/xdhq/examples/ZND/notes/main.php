@@ -139,7 +139,12 @@ function edit($dom, $id) {
 }
 
 function main() {
-	UnJSq::listen( "Connect", "notes" );
+	$type = null;
+
+	// Uncomment below for desktop interface. Default is web (port: 8080).
+	// $type = UnJSq::DESKTOP;
+
+	UnJSq::listen( "Connect", "notes", $type );
 
 	$dom = new MyData();
 

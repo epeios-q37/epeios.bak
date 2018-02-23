@@ -46,7 +46,12 @@ function getUnJSq() {
 getUnJSq();
 
 function main() {
-	UnJSq::listen( "Connect", "blank" );
+	$type = null;
+
+	// Uncomment below for desktop interface. Default is web (port: 8080).
+	// $type = UnJSq::DESKTOP;
+
+	UnJSq::listen( "Connect", "blank", $type );
 
 	$dom = new UnJSqDOM();
 

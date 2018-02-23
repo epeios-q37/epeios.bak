@@ -102,7 +102,6 @@ const defaultType = types.WEB;
 
 function launch(callback, action, type) {
 	var dir = getRealDir(path.dirname(process.argv[1]));
-	xdhq.launch(callback, action);
 
 	if (type === null) {
 		if (process.argv.length > 2) {
@@ -126,6 +125,8 @@ function launch(callback, action, type) {
 		} else
 			type = defaultType;
 	}
+
+	xdhq.launch(callback, action);
 
 	switch (type) {
 		case types.DESKTOP:
