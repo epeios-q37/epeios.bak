@@ -89,8 +89,6 @@ class UnJSq extends XDHq {
 			}
 		}
 
-		var_dump( $type );
-
 		parent::listen( $newSessionAction);
 
 		switch( $type ) {
