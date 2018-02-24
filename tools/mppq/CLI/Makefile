@@ -1,4 +1,4 @@
-#	Copyright (C) 2017 Claude SIMON (http://q37.info/contact/).
+#	Copyright (C) 2018 Claude SIMON (http://q37.info/contact/).
 #
 #	This file is part of MPPq.
 #
@@ -377,8 +377,8 @@ ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20180223"\"
-copt += -DCOPYRIGHT_YEARS=\""2017"\"
+copt += -DVERSION=\""20180224"\"
+copt += -DCOPYRIGHT_YEARS=\""2018"\"
 copt += -DIDENTIFIER=\""effd756a-a901-46e8-939f-3f2a5e7986b0"\"
 
 ifndef EPEIOS_SRC

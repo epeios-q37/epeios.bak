@@ -22,4 +22,5 @@
 using namespace registry;
 
 rEntry registry::parameter::Input( "Input", sclrgstry::Parameters );
+rEntry registry::parameter::Output( "Output", sclrgstry::Parameters );
 

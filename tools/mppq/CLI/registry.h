@@ -28,7 +28,9 @@ namespace registry {
 	namespace parameter {
 		using namespace sclrgstry::parameter;
 
-		extern rEntry Input;
+		extern rEntry
+			Input,
+			Output;
 	}
 
 	namespace definition {

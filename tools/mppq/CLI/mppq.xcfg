@@ -5,7 +5,7 @@
 		<xpp:expand value-of="q37.xpp"/>
   <xpp:expand href="../../../TOL.xcfg"/>
 		<Parameters>
-			<Language>fr</Language>
+			<Language>en</Language>
 			<!-- Default command -->
 			<Command>Process</Command>
 		</Parameters>
@@ -25,14 +25,24 @@
 				<Translation language="fr">in</Translation>
 				<Translation language="en">in</Translation>
 			</Translations>
+			<Translations text="OutputArgumentDescription">
+				<Translation language="fr">Nom du fichier de sortie (utilisation de la sortie standard si absent).</Translation>
+				<Translation language="en">Output file name (use of standard output if missing).</Translation>
+			</Translations>
+			<Translations text="OutputArgumentLabel">
+				<Translation language="fr">out</Translation>
+				<Translation language="en">out</Translation>
+			</Translations>
 		</Locale>
 		<Arguments>
 			<xpp:expand select="TOL_Arguments"/>
-			<Argument id="Process" Description="ProcessCommandDescription" long="process" short="p" Value="Test" Usage="[%InputArgument%]"/>
+			<Argument id="Process" Description="ProcessCommandDescription" long="process" short="p" Value="Process" Usage="[%InputArgument% [%OutputArgument%]]"/>
 			<Argument id="InputArgument" Description="InputArgumentDescription" Path="Input" Label="InputArgumentLabel"/>
+			<Argument id="OutputArgument" Description="OutputArgumentDescription" Path="Output" Label="OutputArgumentLabel"/>
 			<Layouts>
 				<Layout command="Process">
 					<Link index="0" Target="InputArgument"/>
+					<Link index="1" Target="OutputArgument"/>
 				</Layout>
 			</Layouts>
 		</Arguments>

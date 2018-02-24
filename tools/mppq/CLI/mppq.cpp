@@ -164,18 +164,41 @@ namespace {
 	qRE;
 	}
 
-	void Process_( const char *Source )
+	void Process_(
+		const char *Source,
+		const char *Target )
 	{
 	qRH;
-		flf::rRFlow Flow;
+		flf::rRFlow SFlow;
+		flf::rWDriver TFDriver;	// Target file driver.
+		txf::rWFlow TTFlow;	// Target text flow.
+		bso::sBool BackedUp = false;
 	qRB;
 		if ( Source != NULL ) {
-			if ( Flow.Init( Source, err::hUserDefined ) != tol::rSuccess )
+			if ( SFlow.Init( Source, err::hUserDefined ) != tol::rSuccess )
 				sclmisc::ReportFileOpeningErrorAndAbort( Source );
 		}
 
-		Process_( Source == NULL ? CIn.Flow() : Flow, COut );
+		if ( Target != NULL ) {
+			sclmisc::CreateBackupFile( Target );
+
+			BackedUp = true;
+
+			if ( TFDriver.Init( Target, err::hUserDefined ) != tol::rSuccess )
+				sclmisc::ReportFileOpeningErrorAndAbort( Target );
+
+			TTFlow.Init( TFDriver );
+		}
+
+
+		Process_(
+			Source == NULL ? CIn.Flow() : SFlow,
+			Target == NULL ? COut : TTFlow );
 	qRR;
+		if ( BackedUp ) {
+			tol::reset( TFDriver, TTFlow );
+			sclmisc::RecoverBackupFile( Target );
+		}
 	qRT;
 	qRE;
 	}
@@ -183,13 +206,18 @@ namespace {
 	void Process_( void )
 	{
 	qRH;
-		str::wString Input;
-		qCBUFFERr Buffer;
+		str::wString Input, Output;
+		qCBUFFERr InputBuffer, OutputBuffer;
 	qRB;
 		tol::Init( Input );
 		sclmisc::OGetValue( registry::parameter::Input, Input );
 
-		Process_( Input.Amount() != 0 ? Input.Convert( Buffer ) : NULL );
+		tol::Init( Output );
+		sclmisc::OGetValue( registry::parameter::Output, Output );
+
+		Process_(
+			Input.Amount() != 0 ? Input.Convert( InputBuffer ) : NULL,
+			Output.Amount() != 0 ? Output.Convert( OutputBuffer ) : NULL );
 	qRR;
 	qRT;
 	qRE;
