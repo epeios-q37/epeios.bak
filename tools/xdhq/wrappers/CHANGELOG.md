@@ -1,5 +1,9 @@
 *CHANGELOG* for the *XDHTML* wrappers (*all languages*).
 
+2018-02-27:
+- *xdhqnjs*
+  - *CTRL-C* now kills the application silently,
+
 2018-02-23:
 - all:
   - desktop interface (*Electron*) can now be launched, instead of the default web one, by modifying the application source,

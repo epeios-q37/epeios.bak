@@ -266,28 +266,9 @@ qRFE( sclmisc::ErrFinal() )
 }
 #endif
 
-static inline void signal_( int s )
-{
-	exit( EXIT_SUCCESS );
-}
-
-static inline void ExitOnSignal_( void )
-{
-#ifdef CPE_S_POSIX
-	signal( SIGHUP, signal_ );
-#elif defined( CPE_S_WIN )
-	signal( SIGBREAK, signal_ );
-#else
-#	error "Undefined target !"
-#endif
-	signal( SIGTERM, signal_ );
-	signal( SIGABRT, signal_ );
-	signal( SIGINT, signal_ );	// Documentations about this signal not very clear, but this handles Ctrl-C.
-}
-
 Q37_GCTOR( scltool )
 {
-	ExitOnSignal_();
+	sclmisc::ExitOnSignal();
 	qRRor_.Init();
 	SCLError_.Init();
 

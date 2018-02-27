@@ -796,6 +796,7 @@ namespace sclmisc {
 		}
 	};
 
+	void ExitOnSignal( void );
 }
 
 

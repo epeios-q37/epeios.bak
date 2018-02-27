@@ -85,7 +85,12 @@ namespace {
 
 	void Process_( void * )
 	{
+	qRFH;
+	qRFB;
 		Server_.Process();
+	qRFR;
+	qRFT;
+	qRFE( sclmisc::ErrFinal() );
 	}
 }
 
@@ -94,7 +99,7 @@ SCLZND_F( xdhp::Listen )
 qRH;
 	str::wString Arguments, NewSessionAction;
 qRB;
-tol::Init( Arguments, NewSessionAction );
+	tol::Init( Arguments, NewSessionAction );
 	Caller.Get( Arguments, NewSessionAction );
 
 	sclargmnt::FillRegistry( Arguments, sclargmnt::faIsArgument, sclargmnt::uaReport );

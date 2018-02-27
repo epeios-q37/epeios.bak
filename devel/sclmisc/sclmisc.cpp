@@ -1546,6 +1546,28 @@ fdr::rRDriver &sclmisc::rIDriverRack::Init( const fnm::name___ &FileName )
 	}
 }
 
+namespace {
+	inline void signal_( int s )
+	{
+		exit( EXIT_SUCCESS );
+	}
+}
+
+void sclmisc::ExitOnSignal( void )
+{
+#ifdef CPE_S_POSIX
+	signal( SIGHUP, signal_ );
+#elif defined( CPE_S_WIN )
+	signal( SIGBREAK, signal_ );
+	_set_abort_behavior( 0, _WRITE_ABORT_MSG );
+#else
+#	error "Undefined target !"
+#endif
+	signal( SIGTERM, signal_ );
+	signal( SIGABRT, signal_ );
+	signal( SIGINT, signal_ );	// Documentations about this signal not very clear, but this handles Ctrl-C.
+}
+
 Q37_GCTOR( sclmisc )
 {
 	BinPath_.Init();

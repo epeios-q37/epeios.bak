@@ -1,4 +1,10 @@
-# *Epeios* changelog
+# *Epeios* *CHANGELOG**
+
+2018-02-27:
+- SCLMISC:
+  - moving `ExitOnSignal()`from *SCLTOOL* to *SCLMISC*,
+- SCLTOOL:
+   - *idem*,
 
 2018-02-19:
 - XDHUTL

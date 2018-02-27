@@ -62,6 +62,14 @@ void sclznd::SCLZNDRegister( sclznd::sRegistrar &Registrar )
 	Registrar.Register( xdhp::AddClasses, xdhp::RemoveClasses, xdhp::ToggleClasses, xdhp::EnableElements, xdhp::DisableElements );	// 17 - 21.
 	Registrar.Register( xdhp::SetAttribute, xdhp::GetAttribute, xdhp::RemoveAttribute, xdhp::SetProperty, xdhp::GetProperty );	// 22 - 26.
 	Registrar.Register( xdhp::Focus );	// 27.
+
+	
+}
+
+qGCTOR( xdhqznd )
+{
+	// As a daemon, is often interrupted with CTRL-C.
+	sclmisc::ExitOnSignal();
 }
 
 const char *sclmisc::SCLMISCTargetName = NAME_LC;
