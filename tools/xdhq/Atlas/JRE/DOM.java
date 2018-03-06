@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2018 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 2017 Claude SIMON (http://q37.info/contact/).
 
 	This file is part of XDHq.
 
@@ -17,7 +17,7 @@
 	along with XDHq. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package info.q37.unjsq;
+package info.q37.atlas;
 
-public class Event extends info.q37.xdhq.Event {
+public class DOM extends info.q37.xdhq.DOM {
 };

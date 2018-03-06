@@ -66,13 +66,13 @@
 				<File>Rentals.xsl</File>
 			</Files>
 		</Files-->
-		<Files Group="UnJSq">
-			<Files Path="../../UnJSq/NJS/">
+		<Files Group="Altlas">
+			<Files Path="../../Atlas/NJS/">
 				<File Path="../">CHANGELOG.md</File>
 				<File>NOTES.md</File>
 				<File>Project.xml</File>
 				<File>README.md</File>
-				<File>UnJSq.js</File>
+				<File>Atlas.js</File>
 			</Files>
 		<Files Group="Blank">
 			<File Path="../../examples/NJS/blank/">main.js</File>

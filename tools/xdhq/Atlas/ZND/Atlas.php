@@ -2,20 +2,20 @@
 /*
 	Copyright (C) 2018 Claude SIMON (http://q37.info/contact/).
 
-	This file is part of UnJSq.
+	This file is part of XDHq.
 
-	UnJSq is free software: you can redistribute it and/or
+	WDHq is free software: you can redistribute it and/or
 	modify it under the terms of the GNU Affero General Public License as
 	published by the Free Software Foundation, either version 3 of the
 	License, or (at your option) any later version.
 
-	UnJSq is distributed in the hope that it will be useful,
+	XDHq is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 	Affero General Public License for more details.
 
 	You should have received a copy of the GNU Affero General Public License
-	along with UnJSq. If not, see <http://www.gnu.org/licenses/>.
+	along with XDHq. If not, see <http://www.gnu.org/licenses/>.
 */
 
 function getXDHq() {
@@ -49,11 +49,11 @@ set_error_handler(function ($errno, $errstr) {
     return strpos($errstr, 'Declaration of') === 0;
 }, E_WARNING);
 
-class UnJSq extends XDHq {
+class Atlas extends XDHq {
 	const DESKTOP = 1;
 	const WEB = 2;
 	const DESKTOP_AND_WEB = 3;
-	const DEFAULT = UnJSq::WEB;
+	const DEFAULT = Atlas::WEB;
 
 	private static function launchWeb( $dir ) {
 		popen( "start node h:/hg/epeios/tools/xdhq/examples/common/httpd.js h:/hg/epeios/tools/xdhq/examples/common/" . $dir, "r" );
@@ -67,20 +67,20 @@ class UnJSq extends XDHq {
 		global $argv;
 
 		if ( $type === null ) {
-			$type = UnJSq::DEFAULT;
+			$type = Atlas::DEFAULT;
 
 			if ( count( $argv ) > 1 ) {
 				switch ( $argv[1] ) {
 				case "0":
 					break;
 				case "1":
-					$type = UnJSq::DESKTOP;
+					$type = Atlas::DESKTOP;
 					break;
 				case "2":
-					$type = UnJSq::WEB;
+					$type = Atlas::WEB;
 					break;
 				case "3":
-					$type = UnJSq::DESKTOP_AND_WEB;
+					$type = Atlas::DESKTOP_AND_WEB;
 					break;
 				default:
 					die( "Unknown type !");
@@ -92,15 +92,15 @@ class UnJSq extends XDHq {
 		parent::listen( $newSessionAction);
 
 		switch( $type ) {
-		case UnJSq::DESKTOP:
-			UnJSq::launchDesktop( $dir );
+		case Atlas::DESKTOP:
+			Atlas::launchDesktop( $dir );
 			break;
-		case UnJSq::WEB:
-			UnJSq::launchWeb( $dir );
+		case Atlas::WEB:
+			Atlas::launchWeb( $dir );
 			break;
-		case UnJSq::DESKTOP_AND_WEB:
-			UnJSq::launchDesktop( $dir );
-			UnJSq::launchWeb( $dir );
+		case Atlas::DESKTOP_AND_WEB:
+			Atlas::launchDesktop( $dir );
+			Atlas::launchWeb( $dir );
 			break;
 		default:
 			die( "Unknown type !!!");
@@ -110,8 +110,8 @@ class UnJSq extends XDHq {
 	}
 };
 
-class UnJSqTree extends XDHqTree {};
+class AtlasTree extends XDHqTree {};
 
-class UnJSqDOM extends XDHqDOM {};
+class AtlasDOM extends XDHqDOM {};
 
 ?>

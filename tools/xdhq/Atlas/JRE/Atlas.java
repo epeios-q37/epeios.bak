@@ -17,9 +17,9 @@
 	along with XDHq. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package info.q37.unjsq;
+package info.q37.atlas;
 
-public class UnJSq extends info.q37.xdhq.XDHq {
+public class Atlas extends info.q37.xdhq.XDHq {
 	private static void launchWeb(String dir) {
 		try {
 			Runtime runtime = Runtime.getRuntime();

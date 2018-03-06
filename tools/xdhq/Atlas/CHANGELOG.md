@@ -1,4 +1,4 @@
-# CHANGELOG for *UnJS*
+# *CHANGELOG* for *Atlas*
 
 <mark>*Common to all langages... !*</mark>
 

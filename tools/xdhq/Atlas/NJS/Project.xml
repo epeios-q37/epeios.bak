@@ -10,23 +10,23 @@
 			<xpp:bloc>2018</xpp:bloc>
 		</xpp:define>
 		<xpp:set name="Credits" value="Epeios"/>
-		<xpp:set name="Type" value="UnJSq"/>
+		<xpp:set name="Type" value="Atlas"/>
 	</xpp:bloc>
 	<xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
 	<About>
-	 <Program>unjsqjre</Program>
-		<Software>UnJSq</Software>
+	 <Program>atlasnjs</Program>
+		<Software>Atlas</Software>
 		<UUID>45ce6ec4-6d3d-428b-9764-cc1f5588eaf6</UUID>
 	</About>
 	<!-- NO SPACE in 'Keywords' attribute !!! ("a,b,c", NOT "a, b, c")-->
-	<RTW Description="Java package to handle web frontends" Keywords="XDHTML,UnJSq,web,frontend,Java">
-		<Dir>unjsq-java</Dir>
+	<RTW Description="Module to handle web application frontends" Keywords="XDHTML,Atlas,web,frontend">
+		<Dir>atlas-node</Dir>
 	</RTW>
 	<NodeJS>
 		<Deps>
 			<Regular>
 				<Dep>xdhqxdh</Dep>
-				<Dep>xdhqjre</Dep>
+				<Dep>xdhqnjs</Dep>
 				<Dep>xdhwebq</Dep>
 			</Regular>
 		</Deps>

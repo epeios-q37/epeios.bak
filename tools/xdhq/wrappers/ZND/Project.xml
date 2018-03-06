@@ -50,7 +50,7 @@
 	<Files>
   <!-- NOTA : '*.php' files will automatically be packed as such. -->
   <!--File Pack="No">XDHq.php</File-->
-		<File Path="../../UnJSq/ZND/">UnJSq.php</File>
+		<File Path="../../Atlas/ZND/">Atlas.php</File>
 		<Files Group="Blank">
 			<File Path="../../examples/ZND/blank/">main.php</File>
 			<Files Path="../../examples/common/blank/">
@@ -86,7 +86,7 @@
 				<File>Todos.xsl</File>
 			</Files>
 		</Files>
-		<File Path="../../UnJSq/ZND/">UnJSq.php</File>
+		<File Path="../../Atlas/ZND/">Atlas.php</File>
 		<File>NOTES.md</File>
 	</Files>
  <RTW Description="PHP extension template" Keywords="template">

@@ -46,8 +46,8 @@
 	</Modules>
 	<Files>
 		<File>NOTES.md</File>
-		<Files Group="UnJSq">
-			<Files Path="../../UnJSq/JRE/">
+		<Files Group="Atlas">
+			<Files Path="../../Atlas/JRE/">
 				<File Path="../">CHANGELOG.md</File>
 				<File>NOTES.md</File>
 				<File>Project.xml</File>
@@ -88,11 +88,11 @@
 					<File>Todos.xsl</File>
 				</Files>
 			</Files>
-			<Files Group="JAVA" Path="../../UnJSq/JRE/">
+			<Files Group="JAVA" Path="../../Atlas/JRE/">
 				<File Pack="No">DOM.java</File>
 				<File Pack="No">Event.java</File>
 				<File Pack="No">Tree.java</File>
-				<File Pack="No">UnJSq.java</File>
+				<File Pack="No">Atlas.java</File>
 			</Files>
 		</Files>
 	</Files>

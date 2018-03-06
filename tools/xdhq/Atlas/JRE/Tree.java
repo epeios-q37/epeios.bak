@@ -17,7 +17,7 @@
 	along with XDHq. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package info.q37.unjsq;
+package info.q37.atlas;
 
 public class Tree extends info.q37.xdhq.Tree {
 };
