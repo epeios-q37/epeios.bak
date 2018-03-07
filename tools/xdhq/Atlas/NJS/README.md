@@ -1,7 +1,7 @@
-# *Atlas* for *Node.js*
+# The *Atlas* toolkit for *Node.js*
 
-A new and innovative way to develop web frontend with *Node.js*.
+Develop user interfaces under *Node.js* without framework.
 
-[![NPM](https://nodei.co/npm/atlasnjs.png)](https://nodei.co/npm/atlasnjs/)
+[![NPM](https://nodei.co/npm/atlas-node.png)](https://nodei.co/npm/atlas-node/)
 
-For more information, see [http://q37.info/Atlas/](http://q37.info/Atlas/).
+For more information, see <http://atlastk.org/>.

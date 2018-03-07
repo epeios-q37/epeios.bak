@@ -28,6 +28,6 @@ Dépendences :
 	* *wrapper* *XDHTML* + serveur *httpd*,
 	* `xdhq/Atlas/NJS/`
 	* <http://github.com/epeios-q37/atlas-node/>,
-	* <https://www.npmjs.com/package/atlasnjs>.
+	* <https://www.npmjs.com/package/atlas-node>.
 
 *NOTA* : le paquet *NPM* *xdhq* a été renommé en *xdhqnjs*.
