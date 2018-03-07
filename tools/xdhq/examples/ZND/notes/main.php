@@ -2,23 +2,23 @@
 /*
 	Copyright (C) 2018 Claude SIMON (http://q37.info/contact/).
 
-	This file is part of UnJSq.
+	This file is part of XDHq.
 
-	UnJSq is free software: you can redistribute it and/or
+	XDHq is free software: you can redistribute it and/or
 	modify it under the terms of the GNU Affero General Public License as
 	published by the Free Software Foundation, either version 3 of the
 	License, or (at your option) any later version.
 
-	UnJSq is distributed in the hope that it will be useful,
+	XDHq is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 	Affero General Public License for more details.
 
 	You should have received a copy of the GNU Affero General Public License
-	along with UnJSq If not, see <http://www.gnu.org/licenses/>.
+	along with XDHq If not, see <http://www.gnu.org/licenses/>.
 */
 
-function getUnJSq() {
+function getAtlas() {
 	if (getenv("EPEIOS_SRC") === false)
 		$zndq_path = realpath(dirname(__FILE__)) . '/';
 	else {
@@ -37,17 +37,17 @@ function getUnJSq() {
 			break;
 		}
 
-		$zndq_path = $epeios_path . "tools/xdhq/UnJSq/ZND/";
+		$zndq_path = $epeios_path . "tools/xdhq/Atlas/ZND/";
 	}
 
-	require( $zndq_path . "UnJSq.php");
+	require( $zndq_path . "Atlas.php");
 }
 
-getUnJSq();
+getAtlas();
 
 $viewModeElements = ["Pattern", "CreateButton", "DescriptionToggling", "ViewNotes"];
 
-class MyData extends UnJSqDOM {
+class MyData extends AtlasDOM {
 	public $pattern = "";
 	public $hideDescriptions = false;
 	public $id = 0;
@@ -94,7 +94,7 @@ function handleDescriptions($dom) {
 
 function displayList( $dom ) {
 	global $viewModeElements;
-	$tree = new UnJSqTree();
+	$tree = new AtlasTree();
 	$i = 1;	// 0 skipped, as it serves as buffer for the new ones.
 	$contents = [];
 
@@ -128,7 +128,7 @@ function edit($dom, $id) {
 	global $viewModeElements;
 
 	$dom->id = intval($id);
-	$dom->setLayout("Edit." . $id, new UnJSqTree(), "Note.xsl" );
+	$dom->setLayout("Edit." . $id, new AtlasTree(), "Note.xsl" );
 	$dom->setContents(
 			[
 				"Title" => $dom->notes[$dom->id]['title'],
@@ -142,16 +142,16 @@ function main() {
 	$type = null;
 
 	// Uncomment below for desktop interface. Default is web (port: 8080).
-	// $type = UnJSq::DESKTOP;
+	// $type = Atlas::DESKTOP;
 
-	UnJSq::listen( "Connect", "notes", $type );
+	Atlas::listen( "Connect", "notes", $type );
 
 	$dom = new MyData();
 
 	while ( true ) {
 		switch( $dom->getAction( $id ) ) {
 		case "Connect":
-			$dom->setLayout( "", new UnJSqTree(), "Main.xsl" );
+			$dom->setLayout( "", new AtlasTree(), "Main.xsl" );
 			displayList( $dom );
 			break;
 		case "ToggleDescriptions":

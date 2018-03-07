@@ -1,30 +1,30 @@
 /*
 	Copyright (C) 2018 Claude SIMON (http://q37.info/contact/).
 
-	This file is part of UnJSq.
+	This file is part of XDHq.
 
-	UnJSq is free software: you can redistribute it and/or
+	XDHq is free software: you can redistribute it and/or
 	modify it under the terms of the GNU Affero General Public License as
 	published by the Free Software Foundation, either version 3 of the
 	License, or (at your option) any later version.
 
-	UnJSq is distributed in the hope that it will be useful,
+	XDHq is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 	Affero General Public License for more details.
 
 	You should have received a copy of the GNU Affero General Public License
-	along with UnJSq If not, see <http://www.gnu.org/licenses/>.
+	along with XDHq If not, see <http://www.gnu.org/licenses/>.
 */
 
 /*
-This is the Node.js UnJSq (http://q37.info/UnJSq/) version
+This is the Node.js Atlas (http://atlastk/) version
 of the TodoMVC application (http://todomvc.com/).
 */
 
 "use strict"
 
-var unjsqId = "";
+var atlasId = "";
 
 if (process.env.EPEIOS_SRC) {
 	let epeiosPath = "";
@@ -34,14 +34,14 @@ if (process.env.EPEIOS_SRC) {
 	else
 		epeiosPath = "~/hg/epeios/"
 
-	unjsqId = epeiosPath + "tools/xdhq/UnJSq/NJS/UnJSq.js";
+	atlasId = epeiosPath + "tools/xdhq/Atlas/NJS/Atlas.js";
 } else {
-	unjsqId = 'unjsq';
+	atlasId = 'atlas';
 }
 
-const unjsq = require(unjsqId);
-const Tree = unjsq.Tree;
-const DOM = unjsq.DOM;
+const atlas = require(atlasId);
+const Tree = atlas.Tree;
+const DOM = atlas.DOM;
 const type = null;
 
 class MyData extends DOM {
@@ -314,7 +314,7 @@ function acCancel(dom, id) {
 }
 
 function main() {
-	unjsq.register(
+	atlas.register(
 		{
 			"Connect": acConnect,
 			"Submit": acSubmit,
@@ -330,9 +330,9 @@ function main() {
 	);
 
 	// Uncomment below line for desktop interface. Default is web (port 8080).
-	//	const type = unjsq.types.DESKTOP;
+	//	const type = atlas.types.DESKTOP;
 
-	unjsq.launch(newSession, "Connect", type);
+	atlas.launch(newSession, "Connect", type);
 }
 
 main();

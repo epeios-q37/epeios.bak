@@ -1,4 +1,4 @@
-*Changelog* for the *UnJSq* version of the *TodoMVC* (http://todomvc.com/) application, for all languages.
+*Changelog* for the *Atlas* version of the *TodoMVC* (http://todomvc.com/) application, for all languages.
 
 2018-02-08:
 * all:

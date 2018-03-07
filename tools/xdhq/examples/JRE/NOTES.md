@@ -1,1 +1,1 @@
-*TodoMVC* n'est **pas** inclus dans  *unjsq-demos-java*, car il a son propre *repository*, rempli en lançant `DVLRTW` dans le répertoire `TodoMVC`.
+*TodoMVC* n'est **pas** inclus dans  *atlas-java-demo*, car il a son propre *repository*, rempli en lançant `DVLRTW` dans le répertoire `TodoMVC`.

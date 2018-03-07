@@ -34,7 +34,7 @@
 			<p>Double-click to edit a todo</p>
 			<p>
 				<span>Created with </span>
-				<a style="font-style: italic;" href="http://q37.info/UnJSq/">UnJSq</a>
+				<a style="font-style: italic;" href="http://atlastk.org//">Atlas</a>
 				<span>!</span>
 			</p>
 		</footer>

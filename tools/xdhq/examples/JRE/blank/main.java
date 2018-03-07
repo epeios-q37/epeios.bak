@@ -1,23 +1,23 @@
 /*
-	Copyright (C) 2007-2017 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 2018 Claude SIMON (http://q37.info/contact/).
 
-	This file is part of UnJSq.
+	This file is part of XDHq.
 
-	UnJSq is free software: you can redistribute it and/or
+	XDHq is free software: you can redistribute it and/or
 	modify it under the terms of the GNU Affero General Public License as
 	published by the Free Software Foundation, either version 3 of the
 	License, or (at your option) any later version.
 
-	UnJSq is distributed in the hope that it will be useful,
+	XDHq is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 	Affero General Public License for more details.
 
 	You should have received a copy of the GNU Affero General Public License
-	along with UnJSq If not, see <http://www.gnu.org/licenses/>.
+	along with XDHq If not, see <http://www.gnu.org/licenses/>.
 */
 
-import info.q37.unjsq.*;
+import info.q37.atlas.*;
 
 class Thread extends java.lang.Thread {
 	private DOM dom;
@@ -66,16 +66,16 @@ class Blank {
 	}
 
 	public static void main(String[] args) throws Exception {
-		UnJSq.Type type = UnJSq.Type.DEFAULT;
-		System.out.println(UnJSq.wrapperInfo());
-		System.out.println(UnJSq.componentInfo());
+		Atlas.Type type = Atlas.Type.DEFAULT;
+		System.out.println(Atlas.wrapperInfo());
+		System.out.println(Atlas.componentInfo());
 		displayBytecodeBuildTimestamp();
-		System.out.println(UnJSq.returnArgument("Text from JAVA file"));
+		System.out.println(Atlas.returnArgument("Text from JAVA file"));
 
 		// Uncomment for desktop interface. Default is web (port 8080).
-		// type = UnJSq.Type.DESKTOP;
+		// type = Atlas.Type.DESKTOP;
 
-		UnJSq.listen("Connect", "blank", type, args );
+		Atlas.listen("Connect", "blank", type, args );
 
 		for (;;) {
 			java.lang.Thread thread = new Thread(new DOM());

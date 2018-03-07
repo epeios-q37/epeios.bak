@@ -5,7 +5,7 @@
   <xsl:output method="html" encoding="UTF-8"/>
   <xsl:template match="/">
     <div>
-      <input type="textbox" id="Message" value="Hello UnJSq!"/>
+      <input type="textbox" id="Message" value="Hello Atlas!"/>
       <button data-xdh-onevent="Reverse">Reverse Message</button>
     </div>
   </xsl:template>

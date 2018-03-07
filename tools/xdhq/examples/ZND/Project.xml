@@ -10,25 +10,25 @@
 			<xpp:bloc>2018</xpp:bloc>
 		</xpp:define>
 		<About>
-		<Software>UnJSqDemosPHP</Software>
+		<Software>AtlasDemosPHP</Software>
 		</About>
 		<xpp:set name="Credits" value="Epeios"/>
-		<xpp:set name="Type" value="UnJSqDemosPHP"/>
+		<xpp:set name="Type" value="AtlasDemosPHP"/>
 	</xpp:bloc>
 	<xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
 	<About>
 		<UUID>ffcb57c1-c238-42f4-a382-f15aaa068727</UUID>
 	</About>
 	<!-- NO SPACE in 'Keywords' attribute !!! ("a,b,c", NOT "a, b, c")-->
-	<RTW Description="Demonstration applications of 'UnJSq'for 'PHP'." Keywords="Demo,UnJSq,PHP">
-		<Dir>unjsq-demos-php</Dir>
+	<RTW Description="Demonstration applications of 'Atlas'for 'PHP'." Keywords="Demo,Atlas,PHP">
+		<Dir>atlas-php-demo</Dir>
 	</RTW>
   	<!-- Although a 'PHP' app., there is a 'NodeJS' section because 'npm' is currently used as package manager. -->
 <NodeJS>
   <Deps>
    <Regular>
 			 <!-- To enable when created
-    <Dep>unjsqznd</Dep>
+    <Dep>atlasznd</Dep>
 				-->
    </Regular>
   </Deps>

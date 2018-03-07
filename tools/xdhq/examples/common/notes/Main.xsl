@@ -16,10 +16,10 @@
 			<h2>Welcome!</h2>
 			<p>
 				<span>Let's take some notes with </span>
-				<span style="font-style: oblique; font-weight: bold;">UnJSq</span>
+				<span style="font-style: oblique; font-weight: bold;">Atlas</span>
 				<span>!</span>
 			</p>
-			<a href="http://q37.info/UnJSq/" class="button">
+			<a href="http://atlastk.org/" class="button">
 				<xsl:text>    About   </xsl:text>
 			</a>
 		</div>

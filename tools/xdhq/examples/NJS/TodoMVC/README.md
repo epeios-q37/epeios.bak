@@ -14,4 +14,4 @@ Running:
 * `node main.js`,
 * <http://localhost:8080/>.
 
-###### Made with *UnJSq* (<http://q37.info/UnJSq/>), a new and innovative library to develop Web *frontends* <u>without</u> the need of a *JavaScript* framework!
+###### Made with *Atlas* (<http://atlastk.og/>), a new and innovative library to develop Web *frontends* <u>without</u> the need of a *JavaScript* framework!

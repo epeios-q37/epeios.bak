@@ -56,7 +56,7 @@ public class Atlas extends info.q37.xdhq.XDHq {
 		DEFAULT, DESKTOP, WEB, DESKTOP_AND_WEB
 	};
 
-	private static final Type defaultType = Type.WEB;
+	private static final Type defaultType = Type.DESKTOP;
 
 	private static void listen(String newSessionAction, String dir, Type type, String arg) {
 		info.q37.xdhq.XDHq.listen(newSessionAction);
@@ -66,15 +66,16 @@ public class Atlas extends info.q37.xdhq.XDHq {
 
 			if (arg.length() > 0) {
 				switch (arg) {
-				case "0":
-					break;
-				case "1":
+				case "d":
+				case "desktop":
 					type = Type.DESKTOP;
 					break;
-				case "2":
+				case "w":
+				case "web":
 					type = Type.WEB;
 					break;
-				case "3":
+				case "dw":
+				case "wd":
 					type = Type.DESKTOP_AND_WEB;
 					break;
 				default:

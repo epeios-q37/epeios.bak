@@ -10,25 +10,25 @@
 			<xpp:bloc>2018</xpp:bloc>
 		</xpp:define>
 		<About>
-		<Software>UnJSqDemosJava</Software>
+		<Software>AtlasDemosJava</Software>
 		</About>
 		<xpp:set name="Credits" value="Epeios"/>
-		<xpp:set name="Type" value="UnJSqDemosJava"/>
+		<xpp:set name="Type" value="AtlasDemosJava"/>
 	</xpp:bloc>
 	<xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
 	<About>
 		<UUID>87b5b9a5-de30-4fce-a858-ea8dd0f788b9</UUID>
 	</About>
 	<!-- NO SPACE in 'Keywords' attribute !!! ("a,b,c", NOT "a, b, c")-->
-	<RTW Description="Demonstration applications of 'UnJSq' for 'Java'." Keywords="Demo,UnJSq,Java">
-		<Dir>unjsq-demos-java</Dir>
+	<RTW Description="Demonstration applications of 'Atlas' for 'Java'." Keywords="Demo,Atlas,Java">
+		<Dir>atlas-java-demo</Dir>
 	</RTW>
   	<!-- Although a 'Java' app., there is a 'NodeJS' section because 'npm' is currently used as package manager. -->
 <NodeJS>
   <Deps>
    <Regular>
    	<!-- To enable when existing
-    <Dep>unjsqjre</Dep>
+    <Dep>atlasjre</Dep>
      -->
    </Regular>
   </Deps>

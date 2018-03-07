@@ -53,7 +53,7 @@ class Atlas extends XDHq {
 	const DESKTOP = 1;
 	const WEB = 2;
 	const DESKTOP_AND_WEB = 3;
-	const DEFAULT = Atlas::WEB;
+	const DEFAULT = Atlas::DESKTOP;
 
 	private static function launchWeb( $dir ) {
 		popen( "start node h:/hg/epeios/tools/xdhq/examples/common/httpd.js h:/hg/epeios/tools/xdhq/examples/common/" . $dir, "r" );
@@ -71,15 +71,16 @@ class Atlas extends XDHq {
 
 			if ( count( $argv ) > 1 ) {
 				switch ( $argv[1] ) {
-				case "0":
-					break;
-				case "1":
+				case "d":
+				case "desktop":
 					$type = Atlas::DESKTOP;
 					break;
-				case "2":
+				case "w":
+				case "web":
 					$type = Atlas::WEB;
 					break;
-				case "3":
+				case "dw":
+				case "wd":
 					$type = Atlas::DESKTOP_AND_WEB;
 					break;
 				default:

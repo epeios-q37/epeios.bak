@@ -1,4 +1,4 @@
-# *UnJSq* demonstration applications for *PHP*
+# *Atlas* demonstration applications for *PHP*
 
 ## Running:
 
@@ -8,8 +8,8 @@ Except under *Windows*, you will need a *C++* compiler for the installation to s
 
 ## Misc.
 
-For minimal *UnJSq* application demonstration, instead of `php notes/main.js`, launch `php blank/main.js`.
+For minimal *Atlas* application demonstration, instead of `php notes/main.js`, launch `php blank/main.js`.
 
-Modifying the content of the `blank` directory is a good way to create your own *UnJSq* based application.
+Modifying the content of the `blank` directory is a good way to create your own *Atlas* based application.
 
-For more information on *UnJSq*, see <http://q37.info/UnJSq/>.
+For more information on *Atlas*, see <http://atlastk.org/>.

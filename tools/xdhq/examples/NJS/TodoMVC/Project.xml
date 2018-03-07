@@ -20,13 +20,13 @@
 		<UUID>79666866-b6c2-4819-ab7d-3a0d284f0ba1</UUID>
 	</About>
 	<!-- NO SPACE in 'Keywords' attribute !!! ("a,b,c", NOT "a, b, c")-->
-	<RTW Description="'TodoMVC' application for 'Node.js' with 'UnJSq'." Keywords="Demo,UnJSq,TodoMVC,Node,NodeJS,Node.js">
+	<RTW Description="'TodoMVC' application for 'Node.js' with 'Atlas'." Keywords="Demo,Atlas,TodoMVC,Node,NodeJS,Node.js">
 		<Dir>todomvc-node</Dir>
 	</RTW>
  <NodeJS>
   <Deps>
    <Regular>
-    <Dep>unjsqnjs</Dep>
+    <Dep>atlasnjs</Dep>
     <Dep>todomvc-app-css</Dep>
     <Dep>todomvc-common</Dep>
    </Regular>

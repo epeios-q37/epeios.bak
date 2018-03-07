@@ -11,7 +11,7 @@ Running:
 
 (*work in progress*)
 
-###### Made with *UnJSq* (<http://q37.info/UnJSq/>), a new and innovative library to develop Web *frontends* <u>without</u> the need of a *JavaScript* framework!
+###### Made with *Atlas* (<http://atlastk.org/>), a new and innovative library to develop Web *frontends* <u>without</u> the need of a *JavaScript* framework!
 
 
 

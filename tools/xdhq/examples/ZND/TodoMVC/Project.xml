@@ -20,7 +20,7 @@
 		<UUID>02c4eb13-d8d9-4e62-945a-2bb503e17645</UUID>
 	</About>
 	<!-- NO SPACE in 'Keywords' attribute !!! ("a,b,c", NOT "a, b, c")-->
-	<RTW Description="'TodoMVC' application for 'PHP' with 'UnJSq'." Keywords="Demo,UnJSq,TodoMVC,PHP,Zend">
+	<RTW Description="'TodoMVC' application for 'PHP' with 'Atlas'." Keywords="Demo,Atlas,TodoMVC,PHP,Zend">
 		<Dir>todomvc-php</Dir>
 	</RTW>
 	 	<!-- Although a 'Java' app., there is a 'NodeJS' section because 'npm' is currently used as package manager. -->
@@ -28,7 +28,7 @@
   <Deps>
    <Regular>
 			 <!-- To enable when created
-    <Dep>unjsqznd</Dep>
+    <Dep>atlasznd</Dep>
 				-->
     <Dep>todomvc-app-css</Dep>
     <Dep>todomvc-common</Dep>

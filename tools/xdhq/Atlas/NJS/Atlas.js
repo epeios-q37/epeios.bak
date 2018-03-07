@@ -98,7 +98,7 @@ const types = {
 
 module.exports.types = types;
 
-const defaultType = types.WEB;
+const defaultType = types.DESKTOP;
 
 function launch(callback, action, type) {
 	var dir = getRealDir(path.dirname(process.argv[1]));
@@ -106,16 +106,16 @@ function launch(callback, action, type) {
 	if (type === null) {
 		if (process.argv.length > 2) {
 			switch (process.argv[2]) {
-				case "0":
-					type = defaultType;
-					break;
-				case "1":
+				case "d":
+				case "desktop":
 					type = types.DESKTOP;
 					break;
-				case "2":
+				case "web":
+				case "w":
 					type = types.WEB;
 					break;
-				case "3":
+				case "dw":
+				case "wd":
 					type = types.DESKTOP_AND_WEB;
 					break;
 				default:

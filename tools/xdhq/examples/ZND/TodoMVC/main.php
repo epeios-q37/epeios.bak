@@ -2,23 +2,23 @@
 /*
 	Copyright (C) 2018 Claude SIMON (http://q37.info/contact/).
 
-	This file is part of UnJSq.
+	This file is part of XDHq.
 
-	UnJSq is free software: you can redistribute it and/or
+	WDHq is free software: you can redistribute it and/or
 	modify it under the terms of the GNU Affero General Public License as
 	published by the Free Software Foundation, either version 3 of the
 	License, or (at your option) any later version.
 
-	UnJSq is distributed in the hope that it will be useful,
+	XDHq is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 	Affero General Public License for more details.
 
 	You should have received a copy of the GNU Affero General Public License
-	along with UnJSq If not, see <http://www.gnu.org/licenses/>.
+	along with XDHq If not, see <http://www.gnu.org/licenses/>.
 */
 
-function getUnJSq() {
+function getAtlas() {
 	if (getenv("EPEIOS_SRC") === false)
 		$zndq_path = realpath(dirname(__FILE__)) . '/';
 	else {
@@ -37,15 +37,15 @@ function getUnJSq() {
 			break;
 		}
 
-		$zndq_path = $epeios_path . "tools/xdhq/UnJSq/ZND/";
+		$zndq_path = $epeios_path . "tools/xdhq/Atlas/ZND/";
 	}
 
-	require( $zndq_path . "UnJSq.php");
+	require( $zndq_path . "Atlas.php");
 }
 
-getUnJSq();
+getAtlas();
 
-class DOM extends UnJSqDOM {
+class DOM extends AtlasDOM {
 	public $exclude = NULL;
 	public $id = -1;
 	public $todos = [
@@ -113,7 +113,7 @@ function handleCount( $dom ) {
 }
 
 function displayTodos( $dom ) {
-	$tree = new UnJSqTree();
+	$tree = new AtlasTree();
 	$i = 0;
 	$count = count( $dom->todos );
 
@@ -259,16 +259,16 @@ function main() {
 	$type = null;
 
 	// Uncomment below for desktop interface. Default is web (port: 8080).
-	// $type = UnJSq::DESKTOP;
+	// $type = Atlas::DESKTOP;
 
-	UnJSq::listen( "Connect", "TodoMVC", $type );
+	Atlas::listen( "Connect", "TodoMVC", $type );
 
 	$dom = new DOM();
 
 	while ( true ) {
 		switch( $dom->getAction( $id ) ) {
 		case "Connect":
-			$dom->setLayout( "", new UnJSqTree(), "Main.xsl" );
+			$dom->setLayout( "", new AtlasTree(), "Main.xsl" );
 			$dom->focus( "Input" );
 			displayTodos( $dom );
 			break;
