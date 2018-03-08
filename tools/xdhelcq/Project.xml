@@ -3,7 +3,7 @@
 	<xpp:bloc>
 		<!-- User definitions -->
 		<xpp:define name="Version">
-			<xpp:bloc>(no more in use)</xpp:bloc>
+			<xpp:bloc/>
 		</xpp:define>
 		<xpp:define name="CopyrightYears">
 			<xpp:bloc>2017</xpp:bloc>
@@ -51,6 +51,8 @@
   <Dir>xdhelcq</Dir>
  </RTW>
 	<Files>
+  <File>XDHELCq.html</File>
+  <File>XDHELCq.js</File>
  </Files>
  <Doc>
  </Doc>

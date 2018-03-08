@@ -100,7 +100,6 @@ namespace {
 }
 
 namespace {
-
 	void InitWithModuleFilename_(
 		v8::Local<v8::Value> Module,
 		v8q::sLString &Filename )
@@ -254,7 +253,7 @@ namespace {
 			V8Return = v8q::Execute( Script.Convert( Buffer ), v8q::GetIsolate() );
 
 			if ( Return != NULL ) {
-				if ( !V8Return->IsNullOrUndefined() ) {
+				if ( !V8Return->IsNull() && !V8Return->IsUndefined() ) {
 					if ( V8Return->IsString() ) {
 						if ( !( String = V8Return->ToString() ).IsEmpty() ) {
 							Return->Malloc( String->Utf8Length() + 1 );	// '+ 1' for the NULL termination character.
