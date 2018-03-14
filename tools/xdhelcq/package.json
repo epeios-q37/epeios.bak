@@ -1,6 +1,6 @@
 {
   "name": "xdhelcq",
-  "version": "2017.9.1",
+  "version": "0.0.0",
   "author": "Claude SIMON (http://q37.info/contact/)",
   "description": "THIS FILE ONLY SERVES WHEN USING 'DVLGenGYP' ; FOR PUBLICATION ('DVLRTW'), THE USED 'package.json' IS GENERATED !",
   "main": "XDHELCq.js",
@@ -15,11 +15,12 @@
     "host": "https://github.com"
   },
   "dependencies": {
+    "electron": "^1.8.3",
     "node-pre-gyp": "0.6.x"
   },
   "devDependencies": {
     "aws-sdk": "2.x",
-    "electron-rebuild": "^1.6.0"
+    "electron-rebuild": "^1.7.3"
   },
   "scripts": {
     "preinstall": "npm install node-pre-gyp",

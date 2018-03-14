@@ -2,7 +2,7 @@
 
 2018-03-08:
 
-- Using `IsNull()` and `IsUndefined()` instead of less widespread `IsUndefinedOrNull()` function.
+- Using `IsNull()` and `IsUndefined()` functions instead of more recent `IsUndefinedOrNull()` function,
 
 2018-02-19:
 

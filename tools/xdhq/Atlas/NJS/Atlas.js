@@ -72,8 +72,8 @@ if (isDev()) {
 } else {
 	xdhqId = "xdhq";
 	xdhwebqId = "xdhwebq";
-	xdhelcqPath = require("xdhelcq").path;
-	xdhelcqBin = require("xdhelcq").bin;
+	xdhelcqPath = require.resolve("xdhelcq");
+	xdhelcqBin = xdhelcqPath;
 	electronBin = require("electron");
 }
 

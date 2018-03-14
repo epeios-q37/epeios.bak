@@ -1,9 +1,10 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<Project xmlns:xpp="http://zeusw.org/epeios/xpp">
+<Project 
+	xmlns:xpp="http://zeusw.org/epeios/xpp">
 	<xpp:bloc>
 		<!-- User definitions -->
 		<xpp:define name="Version">
-			<xpp:bloc/>
+			<xpp:bloc>2018.3.9</xpp:bloc>
 		</xpp:define>
 		<xpp:define name="CopyrightYears">
 			<xpp:bloc>2017</xpp:bloc>
@@ -17,45 +18,42 @@
 		<Software>XDHELCq</Software>
 		<UUID>d6a723cb-e88f-4f2f-b429-3adc207f1d62</UUID>
 	</About>
- <Modules>
+	<Modules>
 		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
 			<Modules Group="Core">
 				<xpp:expand select="Core"/>
-    <Modules Group="SCL">
-     <xpp:expand select="SCL"/>
-    </Modules>
-    <Module>dlbrry</Module>
-    <Module>n4all</Module>
-    <Module>n4allw</Module>
-    <Module>n4njs</Module>
-    <Module>nodeq</Module>
-    <Module>plgn</Module>
-    <Module>plgncore</Module>
-    <Module>strmrg</Module>
-    <Module>uvq</Module>
-    <Module>uvqdcl</Module>
-    <Module>v8q</Module>
-    <Module>xdhcmn</Module>
-    <Module>xdhujp</Module>
-    <Module>xdhujr</Module>
-    <Module>xdhujs</Module>
-    <Module>xdhups</Module>
-    <Module>xdhutl</Module>
+				<Modules Group="SCL">
+					<xpp:expand select="SCL"/>
+				</Modules>
+				<Module>dlbrry</Module>
+				<Module>n4all</Module>
+				<Module>n4allw</Module>
+				<Module>n4njs</Module>
+				<Module>nodeq</Module>
+				<Module>plgn</Module>
+				<Module>plgncore</Module>
+				<Module>strmrg</Module>
+				<Module>uvq</Module>
+				<Module>uvqdcl</Module>
+				<Module>v8q</Module>
+				<Module>xdhcmn</Module>
+				<Module>xdhujp</Module>
+				<Module>xdhujr</Module>
+				<Module>xdhujs</Module>
+				<Module>xdhups</Module>
+				<Module>xdhutl</Module>
 			</Modules>
 		</Modules>
-  <Module>registry</Module>
+		<Module>registry</Module>
 	</Modules>
-	<SourceDirs>
-	</SourceDirs>
+	<SourceDirs></SourceDirs>
 	<RTW Description="'XDHTML' 'Electron' wrapper." Keywords="electron,XDHTML,wrapper,native,desktop,ui">
-  <Dir>xdhelcq</Dir>
- </RTW>
+		<Dir>xdhelcq</Dir>
+	</RTW>
 	<Files>
-  <File>XDHELCq.html</File>
-  <File>XDHELCq.js</File>
- </Files>
- <Doc>
- </Doc>
+		<File>XDHELCq.html</File>
+		<File>XDHELCq.js</File>
+	</Files>
 	<PreprocessorDefinitions>
 		<PreprocessorDefinition>E_ST</PreprocessorDefinition>
 	</PreprocessorDefinitions>
