@@ -25,7 +25,7 @@
 		</Deps>
 	</NodeJS-->
 	<!-- NO SPACE in 'Keywords' attribute !!! ("a,b,c", NOT "a, b, c")-->
-	<RTW Description="Node.js addon to use 'XDHTML' module with web browsers." Keywords="XDHTML,UnJS,web">
+	<RTW Description="Node.js addon to use 'XDHTML' module with web browsers." Keywords="XDHTML,web">
   <Dir>xdhwebq-node</Dir>
  </RTW>
  <Modules>

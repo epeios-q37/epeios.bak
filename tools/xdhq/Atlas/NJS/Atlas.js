@@ -70,10 +70,10 @@ if (isDev()) {
 	xdhelcqBin = path.join(binPath, "xdhqxdh");
 	electronBin = xdhelcqPath + "node_modules/electron/dist/electron";
 } else {
-	xdhqId = "xdhq";
+	xdhqId = "xdhqnjs";
 	xdhwebqId = "xdhwebq";
-	xdhelcqPath = require.resolve("xdhelcq");
-	xdhelcqBin = xdhelcqPath;
+	xdhelcqPath = path.dirname(require.resolve("xdhelcq"));
+	xdhelcqBin = path.join(xdhelcqPath, "xdhqxdh");
 	electronBin = require("electron");
 }
 
