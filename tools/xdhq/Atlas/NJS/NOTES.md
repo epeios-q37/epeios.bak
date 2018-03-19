@@ -22,7 +22,7 @@ Dépendences :
   * *wrapper* *XDHTML*,
   * `xdhq/wrapper/NJS/`
   * <http://github.com/epeios-q37/xdhq-node/>,
-  * <https://www.npmjs.com/package/xdhq/>,
+  * <https://www.npmjs.com/package/xdhqnjs/>,
 
 * *atlasnjs* :
 	* *wrapper* *XDHTML* + serveur *httpd*,

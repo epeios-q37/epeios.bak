@@ -272,10 +272,10 @@ namespace fbltyp {
 			Name.plug( AS );
 			Casts.plug( AS );
 		}
-		detail_ &operator =( const detail_ &CI )
+		detail_ &operator =( const detail_ &D )
 		{
-			Name = CI.Name;
-			Casts = CI.Casts;
+			Name = D.Name;
+			Casts = D.Casts;
 
 			return *this;
 		}

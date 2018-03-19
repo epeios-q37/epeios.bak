@@ -103,7 +103,7 @@ const defaultType = types.DESKTOP;
 function launch(callback, action, type) {
 	var dir = getRealDir(path.dirname(process.argv[1]));
 
-	if (type === null) {
+	if (type === undefined) {
 		if (process.argv.length > 2) {
 			switch (process.argv[2]) {
 				case "d":

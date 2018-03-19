@@ -37,7 +37,7 @@ public class XDHq extends info.q37.jreq.JREq {
 	{
 		return (String)call( 0, argument );
 	}
-	static public void listen( String newSessionAction ) {
+	static public void launch( String newSessionAction ) {
 		call( 7, "53752", newSessionAction );
 	}
 }

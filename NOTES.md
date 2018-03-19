@@ -1,4 +1,4 @@
-# Developer's remainder (hence written in french)
+# Developer's reminder (hence written in french)
 
 ## La section `RTW` dans les fichiers `Project.xml`.
 

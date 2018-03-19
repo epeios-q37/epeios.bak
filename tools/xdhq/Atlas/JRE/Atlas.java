@@ -58,8 +58,8 @@ public class Atlas extends info.q37.xdhq.XDHq {
 
 	private static final Type defaultType = Type.DESKTOP;
 
-	private static void listen(String newSessionAction, String dir, Type type, String arg) {
-		info.q37.xdhq.XDHq.listen(newSessionAction);
+	private static void launch(String newSessionAction, String dir, Type type, String arg) {
+		info.q37.xdhq.XDHq.launch(newSessionAction);
 
 		if (type == Type.DEFAULT) {
 			type = defaultType;
@@ -104,14 +104,14 @@ public class Atlas extends info.q37.xdhq.XDHq {
 		}
 	}
 
-	public static void listen(String newSessionAction, String dir, Type type, String[] args) {
+	public static void launch(String newSessionAction, String dir, Type type, String[] args) {
 		if (args.length > 0)
-			listen(newSessionAction, dir, type, args[0]);
+			launch(newSessionAction, dir, type, args[0]);
 		else
-			listen(newSessionAction, dir, type, "");
+			launch(newSessionAction, dir, type, "");
 	}
 
-	public static void listen(String newSessionAction, Type type, String[] args) {
-		listen(newSessionAction, ".", type, args);
+	public static void maunch(String newSessionAction, Type type, String[] args) {
+		launch(newSessionAction, ".", type, args);
 	}
 };

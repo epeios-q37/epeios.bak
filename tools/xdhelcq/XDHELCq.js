@@ -29,7 +29,7 @@ function createWindow() {
 
 
   // Open the DevTools.
-  win.webContents.openDevTools();
+//  win.webContents.openDevTools();
 
   let head = fs.readFileSync(path.join(cdnPath, "head.html"));
   let html = fs.readFileSync(path.join(__dirname, "XDHELCq.html"), "utf8").replace("<!-- $USER_HEAD -->", head);

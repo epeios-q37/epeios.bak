@@ -52,7 +52,7 @@ public class Tree {
 		putAttribute( name, String.valueOf( value ) );
 	}
 
-	public void putAttribute( String name, int value ) {
+	public void putAttribute(String name, int value ) {
 		putAttribute( name, String.valueOf( value ) );
 	}
 

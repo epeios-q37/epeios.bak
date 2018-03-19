@@ -72,10 +72,7 @@ class Blank {
 		displayBytecodeBuildTimestamp();
 		System.out.println(Atlas.returnArgument("Text from JAVA file"));
 
-		// Uncomment for desktop interface. Default is web (port 8080).
-		// type = Atlas.Type.DESKTOP;
-
-		Atlas.listen("Connect", "blank", type, args );
+		Atlas.launch("Connect", "blank", type, args );
 
 		for (;;) {
 			java.lang.Thread thread = new Thread(new DOM());

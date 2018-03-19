@@ -237,7 +237,7 @@ function launch(dir, service) {
 if (require.main === module) {
 	// Called directly (through a fork or from CLI).
 	if (process.argv.length >= 3) {
-		console.log( process.argv);
+//		console.log( process.argv);
 		launch(process.argv[2], process.argv[3]);
 	} else
 		throw "Not enough arguments !";

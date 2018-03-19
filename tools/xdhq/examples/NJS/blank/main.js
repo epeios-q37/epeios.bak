@@ -37,7 +37,6 @@ if (process.env.EPEIOS_SRC) {
 const atlas = require(atlasId);
 const Tree = atlas.Tree;
 const DOM = atlas.DOM;
-const type = null;
 
 class MyData extends DOM {
 	constructor() {
@@ -80,10 +79,7 @@ function main() {
 		}
 	);
 
-	// Uncomment below line for desktop interface. Default is web (port 8080).
-	//	const type = atlas.types.DESKTOP;
-
-	atlas.launch(newSession, "Connect", type);
+	atlas.launch(newSession, "Connect" );
 }
 
 main();
