@@ -64,7 +64,7 @@ class XDHq extends XDHqWrapper {
 	static function returnArgument($argument) {
 		return parent::_call(0, $argument);
 	}
-	static function listen ( string $newSessionAction ) {
+	static function launch ( string $newSessionAction ) {
 		parent::_call( 7, "53752", $newSessionAction );
 	}
 }
@@ -204,20 +204,20 @@ class XDHqDOM extends XDHqWrapper {
 	function disableElement( string $id ) {
 		self::disableElements( array( $id ) );
 	}
-	function setAttribute( string $id, string $value ) {
+	function setAttribute( string $id, string $name, string $value ) {
 		return self::call( 22, $id, $value );
 	}
-	function getAttribute( string $id ) {
-		return self::call( 23, $id );
+	function getAttribute( string $id, string $name ) {
+		return self::call( 23, $id, $name );
 	}
-	function removeAttribute( string $id ) {
+	function removeAttribute( string $id, string $name ) {
 		self::call( 24, $id );
 	}
-	function setProperty( string $id, string $value ) {
-		return self::call( 25, $id , $value );
+	function setProperty( string $id, string $name, string $value ) {
+		return self::call( 25, $id, $name, $value );
 	}
-	function getProperty( string $id ) {
-		return self::call( 26, $id );
+	function getProperty( string $id, string $name ) {
+		return self::call( 26, $id, $name );
 	}
 	function focus( string $id ) {
 		self::call( 27, $id );

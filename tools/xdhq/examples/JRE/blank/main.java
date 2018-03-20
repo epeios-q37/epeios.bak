@@ -73,6 +73,7 @@ class Blank {
 		System.out.println(Atlas.returnArgument("Text from JAVA file"));
 
 		Atlas.launch("Connect", "blank", type, args );
+		// 
 
 		for (;;) {
 			java.lang.Thread thread = new Thread(new DOM());

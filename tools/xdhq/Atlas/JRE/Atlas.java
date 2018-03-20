@@ -111,7 +111,7 @@ public class Atlas extends info.q37.xdhq.XDHq {
 			launch(newSessionAction, dir, type, "");
 	}
 
-	public static void maunch(String newSessionAction, Type type, String[] args) {
-		launch(newSessionAction, ".", type, args);
+	public static void launch(String newSessionAction, Type type) {
+			launch(newSessionAction, ".", type, "");
 	}
 };

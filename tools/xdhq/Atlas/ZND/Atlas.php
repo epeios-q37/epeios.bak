@@ -63,7 +63,7 @@ class Atlas extends XDHq {
 		popen( "start h:/hg/epeios/tools/xdhelcq/node_modules/electron/dist/electron h:/hg/epeios/tools/xdhelcq/ -m=h:/bin/xdhqxdh h:/hg/epeios/tools/xdhq/examples/common/" . $dir, "r" );
 	}
 
-	public static function listen( string $newSessionAction, string $dir, $type = null ) {
+	public static function launch( string $newSessionAction, $type = null, string $dir = "." ) {
 		global $argv;
 
 		if ( $type === null ) {
@@ -90,7 +90,7 @@ class Atlas extends XDHq {
 			}
 		}
 
-		parent::listen( $newSessionAction);
+		parent::launch( $newSessionAction);
 
 		switch( $type ) {
 		case Atlas::DESKTOP:
