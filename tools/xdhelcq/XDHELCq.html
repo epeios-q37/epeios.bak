@@ -53,7 +53,7 @@
           addonPath = '~/bin/';
         xdhelcqPath = addonPath + 'xdhelcq.node';
       } else {
-        xdhelcqPath = './xdhelcq.node';
+        xdhelcqPath = require('path').join(require('atlastk').xdhelcqPath, 'xdhelcq.node');
       }
 
       const xdhelcq = require(xdhelcqPath);

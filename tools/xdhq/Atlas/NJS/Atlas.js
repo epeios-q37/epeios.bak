@@ -73,11 +73,10 @@ if (isDev()) {
 	xdhqId = "xdhqnjs";
 	xdhwebqId = "xdhwebq";
 	xdhelcqPath = path.dirname(require.resolve("xdhelcq"));
-	xdhelcqBin = path.join(xdhelcqPath, "xdhqxdh");
-	electronBin = require("electron");
+	xdhelcqBin = require('xdhqxdh').fileName;
+	electronBin = require("xdhelcq").electron;
 }
 
-const xdhwebq = require(xdhwebqId);
 const xdhq = require(xdhqId);
 
 function launchWeb(dir) {
@@ -85,7 +84,7 @@ function launchWeb(dir) {
 }
 
 function launchDesktop(dir) {
-	require('child_process').spawn(electronBin, [xdhelcqPath, "-m=" + xdhelcqBin, dir]).on('close', function (code) {
+	require('child_process').spawn(electronBin, [path.join(xdhelcqPath, "index.js"), "-m=" + xdhelcqBin, dir]).on('close', function (code) {
 		process.exit(code)
 	});
 }

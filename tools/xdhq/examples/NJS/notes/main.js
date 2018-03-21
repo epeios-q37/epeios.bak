@@ -31,7 +31,7 @@ if (process.env.EPEIOS_SRC) {
 
 	atlasId = epeiosPath + "tools/xdhq/Atlas/NJS/Atlas.js";
 } else {
-	atlasId = 'atlas';
+	atlasId = 'atlastk';
 }
 
 const atlas = require(atlasId);
