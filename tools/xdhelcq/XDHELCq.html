@@ -6,7 +6,7 @@
     <!-- Without below line, 'jQuery' isn't loaded correctly. -->
     <!-- From http://stackoverflow.com/questions/32621988/electron-jquery-is-not-defined -->
     <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
-    <script src="file://h:/hg/epeios/corpus/js/xdhtml.js"></script>
+    <script src="file://$XDHELCQ_PATH$/js/xdhtml.js"></script>
     <script>
       function attachDebugger() {
         alert("Attach debugger !");
@@ -28,16 +28,9 @@
         //	console.log( mergedArguments );
         xdhelcq.initialize(mergedArguments);
       }
-      function userHead() {
-        try {
-          return require(fs).readFileSync("head.html");
-        } catch (err) {
-          return "";
-        }
-      }
 
     </script>
-    <!-- $USER_HEAD -->
+    <!-- $USER_HEAD$ -->
   </head>
   <body id="XDHRoot">
     <script>
@@ -46,14 +39,14 @@
       var xdhelcqPath = null;
 
       if (process.env.EPEIOS_SRC) {
-        var addonPath = null;
+        let addonPath = null;
         if (process.platform == 'win32')
           addonPath = 'h:/bin/';
         else
           addonPath = '~/bin/';
-        xdhelcqPath = addonPath + 'xdhelcq.node';
+        xdhelcqPath = require('path').join(addonPath, 'xdhelcq.node');
       } else {
-        xdhelcqPath = require('path').join(require('atlastk').xdhelcqPath, 'xdhelcq.node');
+        xdhelcqPath = require('path').join("$XDHELCQ_PATH$", "xdhelcq.node");
       }
 
       const xdhelcq = require(xdhelcqPath);

@@ -334,7 +334,8 @@ namespace {
 		Identification.Append( " - Node v" NODE_VERSION_STRING "; ABI v" NODE_STRINGIFY( NODE_MODULE_VERSION ) " - " );
 		Identification.Append( "Build " __DATE__ " " __TIME__ " - " );
 		Identification.Append( cpe::GetDescription() );
-		Agent_.Init( xdhcmn::mMonoUser, ModuleFilename, dlbrry::n_Default, Identification.Convert( IdentificationBuffer_ ) );
+		// Library compiled with 'node-gyp', which doesn't put the 'lib' prefix on 'POSIX' systems, hence 'dlbrry::nExtOnly'.
+		Agent_.Init( xdhcmn::mMonoUser, ModuleFilename, dlbrry::nExtOnly,  Identification.Convert( IdentificationBuffer_ ) );
 
 		Session_.Init( Agent_.RetrieveCallback( Agent_.BaseLanguage( LanguageBuffer_ ), ProxyCallback ) );
 		sclmisc::SetBaseLanguage( str::wString( Agent_.BaseLanguage( Buffer ) ) );

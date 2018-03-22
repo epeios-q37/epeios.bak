@@ -1,3 +1,22 @@
+/*
+	Copyright (C) 2018 Claude SIMON (http://q37.info/contact/).
+
+	This file is part of XDHq.
+
+	XDHq is free software: you can redistribute it and/or
+	modify it under the terms of the GNU Affero General Public License as
+	published by the Free Software Foundation, either version 3 of the
+	License, or (at your option) any later version.
+
+	XDHq is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+	Affero General Public License for more details.
+
+	You should have received a copy of the GNU Affero General Public License
+	along with XDHq. If not, see <http://www.gnu.org/licenses/>.
+*/
+
 const { app, BrowserWindow } = require('electron');
 const path = require('path');
 const url = require('url');
@@ -29,10 +48,11 @@ function createWindow() {
 
 
   // Open the DevTools.
-//  win.webContents.openDevTools();
+  //  win.webContents.openDevTools();
 
-  let head = fs.readFileSync(path.join(cdnPath, "head.html"));
-  let html = fs.readFileSync(path.join(__dirname, "XDHELCq.html"), "utf8").replace("<!-- $USER_HEAD -->", head);
+  let headFilename = (path.join(cdnPath, "head.html"));
+  let head = () => { if (fs.existsSync(headFilename)) return fs.readFileSync(headFilename); else return ""; };
+  let html = fs.readFileSync(path.join(__dirname, "XDHELCq.html"), "utf8").replace("<!-- $USER_HEAD$ -->", head).replace(/\$XDHELCQ_PATH\$/g, __dirname.replace(/\\/g, "\\\\"));
 
   win.loadURL("data:text/html;charset=utf-8," + encodeURI(html), { baseURLForDataURL: "file://" + cdnPath });
 
