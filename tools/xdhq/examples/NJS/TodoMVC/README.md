@@ -11,7 +11,9 @@ Running:
 
 * retrieve this repository,
 * `npm install`,
-* `node main.js`,
-* <http://localhost:8080/>.
+* desktop interface: `node main.js`,
+* web interface:
+  * `node main.js web`,
+  * <http://localhost:8080/>.
 
-###### Made with *Atlas* (<http://atlastk.og/>), a new and innovative library to develop Web *frontends* <u>without</u> the need of a *JavaScript* framework!
+Made with the *Atlas* toolkit (<http://atlastk.org/>), an alternative to *JavaScript* frameworks for writing web and desktop interfaces.
