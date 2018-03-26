@@ -1,4 +1,4 @@
-# Developers/maintainers notes about the *Atlas* toolkit
+# Developers/maintainers notes about the *Atlas* toolkit binding for *Node.js*
 
 Dependencies :
 

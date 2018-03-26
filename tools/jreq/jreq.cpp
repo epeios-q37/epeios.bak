@@ -57,7 +57,7 @@ namespace {
 			BaseFlow.Init( Info );
 			Flow.Init( BaseFlow );
 
-			Flow << sclmisc::SCLMISCProductName << " v" << VERSION << " - JNI v" << ( ( Version & 0xff00 ) >> 16 ) << '.' << ( Version & 0xff )  << txf::nl
+			Flow << sclmisc::SCLMISCProductName << " v" << VERSION << " - JNI v" << ( ( Version & 0xffff0000 ) >> 16 ) << '.' << ( Version & 0xffff )  << txf::nl
 				<< txf::pad << "Build : " __DATE__ " " __TIME__ " (" <<  cpe::GetDescription() << ')';
 		qRR
 		qRT

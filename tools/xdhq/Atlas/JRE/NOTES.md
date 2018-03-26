@@ -1,33 +1,39 @@
-Dépendences :
+# Developers/maintainers notes about the *Atlas* toolkit binding for *Java*
 
-* *njsq*, **à packager en premier !!!** : 
-  * *wrapper* *Node.js*,
-  * `njsq/`
+* *jreq*, **à packager en premier !!!** : 
+  * *wrapper* *Java*,
+  * `jreq/`
+  * <http://github.com/epeios-q37/jreq/>,
   * <http://github.com/epeios-q37/njsq/>,
-  * <https://www.npmjs.com/package/njsq/>,
+  * [![NPM](https://nodei.co/npm/jreq.png)](https://nodei.co/npm/jreq/),
 
-* *xdhwebqnjs* :
+* *xdhqxdh*:
+  * *proxy*,
+  * `xdhq/proxy/`,
+  * <http://github.com/epeios-q37/xdhq/>,
+  * [![NPM](https://nodei.co/npm/xdhqxdh.png)](https://nodei.co/npm/xdhqxdh/).
+
+* *xdhqnjs*:
+  * *wrapper* *XDHTML*,
+  * `xdhq/wrapper/NJS/`
+  * <http://github.com/epeios-q37/xdhq-node/>,
+  * [![NPM](https://nodei.co/npm/xdhqnjs.png)](https://nodei.co/npm/xdhqnjs/).
+
+* *xdhwebqnjs*:
   * *frontend* *web* *XDHTML*,
   * `xdhwebq/NJS`,
   * <https://github.com/epeios-q37/xdhwebq-node>
-  * <https://www.npmjs.com/package/xdhwebq>,
+  * [![NPM](https://nodei.co/npm/xdhwebq.png)](https://nodei.co/npm/xdhwebq/).
 
-* *xdhqxdh* (*NOTA* : *Node.js* v5 est ignoré lors de l'intégration car il pose problèmes...):
-  *  *proxy*,
-  * `xdhq/proxy/`,
-  * <http://github.com/epeios-q37/xdhq/>,
-  * <http://www.npmjs.com/package/xdhqxdh/>,
-
-* *xdhqjre* :
-  * *wrapper* *XDHTML*,
-  * `xdhq/wrapper/JRE/`
-  * <http://github.com/epeios-q37/xdhq-java/>,
-  * <https://www.npmjs.com/package/xdhqjre/>,
+* *xdhelcq*:
+  * *frontend* *desktop* *XDHTML*,
+  * `xdhwelcq`,
+  * <https://github.com/epeios-q37/xdhelcq>
+  * [![NPM](https://nodei.co/npm/xdhelcq.png)](https://nodei.co/npm/xdhelcq/).
 
 * *atlasjre* :
-	* *wrapper* *XDHTML* + serveur *httpd*,
-	* `xdhq/Atlas/JRE/`
-	* <http://github.com/epeios-q37/atlas-java/>,
-	* <https://www.npmjs.com/package/atlasjre/>.
+ 	* *wrapper* *XDHTML* + serveur *httpd* + *Electron*,
+ 	* `xdhq/Atlas/JRE/`
+ 	* <http://github.com/epeios-q37/atlas-java/>,
+  * [![NPM](https://nodei.co/npm/atlastk-java.png)](https://nodei.co/npm/atlastk-java/).
 
-*NOTA* : le paquet *NPM* *xdhq* a été renommé en *xdhqnjs*.
