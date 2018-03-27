@@ -26,7 +26,10 @@
 			<Modules Group="CSD">
 				<Module>csdbns</Module>
 				<Module>csdcmn</Module>
+				<Module>csdmxb</Module>
 				<Module>csdmxs</Module>
+				<Module>csdmns</Module>
+				<Module>csdscb</Module>
 			</Modules>
 			<Modules Group="SCL">
 				<xpp:expand select="SCL"/>
@@ -110,6 +113,13 @@
 			<File Pack="No">Tree.java</File>
 		</Files>
 	</Files>
+	<NodeJS>
+		<Deps>
+			<Regular>
+				<Dep>jreq</Dep>
+				</Regular>
+		</Deps>
+	</NodeJS>
 	<RTW>
 		<Dir>xdhq-java</Dir>
 	</RTW>
