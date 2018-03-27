@@ -111,6 +111,7 @@
 			<File Pack="No">Event.java</File>
 			<File Pack="No">Test.java</File>
 			<File Pack="No">Tree.java</File>
+			<File Pack="No">XDHq.java</File>
 		</Files>
 	</Files>
 	<NodeJS>
