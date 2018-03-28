@@ -116,8 +116,9 @@ namespace {
 #ifdef CPE_C_MSC
 	/*
 	This macro does nothing more that the 'Assign_(...)' function above,
-	but without it, Visual C++ 2017 does NOT assign 'source' to 'target',
-	target remains at 'NULL', and the program crashes !!!
+	but without it, Visual C++ 2017 does NOT assign 'source' to 'target'
+	in 'Release' configuration, hence target remains at 'NULL',
+	and the program crashes !!!
 	*/
 # define Assign_( source, target )	::Assign_( source, target);target = source
 #endif

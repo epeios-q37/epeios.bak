@@ -1,16 +1,22 @@
-# *Epeios* *CHANGELOG**
+# *Epeios* *CHANGELOG*
 
-2018-02-27:
+## 2018-03-28
+- N4JRE:
+  - securing padding shared of structure shared between two libraries.
+- SCLJRE:
+  - workaround of a *Visual C++ 2017* bug.
+  
+## 2018-02-27
 - SCLMISC:
   - moving `ExitOnSignal()`from *SCLTOOL* to *SCLMISC*,
 - SCLTOOL:
    - *idem*,
 
-2018-02-19:
+## 2018-02-19
 - XDHUTL
   - fixing bug occurring when event label size too small,
 
-2018-02-18:
+## 2018-02-18
 - *common*:
   - **$**: reverting path parameter handling,
 - SCLXDHTML:
@@ -22,7 +28,7 @@
 - XDHUJS:
   - **$**,
 
-2018-02-16:
+## 2018-02-16
 - *common*:
   - **$**: a path parameter is now coming along with *XSL* parameter, for the desktop version be able to load the file,
 - SCLXDHTML:
@@ -35,11 +41,11 @@
   - **$**,
   - commenting out some obsolete functions,
 
-2018-02-14:
+## 2018-02-14
 - CSDMXC
   - a failing server is no more blocking; however, the request has to be relaunched, an automatic reconnection has yet to be implemented.
 
-2018-01-31:
+## 2018-01-31
 - SCLJRE:
   - fixing parameter mess with template variadics,
 
