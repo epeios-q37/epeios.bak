@@ -227,8 +227,10 @@ class Thread extends java.lang.Thread {
 		this.dom = dom;
 		todos = new ArrayList<Todo>();
 
-		todos.add(new Todo("Todo 1", true));
-		todos.add(new Todo("Todo 2"));
+		if ( false ) {
+			todos.add(new Todo("Todo 1", true));
+			todos.add(new Todo("Todo 2"));
+		}
 	}
 
 	public void run() {
@@ -290,7 +292,7 @@ class TodoMVC {
 		// Uncomment for desktop interface. Default is web (port 8080).
 		// type = Atlas.Type.DESKTOP;
 
-		Atlas.listen("Connect", "TodoMVC", type, args);
+		Atlas.launch("Connect", "TodoMVC", type, args);
 
 		for (;;) {
 			java.lang.Thread thread = new Thread(new DOM());

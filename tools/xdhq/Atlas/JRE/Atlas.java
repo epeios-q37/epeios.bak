@@ -20,11 +20,24 @@
 package info.q37.atlas;
 
 public class Atlas extends info.q37.xdhq.XDHq {
+	private static boolean isDev() {
+		return System.getenv("EPEIOS_SRC") != null;
+	}
+
 	private static void launchWeb(String dir) {
 		try {
+			String command, path;
+
+			if (isDev()) {
+				command = "node httpd ";
+				path = "h:/hg/epeios/tools/xdhq/examples/common/";
+			} else {
+				command = "node -e \"require('xdhwebq').fileName\"";
+				path = ".";
+			}
+
 			Runtime runtime = Runtime.getRuntime();
-			Process httpd = runtime.exec("node httpd " + dir, null,
-					new java.io.File("h:/hg/epeios/tools/xdhq/examples/common/"));
+			Process httpd = runtime.exec(command + dir, null, new java.io.File(path));
 			runtime.addShutdownHook(new Thread() {
 				public void run() {
 					httpd.destroy();
@@ -37,11 +50,20 @@ public class Atlas extends info.q37.xdhq.XDHq {
 
 	private static void launchDesktop(String dir) {
 		try {
+			String command, path;
+
+			if (isDev()) {
+				command = "h:/hg/epeios/tools/xdhelcq/node_modules/electron/dist/electron index.js -m=h:/bin/xdhqxdh h:/hg/epeios/tools/xdhq/examples/common/";
+				path = "h:/hg/epeios/tools/xdhelcq";
+			} else {
+				command = "node -e \"require('child_process').spawnSync(require('xdhelcq').electron,[require('path').join(require('xdhelcq').path, 'index.js'),'-m=' + require('xdhqxdh').fileName, require('upath').normalize(require('path').resolve(__dirname))]);\"";
+				path = ".";
+			}
+
+			System.out.println( command + " ; " + path);
+
 			Runtime runtime = Runtime.getRuntime();
-			Process electron = runtime.exec(
-					"h:/hg/epeios/tools/xdhelcq/node_modules/electron/dist/electron . -m=h:/bin/xdhqxdh h:/hg/epeios/tools/xdhq/examples/common/"
-							+ dir,
-					null, new java.io.File("h:/hg/epeios/tools/xdhelcq"));
+			Process electron = runtime.exec(command + dir, null, new java.io.File(path));
 			runtime.addShutdownHook(new Thread() {
 				public void run() {
 					electron.destroy();
@@ -112,6 +134,6 @@ public class Atlas extends info.q37.xdhq.XDHq {
 	}
 
 	public static void launch(String newSessionAction, Type type) {
-			launch(newSessionAction, ".", type, "");
+		launch(newSessionAction, ".", type, "");
 	}
 };

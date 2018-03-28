@@ -60,7 +60,7 @@ class Atlas extends XDHq {
 	}
 
 	private static function launchDesktop( $dir ) {
-		popen( "start h:/hg/epeios/tools/xdhelcq/node_modules/electron/dist/electron h:/hg/epeios/tools/xdhelcq/ -m=h:/bin/xdhqxdh h:/hg/epeios/tools/xdhq/examples/common/" . $dir, "r" );
+		popen( "start h:/hg/epeios/tools/xdhelcq/node_modules/electron/dist/electron h:/hg/epeios/tools/xdhelcq/index.js -m=h:/bin/xdhqxdh h:/hg/epeios/tools/xdhq/examples/common/" . $dir, "r" );
 	}
 
 	public static function launch( string $newSessionAction, $type = null, string $dir = "." ) {

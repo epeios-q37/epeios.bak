@@ -343,7 +343,7 @@ namespace n4jre {
 	typedef void( *fDelete )( cObject * );
 
 	typedef void ( *fThrow )( const char *Message );
-
+#pragma pack(push, 1)
 	struct gShared {
 	public:
 		fNewObject NewObject;
@@ -364,6 +364,7 @@ namespace n4jre {
 		}
 		qCDTOR( gShared );
 	};
+#pragma pack(pop)
 }
 
 # ifdef N4JRE_H_

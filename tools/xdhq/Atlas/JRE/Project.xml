@@ -25,6 +25,7 @@
 	<NodeJS>
 		<Deps>
 			<Regular>
+				<Dep>upath</Dep>
 				<Dep>xdhqxdh</Dep>
 				<Dep>xdhqjre</Dep>
 				<Dep>xdhwebq</Dep>
