@@ -13,11 +13,11 @@
   * <http://github.com/epeios-q37/xdhq/>,
   * [![NPM](https://nodei.co/npm/xdhqxdh.png)](https://nodei.co/npm/xdhqxdh/).
 
-* *xdhqnjs*:
+* *xdhqjre*:
   * *wrapper* *XDHTML*,
-  * `xdhq/wrapper/NJS/`
-  * <http://github.com/epeios-q37/xdhq-node/>,
-  * [![NPM](https://nodei.co/npm/xdhqnjs.png)](https://nodei.co/npm/xdhqnjs/).
+  * `xdhq/wrapper/JRE/`
+  * <http://github.com/epeios-q37/xdhq-java/>,
+  * [![NPM](https://nodei.co/npm/xdhqjre.png)](https://nodei.co/npm/xdhqjre/).
 
 * *xdhwebqnjs*:
   * *frontend* *web* *XDHTML*,

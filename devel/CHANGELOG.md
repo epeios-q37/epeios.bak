@@ -2,9 +2,9 @@
 
 ## 2018-03-28
 - N4JRE:
-  - securing padding shared of structure shared between two libraries.
+  - securing padding of structure shared between two libraries,
 - SCLJRE:
-  - workaround of a *Visual C++ 2017* bug.
+  - workaround of a *Visual C++ 2017* bug in *Release* configuration,
   
 ## 2018-02-27
 - SCLMISC:
