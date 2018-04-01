@@ -24,7 +24,7 @@ Dependencies :
   * *frontend* *web* *XDHTML*,
   * `xdhwebq/NJS`,
   * <https://github.com/epeios-q37/xdhwebq-node>
-  * [![NPM](https://nodei.co/npm/xdhwebq.png)](https://nodei.co/npm/xdhwebq/).
+  * [![NPM](https://nodei.co/npm/xdhwebqnjs.png)](https://nodei.co/npm/xdhwebqnjs/).
 
 * *xdhelcq*:
   * *frontend* *desktop* *XDHTML*,

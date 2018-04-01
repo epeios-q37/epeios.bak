@@ -4,7 +4,6 @@
   * *wrapper* *Java*,
   * `jreq/`
   * <http://github.com/epeios-q37/jreq/>,
-  * <http://github.com/epeios-q37/njsq/>,
   * [![NPM](https://nodei.co/npm/jreq.png)](https://nodei.co/npm/jreq/),
 
 * *xdhqxdh*:
