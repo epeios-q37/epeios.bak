@@ -25,10 +25,11 @@
 	<NodeJS>
 		<Deps>
 			<Regular>
+			<!-- 'upath' module is used in a 'node -e' argument in the 'Atlas.java' file-->
 				<Dep>upath</Dep>
 				<Dep>xdhqxdh</Dep>
 				<Dep>xdhqjre</Dep>
-				<Dep>xdhwebq</Dep>
+				<Dep>xdhwebqnjs</Dep>
 				<Dep>xdhelcq</Dep>
 			</Regular>
 		</Deps>

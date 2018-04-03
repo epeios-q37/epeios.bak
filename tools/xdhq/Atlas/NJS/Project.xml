@@ -27,8 +27,8 @@
 			<Regular>
 				<Dep>xdhqxdh</Dep>
 				<Dep>xdhqnjs</Dep>
+				<Dep>xdhwebqnjs</Dep>
 				<Dep>xdhelcq</Dep>
-				<Dep>xdhwebq</Dep>
 			</Regular>
 		</Deps>
 	</NodeJS>
