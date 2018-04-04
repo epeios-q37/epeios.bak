@@ -139,12 +139,7 @@ function edit($dom, $id) {
 }
 
 function main() {
-	$type = null;
-
-	// Uncomment below for desktop interface. Default is web (port: 8080).
-	// $type = Atlas::DESKTOP;
-
-	Atlas::listen( "Connect", "notes", $type );
+	Atlas::launch( "Connect", null, "notes" );
 
 	$dom = new MyData();
 

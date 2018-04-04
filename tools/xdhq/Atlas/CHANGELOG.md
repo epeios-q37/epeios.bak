@@ -2,15 +2,18 @@
 
 **Common to all languages!**
 
-# 2018-03-07:
+## 2018-04-04
+- some modifications to be compatible with *Java* 1.6,
+
+## 2018-03-07
 
 - _UnJSq_ becomes _Atlas_ (toolkit),
 
-# 2018-02-03:
+## 2018-02-03
 
 - adding `execute`, `focus`, `removeAttribute`,
 
-# 2018-01-10:
+## 2018-01-10
 
 - *unjsq-node*:
     - fixing compilation issues under *macOS*.

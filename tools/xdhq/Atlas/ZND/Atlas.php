@@ -18,10 +18,12 @@
 	along with XDHq. If not, see <http://www.gnu.org/licenses/>.
 */
 
+function isDev() {
+	return getenv( "EPEIOS_SRC") !== false;
+}
+
 function getXDHq() {
-	if (getenv("EPEIOS_SRC") === false)
-		$xdhq_path = realpath(dirname(__FILE__)) . '/';
-	else {
+	if ( isDev() ) {
 		switch (strtoupper(substr(php_uname('s') , 0, 3))) {
 			case "WIN":
 				$epeios_path = "h:\\hg\\epeios\\";
@@ -38,7 +40,8 @@ function getXDHq() {
 		}
 
 		$xdhq_path = $epeios_path . "tools/xdhq/wrappers/ZND/";
-	}
+	} else
+		$xdhq_path = realpath(dirname(__FILE__)) . '/';
 
 	require( $xdhq_path . "XDHq.php");
 }
@@ -56,11 +59,11 @@ class Atlas extends XDHq {
 	const DEFAULT = Atlas::DESKTOP;
 
 	private static function launchWeb( $dir ) {
-		popen( "start node h:/hg/epeios/tools/xdhq/examples/common/httpd.js h:/hg/epeios/tools/xdhq/examples/common/" . $dir, "r" );
+		fclose(popen( "start node h:/hg/epeios/tools/xdhq/examples/common/httpd.js h:/hg/epeios/tools/xdhq/examples/common/" . $dir, "r" ));
 	}
 
 	private static function launchDesktop( $dir ) {
-		popen( "start h:/hg/epeios/tools/xdhelcq/node_modules/electron/dist/electron h:/hg/epeios/tools/xdhelcq/index.js -m=h:/bin/xdhqxdh h:/hg/epeios/tools/xdhq/examples/common/" . $dir, "r" );
+		fclose(popen( "start h:/hg/epeios/tools/xdhelcq/node_modules/electron/dist/electron h:/hg/epeios/tools/xdhelcq/index.js -m=h:/bin/xdhqxdh h:/hg/epeios/tools/xdhq/examples/common/" . $dir, "r" ));
 	}
 
 	public static function launch( string $newSessionAction, $type = null, string $dir = "." ) {

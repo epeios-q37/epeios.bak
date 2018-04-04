@@ -37,7 +37,7 @@ public class Atlas extends info.q37.xdhq.XDHq {
 			}
 
 			Runtime runtime = Runtime.getRuntime();
-			Process httpd = runtime.exec(command + dir, null, new java.io.File(path));
+			final Process httpd = runtime.exec(command + dir, null, new java.io.File(path));
 			runtime.addShutdownHook(new Thread() {
 				public void run() {
 					httpd.destroy();
@@ -63,7 +63,7 @@ public class Atlas extends info.q37.xdhq.XDHq {
 			System.out.println( command + " ; " + path);
 
 			Runtime runtime = Runtime.getRuntime();
-			Process electron = runtime.exec(command + dir, null, new java.io.File(path));
+			final Process electron = runtime.exec(command + dir, null, new java.io.File(path));
 			runtime.addShutdownHook(new Thread() {
 				public void run() {
 					electron.destroy();
@@ -87,23 +87,15 @@ public class Atlas extends info.q37.xdhq.XDHq {
 			type = defaultType;
 
 			if (arg.length() > 0) {
-				switch (arg) {
-				case "d":
-				case "desktop":
+				if ( (arg == "d" ) || ( arg == "desktop" ) ) {
 					type = Type.DESKTOP;
-					break;
-				case "w":
-				case "web":
+				} else if ( ( arg == "w") || ( arg == "web" ) ) {
 					type = Type.WEB;
-					break;
-				case "dw":
-				case "wd":
+				} else if ( ( arg == "dw" ) || ( arg == "wd") ) {
 					type = Type.DESKTOP_AND_WEB;
-					break;
-				default:
+				} else {
 					System.out.println("Unknown type !");
 					System.exit(1);
-					break;
 				}
 			}
 		}

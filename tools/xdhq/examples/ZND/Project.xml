@@ -10,10 +10,10 @@
 			<xpp:bloc>2018</xpp:bloc>
 		</xpp:define>
 		<About>
-		<Software>AtlasDemosPHP</Software>
+		<Software>AtlasDemos</Software>
 		</About>
 		<xpp:set name="Credits" value="Epeios"/>
-		<xpp:set name="Type" value="AtlasDemosPHP"/>
+		<xpp:set name="Type" value="AtlasDemoPHP"/>
 	</xpp:bloc>
 	<xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
 	<About>

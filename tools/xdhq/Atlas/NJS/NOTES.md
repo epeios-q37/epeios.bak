@@ -41,4 +41,5 @@ Dependencies :
 *NOTA*:
 
 * Following the installation of all *Atlas* toolkit bindings through *NPM*, the *xdhq* package was renamed to *xdhqnjs*,
-* Because `require('atlas-node')` was to clumsy, the `atlas-node` package was renamed to `atlastk`.
+* Because `require('atlas-node')` was to clumsy, the `atlas-node` package was renamed to `atlastk`,
+* `xdhwebqnjs`was first `xdhwebq`.

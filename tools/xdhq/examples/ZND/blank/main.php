@@ -46,7 +46,7 @@ function getAtlas() {
 getAtlas();
 
 function main() {
-	Atlas::listen( "Connect", null, "blank" );
+	Atlas::launch( "Connect", null, "blank" );
 
 	$dom = new AtlasDOM();
 

@@ -161,38 +161,31 @@ class Thread extends java.lang.Thread {
 		System.out.println("Connection detected...");
 
 		for (;;) {
-			switch (dom.getAction(event)) {
-			case "Connect":
+			String action = dom.getAction(event);
+
+			if ( action.equals( "Connect" ) ) {
 				dom.setLayout("", new Tree(), "Main.xsl");
 				displayList();
-				break;
-			case "ToggleDescriptions":
+			} else if ( action.equals( "ToggleDescriptions" ) ) {
 				hideDescriptions = "true".equals(dom.getContent(event.id));
 				handleDescriptions();
-				break;
-			case "Search":
+			} else if ( action.equals( "Search" ) ) {
 				pattern = dom.getContent("Pattern").toLowerCase();
 				displayList();
-				break;
-			case "Edit":
+			} else if ( action.equals( "Edit" ) ) {
 				edit(dom.getContent(event.id));
-				break;
-			case "Delete":
+			} else if ( action.equals( "Delete" ) ) {
 				if (dom.confirm("Are you sure you want to delete this entry ?")) {
 					notes.remove(Integer.parseInt(dom.getContent(event.id)));
 					displayList();
 				}
-				break;
-			case "Submit":
+			} else if ( action.equals( "Submit" ) ) {
 				submit();
-				break;
-			case "Cancel":
+			} else if ( action.equals( "Cancel" ) ) {
 				cancel();
-				break;
-			default:
+			} else {
 				System.out.println("No or unknown action !");
 				System.exit(1);
-				break;
 			}
 		}
 	}
@@ -200,12 +193,7 @@ class Thread extends java.lang.Thread {
 
 class Notes {
 	public static void main(String[] args) throws Exception {
-		Atlas.Type type = Atlas.Type.DEFAULT;
-
-		// Uncomment for desktop interface. Default is web (port 8080).
-		// type = Atlas.Type.DESKTOP;
-
-		Atlas.listen("Connect", "Notes", type, args );
+		Atlas.launch("Connect", "Notes", Atlas.Type.DEFAULT, args );
 
 		for (;;) {
 			java.lang.Thread thread = new Thread(new DOM());

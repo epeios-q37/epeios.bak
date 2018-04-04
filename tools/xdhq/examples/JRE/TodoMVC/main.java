@@ -287,12 +287,7 @@ class Thread extends java.lang.Thread {
 
 class TodoMVC {
 	public static void main(String[] args) throws Exception {
-		Atlas.Type type = Atlas.Type.DEFAULT;
-
-		// Uncomment for desktop interface. Default is web (port 8080).
-		// type = Atlas.Type.DESKTOP;
-
-		Atlas.launch("Connect", "TodoMVC", type, args);
+		Atlas.launch("Connect", "TodoMVC", Atlas.Type.DEFAULT, args);
 
 		for (;;) {
 			java.lang.Thread thread = new Thread(new DOM());

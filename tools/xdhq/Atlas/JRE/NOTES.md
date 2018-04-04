@@ -22,7 +22,7 @@
   * *frontend* *web* *XDHTML*,
   * `xdhwebq/NJS`,
   * <https://github.com/epeios-q37/xdhwebq-node>
-  * [![NPM](https://nodei.co/npm/xdhwebq.png)](https://nodei.co/npm/xdhwebq/).
+  * [![NPM](https://nodei.co/npm/xdhwebqnjs.png)](https://nodei.co/npm/xdhwebqnjs/).
 
 * *xdhelcq*:
   * *frontend* *desktop* *XDHTML*,
@@ -31,7 +31,7 @@
   * [![NPM](https://nodei.co/npm/xdhelcq.png)](https://nodei.co/npm/xdhelcq/).
 
 * *atlasjre* :
- 	* *wrapper* *XDHTML* + serveur *httpd* + *Electron*,
+ 	* *wrapper* *XDHTML* + *httpd* server + *Electron*,
  	* `xdhq/Atlas/JRE/`
  	* <http://github.com/epeios-q37/atlas-java/>,
   * [![NPM](https://nodei.co/npm/atlastk-java.png)](https://nodei.co/npm/atlastk-java/).

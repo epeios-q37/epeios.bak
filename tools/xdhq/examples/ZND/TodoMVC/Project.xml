@@ -13,7 +13,7 @@
 		<Software>TodoMVC</Software>
 		</About>
 		<xpp:set name="Credits" value="Epeios"/>
-		<xpp:set name="Type" value="TodoMVCPHP"/>
+		<xpp:set name="Type" value="AtlasDemoPHP"/>
 	</xpp:bloc>
 	<xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
 	<About>

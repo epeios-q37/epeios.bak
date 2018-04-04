@@ -1,6 +1,6 @@
  # *XDHWebQ*
 
-[![NPM](https://nodei.co/npm/xdhwebq.png)](https://nodei.co/npm/xdhwebq/)
+[![NPM](https://nodei.co/npm/xdhwebqnjs.png)](https://nodei.co/npm/xdhwebqnjs/)
 
 For more information, see [http://q37.info/tools/xdhwebq/](http://q37.info/tools/xdhwebq/).
 

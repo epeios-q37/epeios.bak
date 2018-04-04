@@ -66,14 +66,13 @@ class Blank {
 	}
 
 	public static void main(String[] args) throws Exception {
-		Atlas.Type type = Atlas.Type.DEFAULT;
+		Atlas.Type type = ;
 		System.out.println(Atlas.wrapperInfo());
 		System.out.println(Atlas.componentInfo());
 		displayBytecodeBuildTimestamp();
 		System.out.println(Atlas.returnArgument("Text from JAVA file"));
 
-		Atlas.launch("Connect", "blank", type, args );
-		// 
+		Atlas.launch("Connect", "blank", Atlas.Type.DEFAULT, args );
 
 		for (;;) {
 			java.lang.Thread thread = new Thread(new DOM());

@@ -258,10 +258,7 @@ function cancel( $dom ) {
 function main() {
 	$type = null;
 
-	// Uncomment below for desktop interface. Default is web (port: 8080).
-	// $type = Atlas::DESKTOP;
-
-	Atlas::listen( "Connect", "TodoMVC", $type );
+	Atlas::launch( "Connect", null, "TodoMVC" );
 
 	$dom = new DOM();
 
