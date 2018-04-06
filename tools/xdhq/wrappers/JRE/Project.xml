@@ -68,6 +68,7 @@
 				<Files Path="../../examples/JRE/">
 					<File Path="notes/">main.java</File>
 					<File>NOTES.md</File>
+					<File>Project.xml</File>
 					<File>README.md</File>
 				</Files>
 				<Files Path="../../examples/common/notes/">
@@ -81,6 +82,7 @@
 			<Files Group="TodoMVC">
 				<Files Path="../../examples/JRE/TodoMVC/">
 					<File>main.java</File>
+					<File>Project.xml</File>
 					<File>README.md</File>
 				</Files>
 				<Files Path="../../examples/common/TodoMVC/">

@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<Project 
-	xmlns:xpp="http://zeusw.org/epeios/xpp">
+<Project xmlns:xpp="http://zeusw.org/epeios/xpp">
 	<xpp:bloc>
 		<!-- User definitions -->
 		<xpp:define name="Version">
@@ -10,7 +9,7 @@
 			<xpp:bloc>2018</xpp:bloc>
 		</xpp:define>
 		<About>
-		<Software>AtlasDemos</Software>
+			<Software>AtlasDemos</Software>
 		</About>
 		<xpp:set name="Credits" value="Epeios"/>
 		<xpp:set name="Type" value="AtlasDemoJava"/>
@@ -23,14 +22,17 @@
 	<RTW Description="Demonstration applications of 'Atlas' for 'Java'." Keywords="Demo,Atlas,Java">
 		<Dir>atlas-java-demo</Dir>
 	</RTW>
-  	<!-- Although a 'Java' app., there is a 'NodeJS' section because 'npm' is currently used as package manager. -->
-<NodeJS>
-  <Deps>
-   <Regular>
-   	<!-- To enable when existing
-    <Dep>atlasjre</Dep>
+	<!-- Although a 'Java' app., there is a 'NodeJS' section because 'npm' is currently used as package manager. -->
+	<NodeJS>
+		<Scripts>
+			<Script Name="install">node install.js</Script>
+		</Scripts>
+		<Deps>
+			<Regular>
+				<!-- To enable when existing
+    <Dep>atlastk-java</Dep>
      -->
-   </Regular>
-  </Deps>
- </NodeJS>
-	</Project>
+			</Regular>
+		</Deps>
+	</NodeJS>
+</Project>

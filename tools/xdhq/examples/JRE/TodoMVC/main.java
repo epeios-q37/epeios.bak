@@ -287,7 +287,15 @@ class Thread extends java.lang.Thread {
 
 class TodoMVC {
 	public static void main(String[] args) throws Exception {
-		Atlas.launch("Connect", "TodoMVC", Atlas.Type.DEFAULT, args);
+		String dir;
+
+		if ( System.getenv("EPEIOS_SRC") == null )
+			dir = ".";
+		else
+			dir = "TodoMVC";
+
+
+		Atlas.launch("Connect", dir, Atlas.Type.DEFAULT, args);
 
 		for (;;) {
 			java.lang.Thread thread = new Thread(new DOM());

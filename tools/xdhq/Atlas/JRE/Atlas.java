@@ -26,19 +26,17 @@ public class Atlas extends info.q37.xdhq.XDHq {
 
 	private static void launchWeb(String dir) {
 		try {
-			String command, path;
+			ProcessBuilder processBuilder;
 
 			if (isDev()) {
-				command = "node httpd ";
-				path = "h:/hg/epeios/tools/xdhq/examples/common/";
+				processBuilder = new ProcessBuilder( "node", "httpd", dir );
+				processBuilder.directory( new java.io.File("h:/hg/epeios/tools/xdhq/examples/common/" ) );
 			} else {
-				command = "node -e \"require('xdhwebq').fileName\"";
-				path = ".";
+				processBuilder = new ProcessBuilder( "node", "-e", "require(require('xdhwebqnjs').fileName).launch('" + dir + "');");
 			}
 
-			Runtime runtime = Runtime.getRuntime();
-			final Process httpd = runtime.exec(command + dir, null, new java.io.File(path));
-			runtime.addShutdownHook(new Thread() {
+			final Process httpd = processBuilder.start();
+			Runtime.getRuntime().addShutdownHook(new Thread() {
 				public void run() {
 					httpd.destroy();
 				}
@@ -50,21 +48,17 @@ public class Atlas extends info.q37.xdhq.XDHq {
 
 	private static void launchDesktop(String dir) {
 		try {
-			String command, path;
+			ProcessBuilder processBuilder;
 
 			if (isDev()) {
-				command = "h:/hg/epeios/tools/xdhelcq/node_modules/electron/dist/electron index.js -m=h:/bin/xdhqxdh h:/hg/epeios/tools/xdhq/examples/common/";
-				path = "h:/hg/epeios/tools/xdhelcq";
+				processBuilder = new ProcessBuilder( "h:/hg/epeios/tools/xdhelcq/node_modules/electron/dist/electron", "index.js", "-m=h:/bin/xdhqxdh", "h:/hg/epeios/tools/xdhq/examples/common/" + dir);
+				processBuilder.directory( new java.io.File("h:/hg/epeios/tools/xdhelcq") );
 			} else {
-				command = "node -e \"require('child_process').spawnSync(require('xdhelcq').electron,[require('path').join(require('xdhelcq').path, 'index.js'),'-m=' + require('xdhqxdh').fileName, require('upath').normalize(require('path').resolve(__dirname))]);\"";
-				path = ".";
+				processBuilder = new ProcessBuilder( "node", "-e", "require('child_process').spawnSync(require('xdhelcq').electron,[require('path').join(require('xdhelcq').path, 'index.js'),'-m=' + require('xdhqxdh').fileName, require('upath').normalize(require('path').join(require('path').resolve(__dirname),'" + dir + "'))])");
 			}
 
-			System.out.println( command + " ; " + path);
-
-			Runtime runtime = Runtime.getRuntime();
-			final Process electron = runtime.exec(command + dir, null, new java.io.File(path));
-			runtime.addShutdownHook(new Thread() {
+			final Process electron = processBuilder.start();
+			Runtime.getRuntime().addShutdownHook(new Thread() {
 				public void run() {
 					electron.destroy();
 				}
@@ -87,11 +81,11 @@ public class Atlas extends info.q37.xdhq.XDHq {
 			type = defaultType;
 
 			if (arg.length() > 0) {
-				if ( (arg == "d" ) || ( arg == "desktop" ) ) {
+				if ( arg.equals( "d" ) || arg.equals( "desktop" ) ) {
 					type = Type.DESKTOP;
-				} else if ( ( arg == "w") || ( arg == "web" ) ) {
+				} else if ( arg.equals( "w") || arg.equals( "web" ) ) {
 					type = Type.WEB;
-				} else if ( ( arg == "dw" ) || ( arg == "wd") ) {
+				} else if ( arg.equals( "dw" ) || arg.equals( "wd") ) {
 					type = Type.DESKTOP_AND_WEB;
 				} else {
 					System.out.println("Unknown type !");

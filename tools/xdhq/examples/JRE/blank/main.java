@@ -32,24 +32,20 @@ class Thread extends java.lang.Thread {
 		System.out.println("Connection detected...");
 
 		for (;;) {
-			switch (dom.getAction(event)) {
-			case "Connect":
+			String action = dom.getAction(event);
+
+			if ( action.equals( "Connect" ) ) {
 				dom.setLayout("", new Tree(), "Main.xsl");
 				dom.addClass("Input", "hidden");
-				break;
-			case "Submit":
+			} else if ( action.equals( "Submit" ) ) {
 				dom.setContent("Pattern", dom.getContent("Pattern").toUpperCase());
-				break;
-			case "HideInput":
+			} else if ( action.equals( "HideInput" ) ) {
 				dom.addClass("Input", "hidden");
-				break;
-			case "ShowInput":
+			} else if ( action.equals( "ShowInput" ) ) {
 				dom.removeClass("Input", "hidden");
-				break;
-			default:
+			} else {
 				System.out.println("No or unknown action !");
 				System.exit(1);
-				break;
 			}
 		}
 	}
@@ -66,7 +62,6 @@ class Blank {
 	}
 
 	public static void main(String[] args) throws Exception {
-		Atlas.Type type = ;
 		System.out.println(Atlas.wrapperInfo());
 		System.out.println(Atlas.componentInfo());
 		displayBytecodeBuildTimestamp();

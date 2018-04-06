@@ -193,7 +193,7 @@ class Thread extends java.lang.Thread {
 
 class Notes {
 	public static void main(String[] args) throws Exception {
-		Atlas.launch("Connect", "Notes", Atlas.Type.DEFAULT, args );
+		Atlas.launch("Connect", "notes", Atlas.Type.DEFAULT, args );
 
 		for (;;) {
 			java.lang.Thread thread = new Thread(new DOM());
