@@ -87,7 +87,7 @@ namespace jrebse {
 			const char *Signature,
 			args... Args )
 		{
-			return Init( Env, Env->NewObject( Class, jniq::GetMethodID( Class, "<init>", Signature, Env ), Args... ), Class );
+			return Init( Env, Env->NewObject( Class, jniq::GetMethodID( Env, Class, "<init>", Signature ), Args... ), Class );
 		}
 		template <typename ...args> void Init(
 			JNIEnv *Env,
@@ -190,36 +190,34 @@ namespace jrebse {
 		namespace io {
 			CH( PrintStream )
 				void Println(
-					jobject Object,
-					JNIEnv *Env = NULL ) const
+					JNIEnv *Env,
+					jobject Object ) const
 				{
-					return object::CallVoidMethod( "println", "(Ljava/lang/Object;)V", Env, Object );
+					return object::CallVoidMethod( Env, "println", "(Ljava/lang/Object;)V", Object );
 				}
 				void Println(
-					const char *Text,
-					JNIEnv *Env = NULL ) const
+					JNIEnv *Env,
+					const char *Text ) const
 				{
-					Env = jniq::GetEnv( Env );
-
-					return Println( Env->NewStringUTF( Text ), Env );
+					return Println( Env, Env->NewStringUTF( Text ) );
 				}
-				void Flush( JNIEnv *Env = NULL ) const
+				void Flush( JNIEnv *Env ) const
 				{
-					return object::CallVoidMethod( "flush", "()V", Env );
+					return object::CallVoidMethod( Env, "flush", "()V" );
 				}
 			CF( PrintStream );
 			CH( InputStream )
-				jint Read( JNIEnv *Env = NULL ) const
+				jint Read( JNIEnv *Env ) const
 				{
-					return object::CallIntMethod( "read", "()I", Env );
+					return object::CallIntMethod( Env, "read", "()I" );
 				}
 				jint Read(
+					JNIEnv *Env,
 					jbyteArray b,
 					jint off,
-					jint len,
-					JNIEnv *Env = NULL ) const
+					jint len ) const
 				{
-					return object::CallIntMethod( "read", "([BII)I", Env, b, off, len, Env );
+					return object::CallIntMethod( Env, "read", "([BII)I", Env, b, off, len );
 				}
 			CF( InputStream );
 		}
@@ -272,11 +270,9 @@ namespace jrebse {
 				}
 			CF( String );
 			CH( System )
-				static io::sPrintStream Out( JNIEnv *Env = NULL )
+				static io::sPrintStream Out( JNIEnv *Env )
 				{
-					Env = jniq::GetEnv( Env );
-
-					return io::sPrintStream( jniq::GetStaticObjectField( Name, "out", "Ljava/io/PrintStream;", Env ), Env );
+					return io::sPrintStream( Env, jniq::GetStaticObjectField( Env, Name, "out", "Ljava/io/PrintStream;" ) );
 				}
 			CF( System );
 		}
