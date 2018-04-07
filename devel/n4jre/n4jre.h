@@ -330,7 +330,7 @@ namespace n4jre {
 	typedef cObject sJObject_;
 	typedef sJObject_* sJObject;
 
-	typedef void *sEnv;
+	using n4all::sEnv;
 
 	typedef cObject *(* fNewObject )(
 		sEnv *Env,
