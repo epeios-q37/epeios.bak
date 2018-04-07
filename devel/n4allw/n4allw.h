@@ -76,10 +76,11 @@ namespace n4allw {
 			bso::sBool SkipComponenentUnloading,	// The component will be unloaded when quitting the program, and not explicitly (at true only for a 'PHP' workaround under 'GNU/Linux').
 			qRPD );
 		inline void Call(
+			n4all::sEnv *Env,
 			sdr::sRow Row,
 			n4all::cCaller &Caller )
 		{
-			return L_().Call( GetFunction_( Row ), Caller );
+			return L_().Call( Env, GetFunction_( Row ), Caller );
 		}
 		bso::sBool GetInfo( str::dString &Info ) const
 		{

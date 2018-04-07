@@ -154,7 +154,7 @@ qRFB
 	Rack_.Init( Error_, SCLError_, cio::GetSet( cio::t_Default ), Locale_ );
 
 	Location.Init();
-	jniq::Convert( RawLocation, Location, Env);
+	jniq::Convert( Env, RawLocation, Location);
 	// TODO : Find a way to fill 'Location' with the path of the binary.
 
 //	cio::COut << ">>>>>>>>> " << Location << txf::nl << txf::commit;
@@ -179,9 +179,11 @@ namespace {
 	{
 		delete Object;
 	}
-	inline void Throw_( const char *Message )
+	inline void Throw_(
+		n4jre::sEnv *RawEnv,
+		const char *Message )
 	{
-		JNIEnv *Env = jniq::GetEnv();
+		JNIEnv *Env = (JNIEnv *)RawEnv;
 
 		if ( Env->ExceptionOccurred() == NULL )
 			Env->ThrowNew( Env->FindClass( "java/lang/Exception"), Message );
@@ -202,7 +204,7 @@ qRFH;
 	str::wString ComponentFilename;
 qRFB;
 	Arguments.Init();
-	jniq::Convert( RawArguments, Arguments, Env );
+	jniq::Convert( Env, RawArguments, Arguments );
 
 	sclargmnt::FillRegistry( Arguments, sclargmnt::faIsArgument, sclargmnt::uaReport );
 
@@ -240,7 +242,7 @@ extern "C" JNIEXPORT jobject JNICALL Java_info_q37_jreq_Wrapper_call(
 	jobject Return = NULL;
 qRFH
 qRFB
-	Return = wrapper::Call( GetLauncher_( Launcher ), Index, Args );
+	Return = wrapper::Call( Env, GetLauncher_( Launcher ), Index, Args );
 qRFR
 qRFT
 qRFE( ERRFinal_( Env ) )

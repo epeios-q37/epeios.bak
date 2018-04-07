@@ -117,7 +117,7 @@ SCLJRE_F( xdhp::New )
 {
 	rData_ *Data = Sharing_.Read();
 
-	scljre::sJObject Object = scljre::ConvertUO<rData_>( Data );
+	scljre::sJObject Object = scljre::ConvertUO<rData_>( Env, Data );
 
 	Data->Recv.ReadDismiss();
 
@@ -145,6 +145,7 @@ SCLJRE_F( xdhp::Set )
 namespace {
 	namespace {
 		void Init_(
+			scljre::sEnv *Env,
 			scljre::java::lang::rString &String,
 			const str::dString &Content )
 		{
@@ -156,7 +157,7 @@ namespace {
 
 			Array.Init( Content );
 
-			String.Init( Array, CharsetName );
+			String.Init( Env, Array, CharsetName );
 		qRR
 		qRT
 		qRE
@@ -164,6 +165,7 @@ namespace {
 	}
 
 	void Set_(
+		scljre::sEnv *Env,
 		const char *Name,
 		const str::dString &Value,
 		scljre::rObject &Data )
@@ -171,7 +173,7 @@ namespace {
 	qRH
 		scljre::java::lang::rString String;
 	qRB
-		Init_( String, Value );
+		Init_( Env, String, Value );
 		Data.Set( Name, "Ljava/lang/String;", String() );
 	qRR
 	qRT
@@ -194,8 +196,8 @@ qRB;
 	Event.Init( Caller.GetObject() );
 	
 	Data.Recv.ReadBegin();
-	Set_( "id", Data.Recv.Id, Event );
-	Set_( "action", Data.Recv.Action, Event );
+	Set_( Env, "id", Data.Recv.Id, Event );
+	Set_( Env, "action", Data.Recv.Action, Event );
 	Data.Recv.ReadEnd();
 qRR;
 qRT;
@@ -224,7 +226,7 @@ SCLJRE_F( xdhp::Execute )
 
 	SWITCH;
 
-	Buffer = scljre::String( Return.GetString() );
+	Buffer = scljre::String( Env, Return.GetString() );
 
 	END;
 
@@ -257,7 +259,7 @@ SCLJRE_F( xdhp::Confirm )
 
 	END;
 
-	return scljre::Boolean( Response );
+	return scljre::Boolean( Env, Response );
 }
 
 SCLJRE_F( xdhp::SetLayout )
@@ -284,7 +286,7 @@ SCLJRE_F( xdhp::GetContents )
 
 	SWITCH;
 
-	Buffer = scljre::Strings( Return.GetStrings() );
+	Buffer = scljre::Strings( Env, Return.GetStrings() );
 
 	END;
 
@@ -397,7 +399,7 @@ SCLJRE_F( xdhp::GetAttribute )
 
 	SWITCH;
 
-	Buffer = scljre::String( Return.GetString() );
+	Buffer = scljre::String( Env, Return.GetString() );
 
 	END;
 
@@ -438,7 +440,7 @@ SCLJRE_F( xdhp::GetProperty )
 
 	SWITCH;
 
-	Buffer = scljre::String( Return.GetString() );
+	Buffer = scljre::String( Env, Return.GetString() );
 
 	END;
 

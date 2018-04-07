@@ -79,32 +79,30 @@ namespace {
 	}
 
 	void Fill_(
+		JNIEnv *Env,
 		int ArgC,
 		const n4jre::sValue *ArgV,
-		JNIEnv *Env,
 		jvalue *Arg )
 	{
 		while ( ArgC-- )
 			Fill_( ArgV[ArgC], Env, Arg[ArgC] );
 	}
+
 	jvalue *Fill_(
+		JNIEnv *Env,
 		int ArgC,
-		const n4jre::sValue *ArgV,
-		JNIEnv *Env )
+		const n4jre::sValue *ArgV )
 	{
 		jvalue *Args = NULL;
 	qRH
-		JNIEnv *Env = NULL;
 	qRB
-		JNIEnv *Env = jniq::GetEnv();
-
 		if ( ArgC != 0 ) {
 			Args = new jvalue[ArgC];
 
 			if ( Args == NULL )
 				qRAlc();
 
-			Fill_( ArgC, ArgV, Env, Args );
+			Fill_( Env, ArgC, ArgV, Args );
 		}
 	qRR
 	qRT
@@ -113,8 +111,8 @@ namespace {
 	}
 
 	void Retrieve_(
-		jobject Arg,
 		JNIEnv *Env,
+		jobject Arg,
 		n4jre::rJString &String )
 	{
 		jsize Size = Env->GetStringUTFLength( (jstring)Arg );
@@ -126,8 +124,8 @@ namespace {
 	}
 
 	void Retrieve_(
-		jobject Arg,
 		JNIEnv *Env,
+		jobject Arg,
 		n4jre::rJByteArray &Array )
 	{
 		jsize Size = Env->GetArrayLength( (jbyteArray)Arg );
@@ -139,8 +137,8 @@ namespace {
 	}
 
 	void RetrieveAndFree_(
-		jvalue &Arg,
 		JNIEnv *Env,
+		jvalue &Arg,
 		n4jre::sValue &ArgV )
 	{
 		bso::sBool IsObject = true;
@@ -153,10 +151,10 @@ namespace {
 			// Nothing to free.
 			break;
 		case n4jre::tString:
-			Retrieve_( Arg.l, Env, *ArgV.String );
+			Retrieve_( Env, Arg.l, *ArgV.String );
 			break;
 		case n4jre::tByteArray:
-			Retrieve_( Arg.l, Env, *ArgV.ByteArray );
+			Retrieve_( Env, Arg.l, *ArgV.ByteArray );
 			break;
 		default:
 			qRGnr();
@@ -168,13 +166,13 @@ namespace {
 	}
 
 	void RetrieveAndFree_(
+		JNIEnv *Env,
 		int ArgC,
 		n4jre::sValue *ArgV,
-		jvalue *Arg,
-		JNIEnv *Env )
+		jvalue *Arg )
 	{
 		while ( ArgC-- )
-			RetrieveAndFree_( Arg[ArgC], Env, ArgV[ArgC] );
+			RetrieveAndFree_( Env, Arg[ArgC], ArgV[ArgC] );
 	}
 }
 
@@ -182,8 +180,8 @@ typedef n4all::cCaller cCaller_;
 
 namespace {
 	void GetString_(
-		jobject Object,
 		JNIEnv *Env,
+		jobject Object,
 		void *RawString )
 	{
 		str::dString &String = *( str::dString * )RawString;
@@ -191,12 +189,12 @@ namespace {
 		if ( !Env->IsInstanceOf( Object, Env->FindClass( "Ljava/lang/String;" ) ) )
 			qRGnr();
 
-		jniq::Convert( (jstring)Object, String, Env );
+		jniq::Convert( Env, (jstring)Object, String );
 	}
 
 	void SetString_(
-		const void *RawString,
 		JNIEnv *Env,
+		const void *RawString,
 		jobject &Object )
 	{
 	qRH
@@ -218,26 +216,26 @@ namespace {
 	: public cObject_
 	{
 	private:
+		JNIEnv * Env_;
 		jobject Object_;
 		template <typename type, typename function> type CallMethod_(
 			const char *Method,
 			const char *Signature,
 			int ArgC,
 			n4jre::sValue *ArgV,
-			function Function,
-			JNIEnv *Env )
+			function Function )
 		{
 			type Return;
 		qRH
 			jvalue *Args = NULL;
 		qRB
-			Args = Fill_( ArgC, ArgV, Env );
+			Args = Fill_( Env_, ArgC, ArgV );
 
-			Return = Function( Env, Object_, jniq::GetMethodID( Object_, Method, Signature, Env ), Args );
+			Return = Function( Env_, Object_, jniq::GetMethodID( Env_, Object_, Method, Signature ), Args );
 		qRR
 		qRT
 			if ( Args != NULL ) {
-				RetrieveAndFree_( ArgC, ArgV, Args, Env );
+				RetrieveAndFree_( Env_, ArgC, ArgV, Args );
 				delete Args;
 			}
 		qRE
@@ -245,7 +243,6 @@ namespace {
 		}
 		void Set_(
 			jobject JObject,
-			JNIEnv *Env,
 			n4jre::sValue &Object )
 		{
 			switch ( Object.Type ) {
@@ -258,7 +255,7 @@ namespace {
 				qRVct();
 				break;
 			case n4jre::tByteArray:
-				Retrieve_( JObject, Env, *Object.ByteArray );
+				Retrieve_( Env_, JObject, *Object.ByteArray );
 				break;
 			default:
 				qRGnr();
@@ -273,7 +270,7 @@ namespace {
 		{
 			rObject_ &Object = *(rObject_ *)Value;
 
-			jniq::SetObjectField( Object_, Name, Signature, Object.Object_, jniq::GetEnv() );
+			jniq::SetObjectField( Env_, Object_, Name, Signature, Object.Object_ );
 		}
 		virtual void N4JRECallObjectMethod(
 			const char *Method,
@@ -282,15 +279,13 @@ namespace {
 			int ArgC,
 			n4jre::sValue *ArgV ) override
 		{
-			JNIEnv *Env = jniq::GetEnv();
+			jobject JObject = CallMethod_<jobject>( Method, Signature, ArgC, ArgV, Env_->functions->CallObjectMethodA );
 
-			jobject JObject = CallMethod_<jobject>( Method, Signature, ArgC, ArgV, Env->functions->CallObjectMethodA, Env );
-
-			Set_( JObject, Env, Object );
+			Set_( JObject, Object );
 		}
 		virtual n4jre::sJSize N4JREGetLength( void ) override
 		{
-			return jniq::GetLength( Object_, jniq::GetEnv() );
+			return jniq::GetLength( Env_, Object_ );
 		}
 		virtual cObject *N4JREGetElement( n4jre::sJSize Index ) override
 		{
@@ -300,7 +295,7 @@ namespace {
 			if ( ( Object = new rObject_ ) == NULL  )
 				qRAlc();
 
-			Object->Init( jniq::GetElement( Object_, Index, jniq::GetEnv() ) );
+			Object->Init( Env_, jniq::GetElement( Env_, Object_, Index ) );
 		qRR;
 			if ( Object != NULL )
 				delete Object;
@@ -312,7 +307,7 @@ namespace {
 			n4jre::sJSize Index,
 			cObject *Object ) override
 		{
-			jniq::SetElement( Object_, Index, ((rObject_ *)Object)->Object_ );
+			jniq::SetElement( Env_, Object_, Index, ((rObject_ *)Object)->Object_ );
 		}
 		virtual void N4JRECallVoidMethod(
 			const char *Method,
@@ -321,18 +316,15 @@ namespace {
 			n4jre::sValue *ArgV ) override
 		{
 		qRH
-			JNIEnv *Env = NULL;
 			jvalue *Args = NULL;
 		qRB
-			JNIEnv *Env = jniq::GetEnv();
+			Args = Fill_( Env_, ArgC, ArgV );
 
-			Args = Fill_( ArgC, ArgV, Env );
-
-			Env->CallVoidMethodA( Object_, jniq::GetMethodID( Object_, Method, Signature, Env ), Args );
+			Env_->CallVoidMethodA( Object_, jniq::GetMethodID( Env_, Object_, Method, Signature ), Args );
 		qRR
 		qRT
 			if ( Args != NULL ) {
-				RetrieveAndFree_( ArgC, ArgV, Args, Env );
+				RetrieveAndFree_( Env_, ArgC, ArgV, Args );
 				delete Args;
 			}
 		qRE
@@ -343,9 +335,7 @@ namespace {
 			int ArgC,
 			n4jre::sValue *ArgV ) override
 		{
-			JNIEnv *Env = jniq::GetEnv();
-
-			return CallMethod_<jboolean>( Method, Signature, ArgC, ArgV, Env->functions->CallBooleanMethod, Env );
+			return CallMethod_<jboolean>( Method, Signature, ArgC, ArgV, Env_->functions->CallBooleanMethod );
 		}
 		virtual n4jre::sJShort N4JRECallShortMethod(
 			const char *Method,
@@ -353,9 +343,7 @@ namespace {
 			int ArgC,
 			n4jre::sValue *ArgV ) override
 		{
-			JNIEnv *Env = jniq::GetEnv();
-
-			return CallMethod_<jshort>( Method, Signature, ArgC, ArgV, Env->functions->CallShortMethodA, Env );
+			return CallMethod_<jshort>( Method, Signature, ArgC, ArgV, Env_->functions->CallShortMethodA );
 		}
 		virtual n4jre::sJInt N4JRECallIntMethod(
 			const char *Method,
@@ -363,9 +351,7 @@ namespace {
 			int ArgC,
 			n4jre::sValue *ArgV ) override
 		{
-			JNIEnv *Env = jniq::GetEnv();
-
-			return CallMethod_<jint>( Method, Signature, ArgC, ArgV, Env->functions->CallIntMethodA, Env );
+			return CallMethod_<jint>( Method, Signature, ArgC, ArgV, Env_->functions->CallIntMethodA );
 		}
 		virtual n4jre::sJLong N4JRECallLongMethod(
 			const char *Method,
@@ -373,9 +359,7 @@ namespace {
 			int ArgC,
 			n4jre::sValue *ArgV ) override
 		{
-			JNIEnv *Env = jniq::GetEnv();
-
-			return CallMethod_<jlong>( Method, Signature, ArgC, ArgV, Env->functions->CallLongMethodA, Env );
+			return CallMethod_<jlong>( Method, Signature, ArgC, ArgV, Env_->functions->CallLongMethodA );
 		}
 
 	public:
@@ -383,14 +367,18 @@ namespace {
 		{
 			if ( P ) {
 				if ( Object_ != NULL )
-					jniq::GetEnv()->DeleteGlobalRef( Object_ );
+					Env_->DeleteGlobalRef( Object_ );
 			}
 
+			Env_ = NULL;
 			Object_ = NULL;
 		}
 		qCVDTOR( rObject_ );
-		void Init( jobject Object )
+		void Init(
+			JNIEnv *Env,
+			jobject Object )
 		{
+			Env_ = Env;
 			Object_ = Object;
 		}
 		jobject Object( void )
@@ -402,6 +390,7 @@ namespace {
 	class sCaller_
 	: public cCaller_ {
 	private:
+		JNIEnv * Env_;
 		qRMV( jobjectArray, A_, Args_ );
 		jobject ReturnedValue_;
 		virtual void N4ALLGetArgument(
@@ -410,12 +399,9 @@ namespace {
 			void *Value ) override
 		{
 		qRH
-			JNIEnv *Env = NULL;
 			rObject_ *Object = NULL;
 		qRB
-			Env = jniq::GetEnv();
-
-			if ( Index >= Env->GetArrayLength( A_() ) )
+			if ( Index >= Env_->GetArrayLength( A_() ) )
 				qRFwk();
 
 			if ( Type != n4jre::t_Undefined )
@@ -426,7 +412,7 @@ namespace {
 			if ( Object == NULL )
 				qRAlc();
 
-			Object->Init( Env->NewGlobalRef( Env->GetObjectArrayElement( A_(), Index ) ) );
+			Object->Init( Env_, Env_->NewGlobalRef( Env_->GetObjectArrayElement( A_(), Index ) ) );
 
 			*(n4jre::sJObject *)Value = Object;
 		qRR
@@ -437,8 +423,6 @@ namespace {
 			n4all::sType Type,
 			const void *Value ) override
 		{
-			JNIEnv *Env = jniq::GetEnv();
-
 			if ( Type != n4jre::t_Undefined )
 				qRGnr();
 
@@ -456,8 +440,11 @@ namespace {
 			ReturnedValue_ = NULL;
 		}
 		qCDTOR( sCaller_ );
-		void Init( jobjectArray &Args )
+		void Init(
+			JNIEnv_ *Env,
+			jobjectArray &Args )
 		{
+			Env_ = Env;
 			Args_ = &Args;
 			ReturnedValue_ = NULL;
 		}
@@ -469,6 +456,7 @@ namespace {
 }
 
 n4jre::cObject *wrapper::NewObject(
+	n4jre::sEnv *RawEnv,
 	const char *ClassName,
 	const char *Signature,
 	int ArgC,
@@ -477,13 +465,13 @@ n4jre::cObject *wrapper::NewObject(
 	rObject_ *Object = NULL;
 qRH
 	jvalue *Args = NULL;
-	JNIEnv *Env = NULL;
 	jclass Class = NULL;
-qRB
-	Env = jniq::GetEnv();
-	Class = jniq::FindClass( ClassName, Env );
+	JNIEnv *Env = NULL;
+	qRB
+		Env = (JNIEnv *)RawEnv;
+	Class = jniq::FindClass( Env, ClassName );
 
-	Args = Fill_( ArgC, ArgV, Env );
+	Args = Fill_( Env, ArgC, ArgV );
 
 	Object = ::new rObject_;
 
@@ -491,15 +479,15 @@ qRB
 		qRAlc();
 
 	if ( ( ClassName == NULL ) || ( *ClassName == 0 ) )
-		Object->Init( NULL );
+		Object->Init( Env, NULL );
 	else
-		Object->Init( Env->NewObjectA( Class, jniq::GetMethodID( Class, "<init>", Signature, Env ), Args ) );
+		Object->Init( Env, Env->NewObjectA( Class, jniq::GetMethodID( Env, Class, "<init>", Signature ), Args ) );
 qRR
 	if ( Object != NULL )
 		delete Object;
 qRT
 	if ( Args != NULL ) {
-		RetrieveAndFree_( ArgC, ArgV, Args, Env );
+		RetrieveAndFree_( Env, ArgC, ArgV, Args );
 		delete Args;
 	}
 qRE
@@ -507,16 +495,17 @@ qRE
 }
 
 n4jre::cObject *wrapper::NewObjectArray(
+	n4jre::sEnv *RawEnv,
 	n4jre::sJSize Length,
 	const char *ClassName )
 {
 	rObject_ *Object = NULL;
 qRH;
-	JNIEnv *Env = NULL;
 	jclass Class = NULL;
-qRB;
-	Env = jniq::GetEnv();
-	Class = jniq::FindClass( ClassName, Env );
+	JNIEnv *Env = NULL;
+qRB
+	Env = (JNIEnv *)RawEnv;
+	Class = jniq::FindClass( Env, ClassName );
 
 	Object = ::new rObject_;
 
@@ -526,7 +515,7 @@ qRB;
 	if ( (ClassName == NULL) || (*ClassName == 0) )
 		qRGnr();
 
-	Object->Init( Env->NewObjectArray( Length, Class, NULL ) );
+	Object->Init( Env, Env->NewObjectArray( Length, Class, NULL ) );
 qRR
 	if ( Object != NULL )
 		delete Object;
@@ -537,6 +526,7 @@ qRE
 
 
 jobject wrapper::Call(
+	JNIEnv *Env,
 	rLauncher &Launcher,
 	jint Index,
 	jobjectArray &Args )
@@ -545,9 +535,9 @@ jobject wrapper::Call(
 qRH
 	sCaller_ Caller;
 qRB
-	Caller.Init( Args );
+	Caller.Init( Env, Args );
 
-	Launcher.Call( Index, Caller );
+	Launcher.Call( (n4jre::sEnv*)Env, Index, Caller );
 
 //	n4allw::GetLauncher().Launch( n4allw::GetFunction( Index ), Caller );
 

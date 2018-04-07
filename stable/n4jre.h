@@ -330,19 +330,25 @@ namespace n4jre {
 	typedef cObject sJObject_;
 	typedef sJObject_* sJObject;
 
+	typedef void *sEnv;
+
 	typedef cObject *(* fNewObject )(
+		sEnv *Env,
 		const char *Class,
 		const char *Signature,
 		int ArgC,
 		sValue *ArgV );
 
 	typedef cObject *(* fNewObjectArray)(
+		sEnv *Env,
 		sJSize Length,
 		const char *Class );
 
 	typedef void( *fDelete )( cObject * );
 
-	typedef void ( *fThrow )( const char *Message );
+	typedef void ( *fThrow )(
+		sEnv *Env,
+		const char *Message );
 #pragma pack(push, 1)
 	struct gShared {
 	public:

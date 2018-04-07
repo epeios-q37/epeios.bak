@@ -29,15 +29,19 @@ namespace wrapper {
 	using n4allw::rLauncher;
 
 	n4jre::cObject *NewObject(
+		n4jre::sEnv *Env,
 		const char * ClassName,
 		const char * Signature,
-		int ArgC, n4jre::sValue * ArgV );
+		int ArgC,
+		n4jre::sValue * ArgV );
 
 	n4jre::cObject *NewObjectArray(
+		n4jre::sEnv *Env,
 		n4jre::sJSize Length,
 		const char * ClassName );
 
 	jobject Call(
+		JNIEnv *Env,
 		rLauncher &Launcher,
 		jint Index,
 		jobjectArray &Args );

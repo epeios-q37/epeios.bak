@@ -58,9 +58,11 @@ namespace {
 	typedef n4all::cLauncher cLauncher_;
 
 	class sLauncher_
-	: public cLauncher_ {
+	: public cLauncher_
+	{
 	protected:
 		virtual void N4ALLCall(
+			sEnv *Env,
 			void *Function,
 			n4all::cCaller &RawCaller ) override
 		{
@@ -69,7 +71,7 @@ namespace {
 
 			Caller.Init( RawCaller );
 
-			Return = ( (fFunction *)Function )( Caller );
+			Return = ( (fFunction *)Function )( Env, Caller );
 
 			RawCaller.SetReturnValue( n4jre::t_Undefined, Return );	// 'sJObject' is a generic type, so no type is specified.
 		}
@@ -156,12 +158,14 @@ qRE
 	return Launcher;
 }
 
-void scljre::Throw( const str::dString &Message )
+void scljre::Throw(
+	sEnv *Env,
+	const str::dString &Message )
 {
 qRH
 	qCBUFFERr Buffer;
 qRB
-	Throw( Message.Convert( Buffer ) );
+	Throw( Env, Message.Convert( Buffer ) );
 qRR
 qRT
 qRE
@@ -184,13 +188,15 @@ sJObject scljre::Null( void )
 }
 
 namespace {
-	template <typename primitive, typename wrapper> sJObject Wrap_( primitive Value )
+	template <typename primitive, typename wrapper> sJObject Wrap_(
+		sEnv *Env,
+		primitive Value )
 	{
 		sJObject Object = NULL;
 	qRH
 		wrapper Wrapper;
 	qRB
-		Wrapper.Init( Value );
+		Wrapper.Init( Env, Value );
 
 		Object = Wrapper();
 
@@ -202,22 +208,30 @@ namespace {
 	}
 }
 
-sJObject scljre::Boolean( sJBoolean Value )
+sJObject scljre::Boolean(
+	sEnv *Env,
+	sJBoolean Value )
 {
-	return Wrap_<sJBoolean, java::lang::rBoolean>( Value );
+	return Wrap_<sJBoolean, java::lang::rBoolean>( Env, Value );
 }
 
-sJObject scljre::Integer( sJInt Value )
+sJObject scljre::Integer(
+	sEnv *Env,
+	sJInt Value )
 {
-	return Wrap_<sJInt, java::lang::rInteger>( Value );
+	return Wrap_<sJInt, java::lang::rInteger>( Env, Value );
 }
 
-sJObject scljre::Long( sJLong Value )
+sJObject scljre::Long(
+	sEnv *Env,
+	sJLong Value )
 {
-	return Wrap_<sJLong, java::lang::rLong>( Value );
+	return Wrap_<sJLong, java::lang::rLong>( Env, Value );
 }
 
-sJObject scljre::String( const str::dString &UTF )
+sJObject scljre::String(
+	sEnv *Env,
+	const str::dString &UTF )
 {
 	sJObject Object = NULL;
 qRH
@@ -229,7 +243,7 @@ qRB
 
 	Bytes.Init( UTF );
 
-	JString.Init( Bytes, Charset );
+	JString.Init( Env, Bytes, Charset );
 
 	Object = JString();
 
@@ -240,7 +254,9 @@ qRE
 	return Object;
 }
 
-sJObject scljre::Strings( const str::dStrings &Strings )
+sJObject scljre::Strings(
+	sEnv *Env,
+	const str::dStrings &Strings )
 {
 	sJObject Buffer = NULL;
 qRH;
@@ -250,12 +266,12 @@ qRB;
 	if ( Strings.Amount() > n4jre::SizeMax )
 		qRLmt();
 
-	Object.Init( NewObjectArray_( (sJSize)Strings.Amount(), "Ljava/lang/String;" ) );
+	Object.Init( NewObjectArray_( Env, (sJSize)Strings.Amount(), "Ljava/lang/String;" ) );
 
 	Row = Strings.First();
 
 	while ( Row != qNIL ) {
-		Object.SetElement( (sJSize)*Row, String( Strings( Row ) ) );
+		Object.SetElement( (sJSize)*Row, String( Env, Strings( Row ) ) );
 
 		Row = Strings.Next( Row );
 	}

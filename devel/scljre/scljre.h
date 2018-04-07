@@ -60,6 +60,7 @@ namespace scljre {
 	}
 
 	template <typename ...args> cObject *New(
+		sEnv *Env,
 		const char *Class,
 		const char *Signature,
 		args&... Args )
@@ -69,15 +70,19 @@ namespace scljre {
 
 		Fill_( 0, Values, Args... );
 
-		return NewObject_( Class, Signature, sizeof...( args ), Values );
+		return NewObject_( Env, Class, Signature, sizeof...( args ), Values );
 	}
 
-	inline void Throw( const char *Message )
+	inline void Throw(
+		sEnv *Env,
+		const char *Message )
 	{
-		return Throw_( Message );
+		return Throw_( Env, Message );
 	}
 
-	void Throw( const str::dString &Text );
+	void Throw(
+		sEnv *Env,
+		const str::dString &Text );
 
 	class rObject {
 	private:
@@ -264,9 +269,11 @@ namespace scljre {
 
 		namespace lang {
 			B( Boolean );
-				void Init( sJBoolean Boolean )
+				void Init(
+					sEnv *Env,
+					sJBoolean Boolean )
 				{
-					Init( New( "Ljava/lang/Boolean;", "(Z)V", Boolean ) );
+					Init( New( Env, "Ljava/lang/Boolean;", "(Z)V", Boolean ) );
 				}
 				sJBoolean BooleanValue( void )
 				{
@@ -275,9 +282,11 @@ namespace scljre {
 			A;
 
 			B( Short );
-				void Init( sJShort Short )
+				void Init(
+					sEnv *Env,
+					sJShort Short )
 				{
-					Init( New( "Ljava/lang/Short;", "(S)V", Short ) );
+					Init( New( Env, "Ljava/lang/Short;", "(S)V", Short ) );
 				}
 				sJShort ShortValue( void )
 				{
@@ -286,9 +295,11 @@ namespace scljre {
 			A;
 
 			B( Integer );
-				void Init( sJInt Integer )
+				void Init(
+					sEnv *Env,
+					sJInt Integer )
 				{
-					Init( New( "Ljava/lang/Integer;", "(I)V", Integer ) );
+					Init( New( Env, "Ljava/lang/Integer;", "(I)V", Integer ) );
 				}
 				sJInt IntValue( void )
 				{
@@ -297,9 +308,11 @@ namespace scljre {
 			A;
 
 			B( Long );
-				void Init( sJLong Long )
+				void Init(
+					sEnv *Env,
+					sJLong Long )
 				{
-					Init( New( "Ljava/lang/Long;", "(J)V", Long ) );
+					Init( New( Env, "Ljava/lang/Long;", "(J)V", Long ) );
 				}
 				sJLong LongValue( void )
 				{
@@ -309,10 +322,11 @@ namespace scljre {
 
 			B( String );
 				void Init(
+					sEnv *Env,
 					rJByteArray &bytes,
 					rJString &charsetName )
 				{
-					Init( New( "Ljava/lang/String;", "([BLjava/lang/String;)V", bytes, charsetName ) );
+					Init( New( Env, "Ljava/lang/String;", "([BLjava/lang/String;)V", bytes, charsetName ) );
 				}
 				void GetBytes(
 					rJString &charsetName,
@@ -423,7 +437,9 @@ namespace scljre {
 		}
 	};
 
-	typedef sJObject ( fFunction )( sCaller &Caller );
+	typedef sJObject ( fFunction )(
+		sEnv *Env,
+		sCaller &Caller );
 
 # undef B
 # undef A
@@ -437,24 +453,40 @@ namespace scljre {
 # endif
 
 	sJObject Null( void );
-	sJObject Boolean( sJBoolean Boolean );
-	sJObject Integer( sJInt Integer );
-	sJObject Long( sJLong Long );
-	sJObject String( const str::dString &UTF );
-	sJObject Strings( const str::dStrings &Strings );
+	sJObject Boolean(
+		sEnv *Env,
+		sJBoolean Boolean );
+	sJObject Integer(
+		sEnv *Env,
+		sJInt Integer );
+	sJObject Long(
+		sEnv *Env,
+		sJLong Long );
+	sJObject String(
+		sEnv *Env,
+		const str::dString &UTF );
+	sJObject Strings(
+		sEnv *Env,
+		const str::dStrings &Strings );
 
 	// To ease the handling of user object. 
-	template <typename t> inline sJObject ConvertUO( const t* UO )
+	template <typename t> inline sJObject ConvertUO(
+		sEnv *Env,
+		const t* UO )
 	{
-		return Long( (sJLong)UO );
+		return Long( Env, (sJLong)UO );
 	}
 
-	template <typename t> inline sJObject ConvertUO( const t& UO )
+	template <typename t> inline sJObject ConvertUO(
+		sEnv *Env,
+		const t& UO )
 	{
 		return ConvertUO<t>( &UO );
 	}
 
-	template <typename t, typename... args> inline sJObject CreateUO( args& ...Args )
+	template <typename t, typename... args> inline sJObject CreateUO(
+		sEnv *Env,
+		args& ...Args )
 	{
 		t *UO;
 	qRH;
@@ -468,7 +500,7 @@ namespace scljre {
 	qRR;
 	qRT;
 	qRE;
-		return scljre::ConvertUO<t>( UO );
+		return scljre::ConvertUO<t>( Env, UO );
 	}
 
 	template <typename t> inline t *GetUOP( sJObject Object )
@@ -548,7 +580,9 @@ namespace scljre {
 	void SCLJRERegister( sRegistrar &Registrar );	// To define by user
 }
 
-# define SCLJRE_F( name ) scljre::sJObject name( scljre::sCaller &Caller )
+# define SCLJRE_F( name ) scljre::sJObject name(\
+	scljre::sEnv *Env,\
+	scljre::sCaller &Caller )
 
 # ifdef SCLJRE_H_
 #  define H SCLJRE_H_

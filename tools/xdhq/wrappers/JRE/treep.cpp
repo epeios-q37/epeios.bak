@@ -41,7 +41,7 @@ namespace {
 
 SCLJRE_F( treep::New )
 {
-	return scljre::CreateUO<rRack_>();
+	return scljre::CreateUO<rRack_>( Env );
 }
 
 SCLJRE_F( treep::Delete )

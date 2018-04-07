@@ -40,7 +40,8 @@ namespace jniq {
 
 	JNIEnv *GetGlobalEnv( void );
 
-	inline JNIEnv *GetEnv( JNIEnv *Env = NULL )
+	// DEPRECATED, as useless in multithreading environment !
+	inline JNIEnv *GetEnv_( JNIEnv *Env = NULL )
 	{
 		if ( Env == NULL )
 			return GetGlobalEnv();
@@ -49,20 +50,20 @@ namespace jniq {
 	}
 
 	const str::string_ &Convert(
+		JNIEnv *Env,
 		jstring JString,
-		str::string_ &String,
-		JNIEnv *Env = NULL );
+		str::string_ &String);
 
 	const char *Convert(
+		JNIEnv *Env,
 		jstring JString,
-		qCBUFFERr &Buffer,
-		JNIEnv *Env = NULL );
+		qCBUFFERr &Buffer );
 
 	inline jclass FindClass(
-		const char *Name,
-		JNIEnv *Env = NULL )
+		JNIEnv *Env,
+		const char *Name )
 	{
-		jclass Class = GetEnv( Env )->FindClass( Name );
+		jclass Class = Env->FindClass( Name );
 
 		if ( Class == NULL )
 			qRFwk();
@@ -71,10 +72,10 @@ namespace jniq {
 	}
 
 	inline jclass GetClass(
-		jobject Object,
-		JNIEnv *Env = NULL )
+		JNIEnv *Env,
+		jobject Object )
 	{
-		jclass Class = GetEnv( Env )->GetObjectClass( Object );
+		jclass Class = Env->GetObjectClass( Object );
 
 		if ( Class == NULL )
 			qRLbr();
@@ -83,12 +84,12 @@ namespace jniq {
 	}
 
 	inline jmethodID GetMethodID(
+		JNIEnv *Env,
 		jclass Class,
 		const char *Name,
-		const char *Signature,
-		JNIEnv *Env = NULL )
+		const char *Signature )
 	{
-		jmethodID MethodID = GetEnv( Env )->GetMethodID( Class, Name, Signature );
+		jmethodID MethodID = Env->GetMethodID( Class, Name, Signature );
 
 		if ( MethodID == NULL )
 			qRLbr();
@@ -97,23 +98,21 @@ namespace jniq {
 	}
 
 	inline jmethodID GetMethodID(
+		JNIEnv *Env,
 		jobject Object,
 		const char *Name,
-		const char *Signature,
-		JNIEnv *Env = NULL )
+		const char *Signature )
 	{
-		Env = GetEnv( Env );
-
-		return GetMethodID( GetClass( Object, Env ), Name, Signature, Env );
+		return GetMethodID( Env, GetClass( Env, Object ), Name, Signature );
 	}
 
 	inline jmethodID GetStaticMethodID(
+		JNIEnv *Env,
 		jclass Class,
 		const char *Name,
-		const char *Signature,
-		JNIEnv *Env = NULL )
+		const char *Signature )
 	{
-		jmethodID MethodID = GetEnv( Env )->GetStaticMethodID( Class, Name, Signature );
+		jmethodID MethodID = Env->GetStaticMethodID( Class, Name, Signature );
 
 		if ( MethodID == NULL )
 			qRLbr();
@@ -122,23 +121,21 @@ namespace jniq {
 	}
 
 	inline jmethodID GetStaticMethodID(
+		JNIEnv *Env,
 		jobject Object,
 		const char *Name,
-		const char *Signature,
-		JNIEnv *Env = NULL )
+		const char *Signature )
 	{
-		Env = GetEnv( Env );
-
-		return GetStaticMethodID( GetClass( Object, Env ), Name, Signature, Env );
+		return GetStaticMethodID( Env, GetClass( Env, Object ), Name, Signature );
 	}
 
 	inline jfieldID GetFieldID(
+		JNIEnv *Env,
 		jclass Class,
 		const char *Name,
-		const char *Signature,
-		JNIEnv *Env = NULL )
+		const char *Signature )
 	{
-		jfieldID FieldID = GetEnv( Env )->GetFieldID( Class, Name, Signature );
+		jfieldID FieldID = Env->GetFieldID( Class, Name, Signature );
 
 		if ( FieldID == NULL )
 			qRLbr();
@@ -147,22 +144,21 @@ namespace jniq {
 	}
 
 	inline jfieldID GetFieldID(
+		JNIEnv *Env,
 		jobject Object,
 		const char *Name,
-		const char *Signature,
-		JNIEnv *Env = NULL )
+		const char *Signature )
 	{
-		Env = GetEnv( Env );
-		return GetFieldID( GetClass( Object, Env ), Name, Signature, Env );
+		return GetFieldID( Env, GetClass( Env, Object ), Name, Signature );
 	}
 
 	inline jfieldID GetStaticFieldID(
+		JNIEnv *Env,
 		jclass Class,
 		const char *Name,
-		const char *Signature,
-		JNIEnv *Env = NULL )
+		const char *Signature )
 	{
-		jfieldID FieldID = GetEnv( Env )->GetStaticFieldID( Class, Name, Signature );
+		jfieldID FieldID = Env->GetStaticFieldID( Class, Name, Signature );
 
 		if ( FieldID == NULL )
 			qRLbr();
@@ -171,54 +167,44 @@ namespace jniq {
 	}
 
 	inline jint GetIntField(
+		JNIEnv *Env,
 		jobject Object,
-		const char *Name,
-		JNIEnv *Env = NULL )
+		const char *Name )
 	{
-		Env = GetEnv( Env );
-
-		return Env->GetIntField( Object, GetFieldID( Object, Name, "I", Env ) );
+		return Env->GetIntField( Object, GetFieldID( Env, Object, Name, "I" ) );
 	}
 
 	inline jint GetStaticIntField(
+		JNIEnv *Env,
 		jclass Class,
-		const char *Name,
-		JNIEnv *Env = NULL )
+		const char *Name )
 	{
-		Env = GetEnv( Env );
-
-		return Env->GetStaticIntField( Class, GetStaticFieldID( Class, Name, "I", Env ) );
+		return Env->GetStaticIntField( Class, GetStaticFieldID( Env, Class, Name, "I" ) );
 	}
 
 	inline jlong GetLongField(
+		JNIEnv *Env,
 		jobject Object,
-		const char *Name,
-		JNIEnv *Env = NULL )
+		const char *Name )
 	{
-		Env = GetEnv( Env );
-
-		return Env->GetLongField( Object, GetFieldID( Object, Name, "J", Env ) );
+		return Env->GetLongField( Object, GetFieldID( Env, Object, Name, "J" ) );
 	}
 
 	inline jlong GetStaticLongField(
+		JNIEnv *Env,
 		jclass Class,
-		const char *Name,
-		JNIEnv *Env = NULL )
+		const char *Name )
 	{
-		Env = GetEnv( Env );
-
-		return Env->GetStaticLongField( Class, GetStaticFieldID( Class, Name, "J", Env ) );
+		return Env->GetStaticLongField( Class, GetStaticFieldID( Env, Class, Name, "J" ) );
 	}
 
 	inline jobject GetObjectField(
+		JNIEnv *Env,
 		jobject Object,
 		const char *Name,
-		const char *Signature,
-		JNIEnv *Env = NULL )
+		const char *Signature )
 	{
-		Env = GetEnv( Env );
-
-		jobject Field = Env->GetObjectField( Object, GetFieldID( Object, Name, Signature, Env ) );
+		jobject Field = Env->GetObjectField( Object, GetFieldID( Env, Object, Name, Signature ) );
 
 		if ( Field == NULL )
 			qRLbr();
@@ -227,14 +213,12 @@ namespace jniq {
 	}
 
 	inline jobject GetStaticObjectField(
+		JNIEnv *Env,
 		jclass Class,
 		const char *Name,
-		const char *Signature,
-		JNIEnv *Env = NULL )
+		const char *Signature )
 	{
-		Env = GetEnv( Env);
-
-		jobject Object = Env->GetStaticObjectField( Class, GetStaticFieldID( Class, Name, Signature, Env ) );
+		jobject Object = Env->GetStaticObjectField( Class, GetStaticFieldID( Env, Class, Name, Signature ) );
 
 		if ( Object == NULL )
 			qRLbr();
@@ -243,62 +227,52 @@ namespace jniq {
 	}
 
 	inline jobject GetStaticObjectField(
+		JNIEnv *Env,
 		const char *ClassName,
 		const char *Name,
-		const char *Signature,
-		JNIEnv *Env = NULL )
+		const char *Signature )
 	{
-		Env = GetEnv( Env );
-
-		return GetStaticObjectField( FindClass( ClassName, Env ), Name, Signature, Env );
+		return GetStaticObjectField( Env, FindClass( Env, ClassName ), Name, Signature );
 	}
 
 	inline void SetIntField(
+		JNIEnv *Env,
 		jobject Object,
 		const char *Name,
-		jint Value,
-		JNIEnv *Env = NULL )
+		jint Value )
 	{
-		Env = GetEnv( Env );
-
-		Env->SetIntField( Object, GetFieldID( Object, Name, "J", Env ), Value );
+		Env->SetIntField( Object, GetFieldID( Env, Object, Name, "J" ), Value );
 	}
 
 	inline void SetLongField(
+		JNIEnv *Env,
 		jobject Object,
 		const char *Name,
-		jlong Value,
-		JNIEnv *Env = NULL )
+		jlong Value )
 	{
-		Env = GetEnv( Env );
-
-		Env->SetLongField( Object, GetFieldID( Object, Name, "J", Env ), Value );
+		Env->SetLongField( Object, GetFieldID( Env, Object, Name, "J" ), Value );
 	}
 
 	inline void SetObjectField(
+		JNIEnv *Env,
 		jobject Object,
 		const char *Name,
 		const char *Signature,
-		jobject Value,
-		JNIEnv *Env = NULL )
+		jobject Value )
 	{
 		if ( ( Signature == NULL )
 			  || ( Signature[0] == 0 )
 			  || ( Signature[strlen( Signature )-1] != ';' ) )
 			qRFwk();
 
-		Env = GetEnv( Env );
-
-		Env->SetObjectField( Object, GetFieldID( Object, Name, Signature ), Value );
+		Env->SetObjectField( Object, GetFieldID( Env, Object, Name, Signature ), Value );
 	}
 
 	template <typename type> inline jsize GetLength(
-		type Array,
-		JNIEnv *Env = NULL )
+		JNIEnv *Env,
+		type Array )
 	{
 		jsize Length = 0;
-
-		Env = GetEnv( Env );
 
 		Length = Env->GetArrayLength( Array );
 
@@ -309,49 +283,45 @@ namespace jniq {
 	}
 
 	template <typename type> inline jobject GetElement(
+		JNIEnv *Env,
 		type Array,
-		jsize Index,
-		JNIEnv *Env = NULL )
+		jsize Index )
 	{
-		Env = GetEnv( Env );
-
 		return Env->GetObjectArrayElement( Array, Index );
 	}
 
 	template <typename type> inline void SetElement(
+		JNIEnv *Env,
 		type Array,
 		jsize Index,
-		jobject Object,
-		JNIEnv *Env = NULL )
+		jobject Object )
 	{
-		Env = GetEnv( Env );
-
 		return Env->SetObjectArrayElement( Array, Index, Object );
 	}
 
 	// Don't know what happens if 'Array' isn't a 'jobjectArray' !
 	inline jsize GetLength(
-		jobject Array,
-		JNIEnv *Env = NULL )
+		JNIEnv *Env,
+		jobject Array )
 	{
-		return GetLength( (jobjectArray)Array, Env );
+		return GetLength( Env, (jobjectArray)Array );
 	}
 
 	inline jobject GetElement(
+		JNIEnv *Env,
 		jobject Array,
-		jsize Index,
-		JNIEnv *Env = NULL )
+		jsize Index )
 	{
-		return GetElement( (jobjectArray)Array, Index, Env );
+		return GetElement( Env, (jobjectArray)Array, Index );
 	}
 
 	inline void SetElement(
+		JNIEnv *Env,
 		jobject Array,
 		jsize Index,
-		jobject Object,
-		JNIEnv *Env = NULL )
+		jobject Object )
 	{
-		return SetElement( (jobjectArray)Array, Index, Object, Env );
+		return SetElement( Env, (jobjectArray)Array, Index, Object );
 	}
 }
 

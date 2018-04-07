@@ -1,5 +1,22 @@
 # *Epeios* *CHANGELOG*
 
+## 2018-04-07
+- JNIQ:
+  - removing `JNIEnv *` parameter's default value, as its value change from one thread to another,
+  - the `JNIEnv *` parameter becomes the first one,
+  - deprecating (adding `_` to name) `GetENV(...)` function (see above),
+  - *NOTE*: sharing the same `JNIEnv *` between different threads seems to work under *Windows* and *macOS*, but does not under *GNU/Linux*,
+- JREBSE:
+  - adaptation to changes in *JNIQ*,
+- N4ALL:
+  - introducing `sEnv` needed by adaptation to changes in underlying modules,
+- N4ALLW:
+  - adaptation to changes in underlying modules,
+- N4JRE:
+  - adaptation to changes in underlying modules,
+- SCLJRE:
+  - adaptation to changes in underlying modules,
+
 ## 2018-03-28
 - N4JRE:
   - securing padding of structure shared between two libraries,

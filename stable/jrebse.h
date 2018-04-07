@@ -41,12 +41,11 @@ namespace jrebse {
 	class sObject_
 	{
 	protected:
+		JNIEnv *Env_;
 		qPMV( _jobject, O_, Object_ );
 		virtual void reset_( bso::sBool P = true )
 		{}
-		virtual jobject Init_(
-			jobject Object,
-			JNIEnv *Env )
+		virtual jobject Init_( jobject Object )
 		{
 			return Object;
 		}
@@ -55,60 +54,48 @@ namespace jrebse {
 		{
 			reset_( P );
 
+			Env_ = NULL;
 			Object_ = NULL;
 		}
 		qCDTOR( sObject_ );
 		void Init(
+			JNIEnv *Env,
 			jobject Object,
-			jclass Class,
-			JNIEnv *Env = NULL )
+			jclass Class )
 		{
-			Env = jniq::GetEnv( Env );
+			Env_ = Env;
 
-			if ( !Env->IsInstanceOf( Object, Class ) )
+			if ( !Env_->IsInstanceOf( Object, Class ) )
 				qRFwk();
 
-			Object_ = Init_( Object, Env );
+			Object_ = Init_( Object );
 		}
 		void Init(
+			JNIEnv *Env,
 			jobject Object,
-			const char *Class,
-			JNIEnv *Env = NULL )
+			const char *Class )
 		{
-			Env = jniq::GetEnv( Env );
-
-			return Init( Object, jniq::FindClass( Class, Env ), Env );
+			return Init( Env, Object, jniq::FindClass( Env, Class ) );
 		}
 		operator jobject( void )
 		{
 			return O_();
 		}
 		template <typename ...args> void Init(
-			jclass Class,
-			const char *Signature,
 			JNIEnv *Env,
-			args... Args )
-		{
-			Env = jniq::GetEnv( Env );
-
-			return Init( Env->NewObject( Class, jniq::GetMethodID( Class, "<init>", Signature, Env ), Args... ), Class, Env );
-		}
-		template <typename ...args> void Init(
 			jclass Class,
 			const char *Signature,
 			args... Args )
 		{
-			return Init( Class, Signature, NULL, Args... );
+			return Init( Env, Env->NewObject( Class, jniq::GetMethodID( Class, "<init>", Signature, Env ), Args... ), Class );
 		}
 		template <typename ...args> void Init(
+			JNIEnv *Env,
 			const char *ClassName,
 			const char *Signature,
-			JNIEnv *Env,
 			args... Args )
 		{
-			Env = jniq::GetEnv( Env );
-
-			return Init( jniq::FindClass( ClassName, Env ), Signature, Env, Args... );
+			return Init( Env, jniq::FindClass( Env, ClassName ), Signature, Env, Args... );
 		}
 		template <typename ...args> void Init(
 			const char *ClassName,
@@ -125,12 +112,9 @@ namespace jrebse {
 		template <typename ...args> type Call##name##Method(\
 			const char *Method,\
 			const char *Signature,\
-			JNIEnv *Env,\
 			args... Args ) const\
 		{\
-			Env = jniq::GetEnv( Env );\
-\
-			return Env->Call##name##Method( O_(), jniq::GetMethodID( O_(), Method, Signature, Env ), Args... );\
+			return Env_->Call##name##Method( Env_, O_(), jniq::GetMethodID( Env_, O_(), Method, Signature ), Args... );\
 		}
 		H( void, Void );
 		H( jint, Int );
@@ -146,14 +130,12 @@ namespace jrebse {
 		virtual void reset_( bso::sBool P ) override
 		{
 			if ( P ) { 
-				jniq::GetEnv( NULL )->DeleteGlobalRef( Object_ );
+				Env_->DeleteGlobalRef( Object_ );
 			}
 		}
-		virtual jobject Init_(
-			jobject Object,
-			JNIEnv_ *Env ) override
+		virtual jobject Init_( jobject Object ) override
 		{
-			return jniq::GetEnv( Env )->NewGlobalRef( Object );
+			return Env_->NewGlobalRef( Object );
 		}
 	};
 
