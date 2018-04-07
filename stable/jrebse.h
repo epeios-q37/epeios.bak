@@ -169,16 +169,16 @@ namespace jrebse {
 		}\
 		qCDTOR( name##_ );\
 		name##_(\
-			jobject Object,\
-			JNIEnv *Env = NULL )\
+			JNIEnv *Env,\
+			jobject Object )\
 		{\
 			Init( Object );\
 		}\
 		void Init(\
-			jobject Object,\
-			JNIEnv *Env = NULL )\
+			JNIEnv *Env,\
+			jobject Object )\
 		{\
-			return object::Init( Object, Signature, Env );\
+			return object::Init( Env, Object, Signature );\
 		}
 
 # define CF( name )\

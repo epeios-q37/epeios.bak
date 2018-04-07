@@ -388,17 +388,12 @@ endif
 #############################
 		
 all: $(binary)
-ifdef EPEIOS_SRC
-	javac *.java
-else
-	javac src/*.java -d .
-endif
 	rm -rf *.o
 ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20180328"\"
+copt += -DVERSION=\""20180407"\"
 copt += -DCOPYRIGHT_YEARS=\""2017"\"
 copt += -DIDENTIFIER=\"""\"
 
