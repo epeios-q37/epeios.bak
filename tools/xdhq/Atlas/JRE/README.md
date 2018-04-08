@@ -1,7 +1,7 @@
-# *Atlas* for *Java*
+# *Java* binding of the *Atlas* toolkit
 
-A new and innovative way to develop web frontend in *Java*.
+A new and innovative way to develop web and desktop interfaces in *Java*.
 
-[![NPM](https://nodei.co/npm/atlasjre.png)](https://nodei.co/npm/atlasjre/)
+[![NPM](https://nodei.co/npm/atlastk-java.png)](https://nodei.co/npm/atlastk-java/)
 
-For more information, see [http://q37.info/atlas/](http://q37.info/atlas/).
+For more information, see <http://atlastk.org>.

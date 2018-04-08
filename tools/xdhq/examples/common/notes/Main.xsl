@@ -15,8 +15,11 @@
 			<a class="right q37" href="http://q37.info/"/>
 			<h2>Welcome!</h2>
 			<p>
-				<span>Let's take some notes with </span>
-				<span style="font-style: oblique; font-weight: bold;">Atlas</span>
+				<span>Let's take some notes with the </span>
+				<span style="font-weight: bold;">
+					<span style="font-style: oblique">Atlas</span>
+					<span> toolkit</span>
+				</span>
 				<span>!</span>
 			</p>
 			<a href="http://atlastk.org/" class="button">

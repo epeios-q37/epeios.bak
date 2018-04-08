@@ -19,7 +19,7 @@
 		<UUID>45ce6ec4-6d3d-428b-9764-cc1f5588eaf6</UUID>
 	</About>
 	<!-- NO SPACE in 'Keywords' attribute !!! ("a,b,c", NOT "a, b, c")-->
-	<RTW Description="Java package to handle web frontends" Keywords="XDHTML,Atlas,web,frontend,Java">
+	<RTW Description="Java package to handle web frontends" Keywords="XDHTML,Atlas,web,desktop,interface,Java">
 		<Dir>atlas-java</Dir>
 	</RTW>
 	<NodeJS>

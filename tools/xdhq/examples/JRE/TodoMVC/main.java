@@ -239,47 +239,37 @@ class Thread extends java.lang.Thread {
 		System.out.println("Connection detected...");
 
 		for (;;) {
-			switch (dom.getAction(event)) {
-			case "Connect":
+			String action = dom.getAction(event);
+
+			if ( action.equals( "Connect" ) ) {
 				dom.setLayout("", new Tree(), "Main.xsl");
 				dom.focus("Input");
 				displayTodos();
-				break;
-			case "Submit":
+			} else if (action.equals( "Submit" ) ) {
 				if (index == -1)
 					submitNew();
 				else
 					submitModification();
-				break;
-			case "Destroy":
+			} else if (action.equals( "Destroy" ) ) {
 				todos.remove(Integer.parseInt(dom.getContent(event.id)));
 				displayTodos();
-				break;
-			case "Toggle":
+			} else if (action.equals( "Toggle" ) ) {
 				toggle(event.id);
-				break;
-			case "All":
+			} else if (action.equals( "All" ) ) {
 				all();
-				break;
-			case "Active":
+			} else if (action.equals( "Active" ) ) {
 				active();
-				break;
-			case "Completed":
+			} else if (action.equals( "Completed" ) ) {
 				completed();
-				break;
-			case "Clear":
+			} else if (action.equals( "Clear" ) ) {
 				clear();
-				break;
-			case "Edit":
+			} else if (action.equals( "Edit" ) ) {
 				edit(event.id);
-				break;
-			case "Cancel":
+			} else if (action.equals( "Cancel" ) ) {
 				cancel();
-				break;
-			default:
+			} else {
 				System.out.println("No or unknown action !");
 				System.exit(1);
-				break;
 			}
 		}
 	}

@@ -33,8 +33,11 @@
 		<footer class="info">
 			<p>Double-click to edit a todo</p>
 			<p>
-				<span>Created with </span>
-				<a style="font-style: italic;" href="http://atlastk.org//">Atlas</a>
+				<span>Created with the </span>
+				<a href="http://atlastk.org//">
+					<span style="font-style: italic;">Atlas</span>
+					<span> toolkit</span>
+				</a>
 				<span>!</span>
 			</p>
 		</footer>
