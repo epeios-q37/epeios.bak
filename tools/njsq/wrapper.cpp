@@ -647,7 +647,7 @@ qRB
 
 	Caller.Init( Info );
 
-	rLauncher_::Call( Index->Uint32Value(), Caller );
+	rLauncher_::Call( NULL, Index->Uint32Value(), Caller );
 
 //	n4allw::GetLauncher().Launch( n4allw::GetFunction( Index->Uint32Value() ), Caller );
 

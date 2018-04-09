@@ -38,6 +38,7 @@ namespace {
 	: public cLauncher_ {
 	protected:
 		virtual void N4ALLCall(
+			n4all::sEnv *,	// Not used.
 			void *Function,
 			n4all::cCaller &RawCaller ) override
 		{

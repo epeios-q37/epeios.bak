@@ -59,11 +59,18 @@ class Atlas extends XDHq {
 	const DEFAULT = Atlas::DESKTOP;
 
 	private static function launchWeb( $dir ) {
-		fclose(popen( "start node h:/hg/epeios/tools/xdhq/examples/common/httpd.js h:/hg/epeios/tools/xdhq/examples/common/" . $dir, "r" ));
+		if ( isDev() )
+			fclose(popen( "start node h:/hg/epeios/tools/xdhq/examples/common/httpd.js h:/hg/epeios/tools/xdhq/examples/common/" . $dir, "r" ));
+		else
+			fclose(popen( "start node -e \"require(require('xdhwebqnjs').fileName).launch('" . $dir . "');\"", "r" ));
 	}
 
 	private static function launchDesktop( $dir ) {
-		fclose(popen( "start h:/hg/epeios/tools/xdhelcq/node_modules/electron/dist/electron h:/hg/epeios/tools/xdhelcq/index.js -m=h:/bin/xdhqxdh h:/hg/epeios/tools/xdhq/examples/common/" . $dir, "r" ));
+		if ( isDev() )
+			fclose(popen( "start h:/hg/epeios/tools/xdhelcq/node_modules/electron/dist/electron h:/hg/epeios/tools/xdhelcq/index.js -m=h:/bin/xdhqxdh h:/hg/epeios/tools/xdhq/examples/common/" . $dir, "r" ));
+		else
+			fclose(popen( "start node -e \"require('child_process').spawnSync(require('xdhelcq').electron,[require('path').join(require('xdhelcq').path, 'index.js'),'-m=' + require('xdhqxdh').fileName, require('upath').normalize(require('path').join(require('path').resolve(__dirname),'" . $dir . "'))])\"", "r" ));
+
 	}
 
 	public static function launch( string $newSessionAction, $type = null, string $dir = "." ) {

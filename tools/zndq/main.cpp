@@ -479,7 +479,7 @@ qRFB;
 #else
 	Caller.Init( NULL, num_varargs, varargs, return_value );	// 'tsrm_ls' no more available in 'ZTS' !?
 #endif
-	GetLauncher_( Launcher ).Call( Index, Caller );
+	GetLauncher_( Launcher ).Call( NULL, Index, Caller );
 qRFR;
 qRFT;
 qRFE( ERRFinal_() );
