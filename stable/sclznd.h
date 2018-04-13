@@ -190,7 +190,7 @@ namespace sclznd {
 	}
 
 	void SCLZNDInfo( txf::sWFlow &Flow );	// To define by user.
-	void SCLZNDRegister( sRegistrar &Registrar );	// To define by user
+	const sclmisc::sInfo &SCLZNDRegister( sRegistrar &Registrar );	// To define by user
 }
 
 # define SCLZND_F( name ) void name( sclznd::sCaller &Caller )

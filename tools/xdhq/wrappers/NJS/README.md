@@ -1,4 +1,4 @@
-# *XDHqNJS*
+# xdhq-node
 
 [![NPM](https://nodei.co/npm/xdhqnjs.png)](https://nodei.co/npm/xdhqnjs/)
 

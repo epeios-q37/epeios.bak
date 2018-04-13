@@ -21,8 +21,6 @@
 
 #include "sclargmnt.h"
 
-#include "sclmisc.h"
-
 using namespace sclargmnt;
 
 using namespace sclmisc;
@@ -1321,7 +1319,9 @@ static const str::string_ &GetCommand_( str::string_ &Command )
 	return Command;
 }
 
-static void PrintCommandUsage_( const str::string_ &Id )
+static void PrintCommandUsage_(
+	const str::string_ &Id,
+	const sclmisc::sInfo &Info )
 {
 qRH
 	str::string Dummy, Command;
@@ -1341,7 +1341,7 @@ qRB
 
 	DefaultOne = Command == Value;
 
-	cio::COut << sclmisc::SCLMISCTargetName << " ";
+	cio::COut << Info.Target() << " ";
 
 	if ( DefaultOne )
 		cio::COut << '[';
@@ -1461,11 +1461,12 @@ qRE
 
 static void PrintUsage_(
 	const str::string_ &Id,
-	type__ Type )
+	type__ Type,
+	const sclmisc::sInfo &Info )
 {
 	switch ( Type ) {
 	case tCommand:
-		PrintCommandUsage_( Id );
+		PrintCommandUsage_( Id, Info );
 		break;
 	case tFlag:
 		PrintFlagUsage_( Id );
@@ -1484,12 +1485,13 @@ static void PrintUsage_(
 
 static void PrintUsage_(
 	type__ Type,
-	const str::strings_ &Ids )
+	const str::strings_ &Ids,
+	const sclmisc::sInfo &Info )
 {
 	sdr::row__ Row = Ids.First();
 
 	while ( Row != qNIL ) {
-		PrintUsage_( Ids( Row ), Type );
+		PrintUsage_( Ids( Row ), Type, Info );
 
 		Row = Ids.Next( Row );
 
@@ -1538,7 +1540,9 @@ static void IdentifyArguments_(
 	}
 }
 
-void sclargmnt::PrintUsage( txf::text_oflow__ &Flow )
+void sclargmnt::PrintUsage(
+	const sclmisc::sInfo &Info,
+	txf::text_oflow__ &Flow )
 {
 qRH
 	str::strings Ids, Commands, Flags, Options, Frees;
@@ -1563,16 +1567,16 @@ qRB
 	ProgramDescription.Init();
 	Flow << sclmisc::GetBaseTranslation( "ProgramDescription", ProgramDescription ) << txf::nl << txf::nl;
 
-	PrintUsage_( tCommand, Commands );
+	PrintUsage_( tCommand, Commands, Info );
 
 	if ( ( Flags.Amount() != 0 )
 	     || ( Options.Amount() != 0 )
 		 || ( Frees.Amount() != 0 ) )
 	cio::COut << txf::nl;
 
-	PrintUsage_( tFlag, Flags );
-	PrintUsage_( tOption, Options );
-	PrintUsage_( tFree, Frees );
+	PrintUsage_( tFlag, Flags, Info );
+	PrintUsage_( tOption, Options, Info );
+	PrintUsage_( tFree, Frees, Info );
 qRR
 qRT
 qRE

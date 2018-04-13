@@ -46,7 +46,7 @@ namespace n4allw {
 			const fnm::rName &ComponentFilename,
 			dlbrry::eNormalization Normalization,
 			n4all::cRegistrar &Registrar,
-			sclmisc::sRack & Rack,
+			sclmisc::sRack &Rack,
 			void * UP,
 			bso::sBool SkipComponentUnloading );
 	public:

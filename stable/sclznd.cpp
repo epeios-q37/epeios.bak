@@ -70,7 +70,8 @@ namespace {
 
 n4all::cLauncher *scln4a::SCLN4ARegister(
 	n4all::cRegistrar &RegistrarCallback,
-	void *UP )
+	void *UP,
+	const sclmisc::sInfo *&Info )
 {
 	n4all::cLauncher *Launcher = NULL;
 qRH
@@ -79,7 +80,7 @@ qRB
 	const n4znd::gShared &Shared = *( const n4znd::gShared* )UP;
 
 	Registrar.Init( RegistrarCallback );
-	SCLZNDRegister( Registrar );
+	Info = &SCLZNDRegister( Registrar );
 
 	Launcher = new sLauncher_;
 

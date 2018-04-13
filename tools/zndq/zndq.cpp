@@ -23,12 +23,16 @@
 
 # include "main.h"
 
+#include "epsmsc.h"
+#include "sclmisc.h"
+
 #if PHP_MAJOR_VERSION != 7
 # error "Does actually only work with PHP 7. \
 The usually available documentation about extensions is only about PHP 5, \
 and there are important differences with PHP 7. See http://wiki.php.net/phpng-upgrading"
 #endif
 
+const sclmisc::sInfo zndq::Info( NAME_LC, NAME_MC, EPSMSC_ORGANIZATION );
 
 PHP_FUNCTION( zndq_init )
 {

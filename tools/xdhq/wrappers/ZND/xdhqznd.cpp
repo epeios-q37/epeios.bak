@@ -23,10 +23,13 @@
 #include "treep.h"
 #include "xdhp.h"
 
+#include "epsmsc.h"
 #include "iof.h"
 #include "xpp.h"
 #include "lcl.h"
 #include "sclznd.h"
+
+const sclmisc::sInfo xdhqznd::Info( NAME_LC, "XDHq", EPSMSC_ORGANIZATION );
 
 void sclznd::SCLZNDInfo( txf::sWFlow &Flow )
 {
@@ -53,7 +56,7 @@ namespace {
 	}
 }
 
-void sclznd::SCLZNDRegister( sclznd::sRegistrar &Registrar )
+const sclmisc::sInfo &sclznd::SCLZNDRegister( sclznd::sRegistrar &Registrar )
 {
 	Registrar.Register( ReturnArgument_ );	// 0.
 	Registrar.Register( treep::New, treep::Delete, treep::PushTag, treep::PopTag, treep::PutValue, treep::PutAttribute );	// 1 - 6.
@@ -63,7 +66,7 @@ void sclznd::SCLZNDRegister( sclznd::sRegistrar &Registrar )
 	Registrar.Register( xdhp::SetAttribute, xdhp::GetAttribute, xdhp::RemoveAttribute, xdhp::SetProperty, xdhp::GetProperty );	// 22 - 26.
 	Registrar.Register( xdhp::Focus );	// 27.
 
-	
+	return xdhqznd::Info;
 }
 
 qGCTOR( xdhqznd )
@@ -72,5 +75,3 @@ qGCTOR( xdhqznd )
 	sclmisc::ExitOnSignal();
 }
 
-const char *sclmisc::SCLMISCTargetName = NAME_LC;
-const char *sclmisc::SCLMISCProductName = NAME_MC;

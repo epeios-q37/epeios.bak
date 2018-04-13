@@ -3,7 +3,7 @@
  <xpp:bloc>
   <!-- User definitions -->
   <xpp:define name="Version">
-   <xpp:bloc>(Obsolete)</xpp:bloc>
+   <xpp:bloc></xpp:bloc>
   </xpp:define>
   <xpp:set name="Credits" value="Epeios"/>
   <xpp:set name="Type" value="ZNDWrapper"/>
@@ -39,6 +39,7 @@
  <Files>
   <File>README.md</File>
 		<File>CHANGELOG.md</File>
+		<File>NOTES.md</File>
 		<File>TODO.md</File>
 		<!-- '*.php' files are source files and will automatically packed as such. -->
   <File Pack="No">ZNDq.php</File>

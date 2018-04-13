@@ -50,8 +50,8 @@
 	<Files>
 		<File>NOTES.md</File>
 		<Files Group="Atlas">
+			<File Path="../../Atlas/">CHANGELOG.md</File>
 			<Files Path="../../Atlas/JRE/">
-				<File Path="../">CHANGELOG.md</File>
 				<File>NOTES.md</File>
 				<File>Project.xml</File>
 				<File>README.md</File>

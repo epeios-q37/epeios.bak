@@ -3,7 +3,7 @@
  <xpp:bloc>
   <!-- User definitions -->
   <xpp:define name="Version">
-   <xpp:bloc>(Obsolete entry)</xpp:bloc>
+   <xpp:bloc>20180414</xpp:bloc>
   </xpp:define>
   <xpp:set name="Credits" value="Epeios"/>
   <xpp:set name="Type" value="ZNDComponent"/>
@@ -25,7 +25,10 @@
 			<Modules Group="CSD">
 				<Module>csdbns</Module>
 				<Module>csdcmn</Module>
+				<Module>csdmxb</Module>
 				<Module>csdmxs</Module>
+				<Module>csdmns</Module>
+				<Module>csdscb</Module>
 			</Modules>
 			<Modules Group="SCL">
     <xpp:expand select="SCL"/>
@@ -50,8 +53,15 @@
 	<Files>
   <!-- NOTA : '*.php' files will automatically be packed as such. -->
   <!--File Pack="No">XDHq.php</File-->
-		<File Path="../../Atlas/ZND/">Atlas.php</File>
-		<Files Group="Blank">
+		<Files Group="Atlas">
+			<File Path="../../Atlas/">CHANGELOG.md</File>
+			<Files Path="../../Atlas/ZND/">
+				<File>Atlas.php</File>
+				<File>NOTES.md</File>
+				<File>Project.xml</File>
+				<File>README.md</File>
+			</Files>
+			<Files Group="Blank">
 			<File Path="../../examples/ZND/blank/">main.php</File>
 			<Files Path="../../examples/common/blank/">
 				<File>CHANGELOG.md</File>
@@ -63,6 +73,7 @@
 			<Files Path="../../examples/ZND/">
 				<File Path="notes/">main.php</File>
 				<File>NOTES.md</File>
+				<File>Project.xml</File>
 				<File>README.md</File>
 			</Files>
 			<Files Path="../../examples/common/notes/">
@@ -76,6 +87,7 @@
 		<Files Group="TodoMVC">
 			<Files Path="../../examples/ZND/TodoMVC/">
 				<File>main.php</File>
+				<File>Project.xml</File>
 				<File>README.md</File>
 			</Files>
 			<Files Path="../../examples/common/TodoMVC/">
@@ -86,10 +98,17 @@
 				<File>Todos.xsl</File>
 			</Files>
 		</Files>
-		<File Path="../../Atlas/ZND/">Atlas.php</File>
+		</Files>
 		<File>NOTES.md</File>
 	</Files>
- <RTW Description="PHP extension template" Keywords="template">
+	<NodeJS>
+		<Deps>
+			<Regular>
+				<Dep>zndq</Dep>
+			</Regular>
+		</Deps>
+	</NodeJS>
+	<RTW Description="PHP extension template" Keywords="XDHq">
   <Dir>xdhq-php</Dir>
  </RTW>
 </Project>

@@ -258,7 +258,10 @@ function cancel( $dom ) {
 function main() {
 	$type = null;
 
-	Atlas::launch( "Connect", null, "TodoMVC" );
+	if ( isDev() )
+		Atlas::launch( "Connect", null, "TodoMVC" );
+	else
+		Atlas::launch( "Connect", null, "." );
 
 	$dom = new DOM();
 

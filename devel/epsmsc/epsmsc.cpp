@@ -45,6 +45,3 @@ void epsmsc::PrintLicense(
 	<< pad << "General Public License along with " << Name << ". If not," << nl
 	<< pad << "see <http://www.gnu.org/licenses/>" << nl;
 }
-
-const char *sclmisc::SCLMISCOrganizationName = "q37.info";
-

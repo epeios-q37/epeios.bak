@@ -30,4 +30,14 @@
 # define OWNER_CONTACT		"http://q37.info/contact/"
 # define COPYRIGHT			COPYRIGHT_YEARS " " OWNER_NAME " (" OWNER_CONTACT ")"
 
+// To avoid inclusion of 'sclmisc.h', which causes some troubles...
+
+namespace sclmisc {
+	struct sInfo;
+}
+
+namespace zndq {
+	extern const sclmisc::sInfo Info;
+}
+
 #endif

@@ -20,7 +20,7 @@
 
 function getAtlas() {
 	if (getenv("EPEIOS_SRC") === false)
-		$zndq_path = realpath(dirname(__FILE__)) . '/';
+		$zndq_path = realpath(dirname(__FILE__)) . '/../';
 	else {
 		switch (strtoupper(substr(php_uname('s') , 0, 3))) {
 		case "WIN":

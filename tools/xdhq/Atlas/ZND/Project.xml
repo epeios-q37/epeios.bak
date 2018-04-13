@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project 
+	xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<xpp:bloc>
+		<!-- User definitions -->
+		<xpp:define name="Version">
+			<xpp:bloc>0.0.1</xpp:bloc>
+		</xpp:define>
+		<xpp:define name="CopyrightYears">
+			<xpp:bloc>2018</xpp:bloc>
+		</xpp:define>
+		<xpp:set name="Credits" value="Epeios"/>
+		<xpp:set name="Type" value="Atlas"/>
+	</xpp:bloc>
+	<xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
+	<About>
+	 <Program>atlasznd</Program>
+		<Software>Atlas</Software>
+		<UUID>513dfc4f-d103-4b95-98a8-848f82b72259</UUID>
+	</About>
+	<!-- NO SPACE in 'Keywords' attribute !!! ("a,b,c", NOT "a, b, c")-->
+	<RTW Description="Java package to handle web frontends" Keywords="XDHTML,Atlas,web,desktop,interface,Java">
+		<Dir>atlas-php</Dir>
+	</RTW>
+	<NodeJS>
+		<Deps>
+			<Regular>
+			<!-- 'upath' module is used in a 'node -e' argument in the 'Atlas.java' file-->
+				<Dep>upath</Dep>
+				<Dep>xdhqxdh</Dep>
+				<Dep>xdhqznd</Dep>
+				<Dep>xdhwebqnjs</Dep>
+				<Dep>xdhelcq</Dep>
+			</Regular>
+		</Deps>
+	</NodeJS>
+</Project>

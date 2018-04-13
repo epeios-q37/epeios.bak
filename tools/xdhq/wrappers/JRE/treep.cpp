@@ -34,7 +34,7 @@ namespace {
 	public:
 		void Init( void )
 		{
-			tree::rRack::Init( sclmisc::SCLMISCTargetName );
+			tree::rRack::Init( sclmisc::GetTargetName() );
 		}
 	};
 }

@@ -22,21 +22,40 @@ function isDev() {
 	return getenv( "EPEIOS_SRC") !== false;
 }
 
+function isWin() {
+	switch (strtoupper(substr(php_uname('s') , 0, 3))) {
+		case "WIN":
+			return true;
+			break;
+		default:
+			return false;
+			break;
+	}
+}
+
+function execute( string $command ) {
+	if ( isWin() ) {
+		fclose(popen("start " . $command, 'r' ) );
+	} else {
+		fclose(popen( $command . " &", 'r' ) );
+	}
+}
+
 function getXDHq() {
 	if ( isDev() ) {
 		switch (strtoupper(substr(php_uname('s') , 0, 3))) {
 			case "WIN":
 				$epeios_path = "h:\\hg\\epeios\\";
-			break;
+				break;
 			case "LIN":
 				$epeios_path = "/home/csimon/hg/epeios/";
-			break;
+				break;
 			case "DAR":
 				$epeios_path = "/Users/csimon/hg/epeios/";
-			break;
+				break;
 			default:
 				die( "Unknown OS !!!");
-			break;
+				break;
 		}
 
 		$xdhq_path = $epeios_path . "tools/xdhq/wrappers/ZND/";
@@ -60,16 +79,16 @@ class Atlas extends XDHq {
 
 	private static function launchWeb( $dir ) {
 		if ( isDev() )
-			fclose(popen( "start node h:/hg/epeios/tools/xdhq/examples/common/httpd.js h:/hg/epeios/tools/xdhq/examples/common/" . $dir, "r" ));
+			execute( "node h:/hg/epeios/tools/xdhq/examples/common/httpd.js h:/hg/epeios/tools/xdhq/examples/common/" . $dir );
 		else
-			fclose(popen( "start node -e \"require(require('xdhwebqnjs').fileName).launch('" . $dir . "');\"", "r" ));
+			execute( "node -e \"require(require('xdhwebqnjs').fileName).launch('" . $dir . "');\"" );
 	}
 
 	private static function launchDesktop( $dir ) {
 		if ( isDev() )
-			fclose(popen( "start h:/hg/epeios/tools/xdhelcq/node_modules/electron/dist/electron h:/hg/epeios/tools/xdhelcq/index.js -m=h:/bin/xdhqxdh h:/hg/epeios/tools/xdhq/examples/common/" . $dir, "r" ));
+			execute( "h:/hg/epeios/tools/xdhelcq/node_modules/electron/dist/electron h:/hg/epeios/tools/xdhelcq/index.js -m=h:/bin/xdhqxdh h:/hg/epeios/tools/xdhq/examples/common/" . $dir );
 		else
-			fclose(popen( "start node -e \"require('child_process').spawnSync(require('xdhelcq').electron,[require('path').join(require('xdhelcq').path, 'index.js'),'-m=' + require('xdhqxdh').fileName, require('upath').normalize(require('path').join(require('path').resolve(__dirname),'" . $dir . "'))])\"", "r" ));
+			execute( "node -e \"require('child_process').spawnSync(require('xdhelcq').electron,[require('path').join(require('xdhelcq').path, 'index.js'),'-m=' + require('xdhqxdh').fileName, require('upath').normalize(require('path').join(require('path').resolve(__dirname),'" . $dir . "'))])\"");
 
 	}
 

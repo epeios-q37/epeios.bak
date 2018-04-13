@@ -43,10 +43,55 @@
 /***************/
 
 namespace sclmisc {
-	// Three below items MUST be defined by user.
-	extern const char *SCLMISCTargetName;
-	extern const char *SCLMISCProductName;
-	extern const char *SCLMISCOrganizationName;
+	struct sInfo
+	{
+	private:
+		const char *Return_( const char *Name ) const
+		{
+			if ( Name == NULL )
+				qRFwk();
+
+			return Name;
+		}
+		const char
+			*Target_,
+			*Product_,
+			*Organization_;
+	public:
+		void reset( bso::sBool = true )
+		{
+			Target_ = Product_ = Organization_ = NULL;
+		}
+		sInfo(
+			const char *Name,
+			const char *Product,
+			const char *Organization )
+		{
+			Init( Name, Product, Organization );
+		}
+		qCDTOR( sInfo );
+		void Init(
+			const char *Target,
+			const char *Product,
+			const char *Organization )
+		{
+			Target_ = Target;
+			Product_ = Product;
+			Organization_ = Organization;
+		}
+		const char *Target( void ) const
+		{
+			return Return_( Target_ );
+		}
+		const char *Product( void ) const
+		{
+			return Return_( Product_ );
+		}
+		const char *Organization( void ) const
+		{
+			return Return_( Organization_ );
+		}
+	};
 
 	bso::bool__ IsInitialized( void );
 
@@ -209,31 +254,28 @@ namespace sclmisc {
 		const char *LocaleDirectory,
 		xtf::extended_text_iflow__ &RegistryFlow,
 		const char *RegistryDirectory,
-		const fnm::name___ &BinPath );
+		const fnm::name___ &BinPath,
+		const sInfo &Info );
 
 	void Initialize(
 		const sRack &Rack,
 		const fnm::name___ &BinPath,
+		const sInfo &Info,
 		qRPD );
 
-	// Counter-part of 'Initalize'.
-	void Quit( void );
+	// Counter-part of 'Initialize'.
+	void Quit( const sInfo &Info );
 
-	// Store the content of the 'lastign' registry level as application data.
-	void StoreLastingRegistry( void );
+	// Store the content of the 'lasting' registry level as application data.
+	void StoreLastingRegistry( const sInfo &Info );
 
 	// Deletes the file which contains the lasting registry.
 	void DumpLastingRegistryFile(
 		txf::sWFlow &Flow,
-		const char *Target = SCLMISCTargetName,
-		const char *Product = SCLMISCProductName,
-		const char *Organization = SCLMISCOrganizationName );
+		const sInfo &Info );
 
 	// Deletes the file which contains the lasting registry.
-	void DeleteLastingRegistryFile(
-		const char *Target = SCLMISCTargetName,
-		const char *Product = SCLMISCProductName,
-		const char *Organization = SCLMISCOrganizationName );
+	void DeleteLastingRegistryFile( const sInfo &Info );
 
 	void DumpRegistriesAndOrLocalesIfRequired( void );
 
@@ -255,17 +297,20 @@ namespace sclmisc {
 	void LoadProject(
 		flw::iflow__ &Flow,
 		const fnm::name___ &Directory,
+		const sInfo &Info,
 		str::string_ &Id );
 
 	void LoadProject(
 		const fnm::name___ &FileName,
+		const sInfo &Info,
 		str::string_ &Id );
 
 	void LoadProject(
 		project_type__ ProjectType,
-		const str::string_ &ProjectFeature );
+		const str::string_ &ProjectFeature,
+		const sInfo &Info );
 
-	void LoadProject( void );	// Load project, if applies, following configuration file indications.
+	void LoadProject( const sInfo &Info );	// Load project, if applies, following configuration file indications.
 
 	using fil::GetBackupFilename;
 

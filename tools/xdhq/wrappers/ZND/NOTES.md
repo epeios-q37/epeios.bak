@@ -1,9 +1,5 @@
 # Notes about the *PHP* version of *UnJSq*/*XDHq*
 
-## Caveat
-
-Currently, this application does not serve the 
-
 ## Running
 
 ### Preamble

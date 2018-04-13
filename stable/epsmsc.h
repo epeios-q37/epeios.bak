@@ -34,6 +34,8 @@
 
 # include "cio.h"
 
+# define EPSMSC_ORGANIZATION	"q37.info"
+
 //d The epeios site URL.
 # define EPSMSC_EPEIOS_URL	"http://q37.info/"
 

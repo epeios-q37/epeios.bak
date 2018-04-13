@@ -39,7 +39,8 @@ mods += tagsbs tht thtsub tol txf
 mods += tys uys utf xml xpp 
 mods += xtf llio dlbrry n4all n4znd 
 mods += plgn plgncore sck 
-mods += csdbns csdcmn csdmxs 
+mods += csdbns csdcmn csdmxb csdmxs csdmns 
+mods += csdscb 
 mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
 mods += scln4a sclznd 
 mods += prtcl proxy prxy_cmn prxy_recv prxy_send 
@@ -397,7 +398,7 @@ ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20180227"\"
+copt += -DVERSION=\""20180413"\"
 copt += -DCOPYRIGHT_YEARS=\""2007-2017"\"
 copt += -DIDENTIFIER=\"""\"
 
