@@ -28,9 +28,12 @@
 #include "sclargmnt.h"
 #include "sclmisc.h"
 
+#include "epsmsc.h"
 #include "iof.h"
 #include "xpp.h"
 #include "lcl.h"
+
+const sclmisc::sInfo jreq::Info( NAME_LC, NAME_MC, EPSMSC_ORGANIZATION );
 
 #define MDEF( name ) qCDEF( char *, name, #name );
 
@@ -57,7 +60,7 @@ namespace {
 			BaseFlow.Init( Info );
 			Flow.Init( BaseFlow );
 
-			Flow << sclmisc::SCLMISCProductName << " v" << VERSION << " - JNI v" << ( ( Version & 0xffff0000 ) >> 16 ) << '.' << ( Version & 0xffff )  << txf::nl
+			Flow << jreq::Info.Product() << " v" << VERSION << " - JNI v" << ( ( Version & 0xffff0000 ) >> 16 ) << '.' << ( Version & 0xffff )  << txf::nl
 				<< txf::pad << "Build : " __DATE__ " " __TIME__ " (" <<  cpe::GetDescription() << ')';
 		qRR
 		qRT
@@ -159,7 +162,7 @@ qRFB
 
 //	cio::COut << ">>>>>>>>> " << Location << txf::nl << txf::commit;
 
-	sclmisc::Initialize( Rack_, Location );
+	sclmisc::Initialize( Rack_, Location, jreq::Info );
 
 	jniq::SetGlobalEnv( Env );
 qRFR
@@ -248,10 +251,6 @@ qRFT
 qRFE( ERRFinal_( Env ) )
 	return Return;
 }
-
-const char *sclmisc::SCLMISCTargetName = NAME_LC;
-const char *sclmisc::SCLMISCProductName = NAME_MC;
-
 
 qGCTOR( jreq )
 {

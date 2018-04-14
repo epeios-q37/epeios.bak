@@ -1,5 +1,9 @@
 # *NJSq* changelog
 
+## 2018-04-14
+
+- adaptation to modifications in underlying modules,
+
 ## 2018-04-09
 
 - adaptation to modifications in underlying libraries,

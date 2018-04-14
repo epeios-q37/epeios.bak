@@ -128,7 +128,8 @@ namespace {
 
 n4all::cLauncher *scln4a::SCLN4ARegister(
 	n4all::cRegistrar &RegistrarCallback,
-	void *UP )
+	void *UP,
+	const sclmisc::sInfo *&Info )
 {
 	n4all::cLauncher *Launcher = NULL;
 qRH
@@ -144,7 +145,7 @@ qRB
 	Assign_( Shared.Throw, Throw_ );
 
 	Registrar.Init( RegistrarCallback );
-	SCLJRERegister( Registrar );
+	Info = &SCLJRERegister( Registrar );
 
 	Launcher = new sLauncher_;
 

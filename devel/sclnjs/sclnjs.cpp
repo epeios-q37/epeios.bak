@@ -218,7 +218,8 @@ namespace {
 
 n4all::cLauncher *scln4a::SCLN4ARegister(
 	n4all::cRegistrar &RegistrarCallback,
-	void *UP )
+	void *UP,
+	const sclmisc::sInfo *&Info )
 {
 	n4all::cLauncher *Launcher = NULL;
 qRH
@@ -233,7 +234,7 @@ qRB
 
 	Registrar.Init( RegistrarCallback );
 
-	SCLNJSRegister( Registrar );
+	Info = &SCLNJSRegister( Registrar );
 
 	Launcher = new sLauncher_;
 

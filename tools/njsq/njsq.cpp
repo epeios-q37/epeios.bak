@@ -39,6 +39,8 @@ using cio::CErr;
 using cio::COut;
 using cio::CIn;
 
+const sclmisc::sInfo njsq::Info( NAME_LC, NAME_MC, EPSMSC_ORGANIZATION );
+
 namespace {
 	void ErrFinal_( v8::Isolate *Isolate = NULL )
 	{
@@ -315,7 +317,7 @@ qRFB
 	Location.Init();
 	GetAddonLocation_( Module, Location );
 
-	sclmisc::Initialize( Rack_, Location );
+	sclmisc::Initialize( Rack_, Location, njsq::Info );
 
 	/*
 	node::AtExit( OnExit_, NULL );
@@ -329,7 +331,3 @@ qRFE( ErrFinal_() )
 }
 
 NODE_MODULE( njsq, Start );
-
-const char *sclmisc::SCLMISCTargetName = NAME_LC;
-const char *sclmisc::SCLMISCProductName = NAME_MC;
-

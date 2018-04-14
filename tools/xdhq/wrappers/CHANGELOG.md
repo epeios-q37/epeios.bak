@@ -1,5 +1,9 @@
 # *CHANGELOG* for the *XDHTML* wrappers (*all languages*).
 
+## 2018-04-14
+- *xdhqnjs*
+ - adaptation to changes in underlying modules,
+
 ## 2018-04-06
 - *xdhqnjs*
   - using `ProcessBuilder` to launch *Electron* and *httpd*, as `Runtime.exec(...)` seems not to work under *macOS*,

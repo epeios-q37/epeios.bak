@@ -1,5 +1,13 @@
 # *Epeios* *CHANGELOG*
 
+## 2018-04-14
+- *shared*:
+  - **$**: adaptation to changes in underlying modules,
+- SCLJRE:
+  - **$**,
+- SCLNJS:
+  - **$**,
+
 ## 2018-04-13
 - *shared*:
   - **$**: adaptation to changes in underlying modules,

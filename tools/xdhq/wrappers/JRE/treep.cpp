@@ -20,6 +20,7 @@
 #include "treep.h"
 
 #include "tree.h"
+#include "xdhqjre.h"
 
 #include "txf.h"
 #include "xml.h"
@@ -34,7 +35,7 @@ namespace {
 	public:
 		void Init( void )
 		{
-			tree::rRack::Init( sclmisc::GetTargetName() );
+			tree::rRack::Init( xdhqjre::Info.Target() );
 		}
 	};
 }

@@ -23,10 +23,13 @@
 #include "treep.h"
 #include "xdhp.h"
 
+#include "epsmsc.h"
 #include "iof.h"
 #include "xpp.h"
 #include "lcl.h"
 #include "scljre.h"
+
+const sclmisc::sInfo xdhqjre::Info( NAME_LC, "XDHq", EPSMSC_ORGANIZATION );
 
 void scljre::SCLJREInfo( txf::sWFlow &Flow )
 {
@@ -55,7 +58,7 @@ namespace {
 	}
 }
 
-void scljre::SCLJRERegister( scljre::sRegistrar &Registrar )
+const sclmisc::sInfo &scljre::SCLJRERegister( scljre::sRegistrar &Registrar )
 {
 	Registrar.Register( ReturnArgument_ );	// 0
 	Registrar.Register( treep::New, treep::Delete, treep::PushTag, treep::PopTag, treep::PutValue, treep::PutAttribute );	// 1 - 6
@@ -65,7 +68,5 @@ void scljre::SCLJRERegister( scljre::sRegistrar &Registrar )
 	Registrar.Register( xdhp::SetAttribute, xdhp::GetAttribute, xdhp::RemoveAttribute, xdhp::SetProperty, xdhp::GetProperty );	// 23 - 27.
 	Registrar.Register( xdhp::Focus );	// 28
 
+	return xdhqjre::Info;
 }
-
-const char *sclmisc::SCLMISCTargetName = NAME_LC;
-const char *sclmisc::SCLMISCProductName = NAME_MC;

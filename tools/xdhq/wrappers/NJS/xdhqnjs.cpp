@@ -23,8 +23,11 @@
 #include "xdhp.h"
 #include "treep.h"
 
+#include "epsmsc.h"
 #include "sclmisc.h"
 #include "sclnjs.h"
+
+const sclmisc::sInfo xdhqnjs::Info( NAME_LC, "XDHq", EPSMSC_ORGANIZATION );
 
 void sclnjs::SCLNJSInfo( txf::sWFlow &Flow )
 {
@@ -51,7 +54,7 @@ namespace {
 	}
 }
 
-void sclnjs::SCLNJSRegister( sclnjs::sRegistrar &Registrar )
+const sclmisc::sInfo &sclnjs::SCLNJSRegister( sclnjs::sRegistrar &Registrar )
 {
 	Registrar.Register( ReturnArgument_ );
 	Registrar.Register( treep::New, treep::Delete, treep::PushTag, treep::PopTag, treep::PutValue, treep::PutAttribute );	// 1 - 6
@@ -60,8 +63,6 @@ void sclnjs::SCLNJSRegister( sclnjs::sRegistrar &Registrar )
 	Registrar.Register( xdhp::AddClasses, xdhp::RemoveClasses, xdhp::ToggleClasses, xdhp::EnableElements, xdhp::DisableElements );	// 16 - 20.
 	Registrar.Register( xdhp::SetAttribute, xdhp::GetAttribute, xdhp::RemoveAttribute, xdhp::SetProperty, xdhp::GetProperty );	// 21 - 25.
 	Registrar.Register( xdhp::Focus );	// 26.
-}
 
-const char *sclmisc::SCLMISCTargetName = NAME_LC;
-const char *sclmisc::SCLMISCProductName = NAME_MC;
-// const char *scln4a::SCLN4AProductVersion = VERSION;
+	return xdhqnjs::Info;
+}

@@ -20,6 +20,8 @@
 #ifndef XDHQJRE_INC_
 # define XDHQJRE_INC_
 
+# include "sclmisc.h"
+
 # define NAME_MC			"XDHqJRE"
 # define NAME_LC			"xdhqjre"
 # define NAME_UC			"XDHQJRE"
@@ -29,5 +31,9 @@
 # define OWNER_NAME			"Claude SIMON"
 # define OWNER_CONTACT		"http://q37.info/contact/"
 # define COPYRIGHT			COPYRIGHT_YEARS " " OWNER_NAME " (" OWNER_CONTACT ")"
+
+namespace xdhqjre {
+	extern const sclmisc::sInfo Info;
+}
 
 #endif

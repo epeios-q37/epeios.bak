@@ -20,6 +20,8 @@
 #ifndef JREQ_INC_
 # define JREQ_INC_
 
+# include "sclmisc.h"
+
 # define NAME_MC			"JREq"
 # define NAME_LC			"jreq"
 # define NAME_UC			"JREQ"
@@ -29,5 +31,9 @@
 # define OWNER_NAME			"Claude SIMON"
 # define OWNER_CONTACT		"http://q37.info/contact/"
 # define COPYRIGHT			COPYRIGHT_YEARS " " OWNER_NAME " (" OWNER_CONTACT ")"
+
+namespace jreq {
+	extern const sclmisc::sInfo Info;
+}
 
 #endif
