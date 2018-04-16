@@ -25,7 +25,6 @@
 
 #include "sclerror.h"
 #include "sclargmnt.h"
-#include "sclmisc.h"
 
 #include "dir.h"
 #include "err.h"
@@ -41,6 +40,8 @@
 using cio::CErr;
 using cio::COut;
 using cio::CIn;
+
+const sclmisc::sInfo xdhelcq::Info( NAME_LC, NAME_MC, EPSMSC_ORGANIZATION );
 
 namespace {
 	namespace {
@@ -462,7 +463,7 @@ qRFB
 	Location.Init();
 	GetAddonLocation_( Module, Location );
 
-	sclmisc::Initialize( Rack_, Location );
+	sclmisc::Initialize( Rack_, Location, xdhelcq::Info );
 
 	node::AtExit( OnExit_, NULL );
 qRFR
@@ -471,7 +472,3 @@ qRFE( ErrFinal_() )
 }
 
 NODE_MODULE( xdhelcq, Start );
-
-const char *sclmisc::SCLMISCTargetName = NAME_LC;
-const char *sclmisc::SCLMISCProductName = NAME_MC;
-

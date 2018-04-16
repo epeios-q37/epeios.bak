@@ -1,5 +1,9 @@
 # *XDHELCq* *CHANGELOG*
 
+## 2018-04-16
+
+- adaptation to changes in underlying modules,
+
 ## 2018-03-22
 
 - handling the fact that the dynamic libraries are not prefixed with `lib` under *POSIX* systems, because they are compiled using *node-(pre)-gyp*,
