@@ -24,7 +24,6 @@
 #include "treep.h"
 
 #include "epsmsc.h"
-#include "sclmisc.h"
 #include "sclnjs.h"
 
 const sclmisc::sInfo xdhqnjs::Info( NAME_LC, "XDHq", EPSMSC_ORGANIZATION );
