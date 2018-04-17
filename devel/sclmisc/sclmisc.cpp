@@ -34,6 +34,8 @@
 
 using namespace sclmisc;
 
+using scli::sInfo;
+
 namespace {
 	str::wString BinPath_;
 }

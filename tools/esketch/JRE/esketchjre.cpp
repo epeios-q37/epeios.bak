@@ -26,6 +26,8 @@
 #include "lcl.h"
 #include "scljre.h"
 
+SCLI_DEF( esketchjre, NAME_LC, "eSketch" );
+
 void scljre::SCLJREInfo( txf::sWFlow &Flow )
 {
 	Flow << NAME_MC << " v" << VERSION << txf::nl
@@ -45,7 +47,7 @@ namespace {
 		Text.Init();
 		sclmisc::GetBaseTranslation( "Argument", Text, Input );
 
-		Return = scljre::String( Text );
+		Return = scljre::String( Env, Text );
 	qRR
 	qRT
 	qRE
@@ -70,7 +72,7 @@ namespace {
 			Row = Strings.Next( Row );
 		}
 
-		Return = scljre::Strings( Strings );
+		Return = scljre::Strings( Env, Strings );
 	qRR;
 	qRT;
 	qRE;
@@ -78,10 +80,9 @@ namespace {
 	}
 }
 
-void scljre::SCLJRERegister( scljre::sRegistrar &Registrar )
+const scli::sInfo &scljre::SCLJRERegister( scljre::sRegistrar &Registrar )
 {
 	Registrar.Register( ReturnArgument_, TestStrings_ );
-}
 
-const char *sclmisc::SCLMISCTargetName = NAME_LC;
-const char *sclmisc::SCLMISCProductName = NAME_MC;
+	return esketchjre::Info;
+}

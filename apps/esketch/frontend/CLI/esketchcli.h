@@ -22,14 +22,18 @@
 
 # include "sktinf.h"
 
-# define NAME_MC			SKTINF_MC_AFFIX "cli"
-# define NAME_LC			SKTINF_LC_AFFIX "cli"
-# define NAME_UC			SKTINF_UC_AFFIX "CLI"
+# include "scli.h"
+
+# define NAME_MC			SKTINF_MC "cli"
+# define NAME_LC			SKTINF_LC "cli"
+# define NAME_UC			SKTINF_UC "CLI"
 # define WEBSITE_URL		SKTINF_WEBSITE_URL
 # define AUTHOR_NAME		SKTINF_AUTHOR_NAME
 # define AUTHOR_CONTACT		SKTINF_AUTHOR_CONTACT
 # define OWNER_NAME			SKTINF_OWNER_NAME
 # define OWNER_CONTACT		SKTINF_OWNER_CONTACT
 # define COPYRIGHT			COPYRIGHT_YEARS " " OWNER_NAME " (" OWNER_CONTACT ")"	
+
+SCLI_DEC( esketchcli );
 
 #endif

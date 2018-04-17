@@ -577,7 +577,7 @@ namespace scljre {
 	typedef scln4a::sRegistrar<fFunction> sRegistrar;
 
 	void SCLJREInfo( txf::sWFlow &Flow );	// To define by user.
-	const sclmisc::sInfo &SCLJRERegister( sRegistrar &Registrar );	// To define by user
+	const scli::sInfo &SCLJRERegister( sRegistrar &Registrar );	// To define by user
 }
 
 # define SCLJRE_F( name ) scljre::sJObject name(\

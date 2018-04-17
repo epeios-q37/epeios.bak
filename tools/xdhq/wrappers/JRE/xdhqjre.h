@@ -20,7 +20,7 @@
 #ifndef XDHQJRE_INC_
 # define XDHQJRE_INC_
 
-# include "sclmisc.h"
+# include "scli.h"
 
 # define NAME_MC			"XDHqJRE"
 # define NAME_LC			"xdhqjre"
@@ -32,8 +32,6 @@
 # define OWNER_CONTACT		"http://q37.info/contact/"
 # define COPYRIGHT			COPYRIGHT_YEARS " " OWNER_NAME " (" OWNER_CONTACT ")"
 
-namespace xdhqjre {
-	extern const sclmisc::sInfo Info;
-}
+SCLI_DEC( xdhqjre );
 
 #endif

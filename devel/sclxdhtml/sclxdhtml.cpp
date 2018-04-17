@@ -84,7 +84,7 @@ namespace {
 
 			if ( Launcher_ == NULL ) {
 				Launcher_ = Data.LauncherIdentification();
-				sclmisc::Initialize( Data.SCLRack(), Data.Localization() );
+				sclmisc::Initialize( Data.SCLRack(), Data.Localization(), SCLXDHTMLInfo() );
 
 				SCLXDHTMLInitialization( Data.Mode() );
 			}
@@ -671,7 +671,7 @@ qRH
 	str::string ProjectFeature;
 qRB
 	ProjectFeature.Init();
-	sclfrntnd::LoadProject( prolog::GetProjectFeatures( Proxy, ProjectFeature ), ProjectFeature );
+	sclfrntnd::LoadProject( prolog::GetProjectFeatures( Proxy, ProjectFeature ), ProjectFeature, Proxy.Info() );
 qRR
 qRT
 qRE

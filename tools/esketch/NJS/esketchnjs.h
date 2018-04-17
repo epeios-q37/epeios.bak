@@ -20,6 +20,8 @@
 #ifndef ESKETCHNJS_INC_
 # define  ESKETCHNJS_INC_
 
+# include "scli.h"
+
 # define NAME_MC			"eSketchNJS"
 # define NAME_LC			"esketchnjs"
 # define NAME_UC			"ESKETCHNJS"
@@ -29,6 +31,8 @@
 # define OWNER_NAME			"Claude SIMON"
 # define OWNER_CONTACT		"http://q37.info/contact/"
 # define COPYRIGHT			COPYRIGHT_YEARS " " OWNER_NAME " (" OWNER_CONTACT ")"	
+
+SCLI_DEC( esketchnjs );
 
 #endif
 

@@ -75,14 +75,20 @@ static int main_(
 qRH
 	str::string Command;
 	sclmisc::sRack Rack;
+	const scli::sInfo *Info = NULL;
 qRB
+	Info = &SCLTOOLInfo();
+
+	if ( Info == NULL )
+		qRFwk();
+
 	Rack.Init( qRRor_, SCLError_, CIO, Locale_);
 
-	sclmisc::Initialize( Rack, (const char *)NULL );
+	sclmisc::Initialize( Rack, (const char *)NULL, *Info );
 
 	FillRegistry_( Oddities.argc, Oddities.argv, IgnoreUnknownArguments );
 
-	sclmisc::LoadProject();
+	sclmisc::LoadProject( *Info );
 
 	sclmisc::FillSetupRegistry();
 
@@ -91,7 +97,7 @@ qRB
 	Command.Init();
 
 	if ( sclargmnt::GetCommand( Command ) == "Usage" )
-		sclargmnt::PrintUsage( cio::COut );
+		sclargmnt::PrintUsage( *Info, cio::COut );
 	else
 		ExitValue = SCLTOOLMain( Command, Oddities );
 qRR
@@ -133,7 +139,8 @@ qRT
 
 	sclmisc::DumpRegistriesAndOrLocalesIfRequired();
 
-	sclmisc::Quit();
+	if ( Info != NULL )
+		sclmisc::Quit( *Info );
 qRE
 	return ExitValue;
 }

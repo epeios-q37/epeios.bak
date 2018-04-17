@@ -136,7 +136,7 @@ namespace scln4a {
 	n4all::cLauncher *SCLN4ARegister(
 		n4all::cRegistrar &Registrar,
 		void *UP,
-		const sclmisc::sInfo *&Info );	// To define by user.
+		const scli::sInfo *&Info );	// To define by user.
 
 	extern const char *SCLN4AProductVersion;	// To define by user.
 }

@@ -260,7 +260,7 @@ static void GetCommandsIDAndName_(
 	backend___ &Backend,
 	rRequest &Request )
 {
-	type__ Type = Request.Id16In();
+	type__ Type = *Request.Id16In();
 
 	WriteCommandsIDAndName_( Backend.Module( Type ).Descriptions, Request );
 }
@@ -286,7 +286,7 @@ static void GetParameters_(
 	backend___ &Backend,
 	rRequest &Request )
 {
-	type__ Type = Request.Id16In();
+	type__ Type = *Request.Id16In();
 	id16__ Command = Request.Id16In();;
 
 	WriteParameters_( Backend.Module( (type__)*Type ).Descriptions, *Command, Request );
@@ -389,7 +389,7 @@ qRH
 	TOL_CBUFFER___ Buffer;
 	object__ O;
 qRB
-	T = Request.Id16In();
+	T = *Request.Id16In();
 
 	if ( *T >= Backend.Modules.Amount() )
 		qRFwk();
@@ -446,7 +446,7 @@ static void FillCommands_(
 	backend___ &Backend,
 	type__ Type,
 	const commands_details_ &CommandsDetails,
-	id16s_t_ &Commands )
+	id16s_ &Commands )
 {
 qRH
 	id16_t__ Command;
@@ -483,8 +483,8 @@ static void GetTypeAndCommands_(
 {
 	const string_ &Name = Request.StringIn();
 	const commands_details_ &CommandsDetails = Request.CommandsDetailsIn();
-	type__ &Type = (type__ &)Request.Id16Out();
-	id16s_t_ &Commands = Request.Id16sOut();
+	type__ Type = *Request.Id16Out();
+	id16s_ &Commands = Request.Id16sOut();
 
 	if ( ( Type = Backend.Type( Name ) ) == FBLBKD_INVALID_TYPE )
 		qRFwk();
@@ -505,7 +505,7 @@ qRH
 	command__ Command;
 	TOL_CBUFFER___ Buffer;
 qRB
-	type__ Type = Request.Id16In();
+	type__ Type = *Request.Id16In();
 
 	Description.Init();
 	Description.Name  = Request.StringIn();
@@ -532,9 +532,9 @@ static void GetCommands_(
 	backend___ &Backend,
 	rRequest &Request )
 {
-	type__ Type = Request.Id16In();
+	type__ Type = *Request.Id16In();
 	const commands_details_ &CommandsDetails = Request.CommandsDetailsIn();
-	id16s_t_ &Commands = Request.Id16sOut();
+	id16s_ &Commands = Request.Id16sOut();
 
 	FillCommands_( Backend, Type, CommandsDetails, Commands );
 }
@@ -662,7 +662,7 @@ type__ fblbkd::backend___::Type( const str::string_ &Name ) const
 }
 
 bso::bool__ fblbkd::backend___::_TestCompatibility(
-	fdr::rIODriver &FrontendIODriver,
+	fdr::rRWDriver &FrontendIODriver,
 	const char *APIVersion,
 	const char *MessageLabel,
 	const char *URLLabel )
@@ -675,7 +675,7 @@ qRH
 	char RemoteAPIVersion[10];
 	str::string Translation;
 	TOL_CBUFFER___ Buffer;
-	flw::sDressedIOFlow<> Flow;
+	flw::sDressedRWFlow<> Flow;
 qRB
 	Flow.Init( FrontendIODriver );
 
@@ -719,7 +719,7 @@ qRE
 	return Success;
 }
 
-bso::bool__ fblbkd::backend___::_TestCompatibility( fdr::rIODriver &FrontendIODriver )
+bso::bool__ fblbkd::backend___::_TestCompatibility( fdr::rRWDriver &FrontendIODriver )
 {
 	bso::bool__ Success = false;
 qRH
@@ -740,7 +740,7 @@ qRE
 }
 
 bso::bool__ backend___::_HandleRequest(
-	fdr::rIODriver &Driver,
+	fdr::rRWDriver &Driver,
 	log_functions__ &LogFunctions )
 {
 	bso::sBool Disconnect = false;

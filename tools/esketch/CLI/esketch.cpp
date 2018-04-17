@@ -35,6 +35,8 @@ using cio::CErr;
 using cio::COut;
 using cio::CIn;
 
+SCLI_DEF( esketch, NAME_LC, NAME_MC );
+
 namespace {
 	void PrintHeader_( void )
 	{
@@ -61,6 +63,11 @@ namespace {
 	else if ( Command == #name )\
 		name##_()
 
+const scli::sInfo &scltool::SCLTOOLInfo( void )
+{
+	return esketch::Info;
+}
+
 int scltool::SCLTOOLMain(
 	const str::dString &Command,
 	const scltool::fOddities &Oddities )
@@ -82,7 +89,3 @@ qRT;
 qRE;
 	return ExitValue;
 }
-
-const char *sclmisc::SCLMISCTargetName = NAME_LC;
-const char *sclmisc::SCLMISCProductName = NAME_MC;
-

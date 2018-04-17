@@ -28,6 +28,8 @@
 
 #include "sclmisc.h"
 
+SCLI_DEF( xdhqxdh, PROGRAM_NAME, SOFTWARE_NAME );
+
 namespace {
 	csdmnc::rCore Core_;
 }
@@ -663,6 +665,11 @@ xdhcmn::cSession *sclxdhtml::SCLXDHTMLRetrieveCallback(
 	return Session;
 }
 
+const scli::sInfo &sclxdhtml::SCLXDHTMLInfo( void )
+{
+	return xdhqxdh::Info;
+}
+
 void sclxdhtml::SCLXDHTMLReleaseCallback( xdhcmn::cSession *Callback )
 {
 	if ( Callback == NULL )
@@ -670,6 +677,3 @@ void sclxdhtml::SCLXDHTMLReleaseCallback( xdhcmn::cSession *Callback )
 
 	delete Callback;
 }
-
-const char *sclmisc::SCLMISCTargetName = PROGRAM_NAME;
-const char *sclmisc::SCLMISCProductName = SOFTWARE_NAME;

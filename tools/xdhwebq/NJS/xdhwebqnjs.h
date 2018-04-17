@@ -20,7 +20,7 @@
 #ifndef XDHWEBQNJS_INC_
 # define  XDHWEBQNJS_INC_
 
-# include "sclmisc.h"
+# include "scli.h"
 
 # define NAME_MC			"XDHWebQNJS"
 # define NAME_LC			"xdhwebqnjs"
@@ -32,9 +32,7 @@
 # define OWNER_CONTACT		"http://q37.info/contact/"
 # define COPYRIGHT			COPYRIGHT_YEARS " " OWNER_NAME " (" OWNER_CONTACT ")"
 
-namespace xdhwebqnjs {
-	extern const sclmisc::sInfo Info;
-}
+SCLI_DEC( xdhwebqnjs );
 
 #endif
 

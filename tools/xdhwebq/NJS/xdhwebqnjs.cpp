@@ -23,11 +23,10 @@
 
 #include "xdhwebq.h"
 
-#include "epsmsc.h"
 #include "sclargmnt.h"
 #include "sclnjs.h"
 
-const sclmisc::sInfo xdhwebqnjs::Info( NAME_LC, NAME_MC, EPSMSC_ORGANIZATION );
+SCLI_DEF( xdhwebqnjs, NAME_LC, NAME_MC );
 
 void sclnjs::SCLNJSInfo( txf::sWFlow &Flow )
 {
@@ -173,7 +172,7 @@ namespace {
 	}
 }
 
-const sclmisc::sInfo &sclnjs::SCLNJSRegister( sclnjs::sRegistrar &Registrar )
+const scli::sInfo &sclnjs::SCLNJSRegister( sclnjs::sRegistrar &Registrar )
 {
 	Registrar.Register( ReturnArgument_ );
 	Registrar.Register( Init, HandleS_, HandleA_ );

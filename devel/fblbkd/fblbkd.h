@@ -798,13 +798,13 @@ namespace fblbkd {
 			return Links.Index( IdObjet );
 		}
 		bso::bool__ _TestCompatibility(
-			fdr::rIODriver &FrontendIODriver,
+			fdr::rRWDriver &FrontendIODriver,
 			const char *APIVersion,
 			const char *MessageLabel,
 			const char *URLLabel );
-		bso::bool__ _TestCompatibility(	fdr::rIODriver &FrontendIODriver );
+		bso::bool__ _TestCompatibility(	fdr::rRWDriver &FrontendIODriver );
 		bso::bool__ _HandleRequest(
-			fdr::rIODriver &FrontendIODriver,
+			fdr::rRWDriver &FrontendIODriver,
 			log_functions__ &LogFunctions );
 	protected:
 		virtual void *FBLBKDUserPointer( void ) = 0;
@@ -882,7 +882,7 @@ namespace fblbkd {
 		/*f Handle the request which come by 'Channel' and write the answer to 'Channel'.
 		If 'true' is returned, than the request contains a deconnection request. */
 		bso::bool__ Handle(
-			fdr::rIODriver &FrontendIODriver,
+			fdr::rRWDriver &FrontendIODriver,
 			log_functions__ &LogFunctions )
 		{
 			if ( !_CompatibilityTested ) {

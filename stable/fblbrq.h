@@ -211,7 +211,7 @@ namespace fblbrq {
 		// At true if the request parsed.
 		bso::bool__ Parsed_;
 		// The input/output channel for the request.
-		flw::sDressedIOFlow<> Channel_;
+		flw::sDressedRWFlow<> Channel_;
 		bso::bool__ _DismissPending;	// Pour grer la prsence d'un flux dans les paramtres entrants.
 		bso::sBool Disconnect_;	// If at 'true', the client asked for disconnection.
 		const void *_Get(
@@ -288,7 +288,7 @@ namespace fblbrq {
 		//f Initialization with 'Channel' to parse/answer the request.
 		void Init(
 			callbacks__ &Callbacks,
-			fdr::rIODriver &Driver )
+			fdr::rRWDriver &Driver )
 		{
 			reset();
 			Callbacks_ = &Callbacks;
@@ -323,8 +323,8 @@ namespace fblbrq {
 		FBLBRQ_M( Id8, id8__ )
 		FBLBRQ_M( Id8s, id8s_ )
 		FBLBRQ_M( XId8s, xid8s_t_ )
-		FBLBRQ_M( Id16, id16_t__ )
-		FBLBRQ_M( Id16s, id16s_t_ )
+		FBLBRQ_M( Id16, id16__ )
+		FBLBRQ_M( Id16s, id16s_ )
 		FBLBRQ_M( XId16s, xid16s_t_ )
 		FBLBRQ_M( Id32, id32__ )
 		FBLBRQ_M( Id32s, id32s_ )

@@ -37,7 +37,7 @@ n4all::cLauncher *N4ALLRegister(
 {
 	n4all::cLauncher *Launcher = NULL;
 qRFH
-	const sclmisc::sInfo *Info;
+	const scli::sInfo *Info;
 qRFB
 	Launcher = scln4a::SCLN4ARegister( *Registrar, Data->UP, Info );
 

@@ -36,6 +36,8 @@ typedef sclbacknd::rCallback rCallback_;
 
 typedef sclbacknd::rBackend	rBackend_;
 
+SCLI_DEF( esketchbkd, BACKEND_NAME, SKTINF_MC );
+
 class rBackend
 : public rBackend_
 {
@@ -65,7 +67,7 @@ public:
 			Mode,
 			API_VERSION,
 			ClientOrigin,
-			SKTINF_LC_AFFIX,
+			SKTINF_LC,
 			BACKEND_NAME " V" VERSION,
 			COPYRIGHT,
 			SKTINF_SOFTWARE_NAME " V" SKTINF_SOFTWARE_VERSION );
@@ -114,6 +116,11 @@ public:
 	}
 };
 
+const scli::sInfo &scldaemon::SCLDAEMONInfo( void )
+{
+	return esketchbkd::Info;
+}
+
 rCallback_ *sclbacknd::SCLBACKNDGetCallback(
 	csdleo::context__ Context,
 	fblovl::eMode Mode )
@@ -141,6 +148,3 @@ qRT
 qRE
 	return Callback;
 }
-
-const char *sclmisc::SCLMISCTargetName = BACKEND_NAME;
-const char *sclmisc::SCLMISCProductName = SKTINF_MC_AFFIX;

@@ -415,7 +415,7 @@ namespace sclnjs {
 	typedef scln4a::sRegistrar<fFunction> sRegistrar;
 
 	void SCLNJSInfo( txf::sWFlow &Flow );	// To define by user.
-	const sclmisc::sInfo &SCLNJSRegister( sRegistrar &Registrar );	// To define by user
+	const scli::sInfo &SCLNJSRegister( sRegistrar &Registrar );	// To define by user
 }
 
 // Required by g++ and Clang, (but not by VC++).

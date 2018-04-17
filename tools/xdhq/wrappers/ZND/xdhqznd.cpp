@@ -23,13 +23,12 @@
 #include "treep.h"
 #include "xdhp.h"
 
-#include "epsmsc.h"
 #include "iof.h"
 #include "xpp.h"
 #include "lcl.h"
 #include "sclznd.h"
 
-const sclmisc::sInfo xdhqznd::Info( NAME_LC, "XDHq", EPSMSC_ORGANIZATION );
+SCLI_DEF( xdhqznd, NAME_LC, "XDHq" );
 
 void sclznd::SCLZNDInfo( txf::sWFlow &Flow )
 {
@@ -56,7 +55,7 @@ namespace {
 	}
 }
 
-const sclmisc::sInfo &sclznd::SCLZNDRegister( sclznd::sRegistrar &Registrar )
+const scli::sInfo &sclznd::SCLZNDRegister( sclznd::sRegistrar &Registrar )
 {
 	Registrar.Register( ReturnArgument_ );	// 0.
 	Registrar.Register( treep::New, treep::Delete, treep::PushTag, treep::PopTag, treep::PutValue, treep::PutAttribute );	// 1 - 6.

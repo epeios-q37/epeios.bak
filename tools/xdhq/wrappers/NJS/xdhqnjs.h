@@ -20,7 +20,7 @@
 #ifndef XDHQNJS_INC_
 # define  XDHQNJS_INC_
 
-# include "sclmisc.h"
+# include "scli.h"
 
 # define NAME_MC			"XDHqNJS"
 # define NAME_LC			"xdhqnjs"
@@ -32,9 +32,7 @@
 # define OWNER_CONTACT		"http://q37.info/contact/"
 # define COPYRIGHT			COPYRIGHT_YEARS " " OWNER_NAME " (" OWNER_CONTACT ")"	
 
-namespace xdhqnjs {
-	extern const sclmisc::sInfo Info;
-}
+SCLI_DEC( xdhqnjs );
 
 #endif
 

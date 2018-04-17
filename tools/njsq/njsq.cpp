@@ -30,7 +30,6 @@
 #include "dir.h"
 #include "err.h"
 #include "cio.h"
-#include "epsmsc.h"
 #include "xpp.h"
 #include "fnm.h"
 #include "flf.h"
@@ -39,7 +38,7 @@ using cio::CErr;
 using cio::COut;
 using cio::CIn;
 
-const sclmisc::sInfo njsq::Info( NAME_LC, NAME_MC, EPSMSC_ORGANIZATION );
+SCLI_DEF( njsq, NAME_LC, NAME_MC );
 
 namespace {
 	void ErrFinal_( v8::Isolate *Isolate = NULL )

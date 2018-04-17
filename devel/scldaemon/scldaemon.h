@@ -34,6 +34,7 @@
 # include "csdleo.h"
 # include "csdscb.h"
 
+# include "scli.h"
 # include "sclrgstry.h"
 
 # ifndef SCLDAEMON_DISABLE_ERROR_DETECTION
@@ -127,6 +128,9 @@ namespace scldaemon {
 		{
 		}
 	};
+
+	// To define by user.
+	const scli::sInfo &SCLDAEMONInfo( void );
 
 	/* Called once, when the library is loaded. All the 'registry' stuff is already initialized.
 	The same returned callback is used to handle each connection (one callback for all connections,

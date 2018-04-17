@@ -256,12 +256,7 @@ namespace sclfrntnd {
 		}
 	};
 
-	inline void LoadProject(
-		sclmisc::project_type__ Type,
-		const str::string_ &Feature )
-	{
-		sclmisc::LoadProject( Type, Feature );
-	}
+	using sclmisc::LoadProject;
 
 	void GetProjectsFeatures(
 		const char *Language,
@@ -644,7 +639,7 @@ namespace sclfrntnd {
 
 	eProjectHandling GetProjectHandling( const str::dString &Pattern );
 
-	eProjectHandling HandleProject( void );
+	eProjectHandling HandleProject( const scli::sInfo &Info );
 }
 
 #endif

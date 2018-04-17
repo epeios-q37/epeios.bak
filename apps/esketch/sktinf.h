@@ -22,21 +22,21 @@
 #ifndef SKTINF_INC_
 # define SKTINF_INC_
 
-# define SKTINF_LC_AFFIX					"esketch"
-# define SKTINF_UC_AFFIX					"ESKETCH"
-# define SKTINF_MC_AFFIX					"eSketch"
-# define SKTINF_UC_SHORT					"SKT"
-# define SKTINF_LC_SHORT					"skt"
+# define SKTINF_LC					"esketch"
+# define SKTINF_UC					"ESKETCH"
+# define SKTINF_MC					"eSketch"
+# define SKTINF_UC_SHORT			"SKT"
+# define SKTINF_LC_SHORT			"skt"
 
-# define SKTINF_WEBSITE_URL					"http://q37.info/"
+# define SKTINF_WEBSITE_URL			"http://q37.info/"
 
-# define SKTINF_SOFTWARE_NAME				SKTINF_MC_AFFIX	// Commercial name of the software ; set to appropriate value if needed.
-# define SKTINF_SOFTWARE_VERSION 			"1.0"	// Version of the whole software, not of a particular program.
-# define SKTINF_SOFTWARE_URL				SKTINF_WEBSITE_URL
+# define SKTINF_SOFTWARE_NAME		SKTINF_MC	// Commercial name of the software ; set to appropriate value if needed.
+# define SKTINF_SOFTWARE_VERSION	"1.0"	// Version of the whole software, not of a particular program.
+# define SKTINF_SOFTWARE_URL		SKTINF_WEBSITE_URL
 
-# define SKTINF_AUTHOR_NAME					"Claude SIMON"
-# define SKTINF_AUTHOR_CONTACT				"http://q37.info/contact/"
-# define SKTINF_OWNER_NAME					"Claude SIMON"
-# define SKTINF_OWNER_CONTACT				"http://q37.info/contact/"
+# define SKTINF_AUTHOR_NAME			"Claude SIMON"
+# define SKTINF_AUTHOR_CONTACT		"http://q37.info/contact/"
+# define SKTINF_OWNER_NAME			"Claude SIMON"
+# define SKTINF_OWNER_CONTACT		"http://q37.info/contact/"
 
 #endif

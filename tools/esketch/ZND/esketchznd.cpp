@@ -26,6 +26,8 @@
 #include "lcl.h"
 #include "sclznd.h"
 
+SCLI_DEF( esketchznd, NAME_LC, "eSketch" );
+
 void sclznd::SCLZNDInfo( txf::sWFlow &Flow )
 {
 	Flow << NAME_MC << " v" << VERSION << txf::nl
@@ -75,10 +77,9 @@ namespace {
 	}
 }
 
-void sclznd::SCLZNDRegister( sclznd::sRegistrar &Registrar )
+const scli::sInfo &sclznd::SCLZNDRegister( sclznd::sRegistrar &Registrar )
 {
 	Registrar.Register( ReturnArgument_, TestStrings_ );
-}
 
-const char *sclmisc::SCLMISCTargetName = NAME_LC;
-const char *sclmisc::SCLMISCProductName = NAME_MC;
+	return esketchznd::Info;
+}

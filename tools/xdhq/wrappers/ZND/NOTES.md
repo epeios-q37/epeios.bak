@@ -16,4 +16,4 @@ To avoid to have to kill the *Node.js* web server, in addition of the applicatio
 
 ### *Cygwin*
 
-*Cygwin* doesn't properly send the *CTRL-C* to a windows application. Currently, this seems not e problematic, but it was once.
+*Cygwin* doesn't properly send the *CTRL-C* to a windows application. Currently, this seems not be problematic, but it was once.

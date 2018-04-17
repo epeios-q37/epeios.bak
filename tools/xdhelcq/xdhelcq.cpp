@@ -41,7 +41,7 @@ using cio::CErr;
 using cio::COut;
 using cio::CIn;
 
-const sclmisc::sInfo xdhelcq::Info( NAME_LC, NAME_MC, EPSMSC_ORGANIZATION );
+SCLI_DEF( xdhelcq, NAME_LC, NAME_MC );
 
 namespace {
 	namespace {

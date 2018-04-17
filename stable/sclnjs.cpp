@@ -219,7 +219,7 @@ namespace {
 n4all::cLauncher *scln4a::SCLN4ARegister(
 	n4all::cRegistrar &RegistrarCallback,
 	void *UP,
-	const sclmisc::sInfo *&Info )
+	const scli::sInfo *&Info )
 {
 	n4all::cLauncher *Launcher = NULL;
 qRH

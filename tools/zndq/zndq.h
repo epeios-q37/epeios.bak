@@ -20,6 +20,8 @@
 #ifndef ZNDQ_INC_
 # define ZNDQ_INC_
 
+# include "scli.h"
+
 # define NAME_MC			"ZNDq"
 # define NAME_LC			"zndq"
 # define NAME_UC			"ZNDQ"
@@ -30,14 +32,6 @@
 # define OWNER_CONTACT		"http://q37.info/contact/"
 # define COPYRIGHT			COPYRIGHT_YEARS " " OWNER_NAME " (" OWNER_CONTACT ")"
 
-// To avoid inclusion of 'sclmisc.h', which causes some troubles...
-
-namespace sclmisc {
-	struct sInfo;
-}
-
-namespace zndq {
-	extern const sclmisc::sInfo Info;
-}
+SCLI_DEC( zndq );
 
 #endif

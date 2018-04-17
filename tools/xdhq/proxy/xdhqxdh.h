@@ -22,6 +22,8 @@
 
 # include "sclxdhtml.h"
 
+# include "scli.h"
+
 # define PROGRAM_NAME		"xdhq"	SCLXDHTML_DEFAULT_SUFFIX
 # define SOFTWARE_NAME		"XDHq"
 # define AUTHOR_NAME		"Claude SIMON"
@@ -32,5 +34,7 @@
 # define SOFTWARE_VERSION	"0.9"
 # define SOFTWARE_DETAILS	SKTINF_SOFTWARE_NAME " V" SKTINF_SOFTWARE_VERSION
 # define SOFTWARE_URL		"http://q37.info/"
+
+SCLI_DEC( xdhqxdh );
 
 #endif

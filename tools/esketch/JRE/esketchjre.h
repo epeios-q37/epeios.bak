@@ -20,6 +20,8 @@
 #ifndef ESKETCHJRE_INC_
 # define ESKETCHJRE_INC_
 
+# include "scli.h"
+
 # define NAME_MC			"eSketchJRE"
 # define NAME_LC			"esketchjre"
 # define NAME_UC			"ESKETCHJRE"
@@ -29,5 +31,7 @@
 # define OWNER_NAME			"Claude SIMON"
 # define OWNER_CONTACT		"http://q37.info/contact/"
 # define COPYRIGHT			COPYRIGHT_YEARS " " OWNER_NAME " (" OWNER_CONTACT ")"
+
+SCLI_DEC( esketchjre );
 
 #endif

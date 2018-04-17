@@ -20,6 +20,8 @@
 #ifndef ESKETCHZND_INC_
 # define ESKETCHZND_INC_
 
+# include "scli.h"
+
 # define NAME_MC			"eSketchZND"
 # define NAME_LC			"esketchznd"
 # define NAME_UC			"ESKETCHZND"
@@ -29,5 +31,7 @@
 # define OWNER_NAME			"Claude SIMON"
 # define OWNER_CONTACT		"http://q37.info/contact/"
 # define COPYRIGHT			COPYRIGHT_YEARS " " OWNER_NAME " (" OWNER_CONTACT ")"
+
+SCLI_DEC( esketchznd );
 
 #endif

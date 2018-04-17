@@ -223,6 +223,7 @@ namespace sclxdhtml {
 	{
 	private:
 		xdhdws::sProxy Core_;
+		qRMV( const scli::sInfo, I_, Info_ );
 		void Alert_(
 			const ntvstr::string___ &XML,
 			const ntvstr::string___ &XSL,
@@ -260,7 +261,7 @@ namespace sclxdhtml {
 			qRH;
 				rack Rack;
 			qRB;
-				Rack.Init( Target, Session );
+				Rack.Init( Target, Session, I_() );
 
 				Get( Session, Rack() );
 
@@ -272,12 +273,18 @@ namespace sclxdhtml {
 	public:
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, Core_ );
+			tol::reset( P, Core_, Info_ );
 		}
 		qCDTOR( sProxy );
-		void Init( xdhcmn::cProxy *Proxy )
+		void Init( xdhcmn::cProxy *Proxy,
+			const scli::sInfo &Info )
 		{
 			Core_.Init( Proxy );
+			Info_ = &Info;
+		}
+		const scli::sInfo &Info( void ) const
+		{
+			return I_();
 		}
 		void Log( const ntvstr::rString &Message )
 		{
@@ -468,7 +475,8 @@ namespace sclxdhtml {
 		E_CDTOR( rRack );
 		void Init(
 			const char *View,
-			session &Session )
+			session &Session,
+			const scli::sInfo &Info )
 		{
 			tol::buffer__ Buffer;
 			xml::mark__ Mark = XML_UNDEFINED_MARK;
@@ -478,7 +486,7 @@ namespace sclxdhtml {
 			_Writer.Init( _Flow, xml::oIndent, xml::e_Default );
 			_Writer.PushTag( "XDHTML" );
 			_Writer.PutAttribute( "View", View );
-			_Writer.PutAttribute( "Generator", sclmisc::SCLMISCTargetName );
+			_Writer.PutAttribute( "Generator", Info.Target() );
 			_Writer.PutAttribute( "TimeStamp", tol::DateAndTime( Buffer ) );
 			_Writer.PutAttribute( "OS", cpe::GetOSDigest() );
 			Mark = _Writer.PushTag( "Corpus" );
@@ -543,9 +551,10 @@ namespace sclxdhtml {
 				sclfrntnd::rKernel &Kernel,
 				const char *Language,
 				xdhcmn::cProxy *Callback,
-				class rCore<rSession> &Core )
+				class rCore<rSession> &Core,
+				const scli::sInfo &Info )
 		{
-			sProxy::Init( Callback );
+			sProxy::Init( Callback, Info );
 			Reporting_.Init( *this, Language );
 			frontend::Init( Kernel, Language, Reporting_ );
 			Page_ = UndefinedPage;
@@ -766,6 +775,7 @@ namespace sclxdhtml {
 		Proxy.SetContents( Ids, Contents );
 	}
 
+	const scli::sInfo &SCLXDHTMLInfo( void );	// To define by user.
 	void SCLXDHTMLInitialization( xdhcmn::eMode Mode );	// To define by user.
 
 	xdhcmn::cSession *SCLXDHTMLRetrieveCallback(

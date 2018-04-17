@@ -74,12 +74,15 @@ namespace scltool {
 
 	typedef fOddities oddities__;
 
-	// A dfinir par l'utilisateur.
+	// To define by user.
+	const scli::sInfo &SCLTOOLInfo( void );
+
+	// To define by user.
 	int SCLTOOLMain(
 		const str::string_ &Command,
 		const oddities__ &Oddities );
 
-	extern bso::bool__ IgnoreUnknownArguments;	// A 'false' par dfaut, mais peut tre modifi par l'utilisateur (p. ex. dans l'utilisation de 'CEF').
+	extern bso::bool__ IgnoreUnknownArguments;	// 'false' by default, meaning that all command-line arguments are handled, and unknown ones will be reported, but can be modified by user.
 }
 
 #endif

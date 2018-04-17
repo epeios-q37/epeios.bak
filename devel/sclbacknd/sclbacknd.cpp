@@ -172,12 +172,12 @@ qRE
 namespace {
 	void ReportRequestError_(
 		const char *Language,
-		fdr::rODriver &ODriver )
+		fdr::rWDriver &ODriver )
 	{
 		qRH
 			str::string Translation;
 			TOL_CBUFFER___ Buffer;
-			flw::sDressedOFlow<> Flow;
+			flw::sDressedWFlow<> Flow;
 		qRB
 			Flow.Init( ODriver );
 
@@ -196,7 +196,7 @@ namespace {
 
 	void ReportSoftwareError_(
 		const char *Language,
-		fdr::rODriver &ODriver )
+		fdr::rWDriver &ODriver )
 	{
 	qRH
 		err::buffer__ ErrorBuffer;
@@ -204,7 +204,7 @@ namespace {
 		lcl::meaning Meaning;
 		str::wString Translation;
 		qCBUFFERr Buffer;
-		flw::sDressedOFlow<> Flow;
+		flw::sDressedWFlow<> Flow;
 	qRB
 		Flow.Init( ODriver );
 
@@ -225,7 +225,7 @@ namespace {
 	}
 }
 
-bso::sBool sclbacknd::backend___::SCLDAEMONProcess( fdr::rIODriver *IODriver )
+bso::sBool sclbacknd::backend___::SCLDAEMONProcess( fdr::rRWDriver *IODriver )
 {
 	bso::bool__ Continue = true;
 qRH

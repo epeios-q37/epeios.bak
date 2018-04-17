@@ -17,35 +17,9 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define SCLN4A_COMPILATION_
+#define SCLI_COMPILATION_
 
-#include "scln4a.h"
+#include "scli.h"
 
-using namespace scln4a;
+using namespace scli;
 
-#ifdef CPE_S_WIN
-# define FUNCTION_SPEC __declspec(dllexport)
-#else
-# define FUNCTION_SPEC
-#endif
-
-extern "C" FUNCTION_SPEC n4all::fRegister N4ALL_REGISTER_FUNCTION_NAME;
-
-n4all::cLauncher *N4ALLRegister(
-	n4all::cRegistrar *Registrar,
-	n4all::sData *Data )
-{
-	n4all::cLauncher *Launcher = NULL;
-qRFH
-	const scli::sInfo *Info;
-qRFB
-	Launcher = scln4a::SCLN4ARegister( *Registrar, Data->UP, Info );
-
-	sclmisc::Initialize( *Data->SCLRack, *Data->Location, *Info );
-qRFR
-	if ( Launcher != NULL )
-		delete Launcher;
-qRFT
-qRFE( sclmisc::ErrFinal() )
-	return Launcher;
-}

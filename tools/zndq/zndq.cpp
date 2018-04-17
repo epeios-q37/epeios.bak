@@ -32,7 +32,7 @@ The usually available documentation about extensions is only about PHP 5, \
 and there are important differences with PHP 7. See http://wiki.php.net/phpng-upgrading"
 #endif
 
-const sclmisc::sInfo zndq::Info( NAME_LC, NAME_MC, EPSMSC_ORGANIZATION );
+SCLI_DEF( zndq, NAME_LC, NAME_MC );
 
 PHP_FUNCTION( zndq_init )
 {

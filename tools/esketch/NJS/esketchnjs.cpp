@@ -24,6 +24,8 @@
 #include "sclmisc.h"
 #include "sclnjs.h"
 
+SCLI_DEF( esketchnjs, NAME_LC, "eSketch" );
+
 void sclnjs::SCLNJSInfo( txf::sWFlow &Flow )
 {
 	Flow << NAME_MC << " v" << VERSION << txf::nl
@@ -49,11 +51,10 @@ namespace {
 	}
 }
 
-void sclnjs::SCLNJSRegister( sclnjs::sRegistrar &Registrar )
+const scli::sInfo &sclnjs::SCLNJSRegister( sclnjs::sRegistrar &Registrar )
 {
 	Registrar.Register( ReturnArgument_ );
+
+	return esketchnjs::Info;
 }
 
-const char *sclmisc::SCLMISCTargetName = NAME_LC;
-const char *sclmisc::SCLMISCProductName = NAME_MC;
-// const char *scln4a::SCLN4AProductVersion = VERSION;

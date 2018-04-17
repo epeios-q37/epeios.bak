@@ -20,7 +20,7 @@
 #ifndef NJSQ_INC_
 # define NJSQ_INC_
 
-# include "sclmisc.h"
+# include "scli.h"
 
 # define NAME_MC			"NJSq"
 # define NAME_LC			"njsq"
@@ -32,8 +32,6 @@
 # define OWNER_CONTACT		"http://q37.info/contact/"
 # define COPYRIGHT			COPYRIGHT_YEARS " " OWNER_NAME " (" OWNER_CONTACT ")"	
 
-namespace njsq {
-	extern const sclmisc::sInfo Info;
-}
+SCLI_DEC( njsq );
 
 #endif

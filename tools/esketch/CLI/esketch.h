@@ -24,6 +24,8 @@
 // Don't remove what between above 'BEGIN' and below 'END'.
 /* PLACEHOLDER */
 
+# include "scli.h"
+
 # define NAME_MC			"eSketch"
 # define NAME_UC			"ESKETCH"
 # define NAME_LC			"esketch"
@@ -33,6 +35,8 @@
 # define OWNER_NAME			"Claude SIMON"
 # define OWNER_CONTACT		"http://q37.info/contact/"
 # define COPYRIGHT			COPYRIGHT_YEARS " " OWNER_NAME " (" OWNER_CONTACT ")"	
+
+SCLI_DEC( esketch )
 
 # define END
 

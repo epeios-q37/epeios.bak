@@ -21,9 +21,12 @@
 
 #include "sclargmnt.h"
 
+#include "sclmisc.h"
+
 using namespace sclargmnt;
 
 using namespace sclmisc;
+using scli::sInfo;
 
 E_CDEF(bso::char__, ExplicitOptionMarker_, '#' );	// Marker of an option where the path is explicitly given.
 
@@ -1321,7 +1324,7 @@ static const str::string_ &GetCommand_( str::string_ &Command )
 
 static void PrintCommandUsage_(
 	const str::string_ &Id,
-	const sclmisc::sInfo &Info )
+	const sInfo &Info )
 {
 qRH
 	str::string Dummy, Command;
@@ -1462,7 +1465,7 @@ qRE
 static void PrintUsage_(
 	const str::string_ &Id,
 	type__ Type,
-	const sclmisc::sInfo &Info )
+	const sInfo &Info )
 {
 	switch ( Type ) {
 	case tCommand:
@@ -1486,7 +1489,7 @@ static void PrintUsage_(
 static void PrintUsage_(
 	type__ Type,
 	const str::strings_ &Ids,
-	const sclmisc::sInfo &Info )
+	const sInfo &Info )
 {
 	sdr::row__ Row = Ids.First();
 
@@ -1541,7 +1544,7 @@ static void IdentifyArguments_(
 }
 
 void sclargmnt::PrintUsage(
-	const sclmisc::sInfo &Info,
+	const sInfo &Info,
 	txf::text_oflow__ &Flow )
 {
 qRH

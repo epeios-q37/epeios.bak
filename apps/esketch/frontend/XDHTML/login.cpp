@@ -77,7 +77,7 @@ qRB
 	}
 
 	IncompatibilityInformations.Init();
-	if ( !Session.Connect( fblfrd::compatibility_informations__( SKTINF_LC_AFFIX, ESKETCH_API_VERSION ), IncompatibilityInformations ) )
+	if ( !Session.Connect( fblfrd::compatibility_informations__( SKTINF_LC, ESKETCH_API_VERSION ), IncompatibilityInformations ) )
 		qRGnr();
 
 	main::Display( Session );

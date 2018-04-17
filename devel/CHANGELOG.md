@@ -1,46 +1,81 @@
 # *Epeios* *CHANGELOG*
 
-## 2018-04-14
-- *shared*:
-  - **$**: adaptation to changes in underlying modules,
+## 2018-04-17
+
+- FBLBKD:
+  - [adpt],
+- FBLBRQ:
+  - [adpt],
+- SCLI:
+  - creation,
+- SCLARGMNT:
+  - [adpt],
+- SCLBACKND:
+  - [adpt],
+- SCLDAEMON:
+  - [adpt],
+- SCLFRNTND:
+  - [adpt],
 - SCLJRE:
-  - **$**,
+  - [adpt],
+- SCLMISC:
+  - moving info related stuff to new *SCLI* library,
+- SCLN4A:
+  - [adpt],
 - SCLNJS:
-  - **$**,
+  - [adpt],
+- SCLTOOL:
+  - [adpt],
+- SCLXDHTML:
+  - [adpt],
+- SCLZND:
+  - [adpt],
+ 
+## 2018-04-16
+
+- SCLFRNTND:
+  - [adpt],
+- SCLXDHTML:
+  - [adpt],
+
+## 2018-04-14
+
+- SCLJRE:
+  - [adpt],
+- SCLNJS:
+  - [adpt],
 
 ## 2018-04-13
-- *shared*:
-  - **$**: adaptation to changes in underlying modules,
+
 - EPSMSC:
-  - **$**,
+  - [adpt],
 - N4ALL:
-  - **$**,
+  - [adpt],
 - N4ALLW:
-  - **$**,
+  - [adpt],
 - SCLMISC:
   - removing all functions and global variables related to `(Target|Product|Organization)Name`, as *PHP*, under, at least, *GNU/Linux*, loads extension using the `RTLD_GLOBAL` parameter, which causes all global variables to be shared between all dynamic libraries,
   - introducing `sInfo`,
 - SCLARGMNT:
-  - **$**,
+  - [adpt],
 - SCLN4A:
-  - **$**,
+  - [adpt],
 
 ## 2018-04-12
-- *shared*:
-  - **$**: adaptation to changes in underlying modules,
+
 - EPSMSC:
-  - **$**,
+  - [adpt],
 - SCLMISC:
   - the `SCLMISC(Target|Product|Organization)Name` which had to be defined by the user are replaced by functions, to avoid sharing of the variables between dynamic libraries, as it seems to occur under *GNULinux*,
 - SCLARGMNT:
-  - **$**,
+  - [adpt],
 
 ## 2018-04-09
 
 - SCLNJS:
-  - adaptation to  changes in underlying modules,
+  - [adpt],
 - SCLZND:
-  - adaptation to  changes in underlying modules,
+  - [adpt],
 
 ## 2018-04-07
 
@@ -54,11 +89,11 @@
 - N4ALL:
   - introducing `sEnv` needed by adaptation to changes in underlying modules,
 - N4ALLW:
-  - adaptation to changes in underlying modules,
+  - [adpt],
 - N4JRE:
-  - adaptation to changes in underlying modules,
+  - [adpt],
 - SCLJRE:
-  - adaptation to changes in underlying modules,
+  - [adpt],
 
 ## 2018-03-28
 
@@ -435,7 +470,7 @@
 - N4JRE, SCLJRE:
   - Adding *Short* *Java* type related stuff.
 - SCK:
-  - Adding default timout parameter.
+  - Adding default timeout parameter.
 - SCLJRE:
   - Fixing `Null()`, according modification of `JREq`.
   - Moving `Delete_` to *.cpp* to avoid some confusion by compilators when user declares some function of some name.
@@ -490,7 +525,7 @@
 
 ## 2017-10-18:
 - TOL:
-    - Surrounding class definition in `qG(C|D)TOR(...)` with anonymous namespace, so that such defined global (con|de)structor will not be shared between different librarires under *GNU/Linux*.
+    - Surrounding class definition in `qG(C|D)TOR(...)` with anonymous namespace, so that such defined global (con|de)structor will not be shared between different libraries under *GNU/Linux*.
 
 ## 2017-10-17:
 - SCLLOCALE
@@ -2758,5 +2793,11 @@
 - NTVSTR:
 	- Adding method for int, to avoid to have to cast NULL (defined as '0') into '(const ntvstr::char__ *)'.
 		
+## Notes
 
+[adpt]:#Adaptation
+  
+### Adaptation
+
+Adaptation to changes in underlying libraries. 
 

@@ -20,7 +20,7 @@
 #ifndef XDHQZND_INC_
 # define XDHQZND_INC_
 
-# include "sclmisc.h"
+# include "scli.h"
 
 # define NAME_MC			"XDHqZND"
 # define NAME_LC			"xdhqznd"
@@ -32,8 +32,6 @@
 # define OWNER_CONTACT		"http://q37.info/contact/"
 # define COPYRIGHT			COPYRIGHT_YEARS " " OWNER_NAME " (" OWNER_CONTACT ")"
 
-namespace xdhqznd {
-	extern const sclmisc::sInfo Info;
-}
+SCLI_DEC( xdhqznd );
 
 #endif

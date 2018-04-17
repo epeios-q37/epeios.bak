@@ -37,6 +37,8 @@ using cio::CErr;
 using cio::COut;
 using cio::CIn;
 
+SCLI_DEF( esketchcli, NAME_LC, SKTINF_MC );
+
 namespace {
 	void PrintHeader_( void )
 	{
@@ -59,7 +61,7 @@ namespace {
 				sclfrntnd::rFeatures Features;
 			qRB
 				IncompatibilityInformations.Init();
-				if ( !Frontend.Connect( fblfrd::compatibility_informations__( SKTINF_LC_AFFIX, ESKETCH_API_VERSION ), IncompatibilityInformations ) )
+				if ( !Frontend.Connect( fblfrd::compatibility_informations__( SKTINF_LC, ESKETCH_API_VERSION ), IncompatibilityInformations ) )
 					qRGnr();
 
 			qRR
@@ -155,6 +157,11 @@ namespace {
 	else if ( Command == #name )\
 		name##_()
 
+const scli::sInfo &scltool::SCLTOOLInfo( void )
+{
+	return esketchcli::Info;
+}
+
 int scltool::SCLTOOLMain(
 	const str::dString &Command,
 	const scltool::fOddities &Oddities )
@@ -178,7 +185,3 @@ qRT
 qRE
 	return ExitValue;
 }
-
-const char *sclmisc::SCLMISCTargetName = NAME_LC;
-const char *sclmisc::SCLMISCProductName = NAME_MC;
-

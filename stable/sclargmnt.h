@@ -28,7 +28,7 @@
 
 // SoCLe ARGuMeNTs
 
-# include "sclmisc.h"
+# include "scli.h"
 
 # include "err.h"
 # include "txf.h"
@@ -52,7 +52,7 @@ namespace sclargmnt {
 	const str::string_ &GetCommand( str::string_ &Command );
 
 	void PrintUsage(
-		const sclmisc::sInfo &Info,
+		const scli::sInfo &Info,
 		txf::text_oflow__ &Flow );
 
 	void FillRegistry(

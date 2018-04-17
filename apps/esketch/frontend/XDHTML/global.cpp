@@ -33,7 +33,7 @@ qRH
 	sclxdhtml::rRack<core::rSession,core::sDump> Rack;
 	str::string AboutTranslation;
 qRB
-	Rack.Init( XSLAffix_, Session );
+	Rack.Init( XSLAffix_, Session, esketchxdh::Info );
 
 	Rack().PushTag( "About" );
 	core::About( Session, Rack );

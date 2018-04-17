@@ -61,7 +61,7 @@ namespace {
 				// Does not work when placed in 'global_cdtor'.
 				Directory.Init();
 				fnm::GetLocation( Data->LibraryLocationAndName, Directory );
-				sclmisc::Initialize( *(sclmisc::sRack *)Data->UP, Directory.UTF8( Buffer ) );
+				sclmisc::Initialize( *(sclmisc::sRack *)Data->UP, Directory.UTF8( Buffer ), SCLDAEMONInfo() );
 				IsInitialized_ = true;
 			}
 		qRR

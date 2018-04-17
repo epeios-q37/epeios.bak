@@ -33,7 +33,7 @@
 #include "xpp.h"
 #include "lcl.h"
 
-const sclmisc::sInfo jreq::Info( NAME_LC, NAME_MC, EPSMSC_ORGANIZATION );
+SCLI_DEF( jreq, NAME_LC, NAME_MC );
 
 #define MDEF( name ) qCDEF( char *, name, #name );
 

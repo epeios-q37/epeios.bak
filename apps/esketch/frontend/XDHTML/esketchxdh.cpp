@@ -29,6 +29,13 @@
 #include "main.h"
 #include "prolog.h"
 
+SCLI_DEF( esketchxdh, NAME, SKTINF_MC );
+
+const scli::sInfo &sclxdhtml::SCLXDHTMLInfo( void )
+{
+	return esketchxdh::Info;
+}
+
 void sclxdhtml::SCLXDHTMLInitialization( xdhcmn::eMode Mode )
 {
 qRH
@@ -56,11 +63,11 @@ xdhcmn::cSession *sclxdhtml::SCLXDHTMLRetrieveCallback(
 	if ( Session == NULL )
 		qRGnr();
 
-	Session->Init( core::Kernel(), Language, ProxyCallback, core::Core );
+	Session->Init( core::Kernel(), Language, ProxyCallback, core::Core, esketchxdh::Info );
 
 	switch ( Mode ) {
 	case xdhcmn::mMonoUser:
-		switch ( sclfrntnd::HandleProject() ) {
+		switch ( sclfrntnd::HandleProject( esketchxdh::Info ) ) {
 		case sclfrntnd::phNone:
 			::prolog::Display( *Session );
 			break;
@@ -97,6 +104,3 @@ void sclxdhtml::SCLXDHTMLReleaseCallback( xdhcmn::cSession *Callback )
 
 	delete Callback;
 }
-
-const char *sclmisc::SCLMISCTargetName = NAME;
-const char *sclmisc::SCLMISCProductName = SKTINF_MC_AFFIX;

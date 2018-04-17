@@ -23,10 +23,9 @@
 #include "xdhp.h"
 #include "treep.h"
 
-#include "epsmsc.h"
 #include "sclnjs.h"
 
-const sclmisc::sInfo xdhqnjs::Info( NAME_LC, "XDHq", EPSMSC_ORGANIZATION );
+SCLI_DEF( xdhqnjs, NAME_LC, "XDHq" );
 
 void sclnjs::SCLNJSInfo( txf::sWFlow &Flow )
 {
@@ -53,7 +52,7 @@ namespace {
 	}
 }
 
-const sclmisc::sInfo &sclnjs::SCLNJSRegister( sclnjs::sRegistrar &Registrar )
+const scli::sInfo &sclnjs::SCLNJSRegister( sclnjs::sRegistrar &Registrar )
 {
 	Registrar.Register( ReturnArgument_ );
 	Registrar.Register( treep::New, treep::Delete, treep::PushTag, treep::PopTag, treep::PutValue, treep::PutAttribute );	// 1 - 6
