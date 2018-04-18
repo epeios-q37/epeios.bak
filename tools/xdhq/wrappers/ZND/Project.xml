@@ -69,7 +69,15 @@
 				<File>Main.xsl</File>
 			</Files>
 		</Files>
-		<Files Group="Notes">
+			<Files Group="Hello">
+				<File Path="../../examples/ZND/Hello/">main.php</File>
+				<Files Path="../../examples/common/Hello/">
+					<File>CHANGELOG.md</File>
+					<File>head.html</File>
+					<File>Main.xsl</File>
+				</Files>
+			</Files>
+			<Files Group="Notes">
 			<Files Path="../../examples/ZND/">
 				<File Path="notes/">main.php</File>
 				<File>NOTES.md</File>

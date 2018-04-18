@@ -82,7 +82,15 @@
 				<File>Main.xsl</File>
 			</Files>
 		</Files>
-		<Files Group="Notes">
+			<Files Group="Hello">
+				<File Path="../../examples/NJS/Hello/">main.js</File>
+				<Files Path="../../examples/common/Hello/">
+					<File>CHANGELOG.md</File>
+					<File>head.html</File>
+					<File>Main.xsl</File>
+				</Files>
+			</Files>
+			<Files Group="Notes">
 			<Files Path="../../examples/NJS/">
 				<File Path="notes/">main.js</File>
 				<File>Project.xml</File>

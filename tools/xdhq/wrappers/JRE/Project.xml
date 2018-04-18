@@ -64,6 +64,14 @@
 					<File>Main.xsl</File>
 				</Files>
 			</Files>
+			<Files Group="Hello">
+				<File Path="../../examples/JRE/Hello/">main.java</File>
+				<Files Path="../../examples/common/Hello/">
+					<File>CHANGELOG.md</File>
+					<File>head.html</File>
+					<File>Main.xsl</File>
+				</Files>
+			</Files>
 			<Files Group="Notes">
 				<Files Path="../../examples/JRE/">
 					<File Path="notes/">main.java</File>
