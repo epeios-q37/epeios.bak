@@ -45,6 +45,9 @@ class Thread extends java.lang.Thread {
 				case "Typing":
 					dom.setContent("name", dom.getContent(event.id));
 					break;
+				case "Clear":
+					if ( dom.confirm( "Are you sure ?" ) ) dom.setContents( new String[][] { { "input", ""}, { "name", ""} } );
+					break;
 				}
 			}
 		}
@@ -55,6 +58,6 @@ class Hello {
 	public static void main(String[] args) throws Exception {
 		Atlas.launch("Connect", "Hello", Atlas.Type.DEFAULT, args );
 
-		for (;;) (new Thread(new DOM())).start();
+		for (;;) new Thread(new DOM()).start();
 	}
 }

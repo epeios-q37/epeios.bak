@@ -196,6 +196,7 @@ function serveFile(pathname, res) {
 				const ext = path.parse(pathname).ext;
 				// if the file is found, set Content-type and send data
 				res.setHeader('Content-type', mimeType[ext] || 'text/plain');
+				res.setHeader('allow-modals', true);
 				res.end(data);
 			}
 		});

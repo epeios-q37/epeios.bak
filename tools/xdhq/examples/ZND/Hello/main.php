@@ -57,6 +57,9 @@ while ( true ) {
 	case "Typing":
 		$dom->setContent( "name", $dom->getContent( $id ) );
 		break;
+	case "Clear":
+		if ( $dom->confirm( "Are you sure?" ) ) $dom->setContents( [ "input" => "", "name" => "" ] );
+		break;
 	}
 }
 

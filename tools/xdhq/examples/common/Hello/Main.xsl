@@ -4,13 +4,15 @@
 	<xsl:template match="/">
 		<span class="vcenter-out">
 			<span class="vcenter-in">
-					<label>Name:</label>
-					<input maxlength="20" placeholder="Enter a name here" type="text" data-xdh-onevent="input|Typing"/>
-					<hr/>
-					<h1>
-					 <span>Hello </span>
-						<span style="font-style: italic;" id="name"/>
-						<span>!</span></h1>
+				<label>Name:</label>
+				<input id="input" maxlength="20" placeholder="Enter a name here" type="text" data-xdh-onevent="input|Typing"/>
+				<button data-xdh-onevent="Clear">Clear</button>
+				<hr/>
+				<h1>
+				 <span>Hello </span>
+					<span style="font-style: italic;" id="name"/>
+					<span>!</span>
+				</h1>
 			</span>
 		</span>
 	</xsl:template>

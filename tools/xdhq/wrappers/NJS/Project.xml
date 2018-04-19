@@ -17,11 +17,11 @@
 		<Software>XDHq</Software>
 		<UUID>d6a723cb-e88f-4f2f-b429-3adc207f1d62</UUID>
 	</About>
- <!-- NO SPACE in 'Keywords' attribute !!! ("a,b,c", NOT "a, b, c")-->
+	<!-- NO SPACE in 'Keywords' attribute !!! ("a,b,c", NOT "a, b, c")-->
 	<RTW Description="'XDHTML' wrapper." Keywords="XDHTML">
-  <Dir>xdhq-node</Dir>
- </RTW>
- <Modules>
+		<Dir>xdhq-node</Dir>
+	</RTW>
+	<Modules>
 		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
 			<Modules Group="Core">
 				<xpp:expand select="Core"/>
@@ -35,10 +35,10 @@
 				<Module>csdmxs</Module>
 				<Module>csdscb</Module>
 			</Modules>
-   <Modules Group="SCL">
-    <xpp:expand select="SCL"/>
-   </Modules>
-  </Modules>
+			<Modules Group="SCL">
+				<xpp:expand select="SCL"/>
+			</Modules>
+		</Modules>
 		<Modules Group="Shared" Path="../">
 			<Module Path="../">prtcl</Module>
 			<Module>proxy</Module>
@@ -74,14 +74,14 @@
 				<File>README.md</File>
 				<File>Atlas.js</File>
 			</Files>
-		<Files Group="Blank">
-			<File Path="../../examples/NJS/blank/">main.js</File>
-			<Files Path="../../examples/common/blank/">
-				<File>CHANGELOG.md</File>
-				<File>head.html</File>
-				<File>Main.xsl</File>
+			<Files Group="Blank">
+				<File Path="../../examples/NJS/blank/">main.js</File>
+				<Files Path="../../examples/common/blank/">
+					<File>CHANGELOG.md</File>
+					<File>head.html</File>
+					<File>Main.xsl</File>
+				</Files>
 			</Files>
-		</Files>
 			<Files Group="Hello">
 				<File Path="../../examples/NJS/Hello/">main.js</File>
 				<Files Path="../../examples/common/Hello/">
@@ -91,34 +91,34 @@
 				</Files>
 			</Files>
 			<Files Group="Notes">
-			<Files Path="../../examples/NJS/">
-				<File Path="notes/">main.js</File>
-				<File>Project.xml</File>
-				<File>NOTES.md</File>
-				<File>README.md</File>
+				<Files Path="../../examples/NJS/">
+					<File Path="notes/">main.js</File>
+					<File>Project.xml</File>
+					<File>NOTES.md</File>
+					<File>README.md</File>
+				</Files>
+				<Files Path="../../examples/common/notes/">
+					<File>CHANGELOG.md</File>
+					<File>head.html</File>
+					<File>Main.xsl</File>
+					<File>Notes.xsl</File>
+					<File>Note.xsl</File>
+				</Files>
 			</Files>
-			<Files Path="../../examples/common/notes/">
-				<File>CHANGELOG.md</File>
-				<File>head.html</File>
-				<File>Main.xsl</File>
-				<File>Notes.xsl</File>
-				<File>Note.xsl</File>
+			<Files Group="TodoMVC">
+				<Files Path="../../examples/NJS/TodoMVC/">
+					<File>main.js</File>
+					<File>Project.xml</File>
+					<File>README.md</File>
+				</Files>
+				<Files Path="../../examples/common/TodoMVC/">
+					<File>CHANGELOG.md</File>
+					<File>head.html</File>
+					<File>Main.xsl</File>
+					<File>NOTES.md</File>
+					<File>Todos.xsl</File>
+				</Files>
 			</Files>
-		</Files>
-		<Files Group="TodoMVC">
-			<Files Path="../../examples/NJS/TodoMVC/">
-				<File>main.js</File>
-				<File>Project.xml</File>
-				<File>README.md</File>
-			</Files>
-			<Files Path="../../examples/common/TodoMVC/">
-				<File>CHANGELOG.md</File>
-				<File>head.html</File>
-				<File>Main.xsl</File>
-				<File>NOTES.md</File>
-				<File>Todos.xsl</File>
-			</Files>
-		</Files>
 		</Files>
 	</Files>
 	<PreprocessorDefinitions>
