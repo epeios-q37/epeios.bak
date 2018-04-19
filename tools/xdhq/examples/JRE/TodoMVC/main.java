@@ -133,9 +133,7 @@ class Thread extends java.lang.Thread {
 
 			dom.setContent("Label." + index, content);
 
-			String idsAndClasses[][] = { { "View." + index, "hide" }, { "Todo." + index, "editing" } };
-
-			dom.removeClasses(idsAndClasses);
+			dom.removeClasses( new String[][] { { "View." + index, "hide" }, { "Todo." + index, "editing" } } );
 		} else {
 			todos.remove(index);
 			displayTodos();
@@ -159,34 +157,28 @@ class Thread extends java.lang.Thread {
 	}
 
 	private void all() {
-		String idsAndClasses[][] = { { "Active", "selected" }, { "Completed", "selected" } };
-
 		exclude = null;
 
 		dom.addClass("All", "selected");
-		dom.removeClasses(idsAndClasses);
+		dom.removeClasses(new String[][] { { "Active", "selected" }, { "Completed", "selected" } } );
 
 		displayTodos();
 	}
 
 	private void active() {
-		String idsAndClasses[][] = { { "All", "selected" }, { "Completed", "selected" } };
-
 		exclude = true;
 
 		dom.addClass("Active", "selected");
-		dom.removeClasses(idsAndClasses);
+		dom.removeClasses(new String[][] { { "All", "selected" }, { "Completed", "selected" } } );
 
 		displayTodos();
 	}
 
 	private void completed() {
-		String idsAndClasses[][] = { { "All", "selected" }, { "Active", "selected" } };
-
 		exclude = false;
 
 		dom.addClass("Completed", "selected");
-		dom.removeClasses(idsAndClasses);
+		dom.removeClasses( new String[][] { { "All", "selected" }, { "Active", "selected" } } );
 
 		displayTodos();
 	}
@@ -204,23 +196,20 @@ class Thread extends java.lang.Thread {
 
 	private void edit(String id) {
 		String content = dom.getContent(id);
-		String idsAndClasses[][] = { { "View." + content, "hide" }, { id, "editing" } };
 
 		index = Integer.parseInt(content);
 
-		dom.addClasses(idsAndClasses);
+		dom.addClasses( new String[][] { { "View." + content, "hide" }, { id, "editing" } } );
 		dom.setContent("Input." + content, todos.get(index).label);
 		dom.focus("Input." + content);
 	}
 
 	private void cancel() {
 		int index = this.index;
-		String idsAndClasses[][] = { { "View." + index, "hide" }, { "Todo." + index, "editing" } };
-
 		this.index = -1;
 
 		dom.setContent("Input." + index, "");
-		dom.removeClasses(idsAndClasses);
+		dom.removeClasses( new String[][] { { "View." + index, "hide" }, { "Todo." + index, "editing" } } );
 	}
 
 	public Thread(DOM dom) {

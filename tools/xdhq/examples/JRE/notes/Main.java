@@ -77,8 +77,7 @@ class Thread extends java.lang.Thread {
 
 			if ((length == 0) || pattern.equals(note.title.substring(0, length).toLowerCase())) {
 				push(note, index, tree);
-				String idAndContent[] = { "Description." + index, note.description };
-				idsAndContents.add(idAndContent);
+				idsAndContents.add( new String[] { "Description." + index, note.description } );
 			}
 		}
 
@@ -97,10 +96,8 @@ class Thread extends java.lang.Thread {
 		index = Integer.parseInt(id);
 		Note note = notes.get(index);
 
-		String idsAndContents[][] = { { "Title", note.title }, { "Description", note.description } };
-
 		dom.setLayout("Edit." + id, new Tree(), "Note.xsl");
-		dom.setContents(idsAndContents);
+		dom.setContents( new String[][] { { "Title", note.title }, { "Description", note.description } } );
 		dom.disableElements(viewModeElements);
 		dom.dressWidgets("Notes");
 	}
@@ -119,9 +116,7 @@ class Thread extends java.lang.Thread {
 				notes.add(0, new Note());
 				displayList();
 			} else {
-				String idsAndContents[][] = { { "Title." + index, title }, { "Description." + index, description } };
-
-				dom.setContents(idsAndContents);
+				dom.setContents( new String[][] { { "Title." + index, title }, { "Description." + index, description } } );
 				view();
 			}
 		} else
@@ -130,8 +125,7 @@ class Thread extends java.lang.Thread {
 
 	private void cancel() {
 		Note note = notes.get(index);
-		String ids[] = { "Title", "Description" };
-		String result[] = dom.getContents(ids);
+		String result[] = dom.getContents(new String[] { "Title", "Description" } );
 		String title = result[0].trim();
 		String description = result[1];
 
@@ -192,7 +186,7 @@ class Thread extends java.lang.Thread {
 }
 
 class Notes {
-	public static void main(String[] args) throws Exception {
+	public static void main(String args[]) throws Exception {
 		Atlas.launch("Connect", "notes", Atlas.Type.DEFAULT, args );
 
 		for (;;) {

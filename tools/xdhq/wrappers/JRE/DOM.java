@@ -33,9 +33,7 @@ public class DOM {
 			classes.add(idAndClass[1]);
 		}
 
-		String [][] ret = { ids.toArray(new String[0]), classes.toArray(new String[0]) };
-
-		return ret;
+		return new String[][] { ids.toArray( new String[0] ), classes.toArray( new String[0] ) };
 	}
 
 	public DOM() {
@@ -98,9 +96,7 @@ public class DOM {
 	}
 
 	public String getContent(String id) {
-		String ids[] = { id };
-
-		return getContents(ids)[0];
+		return getContents( new String [] { id } )[0];
 	}
 
 	public void setContents(String[][] idsAndContents) {
@@ -110,9 +106,7 @@ public class DOM {
 	}
 
 	public void setContent(String id, String content) {
-		String idsAndContents[][] = { { id, content } };
-
-		setContents(idsAndContents);
+		setContents( new String[][] { { id, content } } );
 	}
 
 	public void dressWidgets(String id) {
@@ -126,8 +120,7 @@ public class DOM {
 	}
 
 	private void handleClass(int Index, String id, String clas) {
-		String idAndClass[][] = { { id, clas } };
-		handleClasses(Index, idAndClass);
+		handleClasses(Index, new String[][] { { id, clas } } );
 	}
 
 	public void addClasses(String[][] idsAndClasses) {
@@ -159,9 +152,7 @@ public class DOM {
 	}
 
 	public void enableElement(String id) {
-		String ids[] = { id };
-
-		enableElements(ids);
+		enableElements( new String[] { id } );
 	}
 
 	public void disableElements(String[] ids) {
@@ -169,9 +160,7 @@ public class DOM {
 	}
 
 	public void disableElement(String id) {
-		String ids[] = { id };
-
-		disableElements(ids);
+		disableElements(new String[] { id } );
 	}
 
 	public void setAttribute(String id, String name, String value) {
