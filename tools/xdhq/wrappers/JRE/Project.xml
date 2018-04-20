@@ -102,10 +102,10 @@
 				</Files>
 			</Files>
 			<Files Group="JAVA" Path="../../Atlas/JRE/">
-				<File Pack="No">DOM.java</File>
-				<File Pack="No">Event.java</File>
-				<File Pack="No">Tree.java</File>
 				<File Pack="No">Atlas.java</File>
+				<File Pack="No">DOM.java</File>
+				<File Pack="No">Handler.java</File>
+				<File Pack="No">Tree.java</File>
 			</Files>
 		</Files>
 	</Files>

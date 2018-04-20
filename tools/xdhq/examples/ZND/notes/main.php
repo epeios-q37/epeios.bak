@@ -99,7 +99,6 @@ function displayList( $dom ) {
 	$contents = [];
 
 	$tree->pushTag( "Notes" );
-	$tree->putAttribute( "HideDescriptions", $dom->hideDescriptions );
 
 	$count = count($dom->notes );
 

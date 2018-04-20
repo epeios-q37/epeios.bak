@@ -19,45 +19,24 @@
 
 import info.q37.atlas.*;
 
-class Thread extends java.lang.Thread {
-	private DOM dom;
-
-	public Thread(DOM dom) {
-		this.dom = dom;
-	}
-
-	public void run() {
-		Event event = new Event();
-		for (;;) {
-			if ( false ) {
-				String action = dom.getAction(event);
-
-				if ( action.equals( "Connect" ) ) {
-					dom.setLayout("", new Tree(), "Main.xsl");
-				} else if ( action.equals( "Typing" ) ) {
-					dom.setContent("name", dom.getContent(event.id));
-				}
-			} else {
-				switch( dom.getAction( event )) {
-				case "Connect":
-					dom.setLayout("", new Tree(), "Main.xsl");
-					break;
-				case "Typing":
-					dom.setContent("name", dom.getContent(event.id));
-					break;
-				case "Clear":
-					if ( dom.confirm( "Are you sure ?" ) ) dom.setContents( new String[][] { { "input", ""}, { "name", ""} } );
-					break;
-				}
-			}
+class Hello extends Atlas {
+	public void handle( DOM dom, String action, String id )
+	{
+		switch( action) {
+		case "Connect":
+			dom.setLayout("", new Tree(), "Main.xsl");
+			break;
+		case "Typing":
+			dom.setContent("name", dom.getContent(id));
+			break;
+		case "Clear":
+			if ( dom.confirm( "Are you sure ?" ) ) dom.setContents( new String[][] { { "input", ""}, { "name", ""} } );
+			break;
 		}
 	}
-}
-
-class Hello {
 	public static void main(String[] args) throws Exception {
-		Atlas.launch("Connect", "Hello", Atlas.Type.DEFAULT, args );
+		launch("Connect", "Hello", Atlas.Type.DEFAULT, args );
 
-		for (;;) new Thread(new DOM()).start();
+		for (;;) new Hello();
 	}
 }

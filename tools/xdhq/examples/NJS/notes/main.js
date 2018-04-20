@@ -97,7 +97,6 @@ function displayList(dom) {
 	var contents = {};
 
 	tree.pushTag("Notes");
-	tree.putAttribute("HideDescriptions", dom.hideDescriptions);
 
 	while (i < dom.notes.length) {
 		if (dom.notes[i]['title'].toLowerCase().startsWith(dom.pattern)) {

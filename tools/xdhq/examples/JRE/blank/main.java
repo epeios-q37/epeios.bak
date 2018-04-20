@@ -18,60 +18,42 @@
 */
 
 import info.q37.atlas.*;
+import info.q37.xdhq.XDHq;
 
-class Thread extends java.lang.Thread {
-	private DOM dom;
-
-	public Thread(DOM dom) {
-		this.dom = dom;
-	}
-
-	public void run() {
-		Event event = new Event();
-
-		System.out.println("Connection detected...");
-
-		for (;;) {
-			String action = dom.getAction(event);
-
-			if ( action.equals( "Connect" ) ) {
-				dom.setLayout("", new Tree(), "Main.xsl");
-				dom.addClass("Input", "hidden");
-			} else if ( action.equals( "Submit" ) ) {
-				dom.setContent("Pattern", dom.getContent("Pattern").toUpperCase());
-			} else if ( action.equals( "HideInput" ) ) {
-				dom.addClass("Input", "hidden");
-			} else if ( action.equals( "ShowInput" ) ) {
-				dom.removeClass("Input", "hidden");
-			} else {
-				System.out.println("No or unknown action !");
-				System.exit(1);
-			}
+class Blank extends Atlas {
+	public void handle( DOM dom, String action, String id ) {
+		if ( action.equals( "Connect" ) ) {
+			dom.setLayout("", new Tree(), "Main.xsl");
+			dom.addClass("Input", "hidden");
+		} else if ( action.equals( "Submit" ) ) {
+			dom.setContent("Pattern", dom.getContent("Pattern").toUpperCase());
+		} else if ( action.equals( "HideInput" ) ) {
+			dom.addClass("Input", "hidden");
+		} else if ( action.equals( "ShowInput" ) ) {
+			dom.removeClass("Input", "hidden");
+		} else {
+			System.out.println("No or unknown action !");
+			System.exit(1);
 		}
 	}
 
 	public void test() {
 		System.out.println("Essai from void method!");
 	}
-}
 
-class Blank {
 	private static void displayBytecodeBuildTimestamp() throws Exception {
 		System.out.println("Bytecode build : " + new java.util.Date(new java.io.File(Blank.class.getClassLoader()
 				.getResource(Blank.class.getCanonicalName().replace('.', '/') + ".class").toURI()).lastModified()));
 	}
 
 	public static void main(String[] args) throws Exception {
-		System.out.println(Atlas.wrapperInfo());
-		System.out.println(Atlas.componentInfo());
+		System.out.println(XDHq.wrapperInfo());
+		System.out.println(XDHq.componentInfo());
 		displayBytecodeBuildTimestamp();
-		System.out.println(Atlas.returnArgument("Text from JAVA file"));
+		System.out.println(XDHq.returnArgument("Text from JAVA file"));
 
-		Atlas.launch("Connect", "blank", Atlas.Type.DEFAULT, args );
+		launch("Connect", "blank", Atlas.Type.DEFAULT, args );
 
-		for (;;) {
-			java.lang.Thread thread = new Thread(new DOM());
-			thread.start();
-		}
+		for (;;) new Blank();
 	}
 }

@@ -34,8 +34,7 @@ class Todo {
 	}
 }
 
-class Thread extends java.lang.Thread {
-	private DOM dom;
+class TodoMVC extends Atlas {
 	private Boolean exclude;
 	private int index = -1;
 	private List<Todo> todos;
@@ -62,7 +61,7 @@ class Thread extends java.lang.Thread {
 		tree.popTag();
 	}
 
-	private void displayCount(int count) {
+	private void displayCount(DOM dom, int count) {
 		String text = "";
 
 		switch (count) {
@@ -79,7 +78,7 @@ class Thread extends java.lang.Thread {
 		dom.setContent("Count", text);
 	}
 
-	private void handleCount() {
+	private void handleCount( DOM dom ) {
 		int count = itemsLeft();
 
 		if (count != todos.size())
@@ -87,10 +86,10 @@ class Thread extends java.lang.Thread {
 		else
 			dom.enableElement("HideClearCompleted");
 
-		displayCount(count);
+		displayCount(dom, count);
 	}
 
-	private void displayTodos() {
+	private void displayTodos( DOM dom ) {
 		Tree tree = new Tree();
 		ListIterator<Todo> li = todos.listIterator();
 
@@ -108,20 +107,20 @@ class Thread extends java.lang.Thread {
 		tree.popTag();
 
 		dom.setLayout("Todos", tree, "Todos.xsl");
-		handleCount();
+		handleCount( dom );
 	}
 
-	private void submitNew() {
+	private void submitNew( DOM dom ) {
 		String content = dom.getContent("Input");
 		dom.setContent("Input", "");
 
 		if (!"".equals(content.trim())) {
 			todos.add(0, new Todo(content));
-			displayTodos();
+			displayTodos( dom );
 		}
 	}
 
-	private void submitModification() {
+	private void submitModification( DOM dom ) {
 		int index = this.index;
 		this.index = -1;
 
@@ -136,11 +135,11 @@ class Thread extends java.lang.Thread {
 			dom.removeClasses( new String[][] { { "View." + index, "hide" }, { "Todo." + index, "editing" } } );
 		} else {
 			todos.remove(index);
-			displayTodos();
+			displayTodos( dom );
 		}
 	}
 
-	private void toggle(String id) {
+	private void toggle( DOM dom, String id) {
 		int index = Integer.parseInt(id);
 		Todo todo = todos.get(index);
 
@@ -148,42 +147,42 @@ class Thread extends java.lang.Thread {
 
 		todos.set(index, todo);
 
-		dom.toggleClass("Todo." + id, "completed");
+		dom.toggleClass( "Todo." + id, "completed");
 
 		if (exclude != null)
-			displayTodos();
+			displayTodos( dom );
 		else
-			handleCount();
+			handleCount( dom  );
 	}
 
-	private void all() {
+	private void all( DOM dom ) {
 		exclude = null;
 
 		dom.addClass("All", "selected");
 		dom.removeClasses(new String[][] { { "Active", "selected" }, { "Completed", "selected" } } );
 
-		displayTodos();
+		displayTodos( dom );
 	}
 
-	private void active() {
+	private void active( DOM dom ) {
 		exclude = true;
 
 		dom.addClass("Active", "selected");
 		dom.removeClasses(new String[][] { { "All", "selected" }, { "Completed", "selected" } } );
 
-		displayTodos();
+		displayTodos( dom );
 	}
 
-	private void completed() {
+	private void completed( DOM dom ) {
 		exclude = false;
 
 		dom.addClass("Completed", "selected");
 		dom.removeClasses( new String[][] { { "All", "selected" }, { "Active", "selected" } } );
 
-		displayTodos();
+		displayTodos( dom );
 	}
 
-	private void clear() {
+	private void clear( DOM dom ) {
 		ListIterator<Todo> li = todos.listIterator();
 
 		while (li.hasNext()) {
@@ -191,10 +190,10 @@ class Thread extends java.lang.Thread {
 				li.remove();
 		}
 
-		displayTodos();
+		displayTodos( dom );
 	}
 
-	private void edit(String id) {
+	private void edit(DOM dom, String id) {
 		String content = dom.getContent(id);
 
 		index = Integer.parseInt(content);
@@ -204,7 +203,7 @@ class Thread extends java.lang.Thread {
 		dom.focus("Input." + content);
 	}
 
-	private void cancel() {
+	private void cancel( DOM dom ) {
 		int index = this.index;
 		this.index = -1;
 
@@ -212,8 +211,9 @@ class Thread extends java.lang.Thread {
 		dom.removeClasses( new String[][] { { "View." + index, "hide" }, { "Todo." + index, "editing" } } );
 	}
 
-	public Thread(DOM dom) {
-		this.dom = dom;
+	public TodoMVC() {
+		System.out.println("Connection detected...");
+
 		todos = new ArrayList<Todo>();
 
 		if ( false ) {
@@ -222,49 +222,39 @@ class Thread extends java.lang.Thread {
 		}
 	}
 
-	public void run() {
-		Event event = new Event();
-
-		System.out.println("Connection detected...");
-
-		for (;;) {
-			String action = dom.getAction(event);
-
-			if ( action.equals( "Connect" ) ) {
-				dom.setLayout("", new Tree(), "Main.xsl");
-				dom.focus("Input");
-				displayTodos();
-			} else if (action.equals( "Submit" ) ) {
-				if (index == -1)
-					submitNew();
-				else
-					submitModification();
-			} else if (action.equals( "Destroy" ) ) {
-				todos.remove(Integer.parseInt(dom.getContent(event.id)));
-				displayTodos();
-			} else if (action.equals( "Toggle" ) ) {
-				toggle(event.id);
-			} else if (action.equals( "All" ) ) {
-				all();
-			} else if (action.equals( "Active" ) ) {
-				active();
-			} else if (action.equals( "Completed" ) ) {
-				completed();
-			} else if (action.equals( "Clear" ) ) {
-				clear();
-			} else if (action.equals( "Edit" ) ) {
-				edit(event.id);
-			} else if (action.equals( "Cancel" ) ) {
-				cancel();
-			} else {
-				System.out.println("No or unknown action !");
-				System.exit(1);
-			}
+	public void handle( DOM dom, String action, String id ) {
+		if ( action.equals( "Connect" ) ) {
+			dom.setLayout("", new Tree(), "Main.xsl");
+			dom.focus("Input");
+			displayTodos( dom );
+		} else if (action.equals( "Submit" ) ) {
+			if (index == -1)
+				submitNew( dom );
+			else
+				submitModification( dom );
+		} else if (action.equals( "Destroy" ) ) {
+			todos.remove(Integer.parseInt(dom.getContent(id)));
+			displayTodos( dom );
+		} else if (action.equals( "Toggle" ) ) {
+			toggle(dom, id);
+		} else if (action.equals( "All" ) ) {
+			all( dom );
+		} else if (action.equals( "Active" ) ) {
+			active( dom );
+		} else if (action.equals( "Completed" ) ) {
+			completed( dom );
+		} else if (action.equals( "Clear" ) ) {
+			clear( dom );
+		} else if (action.equals( "Edit" ) ) {
+			edit(dom, id);
+		} else if (action.equals( "Cancel" ) ) {
+			cancel( dom );
+		} else {
+			System.out.println("No or unknown action !");
+			System.exit(1);
 		}
 	}
-}
 
-class TodoMVC {
 	public static void main(String[] args) throws Exception {
 		String dir;
 
@@ -274,11 +264,8 @@ class TodoMVC {
 			dir = "TodoMVC";
 
 
-		Atlas.launch("Connect", dir, Atlas.Type.DEFAULT, args);
+		launch("Connect", dir, Atlas.Type.DEFAULT, args);
 
-		for (;;) {
-			java.lang.Thread thread = new Thread(new DOM());
-			thread.start();
-		}
+		for (;;) new TodoMVC();
 	}
 }

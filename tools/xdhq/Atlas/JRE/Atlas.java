@@ -19,7 +19,26 @@
 
 package info.q37.atlas;
 
-public class Atlas extends info.q37.xdhq.XDHq {
+public abstract class Atlas implements Runnable {
+	private DOM dom;
+
+	public Atlas() {
+		this.dom = new DOM();
+		new Thread( this ).start();
+	}
+
+	public abstract void handle( DOM dom, String action, String id );
+
+	@Override
+	public final void run() {
+		info.q37.xdhq.Event event = new info.q37.xdhq.Event();
+		for (;;) {
+			dom.getAction(event);
+
+			handle( dom, event.action, event.id );
+		}
+	}
+
 	private static boolean isDev() {
 		return System.getenv("EPEIOS_SRC") != null;
 	}
@@ -36,7 +55,7 @@ public class Atlas extends info.q37.xdhq.XDHq {
 			}
 
 			final Process httpd = processBuilder.start();
-			Runtime.getRuntime().addShutdownHook(new Thread() {
+			Runtime.getRuntime().addShutdownHook(new java.lang.Thread() {
 				public void run() {
 					httpd.destroy();
 				}
@@ -58,7 +77,7 @@ public class Atlas extends info.q37.xdhq.XDHq {
 			}
 
 			final Process electron = processBuilder.start();
-			Runtime.getRuntime().addShutdownHook(new Thread() {
+			Runtime.getRuntime().addShutdownHook(new java.lang.Thread() {
 				public void run() {
 					electron.destroy();
 				}

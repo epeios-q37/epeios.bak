@@ -32,8 +32,7 @@ class Note {
 	}
 }
 
-class Thread extends java.lang.Thread {
-	private DOM dom;
+class Notes extends Atlas {
 	private String pattern = "";
 	private boolean hideDescriptions = false;
 	private int index = 0;
@@ -55,20 +54,19 @@ class Thread extends java.lang.Thread {
 		tree.popTag();
 	}
 
-	private void handleDescriptions() {
+	private void handleDescriptions( DOM dom ) {
 		if (hideDescriptions)
 			dom.disableElement("ViewDescriptions");
 		else
 			dom.enableElement("ViewDescriptions");
 	}
 
-	private void displayList() {
+	private void displayList( DOM dom ) {
 		Tree tree = new Tree();
 		List<String[]> idsAndContents = new ArrayList<String[]>();
 		ListIterator<Note> li = notes.listIterator(1); // 0 skipped, as it serves as buffer for the new notes.
 
 		tree.pushTag("Notes");
-		tree.putAttribute("HideDescriptions", "tutu");
 
 		while (li.hasNext()) {
 			int index = li.nextIndex();
@@ -86,13 +84,13 @@ class Thread extends java.lang.Thread {
 		dom.enableElements(viewModeElements);
 	}
 
-	private void view() {
+	private void view( DOM dom ) {
 		dom.enableElements(viewModeElements);
 		dom.setContent("Edit." + index, "");
 		index = -1;
 	}
 
-	private void edit(String id) {
+	private void edit(DOM dom, String id) {
 		index = Integer.parseInt(id);
 		Note note = notes.get(index);
 
@@ -102,7 +100,7 @@ class Thread extends java.lang.Thread {
 		dom.dressWidgets("Notes");
 	}
 
-	private void submit() {
+	private void submit( DOM dom ) {
 		String ids[] = { "Title", "Description" };
 		String result[] = dom.getContents(ids);
 
@@ -114,16 +112,16 @@ class Thread extends java.lang.Thread {
 
 			if (index == 0) {
 				notes.add(0, new Note());
-				displayList();
+				displayList( dom );
 			} else {
 				dom.setContents( new String[][] { { "Title." + index, title }, { "Description." + index, description } } );
-				view();
+				view( dom );
 			}
 		} else
 			dom.alert("Title can not be empty !");
 	}
 
-	private void cancel() {
+	private void cancel( DOM dom ) {
 		Note note = notes.get(index);
 		String result[] = dom.getContents(new String[] { "Title", "Description" } );
 		String title = result[0].trim();
@@ -131,14 +129,13 @@ class Thread extends java.lang.Thread {
 
 		if (!title.equals(note.title) || !description.equals(note.description)) {
 			if (dom.confirm("Are you sure you want to cancel your modifications ?"))
-				view();
+				view( dom );
 		} else
-			view();
+			view( dom );
 	}
 
-	public Thread(DOM dom) {
-		this.dom = dom;
-
+	public Notes() {
+		System.out.println("Connection detected...");
 		notes = new ArrayList<Note>();
 
 		// First must be empty as it used as buffer for the new notes.
@@ -149,49 +146,35 @@ class Thread extends java.lang.Thread {
 		notes.add(new Note("Implement new functionalities", "Although it&rsquo;s almost perfect..., isn&rsquo;t it ?"));
 	}
 
-	public void run() {
-		Event event = new Event();
-
-		System.out.println("Connection detected...");
-
-		for (;;) {
-			String action = dom.getAction(event);
-
-			if ( action.equals( "Connect" ) ) {
-				dom.setLayout("", new Tree(), "Main.xsl");
-				displayList();
-			} else if ( action.equals( "ToggleDescriptions" ) ) {
-				hideDescriptions = "true".equals(dom.getContent(event.id));
-				handleDescriptions();
-			} else if ( action.equals( "Search" ) ) {
-				pattern = dom.getContent("Pattern").toLowerCase();
-				displayList();
-			} else if ( action.equals( "Edit" ) ) {
-				edit(dom.getContent(event.id));
-			} else if ( action.equals( "Delete" ) ) {
-				if (dom.confirm("Are you sure you want to delete this entry ?")) {
-					notes.remove(Integer.parseInt(dom.getContent(event.id)));
-					displayList();
-				}
-			} else if ( action.equals( "Submit" ) ) {
-				submit();
-			} else if ( action.equals( "Cancel" ) ) {
-				cancel();
-			} else {
-				System.out.println("No or unknown action !");
-				System.exit(1);
+	public void handle( DOM dom, String action, String id ) {
+		if ( action.equals( "Connect" ) ) {
+			dom.setLayout("", new Tree(), "Main.xsl");
+			displayList( dom );
+		} else if ( action.equals( "ToggleDescriptions" ) ) {
+			hideDescriptions = "true".equals(dom.getContent(id));
+			handleDescriptions( dom );
+		} else if ( action.equals( "Search" ) ) {
+			pattern = dom.getContent("Pattern").toLowerCase();
+			displayList( dom );
+		} else if ( action.equals( "Edit" ) ) {
+			edit(dom, dom.getContent(id));
+		} else if ( action.equals( "Delete" ) ) {
+			if (dom.confirm("Are you sure you want to delete this entry ?")) {
+				notes.remove(Integer.parseInt(dom.getContent(id)));
+				displayList( dom );
 			}
+		} else if ( action.equals( "Submit" ) ) {
+			submit( dom );
+		} else if ( action.equals( "Cancel" ) ) {
+			cancel( dom );
+		} else {
+			System.out.println("No or unknown action !");
+			System.exit(1);
 		}
 	}
-}
-
-class Notes {
 	public static void main(String args[]) throws Exception {
-		Atlas.launch("Connect", "notes", Atlas.Type.DEFAULT, args );
+		launch("Connect", "notes", Atlas.Type.DEFAULT, args );
 
-		for (;;) {
-			java.lang.Thread thread = new Thread(new DOM());
-			thread.start();
-		}
+		for (;;) new Notes();
 	}
 }
