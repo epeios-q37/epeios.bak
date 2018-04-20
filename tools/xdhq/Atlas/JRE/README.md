@@ -1,15 +1,13 @@
 # *Java* binding of the *Atlas* toolkit
 
-The *Atlas* toolkit (*AtlasTK*) is a library for web and desktop UI. This is the *Java* binding of this toolkit.
+The *Atlas* toolkit is a library for web and desktop UI. This is the *Java* binding of this toolkit.
 
 
-## Basic example
+## *Hello World!*
 
 ![Little demonstration](http://q37.info/download/Hello.gif "A basic example")
 
-### The *Java* source code
-
-The *Java* source file.
+### *Java* source code
 
 ```Java
 import info.q37.atlas.*;
@@ -29,6 +27,7 @@ class Hello extends Atlas {
       break;
     }
   }
+
   public static void main(String[] args) throws Exception {
     launch("Connect", info.q37.atlas.Atlas.Type.DEFAULT);
 
@@ -37,11 +36,11 @@ class Hello extends Atlas {
 }
 ```
 
-### The *XSL* file
+### *XSL* file
 
-The *XSL* file given as parameter to above `dom.setLayout(...)`instruction.
+This is the content of the `Main.xsl` file which name is given given as parameter to above `dom.setLayout(...)` instruction. 
 
-```XSL
+```XML
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0"
                 xmlns="http://www.w3.org/1999/xhtml"

@@ -1,6 +1,12 @@
 # *CHANGELOG* for the *Atlas* toolkit
 
-**Common to all languages!**
+**Common to all bindings!**
+
+## 2018-04-20
+- *atlas-java*
+  - simplification,
+- all bindings:
+  - upgrading to version `0.1.0`,
 
 ## 2018-03-07
 

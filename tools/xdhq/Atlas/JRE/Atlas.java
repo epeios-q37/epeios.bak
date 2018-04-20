@@ -55,7 +55,7 @@ public abstract class Atlas implements Runnable {
 			}
 
 			final Process httpd = processBuilder.start();
-			Runtime.getRuntime().addShutdownHook(new java.lang.Thread() {
+			Runtime.getRuntime().addShutdownHook(new Thread() {
 				public void run() {
 					httpd.destroy();
 				}
@@ -77,7 +77,7 @@ public abstract class Atlas implements Runnable {
 			}
 
 			final Process electron = processBuilder.start();
-			Runtime.getRuntime().addShutdownHook(new java.lang.Thread() {
+			Runtime.getRuntime().addShutdownHook(new Thread() {
 				public void run() {
 					electron.destroy();
 				}

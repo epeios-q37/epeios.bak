@@ -1,8 +1,10 @@
-# Demonstration applications from the *Java* binding of the *Atlas* toolkit
+# Demonstration of the *Java* binding from the *Atlas* toolkit
+
+Try this demonstration at <http://atlastk.org:8080>.
 
 There is also a version for:
   * *Node.js* : <http://github.com/epeios-q37/atlas-node-demo/>,
   * *PHP* : <http://github.com/epeios-q37/atlas-php-demo/>.
 
 
-See <http://atlastk.org/> for more information.
+For more information: <http://atlastk.org/>

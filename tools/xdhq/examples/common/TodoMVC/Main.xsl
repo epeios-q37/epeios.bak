@@ -34,7 +34,7 @@
 			<p>Double-click to edit a todo</p>
 			<p>
 				<span>Created with the </span>
-				<a href="http://atlastk.org//">
+				<a href="http://atlastk.org/">
 					<span style="font-style: italic;">Atlas</span>
 					<span> toolkit</span>
 				</a>

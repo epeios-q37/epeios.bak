@@ -3,7 +3,7 @@
  <xpp:bloc>
   <!-- User definitions -->
   <xpp:define name="Version">
-   <xpp:bloc>20180414</xpp:bloc>
+			<xpp:bloc/>
   </xpp:define>
   <xpp:set name="Credits" value="Epeios"/>
   <xpp:set name="Type" value="ZNDComponent"/>

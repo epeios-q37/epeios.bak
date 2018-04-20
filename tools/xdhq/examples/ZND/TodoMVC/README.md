@@ -1,13 +1,18 @@
-# *TodoMVC* written in *PHP*
+# *TodoMVC* in *PHP*
 
-A *PHP* version of the *TodoMVC* (<http://todomvc.com/>) application.
+A *PHP* version of the *TodoMVC* (<http://todomvc.com/>) application. It looks like this:
+
+![The PHP implementation of TodoMVC](http://q37.info/download/TodoMVC.gif "The PHP implementation of TodoMVC")
 
 There is also a version for:
 
-  * *Node.js*: <http://github.com/epeios-q37/todomvc-node>,
   * *Java*: <http://github.com/epeios-q37/todomvc-java>.
+  * *Node.js*: <http://github.com/epeios-q37/todomvc-node>,
 
-See <http://atlastk.org/> for more information.
+For more information: <http://atlastk.org/>
+
+
+
 
 
 
