@@ -1,20 +1,10 @@
 # *TodoMVC* in *PHP*
 
-A *PHP* version of the *TodoMVC* (<http://todomvc.com/>) application. It looks like this:
+A *PHP* version of the *TodoMVC* (<http://todomvc.com/>) application, made with the [*Atlas* toolkit](http://github.com/epeios-q37/atlas-php).
 
-![The PHP implementation of TodoMVC](http://q37.info/download/TodoMVC.gif "The PHP implementation of TodoMVC")
+[![TodoMVC preview](http://q37.info/download/TodoMVC.gif "Preview of the PHP implementation of TodoMVC made with the Atlas toolkit")](http://atlastk.org)
 
 There is also a version for:
 
   * *Java*: <http://github.com/epeios-q37/todomvc-java>.
-  * *Node.js*: <http://github.com/epeios-q37/todomvc-node>,
-
-For more information: <http://atlastk.org/>
-
-
-
-
-
-
-
-
+  * *Node.js*: <http://github.com/epeios-q37/todomvc-node>.
