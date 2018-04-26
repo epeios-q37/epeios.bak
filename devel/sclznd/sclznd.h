@@ -94,7 +94,7 @@ namespace sclznd {
 		{
 			Get_( Strings );
 		}
-		// Termination method for below lethod.
+		// Termination method for below method.
 		void Get( void )
 		{}
 		template <typename arg, typename ...args> void Get(

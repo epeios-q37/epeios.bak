@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns:xpp="http://q37.info/ns/xpp/" >
+ <xpp:bloc>
+  <!-- User definitions -->
+  <xpp:define name="Version">
+   <xpp:bloc>(Obsolete entry)</xpp:bloc>
+  </xpp:define>
+  <xpp:set name="Credits" value="Epeios"/>
+  <xpp:set name="Type" value="ZNDComponent"/>
+  <xpp:define name="CopyrightYears">
+   <xpp:bloc>2007-2017</xpp:bloc>
+  </xpp:define>
+ </xpp:bloc>
+ <xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
+ <About>
+  <Program>xdhwebqznd</Program>
+  <Software>XDHWebQ</Software>
+ </About>
+ <Modules>
+  <Modules Group="Epeios" Path="h:/hg/epeios/stable/">
+   <Modules Group="Core">
+    <xpp:expand select="Core"/>
+				<Module>btr</Module>
+				<Module>idxbtq</Module>
+				<Module>idxbtr</Module>
+				<Module>idxque</Module>
+				<Module>strmrg</Module>
+			</Modules>
+   <Modules Group="SCL">
+    <xpp:expand select="SCL"/>
+   </Modules>
+			<Modules Group="XDH">
+				<Module>xdhcmn</Module>
+				<Module>xdhups</Module>
+				<Module>xdhutl</Module>
+				<Modules Group="JS">
+					<Module>xdhujp</Module>
+					<Module>xdhujr</Module>
+					<Module>xdhujs</Module>
+				</Modules>
+			</Modules>
+		</Modules>
+		<Modules Group="XDHWebQ" Path="../">
+			<Module>misc</Module>
+			<Module>query</Module>
+			<Module>session</Module>
+			<Module>xdwrgstry</Module>
+			<Module>xdhwebq</Module>
+		</Modules>
+		<Module>registry</Module>
+ </Modules>
+	<SourceDirs>
+		<SourceDir>../</SourceDir>
+	</SourceDirs>
+	<Files>
+  <!-- NOTA : '*.php' files will automatically be packed as such. -->
+  <!--File Pack="No">XDHWebQ.php</File-->
+ </Files>
+ <RTW Description="PHP extension template" Keywords="template">
+  <Dir>xdhwebq-php</Dir>
+ </RTW>
+</Project>

@@ -26,7 +26,7 @@
 #include "sclargmnt.h"
 #include "sclnjs.h"
 
-SCLI_DEF( xdhwebqnjs, NAME_LC, NAME_MC );
+SCLI_DEF( xdhwebqnjs, NAME_LC, "XDHWebQ" );
 
 void sclnjs::SCLNJSInfo( txf::sWFlow &Flow )
 {
