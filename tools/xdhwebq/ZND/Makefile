@@ -1,4 +1,4 @@
-#	Copyright (C) 2007-2017 Claude SIMON (http://q37.info/contact/).
+#	Copyright (C) 2018 Claude SIMON (http://q37.info/contact/).
 #
 #	This file is part of XDHWebQ.
 #
@@ -398,7 +398,7 @@ ifeq ("$(target)","$(Android)")
 endif
 
 copt += -DVERSION=\""20180426"\"
-copt += -DCOPYRIGHT_YEARS=\""2007-2017"\"
+copt += -DCOPYRIGHT_YEARS=\""2018"\"
 copt += -DIDENTIFIER=\"""\"
 
 ifndef EPEIOS_SRC

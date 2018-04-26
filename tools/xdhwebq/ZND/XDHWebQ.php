@@ -62,5 +62,19 @@ class XDHWebQ extends ZNDq {
 	static public function returnArgument($argument) {
 		return ZNDq_wrapper( ZNDq::$launcher, 0, $argument);
 	}
+	private function split( array $keysAndValues, array &$keys, array &$values ) {
+		foreach ($keysAndValues as $key => $value) {
+			$keys[] = $key;
+			$values[] = $value;
+		}
+	}
+	static public void serve() {
+		$ids = [];
+		$values = [];
+
+		split( $_REQUEST, $ids, $values );
+
+		return ZNDq_wrapper( ZNDq::$launcher, 1, $ids, $values);
+	}
 }
 ?>
