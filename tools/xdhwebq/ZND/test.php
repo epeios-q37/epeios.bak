@@ -1,7 +1,7 @@
 <?php
 
 /*
-	Copyright (C) 2017 by Claude SIMON (http://zeusw.org/epeios/contact.html).
+	Copyright (C) 2018 by Claude SIMON (http://zeusw.org/epeios/contact.html).
 
 	This file is part of XDHWebQ.
 
