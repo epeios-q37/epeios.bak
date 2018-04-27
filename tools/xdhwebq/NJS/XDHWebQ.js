@@ -245,8 +245,6 @@ if (require.main === module) {
 	// Required as a module
 }
 
-
-
 module.exports.returnArgument = (text) => njsq._call(xdhwebq, 0, text);
 module.exports.serve = serve;
 module.exports.launch = launch;

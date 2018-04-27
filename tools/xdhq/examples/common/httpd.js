@@ -19,7 +19,7 @@
 
 /*
 To just launch a web server to serve requests for
-JAVA, PHP, CLI XDHQ frontends. Useful during development.
+JAVA, PHP, CLI XDHq frontends. Useful during development.
 Can be also used also for node frontends, but this web server
 is automatically launched when the corresponding frontend
 is launched.
