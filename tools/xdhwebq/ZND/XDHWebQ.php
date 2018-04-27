@@ -20,61 +20,71 @@
 
 $zndq_affix = "xdhwebq";
 
-/***** Begin of generic part. ****/
-if (getenv("EPEIOS_SRC") === false) $zndq_path = realpath(dirname(__FILE__)) . '/';
-else {
-	switch (strtoupper(substr(php_uname('s') , 0, 3))) {
-		case "WIN":
-			$zndq_path = "h:\\bin\\";
-		break;
-		case "LIN":
-			$zndq_path = "/home/csimon/bin/";
-		break;
-		case "DAR":
-			$zndq_path = "/Users/csimon/bin/";
-		break;
-		default:
-			echo "Unknown OS !!!\n";
-		break;
-	}
-}
+error_log( __LINE__ );
 
-zndq_init();
+require_once( "h:\\hg\\epeios\\tools\\zndq\\ZNDq.php");
 
-class ZNDq {
-	static public $launcher = 0;
-	static public function wrapperInfo() {
-		return zndq_wrapper_info();
-	}
-	static public function componentInfo() {
-		return zndq_component_info( ZNDq::$launcher );
-	}
-	static protected function register($arguments) {
-		return zndq_register($arguments);
-	}
-}
-
-ZNDq::$launcher = zndq_register(str_replace(' ', '\ ', str_replace('\\', '/', $zndq_path)) . $zndq_affix . "znd");
-
-/**** End of generic part. ****/
+error_log( __LINE__ );
 
 class XDHWebQ extends ZNDq {
+	static private $launcher;
+	static function init() {
+error_log( __LINE__ );
+		self::$launcher = parent::register_( "xdhq" );
+error_log( __LINE__ );
+	}
 	static public function returnArgument($argument) {
 		return ZNDq_wrapper( ZNDq::$launcher, 0, $argument);
 	}
-	private function split( array $keysAndValues, array &$keys, array &$values ) {
+	static private function split( array $keysAndValues, array &$keys, array &$values ) {
 		foreach ($keysAndValues as $key => $value) {
 			$keys[] = $key;
 			$values[] = $value;
 		}
 	}
-	static public void serve() {
-		$ids = [];
-		$values = [];
+	static private function userHead() {
+		$content = false; //file_get_contents( 'head.html' );
 
-		split( $_REQUEST, $ids, $values );
+		if ( $content === false )
+			$content = "";
 
-		return ZNDq_wrapper( ZNDq::$launcher, 1, $ids, $values);
+		return $content;
+	}
+	static private function prolog() {
+		return implode( "\n",
+			array (
+				'<!DOCTYPE html>',
+				'<html>',
+				'	<head>',
+				'		<meta charset="UTF-8" />',
+				'		<meta http-equiv="X-UA-Compatible" content="IE=edge" />',
+				self::userHead(),
+				'		<script src="xdh/xdhtml.js"></script>',
+				'		<script src="xdh/xdhwebq.js"></script>',
+				'		<script>handleQuery("?_action=")</script>',
+				'	</head>',
+				'	<body id="XDHRoot">',
+				'	</body>'
+			)
+		);
+	}
+	static public function serve() {
+		if ( count($_REQUEST) == 0 )
+			return self::prolog();
+		else {
+			$ids = [];
+			$values = [];
+
+			self::split( $_REQUEST, $ids, $values );
+
+			return parent::call_( self::$launcher, 1, $ids, $values);
+		}
 	}
 }
+
+
+	if ( $_SERVER['QUERY_STRING'] == "" )
+	XDHWebQ::init();
+
+
 ?>

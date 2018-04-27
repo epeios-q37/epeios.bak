@@ -1,5 +1,10 @@
 # *Epeios* *CHANGELOG*
 
+## 2018-04-27
+
+- N4ALLW:
+  - skip registration if a registration has been already made,
+
 ## 2018-04-17
 
 - FBLBKD:

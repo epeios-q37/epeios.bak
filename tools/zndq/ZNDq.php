@@ -39,6 +39,7 @@ else {
 	}
 }
 
+if ( $_SERVER['QUERY_STRING'] == "" )
 zndq_init( $zndq_location );
 
 // Some method are suffixed with '_', so we can use the name without final '_' in subclasses.

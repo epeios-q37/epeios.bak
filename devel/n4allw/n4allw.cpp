@@ -48,8 +48,8 @@ namespace {
 		{
 			Functions_ = NULL;
 		}
-		qCVDTOR( rRegistrar_ )
-			void Init( dFunctions_ & Functions )
+		qCVDTOR( rRegistrar_ );
+		void Init( dFunctions_ & Functions )
 		{
 			Functions_ = &Functions;
 		}
@@ -122,12 +122,14 @@ bso::sBool n4allw::rLauncher::Init(
 qRH;
 	rRegistrar_ Registrar;
 qRB;
-	Functions_.Init();
-	Registrar.Init( Functions_ );
+	if ( Functions_.Amount() == 0 ) {
+		Registrar.Init( Functions_ );
 
-	if ( !Register_( ComponentFilename, Normalization, Registrar, Rack, UP, SkipComponentUnloading ) ) {
-		if ( qRP == err::hThrowException )
-			qRFwk();
+		if ( !Register_( ComponentFilename, Normalization, Registrar, Rack, UP, SkipComponentUnloading ) ) {
+			if ( qRP == err::hThrowException )
+				qRFwk();
+		} else
+			Return = true;
 	} else
 		Return = true;
 qRR;

@@ -112,24 +112,24 @@ function userHead() {
 
 function prolog() {
 	return [
-	'<!DOCTYPE html>',
-	'<html>',
-	'	<head>',
-	'		<meta charset="UTF-8" />',
-	'		<meta http-equiv="X-UA-Compatible" content="IE=edge" />',
-	userHead(),
-	'		<script src="xdh/xdhtml.js"></script>',
-	'		<script src="xdh/xdhwebq.js"></script>',
-	'		<script>handleQuery("?_action=")</script>',
-	'	</head>',
-	'	<body id="XDHRoot">',
-	'	</body>'
-].join("\n");
+		'<!DOCTYPE html>',
+		'<html>',
+		'	<head>',
+		'		<meta charset="UTF-8" />',
+		'		<meta http-equiv="X-UA-Compatible" content="IE=edge" />',
+		userHead(),
+		'		<script src="xdh/xdhtml.js"></script>',
+		'		<script src="xdh/xdhwebq.js"></script>',
+		'		<script>handleQuery("?_action=")</script>',
+		'	</head>',
+		'	<body id="XDHRoot">',
+		'	</body>'
+	].join("\n");
 }
 
 function serveQuery(query, res) {
 	var response = "";
-	if ('_action' in query ) {
+	if ('_action' in query) {
 		var keys = new Array();
 		var values = new Array();
 
@@ -237,7 +237,7 @@ function launch(dir, service) {
 if (require.main === module) {
 	// Called directly (through a fork or from CLI).
 	if (process.argv.length >= 3) {
-//		console.log( process.argv);
+		//		console.log( process.argv);
 		launch(process.argv[2], process.argv[3]);
 	} else
 		throw "Not enough arguments !";

@@ -86,6 +86,7 @@ namespace {
 const scli::sInfo &sclznd::SCLZNDRegister( sclznd::sRegistrar &Registrar )
 {
 	Registrar.Register( ReturnArgument_ );
+	Registrar.Register( Handle_ );
 
 	return xdhwebqznd::Info;
 }
