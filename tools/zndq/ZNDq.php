@@ -39,14 +39,13 @@ else {
 	}
 }
 
-if ( $_SERVER['QUERY_STRING'] == "" )
 zndq_init( $zndq_location );
 
 // Some method are suffixed with '_', so we can use the name without final '_' in subclasses.
 class ZNDq {
-	static protected function register_( $extension ) {
+	static protected function register_( string $extension, string $discriminator ) {
 		global $zndq_location;
-		return zndq_register(str_replace(' ', '\\ ', str_replace('\\', '/', $zndq_location)) . $extension . "znd");	
+		return zndq_register(str_replace(' ', '\\ ', str_replace('\\', '/', $zndq_location)) . $extension . "znd", $discriminator );	
 	}
 	static public function wrapperInfo() {
 		return zndq_wrapper_info();

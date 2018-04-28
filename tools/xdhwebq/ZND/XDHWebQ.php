@@ -22,15 +22,18 @@ $zndq_affix = "xdhwebq";
 
 error_log( __LINE__ );
 
-require_once( "h:\\hg\\epeios\\tools\\zndq\\ZNDq.php");
+require( "h:\\hg\\epeios\\tools\\zndq\\ZNDq.php");
 
 error_log( __LINE__ );
 
 class XDHWebQ extends ZNDq {
 	static private $launcher;
 	static function init() {
+	global $zndq_affix;
 error_log( __LINE__ );
-		self::$launcher = parent::register_( "xdhq" );
+		self::$launcher = parent::register_( $zndq_affix, get_class() );
+error_log( __LINE__ );
+		parent::call_( self::$launcher, 1, "h:/bin/xdhqxdh" );
 error_log( __LINE__ );
 	}
 	static public function returnArgument($argument) {
@@ -77,14 +80,12 @@ error_log( __LINE__ );
 
 			self::split( $_REQUEST, $ids, $values );
 
-			return parent::call_( self::$launcher, 1, $ids, $values);
+			error_log( __LINE__ .": " . var_dump( $_REQUEST ) );
+
+			return parent::call_( self::$launcher, 2, $ids, $values);
 		}
 	}
 }
 
-
-	if ( $_SERVER['QUERY_STRING'] == "" )
-	XDHWebQ::init();
-
-
+XDHWebQ::init();
 ?>

@@ -13,12 +13,13 @@
 		<Locale>
 		</Locale>
 		<Arguments>
-			<Argument id="ProcessCommand" Description="ProcessCommandDescription" long="process" Value="Process" Usage=" %ModuleFilenameArgument%"/>
+			<Argument id="ProcessCommand" Description="ProcessCommandDescription" long="process" Value="Process" Usage="%ModuleFilenameArgument%"/>
 			<Argument id="ModuleFilenameArgument" Description="ModuleFilenameArgumentDescription" Path="ModuleFilename" Label="ModuleFilenameArgumentLabel"/>
 			<Layouts>
 				<Layout command="Process">
 					<Link index="0" Target="ModuleFilenameArgument"/>
 				</Layout>
 			</Layouts>
-		</Arguments>	</Configuration>
+		</Arguments>
+	</Configuration>
 </Configurations>

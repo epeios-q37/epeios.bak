@@ -26,6 +26,7 @@
 #include "iof.h"
 #include "xpp.h"
 #include "lcl.h"
+#include "sclargmnt.h"
 #include "sclznd.h"
 
 SCLI_DEF( xdhwebqznd, NAME_LC, "XDHWebQ" );
@@ -56,7 +57,38 @@ namespace {
 	}
 
 	namespace {
+		xdhwebq::rAgent Agent_;
+		xdhwebq::wSessions UnprotectedSessions_;
 		xdhwebq::rSessions Sessions_;
+		bso::sBool Initialized_ = false;
+	}
+
+	SCLZND_F( Init_ )
+	{
+	qRH;
+		str::wString Arguments, Identification, ModuleFilename;
+		qCBUFFERr Buffer;
+	qRB;
+		if ( !Initialized_ ) {
+			Initialized_ = true;
+			Arguments.Init();
+			Caller.Get( Arguments );
+
+			sclargmnt::FillRegistry( Arguments, sclargmnt::faIsArgument, sclargmnt::uaReport );
+
+			Identification.Init( NAME_LC " V" VERSION " Build " __DATE__ " " __TIME__ " - " );
+			Identification.Append( cpe::GetDescription() );
+
+			ModuleFilename.Init();
+			sclmisc::MGetValue( registry::parameter::ModuleFilename, ModuleFilename );
+
+			Agent_.Init( xdhcmn::mMultiUser, ModuleFilename, dlbrry::nExtOnly, Identification.Convert( Buffer ) );
+			UnprotectedSessions_.Init( 0, 0, Agent_ );
+			Sessions_.Init( UnprotectedSessions_ );
+			}
+	qRR;
+	qRT;
+	qRE;
 	}
 
 	SCLZND_F( Handle_ )
@@ -86,7 +118,7 @@ namespace {
 const scli::sInfo &sclznd::SCLZNDRegister( sclznd::sRegistrar &Registrar )
 {
 	Registrar.Register( ReturnArgument_ );
-	Registrar.Register( Handle_ );
+	Registrar.Register( Init_, Handle_ );
 
 	return xdhwebqznd::Info;
 }

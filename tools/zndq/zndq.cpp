@@ -24,6 +24,7 @@
 # include "main.h"
 
 #include "epsmsc.h"
+#include "lstcrt.h"
 #include "sclmisc.h"
 
 #if PHP_MAJOR_VERSION != 7
@@ -34,14 +35,49 @@ and there are important differences with PHP 7. See http://wiki.php.net/phpng-up
 
 SCLI_DEF( zndq, NAME_LC, NAME_MC );
 
+namespace {
+	bso::sBool Initialized_ = false;
+	qROW( DRow_ );
+	lstbch::qLBUNCHw( zend_long, sDRow_ ) Launchers_;
+	lstcrt::qLMCRATEw( str::dString, sDRow_ ) Discriminators_;
+
+	zend_long Search_( const str::dString &Discriminator )
+	{
+		sDRow_ Row = Discriminators_.First();
+
+		while ( (Row != qNIL) && (Discriminators_( Row ) != Discriminator) )
+			Row = Discriminators_.Next( Row );
+
+		if ( Row != qNIL )
+			return Launchers_( Row );
+		else
+			return 0;
+	}
+
+	void Set_(
+		const str::dString &Discriminator,
+		zend_long Launcher )
+	{
+		sDRow_ Row = Discriminators_.New();
+
+		Discriminators_( Row ).Init( Discriminator );
+
+		if ( Row != Launchers_.Add( Launcher ) )
+			qRGnr();
+	}
+}
+
 PHP_FUNCTION( zndq_init )
 {
-	zend_string *String;
+	if ( !Initialized_ ) {
+		Initialized_ = true;
+		zend_string *String;
 
-	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "S", &String ) != SUCCESS )
-		main::ThrowGenericError();
+		if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "S", &String ) != SUCCESS )
+			main::ThrowGenericError();
 
-	main::Init( String->val, String->len );
+		main::Init( String->val, String->len );
+	}
 }
 
 PHP_FUNCTION( zndq_wrapper_info )
@@ -61,13 +97,28 @@ PHP_FUNCTION( zndq_component_info )
 
 PHP_FUNCTION( zndq_register )
 {
-	zend_string *String;
-
-	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "S", &String ) != SUCCESS )
+	zend_long Launcher = 0;
+qRH;
+	zend_string *String = NULL, *RawDiscriminator = NULL;
+	str::wString Discriminator;
+qRB;
+	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "SS", &String, &RawDiscriminator ) != SUCCESS )
 		main::ThrowGenericError();
 
-	// 'String->val' contains a list of arguments, as defined in the configuration file for the 'Launch' command.
-	RETURN_LONG( main::Register( String->val, String->len ) )
+	Discriminator.Init();
+	Discriminator.Append( RawDiscriminator->val, RawDiscriminator->len );
+
+	// A PHP script may be launched on each http request, but the registering must only occurring the first time.
+	// Also, 'zndq' could be used for different scripts at the same time, hence the discriminator.
+	if ( ( Launcher = Search_( Discriminator ) ) == 0 )	{
+		// 'String->val' contains a list of arguments, as defined in the configuration file for the 'Launch' command.
+		Launcher = main::Register( String->val, String->len );
+		Set_( Discriminator, Launcher );
+	}
+qRR;
+qRT;
+qRE;
+	RETURN_LONG( Launcher );
 }
 
 PHP_FUNCTION( zndq_call )
@@ -121,3 +172,9 @@ zend_module_entry zndq_module_entry = {
 };
 
 ZEND_GET_MODULE( zndq )
+
+qGCTOR( zndq )
+{
+	Launchers_.Init();
+	Discriminators_.Init();
+}

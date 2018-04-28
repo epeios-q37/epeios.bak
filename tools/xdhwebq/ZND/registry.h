@@ -20,17 +20,17 @@
 #ifndef REGISTRY_INC_
 # define REGISTRY_INC_
 
-# include "sclrgstry.h"
+# include "xdwrgstry.h"
 
 namespace registry {
-	using namespace sclrgstry;
+	using namespace xdwrgstry;
 
 	namespace parameter {
-		using namespace sclrgstry::parameter;
+		using namespace xdwrgstry::parameter;
 	}
 
 	namespace definition {
-		using namespace sclrgstry::definition;
+		using namespace xdwrgstry::definition;
 	}
 }
 

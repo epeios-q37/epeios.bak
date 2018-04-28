@@ -1,5 +1,11 @@
 # *Epeios* *CHANGELOG*
 
+## ## 2018-04-28
+- N4ALLW:
+  - reverting previous modification,
+- SCLN4A:
+  - reinforcing error handling,
+
 ## 2018-04-27
 
 - N4ALLW:

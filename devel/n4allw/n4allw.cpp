@@ -122,14 +122,13 @@ bso::sBool n4allw::rLauncher::Init(
 qRH;
 	rRegistrar_ Registrar;
 qRB;
-	if ( Functions_.Amount() == 0 ) {
-		Registrar.Init( Functions_ );
+	Functions_.Init();
 
-		if ( !Register_( ComponentFilename, Normalization, Registrar, Rack, UP, SkipComponentUnloading ) ) {
-			if ( qRP == err::hThrowException )
-				qRFwk();
-		} else
-			Return = true;
+	Registrar.Init( Functions_ );
+
+	if ( !Register_( ComponentFilename, Normalization, Registrar, Rack, UP, SkipComponentUnloading ) ) {
+		if ( qRP == err::hThrowException )
+			qRFwk();
 	} else
 		Return = true;
 qRR;
