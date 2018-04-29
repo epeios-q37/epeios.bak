@@ -373,6 +373,9 @@ qRE
 
 			if ( Created ) {
 				UP_ = C_().Get();
+
+				if ( UP_ == NULL )	// Not able to connect to server.
+					qRFwk();
 			}
 
 			Flow_.Init( Driver_() );
@@ -427,7 +430,6 @@ qRE
 			fdr::size__ Amount = 0;
 		qRH
 		qRB
-
 			if ( Core_ != NULL ) {
 				Prepare_();
 

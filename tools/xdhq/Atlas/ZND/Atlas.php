@@ -72,6 +72,7 @@ set_error_handler(function ($errno, $errstr) {
 }, E_WARNING);
 
 class Atlas extends XDHq {
+	const NONE = 0;
 	const DESKTOP = 1;
 	const WEB = 2;
 	const DESKTOP_AND_WEB = 3;
@@ -112,6 +113,10 @@ class Atlas extends XDHq {
 				case "wd":
 					$type = Atlas::DESKTOP_AND_WEB;
 					break;
+				case "n":
+				case "none":
+					$type = Atlas::NONE;
+					break;
 				default:
 					die( "Unknown type !");
 					break;
@@ -122,6 +127,8 @@ class Atlas extends XDHq {
 		parent::launch( $newSessionAction);
 
 		switch( $type ) {
+		case Atlas::NONE:
+			break;
 		case Atlas::DESKTOP:
 			Atlas::launchDesktop( $dir );
 			break;

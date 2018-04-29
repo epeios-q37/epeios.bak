@@ -373,6 +373,9 @@ qRE
 
 			if ( Created ) {
 				UP_ = C_().Get();
+
+				if ( UP_ == NULL )	// Not able to connect to server.
+					qRFwk();
 			}
 
 			Flow_.Init( Driver_() );

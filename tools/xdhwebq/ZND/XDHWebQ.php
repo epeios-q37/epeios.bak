@@ -46,7 +46,7 @@ error_log( __LINE__ );
 		}
 	}
 	static private function userHead() {
-		$content = false; //file_get_contents( 'head.html' );
+		$content = file_get_contents( 'head.html' );
 
 		if ( $content === false )
 			$content = "";
@@ -59,6 +59,7 @@ error_log( __LINE__ );
 				'<!DOCTYPE html>',
 				'<html>',
 				'	<head>',
+				'		<meta name="generator" content="XDHWebQZND"/>',
 				'		<meta charset="UTF-8" />',
 				'		<meta http-equiv="X-UA-Compatible" content="IE=edge" />',
 				self::userHead(),
@@ -67,7 +68,8 @@ error_log( __LINE__ );
 				'		<script>handleQuery("?_action=")</script>',
 				'	</head>',
 				'	<body id="XDHRoot">',
-				'	</body>'
+				'	</body>',
+				'</html>',
 			)
 		);
 	}
@@ -79,8 +81,6 @@ error_log( __LINE__ );
 			$values = [];
 
 			self::split( $_REQUEST, $ids, $values );
-
-			error_log( __LINE__ .": " . var_dump( $_REQUEST ) );
 
 			return parent::call_( self::$launcher, 2, $ids, $values);
 		}

@@ -1,6 +1,12 @@
 # *Epeios* *CHANGELOG*
 
-## ## 2018-04-28
+## 2018-04-29
+
+- CSDMXC:
+  - when failing to connect to server, throws now a specific error,
+
+## 2018-04-28
+
 - N4ALLW:
   - reverting previous modification,
 - SCLN4A:

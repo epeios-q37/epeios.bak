@@ -48,7 +48,7 @@ getZNDq();
 class XDHqWrapper extends ZNDq {
 	static private $launcher;
 	static function init() {
-		self::$launcher = parent::register_( "xdhq" );
+		self::$launcher = parent::register_( "xdhq", get_class() );
 	}
 	static public function componentInfo() {
 		return parent::componentInfo_( self::$launcher );

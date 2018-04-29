@@ -107,7 +107,7 @@ namespace {
 
 	namespace {
 		struct rRack_
-			: public sclnjs::cAsync
+		: public sclnjs::cAsync
 		{
 		protected:
 			virtual void UVQWork( void ) override
