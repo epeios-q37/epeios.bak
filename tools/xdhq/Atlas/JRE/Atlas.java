@@ -88,7 +88,7 @@ public abstract class Atlas implements Runnable {
 	}
 
 	public enum Type {
-		DEFAULT, DESKTOP, WEB, DESKTOP_AND_WEB
+		NONE, DESKTOP, WEB, DESKTOP_AND_WEB, DEFAULT
 	};
 
 	private static final Type defaultType = Type.DESKTOP;
@@ -100,7 +100,9 @@ public abstract class Atlas implements Runnable {
 			type = defaultType;
 
 			if (arg.length() > 0) {
-				if ( arg.equals( "d" ) || arg.equals( "desktop" ) ) {
+				if ( arg.equals( "n" ) || arg.equals( "none" ) ) {
+					type = Type.NONE;
+				} else if ( arg.equals( "d" ) || arg.equals( "desktop" ) ) {
 					type = Type.DESKTOP;
 				} else if ( arg.equals( "w") || arg.equals( "web" ) ) {
 					type = Type.WEB;
@@ -114,6 +116,8 @@ public abstract class Atlas implements Runnable {
 		}
 
 		switch (type) {
+		case NONE:
+			break;
 		case DESKTOP:
 			launchDesktop(dir);
 			break;

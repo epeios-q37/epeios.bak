@@ -35,7 +35,7 @@ namespace {
 	public:
 		void Init( void )
 		{
-			tree::rRack::Init( xdhqjre::Info.Target() );
+			tree::rRack::Init( NAME_MC );
 		}
 	};
 }

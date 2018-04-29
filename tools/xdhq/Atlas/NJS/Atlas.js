@@ -90,6 +90,7 @@ function launchDesktop(dir) {
 }
 
 const types = {
+	NONE: 0,
 	DESKTOP: 1,
 	WEB: 2,
 	DESKTOP_AND_WEB: 3
@@ -105,6 +106,10 @@ function launch(callback, action, type) {
 	if (type === undefined) {
 		if (process.argv.length > 2) {
 			switch (process.argv[2]) {
+				case "n":
+				case "none":
+					type = types.NONE;
+					break;
 				case "d":
 				case "desktop":
 					type = types.DESKTOP;
@@ -128,6 +133,8 @@ function launch(callback, action, type) {
 	xdhq.launch(callback, action);
 
 	switch (type) {
+		case types.NONE:
+			break;
 		case types.DESKTOP:
 			launchDesktop(dir);
 			break;
