@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2016 by Claude SIMON (http://zeusw.org/epeios/contact.html).
+	Copyright (C) 2017 by Claude SIMON (http://zeusw.org/epeios/contact.html).
 
 	This file is part of 'MPPq'.
 
@@ -20,9 +20,7 @@
 #ifndef MPPQ_INC_
 # define MPPQ_INC_
 
-# define BEGIN
-// Don't remove what between above 'BEGIN' and below 'END'.
-/* PLACEHOLDER */
+# include "scli.h"
 
 # define NAME_MC			"MPPq"
 # define NAME_UC			"MPPQ"
@@ -32,9 +30,9 @@
 # define AUTHOR_CONTACT		"http://q37.info/contact/"
 # define OWNER_NAME			"Claude SIMON"
 # define OWNER_CONTACT		"http://q37.info/contact/"
-# define COPYRIGHT			COPYRIGHT_YEARS " " OWNER_NAME " (" OWNER_CONTACT ")"	
+# define COPYRIGHT			COPYRIGHT_YEARS " " OWNER_NAME " (" OWNER_CONTACT ")"
 
-# define END
+SCLI_DEC( mppq )
 
 #endif
 

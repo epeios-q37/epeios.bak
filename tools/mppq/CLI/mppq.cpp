@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2018 by Claude SIMON (http://zeusw.org/epeios/contact.html).
+	Copyright (C) 2017 by Claude SIMON (http://zeusw.org/epeios/contact.html).
 
 	This file is part of 'MPPq'.
 
@@ -36,6 +36,8 @@ using cio::CErr;
 using cio::COut;
 using cio::CIn;
 
+SCLI_DEF( mppq, NAME_LC, NAME_MC );
+
 namespace {
 	typedef str::dStrings dSlide;
 	qW( Slide );
@@ -45,6 +47,12 @@ namespace {
 		COut << NAME_MC " V" VERSION << " (" WEBSITE_URL ")" << txf::nl;
 		COut << "Copyright (C) " COPYRIGHT << txf::nl;
 		COut << txf::pad << "Build : " __DATE__ " " __TIME__ << " (" << cpe::GetDescription() << ')' << txf::nl;
+	}
+
+	void PrintSlideSeparator_( txf::sWFlow &Flow )
+	{
+		// 'Marp' slide separator.
+		Flow << txf::nl << "---" << txf::nl;
 	}
 
 	void Display_(
@@ -63,6 +71,8 @@ namespace {
 				Row = Slide.Next( Row );
 			}
 		}
+
+		PrintSlideSeparator_( Flow );
 	}
 
 	bso::sBool IsListItem_( const str::dString &Line )
@@ -96,6 +106,8 @@ namespace {
 					DigitFound = true;
 				else if ( C == '*' )
 					SpaceAwaited = true;
+				else if ( C == '-' )
+					SpaceAwaited = true;
 				else if ( C != ' ' )
 					Continue = false;
 			}
@@ -106,21 +118,49 @@ namespace {
 		return Is;
 	}
 
+	bso::sBool IsComment_( const str::dString &Line )
+	{
+		sdr::sRow Row = Line.First();
+
+		while ( (Row != qNIL) && (Line( Row ) == ' ') )
+			Row = Line.Next( Row );
+
+		if ( Row == qNIL )
+			return false;
+
+		return Line.Search( str::wString( "<!--" ) ) == Row;
+	}
+
+
+	sdr::sRow NextSkippingComments_(
+		const str::dStrings &Slide,
+		sdr::sRow Row )
+	{
+		do {
+			Row = Slide.Next( Row );
+		} while ( (Row != qNIL) && IsComment_( Slide( Row ) ) );
+
+		return Row;
+	}
+
 	void Handle_(
 		const str::dStrings &Slide,
 		txf::sWFlow &Flow )
 	{
 		sdr::sRow Row = Slide.First();
+		bso::sBool ListItemDetected = false;
 
 		while ( Row != qNIL ) {
 			if (IsListItem_(Slide(Row))) {
 				Display_(Row, Slide, Flow);
 
-				// 'Marp' slide separator.
-				Flow << "---" << txf::nl;
+				ListItemDetected = true;
+			} else if ( ListItemDetected ) {
+				ListItemDetected = false;
+				Display_( Row, Slide, Flow );
 			}
 
-			Row = Slide.Next( Row );
+			Row = NextSkippingComments_( Slide, Row );
 		}
 
 		Display_( qNIL, Slide, Flow );
@@ -147,12 +187,13 @@ namespace {
 				Line.Init();
 				Flow.GetLine( Line );
 
-				Slide.Append( Line );
+				if ( Line.Amount() != 0 ) {
+					if ( Line == "---" ) {
+						Handle_( Slide, WFlow );
 
-				if ( Line == "---" ) {
-					Handle_( Slide, WFlow );
-
-					Slide.Init();
+						Slide.Init();
+					} else 
+						Slide.Append( Line );
 				}
 			}
 		}
@@ -224,6 +265,11 @@ namespace {
 	}
 }
 
+const scli::sInfo &scltool::SCLTOOLInfo( void )
+{
+	return mppq::Info;
+}
+
 #define C( name )\
 	else if ( Command == #name )\
 		name##_()
@@ -249,7 +295,3 @@ qRT
 qRE
 	return ExitValue;
 }
-
-const char *sclmisc::SCLMISCTargetName = NAME_LC;
-const char *sclmisc::SCLMISCProductName = NAME_MC;
-
