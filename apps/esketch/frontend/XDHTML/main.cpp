@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2016 Claude SIMON (http://zeusw.org/epeios/contact.html).
+	Copyright (C) 2018 Claude SIMON (http://zeusw.org/epeios/contact.html).
 
 	This file is part of 'eSketch' software.
 

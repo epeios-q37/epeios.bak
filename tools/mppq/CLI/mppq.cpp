@@ -58,7 +58,8 @@ namespace {
 	void Display_(
 		sdr::sRow Last,
 		const dSlide &Slide,
-		txf::sWFlow &Flow )
+		txf::sWFlow &Flow,
+		bso::sBool DisplaySeparator )
 	{
 		sdr::sRow Row = Slide.First();
 
@@ -72,7 +73,8 @@ namespace {
 			}
 		}
 
-		PrintSlideSeparator_( Flow );
+		if ( DisplaySeparator )
+			PrintSlideSeparator_( Flow );
 	}
 
 	bso::sBool IsListItem_( const str::dString &Line )
@@ -152,18 +154,18 @@ namespace {
 
 		while ( Row != qNIL ) {
 			if (IsListItem_(Slide(Row))) {
-				Display_(Row, Slide, Flow);
+				Display_(Row, Slide, Flow, true );
 
 				ListItemDetected = true;
 			} else if ( ListItemDetected ) {
 				ListItemDetected = false;
-				Display_( Row, Slide, Flow );
+				Display_( Row, Slide, Flow, true );
 			}
 
 			Row = NextSkippingComments_( Slide, Row );
 		}
 
-		Display_( qNIL, Slide, Flow );
+		Display_( qNIL, Slide, Flow, false );
 	}
 
 	void Process_(

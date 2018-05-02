@@ -1,5 +1,9 @@
 # *MPPq* *CHANGELOG*
 
+## 2018-05-02
+
+- skipping tailing slide separator, to avoid empty slide,
+
 ## 2018-05-01
 
 - adaptation to changes in underlying libraries,

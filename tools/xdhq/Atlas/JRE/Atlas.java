@@ -145,4 +145,8 @@ public abstract class Atlas implements Runnable {
 	public static void launch(String newSessionAction, Type type) {
 		launch(newSessionAction, ".", type, "");
 	}
+
+	public static void launch(String newSessionAction) {
+		launch(newSessionAction, ".", Type.DEFAULT, "");
+	}
 };
