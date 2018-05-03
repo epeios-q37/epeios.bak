@@ -31,24 +31,18 @@
 # include "xdhdws.h"
 
 /***** Macros dealing with actions ****/
-
-namespace sclx {
-	template <typename session> class sAction
-	: public sclxdhtml::cAction<session>
-	{
-	protected:
-		virtual void SCLXLaunch(
-			session &Session,
-			const char *Id ) override;
-	public:
-		static const char *Name;
-	};
-}
-
 // Declaration.
 # define BASE_ACD( name )\
-	typedef sclx::sAction<core::rSession> s##name;\
-	extern s##name name
+	extern class s##name\
+	: public sclxdhtml::cAction<core::rSession>\
+	{\
+	protected:\
+		virtual void SCLXLaunch(\
+			core::rSession &Session,\
+			const char *Id ) override;\
+	public:\
+		static const char *Name;\
+	} name
 
 // Registering.
 # define BASE_ACR( name )\
