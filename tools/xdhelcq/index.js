@@ -24,10 +24,11 @@ const fs = require('fs');
 
 const args = process.argv;
 
+
 // console.log( args );
 
 function help() {
-  process.stdout.write(". -m=h:/bin/xdhqxdh/ <dir>");
+  process.stdout.write(". -m=h:/bin/xdhqxdh <dir>");
   process.exit(-1);
 }
 
@@ -68,7 +69,9 @@ function createWindow() {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
+console.log( "Before !");
 app.on('ready', createWindow)
+console.log( "After !");
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {

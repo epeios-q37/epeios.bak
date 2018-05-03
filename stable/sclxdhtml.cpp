@@ -374,7 +374,14 @@ qRH
 	str::wString XSL;
 qRB
 	XSL.Init();
+# if false
+	// The _content_ of the XSL file is transmitted (old behavior).
 	sclxdhtml::LoadXSLAndTranslateTags( rgstry::tentry___( Filename, Target ), Registry, XSL, Marker );
+# else
+	// The _name_ of the XSL file is transmitted (new bahavior).
+	XSL.Append( Target );
+	XSL.Append( ".xsl" );
+# endif
 
 	Core_.SetLayout( Id, XML, XSL );
 qRR

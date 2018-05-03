@@ -1,5 +1,10 @@
 # *Epeios* *CHANGELOG*
 
+## 2018-05-03
+
+- SCLXDHTML
+  - regarding the *XSL* files, switching from old behavior (transmitting file's content) to new one (transmitting file's name),
+
 ## 2018-04-29
 
 - CSDMXC:

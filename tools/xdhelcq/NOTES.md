@@ -8,9 +8,11 @@ The module has to be launched as value of the `--module|-m` flag.
 
 The module must be given <u>with</u> path, or the locale/configuration files will not be found.
 
+The second argument (third with the `-m|--module` option) must be `index.js`. If not, it's `XDHElcQ.js` which will be used, as it is the one defined as the`main` entry in the `package.json` file, for `require('xdehelcq')` to be working properly.
+
 As last argument, the subdirectory which contains all the file red directly by *Electron*.
 
-Example to launch the *Atlas* frontend for *TodoMVC* : `nodes_module/.bin/electron . -m=h:/bin/xdhqxdh TodoMVC`.
+Example to launch the *Atlas* frontend for *TodoMVC* : `nodes_module/.bin/electron index.js -m=h:/bin/xdhqxdh TodoMVC`.
 
 ## Installation
 

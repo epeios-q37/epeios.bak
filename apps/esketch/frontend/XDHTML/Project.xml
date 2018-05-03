@@ -86,7 +86,7 @@
 					<File>MainLocale.xml</File>
 				</Files>
 				<Files Group="Prolog">
-					<File>PrologLayout.xsl</File>
+					<File>Prolog.xsl</File>
 					<File>PrologCasting.xsl</File>
 				</Files>
 			</Files>
