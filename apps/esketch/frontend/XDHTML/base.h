@@ -32,17 +32,7 @@
 
 /***** Macros dealing with actions ****/
 // Declaration.
-# define BASE_ACD( name )\
-	extern class s##name\
-	: public sclxdhtml::cAction<core::rSession>\
-	{\
-	protected:\
-		virtual void SCLXLaunch(\
-			core::rSession &Session,\
-			const char *Id ) override;\
-	public:\
-		static const char *Name;\
-	} name
+# define BASE_ACD( name ) SCLX_ACD( core::rSession, name )
 
 // Registering.
 # define BASE_ACR( name )\

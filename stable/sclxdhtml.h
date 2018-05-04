@@ -74,6 +74,19 @@ namespace sclxdhtml {
 		}
 	};
 
+# define SCLX_ACD( session, name )\
+	extern class s##name\
+	: public sclxdhtml::cAction<session>\
+	{\
+	protected:\
+		virtual void SCLXLaunch(\
+			session &Session,\
+			const char *Id ) override;\
+	public:\
+		static const char *Name;\
+	} name
+
+
 	E_ROW( crow__ );	// callback row;
 
 	template <typename session> E_TTCLONE_( bch::E_BUNCHt_( cAction<session> *, crow__ ), action_callbacks_ );
