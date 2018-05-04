@@ -13,7 +13,7 @@ The *Atlas* toolkit is a library for web and desktop UI. This is the *PHP* bindi
 <?php
 require( "Atlas.php");
 
-Atlas::launch( "Connect", null );
+Atlas::launch( "Connect" );
 
 $dom = new AtlasDOM();
 

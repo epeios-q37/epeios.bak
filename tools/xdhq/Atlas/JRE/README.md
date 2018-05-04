@@ -29,7 +29,7 @@ class Hello extends Atlas {
   }
 
   public static void main(String[] args) throws Exception {
-    launch("Connect", info.q37.atlas.Atlas.Type.DEFAULT);
+    launch("Connect");
 
     for (;;) new Hello();
   }
