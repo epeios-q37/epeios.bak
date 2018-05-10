@@ -54,17 +54,19 @@ namespace {
 
 		OnNotConnectedAllowedActions.Add(
 			xdhcmn::CloseActionLabel,
-			global::About, global::Test,
+			global::OnNewSession, global::About, global::Test,
 			prolog::DisplayProjectFilename, prolog::LoadProject, prolog::SwitchProjectType,	// All 'prolog'-related actions are allowed.
 			login::Dismiss, login::DisplayEmbeddedBackendFilename, login::Connect, login::SwitchBackendType,	// All 'login'-related actions too.
 			main::HideTestButton, main::ShowTestButton );
 	};
 }
 
+BASE_ACD( OnNewSession_ );
+
 void core::rCore::Init( xdhcmn::eMode Mode )
 {
 	ActionHelperCallback_.Init();
-	sclxdhtml::rCore<rSession>::Init( Mode, ActionHelperCallback_ );
+	sclxdhtml::rCore<rSession>::Init( Mode, global::OnNewSession, ActionHelperCallback_ );
 	Register_();
 }
 

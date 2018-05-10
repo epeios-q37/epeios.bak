@@ -63,14 +63,16 @@ namespace sclxdhtml {
 	protected:
 		virtual void SCLXLaunch(
 			session &Session,
-			const char *Id ) = 0;
+			const char *Id,
+			xdhcmn::eMode Mode ) = 0;
 	public:
 		qCALLBACK( Action );
 		void Launch(
 			session &Session,
-			const char *Id )
+			const char *Id,
+			xdhcmn::eMode Mode )
 		{
-			return SCLXLaunch( Session, Id );
+			return SCLXLaunch( Session, Id, Mode );
 		}
 	};
 
@@ -81,11 +83,19 @@ namespace sclxdhtml {
 	protected:\
 		virtual void SCLXLaunch(\
 			session &Session,\
-			const char *Id ) override;\
+			const char *Id,\
+			xdhcmn::eMode Mode ) override;\
 	public:\
 		static const char *Name;\
 	} name
 
+# define SCLX_AC( session, owner, name )\
+	owner::s##name owner::name;\
+	const char *owner::s##name::Name = #name;\
+	void owner::s##name::SCLXLaunch(\
+		session &Session,\
+		const char *Id,\
+		xdhcmn::eMode Mode )
 
 	E_ROW( crow__ );	// callback row;
 
@@ -144,14 +154,15 @@ namespace sclxdhtml {
 		void Launch(
 			session &Session,
 			const char *Id,
-			const char *Action )
+			const char *Action,
+			xdhcmn::eMode Mode )
 		{
 			cAction<session> *Callback = _Get( str::string( Action ) );
 
 			if ( Callback == NULL )
 				qRFwk();	// An event has no associated action. Check the'.xsl' file.
 
-			return Callback->Launch( Session, Id );
+			return Callback->Launch( Session, Id, Mode );
 		}
 	};
 
@@ -699,8 +710,9 @@ namespace sclxdhtml {
 	template <typename session> class rCore {
 	private:
 		action_handler<session> _Handler;
-		xdhcmn::eMode _Mode;
+		xdhcmn::eMode Mode_;
 		Q37_MRMDF( cActionHelper<session>, _AH, _ActionHelperCallback );
+		qPMV( const char, ONS_, OnNewSession_ );	// Name of the action to call on new session.
 		bso::bool__ _OnBeforeAction(
 			session &Session,
 			const char *Id,
@@ -720,16 +732,19 @@ namespace sclxdhtml {
 		void reset( bso::bool__ P = true )
 		{
 			_Handler.reset( P );
-			_Mode = xdhcmn::m_Undefined;
+			Mode_ = xdhcmn::m_Undefined;
 			_ActionHelperCallback = NULL;
+			OnNewSession_ = NULL;
 		}
 		E_CVDTOR( rCore )
-			void Init(
-				xdhcmn::eMode Mode,
-				cActionHelper<session> &ActionHelperCallback )
+		template <typename action> void Init(
+			xdhcmn::eMode Mode,
+			const action &OnNewSession,
+			cActionHelper<session> &ActionHelperCallback )
 		{
+			OnNewSession_ = OnNewSession.Name;
 			_ActionHelperCallback = &ActionHelperCallback;
-			_Mode = Mode;
+			Mode_ = Mode;
 			_Handler.Init();
 		}
 		void AddActionCallback(
@@ -744,28 +759,26 @@ namespace sclxdhtml {
 			const char *Action )
 		{
 			bso::bool__ Success = true;
-			qRH
-				TOL_CBUFFER___ Buffer;
-			qRB
-				if ( !strcmp( Action, xdhcmn::RefreshActionLabel ) ) {
-					_OnRefresh( Session );
-				} else if ( _OnBeforeAction( Session, Id, Action ) ) {
-					if ( !strcmp( Action, xdhcmn::CloseActionLabel ) )
-						Success = _OnClose( Session );	// Dans ce cas, si 'Success' est  'false', la fermeture de l'application est suspendue.
-					else
-# if 0
-						Success = _Handler.Launch( Session, Id, Action );
-# else
-						_Handler.Launch( Session, Id, Action );
-# endif
-				}
-				qRR
-					HandleError( Session, Session.Language() );
-				qRT
-					qRE
-					return Success;
+		qRH;
+			TOL_CBUFFER___ Buffer;
+		qRB;
+			if ( Action == NULL )
+				Action = ONS_();
+
+			 if ( !strcmp( Action, xdhcmn::RefreshActionLabel ) ) {
+				_OnRefresh( Session );
+			} else if ( _OnBeforeAction( Session, Id, Action ) ) {
+				if ( !strcmp( Action, xdhcmn::CloseActionLabel ) )
+					Success = _OnClose( Session );	// Dans ce cas, si 'Success' est  'false', la fermeture de l'application est suspendue.
+				else
+					_Handler.Launch( Session, Id, Action, Mode_ );
+			}
+		qRR;
+			HandleError( Session, Session.Language() );
+		qRT;
+		qRE;
+			return Success;
 		}
-		E_RODISCLOSE__( xdhcmn::eMode, Mode );
 	};
 
 

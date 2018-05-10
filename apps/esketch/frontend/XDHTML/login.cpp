@@ -70,7 +70,7 @@ qRH
 	fblfrd::incompatibility_informations IncompatibilityInformations;
 	sclfrntnd::rFeatures Features;
 qRB
-	if ( core::Core.Mode() == xdhcmn::mMonoUser ) {
+	if ( Mode == xdhcmn::mMonoUser ) {
 		Features.Init();
 		sclxdhtml::login::GetBackendFeatures( Session, Features );
 		core::Kernel().Init( Features, plgn::EmptyAbstracts );

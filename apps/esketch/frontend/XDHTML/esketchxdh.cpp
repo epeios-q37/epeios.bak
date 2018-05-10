@@ -65,35 +65,6 @@ xdhcmn::cSession *sclxdhtml::SCLXDHTMLRetrieveCallback(
 
 	Session->Init( core::Kernel(), Language, ProxyCallback, core::Core, esketchxdh::Info );
 
-	switch ( Mode ) {
-	case xdhcmn::mMonoUser:
-		switch ( sclfrntnd::HandleProject( esketchxdh::Info ) ) {
-		case sclfrntnd::phNone:
-			::prolog::Display( *Session );
-			break;
-		case sclfrntnd::phLoad:
-			::login::Display( *Session );
-			break;
-		case sclfrntnd::phLogin:
-			Session->SetBackendVisibility( sclxdhtml::bvHide );
-			::login::Display( *Session );
-			break;
-		case sclfrntnd::phRun:
-			::main::Display( *Session );
-			break;
-		default:
-			qRGnr();
-			break;
-		}
-		break;
-	case xdhcmn::mMultiUser:
-//		login::SetLayout( *Session );
-		break;
-	default:
-		qRGnr();
-		break;
-	}
-
 	return Session;
 }
 

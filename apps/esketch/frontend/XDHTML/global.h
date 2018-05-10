@@ -23,11 +23,13 @@
 # include "base.h"
 
 namespace global {
+	BASE_ACD( OnNewSession );
 	BASE_ACD( About );
 	BASE_ACD( Test );
 
 	inline void Register( void )
 	{
+		BASE_ACR( OnNewSession );
 		BASE_ACR( About );
 		BASE_ACR( Test );
 	}

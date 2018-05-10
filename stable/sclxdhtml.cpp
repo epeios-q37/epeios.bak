@@ -189,16 +189,21 @@ namespace {
 
 	inline void SetXSL_( str::string_ &XSL )
 	{
-		XSL.Append("<?xml version=\"1.0\" encoding=\"utf-8\"?>\
-			<xsl:stylesheet version=\"1.0\"\
-			                xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\">\
-				<xsl:output method=\"html\"\
-					        encoding=\"utf-8\"/>\
-				<xsl:template match=\"/\">\
-					<xsl:value-of select=\"Content\"/>\
-				</xsl:template>\
-			</xsl:stylesheet>\
-		");
+		XSL.Append("data:text/xml;charset=utf-8,");
+
+		/*
+		<?xml version="1.0" encoding="utf-8"?>
+		<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+			<xsl:output method="html" encoding="utf-8"/>
+			<xsl:template match="/">
+				<xsl:value-of select="Content"/>
+			</xsl:template>
+		</xsl:stylesheet>
+		*/
+
+		// Above URI encoded.
+		XSL.Append( "%3C%3Fxml%20version%3D%221.0%22%20encoding%3D%22utf-8%22%3F%3E%0A%3Cxsl%3Astylesheet%20version%3D%221.0%22%20xmlns%3Axsl%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2FXSL%2FTransform%22%3E%0A%09%3Cxsl%3Aoutput%20method%3D%22html%22%20encoding%3D%22utf-8%22%2F%3E%0A%09%3Cxsl%3Atemplate%20match%3D%22%2F%22%3E%0A%09%09%3Cxsl%3Avalue-of%20select%3D%22Content%22%2F%3E%0A%09%3C%2Fxsl%3Atemplate%3E%0A%3C%2Fxsl%3Astylesheet%3E" );
+
 	}
 
 	inline void SetXMLAndXSL_(

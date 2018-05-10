@@ -20,11 +20,48 @@
 #include "global.h"
 
 #include "core.h"
+#include "login.h"
+#include "main.h"
+#include "prolog.h"
 #include "registry.h"
 
 qCDEF(char *, XSLAffix_, "Global" );
 
 #define AC( name ) BASE_AC( global, name )
+
+AC( OnNewSession )
+{
+	switch ( Mode ) {
+	case xdhcmn::mMonoUser:
+		switch ( sclfrntnd::HandleProject( esketchxdh::Info ) ) {
+		case sclfrntnd::phNone:
+			::prolog::Display( Session );
+			break;
+		case sclfrntnd::phLoad:
+			::login::Display( Session );
+			break;
+		case sclfrntnd::phLogin:
+			Session.SetBackendVisibility( sclxdhtml::bvHide );
+			::login::Display( Session );
+			break;
+		case sclfrntnd::phRun:
+			::main::Display( Session );
+			break;
+		default:
+			qRGnr();
+			break;
+		}
+		break;
+	case xdhcmn::mMultiUser:
+		//		login::SetLayout( *Session );
+		break;
+	default:
+		qRGnr();
+		break;
+	}
+
+	Session.AlertU( "coucoiu" );
+}
 
 AC( About )
 {

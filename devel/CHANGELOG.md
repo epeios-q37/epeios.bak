@@ -1,5 +1,10 @@
 # *Epeios* *CHANGELOG*
 
+## 2018-05-10
+
+- SCLXDHTML:
+  - the callbacks now receive a *Mode* parameters,
+
 ## 2018-05-03
 
 - SCLXDHTML

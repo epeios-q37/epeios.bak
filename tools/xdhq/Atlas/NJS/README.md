@@ -5,7 +5,7 @@ The *Atlas* toolkit is a library for web and desktop UI. This is the binding of 
 
 ## *Hello World!*
 
-![Little demonstration](http://q37.info/download/Hello.gif "A basic example")
+[![Little demonstration](http://q37.info/download/Hello.gif "A basic example")](http://q37.info/s/atk/Hello/)
 
 ### *JavaScript* source code
 
@@ -24,7 +24,7 @@ atlas.launch(() => new atlas.DOM(), "Connect");
 
 ### *XSL* file
 
-This is the content of the `Main.xsl` file which name is given given as parameter to above `dom.setLayout(...)` instruction. 
+This is the content of the `Main.xsl` file which name is given as parameter to above `dom.setLayout(...)` instruction. 
 
 ```XML
 <?xml version="1.0" encoding="UTF-8"?>
@@ -48,4 +48,8 @@ This is the content of the `Main.xsl` file which name is given given as paramete
 
 ## What's next ?
 
-For more information: <http://atlastk.org/>
+Here's how the *Atlas* toolkit version of the [*TodoMVC*](http://todomvc.com/) application looks like: 
+
+[![TodoMVC](http://q37.info/download/TodoMVC.gif "The TodoMVC application made with the Atlas toolkit")](http://q37.info/s/atk/TodoMVC)
+
+The source code of this application and more information about the *Atlas* toolkit can be found at <http://atlastk.org/>

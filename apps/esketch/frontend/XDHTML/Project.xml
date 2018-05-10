@@ -65,9 +65,10 @@
 	</SourceDirs>
 	<Files>
 		<Files Group="XSL" Path="XSL/">
+			<File>Head.html</File>
 			<Files Group="Frames">
 				<Files Group="Frame">
-					<File>FrameLayout.xsl</File>
+					<File>Frame.xsl</File>
 					<File>FrameCasting.xsl</File>
 					<File>FrameLocale.xml</File>
 				</Files>
@@ -77,11 +78,11 @@
 			</Files>
 			<Files Group="Pages">
 				<Files Group="Login">
-					<File>LoginLayout.xsl</File>
+					<File>Login.xsl</File>
 					<File>LoginCasting.xsl</File>
 				</Files>
 				<Files Group="Main">
-					<File>MainLayout.xsl</File>
+					<File>Main.xsl</File>
 					<File>MainCasting.xsl</File>
 					<File>MainLocale.xml</File>
 				</Files>

@@ -39,12 +39,8 @@
 	base::Register( s##name::Name, name );
 
 // Definition.
-# define BASE_AC( owner, name )\
-	owner::s##name owner::name;\
-	const char *owner::s##name::Name = #name;\
-	void owner::s##name::SCLXLaunch(\
-		core::rSession &Session,\
-		const char *Id )
+# define BASE_AC( owner, name ) SCLX_AC( core::rSession, owner, name )
+
 /**********/
 
 namespace base {
