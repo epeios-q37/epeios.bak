@@ -1,5 +1,12 @@
 # *Epeios* *CHANGELOG*
 
+## 2018-05-11
+
+- FDR:
+  - adding handling of the amount of data written in the write driver,
+- FLW:
+  - using the count of the written data amount made in *FDR* instead of handling this internally,
+
 ## 2018-05-10
 
 - SCLXDHTML:

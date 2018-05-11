@@ -289,15 +289,15 @@ namespace fdr {
 	{
 	private:
 		byte__ *_Cache;
-		size__ _Size;	// Si == '0', signale 'EOF' atteint.
+		size__ _Size;	// If == '0', report EOF.
 		size__ _Available;
 		size__ _Position;
-		size__ Red_;	// Amount of red data since last dismiss.
+		size__ Red_;	// Amount of red data since last dismiss (NOT physically red, but what was returned to user).
 		bso::sBool DismissPending_;
 		bso::sBool AutoDismissOnEOF_;	// If at 'true', 'Dismiss' is automatically called on EOF. Can be useful when the object is reused, i.e. when several 'Init(...)' are called.
 		size__ _Read(
 			size__ Wanted,
-			byte__ *Buffer )	// Si valeur retourne == 0, alors , alors 'EOF' atteint.
+			byte__ *Buffer )	// id returns 0, the EOF reached.
 		{
 			size__ Amount = 0;
 # ifdef FDR_DBG
@@ -595,6 +595,7 @@ namespace fdr {
 	private:
 		bso::bool__ _Initialized;	// Pour viter des 'pure virtual function call'.
 		bso::sBool CommitPending_;
+		size__ Written_;	// Amount of data written since last commit.
 	protected:
 		// Returns amount of written data. Returns '0' only when no other data can be written (deconnection...), otherwise must block.
 		virtual size__ FDRWrite(
@@ -613,6 +614,7 @@ namespace fdr {
 			_Initialized = false;
 			CommitPending_ = false;
 			_flow_driver_base__::reset( P );
+			Written_ = 0;
 		}
 		E_CVDTOR( oflow_driver_base___ );
 		void Init( thread_safety__ ThreadSafety )
@@ -643,6 +645,8 @@ namespace fdr {
 			} else
 				Success = true;
 
+			Written_ = 0;
+
 			return Success;
 		}
 		size__ Write(
@@ -651,7 +655,11 @@ namespace fdr {
 		{
 			Lock();
 			CommitPending_ = true;
-			return FDRWrite( Buffer, Maximum );
+			Maximum = FDRWrite( Buffer, Maximum );
+
+			Written_ += Maximum;
+
+			return Maximum;
 		}
 		sTID OTake( sTID Owner )
 		{
@@ -660,6 +668,11 @@ namespace fdr {
 		bso::bool__ OFlowIsLocked( void )	// Simplifie l'utilisation de 'ioflow_driver_...'
 		{
 			return IsLocked();
+		}
+		// Returns amount of data written since last commit.
+		size__ AmountWritten( void ) const
+		{
+			return Written_;
 		}
 	};
 

@@ -314,8 +314,6 @@ namespace flw {
 		size__ _Size;
 		// The amount of bytes yet free.
 		size__ _Free;
-		// Amount of data PHYSICALLY written since the last synchronizing (does not take account of the data in the cache).
-		size__ Written_;
 		fdr::oflow_driver_base___ &_D( void ) const
 		{
 			if ( _Driver == NULL )
@@ -326,8 +324,7 @@ namespace flw {
 		size__ _LoopingWrite(
 			const byte__ *Buffer,
 			size__ Wanted,
-			size__ Minimum,
-			size__ *TotalWritten )
+			size__ Minimum )
 		{
 			size__ PonctualAmount = _D().Write( Buffer, Wanted );
 			size__ CumulativeAmount = PonctualAmount;
@@ -340,9 +337,6 @@ namespace flw {
 				CumulativeAmount += PonctualAmount;
 			}
 
-			if ( TotalWritten != NULL )
-				TotalWritten += CumulativeAmount;
-
 			if ( CumulativeAmount < Minimum )
 					CumulativeAmount = 0;	// Even if some data were written, there was a problem, which is reported upstream by returning '0'.
 
@@ -353,14 +347,13 @@ namespace flw {
 		size__ _DirectWrite(
 			const byte__ *Buffer,
 			size__ Wanted,
-			size__ Minimum,
-			size__ *TotalSize );
+			size__ Minimum );
 		bso::sBool DumpCache_( void )
 		{
 			size__ Stayed = _Size - _Free;
 			
 			if ( Stayed != 0 ) {
-				if ( _DirectWrite( _Cache, Stayed, Stayed, NULL ) == Stayed ) {
+				if ( _DirectWrite( _Cache, Stayed, Stayed ) == Stayed ) {
 					_Free = _Size;
 					return true;
 				} else
@@ -385,15 +378,14 @@ namespace flw {
 		Return amount of bytes written. Cache MUST be EMPTY. */
 		size__ _DirectWriteOrIntoCache(
 			const byte__ *Buffer,
-			size__ Amount,
-			size__ *TotalWritten )
+			size__ Amount )
 		{
 #ifdef FLW_DBG
 			if ( _Size != _Free )
 				qRFwk();
 #endif
 			if ( Amount > _Size )
-				return _DirectWrite( Buffer, Amount, Amount, TotalWritten);
+				return _DirectWrite( Buffer, Amount, Amount );
 			else
 				return _WriteIntoCache( Buffer, Amount );
 		}
@@ -402,7 +394,6 @@ namespace flw {
 		{
 			if ( DumpCache_() ) {
 				_D().Commit( Unlock );
-				Written_ = 0;
 				return true;
 			} else
 				return false;
@@ -416,14 +407,13 @@ namespace flw {
 		// Put up to 'Amount' bytes from 'Buffer'. Return number of bytes written.
 		size__ _WriteUpTo(
 			const byte__ *Buffer,
-			size__ Amount,
-			size__ *TotalWritten )
+			size__ Amount )
 		{
 			size__ AmountWritten = _WriteIntoCache( Buffer, Amount );
 
 			if ( ( AmountWritten == 0 )  && ( Amount != 0 ) ) {
 				DumpCache_();
-				AmountWritten = _DirectWriteOrIntoCache( Buffer, Amount, TotalWritten );
+				AmountWritten = _DirectWriteOrIntoCache( Buffer, Amount );
 			}
 
 			return AmountWritten;
@@ -444,7 +434,6 @@ namespace flw {
 			_Driver = NULL;
 			_Cache = NULL;
 			_Size = _Free = 0;
-			Written_ = 0;
 		}
 		qCVDTOR( oflow__ );
 		void Init(
@@ -458,8 +447,6 @@ namespace flw {
 			_Driver = &Driver;
 			_Cache = Cache;
 			_Size = _Free = Size;
-
-			Written_ = 0;
 		}
 		tht::sTID Take( tht::sTID Owner = tht::Undefined )
 		{
@@ -484,7 +471,7 @@ namespace flw {
 			if ( Amount == 0 )
 				return 0;
 			else
-				return _WriteUpTo( (byte__ *)Buffer, Amount, &Written_ );
+				return _WriteUpTo( (byte__ *)Buffer, Amount );
 		}
 		//f Put 'Amount' data from 'Buffer'.
 		bso::sBool Write(
@@ -524,7 +511,7 @@ namespace flw {
 		//f Return the amount of data written since last 'Synchronize()'.
 		size__ AmountWritten( void ) const
 		{
-			return Written_ + ( _Size - _Free );
+			return _D().AmountWritten() + ( _Size - _Free );
 		}
 # if 0
 		size__ WriteRelay(

@@ -29,7 +29,7 @@
 #  define CDGURL_DBG
 # endif
 
-# include "fdr.h"
+# include "cnvfdr.h"
 # include "flw.h"
 # include "err.h"
 # include "tol.h"
@@ -43,6 +43,119 @@ namespace cdgurl {
 	  static fdr::byte__ Hex[] = "0123456789abcdef";
 	  return Hex[Byte&15];
 	}
+
+	typedef flw::standalone_oflow__<>	sWFlow_;
+	typedef flw::standalone_iflow__<>	sRFlow_;
+
+	typedef cnvfdr::cConverter cConverter_;
+	typedef cnvfdr::rConverterRDriver rRDriver_;
+	typedef cnvfdr::rConverterWDriver rWDriver_;
+
+	class sURLEncoder_
+	: public cConverter_
+	{
+	protected:
+		virtual void CNVFDRConvert(
+			flw::sRFlow &In,
+			flw::sWFlow &Out )
+		{
+			fdr::byte__ Byte = 0;
+
+			while ( !In.EndOfFlow() ) {
+				switch ( Byte = In.Get() ) {
+				default:
+					if ( !isalnum( Byte ) ) {
+						fdr::byte__ Buffer[3] = { '%' };
+						Buffer[1] = ToHex_( Byte >> 4 );
+						Buffer[2] = ToHex_( Byte & 15 );
+						Out.Write( Buffer, sizeof( Buffer ) );
+						break;
+					}
+				case '-':
+				case '_':
+				case '.':
+				case '~':
+					Out.Put( Byte );
+					break;
+				case ' ':
+					Out.Put( '+' );
+					break;
+				}
+			}
+		}
+	public:
+		void reset( bso::sBool = true )
+		{
+			// Standardization.
+		}
+		qCVDTOR( sURLEncoder_ );
+		void Init( void )
+		{
+			// Standardization.
+		}
+	};
+
+	typedef cnvfdr::rConverterRDriver rRDriver_;
+
+	class rURLEncoderRDriver
+	: public rRDriver_
+	{
+	private:
+		sURLEncoder_ Encoder_;
+	public:
+		void reset( bso::sBool P = true )
+		{
+			rRDriver_::reset( P );
+			Encoder_.reset( P );
+		}
+		qCDTOR( rURLEncoderRDriver );
+		void Init(
+			fdr::rRDriver &In,
+			fdr::thread_safety__ ThreadSafety = fdr::ts_Default )
+		{
+			Encoder_.Init();
+			rRDriver_::Init( Encoder_, In, ThreadSafety );
+		}
+	};
+
+#if 0
+
+	template <class rURLEncoderRDriver
+	: public rRConverter_
+	{
+	private:
+		sURLEncoder Encoder_;
+	public:
+		void reset( bso::sBool P = true )
+		{
+			Encoder_.reset( P );
+		}
+		qCDTOR( rURLEncoderRDriver );
+		void Init( void )
+		{
+			Encoder_.Init();
+		}
+	};
+
+	class rEncodingRFlow
+	: public sWFlow_
+	{
+	private:
+		rEncodeDriver Driver_;
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			sWFlow_::reset( P );
+			Driver_.reset( P );
+		}
+		qCDTOR( rEncodingRFlow );
+		void Init( flw::oflow__ &Flow )
+		{
+			Driver_.Init( Flow );
+			sOFlow_::Init( Driver_ );
+		}
+	};
+
 
 	class rEncodeDriver
 	: public rOFlowDriver_
@@ -225,6 +338,8 @@ namespace cdgurl {
 	const str::string_ &Decode(
 		const str::string_ &Encoded,
 		str::string_ &Plain );
+
+#endif
 }
 
 #endif

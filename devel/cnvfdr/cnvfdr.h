@@ -1,0 +1,178 @@
+/*
+	Copyright (C) 1999-2017 Claude SIMON (http://q37.info/contact/).
+
+	This file is part of the Epeios framework.
+
+	The Epeios framework is free software: you can redistribute it and/or
+	modify it under the terms of the GNU Affero General Public License as
+	published by the Free Software Foundation, either version 3 of the
+	License, or (at your option) any later version.
+
+	The Epeios framework is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+	Affero General Public License for more details.
+
+	You should have received a copy of the GNU Affero General Public License
+	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
+*/
+
+// CoNVersion Flow DRiver
+
+#ifndef CNVFDR_INC_
+# define CNVFDR_INC_
+
+# define CNVFDR_NAME		"CNVFDR"
+
+# if defined( E_DEBUG ) && !defined( CNVFDR_NODBG )
+#  define CNVFDR_DBG
+# endif
+
+# include "err.h"
+# include "fdr.h"
+# include "flw.h"
+# include "flx.h"
+
+namespace cnvfdr {
+
+	class cConverter
+	{
+	protected:
+		virtual void CNVFDRConvert(
+			flw::sRFlow &In,
+			flw::sWFlow &Out )
+		{
+			qRGnr();
+		}
+		virtual void CNVFDRConvert(
+			fdr::rRDriver &In,
+			fdr::rWDriver &Out )
+		{
+		qRH;
+			flw::sDressedRFlow<> FIn;
+			flw::sDressedWFlow<> FOut;
+		qRB;
+			CNVFDRConvert( FIn, FOut );
+		qRR;
+		qRT
+		qRE;
+		}
+	public:
+		qCALLBACK( Converter );
+		virtual void Convert(
+			fdr::rRDriver &In,
+			fdr::rWDriver &Out )
+		{
+			return CNVFDRConvert( In, Out );
+		}
+	};
+
+	template <typename idriver, typename edriver> class sDriver_
+	: public edriver
+	{
+	protected:
+		qRMV( cConverter, C_, Converter_ );
+		qRMV( idriver, D_, Driver_ );
+		fdr::thread_safety__ ThreadSafety_;
+	public:
+		void reset( bso::sBool P = true )
+		{
+			edriver::reset( P );
+			Converter_ = NULL;
+			Driver_ = NULL;
+			ThreadSafety_ = fdr::ts_Undefined;
+		}
+		qCVDTOR( sDriver_ );
+		void Init(
+			cConverter &Converter,
+			idriver &Out,
+			fdr::thread_safety__ ThreadSafety = fdr::ts_Default )
+		{
+			Converter_ = &Converter;
+			Driver_ = &Out;
+			ThreadSafety_ = ThreadSafety;
+			edriver::Init( ThreadSafety );
+		}
+	};
+
+	template <typename flow, typename cdriver, typename edriver> class rFlow_
+	: public flow
+	{
+	private:
+		cdriver Driver_;
+	public:
+		void reset( bso::sBool P = true )
+		{
+			flow::reset( P );
+			Driver_.reset( P );
+		}
+		qCDTOR( rFlow_ );
+		void Init(
+			cConverter &Converter,
+			edriver &Driver,
+			fdr::thread_safety__ ThreadSafety = fdr::ts_Default )
+		{
+			Driver_.Init( Converter, Driver, ThreadSafety );
+			sRFlow_::Init( Driver_ );
+		}
+	};
+
+	class rConverterRDriver
+	: public sDriver_<fdr::rRDriver, fdr::rRDressedDriver>
+	{
+	protected:
+		virtual fdr::sSize FDRRead(
+			fdr::sSize Maximum,
+			fdr::sByte *Buffer ) override
+		{
+			flx::buffer_oflow_driver___ Out;
+
+			Out.Init( Buffer, ThreadSafety_, Maximum );
+
+			C_().Convert( D_(), Out );
+
+			return Out.AmountWritten();
+		}
+		virtual void FDRDismiss( bso::sBool Unlock ) override
+		{
+			return D_().Dismiss( Unlock );
+		}
+		virtual fdr::sTID FDRITake( fdr::sTID Owner ) override
+		{
+			return D_().ITake( Owner );
+		}
+	};
+
+	typedef rFlow_<flw::sDressedRFlow<>, rConverterRDriver, fdr::rRDriver> rConverterRFlow;
+
+	class rConverterWDriver
+	: public sDriver_<fdr::rWDriver, fdr::rWDressedDriver>
+	{
+	protected:
+		virtual fdr::sSize FDRWrite(
+			const fdr::sByte *Buffer,
+			fdr::sSize Maximum ) override
+		{
+			flx::buffer_iflow_driver___ In;
+
+			In.Init( Buffer, ThreadSafety_, Maximum );
+
+			C_().Convert( In, D_() );
+
+			return In.AmountRed();
+		}
+		// Returns 'false' when underlying write fails, 'true' otherwise.
+		virtual void FDRCommit( bso::sBool Unlock ) override
+		{
+			D_().Commit( Unlock );
+		}
+		virtual fdr::sTID FDROTake( fdr::sTID Owner ) override
+		{
+			return D_().OTake( Owner );
+		}
+	};
+
+	typedef rFlow_<flw::sDressedWFlow<>, rConverterWDriver, fdr::rWDriver> rConverterWFlow;
+}
+
+#endif

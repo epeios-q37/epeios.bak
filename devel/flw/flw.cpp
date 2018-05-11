@@ -32,11 +32,11 @@ bso::sBool flw::oflow__::_Write(
 	size__ Amount,
 	qRPN )
 {
-	size__ PonctualAmountWritten = _WriteUpTo( Buffer, Amount, &Written_ );
+	size__ PonctualAmountWritten = _WriteUpTo( Buffer, Amount );
 	size__ AmountWritten = PonctualAmountWritten;
 
 	while( ( PonctualAmountWritten != 0 ) && ( AmountWritten < Amount ) )
-		AmountWritten += PonctualAmountWritten = _WriteUpTo( Buffer + AmountWritten, Amount - AmountWritten, &Written_ );
+		AmountWritten += PonctualAmountWritten = _WriteUpTo( Buffer + AmountWritten, Amount - AmountWritten );
 
 	if ( PonctualAmountWritten == 0 ) {
 		if ( qRP == err::hThrowException )
@@ -96,8 +96,7 @@ qRE
 size__ flw::oflow__::_DirectWrite(
 	const byte__ *Buffer,
 	size__ Wanted,
-	size__ Minimum,
-	size__ *Written )
+	size__ Minimum )
 {
 	size__ Amount = 0;
 qRH
@@ -113,7 +112,7 @@ qRB
 		qRFwk();
 #endif
 
-	Amount = _LoopingWrite( Buffer, Wanted, Minimum, Written );
+	Amount = _LoopingWrite( Buffer, Wanted, Minimum );
 
 #ifdef FLW_DBG
 	if ( Amount > Wanted )
