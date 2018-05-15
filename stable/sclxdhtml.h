@@ -248,6 +248,7 @@ namespace sclxdhtml {
 	private:
 		xdhdws::sProxy Core_;
 		qRMV( const scli::sInfo, I_, Info_ );
+		bso::sBool SendXSLContent_;	// If true, it's the content of the XSL file which is sent, otherwise it's its name.
 		void Alert_(
 			const ntvstr::string___ &XML,
 			const ntvstr::string___ &XSL,
@@ -297,14 +298,16 @@ namespace sclxdhtml {
 	public:
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, Core_, Info_ );
+			tol::reset( P, Core_, Info_, SendXSLContent_ );
 		}
 		qCDTOR( sProxy );
 		void Init( xdhcmn::cProxy *Proxy,
-			const scli::sInfo &Info )
+			const scli::sInfo &Info,
+				   bso::sBool SendXSLContent )
 		{
 			Core_.Init( Proxy );
 			Info_ = &Info;
+			SendXSLContent_ = SendXSLContent;
 		}
 		const scli::sInfo &Info( void ) const
 		{
@@ -571,14 +574,15 @@ namespace sclxdhtml {
 			Core_ = NULL;
 		}
 		qCVDTOR( rSession )
-			void Init(
-				sclfrntnd::rKernel &Kernel,
-				const char *Language,
-				xdhcmn::cProxy *Callback,
-				class rCore<rSession> &Core,
-				const scli::sInfo &Info )
+		void Init(
+			sclfrntnd::rKernel &Kernel,
+			const char *Language,
+			xdhcmn::cProxy *Callback,
+			class rCore<rSession> &Core,
+			const scli::sInfo &Info,
+			bso::sBool SendXSLContent )
 		{
-			sProxy::Init( Callback, Info );
+			sProxy::Init( Callback, Info, SendXSLContent );
 			Reporting_.Init( *this, Language );
 			frontend::Init( Kernel, Language, Reporting_ );
 			Page_ = UndefinedPage;

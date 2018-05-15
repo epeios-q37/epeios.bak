@@ -21,8 +21,7 @@
 
 #include "sclxdhtml.h"
 
-# include "cdgurl.h"
-
+#include "cdgurl.h"
 
 using namespace sclxdhtml;
 
@@ -190,22 +189,22 @@ namespace {
 	qRE
 	}
 
-
 	inline void SetXSL_( str::string_ &XSL )
 	{
 		XSL.Append("data:text/xml;charset=utf-8,");
 
+#if true
 		cdgurl::Encode( str::wString( "<?xml version=\"1.0\" encoding=\"utf-8\"?>\
--			<xsl:stylesheet version=\"1.0\"\
--			                xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\">\
--				<xsl:output method=\"html\"\
--					        encoding=\"utf-8\"/>\
--				<xsl:template match=\"/\">\
--					<xsl:value-of select=\"Content\"/>\
--				</xsl:template>\
--			</xsl:stylesheet>\
--		" ), XSL );
-
+			<xsl:stylesheet version=\"1.0\"\
+			                xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\">\
+				<xsl:output method=\"html\"\
+					        encoding=\"utf-8\"/>\
+				<xsl:template match=\"/\">\
+					<xsl:value-of select=\"Content\"/>\
+				</xsl:template>\
+			</xsl:stylesheet>\
+		" ), XSL );
+# else
 		/*
 		<?xml version="1.0" encoding="utf-8"?>
 		<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -217,8 +216,8 @@ namespace {
 		*/
 
 		// Above URI encoded.
-//		XSL.Append( "%3C%3Fxml%20version%3D%221.0%22%20encoding%3D%22utf-8%22%3F%3E%0A%3Cxsl%3Astylesheet%20version%3D%221.0%22%20xmlns%3Axsl%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2FXSL%2FTransform%22%3E%0A%09%3Cxsl%3Aoutput%20method%3D%22html%22%20encoding%3D%22utf-8%22%2F%3E%0A%09%3Cxsl%3Atemplate%20match%3D%22%2F%22%3E%0A%09%09%3Cxsl%3Avalue-of%20select%3D%22Content%22%2F%3E%0A%09%3C%2Fxsl%3Atemplate%3E%0A%3C%2Fxsl%3Astylesheet%3E" );
-
+		XSL.Append( "%3C%3Fxml%20version%3D%221.0%22%20encoding%3D%22utf-8%22%3F%3E%0A%3Cxsl%3Astylesheet%20version%3D%221.0%22%20xmlns%3Axsl%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2FXSL%2FTransform%22%3E%0A%09%3Cxsl%3Aoutput%20method%3D%22html%22%20encoding%3D%22utf-8%22%2F%3E%0A%09%3Cxsl%3Atemplate%20match%3D%22%2F%22%3E%0A%09%09%3Cxsl%3Avalue-of%20select%3D%22Content%22%2F%3E%0A%09%3C%2Fxsl%3Atemplate%3E%0A%3C%2Fxsl%3Astylesheet%3E" );
+# endif
 	}
 
 	inline void SetXMLAndXSL_(
@@ -390,23 +389,26 @@ void sclxdhtml::sProxy::SetLayout_(
 	const str::dString &XML,
 	bso::char__ Marker )
 {
-qRH
-	str::wString XSL;
-qRB
+qRH;
+	str::wString XSL, RawXSL;
+qRB;
 	XSL.Init();
-# if false
-	// The _content_ of the XSL file is transmitted (old behavior).
-	sclxdhtml::LoadXSLAndTranslateTags( rgstry::tentry___( Filename, Target ), Registry, XSL, Marker );
-# else
-	// The _name_ of the XSL file is transmitted (new bahavior).
-	XSL.Append( Target );
-	XSL.Append( ".xsl" );
-# endif
+	if ( SendXSLContent_ ) {
+		// The content of the XSL file is transmitted (global XDHTML behavior).
+		RawXSL.Init();
+		sclxdhtml::LoadXSLAndTranslateTags( rgstry::tentry___( Filename, Target ), Registry, RawXSL, Marker );
+		XSL.Append( "data:text/xml;charset=utf-8," );
+		cdgurl::Encode( RawXSL, XSL );
+	} else {
+		// The _name_ of the XSL file is transmitted (Atlas toolkit behavior).
+		XSL.Append( Target );
+		XSL.Append( ".xsl" );
+	}
 
 	Core_.SetLayout( Id, XML, XSL );
-qRR
-qRT
-qRE
+qRR;
+qRT;
+qRE;
 }
 
 void sclxdhtml::sProxy::SetContents(

@@ -63,7 +63,7 @@ xdhcmn::cSession *sclxdhtml::SCLXDHTMLRetrieveCallback(
 	if ( Session == NULL )
 		qRGnr();
 
-	Session->Init( core::Kernel(), Language, ProxyCallback, core::Core, esketchxdh::Info );
+	Session->Init( core::Kernel(), Language, ProxyCallback, core::Core, esketchxdh::Info, true );
 
 	return Session;
 }

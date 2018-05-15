@@ -40,13 +40,15 @@ namespace cnvfdr {
 	protected:
 		virtual void CNVFDRConvert(
 			flw::sRFlow &In,
-			flw::sWFlow &Out )
+			flw::sWFlow &Out,
+			fdr::sSize Max )
 		{
 			qRGnr();
 		}
 		virtual void CNVFDRConvert(
 			fdr::rRDriver &In,
-			fdr::rWDriver &Out )
+			fdr::rWDriver &Out,
+			fdr::sSize Max )
 		{
 		qRH;
 			flw::sDressedRFlow<> FIn;
@@ -55,18 +57,22 @@ namespace cnvfdr {
 			FIn.Init( In );
 			FOut.Init( Out );
 
-			CNVFDRConvert( FIn, FOut );
+			CNVFDRConvert( FIn, FOut, Max );
+
+			FIn.Dismiss( false );
+			FOut.Commit( false );
 		qRR;
-		qRT
+		qRT;
 		qRE;
 		}
 	public:
 		qCALLBACK( Converter );
 		virtual void Convert(
 			fdr::rRDriver &In,
-			fdr::rWDriver &Out )
+			fdr::rWDriver &Out,
+			fdr::sSize Max )
 		{
-			return CNVFDRConvert( In, Out );
+			return CNVFDRConvert( In, Out, Max );
 		}
 	};
 
@@ -125,12 +131,12 @@ namespace cnvfdr {
 		qRB;
 			Out.Init( Buffer, ThreadSafety_, Maximum );
 
-			C_().Convert( D_(), Out );
+			C_().Convert( D_(), Out, Maximum );
 
 			Maximum = Out.AmountWritten();
 		qRR;
-		qRE;
 		qRT;
+		qRE;
 			return Maximum;
 		}
 		virtual void FDRDismiss( bso::sBool Unlock ) override
@@ -153,13 +159,18 @@ namespace cnvfdr {
 			const fdr::sByte *Buffer,
 			fdr::sSize Maximum ) override
 		{
+		qRH;
 			flx::buffer_iflow_driver___ In;
-
+		qRB;
 			In.Init( Buffer, ThreadSafety_, Maximum );
 
-			C_().Convert( In, D_() );
+			C_().Convert( In, D_(), FDR_SIZE_MAX );
 
-			return In.AmountRed();
+			Maximum = In.AmountRed();
+		qRR;
+		qRT;
+		qRE;
+			return Maximum;
 		}
 		// Returns 'false' when underlying write fails, 'true' otherwise.
 		virtual void FDRCommit( bso::sBool Unlock ) override

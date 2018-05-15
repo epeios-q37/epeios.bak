@@ -485,7 +485,7 @@ namespace fdr {
 		{
 			return GetTID_( FDRITake( Owner ), BaseTake( Owner ) );
 		}
-		void Dismiss( bso::sBool Unlock )
+		void Dismiss( bso::sBool Unlock )	// When 'Unlock' is set to false, the 'Red_' value is NOT set to 0.
 		{
 			if ( DismissPending_ ) {
 				if ( _Cache != NULL ) {
@@ -499,7 +499,8 @@ namespace fdr {
 				qRE
 				}
 
-				Red_ = 0;
+				if ( Unlock )
+					Red_ = 0;
 
 				DismissPending_ = false;
 			}
@@ -625,7 +626,7 @@ namespace fdr {
 			CommitPending_ = false;
 			_flow_driver_base__::Init( ThreadSafety );
 		}
-		bso::sBool Commit( bso::sBool Unlock )
+		void Commit( bso::sBool Unlock )	// When 'Unlock' is set to false, the 'Written_' value is NOT set to 0.
 		{
 			bso::sBool Success = false;
 
@@ -642,12 +643,14 @@ namespace fdr {
 				}
 
 				CommitPending_ = false;
+
+				if ( Unlock )
+					Written_ = 0;
 			} else
 				Success = true;
 
-			Written_ = 0;
 
-			return Success;
+//			return Success;
 		}
 		size__ Write(
 			const byte__ *Buffer,

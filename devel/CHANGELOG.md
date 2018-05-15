@@ -1,5 +1,11 @@
 # *Epeios* *CHANGELOG*
 
+## 2018-05-15
+
+- FDR:
+  - `Commit()`does no more return a boolean,
+  - The `Unlock` parameter of the `Dismiss(...)`/`Commit(...)` methods, when set to `false`, prevents the setting to `0` of the `Red_`/`Written_` variables, 
+
 ## 2018-05-14
 
 - FLX:

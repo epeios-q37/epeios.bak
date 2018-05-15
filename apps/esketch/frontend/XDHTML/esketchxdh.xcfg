@@ -45,7 +45,7 @@
 					</XSLFile>
 					<XSLFile target="Prolog">
 							<xpp:expand select="XSLRootDir"/>
-							<xpp:bloc>PrologLayout.xsl</xpp:bloc>
+							<xpp:bloc>Prolog.xsl</xpp:bloc>
 					</XSLFile>
 					<XSLFile target="Login">
 							<xpp:expand select="XSLRootDir"/>
