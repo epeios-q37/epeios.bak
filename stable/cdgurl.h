@@ -29,7 +29,7 @@
 #  define CDGURL_DBG
 # endif
 
-# include "fdr.h"
+# include "cnvfdr.h"
 # include "flw.h"
 # include "err.h"
 # include "tol.h"
@@ -43,6 +43,157 @@ namespace cdgurl {
 	  static fdr::byte__ Hex[] = "0123456789abcdef";
 	  return Hex[Byte&15];
 	}
+
+	typedef flw::standalone_oflow__<>	sWFlow_;
+	typedef flw::standalone_iflow__<>	sRFlow_;
+
+	typedef cnvfdr::cConverter cConverter_;
+	typedef cnvfdr::rConverterRDriver rRDriver_;
+	typedef cnvfdr::rConverterWDriver rWDriver_;
+
+	template <typename converter_driver, typename driver, typename coder> class rURLCoderDriver_
+	: public converter_driver
+	{
+	private:
+		coder Encoder_;
+	public:
+		void reset( bso::sBool P = true )
+		{
+			converter_driver::reset( P );
+			Encoder_.reset( P );
+		}
+		qCDTOR( rURLCoderDriver_ );
+		void Init(
+			driver &Driver,
+			fdr::thread_safety__ ThreadSafety = fdr::ts_Default )
+		{
+			Encoder_.Init();
+			converter_driver::Init( Encoder_, Driver, ThreadSafety );
+		}
+	};
+
+	class sURLEncoder_
+	: public cConverter_
+	{
+	protected:
+		virtual void CNVFDRConvert(
+			flw::sRFlow &In,
+			flw::sWFlow &Out )
+		{
+			fdr::byte__ Byte = 0;
+
+			while ( !In.EndOfFlow() ) {
+				switch ( Byte = In.Get() ) {
+				default:
+					if ( !isalnum( Byte ) ) {
+						fdr::byte__ Buffer[3] = { '%' };
+						Buffer[1] = ToHex_( Byte >> 4 );
+						Buffer[2] = ToHex_( Byte & 15 );
+						Out.Write( Buffer, sizeof( Buffer ) );
+						break;
+					}
+				case '-':
+				case '_':
+				case '.':
+				case '~':
+					Out.Put( Byte );
+					break;
+				case ' ':
+					Out.Put( '+' );
+					break;
+				}
+			}
+		}
+	public:
+		void reset( bso::sBool = true )
+		{
+			// Standardization.
+		}
+		qCVDTOR( sURLEncoder_ );
+		void Init( void )
+		{
+			// Standardization.
+		}
+	};
+
+	template <typename converter_driver, typename driver> qTCLONE( rURLCoderDriver_<qCOVER3( converter_driver, driver, sURLEncoder_ )>, rURLEncoderDriver_ );
+
+	typedef rURLEncoderDriver_<cnvfdr::rConverterRDriver, fdr::rRDriver> rURLEncoderRDriver;
+
+	typedef flw::rDressedRFlow<rURLEncoderRDriver> rEncoderRFlow_;
+
+	class rURLEncoderRFlow
+	: public rEncoderRFlow_
+	{
+	public:
+		void Init(
+			fdr::rRDriver &In,
+			fdr::thread_safety__ ThreadSafety = fdr::ts_Default )
+		{
+			Driver_.Init( In, ThreadSafety );
+			subInit();
+		}
+	};
+
+	typedef rURLEncoderDriver_<cnvfdr::rConverterWDriver, fdr::rWDriver> rURLEncoderWDriver;
+
+	typedef flw::rDressedWFlow<rURLEncoderWDriver> rEncoderWFlow_;
+
+	class rURLEncoderWFlow
+	: public rEncoderWFlow_
+	{
+	public:
+		void Init(
+			fdr::rWDriver &In,
+			fdr::thread_safety__ ThreadSafety = fdr::ts_Default )
+		{
+			Driver_.Init( In, ThreadSafety );
+			subInit();
+		}
+	};
+
+	const str::string_ &Encode(
+		const str::string_ &Plain,
+		str::string_ &Encoded );
+
+#if 0
+
+	template <class rURLEncoderRDriver
+	: public rRConverter_
+	{
+	private:
+		sURLEncoder Encoder_;
+	public:
+		void reset( bso::sBool P = true )
+		{
+			Encoder_.reset( P );
+		}
+		qCDTOR( rURLEncoderRDriver );
+		void Init( void )
+		{
+			Encoder_.Init();
+		}
+	};
+
+	class rEncodingRFlow
+	: public sWFlow_
+	{
+	private:
+		rEncodeDriver Driver_;
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			sWFlow_::reset( P );
+			Driver_.reset( P );
+		}
+		qCDTOR( rEncodingRFlow );
+		void Init( flw::oflow__ &Flow )
+		{
+			Driver_.Init( Flow );
+			sOFlow_::Init( Driver_ );
+		}
+	};
+
 
 	class rEncodeDriver
 	: public rOFlowDriver_
@@ -127,6 +278,106 @@ namespace cdgurl {
 	const str::string_ &Encode(
 		const str::string_ &Plain,
 		str::string_ &Encoded );
+
+# endif
+
+	inline fdr::byte__ FromHex_( fdr::byte__ Byte )
+	{
+		if ( !isxdigit( Byte ) )
+			qRFwk();
+
+		return isdigit( Byte ) ? Byte - '0' : tolower( Byte ) - 'a' + 10;
+	}
+
+	class sURLDecoder_
+	: public cConverter_
+	{
+	protected:
+		virtual void CNVFDRConvert(
+			flw::sRFlow &In,
+			flw::sWFlow &Out )
+		{
+			bso::sSize Available = 0;
+			fdr::byte__ Byte = 0;
+			bso::sBool Stop = In.EndOfFlow();
+
+			while ( !Stop ) {
+				switch ( Byte = In.View() ) {
+				case '+':
+					In.Skip();
+					Out.Put( ' ' );
+					break;
+				case '%':
+					if ( In.IsCacheEmpty( &Available ) )
+						qRFwk();
+
+					if ( (Available >= 3) || (In.AmountRed() == 0) ) {
+						In.Skip();
+						Out.Put( ( FromHex_( In.Get() ) << 4) + FromHex_( In.Get() ) );
+					} else
+						Stop = true;
+					break;
+				default:
+					Out.Put( In.Get() );
+					break;
+				}
+
+				Stop = Stop || In.IsCacheEmpty() || In.EndOfFlow();
+			}
+		}
+	public:
+		void reset( bso::sBool = true )
+		{
+			// Standardization.
+		}
+		qCVDTOR( sURLDecoder_ );
+		void Init( void )
+		{
+			// Standardization.
+		}
+	};
+
+	template <typename converter_driver, typename driver> qTCLONE( rURLCoderDriver_<qCOVER3( converter_driver, driver, sURLDecoder_ )>, rURLDecoderDriver_ );
+
+	typedef rURLDecoderDriver_<cnvfdr::rConverterRDriver, fdr::rRDriver> rURLDecoderRDriver;
+
+	typedef flw::rDressedRFlow<rURLDecoderRDriver> rRFlow_;
+
+	class rURLDecoderRFlow
+	: public rRFlow_
+	{
+	public:
+		void Init(
+			fdr::rRDriver &In,
+			fdr::thread_safety__ ThreadSafety = fdr::ts_Default )
+		{
+			Driver_.Init( In, ThreadSafety );
+			subInit();
+		}
+	};
+
+	typedef rURLDecoderDriver_<cnvfdr::rConverterWDriver, fdr::rWDriver> rURLDecoderWDriver;
+
+	typedef flw::rDressedWFlow<rURLDecoderWDriver> rWFlow_;
+
+	class rURLDecoderWFlow
+	: public rWFlow_
+	{
+	public:
+		void Init(
+			fdr::rWDriver &In,
+			fdr::thread_safety__ ThreadSafety = fdr::ts_Default )
+		{
+			Driver_.Init( In, ThreadSafety );
+			subInit();
+		}
+	};
+
+	const str::string_ &Decode(
+		const str::string_ &Encoded,
+		str::string_ &Plain );
+	
+# if 0
 
 	typedef fdr::iflow_driver___<> rIFlowDriver_;
 
@@ -225,6 +476,8 @@ namespace cdgurl {
 	const str::string_ &Decode(
 		const str::string_ &Encoded,
 		str::string_ &Plain );
+
+#endif
 }
 
 #endif

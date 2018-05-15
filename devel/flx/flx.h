@@ -168,6 +168,13 @@ namespace flx {
 			Tampon_ = Buffer;
 			Taille_ = Size;
 		}
+		void Init(
+			const fdr::byte__ *Buffer,
+			bso::size__ Size,
+			fdr::thread_safety__ ThreadSafety = fdr::ts_Default )
+		{
+			return Init( Buffer, ThreadSafety, Size );
+		}
 	};
 
 	//c Buffer as a standard input flow.
@@ -262,6 +269,13 @@ namespace flx {
 			Tampon_ = Buffer;
 			Taille_ = Size;
 		}
+		void Init(
+			fdr::byte__ *Buffer,
+			bso::size__ Size,
+			fdr::thread_safety__ ThreadSafety = fdr::ts_Default )
+		{
+			return Init( Buffer, ThreadSafety, Size );
+		}
 	};
 
 	//c Buffer as a standard ouput flow.driver
@@ -345,7 +359,7 @@ namespace flx {
 		//f Initializing with the bunch buffer 'Set'.
 		void Init(
 			const bunch_ &Bunch,
-			fdr::thread_safety__ ThreadSafety,
+			fdr::thread_safety__ ThreadSafety = fdr::ts_Default,
 			sdr::row_t__ Position = 0 )
 		{
 			reset();
@@ -355,6 +369,14 @@ namespace flx {
 
 			_idriver___<cache_size>::Init( ThreadSafety );
 		}
+		void Init(
+			const bunch_ &Bunch,
+			sdr::row_t__ Position,
+			fdr::thread_safety__ ThreadSafety = fdr::ts_Default )
+		{
+			return Init( Bunch, ThreadSafety, Position );
+		}
+
 	};
 
 # define E_STRING_IFLOW_DRIVER___	bunch_iflow_driver___<str::string_, bso::char__>
@@ -464,7 +486,7 @@ namespace flx {
 		//f Initializing with the buffer bunch 'Bunch'.
 		void Init(
 			bunch_ &Bunch,
-			fdr::thread_safety__ ThreadSafety )
+			fdr::thread_safety__ ThreadSafety = fdr::ts_Default )
 		{
 			reset();
 
@@ -595,7 +617,13 @@ namespace flx {
 			_oflow_driver___::Init( ThreadSafety );
 			_Access = Access;
 		}
-	};	
+		void Init(
+			eAccess Access,
+			fdr::thread_safety__ ThreadSafety = fdr::ts_Default )
+		{
+			Init( ThreadSafety, Access );
+		}
+	};
 
 	// All writing will always succeed.
 	extern void_odriver___ VoidODriver;
@@ -664,7 +692,13 @@ namespace flx {
 			fdr::iflow_driver___<>::Init( ThreadSafety );
 			_Access = Access;
 		}
-	};	
+		void Init(
+			eAccess Access,
+			fdr::thread_safety__ ThreadSafety = fdr::ts_Default )
+		{
+			return Init( ThreadSafety, Access );
+		}
+	};
 
 	// Each reading attempt will return EOF.
 	extern void_idriver___ VoidIDriver;
@@ -883,6 +917,13 @@ namespace flx {
 			_PendingCommit = true;	// So that, if there was no data, the final '0' is still written.
 			_oflow_driver___::Init( ThreadSafety );
 		}
+		void Init(
+			flw::oflow__ &Flow,
+			eCommitHandling CommitHandling,
+			fdr::thread_safety__ ThreadSafety = fdr::ts_Default )
+		{
+			return Init( Flow, ThreadSafety, CommitHandling );
+		}
 		bso::bool__ IsInitialized( void ) const
 		{
 			return _Flow != NULL;
@@ -986,6 +1027,13 @@ namespace flx {
 			_DismissHandling = DismissHandling,
 			_idriver___<>::Init( ThreadSafety );
 			_AllRed = true;
+		}
+		void Init(
+			flw::iflow__ &Flow,
+			dismiss_handling__ DismissHandling,
+			fdr::thread_safety__ ThreadSafety = fdr::ts_Default )
+		{
+			return Init( Flow, ThreadSafety, DismissHandling );
 		}
 		bso::bool__ IsInitialized( void ) const
 		{
@@ -1231,7 +1279,7 @@ namespace flx {
 		E_CVDTOR( exec_iflow_driver___ );
 		bso::bool__ Init(
 			const ntvstr::string___ &Command,
-			fdr::thread_safety__ ThreadSafety )
+			fdr::thread_safety__ ThreadSafety = fdr::ts_Default )
 		{
 			_idriver___<>::Init( ThreadSafety );
 			return _exec_driver___::Init(Command, _ReadMode );
@@ -1349,7 +1397,7 @@ namespace flx {
 		E_CDTOR( exec_ioflow_driver___ );
 		bso::bool__ Init(
 			const ntvstr::string___ &Command,
-			fdr::thread_safety__ ThreadSafety );
+			fdr::thread_safety__ ThreadSafety = fdr::ts_Default );
 	};
 
 	template <typename flow, typename driver> class _exec_flow___
@@ -1442,7 +1490,7 @@ namespace flx {
 			fdr::sSize Size,
 			fdr::rRDriver &Driver,
 			cSizeDelimitedWFlow *Callback,
-			fdr::thread_safety__ ThreadSafety )
+			fdr::thread_safety__ ThreadSafety = fdr::ts_Default )
 		{
 			_idriver___::Init( ThreadSafety );
 
@@ -1484,7 +1532,10 @@ namespace flx {
 	};
 
 	typedef flx::bunch_iflow_driver___<str::string_, bso::char__, FDR__DEFAULT_CACHE_SIZE> rStringIDriver;
+	typedef rStringIDriver rStringRDriver;
+
 	typedef flx::bunch_oflow_driver___<str::string_, bso::char__> rStringODriver;
+	typedef rStringODriver rStringWDriver;
 
 	// Put the content of 'Driver' into 'String' until EOF.
 	const str::dString &GetString(

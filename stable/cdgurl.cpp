@@ -29,24 +29,20 @@ const str::string_ &cdgurl::Encode(
 	const str::string_ &Plain,
 	str::string_ &Encoded )
 {
-qRH
-	flx::E_STRING_OFLOW___ SFlow;
-	rEncodingOFlow EFlow;
-	sdr::row__ Row = qNIL;
-qRB
-	SFlow.Init( Encoded );
-	EFlow.Init( SFlow );
+qRH;
+	flx::rStringRDriver In;
+	flx::rStringWDriver Out;
+	rURLEncoderRDriver Encoder;
+qRB;
+	In.Init( Plain );
+	Out.Init( Encoded );
 
-	Row = Plain.First();
+	Encoder.Init( In );
 
-	while( Row != qNIL ) {
-		EFlow.Put( Plain( Row ) );
-
-		Row = Plain.Next( Row );
-	}
-qRR
-qRT
-qRE
+	fdr::Copy( Encoder, Out );
+qRR;
+qRT;
+qRE;
 	return Encoded;
 }
 
@@ -55,14 +51,16 @@ const str::string_ &cdgurl::Decode(
 	str::string_ &Plain )
 {
 qRH
-	flx::E_STRING_IFLOW__ SFlow;
-	rDecodingIflow DFlow;
+	flx::rStringRDriver In;
+	flx::rStringWDriver Out;
+	rURLDecoderRDriver Decoder;
 qRB
-	SFlow.Init( Encoded );
-	DFlow.Init( SFlow );
+	In.Init( Encoded );
+	Out.Init( Plain );
 
-	while ( !DFlow.EndOfFlow() )
-		Plain.Append( DFlow.Get() );
+	Decoder.Init( In );
+
+	fdr::Copy( Decoder, Out );
 qRR
 qRT
 qRE

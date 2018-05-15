@@ -708,14 +708,37 @@ inline flw::oflow__ &operator <<(
 namespace flw {
 	typedef flw::byte__ sByte;
 
+	// Facilitates the use of templates (for internal and also external use).
+	template <typename flow, typename driver> class rDressedFlow
+	: public flow
+	{
+	protected:
+		driver Driver_;
+		void subInit( void )
+		{
+			flow::Init( Driver_ );
+		}
+	public:
+		void reset( bso::sBool P = true )
+		{
+			flow::reset( P );
+			Driver_.reset( P );
+		}
+		qCDTOR( rDressedFlow );
+	};
+
 	typedef flw::iflow__ sRFlow;
 	template <int Dummy = 0> qTCLONEs( standalone_iflow__<Dummy>, sDressedRFlow );
+	template <typename driver, int Dummy = 0> qTCLONE( flw::rDressedFlow<qCOVER2( flw::sDressedRFlow<Dummy>, driver )>, rDressedRFlow );
+
 
 	typedef flw::oflow__ sWFlow;
 	template <int CacheSize = FLW__OUTPUT_CACHE_SIZE> qTCLONEs( standalone_oflow__<CacheSize>, sDressedWFlow );
+	template <typename driver, int CacheSize = FLW__OUTPUT_CACHE_SIZE> qTCLONE( flw::rDressedFlow<qCOVER2( flw::sDressedWFlow<CacheSize>, driver )>, rDressedWFlow );
 
 	typedef flw::ioflow__ sRWFlow;
 	template <int OutCacheSize = FLW__OUTPUT_CACHE_SIZE> qTCLONEs( standalone_ioflow__<OutCacheSize>, sDressedRWFlow );
+	template <typename driver, int CacheSize = FLW__OUTPUT_CACHE_SIZE> qTCLONE( flw::rDressedFlow<qCOVER2( flw::sDressedRWFlow<CacheSize>, driver )>, rDressedRWFlow );
 }
 
 #endif

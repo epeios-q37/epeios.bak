@@ -52,6 +52,9 @@ namespace cnvfdr {
 			flw::sDressedRFlow<> FIn;
 			flw::sDressedWFlow<> FOut;
 		qRB;
+			FIn.Init( In );
+			FOut.Init( Out );
+
 			CNVFDRConvert( FIn, FOut );
 		qRR;
 		qRT
@@ -85,35 +88,27 @@ namespace cnvfdr {
 		qCVDTOR( sDriver_ );
 		void Init(
 			cConverter &Converter,
-			idriver &Out,
+			idriver &Driver,
 			fdr::thread_safety__ ThreadSafety = fdr::ts_Default )
 		{
 			Converter_ = &Converter;
-			Driver_ = &Out;
+			Driver_ = &Driver;
 			ThreadSafety_ = ThreadSafety;
 			edriver::Init( ThreadSafety );
 		}
 	};
 
-	template <typename flow, typename cdriver, typename edriver> class rFlow_
+	template <typename flow, typename driver> class rFlow_
 	: public flow
 	{
-	private:
-		cdriver Driver_;
 	public:
-		void reset( bso::sBool P = true )
-		{
-			flow::reset( P );
-			Driver_.reset( P );
-		}
-		qCDTOR( rFlow_ );
 		void Init(
 			cConverter &Converter,
-			edriver &Driver,
+			driver &Driver,
 			fdr::thread_safety__ ThreadSafety = fdr::ts_Default )
 		{
 			Driver_.Init( Converter, Driver, ThreadSafety );
-			sRFlow_::Init( Driver_ );
+			subInit();
 		}
 	};
 
@@ -125,13 +120,18 @@ namespace cnvfdr {
 			fdr::sSize Maximum,
 			fdr::sByte *Buffer ) override
 		{
+		qRH;
 			flx::buffer_oflow_driver___ Out;
-
+		qRB;
 			Out.Init( Buffer, ThreadSafety_, Maximum );
 
 			C_().Convert( D_(), Out );
 
-			return Out.AmountWritten();
+			Maximum = Out.AmountWritten();
+		qRR;
+		qRE;
+		qRT;
+			return Maximum;
 		}
 		virtual void FDRDismiss( bso::sBool Unlock ) override
 		{
@@ -143,7 +143,7 @@ namespace cnvfdr {
 		}
 	};
 
-	typedef rFlow_<flw::sDressedRFlow<>, rConverterRDriver, fdr::rRDriver> rConverterRFlow;
+	typedef rFlow_<flw::rDressedRFlow<rConverterRDriver>, fdr::rRDriver> rConverterRFlow;
 
 	class rConverterWDriver
 	: public sDriver_<fdr::rWDriver, fdr::rWDressedDriver>
@@ -172,7 +172,7 @@ namespace cnvfdr {
 		}
 	};
 
-	typedef rFlow_<flw::sDressedWFlow<>, rConverterWDriver, fdr::rWDriver> rConverterWFlow;
+	typedef rFlow_<flw::rDressedWFlow<rConverterWDriver>, fdr::rWDriver> rConverterWFlow;
 }
 
 #endif

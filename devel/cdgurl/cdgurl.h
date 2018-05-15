@@ -51,6 +51,27 @@ namespace cdgurl {
 	typedef cnvfdr::rConverterRDriver rRDriver_;
 	typedef cnvfdr::rConverterWDriver rWDriver_;
 
+	template <typename converter_driver, typename driver, typename coder> class rURLCoderDriver_
+	: public converter_driver
+	{
+	private:
+		coder Encoder_;
+	public:
+		void reset( bso::sBool P = true )
+		{
+			converter_driver::reset( P );
+			Encoder_.reset( P );
+		}
+		qCDTOR( rURLCoderDriver_ );
+		void Init(
+			driver &Driver,
+			fdr::thread_safety__ ThreadSafety = fdr::ts_Default )
+		{
+			Encoder_.Init();
+			converter_driver::Init( Encoder_, Driver, ThreadSafety );
+		}
+	};
+
 	class sURLEncoder_
 	: public cConverter_
 	{
@@ -95,28 +116,45 @@ namespace cdgurl {
 		}
 	};
 
-	typedef cnvfdr::rConverterRDriver rRDriver_;
+	template <typename converter_driver, typename driver> qTCLONE( rURLCoderDriver_<qCOVER3( converter_driver, driver, sURLEncoder_ )>, rURLEncoderDriver_ );
 
-	class rURLEncoderRDriver
-	: public rRDriver_
+	typedef rURLEncoderDriver_<cnvfdr::rConverterRDriver, fdr::rRDriver> rURLEncoderRDriver;
+
+	typedef flw::rDressedRFlow<rURLEncoderRDriver> rEncoderRFlow_;
+
+	class rURLEncoderRFlow
+	: public rEncoderRFlow_
 	{
-	private:
-		sURLEncoder_ Encoder_;
 	public:
-		void reset( bso::sBool P = true )
-		{
-			rRDriver_::reset( P );
-			Encoder_.reset( P );
-		}
-		qCDTOR( rURLEncoderRDriver );
 		void Init(
 			fdr::rRDriver &In,
 			fdr::thread_safety__ ThreadSafety = fdr::ts_Default )
 		{
-			Encoder_.Init();
-			rRDriver_::Init( Encoder_, In, ThreadSafety );
+			Driver_.Init( In, ThreadSafety );
+			subInit();
 		}
 	};
+
+	typedef rURLEncoderDriver_<cnvfdr::rConverterWDriver, fdr::rWDriver> rURLEncoderWDriver;
+
+	typedef flw::rDressedWFlow<rURLEncoderWDriver> rEncoderWFlow_;
+
+	class rURLEncoderWFlow
+	: public rEncoderWFlow_
+	{
+	public:
+		void Init(
+			fdr::rWDriver &In,
+			fdr::thread_safety__ ThreadSafety = fdr::ts_Default )
+		{
+			Driver_.Init( In, ThreadSafety );
+			subInit();
+		}
+	};
+
+	const str::string_ &Encode(
+		const str::string_ &Plain,
+		str::string_ &Encoded );
 
 #if 0
 
@@ -240,6 +278,106 @@ namespace cdgurl {
 	const str::string_ &Encode(
 		const str::string_ &Plain,
 		str::string_ &Encoded );
+
+# endif
+
+	inline fdr::byte__ FromHex_( fdr::byte__ Byte )
+	{
+		if ( !isxdigit( Byte ) )
+			qRFwk();
+
+		return isdigit( Byte ) ? Byte - '0' : tolower( Byte ) - 'a' + 10;
+	}
+
+	class sURLDecoder_
+	: public cConverter_
+	{
+	protected:
+		virtual void CNVFDRConvert(
+			flw::sRFlow &In,
+			flw::sWFlow &Out )
+		{
+			bso::sSize Available = 0;
+			fdr::byte__ Byte = 0;
+			bso::sBool Stop = In.EndOfFlow();
+
+			while ( !Stop ) {
+				switch ( Byte = In.View() ) {
+				case '+':
+					In.Skip();
+					Out.Put( ' ' );
+					break;
+				case '%':
+					if ( In.IsCacheEmpty( &Available ) )
+						qRFwk();
+
+					if ( (Available >= 3) || (In.AmountRed() == 0) ) {
+						In.Skip();
+						Out.Put( ( FromHex_( In.Get() ) << 4) + FromHex_( In.Get() ) );
+					} else
+						Stop = true;
+					break;
+				default:
+					Out.Put( In.Get() );
+					break;
+				}
+
+				Stop = Stop || In.IsCacheEmpty() || In.EndOfFlow();
+			}
+		}
+	public:
+		void reset( bso::sBool = true )
+		{
+			// Standardization.
+		}
+		qCVDTOR( sURLDecoder_ );
+		void Init( void )
+		{
+			// Standardization.
+		}
+	};
+
+	template <typename converter_driver, typename driver> qTCLONE( rURLCoderDriver_<qCOVER3( converter_driver, driver, sURLDecoder_ )>, rURLDecoderDriver_ );
+
+	typedef rURLDecoderDriver_<cnvfdr::rConverterRDriver, fdr::rRDriver> rURLDecoderRDriver;
+
+	typedef flw::rDressedRFlow<rURLDecoderRDriver> rRFlow_;
+
+	class rURLDecoderRFlow
+	: public rRFlow_
+	{
+	public:
+		void Init(
+			fdr::rRDriver &In,
+			fdr::thread_safety__ ThreadSafety = fdr::ts_Default )
+		{
+			Driver_.Init( In, ThreadSafety );
+			subInit();
+		}
+	};
+
+	typedef rURLDecoderDriver_<cnvfdr::rConverterWDriver, fdr::rWDriver> rURLDecoderWDriver;
+
+	typedef flw::rDressedWFlow<rURLDecoderWDriver> rWFlow_;
+
+	class rURLDecoderWFlow
+	: public rWFlow_
+	{
+	public:
+		void Init(
+			fdr::rWDriver &In,
+			fdr::thread_safety__ ThreadSafety = fdr::ts_Default )
+		{
+			Driver_.Init( In, ThreadSafety );
+			subInit();
+		}
+	};
+
+	const str::string_ &Decode(
+		const str::string_ &Encoded,
+		str::string_ &Plain );
+	
+# if 0
 
 	typedef fdr::iflow_driver___<> rIFlowDriver_;
 

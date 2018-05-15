@@ -1,5 +1,10 @@
 # *Epeios* *CHANGELOG*
 
+## 2018-05-14
+
+- FLX:
+  - adding `Init(...)` methods with a default value for the `ThreadSafety` parameter,
+
 ## 2018-05-11
 
 - FDR:
