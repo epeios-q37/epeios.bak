@@ -38,7 +38,7 @@
 			<xpp:expand select="Definitions"/>
 			<xpp:expand select="XDH_Definitions"/>
 			<xpp:bloc preserve="yes">
-				<XSLFiles>
+				<XSLFiles Handling="Content"><!-- Default value for "@Handling" is "Content". Other value is "Name"-->
 					<XSLFile target="About">
 							<xpp:expand select="XSLRootDir"/>
 							<xpp:bloc>About.xsl</xpp:bloc>

@@ -78,15 +78,16 @@ namespace cdgurl {
 	protected:
 		virtual void CNVFDRConvert(
 			flw::sRFlow &In,
+			fdr::sSize InMax,
 			flw::sWFlow &Out,
-			fdr::sSize Max ) override
+			fdr::sSize OutMax ) override
 		{
 			fdr::byte__ Byte = 0;
 
-			if ( Max < 3 )
+			if ( OutMax < 3 )
 				qRFwk();
 
-			while ( !In.EndOfFlow() && ( Max >= 3 ) ) {
+			while ( !In.EndOfFlow() && ( OutMax >= 3 ) ) {
 				switch ( Byte = In.Get() ) {
 				default:
 					if ( !isalnum( Byte ) ) {
@@ -94,7 +95,7 @@ namespace cdgurl {
 						Buffer[1] = ToHex_( Byte >> 4 );
 						Buffer[2] = ToHex_( Byte & 15 );
 						Out.Write( Buffer, sizeof( Buffer ) );
-						Max -= 3;
+						OutMax -= 3;
 						break;
 					}
 				case '-':
@@ -102,7 +103,7 @@ namespace cdgurl {
 				case '.':
 				case '~':
 					Out.Put( Byte );
-					Max--;
+					OutMax--;
 					break;
 /*				case ' ':
 					Out.Put( '+' );
@@ -302,10 +303,10 @@ namespace cdgurl {
 	protected:
 		virtual void CNVFDRConvert(
 			flw::sRFlow &In,
+			fdr::sSize InMax,
 			flw::sWFlow &Out,
-			fdr::sSize Max ) override
+			fdr::sSize OutMax ) override
 		{
-			bso::sSize Available = 0;
 			fdr::byte__ Byte = 0;
 			bso::sBool Stop = In.EndOfFlow();
 
@@ -313,27 +314,27 @@ namespace cdgurl {
 				switch ( Byte = In.View() ) {
 				case '+':
 					In.Skip();
+					InMax--;
 					Out.Put( ' ' );
-					Max--;
+					OutMax--;
 					break;
 				case '%':
-					if ( In.IsCacheEmpty( &Available ) )
-						qRFwk();
-
-					if ( (Available >= 3) || (In.AmountRed() == 0) ) {
+					if ( InMax >= 3 ) {
 						In.Skip();
 						Out.Put( ( FromHex_( In.Get() ) << 4) + FromHex_( In.Get() ) );
-						Max--;
+						InMax -= 3;
+						OutMax--;
 					} else
 						Stop = true;
 					break;
 				default:
 					Out.Put( In.Get() );
-					Max--;
+					InMax--;
+					OutMax--;
 					break;
 				}
 
-				Stop = Stop || In.IsCacheEmpty() || In.EndOfFlow() || ( Max < 1 );
+				Stop = Stop || In.IsCacheEmpty() || In.EndOfFlow() || ( OutMax < 1 ) || ( InMax == 0 );
 			}
 		}
 	public:

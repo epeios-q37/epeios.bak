@@ -51,6 +51,7 @@ namespace sclxdhtml {
 		namespace definition {
 			using namespace sclrgstry::definition;
 
+			extern rEntry XSLFilesHandling;
 			extern rEntry XSLFile;
 		}
 	}
@@ -74,6 +75,16 @@ namespace sclxdhtml {
 		{
 			return SCLXLaunch( Session, Id, Mode );
 		}
+	};
+
+	// How the XSL file are handled.
+	qENUM( XSLFileHandling ) {
+		xfhName,		// The name of the XSL file is sent (Atlas toolkit behavior).
+		xfhContent,		// The content of the XSL file is sent.
+		xfhRegistry,	// One of above depending of the content of the registry.
+		xfh_amount,
+		xfh_Undefined,
+		xfh_Default = xfhRegistry,
 	};
 
 # define SCLX_ACD( session, name )\
@@ -248,7 +259,7 @@ namespace sclxdhtml {
 	private:
 		xdhdws::sProxy Core_;
 		qRMV( const scli::sInfo, I_, Info_ );
-		bso::sBool SendXSLContent_;	// If true, it's the content of the XSL file which is sent, otherwise it's its name.
+		eXSLFileHandling XSLFileHandling_;
 		void Alert_(
 			const ntvstr::string___ &XML,
 			const ntvstr::string___ &XSL,
@@ -298,16 +309,17 @@ namespace sclxdhtml {
 	public:
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, Core_, Info_, SendXSLContent_ );
+			tol::reset( P, Core_, Info_ );
+			XSLFileHandling_ = xfh_Undefined;
 		}
 		qCDTOR( sProxy );
 		void Init( xdhcmn::cProxy *Proxy,
 			const scli::sInfo &Info,
-				   bso::sBool SendXSLContent )
+			eXSLFileHandling XSLFileHandling )
 		{
 			Core_.Init( Proxy );
 			Info_ = &Info;
-			SendXSLContent_ = SendXSLContent;
+			XSLFileHandling_ = XSLFileHandling;
 		}
 		const scli::sInfo &Info( void ) const
 		{
@@ -580,9 +592,9 @@ namespace sclxdhtml {
 			xdhcmn::cProxy *Callback,
 			class rCore<rSession> &Core,
 			const scli::sInfo &Info,
-			bso::sBool SendXSLContent )
+			eXSLFileHandling XSLFileHandling= xfh_Default )
 		{
-			sProxy::Init( Callback, Info, SendXSLContent );
+			sProxy::Init( Callback, Info, XSLFileHandling );
 			Reporting_.Init( *this, Language );
 			frontend::Init( Kernel, Language, Reporting_ );
 			Page_ = UndefinedPage;

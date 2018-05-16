@@ -29,13 +29,12 @@ namespace {
 	using rgstry::rEntry;
 
 	namespace {
-		namespace {
-			rEntry XSLFiles_( "XSLFiles", sclrgstry::Definitions );
-		}
+		rEntry XSLFiles_( "XSLFiles", sclrgstry::Definitions );
 		rEntry UntaggedXSLFile_( "XSLFile", XSLFiles_ );
 	}
 }
 
+rgstry::rEntry registry::definition::XSLFilesHandling( "@Handling", XSLFiles_ );
 rgstry::rEntry registry::definition::XSLFile( RGSTRY_TAGGING_ATTRIBUTE( "target" ), UntaggedXSLFile_ );
 
 namespace {
@@ -194,16 +193,14 @@ namespace {
 		XSL.Append("data:text/xml;charset=utf-8,");
 
 #if true
-		cdgurl::Encode( str::wString( "<?xml version=\"1.0\" encoding=\"utf-8\"?>\
-			<xsl:stylesheet version=\"1.0\"\
-			                xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\">\
-				<xsl:output method=\"html\"\
-					        encoding=\"utf-8\"/>\
-				<xsl:template match=\"/\">\
-					<xsl:value-of select=\"Content\"/>\
-				</xsl:template>\
-			</xsl:stylesheet>\
-		" ), XSL );
+		cdgurl::Encode( str::wString( "\
+<?xml version=\"1.0\" encoding=\"utf-8\"?>\
+<xsl:stylesheet version=\"1.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\">\
+	<xsl:output method=\"html\" encoding=\"utf-8\"/>\
+	<xsl:template match=\"/\">\
+		<xsl:value-of select=\"Content\"/>\
+	</xsl:template>\
+</xsl:stylesheet>" ), XSL );
 # else
 		/*
 		<?xml version="1.0" encoding="utf-8"?>
@@ -381,6 +378,32 @@ qRT
 qRE
 }
 
+namespace {
+	eXSLFileHandling GetXSLFileHandlingFromRegistry_( const sclrgstry::dRegistry &Registry )
+	{
+		eXSLFileHandling Result = xfh_Undefined;
+	qRH;
+		str::wString Handling;
+	qRB;
+		Handling.Init();
+
+		if ( !sclrgstry::OGetValue( Registry, registry::definition::XSLFilesHandling, Handling ) )
+			Handling.Append( "Content" );	// Default value.
+
+		if ( Handling == "Content" )
+			Result = xfhContent;
+		else if ( Handling == "Name" )
+			Result = xfhName;
+		else
+			sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( registry::definition::XSLFilesHandling );
+	qRR;
+	qRT;
+	qRE;
+		return Result;
+	}
+}
+
+
 void sclxdhtml::sProxy::SetLayout_(
 	const xdhdws::nstring___ &Id,
 	const rgstry::rEntry & Filename,
@@ -391,19 +414,30 @@ void sclxdhtml::sProxy::SetLayout_(
 {
 qRH;
 	str::wString XSL, RawXSL;
+	eXSLFileHandling Handling = XSLFileHandling_;
 qRB;
 	XSL.Init();
-	if ( SendXSLContent_ ) {
+
+	if ( Handling == xfhRegistry )
+		Handling = GetXSLFileHandlingFromRegistry_( Registry );
+
+	switch ( Handling ) {
+	case xfhContent:
 		// The content of the XSL file is transmitted (global XDHTML behavior).
 		RawXSL.Init();
 		sclxdhtml::LoadXSLAndTranslateTags( rgstry::tentry___( Filename, Target ), Registry, RawXSL, Marker );
 		XSL.Append( "data:text/xml;charset=utf-8," );
 		cdgurl::Encode( RawXSL, XSL );
-	} else {
+		break;
+	case xfhName:
 		// The _name_ of the XSL file is transmitted (Atlas toolkit behavior).
 		// NOTA: the Atlas toolkit does NOT use this function. It uses a underlying function which have this behavior.
 		XSL.Append( Target );
 		XSL.Append( ".xsl" );
+		break;
+	default:
+		qRFwk();
+		break;
 	}
 
 	Core_.SetLayout( Id, XML, XSL );

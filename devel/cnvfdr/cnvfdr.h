@@ -40,15 +40,17 @@ namespace cnvfdr {
 	protected:
 		virtual void CNVFDRConvert(
 			flw::sRFlow &In,
+			fdr::sSize InMax,	// Maximum amount of data available in 'In'. There can be less, so you have also to take care of EOF. Not all data must be red, but at least one.
 			flw::sWFlow &Out,
-			fdr::sSize Max )
+			fdr::sSize OutMax )	// Amount of which can be written in 'Out'. At least one character must be written.
 		{
 			qRGnr();
 		}
 		virtual void CNVFDRConvert(
 			fdr::rRDriver &In,
+			fdr::sSize InMax,	// Maximum amount of data available in 'In'. There can be less, so you have also to take care of EOF. Not all data must be red, but at least one.
 			fdr::rWDriver &Out,
-			fdr::sSize Max )
+			fdr::sSize OutAmount )	// Amount of which can be written in 'Out'. At least one character must be written.
 		{
 		qRH;
 			flw::sDressedRFlow<> FIn;
@@ -57,8 +59,9 @@ namespace cnvfdr {
 			FIn.Init( In );
 			FOut.Init( Out );
 
-			CNVFDRConvert( FIn, FOut, Max );
+			CNVFDRConvert( FIn, InMax, FOut, OutAmount );
 
+			// 'FIn' and 'FOut' are only used to ease the handling of 'In' and 'Out'. All data may not be red/written, so avoid that the internal counter are reseted, 'false' is given as parameter below.
 			FIn.Dismiss( false );
 			FOut.Commit( false );
 		qRR;
@@ -69,10 +72,11 @@ namespace cnvfdr {
 		qCALLBACK( Converter );
 		virtual void Convert(
 			fdr::rRDriver &In,
+			fdr::sSize InMax,	// Maximum amount of data available in 'In'. There can be less, so you have also to take care of EOF. Not all data must be red, but at least one.
 			fdr::rWDriver &Out,
-			fdr::sSize Max )
+			fdr::sSize OutAmount )	// Amount of which can be written in 'Out'. At least one character must be written.
 		{
-			return CNVFDRConvert( In, Out, Max );
+			return CNVFDRConvert( In, InMax, Out, OutAmount );
 		}
 	};
 
@@ -131,7 +135,7 @@ namespace cnvfdr {
 		qRB;
 			Out.Init( Buffer, ThreadSafety_, Maximum );
 
-			C_().Convert( D_(), Out, Maximum );
+			C_().Convert( D_(), FDR_SIZE_MAX, Out, Maximum );
 
 			Maximum = Out.AmountWritten();
 		qRR;
@@ -164,7 +168,7 @@ namespace cnvfdr {
 		qRB;
 			In.Init( Buffer, ThreadSafety_, Maximum );
 
-			C_().Convert( In, D_(), FDR_SIZE_MAX );
+			C_().Convert( In, Maximum, D_(), FDR_SIZE_MAX );
 
 			Maximum = In.AmountRed();
 		qRR;

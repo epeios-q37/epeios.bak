@@ -1,5 +1,17 @@
 # *Epeios* *CHANGELOG*
 
+## *Shortcuts*
+- [adpt]: Adaptation to changes in underlying modules,
+
+## 2018-05-16
+
+- CDGURL:
+  - [adpt],
+- CNVFDR:
+  - improvements,
+- SCLXDHTML:
+  - the handling of the *XSL* files (either name or content is sent) can now be retrieved from registry,
+
 ## 2018-05-15
 
 - FDR:
@@ -2844,5 +2856,5 @@
   
 ### Adaptation
 
-Adaptation to changes in underlying libraries. 
+Adaptation to changes in underlying modules. 
 
