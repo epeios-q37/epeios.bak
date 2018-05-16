@@ -153,7 +153,7 @@ qRFE(DoNothing_())
 }
 
 namespace {
-	void SetXML_(
+	void PutInXML_(
 		const str::string_  &Message,
 		str::string_ &XML )
 	{
@@ -170,7 +170,7 @@ namespace {
 	qRE
 	}
 
-	void SetXML_(
+	void TanslateAndPutInXML_(
 		const str::string_  &RawMessage,
 		const char *Language,
 		str::string_ &XML )
@@ -182,40 +182,29 @@ namespace {
 		Message.Init();
 		scllocale::GetTranslation( RawMessage.Convert( Buffer ), Language, Message );
 
-		SetXML_( Message, XML );
+		PutInXML_( Message, XML );
 	qRR
 	qRT
 	qRE
 	}
 
-	inline void SetXSL_( str::string_ &XSL )
+	inline void EncodeXSL_(
+		const str::string_ &Plain,
+		str::dString &Encoded )
 	{
-		XSL.Append("data:text/xml;charset=utf-8,");
+		Encoded.Append("data:text/xml;charset=utf-8,");
 
-#if true
-		cdgurl::Encode( str::wString( "\
-<?xml version=\"1.0\" encoding=\"utf-8\"?>\
+		cdgurl::Encode( Plain, Encoded );
+	}
+
+	const char *AlertBaseXSL_ = "\
+<?xml version = \"1.0\" encoding=\"utf-8\"?>\
 <xsl:stylesheet version=\"1.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\">\
 	<xsl:output method=\"html\" encoding=\"utf-8\"/>\
 	<xsl:template match=\"/\">\
 		<xsl:value-of select=\"Content\"/>\
 	</xsl:template>\
-</xsl:stylesheet>" ), XSL );
-# else
-		/*
-		<?xml version="1.0" encoding="utf-8"?>
-		<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-			<xsl:output method="html" encoding="utf-8"/>
-			<xsl:template match="/">
-				<xsl:value-of select="Content"/>
-			</xsl:template>
-		</xsl:stylesheet>
-		*/
-
-		// Above URI encoded.
-		XSL.Append( "%3C%3Fxml%20version%3D%221.0%22%20encoding%3D%22utf-8%22%3F%3E%0A%3Cxsl%3Astylesheet%20version%3D%221.0%22%20xmlns%3Axsl%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2FXSL%2FTransform%22%3E%0A%09%3Cxsl%3Aoutput%20method%3D%22html%22%20encoding%3D%22utf-8%22%2F%3E%0A%09%3Cxsl%3Atemplate%20match%3D%22%2F%22%3E%0A%09%09%3Cxsl%3Avalue-of%20select%3D%22Content%22%2F%3E%0A%09%3C%2Fxsl%3Atemplate%3E%0A%3C%2Fxsl%3Astylesheet%3E" );
-# endif
-	}
+</xsl:stylesheet>";
 
 	inline void SetXMLAndXSL_(
 		const ntvstr::string___ &Message,
@@ -229,11 +218,11 @@ namespace {
 		Buffer.Init();
 
 		if ( Language == NULL )
-			SetXML_( Message.UTF8( Buffer ), XML );
+			PutInXML_( Message.UTF8( Buffer ), XML );
 		else
-			SetXML_( Message.UTF8( Buffer ), Language, XML );
+			TanslateAndPutInXML_( Message.UTF8( Buffer ), Language, XML );
 
-		SetXSL_( XSL );
+		EncodeXSL_( str::wString( AlertBaseXSL_ ), XSL );
 	qRR
 	qRT
 	qRE
@@ -275,6 +264,25 @@ qRB
 qRR
 qRT
 qRE
+}
+
+void sclxdhtml::sProxy::Alert(
+	const ntvstr::string___ &XML,
+	const ntvstr::string___ &XSL,
+	const ntvstr::string___ &Title,
+	const char *Language )
+{
+qRH;
+	str::wString EncodedXSL;
+	str::string Buffer;
+qRB;
+	tol::Init( EncodedXSL, Buffer );
+	EncodeXSL_( XSL.UTF8( Buffer ), EncodedXSL );
+
+	Alert_( XML, EncodedXSL, Title, Language );
+qRR;
+qRT;
+qRE;
 }
 
 void sclxdhtml::sProxy::AlertT(
@@ -695,7 +703,6 @@ void sclxdhtml::prolog::HandleProjectTypeSwitching( sProxy & Proxy )
 		break;
 	}
 }
-
 
 void sclxdhtml::prolog::DisplaySelectedProjectFilename(
 	sProxy &Proxy,

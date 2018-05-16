@@ -19,7 +19,9 @@
 		</span>
 	</xsl:template>
 	<xsl:template match="Frontend">
-		<xsl:value-of select="Name"/>
+		<span style="font-weight: bold;">
+			<xsl:value-of select="Name"/>
+		</span>
 		<xsl:text> V</xsl:text>
 		<xsl:value-of select="Version"/>
 		<xsl:text> Build </xsl:text>
@@ -46,7 +48,9 @@
 		<br/>
 	</xsl:template>
 	<xsl:template match="Launcher">
-		<xsl:text>#aLauncher# :</xsl:text>
+		<span style="font-style: italic;">
+			<xsl:text>#aLauncher# :</xsl:text>
+		</span>
 		<br/>
 		<xsl:value-of select="."/>
 		<br/>

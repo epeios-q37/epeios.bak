@@ -333,10 +333,7 @@ namespace sclxdhtml {
 			const ntvstr::string___ &XML,
 			const ntvstr::string___ &XSL,
 			const ntvstr::string___ &Title,
-			const char *Language )
-		{
-			Alert_( XML, XSL, Title, Language );
-		}
+			const char *Language );
 		void AlertT(
 			const ntvstr::string___ &RawMessage,
 			const char *Language );	// Translates 'Message'.
