@@ -50,12 +50,15 @@ void prolog::Display( core::rSession &Session )
 	SetLayout( Session );
 
 	Session.SwitchTo( base::pProlog );
+
+	sclxdhtml::prolog::HandleProjectTypeSwitching( Session );
 }
 
 #define AC( name ) BASE_AC( prolog, name )
 
 AC( SwitchProjectType )
 {
+	sclxdhtml::prolog::HandleProjectTypeSwitching( Session );
 }
 
 AC( DisplayProjectFilename )

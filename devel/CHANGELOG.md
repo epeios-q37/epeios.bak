@@ -9,8 +9,13 @@
   - [adpt],
 - CNVFDR:
   - improvements,
+- SCLIMISC:
+  - standardization,
 - SCLXDHTML:
   - the handling of the *XSL* files (either name or content is sent) can now be retrieved from registry,
+  - fixing element disabling bug,
+  - improvements,
+  - [adpt],
 
 ## 2018-05-15
 

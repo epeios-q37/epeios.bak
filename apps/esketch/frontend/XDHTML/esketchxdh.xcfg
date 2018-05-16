@@ -49,11 +49,11 @@
 					</XSLFile>
 					<XSLFile target="Login">
 							<xpp:expand select="XSLRootDir"/>
-							<xpp:bloc>LoginLayout.xsl</xpp:bloc>
+							<xpp:bloc>Login.xsl</xpp:bloc>
 					</XSLFile>
 					<XSLFile target="Main">
 							<xpp:expand select="XSLRootDir"/>
-							<xpp:bloc>MainLayout.xsl</xpp:bloc>
+							<xpp:bloc>Main.xsl</xpp:bloc>
 					</XSLFile>
 				</XSLFiles>
 			</xpp:bloc>

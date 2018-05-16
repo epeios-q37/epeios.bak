@@ -828,19 +828,24 @@ namespace sclxdhtml {
 	void SCLXDHTMLReleaseCallback( xdhcmn::cSession *Callback );	// To define by user.
 
 	namespace prolog {
+		static E_CDEF( char *, BorderId, "Border" );
 		static E_CDEF( char *, ProjectTypeId, "ProjectType" );
+		static E_CDEF( char *, PredefinedProjectFormId, "PredefinedProjectForm" );
 		static E_CDEF( char *, PredefinedProjectId, "PredefinedProject" );
+		static E_CDEF( char *, RemoteProjectFormId, "RemoteProjectForm" );
 		static E_CDEF( char *, RemoteProjectId, "RemoteProject" );
 
 		void GetLayout(
 			sclfrntnd::rFrontend &Frontend,
 			xml::writer_ &Writer );
 
+		void HandleProjectTypeSwitching( sProxy &Proxy );
+
 		void DisplaySelectedProjectFilename(
 			sProxy &Proxy,
 			const char *Id );
 
-		sclmisc::project_type__ GetProjectFeatures(
+		sclmisc::eProjectType GetProjectFeatures(
 			sProxy &Proxy,
 			str::string_ &Feature );
 

@@ -11,7 +11,7 @@
 					<legend>#plgProject#</legend>
 					<div>
 						<span>
-							<fieldset data-xdh-cast="NewProjectCast">
+							<fieldset id="Border">
 								<select id="ProjectType" data-xdh-onevent="SwitchProjectType" title="#plgProjectTypes#">
 									<option value="New">
 										<xsl:if test="DefaultProjectType='New'">
@@ -35,7 +35,7 @@
 								<xsl:apply-templates select="Projects"/>
 								<span style="display: inline-block;">
 									<!-- if the 'style' attribute is set in the child element, the 'hidden' attribute doesn't work anymore on this child element...-->
-									<fieldset data-xdh-cast="UserProjectCast" title="#plgProjectFileToLoad#">
+									<fieldset id="RemoteProjectForm" title="#plgProjectFileToLoad#">
 										<legend>#plgProjectFile#</legend>
 										<button
 											data-xdh-onevent="(OpenFile|DisplayProjectFilename|(#plgSelectProjectFile#|.xprj))"
@@ -55,9 +55,11 @@
 		</span>
 	</xsl:template>
 	<xsl:template match="Projects">
-		<select id="PredefinedProject" data-xdh-cast="PredefinedProjectsCast" title="#plgPredefinedProjects#">
-			<xsl:apply-templates select="Project"/>
-		</select>
+		<span id="PredefinedProjectForm">
+			<select id="PredefinedProject" title="#plgPredefinedProjects#">
+				<xsl:apply-templates select="Project"/>
+			</select>
+		</span>
 	</xsl:template>
 	<xsl:template match="Project">
 		<option>

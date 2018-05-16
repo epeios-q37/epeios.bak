@@ -233,7 +233,7 @@ namespace sclmisc {
 
 	void EraseProjectRegistry( void );
 
-	enum project_type__ {
+	qENUM( ProjectType ) {
 		ptNew,			// Empty project.
 		ptPredefined,	// Use of a project defined in the 'Definitions' section in the configuration file.
 		ptRemote,		// Project stored in a file.
@@ -242,9 +242,9 @@ namespace sclmisc {
 		pt_Undefined
 	};
 
-	const char *GetLabel( project_type__ ProjectType );
+	const char *GetLabel( eProjectType ProjectType );
 
-	project_type__ GetProjectType( const str::string_ &Pattern );
+	eProjectType GetProjectType( const str::string_ &Pattern );
 
 	void LoadProject(
 		flw::iflow__ &Flow,
@@ -258,7 +258,7 @@ namespace sclmisc {
 		str::string_ &Id );
 
 	void LoadProject(
-		project_type__ ProjectType,
+		eProjectType ProjectType,
 		const str::string_ &ProjectFeature,
 		const scli::sInfo &Info );
 

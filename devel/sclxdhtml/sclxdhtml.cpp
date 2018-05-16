@@ -641,7 +641,7 @@ void sclxdhtml::sProxy::EnableElement(	const str::dString &Id )
 
 void sclxdhtml::sProxy::DisableElements( const str::dStrings &Ids )
 {
-	HandleElements_( Ids, &xdhdws::sProxy::EnableElements, Core_ );
+	HandleElements_( Ids, &xdhdws::sProxy::DisableElements, Core_ );
 }
 
 void sclxdhtml::sProxy::DisableElement( const str::dString &Id )
@@ -658,9 +658,9 @@ void sclxdhtml::prolog::GetLayout(
 	sclfrntnd::GetProjectsFeatures( Frontend.Language(), Writer );
 }
 
-static sclmisc::project_type__ GetProjectType_( sProxy &Proxy )
+static sclmisc::eProjectType GetProjectType_( sProxy &Proxy )
 {
-	sclmisc::project_type__ ProjectType = sclmisc::pt_Undefined;
+	sclmisc::eProjectType ProjectType = sclmisc::pt_Undefined;
 qRH
 	str::string Value;
 qRB
@@ -671,6 +671,31 @@ qRT
 qRE
 	return ProjectType;
 }
+
+void sclxdhtml::prolog::HandleProjectTypeSwitching( sProxy & Proxy )
+{
+	switch ( GetProjectType_( Proxy ) ) {
+	case sclmisc::ptNew:
+		Proxy.AddClass( prolog::RemoteProjectFormId, "hide" );
+		Proxy.AddClass( prolog::PredefinedProjectFormId, "hide" );
+		Proxy.AddClass( prolog::BorderId, "fieldset-vanish" );
+		break;
+	case sclmisc::ptPredefined:
+		Proxy.AddClass( prolog::RemoteProjectFormId, "hide" );
+		Proxy.RemoveClass( prolog::PredefinedProjectFormId, "hide" );
+		Proxy.RemoveClass( prolog::BorderId, "fieldset-vanish" );
+		break;
+	case sclmisc::ptRemote:
+		Proxy.RemoveClass( prolog::RemoteProjectFormId, "hide" );
+		Proxy.AddClass( prolog::PredefinedProjectFormId, "hide" );
+		Proxy.RemoveClass( prolog::BorderId, "fieldset-vanish" );
+		break;
+	default:
+		qRFwk();
+		break;
+	}
+}
+
 
 void sclxdhtml::prolog::DisplaySelectedProjectFilename(
 	sProxy &Proxy,
@@ -699,11 +724,11 @@ qRT
 qRE
 }
 
-sclmisc::project_type__ sclxdhtml::prolog::GetProjectFeatures(
+sclmisc::eProjectType sclxdhtml::prolog::GetProjectFeatures(
 	sProxy &Proxy,
 	str::string_ &Feature )
 {
-	sclmisc::project_type__ Type = sclmisc::pt_Undefined;
+	sclmisc::eProjectType Type = sclmisc::pt_Undefined;
 qRH
 	TOL_CBUFFER___ Buffer;
 qRB
