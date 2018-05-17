@@ -390,6 +390,27 @@ namespace {
 
 namespace {
 	namespace {
+		void HandlePredefinedAction_(
+			xdhutl::action__ Action,
+			const str::string_ &UserAction,
+			const str::string_ &TargetId,
+			const xdhcmn::digest_ &Args )
+		{
+			switch ( Action ) {
+			case xdhutl::aOpenFile:
+			case xdhutl::aOpenFiles:
+			case xdhutl::aSaveFile:
+				JS_.Execute( str::wString( "console.log( 'Yo!!!')" ) );
+				JS_.Execute( str::wString( "const {dialog} = require('electron').remote;console.log( dialog.showOpenDialog( {properties: ['openFile', 'openDirectory', 'multiSelections']} ) )" ) );
+				break;
+			default:
+				qRGnr();
+				break;
+			}
+		}
+	}
+
+	namespace {
 		bso::bool__ HandleEvent_( const str::string_  &Digest )
 		{
 			bso::bool__ Stop = true;
@@ -403,7 +424,7 @@ namespace {
 			if ( Digest.Amount() != 0 ) {
 				if ( xdhutl::FetchEventAbstract( Digest, Id, Abstract ) ) {
 					if ( xdhutl::IsPredefined( Abstract.Action() ) )
-						qRVct();	//  HandlePredefinedAction_( Abstract.Action(), Abstract.UserAction, _B(), Id, Abstract.Args );
+						HandlePredefinedAction_( Abstract.Action(), Abstract.UserAction, Id, Abstract.Args );
 					else if ( Abstract.Action() == xdhutl::a_User )
 						Stop = Session_.Launch( Id.Convert( IdBuffer ), Abstract.UserAction.Convert( ActionBuffer ) );
 					else

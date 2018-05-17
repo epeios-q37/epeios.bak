@@ -325,6 +325,35 @@ namespace sclxdhtml {
 		{
 			return I_();
 		}
+		const char *Execute(
+			const xdhcmn::rNString &Script,
+			qCBUFFERr &Result )
+		{
+			return Core_.Execute( Script, Result );
+		}
+		const str::dString &Execute(
+			const xdhcmn::rNString &Script,
+			str::dString &Result )
+		{
+		qRH;
+			qCBUFFERr Buffer;
+		qRB;
+			Result.Append( Core_.Execute( Script, Buffer ) );
+		qRR;
+		qRT;
+		qRE;
+			return Result;
+		}
+		void Execute( const xdhcmn::rNString &Script )
+		{
+		qRH;
+			qCBUFFERr Dummy;
+		qRB;
+			Execute( Script, Dummy );
+		qRR;
+		qRT;
+		qRE;
+		}
 		void Log( const ntvstr::rString &Message )
 		{
 			Core_.Log( Message );
@@ -354,6 +383,33 @@ namespace sclxdhtml {
 		bso::bool__ ConfirmU(
 			const ntvstr::string___ &Message,
 			const char *Language );	// Displays 'Message' as is. 'Language' is used for the closing text message.
+		void SetAttribute(
+			const xdhcmn::rNString &Id,
+			const xdhcmn::rNString &Name,
+			const xdhcmn::rNString &Value )
+		{
+			Core_.SetAttribute( Id, Name, Value );
+		}
+		const char *GetAttribute(
+			const xdhcmn::rNString &Id,
+			const xdhcmn::rNString &Name,
+			qCBUFFERr &Value )
+		{
+			return Core_.GetAttribute( Id, Name, Value );
+		}
+		const str::dString &GetAttribute(
+			const xdhcmn::rNString &Id,
+			const xdhcmn::rNString &Name,
+			str::dString &Value )
+		{
+			return Core_.GetAttribute( Id, Name, Value );
+		}
+		void RemoveAttribute(
+			const xdhcmn::rNString &Id,
+			const xdhcmn::rNString &Name )
+		{
+			Core_.RemoveAttribute( Id, Name );
+		}
 		void SetValue(
 			const ntvstr::rString &Id,
 			const ntvstr::rString &Value )
@@ -775,8 +831,10 @@ namespace sclxdhtml {
 		qRH;
 			TOL_CBUFFER___ Buffer;
 		qRB;
-			if ( Action == NULL )
+			if ( Action == NULL ) {
+				Session.SetAttribute( "", "data-xdh-onevents", "(keypress|About|SC+a)(keypress|Q37Refresh|SC+r)" );
 				Action = ONS_();
+			}
 
 			 if ( !strcmp( Action, xdhcmn::RefreshActionLabel ) ) {
 				_OnRefresh( Session );

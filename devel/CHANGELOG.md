@@ -1,7 +1,14 @@
 # *Epeios* *CHANGELOG*
 
 ## *Shortcuts*
+
 - [adpt]: Adaptation to changes in underlying modules,
+
+## 2018-05-17
+
+- SCLXDHTML:
+ - adding some missing methods to `sProxy`,
+ - the *About* and *refesh* action are automatically added,
 
 ## 2018-05-16
 

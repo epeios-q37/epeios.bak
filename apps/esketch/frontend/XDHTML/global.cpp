@@ -59,8 +59,6 @@ AC( OnNewSession )
 		qRGnr();
 		break;
 	}
-
-	Session.AlertU( "coucoiu" );
 }
 
 AC( About )
