@@ -8,7 +8,7 @@
 
 - SCLXDHTML:
  - adding some missing methods to `sProxy`,
- - the *About* and *refesh* action are automatically added,
+ - the *About* and *Refesh* actions are automatically added,
 
 ## 2018-05-16
 
