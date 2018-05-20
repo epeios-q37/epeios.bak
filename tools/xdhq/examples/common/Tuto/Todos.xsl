@@ -12,14 +12,9 @@
 		<li id="Todo.{@id}" data-xdh-onevents="(dblclick|Edit)" data-xdh-value="{@id}">
 			<xsl:attribute name="class">
 				<xsl:text>view</xsl:text>
-				<xsl:choose>
-					<xsl:when test="@completed='true'">
-						<xsl:text> completed</xsl:text>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:text> active</xsl:text>
-					</xsl:otherwise>
-				</xsl:choose>
+				<xsl:if test="@completed='true'">
+					<xsl:text> completed</xsl:text>
+				</xsl:if>
 			</xsl:attribute>
 			<span id="View.{@id}">
 				<input class="toggle" type="checkbox" id="{@id}" data-xdh-onevent="Toggle">
@@ -32,7 +27,7 @@
 				</label>
 				<button data-xdh-value="{@id}" class="destroy" data-xdh-onevent="Destroy"/>
 			</span>
-			<input id="Input.{@id}" class="edit" data-xdh-onevents="(keypress|Cancel|Esc)(keypress|Submit|Enter)(blur|Submit)"/>
+			<input id="Input.{@id}" class="edit" data-xdh-onevents="(keyup|Cancel|Esc)(keypress|Submit|Enter)(blur|Submit)"/>
 		</li>
 	</xsl:template>
 </xsl:stylesheet>
