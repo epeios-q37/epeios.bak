@@ -251,4 +251,13 @@ namespace xdhcmn {
 		str::dStrings &Splitted );
 }
 
+/************/
+/**** NEW ****/
+/************/
+
+namespace xdhcmn {
+	typedef digest_ dDigest;
+	qW( Digest )
+}
+
 #endif

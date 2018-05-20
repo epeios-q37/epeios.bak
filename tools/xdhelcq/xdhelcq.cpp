@@ -389,6 +389,55 @@ namespace {
 }
 
 namespace {
+	void Get_(
+		const xdhcmn::digest_ &Args,
+		str::string_ &Title,
+		str::string_ &Default,
+		str::strings_ &Types )
+	{
+		xdhcmn::retriever__ Retriever;
+
+		Retriever.Init( Args );
+
+		Retriever.GetString( Title );
+
+		if ( Retriever.Availability() != strmrg::aNone )
+			Retriever.GetStrings( Types );
+
+		if ( Retriever.Availability() != strmrg::aNone )
+			Retriever.GetString( Default );
+	}
+
+	void Test_( const xdhcmn::dDigest &Digest )
+	{
+	qRH
+		str::string Title, Default;
+		str::strings Types;
+		str::wString Out;
+		flx::rStringWDriver Driver;
+		txf::rWFlow TFlow;
+	qRB
+		Title.Init();
+		Default.Init();
+		Types.Init();
+
+		Get_( Digest, Title, Default, Types );
+
+		Out.Init();
+		Driver.Init( Out );
+		TFlow.Init( Driver );
+
+		TFlow << "console.log( '" << Title << txf::tab << Default << txf::tab  << txf::tab << "');" << txf::commit;
+
+		tol::reset( Driver, TFlow );
+
+		JS_.Execute( Out );
+
+	qRR
+	qRT
+	qRE
+	}
+
 	namespace {
 		void HandlePredefinedAction_(
 			xdhutl::action__ Action,
@@ -396,17 +445,26 @@ namespace {
 			const str::string_ &TargetId,
 			const xdhcmn::digest_ &Args )
 		{
+		qRH
+		qRB
 			switch ( Action ) {
 			case xdhutl::aOpenFile:
 			case xdhutl::aOpenFiles:
 			case xdhutl::aSaveFile:
-				JS_.Execute( str::wString( "console.log( 'Yo!!!')" ) );
-				JS_.Execute( str::wString( "const {dialog} = require('electron').remote;console.log( dialog.showOpenDialog( {properties: ['openFile', 'openDirectory', 'multiSelections']} ) )" ) );
+				qRVct();
+//				JS_.Execute( str::wString( "const {dialog} = require('electron').remote;console.log( dialog.showOpenDialog( {properties: ['openFile', 'openDirectory', 'multiSelections']} ) )" ) );
+//				JS_.Execute( str::wString( "const dialog = require('electron').remote;console.log( dialog.dialog.showOpenDialog( {properties: ['openFile', 'openDirectory', 'multiSelections']} ) )" ) );
+//				JS_.Execute( str::wString( "console.log( require('electron').remote.dialog.showOpenDialog( {properties: ['openFile', 'openDirectory', 'multiSelections']} ) )" ) );
+				Test_( Args );
 				break;
 			default:
 				qRGnr();
 				break;
 			}
+		qRR
+		qRT
+		qRE
+
 		}
 	}
 

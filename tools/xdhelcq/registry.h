@@ -35,6 +35,13 @@ namespace registry {
 
 	namespace definition {
 		using namespace sclrgstry::definition;
+
+		namespace script {
+			extern rEntry
+				OpenFileDialogScript,
+				OpenFilesDialogScript,
+				SaveFileDialogScript;
+		}
 	}
 
 	using namespace xdhujr;
