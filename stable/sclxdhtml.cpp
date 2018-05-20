@@ -684,18 +684,18 @@ void sclxdhtml::prolog::HandleProjectTypeSwitching( sProxy & Proxy )
 {
 	switch ( GetProjectType_( Proxy ) ) {
 	case sclmisc::ptNew:
-		Proxy.AddClass( prolog::RemoteProjectFormId, "remove" );
-		Proxy.AddClass( prolog::PredefinedProjectFormId, "remove" );
+		Proxy.AddClass( prolog::RemoteProjectFormId, "hide" );
+		Proxy.AddClass( prolog::PredefinedProjectFormId, "hide" );
 		Proxy.AddClass( prolog::BorderId, "fieldset-vanish" );
 		break;
 	case sclmisc::ptPredefined:
-		Proxy.AddClass( prolog::RemoteProjectFormId, "remove" );
-		Proxy.RemoveClass( prolog::PredefinedProjectFormId, "remove" );
+		Proxy.AddClass( prolog::RemoteProjectFormId, "hide" );
+		Proxy.RemoveClass( prolog::PredefinedProjectFormId, "hide" );
 		Proxy.RemoveClass( prolog::BorderId, "fieldset-vanish" );
 		break;
 	case sclmisc::ptRemote:
-		Proxy.RemoveClass( prolog::RemoteProjectFormId, "remove" );
-		Proxy.AddClass( prolog::PredefinedProjectFormId, "remove" );
+		Proxy.RemoveClass( prolog::RemoteProjectFormId, "hide" );
+		Proxy.AddClass( prolog::PredefinedProjectFormId, "hide" );
 		Proxy.RemoveClass( prolog::BorderId, "fieldset-vanish" );
 		break;
 	default:

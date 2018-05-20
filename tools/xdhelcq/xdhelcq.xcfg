@@ -12,6 +12,9 @@
 			<!-- Default command -->
 		</Parameters>
 		<Definitions>
+		<Scripts>
+		<OpenFileDialog>console.log( require('electron').remote.dialog.showOpenDialog( {title: "%Title%", filters: [%Filters%], properties: ['openFile']} ) )</OpenFileDialog>
+		</Scripts>
 		</Definitions>
 		<Locale>
 			<xpp:expand select="TOL_Locale"/>
