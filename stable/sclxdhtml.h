@@ -832,7 +832,7 @@ namespace sclxdhtml {
 			TOL_CBUFFER___ Buffer;
 		qRB;
 			if ( Action == NULL ) {
-				Session.SetAttribute( "", "data-xdh-onevents", "(keypress|About|SC+a)(keypress|Q37Refresh|SC+r)" );
+				Session.SetAttribute( "", "data-xdh-onevents", "(keypress|About|SC+a)(keypress|Q37Refresh|SC+r)(unload|Q37Close)" );
 				Action = ONS_();
 			}
 

@@ -207,35 +207,6 @@ namespace {
 }
 
 namespace {
-	void ErrFinal_( v8::Isolate *Isolate = NULL )
-	{
-	qRH
-		str::wString Message;
-		err::buffer__ Buffer;
-	qRB
-		Isolate = v8q::GetIsolate( Isolate );
-
-		Message.Init();
-
-		if ( ERRType != err::t_Abort ) {
-			Message.Append( err::Message( Buffer ) );
-
-			ERRRst();	// To avoid relaunching of current error by objects of the 'FLW' library.
-		} else if ( sclerror::IsErrorPending() )
-			sclmisc::GetSCLBasePendingErrorTranslation( Message );
-
-		if ( Isolate != NULL )
-			Isolate->ThrowException( v8::Exception::Error( v8q::ToString( Message ) ) );
-		else
-			cio::CErr << txf::nl << Message << txf::nl;
-	qRR
-		ERRRst();
-	qRT
-	qRE
-	}
-}
-
-namespace {
 	typedef xdhujp::cJS cJS_;
 
 	class sJS
@@ -345,6 +316,35 @@ namespace {
 			delete ProxyCallback;
 	qRT;
 	qRE;
+	}
+
+	void ErrFinal_( v8::Isolate *Isolate = NULL )
+	{
+	qRH
+		str::wString Message;
+		err::buffer__ Buffer;
+	qRB
+		Isolate = v8q::GetIsolate( Isolate );
+
+		Message.Init();
+
+		if ( ERRType != err::t_Abort ) {
+			Message.Append( err::Message( Buffer ) );
+
+			ERRRst();	// To avoid relaunching of current error by objects of the 'FLW' library.
+		} else if ( sclerror::IsErrorPending() )
+			sclmisc::GetSCLBasePendingErrorTranslation( Message );
+
+		if ( Isolate != NULL )
+			Isolate->ThrowException( v8::Exception::Error( v8q::ToString( Message ) ) );
+
+		Message.InsertAt( "alert( '" );
+		Message.Append( "');" );
+		JS_.Execute( Message );
+	qRR
+		ERRRst();
+	qRT
+	qRE
 	}
 
 	void Initialize_( const v8::FunctionCallbackInfo<v8::Value>& Args )
