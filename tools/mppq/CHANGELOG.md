@@ -2,7 +2,7 @@
 
 ## 2018-05-02
 
-- skipping tailing slide separator, to avoid empty slide,
+- skipping tailing slide separator, to avoid empty slides,
 
 ## 2018-05-01
 

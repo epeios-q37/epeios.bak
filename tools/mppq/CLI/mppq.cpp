@@ -63,7 +63,7 @@ namespace {
 	{
 		sdr::sRow Row = Slide.First();
 
-		if( Last == Row )
+		if( ( Row != qNIL ) && ( Last == Row ) )
 			Flow << Slide( Row );
 		else {
 			while ( Row != Last ) {
@@ -177,6 +177,7 @@ namespace {
 		str::wString Line;
 		wSlide Slide;
 		bso::sBool Continue = true;
+		bso::sBool SeparatorPending = false;
 	qRB;
 		Flow.Init( RFlow, utf::f_Guess );
 
@@ -193,15 +194,29 @@ namespace {
 					if ( Line == "---" ) {
 						Handle_( Slide, WFlow );
 
+						SeparatorPending = true;
+
 						Slide.Init();
-					} else 
+					} else {
+						if ( SeparatorPending ) {
+							PrintSlideSeparator_( WFlow );
+							SeparatorPending = false;
+						}
+
 						Slide.Append( Line );
+					}
 				}
 			}
 		}
 
-		if ( Slide.Amount() != 0 )
+		if ( Slide.Amount() != 0 ) {
+			if ( SeparatorPending ) {
+				PrintSlideSeparator_( WFlow );
+				SeparatorPending = false;
+			}
+
 			Handle_( Slide, WFlow );
+		}
 	qRR;
 	qRT;
 	qRE;
