@@ -22,7 +22,7 @@
 						<xsl:attribute name="checked"/>
 					</xsl:if>
 				</input>
-				<label>
+				<label id="Label.{@id}">
 					<xsl:value-of select="."/>
 				</label>
 				<button data-xdh-value="{@id}" class="destroy" data-xdh-onevent="Destroy"/>
