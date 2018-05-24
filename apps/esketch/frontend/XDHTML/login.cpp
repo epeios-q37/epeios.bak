@@ -57,6 +57,7 @@ void login::Display( core::rSession &Session )
 
 AC( SwitchBackendType )
 {
+	Session.BackendVisibility()
 }
 
 AC( DisplayEmbeddedBackendFilename )
