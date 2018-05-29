@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 1999-2017 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 1999 Claude SIMON (http://q37.info/contact/).
 
 	This file is part of the Epeios framework.
 
@@ -231,7 +231,7 @@ static exclusion__ Convert_( dwtxcl::state__ State )
 		break;
 	}
 
-	return x_Undefined;	// Pour éviter un 'warning'.
+	return x_Undefined;	// Pour ï¿½viter un 'warning'.
 }
 
 exclusion__ GetExclusion_(
@@ -337,7 +337,7 @@ qRB
 	default:
 		Goof.Init();
 		SBuffer.Init();
-		Oddity.Init();	// Pas utilisé pour l'instant. Peut-être dans des versions ultèrieure, pour préciser la raison du problème.
+		Oddity.Init();	// Pas utilisï¿½ pour l'instant. Peut-ï¿½tre dans des versions ultï¿½rieure, pour prï¿½ciser la raison du problï¿½me.
 		Fill_( Name, Oddity, Info, Kernel.Names, Kernel.Oddities, SBuffer, Goof );
 		Kernel.Goofs.Append( Goof );
 		break;
@@ -563,7 +563,7 @@ qRE
 struct data___
 {
 private:
-	tamount__ _ThreadAmountMax;	// Nombre maximum de 'thread' simultanés.
+	tamount__ _ThreadAmountMax;	// Nombre maximum de 'thread' simultanï¿½s.
 	tamount__ _ThreadAmount;
 	exclusions_handling__ _ExclusionsHandling;
 	content_ *_Content;
@@ -1076,7 +1076,7 @@ qRB
 
 	if ( IRow != qNIL ) {
 		Stats.SetValue( gssTotal, Content.Amount() - 1 );
-		IRow = Content.Next( IRow );	// On saute le répertoire racine, qui correspond à 'Root'.
+		IRow = Content.Next( IRow );	// On saute le rï¿½pertoire racine, qui correspond ï¿½ 'Root'.
 
 		Ghost.Init();
 		Ghost.S_.Parent = qNIL;
@@ -1171,7 +1171,7 @@ qRH
 	irow__ IRow = qNIL;
 	dwtxcl::excluder Excluder;
 qRB
-	IRow = Content.Last();	// On va à rebours, pour traiter les répertoires les plus imbriqués d'abord.
+	IRow = Content.Last();	// On va ï¿½ rebours, pour traiter les rï¿½pertoires les plus imbriquï¿½s d'abord.
 
 	Excluder.Init( GO );
 
@@ -1194,7 +1194,7 @@ qRE
 }
 
 typedef bch::E_BUNCHt_( irow__, dwtght::grow__ ) ghosts_reminder_;	// Garde la trace pour chaque 'ghost' de l'item l'utilisant.
-															// Pour éviter qu'un 'ghost' soit utilisé par deux items (duplication de répertoire).
+															// Pour ï¿½viter qu'un 'ghost' soit utilisï¿½ par deux items (duplication de rï¿½pertoire).
 E_AUTO( ghosts_reminder );
 
 void dwtdct::TestGhosts(
@@ -1223,7 +1223,7 @@ qRB
 	Reminder.FillWith( qNIL );
 
 	if ( IRow != qNIL ) {
-		IRow = Content.Next( IRow );	// On saute le répertoire racine, qui correspond à 'Root'.
+		IRow = Content.Next( IRow );	// On saute le rï¿½pertoire racine, qui correspond ï¿½ 'Root'.
 	}
 
 	while ( IRow != qNIL ) {

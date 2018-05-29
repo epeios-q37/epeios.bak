@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 1999-2017 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 1999 Claude SIMON (http://q37.info/contact/).
 
 	This file is part of the Epeios framework.
 
@@ -42,7 +42,7 @@ const char *dwtmov::GetLabel( version__ Version )
 		break;
 	}
 
-	return NULL;	// Pour éviter un 'warning'.
+	return NULL;	// Pour ï¿½viter un 'warning'.
 }
 
 version__ dwtmov::GetVersion( const str::string_ &Pattern )
@@ -137,7 +137,7 @@ public:
 E_AUTO( bundle );
 
 typedef bch::E_BUNCHt_( dwtdct::irow__, dwtght::grow__ ) gtoi_;	// Garde la trace pour chaque 'ghost' de l'item l'utilisant.
-																	// Pour éviter qu'un 'ghost' soit utilisé par deux items (duplication de répertoire).
+																	// Pour ï¿½viter qu'un 'ghost' soit utilisï¿½ par deux items (duplication de rï¿½pertoire).
 
 E_AUTO( gtoi );
 
@@ -227,7 +227,7 @@ qRB
 	GToI.FillWith( qNIL );
 
 	if ( IRow != qNIL ) {
-		IRow = Content.Next( IRow );	// On saute le répertoire racine, qui correspond à 'Root'.
+		IRow = Content.Next( IRow );	// On saute le rï¿½pertoire racine, qui correspond ï¿½ 'Root'.
 	}
 
 	while ( IRow != qNIL ) {
@@ -517,7 +517,7 @@ inline bso::sign__ Compare_(
 		break;
 	}
 
-	return Result;	// Pour éviter un 'warning'.
+	return Result;	// Pour ï¿½viter un 'warning'.
 }
 
 inline bso::sign__ Compare_(
@@ -700,7 +700,7 @@ static inline const char *GetLabel_(
 		break;
 	}
 
-	return NULL;	// Pour éviter un 'warning'.
+	return NULL;	// Pour ï¿½viter un 'warning'.
 }
 
 enum attribute__
@@ -708,7 +708,7 @@ enum attribute__
 	aAmount,
 	aOld,
 	aNew,
-	aDepth,	// Obsolete ; conservé pour des raisons de compatibilité.
+	aDepth,	// Obsolete ; conservï¿½ pour des raisons de compatibilitï¿½.
 	a_amount,
 	a_Undefined
 };
@@ -751,7 +751,7 @@ static inline const char *GetLabel_(
 		break;
 	}
 
-	return NULL;	// Pour éviter un 'warning'.
+	return NULL;	// Pour ï¿½viter un 'warning'.
 }
 
 static void Dump_(
@@ -1002,7 +1002,7 @@ static bso::bool__ Apply_(
 	else
 		qRGnr();
 
-	return false;	// Pour éviter un 'warning'.
+	return false;	// Pour ï¿½viter un 'warning'.
 }
 
 bso::bool__ dwtmov::Apply(

@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 1999-2017 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 1999 Claude SIMON (http://q37.info/contact/).
 
 	This file is part of the Epeios framework.
 
@@ -56,7 +56,7 @@ const char *dwtftr::GetLabel( version__ Version )
 		break;
 	}
 
-	return NULL;	// Pour éviter un 'warning'.
+	return NULL;	// Pour ï¿½viter un 'warning'.
 }
 
 version__ dwtftr::GetVersion( const str::string_ &Pattern )
@@ -84,7 +84,7 @@ static inline xversion__ GetXVersion_( version__ Version )
 		break;
 	}
 
-	return xv_Undefined;	// Pour éviter un 'xarning'.
+	return xv_Undefined;	// Pour ï¿½viter un 'xarning'.
 }
 
 #define E( name )	case x##name : return #name; break
@@ -104,7 +104,7 @@ const char *GetLabel_(
 		break;
 	}
 
-	return NULL;	// Pour éviter un 'warning'.
+	return NULL;	// Pour ï¿½viter un 'warning'.
 }
 
 static const stsfsm::automat_ &GetExclusionAutomat_( xversion__ Version )
@@ -118,7 +118,7 @@ static const stsfsm::automat_ &GetExclusionAutomat_( xversion__ Version )
 		break;
 	}
 
-	return *(stsfsm::automat_ *)NULL;	// Pour éviter un 'warning'.
+	return *(stsfsm::automat_ *)NULL;	// Pour ï¿½viter un 'warning'.
 }
 
 exclusion__ GetExclusion_(
@@ -253,7 +253,7 @@ qRB
 		Fill_( Item.Files, Kernel, Directory.Files );
 		Fill_( Item.Goofs, Kernel, Directory.Goofs );
 
-		ParentIRow = Item.Parent();	// Peut-être modifié ci-dessous.
+		ParentIRow = Item.Parent();	// Peut-ï¿½tre modifiï¿½ ci-dessous.
 
 		Directory().Name = Kernel.Names.Append( Item.Dir.Name );
 
@@ -459,7 +459,7 @@ static inline const char *GetLabel_(
 		break;
 	}
 
-	return NULL;	// Pour éviter un 'warning'.
+	return NULL;	// Pour ï¿½viter un 'warning'.
 }
 
 enum attribute__
@@ -514,7 +514,7 @@ static inline const char *GetLabel_(
 		break;
 	}
 
-	return NULL;	// Pour éviter un 'warning'.
+	return NULL;	// Pour ï¿½viter un 'warning'.
 }
 
 static inline void DumpCommon_(
@@ -838,7 +838,7 @@ static tag__ GetTag_(
 	else
 		return (tag__)Id;
 
-	return t_Undefined;	// Pour éviter un 'warning'.
+	return t_Undefined;	// Pour ï¿½viter un 'warning'.
 }
 
 static attribute__ GetAttribute_(
@@ -854,7 +854,7 @@ static attribute__ GetAttribute_(
 	else
 		return (attribute__)Id;
 
-	return a_Undefined;	// Pour éviter un 'warning'.
+	return a_Undefined;	// Pour ï¿½viter un 'warning'.
 }
 
 #define LEVEL_DELTA	5
@@ -908,7 +908,7 @@ inline static bso::sign__ Compare_(
 		break;
 	}
 
-	return 0;	// Pour éviter un 'warning'.
+	return 0;	// Pour ï¿½viter un 'warning'.
 }
 
 template <typename rows, typename items> static sdr::row__ Insert_(

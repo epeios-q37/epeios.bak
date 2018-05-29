@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 1999-2017 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 1999 Claude SIMON (http://q37.info/contact/).
 
 	This file is part of the Epeios framework.
 
@@ -37,7 +37,7 @@ const char *dwtcpr::GetLabel( version__ Version )
 		break;
 	}
 
-	return NULL;	// Pour éviter un 'warning'.
+	return NULL;	// Pour ï¿½viter un 'warning'.
 }
 
 version__ dwtcpr::GetVersion( const str::string_ &Pattern )
@@ -70,7 +70,7 @@ const char *GetLabel_(
 		break;
 	}
 
-	return NULL;	// Pour éviter un 'warning'.
+	return NULL;	// Pour ï¿½viter un 'warning'.
 }
 
 static status__ GetStatus_(
@@ -147,7 +147,7 @@ qRB
 				Link.Init();
 				Link.Parent = NewRow;
 				Link.Source = Rows( Row );
-				// Link.Target = TRows( TRow );	// Répertoire n'existant pas dans la cible, 'Target' est laissé à 'qNIL' pour signaler le fait qu'il faut mettre tous les sous-répertoires en 'Created'.
+				// Link.Target = TRows( TRow );	// Rï¿½pertoire n'existant pas dans la cible, 'Target' est laissï¿½ ï¿½ 'qNIL' pour signaler le fait qu'il faut mettre tous les sous-rï¿½pertoires en 'Created'.
 				Links.Push( Link );
 			}
 		}
@@ -205,7 +205,7 @@ qRB
 			if ( Exclusion == dwtbsc::xNo ) {
 				Rows.Append( Row = Directories.New() );
 
-				Dir().Name = Names.Append( SName() );	// Déjà positionné.
+				Dir().Name = Names.Append( SName() );	// Dï¿½jï¿½ positionnï¿½.
 				Dir().Status = sCreated;
 				Modified = true;
 				Directories.Store( Dir, Row );
@@ -213,7 +213,7 @@ qRB
 				Link.Init();
 				Link.Parent = Row;
 				Link.Source = SRows( SRow );
-				// Link.Target = TRows( TRow );	// Répertoire n'existant pas dans la cible, 'Target' est laissé à 'qNIL' pour signaler le fait qu'il faut mettre tous les sous-répertoires en 'Created'.
+				// Link.Target = TRows( TRow );	// Rï¿½pertoire n'existant pas dans la cible, 'Target' est laissï¿½ ï¿½ 'qNIL' pour signaler le fait qu'il faut mettre tous les sous-rï¿½pertoires en 'Created'.
 				Links.Push( Link );
 			}
 			SRow = SRows.Next( SRow );
@@ -222,7 +222,7 @@ qRB
 			if ( Exclusion == dwtbsc::xNo ) {
 				Rows.Append( Row = Directories.New() );
 
-				Dir().Name = Names.Append( SName() );	// Déjà positionné.
+				Dir().Name = Names.Append( SName() );	// Dï¿½jï¿½ positionnï¿½.
 				Dir().Status = sSteady;
 				Directories.Store( Dir, Row );
 
@@ -239,7 +239,7 @@ qRB
 		case 1:
 			Rows.Append( Row = Directories.New() );
 
-			Dir().Name = Names.Append( TName() );	// Déjà positionné.
+			Dir().Name = Names.Append( TName() );	// Dï¿½jï¿½ positionnï¿½.
 			Dir().Status = sRemoved;
 			TRow = TRows.Next( TRow );
 			Modified = true;
@@ -381,7 +381,7 @@ qRB
 		case -1:
 			if ( Exclusion == dwtbsc::xNo ) {
 				File.Init();
-				File.Name = Names.Append( SName() );	// Déjà positionné.
+				File.Name = Names.Append( SName() );	// Dï¿½jï¿½ positionnï¿½.
 				File.Status = sCreated;
 				Rows.Append( Files.Append( File ) );
 				Modified = true;
@@ -393,7 +393,7 @@ qRB
 		case 0:
 			if ( ( Exclusion == dwtbsc::xNo ) && IsDifferent_( SFiles( SRows( SRow ) ), TFiles( TRows( TRow ) ) ) ) {
 				File.Init();
-				File.Name = Names.Append( SName() );	// Déjà positionné.
+				File.Name = Names.Append( SName() );	// Dï¿½jï¿½ positionnï¿½.
 				File.Status = sModified;
 				Rows.Append( Files.Append( File ) );
 				Modified = true;
@@ -406,7 +406,7 @@ qRB
 			break;
 		case 1:
 			File.Init();
-			File.Name = Names.Append( TName() );	// Déjà positionné.
+			File.Name = Names.Append( TName() );	// Dï¿½jï¿½ positionnï¿½.
 			File.Status = sRemoved;
 			Rows.Append( Files.Append( File ) );
 			TRow = TRows.Next( TRow );
@@ -466,7 +466,7 @@ static void MarkAsModified_(
 	Scene.Directories.Flush();
 }
 
-// Ajoute tous les sous-répertoires d'un nouveau répertoire.
+// Ajoute tous les sous-rï¿½pertoires d'un nouveau rï¿½pertoire.
 static void Put_(
 	drow__ Parent,
 	const dwtftr::drows_ &Rows,
@@ -493,7 +493,7 @@ qRB
 			Link.Init();
 			Link.Parent = RDirectories.Append( Dir );
 			Link.Source = Rows( Row );
-			// Link.Target = TRows( TRow );	// Répertoire n'existant pas dans la cible, 'Target' est laissé à 'qNIL' pour signaler le fait qu'il faut mettre tous les sous-répertoires en 'Created'.
+			// Link.Target = TRows( TRow );	// Rï¿½pertoire n'existant pas dans la cible, 'Target' est laissï¿½ ï¿½ 'qNIL' pour signaler le fait qu'il faut mettre tous les sous-rï¿½pertoires en 'Created'.
 			Links.Push( Link );
 
 			RRows.Append( Link.Parent );
@@ -583,7 +583,7 @@ qRB
 			Modified = Compare_( Link.Source, Source, Link.Target, Target, Dir.Dirs, Scene.Directories, Scene.Names, Links );
 			Modified |= Compare_( Link.Source, Source, Link.Target, Target, Dir.Files, Scene.Files, Scene.Names, TotalFilesAmount, FilesTotalSize );
 		}
-		else // On est dans le cas d'un répertoire nouvellement crée, et on veut donc ajouter tout son contenu à l'arbre des modifications.
+		else // On est dans le cas d'un rï¿½pertoire nouvellement crï¿½e, et on veut donc ajouter tout son contenu ï¿½ l'arbre des modifications.
 			Put_( Link.Parent, Link.Source, Source, Dir.Files, Scene.Files, Dir.Dirs, Scene.Directories, Scene.Names, Links, TotalFilesAmount, FilesTotalSize );
 
 		Scene.Directories.Store( Dir, Link.Parent );
@@ -632,7 +632,7 @@ static inline const char *GetLabel_(
 		break;
 	}
 
-	return NULL;	// Pour éviter un 'warning'.
+	return NULL;	// Pour ï¿½viter un 'warning'.
 }
 
 enum attribute__
@@ -662,7 +662,7 @@ static inline const char *GetLabel_(
 		break;
 	}
 
-	return NULL;	// Pour éviter un 'warning'.
+	return NULL;	// Pour ï¿½viter un 'warning'.
 }
 
 static inline void DumpCore_(
@@ -804,7 +804,7 @@ static tag__ GetTag_(
 	else
 		return (tag__)Id;
 
-	return t_Undefined;	// Pour éviter un 'warning'.
+	return t_Undefined;	// Pour ï¿½viter un 'warning'.
 }
 
 static attribute__ GetAttribute_(
@@ -820,7 +820,7 @@ static attribute__ GetAttribute_(
 	else
 		return (attribute__)Id;
 
-	return a_Undefined;	// Pour éviter un 'warning'.
+	return a_Undefined;	// Pour ï¿½viter un 'warning'.
 }
 enum kind__ {
 	kDir,

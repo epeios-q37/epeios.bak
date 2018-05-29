@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 1999-2017 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 1999 Claude SIMON (http://q37.info/contact/).
 
 	This file is part of the Epeios framework.
 
@@ -225,7 +225,7 @@ namespace fblfrd {
 		flw::iflow__ *_FlowInParameter;	// Contient, s'il y en a un,  le pointeur sur le 'Flow' en paramtre d'entre.
 		bso::bool__ _FlowOutParameter;	// Signale s'il y a un paramtre flow dans les paramtres de sortie.
 		bso::bool__ _DismissPending;
-		str::wString CodeKey_;	// Clé de cryptage des codes pour le 'Ping' et le 'Crash'.
+		str::wString CodeKey_;	// Clï¿½ de cryptage des codes pour le 'Ping' et le 'Crash'.
 		void _PreProcess( void )
 		{
 			P_().PreProcess();

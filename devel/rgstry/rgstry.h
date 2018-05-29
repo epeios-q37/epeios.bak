@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 1999-2017 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 1999 Claude SIMON (http://q37.info/contact/).
 
 	This file is part of the Epeios framework.
 
@@ -65,7 +65,7 @@ namespace rgstry {
 /****** Old version ******/
 /*************************/
 
-// Prédéclaration.
+// Prï¿½dï¿½claration.
 namespace lcl {
 	class meaning_;
 }
@@ -218,14 +218,14 @@ namespace rgstry {
 			_Path.reset( P );
 		}
 		entry___(
-			const char *Path = NULL,	// Non dupliqué !
+			const char *Path = NULL,	// Non dupliquï¿½ !
 			const entry___ *Parent = NULL )
 		{
 			reset( false );
 			Init( Path, Parent );
 		}
 		entry___(
-			const char *Path,	// Non dupliqué !
+			const char *Path,	// Non dupliquï¿½ !
 			const entry___ &Parent )
 		{
 			reset( false );
@@ -241,7 +241,7 @@ namespace rgstry {
 			reset();
 		}
 		void Init(
-			const char *Path = NULL,	// Non dupliqué !
+			const char *Path = NULL,	// Non dupliquï¿½ !
 			const entry___ *Parent = NULL )
 		{
 			_Parent = Parent;
@@ -250,7 +250,7 @@ namespace rgstry {
 			_Path.Init();
 		}
 		void Init(
-			const char *Path,	// Non dupliqué !
+			const char *Path,	// Non dupliquï¿½ !
 			const entry___ &Parent )
 		{
 			Init( Path, &Parent );
@@ -490,7 +490,7 @@ namespace rgstry {
 		}
 	};
 
-	// Nature du nœud.
+	// Nature du nï¿½ud.
 	enum nature__ 
 	{
 		nTag,
@@ -823,7 +823,7 @@ namespace rgstry {
 
 			Buffer.Init( Nodes );
 
-			Writer.PushTag( Buffer( Row ).Name );	// 'PopTag' correspondant fait par méthode appelante.
+			Writer.PushTag( Buffer( Row ).Name );	// 'PopTag' correspondant fait par mï¿½thode appelante.
 			_DumpAttributes( Row, Writer );
 
 			const value_ &Value = Buffer( Row ).Value;
@@ -934,7 +934,7 @@ namespace rgstry {
 			const path_ &Path,
 			row__ Row,
 			value_ &Value,
-			bso::bool__ *Missing ) const;	// Nota : ne met 'Missing' à 'true' que lorsque 'Path' n'existe pas. Si 'Missing' est à 'true', aucune action n'est réalisée.
+			bso::bool__ *Missing ) const;	// Nota : ne met 'Missing' ï¿½ 'true' que lorsque 'Path' n'existe pas. Si 'Missing' est ï¿½ 'true', aucune action n'est rï¿½alisï¿½e.
 		bso::bool__ GetValue(
 			const path_ &Path,
 			row__ Row,
@@ -951,7 +951,7 @@ namespace rgstry {
 			row__ Row,
 			value_ &Value,
 			bso::bool__ *Missing,
-			sdr::row__ *PathErrorRow = NULL ) const;	// Nota : ne met 'Missing' à 'true' que lorsque 'Path' n'existe pas. Si 'Missing' est à 'true', aucune action n'est réalisée.
+			sdr::row__ *PathErrorRow = NULL ) const;	// Nota : ne met 'Missing' ï¿½ 'true' que lorsque 'Path' n'existe pas. Si 'Missing' est ï¿½ 'true', aucune action n'est rï¿½alisï¿½e.
 		bso::bool__ GetValue(
 			const str::string_ &PathString,
 			row__ Row,
@@ -968,7 +968,7 @@ namespace rgstry {
 			row__ Row,
 			value_ &Value,
 			bso::bool__ *Missing,
-			sdr::row__ *PathErrorRow = NULL ) const;	// Nota : ne met 'Missing' à 'true' que lorsque 'Path' n'existe pas. Si 'Missing' est à 'true', aucune action n'est réalisée.
+			sdr::row__ *PathErrorRow = NULL ) const;	// Nota : ne met 'Missing' ï¿½ 'true' que lorsque 'Path' n'existe pas. Si 'Missing' est ï¿½ 'true', aucune action n'est rï¿½alisï¿½e.
 		bso::bool__ GetValue(
 			const tentry__ &Entry,
 			row__ Row,
@@ -987,14 +987,14 @@ namespace rgstry {
 			row__ Row,
 			bso::bool__ *Missing,
 			buffer &Buffer,
-			sdr::row__ *PathErrorRow = NULL ) const;	// Nota : ne met 'Missing' à 'true' que lorsque 'Path' n'existe pas. Si 'Missing' est à 'true', aucune action n'est réalisée.
+			sdr::row__ *PathErrorRow = NULL ) const;	// Nota : ne met 'Missing' ï¿½ 'true' que lorsque 'Path' n'existe pas. Si 'Missing' est ï¿½ 'true', aucune action n'est rï¿½alisï¿½e.
 #endif
 		const value_ &GetValue(
 			const tentry__ &Entry,
 			row__ Row,
 			bso::bool__ *Missing,
 			str::string_ &Value,
-			sdr::row__ *PathErrorRow = NULL ) const	// Nota : ne met 'Missing' à 'true' que lorsque 'Path' n'existe pas. Si 'Missing' est à 'true', aucune action n'est réalisée.
+			sdr::row__ *PathErrorRow = NULL ) const	// Nota : ne met 'Missing' ï¿½ 'true' que lorsque 'Path' n'existe pas. Si 'Missing' est ï¿½ 'true', aucune action n'est rï¿½alisï¿½e.
 		{
 			return GetValue( Entry, Row, Value, Missing, PathErrorRow );
 		}
@@ -1219,7 +1219,7 @@ namespace rgstry {
 	inline row__ Fill(
 		xtf::extended_text_iflow__ &XFlow,
 		const xpp::criterions___ &Criterions,
-		registry_ &Registry	) // Peut être = 'qNIL', auquel cas une nouvelle 'registry' est crée dont la racine est stockée dans ce paramètre.
+		registry_ &Registry	) // Peut ï¿½tre = 'qNIL', auquel cas une nouvelle 'registry' est crï¿½e dont la racine est stockï¿½e dans ce paramï¿½tre.
 	{
 		row__ Row = qNIL;
 	qRH
@@ -1254,7 +1254,7 @@ namespace rgstry {
 		const xpp::criterions___ &Criterions,
 		rgstry::row__ Root,
 		eRootTagHandling RootTagHandling,
-		registry_ &Registry	) // Peut être = 'qNIL', auquel cas une nouvelle 'registry' est crée dont la racine est stockée dans ce paramètre.
+		registry_ &Registry	) // Peut ï¿½tre = 'qNIL', auquel cas une nouvelle 'registry' est crï¿½e dont la racine est stockï¿½e dans ce paramï¿½tre.
 	{
 		bso::sBool Success = false;
 	qRH
@@ -1272,7 +1272,7 @@ namespace rgstry {
 	enum status__ {
 		sOK,
 		sUnableToOpenFile,
-		sParseError,	// Pas d'entrée dans le fichier de traduction : ce sont les traductions du 'parser__' qui sont utilisés.
+		sParseError,	// Pas d'entrï¿½e dans le fichier de traduction : ce sont les traductions du 'parser__' qui sont utilisï¿½s.
 		sUnableToFindRootPath,
 		sRootPathError,
 		s_amount,
@@ -1352,7 +1352,7 @@ namespace rgstry {
 		return Root;
 	}
 
-# if 1	// Déprécié, destiné à disparaître. Utiliser 'multi_level_registry_'.
+# if 1	// Dï¿½prï¿½ciï¿½, destinï¿½ ï¿½ disparaï¿½tre. Utiliser 'multi_level_registry_'.
 	class overloaded_registry___
 	{
 	public:
@@ -1393,8 +1393,8 @@ namespace rgstry {
 		row__ Init(
 			const registry_ &Global,
 			row__ Root,
-			registry_ &Local,	// 'Global' et 'Local' peuvent être identiques.
-			row__ LocalRoot )	// Si égal à qNIL, est crée et retourné.
+			registry_ &Local,	// 'Global' et 'Local' peuvent ï¿½tre identiques.
+			row__ LocalRoot )	// Si ï¿½gal ï¿½ qNIL, est crï¿½e et retournï¿½.
 		{
 			bNode Buffer;
 
@@ -1409,7 +1409,7 @@ namespace rgstry {
 		}
 		row__ SetLocal(
 			registry_ &Registry,	// Si == 'NULL', on prend le 'Global'.
-			row__ Root )	// Si == 'qNIL' est crée et retourné.
+			row__ Root )	// Si == 'qNIL' est crï¿½e et retournï¿½.
 		{
 			if ( ( Global.Registry == NULL ) || ( Global.Root == qNIL ) )
 				qRFwk();
@@ -1428,7 +1428,7 @@ namespace rgstry {
 			const str::string_ &PathString,
 			value_ &Value,
 			bso::bool__ *Missing,
-			sdr::row__ *PathErrorRow = NULL  ) const;	// Nota : ne met 'Missing' à 'true' que lorsque 'Path' n'existe pas. Si 'Missing' est à 'true', aucune action n'est réalisée.
+			sdr::row__ *PathErrorRow = NULL  ) const;	// Nota : ne met 'Missing' ï¿½ 'true' que lorsque 'Path' n'existe pas. Si 'Missing' est ï¿½ 'true', aucune action n'est rï¿½alisï¿½e.
 		bso::bool__ GetValue(
 			const str::string_ &PathString,
 			value_ &Value ) const
@@ -1479,7 +1479,7 @@ namespace rgstry {
 			sdr::row__ *PathErrorRow = NULL ) const;
  	};
 
-	class overloaded_unique_registry___	// La base de registre de base et locale sont la même.
+	class overloaded_unique_registry___	// La base de registre de base et locale sont la mï¿½me.
 	: public overloaded_registry___
 	{
 	private:
@@ -1505,7 +1505,7 @@ namespace rgstry {
 		}
 		row__ Init(
 			registry_ &Global,
-			row__ Root )	// Si == 'qNIL', est crée et retourné.
+			row__ Root )	// Si == 'qNIL', est crï¿½e et retournï¿½.
 		{
 			reset();
 
@@ -1520,7 +1520,7 @@ namespace rgstry {
 		row__ Init(
 			registry_ &Global,
 			row__ Root,
-			row__ LocalRoot ) // Si égal à qNIL, est crée et retourné.
+			row__ LocalRoot ) // Si ï¿½gal ï¿½ qNIL, est crï¿½e et retournï¿½.
 		{
 			reset();
 
@@ -1932,7 +1932,7 @@ namespace rgstry {
 			level__ Level,
 			const path_ &Path,
 			value_ &Value,
-			bso::bool__ *Missing ) const	// Nota : ne met 'Missing' à 'true' que lorsque 'Path' n'existe pas. Si 'Missing' est à 'true', aucune action n'est réalisée.
+			bso::bool__ *Missing ) const	// Nota : ne met 'Missing' ï¿½ 'true' que lorsque 'Path' n'existe pas. Si 'Missing' est ï¿½ 'true', aucune action n'est rï¿½alisï¿½e.
 		{
 		qRH
 			hLock Lock;
@@ -1951,7 +1951,7 @@ namespace rgstry {
 			const str::string_ &PathString,
 			value_ &Value,
 			bso::bool__ *Missing,
-			sdr::row__ *PathErrorRow = NULL  ) const	// Nota : ne met 'Missing' à 'true' que lorsque 'Path' n'existe pas. Si 'Missing' est à 'true', aucune action n'est réalisée.
+			sdr::row__ *PathErrorRow = NULL  ) const	// Nota : ne met 'Missing' ï¿½ 'true' que lorsque 'Path' n'existe pas. Si 'Missing' est ï¿½ 'true', aucune action n'est rï¿½alisï¿½e.
 		{
 		qRH
 			hLock Lock;
@@ -1969,7 +1969,7 @@ namespace rgstry {
 			const str::string_ &PathString,
 			value_ &Value,
 			bso::bool__ *Missing,
-			sdr::row__ *PathErrorRow = NULL  ) const;	// Nota : ne met 'Missing' à 'true' que lorsque 'Path' n'existe pas. Si 'Missing' est à 'true', aucune action n'est réalisée.
+			sdr::row__ *PathErrorRow = NULL  ) const;	// Nota : ne met 'Missing' ï¿½ 'true' que lorsque 'Path' n'existe pas. Si 'Missing' est ï¿½ 'true', aucune action n'est rï¿½alisï¿½e.
 		bso::bool__ GetValue(
 			level__ Level,
 			const path_ &Path,
@@ -2108,29 +2108,29 @@ namespace rgstry {
 		bso::bool__ SetValue(
 			const str::string_ &PathString,
 			const value_ &Value,
-			sdr::row__ *PathErrorRow = NULL );	// Retourne 'false' si 'PathString' a déjà la valeur 'Value', 'true' sinon.
+			sdr::row__ *PathErrorRow = NULL );	// Retourne 'false' si 'PathString' a dï¿½jï¿½ la valeur 'Value', 'true' sinon.
 		bso::bool__ SetValue(
 			const tentry__ &Entry,
 			const value_ &Value,
-			sdr::row__ *PathErrorRow = NULL );	// Retourne 'false' si 'PathString' a déjà la valeur 'Value', 'true' sinon.
+			sdr::row__ *PathErrorRow = NULL );	// Retourne 'false' si 'PathString' a dï¿½jï¿½ la valeur 'Value', 'true' sinon.
 		bso::bool__ AddValue(
 			const str::string_ &PathString,
 			const value_ &Value,
-			sdr::row__ *PathErrorRow = NULL );	// Retourne 'false' si 'PathString' a déjà la valeur 'Value', 'true' sinon.
+			sdr::row__ *PathErrorRow = NULL );	// Retourne 'false' si 'PathString' a dï¿½jï¿½ la valeur 'Value', 'true' sinon.
 		bso::bool__ AddValue(
 			const tentry__ &Entry,
 			const value_ &Value,
-			sdr::row__ *PathErrorRow = NULL );	// Retourne 'false' si 'PathString' a déjà la valeur 'Value', 'true' sinon.
+			sdr::row__ *PathErrorRow = NULL );	// Retourne 'false' si 'PathString' a dï¿½jï¿½ la valeur 'Value', 'true' sinon.
 #if 0
 		bso::bool__ SetValue(
 			const entry___ &Entry,
 			const tags_ &Tags,
 			const value_ &Value,
-			sdr::row__ *PathErrorRow = NULL );	// Retourne 'false' si 'PathString' a déjà la valeur 'Value', 'true' sinon.
+			sdr::row__ *PathErrorRow = NULL );	// Retourne 'false' si 'PathString' a dï¿½jï¿½ la valeur 'Value', 'true' sinon.
 		bso::bool__ SetValue(
 			const entry___ &Entry,
 			const value_ &Value,
-			sdr::row__ *PathErrorRow = NULL );	// Retourne 'false' si 'PathString' a déjà la valeur 'Value', 'true' sinon.
+			sdr::row__ *PathErrorRow = NULL );	// Retourne 'false' si 'PathString' a dï¿½jï¿½ la valeur 'Value', 'true' sinon.
 #endif
 		bso::bool__ Delete(
 			const path_ &Path,
@@ -2152,7 +2152,7 @@ namespace rgstry {
 		bso::bool__ Delete( 
 			const str::string_ &PathString,
 			level__ Level,
-			sdr::row__ *PathErrorRow = NULL )	// Retourne 'false' si 'PathString' a déjà la valeur 'Value', 'true' sinon.
+			sdr::row__ *PathErrorRow = NULL )	// Retourne 'false' si 'PathString' a dï¿½jï¿½ la valeur 'Value', 'true' sinon.
 		{
 			bso::sBool Result = false;
 		qRH
@@ -2170,16 +2170,16 @@ namespace rgstry {
 		bso::bool__ Delete( 
 			const char *PathString,
 			level__ Level,
-			sdr::row__ *PathErrorRow = NULL )	// Retourne 'false' si 'PathString' a déjà la valeur 'Value', 'true' sinon.
+			sdr::row__ *PathErrorRow = NULL )	// Retourne 'false' si 'PathString' a dï¿½jï¿½ la valeur 'Value', 'true' sinon.
 		{
 			return Delete( str::string( PathString ), Level, PathErrorRow );
 		}
 		bso::bool__ Delete(
 			const str::string_ &PathString,
-			sdr::row__ *PathErrorRow = NULL );	// Retourne 'false' si 'PathString' a déjà la valeur 'Value', 'true' sinon.
+			sdr::row__ *PathErrorRow = NULL );	// Retourne 'false' si 'PathString' a dï¿½jï¿½ la valeur 'Value', 'true' sinon.
 		bso::bool__ Delete(
 			const char *PathString,
-			sdr::row__ *PathErrorRow = NULL )	// Retourne 'false' si 'PathString' a déjà la valeur 'Value', 'true' sinon.
+			sdr::row__ *PathErrorRow = NULL )	// Retourne 'false' si 'PathString' a dï¿½jï¿½ la valeur 'Value', 'true' sinon.
 		{
 			return Delete( str::string( PathString ), PathErrorRow );
 		}
@@ -2228,11 +2228,11 @@ namespace rgstry {
 			const tentry__ &Entry ) const;
 		row__ Search(
 			const str::string_ &PathString,
-			level__ &Level,	// Valeur retournée != 'qNIL', contient le 'level' de la registry contenant l'entrée.
+			level__ &Level,	// Valeur retournï¿½e != 'qNIL', contient le 'level' de la registry contenant l'entrï¿½e.
 			sdr::row__ *PathErrorRow = NULL ) const;
 		row__ Search(
 			const tentry__ &Entry,
-			level__ &Level ) const;	// Valeur retournée != 'qNIL', contient le 'level' de la registry contenant l'entrée.
+			level__ &Level ) const;	// Valeur retournï¿½e != 'qNIL', contient le 'level' de la registry contenant l'entrï¿½e.
 		bso::bool__ Exists(
 			level__ Level,
 			const path_ &Path ) const

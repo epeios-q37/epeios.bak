@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 1999-2017 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 1999 Claude SIMON (http://q37.info/contact/).
 
 	This file is part of the Epeios framework.
 
@@ -183,7 +183,7 @@ namespace dwtftr {
 				flsq::ReleaseId( Id );
 
 			Id = flsq::GetId();
-			// L'initialisation proprement dite sera réalisée par des fonctions dédiées.
+			// L'initialisation proprement dite sera rï¿½alisï¿½e par des fonctions dï¿½diï¿½es.
 		}
 	};
 
