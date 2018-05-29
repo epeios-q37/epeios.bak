@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 1999-2017 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 1999 Claude SIMON (http://q37.info/contact/).
 
 	This file is part of the Epeios framework.
 
@@ -83,7 +83,7 @@ namespace dwtdct {
 		struct s
 		{
 			time_t Timestamp;
-			dwtght::grow__ GhostRow;	// Gestion du renommage de répertoire.
+			dwtght::grow__ GhostRow;	// Gestion du renommage de rï¿½pertoire.
 			name_::s Name;
 			oddity_::s Oddity;
 			exclusion__ Exclusion;
@@ -502,15 +502,15 @@ namespace dwtdct {
 	typedef bch::E_BUNCHt_( dwtght::grow__, irow__ ) i2g_;
 	E_AUTO( i2g );
 	
-	// ATTENTION : 'Content' doit avoir été récupèré avec 'rhKeepGhostLike'.
+	// ATTENTION : 'Content' doit avoir ï¿½tï¿½ rï¿½cupï¿½rï¿½ avec 'rhKeepGhostLike'.
 	void SetGhosts(
 		const str::string_ &Root,
 		const content_ &Content,
 		const dwtbsc::ghosts_oddities_ &GO,
 		fGhostsSettingObserver &GhostsSettingObserver,
-		i2g_ &I2G );	// Créer dans chaque répertoire le répertoire spécial servant à détecter le renommage des répertoires.
+		i2g_ &I2G );	// Crï¿½er dans chaque rï¿½pertoire le rï¿½pertoire spï¿½cial servant ï¿½ dï¿½tecter le renommage des rï¿½pertoires.
 
-	// ATTENTION : 'Content' doit avoir été récupèré avec 'rhKeepGhostLike'.
+	// ATTENTION : 'Content' doit avoir ï¿½tï¿½ rï¿½cupï¿½rï¿½ avec 'rhKeepGhostLike'.
 	void DelGhosts(
 		const str::string_ &Root,
 		const content_ &Content,

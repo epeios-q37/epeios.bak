@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 1999-2017 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 1999 Claude SIMON (http://q37.info/contact/).
 
 	This file is part of the Epeios framework.
 
@@ -45,8 +45,8 @@ namespace dwtmov {
 	struct fMove
 	{
 		nrow__
-			Old,		// Nom de l'ancien chemin/nom courant du répertoire.
-			New;		// Nom du nouveau chemin/nom du répertoire.
+			Old,		// Nom de l'ancien chemin/nom courant du rï¿½pertoire.
+			New;		// Nom du nouveau chemin/nom du rï¿½pertoire.
 		void reset( bso::bool__ = true )
 		{
 			Old = New = qNIL;

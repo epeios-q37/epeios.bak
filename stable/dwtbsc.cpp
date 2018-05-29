@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 1999-2017 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 1999 Claude SIMON (http://q37.info/contact/).
 
 	This file is part of the Epeios framework.
 
@@ -59,7 +59,7 @@ const char *dwtbsc::GetLabel( sort_type__ SortType )
 		break;
 	}
 
-	return NULL;	// Pour éviter un 'warning'.
+	return NULL;	// Pour ï¿½viter un 'warning'.
 }
 
 sort_type__ dwtbsc::GetSortType( const str::string_ &Pattern )
@@ -73,7 +73,7 @@ sort_type__ dwtbsc::GetSortType( const str::string_ &Pattern )
 	else
 		return (sort_type__)Id;
 
-	return st_Undefined;	// Pour éviter un 'warning'.
+	return st_Undefined;	// Pour ï¿½viter un 'warning'.
 }
 
 # define I( n, p )\
@@ -249,7 +249,7 @@ static bso::bool__ Delete_(
 qRH
 	str::string Absolute;
 qRB
-	// Sur des lignes différents, et non pas sulr la même avec un '||', car l'échec du premier ne doit pas entrapiner la non-execution du second.
+	// Sur des lignes diffï¿½rents, et non pas sulr la mï¿½me avec un '||', car l'ï¿½chec du premier ne doit pas entrapiner la non-execution du second.
 	Failure |= !Delete_( Root, Item.Path, Item.Files );
 
 	switch ( RootFate ) {
@@ -274,7 +274,7 @@ static bso::bool__ Delete_(
 	const dwtdct::content_ &Content,
 	root_fate__ RootFate )
 {
-	dwtdct::irow__ Row = Content.Last();	// On va dans l'ordre inverse pour commencer par les répertoires les plus imbriquées.
+	dwtdct::irow__ Row = Content.Last();	// On va dans l'ordre inverse pour commencer par les rï¿½pertoires les plus imbriquï¿½es.
 	bso::bool__ Failure = false;
 
 	while ( Row != qNIL ) {

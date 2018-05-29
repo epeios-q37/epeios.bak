@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 1999-2017 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 1999 Claude SIMON (http://q37.info/contact/).
 
 	This file is part of the Epeios framework.
 
@@ -305,11 +305,11 @@ namespace dwtcpr {
 	drow__ Clean(
 		const scene_ &Scene,
 		drow__ Root,
-		scene_ &NewScene );	// Enlève les entrées ne nécessitant pas d'action.
+		scene_ &NewScene );	// Enlï¿½ve les entrï¿½es ne nï¿½cessitant pas d'action.
 
 	drow__ Clean(
 		scene_ &Scene,
-		drow__ Root );	// Enlève les entrées ne nécessitant pas d'action.
+		drow__ Root );	// Enlï¿½ve les entrï¿½es ne nï¿½cessitant pas d'action.
 
 	typedef dwtbsc::observer__ load_observer__;
 

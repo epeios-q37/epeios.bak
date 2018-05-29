@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 1999-2017 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 1999 Claude SIMON (http://q37.info/contact/).
 
 	This file is part of the Epeios framework.
 
@@ -191,7 +191,7 @@ namespace fblbkd {
 		const char *Prefix_;
 		// Libelle du type de l'objet, du module.
 		const char *Name_;
-		// L'interface auquel le module est rattaché.
+		// L'interface auquel le module est rattachï¿½.
 		class backend___ *Backend_;
 	public:
 		//r The description of the request.
@@ -318,7 +318,7 @@ namespace fblbkd {
 		virtual sIndex FBLBKDNew( void )
 		{
 			qRFwk();
-			return 0;	// Pour éviter un warning.
+			return 0;	// Pour ï¿½viter un warning.
 		}
 		//v To delete the object with index 'Index'.
 		virtual void FBLBKDDelete( sIndex Index )
@@ -329,13 +329,13 @@ namespace fblbkd {
 		virtual void *FBLBKDObject( sIndex Index ) const
 		{
 			qRFwk();
-			return NULL;	// Pour éviter un 'warning'
+			return NULL;	// Pour ï¿½viter un 'warning'
 		}
 #if 0
 		//v To get the raw messages.
 		virtual void FBLBKDGetRawMessages( messages_ &Messages ) = 0;
 #endif
-		// Fonction appelée pour traiter la requête 'Requete' pour l'objet d'index 'Index'.
+		// Fonction appelï¿½e pour traiter la requï¿½te 'Requete' pour l'objet d'index 'Index'.
 		virtual void Handle_(
 			sIndex Index,
 			rRequest &Requete,
@@ -662,7 +662,7 @@ namespace fblbkd {
 		}
 	};
 
-	// Module maître, qui fait tout le boulot.
+	// Module maï¿½tre, qui fait tout le boulot.
 	class rMasterModule
 	: public rModule
 	{
@@ -756,14 +756,14 @@ namespace fblbkd {
 		TOL_CBUFFER___ _Language;
 		const lcl::locale_ *_Locale;
 		TOL_CBUFFER___ _BackendLabel;
-		// Informations à propos du 'backend'.
+		// Informations ï¿½ propos du 'backend'.
 		TOL_CBUFFER___ _ExtendedBackendInformations;
 		TOL_CBUFFER___ _BackendCopyright;
 		TOL_CBUFFER___ _SoftwareInformations;
 		str::wString
 			Key_,	// Key used for encrypting the codes.
 			Code_;	// Code to allow a blocking ping or a crash.
-		// Retourne le module correspondant à 'IdType'.
+		// Retourne le module correspondant ï¿½ 'IdType'.
 		rModule &Module_( type__ IdType )
 		{
 			if ( IdType != FBLBKD_MASTER_TYPE )
@@ -778,7 +778,7 @@ namespace fblbkd {
 			else
 				return Master_;	// Not very happy about this conversion, 
 		}
-		// Retourne le module correspondant à 'IdObjet'.
+		// Retourne le module correspondant ï¿½ 'IdObjet'.
 		rModule &Module_( object__ IdObjet )
 		{
 			return Module_( Type_( IdObjet ) );
@@ -787,12 +787,12 @@ namespace fblbkd {
 		{
 			return Module_( Type_( IdObjet ) );
 		}
-		// Retourne le type correpondant à l'objet d'indetificateur 'IdObjet'.
+		// Retourne le type correpondant ï¿½ l'objet d'indetificateur 'IdObjet'.
 		type__ Type_( object__ IdObjet ) const
 		{
 			return Links.Type( IdObjet );
 		}
-		// Retourne l'indexcorrespondant à l'objet d'identificateur 'IdObjet'.
+		// Retourne l'indexcorrespondant ï¿½ l'objet d'identificateur 'IdObjet'.
 		sIndex Index_( object__ IdObjet ) const
 		{
 			return Links.Index( IdObjet );
@@ -821,7 +821,7 @@ namespace fblbkd {
 			Code_.reset( P );
 		}
 		E_CVDTOR( backend___ );
-		// '[Backend|Publisher]Informations' ne sont PAS dupliqué. Leur contenu de doit pas être modifié.
+		// '[Backend|Publisher]Informations' ne sont PAS dupliquï¿½. Leur contenu de doit pas ï¿½tre modifiï¿½.
 		void Init(
 			fblovl::eMode Mode,
 			const char *APIVersion,

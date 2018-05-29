@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 1999-2017 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 1999 Claude SIMON (http://q37.info/contact/).
 
 	This file is part of the Epeios framework.
 
@@ -44,7 +44,7 @@ namespace dwtght {
 		sdr::row__ Error = qNIL;
 		grow__ Row = qNIL;
 
-		if ( ( Pattern.Amount() > ( GO.Prefix.Amount() + GO.Suffix.Amount() + 2 ) )	// '+2' pour les '.' ajoutés automatiquement.
+		if ( ( Pattern.Amount() > ( GO.Prefix.Amount() + GO.Suffix.Amount() + 2 ) )	// '+2' pour les '.' ajoutï¿½s automatiquement.
 			 && ( str::Compare( Pattern, GO.Prefix, Pattern.First(), GO.Prefix.First(), GO.Prefix.Amount() ) == 0 ) ) {
 
 			Row = Pattern.ToUInt( Pattern.First( GO.Prefix.Amount() + 1 ), &Error, str::bAuto );
@@ -58,12 +58,12 @@ namespace dwtght {
 
 	using str::sHook;
 
-	// Pour ma gestion du renommage/déplacement de répertoires.
+	// Pour ma gestion du renommage/dï¿½placement de rï¿½pertoires.
 	class ghost_
 	{
 	public:
 		struct s {
-			grow__ Parent;	// Référence au 'ghost' parent (c'est-à-dire au 'ghost' contenant les données du répertoire parent.
+			grow__ Parent;	// Rï¿½fï¿½rence au 'ghost' parent (c'est-ï¿½-dire au 'ghost' contenant les donnï¿½es du rï¿½pertoire parent.
 			str::string_::s Name;
 		} &S_;
 		str::string_ Name;
@@ -134,7 +134,7 @@ namespace dwtght {
 			Ghosts.reset();
 			FilesHook.reset();
 
-			// L'initialisation proprement dite sera réalisée par des fonctions dédiées.
+			// L'initialisation proprement dite sera rï¿½alisï¿½e par des fonctions dï¿½diï¿½es.
 		}
 	};
 
@@ -174,7 +174,7 @@ namespace dwtght {
 		const dwtbsc::ghosts_oddities_ &GO,
 		grow__ Parent,
 		ghosts_ &Ghosts,
-		grow__ &Row );	// Crée un 'ghost', et retourne son 'Row' dans 'Ghosts' si effectivement crée (ce que l'on sait grâce au 'status__' retourné).
+		grow__ &Row );	// Crï¿½e un 'ghost', et retourne son 'Row' dans 'Ghosts' si effectivement crï¿½e (ce que l'on sait grï¿½ce au 'status__' retournï¿½).
 
 	const str::string_ &GetPath(
 		grow__ Row,

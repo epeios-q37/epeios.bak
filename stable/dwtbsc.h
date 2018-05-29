@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 1999-2017 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 1999 Claude SIMON (http://q37.info/contact/).
 
 	This file is part of the Epeios framework.
 
@@ -40,7 +40,7 @@
 # endif
 
 namespace dwtbsc {
-	typedef bso::uint__ depth__;	// Type de la profondeur d'un répertoire.
+	typedef bso::uint__ depth__;	// Type de la profondeur d'un rï¿½pertoire.
 	E_CDEF( depth__, DepthMax, bso::UIntMax );
 	E_CDEF( depth__, UndefinedDepth, 0 );
 
@@ -65,9 +65,9 @@ namespace dwtbsc {
 	enum exclusion__ {
 		xNo,	// Not excluded.
 		xMatchList,	// Excluded because it matches the list.,
-		xGhost,	// Exclut parce que c'est un répertoire/fichier spécial (répertoire de renommage).
-		xFileTooBig,	// Exclut parce que la taille di fichier dépasse la limite autorisée.
-		xNameTooLong,	// Exclut parce que le nom du fichier/Répertoire est trop long.
+		xGhost,	// Exclut parce que c'est un rï¿½pertoire/fichier spï¿½cial (rï¿½pertoire de renommage).
+		xFileTooBig,	// Exclut parce que la taille di fichier dï¿½passe la limite autorisï¿½e.
+		xNameTooLong,	// Exclut parce que le nom du fichier/Rï¿½pertoire est trop long.
 		x_amount,
 		x_Undefined,
 	};
@@ -76,8 +76,8 @@ namespace dwtbsc {
 		ehNone,	// No exclusion at all (except ghost files).
 		ehRegular,	// Comportemnt normal (conserve ou non les fichiers/dossiers exclus en fonction de la raisonde leur exclusion).
 		ehSkip,	// Ignore les fichiers/dossiers exclus.
-		ehKeep,	// Conserve fichiers/dossiers exclus (mais sont marqués comme tel).
-		ehKeepGhostLike,	// Garde les émlements ressemblant à un 'ghost'. Pour la gestion des 'ghosts'.
+		ehKeep,	// Conserve fichiers/dossiers exclus (mais sont marquï¿½s comme tel).
+		ehKeepGhostLike,	// Garde les ï¿½mlements ressemblant ï¿½ un 'ghost'. Pour la gestion des 'ghosts'.
 		eh_amount,
 		eh_Undefined,
 		eh_Default = ehRegular
@@ -110,7 +110,7 @@ namespace dwtbsc {
 		}
 	};
 
-	class goof__	// Entrée dont in ne peut définir le type ('répertoire ou fichier').
+	class goof__	// Entrï¿½e dont in ne peut dï¿½finir le type ('rï¿½pertoire ou fichier').
 	: public common__
 	{
 	public:
@@ -137,7 +137,7 @@ namespace dwtbsc {
 	E_AUTO( grows );
 
 
-	class regular__	// Base pour un fichier ou un répertoire.
+	class regular__	// Base pour un fichier ou un rï¿½pertoire.
 	: public common__
 	{
 	public:
@@ -407,7 +407,7 @@ namespace dwtbsc {
 		}
 	};
 
-	class ghosts_oddities_	// Elements pour gèrer le renommage de dossiers.
+	class ghosts_oddities_	// Elements pour gï¿½rer le renommage de dossiers.
 	{
 	public:
 		struct s {
@@ -523,8 +523,8 @@ namespace dwtbsc {
 	};
 
 	enum root_fate__ {
-		rfKeep,	// Le répertoire racine est effacé
-		rfDelete,	// Le répertoire racine est conservé.
+		rfKeep,	// Le rï¿½pertoire racine est effacï¿½
+		rfDelete,	// Le rï¿½pertoire racine est conservï¿½.
 		rf_amount,
 		rf_Undefined,
 		rf_Default = rfDelete, 
