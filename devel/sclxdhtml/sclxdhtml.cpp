@@ -827,8 +827,12 @@ namespace {
 	const char *GetLabel_( eBackendType_ Type )
 	{
 		switch ( Type ) {
-		C( None );
-		C( Predefined );
+		case btNone:
+			return sclfrntnd::NoneBackendType;
+			break;
+		case btPredefined:
+			return sclfrntnd::PredefinedBackendType;
+			break;
 		C( Embedded );
 		C( Straight );
 		C( Proxy );
@@ -857,16 +861,15 @@ namespace {
 	{
 		eBackendType_ Type = bt_Undefined;
 	qRH;
-		str::wString Type;
+		str::wString Pattern;
 	qRB;
-		Type.Init();
-		GetType_( Proxy, Type );
+		Pattern.Init();
 
-		Type = GetType_( Type );
+		Type = GetType_( GetType_( Proxy, Pattern ) );
 	qRR;
 	qRT;
 	qRE;
-	return Type;
+		return Type;
 	}
 
 #define A( name )	Ids.Append( str::wString( login::name##BackendId ) )
@@ -936,10 +939,23 @@ void sclxdhtml::login::HandleBackendTypeSwitching( sProxy & Proxy )
 
 #undef S
 
+namespace {
+	void NormalizeParameters_(
+		str::dString &Parameters,
+		const str::dString DefaultPort )
+	{
+		if ( Parameters.Search( ':' ) == qNIL ) {
+			if ( DefaultPort.Amount() ) {
+				Parameters.Append( ':' );
+				Parameters.Append( DefaultPort );
+			}
+		}
+	}
+}
 
 namespace straight_ {
 	namespace {
-		rgstry::rEntry DefaultPort_("@DefaultStraightPort", sclfrntnd::BackendParametersRegistryEntry );
+		rgstry::rEntry DefaultPort_( "@DefaultStraightPort", sclfrntnd::BackendParametersRegistryEntry );
 	}
 
 	void Normalize( str::dString &Parameters )
@@ -947,13 +963,30 @@ namespace straight_ {
 	qRH
 		str::wString Port;
 	qRB
-		if ( Parameters.Search( ':' ) == qNIL ) {
-			Port.Init();
-			if ( sclmisc::OGetValue( DefaultPort_, Port ) ) {
-				Parameters.Append( ':' );
-				Parameters.Append( Port );
-			}
-		}
+		Port.Init();
+		sclmisc::OGetValue( DefaultPort_, Port );
+
+		NormalizeParameters_( Parameters, Port );
+	qRR
+	qRT
+	qRE
+	}
+}
+
+namespace proxy_ {
+	namespace {
+		rgstry::rEntry DefaultPort_( "@DefaultProxyPort", sclfrntnd::BackendParametersRegistryEntry );
+	}
+
+	void Normalize( str::dString &Parameters )
+	{
+	qRH
+		str::wString Port;
+	qRB
+		Port.Init();
+		sclmisc::OGetValue( DefaultPort_, Port );
+
+		NormalizeParameters_( Parameters, Port );
 	qRR
 	qRT
 	qRE
@@ -964,38 +997,39 @@ void sclxdhtml::login::GetBackendFeatures(
 	sProxy &Proxy,
 	sclfrntnd::rFeatures &Features )
 {
-qRH
+qRH;
+	eBackendType_ Type = bt_Undefined;
 	TOL_CBUFFER___ Buffer;
-	str::string Type, Parameters;
-	const char *BackendId = NULL;
-	bso::sBool NormalizeStraightBackendFeature = false;
-qRB
+	str::string Parameters;
+qRB;
 	Parameters.Init();
-
-	Type.Init();
-	Type = GetBackendType_( Proxy, Type );
-
-	if ( Type != sclfrntnd::NoneBackendType ) {
-		if ( Type == sclfrntnd::PredefinedBackendType )
-			BackendId = PredefinedBackendId;
-		else if ( Type == EmbeddedBackendType_ )
-			BackendId = EmbeddedBackendId;
-		else if ( Type == StraightBackendType_ ) {
-			NormalizeStraightBackendFeature = true;
-			BackendId = StraightBackendId;
-		} else
-			qRGnr();
-
-		Parameters.Append( Proxy.GetValue( BackendId, Buffer ) );
-
-		if ( NormalizeStraightBackendFeature )
-			straight_::Normalize( Parameters );
+	
+	switch ( Type = GetType_( Proxy ) ) {
+	case btNone:
+		break;
+	case btPredefined:
+		Parameters.Append( Proxy.GetValue( PredefinedBackendId, Buffer ) );
+		break;
+	case btEmbedded:
+		Parameters.Append( Proxy.GetValue( EmbeddedBackendId, Buffer ) );
+		break;
+	case btStraight:
+		Parameters.Append( Proxy.GetValue( RemoteBackendId, Buffer ) );
+		straight_::Normalize( Parameters );
+		break;
+	case btProxy:
+		Parameters.Append( Proxy.GetValue( ProxyfiedBackendId, Buffer ) );
+		proxy_::Normalize( Parameters );
+		break;
+	default:
+		qRFwk();
+		break;
 	}
 
-	sclfrntnd::SetBackendFeatures( Type, Parameters, Features );
-qRR
-qRT
-qRE
+	sclfrntnd::SetBackendFeatures( str::wString( GetLabel_( Type ) ), Parameters, Features );
+qRR;
+qRT;
+qRE;
 }
 
 void sclxdhtml::login::DisplaySelectedEmbeddedBackendFilename(

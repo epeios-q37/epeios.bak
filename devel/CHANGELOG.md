@@ -7,7 +7,7 @@
 ## 2018-05-29
 
 - SCLXDHTML :
-  - exposing `login::GetBackendType(...)`,
+  - rewriting backend handling in *login* context,
 
 ## 2018-05-17
 

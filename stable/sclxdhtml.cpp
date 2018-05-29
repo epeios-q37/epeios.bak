@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 1999 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 1999-2017 Claude SIMON (http://q37.info/contact/).
 
 	This file is part of the Epeios framework.
 
@@ -788,6 +788,7 @@ const char *sclxdhtml::login::GetLabel( eBackendVisibility Visibility )
 	return NULL;	// To avoid a warning.
 }
 
+#undef C
 
 sclfrntnd::eLogin sclxdhtml::login::GetLayout(
 	sclfrntnd::rFrontend &Frontend,
@@ -798,16 +799,163 @@ sclfrntnd::eLogin sclxdhtml::login::GetLayout(
 	return sclfrntnd::GetLoginFeatures( Writer );
 }
 
-const str::dString &sclxdhtml::login::GetBackendType(
-	sProxy &Proxy,
-	str::dString &Type )
+namespace {
+	const str::dString &GetType_(
+		sProxy &Proxy,
+		str::dString &Type )
+	{
+		return Proxy.GetValue( login::BackendTypeId, Type );
+	}
+
+	qENUM( BackendType_ )
+	{
+		// Below both types are special backend types.
+		btNone,			// No backend.
+		btPredefined,	// Predefined backend.
+		// Below backend types are plugins.
+		btEmbedded,
+		btStraight,
+		btProxy,
+		bt_amount,
+		bt_Undefined
+	};
+
+	stsfsm::wAutomat TypeAutomat_;
+
+#define C( name )	case bt##name : return #name; break
+
+	const char *GetLabel_( eBackendType_ Type )
+	{
+		switch ( Type ) {
+		case btNone:
+			return sclfrntnd::NoneBackendType;
+			break;
+		case btPredefined:
+			return sclfrntnd::PredefinedBackendType;
+			break;
+		C( Embedded );
+		C( Straight );
+		C( Proxy );
+		default:
+			qRFwk();
+			break;
+		}
+
+		return NULL;	// To avoid a warning.
+	}
+
+#undef C
+
+	void FillTypeAutomat_( void )
+	{
+		TypeAutomat_.Init();
+		stsfsm::Fill<eBackendType_>( TypeAutomat_, bt_amount, GetLabel_ );
+	}
+
+	eBackendType_ GetType_( const str::dString &Pattern )
+	{
+		return stsfsm::GetId( Pattern, TypeAutomat_, bt_Undefined, bt_amount );
+	}
+
+	eBackendType_ GetType_( sProxy &Proxy )
+	{
+		eBackendType_ Type = bt_Undefined;
+	qRH;
+		str::wString Pattern;
+	qRB;
+		Pattern.Init();
+
+		Type = GetType_( GetType_( Proxy, Pattern ) );
+	qRR;
+	qRT;
+	qRE;
+		return Type;
+	}
+
+#define A( name )	Ids.Append( str::wString( login::name##BackendId ) )
+
+	void SetIds_( str::dStrings &Ids )
+	{
+		A( Predefined );
+		A( Remote );
+		A( Proxyfied );
+		A( Embedded );
+	}
+
+#undef A
+
+	void SetClasses_( str::dStrings &Classes )
+	{
+		Classes.Append( str::wString( "hide" ) );
+		Classes.Append( str::wString( "hide" ) );
+		Classes.Append( str::wString( "hide" ) );
+		Classes.Append( str::wString( "hide" ) );
+	}
+
+	void HideAll_( sProxy &Proxy )
+	{
+	qRH;
+		str::wStrings Ids, Classes;
+	qRB;
+		tol::Init( Ids, Classes );
+
+		SetIds_( Ids );
+		SetClasses_( Classes );
+
+		Proxy.AddClasses( Ids, Classes );
+	qRR;
+	qRT;
+	qRE;
+	}
+}
+
+#define S( name )	Proxy.RemoveClass( login::name##BackendId, "hide" )
+
+void sclxdhtml::login::HandleBackendTypeSwitching( sProxy & Proxy )
 {
-	return Proxy.GetValue( login::BackendTypeId, Type );
+	HideAll_( Proxy );
+
+	switch ( GetType_( Proxy ) ) {
+	case btNone:
+		// Nothing to do ; all forms remain hidden.
+		break;
+	case btPredefined:
+		S( Predefined );
+		break;
+	case btEmbedded:
+		S( Embedded );
+		break;
+	case btStraight:
+		S( Remote );
+		break;
+	case btProxy:
+		S( Proxyfied );
+		break;
+	default:
+		qRFwk();
+		break;
+	}
+}
+
+#undef S
+
+namespace {
+	void NormalizeParameters_(
+		str::dString &Parameters,
+		const str::dString DefaultPort )
+	{
+		if ( Parameters.Search( ':' ) == qNIL ) {
+			if ( DefaultPort.Amount() ) {
+				Parameters.Append( ':' );
+				Parameters.Append( DefaultPort );
+			}
+		}
+	}
 }
 
 namespace straight_ {
 	namespace {
-		rgstry::rEntry DefaultPort_("@DefaultStraightPort", sclfrntnd::BackendParametersRegistryEntry );
+		rgstry::rEntry DefaultPort_( "@DefaultStraightPort", sclfrntnd::BackendParametersRegistryEntry );
 	}
 
 	void Normalize( str::dString &Parameters )
@@ -815,13 +963,30 @@ namespace straight_ {
 	qRH
 		str::wString Port;
 	qRB
-		if ( Parameters.Search( ':' ) == qNIL ) {
-			Port.Init();
-			if ( sclmisc::OGetValue( DefaultPort_, Port ) ) {
-				Parameters.Append( ':' );
-				Parameters.Append( Port );
-			}
-		}
+		Port.Init();
+		sclmisc::OGetValue( DefaultPort_, Port );
+
+		NormalizeParameters_( Parameters, Port );
+	qRR
+	qRT
+	qRE
+	}
+}
+
+namespace proxy_ {
+	namespace {
+		rgstry::rEntry DefaultPort_( "@DefaultProxyPort", sclfrntnd::BackendParametersRegistryEntry );
+	}
+
+	void Normalize( str::dString &Parameters )
+	{
+	qRH
+		str::wString Port;
+	qRB
+		Port.Init();
+		sclmisc::OGetValue( DefaultPort_, Port );
+
+		NormalizeParameters_( Parameters, Port );
 	qRR
 	qRT
 	qRE
@@ -832,38 +997,39 @@ void sclxdhtml::login::GetBackendFeatures(
 	sProxy &Proxy,
 	sclfrntnd::rFeatures &Features )
 {
-qRH
+qRH;
+	eBackendType_ Type = bt_Undefined;
 	TOL_CBUFFER___ Buffer;
-	str::string Type, Parameters;
-	const char *BackendId = NULL;
-	bso::sBool NormalizeStraightBackendFeature = false;
-qRB
+	str::string Parameters;
+qRB;
 	Parameters.Init();
-
-	Type.Init();
-	Type = GetBackendType( Proxy, Type );
-
-	if ( Type != sclfrntnd::NoneBackendType ) {
-		if ( Type == sclfrntnd::PredefinedBackendType )
-			BackendId = PredefinedBackendId;
-		else if ( Type == EmbeddedBackendType_ )
-			BackendId = EmbeddedBackendId;
-		else if ( Type == StraightBackendType_ ) {
-			NormalizeStraightBackendFeature = true;
-			BackendId = StraightBackendId;
-		} else
-			qRGnr();
-
-		Parameters.Append( Proxy.GetValue( BackendId, Buffer ) );
-
-		if ( NormalizeStraightBackendFeature )
-			straight_::Normalize( Parameters );
+	
+	switch ( Type = GetType_( Proxy ) ) {
+	case btNone:
+		break;
+	case btPredefined:
+		Parameters.Append( Proxy.GetValue( PredefinedBackendId, Buffer ) );
+		break;
+	case btEmbedded:
+		Parameters.Append( Proxy.GetValue( EmbeddedBackendId, Buffer ) );
+		break;
+	case btStraight:
+		Parameters.Append( Proxy.GetValue( RemoteBackendId, Buffer ) );
+		straight_::Normalize( Parameters );
+		break;
+	case btProxy:
+		Parameters.Append( Proxy.GetValue( ProxyfiedBackendId, Buffer ) );
+		proxy_::Normalize( Parameters );
+		break;
+	default:
+		qRFwk();
+		break;
 	}
 
-	sclfrntnd::SetBackendFeatures( Type, Parameters, Features );
-qRR
-qRT
-qRE
+	sclfrntnd::SetBackendFeatures( str::wString( GetLabel_( Type ) ), Parameters, Features );
+qRR;
+qRT;
+qRE;
 }
 
 void sclxdhtml::login::DisplaySelectedEmbeddedBackendFilename(
@@ -893,3 +1059,7 @@ qRT
 qRE
 }
 
+qGCTOR( sclxdhtml )
+{
+	FillTypeAutomat_();
+}

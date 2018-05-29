@@ -50,6 +50,8 @@ void login::Display( core::rSession &Session )
 {
 	SetLayout( Session );
 
+	sclxdhtml::login::HandleBackendTypeSwitching( Session );
+
 	Session.SwitchTo( base::pLogin );
 }
 
@@ -57,25 +59,7 @@ void login::Display( core::rSession &Session )
 
 AC( SwitchBackendType )
 {
-qRH;
-	str::wString Type;
-	bso::sB
-	{
-qRH;
-	qRB;
-	qRR;
-	qRT;
-	qRE;
-	}
-qRB;
-	Type.Init();
-
-	sclxdhtml::login::GetBackendType( Session, Type );
-
-	if ( Type ==  )
-qRR;
-qRT;
-qRE;
+	sclxdhtml::login::HandleBackendTypeSwitching( Session );
 }
 
 AC( DisplayEmbeddedBackendFilename )

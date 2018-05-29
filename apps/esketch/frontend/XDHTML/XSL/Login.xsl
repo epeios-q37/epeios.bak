@@ -72,7 +72,7 @@
 								<xsl:apply-templates select="Backends"/>
 								<span style="display: inline-block;">
 									<!-- if the 'style' attribute is set in the child element, the 'hidden' attribute doesn't work anymore on this child element...-->
-									<fieldset title="#lgnEmbeddedBackendToUse#" data-xdh-cast="EmbeddedBackendCast">
+									<fieldset title="#lgnEmbeddedBackendToUse#" id="EmbeddedBackend">
 										<legend>#lgnEmbeddedBackend#</legend>
 										<xsl:variable name="OS" select="../@OS"/>
 										<xsl:variable name="DynamicLibraryExtension">
@@ -98,7 +98,7 @@
 												<xsl:text>))</xsl:text>
 											</xsl:attribute>#lgnBrowse#
 										</button>
-										<input id="EmbeddedBackend" type="text" size="50">
+										<input type="text" size="50">
 											<xsl:if test="Backend/@Type='Embedded'">
 												<xsl:attribute name="value">
 													<xsl:value-of select="Backend"/>
@@ -107,8 +107,15 @@
 										</input>
 									</fieldset>
 								</span>
-								<input id="StraightBackend" title="#lgnStraightBackendToUse#" placeholder="#lgnAddressPort#" type="text" data-xdh-cast="StraightBackendCast">
+								<input id="RemoteBackend" title="#lgnStraightBackendToUse#" placeholder="#lgnAddressPort#" type="text">
 									<xsl:if test="Backend/@Type='Straight'">
+										<xsl:attribute name="value">
+											<xsl:value-of select="Backend"/>
+										</xsl:attribute>
+									</xsl:if>
+								</input>
+								<input id="ProxyfiedBackend" title="#lgnProxyBackendToUse#" placeholder="#lgnAddressPort#" type="text">
+									<xsl:if test="Backend/@Type='Proxy'">
 										<xsl:attribute name="value">
 											<xsl:value-of select="Backend"/>
 										</xsl:attribute>
@@ -126,7 +133,7 @@
 		</span>
 	</xsl:template>
 	<xsl:template match="Backends">
-		<select title="#lgnPredefinedBackends#" id="PredefinedBackend"  data-xdh-cast="PredefinedBackendCast">
+		<select title="#lgnPredefinedBackends#" id="PredefinedBackend">
 			<xsl:apply-templates select="Backend"/>
 		</select>
 	</xsl:template>
