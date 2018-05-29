@@ -919,6 +919,10 @@ namespace sclxdhtml {
 			sclfrntnd::rFrontend &Frontend,
 			xml::writer_ &Writer );
 
+		const str::dString &GetBackendType(
+			sProxy &Proxy,
+			str::dString &Type );
+
 		void GetBackendFeatures(
 			sProxy &Proxy,
 			sclfrntnd::rFeatures &Features );

@@ -798,13 +798,11 @@ sclfrntnd::eLogin sclxdhtml::login::GetLayout(
 	return sclfrntnd::GetLoginFeatures( Writer );
 }
 
-namespace {
-	const str::dString &GetBackendType_(
-		sProxy &Proxy,
-		str::dString &Type )
-	{
-		return Proxy.GetValue( login::BackendTypeId, Type );
-	}
+const str::dString &sclxdhtml::login::GetBackendType(
+	sProxy &Proxy,
+	str::dString &Type )
+{
+	return Proxy.GetValue( login::BackendTypeId, Type );
 }
 
 namespace straight_ {
@@ -843,7 +841,7 @@ qRB
 	Parameters.Init();
 
 	Type.Init();
-	Type = GetBackendType_( Proxy, Type );
+	Type = GetBackendType( Proxy, Type );
 
 	if ( Type != sclfrntnd::NoneBackendType ) {
 		if ( Type == sclfrntnd::PredefinedBackendType )

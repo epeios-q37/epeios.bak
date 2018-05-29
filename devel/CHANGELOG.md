@@ -4,6 +4,11 @@
 
 - [adpt]: Adaptation to changes in underlying modules,
 
+## 2018-05-29
+
+- SCLXDHTML :
+  - exposing `login::GetBackendType(...)`,
+
 ## 2018-05-17
 
 - SCLXDHTML:

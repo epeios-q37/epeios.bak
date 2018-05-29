@@ -909,15 +909,19 @@ namespace sclxdhtml {
 
 	namespace login {
 		static E_CDEF( char *, BackendTypeId, "BackendType" );
-		static E_CDEF( char *, StraightBackendId, "StraightBackend" );
-		static E_CDEF( char *, EmbeddedBackendId, "EmbeddedBackend" );
+		// Ids of the forms for the parameters of the different backend types.
 		static E_CDEF( char *, PredefinedBackendId, "PredefinedBackend" );
-
+		static E_CDEF( char *, RemoteBackendId, "RemoteBackend" );
+		static E_CDEF( char *, ProxyfiedBackendId, "ProxyfiedBackend" );
+		static E_CDEF( char *, EmbeddedBackendId, "EmbeddedBackend" );
+		
 		const char *GetLabel( eBackendVisibility );
 
 		sclfrntnd::eLogin GetLayout(
 			sclfrntnd::rFrontend &Frontend,
 			xml::writer_ &Writer );
+
+		void HandleBackendTypeSwitching( sProxy &Proxy );
 
 		void GetBackendFeatures(
 			sProxy &Proxy,

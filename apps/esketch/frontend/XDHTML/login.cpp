@@ -57,7 +57,25 @@ void login::Display( core::rSession &Session )
 
 AC( SwitchBackendType )
 {
-	Session.BackendVisibility()
+qRH;
+	str::wString Type;
+	bso::sB
+	{
+qRH;
+	qRB;
+	qRR;
+	qRT;
+	qRE;
+	}
+qRB;
+	Type.Init();
+
+	sclxdhtml::login::GetBackendType( Session, Type );
+
+	if ( Type ==  )
+qRR;
+qRT;
+qRE;
 }
 
 AC( DisplayEmbeddedBackendFilename )

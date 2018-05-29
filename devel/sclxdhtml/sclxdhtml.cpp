@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 1999 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 1999-2017 Claude SIMON (http://q37.info/contact/).
 
 	This file is part of the Epeios framework.
 
@@ -788,6 +788,7 @@ const char *sclxdhtml::login::GetLabel( eBackendVisibility Visibility )
 	return NULL;	// To avoid a warning.
 }
 
+#undef C
 
 sclfrntnd::eLogin sclxdhtml::login::GetLayout(
 	sclfrntnd::rFrontend &Frontend,
@@ -799,13 +800,142 @@ sclfrntnd::eLogin sclxdhtml::login::GetLayout(
 }
 
 namespace {
-	const str::dString &GetBackendType_(
+	const str::dString &GetType_(
 		sProxy &Proxy,
 		str::dString &Type )
 	{
 		return Proxy.GetValue( login::BackendTypeId, Type );
 	}
+
+	qENUM( BackendType_ )
+	{
+		// Below both types are special backend types.
+		btNone,			// No backend.
+		btPredefined,	// Predefined backend.
+		// Below backend types are plugins.
+		btEmbedded,
+		btStraight,
+		btProxy,
+		bt_amount,
+		bt_Undefined
+	};
+
+	stsfsm::wAutomat TypeAutomat_;
+
+#define C( name )	case bt##name : return #name; break
+
+	const char *GetLabel_( eBackendType_ Type )
+	{
+		switch ( Type ) {
+		C( None );
+		C( Predefined );
+		C( Embedded );
+		C( Straight );
+		C( Proxy );
+		default:
+			qRFwk();
+			break;
+		}
+
+		return NULL;	// To avoid a warning.
+	}
+
+#undef C
+
+	void FillTypeAutomat_( void )
+	{
+		TypeAutomat_.Init();
+		stsfsm::Fill<eBackendType_>( TypeAutomat_, bt_amount, GetLabel_ );
+	}
+
+	eBackendType_ GetType_( const str::dString &Pattern )
+	{
+		return stsfsm::GetId( Pattern, TypeAutomat_, bt_Undefined, bt_amount );
+	}
+
+	eBackendType_ GetType_( sProxy &Proxy )
+	{
+		eBackendType_ Type = bt_Undefined;
+	qRH;
+		str::wString Type;
+	qRB;
+		Type.Init();
+		GetType_( Proxy, Type );
+
+		Type = GetType_( Type );
+	qRR;
+	qRT;
+	qRE;
+	return Type;
+	}
+
+#define A( name )	Ids.Append( str::wString( login::name##BackendId ) )
+
+	void SetIds_( str::dStrings &Ids )
+	{
+		A( Predefined );
+		A( Remote );
+		A( Proxyfied );
+		A( Embedded );
+	}
+
+#undef A
+
+	void SetClasses_( str::dStrings &Classes )
+	{
+		Classes.Append( str::wString( "hide" ) );
+		Classes.Append( str::wString( "hide" ) );
+		Classes.Append( str::wString( "hide" ) );
+		Classes.Append( str::wString( "hide" ) );
+	}
+
+	void HideAll_( sProxy &Proxy )
+	{
+	qRH;
+		str::wStrings Ids, Classes;
+	qRB;
+		tol::Init( Ids, Classes );
+
+		SetIds_( Ids );
+		SetClasses_( Classes );
+
+		Proxy.AddClasses( Ids, Classes );
+	qRR;
+	qRT;
+	qRE;
+	}
 }
+
+#define S( name )	Proxy.RemoveClass( login::name##BackendId, "hide" )
+
+void sclxdhtml::login::HandleBackendTypeSwitching( sProxy & Proxy )
+{
+	HideAll_( Proxy );
+
+	switch ( GetType_( Proxy ) ) {
+	case btNone:
+		// Nothing to do ; all forms remain hidden.
+		break;
+	case btPredefined:
+		S( Predefined );
+		break;
+	case btEmbedded:
+		S( Embedded );
+		break;
+	case btStraight:
+		S( Remote );
+		break;
+	case btProxy:
+		S( Proxyfied );
+		break;
+	default:
+		qRFwk();
+		break;
+	}
+}
+
+#undef S
+
 
 namespace straight_ {
 	namespace {
@@ -895,3 +1025,7 @@ qRT
 qRE
 }
 
+qGCTOR( sclxdhtml )
+{
+	FillTypeAutomat_();
+}
