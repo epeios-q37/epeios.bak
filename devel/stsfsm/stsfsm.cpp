@@ -139,6 +139,7 @@ qRB
 		switch ( Parser.Handle( Byte ) ) {
 		case sLost:
 			Continue = false;
+			Match = false;
 			break;
 		case sMatch:
 			Match = true;

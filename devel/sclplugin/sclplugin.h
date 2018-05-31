@@ -32,6 +32,7 @@
 
 # include "err.h"
 # include "flw.h"
+# include "scli.h"
 
 namespace sclplugin {
 	typedef plgncore::callback__ _callback__;
@@ -66,6 +67,7 @@ namespace sclplugin {
 	void SCLPLUGINPluginIdentifier( str::dString &Identifier );
 	void SCLPLUGINPluginDetails( str::dString &Details );
 	void SCLPLUGINPluginParameters( str::dStrings &Parameters );
+	const scli::sInfo &SCLPLUGINInfo( void );	// To define by user.
 	// The following ones are defined by below macro.
 	const char *SCLPLUGINPluginLabel( void );
 	void *SCLPLUGINRetrievePlugin( plgncore::sAbstract *Abstract );

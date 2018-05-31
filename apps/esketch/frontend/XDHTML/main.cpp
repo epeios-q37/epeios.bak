@@ -32,17 +32,6 @@ namespace{
 			xml::dWriter &Writer )
 		{}
 	}
-
-	namespace casting_ {
-		void Get(
-			core::rSession &Session,
-			xml::dWriter &Writer )
-		{
-			Writer.PushTag( "Test" );
-
-			Writer.PutAttribute( "Enabled", ( Session.User.TestButtonIsVisible() ? "true" : "false" ) );
-		}
-	}
 }
 
 void main::SetLayout( core::rSession &Session )
@@ -53,6 +42,8 @@ void main::SetLayout( core::rSession &Session )
 void main::Display( core::rSession &Session )
 {
 	SetLayout( Session );
+
+//	Session.AddClass( "TestButton", "hide" );
 
 	Session.SwitchTo( base::pMain );
 }
@@ -84,16 +75,26 @@ AC( Submission )
 
 AC( ShowTestButton )
 {
-	Session.User.TestButtonIsVisible() = true;
+//	Session.RemoveClass( "TestButton", "hide" );
 }
 
 AC( HideTestButton )
 {
-	Session.User.TestButtonIsVisible() = false;
+//	Session.AddClass( "TestButton", "hide" );
 }
 
-AC( Testing )
+AC( ConnectedTesting )
 {
 	Session.User.TestMessage();
 }
+
+AC( UnconnectedTesting )
+{
+	if ( Session.IsConnected() )
+		Session.AlertT( "ConnectedTestMessage" );
+	else
+		Session.AlertT( "UnconnectedTestMessage" );
+
+}
+
 

@@ -110,8 +110,8 @@ qRB
 	PreInitialize_( Data );
 
 	if ( !sclmisc::IsInitialized() )
-		sclmisc::Initialize( *Data->SCLRack, Directory );
-	else // Same plugin loaded several times from same excutable ; data is common,
+		sclmisc::Initialize( *Data->SCLRack, Directory, SCLPLUGINInfo() );
+	else // Same plugin loaded several times from same executable ; data is common,
 		// so the 'Arguments' registry from the previous loading is erased.
 		sclrgstry::Reset( sclrgstry::lArguments );
 
@@ -133,7 +133,7 @@ bso::sBool sclplugin::callback__::PLGNCOREReleasePlugin( void *Plugin )
 {
 	bso::sBool Result = sclplugin::SCLPLUGINReleasePlugin( Plugin );
 
-	sclmisc::Quit();
+	sclmisc::Quit( SCLPLUGINInfo() );
 
 	return Result;
 }

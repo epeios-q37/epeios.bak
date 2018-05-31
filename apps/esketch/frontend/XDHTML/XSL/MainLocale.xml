@@ -20,9 +20,17 @@
 		<Translation language="fr">Afficher message de test.</Translation>
 		<Translation language="en">Display test message.</Translation>
 	</Translations>
+	<Translations text="mainLaunchUnconnectedTest">
+		<Translation language="fr">Lance une action disponible en mode déconnecté.</Translation>
+		<Translation language="en">Launch an action available in unconnected mode.</Translation>
+	</Translations>
 	<Translations text="mainTest">
 		<Translation language="fr">Test</Translation>
 		<Translation language="en">Test</Translation>
+	</Translations>
+	<Translations text="mainUnconnectedTest">
+		<Translation language="fr">Test déconnecté</Translation>
+		<Translation language="en">Unconnected test</Translation>
 	</Translations>
 	<Translations text="mainHideShowTestButton">
 		<Translation language="fr">Cliquez sur ce texte pour afficher le bouton de test (sortir du cadre le cache).</Translation>

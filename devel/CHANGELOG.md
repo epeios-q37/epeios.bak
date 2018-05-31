@@ -2,7 +2,14 @@
 
 ## *Shortcuts*
 
-- [adpt]: Adaptation to changes in underlying modules,
+- [adpt]: Adaptation to changes in underlying modules;
+
+## 2018-05-31
+
+- SCLPLUGIN
+ - [adpt];
+- STSFSM :
+  - fixing matching on shorter entry;
 
 ## 2018-05-29
 

@@ -42,7 +42,6 @@ mods += fblovl
 mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
 mods += sclplugin 
 mods += csdlec csdleo csdrcc csdscb 
-mods += infofrnt 
 mods += registry rpembedded 
 
 pmods += pllio 
@@ -394,7 +393,7 @@ ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20171122"\"
+copt += -DVERSION=\""20180531"\"
 copt += -DCOPYRIGHT_YEARS=\""2016"\"
 copt += -DIDENTIFIER=\""99ca6539-a9d5-4df2-b48e-52f6ba4c950b"\"
 

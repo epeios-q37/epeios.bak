@@ -35,20 +35,16 @@ namespace instc {
 	{
 	private:
 		rMyObject MyObject_;
-		bso::bool__ _TestButtonIsVisible;
 	public:
 		void reset( bso::bool__ P = true )
 		{	
 			MyObject_.reset( P );
-			_TestButtonIsVisible = false;
 		}
 		E_CVDTOR( rUser );
 		void Init( frdfrntnd::rFrontend &Frontend )
 		{
 			if ( Frontend.IsConnected() )
 				MyObject_.Init( Frontend );
-
-			_TestButtonIsVisible = false;
 		}
 		dString &ToUpper( dString &String )
 		{
@@ -58,7 +54,6 @@ namespace instc {
 		{
 			MyObject_.TestMessage();
 		}
-		E_RWDISCLOSE__( bso::bool__, TestButtonIsVisible );
 	};
 }
 

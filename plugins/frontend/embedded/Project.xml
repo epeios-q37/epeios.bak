@@ -32,9 +32,9 @@
 			<Module>csdrcc</Module>
 			<Module>csdscb</Module>
 		</Modules>
-		<Modules Group="Misc">
+		<!--Modules Group="Misc">
 			<Module Path="../">infofrnt</Module>
-		</Modules>
+		</Modules-->
 		<Module>registry</Module>
 		<Module>rpembedded</Module>
 	</Modules>

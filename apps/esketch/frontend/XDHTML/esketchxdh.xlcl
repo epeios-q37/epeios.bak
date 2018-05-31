@@ -13,4 +13,12 @@
 		<Translation language="fr">Cette action nécessite une connection à un moteur de traitement.</Translation>
 		<Translation language="en">This action needs a conneciton to a backend.</Translation>
 	</Translations>
+	<Translations text="ConnectedTestMessage">
+		<Translation language="fr">Vous êtes connecté à un backend, mais ce bouton est actif même si vous ne l'étiez pas.</Translation>
+		<Translation language="en">You are connected to a backend, but this button would work even if you weren't.</Translation>
+	</Translations>
+	<Translations text="UnconnectedTestMessage">
+		<Translation language="fr">Vous n'êtes pas connecté à un backend, mais ce bouton fonctionne quand même.</Translation>
+		<Translation language="en">You are not connected to a backend, but this button will work even so.</Translation>
+	</Translations>
 </Locale>

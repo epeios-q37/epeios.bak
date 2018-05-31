@@ -19,6 +19,8 @@
 
 // INROrmation about FRoNTend plugins.
 
+// Obsolete ???
+
 #ifndef INFOFRNT__INC
 # define INFOFRNT__INC
 
