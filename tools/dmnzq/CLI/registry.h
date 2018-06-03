@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2015-2016 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 2015 Claude SIMON (http://q37.info/contact/).
 
 	This file is part of dmnzq.
 

@@ -37,6 +37,11 @@ using cio::CIn;
 
 SCLI_DEF( esketch, NAME_LC, NAME_MC );
 
+const scli::sInfo &scltool::SCLTOOLInfo( void )
+{
+	return esketch::Info;
+}
+
 namespace {
 	void PrintHeader_( void )
 	{
@@ -62,11 +67,6 @@ namespace {
 #define C( name )\
 	else if ( Command == #name )\
 		name##_()
-
-const scli::sInfo &scltool::SCLTOOLInfo( void )
-{
-	return esketch::Info;
-}
 
 int scltool::SCLTOOLMain(
 	const str::dString &Command,

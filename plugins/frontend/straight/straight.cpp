@@ -19,6 +19,8 @@
 
 // 'straight' remote plugin.
 
+#include "straight.h"
+
 #include "registry.h"
 
 #include "rpstraight.h"
@@ -33,7 +35,12 @@
 
 #include "csdmnc.h"
 
-#define PLUGIN_NAME	"straight"
+SCLI_DEF( straight, NAME_LC, NAME_MC );
+
+const scli::sInfo &sclplugin::SCLPLUGINInfo( void )
+{
+	return straight::Info;
+}
 
 typedef fblovl::cDriver cPlugin_;
 
@@ -55,7 +62,7 @@ private:
 protected:
 	virtual fdr::ioflow_driver_base___ *CSDRCCNew( void ) override
 	{
-		csdmxc::_driver___ *Driver = new csdmxc::_driver___;
+		csdmxc::rRWDriver *Driver = new csdmxc::rRWDriver;
 
 		if ( Driver == NULL )
 			qRAlc();
@@ -135,8 +142,6 @@ public:
 };
 
 SCLPLUGIN_DEF( rPlugin );
-
-const char *sclmisc::SCLMISCTargetName = PLUGIN_NAME;
 
 void sclplugin::SCLPLUGINPluginIdentifier( str::dString &Identifier )
 {

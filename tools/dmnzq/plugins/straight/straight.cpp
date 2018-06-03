@@ -19,6 +19,8 @@
 
 // 'straight' slot plugin.
 
+#include "straight.h"
+
 #include "misc.h"
 #include "registry.h"
 
@@ -27,7 +29,12 @@
 #include "sclplugin.h"
 #include "sclmisc.h"
 
-#define PLUGIN_NAME	"straight"
+SCLI_DEF( straight, NAME_LC, NAME_MC );
+
+const scli::sInfo &sclplugin::SCLPLUGINInfo( void )
+{
+	return straight::Info;
+}
 
 namespace {
 	using misc::cHandler;
@@ -76,8 +83,6 @@ namespace {
 }
 
 SCLPLUGIN_DEF( rPlugin );
-
-const char *sclmisc::SCLMISCTargetName = PLUGIN_NAME;
 
 void sclplugin::SCLPLUGINPluginIdentifier( str::dString &Identifier )
 {

@@ -43,7 +43,6 @@ mods += csdbnc csdmnc csdmxb csdmxc csdrcc
 mods += csdrcd 
 mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
 mods += sclplugin 
-mods += infofrnt 
 mods += registry rpstraight 
 
 pmods += pllio 
@@ -395,7 +394,7 @@ ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20171122"\"
+copt += -DVERSION=\""20180531"\"
 copt += -DCOPYRIGHT_YEARS=\""2016"\"
 copt += -DIDENTIFIER=\""2c95d4ed-2c57-4399-9c86-4115883be7cc"\"
 

@@ -82,7 +82,7 @@
 				<xpp:ifeq select="packing" value="no">
 					<xpp:bloc marker="$">
 						<xpp:set name="PluginPath" value="$BinPath$plugins/"/>
-						<xpp:set name="BackendPath" value="./"/>
+						<xpp:set name="BackendPath" value="h:/bin/"/>
 					</xpp:bloc>
 				</xpp:ifeq>
 				<xpp:bloc marker="$">

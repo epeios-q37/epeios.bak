@@ -17,10 +17,22 @@
     along with dmnzq.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#include "registry.h"
+#ifndef STRAIGHT_INC_
+# define STRAIGHT_INC_
 
-using namespace registry;
+# include "scli.h"
 
-entry___ registry::Module( "Module", sclrgstry::Parameters );
+# define NAME_MC			"Straight"
+# define NAME_LC			"straight"
+# define NAME_UC			"Straight"
+# define WEBSITE_URL		"http://q37.info/"
+# define AUTHOR_NAME		"Claude SIMON"
+# define AUTHOR_CONTACT		"http://q37.info/contact/"
+# define OWNER_NAME			"Claude SIMON"
+# define OWNER_CONTACT		"http://q37.info/contact/"
+# define COPYRIGHT			COPYRIGHT_YEARS " " OWNER_NAME " (" OWNER_CONTACT ")"	
+# define PLUGIN_NAME		"straight"
 
+SCLI_DEC( straight );
 
+#endif

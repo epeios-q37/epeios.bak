@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2015-2016 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 2015 Claude SIMON (http://q37.info/contact/).
 
 	This file is part of dmnzq.
 
@@ -16,6 +16,8 @@
     You should have received a copy of the GNU Affero General Public License
     along with dmnzq.  If not, see <http://www.gnu.org/licenses/>
 */
+
+#include "dmnzq.h"
 
 #include "misc.h"
 
@@ -39,15 +41,12 @@ using cio::CErr;
 using cio::COut;
 using cio::CIn;
 
-# define NAME_MC			"dmnzq"
-# define NAME_LC			"dmnzq"
-# define NAME_UC			"DMNZQ"
-# define WEBSITE_URL		"http://q37.info/"
-# define AUTHOR_NAME		"Claude SIMON"
-# define AUTHOR_CONTACT		"http://q37.info/contact/"
-# define OWNER_NAME			"Claude SIMON"
-# define OWNER_CONTACT		"http://q37.info/contact/"
-# define COPYRIGHT			COPYRIGHT_YEARS " " OWNER_NAME " (" OWNER_CONTACT ")"	
+SCLI_DEF( dmnzq, NAME_LC, NAME_MC );
+
+const scli::sInfo &scltool::SCLTOOLInfo( void )
+{
+	return dmnzq::Info;
+}
 
 static void PrintHeader_( void )
 {
@@ -140,7 +139,7 @@ namespace {
 		misc::sTimeout Timeout )
 	{
 	qRH
-		csdmxs::rCallback Muxer;
+		csdmxs::rProcessing Muxer;
 	qRB
 		Muxer.Init( Module );
 		Handler.Handle( Muxer, Timeout );
@@ -245,8 +244,6 @@ qRE
 }
 
 #undef C
-
-const char *sclmisc::SCLMISCTargetName = NAME_LC;
 
 Q37_GCTOR( dmnzq )
 {
