@@ -1158,7 +1158,7 @@
 
 ## 2016-10-24:
 - CSDBNC:
-	-  Removing 'OwnershipTaken' argument in 'cProcessing::CSDSCBPreProcess(...)', in favor of  the boolean returned value of 'cProcessing::CSDSCBPostProcess'.
+	-  Removing 'OwnershipTaken' argument in `cProcessing::CSDSCBPreProcess(...)`, in favor of  the boolean returned value of `cProcessing::CSDSCBPostProcess`.
 - CSDBNC, CSDLEC, CSDMXS, SCLDAEMON:
 	- Adaptation to changes in 'CSDBNC'.
 - DTW:
