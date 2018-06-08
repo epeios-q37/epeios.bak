@@ -44,19 +44,17 @@
 # endif
 
 namespace scldaemon {
-	class daemon___
+	class cDaemon
 	{
 	protected:
+		virtual bso::bool__ SCLDAEMONPreProcess( fdr::rRWDriver *IODriver ) = 0;
 		virtual bso::bool__ SCLDAEMONProcess( fdr::rRWDriver *IODriver ) = 0;
+		// Post processing is made by the destructor.
 	public:
-		void reset( bso::bool__ P = true )
+		qCALLBACK( Daemon)
+			bso::bool__ PreProcess( fdr::rRWDriver *IODriver )
 		{
-			// Standardization.
-		}
-		E_CVDTOR( daemon___ );
-		void Init( void )
-		{
-			// Standardization.
+			return SCLDAEMONPreProcess( IODriver );
 		}
 		bso::bool__ Process( fdr::rRWDriver *IODriver )
 		{
@@ -81,13 +79,21 @@ namespace scldaemon {
 			fdr::rRWDriver *IODriver,
 			const ntvstr::char__ *Origin ) override
 		{
-			return SCLDAEMONNew( Origin );
+			cDaemon *Daemon =  SCLDAEMONNew( Origin );
+
+			if ( Daemon == NULL )
+				qRFwk();
+
+			if ( Daemon->PreProcess( IODriver ) )
+				return Daemon;
+			else
+				return NULL;
 		}
 		virtual csdscb::action__ CSDSCBProcess(
 			fdr::rRWDriver *IODriver,
 			void *UP ) override
 		{
-			daemon___ &Daemon = *(daemon___ *)UP;
+			cDaemon &Daemon = *(cDaemon*)UP;
 
 			if ( Daemon.Process( IODriver ) )
 				return csdscb::aContinue;
@@ -98,7 +104,7 @@ namespace scldaemon {
 		{
 		qRH
 		qRB
-			delete (daemon___ *)UP;
+			delete (cDaemon*)UP;
 		qRR
 # ifndef CPE_S_POSIX
 #  ifdef SCLDAEMON__ERROR_DETECTION_ENABLED
@@ -118,7 +124,7 @@ namespace scldaemon {
 		{
 			return false;
 		}
-		virtual daemon___ *SCLDAEMONNew( const ntvstr::char__ *Origin ) = 0;
+		virtual cDaemon *SCLDAEMONNew( const ntvstr::char__ *Origin ) = 0;
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -134,7 +140,7 @@ namespace scldaemon {
 
 	/* Called once, when the library is loaded. All the 'registry' stuff is already initialized.
 	The same returned callback is used to handle each connection (one callback for all connections,
-	and NOT a callbackper connection). */
+	and NOT a callback per connection). */
 	rCallback *SCLDAEMONGetCallback(
 		csdleo::context__ Context,
 		csdleo::mode__ Mode );	// To overload !

@@ -748,7 +748,6 @@ namespace fblbkd {
 	class backend___
 	{
 	private:
-		bso::bool__ _CompatibilityTested;
 		fblovl::eMode Mode_;
 		TOL_CBUFFER___ _ClientOrigin;
 		TOL_CBUFFER___ _APIVersion;
@@ -802,10 +801,6 @@ namespace fblbkd {
 			const char *APIVersion,
 			const char *MessageLabel,
 			const char *URLLabel );
-		bso::bool__ _TestCompatibility(	fdr::rRWDriver &FrontendIODriver );
-		bso::bool__ _HandleRequest(
-			fdr::rRWDriver &FrontendIODriver,
-			log_functions__ &LogFunctions );
 	protected:
 		virtual void *FBLBKDUserPointer( void ) = 0;
 	public:
@@ -815,7 +810,6 @@ namespace fblbkd {
 		links Links;
 		void reset( bso::bool__ P = true )
 		{
-			_CompatibilityTested = false;
 			Mode_ = fblovl::m_Undefined;
 			Key_.reset( P );
 			Code_.reset( P );
@@ -842,7 +836,6 @@ namespace fblbkd {
 			Modules.Init();
 			Links.Init();
 
-			_CompatibilityTested = false;
 			Mode_ = Mode;
 
 			str::string( BackendLabel ).Convert( _BackendLabel );
@@ -879,18 +872,10 @@ namespace fblbkd {
 			Module.Backend_ = this;
 			Modules.Append( &Module );
 		}
-		/*f Handle the request which come by 'Channel' and write the answer to 'Channel'.
-		If 'true' is returned, than the request contains a deconnection request. */
-		bso::bool__ Handle(
+		bso::bool__ TestCompatibility( fdr::rRWDriver &FrontendIODriver );
+		bso::bool__ HandleRequest(
 			fdr::rRWDriver &FrontendIODriver,
-			log_functions__ &LogFunctions )
-		{
-			if ( !_CompatibilityTested ) {
-				_CompatibilityTested = true;
-				return _TestCompatibility( FrontendIODriver );
-			}else
-				return _HandleRequest( FrontendIODriver, LogFunctions );
-		}
+			log_functions__ &LogFunctions );
 		/*f Return the command corresponding at request description 'Description' and
 		object type 'Type'. 'FBLBKD_INVALID_COMMAND' is returned if command not found. */
 		command__ Command(

@@ -124,7 +124,6 @@ qRB
 	sclmisc::OGetValue( ::Key_, Key );
 
 	rBackend_::Init( Mode, APIVersion, ClientOrigin, BackendLabel, scllocale::GetLocale(), BackendInformations, BackendCopyright, SoftwareInformations, Code, Key );
-	rDaemon_::Init();
 	_VoidFlowDriver.Init( fdr::tsDisabled, flx::aAllowed );
 	_RequestLogFunctions.Init( _VoidFlowDriver );
 	_Registry.Init();
@@ -225,12 +224,30 @@ namespace {
 	}
 }
 
+bso::sBool sclbacknd::backend___::SCLDAEMONPreProcess( fdr::rRWDriver *IODriver )
+{
+	bso::bool__ Continue = true;
+qRH
+qRB
+	Continue = TestCompatibility( *IODriver );
+qRR
+	if ( ERRType == err::t_Abort )
+		ReportRequestError_ (Language(), *IODriver );
+	else
+		ReportSoftwareError_( Language(), *IODriver );
+
+	ERRRst();
+qRT
+qRE
+	return Continue;
+}
+
 bso::sBool sclbacknd::backend___::SCLDAEMONProcess( fdr::rRWDriver *IODriver )
 {
 	bso::bool__ Continue = true;
 qRH
 qRB
-	Continue = Handle( *IODriver, _RequestLogFunctions );
+	Continue = HandleRequest( *IODriver, _RequestLogFunctions );
 qRR
 	if ( ERRType == err::t_Abort )
 		ReportRequestError_ (Language(), *IODriver );

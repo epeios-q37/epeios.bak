@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 1999 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 1999-2017 Claude SIMON (http://q37.info/contact/).
 
 	This file is part of the Epeios framework.
 
@@ -48,15 +48,15 @@
 /*************************/
 
 namespace sclbacknd {
-	// Prï¿½dï¿½claration.
+	// Prédéclaration.
 	class fCallback;
 
 	typedef fblbkd::backend___	rBackend_;
-	typedef scldaemon::daemon___ rDaemon_;
+	typedef scldaemon::cDaemon cDaemon_;
 
 	struct rBackend 
 	: public rBackend_,
-	  public rDaemon_
+	  public cDaemon_
 	{
 	private:
 		fblbkd::text_log_functions__<> _RequestLogFunctions;
@@ -68,13 +68,13 @@ namespace sclbacknd {
 		{
 			return this;
 		}
+		bso::bool__ SCLDAEMONPreProcess( fdr::rRWDriver *IODriver ) override;
 		bso::bool__ SCLDAEMONProcess( fdr::rRWDriver *IODriver ) override;
 		virtual void *SCLBACKNDStuff( void ) = 0;
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			rBackend_::reset( P );
-			rDaemon_::reset( P );
 			_RequestLogFunctions.reset( P );
 			_VoidFlowDriver.reset( P );
 			_Registry.reset( P );
@@ -130,7 +130,7 @@ namespace sclbacknd {
 		{
 			return SCLBACKNDPluginOverride( Id, Arguments, Timeout  );
 		}
-		virtual scldaemon::daemon___ *SCLDAEMONNew(	const ntvstr::char__ *Origin ) override
+		virtual scldaemon::cDaemon *SCLDAEMONNew( const ntvstr::char__ *Origin ) override
 		{
 			return SCLBACKNDNew( _Mode, Origin );
 		}

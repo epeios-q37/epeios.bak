@@ -4,6 +4,18 @@
 
 - [adpt]: Adaptation to changes in underlying modules;
 
+## 2018-06-08
+
+- *Common*:
+  - fixing incomplete first request processing;
+- FBLBKD :
+  - some modifications which facilitates the fixing of a bug;
+- SCLBACKND:
+  - [adpt];
+- SCLDAEMON
+  - standardization of `daemon___` (becomes `cDaemon`);
+  - adding `[SCLDAEMON]PreProcess(...)` to `cDaemon`;
+
 ## 2018-05-31
 
 - SCLPLUGIN

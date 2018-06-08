@@ -719,7 +719,7 @@ qRE
 	return Success;
 }
 
-bso::bool__ fblbkd::backend___::_TestCompatibility( fdr::rRWDriver &FrontendIODriver )
+bso::bool__ fblbkd::backend___::TestCompatibility( fdr::rRWDriver &FrontendIODriver )
 {
 	bso::bool__ Success = false;
 qRH
@@ -739,7 +739,7 @@ qRE
 	return Success;
 }
 
-bso::bool__ backend___::_HandleRequest(
+bso::bool__ backend___::HandleRequest(
 	fdr::rRWDriver &Driver,
 	log_functions__ &LogFunctions )
 {
