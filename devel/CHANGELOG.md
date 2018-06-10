@@ -8,31 +8,31 @@
 
 - *Common*:
   - fixing incomplete first request processing;
-- FBLBKD :
+- FBLBKD:
   - some modifications which facilitates the fixing of a bug;
 - SCLBACKND:
   - [adpt];
-- SCLDAEMON
+- SCLDAEMON:
   - standardization of `daemon___` (becomes `cDaemon`);
   - adding `[SCLDAEMON]PreProcess(...)` to `cDaemon`;
 
 ## 2018-05-31
 
-- SCLPLUGIN
+- SCLPLUGIN:
  - [adpt];
-- STSFSM :
+- STSFSM:
   - fixing matching on shorter entry;
 
 ## 2018-05-29
 
-- SCLXDHTML :
+- SCLXDHTML:
   - rewriting backend handling in *login* context,
 
 ## 2018-05-17
 
-- SCLXDHTML:
- - adding some missing methods to `sProxy`,
- - the *About* and *Refesh* actions are automatically added,
+- SCLXDHTML:
+  - adding some missing methods to `sProxy`,
+  - the *About* and *Refesh* actions are automatically added,
 
 ## 2018-05-16
 
@@ -373,7 +373,7 @@
   
 ## 2017-12-28:
 - *shared*:
-  - **$** : adding `Execute` function,
+  - **$**: adding `Execute` function,
 - CDSDCMN:
   - adding `Put(...)` variant to resolve some template ambiguity,
 - XDHCMN:
@@ -496,7 +496,7 @@
 
 ## 2017-12-07:
 - *shared*:
-  - **$** : adding strings and callbacks handling.
+  - **$**: adding strings and callbacks handling.
 - N4NJS:
   - **$**.
 
@@ -506,7 +506,7 @@
 
 ## 2017-12-05:
 - *shared*:
-  - **$** : reworking of the content handling setting to handle correctly the widgets (continued).
+  - **$**: reworking of the content handling setting to handle correctly the widgets (continued).
 - SCLXDHTML:
   - **$**,
   - some function are becoming `rSession` methods,
@@ -524,7 +524,7 @@
 
 ## 2017-12-04:
 - *shared*:
-  - **$** : Reworking of the content handling setting to handle correctly the widgets.
+  - **$**: Reworking of the content handling setting to handle correctly the widgets.
 - SCLXDHTML:
   - **$**.
 - XDHCMN:
@@ -575,7 +575,7 @@
   - Adding `R`(ead) and `W`(rite) prefix as synonym for `I`(nput) and `O`(utput).
 
 ## 2017-11-24:
-- SCLXDHTML, XDHDWS, XDHUJP :
+- SCLXDHTML, XDHDWS, XDHUJP:
   - Introducing the possibility to put the content before handling widgets (*jQuery* related stuff) when setting the layout, or some widget (*jQTE*, for example) are not properly pre-filled. 
 
 ## 2017-11-21:
@@ -607,7 +607,7 @@
   - Fixing *Clang* warning.
 - N4ZND, SCLZND
   - Implementing *Stream* object, and *Long* and *Bool*(ean) types.
-- SCLJRE :
+- SCLJRE:
   - Introducing the new standard where objects are initialized with the `sCaller`, and not the result of one of its method.
 
 ## 2017-10-27:
@@ -759,7 +759,7 @@
 - SCLNJS:
   - Adaptation to changes in *NJS*.
 
-(2017-06-29 : This file becomes a *markdown* file.)
+(2017-06-29: This file becomes a *markdown* file.)
 
 ## 2017-06-20:
 - DLBRRY:
@@ -1303,8 +1303,8 @@
 
 ## 2016-09-21:
 - ERR:
-	- Fixing bug which blocks all error handling in other threads after a 'ERRFinal'.
-- RGSTRY :	
+  - Fixing bug which blocks all error handling in other threads after a 'ERRFinal'.
+- RGSTRY:
 	- Fixing 'multi_level_registry_::Push(...)' bug.
 	- Fixing 'multi_level_registry_::Set(...)' bug.
 - SCLMISC:
@@ -1944,7 +1944,7 @@
 	- Fixing Clang complainings.
 - GLOBAL:
 	- Introducing new conventions.
-- PLGN :	
+- PLGN:	
 	- Fixing 'rRetrievers::Plugin(...)' wrong deletion.
 
 ## 2016-01-19:
@@ -2050,7 +2050,7 @@
 ## 2015-12-08:
 - BSO, TOL:
 	- Conversion from string to number are now more complete.
-- IAS :	
+- IAS:	
 	- Fixing CLang complainig.
 - RGSTRY:
 	- Adaptation to modifications in 'BSO'.
@@ -2135,10 +2135,10 @@
 - DLBRRY:
 	- Fixing 'clang' complaining.
 - SCLFRNTND:
-	- : As 'kernel___' instances are now handled externally, 'Connect(...)' functions has been replace by functions
+	- As 'kernel___' instances are now handled externally, 'Connect(...)' functions has been replace by functions
 	    filling 'features___' instances.
 - SCLXDHTML:
-	- : 'login::GetBackendFeatures(...)' deals now with 'sclfrntnd::features___'.
+	- 'login::GetBackendFeatures(...)' deals now with 'sclfrntnd::features___'.
 
 ## 2015-11-19:
 - SCLXDHTML:
@@ -2212,7 +2212,7 @@
 
 ## 2015-10-07:
 - ERR:
-	- : Skip the 'qRR' for a 't_Return' error type.
+	- Skip the 'qRR' for a 't_Return' error type.
 
 ## 2015-10-06:
 - DIR:
@@ -2241,7 +2241,7 @@
 	- Misc. changes.
 
 ## 2015-09-24:
-- XDHCMN : 'args[)]' -> 'digest[_]'.
+- XDHCMN: 'args[)]' -> 'digest[_]'.
 
 ## 2015-09-23:
 - SCLXDHTML:
@@ -2410,7 +2410,7 @@
 
 ## 2015-07-07:
 - XDHJST:
-	- : Adding 'TagName' parameters to 'GetEventsAbstract()' function to properly handle the default action.
+	- Adding 'TagName' parameters to 'GetEventsAbstract()' function to properly handle the default action.
 
 ## 2015-07-15:
 - NTVSTR:
@@ -2418,7 +2418,7 @@
 
 ## 2015-07-10:
 - XPP:
-	- : Subsitutions occurs now to the 'href' and 'select' attributes of the 'expand' directive , and the 'value' attribute of the 'set' directive too.
+	- Subsitutions occurs now to the 'href' and 'select' attributes of the 'expand' directive , and the 'value' attribute of the 'set' directive too.
 
 ## 2015-07-09:
 - BCH
@@ -2494,7 +2494,7 @@
 
 ## 2015-06-11:
 - MTHTMC:
-	- :Introducing 'tokens__'.
+	- Introducing 'tokens__'.
 
 ## 2015-06-10:
 - SCLLOCALE:
@@ -2510,14 +2510,14 @@
 	- timecode with separators are now handled correct.
 
 ## 2015-06-08:
-- GLOBAL : 
+- GLOBAL: 
 	- Adaptaiton to changes in miscellaneous libraries.
 - AGS:
 	- 'A_STORAGE()' -> 'qAS(_)'.
 - ERR:
 	- Renaming/removing/adding some macros.
 - MTHMTC:
-	- # Fixing misssing '&'.
+	- Fixing misssing '&'.
 - SDR:
 	- 'E_NIL' -> 'qNIL'.
 	- 'E_SDRIVER' ->'qSD__'.
@@ -2673,7 +2673,7 @@
 
 ## 2015-04-13:
 - GLOBAL:
-	- Fixing file encoding issues which made crash 'Xcode'. NOTA : all non-ASCII characters were stripped.
+	- Fixing file encoding issues which made crash 'Xcode'. NOTA: all non-ASCII characters were stripped.
 
 ## 2015-04-12:
 - DLBRRY:
@@ -2807,7 +2807,7 @@
 	- Adaptation to changes in 'FLX'.
 - SCLRGSTRY:
 	- 'GetUnsigneNumber(...)' returns now the correct value.
-	- : Modifying 'GetSigneNumber_(...)' to take account of changes in 'STR'.
+	- Modifying 'GetSigneNumber_(...)' to take account of changes in 'STR'.
 - SCLTOOL:
 	- Retrieving signal handling from 'TOL'.
 - STR:
