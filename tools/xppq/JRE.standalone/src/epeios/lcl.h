@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 1999-2017 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 1999 Claude SIMON (http://q37.info/contact/).
 
 	This file is part of the Epeios framework.
 
@@ -283,12 +283,12 @@ namespace lcl {
 		void _GetCorrespondingLabels(
 			const strings_ &Labels,
 			strings_ &Wordings ) const;
-		// A des fins de compatibilité ascendente.
+		// A des fins de compatibilitï¿½ ascendente.
 		bso::bool__ _GetTranslationFollowingLanguageThenMessage(
 			const str::string_ &Text,
 			const char *Language,
 			str::string_ &Translation ) const;
-		// A des fins de compatibilité ascendente.
+		// A des fins de compatibilitï¿½ ascendente.
 		bso::bool__ _GetTranslationFollowingMessageThenLanguage(
 			const str::string_ &Text,
 			const char *Language,
@@ -400,16 +400,16 @@ namespace lcl {
 
 	E_AUTO( locale );
 
-	// Fonction utilisée dans le cadre de l'internationalisation, qui sert juste à contrôler l'existence du premier paramètre, qui correspond généralement à une entrée d'un 'enum'.
+	// Fonction utilisï¿½e dans le cadre de l'internationalisation, qui sert juste ï¿½ contrï¿½ler l'existence du premier paramï¿½tre, qui correspond gï¿½nï¿½ralement ï¿½ une entrï¿½e d'un 'enum'.
 	inline const char *Control_(
-		int,	// Sert juste à vérifier l'existence d'une entrée d'un 'enum'.
+		int,	// Sert juste ï¿½ vï¿½rifier l'existence d'une entrï¿½e d'un 'enum'.
 		const char *Text )
 	{
 		return Text;
 	}
 }
 
-// A utiliser dans une macro '_( name )', qui prédéfini le paramètre 'prefix'.
+// A utiliser dans une macro '_( name )', qui prï¿½dï¿½fini le paramï¿½tre 'prefix'.
 # define LCL_M( prefix, name ) lcl::Control_( prefix##name, #name )
 
 /*************/

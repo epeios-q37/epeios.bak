@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 1999-2017 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 1999 Claude SIMON (http://q37.info/contact/).
 
 	This file is part of the Epeios framework.
 
@@ -97,12 +97,12 @@ namespace lst {
 
 			return New;
 		}
-		// Retourne l'élément succédant à 'Element', ou LST_INEXISTANT si inexistant.
+		// Retourne l'ï¿½lï¿½ment succï¿½dant ï¿½ 'Element', ou LST_INEXISTANT si inexistant.
 		sdr::row_t__ Successeur_( sdr::row_t__ Element ) const
 		{
 			return lst::Successeur_( Element, Extent_(), Locations );
 		}
-		// Retourne l'élément précédent 'Element', ou LST_INEXISTANT si inexistant.
+		// Retourne l'ï¿½lï¿½ment prï¿½cï¿½dent 'Element', ou LST_INEXISTANT si inexistant.
 		sdr::row_t__ Predecesseur_( sdr::row_t__ Element ) const
 		{
 			return lst::Predecesseur_( Element, Locations );
@@ -278,7 +278,7 @@ namespace lst {
 			else
 				return !Locations.IsAvailable( *Entry );
 		}
-		// Ne peut être appelé que lorsqu'il y a aucune entrée libre.
+		// Ne peut ï¿½tre appelï¿½ que lorsqu'il y a aucune entrï¿½e libre.
 		void Allocate(
 			sdr::size__ Size,
 			aem::mode__ Mode = aem::m_Default )
@@ -327,7 +327,7 @@ namespace lst {
 	private:
 		// Table de l'occupation de la liste.
 		bitbch::bit_bunch__<t, r> Occupation_;
-		// Nombre d'éléments dans la liste.
+		// Nombre d'ï¿½lï¿½ments dans la liste.
 		sdr::size__ Nombre_;
 	public:
 		list__( void )

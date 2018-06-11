@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 1999-2017 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 1999 Claude SIMON (http://q37.info/contact/).
 
 	This file is part of the Epeios framework.
 
@@ -29,11 +29,11 @@
 // File Name Manager
 
 /*
-	Significations des différents termes :
-	- 'path' pour, de manière générique, un fichier ou un répertoire,
-	- 'directory' (diminutif : 'dir') pour un répertoire,
+	Significations des diffï¿½rents termes :
+	- 'path' pour, de maniï¿½re gï¿½nï¿½rique, un fichier ou un rï¿½pertoire,
+	- 'directory' (diminutif : 'dir') pour un rï¿½pertoire,
 	- 'filename' pour un nom de fichier, avec ou sans sa localisation,
-	- 'basename' pour un nom de fichier sans sa localisation, mais avec son éventuellle extension,
+	- 'basename' pour un nom de fichier sans sa localisation, mais avec son ï¿½ventuellle extension,
 	- 'location' la localisation (la liste des parents) d'un fichier,
 	- 'affix' le 'basename' d'un fichier sans son extension.
 */
@@ -60,7 +60,7 @@ namespace fnm {
 	typedef ntvstr::core___ ncore___;
 	typedef ntvstr::string___ name___;
 
-	// Les différents type d'un chemin ('path').
+	// Les diffï¿½rents type d'un chemin ('path').
 	enum type__
 	{
 		// ""

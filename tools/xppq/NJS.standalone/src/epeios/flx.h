@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 1999-2017 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 1999 Claude SIMON (http://q37.info/contact/).
 
 	This file is part of the Epeios framework.
 
@@ -1629,7 +1629,7 @@ namespace flx {
 		}
 	};
 
-	// Relay classes relays data from an output driver to an input one.
+	// Relay classes relays data fromï¿½an output driver to an input one.
 	// The core. Thread-safe.
 	class rRelay_
 	{
