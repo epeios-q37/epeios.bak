@@ -201,7 +201,7 @@ namespace csdbns {
 				qRFwk();
 
 			Data->IODriver->Init( Socket, true, fdr::ts_Default, sck::NoTimeout );
-			Data->UP = BaseCallback->PreProcess( Data->IODriver, ntvstr::string___( IP ).Internal() );	// The 'OwnerShipTaken' concerns the 'Flow'.
+			Data->UP = BaseCallback->PreProcess( ntvstr::string___( IP ).Internal() );	// The 'OwnerShipTaken' concerns the 'Flow'.
 		qRR
 			if ( Data != NULL )
 				delete Data;

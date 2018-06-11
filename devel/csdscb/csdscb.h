@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 1999-2017 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 1999 Claude SIMON (http://q37.info/contact/).
 
 	This file is part of the Epeios framework.
 
@@ -60,7 +60,7 @@ namespace csdscb {
 			return false;
 		}
 		virtual void *CSDSCBPreProcess(
-			fdr::rRWDriver *IODriver,
+			// fdr::rRWDriver *IODriver,	// As tempting as it could be, do NOT activate this parameter, as this will lead to some issues between embedded/remote backends and the Atlas toolkit handling.
 			const ntvstr::char__ *Origin ) = 0;	// If set to true, it means that the 'Flow' will be destructed downstream.
 		virtual eAction CSDSCBProcess(
 			fdr::rRWDriver *IODriver,
@@ -77,11 +77,9 @@ namespace csdscb {
 		{
 			return CSDSCBPluginOverride( Id, Arguments, Timeout );
 		}
-		void *PreProcess(
-			fdr::rRWDriver *IODriver,
-			const ntvstr::char__ *Origin )
+		void *PreProcess( const ntvstr::char__ *Origin )
 		{
-			return CSDSCBPreProcess( IODriver, Origin );
+			return CSDSCBPreProcess( Origin );
 		}
 		eAction Process(
 			fdr::rRWDriver *IODriver,

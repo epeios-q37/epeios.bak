@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 1999 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 1999-2017 Claude SIMON (http://q37.info/contact/).
 
 	This file is part of the Epeios framework.
 
@@ -149,7 +149,7 @@ une requte de manire trs intense (bombardage de 'push' 'join'). C'est comme si l
 			Path.Init();
 			dir::GetSelfPath( Path );
 
-			UP_ = _Callback->PreProcess( IODriver_, Path.Internal() );
+			UP_ = _Callback->PreProcess( Path.Internal() );
 		qRR
 		qRT
 		qRE

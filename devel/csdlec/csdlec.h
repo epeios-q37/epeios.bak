@@ -149,7 +149,7 @@ une requte de manire trs intense (bombardage de 'push' 'join'). C'est comme si l
 			Path.Init();
 			dir::GetSelfPath( Path );
 
-			UP_ = _Callback->PreProcess( IODriver_, Path.Internal() );
+			UP_ = _Callback->PreProcess( Path.Internal() );
 		qRR
 		qRT
 		qRE

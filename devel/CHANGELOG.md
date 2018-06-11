@@ -4,6 +4,23 @@
 
 - [adpt]: Adaptation to changes in underlying modules;
 
+## 2018-06-11
+
+- CSDBNS:
+  - [adpt];
+- CSDSCB:
+  - removing `IODriver` parameter to `cProcessing::[CSDSCB]PreProcess(...)` [virtual] method as the use of this parameter leads to incompatibilities between backends and the *Atlas* toolkit;
+- CSDLEC:
+  - [adpt];
+- CSDMXS:
+  - [adpt];
+  - following modifications made to *CSDSCB*, reverting some modifications introduced with the *Atlas* toolkit, but which were incompatible with remote backends;
+- SCLBACKND:
+  - [adpt];
+- SCLDAEMON:
+  - [adpt];
+  - removing `[SCLDAEMON]PreProcess(...)` to `cDaemon`, as it causes some issue with embedded backends;
+
 ## 2018-06-08
 
 - *Common*:

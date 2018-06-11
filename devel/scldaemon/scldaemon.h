@@ -47,15 +47,10 @@ namespace scldaemon {
 	class cDaemon
 	{
 	protected:
-		virtual bso::bool__ SCLDAEMONPreProcess( fdr::rRWDriver *IODriver ) = 0;
 		virtual bso::bool__ SCLDAEMONProcess( fdr::rRWDriver *IODriver ) = 0;
 		// Post processing is made by the destructor.
 	public:
 		qCALLBACK( Daemon)
-			bso::bool__ PreProcess( fdr::rRWDriver *IODriver )
-		{
-			return SCLDAEMONPreProcess( IODriver );
-		}
 		bso::bool__ Process( fdr::rRWDriver *IODriver )
 		{
 			return SCLDAEMONProcess( IODriver );
@@ -75,19 +70,9 @@ namespace scldaemon {
 		{
 			return SCLDAEMONPluginOverride( Id, Arguments, Timeout );
 		}
-		virtual void *CSDSCBPreProcess(
-			fdr::rRWDriver *IODriver,
-			const ntvstr::char__ *Origin ) override
+		virtual void *CSDSCBPreProcess( const ntvstr::char__ *Origin ) override
 		{
-			cDaemon *Daemon =  SCLDAEMONNew( Origin );
-
-			if ( Daemon == NULL )
-				qRFwk();
-
-			if ( Daemon->PreProcess( IODriver ) )
-				return Daemon;
-			else
-				return NULL;
+			return SCLDAEMONNew( Origin );
 		}
 		virtual csdscb::action__ CSDSCBProcess(
 			fdr::rRWDriver *IODriver,

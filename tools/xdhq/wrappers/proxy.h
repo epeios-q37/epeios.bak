@@ -119,10 +119,9 @@ namespace proxy {
 	private:
 		// Action to launch on a new session.
 		str::wString NewSessionAction_;
+		bso::sBool Handshaked_;
 	protected:
-		virtual void *CSDSCBPreProcess(
-			fdr::rRWDriver *IODriver,
-			const ntvstr::char__ *Origin ) override
+		virtual void *CSDSCBPreProcess( const ntvstr::char__ *Origin ) override
 		{
 			data *Data = NULL;
 		qRH;
@@ -134,12 +133,6 @@ namespace proxy {
 				qRAlc();
 
 			Data->Recv.WriteDismiss();
-
-			Flow.Init( *IODriver );
-			Handshake_( Flow, Data->Language );
-
-			prtcl::PutAnswer( prtcl::aOK_1, Flow );
-			Flow.Commit();
 		qRR;
 			if ( Data != NULL )
 				delete Data;
@@ -160,36 +153,44 @@ namespace proxy {
 
 			Flow.Init( *IODriver );
 
-			if ( Data.Request != prxy_cmn::r_Undefined ) {
-				Data.Recv.WriteBegin();
-				Data.Recv.Return.Init();
-				prxy_recv::Recv( Data.Request, Flow, Data.Recv.Return );
-				Data.Request = prxy_cmn::r_Undefined;
-				Data.Recv.WriteEnd();
-				PRXYOnPending( &Data );
-			} else {
-				Data.Recv.WriteBegin();
-				tol::Init( Data.Recv.Id, Data.Recv.Action );
-				GetAction_( Flow, Data.Recv.Id, Data.Recv.Action );
-				if ( Data.Recv.Action.Amount() == 0 ) {
-					if ( Data.Recv.Id.Amount() == 0 )
-						Data.Recv.Action = NewSessionAction_;
-					else
-						qRGnr();
-				}
-				Data.Recv.WriteEnd();
-				PRXYOnAction( &Data );
-			}
+			if ( !Handshaked_ ) {
+				Handshake_( Flow, Data.Language );
+				Handshaked_ = true;
 
-			Data.Sent.ReadBegin();
-
-			// 'Data.Request' is set by the 'PRXYOn...' method above.
-			if ( Data.Request != prxy_cmn::r_Undefined )
-				prxy_send::Send( Data.Request, Flow, Data.Sent.Arguments );
-			else
 				prtcl::PutAnswer( prtcl::aOK_1, Flow );
+				Flow.Commit();
+			} else {
+				if ( Data.Request != prxy_cmn::r_Undefined ) {
+					Data.Recv.WriteBegin();
+					Data.Recv.Return.Init();
+					prxy_recv::Recv( Data.Request, Flow, Data.Recv.Return );
+					Data.Request = prxy_cmn::r_Undefined;
+					Data.Recv.WriteEnd();
+					PRXYOnPending( &Data );
+				} else {
+					Data.Recv.WriteBegin();
+					tol::Init( Data.Recv.Id, Data.Recv.Action );
+					GetAction_( Flow, Data.Recv.Id, Data.Recv.Action );
+					if ( Data.Recv.Action.Amount() == 0 ) {
+						if ( Data.Recv.Id.Amount() == 0 )
+							Data.Recv.Action = NewSessionAction_;
+						else
+							qRGnr();
+					}
+					Data.Recv.WriteEnd();
+					PRXYOnAction( &Data );
+				}
 
-			Data.Sent.ReadEnd();
+				Data.Sent.ReadBegin();
+
+				// 'Data.Request' is set by the 'PRXYOn...' method above.
+				if ( Data.Request != prxy_cmn::r_Undefined )
+					prxy_send::Send( Data.Request, Flow, Data.Sent.Arguments );
+				else
+					prtcl::PutAnswer( prtcl::aOK_1, Flow );
+
+				Data.Sent.ReadEnd();
+			}
 		qRR;
 		qRT;
 		qRE;
@@ -212,11 +213,12 @@ namespace proxy {
 	public:
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, NewSessionAction_ );
+			tol::reset( P, Handshaked_, NewSessionAction_ );
 		}
 		qCVDTOR( rProcessing );
 		void Init( const str::dString &NewSessionAction )
 		{
+			Handshaked_ = false;
 			NewSessionAction_.Init( NewSessionAction );
 		}
 	};

@@ -59,6 +59,7 @@ namespace sclbacknd {
 	  public cDaemon_
 	{
 	private:
+		bso::sBool CompatibilityTested_;
 		fblbkd::text_log_functions__<> _RequestLogFunctions;
 		flx::void_odriver___ _VoidFlowDriver;
 		rgstry::multi_level_registry _Registry;
@@ -68,13 +69,13 @@ namespace sclbacknd {
 		{
 			return this;
 		}
-		bso::bool__ SCLDAEMONPreProcess( fdr::rRWDriver *IODriver ) override;
 		bso::bool__ SCLDAEMONProcess( fdr::rRWDriver *IODriver ) override;
 		virtual void *SCLBACKNDStuff( void ) = 0;
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			rBackend_::reset( P );
+			CompatibilityTested_ = false;
 			_RequestLogFunctions.reset( P );
 			_VoidFlowDriver.reset( P );
 			_Registry.reset( P );

@@ -117,6 +117,8 @@ void sclbacknd::backend___::Init(
 qRH
 	str::wString Code, Key;
 qRB
+	CompatibilityTested_ = false;
+
 	Code.Init();
 	sclmisc::OGetValue( ::Code_, Code );
 
@@ -224,30 +226,17 @@ namespace {
 	}
 }
 
-bso::sBool sclbacknd::backend___::SCLDAEMONPreProcess( fdr::rRWDriver *IODriver )
-{
-	bso::bool__ Continue = true;
-qRH
-qRB
-	Continue = TestCompatibility( *IODriver );
-qRR
-	if ( ERRType == err::t_Abort )
-		ReportRequestError_ (Language(), *IODriver );
-	else
-		ReportSoftwareError_( Language(), *IODriver );
-
-	ERRRst();
-qRT
-qRE
-	return Continue;
-}
-
 bso::sBool sclbacknd::backend___::SCLDAEMONProcess( fdr::rRWDriver *IODriver )
 {
 	bso::bool__ Continue = true;
 qRH
 qRB
-	Continue = HandleRequest( *IODriver, _RequestLogFunctions );
+	if ( CompatibilityTested_ )
+		Continue = HandleRequest( *IODriver, _RequestLogFunctions );
+	else {
+		Continue = TestCompatibility( *IODriver );
+		CompatibilityTested_ = true;
+	}
 qRR
 	if ( ERRType == err::t_Abort )
 		ReportRequestError_ (Language(), *IODriver );
