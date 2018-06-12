@@ -85,9 +85,10 @@ namespace proxy {
 		rSent Sent;
 		prxy_cmn::eRequest Request;
 		str::wString Language;
+		bso::sBool Handshaked;
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, Recv, Sent, Language );
+			tol::reset( P, Recv, Sent, Language, Handshaked );
 			Request = prxy_cmn::r_Undefined;
 		}
 		qCDTOR( rData );
@@ -97,6 +98,7 @@ namespace proxy {
 
 			tol::Init( Recv, Sent, Language );
 			Request = prxy_cmn::r_Undefined;
+			Handshaked = false;
 		}
 		bso::sBool IsTherePendingRequest( void ) const
 		{
@@ -119,7 +121,6 @@ namespace proxy {
 	private:
 		// Action to launch on a new session.
 		str::wString NewSessionAction_;
-		bso::sBool Handshaked_;
 	protected:
 		virtual void *CSDSCBPreProcess( const ntvstr::char__ *Origin ) override
 		{
@@ -131,8 +132,6 @@ namespace proxy {
 
 			if ( Data == NULL )
 				qRAlc();
-
-			Data->Recv.WriteDismiss();
 		qRR;
 			if ( Data != NULL )
 				delete Data;
@@ -153,9 +152,11 @@ namespace proxy {
 
 			Flow.Init( *IODriver );
 
-			if ( !Handshaked_ ) {
+			if ( !Data.Handshaked ) {
+				Data.Recv.WriteDismiss();
+
 				Handshake_( Flow, Data.Language );
-				Handshaked_ = true;
+				Data.Handshaked = true;
 
 				prtcl::PutAnswer( prtcl::aOK_1, Flow );
 				Flow.Commit();
@@ -213,12 +214,11 @@ namespace proxy {
 	public:
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, Handshaked_, NewSessionAction_ );
+			tol::reset( P, NewSessionAction_ );
 		}
 		qCVDTOR( rProcessing );
 		void Init( const str::dString &NewSessionAction )
 		{
-			Handshaked_ = false;
 			NewSessionAction_.Init( NewSessionAction );
 		}
 	};
