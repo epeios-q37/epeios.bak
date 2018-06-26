@@ -75,12 +75,12 @@ AC( Submission )
 
 AC( ShowTestButton )
 {
-//	Session.RemoveClass( "TestButton", "hide" );
+	Session.RemoveClass( "TestButton", "hide" );
 }
 
 AC( HideTestButton )
 {
-//	Session.AddClass( "TestButton", "hide" );
+	Session.AddClass( "TestButton", "hide" );
 }
 
 AC( ConnectedTesting )
@@ -94,7 +94,6 @@ AC( UnconnectedTesting )
 		Session.AlertT( "ConnectedTestMessage" );
 	else
 		Session.AlertT( "UnconnectedTestMessage" );
-
 }
 
 
