@@ -17,35 +17,15 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-//	$Id: mscmdm.h,v 1.7 2012/09/07 16:18:22 csimon Exp $
+// MuSiC MiDi Messages 
 
 #ifndef MSCMDM__INC
-#define MSCMDM__INC
-
-#define MSCMDM_NAME		"MSCMDM"
-
-#define	MSCMDM_VERSION	"$Revision: 1.7 $"
-
-#define MSCMDM_OWNER		"Claude SIMON"
+# define MSCMDM__INC
 
 
-#if defined( E_DEBUG ) && !defined( MSCMDM_NODBG )
-#define MSCMDM_DBG
-#endif
-
-/* Begin of automatic documentation generation part. */
-
-//V $Revision: 1.7 $
-//C Claude SIMON (csimon at zeusw dot org)
-//R $Date: 2012/09/07 16:18:22 $
-
-/* End of automatic documentation generation part. */
-
-/* Addendum to the automatic documentation generation part. */
-//D MuSiC MiDi Messages 
-/* End addendum to automatic documentation generation part. */
-
-/*$BEGIN$*/
+# if defined( E_DEBUG ) && !defined( MSCMDM_NODBG )
+#  define MSCMDM_DBG
+# endif
 
 #include "err.h"
 #include "flw.h"
@@ -74,7 +54,7 @@ namespace mscmdm {
 	using flw::size__;
 
 	// Autres donnes associes aux vnements.
-	enum extraneous__ {
+	qENUM( Extraneous) {
 		// Pas d'autres donnes.
 		xNone,
 		// 'Delta time ticks'.
@@ -85,7 +65,8 @@ namespace mscmdm {
 	};
 
 	//e The MIDI events.
-	enum midi_event__ {
+	// 'mid' prefix to avoid confusion with 'eMetaEvent'.
+	qENUM( MidiEvent ) {
 		//i Note off event.
 		midNoteOff,
 		//i Note on event.
@@ -107,10 +88,10 @@ namespace mscmdm {
 		mid_NotAMIDIEvent,
 	};
 
-	const char *GetMIDIEventLabel( midi_event__ Event );
+	const char *GetMIDIEventLabel( eMidiEvent Event );
 
 	//e The system events.
-	enum system_event__ {
+	qENUM( SystemEvent ) {
 		//i Exclusive system event,
 		sysExclusive,
 		//i Timing clock system event.
@@ -138,10 +119,11 @@ namespace mscmdm {
 		sys_NotASystemEvent,
 	};
 
-	const char *GetSystemEventLabel( system_event__ Event );
+	const char *GetSystemEventLabel( eSystemEvent Event );
 
 	//e The meta events.
-	enum meta_event__ {
+	// 'mta' prefix to avoid confusion with 'eMidiEvent'.
+	qENUM( MetaEvent ) {
 		//i Sequence number meta-event.
 		mtaSequenceNumber,
 		//i Test meta-event,
@@ -183,7 +165,7 @@ namespace mscmdm {
 		mta_NotAMetaEvent,
 	};
 
-	const char *GetMetaEventLabel( meta_event__ Event );
+	const char *GetMetaEventLabel( eMetaEvent Event );
 
 	//t Type of the delta time ticks..
 	typedef bso::u32__ delta_time_ticks__;
@@ -191,7 +173,7 @@ namespace mscmdm {
 	//t Type of a channel identificator.
 	typedef bso::u8__ channel_id__;
 
-	enum event_type__ {
+	qENUM( EventType ) {
 		// MIDI Event,
 		etMIDI,
 		// System event.
@@ -202,60 +184,60 @@ namespace mscmdm {
 		et_Undefined
 	};
 
-	const char *GetEventTypeLabel( event_type__ Event );
+	const char *GetEventTypeLabel( eEventType Event );
 
-	event_type__ DetermineEvent(
+	eEventType DetermineEvent(
 		flw::sByte Datum,
 		flw::sByte AdditionalDatum,	// For meta event only.
 		bso::u8__ &Event );
 
-	midi_event__ DetermineMIDIEvent( flw::sByte Datum );
+	eMidiEvent DetermineMIDIEvent( flw::sByte Datum );
 
-	size__ GetMIDIEventDataSize( midi_event__ Event );
+	size__ GetMIDIEventDataSize( eMidiEvent Event );
 
 
-	inline event_type__ DetermineEvent(
+	inline eEventType DetermineEvent(
 		flw::sByte Datum,
 		flw::sByte AdditionalDatum,
-		midi_event__ &MIDIEvent,
-		system_event__ &SystemEvent,
-		meta_event__ &MetaEvent )
+		eMidiEvent &MIDIEvent,
+		eSystemEvent &SystemEvent,
+		eMetaEvent &MetaEvent )
 	{
 		bso::u8__ Event;
-		event_type__ EventType = DetermineEvent( Datum, AdditionalDatum, Event );
+		eEventType EventType = DetermineEvent( Datum, AdditionalDatum, Event );
 
 		switch( EventType ) {
 		case etMIDI:
-			MIDIEvent = (midi_event__)Event;
+			MIDIEvent = (eMidiEvent)Event;
 			break;
 		case etSystem:
-			SystemEvent = (system_event__)Event;
+			SystemEvent = (eSystemEvent)Event;
 			break;
 		case etMeta:
-			MetaEvent = (meta_event__)Event;
+			MetaEvent = (eMetaEvent)Event;
 			break;
 		}
 
 		return EventType;
 	}
 
-	struct extended_midi_event__ {
+	struct sExtendedMidiEvent {
 		// The midi event.
-		midi_event__ Event;
+		eMidiEvent Event;
 		// The channel ID.
 		channel_id__ ChannelID;
 		// At true for tied event.
 		bso::bool__ Tied;
 	};
 
-	struct extended_system_event__ {
+	struct sExtendedSystemEvent {
 		// The midi event.
-		system_event__ Event;
+		eSystemEvent Event;
 	};
 
-	struct extended_meta_event__ {
+	struct sExtendedMetaEvent {
 		// The midi event.
-		meta_event__ Event;
+		eMetaEvent Event;
 		// Data size.
 		size__ Size;
 		// Meta-event id.
@@ -264,22 +246,22 @@ namespace mscmdm {
 
 
 	//c An event header.
-	struct event_header__ {
+	struct sEventHeader {
 		//o The delta time ticks.
 		delta_time_ticks__ DeltaTimeTicks;
 		//o The event.
-		event_type__ EventType;
+		eEventType EventType;
 		// Event id.
 		event_id__ Id;
 		union {
 			// The MIDI event, if 'EventType' == 'etMIDI'.
-			extended_midi_event__ MIDIEvent;
+			sExtendedMidiEvent MIDIEvent;
 			// The system event, if 'EventType' == 'etSystem'.
-			extended_system_event__ SystemEvent;
+			sExtendedSystemEvent SystemEvent;
 			// The meta event, if 'EventType' == 'etMeta'.
-			extended_meta_event__ MetaEvent;
+			sExtendedMetaEvent MetaEvent;
 		};
-		event_header__( void )
+		sEventHeader( void )
 		{
 			DeltaTimeTicks = 0;
 			EventType = et_Undefined;
@@ -287,12 +269,12 @@ namespace mscmdm {
 		}
 	};
 
-	const char *GetEventLabel( const event_header__ &Event );
+	const char *GetEventLabel( const sEventHeader &Event );
 
-	inline event_type__ PartiallyFillEventHeader(
+	inline eEventType PartiallyFillEventHeader(
 		flw::sByte Datum,
 		flw::sByte AdditionalDatum,	// Only for meta event.
-		event_header__ &EventHeader )
+		sEventHeader &EventHeader )
 	{
 		EventHeader.Id = Datum;
 		EventHeader.MetaEvent.Id = AdditionalDatum;
@@ -305,31 +287,32 @@ namespace mscmdm {
 	typedef str::string_ data_;
 	typedef str::string data;
 
-	struct callback__
+	struct cEventHandler
 	{
 	protected:
 		virtual bso::bool__ MSCMDMHandleEvent(
-			const event_header__ &Header,
+			const sEventHeader &Header,
 			const data_ &Data,
-			extraneous__ Extraneous ) = 0;
+			eExtraneous Extraneous ) = 0;
 	public:
 		virtual bso::bool__ HandleEvent(
-			const event_header__ &Header,
+			const sEventHeader &Header,
 			const data_ &Data,
-			extraneous__ Extraneous )
+			eExtraneous Extraneous )
 		{
 			return MSCMDMHandleEvent( Header, Data, Extraneous );
 		}
+		qCALLBACK( EventHandler );
 	};
 
-	enum flag_position__ {
+	qENUM( FlagPosition ) {
 		fpSkipDoublons,	// Identical MIDI events with 0 tick times are elminated.
 		fpZeroVelocityBecomesNoteOff,	// 'NoteOn' event with '0' as velocity becomes 'NoteOff'.
 		fp_amount,
 		fp_Undefined
 	};
 
-	enum flag_mask {
+	qENUM( FlagMask ) {
 		fmSkipDoublons = 1 << fpSkipDoublons,
 		fmZeroVelocityBecomesNoteOff = 1 << fpZeroVelocityBecomesNoteOff,
 		fmDefaultFlag = fmSkipDoublons | fmZeroVelocityBecomesNoteOff
@@ -337,14 +320,14 @@ namespace mscmdm {
 
 
 	bso::bool__ Parse(
-		callback__ &Callback,
+		cEventHandler &Callback,
 		flw::iflow__ &IFlow,
-		extraneous__ Extraneous,
+		eExtraneous Extraneous,
 		int Flags = fmDefaultFlag );
 
 # ifdef MSCMDM__DEVICES_AVAILABLE
 	inline bso::bool__ Parse(
-		callback__ &Callback,
+		cEventHandler &Callback,
 		mscmdd::rRFlow &IFlow,
 		int Flags = fmDefaultFlag )
 	{
@@ -356,14 +339,14 @@ namespace mscmdm {
 	//f Put in 'EventHeader' the header of the event red in 'IFlow'. Return the size of the header. If '04, the error.
 	bso::bool__ GetEventHeader(
 		flw::iflow__ &IFlow,
-		extraneous__ Extraneous,
-		event_header__ &EventHeader,
+		eExtraneous Extraneous,
+		sEventHeader &EventHeader,
 		err::handling__ ErrHandling = err::h_Default );
 
 # ifdef MSCMDM__DEVICES_AVAILABLE
 	inline bso::bool__ GetEventHeader(
 		mscmdd::rRFlow &IFlow,
-		event_header__ &EventHeader,
+		sEventHeader &EventHeader,
 		err::handling__ ErrHandling = err::h_Default )
 	{
 		return GetEventHeader( IFlow, xNone, EventHeader, ErrHandling );
@@ -371,14 +354,14 @@ namespace mscmdm {
 #endif
 
 	size__ GetEventData(
-		const event_header__ &EventHeader,
+		const sEventHeader &EventHeader,
 		flw::iflow__ &IFlow,
-		extraneous__ Extraneous,
+		eExtraneous Extraneous,
 		data_ &Data );
 
 # ifdef MSCMDM__DEVICES_AVAILABLE
 	inline size__ GetEventData(
-		const event_header__ &EventHeader,
+		const sEventHeader &EventHeader,
 		mscmdd::rRFlow &IFlow,
 		data_ &Data )
 	{
@@ -391,7 +374,7 @@ namespace mscmdm {
 	public:
 		struct s
 		{
-			event_header__ EventHeader;
+			sEventHeader EventHeader;
 			data_::s Data;
 		} &S_;
 		data_ Data;
@@ -429,7 +412,7 @@ namespace mscmdm {
 			Data.Init();
 		}
 		void Init(
-			const event_header__ &Header,
+			const sEventHeader &Header,
 			const data_ &Data )
 		{
 			reset();
@@ -437,7 +420,7 @@ namespace mscmdm {
 			S_.EventHeader = Header;
 			this->Data.Init( Data );
 		}
-		E_RWDISCLOSE_( event_header__, EventHeader )
+		E_RWDISCLOSE_( sEventHeader, EventHeader )
 	};
 
 	E_AUTO( event )
@@ -452,13 +435,13 @@ namespace mscmdm {
 		event_id__ Id,
 		const data_ &RawData,
 		bso::bool__ Tied,
-		extraneous__ Extraneous,
+		eExtraneous Extraneous,
 		flw::oflow__ &OFlow );
 
 	inline void PutEventHeader(
-		const event_header__ &Header,
+		const sEventHeader &Header,
 		const data_ &RawData,
-		extraneous__ Extraneous,
+		eExtraneous Extraneous,
 		flw::oflow__ &OFlow )
 	{
 		PutEventHeader( Header.DeltaTimeTicks, Header.Id, RawData, ( Header.EventType == etMIDI ? Header.MIDIEvent.Tied : false ), Extraneous, OFlow );
@@ -466,7 +449,7 @@ namespace mscmdm {
 
 # ifdef MSCMDM__DEVICES_AVAILABLE
 	inline void PutEventHeader(
-		const event_header__ &Header,
+		const sEventHeader &Header,
 		const data_ &RawData,
 		mscmdd::rRWFlow &OFlow )
 	{
@@ -477,7 +460,7 @@ namespace mscmdm {
 
 	void PutEvent(
 		const event_ &Event,
-		extraneous__ Extraneous,
+		eExtraneous Extraneous,
 		flw::oflow__ &OFlow );
 
 # ifdef MSCMDM__DEVICES_AVAILABLE
@@ -491,7 +474,7 @@ namespace mscmdm {
 
 	void PutEvents(
 		const events_ &Events,
-		extraneous__ Extraneous,
+		eExtraneous Extraneous,
 		flw::oflow__ &OFlow );
 	
 # ifdef MSCMDM__DEVICES_AVAILABLE
@@ -508,7 +491,7 @@ namespace mscmdm {
 
 	void PutTrack(
 		const track_ &Track,
-		extraneous__ Extraneous,
+		eExtraneous Extraneous,
 		flw::oflow__ &OFlow );
 
 # ifdef MSCMDM__DEVICES_AVAILABLE
@@ -527,7 +510,7 @@ namespace mscmdm {
 
 	void PutTracks(
 		const tracks_ &Tracks,
-		extraneous__ Extraneous,
+		eExtraneous Extraneous,
 		flw::oflow__ &Flow );
 
 # ifdef MSCMDM__DEVICES_AVAILABLE
@@ -539,7 +522,7 @@ namespace mscmdm {
 	}
 # endif
 
-	inline bso::bool__ IsMetaDataText( meta_event__ Event )
+	inline bso::bool__ IsMetaDataText( eMetaEvent Event )
 	{
 		switch( Event ) {
 		case mtaText:
@@ -643,25 +626,25 @@ namespace mscmdm {
 	}
 */
 	void PrintMIDIEvent(
-		const extended_midi_event__ &Event,
+		const sExtendedMidiEvent &Event,
 		const data_ &Data,
 		txf::text_oflow__ &OFlow );
 
 	//f Print to 'OFlow', which origin is 'Origin', the description of the system event 'Event' in 'IFlow'.
 	void PrintSystemEvent(
-		const extended_system_event__ &Event,
+		const sExtendedSystemEvent &Event,
 		const data_ &Data,
 		txf::text_oflow__ &OFlow );
 
 	//f Print to 'OFlow' the description of the meta event 'Event' in 'IFlow'.
 	void PrintMetaEvent(
-		const extended_meta_event__ &Event,
+		const sExtendedMetaEvent &Event,
 		const data_ &Data,
 		txf::text_oflow__ &OFlow );
 
 	//f Print to 'OFlow', which origin is 'Origin', the description of the event in 'IFlow'.
 	void PrintEvent(
-		const event_header__ &EventHeader,
+		const sEventHeader &EventHeader,
 		const data_ &Data,
 		txf::text_oflow__ &OFlow );
 

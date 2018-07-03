@@ -84,7 +84,7 @@ static const char *EventTypeLabels_[et_amount] = {
 	"Meta",
 };
 
-const char *mscmdm::GetMIDIEventLabel( midi_event__ Event )
+const char *mscmdm::GetMIDIEventLabel( eMidiEvent Event )
 {
 	if ( Event >= mid_amount )
 		qRFwk();
@@ -92,7 +92,7 @@ const char *mscmdm::GetMIDIEventLabel( midi_event__ Event )
 	return MIDIEventLabels_[Event];
 }
 
-size__ mscmdm::GetMIDIEventDataSize( midi_event__ Event )
+size__ mscmdm::GetMIDIEventDataSize( eMidiEvent Event )
 {
 	if ( Event >= mid_amount )
 		qRFwk();
@@ -100,7 +100,7 @@ size__ mscmdm::GetMIDIEventDataSize( midi_event__ Event )
 	return MIDIEventDataSize_[Event ];
 }
 
-const char *mscmdm::GetSystemEventLabel( system_event__ Event )
+const char *mscmdm::GetSystemEventLabel( eSystemEvent Event )
 {
 	if ( Event >= sys_amount )
 		qRFwk();
@@ -108,7 +108,7 @@ const char *mscmdm::GetSystemEventLabel( system_event__ Event )
 	return SystemEventLabels_[Event];
 }
 
-const char *mscmdm::GetMetaEventLabel( meta_event__ Event )
+const char *mscmdm::GetMetaEventLabel( eMetaEvent Event )
 {
 	if ( Event >= mta_amount )
 		qRFwk();
@@ -116,7 +116,7 @@ const char *mscmdm::GetMetaEventLabel( meta_event__ Event )
 	return MetaEventLabels_[Event];
 }
 
-const char *mscmdm::GetEventLabel( const event_header__ &Event )
+const char *mscmdm::GetEventLabel( const sEventHeader &Event )
 {
 	switch ( Event.EventType ) {
 	case etMIDI:
@@ -137,7 +137,7 @@ const char *mscmdm::GetEventLabel( const event_header__ &Event )
 }
 
 
-const char *mscmdm::GetEventTypeLabel( event_type__ Type )
+const char *mscmdm::GetEventTypeLabel( eEventType Type )
 {
 	if ( Type >= et_amount )
 		qRFwk();
@@ -198,7 +198,7 @@ void mscmdm::Encode(
 	Data.Append( (bso::char__)( Ticks & BASE_MASK ) );
 }
 
-midi_event__ mscmdm::DetermineMIDIEvent( flw::sByte Datum )
+eMidiEvent mscmdm::DetermineMIDIEvent( flw::sByte Datum )
 {
 	switch( Datum & 0xf0 ) {
 	case 0x80:
@@ -227,7 +227,7 @@ midi_event__ mscmdm::DetermineMIDIEvent( flw::sByte Datum )
 	return mid_NotAMIDIEvent;
 }
 
-static inline system_event__ DetermineSystemEvent_( flw::sByte Datum )
+static inline eSystemEvent DetermineSystemEvent_( flw::sByte Datum )
 {
 	switch ( Datum &0xf ) {
 	case 0x0:
@@ -262,7 +262,7 @@ static inline system_event__ DetermineSystemEvent_( flw::sByte Datum )
 	return sys_NotASystemEvent;
 }
 
-static inline meta_event__ DetermineMetaEvent_( flw::sByte Datum )
+static inline eMetaEvent DetermineMetaEvent_( flw::sByte Datum )
 {
 	switch ( Datum ) {
 	case 0x00:
@@ -321,12 +321,12 @@ static inline meta_event__ DetermineMetaEvent_( flw::sByte Datum )
 	return mta_NotAMetaEvent;	// Standadisation.
 }
 
-event_type__ mscmdm::DetermineEvent(
+eEventType mscmdm::DetermineEvent(
 	flw::sByte Datum,
 	flw::sByte AdditionalDatum,	// For meta only.
 	bso::sU8 &Event )
 {
-	event_type__ EventType = et_Undefined;
+	eEventType EventType = et_Undefined;
 
 	if ( Datum == 0xff  ) {
 		EventType = etMeta;
@@ -345,8 +345,8 @@ event_type__ mscmdm::DetermineEvent(
 #if 0
 bso::bool__ mscmdm::GetEventHeader(
 	flw::iflow__ &IFlow,
-	extraneous__ Extraneous,
-	event_header__ &EventHeader,
+	eExtraneous Extraneous,
+	sEventHeader &EventHeader,
 	err::handling__ ErrHandling )
 {
 	flw::sByte Datum;
@@ -398,8 +398,8 @@ bso::bool__ mscmdm::GetEventHeader(
 #else
 bso::bool__ mscmdm::GetEventHeader(
 	flw::iflow__ &IFlow,
-	extraneous__ Extraneous,
-	event_header__ &EventHeader,
+	eExtraneous Extraneous,
+	sEventHeader &EventHeader,
 	err::handling__ ErrHandling )
 {
 	flw::sByte Datum;
@@ -462,7 +462,7 @@ bso::bool__ mscmdm::GetEventHeader(
 
 
 void mscmdm::PrintMIDIEvent(
-	const extended_midi_event__ &Event,
+	const sExtendedMidiEvent &Event,
 	const data_ &Data,
 	txf::text_oflow__ &OFlow )
 {
@@ -479,7 +479,7 @@ void mscmdm::PrintMIDIEvent(
 }
 
 void mscmdm::PrintSystemEvent(
-	const extended_system_event__ &Event,
+	const sExtendedSystemEvent &Event,
 	const data_ &Data,
 	txf::text_oflow__ &OFlow )
 {
@@ -492,7 +492,7 @@ void mscmdm::PrintSystemEvent(
 }
 
 void mscmdm::PrintMetaEvent(
-	const extended_meta_event__ &Event,
+	const sExtendedMetaEvent &Event,
 	const data_ &Data,
 	txf::text_oflow__ &OFlow )
 {
@@ -539,7 +539,7 @@ void mscmdm::PrintMetaEvent(
 }
 
 void mscmdm::PrintEvent(
-	const event_header__ &EventHeader,
+	const sEventHeader &EventHeader,
 	const data_ &Data,
 	txf::text_oflow__ &OFlow )
 {
@@ -562,7 +562,7 @@ void mscmdm::PrintEvent(
 }
 
 static size__ GetMIDIEventData_(
-	const extended_midi_event__ &Event,
+	const sExtendedMidiEvent &Event,
 	flw::iflow__ &IFlow,
 	data_ &Data )
 {
@@ -575,9 +575,9 @@ static size__ GetMIDIEventData_(
 }
 
 static size__ GetSystemEventData_(
-	const extended_system_event__ &Event,
+	const sExtendedSystemEvent &Event,
 	flw::iflow__ &IFlow,
-	extraneous__ Extraneous,
+	eExtraneous Extraneous,
 	data_ &Data )
 {
 	size__ Size = 0;
@@ -613,7 +613,7 @@ static size__ GetSystemEventData_(
 }
 
 static size__ GetMetaEventData_(
-	const extended_meta_event__ &Event,
+	const sExtendedMetaEvent &Event,
 	flw::iflow__ &IFlow,
 	data_ &Data )
 {
@@ -626,9 +626,9 @@ static size__ GetMetaEventData_(
 }
 
 size__ mscmdm::GetEventData(
-	const event_header__ &EventHeader,
+	const sEventHeader &EventHeader,
 	flw::iflow__ &IFlow,
-	extraneous__ Extraneous,
+	eExtraneous Extraneous,
 	data_ &Data )
 {
 	switch( EventHeader.EventType ) {
@@ -667,7 +667,7 @@ void mscmdm::PutEventHeader(
 	event_id__ Id,
 	const data_ &RawData,
 	bso::bool__ Tied,
-	extraneous__ Extraneous,
+	eExtraneous Extraneous,
 	flw::oflow__ &OFlow )
 {
 qRH
@@ -699,7 +699,7 @@ qRE
 
 void mscmdm::PutEvent(
 	const event_ &Event,
-	extraneous__ Extraneous,
+	eExtraneous Extraneous,
 	flw::oflow__ &OFlow )
 {
 qRH
@@ -729,7 +729,7 @@ qRE
 
 void mscmdm::PutEvents(
 	const events_ &Events,
-	extraneous__ Extraneous,
+	eExtraneous Extraneous,
 	flw::oflow__ &OFlow )
 {
 	erow__ Row = Events.First();
@@ -776,7 +776,7 @@ static mscmdf::track_chunk_size__ GetSize_( const events_ &Events )
 
 void mscmdm::PutTrack(
 	const track_ &Track,
-	extraneous__ Extraneous,
+	eExtraneous Extraneous,
 	flw::oflow__ &OFlow )
 {
 	erow__ Row = qNIL;
@@ -802,7 +802,7 @@ void mscmdm::PutTrack(
 
 void mscmdm::PutTracks(
 	const tracks_ &Tracks,
-	extraneous__ Extraneous,
+	eExtraneous Extraneous,
 	flw::oflow__ &OFlow )
 {
 	trow__ Row = Tracks.First();
@@ -815,9 +815,9 @@ void mscmdm::PutTracks(
 }
 
 static inline bso::bool__ EventIsDoublon_(
-	const event_header__ &TargetEvent,
+	const sEventHeader &TargetEvent,
 	const data_ &TargetData,
-	const event_header__ &SourceEvent,
+	const sEventHeader &SourceEvent,
 	const data_ &SourceData )
 {
 	if ( TargetEvent.EventType != etMIDI )
@@ -831,15 +831,15 @@ static inline bso::bool__ EventIsDoublon_(
 
 
 bso::bool__ mscmdm::Parse(
-	callback__ &Callback,
+	cEventHandler &Callback,
 	flw::iflow__ &IFlow,
-	extraneous__ Extraneous,
+	eExtraneous Extraneous,
 	int Flags )
 {
 	bso::bool__ Success = true;
 qRH
 	data Data, PreviousData;
-	event_header__ EventHeader, PreviousEventHeader;
+	sEventHeader EventHeader, PreviousEventHeader;
 	bso::bool__ Continue = true;
 qRB
 	PreviousData.Init();
