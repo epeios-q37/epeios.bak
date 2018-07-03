@@ -27,7 +27,7 @@
 #define MSCMDF_DBG
 #endif
 
-//D MuSiC MiDi File 
+// MuSiC MiDi File 
 
 #include "err.h"
 #include "flw.h"
@@ -36,21 +36,21 @@
 namespace mscmdf {
 
 	//t The type of a a SMF type.
-	typedef bso::u16__ smf_type__;
+	typedef bso::u16__ sSMFType;
 
 	//t Type of the delta time ticks..
-	typedef bso::u16__ delta_time_ticks__;
+	typedef bso::u16__ sDeltaTimeTicks;
 
 	//t Type of the track-chunk amount.
-	typedef bso::u16__ track_chunk_amount__;
+	typedef bso::u16__ sTrackChunkAmount;
 
 #define MSCMDF_TRACK_CHUNK_AMOUNT_MAX	BSO_USHORT_MAX
 
 	//c A header chunk.
 	struct header_chunk__ {
-		smf_type__ SMFType;
-		track_chunk_amount__ TrackChunkAmount;
-		delta_time_ticks__ DeltaTimeTicks;
+		sSMFType SMFType;
+		sTrackChunkAmount TrackChunkAmount;
+		sDeltaTimeTicks DeltaTimeTicks;
 	};
 
 	//f Put in 'HeaderChunk' the content of the header chunk.
@@ -60,9 +60,9 @@ namespace mscmdf {
 		err::handling__ ErrHandling = err::h_Default );
 
 	void PutHeaderChunk(
-		smf_type__ SMFType,
-		track_chunk_amount__ TrackChunkAmount,
-		delta_time_ticks__ DeltaTimeTicks,
+		sSMFType SMFType,
+		sTrackChunkAmount TrackChunkAmount,
+		sDeltaTimeTicks DeltaTimeTicks,
 		flw::oflow__ &OFlow );
 
 	inline void PutHeaderChunk(

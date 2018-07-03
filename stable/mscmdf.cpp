@@ -72,9 +72,9 @@ static void Put_(
 }
 
 void mscmdf::PutHeaderChunk(
-	smf_type__ SMFType,
-	track_chunk_amount__ TrackChunkAmount,
-	delta_time_ticks__ DeltaTimeTicks,
+	sSMFType SMFType,
+	sTrackChunkAmount TrackChunkAmount,
+	sDeltaTimeTicks DeltaTimeTicks,
 	flw::oflow__ &OFlow )
 {
 	OFlow.Write( HEADER_CHUNK_HEAD, HEADER_CHUNK_HEAD_SIZE );
@@ -86,7 +86,7 @@ void mscmdf::PutHeaderChunk(
 
 static inline bso::bool__ HandleDeltaTimeTicks_(
 	flw::iflow__ &IFlow,
-	delta_time_ticks__ &DeltaTimeTicks )
+	sDeltaTimeTicks &DeltaTimeTicks )
 {
 	flw::sByte Datum = IFlow.Get();
 

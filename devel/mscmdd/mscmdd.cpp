@@ -33,7 +33,7 @@ using namespace mscmdd;
 static void Fill_(
 	const char *Buffer,
 	bso::size__ Amount,
-	_data___ &Data )
+	rData_ &Data )
 {
 	bso::bool__ Wait = false;
 	bso::size__ AwareAmount = 0;
@@ -47,14 +47,14 @@ static void Fill_(
 
 		mtx::Lock( Data.Access ) ;
 
-		AwareAmount = _Emptyness( Data );
+		AwareAmount = Emptyness_( Data );
 
 		if ( AwareAmount > Amount )
 			AwareAmount = Amount;
 
 		memcpy( Data.Buffer + Data.Available + Data.Position, Buffer, AwareAmount );
 
-		if ( _IsEmpty( Data ) )
+		if ( IsEmpty_( Data ) )
 			mtx::Unlock( Data.Empty );	// Si 'Data.Buffer' tait vide, on signale au consommateur que ce n'est plus le cas.
 
 		Amount -= AwareAmount;
@@ -62,7 +62,7 @@ static void Fill_(
 
 		Data.Available += AwareAmount;
 
-		if( _IsFull( Data ) )
+		if( IsFull_( Data ) )
 			mtx::Lock( Data.Full );
 
 		mtx::Unlock( Data.Access );
@@ -77,7 +77,7 @@ static void CALLBACK MidiInProc_(
   DWORD dwParam2 )
 {
 qRH
-	_data___ &Data = *(_data___ *)dwInstance;
+	rData_ &Data = *(rData_ *)dwInstance;
 	bso::u8__ Event = 0;
 	MIDIHDR *Header = NULL;
 	bso::bool__ Wait = false;
@@ -137,7 +137,7 @@ qRT
 qRE
 }
 
-fdr::size__ mscmdd::midi_in___::Read(
+fdr::size__ mscmdd::rIn::Read(
 	fdr::size__ Maximum,
 	fdr::sByte *Buffer )
 {
@@ -163,7 +163,7 @@ fdr::size__ mscmdd::midi_in___::Read(
 
 	mtx::Lock( _Data.Access );
 
-	if ( _IsEmpty( _Data ) ) {
+	if ( IsEmpty_( _Data ) ) {
 		if ( !_Started ) {
 				if ( midiInStart( _Handle ) != MMSYSERR_NOERROR )
 					qRFwk();
@@ -183,7 +183,7 @@ fdr::size__ mscmdd::midi_in___::Read(
 	if ( Maximum > _Data.Available )
 		Maximum = _Data.Available;
 
-	if ( _IsFull( _Data ) )
+	if ( IsFull_( _Data ) )
 		mtx::Unlock( _Data.Full );	// Si '_Data.Buffer' tait plein, on signale au producteur que ce n'est plus le cas.
 
 	memcpy( Buffer, _Data.Buffer + _Data.Position, Maximum );
@@ -201,7 +201,7 @@ fdr::size__ mscmdd::midi_in___::Read(
 	return Maximum;
 }
 
-bso::bool__ mscmdd::midi_in___::Init(
+bso::bool__ mscmdd::rIn::Init(
 	int Device,
 	err::handling__ ErrHandling )
 {

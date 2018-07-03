@@ -345,7 +345,7 @@ namespace mscmdm {
 # ifdef MSCMDM__DEVICES_AVAILABLE
 	inline bso::bool__ Parse(
 		callback__ &Callback,
-		mscmdd::midi_iflow___ &IFlow,
+		mscmdd::rRFlow &IFlow,
 		int Flags = fmDefaultFlag )
 	{
 		return Parse( Callback, IFlow, xNone, Flags );
@@ -362,7 +362,7 @@ namespace mscmdm {
 
 # ifdef MSCMDM__DEVICES_AVAILABLE
 	inline bso::bool__ GetEventHeader(
-		mscmdd::midi_iflow___ &IFlow,
+		mscmdd::rRFlow &IFlow,
 		event_header__ &EventHeader,
 		err::handling__ ErrHandling = err::h_Default )
 	{
@@ -379,7 +379,7 @@ namespace mscmdm {
 # ifdef MSCMDM__DEVICES_AVAILABLE
 	inline size__ GetEventData(
 		const event_header__ &EventHeader,
-		mscmdd::midi_iflow___ &IFlow,
+		mscmdd::rRFlow &IFlow,
 		data_ &Data )
 	{
 		return GetEventData( EventHeader, IFlow, xNone, Data );
@@ -468,7 +468,7 @@ namespace mscmdm {
 	inline void PutEventHeader(
 		const event_header__ &Header,
 		const data_ &RawData,
-		mscmdd::midi_ioflow___ &OFlow )
+		mscmdd::rRWFlow &OFlow )
 	{
 		PutEventHeader( Header, RawData, xNone, OFlow );
 	}
@@ -483,7 +483,7 @@ namespace mscmdm {
 # ifdef MSCMDM__DEVICES_AVAILABLE
 	inline void PutEvent(
 		const event_ &Event,
-		mscmdd::midi_oflow___ &OFlow )
+		mscmdd::rWFlow &OFlow )
 	{
 		PutEvent( Event, xNone, OFlow );
 	}
@@ -497,7 +497,7 @@ namespace mscmdm {
 # ifdef MSCMDM__DEVICES_AVAILABLE
 	inline void PutEvents(
 		const events_ &Events,
-		mscmdd::midi_oflow___ &OFlow )
+		mscmdd::rWFlow &OFlow )
 	{
 		PutEvents( Events, xNone, OFlow );
 	}
@@ -514,7 +514,7 @@ namespace mscmdm {
 # ifdef MSCMDM__DEVICES_AVAILABLE
 	inline void PutTrack(
 		const track_ &Track,
-		mscmdd::midi_oflow___ &OFlow )
+		mscmdd::rWFlow &OFlow )
 	{
 		PutTrack( Track, xNone, OFlow );
 	}
@@ -533,7 +533,7 @@ namespace mscmdm {
 # ifdef MSCMDM__DEVICES_AVAILABLE
 	inline void PutTracks(
 		const tracks_ &Tracks,
-		mscmdd::midi_oflow___ &OFlow )
+		mscmdd::rWFlow &OFlow )
 	{
 		PutTracks( Tracks, xNone, OFlow );
 	}

@@ -17,35 +17,14 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-//	$Id: mscmdd.h,v 1.16 2012/09/07 16:18:21 csimon Exp $
+// MuSiC MiDi Device 
 
 #ifndef MSCMDD__INC
-#define MSCMDD__INC
+# define MSCMDD__INC
 
-#define MSCMDD_NAME		"MSCMDD"
-
-#define	MSCMDD_VERSION	"$Revision: 1.16 $"
-
-#define MSCMDD_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
-
-
-#if defined( E_DEBUG ) && !defined( MSCMDD_NODBG )
-#define MSCMDD_DBG
-#endif
-
-/* Begin of automatic documentation generation part. */
-
-//V $Revision: 1.16 $
-//C Claude SIMON (http://zeusw.org/intl/contact.html)
-//R $Date: 2012/09/07 16:18:21 $
-
-/* End of automatic documentation generation part. */
-
-/* Addendum to the automatic documentation generation part. */
-//D MuSiC MiDi Device 
-/* End addendum to automatic documentation generation part. */
-
-/*$BEGIN$*/
+# if defined( E_DEBUG ) && !defined( MSCMDD_NODBG )
+#  define MSCMDD_DBG
+# endif
 
 # include "err.h"
 # include "flw.h"
@@ -85,38 +64,31 @@
 
 namespace mscmdd {
 #ifdef MSCMDD__WINDOWS
-	typedef UINT_PTR	handler__;
+	typedef UINT_PTR	sHandler;
 	typedef char name__[MAXPNAMELEN];
 
-	class midi_out___
+	class rOut
 	{
 	private:
-		HMIDIOUT    _Handle;
+		HMIDIOUT Handle_;
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			if ( P )
-				if ( _Handle != NULL )
-					if ( midiOutClose( _Handle ) != MMSYSERR_NOERROR )
+				if ( Handle_ != NULL )
+					if ( midiOutClose( Handle_ ) != MMSYSERR_NOERROR )
 						qRFwk();
 
-			_Handle = NULL;
+			Handle_ = NULL;
 		}
-		midi_out___( void )
-		{
-			reset( false );
-		}
-		~midi_out___( void )
-		{
-			reset();
-		}
-		bso::bool__ Init(
+		qCDTOR( rOut );
+		bso::sBool Init(
 			int Device,
 			err::handling__ ErrorHandling )
 		{
 			reset();
 
-			if ( midiOutOpen( &_Handle, Device, 0, 0, CALLBACK_NULL) != MMSYSERR_NOERROR ) {
+			if ( midiOutOpen( &Handle_, Device, 0, 0, CALLBACK_NULL) != MMSYSERR_NOERROR ) {
 				if ( ErrorHandling != err::hUserDefined )
 					qRFwk();
 				else
@@ -139,17 +111,17 @@ namespace mscmdd {
 			midiHdr.dwFlags = 0;
 
 #ifdef MSCMDD_DBG
-			if ( _Handle == NULL )
+			if ( Handle_ == NULL )
 				qRFwk();
 #endif
 			/* Prepare the buffer and MIDIHDR */
-			if ( midiOutPrepareHeader( _Handle,  &midiHdr, sizeof(MIDIHDR)) != MMSYSERR_NOERROR )
+			if ( midiOutPrepareHeader( Handle_,  &midiHdr, sizeof(MIDIHDR)) != MMSYSERR_NOERROR )
 				qRFwk();
 
-			if ( midiOutLongMsg( _Handle, &midiHdr, sizeof(MIDIHDR ) ) != MMSYSERR_NOERROR )
+			if ( midiOutLongMsg( Handle_, &midiHdr, sizeof(MIDIHDR ) ) != MMSYSERR_NOERROR )
 				qRFwk();
 
-			while ( ( Err = midiOutUnprepareHeader( _Handle, &midiHdr, sizeof(MIDIHDR ) ) ) == MIDIERR_STILLPLAYING )
+			while ( ( Err = midiOutUnprepareHeader( Handle_, &midiHdr, sizeof(MIDIHDR ) ) ) == MIDIERR_STILLPLAYING )
 			{}
 
 			if ( Err != MMSYSERR_NOERROR )
@@ -231,17 +203,17 @@ namespace mscmdd {
 	};
 #	endif
 
-	class midi_oflow_driver___
-	: public fdr::oflow_driver___<>
+	class rWDriver
+	: public fdr::rWDressedDriver
 	{
 	private:
-		midi_out___ _Out;
+		rOut Out_;
 	protected:
-		virtual fdr::size__ FDRWrite(
+		virtual fdr::sSize FDRWrite(
 			const fdr::sByte *Buffer,
 			fdr::size__ Maximum ) override
 		{
-			return _Out.Write( Buffer, Maximum );
+			return Out_.Write( Buffer, Maximum );
 		}
 		virtual void FDRCommit( bso::sBool ) override
 		{}
@@ -253,61 +225,47 @@ namespace mscmdd {
 		void reset( bso::bool__ P = true )
 		{
 			fdr::oflow_driver___<>::reset( P );
-			_Out.reset();
+			Out_.reset();
 		}
-		midi_oflow_driver___( void )
-		{
-			reset( false );
-		}
-		~midi_oflow_driver___( void )
-		{
-			reset();
-		}
-		bso::bool__ Init(
+		qCVDTOR( rWDriver)
+		bso::sBool Init(
 			int Device,
 			err::handling__ ErrHandling = err::h_Default,
 			fdr::thread_safety__ ThreadSafety = fdr::ts_Default )
 		{
 			fdr::oflow_driver___<>::Init( ThreadSafety );
 
-			return _Out.Init( Device, ErrHandling );
+			return Out_.Init( Device, ErrHandling );
 		}
 	};
 
-	typedef flw::standalone_oflow__<MSCMDD__OUTPUT_CACHE_SIZE> _oflow__;
+	typedef flw::sDressedWFlow<MSCMDD__OUTPUT_CACHE_SIZE> WFlow_;
 
-	class midi_oflow___
-	: public _oflow__
+	class rWFlow
+	: public WFlow_
 	{
 	private:
-		midi_oflow_driver___ _Driver;
+		rWDriver Driver_;
 	public:
 		void reset( bool P = true )
 		{
-			_oflow__::reset( P );
-			_Driver.reset( P );
+			WFlow_::reset( P );
+			Driver_.reset( P );
 		}
-		midi_oflow___( void )
-		{
-			reset( false );
-		}
-		virtual ~midi_oflow___( void )
-		{
-			reset();
-		}
+		qCVDTOR( rWFlow );
 		//f Initialization with socket 'Socket' and 'Timeout' as timeout.
 		bso::bool__ Init(
 			int DeviceId,
 			err::handling__ ErrHandle = err::h_Default )
 		{
-			_oflow__::Init( _Driver );
+			WFlow_::Init( Driver_ );
 
-			return _Driver.Init( DeviceId, ErrHandle );
+			return Driver_.Init( DeviceId, ErrHandle );
 		}
 	};
 
 #	ifdef MSCMDD__WINDOWS
-	struct _data___
+	struct rData_
 	{
 	public:
 		mtx::handler___ Access;	// Pour protger l'accs aus donnes de cet structure.
@@ -325,7 +283,7 @@ namespace mscmdd {
 		}
 	};
 
-	inline bso::bool__ _IsFull( const _data___ &Data )
+	inline bso::bool__ IsFull_( const rData_ &Data )
 	{
 #ifdef MSCMDD_DBG
 		if ( !mtx::IsLocked( Data.Access ) )
@@ -334,7 +292,7 @@ namespace mscmdd {
 		return ( ( Data.Available + Data.Position ) == Data.Size );
 	}
 
-	inline bso::bool__ _IsEmpty( const _data___ &Data )
+	inline bso::bool__ IsEmpty_( const rData_ &Data )
 	{
 #ifdef MSCMDD_DBG
 		if ( !mtx::IsLocked( Data.Access ) )
@@ -343,7 +301,7 @@ namespace mscmdd {
 		return ( Data.Available == 0 );
 	}
 
-	inline bso::size__ _Emptyness( const _data___ &Data )
+	inline bso::size__ Emptyness_( const rData_ &Data )
 	{
 #ifdef MSCMDD_DBG
 		if ( !mtx::IsLocked( Data.Access ) )
@@ -353,7 +311,7 @@ namespace mscmdd {
 	}
 
 
-	class midi_in___
+	class rIn
 	{
 	private:
 		bso::bool__ _Started;
@@ -361,7 +319,7 @@ namespace mscmdd {
 		MIDIHDR _Header[3];
 		fdr::sByte _Cache[2000];
 		char _HeaderBuffer[512][3];
-		_data___ _Data;
+		rData_ _Data;
 		void _Purge( void )
 		{
 			_Data.Purge = true;
@@ -394,14 +352,7 @@ namespace mscmdd {
 			_Data.Access = _Data.Full = _Data.Empty = MTX_INVALID_HANDLER;
 			_Data.Buffer = NULL;
 		}
-		midi_in___( void )
-		{
-			reset( false );
-		}
-		~midi_in___( void )
-		{
-			reset();
-		}
+		qCDTOR( rIn );
 		bso::bool__ Init(
 			int Device,
 			err::handling__ ErrHandling );
@@ -503,11 +454,11 @@ namespace mscmdd {
 	};
 #	endif
 
-	class midi_iflow_driver___
+	class rRDriver
 	: public fdr::iflow_driver___<MSCMDD__INPUT_CACHE_SIZE>
 	{
 	private:
-		midi_in___ _In;
+		rIn _In;
 	protected:
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
@@ -529,14 +480,7 @@ namespace mscmdd {
 			fdr::iflow_driver___<>::reset( P );
 			_In.reset( P );
 		}
-		midi_iflow_driver___( void )
-		{
-			reset( false );
-		}
-		~midi_iflow_driver___( void )
-		{
-			reset();
-		}
+		qCVDTOR( rRDriver );
 		bso::bool__ Init(
 			int Device,
 			err::handling__ ErrHandling = err::h_Default,
@@ -557,25 +501,18 @@ namespace mscmdd {
 
 	typedef flw::standalone_iflow__<> _iflow__;	// En fait, le 'template' est, et doit tre,  'O' (voir 'flw::standalone_iflow__').
 
-	class midi_iflow___
+	class rRFlow
 	: public _iflow__
 	{
 	private:
-		midi_iflow_driver___ _Driver;
+		rRDriver _Driver;
 	public:
 		void reset( bool P = true )
 		{
 			_iflow__::reset( P );
 			_Driver.reset( P );
 		}
-		midi_iflow___( void )
-		{
-			reset( false );
-		}
-		virtual ~midi_iflow___( void )
-		{
-			reset();
-		}
+		qCVDTOR( rRFlow );
 		bso::bool__ Init(
 			int Device,
 			err::handling__ ErrHandle = err::h_Default )
@@ -607,12 +544,12 @@ namespace mscmdd {
 
 	typedef fdr::ioflow_driver___<MSCMDD__INPUT_CACHE_SIZE> _ioflow_driver___;
 
-	class midi_ioflow_driver___
+	class rRWDriver
 	: public _ioflow_driver___
 	{
 	private:
-		midi_in___ _In;
-		midi_out___ _Out;
+		rIn _In;
+		rOut _Out;
 	protected:
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
@@ -648,14 +585,7 @@ namespace mscmdd {
 			_In.reset( P );
 			_Out.reset( P );
 		}
-		midi_ioflow_driver___( void )
-		{
-			reset( false );
-		}
-		~midi_ioflow_driver___( void )
-		{
-			reset();
-		}
+		qCVDTOR( rRWDriver );
 		status__ Init(
 			int DeviceIn,
 			int DeviceOut,
@@ -676,25 +606,18 @@ namespace mscmdd {
 
 	typedef flw::standalone_ioflow__<MSCMDD__OUTPUT_CACHE_SIZE> _ioflow___;
 
-	class midi_ioflow___
+	class rRWFlow
 	: public _ioflow___
 	{
 	private:
-		midi_ioflow_driver___ _Driver;
+		rRWDriver _Driver;
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			_ioflow___::reset( P );
 			_Driver.reset( P );
 		}
-		midi_ioflow___( void )
-		{
-			reset( false );
-		}
-		~midi_ioflow___( void )
-		{
-			reset();
-		}
+		qCVDTOR( rRWFlow );
 		status__ Init(
 			int DeviceIn,
 			int DeviceOut,

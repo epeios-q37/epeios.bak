@@ -3,6 +3,20 @@
 ## *Shortcuts*
 
 - [adpt]: Adaptation to changes in underlying modules;
+- [stdz]: modification to comply with current standards;
+
+## 2018-07-03
+
+- MSCMDD:
+  - [stdz];
+- MSCMDF:
+  - [stdz];
+- MSCMDM:
+  - [adpt];
+  - [stdz];
+- MSCMLM:
+  - [adpt];
+  - [stdz];
 
 ## 2018-06-11
 
@@ -597,7 +611,7 @@
 
 ## 2017-11-21:
 - SCLFRNTND:
-  - Fixing bad handling when no backend is selected.
+  - Fixing bad handling when no back-end is selected.
 
 ## 2017-11-20:
 - SCLMISC:
@@ -2906,8 +2920,12 @@
 ## Notes
 
 [adpt]:#Adaptation
+[stdz]:#Standardization
   
 ### Adaptation
 
 Adaptation to changes in underlying modules. 
 
+### Standardization
+
+Modification to comply with current standards.

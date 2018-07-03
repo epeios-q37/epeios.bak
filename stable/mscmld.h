@@ -77,7 +77,7 @@ namespace mscmld {
 		return 0;	// To avoid a warning;
 	}
 
-	enum pitch_name__ {
+	qENUM( PitchName ) {
 		pnA,
 		pnB,
 		pnC,
@@ -90,9 +90,9 @@ namespace mscmld {
 		pn_Undefined
 	};
 
-	const char *GetPitchNameLabel( pitch_name__ Name );
+	const char *GetPitchNameLabel( ePitchName Name );
 
-	enum pitch_accidental__ {
+	qENUM( PitchAccidental ) {
 		paFlat,
 		paNatural,
 		paSharp,
@@ -100,29 +100,26 @@ namespace mscmld {
 		pa_Undefined
 	};
 
-	const char *GetPitchAccidentalLabel( pitch_accidental__ Accidental );
+	const char *GetPitchAccidentalLabel( ePitchAccidental Accidental );
 
-	typedef bso::u8__ pitch_octave__;
+	typedef bso::u8__ sPitchOctave;
 #define MSCMLD_UNDEFINED_PITCH_OCTAVE BSO_U8_MAX
 
-	struct pitch__ {
-		pitch_name__ Name;
-		pitch_accidental__ Accidental;
-		pitch_octave__ Octave;
+	struct sPitch {
+		ePitchName Name;
+		ePitchAccidental Accidental;
+		sPitchOctave Octave;
 		void reset( bso::bool__ P = true )
 		{
 			Name = pn_Undefined;
 			Accidental = pa_Undefined;
 			Octave = MSCMLD_UNDEFINED_PITCH_OCTAVE;
 		}
-		pitch__( void )
-		{
-			reset( false );
-		}
-		pitch__(
-			pitch_octave__ Octave,
-			pitch_name__ Name,
-			pitch_accidental__ Accidental = paNatural )
+		qCTOR( sPitch );
+		sPitch(
+			sPitchOctave Octave,
+			ePitchName Name,
+			ePitchAccidental Accidental = paNatural )
 		{
 			reset( false );
 
@@ -130,10 +127,10 @@ namespace mscmld {
 			this->Accidental = Accidental;
 			this->Octave = Octave;
 		}
-		pitch__(
-			pitch_name__ Name,
-			pitch_octave__ Octave,
-			pitch_accidental__ Accidental = paNatural )
+		sPitch(
+			ePitchName Name,
+			sPitchOctave Octave,
+			ePitchAccidental Accidental = paNatural )
 		{
 			reset( false );
 
@@ -141,10 +138,10 @@ namespace mscmld {
 			this->Accidental = Accidental;
 			this->Octave = Octave;
 		}
-		pitch__(
-			pitch_name__ Name,
-			pitch_accidental__ Accidental,
-			pitch_octave__ Octave )
+		sPitch(
+			ePitchName Name,
+			ePitchAccidental Accidental,
+			sPitchOctave Octave )
 		{
 			this->Name = Name;
 			this->Accidental = Accidental;
@@ -165,28 +162,28 @@ namespace mscmld {
 	};
 
 	inline int operator ==(
-		const pitch__ &Op1,
-		const pitch__ &Op2 )
+		const sPitch &Op1,
+		const sPitch &Op2 )
 	{
 		return ( Op1.Name == Op2.Name ) && ( Op1.Accidental == Op2.Accidental ) && ( Op1.Octave == Op2.Octave );
 	}
 
 	inline int operator !=(
-		const pitch__ &Op1,
-		const pitch__ &Op2 )
+		const sPitch &Op1,
+		const sPitch &Op2 )
 	{
 		return ( Op1.Name != Op2.Name ) || ( Op1.Accidental != Op2.Accidental ) || ( Op1.Octave != Op2.Octave );
 	}
 
-	E_ROW( prow__ );
+	qROW( PRow );
 
-	typedef bch::E_BUNCHt_( pitch__, prow__ ) pitches_;
-	E_AUTO( pitches )
+	typedef bch::qBUNCHd( sPitch, sPRow ) dPitches;
+	qW( Pitches )
 
 # define MSCMLD_UNDEFINED_TUPLET_NUMERATOR		BSO_U8_MAX
 # define MSCMLD_UNDEFINED_TUPLET_DENOMINATOR	BSO_U8_MAX
 
-	struct tuplet__ {
+	struct sTuplet {
 		bso::u8__ Numerator;
 		bso::u8__ Denominator;
 		void reset( bso::bool__ = true )
@@ -194,7 +191,7 @@ namespace mscmld {
 			Numerator = MSCMLD_UNDEFINED_TUPLET_NUMERATOR;
 			Denominator = MSCMLD_UNDEFINED_TUPLET_DENOMINATOR;
 		}
-		E_CDTOR( tuplet__ );
+		qCDTOR( sTuplet );
 		void Init( void )
 		{
 			reset();
@@ -206,8 +203,8 @@ namespace mscmld {
 	};
 
 	inline int operator ==(
-		tuplet__ Op1,
-		tuplet__ Op2 )
+		sTuplet Op1,
+		sTuplet Op2 )
 	{
 		if ( Op1.IsValid() )
 			if ( Op1.IsValid() )
@@ -221,8 +218,8 @@ namespace mscmld {
 	}
 
 	inline int operator !=(
-		tuplet__ Op1,
-		tuplet__ Op2 )
+		sTuplet Op1,
+		sTuplet Op2 )
 	{
 		if ( Op1.IsValid() )
 			if ( Op1.IsValid() )
@@ -238,11 +235,10 @@ namespace mscmld {
 # define MSCMLD_UNDEFINED_DURATION_BASE	0
 # define MSCMLD_UNDEFINED_DURATION_MODIFIER	BSO_U8_MAX
 
-	struct duration__
-	{
+	struct sDuration {
 		bso::s8__ Base;	// 1 : whole, 2 : half, 3 : quarter, 4 : eight, ... -1 : double whole ; -2 : quadruple whole...
 		bso::u8__ Modifier;	// Amount of dot.
-		tuplet__ Tuplet;
+		sTuplet Tuplet;
 		bso::bool__ TiedToNext;
 		void reset( bso::bool__ P = true )
 		{
@@ -251,23 +247,20 @@ namespace mscmld {
 			Tuplet.reset( P );
 			TiedToNext = false;
 		}
-		duration__( void )
-		{
-			reset( false );
-		}
-		duration__(
+		qCDTOR( sDuration );
+		sDuration(
 			bso::s8__ Base,
 			bso::u8__ Modifier = 0,
-			tuplet__ Tuplet = tuplet__(),
+			sTuplet Tuplet = sTuplet(),
 			bso::bool__ TiedToNext = false )
 		{
 			Init( Base, Modifier, TiedToNext, Tuplet );
 		}
-		duration__(
+		sDuration(
 			bso::s8__ Base,
 			bso::u8__ Modifier,
 			bso::bool__ TiedToNext,
-			tuplet__ Tuplet = tuplet__() )
+			sTuplet Tuplet = sTuplet() )
 		{
 			Init( Base, Modifier, TiedToNext, Tuplet );
 		}
@@ -279,7 +272,7 @@ namespace mscmld {
 			bso::s8__ Base,
 			bso::u8__ Modifier,
 			bso::bool__ TiedToNext,
-			tuplet__ Tuplet = tuplet__() )
+			sTuplet Tuplet = sTuplet() )
 		{
 			Init();
 
@@ -291,7 +284,7 @@ namespace mscmld {
 		void Init(
 			bso::s8__ Base,
 			bso::u8__ Modifier = 0,
-			tuplet__ Tuplet = tuplet__(),
+			sTuplet Tuplet = sTuplet(),
 			bso::bool__ TiedToNext = false )
 		{
 			Init( Base, Modifier, TiedToNext, Tuplet );
@@ -303,33 +296,33 @@ namespace mscmld {
 	};
 
 	inline int operator ==(
-		duration__ Op1,
-		duration__ Op2 )
+		sDuration Op1,
+		sDuration Op2 )
 	{
 		return ( ( Op1.Base == Op2.Base ) && ( Op1.Modifier == Op2.Modifier ) );
 	}
 
 	inline int operator !=(
-		duration__ Op1,
-		duration__ Op2 )
+		sDuration Op1,
+		sDuration Op2 )
 	{
 		return ( ( Op1.Base != Op2.Base ) || ( Op1.Modifier != Op2.Modifier ) );
 	}
 
-	E_ROW( drow__ );
+	qROW( DRow );
 
-	typedef bch::E_BUNCHt_( duration__, drow__ ) durations_;
-	E_AUTO( durations )
+	typedef bch::qBUNCHd( sDuration, sDRow ) dDurations;
+	qW( Durations )
 
-	typedef bso::s8__ signature_key__;	// -1: 1 flat, -2, 2 flats, ..., 0 : C key, 1 : 1 sharp, 2 : 2 sharps, ...
+	typedef bso::s8__ sSignatureKey;	// -1: 1 flat, -2, 2 flats, ..., 0 : C key, 1 : 1 sharp, 2 : 2 sharps, ...
 #define MSCMLD_UNDEFINED_KEY_SIGNATURE	BSO_S8_MAX
 
-	inline void Initialize( signature_key__ &Key )
+	inline void Initialize( sSignatureKey &Key )
 	{
 		Key = MSCMLD_UNDEFINED_KEY_SIGNATURE;
 	}
 
-	inline bso::bool__ IsValid( signature_key__ Key )
+	inline bso::bool__ IsValid( sSignatureKey Key )
 	{
 		return Key != MSCMLD_UNDEFINED_KEY_SIGNATURE;
 	}
@@ -351,10 +344,10 @@ namespace mscmld {
 		return DenominatorPower != MSCMLD_UNDEFINED_TIME_SIGNATURE_DENOMINATOR_POWER;
 	}
 
-	struct signature_time__ {
+	struct sSignatureTime {
 	private:
-		numerator__ _Numerator;	// Si < 0, le dnominateur (bien le dnominateur) n'est pas cens tre affich.
-		denominator_power__ _DenominatorPower;	// Le dnominateur rel est gal  = 2 ^ abs('DenominatorPower').
+		numerator__ _Numerator;	// Si < 0, le dénominateur (bien le dénominateur) n'est pas censé être affiché.
+		denominator_power__ _DenominatorPower;	// Le dénominateur réel est égal à = 2 ^ abs('DenominatorPower').
 		void _Test( void ) const
 		{
 			if ( !IsValid() )
@@ -366,8 +359,8 @@ namespace mscmld {
 			_Numerator = MSCMLD_UNDEFINED_TIME_SIGNATURE_NUMERATOR;
 			_DenominatorPower = MSCMLD_UNDEFINED_TIME_SIGNATURE_DENOMINATOR_POWER;
 		}
-		E_CVDTOR( signature_time__ );
-		signature_time__ (
+		qCVDTOR( sSignatureTime );
+		sSignatureTime (
 			bso::u8__ Numerator,
 			bso::s8__ Denominator,
 			bso::bool__ DenominatorIsHidden = false )
@@ -435,8 +428,8 @@ namespace mscmld {
 	};
 
 	inline int operator ==(
-		const signature_time__ &Op1,
-		const signature_time__ &Op2 )
+		const sSignatureTime &Op1,
+		const sSignatureTime &Op2 )
 	{
 		bso::bool__
 			V1 = Op1.IsValid(),
@@ -454,36 +447,33 @@ namespace mscmld {
 	}
 
 	inline int operator !=(
-		const signature_time__ &Op1,
-		const signature_time__ &Op2 )
+		const sSignatureTime &Op1,
+		const sSignatureTime &Op2 )
 	{
 		return !operator==( Op1, Op2 );
 	}
 
-	struct signature__ {
-		signature_key__ Key;
-		signature_time__ Time;
+	struct sSignature {
+		sSignatureKey Key;
+		sSignatureTime Time;
 		void reset( bso::bool__ P = true )
 		{
 			Key = MSCMLD_UNDEFINED_KEY_SIGNATURE;
 			Time.reset( P );
 		}
-		signature__( void )
-		{
-			reset( false );
-		}
-		signature__(
-			const signature_key__ &Key,
-			const signature_time__ &Time )
+		qCDTOR( sSignature );
+		sSignature(
+			const sSignatureKey &Key,
+			const sSignatureTime &Time )
 		{
 			reset( false );
 
 			this->Key = Key;
 			this->Time = Time;
 		}
-		signature__(
-			const signature_time__ &Time,
-			const signature_key__ &Key )
+		sSignature(
+			const sSignatureTime &Time,
+			const sSignatureKey &Key )
 		{
 			reset( false );
 
@@ -502,43 +492,40 @@ namespace mscmld {
 	};
 
 	inline int operator ==(
-		const signature__ &Op1,
-		const signature__ &Op2 )
+		const sSignature &Op1,
+		const sSignature &Op2 )
 	{
 		return ( ( Op1.Key == Op2.Key ) && ( Op1.Time == Op2.Time ) );
 	}
 
 	inline int operator !=(
-		const signature__ &Op1,
-		const signature__ &Op2 )
+		const sSignature &Op1,
+		const sSignature &Op2 )
 	{
 		return ( ( Op1.Key != Op2.Key ) || ( Op1.Time != Op2.Time ) );
 	}
 
-	E_ROW( srow__ );
+	qROW( SRow );
 
-	typedef bch::E_BUNCHt_( signature__, srow__ ) signatures_;
-	E_AUTO( signatures )
+	typedef bch::qBUNCHd( sSignature, sSRow ) dSignatures;
+	qW( Signatures )
 
 
-	struct note__ {
-		pitch__ Pitch;
-		duration__ Duration;
-		signature__ Signature;
+	struct sNote {
+		sPitch Pitch;
+		sDuration Duration;
+		sSignature Signature;
 		void reset( bso::bool__ P = true )
 		{
 			Pitch.reset( P );
 			Duration.reset( P );
 			Signature.reset( P );
 		}
-		note__( void )
-		{
-			reset( false );
-		}
-		note__(
-			const pitch__ &Pitch,
-			const duration__ &Duration,
-			const signature__ &Signature )
+		qCDTOR( sNote );
+		sNote(
+			const sPitch &Pitch,
+			const sDuration &Duration,
+			const sSignature &Signature )
 		{
 			reset( false );
 
@@ -558,20 +545,20 @@ namespace mscmld {
 		}
 	};
 
-	E_ROW( row__ );
+	qROW( Row );
 
-	typedef bch::E_BUNCHt_( note__, row__ ) notes_;
-	E_AUTO( notes );
+	typedef bch::qBUNCHd( sNote, sRow ) dNotes;
+	qW( Notes );
 
 	void Merge(
-		const pitches_ &Pitches,
-		const durations_ &Durations,
-		const signatures_ &Signatures,
-		notes_ &Notes );
+		const dPitches &Pitches,
+		const dDurations &Durations,
+		const dSignatures &Signatures,
+		dNotes &Notes );
 
 	E_CDEF( bso::u8__, AnacrousisUndefinedBase, 0 );
 
-	class anacrousis__ {
+	class sAnacrousis {
 	public:
 		bso::u8__ Base;	// 0: Undefined1: noire, 2: croche, 3: double-croche, ...
 		bso::u8__ Amount;
@@ -580,7 +567,7 @@ namespace mscmld {
 			Base = AnacrousisUndefinedBase;
 			Amount = 0;
 		}
-		E_CDTOR( anacrousis__);
+		qCDTOR( sAnacrousis );
 		void Init( void )
 		{
 			Base = 1;
@@ -592,35 +579,35 @@ namespace mscmld {
 		}
 	};
 
-	class melody_ 
-	: public notes_
+	class dMelody 
+	: public dNotes
 	{
 	public:
 		struct s
-		: public notes_::s
+		: public dNotes::s
 		{
-			anacrousis__ Anacrousis;
+			sAnacrousis Anacrousis;
 		} &S_;
-		melody_( s &S )
+		dMelody( s &S )
 		: S_( S ),
-		  notes_( S )
+		  dNotes( S )
 		{}
 		void reset( bso::bool__ P = true )
 		{
-			notes_::reset( P );
+			dNotes::reset( P );
 			S_.Anacrousis.reset( P );
 		}
-		void plug( qSD__ &SD )
+		void plug( bch::sHook &Hook )
 		{
-			notes_::plug( SD );
+			dNotes::plug( Hook );
 		}
-		void plug( qAS_ &AS )
+		void plug( qASd *AS )
 		{
-			notes_::plug( AS );
+			dNotes::plug( AS );
 		}
-		melody_ &operator =( const melody_ &M )
+		dMelody &operator =( const dMelody &M )
 		{
-			notes_::operator=( M );
+			dNotes::operator=( M );
 
 			S_.Anacrousis = M.S_.Anacrousis;
 
@@ -628,18 +615,18 @@ namespace mscmld {
 		}
 		void Init( void )
 		{
-			notes_::Init();
+			dNotes::Init();
 			S_.Anacrousis.Init();
 		}
-		bso::bool__ MarkAsAnacrousis( err::handling__ Handling = err::h_Default );	// Marque les notes dj introduite en tant qu'anacrouse.
-		E_RODISCLOSE_( anacrousis__, Anacrousis );
+		bso::bool__ MarkAsAnacrousis( err::handling__ Handling = err::h_Default );	// Marque les notes déjà introduite en tant qu'anacrouse.
+		qRODISCLOSEd( sAnacrousis, Anacrousis );
 	};
 
-	E_AUTO( melody );
+	qW( Melody );
 
 	void SplitToMatchBars(
-		const melody_ &Source,
-		melody_ &Target );
+		const dMelody &Source,
+		dMelody &Target );
 
 	enum write_status__ {
 		wsOK,
@@ -649,7 +636,7 @@ namespace mscmld {
 	};
 
 	write_status__ WriteXML(
-		const melody_ &Melody,
+		const dMelody &Melody,
 		xml::writer_ &Writer );
 
 	enum parse_status__ {
@@ -682,8 +669,8 @@ namespace mscmld {
 
 	parse_status__ ParseXML(
 		xml::parser___ &Parser,
-		melody_ &Melody,
-		bso::bool__ WithRoot );	// Si  'true', la prochaine balise est 'Melody', sinon, on est  l'intrieur de 'Melody'. Dans les deux cas, au rerour on est  l'extrieur de la balise 'Melody'.
+		dMelody &Melody,
+		bso::bool__ WithRoot );	// Si à 'true', la prochaine balise est 'Melody', sinon, on est à l'intérieur de 'Melody'. Dans les deux cas, au rerour on est à l'extérieur de la balise 'Melody'.
 
 }
 

@@ -23,9 +23,9 @@
 
 using namespace mscmld;
 
-#include "mthfrc.h"
+#include "mthrtn.h"
 
-#define MELODY_TAG							"Melody"
+#define dMelodyTAG							"Melody"
 
 
 #define SIGNATURE_TAG						"Signature"
@@ -72,7 +72,7 @@ E_CDEF( char *, AnacrousisAmountAttribute_, "Amount" );
 
 
 
-const char *mscmld::GetPitchNameLabel( pitch_name__ Name )
+const char *mscmld::GetPitchNameLabel( ePitchName Name )
 {
 	switch( Name ) {
 	case pnA:
@@ -107,7 +107,7 @@ const char *mscmld::GetPitchNameLabel( pitch_name__ Name )
 	return NULL;	// To avoir a 'warning'.
 }
 
-const char *mscmld::GetPitchAccidentalLabel( pitch_accidental__ Accidental )
+const char *mscmld::GetPitchAccidentalLabel( ePitchAccidental Accidental )
 {
 	switch( Accidental ) {
 	case paFlat:
@@ -127,14 +127,14 @@ const char *mscmld::GetPitchAccidentalLabel( pitch_accidental__ Accidental )
 	return NULL;	// To avoir a 'warning'.
 }
 
-static mthfrc::fraction_ &GetFraction_(
+static mthrtn::dRational &GetFraction_(
 	bso::u8__ Base,
 	bso::u8__ DotAmount,
-	tuplet__ Tuplet,
-	mthfrc::fraction_ &Result )
+	sTuplet Tuplet,
+	mthrtn::dRational &Result )
 {
 qRH
-	mthfrc::fraction Dot, Buffer;
+	mthrtn::wRational Dot, Buffer;
 qRB
 	if ( Base >= 1 )
 		Result.Init( 1, 1 << ( Base - 1 ) );
@@ -150,15 +150,15 @@ qRB
 
 	while ( DotAmount-- ) {
 		Buffer = Dot;
-		mthfrc::Div( Buffer, mthfrc::fraction( 2 ), Dot );
+		mthrtn::Div( Buffer, mthrtn::wRational( 2 ), Dot );
 
 		Buffer = Result;
-		mthfrc::Add( Buffer, Dot, Result );
+		mthrtn::Add( Buffer, Dot, Result );
 	}
 
 	if ( Tuplet.IsValid() ) {
-		mthfrc::Div( Result, mthfrc::fraction( Tuplet.Denominator ), Buffer );
-		mthfrc::Mul( Buffer, mthfrc::fraction( Tuplet.Numerator ), Result );
+		mthrtn::Div( Result, mthrtn::wRational( Tuplet.Denominator ), Buffer );
+		mthrtn::Mul( Buffer, mthrtn::wRational( Tuplet.Numerator ), Result );
 	}
 qRR
 qRT
@@ -166,9 +166,9 @@ qRE
 	return Result;
 }
 
-static inline mthfrc::fraction_ &GetFraction_(
-	const duration__ &Duration,
-	mthfrc::fraction_ &Result )
+static inline mthrtn::dRational &GetFraction_(
+	const sDuration &Duration,
+	mthrtn::dRational &Result )
 {
 	if ( Duration.Base == 0 )
 		qRFwk();
@@ -176,16 +176,16 @@ static inline mthfrc::fraction_ &GetFraction_(
 	return GetFraction_( Duration.Base, Duration.Modifier, Duration.Tuplet, Result );
 }
 
-duration__ FindDuration_(
-	mthfrc::fraction_ &Fraction,
+sDuration FindDuration_(
+	mthrtn::dRational &Fraction,
 	bso::bool__ AlwaysTied )
 {
-	duration__ Duration;
+	sDuration Duration;
 qRH
 	bso::u8__ Base = 0;
 	bso::u8__ Dot = 0;
 	bso::bool__ Continue = true;
-	mthfrc::fraction Candidate, Buffer;
+	mthrtn::wRational Candidate, Buffer;
 qRB
 	Base = 1;
 	Dot = 2;
@@ -193,7 +193,7 @@ qRB
 	while ( 1 ) {
 		Candidate.Init();
 
-		GetFraction_( Base, Dot, tuplet__(), Candidate );
+		GetFraction_( Base, Dot, sTuplet(), Candidate );
 
 		switch ( ( Fraction - Candidate ).GetSign() ) {
 		case -1:
@@ -204,7 +204,7 @@ qRB
 				break;
 			case 0:
 				if ( Base == 7 ) {
-					Duration = duration__();
+					Duration = sDuration();
 					qRReturn;
 				} else {
 					Base++;
@@ -217,17 +217,17 @@ qRB
 			}
 			break;
 		case 0:
-			Duration = duration__( Base, Dot, AlwaysTied );
+			Duration = sDuration( Base, Dot, AlwaysTied );
 			Buffer.Init();
 			Buffer = Fraction;
-			mthfrc::Sub( Buffer, Candidate, Fraction );
+			mthrtn::Sub( Buffer, Candidate, Fraction );
 			qRReturn;
 			break;
 		case 1:
-			Duration = duration__( Base, Dot, true );
+			Duration = sDuration( Base, Dot, true );
 			Buffer.Init();
 			Buffer = Fraction;
-			mthfrc::Sub( Buffer, Candidate, Fraction );
+			mthrtn::Sub( Buffer, Candidate, Fraction );
 			qRReturn;
 			break;
 		default:
@@ -245,22 +245,22 @@ qRE
 
 
 static void HandleOverflow_(
-	mthfrc::fraction_ &Note,
-	const signature_time__ &Time,
-	const pitch__ &Pitch,
-	const signature__ &Signature,
-	mthfrc::fraction_ &Bar,
-	melody_ &Melody )
+	mthrtn::dRational &Note,
+	const sSignatureTime &Time,
+	const sPitch &Pitch,
+	const sSignature &Signature,
+	mthrtn::dRational &Bar,
+	dMelody &Melody )
 {
 qRH
-	mthfrc::fraction Buffer;
-	duration__ Duration;
+	mthrtn::wRational Buffer;
+	sDuration Duration;
 qRB
 	Buffer.Init();
 
 	Buffer = Note;
 
-	mthfrc::Sub( Buffer, Bar, Note );
+	mthrtn::Sub( Buffer, Bar, Note );
 
 	if ( Note.GetSign() != 1 )
 		qRFwk();
@@ -271,7 +271,7 @@ qRB
 		if ( !Duration.IsValid() )
 			qRLmt();
 
-		Melody.Append( note__( Pitch, Duration, Signature ) );
+		Melody.Append( sNote( Pitch, Duration, Signature ) );
 	}
 
 	Bar.Init( Time.Numerator(), Time.Denominator() );
@@ -280,7 +280,7 @@ qRB
 
 	Buffer = Bar;
 
-	mthfrc::Sub( Buffer, Note, Bar );
+	mthrtn::Sub( Buffer, Note, Bar );
 
 	if ( Bar.GetSign() != 1 )
 		qRLmt();
@@ -291,7 +291,7 @@ qRB
 		if ( !Duration.IsValid() )
 			qRLmt();
 
-		Melody.Append( note__( Pitch, Duration, Signature ) );
+		Melody.Append( sNote( Pitch, Duration, Signature ) );
 	}
 
 qRR
@@ -300,13 +300,13 @@ qRE
 }
 
 void mscmld::SplitToMatchBars(
-	const melody_ &Source,
-	melody_ &Target )
+	const dMelody &Source,
+	dMelody &Target )
 {
 qRH
-	row__ Row = qNIL;
-	mthfrc::fraction Bar, Note, Buffer;
-	signature_time__ Time;
+	sRow Row = qNIL;
+	mthrtn::wRational Bar, Note, Buffer;
+	sSignatureTime Time;
 qRB
 	Row = Source.First();
 
@@ -327,7 +327,7 @@ qRB
 		case 1:
 			Buffer.Init();
 			Buffer = Bar;
-			mthfrc::Sub( Buffer, Note, Bar );
+			mthrtn::Sub( Buffer, Note, Bar );
 
 			Target.Append( Source( Row ) );
 			break;
@@ -347,7 +347,7 @@ qRT
 qRE
 }
 
-static bso::u8__ GetChromaticAbsolute_( const pitch__ &Pitch )
+static bso::u8__ GetChromaticAbsolute_( const sPitch &Pitch )
 {
 	if ( ( BSO_U8_MAX / 12 ) < Pitch.Octave )
 		qRFwk();
@@ -404,13 +404,13 @@ static bso::u8__ GetChromaticAbsolute_( const pitch__ &Pitch )
 	return Absolute;
 }
 
-bso::u8__ mscmld::pitch__::GetChromatic( void ) const
+bso::u8__ mscmld::sPitch::GetChromatic( void ) const
 {
 	return GetChromaticAbsolute_( *this );
 }
 
 
-static bso::u8__ GetDiatonicAbsolute_( const pitch__ &Pitch )
+static bso::u8__ GetDiatonicAbsolute_( const sPitch &Pitch )
 {
 	if ( ( BSO_U8_MAX / 7 ) < Pitch.Octave )
 		qRFwk();
@@ -450,17 +450,17 @@ static bso::u8__ GetDiatonicAbsolute_( const pitch__ &Pitch )
 }
 
 void mscmld::Merge(
-	const pitches_ &Pitches,
-	const durations_ &Durations,
-	const signatures_ &Signatures,
-	notes_ &Notes )
+	const dPitches &Pitches,
+	const dDurations &Durations,
+	const dSignatures &Signatures,
+	dNotes &Notes )
 {
-	prow__ PRow = Pitches.First();
-	drow__ DRow = Durations.First();
-	srow__ SRow = Signatures.First();
+	sPRow PRow = Pitches.First();
+	sDRow DRow = Durations.First();
+	sSRow SRow = Signatures.First();
 
 	while ( ( PRow != qNIL ) && ( DRow != qNIL ) && ( SRow != qNIL ) ) {
-		Notes.Append( note__( Pitches( PRow ), Durations( DRow ), Signatures( SRow ) ) );
+		Notes.Append( sNote( Pitches( PRow ), Durations( DRow ), Signatures( SRow ) ) );
 
 		PRow = Pitches.Next( PRow );
 		DRow = Durations.Next( DRow );
@@ -469,13 +469,13 @@ void mscmld::Merge(
 }
 
 static bso::bool__ Adjust_(
-	mthfrc::fraction_ &BarFraction,
-	const mthfrc::fraction_ &NoteFraction,
+	mthrtn::dRational &BarFraction,
+	const mthrtn::dRational &NoteFraction,
 	bso::bool__ *Error )
 {
 	bso::bool__ BarComplete = false;
 qRH
-	mthfrc::fraction Buffer;
+	mthrtn::wRational Buffer;
 qRB
 #ifdef DEBUG
 	cio::cout << BarFraction << txf::tab << NoteFraction << txf::tab << txf::sync;
@@ -493,7 +493,7 @@ qRB
 	case 1:
 		Buffer.Init();
 		Buffer = BarFraction;
-		mthfrc::Sub( Buffer, NoteFraction, BarFraction );
+		mthrtn::Sub( Buffer, NoteFraction, BarFraction );
 		break;
 	default:
 		qRFwk();
@@ -515,11 +515,11 @@ qRE
 			break
 
 static void Convert_(
-	const mthfrc::fraction_ &RawDuration,
-	anacrousis__ &Anacrousis )
+	const mthrtn::dRational &RawDuration,
+	sAnacrousis &Anacrousis )
 {
 qRH
-	mthfrc::fraction Duration;
+	mthrtn::wRational Duration;
 qRB
 	Duration.Init( RawDuration );
 
@@ -548,13 +548,13 @@ qRT
 qRE
 }
 
-bso::bool__ mscmld::melody_::MarkAsAnacrousis( err::handling__ Handling )
+bso::bool__ mscmld::dMelody::MarkAsAnacrousis( err::handling__ Handling )
 {
 	bso::bool__ Success = false;
 qRH
-	mthfrc::fraction Total, Remaining, Note;
+	mthrtn::wRational Total, Remaining, Note;
 	bso::bool__ BarHandlingError = false;
-	row__ Row = qNIL;
+	sRow Row = qNIL;
 	bso::bool__ BarIsComplete = false;
 qRB
 	if ( IsEmpty() )
@@ -599,8 +599,8 @@ qRE
 }
 
 static void WriteXML_(
-	const pitch__ &Pitch,
-	const pitch__ &PreviousPitch,
+	const sPitch &Pitch,
+	const sPitch &PreviousPitch,
 	xml::writer_ &Writer )
 {
 	bso::integer_buffer__ Buffer;
@@ -633,7 +633,7 @@ static void WriteXML_(
 }
 
 static void WriteXMLDurationCoreAttributes_(
-	const duration__ &Duration,
+	const sDuration &Duration,
 	xml::writer_ &Writer )
 {
 	bso::integer_buffer__ Buffer;
@@ -645,8 +645,8 @@ static void WriteXMLDurationCoreAttributes_(
 }
 
 static void WriteXML_(
-	const duration__ &Duration,
-	const duration__ &PreviousDuration,
+	const sDuration &Duration,
+	const sDuration &PreviousDuration,
 	xml::writer_ &Writer )
 {
 	Writer.PushTag( DURATION_TAG );
@@ -665,12 +665,12 @@ static void WriteXML_(
 }
 
 static void WriteXML_(
-	const signature_key__ &Key,
-	const signature_key__ &PreviousKey,
+	const sSignatureKey &Key,
+	const sSignatureKey &PreviousKey,
 	xml::writer_ &Writer )
 {
-	pitch_name__ Name = pn_Undefined;
-	pitch_accidental__ Accidental = pa_Undefined;
+	ePitchName Name = pn_Undefined;
+	ePitchAccidental Accidental = pa_Undefined;
 	bso::integer_buffer__ Buffer;
 
 	Writer.PushTag( KEY_TAG );
@@ -753,8 +753,8 @@ static void WriteXML_(
 }
 
 static void WriteXML_(
-	const signature_time__ &Time,
-	const signature_time__ &PreviousTime,
+	const sSignatureTime &Time,
+	const sSignatureTime &PreviousTime,
 	xml::writer_ &Writer )
 {
 	bso::integer_buffer__ Buffer;
@@ -778,8 +778,8 @@ static void WriteXML_(
 }
 
 static void WriteXML_(
-	const signature__ &Signature,
-	const signature__ &PreviousSignature,
+	const sSignature &Signature,
+	const sSignature &PreviousSignature,
 	xml::writer_ &Writer )
 {
 	Writer.PushTag( SIGNATURE_TAG );
@@ -796,8 +796,8 @@ static void WriteXML_(
 
 
 static void WriteXML_(
-	const note__ &Note,
-	const note__ &PreviousNote,
+	const sNote &Note,
+	const sNote &PreviousNote,
 	xml::writer_ &Writer )
 {
 	if ( Note.Pitch.Name == pnRest )
@@ -815,14 +815,14 @@ static void WriteXML_(
 
 
 write_status__ mscmld::WriteXML(
-	const melody_ &Melody,
+	const dMelody &Melody,
 	xml::writer_ &Writer )
 {
 	write_status__ Status = wsOK;
 qRH
-	row__ Row = qNIL;
-	mthfrc::fraction BarFraction, NoteFraction, Buffer;
-	note__ PreviousNote, Note;
+	sRow Row = qNIL;
+	mthrtn::wRational BarFraction, NoteFraction, Buffer;
+	sNote PreviousNote, Note;
 	bso::bool__ BarClosed = true;
 	bso::bool__ BarHandlingError = false;
 	bso::bool__ HandleAnacrousis = false;
@@ -950,7 +950,7 @@ qRE
 
 static parse_status__ GetKeyRaw_(
 	const str::string_ &Raw,
-	signature_key__ &Key )
+	sSignatureKey &Key )
 {
 	sdr::row__ Error = qNIL;
 
@@ -968,7 +968,7 @@ static parse_status__ GetKeyRaw_(
 
 static parse_status__ ParseKey_(
 	xml::parser___ &Parser,
-	signature_key__ &Key )
+	sSignatureKey &Key )
 {
 	parse_status__ Status = psOK;
 	bso::bool__ Continue = true;
@@ -1021,7 +1021,7 @@ static parse_status__ GetU8(
 
 static parse_status__ ParseTime_(
 	xml::parser___ &Parser,
-	signature_time__ &Time )
+	sSignatureTime &Time )
 {
 	parse_status__ Status = psOK;
 	bso::bool__ Continue = true;
@@ -1082,12 +1082,12 @@ static parse_status__ ParseTime_(
 
 static parse_status__ ParseSignature_(
 	xml::parser___ &Parser,
-	signature__ &Signature )
+	sSignature &Signature )
 {
 	parse_status__ Status = psOK;
 qRH
-	signature_key__ Key = MSCMLD_UNDEFINED_KEY_SIGNATURE;
-	signature_time__ Time;
+	sSignatureKey Key = MSCMLD_UNDEFINED_KEY_SIGNATURE;
+	sSignatureTime Time;
 	bso::bool__ Continue = true;
 qRB
 	Initialize( Key );
@@ -1142,36 +1142,36 @@ qRE
 	return Status;
 }
 
-static pitch_name__ GetPitchName_( const str::string_ &Name )
+static ePitchName GetPitchName_( const str::string_ &Name )
 {
 	int i = 0;
 
-	while ( ( i < pn_amount ) && ( Name != GetPitchNameLabel( (pitch_name__)i ) ) )
+	while ( ( i < pn_amount ) && ( Name != GetPitchNameLabel( (ePitchName)i ) ) )
 		i++;
 
 	if ( i > pn_amount )
 		i = pn_Undefined;
 
-	return (pitch_name__)i;
+	return (ePitchName)i;
 }
 
-static pitch_accidental__ GetPitchAccidental_( const str::string_ &Accidental )
+static ePitchAccidental GetPitchAccidental_( const str::string_ &Accidental )
 {
 	int i = 0;
 
-	while ( ( i < pa_amount ) && ( Accidental != GetPitchAccidentalLabel( (pitch_accidental__)i ) ) )
+	while ( ( i < pa_amount ) && ( Accidental != GetPitchAccidentalLabel( (ePitchAccidental)i ) ) )
 		i++;
 
 	if ( i > pa_amount )
 		i = pa_Undefined;
 
-	return (pitch_accidental__)i;
+	return (ePitchAccidental)i;
 }
 
-static pitch_octave__ GetPitchOctave_( const str::string_ &Octave )
+static sPitchOctave GetPitchOctave_( const str::string_ &Octave )
 {
 	sdr::row__ Error = qNIL;
-	pitch_octave__ O = Octave.ToU8( &Error );
+	sPitchOctave O = Octave.ToU8( &Error );
 
 	if ( Error != qNIL )
 		O = MSCMLD_UNDEFINED_PITCH_OCTAVE;
@@ -1183,13 +1183,13 @@ static pitch_octave__ GetPitchOctave_( const str::string_ &Octave )
 
 static parse_status__ ParsePitch_(
 	xml::parser___ &Parser,
-	pitch__ &Pitch )
+	sPitch &Pitch )
 {
 	parse_status__ Status = psOK;
 	bso::bool__ Continue = true;
-	pitch_name__ Name = pn_Undefined;
-	pitch_accidental__ Accidental = pa_Undefined;
-	pitch_octave__ Octave = MSCMLD_UNDEFINED_PITCH_OCTAVE;
+	ePitchName Name = pn_Undefined;
+	ePitchAccidental Accidental = pa_Undefined;
+	sPitchOctave Octave = MSCMLD_UNDEFINED_PITCH_OCTAVE;
 
 	while ( Continue ) {
 		switch ( Parser.Parse( xml::tfObvious ) ) {
@@ -1300,8 +1300,8 @@ tol::xbool__ GetTiedFlag_( const str::string_ &Value )
 static parse_status__ ParseDuration_(
 	const char *Tag,
 	xml::parser___ &Parser,
-	const tuplet__ &Tuplet,
-	duration__ &Duration )
+	const sTuplet &Tuplet,
+	sDuration &Duration )
 {
 	parse_status__ Status = psOK;
 	bso::bool__ Continue = true;
@@ -1382,14 +1382,14 @@ static parse_status__ ParseDuration_(
 
 static parse_status__ ParseNote_( 
 	xml::parser___ &Parser,
-	const signature__ &Signature,
-	const tuplet__ &Tuplet,
-	note__ &Note )
+	const sSignature &Signature,
+	const sTuplet &Tuplet,
+	sNote &Note )
 {
 	parse_status__ Status = psOK;
 	bso::bool__ Continue = true;
-	pitch__ Pitch;
-	duration__ Duration;
+	sPitch Pitch;
+	sDuration Duration;
 
 	Pitch.Init();
 	Duration.Init();
@@ -1453,14 +1453,14 @@ static parse_status__ ParseBar_( xml::parser___ &Parser )
 
 static parse_status__ ParseRest_(
 	xml::parser___ &Parser,
-	const signature__ &Signature,
-	const tuplet__ &Tuplet,
-	note__ &Note  )
+	const sSignature &Signature,
+	const sTuplet &Tuplet,
+	sNote &Note  )
 {
 	parse_status__ Status = psOK;
 	bso::bool__ Continue = true;
-	pitch__ Pitch;
-	duration__ Duration;
+	sPitch Pitch;
+	sDuration Duration;
 
 	Pitch.Init();
 	Pitch.Name = pnRest;
@@ -1540,16 +1540,16 @@ static bso::u8__ GetTupletDenominator_( const str::string_ &Value )
 
 static parse_status__ ParseTuplet_( 
 	xml::parser___ &Parser,
-	const signature__ &Signature,
-	melody_ &Melody )
+	const sSignature &Signature,
+	dMelody &Melody )
 {
 	parse_status__ Status = psOK;
 	bso::bool__ Continue = true;
 	bso::u8__
 		Numerator = MSCMLD_UNDEFINED_TUPLET_NUMERATOR,
 		Denominator = MSCMLD_UNDEFINED_TUPLET_DENOMINATOR;
-	tuplet__ Tuplet;
-	note__ Note;
+	sTuplet Tuplet;
+	sNote Note;
 
 	Note.Init();
 
@@ -1630,8 +1630,8 @@ static parse_status__ ParseTuplet_(
 
 static parse_status__ ParseAnacrousis_(
 	xml::parser___ &Parser,
-	const signature__ &Signature,
-	anacrousis__ &Anacrousis ) 
+	const sSignature &Signature,
+	sAnacrousis &Anacrousis ) 
 {
 	parse_status__ Status = psOK;
 	bso::bool__ Continue = true;
@@ -1699,12 +1699,12 @@ static parse_status__ ParseAnacrousis_(
 
 static parse_status__ Parse_(
 	xml::parser___ &Parser,
-	melody_ &Melody ) 
+	dMelody &Melody ) 
 {
 	parse_status__ Status = psOK;
 	bso::bool__ Continue = true;
-	signature__ Signature;
-	note__ Note;
+	sSignature Signature;
+	sNote Note;
 
 	while ( Continue ) {
 		switch ( Parser.Parse( xml::tfObvious ) ) {
@@ -1712,9 +1712,9 @@ static parse_status__ Parse_(
 			if ( Parser.TagName() == SIGNATURE_TAG )
 				Status = ParseSignature_( Parser, Signature );
 			else if ( Parser.TagName() == NOTE_TAG )
-				Status = ParseNote_( Parser, Signature, tuplet__(), Note );
+				Status = ParseNote_( Parser, Signature, sTuplet(), Note );
 			else if ( Parser.TagName() == REST_TAG )
-				Status = ParseRest_( Parser, Signature, tuplet__(), Note );
+				Status = ParseRest_( Parser, Signature, sTuplet(), Note );
 			else if ( Parser.TagName() == BAR_TAG )
 				Status = ParseBar_( Parser );
 			else if ( Parser.TagName() == TUPLET_TAG )
@@ -1737,7 +1737,7 @@ static parse_status__ Parse_(
 			Status = psUnexpectedValue;
 			break;
 		case xml::tEndTag:
-			if ( Parser.TagName() != MELODY_TAG )
+			if ( Parser.TagName() != dMelodyTAG )
 				qRFwk();
 
 			Continue = false;
@@ -1756,7 +1756,7 @@ static parse_status__ Parse_(
 
 parse_status__ mscmld::ParseXML(
 	xml::parser___ &Parser,
-	melody_ &Melody,
+	dMelody &Melody,
 	bso::bool__ WithRoot )	// Si  'true', la prochaine balise est 'Melody', sinon, on est  l'intrieur de 'Melody'. Dans les deux cas, au retour on est  l'extrieur de la balise 'Melody'.
 {
 	if ( WithRoot)
