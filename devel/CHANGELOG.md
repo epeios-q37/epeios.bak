@@ -5,6 +5,12 @@
 - [adpt]: Adaptation to changes in underlying modules;
 - [stdz]: modification to comply with current standards;
 
+## 2018-07-04
+
+- MSCMDD:
+  - [adpt];
+  - [stdz];
+
 ## 2018-07-03
 
 - MSCMDD:

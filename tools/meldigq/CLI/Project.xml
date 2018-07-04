@@ -25,6 +25,16 @@
 			<Modules Group="SCL">
 				<xpp:expand select="SCL"/>
 			</Modules>
+			<Modules Group="MSC">
+				<Module>mscmdd</Module>
+				<Module>mscmdf</Module>
+				<Module>mscmdm</Module>
+				<Module>mscmld</Module>
+			</Modules>
+			<Modules Group="MTH">
+				<Module>mthitg</Module>
+				<Module>mthrtn</Module>
+			</Modules>
 		</Modules>
 		<Module>registry</Module>
 	</Modules>

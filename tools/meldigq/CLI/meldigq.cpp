@@ -591,7 +591,7 @@ struct shared__ {
 
 static sdr::sRow GetDevice_(
 	const char *Name,
-	const mscmdd::names_ &Names )
+	const mscmdd::dNames &Names )
 {
 	sdr::sRow Row = Names.First();
 
@@ -603,17 +603,17 @@ static sdr::sRow GetDevice_(
 }
 
 static int GetDeviceId_(
-	mscmdd::way__ Way,
+	mscmdd::eWay Way,
 	const char *Name )
 {
 	int Id;
 qRH;
-	mscmdd::names Names;
+	mscmdd::wNames Names;
 	sdr::sRow Row = qNIL;
 qRB;
 	Names.Init();
 
-	mscmdd::GetMidiDevicesNames( Way, Names );
+	mscmdd::GetMidiDeviceNames( Way, Names );
 
 	if ( ( Row = GetDevice_( Name, Names ) ) == qNIL ) {
 		switch ( Way ) {
@@ -666,6 +666,7 @@ qRE;
 }
 
 static int GetDeviceId_(
+	mscmdd::eWay Way,
 	const rgstry::sTEntry &PolicyEntry,
 	const rgstry::sTEntry &ValueEntry )
 {
@@ -678,7 +679,7 @@ qRB;
 		Id = sclmisc::MGetU8( ValueEntry );
 		break;
 	case pName:
-		Id = GetDeviceId_( mscmdd::wIn, sclmisc::MGetValue( ValueEntry, Buffer ) );
+		Id = GetDeviceId_( Way, sclmisc::MGetValue( ValueEntry, Buffer ) );
 		break;
 	default:
 		qRGnr();
@@ -692,12 +693,12 @@ qRE;
 
 static int GetDeviceInId_( void )
 {
-	return GetDeviceId_( registry::parameter::devices::in::Policy, registry::parameter::devices::in::Value );
+	return GetDeviceId_( mscmdd::wIn, registry::parameter::devices::in::Policy, registry::parameter::devices::in::Value );
 }
 
 static int GetDeviceOutId_( void )
 {
-	return GetDeviceId_( registry::parameter::devices::out::Policy, registry::parameter::devices::out::Value );
+	return GetDeviceId_( mscmdd::wOut, registry::parameter::devices::out::Policy, registry::parameter::devices::out::Value );
 }
 
 static inline sSignatureKey GetSignatureKey_( void )
@@ -1004,6 +1005,86 @@ qRT;
 qRE;
 }
 
+void DisplayMidiOutDevices( void )
+{
+qRH;
+	mscmdd::wNames Names;	
+	sdr::sRow Row = qNIL;
+	str::wString Buffer;
+qRB;
+	Names.Init();
+
+	mscmdd::GetMidiOutDeviceNames( Names );
+
+	Buffer.Init();
+
+	if ( Names.Amount() == 0 )
+		cio:: COut << sclmisc::GetBaseTranslation( "NoMIDIOutDevicesAvailable", Buffer );
+	else
+		cio::COut << sclmisc::GetBaseTranslation( "AvailableMIDIOutDevices", Buffer );
+
+	cio::COut << " : " << txf::nl;
+
+	Row = Names.First();
+
+	while ( Row != qNIL ) {
+		cio::COut << *Row << " : " << Names( Row ) << txf::nl;
+
+		Row = Names.Next( Row );
+	}
+
+	cio::COut << txf::commit;
+qRR;
+qRT;
+qRE;
+}
+
+void DisplayMidiInDevices( void )
+{
+qRH;
+	mscmdd::wNames Names;	
+	sdr::sRow Row = qNIL;
+	str::wString Buffer;
+qRB;
+	Names.Init();
+
+	mscmdd::GetMidiInDeviceNames( Names );
+
+	Buffer.Init();
+
+	if ( Names.Amount() == 0 )
+		cio::COut << sclmisc::GetBaseTranslation( "NoMIDIInDevicesAvailable", Buffer );
+	else
+		cio::COut << sclmisc::GetBaseTranslation( "AvailableMIDIInDevices", Buffer );
+
+	cio::COut << " : " << txf::nl;
+
+	Row = Names.First();
+
+	while ( Row != qNIL ) {
+		cio::COut << *Row << " : " << Names( Row ) << txf::nl;
+
+		Row = Names.Next( Row );
+	}
+
+	cio::COut << txf::commit;
+qRR;
+qRT;
+qRE;
+}
+
+
+void DisplayMidiDevices( void )
+{
+	DisplayMidiInDevices();
+	DisplayMidiOutDevices();
+}
+
+void Info_( void )
+{
+	DisplayMidiDevices();
+}
+
 #define C( name )\
 	else if ( Command == #name )\
 		name##_()
@@ -1020,6 +1101,7 @@ qRB;
 	else if ( Command == "License" )
 		epsmsc::PrintLicense( NAME_MC );
 	C( Launch );
+	C( Info );
 	else
 		qRGnr();
 

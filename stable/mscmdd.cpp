@@ -88,7 +88,7 @@ qRB
 		Buffer[0] = dwParam1 & 0xff;
 		switch ( mscmdm::DetermineEvent( dwParam1 & 0xff, ( dwParam1 & 0xff00 ) >> 8, Event ) ) {
 		case mscmdm::etMIDI:
-			switch ( mscmdm::GetMIDIEventDataSize( (mscmdm::midi_event__)Event ) ) {
+			switch ( mscmdm::GetMIDIEventDataSize( (mscmdm::eMidiEvent)Event ) ) {
 			case 0:
 				Fill_( Buffer, 1, Data );
 				break;
@@ -245,7 +245,7 @@ bso::bool__ mscmdd::rIn::Init(
 
 static void Convert_(
 	const WCHAR *WString,
-	name_ &Name )
+	dName &Name )
 {
 	while ( *WString ) {
 		Name.Append( (char)*WString );
@@ -259,7 +259,7 @@ static void Convert_(
 // Pour g++ sous 'cygwin'.
 static inline void Convert_(
 	const CHAR *RawString,
-	name_ &Name )
+	dName &Name )
 {
 	Name.Append( RawString );
 }
@@ -433,14 +433,14 @@ qRE
 #endif
 
 
-bso::u32__ mscmdd::GetMidiInDevicesNames( names_ &Names )
+bso::u32__ mscmdd::GetMidiInDeviceNames( dNames &Names )
 {
 	bso::u32__ Count = 0;
 #ifdef MSCMDD__WINDOWS
 qRH
 	MIDIINCAPS InCaps;
 	bso::u32__ Counter = 0;
-	name Name;
+	wName Name;
 qRB
 	Count =  midiInGetNumDevs();
 
@@ -470,14 +470,14 @@ qRE
 	return Count;
 }
 
-bso::u32__ mscmdd::GetMidiOutDevicesNames( names_ &Names )
+bso::u32__ mscmdd::GetMidiOutDeviceNames( dNames &Names )
 {
 	bso::u32__ Count = 0;
 #ifdef MSCMDD__WINDOWS
 qRH
 	MIDIOUTCAPS OutCaps;
 	bso::u32__ Counter = 0;
-	name Name;
+	wName Name;
 qRB
 	Count =  midiOutGetNumDevs();
 

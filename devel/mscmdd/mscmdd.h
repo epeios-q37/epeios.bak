@@ -30,7 +30,7 @@
 # include "flw.h"
 # include "cpe.h"
 # include "str.h"
-# include "ctn.h"
+# include "crt.h"
 # include "lcl.h"
 
 # ifdef CPE_S_WIN
@@ -65,7 +65,7 @@
 namespace mscmdd {
 #ifdef MSCMDD__WINDOWS
 	typedef UINT_PTR	sHandler;
-	typedef char name__[MAXPNAMELEN];
+	typedef char sName[MAXPNAMELEN];
 
 	class rOut
 	{
@@ -635,32 +635,32 @@ namespace mscmdd {
 	};
 
 
-	typedef str::string_	name_;
-	typedef str::string		name;
+	typedef str::string_	dName;
+	typedef str::string		wName;
 
-	typedef ctn::E_MCONTAINER_( name_ ) names_;
-	E_AUTO( names )
+	typedef crt::qCRATEdl( dName ) dNames;
+	qW( Names );
 
-	bso::uint__ GetMidiInDevicesNames( names_ &Names );
-	bso::uint__ GetMidiOutDevicesNames( names_ &Names );
+	bso::uint__ GetMidiInDeviceNames( dNames &Names );
+	bso::uint__ GetMidiOutDeviceNames( dNames &Names );
 
-	enum way__ {
+	qENUM( Way ) {
 		wIn,
 		wOut,
 		w_amount,
 		w_Undefined
 	};
 
-	inline bso::uint__ GetMidiDevicesNames(
-		way__ Way,
-		names_ &Names )
+	inline bso::uint__ GetMidiDeviceNames(
+		eWay Way,
+		dNames &Names )
 	{
 		switch ( Way ) {
 		case wIn:
-			return GetMidiInDevicesNames( Names );
+			return GetMidiInDeviceNames( Names );
 			break;
 		case wOut:
-			return GetMidiOutDevicesNames( Names );
+			return GetMidiOutDeviceNames( Names );
 			break;
 		default:
 			qRFwk();

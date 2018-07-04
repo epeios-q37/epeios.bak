@@ -6,8 +6,70 @@
   <xpp:expand href="../../../TOL.xcfg"/>
 		<Parameters>
 			<Language>fr</Language>
-			<Command>Test</Command>
 			<!-- Default command -->
+			<Command>Launch</Command>
+			<Devices>
+				<In Policy="Name">EDIROL PC-50</In>
+				<Out Policy="Name">Microsoft GS Wavetable Synth</Out>
+			</Devices>
+			<Signature>
+				<Time>
+					<Numerator>2</Numerator>
+					<Denominator>2</Denominator>
+				</Time>
+				<Key>-2</Key>
+			</Signature>
+			<Tempo>
+				<Unit>3</Unit>
+				<Value>60</Value>
+			</Tempo>
+			<TargetFileName>Essai.xmld</TargetFileName>
+			<xpp:bloc>
+				<xpp:bloc>
+					<!-- Définition des macros -->
+					<xpp:define name="BinDir">
+						<xpp:bloc>c:\cygwin\bin\</xpp:bloc>
+					</xpp:define>
+					<xpp:define name="sabcmd">
+						<xpp:bloc>h:\bin\sabcmd</xpp:bloc>
+					</xpp:define>"
+					<xpp:define  name="xmld2ly">
+						<xpp:bloc>h:/cvs/epeios/corpus/xmld2ly.xsl</xpp:bloc>
+					</xpp:define>
+					<xpp:define name="cat">
+						<xpp:bloc>
+							<xpp:expand select="BinDir"/>
+							<xpp:bloc>cat</xpp:bloc>
+						</xpp:bloc>
+					</xpp:define>
+					<xpp:define name="Lilypond">
+						<xpp:bloc>"C:\Program Files (x86)\LilyPond\usr\bin\lilypond.exe" -dbackend=eps -dno-gs-load-fonts -dinclude-eps-fonts --png </xpp:bloc>
+					</xpp:define>"
+					<xpp:define name="putclip">
+						<xpp:bloc>
+							<xpp:expand select="BinDir"/>
+							<xpp:bloc>putclip</xpp:bloc>
+						</xpp:bloc>
+					</xpp:define>
+					<xpp:define name="Script">
+						<xpp:bloc>
+							<xpp:expand select="sabcmd"/>
+							<xpp:bloc> "file://</xpp:bloc>
+							<xpp:expand select="xmld2ly"/>
+							<xpp:bloc>" "%1" test.ly &amp;</xpp:bloc>
+							<xpp:expand select="cat"/>
+							<xpp:bloc> test.ly | </xpp:bloc>
+							<xpp:expand select="putclip"/>
+							<xpp:bloc> &amp; </xpp:bloc>
+							<xpp:expand select="Lilypond"/>
+							<xpp:bloc> test.ly &amp; start test.png</xpp:bloc>
+						</xpp:bloc>
+					</xpp:define>
+				</xpp:bloc>
+				<Command>
+					<xpp:expand select="Script"/>
+				</Command>
+			</xpp:bloc>
 		</Parameters>
 		<Definitions>
 		</Definitions>

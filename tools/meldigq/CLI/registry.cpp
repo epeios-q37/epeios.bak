@@ -24,4 +24,38 @@ using namespace registry;
 // rEntry registry::parameter::Test( "Test", sclrgstry::Parameters );
 
 rEntry registry::parameter::TargetFileName( "TargetFilename", sclrgstry::Parameters );
+rEntry registry::parameter::Script( "Script", sclrgstry::Parameters );
+
+namespace {
+	rEntry Devices_( "Devices", sclrgstry::Parameters );
+	rEntry In_( "In", Devices_ );
+	rEntry Out_( "Out", Devices_ );
+}
+
+rEntry registry::parameter::devices::in::Value = In_;
+rEntry registry::parameter::devices::in::Policy( "@Policy", In_ );
+
+rEntry registry::parameter::devices::out::Value = Out_;
+rEntry registry::parameter::devices::out::Policy( "@Policy", Out_ );
+
+namespace {
+	rEntry Signature_( "Signature", sclrgstry::Parameters );
+}
+
+rEntry registry::parameter::signature::Key( "Key", Signature_ );
+
+namespace {
+	rEntry Time_( "Time", Signature_ );
+}
+
+rEntry registry::parameter::signature::time::Numerator( "Numerator", Time_ );
+rEntry registry::parameter::signature::time::Denominator( "Denominator", Time_ );
+
+namespace {
+	rEntry Tempo_( "Tempo", sclrgstry::Parameters );
+}
+
+rEntry registry::parameter::tempo::Value( "Value", Tempo_ );
+rEntry registry::parameter::tempo::Unit( "Unit", Tempo_ );
+
 
