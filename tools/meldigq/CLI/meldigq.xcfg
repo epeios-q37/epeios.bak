@@ -14,16 +14,16 @@
 			</Devices>
 			<Signature>
 				<Time>
-					<Numerator>2</Numerator>
-					<Denominator>2</Denominator>
+					<Numerator>7</Numerator>
+					<Denominator>4</Denominator>
 				</Time>
-				<Key>-2</Key>
+				<Key>0</Key>
 			</Signature>
 			<Tempo>
 				<Unit>3</Unit>
 				<Value>60</Value>
 			</Tempo>
-			<TargetFileName>Essai.xmld</TargetFileName>
+			<TargetFilename>Essai.xmld</TargetFilename>
 			<xpp:bloc>
 				<xpp:bloc>
 					<!-- Définition des macros -->
@@ -34,7 +34,7 @@
 						<xpp:bloc>h:\bin\sabcmd</xpp:bloc>
 					</xpp:define>"
 					<xpp:define  name="xmld2ly">
-						<xpp:bloc>h:/cvs/epeios/corpus/xmld2ly.xsl</xpp:bloc>
+						<xpp:bloc>h:/hg/epeios/stable/xmld2ly.xsl</xpp:bloc>
 					</xpp:define>
 					<xpp:define name="cat">
 						<xpp:bloc>
@@ -66,9 +66,9 @@
 						</xpp:bloc>
 					</xpp:define>
 				</xpp:bloc>
-				<Command>
+				<Script>
 					<xpp:expand select="Script"/>
-				</Command>
+				</Script>
 			</xpp:bloc>
 		</Parameters>
 		<Definitions>

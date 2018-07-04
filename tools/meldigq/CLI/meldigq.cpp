@@ -454,7 +454,7 @@ static void Print_(
 {
 	bso::sU8 Modifier = Duration.Modifier;
 
-	Flow << (bso::sU8)Duration.Base;
+	Flow << (char)((bso::sU8)Duration.Base + '0');
 
 	while ( Modifier-- )
 		Flow << '.';
@@ -799,7 +799,11 @@ qRB;
 
 	Writer.Init( TFlow, xml::oIndent, xml::e_Default );
 
+	Writer.PushTag( "Melody" );
+
 	mscmld::WriteXML( Melody, Writer );
+
+	Writer.PopTag();
 
 	Buffer.Init();
 	COut << sclmisc::GetBaseTranslation( "Done", Buffer ) << '.' << txf::nl << txf::commit;
@@ -821,7 +825,7 @@ qRB;
 
 	Backuped = true;
 
-	Save_( Melody, FileName );
+	Save_( Melody, (const str::dString &)FileName );
 qRR;
 	if ( Backuped )
 		sclmisc::RecoverBackupFile( FileName );
@@ -984,12 +988,12 @@ qRFB;
 					Note.Duration.Base = C - '0';
 				else if ( C == '.' )
 					Note.Duration.Modifier++;
-				else if ( C == '-' )
+				else if ( C == '*' )
 					Note.Duration.TiedToNext = !Note.Duration.TiedToNext;
 
 				Melody.Store( Note, Shared.Row );
 
-//				Shared.Row = Melody.Next( Shared.Row );
+				Shared.Row = Melody.Next( Shared.Row );
 			}
 		}
 
