@@ -23,3 +23,5 @@ using namespace registry;
 
 // rEntry registry::parameter::Test( "Test", sclrgstry::Parameters );
 
+rEntry registry::parameter::TargetFileName( "TargetFilename", sclrgstry::Parameters );
+

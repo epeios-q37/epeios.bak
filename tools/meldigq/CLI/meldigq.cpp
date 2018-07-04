@@ -358,10 +358,10 @@ bso::sU32 ComputeTime_(
 
 }
 
-struct tempo__ {
+struct sTempo {
 	bso::sU8 Value;
 	sDuration Unit;
-	tempo__( void )
+	sTempo( void )
 	{
 		// Par défaut : 120 à la noire.
 		Value = 120;
@@ -414,7 +414,7 @@ qRE;
 	return Unit;
 }
 
-static const tempo__ &GetTempo_( tempo__ &Tempo )
+static const sTempo &GetTempo_( sTempo &Tempo )
 {
 	Tempo.Value = sclmisc::MGetU8( registry::parameter::tempo::Value );
 	GetTempoUnit_( Tempo.Unit );
@@ -422,7 +422,7 @@ static const tempo__ &GetTempo_( tempo__ &Tempo )
 	return Tempo;
 }
 
-bso::sU32 ComputeBase_( const tempo__ &Tempo )
+bso::sU32 ComputeBase_( const sTempo &Tempo )
 {
 	return 4 * ComputeTime_( Tempo.Unit, 4 * 60 * 1000 / Tempo.Value );
 }
@@ -493,7 +493,7 @@ qRH;
 	sEventHeader Header;
 	data Data;
 	event Event;
-	tempo__ Tempo;
+	sTempo Tempo;
 qRB;
 	Header.Id = 144;
 	Header.EventType = etMIDI;
@@ -529,7 +529,7 @@ qRE;
 
 static void Play_(
 	const dMelody &Melody,
-	const tempo__ &Tempo,
+	const sTempo &Tempo,
 	flw::oflow__ &Flow )
 {
 qRH;
@@ -636,78 +636,111 @@ qRE;
 	return Id;
 }
 
-static int GetDeviceInId_( void )
+qENUM( Policy ) {
+	pId,
+	pName,
+	p_amount,
+	p_Undefined
+};
+
+static ePolicy GetPolicy_( const rgstry::sTEntry &Entry )
+{
+	ePolicy Policy = p_Undefined;
+qRH;
+	str::wString RawPolicy;
+qRB;
+	RawPolicy.Init();
+
+	sclmisc::MGetValue( Entry, RawPolicy );
+
+	if ( RawPolicy == "Id" )
+		Policy = pId;
+	else if ( RawPolicy == "Name" )
+		Policy = pName;
+	else
+		sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( Entry );
+qRR;
+qRT;
+qRE;
+	return Policy;
+}
+
+static int GetDeviceId_(
+	const rgstry::sTEntry &PolicyEntry,
+	const rgstry::sTEntry &ValueEntry )
 {
 	int Id;
 qRH;
 	qCBUFFERr Buffer;
 qRB;
-	switch ( global::GetDeviceInPolicy() ) {
-	case global::dpId:
-		Id = global::GetDeviceInValue();
+	switch ( GetPolicy_( PolicyEntry ) ) {
+	case pId:
+		Id = sclmisc::MGetU8( ValueEntry );
 		break;
-	case global::dpName:
-		Id = GetDeviceId_( mscmdd::wIn, global::GetDeviceInValue( Buffer ) );
+	case pName:
+		Id = GetDeviceId_( mscmdd::wIn, sclmisc::MGetValue( ValueEntry, Buffer ) );
 		break;
 	default:
 		qRGnr();
 		break;
-}
+	}
 qRR;
 qRT;
 qRE;
 	return Id;
+}
+
+static int GetDeviceInId_( void )
+{
+	return GetDeviceId_( registry::parameter::devices::in::Policy, registry::parameter::devices::in::Value );
 }
 
 static int GetDeviceOutId_( void )
 {
-	int Id;
-qRH;
-	STR_BUFFER___ Buffer;
-qRB;
-	switch ( global::GetDeviceOutPolicy() ) {
-	case global::dpId:
-		Id = global::GetDeviceOutValue();
-		break;
-	case global::dpName:
-		Id = GetDeviceId_( mscmdd::wOut, global::GetDeviceOutValue( Buffer ) );
-		break;
-	default:
-		qRGnr();
-		break;
-}
-qRR;
-qRT;
-qRE;
-	return Id;
+	return GetDeviceId_( registry::parameter::devices::out::Policy, registry::parameter::devices::out::Value );
 }
 
 static inline sSignatureKey GetSignatureKey_( void )
 {
-	return GetRawSignatureKey();
+	return sclmisc::MGetS8( registry::parameter::signature::Key, -7, 7 );
 }
 
-static inline signature_time__ GetSignatureTime_( void )
+inline bso::sU8 GetRawSignatureTimeDenominator( void )
 {
-	return signature_time__( GetRawSignatureTimeNumerator(), GetRawSignatureTimeDenominator() );
+	return sclmisc::MGetU8( registry::parameter::signature::time::Denominator, 8 );
 }
 
-static inline signature__ GetSignature_( void )
+inline bso::sU8 GetRawSignatureTimeNumerator( void )
 {
-	return signature__( GetSignatureKey_(), GetSignatureTime_() );
+	return sclmisc::MGetU8( registry::parameter::signature::time::Numerator, 12 );
+}
+
+static inline sSignatureTime GetSignatureTime_( void )
+{
+	return sSignatureTime( GetRawSignatureTimeNumerator(), GetRawSignatureTimeDenominator() );
+}
+
+inline bso::sU8 GetRawSignatureKey( void )
+{
+	return sclmisc::MGetS8( registry::parameter::signature::Key, -7, 7 );
+}
+
+static inline sSignature GetSignature_( void )
+{
+	return sSignature( GetSignatureKey_(), GetSignatureTime_() );
 }
 
 static void HandleMIDI_( void *UP )
 {
 	shared__ &Shared = *(shared__ *)UP;
-ERRFProlog
-	mscmdd::midi_iflow___ IFlow;
+qRFH;
+	mscmdd::rRFlow IFlow;
 	sEventHeader Header;
 	data Data;
 	event Event;
 	sNote Note;
-	signature__ Signature;
-ERRFBegin
+	sSignature Signature;
+qRFB;
 	Signature = GetSignature_();
 
 	IFlow.Init( GetDeviceInId_() );
@@ -731,7 +764,7 @@ ERRFBegin
 					Note = sNote( GetPitch_( Data( Data.First() ), Signature.Key ), sDuration( 3 ), Signature );
 					mtx::Lock( Shared.Mutex );
 					if ( Shared.Row != qNIL ) {
-						Shared.Melody->Insert( Note, Shared.Row );
+						Shared.Melody->InsertAt( Note, Shared.Row );
 						Shared.Row = Shared.Melody->Next( Shared.Row );
 					}else
 						Shared.Melody->Append( Note );
@@ -740,26 +773,26 @@ ERRFBegin
 					mtx::Unlock( Shared.Mutex );
 				}
 	}
-ERRFErr
-ERRFEnd
-ERRFEpilog
+qRFR;
+qRFT;
+qRFE( sclmisc::ErrFinal() );
 }
 
 static void Save_(
 	const dMelody &Melody,
-	const char *FileName )
+	const fnm::rName &FileName )
 {
 qRH;
 	flf::file_oflow___ Flow;
 	txf::text_oflow__ TFlow;
 	xml::writer Writer;
+	str::wString Buffer;
 qRB;
-	if ( Flow.Init( FileName, err::hUserDefined ) != fil::sSuccess ) {
-		CErr << GetTranslation( mUnableToOpenFile, FileName ) << " !" << txf::nl << txf::commit;
-		ERRReturn;
-	}
+	if ( Flow.Init( FileName, err::hUserDefined ) != tol::rSuccess )
+		sclmisc::ReportFileOpeningErrorAndAbort( FileName );
 
-	COut << GetTranslation( mWritingFile, FileName ) << "..." << txf::commit;
+	Buffer.Init();
+	COut << sclmisc::GetBaseTranslation( "WritingFile", Buffer, FileName ) << "..." << txf::commit;
 
 	TFlow.Init( Flow );
 
@@ -767,40 +800,42 @@ qRB;
 
 	mscmld::WriteXML( Melody, Writer );
 
-	COut << GetTranslation( mDone ) << '.' << txf::nl << txf::commit;
+	Buffer.Init();
+	COut << sclmisc::GetBaseTranslation( "Done", Buffer ) << '.' << txf::nl << txf::commit;
 qRR;
 qRT;
 qRE;
 }
 
-static const char *Save_(
+static const str::dString &Save_(
 	const dMelody &Melody,
-	STR_BUFFER___ &Buffer )
+	str::dString &FileName )
 {
 qRH;
 	bso::bool__ Backuped = false;
 qRB;
-	if ( GetTargetFileName( Buffer ) == NULL )
-		qRGnr();
+	sclmisc::MGetValue( registry::parameter::TargetFileName, FileName );
 
-	CreateBackupFile( Buffer );
+	sclmisc::CreateBackupFile( FileName );
+
 	Backuped = true;
 
-	Save_( Melody, Buffer() );
+	Save_( Melody, FileName );
 qRR;
 	if ( Backuped )
-		RecoverBackupFile( Buffer );
+		sclmisc::RecoverBackupFile( FileName );
 qRT;
 qRE;
-	return Buffer;
+	return FileName;
 }
 
 static void Save_( const dMelody &Melody )
 {
 qRH;
-	STR_BUFFER___ Buffer;
+	str::wString FileName;
 qRB;
-	Save_( Melody, Buffer );
+	FileName.Init();
+	Save_( Melody, FileName );
 qRR;
 qRT;
 qRE;
@@ -809,22 +844,25 @@ qRE;
 static void Execute_( const dMelody &Melody )
 {
 qRH;
-	STR_BUFFER___ Buffer;
-	const char *FileName = NULL;
-	str::string Command;
+	str::wString FileName;
+	str::string Script;
+	str::wString Buffer;
 qRB;
-	FileName = Save_( Melody, Buffer );
+	FileName.Init();
+	Save_( Melody, FileName );
 
-	Command.Init();
-	GetCommand( Command );
+	Script.Init();
+	sclmisc::MGetValue( registry::parameter::Script, Script );
 
-	str::ReplaceTag( Command, 1, str::string( FileName ), '%' );
+	tagsbs::SubstituteShortTag( Script, 1, FileName, '%' );
 
-	COut << GetTranslation( mExecutingCommand, Command.Convert( Buffer ) ) << "..." << txf::commit;
+	Buffer.Init();
+	COut << sclmisc::GetBaseTranslation( "ExecutingCommand", FileName ) << "..." << txf::commit;
 
-	system( Buffer );
+	tol::System( Script );
 
-	COut << GetTranslation( mDone ) << txf::nl << txf::commit;
+	Buffer.Init();
+	COut << sclmisc::GetBaseTranslation( "Done", Buffer ) << '.' << txf::nl << txf::commit;
 qRR;
 qRT;
 qRE;
@@ -853,31 +891,31 @@ enum
   KEY_RIGHT = 256 + 77
 };
 
-static void Go_( const parameters &Parameters )
+static void Launch_( void )
 {
-qRH;
-	melody Melody;
+qRFH;
+	wMelody Melody;
 	shared__ Shared;
 	int C;
 	sNote Note;
-	mscmdd::midi_oflow___ Flow;
-	signature__ Signature;
-	tempo__ Tempo;
-ERRFBegin
+	mscmdd::rWFlow Flow;
+	sSignature Signature;
+	sTempo Tempo;
+qRFB;
 	Signature = GetSignature_();
 	GetTempo_( Tempo );
 
 	Melody.Init();
 	Flow.Init( GetDeviceOutId_() );
 
-	Shared.Mutex = mtx::Create( mtx::mFree );
+	Shared.Mutex = mtx::Create();
 
 	Shared.Melody = &Melody;
 	Shared.OFlow = &Flow;
 
 	mtx::Lock( Shared.Mutex );
 
-	mtk::Launch( HandleMIDI_, &Shared );
+	mtk::RawLaunch( HandleMIDI_, &Shared );
 
 	while ( 1 ) {
 		mtx::Unlock( Shared.Mutex );
@@ -928,7 +966,7 @@ ERRFBegin
 		else if ( C == 'r' ) {
 			Note = sNote( sPitch( pnRest, 0 ),  sDuration( 3 ), Signature );
 			if ( Shared.Row != qNIL ) {
-				Shared.Melody->Insert( Note, Shared.Row );
+				Shared.Melody->InsertAt( Note, Shared.Row );
 				Shared.Row = Shared.Melody->Next( Shared.Row );
 			}else
 				Shared.Melody->Append( Note );
@@ -976,12 +1014,12 @@ int scltool::SCLTOOLMain(
 {
 	int ExitValue = EXIT_FAILURE;
 qRH;
-qRH;
+qRB;
 	if ( Command == "Version" )
 		PrintHeader_();
 	else if ( Command == "License" )
 		epsmsc::PrintLicense( NAME_MC );
-	C( Test );
+	C( Launch );
 	else
 		qRGnr();
 

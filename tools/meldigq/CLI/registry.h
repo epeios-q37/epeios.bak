@@ -28,6 +28,10 @@ namespace registry {
 	namespace parameter {
 		using namespace sclrgstry::parameter;
 
+		extern rEntry
+			Script,
+			TargetFileName;
+
 		namespace devices
 		{
 			namespace in
@@ -59,7 +63,6 @@ namespace registry {
 				Value,
 				Unit;
 		};
-		extern rEntry TargetFileName;
 	}
 
 	namespace definition {
