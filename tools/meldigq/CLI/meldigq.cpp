@@ -487,6 +487,7 @@ static void Print_(
 static void Play_(
 	const sNote &Note,
 	bso::sU32 Base,
+	bso::sBool Tied,
 	flw::oflow__ &Flow )
 {
 qRH;
@@ -509,8 +510,10 @@ qRB;
 
 	Event.Init( Header, Data );
 
-	mscmdm::PutEvent( Event, mscmdm::xNone, Flow );
-	Flow.Commit();
+	if ( !Tied ) {
+		mscmdm::PutEvent( Event, mscmdm::xNone, Flow );
+		Flow.Commit();
+	}
 
 	Print_( Note, COut, false );
 
@@ -519,8 +522,10 @@ qRB;
 	Data.Store( 0, Data.Last() );
 	Event.Init( Header, Data );
 
-	mscmdm::PutEvent( Event, mscmdm::xNone, Flow );
-	Flow.Commit();
+	if ( !Tied ) {
+		mscmdm::PutEvent( Event, mscmdm::xNone, Flow );
+		Flow.Commit();
+	}
 qRR;
 qRT;
 qRE;
@@ -535,15 +540,20 @@ static void Play_(
 qRH;
 	sRow Row = qNIL;
 	bso::sU32 Base = 0;
+	bso::sBool Tied = false;
 qRB;
 	Base = ComputeBase_( Tempo );
 
 	Row = Melody.First();
 
 	while ( Row != qNIL ) {
-		Play_( Melody( Row ), Base, Flow );
+		Play_( Melody( Row ), Base, Tied, Flow );
+
+		Tied = false;
 
 		COut << txf::commit;
+
+		Tied = Melody( Row ).Duration.TiedToNext;
 
 		Row = Melody.Next( Row );
 	}

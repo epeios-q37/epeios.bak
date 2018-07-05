@@ -453,7 +453,7 @@ SCLNJS_F( xdhp::Confirm )
 
 SCLNJS_F( xdhp::SetLayout )
 {
-	ARGS_BEGIN( SetLayout );;
+	ARGS_BEGIN( SetLayout );
 
 	Caller.GetArgument( Arguments.Id );
 
