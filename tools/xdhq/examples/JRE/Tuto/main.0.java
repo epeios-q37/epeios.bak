@@ -20,7 +20,55 @@
 import info.q37.atlas.*;
 import java.util.*;
 
+class Todo {
+	public boolean completed;
+	public String label;
+
+	Todo(String label, boolean completed) {
+		this.completed = completed;
+		this.label = label;
+	}
+
+	Todo(String label) {
+		this(label, false);
+	}
+}
+
 class TodoMVC extends Atlas {
+	private Boolean exclude;
+	private int index = -1;
+	private List<Todo> todos;
+
+	public TodoMVC() {
+		todos = new ArrayList<Todo>();
+	}
+
+	private void displayTodos(DOM dom) {
+		Tree tree = new Tree();
+		ListIterator<Todo> li = todos.listIterator();
+
+		tree.pushTag("Todos");
+
+		while (li.hasNext()) {
+			int index = li.nextIndex();
+			push(li.next(), index, tree);
+		}
+
+		tree.popTag();
+
+		dom.setLayout("Todos", tree, "Todos.1.xsl");
+	}
+
+	private void submitNew(DOM dom) {
+		String content = dom.getContent("Input");
+		dom.setContent("Input", "");
+
+		if (!"".equals(content.trim())) {
+			todos.add(0, new Todo(content));
+			displayTodos(dom);
+		}
+	}
+
 	public void handle(DOM dom, String action, String id) {
 		if (action.equals("Connect")) {
 			dom.setLayout("", new Tree(), "Main.0.xsl");

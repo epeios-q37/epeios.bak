@@ -32,7 +32,7 @@
 
 ### For *PHP*
 
-- `n=1;code -n -d main.$(expr $n - 1 ).php main.$n.ph`
+- `n=1;code -n -d main.$(expr $n - 1 ).php main.$n.php`
 - `php main.$n.php` 
 
 ## *VSCode* settings :

@@ -39,6 +39,12 @@ const Tree = atlas.Tree;
 const DOM = atlas.DOM;
 
 class MyData extends DOM {
+	constructor() {
+		super();
+		this.exclude = null;
+		this.index = -1;
+		this.todos = [];
+	}
 }
 
 function newSession() {
@@ -49,6 +55,42 @@ function newSession() {
 
 function acConnect(dom, id) {
 	dom.setLayout("", new Tree(), "Main.0.xsl");
+}
+
+function displayTodos(dom) {
+	var tree = new Tree();
+	var i = 0;
+
+	dom.index = -1;
+
+	tree.pushTag("Todos");
+
+	while (i < dom.todos.length) {
+		push(dom.todos[i], i, tree);
+		i++;
+	}
+
+	tree.popTag();
+
+	dom.setLayout("Todos", tree, "Todos.1.xsl");
+}
+
+function acSubmit(dom, id) {
+	dom.getContent("Input",
+		(content) => dom.setContent("Input", "",
+			() => {
+				if (content.trim() != "") {
+					dom.todos.unshift(
+						{
+							"completed": false,
+							"label": content
+						}
+					);
+					displayTodos(dom);
+				}
+			}
+		)
+	);
 }
 
 function main() {
