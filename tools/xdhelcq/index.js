@@ -49,7 +49,7 @@ function createWindow() {
 
 
   // Open the DevTools.
-  win.webContents.openDevTools();
+//  win.webContents.openDevTools();
 
   let headFilename = (path.join(cdnPath, "head.html"));
   let head = () => { if (fs.existsSync(headFilename)) return fs.readFileSync(headFilename); else return ""; };
