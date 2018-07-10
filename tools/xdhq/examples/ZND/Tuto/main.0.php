@@ -51,36 +51,6 @@ class DOM extends AtlasDOM {
  public $todos = [];
 }
 
-function displayTodos($dom) {
- $tree = new AtlasTree();
- $i = 0;
- $count = count($dom->todos);
-
- $tree->pushTag("Todos");
-
- while ($i < $count) {
-  push($dom->todos[$i], $i, $tree);
-  $i++;
- }
-
- $tree->popTag();
-
- $dom->setLayout("Todos", $tree, "Todos.1.xsl");
-}
-
-function submitNew($dom) {
- $content = $dom->getContent("Input");
- $dom->setContent("Input", "");
-
- if (trim($content) != "") {
-  array_unshift($dom->todos, [
-   'completed' => false,
-   'label' => $content,
-  ]);
-  displayTodos($dom);
- }
-}
-
 function main() {
  $type = null;
 
