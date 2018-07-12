@@ -58,7 +58,7 @@ class MyData extends DOM {
 				"label": "Note 2"
 			}
 		];
-		this.todos = [];
+//		 this.todos = [];
 	}
 	itemsLeft() {
 		var i = this.todos.length;
@@ -71,19 +71,6 @@ class MyData extends DOM {
 
 		return count;
 	}
-}
-
-function push(todo, id, tree) {
-	tree.pushTag('Todo');
-	tree.putAttribute('id', id);
-
-	if (todo["completed"])
-		tree.putAttribute("completed", "true");
-	else
-		tree.putAttribute("completed", "false");
-
-	tree.putValue(todo["label"]);
-	tree.popTag();
 }
 
 function displayCount(dom, count) {
@@ -117,20 +104,22 @@ function handleCount(dom) {
 }
 
 function displayTodos(dom) {
-	var tree = new Tree();
+	var tree = atlas.createTree();
 	var i = 0;
+	var todo;
 
 	dom.index = -1;
 
-	tree.pushTag("Todos");
+	tree = tree.ele("Todos");
 
 	while (i < dom.todos.length) {
-		if (dom.exclude === null || (dom.todos[i]['completed'] != dom.exclude))
-			push(dom.todos[i], i, tree);
+		todo = dom.todos[i];
+		if (dom.exclude === null || (todo['completed'] != dom.exclude))
+				tree = tree.ele('Todo', { 'id': i, 'completed' : todo["completed"] }, todo["label"] ).up();
 		i++;
 	}
 
-	tree.popTag();
+	tree = tree.up();
 
 	dom.setLayout("Todos", tree, "Todos.xsl",
 		() => handleCount(dom)
@@ -144,7 +133,7 @@ function newSession() {
 }
 
 function acConnect(dom, id) {
-	dom.setLayout("", new Tree(), "Main.xsl",
+	dom.setLayout("", atlas.createTree(), "Main.xsl",
 		() => dom.focus("Input",
 			() => displayTodos(dom)
 		)

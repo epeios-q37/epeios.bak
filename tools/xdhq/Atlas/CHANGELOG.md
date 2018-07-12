@@ -3,6 +3,7 @@
 **Common to all bindings!**
 
 ## 2018-04-20
+
 - *atlas-java*
   - simplification,
 - all bindings:

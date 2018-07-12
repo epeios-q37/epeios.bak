@@ -48,23 +48,6 @@ componentFilename = path.join(componentPath, affix + "njs").replace(/\\/g, "\\\\
 const xdhq = njsq._register(componentFilename);
 module.exports = njsq;
 
-class Tree {
-	constructor() {
-		njsq._call(xdhq, 1, this);
-	}
-	pushTag(name) {
-		njsq._call(xdhq, 3, this, name);
-	}
-	popTag() {
-		njsq._call(xdhq, 4, this);
-	}
-	putValue(value) {
-		njsq._call(xdhq, 5, this, value.toString());
-	}
-	putAttribute(name, value) {
-		njsq._call(xdhq, 6, this, name, value.toString());
-	}
-}
 
 // {'a': b, 'c': d, 'e': f} -> ['a','c','e'] [b,d,f]
 function split(keysAndValues, keys, values) {
@@ -107,7 +90,7 @@ class XDH {
 		njsq._call(xdhq, 11, this, message, (result) => callback(result == "true"));
 	}
 	setLayout(id, tree, xslFilename, callback) {
-		njsq._call(xdhq, 12, this, id, tree, xslFilename, callback);
+		njsq._call(xdhq, 12, this, id, tree.end(), xslFilename, callback);
 	}
 	getContents(ids, callback) {
 		njsq._call(xdhq, 13, this, ids,
@@ -209,7 +192,7 @@ module.exports.componentInfo = () => njsq._componentInfo(xdhq);
 module.exports.wrapperInfo = () => njsq._wrapperInfo();
 module.exports.returnArgument = (text) => { return njsq._call(xdhq, 0, text) };
 
-module.exports.Tree = Tree;
+module.exports.createTree = () => require('xmlbuilder').create('XDHTML');
 module.exports.register = register;
 module.exports.launch = launch;
 module.exports.XDH = XDH;

@@ -1,20 +1,26 @@
 # *CHANGELOG* for the *XDHTML* wrappers (*all languages*).
 
+## 2018-07-12
+- *xdhqnjs*:
+  - no more `Tree` object, but a 'createTree()` function returning an object from a *xmlbuilder* module,
+
 ## 2018-04-14
-- *xdhqnjs*
- - adaptation to changes in underlying modules,
+
+- *xdhqnjs*:
+  - adaptation to changes in underlying modules,
 
 ## 2018-04-06
-- *xdhqnjs*
+
+- *xdhqnjs*:
   - using `ProcessBuilder` to launch *Electron* and *httpd*, as `Runtime.exec(...)` seems not to work under *macOS*,
 
 ## 2018-04-04
-- *xdhqnjs*
+- *xdhqnjs*:
  - some modifications to be compatible with *Java* 1.6,
 
 ## 2018-02-27
 
-- *xdhqnjs*
+- *xdhqnjs*:
   - *CTRL-C* now kills the application silently,
 
 ## 2018-02-23
@@ -24,7 +30,7 @@
 
 ## 2018-02-19
 
-- *xdhqznd*
+- *xdhqznd*:
   - adaptation to changes in underlying libraries,
 
 ## 2018-02-16
@@ -39,11 +45,11 @@
 
 ## 2018-01-14
 
-- *xdhqnjs*
+- *xdhqnjs*:
   - all the files served by the *httpd* server are automatically now relative to the directory containing the main *JS* script; it's no more required to give this directory as parameter of the `launch(...)` method,
 
 ## 2018-01-13
 
-- *xdhqnjs*
+- *xdhqnjs*:
   - replacing the *cast* system handling with a system based on *CSS* styles and classes,
   - adding functions to (en|dis)able elements (including styles).

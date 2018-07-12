@@ -153,5 +153,5 @@ function launch(callback, action, type) {
 
 module.exports.register = xdhq.register;
 module.exports.launch = launch;
-module.exports.Tree = xdhq.Tree;
+module.exports.createTree = xdhq.createTree;
 module.exports.DOM = xdhq.XDH;

@@ -457,7 +457,11 @@ SCLNJS_F( xdhp::SetLayout )
 
 	Caller.GetArgument( Arguments.Id );
 
+#if false
 	treep::GetXML( Caller, Arguments.XML );
+#else
+	Caller.GetArgument( Arguments.XML );
+#endif
 
 	Caller.GetArgument( Arguments.XSLFilename, Data.Callback );
 	Arguments.Language = Data.Language;
