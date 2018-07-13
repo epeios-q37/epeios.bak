@@ -46,7 +46,7 @@ if (process.env.EPEIOS_SRC) {
 
 componentFilename = path.join(componentPath, affix + "njs").replace(/\\/g, "\\\\").replace(/'/g, "\\'").replace(/ /g, "\\ ");
 const xdhq = njsq._register(componentFilename);
-module.exports = njsq;
+// module.exports = njsq;
 
 
 // {'a': b, 'c': d, 'e': f} -> ['a','c','e'] [b,d,f]

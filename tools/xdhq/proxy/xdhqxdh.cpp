@@ -43,7 +43,7 @@ qRB;
 	HostService.Init();
 	sclmisc::MGetValue( ::registry::parameter::HostService, HostService );
 
-	Core_.Init( HostService.Convert( Buffer ), 0, sck::NoTimeout );
+//	Core_.Init( HostService.Convert( Buffer ), 0, sck::NoTimeout );
 qRR;
 qRT;
 qRE;
@@ -528,7 +528,8 @@ namespace {
 	  public xdhdws::sProxy
 	{
 	private:
-		csdmnc::rRWDriver Driver_;
+		csdbnc::rRWDriver Driver_;
+//		csdmnc::rRWDriver Driver_;
 		bso::sBool FirstCall_;
 	protected:
 		virtual bso::bool__ XDHCMNLaunch(
@@ -612,7 +613,8 @@ namespace {
 		qRH;
 			flw::sDressedWFlow<> Flow;
 		qRB;
-			Driver_.Init( Core_, fdr::ts_Default );
+//			Driver_.Init( Core_, fdr::ts_Default );
+			Driver_.Init( "localhost:53752", sck::NoTimeout, err::h_Default );
 
 			Flow.Init( Driver_ );
 

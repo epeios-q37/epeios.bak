@@ -19,29 +19,13 @@
 
 "use strict"
 
-var atlasId = "";
+const atlas = require("./Atlas.js");
 
-if (process.env.EPEIOS_SRC) {
-	let epeiosPath = "";
-
-	if (process.platform == 'win32')
-		epeiosPath = "h:/hg/epeios/"
-	else
-		epeiosPath = "~/hg/epeios/"
-
-	atlasId = epeiosPath + "tools/xdhq/Atlas/NJS/Atlas.js";
-} else {
-	atlasId = 'atlastk';
-}
-
-const atlas = require(atlasId);
-
-atlas.register(
+const callbacks = 
 	{
 		"Connect": (dom, id) => dom.setLayout("", atlas.createTree(), "Main.xsl"),
 		"Typing": (dom, id) => dom.getContent(id, (name) => dom.setContent("name", name)),
 		"Clear": (dom, id) => dom.confirm("Are you sure ?", (answer) => { if (answer) dom.setContents({ "input": "", "name": "" } ) } ),
-	}
-);
+	};
 
-atlas.launch(() => new atlas.DOM(), "Connect" );
+atlas.launch(() => new atlas.DOM(), (dom, id) => dom.setLayout("", atlas.createTree(), "Main.xsl"), callbacks );
