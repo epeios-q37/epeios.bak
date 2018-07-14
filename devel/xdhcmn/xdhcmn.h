@@ -186,6 +186,8 @@ namespace xdhcmn {
 		virtual void XDHCMNBaseLanguage( TOL_CBUFFER___ &Buffer ) = 0;
 		virtual cSession *XDHCMNRetrieveCallback(
 			const char *Language,
+			const char *HostService,	// If != NULL, demo. mode with connexion to given host/service,
+										// other wise prod. mode, with host/service retrieved from registry.
 			cProxy *Proxy ) = 0;
 		virtual void XDHCMNReleaseCallback( cSession *Session ) = 0;
 	public:
@@ -202,9 +204,10 @@ namespace xdhcmn {
 		}
 		cSession *RetrieveCallback(
 			const char *Language,
+			const char *HostService,
 			cProxy *Proxy )
 		{
-			return XDHCMNRetrieveCallback( Language, Proxy );
+			return XDHCMNRetrieveCallback( Language, HostService, Proxy );
 		}
 		void ReleaseCallback( cSession *Session )
 		{

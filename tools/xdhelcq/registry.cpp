@@ -22,4 +22,5 @@
 using namespace registry;
 
 rEntry registry::parameter::ModuleFilename( "ModuleFilename", sclrgstry::Parameters );
+rEntry registry::parameter::Server( "Server", sclrgstry::Parameters );
 

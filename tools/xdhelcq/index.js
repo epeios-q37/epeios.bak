@@ -34,10 +34,10 @@ function help() {
 
 if (args.length < 4)
   help();
-else if (args[3][0] == '-')
+else if (args[args.length - 1][0] == '-')
   help();
 
-const cdnPath = path.posix.join(args[3], '/');
+const cdnPath = path.posix.join(args[args.length - 1], '/');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -49,7 +49,7 @@ function createWindow() {
 
 
   // Open the DevTools.
-//  win.webContents.openDevTools();
+  //  win.webContents.openDevTools();
 
   let headFilename = (path.join(cdnPath, "head.html"));
   let head = () => { if (fs.existsSync(headFilename)) return fs.readFileSync(headFilename); else return ""; };
@@ -69,9 +69,9 @@ function createWindow() {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-console.log( "Before !");
+console.log("Before !");
 app.on('ready', createWindow)
-console.log( "After !");
+console.log("After !");
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {

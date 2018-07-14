@@ -878,6 +878,8 @@ namespace sclxdhtml {
 	xdhcmn::cSession *SCLXDHTMLRetrieveCallback(
 		const char *Language,
 		xdhcmn::eMode Mode,
+		const char *HostService,	// If != NULL, demo. mode with connexion to given host/service,
+									// other wise prod. mode, with host/service retrieved from registry.
 		xdhcmn::cProxy *ProxyCallback );	// To define by user.
 
 	void SCLXDHTMLReleaseCallback( xdhcmn::cSession *Callback );	// To define by user.

@@ -283,7 +283,7 @@ namespace {
 	xdhups::agent___ Agent_;
 	TOL_CBUFFER___ LanguageBuffer_, IdentificationBuffer_;
 
-	void InitializeSession_( void )
+	void InitializeSession_( const char *HostService )	// == NULL: prod. mode; !=NULL: demo. mode.
 	{
 	qRH;
 		xdhujp::sProxyCallback *ProxyCallback = NULL;
@@ -309,7 +309,7 @@ namespace {
 		// Library compiled with 'node-gyp', which doesn't put the 'lib' prefix on 'POSIX' systems, hence 'dlbrry::nExtOnly'.
 		Agent_.Init( xdhcmn::mMonoUser, ModuleFilename, dlbrry::nExtOnly,  Identification.Convert( IdentificationBuffer_ ) );
 
-		Session_.Init( Agent_.RetrieveCallback( Agent_.BaseLanguage( LanguageBuffer_ ), ProxyCallback ) );
+		Session_.Init( Agent_.RetrieveCallback( Agent_.BaseLanguage( LanguageBuffer_ ), HostService, ProxyCallback ) );
 		sclmisc::SetBaseLanguage( str::wString( Agent_.BaseLanguage( Buffer ) ) );
 	qRR;
 		if ( ProxyCallback != NULL )
@@ -351,9 +351,10 @@ namespace {
 	{
 	qRFH;
 		v8q::sLString RawArguments;
-		str::wString Arguments, NormalizedArguments;
+		str::wString Arguments, NormalizedArguments, Server;
+		qCBUFFERr Buffer;
 	qRFB;
-		RawArguments.Init( Args[0]);
+		RawArguments.Init( Args[0] );
 
 		Arguments.Init();
 		RawArguments.Get( Arguments );
@@ -363,7 +364,11 @@ namespace {
 
 		sclargmnt::FillRegistry( NormalizedArguments, sclargmnt::faIsCommand, sclargmnt::uaIgnore );
 
-		InitializeSession_();
+		Server.Init();
+		if ( sclmisc::OGetValue( registry::parameter::Server, Server ) )
+			Server.Convert( Buffer );
+
+		InitializeSession_( Buffer );
 	qRFR;
 	qRFT;
 	qRFE( ErrFinal_() );

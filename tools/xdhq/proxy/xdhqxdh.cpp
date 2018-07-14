@@ -41,9 +41,9 @@ qRH;
 	str::wString HostService;
 qRB;
 	HostService.Init();
-	sclmisc::MGetValue( ::registry::parameter::HostService, HostService );
 
-//	Core_.Init( HostService.Convert( Buffer ), 0, sck::NoTimeout );
+	if ( sclmisc::OGetValue( ::registry::parameter::HostService, HostService ) )
+		Core_.Init( HostService.Convert( Buffer ), 0, sck::NoTimeout );
 qRR;
 qRT;
 qRE;
@@ -523,14 +523,38 @@ namespace {
 	qRE;
 	}
 
+	qENUM( Mode_ ) {
+		mDemo,	// Demo mode, direct connexion (not muxed) through the easy to install component.
+		mProd,	// Production mode, muxed connexion through the native component.
+		m_amount,
+		m_Undefined
+	};
+
 	class rSession_
 	: public xdhcmn::cSession,
 	  public xdhdws::sProxy
 	{
 	private:
-		csdbnc::rRWDriver Driver_;
-//		csdmnc::rRWDriver Driver_;
+		eMode_ Mode_;
+		csdbnc::rRWDriver DemoDriver_;
+		csdmnc::rRWDriver ProdDriver_;
 		bso::sBool FirstCall_;
+		fdr::rRWDriver &D_( void )
+		{
+			switch ( Mode_ ) {
+			case mDemo:
+				return DemoDriver_;
+				break;
+			case mProd:
+				return ProdDriver_;
+				break;
+			default:
+				qRGnr();
+				break;
+			}
+
+			return *(fdr::rRWDriver *)NULL;	// To avoid a warning.
+		}
 	protected:
 		virtual bso::bool__ XDHCMNLaunch(
 			const char *Id,
@@ -541,7 +565,7 @@ namespace {
 			bso::sBool Continue = true;
 			flw::sDressedRWFlow<> Flow;
 		qRB;
-			Flow.Init( Driver_ );
+			Flow.Init( D_() );
 
 			if ( FirstCall_ ) {
 				if ( prtcl::GetAnswer( Flow ) != prtcl::aOK_1 )
@@ -602,21 +626,32 @@ namespace {
 	public:
 		void reset( bso::sBool P = true )
 		{
+			tol::reset( P, DemoDriver_, ProdDriver_ );
+			Mode_ = m_Undefined;
 			xdhdws::sProxy::reset( P );
 			FirstCall_ = false;
 		}
 		qCVDTOR( rSession_ )
 		void Init(
 			xdhcmn::cProxy *Callback,
-			const char *Language )
+			const char *Language,
+			const char *HostService )
 		{
 		qRH;
 			flw::sDressedWFlow<> Flow;
 		qRB;
-//			Driver_.Init( Core_, fdr::ts_Default );
-			Driver_.Init( "localhost:53752", sck::NoTimeout, err::h_Default );
+			tol::reset( DemoDriver_, ProdDriver_ );
+			Mode_ = m_Undefined;
 
-			Flow.Init( Driver_ );
+			if ( HostService == NULL ) {
+				ProdDriver_.Init( Core_, fdr::ts_Default );
+				Mode_ = mProd;
+			} else {
+				DemoDriver_.Init( HostService, sck::NoTimeout, err::h_Default );
+				Mode_ = mDemo;
+			}
+
+			Flow.Init( D_() );
 
 			csdcmn::SendProtocol( prtcl::ProtocolId, prtcl::ProtocolVersion, Flow );
 
@@ -630,18 +665,18 @@ namespace {
 
 			Flow.reset();
 
-			Driver_.Dismiss( true );
+			D_().Dismiss( true );
 		qRR;
 		qRT;
 		qRE;
 		}
 		operator fdr::rRWDriver &( void )
 		{
-			return Driver_;
+			return D_();
 		}
 		fdr::rRWDriver &Driver( void )
 		{
-			return Driver_;
+			return D_();
 		}
 	};
 }
@@ -649,6 +684,7 @@ namespace {
 xdhcmn::cSession *sclxdhtml::SCLXDHTMLRetrieveCallback(
 	const char *Language,
 	xdhcmn::eMode Mode,
+	const char *HostService,
 	xdhcmn::cProxy *ProxyCallback )
 {
 	rSession_ *Session = new rSession_;
@@ -657,7 +693,7 @@ xdhcmn::cSession *sclxdhtml::SCLXDHTMLRetrieveCallback(
 	if ( Session == NULL )
 		qRGnr();
 
-	Session->Init( ProxyCallback, Language );
+	Session->Init( ProxyCallback, Language, HostService );
 
 	// WARNING ! In 'MultiUser' mode, 'ProxyCallback' is not correctly set yet!
 /*	if ( Mode == xdhcmn::mMonoUser ) {

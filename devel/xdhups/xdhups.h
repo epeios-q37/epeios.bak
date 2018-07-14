@@ -87,9 +87,10 @@ namespace xdhups {
 			const char *Identification );
 		cSession_ *RetrieveCallback(
 			const char *Language,
+			const char *HostService,	// NULL: prod. mode; !=NULL: demo. mode.
 			xdhcmn::cProxy *Callback )
 		{
-			return C_().RetrieveCallback( Language, Callback );
+			return C_().RetrieveCallback( Language, HostService, Callback );
 		}
 		const char *BaseLanguage( TOL_CBUFFER___ &Buffer ) const
 		{

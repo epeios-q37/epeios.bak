@@ -30,7 +30,9 @@ namespace registry {
 	namespace parameter {
 		using namespace sclrgstry::parameter;
 
-		extern rEntry ModuleFilename;
+		extern rEntry
+			ModuleFilename,
+			Server;	// If defined, demo mode, else prod mode, the server host/service is retrieved by proxy from registry.
 	}
 
 	namespace definition {

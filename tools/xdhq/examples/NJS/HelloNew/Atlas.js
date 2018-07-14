@@ -85,7 +85,7 @@ function launchWeb(dir) {
 }
 
 function launchDesktop(dir) {
-  require('child_process').spawn(electronBin, [path.join(xdhelcqPath, "index.js"), "-m=" + xdhelcqBin, dir]).on('close', function (code) {
+  require('child_process').spawn(electronBin, [path.join(xdhelcqPath, "index.js"), "-s=localhost:53752", "-m=" + xdhelcqBin, dir]).on('close', function (code) {
     process.exit(code)
   });
 }
@@ -163,15 +163,19 @@ function getAction(query) {
   return getString(query, 9 + getSize(query, 9) + 1);
 }
 
-// Types of the returned value.
+// Types of the reponse.
 const types = {
-  NONE: 0,
-  STRING: 1,
-  STRINGS: 2
+  UNDEFINED: 0, // No pending response.
+  NONE: 1,
+  STRING: 2,
+  STRINGS: 3
 }
 
 function getResponse(query, type) {
   switch (type) {
+    case types.UNDEFINED:
+      throw "This function should not be called with UNDEFINED type !!!";
+      break;
     case types.NONE:
       throw "The NONE type should be handled upstream !!!";
       break;
@@ -223,15 +227,15 @@ function launch(create, callback, callbacks, gui) {
     //		c.on('data', function(chunk) {console.log( ">" + chunk.toString() + "<" ) });
     c.on('readable', () => {
 
-      if (c._dom === undefined) {
+      if (c._xdhDOM === undefined) {
         var data;
 
         while (data = c.read())
           console.log(">" + data + ' ||| ' + Buffer.from(data) + "<");
 
-        c._dom = create(c);
-        c._dom._callbacks = callbacks;
-        c._dom._socket = c;
+        c._xdhDOM = create(c);
+        c._xdhCallbacks = callbacks;
+        c._xdhDOM._xdhSocket = c;
 
         c.write(Buffer.from("OK_1\x00"));
       } else {
@@ -249,33 +253,37 @@ function launch(create, callback, callbacks, gui) {
           console.log("action: '" + action + "', id: '" + id + "'");
 
           if (action == "") {
-            callback(c._dom, "");
+            callback(c._xdhDOM, "");
             //            c.write(Buffer.from("OK_1\x00"));
           } else {
-            c._dom._callbacks[action](c._dom, id);
-//            c.write(Buffer.from("OK_1\x00"));
+            c._xdhCallbacks[action](c._xdhDOM, id);
+            //            c.write(Buffer.from("OK_1\x00"));
           }
         } else {
-          console.log("READY !!!", c._dom._type );
-          if (c._dom._type === types.NONE) {
-            if (c._dom._callback != undefined)
-              c._dom._callback();
-             else
+          console.log("READY !!!", c._xdhDOM._xdhType);
+          if (c._xdhDOM._xdhType === types.NONE) {
+            if (c._xdhDOM._xdhCallback != undefined) {
+              c._xdhDOM._xdhType = types.UNDEFINED;
+              c._xdhDOM._xdhCallback();
+              if (c._xdhDOM._xdhType === types.UNDEFINED)
+                c.write(Buffer.from("OK_1\x00"));
+            } else
               c.write(Buffer.from("OK_1\x00"));
-          } else if (c._dom._callback != undefined) {
-            c._dom._callback(getResponse(query, c._dom._type));
+          } else if (c._xdhDOM._xdhCallback != undefined) {
+            var type = c._xdhDOM._xdhType;
+            c._xdhDOM._xdhType = types.UNDEFINED;
+            c._xdhDOM._xdhCallback(getResponse(query, type));
+            if (c._xdhDOM._xdhType === types.UNDEFINED)
+              c.write(Buffer.from("OK_1\x00"));
           } else {
-            getResponse(query, c._dom._type);
+            getResponse(query, c._xdhDOM._xdhType);
             c.write(Buffer.from("OK_1\x00"));
           }
         }
       }
-    }
-   );
+    });
 
     console.log('client connected');
-    //  c.write('hello\r\n');
-    //  c.pipe(c);
   });
   server.on('error', (err) => {
     throw err;
@@ -341,41 +349,41 @@ function call(dom, command, type, callback) {
     i++;
   }
 
-  dom._type = type;
-  dom._callback = callback;
+  dom._xdhType = type;
+  dom._xdhCallback = callback;
 
   console.log("Data: ", data.toString());
-  dom._socket.write(data);
+  dom._xdhSocket.write(data);
 }
 
 // {'a': b, 'c': d, 'e': f} -> ['a','c','e'] [b,d,f]
 function split(keysAndValues, keys, values) {
-	for (var prop in keysAndValues) {
-		keys.push(prop);
-		values.push(keysAndValues[prop]);
-	}
+  for (var prop in keysAndValues) {
+    keys.push(prop);
+    values.push(keysAndValues[prop]);
+  }
 }
 
 // ['a', 'b', 'c'] ['d', 'e', 'f'] -> { 'a': 'd', 'b': 'e', 'c': 'f' }
 function unsplit(keys, values) {
-	var i = 0;
-	var keysValues = {};
+  var i = 0;
+  var keysValues = {};
 
-	while (i < keys.length) {
-		keysValues[keys[i]] = values[i];
-		i++;
-	}
+  while (i < keys.length) {
+    keysValues[keys[i]] = values[i];
+    i++;
+  }
 
-	return keysValues;
+  return keysValues;
 }
 
 // 'key', value -> { 'key': value } 
 function merge(key, value) {
-	var keyValue = {};
+  var keyValue = {};
 
-	keyValue[key] = value;
+  keyValue[key] = value;
 
-	return keyValue;
+  return keyValue;
 }
 
 class DOM {
@@ -383,27 +391,27 @@ class DOM {
     call(this, "SetLayout_1", types.NONE, callback, id, tree.end(), xslFilename);
   }
   getContents(ids, callback) {
-    call(this, "GetContents_1", types.STRINGS, (contents) => callback( unsplit(ids, contents) ), ids);
+    call(this, "GetContents_1", types.STRINGS, (contents) => callback(unsplit(ids, contents)), ids);
   }
   getContent(id, callback) {
     this.getContents([id], (result) => { callback(result[id]); });
   }
-	setContents(idsAndContents, callback) {
-		var ids = [];
-		var contents = [];
+  setContents(idsAndContents, callback) {
+    var ids = [];
+    var contents = [];
 
-    console.log( "!!!!!", idsAndContents);
+    console.log("!!!!!", idsAndContents);
 
     split(idsAndContents, ids, contents);
-    
-    call(this, "SetContents_1", types.NONE, callback, ids, contents );
+
+    call(this, "SetContents_1", types.NONE, callback, ids, contents);
   }
   setContent(id, content, callback) {
-		this.setContents(merge(id, content), callback);
+    this.setContents(merge(id, content), callback);
   }
-	confirm(message, callback) {
-		call(this, "Confirm_1", types.STRING, (result) => callback(result == "true"), message );
-	}
+  confirm(message, callback) {
+    call(this, "Confirm_1", types.STRING, (result) => callback(result == "true"), message);
+  }
 }
 
 module.exports.register = xdhq.register;

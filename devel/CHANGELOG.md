@@ -5,6 +5,15 @@
 - [adpt]: Adaptation to changes in underlying modules;
 - [stdz]: modification to comply with current standards;
 
+## 2018-07-14
+
+- SCLXDHTML
+  - introducing *Demo* mode,
+- XDHCMN
+  - introducing *Demo* mode,
+- XDHUPS:
+  - introducing *Demo* mode,
+
 ## 2018-07-04
 
 - MSCMDD:
