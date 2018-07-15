@@ -61,6 +61,7 @@ const scli::sInfo &sclnjs::SCLNJSRegister( sclnjs::sRegistrar &Registrar )
 	Registrar.Register( xdhp::AddClasses, xdhp::RemoveClasses, xdhp::ToggleClasses, xdhp::EnableElements, xdhp::DisableElements );	// 16 - 20.
 	Registrar.Register( xdhp::SetAttribute, xdhp::GetAttribute, xdhp::RemoveAttribute, xdhp::SetProperty, xdhp::GetProperty );	// 21 - 25.
 	Registrar.Register( xdhp::Focus );	// 26.
+	Registrar.Register( xdhp::New );	// 27.
 
 	return xdhqnjs::Info;
 }

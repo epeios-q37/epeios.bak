@@ -21,6 +21,7 @@
 # define PRXY_SEND_INC_
 
 # include "prxy_cmn.h"
+# include "crt.h"
 
 namespace prxy_send {
 	struct rArguments
@@ -39,10 +40,27 @@ namespace prxy_send {
 		}
 	};
 
+	struct rNewArguments
+	{
+	public:
+		str::wStrings Strings;
+		crt::qCRATEwl( str::dStrings ) Arrays;
+		void reset( bso::sBool P = true )
+		{
+			tol::reset( Strings, Arrays );
+		}
+		qCDTOR( rNewArguments );
+		void Init( void )
+		{
+			tol::Init( Strings, Arrays );
+		}
+	};
+
 	void Send(
 		prxy_cmn::eRequest Request,
 		flw::sWFlow &Flow,
-		const rArguments &Arguments );
+		const rArguments &Arguments,
+		const rNewArguments &NewArguments );
 }
 
 #endif

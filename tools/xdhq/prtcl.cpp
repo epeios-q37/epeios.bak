@@ -140,7 +140,7 @@ eCommand prtcl::GetCommand( flw::iflow__ &Flow )
 	return stsfsm::GetId( Flow, CommandAutomat_, c_Undefined, c_amount );
 }
 
-void prtcl::LaunchCommand(
+void prtcl::SendCommand(
 	eCommand Command,
 	flw::oflow__ &Flow )
 {

@@ -63,6 +63,31 @@ namespace {
 template <> void scln4::Get(
 	int Index,
 	cCaller_ &Caller,
+	rInt &Int )
+{
+	Get_<n4njs::cUInt>( Index, Caller, n4njs::tInt, Int );
+}
+
+template <> void scln4::Get(
+	int Index,
+	cCaller_ &Caller,
+	int &Target )
+{
+qRH;
+	rInt Int;
+qRB;
+	Int.Init();
+	Get( Index, Caller, Int );
+
+	Target = Int.Get();
+qRR;
+qRT;
+qRE;
+}
+
+template <> void scln4::Get(
+	int Index,
+	cCaller_ &Caller,
 	sclnjs::rString &String )
 {
 	Get_<n4njs::cUString>( Index, Caller, n4njs::tString, String );

@@ -83,7 +83,7 @@ namespace prtcl {
 
 	eCommand GetCommand( flw::iflow__ &Flow );
 
-	void LaunchCommand(
+	void SendCommand(
 		eCommand Command,
 		flw::oflow__ &Flow );
 

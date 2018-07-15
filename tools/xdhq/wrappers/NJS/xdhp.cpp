@@ -589,11 +589,48 @@ SCLNJS_F( xdhp::SetProperty )
 
 SCLNJS_F( xdhp::Focus )
 {
-	ARGS_BEGIN( Focus );
+	ARGS_BEGIN( Focus_ );
 
 	Caller.GetArgument( Arguments.Id, Data.Callback );
 
 	ARGS_END;
+}
+
+SCLNJS_F( xdhp::New )
+{
+qRH;
+	rData_ &Data = GetData_( Caller );
+	proxy::rNewArguments &Arguments = Data.Sent.NewArguments;
+	int Amount = 0;
+	str::wString String;
+	str::wStrings Strings;
+qRB;
+	Data.Sent.WriteBegin();
+	Data.Request = prxy_cmn::rNew;
+	Arguments.Init();
+
+	Caller.GetArgument( Data.Callback );
+
+	Caller.GetArgument( Amount );
+
+	while ( Amount-- ) {
+		String.Init();
+		Caller.GetArgument( String );
+		Arguments.Strings.Append( String );
+	}
+
+	Caller.GetArgument( Amount );
+
+	while ( Amount-- ) {
+		Strings.Init();
+		Caller.GetArgument( Strings );
+		Arguments.Arrays.Append( Strings );
+	}
+
+	Data.Sent.WriteEnd();
+qRR;
+qRT;
+qRE;
 }
 
 qGCTOR( xdhp )

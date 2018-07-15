@@ -237,7 +237,7 @@ function launch(create, callback, callbacks, gui) {
         c._xdhCallbacks = callbacks;
         c._xdhDOM._xdhSocket = c;
 
-        c.write(Buffer.from("OK_1\x00"));
+        c.write(Buffer.from("StandBy_1\x00"));
       } else {
         var query;
 
@@ -254,10 +254,10 @@ function launch(create, callback, callbacks, gui) {
 
           if (action == "") {
             callback(c._xdhDOM, "");
-            //            c.write(Buffer.from("OK_1\x00"));
+            //            c.write(Buffer.from("StandBy_1\x00"));
           } else {
             c._xdhCallbacks[action](c._xdhDOM, id);
-            //            c.write(Buffer.from("OK_1\x00"));
+            //            c.write(Buffer.from("StandBy_1\x00"));
           }
         } else {
           console.log("READY !!!", c._xdhDOM._xdhType);
@@ -266,18 +266,18 @@ function launch(create, callback, callbacks, gui) {
               c._xdhDOM._xdhType = types.UNDEFINED;
               c._xdhDOM._xdhCallback();
               if (c._xdhDOM._xdhType === types.UNDEFINED)
-                c.write(Buffer.from("OK_1\x00"));
+                c.write(Buffer.from("StandBy_1\x00"));
             } else
-              c.write(Buffer.from("OK_1\x00"));
+              c.write(Buffer.from("StandBy_1\x00"));
           } else if (c._xdhDOM._xdhCallback != undefined) {
             var type = c._xdhDOM._xdhType;
             c._xdhDOM._xdhType = types.UNDEFINED;
             c._xdhDOM._xdhCallback(getResponse(query, type));
             if (c._xdhDOM._xdhType === types.UNDEFINED)
-              c.write(Buffer.from("OK_1\x00"));
+              c.write(Buffer.from("StandBy_1\x00"));
           } else {
             getResponse(query, c._xdhDOM._xdhType);
-            c.write(Buffer.from("OK_1\x00"));
+            c.write(Buffer.from("StandBy_1\x00"));
           }
         }
       }

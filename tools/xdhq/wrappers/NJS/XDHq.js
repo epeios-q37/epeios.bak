@@ -89,8 +89,11 @@ class XDH {
 	confirm(message, callback) {
 		njsq._call(xdhq, 11, this, message, (result) => callback(result == "true"));
 	}
-	setLayout(id, tree, xslFilename, callback) {
+	setLayoutOld(id, tree, xslFilename, callback) {
 		njsq._call(xdhq, 12, this, id, tree.end(), xslFilename, callback);
+	}
+	setLayoutNew(id, tree, xslFilename, callback) {
+		njsq._call(xdhq, 27, this, callback, 3, id, tree.end(), xslFilename, 0);
 	}
 	getContents(ids, callback) {
 		njsq._call(xdhq, 13, this, ids,

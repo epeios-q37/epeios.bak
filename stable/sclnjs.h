@@ -123,6 +123,7 @@ namespace sclnjs {
 
 	};
 
+	typedef rBase_<int, n4njs::cUInt> rInt;
 	typedef rBase_<str::dString, n4njs::cUString> rString;
 	typedef rBase_<str::dStrings, n4njs::cUStrings> rStrings;
 	typedef rBase_<n4njs::dCallbacks, n4njs::cUCallbacks> rCallbacks;

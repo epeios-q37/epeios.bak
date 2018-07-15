@@ -31,6 +31,7 @@
 
 namespace proxy {
 	using prxy_send::rArguments;
+	using prxy_send::rNewArguments;
 	using prxy_recv::rReturn;
 
 	typedef tht::rReadWrite rControl_;
@@ -64,16 +65,17 @@ namespace proxy {
 	{
 	public:
 		rArguments Arguments;
+		rNewArguments NewArguments;
 		void reset( bso::sBool P = true )
 		{
 			rControl_::reset( P );
-			tol::reset( P, Arguments );
+			tol::reset( P, Arguments, NewArguments );
 		}
 		qCDTOR( rSent );
 		void Init( void )
 		{
 			rControl_::Init();
-			tol::Init( Arguments );
+			tol::Init( Arguments, NewArguments );
 		}
 	};
 
@@ -158,7 +160,7 @@ namespace proxy {
 				Handshake_( Flow, Data.Language );
 				Data.Handshaked = true;
 
-				prtcl::LaunchCommand( prtcl::cStandBy_1, Flow );
+				prtcl::SendCommand( prtcl::cStandBy_1, Flow );
 				Flow.Commit();
 			} else {
 				if ( Data.Request != prxy_cmn::r_Undefined ) {
@@ -186,9 +188,9 @@ namespace proxy {
 
 				// 'Data.Request' is set by the 'PRXYOn...' method above.
 				if ( Data.Request != prxy_cmn::r_Undefined )
-					prxy_send::Send( Data.Request, Flow, Data.Sent.Arguments );
+					prxy_send::Send( Data.Request, Flow, Data.Sent.Arguments, Data.Sent.NewArguments );
 				else
-					prtcl::LaunchCommand( prtcl::cStandBy_1, Flow );
+					prtcl::SendCommand( prtcl::cStandBy_1, Flow );
 
 				Data.Sent.ReadEnd();
 			}

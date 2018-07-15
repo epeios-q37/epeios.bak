@@ -27,7 +27,7 @@ void prxy_cmn::execute::S(
 	const str::dString &Script,
 	flw::sWFlow &Flow )
 {
-	prtcl::LaunchCommand( prtcl::cExecute_1, Flow );
+	prtcl::SendCommand( prtcl::cExecute_1, Flow );
 	prtcl::Put( Script, Flow );
 	Flow.Commit();
 }
@@ -44,7 +44,7 @@ void prxy_cmn::alert::S(
 	const str::dString &Message,
 	flw::sWFlow &Flow )
 {
-	prtcl::LaunchCommand( prtcl::cAlert_1, Flow );
+	prtcl::SendCommand( prtcl::cAlert_1, Flow );
 	prtcl::Put( Message, Flow );
 	Flow.Commit();
 }
@@ -53,7 +53,7 @@ void prxy_cmn::confirm::S(
 	const str::dString &Message,
 	flw::sWFlow &Flow )
 {
-	prtcl::LaunchCommand( prtcl::cConfirm_1, Flow );
+	prtcl::SendCommand( prtcl::cConfirm_1, Flow );
 	prtcl::Put( Message, Flow );
 	Flow.Commit();
 }
@@ -74,7 +74,7 @@ namespace {
 		const str::dString &XSL,
 		flw::sWFlow &Flow )
 	{
-		prtcl::LaunchCommand( Command, Flow );
+		prtcl::SendCommand( Command, Flow );
 		prtcl::Put( Id, Flow );
 		prtcl::Put( XML, Flow );
 		prtcl::Put( XSL, Flow );
@@ -131,7 +131,7 @@ void prxy_cmn::contents::get::S(
 	const str::dStrings &Ids,
 	flw::sWFlow &Flow )
 {
-	prtcl::LaunchCommand( prtcl::cGetContents_1, Flow );
+	prtcl::SendCommand( prtcl::cGetContents_1, Flow );
 	prtcl::Put( Ids, Flow );
 	Flow.Commit();
 }
@@ -149,7 +149,7 @@ void prxy_cmn::contents::set::S(
 	const str::dStrings & Contents,
 	flw::sWFlow & Flow )
 {
-	prtcl::LaunchCommand( prtcl::cSetContents_1, Flow );
+	prtcl::SendCommand( prtcl::cSetContents_1, Flow );
 	prtcl::Put( Ids, Flow );
 	prtcl::Put( Contents, Flow );
 	Flow.Commit();
@@ -159,7 +159,7 @@ void prxy_cmn::widgets::dress::S(
 	const str::dString &Id,
 	flw::sWFlow &Flow )
 {
-	prtcl::LaunchCommand( prtcl::cDressWidgets_1, Flow );
+	prtcl::SendCommand( prtcl::cDressWidgets_1, Flow );
 	prtcl::Put( Id, Flow );
 	Flow.Commit();
 }
@@ -171,7 +171,7 @@ namespace {
 		prtcl::eCommand Command,
 		flw::sWFlow & Flow )
 	{
-		prtcl::LaunchCommand( Command, Flow );
+		prtcl::SendCommand( Command, Flow );
 		prtcl::Put( Ids, Flow );
 		prtcl::Put( Classes, Flow );
 		Flow.Commit();
@@ -208,7 +208,7 @@ namespace {
 		prtcl::eCommand Command,
 		flw::sWFlow & Flow )
 	{
-		prtcl::LaunchCommand( Command, Flow );
+		prtcl::SendCommand( Command, Flow );
 		prtcl::Put( Ids, Flow );
 		Flow.Commit();
 	}
@@ -236,7 +236,7 @@ void prxy_cmn::ap_::set::S(
 	const str::dString &Value,
 	flw::sWFlow &Flow )
 {
-	prtcl::LaunchCommand( Command, Flow );
+	prtcl::SendCommand( Command, Flow );
 	prtcl::Put( Id, Flow );
 	prtcl::Put( Name, Flow );
 	prtcl::Put( Value, Flow );
@@ -249,7 +249,7 @@ void prxy_cmn::ap_::get::S(
 	const str::dString &Name,
 	flw::sWFlow &Flow )
 {
-	prtcl::LaunchCommand( Command, Flow );
+	prtcl::SendCommand( Command, Flow );
 	prtcl::Put( Id, Flow );
 	prtcl::Put( Name, Flow );
 	Flow.Commit();
@@ -268,7 +268,7 @@ void prxy_cmn::attribute::remove::S(
 	const str::dString &Name,
 	flw::sWFlow &Flow )
 {
-	prtcl::LaunchCommand( prtcl::cRemoveAttribute_1, Flow );
+	prtcl::SendCommand( prtcl::cRemoveAttribute_1, Flow );
 	prtcl::Put( Id, Flow );
 	prtcl::Put( Name, Flow );
 	Flow.Commit();
@@ -278,7 +278,7 @@ void prxy_cmn::focus::S(
 	const str::dString &Id,
 	flw::sWFlow &Flow )
 {
-	prtcl::LaunchCommand( prtcl::cFocus_1, Flow );
+	prtcl::SendCommand( prtcl::cFocus_1, Flow );
 	prtcl::Put( Id, Flow );
 	Flow.Commit();
 }

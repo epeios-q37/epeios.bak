@@ -7,6 +7,8 @@
 
 ## 2018-07-15
 
+- SCLNJS:
+  - handling `int`parameter,
 - XDHDWS:
   - adding`Proxy::Execute(...)` variant,
 

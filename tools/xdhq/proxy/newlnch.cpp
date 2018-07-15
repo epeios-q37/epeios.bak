@@ -235,6 +235,13 @@ void newlnch::Launch(
 {
 qRH;
 	str::wString Command;
+	{
+		qRH;
+		qRB;
+		qRR;
+		qRT;
+		qRE;
+	}
 	sAmount_
 		StringsAmount = 0,
 		MergedStringsAmount = 0;

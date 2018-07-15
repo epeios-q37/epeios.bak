@@ -45,6 +45,7 @@ namespace xdhp {
 	SCLNJS_F( SetProperty );
 	SCLNJS_F( GetProperty );
 	SCLNJS_F( Focus );
+	SCLNJS_F( New );	// Will replace all other commands (except the 2 first ones).
 }
 
 #endif

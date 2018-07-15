@@ -45,7 +45,8 @@ namespace prxy_cmn {
 		rRemoveAttribute,
 		rSetProperty,
 		rGetProperty,
-		rFocus,
+		rFocus_,
+		rNew,
 		r_amount,
 		r_Undefined
 	};

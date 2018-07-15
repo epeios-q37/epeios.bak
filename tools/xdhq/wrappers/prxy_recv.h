@@ -25,6 +25,7 @@
 namespace prxy_recv {
 	qENUM( Type )
 	{
+		tVoid,
 		tString,
 		tStrings,
 		t_amount,
