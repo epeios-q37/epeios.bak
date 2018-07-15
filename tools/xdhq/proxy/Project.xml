@@ -45,6 +45,7 @@
 				<xpp:expand select="XDH"/>
 			</Modules>
 		</Modules>
+		<Module>newlnch</Module>
 		<Module>registry</Module>
 		<Module Path="../">prtcl</Module>
 	</Modules>

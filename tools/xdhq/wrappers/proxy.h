@@ -158,7 +158,7 @@ namespace proxy {
 				Handshake_( Flow, Data.Language );
 				Data.Handshaked = true;
 
-				prtcl::PutAnswer( prtcl::aOK_1, Flow );
+				prtcl::LaunchCommand( prtcl::cStandBy_1, Flow );
 				Flow.Commit();
 			} else {
 				if ( Data.Request != prxy_cmn::r_Undefined ) {
@@ -188,7 +188,7 @@ namespace proxy {
 				if ( Data.Request != prxy_cmn::r_Undefined )
 					prxy_send::Send( Data.Request, Flow, Data.Sent.Arguments );
 				else
-					prtcl::PutAnswer( prtcl::aOK_1, Flow );
+					prtcl::LaunchCommand( prtcl::cStandBy_1, Flow );
 
 				Data.Sent.ReadEnd();
 			}

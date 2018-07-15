@@ -5,6 +5,11 @@
 - [adpt]: Adaptation to changes in underlying modules;
 - [stdz]: modification to comply with current standards;
 
+## 2018-07-15
+
+- XDHDWS:
+  - adding`Proxy::Execute(...)` variant,
+
 ## 2018-07-14
 
 - SCLXDHTML

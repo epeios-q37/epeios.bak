@@ -19,6 +19,7 @@
 
 #include "xdhqxdh.h"
 
+#include "newlnch.h"
 #include "registry.h"
 
 #include "prtcl.h"
@@ -568,7 +569,7 @@ namespace {
 			Flow.Init( D_() );
 
 			if ( FirstCall_ ) {
-				if ( prtcl::GetAnswer( Flow ) != prtcl::aOK_1 )
+				if ( prtcl::GetCommand( Flow ) != prtcl::cStandBy_1 )
 					qRGnr();
 
 				Flow.Dismiss();
@@ -583,15 +584,15 @@ namespace {
 			Flow.Commit();
 
 # define H( name )\
-	case prtcl::a##name##_1:\
+	case prtcl::c##name##_1:\
 		::name##_( Flow, *this );\
 		break
 
 			while( Continue )
-				switch ( prtcl::GetAnswer( Flow ) ) {
-				case prtcl::aOK_1:
+				switch ( prtcl::GetCommand( Flow ) ) {
+				case prtcl::cStandBy_1:
 					Return = true;
-				case prtcl::aError_1:
+				case prtcl::cError_1:
 					Continue = false;
 					Flow.Dismiss();
 					break;
@@ -613,6 +614,9 @@ namespace {
 				H( SetProperty );
 				H( GetProperty );
 				H( Focus );
+				case prtcl::cNew:	// This command will replace all the above ones (except the 2 first).
+					newlnch::Launch( Flow, *this );
+					break;
 				default:
 					qRGnr();
 					break;

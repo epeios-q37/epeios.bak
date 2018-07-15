@@ -59,12 +59,25 @@ namespace xdhdws {
 			Callback_ = Callback;
 		}
 		const char *Execute(
-			const nstring___ &Message,
+			const nstring___ &Script,
 			TOL_CBUFFER___ &Buffer )
 		{
-			C_().Process( xdhcmn::fExecute, &Buffer, Message.Internal()() );
+			C_().Process( xdhcmn::fExecute, &Buffer, Script.Internal()() );
 
 			return Buffer;
+		}
+		const str::dString &Execute(
+			const nstring___ &Script,
+			str::dString &Result )
+		{
+		qRH;
+			qCBUFFERr Buffer;
+		qRB;
+			Result.Append( Execute( Script, Buffer ) );
+		qRR;
+		qRT;
+		qRE;
+			return Result;
 		}
 		void Log( const nstring___ &Message )
 		{

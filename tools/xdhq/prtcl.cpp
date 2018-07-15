@@ -84,12 +84,12 @@ void prtcl::PutRequest(
 	Put_( Request, Flow, GetLabel );
 }
 
-#define C( name ) case a##name : return #name ; break
+#define C( name ) case c##name : return #name ; break
 
-const char *prtcl::GetLabel( eAnswer Answer )
+const char *prtcl::GetLabel( eCommand Command )
 {
-	switch ( Answer ) {
-		C( OK_1 );
+	switch ( Command ) {
+		C( StandBy_1 );
 		C( Error_1 );
 		C( Execute_1 );
 		C( Alert_1 );
@@ -109,6 +109,7 @@ const char *prtcl::GetLabel( eAnswer Answer )
 		C( SetProperty_1 );
 		C( GetProperty_1 );
 		C( Focus_1 );
+		C( New );
 	default:
 		qRFwk();
 		break;
@@ -120,37 +121,37 @@ const char *prtcl::GetLabel( eAnswer Answer )
 #undef C
 
 namespace {
-	stsfsm::wAutomat AnswerAutomat_;
+	stsfsm::wAutomat CommandAutomat_;
 
-	void FillAnswerAutomat_( void )
+	void FillCommandAutomat_( void )
 	{
-		AnswerAutomat_.Init();
-		stsfsm::Fill<eAnswer>( AnswerAutomat_, a_amount, GetLabel );
+		CommandAutomat_.Init();
+		stsfsm::Fill<eCommand>( CommandAutomat_, c_amount, GetLabel );
 	}
 }
 
-eAnswer prtcl::GetAnswer( const str::dString &Pattern )
+eCommand prtcl::GetCommand( const str::dString &Pattern )
 {
-	return stsfsm::GetId( Pattern, AnswerAutomat_, a_Undefined, a_amount );
+	return stsfsm::GetId( Pattern, CommandAutomat_, c_Undefined, c_amount );
 }
 
-eAnswer prtcl::GetAnswer( flw::iflow__ &Flow )
+eCommand prtcl::GetCommand( flw::iflow__ &Flow )
 {
-	return stsfsm::GetId( Flow, AnswerAutomat_, a_Undefined, a_amount );
+	return stsfsm::GetId( Flow, CommandAutomat_, c_Undefined, c_amount );
 }
 
-void prtcl::PutAnswer(
-	eAnswer Answer,
+void prtcl::LaunchCommand(
+	eCommand Command,
 	flw::oflow__ &Flow )
 {
-	Put_( Answer, Flow, GetLabel );
+	Put_( Command, Flow, GetLabel );
 }
 
 namespace {
 	void FillAutomats_( void )
 	{
 		FillRequestAutomat_();
-		FillAnswerAutomat_();
+		FillCommandAutomat_();
 	}
 }
 

@@ -27,7 +27,7 @@ void prxy_cmn::execute::S(
 	const str::dString &Script,
 	flw::sWFlow &Flow )
 {
-	prtcl::PutAnswer( prtcl::aExecute_1, Flow );
+	prtcl::LaunchCommand( prtcl::cExecute_1, Flow );
 	prtcl::Put( Script, Flow );
 	Flow.Commit();
 }
@@ -44,7 +44,7 @@ void prxy_cmn::alert::S(
 	const str::dString &Message,
 	flw::sWFlow &Flow )
 {
-	prtcl::PutAnswer( prtcl::aAlert_1, Flow );
+	prtcl::LaunchCommand( prtcl::cAlert_1, Flow );
 	prtcl::Put( Message, Flow );
 	Flow.Commit();
 }
@@ -53,7 +53,7 @@ void prxy_cmn::confirm::S(
 	const str::dString &Message,
 	flw::sWFlow &Flow )
 {
-	prtcl::PutAnswer( prtcl::aConfirm_1, Flow );
+	prtcl::LaunchCommand( prtcl::cConfirm_1, Flow );
 	prtcl::Put( Message, Flow );
 	Flow.Commit();
 }
@@ -68,13 +68,13 @@ void prxy_cmn::confirm::R(
 
 namespace {
 	void SetWithXSLContentOrFilename_(
-		prtcl::eAnswer Answer,
+		prtcl::eCommand Command,
 		const str::dString &Id,
 		const str::dString &XML,
 		const str::dString &XSL,
 		flw::sWFlow &Flow )
 	{
-		prtcl::PutAnswer( Answer, Flow );
+		prtcl::LaunchCommand( Command, Flow );
 		prtcl::Put( Id, Flow );
 		prtcl::Put( XML, Flow );
 		prtcl::Put( XSL, Flow );
@@ -83,7 +83,7 @@ namespace {
 
 	// The XSL content is send.
 	void SetWithXSLContent_(
-		prtcl::eAnswer Answer,
+		prtcl::eCommand Command,
 		const str::dString &Id,
 		const str::dString &XML,
 		const str::dString &XSLFilename,
@@ -97,7 +97,7 @@ namespace {
 		XSL.Init();
 		sclmisc::LoadXMLAndTranslateTags( XSLFilename, Language.Convert( Buffer ), XSL, '#' );
 
-		SetWithXSLContentOrFilename_( Answer, Id, XML, XSL, Flow );
+		SetWithXSLContentOrFilename_( Command, Id, XML, XSL, Flow );
 	qRR;
 	qRT;
 	qRE;
@@ -105,14 +105,14 @@ namespace {
 
 	// The XSL filename is send.
 	void SetWithXSLFilename_(
-		prtcl::eAnswer Answer,
+		prtcl::eCommand Command,
 		const str::dString &Id,
 		const str::dString &XML,
 		const str::dString &XSLFilename,
 		const str::dString &Language,
 		flw::sWFlow &Flow )
 	{
-		SetWithXSLContentOrFilename_( Answer, Id, XML, XSLFilename, Flow );
+		SetWithXSLContentOrFilename_( Command, Id, XML, XSLFilename, Flow );
 	}
 }
 
@@ -124,14 +124,14 @@ void prxy_cmn::layout::set::S(
 	flw::sWFlow &Flow )
 {
 	//	SetWithXSLContent_( prtcl::aSetLayout_1, Id, XML, XSLFilename, Language, Flow );
-	SetWithXSLFilename_( prtcl::aSetLayout_1, Id, XML, XSLFilename, Language, Flow );
+	SetWithXSLFilename_( prtcl::cSetLayout_1, Id, XML, XSLFilename, Language, Flow );
 }
 
 void prxy_cmn::contents::get::S(
 	const str::dStrings &Ids,
 	flw::sWFlow &Flow )
 {
-	prtcl::PutAnswer( prtcl::aGetContents_1, Flow );
+	prtcl::LaunchCommand( prtcl::cGetContents_1, Flow );
 	prtcl::Put( Ids, Flow );
 	Flow.Commit();
 }
@@ -149,7 +149,7 @@ void prxy_cmn::contents::set::S(
 	const str::dStrings & Contents,
 	flw::sWFlow & Flow )
 {
-	prtcl::PutAnswer( prtcl::aSetContents_1, Flow );
+	prtcl::LaunchCommand( prtcl::cSetContents_1, Flow );
 	prtcl::Put( Ids, Flow );
 	prtcl::Put( Contents, Flow );
 	Flow.Commit();
@@ -159,7 +159,7 @@ void prxy_cmn::widgets::dress::S(
 	const str::dString &Id,
 	flw::sWFlow &Flow )
 {
-	prtcl::PutAnswer( prtcl::aDressWidgets_1, Flow );
+	prtcl::LaunchCommand( prtcl::cDressWidgets_1, Flow );
 	prtcl::Put( Id, Flow );
 	Flow.Commit();
 }
@@ -168,10 +168,10 @@ namespace {
 	void HandleClasses_(
 		const str::dStrings &Ids,
 		const str::dStrings &Classes,
-		prtcl::eAnswer Answer,
+		prtcl::eCommand Command,
 		flw::sWFlow & Flow )
 	{
-		prtcl::PutAnswer( Answer, Flow );
+		prtcl::LaunchCommand( Command, Flow );
 		prtcl::Put( Ids, Flow );
 		prtcl::Put( Classes, Flow );
 		Flow.Commit();
@@ -183,7 +183,7 @@ void prxy_cmn::classes::add::S(
 	const str::dStrings &Classes,
 	flw::sWFlow & Flow )
 {
-	HandleClasses_( Ids, Classes, prtcl::aAddClasses_1, Flow );
+	HandleClasses_( Ids, Classes, prtcl::cAddClasses_1, Flow );
 }
 
 void prxy_cmn::classes::remove::S(
@@ -191,7 +191,7 @@ void prxy_cmn::classes::remove::S(
 	const str::dStrings &Classes,
 	flw::sWFlow & Flow )
 {
-	HandleClasses_( Ids, Classes, prtcl::aRemoveClasses_1, Flow );
+	HandleClasses_( Ids, Classes, prtcl::cRemoveClasses_1, Flow );
 }
 
 void prxy_cmn::classes::toggle::S(
@@ -199,16 +199,16 @@ void prxy_cmn::classes::toggle::S(
 	const str::dStrings &Classes,
 	flw::sWFlow & Flow )
 {
-	HandleClasses_( Ids, Classes, prtcl::aToggleClasses_1, Flow );
+	HandleClasses_( Ids, Classes, prtcl::cToggleClasses_1, Flow );
 }
 
 namespace {
 	void HandleElements_(
 		const str::dStrings &Ids,
-		prtcl::eAnswer Answer,
+		prtcl::eCommand Command,
 		flw::sWFlow & Flow )
 	{
-		prtcl::PutAnswer( Answer, Flow );
+		prtcl::LaunchCommand( Command, Flow );
 		prtcl::Put( Ids, Flow );
 		Flow.Commit();
 	}
@@ -218,25 +218,25 @@ void prxy_cmn::elements::enable::S(
 	const str::dStrings &Ids,
 	flw::sWFlow & Flow )
 {
-	HandleElements_( Ids, prtcl::aEnableElements_1, Flow );
+	HandleElements_( Ids, prtcl::cEnableElements_1, Flow );
 }
 
 void prxy_cmn::elements::disable::S(
 	const str::dStrings &Ids,
 	flw::sWFlow & Flow )
 {
-	HandleElements_( Ids, prtcl::aDisableElements_1, Flow );
+	HandleElements_( Ids, prtcl::cDisableElements_1, Flow );
 }
 
 
 void prxy_cmn::ap_::set::S(
-	prtcl::eAnswer Answer,
+	prtcl::eCommand Command,
 	const str::dString &Id,
 	const str::dString &Name,
 	const str::dString &Value,
 	flw::sWFlow &Flow )
 {
-	prtcl::PutAnswer( Answer, Flow );
+	prtcl::LaunchCommand( Command, Flow );
 	prtcl::Put( Id, Flow );
 	prtcl::Put( Name, Flow );
 	prtcl::Put( Value, Flow );
@@ -244,12 +244,12 @@ void prxy_cmn::ap_::set::S(
 }
 
 void prxy_cmn::ap_::get::S(
-	prtcl::eAnswer Answer,
+	prtcl::eCommand Command,
 	const str::dString &Id,
 	const str::dString &Name,
 	flw::sWFlow &Flow )
 {
-	prtcl::PutAnswer( Answer, Flow );
+	prtcl::LaunchCommand( Command, Flow );
 	prtcl::Put( Id, Flow );
 	prtcl::Put( Name, Flow );
 	Flow.Commit();
@@ -268,7 +268,7 @@ void prxy_cmn::attribute::remove::S(
 	const str::dString &Name,
 	flw::sWFlow &Flow )
 {
-	prtcl::PutAnswer( prtcl::aRemoveAttribute_1, Flow );
+	prtcl::LaunchCommand( prtcl::cRemoveAttribute_1, Flow );
 	prtcl::Put( Id, Flow );
 	prtcl::Put( Name, Flow );
 	Flow.Commit();
@@ -278,7 +278,7 @@ void prxy_cmn::focus::S(
 	const str::dString &Id,
 	flw::sWFlow &Flow )
 {
-	prtcl::PutAnswer( prtcl::aFocus_1, Flow );
+	prtcl::LaunchCommand( prtcl::cFocus_1, Flow );
 	prtcl::Put( Id, Flow );
 	Flow.Commit();
 }

@@ -290,7 +290,7 @@ namespace prxy_cmn {
 	namespace ap_ {
 		namespace set {
 			void S(
-				prtcl::eAnswer Answer,
+				prtcl::eCommand Command,
 				const str::dString &Id,
 				const str::dString &Name,
 				const str::dString &Value,
@@ -301,19 +301,19 @@ namespace prxy_cmn {
 		}
 
 		inline void Set(
-			prtcl::eAnswer Answer,
+			prtcl::eCommand Command,
 			const str::dString &Id,
 			const str::dString &Name,
 			const str::dString &Value,
 			flw::sRWFlow &Flow )
 		{
-			set::S( Answer, Id, Name, Value, Flow );
+			set::S( Command, Id, Name, Value, Flow );
 			set::R( Flow );
 		}
 
 		namespace get {
 			void S(
-				prtcl::eAnswer Answer,
+				prtcl::eCommand Command,
 				const str::dString &Id,
 				const str::dString &Name,
 				flw::sWFlow &Flow );
@@ -324,13 +324,13 @@ namespace prxy_cmn {
 		}
 
 		inline void Get(
-			prtcl::eAnswer Answer,
+			prtcl::eCommand Command,
 			const str::dString &Id,
 			const str::dString &Name,
 			flw::sRWFlow &Flow,
 			str::dString &Value )
 		{
-			get::S( Answer, Id, Name, Flow );
+			get::S( Command, Id, Name, Flow );
 			get::R( Flow, Value );
 		}
 
@@ -344,7 +344,7 @@ namespace prxy_cmn {
 				const str::dString &Value,
 				flw::sWFlow &Flow )
 			{
-				ap_::set::S( prtcl::aSetAttribute_1, Id, Name, Value, Flow );
+				ap_::set::S( prtcl::cSetAttribute_1, Id, Name, Value, Flow );
 			}
 
 			inline void R( flw::sRFlow &Flow )
@@ -369,7 +369,7 @@ namespace prxy_cmn {
 				const str::dString &Name,
 				flw::sWFlow &Flow )
 			{
-				ap_::get::S( prtcl::aGetAttribute_1, Id, Name, Flow );
+				ap_::get::S( prtcl::cGetAttribute_1, Id, Name, Flow );
 			}
 
 			inline void R(
@@ -418,7 +418,7 @@ namespace prxy_cmn {
 				const str::dString &Value,
 				flw::sWFlow &Flow )
 			{
-				ap_::set::S( prtcl::aSetProperty_1, Id, Name, Value, Flow );
+				ap_::set::S( prtcl::cSetProperty_1, Id, Name, Value, Flow );
 			}
 
 			inline void R( flw::sRFlow &Flow )
@@ -443,7 +443,7 @@ namespace prxy_cmn {
 				const str::dString &Name,
 				flw::sWFlow &Flow )
 			{
-				ap_::get::S( prtcl::aGetProperty_1, Id, Name, Flow );
+				ap_::get::S( prtcl::cGetProperty_1, Id, Name, Flow );
 			}
 
 			inline void R(

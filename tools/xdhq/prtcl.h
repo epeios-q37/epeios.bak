@@ -50,40 +50,41 @@ namespace prtcl {
 		eRequest Request,
 		flw::oflow__ &Flow );
 
-	qENUM( Answer )
+	qENUM( Command )
 	{
-		aOK_1,
-		aError_1,
-		aExecute_1,
-		aAlert_1,
-		aConfirm_1,
-		aSetLayout_1,
-		aGetContents_1,
-		aSetContents_1,
-		aDressWidgets_1,
-		aAddClasses_1,
-		aRemoveClasses_1,
-		aToggleClasses_1,
-		aEnableElements_1,
-		aDisableElements_1,
-		aSetAttribute_1,
-		aGetAttribute_1,
-		aRemoveAttribute_1,
-		aSetProperty_1,
-		aGetProperty_1,
-		aFocus_1,
-		a_amount,
-		a_Undefined
+		cStandBy_1,
+		cError_1,
+		cExecute_1,
+		cAlert_1,
+		cConfirm_1,
+		cSetLayout_1,
+		cGetContents_1,
+		cSetContents_1,
+		cDressWidgets_1,
+		cAddClasses_1,
+		cRemoveClasses_1,
+		cToggleClasses_1,
+		cEnableElements_1,
+		cDisableElements_1,
+		cSetAttribute_1,
+		cGetAttribute_1,
+		cRemoveAttribute_1,
+		cSetProperty_1,
+		cGetProperty_1,
+		cFocus_1,
+		cNew,	// Will replace all above commands, except the 2 first ones.
+		c_amount,
+		c_Undefined
 	};
 
-	const char *GetLabel( eAnswer Answer );
+	const char *GetLabel( eCommand Command );
 
-	eAnswer GetAnswer( const str::dString &Pattern );
+	eCommand GetCommand( const str::dString &Pattern );
 
-	eAnswer GetAnswer( flw::iflow__ &Flow );
+	eCommand GetCommand( flw::iflow__ &Flow );
 
-	void PutAnswer(
-		eAnswer Answer,
+	void LaunchCommand(
+		eCommand Command,
 		flw::oflow__ &Flow );
 
 	using csdcmn::Put;
