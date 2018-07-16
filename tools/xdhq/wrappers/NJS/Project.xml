@@ -48,7 +48,6 @@
 			<Module>tree</Module>
 		</Modules>
 		<Module>registry</Module>
-		<Module>treep</Module>
 		<Module>xdhp</Module>
 	</Modules>
 	<SourceDirs>

@@ -87,122 +87,95 @@ const types = {
 
 class XDH {
 	execute(script, callback) {
-		njsq._call(xdhq, 9, this, script, callback);
+		//		njsq._call(xdhq, 9, this, script, callback);
+		njsq._call(xdhq, 3, this, "Execute_1", types.VOID, 1, script, 0, callback);
 	}
 	alert(message, callback) {
-		njsq._call(xdhq, 10, this, message, callback);
+		njsq._call(xdhq, 3, this, "", types.VOID, 1, message, 0, callback);
 	}
-	confirmOld(message, callback) {
-		njsq._call(xdhq, 11, this, message, (result) => callback(result == "true"));
+	confirm(message, callback) {
+		njsq._call(xdhq, 3, this, "Confirm_1", types.STRING, 1, message, 0, (result) => callback(result == "true"));
 	}
-	confirmNew(message, callback) {
-		njsq._call(xdhq, 27, this, "Confirm_1", types.STRING, 1, message, 0, (result) => callback(result == "true"));
+	setLayout(id, tree, xslFilename, callback) {
+		njsq._call(xdhq, 3, this, "SetLayout_1", types.VOID, 3, id, tree.end(), xslFilename, 0, callback);
 	}
-	setLayoutOld(id, tree, xslFilename, callback) {
-		njsq._call(xdhq, 12, this, id, tree.end(), xslFilename, callback);
-	}
-	setLayoutNew(id, tree, xslFilename, callback) {
-		njsq._call(xdhq, 27, this, "SetLayout_1", types.VOID, 3, id, tree.end(), xslFilename, 0, callback);
-	}
-	getContentsOld(ids, callback) {
-		njsq._call(xdhq, 13, this, ids,
+	getContents(ids, callback) {
+		njsq._call(xdhq, 3, this, "GetContents_1", types.STRINGS, 0, 1, ids,
 			(contents) => callback(unsplit(ids, contents))
 		);
 	}
-	getContentsNew(ids, callback) {
-		njsq._call(xdhq, 27, this, "GetContents_1", types.STRINGS, 0, 1, ids,
-			(contents) => callback(unsplit(ids, contents))
-		);
-	}
-	getContentOld(id, callback) {
+	getContent(id, callback) {
 		return this.getContents([id], (result) => { callback(result[id]); });
 	}
-	getContentNew(id, callback) {
-		return this.getContentsNew([id], (result) => { callback(result[id]); });
-	}
-	setContentsOld(idsAndContents, callback) {
+	setContents(idsAndContents, callback) {
 		var ids = [];
 		var contents = [];
 
 		split(idsAndContents, ids, contents);
 
-		njsq._call(xdhq, 14, this, ids, contents, callback);
+		njsq._call(xdhq, 3, this, "SetContents_1", types.VOID, 0, 2, ids, contents, callback);
 	}
-	setContentsNew(idsAndContents, callback) {
-		var ids = [];
-		var contents = [];
-
-		split(idsAndContents, ids, contents);
-
-		njsq._call(xdhq, 27, this, "SetContents_1", types.VOID, 0, 2, ids, contents, callback);
-	}
-	setContentOld(id, content, callback) {
-		return this.setContentsOld(merge(id, content), callback);
-	}
-	setContentNew(id, content, callback) {
-		return this.setContentsNew(merge(id, content), callback);
+	setContent(id, content, callback) {
+		return this.setContents(merge(id, content), callback);
 	}
 	dressWidgets(id, callback) {
-		njsq._call(xdhq, 15, this, id, callback);
+		njsq._call(xdhq, 3, this, "DressWidget_1", types.VOID, 1, id, 0, callback);
 	}
-	handleClasses(idsAndClasses, fid, callback) {
+	handleClasses(idsAndClasses, command, callback) {
 		var ids = [];
 		var classes = [];
 
 		split(idsAndClasses, ids, classes);
 
-		njsq._call(xdhq, fid, this, ids, classes, callback);
+		njsq._call(xdhq, 3, this, command, types.VOID, 0, 2, ids, classes, callback);
 	}
 	addClasses(idsAndClasses, callback) {
-		this.handleClasses(idsAndClasses, 16, callback);
+		this.handleClasses(idsAndClasses, "AddClasses_1", callback);
 	}
 	addClass(id, clas, callback) {
 		this.addClasses(merge(id, clas), callback);
 	}
 	removeClasses(idsAndClasses, callback) {
-		this.handleClasses(idsAndClasses, 17, callback);
+		this.handleClasses(idsAndClasses, "RemoveClasses_1", callback);
 	}
 	removeClass(id, clas, callback) {
 		this.removeClasses(merge(id, clas), callback);
 	}
 	toggleClasses(idsAndClasses, callback) {
-		this.handleClasses(idsAndClasses, 18, callback);
+		this.handleClasses(idsAndClasses, "ToggleClasses_1", callback);
 	}
 	toggleClass(id, clas, callback) {
 		this.toggleClasses(merge(id, clas), callback);
 	}
 	enableElements(ids, callback) {
-		njsq._call(xdhq, 19, this, ids, callback);
+		njsq._call(xdhq, 3, this, "EnableElements_1", types.VOID, 0, 1, ids, callback);
 	}
 	enableElement(id, callback) {
 		this.enableElements([id], callback);
 	}
 	disableElements(ids, callback) {
-		njsq._call(xdhq, 20, this, ids, callback);
+		njsq._call(xdhq, 3, this, "DisableElements_1", types.VOID, 0, 1, ids, callback);
 	}
 	disableElement(id, callback) {
 		this.disableElements([id], callback);
 	}
 	setAttribute(id, name, value, callback) {
-		njsq._call(xdhq, 21, this, id, name, value, callback);
+		njsq._call(xdhq, 3, this, "SetAttribute_1", types.VOID, 3, id, name, value, 0, callback);
 	}
 	getAttribute(id, name, callback) {
-		return njsq._call(xdhq, 22, this, id, name, callback);
+		return njsq._call(xdhq, 3, this, "GetAttribute_1", types.STRING, 2, id, name, 0, callback);
 	}
 	removeAttribute(id, name, callback) {
-		return njsq._call(xdhq, 23, this, id, name, callback);
-	}
-	setAttribute(id, name, value, callback) {
-		njsq._call(xdhq, 22, this, id, name, value, callback);
+		njsq._call(xdhq, 3, this, "RemoveAttribute_1", types.VOID, 2, id, name, 0, callback);
 	}
 	setProperty(id, name, value, callback) {
-		njsq._call(xdhq, 24, this, id, name, value, callback);
+		njsq._call(xdhq, 3, this, "SetProperty_1", types.VOID, 3, id, name, value, 0, callback);
 	}
 	getProperty(id, name, callback) {
-		return njsq._call(xdhq, 25, this, id, name, callback);
+		return njsq._call(xdhq, 3, this, "GetProperty_1", types.STRING, 2, id, name, 0, callback);
 	}
 	focus(id, callback) {
-		return njsq._call(xdhq, 26, this, id, callback);
+		njsq._call(xdhq, 3, this, "Focus_1", types.VOID, 1, id, 0, callback);
 	}
 }
 
@@ -212,11 +185,11 @@ function register(idsAndItems) {
 
 	split(idsAndItems, tags, callbacks);
 
-	njsq._call(xdhq, 7, tags, callbacks);
+	njsq._call(xdhq, 1, tags, callbacks);
 }
 
 function launch(callback, action) {
-	njsq._call(xdhq, 8, callback, "53752", action);
+	njsq._call(xdhq, 2, callback, "53752", action);
 }
 
 module.exports.componentInfo = () => njsq._componentInfo(xdhq);

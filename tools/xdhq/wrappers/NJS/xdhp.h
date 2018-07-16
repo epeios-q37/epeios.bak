@@ -27,25 +27,7 @@
 namespace xdhp {
 	SCLNJS_F( Register );
 	SCLNJS_F( Listen );
-	SCLNJS_F( Execute );
-	SCLNJS_F( Alert );
-	SCLNJS_F( Confirm );
-	SCLNJS_F( SetLayout );
-	SCLNJS_F( GetContents );
-	SCLNJS_F( SetContents );
-	SCLNJS_F( DressWidgets );
-	SCLNJS_F( AddClasses );
-	SCLNJS_F( RemoveClasses );
-	SCLNJS_F( ToggleClasses );
-	SCLNJS_F( EnableElements );
-	SCLNJS_F( DisableElements );
-	SCLNJS_F( SetAttribute );
-	SCLNJS_F( GetAttribute );
-	SCLNJS_F( RemoveAttribute );
-	SCLNJS_F( SetProperty );
-	SCLNJS_F( GetProperty );
-	SCLNJS_F( Focus );
-	SCLNJS_F( New );	// Will replace all other commands (except the 2 first ones).
+	SCLNJS_F( Launch );	// Will replace all other commands (except the 2 first ones).
 }
 
 #endif

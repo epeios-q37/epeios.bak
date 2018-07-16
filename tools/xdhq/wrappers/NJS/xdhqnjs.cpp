@@ -21,7 +21,6 @@
 
 #include "registry.h"
 #include "xdhp.h"
-#include "treep.h"
 
 #include "sclnjs.h"
 
@@ -55,13 +54,7 @@ namespace {
 const scli::sInfo &sclnjs::SCLNJSRegister( sclnjs::sRegistrar &Registrar )
 {
 	Registrar.Register( ReturnArgument_ );
-	Registrar.Register( treep::New, treep::Delete, treep::PushTag, treep::PopTag, treep::PutValue, treep::PutAttribute );	// 1 - 6
-	Registrar.Register( xdhp::Register, xdhp::Listen, xdhp::Execute );	// 7 - 9
-	Registrar.Register( xdhp::Alert, xdhp::Confirm, xdhp::SetLayout, xdhp::GetContents, xdhp::SetContents, xdhp::DressWidgets ); // 10 - 15
-	Registrar.Register( xdhp::AddClasses, xdhp::RemoveClasses, xdhp::ToggleClasses, xdhp::EnableElements, xdhp::DisableElements );	// 16 - 20.
-	Registrar.Register( xdhp::SetAttribute, xdhp::GetAttribute, xdhp::RemoveAttribute, xdhp::SetProperty, xdhp::GetProperty );	// 21 - 25.
-	Registrar.Register( xdhp::Focus );	// 26.
-	Registrar.Register( xdhp::New );	// 27.
+	Registrar.Register( xdhp::Register, xdhp::Listen, xdhp::Launch );	// 1 - 3
 
 	return xdhqnjs::Info;
 }
