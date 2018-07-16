@@ -5,6 +5,15 @@
 - [adpt]: Adaptation to changes in underlying modules;
 - [stdz]: modification to comply with current standards;
 
+## 2018-07-16
+
+- N4NJS:
+  - introducing integer type,
+- SCLNJS:
+  - introducing integer type,
+- V8Q:
+  - introducing integer type,
+
 ## 2018-07-15
 
 - SCLNJS:

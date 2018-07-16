@@ -238,6 +238,52 @@ namespace {
 			return Get_<host>( Info[Index], UndefinedForbidden );
 		}
 
+		class rInt32_
+		: public n4njs::cInt32
+		{
+		private:
+			int32_t Base_;
+		protected:
+			virtual void N4NJSSet( const int32_t &Base ) override
+			{
+				Base_ = Base;
+			}
+			virtual const int32_t &N4NJSGet( void ) const override
+			{
+				return Base_;
+			}
+		public:
+			void reset( bso::sBool P = true )
+			{
+				Base_ = 0;
+			}
+			qCVDTOR( rInt32_ );
+			void Init(
+				const v8::Local<v8::Value> Value,
+				bso::sBool UndefinedForbidden )
+			{
+				if ( !Value->IsInt32() )
+					qRGnr();
+
+				Base_ = v8::Local<v8::Int32>::Cast( Value )->Int32Value();
+			}
+			int32_t &Expose( void )
+			{
+				return Base_;
+			}
+			const int32_t &Expose( void ) const
+			{
+				return Base_;
+			}
+		};
+
+		inline n4njs::cInt32 *GetInt32_(
+			int Index,
+			const v8::FunctionCallbackInfo<v8::Value> &Info )
+		{
+			return Get_<rInt32_>( Index, Info, true );
+		}
+
 		typedef rCore_<n4njs::cUObject, nodeq::rPObject> rObject_;
 
 		class rBuffer_
@@ -278,13 +324,13 @@ namespace {
 				namespace {
 					void Set_(
 						v8::Local<v8::Value> &Argv,
-						const int *Value )
+						const int32_t *Value )
 					{
-						nodeq::sLNumber Number;
+						nodeq::sLInt32 Uint32;
 
-						Number.Init( *Value );
+						Uint32.Init( *Value );
 
-						Argv = Number.Core();
+						Argv = Uint32.Core();
 					}
 
 					void Set_(
@@ -346,7 +392,7 @@ namespace {
 
 					switch ( Argument.Type ) {
 					case n4njs::tInt:
-						Set_( Argv, (const int *)Argument.Value );
+						Set_( Argv, (const int32_t *)Argument.Value );
 						break;
 					case n4njs::tString:
 						Set_( Argv, (const str::dString *)Argument.Value );
@@ -577,6 +623,9 @@ namespace {
 				qRGnr();
 
 			switch ( Type ) {
+			case n4njs::tInt:
+				(*(n4njs::cInt32 **)Value) = GetInt32_( Index, I_() );
+				break;
 			case n4njs::tString:
 				( *( n4njs::cUString ** )Value ) = GetString_( Index, I_() );
 				break;

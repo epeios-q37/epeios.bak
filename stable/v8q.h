@@ -796,6 +796,53 @@ namespace v8q {
 
 	T( Primitive, Boolean );
 
+	template <typename primitive> class xInt32_
+	: public primitive
+	{
+	public:
+		using primitive::reset;
+		using primitive::Core;
+		qCDTOR( xInt32_ );
+		xInt32_(
+			v8::Local<v8::Value> Value,
+			v8::Isolate *Isolate = NULL )
+		{
+			Init( Value, Isolate );
+		}
+		template <typename data> xInt32_(
+			xValue_<data> &Value,
+			v8::Isolate *Isolate = NULL )
+		{
+			Init( Value.Core(), Isolate );
+		}
+		void Init(
+			v8::Local<v8::Value> Value,
+			bso::sBool UndefinedForbidden,
+			v8::Isolate *Isolate = NULL )
+		{
+			primitive::Init( Value, UndefinedForbidden, &v8::Value::IsUint32, Isolate );
+		}
+		void Init(
+			v8::Local<v8::Value> Value,
+			v8::Isolate *Isolate = NULL )
+		{
+			Init( Value, true, Isolate );
+		}
+		void Init(
+			uint32_t Uint32,
+			v8::Isolate *Isolate = NULL )
+		{
+			Isolate = GetIsolate( Isolate );
+			Init( v8::Uint32::New( Isolate, Uint32 ), Isolate );
+		}
+		bso::sBool operator *( void )
+		{
+			return Core()->Value();
+		}
+	};
+
+	T( Primitive, Int32 );
+
 	template <typename primitive> class xNumber_
 	: public primitive
 	{

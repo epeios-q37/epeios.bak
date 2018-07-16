@@ -107,7 +107,7 @@ namespace n4njs {
 		}
 	};
 
-	typedef cUBase_<int> cUInt;
+	typedef cUBase_<int32_t> cInt32;
 	typedef cUBase_<str::dString> cUString;
 	typedef cUBase_<str::dStrings> cUStrings;
 

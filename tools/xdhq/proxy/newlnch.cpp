@@ -235,13 +235,6 @@ void newlnch::Launch(
 {
 qRH;
 	str::wString Command;
-	{
-		qRH;
-		qRB;
-		qRR;
-		qRT;
-		qRE;
-	}
 	sAmount_
 		StringsAmount = 0,
 		MergedStringsAmount = 0;
@@ -252,6 +245,7 @@ qRH;
 	str::wStrings ResultStrings;
 	eType_ ResultType = t_Undefined;
 qRB;
+	Command.Init();
 	prtcl::Get( Flow, Command );
 
 	prtcl::Get( Flow, StringsAmount );

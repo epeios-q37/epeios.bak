@@ -38,7 +38,7 @@ const atlas = require(atlasId);
 
 atlas.register(
 	{
-		"Connect": (dom, id) => dom.setLayoutNew("", atlas.createTree(), "Main.xsl"),
+		"Connect": (dom, id) => dom.alert( "Debugger !", () => dom.setLayoutNew("", atlas.createTree(), "Main.xsl") ),
 		"Typing": (dom, id) => dom.getContent(id, (name) => dom.setContent("name", name)),
 		"Clear": (dom, id) => dom.confirm("Are you sure ?", (answer) => { if (answer) dom.setContents({ "input": "", "name": "" } ) } ),
 	}

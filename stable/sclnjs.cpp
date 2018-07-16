@@ -63,9 +63,9 @@ namespace {
 template <> void scln4::Get(
 	int Index,
 	cCaller_ &Caller,
-	rInt &Int )
+	rInt32 &Int )
 {
-	Get_<n4njs::cUInt>( Index, Caller, n4njs::tInt, Int );
+	Get_<n4njs::cInt32>( Index, Caller, n4njs::tInt, Int );
 }
 
 template <> void scln4::Get(
@@ -74,7 +74,7 @@ template <> void scln4::Get(
 	int &Target )
 {
 qRH;
-	rInt Int;
+	rInt32 Int;
 qRB;
 	Int.Init();
 	Get( Index, Caller, Int );
