@@ -152,9 +152,10 @@ namespace {
 
 	void New_(
 		flw::sRFlow &Flow,
+		prxy_recv::eType Type,
 		rReturn &Return )
 	{
-		switch ( Return.GetType() ) {
+		switch ( Type ) {
 		case tVoid:
 			break;
 		case tString:
@@ -178,6 +179,7 @@ namespace {
 
 void prxy_recv::Recv(
 	eRequest Request,
+	prxy_recv::eType ReturnTypeForNewHandling,
 	flw::sRFlow &Flow,
 	rReturn &Return )
 {
@@ -205,7 +207,9 @@ void prxy_recv::Recv(
 	H( GetProperty );
 	H( SetProperty );
 	H( Focus_ );
-	H( New );
+	case rNew:
+		New_( Flow, ReturnTypeForNewHandling, Return );
+		break;
 	default:
 		qRGnr();
 		break;

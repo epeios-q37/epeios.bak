@@ -79,6 +79,12 @@ function merge(key, value) {
 	return keyValue;
 }
 
+const types = {
+	VOID: 0,
+	STRING: 1,
+	STRINGS: 2
+}
+
 class XDH {
 	execute(script, callback) {
 		njsq._call(xdhq, 9, this, script, callback);
@@ -86,24 +92,35 @@ class XDH {
 	alert(message, callback) {
 		njsq._call(xdhq, 10, this, message, callback);
 	}
-	confirm(message, callback) {
+	confirmOld(message, callback) {
 		njsq._call(xdhq, 11, this, message, (result) => callback(result == "true"));
+	}
+	confirmNew(message, callback) {
+		njsq._call(xdhq, 27, this, "Confirm_1", types.STRING, 1, message, 0, (result) => callback(result == "true"));
 	}
 	setLayoutOld(id, tree, xslFilename, callback) {
 		njsq._call(xdhq, 12, this, id, tree.end(), xslFilename, callback);
 	}
 	setLayoutNew(id, tree, xslFilename, callback) {
-		njsq._call(xdhq, 27, this, callback, 3, id, tree.end(), xslFilename, 0);
+		njsq._call(xdhq, 27, this, "SetLayout_1", types.VOID, 3, id, tree.end(), xslFilename, 0, callback);
 	}
-	getContents(ids, callback) {
+	getContentsOld(ids, callback) {
 		njsq._call(xdhq, 13, this, ids,
 			(contents) => callback(unsplit(ids, contents))
 		);
 	}
-	getContent(id, callback) {
+	getContentsNew(ids, callback) {
+		njsq._call(xdhq, 27, this, "GetContents_1", types.STRINGS, 0, 1, ids,
+			(contents) => callback(unsplit(ids, contents))
+		);
+	}
+	getContentOld(id, callback) {
 		return this.getContents([id], (result) => { callback(result[id]); });
 	}
-	setContents(idsAndContents, callback) {
+	getContentNew(id, callback) {
+		return this.getContentsNew([id], (result) => { callback(result[id]); });
+	}
+	setContentsOld(idsAndContents, callback) {
 		var ids = [];
 		var contents = [];
 
@@ -111,8 +128,19 @@ class XDH {
 
 		njsq._call(xdhq, 14, this, ids, contents, callback);
 	}
-	setContent(id, content, callback) {
-		return this.setContents(merge(id, content), callback);
+	setContentsNew(idsAndContents, callback) {
+		var ids = [];
+		var contents = [];
+
+		split(idsAndContents, ids, contents);
+
+		njsq._call(xdhq, 27, this, "SetContents_1", types.VOID, 0, 2, ids, contents, callback);
+	}
+	setContentOld(id, content, callback) {
+		return this.setContentsOld(merge(id, content), callback);
+	}
+	setContentNew(id, content, callback) {
+		return this.setContentsNew(merge(id, content), callback);
 	}
 	dressWidgets(id, callback) {
 		njsq._call(xdhq, 15, this, id, callback);

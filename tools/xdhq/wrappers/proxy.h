@@ -86,6 +86,7 @@ namespace proxy {
 		rRecv Recv;
 		rSent Sent;
 		prxy_cmn::eRequest Request;
+		prxy_recv::eType ReturnType;	// For the new handling.
 		str::wString Language;
 		bso::sBool Handshaked;
 		void reset( bso::sBool P = true )
@@ -100,6 +101,8 @@ namespace proxy {
 
 			tol::Init( Recv, Sent, Language );
 			Request = prxy_cmn::r_Undefined;
+			ReturnType = prxy_recv::t_Undefined;
+			ReturnType = prxy_recv::t_Undefined;
 			Handshaked = false;
 		}
 		bso::sBool IsTherePendingRequest( void ) const
@@ -166,7 +169,7 @@ namespace proxy {
 				if ( Data.Request != prxy_cmn::r_Undefined ) {
 					Data.Recv.WriteBegin();
 					Data.Recv.Return.Init();
-					prxy_recv::Recv( Data.Request, Flow, Data.Recv.Return );
+					prxy_recv::Recv( Data.Request, Data.ReturnType, Flow, Data.Recv.Return );
 					Data.Request = prxy_cmn::r_Undefined;
 					Data.Recv.WriteEnd();
 					PRXYOnPending( &Data );

@@ -33,7 +33,7 @@ namespace {
 		// In the future, there will be a 'GetValue_s_(...)' which will handle merged ids,
 		// so this function will be useless.
 		void GetContents_(
-			const str::dString &MergedIds,
+			const str::dString &JSMergedIds,
 			xdhdws::sProxy &Proxy,
 			str::dStrings &Contents  )
 		{
@@ -41,9 +41,13 @@ namespace {
 			str::wStrings Ids;
 			str::wString Content;
 			sdr::sRow Row = qNIL;
+			str::wString MergedIds;
 		qRB;
-			Ids.Init();
+			MergedIds.Init( JSMergedIds );
 
+			MergedIds.Crop( MergedIds.Next( MergedIds.First() ), MergedIds.Previous( MergedIds.Last() ) );	// To remove the enclosing '[]'.
+
+			Ids.Init();
 			xdhcmn::FlatSplit( MergedIds, Ids );
 
 			Row = Ids.First();
@@ -72,6 +76,46 @@ namespace {
 			t_Undefined
 	};
 
+	void Alert_(
+		const str::dString &Message,
+		xdhdws::sProxy &Proxy )
+	{
+	qRH;
+		str::wString Script;
+		qCBUFFERr Buffer;
+	qRB;
+		Script.Init( "window.alert(\"");
+		xdhcmn::Escape( Message, Script, '"' );
+		Script.Append( "\");'';");
+
+		Proxy.Execute( Script, Buffer );
+	qRR;
+	qRT;
+	qRE;
+	}
+
+	void Confirm_(
+		const str::dString &Message,
+		xdhdws::sProxy &Proxy,
+		str::dString &Response )
+	{
+	qRH;
+		str::wString Script;
+		qCBUFFERr Buffer;
+	qRB;
+		Script.Init( "if ( window.confirm(\"");
+		xdhcmn::Escape( Message, Script, '"' );
+		Script.Append( "\") ) 'true'; else 'false';");
+
+		Proxy.Execute( Script, Buffer );
+
+		Response.Append( Buffer );
+	qRR;
+	qRT;
+	qRE;
+	}
+
+
 	// If returns true, the value in 'Buffer' have to be returned.
 	eType_ Launch_(
 		prtcl::eCommand Command,
@@ -89,21 +133,21 @@ namespace {
 			ResultType = tString;
 			break;
 		case prtcl::cAlert_1:
-			Proxy.Alert( *Strings( 0 ), *Strings( 1 ), *Strings( 2 ), *Strings( 3 ) );
+			Alert_( *Strings( 0 ), Proxy );
 			break;
 		case prtcl::cConfirm_1:
-			Proxy.Confirm( *Strings( 0 ), *Strings( 1 ), *Strings( 2 ), *Strings( 3 ) );
+			Confirm_( *Strings( 0 ), Proxy, ResultString );
+			ResultType = tString;
 			break;
 		case prtcl::cSetLayout_1:
 			Proxy.SetLayout( *Strings( 0 ), *Strings( 1 ), *Strings( 2 ) );
 			break;
 		case prtcl::cGetContents_1:
 			GetContents_( *MergedStrings( 0 ), Proxy, ResultStrings );
-			ResultType = tString;
+			ResultType = tStrings;
 			break;
 		case prtcl::cSetContents_1:
 			Proxy.SetContents( *MergedStrings( 0 ), *MergedStrings( 1 ) );
-			qRVct();
 			break;
 		case prtcl::cDressWidgets_1:
 			Proxy.DressWidgets( *Strings( 0 ) );
@@ -200,7 +244,7 @@ namespace {
 
 			String->Init();
 
-			xdhcmn::FlatMerge( Strings, *String, false );
+			xdhcmn::FlatMerge( Strings, *String, true );
 
 			MergedStrings.Push( String );
 
@@ -235,9 +279,7 @@ void newlnch::Launch(
 {
 qRH;
 	str::wString Command;
-	sAmount_
-		StringsAmount = 0,
-		MergedStringsAmount = 0;
+	sAmount_ Amount = 0;
 	rStrings_ 
 		Strings,
 		MergedStrings;
@@ -248,18 +290,19 @@ qRB;
 	Command.Init();
 	prtcl::Get( Flow, Command );
 
-	prtcl::Get( Flow, StringsAmount );
-	prtcl::Get( Flow, MergedStringsAmount );
+	prtcl::Get( Flow, Amount );
 
 	Strings.Init();
 
-	if ( StringsAmount )
-		GetStrings_( Flow, StringsAmount, Strings );
+	if ( Amount )
+		GetStrings_( Flow, Amount, Strings );
+
+	prtcl::Get( Flow, Amount );
 
 	MergedStrings.Init();
 
-	if ( StringsAmount )
-		GetMergedStrings_( Flow, MergedStringsAmount, MergedStrings );
+	if ( Amount )
+		GetMergedStrings_( Flow, Amount, MergedStrings );
 
 	Flow.Dismiss();
 

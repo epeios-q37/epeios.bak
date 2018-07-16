@@ -602,14 +602,23 @@ qRH;
 	rData_ &Data = GetData_( Caller );
 	proxy::rNewArguments &Arguments = Data.Sent.NewArguments;
 	int Amount = 0;
+	int &RawType = Amount;
 	str::wString String;
 	str::wStrings Strings;
 qRB;
 	Data.Sent.WriteBegin();
+
 	Data.Request = prxy_cmn::rNew;
 	Arguments.Init();
 
-	Caller.GetArgument( Data.Callback );
+	Caller.GetArgument( Arguments.Command );
+
+	Caller.GetArgument( RawType );
+
+	if ( RawType >= prxy_recv::t_amount )
+		qRGnr();
+
+	Data.ReturnType = (prxy_recv::eType)RawType;
 
 	Caller.GetArgument( Amount );
 
@@ -626,6 +635,8 @@ qRB;
 		Caller.GetArgument( Strings );
 		Arguments.Arrays.Append( Strings );
 	}
+
+	Caller.GetArgument( Data.Callback );
 
 	Data.Sent.WriteEnd();
 qRR;

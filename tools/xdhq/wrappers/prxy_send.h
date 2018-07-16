@@ -43,16 +43,17 @@ namespace prxy_send {
 	struct rNewArguments
 	{
 	public:
+		str::wString Command;
 		str::wStrings Strings;
 		crt::qCRATEwl( str::dStrings ) Arrays;
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( Strings, Arrays );
+			tol::reset( P, Command, Strings, Arrays );
 		}
 		qCDTOR( rNewArguments );
 		void Init( void )
 		{
-			tol::Init( Strings, Arrays );
+			tol::Init( Command, Strings, Arrays );
 		}
 	};
 

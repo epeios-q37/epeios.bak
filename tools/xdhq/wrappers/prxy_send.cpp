@@ -138,11 +138,11 @@ namespace {
 			const items &Items,
 			flw::sWFlow &Flow )
 		{
+			prtcl::Put( Items.Amount(), Flow );
+
 			sdr::sRow Row = Items.First();
 
 			if ( Row != qNIL ) {
-				prtcl::Put( Items.Amount(), Flow );
-
 				while ( Row != qNIL ) {
 					prtcl::Put( Items( Row ), Flow );
 
@@ -157,7 +157,7 @@ namespace {
 		const rNewArguments &Arguments )
 	{
 		prtcl::SendCommand( prtcl::cNew, Flow );
-
+		prtcl::Put( Arguments.Command, Flow );
 		Send_( Arguments.Strings, Flow );
 		Send_( Arguments.Arrays, Flow );
 	}
