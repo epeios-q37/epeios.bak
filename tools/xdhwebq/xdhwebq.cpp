@@ -87,13 +87,16 @@ namespace {
 			lck::exclusive_access___<session::dSessions> Sessions;
 			session::rSession *Session = NULL;
 			err::buffer__ ERRBuffer;
-			str::string AbortMessage;
+			str::string Token, AbortMessage;
 		qRB;
 			Sessions.Init( RawSessions );
 
+			Token.Init();
+			Pairs.GetValue( str::wString( "_token" ), Token );
+
 			if ( SessionId.Amount() == 0 ) {
 				SessionId.Init();
-				Row = Sessions().New( SessionId, Language );
+				Row = Sessions().New( SessionId, Language, Token );
 			} else {
 				Row = Sessions().Search( SessionId );
 

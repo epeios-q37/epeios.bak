@@ -91,7 +91,7 @@ function launchDesktop(dir,prod) {
 			process.exit(code)
 		});
 	} else {
-		require('child_process').spawn(electronBin, [path.join(xdhelcqPath, "index.js"), "-s=localhost:53752", "-m=" + xdhelcqBin, dir]).on('close', function (code) {
+		require('child_process').spawn(electronBin, [path.join(xdhelcqPath, "index.js"), "-t=localhost:53752", "-m=" + xdhelcqBin, dir]).on('close', function (code) {
 			process.exit(code)
 		});
 	}

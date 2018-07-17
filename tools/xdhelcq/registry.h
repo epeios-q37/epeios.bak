@@ -32,7 +32,7 @@ namespace registry {
 
 		extern rEntry
 			ModuleFilename,
-			Server;	// If defined, demo mode, else prod mode, the server host/service is retrieved by proxy from registry.
+			Token;	// If defined, DEMO, otherwise PROD.
 	}
 
 	namespace definition {

@@ -406,7 +406,7 @@ namespace sck {
 
 	qCDEF( sSocket, Undefined, SCK_INVALID_SOCKET );
 
-	typedef socket_ioflow_driver___ rRWFlowDriver;
+	typedef socket_ioflow_driver___ rRWDriver;
 	typedef socket_ioflow___ rRWFlow;
 }
 #endif

@@ -30,6 +30,7 @@
 			<Modules Group="CSD">
 				<xpp:expand select="CSDF"/>
 				<Module>csdbnc</Module>
+				<Module>csdbns</Module>
 				<Module>csdcmn</Module>
 				<Module>csdmnc</Module>
 				<Module>csdmxb</Module>
@@ -45,6 +46,7 @@
 				<xpp:expand select="XDH"/>
 			</Modules>
 		</Modules>
+		<Module>dmopool</Module>
 		<Module>newlnch</Module>
 		<Module>registry</Module>
 		<Module Path="../">prtcl</Module>

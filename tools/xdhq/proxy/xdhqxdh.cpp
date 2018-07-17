@@ -19,6 +19,7 @@
 
 #include "xdhqxdh.h"
 
+#include "dmopool.h"
 #include "newlnch.h"
 #include "registry.h"
 
@@ -26,6 +27,7 @@
 
 #include "csdmnc.h"
 #include "csdcmn.h"
+#include "csdbns.h"
 
 #include "sclmisc.h"
 
@@ -537,7 +539,7 @@ namespace {
 	{
 	private:
 		eMode_ Mode_;
-		csdbnc::rRWDriver DemoDriver_;
+		sck::rRWDriver DemoDriver_;
 		csdmnc::rRWDriver ProdDriver_;
 		bso::sBool FirstCall_;
 		fdr::rRWDriver &D_( void )
@@ -639,7 +641,7 @@ namespace {
 		void Init(
 			xdhcmn::cProxy *Callback,
 			const char *Language,
-			const char *HostService )
+			const str::dString &Token )	// If empty, PROD session, else token used for the DEMO session.
 		{
 		qRH;
 			flw::sDressedWFlow<> Flow;
@@ -647,11 +649,11 @@ namespace {
 			tol::reset( DemoDriver_, ProdDriver_ );
 			Mode_ = m_Undefined;
 
-			if ( HostService == NULL ) {
+			if ( Token.Amount() == 0 ) {
 				ProdDriver_.Init( Core_, fdr::ts_Default );
 				Mode_ = mProd;
 			} else {
-				DemoDriver_.Init( HostService, sck::NoTimeout, err::h_Default );
+				DemoDriver_.Init( dmopool::GetConnexion( Token ), true, fdr::ts_Default );
 				Mode_ = mDemo;
 			}
 
@@ -688,7 +690,7 @@ namespace {
 xdhcmn::cSession *sclxdhtml::SCLXDHTMLRetrieveCallback(
 	const char *Language,
 	xdhcmn::eMode Mode,
-	const char *HostService,
+	const str::dString &Token,
 	xdhcmn::cProxy *ProxyCallback )
 {
 	rSession_ *Session = new rSession_;
@@ -697,7 +699,7 @@ xdhcmn::cSession *sclxdhtml::SCLXDHTMLRetrieveCallback(
 	if ( Session == NULL )
 		qRGnr();
 
-	Session->Init( ProxyCallback, Language, HostService );
+	Session->Init( ProxyCallback, Language, Token );
 
 	// WARNING ! In 'MultiUser' mode, 'ProxyCallback' is not correctly set yet!
 /*	if ( Mode == xdhcmn::mMonoUser ) {

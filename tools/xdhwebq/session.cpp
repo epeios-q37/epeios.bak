@@ -232,7 +232,8 @@ static bso::sign__ Search_(
 
 row__ session::dSessions::New(
 	id__ &Id,
-	const str::string_ &Language )
+	const str::string_ &Language,
+	const str::dString &Token )	// If _not_ empty, DEMO.
 {
 	row__ Row = qNIL;
 qRH
@@ -254,7 +255,7 @@ qRB
 	if ( ProxyCallback == NULL )
 		qRAlc();
 
-	SessionCallback = _A().RetrieveCallback( Language.Convert( Buffer ), ProxyCallback );	// Session destroys 'ProxyCallback'.
+	SessionCallback = _A().RetrieveCallback( Language.Convert( Buffer ), Token, ProxyCallback );	// Session destroys 'ProxyCallback'.
 
 	if ( SessionCallback == NULL )
 		qRGnr();

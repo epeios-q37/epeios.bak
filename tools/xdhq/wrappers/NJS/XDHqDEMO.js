@@ -110,25 +110,27 @@ function launch(createCallback, newSessionAction, callbacks) {
 	}
 
     //	xdhq.launch(callback, action);
-  const server = net.createServer((c) => {
-    // 'connection' listener
-    //		c.on('data', function(chunk) {console.log( ">" + chunk.toString() + "<" ) });
-    c.on('readable', () => {
+	const client = new net.Socket();
 
-      if (c._xdhDOM === undefined) {
+	client.connect(51000, "localhost", () => {
+    // 'connection' listener
+		//		client.on('data', function(chunk) {console.log( ">" + chunk.toString() + "<" ) });
+    client.on('readable', () => {
+
+    	if (client._xdhDOM === undefined) {
         var data;
 
-        while (data = c.read())
+        while (data = client.read())
           console.log(">" + data + ' ||| ' + Buffer.from(data) + "<");
 
-        c._xdhDOM = createCallback(c);
-        c._xdhDOM._xdhSocket = c;
+        client._xdhDOM = createCallback(client);
+        client._xdhDOM._xdhSocket = client;
 
-        c.write(Buffer.from("StandBy_1\x00"));
+        client.write(Buffer.from("StandBy_1\x00"));
       } else {
         var query;
 
-        query = getQuery(c);
+        query = getQuery(client);
 
         console.log("Query: ", query.toString());
 
@@ -140,42 +142,37 @@ function launch(createCallback, newSessionAction, callbacks) {
           console.log("action: '" + action + "', id: '" + id + "'");
 
           if (action == "") {
-            callbacks[newSessionAction](c._xdhDOM, "");
-            //            c.write(Buffer.from("StandBy_1\x00"));
+          	callbacks[newSessionAction](client._xdhDOM, "");
+          	//            client.write(Buffer.from("StandBy_1\x00"));
           } else {
-            callbacks[action](c._xdhDOM, id);
+          	callbacks[action](client._xdhDOM, id);
           }
         } else {
-          console.log("READY !!!", c._xdhDOM._xdhType);
-          if (c._xdhDOM._xdhType === types.VOID) {
-            if (c._xdhDOM._xdhCallback != undefined) {
-              c._xdhDOM._xdhType = types.UNDEFINED;
-              c._xdhDOM._xdhCallback();
-              if (c._xdhDOM._xdhType === types.UNDEFINED)
-                c.write(Buffer.from("StandBy_1\x00"));
+        	console.log("READY !!!", client._xdhDOM._xdhType);
+        	if (client._xdhDOM._xdhType === types.VOID) {
+        		if (client._xdhDOM._xdhCallback != undefined) {
+        			client._xdhDOM._xdhType = types.UNDEFINED;
+        			client._xdhDOM._xdhCallback();
+        			if (client._xdhDOM._xdhType === types.UNDEFINED)
+        				client.write(Buffer.from("StandBy_1\x00"));
             } else
-              c.write(Buffer.from("StandBy_1\x00"));
-          } else if (c._xdhDOM._xdhCallback != undefined) {
-            var type = c._xdhDOM._xdhType;
-            c._xdhDOM._xdhType = types.UNDEFINED;
-            c._xdhDOM._xdhCallback(getResponse(query, type));
-            if (c._xdhDOM._xdhType === types.UNDEFINED)
-              c.write(Buffer.from("StandBy_1\x00"));
+        			client.write(Buffer.from("StandBy_1\x00"));
+        	} else if (client._xdhDOM._xdhCallback != undefined) {
+        		var type = client._xdhDOM._xdhType;
+        		client._xdhDOM._xdhType = types.UNDEFINED;
+        		client._xdhDOM._xdhCallback(getResponse(query, type));
+        		if (client._xdhDOM._xdhType === types.UNDEFINED)
+        			client.write(Buffer.from("StandBy_1\x00"));
           } else {
-            getResponse(query, c._xdhDOM._xdhType);
-            c.write(Buffer.from("StandBy_1\x00"));
+        		getResponse(query, client._xdhDOM._xdhType);
+        		client.write(Buffer.from("StandBy_1\x00"));
           }
         }
       }
     });
-
-    console.log('client connected');
   });
-  server.on('error', (err) => {
+  client.on('error', (err) => {
     throw err;
-  });
-  server.listen(53752, () => {
-    console.log('server bound');
   });
 
 }

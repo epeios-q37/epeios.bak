@@ -103,10 +103,10 @@ namespace {
 		}
 		virtual xdhcmn::cSession *XDHCMNRetrieveCallback(
 			const char *Language,
-			const char *HostService ,
+			const str::dString &Token,
 			xdhcmn::cProxy *ProxyCallback ) override
 		{
-			return SCLXDHTMLRetrieveCallback( Language, Mode_, HostService, ProxyCallback );
+			return SCLXDHTMLRetrieveCallback( Language, Mode_, Token, ProxyCallback );
 		}
 		virtual void XDHCMNReleaseCallback( xdhcmn::cSession *Callback ) override
 		{

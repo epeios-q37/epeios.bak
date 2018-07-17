@@ -505,13 +505,15 @@ namespace session {
 		//f Return the position of a mandatory new session.
 		row__ New(
 			id__ &Id,
-			const str::string_ &Language );
+			const str::string_ &Language,
+			const str::dString &Token );
 		row__ New(
 			str::string_ &Id,
-			const str::string_ &Language )
+			const str::string_ &Language,
+			const str::dString &Token )
 		{
 			id__ RawId;
-			row__ Row = New( RawId, Language );
+			row__ Row = New( RawId, Language, Token );
 
 			Id.Append( RawId.Value() );
 

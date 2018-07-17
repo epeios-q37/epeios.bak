@@ -46,10 +46,10 @@
 		<Arguments>
 			<xpp:expand select="TOL_Arguments"/>
 			<!-- Command -->
-			<Argument id="LaunchCommand" Description="LaunchCommandDescription" long="launch" short="l" Value="Launch" Usage="%ModuleFilenameOption% %ServerOption%"/>
+			<Argument id="LaunchCommand" Description="LaunchCommandDescription" long="launch" short="l" Value="Launch" Usage="%ModuleFilenameOption% %TokenOption%"/>
 			<!-- Options -->
 			<Argument id="ModuleFilenameOption" Description="ModuleFilenameOptionDescription" long="module" short="m" Path="ModuleFilename" Label="ModuleFilenameOptionLabel"/>
-			<Argument id="ServerOption" Description="ServerOptionDescription" long="server" short="s" Path="Server" Label="ServerOptionLabel"/>
+			<Argument id="TokenOption" Description="TokenOptionDescription" long="token" short="t" Path="Token" Label="TokenOptionLabel"/>
 			<Layouts>
 				<Layout command="Launch">
 				</Layout>
