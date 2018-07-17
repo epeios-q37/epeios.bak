@@ -14,17 +14,17 @@
 	Affero General Public License for more details.
 
 	You should have received a copy of the GNU Affero General Public License
-	along with XDHq If not, see <http://www.gnu.org/licenses/>.
+	along with XDHq. If not, see <http://www.gnu.org/licenses/>.
 */
 
 "use strict"
 
-const atlas = require("./Atlas.js");
+// Types of the reponse.
+const types = {
+  VOID: 0,
+  STRING: 1,
+  STRINGS: 2,
+  UNDEFINED: 3 // Always the highest value.
+}
 
-const callbacks = {
-	"Connect": (dom, id) => dom.setLayout("", atlas.createTree(), "Main.xsl"),
-	"Typing": (dom, id) => dom.getContent(id, (name) => dom.setContent("name", name)),
-	"Clear": (dom, id) => dom.confirm("Are you sure ?", (answer) => { if (answer) dom.setContents({ "input": "", "name": "" }) }),
-};
-
-atlas.launch(() => new atlas.DOM(), "Connect", callbacks);
+module.exports.types = types;

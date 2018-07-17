@@ -56,6 +56,9 @@
 	</SourceDirs>
 	<Files>
 		<!-- NOTA : '*.js' files will automatically be packed. -->
+		<File Pack="No">XDHqDEMO.js</File>
+		<File Pack="No">XDHqPROD.js</File>
+		<File Pack="No">XDHqSHRD.js</File>
 		<!--File Pack="No">XDHq.js</File-->
 		<!--Files Group="Rentals">
 			<File>rentals.js</File>
@@ -65,7 +68,7 @@
 				<File>Rentals.xsl</File>
 			</Files>
 		</Files-->
-		<Files Group="Altlas">
+		<Files Group="Atlas">
 			<Files Path="../../Atlas/NJS/">
 				<File Path="../">CHANGELOG.md</File>
 				<File>NOTES.md</File>

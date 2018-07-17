@@ -93,6 +93,7 @@ namespace proxy {
 		{
 			tol::reset( P, Recv, Sent, Language, Handshaked );
 			Request = prxy_cmn::r_Undefined;
+			ReturnType = prxy_recv::t_Undefined;
 		}
 		qCDTOR( rData );
 		void Init( void )
@@ -101,7 +102,6 @@ namespace proxy {
 
 			tol::Init( Recv, Sent, Language );
 			Request = prxy_cmn::r_Undefined;
-			ReturnType = prxy_recv::t_Undefined;
 			ReturnType = prxy_recv::t_Undefined;
 			Handshaked = false;
 		}

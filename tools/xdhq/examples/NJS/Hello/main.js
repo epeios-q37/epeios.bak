@@ -36,14 +36,10 @@ if (process.env.EPEIOS_SRC) {
 
 const atlas = require(atlasId);
 
-atlas.register(
-	{
-//		"Connect": (dom, id) => dom.alert( "Debugger !", () => dom.setLayout("", atlas.createTree(), "Main.xsl") ),
-		"Connect": (dom, id) => dom.setLayout("", atlas.createTree(), "Main.xsl"),
-//		"Typing": (dom, id) => dom.getContent(id, (name) => { console.log( "name: >" + name + "<"); dom.setContent("name", name );}), 
-		"Typing": (dom, id) => dom.getContent(id, (name) => dom.setContent("name", name ) ), 
-		"Clear": (dom, id) => dom.confirm("Are you sure ?", (answer) => { if (answer) dom.setContents({ "input": "", "name": "" }) }),
-	}
-);
+const callbacks = {
+	"Connect": (dom, id) => dom.setLayout("", atlas.createTree(), "Main.xsl"),
+	"Typing": (dom, id) => dom.getContent(id, (name) => dom.setContent("name", name)),
+	"Clear": (dom, id) => dom.confirm("Are you sure ?", (answer) => { if (answer) dom.setContents({ "input": "", "name": "" }) }),
+};
 
-atlas.launch(() => new atlas.DOM(), "Connect" );
+atlas.launch(() => new atlas.DOM(), "Connect", callbacks );

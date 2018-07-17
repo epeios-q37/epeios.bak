@@ -414,15 +414,6 @@ namespace {
 	}
 }
 
-#define ARGS_BEGIN( request )\
-	rData_ &Data = GetData_( Caller );\
-	Data.Sent.WriteBegin();\
-	Data.Request = prxy_cmn::r##request;\
-	proxy::rArguments &Arguments = Data.Sent.Arguments;\
-	Arguments.Init();
-
-#define ARGS_END	Data.Sent.WriteEnd()
-
 SCLNJS_F( xdhp::Launch )
 {
 qRH;

@@ -79,79 +79,111 @@ if (isDev()) {
 
 const xdhq = require(xdhqId);
 
+const modes = xdhq.modes;
+
 function launchWeb(dir) {
 	require('child_process').fork(require(xdhwebqId).fileName, [dir]);
 }
 
-function launchDesktop(dir) {
-	require('child_process').spawn(electronBin, [path.join(xdhelcqPath, "index.js"), "-m=" + xdhelcqBin, dir]).on('close', function (code) {
-		process.exit(code)
-	});
+function launchDesktop(dir,prod) {
+	if (prod) {
+		require('child_process').spawn(electronBin, [path.join(xdhelcqPath, "index.js"), "-m=" + xdhelcqBin, dir]).on('close', function (code) {
+			process.exit(code)
+		});
+	} else {
+		require('child_process').spawn(electronBin, [path.join(xdhelcqPath, "index.js"), "-s=localhost:53752", "-m=" + xdhelcqBin, dir]).on('close', function (code) {
+			process.exit(code)
+		});
+	}
+
 }
 
-const types = {
+const guis = {
 	NONE: 0,
 	DESKTOP: 1,
 	WEB: 2,
 	DESKTOP_AND_WEB: 3
 }
 
-module.exports.types = types;
+module.exports.guis = guis;
 
-const defaultType = types.DESKTOP;
+const defaultGUI = guis.DESKTOP;
 
-function launch(callback, action, type) {
+var mode;
+
+if (process.env.EPEIOS_SRC) {
+	mode = modes.PROD;
+} else {
+	mode = modes.DEMO;
+}
+
+function launch(createCallback, newSessionAction, callbacks, gui) {
 	var dir = getRealDir(path.dirname(process.argv[1]));
+	var arg = "";
+	var prod = false;
 
-	if (type === undefined) {
-		if (process.argv.length > 2) {
-			switch (process.argv[2]) {
+	if ( process.argv.length > 2)
+		arg = process.argv[2];
+
+	if (arg != "") {
+		if (arg[0] == 'P') {
+			mode = modes.PROD;
+			arg = arg.substr( 1 );
+		} else if (arg[0] == 'D') {
+			mode = modes.DEMO;
+			arg = arg.substr(1);
+		}
+	}
+
+	if (gui === undefined) {
+		if (arg!="") {
+			switch (arg) {
 				case "n":
 				case "none":
-					type = types.NONE;
+					gui = guis.NONE;
 					break;
 				case "d":
 				case "desktop":
-					type = types.DESKTOP;
+					gui = guis.DESKTOP;
 					break;
 				case "web":
 				case "w":
-					type = types.WEB;
+					gui = guis.WEB;
 					break;
 				case "dw":
 				case "wd":
-					type = types.DESKTOP_AND_WEB;
+					gui = guis.DESKTOP_AND_WEB;
 					break;
 				default:
-					throw ("Unknown type !");
+					throw ("Unknown gui !");
 					break;
 			}
 		} else
-			type = defaultType;
+			gui = defaultGUI;
 	}
 
-	xdhq.launch(callback, action);
+	prod = mode == modes.PROD;
+	xdhq.launch(createCallback, newSessionAction, callbacks, mode);
 
-	switch (type) {
-		case types.NONE:
+	switch (gui) {
+		case guis.NONE:
 			break;
-		case types.DESKTOP:
-			launchDesktop(dir);
+		case guis.DESKTOP:
+			launchDesktop(dir,prod);
 			break;
-		case types.WEB:
+		case guis.WEB:
 			launchWeb(dir);
 			break;
-		case types.DESKTOP_AND_WEB:
-			launchDesktop(dir);
+		case guis.DESKTOP_AND_WEB:
+			launchDesktop(dir,prod);
 			launchWeb(dir);
 			break;
 		default:
-			throw ("Unknown type !");
+			throw ("Unknown gui !");
 			break;
 	}
 }
 
-module.exports.register = xdhq.register;
 module.exports.launch = launch;
-module.exports.createTree = xdhq.createTree;
+module.exports.createTree = () => require('xmlbuilder').create('XDHTML');
 module.exports.DOM = xdhq.XDH;
