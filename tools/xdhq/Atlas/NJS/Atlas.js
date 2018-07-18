@@ -91,7 +91,8 @@ function launchDesktop(dir,prod) {
 			process.exit(code)
 		});
 	} else {
-		require('child_process').spawn(electronBin, [path.join(xdhelcqPath, "index.js"), "-t=localhost:53752", "-m=" + xdhelcqBin, dir]).on('close', function (code) {
+		// 'xdhq_desktop' is a special token to report that the desktop interface is launched, not the web one (used in 'dmopool.cpp' from 'xdhqxdh' component).
+		require('child_process').spawn(electronBin, [path.join(xdhelcqPath, "index.js"), "-t=xdhq_desktop", "-m=" + xdhelcqBin, dir]).on('close', function (code) {
 			process.exit(code)
 		});
 	}
@@ -163,7 +164,13 @@ function launch(createCallback, newSessionAction, callbacks, gui) {
 	}
 
 	prod = mode == modes.PROD;
-	xdhq.launch(createCallback, newSessionAction, callbacks, mode);
+
+	var url = "";
+
+	if (gui == guis.WEB)
+		url = "http://localhost:8080";
+
+	xdhq.launch(createCallback, newSessionAction, callbacks, mode, url);
 
 	switch (gui) {
 		case guis.NONE:

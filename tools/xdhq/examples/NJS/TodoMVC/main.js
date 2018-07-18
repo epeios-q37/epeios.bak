@@ -58,7 +58,7 @@ class MyData extends DOM {
 				"label": "Note 2"
 			}
 		];
-//		 this.todos = [];
+		 this.todos = [];
 	}
 	itemsLeft() {
 		var i = this.todos.length;
@@ -302,22 +302,20 @@ function acCancel(dom, id) {
 }
 
 function main() {
-	atlas.register(
-		{
-			"Connect": acConnect,
-			"Submit": acSubmit,
-			"Destroy": acDestroy,
-			"Toggle": acToggle,
-			"All": acAll,
-			"Active": acActive,
-			"Completed": acCompleted,
-			"Clear": acClear,
-			"Edit": acEdit,
-			"Cancel": acCancel,
-		}
-	);
+	var callbacks =	{
+		"Connect": acConnect,
+		"Submit": acSubmit,
+		"Destroy": acDestroy,
+		"Toggle": acToggle,
+		"All": acAll,
+		"Active": acActive,
+		"Completed": acCompleted,
+		"Clear": acClear,
+		"Edit": acEdit,
+		"Cancel": acCancel,
+	};
 
-	atlas.launch(newSession, "Connect" );
+	atlas.launch(newSession, "Connect", callbacks );
 }
 
 main();

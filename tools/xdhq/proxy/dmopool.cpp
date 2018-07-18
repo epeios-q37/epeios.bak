@@ -33,7 +33,7 @@ using namespace dmopool;
 namespace {
 	mtx::rHandler Mutex_ = mtx::UndefinedHandler;
 	qROW( Row );
-	crt::qMCRATEw( str::dString, sRow ) Tokens;
+	crt::qMCRATEw( str::dString, sRow ) Tokens_;
 	crt::qMCRATEw( bch::qBUNCHdl( sck::sSocket ), sRow ) Sockets_;
 	csdbns::rListener Listener_;
 
@@ -41,10 +41,10 @@ namespace {
 	{
 		mtx::Lock( Mutex_ );
 
-		sRow Row = Tokens.First();
+		sRow Row = Tokens_.First();
 
-		while ( ( Row != qNIL ) && (Tokens( Row ) != Token) )
-			Row = Tokens.Next( Row );
+		while ( ( Row != qNIL ) && (Tokens_( Row ) != Token) )
+			Row = Tokens_.Next( Row );
 
 
 		mtx::Unlock( Mutex_ );
@@ -59,7 +59,7 @@ namespace {
 		if ( Search_( Token ) != qNIL )
 			qRGnr();
 
-		Row = Tokens.Append( Token );
+		Row = Tokens_.Append( Token );
 
 		if ( Sockets_.New() != Row )
 			qRGnr();
@@ -97,16 +97,19 @@ namespace {
 	qRB;
 		Blocker.Release();
 
-		Flow.Init( Socket, true, sck::NoTimeout );
+		Flow.Init( Socket, false, sck::NoTimeout );
 
 		Token.Init();
 		Get_( Flow, Token );
 
 		if ( Token.Amount() == 0 ) {
 			Token.Append( tol::UUIDGen( UUID ) );
+//			Token.Append( "coucou" );
 
 			Row = Create_( Token );
-		} else
+		} else if ( Token == "xdhq_desktop" )
+			Row = Create_( Token );
+		else
 			Row = Search_( Token );
 
 		if ( Row == qNIL )
@@ -146,6 +149,7 @@ namespace {
 	void Init_( void )
 	{
 		Mutex_ = mtx::Create();
+		Tokens_.Init();
 		Sockets_.Init();
 		Listener_.Init( 51000 );
 

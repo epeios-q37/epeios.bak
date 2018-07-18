@@ -48,6 +48,20 @@ function getStrings(query, offset) {
   return strings;
 }
 
+function addString(data, string) {
+	return Buffer.concat([data, Buffer.alloc(1, string.length), Buffer.from(string)]);
+}
+
+function addStrings(data, strings) {
+	var i = 0;
+	data = Buffer.concat([data, Buffer.alloc(1, strings.length)]);
+
+	while (i < strings.length)
+		data = addString(data, strings[i++]);
+
+	return data;
+}
+
 function hasToLaunch(query) {
   var i = 0;
   var request = "";
@@ -63,7 +77,7 @@ function hasToLaunch(query) {
     throw "Unknown query: '" + request + "'";
 }
 
-function getQuery(socket, action, id) {
+function getQuery(socket) {
   var buffer;
   var query = Buffer.alloc(0);
 
@@ -104,38 +118,62 @@ function getResponse(query, type) {
   }
 }
 
+var token = "";
+var url = "";
+
 function pseudoServer(createCallback, newSessionAction, callbacks)
 {
-	const client = new net.Socket();
+	var client = new net.Socket();
 
 	client.connect(51000, "localhost", () => {
+		console.log("!!!");
+
+		var data = new Buffer(0);
+		var relaunch = true;
+
+		if ((token == '') && (url == ''))
+			token = "xdhq_desktop";
+		
+		data = addString(data, token);
+
+		client.write(data);
 
 		client.on('readable', () => {
 			if (client._xdhDOM === undefined) {
-				pseudoServer(createCallback, newSessionAction, callbacks);
+				var query = getQuery(client);
 
-				var data;
+				token = getString(query, 0);
 
-				while (data = client.read())
-					console.log(">" + data + ' ||| ' + Buffer.from(data) + "<");
+				if (token == "")
+					throw "Bad connection information !!!";
 
 				client._xdhDOM = createCallback(client);
 				client._xdhDOM._xdhSocket = client;
 
 				client.write(Buffer.from("StandBy_1\x00"));
+
+				if (url != "") {
+					require('child_process').exec("start " + url + "?_token=" + token);
+					url = "";
+				}
+
+			} else if ( relaunch ) {
+				pseudoServer(createCallback, newSessionAction, callbacks);
+
+				while (data = client.read());
+
+				relaunch = false;
 			} else {
+
 				var query;
 
 				query = getQuery(client);
-
-				console.log("Query: ", query.toString());
 
 				if (hasToLaunch(query)) {
 					var id, action;
 
 					id = getId(query);
 					action = getAction(query);
-					console.log("action: '" + action + "', id: '" + id + "'");
 
 					if (action == "") {
 						callbacks[newSessionAction](client._xdhDOM, "");
@@ -144,7 +182,6 @@ function pseudoServer(createCallback, newSessionAction, callbacks)
 						callbacks[action](client._xdhDOM, id);
 					}
 				} else {
-					console.log("READY !!!", client._xdhDOM._xdhType);
 					if (client._xdhDOM._xdhType === types.VOID) {
 						if (client._xdhDOM._xdhCallback != undefined) {
 							client._xdhDOM._xdhType = types.UNDEFINED;
@@ -172,30 +209,18 @@ function pseudoServer(createCallback, newSessionAction, callbacks)
 	});
 }
 
-function launch(createCallback, newSessionAction, callbacks) {
+function launch(createCallback, newSessionAction, callbacks, webURL) {
 	if (process.env.EPEIOS_SRC) {
 		console.log("DEMO mode !");
 	}
+
+	url = webURL;
 
 	pseudoServer(createCallback, newSessionAction, callbacks);
 
 }
 
 const net = require('net');
-
-function addString(data, string) {
-  return Buffer.concat([data, Buffer.alloc(1, string.length), Buffer.from(string)]);
-}
-
-function addStrings(data, strings) {
-  var i = 0;
-  data = Buffer.concat([data, Buffer.alloc(1, strings.length)]);
-
-  while (i < strings.length)
-    data = addString(data, strings[i++]);
-
-  return data;
-}
 
 function add(data, argument) {
   if (typeof (argument) === "string")
@@ -223,38 +248,7 @@ function call( dom, command, type ) {
 
   dom._xdhCallback = arguments[i++];
 
-  console.log("Data: ", data.toString());
   dom._xdhSocket.write(data);
-}
-
-// {'a': b, 'c': d, 'e': f} -> ['a','c','e'] [b,d,f]
-function split(keysAndValues, keys, values) {
-  for (var prop in keysAndValues) {
-    keys.push(prop);
-    values.push(keysAndValues[prop]);
-  }
-}
-
-// ['a', 'b', 'c'] ['d', 'e', 'f'] -> { 'a': 'd', 'b': 'e', 'c': 'f' }
-function unsplit(keys, values) {
-  var i = 0;
-  var keysValues = {};
-
-  while (i < keys.length) {
-    keysValues[keys[i]] = values[i];
-    i++;
-  }
-
-  return keysValues;
-}
-
-// 'key', value -> { 'key': value } 
-function merge(key, value) {
-  var keyValue = {};
-
-  keyValue[key] = value;
-
-  return keyValue;
 }
 
 module.exports.launch = launch;
