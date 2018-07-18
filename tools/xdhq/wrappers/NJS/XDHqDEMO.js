@@ -20,32 +20,43 @@
 "use strict"
 
 function getSize(query, offset) {
-  var size = query[offset];
+	var byte = query[offset++];
+	var size = byte & 0x7f;
 
-  return size;
+	while (byte & 0x80) {
+		byte = query[offset++];
+
+		size = (size << 7) + (byte & 0x7f);
+	}
+
+	return [size, offset];
 }
 
 function getString(query, offset) {
-  var size = getSize(query, offset++);
-  var string = "";
+	var size = 0;
+	[size,offset] = getSize(query, offset);
 
-  while (size--)
-    string += String.fromCodePoint(query[offset++]);
+	var string = "";
 
-  return string;
+	while (size--)
+		string += String.fromCodePoint(query[offset++]);
+
+	return [string,offset];
 }
 
 function getStrings(query, offset) {
-  var size = getSize(query, offset++);
+	var size = 0;
+	var strings = new Array();
+	var string = "";
 
-  var strings = new Array();
+	[size,offset] = getSize(query, offset);
 
-  while (size--) {
-    strings.push(getString(query, offset));
-    offset += getSize(query, offset) + 1;
-  }
+	while (size--) {
+		[string,offset]=getString(query, offset);
+		strings.push(string);
+	}
 
-  return strings;
+	return strings;
 }
 
 function addString(data, string) {
@@ -63,66 +74,65 @@ function addStrings(data, strings) {
 }
 
 function hasToLaunch(query) {
-  var i = 0;
-  var request = "";
+	var i = 0;
+	var request = "";
 
-  while (query[i] != 0)
-    request += String.fromCodePoint(query[i++]);
+	while (query[i] != 0)
+		request += String.fromCodePoint(query[i++]);
 
-  if (request == "Ready_1")
-    return false;
-  else if (request == "Launch_1")
-    return true;
-  else
-    throw "Unknown query: '" + request + "'";
+	if (request == "Ready_1")
+		return false;
+	else if (request == "Launch_1")
+		return true;
+	else
+		throw "Unknown query: '" + request + "'";
 }
 
 function getQuery(socket) {
-  var buffer;
-  var query = Buffer.alloc(0);
+	var buffer;
+	var query = Buffer.alloc(0);
 
-  while (buffer = socket.read())
-    query = Buffer.concat([query, buffer]);
+	while (buffer = socket.read())
+		query = Buffer.concat([query, buffer]);
 
-  return query;
+	return query;
 }
 
 function getId(query) {
-  return getString(query, 9);
+	return getString(query, 9)[0];
 }
 
 function getAction(query) {
-  return getString(query, 9 + getSize(query, 9) + 1);
+	return getString(query, 9 + getSize(query, 9)[0] + 1)[0];
 }
 
 // Types of the reponse.
 const types = require('./XDHqSHRD.js').types;
 
 function getResponse(query, type) {
-  switch (type) {
-    case types.UNDEFINED:
-      throw "This function should not be called with UNDEFINED type !!!";
-      break;
-    case types.VOID:
-      throw "The VOID type should be handled upstream !!!";
-      break;
-    case types.STRING:
-      return getString(query, 8);
-      break;
-    case types.STRINGS:
-      return getStrings(query, 8);
-      break;
-    default:
-      throw "Unknown response type !!!";
-      break;
-  }
+	switch (type) {
+		case types.UNDEFINED:
+			throw "This function should not be called with UNDEFINED type !!!";
+			break;
+		case types.VOID:
+			throw "The VOID type should be handled upstream !!!";
+			break;
+		case types.STRING:
+			return getString(query, 8);
+			break;
+		case types.STRINGS:
+			return getStrings(query, 8);
+			break;
+		default:
+			throw "Unknown response type !!!";
+			break;
+	}
 }
 
 var token = "";
 var url = "";
 
-function pseudoServer(createCallback, newSessionAction, callbacks)
-{
+function pseudoServer(createCallback, newSessionAction, callbacks) {
 	var client = new net.Socket();
 
 	client.connect(51000, "localhost", () => {
@@ -133,7 +143,7 @@ function pseudoServer(createCallback, newSessionAction, callbacks)
 
 		if ((token == '') && (url == ''))
 			token = "xdhq_desktop";
-		
+
 		data = addString(data, token);
 
 		client.write(data);
@@ -142,7 +152,7 @@ function pseudoServer(createCallback, newSessionAction, callbacks)
 			if (client._xdhDOM === undefined) {
 				var query = getQuery(client);
 
-				token = getString(query, 0);
+				token = getString(query, 0)[0];
 
 				if (token == "")
 					throw "Bad connection information !!!";
@@ -157,7 +167,7 @@ function pseudoServer(createCallback, newSessionAction, callbacks)
 					url = "";
 				}
 
-			} else if ( relaunch ) {
+			} else if (relaunch) {
 				pseudoServer(createCallback, newSessionAction, callbacks);
 
 				while (data = client.read());
@@ -223,32 +233,32 @@ function launch(createCallback, newSessionAction, callbacks, webURL) {
 const net = require('net');
 
 function add(data, argument) {
-  if (typeof (argument) === "string")
-    return addString(data, argument);
-  else if (typeof (argument) === "object")
-    return addStrings(data, argument);
-  else
-    throw "Unexpected argument type: " + typeof (argument);
+	if (typeof (argument) === "string")
+		return addString(data, argument);
+	else if (typeof (argument) === "object")
+		return addStrings(data, argument);
+	else
+		throw "Unexpected argument type: " + typeof (argument);
 }
 
-function call( dom, command, type ) {
-  var i = 3;
-  var data = Buffer.from(command + '\x00');
-  var amount = arguments[i++];
+function call(dom, command, type) {
+	var i = 3;
+	var data = Buffer.from(command + '\x00');
+	var amount = arguments[i++];
 
-  dom._xdhType = type;
+	dom._xdhType = type;
 
-  while ( amount-- )
-    data = add(data, arguments[i++]);
+	while (amount--)
+		data = add(data, arguments[i++]);
 
-  amount = arguments[i++];
+	amount = arguments[i++];
 
-  while ( amount-- )
-    data = add(data, arguments[i++]);
+	while (amount--)
+		data = add(data, arguments[i++]);
 
-  dom._xdhCallback = arguments[i++];
+	dom._xdhCallback = arguments[i++];
 
-  dom._xdhSocket.write(data);
+	dom._xdhSocket.write(data);
 }
 
 module.exports.launch = launch;
