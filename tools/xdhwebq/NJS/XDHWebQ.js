@@ -110,7 +110,9 @@ function userHead() {
 	}
 }
 
-function prolog() {
+function prolog(token) {
+	if (token == undefined)
+		token = "";
 	return [
 		'<!DOCTYPE html>',
 		'<html>',
@@ -121,7 +123,7 @@ function prolog() {
 		userHead(),
 		'		<script src="xdh/xdhtml.js"></script>',
 		'		<script src="xdh/xdhwebq.js"></script>',
-		'		<script>handleQuery("?_action=")</script>',
+		'		<script>handleQuery("?_token=' + token + '&_action=")</script>',
 		'	</head>',
 		'	<body id="XDHRoot">',
 		'	</body>'
@@ -139,7 +141,7 @@ function serveQuery(query, res) {
 		new StringStream(njsq._call(xdhwebq, 2, keys, values)).pipe(res);
 		//		njsq._call(xdhwebq, 3, keys, values, (result) => new StringStream(result ).pipe(res));
 	} else {
-		new StringStream(prolog()).pipe(res);
+		new StringStream(prolog(query['_token'])).pipe(res);
 	}
 }
 

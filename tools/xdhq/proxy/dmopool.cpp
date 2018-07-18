@@ -21,16 +21,115 @@
 
 using namespace dmopool;
 
+#include "prtcl.h"
+
 #include "bch.h"
+#include "crt.h"
 #include "csdbns.h"
+#include "flx.h"
 #include "mtk.h"
+#include "str.h"
 
 namespace {
 	mtx::rHandler Mutex_ = mtx::UndefinedHandler;
-	bch::qBUNCHwl( sck::sSocket ) Sockets_;
+	qROW( Row );
+	crt::qMCRATEw( str::dString, sRow ) Tokens;
+	crt::qMCRATEw( bch::qBUNCHdl( sck::sSocket ), sRow ) Sockets_;
 	csdbns::rListener Listener_;
 
-	void Routine_( void * )
+	sRow Search_( const str::dString &Token )
+	{
+		mtx::Lock( Mutex_ );
+
+		sRow Row = Tokens.First();
+
+		while ( ( Row != qNIL ) && (Tokens( Row ) != Token) )
+			Row = Tokens.Next( Row );
+
+
+		mtx::Unlock( Mutex_ );
+
+		return Row;
+	}
+
+	sRow Create_( const str::dString &Token )
+	{
+		sRow Row = qNIL;
+
+		if ( Search_( Token ) != qNIL )
+			qRGnr();
+
+		Row = Tokens.Append( Token );
+
+		if ( Sockets_.New() != Row )
+			qRGnr();
+
+		Sockets_( Row ).Init();
+
+		return Row;
+	}
+
+	void Get_(
+		flw::sRFlow &Flow,
+		str::dString &String )
+	{
+		prtcl::Get( Flow, String );
+	}
+
+	void Put_(
+		const str::dString &String,
+		flw::sWFlow &Flow )
+	{
+		prtcl::Put( String, Flow );
+	}
+
+	void NewConnexionRoutine_(
+		void *UP,
+		mtk::gBlocker &Blocker )
+	{
+	qRH
+		sck::sSocket Socket = (sck::sSocket)UP;
+		bso::sBool Locked = false;
+		str::wString Token;
+		sck::rRWFlow Flow;
+		tol::bUUID UUID;
+		sRow Row = qNIL;
+	qRB;
+		Blocker.Release();
+
+		Flow.Init( Socket, true, sck::NoTimeout );
+
+		Token.Init();
+		Get_( Flow, Token );
+
+		if ( Token.Amount() == 0 ) {
+			Token.Append( tol::UUIDGen( UUID ) );
+
+			Row = Create_( Token );
+		} else
+			Row = Search_( Token );
+
+		if ( Row == qNIL )
+			Token.Init();
+		else {
+			mtx::Lock( Mutex_ );
+			Locked = true;
+
+			Sockets_( Row ).Push( Socket );
+
+			mtx::Unlock( Mutex_ );
+			Locked = false;
+		}
+
+		Put_( Token, Flow );
+	qRR;
+	qRT;
+		if( Locked )
+			mtx::Unlock( Mutex_ );
+	qRE;
+	}
+
+	void ListeningRoutine_( void * )
 	{
 		sck::sSocket Socket = sck::Undefined;
 		const char *IP;
@@ -40,15 +139,8 @@ namespace {
 
 			Socket = Listener_.GetConnection( IP );
 
-			mtx::Lock( Mutex_ );
-
-			Sockets_.Push( Socket );
-
-			mtx::Unlock( Mutex_ );
+			mtk::Launch( NewConnexionRoutine_, (void *)Socket );
 		}
-
-
-
 	}
 
 	void Init_( void )
@@ -57,17 +149,23 @@ namespace {
 		Sockets_.Init();
 		Listener_.Init( 51000 );
 
-		mtk::RawLaunch( Routine_, NULL );
+		mtk::RawLaunch( ListeningRoutine_, NULL );
 	}
 }
 
 sck::sSocket dmopool::GetConnexion( const str::dString &Token )
 {
 	sck::sSocket Socket = sck::Undefined;
+	sRow Row = qNIL;
+
+	Row = Search_( Token );
+
+	if ( Row == qNIL )
+		qRGnr();
 
 	mtx::Lock( Mutex_ );
 
-	Socket = Sockets_.Pop();
+	Socket = Sockets_( Row ).Pop();
 
 	mtx::Unlock( Mutex_ );
 

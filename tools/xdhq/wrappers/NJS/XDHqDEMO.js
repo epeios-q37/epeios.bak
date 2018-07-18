@@ -104,76 +104,80 @@ function getResponse(query, type) {
   }
 }
 
+function pseudoServer(createCallback, newSessionAction, callbacks)
+{
+	const client = new net.Socket();
+
+	client.connect(51000, "localhost", () => {
+
+		client.on('readable', () => {
+			if (client._xdhDOM === undefined) {
+				pseudoServer(createCallback, newSessionAction, callbacks);
+
+				var data;
+
+				while (data = client.read())
+					console.log(">" + data + ' ||| ' + Buffer.from(data) + "<");
+
+				client._xdhDOM = createCallback(client);
+				client._xdhDOM._xdhSocket = client;
+
+				client.write(Buffer.from("StandBy_1\x00"));
+			} else {
+				var query;
+
+				query = getQuery(client);
+
+				console.log("Query: ", query.toString());
+
+				if (hasToLaunch(query)) {
+					var id, action;
+
+					id = getId(query);
+					action = getAction(query);
+					console.log("action: '" + action + "', id: '" + id + "'");
+
+					if (action == "") {
+						callbacks[newSessionAction](client._xdhDOM, "");
+						//            client.write(Buffer.from("StandBy_1\x00"));
+					} else {
+						callbacks[action](client._xdhDOM, id);
+					}
+				} else {
+					console.log("READY !!!", client._xdhDOM._xdhType);
+					if (client._xdhDOM._xdhType === types.VOID) {
+						if (client._xdhDOM._xdhCallback != undefined) {
+							client._xdhDOM._xdhType = types.UNDEFINED;
+							client._xdhDOM._xdhCallback();
+							if (client._xdhDOM._xdhType === types.UNDEFINED)
+								client.write(Buffer.from("StandBy_1\x00"));
+						} else
+							client.write(Buffer.from("StandBy_1\x00"));
+					} else if (client._xdhDOM._xdhCallback != undefined) {
+						var type = client._xdhDOM._xdhType;
+						client._xdhDOM._xdhType = types.UNDEFINED;
+						client._xdhDOM._xdhCallback(getResponse(query, type));
+						if (client._xdhDOM._xdhType === types.UNDEFINED)
+							client.write(Buffer.from("StandBy_1\x00"));
+					} else {
+						getResponse(query, client._xdhDOM._xdhType);
+						client.write(Buffer.from("StandBy_1\x00"));
+					}
+				}
+			}
+		});
+	});
+	client.on('error', (err) => {
+		throw err;
+	});
+}
+
 function launch(createCallback, newSessionAction, callbacks) {
 	if (process.env.EPEIOS_SRC) {
 		console.log("DEMO mode !");
 	}
 
-    //	xdhq.launch(callback, action);
-	const client = new net.Socket();
-
-	client.connect(51000, "localhost", () => {
-    // 'connection' listener
-		//		client.on('data', function(chunk) {console.log( ">" + chunk.toString() + "<" ) });
-    client.on('readable', () => {
-
-    	if (client._xdhDOM === undefined) {
-        var data;
-
-        while (data = client.read())
-          console.log(">" + data + ' ||| ' + Buffer.from(data) + "<");
-
-        client._xdhDOM = createCallback(client);
-        client._xdhDOM._xdhSocket = client;
-
-        client.write(Buffer.from("StandBy_1\x00"));
-      } else {
-        var query;
-
-        query = getQuery(client);
-
-        console.log("Query: ", query.toString());
-
-        if (hasToLaunch(query)) {
-          var id, action;
-
-          id = getId(query);
-          action = getAction(query);
-          console.log("action: '" + action + "', id: '" + id + "'");
-
-          if (action == "") {
-          	callbacks[newSessionAction](client._xdhDOM, "");
-          	//            client.write(Buffer.from("StandBy_1\x00"));
-          } else {
-          	callbacks[action](client._xdhDOM, id);
-          }
-        } else {
-        	console.log("READY !!!", client._xdhDOM._xdhType);
-        	if (client._xdhDOM._xdhType === types.VOID) {
-        		if (client._xdhDOM._xdhCallback != undefined) {
-        			client._xdhDOM._xdhType = types.UNDEFINED;
-        			client._xdhDOM._xdhCallback();
-        			if (client._xdhDOM._xdhType === types.UNDEFINED)
-        				client.write(Buffer.from("StandBy_1\x00"));
-            } else
-        			client.write(Buffer.from("StandBy_1\x00"));
-        	} else if (client._xdhDOM._xdhCallback != undefined) {
-        		var type = client._xdhDOM._xdhType;
-        		client._xdhDOM._xdhType = types.UNDEFINED;
-        		client._xdhDOM._xdhCallback(getResponse(query, type));
-        		if (client._xdhDOM._xdhType === types.UNDEFINED)
-        			client.write(Buffer.from("StandBy_1\x00"));
-          } else {
-        		getResponse(query, client._xdhDOM._xdhType);
-        		client.write(Buffer.from("StandBy_1\x00"));
-          }
-        }
-      }
-    });
-  });
-  client.on('error', (err) => {
-    throw err;
-  });
+	pseudoServer(createCallback, newSessionAction, callbacks);
 
 }
 
