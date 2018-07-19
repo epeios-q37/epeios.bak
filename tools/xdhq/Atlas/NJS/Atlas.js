@@ -96,7 +96,6 @@ function launchDesktop(dir,prod) {
 			process.exit(code)
 		});
 	}
-
 }
 
 const guis = {
@@ -112,7 +111,7 @@ const defaultGUI = guis.DESKTOP;
 
 var mode;
 
-if (process.env.EPEIOS_SRC) {
+if (isDev()) {
 	mode = modes.PROD;
 } else {
 	mode = modes.DEMO;

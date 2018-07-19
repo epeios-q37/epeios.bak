@@ -46,7 +46,6 @@ namespace {
 		while ( ( Row != qNIL ) && (Tokens_( Row ) != Token) )
 			Row = Tokens_.Next( Row );
 
-
 		mtx::Unlock( Mutex_ );
 
 		return Row;

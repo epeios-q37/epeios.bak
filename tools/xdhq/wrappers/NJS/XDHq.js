@@ -19,7 +19,35 @@
 
 "use strict"
 
+const fs = require('fs');
+const path = require('path');
 const types = require('./XDHqSHRD.js').types;
+
+function isDev() {
+	if (process.env.EPEIOS_SRC)
+		return true;
+	else
+		return false;
+}
+
+function getEpeiosPath() {
+	if (isDev) {
+		if (process.platform == 'win32') {
+			return "h:/hg/epeios/"
+		} else {
+			return "~/hg/epeios/"
+		}
+	} else
+		throw "Error !";
+}
+
+function getRealDir(dir) {
+	if (isDev()) {
+		let epeiosPath = getEpeiosPath();
+		return path.resolve(epeiosPath, "tools/xdhq/examples/common/", path.relative(path.resolve(epeiosPath, "tools/xdhq/examples/NJS/"), path.resolve(dir)));	// No final '/'.
+	} else
+		return path.resolve(dir);
+}
 
 const modes = {
 	DEMO: 0,
@@ -84,10 +112,12 @@ class XDH {
 		call( this, "Alert_1", types.VOID, 1, message, 0, callback);
 	}
 	confirm(message, callback) {
-		call( this, "Confirm_1", types.STRING, 1, message, 0, (result) => callback(result == "true"));
+		call( this, "Confirm_1", types.STRING, 1, message, 0, (answer) => callback(answer == "true"));
 	}
 	setLayout(id, tree, xslFilename, callback) {
-		call(this, "SetLayout_1", types.VOID, 3, id, tree.end(), xslFilename, 0, callback);
+		var xsl = "data:text/xml;base64," + Buffer.from(fs.readFileSync(path.join( getRealDir(path.dirname(xslFilename)), path.win32.basename(xslFilename)))).toString('base64');
+
+		call(this, "SetLayout_1", types.VOID, 3, id, tree.end(), xsl, 0, callback);
 	}
 	getContents(ids, callback) {
 		call(this, "GetContents_1", types.STRINGS, 0, 1, ids,

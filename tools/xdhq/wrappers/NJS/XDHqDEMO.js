@@ -56,16 +56,28 @@ function getStrings(query, offset) {
 		strings.push(string);
 	}
 
-	return strings;
+	return [strings,offset];
+}
+
+function convertSize(size) {
+	var result = Buffer.alloc(1, size & 0x7f);
+	size >>= 7;
+
+	while (size != 0) {
+		result = Buffer.concat([Buffer.alloc(1, ( size & 0x7f ) | 0x80 ), result]);
+		size >>= 7;
+	}
+
+	return result;
 }
 
 function addString(data, string) {
-	return Buffer.concat([data, Buffer.alloc(1, string.length), Buffer.from(string)]);
+	return Buffer.concat([data, convertSize( string.length), Buffer.from(string)]);
 }
 
 function addStrings(data, strings) {
 	var i = 0;
-	data = Buffer.concat([data, Buffer.alloc(1, strings.length)]);
+	data = Buffer.concat([data, convertSize( strings.length)]);
 
 	while (i < strings.length)
 		data = addString(data, strings[i++]);
@@ -106,7 +118,7 @@ function getAction(query) {
 	return getString(query, 9 + getSize(query, 9)[0] + 1)[0];
 }
 
-// Types of the reponse.
+// Types of the response.
 const types = require('./XDHqSHRD.js').types;
 
 function getResponse(query, type) {
@@ -118,10 +130,10 @@ function getResponse(query, type) {
 			throw "The VOID type should be handled upstream !!!";
 			break;
 		case types.STRING:
-			return getString(query, 8);
+			return getString(query, 8)[0];
 			break;
 		case types.STRINGS:
-			return getStrings(query, 8);
+			return getStrings(query, 8)[0];
 			break;
 		default:
 			throw "Unknown response type !!!";
@@ -136,8 +148,6 @@ function pseudoServer(createCallback, newSessionAction, callbacks) {
 	var client = new net.Socket();
 
 	client.connect(51000, "localhost", () => {
-		console.log("!!!");
-
 		var data = new Buffer(0);
 		var relaunch = true;
 
