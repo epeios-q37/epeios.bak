@@ -116,11 +116,10 @@ function prolog(token) {
 	return [
 		'<!DOCTYPE html>',
 		'<html>',
-		'	<head>',
+		'	<head id="_xdh_head">',
 		'		<meta name="generator" content="XDHWebQNJS"/>',
 		'		<meta charset="UTF-8" />',
 		'		<meta http-equiv="X-UA-Compatible" content="IE=edge" />',
-		userHead(),
 		'		<script src="xdh/xdhtml.js"></script>',
 		'		<script src="xdh/xdhwebq.js"></script>',
 		'		<script>handleQuery("?_token=' + token + '&_action=")</script>',

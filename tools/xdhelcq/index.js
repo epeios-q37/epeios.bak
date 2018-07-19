@@ -51,9 +51,7 @@ function createWindow() {
   // Open the DevTools.
   //  win.webContents.openDevTools();
 
-  let headFilename = (path.join(cdnPath, "head.html"));
-  let head = () => { if (fs.existsSync(headFilename)) return fs.readFileSync(headFilename); else return ""; };
-  let html = fs.readFileSync(path.join(__dirname, "XDHELCq.html"), "utf8").replace("<!-- $USER_HEAD$ -->", head).replace(/\$XDHELCQ_PATH\$/g, __dirname.replace(/\\/g, "\\\\"));
+  let html = fs.readFileSync(path.join(__dirname, "XDHELCq.html"), "utf8").replace(/\$XDHELCQ_PATH\$/g, __dirname.replace(/\\/g, "\\\\"));
 
   win.loadURL("data:text/html;charset=utf-8," + encodeURI(html), { baseURLForDataURL: "file://" + cdnPath });
 

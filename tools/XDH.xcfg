@@ -146,11 +146,20 @@
 			<Fetcher>
 				<Events>
 					<![CDATA[
-					 console.log( "%XSL%" );
-						removeChildren( "%Id%" );
-						getElement( "%Id%" ).appendChild( transformToFragment( "%XML%", "%XSL%" ) );"";
-						var digests = fetchEventHandlers( "%Id%" );
+					{
+						let xml = "%XML%";
+						let xsl = "%XSL%";
+						let id = "%Id%";
+					 console.log( "Id:", id, "XSL: ", xsl, "XML: ", xml );
+						if( xsl == "" )
+												getElement( id ).innerHTML = xml;
+						else {
+												removeChildren( id );
+												getElement( id ).appendChild( transformToFragment( xml, xsl ) );
+						}
+						var digests = fetchEventHandlers( id );
 						digests;
+						}
 					]]>
 				</Events>
 				<Widgets>

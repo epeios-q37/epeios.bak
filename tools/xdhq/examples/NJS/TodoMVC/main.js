@@ -43,6 +43,20 @@ const atlas = require(atlasId);
 const Tree = atlas.Tree;
 const DOM = atlas.DOM;
 
+const head = [
+'<title>Atlas • TodoMVC</title>',
+'<link rel="stylesheet" href="node_modules/todomvc-common/base.css">',
+'<link rel="stylesheet" href="node_modules/todomvc-app-css/index.css">',
+'<style>',
+' .hide { display: none; }',
+'</style>',
+'<style id="HideClearCompleted">',
+' .clear-completed { display: none; }',
+'</style>'
+].join('\n');
+
+console.log(head);
+
 class MyData extends DOM {
 	constructor() {
 		super();
@@ -121,7 +135,7 @@ function displayTodos(dom) {
 
 	tree = tree.up();
 
-	dom.setLayout("Todos", tree, "Todos.xsl",
+	dom.setLayoutXSL("Todos", tree, "Todos.xsl",
 		() => handleCount(dom)
 	);
 }
@@ -133,9 +147,11 @@ function newSession() {
 }
 
 function acConnect(dom, id) {
-	dom.setLayout("", atlas.createTree(), "Main.xsl",
-		() => dom.focus("Input",
-			() => displayTodos(dom)
+	dom.headUp( head,
+		() => dom.setLayoutXSL("", atlas.createTree(), "Main.xsl",
+			() => dom.focus("Input",
+				() => displayTodos(dom)
+			)
 		)
 	);
 }

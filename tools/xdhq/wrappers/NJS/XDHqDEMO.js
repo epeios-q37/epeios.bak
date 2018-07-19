@@ -169,6 +169,7 @@ function pseudoServer(createCallback, newSessionAction, callbacks) {
 
 				client._xdhDOM = createCallback(client);
 				client._xdhDOM._xdhSocket = client;
+				client._xdhDOM._xdhIsDEMO = true;
 
 				client.write(Buffer.from("StandBy_1\x00"));
 

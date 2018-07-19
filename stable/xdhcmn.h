@@ -80,7 +80,7 @@ namespace xdhcmn {
 		fLog,				// Message,
 		fAlert,				// XML, XSL, Title.
 		fConfirm,			// XML, XSL, Title.
-		fSetLayout,			// Id, XML, XSL.
+		fSetLayout,			// Id, XML, XSL; if XSL is empty, XML is pure HTML.
 		fSetContents,		// Ids, Contents.
 		fDressWidgets,		// Id.
 		fInsertCSSRule,		// Rule, Index.

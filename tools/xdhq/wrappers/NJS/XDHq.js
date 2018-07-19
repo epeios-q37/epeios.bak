@@ -114,10 +114,24 @@ class XDH {
 	confirm(message, callback) {
 		call( this, "Confirm_1", types.STRING, 1, message, 0, (answer) => callback(answer == "true"));
 	}
-	setLayout(id, tree, xslFilename, callback) {
-		var xsl = "data:text/xml;base64," + Buffer.from(fs.readFileSync(path.join( getRealDir(path.dirname(xslFilename)), path.win32.basename(xslFilename)))).toString('base64');
+	setLayout_(id, xml, xsl, callback) {
+		call(this, "SetLayout_1", types.VOID, 3, id, xml, xsl, 0, callback);
+	}
+	headUp(head, callback) {
+		this.setLayout_( "_xdh_head", head, "", callback );
+	}
+	setLayout(id, html, callback) {
+		this.setLayout_( id, html, "", callback);
+	}
+	setLayoutXSL(id, tree, xslFilename, callback) {
+		let xslURL;
 
-		call(this, "SetLayout_1", types.VOID, 3, id, tree.end(), xsl, 0, callback);
+		if (this._xdhIsDEMO)
+			xslURL = "data:text/xml;base64," + Buffer.from(fs.readFileSync(path.join(getRealDir(path.dirname(xslFilename)), path.win32.basename(xslFilename)))).toString('base64');
+		else
+			xslURL = xslFilename;
+
+		this.setLayout_( id, tree.end(), xslURL, callback);
 	}
 	getContents(ids, callback) {
 		call(this, "GetContents_1", types.STRINGS, 0, 1, ids,

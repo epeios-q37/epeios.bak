@@ -88,8 +88,8 @@
 				<File Path="../../examples/NJS/Hello/">main.js</File>
 				<Files Path="../../examples/common/Hello/">
 					<File>CHANGELOG.md</File>
-					<File>head.html</File>
-					<File>Main.xsl</File>
+					<File>Head.html</File>
+					<File>Main.html</File>
 				</Files>
 			</Files>
 			<Files Group="Notes">

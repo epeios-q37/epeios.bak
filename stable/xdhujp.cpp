@@ -199,7 +199,7 @@ static void SetLayout_(
 	cJS &Callback,
 	const nchar__ *Id,	// If 'Id' != NULL, it's the id of the element to apply to, otherwise it applies to the document.
 	const nchar__ *XML,
-	const nchar__ *XSL )
+	const nchar__ *XSL )	// If empty, 'XML' cotains pute '(X)HTML'.
 {
 qRH
 	TOL_CBUFFER___ Result;
