@@ -4,8 +4,8 @@
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<xsl:output method="html" encoding="UTF-8"/>
 	<xsl:template match="/">
-		<span class="vcenter-out">
-			<span class="vcenter-in">
+		<div class="vcenter-out">
+			<div class="vcenter-in">
 				<span data-xdh-onevent="mouseleave|HideInput">
 					<fieldset>
 						<div data-xdh-onevent="ShowInput">
@@ -17,7 +17,7 @@
 						</div>
 					</fieldset>
 				</span>
-			</span>
-		</span>
+			</div>
+		</div>
 	</xsl:template>
 </xsl:stylesheet>

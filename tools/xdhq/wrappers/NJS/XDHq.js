@@ -127,7 +127,7 @@ class XDH {
 		let xslURL;
 
 		if (this._xdhIsDEMO)
-			xslURL = "data:text/xml;base64," + Buffer.from(fs.readFileSync(path.join(getRealDir(path.dirname(xslFilename)), path.win32.basename(xslFilename)))).toString('base64');
+			xslURL = "data:text/xml;charset=utf-8," + encodeURIComponent(Buffer.from(fs.readFileSync(path.join(getRealDir(path.dirname(xslFilename)), path.win32.basename(xslFilename)))).toString());
 		else
 			xslURL = xslFilename;
 

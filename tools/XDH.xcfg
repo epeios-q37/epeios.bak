@@ -147,6 +147,7 @@
 				<Events>
 					<![CDATA[
 					{
+					console.log( "Yo!" );
 						let xml = "%XML%";
 						let xsl = "%XSL%";
 						let id = "%Id%";

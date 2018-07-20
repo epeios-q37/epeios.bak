@@ -125,18 +125,9 @@ function launch(createCallback, newSessionAction, callbacks, gui) {
 	if ( process.argv.length > 2)
 		arg = process.argv[2];
 
-	if (arg != "") {
-		if (arg[0] == 'P') {
-			mode = modes.PROD;
-			arg = arg.substr( 1 );
-		} else if (arg[0] == 'D') {
-			mode = modes.DEMO;
-			arg = arg.substr(1);
-		}
-	}
-
 	if (gui === undefined) {
 		if (arg!="") {
+			mode = modes.PROD;
 			switch (arg) {
 				case "n":
 				case "none":
@@ -146,8 +137,10 @@ function launch(createCallback, newSessionAction, callbacks, gui) {
 				case "desktop":
 					gui = guis.DESKTOP;
 					break;
-				case "web":
+				case "W":
+					mode = modes.DEMO;
 				case "w":
+				case "web":
 					gui = guis.WEB;
 					break;
 				case "dw":

@@ -19,6 +19,8 @@
 
 "use strict"
 
+const fs = require('fs');
+
 var atlasId = "";
 
 if (process.env.EPEIOS_SRC) {
@@ -52,7 +54,7 @@ function newSession() {
 }
 
 function acConnect(dom, id) {
-	dom.setLayout("", new Tree(), "Main.xsl");
+	dom.headUp( fs.readFileSync( "Head.html"), () => dom.setLayout("", new Tree(), "Main.xsl"));
 }
 
 function acSubmit(dom, id) {
@@ -70,7 +72,7 @@ function acShowInput(dom, id) {
 }
 
 function main() {
-	atlas.register(
+	const callbacks = (
 		{
 			"Connect": acConnect,
 			"Submit": acSubmit,
@@ -79,7 +81,7 @@ function main() {
 		}
 	);
 
-	atlas.launch(newSession, "Connect" );
+	atlas.launch(newSession, "Connect", callbacks );
 }
 
 main();
