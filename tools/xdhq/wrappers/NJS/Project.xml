@@ -80,8 +80,8 @@
 				<File Path="../../examples/NJS/blank/">main.js</File>
 				<Files Path="../../examples/common/blank/">
 					<File>CHANGELOG.md</File>
-					<File>head.html</File>
-					<File>Main.xsl</File>
+					<File>Head.html</File>
+					<File>Main.html</File>
 				</Files>
 			</Files>
 			<Files Group="Hello">
@@ -101,22 +101,22 @@
 				</Files>
 				<Files Path="../../examples/common/notes/">
 					<File>CHANGELOG.md</File>
-					<File>head.html</File>
-					<File>Main.xsl</File>
+					<File>Head.html</File>
+					<File>Main.html</File>
+					<File>Note.html</File>
 					<File>Notes.xsl</File>
-					<File>Note.xsl</File>
 				</Files>
 			</Files>
 			<Files Group="TodoMVC">
 				<Files Path="../../examples/NJS/TodoMVC/">
-					<File>main.js</File>
+					<File>Main.js</File>
 					<File>Project.xml</File>
 					<File>README.md</File>
 				</Files>
 				<Files Path="../../examples/common/TodoMVC/">
 					<File>CHANGELOG.md</File>
-					<File>head.html</File>
-					<File>Main.xsl</File>
+					<File>Head.html</File>
+					<File>Main.html</File>
 					<File>NOTES.md</File>
 					<File>Todos.xsl</File>
 				</Files>

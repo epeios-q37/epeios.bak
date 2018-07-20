@@ -19,7 +19,7 @@
 
 "use strict"
 
-// Types of the reponse.
+// Types of the response.
 const types = {
   VOID: 0,
   STRING: 1,

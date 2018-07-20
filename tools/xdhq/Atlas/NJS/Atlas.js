@@ -27,33 +27,7 @@ var xdhelcqPath = "";
 var xdhelcqBin = "";
 var electronBin = "";
 
-function isDev() {
-	if (process.env.EPEIOS_SRC)
-		return true;
-	else
-		return false;
-}
-
-function getEpeiosPath() {
-	if (isDev) {
-		if (process.platform == 'win32') {
-			return "h:/hg/epeios/"
-		} else {
-			return "~/hg/epeios/"
-		}
-	} else
-		throw "Error !";
-}
-
-function getRealDir(dir) {
-	if (isDev()) {
-		let epeiosPath = getEpeiosPath();
-		return path.resolve(epeiosPath, "tools/xdhq/examples/common/", path.relative(path.resolve(epeiosPath, "tools/xdhq/examples/NJS/"), path.resolve(dir)));	// No final '/'.
-	} else
-		return path.resolve(dir);
-}
-
-if (isDev()) {
+if (process.env.EPEIOS_SRC) {
 	let epeiosToolsPath = "";
 	let binPath = "";
 	if (process.platform == 'win32') {
@@ -111,14 +85,14 @@ const defaultGUI = guis.DESKTOP;
 
 var mode;
 
-if (isDev()) {
+if (xdhq.isDev()) {
 	mode = modes.PROD;
 } else {
 	mode = modes.DEMO;
 }
 
 function launch(createCallback, newSessionAction, callbacks, gui) {
-	var dir = getRealDir(path.dirname(process.argv[1]));
+	var dir = xdhq.getAssetDir();
 	var arg = "";
 	var prod = false;
 
@@ -186,3 +160,5 @@ function launch(createCallback, newSessionAction, callbacks, gui) {
 module.exports.launch = launch;
 module.exports.createTree = () => require('xmlbuilder').create('XDHTML');
 module.exports.DOM = xdhq.XDH;
+
+module.exports.readAsset = xdhq.readAsset;

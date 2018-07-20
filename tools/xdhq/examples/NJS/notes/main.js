@@ -35,8 +35,9 @@ if (process.env.EPEIOS_SRC) {
 }
 
 const atlas = require(atlasId);
-const Tree = atlas.Tree;
 const DOM = atlas.DOM;
+
+const readAsset = atlas.readAsset;
 
 const viewModeElements = ["Pattern", "CreateButton", "DescriptionToggling", "ViewNotes"];
 
@@ -73,15 +74,16 @@ function newSession() {
 }
 
 function push(note, id, tree) {
-	tree.pushTag('Note');
-	tree.putAttribute('id', id);
+	tree = tree.ele('Note');
+	tree = tree.att('id', id);
 	for (var prop in note) {
-		tree.pushTag(prop);
-		tree.putValue(note[prop]);
-		tree.popTag();
+		tree = tree.ele(prop,note[prop]);
+		tree = tree.up();
 	}
 
-	tree.popTag();
+	tree = tree.up();
+
+	return tree;
 }
 
 function handleDescriptions(dom) {
@@ -92,23 +94,23 @@ function handleDescriptions(dom) {
 }
 
 function displayList(dom) {
-	var tree = new Tree();
+	var tree = atlas.createTree();
 	var i = 1;	// 0 skipped, as it serves as buffer for the new ones.
 	var contents = {};
 
-	tree.pushTag("Notes");
+	tree = tree.ele("Notes");
 
 	while (i < dom.notes.length) {
 		if (dom.notes[i]['title'].toLowerCase().startsWith(dom.pattern)) {
-			push(dom.notes[i], i, tree);
+			tree = push(dom.notes[i], i, tree);
 			contents["Description." + i] = dom.notes[i]['description'];
 		}
 		i++;
 	}
 
-	tree.popTag();
+	tree = tree.up();
 
-	dom.setLayout("Notes", tree, "Notes.xsl",
+	dom.setLayoutXSL("Notes", tree, "Notes.xsl",
 		() => dom.setContents(contents,
 			() => dom.enableElements(viewModeElements,
 				() => handleDescriptions(dom)
@@ -118,8 +120,10 @@ function displayList(dom) {
 }
 
 function acConnect(dom, id) {
-	dom.setLayout("", new Tree(), "Main.xsl",
-		() => displayList(dom)
+	dom.headUp( readAsset("Head.html"),
+		() => dom.setLayout("", readAsset( "Main.html" ),
+			() => displayList(dom)
+		)
 	);
 }
 
@@ -153,7 +157,7 @@ function view(dom) {
 
 function edit(dom, id) {
 	dom.id = parseInt(id);
-	dom.setLayout("Edit." + id, new Tree(), "Note.xsl",
+	dom.setLayout("Edit." + id, readAsset( "Note.html" ),
 		() => dom.setContents(
 			{
 				"Title": dom.notes[dom.id]['title'],
@@ -228,19 +232,17 @@ function acCancel(dom, id) {
 }
 
 function main() {
-	atlas.register(
-		{
-			"Connect": acConnect,
-			"ToggleDescriptions": acToggleDescriptions,
-			"Search": acSearch,
-			"Edit": acEdit,
-			"Delete": acDelete,
-			"Submit": acSubmit,
-			"Cancel": acCancel,
-		}
-	);
+	const callbacks = {
+		"Connect": acConnect,
+		"ToggleDescriptions": acToggleDescriptions,
+		"Search": acSearch,
+		"Edit": acEdit,
+		"Delete": acDelete,
+		"Submit": acSubmit,
+		"Cancel": acCancel,
+	};
 
-	atlas.launch(newSession, "Connect" );
+	atlas.launch(newSession, "Connect", callbacks );
 }
 
 main();

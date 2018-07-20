@@ -41,12 +41,24 @@ function getEpeiosPath() {
 		throw "Error !";
 }
 
-function getRealDir(dir) {
+// Returns the directory which contains all the assets, based on the directory from where the app. were launched.
+function getAssetDir() {
+	var dir = path.dirname(process.argv[1]);
+
 	if (isDev()) {
 		let epeiosPath = getEpeiosPath();
 		return path.resolve(epeiosPath, "tools/xdhq/examples/common/", path.relative(path.resolve(epeiosPath, "tools/xdhq/examples/NJS/"), path.resolve(dir)));	// No final '/'.
 	} else
 		return path.resolve(dir);
+}
+
+function getAssetFileName(fileName) {
+	return path.join(getAssetDir(), path.win32.basename(fileName))
+}
+
+function readAsset( fileName )
+{
+	return Buffer.from(fs.readFileSync(getAssetFileName(fileName))).toString();
 }
 
 const modes = {
@@ -123,13 +135,13 @@ class XDH {
 	setLayout(id, html, callback) {
 		this.setLayout_( id, html, "", callback);
 	}
-	setLayoutXSL(id, tree, xslFilename, callback) {
+	setLayoutXSL(id, tree, xslFileName, callback) {
 		let xslURL;
 
 		if (this._xdhIsDEMO)
-			xslURL = "data:text/xml;charset=utf-8," + encodeURIComponent(Buffer.from(fs.readFileSync(path.join(getRealDir(path.dirname(xslFilename)), path.win32.basename(xslFilename)))).toString());
+			xslURL = "data:text/xml;charset=utf-8," + encodeURIComponent(readAsset(xslFileName));
 		else
-			xslURL = xslFilename;
+			xslURL = xslFileName;
 
 		this.setLayout_( id, tree.end(), xslURL, callback);
 	}
@@ -153,7 +165,7 @@ class XDH {
 		return this.setContents(merge(id, content), callback);
 	}
 	dressWidgets(id, callback) {
-		call(this, "DressWidget_1", types.VOID, 1, id, 0, callback);
+		call(this, "DressWidgets_1", types.VOID, 1, id, 0, callback);
 	}
 	handleClasses(idsAndClasses, command, callback) {
 		var ids = [];
@@ -220,3 +232,9 @@ module.exports.returnArgument = (text) => { return njsq._call(xdhq, 0, text) };
 module.exports.launch = launch;
 module.exports.XDH = XDH;
 module.exports.modes = modes;
+
+// Following functions are dev helper.
+module.exports.isDev = isDev;
+module.exports.getAssetDir = getAssetDir;
+module.exports.getAssetFileName = getAssetFileName;
+module.exports.readAsset = readAsset;

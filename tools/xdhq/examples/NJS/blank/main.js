@@ -40,6 +40,8 @@ const atlas = require(atlasId);
 const Tree = atlas.Tree;
 const DOM = atlas.DOM;
 
+const readAsset = atlas.readAsset;
+
 class MyData extends DOM {
 	constructor() {
 		super();
@@ -54,7 +56,7 @@ function newSession() {
 }
 
 function acConnect(dom, id) {
-	dom.headUp( fs.readFileSync( "Head.html"), () => dom.setLayout("", new Tree(), "Main.xsl"));
+	dom.headUp( readAsset( "Head.html"), () => dom.setLayout("", readAsset( "Main.html")));
 }
 
 function acSubmit(dom, id) {

@@ -42,19 +42,7 @@ if (process.env.EPEIOS_SRC) {
 const atlas = require(atlasId);
 const Tree = atlas.Tree;
 const DOM = atlas.DOM;
-
-const head = [
-'<title>Atlas • TodoMVC</title>',
-'<link rel="stylesheet" href="node_modules/todomvc-common/base.css">',
-'<link rel="stylesheet" href="node_modules/todomvc-app-css/index.css">',
-'<link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAMFBMVEUEAvyEhsxERuS8urQsKuycnsRkYtzc2qwUFvRUVtysrrx0ctTs6qTMyrSUksQ0NuyciPBdAAABHklEQVR42mNgwAa8zlxjDd2A4POfOXPmzZkFCAH2M8fNzyALzDlzg2ENssCbMwkMOsgCa858YOjBKxBzRoHhD7LAHiBH5swCT9HQ6A9ggZ4zp7YCrV0DdM6pBpAAG5Blc2aBDZA68wCsZPuZU0BDH07xvHOmAGKKvgMP2NA/Zw7ADIYJXGDgLQeBBSCBFu0aoAPYQUadMQAJAE29zwAVWMCWpgB08ZnDQGsbGhpsgCqBQHNfzRkDEIPlzFmo0T5nzoMovjPHoAK8Zw5BnA5yDosDSAVYQOYMKIDZzkoDzagAsjhqzjRAfXTmzAQgi/vMQZA6pjtAvhEk0E+ATWRRm6YBZuScCUCNN5szH1D4TGdOoSrggtiNAH3vBBjwAQCglIrSZkf1MQAAAABJRU5ErkJggg=="/>',
-'<style>',
-' .hide { display: none; }',
-'</style>',
-'<style id="HideClearCompleted">',
-' .clear-completed { display: none; }',
-'</style>'
-].join('\n');
+const readAsset = atlas.readAsset;
 
 class MyData extends DOM {
 	constructor() {
@@ -146,10 +134,12 @@ function newSession() {
 }
 
 function acConnect(dom, id) {
-	dom.headUp( head,
-		() => dom.setLayoutXSL("", atlas.createTree(), "Main.xsl",
+	dom.headUp( readAsset( "Head.html" ),
+		() => dom.setLayout("", readAsset( "Main.html"),
 			() => dom.focus("Input",
-				() => displayTodos(dom)
+				() => dom.disableElements(["HideActive", "HideCompleted"],
+					() => displayTodos(dom)
+				)
 			)
 		)
 	);
@@ -221,13 +211,14 @@ function acToggle(dom, id) {
 
 	dom.todos[i]['completed'] = !dom.todos[i]['completed'];
 
+	// Can't use 'ToggleClasses', because then 2 elements would have same key...
 	dom.toggleClass("Todo." + id, "completed",
-		() => {
-			if (dom.exclude != null)
-				displayTodos(dom);
-			else
-				handleCount(dom);
-		}
+		() => dom.toggleClass( "Todo." + id, "active",
+			() => {
+				if (dom.exclude == null)
+					handleCount(dom);
+			}
+		)
 	);
 }
 
@@ -240,7 +231,7 @@ function acAll(dom, id) {
 				"Active": "selected",
 				"Completed": "selected"
 			},
-			() => displayTodos(dom)
+			() => dom.disableElements( ["HideActive", "HideCompleted"] )
 		)
 	)
 }
@@ -254,7 +245,8 @@ function acActive(dom, id) {
 				"All": "selected",
 				"Completed": "selected"
 			},
-			() => displayTodos(dom)
+			() => dom.disableElement( "HideActive",
+				() => dom.enableElement( "HideCompleted") )
 		)
 	)
 }
@@ -268,7 +260,8 @@ function acCompleted(dom, id) {
 				"All": "selected",
 				"Active": "selected"
 			},
-			() => displayTodos(dom)
+			() => dom.disableElement("HideCompleted",
+				() =>dom.enableElement("HideActive"))
 		)
 	)
 }

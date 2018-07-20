@@ -35,7 +35,11 @@ if (process.env.EPEIOS_SRC) {
 }
 
 const atlas = require(atlasId);
+const fs = require('fs');
 
+const readAsset = atlas.readAsset;
+
+// 'head' and 'body' are used for the one file version of this app.
 const head = [
 '<title>"Hello World !" example</title>',
 '<style type="text/css">',
@@ -65,7 +69,8 @@ const body = [
 '</div>'].join('\n');
 
 const callbacks = {
-	"Connect": (dom, id) => dom.headUp(head, () => dom.setLayout("", body)),
+//	"Connect": (dom, id) => dom.headUp( head, () => dom.setLayout("", body)),
+	"Connect": (dom, id) => dom.headUp( readAsset('Head.html'), () => dom.setLayout("", readAsset("Main.html"))),
 	"Typing": (dom, id) => dom.getContent(id, (name) => dom.setContent("name", name)),
 	"Clear": (dom, id) => dom.confirm("Are you sure ?", (answer) => { if (answer) dom.setContents({ "input": "", "name": "" }) }),
 };
