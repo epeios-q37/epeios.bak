@@ -4,7 +4,7 @@
 	<xpp:bloc>
 		<!-- User definitions -->
 		<xpp:define name="Version">
-			<xpp:bloc>0.1.0</xpp:bloc>
+			<xpp:bloc>0.2.0</xpp:bloc>
 		</xpp:define>
 		<xpp:define name="CopyrightYears">
 			<xpp:bloc>2018</xpp:bloc>
@@ -19,16 +19,23 @@
 		<UUID>45ce6ec4-6d3d-428b-9764-cc1f5588eaf6</UUID>
 	</About>
 	<!-- NO SPACE in 'Keywords' attribute !!! ("a,b,c", NOT "a, b, c")-->
-	<RTW Description="Toolkit for developing user interfaces with Node.js" Keywords="XDHTML,Atlas,web,desktop,interface,frontend">
+	<RTW Description="Toolkit for developing web and desktop user interfaces with Node.js" Keywords="XDHTML,Atlas,web,desktop,interface,frontend">
 		<Dir>atlas-node</Dir>
 	</RTW>
 	<NodeJS>
 		<Deps>
 			<Regular>
-				<Dep>xdhqxdh</Dep>
+				<!--
+				The default installation does NOT install native code,
+				hence the 3 last dependencies are skipped.
+				'xdhqnjs' only installs JS scripts (although it contains C++ sources.
+				-->
 				<Dep>xdhqnjs</Dep>
+				<!--
+				<Dep>xdhqxdh</Dep>
 				<Dep>xdhwebqnjs</Dep>
 				<Dep>xdhelcq</Dep>
+				-->
 			</Regular>
 		</Deps>
 	</NodeJS>

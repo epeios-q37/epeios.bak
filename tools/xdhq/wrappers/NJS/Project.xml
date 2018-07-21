@@ -18,9 +18,6 @@
 		<UUID>d6a723cb-e88f-4f2f-b429-3adc207f1d62</UUID>
 	</About>
 	<!-- NO SPACE in 'Keywords' attribute !!! ("a,b,c", NOT "a, b, c")-->
-	<RTW Description="'XDHTML' wrapper." Keywords="XDHTML">
-		<Dir>xdhq-node</Dir>
-	</RTW>
 	<Modules>
 		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
 			<Modules Group="Core">
@@ -55,10 +52,9 @@
 		<SourceDir>../..</SourceDir>
 	</SourceDirs>
 	<Files>
-		<!-- NOTA : '*.js' files will automatically be packed. -->
-		<File Pack="No">XDHqDEMO.js</File>
-		<File Pack="No">XDHqPROD.js</File>
-		<File Pack="No">XDHqSHRD.js</File>
+		<File>XDHqDEMO.js</File>
+		<File>XDHqPROD.js</File>
+		<File>XDHqSHRD.js</File>
 		<!--File Pack="No">XDHq.js</File-->
 		<!--Files Group="Rentals">
 			<File>rentals.js</File>
@@ -85,7 +81,10 @@
 				</Files>
 			</Files>
 			<Files Group="Hello">
-				<File Path="../../examples/NJS/Hello/">main.js</File>
+				<Files Path="../../examples/NJS/Hello/">
+					<File>Hello.js</File>
+					<File>main.js</File>
+				</Files>
 				<Files Path="../../examples/common/Hello/">
 					<File>CHANGELOG.md</File>
 					<File>Head.html</File>
@@ -126,4 +125,11 @@
 	<PreprocessorDefinitions>
 		<PreprocessorDefinition>E_ST</PreprocessorDefinition>
 	</PreprocessorDefinitions>
+	<!--
+	The default installation does NOT install the native code (Atlas toolkit DEMO mode),
+	hence the packaging scripts explicitly skip all the native-related stuffs.
+	-->
+	<RTW Description="'XDHTML' wrapper." Keywords="XDHTML">
+		<Dir>xdhq-node</Dir>
+	</RTW>
 </Project>

@@ -27,4 +27,85 @@ const types = {
   UNDEFINED: 3 // Always the highest value.
 }
 
+const platforms = {
+	ANDROID: 0,
+	AIX: 1,
+	DARWIN: 2,
+	FREEBSD: 3,
+	LINUX: 4,
+	OPENBSD: 5,
+	SUNOS: 6,
+	WIN32: 7,
+	UNKNOWN: 8
+}
+
+const platform = (() => {
+	let platform = platforms.UNKNOWN;
+
+	switch (process.platform) {
+	case 'android':
+		platform =  platforms.ANDROID;
+		break;
+	case 'aix':
+		platform = platforms.AIX;
+		break;
+	case 'darwin':
+		platform = platforms.DARWIN;
+		break;
+	case 'freebsd':
+		platform = platforms.FREEBSD;
+		break;
+	case 'linux':
+		platform = platforms.LINUX;
+		break;
+	case 'openbsd':
+		platform = platforms.OPENBSD;
+		break;
+	case 'sunos':
+		platform = platforms.SUNOS;
+		break;
+	case 'win32':
+		platform = platforms.WIN32;
+		break;
+	default:
+		throw "Unknown platform: '" + process.platform + "' !!!";
+		break;
+	}
+
+	return platform;
+})();
+
+function open(document) {
+	var command = "";
+	var available = false;
+	switch (platform) {
+	case platforms.ANDROID:
+		break;
+	case platforms.DARWIN:
+		command = "open " + document;
+		available = true;
+		break;
+	case platforms.AIX:
+	case platforms.FREEBSD:
+	case platforms.LINUX:
+	case platforms.OPENDBSD:
+	case platforms.SUNOS:
+		command = "xdg-open " + document;
+		available = true;
+	case platforms.WIN32:
+		command = "start " + document;
+		available = true;
+	default:
+		break;
+	}
+
+	if ( available )
+		require('child_process').exec(command);
+
+	return available;
+}
+
 module.exports.types = types;
+module.exports.platforms = platforms;
+module.exports.platform = platform;
+module.exports.open = open;

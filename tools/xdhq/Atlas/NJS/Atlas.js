@@ -45,10 +45,12 @@ if (process.env.EPEIOS_SRC) {
 	electronBin = xdhelcqPath + "node_modules/electron/dist/electron";
 } else {
 	xdhqId = "xdhqnjs";
+	/*
 	xdhwebqId = "xdhwebq";
 	xdhelcqPath = path.dirname(require.resolve("xdhelcq"));
 	xdhelcqBin = require('xdhqxdh').fileName;
 	electronBin = require("xdhelcq").electron;
+	*/
 }
 
 const xdhq = require(xdhqId);
@@ -64,12 +66,8 @@ function launchDesktop(dir,prod) {
 		require('child_process').spawn(electronBin, [path.join(xdhelcqPath, "index.js"), "-m=" + xdhelcqBin, dir]).on('close', function (code) {
 			process.exit(code)
 		});
-	} else {
-		// 'xdhq_desktop' is a special token to report that the desktop interface is launched, not the web one (used in 'dmopool.cpp' from 'xdhqxdh' component).
-		require('child_process').spawn(electronBin, [path.join(xdhelcqPath, "index.js"), "-t=xdhq_desktop", "-m=" + xdhelcqBin, dir]).on('close', function (code) {
-			process.exit(code)
-		});
-	}
+	} else
+		throw "DEMO mode not available with desktop interface !!!";
 }
 
 const guis = {
@@ -81,14 +79,15 @@ const guis = {
 
 module.exports.guis = guis;
 
-const defaultGUI = guis.DESKTOP;
-
 var mode;
+var defaultGUI;
 
 if (xdhq.isDev()) {
 	mode = modes.PROD;
+	defaultGUI = guis.DESKTOP;
 } else {
 	mode = modes.DEMO;
+	defaultGUI = guis.NONE;
 }
 
 function launch(createCallback, newSessionAction, callbacks, gui) {
@@ -133,7 +132,7 @@ function launch(createCallback, newSessionAction, callbacks, gui) {
 
 	var url = "";
 
-	if (gui == guis.WEB)
+	if (!prod)
 		url = "http://localhost:8080";
 
 	xdhq.launch(createCallback, newSessionAction, callbacks, mode, url);

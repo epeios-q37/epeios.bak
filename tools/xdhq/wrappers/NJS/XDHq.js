@@ -21,7 +21,12 @@
 
 const fs = require('fs');
 const path = require('path');
-const types = require('./XDHqSHRD.js').types;
+const shared = require('./XDHqSHRD.js');
+
+const types = shared.types;
+const platforms = shared.platforms;
+const platform = shared.platform;
+const open = shared.open;
 
 function isDev() {
 	if (process.env.EPEIOS_SRC)
@@ -32,7 +37,7 @@ function isDev() {
 
 function getEpeiosPath() {
 	if (isDev) {
-		if (process.platform == 'win32') {
+		if (platform == platforms.WIN32) {
 			return "h:/hg/epeios/"
 		} else {
 			return "~/hg/epeios/"
@@ -238,3 +243,4 @@ module.exports.isDev = isDev;
 module.exports.getAssetDir = getAssetDir;
 module.exports.getAssetFileName = getAssetFileName;
 module.exports.readAsset = readAsset;
+module.exports.open = open;

@@ -19,6 +19,12 @@
 
 "use strict"
 
+// Types of the response.
+const shared = require('./XDHqSHRD.js');
+
+const types = shared.types;
+const open = shared.open;
+
 function byteLength(str) {
 	// returns the byte length of an utf8 string
 	var s = str.length;
@@ -130,9 +136,6 @@ function getAction(query) {
 	return getString(query, 9 + getSize(query, 9)[0] + 1)[0];
 }
 
-// Types of the response.
-const types = require('./XDHqSHRD.js').types;
-
 function getResponse(query, type) {
 	switch (type) {
 		case types.UNDEFINED:
@@ -163,9 +166,6 @@ function pseudoServer(createCallback, newSessionAction, callbacks) {
 		var data = new Buffer(0);
 		var relaunch = true;
 
-		if ((token == '') && (url == ''))
-			token = "xdhq_desktop";
-
 		data = addString(data, token);
 
 		client.write(data);
@@ -186,7 +186,13 @@ function pseudoServer(createCallback, newSessionAction, callbacks) {
 				client.write(Buffer.from("StandBy_1\x00"));
 
 				if (url != "") {
-					require('child_process').exec("start " + url + "?_token=" + token);
+					let completeURL = url + "?_token=" + token;
+
+					if ( open( completeURL ) )
+						console.log("Open " + completeURL + " in a web browser, if not already done. Enjoy!");
+					else
+						console.log("Open " + completeURL + " in a web browser. Enjoy!");
+
 					url = "";
 				}
 
