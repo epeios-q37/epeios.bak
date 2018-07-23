@@ -185,7 +185,7 @@ namespace fdr {
 #ifdef FDR__TS
 			sTID Caller = tht::GetTID();
 
-			if ( _Mutex != mtx::UndefinedHandler ) {
+			if ( _Mutex != mtx::Undefined ) {
 				if ( TryToLock_( _Mutex ) ) {
 					if ( Owner_ != tht::Undefined )
 						qRFwk();
@@ -243,7 +243,7 @@ namespace fdr {
 #ifdef FDR__TS
 			sTID Caller = tht::GetTID();
 
-			if ( _Mutex != mtx::UndefinedHandler ) {
+			if ( _Mutex != mtx::Undefined ) {
 				if ( IsLocked_( _Mutex ) ) {
 					if ( Owner_ != Caller )
 						qRFwk();

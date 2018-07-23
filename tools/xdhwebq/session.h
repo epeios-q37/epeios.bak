@@ -65,19 +65,19 @@ namespace session {
 		void reset( bso::bool__ P = true )
 		{
 			if ( P )
-				if ( _Mutex != mtx::UndefinedHandler )
+				if ( _Mutex != mtx::Undefined )
 					mtx::Delete( _Mutex );
 
 			_Id = NULL;
 			_Action = NULL;
-			_Mutex = mtx::UndefinedHandler;
+			_Mutex = mtx::Undefined;
 			Session_ = NULL;
 			Callback_ = NULL;
 		}
 		E_CDTOR( shared_data__ );
 		void Init( void )
 		{
-			if ( _Mutex != mtx::UndefinedHandler )
+			if ( _Mutex != mtx::Undefined )
 				mtx::Delete( _Mutex );
 
 			// _Id.Init();	//	Buffer. No Initialization.
@@ -148,7 +148,7 @@ namespace session {
 			_Downstream;
 		void _Create( mtx::handler___ &Handler )
 		{
-			if ( Handler != mtx::UndefinedHandler )
+			if ( Handler != mtx::Undefined )
 				qRGnr();
 
 			Handler = mtx::Create();
@@ -161,7 +161,7 @@ namespace session {
 		}
 		void _Delete( mtx::handler___ &Handler )
 		{
-			if ( Handler != mtx::UndefinedHandler )
+			if ( Handler != mtx::Undefined )
 				mtx::Delete( Handler );
 
 			Handler = NULL;
@@ -198,7 +198,7 @@ namespace session {
 			if ( P )
 				_Delete();
 
-			_Global = _Upstream = _Downstream = mtx::UndefinedHandler;
+			_Global = _Upstream = _Downstream = mtx::Undefined;
 		}
 		E_CDTOR( _mutexes___ );
 		void Init( void )

@@ -133,8 +133,10 @@ function newSession() {
 	return new MyData();
 }
 
+var head = "";
+
 function acConnect(dom, id) {
-	dom.headUp( readAsset( "Head.html" ),
+	dom.headUp( readAsset( head ),
 		() => dom.setLayout("", readAsset( "Main.html"),
 			() => dom.focus("Input",
 				() => dom.disableElements(["HideActive", "HideCompleted"],
@@ -323,7 +325,21 @@ function main() {
 		"Cancel": acCancel,
 	};
 
-	atlas.launch(newSession, "Connect", callbacks );
+	atlas.launch(newSession, "Connect", callbacks);
+
+	switch (atlas.mode) {
+		case atlas.modes.PROD:
+			head = "HeadPROD.html";
+			break;
+		case atlas.modes.DEMO:
+			head = "HeadDEMO.html";
+			break;
+		default:
+			throw "Unknown mode !!!";
+			break;
+	}
+
+	console.log("Head: ", head);
 }
 
 main();

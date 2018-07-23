@@ -114,7 +114,8 @@
 				</Files>
 				<Files Path="../../examples/common/TodoMVC/">
 					<File>CHANGELOG.md</File>
-					<File>Head.html</File>
+					<File>HeadDEMO.html</File>
+					<File>HeadPROD.html</File>
 					<File>Main.html</File>
 					<File>NOTES.md</File>
 					<File>Todos.xsl</File>

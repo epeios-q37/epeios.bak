@@ -28,7 +28,9 @@ namespace registry {
 	namespace parameter {
 		using namespace sclxdhtml::registry::parameter;
 
-		extern rEntry HostService;
+		extern rEntry
+			HostService,
+			DemoService;
 	}
 
 	namespace definition {

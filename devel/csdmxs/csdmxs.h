@@ -146,13 +146,13 @@ qRE
 		void reset( bso::sBool P = true )
 		{
 			if ( P ) {
-				if ( S_.Mutex != mtx::UndefinedHandler )
+				if ( S_.Mutex != mtx::Undefined )
 					mtx::Delete( S_.Mutex );
 			}
 
 			UPs.reset( P );
-			S_.Mutex = mtx::UndefinedHandler;
-			S_.Log.Mutex = mtx::UndefinedHandler;
+			S_.Mutex = mtx::Undefined;
+			S_.Log.Mutex = mtx::Undefined;
 			S_.Log.Callback = NULL;
 
 		}

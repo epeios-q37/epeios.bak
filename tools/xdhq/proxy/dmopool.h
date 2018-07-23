@@ -31,6 +31,7 @@
 # include "sck.h"
 
 namespace dmopool {
+	void Initialize();
 	sck::sSocket GetConnexion( const str::dString &Token );
 }
 

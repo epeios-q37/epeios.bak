@@ -23,15 +23,19 @@ using namespace dmopool;
 
 #include "prtcl.h"
 
+#include "registry.h"
+
 #include "bch.h"
 #include "crt.h"
 #include "csdbns.h"
 #include "flx.h"
 #include "mtk.h"
+#include "sclmisc.h"
 #include "str.h"
 
+
 namespace {
-	mtx::rHandler Mutex_ = mtx::UndefinedHandler;
+	mtx::rHandler Mutex_ = mtx::Undefined;
 	qROW( Row );
 	crt::qMCRATEw( str::dString, sRow ) Tokens_;
 	crt::qMCRATEw( bch::qBUNCHdl( sck::sSocket ), sRow ) Sockets_;
@@ -86,14 +90,14 @@ namespace {
 		void *UP,
 		mtk::gBlocker &Blocker )
 	{
-	qRH
+	qRFH;
 		sck::sSocket Socket = (sck::sSocket)UP;
 		bso::sBool Locked = false;
 		str::wString Token;
 		sck::rRWFlow Flow;
 		tol::bUUID UUID;
 		sRow Row = qNIL;
-	qRB;
+	qRFB;
 		Blocker.Release();
 
 		Flow.Init( Socket, false, sck::NoTimeout );
@@ -103,12 +107,9 @@ namespace {
 
 		if ( Token.Amount() == 0 ) {
 			Token.Append( tol::UUIDGen( UUID ) );
-//			Token.Append( "coucou" );
 
 			Row = Create_( Token );
-		} else if ( Token == "xdhq_desktop" )
-			Row = Create_( Token );
-		else
+		}		else
 			Row = Search_( Token );
 
 		if ( Row == qNIL )
@@ -124,18 +125,19 @@ namespace {
 		}
 
 		Put_( Token, Flow );
-	qRR;
-	qRT;
+	qRFR;
+	qRFT;
 		if( Locked )
 			mtx::Unlock( Mutex_ );
-	qRE;
+	qRFE( sclmisc::ErrFinal() );
 	}
 
 	void ListeningRoutine_( void * )
 	{
+	qRFH;
 		sck::sSocket Socket = sck::Undefined;
 		const char *IP;
-
+	qRFB;
 		while ( true ) {
 			Socket = sck::Undefined;
 
@@ -143,18 +145,27 @@ namespace {
 
 			mtk::Launch( NewConnexionRoutine_, (void *)Socket );
 		}
+	qRFR;
+	qRFT;
+	qRFE( sclmisc::ErrFinal() );
 	}
+}
 
-	void Init_( void )
-	{
-		Mutex_ = mtx::Create();
-		Tokens_.Init();
-		Sockets_.Init();
-		Listener_.Init( 51000 );
+void dmopool::Initialize( void )
+{
+qRH;
+	csdbns::sService Service = csdbns::Undefined;
+qRB;
+	if ( (Service = sclmisc::OGetU16( registry::parameter::DemoService, csdbns::Undefined ) ) != csdbns::Undefined ) {
+		Listener_.Init( Service );
 
 		mtk::RawLaunch( ListeningRoutine_, NULL );
 	}
+qRR;
+qRT;
+qRE;
 }
+
 
 sck::sSocket dmopool::GetConnexion( const str::dString &Token )
 {
@@ -177,6 +188,14 @@ sck::sSocket dmopool::GetConnexion( const str::dString &Token )
 
 qGCTOR( dmopool )
 {
-	Init_();
+	Mutex_ = mtx::Create();
+	Tokens_.Init();
+	Sockets_.Init();
+}
+
+qGDTOR( dmopool )
+{
+	if ( Mutex_ != mtx::Undefined )
+		mtx::Delete( Mutex_, true );
 }
 

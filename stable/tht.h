@@ -109,14 +109,14 @@ namespace tht {
 		mtx::rHandler Mutex_;
 		void Release_( void )
 		{
-			if ( Mutex_ != mtx::UndefinedHandler )
+			if ( Mutex_ != mtx::Undefined )
 				Delete( Mutex_ );
 
-			Mutex_ = mtx::UndefinedHandler;
+			Mutex_ = mtx::Undefined;
 		}
 		void Test_( void ) const
 		{
-			if ( Mutex_ == mtx::UndefinedHandler )
+			if ( Mutex_ == mtx::Undefined )
 				qRFwk();
 		}
 	public:
@@ -126,7 +126,7 @@ namespace tht {
 			if ( P )
 				Release_();
 
-			Mutex_ = mtx::UndefinedHandler;
+			Mutex_ = mtx::Undefined;
 			ThreadID = Undefined;
 		}
 		qCDTOR( rCore_ );
@@ -347,7 +347,7 @@ namespace tht {
 		mtx::rHandler Write_, Read_;
 		void Delete_( mtx::rHandler Handler )
 		{
-			if ( Handler != mtx::UndefinedHandler )
+			if ( Handler != mtx::Undefined )
 				mtx::Delete( Handler, true );
 		}
 	public:
@@ -358,7 +358,7 @@ namespace tht {
 				Delete_( Read_ );
 			}
 
-			Write_ = Read_ = mtx::UndefinedHandler;
+			Write_ = Read_ = mtx::Undefined;
 		}
 		qCDTOR( rReadWrite );
 		void Init( void )

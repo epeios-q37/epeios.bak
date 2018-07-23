@@ -65,23 +65,23 @@ namespace sclerror {
 	class rError
 	{
 	public:
-		mtx::handler___ Mutex = mtx::UndefinedHandler;
+		mtx::handler___ Mutex = mtx::Undefined;
 		lstbch::E_LBUNCHt( tid__, row__ ) TIds;
 		ctn::E_CONTAINERt( lcl::meaning_, row__ ) Meanings;
 		void reset( bso::bool__ P = true )
 		{
 			if ( P )
-				if ( Mutex != mtx::UndefinedHandler )
+				if ( Mutex != mtx::Undefined )
 					mtx::Delete( Mutex );
 
-			Mutex = mtx::UndefinedHandler;
+			Mutex = mtx::Undefined;
 			TIds.reset( P );
 			Meanings.reset( P );
 		}
 		E_CDTOR( rError );
 		void Init( void )
 		{
-			if ( Mutex != mtx::UndefinedHandler )
+			if ( Mutex != mtx::Undefined )
 				mtx::Delete( Mutex );
 
 			Mutex = mtx::Create();

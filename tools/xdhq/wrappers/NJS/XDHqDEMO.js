@@ -188,7 +188,7 @@ function pseudoServer(createCallback, newSessionAction, callbacks) {
 				if (url != "") {
 					let completeURL = url + "?_token=" + token;
 
-					if ( open( completeURL ) )
+					if (open(completeURL))
 						console.log("Open " + completeURL + " in a web browser, if not already done. Enjoy!");
 					else
 						console.log("Open " + completeURL + " in a web browser. Enjoy!");
@@ -255,7 +255,7 @@ function launch(createCallback, newSessionAction, callbacks, webURL) {
 
 	url = webURL;
 
-	pseudoServer(createCallback, newSessionAction, callbacks);
+	setTimeout( () => pseudoServer(createCallback, newSessionAction, callbacks), 2000 );
 
 }
 

@@ -5,6 +5,22 @@
 - [adpt]: Adaptation to changes in underlying modules;
 - [stdz]: modification to comply with current standards;
 
+## 2018-07-23
+
+- CSDBNS:
+  - [adpt],
+  - Introducing `Undefined` as service (port) value,
+- CSDMXS:
+  - [adpt],
+- FDR:
+  - [adpt],
+- MTX:
+  - `UndefinedHandler` -> `Undefined`,
+- SCLERROR:
+  - [adpt],
+- THT:
+  - [adpt],
+
 ## 2018-07-17
 
 - SCLXDHTML:

@@ -22,3 +22,4 @@
 using sclrgstry::rEntry;
 
 rEntry registry::parameter::HostService( "HostService", sclrgstry::Parameters );
+rEntry registry::parameter::DemoService( "DemoService", sclrgstry::Parameters );

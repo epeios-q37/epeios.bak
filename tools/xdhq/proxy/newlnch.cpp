@@ -31,7 +31,7 @@ namespace {
 	namespace {
 		// Currently, we merge, then split, due to how the 'GetValue(...)' method works.
 		// In the future, there will be a 'GetValue_s_(...)' which will handle merged ids,
-		// so this function will be useless.
+		// this function will then be useless.
 		void GetContents_(
 			const str::dString &JSMergedIds,
 			xdhdws::sProxy &Proxy,

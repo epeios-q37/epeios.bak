@@ -47,6 +47,8 @@ qRB;
 
 	if ( sclmisc::OGetValue( ::registry::parameter::HostService, HostService ) )
 		Core_.Init( HostService.Convert( Buffer ), 0, sck::NoTimeout );
+
+	dmopool::Initialize();
 qRR;
 qRT;
 qRE;

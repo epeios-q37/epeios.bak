@@ -222,7 +222,7 @@ E_ROW( rrow__ );
 
 static lstbch::E_LBUNCHt( csdbns_repository_item__, rrow__ ) Repository_;
 
-mtx::handler___ Mutex_ = mtx::UndefinedHandler;
+mtx::handler___ Mutex_ = mtx::Undefined;
 
 inline static void Lock_( void )
 {

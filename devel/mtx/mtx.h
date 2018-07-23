@@ -374,7 +374,7 @@ namespace mtx {
 		}
 	} *handler___;
 
-	E_CDEF( handler___, UndefinedHandler, NULL );
+	E_CDEF( handler___, Undefined, NULL );
 
 	//f Return a new mutex handler.
 	inline handler___ Create( bso::bool__ Disabled = false )	// Si True, utilisation dans un contexte mono-thread.

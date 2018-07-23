@@ -345,5 +345,6 @@ namespace csdbns {
 	typedef server___ rServer;
 	typedef listener___ rListener;
 	typedef port__ sService;
+	qCDEF( sService, Undefined, 0 );
 }
 #endif
