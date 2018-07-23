@@ -628,8 +628,6 @@ namespace fdr {
 		}
 		void Commit( bso::sBool Unlock )	// When 'Unlock' is set to false, the 'Written_' value is NOT set to 0.
 		{
-			bso::sBool Success = false;
-
 			if ( CommitPending_ ) {
 				if ( _Initialized ) {
 				qRH
@@ -646,11 +644,7 @@ namespace fdr {
 
 				if ( Unlock )
 					Written_ = 0;
-			} else
-				Success = true;
-
-
-//			return Success;
+			}
 		}
 		size__ Write(
 			const byte__ *Buffer,

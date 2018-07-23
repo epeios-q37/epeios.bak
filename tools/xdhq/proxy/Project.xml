@@ -35,6 +35,7 @@
 				<Module>csdmnc</Module>
 				<Module>csdmxb</Module>
 				<Module>csdmxc</Module>
+				<Module>csdscb</Module>
 			</Modules>
 			<Modules Group="FBL">
 				<xpp:expand select="FBLF"/>

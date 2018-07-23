@@ -137,6 +137,9 @@ function launch(createCallback, newSessionAction, callbacks, gui) {
 
 	xdhq.launch(createCallback, newSessionAction, callbacks, mode, url);
 
+	module.exports.mode = mode;
+
+
 	switch (gui) {
 		case guis.NONE:
 			break;
@@ -162,4 +165,3 @@ module.exports.DOM = xdhq.XDH;
 
 module.exports.readAsset = xdhq.readAsset;
 module.exports.modes = modes;
-module.exports.mode = mode;

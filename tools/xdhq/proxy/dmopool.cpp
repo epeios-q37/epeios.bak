@@ -91,7 +91,7 @@ namespace {
 		mtk::gBlocker &Blocker )
 	{
 	qRFH;
-		sck::sSocket Socket = (sck::sSocket)UP;
+		sck::sSocket Socket = *(sck::sSocket *)UP;
 		bso::sBool Locked = false;
 		str::wString Token;
 		sck::rRWFlow Flow;
@@ -143,7 +143,7 @@ namespace {
 
 			Socket = Listener_.GetConnection( IP );
 
-			mtk::Launch( NewConnexionRoutine_, (void *)Socket );
+			mtk::Launch( NewConnexionRoutine_, &Socket );
 		}
 	qRFR;
 	qRFT;

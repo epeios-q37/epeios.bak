@@ -117,8 +117,8 @@ namespace cnvfdr {
 			driver &Driver,
 			fdr::thread_safety__ ThreadSafety = fdr::ts_Default )
 		{
-			Driver_.Init( Converter, Driver, ThreadSafety );
-			subInit();
+			flow::Driver_.Init( Converter, Driver, ThreadSafety );
+			flow::subInit();
 		}
 	};
 

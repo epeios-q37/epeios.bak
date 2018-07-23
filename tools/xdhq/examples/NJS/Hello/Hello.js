@@ -46,9 +46,6 @@ const atlas = require(atlasId);
 	and uncomment following line.
 */
 // const atlas = require( 'atlastk' );
-const fs = require('fs');
-
-const readAsset = atlas.readAsset;
 
 const head = [
 '<title>"Hello World !" example</title>',
@@ -70,8 +67,6 @@ const body = [
 '   <h1>',
 '    <span>Hello </span>',
 '    <span style="font-style: italic;" id="name"></span>',
-// '    <span style="font-style: italic;" id="name"/>',	// With this line rather then the above one, 
-														// the following line becomes a child of the above tag !!!
 '    <span>!</span>',
 '   </h1>',
 '  </filedset>',

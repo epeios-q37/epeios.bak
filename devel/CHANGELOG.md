@@ -12,12 +12,16 @@
   - Introducing `Undefined` as service (port) value,
 - CSDMXS:
   - [adpt],
+- CNVFDR:
+  - fixing some template issues occuring with *g++*,
 - FDR:
   - [adpt],
 - MTX:
   - `UndefinedHandler` -> `Undefined`,
 - SCLERROR:
   - [adpt],
+- SCLNJS:
+  - fixing some template issues occuring with *g++*,
 - THT:
   - [adpt],
 

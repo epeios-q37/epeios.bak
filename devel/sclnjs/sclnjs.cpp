@@ -60,6 +60,9 @@ namespace {
 	}
 }
 
+// For 'clang' and 'c++', the 'scln4' namespace definitions below
+// must be explicitly declared in sclnjs.h too !
+
 template <> void scln4::Get(
 	int Index,
 	cCaller_ &Caller,

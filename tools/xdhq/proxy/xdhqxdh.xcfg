@@ -8,7 +8,7 @@
 			<Command>Test</Command>
 			<HostService>localhost:53752</HostService>
 			<!-- Listening service (port) for the DEMO mode. If empty or == '0', DEMO behavior not launched. -->
-			<DemoService>51000</DemoService>
+			<DemoService>53800</DemoService>
 			<!-- Default command -->
 		</Parameters>
 		<Definitions>

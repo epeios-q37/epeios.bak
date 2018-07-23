@@ -338,8 +338,6 @@ function main() {
 			throw "Unknown mode !!!";
 			break;
 	}
-
-	console.log("Head: ", head);
 }
 
 main();

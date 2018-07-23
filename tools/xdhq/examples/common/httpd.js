@@ -43,7 +43,7 @@ if (process.env.EPEIOS_SRC) {
 
 	xdhwebqId = epeiosToolsPath + "xdhwebq/NJS/XDHWebQ.js";
 } else {
-	xdhwebqId = "xdhwebq";
+	xdhwebqId = "xdhwebqnjs";
 }
 
 require(xdhwebqId).launch(process.argv[2]);

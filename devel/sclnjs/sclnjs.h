@@ -424,6 +424,16 @@ namespace scln4 {
 	template <> void Get(
 		int Index,
 		cCaller_ &Caller,
+		sclnjs::rInt32 &Int );
+
+	template <> void Get(
+		int Index,
+		cCaller_ &Caller,
+		int &Target );
+
+	template <> void Get(
+		int Index,
+		cCaller_ &Caller,
 		sclnjs::rObject &Object );
 
 	template <> void Get(

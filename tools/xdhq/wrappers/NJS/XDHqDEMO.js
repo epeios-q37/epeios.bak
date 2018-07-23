@@ -24,6 +24,9 @@ const shared = require('./XDHqSHRD.js');
 
 const types = shared.types;
 const open = shared.open;
+const service = 53800;
+var host = "atlastk.org";
+
 
 function byteLength(str) {
 	// returns the byte length of an utf8 string
@@ -162,7 +165,7 @@ var url = "";
 function pseudoServer(createCallback, newSessionAction, callbacks) {
 	var client = new net.Socket();
 
-	client.connect(51000, "localhost", () => {
+	client.connect(service, host, () => {
 		var data = new Buffer(0);
 		var relaunch = true;
 
