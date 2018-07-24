@@ -40,7 +40,6 @@ if (process.env.EPEIOS_SRC) {
 }
 
 const atlas = require(atlasId);
-const Tree = atlas.Tree;
 const DOM = atlas.DOM;
 const readAsset = atlas.readAsset;
 
