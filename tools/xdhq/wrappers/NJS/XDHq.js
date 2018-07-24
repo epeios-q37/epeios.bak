@@ -61,8 +61,7 @@ function getAssetFileName(fileName) {
 	return path.join(getAssetDir(), path.win32.basename(fileName))
 }
 
-function readAsset( fileName )
-{
+function readAsset(fileName) {
 	return Buffer.from(fs.readFileSync(getAssetFileName(fileName))).toString();
 }
 
@@ -123,22 +122,22 @@ function launch(callback, action, tagsAndCallbacks, mode, url) {
 
 class XDH {
 	execute(script, callback) {
-		call( this, "Execute_1", types.VOID, 1, script, 0, callback);
+		call(this, "Execute_1", types.VOID, 1, script, 0, callback);
 	}
 	alert(message, callback) {
-		call( this, "Alert_1", types.VOID, 1, message, 0, callback);
+		call(this, "Alert_1", types.VOID, 1, message, 0, callback);
 	}
 	confirm(message, callback) {
-		call( this, "Confirm_1", types.STRING, 1, message, 0, (answer) => callback(answer == "true"));
+		call(this, "Confirm_1", types.STRING, 1, message, 0, (answer) => callback(answer == "true"));
 	}
 	setLayout_(id, xml, xsl, callback) {
 		call(this, "SetLayout_1", types.VOID, 3, id, xml, xsl, 0, callback);
 	}
 	headUp(head, callback) {
-		this.setLayout_( "_xdh_head", head, "", callback );
+		this.setLayout_("_xdh_head", head, "", callback);
 	}
 	setLayout(id, html, callback) {
-		this.setLayout_( id, html, "", callback);
+		this.setLayout_(id, html, "", callback);
 	}
 	setLayoutXSL(id, tree, xslFileName, callback) {
 		let xslURL;
@@ -148,7 +147,7 @@ class XDH {
 		else
 			xslURL = xslFileName;
 
-		this.setLayout_( id, tree.end(), xslURL, callback);
+		this.setLayout_(id, tree.end(), xslURL, callback);
 	}
 	getContents(ids, callback) {
 		call(this, "GetContents_1", types.STRINGS, 0, 1, ids,

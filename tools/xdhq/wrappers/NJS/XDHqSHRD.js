@@ -21,10 +21,10 @@
 
 // Types of the response.
 const types = {
-  VOID: 0,
-  STRING: 1,
-  STRINGS: 2,
-  UNDEFINED: 3 // Always the highest value.
+	VOID: 0,
+	STRING: 1,
+	STRINGS: 2,
+	UNDEFINED: 3 // Always the highest value.
 }
 
 const platforms = {
@@ -43,33 +43,33 @@ const platform = (() => {
 	let platform = platforms.UNKNOWN;
 
 	switch (process.platform) {
-	case 'android':
-		platform =  platforms.ANDROID;
-		break;
-	case 'aix':
-		platform = platforms.AIX;
-		break;
-	case 'darwin':
-		platform = platforms.DARWIN;
-		break;
-	case 'freebsd':
-		platform = platforms.FREEBSD;
-		break;
-	case 'linux':
-		platform = platforms.LINUX;
-		break;
-	case 'openbsd':
-		platform = platforms.OPENBSD;
-		break;
-	case 'sunos':
-		platform = platforms.SUNOS;
-		break;
-	case 'win32':
-		platform = platforms.WIN32;
-		break;
-	default:
-		throw "Unknown platform: '" + process.platform + "' !!!";
-		break;
+		case 'android':
+			platform = platforms.ANDROID;
+			break;
+		case 'aix':
+			platform = platforms.AIX;
+			break;
+		case 'darwin':
+			platform = platforms.DARWIN;
+			break;
+		case 'freebsd':
+			platform = platforms.FREEBSD;
+			break;
+		case 'linux':
+			platform = platforms.LINUX;
+			break;
+		case 'openbsd':
+			platform = platforms.OPENBSD;
+			break;
+		case 'sunos':
+			platform = platforms.SUNOS;
+			break;
+		case 'win32':
+			platform = platforms.WIN32;
+			break;
+		default:
+			throw "Unknown platform: '" + process.platform + "' !!!";
+			break;
 	}
 
 	return platform;
@@ -79,27 +79,27 @@ function open(document) {
 	var command = "";
 	var available = false;
 	switch (platform) {
-	case platforms.ANDROID:
-		break;
-	case platforms.DARWIN:
-		command = "open " + document;
-		available = true;
-		break;
-	case platforms.AIX:
-	case platforms.FREEBSD:
-	case platforms.LINUX:
-	case platforms.OPENDBSD:
-	case platforms.SUNOS:
-		command = "xdg-open " + document;
-		available = true;
-	case platforms.WIN32:
-		command = "start " + document;
-		available = true;
-	default:
-		break;
+		case platforms.ANDROID:
+			break;
+		case platforms.DARWIN:
+			command = "open " + document;
+			available = true;
+			break;
+		case platforms.AIX:
+		case platforms.FREEBSD:
+		case platforms.LINUX:
+		case platforms.OPENDBSD:
+		case platforms.SUNOS:
+			command = "xdg-open " + document;
+			available = true;
+		case platforms.WIN32:
+			command = "start " + document;
+			available = true;
+		default:
+			break;
 	}
 
-	if ( available )
+	if (available)
 		require('child_process').exec(command);
 
 	return available;

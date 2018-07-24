@@ -114,8 +114,7 @@ function displayTodos(dom) {
 
 	while (i < dom.todos.length) {
 		todo = dom.todos[i];
-		if (dom.exclude === null || (todo['completed'] != dom.exclude))
-				tree = tree.ele('Todo', { 'id': i, 'completed' : todo["completed"] }, todo["label"] ).up();
+		tree = tree.ele('Todo', { 'id': i, 'completed' : todo["completed"] }, todo["label"] ).up();
 		i++;
 	}
 

@@ -52,7 +52,7 @@ function call() {
 	var args = [xdhq, 3];
 	var i = 0;
 
-	while ( i < arguments.length )
+	while (i < arguments.length)
 		args.push(arguments[i++]);
 
 	njsq._call.apply(null, args);

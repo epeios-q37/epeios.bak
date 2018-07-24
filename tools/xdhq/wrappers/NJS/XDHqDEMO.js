@@ -27,14 +27,16 @@ const open = shared.open;
 const service = 53800;
 var host = "atlastk.org";
 
+if (process.env.EPEIOS_SRC)
+	host = "localhost";
 
 function byteLength(str) {
 	// returns the byte length of an utf8 string
 	var s = str.length;
-	for (var i=str.length-1; i>=0; i--) {
+	for (var i = str.length - 1; i >= 0; i--) {
 		var code = str.charCodeAt(i);
 		if (code > 0x7f && code <= 0x7ff) s++;
-		else if (code > 0x7ff && code <= 0xffff) s+=2;
+		else if (code > 0x7ff && code <= 0xffff) s += 2;
 		if (code >= 0xDC00 && code <= 0xDFFF) i--; //trail surrogate
 	}
 	return s;
@@ -55,14 +57,14 @@ function getSize(query, offset) {
 
 function getString(query, offset) {
 	var size = 0;
-	[size,offset] = getSize(query, offset);
+	[size, offset] = getSize(query, offset);
 
 	var string = "";
 
 	while (size--)
 		string += String.fromCodePoint(query[offset++]);
 
-	return [string,offset];
+	return [string, offset];
 }
 
 function getStrings(query, offset) {
@@ -70,14 +72,14 @@ function getStrings(query, offset) {
 	var strings = new Array();
 	var string = "";
 
-	[size,offset] = getSize(query, offset);
+	[size, offset] = getSize(query, offset);
 
 	while (size--) {
-		[string,offset]=getString(query, offset);
+		[string, offset] = getString(query, offset);
 		strings.push(string);
 	}
 
-	return [strings,offset];
+	return [strings, offset];
 }
 
 function convertSize(size) {
@@ -85,7 +87,7 @@ function convertSize(size) {
 	size >>= 7;
 
 	while (size != 0) {
-		result = Buffer.concat([Buffer.alloc(1, ( size & 0x7f ) | 0x80 ), result]);
+		result = Buffer.concat([Buffer.alloc(1, (size & 0x7f) | 0x80), result]);
 		size >>= 7;
 	}
 
@@ -93,12 +95,12 @@ function convertSize(size) {
 }
 
 function addString(data, string) {
-	return Buffer.concat([data, convertSize( byteLength( string)), Buffer.from(string,'utf8')]);
+	return Buffer.concat([data, convertSize(byteLength(string)), Buffer.from(string, 'utf8')]);
 }
 
 function addStrings(data, strings) {
 	var i = 0;
-	data = Buffer.concat([data, convertSize( strings.length)]);
+	data = Buffer.concat([data, convertSize(strings.length)]);
 
 	while (i < strings.length)
 		data = addString(data, strings[i++]);
@@ -258,7 +260,7 @@ function launch(createCallback, newSessionAction, callbacks, webURL) {
 
 	url = webURL;
 
-	setTimeout( () => pseudoServer(createCallback, newSessionAction, callbacks), 2000 );
+	setTimeout(() => pseudoServer(createCallback, newSessionAction, callbacks), 2000);
 
 }
 
