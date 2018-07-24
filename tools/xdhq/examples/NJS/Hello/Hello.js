@@ -48,35 +48,37 @@ const atlas = require(atlasId);
 // const atlas = require( 'atlastk' );
 
 const head = [
-'<title>"Hello World !" example</title>',
-'<style type="text/css">',
-' html, body { height: 100%; padding: 0; margin: 0; }',
-' .vcenter-out, .hcenter { display: table; height: 100%; margin: auto; }',
-' .vcenter-in { display: table-cell; vertical-align: middle;',
-'</style>',
+	'<title>"Hello World !" example</title>',
+	'<style type="text/css">',
+	' html, body { height: 100%; padding: 0; margin: 0; }',
+	' .vcenter-out, .hcenter { display: table; height: 100%; margin: auto; }',
+	' .vcenter-in { display: table-cell; vertical-align: middle; }',
+	'</style>',
 ].join('\n');
 
 const body = [
-'<div class="vcenter-out">',
-' <div class="vcenter-in">',
-'  <fieldset>',
-'   <label>Name:</label>',
-'   <input id="input" maxlength="20" placeholder="Enter a name here" type="text" data-xdh-onevent="input|Typing"/>',
-'   <button data-xdh-onevent="Clear">Clear</button>',
-'   <hr/>',
-'   <h1>',
-'    <span>Hello </span>',
-'    <span style="font-style: italic;" id="name"></span>',
-'    <span>!</span>',
-'   </h1>',
-'  </filedset>',
-' </div>',
-'</div>'].join('\n');
+	'<div class="vcenter-out">',
+	' <div class="vcenter-in">',
+	'  <fieldset>',
+	'   <label>Name:</label>',
+	'   <input id="input" maxlength="20" placeholder="Enter a name here"',
+	'		type="text" data-xdh-onevent="input|Typing"/>',
+	'   <button data-xdh-onevent="Clear">Clear</button>',
+	'   <hr/>',
+	'   <h1>',
+	'    <span>Hello </span>',
+	'    <span style="font-style: italic;" id="name"></span>',
+	'    <span>!</span>',
+	'   </h1>',
+	'  </filedset>',
+	' </div>',
+	'</div>'].join('\n');
 
 const callbacks = {
-	"Connect": (dom, id) => dom.headUp( head, () => dom.setLayout("", body)),
+	"Connect": (dom, id) => dom.headUp(head, () => dom.setLayout("", body)),
 	"Typing": (dom, id) => dom.getContent(id, (name) => dom.setContent("name", name)),
-	"Clear": (dom, id) => dom.confirm("Are you sure ?", (answer) => { if (answer) dom.setContents({ "input": "", "name": "" }) }),
+	"Clear": (dom, id) => dom.confirm("Are you sure ?",
+		(answer) => { if (answer) dom.setContents({ "input": "", "name": "" }) }),
 };
 
-atlas.launch(() => new atlas.DOM(), "Connect", callbacks );
+atlas.launch(() => new atlas.DOM(), "Connect", callbacks);
