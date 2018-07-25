@@ -17,13 +17,13 @@
     along with XDHWebQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "xdhwebq.h"
+#include "xdwmain.h"
 
 #include "misc.h"
 
 #include "xdhutl.h"
 
-using namespace xdhwebq;
+using namespace xdwmain;
 
 namespace {
 	namespace {
@@ -203,7 +203,7 @@ namespace {
 	}
 }
 
-void xdhwebq::Handle(
+void xdwmain::Handle(
 	const query::dPairs &Pairs,
 	session::rSessions &Sessions,
 	str::dString &Response )

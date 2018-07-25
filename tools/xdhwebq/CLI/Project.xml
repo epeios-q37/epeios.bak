@@ -1,34 +1,23 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<Project xmlns:xpp="http://zeusw.org/epeios/xpp">
+<Project xmlns:xpp="http://q37.info/ns/xpp/">
 	<xpp:bloc>
 		<!-- User definitions -->
 		<xpp:define name="Version">
-			<xpp:bloc/>
+			<xpp:bloc></xpp:bloc>
 		</xpp:define>
 		<xpp:define name="CopyrightYears">
 			<xpp:bloc>2017</xpp:bloc>
 		</xpp:define>
 		<xpp:set name="Credits" value="Epeios"/>
-		<xpp:set name="Type" value="NJSComponent"/>
+		<xpp:set name="Type" value="Tool"/>
 	</xpp:bloc>
 	<xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
 	<About>
-		<Program>xdhwebqnjs</Program>
+		<Program>xdhwebq</Program>
 		<Software>XDHWebQ</Software>
-		<UUID>d6a723cb-e88f-4f2f-b429-3adc207f1d62</UUID>
+		<UUID>effd756a-a901-46e8-939f-3f2a5e7986b0</UUID>
 	</About>
-	<!--NodeJS>
-		<Deps>
-			<Regular>
-				<Dep>xdhqxdh</Dep>
-			</Regular>
-		</Deps>
-	</NodeJS-->
-	<!-- NO SPACE in 'Keywords' attribute !!! ("a,b,c", NOT "a, b, c")-->
-	<RTW Description="Node.js addon to use 'XDHTML' module with web browsers." Keywords="XDHTML,web">
-  <Dir>xdhwebq-node</Dir>
- </RTW>
- <Modules>
+	<Modules>
 		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
 			<Modules Group="Core">
 				<xpp:expand select="Core"/>
@@ -36,11 +25,16 @@
 				<Module>idxbtq</Module>
 				<Module>idxbtr</Module>
 				<Module>idxque</Module>
+				<Module>sck</Module>
 				<Module>strmrg</Module>
 			</Modules>
-   <Modules Group="SCL">
-    <xpp:expand select="SCL"/>
-   </Modules>
+			<Modules Group="CSD">
+				<Module>csdbns</Module>
+				<Module>csdscb</Module>
+			</Modules>
+			<Modules Group="SCL">
+				<xpp:expand select="SCL"/>
+			</Modules>
 			<Modules Group="XDH">
 				<Module>xdhcmn</Module>
 				<Module>xdhups</Module>
@@ -59,18 +53,23 @@
 			<Module>xdwmain</Module>
 			<Module>xdwrgstry</Module>
 		</Modules>
-  <Module>registry</Module>
- </Modules>
+		<Module>registry</Module>
+	</Modules>
+	<Files/>
+ <RTW>
+  <Dir>xdhwebq-cli</Dir>
+ </RTW>
+ <Packing>
+		<WikiFiles>
+			<File Dir="computing/epeios/tools/" WikiOddity="IsHome">xdhwebq</File>
+			<File Dir="computing/epeios/tools/xdhwebq/">Manual</File>
+			<File Dir="computing/epeios/">Compilation</File>
+			<File Dir="computing/epeios/tools/">Configuration</File>
+		</WikiFiles>
+	</Packing>
 	<SourceDirs>
 		<SourceDir>../</SourceDir>
 	</SourceDirs>
-	<Files>
-  <!-- NOTA : '*.js' files will automatically be packed. -->
-  <!--File Pack="No">XDHWebQ.js</File-->
-		<File Path="../" Pack="No">xdhwebq.xcfg</File>
-		<File Path="../../" Pack="No">XDH.xcfg</File>
-		<File Path="../../../corpus/js/">xdhtml.js</File>
-	</Files>
 	<PreprocessorDefinitions>
 		<PreprocessorDefinition>E_ST</PreprocessorDefinition>
 	</PreprocessorDefinitions>

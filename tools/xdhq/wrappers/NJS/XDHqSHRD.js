@@ -92,9 +92,11 @@ function open(document) {
 		case platforms.SUNOS:
 			command = "xdg-open " + document;
 			available = true;
+			break;
 		case platforms.WIN32:
 			command = "start " + document;
 			available = true;
+			break;
 		default:
 			break;
 	}

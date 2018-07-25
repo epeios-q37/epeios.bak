@@ -4,7 +4,7 @@
 	<xpp:bloc>
 		<!-- User definitions -->
 		<xpp:define name="Version">
-			<xpp:bloc>0.2.0</xpp:bloc>
+			<xpp:bloc>0.1.9</xpp:bloc>
 		</xpp:define>
 		<xpp:define name="CopyrightYears">
 			<xpp:bloc>2018</xpp:bloc>
@@ -36,6 +36,8 @@
 				<Dep>xdhwebqnjs</Dep>
 				<Dep>xdhelcq</Dep>
 				-->
+				<!-- Should be a dependencies of 'xdhqnjs, but all the dependencies are removed due to the DEMO mode. -->
+				<Dep>xmlbuilder</Dep>
 			</Regular>
 		</Deps>
 	</NodeJS>

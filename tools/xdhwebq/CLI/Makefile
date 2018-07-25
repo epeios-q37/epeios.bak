@@ -15,7 +15,7 @@
 #	You should have received a copy of the GNU Affero General Public License
 #	along with XDHWebQ. If not, see <http://www.gnu.org/licenses/>.
 
-name = xdhwebqnjs
+name = xdhwebq
 
 
 # Epeios general debugging features
@@ -37,11 +37,12 @@ mods += que rgstry sdr stkbse stkbch
 mods += stkcrt stkctn str strng stsfsm 
 mods += tagsbs tht thtsub tol txf 
 mods += tys uys utf xml xpp 
-mods += xtf llio dlbrry n4all n4njs 
-mods += plgn plgncore uvqdcl btr idxbtq 
-mods += idxbtr idxque strmrg 
+mods += xtf llio dlbrry plgn plgncore 
+mods += btr idxbtq idxbtr idxque sck 
+mods += strmrg 
+mods += csdbns csdscb 
 mods += sclargmnt scli sclmisc sclerror scllocale 
-mods += sclrgstry scln4a sclnjs 
+mods += sclrgstry scltool 
 mods += xdhujp xdhujr xdhujs 
 mods += xdhcmn xdhups xdhutl 
 mods += misc query session xdwmain xdwrgstry 
@@ -228,11 +229,7 @@ ifeq ("$(os)","$(Cygwin)")
     
 	endif
 	
-	ifneq ("$(target)","$(Android)")
-		binary=$(name).dll
-		lo += -Wl,--kill-at -shared
-	endif
-
+	binary=$(name).exe
 
 	dest=/cygdrive/h/bin/
 
@@ -264,8 +261,7 @@ ifeq ("$(os)", "$(MinGW)")
 		endif
 	endif
 
-	binary=$(name).dll
-	lo += -Wl,--kill-at -shared
+	binary=$(name).exe
 
 	dest=/h/bin/
 endif
@@ -294,9 +290,7 @@ ifeq ("$(os)","$(GNULinux)")
 			lo += -m64
 		endif
 	endif
-	binary=lib$(name).so
-	lo += -shared
-	co += -fPIC
+	binary=$(name)
 
 	dest=/home/csimon/bin/
 endif
@@ -325,9 +319,7 @@ ifeq ("$(os)","$(Linux)")
 			lo += -m64
 		endif
 	endif
-	binary=lib$(name).so
-	lo += -shared
-	co += -fPIC
+	binary=$(name)
 endif
 
 #############################
@@ -352,8 +344,7 @@ ifeq ("$(os)","$(MacOS)")
 			lo += -m64
 		endif
 	endif
-	binary=lib$(name).dylib
-	lo += -dynamiclib
+	binary=$(name)
 
 	dest=/Users/csimon/bin/
 endif
@@ -382,9 +373,7 @@ ifeq ("$(os)","$(Android)")
 			lo += -m64
 		endif
 	endif
-	binary=lib$(name).so
-	lo += -shared
-	co += -fPIC
+	binary=$(name)
 endif
 
 #############################
@@ -397,7 +386,7 @@ endif
 
 copt += -DVERSION=\""20180725"\"
 copt += -DCOPYRIGHT_YEARS=\""2017"\"
-copt += -DIDENTIFIER=\""d6a723cb-e88f-4f2f-b429-3adc207f1d62"\"
+copt += -DIDENTIFIER=\""effd756a-a901-46e8-939f-3f2a5e7986b0"\"
 
 ifndef EPEIOS_SRC
 	src += :src:src/epeios

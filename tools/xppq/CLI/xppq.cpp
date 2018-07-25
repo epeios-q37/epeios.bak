@@ -37,6 +37,8 @@ using cio::CErr;
 using cio::COut;
 using cio::CIn;
 
+SCLI_DEF( xppq, NAME_LC, NAME_MC );
+
 static void PrintHeader_( void )
 {
 	COut << NAME_MC " V" VERSION << " (" WEBSITE_URL ")" << txf::nl;
@@ -245,6 +247,11 @@ namespace {
 	}
 }
 
+const scli::sInfo &scltool::SCLTOOLInfo( void )
+{
+	return xppq::Info;
+}
+
 #define C( name )\
 	else if ( Command == #name )\
 		name##_()
@@ -272,7 +279,3 @@ qRT
 qRE
 	return ExitValue;
 }
-
-const char *sclmisc::SCLMISCTargetName = NAME_LC;
-const char *sclmisc::SCLMISCProductName = NAME_MC;
-

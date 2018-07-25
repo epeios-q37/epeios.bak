@@ -137,8 +137,11 @@ function serveQuery(query, res) {
 
 		put(query, keys, values);
 
+		// Synchrone handling.
 		new StringStream(njsq._call(xdhwebq, 2, keys, values)).pipe(res);
-		//		njsq._call(xdhwebq, 3, keys, values, (result) => new StringStream(result ).pipe(res));
+
+		// Asynchrone handling. Works, but very slow !?!
+		// njsq._call(xdhwebq, 3, keys, values, (result) => new StringStream(result ).pipe(res));
 	} else {
 		new StringStream(prolog(query['_token'])).pipe(res);
 	}

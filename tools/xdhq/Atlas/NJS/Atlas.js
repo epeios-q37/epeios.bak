@@ -54,6 +54,7 @@ if (process.env.EPEIOS_SRC) {
 }
 
 const xdhq = require(xdhqId);
+const isDev = xdhq.isDev;
 
 const modes = xdhq.modes;
 
@@ -133,7 +134,11 @@ function launch(createCallback, newSessionAction, callbacks, gui) {
 	var url = "";
 
 	if (!prod)
-		url = "http://localhost:8080";
+		if ( isDev() )
+			url = "http://localhost:8080";
+		else
+			url = "http://atlastk.org:8080"
+
 
 	xdhq.launch(createCallback, newSessionAction, callbacks, mode, url);
 

@@ -17,13 +17,13 @@
     along with XDHWebQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef XDHWEBQ_INC_
-# define XDHWEBQ_INC_
+#ifndef XDWMAIN_INC_
+# define XDWMAIN_INC_
 
 # include "query.h"
 # include "session.h"
 
-namespace xdhwebq {
+namespace xdwmain {
 	using query::dPairs;
 	using query::wPairs;
 

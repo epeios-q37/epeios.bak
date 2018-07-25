@@ -45,13 +45,15 @@ qRT
 qRE
 }
 
-static void Launch_( void *UP )
+static void Launch_(
+	shared_data__ &Data,
+	rSession &Session,
+	mtk::gBlocker &Blocker )
 {
-qRFH;
+qRH;
 	TOL_CBUFFER___ Id, Action;
-qRFB;
-	shared_data__ &Data = *(shared_data__ *)UP;
-	rSession &Session = Data.Session();
+	bso::sBool Locked = false;
+qRB;
 	xdhcmn::cSession &Callback = Data.Callback();
 
 	Data.Id().Convert( Id );
@@ -59,17 +61,35 @@ qRFB;
 
 	Session.UpstreamCallInProgress( true );
 
-	Data.Unlock();
+	Blocker.Release();
+
+	Locked = true;
 
 	Callback.Launch( Id, Action );
+qRR;
+qRT;
+	if ( Locked ) {
+		Session.Lock();
 
-	Session.Lock();
+		Session.UpstreamCallInProgress( false );
 
-	Session.UpstreamCallInProgress( false );
+		Session.UnlockUpstream();
 
-	Session.UnlockUpstream();
+		Session.Unlock();
+	}
+qRE;
+}
 
-	Session.Unlock();
+static void Launch_(
+	void *UP,
+	mtk::gBlocker &Blocker )
+{
+qRFH;
+	shared_data__ &Data = *(shared_data__ *)UP; 
+qRFB;
+	rSession &Session = Data.Session();
+
+	Launch_( Data, Session, Blocker );
 qRFR;
 qRFT;
 qRFE( sclmisc::ErrFinal() );
@@ -91,13 +111,7 @@ qRB
 
 	Data.Init ( Id, Action, *this, _SC() );
 
-	Data.Lock();
-
-	mtk::RawLaunch( Launch_, &Data );
-
-	Data.Lock();
-	
-	Data.Unlock();
+	mtk::Launch( Launch_, &Data );
 
 	_Lock( tUpstream );
 
@@ -120,7 +134,7 @@ qRE
 }
 
 void session::rSession::UpstreamReport(
-	const str::string_ &Response,	// Reponse from previous script.
+	const str::string_ &Response,	// Response from previous script.
 	str::string_ &Script )	// Script to execute. Empty if nothing to do.
 {
 qRH

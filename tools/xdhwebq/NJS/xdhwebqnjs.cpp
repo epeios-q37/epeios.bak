@@ -21,7 +21,7 @@
 
 #include "registry.h"
 
-#include "xdhwebq.h"
+#include "xdwmain.h"
 
 #include "sclargmnt.h"
 #include "sclnjs.h"
@@ -53,9 +53,9 @@ namespace {
 	}
 
 	namespace {
-		xdhwebq::rAgent Agent_;
-		xdhwebq::wSessions UnprotectedSessions_;
-		xdhwebq::rSessions Sessions_;
+		xdwmain::rAgent Agent_;
+		xdwmain::wSessions UnprotectedSessions_;
+		xdwmain::rSessions Sessions_;
 	}
 
 	SCLNJS_F( Init )
@@ -87,7 +87,7 @@ namespace {
 	{
 	qRH;
 		str::wStrings Keys, Values;
-		xdhwebq::wPairs Pairs;
+		xdwmain::wPairs Pairs;
 		str::wString Response;
 	qRB;
 		tol::Init( Keys, Values );
@@ -97,7 +97,7 @@ namespace {
 		Pairs.Add( Keys, Values );
 
 		Response.Init();
-		xdhwebq::Handle( Pairs, Sessions_, Response );
+		xdwmain::Handle( Pairs, Sessions_, Response );
 
 		Caller.SetReturnValue( Response );
 	qRR;
@@ -113,7 +113,7 @@ namespace {
 			virtual void UVQWork( void ) override
 			{
 				cio::COut << txf::tab << ">>>>>> " __LOC__ << txf::nl << txf::commit;
-				xdhwebq::Handle( Pairs, Sessions_, Response );
+				xdwmain::Handle( Pairs, Sessions_, Response );
 				cio::COut << txf::tab << "<<<<<< " __LOC__ << txf::nl << txf::commit;
 			}
 			virtual sclnjs::eBehavior UVQAfter( void ) override
@@ -124,7 +124,7 @@ namespace {
 				return sclnjs::bExitAndDelete;
 			}
 		public:
-			xdhwebq::wPairs Pairs;
+			xdwmain::wPairs Pairs;
 			sclnjs::rCallback Callback;
 			str::wString Response;
 			void reset( bso::sBool P = true )
@@ -162,7 +162,9 @@ namespace {
 		Rack->After();
 		delete Rack;
 #else
+		cio::COut << txf::tab << ">>>>>> " __LOC__ << txf::nl << txf::commit;
 		sclnjs::Launch( *Rack );
+		cio::COut << txf::tab << ">>>>>> " __LOC__ << txf::nl << txf::commit;
 #endif
 	qRR;
 		if ( Rack != NULL )

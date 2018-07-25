@@ -45,44 +45,22 @@ namespace session {
 	private:
 		Q37_MRMDF( rSession, S_, Session_ );
 		Q37_MRMDF( xdhcmn::cSession, C_, Callback_ );
-		mtx::handler___ _Mutex;
-		void _Lock( void )
-		{
-			mtx::Lock( _Mutex );
-		}
-		void _Unlock( void )
-		{
-			mtx::Unlock( _Mutex );
-		}
-		void _Test( void )
-		{
-			if ( !mtx::IsLocked( _Mutex ) )
-				qRGnr();
-		}
 		Q37_MRMDF( const str::string_ , _GetId, _Id );
 		Q37_MRMDF( const str::string_ , _GetAction, _Action );
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			if ( P )
-				if ( _Mutex != mtx::Undefined )
-					mtx::Delete( _Mutex );
-
 			_Id = NULL;
 			_Action = NULL;
-			_Mutex = mtx::Undefined;
 			Session_ = NULL;
 			Callback_ = NULL;
 		}
 		E_CDTOR( shared_data__ );
 		void Init( void )
 		{
-			if ( _Mutex != mtx::Undefined )
-				mtx::Delete( _Mutex );
-
 			// _Id.Init();	//	Buffer. No Initialization.
 			// _Action.Init();	//	Buffer. No Initialization.
-			_Mutex = mtx::Create();
+
 			Session_ = NULL;
 			Callback_ = NULL;
 		}
@@ -99,30 +77,16 @@ namespace session {
 			Session_ = &Session;
 			Callback_ = &Callback;
 		}
-		void Lock( void )
-		{
-			_Lock();
-		}
-		void Unlock( void )
-		{
-			_Unlock();
-		}
 		const str::string_ &Id( void )
 		{
-			_Test();
-
 			return _GetId();
 		}
 		const str::string_ &Action( void )
 		{
-			_Test();
-
 			return _GetAction();
 		}
 		xdhcmn::cSession &Callback( void )
 		{
-			_Test();
-
 			return C_();
 		}
 		rSession &Session( void ) const
