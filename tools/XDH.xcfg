@@ -147,11 +147,9 @@
 				<Events>
 					<![CDATA[
 					{
-					console.log( "Yo!" );
 						let xml = "%XML%";
 						let xsl = "%XSL%";
 						let id = "%Id%";
-					 console.log( "Id:", id, "XSL: ", xsl, "XML: ", xml );
 						if( xsl == "" )
 												getElement( id ).innerHTML = xml;
 						else {

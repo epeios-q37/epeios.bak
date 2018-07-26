@@ -125,7 +125,7 @@ namespace {
 		ModuleFilename.Init();
 		sclmisc::MGetValue( registry::parameter::ModuleFilename, ModuleFilename );
 
-		Agent.Init( xdhcmn::mMultiUser, ModuleFilename, dlbrry::nExtOnly, Identification.Convert( Buffer ) );
+		Agent.Init( xdhcmn::mMultiUser, ModuleFilename, dlbrry::n_Default, Identification.Convert( Buffer ) );
 
 		SessionsUnprotected.Init( 0, 0, Agent );
 

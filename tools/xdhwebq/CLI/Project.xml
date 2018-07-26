@@ -56,10 +56,10 @@
 		<Module>registry</Module>
 	</Modules>
 	<Files/>
- <RTW>
-  <Dir>xdhwebq-cli</Dir>
- </RTW>
- <Packing>
+	<RTW>
+		<Dir>xdhwebq-cli</Dir>
+	</RTW>
+	<Packing>
 		<WikiFiles>
 			<File Dir="computing/epeios/tools/" WikiOddity="IsHome">xdhwebq</File>
 			<File Dir="computing/epeios/tools/xdhwebq/">Manual</File>
@@ -70,6 +70,10 @@
 	<SourceDirs>
 		<SourceDir>../</SourceDir>
 	</SourceDirs>
+	<Files>
+		<File Path="../" Pack="No">xdhwebq.xcfg</File>
+		<File Path="../../" Pack="No">XDH.xcfg</File>
+	</Files>
 	<PreprocessorDefinitions>
 		<PreprocessorDefinition>E_ST</PreprocessorDefinition>
 	</PreprocessorDefinitions>

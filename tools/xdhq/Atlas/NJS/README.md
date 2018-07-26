@@ -3,47 +3,50 @@
 The *Atlas* toolkit is a library for web and desktop UI. This is the binding of this toolkit for *Node.js*.
 
 
-## *Hello World!*
+## *Hello, World!*
 
-[![Little demonstration](http://q37.info/download/Hello.gif "A basic example")](http://q37.info/s/atk/Hello/)
+[![Little demonstration](https://q37.info/download/Hello.gif "A basic example")](http://q37.info/s/atk/Hello/)
 
-### *JavaScript* source code
+## source code
 
-```JavaScript
-const atlas = require('atlastk');
+```javascript
+const atlas = require( 'atlastk' );
 
-atlas.register( {
- "Connect": (dom, id) => dom.setLayout("", new atlas.Tree(), "Main.xsl"),
- "Typing": (dom, id) => dom.getContent(id, (name) => dom.setContent("name", name)),
- "Clear": (dom, id) => dom.confirm("Are you sure ?", (answer) => { if (answer) dom.setContents({"input": "", "name": ""})}),
- } );
+const head = [
+	'<title>"Hello, World !" example</title>',
+	'<style type="text/css">',
+	' html, body { height: 100%; padding: 0; margin: 0; }',
+	' .vcenter-out, .hcenter { display: table; height: 100%; margin: auto; }',
+	' .vcenter-in { display: table-cell; vertical-align: middle; }',
+	'</style>',
+].join('\n');
 
-atlas.launch(() => new atlas.DOM(), "Connect");
-```
+const body = [
+	'<div class="vcenter-out">',
+	' <div class="vcenter-in">',
+	'  <fieldset>',
+	'   <label>Name:</label>',
+	'   <input id="input" maxlength="20" placeholder="Enter a name here"',
+	'		type="text" data-xdh-onevent="input|Typing"/>',
+	'   <button data-xdh-onevent="Clear">Clear</button>',
+	'   <hr/>',
+	'   <h1>',
+	'    <span>Hello </span>',
+	'    <span style="font-style: italic;" id="name"></span>',
+	'    <span>!</span>',
+	'   </h1>',
+	'  </filedset>',
+	' </div>',
+	'</div>'].join('\n');
 
+const callbacks = {
+	"Connect": (dom, id) => dom.headUp(head, () => dom.setLayout("", body)),
+	"Typing": (dom, id) => dom.getContent(id, (name) => dom.setContent("name", name)),
+	"Clear": (dom, id) => dom.confirm("Are you sure ?",
+		(answer) => { if (answer) dom.setContents({ "input": "", "name": "" }) }),
+};
 
-### *XSL* file
-
-This is the content of the `Main.xsl` file which name is given as parameter to above `dom.setLayout(...)` instruction. 
-
-```XML
-<?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0"
-                xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-  <xsl:output method="html" encoding="UTF-8"/>
-  <xsl:template match="/">
-    <label>Name:</label>
-    <input id="input" maxlength="20" placeholder="Enter a name here" type="text" data-xdh-onevent="input|Typing"/>
-    <button data-xdh-onevent="Clear">Clear</button>
-    <hr/>
-    <h1>
-      <span>Hello </span>
-      <span style="font-style: italic;" id="name"/>
-      <span>!</span>
-    </h1>
-  </xsl:template>
-</xsl:stylesheet>
+atlas.launch(() => new atlas.DOM(), "Connect", callbacks);
 ```
 
 ## What's next ?
