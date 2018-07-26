@@ -48,7 +48,7 @@ const atlas = require(atlasId);
 // const atlas = require( 'atlastk' );
 
 const head = [
-	'<title>"Hello World !" example</title>',
+	'<title>"Hello, World !" example</title>',
 	'<style type="text/css">',
 	' html, body { height: 100%; padding: 0; margin: 0; }',
 	' .vcenter-out, .hcenter { display: table; height: 100%; margin: auto; }',

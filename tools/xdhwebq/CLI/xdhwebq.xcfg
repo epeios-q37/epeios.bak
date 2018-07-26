@@ -4,10 +4,11 @@
 		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
 		<xpp:expand value-of="q37.xpp"/>
   <xpp:expand href="../../../TOL.xcfg"/>
+		<xpp:expand href="../../XDH.xcfg"/>
 		<Parameters>
 			<Language>fr</Language>
-			<Command>Test</Command>
-			<!-- Default command -->
+			<Command>Process</Command>
+			<Service>53741</Service>
 		</Parameters>
 		<Definitions>
 		</Definitions>

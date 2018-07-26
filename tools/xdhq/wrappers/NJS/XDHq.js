@@ -128,7 +128,7 @@ class XDH {
 		call(this, "Alert_1", types.VOID, 1, message, 0, callback);
 	}
 	confirm(message, callback) {
-		call(this, "Confim_1", types.STRING, 1, message, 0, (answer) => callback(answer == "true"));
+		call(this, "Confirm_1", types.STRING, 1, message, 0, (answer) => callback(answer == "true"));
 	}
 	setLayout_(id, xml, xsl, callback) {
 		call(this, "SetLayout_1", types.VOID, 3, id, xml, xsl, 0, callback);

@@ -137,7 +137,7 @@ function launch(createCallback, newSessionAction, callbacks, gui) {
 		if ( isDev() )
 			url = "http://localhost:8080";
 		else
-			url = "http://atlastk.org:8080"
+			url = "http://atlastk.org/atlas.php"
 
 
 	xdhq.launch(createCallback, newSessionAction, callbacks, mode, url);
