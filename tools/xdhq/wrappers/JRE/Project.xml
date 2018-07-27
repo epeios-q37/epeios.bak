@@ -117,6 +117,11 @@
 		<!--File Pack="No">XDHq.java</File-->
 		<Files Group="JAVA">
 			<File Pack="No">DOM.java</File>
+			<Files Group="DOM">
+				<File Pack="No">DEMO.java</File>
+				<File Pack="No">PROD.java</File>
+				<File Pack="No">SHRD.java</File>
+			</Files>
 			<File Pack="No">Event.java</File>
 			<File Pack="No">Test.java</File>
 			<File Pack="No">Tree.java</File>

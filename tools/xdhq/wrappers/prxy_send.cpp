@@ -126,7 +126,7 @@ namespace {
 	{
 		property::get::S( Arguments.Id, Arguments.Name, Flow );
 	}
-	void Focus__(
+	void Focus_(
 		flw::sWFlow &Flow,
 		const rArguments &Arguments )
 	{
@@ -195,7 +195,7 @@ void prxy_send::Send(
 	H( RemoveAttribute );
 	H( SetProperty );
 	H( GetProperty );
-	H( Focus_ );
+	H( Focus );
 	case rNew:
 		New_( Flow, NewArguments );
 		break;

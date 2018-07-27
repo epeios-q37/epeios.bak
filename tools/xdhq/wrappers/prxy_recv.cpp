@@ -143,7 +143,7 @@ namespace {
 		property::get::R( Flow, Return.StringToSet() );
 	}
 
-	void Focus__(
+	void Focus_(
 		flw::sRFlow &Flow,
 		rReturn &Return )
 	{
@@ -206,7 +206,7 @@ void prxy_recv::Recv(
 	H( SetAttribute );
 	H( GetProperty );
 	H( SetProperty );
-	H( Focus_ );
+	H( Focus );
 	case rNew:
 		New_( Flow, ReturnTypeForNewHandling, Return );
 		break;
