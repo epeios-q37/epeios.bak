@@ -19,8 +19,5 @@
 
 package info.q37.xdhq.dom;
 
-public class Event {
-	public String
-		id,
-		action;
-};
+public class DEMO {
+}

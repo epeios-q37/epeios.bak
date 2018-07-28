@@ -31,7 +31,7 @@ public abstract class Atlas implements Runnable {
 
 	@Override
 	public final void run() {
-		info.q37.xdhq.Event event = new info.q37.xdhq.Event();
+		info.q37.xdhq.dom.Event event = new info.q37.xdhq.dom.Event();
 		for (;;) {
 			dom.getAction(event);
 
@@ -87,35 +87,35 @@ public abstract class Atlas implements Runnable {
 		}
 	}
 
-	public enum Type {
+	public enum GUI {
 		NONE, DESKTOP, WEB, DESKTOP_AND_WEB, DEFAULT
 	};
 
-	private static final Type defaultType = Type.DESKTOP;
+	private static final GUI defaultGUI = GUI.DESKTOP;
 
-	private static void launch(String newSessionAction, String dir, Type type, String arg) {
+	private static void launch(String newSessionAction, String dir, GUI gui, String arg) {
 		info.q37.xdhq.XDHq.launch(newSessionAction);
 
-		if (type == Type.DEFAULT) {
-			type = defaultType;
+		if (gui == GUI.DEFAULT) {
+			gui = defaultGUI;
 
 			if (arg.length() > 0) {
 				if ( arg.equals( "n" ) || arg.equals( "none" ) ) {
-					type = Type.NONE;
+					gui = GUI.NONE;
 				} else if ( arg.equals( "d" ) || arg.equals( "desktop" ) ) {
-					type = Type.DESKTOP;
+					gui = GUI.DESKTOP;
 				} else if ( arg.equals( "w") || arg.equals( "web" ) ) {
-					type = Type.WEB;
+					gui = GUI.WEB;
 				} else if ( arg.equals( "dw" ) || arg.equals( "wd") ) {
-					type = Type.DESKTOP_AND_WEB;
+					gui = GUI.DESKTOP_AND_WEB;
 				} else {
-					System.out.println("Unknown type !");
+					System.out.println("Unknown gui !");
 					System.exit(1);
 				}
 			}
 		}
 
-		switch (type) {
+		switch (gui) {
 		case NONE:
 			break;
 		case DESKTOP:
@@ -129,24 +129,24 @@ public abstract class Atlas implements Runnable {
 			launchWeb(dir);
 			break;
 		default:
-			System.out.println("Unknown type !");
+			System.out.println("Unknown gui !");
 			System.exit(1);
 			break;
 		}
 	}
 
-	public static void launch(String newSessionAction, String dir, Type type, String[] args) {
+	public static void launch(String newSessionAction, String dir, GUI gui, String[] args) {
 		if (args.length > 0)
-			launch(newSessionAction, dir, type, args[0]);
+			launch(newSessionAction, dir, gui, args[0]);
 		else
-			launch(newSessionAction, dir, type, "");
+			launch(newSessionAction, dir, gui, "");
 	}
 
-	public static void launch(String newSessionAction, Type type) {
-		launch(newSessionAction, ".", type, "");
+	public static void launch(String newSessionAction, GUI gui) {
+		launch(newSessionAction, ".", gui, "");
 	}
 
 	public static void launch(String newSessionAction) {
-		launch(newSessionAction, ".", Type.DEFAULT, "");
+		launch(newSessionAction, ".", GUI.DEFAULT, "");
 	}
 };

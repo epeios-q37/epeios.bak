@@ -19,8 +19,17 @@
 
 package info.q37.xdhq.dom;
 
-public class Event {
-	public String
-		id,
-		action;
-};
+public abstract class SHRD {
+	public enum GUY {
+		NONE, DESKTOP, WEB, DESKTOP_AND_WEB, DEFAULT
+	};
+
+	public enum Type {
+		VOID, STRING, STRINGS, UNDEFINED
+	};
+
+	public abstract String getAction(Event event);
+
+	public abstract Object call(String command, Type type, String[] strings, String [][] xstrings );
+
+}

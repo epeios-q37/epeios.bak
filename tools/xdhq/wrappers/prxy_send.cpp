@@ -159,7 +159,7 @@ namespace {
 		prtcl::SendCommand( prtcl::cNew, Flow );
 		prtcl::Put( Arguments.Command, Flow );
 		Send_( Arguments.Strings, Flow );
-		Send_( Arguments.Arrays, Flow );
+		Send_( Arguments.XStrings, Flow );
 	}
 }
 
@@ -196,7 +196,7 @@ void prxy_send::Send(
 	H( SetProperty );
 	H( GetProperty );
 	H( Focus );
-	case rNew:
+	case rLaunch:
 		New_( Flow, NewArguments );
 		break;
 	default:

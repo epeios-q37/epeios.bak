@@ -22,9 +22,26 @@ import info.q37.atlas.*;
 class Hello extends Atlas {
 	public void handle( DOM dom, String action, String id )
 	{
+		String html = 
+		"<div class=\"vcenter-out\">" +
+		" <div class=\"vcenter-in\">" +
+		"  <fieldset>" +
+		"   <label>Name:</label>" +
+		"   <input id=\"input\" maxlength=\"20\" placeholder=\"Enter a name here\"'" +
+		"	 type=\"text\" data-xdh-onevent=\"input|Typing\"/>" +
+		"   <button data-xdh-onevent=\"Clear\">Clear</button>'" +
+		"   <hr/>" +
+		"   <h1>" +
+		"    <span>Hello </span>" +
+		"    <span style=\"font-style: italic;\" id=\"name\"></span>" +
+		"    <span>!</span>" +
+		"   </h1>" +
+		"  </fieldset>" +
+		" </div>" +
+		"</div>";
 		switch( action) {
 		case "Connect":
-			dom.setLayout("", new Tree(), "Main.xsl");
+			dom.setLayout("", html);
 			break;
 		case "Typing":
 			dom.setContent("name", dom.getContent(id));
@@ -35,7 +52,7 @@ class Hello extends Atlas {
 		}
 	}
 	public static void main(String[] args) throws Exception {
-		launch("Connect", "Hello", Atlas.Type.DEFAULT, args );
+		launch("Connect", "Hello", Atlas.GUI.DEFAULT, args );
 
 		for (;;) new Hello();
 	}

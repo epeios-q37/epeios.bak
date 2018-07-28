@@ -206,257 +206,58 @@ qRE;
 }
 
 #define BEGIN( request )\
-	rData_ &Data = GetData_( Caller );\
-	Data.Sent.WriteBegin();\
-	Data.Request = prxy_cmn::r##request;\
-	proxy::rArguments &Arguments = Data.Sent.Arguments;\
-	Arguments.Init();
 
 #define SWITCH	Data.Sent.WriteEnd();Data.Recv.ReadBegin(); proxy::rReturn &Return = Data.Recv.Return
 
 #define END	Data.Recv.ReadEnd()
 
-SCLJRE_F( xdhp::Execute )
+SCLJRE_F( xdhp::Launch )
 {
 	scljre::sJObject Buffer = NULL;
+qRH;
+	str::wString Command;
+	scljre::java::lang::rInteger Type;
+qRB;
+	rData_ &Data = GetData_( Caller );
+	Data.Sent.WriteBegin();
+	Data.Request = prxy_cmn::rLaunch;
+	proxy::rNewArguments &Arguments = Data.Sent.NewArguments;
 
-	BEGIN( Execute );
+	Arguments.Init();
 
-	Caller.Get( Arguments.Script );
+	Command.Init();
+	Caller.Get( Command );
 
-	SWITCH;
+	Type.Init( Caller.GetObject() );
+	Data.ReturnType = (prxy_recv::eType)Type.IntValue();
 
-	Buffer = scljre::String( Env, Return.GetString() );
+	Caller.Get( Arguments.Strings );
+	Caller.Get( Arguments.XStrings );
 
-	END;
+	Data.Sent.WriteEnd();
+	Data.Recv.ReadBegin();
+	proxy::rReturn &Return = Data.Recv.Return;
 
+	switch ( Data.ReturnType ) {
+	case prxy_recv::tVoid:
+		Buffer = scljre::Null();
+		break;
+	case prxy_recv::tString:
+		Buffer = scljre::String( Env, Return.GetString() );
+		break;
+	case prxy_recv::tStrings:
+		Buffer = scljre::Strings( Env, Return.GetStrings() );
+		break;
+	default:
+		qRGnr();
+		break;
+	}
+
+	Data.Recv.ReadEnd();
+qRR;
+qRT;
+qRE;
 	return Buffer;
-}
-
-SCLJRE_F( xdhp::Alert )
-{
-	BEGIN( Alert );
-
-	Caller.Get( Arguments.Message );
-
-	SWITCH;
-	END;
-
-	return scljre::Null();
-}
-
-SCLJRE_F( xdhp::Confirm )
-{
-	bso::sBool Response = false;
-
-	BEGIN( Confirm );
-
-	Caller.Get( Arguments.Message );
-
-	SWITCH;
-
-	Response = Return.GetString() == "true";
-
-	END;
-
-	return scljre::Boolean( Env, Response );
-}
-
-SCLJRE_F( xdhp::SetLayout )
-{
-	BEGIN( SetLayout );
-
-	Caller.Get( Arguments.Id );
-	treep::GetXML( Caller, Arguments.XML );
-	Caller.Get( Arguments.XSLFilename );
-
-	SWITCH;
-	END;
-
-	return scljre::Null();
-}
-
-SCLJRE_F( xdhp::GetContents )
-{
-	scljre::sJObject Buffer = NULL;
-
-	BEGIN( GetContents );
-
-	Caller.Get( Arguments.Ids );
-
-	SWITCH;
-
-	Buffer = scljre::Strings( Env, Return.GetStrings() );
-
-	END;
-
-	return Buffer;
-}
-
-SCLJRE_F( xdhp::SetContents )
-{
-	BEGIN( SetContents );
-
-	Caller.Get( Arguments.Ids, Arguments.Contents );
-
-	SWITCH;
-	END;
-
-	return scljre::Null();
-}
-
-SCLJRE_F( xdhp::DressWidgets )
-{
-	BEGIN( DressWidgets );
-
-	Caller.Get( Arguments.Id );
-
-	SWITCH;
-	END;
-
-	return scljre::Null();
-}
-
-SCLJRE_F( xdhp::AddClasses )
-{
-	BEGIN( AddClasses );
-
-	Caller.Get( Arguments.Ids, Arguments.Classes );
-
-	SWITCH;
-	END;
-
-	return scljre::Null();
-}
-
-SCLJRE_F( xdhp::RemoveClasses )
-{
-	BEGIN( RemoveClasses );
-
-	Caller.Get( Arguments.Ids, Arguments.Classes );
-
-	SWITCH;
-	END;
-
-	return scljre::Null();
-}
-
-SCLJRE_F( xdhp::ToggleClasses )
-{
-	BEGIN( ToggleClasses );
-
-	Caller.Get( Arguments.Ids, Arguments.Classes );
-
-	SWITCH;
-	END;
-
-	return scljre::Null();
-}
-
-SCLJRE_F( xdhp::EnableElements )
-{
-	BEGIN( EnableElements );
-
-	Caller.Get( Arguments.Ids );
-
-	SWITCH;
-	END;
-
-	return scljre::Null();
-}
-
-SCLJRE_F( xdhp::DisableElements )
-{
-	BEGIN( DisableElements );
-
-	Caller.Get( Arguments.Ids );
-
-	SWITCH;
-	END;
-
-	return scljre::Null();
-}
-
-SCLJRE_F( xdhp::SetAttribute )
-{
-	BEGIN( SetAttribute );
-
-	Caller.Get( Arguments.Id, Arguments.Name, Arguments.Value );
-
-	SWITCH;
-	END;
-
-	return scljre::Null();
-}
-
-SCLJRE_F( xdhp::GetAttribute )
-{
-	scljre::sJObject Buffer = NULL;
-
-	BEGIN( GetAttribute );
-
-	Caller.Get( Arguments.Id, Arguments.Name );
-
-	SWITCH;
-
-	Buffer = scljre::String( Env, Return.GetString() );
-
-	END;
-
-	return Buffer;
-}
-
-SCLJRE_F( xdhp::RemoveAttribute )
-{
-	BEGIN( RemoveAttribute );
-
-	Caller.Get( Arguments.Id, Arguments.Name );
-
-	SWITCH;
-	END;
-
-	return scljre::Null();
-}
-
-SCLJRE_F( xdhp::SetProperty )
-{
-	BEGIN( SetAttribute );
-
-	Caller.Get( Arguments.Id, Arguments.Name, Arguments.Value );
-
-	SWITCH;
-	END;
-
-	return scljre::Null();
-}
-
-SCLJRE_F( xdhp::GetProperty )
-{
-	scljre::sJObject Buffer = NULL;
-
-	BEGIN( GetProperty );
-
-	Caller.Get( Arguments.Id, Arguments.Name );
-
-	SWITCH;
-
-	Buffer = scljre::String( Env, Return.GetString() );
-
-	END;
-
-	return Buffer;
-}
-
-SCLJRE_F( xdhp::Focus )
-{
-	BEGIN( Focus );
-
-	Caller.Get( Arguments.Id );
-
-	SWITCH;
-	END;
-
-	return scljre::Null();
 }
 
 qGCTOR( xdhp )

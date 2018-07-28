@@ -29,24 +29,7 @@ namespace xdhp {
 	SCLJRE_F( New );
 	SCLJRE_F( Set );
 	SCLJRE_F( GetAction );
-	SCLJRE_F( Execute );
-	SCLJRE_F( Alert );
-	SCLJRE_F( Confirm );
-	SCLJRE_F( SetLayout );
-	SCLJRE_F( GetContents );
-	SCLJRE_F( SetContents );
-	SCLJRE_F( DressWidgets );
-	SCLJRE_F( AddClasses );
-	SCLJRE_F( RemoveClasses );
-	SCLJRE_F( ToggleClasses );
-	SCLJRE_F( EnableElements );
-	SCLJRE_F( DisableElements );
-	SCLJRE_F( SetAttribute );
-	SCLJRE_F( GetAttribute );
-	SCLJRE_F( RemoveAttribute );
-	SCLJRE_F( SetProperty );
-	SCLJRE_F( GetProperty );
-	SCLJRE_F( Focus );
+	SCLJRE_F( Launch );
 }
 
 #endif

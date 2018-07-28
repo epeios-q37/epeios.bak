@@ -60,12 +60,7 @@ namespace {
 const scli::sInfo &scljre::SCLJRERegister( scljre::sRegistrar &Registrar )
 {
 	Registrar.Register( ReturnArgument_ );	// 0
-	Registrar.Register( treep::New, treep::Delete, treep::PushTag, treep::PopTag, treep::PutValue, treep::PutAttribute );	// 1 - 6
-	Registrar.Register( xdhp::Listen, xdhp::New, xdhp::Set, xdhp::GetAction, xdhp::Execute );	// 7 - 11
-	Registrar.Register( xdhp::Alert, xdhp::Confirm, xdhp::SetLayout, xdhp::GetContents, xdhp::SetContents, xdhp::DressWidgets ); //12 - 17
-	Registrar.Register( xdhp::AddClasses, xdhp::RemoveClasses, xdhp::ToggleClasses, xdhp::EnableElements, xdhp::DisableElements );	// 18 - 22.
-	Registrar.Register( xdhp::SetAttribute, xdhp::GetAttribute, xdhp::RemoveAttribute, xdhp::SetProperty, xdhp::GetProperty );	// 23 - 27.
-	Registrar.Register( xdhp::Focus );	// 28
+	Registrar.Register( xdhp::Listen, xdhp::New, xdhp::Set, xdhp::GetAction, xdhp::Launch );	// 1 - 5
 
 	return xdhqjre::Info;
 }

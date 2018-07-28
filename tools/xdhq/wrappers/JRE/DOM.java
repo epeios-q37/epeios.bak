@@ -21,8 +21,12 @@ package info.q37.xdhq;
 
 import java.util.*;
 
+import info.q37.xdhq.dom.SHRD.Type;
+
 public class DOM {
-	private Object core;
+	private info.q37.xdhq.dom.SHRD XDHq;
+	private String[] empty = {};
+	private String[][] emptys = {};
 
 	private String[][] split(String[][] idsAndClasses) {
 		List<String> ids = new ArrayList<String>();
@@ -37,72 +41,50 @@ public class DOM {
 	}
 
 	public DOM() {
-		core = XDHq.call(8);
+		XDHq = new info.q37.xdhq.dom.PROD();
 	}
 
-	public void finalize() {
-		XDHq.call(9, core);
-	}
-
-	// Not very elegant !
-	/*
-	private Object call(int index, Object... objects) {
-		// With below line, 'objects' is one argument, and is not exploded.
-		 // return XDHq.call(index, core, objects);
-
-		switch (objects.length) {
-		case 1:
-			return XDHq.call(index, core, objects[0]);
-		case 2:
-			return XDHq.call(index, core, objects[0], objects[1]);
-		case 3:
-			return XDHq.call(index, core, objects[0], objects[1], objects[2]);
-		default:
-			System.err.println("Missing case !");
-			System.exit(1);
-			return null;
-		}
-	}
-	*/
-
-	public void set(Object object) {
-		XDHq.call(9, core, object);
-	}
-
-	public String getAction(Event event) {
-		XDHq.call(10, core, event);
-
-		return event.action;
+	public String getAction( info.q37.xdhq.dom.Event event )
+	{
+		return XDHq.getAction( event );
 	}
 
 	public String execute(String script) {
-		return (String)XDHq.call(11, core, script);
+		return (String)XDHq.call( "Execute_1", Type.STRING, new String[]{script}, emptys );
 	}
 
 	public void alert(String message) {
-		XDHq.call(12, core, message);
+		XDHq.call("Alert_1", Type.VOID, new String[]{message}, emptys);
 	}
 
 	public boolean confirm(String message) {
-		return (Boolean)XDHq.call(13, core, message);
+		return (Boolean)XDHq.call("Confirm_1", Type.VOID, new String[]{message}, emptys );
 	}
 
-	public void setLayout(String id, Tree tree, String xslFilename) {
-		XDHq.call(14, core, id, tree.core(), xslFilename);
+	void setLayout_(String id, String xml, String xslFilename) {
+		XDHq.call("SetLayout_1", Type.VOID, new String[]{id, xml, xslFilename}, emptys );
+	}
+
+	public void setLayout(String id, String html) {
+		setLayout_( id, html, "" );
+	}
+
+	public void setLayout(String id, String xml, String xslFilename) {
+		setLayout_(id, xml, xslFilename);
 	}
 
 	public String[] getContents(String[] ids) {
-		return (String [])XDHq.call(15, core, ids);
+		return (String [])XDHq.call("GetContents_1", Type.STRINGS, new String[0], new String[][]{ids});
 	}
 
 	public String getContent(String id) {
-		return getContents( new String [] { id } )[0];
+		return getContents( new String []{id} )[0];
 	}
 
 	public void setContents(String[][] idsAndContents) {
 		String splittedIdsAndContents[][] = split(idsAndContents);
 
-		XDHq.call(16, core, splittedIdsAndContents[0], splittedIdsAndContents[1]);
+		XDHq.call("SetContents_1", Type.STRING, empty, splittedIdsAndContents);
 	}
 
 	public void setContent(String id, String content) {
@@ -110,45 +92,45 @@ public class DOM {
 	}
 
 	public void dressWidgets(String id) {
-		XDHq.call(17, core, id);
+		XDHq.call("DressWidgets_1", Type.VOID, new String[]{id}, emptys );
 	}
 
-	private void handleClasses(int index, String[][] idsAndClasses) {
+	private void handleClasses(String command, String[][] idsAndClasses) {
 		String splittedIdsAndClasses[][] = split(idsAndClasses);
 
-		XDHq.call(index, core, splittedIdsAndClasses[0], splittedIdsAndClasses[1]);
+		XDHq.call(command, Type.VOID, empty, splittedIdsAndClasses);
 	}
 
-	private void handleClass(int Index, String id, String clas) {
-		handleClasses(Index, new String[][] { { id, clas } } );
+	private void handleClass(String command, String id, String clas) {
+		handleClasses(command, new String[][] { { id, clas } } );
 	}
 
 	public void addClasses(String[][] idsAndClasses) {
-		handleClasses(18, idsAndClasses);
+		handleClasses("AddClasses_1", idsAndClasses);
 	}
 
 	public void addClass(String id, String clas) {
-		handleClass(18, id, clas);
+		handleClass("AddClasses_1", id, clas);
 	}
 
 	public void removeClasses(String[][] idsAndClasses) {
-		handleClasses(19, idsAndClasses);
+		handleClasses("RemoveClasses_1", idsAndClasses);
 	}
 
 	public void removeClass(String id, String clas) {
-		handleClass(19, id, clas);
+		handleClass("RemoveClasses_1", id, clas);
 	}
 
 	public void toggleClasses(String[][] idsAndClasses) {
-		handleClasses(20, idsAndClasses);
+		handleClasses("ToggleClasses_1", idsAndClasses);
 	}
 
 	public void toggleClass(String id, String clas) {
-		handleClass(20, id, clas);
+		handleClass("ToggleClasses_1", id, clas);
 	}
 
 	public void enableElements(String[] ids) {
-		XDHq.call(21, core, ids);
+		XDHq.call("EnableElements_1", Type.VOID, empty, new String[][] {ids});
 	}
 
 	public void enableElement(String id) {
@@ -156,7 +138,7 @@ public class DOM {
 	}
 
 	public void disableElements(String[] ids) {
-		XDHq.call(22, core, ids);
+		XDHq.call("DisableElements_1", Type.VOID, empty, new String[][] {ids});
 	}
 
 	public void disableElement(String id) {
@@ -164,26 +146,26 @@ public class DOM {
 	}
 
 	public void setAttribute(String id, String name, String value) {
-		XDHq.call(23, core, id, name, value);
+		XDHq.call("SetAttribute_1", Type.VOID, new String[]{id, name, value}, emptys);
 	}
 
 	public String getAttribute(String id, String name) {
-		return (String)XDHq.call(24, core, id, name);
+		return (String)XDHq.call("GetAttribute_1", Type.STRING, new String[] {id, name}, emptys);
 	}
 
 	public void removeAttribute(String id, String name) {
-		XDHq.call(25, core, id, name);
+		XDHq.call("RemoveAttribute_1", Type.VOID, new String[]{id, name}, emptys);
 	}
 
 	public void setProperty(String id, String name, String value) {
-		XDHq.call(26, core, id, name, value);
+		XDHq.call("SetProperty_1", Type.VOID, new String[] {id, name, value}, emptys);
 	}
 
 	public String getProperty(String id, String name) {
-		return (String)XDHq.call(27, core, id, name);
+		return (String)XDHq.call("GetPoperty_1", Type.STRING, new String[] {id, name}, emptys );
 	}
 
 	public void focus(String id) {
-		XDHq.call(28, core, id );
+		XDHq.call("Focus_1", Type.VOID, new String[]{id}, emptys );
 	}
 }

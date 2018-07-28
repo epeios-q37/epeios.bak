@@ -150,7 +150,7 @@ namespace {
 		focus::R( Flow );
 	}
 
-	void New_(
+	void Launch_(
 		flw::sRFlow &Flow,
 		prxy_recv::eType Type,
 		rReturn &Return )
@@ -207,8 +207,8 @@ void prxy_recv::Recv(
 	H( GetProperty );
 	H( SetProperty );
 	H( Focus );
-	case rNew:
-		New_( Flow, ReturnTypeForNewHandling, Return );
+	case rLaunch:
+		Launch_( Flow, ReturnTypeForNewHandling, Return );
 		break;
 	default:
 		qRGnr();

@@ -5,6 +5,11 @@
 - [adpt]: Adaptation to changes in underlying modules;
 - [stdz]: modification to comply with current standards;
 
+## 2018-07-28
+
+- SCLJRE:
+  - introducing array of strings (`(d|w)XStrings`),
+
 ## 2018-07-23
 
 - CSDBNS:

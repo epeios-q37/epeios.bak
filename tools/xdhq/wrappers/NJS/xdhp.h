@@ -27,7 +27,7 @@
 namespace xdhp {
 	SCLNJS_F( Register );
 	SCLNJS_F( Listen );
-	SCLNJS_F( Launch );	// Will replace all other commands (except the 2 first ones).
+	SCLNJS_F( Launch );
 }
 
 #endif

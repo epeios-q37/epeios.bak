@@ -426,7 +426,7 @@ qRH;
 qRB;
 	Data.Sent.WriteBegin();
 
-	Data.Request = prxy_cmn::rNew;
+	Data.Request = prxy_cmn::rLaunch;
 	Arguments.Init();
 
 	Caller.GetArgument( Arguments.Command );
@@ -451,7 +451,7 @@ qRB;
 	while ( Amount-- ) {
 		Strings.Init();
 		Caller.GetArgument( Strings );
-		Arguments.Arrays.Append( Strings );
+		Arguments.XStrings.Append( Strings );
 	}
 
 	Caller.GetArgument( Data.Callback );

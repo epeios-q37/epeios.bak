@@ -19,8 +19,28 @@
 
 package info.q37.xdhq.dom;
 
-public class Event {
-	public String
-		id,
-		action;
-};
+import info.q37.xdhq.XDHq;
+import info.q37.xdhq.dom.SHRD;
+
+public class PROD extends SHRD {
+	private Object core;
+
+	public PROD() {
+		core = XDHq.call(2);
+	}
+
+	public void finalize() {
+		XDHq.call(3, core);
+	}
+
+	@Override public Object call(String command, Type type, String[] strings, String[][] xstrings )  {
+		return XDHq.call( 5, core, command, type, strings, xstrings );
+	}
+
+	@Override public String getAction(Event event) {
+		XDHq.call(4, core, event);
+
+		return event.action;
+	}
+
+}

@@ -45,15 +45,15 @@ namespace prxy_send {
 	public:
 		str::wString Command;
 		str::wStrings Strings;
-		crt::qCRATEwl( str::dStrings ) Arrays;
+		crt::qCRATEwl( str::dStrings ) XStrings;
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, Command, Strings, Arrays );
+			tol::reset( P, Command, Strings, XStrings );
 		}
 		qCDTOR( rNewArguments );
 		void Init( void )
 		{
-			tol::Init( Command, Strings, Arrays );
+			tol::Init( Command, Strings, XStrings );
 		}
 	};
 

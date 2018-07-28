@@ -43,6 +43,9 @@ namespace scljre {
 	extern n4jre::fNewObjectArray NewObjectArray_;
 	extern n4jre::fThrow Throw_;
 
+	typedef crt::qCRATEdl( str::dStrings ) dXStrings;
+	qW( XStrings );
+
 	// Termination method.
 	inline void Fill_(
 		int Indice,
@@ -368,22 +371,55 @@ namespace scljre {
 		{
 			Get_( GetObject(), String );
 		}
-		void Get_( str::dStrings &Strings )
+		void Get_(
+			rObject &Object,
+			str::dStrings &Strings )
 		{
 		qRH;
-			rObject Object;
 			scljre::java::lang::rString JString;
 			n4jre::sJSize Length = 0, Index = 0;
 			str::wString String;
 		qRB;
-			Object.Init( GetObject() );
-
 			Length = Object.GetLength();
 
 			while ( Index < Length ) {
 				String.Init();
 				Get_( Object.GetElement( Index++ ), String );
 				Strings.Append( String );
+			}
+		qRR;
+		qRT;
+		qRE;
+		}
+		void Get_( str::dStrings &Strings )
+		{
+		qRH;
+			rObject Object;
+		qRB;
+			Object.Init( GetObject() );
+
+			Get_( Object, Strings );
+
+		qRR;
+		qRT;
+		qRE;
+		}
+		void Get_( dXStrings &XStrings )
+		{
+		qRH;
+			rObject JArray, JStrings;
+			n4jre::sJSize Length = 0, Index = 0;
+			str::wStrings Strings;
+		qRB;
+			JArray.Init( GetObject() );
+
+			Length = JArray.GetLength();
+
+			while ( Index < Length ) {
+				JStrings.Init(JArray.GetElement( Index++ ) );
+				Strings.Init();
+				Get_( JStrings, Strings );
+				XStrings.Append( Strings );
 			}
 		qRR;
 		qRT;
