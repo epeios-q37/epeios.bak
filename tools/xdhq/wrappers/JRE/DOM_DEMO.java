@@ -19,5 +19,19 @@
 
 package info.q37.xdhq.dom;
 
-public class DOM_DEMO {
+import java.net.*;
+
+public class DOM_DEMO extends DOM_SHRD {
+	private String address = "atlastk.org";
+	private int port = 53800;
+	private String token = "";
+	private Socket socket;
+
+	public DOM_DEMO() {
+		socket = new Socket( address, port );
+
+		socket.getOutputStream().write(token);
+	}
+
+
 }

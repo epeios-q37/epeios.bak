@@ -25,7 +25,8 @@ public class XDH extends info.q37.jreq.JRE {
 	static public void launch( String newSessionAction ) {
 		System.out.println(Thread.currentThread().getStackTrace()[1]);
 
-		XDH_PROD.launch( newSessionAction );
+//		XDH_PROD.launch( newSessionAction );
+		XDH_DEMOs.launch( newSessionAction );
 
 		System.out.println(Thread.currentThread().getStackTrace()[1]);
 

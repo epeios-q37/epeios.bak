@@ -41,7 +41,8 @@ public class DOM {
 	}
 
 	public DOM() {
-		DOM = new info.q37.xdhq.dom.DOM_PROD();
+		DOM = new info.q37.xdhq.dom.DOM_DEMO();
+//		DOM = new info.q37.xdhq.dom.DOM_PROD();
 	}
 
 	public String getAction( info.q37.xdhq.dom.Event event )

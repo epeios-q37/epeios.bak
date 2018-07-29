@@ -27,6 +27,8 @@ public class DOM_PROD extends DOM_SHRD {
 
 	public DOM_PROD() {
 		core = XDH_PROD.call(2);
+
+
 	}
 
 	public void finalize() {
