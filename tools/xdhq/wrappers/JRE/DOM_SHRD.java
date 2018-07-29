@@ -17,27 +17,26 @@
 	along with XDHq. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package info.q37.xdhq;
+package info.q37.xdhq.dom;
 
-import info.q37.jreq.JREq;
+public abstract class DOM_SHRD {
+	public enum GUY {
+		NONE, DESKTOP, WEB, DESKTOP_AND_WEB, DEFAULT
+	};
 
-public class XDHq extends info.q37.jreq.JREq {
-	static private long launcher;
-	static {
-		launcher = JREq.register( "xdhq" );
-	}
-	static public Object call(int index, Object... objects) {
-		return JREq.call( launcher, index, objects );
+	public enum Type {
+		VOID( 0 ), STRING( 1 ), STRINGS( 2 ), UNDEFINED( 3 );
+	    private int value;
+	    private Type(int value) {
+			this.value = value;
+		}
+	    public int getValue() {
+			return value;
+		}
+	};
 
-	}
-	static public String componentInfo(){
-		return JREq.componentInfo( launcher );
-	}
-	static public String returnArgument( String argument )
-	{
-		return (String)call( 0, argument );
-	}
-	static public void launch( String newSessionAction ) {
-		call( 2, "53752", newSessionAction );
-	}
+	public abstract String getAction(Event event);
+
+	public abstract Object call(String command, Type type, String[] strings, String [][] xstrings );
+
 }

@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2018 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 2017 Claude SIMON (http://q37.info/contact/).
 
 	This file is part of XDHq.
 
@@ -17,7 +17,7 @@
 	along with XDHq. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package info.q37.atlas;
+package info.q37.xdhq;
 
-public class Tree extends info.q37.xdhq.Tree {
-};
+public class XDH_SHRD {
+}

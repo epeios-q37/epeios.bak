@@ -17,16 +17,7 @@
 	along with XDHq. If not, see <http://www.gnu.org/licenses/>.
 */
 
-public class Test {
-	private static void displayBytecodeBuildTimestamp() throws Exception {
-		System.out.println("Bytecode build : " + new java.util.Date(new java.io.File(Test.class.getClassLoader()
-				.getResource(Test.class.getCanonicalName().replace('.', '/') + ".class").toURI()).lastModified()));
-	}
+package info.q37.xdhq.dom;
 
-	public static void main(String[] args) throws Exception {
-		System.out.println(info.q37.xdhq.XDHq.componentInfo());
-		System.out.println(info.q37.jreq.JREq.wrapperInfo());
-		displayBytecodeBuildTimestamp();
-		System.out.println(info.q37.xdhq.XDHq.returnArgument("Text from JAVA file"));
-	}
+public class DOM_DEMO {
 }

@@ -70,7 +70,7 @@ const body = [
 	'    <span style="font-style: italic;" id="name"></span>',
 	'    <span>!</span>',
 	'   </h1>',
-	'  </filedset>',
+	'  </fieldset>',
 	' </div>',
 	'</div>'].join('\n');
 

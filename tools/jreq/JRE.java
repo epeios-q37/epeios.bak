@@ -30,7 +30,7 @@ class Wrapper {
 
 	native protected static long register(String arguments);
 
-	native protected static Object call(long launcher, int index, Object... objects);
+	native public static Object call(long launcher, int index, Object... objects);
 	static protected String getLocation()
 	{
 		String osName = System.getProperty("os.name").toLowerCase();
@@ -55,7 +55,7 @@ class Wrapper {
 	}
 }
 
-public class JREq extends Wrapper {
+public class JRE extends Wrapper {
 	static public long register( String componentName ) {
 		return Wrapper.register( getLocation() + componentName + "jre" );
 	}

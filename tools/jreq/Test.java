@@ -24,7 +24,7 @@ public class Test {
 	}
 
 	public static void main(String[] args) throws Exception {
-		System.out.println(info.q37.jreq.JREq.wrapperInfo());
+		System.out.println(info.q37.jreq.JRE.wrapperInfo());
 		displayCompilationTime();
 	}
 }

@@ -69,6 +69,9 @@ public abstract class Atlas implements Runnable {
 		try {
 			ProcessBuilder processBuilder;
 
+			System.out.println(" DESKTOP !");
+
+
 			if (isDev()) {
 				processBuilder = new ProcessBuilder( "h:/hg/epeios/tools/xdhelcq/node_modules/electron/dist/electron", "index.js", "-m=h:/bin/xdhqxdh", "h:/hg/epeios/tools/xdhq/examples/common/" + dir);
 				processBuilder.directory( new java.io.File("h:/hg/epeios/tools/xdhelcq") );
@@ -94,7 +97,12 @@ public abstract class Atlas implements Runnable {
 	private static final GUI defaultGUI = GUI.DESKTOP;
 
 	private static void launch(String newSessionAction, String dir, GUI gui, String arg) {
-		info.q37.xdhq.XDHq.launch(newSessionAction);
+		System.out.println(Thread.currentThread().getStackTrace()[1]);
+
+		info.q37.xdhq.XDH.launch(newSessionAction);
+
+		System.out.println(Thread.currentThread().getStackTrace()[1]);
+
 
 		if (gui == GUI.DEFAULT) {
 			gui = defaultGUI;

@@ -215,7 +215,6 @@ SCLJRE_F( xdhp::Launch )
 {
 	scljre::sJObject Buffer = NULL;
 qRH;
-	str::wString Command;
 	scljre::java::lang::rInteger Type;
 qRB;
 	rData_ &Data = GetData_( Caller );
@@ -225,8 +224,7 @@ qRB;
 
 	Arguments.Init();
 
-	Command.Init();
-	Caller.Get( Command );
+	Caller.Get( Arguments.Command );
 
 	Type.Init( Caller.GetObject() );
 	Data.ReturnType = (prxy_recv::eType)Type.IntValue();

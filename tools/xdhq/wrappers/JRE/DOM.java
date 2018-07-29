@@ -21,10 +21,10 @@ package info.q37.xdhq;
 
 import java.util.*;
 
-import info.q37.xdhq.dom.SHRD.Type;
+import info.q37.xdhq.dom.DOM_SHRD.Type;
 
 public class DOM {
-	private info.q37.xdhq.dom.SHRD XDHq;
+	private info.q37.xdhq.dom.DOM_SHRD DOM;
 	private String[] empty = {};
 	private String[][] emptys = {};
 
@@ -41,40 +41,44 @@ public class DOM {
 	}
 
 	public DOM() {
-		XDHq = new info.q37.xdhq.dom.PROD();
+		DOM = new info.q37.xdhq.dom.DOM_PROD();
 	}
 
 	public String getAction( info.q37.xdhq.dom.Event event )
 	{
-		return XDHq.getAction( event );
+		return DOM.getAction( event );
 	}
 
 	public String execute(String script) {
-		return (String)XDHq.call( "Execute_1", Type.STRING, new String[]{script}, emptys );
+		return (String)DOM.call( "Execute_1", Type.STRING, new String[]{script}, emptys );
 	}
 
 	public void alert(String message) {
-		XDHq.call("Alert_1", Type.VOID, new String[]{message}, emptys);
+		DOM.call("Alert_1", Type.VOID, new String[]{message}, emptys);
 	}
 
 	public boolean confirm(String message) {
-		return (Boolean)XDHq.call("Confirm_1", Type.VOID, new String[]{message}, emptys );
+		return "true".equals(DOM.call("Confirm_1", Type.STRING, new String[]{message}, emptys ));
 	}
 
 	void setLayout_(String id, String xml, String xslFilename) {
-		XDHq.call("SetLayout_1", Type.VOID, new String[]{id, xml, xslFilename}, emptys );
+		DOM.call("SetLayout_1", Type.VOID, new String[]{id, xml, xslFilename}, emptys );
+	}
+
+	public void headUp( String head ) {
+			setLayout_("_xdh_head", head, "");
 	}
 
 	public void setLayout(String id, String html) {
 		setLayout_( id, html, "" );
 	}
 
-	public void setLayout(String id, String xml, String xslFilename) {
+	public void setLayoutXSLs(String id, String xml, String xslFilename) {
 		setLayout_(id, xml, xslFilename);
 	}
 
 	public String[] getContents(String[] ids) {
-		return (String [])XDHq.call("GetContents_1", Type.STRINGS, new String[0], new String[][]{ids});
+		return (String [])DOM.call("GetContents_1", Type.STRINGS, new String[0], new String[][]{ids});
 	}
 
 	public String getContent(String id) {
@@ -84,7 +88,7 @@ public class DOM {
 	public void setContents(String[][] idsAndContents) {
 		String splittedIdsAndContents[][] = split(idsAndContents);
 
-		XDHq.call("SetContents_1", Type.STRING, empty, splittedIdsAndContents);
+		DOM.call("SetContents_1", Type.VOID, empty, splittedIdsAndContents);
 	}
 
 	public void setContent(String id, String content) {
@@ -92,13 +96,13 @@ public class DOM {
 	}
 
 	public void dressWidgets(String id) {
-		XDHq.call("DressWidgets_1", Type.VOID, new String[]{id}, emptys );
+		DOM.call("DressWidgets_1", Type.VOID, new String[]{id}, emptys );
 	}
 
 	private void handleClasses(String command, String[][] idsAndClasses) {
 		String splittedIdsAndClasses[][] = split(idsAndClasses);
 
-		XDHq.call(command, Type.VOID, empty, splittedIdsAndClasses);
+		DOM.call(command, Type.VOID, empty, splittedIdsAndClasses);
 	}
 
 	private void handleClass(String command, String id, String clas) {
@@ -130,7 +134,7 @@ public class DOM {
 	}
 
 	public void enableElements(String[] ids) {
-		XDHq.call("EnableElements_1", Type.VOID, empty, new String[][] {ids});
+		DOM.call("EnableElements_1", Type.VOID, empty, new String[][] {ids});
 	}
 
 	public void enableElement(String id) {
@@ -138,7 +142,7 @@ public class DOM {
 	}
 
 	public void disableElements(String[] ids) {
-		XDHq.call("DisableElements_1", Type.VOID, empty, new String[][] {ids});
+		DOM.call("DisableElements_1", Type.VOID, empty, new String[][] {ids});
 	}
 
 	public void disableElement(String id) {
@@ -146,26 +150,26 @@ public class DOM {
 	}
 
 	public void setAttribute(String id, String name, String value) {
-		XDHq.call("SetAttribute_1", Type.VOID, new String[]{id, name, value}, emptys);
+		DOM.call("SetAttribute_1", Type.VOID, new String[]{id, name, value}, emptys);
 	}
 
 	public String getAttribute(String id, String name) {
-		return (String)XDHq.call("GetAttribute_1", Type.STRING, new String[] {id, name}, emptys);
+		return (String)DOM.call("GetAttribute_1", Type.STRING, new String[] {id, name}, emptys);
 	}
 
 	public void removeAttribute(String id, String name) {
-		XDHq.call("RemoveAttribute_1", Type.VOID, new String[]{id, name}, emptys);
+		DOM.call("RemoveAttribute_1", Type.VOID, new String[]{id, name}, emptys);
 	}
 
 	public void setProperty(String id, String name, String value) {
-		XDHq.call("SetProperty_1", Type.VOID, new String[] {id, name, value}, emptys);
+		DOM.call("SetProperty_1", Type.VOID, new String[] {id, name, value}, emptys);
 	}
 
 	public String getProperty(String id, String name) {
-		return (String)XDHq.call("GetPoperty_1", Type.STRING, new String[] {id, name}, emptys );
+		return (String)DOM.call("GetPoperty_1", Type.STRING, new String[] {id, name}, emptys );
 	}
 
 	public void focus(String id) {
-		XDHq.call("Focus_1", Type.VOID, new String[]{id}, emptys );
+		DOM.call("Focus_1", Type.VOID, new String[]{id}, emptys );
 	}
 }

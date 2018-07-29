@@ -17,19 +17,24 @@
 	along with XDHq. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package info.q37.xdhq.dom;
+package info.q37.xdhq;
 
-public abstract class SHRD {
-	public enum GUY {
-		NONE, DESKTOP, WEB, DESKTOP_AND_WEB, DEFAULT
-	};
+import info.q37.jreq.JRE;
 
-	public enum Type {
-		VOID, STRING, STRINGS, UNDEFINED
-	};
+public class XDH_PROD extends XDH_SHRD {
+	static private long launcher;
+	static {
+		launcher = JRE.register( "xdhq" );
+	}
+	static public Object call(int index, Object... objects) {
+		return JRE.call( launcher, index, objects );
+	}
+	static public void launch( String newSessionAction ) {
+		System.out.println(Thread.currentThread().getStackTrace()[1]);
 
-	public abstract String getAction(Event event);
+		JRE.call( launcher, 1, "53752", newSessionAction );
 
-	public abstract Object call(String command, Type type, String[] strings, String [][] xstrings );
+		System.out.println(Thread.currentThread().getStackTrace()[1]);
 
+	}
 }

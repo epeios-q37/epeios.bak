@@ -17,7 +17,17 @@
 	along with XDHq. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package info.q37.xdhq.dom;
+package info.q37.xdhq;
 
-public class DEMO {
+import info.q37.xdhq.XDH_PROD;
+
+public class XDH extends info.q37.jreq.JRE {
+	static public void launch( String newSessionAction ) {
+		System.out.println(Thread.currentThread().getStackTrace()[1]);
+
+		XDH_PROD.launch( newSessionAction );
+
+		System.out.println(Thread.currentThread().getStackTrace()[1]);
+
+	}
 }
