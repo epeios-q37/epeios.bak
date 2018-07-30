@@ -49,8 +49,7 @@ public class DOM {
 		}
 	}
 
-	public void getAction( info.q37.xdhq.dom.Event event )
-	{
+	public void getAction( info.q37.xdhq.dom.Event event ) {
 		DOM.getAction( event );
 	}
 
@@ -71,7 +70,8 @@ public class DOM {
 	}
 
 	public void headUp( String head ) {
-			setLayout_("_xdh_head", head, "");
+		System.out.println(Thread.currentThread().getStackTrace()[1]);
+		setLayout_("_xdh_head", head, "");
 	}
 
 	public void setLayout(String id, String html) {

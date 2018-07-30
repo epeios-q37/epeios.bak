@@ -97,12 +97,7 @@ public abstract class Atlas implements Runnable {
 	private static final GUI defaultGUI = GUI.DESKTOP;
 
 	private static void launch(String newSessionAction, String dir, GUI gui, String arg) {
-		System.out.println(Thread.currentThread().getStackTrace()[1]);
-
 		info.q37.xdhq.XDH.launch(newSessionAction);
-
-		System.out.println(Thread.currentThread().getStackTrace()[1]);
-
 
 		if (gui == GUI.DEFAULT) {
 			gui = defaultGUI;

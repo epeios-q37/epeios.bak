@@ -21,24 +21,29 @@ package info.q37.xdhq.dom;
 
 import java.net.*;
 import java.io.*;
+import java.util.*;
 
 public class DOM_DEMO extends DOM_SHRD {
-	private String address = "atlastk.org";
-	private int port = 53800;
-	private String token = "";
+	static private String address = "atlastk.org";
+//	static private String address = "localhost";
+	static private int port = 53800;
+	static private String token = "";
 	private Socket socket;
+	private boolean firstLaunch = true;
 
 	private void writeSize_( int size, OutputStream stream ) throws Exception {
-		byte datum = (byte)(size & 0x7F);
+		byte data[] = new byte[8];
+		int i = 7;
+
+		data[i] = (byte)(size & 0x7F);
 		size >>= 7;
 
 		while ( size != 0 ) {
-			stream.write( datum |= 0x80 );
-			datum = (byte)(size & 0x7F);
+			data[--i] = (byte)(size | 0x80);
 			size >>= 7;
 		}
 
-		stream.write( datum );
+		stream.write( data, i, 8 - i );
 	}
 
 	private void writeString_( String string, OutputStream stream ) throws Exception {
@@ -67,8 +72,6 @@ public class DOM_DEMO extends DOM_SHRD {
 		writeStrings_( strings, socket.getOutputStream() );
 	}
 
-
-
 	private int getSize_( InputStreamReader reader ) throws Exception {
 		int datum = reader.read();
 		int size = datum & 0x7f;
@@ -86,10 +89,31 @@ public class DOM_DEMO extends DOM_SHRD {
 		String string = "";
 		int size = getSize_( reader );
 
-		while ( size-- != 0 )
-			string += reader.read();
+		while ( size-- != 0 ) {
+			string += (char)reader.read();
+		}
 
 		return string;
+	}
+
+	private String getString_() throws Exception {
+		return getString_( new InputStreamReader( socket.getInputStream() ) );
+	}
+
+	private String[] getStrings_( InputStreamReader reader ) throws Exception {
+		int size = getSize_( reader );
+		int i = 0;
+
+		String[] strings = new String[size];
+
+		while ( i < size )
+			strings[i++] = getString_( reader );
+
+		return strings;
+	}
+
+	private String[] getStrings_() throws Exception {
+		return getStrings_( new InputStreamReader( socket.getInputStream() ) );
 	}
 
 	private String getQuery_( InputStreamReader reader ) throws Exception {
@@ -97,7 +121,7 @@ public class DOM_DEMO extends DOM_SHRD {
 		int datum = reader.read();
 
 		while ( datum != 0 ) {
-			query += datum;
+			query += (char)datum;
 			datum = reader.read();
 		}
 
@@ -108,33 +132,60 @@ public class DOM_DEMO extends DOM_SHRD {
 		return getQuery_( new InputStreamReader( socket.getInputStream() ) );
 	}
 
-	private String getString_() throws Exception {
-		return getString_( new InputStreamReader( socket.getInputStream() ) );
-	}
-
 	public DOM_DEMO() throws Exception {
 		socket = new Socket( address, port );
 		OutputStream output = socket.getOutputStream();
+		InputStreamReader reader = new InputStreamReader( socket.getInputStream() );
 
-		output.write(token.getBytes());
+		writeString_( token, output );
 
-		token = getString_();
+		output.flush();
 
-		if ( "".equals( token ) )
-			throw new Exception( "Invalid connection information !!!");
+		if ( "".equals( token ) ) {
+			token = getString_( reader );
 
-		output.write(new String( "StandBy_1" + 0x00).getBytes() );
+
+			if ( "".equals( token ) )
+				throw new Exception( "Invalid connection information !!!");
+
+			System.out.println( "Token: " + token );
+		} else {
+			if ( !getString_( reader ).equals( token ) )
+				throw new Exception( "Unmatched token !!!");
+
+		}
+
+		getString_( reader );	// Protocol version.
+
+		output.write(new String( "StandBy_1" ).getBytes());
+		output.write( 0 );
+
+		output.flush();
 	}
 
 	@Override public void getAction(Event event) {
 		try {
-			String query = getQuery_();
+			if ( !firstLaunch ) {
+				OutputStream output = socket.getOutputStream();
+				output.write(new String( "StandBy_1" ).getBytes());
+				output.write( 0 );
+				output.flush();
+			} else
+				firstLaunch = false;
+
+			InputStreamReader reader = new InputStreamReader( socket.getInputStream() );
+			String query = getQuery_( reader );
 
 			if ( !"Launch_1".equals( query ) )
 				throw new Exception( "Unknown query '" + query + "' !!!" );
 
-			event.id = getString_();
-			event.action = getString_();
+			event.id = getString_( reader );
+
+			event.action = getString_( reader );
+
+			if ( "".equals( event.action ) )
+				event.action = info.q37.xdhq.XDH_DEMO.newSessionAction;
+
 		} catch ( Exception e) {
 			e.printStackTrace();
 		}
@@ -148,15 +199,40 @@ public class DOM_DEMO extends DOM_SHRD {
 			int size = strings.length;
 			int i = 0;
 
+			output.write( new String( command ).getBytes() );
+			output.write( 0 );
+
 			while( i < size ) {
-				writeString_( strings[i++]);
+				writeString_( strings[i++], output );
 			}
 
 			size = xstrings.length;
 			i = 0;
 
 			while( i < size ) {
-				writeStrings_( xstrings[i++]);
+				writeStrings_( xstrings[i++], output);
+			}
+
+			output.flush();
+
+			InputStreamReader reader = new InputStreamReader( socket.getInputStream() );
+
+			String query = getQuery_( reader );
+
+			if ( !"Ready_1".equals( query ) )
+				throw new Exception( "Unknown query '" + query + "' !!!" );
+
+			switch ( type ) {
+			case VOID:
+				break;
+			case STRING:
+				object = getString_( reader );
+				break;
+			case STRINGS:
+				object = getStrings_( reader );
+				break;
+			default:
+				throw new Exception( "Unknown return type !!!");
 			}
 		} catch ( Exception e) {
 			e.printStackTrace();

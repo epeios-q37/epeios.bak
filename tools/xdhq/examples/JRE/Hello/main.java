@@ -49,6 +49,7 @@ class Hello extends Atlas {
 		"</div>";
 		switch( action) {
 		case "Connect":
+			System.out.println(Thread.currentThread().getStackTrace()[1]);
 			dom.headUp( head );
 			dom.setLayout("", html);
 			break;
@@ -58,11 +59,14 @@ class Hello extends Atlas {
 		case "Clear":
 			if ( dom.confirm( "Are you sure ?" ) ) dom.setContents( new String[][] { { "input", ""}, { "name", ""} } );
 			break;
+		default:
+			throw new RuntimeException( "Unknown action '" + action + "' !!!");
 		}
 	}
 	public static void main(String[] args) throws Exception {
 		launch("Connect", "Hello", Atlas.GUI.DEFAULT, args );
 
-		for (;;) new Hello();
+		for (;;)
+			new Hello();
 	}
 }
