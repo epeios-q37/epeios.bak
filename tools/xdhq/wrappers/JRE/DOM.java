@@ -41,13 +41,17 @@ public class DOM {
 	}
 
 	public DOM() {
-		DOM = new info.q37.xdhq.dom.DOM_DEMO();
-//		DOM = new info.q37.xdhq.dom.DOM_PROD();
+		try {
+			DOM = new info.q37.xdhq.dom.DOM_DEMO();
+//			DOM = new info.q37.xdhq.dom.DOM_PROD();
+		} catch ( Exception e ) {
+			e.printStackTrace();
+		}
 	}
 
-	public String getAction( info.q37.xdhq.dom.Event event )
+	public void getAction( info.q37.xdhq.dom.Event event )
 	{
-		return DOM.getAction( event );
+		DOM.getAction( event );
 	}
 
 	public String execute(String script) {
