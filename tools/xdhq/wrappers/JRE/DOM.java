@@ -22,6 +22,7 @@ package info.q37.xdhq;
 import java.util.*;
 
 import info.q37.xdhq.dom.DOM_SHRD.Type;
+import info.q37.xdhq.MODE;
 
 public class DOM {
 	private info.q37.xdhq.dom.DOM_SHRD DOM;
@@ -40,10 +41,18 @@ public class DOM {
 		return new String[][] { ids.toArray( new String[0] ), classes.toArray( new String[0] ) };
 	}
 
-	public DOM() {
+	public DOM( MODE mode ) {
 		try {
-			DOM = new info.q37.xdhq.dom.DOM_DEMO();
-//			DOM = new info.q37.xdhq.dom.DOM_PROD();
+			switch ( mode ) {
+			case DEMO:
+				DOM = new info.q37.xdhq.dom.DOM_DEMO();
+				break;
+			case PROD:
+				DOM = new info.q37.xdhq.dom.DOM_PROD();
+				break;
+			default:
+				throw new RuntimeException( "Unknown mode !!!");
+			}
 		} catch ( Exception e ) {
 			e.printStackTrace();
 		}

@@ -19,11 +19,14 @@
 
 package info.q37.atlas;
 
+import info.q37.xdhq.MODE;
+
 public abstract class Atlas implements Runnable {
+	private static MODE mode = MODE.UNDEFINED;
 	private DOM dom;
 
 	public Atlas() {
-		this.dom = new DOM();
+		this.dom = new DOM( mode );
 		new Thread( this ).start();
 	}
 
@@ -90,33 +93,46 @@ public abstract class Atlas implements Runnable {
 		}
 	}
 
-	public enum GUI {
-		NONE, DESKTOP, WEB, DESKTOP_AND_WEB, DEFAULT
-	};
+	private static final GUI getDefaultGUI() {
+		if ( isDev() )
+			return GUI.DESKTOP;
+		else
+			return GUI.WEB;
+	}
 
-	private static final GUI defaultGUI = GUI.DESKTOP;
+	private static final MODE getDefaultMODE() {
+		if ( isDev() )
+			return MODE.PROD;
+		else
+			return MODE.DEMO;
+	}
 
 	private static void launch(String newSessionAction, String dir, GUI gui, String arg) {
-		info.q37.xdhq.XDH.launch(newSessionAction);
+		mode = getDefaultMODE();
 
 		if (gui == GUI.DEFAULT) {
-			gui = defaultGUI;
+			gui = getDefaultGUI();
 
 			if (arg.length() > 0) {
 				if ( arg.equals( "n" ) || arg.equals( "none" ) ) {
 					gui = GUI.NONE;
 				} else if ( arg.equals( "d" ) || arg.equals( "desktop" ) ) {
 					gui = GUI.DESKTOP;
+				} else if ( arg.equals( "W" ) ) {
+					mode = MODE.DEMO;
+					gui = GUI.WEB;
 				} else if ( arg.equals( "w") || arg.equals( "web" ) ) {
 					gui = GUI.WEB;
 				} else if ( arg.equals( "dw" ) || arg.equals( "wd") ) {
 					gui = GUI.DESKTOP_AND_WEB;
 				} else {
-					System.out.println("Unknown gui !");
+					System.out.println("Unknown gui $!");
 					System.exit(1);
 				}
 			}
 		}
+
+		info.q37.xdhq.XDH.launch(newSessionAction, mode);
 
 		switch (gui) {
 		case NONE:

@@ -64,7 +64,7 @@ class Hello extends Atlas {
 		}
 	}
 	public static void main(String[] args) throws Exception {
-		launch("Connect", "Hello", Atlas.GUI.DEFAULT, args );
+		launch("Connect", "Hello", GUI.DEFAULT, args );
 
 		for (;;)
 			new Hello();

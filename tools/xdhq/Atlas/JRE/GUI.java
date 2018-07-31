@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2017 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 2018 Claude SIMON (http://q37.info/contact/).
 
 	This file is part of XDHq.
 
@@ -17,27 +17,8 @@
 	along with XDHq. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package info.q37.xdhq;
+package info.q37.atlas;
 
-import info.q37.xdhq.XDH_PROD;
-import info.q37.xdhq.MODE;
-
-public class XDH extends info.q37.jreq.JRE {
-	static public void launch( String newSessionAction,  MODE mode ) {
-		System.out.println(Thread.currentThread().getStackTrace()[1]);
-
-		switch ( mode ) {
-		case DEMO:
-			XDH_DEMO.launch( newSessionAction );
-			break;
-		case PROD:
-			XDH_PROD.launch( newSessionAction );
-			break;
-		default:
-			throw new RuntimeException( "Unknown mode !!!");
-		}
-
-		System.out.println(Thread.currentThread().getStackTrace()[1]);
-
-	}
-}
+public enum GUI {
+	NONE, DESKTOP, WEB, DESKTOP_AND_WEB, DEFAULT
+};

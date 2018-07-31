@@ -104,6 +104,7 @@
 			<Files Group="JAVA" Path="../../Atlas/JRE/">
 				<File Pack="No">Atlas.java</File>
 				<File Pack="No">DOM.java</File>
+				<File Pack="No">GUI.java</File>
 			</Files>
 		</Files>
 	</Files>
@@ -116,6 +117,7 @@
 		<!--File Pack="No">XDHq.java</File-->
 		<Files Group="JAVA">
 			<File Pack="No">DOM.java</File>
+			<File Pack="No">MODE.java</File>
 			<Files Group="DOM">
 				<File Pack="No">DOM_DEMO.java</File>
 				<File Pack="No">DOM_PROD.java</File>

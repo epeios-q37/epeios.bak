@@ -20,4 +20,7 @@
 package info.q37.atlas;
 
 public class DOM extends info.q37.xdhq.DOM {
+	public DOM( info.q37.xdhq.MODE mode ) {
+		super( mode );
+	}
 };
