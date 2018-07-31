@@ -173,7 +173,7 @@ class Notes extends Atlas {
 		}
 	}
 	public static void main(String args[]) throws Exception {
-		launch("Connect", "notes", Atlas.Type.DEFAULT, args );
+		launch("Connect", "notes", GUI.DEFAULT, args );
 
 		for (;;) new Notes();
 	}

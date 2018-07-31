@@ -22,9 +22,40 @@ package info.q37.xdhq;
 import info.q37.xdhq.XDH_PROD;
 import info.q37.xdhq.MODE;
 
+import java.nio.file.*;
+
 public class XDH extends info.q37.jreq.JRE {
-	static public void launch( String newSessionAction,  MODE mode ) {
+	private static MODE mode_ = MODE.UNDEFINED;
+	static private String readFile_( String path ) {
+		String result = null;
+		try {
+			  byte[] encoded = Files.readAllBytes(Paths.get(path));
+			  result = new String(encoded);
+		  } catch ( Exception e) {
+				System.out.println(e.getStackTrace());
+		  }
+
+		  return result;
+	}
+	public static boolean isDev() {
+		return System.getenv("EPEIOS_SRC") != null;
+	}
+	private static String getAssetPath_() {
+		if ( isDev() )
+			return "h:/hg/epeios/tools/xdhq/examples/common/TodoMVC/";
+		else
+			return "./";
+	}
+	public static String getAssetFilename_( String path ) {
+		return getAssetPath_() + path;
+	}
+	public static String readAsset( String path ) {
+		return readFile_( getAssetFilename_( path ) );
+	}
+	static public void launch( String newSessionAction, MODE mode ) {
 		System.out.println(Thread.currentThread().getStackTrace()[1]);
+
+		XDH.mode_ = mode;
 
 		switch ( mode ) {
 		case DEMO:
@@ -38,6 +69,11 @@ public class XDH extends info.q37.jreq.JRE {
 		}
 
 		System.out.println(Thread.currentThread().getStackTrace()[1]);
-
+	}
+	static public MODE getMode() {
+		return mode_;
+	}
+	static public boolean isDEMO() {
+		return getMode() == MODE.DEMO;
 	}
 }

@@ -79,7 +79,6 @@ public class DOM {
 	}
 
 	public void headUp( String head ) {
-		System.out.println(Thread.currentThread().getStackTrace()[1]);
 		setLayout_("_xdh_head", head, "");
 	}
 
@@ -87,8 +86,15 @@ public class DOM {
 		setLayout_( id, html, "" );
 	}
 
-	public void setLayoutXSLs(String id, String xml, String xslFilename) {
-		setLayout_(id, xml, xslFilename);
+	public void setLayoutXSL(String id, String xml, String xslFilename) {
+		String xslURL;
+
+		if ( info.q37.xdhq.XDH.isDEMO() )
+			xslURL = new String( "data:text/xml;base64," + java.util.Base64.getEncoder().encodeToString( info.q37.xdhq.XDH.readAsset( xslFilename).getBytes() ) );
+		else
+			xslURL = xslFilename;
+
+		setLayout_(id, xml, xslURL);
 	}
 
 	public String[] getContents(String[] ids) {

@@ -51,14 +51,15 @@ class TodoMVC extends Atlas {
 		return count;
 	}
 
-	private void push(Todo todo, int id, Tree tree) {
-		tree.pushTag("Todo");
-		tree.putAttribute("id", id);
+	private String push(Todo todo, int id, String xml) {
+		xml = new String( xml + "<Todo" );
+		xml = new String( xml + " id=\"" + id + "\"");
 
-		tree.putAttribute("completed", todo.completed);
+		xml = new String( xml + " completed=\"" + todo.completed + "\">");
 
-		tree.putValue(todo.label);
-		tree.popTag();
+		xml = new String( xml + todo.label);
+
+		return new String( xml + "</Todo>\n" );
 	}
 
 	private void displayCount(DOM dom, int count) {
@@ -90,10 +91,9 @@ class TodoMVC extends Atlas {
 	}
 
 	private void displayTodos( DOM dom ) {
-		Tree tree = new Tree();
 		ListIterator<Todo> li = todos.listIterator();
 
-		tree.pushTag("Todos");
+		String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<XDHTML>\n<Todos>\n";
 
 		while (li.hasNext()) {
 			int index = li.nextIndex();
@@ -101,12 +101,12 @@ class TodoMVC extends Atlas {
 			Todo todo = li.next();
 
 			if ((exclude == null) || (todo.completed != exclude))
-				push(todo, index, tree);
+				xml = push(todo, index, xml);
 		}
 
-		tree.popTag();
+		xml = new String( xml + "</Todos>\n</XDHTML>" );
 
-		dom.setLayout("Todos", tree, "Todos.xsl");
+		dom.setLayoutXSL("Todos", xml, "Todos.xsl");
 		handleCount( dom );
 	}
 
@@ -148,6 +148,7 @@ class TodoMVC extends Atlas {
 		todos.set(index, todo);
 
 		dom.toggleClass( "Todo." + id, "completed");
+		dom.toggleClass( "Todo." + id, "active");
 
 		if (exclude != null)
 			displayTodos( dom );
@@ -160,8 +161,7 @@ class TodoMVC extends Atlas {
 
 		dom.addClass("All", "selected");
 		dom.removeClasses(new String[][] { { "Active", "selected" }, { "Completed", "selected" } } );
-
-		displayTodos( dom );
+		dom.disableElements(new String[]{"HideActive","HideCompleted"});
 	}
 
 	private void active( DOM dom ) {
@@ -169,17 +169,17 @@ class TodoMVC extends Atlas {
 
 		dom.addClass("Active", "selected");
 		dom.removeClasses(new String[][] { { "All", "selected" }, { "Completed", "selected" } } );
-
-		displayTodos( dom );
-	}
+		dom.disableElement("HideActive");
+		dom.enableElement("HideCompleted");
+}
 
 	private void completed( DOM dom ) {
 		exclude = false;
 
 		dom.addClass("Completed", "selected");
 		dom.removeClasses( new String[][] { { "All", "selected" }, { "Active", "selected" } } );
-
-		displayTodos( dom );
+		dom.disableElement("HideCompleted");
+		dom.enableElement("HideActive");
 	}
 
 	private void clear( DOM dom ) {
@@ -224,8 +224,10 @@ class TodoMVC extends Atlas {
 
 	public void handle( DOM dom, String action, String id ) {
 		if ( action.equals( "Connect" ) ) {
-			dom.setLayout("", new Tree(), "Main.xsl");
+			dom.headUp( info.q37.xdhq.XDH.readAsset("HeadDEMO.html") );
+			dom.setLayout("", info.q37.xdhq.XDH.readAsset( "Main.html") );
 			dom.focus("Input");
+			dom.disableElements( new String[]{"HideActive","HideCompleted"});
 			displayTodos( dom );
 		} else if (action.equals( "Submit" ) ) {
 			if (index == -1)
@@ -250,8 +252,7 @@ class TodoMVC extends Atlas {
 		} else if (action.equals( "Cancel" ) ) {
 			cancel( dom );
 		} else {
-			System.out.println("No or unknown action !");
-			System.exit(1);
+			throw new RuntimeException("No or unknown action !!!");
 		}
 	}
 
@@ -263,8 +264,7 @@ class TodoMVC extends Atlas {
 		else
 			dir = "TodoMVC";
 
-
-		launch("Connect", dir, Atlas.Type.DEFAULT, args);
+		launch("Connect", dir, GUI.DEFAULT, args);
 
 		for (;;) new TodoMVC();
 	}

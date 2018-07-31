@@ -22,11 +22,10 @@ package info.q37.atlas;
 import info.q37.xdhq.MODE;
 
 public abstract class Atlas implements Runnable {
-	private static MODE mode = MODE.UNDEFINED;
 	private DOM dom;
 
 	public Atlas() {
-		this.dom = new DOM( mode );
+		this.dom = new DOM( info.q37.xdhq.XDH.getMode() );
 		new Thread( this ).start();
 	}
 
@@ -42,8 +41,12 @@ public abstract class Atlas implements Runnable {
 		}
 	}
 
-	private static boolean isDev() {
-		return System.getenv("EPEIOS_SRC") != null;
+	public static boolean isDev() {
+		return info.q37.xdhq.XDH.isDev();
+	}
+
+	public String readAsset( String path ) {
+		return info.q37.xdhq.XDH.readAsset( path );
 	}
 
 	private static void launchWeb(String dir) {
@@ -108,7 +111,7 @@ public abstract class Atlas implements Runnable {
 	}
 
 	private static void launch(String newSessionAction, String dir, GUI gui, String arg) {
-		mode = getDefaultMODE();
+		MODE mode = getDefaultMODE();
 
 		if (gui == GUI.DEFAULT) {
 			gui = getDefaultGUI();
