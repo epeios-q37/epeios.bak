@@ -148,7 +148,13 @@ public class DOM_DEMO extends DOM_SHRD {
 			if ( "".equals( token ) )
 				throw new Exception( "Invalid connection information !!!");
 
-			System.out.println( "Token: " + token );
+			String url = "http://atlastk.org/atlas.php?_token=" + token;
+
+			if ( java.awt.Desktop.isDesktopSupported()) {
+				java.awt.Desktop.getDesktop().browse( new URI( url ) );
+				System.out.println( "Open " + url + " in a web browser, if not already done. Enjoy!");
+			} else
+				System.out.println("Open " + url + " in a web browser. Enjoy!");
 		} else {
 			if ( !getString_( reader ).equals( token ) )
 				throw new Exception( "Unmatched token !!!");
