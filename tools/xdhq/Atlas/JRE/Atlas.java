@@ -135,7 +135,7 @@ public abstract class Atlas implements Runnable {
 			}
 		}
 
-		info.q37.xdhq.XDH.launch(newSessionAction, mode);
+		info.q37.xdhq.XDH.launch(newSessionAction, mode, dir);
 
 		switch (gui) {
 		case NONE:
@@ -144,7 +144,8 @@ public abstract class Atlas implements Runnable {
 			launchDesktop(dir);
 			break;
 		case WEB:
-			launchWeb(dir);
+			if( mode != MODE.DEMO )
+				launchWeb(dir);
 			break;
 		case DESKTOP_AND_WEB:
 			launchDesktop(dir);

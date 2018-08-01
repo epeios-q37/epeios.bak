@@ -1,25 +1,30 @@
- # Notes concernant la version *Java* (*JRE*) de *Atlas*/*XDHq*
+# Notes concernant la version *Java* (*JRE*) de *Atlas*/*XDHq*
 
- ## Compilation
+## Compilation
 
- Script pour *recompiler* l'ensemble des sources *JAVA* (*attention*: le répertoire `classes` **doit** exister !) :
+Script pour *recompiler* l'ensemble des sources *JAVA* (*attention*: les répertoires `classes` respectifs **doivent** exister !) :
 
- `pushd /cygdrive/h/hg/epeios/tools/jreq;rm -rf classes/*;javac -d classes *.java;cd /cygdrive/h/hg/epeios/tools/xdhq/wrappers/JRE;rm -rf classes/*;javac -d classes *.java;cd /cygdrive/h/hg/epeios/tools/xdhq/Atlas/JRE;rm -rf classes/*;javac -d classes *.java;popd`
+`ver=1.5;pushd /cygdrive/h/hg/epeios/tools/jreq;rm -rf classes/*;javac -target $ver -source $ver -d classes *.java;cd /cygdrive/h/hg/epeios/tools/xdhq/wrappers/JRE;rm -rf classes/*;javac -target $ver -source $ver -d classes *.java;cd /cygdrive/h/hg/epeios/tools/xdhq/Atlas/JRE;rm -rf classes/*;javac -source $ver -target $ver -d classes *.java;popd;`
 
- Il y a également des sources dans `tools/xdhq/Atlas/JRE`, mais elles ne devraient pas avoir à être modifiés.
- 
- ## Lancement
+## Déploiement
 
- ### *Cygwin*
+Après compilation, commande pour générer le `.jar`:
 
- *Atlas* (`info.q37.atlas.Atlas`) lance un serveur web via *node.js*, qui est normalement interrompu lors d'un *CTRL-C*, mais cela ne fonctionne pas sous *Cygwin*. Il faut donc lancer le programme sous une session *DOS* classique.
+`pushd /cygdrive/h/temp;rm -rf classes;mkdir classes;cp -R h:/hg/epeios/tools/jreq/classes/* classes/;cp -R h:/hg/epeios/tools/xdhq/wrappers/JRE/classes/* classes;cp -R h:/hg/epeios/tools/xdhq/Atlas/JRE/classes/* classes;popd;jar cvf Atlas.jar -C h:/temp/classes/ .` 
+  
+## Lancement
 
- Si lancé directement (et non pas à l'aide de la commande ci-dessous) sous *Cygwin*, il faudra tuer le serveur *httpd* manuellement.
+### *Cygwin*
 
- Pour contourner ce problème, lancer avec de la manière suivante :
-  * pour lancer uniquement : `cmd /c start java <class>`,
-  * pour compiler puis lancer en cas de succés : `javac *.java && cmd /c start java <class>`.
+*Atlas* (`info.q37.atlas.Atlas`) lance un serveur web via *node.js*, qui est normalement interrompu lors d'un *CTRL-C*, mais cela ne fonctionne pas sous *Cygwin*. Il faut donc lancer le programme sous une session *DOS* classique.
 
- ### `CLASSPATH` pour le développement
+Si lancé directement (et non pas à l'aide de la commande ci-dessous) sous *Cygwin*, il faudra tuer le serveur *httpd* manuellement.
 
- `.;h:/hg/epeios/tools/jreq/classes/;h:/hg/epeios/tools/xdhq/wrappers/JRE/classes/;h:/hg/epeios/tools/xdhq/Atlas/JRE/classes/`
+Pour contourner ce problème, lancer avec de la manière suivante :
+
+- pour lancer uniquement : `cmd /c start java <class>`,
+- pour compiler puis lancer en cas de succés : `javac *.java && cmd /c start java <class>`.
+
+## `CLASSPATH` pour le développement
+
+`.;h:/hg/epeios/tools/jreq/classes/;h:/hg/epeios/tools/xdhq/wrappers/JRE/classes/;h:/hg/epeios/tools/xdhq/Atlas/JRE/classes/`

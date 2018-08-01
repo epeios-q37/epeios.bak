@@ -20,7 +20,7 @@
 package info.q37.xdhq;
 
 public class XDH_DEMO extends XDH_SHRD {
-	static public String  newSessionAction;
+	static public String newSessionAction;
 	static public void launch( String newSessionAction ) {
 		XDH_DEMO.newSessionAction = newSessionAction;
 	}

@@ -25,6 +25,7 @@ import info.q37.xdhq.MODE;
 import java.nio.file.*;
 
 public class XDH extends info.q37.jreq.JRE {
+	private static String dir_;
 	private static MODE mode_ = MODE.UNDEFINED;
 	static private String readFile_( String path ) {
 		String result = null;
@@ -42,7 +43,7 @@ public class XDH extends info.q37.jreq.JRE {
 	}
 	private static String getAssetPath_() {
 		if ( isDev() )
-			return "h:/hg/epeios/tools/xdhq/examples/common/TodoMVC/";
+			return "h:/hg/epeios/tools/xdhq/examples/common/" + dir_ + "/";
 		else
 			return "./";
 	}
@@ -52,10 +53,11 @@ public class XDH extends info.q37.jreq.JRE {
 	public static String readAsset( String path ) {
 		return readFile_( getAssetFilename_( path ) );
 	}
-	static public void launch( String newSessionAction, MODE mode ) {
+	static public void launch( String newSessionAction, MODE mode, String dir ) {
 		System.out.println(Thread.currentThread().getStackTrace()[1]);
 
 		XDH.mode_ = mode;
+		XDH.dir_ = dir;
 
 		switch ( mode ) {
 		case DEMO:

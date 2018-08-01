@@ -31,8 +31,10 @@ class Wrapper {
 	native protected static long register(String arguments);
 
 	native public static Object call(long launcher, int index, Object... objects);
-	static protected String getLocation()
-	{
+
+	static private boolean loaded = false;
+
+	static protected String getLocation() {
 		String osName = System.getProperty("os.name").toLowerCase();
 
 		if (System.getenv("EPEIOS_SRC") == null) {
@@ -40,23 +42,29 @@ class Wrapper {
 		} else if (osName.contains("windows"))
 			return "h:/bin/";
 		else if (osName.contains("mac")) {
-			return  "/Users/csimon/bin/";
+			return "/Users/csimon/bin/";
 		} else {
 			return "/home/csimon/bin/";
 		}
 
 	}
-	static {
+
+	static void Init() {
+		if ( !loaded ) {
 		String location = getLocation();
 
 		System.loadLibrary("jreq");
 
 		init(location);
+
+		loaded = true;
+		}
 	}
 }
 
 public class JRE extends Wrapper {
 	static public long register( String componentName ) {
+		Wrapper.Init();
 		return Wrapper.register( getLocation() + componentName + "jre" );
 	}
 }
