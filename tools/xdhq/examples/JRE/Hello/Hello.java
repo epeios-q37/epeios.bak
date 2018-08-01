@@ -17,23 +17,48 @@
 	along with XDHq If not, see <http://www.gnu.org/licenses/>.
 */
 
+/*
+	This is the one-file version, which does not need the 'Head.html' and the 'Main.html' files.
+*/
+
 import info.q37.atlas.*;
 
 class Hello extends Atlas {
 	public void handle( DOM dom, String action, String id )
 	{
-		switch( action) {
-		case "Connect":
-			dom.headUp( readAsset( "Head.html" ) );
-			dom.setLayout("", readAsset( "Main.html") );
-			break;
-		case "Typing":
+		String head = 
+		"<title>\"Hello, World !\" example</title>" +
+		"<style type=\"text/css\">" +
+		" html, body { height: 100%; padding: 0; margin: 0; }" +
+		" .vcenter-out, .hcenter { display: table; height: 100%; margin: auto; }" +
+		" .vcenter-in { display: table-cell; vertical-align: middle; }" +
+		"</style>";
+	
+		String html = 
+		"<div class=\"vcenter-out\">" +
+		" <div class=\"vcenter-in\">" +
+		"  <fieldset>" +
+		"   <label>Name:</label>" +
+		"   <input id=\"input\" maxlength=\"20\" placeholder=\"Enter a name here\"'" +
+		"	 type=\"text\" data-xdh-onevent=\"input|Typing\"/>" +
+		"   <button data-xdh-onevent=\"Clear\">Clear</button>" +
+		"   <hr/>" +
+		"   <h1>" +
+		"    <span>Hello </span>" +
+		"    <span style=\"font-style: italic;\" id=\"name\"></span>" +
+		"    <span>!</span>" +
+		"   </h1>" +
+		"  </fieldset>" +
+		" </div>" +
+		"</div>";
+		if ( "Connect".equals( action ) ) {
+			dom.headUp( head );
+			dom.setLayout("", html);
+		} else if ("Typing".equals( action ) ) {
 			dom.setContent("name", dom.getContent(id));
-			break;
-		case "Clear":
+		} else if ( "Clear".equals( action ) ) {
 			if ( dom.confirm( "Are you sure ?" ) ) dom.setContents( new String[][] { { "input", ""}, { "name", ""} } );
-			break;
-		default:
+		} else {
 			throw new RuntimeException( "Unknown action '" + action + "' !!!");
 		}
 	}

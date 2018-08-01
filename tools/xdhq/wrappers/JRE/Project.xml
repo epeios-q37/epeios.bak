@@ -66,10 +66,11 @@
 			</Files>
 			<Files Group="Hello">
 				<File Path="../../examples/JRE/Hello/">main.java</File>
+				<File Path="../../examples/JRE/Hello/">Hello.java</File>
 				<Files Path="../../examples/common/Hello/">
 					<File>CHANGELOG.md</File>
 					<File>head.html</File>
-					<File>Main.xsl</File>
+					<File>Main.html</File>
 				</Files>
 			</Files>
 			<Files Group="Notes">

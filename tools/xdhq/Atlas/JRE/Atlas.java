@@ -75,9 +75,6 @@ public abstract class Atlas implements Runnable {
 		try {
 			ProcessBuilder processBuilder;
 
-			System.out.println(" DESKTOP !");
-
-
 			if (isDev()) {
 				processBuilder = new ProcessBuilder( "h:/hg/epeios/tools/xdhelcq/node_modules/electron/dist/electron", "index.js", "-m=h:/bin/xdhqxdh", "h:/hg/epeios/tools/xdhq/examples/common/" + dir);
 				processBuilder.directory( new java.io.File("h:/hg/epeios/tools/xdhelcq") );

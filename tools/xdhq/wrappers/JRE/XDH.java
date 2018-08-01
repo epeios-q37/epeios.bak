@@ -54,8 +54,6 @@ public class XDH extends info.q37.jreq.JRE {
 		return readFile_( getAssetFilename_( path ) );
 	}
 	static public void launch( String newSessionAction, MODE mode, String dir ) {
-		System.out.println(Thread.currentThread().getStackTrace()[1]);
-
 		XDH.mode_ = mode;
 		XDH.dir_ = dir;
 
@@ -69,8 +67,6 @@ public class XDH extends info.q37.jreq.JRE {
 		default:
 			throw new RuntimeException( "Unknown mode !!!");
 		}
-
-		System.out.println(Thread.currentThread().getStackTrace()[1]);
 	}
 	static public MODE getMode() {
 		return mode_;

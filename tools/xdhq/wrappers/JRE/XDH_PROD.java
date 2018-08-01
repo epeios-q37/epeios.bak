@@ -30,11 +30,6 @@ public class XDH_PROD extends XDH_SHRD {
 		return JRE.call( launcher, index, objects );
 	}
 	static public void launch( String newSessionAction ) {
-		System.out.println(Thread.currentThread().getStackTrace()[1]);
-
 		JRE.call( launcher, 1, "53752", newSessionAction );
-
-		System.out.println(Thread.currentThread().getStackTrace()[1]);
-
 	}
 }

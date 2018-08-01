@@ -74,7 +74,7 @@ public class DOM {
 		return "true".equals(DOM.call("Confirm_1", Type.STRING, new String[]{message}, emptys ));
 	}
 
-	void setLayout_(String id, String xml, String xslFilename) {
+	private void setLayout_(String id, String xml, String xslFilename) {
 		DOM.call("SetLayout_1", Type.VOID, new String[]{id, xml, xslFilename}, emptys );
 	}
 

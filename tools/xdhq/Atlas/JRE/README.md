@@ -2,12 +2,6 @@
 
 The *Atlas* toolkit is a library for web and desktop UI. This is the *Java* binding of this toolkit.
 
-## <u>Important</u>
-
-Le séparateur de l'argument `-cp`  ou `-classpath` ainsi que du contenu la variable d'environnement `CLASSPATH`est `;` **sous Windows** (nécessitant d'entourer le paramètre de `-cp` ou `--classpath` par des quotes sous *Cygwin*).
-Pour les autres *OSes*, cela semble être `:` (double-point).
-
-
 ## *Hello World!*
 
 [![Little demonstration](http://q37.info/download/Hello.gif "A basic example")](http://q37.info/s/atk/Hello/)
