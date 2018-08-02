@@ -19,6 +19,7 @@
 
 /*
 	This is the one-file version, which does not need the 'Head.html' and the 'Main.html' files.
+	See also comment belows.
 */
 
 import info.q37.atlas.*;
@@ -51,6 +52,7 @@ class Hello extends Atlas {
 		"  </fieldset>" +
 		" </div>" +
 		"</div>";
+
 		if ( "Connect".equals( action ) ) {
 			dom.headUp( head );
 			dom.setLayout("", html);
@@ -64,6 +66,8 @@ class Hello extends Atlas {
 	}
 	public static void main(String[] args) throws Exception {
 		launch("Connect", "Hello", GUI.DEFAULT, args );
+		// Remove about line and uncomment following.
+		// launch("Connect" );
 
 		for (;;)
 			new Hello();

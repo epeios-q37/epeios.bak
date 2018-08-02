@@ -51,13 +51,17 @@ class TodoMVC extends Atlas {
 		return count;
 	}
 
+	private String escape( String text ) {
+		return text.replace( "&", "&amp;").replace( "\"", "&quot;").replace( "<", "&lt;").replace( ">", "&gt;");
+	}
+
 	private String push(Todo todo, int id, String xml) {
 		xml = new String( xml + "<Todo" );
 		xml = new String( xml + " id=\"" + id + "\"");
 
 		xml = new String( xml + " completed=\"" + todo.completed + "\">");
 
-		xml = new String( xml + todo.label);
+		xml = new String( xml + escape( todo.label) );
 
 		return new String( xml + "</Todo>\n" );
 	}
@@ -130,7 +134,7 @@ class TodoMVC extends Atlas {
 		if (!"".equals(content.trim())) {
 			todos.set(index, new Todo(content, todos.get(index).completed));
 
-			dom.setContent("Label." + index, content);
+			dom.setContent("Label." + index, escape(content));
 
 			dom.removeClasses( new String[][] { { "View." + index, "hide" }, { "Todo." + index, "editing" } } );
 		} else {
