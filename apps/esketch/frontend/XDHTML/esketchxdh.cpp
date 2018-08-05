@@ -56,8 +56,12 @@ qRE
 xdhcmn::cSession *sclxdhtml::SCLXDHTMLRetrieveCallback(
 	const char *Language,
 	xdhcmn::eMode Mode,
+	const str::dString &Token,
 	xdhcmn::cProxy *ProxyCallback )
 {
+	if ( Token.Amount() != 0 )
+		qRGnr();
+
 	core::rSession *Session = new core::rSession;
 
 	if ( Session == NULL )
