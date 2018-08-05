@@ -5,6 +5,10 @@
 - [adpt]: Adaptation to changes in underlying modules;
 - [stdz]: modification to comply with current standards;
 
+## 2018-08-05
+- STSFSM:
+  - handling thread-safety.
+
 ## 2018-07-28
 
 - SCLJRE:

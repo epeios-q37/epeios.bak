@@ -77,25 +77,38 @@ id__ stsfsm::Add(
 
 status__ stsfsm::parser__::Handle( bso::u8__ C )
 {
+	status__ Status = s_Undefined;
+qRH;
 	crow__ Next = qNIL;
+qRB;
+
+	_A().Lock();
 
 	if ( _Current == qNIL )
 		_Current = _A().First();
 
-	if ( _Current == qNIL )
-		return sLost;	// L'automate est vide.
+	if ( _Current == qNIL ) {
+		Status = sLost;	// L'automate est vide.
+	} else {
+		Next = _A()(_Current).Get( C );
 
-	Next = _A()( _Current ).Get( C );
+		if ( Next == qNIL ) {
+			Status = sLost;
+		} else {
+			_Current = Next;
 
-	if ( Next == qNIL )
-		return sLost;
+			if ( _A()(_Current).GetId() == UndefinedId )
+				Status = sPending;
+			else
+				Status = sMatch;
+		}
+	}
 
-	_Current = Next;
-
-	if ( _A()( _Current ).GetId() == UndefinedId )
-		return sPending;
-	else
-		return sMatch;
+qRR;
+qRT;
+	_A().Unlock();
+qRE;
+	return Status;
 }
 
 status__ stsfsm::parser__::_Handle(

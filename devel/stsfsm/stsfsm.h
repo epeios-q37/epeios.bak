@@ -140,7 +140,57 @@ namespace stsfsm {
 		E_RWDISCLOSE_( fId, Id );
 	};
 
-	typedef ctn::qMCONTAINERd( dCard, sCRow ) dAutomat;
+	typedef ctn::qMCONTAINERd( dCard, sCRow ) dAutomat_;
+
+	class dAutomat
+	: public dAutomat_
+	{
+	public:
+		struct s
+		: public dAutomat_::s
+		{
+			mutable mtx::rHandler Mutex;
+		} &S_;
+		void reset( bso::sBool P = true )
+		{
+			if ( P ) {
+				if ( S_.Mutex != mtx::Undefined )
+					mtx::Delete( S_.Mutex );
+			}
+
+			dAutomat_::reset( P );
+
+			S_.Mutex = mtx::Undefined;
+		}
+		dAutomat( s &S )
+			: S_( S ),
+			dAutomat_( S )
+		{}
+		dAutomat &operator =( const dAutomat &A )
+		{
+			qRFwk();
+			// It doesn't make sense to copy this object. 'dAutmat_', yes.
+
+			return *this;	// To avoid a warning.
+		}
+		void Init( void )
+		{
+			reset();
+
+			S_.Mutex = mtx::Create();
+
+			dAutomat_::Init();
+		}
+		void Lock( void ) const
+		{
+			mtx::Lock( S_.Mutex );
+		}
+		void Unlock( void ) const
+		{
+			mtx::Unlock( S_.Mutex );
+		}
+	};
+
 	qW( Automat );
 
 	using bch::rRH;
@@ -236,7 +286,15 @@ namespace stsfsm {
 		}
 		id__ GetId( void ) const
 		{
-			return _A()( _Current ).GetId();
+			id__ Id = UndefinedId;
+
+			_A().Lock();
+
+			Id = _A()( _Current ).GetId();
+
+			_A().Unlock();
+
+			return Id;
 		}
 	};
 

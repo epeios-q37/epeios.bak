@@ -25,8 +25,8 @@ import java.util.*;
 import java.awt.Desktop;
 
 public class DOM_DEMO extends DOM_SHRD {
-//	static private String address = "atlastk.org";
-	static private String address = "localhost";
+//	static private String address = "atlastk.org"; static private String httpPort = "";
+	static private String address = "localhost"; static private String httpPort = ":8080";
 	static private int port = 53800;
 	static private String token = "";
 	private Socket socket;
@@ -134,7 +134,13 @@ public class DOM_DEMO extends DOM_SHRD {
 	}
 
 	public DOM_DEMO() throws Exception {
+		try {
 		socket = new Socket( address, port );
+		} catch ( Exception e ) {
+			System.out.println( "Unable to connect to " + address + ":" + port + " !!!");
+			System.exit( 1 );
+		}
+
 		OutputStream output = socket.getOutputStream();
 		InputStreamReader reader = new InputStreamReader( socket.getInputStream() );
 
@@ -149,7 +155,7 @@ public class DOM_DEMO extends DOM_SHRD {
 			if ( "".equals( token ) )
 				throw new Exception( "Invalid connection information !!!");
 
-			String url = "http://atlastk.org/atlas.php?_token=" + token;
+			String url = "http://" + address + httpPort + "/atlas.php?_token=" + token;
 
 			if ( Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE) ) {
 				System.out.println( "Open " + url + " in a web browser, if not already done. Enjoy!");
