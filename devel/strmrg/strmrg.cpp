@@ -297,10 +297,11 @@ qRH
 	xtf::utf__ UTF;
 	bso::char__ C = 0;
 	xtf::error__ Error = xtf::e_Undefined;
+	bso::sBool Cont = true;
 qRB
 	String.Init();
 
-	while ( !Flow.EndOfFlow( Error ) ) {
+	while ( Cont && !Flow.EndOfFlow( Error ) ) {
 		UTF.Init();
 		C = Flow.Get( UTF );
 		if ( Trace == tEscape ) {
@@ -330,7 +331,7 @@ qRB
 			} else if ( C == Tokens.End ) {
 				if ( String.Amount() != 0 )
 					Table.Append( String );
-				qRReturn;
+				Cont = false;
 			} else {
 				String.Append( (bso::char__ *)UTF.Data, UTF.Size );
 				Trace = tOther;
@@ -338,11 +339,13 @@ qRB
 		}
 	}
 
-	if ( ( Error == xtf::e_NoError ) && ( Trace != tEscape ) ) {
-		if ( String.Amount() != 0 )
-			Table.Append( String );
-	} else
-		Success = false;
+	if ( Cont ) {
+		if ( (Error == xtf::e_NoError) && (Trace != tEscape) ) {
+			if ( String.Amount() != 0 )
+				Table.Append( String );
+		} else
+			Success = false;
+	}
 
 qRR
 qRT
