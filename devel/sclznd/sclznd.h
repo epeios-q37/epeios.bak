@@ -29,6 +29,7 @@
 # endif
 
 # include "bso.h"
+# include "cpe.h"
 # include "err.h"
 # include "n4znd.h"
 # include "scln4a.h"
@@ -36,6 +37,13 @@
 
 namespace sclznd {
 	typedef scln4a::sCaller sCaller_;
+# ifdef CPE_F_32BITS
+	typedef bso::sS32 sLong;
+# endif
+
+# ifdef CPE_F_64BITS
+	typedef bso::sS64 sLong;
+# endif
 
 	class sCaller
 	: public sCaller_ {
@@ -45,7 +53,7 @@ namespace sclznd {
 		{
 			C_().GetArgument( Index_++, n4znd::tString, &String );
 		}
-		void Get_( bso::sS64 &Long )
+		void Get_( sLong &Long )
 		{
 			C_().GetArgument( Index_++, n4znd::tLong, &Long );
 		}
@@ -82,7 +90,7 @@ namespace sclznd {
 
 			return Driver;
 		}
-		void Get( bso::sS64 &Long )
+		void Get( sLong &Long )
 		{
 			Get_( Long );
 		}
@@ -108,7 +116,7 @@ namespace sclznd {
 		{
 			C_().SetReturnValue( n4znd::tString, &String );
 		}
-		void SetReturnValue( bso::sS64 Long )
+		void SetReturnValue( sLong Long )
 		{
 			C_().SetReturnValue( n4znd::tLong, &Long );
 		}

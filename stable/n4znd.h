@@ -47,7 +47,7 @@ namespace n4znd {
 	qENUM( Type ) {
 		tString,
 		tStream,
-		tLong,
+		tLong,	// Only available integer type !
 		tBool,
 		tStrings,
 		t_amount,

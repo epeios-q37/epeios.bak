@@ -20,7 +20,6 @@
 #include "xdhp.h"
 
 #include "registry.h"
-#include "treep.h"
 
 #include "proxy.h"
 
@@ -204,12 +203,6 @@ qRT;
 qRE;
 	return scljre::Null();
 }
-
-#define BEGIN( request )\
-
-#define SWITCH	Data.Sent.WriteEnd();Data.Recv.ReadBegin(); proxy::rReturn &Return = Data.Recv.Return
-
-#define END	Data.Recv.ReadEnd()
 
 SCLJRE_F( xdhp::Launch )
 {

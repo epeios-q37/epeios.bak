@@ -40,10 +40,8 @@
 			<Module>prxy_cmn</Module>
 			<Module>prxy_recv</Module>
 			<Module>prxy_send</Module>
-			<Module>tree</Module>
 		</Modules>
 		<Module>registry</Module>
-		<Module>treep</Module>
 		<Module>xdhp</Module>
 	</Modules>
 	<SourceDirs>
@@ -51,6 +49,9 @@
 		<SourceDir>../..</SourceDir>
 	</SourceDirs>
 	<Files>
+		<File>XDHqDEMO.php</File>
+		<File>XDHqPROD.php</File>
+		<File>XDHqSHRD.php</File>
   <!-- NOTA : '*.php' files will automatically be packed as such. -->
   <!--File Pack="No">XDHq.php</File-->
 		<Files Group="Atlas">

@@ -41,10 +41,8 @@
 			<Module>prxy_cmn</Module>
 			<Module>prxy_recv</Module>
 			<Module>prxy_send</Module>
-			<Module>tree</Module>
 		</Modules>
 		<Module>registry</Module>
-		<Module>treep</Module>
 		<Module>xdhp</Module>
 	</Modules>
 	<Files>

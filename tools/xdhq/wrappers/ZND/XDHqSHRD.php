@@ -18,9 +18,88 @@
 	along with XDHq.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-require( 'XDHqPROD.php' );
+function getZNDq() {
+	if (getenv("EPEIOS_SRC") === false)
+		$zndq_path = realpath(dirname(__FILE__)) . '/';
+	else {
+		switch (strtoupper(substr(php_uname('s') , 0, 3))) {
+			case "WIN":
+				$epeios_path = "h:\\hg\\epeios\\";
+			break;
+			case "LIN":
+				$epeios_path = "/home/csimon/hg/epeios/";
+			break;
+			case "DAR":
+				$epeios_path = "/Users/csimon/hg/epeios/";
+			break;
+			default:
+				echo "Unknown OS !!!\n";
+			break;
+		}
 
-class XDHqDOM extends XDHqDOM_PROD {
+		$zndq_path = $epeios_path . "tools/zndq/";
+	}
+
+	require( $zndq_path . "ZNDq.php");
+}
+
+getZNDq();
+
+class XDHqWrapper extends ZNDq {
+	static private $launcher;
+	static function init() {
+		self::$launcher = parent::register_( "xdhq", get_class() );
+	}
+	static public function componentInfo() {
+		return parent::componentInfo_( self::$launcher );
+	}
+	static protected function _call( $id, ...$args ) {
+		return parent::call_( self::$launcher, $id, ...$args );
+	}
+}
+
+XDHqWrapper::init();
+
+class XDHq extends XDHqWrapper {
+	static function returnArgument($argument) {
+		return parent::_call(0, $argument);
+	}
+	static function launch ( string $newSessionAction ) {
+		parent::_call( 7, "53752", $newSessionAction );
+	}
+}
+
+class XDHQTree extends XDHqWrapper {
+	private $core;
+	function __construct() {
+		$this->core = parent::_call( 1 );
+	}
+	private function call( $id, ...$args ) {
+		return parent::_call( $id, $this->core, ...$args );
+	}
+	function __destruct() {
+		self::call( 2 );
+	}
+	function pushTag( string $name ) {
+		self::call( 3, $name );
+	}
+	function popTag() {
+		self::call( 4 );
+	}
+	function putValue( string $value )
+	{
+		self::call( 5, $value );
+	}
+	function putAttribute( string $name, string $value ) {
+		self::call( 6, $name, $value );
+	}
+	function getCore() {
+		return $this->core;
+	}
+}
+
+class XDHqDOM extends XDHqWrapper {
+	private $core;
 	private function split( array $keysAndValues, array &$keys, array &$values ) {
 		foreach ($keysAndValues as $key => $value) {
 			$keys[] = $key;
@@ -34,10 +113,24 @@ class XDHqDOM extends XDHqDOM_PROD {
 
 		while ( $i < $count ) {
 			$keysAndValues[$keys[$i]] = $values[$i];
+
 			$i++;
 		}
 
 		return $keysAndValues;
+	}
+	function __construct() {
+		$this->core = parent::_call( 8 );
+	}
+	private function call( $id, ...$args ) {
+		return parent::_call( $id, $this->core, ...$args );
+	}
+	function getAction( &$id ) {
+		$return = self::call( 9 );
+
+		$id = $return[0];
+
+		return $return[1];
 	}
 	function execute( $script ) {
 		return self::call( 10 );
@@ -46,16 +139,13 @@ class XDHqDOM extends XDHqDOM_PROD {
 		self::call( 11, $message );
 	}
 	function confirm( string $message ) {
-		return self::call( "Confirm_1", 1, 1, $message, 0 ) == "true";
+		return self::call( 12, $message );
 	}
-	private function setLayout_(string  $id, $tree, string $xslFilename ) {
-		self::call( "SetLayout_1", 0, 3, $id, $tree, $xslFilename, 0 );
-	}
-	function setLayout(string  $id, string $html ) {
-		self::setLayout_( $id, $html, "" );
+	function setLayout(string  $id, XDHqTree $tree, string $xslFilename ) {
+		self::call( 13, $id, $tree->getCore(), $xslFilename );
 	}
 	function getContents( array $ids ) {
-		return self::unsplit($ids,self::call( "GetContents_1", 2, 0, 1, $ids ));
+		return self::unsplit($ids,self::call( 14,$ids ));
 	}
 	function getContent( string $id ) {
 		return self::getContents( [$id] )[$id];
@@ -66,7 +156,7 @@ class XDHqDOM extends XDHqDOM_PROD {
 
 		self::split( $idsAndContents, $ids, $contents );
 
-		self::call( "SetContents_1", 0, 0, 2, $ids, $contents );
+		self::call( 15, $ids, $contents );
 	}
 	function setContent( string $id, string $content ) {
 		self::setContents( [ $id => $content ] );

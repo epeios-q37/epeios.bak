@@ -293,7 +293,7 @@ namespace {
 
 	void Get_(
 		zval &Val,
-		bso::sS64 &Long )
+		zend_long &Long )
 	{
 		if ( Z_TYPE( Val ) != IS_LONG )
 			qRGnr();
@@ -397,7 +397,7 @@ namespace {
 				Get_<fdr::rRWDriver *>( varargs_, Index, Value );
 				break;
 			case n4znd::tLong:
-				Get_<bso::sS64>( varargs_, Index, Value );
+				Get_<zend_long>( varargs_, Index, Value );
 				break;
 			case n4znd::tBool:
 				Get_<bso::sBool>( varargs_, Index, Value );

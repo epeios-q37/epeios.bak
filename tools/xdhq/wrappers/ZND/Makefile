@@ -41,11 +41,10 @@ mods += xtf llio dlbrry n4all n4znd
 mods += plgn plgncore sck 
 mods += csdbns csdcmn csdmxb csdmxs csdmns 
 mods += csdscb 
-mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
-mods += scln4a sclznd 
+mods += sclargmnt scli sclmisc sclerror scllocale 
+mods += sclrgstry scln4a sclznd 
 mods += prtcl proxy prxy_cmn prxy_recv prxy_send 
-mods += tree 
-mods += registry treep xdhp 
+mods += registry xdhp 
 
 pmods += pllio 
 
@@ -398,7 +397,7 @@ ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20180417"\"
+copt += -DVERSION=\""20180807"\"
 copt += -DCOPYRIGHT_YEARS=\""2007-2017"\"
 copt += -DIDENTIFIER=\"""\"
 

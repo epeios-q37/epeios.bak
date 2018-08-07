@@ -20,10 +20,6 @@
 package info.q37.xdhq.dom;
 
 public abstract class DOM_SHRD {
-	public enum GUY {
-		NONE, DESKTOP, WEB, DESKTOP_AND_WEB, DEFAULT
-	};
-
 	public enum Type {
 		VOID( 0 ), STRING( 1 ), STRINGS( 2 ), UNDEFINED( 3 );
 	    private int value;

@@ -20,7 +20,6 @@
 #include "xdhp.h"
 
 #include "registry.h"
-#include "treep.h"
 
 #include "proxy.h"
 
@@ -170,204 +169,65 @@ qRE;
 
 #define END	Data.Recv.ReadEnd()
 
-SCLZND_F( xdhp::Execute )
+SCLZND_F( xdhp::Launch )
 {
-	BEGIN( Execute );
-
-	Caller.Get( Arguments.Script );
-
-	SWITCH;
-
-	Caller.SetReturnValue( Return.GetString() );
-
-	END;
-}
-
-
-
-SCLZND_F( xdhp::Alert )
-{
-	BEGIN( Alert );
-
-	Caller.Get( Arguments.Message );
-
-	SWITCH;
-	END;
-}
-
-SCLZND_F( xdhp::Confirm )
-{
-	BEGIN( Confirm );
-
-	Caller.Get( Arguments.Message );
-	
-	SWITCH;
-
-	Caller.SetReturnValue( Return.GetString() == "true" );
-
-	END;
-}
-
-SCLZND_F( xdhp::SetLayout )
-{
-	BEGIN( SetLayout );
-
-	Caller.Get( Arguments.Id );
-	treep::GetXML( Caller, Arguments.XML );
-	Caller.Get( Arguments.XSLFilename );
-
-	SWITCH;
-	END;
-}
-
-SCLZND_F( xdhp::GetContents )
-{
-	BEGIN( GetContents );
-
-	Caller.Get( Arguments.Ids );
-
-	SWITCH;
-
-	Caller.SetReturnValue( Return.GetStrings() );
-
-	END;
-}
-
-SCLZND_F( xdhp::SetContents )
-{
-	BEGIN( SetContents );
-
-	Caller.Get( Arguments.Ids, Arguments.Contents );
-
-	SWITCH;
-
-	END;
-}
-
-SCLZND_F( xdhp::DressWidgets )
-{
-	BEGIN( DressWidgets );
-
-	Caller.Get( Arguments.Id );
-
-	SWITCH;
-	END;
-}
-
-SCLZND_F( xdhp::AddClasses )
-{
-	BEGIN( AddClasses );
-
-	Caller.Get( Arguments.Ids, Arguments.Classes );
-
-	SWITCH;
-	END;
-}
-
-SCLZND_F( xdhp::RemoveClasses )
-{
-	BEGIN( RemoveClasses );
-
-	Caller.Get( Arguments.Ids, Arguments.Classes );
-
-	SWITCH;
-	END;
-}
-
-SCLZND_F( xdhp::ToggleClasses )
-{
-	BEGIN( ToggleClasses );
-
-	Caller.Get( Arguments.Ids, Arguments.Classes );
-
-	SWITCH;
-	END;
-}
-
-SCLZND_F( xdhp::EnableElements )
-{
-	BEGIN( EnableElements );
-
-	Caller.Get( Arguments.Ids );
-
-	SWITCH;
-	END;
-}
-
-SCLZND_F( xdhp::DisableElements )
-{
-	BEGIN( DisableElements );
-
-	Caller.Get( Arguments.Ids );
-
-	SWITCH;
-	END;
-}
-
-SCLZND_F( xdhp::SetAttribute )
-{
-	BEGIN( SetAttribute );
-
-	Caller.Get( Arguments.Id, Arguments.Name, Arguments.Value );
-
-	SWITCH;
-	END;
-}
-
-SCLZND_F( xdhp::GetAttribute )
-{
-	BEGIN( GetAttribute );
-
-	Caller.Get( Arguments.Id, Arguments.Name );
-
-	SWITCH;
-
-	Caller.SetReturnValue( Return.GetString() );
-
-	END;
-}
-
-SCLZND_F( xdhp::RemoveAttribute )
-{
-	BEGIN( RemoveAttribute );
-
-	Caller.Get( Arguments.Id, Arguments.Name );
-
-	SWITCH;
-	END;
-}
-
-SCLZND_F( xdhp::SetProperty )
-{
-	BEGIN( SetAttribute );
-
-	Caller.Get( Arguments.Id, Arguments.Name, Arguments.Value );
-
-	SWITCH;
-	END;
-}
-
-SCLZND_F( xdhp::GetProperty )
-{
-	BEGIN( GetProperty );
-
-	Caller.Get( Arguments.Id, Arguments.Name );
-
-	SWITCH;
-
-	Caller.SetReturnValue( Return.GetString() );
-
-	END;
-}
-
-SCLZND_F( xdhp::Focus )
-{
-	BEGIN( Focus );
-
-	Caller.Get( Arguments.Id );
-
-	SWITCH;
-	END;
+qRH;
+	sclznd::sLong RawType = 0, Amount = 0;
+	str::wString String;
+	str::wStrings Strings;
+qRB;
+	rData_ &Data = GetData_( Caller );
+	Data.Sent.WriteBegin();
+	Data.Request = prxy_cmn::rLaunch;
+	proxy::rNewArguments &Arguments = Data.Sent.NewArguments;
+	Arguments.Init();
+
+	Caller.Get( Arguments.Command );
+	Caller.Get( RawType );
+
+	if ( RawType >= prxy_recv::t_amount )
+		qRGnr();
+
+	Data.ReturnType = (prxy_recv::eType)RawType;
+
+	Caller.Get( Amount );
+
+	while ( Amount-- ) {
+		String.Init();
+		Caller.Get( String );
+		Arguments.Strings.Append( String );
+	}
+
+	Caller.Get( Amount );
+
+	while ( Amount-- ) {
+		Strings.Init();
+		Caller.Get( Strings );
+		Arguments.XStrings.Append( Strings );
+	}
+
+	Data.Sent.WriteEnd();
+	Data.Recv.ReadBegin();
+	proxy::rReturn &Return = Data.Recv.Return;
+
+	switch ( Data.ReturnType ) {
+	case prxy_recv::tVoid:
+		break;
+	case prxy_recv::tString:
+		Caller.SetReturnValue( Return.GetString() );
+		break;
+	case prxy_recv::tStrings:
+		Caller.SetReturnValue( Return.GetStrings() );
+		break;
+	default:
+		qRGnr();
+		break;
+	}
+
+	Data.Recv.ReadEnd();
+qRR;
+qRT;
+qRE;
 }
 
 qGCTOR( xdhp )

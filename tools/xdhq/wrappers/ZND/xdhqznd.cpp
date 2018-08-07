@@ -20,7 +20,6 @@
 #include "xdhqznd.h"
 
 #include "registry.h"
-#include "treep.h"
 #include "xdhp.h"
 
 #include "iof.h"
@@ -58,12 +57,7 @@ namespace {
 const scli::sInfo &sclznd::SCLZNDRegister( sclznd::sRegistrar &Registrar )
 {
 	Registrar.Register( ReturnArgument_ );	// 0.
-	Registrar.Register( treep::New, treep::Delete, treep::PushTag, treep::PopTag, treep::PutValue, treep::PutAttribute );	// 1 - 6.
-	Registrar.Register( xdhp::Listen, xdhp::New, xdhp::GetAction, xdhp::Execute );	// 7 - 10.
-	Registrar.Register( xdhp::Alert, xdhp::Confirm, xdhp::SetLayout, xdhp::GetContents, xdhp::SetContents, xdhp::DressWidgets ); // 11 - 16.
-	Registrar.Register( xdhp::AddClasses, xdhp::RemoveClasses, xdhp::ToggleClasses, xdhp::EnableElements, xdhp::DisableElements );	// 17 - 21.
-	Registrar.Register( xdhp::SetAttribute, xdhp::GetAttribute, xdhp::RemoveAttribute, xdhp::SetProperty, xdhp::GetProperty );	// 22 - 26.
-	Registrar.Register( xdhp::Focus );	// 27.
+	Registrar.Register( xdhp::Listen, xdhp::New, xdhp::GetAction, xdhp::Launch );	// 1 - 4.
 
 	return xdhqznd::Info;
 }

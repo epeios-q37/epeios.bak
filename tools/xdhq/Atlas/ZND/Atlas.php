@@ -147,8 +147,6 @@ class Atlas extends XDHq {
 	}
 };
 
-class AtlasTree extends XDHqTree {};
-
 class AtlasDOM extends XDHqDOM {};
 
 ?>
