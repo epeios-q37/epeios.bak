@@ -35,6 +35,11 @@
 # include "tol.h"
 
 namespace crt {
+	using ctn::const_mono_item;
+	using ctn::const_poly_item;
+	using ctn::volatile_mono_item;
+	using ctn::volatile_poly_item;
+
 	template <typename type, typename row> qTCLONEd( ctn::mono_container_<qCOVER2(type,row)>, dMonoCrate );
 	qW2( MonoCrate );
 

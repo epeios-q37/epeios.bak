@@ -78,36 +78,30 @@ id__ stsfsm::Add(
 status__ stsfsm::parser__::Handle( bso::u8__ C )
 {
 	status__ Status = s_Undefined;
-qRH;
 	crow__ Next = qNIL;
-qRB;
+	sCard_ Card;
 
-	_A().Lock();
+	if ( Current_ == qNIL )
+		Current_ = A_().First();
 
-	if ( _Current == qNIL )
-		_Current = _A().First();
-
-	if ( _Current == qNIL ) {
+	if ( Current_ == qNIL ) {
 		Status = sLost;	// L'automate est vide.
 	} else {
-		Next = _A()(_Current).Get( C );
+		Card.Init( A_() );
+		Next = Card(Current_).Get( C );
 
 		if ( Next == qNIL ) {
 			Status = sLost;
 		} else {
-			_Current = Next;
+			Current_ = Next;
 
-			if ( _A()(_Current).GetId() == UndefinedId )
+			if ( Card(Current_).GetId() == UndefinedId )
 				Status = sPending;
 			else
 				Status = sMatch;
 		}
 	}
 
-qRR;
-qRT;
-	_A().Unlock();
-qRE;
 	return Status;
 }
 

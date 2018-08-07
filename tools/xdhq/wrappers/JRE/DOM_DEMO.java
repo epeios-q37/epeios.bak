@@ -25,8 +25,8 @@ import java.util.*;
 import java.awt.Desktop;
 
 public class DOM_DEMO extends DOM_SHRD {
-//	static private String address = "atlastk.org"; static private String httpPort = "";
-	static private String address = "localhost"; static private String httpPort = ":8080";
+	static private String address = "atlastk.org"; static private String httpPort = "";
+//	static private String address = "localhost"; static private String httpPort = ":8080";
 	static private int port = 53800;
 	static private String token = "";
 	private Socket socket;

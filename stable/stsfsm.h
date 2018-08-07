@@ -140,56 +140,8 @@ namespace stsfsm {
 		E_RWDISCLOSE_( fId, Id );
 	};
 
-	typedef ctn::qMCONTAINERd( dCard, sCRow ) dAutomat_;
-
-	class dAutomat
-	: public dAutomat_
-	{
-	public:
-		struct s
-		: public dAutomat_::s
-		{
-			mutable mtx::rHandler Mutex;
-		} &S_;
-		void reset( bso::sBool P = true )
-		{
-			if ( P ) {
-				if ( S_.Mutex != mtx::Undefined )
-					mtx::Delete( S_.Mutex );
-			}
-
-			dAutomat_::reset( P );
-
-			S_.Mutex = mtx::Undefined;
-		}
-		dAutomat( s &S )
-			: S_( S ),
-			dAutomat_( S )
-		{}
-		dAutomat &operator =( const dAutomat &A )
-		{
-			qRFwk();
-			// It doesn't make sense to copy this object. 'dAutmat_', yes.
-
-			return *this;	// To avoid a warning.
-		}
-		void Init( void )
-		{
-			reset();
-
-			S_.Mutex = mtx::Create();
-
-			dAutomat_::Init();
-		}
-		void Lock( void ) const
-		{
-			mtx::Lock( S_.Mutex );
-		}
-		void Unlock( void ) const
-		{
-			mtx::Unlock( S_.Mutex );
-		}
-	};
+	typedef ctn::qMCONTAINERd( dCard, sCRow ) dAutomat;
+	typedef crt::qCMITEMs( dCard, sCRow ) sCard_;
 
 	qW( Automat );
 
@@ -249,29 +201,22 @@ namespace stsfsm {
 
 	class parser__ {
 	private:
-		const automat_ *_Automat;
-		crow__ _Current;
-		const automat_ &_A( void ) const
-		{
-			if ( _Automat == NULL )
-				qRFwk();
-
-			return *_Automat;
-		}
+		crow__ Current_;
+		qCRMV( automat_, A_, Automat_ );
 		status__ _Handle(
 			const str::string_ &Pattern,
 			sdr::row__ *LostPosition );
 	public:
 		void reset( bso::bool__ = true )
 		{
-			_Automat = NULL;
-			_Current = qNIL;
+			Automat_ = NULL;
+			Current_ = qNIL;
 		}
 		E_CVDTOR( parser__ );
 		void Init( const automat_ &Automat )
 		{
-			_Automat = &Automat;
-			_Current = qNIL;
+			Automat_ = &Automat;
+			Current_ = qNIL;
 		}
 		status__ Handle( bso::u8__ C );
 		status__ Handle( const str::string_ &Pattern )
@@ -286,15 +231,11 @@ namespace stsfsm {
 		}
 		id__ GetId( void ) const
 		{
-			id__ Id = UndefinedId;
+			sCard_ Card;
 
-			_A().Lock();
+			Card.Init( A_() );
 
-			Id = _A()( _Current ).GetId();
-
-			_A().Unlock();
-
-			return Id;
+			return Card( Current_ ).GetId();
 		}
 	};
 
