@@ -135,7 +135,7 @@ public class DOM_DEMO extends DOM_SHRD {
 
 	public DOM_DEMO() throws Exception {
 		try {
-		socket = new Socket( address, port );
+			socket = new Socket( address, port );
 		} catch ( Exception e ) {
 			System.out.println( "Unable to connect to " + address + ":" + port + " !!!");
 			System.exit( 1 );
@@ -165,7 +165,6 @@ public class DOM_DEMO extends DOM_SHRD {
 		} else {
 			if ( !getString_( reader ).equals( token ) )
 				throw new Exception( "Unmatched token !!!");
-
 		}
 
 		getString_( reader );	// Protocol version.

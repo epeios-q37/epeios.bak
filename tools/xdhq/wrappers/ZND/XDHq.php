@@ -18,9 +18,12 @@
 	along with XDHq.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-require( 'XDHqPROD.php' );
+//require( 'XDHqPROD.php' );
+require( 'XDHqDEMO.php' );
 
-class XDHqDOM extends XDHqDOM_PROD {
+
+//class XDHqDOM extends XDHqDOM_PROD {
+class XDHqDOM extends XDHqDOM_DEMO {
 	private function split( array $keysAndValues, array &$keys, array &$values ) {
 		foreach ($keysAndValues as $key => $value) {
 			$keys[] = $key;

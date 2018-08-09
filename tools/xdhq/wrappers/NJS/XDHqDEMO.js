@@ -21,6 +21,7 @@
 
 // Types of the response.
 const shared = require('./XDHqSHRD.js');
+const net = require('net');
 
 const types = shared.types;
 const open = shared.open;
@@ -263,8 +264,6 @@ function launch(createCallback, newSessionAction, callbacks, webURL) {
 	setTimeout(() => pseudoServer(createCallback, newSessionAction, callbacks), 2000);
 
 }
-
-const net = require('net');
 
 function add(data, argument) {
 	if (typeof (argument) === "string")

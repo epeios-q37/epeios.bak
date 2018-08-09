@@ -64,7 +64,7 @@ class XDHq extends XDHqWrapper {
 	static function returnArgument($argument) {
 		return parent::_call(0, $argument);
 	}
-	static function launch ( string $newSessionAction ) {
+	static function launch( string $newSessionAction ) {
 		parent::_call( 1, "53752", $newSessionAction );
 	}
 }

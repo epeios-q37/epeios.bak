@@ -60,6 +60,8 @@ while ( true ) {
 	case "Clear":
 		if ( $dom->confirm( "Are you sure?" ) ) $dom->setContents( [ "input" => "", "name" => "" ] );
 		break;
+	default:
+		throw new Exception( "Unknown action '" . $action . "' !!!");
 	}
 }
 

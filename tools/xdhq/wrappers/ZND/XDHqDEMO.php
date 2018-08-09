@@ -18,209 +18,195 @@
 	along with XDHq.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-function getZNDq() {
-	if (getenv("EPEIOS_SRC") === false)
-		$zndq_path = realpath(dirname(__FILE__)) . '/';
-	else {
-		switch (strtoupper(substr(php_uname('s') , 0, 3))) {
-			case "WIN":
-				$epeios_path = "h:\\hg\\epeios\\";
-			break;
-			case "LIN":
-				$epeios_path = "/home/csimon/hg/epeios/";
-			break;
-			case "DAR":
-				$epeios_path = "/Users/csimon/hg/epeios/";
-			break;
-			default:
-				echo "Unknown OS !!!\n";
-			break;
+$newSessionAction = '';
+
+class XDHq {
+	static function launch( string $newSessionAction ) {
+		$GLOBALS["newSessionAction"] = $newSessionAction;
+	}
+}
+
+class XDHqDOM_DEMO {
+	private $socket;
+	private $token = "";
+	private $firstLaunch = true;
+	private function writeSize_( $socket, $size ) {
+		$result = pack( "C", $size & 0x7f );
+		$size >>= 7;
+
+		while ( $size != 0 ) {
+			$result = pack( "C", ( $size & 0x7f ) | 0x80 ) . $result;
+			$size >>= 7;
 		}
 
-		$zndq_path = $epeios_path . "tools/zndq/";
+		fwrite( $socket, $result );
 	}
-
-	require( $zndq_path . "ZNDq.php");
-}
-
-getZNDq();
-
-class XDHqWrapper extends ZNDq {
-	static private $launcher;
-	static function init() {
-		self::$launcher = parent::register_( "xdhq", get_class() );
+	private function writeString_( $string, $socket ) {
+		$this->writeSize_( $socket, strlen( $string ) );
+		fwrite( $socket, $string );
 	}
-	static public function componentInfo() {
-		return parent::componentInfo_( self::$launcher );
-	}
-	static protected function _call( $id, ...$args ) {
-		return parent::call_( self::$launcher, $id, ...$args );
-	}
-}
-
-XDHqWrapper::init();
-
-class XDHq extends XDHqWrapper {
-	static function returnArgument($argument) {
-		return parent::_call(0, $argument);
-	}
-	static function launch ( string $newSessionAction ) {
-		parent::_call( 7, "53752", $newSessionAction );
-	}
-}
-
-class XDHQTree extends XDHqWrapper {
-	private $core;
-	function __construct() {
-		$this->core = parent::_call( 1 );
-	}
-	private function call( $id, ...$args ) {
-		return parent::_call( $id, $this->core, ...$args );
-	}
-	function __destruct() {
-		self::call( 2 );
-	}
-	function pushTag( string $name ) {
-		self::call( 3, $name );
-	}
-	function popTag() {
-		self::call( 4 );
-	}
-	function putValue( string $value )
-	{
-		self::call( 5, $value );
-	}
-	function putAttribute( string $name, string $value ) {
-		self::call( 6, $name, $value );
-	}
-	function getCore() {
-		return $this->core;
-	}
-}
-
-class XDHqDOM extends XDHqWrapper {
-	private $core;
-	private function split( array $keysAndValues, array &$keys, array &$values ) {
-		foreach ($keysAndValues as $key => $value) {
-			$keys[] = $key;
-			$values[] = $value;
-		}
-	}
-	private function unsplit( array $keys, array $values ) {
-		$count = count( $keys );
+	private function writeStrings_( $strings, $socket ) {
+		$count = count( $strings );
 		$i = 0;
-		$keysAndValues = [];
+
+		$this->writeSize_( $socket, $count );
 
 		while ( $i < $count ) {
-			$keysAndValues[$keys[$i]] = $values[$i];
+			$this->writeString_( $strings[$i], $socket );
+			$i++;
+		}
+	}
+	private function getByte_( $socket ) {
+		$dummy = unpack( "C", fgetc( $socket ) );
 
+		var_dump( $dummy );
+
+		return $dummy[1];
+	}
+	private function getSize_( $socket ) {
+		$byte = $this->getByte_( $socket );
+		$size = $byte & 0x7f;
+		
+		while ( $byte & 0x80 ) {
+			$byte = $this->getByte_( $socket );
+
+			$size = ($size << 7) + ( $byte & 0x7f );
+		}
+
+		return $size;
+	}
+	private function getString_( $socket ) {
+		$size = $this->getSize_( $socket );
+
+		if ( $size ) {
+			$string =  fread( $socket, $size );
+			echo ( "Size: " . $size . ";content :");
+			var_dump( $string );
+			return $string;
+		} else
+			return "";
+	}
+	private function getStrings_( $socket ) {
+		$amount = $this->getSize_( $socket );
+
+		while( $amount-- ) {
+			$strings[] = $this->getString_( $socket );
+		}
+
+		return $strings;
+	}
+	private function getQuery_( $socket ) {
+		$c = fgetc( $socket );
+		$string = "";
+
+		echo( "Grup\n" );
+
+		var_dump( $c );
+
+		echo( "Grop\n" );
+
+		while ( !empty( $c ) ) {
+			$string .= $c;
+			$c = fgetc( $socket );
+		}
+
+		return $string;
+	}
+	private function standBy_( $socket ) {
+		fwrite( $this->socket,  pack( "a*x", "StandBy_1" ) );
+	}
+	function __construct() {
+		$address = "atlastk.org";$httpPort = "";
+//		$address = "localhost";$httpPort = ":8080";
+		$port = 53800;
+
+		$this->socket = fsockopen( $address, $port, $errno, $errstr );
+
+		if (!$this->socket)
+		    throw new Exception( "$errstr ($errno)\n" );
+
+		$this->writeString_( $this->token, $this->socket );
+
+		fflush( $this->socket );
+
+		if ( empty($this->token) ) {
+			$this->token = $this->getString_( $this->socket );
+
+			if ( empty($this->token) )
+				throw new Exception( "Invalid connection information !!!");
+
+			echo "Token id : " . $this->token . "\n";
+			exec( "start http://" . $address . $httpPort . "/atlas.php?_token=" . $this->token );
+		} else {
+			if ( $this->getString_( $this.socket) != $this->token )
+				throw new Exception( "Unmatched token !!!");
+		}
+
+		echo "Prot: '" . $this->getString_( $this->socket ) . "'";	// Protocol version.
+		echo "Lang: '" . $this->getQuery_( $this->socket ) . "'";	// Language.
+
+		$this->standBy_( $this->socket );
+		fflush( $this->socket );
+	}
+	function getAction( &$id ) {
+		if ( !$this->firstLaunch ) {
+			$this->standBy_( $this->socket );
+			fflush( $this->socket );
+		} else
+			$this->firstLaunch = false;
+
+		var_dump( $this->getQuery_( $this->socket ) );
+
+		$id = $this->getString_( $this->socket );
+
+		$action = $this->getString_( $this->socket );
+
+		if( empty( $action ) )
+			$action = $GLOBALS["newSessionAction"];
+
+		var_dump( $id, $action );
+
+		return $action;
+	}
+	function call( $command, $type, ...$args ) {
+		var_dump( $command, $type, $args );
+
+		$i = 0;
+
+		fwrite( $this->socket, pack( "a*x", $command ) );
+
+		$amount = $args[$i];
+		$i++;
+
+		while ( $amount-- ) {
+			$this->writeString_( $args[$i], $this->socket );
 			$i++;
 		}
 
-		return $keysAndValues;
-	}
-	function __construct() {
-		$this->core = parent::_call( 8 );
-	}
-	private function call( $id, ...$args ) {
-		return parent::_call( $id, $this->core, ...$args );
-	}
-	function getAction( &$id ) {
-		$return = self::call( 9 );
+		$amount = $args[$i];
+		$i++;
 
-		$id = $return[0];
+		while ( $amount-- ) {
+			$this->writeStrings_( $args[$i], $this->socket );
+			$i++;
+		}
 
-		return $return[1];
-	}
-	function execute( $script ) {
-		return self::call( 10 );
-	}
-	function alert( string $message ) {
-		self::call( 11, $message );
-	}
-	function confirm( string $message ) {
-		return self::call( 12, $message );
-	}
-	function setLayout(string  $id, XDHqTree $tree, string $xslFilename ) {
-		self::call( 13, $id, $tree->getCore(), $xslFilename );
-	}
-	function getContents( array $ids ) {
-		return self::unsplit($ids,self::call( 14,$ids ));
-	}
-	function getContent( string $id ) {
-		return self::getContents( [$id] )[$id];
-	}
-	function setContents( array $idsAndContents ) {
-		$ids = [];
-		$contents = [];
+		fflush( $this->socket );
 
-		self::split( $idsAndContents, $ids, $contents );
+		var_dump( $this->getQuery_( $this->socket ) );
 
-		self::call( 15, $ids, $contents );
-	}
-	function setContent( string $id, string $content ) {
-		self::setContents( [ $id => $content ] );
-	}
-	function dressWidgets( string $id ) {
-		return self::call( 16, $id );
-	}
-	private function handleClasses( $fid, array $idsAndClasses ) {
-		$ids = [];
-		$classes = [];
-
-		self::split( $idsAndClasses, $ids, $classes );
-		self::call( $fid, $ids, $classes );
-	}
-	private function handleClass( $fid, $id, $class ) {
-		self::handleClasses( $fid, [ $id => $class ] );
-	}
-	function addClasses( array $idsAndClasses ) {
-		self::handleClasses( 17, $idsAndClasses );
-	}
-	function addClass( string $id, string $class  ) {
-		self::handleClass( 17, $id, $class );
-	}
-	function removeClasses( array $idsAndClasses ) {
-		self::handleClasses( 18, $idsAndClasses );
-	}
-	function removeClass( string $id, string $class  ) {
-		self::handleClass( 18, $id, $class );
-	}
-	function toggleClasses( array $idsAndClasses ) {
-		self::handleClasses( 19, $idsAndClasses );
-	}
-	function toggleClass( string $id, string $class  ) {
-		self::handleClass( 19, $id, $class );
-	}
-	function enableElements( array $ids ) {
-		self::call( 20, $ids );
-	}
-	function enableElement( string $id ) {
-		self::enableElements( array( $id ) );
-	}
-	function disableElements( array $ids ) {
-		self::call( 21, $ids  );
-	}
-	function disableElement( string $id ) {
-		self::disableElements( array( $id ) );
-	}
-	function setAttribute( string $id, string $name, string $value ) {
-		return self::call( 22, $id, $value );
-	}
-	function getAttribute( string $id, string $name ) {
-		return self::call( 23, $id, $name );
-	}
-	function removeAttribute( string $id, string $name ) {
-		self::call( 24, $id );
-	}
-	function setProperty( string $id, string $name, string $value ) {
-		return self::call( 25, $id, $name, $value );
-	}
-	function getProperty( string $id, string $name ) {
-		return self::call( 26, $id, $name );
-	}
-	function focus( string $id ) {
-		self::call( 27, $id );
+		switch ( $type ) {
+		case 0:
+			break;
+		case 1:
+			return $this->getString_( $this->socket );
+			break;
+		case 2:
+			return $this->getStrings_( $this->socket );
+			break;
+		default:
+			throw new Exception( "Unknown return type !!!");
+		}
 	}
 }
 ?>
