@@ -54,6 +54,9 @@ class XDHqDOM extends XDHqDOM_DEMO {
 	private function setLayout_(string  $id, $tree, string $xslFilename ) {
 		self::call( "SetLayout_1", 0, 3, $id, $tree, $xslFilename, 0 );
 	}
+	function headUp(string $html ) {
+		self::setLayout_( "_xdh_head", $html, "" );
+	}
 	function setLayout(string  $id, string $html ) {
 		self::setLayout_( $id, $html, "" );
 	}

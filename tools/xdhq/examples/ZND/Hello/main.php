@@ -52,6 +52,7 @@ $dom = new AtlasDOM();
 while ( true ) {
 	switch( $dom->getAction( $id ) ) {
 	case "Connect":
+		$dom->headUp( file_get_contents( "h:/hg/epeios/tools/xdhq/examples/common/Hello/Head.html") );
 		$dom->setLayout( "", file_get_contents( "h:/hg/epeios/tools/xdhq/examples/common/Hello/Main.html" ) );
 		break;
 	case "Typing":

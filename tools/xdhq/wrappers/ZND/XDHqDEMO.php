@@ -57,11 +57,7 @@ class XDHqDOM_DEMO {
 		}
 	}
 	private function getByte_( $socket ) {
-		$dummy = unpack( "C", fgetc( $socket ) );
-
-		var_dump( $dummy );
-
-		return $dummy[1];
+		return unpack( "C", fgetc( $socket ) )[1];
 	}
 	private function getSize_( $socket ) {
 		$byte = $this->getByte_( $socket );
@@ -79,10 +75,7 @@ class XDHqDOM_DEMO {
 		$size = $this->getSize_( $socket );
 
 		if ( $size ) {
-			$string =  fread( $socket, $size );
-			echo ( "Size: " . $size . ";content :");
-			var_dump( $string );
-			return $string;
+			return fread( $socket, $size );
 		} else
 			return "";
 	}
@@ -99,13 +92,7 @@ class XDHqDOM_DEMO {
 		$c = fgetc( $socket );
 		$string = "";
 
-		echo( "Grup\n" );
-
-		var_dump( $c );
-
-		echo( "Grop\n" );
-
-		while ( !empty( $c ) ) {
+		while ( $c != "\0" ) {
 			$string .= $c;
 			$c = fgetc( $socket );
 		}
@@ -142,8 +129,9 @@ class XDHqDOM_DEMO {
 				throw new Exception( "Unmatched token !!!");
 		}
 
-		echo "Prot: '" . $this->getString_( $this->socket ) . "'";	// Protocol version.
-		echo "Lang: '" . $this->getQuery_( $this->socket ) . "'";	// Language.
+		$this->getString_( $this->socket );	// Protocol label.
+		$this->getString_( $this->socket );	// Protocol version.
+		$this->getString_( $this->socket );	// Language.
 
 		$this->standBy_( $this->socket );
 		fflush( $this->socket );
@@ -155,7 +143,7 @@ class XDHqDOM_DEMO {
 		} else
 			$this->firstLaunch = false;
 
-		var_dump( $this->getQuery_( $this->socket ) );
+		$this->getQuery_( $this->socket );
 
 		$id = $this->getString_( $this->socket );
 
@@ -164,13 +152,9 @@ class XDHqDOM_DEMO {
 		if( empty( $action ) )
 			$action = $GLOBALS["newSessionAction"];
 
-		var_dump( $id, $action );
-
 		return $action;
 	}
 	function call( $command, $type, ...$args ) {
-		var_dump( $command, $type, $args );
-
 		$i = 0;
 
 		fwrite( $this->socket, pack( "a*x", $command ) );
@@ -193,7 +177,7 @@ class XDHqDOM_DEMO {
 
 		fflush( $this->socket );
 
-		var_dump( $this->getQuery_( $this->socket ) );
+		$this->getQuery_( $this->socket );
 
 		switch ( $type ) {
 		case 0:

@@ -261,7 +261,7 @@ function launch(createCallback, newSessionAction, callbacks, webURL) {
 
 	url = webURL;
 
-	setTimeout(() => pseudoServer(createCallback, newSessionAction, callbacks), 2000);
+	setTimeout(() => pseudoServer(createCallback, newSessionAction, callbacks), 1000);
 
 }
 
