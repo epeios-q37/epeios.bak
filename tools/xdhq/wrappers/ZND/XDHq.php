@@ -29,15 +29,15 @@ class XDHq extends XDHq_SHRD{
 	private static $dir_;
 	private static function getAssetPath_() {
 		if ( parent::isDev() )
-			return "h:/hg/epeios/tools/xdhq/examples/common/" . dir_ . "/";
+			return "h:/hg/epeios/tools/xdhq/examples/common/" . self::$dir_ . "/";
 		else
 			return "./";
 	}
 	private static function getAssetFilename_( $path ) {
-		return $this->getAssetPath_() . $path;
+		return self::getAssetPath_() . $path;
 	}
 	static function readAsset( $path ) {
-		return get_file_content( $this->getAssetFilename_( $path ) );
+		return file_get_contents( self::getAssetFilename_( $path ) );
 	}
 	protected static function launch_( $newSessionAction, $mode, $dir ) {
 		self::$mode_ = $mode;
@@ -57,6 +57,9 @@ class XDHq extends XDHq_SHRD{
 	}
 	static function getMode() {
 		return self::$mode_;
+	}
+	static function isDEMO() {
+		return self::getMode() == MODE_DEMO;
 	}
 }
 
@@ -100,16 +103,16 @@ class XDHqDOM {
 		return $this->dom_->getAction( $id );
 	}
 	function execute( $script ) {
-		return self::call_( 10 );
+		return self::call_( "Execute_1", XDHq::RT_STRING, 1, $script, 0 );
 	}
 	function alert( string $message ) {
-		self::call_( 11, $message );
+		self::call_( "Alert_1", XDHq::RT_NONE, 1, $message, 0 );
 	}
 	function confirm( string $message ) {
-		return self::call_( "Confirm_1", 1, 1, $message, 0 ) == "true";
+		return self::call_( "Confirm_1", XDHq::RT_STRING, 1, $message, 0 ) == "true";
 	}
 	private function setLayout_(string  $id, $tree, string $xslFilename ) {
-		self::call_( "SetLayout_1", 0, 3, $id, $tree, $xslFilename, 0 );
+		self::call_( "SetLayout_1", XDHq::RT_NONE, 3, $id, $tree, $xslFilename, 0 );
 	}
 	function headUp(string $html ) {
 		self::setLayout_( "_xdh_head", $html, "" );
@@ -117,8 +120,16 @@ class XDHqDOM {
 	function setLayout(string  $id, string $html ) {
 		self::setLayout_( $id, $html, "" );
 	}
+	function setLayoutXSL(string  $id, string $xml, string $xsl ) {
+		$xslURL = $xsl;
+
+		if ( XDHq::isDEMO() )
+			$xslURL = "data:text/xml;charset=utf-8," . rawurlencode( XDHq::readAsset( $xsl ) );
+			
+		self::setLayout_( $id, $xml, $xslURL );
+	}
 	function getContents( array $ids ) {
-		return self::unsplit_($ids,self::call_( "GetContents_1", 2, 0, 1, $ids ));
+		return self::unsplit_($ids,self::call_( "GetContents_1", XDHq::RT_STRINGS, 0, 1, $ids ));
 	}
 	function getContent( string $id ) {
 		return self::getContents( [$id] )[$id];
@@ -129,71 +140,68 @@ class XDHqDOM {
 
 		self::split_( $idsAndContents, $ids, $contents );
 
-		self::call_( "SetContents_1", 0, 0, 2, $ids, $contents );
+		self::call_( "SetContents_1", XDHq::RT_NONE, 0, 2, $ids, $contents );
 	}
 	function setContent( string $id, string $content ) {
 		self::setContents( [ $id => $content ] );
 	}
 	function dressWidgets( string $id ) {
-		return self::call_( 16, $id );
+		return self::call_( "DressWidgets_1", XDHq::RT_NONE, 1, $id, 0 );
 	}
-	private function handleClasses( $fid, array $idsAndClasses ) {
+	private function handleClasses( $command, array $idsAndClasses ) {
 		$ids = [];
 		$classes = [];
 
-		self::split( $idsAndClasses, $ids, $classes );
-		self::call_( $fid, $ids, $classes );
-	}
-	private function handleClass( $fid, $id, $class ) {
-		self::handleClasses( $fid, [ $id => $class ] );
+		self::split_( $idsAndClasses, $ids, $classes );
+		self::call_( $command, XDHq::RT_NONE, 0, 2, $ids, $classes );
 	}
 	function addClasses( array $idsAndClasses ) {
-		self::handleClasses( 17, $idsAndClasses );
-	}
-	function addClass( string $id, string $class  ) {
-		self::handleClass( 17, $id, $class );
+		self::handleClasses( "AddClasses_1", $idsAndClasses );
 	}
 	function removeClasses( array $idsAndClasses ) {
-		self::handleClasses( 18, $idsAndClasses );
-	}
-	function removeClass( string $id, string $class  ) {
-		self::handleClass( 18, $id, $class );
+		self::handleClasses( "RemoveClasses_1", $idsAndClasses );
 	}
 	function toggleClasses( array $idsAndClasses ) {
-		self::handleClasses( 19, $idsAndClasses );
+		self::handleClasses( "ToggleClasses_1", $idsAndClasses );
+	}
+	function addClass( string $id, string $class  ) {
+		self::addClasses( [ $id => $class ] );
+	}
+	function removeClass( string $id, string $class  ) {
+		self::handleClasses( [ $id => $class ] );
 	}
 	function toggleClass( string $id, string $class  ) {
-		self::handleClass( 19, $id, $class );
+		self::toggleClasses( [ $id => $class ] );
 	}
 	function enableElements( array $ids ) {
-		self::call_( 20, $ids );
+		self::call_( "EnableElements_1", XDHq::RT_NONE, 0, 1, $ids );
 	}
 	function enableElement( string $id ) {
 		self::enableElements( array( $id ) );
 	}
 	function disableElements( array $ids ) {
-		self::call_( 21, $ids  );
+		self::call_( "DisableElements_1", XDHq::RT_NONE, 0, 1, $ids  );
 	}
 	function disableElement( string $id ) {
 		self::disableElements( array( $id ) );
 	}
 	function setAttribute( string $id, string $name, string $value ) {
-		return self::call_( 22, $id, $value );
+		return self::call_( "SetAttribute_1", XDHq::RT_NONE, 2, $id, $value, 0 );
 	}
 	function getAttribute( string $id, string $name ) {
-		return self::call_( 23, $id, $name );
+		return self::call_( "GetAttribute_1", XDHq::RT_STRING, 2, $id, $name, 0 );
 	}
 	function removeAttribute( string $id, string $name ) {
-		self::call_( 24, $id );
+		self::call_( "RemoveAttribute_1", XDHq::RT_NONE, 1, $id, 0 );
 	}
 	function setProperty( string $id, string $name, string $value ) {
-		return self::call_( 25, $id, $name, $value );
+		return self::call_( "SetProperty_1", XDHq::RT_NONE, 3, $id, $name, $value, 0 );
 	}
 	function getProperty( string $id, string $name ) {
-		return self::call_( 26, $id, $name );
+		return self::call_( "GetPropertY_1", XDHq::RT_STRING, 2, $id, $name, 0 );
 	}
 	function focus( string $id ) {
-		self::call_( 27, $id );
+		self::call_( "Focus_1", XDHq::RT_NONE, 1, $id, 0 );
 	}
 }
 ?>

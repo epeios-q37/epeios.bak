@@ -87,12 +87,10 @@ public class DOM {
 	}
 
 	public void setLayoutXSL(String id, String xml, String xslFilename) {
-		String xslURL;
+		String xslURL = xslFilename;
 
 		if ( info.q37.xdhq.XDH.isDEMO() )
 			xslURL = new String( "data:text/xml;base64," + java.util.Base64.getEncoder().encodeToString( info.q37.xdhq.XDH.readAsset( xslFilename).getBytes() ) );
-		else
-			xslURL = xslFilename;
 
 		setLayout_(id, xml, xslURL);
 	}

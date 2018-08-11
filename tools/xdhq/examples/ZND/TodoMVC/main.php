@@ -67,21 +67,31 @@ class DOM extends AtlasDOM {
 				$count++;
 
 		return $count;
-
 	}
 }
 
-function push( $todo, $id, $tree ) {
-	$tree->pushTag( 'Todo' );
-	$tree->putAttribute ('id', $id );
+function push( $todo, $id, &$tree ) {
+	$tree .= "<Todo";
+//	$tree->pushTag( 'Todo' );
 
-	if ( $todo['completed'])
-		$tree->putAttribute( 'completed', 'true' );
-	else
-		$tree->putAttribute( 'completed', 'false');
+	$tree .= " id=\"" . $id . "\"";
+//	$tree->putAttribute ('id', $id );
 
-	$tree->putValue( $todo['label']);
-	$tree->popTag();
+	if ( $todo['completed']) {
+		$tree .= " completed=\"true\"";
+//		$tree->putAttribute( 'completed', 'true' );
+	} else {
+		$tree .= " completed=\"false\"";
+
+//		$tree->putAttribute( 'completed', 'false');
+	}
+
+	$tree .= ">";
+	$tree .= $todo['label'];
+//	$tree->putValue( $todo['label']);
+
+	$tree .= "</Todo>\n";
+//	$tree->popTag();
 }
 
 function displayCount( $dom, $count ) {
@@ -113,22 +123,23 @@ function handleCount( $dom ) {
 }
 
 function displayTodos( $dom ) {
-	$tree = new AtlasTree();
+	$tree = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<XDHTML>\n<Todos>\n";
 	$i = 0;
 	$count = count( $dom->todos );
 
-	$tree->pushTag( "Todos");
+//	$tree->pushTag( "Todos");
 
 	while( $i < $count ) {
-		if ( is_null( $dom->exclude ) || ( $dom->todos[$i]['completed'] != $dom->exclude ) )
-			push( $dom->todos[$i], $i, $tree );
+		push( $dom->todos[$i], $i, $tree );
 
 		$i++;
 	}
 
-	$tree->popTag();
+	$tree .= "</Todos>\n</XDHTML>";
+	var_dump( $tree );
+//	$tree->popTag();
 
-	$dom->setLayout( "Todos", $tree, "Todos.xsl");
+	$dom->setLayoutXSL( "Todos", $tree, "Todos.xsl" );
 	handleCount( $dom );
 }
 
@@ -173,6 +184,7 @@ function toggle( $dom, $id ) {
 	$dom->todos[$i]['completed'] = !$dom->todos[$i]['completed'];
 
 	$dom->toggleClass( "Todo." . $id, "completed" );
+	$dom->toggleClass( "Todo." . $id, "active" );
 
 	if ( !is_null( $dom->exclude ) )
 		displayTodos( $dom );
@@ -189,7 +201,7 @@ function all( $dom ) {
 		'Completed' => "selected" 
 	]);
 
-	displayTodos( $dom );
+	$dom->disableElements( ["HideActive", "HideCompleted"]);
 }
 
 function active( $dom ) {
@@ -201,7 +213,9 @@ function active( $dom ) {
 		'Completed' => "selected" 
 	]);
 
-	displayTodos( $dom );
+	$dom->disableElement( "HideActive");
+	$dom->enableElement( "HideCompleted");
+
 }
 
 function completed( $dom ) {
@@ -213,7 +227,8 @@ function completed( $dom ) {
 		'Active' => "selected"
 	]);
 
-	displayTodos( $dom );
+	$dom->enableElement( "HideActive");
+	$dom->disableElement( "HideCompleted");
 }
 
 function clear( $dom ) {
@@ -258,7 +273,7 @@ function cancel( $dom ) {
 function main() {
 	$type = null;
 
-	if ( isDev() )
+	if ( Atlas::isDev() )
 		Atlas::launch( "Connect", null, "TodoMVC" );
 	else
 		Atlas::launch( "Connect", null, "." );
@@ -268,8 +283,10 @@ function main() {
 	while ( true ) {
 		switch( $dom->getAction( $id ) ) {
 		case "Connect":
-			$dom->setLayout( "", new AtlasTree(), "Main.xsl" );
+			$dom->headUp( Atlas::readAsset( "HeadDEMO.html" ) );
+			$dom->setLayout( "", Atlas::readAsset( "Main.html" ) );
 			$dom->focus( "Input" );
+			$dom->disableElements( ["HideActive", "HideCompleted"]);
 			displayTodos( $dom );
 			break;
 		case "Submit":

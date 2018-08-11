@@ -53,7 +53,7 @@ class Atlas extends XDHq {
 	const GUI_DESKTOP = 1;
 	const GUI_WEB = 2;
 	const GUI_DESKTOP_AND_WEB = 3;
-	const GUI_DEFAULT = Atlas::GUI_DESKTOP;
+	const GUI_DEFAULT = GUI_DESKTOP;
 
 	static private function execute_( string $command ) {
 		if ( self::isWin() ) {
@@ -98,7 +98,7 @@ class Atlas extends XDHq {
 		$mode = self::getDefaultMode_();
 
 		if ( $gui === null ) {
-			$gui = self::GUI_DEFAULT;
+			$gui = self::getDefaultGUI_();
 
 			if ( count( $argv ) > 1 ) {
 				switch ( $argv[1] ) {
