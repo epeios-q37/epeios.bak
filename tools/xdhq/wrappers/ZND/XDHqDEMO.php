@@ -20,7 +20,7 @@
 
 $newSessionAction = '';
 
-class XDHq {
+class XDHq_DEMO extends XDHq_SHRD {
 	static function launch( string $newSessionAction ) {
 		$GLOBALS["newSessionAction"] = $newSessionAction;
 	}
@@ -180,12 +180,12 @@ class XDHqDOM_DEMO {
 		$this->getQuery_( $this->socket );
 
 		switch ( $type ) {
-		case 0:
+		case XDHq::RT_NONE:
 			break;
-		case 1:
+		case XDHq::RT_STRING:
 			return $this->getString_( $this->socket );
 			break;
-		case 2:
+		case XDHq::RT_STRINGS:
 			return $this->getStrings_( $this->socket );
 			break;
 		default:

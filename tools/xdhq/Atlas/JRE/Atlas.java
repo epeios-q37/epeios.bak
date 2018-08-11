@@ -120,7 +120,7 @@ public abstract class Atlas implements Runnable {
 					gui = GUI.DESKTOP;
 				} else if ( arg.equals( "W" ) ) {
 					mode = MODE.DEMO;
-					gui = GUI.WEB;
+					gui = GUI.NONE;	// The httpd server is launched externally.
 				} else if ( arg.equals( "w") || arg.equals( "web" ) ) {
 					gui = GUI.WEB;
 				} else if ( arg.equals( "dw" ) || arg.equals( "wd") ) {
@@ -141,8 +141,7 @@ public abstract class Atlas implements Runnable {
 			launchDesktop(dir);
 			break;
 		case WEB:
-			if( mode != MODE.DEMO )
-				launchWeb(dir);
+			launchWeb(dir);
 			break;
 		case DESKTOP_AND_WEB:
 			launchDesktop(dir);

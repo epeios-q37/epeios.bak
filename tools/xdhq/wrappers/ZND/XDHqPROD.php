@@ -53,19 +53,16 @@ class XDHqWrapper extends ZNDq {
 	static public function componentInfo() {
 		return parent::componentInfo_( self::$launcher );
 	}
-	static protected function _call( $id, ...$args ) {
+	static public function _call( $id, ...$args ) {
 		return parent::call_( self::$launcher, $id, ...$args );
 	}
 }
 
 XDHqWrapper::init();
 
-class XDHq extends XDHqWrapper {
-	static function returnArgument($argument) {
-		return parent::_call(0, $argument);
-	}
+class XDHq_PROD extends XDHq_SHRD {
 	static function launch( string $newSessionAction ) {
-		parent::_call( 1, "53752", $newSessionAction );
+		XDHqWrapper::_call( 1, "53752", $newSessionAction );
 	}
 }
 
