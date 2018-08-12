@@ -214,10 +214,7 @@ function acToggle(dom, id) {
 	// Can't use 'ToggleClasses', because then 2 elements would have same key...
 	dom.toggleClass("Todo." + id, "completed",
 		() => dom.toggleClass( "Todo." + id, "active",
-			() => {
-				if (dom.exclude == null)
-					handleCount(dom);
-			}
+			() => handleCount(dom)
 		)
 	);
 }

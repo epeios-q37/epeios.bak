@@ -87,7 +87,7 @@ function push( $todo, $id, &$tree ) {
 	}
 
 	$tree .= ">";
-	$tree .= $todo['label'];
+	$tree .= htmlspecialchars( $todo['label'] );
 //	$tree->putValue( $todo['label']);
 
 	$tree .= "</Todo>\n";
@@ -136,7 +136,6 @@ function displayTodos( $dom ) {
 	}
 
 	$tree .= "</Todos>\n</XDHTML>";
-	var_dump( $tree );
 //	$tree->popTag();
 
 	$dom->setLayoutXSL( "Todos", $tree, "Todos.xsl" );
@@ -186,10 +185,7 @@ function toggle( $dom, $id ) {
 	$dom->toggleClass( "Todo." . $id, "completed" );
 	$dom->toggleClass( "Todo." . $id, "active" );
 
-	if ( !is_null( $dom->exclude ) )
-		displayTodos( $dom );
-	else
-		handleCount( $dom );
+	handleCount( $dom );
 }
 
 function all( $dom ) {

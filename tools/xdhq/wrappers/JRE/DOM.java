@@ -29,16 +29,8 @@ public class DOM {
 	private String[] empty = {};
 	private String[][] emptys = {};
 
-	private String[][] split(String[][] idsAndClasses) {
-		List<String> ids = new ArrayList<String>();
-		List<String> classes = new ArrayList<String>();
-
-		for( String[] idAndClass : idsAndClasses ) {
-			ids.add(idAndClass[0]);
-			classes.add(idAndClass[1]);
-		}
-
-		return new String[][] { ids.toArray( new String[0] ), classes.toArray( new String[0] ) };
+	private String[][] split(Map<String,String> idsAndClasses) {
+		return new String[][] { idsAndClasses.keySet().toArray( new String[0] ), idsAndClasses.values().toArray( new String[0] ) };
 	}
 
 	public DOM( MODE mode ) {
@@ -103,31 +95,29 @@ public class DOM {
 		return getContents( new String []{id} )[0];
 	}
 
-	public void setContents(String[][] idsAndContents) {
-		String splittedIdsAndContents[][] = split(idsAndContents);
-
-		DOM.call("SetContents_1", Type.VOID, empty, splittedIdsAndContents);
+	public final void setContents(Map<String,String> idsAndContents) {
+		DOM.call("SetContents_1", Type.VOID, empty, split(idsAndContents));
 	}
 
-	public void setContent(String id, String content) {
-		setContents( new String[][] { { id, content } } );
+	public final void setContent(final String id, final String content) {
+		setContents( new HashMap<String,String> () {{ put(id, content ); }} );
 	}
 
 	public void dressWidgets(String id) {
 		DOM.call("DressWidgets_1", Type.VOID, new String[]{id}, emptys );
 	}
 
-	private void handleClasses(String command, String[][] idsAndClasses) {
+	private void handleClasses(String command, Map<String,String> idsAndClasses) {
 		String splittedIdsAndClasses[][] = split(idsAndClasses);
 
 		DOM.call(command, Type.VOID, empty, splittedIdsAndClasses);
 	}
 
-	private void handleClass(String command, String id, String clas) {
-		handleClasses(command, new String[][] { { id, clas } } );
+	private void handleClass( String command, final String id, final String clas) {
+		handleClasses(command, new HashMap<String,String>() {{ put( id, clas ); }} );
 	}
 
-	public void addClasses(String[][] idsAndClasses) {
+	public void addClasses(Map<String,String> idsAndClasses) {
 		handleClasses("AddClasses_1", idsAndClasses);
 	}
 
@@ -135,7 +125,7 @@ public class DOM {
 		handleClass("AddClasses_1", id, clas);
 	}
 
-	public void removeClasses(String[][] idsAndClasses) {
+	public void removeClasses(Map<String,String> idsAndClasses) {
 		handleClasses("RemoveClasses_1", idsAndClasses);
 	}
 
@@ -143,7 +133,7 @@ public class DOM {
 		handleClass("RemoveClasses_1", id, clas);
 	}
 
-	public void toggleClasses(String[][] idsAndClasses) {
+	public void toggleClasses(Map<String,String> idsAndClasses) {
 		handleClasses("ToggleClasses_1", idsAndClasses);
 	}
 

@@ -136,7 +136,7 @@ class TodoMVC extends Atlas {
 
 			dom.setContent("Label." + index, escape(content));
 
-			dom.removeClasses( new String[][] { { "View." + index, "hide" }, { "Todo." + index, "editing" } } );
+			dom.removeClasses( new HashMap<String,String> () {{ put( "View." + index, "hide" ); put ("Todo." + index, "editing" );}} );
 		} else {
 			todos.remove(index);
 			displayTodos( dom );
@@ -154,17 +154,14 @@ class TodoMVC extends Atlas {
 		dom.toggleClass( "Todo." + id, "completed");
 		dom.toggleClass( "Todo." + id, "active");
 
-		if (exclude != null)
-			displayTodos( dom );
-		else
-			handleCount( dom  );
+		handleCount( dom  );
 	}
 
 	private void all( DOM dom ) {
 		exclude = null;
 
 		dom.addClass("All", "selected");
-		dom.removeClasses(new String[][] { { "Active", "selected" }, { "Completed", "selected" } } );
+		dom.removeClasses(new HashMap<String,String>() {{ put("Active", "selected"); put("Completed", "selected"); } } );
 		dom.disableElements(new String[]{"HideActive","HideCompleted"});
 	}
 
@@ -172,7 +169,7 @@ class TodoMVC extends Atlas {
 		exclude = true;
 
 		dom.addClass("Active", "selected");
-		dom.removeClasses(new String[][] { { "All", "selected" }, { "Completed", "selected" } } );
+		dom.removeClasses(new HashMap<String,String>() {{ put("All", "selected"); put("Completed", "selected"); } } );
 		dom.disableElement("HideActive");
 		dom.enableElement("HideCompleted");
 }
@@ -181,7 +178,7 @@ class TodoMVC extends Atlas {
 		exclude = false;
 
 		dom.addClass("Completed", "selected");
-		dom.removeClasses( new String[][] { { "All", "selected" }, { "Active", "selected" } } );
+		dom.removeClasses(new HashMap<String,String>() {{ put("All", "selected"); put("Active", "selected"); }} );
 		dom.disableElement("HideCompleted");
 		dom.enableElement("HideActive");
 	}
@@ -202,7 +199,7 @@ class TodoMVC extends Atlas {
 
 		index = Integer.parseInt(content);
 
-		dom.addClasses( new String[][] { { "View." + content, "hide" }, { id, "editing" } } );
+		dom.addClasses( new HashMap<String,String>() {{ put("View." + content, "hide" ); put( id, "editing" );}} );
 		dom.setContent("Input." + content, todos.get(index).label);
 		dom.focus("Input." + content);
 	}
@@ -212,7 +209,7 @@ class TodoMVC extends Atlas {
 		this.index = -1;
 
 		dom.setContent("Input." + index, "");
-		dom.removeClasses( new String[][] { { "View." + index, "hide" }, { "Todo." + index, "editing" } } );
+		dom.removeClasses( new HashMap<String,String>() {{ put("View." + index, "hide" ); put( "Todo." + index, "editing"); }} );
 	}
 
 	public TodoMVC() {
@@ -269,6 +266,8 @@ class TodoMVC extends Atlas {
 			dir = "TodoMVC";
 
 		launch("Connect", dir, GUI.DEFAULT, args);
+
+		Map<String,String> map = new HashMap<String,String> () {{ put("titi", "toto"); put("tutu","tete"); }};
 
 		for (;;) new TodoMVC();
 	}
