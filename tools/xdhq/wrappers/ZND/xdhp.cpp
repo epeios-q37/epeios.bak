@@ -178,8 +178,7 @@ qRH;
 qRB;
 	rData_ &Data = GetData_( Caller );
 	Data.Sent.WriteBegin();
-	Data.Request = prxy_cmn::rLaunch;
-	proxy::rNewArguments &Arguments = Data.Sent.NewArguments;
+	proxy::rArguments &Arguments = Data.Sent.Arguments;
 	Arguments.Init();
 
 	Caller.Get( Arguments.Command );
@@ -188,7 +187,7 @@ qRB;
 	if ( RawType >= prxy_recv::t_amount )
 		qRGnr();
 
-	Data.ReturnType = (prxy_recv::eType)RawType;
+	Data.SetReturnType( (prxy_recv::eType)RawType );
 
 	Caller.Get( Amount );
 
@@ -210,7 +209,7 @@ qRB;
 	Data.Recv.ReadBegin();
 	proxy::rReturn &Return = Data.Recv.Return;
 
-	switch ( Data.ReturnType ) {
+	switch ( Data.GetReturnType() ) {
 	case prxy_recv::tVoid:
 		break;
 	case prxy_recv::tString:

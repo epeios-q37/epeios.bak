@@ -31,7 +31,6 @@
 
 namespace proxy {
 	using prxy_send::rArguments;
-	using prxy_send::rNewArguments;
 	using prxy_recv::rReturn;
 
 	typedef tht::rReadWrite rControl_;
@@ -65,35 +64,34 @@ namespace proxy {
 	{
 	public:
 		rArguments Arguments;
-		rNewArguments NewArguments;
 		void reset( bso::sBool P = true )
 		{
 			rControl_::reset( P );
-			tol::reset( P, Arguments, NewArguments );
+			tol::reset( P, Arguments );
 		}
 		qCDTOR( rSent );
 		void Init( void )
 		{
 			rControl_::Init();
-			tol::Init( Arguments, NewArguments );
+			tol::Init( Arguments );
 		}
 	};
 
 
 	struct rData
 	{
+	private:
+		prxy_recv::eType ReturnType_;
 	public:
 		rRecv Recv;
 		rSent Sent;
-		prxy_cmn::eRequest Request_;
-		prxy_recv::eType ReturnType;	// For the new handling.
 		str::wString Language;
 		bso::sBool Handshaked;
+		bso::sBool PendingRequest;
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, Recv, Sent, Language, Handshaked );
-			Request_ = prxy_cmn::r_Undefined;
-			ReturnType = prxy_recv::t_Undefined;
+			tol::reset( P, Recv, Sent, Language, Handshaked, PendingRequest );
+			ReturnType_ = prxy_recv::t_Undefined;
 		}
 		qCDTOR( rData );
 		void Init( void )
@@ -101,14 +99,26 @@ namespace proxy {
 			reset();
 
 			tol::Init( Recv, Sent, Language );
-			Request_ = prxy_cmn::r_Undefined;
-			ReturnType = prxy_recv::t_Undefined;
+			ReturnType_ = prxy_recv::t_Undefined;
+			PendingRequest = false;
 			Handshaked = false;
 		}
-		bso::sBool IsTherePendingRequest( void ) const
+		void SetReturnType( prxy_recv::eType Type )
 		{
-			return ReturnType != prxy_recv::t_Undefined;
-			return Request_ != prxy_cmn::r_Undefined;
+			ReturnType_ = Type;
+			PendingRequest = true;
+		}
+		prxy_recv::eType GetReturnType( void ) const
+		{
+			if ( ReturnType_ == prxy_recv::t_Undefined )
+				qRGnr();
+
+			return ReturnType_;
+
+		}
+		bso::sBool _IsTherePendingRequest( void ) const
+		{
+			return PendingRequest;
 		}
 	};
 
@@ -167,12 +177,11 @@ namespace proxy {
 				prtcl::SendCommand( prtcl::cStandBy_1, Flow );
 				Flow.Commit();
 			} else {
-				if ( Data.IsTherePendingRequest() ) {
+				if ( Data._IsTherePendingRequest() ) {
 					Data.Recv.WriteBegin();
 					Data.Recv.Return.Init();
-					prxy_recv::Recv( prxy_cmn::r_Undefined, Data.ReturnType, Flow, Data.Recv.Return );
-//					Data.Request_ = prxy_cmn::r_Undefined;
-					Data.ReturnType = prxy_recv::t_Undefined;
+					prxy_recv::Recv( Data.GetReturnType(), Flow, Data.Recv.Return );
+					Data.PendingRequest = false;
 					Data.Recv.WriteEnd();
 					PRXYOnPending( &Data );
 				} else {
@@ -192,8 +201,8 @@ namespace proxy {
 				Data.Sent.ReadBegin();
 
 				// 'Data.Request' is set by the 'PRXYOn...' method above.
-				if ( Data.IsTherePendingRequest() )
-					prxy_send::Send( prxy_cmn::r_Undefined, Flow, Data.Sent.Arguments, Data.Sent.NewArguments );
+				if ( Data._IsTherePendingRequest() )
+					prxy_send::Send( Flow, Data.Sent.Arguments );
 				else
 					prtcl::SendCommand( prtcl::cStandBy_1, Flow );
 

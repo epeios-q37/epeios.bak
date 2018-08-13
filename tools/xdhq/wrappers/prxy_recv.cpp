@@ -19,175 +19,27 @@
 
 #include "prxy_recv.h"
 
-using namespace prxy_recv;
-
-using namespace prxy_cmn;
-
-namespace {
-	void Execute_(
-		flw::sRFlow &Flow,
-		rReturn &Return )
-	{
-		execute::R( Flow, Return.StringToSet() );
-	}
-
-	void Alert_(
-		flw::sRFlow &Flow,
-		rReturn &Return )
-	{
-		alert::R( Flow );
-	}
-
-	void Confirm_(
-		flw::sRFlow &Flow,
-		rReturn &Return )
-	{
-		confirm::R( Flow, Return.StringToSet() );
-	}
-
-	void SetLayout_(
-		flw::sRFlow &Flow,
-		rReturn &Return )
-	{
-		layout::set::R( Flow );
-	}
-
-	void GetContents_(
-		flw::sRFlow &Flow,
-		rReturn &Return )
-	{
-		contents::get::R( Flow, Return.StringsToSet() );
-	}
-
-	void SetContents_(
-		flw::sRFlow &Flow,
-		rReturn &Return )
-	{
-		contents::set::R( Flow );
-	}
-
-	void DressWidgets_(
-		flw::sRFlow &Flow,
-		rReturn &Return )
-	{
-		widgets::dress::R( Flow );
-	}
-
-	void AddClasses_(
-		flw::sRFlow &Flow,
-		rReturn &Return )
-	{
-		classes::add::R( Flow );
-	}
-
-	void RemoveClasses_(
-		flw::sRFlow &Flow,
-		rReturn &Return )
-	{
-		classes::remove::R( Flow );
-	}
-
-	void ToggleClasses_(
-		flw::sRFlow &Flow,
-		rReturn &Return )
-	{
-		classes::toggle::R( Flow );
-	}
-
-	void EnableElements_(
-		flw::sRFlow &Flow,
-		rReturn &Return )
-	{
-		elements::enable::R( Flow );
-	}
-
-	void DisableElements_(
-		flw::sRFlow &Flow,
-		rReturn &Return )
-	{
-		elements::disable::R( Flow );
-	}
-
-	void SetAttribute_(
-		flw::sRFlow &Flow,
-		rReturn &Return )
-	{
-		attribute::set::R( Flow );
-	}
-
-	void GetAttribute_(
-		flw::sRFlow &Flow,
-		rReturn &Return )
-	{
-		attribute::get::R( Flow, Return.StringToSet() );
-	}
-
-	void RemoveAttribute_(
-		flw::sRFlow &Flow,
-		rReturn &Return )
-	{
-		attribute::remove::R( Flow );
-	}
-
-	void SetProperty_(
-		flw::sRFlow &Flow,
-		rReturn &Return )
-	{
-		property::set::R( Flow );
-	}
-
-	void GetProperty_(
-		flw::sRFlow &Flow,
-		rReturn &Return )
-	{
-		property::get::R( Flow, Return.StringToSet() );
-	}
-
-	void Focus_(
-		flw::sRFlow &Flow,
-		rReturn &Return )
-	{
-		focus::R( Flow );
-	}
-
-	void Launch_(
-		flw::sRFlow &Flow,
-		prxy_recv::eType Type,
-		rReturn &Return )
-	{
-		switch ( Type ) {
-		case tVoid:
-			break;
-		case tString:
-			prtcl::Get( Flow, Return.StringToSet() );
-			break;
-		case tStrings:
-			prtcl::Get( Flow, Return.StringsToSet() );
-			break;
-		default:
-			qRGnr();
-			break;
-		}
-	}
-
-}
-
-#define H( name )\
-	case r##name:\
-		name##_( Flow, Return );\
-		break
-
 void prxy_recv::Recv(
-	eRequest Request,
-	prxy_recv::eType ReturnTypeForNewHandling,
+	prxy_recv::eType ReturnType,
 	flw::sRFlow &Flow,
 	rReturn &Return )
 {
 	if ( prtcl::GetRequest( Flow ) != prtcl::rReady_1 )
 		qRGnr();
 
-	Launch_( Flow, ReturnTypeForNewHandling, Return );
+	switch ( ReturnType ) {
+	case tVoid:
+		break;
+	case tString:
+		prtcl::Get( Flow, Return.StringToSet() );
+		break;
+	case tStrings:
+		prtcl::Get( Flow, Return.StringsToSet() );
+		break;
+	default:
+		qRGnr();
+		break;
+	}
 }
 
-#undef H
 

@@ -90,7 +90,6 @@ namespace prxy_recv {
 	};
 
 	void Recv(
-		prxy_cmn::eRequest Request,
 		prxy_recv::eType ReturnTypeForNewHandling,
 		flw::sRFlow &Flow,
 		rReturn &Return );

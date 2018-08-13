@@ -24,115 +24,6 @@ using namespace prxy_send;
 using namespace prxy_cmn;
 
 namespace {
-	void Execute_(
-		flw::sWFlow &Flow,
-		const rArguments &Arguments )
-	{
-		execute::S( Arguments.Script, Flow );
-	}
-	void Alert_(
-		flw::sWFlow &Flow,
-		const rArguments &Arguments )
-	{
-		alert::S( Arguments.Message, Flow );
-	}
-	void Confirm_(
-		flw::sWFlow &Flow,
-		const rArguments &Arguments )
-	{
-		confirm::S( Arguments.Message, Flow );
-	}
-	void SetLayout_(
-		flw::sWFlow &Flow,
-		const rArguments &Arguments )
-	{
-		layout::set::S( Arguments.Id, Arguments.XML, Arguments.XSLFilename, Arguments.Language, Flow );
-	}
-	void GetContents_(
-		flw::sWFlow &Flow,
-		const rArguments &Arguments )
-	{
-		contents::get::S( Arguments.Ids, Flow );
-	}
-	void SetContents_(
-		flw::sWFlow &Flow,
-		const rArguments &Arguments )
-	{
-		contents::set::S( Arguments.Ids, Arguments.Contents, Flow );
-	}
-	void DressWidgets_(
-		flw::sWFlow &Flow,
-		const rArguments &Arguments )
-	{
-		widgets::dress::S( Arguments.Id, Flow );
-	}
-	void AddClasses_(
-		flw::sWFlow &Flow,
-		const rArguments &Arguments )
-	{
-		classes::add::S( Arguments.Ids, Arguments.Classes, Flow );
-	}
-	void RemoveClasses_(
-		flw::sWFlow &Flow,
-		const rArguments &Arguments )
-	{
-		classes::remove::S( Arguments.Ids, Arguments.Classes, Flow );
-	}
-	void ToggleClasses_(
-		flw::sWFlow &Flow,
-		const rArguments &Arguments )
-	{
-		classes::toggle::S( Arguments.Ids, Arguments.Classes, Flow );
-	}
-	void EnableElements_(
-		flw::sWFlow &Flow,
-		const rArguments &Arguments )
-	{
-		elements::enable::S( Arguments.Ids, Flow );
-	}
-	void DisableElements_(
-		flw::sWFlow &Flow,
-		const rArguments &Arguments )
-	{
-		elements::disable::S( Arguments.Ids, Flow );
-	}
-	void SetAttribute_(
-		flw::sWFlow &Flow,
-		const rArguments &Arguments )
-	{
-		attribute::set::S( Arguments.Id, Arguments.Name, Arguments.Value, Flow );
-	}
-	void GetAttribute_(
-		flw::sWFlow &Flow,
-		const rArguments &Arguments )
-	{
-		attribute::get::S( Arguments.Id, Arguments.Name, Flow );
-	}
-	void RemoveAttribute_(
-		flw::sWFlow &Flow,
-		const rArguments &Arguments )
-	{
-		attribute::remove::S( Arguments.Id, Arguments.Name, Flow );
-	}
-	void SetProperty_(
-		flw::sWFlow &Flow,
-		const rArguments &Arguments )
-	{
-		property::set::S( Arguments.Id, Arguments.Name, Arguments.Value, Flow );
-	}
-	void GetProperty_(
-		flw::sWFlow &Flow,
-		const rArguments &Arguments )
-	{
-		property::get::S( Arguments.Id, Arguments.Name, Flow );
-	}
-	void Focus_(
-		flw::sWFlow &Flow,
-		const rArguments &Arguments )
-	{
-		focus::S( Arguments.Id, Flow );
-	}
-
 	namespace {
 		template <typename items> void Send_(
 			const items &Items,
@@ -151,31 +42,14 @@ namespace {
 			}
 		}
 	}
-
-	void New_(
-		flw::sWFlow &Flow,
-		const rNewArguments &Arguments )
-	{
-//		prtcl::SendCommand( prtcl::cNew, Flow );
-		prtcl::SendCommand( prtcl::GetCommand( Arguments.Command ), Flow );
-//		prtcl::Put( Arguments.Command, Flow );
-		Send_( Arguments.Strings, Flow );
-		Send_( Arguments.XStrings, Flow );
-	}
 }
 
-#define H( name )\
-	case r##name:\
-		name##_( Flow, Arguments );\
-		break
 
 void prxy_send::Send(
-	eRequest Request,
 	flw::sWFlow &Flow,
-	const rArguments &Arguments,
-	const rNewArguments &NewArguments )
+	const rArguments &Arguments )
 {
-	New_( Flow, NewArguments );
+	prtcl::SendCommand( prtcl::GetCommand( Arguments.Command ), Flow );
+	Send_( Arguments.Strings, Flow );
+	Send_( Arguments.XStrings, Flow );
 }
-
-#undef H

@@ -27,22 +27,6 @@ namespace prxy_send {
 	struct rArguments
 	{
 	public:
-		str::wString Script, Message, Id, XML, XSLFilename, Language, Name, Value;
-		str::wStrings Ids, Contents, Tags, Values, Classes;
-		void reset( bso::sBool P = true )
-		{
-			tol::reset( Script, Message, Id, XML, XSLFilename, Language, Name, Value, Ids, Contents, Tags, Values, Classes );
-		}
-		qCDTOR( rArguments );
-		void Init( void )
-		{
-			tol::Init( Script, Message, Id, XML, XSLFilename, Language, Name, Value, Ids, Contents, Tags, Values, Classes );
-		}
-	};
-
-	struct rNewArguments
-	{
-	public:
 		str::wString Command;
 		str::wStrings Strings;
 		crt::qCRATEwl( str::dStrings ) XStrings;
@@ -50,7 +34,7 @@ namespace prxy_send {
 		{
 			tol::reset( P, Command, Strings, XStrings );
 		}
-		qCDTOR( rNewArguments );
+		qCDTOR( rArguments );
 		void Init( void )
 		{
 			tol::Init( Command, Strings, XStrings );
@@ -58,10 +42,8 @@ namespace prxy_send {
 	};
 
 	void Send(
-		prxy_cmn::eRequest Request,
 		flw::sWFlow &Flow,
-		const rArguments &Arguments,
-		const rNewArguments &NewArguments );
+		const rArguments &NewArguments );
 }
 
 #endif

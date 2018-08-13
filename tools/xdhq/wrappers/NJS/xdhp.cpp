@@ -274,7 +274,7 @@ namespace {
 				Callback.Assign( Get_( Data.Recv.Action ) );
 				Callback.VoidLaunch( Data.XDH, Data.Recv.Id );
 				Data.Recv.ReadEnd();
-				if ( !Data.IsTherePendingRequest() )
+				if ( !Data._IsTherePendingRequest() )
 					Data.Sent.WriteDismiss();
 				Callback.reset( false );
 				break;
@@ -284,7 +284,7 @@ namespace {
 				SetCallbackArguments_( Data.Recv.Return, Arguments );
 				Data.Recv.ReadEnd();
 				Callback.VoidLaunch( Arguments );
-				if ( !Data.IsTherePendingRequest() )
+				if ( !Data._IsTherePendingRequest() )
 					Data.Sent.WriteDismiss();
 				Callback.reset( false );
 				break;
@@ -418,7 +418,7 @@ SCLNJS_F( xdhp::Launch )
 {
 qRH;
 	rData_ &Data = GetData_( Caller );
-	proxy::rNewArguments &Arguments = Data.Sent.NewArguments;
+	proxy::rArguments &Arguments = Data.Sent.Arguments;
 	int Amount = 0;
 	int &RawType = Amount;
 	str::wString String;
@@ -426,7 +426,6 @@ qRH;
 qRB;
 	Data.Sent.WriteBegin();
 
-//	Data.Request_ = prxy_cmn::rLaunch;
 	Arguments.Init();
 
 	Caller.GetArgument( Arguments.Command );
@@ -436,7 +435,7 @@ qRB;
 	if ( RawType >= prxy_recv::t_amount )
 		qRGnr();
 
-	Data.ReturnType = (prxy_recv::eType)RawType;
+	Data.SetReturnType( (prxy_recv::eType)RawType );
 
 	Caller.GetArgument( Amount );
 
