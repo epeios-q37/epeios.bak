@@ -113,6 +113,8 @@ function launch(createCallback, newSessionAction, callbacks, gui) {
 					break;
 				case "W":
 					mode = modes.DEMO;
+					gui = guis.NONE;
+					break;
 				case "w":
 				case "web":
 					gui = guis.WEB;
@@ -131,16 +133,7 @@ function launch(createCallback, newSessionAction, callbacks, gui) {
 
 	prod = mode == modes.PROD;
 
-	var url = "";
-
-	if (!prod)
-		if ( isDev() )
-			url = "http://localhost:8080";
-		else
-			url = "http://atlastk.org/atlas.php"
-
-
-	xdhq.launch(createCallback, newSessionAction, callbacks, mode, url);
+	xdhq.launch(createCallback, newSessionAction, callbacks, mode);
 
 	module.exports.mode = mode;
 

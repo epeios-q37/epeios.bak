@@ -23,6 +23,7 @@
 */
 
 import info.q37.atlas.*;
+import java.util.HashMap;
 
 class Hello extends Atlas {
 	public void handle( DOM dom, String action, String id )
@@ -59,7 +60,7 @@ class Hello extends Atlas {
 		} else if ("Typing".equals( action ) ) {
 			dom.setContent("name", dom.getContent(id));
 		} else if ( "Clear".equals( action ) ) {
-			if ( dom.confirm( "Are you sure ?" ) ) dom.setContents( new String[][] { { "input", ""}, { "name", ""} } );
+			if ( dom.confirm( "Are you sure ?" ) ) dom.setContents( new HashMap<String,String> () {{ put( "input", ""); put( "name", ""); }} );
 		} else {
 			throw new RuntimeException( "Unknown action '" + action + "' !!!");
 		}

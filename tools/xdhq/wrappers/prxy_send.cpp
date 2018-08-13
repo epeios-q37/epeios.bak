@@ -138,7 +138,7 @@ namespace {
 			const items &Items,
 			flw::sWFlow &Flow )
 		{
-			prtcl::Put( Items.Amount(), Flow );
+//			prtcl::Put( Items.Amount(), Flow );
 
 			sdr::sRow Row = Items.First();
 
@@ -156,8 +156,9 @@ namespace {
 		flw::sWFlow &Flow,
 		const rNewArguments &Arguments )
 	{
-		prtcl::SendCommand( prtcl::cNew, Flow );
-		prtcl::Put( Arguments.Command, Flow );
+//		prtcl::SendCommand( prtcl::cNew, Flow );
+		prtcl::SendCommand( prtcl::GetCommand( Arguments.Command ), Flow );
+//		prtcl::Put( Arguments.Command, Flow );
 		Send_( Arguments.Strings, Flow );
 		Send_( Arguments.XStrings, Flow );
 	}

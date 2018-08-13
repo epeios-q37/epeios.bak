@@ -19,17 +19,16 @@
 
 "use strict"
 
-// Types of the response.
+//const address = "atlastk.org";const httpPort = "";
+const address = "localhost";const httpPort = ":8080";
+
+const port = 53800;
+
 const shared = require('./XDHqSHRD.js');
 const net = require('net');
 
 const types = shared.types;
 const open = shared.open;
-const service = 53800;
-var host = "atlastk.org";
-
-if (process.env.EPEIOS_SRC)
-	host = "localhost";
 
 function byteLength(str) {
 	// returns the byte length of an utf8 string
@@ -163,12 +162,11 @@ function getResponse(query, type) {
 }
 
 var token = "";
-var url = "";
 
 function pseudoServer(createCallback, newSessionAction, callbacks) {
 	var client = new net.Socket();
 
-	client.connect(service, host, () => {
+	client.connect(port, address, () => {
 		var data = new Buffer(0);
 		var relaunch = true;
 
@@ -180,10 +178,20 @@ function pseudoServer(createCallback, newSessionAction, callbacks) {
 			if (client._xdhDOM === undefined) {
 				var query = getQuery(client);
 
-				token = getString(query, 0)[0];
 
-				if (token == "")
-					throw "Bad connection information !!!";
+				if (token == "") {
+					token = getString(query, 0)[0];
+
+					if (token == "")
+						throw "Bad connection information !!!";
+
+					let completeURL = "http://" + address + httpPort + "/atlas.php?_token=" + token;
+
+					if (open(completeURL))
+						console.log("Open " + completeURL + " in a web browser, if not already done. Enjoy!");
+					else
+						console.log("Open " + completeURL + " in a web browser. Enjoy!");
+				}
 
 				client._xdhDOM = createCallback(client);
 				client._xdhDOM._xdhSocket = client;
@@ -191,16 +199,6 @@ function pseudoServer(createCallback, newSessionAction, callbacks) {
 
 				client.write(Buffer.from("StandBy_1\x00"));
 
-				if (url != "") {
-					let completeURL = url + "?_token=" + token;
-
-					if (open(completeURL))
-						console.log("Open " + completeURL + " in a web browser, if not already done. Enjoy!");
-					else
-						console.log("Open " + completeURL + " in a web browser. Enjoy!");
-
-					url = "";
-				}
 
 			} else if (relaunch) {
 				pseudoServer(createCallback, newSessionAction, callbacks);
@@ -250,16 +248,14 @@ function pseudoServer(createCallback, newSessionAction, callbacks) {
 		});
 	});
 	client.on('error', (err) => {
-		throw err;
+		throw "Unable to connect to '" + address + ":" + port + "' !!!";
 	});
 }
 
-function launch(createCallback, newSessionAction, callbacks, webURL) {
+function launch(createCallback, newSessionAction, callbacks) {
 	if (process.env.EPEIOS_SRC) {
 		console.log("DEMO mode !");
 	}
-
-	url = webURL;
 
 	setTimeout(() => pseudoServer(createCallback, newSessionAction, callbacks), 1000);
 
