@@ -85,14 +85,14 @@ namespace proxy {
 	public:
 		rRecv Recv;
 		rSent Sent;
-		prxy_cmn::eRequest Request;
+		prxy_cmn::eRequest Request_;
 		prxy_recv::eType ReturnType;	// For the new handling.
 		str::wString Language;
 		bso::sBool Handshaked;
 		void reset( bso::sBool P = true )
 		{
 			tol::reset( P, Recv, Sent, Language, Handshaked );
-			Request = prxy_cmn::r_Undefined;
+			Request_ = prxy_cmn::r_Undefined;
 			ReturnType = prxy_recv::t_Undefined;
 		}
 		qCDTOR( rData );
@@ -101,13 +101,14 @@ namespace proxy {
 			reset();
 
 			tol::Init( Recv, Sent, Language );
-			Request = prxy_cmn::r_Undefined;
+			Request_ = prxy_cmn::r_Undefined;
 			ReturnType = prxy_recv::t_Undefined;
 			Handshaked = false;
 		}
 		bso::sBool IsTherePendingRequest( void ) const
 		{
-			return Request != prxy_cmn::r_Undefined;
+			return ReturnType != prxy_recv::t_Undefined;
+			return Request_ != prxy_cmn::r_Undefined;
 		}
 	};
 
@@ -166,11 +167,12 @@ namespace proxy {
 				prtcl::SendCommand( prtcl::cStandBy_1, Flow );
 				Flow.Commit();
 			} else {
-				if ( Data.Request != prxy_cmn::r_Undefined ) {
+				if ( Data.IsTherePendingRequest() ) {
 					Data.Recv.WriteBegin();
 					Data.Recv.Return.Init();
-					prxy_recv::Recv( Data.Request, Data.ReturnType, Flow, Data.Recv.Return );
-					Data.Request = prxy_cmn::r_Undefined;
+					prxy_recv::Recv( prxy_cmn::r_Undefined, Data.ReturnType, Flow, Data.Recv.Return );
+//					Data.Request_ = prxy_cmn::r_Undefined;
+					Data.ReturnType = prxy_recv::t_Undefined;
 					Data.Recv.WriteEnd();
 					PRXYOnPending( &Data );
 				} else {
@@ -190,8 +192,8 @@ namespace proxy {
 				Data.Sent.ReadBegin();
 
 				// 'Data.Request' is set by the 'PRXYOn...' method above.
-				if ( Data.Request != prxy_cmn::r_Undefined )
-					prxy_send::Send( Data.Request, Flow, Data.Sent.Arguments, Data.Sent.NewArguments );
+				if ( Data.IsTherePendingRequest() )
+					prxy_send::Send( prxy_cmn::r_Undefined, Flow, Data.Sent.Arguments, Data.Sent.NewArguments );
 				else
 					prtcl::SendCommand( prtcl::cStandBy_1, Flow );
 

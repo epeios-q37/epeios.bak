@@ -426,7 +426,7 @@ qRH;
 qRB;
 	Data.Sent.WriteBegin();
 
-	Data.Request = prxy_cmn::rLaunch;
+//	Data.Request_ = prxy_cmn::rLaunch;
 	Arguments.Init();
 
 	Caller.GetArgument( Arguments.Command );

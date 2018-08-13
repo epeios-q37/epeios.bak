@@ -48,7 +48,6 @@
 			</Modules>
 		</Modules>
 		<Module>dmopool</Module>
-		<Module>newlnch</Module>
 		<Module>registry</Module>
 		<Module Path="../">prtcl</Module>
 	</Modules>

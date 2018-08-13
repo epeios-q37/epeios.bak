@@ -186,34 +186,7 @@ void prxy_recv::Recv(
 	if ( prtcl::GetRequest( Flow ) != prtcl::rReady_1 )
 		qRGnr();
 
-	switch ( Request ) {
-	case r_Undefined:
-		qRGnr();
-		break;
-	H( Execute );
-	H( Alert );
-	H( Confirm );
-	H( SetLayout );
-	H( GetContents );
-	H( SetContents );
-	H( DressWidgets );
-	H( AddClasses );
-	H( RemoveClasses );
-	H( ToggleClasses );
-	H( EnableElements );
-	H( DisableElements );
-	H( GetAttribute );
-	H( SetAttribute );
-	H( GetProperty );
-	H( SetProperty );
-	H( Focus );
-	case rLaunch:
-		Launch_( Flow, ReturnTypeForNewHandling, Return );
-		break;
-	default:
-		qRGnr();
-		break;
-	}
+	Launch_( Flow, ReturnTypeForNewHandling, Return );
 }
 
 #undef H

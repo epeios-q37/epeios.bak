@@ -175,35 +175,7 @@ void prxy_send::Send(
 	const rArguments &Arguments,
 	const rNewArguments &NewArguments )
 {
-	switch ( Request ) {
-	case r_Undefined:
-		qRGnr();
-		break;
-	H( Execute );
-	H( Alert );
-	H( Confirm );
-	H( SetLayout );
-	H( GetContents );
-	H( SetContents );
-	H( DressWidgets );
-	H( AddClasses );
-	H( RemoveClasses );
-	H( ToggleClasses );
-	H( EnableElements );
-	H( DisableElements );
-	H( SetAttribute );
-	H( GetAttribute );
-	H( RemoveAttribute );
-	H( SetProperty );
-	H( GetProperty );
-	H( Focus );
-	case rLaunch:
-		New_( Flow, NewArguments );
-		break;
-	default:
-		qRGnr();
-		break;
-	}
+	New_( Flow, NewArguments );
 }
 
 #undef H

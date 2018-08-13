@@ -46,7 +46,7 @@ mods += fblfrp fblovl fbltyp
 mods += sclargmnt scli sclmisc sclerror scllocale 
 mods += sclrgstry sclxdhtml sclfrntnd 
 mods += xdhcmn xdhdws 
-mods += dmopool newlnch registry prtcl 
+mods += dmopool registry prtcl 
 
 pmods += pllio 
 

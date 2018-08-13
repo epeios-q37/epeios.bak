@@ -46,7 +46,6 @@ namespace prxy_cmn {
 		rSetProperty,
 		rGetProperty,
 		rFocus,
-		rLaunch,	// New command which will replace all the other ones.
 		r_amount,
 		r_Undefined
 	};

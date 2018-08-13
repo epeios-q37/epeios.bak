@@ -20,7 +20,6 @@
 #include "xdhqxdh.h"
 
 #include "dmopool.h"
-#include "newlnch.h"
 #include "registry.h"
 
 #include "prtcl.h"
@@ -619,8 +618,8 @@ namespace {
 				H( GetProperty );
 				H( Focus );
 				case prtcl::cNew:	// This command will replace all the above ones (except the 2 first).
-					newlnch::Launch( Flow, *this );
-					break;
+//					newlnch::Launch( Flow, *this );
+//					break;
 				default:
 					qRGnr();
 					break;
