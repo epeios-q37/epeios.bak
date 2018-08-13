@@ -36,6 +36,83 @@ namespace {
 	csdmnc::rCore Core_;
 }
 
+namespace {
+
+	stsfsm::wAutomat CommandAutomat_;
+
+	qENUM( Command_ )
+	{
+		cStandBy_1,	// Send as command to report that there is no more command to handle.
+		cExecute_1,
+		cAlert_1,
+		cConfirm_1,
+		cSetLayout_1,
+		cGetContents_1,
+		cSetContents_1,
+		cDressWidgets_1,
+		cAddClasses_1,
+		cRemoveClasses_1,
+		cToggleClasses_1,
+		cEnableElements_1,
+		cDisableElements_1,
+		cSetAttribute_1,
+		cGetAttribute_1,
+		cRemoveAttribute_1,
+		cSetProperty_1,
+		cGetProperty_1,
+		cFocus_1,
+		c_amount,
+		c_Undefined
+	};
+
+	#define C( name ) case c##name : return #name ; break
+
+	const char *GetLabel_( eCommand_ Command )
+	{
+		switch ( Command ) {
+			case cStandBy_1:
+				return prtcl::StandBy;
+				break;
+			C( Execute_1 );
+			C( Alert_1 );
+			C( Confirm_1 );
+			C( SetLayout_1 );
+			C( GetContents_1 );
+			C( SetContents_1 );
+			C( DressWidgets_1 );
+			C( AddClasses_1 );
+			C( RemoveClasses_1 );
+			C( ToggleClasses_1 );
+			C( EnableElements_1 );
+			C( DisableElements_1 );
+			C( SetAttribute_1 );
+			C( GetAttribute_1 );
+			C( RemoveAttribute_1 );
+			C( SetProperty_1 );
+			C( GetProperty_1 );
+			C( Focus_1 );
+		default:
+			qRFwk();
+			break;
+		}
+
+		return NULL; // To avoid a 'warning'.
+	}
+
+#undef C
+
+	void FillCommandAutomat_( void )
+	{
+		CommandAutomat_.Init();
+		stsfsm::Fill<eCommand_>( CommandAutomat_, c_amount, GetLabel_ );
+	}
+
+	eCommand_ GetCommand_( flw::iflow__ &Flow )
+	{
+		return stsfsm::GetId( Flow, CommandAutomat_, c_Undefined, c_amount );
+	}
+}
+
 void sclxdhtml::SCLXDHTMLInitialization( xdhcmn::eMode Mode )
 {
 qRH;
@@ -572,7 +649,7 @@ namespace {
 			Flow.Init( D_() );
 
 			if ( FirstCall_ ) {
-				if ( prtcl::GetCommand( Flow ) != prtcl::cStandBy_1 )
+				if ( GetCommand_( Flow ) != cStandBy_1 )
 					qRGnr();
 
 				Flow.Dismiss();
@@ -587,15 +664,14 @@ namespace {
 			Flow.Commit();
 
 # define H( name )\
-	case prtcl::c##name##_1:\
+	case c##name##_1:\
 		::name##_( Flow, *this );\
 		break
 
 			while( Continue )
-				switch ( prtcl::GetCommand( Flow ) ) {
-				case prtcl::cStandBy_1:
+				switch ( GetCommand_( Flow ) ) {
+				case cStandBy_1:
 					Return = true;
-				case prtcl::cError_1:
 					Continue = false;
 					Flow.Dismiss();
 					break;
@@ -718,4 +794,9 @@ void sclxdhtml::SCLXDHTMLReleaseCallback( xdhcmn::cSession *Callback )
 		qRGnr();
 
 	delete Callback;
+}
+
+qGCTOR( xdhqxdh )
+{
+	FillCommandAutomat_();
 }

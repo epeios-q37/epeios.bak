@@ -27,6 +27,8 @@
 # include "str.h"
 
 namespace proxy {
+	using prtcl::StandBy;
+
 	struct rArguments
 	{
 	public:
@@ -261,7 +263,7 @@ namespace proxy {
 				Handshake_( Flow, Data.Language );
 				Data.Handshaked = true;
 
-				prtcl::SendCommand( prtcl::cStandBy_1, Flow );
+				flw::PutString( StandBy, Flow );
 				Flow.Commit();
 			} else {
 				if ( Data._IsTherePendingRequest() ) {
@@ -291,7 +293,7 @@ namespace proxy {
 				if ( Data._IsTherePendingRequest() )
 					proxy::Send( Flow, Data.Sent.Arguments );
 				else
-					prtcl::SendCommand( prtcl::cStandBy_1, Flow );
+					flw::PutString( StandBy, Flow );
 
 				Data.Sent.ReadEnd();
 			}

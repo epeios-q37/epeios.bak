@@ -50,9 +50,15 @@ void proxy::Send(
 	flw::sWFlow &Flow,
 	const rArguments &Arguments )
 {
-	prtcl::SendCommand( prtcl::GetCommand( Arguments.Command ), Flow );
+qRH;
+	qCBUFFERr Buffer;
+qRB;
+	flw::PutString( Arguments.Command.Convert( Buffer ), Flow );
 	Send_( Arguments.Strings, Flow );
 	Send_( Arguments.XStrings, Flow );
+qRR;
+qRT;
+qRE;
 }
 
 void proxy::Recv(
