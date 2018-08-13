@@ -109,7 +109,6 @@ const char *prtcl::GetLabel( eCommand Command )
 		C( SetProperty_1 );
 		C( GetProperty_1 );
 		C( Focus_1 );
-		C( New );
 	default:
 		qRFwk();
 		break;

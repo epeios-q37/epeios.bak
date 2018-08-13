@@ -22,16 +22,103 @@
 
 # include "prtcl.h"
 
-# include "prxy_send.h"
-# include "prxy_recv.h"
-
 # include "csdscb.h"
 # include "flw.h"
 # include "str.h"
 
 namespace proxy {
-	using prxy_send::rArguments;
-	using prxy_recv::rReturn;
+	struct rArguments
+	{
+	public:
+		str::wString Command;
+		str::wStrings Strings;
+		crt::qCRATEwl( str::dStrings ) XStrings;
+		void reset( bso::sBool P = true )
+		{
+			tol::reset( P, Command, Strings, XStrings );
+		}
+		qCDTOR( rArguments );
+		void Init( void )
+		{
+			tol::Init( Command, Strings, XStrings );
+		}
+	};
+
+	void Send(
+		flw::sWFlow &Flow,
+		const rArguments &NewArguments );
+
+	qENUM( Type )
+	{
+		tVoid,
+			tString,
+			tStrings,
+			t_amount,
+			t_Undefined
+	};
+
+	class rReturn
+	{
+	private:
+		eType Type_;
+		str::wString String_;
+		str::wStrings Strings_;
+		void Test_( eType Type ) const
+		{
+			if ( Type_ != Type )
+				qRGnr();
+		}
+	public:
+		void reset( bso::sBool P = true )
+		{
+			tol::reset( P, String_, Strings_ );
+			Type_ = t_Undefined;
+		}
+		qCDTOR( rReturn );
+		void Init( void )
+		{
+			tol::Init( String_, Strings_ );
+			Type_ = t_Undefined;
+		}
+		str::dString &StringToSet( void )
+		{
+			Test_( t_Undefined );
+
+			Type_ = tString;
+
+			return String_;
+		}
+		str::dStrings &StringsToSet( void )
+		{
+			Test_( t_Undefined );
+
+			Type_ = tStrings;
+
+			return Strings_;
+		}
+		eType GetType( void ) const
+		{
+			return Type_;
+		}
+		const str::dString &GetString( void ) const
+		{
+			Test_( tString );
+
+			return String_;
+		}
+		const str::dStrings &GetStrings( void ) const
+		{
+			Test_( tStrings );
+
+			return Strings_;
+		}
+	};
+
+	void Recv(
+		eType ReturnType,
+		flw::sRFlow &Flow,
+		rReturn &Return );
+
 
 	typedef tht::rReadWrite rControl_;
 
@@ -81,7 +168,7 @@ namespace proxy {
 	struct rData
 	{
 	private:
-		prxy_recv::eType ReturnType_;
+		eType ReturnType_;
 	public:
 		rRecv Recv;
 		rSent Sent;
@@ -91,7 +178,7 @@ namespace proxy {
 		void reset( bso::sBool P = true )
 		{
 			tol::reset( P, Recv, Sent, Language, Handshaked, PendingRequest );
-			ReturnType_ = prxy_recv::t_Undefined;
+			ReturnType_ = t_Undefined;
 		}
 		qCDTOR( rData );
 		void Init( void )
@@ -99,18 +186,18 @@ namespace proxy {
 			reset();
 
 			tol::Init( Recv, Sent, Language );
-			ReturnType_ = prxy_recv::t_Undefined;
+			ReturnType_ = t_Undefined;
 			PendingRequest = false;
 			Handshaked = false;
 		}
-		void SetReturnType( prxy_recv::eType Type )
+		void SetReturnType( eType Type )
 		{
 			ReturnType_ = Type;
 			PendingRequest = true;
 		}
-		prxy_recv::eType GetReturnType( void ) const
+		eType GetReturnType( void ) const
 		{
-			if ( ReturnType_ == prxy_recv::t_Undefined )
+			if ( ReturnType_ == t_Undefined )
 				qRGnr();
 
 			return ReturnType_;
@@ -180,7 +267,7 @@ namespace proxy {
 				if ( Data._IsTherePendingRequest() ) {
 					Data.Recv.WriteBegin();
 					Data.Recv.Return.Init();
-					prxy_recv::Recv( Data.GetReturnType(), Flow, Data.Recv.Return );
+					proxy::Recv( Data.GetReturnType(), Flow, Data.Recv.Return );
 					Data.PendingRequest = false;
 					Data.Recv.WriteEnd();
 					PRXYOnPending( &Data );
@@ -202,7 +289,7 @@ namespace proxy {
 
 				// 'Data.Request' is set by the 'PRXYOn...' method above.
 				if ( Data._IsTherePendingRequest() )
-					prxy_send::Send( Flow, Data.Sent.Arguments );
+					proxy::Send( Flow, Data.Sent.Arguments );
 				else
 					prtcl::SendCommand( prtcl::cStandBy_1, Flow );
 

@@ -38,9 +38,6 @@
 		<Modules Group="Shared" Path="../">
 			<Module Path="../">prtcl</Module>
 			<Module>proxy</Module>
-			<Module>prxy_cmn</Module>
-			<Module>prxy_recv</Module>
-			<Module>prxy_send</Module>
 		</Modules>
 		<Module>registry</Module>
 		<Module>xdhp</Module>

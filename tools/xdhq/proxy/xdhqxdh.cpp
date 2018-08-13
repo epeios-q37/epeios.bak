@@ -617,9 +617,6 @@ namespace {
 				H( SetProperty );
 				H( GetProperty );
 				H( Focus );
-				case prtcl::cNew:	// This command will replace all the above ones (except the 2 first).
-//					newlnch::Launch( Flow, *this );
-//					break;
 				default:
 					qRGnr();
 					break;

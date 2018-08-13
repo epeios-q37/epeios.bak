@@ -203,13 +203,13 @@ namespace {
 			sclnjs::dArguments &Arguments )
 		{
 			switch ( Return.GetType() ) {
-			case prxy_recv::tString:
+			case proxy::tString:
 				Arguments.Add( Return.GetString() );
 				break;
-			case prxy_recv::tStrings:
+			case proxy::tStrings:
 				Arguments.Add( Return.GetStrings() );
 				break;
-			case prxy_recv::t_Undefined:
+			case proxy::t_Undefined:
 				break;
 			default:
 				qRGnr();
@@ -432,10 +432,10 @@ qRB;
 
 	Caller.GetArgument( RawType );
 
-	if ( RawType >= prxy_recv::t_amount )
+	if ( RawType >= proxy::t_amount )
 		qRGnr();
 
-	Data.SetReturnType( (prxy_recv::eType)RawType );
+	Data.SetReturnType( (proxy::eType)RawType );
 
 	Caller.GetArgument( Amount );
 

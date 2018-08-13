@@ -184,10 +184,10 @@ qRB;
 	Caller.Get( Arguments.Command );
 	Caller.Get( RawType );
 
-	if ( RawType >= prxy_recv::t_amount )
+	if ( RawType >= proxy::t_amount )
 		qRGnr();
 
-	Data.SetReturnType( (prxy_recv::eType)RawType );
+	Data.SetReturnType( (proxy::eType)RawType );
 
 	Caller.Get( Amount );
 
@@ -210,12 +210,12 @@ qRB;
 	proxy::rReturn &Return = Data.Recv.Return;
 
 	switch ( Data.GetReturnType() ) {
-	case prxy_recv::tVoid:
+	case proxy::tVoid:
 		break;
-	case prxy_recv::tString:
+	case proxy::tString:
 		Caller.SetReturnValue( Return.GetString() );
 		break;
-	case prxy_recv::tStrings:
+	case proxy::tStrings:
 		Caller.SetReturnValue( Return.GetStrings() );
 		break;
 	default:

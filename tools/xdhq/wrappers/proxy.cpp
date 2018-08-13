@@ -25,6 +25,59 @@
 
 using namespace proxy;
 
+namespace {
+	namespace {
+		template <typename items> void Send_(
+			const items &Items,
+			flw::sWFlow &Flow )
+		{
+			//			prtcl::Put( Items.Amount(), Flow );
+
+			sdr::sRow Row = Items.First();
+
+			if ( Row != qNIL ) {
+				while ( Row != qNIL ) {
+					prtcl::Put( Items( Row ), Flow );
+
+					Row = Items.Next( Row );
+				}
+			}
+		}
+	}
+}
+
+void proxy::Send(
+	flw::sWFlow &Flow,
+	const rArguments &Arguments )
+{
+	prtcl::SendCommand( prtcl::GetCommand( Arguments.Command ), Flow );
+	Send_( Arguments.Strings, Flow );
+	Send_( Arguments.XStrings, Flow );
+}
+
+void proxy::Recv(
+	eType ReturnType,
+	flw::sRFlow &Flow,
+	rReturn &Return )
+{
+	if ( prtcl::GetRequest( Flow ) != prtcl::rReady_1 )
+		qRGnr();
+
+	switch ( ReturnType ) {
+	case tVoid:
+		break;
+	case tString:
+		prtcl::Get( Flow, Return.StringToSet() );
+		break;
+	case tStrings:
+		prtcl::Get( Flow, Return.StringsToSet() );
+		break;
+	default:
+		qRGnr();
+		break;
+	}
+}
+
 void proxy::Handshake_(
 	flw::sRFlow &Flow,
 	str::dString & Language )

@@ -72,7 +72,6 @@ namespace prtcl {
 		cSetProperty_1,
 		cGetProperty_1,
 		cFocus_1,
-		cNew,	// Will replace all above commands, except the 2 first ones.
 		c_amount,
 		c_Undefined
 	};

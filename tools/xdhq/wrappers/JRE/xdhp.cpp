@@ -219,7 +219,7 @@ qRB;
 	Caller.Get( Arguments.Command );
 
 	Type.Init( Caller.GetObject() );
-	Data.SetReturnType( (prxy_recv::eType)Type.IntValue() );
+	Data.SetReturnType( (proxy::eType)Type.IntValue() );
 
 	Caller.Get( Arguments.Strings );
 	Caller.Get( Arguments.XStrings );
@@ -229,13 +229,13 @@ qRB;
 	proxy::rReturn &Return = Data.Recv.Return;
 
 	switch ( Data.GetReturnType() ) {
-	case prxy_recv::tVoid:
+	case proxy::tVoid:
 		Buffer = scljre::Null();
 		break;
-	case prxy_recv::tString:
+	case proxy::tString:
 		Buffer = scljre::String( Env, Return.GetString() );
 		break;
-	case prxy_recv::tStrings:
+	case proxy::tStrings:
 		Buffer = scljre::Strings( Env, Return.GetStrings() );
 		break;
 	default:
