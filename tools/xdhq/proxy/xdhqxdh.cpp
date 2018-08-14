@@ -187,7 +187,6 @@ namespace {
 
 		Flow.Dismiss();
 
-		prtcl::PutRequest( prtcl::rReady_1, Flow );
 		prtcl::Put( (char *)Buffer(), Flow );
 		Flow.Commit();
 	qRR;
@@ -213,9 +212,6 @@ namespace {
 		Proxy.Execute( Script, Buffer );
 
 		Flow.Dismiss();
-
-		prtcl::PutRequest( prtcl::rReady_1, Flow );
-		Flow.Commit();
 	qRR;
 	qRT;
 	qRE;
@@ -240,7 +236,6 @@ namespace {
 
 		Flow.Dismiss();
 
-		prtcl::PutRequest( prtcl::rReady_1, Flow );
 		prtcl::Put( (char *)Buffer(), Flow );
 		Flow.Commit();
 	qRR;
@@ -264,9 +259,6 @@ namespace {
 		Proxy.SetLayout( Id, XML, XSL );
 
 		Flow.Dismiss();
-
-		prtcl::PutRequest( prtcl::rReady_1, Flow );
-		Flow.Commit();
 	qRR;
 	qRT;
 	qRE;
@@ -313,7 +305,6 @@ namespace {
 
 		Flow.Dismiss();
 
-		prtcl::PutRequest( prtcl::rReady_1, Flow );
 		prtcl::Put( Contents, Flow );
 		Flow.Commit();
 	qRR;
@@ -341,9 +332,6 @@ namespace {
 		Proxy.SetContents( MergedIds, MergedContents );
 
 		Flow.Dismiss();
-
-		prtcl::PutRequest( prtcl::rReady_1, Flow );
-		Flow.Commit();
 	qRR;
 	qRT;
 	qRE;
@@ -362,9 +350,6 @@ namespace {
 		Proxy.DressWidgets( Id );
 
 		Flow.Dismiss();
-
-		prtcl::PutRequest( prtcl::rReady_1, Flow );
-		Flow.Commit();
 	qRR;
 	qRT;
 	qRE;
@@ -394,9 +379,6 @@ namespace {
 			(Proxy.*Method)( MergedIds, MergedClasses );
 
 			Flow.Dismiss();
-
-			prtcl::PutRequest( prtcl::rReady_1, Flow );
-			Flow.Commit();
 		qRR;
 		qRT;
 		qRE;
@@ -444,9 +426,6 @@ namespace {
 			(Proxy.*Method)( MergedIds );
 
 			Flow.Dismiss();
-
-			prtcl::PutRequest( prtcl::rReady_1, Flow );
-			Flow.Commit();
 		qRR;
 		qRT;
 		qRE;
@@ -482,9 +461,6 @@ namespace {
 		Proxy.SetAttribute( Id, Name, Value );
 
 		Flow.Dismiss();
-
-		prtcl::PutRequest( prtcl::rReady_1, Flow );
-		Flow.Commit();
 	qRR;
 	qRT;
 	qRE;
@@ -506,7 +482,6 @@ namespace {
 
 		Flow.Dismiss();
 
-		prtcl::PutRequest( prtcl::rReady_1, Flow );
 		prtcl::Put( Value, Flow );
 		Flow.Commit();
 	qRR;
@@ -528,9 +503,6 @@ namespace {
 		Proxy.RemoveAttribute( Id, Name );
 
 		Flow.Dismiss();
-
-		prtcl::PutRequest( prtcl::rReady_1, Flow );
-		Flow.Commit();
 	qRR;
 	qRT;
 	qRE;
@@ -551,9 +523,6 @@ namespace {
 		Proxy.SetProperty( Id, Name, Value );
 
 		Flow.Dismiss();
-
-		prtcl::PutRequest( prtcl::rReady_1, Flow );
-		Flow.Commit();
 	qRR;
 	qRT;
 	qRE;
@@ -575,7 +544,6 @@ namespace {
 
 		Flow.Dismiss();
 
-		prtcl::PutRequest( prtcl::rReady_1, Flow );
 		prtcl::Put( Value, Flow );
 		Flow.Commit();
 	qRR;
@@ -596,9 +564,6 @@ namespace {
 		Proxy.Focus( Id );
 
 		Flow.Dismiss();
-
-		prtcl::PutRequest( prtcl::rReady_1, Flow );
-		Flow.Commit();
 	qRR;
 	qRT;
 	qRE;
@@ -619,7 +584,6 @@ namespace {
 		eMode_ Mode_;
 		sck::rRWDriver DemoDriver_;
 		csdmnc::rRWDriver ProdDriver_;
-		bso::sBool FirstCall_;
 		fdr::rRWDriver &D_( void )
 		{
 			switch ( Mode_ ) {
@@ -647,17 +611,6 @@ namespace {
 			flw::sDressedRWFlow<> Flow;
 		qRB;
 			Flow.Init( D_() );
-
-			if ( FirstCall_ ) {
-				if ( GetCommand_( Flow ) != cStandBy_1 )
-					qRGnr();
-
-				Flow.Dismiss();
-
-				FirstCall_ = false;
-			}
-
-			prtcl::PutRequest( prtcl::rLaunch_1, Flow );
 
 			prtcl::Put( Id, Flow );
 			prtcl::Put( Action, Flow );
@@ -697,7 +650,9 @@ namespace {
 					qRGnr();
 					break;
 			}
+
 #undef H
+
 		qRR;
 		qRT;
 		qRE;
@@ -709,7 +664,6 @@ namespace {
 			tol::reset( P, DemoDriver_, ProdDriver_ );
 			Mode_ = m_Undefined;
 			xdhdws::sProxy::reset( P );
-			FirstCall_ = false;
 		}
 		qCVDTOR( rSession_ )
 		void Init(
@@ -740,8 +694,6 @@ namespace {
 			Flow.Commit();
 
 			xdhdws::sProxy::Init( Callback );
-
-			FirstCall_ = true;
 
 			Flow.reset();
 

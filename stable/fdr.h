@@ -309,8 +309,6 @@ namespace fdr {
 
 				if ( ( Amount == 0 ) && AutoDismissOnEOF_ && DismissPending_ )
 					Dismiss( true );	// Relaying dismissing to underlying level on EOF.
-				else if ( Amount != 0 )
-					DismissPending_ = true;
 
 				return Amount;
 			} else
@@ -426,14 +424,21 @@ namespace fdr {
 			return Red;
 		}
 
-		bso::bool__ _EOF( void )
+		bso::bool__ EOF_( void )
 		{
-			if ( _Available ) 
+			Lock();
+
+			if ( _Available ) {
+				DismissPending_ = true;
 				return false;
-			else if ( _Size == 0 )
+			} else if ( ( _Size != 0 ) && (_FillCache( 0 ) != 0) ) {
+				DismissPending_ = true;
+				return false;
+			} else {
+				if ( !DismissPending_ )
+					Unlock();
 				return true;
-			else
-				return _FillCache( 0 ) == 0;
+			}
 		}
 	protected:
 		// Retourne le nombre d'octets effectivement lus. Ne retourne '0' que si plus aucune donne n'est disponibe.
@@ -514,9 +519,7 @@ namespace fdr {
 			if ( Wanted < 1 )
 				qRFwk();
 #endif
-			Lock();
-
-			if ( _EOF() )
+			if ( EOF_() )
 				return 0;
 
 			switch ( Behavior ) {
@@ -559,9 +562,7 @@ namespace fdr {
 		}
 		bso::bool__ EndOfFlow( void )
 		{
-			Lock();
-
-			return _EOF();
+			return EOF_();
 		}
 		bso::bool__ IFlowIsLocked( void )	// Simplifie l'utilisation de 'ioflow_driver_...'
 		{

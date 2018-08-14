@@ -25,8 +25,8 @@ import java.util.*;
 import java.awt.Desktop;
 
 public class DOM_DEMO extends DOM_SHRD {
-	static private String address = "atlastk.org"; static private String httpPort = "";
-//	static private String address = "localhost"; static private String httpPort = ":8080";
+//	static private String address = "atlastk.org"; static private String httpPort = "";
+	static private String address = "localhost"; static private String httpPort = ":8080";
 	static private int port = 53800;
 	static private String token = "";
 	private Socket socket;
@@ -117,22 +117,6 @@ public class DOM_DEMO extends DOM_SHRD {
 		return getStrings_( new InputStreamReader( socket.getInputStream() ) );
 	}
 
-	private String getQuery_( InputStreamReader reader ) throws Exception {
-		String query = "";
-		int datum = reader.read();
-
-		while ( datum != 0 ) {
-			query += (char)datum;
-			datum = reader.read();
-		}
-
-		return query;
-	}
-
-	private String getQuery_() throws Exception {
-		return getQuery_( new InputStreamReader( socket.getInputStream() ) );
-	}
-
 	public DOM_DEMO() throws Exception {
 		try {
 			socket = new Socket( address, port );
@@ -168,11 +152,6 @@ public class DOM_DEMO extends DOM_SHRD {
 		}
 
 		getString_( reader );	// Protocol version.
-
-		output.write(new String( "StandBy_1" ).getBytes());
-		output.write( 0 );
-
-		output.flush();
 	}
 
 	@Override public void getAction(Event event) {
@@ -186,10 +165,6 @@ public class DOM_DEMO extends DOM_SHRD {
 				firstLaunch = false;
 
 			InputStreamReader reader = new InputStreamReader( socket.getInputStream() );
-			String query = getQuery_( reader );
-
-			if ( !"Launch_1".equals( query ) )
-				throw new Exception( "Unknown query '" + query + "' !!!" );
 
 			event.id = getString_( reader );
 
@@ -228,11 +203,6 @@ public class DOM_DEMO extends DOM_SHRD {
 			output.flush();
 
 			InputStreamReader reader = new InputStreamReader( socket.getInputStream() );
-
-			String query = getQuery_( reader );
-
-			if ( !"Ready_1".equals( query ) )
-				throw new Exception( "Unknown query '" + query + "' !!!" );
 
 			switch ( type ) {
 			case VOID:

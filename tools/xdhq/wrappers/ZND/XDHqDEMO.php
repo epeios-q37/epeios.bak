@@ -29,7 +29,6 @@ class XDHq_DEMO extends XDHq_SHRD {
 class XDHqDOM_DEMO {
 	private $socket;
 	private $token = "";
-	private $firstLaunch = true;
 	private function writeSize_( $socket, $size ) {
 		$result = pack( "C", $size & 0x7f );
 		$size >>= 7;
@@ -99,12 +98,9 @@ class XDHqDOM_DEMO {
 
 		return $string;
 	}
-	private function standBy_( $socket ) {
-		fwrite( $this->socket,  pack( "a*x", "StandBy_1" ) );
-	}
 	function __construct() {
-		$address = "atlastk.org";$httpPort = "";
-//		$address = "localhost";$httpPort = ":8080";
+//		$address = "atlastk.org";$httpPort = "";
+		$address = "localhost";$httpPort = ":8080";
 		$port = 53800;
 
 		$this->socket = fsockopen( $address, $port, $errno, $errstr );
@@ -132,18 +128,16 @@ class XDHqDOM_DEMO {
 		$this->getString_( $this->socket );	// Protocol label.
 		$this->getString_( $this->socket );	// Protocol version.
 		$this->getString_( $this->socket );	// Language.
-
-		$this->standBy_( $this->socket );
-		fflush( $this->socket );
 	}
 	function getAction( &$id ) {
-		if ( !$this->firstLaunch ) {
-			$this->standBy_( $this->socket );
-			fflush( $this->socket );
-		} else
-			$this->firstLaunch = false;
+		static $firstLaunch = true;
 
-		$this->getQuery_( $this->socket );
+		if ( !$firstLaunch) {
+			fwrite($this->socket,  pack( "a*x", "StandBy_1" ));
+			fflush($this->socket);
+		} else
+			$firstLaunch = false;
+
 
 		$id = $this->getString_( $this->socket );
 
@@ -176,8 +170,6 @@ class XDHqDOM_DEMO {
 		}
 
 		fflush( $this->socket );
-
-		$this->getQuery_( $this->socket );
 
 		switch ( $type ) {
 		case XDHq::RT_NONE:

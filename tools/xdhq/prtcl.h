@@ -34,23 +34,6 @@ namespace prtcl {
 	static qCDEF( char *, StandBy, "StandBy_1" );	// Send as command to report that there is no more command to handle.
 	qCDEF( bso::sU8, ProtocolVersion, 0 );
 
-	qENUM( Request ) {
-		rLaunch_1,	// Event was launched.
-		rReady_1,	// Potential pending data are available, and client is available for new action.
-		r_amount,
-		r_Undefined
-	};
-
-	const char *GetLabel( eRequest Request );
-
-	eRequest GetRequest( const str::dString &Pattern );
-
-	eRequest GetRequest( flw::iflow__ &Flow );
-
-	void PutRequest(
-		eRequest Request,
-		flw::oflow__ &Flow );
-
 	using csdcmn::Put;
 	using csdcmn::Get;
 }

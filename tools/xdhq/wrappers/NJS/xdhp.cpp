@@ -274,7 +274,7 @@ namespace {
 				Callback.Assign( Get_( Data.Recv.Action ) );
 				Callback.VoidLaunch( Data.XDH, Data.Recv.Id );
 				Data.Recv.ReadEnd();
-				if ( !Data._IsTherePendingRequest() )
+				if ( !Data.IsTherePendingRequest() )
 					Data.Sent.WriteDismiss();
 				Callback.reset( false );
 				break;
@@ -284,7 +284,7 @@ namespace {
 				SetCallbackArguments_( Data.Recv.Return, Arguments );
 				Data.Recv.ReadEnd();
 				Callback.VoidLaunch( Arguments );
-				if ( !Data._IsTherePendingRequest() )
+				if ( !Data.IsTherePendingRequest() )
 					Data.Sent.WriteDismiss();
 				Callback.reset( false );
 				break;

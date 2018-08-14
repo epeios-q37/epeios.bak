@@ -23,43 +23,6 @@
 
 using namespace prtcl;
 
-#define C( name ) case r##name : return #name ; break
-
-const char *prtcl::GetLabel( eRequest Request )
-{
-	switch ( Request ) {
-	C( Launch_1 );
-	C( Ready_1 );
-	default:
-		qRFwk();
-		break;
-	}
-
-	return NULL; // To avoid a 'warning'.
-}
-
-#undef C
-
-namespace {
-	stsfsm::wAutomat RequestAutomat_;
-
-	void FillRequestAutomat_( void )
-	{
-		RequestAutomat_.Init();
-		stsfsm::Fill<eRequest>( RequestAutomat_, r_amount, GetLabel );
-	}
-}
-
-eRequest prtcl::GetRequest( const str::dString &Pattern )
-{
-	return stsfsm::GetId( Pattern, RequestAutomat_, r_Undefined, r_amount );
-}
-
-eRequest prtcl::GetRequest( flw::iflow__ &Flow )
-{
-	return stsfsm::GetId( Flow, RequestAutomat_, r_Undefined, r_amount );
-}
-
 namespace {
 	inline void Put_(
 		const char *Identifier,
@@ -76,16 +39,3 @@ namespace {
 		Put_( Get( T ), Flow );
 	}
 }
-
-void prtcl::PutRequest(
-	eRequest Request,
-	flw::oflow__ &Flow )
-{
-	Put_( Request, Flow, GetLabel );
-}
-
-qGCTOR( prtcl )
-{
-	FillRequestAutomat_();
-}
-

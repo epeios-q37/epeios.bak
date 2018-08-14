@@ -66,9 +66,6 @@ void proxy::Recv(
 	flw::sRFlow &Flow,
 	rReturn &Return )
 {
-	if ( prtcl::GetRequest( Flow ) != prtcl::rReady_1 )
-		qRGnr();
-
 	switch ( ReturnType ) {
 	case tVoid:
 		break;
@@ -102,9 +99,6 @@ void proxy::GetAction_(
 	str::dString &Id,
 	str::dString &Action )
 {
-	if ( prtcl::GetRequest( Flow ) != prtcl::rLaunch_1 )
-		qRGnr();
-
 	prtcl::Get( Flow, Id );
 	prtcl::Get( Flow, Action );
 	Flow.Dismiss();

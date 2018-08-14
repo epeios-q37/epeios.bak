@@ -205,7 +205,7 @@ namespace proxy {
 			return ReturnType_;
 
 		}
-		bso::sBool _IsTherePendingRequest( void ) const
+		bso::sBool IsTherePendingRequest( void ) const
 		{
 			return PendingRequest;
 		}
@@ -262,11 +262,8 @@ namespace proxy {
 
 				Handshake_( Flow, Data.Language );
 				Data.Handshaked = true;
-
-				flw::PutString( StandBy, Flow );
-				Flow.Commit();
 			} else {
-				if ( Data._IsTherePendingRequest() ) {
+				if ( Data.IsTherePendingRequest() ) {
 					Data.Recv.WriteBegin();
 					Data.Recv.Return.Init();
 					proxy::Recv( Data.GetReturnType(), Flow, Data.Recv.Return );
@@ -290,7 +287,7 @@ namespace proxy {
 				Data.Sent.ReadBegin();
 
 				// 'Data.Request' is set by the 'PRXYOn...' method above.
-				if ( Data._IsTherePendingRequest() )
+				if ( Data.IsTherePendingRequest() )
 					proxy::Send( Flow, Data.Sent.Arguments );
 				else
 					flw::PutString( StandBy, Flow );
