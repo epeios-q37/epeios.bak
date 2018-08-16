@@ -25,28 +25,24 @@
 
 using namespace proxy;
 
-namespace {
-	namespace {
-		template <typename items> void Send_(
-			const items &Items,
-			flw::sWFlow &Flow )
-		{
-			//			prtcl::Put( Items.Amount(), Flow );
+template <typename items> static void Send_(
+	const items &Items,
+	flw::sWFlow &Flow )
+{
+	//			prtcl::Put( Items.Amount(), Flow );
 
-			sdr::sRow Row = Items.First();
+	sdr::sRow Row = Items.First();
 
-			if ( Row != qNIL ) {
-				while ( Row != qNIL ) {
-					prtcl::Put( Items( Row ), Flow );
+	if ( Row != qNIL ) {
+		while ( Row != qNIL ) {
+			prtcl::Put( Items( Row ), Flow );
 
-					Row = Items.Next( Row );
-				}
-			}
+			Row = Items.Next( Row );
 		}
 	}
 }
 
-void proxy::Send(
+void proxy::Send_(
 	flw::sWFlow &Flow,
 	const rArguments &Arguments )
 {
@@ -54,14 +50,14 @@ qRH;
 	qCBUFFERr Buffer;
 qRB;
 	flw::PutString( Arguments.Command.Convert( Buffer ), Flow );
-	Send_( Arguments.Strings, Flow );
-	Send_( Arguments.XStrings, Flow );
+	::Send_<str::dStrings>( Arguments.Strings, Flow );
+	::Send_<dXStrings_>( Arguments.XStrings, Flow );
 qRR;
 qRT;
 qRE;
 }
 
-void proxy::Recv(
+void proxy::Recv_(
 	eType ReturnType,
 	flw::sRFlow &Flow,
 	rReturn &Return )
@@ -82,16 +78,16 @@ void proxy::Recv(
 }
 
 void proxy::Handshake_(
-	flw::sRFlow &Flow,
+	flw::sRWFlow &Flow,
 	str::dString & Language )
 {
-	csdcmn::sVersion Version = csdcmn::UndefinedVersion;
-
-	if ( (Version = csdcmn::GetProtocolVersion( prtcl::ProtocolId, Flow )) != prtcl::ProtocolVersion )
-		qRGnr();
-
 	prtcl::Get( Flow, Language );
+
 	Flow.Dismiss();
+
+	csdcmn::SendProtocol( prtcl::ProtocolId, prtcl::ProtocolVersion, Flow );
+
+	Flow.Commit();
 }
 
 void proxy::GetAction_(

@@ -29,12 +29,15 @@
 namespace proxy {
 	using prtcl::StandBy;
 
+	typedef crt::qCRATEdl( str::dStrings ) dXStrings_;
+	qW( XStrings_ );
+
 	struct rArguments
 	{
 	public:
 		str::wString Command;
 		str::wStrings Strings;
-		crt::qCRATEwl( str::dStrings ) XStrings;
+		wXStrings_ XStrings;
 		void reset( bso::sBool P = true )
 		{
 			tol::reset( P, Command, Strings, XStrings );
@@ -46,7 +49,8 @@ namespace proxy {
 		}
 	};
 
-	void Send(
+	// Returns 'false' if type is 'void' (i.e. no data were read from 'Flow').
+	void Send_(
 		flw::sWFlow &Flow,
 		const rArguments &NewArguments );
 
@@ -116,7 +120,7 @@ namespace proxy {
 		}
 	};
 
-	void Recv(
+	void Recv_(
 		eType ReturnType,
 		flw::sRFlow &Flow,
 		rReturn &Return );
@@ -175,11 +179,10 @@ namespace proxy {
 		rRecv Recv;
 		rSent Sent;
 		str::wString Language;
-		bso::sBool Handshaked;
 		bso::sBool PendingRequest;
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, Recv, Sent, Language, Handshaked, PendingRequest );
+			tol::reset( P, Recv, Sent, Language, PendingRequest );
 			ReturnType_ = t_Undefined;
 		}
 		qCDTOR( rData );
@@ -190,7 +193,6 @@ namespace proxy {
 			tol::Init( Recv, Sent, Language );
 			ReturnType_ = t_Undefined;
 			PendingRequest = false;
-			Handshaked = false;
 		}
 		void SetReturnType( eType Type )
 		{
@@ -212,7 +214,7 @@ namespace proxy {
 	};
 
 	void Handshake_(
-		flw::sRFlow &Flow,
+		flw::sRWFlow &Flow,
 		str::dString &Language );
 
 	void GetAction_(
@@ -227,7 +229,9 @@ namespace proxy {
 		// Action to launch on a new session.
 		str::wString NewSessionAction_;
 	protected:
-		virtual void *CSDSCBPreProcess( const ntvstr::char__ *Origin ) override
+		virtual void *CSDSCBPreProcess(
+			fdr::rRWDriver *RWDriver,
+			const ntvstr::char__ *Origin ) override
 		{
 			data *Data = NULL;
 		qRH;
@@ -237,6 +241,12 @@ namespace proxy {
 
 			if ( Data == NULL )
 				qRAlc();
+
+			Flow.Init( *RWDriver );
+
+			Data->Recv.WriteDismiss();
+
+			Handshake_( Flow, Data->Language );
 		qRR;
 			if ( Data != NULL )
 				delete Data;
@@ -245,28 +255,24 @@ namespace proxy {
 			return Data;
 		}
 		virtual csdscb::eAction CSDSCBProcess(
-			fdr::rRWDriver *IODriver,
+			fdr::rRWDriver *RWDriver,
 			void *UP ) override
 		{
 		qRH;
 			flw::sDressedRWFlow<> Flow;
 			data &Data = *(data *)UP;
+			bso::sBool Cont = true;
 		qRB;
 			if ( UP == NULL )
 				qRGnr();
 
-			Flow.Init( *IODriver );
+			Flow.Init( *RWDriver );
 
-			if ( !Data.Handshaked ) {
-				Data.Recv.WriteDismiss();
-
-				Handshake_( Flow, Data.Language );
-				Data.Handshaked = true;
-			} else {
+			while ( Cont ) {
 				if ( Data.IsTherePendingRequest() ) {
 					Data.Recv.WriteBegin();
 					Data.Recv.Return.Init();
-					proxy::Recv( Data.GetReturnType(), Flow, Data.Recv.Return );
+					Recv_( Data.GetReturnType(), Flow, Data.Recv.Return );
 					Data.PendingRequest = false;
 					Data.Recv.WriteEnd();
 					PRXYOnPending( &Data );
@@ -287,10 +293,13 @@ namespace proxy {
 				Data.Sent.ReadBegin();
 
 				// 'Data.Request' is set by the 'PRXYOn...' method above.
-				if ( Data.IsTherePendingRequest() )
-					proxy::Send( Flow, Data.Sent.Arguments );
-				else
+				if ( Data.IsTherePendingRequest() ) {
+					Send_( Flow, Data.Sent.Arguments );
+					Cont = Data.GetReturnType() == tVoid;
+				} else {
 					flw::PutString( StandBy, Flow );
+					Cont = false;
+				}
 
 				Data.Sent.ReadEnd();
 			}

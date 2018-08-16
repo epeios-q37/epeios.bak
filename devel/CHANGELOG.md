@@ -5,23 +5,41 @@
 - [adpt]: Adaptation to changes in underlying modules;
 - [stdz]: modification to comply with current standards;
 
+## 2018-08-16
+
+- CSDBNS:
+  - [adpt];
+  - [stdz];
+- CSDMXS:
+  - [adpt];
+- CSDSCB:
+  - reverting some modifications due to modifications on components at otigine of this problem (*Atlas* toolkit);
+  - [stdz];
+
+## 2018-08-14
+
+- FDR:
+  - when there was still data in the cache, dismissing was not handled properly;
 
 ## 2018-08-07
-- SCLZND :
-  - introducing 'sLong',
+
+- SCLZND:
+  - introducing 'sLong';
 
 ## 2018-08-07
-- STSFSM :
-  - handling thread-safety with item rather then mutex.
+
+- STSFSM:
+  - handling thread-safety with item rather then mutexes;
 
 ## 2018-08-05
+
 - STSFSM:
-  - handling thread-safety.
+  - handling thread-safety;
 
 ## 2018-07-28
 
 - SCLJRE:
-  - introducing array of strings (`(d|w)XStrings`),
+  - introducing array of strings (`(d|w)XStrings`);
 
 ## 2018-07-23
 
@@ -31,7 +49,7 @@
 - CSDMXS:
   - [adpt],
 - CNVFDR:
-  - fixing some template issues occuring with *g++*,
+  - fixing some template issues occurring with *g++*,
 - FDR:
   - [adpt],
 - MTX:

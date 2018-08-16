@@ -60,13 +60,13 @@ namespace csdscb {
 			return false;
 		}
 		virtual void *CSDSCBPreProcess(
-			// fdr::rRWDriver *IODriver,	// As tempting as it could be, do NOT activate this parameter, as this will lead to some issues between embedded/remote backends and the Atlas toolkit handling.
-			const ntvstr::char__ *Origin ) = 0;	// If set to true, it means that the 'Flow' will be destructed downstream.
+			fdr::rRWDriver *RWDriver,
+			const ntvstr::char__ *Origin ) = 0;
 		virtual eAction CSDSCBProcess(
-			fdr::rRWDriver *IODriver,
+			fdr::rRWDriver *RWDriver,
 			void *UP ) = 0;
 		// If the returned value is 'true', the underlying socket will be closed.
-		// Usefull when the socket reading and writing are not handled by the same thread, so the other thread may not be wait indefinatly ( used in 'prxyq').
+		// Useful when the socket reading and writing are not handled by the same thread, so the other thread may not be wait indefinitely ( used in 'prxyq').
 		virtual bso::sBool CSDSCBPostProcess( void *UP ) = 0;
 	public:
 		qCALLBACK( Processing );
@@ -77,15 +77,17 @@ namespace csdscb {
 		{
 			return CSDSCBPluginOverride( Id, Arguments, Timeout );
 		}
-		void *PreProcess( const ntvstr::char__ *Origin )
+		void *PreProcess(
+			fdr::rRWDriver *RWDriver,
+			const ntvstr::char__ *Origin )
 		{
-			return CSDSCBPreProcess( Origin );
+			return CSDSCBPreProcess( RWDriver, Origin );
 		}
 		eAction Process(
-			fdr::rRWDriver *IODriver,
+			fdr::rRWDriver *RWDriver,
 			void *UP )
 		{
-			return CSDSCBProcess( IODriver, UP );
+			return CSDSCBProcess( RWDriver, UP );
 		}
 		// If the returned value is 'true', the underlying socket has to be closed upstream.
 		bso::sBool PostProcess( void *UP )

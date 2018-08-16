@@ -57,7 +57,7 @@ namespace csdbns {
 			sck::socket__ Socket,
 			void *UP ) = 0;
 		// If the returned value is 'true', the underlying socket will be closed.
-		// Usefull when the socket reading and writing are not handled by the same thread, so the other thread may not be wait indefinatly ( used in 'prxyq').
+		// Useful when the socket reading and writing are not handled by the same thread, so the other thread may not be wait indefinatly ( used in 'prxyq').
 		virtual bso::sBool CSDBNSPostProcess( void *UP ) = 0;
 	public:
 		void *PreProcess(
@@ -160,15 +160,15 @@ namespace csdbns {
 # ifdef CPE_F_MT
 
 	struct rData_ {
-		sck::socket_ioflow_driver___ *IODriver;
+		sck::socket_ioflow_driver___ *RWDriver;
 		void *UP;
 		void reset( bso::sBool P = true )
 		{
 			if ( P )
-				if ( IODriver != NULL )
-					delete IODriver;
+				if ( RWDriver != NULL )
+					delete RWDriver;
 
-			tol::reset( P, IODriver, UP );
+			tol::reset( P, RWDriver, UP );
 		}
 		qCDTOR( rData_ );
 		void Init( void )
@@ -195,13 +195,13 @@ namespace csdbns {
 
 			Data->Init();
 
-			Data->IODriver = new sck::socket_ioflow_driver___;
+			Data->RWDriver = new sck::socket_ioflow_driver___;
 
-			if ( Data->IODriver == NULL )
+			if ( Data->RWDriver == NULL )
 				qRFwk();
 
-			Data->IODriver->Init( Socket, true, fdr::ts_Default, sck::NoTimeout );
-			Data->UP = BaseCallback->PreProcess( ntvstr::string___( IP ).Internal() );	// The 'OwnerShipTaken' concerns the 'Flow'.
+			Data->RWDriver->Init( Socket, true, fdr::ts_Default, sck::NoTimeout );
+			Data->UP = BaseCallback->PreProcess( Data->RWDriver, ntvstr::string___( IP ).Internal() );	// The 'OwnerShipTaken' concerns the 'Flow'.
 		qRR
 			if ( Data != NULL )
 				delete Data;
@@ -219,7 +219,7 @@ namespace csdbns {
 			if ( Data.Flow.GetSocket() != Socket )
 				ERRc();
 #  endif
-			return BaseCallback->Process( Data.IODriver, Data.UP );
+			return BaseCallback->Process( Data.RWDriver, Data.UP );
 		}
 		virtual bso::sBool CSDBNSPostProcess( void *UP ) override
 		{
@@ -231,7 +231,7 @@ namespace csdbns {
 			rData_ &Data = *(rData_ *)UP;
 
 			if ( !( ReturnedValue = BaseCallback->PostProcess( Data.UP ) ) )
-				Data.IODriver = NULL;	// To avoid destruction below.
+				Data.RWDriver = NULL;	// To avoid destruction below.
 
 			delete (rData_ *)UP;
 

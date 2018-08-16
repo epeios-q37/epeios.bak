@@ -279,7 +279,9 @@ qRE
 		ntvstr::string___ _Origin;
 		void _Clean( void );	// Appelle le 'PostProcess' pour tous les objets utilisateurs.
 	protected:
-		virtual void *CSDSCBPreProcess( const ntvstr::char__ *Origin ) override
+		virtual void *CSDSCBPreProcess(
+			fdr::rRWDriver *RWDriver,
+			const ntvstr::char__ *Origin ) override
 		{
 			_Origin.Init( Origin );
 
@@ -318,11 +320,11 @@ qRE
 				Id = Core_.New();
 				PutId( Id, Flow );
 				Flow.Commit( false );
-				SUP = Callback_->PreProcess( _Origin );
+				SUP = Callback_->PreProcess( IODriver, _Origin );
 				if ( OwnerShipTaken )
 					qRFwk();
 				Core_.Store( SUP, Id );
-#if 1
+#if 0
 				Action = Callback_->Process( IODriver, SUP );
 #else
 				Action = csdscb::aContinue;

@@ -198,7 +198,7 @@ namespace bso {
 	}
 	*/
 
-	// Taille maximale nï¿½cessaire pour stocker la valeur d'un entirer en dï¿½cimal dans une chaine de caractï¿½re (+ le signe).
+	// Taille maximale nécessaire pour stocker la valeur d'un entirer en décimal dans une chaine de caractère (+ le signe).
 # define BSO_ASCII_CONVERTED_INTEGER_MAX_SIZE	( 1 + ( sizeof( bso::pointer__ ) * 8 ) )
 
 	typedef buffer__ integer_buffer__;
@@ -313,7 +313,7 @@ namespace bso {
 
 
 
-// Non utilisation de 'E_CDEF', car l'incusion de 'tol.h' pose problï¿½me.
+// Non utilisation de 'E_CDEF', car l'incusion de 'tol.h' pose problème.
 // 'natural signed integer'
 # ifdef BSO__64
 	typedef s64__ sint__;
@@ -331,7 +331,7 @@ namespace bso {
 #  error
 #endif
 
-	// Entier gï¿½nï¿½rique, comme facilitï¿½.
+	// Entier générique, comme facilité.
 	typedef uint__ int__;
 	const int__ IntMin = UIntMin;
 	const int__ IntMax = UIntMax;
@@ -550,7 +550,7 @@ namespace bso {
 
 	const struct xint__ &_ConvertToDInt(
 		sBig Big,
-		struct xint__ &XInt );	//Avec '_', pour ï¿½viter des problï¿½mes d'ambiguï¿½tï¿½ ('int__' <=> 'uint__').
+		struct xint__ &XInt );	//Avec '_', pour éviter des problèmes d'ambiguïté ('int__' <=> 'uint__').
 
 	struct xint__ {
 	private:
@@ -572,7 +572,7 @@ namespace bso {
 		}
 		void reset( bso::bool__ = true )
 		{
-			// Pour ï¿½viter l'inclusion de "strng.h", qui pose problï¿½me.
+			// Pour éviter l'inclusion de "strng.h", qui pose problème.
 			// memset( _Int, 0, sizeof( _Int ) );
 			_Length = 0;
 		}
@@ -685,7 +685,7 @@ namespace bso {
 			break;
 		}
 
-		return 0;	// Pour ï¿½viter un 'warning'.
+		return 0;	// Pour éviter un 'warning'.
 	}
 
 	inline sSBig ConvertToSBig(

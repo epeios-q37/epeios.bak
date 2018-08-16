@@ -210,8 +210,6 @@ namespace {
 		Script.Append( "\");'';");
 
 		Proxy.Execute( Script, Buffer );
-
-		Flow.Dismiss();
 	qRR;
 	qRT;
 	qRE;
@@ -257,8 +255,6 @@ namespace {
 		prtcl::Get( Flow, XSL );
 
 		Proxy.SetLayout( Id, XML, XSL );
-
-		Flow.Dismiss();
 	qRR;
 	qRT;
 	qRE;
@@ -330,8 +326,6 @@ namespace {
 		xdhcmn::FlatMerge( Contents, MergedContents, true );
 
 		Proxy.SetContents( MergedIds, MergedContents );
-
-		Flow.Dismiss();
 	qRR;
 	qRT;
 	qRE;
@@ -348,8 +342,6 @@ namespace {
 		prtcl::Get( Flow, Id );
 
 		Proxy.DressWidgets( Id );
-
-		Flow.Dismiss();
 	qRR;
 	qRT;
 	qRE;
@@ -377,8 +369,6 @@ namespace {
 			xdhcmn::FlatMerge( Classes, MergedClasses, true );
 
 			(Proxy.*Method)( MergedIds, MergedClasses );
-
-			Flow.Dismiss();
 		qRR;
 		qRT;
 		qRE;
@@ -424,8 +414,6 @@ namespace {
 			xdhcmn::FlatMerge( Ids, MergedIds, true );
 
 			(Proxy.*Method)( MergedIds );
-
-			Flow.Dismiss();
 		qRR;
 		qRT;
 		qRE;
@@ -459,8 +447,6 @@ namespace {
 		prtcl::Get( Flow, Value );
 
 		Proxy.SetAttribute( Id, Name, Value );
-
-		Flow.Dismiss();
 	qRR;
 	qRT;
 	qRE;
@@ -501,8 +487,6 @@ namespace {
 		prtcl::Get( Flow, Name );
 
 		Proxy.RemoveAttribute( Id, Name );
-
-		Flow.Dismiss();
 	qRR;
 	qRT;
 	qRE;
@@ -521,8 +505,6 @@ namespace {
 		prtcl::Get( Flow, Value );
 
 		Proxy.SetProperty( Id, Name, Value );
-
-		Flow.Dismiss();
 	qRR;
 	qRT;
 	qRE;
@@ -562,8 +544,6 @@ namespace {
 		prtcl::Get( Flow, Id );
 
 		Proxy.Focus( Id );
-
-		Flow.Dismiss();
 	qRR;
 	qRT;
 	qRE;
@@ -672,7 +652,8 @@ namespace {
 			const str::dString &Token )	// If empty, PROD session, else token used for the DEMO session.
 		{
 		qRH;
-			flw::sDressedWFlow<> Flow;
+			flw::sDressedRWFlow<> Flow;
+			csdcmn::sVersion Version = csdcmn::UndefinedVersion;
 		qRB;
 			tol::reset( DemoDriver_, ProdDriver_ );
 			Mode_ = m_Undefined;
@@ -687,17 +668,14 @@ namespace {
 
 			Flow.Init( D_() );
 
-			csdcmn::SendProtocol( prtcl::ProtocolId, prtcl::ProtocolVersion, Flow );
-
 			prtcl::Put( Language, Flow );
 
 			Flow.Commit();
 
+			if ( (Version = csdcmn::GetProtocolVersion( prtcl::ProtocolId, Flow )) != prtcl::ProtocolVersion )
+				qRGnr();
+
 			xdhdws::sProxy::Init( Callback );
-
-			Flow.reset();
-
-			D_().Dismiss( true );
 		qRR;
 		qRT;
 		qRE;
