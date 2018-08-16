@@ -31,6 +31,8 @@ public class DOM_DEMO extends DOM_SHRD {
 	static private String token = "";
 	private Socket socket;
 	private boolean firstLaunch = true;
+	static private String protocolLabel = "712a58bf-2c9a-47b2-ba5e-d359a99966de";
+	static private String protocolVersion = "0";
 
 	private void writeSize_( int size, OutputStream stream ) throws Exception {
 		byte data[] = new byte[8];
@@ -129,12 +131,10 @@ public class DOM_DEMO extends DOM_SHRD {
 		InputStreamReader reader = new InputStreamReader( socket.getInputStream() );
 
 		writeString_( token, output );
-
 		output.flush();
 
 		if ( "".equals( token ) ) {
 			token = getString_( reader );
-
 
 			if ( "".equals( token ) )
 				throw new Exception( "Invalid connection information !!!");
@@ -151,7 +151,10 @@ public class DOM_DEMO extends DOM_SHRD {
 				throw new Exception( "Unmatched token !!!");
 		}
 
-		getString_( reader );	// Protocol version.
+		getString_( reader );	// Language.
+		writeString_( protocolLabel, output );
+		writeString_( protocolVersion, output );
+		output.flush();
 	}
 
 	@Override public void getAction(Event event) {

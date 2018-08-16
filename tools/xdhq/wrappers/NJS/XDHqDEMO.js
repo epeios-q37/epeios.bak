@@ -30,6 +30,9 @@ const net = require('net');
 const types = shared.types;
 const open = shared.open;
 
+const protocolLabel = "712a58bf-2c9a-47b2-ba5e-d359a99966de";
+const protocolVersion = "0";
+
 function byteLength(str) {
 	// returns the byte length of an utf8 string
 	var s = str.length;
@@ -191,11 +194,12 @@ function pseudoServer(createCallback, newSessionAction, callbacks) {
 				client._xdhDOM = createCallback(client);
 				client._xdhDOM._xdhSocket = client;
 				client._xdhDOM._xdhIsDEMO = true;
-				client._xdhDOM._xdhType = types.UNDEFINED
+				client._xdhDOM._xdhType = types.UNDEFINED;
+				client .write( addString(addString(Buffer.from(""),protocolLabel),protocolVersion));
 			} else if (relaunch) {
 				pseudoServer(createCallback, newSessionAction, callbacks);
 
-				while (client.read());	// Purges protocol label and version, and language.
+				while (client.read());	// Language.
 
 				relaunch = false;
 			} else {

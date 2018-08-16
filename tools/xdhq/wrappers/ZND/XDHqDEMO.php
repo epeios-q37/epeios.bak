@@ -29,6 +29,8 @@ class XDHq_DEMO extends XDHq_SHRD {
 class XDHqDOM_DEMO {
 	private $socket;
 	private $token = "";
+	private $protocolLabel = "712a58bf-2c9a-47b2-ba5e-d359a99966de";
+	private $protocolVersion = "0";
 	private function writeSize_( $socket, $size ) {
 		$result = pack( "C", $size & 0x7f );
 		$size >>= 7;
@@ -125,9 +127,10 @@ class XDHqDOM_DEMO {
 				throw new Exception( "Unmatched token !!!");
 		}
 
-		$this->getString_( $this->socket );	// Protocol label.
-		$this->getString_( $this->socket );	// Protocol version.
 		$this->getString_( $this->socket );	// Language.
+		$this->writeString_( $this->protocolLabel, $this->socket );
+		$this->writeString_( $this->protocolVersion, $this->socket );
+		fflush( $this->socket );
 	}
 	function getAction( &$id ) {
 		static $firstLaunch = true;

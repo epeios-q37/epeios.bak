@@ -62,6 +62,7 @@ namespace {
 			Q37_MRMDF( session::rSessions, S_, Sessions_ );
 		protected:
 			void *CSDSCBPreProcess(
+				fdr::rRWDriver *RWDriver,
 				const ntvstr::char__ *Origin ) override
 			{
 				return NULL;
