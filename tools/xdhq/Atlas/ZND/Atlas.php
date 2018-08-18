@@ -22,24 +22,24 @@ function getXDHq() {
 	if ( getenv( "EPEIOS_SRC") !== false ) {
 		switch (strtoupper(substr(php_uname('s') , 0, 3))) {
 			case "WIN":
-				$epeios_path = "h:\\hg\\epeios\\";
+				$epeiosPath = "h:\\hg\\epeios\\";
 				break;
 			case "LIN":
-				$epeios_path = "/home/csimon/hg/epeios/";
+				$epeiosPath = "/home/csimon/hg/epeios/";
 				break;
 			case "DAR":
-				$epeios_path = "/Users/csimon/hg/epeios/";
+				$epeiosPath = "/Users/csimon/hg/epeios/";
 				break;
 			default:
 				die( "Unknown OS !!!");
 				break;
 		}
 
-		$xdhq_path = $epeios_path . "tools/xdhq/wrappers/ZND/";
+		$xdhqPath = $epeiosPath . "tools/xdhq/wrappers/ZND/";
 	} else
-		$xdhq_path = realpath(dirname(__FILE__)) . '/';
+		$xdhqPath = "phar://Atlas.phar/";
 
-	require( $xdhq_path . "XDHq.php");
+	require( $xdhqPath . "XDHq.php");
 }
 
 getXDHq();

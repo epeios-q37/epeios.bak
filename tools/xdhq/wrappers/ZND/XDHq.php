@@ -18,8 +18,11 @@
 	along with XDHq.  If not, see <http://www.gnu.org/licenses/>.
 */
 require 'XDHqSHRD.php';
-require 'XDHqPROD.php';
 require 'XDHqDEMO.php';
+
+if ( XDHq_SHRD::isDev() )
+	require 'XDHqPROD.php';
+
 
 class XDHq extends XDHq_SHRD{
 	const MODE_PROD = 0;
