@@ -38,6 +38,22 @@ class XDHq_SHRD {
 				break;
 		}
 	}
+
+	static function open( $document ) {
+		switch (strtoupper(substr(php_uname('s') , 0, 3))) {
+			case "WIN":
+				$command = "start";
+				break;
+			case "DAR":	// macOS.
+				$command = "open";
+				break;
+			default:	// Linux and others.
+				$command = "xdg-open";
+				break;
+		}
+
+		exec( $command . " " . $document );
+	}
 }
 
 ?>

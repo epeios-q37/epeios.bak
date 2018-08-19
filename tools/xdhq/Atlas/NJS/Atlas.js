@@ -158,7 +158,6 @@ function launch(createCallback, newSessionAction, callbacks, gui) {
 }
 
 module.exports.launch = launch;
-module.exports.createTree = () => require('xmlbuilder').create('XDHTML');
 module.exports.DOM = xdhq.XDH;
 
 module.exports.readAsset = xdhq.readAsset;

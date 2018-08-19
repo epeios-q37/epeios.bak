@@ -14,7 +14,7 @@ Script pour *recompiler* l'ensemble des sources *JAVA* (*attention*: les répert
 
 `ver=1.5;pushd /cygdrive/h/hg/epeios/tools/jreq;rm -rf classes/*;javac -target $ver -source $ver -d classes *.java;cd /cygdrive/h/hg/epeios/tools/xdhq/wrappers/JRE;rm -rf classes/*;javac -target $ver -source $ver -d classes *.java;cd /cygdrive/h/hg/epeios/tools/xdhq/Atlas/JRE;rm -rf classes/*;javac -source $ver -target $ver -d classes *.java;popd;`
 
-Nom du script : `ATKCompile`.
+Nom du script : `ATKJCompile`.
 
 ## Déploiement
 
@@ -22,7 +22,7 @@ Nom du script : `ATKCompile`.
 
 `pushd /cygdrive/h/temp;rm -rf classes;mkdir classes;cp -R h:/hg/epeios/tools/jreq/classes/* classes/;cp -R h:/hg/epeios/tools/xdhq/wrappers/JRE/classes/* classes;cp -R h:/hg/epeios/tools/xdhq/Atlas/JRE/classes/* classes;popd;jar cvf Atlas.jar -C h:/temp/classes/ .` 
 
-Nom du script : `ATKPack`.
+Nom du script : `ATKJPack`.
   
 ## Lancement
 

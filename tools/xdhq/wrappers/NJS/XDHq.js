@@ -139,13 +139,13 @@ class XDH {
 	setLayout(id, html, callback) {
 		this.setLayout_(id, html, "", callback);
 	}
-	setLayoutXSL(id, tree, xslFilename, callback) {
+	setLayoutXSL(id, xml, xslFilename, callback) {
 		let xslURL = xslFilename;
 
 		if (this._xdhIsDEMO)
 			xslURL = "data:text/xml;charset=utf-8," + encodeURIComponent(readAsset(xslFilename));
 
-		this.setLayout_(id, tree.end(), xslURL, callback);
+		this.setLayout_(id, xml, xslURL, callback);
 	}
 	getContents(ids, callback) {
 		call(this, "GetContents_1", types.STRINGS, 0, 1, ids,

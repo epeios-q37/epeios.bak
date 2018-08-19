@@ -121,7 +121,7 @@ class XDHqDOM_DEMO {
 				throw new Exception( "Invalid connection information !!!");
 
 			echo "Token id : " . $this->token . "\n";
-			exec( "start http://" . $address . $httpPort . "/atlas.php?_token=" . $this->token );
+			XDHq_SHRD::open( "http://" . $address . $httpPort . "/atlas.php?_token=" . $this->token );
 		} else {
 			if ( $this->getString_( $this.socket) != $this->token )
 				throw new Exception( "Unmatched token !!!");

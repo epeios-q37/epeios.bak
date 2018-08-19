@@ -19,8 +19,8 @@
 
 "use strict"
 
-//const address = "atlastk.org";const httpPort = "";
-const address = "localhost";const httpPort = ":8080";
+const address = "atlastk.org";const httpPort = "";
+//const address = "localhost";const httpPort = ":8080";
 
 const port = 53800;
 

@@ -29,7 +29,8 @@
     <Dep>atlastk</Dep>
     <Dep>todomvc-app-css</Dep>
     <Dep>todomvc-common</Dep>
-   </Regular>
+				<Dep>xmlbuilder</Dep>
+			</Regular>
   </Deps>
  </NodeJS>
 	</Project>

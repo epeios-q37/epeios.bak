@@ -104,7 +104,7 @@ function handleCount(dom) {
 }
 
 function displayTodos(dom) {
-	var tree = atlas.createTree();
+	var tree = require('xmlbuilder').create('XDHTML');
 	var i = 0;
 	var todo;
 
@@ -120,7 +120,7 @@ function displayTodos(dom) {
 
 	tree = tree.up();
 
-	dom.setLayoutXSL("Todos", tree, "Todos.xsl",
+	dom.setLayoutXSL("Todos", tree.end(), "Todos.xsl",
 		() => handleCount(dom)
 	);
 }
