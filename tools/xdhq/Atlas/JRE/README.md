@@ -45,7 +45,8 @@ class Hello extends Atlas {
 			dom.setContent("name", dom.getContent(id));
 		} else if ( "Clear".equals( action ) ) {
 			if ( dom.confirm( "Are you sure ?" ) )
-				dom.setContents( new String[][] { { "input", ""}, { "name", ""} } );
+				dom.setContents( new HashMap<String,String>()
+					{{put("input","");put("name","");}} );
 		} else {
 			throw new RuntimeException( "Unknown action '" + action + "' !!!");
 		}

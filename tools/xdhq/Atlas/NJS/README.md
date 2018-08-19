@@ -35,7 +35,7 @@ const body = [
 	'    <span style="font-style: italic;" id="name"></span>',
 	'    <span>!</span>',
 	'   </h1>',
-	'  </filedset>',
+	'  </fieldset>',
 	' </div>',
 	'</div>'].join('\n');
 
@@ -48,6 +48,10 @@ const callbacks = {
 
 atlas.launch(() => new atlas.DOM(), "Connect", callbacks);
 ```
+
+- Launch `npm install atlastk`,
+- in the same directory, create a `Hello.js` file with above source code, or get it directly here : <https://q37.info/download/assets/Hello.js>,
+- launch `node Hello.js`.
 
 ## What's next ?
 

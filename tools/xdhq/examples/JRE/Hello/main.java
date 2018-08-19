@@ -32,7 +32,9 @@ class Hello extends Atlas {
 			dom.setContent("name", dom.getContent(id));
 			break;
 		case "Clear":
-			if ( dom.confirm( "Are you sure ?" ) ) dom.setContents( new HashMap<String,String> () {{ put( "input", ""); put( "name", ""); }} );
+			if ( dom.confirm( "Are you sure ?" ) )
+				dom.setContents( new HashMap<String,String> ()
+					{{ put( "input", ""); put( "name", ""); }} );
 			break;
 		default:
 			throw new RuntimeException( "Unknown action '" + action + "' !!!");
