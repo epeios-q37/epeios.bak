@@ -101,8 +101,8 @@ class XDHqDOM_DEMO {
 		return $string;
 	}
 	function __construct() {
-//		$address = "atlastk.org";$httpPort = "";
-		$address = "localhost";$httpPort = ":8080";
+		$address = "atlastk.org";$httpPort = "";
+//		$address = "localhost";$httpPort = ":8080";
 		$port = 53800;
 
 		$this->socket = fsockopen( $address, $port, $errno, $errstr );

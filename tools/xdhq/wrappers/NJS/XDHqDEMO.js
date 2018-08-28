@@ -126,8 +126,6 @@ function getQuery(socket) {
 	while (buffer = socket.read())
 		query = Buffer.concat([query, buffer]);
 
-	console.log("Query: '" + query + "'");
-
 	return query;
 }
 
@@ -292,7 +290,6 @@ function call(dom, command, type) {
 	dom._xdhCallback = arguments[i++];
 
 	dom._xdhSocket.write(data);
-	console.log("Command :" + command);
 }
 
 module.exports.launch = launch;
