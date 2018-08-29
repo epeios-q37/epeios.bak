@@ -18,19 +18,18 @@
 	along with XDHq.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-$newSessionAction = '';
-
 class XDHq_DEMO extends XDHq_SHRD {
+	static $newSessionAction;
 	static function launch( string $newSessionAction ) {
-		$GLOBALS["newSessionAction"] = $newSessionAction;
+		self::$newSessionAction = $newSessionAction;
 	}
 }
 
-class XDHqDOM_DEMO {
+class XDHqDOM_DEMO extends Threaded{
 	private $socket;
-	private $token = "";
-	private $protocolLabel = "712a58bf-2c9a-47b2-ba5e-d359a99966de";
-	private $protocolVersion = "0";
+	private static $token = "";
+	private static $protocolLabel = "712a58bf-2c9a-47b2-ba5e-d359a99966de";
+	private static $protocolVersion = "0";
 	private function writeSize_( $socket, $size ) {
 		$result = pack( "C", $size & 0x7f );
 		$size >>= 7;
@@ -40,11 +39,11 @@ class XDHqDOM_DEMO {
 			$size >>= 7;
 		}
 
-		fwrite( $socket, $result );
+		stream_socket_sendto( $socket, $result );
 	}
 	private function writeString_( $string, $socket ) {
 		$this->writeSize_( $socket, strlen( $string ) );
-		fwrite( $socket, $string );
+		stream_socket_sendto( $socket, $string );
 	}
 	private function writeStrings_( $strings, $socket ) {
 		$count = count( $strings );
@@ -58,7 +57,10 @@ class XDHqDOM_DEMO {
 		}
 	}
 	private function getByte_( $socket ) {
-		return unpack( "C", fgetc( $socket ) )[1];
+		$c = stream_socket_recvfrom( $socket, 1 );
+		echo "Gnap!";
+		var_dump( $c );
+		return unpack( "C", $c )[1];
 	}
 	private function getSize_( $socket ) {
 		$byte = $this->getByte_( $socket );
@@ -76,7 +78,7 @@ class XDHqDOM_DEMO {
 		$size = $this->getSize_( $socket );
 
 		if ( $size ) {
-			return fread( $socket, $size );
+			return stream_socket_recvfrom( $socket, $size );
 		} else
 			return "";
 	}
@@ -90,12 +92,12 @@ class XDHqDOM_DEMO {
 		return $strings;
 	}
 	private function getQuery_( $socket ) {
-		$c = fgetc( $socket );
+		$c =  stream_socket_recvfrom( $socket, 1 );
 		$string = "";
 
 		while ( $c != "\0" ) {
 			$string .= $c;
-			$c = fgetc( $socket );
+			$c =  stream_socket_recvfrom ( $socket, 1 );
 		}
 
 		return $string;
@@ -103,41 +105,47 @@ class XDHqDOM_DEMO {
 	function __construct() {
 		$address = "atlastk.org";$httpPort = "";
 //		$address = "localhost";$httpPort = ":8080";
-		$port = 53800;
+		$port = "53800";
 
-		$this->socket = fsockopen( $address, $port, $errno, $errstr );
+		$this->socket = stream_socket_client( "tcp://" . $address . ":" . $port, $errno, $errstr );
 
 		if (!$this->socket)
 		    throw new Exception( "$errstr ($errno)\n" );
 
-		$this->writeString_( $this->token, $this->socket );
+		$this->writeString_( self::$token, $this->socket );
 
-		fflush( $this->socket );
+//		fflush( $this->socket );
 
-		if ( empty($this->token) ) {
-			$this->token = $this->getString_( $this->socket );
+		if ( empty(self::$token) ) {
+			self::$token = $this->getString_( $this->socket );
 
-			if ( empty($this->token) )
+			if ( empty(self::$token) )
 				throw new Exception( "Invalid connection information !!!");
 
-			echo "Token id : " . $this->token . "\n";
-			XDHq_SHRD::open( "http://" . $address . $httpPort . "/atlas.php?_token=" . $this->token );
+			echo "Token id : " . self::$token . "\n";
+			XDHq_SHRD::open( "http://" . $address . $httpPort . "/atlas.php?_token=" . self::$token );
 		} else {
-			if ( $this->getString_( $this.socket) != $this->token )
+			if ( $this->getString_( $this->socket) != self::$token )
 				throw new Exception( "Unmatched token !!!");
 		}
 
+		echo "1\n";
+	
 		$this->getString_( $this->socket );	// Language.
-		$this->writeString_( $this->protocolLabel, $this->socket );
-		$this->writeString_( $this->protocolVersion, $this->socket );
-		fflush( $this->socket );
+		echo "2\n";
+		$this->writeString_( self::$protocolLabel, $this->socket );
+		echo "3\n";
+		$this->writeString_( self::$protocolVersion, $this->socket );
+		echo "4\n";
+//		fflush( $this->socket );
+		echo "5\n";
 	}
 	function getAction( &$id ) {
 		static $firstLaunch = true;
 
 		if ( !$firstLaunch) {
-			fwrite($this->socket,  pack( "a*x", "StandBy_1" ));
-			fflush($this->socket);
+			 stream_socket_sendto($this->socket,  pack( "a*x", "StandBy_1" ));
+//			fflush($this->socket);
 		} else
 			$firstLaunch = false;
 
@@ -147,14 +155,14 @@ class XDHqDOM_DEMO {
 		$action = $this->getString_( $this->socket );
 
 		if( empty( $action ) )
-			$action = $GLOBALS["newSessionAction"];
+			$action = XDHq_DEMO::$newSessionAction;
 
 		return $action;
 	}
 	function call( $command, $type, ...$args ) {
 		$i = 0;
 
-		fwrite( $this->socket, pack( "a*x", $command ) );
+		 stream_socket_sendto( $this->socket, pack( "a*x", $command ) );
 
 		$amount = $args[$i];
 		$i++;
@@ -172,7 +180,7 @@ class XDHqDOM_DEMO {
 			$i++;
 		}
 
-		fflush( $this->socket );
+//		fflush( $this->socket );
 
 		switch ( $type ) {
 		case XDHq::RT_NONE:

@@ -28,7 +28,7 @@ class XDHq extends XDHq_SHRD{
 	const MODE_PROD = 0;
 	const MODE_DEMO = 1;
 	const MODE_UNDEFINED = 2;
-	private static $mode_ = MODE_UNDEFINED;
+	private static $mode_ = self::MODE_UNDEFINED;
 	private static $dir_;
 	private static function getAssetPath_() {
 		if ( parent::isDev() )
@@ -47,10 +47,10 @@ class XDHq extends XDHq_SHRD{
 		self::$dir_ = $dir;
 
 		switch ( $mode ) {
-		case MODE_PROD:
+		case self::MODE_PROD:
 			XDHq_PROD::launch( $newSessionAction );
 			break;
-		case MODE_DEMO:
+		case self::MODE_DEMO:
 			XDHq_DEMO::launch( $newSessionAction );
 			break;
 		default:
@@ -67,7 +67,7 @@ class XDHq extends XDHq_SHRD{
 }
 
 
-class XDHqDOM {
+class XDHqDOM extends Threaded {
 	private $dom_;
 	private function split_( array $keysAndValues, array &$keys, array &$values ) {
 		foreach ($keysAndValues as $key => $value) {
@@ -77,10 +77,10 @@ class XDHqDOM {
 	}
 	function __construct() {
 		switch ( XDHq::getMode() ) {
-		case MODE_PROD:
+		case XDHq::MODE_PROD:
 			$this->dom_ = new XDHqDOM_PROD;
 			break;
-		case MODE_DEMO:
+		case XDHq::MODE_DEMO:
 			$this->dom_ = new XDHqDOM_DEMO;
 			break;
 		default:

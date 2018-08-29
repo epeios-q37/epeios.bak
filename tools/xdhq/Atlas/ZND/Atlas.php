@@ -80,16 +80,16 @@ class Atlas extends XDHq {
 
 	private static function getDefaultGUI_() {
 		if ( self::isDev() )
-			return GUI_DESKTOP;
+			return self::GUI_DESKTOP;
 		else
-			return GUI_WEB;
+			return self::GUI_WEB;
 	}
 
 	private static function getDefaultMODE_() {
 		if ( self::isDev() )
-			return MODE_PROD;
+			return XDHq::MODE_PROD;
 		else
-			return MODE_DEMO;
+			return XDHq::MODE_DEMO;
 	}
 
 	public static function launch( string $newSessionAction, $gui = null, string $dir = "." ) {
@@ -104,23 +104,23 @@ class Atlas extends XDHq {
 				switch ( $argv[1] ) {
 				case "d":
 				case "desktop":
-					$gui = GUI_DESKTOP;
+					$gui = self::GUI_DESKTOP;
 					break;
 				case "w":
 				case "web":
-					$gui = GUI_WEB;
+					$gui = self::GUI_WEB;
 					break;
 				case "dw":
 				case "wd":
-					$gui = GUI_DESKTOP_AND_WEB;
+					$gui = self::GUI_DESKTOP_AND_WEB;
 					break;
 				case "n":
 				case "none":
-					$gui = GUI_NONE;
+					$gui = self::GUI_NONE;
 					break;
 				case 'W':
-					$gui = GUI_NONE;	// The httpd server is launched externally.
-					$mode = MODE_DEMO;
+					$gui = self::GUI_NONE;	// The httpd server is launched externally.
+					$mode = XDHq::MODE_DEMO;
 					break;
 				default:
 					die( "Unknown GUI !");
@@ -132,15 +132,15 @@ class Atlas extends XDHq {
 		parent::launch_( $newSessionAction, $mode, $dir );
 
 		switch( $gui ) {
-		case GUI_NONE:
+		case self::GUI_NONE:
 			break;
-		case GUI_DESKTOP:
+		case self::GUI_DESKTOP:
 			self::launchDesktop_( $dir );
 			break;
-		case GUI_WEB:
+		case self::GUI_WEB:
 			self::launchWeb_( $dir );
 			break;
-		case GUI_DESKTOP_AND_WEB:
+		case self::GUI_DESKTOP_AND_WEB:
 			self::launchDesktop_( $dir );
 			self::launchWeb_( $dir );
 			break;
