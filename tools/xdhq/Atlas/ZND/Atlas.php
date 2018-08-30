@@ -48,12 +48,14 @@ set_error_handler(function ($errno, $errstr) {
     return strpos($errstr, 'Declaration of') === 0;
 }, E_WARNING);
 
-class Atlas {
+class Atlas extends Thread {
 	const GUI_NONE = 0;
 	const GUI_DESKTOP = 1;
 	const GUI_WEB = 2;
 	const GUI_DESKTOP_AND_WEB = 3;
-	const GUI_DEFAULT = GUI_DESKTOP;
+	const GUI_DEFAULT = self::GUI_DESKTOP;
+
+	static $userObject = [];
 
 	static private function execute_( string $command ) {
 		if ( XDHq::isWin() ) {
@@ -96,7 +98,11 @@ class Atlas {
 		return XDHq::readAsset( $path );
 	}
 
-	public static function launch( string $newSessionAction, $gui = null, string $dir = "." ) {
+	public function __construct() {
+		$this->dom = new XDHqDOM();
+	}
+	
+	public static function launch( string $newSessionAction, callable $callback, $gui = null, string $dir = "." ) {
 		global $argv;
 
 		$mode = self::getDefaultMode_();
@@ -153,8 +159,23 @@ class Atlas {
 			break;
 		}
 
+		$i = 0;
+
+		while (true) {
+		 $dom[$i] = new Atlas();
+		self::$userObject[$i] = call_user_func( $callback );
+		$dom[$i]->start();
+		 $i++;
+		}
+	}
+
+	public function run() {
+	static $i = -1;
+	$i++;
+	  while (true) {
+	   $action = $this->dom->getAction($id);
+	   call_user_func(array(self::$userObject[$i], 'handle'), $this->dom, $action, $id);
+	  }
 	}
 };
-
-class AtlasDOM extends XDHqDOM {};
 ?>

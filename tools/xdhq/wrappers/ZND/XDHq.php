@@ -20,7 +20,7 @@
 require 'XDHqSHRD.php';
 require 'XDHqDEMO.php';
 
-if ( XDHq_SHRD::isDev() )
+if ( false && XDHq_SHRD::isDev() )
 	require 'XDHqPROD.php';
 
 
@@ -62,7 +62,7 @@ class XDHq extends XDHq_SHRD{
 		return self::$mode_;
 	}
 	static function isDEMO() {
-		return self::getMode() == MODE_DEMO;
+		return self::getMode() == self::MODE_DEMO;
 	}
 }
 

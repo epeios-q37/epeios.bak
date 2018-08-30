@@ -19,51 +19,57 @@
 */
 
 function getAtlas() {
-	if (getenv("EPEIOS_SRC") === false)
-		$zndq_path = realpath(dirname(__FILE__)) . '/../';
-	else {
-		switch (strtoupper(substr(php_uname('s') , 0, 3))) {
-		case "WIN":
-			$epeios_path = "h:\\hg\\epeios\\";
-		break;
-		case "LIN":
-			$epeios_path = "/home/csimon/hg/epeios/";
-		break;
-		case "DAR":
-			$epeios_path = "/Users/csimon/hg/epeios/";
-		break;
-		default:
-			echo "Unknown OS !!!\n";
-			break;
-		}
+ if (getenv("EPEIOS_SRC") === false) {
+  $zndq_path = realpath(dirname(__FILE__)) . '/../';
+ } else {
+  switch (strtoupper(substr(php_uname('s'), 0, 3))) {
+  case "WIN":
+   $epeios_path = "h:\\hg\\epeios\\";
+   break;
+  case "LIN":
+   $epeios_path = "/home/csimon/hg/epeios/";
+   break;
+  case "DAR":
+   $epeios_path = "/Users/csimon/hg/epeios/";
+   break;
+  default:
+   echo "Unknown OS !!!\n";
+   break;
+  }
 
-		$zndq_path = $epeios_path . "tools/xdhq/Atlas/ZND/";
-	}
+  $zndq_path = $epeios_path . "tools/xdhq/Atlas/ZND/";
+ }
 
-	require( $zndq_path . "Atlas.php");
+ require $zndq_path . "Atlas.php";
 }
 
 getAtlas();
 
-Atlas::launch( "Connect", null, "Hello" );
-
-$dom = new AtlasDOM();
-
-while ( true ) {
-	switch( $dom->getAction( $id ) ) {
-	case "Connect":
-		$dom->headUp( Atlas::readAsset( "Head.html") );
-		$dom->setLayout( "", Atlas::readAsset( "Main.html" ) );
-		break;
-	case "Typing":
-		$dom->setContent( "name", $dom->getContent( $id ) );
-		break;
-	case "Clear":
-		if ( $dom->confirm( "Are you sure?" ) ) $dom->setContents( [ "input" => "", "name" => "" ] );
-		break;
-	default:
-		throw new Exception( "Unknown action '" . $action . "' !!!");
-	}
+class MyDOM {
+ public function handle($dom, $action, $id) {
+  switch ($action) {
+  case "Connect":
+   $dom->headUp(Atlas::readAsset("Head.html"));
+   $dom->setLayout("", Atlas::readAsset("Main.html"));
+   break;
+  case "Typing":
+   $dom->setContent("name", $dom->getContent($id));
+   break;
+  case "Clear":
+   if ($dom->confirm("Are you sure?")) {
+    $dom->setContents(["input" => "", "name" => ""]);
+   }
+   break;
+  default:
+   throw new Exception("Unknown action '" . $action . "' !!!");
+  }
+ }
 }
+
+function myNew() {
+ return new MyDOM();
+}
+
+Atlas::launch("Connect", 'myNew', null, "Hello");
 
 ?>
