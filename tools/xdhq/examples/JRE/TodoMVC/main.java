@@ -267,8 +267,6 @@ class TodoMVC extends Atlas {
 
 		launch("Connect", dir, GUI.DEFAULT, args);
 
-		Map<String,String> map = new HashMap<String,String> () {{ put("titi", "toto"); put("tutu","tete"); }};
-
 		for (;;) new TodoMVC();
 	}
 }

@@ -42,7 +42,7 @@ class XDHq extends XDHq_SHRD{
 	static function readAsset( $path ) {
 		return file_get_contents( self::getAssetFilename_( $path ) );
 	}
-	protected static function launch_( $newSessionAction, $mode, $dir ) {
+	static function launch( $newSessionAction, $mode, $dir ) {
 		self::$mode_ = $mode;
 		self::$dir_ = $dir;
 

@@ -48,7 +48,7 @@ set_error_handler(function ($errno, $errstr) {
     return strpos($errstr, 'Declaration of') === 0;
 }, E_WARNING);
 
-class Atlas extends XDHq {
+class Atlas {
 	const GUI_NONE = 0;
 	const GUI_DESKTOP = 1;
 	const GUI_WEB = 2;
@@ -56,7 +56,7 @@ class Atlas extends XDHq {
 	const GUI_DEFAULT = GUI_DESKTOP;
 
 	static private function execute_( string $command ) {
-		if ( self::isWin() ) {
+		if ( XDHq::isWin() ) {
 			fclose(popen("start " . $command, 'r' ) );
 		} else {
 			fclose(popen( $command . " &", 'r' ) );
@@ -64,7 +64,7 @@ class Atlas extends XDHq {
 	}
 
 	private static function launchWeb_( $dir ) {
-		if ( self::isDev() )
+		if ( XDHq::isDev() )
 			self::execute_( "node h:/hg/epeios/tools/xdhq/examples/common/httpd.js h:/hg/epeios/tools/xdhq/examples/common/" . $dir );
 		else
 			self::execute_( "node -e \"require(require('xdhwebqnjs').fileName).launch('" . $dir . "');\"" );
@@ -79,17 +79,21 @@ class Atlas extends XDHq {
 	}
 
 	private static function getDefaultGUI_() {
-		if ( self::isDev() )
+		if ( XDHq::isDev() )
 			return self::GUI_DESKTOP;
 		else
 			return self::GUI_WEB;
 	}
 
 	private static function getDefaultMODE_() {
-		if ( self::isDev() )
+		if ( XDHq::isDev() )
 			return XDHq::MODE_PROD;
 		else
 			return XDHq::MODE_DEMO;
+	}
+
+	static function readAsset( $path ) {
+		return XDHq::readAsset( $path );
 	}
 
 	public static function launch( string $newSessionAction, $gui = null, string $dir = "." ) {
@@ -129,7 +133,7 @@ class Atlas extends XDHq {
 			}
 		}
 
-		parent::launch_( $newSessionAction, $mode, $dir );
+		XDHq::launch( $newSessionAction, $mode, $dir );
 
 		switch( $gui ) {
 		case self::GUI_NONE:

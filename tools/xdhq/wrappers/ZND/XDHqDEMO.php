@@ -39,11 +39,11 @@ class XDHqDOM_DEMO extends Threaded{
 			$size >>= 7;
 		}
 
-		stream_socket_sendto( $socket, $result );
+		fwrite( $socket, $result );
 	}
 	private function writeString_( $string, $socket ) {
 		$this->writeSize_( $socket, strlen( $string ) );
-		stream_socket_sendto( $socket, $string );
+		fwrite( $socket, $string );
 	}
 	private function writeStrings_( $strings, $socket ) {
 		$count = count( $strings );
@@ -57,10 +57,7 @@ class XDHqDOM_DEMO extends Threaded{
 		}
 	}
 	private function getByte_( $socket ) {
-		$c = stream_socket_recvfrom( $socket, 1 );
-		echo "Gnap!";
-		var_dump( $c );
-		return unpack( "C", $c )[1];
+		return unpack( "C", fgetc( $socket ) )[1];
 	}
 	private function getSize_( $socket ) {
 		$byte = $this->getByte_( $socket );
@@ -78,7 +75,7 @@ class XDHqDOM_DEMO extends Threaded{
 		$size = $this->getSize_( $socket );
 
 		if ( $size ) {
-			return stream_socket_recvfrom( $socket, $size );
+			return fread( $socket, $size );
 		} else
 			return "";
 	}
@@ -92,12 +89,12 @@ class XDHqDOM_DEMO extends Threaded{
 		return $strings;
 	}
 	private function getQuery_( $socket ) {
-		$c =  stream_socket_recvfrom( $socket, 1 );
+		$c = fgetc( $socket );
 		$string = "";
 
 		while ( $c != "\0" ) {
 			$string .= $c;
-			$c =  stream_socket_recvfrom ( $socket, 1 );
+			$c = fgetc( $socket );
 		}
 
 		return $string;
@@ -105,16 +102,16 @@ class XDHqDOM_DEMO extends Threaded{
 	function __construct() {
 		$address = "atlastk.org";$httpPort = "";
 //		$address = "localhost";$httpPort = ":8080";
-		$port = "53800";
+		$port = 53800;
 
-		$this->socket = stream_socket_client( "tcp://" . $address . ":" . $port, $errno, $errstr );
+		$this->socket = fsockopen( $address, $port, $errno, $errstr );
 
 		if (!$this->socket)
 		    throw new Exception( "$errstr ($errno)\n" );
 
 		$this->writeString_( self::$token, $this->socket );
 
-//		fflush( $this->socket );
+		fflush( $this->socket );
 
 		if ( empty(self::$token) ) {
 			self::$token = $this->getString_( $this->socket );
@@ -129,23 +126,17 @@ class XDHqDOM_DEMO extends Threaded{
 				throw new Exception( "Unmatched token !!!");
 		}
 
-		echo "1\n";
-	
 		$this->getString_( $this->socket );	// Language.
-		echo "2\n";
 		$this->writeString_( self::$protocolLabel, $this->socket );
-		echo "3\n";
 		$this->writeString_( self::$protocolVersion, $this->socket );
-		echo "4\n";
-//		fflush( $this->socket );
-		echo "5\n";
+		fflush( $this->socket );
 	}
 	function getAction( &$id ) {
 		static $firstLaunch = true;
 
 		if ( !$firstLaunch) {
-			 stream_socket_sendto($this->socket,  pack( "a*x", "StandBy_1" ));
-//			fflush($this->socket);
+			fwrite($this->socket,  pack( "a*x", "StandBy_1" ));
+			fflush($this->socket);
 		} else
 			$firstLaunch = false;
 
@@ -162,7 +153,7 @@ class XDHqDOM_DEMO extends Threaded{
 	function call( $command, $type, ...$args ) {
 		$i = 0;
 
-		 stream_socket_sendto( $this->socket, pack( "a*x", $command ) );
+		fwrite( $this->socket, pack( "a*x", $command ) );
 
 		$amount = $args[$i];
 		$i++;
@@ -180,7 +171,7 @@ class XDHqDOM_DEMO extends Threaded{
 			$i++;
 		}
 
-//		fflush( $this->socket );
+		fflush( $this->socket );
 
 		switch ( $type ) {
 		case XDHq::RT_NONE:
