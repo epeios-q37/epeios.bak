@@ -45,7 +45,7 @@ function getAtlas() {
 
 getAtlas();
 
-class MyDOM {
+class Hello extends Threaded {
  public function handle($dom, $action, $id) {
   switch ($action) {
   case "Connect":
@@ -67,7 +67,7 @@ class MyDOM {
 }
 
 function myNew() {
- return new MyDOM();
+ return new Hello();
 }
 
 Atlas::launch("Connect", 'myNew', null, "Hello");
