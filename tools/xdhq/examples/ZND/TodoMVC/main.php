@@ -45,23 +45,33 @@ function getAtlas() {
 
 getAtlas();
 
-class TodoMVC {
- public $exclude = NULL;
- public $id = -1;
- public $todos = [];/*
-  = [
-  [
-   'completed' => true,
-   'label' => "Note 1",
-  ],
-  [
-   'completed' => false,
-   'label' => "Note 2",
-  ],
- ];
- */
+/*
+  In threaded classes, arrays are volatile, so no function
+  which takes a reference can be used ('array-splice()', for example).
+  Arrays are also immutable.
+  Hence the way 'todos' member is handled.
+*/
+class TodoMVC extends Threaded {
+ private $exclude = NULL;
+ private $id = -1;
+ private $todos = [];
+ private $next = 0; // next free index of '$todos'.
+ 
+ function remove($index) {
+  $limit = $this->next - 1;
+
+  while ($index < $limit) {
+   $this->todos[$index] = $this->todos[$index + 1];
+   $index++;
+  }
+
+  unset($this->todos[$limit]);
+
+  $this->next--;
+ }
+
  public function itemsLeft() {
-  $i = count($this->todos);
+  $i = $this->next;
   $count = 0;
 
   while ($i--) {
@@ -116,7 +126,7 @@ class TodoMVC {
  function handleCount($dom) {
   $count = $this->itemsLeft();
 
-  if ($count != count($this->todos)) {
+  if ($count != $this->next) {
    $dom->disableElement("HideClearCompleted");
   } else {
    $dom->enableElement("HideClearCompleted");
@@ -128,7 +138,7 @@ class TodoMVC {
  function displayTodos($dom) {
   $tree = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<XDHTML>\n<Todos>\n";
   $i = 0;
-  $count = count($this->todos);
+  $count = $this->next;
 
 // $tree->pushTag( "Todos");
 
@@ -148,13 +158,12 @@ class TodoMVC {
  function submitNew($dom) {
   $content = $dom->getContent("Input");
   $dom->setContent("Input", "");
-  var_dump( $this->todos );
+//  var_dump( $this->todos );
   if (trim($content) != "") {
-   array_unshift($this->todos, [
+   $this->todos[$this->next++] = [
     'completed' => false,
     'label' => $content,
-   ]);
-   var_dump( $this->todos );
+   ];
    $this->displayTodos($dom);
   }
  }
@@ -176,9 +185,14 @@ class TodoMVC {
     'Todo.' . $id => "editing",
    ]);
   } else {
-   array_splice($this->todos, $id, 1);
-   displayTodos($dom);
+   $this->remove($id);
+   $this->displayTodos($dom);
   }
+ }
+
+ function destroy($dom, $id) {
+  $this->remove(intval($dom->getContent($id)));
+  $this->displayTodos($dom);
  }
 
  function toggle($dom, $id) {
@@ -186,10 +200,10 @@ class TodoMVC {
 
   $this->todos[$i]['completed'] = !$this->todos[$i]['completed'];
 
-  $this->toggleClass("Todo." . $id, "completed");
-  $this->toggleClass("Todo." . $id, "active");
+  $dom->toggleClass("Todo." . $id, "completed");
+  $dom->toggleClass("Todo." . $id, "active");
 
-  handleCount($dom);
+  $this->handleCount($dom);
  }
 
  function all($dom) {
@@ -233,11 +247,11 @@ class TodoMVC {
 
  function clear($dom) {
   $i = 0;
-  $count = count($this->todos);
+  $count = $this->next;
 
   while ($i < $count) {
    if ($this->todos[$i]['completed']) {
-    array_splice($this->todos, $i, 1);
+    $this->remove($i);
     $count--;
    } else {
     $i++;
@@ -245,7 +259,7 @@ class TodoMVC {
 
   }
 
-  displayTodos($dom);
+  $this->displayTodos($dom);
  }
 
  function edit($dom, $id) {
@@ -273,6 +287,7 @@ class TodoMVC {
  }
 
  function handle($dom, $action, $id) {
+  $this->test = "Hello !!!";
   switch ($action) {
   case "Connect":
    $dom->headUp(Atlas::readAsset("HeadDEMO.html"));
@@ -289,8 +304,7 @@ class TodoMVC {
    }
    break;
   case "Destroy":
-   array_splice($this->todos, intval($dom->getContent($id)), 1);
-   $this->displayTodos($dom);
+   $this->destroy($dom, $id);
    break;
   case "Toggle":
    $this->toggle($dom, $id);
