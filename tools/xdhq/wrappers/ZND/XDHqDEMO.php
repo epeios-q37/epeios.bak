@@ -25,7 +25,7 @@ class XDHq_DEMO extends XDHq_SHRD {
 	}
 }
 
-class XDHqDOM_DEMO extends Threaded{
+class XDHqDOM_DEMO extends Threaded {
 	private $socket;
 	private static $token = "";
 	private static $protocolLabel = "712a58bf-2c9a-47b2-ba5e-d359a99966de";
@@ -57,7 +57,9 @@ class XDHqDOM_DEMO extends Threaded{
 		}
 	}
 	private function getByte_( $socket ) {
-		return unpack( "C", fgetc( $socket ) )[1];
+		while( !($c = fgetc( $socket ) ) );	// Workaround concerning a arbitrary timeout!
+			
+		return unpack( "C", $c )[1];
 	}
 	private function getSize_( $socket ) {
 		$byte = $this->getByte_( $socket );
@@ -119,8 +121,9 @@ class XDHqDOM_DEMO extends Threaded{
 			if ( empty(self::$token) )
 				throw new Exception( "Invalid connection information !!!");
 
-			echo "Token id : " . self::$token . "\n";
-			XDHq_SHRD::open( "http://" . $address . $httpPort . "/atlas.php?_token=" . self::$token );
+			$url = "http://" . $address . $httpPort . "/atlas.php?_token=" . self::$token;
+			echo "Open " . $url . " in a web browser, if not already done. Enjoy!";
+			XDHq_SHRD::open( $url );
 		} else {
 			if ( $this->getString_( $this->socket) != self::$token )
 				throw new Exception( "Unmatched token !!!");
