@@ -20,7 +20,7 @@
 
 /*
 	This is the one-file version, which does not need the 'Head.html' and the 'Main.html' files.
-	See next comment.
+	See next comments.
 */
 
 function getAtlas() {
@@ -53,6 +53,7 @@ getAtlas();
 /*
 	Before publication, remove this comment, all the above lines
 	and uncomment following line.
+	See also next comment.
 */
 // require "phar://Atlas.phar/Atlas.php";
 
@@ -91,7 +92,7 @@ EOT;
    <button data-xdh-onevent="Clear">Clear</button>
    <hr />
    <h1>
-    <sspan>Hello </span>
+    <span>Hello </span>
     <span style="font-style: italic;" id="name"></span>
     <!-- <span style="font-style: italic;" id="name" />	With this line rather then the above one,
                                                          the following line becomes a child of the above tag !!! -->
@@ -122,9 +123,14 @@ EOT;
  }
 }
 
-function myNew() {
+function hello() {
  return new Hello();
 }
 
-Atlas::launch("Connect", 'myNew', null, "Hello");
+Atlas::launch("Connect", 'hello', null, "Hello");
+/*
+	Before publication, remove above line
+	and uncomment following line.
+*/
+// Atlas::launch("Connect", 'hello');
 ?>

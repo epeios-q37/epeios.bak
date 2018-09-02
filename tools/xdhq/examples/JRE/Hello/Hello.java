@@ -69,7 +69,7 @@ class Hello extends Atlas {
 	}
 	public static void main(String[] args) throws Exception {
 		launch("Connect", "Hello", GUI.DEFAULT, args );
-		// Remove about line and uncomment following.
+		// Remove above line and uncomment following.
 		// launch("Connect" );
 
 		for (;;)

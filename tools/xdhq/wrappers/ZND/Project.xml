@@ -68,7 +68,11 @@
 			</Files>
 		</Files>
 			<Files Group="Hello">
-				<File Path="../../examples/ZND/Hello/">main.php</File>
+				<Files Path="../../examples/ZND/Hello/">
+					<File>main.php</File>
+					<File>Hello.php</File>
+				</Files>
+					<File Path="../../examples/ZND/Hello/">Hello.php</File>
 				<Files Path="../../examples/common/Hello/">
 					<File>CHANGELOG.md</File>
 					<File>head.html</File>
