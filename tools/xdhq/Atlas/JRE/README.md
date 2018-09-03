@@ -1,6 +1,6 @@
 # *Java* binding of the *Atlas* toolkit
 
-The [*Atlas* toolkit](https://atlastk.org/) is a library for web and desktop UI. This is the *Java* binding of this toolkit.
+The [*Atlas* toolkit](https://atlastk.org/) is a library which facilitates the prototyping of web applications.
 
 ## *Hello World!*
 
@@ -8,6 +8,7 @@ The [*Atlas* toolkit](https://atlastk.org/) is a library for web and desktop UI.
 
 ```Java
 import info.q37.atlas.*;
+import java.util.HashMap;
 
 class Hello extends Atlas {
 	public void handle( DOM dom, String action, String id )
@@ -45,8 +46,8 @@ class Hello extends Atlas {
 			dom.setContent("name", dom.getContent(id));
 		} else if ( "Clear".equals( action ) ) {
 			if ( dom.confirm( "Are you sure ?" ) )
-				dom.setContents( new HashMap<String,String>()
-					{{put("input","");put("name","");}} );
+				dom.setContents( new HashMap<String,String> ()
+					{{ put( "input", ""); put( "name", ""); }} );
 		} else {
 			throw new RuntimeException( "Unknown action '" + action + "' !!!");
 		}

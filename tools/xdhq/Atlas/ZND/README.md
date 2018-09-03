@@ -1,61 +1,91 @@
 # *PHP* binding of the *Atlas* toolkit
 
-The *Atlas* toolkit is a library for web and desktop UI. This is the *PHP* binding of this toolkit.
-
+The [*Atlas* toolkit](https://atlastk.org/) is a library which facilitates the prototyping of web applications.
 
 ## *Hello World!*
 
 [![Little demonstration](http://q37.info/download/Hello.gif "A basic example")](http://q37.info/s/atk/Hello/)
 
-### *PHP* source code
-
 ```PHP
-<?php
-require( "Atlas.php");
+require "phar://Atlas.phar/Atlas.php";
 
-Atlas::launch( "Connect" );
+class Hello extends Threaded {
+ static $head = <<<EOT
+<title>"Hello, World !" example</title>
+<link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAMFBMVEUEAvyEhsxERuS8urQsKuycnsRkYtzc2qwUFvRUVtysrrx0ctTs6qTMyrSUksQ0NuyciPBdAAABHklEQVR42mNgwAa8zlxjDd2A4POfOXPmzZkFCAH2M8fNzyALzDlzg2ENssCbMwkMOsgCa858YOjBKxBzRoHhD7LAHiBH5swCT9HQ6A9ggZ4zp7YCrV0DdM6pBpAAG5Blc2aBDZA68wCsZPuZU0BDH07xvHOmAGKKvgMP2NA/Zw7ADIYJXGDgLQeBBSCBFu0aoAPYQUadMQAJAE29zwAVWMCWpgB08ZnDQGsbGhpsgCqBQHNfzRkDEIPlzFmo0T5nzoMovjPHoAK8Zw5BnA5yDosDSAVYQOYMKIDZzkoDzagAsjhqzjRAfXTmzAQgi/vMQZA6pjtAvhEk0E+ATWRRm6YBZuScCUCNN5szH1D4TGdOoSrggtiNAH3vBBjwAQCglIrSZkf1MQAAAABJRU5ErkJggg==" />
+<style type="text/css">
+ html,
+ body {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+ }
 
-$dom = new AtlasDOM();
+ .vcenter-out,
+ .hcenter {
+  display: table;
+  height: 100%;
+  margin: auto;
+ }
 
-while ( true ) {
-  switch( $dom->getAction($id) ) {
+ .vcenter-in {
+  display: table-cell;
+  vertical-align: middle;
+ }
+</style>
+EOT;
+
+ static $body = <<<EOT
+<div class="vcenter-out">
+ <div class="vcenter-in">
+  <fieldset>
+   <label>Name:</label>
+   <input id="input" maxlength="20" placeholder="Enter a name here" type="text" data-xdh-onevent="input|Typing" />
+   <button data-xdh-onevent="Clear">Clear</button>
+   <hr />
+   <h1>
+    <span>Hello </span>
+    <span style="font-style: italic;" id="name"></span>
+    <!-- <span style="font-style: italic;" id="name" />	With this line rather then the above one,
+                                                         the following line becomes a child of the above tag !!! -->
+    <span>!</span>
+   </h1>
+  </fieldset>
+ </div>
+</div>
+EOT;
+ 
+ public function handle($dom, $action, $id) {
+  switch ($action) {
   case "Connect":
-    $dom->setLayout("", new AtlasTree(), "Main.xsl");
-    break;
+   $dom->headUp(self::$head);
+   $dom->setLayout("", self::$body);
+   break;
   case "Typing":
-    $dom->setContent("name", $dom->getContent($id));
-    break;
+   $dom->setContent("name", $dom->getContent($id));
+   break;
   case "Clear":
-    if ( $dom->confirm("Are you sure?") ) $dom->setContents(["input" => "", "name" => ""]);
-    break;
+   if ($dom->confirm("Are you sure?")) {
+    $dom->setContents(["input" => "", "name" => ""]);
+   }
+   break;
+  default:
+   throw new Exception("Unknown action '" . $action . "' !!!");
   }
+ }
 }
+
+function hello() {
+ return new Hello();
+}
+
+Atlas::launch("Connect", 'hello');
 ?>
 ```
 
-### *XSL* file
-
-This is the content of the `Main.xsl` file which name is given as parameter to above `$dom.setLayout(...)` instruction. 
-
-```XML
-<?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0"
-                xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-  <xsl:output method="html" encoding="UTF-8"/>
-  <xsl:template match="/">
-    <label>Name:</label>
-    <input id="input" maxlength="20" placeholder="Enter a name here" type="text" data-xdh-onevent="input|Typing"/>
-    <button data-xdh-onevent="Clear">Clear</button>
-    <hr/>
-    <h1>
-      <span>Hello </span>
-      <span style="font-style: italic;" id="name"/>
-      <span>!</span>
-    </h1>
-  </xsl:template>
-</xsl:stylesheet>
-```
+- Get the `Atlas.phar` file: <https://q37.info/download/assets/Atlas.phar>,
+- in the same directory, create a `Hello.php` file with above source code, or get it directly here: <https://q37.info/download/assets/Hello.php>,
+- launch `php Hello.php`.
 
 ## What's next ?
 

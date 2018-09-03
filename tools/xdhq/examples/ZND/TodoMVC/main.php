@@ -82,28 +82,21 @@ class TodoMVC extends Threaded {
 
   return $count;
  }
- function push($todo, $id, &$tree) {
-  $tree .= "<Todo";
-// $tree->pushTag( 'Todo' );
+ function push($todo, $id, &$xml) {
+  $xml .= "<Todo";
 
-  $tree .= " id=\"" . $id . "\"";
-// $tree->putAttribute ('id', $id );
+  $xml .= " id=\"" . $id . "\"";
 
   if ($todo['completed']) {
-   $tree .= " completed=\"true\"";
-//  $tree->putAttribute( 'completed', 'true' );
+   $xml .= " completed=\"true\"";
   } else {
-   $tree .= " completed=\"false\"";
-
-//  $tree->putAttribute( 'completed', 'false');
+   $xml .= " completed=\"false\"";
   }
 
-  $tree .= ">";
-  $tree .= htmlspecialchars($todo['label']);
-// $tree->putValue( $todo['label']);
+  $xml .= ">";
+  $xml .= htmlspecialchars($todo['label']);
 
-  $tree .= "</Todo>\n";
-// $tree->popTag();
+  $xml .= "</Todo>\n";
  }
 
  function displayCount($dom, $count) {
@@ -136,22 +129,19 @@ class TodoMVC extends Threaded {
  }
 
  function displayTodos($dom) {
-  $tree = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<XDHTML>\n<Todos>\n";
+  $xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<XDHTML>\n<Todos>\n";
   $i = 0;
   $count = $this->next;
 
-// $tree->pushTag( "Todos");
-
   while ($i < $count) {
-   $this->push($this->todos[$i], $i, $tree);
+   $this->push($this->todos[$i], $i, $xml);
 
    $i++;
   }
 
-  $tree .= "</Todos>\n</XDHTML>";
-// $tree->popTag();
+  $xml .= "</Todos>\n</XDHTML>";
 
-  $dom->setLayoutXSL("Todos", $tree, "Todos.xsl");
+  $dom->setLayoutXSL("Todos", $xml, "Todos.xsl");
   $this->handleCount($dom);
  }
 

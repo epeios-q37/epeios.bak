@@ -1,13 +1,10 @@
 # Binding for *Node.js* of the *Atlas* toolkit
 
-The *Atlas* toolkit is a library for web and desktop UI. This is the binding of this toolkit for *Node.js*.
-
+The [*Atlas* toolkit](https://atlastk.org/) is a library which facilitates the prototyping of web applications.
 
 ## *Hello, World!*
 
 [![Little demonstration](https://q37.info/download/Hello.gif "A basic example")](http://q37.info/s/atk/Hello/)
-
-## source code
 
 ```javascript
 const atlas = require( 'atlastk' );
@@ -18,8 +15,7 @@ const head = [
 	' html, body { height: 100%; padding: 0; margin: 0; }',
 	' .vcenter-out, .hcenter { display: table; height: 100%; margin: auto; }',
 	' .vcenter-in { display: table-cell; vertical-align: middle; }',
-	'</style>',
-].join('\n');
+	'</style>'].join('\n');
 
 const body = [
 	'<div class="vcenter-out">',
@@ -50,7 +46,7 @@ atlas.launch(() => new atlas.DOM(), "Connect", callbacks);
 ```
 
 - Launch `npm install atlastk`,
-- in the same directory, create a `Hello.js` file with above source code, or get it directly here : <https://q37.info/download/assets/Hello.js>,
+- in the same directory, create a `Hello.js` file with above source code, or get it directly here: <https://q37.info/download/assets/Hello.js>,
 - launch `node Hello.js`.
 
 ## What's next ?
@@ -59,4 +55,4 @@ Here's how the *Atlas* toolkit version of the [*TodoMVC*](http://todomvc.com/) a
 
 [![TodoMVC](http://q37.info/download/TodoMVC.gif "The TodoMVC application made with the Atlas toolkit")](http://q37.info/s/atk/TodoMVC)
 
-The source code of this application and more information about the *Atlas* toolkit can be found at <http://atlastk.org/>
+The source code of this application and more information about the *Atlas* toolkit can be found at <http://atlastk.org/>.

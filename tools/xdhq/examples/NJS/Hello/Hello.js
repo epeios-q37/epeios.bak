@@ -53,8 +53,7 @@ const head = [
 	' html, body { height: 100%; padding: 0; margin: 0; }',
 	' .vcenter-out, .hcenter { display: table; height: 100%; margin: auto; }',
 	' .vcenter-in { display: table-cell; vertical-align: middle; }',
-	'</style>',
-].join('\n');
+	'</style>'].join('\n');
 
 const body = [
 	'<div class="vcenter-out">',
