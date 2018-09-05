@@ -1,11 +1,13 @@
 # *TodoMVC* in *Java*
 
+![Java logo](https://q37.info/download/assets/Java.png "Java")
+
 A *Java* version of the *TodoMVC* (<http://todomvc.com/>) application, made with the [*Atlas* toolkit](https://atlastk.org/).
 
 [![The Java implementation of TodoMVC](http://q37.info/download/TodoMVC.gif "The Java implementation of TodoMVC")](http://atlastk.org)
 
-- Get this repository (with *git* : `git clone https://github.com/epeios-q37/todomvc-java`),
-- put, inside of the retrieved repository, the `Atlas.jar` file (https://q37.info/download/assets/Atlas.jar),
+- Get this repository (with *git*: `git clone https://github.com/epeios-q37/todomvc-java`),
+- put, inside of the retrieved repository, the `Atlas.jar` file: https://q37.info/download/assets/Atlas.jar,
 - compile the source file (`javac -cp Atlas.jar main.java`),
 - launch:
 	- under *Windows*: `java -cp .;Atlas.jar TodoMVC` (with a semi-colon as separator for the *classpath*),

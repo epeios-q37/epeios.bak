@@ -1,5 +1,7 @@
 # *PHP* binding of the *Atlas* toolkit
 
+![PHP.js logo](https://q37.info/download/assets/PHP.png "PHP.js")
+
 The [*Atlas* toolkit](https://atlastk.org/) is a library which facilitates the prototyping of web applications.
 
 ## *Hello World!*

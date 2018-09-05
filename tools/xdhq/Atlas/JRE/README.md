@@ -1,5 +1,7 @@
 # *Java* binding of the *Atlas* toolkit
 
+![Java logo](https://q37.info/download/assets/Java.png "Java")
+
 The [*Atlas* toolkit](https://atlastk.org/) is a library which facilitates the prototyping of web applications.
 
 ## *Hello World!*

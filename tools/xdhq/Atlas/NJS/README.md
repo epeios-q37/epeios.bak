@@ -1,5 +1,7 @@
 # Binding for *Node.js* of the *Atlas* toolkit
 
+![Node.js logo](https://q37.info/download/assets/Node.png "Node.js")
+
 The [*Atlas* toolkit](https://atlastk.org/) is a library which facilitates the prototyping of web applications.
 
 ## *Hello, World!*
