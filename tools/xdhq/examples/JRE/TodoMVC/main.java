@@ -40,30 +40,16 @@ class TodoMVC extends Atlas {
 	private List<Todo> todos;
 
 	private int itemsLeft() {
-		int count = 0;
-		Iterator<Todo> it = todos.iterator();
-
-		while (it.hasNext()) {
-			if (!it.next().completed)
-				count++;
-		}
-
-		return count;
+		return (int) todos.stream().filter(todo -> !todo.completed).count();
 	}
 
-	private String escape( String text ) {
-		return text.replace( "&", "&amp;").replace( "\"", "&quot;").replace( "<", "&lt;").replace( ">", "&gt;");
+	private String escape(String text) {
+		return text.replace("&", "&amp;").replace("\"", "&quot;").replace("<", "&lt;").replace(">", "&gt;");
 	}
 
 	private String push(Todo todo, int id, String xml) {
-		xml = new String( xml + "<Todo" );
-		xml = new String( xml + " id=\"" + id + "\"");
-
-		xml = new String( xml + " completed=\"" + todo.completed + "\">");
-
-		xml = new String( xml + escape( todo.label) );
-
-		return new String( xml + "</Todo>\n" );
+		return xml + "<Todo" + " id=\"" + id + "\"" + " completed=\"" + todo.completed + "\">" + escape(todo.label)
+				+ "</Todo>\n";
 	}
 
 	private void displayCount(DOM dom, int count) {
@@ -83,7 +69,7 @@ class TodoMVC extends Atlas {
 		dom.setContent("Count", text);
 	}
 
-	private void handleCount( DOM dom ) {
+	private void handleCount(DOM dom) {
 		int count = itemsLeft();
 
 		if (count != todos.size())
@@ -94,7 +80,7 @@ class TodoMVC extends Atlas {
 		displayCount(dom, count);
 	}
 
-	private void displayTodos( DOM dom ) {
+	private void displayTodos(DOM dom) {
 		ListIterator<Todo> li = todos.listIterator();
 
 		String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<XDHTML>\n<Todos>\n";
@@ -108,23 +94,23 @@ class TodoMVC extends Atlas {
 				xml = push(todo, index, xml);
 		}
 
-		xml = new String( xml + "</Todos>\n</XDHTML>" );
+		xml += "</Todos>\n</XDHTML>";
 
 		dom.setLayoutXSL("Todos", xml, "Todos.xsl");
-		handleCount( dom );
+		handleCount(dom);
 	}
 
-	private void submitNew( DOM dom ) {
+	private void submitNew(DOM dom) {
 		String content = dom.getContent("Input");
 		dom.setContent("Input", "");
 
 		if (!"".equals(content.trim())) {
 			todos.add(0, new Todo(content));
-			displayTodos( dom );
+			displayTodos(dom);
 		}
 	}
 
-	private void submitModification( DOM dom ) {
+	private void submitModification(DOM dom) {
 		int index = this.index;
 		this.index = -1;
 
@@ -136,14 +122,19 @@ class TodoMVC extends Atlas {
 
 			dom.setContent("Label." + index, escape(content));
 
-			dom.removeClasses( new HashMap<String,String> () {{ put( "View." + index, "hide" ); put ("Todo." + index, "editing" );}} );
+			dom.removeClasses(new HashMap<String, String>() {
+				{
+					put("View." + index, "hide");
+					put("Todo." + index, "editing");
+				}
+			});
 		} else {
 			todos.remove(index);
-			displayTodos( dom );
+			displayTodos(dom);
 		}
 	}
 
-	private void toggle( DOM dom, String id) {
+	private void toggle(DOM dom, String id) {
 		int index = Integer.parseInt(id);
 		Todo todo = todos.get(index);
 
@@ -151,47 +142,57 @@ class TodoMVC extends Atlas {
 
 		todos.set(index, todo);
 
-		dom.toggleClass( "Todo." + id, "completed");
-		dom.toggleClass( "Todo." + id, "active");
+		dom.toggleClass("Todo." + id, "completed");
+		dom.toggleClass("Todo." + id, "active");
 
-		handleCount( dom  );
+		handleCount(dom);
 	}
 
-	private void all( DOM dom ) {
+	private void all(DOM dom) {
 		exclude = null;
 
 		dom.addClass("All", "selected");
-		dom.removeClasses(new HashMap<String,String>() {{ put("Active", "selected"); put("Completed", "selected"); } } );
-		dom.disableElements(new String[]{"HideActive","HideCompleted"});
+		dom.removeClasses(new HashMap<String, String>() {
+			{
+				put("Active", "selected");
+				put("Completed", "selected");
+			}
+		});
+		dom.disableElements(new String[] { "HideActive", "HideCompleted" });
 	}
 
-	private void active( DOM dom ) {
+	private void active(DOM dom) {
 		exclude = true;
 
 		dom.addClass("Active", "selected");
-		dom.removeClasses(new HashMap<String,String>() {{ put("All", "selected"); put("Completed", "selected"); } } );
+		dom.removeClasses(new HashMap<String, String>() {
+			{
+				put("All", "selected");
+				put("Completed", "selected");
+			}
+		});
 		dom.disableElement("HideActive");
 		dom.enableElement("HideCompleted");
-}
+	}
 
-	private void completed( DOM dom ) {
+	private void completed(DOM dom) {
 		exclude = false;
 
 		dom.addClass("Completed", "selected");
-		dom.removeClasses(new HashMap<String,String>() {{ put("All", "selected"); put("Active", "selected"); }} );
+		dom.removeClasses(new HashMap<String, String>() {
+			{
+				put("All", "selected");
+				put("Active", "selected");
+			}
+		});
 		dom.disableElement("HideCompleted");
 		dom.enableElement("HideActive");
 	}
 
-	private void clear( DOM dom ) {
-		ListIterator<Todo> li = todos.listIterator();
+	private void clear(DOM dom) {
+		todos.removeIf(todo -> todo.completed);
 
-		while (li.hasNext()) {
-			if (li.next().completed)
-				li.remove();
-		}
-
-		displayTodos( dom );
+		displayTodos(dom);
 	}
 
 	private void edit(DOM dom, String id) {
@@ -199,17 +200,27 @@ class TodoMVC extends Atlas {
 
 		index = Integer.parseInt(content);
 
-		dom.addClasses( new HashMap<String,String>() {{ put("View." + content, "hide" ); put( id, "editing" );}} );
+		dom.addClasses(new HashMap<String, String>() {
+			{
+				put("View." + content, "hide");
+				put(id, "editing");
+			}
+		});
 		dom.setContent("Input." + content, todos.get(index).label);
 		dom.focus("Input." + content);
 	}
 
-	private void cancel( DOM dom ) {
+	private void cancel(DOM dom) {
 		int index = this.index;
 		this.index = -1;
 
 		dom.setContent("Input." + index, "");
-		dom.removeClasses( new HashMap<String,String>() {{ put("View." + index, "hide" ); put( "Todo." + index, "editing"); }} );
+		dom.removeClasses(new HashMap<String, String>() {
+			{
+				put("View." + index, "hide");
+				put("Todo." + index, "editing");
+			}
+		});
 	}
 
 	public TodoMVC() {
@@ -217,42 +228,53 @@ class TodoMVC extends Atlas {
 
 		todos = new ArrayList<Todo>();
 
-		if ( false ) {
+		if (false) { // At true for testing purpose.
 			todos.add(new Todo("Todo 1", true));
 			todos.add(new Todo("Todo 2"));
 		}
 	}
 
-	public void handle( DOM dom, String action, String id ) {
-		if ( action.equals( "Connect" ) ) {
-			dom.headUp( info.q37.xdhq.XDH.readAsset("HeadDEMO.html") );
-			dom.setLayout("", info.q37.xdhq.XDH.readAsset( "Main.html") );
+	public void handle(DOM dom, String action, String id) {
+		switch (action) {
+		case "Connect":
+			dom.headUp(info.q37.xdhq.XDH.readAsset("HeadDEMO.html"));
+			dom.setLayout("", info.q37.xdhq.XDH.readAsset("Main.html"));
 			dom.focus("Input");
-			dom.disableElements( new String[]{"HideActive","HideCompleted"});
-			displayTodos( dom );
-		} else if (action.equals( "Submit" ) ) {
+			dom.disableElements(new String[] { "HideActive", "HideCompleted" });
+			displayTodos(dom);
+			break;
+		case "Submit":
 			if (index == -1)
-				submitNew( dom );
+				submitNew(dom);
 			else
-				submitModification( dom );
-		} else if (action.equals( "Destroy" ) ) {
+				submitModification(dom);
+			break;
+		case "Destroy":
 			todos.remove(Integer.parseInt(dom.getContent(id)));
-			displayTodos( dom );
-		} else if (action.equals( "Toggle" ) ) {
+			displayTodos(dom);
+			break;
+		case "Toggle":
 			toggle(dom, id);
-		} else if (action.equals( "All" ) ) {
-			all( dom );
-		} else if (action.equals( "Active" ) ) {
-			active( dom );
-		} else if (action.equals( "Completed" ) ) {
-			completed( dom );
-		} else if (action.equals( "Clear" ) ) {
-			clear( dom );
-		} else if (action.equals( "Edit" ) ) {
+			break;
+		case "All":
+			all(dom);
+			break;
+		case "Active":
+			active(dom);
+			break;
+		case "Completed":
+			completed(dom);
+			break;
+		case "Clear":
+			clear(dom);
+			break;
+		case "Edit":
 			edit(dom, id);
-		} else if (action.equals( "Cancel" ) ) {
-			cancel( dom );
-		} else {
+			break;
+		case "Cancel":
+			cancel(dom);
+			break;
+		default:
 			throw new RuntimeException("No or unknown action !!!");
 		}
 	}
@@ -260,13 +282,14 @@ class TodoMVC extends Atlas {
 	public static void main(String[] args) throws Exception {
 		String dir;
 
-		if ( System.getenv("EPEIOS_SRC") == null )
+		if (System.getenv("EPEIOS_SRC") == null)
 			dir = ".";
 		else
 			dir = "TodoMVC";
 
 		launch("Connect", dir, GUI.DEFAULT, args);
 
-		for (;;) new TodoMVC();
+		for (;;)
+			new TodoMVC();
 	}
 }
