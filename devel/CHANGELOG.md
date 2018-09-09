@@ -5,6 +5,13 @@
 - [adpt]: Adaptation to changes in underlying modules;
 - [stdz]: modification to comply with current standards;
 
+## 2018-09-09
+
+- MTX:
+  - adding `rMutex::InitAndLock(...)`,
+- THT :
+  - adding timeout handlig to `rReadWrite`.
+
 ## 2018-08-16
 
 - CSDBNS:

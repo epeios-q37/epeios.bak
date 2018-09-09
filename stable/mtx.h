@@ -513,6 +513,11 @@ namespace mtx {
 
 			_State = sUnlocked;
 		}
+		void InitAndLock( handler___ Handler )
+		{
+			Init( Handler );
+			Lock();
+		}
 		bso::bool__ TryToLock( void )
 		{
 			_Test();

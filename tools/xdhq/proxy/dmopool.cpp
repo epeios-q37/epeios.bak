@@ -35,15 +35,42 @@ using namespace dmopool;
 
 
 namespace {
-	mtx::rHandler Handler_ = mtx::Undefined;
+	class rConnections_
+	{
+	public:
+		sck::sSocket Socket;
+		tht::rReadWrite Access;
+		bso::sBool GiveUp;
+		void reset( bso::sBool P = true )
+		{
+			if ( P ) {
+				if ( Socket != sck::Undefined )
+					sck::Close( Socket );
+			}
+
+			Socket = sck::Undefined;
+			Access.reset( P );
+			GiveUp = false;	// If at 'true', the client is deemed to be disconnected.
+		}
+		qCDTOR( rConnections_ );
+		void Init( void )
+		{
+			reset();
+
+			Access.Init();
+			GiveUp = false;
+		}
+	};
+
+	mtx::rHandler MutexHandler_ = mtx::Undefined;
 	qROW( Row );
 	crt::qMCRATEw( str::dString, sRow ) Tokens_;
-	crt::qMCRATEw( bch::qBUNCHdl( sck::sSocket ), sRow ) Sockets_;
+	bch::qBUNCHw( rConnections_ *, sRow ) Clients_;
 	csdbns::rListener Listener_;
 
-	sRow Search_( const str::dString &Token )
+	rConnections_ *TUSearch_( const str::dString &Token )
 	{
-		if ( !mtx::IsLocked( Handler_ ) )
+		if ( !mtx::IsLocked( MutexHandler_ ) )
 			qRGnr();
 
 		sRow Row = Tokens_.First();
@@ -51,31 +78,54 @@ namespace {
 		while ( ( Row != qNIL ) && (Tokens_( Row ) != Token) )
 			Row = Tokens_.Next( Row );
 
-		return Row;
+		if ( Row != qNIL )
+			return Clients_( Row );
+		else
+			return NULL;
 	}
 
-	sRow Create_( const str::dString &Token )
+	rConnections_ *TSSearch_( const str::dString &Token )
 	{
-		sRow Row = qNIL;
+		rConnections_ *Connections = NULL;
 	qRH;
 		mtx::rMutex Mutex;
 	qRB;
-		Mutex.Init( Handler_) ;
-		Mutex.Lock();
+		Mutex.InitAndLock( MutexHandler_ );
 
-		if ( Search_( Token ) != qNIL )
+		Connections = TUSearch_( Token );
+	qRR;
+	qRT;
+	qRE;
+		return Connections;
+	}
+
+	rConnections_ *Create_( const str::dString &Token )
+	{
+		rConnections_*Connections = NULL;
+	qRH;
+		mtx::rMutex Mutex;
+		sRow Row = qNIL;
+	qRB;
+		Mutex.InitAndLock( MutexHandler_) ;
+
+		if ( TUSearch_( Token ) != NULL )
 			qRGnr();
 
 		Row = Tokens_.Append( Token );
 
-		if ( Sockets_.New() != Row )
-			qRGnr();
+		if ( (Connections = new rConnections_) == NULL )
+			qRAlc();
 
-		Sockets_( Row ).Init();
+		Connections->Init();
+
+		if ( Clients_.Append( Connections ) != Row )
+			qRGnr();
 	qRR;
+		if ( Connections != NULL )
+			delete Connections;
 	qRT;
 	qRE;
-		return Row;
+		return Connections;
 	}
 
 	void Get_(
@@ -101,7 +151,7 @@ namespace {
 		str::wString Token;
 		sck::rRWFlow Flow;
 		tol::bUUID UUID;
-		sRow Row = qNIL;
+		rConnections_ *Connections = NULL;
 		mtx::rMutex Mutex;
 	qRFB;
 		Blocker.Release();
@@ -111,28 +161,20 @@ namespace {
 		Token.Init();
 		Get_( Flow, Token );
 
-		Mutex.Init( Handler_ );
-
 		if ( Token.Amount() == 0 ) {
 			Token.Append( tol::UUIDGen( UUID ) );
 
-			Row = Create_( Token );
+			Connections = Create_( Token );
 		} else {
-			Mutex.Lock();
-
-			Row = Search_( Token );
-
-			Mutex.Unlock();
+			Connections = TSSearch_( Token );
 		}
 
-		if ( Row == qNIL )
+		if ( Connections == NULL )
 			Token.Init();
 		else {
-			Mutex.Lock();
-
-			Sockets_( Row ).Push( Socket );
-
-			Mutex.Unlock();
+			Connections->Access.WriteBegin();
+			Connections->Socket = Socket;
+			Connections->Access.WriteEnd();
 		}
 
 		Put_( Token, Flow );
@@ -175,46 +217,50 @@ qRT;
 qRE;
 }
 
-sck::sSocket dmopool::GetConnexion( const str::dString &Token )
+sck::sSocket dmopool::GetConnection( const str::dString &Token )
 {
 	sck::sSocket Socket = sck::Undefined;
-qRH;
-	mtx::rMutex Mutex;
-	sRow Row = qNIL;
-qRB;
-	Mutex.Init( Handler_ );
-	Mutex.Lock();
+	rConnections_ *Connections = TSSearch_( Token );
 
-	Row = Search_( Token );
-
-	if ( Row == qNIL )
+	if ( Connections == NULL )
 		qRGnr();
 
-	while ( !Sockets_( Row ).Amount() ) {
-		Mutex.Unlock();
-
-		tht::Defer();
-
-		Mutex.Lock();
+	if ( !Connections->Access.ReadBegin( 1000 ) ) {	// Give 1 second to the client to respond.
+		Connections->GiveUp = true;				// No available connections within 1 second, tells other to give up.
+		Connections->Access.WriteDismiss();		// The 'ReadBegin()' from another thread will now succeed.
+		qRGnr();
 	}
 
-	Socket = Sockets_( Row ).Pop();
-qRR;
-qRT;
-qRE;
+	if ( Connections->GiveUp ) {	// 'ReadBegin()' succeeded, but we have were instructed to give up.
+		Connections->Access.ReadEnd();	// For the following 'WriteDismiss()' to succeed.
+		Connections->Access.WriteDismiss();		// The 'ReadBegin()' from another thread will now succeed.
+		qRGnr();
+	}
+
+	Socket = Connections->Socket;
+	Connections->Access.ReadEnd();
+
 	return Socket;
 }
 
 qGCTOR( dmopool )
 {
-	Handler_ = mtx::Create();
+	MutexHandler_ = mtx::Create();
 	Tokens_.Init();
-	Sockets_.Init();
+	Clients_.Init();
 }
 
 qGDTOR( dmopool )
 {
-	if ( Handler_ != mtx::Undefined )
-		mtx::Delete( Handler_, true );
+	if ( MutexHandler_ != mtx::Undefined )
+		mtx::Delete( MutexHandler_, true );
+
+	sRow Row = Clients_.First();
+
+	while ( Row != qNIL ) {
+		delete Clients_( Row );
+
+		Row = Clients_.Next( Row );
+	}
 }
 

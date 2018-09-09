@@ -662,7 +662,7 @@ namespace {
 				ProdDriver_.Init( Core_, fdr::ts_Default );
 				Mode_ = mProd;
 			} else {
-				DemoDriver_.Init( dmopool::GetConnexion( Token ), true, fdr::ts_Default );
+				DemoDriver_.Init( dmopool::GetConnection( Token ), true, fdr::ts_Default );
 				Mode_ = mDemo;
 			}
 

@@ -371,31 +371,39 @@ namespace tht {
 
 			mtx::Lock( Read_ );
 		}
-		void WriteBegin( void )
+		bso::sBool WriteBegin( tol::sDelay Timeout = 0 )	// If != 0, returns 'false' after 'Timeout' ms, otherwise returns 'true' when locks succeeds.
 		{
-			mtx::Lock( Write_ );
+			return mtx::Lock( Write_, Timeout );
 		}
 		void WriteEnd( void )
 		{
 			mtx::Unlock( Read_ );
 		}
-		void WriteDismiss( void )
+		bso::sBool WriteDismiss( tol::sDelay Timeout = 0 )	// If != 0, returns 'false' after 'Timeout' ms, otherwise returns 'true' when locks succeeds.
 		{
-			WriteBegin();
+			if ( !WriteBegin( Timeout ) )
+				return false;
+
 			WriteEnd();
+
+			return true;
 		}
-		void ReadBegin( void )
+		bso::sBool ReadBegin( tol::sDelay Timeout = 0 )	// If != 0, returns 'false' after 'Timeout' ms, otherwise returns 'true' when locks succeeds.
 		{
-			mtx::Lock( Read_ );
+			return mtx::Lock( Read_, Timeout );
 		}
 		void ReadEnd( void )
 		{
 			mtx::Unlock( Write_ );
 		}
-		void ReadDismiss( void )
+		bso::sBool ReadDismiss( tol::sDelay Timeout = 0 )	// If != 0, returns 'false' after 'Timeout' ms, otherwise returns 'true' when locks succeeds.
 		{
-			ReadBegin();
+			if ( !ReadBegin( Timeout ) )
+				return false;
+
 			ReadEnd();
+
+			return true;
 		}
 	};
 	

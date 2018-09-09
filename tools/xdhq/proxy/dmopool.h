@@ -32,7 +32,7 @@
 
 namespace dmopool {
 	void Initialize();
-	sck::sSocket GetConnexion( const str::dString &Token );
+	sck::sSocket GetConnection( const str::dString &Token );
 }
 
 #endif
