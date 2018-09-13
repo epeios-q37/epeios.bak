@@ -41,6 +41,9 @@ along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 # define SCLXDHTML_DEFAULT_SUFFIX "xdh"
 
 namespace sclxdhtml {
+
+	qCDEF( char, DefaultMarker, '#' );
+
 	namespace registry {
 		using rgstry::rEntry;
 
@@ -51,8 +54,9 @@ namespace sclxdhtml {
 		namespace definition {
 			using namespace sclrgstry::definition;
 
-			extern rEntry XSLFilesHandling;
-			extern rEntry XSLFile;
+			extern rEntry XMLFilesHandling;
+			extern rEntry XSLFile;		// To style XML data. 
+			extern rEntry XHTMLFile;	// For the head section of the HTML main page.
 		}
 	}
 
@@ -279,9 +283,21 @@ namespace sclxdhtml {
 			const char *MessageLanguage,	// If != 'NULL', 'Message' is translated, otherwise it is displayed as is.
 			const char *CloseTextLanguage );
 	protected:
+		void HeadUp_( 
+			const rgstry::rEntry &XHTMLFilename,
+			const char *Target,
+			const sclrgstry::registry_ &Registry,
+			bso::char__ Marker );
+		void HeadUp_(
+			const char *Target,
+			const sclrgstry::registry_ &Registry,
+			bso::char__ Marker = DefaultMarker )
+		{
+			HeadUp_( registry::definition::XHTMLFile, Target, Registry, Marker );
+		}
 		void SetLayout_(
 			const xdhdws::nstring___ &Id,
-			const rgstry::rEntry &Filename,
+			const rgstry::rEntry &XSLFilename,
 			const char *Target,
 			const sclrgstry::registry_ &Registry,
 			const str::dString &XML,
@@ -292,20 +308,20 @@ namespace sclxdhtml {
 			const sclrgstry::registry_ &Registry,
 			void( *Get )(session &Session, xml::dWriter &Writer),
 			session &Session,
-			bso::char__ Marker = '#' )
-			{
-			qRH;
-				rack Rack;
-			qRB;
-				Rack.Init( Target, Session, I_() );
+			bso::char__ Marker = DefaultMarker )
+		{
+		qRH;
+			rack Rack;
+		qRB;
+			Rack.Init( Target, Session, I_() );
 
-				Get( Session, Rack() );
+			Get( Session, Rack() );
 
-				SetLayout_( Id, registry::definition::XSLFile, Target, Registry, Rack.Target(), Marker );
-			qRR;
-			qRT;
-			qRE;
-			}
+			SetLayout_( Id, registry::definition::XSLFile, Target, Registry, Rack.Target(), Marker );
+		qRR;
+		qRT;
+		qRE;
+		}
 	public:
 		void reset( bso::sBool P = true )
 		{
@@ -728,6 +744,12 @@ namespace sclxdhtml {
 		}
 		qRWDISCLOSEr( eBackendVisibility, BackendVisibility );
 		qRODISCLOSEr( page, Page );
+		void HeadUp(
+			const char *Target,
+			const bso::sChar Marker = DefaultMarker )
+		{
+			sProxy::HeadUp_( Target, frontend::Registry(), Marker );
+		}
 		void SetElementLayout(
 			const xdhdws::nstring___ &Id,
 			const char *Target,
@@ -859,7 +881,7 @@ namespace sclxdhtml {
 		const rgstry::tentry__ &FileName,
 		const sclrgstry::registry_ &Registry,
 		str::string_ &String,
-		bso::char__ Marker = '#' )
+		bso::char__ Marker = DefaultMarker )
 	{
 		sclmisc::LoadXMLAndTranslateTags( FileName, Registry, String, Marker );
 	}

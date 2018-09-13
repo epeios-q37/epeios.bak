@@ -28,7 +28,7 @@
 #include "sclfrntnd.h"
 
 namespace {
-	qCDEF( char *, XSLAffix_, "Prolog" );
+	qCDEF( char *, XMLAffix_, "Prolog" );
 
 	namespace layout_ {
 		void Get(
@@ -42,7 +42,8 @@ namespace {
 
 void prolog::SetLayout( core::rSession &Session )
 {
-	Session.SetDocumentLayout( XSLAffix_, layout_::Get );
+	Session.HeadUp( XMLAffix_ );
+	Session.SetDocumentLayout( XMLAffix_, layout_::Get );
 }
 
 void prolog::Display( core::rSession &Session )

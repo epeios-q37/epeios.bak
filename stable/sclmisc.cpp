@@ -1077,7 +1077,7 @@ qRH
 qRB
 	Load( FileName, Registry, String );
 
-	scllocale::TranslateTags( String, sclrgstry::GetLanguage_( Registry, Buffer ), Marker );
+	scllocale::TranslateTags( String, sclrgstry::GetLanguage( Registry, Buffer ), Marker );
 qRR
 qRT
 qRE
@@ -1121,7 +1121,7 @@ qRB;
 	Filename.Init();
 	sclrgstry::MGetValue( Registry, FilenameEntry, Filename );
 
-	LoadXMLAndTranslateTags( Filename, sclrgstry::GetLanguage_( Registry, Buffer ), String, Marker );
+	LoadXMLAndTranslateTags( Filename, sclrgstry::GetLanguage( Registry, Buffer ), String, Marker );
 qRR;
 qRT;
 qRE;

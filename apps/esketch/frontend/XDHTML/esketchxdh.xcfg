@@ -8,13 +8,13 @@
 		<xpp:bloc>
 			<!-- Macros and variables -->
 			<xpp:bloc preserve="yes">
-				<xpp:define name="XSLRootDir">
+				<xpp:define name="XMLRootDir">
 					<xpp:bloc>
-						<xpp:expand select="XSLRootDirHeader"/>
-						<xpp:bloc>epeios/apps/esketch/frontend/XDHTML/XSL/</xpp:bloc>
+						<xpp:expand select="XMLRootDirHeader"/>
+						<xpp:bloc>epeios/apps/esketch/frontend/XDHTML/XML/</xpp:bloc>
 					</xpp:bloc>
 				</xpp:define>
-				<xpp:define name="XSLRootDirHeader">
+				<xpp:define name="XMLRootDirHeader">
 					<xpp:bloc>
 						<xpp:ifeq select="env" value="windows">
 							<xpp:bloc>H:/hg/</xpp:bloc>
@@ -38,24 +38,28 @@
 			<xpp:expand select="Definitions"/>
 			<xpp:expand select="XDH_Definitions"/>
 			<xpp:bloc preserve="yes">
-				<XSLFiles Handling="Content"><!-- Default value for "@Handling" is "Content". Other value is "Name"-->
+				<XMLFiles Handling="Content"><!-- Default value for "@Handling" is "Content". Other value is "Name"-->
 					<XSLFile target="About">
-							<xpp:expand select="XSLRootDir"/>
+							<xpp:expand select="XMLRootDir"/>
 							<xpp:bloc>About.xsl</xpp:bloc>
 					</XSLFile>
 					<XSLFile target="Prolog">
-							<xpp:expand select="XSLRootDir"/>
+							<xpp:expand select="XMLRootDir"/>
 							<xpp:bloc>Prolog.xsl</xpp:bloc>
 					</XSLFile>
+					<XHTMLFile target="Prolog">
+						<xpp:expand select="XMLRootDir"/>
+						<xpp:bloc>Prolog.xhtml</xpp:bloc>
+					</XHTMLFile>
 					<XSLFile target="Login">
-							<xpp:expand select="XSLRootDir"/>
+							<xpp:expand select="XMLRootDir"/>
 							<xpp:bloc>Login.xsl</xpp:bloc>
 					</XSLFile>
 					<XSLFile target="Main">
-							<xpp:expand select="XSLRootDir"/>
+							<xpp:expand select="XMLRootDir"/>
 							<xpp:bloc>Main.xsl</xpp:bloc>
 					</XSLFile>
-				</XSLFiles>
+				</XMLFiles>
 			</xpp:bloc>
 		</Definitions>
 		<Locale>
@@ -82,7 +86,7 @@
 			<xpp:bloc>
 				<!-- Login : in 'XDH.xcfg : XDH_Locale'-->
 			</xpp:bloc>
-			<xpp:expand href="XSL/MainLocale.xml"/>
+			<xpp:expand href="XML/Main.xlcl"/>
 		</Locale>
 	</Configuration>
 </Configurations>

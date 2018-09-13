@@ -2,8 +2,26 @@
 
 ## *Shortcuts*
 
-- [adpt]: Adaptation to changes in underlying modules;
-- [stdz]: modification to comply with current standards;
+- [adpt]: Adaptation to changes in underlying modules,
+- [stdz]: modification to comply with current standards,
+- [trvl]: trivial modifications,
+
+## 2018-09-13
+
+- SCLMISC:
+  - [adpt]
+
+- SCLRGSTRY:
+  - [trvl],
+
+- SCLXDHTML:
+  - adding `rSession::HeadUp(...)`,
+  - *XSL* files are now referred with the more generic *XML* term, to cover the use of locale (*XLCL* affix) and *XHTML* files.
+
+## 2018-09-12
+
+- CSDLEC:
+  - [adpt]
 
 ## 2018-09-09
 
@@ -3024,6 +3042,7 @@
 
 [adpt]:#Adaptation
 [stdz]:#Standardization
+[trvl]:#Trivial
   
 ### Adaptation
 
@@ -3032,3 +3051,7 @@ Adaptation to changes in underlying modules.
 ### Standardization
 
 Modification to comply with current standards.
+
+### Trivial
+
+Trivial modifications.

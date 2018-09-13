@@ -29,13 +29,15 @@ namespace {
 	using rgstry::rEntry;
 
 	namespace {
-		rEntry XSLFiles_( "XSLFiles", sclrgstry::Definitions );
-		rEntry UntaggedXSLFile_( "XSLFile", XSLFiles_ );
+		rEntry XMLFiles_( "XMLFiles", sclrgstry::Definitions );
+		rEntry UntaggedXSLFile_( "XSLFile", XMLFiles_ );
+		rEntry UntaggedXHTMLFile_( "XHTMLFile", XMLFiles_ );
 	}
 }
 
-rgstry::rEntry registry::definition::XSLFilesHandling( "@Handling", XSLFiles_ );
+rgstry::rEntry registry::definition::XMLFilesHandling( "@Handling", XMLFiles_ );
 rgstry::rEntry registry::definition::XSLFile( RGSTRY_TAGGING_ATTRIBUTE( "target" ), UntaggedXSLFile_ );
+rgstry::rEntry registry::definition::XHTMLFile( RGSTRY_TAGGING_ATTRIBUTE( "target" ), UntaggedXHTMLFile_ );
 
 namespace {
 	E_CDEF(char *, StraightBackendType_, "Straight" );
@@ -189,7 +191,7 @@ namespace {
 	qRE
 	}
 
-	inline void EncodeXSL_(
+	inline void EncodeXML_(
 		const str::string_ &Plain,
 		str::dString &Encoded )
 	{
@@ -223,7 +225,7 @@ namespace {
 		else
 			TanslateAndPutInXML_( Message.UTF8( Buffer ), Language, XML );
 
-		EncodeXSL_( str::wString( AlertBaseXSL_ ), XSL );
+		EncodeXML_( str::wString( AlertBaseXSL_ ), XSL );
 	qRR
 	qRT
 	qRE
@@ -278,7 +280,7 @@ qRH;
 	str::string Buffer;
 qRB;
 	tol::Init( EncodedXSL, Buffer );
-	EncodeXSL_( XSL.UTF8( Buffer ), EncodedXSL );
+	EncodeXML_( XSL.UTF8( Buffer ), EncodedXSL );
 
 	Alert_( XML, EncodedXSL, Title, Language );
 qRR;
@@ -388,7 +390,7 @@ qRE
 }
 
 namespace {
-	eXSLFileHandling GetXSLFileHandlingFromRegistry_( const sclrgstry::dRegistry &Registry )
+	eXSLFileHandling GetXMLFileHandlingFromRegistry_( const sclrgstry::dRegistry &Registry )
 	{
 		eXSLFileHandling Result = xfh_Undefined;
 	qRH;
@@ -396,7 +398,7 @@ namespace {
 	qRB;
 		Handling.Init();
 
-		if ( !sclrgstry::OGetValue( Registry, registry::definition::XSLFilesHandling, Handling ) )
+		if ( !sclrgstry::OGetValue( Registry, registry::definition::XMLFilesHandling, Handling ) )
 			Handling.Append( "Content" );	// Default value.
 
 		if ( Handling == "Content" )
@@ -404,7 +406,7 @@ namespace {
 		else if ( Handling == "Name" )
 			Result = xfhName;
 		else
-			sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( registry::definition::XSLFilesHandling );
+			sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( registry::definition::XMLFilesHandling );
 	qRR;
 	qRT;
 	qRE;
@@ -413,9 +415,28 @@ namespace {
 }
 
 
+void sclxdhtml::sProxy::HeadUp_(
+	const rgstry::rEntry &XHTMLFilename,
+	const char *Target,
+	const sclrgstry::registry_ &Registry,
+	bso::char__ Marker )
+{
+qRH;
+	str::wString Content;
+	ntvstr::rBuffer Buffer;
+qRB;
+	Content.Init();
+	sclmisc::LoadXMLAndTranslateTags( rgstry::tentry___( XHTMLFilename, Target ), Registry, Content, Marker );
+
+	Core_.SetLayout( "_xdh_head", Content, "" );
+qRR;
+qRT;
+qRE;
+}
+
 void sclxdhtml::sProxy::SetLayout_(
 	const xdhdws::nstring___ &Id,
-	const rgstry::rEntry & Filename,
+	const rgstry::rEntry &XSLFilename,
 	const char *Target,
 	const sclrgstry::registry_ &Registry,
 	const str::dString &XML,
@@ -428,13 +449,13 @@ qRB;
 	XSL.Init();
 
 	if ( Handling == xfhRegistry )
-		Handling = GetXSLFileHandlingFromRegistry_( Registry );
+		Handling = GetXMLFileHandlingFromRegistry_( Registry );
 
 	switch ( Handling ) {
 	case xfhContent:
 		// The content of the XSL file is transmitted (global XDHTML behavior).
 		RawXSL.Init();
-		sclxdhtml::LoadXSLAndTranslateTags( rgstry::tentry___( Filename, Target ), Registry, RawXSL, Marker );
+		sclxdhtml::LoadXSLAndTranslateTags( rgstry::tentry___( XSLFilename, Target ), Registry, RawXSL, Marker );
 		XSL.Append( "data:text/xml;charset=utf-8," );
 		cdgurl::Encode( RawXSL, XSL );
 		break;

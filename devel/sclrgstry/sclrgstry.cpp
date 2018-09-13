@@ -209,7 +209,7 @@ rgstry::level__ sclrgstry::GetRawLevel( eLevel Level )
 
 #undef C
 
-const char *sclrgstry::GetLanguage_(
+const char *sclrgstry::GetLanguage(
 	const registry_ &Registry,
 	TOL_CBUFFER___ &Buffer )
 {

@@ -139,7 +139,7 @@ une requte de manire trs intense (bombardage de 'push' 'join'). C'est comme si l
 	private:
 		csdscb::callback__ *_Callback;
 		void *UP_;
-		fdr::rRWDriver *IODriver_;
+		fdr::rRWDriver *RWDriver_;
 		bso::bool__ _DataAvailable;
 		void _Create( void )
 		{
@@ -149,7 +149,7 @@ une requte de manire trs intense (bombardage de 'push' 'join'). C'est comme si l
 			Path.Init();
 			dir::GetSelfPath( Path );
 
-			UP_ = _Callback->PreProcess( Path.Internal() );
+			UP_ = _Callback->PreProcess( RWDriver_, Path.Internal() );
 		qRR
 		qRT
 		qRE
@@ -172,7 +172,7 @@ une requte de manire trs intense (bombardage de 'push' 'join'). C'est comme si l
 		virtual void FDRCommit( bso::sBool Unlock ) override
 		{
 			if ( _DataAvailable )
-				_Callback->Process( IODriver_, UP_ );
+				_Callback->Process( RWDriver_, UP_ );
 
 			_DataAvailable = false;
 		}
@@ -186,7 +186,7 @@ une requte de manire trs intense (bombardage de 'push' 'join'). C'est comme si l
 
 			_Callback = NULL;
 			UP_ = NULL;
-			IODriver_ = NULL;
+			RWDriver_ = NULL;
 			_DataAvailable = false;
 		}
 		_active_generic_driver___(
@@ -202,13 +202,13 @@ une requte de manire trs intense (bombardage de 'push' 'join'). C'est comme si l
 		}
 		void Init(
 			csdscb::callback__ &Callback,
-			fdr::rRWDriver *IODriver,
+			fdr::rRWDriver *RWDriver,
 			fdr::thread_safety__ ThreadSafety )
 		{
 			reset();
 
 			_Callback = &Callback;
-			IODriver_ = IODriver;
+			RWDriver_ = RWDriver;
 
 			_passive_generic_driver___::Init( ThreadSafety );
 
