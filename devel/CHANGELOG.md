@@ -6,6 +6,15 @@
 - [stdz]: modification to comply with current standards,
 - [trvl]: trivial modifications,
 
+## 2018-09-14
+
+- XDHCMN:
+  - adding `Escape(...)` variant,
+- XML:
+  - fixing bad error reporting when extraneous `"`,
+- SCLXDHTML:
+  - changing the handling of the *head* section of the application's main page,
+
 ## 2018-09-13
 
 - SCLMISC:

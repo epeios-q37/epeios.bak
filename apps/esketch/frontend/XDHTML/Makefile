@@ -42,8 +42,8 @@ mods += strmrg cdgurl cnvfdr
 mods += csdrcc 
 mods += fblcmd fblcst fblfep fblfph fblfrd 
 mods += fblfrp fblovl fbltyp 
-mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
-mods += sclxdhtml sclfrntnd 
+mods += sclargmnt scli sclmisc sclerror scllocale 
+mods += sclrgstry sclxdhtml sclfrntnd 
 mods += xdhcmn xdhdws 
 mods += frdapi frdfrntnd frdrgstry 
 mods += sktfbc sktinf 
@@ -401,7 +401,7 @@ ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20180515"\"
+copt += -DVERSION=\""20180913"\"
 copt += -DCOPYRIGHT_YEARS=\""2016"\"
 copt += -DIDENTIFIER=\""c8c33276-5e09-4f11-bd1b-3283b0ef0697"\"
 

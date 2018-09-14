@@ -338,6 +338,10 @@ namespace {
 		if ( Isolate != NULL )
 			Isolate->ThrowException( v8::Exception::Error( v8q::ToString( Message ) ) );
 
+		xdhcmn::Escape( Message, 0 );
+
+		v8q::console::Log( Isolate, Message );
+
 		Message.InsertAt( "alert( '" );
 		Message.Append( "');" );
 		JS_.Execute( Message );

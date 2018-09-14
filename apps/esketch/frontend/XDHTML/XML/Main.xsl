@@ -16,7 +16,7 @@
 						<div>
 							<button data-xdh-onevent="ConnectedTesting" id="TestButton" title="#mainDisplayTestMessage#">#mainTest#</button>
 						</div>
-						<!-- 'data-xdh-content' empty because we don't rely on it (there is only one), but t must be present. -->
+						<!-- 'data-xdh-content' empty because we don't rely on it (there is only one), but must be present. -->
 						<input id="Pattern" type="text" size="50"/>
 						<button title="#mainConvert#" data-xdh-onevent="Submission">#mainOK#</button>
 						<div>

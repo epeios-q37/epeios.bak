@@ -31,13 +31,12 @@ namespace {
 	namespace {
 		rEntry XMLFiles_( "XMLFiles", sclrgstry::Definitions );
 		rEntry UntaggedXSLFile_( "XSLFile", XMLFiles_ );
-		rEntry UntaggedXHTMLFile_( "XHTMLFile", XMLFiles_ );
 	}
 }
 
 rgstry::rEntry registry::definition::XMLFilesHandling( "@Handling", XMLFiles_ );
 rgstry::rEntry registry::definition::XSLFile( RGSTRY_TAGGING_ATTRIBUTE( "target" ), UntaggedXSLFile_ );
-rgstry::rEntry registry::definition::XHTMLFile( RGSTRY_TAGGING_ATTRIBUTE( "target" ), UntaggedXHTMLFile_ );
+rgstry::rEntry registry::definition::HeadFile( "HeadFile", XMLFiles_ );
 
 namespace {
 	E_CDEF(char *, StraightBackendType_, "Straight" );
@@ -416,8 +415,7 @@ namespace {
 
 
 void sclxdhtml::sProxy::HeadUp_(
-	const rgstry::rEntry &XHTMLFilename,
-	const char *Target,
+	const rgstry::rEntry &HeadFilename,
 	const sclrgstry::registry_ &Registry,
 	bso::char__ Marker )
 {
@@ -426,7 +424,7 @@ qRH;
 	ntvstr::rBuffer Buffer;
 qRB;
 	Content.Init();
-	sclmisc::LoadXMLAndTranslateTags( rgstry::tentry___( XHTMLFilename, Target ), Registry, Content, Marker );
+	sclmisc::LoadXMLAndTranslateTags( HeadFilename, Registry, Content, Marker );
 
 	Core_.SetLayout( "_xdh_head", Content, "" );
 qRR;

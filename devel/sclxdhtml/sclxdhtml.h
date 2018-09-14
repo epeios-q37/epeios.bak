@@ -55,8 +55,8 @@ namespace sclxdhtml {
 			using namespace sclrgstry::definition;
 
 			extern rEntry XMLFilesHandling;
-			extern rEntry XSLFile;		// To style XML data. 
-			extern rEntry XHTMLFile;	// For the head section of the HTML main page.
+			extern rEntry XSLFile;	// To style XML data tagged). 
+			extern rEntry HeadFile;	// For the head section of the HTML main page. One page only.
 		}
 	}
 
@@ -284,16 +284,14 @@ namespace sclxdhtml {
 			const char *CloseTextLanguage );
 	protected:
 		void HeadUp_( 
-			const rgstry::rEntry &XHTMLFilename,
-			const char *Target,
+			const rgstry::rEntry &HeadFilename,
 			const sclrgstry::registry_ &Registry,
 			bso::char__ Marker );
 		void HeadUp_(
-			const char *Target,
 			const sclrgstry::registry_ &Registry,
 			bso::char__ Marker = DefaultMarker )
 		{
-			HeadUp_( registry::definition::XHTMLFile, Target, Registry, Marker );
+			HeadUp_( registry::definition::HeadFile, Registry, Marker );
 		}
 		void SetLayout_(
 			const xdhdws::nstring___ &Id,
@@ -744,11 +742,9 @@ namespace sclxdhtml {
 		}
 		qRWDISCLOSEr( eBackendVisibility, BackendVisibility );
 		qRODISCLOSEr( page, Page );
-		void HeadUp(
-			const char *Target,
-			const bso::sChar Marker = DefaultMarker )
+		void HeadUp( const bso::sChar Marker = DefaultMarker )
 		{
-			sProxy::HeadUp_( Target, frontend::Registry(), Marker );
+			sProxy::HeadUp_( frontend::Registry(), Marker );
 		}
 		void SetElementLayout(
 			const xdhdws::nstring___ &Id,

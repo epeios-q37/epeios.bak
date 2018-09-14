@@ -138,6 +138,24 @@ void xdhcmn::Escape(
     }
 }
 
+const str::dString &xdhcmn:: Escape(
+	str::string_ &String,
+	bso::char__ Delimiter,	// Should be '\'', '"' or 0. If 0, escapes '\'' and '\"', otherwise escapes 'Delimiter'.
+	bso::char__ EscapeChar )
+{
+qRH;
+	str::wString Buffer;
+qRB;
+	Buffer.Init();
+	Escape( String, Buffer, Delimiter, EscapeChar );
+	String = Buffer;
+qRR;
+qRT;
+qRE;
+	return String;
+}
+
+
 void xdhcmn::FlatMerge(
 	const str::dStrings &Splitted,
 	str::dString &Merged,

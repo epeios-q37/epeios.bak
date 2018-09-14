@@ -1,4 +1,8 @@
-# *XDHELCq* *CHANGELOG*
+# *XDHELCq* changelog.
+
+## 2018-09-14
+
+- some error were not correctly reported due to *JS* error,
 
 ## 2018-04-16
 

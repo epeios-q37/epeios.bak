@@ -691,6 +691,9 @@ qRB
 
 					_Token = tStartTag;
 
+					if ( _Flow.EndOfFlow() )
+						RETURN( sUnexpectedEOF );
+
 					// Pour faciliter la localisation d'une erreur.
 					if ( isspace( _Flow.View() ) )
 						_Flow.Get();

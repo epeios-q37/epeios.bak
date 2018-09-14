@@ -223,6 +223,12 @@ namespace xdhcmn {
 		str::string_ &Target,
 		bso::char__ Delimiter,	// Should be '\'', '"' or 0. If 0, escapes '\'' and '\"', otherwise escapes 'Delimiter'.
 		bso::char__ EscapeChar = strmrg::DefaultEscapeToken );
+
+	const str::dString &Escape(
+		str::string_ &String,
+		bso::char__ Delimiter,	// Should be '\'', '"' or 0. If 0, escapes '\'' and '\"', otherwise escapes 'Delimiter'.
+		bso::char__ EscapeChar = strmrg::DefaultEscapeToken );
+
 #if 0
 	void Unescape(
 		const str::string_ &Source,

@@ -47,10 +47,10 @@
 							<xpp:expand select="XMLRootDir"/>
 							<xpp:bloc>Prolog.xsl</xpp:bloc>
 					</XSLFile>
-					<XHTMLFile target="Prolog">
+					<HeadFile>
 						<xpp:expand select="XMLRootDir"/>
-						<xpp:bloc>Prolog.xhtml</xpp:bloc>
-					</XHTMLFile>
+						<xpp:bloc>Head.xhtml</xpp:bloc>
+					</HeadFile>
 					<XSLFile target="Login">
 							<xpp:expand select="XMLRootDir"/>
 							<xpp:bloc>Login.xsl</xpp:bloc>
