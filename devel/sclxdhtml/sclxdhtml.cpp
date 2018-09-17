@@ -677,8 +677,6 @@ void sclxdhtml::sProxy::DisableElement( const str::dString &Id )
 	HandleElement_( Id, &sProxy::DisableElements, *this );
 }
 
-qCDEF( char *, sclxdhtml::RootTagId_, "XDHRoot" );
-
 void sclxdhtml::prolog::GetLayout(
 	sclfrntnd::rFrontend &Frontend,
 	xml::writer_ &Writer)

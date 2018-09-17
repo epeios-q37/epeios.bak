@@ -53,7 +53,7 @@ AC( OnNewSession )
 		}
 		break;
 	case xdhcmn::mMultiUser:
-		//		login::SetLayout( *Session );
+		::main::Display( Session );
 		break;
 	default:
 		qRGnr();

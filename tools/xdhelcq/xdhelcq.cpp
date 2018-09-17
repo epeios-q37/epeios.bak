@@ -340,7 +340,7 @@ namespace {
 
 		xdhcmn::Escape( Message, 0 );
 
-		v8q::console::Log( Isolate, Message );
+//		v8q::console::Log( Isolate, Message );
 
 		Message.InsertAt( "alert( '" );
 		Message.Append( "');" );

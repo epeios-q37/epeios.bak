@@ -6,6 +6,13 @@
 - [stdz]: modification to comply with current standards,
 - [trvl]: trivial modifications,
 
+## 2018-09-17
+
+- SCLXDHTML:
+  - the head section is now set automatically, and no more by explicitly calling the `HeadUp(...)` method,
+  - no more use of `XDHRoot`,
+  - default action was not handled properly with web interface,
+
 ## 2018-09-14
 
 - XDHCMN:

@@ -620,8 +620,6 @@ namespace sclxdhtml {
 
 	template <typename session> class rCore;
 
-	extern const char *RootTagId_;
-
 	// User put in 'instances' all his own objects, instantiating all with a 'new' (by overloading 'SCLXHTMLNew(...)'), a 'delete' will be made automatically when unloading the library.
 	template <typename instances, typename frontend, typename page, page UndefinedPage, typename dump> class rSession
 	: public cSession_,
@@ -742,10 +740,6 @@ namespace sclxdhtml {
 		}
 		qRWDISCLOSEr( eBackendVisibility, BackendVisibility );
 		qRODISCLOSEr( page, Page );
-		void HeadUp( const bso::sChar Marker = DefaultMarker )
-		{
-			sProxy::HeadUp_( frontend::Registry(), Marker );
-		}
 		void SetElementLayout(
 			const xdhdws::nstring___ &Id,
 			const char *Target,
@@ -766,7 +760,8 @@ namespace sclxdhtml {
 			void( *Get )( rSession &Session, xml::dWriter &Writer ),
 			const sclrgstry::dRegistry &Registry )
 		{
-			SetElementLayout( RootTagId_, Target, Get, Registry );
+			sProxy::HeadUp_( frontend::Registry(), DefaultMarker );
+			SetElementLayout( "", Target, Get, Registry );
 		}
 		void SetDocumentLayout(
 			const char *Target,
@@ -849,7 +844,7 @@ namespace sclxdhtml {
 		qRH;
 			TOL_CBUFFER___ Buffer;
 		qRB;
-			if ( Action == NULL ) {
+			if ( ( Action == NULL ) || ( *Action == 0 ) ) {
 				Session.SetAttribute( "", "data-xdh-onevents", "(keypress|About|SC+a)(keypress|Q37Refresh|SC+r)" );
 				Action = ONS_();
 			}

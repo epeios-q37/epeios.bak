@@ -42,7 +42,6 @@ namespace {
 
 void prolog::SetLayout( core::rSession &Session )
 {
-	Session.HeadUp();
 	Session.SetDocumentLayout( XMLAffix_, layout_::Get );
 }
 
