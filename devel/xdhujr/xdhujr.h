@@ -56,11 +56,9 @@ namespace xdhujr {
 		
 	namespace script {
 		extern entry___ Log;
-		namespace fetcher {
-			extern entry___ Events;
-			extern entry___ Widgets;
-		};
 		namespace setter{
+			extern entry___ Head;
+			extern entry___ Layout;
 			extern entry___ EventHandlers;
 			extern entry___ Contents;
 		}
@@ -90,6 +88,7 @@ namespace xdhujr {
 			extern entry___ ValueRetriever;
 			extern entry___ Focuser;
 			extern entry___ Selector;
+			extern entry___ Fetcher;
 		}
 		namespace css_rule {
 			extern rEntry

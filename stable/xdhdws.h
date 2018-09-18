@@ -109,6 +109,12 @@ namespace xdhdws {
 		qRE
 			return Confirmed;
 		}
+		void SetHead(
+			const nstring___ &XML,
+			const nstring___ &XSL )
+		{
+			C_().Process( xdhcmn::fSetHead, NULL, XML.Internal()(), XSL.Internal()() );
+		}
 		void SetLayout(
 			const nstring___ &Id,
 			const nstring___ &XML,

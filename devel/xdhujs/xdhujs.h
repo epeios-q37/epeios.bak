@@ -42,11 +42,11 @@ namespace xdhujs {
 
 	E_ENUM(script_name) {
 		snExecute,
+		snHeadSetter,
+		snLayoutSetter,
 		snAttributeGetter,
 		snAttributeRemover,
 		snAttributeSetter,
-		snEventsFetcher,
-		snWidgetsFetcher,
 		snValueGetter,
 		snValueSetter,
 		snDialogAlert,
@@ -59,6 +59,7 @@ namespace xdhujs {
 		snWidgetValueRetriever,
 		snWidgetFocuser,
 		snWidgetSelector,
+		snWidgetFetcher,
 		snEventHandlersSetter,
 		snContentsSetter,
 		snWidgetsInstantiator,

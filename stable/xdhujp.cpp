@@ -195,26 +195,45 @@ static void HandleWidgets_(
 	ParametersSetsTag.Append( " ]");
 }
 
+static void SetHead_(
+	cJS &Callback,
+	const nchar__ *XML,
+	const nchar__ *XSL )	// If empty, 'XML' contains pure 'XHTML'.
+{
+	Execute( Callback, xdhujs::snHeadSetter, NULL, XML, XSL );
+}
+
+static void SetHead_(
+	cJS &Callback,
+	va_list List )
+{
+	// NOTA : we use variables, because if we put 'va_arg()' directly as parameter to below function, it's not sure that they are called in the correct order.
+	const nchar__ *XML = va_arg( List, const nchar__ * );
+	const nchar__ *XSL = va_arg( List, const nchar__ * );
+
+	SetHead_( Callback,  XML, XSL );
+}
+
 static void SetLayout_(
 	cJS &Callback,
 	const nchar__ *Id,	// If 'Id' != NULL, it's the id of the element to apply to, otherwise it applies to the document.
 	const nchar__ *XML,
-	const nchar__ *XSL )	// If empty, 'XML' cotains pute '(X)HTML'.
+	const nchar__ *XSL )	// If empty, 'XML' contains pure '(X)HTML'.
 {
-qRH
+qRH;
 	TOL_CBUFFER___ Result;
 	str::string RawDigest;
 	xdhcmn::digest Digest;
-qRB
-	RawDigest.Init( Execute( Callback, xdhujs::snEventsFetcher, &Result, Id, XML, XSL ) );
+qRB;
+	RawDigest.Init( Execute( Callback, xdhujs::snLayoutSetter, &Result, Id, XML, XSL ) );
 
 	Digest.Init();
 	xdhcmn::Split( RawDigest, Digest );
 
 	HandleEvents_( Callback, Digest );
-qRR
-qRT
-qRE
+qRR;
+qRT;
+qRE;
 }
 
 static void SetLayout_(
@@ -264,7 +283,7 @@ qRH
 	str::string RawDigest;
 	xdhcmn::digest Digest;
 qRB
-	RawDigest.Init( Execute( Callback, xdhujs::snWidgetsFetcher, &Result, Id ) );
+	RawDigest.Init( Execute( Callback, xdhujs::snWidgetFetcher, &Result, Id ) );
 
 	Digest.Init();
 	xdhcmn::Split( RawDigest, Digest );
@@ -713,6 +732,9 @@ static script_name__ Convert_( xdhcmn::function__ Function )
 	case xdhcmn::fSelect:
 		qRFwk();
 		break;
+	case xdhcmn::fSetHead:
+		qRFwk();
+		break;
 	case xdhcmn::fSetLayout:
 		qRFwk();
 		break;
@@ -785,6 +807,9 @@ void xdhujp::sProxyCallback::XDHCMNProcess(
 		break;
 	case xdhcmn::fSelect:
 		Select_( C_(), List);
+		break;
+	case xdhcmn::fSetHead:
+		SetHead_( C_(), List );
 		break;
 	case xdhcmn::fSetLayout:
 		SetLayout_( C_(), List );

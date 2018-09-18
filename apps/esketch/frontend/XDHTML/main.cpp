@@ -45,11 +45,11 @@ void main::Display( core::rSession &Session )
 
 //	<link rel = "stylesheet" href = "http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
+//	Session.Execute( "var s = document.createElement('script'); s.innerHTML = \"'if (typeof module === 'object') {window.module = module; module = undefined;}\";document.head.appendChild(s);" );
 	Session.Execute( "var s = document.createElement('link'); s.setAttribute('rel','stylesheet');s.setAttribute('href','http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css');document.head.appendChild(s);" );
-
-
 	Session.Execute( "var s = document.createElement('script'); s.setAttribute('src','https://code.jquery.com/jquery-1.12.4.js');document.head.appendChild(s);" );
 	Session.Execute( "var s = document.createElement('script'); s.setAttribute('src','https://code.jquery.com/ui/1.12.1/jquery-ui.js');document.head.appendChild(s);" );
+
 
 //	Session.AddClass( "TestButton", "hide" );
 

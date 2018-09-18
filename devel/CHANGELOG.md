@@ -6,6 +6,14 @@
 - [stdz]: modification to comply with current standards,
 - [trvl]: trivial modifications,
 
+## 2018-09-18
+
+- SCLXDHTML:
+  - [adpt],
+- XDH...:
+  - *EventFetcher* replaced by *LayoutSetter* (yes, was naming was weired),
+  - setting the head section (*HeadUp*) has now its own script (*HeadSetter*),
+
 ## 2018-09-17
 
 - SCLXDHTML:

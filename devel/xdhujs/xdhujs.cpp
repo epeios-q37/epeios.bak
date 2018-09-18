@@ -45,8 +45,8 @@ const str::string_ &xdhujs::GetTaggedScript(
 	C( Log, Log );
 	C( DialogAlert, dialog::Alert );
 	C( DialogConfirm, dialog::Confirm );
-	C( EventsFetcher, fetcher::Events );
-	C( WidgetsFetcher, fetcher::Widgets );
+	C( HeadSetter, setter::Head );
+	C( LayoutSetter, setter::Layout );
 	C( PropertySetter, property::Setter );
 	C( PropertyGetter, property::Getter );
 	C( AttributeSetter, attribute::Setter );
@@ -57,6 +57,7 @@ const str::string_ &xdhujs::GetTaggedScript(
 	C( ValueGetter, value::Getter );
 	C( WidgetFocuser, widget::Focuser );
 	C( WidgetSelector, widget::Selector );
+	C( WidgetFetcher, widget::Fetcher );
 	C( Focuser, Focuser );
 	C( Selector, Selector );
 	C( EventHandlersSetter, setter::EventHandlers );
@@ -185,13 +186,14 @@ qRB
 	S( AttributeRemover, Id_, Name_, NULL  );
 	S( PropertySetter, Id_, Name_, Value_, NULL );
 	S( PropertyGetter, Id_, Name_, NULL );
-	S( EventsFetcher, Id_, XML_, XSL_, NULL );
-	S( WidgetsFetcher, Id_, NULL );
+	S( HeadSetter, XML_, XSL_, NULL );
+	S( LayoutSetter, Id_, XML_, XSL_, NULL );
 	S( ValueSetter, Id_, Value_, NULL );
 	S( ValueGetter, Id_, NULL );
 	S( WidgetValueRetriever, Id_, Method_, NULL );
 	S( WidgetFocuser, Id_, Method_, NULL );
 	S( WidgetSelector, Id_, Method_, NULL );
+	S( WidgetFetcher, Id_, NULL );
 	S( Focuser, Id_, NULL );
 	S( Selector, Id_, NULL );
 	S( EventHandlersSetter, Ids_, Events_, NULL );

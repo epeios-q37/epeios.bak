@@ -144,7 +144,23 @@
 				]]>
 			</DroppableSetter>
 			<Fetcher>
-				<Events>
+			</Fetcher>
+			<Setter>
+				<Head>
+					<![CDATA[
+					{
+						let xml = "%XML%";
+						let xsl = "%XSL%";
+						if( xsl == "" )
+												document.head.innerHTML = xml;
+						else {
+												document.head.innerHTML = "";
+												document.head.appendChild( transformToFragment( xml, xsl ) );
+						}
+					}
+					]]>
+				</Head>
+				<Layout>
 					<![CDATA[
 					{
 						let xml = "%XML%";
@@ -157,21 +173,13 @@
 												getElement( id ).appendChild( transformToFragment( xml, xsl ) );
 												if ( id == "" ) {
 													getElement( id ).insertBefore( document.createElement( 'hr' ), getElement( id ).firstChild );
-													}
+												}
 						}
 						var digests = fetchEventHandlers( id );
 						digests;
 						}
 					]]>
-				</Events>
-				<Widgets>
-					<![CDATA[
-					var digest = fetchWidgets( "%Id%" );
-					digest;
-				]]>
-				</Widgets>
-			</Fetcher>
-			<Setter>
+				</Layout>
 				<EventHandlers>
 					<![CDATA[
 					setEventHandlers( %Ids_%, %Events_% );
@@ -238,6 +246,12 @@
 							jQuery( getElement( "%Id%") ).%Method_%
 						]]>
 				</Selector>
+				<Fetcher>
+					<![CDATA[
+					var digest = fetchWidgets( "%Id%" );
+					digest;
+				]]>
+				</Fetcher>
 			</Widget>
 			<CSSRule>
 				<Insert>

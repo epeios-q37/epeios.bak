@@ -55,11 +55,9 @@ static entry___ ValueScripts_( "Value", xdhujr::Scripts );
 entry___ xdhujr::script::value::Setter( "Setter", ValueScripts_ );
 entry___ xdhujr::script::value::Getter( "Getter", ValueScripts_ );
 
-static entry___ FetcherScripts_("Fetcher", xdhujr::Scripts );
-entry___ xdhujr::script::fetcher::Events( "Events", FetcherScripts_ );
-entry___ xdhujr::script::fetcher::Widgets( "Widgets", FetcherScripts_ );
-
 static entry___ SetterScripts_( "Setter", xdhujr::Scripts );
+entry___ xdhujr::script::setter::Head( "Head", SetterScripts_ );
+entry___ xdhujr::script::setter::Layout("Layout", SetterScripts_);
 entry___ xdhujr::script::setter::EventHandlers( "EventHandlers", SetterScripts_ );
 entry___ xdhujr::script::setter::Contents( "Contents", SetterScripts_ );
 
@@ -75,6 +73,7 @@ static entry___ WidgetScripts_( "Widget", xdhujr::Scripts );
 entry___ xdhujr::script::widget::ValueRetriever( "ValueRetriever", WidgetScripts_ );
 entry___ xdhujr::script::widget::Focuser( "Focuser", WidgetScripts_ );
 entry___ xdhujr::script::widget::Selector( "Selector", WidgetScripts_ );
+entry___ xdhujr::script::widget::Fetcher( "Fetcher", WidgetScripts_ );
 
 entry___ xdhujr::script::Log( "Log", xdhujr::Scripts );
 entry___ xdhujr::script::Focuser( "Focuser", Scripts );

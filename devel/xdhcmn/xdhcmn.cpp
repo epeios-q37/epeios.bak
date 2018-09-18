@@ -41,6 +41,7 @@ const char *xdhcmn::GetLabel( function__ Function )
 	C( Log );
 	C( Alert );
 	C( Confirm );
+	C( SetHead );
 	C( SetLayout );
 	C( DressWidgets );
 	C( SetContents );

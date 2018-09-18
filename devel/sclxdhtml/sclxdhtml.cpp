@@ -426,7 +426,7 @@ qRB;
 	Content.Init();
 	sclmisc::LoadXMLAndTranslateTags( HeadFilename, Registry, Content, Marker );
 
-	Core_.SetLayout( "_xdh_head", Content, "" );
+	Core_.SetHead( Content, "" );
 qRR;
 qRT;
 qRE;
