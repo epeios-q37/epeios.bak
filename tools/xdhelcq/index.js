@@ -49,7 +49,7 @@ function createWindow() {
 
 
   // Open the DevTools.
-  //  win.webContents.openDevTools();
+  win.webContents.openDevTools();
 
   let html = fs.readFileSync(path.join(__dirname, "XDHELCq.html"), "utf8").replace(/\$XDHELCQ_PATH\$/g, __dirname.replace(/\\/g, "\\\\"));
 

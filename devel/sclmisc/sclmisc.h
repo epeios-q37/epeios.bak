@@ -276,35 +276,45 @@ namespace sclmisc {
 
 	void Load(
 		const fnm::name___ &FileName,
-		str::string_ &String );
+		str::string_ &Content );
 
 	void LoadAndTranslateTags(
 		const fnm::name___ &FileName,
 		const char *Language,
-		str::string_ &String,
+		str::string_ &Content,
 		char Marker = scllocale::DefaultMarker );
+
+	bso::sBool Load(
+		const rgstry::tentry__ &FileName,
+		const sclrgstry::registry_ &Registry,
+		sclrgstry::eNeedness Needness,
+		str::string_ &Content );
 
 	void Load(
 		const rgstry::tentry__ &FileName,
 		const sclrgstry::registry_ &Registry,
-		str::string_ &String );
+		str::string_ &Content )
+	{
+		if ( !Load( FileName, Registry, sclrgstry::nMandatory, Content ) )
+			qRGnr();
+	}
 
 	void LoadAndTranslateTags(
 		const rgstry::tentry__ &FileName,
 		const sclrgstry::registry_ &Registry,
-		str::string_ &String,
+		str::string_ &Content,
 		char Marker = scllocale::DefaultMarker );
 
 	void LoadXMLAndTranslateTags(
 		const fnm::rName &Filename,
 		const char *Language,
-		str::string_ &String,
+		str::string_ &Content,
 		char Marker = scllocale::DefaultMarker );
 
 	void LoadXMLAndTranslateTags(
 		const rgstry::tentry__ &Filename,
 		const sclrgstry::registry_ &Registry,
-		str::string_ &String,
+		str::string_ &Content,
 		char Marker = scllocale::DefaultMarker );
 
 	sclrgstry::registry_ &GetRWRegistry( void );

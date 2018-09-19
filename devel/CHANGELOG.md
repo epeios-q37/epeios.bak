@@ -6,6 +6,11 @@
 - [stdz]: modification to comply with current standards,
 - [trvl]: trivial modifications,
 
+## 2018-09-19
+
+- SCLRGSTRY:
+  - introducing `eNeedness`,
+
 ## 2018-09-18
 
 - SCLXDHTML:

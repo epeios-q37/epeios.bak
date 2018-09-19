@@ -1012,7 +1012,7 @@ qRE
 
 void sclmisc::Load(
 	const fnm::name___ &FileName,
-	str::string_ &String )
+	str::string_ &Content )
 {
 qRH
 	flf::file_iflow___ Flow;
@@ -1020,7 +1020,7 @@ qRB
 	if ( !Flow.Init( FileName, err::hUserDefined ) )
 		ReportFileOpeningErrorAndAbort( FileName );
 
-	String.FillWith( Flow );
+	Content.FillWith( Flow );
 qRR
 qRT
 qRE
@@ -1029,55 +1029,59 @@ qRE
 void sclmisc::LoadAndTranslateTags(
 	const fnm::name___ &FileName,
 	const char *Language,
-	str::string_ &String,
+	str::string_ &Content,
 	char Marker )
 {
-	Load( FileName, String );
+	Load( FileName, Content );
 
-	scllocale::TranslateTags( String, Language, Marker );
+	scllocale::TranslateTags( Content, Language, Marker );
 }
 
-static void Load_(
+static bso::sBool Load_(
 	const rgstry::tentry__ &Entry,
 	const sclrgstry::registry_ &Registry,
-	str::string_ &String,
-	str::string_ &FileName )
+	str::string_ &Content,
+	str::string_ &FileName,
+	sclrgstry::eNeedness Needness )
 {
-	sclrgstry::MGetValue( Registry, Entry, FileName );
-
-	Load( FileName, String );
+	if ( sclrgstry::BGetValue( Registry, Entry, Needness, Content ) ) {
+		Load( FileName, Content );
+		return true;
+	} else
+		return false;
 }
 
-
-
-void sclmisc::Load(
+bso::sBool sclmisc::Load(
 	const rgstry::tentry__ &Entry,
 	const sclrgstry::registry_ &Registry,
-	str::string_ &String )
+	sclrgstry::eNeedness Needness,
+	str::string_ &Content )
 {
+	bso::sBool Result = false;
 qRH
 	str::string FileName;
 qRB
 	FileName.Init();
 
-	Load_( Entry, Registry, String, FileName );
+	Load_( Entry, Registry, Content, FileName, Needness );
 qRR
 qRT
 qRE
+	return Result;
 }
 
 void sclmisc::LoadAndTranslateTags(
 	const rgstry::tentry__ &FileName,
 	const sclrgstry::registry_ &Registry,
-	str::string_ &String,
+	str::string_ &Content,
 	char Marker )
 {
 qRH
 	TOL_CBUFFER___ Buffer;
 qRB
-	Load( FileName, Registry, String );
+	Load( FileName, Registry, Content );
 
-	scllocale::TranslateTags( String, sclrgstry::GetLanguage( Registry, Buffer ), Marker );
+	scllocale::TranslateTags( Content, sclrgstry::GetLanguage( Registry, Buffer ), Marker );
 qRR
 qRT
 qRE
@@ -1087,7 +1091,7 @@ qRE
 void sclmisc::LoadXMLAndTranslateTags(
 	const fnm::rName &Filename,
 	const char *Language,
-	str::string_ &String,
+	str::string_ &Content,
 	char Marker )
 {
 qRH;
@@ -1102,7 +1106,7 @@ qRB;
 	Untranslated.Init();
 	xpp::Process( Unprocessed, xml::oIndent, Untranslated, xpp::criterions___( FileNameLocation ) );
 
-	scllocale::TranslateTags( Untranslated, Language, String, Marker );
+	scllocale::TranslateTags( Untranslated, Language, Content, Marker );
 qRR;
 qRT;
 qRE;
@@ -1111,7 +1115,7 @@ qRE;
 void sclmisc::LoadXMLAndTranslateTags(
 	const rgstry::tentry__ &FilenameEntry,
 	const sclrgstry::registry_ &Registry,
-	str::string_ &String,
+	str::string_ &Content,
 	char Marker )
 {
 qRH;
@@ -1121,7 +1125,7 @@ qRB;
 	Filename.Init();
 	sclrgstry::MGetValue( Registry, FilenameEntry, Filename );
 
-	LoadXMLAndTranslateTags( Filename, sclrgstry::GetLanguage( Registry, Buffer ), String, Marker );
+	LoadXMLAndTranslateTags( Filename, sclrgstry::GetLanguage( Registry, Buffer ), Content, Marker );
 qRR;
 qRT;
 qRE;

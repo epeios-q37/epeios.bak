@@ -47,6 +47,15 @@ namespace sclrgstry {
 
 	extern const char *ParametersTag;
 
+	// For the 'BGetValue(...)' function.
+	qENUM( Needness )
+	{
+		nMandatory,	// Error if the entry is not present.
+		nOptional,	// Returns true if the entry is present, false otherwise.
+		n_amount,
+		n_Undefined,
+	};
+
 #if 0
 	registry_ &GetRegistry( void );
 # endif
@@ -245,7 +254,16 @@ namespace sclrgstry {
 	bso::bool__ BGetValue(
 		const registry_ &Registry,
 		const rgstry::tentry__ &Entry,
+		eNeedness Needness,
 		str::string_ &Value );
+
+	bso::bool__ BGetValue(
+		const registry_ &Registry,
+		const rgstry::tentry__ &Entry,
+		str::string_ &Value )
+	{
+		return BGetValue( Registry, Entry, nOptional, Value );
+	}
 
 	bso::bool__ GetValues(
 		const registry_ &Registry,
