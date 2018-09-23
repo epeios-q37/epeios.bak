@@ -537,6 +537,7 @@ bso::bool__ sclrgstry::BGetValue(
 	switch ( Needness ) {
 	case nMandatory:
 		MGetValue( Registry, Entry, Value );
+		Return = true;
 		break;
 	case nOptional:
 		Return =  OGetValue( Registry, Entry, Value );

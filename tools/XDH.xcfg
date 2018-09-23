@@ -41,9 +41,9 @@
 			<Dialog>
 				<Alert>
 					<![CDATA[
-						dialog = document.createElement( "span" );
-						dialog.innerHTML = transformToHTML( "%XML%", "%XSL%" );
-						$(dialog).dialog({modal: true},{title: "%Title%"},{width: "auto"} ,{closeText: "%CloseText%"});
+						dia = document.createElement( "span" );
+						dia.innerHTML = transformToHTML( "%XML%", "%XSL%" );
+						jQuery(dia).dialog({modal: true},{title: "%Title%"},{width: "auto"} ,{closeText: "%CloseText%"});
 					]]>
 				</Alert>
 				<!-- Ugly. Will try to solve problem with the below alternative. -->
@@ -157,6 +157,7 @@
 												document.head.innerHTML = "";
 												document.head.appendChild( transformToFragment( xml, xsl ) );
 						}
+//				handleHead();
 					}
 					]]>
 				</Head>

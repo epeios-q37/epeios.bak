@@ -268,6 +268,24 @@ qRT
 qRE
 }
 
+void sclxdhtml::sProxy::AlertB( const ntvstr::string___ & RawMessage )
+{
+qRH;
+	str::wString Script, Buffer;
+qRB;
+	Script.Init( "alert('" );
+
+	Buffer.Init();
+	xdhcmn::Escape( RawMessage.UTF8( Buffer ), Script, '\'' );
+
+	Script.Append( "');" );
+
+	Execute( Script );
+qRR;
+qRT;
+qRE;
+}
+
 void sclxdhtml::sProxy::Alert(
 	const ntvstr::string___ &XML,
 	const ntvstr::string___ &XSL,
@@ -375,10 +393,10 @@ qRB
 		break;
 	case err::t_Free:
 	case err::t_Return:
-		Proxy.AlertU( "???", Language );
+		Proxy.AlertB( "???" );
 		break;
 	default:
-		Proxy.AlertU( err::Message( ErrBuffer ), Language );
+		Proxy.AlertB( err::Message( ErrBuffer ) );
 		break;
 	}
 
@@ -424,9 +442,9 @@ qRH;
 	ntvstr::rBuffer Buffer;
 qRB;
 	Content.Init();
-	sclmisc::LoadXMLAndTranslateTags( HeadFilename, Registry, Content, Marker );
 
-	Core_.SetHead( Content, "" );
+	if ( sclmisc::LoadXMLAndTranslateTags( HeadFilename, Registry, Content, sclrgstry::nOptional, Marker ) )
+		Core_.SetHead( Content, "" );
 qRR;
 qRT;
 qRE;

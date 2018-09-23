@@ -6,6 +6,15 @@
 - [stdz]: modification to comply with current standards,
 - [trvl]: trivial modifications,
 
+## 2018-09-21
+
+- SCLRGSTRY:
+ - fixing a bug introduced by previous modifications,
+
+- SCLXDHTML:
+  - introducing `sProxy::AlertB(...)`, calling the JS original `alert(...)`,
+  - an error is now correctly reported when occurring at a early time,
+
 ## 2018-09-19
 
 - SCLRGSTRY:

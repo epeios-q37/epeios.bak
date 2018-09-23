@@ -15,7 +15,7 @@
 - *xdhqwebqnjs*:
   - the action launched on new session is now handled by the wrappers,
 
-# 2018-01-09
+## 2018-01-09
 
 - *xdhwebqnjs*:
   - fixing *Clang* warning,

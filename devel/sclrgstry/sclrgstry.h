@@ -257,7 +257,7 @@ namespace sclrgstry {
 		eNeedness Needness,
 		str::string_ &Value );
 
-	bso::bool__ BGetValue(
+	inline 	bso::bool__ BGetValue(
 		const registry_ &Registry,
 		const rgstry::tentry__ &Entry,
 		str::string_ &Value )

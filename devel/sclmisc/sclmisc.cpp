@@ -1070,22 +1070,23 @@ qRE
 	return Result;
 }
 
-void sclmisc::LoadAndTranslateTags(
+bso::sBool sclmisc::LoadAndTranslateTags(
 	const rgstry::tentry__ &FileName,
 	const sclrgstry::registry_ &Registry,
 	str::string_ &Content,
+	sclrgstry::eNeedness Needness,
 	char Marker )
 {
+	bso::sBool Found = false;
 qRH
 	TOL_CBUFFER___ Buffer;
 qRB
-	Load( FileName, Registry, Content );
-
-	scllocale::TranslateTags( Content, sclrgstry::GetLanguage( Registry, Buffer ), Marker );
+	if ( Found = Load( FileName, Registry, Needness, Content ) )
+		scllocale::TranslateTags( Content, sclrgstry::GetLanguage( Registry, Buffer ), Marker );
 qRR
 qRT
 qRE
-
+return Found;
 }
 
 void sclmisc::LoadXMLAndTranslateTags(
@@ -1112,23 +1113,26 @@ qRT;
 qRE;
 }
 
-void sclmisc::LoadXMLAndTranslateTags(
+bso::sBool sclmisc::LoadXMLAndTranslateTags(
 	const rgstry::tentry__ &FilenameEntry,
 	const sclrgstry::registry_ &Registry,
 	str::string_ &Content,
+	sclrgstry::eNeedness Needness,
 	char Marker )
 {
+	bso::sBool Found = false;
 qRH;
 	str::string Filename;
 	TOL_CBUFFER___ Buffer;
 qRB;
 	Filename.Init();
-	sclrgstry::MGetValue( Registry, FilenameEntry, Filename );
 
-	LoadXMLAndTranslateTags( Filename, sclrgstry::GetLanguage( Registry, Buffer ), Content, Marker );
+	if ( Found = sclrgstry::BGetValue( Registry, FilenameEntry, Needness, Filename ) )
+		LoadXMLAndTranslateTags( Filename, sclrgstry::GetLanguage( Registry, Buffer ), Content, Marker );
 qRR;
 qRT;
 qRE;
+	return Found;
 }
 
 const sclrgstry::registry_ &sclmisc::GetRegistry( void )

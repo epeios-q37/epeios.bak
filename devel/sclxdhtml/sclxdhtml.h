@@ -372,6 +372,8 @@ namespace sclxdhtml {
 		{
 			Core_.Log( Message );
 		}
+		// The basic alert, without use of 'JQuery' based widget.
+		void AlertB( const ntvstr::string___ & Message );
 		void Alert(
 			const ntvstr::string___ &XML,
 			const ntvstr::string___ &XSL,
@@ -871,10 +873,10 @@ namespace sclxdhtml {
 	inline void LoadXSLAndTranslateTags(
 		const rgstry::tentry__ &FileName,
 		const sclrgstry::registry_ &Registry,
-		str::string_ &String,
+		str::string_ &Content,
 		bso::char__ Marker = DefaultMarker )
 	{
-		sclmisc::LoadXMLAndTranslateTags( FileName, Registry, String, Marker );
+		return sclmisc::LoadXMLAndTranslateTags( FileName, Registry, Content, Marker );
 	}
 
 	inline void SetContents_(

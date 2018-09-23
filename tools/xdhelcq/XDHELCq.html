@@ -1,57 +1,58 @@
 <!DOCTYPE html>
 <html>
-  <head id="_xdh_head">
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <!-- Without below line, 'jQuery' isn't loaded correctly. -->
-    <!-- From http://stackoverflow.com/questions/32621988/electron-jquery-is-not-defined -->
-    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
-    <script src="file://$XDHELCQ_PATH$/js/xdhtml.js"></script>
-    <script>
-      function attachDebugger() {
-        alert("Attach debugger !");
-      }
-      function log(message) {
-        console.log(message);
-      }
-      function launchEvent(digest) {
-        xdhelcq.launchEvent(digest);
-      }
-      function initialize(arguments) {
-        var mergedArguments = "";
-        var length = arguments.length;
+<head id="_xdh_head">
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <!-- Without below line, 'jQuery' isn't loaded correctly. -->
+  <!-- From http://stackoverflow.com/questions/32621988/electron-jquery-is-not-defined -->
+  <script>if (typeof module === 'object') { window.module = module; module = undefined; }</script>
+  <script src="file://$XDHELCQ_PATH$/js/xdhtml.js"></script>
+  <script>
+    function attachDebugger() {
+      alert("Attach debugger !");
+    }
+    function log(message) {
+      console.log(message);
+    }
+    function launchEvent(digest) {
+      xdhelcq.launchEvent(digest);
+    }
+    function initialize(arguments) {
+      var mergedArguments = "";
+      var length = arguments.length;
 
-        while (length--) {
-          mergedArguments = '"' + arguments[length] + '" ' + mergedArguments;
-        }
-
-        //	console.log( mergedArguments );
-        xdhelcq.initialize(mergedArguments);
+      while (length--) {
+        mergedArguments = '"' + arguments[length] + '" ' + mergedArguments;
       }
 
-    </script>
-  </head>
-  <body>
-    <script>
-      attachDebugger();
+      //	console.log( mergedArguments );
+      xdhelcq.initialize(mergedArguments);
+    }
+  </script>
+</head>
 
-      var xdhelcqPath = null;
+<body>
+  <script>
+    attachDebugger();
 
-      if (process.env.EPEIOS_SRC) {
-        let addonPath = null;
-        if (process.platform == 'win32')
-          addonPath = 'h:/bin/';
-        else
-          addonPath = '~/bin/';
-        xdhelcqPath = require('path').join(addonPath, 'xdhelcq.node');
-      } else {
-        xdhelcqPath = require('path').join("$XDHELCQ_PATH$", "xdhelcq.node");
-      }
+    var xdhelcqPath = null;
 
-      const xdhelcq = require(xdhelcqPath);
-      // console.log( require(\'electron\').remote.process.argv );
-      initialize(require('electron').remote.process.argv);
-      launchEvent("");
-    </script>
-  </body>
+    if (process.env.EPEIOS_SRC) {
+      let addonPath = null;
+      if (process.platform == 'win32')
+        addonPath = 'h:/bin/';
+      else
+        addonPath = '~/bin/';
+      xdhelcqPath = require('path').join(addonPath, 'xdhelcq.node');
+    } else {
+      xdhelcqPath = require('path').join("$XDHELCQ_PATH$", "xdhelcq.node");
+    }
+
+    const xdhelcq = require(xdhelcqPath);
+    // console.log( require(\'electron\').remote.process.argv );
+    initialize(require('electron').remote.process.argv);
+    launchEvent("");
+  </script>
+</body>
+
 </html>

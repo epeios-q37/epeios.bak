@@ -39,18 +39,30 @@ void main::SetLayout( core::rSession &Session )
 	Session.SetDocumentLayout( XSLAffix_, layout_::Get );
 }
 
+const char *Test = R"((function() {
+// Load the script
+var script = document.createElement( "SCRIPT" );
+script.src = 'https://code.jquery.com/jquery-1.12.4.js';
+script.type = 'text/javascript';
+script.onload = function()
+{
+	jQuery.getScript( 'https://code.jquery.com/ui/1.12.1/jquery-ui.js' )
+};
+document.getElementsByTagName( "head" )[0].appendChild( script );
+})();)";
+
 void main::Display( core::rSession &Session )
 {
 	SetLayout( Session );
 
-//	<link rel = "stylesheet" href = "http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
-//	Session.Execute( "var s = document.createElement('script'); s.innerHTML = \"'if (typeof module === 'object') {window.module = module; module = undefined;}\";document.head.appendChild(s);" );
+
 	Session.Execute( "var s = document.createElement('link'); s.setAttribute('rel','stylesheet');s.setAttribute('href','http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css');document.head.appendChild(s);" );
-	Session.Execute( "var s = document.createElement('script'); s.setAttribute('src','https://code.jquery.com/jquery-1.12.4.js');document.head.appendChild(s);" );
+	Session.Execute( Test );
+/*
+	Session.Execute( "document.write('<script type=\"text/javascript\" src=\"https://code.jquery.com/jquery-1.12.4.js\"></script>')" );
 	Session.Execute( "var s = document.createElement('script'); s.setAttribute('src','https://code.jquery.com/ui/1.12.1/jquery-ui.js');document.head.appendChild(s);" );
-
-
+*/
 //	Session.AddClass( "TestButton", "hide" );
 
 	Session.SwitchTo( base::pMain );

@@ -276,36 +276,68 @@ namespace sclmisc {
 
 	void Load(
 		const fnm::name___ &FileName,
-		str::string_ &String );
+		str::string_ &Content );
 
 	void LoadAndTranslateTags(
 		const fnm::name___ &FileName,
 		const char *Language,
-		str::string_ &String,
+		str::string_ &Content,
 		char Marker = scllocale::DefaultMarker );
 
+	bso::sBool Load(
+		const rgstry::tentry__ &FileName,
+		const sclrgstry::registry_ &Registry,
+		sclrgstry::eNeedness Needness,
+		str::string_ &Content );
+/*
 	void Load(
 		const rgstry::tentry__ &FileName,
 		const sclrgstry::registry_ &Registry,
-		str::string_ &String );
-
-	void LoadAndTranslateTags(
+		str::string_ &Content )
+	{
+		if ( !Load( FileName, Registry, sclrgstry::nMandatory, Content ) )
+			qRGnr();
+	}
+*/
+	bso::sBool LoadAndTranslateTags(
 		const rgstry::tentry__ &FileName,
 		const sclrgstry::registry_ &Registry,
-		str::string_ &String,
+		str::string_ &Content,
+		sclrgstry::eNeedness Needness,
 		char Marker = scllocale::DefaultMarker );
+
+	inline void LoadAndTranslateTags(
+		const rgstry::tentry__ &Filename,
+		const sclrgstry::registry_ &Registry,
+		str::string_ &Content,
+		char Marker = scllocale::DefaultMarker )
+	{
+		if ( !LoadAndTranslateTags( Filename, Registry, Content, sclrgstry::nMandatory, Marker ) )
+			qRFwk();
+	}
 
 	void LoadXMLAndTranslateTags(
 		const fnm::rName &Filename,
 		const char *Language,
-		str::string_ &String,
+		str::string_ &Content,
 		char Marker = scllocale::DefaultMarker );
 
-	void LoadXMLAndTranslateTags(
-		const rgstry::tentry__ &Filename,
+	bso::sBool LoadXMLAndTranslateTags(
+		const rgstry::tentry__ &FileName,
 		const sclrgstry::registry_ &Registry,
-		str::string_ &String,
+		str::string_ &Content,
+		sclrgstry::eNeedness Needness,
 		char Marker = scllocale::DefaultMarker );
+
+	inline void LoadXMLAndTranslateTags(
+		const rgstry::tentry__ &FileName,
+		const sclrgstry::registry_ &Registry,
+		str::string_ &Content,
+		char Marker = scllocale::DefaultMarker )
+	{
+		if ( !LoadXMLAndTranslateTags( FileName, Registry, Content, sclrgstry::nMandatory, Marker ) )
+			qRFwk();
+	}
 
 	sclrgstry::registry_ &GetRWRegistry( void );
 	const sclrgstry::registry_ &GetRegistry( void );
