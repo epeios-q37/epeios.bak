@@ -71,6 +71,13 @@
 		<SourceDir>../</SourceDir>
 	</SourceDirs>
 	<Files>
+		<Files Group="htdocs" Path="../htdocs/">
+			<!-- No 'Pack="yes"', because the whole 'htdocs' directory is packed directly by the 'pack' tool.-->
+			<File>xdhwebq.js</File>
+			<File Path="../../../corpus/js/">xdhtml.js</File>
+			<File>xdh.php</File>
+			<File>prolog.php</File>
+		</Files>
 		<File Path="../" Pack="No">xdhwebq.xcfg</File>
 		<File Path="../../" Pack="No">XDH.xcfg</File>
 	</Files>
