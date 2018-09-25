@@ -427,6 +427,11 @@ qRE
 	return Out_;
 }
 
+fdr::rRDriver &flx::VoidRDriver = flx::VoidIDriver;
+fdr::rWDriver &flx::VoidWDriver = flx::VoidODriver;
+
+flw::sRFlow &flx::VoidRFlow = flx::VoidIFlow;
+flw::sWFlow &flx::VoidWFlow = flx::VoidOFlow;
 
 
 Q37_GCTOR( flx )

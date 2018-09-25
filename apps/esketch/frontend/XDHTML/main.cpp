@@ -29,7 +29,7 @@ namespace{
 	namespace layout_ {
 		void Get(
 			core::rSession &Session,
-			xml::dWriter &Writer )
+			xml::rWriter &Writer )
 		{}
 	}
 }
@@ -54,8 +54,6 @@ document.getElementsByTagName( "head" )[0].appendChild( script );
 void main::Display( core::rSession &Session )
 {
 	SetLayout( Session );
-
-
 
 	Session.Execute( "var s = document.createElement('link'); s.setAttribute('rel','stylesheet');s.setAttribute('href','http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css');document.head.appendChild(s);" );
 	Session.Execute( Test );

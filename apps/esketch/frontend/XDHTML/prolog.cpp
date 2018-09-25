@@ -33,7 +33,7 @@ namespace {
 	namespace layout_ {
 		void Get(
 			core::rSession &Session,
-			xml::dWriter &Writer )
+			xml::rWriter &Writer )
 		{
 			sclxdhtml::prolog::GetLayout( Session, Writer );
 		}

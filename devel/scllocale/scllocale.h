@@ -79,7 +79,7 @@ namespace scllocale {
 	void Dump(
 		target__ Target,
 		bso::bool__ RootToo,
-		xml::writer &Writer );
+		xml::rWriter &Writer );
 
 	void Erase( target__ Target );
 

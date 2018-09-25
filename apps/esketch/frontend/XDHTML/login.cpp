@@ -34,7 +34,7 @@ namespace {
 	namespace layout_ {
 		void Get(
 			core::rSession &Session,
-			xml::dWriter &Writer )
+			xml::rWriter &Writer )
 		{
 			sclxdhtml::login::GetLayout( Session, Writer );
 		}

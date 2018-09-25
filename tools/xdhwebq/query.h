@@ -101,7 +101,7 @@ namespace query {
 		bso::bool__ GetValue(
 			const item_ &Field,
 			item_ &Value ) const;
-		void Dump( xml::writer_ &Writer ) const;
+		void Dump( xml::rWriter &Writer ) const;
 
 
 	};

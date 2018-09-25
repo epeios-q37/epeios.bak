@@ -2031,6 +2031,11 @@ namespace flx {
 		}
 	};
 
+	extern fdr::rRDriver &VoidRDriver;
+	extern fdr::rWDriver &VoidWDriver;
+
+	extern flw::sRFlow &VoidRFlow;
+	extern flw::sWFlow &VoidWFlow;
 }
 
 #endif

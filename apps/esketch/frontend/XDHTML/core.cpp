@@ -82,19 +82,19 @@ qRE
 
 void core::sDump::Corpus(
 	core::rInstances &Session,
-	xml::dWriter &Writer )
+	xml::rWriter &Writer )
 {}
 
 void core::sDump::Common(
 	core::rInstances &Session,
-	xml::dWriter &Writer )
+	xml::rWriter &Writer )
 {}
 
 #define V( value, tag )	Writer.PutValue( value, #tag );
 
 static void About_(
 	sclfrntnd::rFrontend &Frontend,
-	xml::writer_ &Writer )
+	xml::rWriter &Writer )
 {
 qRH
 	str::wString ProtocolVersion, Plugin, PluginParameters, BackendLabel, APIVersion, BackendInformations, BackendCopyright, SoftwareInformations;
@@ -119,7 +119,7 @@ qRE
 
 void core::About(
 	rSession &Session,
-	xml::writer_ &Writer )
+	xml::rWriter &Writer )
 {
 qRH
 	str::string Build;

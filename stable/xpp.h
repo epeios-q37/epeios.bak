@@ -866,7 +866,7 @@ namespace xpp {
 		const str::string_ &Namespace,
 		flw::iflow__ &IFlow,
 		utf::format__ Format,
-		xml::writer_ &Writer,
+		xml::rWriter &Writer,
 		context___ &Context );
 
 	status__ Encrypt(
@@ -880,7 +880,7 @@ namespace xpp {
 	status__ Process(
 		xtf::extended_text_iflow__ &XFlow,
 		const criterions___ &Criterions,
-		xml::writer_ &Writer,
+		xml::rWriter &Writer,
 		context___ &Context );
 
 	status__ Process(
@@ -893,7 +893,7 @@ namespace xpp {
 	inline status__ Process(
 		xtf::extended_text_iflow__ &XFlow,
 		const criterions___ &Criterions,
-		xml::writer_ &Writer )
+		xml::rWriter &Writer )
 	{
 		status__ Status = s_Undefined;
 	qRH

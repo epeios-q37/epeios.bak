@@ -304,7 +304,7 @@ namespace sclxdhtml {
 			const xdhdws::nstring___ &Id,
 			const char *Target,
 			const sclrgstry::registry_ &Registry,
-			void( *Get )(session &Session, xml::dWriter &Writer),
+			void( *Get )(session &Session, xml::rWriter &Writer),
 			session &Session,
 			bso::char__ Marker = DefaultMarker )
 		{
@@ -574,7 +574,7 @@ namespace sclxdhtml {
 	private:
 		str::wString Target_;
 		mutable flx::E_STRING_TOFLOW___ _Flow;
-		xml::writer _Writer;
+		xml::rWriter _Writer;
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -587,7 +587,7 @@ namespace sclxdhtml {
 			const scli::sInfo &Info )
 		{
 			tol::buffer__ Buffer;
-			xml::mark__ Mark = XML_UNDEFINED_MARK;
+			xml::sMark Mark = xml::Undefined;
 
 			Target_.Init();
 			_Flow.Init( Target_ );
@@ -603,11 +603,11 @@ namespace sclxdhtml {
 			_Writer.PushTag( "Layout" );
 			dump::Common( Session, _Writer );
 		}
-		operator xml::writer_ &()
+		operator xml::rWriter &()
 		{
 			return _Writer;
 		}
-		xml::writer_ &operator()( void )
+		xml::rWriter &operator()( void )
 		{
 			return _Writer;
 		}
@@ -745,7 +745,7 @@ namespace sclxdhtml {
 		void SetElementLayout(
 			const xdhdws::nstring___ &Id,
 			const char *Target,
-			void( *Get )( rSession &Session, xml::dWriter &Writer ),
+			void( *Get )( rSession &Session, xml::rWriter &Writer ),
 			const sclrgstry::dRegistry &Registry )
 		{
 			sProxy::SetLayout_<rSession, rRack<rSession,dump>>( Id, Target, Registry, Get, *this );
@@ -753,13 +753,13 @@ namespace sclxdhtml {
 		void SetElementLayout(
 			const xdhdws::nstring___ &Id,
 			const char *Target,
-			void( *Get )( rSession &Session, xml::dWriter &Writer ) )
+			void( *Get )( rSession &Session, xml::rWriter &Writer ) )
 		{
 			SetElementLayout( Id, Target, Get, frontend::Registry() );
 		}
 		inline void SetDocumentLayout(
 			const char *Target,
-			void( *Get )( rSession &Session, xml::dWriter &Writer ),
+			void( *Get )( rSession &Session, xml::rWriter &Writer ),
 			const sclrgstry::dRegistry &Registry )
 		{
 			sProxy::HeadUp_( frontend::Registry(), DefaultMarker );
@@ -767,7 +767,7 @@ namespace sclxdhtml {
 		}
 		void SetDocumentLayout(
 			const char *Target,
-			void( *Get )( rSession &Session, xml::dWriter &Writer ) )
+			void( *Get )( rSession &Session, xml::rWriter &Writer ) )
 		{
 			SetDocumentLayout( Target, Get, frontend::Registry() );
 		}
@@ -909,7 +909,7 @@ namespace sclxdhtml {
 
 		void GetLayout(
 			sclfrntnd::rFrontend &Frontend,
-			xml::writer_ &Writer );
+			xml::rWriter &Writer );
 
 		void HandleProjectTypeSwitching( sProxy &Proxy );
 
@@ -936,7 +936,7 @@ namespace sclxdhtml {
 
 		sclfrntnd::eLogin GetLayout(
 			sclfrntnd::rFrontend &Frontend,
-			xml::writer_ &Writer );
+			xml::rWriter &Writer );
 
 		void HandleBackendTypeSwitching( sProxy &Proxy );
 

@@ -44,10 +44,10 @@ namespace core {
 	public:
 		static void Corpus(
 			rInstances &Instances,
-			xml::dWriter &Writer );
+			xml::rWriter &Writer );
 		static void Common(
 			rInstances &Instances,
-			xml::dWriter &Writer );
+			xml::rWriter &Writer );
 	};
 
 	typedef sclxdhtml::rSession < rInstances, frdfrntnd::rFrontend, base::ePage, base::p_Undefined, sDump > rSession;
@@ -90,7 +90,7 @@ namespace core {
 
 	void About(
 		rSession &Session,
-		xml::writer_ &Writer );
+		xml::rWriter &Writer );
 }
 
 #endif

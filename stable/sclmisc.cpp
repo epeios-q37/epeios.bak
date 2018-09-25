@@ -298,7 +298,7 @@ namespace {
 		rgstry::row__ Row = qNIL;
 		flx::E_STRING_OFLOW___ Flow;
 		txf::text_oflow__ TFlow;
-		xml::writer Writer;
+		xml::rWriter Writer;
 	qRB
 		Row = GetRegistry().Search( Level, sclrgstry::Locale );
 
@@ -446,7 +446,7 @@ namespace {
 	qRH
 		flf::rOFlow Flow;
 		txf::sWFlow TFlow;
-		xml::wWriter Writer;
+		xml::rWriter Writer;
 		tol::bDateAndTime Buffer;
 	qRB
 		Flow.Init( Filename );
@@ -472,7 +472,7 @@ namespace {
 	qRH
 		flf::rOFlow Flow;
 		txf::sWFlow TFlow;
-		xml::wWriter Writer;
+		xml::rWriter Writer;
 	qRB
 		if ( !GetRegistry().IsEmpty( Level ) ) {
 			if ( !fil::Exists(Filename) || ( fil::GetLastModificationTime(Filename) <= GetRegistry().TimeStamp( Level ) ) )
@@ -1378,7 +1378,7 @@ namespace {
 	qRH
 		flx::E_STRING_OFLOW___ SFlow;
 		txf::text_oflow__ TFlow;
-		xml::writer Writer;
+		xml::rWriter Writer;
 	qRB
 		SFlow.Init( XML );
 		TFlow.Init( SFlow );

@@ -1213,36 +1213,36 @@ qRT
 qRE
 }
 
-void xml::writer_::_CloseAllTags( void )
+void xml::rWriter::CloseAllTags_( void )
 {
-	while ( Tags.Amount() != 0 )
+	while ( Tags_.Amount() != 0 )
 		PopTag();
 }
 
-void xml::writer_::_Indent( bso::size__ Amount ) const
+void xml::rWriter::Indent_( bso::size__ Amount ) const
 {
 	while ( Amount-- )
-		*S_.Flow << ' ';
+		F_() << ' ';
 }
 
-void xml::writer_::PutRawValue( flw::sRFlow &Flow )
+void xml::rWriter::PutRawValue( flw::sRFlow &Flow )
 {
-	if ( S_.TagNameInProgress ) {
-		*S_.Flow << '>';
-		S_.TagNameInProgress = false;
+	if ( TagNameInProgress_ ) {
+		F_() << '>';
+		TagNameInProgress_ = false;
 	}
 
 	flx::Copy( Flow, RF_() );
 
-	S_.TagValueInProgress = true;
+	TagValueInProgress_ = true;
 
-	_Commit();
+	Commit_();
 }
 
 namespace {
 	void TransformAndPutValue_(
 		flw::sRFlow &Flow,
-		dWriter &Writer )
+		rWriter &Writer )
 	{
 	qRH
 		flw::standalone_iflow__<> TFlow;
@@ -1258,9 +1258,9 @@ namespace {
 	}
 }
 
-void xml::writer_::PutValue( flw::sRFlow &Flow )
+void xml::rWriter::PutValue( flw::sRFlow &Flow )
 {
-	switch ( S_.SpecialCharHandling ) {
+	switch ( SpecialCharHandling_ ) {
 	case schReplace:
 		TransformAndPutValue_( Flow, *this );
 		break;
@@ -1273,7 +1273,7 @@ void xml::writer_::PutValue( flw::sRFlow &Flow )
 	}
 }
 
-void xml::writer_::PuRawValue( const value_ &Value )
+void xml::rWriter::PuRawValue( const value_ &Value )
 {
 	flx::sStringIFlow Flow;
 
@@ -1282,7 +1282,7 @@ void xml::writer_::PuRawValue( const value_ &Value )
 }
 
 
-void xml::writer_::PutValue( const value_ &Value )
+void xml::rWriter::PutValue( const value_ &Value )
 {
 	flx::sStringIFlow Flow;
 
@@ -1290,11 +1290,11 @@ void xml::writer_::PutValue( const value_ &Value )
 	PutValue( Flow );
 }
 
-void xml::writer_::PutRawAttribute(
+void xml::rWriter::PutRawAttribute(
 	const name_ &Name,
 	flw::sRFlow &Flow )
 {
-	if ( !S_.TagNameInProgress )
+	if ( !TagNameInProgress_ )
 		qRFwk();
 
 	F_() << ' ' << Name << "=\"";
@@ -1303,14 +1303,14 @@ void xml::writer_::PutRawAttribute(
 		
 	F_() << '"';
 
-	_Commit();
+	Commit_();
 }
 
 namespace {
 	void TransformAndPutAttribute_(
 		const name_ &Name,
 		flw::sRFlow &Flow,
-		dWriter &Writer )
+		rWriter &Writer )
 	{
 	qRH
 		flw::standalone_iflow__<> TFlow;
@@ -1326,11 +1326,11 @@ namespace {
 	}
 }
 
-void xml::writer_::PutAttribute(
+void xml::rWriter::PutAttribute(
 	const name_ &Name,
 	flw::sRFlow &Flow )
 {
-	switch ( S_.SpecialCharHandling ) {
+	switch ( SpecialCharHandling_ ) {
 	case schReplace:
 		TransformAndPutAttribute_( Name, Flow, *this );
 		break;
@@ -1343,7 +1343,7 @@ void xml::writer_::PutAttribute(
 	}
 }
 
-void xml::writer_::PutAttribute(
+void xml::rWriter::PutAttribute(
 	const name_ &Name,
 	const value_ &Value )
 {
@@ -1353,7 +1353,7 @@ void xml::writer_::PutAttribute(
 	PutAttribute( Name, *Flow );
 }
 
-void xml::writer_::PutRawAttribute(
+void xml::rWriter::PutRawAttribute(
 	const name_ &Name,
 	const value_ &Value )
 {
@@ -1363,11 +1363,11 @@ void xml::writer_::PutRawAttribute(
 	PutRawAttribute( Name, Flow );
 }
 
-void xml::writer_::PutCData( flw::sRFlow &Flow )
+void xml::rWriter::PutCData( flw::sRFlow &Flow )
 {
-	if ( S_.TagNameInProgress ) {
-		*S_.Flow << '>';
-		S_.TagNameInProgress = false;
+	if ( TagNameInProgress_ ) {
+		F_() << '>';
+		TagNameInProgress_ = false;
 	}
 	
 	F_() << "<![CDATA[";
@@ -1376,10 +1376,10 @@ void xml::writer_::PutCData( flw::sRFlow &Flow )
 		
 	F_() << "]]>";
 
-	_Commit();
+	Commit_();
 }
 
-void xml::writer_::PutCData( const value_ &Value )
+void xml::rWriter::PutCData( const value_ &Value )
 {
 	flx::sStringIFlow Flow;
 
@@ -1387,47 +1387,51 @@ void xml::writer_::PutCData( const value_ &Value )
 	PutCData( Flow );
 }
 
-mark__ xml::writer_::PopTag( mark__ Mark )
+sMark xml::rWriter::PopTag( sMark Mark )
 {
 qRH
 	name Name;
 qRB
-	if ( Tags.IsEmpty() )
+	if ( Tags_.IsEmpty() )
 		qRFwk();
 
-	Name.Init();
-
-	if ( Mark != Tags.Pop( Name ) )
+	if ( Mark != Tags_.Last() )
 		if ( Mark != qNIL )
 			qRFwk();
 
-	if ( S_.TagNameInProgress )
-		*S_.Flow << "/>";
+	Name.Init();
+
+	Tags_.Top( Name );
+
+	if ( TagNameInProgress_ )
+		F_() << "/>";
 	else {
-		if ( !S_.TagValueInProgress && ( S_.Outfit == oIndent ) )
-			_Indent( Tags.Amount() );
-		*S_.Flow << "</" << Name << ">";
+		if ( !TagValueInProgress_ && ( Outfit_ == oIndent ) )
+			Indent_( Tags_.Amount() );
+		F_() << "</" << Name << ">";
 	}
 
-	if ( S_.Outfit == oIndent )
-		*S_.Flow << txf::nl;
+	if ( Outfit_ == oIndent )
+		F_() << txf::nl;
 
-	S_.TagNameInProgress = false;
-	S_.TagValueInProgress = false;
+	TagNameInProgress_ = false;
+	TagValueInProgress_ = false;
 
-	_Commit();
+	Commit_();
+
+	Tags_.Pop();
 qRR
 qRT
 qRE
-	return Tags.Last();
+	return Tags_.Last();
 }
 
-void xml::writer_::Rewind( mark__ Mark )
+void xml::rWriter::Rewind( sMark Mark )
 {
 	while ( PopTag() != Mark );
 }
 
-bso::sBool dWriter::Put( rParser &Parser )
+bso::sBool xml::rWriter::Put( rParser &Parser )
 {
 	bso::sBool Continue = true, Success = false;
 
@@ -1473,7 +1477,7 @@ bso::sBool dWriter::Put( rParser &Parser )
 	return Success;
 }
 
-bso::sBool xml::dWriter::Put( xtf::extended_text_iflow__ &XFlow )
+bso::sBool xml::rWriter::Put( xtf::extended_text_iflow__ &XFlow )
 {
 	bso::sBool Success = true;
 qRH
@@ -1488,7 +1492,7 @@ qRE
 	return Success;
 }
 
-bso::sBool xml::dWriter::Put( const str::dString &XML )
+bso::sBool xml::rWriter::Put( const str::dString &XML )
 {
 	bso::sBool Success = false;
 qRH

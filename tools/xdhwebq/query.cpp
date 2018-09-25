@@ -116,7 +116,7 @@ bso::bool__ query::dPairs::GetValue(
 	return false;
 }
 
-void query::dPairs::Dump( xml::writer_ &Writer ) const
+void query::dPairs::Dump( xml::rWriter &Writer ) const
 {
 	prow__ Row = Pairs.First();
 

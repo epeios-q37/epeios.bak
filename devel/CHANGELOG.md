@@ -6,6 +6,30 @@
 - [stdz]: modification to comply with current standards,
 - [trvl]: trivial modifications,
 
+## 2018-09-25
+
+- FLX:
+  - introducing `R...`/`W...` variants,
+- RGSTRY:
+  - [adpt],
+- SCLFRNTND:
+  - [adpt],
+- SCLLOCALE:
+  - [adpt],
+- SCLMISC:
+  - [adpt],
+- SCLXDHTML:
+  - [adpt],
+- TXF:
+  - introducing `(R|W)Void`,
+- XML:
+  - `mark__` -> `sMark`,
+  - `(d|w)Writer` -> `rWriter`,
+  - `XML_UNDEFINED_MARK` -> `Undefined`,
+  - `rWriter` can be instruct to ignore some levels,
+- XPP:
+  - [adpt],
+
 ## 2018-09-21
 
 - SCLRGSTRY:

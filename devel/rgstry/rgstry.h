@@ -814,10 +814,10 @@ namespace rgstry {
 		void _Delete( const rows_ &Rows );
 		void _DumpAttributes(
 			row__ Row,
-			xml::writer_ &Writer ) const;
+			xml::rWriter &Writer ) const;
 		void _DumpNode(
 			row__ Row,
-			xml::writer_ &Writer ) const
+			xml::rWriter &Writer ) const
 		{
 			bNode Buffer;
 
@@ -834,7 +834,7 @@ namespace rgstry {
 		sdr::size__ _Dump(
 			row__ Root,
 			bso::bool__ RootToo,
-			xml::writer_ &Writer ) const;	// Retourne le nombre d'enfants.
+			xml::rWriter &Writer ) const;	// Retourne le nombre d'enfants.
 	public:
 		struct s {
 			dNodes_::s Nodes;
@@ -1142,7 +1142,7 @@ namespace rgstry {
 		sdr::size__ Dump(
 			row__ Root,
 			bso::bool__ RootToo,
-			xml::writer_ &Writer ) const;	// Retourne le nombre d'enfants.
+			xml::rWriter &Writer ) const;	// Retourne le nombre d'enfants.
 		sdr::size__ Dump(
 			row__ Root,
 			bso::bool__ RootToo,
@@ -1662,7 +1662,7 @@ namespace rgstry {
 	void Dump(
 		const entry__ &Entry,
 		bso::bool__ RootToo,
-		xml::writer_ &Writer );
+		xml::rWriter &Writer );
 
 	typedef stkbch::qBSTACKd( entry__, level__ ) _entries_;
 	typedef stkbch::qBSTACKd( time_t, level__ ) _timestamps_;
@@ -2387,7 +2387,7 @@ namespace rgstry {
 			level__ Level,
 			row__ Node,	// Si == 'qNIL', on part de la racine.
 			bso::bool__ NodeToo,
-			xml::writer_ &Writer ) const
+			xml::rWriter &Writer ) const
 		{
 			sdr::size__ Result = 0;
 		qRH

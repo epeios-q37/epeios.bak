@@ -178,6 +178,7 @@ namespace {
 		wSlide Slide;
 		bso::sBool Continue = true;
 		bso::sBool SeparatorPending = false;
+		bso::sBool IsCode = false;
 	qRB;
 		Flow.Init( RFlow, utf::f_Guess );
 
@@ -190,7 +191,7 @@ namespace {
 				Line.Init();
 				Flow.GetLine( Line );
 
-				if ( Line.Amount() != 0 ) {
+				if ( ( Line.Amount() != 0 ) || IsCode ) {
 					if ( Line == "---" ) {
 						Handle_( Slide, WFlow );
 
@@ -198,6 +199,9 @@ namespace {
 
 						Slide.Init();
 					} else {
+						if ( Line.Search( str::wString( "```" ) ) == 0 )
+							IsCode = !IsCode;
+
 						if ( SeparatorPending ) {
 							PrintSlideSeparator_( WFlow );
 							SeparatorPending = false;

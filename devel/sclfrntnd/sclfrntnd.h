@@ -260,11 +260,11 @@ namespace sclfrntnd {
 
 	void GetProjectsFeatures(
 		const char *Language,
-		xml::writer_ &Writer );
+		xml::rWriter &Writer );
 
 	void GetBackendsFeatures(
 		const char *Language,
-		xml::writer_ &Writer );
+		xml::rWriter &Writer );
 
 	void GuessBackendFeatures( rFeatures &Features );	// Set features following what's in registry.
 
@@ -398,7 +398,7 @@ namespace sclfrntnd {
 	};
 
 	inline void Dump_(
-		xml::dWriter &Writer,
+		xml::rWriter &Writer,
 		eKind Kind )
 	{
 		switch ( Kind ) {
@@ -411,7 +411,7 @@ namespace sclfrntnd {
 	}
 	
 	template <typename ... args> inline void Dump_(
-		xml::dWriter &Writer,
+		xml::rWriter &Writer,
 		eKind Kind,
 		const str::dString *Value,
 		const char *Label,
@@ -436,7 +436,7 @@ namespace sclfrntnd {
 	}
 
 	template <typename ... args> inline void Dump_(
-		xml::dWriter &Writer,
+		xml::rWriter &Writer,
 		eKind Kind,
 		const str::dString *Value,
 		args... Args )
@@ -454,7 +454,7 @@ namespace sclfrntnd {
 	}
 
 	template <typename id, typename... args> inline void Dump_(
-		xml::dWriter &Writer,
+		xml::rWriter &Writer,
 		id Id,
 		args... Args )	// Kind, Value, [Label], kind, value, [Label]... k_End.
 	{
@@ -467,7 +467,7 @@ namespace sclfrntnd {
 	template <typename ids> inline void Dump(
 		const dI1S<ids> &I1S,
 		const char *ItemLabel,
-		xml::writer_ &Writer )
+		xml::rWriter &Writer )
 	{
 		sdr::row__ Row = I1S.First();
 
@@ -488,7 +488,7 @@ namespace sclfrntnd {
 		const dI1S<ids> &I1S,
 		const char *ItemsLabel,
 		const char *ItemLabel,
-		xml::writer_ &Writer )
+		xml::rWriter &Writer )
 	{
 		Writer.PushTag( ItemsLabel );
 
@@ -503,7 +503,7 @@ namespace sclfrntnd {
 		const char *ItemLabel,
 		eKind String1LabelKind,
 		const char *String1Label,
-		xml::writer_ &Writer )
+		xml::rWriter &Writer )
 	{
 		sdr::row__ Row = I1S.First();
 
@@ -526,7 +526,7 @@ namespace sclfrntnd {
 		const char *ItemLabel,
 		eKind String1LabelKind,
 		const char *String1Label,
-		xml::writer_ &Writer )
+		xml::rWriter &Writer )
 	{
 		Writer.PushTag( ItemsLabel );
 
@@ -542,7 +542,7 @@ namespace sclfrntnd {
 	template <typename ids> inline void DumpWithLabelAttribute(
 		const sclfrntnd::dI1S<ids> &I1S,
 		const char *ItemLabel,
-		xml::writer_ &Writer )
+		xml::rWriter &Writer )
 	{
 		Dump<ids>( I1S, ItemLabel, kAttribute, LabelAttribute, Writer );
 	}
@@ -551,7 +551,7 @@ namespace sclfrntnd {
 		const sclfrntnd::dI1S<ids> &I1S,
 		const char *ItemsLabel,
 		const char *ItemLabel,
-		xml::writer_ &Writer )
+		xml::rWriter &Writer )
 	{
 		Dump<ids>( I1S, ItemsLabel, ItemLabel, kAttribute, LabelAttribute, Writer );
 	}
@@ -581,7 +581,7 @@ namespace sclfrntnd {
 		str::dString &UserID,
 		str::dString &Password );
 
-	eLogin GetLoginFeatures( xml::dWriter &Writer );
+	eLogin GetLoginFeatures( xml::rWriter &Writer );
 
 	/* An identifier usually identifies the plugin used to access the backend.
 	Identifier belows are returned when there in no bckend, or if the backend is embedded. */

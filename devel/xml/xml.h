@@ -45,8 +45,6 @@ namespace lcl {
 	class meaning_;
 }
 
-# define XML_UNDEFINED_MARK	((xml::mark__)qNIL)
-
 namespace xml {
 	typedef str::string_	name_;
 	typedef str::string		name;
@@ -124,7 +122,9 @@ namespace xml {
 		}
 	};
 
-	E_TMIMIC__( stkctn::sRow, mark__ );
+	E_TMIMIC__( stkctn::sRow, sMark );
+
+	qCDEF( sMark, Undefined, qNIL );
 
 	inline bso::bool__ WriteXMLHeader(
 		txf::text_oflow__ &OFlow,
@@ -156,88 +156,72 @@ namespace xml {
 
 	typedef parser___ rParser;
 
-	class dWriter
+	typedef bso::sU8 sLevel_;
+
+	class rWriter
 	{
 	private:
-		void _CloseAllTags( void );
-		void _Indent( bso::size__ Amount ) const;
-		void _Commit( void )
-		{
-			if ( S_.AlwaysCommit )
-				S_.Flow->Commit();
-		}
+		stkctn::qMCSTACKwl( name_ ) Tags_;
+		txf::text_oflow__ *Flow_;
+		bso::bool__ TagNameInProgress_;
+		bso::bool__ TagValueInProgress_;
+		eLayout Outfit_;
+		eSpecialCharHandling SpecialCharHandling_;
+		sLevel_ LevelsToIgnore_;	// Tags which level (beginning at 1) are inferior to this value are ignored.
+									// With a value of '1', the root tag is ignored.
+		bso::bool__ AlwaysCommit_;	// Fait un 'commit' aprs chaque criture. Utile pour le dboguage d'application.
+		void CloseAllTags_( void );
+		void Indent_( bso::size__ Amount ) const;
 		txf::text_oflow__ &F_( void ) const
 		{
-			if ( S_.Flow == NULL )
+			if ( Flow_ == NULL )
 				qRFwk();
 
-			return *S_.Flow;
+			if ( LevelsToIgnore_ > Tags_.Amount() )
+				return txf::WVoid;
+			else
+				return *Flow_;
 		}
 		flw::oflow__ &RF_( void ) const
 		{
 			return F_().Flow();
 		}
+		void Commit_( void )
+		{
+			if ( AlwaysCommit_ )
+				F_().Commit();
+		}
 	public:
-		struct s {
-			stkctn::qMCSTACKdl( name_ )::s Tags;
-			txf::text_oflow__ *Flow;
-			bso::bool__ TagNameInProgress;
-			bso::bool__ TagValueInProgress;
-			eLayout Outfit;
-			eSpecialCharHandling SpecialCharHandling;
-			bso::bool__ Ignore;
-			bso::bool__ AlwaysCommit;	// Fait un 'commit' aprs chaque criture. Utile pour le dboguage d'application.
-		} &S_;
-		stkctn::qMCSTACKdl( name_ ) Tags;
-		dWriter( s &S )
-		: S_( S ),
-		  Tags( S.Tags )
-		{}
 		void reset( bso::bool__ P = true )
 		{
 			if ( P )
-				_CloseAllTags();
+				CloseAllTags_();
 
-			S_.TagNameInProgress = false;
-			S_.TagValueInProgress = false;
+			TagNameInProgress_ = false;
+			TagValueInProgress_ = false;
 
-			Tags.reset( P );
-			S_.Flow = NULL;
-			S_.Outfit = o_Undefined;
-			S_.SpecialCharHandling = sch_Undefined;
-			S_.Ignore = false;
-			S_.AlwaysCommit = false;
+			Tags_.reset( P );
+			Flow_ = NULL;
+			Outfit_ = o_Undefined;
+			SpecialCharHandling_ = sch_Undefined;
+			LevelsToIgnore_ = 0;
+			AlwaysCommit_ = false;
 		}
-		void plug( qASd *AS )
-		{
-			Tags.plug( AS );
-		}
-		dWriter &operator =( const dWriter &W )
-		{
-			Tags = W.Tags;
-
-			S_.TagNameInProgress = W.S_.TagNameInProgress;
-			S_.TagValueInProgress = W.S_.TagValueInProgress;
-			S_.Flow = W.S_.Flow;
-			S_.Outfit = W.S_.Outfit;
-			S_.SpecialCharHandling = W.S_.SpecialCharHandling;
-			S_.Ignore = W.S_.Ignore;
-			S_.AlwaysCommit = W.S_.AlwaysCommit;
-
-			return *this;
-		}
+		qCDTOR( rWriter );
 		void Init(
 			txf::text_oflow__ &Flow,
 			eLayout Outfit,
 			fEncoding Encoding,
+			sLevel_ LevelsToIgnore = 0,
 			eSpecialCharHandling SpecialCharHandling = sch_Default )
 		{
 			reset();
 
-			Tags.Init();
-			S_.Flow = &Flow;
-			S_.Outfit = Outfit;
-			S_.SpecialCharHandling = SpecialCharHandling;
+			Tags_.Init();
+			Flow_ = &Flow;
+			Outfit_ = Outfit;
+			LevelsToIgnore_ = LevelsToIgnore;
+			SpecialCharHandling_ = SpecialCharHandling;
 
 			if ( WriteXMLHeader( Flow, Encoding ) )
 				switch ( Outfit ) {
@@ -251,34 +235,42 @@ namespace xml {
 					break;
 			}
 		}
-		mark__ GetMark( void ) const
+		void Init(
+			txf::text_oflow__ &Flow,
+			eLayout Outfit,
+			fEncoding Encoding,
+			eSpecialCharHandling SpecialCharHandling )
 		{
-			return Tags.Last();
+			return Init( Flow, Outfit, Encoding, 0, SpecialCharHandling );
+
 		}
-		mark__ PushTag( const name_ &Name )	// Valeur retourne : voir 'PopTag(...)'.
+		sMark GetMark( void ) const
 		{
-			mark__ Mark = XML_UNDEFINED_MARK;
+			return Tags_.Last();
+		}
+		sMark PushTag( const name_ &Name )	// See 'PopTag(...)' for the returned value.
+		{
+			sMark Mark = Tags_.Push( Name );
 
-			if ( S_.TagNameInProgress ) {
-				*S_.Flow << '>';
+			if ( TagNameInProgress_ ) {
+				F_() << '>';
 
-				if ( S_.Outfit == oIndent )
-					*S_.Flow << txf::nl;
+				if ( Outfit_ == oIndent )
+					F_() << txf::nl;
 			}
 
-			if ( S_.Outfit == oIndent )
-				_Indent( Tags.Amount() );
+			if ( Outfit_ == oIndent )
+				Indent_( Tags_.Amount() );
 
-			*S_.Flow << '<' << Name;
-			Mark = Tags.Push( Name );
-			S_.TagNameInProgress = true;
-			S_.TagValueInProgress = false;
+			F_() << '<' << Name;
+			TagNameInProgress_ = true;
+			TagValueInProgress_ = false;
 
-			_Commit();
+			Commit_();
 
 			return Mark;
 		}
-		mark__ PushTag( const char *Name )	// Valeur retourne : voir 'PopTag(...)'.
+		sMark PushTag( const char *Name )	// See 'PopTag(...)' for the returned value.
 		{
 			return PushTag( name( Name ) );
 		}
@@ -443,26 +435,24 @@ namespace xml {
 		{
 			PutCData( value( Value ) ) ;
 		}
-		mark__ PopTag( mark__ Mark = XML_UNDEFINED_MARK );	// 'Mark', si utilis, est retourn par un 'Push(...)' et permet de contrler si l'on se retrouve bien au mme niveau que le 'Push(...)' en question.
-		void Rewind( mark__ Mark );	// Dsemile l'arbre jusqu'au niveau de 'Mark'.
+		sMark PopTag( sMark Mark = Undefined );	// 'Mark', is used,is returned by a 'Push(...)', and is used to control if we are at the same level as the concerned 'Push(...)'.
+		void Rewind( sMark Mark );	// Unwind to 'Mark' level.
 		txf::text_oflow__ &GetFlow( void )
 		{
-			return *S_.Flow;
+			return *Flow_;
 		}
 		void AlwayCommit( bso::bool__ Value = true )
 		{
-			S_.AlwaysCommit = Value;
+			AlwaysCommit_ = Value;
 		}
 		bso::sBool Put( rParser &Parser );
 		// Ident and put the content of 'XFlow' (reparse it).
 		bso::sBool Put( xtf::extended_text_iflow__ &XFlow );
 		// Ident and put the content of 'XML' (reparse it).
 		bso::sBool Put( const str::dString &XML );
-		qRODISCLOSEd( eLayout, Outfit )
-		qRODISCLOSEd( eSpecialCharHandling, SpecialCharHandling )
+		qRODISCLOSEr( eLayout, Outfit )
+		qRODISCLOSEr( eSpecialCharHandling, SpecialCharHandling )
 	};
-
-	qW( Writer )
 }
 
 /***************/
@@ -899,10 +889,6 @@ namespace xml {
 
 	typedef fEncoding encoding__;
 
-	typedef dWriter writer_;
-
-	E_AUTO( writer )
-
 	inline void WriteXSLDeclaration(
 		const str::string_ &XSLHRef,
 		txf::text_oflow__ &OFlow )
@@ -912,7 +898,7 @@ namespace xml {
 
 	template <typename i> void PutValue(
 		i Value,
-		xml::writer_ &Writer )
+		xml::rWriter &Writer )
 	{
 		bso::integer_buffer__ IBuffer;
 
@@ -922,7 +908,7 @@ namespace xml {
 	template <typename s, typename i> void PutValue(
 		i Value,
 		const s &Name,
-		xml::writer_ &Writer )
+		xml::rWriter &Writer )
 	{
 		bso::integer_buffer__ IBuffer;
 
@@ -932,7 +918,7 @@ namespace xml {
 	template <typename s, typename i> void PutAttribute(
 		const s &Name,
 		i Value,
-		xml::writer_ &Writer )
+		xml::rWriter &Writer )
 	{
 		bso::integer_buffer__ IBuffer;
 

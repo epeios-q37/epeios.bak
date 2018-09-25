@@ -21,4 +21,15 @@
 
 #include "txf.h"
 
+#include "flx.h"
+
 using namespace txf;
+
+sRFlow txf::RVoid;
+sWFlow txf::WVoid;
+
+qGCTOR( txf )
+{
+	RVoid.Init( flx::VoidRFlow );
+	WVoid.Init( flx::VoidWFlow );
+}

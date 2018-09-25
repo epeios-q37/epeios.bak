@@ -493,6 +493,9 @@ namespace txf {
 			text_iflow__::Init( Flow_ );
 		}
 	};
+
+	extern sRFlow RVoid;
+	extern sWFlow WVoid;
 }
 
 

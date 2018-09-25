@@ -161,7 +161,7 @@ namespace {
 	{
 	qRH
 		flx::E_STRING_TOFLOW___ STOFlow;
-		xml::writer Writer;
+		xml::rWriter Writer;
 	qRB
 		STOFlow.Init( XML );
 		Writer.Init( STOFlow, xml::oCompact, xml::e_Default );
@@ -697,7 +697,7 @@ void sclxdhtml::sProxy::DisableElement( const str::dString &Id )
 
 void sclxdhtml::prolog::GetLayout(
 	sclfrntnd::rFrontend &Frontend,
-	xml::writer_ &Writer)
+	xml::rWriter &Writer)
 {
 	sclfrntnd::GetProjectsFeatures( Frontend.Language(), Writer );
 }
@@ -828,7 +828,7 @@ const char *sclxdhtml::login::GetLabel( eBackendVisibility Visibility )
 
 sclfrntnd::eLogin sclxdhtml::login::GetLayout(
 	sclfrntnd::rFrontend &Frontend,
-	xml::writer_ &Writer)
+	xml::rWriter &Writer)
 {
 	sclfrntnd::GetBackendsFeatures( Frontend.Language(), Writer );
 

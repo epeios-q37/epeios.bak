@@ -129,7 +129,7 @@ static level__ GetLevel_( target__ Target )
 void scllocale::Dump(
 	target__ Target,
 	bso::bool__ RootToo,
-	xml::writer &Writer )
+	xml::rWriter &Writer )
 {
 	Locale_().Dump( GetLevel_( Target ), qNIL, RootToo, Writer );
 }

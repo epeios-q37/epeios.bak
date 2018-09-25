@@ -184,7 +184,7 @@ qRE
 	return Login;
 }
 
-eLogin sclfrntnd::GetLoginFeatures( xml::dWriter &Writer )
+eLogin sclfrntnd::GetLoginFeatures( xml::rWriter &Writer )
 {
 	eLogin Login = l_Undefined;
 qRH
@@ -281,7 +281,7 @@ static void GetPredefinedItem_(
 	const registry_ &Registry,
 	const lcl::locale_ &Locale,
 	const char *Language,
-	xml::writer_ &Writer )
+	xml::rWriter &Writer )
 {
 qRH
 	str::string Value;
@@ -318,7 +318,7 @@ static void GetPredefinedItems_(
 	const registry_ &Registry,
 	const lcl::locale_ &Locale,
 	const char *Language,
-	xml::writer_ &Writer )
+	xml::rWriter &Writer )
 {
 	sdr::row__ Row = Ids.First();
 
@@ -347,7 +347,7 @@ static void GetPredefinedItems_(
 	const registry_ &Registry,
 	const lcl::locale_ &Locale,
 	const char *Language,
-	xml::writer_ &Writer )
+	xml::rWriter &Writer )
 {
 qRH
 	rgstry::values Ids;
@@ -379,7 +379,7 @@ static void GetFeatures_(
 	const rgstry::entry___ &ValueEntry,
 	const rgstry::entry___ &AliasEntry,
 	const char *Language,
-	xml::writer_ &Writer )
+	xml::rWriter &Writer )
 {
 qRH
 	str::string DefaultType;
@@ -475,7 +475,7 @@ void sclfrntnd::rFrontend::Disconnect( void )
 
 void sclfrntnd::GetProjectsFeatures(
 	const char *Language,
-	xml::writer_ &Writer )
+	xml::rWriter &Writer )
 {
 qRH
 	str::string Pattern;
@@ -488,7 +488,7 @@ qRE
 
 void sclfrntnd::GetBackendsFeatures(
 	const char *Language,
-	xml::writer_ &Writer )
+	xml::rWriter &Writer )
 {
 qRH
 	str::string Backend, Type;

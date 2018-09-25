@@ -572,7 +572,7 @@ qRE
 
 void rgstry::registry_::_DumpAttributes(
 	row__ Row,
-	xml::writer_ &Writer ) const
+	xml::rWriter &Writer ) const
 {
 qRH
 	rows Rows;
@@ -600,7 +600,7 @@ qRE
 sdr::size__ rgstry::registry_::_Dump(
 	row__ Root,
 	bso::bool__ RootToo,
-	xml::writer_ &Writer ) const
+	xml::rWriter &Writer ) const
 {
 	sdr::size__ ChildAmount = 0;
 qRH
@@ -638,7 +638,7 @@ qRE
 sdr::size__ rgstry::registry_::Dump(
 	row__ Root,
 	bso::bool__ RootToo,
-	xml::writer_ &Writer ) const
+	xml::rWriter &Writer ) const
 {
 	return _Dump( Root, RootToo, Writer );
 }
@@ -652,7 +652,7 @@ sdr::size__ rgstry::registry_::Dump(
 {
 	sdr::size__ ChildAmount = 0;
 qRH
-	xml::writer Writer;
+	xml::rWriter Writer;
 qRB
 	Writer.Init( Flow, Outfit, Encoding );
 
@@ -1145,7 +1145,7 @@ qRE
 void rgstry::Dump(
 	const entry__ &Entry,
 	bso::bool__ RootToo,
-	xml::writer_ &Writer )
+	xml::rWriter &Writer )
 {
 qRH
 	hLock Lock;
