@@ -62,11 +62,23 @@ namespace xdhcmn {
 	class cSession
 	{
 	protected:
-		virtual bso::bool__ XDHCMNLaunch(
+		virtual void XDHCMNGetInfo( str::dString &Info ) = 0;
+		virtual bso::sBool XDHCMNGetHead( str::dString &Head ) = 0;
+			virtual bso::bool__ XDHCMNLaunch(
 			const char *Id,
 			const char *Action ) = 0;
 	public:
 		qCALLBACK( Session );
+		const str::dString &GetInfo( str::dString &Info )
+		{
+			XDHCMNGetInfo( Info );
+
+			return Info;
+		}
+		bso::sBool GetHead( str::dString &Head )
+		{
+			return XDHCMNGetHead( Head );
+		}
 		bso::bool__ Launch(
 			const char *Id,
 			const char *Action )

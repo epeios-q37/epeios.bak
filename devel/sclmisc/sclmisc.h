@@ -320,6 +320,7 @@ namespace sclmisc {
 		const fnm::rName &Filename,
 		const char *Language,
 		str::string_ &Content,
+		xml::sLevel Level,
 		char Marker = scllocale::DefaultMarker );
 
 	bso::sBool LoadXMLAndTranslateTags(
@@ -327,15 +328,17 @@ namespace sclmisc {
 		const sclrgstry::registry_ &Registry,
 		str::string_ &Content,
 		sclrgstry::eNeedness Needness,
+		xml::sLevel Level,
 		char Marker = scllocale::DefaultMarker );
 
 	inline void LoadXMLAndTranslateTags(
 		const rgstry::tentry__ &FileName,
 		const sclrgstry::registry_ &Registry,
 		str::string_ &Content,
+		xml::sLevel Level,
 		char Marker = scllocale::DefaultMarker )
 	{
-		if ( !LoadXMLAndTranslateTags( FileName, Registry, Content, sclrgstry::nMandatory, Marker ) )
+		if ( !LoadXMLAndTranslateTags( FileName, Registry, Content, sclrgstry::nMandatory, Level, Marker ) )
 			qRFwk();
 	}
 

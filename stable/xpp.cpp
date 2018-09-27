@@ -1809,7 +1809,7 @@ status__ xpp::Process(
 qRH
 	xml::rWriter Writer;
 qRB
-	Writer.Init( OFlow, Outfit, xml::e_None, xml::schKeep );
+	Writer.Init( OFlow, Outfit, xml::e_None, Criterions.Level, xml::schKeep );
 
 	Status = Process( XFlow, Criterions, Writer, Context );
 qRR

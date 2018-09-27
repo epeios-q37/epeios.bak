@@ -29,6 +29,7 @@
       xdhelcq.initialize(mergedArguments);
     }
   </script>
+  $XDHELCQ_HEAD$
 </head>
 
 <body>
@@ -51,6 +52,8 @@
     const xdhelcq = require(xdhelcqPath);
     // console.log( require(\'electron\').remote.process.argv );
     initialize(require('electron').remote.process.argv);
+    alert( xdhelcq.moduleInfo());
+    alert( xdhelcq.getHead());
     launchEvent("");
   </script>
 </body>

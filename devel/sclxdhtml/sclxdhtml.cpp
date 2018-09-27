@@ -431,8 +431,24 @@ namespace {
 	}
 }
 
+bso::sBool sclxdhtml::sProxy::GetHead_(
+	const rgstry::rEntry &HeadFilename,
+	const sclrgstry::registry_ &Registry,
+	str::dString &Content,
+	bso::char__ Marker )
+{
+	bso::sBool Exists = false;
+qRH;
+	ntvstr::rBuffer Buffer;
+qRB;
+	Exists = sclmisc::LoadXMLAndTranslateTags( HeadFilename, Registry, Content, sclrgstry::nOptional, 1, Marker );
+qRR;
+qRT;
+qRE;
+	return Exists;
+}
 
-void sclxdhtml::sProxy::HeadUp_(
+void sclxdhtml::sProxy::_HeadUp_(
 	const rgstry::rEntry &HeadFilename,
 	const sclrgstry::registry_ &Registry,
 	bso::char__ Marker )
@@ -443,7 +459,7 @@ qRH;
 qRB;
 	Content.Init();
 
-	if ( sclmisc::LoadXMLAndTranslateTags( HeadFilename, Registry, Content, sclrgstry::nOptional, Marker ) )
+	if ( sclmisc::LoadXMLAndTranslateTags( HeadFilename, Registry, Content, sclrgstry::nOptional, 1, Marker ) )
 		Core_.SetHead( Content, "" );
 qRR;
 qRT;

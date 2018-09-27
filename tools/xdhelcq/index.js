@@ -21,9 +21,36 @@ const { app, BrowserWindow } = require('electron');
 const path = require('path');
 const url = require('url');
 const fs = require('fs');
-
+ 
 const args = process.argv;
 
+function getXdhelcqPath() {
+  if (process.env.EPEIOS_SRC) {
+    let addonPath = null;
+    if (process.platform == 'win32')
+      addonPath = 'h:/bin/';
+    else
+      addonPath = '~/bin/';
+    return require('path').join(addonPath, 'xdhelcq.node');
+  } else {
+    return require('path').join(__dirname, "xdhelcq.node");
+  }
+}
+
+function initialize(arguments) {
+  var mergedArguments = "";
+  var length = arguments.length;
+
+  while (length--) {
+    mergedArguments = '"' + arguments[length] + '" ' + mergedArguments;
+  }
+
+  console.log( mergedArguments );
+  xdhelcq.initialize(mergedArguments);
+}
+
+const xdhelcq = require(getXdhelcqPath());
+initialize(process.argv);
 
 // console.log( args );
 
@@ -47,11 +74,10 @@ function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({ width: 800, height: 600 })
 
-
   // Open the DevTools.
   win.webContents.openDevTools();
 
-  let html = fs.readFileSync(path.join(__dirname, "XDHELCq.html"), "utf8").replace(/\$XDHELCQ_PATH\$/g, __dirname.replace(/\\/g, "\\\\"));
+  let html = fs.readFileSync(path.join(__dirname, "XDHELCq.html"), "utf8").replace(/\$XDHELCQ_PATH\$/g, __dirname.replace(/\\/g, "\\\\")).replace(/\$XDHELCQ_HEAD\$/g, xdhelcq.getHead());
 
   win.loadURL("data:text/html;charset=utf-8," + encodeURI(html), { baseURLForDataURL: "file://" + cdnPath });
 
@@ -69,6 +95,8 @@ function createWindow() {
 // Some APIs can only be used after this event occurs.
 console.log("Before !");
 app.on('ready', createWindow)
+console.log( xdhelcq.moduleInfo());
+console.log( xdhelcq.getHead());
 console.log("After !");
 
 // Quit when all windows are closed.

@@ -156,7 +156,7 @@ namespace xml {
 
 	typedef parser___ rParser;
 
-	typedef bso::sU8 sLevel_;
+	typedef bso::sU8 sLevel;
 
 	class rWriter
 	{
@@ -167,7 +167,7 @@ namespace xml {
 		bso::bool__ TagValueInProgress_;
 		eLayout Outfit_;
 		eSpecialCharHandling SpecialCharHandling_;
-		sLevel_ LevelsToIgnore_;	// Tags which level (beginning at 1) are inferior to this value are ignored.
+		sLevel LevelsToIgnore_;	// Tags which level (beginning at 1) are inferior to this value are ignored.
 									// With a value of '1', the root tag is ignored.
 		bso::bool__ AlwaysCommit_;	// Fait un 'commit' aprs chaque criture. Utile pour le dboguage d'application.
 		void CloseAllTags_( void );
@@ -177,7 +177,7 @@ namespace xml {
 			if ( Flow_ == NULL )
 				qRFwk();
 
-			if ( LevelsToIgnore_ > Tags_.Amount() )
+			if ( LevelsToIgnore_ >= Tags_.Amount() )
 				return txf::WVoid;
 			else
 				return *Flow_;
@@ -212,7 +212,7 @@ namespace xml {
 			txf::text_oflow__ &Flow,
 			eLayout Outfit,
 			fEncoding Encoding,
-			sLevel_ LevelsToIgnore = 0,
+			sLevel LevelsToIgnore = 0,
 			eSpecialCharHandling SpecialCharHandling = sch_Default )
 		{
 			reset();

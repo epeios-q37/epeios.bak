@@ -6,6 +6,19 @@
 - [stdz]: modification to comply with current standards,
 - [trvl]: trivial modifications,
 
+## 2018-09-27
+
+- RGSTRY:
+  - [adpt],
+- SCLXDHTML:
+  - [adpt],
+  - introducing `sProxy` new head retrieving methods,
+  - deprecating old `sProxy` head setting methods,
+- XDHCMN:
+  - introducing `cSession::(XDHCMN)Info(...)` and `cSession::(XDHCMN)Head(...)`,
+- XDHUPS:
+  - [adpt],
+
 ## 2018-09-25
 
 - FLX:

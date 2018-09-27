@@ -650,6 +650,7 @@ namespace xpp {
 	{
 		fnm::name___
 			Directory;
+		xml::sLevel Level;
 		str::string
 			CypherKey,
 			Namespace;
@@ -658,6 +659,7 @@ namespace xpp {
 		void reset( bso::bool__ P = true )
 		{
 			Directory.reset( P);
+			Level = 0;
 			CypherKey.reset( P );
 			Namespace.reset( P );
 			Preserve = false;
@@ -669,6 +671,7 @@ namespace xpp {
 		}
 		criterions___( 
 			const fnm::name___ &Directory,
+			xml::sLevel Level = 0,
 			const str::string_ &CypherKey = str::string() ,
 			const str::string_ &Namespace = str::string(),
 			bso::bool__ Preserve = false,
@@ -676,16 +679,18 @@ namespace xpp {
 		{
 			reset( false );
 
-			Init( Directory, CypherKey, Namespace, Preserve, SubstitutionTag );
+			Init( Directory, Level, CypherKey, Namespace, Preserve, SubstitutionTag );
 		}
 		void Init( 
 			const fnm::name___ &Directory,
-			const str::string_ &CypherKey = str::string() ,
+			xml::sLevel Level = 0,
+			const str::string_ &CypherKey = str::string(),
 			const str::string_ &Namespace = str::string(),
 			bso::bool__ Preserve = false,
 			bso::char__ SubstitutionTag = 0 )
 		{
 			this->Directory.Init( Directory );
+			this->Level = Level;
 			this->CypherKey.Init( CypherKey );
 			this->Namespace.Init( Namespace );
 			this->Preserve = Preserve;

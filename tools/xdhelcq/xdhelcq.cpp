@@ -79,25 +79,6 @@ namespace {
 	qRT
 	qRE
 	}
-
-	void GetModuleInfo_( const v8::FunctionCallbackInfo<v8::Value>& Args )
-	{
-	qRH
-		str::wString Info;
-		v8q::sLString String;
-	qRB
-		Info.Init();
-
-//		if ( !wrapper::GetLauncherInfo( Info ) )
-			sclmisc::GetBaseTranslation( "NoRegisteredComponent", Info );
-
-		String.Init( Info );
-
-		Args.GetReturnValue().Set( String.Core() );
-	qRR
-	qRT
-	qRE
-	}
 }
 
 namespace {
@@ -396,6 +377,49 @@ namespace {
 }
 
 namespace {
+	void GetModuleInfo_( const v8::FunctionCallbackInfo<v8::Value>& Args )
+	{
+	qRH;
+		str::wString Info;
+		v8q::sLString String;
+	qRB;
+		Info.Init();
+
+		/*
+			if ( !wrapper::GetLauncherInfo( Info ) )
+				sclmisc::GetBaseTranslation( "NoRegisteredComponent", Info );
+		*/
+
+		Session_.Info( Info );
+
+		String.Init( Info );
+
+		Args.GetReturnValue().Set( String.Core() );
+		qRR;
+		qRT;
+		qRE;
+	}
+
+	void GetHead_( const v8::FunctionCallbackInfo<v8::Value>& Args )
+	{
+	qRH;
+		str::wString Head;
+		v8q::sLString String;
+	qRB;
+		Head.Init();
+
+		Session_.Head( Head );
+
+		String.Init( Head );
+
+		Args.GetReturnValue().Set( String.Core() );
+	qRR;
+	qRT;
+	qRE;
+	}
+}
+
+namespace {
 	void Get_(
 		const xdhcmn::digest_ &Args,
 		str::string_ &Title,
@@ -535,6 +559,7 @@ qRFB
 	NODE_SET_METHOD( Exports, "wrapperInfo", GetWrapperInfo_ );
 	NODE_SET_METHOD( Exports, "moduleInfo", GetModuleInfo_ );
 	NODE_SET_METHOD( Exports, "initialize", Initialize_ );
+	NODE_SET_METHOD( Exports, "getHead", GetHead_ );
 	NODE_SET_METHOD( Exports, "execute", Execute_ );
 	NODE_SET_METHOD( Exports, "launchEvent", LaunchEvent_ );
 

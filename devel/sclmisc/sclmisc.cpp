@@ -1093,6 +1093,7 @@ void sclmisc::LoadXMLAndTranslateTags(
 	const fnm::rName &Filename,
 	const char *Language,
 	str::string_ &Content,
+	xml::sLevel Level,
 	char Marker )
 {
 qRH;
@@ -1105,7 +1106,7 @@ qRB;
 	fnm::GetLocation( Filename, FileNameLocation );
 
 	Untranslated.Init();
-	xpp::Process( Unprocessed, xml::oIndent, Untranslated, xpp::criterions___( FileNameLocation ) );
+	xpp::Process( Unprocessed, xml::oIndent, Untranslated, xpp::criterions___( FileNameLocation, Level ) );
 
 	scllocale::TranslateTags( Untranslated, Language, Content, Marker );
 qRR;
@@ -1118,6 +1119,7 @@ bso::sBool sclmisc::LoadXMLAndTranslateTags(
 	const sclrgstry::registry_ &Registry,
 	str::string_ &Content,
 	sclrgstry::eNeedness Needness,
+	xml::sLevel Level,
 	char Marker )
 {
 	bso::sBool Found = false;
@@ -1128,7 +1130,7 @@ qRB;
 	Filename.Init();
 
 	if ( Found = sclrgstry::BGetValue( Registry, FilenameEntry, Needness, Filename ) )
-		LoadXMLAndTranslateTags( Filename, sclrgstry::GetLanguage( Registry, Buffer ), Content, Marker );
+		LoadXMLAndTranslateTags( Filename, sclrgstry::GetLanguage( Registry, Buffer ), Content, Level, Marker );
 qRR;
 qRT;
 qRE;

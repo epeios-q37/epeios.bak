@@ -59,6 +59,14 @@ namespace xdhups {
 		{
 			return Callback_;
 		}
+		const str::dString &Info( str::dString &Info )
+		{
+			return C_().GetInfo( Info );
+		}
+		bso::sBool Head( str::dString &Head )
+		{
+			return C_().GetHead( Head );
+		}
 		bso::bool__ Launch(
 			const char *Id,
 			const char *Action )
