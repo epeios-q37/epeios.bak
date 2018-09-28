@@ -1399,13 +1399,12 @@ qRB
 		if ( Mark != qNIL )
 			qRFwk();
 
-	Name.Init();
-
-	Tags_.Top( Name );
-
-	if ( TagNameInProgress_ )
+	if ( TagNameInProgress_ ) {
 		F_() << "/>";
-	else {
+		Tags_.Pop();
+	}  else {
+		Name.Init();
+		Tags_.Pop( Name );
 		if ( !TagValueInProgress_ && ( Outfit_ == oIndent ) )
 			Indent_( Tags_.Amount() );
 		F_() << "</" << Name << ">";
@@ -1414,12 +1413,10 @@ qRB
 	if ( Outfit_ == oIndent )
 		F_() << txf::nl;
 
-	TagNameInProgress_ = false;
-	TagValueInProgress_ = false;
-
 	Commit_();
 
-	Tags_.Pop();
+	TagNameInProgress_ = false;
+	TagValueInProgress_ = false;
 qRR
 qRT
 qRE

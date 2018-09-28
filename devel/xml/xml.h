@@ -177,7 +177,7 @@ namespace xml {
 			if ( Flow_ == NULL )
 				qRFwk();
 
-			if ( LevelsToIgnore_ >= Tags_.Amount() )
+			if ( LevelsToIgnore_ >= ( Tags_.Amount() + ( TagNameInProgress_ ? 0 : 1 ) ) )
 				return txf::WVoid;
 			else
 				return *Flow_;
@@ -250,8 +250,6 @@ namespace xml {
 		}
 		sMark PushTag( const name_ &Name )	// See 'PopTag(...)' for the returned value.
 		{
-			sMark Mark = Tags_.Push( Name );
-
 			if ( TagNameInProgress_ ) {
 				F_() << '>';
 
@@ -259,12 +257,15 @@ namespace xml {
 					F_() << txf::nl;
 			}
 
+			sMark Mark = Tags_.Push( Name );
+
+			TagNameInProgress_ = true;
+			TagValueInProgress_ = false;
+
 			if ( Outfit_ == oIndent )
 				Indent_( Tags_.Amount() );
 
 			F_() << '<' << Name;
-			TagNameInProgress_ = true;
-			TagValueInProgress_ = false;
 
 			Commit_();
 

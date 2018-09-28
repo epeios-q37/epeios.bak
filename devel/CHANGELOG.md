@@ -6,6 +6,11 @@
 - [stdz]: modification to comply with current standards,
 - [trvl]: trivial modifications,
 
+## 2018-09-28
+
+- XML:
+  - handling the  skipping of top tags in `sWriter`,
+
 ## 2018-09-27
 
 - RGSTRY:
