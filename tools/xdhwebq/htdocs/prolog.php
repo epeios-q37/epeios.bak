@@ -1,5 +1,4 @@
 <?php
-
 /*
 	Copyright (C) 2015 Claude SIMON (http://q37.info/contact/).
 
