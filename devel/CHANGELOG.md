@@ -6,6 +6,28 @@
 - [stdz]: modification to comply with current standards,
 - [trvl]: trivial modifications,
 
+## 2018-10-03
+- SCLI:
+  - adding control feature to ensure compatibility so theobject can be moved between binaries,
+- XDHCMN:
+  - `sUpstream::[XDHCMN]GetInfo(...)` does no more deal with strings, but returns a `scli::sInfo`,
+- XDHUPS:
+  - [adpt],
+
+## 2018-10-02
+
+- SCLXDHTML:
+  - [adpt],
+- XDHCMN:
+  - moving `[XDHCMN]GetHead(...)` and `[XDHCMN]GetInfos(...)` from `cSession` to `cDownstream` as this methods are global to the app.,
+  - renaming `cProxy` to `cUpstream` as it's the counterpart of `cDownstream`,
+- XDHDWS:
+  - [adpt],
+- XDHUJP:
+  - [adpt],
+- XDHUPS:
+  - [adpt],
+
 ## 2018-09-28
 
 - XML:

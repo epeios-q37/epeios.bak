@@ -57,7 +57,7 @@ xdhcmn::cSession *sclxdhtml::SCLXDHTMLRetrieveCallback(
 	const char *Language,
 	xdhcmn::eMode Mode,
 	const str::dString &Token,
-	xdhcmn::cProxy *ProxyCallback )
+	xdhcmn::cUpstream *UpstreamCallback )
 {
 	if ( Token.Amount() != 0 )
 		qRGnr();
@@ -67,7 +67,7 @@ xdhcmn::cSession *sclxdhtml::SCLXDHTMLRetrieveCallback(
 	if ( Session == NULL )
 		qRGnr();
 
-	Session->Init( core::Kernel(), Language, ProxyCallback, core::Core, esketchxdh::Info );
+	Session->Init( core::Kernel(), Language, UpstreamCallback, core::Core, esketchxdh::Info );
 
 	return Session;
 }

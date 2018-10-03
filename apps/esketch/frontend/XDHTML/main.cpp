@@ -61,7 +61,7 @@ void main::Display( core::rSession &Session )
 	Session.Execute( "document.write('<script type=\"text/javascript\" src=\"https://code.jquery.com/jquery-1.12.4.js\"></script>')" );
 	Session.Execute( "var s = document.createElement('script'); s.setAttribute('src','https://code.jquery.com/ui/1.12.1/jquery-ui.js');document.head.appendChild(s);" );
 */
-//	Session.AddClass( "TestButton", "hide" );
+	Session.AddClass( "TestButton", "hide" );
 
 	Session.SwitchTo( base::pMain );
 }

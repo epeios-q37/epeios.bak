@@ -15,12 +15,12 @@
     "host": "https://github.com"
   },
   "dependencies": {
-    "electron": "^1.8.3",
+    "electron": "^1.8.8",
     "node-pre-gyp": "0.6.x"
   },
   "devDependencies": {
     "aws-sdk": "2.x",
-    "electron-rebuild": "^1.7.3"
+    "electron-rebuild": "^1.8.2"
   },
   "scripts": {
     "preinstall": "npm install node-pre-gyp",

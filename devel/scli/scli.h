@@ -31,11 +31,19 @@
 # include "err.h"
 
 namespace scli {
+
+	// If the structure is changed, modify the global id int he '.cpp' !!!
 	struct sInfo
 	{
 	private:
+		// Must be first member.
+		static const char *Id_;
+		// Throws an exception if the id of the object doesn't fit the global one.
+		static void Control_( void );
 		const char *Return_( const char *Name ) const
 		{
+			Control_();
+
 			if ( Name == NULL )
 				qRFwk();
 

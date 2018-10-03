@@ -173,7 +173,7 @@
 												removeChildren( id );
 												getElement( id ).appendChild( transformToFragment( xml, xsl ) );
 												if ( id == "" ) {
-													getElement( id ).insertBefore( document.createElement( 'hr' ), getElement( id ).firstChild );
+												//	getElement( id ).insertBefore( document.createElement( 'hr' ), getElement( id ).firstChild );
 												}
 						}
 						var digests = fetchEventHandlers( id );

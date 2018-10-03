@@ -390,7 +390,7 @@ namespace {
 				sclmisc::GetBaseTranslation( "NoRegisteredComponent", Info );
 		*/
 
-		Session_.Info( Info );
+		Agent_.Info( Info );
 
 		String.Init( Info );
 
@@ -408,7 +408,7 @@ namespace {
 	qRB;
 		Head.Init();
 
-		Session_.Head( Head );
+		Agent_.Head( Head );
 
 		String.Init( Head );
 

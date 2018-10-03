@@ -21,13 +21,14 @@
 	$out = '
 		<!DOCTYPE html>
 		<html>
-			<head id="_xdh_head">
+			<head>
 			<!-- If modified, report modification in "xdhcefq.html" from "xdhcefq" -->
 			<!-- BEGIN -->
 			<meta charset="UTF-8" />
 			<script src="xdh/xdhtml.js"></script>
-			<script src="xdh/xdhwebq.js"></script>
-			<script>handleQuery("xdh.php?_token=' . $token . '&_language=' . $language . '&_action=' . $action  . '&_cont=' . '" )</script>
+			<script src="xdh/xdhwebq.js"></script>'
+			. $head .
+			'<script>handleQuery("xdh.php?_token=' . $token . '&_language=' . $language . '&_action=' . $action  . '&_cont=' . '" )</script>
 		</head>
 		<!--body id="Root" data-xdh-onevents="(keypress|About|SC+a)(keypress|Q37Refresh|SC+r)"-->
 		<body>

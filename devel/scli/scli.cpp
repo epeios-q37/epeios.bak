@@ -21,5 +21,19 @@
 
 #include "scli.h"
 
+#include "tol.h"
+
 using namespace scli;
 
+namespace {
+	// Use an new uuid if the 'sInfo' object is modified !
+	qCDEF( char *, Id_, "ac41a47a-1661-4b60-b940-82c9cae00c7e" );
+}
+
+const char *scli::sInfo::Id_ = ::Id_;
+
+void scli::sInfo::Control_( void )
+{
+	if ( strcmp( scli::sInfo::Id_, ::Id_ ) )
+		qRFwk();
+}

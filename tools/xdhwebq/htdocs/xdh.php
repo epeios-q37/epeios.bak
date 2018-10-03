@@ -23,30 +23,49 @@ error_reporting(E_ALL);
 $host = "localhost";
 $service = 53741;
 
-if (isset($_REQUEST["_prolog"]) || (isset($_REQUEST["_token"]) && !isset($_REQUEST["_cont"]))) {
- $action = $_REQUEST["_action"];
- $language = $_REQUEST["_language"];
- $UserID = $_REQUEST["UserID"];
- $Password = $_REQUEST["Password"];
- $token = $_REQUEST["_token"];
+function send( $query ) {
+ /* creates a TCP/IP socket. */
+ global $host,$service;
 
- require 'prolog.php';
-
- echo $out;
-} else {
- /* Crée un socket TCP/IP. */
  $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
+
  if ($socket === false) {
   echo "socket_create() fails :  " . socket_strerror(socket_last_error()) . "\n";
   return;
  }
 
  $result = socket_connect($socket, gethostbyname($host), $service);
+
  if ($result === false) {
   echo "socket_connect() fails : ($result) " . socket_strerror(socket_last_error($socket)) . "\n";
   return;
  }
 
+ socket_write($socket, $query, strlen($query));
+
+ $answer = "";
+
+ while ($data = socket_read($socket, 2048)) {
+  $answer .= $data;
+ }
+
+  socket_close($socket);
+
+  return $answer;
+}
+
+if (isset($_REQUEST["_prolog"]) || (isset($_REQUEST["_token"]) && !isset($_REQUEST["_cont"]))) {
+ $action = $_REQUEST["_action"];
+ $language = $_REQUEST["_language"];
+ $UserID = $_REQUEST["UserID"];
+ $Password = $_REQUEST["Password"];
+ $token = $_REQUEST["_token"];
+ $head = send( "_head" . "\00\00\00" );
+
+ require 'prolog.php';
+
+ echo $out;
+} else {
  $in = "";
 
  foreach ($_REQUEST as $key => $value) {
@@ -54,14 +73,8 @@ if (isset($_REQUEST["_prolog"]) || (isset($_REQUEST["_token"]) && !isset($_REQUE
  }
 
  $in .= "_CGI\00" . $_SERVER['PHP_SELF'] . "\00\00";
-
- socket_write($socket, $in, strlen($in));
-
- while ($out = socket_read($socket, 2048)) {
-  echo $out;
- }
-
- socket_close($socket);
+ 
+ echo send( $in );
 }
 ?>
 

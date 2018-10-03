@@ -283,29 +283,6 @@ namespace sclxdhtml {
 			const char *MessageLanguage,	// If != 'NULL', 'Message' is translated, otherwise it is displayed as is.
 			const char *CloseTextLanguage );
 	protected:
-		bso::sBool GetHead_(
-			const rgstry::rEntry &HeadFilename,
-			const sclrgstry::registry_ &Registry,
-			str::dString &Content,
-			bso::char__ Marker );
-		inline bso::sBool GetHead_(
-			const sclrgstry::registry_ &Registry,
-			str::dString &Content,
-			bso::char__ Marker = DefaultMarker )
-		{
-			return GetHead_( registry::definition::HeadFile, Registry, Content, Marker );
-		}
-		// Deprecated.
-		void _HeadUp_(
-			const rgstry::rEntry &HeadFilename,
-			const sclrgstry::registry_ &Registry,
-			bso::char__ Marker );
-		void _HeadUp_(
-			const sclrgstry::registry_ &Registry,
-			bso::char__ Marker = DefaultMarker )
-		{
-			_HeadUp_( registry::definition::HeadFile, Registry, Marker );
-		}
 		void SetLayout_(
 			const xdhdws::nstring___ &Id,
 			const rgstry::rEntry &XSLFilename,
@@ -340,11 +317,11 @@ namespace sclxdhtml {
 			XSLFileHandling_ = xfh_Undefined;
 		}
 		qCDTOR( sProxy );
-		void Init( xdhcmn::cProxy *Proxy,
+		void Init( xdhcmn::cUpstream *Upstream,
 			const scli::sInfo &Info,
 			eXSLFileHandling XSLFileHandling )
 		{
-			Core_.Init( Proxy );
+			Core_.Init( Upstream );
 			Info_ = &Info;
 			XSLFileHandling_ = XSLFileHandling;
 		}
@@ -654,21 +631,6 @@ namespace sclxdhtml {
 		{
 			return C_().Launch( *this, Id, Action );
 		}
-		void XDHCMNGetInfo( str::dString &Info ) override
-		{
-			const scli::sInfo &I = this->Info();
-
-			Info.Append( "P : " );
-			Info.Append( I.Product() );
-			Info.Append( " ; T : " );
-			Info.Append( I.Target() );
-			Info.Append( " ; O : " );
-			Info.Append( I.Organization() );
-		}
-		bso::sBool XDHCMNGetHead( str::dString &Head ) override
-		{
-			return this->GetHead( Head );
-		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -684,7 +646,7 @@ namespace sclxdhtml {
 		void Init(
 			sclfrntnd::rKernel &Kernel,
 			const char *Language,
-			xdhcmn::cProxy *Callback,
+			xdhcmn::cUpstream *Callback,
 			class rCore<rSession> &Core,
 			const scli::sInfo &Info,
 			eXSLFileHandling XSLFileHandling= xfh_Default )
@@ -927,7 +889,7 @@ namespace sclxdhtml {
 		xdhcmn::eMode Mode,
 		const str::dString &Token,	// If not empty, DEMO mode with connexion identified by 'Token',
 									// otherwise PROD mode, with host/service retrieved from registry.
-		xdhcmn::cProxy *ProxyCallback );	// To define by user.
+		xdhcmn::cUpstream *UpstreamCallback );	// To define by user.
 
 	void SCLXDHTMLReleaseCallback( xdhcmn::cSession *Callback );	// To define by user.
 

@@ -98,6 +98,10 @@ namespace query {
 			const str::dStrings &Values );
 		void FillWith( flw::iflow__ &Flow );
 		prow__ Find( const item_ &Field ) const;
+		bso::sBool Exists( const item_ &Field ) const
+		{
+			return Find( Field ) != qNIL;
+		}
 		bso::bool__ GetValue(
 			const item_ &Field,
 			item_ &Value ) const;

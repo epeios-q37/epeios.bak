@@ -79,7 +79,7 @@ namespace xdhujp {
 		TOL_CBUFFER___ *Buffer,
 		... );
 
-	typedef xdhcmn::cProxy cProxy_;
+	typedef xdhcmn::cUpstream cProxy_;
 
 	class sProxyCallback
 	: public cProxy_

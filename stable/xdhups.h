@@ -59,14 +59,6 @@ namespace xdhups {
 		{
 			return Callback_;
 		}
-		const str::dString &Info( str::dString &Info )
-		{
-			return C_().GetInfo( Info );
-		}
-		bso::sBool Head( str::dString &Head )
-		{
-			return C_().GetHead( Head );
-		}
 		bso::bool__ Launch(
 			const char *Id,
 			const char *Action )
@@ -96,7 +88,7 @@ namespace xdhups {
 		cSession_ *RetrieveCallback(
 			const char *Language,
 			const str::dString &Token,	// If empty, PROD, otherwise DEMO.
-			xdhcmn::cProxy *Callback )
+			xdhcmn::cUpstream *Callback )
 		{
 			return C_().RetrieveCallback( Language, Token, Callback );
 		}
@@ -108,6 +100,24 @@ namespace xdhups {
 		{
 			return C_().ReleaseCallback( Callback );
 		}
+		const str::dString &Info( str::dString &Info )
+		{
+			const scli::sInfo &I = C_().GetInfo();
+
+			Info.Append( "T: " );
+			Info.Append( I.Target() );
+			Info.Append( "; P: " );
+			Info.Append( I.Product() );
+			Info.Append( "; O: " );
+			Info.Append( I.Organization() );
+
+			return Info;
+		}
+		bso::sBool Head( str::dString &Head )
+		{
+			return C_().GetHead( Head );
+		}
+
 	};
 }
 

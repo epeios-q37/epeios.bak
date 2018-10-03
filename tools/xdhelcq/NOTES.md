@@ -22,7 +22,9 @@ Install, **in this directory, without the `-g` option**, the *NPM* packages *ele
 
 Launch `DVLGenGYP`. `electron` (and also `electron-rebuild`) will be in `nodes_modules/.bin/`. Although `DVLGenGYP` builds the wrapper, rebuild it with the IDE from *Visual Studio* in order for the binary to be deployed correctly.
 
-`node_module/.bin/electron-rebuild` is an alternative way to build the addon, but `DVLGenGYP`ìs required to create the proper `.sln`, and also th rebuilding with *Visual Studio*.
+`node_module/.bin/electron-rebuild` is an alternative way to build the addon, but `DVLGenGYP` ìs required to create the proper `.sln`, and also to rebuilding with *Visual Studio*.
+
+The `build` can be safely deleted ; it will be rebuild (no pun intended). This may solve some problems.
 
 Resources:
 

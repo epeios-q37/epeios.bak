@@ -68,7 +68,6 @@ const char *sclxdhtml::GetLauncher( void )
 
 // Bien que dfinit dans un '.cpp', et propre  ce '.cpp', VC++ se mlange les pinceaux avec le 'callback__' dfinit dans 'scllocale.cpp', d'o le 'namespace'.
 namespace {
-
 	typedef xdhcmn::cDownstream cDownstream_;
 
 	class sDownstream
@@ -105,13 +104,21 @@ namespace {
 		virtual xdhcmn::cSession *XDHCMNRetrieveCallback(
 			const char *Language,
 			const str::dString &Token,
-			xdhcmn::cProxy *ProxyCallback ) override
+			xdhcmn::cUpstream *UpstreamCallback ) override
 		{
-			return SCLXDHTMLRetrieveCallback( Language, Mode_, Token, ProxyCallback );
+			return SCLXDHTMLRetrieveCallback( Language, Mode_, Token, UpstreamCallback );
 		}
 		virtual void XDHCMNReleaseCallback( xdhcmn::cSession *Callback ) override
 		{
 			return SCLXDHTMLReleaseCallback( Callback );
+		}
+		const scli::sInfo &XDHCMNGetInfo( void ) override
+		{
+			return SCLXDHTMLInfo();
+		}
+		bso::sBool XDHCMNGetHead( str::dString &Head ) override
+		{
+			return sclmisc::LoadXMLAndTranslateTags( registry::definition::HeadFile, sclrgstry::GetCommonRegistry(), Head, sclrgstry::nOptional, 1, DefaultMarker );
 		}
 	public:
 		void reset( bso::bool__ P = true )
@@ -429,41 +436,6 @@ namespace {
 	qRE;
 		return Result;
 	}
-}
-
-bso::sBool sclxdhtml::sProxy::GetHead_(
-	const rgstry::rEntry &HeadFilename,
-	const sclrgstry::registry_ &Registry,
-	str::dString &Content,
-	bso::char__ Marker )
-{
-	bso::sBool Exists = false;
-qRH;
-	ntvstr::rBuffer Buffer;
-qRB;
-	Exists = sclmisc::LoadXMLAndTranslateTags( HeadFilename, Registry, Content, sclrgstry::nOptional, 1, Marker );
-qRR;
-qRT;
-qRE;
-	return Exists;
-}
-
-void sclxdhtml::sProxy::_HeadUp_(
-	const rgstry::rEntry &HeadFilename,
-	const sclrgstry::registry_ &Registry,
-	bso::char__ Marker )
-{
-qRH;
-	str::wString Content;
-	ntvstr::rBuffer Buffer;
-qRB;
-	Content.Init();
-
-	if ( sclmisc::LoadXMLAndTranslateTags( HeadFilename, Registry, Content, sclrgstry::nOptional, 1, Marker ) )
-		Core_.SetHead( Content, "" );
-qRR;
-qRT;
-qRE;
 }
 
 void sclxdhtml::sProxy::SetLayout_(

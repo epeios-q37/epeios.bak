@@ -62,23 +62,11 @@ namespace xdhcmn {
 	class cSession
 	{
 	protected:
-		virtual void XDHCMNGetInfo( str::dString &Info ) = 0;
-		virtual bso::sBool XDHCMNGetHead( str::dString &Head ) = 0;
-			virtual bso::bool__ XDHCMNLaunch(
+		virtual bso::bool__ XDHCMNLaunch(
 			const char *Id,
 			const char *Action ) = 0;
 	public:
 		qCALLBACK( Session );
-		const str::dString &GetInfo( str::dString &Info )
-		{
-			XDHCMNGetInfo( Info );
-
-			return Info;
-		}
-		bso::sBool GetHead( str::dString &Head )
-		{
-			return XDHCMNGetHead( Head );
-		}
 		bso::bool__ Launch(
 			const char *Id,
 			const char *Action )
@@ -120,7 +108,7 @@ namespace xdhcmn {
 
 	const char *GetLabel( function__ Function );
 
-	class cProxy
+	class cUpstream
 	{
 	protected:
 		virtual void XDHCMNProcess(
@@ -128,7 +116,7 @@ namespace xdhcmn {
 			TOL_CBUFFER___ *Result,
 			va_list List ) = 0;
 	public:
-		qCALLBACK( Proxy );
+		qCALLBACK( Upstream );
 		void Process(
 			function__ Function,
 			TOL_CBUFFER___ *Result,
@@ -201,8 +189,10 @@ namespace xdhcmn {
 			const char *Language,
 			const str::dString &Token,	// If not empty, DEMO mode with connexion identified by 'Token',
 										// otherwise PROD mode, with host/service retrieved from registry.
-			cProxy *Proxy ) = 0;
+			cUpstream *Upstream ) = 0;
 		virtual void XDHCMNReleaseCallback( cSession *Session ) = 0;
+		virtual const scli::sInfo &XDHCMNGetInfo( void ) = 0;
+		virtual bso::sBool XDHCMNGetHead( str::dString &Head ) = 0;
 	public:
 		qCALLBACK( Downstream )
 		void Initialize( const shared_data__ &Data )
@@ -219,13 +209,21 @@ namespace xdhcmn {
 			const char *Language,
 			const str::dString &Token,	// If not empty, DEMO mode with connexion identified by 'Token',
 										// otherwise PROD mode, with host/service retrieved from registry.
-			cProxy *Proxy )
+			cUpstream *Upstream )
 		{
-			return XDHCMNRetrieveCallback( Language, Token, Proxy );
+			return XDHCMNRetrieveCallback( Language, Token, Upstream );
 		}
 		void ReleaseCallback( cSession *Session )
 		{
 			return XDHCMNReleaseCallback( Session );
+		}
+		const scli::sInfo &GetInfo( void )
+		{
+			return XDHCMNGetInfo();
+		}
+		bso::sBool GetHead( str::dString &Head )
+		{
+			return XDHCMNGetHead( Head );
 		}
 	};
 
