@@ -33,4 +33,6 @@ Resources:
 
 ## Caveats:
 
+**If you have the message `…/xdhelcq.node is not a valid Win32 application.` is displayed the arguments, this may only mean that the arguments are incorrect !!!**
+
 If the build fails, retry after deleting `.electron`, `.electron-gyp` and `.node-gyp` in `C:/Users/csimon/`.

@@ -647,7 +647,7 @@ namespace {
 		}
 		qCVDTOR( rSession_ )
 		void Init(
-			xdhcmn::cProxy *Callback,
+			xdhcmn::cUpstream *Callback,
 			const char *Language,
 			const str::dString &Token )	// If empty, PROD session, else token used for the DEMO session.
 		{
@@ -695,7 +695,7 @@ xdhcmn::cSession *sclxdhtml::SCLXDHTMLRetrieveCallback(
 	const char *Language,
 	xdhcmn::eMode Mode,
 	const str::dString &Token,
-	xdhcmn::cProxy *ProxyCallback )
+	xdhcmn::cUpstream *UpstreamCallback )
 {
 	rSession_ *Session = new rSession_;
 	bso::sBool Continue = true;
@@ -703,7 +703,7 @@ xdhcmn::cSession *sclxdhtml::SCLXDHTMLRetrieveCallback(
 	if ( Session == NULL )
 		qRGnr();
 
-	Session->Init( ProxyCallback, Language, Token );
+	Session->Init( UpstreamCallback, Language, Token );
 
 	// WARNING ! In 'MultiUser' mode, 'ProxyCallback' is not correctly set yet!
 /*	if ( Mode == xdhcmn::mMonoUser ) {
