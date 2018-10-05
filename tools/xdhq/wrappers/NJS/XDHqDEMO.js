@@ -19,8 +19,8 @@
 
 "use strict"
 
-//const address = "atlastk.org";const httpPort = "";
-const address = "localhost";const httpPort = ":8080";
+const address = "atlastk.org";const httpPort = "";
+//const address = "localhost";const httpPort = ":8080";
 
 const port = 53800;
 
@@ -111,10 +111,10 @@ function addStrings(data, strings) {
 	return data;
 }
 
-function handleToken(token) {
+function handleString(string) {
 	var data = new Buffer(0);
 
-	data = addString(data, token);
+	data = addString(data, string);
 
 	return data;
 }
@@ -159,8 +159,15 @@ function getResponse(query, type) {
 
 var token = "";
 
+if (process.env.ATLAS_TOKEN)
+	token = "_" + process.env.ATLAS_TOKEN;
+
 function standBy(socket) {
 	socket.write(Buffer.from("StandBy_1\x00"));
+}
+
+function isTokenEmpty() {
+	return ( token == "" ) || ( token.charAt( 0 ) == '_' );
 }
 
 function pseudoServer(createCallback, newSessionAction, callbacks, head) {
@@ -169,27 +176,32 @@ function pseudoServer(createCallback, newSessionAction, callbacks, head) {
 	client.connect(port, address, () => {
 		var relaunch = true;
 
-		client.write(handleToken(token));
+		client.write(handleString(token));
 
-		if (token == "")
-			client.write(handleToken(head));
+		if ( isTokenEmpty() ) {
+			if (head === undefined)
+				head = "";
+			client.write(handleString(head));
+		}
 
 		client.on('readable', () => {
 			if (client._xdhDOM === undefined) {
 				let query = getQuery(client);
 
-				if (token == "") {
+				if ( isTokenEmpty() ) {
 					token = getString(query, 0)[0];
 
-					if (token == "")
+					if ( isTokenEmpty() )
 						throw "Bad connection information !!!";
 
 					let completeURL = "http://" + address + httpPort + "/xdh.php?_token=" + token;
 
+					console.log(completeURL);
+
 					if (open(completeURL))
-						console.log("Open " + completeURL + " in a web browser, if not already done. Enjoy!");
+						console.log("Open above URL in a web browser, if not already done. Enjoy!");
 					else
-						console.log("Open " + completeURL + " in a web browser. Enjoy!");
+						console.log("Open above URL in a web browser. Enjoy!");
 				}
 
 				client._xdhDOM = createCallback(client);

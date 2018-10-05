@@ -100,8 +100,8 @@ class Atlas extends Thread {
 
  }
 
- static function readAsset($path) {
-  return XDHq::readAsset($path);
+ static function readAsset($path, string $dir = "." ) {
+  return XDHq::readAsset($path, $dir );
  }
 
  public function __construct($userObject) {
@@ -109,7 +109,7 @@ class Atlas extends Thread {
   $this->userObject = $userObject;
  }
 
- public static function launch(string $newSessionAction, callable $callback, $gui = null, string $dir = ".") {
+ public static function launch(string $newSessionAction, callable $callback, string $headContent = "", $gui = null, string $dir = ".") {
   global $argv;
 
   $mode = self::getDefaultMode_();
@@ -146,7 +146,7 @@ class Atlas extends Thread {
    }
   }
 
-  XDHq::launch($newSessionAction, $mode, $dir);
+  XDHq::launch($newSessionAction, $headContent, $mode, $dir);
 
   switch ($gui) {
   case self::GUI_NONE:

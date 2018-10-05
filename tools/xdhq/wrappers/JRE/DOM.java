@@ -70,10 +70,6 @@ public class DOM {
 		DOM.call("SetLayout_1", Type.VOID, new String[]{id, xml, xslFilename}, emptys );
 	}
 
-	public void headUp( String head ) {
-		setLayout_("_xdh_head", head, "");
-	}
-
 	public void setLayout(String id, String html) {
 		setLayout_( id, html, "" );
 	}
@@ -81,10 +77,13 @@ public class DOM {
 	public void setLayoutXSL(String id, String xml, String xslFilename) {
 		String xslURL = xslFilename;
 
+		throw new java.lang.RuntimeException( "readAsset() not correctly handled !");
+/*
 		if ( info.q37.xdhq.XDH.isDEMO() )
-			xslURL = new String( "data:text/xml;base64," + java.util.Base64.getEncoder().encodeToString( info.q37.xdhq.XDH.readAsset( xslFilename).getBytes() ) );
+			xslURL = new String( "data:text/xml;base64," + java.util.Base64.getEncoder().encodeToString( info.q37.xdhq.XDH.readAsset( xslFilename, "" ).getBytes() ) );
 
 		setLayout_(id, xml, xslURL);
+		*/
 	}
 
 	public String[] getContents(String[] ids) {

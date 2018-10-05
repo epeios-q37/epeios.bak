@@ -60,7 +60,7 @@ if (isset($_REQUEST["_prolog"]) || (isset($_REQUEST["_token"]) && !isset($_REQUE
  $UserID = $_REQUEST["UserID"];
  $Password = $_REQUEST["Password"];
  $token = $_REQUEST["_token"];
- $head = send( "_head" . "\00\00\00" );
+ $head = send( "_token" . "\00" . $token . "\00" . "_head" . "\00\00\00" );
 
  require 'prolog.php';
 

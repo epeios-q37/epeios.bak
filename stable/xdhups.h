@@ -119,7 +119,6 @@ namespace xdhups {
 		{
 			return C_().GetHead( UP, Head );
 		}
-
 	};
 }
 

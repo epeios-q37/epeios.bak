@@ -5,7 +5,7 @@
 Le séparateur de l'argument `-cp`  ou `-classpath` ainsi que du contenu de la variable d'environnement `CLASSPATH`est `;` (point-virgule) **sous Windows** (nécessitant d'entourer le paramètre de `-cp` ou `--classpath` par des quotes sous *Cygwin*).
 Pour les autres *OSes*, cela semble être `:` (double-point).
 
-- Pour afficher le fichier et le laigne courrante : `System.out.println(Thread.currentThread().getStackTrace()[1]);`
+- Pour afficher le fichier et le ligne courante : `System.out.println(Thread.currentThread().getStackTrace()[1]);`
 - Code pour le *catch* : `System.out.println(e.getStackTrace());` 
 
 ## Compilation

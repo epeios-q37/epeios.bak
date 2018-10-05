@@ -21,12 +21,14 @@ import info.q37.atlas.*;
 import java.util.HashMap;
 
 class Hello extends Atlas {
+	static private String readAsset_( String path )  {
+		return readAsset( path, "Hello" );
+	}
 	public void handle( DOM dom, String action, String id )
 	{
 		switch( action) {
 		case "Connect":
-			dom.headUp( readAsset( "Head.html" ) );
-			dom.setLayout("", readAsset( "Main.html") );
+			dom.setLayout("", readAsset_( "Main.html") );
 			break;
 		case "Typing":
 			dom.setContent("name", dom.getContent(id));
@@ -41,7 +43,7 @@ class Hello extends Atlas {
 		}
 	}
 	public static void main(String[] args) throws Exception {
-		launch("Connect", "Hello", GUI.DEFAULT, args );
+		launch("Connect", readAsset_( "Head.html" ), "Hello", GUI.DEFAULT, args );
 
 		for (;;)
 			new Hello();

@@ -25,7 +25,22 @@
 	that there is a timeout after which the application is killed.
 */
 
-const atlas = require( 'atlastk' );
+var atlasId = "";
+
+if (process.env.EPEIOS_SRC) {
+	let epeiosPath = "";
+
+	if (process.platform == 'win32')
+		epeiosPath = "h:/hg/epeios/"
+	else
+		epeiosPath = "~/hg/epeios/"
+
+	atlasId = epeiosPath + "tools/xdhq/Atlas/NJS/Atlas.js";
+} else {
+	atlasId = 'atlastk';
+}
+
+const atlas = require(atlasId);
 const DOM = atlas.DOM;
 
 class MyData extends DOM {
@@ -116,15 +131,11 @@ function newSession() {
 	return new MyData();
 }
 
-var head = "";
-
 function acConnect(dom, id) {
-	dom.headUp( head,
-		() => dom.setLayout("", body,
-			() => dom.focus("Input",
-				() => dom.disableElements(["HideActive", "HideCompleted"],
-					() => displayTodos(dom)
-				)
+	dom.setLayout("", body,
+		() => dom.focus("Input",
+			() => dom.disableElements(["HideActive", "HideCompleted"],
+				() => displayTodos(dom)
 			)
 		)
 	);
@@ -305,12 +316,77 @@ function main() {
 		"Cancel": acCancel,
 	};
 
-	atlas.launch(newSession, "Connect", callbacks);
+	// Content of 'HeadDEMO.html'.
+	let head = `
+		<title>Atlas • TodoMVC</title>
+		<link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAMFBMVEUEAvyEhsxERuS8urQsKuycnsRkYtzc2qwUFvRUVtysrrx0ctTs6qTMyrSUksQ0NuyciPBdAAABHklEQVR42mNgwAa8zlxjDd2A4POfOXPmzZkFCAH2M8fNzyALzDlzg2ENssCbMwkMOsgCa858YOjBKxBzRoHhD7LAHiBH5swCT9HQ6A9ggZ4zp7YCrV0DdM6pBpAAG5Blc2aBDZA68wCsZPuZU0BDH07xvHOmAGKKvgMP2NA/Zw7ADIYJXGDgLQeBBSCBFu0aoAPYQUadMQAJAE29zwAVWMCWpgB08ZnDQGsbGhpsgCqBQHNfzRkDEIPlzFmo0T5nzoMovjPHoAK8Zw5BnA5yDosDSAVYQOYMKIDZzkoDzagAsjhqzjRAfXTmzAQgi/vMQZA6pjtAvhEk0E+ATWRRm6YBZuScCUCNN5szH1D4TGdOoSrggtiNAH3vBBjwAQCglIrSZkf1MQAAAABJRU5ErkJggg==" />
+		<!-- Only both lines below change between 'PROD' and 'DEMO' files. -->
+		<link rel="stylesheet" href="http://q37.info/download/assets/TodoMVC/todomvc-common/base.css">
+		<link rel="stylesheet" href="http://q37.info/download/assets/TodoMVC/todomvc-app-css/index.css">
+		<style>
+		 .hide {
+				display: none;
+			}
+		</style>
+		<style id="HideClearCompleted">
+		 .clear-completed {
+				display: none;
+			}
+		</style>
+		<style id="HideCompleted">
+		 .completed {
+				display: none;
+			}
+		</style>
+		<style id="HideActive">
+		 .active {
+				display: none;
+			}
+		</style>
+	`;
 
-	head = '<title>Atlas • TodoMVC</title><link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAMFBMVEUEAvyEhsxERuS8urQsKuycnsRkYtzc2qwUFvRUVtysrrx0ctTs6qTMyrSUksQ0NuyciPBdAAABHklEQVR42mNgwAa8zlxjDd2A4POfOXPmzZkFCAH2M8fNzyALzDlzg2ENssCbMwkMOsgCa858YOjBKxBzRoHhD7LAHiBH5swCT9HQ6A9ggZ4zp7YCrV0DdM6pBpAAG5Blc2aBDZA68wCsZPuZU0BDH07xvHOmAGKKvgMP2NA/Zw7ADIYJXGDgLQeBBSCBFu0aoAPYQUadMQAJAE29zwAVWMCWpgB08ZnDQGsbGhpsgCqBQHNfzRkDEIPlzFmo0T5nzoMovjPHoAK8Zw5BnA5yDosDSAVYQOYMKIDZzkoDzagAsjhqzjRAfXTmzAQgi/vMQZA6pjtAvhEk0E+ATWRRm6YBZuScCUCNN5szH1D4TGdOoSrggtiNAH3vBBjwAQCglIrSZkf1MQAAAABJRU5ErkJggg==" /> <link rel="stylesheet" href="http://q37.info/download/assets/TodoMVC/todomvc-common/base.css"> <link rel="stylesheet" href="http://q37.info/download/assets/TodoMVC/todomvc-app-css/index.css"> <style> .hide {  display: none; } </style> <style id="HideClearCompleted"> .clear-completed {  display: none; } </style> <style id="HideCompleted"> .completed {  display: none; } </style> <style id="HideActive"> .active {  display: none; } </style>';
+	atlas.launch(newSession, "Connect", callbacks, head);
 
-
-	body = '<section class="todoapp">	<header class="header">		<h1>todos</h1>		<input id="Input" class="new-todo" placeholder="What needs to be done?" autofocus="" data-xdh-onevent="keypress|Submit|Enter"/>	</header>	<section class="main">		<input class="toggle-all" type="checkbox"/>		<label for="toggle-all">Mark all as complete</label>		<ul class="todo-list" id="Todos"/>	</section>	<footer class="footer">		<span class="todo-count" id="Count"></span>		<ul class="filters">			<li>				<a style="cursor: pointer;" id="All" class="selected" data-xdh-onevent="All">All</a>			</li>			<li>				<a style="cursor: pointer;" id="Active" data-xdh-onevent="Active">Active</a>			</li>			<li>				<a style="cursor: pointer;" id="Completed" data-xdh-onevent="Completed">Completed</a>			</li>		</ul>		<button class="clear-completed" data-xdh-onevent="Clear">Clear completed</button>	</footer></section><footer class="info">	<p>Double-click to edit a todo</p>	<p>		<span>Created with the </span>		<a href="http://atlastk.org/">			<span style="font-style: italic;">Atlas</span>			<span> toolkit</span>		</a>		<span>!</span>	</p></footer>';
-}    
+	// Content of 'Main.html'.
+	body = `
+		<section class ="todoapp">
+			<header class ="header">
+				<h1>todos</h1>
+				<input id="Input" class ="new-todo" placeholder="What needs to be done?" autofocus="" data-xdh-onevent="keypress|Submit|Enter"/>
+			</header>
+			<section class ="main">
+				<input class ="toggle-all" type="checkbox"/>
+				<label for="toggle-all">Mark all as complete</label>
+				<ul class ="todo-list" id="Todos"/>
+			</section>
+			<footer class ="footer">
+				<span class ="todo-count" id="Count"></span>
+				<ul class ="filters">
+					<li>
+						<a style="cursor: pointer;" id="All" class ="selected" data-xdh-onevent="All">All</a>
+					</li>
+					<li>
+						<a style="cursor: pointer;" id="Active" data-xdh-onevent="Active">Active</a>
+					</li>
+					<li>
+						<a style="cursor: pointer;" id="Completed" data-xdh-onevent="Completed">Completed</a>
+					</li>
+				</ul>
+				<button class ="clear-completed" data-xdh-onevent="Clear">Clear completed</button>
+			</footer>
+		</section>
+		<footer class ="info">
+			<p>Double-click to edit a todo</p>
+			<p>
+				<span>Created with the </span>
+				<a href="http://atlastk.org/">
+					<span style="font-style: italic;">Atlas</span>
+					<span> toolkit</span>
+				</a>
+				<span>!</span>
+			</p>
+		</footer>
+	`;
+};
 
 main();

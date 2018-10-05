@@ -25,7 +25,6 @@ import info.q37.xdhq.MODE;
 import java.nio.file.*;
 
 public class XDH extends info.q37.jreq.JRE {
-	private static String dir_;
 	private static MODE mode_ = MODE.UNDEFINED;
 	static private String readFile_( String path ) {
 		String result = null;
@@ -41,25 +40,24 @@ public class XDH extends info.q37.jreq.JRE {
 	public static boolean isDev() {
 		return System.getenv("EPEIOS_SRC") != null;
 	}
-	private static String getAssetPath_() {
+	private static String getAssetPath_( String dir ) {
 		if ( isDev() )
-			return "h:/hg/epeios/tools/xdhq/examples/common/" + dir_ + "/";
+			return "h:/hg/epeios/tools/xdhq/examples/common/" + dir + "/";
 		else
 			return "./";
 	}
-	public static String getAssetFilename_( String path ) {
-		return getAssetPath_() + path;
+	public static String getAssetFilename_( String path, String dir ) {
+		return getAssetPath_( dir ) + path;
 	}
-	public static String readAsset( String path ) {
-		return readFile_( getAssetFilename_( path ) );
+	public static String readAsset( String path, String dir ) {
+		return readFile_( getAssetFilename_( path, dir ) );
 	}
-	static public void launch( String newSessionAction, MODE mode, String dir ) {
+	static public void launch( String newSessionAction, String headContent, MODE mode ) {
 		XDH.mode_ = mode;
-		XDH.dir_ = dir;
 
 		switch ( mode ) {
 		case DEMO:
-			XDH_DEMO.launch( newSessionAction );
+			XDH_DEMO.launch( newSessionAction, headContent );
 			break;
 		case PROD:
 			XDH_PROD.launch( newSessionAction );

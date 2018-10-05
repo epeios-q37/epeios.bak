@@ -45,8 +45,12 @@ public abstract class Atlas implements Runnable {
 		return info.q37.xdhq.XDH.isDev();
 	}
 
-	public String readAsset( String path ) {
-		return info.q37.xdhq.XDH.readAsset( path );
+	static public String readAsset( String path, String dir ) {
+		return info.q37.xdhq.XDH.readAsset( path, dir );
+	}
+
+	public static String readAsset( String path ) {
+		return readAsset( path, "" );
 	}
 
 	private static void launchWeb(String dir) {
@@ -107,7 +111,7 @@ public abstract class Atlas implements Runnable {
 			return MODE.DEMO;
 	}
 
-	private static void launch(String newSessionAction, String dir, GUI gui, String arg) {
+	private static void launch(String newSessionAction, String headContent, String dir, GUI gui, String arg) {
 		MODE mode = getDefaultMODE();
 
 		if (gui == GUI.DEFAULT) {
@@ -132,7 +136,7 @@ public abstract class Atlas implements Runnable {
 			}
 		}
 
-		info.q37.xdhq.XDH.launch(newSessionAction, mode, dir);
+		info.q37.xdhq.XDH.launch(newSessionAction, headContent, mode );
 
 		switch (gui) {
 		case NONE:
@@ -154,18 +158,18 @@ public abstract class Atlas implements Runnable {
 		}
 	}
 
-	public static void launch(String newSessionAction, String dir, GUI gui, String[] args) {
+	public static void launch(String newSessionAction, String headContent, String dir, GUI gui, String[] args) {
 		if (args.length > 0)
-			launch(newSessionAction, dir, gui, args[0]);
+			launch(newSessionAction, headContent,dir, gui, args[0]);
 		else
-			launch(newSessionAction, dir, gui, "");
+			launch(newSessionAction, headContent, dir, gui, "");
 	}
 
-	public static void launch(String newSessionAction, GUI gui) {
-		launch(newSessionAction, ".", gui, "");
+	public static void launch(String newSessionAction, String headContent, GUI gui) {
+		launch(newSessionAction, headContent, ".", gui, "");
 	}
 
-	public static void launch(String newSessionAction) {
-		launch(newSessionAction, ".", GUI.DEFAULT, "");
+	public static void launch(String newSessionAction, String headContent) {
+		launch(newSessionAction, headContent, ".", GUI.DEFAULT, "");
 	}
 };

@@ -29,29 +29,29 @@ class XDHq extends XDHq_SHRD{
 	const MODE_DEMO = 1;
 	const MODE_UNDEFINED = 2;
 	private static $mode_ = self::MODE_UNDEFINED;
-	private static $dir_;
-	private static function getAssetPath_() {
+	static $dir;
+	private static function getAssetPath_( $dir ) {
 		if ( parent::isDev() )
-			return "h:/hg/epeios/tools/xdhq/examples/common/" . self::$dir_ . "/";
+			return "h:/hg/epeios/tools/xdhq/examples/common/" . $dir . "/";
 		else
 			return "./";
 	}
-	private static function getAssetFilename_( $path ) {
-		return self::getAssetPath_() . $path;
+	private static function getAssetFilename_( $path, $dir ) {
+		return self::getAssetPath_( $dir ) . $path;
 	}
-	static function readAsset( $path ) {
-		return file_get_contents( self::getAssetFilename_( $path ) );
+	static function readAsset( $path, string $dir = "" ) {
+		return file_get_contents( self::getAssetFilename_( $path, $dir ) );
 	}
-	static function launch( $newSessionAction, $mode, $dir ) {
+	static function launch( string $newSessionAction, string $headContent, $mode, string $dir ) {
 		self::$mode_ = $mode;
-		self::$dir_ = $dir;
+		self::$dir = $dir;
 
 		switch ( $mode ) {
 		case self::MODE_PROD:
 			XDHq_PROD::launch( $newSessionAction );
 			break;
 		case self::MODE_DEMO:
-			XDHq_DEMO::launch( $newSessionAction );
+			XDHq_DEMO::launch( $newSessionAction, $headContent );
 			break;
 		default:
 			throw new Exception( "Unknown mode !!!");
@@ -117,9 +117,6 @@ class XDHqDOM extends Threaded {
 	private function setLayout_(string  $id, $tree, string $xslFilename ) {
 		self::call_( "SetLayout_1", XDHq::RT_NONE, 3, $id, $tree, $xslFilename, 0 );
 	}
-	function headUp(string $html ) {
-		self::setLayout_( "_xdh_head", $html, "" );
-	}
 	function setLayout(string  $id, string $html ) {
 		self::setLayout_( $id, $html, "" );
 	}
@@ -127,7 +124,7 @@ class XDHqDOM extends Threaded {
 		$xslURL = $xsl;
 
 		if ( XDHq::isDEMO() )
-			$xslURL = "data:text/xml;charset=utf-8," . rawurlencode( XDHq::readAsset( $xsl ) );
+			$xslURL = "data:text/xml;charset=utf-8," . rawurlencode( XDHq::readAsset( $xsl, XDHq::$dir ) );
 			
 		self::setLayout_( $id, $xml, $xslURL );
 	}

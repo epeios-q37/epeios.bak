@@ -19,7 +19,6 @@
 
 /*
 	This is the one-file version, which does not need the 'Head.html' and the 'Main.html' files.
-	See next comment.
 */
 
 "use strict"
@@ -41,37 +40,52 @@ if (process.env.EPEIOS_SRC) {
 
 const atlas = require(atlasId);
 
-/*
-	Before publication, remove this comment, all the above lines
-	and uncomment following line.
-*/
-// const atlas = require( 'atlastk' );
+// Content of 'Head.html'.
+const head = `
+	<title>"Hello, World !" example</title>
+	<link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAMFBMVEUEAvyEhsxERuS8urQsKuycnsRkYtzc2qwUFvRUVtysrrx0ctTs6qTMyrSUksQ0NuyciPBdAAABHklEQVR42mNgwAa8zlxjDd2A4POfOXPmzZkFCAH2M8fNzyALzDlzg2ENssCbMwkMOsgCa858YOjBKxBzRoHhD7LAHiBH5swCT9HQ6A9ggZ4zp7YCrV0DdM6pBpAAG5Blc2aBDZA68wCsZPuZU0BDH07xvHOmAGKKvgMP2NA/Zw7ADIYJXGDgLQeBBSCBFu0aoAPYQUadMQAJAE29zwAVWMCWpgB08ZnDQGsbGhpsgCqBQHNfzRkDEIPlzFmo0T5nzoMovjPHoAK8Zw5BnA5yDosDSAVYQOYMKIDZzkoDzagAsjhqzjRAfXTmzAQgi/vMQZA6pjtAvhEk0E+ATWRRm6YBZuScCUCNN5szH1D4TGdOoSrggtiNAH3vBBjwAQCglIrSZkf1MQAAAABJRU5ErkJggg==" />
+	<style type="text/css">
+		html,
+		body {
+		height: 100%;
+		padding: 0;
+		margin: 0;
+	}
 
-const head = [
-	'<title>"Hello, World !" example</title>',
-	'<style type="text/css">',
-	' html, body { height: 100%; padding: 0; margin: 0; }',
-	' .vcenter-out, .hcenter { display: table; height: 100%; margin: auto; }',
-	' .vcenter-in { display: table-cell; vertical-align: middle; }',
-	'</style>'].join('\n');
+		.vcenter-out,
+		.hcenter {
+		display: table;
+		height: 100%;
+		margin: auto;
+	}
 
-const body = [
-	'<div class="vcenter-out">',
-	' <div class="vcenter-in">',
-	'  <fieldset>',
-	'   <label>Name:</label>',
-	'   <input id="input" maxlength="20" placeholder="Enter a name here"',
-	'		type="text" data-xdh-onevent="input|Typing"/>',
-	'   <button data-xdh-onevent="Clear">Clear</button>',
-	'   <hr/>',
-	'   <h1>',
-	'    <span>Hello </span>',
-	'    <span style="font-style: italic;" id="name"></span>',
-	'    <span>!</span>',
-	'   </h1>',
-	'  </fieldset>',
-	' </div>',
-	'</div>'].join('\n');
+		.vcenter-in {
+		display: table-cell;
+		vertical-align: middle;
+	}
+	</style>
+`;
+
+// Content of 'Main.html'.
+const body = `
+	<div class ="vcenter-out">
+	 <div class ="vcenter-in">
+	  <fieldset>
+	   <label>Name: </label>
+	   <input id="input" maxlength="20" placeholder="Enter a name here" type="text" data-xdh-onevent="input|Typing" />
+	   <button data-xdh-onevent="Clear">Clear</button>
+	   <hr />
+	   <h1>
+		<span>Hello </span>
+		<span style="font-style: italic;" id="name"></span>
+		<!-- <span style="font-style: italic;" id="name" />	With this line rather then the above one,
+															 the following line becomes a child of the above tag !!! -->
+		<span>!</span>
+	   </h1>
+	  </fieldset>
+	 </div>
+	</div>
+`;
 
 const callbacks = {
 	"Connect": (dom, id) => dom.setLayout("", body),
@@ -80,4 +94,4 @@ const callbacks = {
 		(answer) => { if (answer) dom.setContents({ "input": "", "name": "" }) }),
 };
 
-atlas.launch(() => new atlas.DOM(), "Connect", callbacks);
+atlas.launch(() => new atlas.DOM(), "Connect", callbacks, head );

@@ -39,6 +39,17 @@ class TodoMVC extends Atlas {
 	private int index = -1;
 	private List<Todo> todos;
 
+	private static String readAsset_( String path ) {
+		String dir;
+
+		if (System.getenv("EPEIOS_SRC") == null)
+			dir = ".";
+		else
+			dir = "TodoMVC";
+
+		return readAsset( path, dir );
+	}
+
 	private int itemsLeft() {
 		return (int) todos.stream().filter(todo -> !todo.completed).count();
 	}
@@ -237,8 +248,7 @@ class TodoMVC extends Atlas {
 	public void handle(DOM dom, String action, String id) {
 		switch (action) {
 		case "Connect":
-			dom.headUp(info.q37.xdhq.XDH.readAsset("HeadDEMO.html"));
-			dom.setLayout("", info.q37.xdhq.XDH.readAsset("Main.html"));
+			dom.setLayout("", readAsset_("Main.html"));
 			dom.focus("Input");
 			dom.disableElements(new String[] { "HideActive", "HideCompleted" });
 			displayTodos(dom);
@@ -287,7 +297,7 @@ class TodoMVC extends Atlas {
 		else
 			dir = "TodoMVC";
 
-		launch("Connect", dir, GUI.DEFAULT, args);
+		launch("Connect", readAsset_("HeadDEMO.html"), dir, GUI.DEFAULT, args);
 
 		for (;;)
 			new TodoMVC();

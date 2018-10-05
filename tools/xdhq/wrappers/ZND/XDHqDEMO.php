@@ -19,9 +19,10 @@
 */
 
 class XDHq_DEMO extends XDHq_SHRD {
-	static $newSessionAction;
-	static function launch( string $newSessionAction ) {
+	static $newSessionAction, $headContent;
+	static function launch( string $newSessionAction, string $headContent ) {
 		self::$newSessionAction = $newSessionAction;
+		self::$headContent = $headContent;
 	}
 }
 
@@ -30,6 +31,9 @@ class XDHqDOM_DEMO extends Threaded {
 	private static $token = "";
 	private static $protocolLabel = "712a58bf-2c9a-47b2-ba5e-d359a99966de";
 	private static $protocolVersion = "0";
+	private static function isTokenEmpty_() {
+		return empty( self::$token ) || ( substr( self::$token, 0, 1 ) == '_' );
+	}
 	private function writeSize_( $socket, $size ) {
 		$result = pack( "C", $size & 0x7f );
 		$size >>= 7;
@@ -106,6 +110,10 @@ class XDHqDOM_DEMO extends Threaded {
 //		$address = "localhost";$httpPort = ":8080";
 		$port = 53800;
 
+		if( $this->isTokenEmpty_() )
+			if ( getenv( "ATLAS_TOKEN") !== false )
+				self::$token = "_" . getenv( "ATLAS_TOKEN" );
+
 		$this->socket = fsockopen( $address, $port, $errno, $errstr );
 
 		if (!$this->socket)
@@ -113,16 +121,20 @@ class XDHqDOM_DEMO extends Threaded {
 
 		$this->writeString_( self::$token, $this->socket );
 
+		if ( $this->isTokenEmpty_() )
+			$this->writeString_( XDHq_DEMO::$headContent, $this->socket );
+
 		fflush( $this->socket );
 
-		if ( empty(self::$token) ) {
+		if ( $this->isTokenEmpty_() ) {
 			self::$token = $this->getString_( $this->socket );
 
-			if ( empty(self::$token) )
+			if ( $this->isTokenEmpty_() )
 				throw new Exception( "Invalid connection information !!!");
 
-			$url = "http://" . $address . $httpPort . "/atlas.php?_token=" . self::$token;
-			echo "Open " . $url . " in a web browser, if not already done. Enjoy!";
+			$url = "http://" . $address . $httpPort . "/xdh.php?_token=" . self::$token;
+			echo $url . "\n";
+			echo "Open above URL in a web browser, if not already done. Enjoy!";
 			XDHq_SHRD::open( $url );
 		} else {
 			if ( $this->getString_( $this->socket) != self::$token )

@@ -18,6 +18,11 @@
 	along with XDHq If not, see <http://www.gnu.org/licenses/>.
 */
 
+function readAsset( $path ) {
+	// Due to multi-threading constraints, a global variable can not be used here.
+	return Atlas::readAsset( $path, "Hello" );
+}
+
 function getAtlas() {
  if (getenv("EPEIOS_SRC") === false) {
   $zndq_path = realpath(dirname(__FILE__)) . '/../';
@@ -49,8 +54,7 @@ class Hello extends Threaded {
  public function handle($dom, $action, $id) {
   switch ($action) {
   case "Connect":
-   $dom->headUp(Atlas::readAsset("Head.html"));
-   $dom->setLayout("", Atlas::readAsset("Main.html"));
+   $dom->setLayout("", readAsset("Main.html"));
    break;
   case "Typing":
    $dom->setContent("name", $dom->getContent($id));
@@ -70,6 +74,5 @@ function myNew() {
  return new Hello();
 }
 
-Atlas::launch("Connect", 'myNew', null, "Hello");
-
+Atlas::launch("Connect", 'myNew', readAsset( "Head.html" ), null, "Hello" );
 ?>

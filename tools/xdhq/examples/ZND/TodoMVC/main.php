@@ -18,6 +18,16 @@ You should have received a copy of the GNU Affero General Public License
 along with XDHq If not, see <http://www.gnu.org/licenses/>.
  */
 
+ function readAsset( $path ) {
+  $dir = ".";
+
+  if ( XDHq::isDev() )
+   $dir = "TodoMVC";
+
+	// Due to multi-threading constraints, a global variable can not be used here.
+	return Atlas::readAsset( $path, $dir );
+}
+
 function getAtlas() {
  if (getenv("EPEIOS_SRC") === false) {
   $atlasPath = "phar://Atlas.phar/";
@@ -280,8 +290,7 @@ class TodoMVC extends Threaded {
   $this->test = "Hello !!!";
   switch ($action) {
   case "Connect":
-   $dom->headUp(Atlas::readAsset("HeadDEMO.html"));
-   $dom->setLayout("", Atlas::readAsset("Main.html"));
+   $dom->setLayout("", readAsset("Main.html"));
    $dom->focus("Input");
    $dom->disableElements(["HideActive", "HideCompleted"]);
    $this->displayTodos($dom);
@@ -332,11 +341,10 @@ function main() {
  $type = null;
 
  if (XDHq::isDev()) {
-  Atlas::launch("Connect", 'myNew', null, "TodoMVC");
+  Atlas::launch("Connect", 'myNew', readAsset("HeadDEMO.html"), null, "TodoMVC");
  } else {
-  Atlas::launch("Connect", 'myNew', null, ".");
+  Atlas::launch("Connect", 'myNew', readAsset("HeadDEMO.html"), null, ".");
  }
-
 }
 
 main();

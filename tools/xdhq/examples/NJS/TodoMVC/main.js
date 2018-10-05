@@ -131,15 +131,11 @@ function newSession() {
 	return new MyData();
 }
 
-var head = "";
-
 function acConnect(dom, id) {
-	dom.headUp( readAsset( head ),
-		() => dom.setLayout("", readAsset( "Main.html"),
-			() => dom.focus("Input",
-				() => dom.disableElements(["HideActive", "HideCompleted"],
-					() => displayTodos(dom)
-				)
+	dom.setLayout("", readAsset( "Main.html"),
+		() => dom.focus("Input",
+			() => dom.disableElements(["HideActive", "HideCompleted"],
+				() => displayTodos(dom)
 			)
 		)
 	);
@@ -320,7 +316,7 @@ function main() {
 		"Cancel": acCancel,
 	};
 
-	atlas.launch(newSession, "Connect", callbacks);
+	let head = "";
 
 	switch (atlas.mode) {
 		case atlas.modes.PROD:
@@ -333,6 +329,8 @@ function main() {
 			throw "Unknown mode !!!";
 			break;
 	}
+
+	atlas.launch(newSession, "Connect", callbacks, readAsset(head));
 }
 
 main();

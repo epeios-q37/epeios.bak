@@ -25,14 +25,18 @@ import java.util.*;
 import java.awt.Desktop;
 
 public class DOM_DEMO extends DOM_SHRD {
-	static private String address = "atlastk.org"; static private String httpPort = "";
-//	static private String address = "localhost"; static private String httpPort = ":8080";
+//	static private String address = "atlastk.org"; static private String httpPort = "";
+	static private String address = "localhost"; static private String httpPort = ":8080";
 	static private int port = 53800;
 	static private String token = "";
 	private Socket socket;
 	private boolean firstLaunch = true;
 	static private String protocolLabel = "712a58bf-2c9a-47b2-ba5e-d359a99966de";
 	static private String protocolVersion = "0";
+
+	static private boolean isTokenEmpty_() {
+		return "".equals( token );
+	}
 
 	private void writeSize_( int size, OutputStream stream ) throws Exception {
 		byte data[] = new byte[8];
@@ -131,18 +135,24 @@ public class DOM_DEMO extends DOM_SHRD {
 		InputStreamReader reader = new InputStreamReader( socket.getInputStream() );
 
 		writeString_( token, output );
+
+		if ( isTokenEmpty_() ) {
+			writeString_( info.q37.xdhq.XDH_DEMO.headContent );
+		}
+
 		output.flush();
 
-		if ( "".equals( token ) ) {
+		if ( isTokenEmpty_() ) {
 			token = getString_( reader );
 
-			if ( "".equals( token ) )
+			if ( isTokenEmpty_() )
 				throw new Exception( "Invalid connection information !!!");
 
-			String url = "http://" + address + httpPort + "/atlas.php?_token=" + token;
+			String url = "http://" + address + httpPort + "/xdh.php?_token=" + token;
 
 			if ( Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE) ) {
-				System.out.println( "Open " + url + " in a web browser, if not already done. Enjoy!");
+				System.out.println( url );
+				System.out.println( "Open above URL in a web browser, if not already done. Enjoy!");
 				Desktop.getDesktop().browse( new URI( url ) );
 			} else
 				System.out.println("Open " + url + " in a web browser. Enjoy!");
