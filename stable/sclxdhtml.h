@@ -64,6 +64,10 @@ namespace sclxdhtml {
 
 	const char *GetLauncher( void );
 
+	typedef void( *fHead )(void *UP, str::dString &Head);
+
+	void SetHeadFunction( fHead HeadFunction );
+
 	template <typename session> class cAction {
 	protected:
 		virtual void SCLXLaunch(

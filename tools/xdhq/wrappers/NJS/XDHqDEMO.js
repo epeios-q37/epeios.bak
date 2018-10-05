@@ -19,8 +19,8 @@
 
 "use strict"
 
-const address = "atlastk.org";const httpPort = "";
-//const address = "localhost";const httpPort = ":8080";
+//const address = "atlastk.org";const httpPort = "";
+const address = "localhost";const httpPort = ":8080";
 
 const port = 53800;
 
@@ -163,7 +163,7 @@ function standBy(socket) {
 	socket.write(Buffer.from("StandBy_1\x00"));
 }
 
-function pseudoServer(createCallback, newSessionAction, callbacks) {
+function pseudoServer(createCallback, newSessionAction, callbacks, head) {
 	var client = new net.Socket();
 
 	client.connect(port, address, () => {
@@ -171,9 +171,12 @@ function pseudoServer(createCallback, newSessionAction, callbacks) {
 
 		client.write(handleToken(token));
 
+		if (token == "")
+			client.write(handleToken(head));
+
 		client.on('readable', () => {
 			if (client._xdhDOM === undefined) {
-				var query = getQuery(client);
+				let query = getQuery(client);
 
 				if (token == "") {
 					token = getString(query, 0)[0];
@@ -181,7 +184,7 @@ function pseudoServer(createCallback, newSessionAction, callbacks) {
 					if (token == "")
 						throw "Bad connection information !!!";
 
-					let completeURL = "http://" + address + httpPort + "/atlas.php?_token=" + token;
+					let completeURL = "http://" + address + httpPort + "/xdh.php?_token=" + token;
 
 					if (open(completeURL))
 						console.log("Open " + completeURL + " in a web browser, if not already done. Enjoy!");
@@ -195,7 +198,7 @@ function pseudoServer(createCallback, newSessionAction, callbacks) {
 				client._xdhDOM._xdhType = types.UNDEFINED;
 				client .write( addString(addString(Buffer.from(""),protocolLabel),protocolVersion));
 			} else if (relaunch) {
-				pseudoServer(createCallback, newSessionAction, callbacks);
+				pseudoServer(createCallback, newSessionAction, callbacks);	// Useless to give 'head', as it will no more be used.
 
 				while (client.read());	// Language.
 
@@ -251,15 +254,15 @@ function pseudoServer(createCallback, newSessionAction, callbacks) {
 	});
 	client.on('error', (err) => {
 		throw "Unable to connect to '" + address + ":" + port + "' !!!";
-	});
+	}); 
 }
 
-function launch(createCallback, newSessionAction, callbacks) {
+function launch(createCallback, newSessionAction, callbacks, head) {
 	if (process.env.EPEIOS_SRC) {
 		console.log("DEMO mode !");
 	}
 
-	setTimeout(() => pseudoServer(createCallback, newSessionAction, callbacks), 1000);
+	setTimeout(() => pseudoServer(createCallback, newSessionAction, callbacks, head), 1000);
 
 }
 

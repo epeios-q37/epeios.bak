@@ -74,7 +74,7 @@ namespace {
 			{
 			qRH
 				query::wPairs Pairs;
-				str::string Response;
+				str::string Token, Response;
 				TOL_CBUFFER___ Buffer;
 				flw::sDressedRWFlow<> Flow;
 			qRB
@@ -84,9 +84,12 @@ namespace {
 
 				Response.Init();
 
-				if ( Pairs.Exists( str::wString( "_head" ) ) )
-					 A_().Head( Response );
-				else
+				if ( Pairs.Exists( str::wString( "_head" ) ) ) {
+					Token.Init();
+					Pairs.GetValue( str::wString( "_token" ), Token );
+
+					A_().Head( &Token, Response );
+				}  else
 					xdwmain::Handle( Pairs, S_(), Response );
 
 				Flow.Write(Response.Convert(Buffer), Response.Amount() );

@@ -74,7 +74,7 @@ const body = [
 	'</div>'].join('\n');
 
 const callbacks = {
-	"Connect": (dom, id) => dom.headUp(head, () => dom.setLayout("", body)),
+	"Connect": (dom, id) => dom.setLayout("", body),
 	"Typing": (dom, id) => dom.getContent(id, (name) => dom.setContent("name", name)),
 	"Clear": (dom, id) => dom.confirm("Are you sure ?",
 		(answer) => { if (answer) dom.setContents({ "input": "", "name": "" }) }),

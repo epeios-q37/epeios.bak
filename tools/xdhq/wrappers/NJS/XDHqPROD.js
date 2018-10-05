@@ -66,7 +66,7 @@ function split(keysAndValues, keys, values) {
 	}
 }
 
-function launch(callback, action, tagsAndCallbacks) {
+function launch(callback, action, tagsAndCallbacks, head ) {
 	console.log("PROD mode !");
 	var tags = [];
 	var callbacks = [];

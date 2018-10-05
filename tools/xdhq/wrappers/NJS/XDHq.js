@@ -103,7 +103,7 @@ function merge(key, value) {
 var xdhq;
 var call;
 
-function launch(callback, action, tagsAndCallbacks, mode) {
+function launch(callback, action, tagsAndCallbacks, head, mode) {
 	switch (mode) {
 		case modes.DEMO:
 			xdhq = require('./XDHqDEMO.js');
@@ -117,7 +117,7 @@ function launch(callback, action, tagsAndCallbacks, mode) {
 	}
 
 	call = xdhq.call;
-	xdhq.launch(callback, action, tagsAndCallbacks);
+	xdhq.launch(callback, action, tagsAndCallbacks, head );
 }
 
 class XDH {
@@ -132,9 +132,6 @@ class XDH {
 	}
 	setLayout_(id, xml, xsl, callback) {
 		call(this, "SetLayout_1", types.VOID, 3, id, xml, xsl, 0, callback);
-	}
-	headUp(head, callback) {
-		this.setLayout_("_xdh_head", head, "", callback);
 	}
 	setLayout(id, html, callback) {
 		this.setLayout_(id, html, "", callback);

@@ -64,19 +64,27 @@ namespace {
 
 	mtx::rHandler MutexHandler_ = mtx::Undefined;
 	qROW( Row );
-	crt::qMCRATEw( str::dString, sRow ) Tokens_;
+	crt::qMCRATEw( str::dString, sRow ) _Tokens_;
+	crt::qMCRATEw( str::dString, sRow ) Heads_;
 	bch::qBUNCHw( rConnections_ *, sRow ) Clients_;
 	csdbns::rListener Listener_;
 
-	rConnections_ *TUSearch_( const str::dString &Token )
+	sRow TUSearch_( const str::dString &Token )
 	{
 		if ( !mtx::IsLocked( MutexHandler_ ) )
 			qRGnr();
 
-		sRow Row = Tokens_.First();
+		sRow Row = _Tokens_.First();
 
-		while ( ( Row != qNIL ) && (Tokens_( Row ) != Token) )
-			Row = Tokens_.Next( Row );
+		while ( (Row != qNIL) && (_Tokens_( Row ) != Token) )
+			Row = _Tokens_.Next( Row );
+
+		return Row;
+	}
+
+	rConnections_ *TUConnSearch_( const str::dString &Token )
+	{
+		sRow Row = TUSearch_( Token );
 
 		if ( Row != qNIL )
 			return Clients_( Row );
@@ -84,7 +92,7 @@ namespace {
 			return NULL;
 	}
 
-	rConnections_ *TSSearch_( const str::dString &Token )
+	rConnections_ *TSConnSearch_( const str::dString &Token )
 	{
 		rConnections_ *Connections = NULL;
 	qRH;
@@ -92,14 +100,44 @@ namespace {
 	qRB;
 		Mutex.InitAndLock( MutexHandler_ );
 
-		Connections = TUSearch_( Token );
+		Connections = TUConnSearch_( Token );
 	qRR;
 	qRT;
 	qRE;
 		return Connections;
 	}
 
-	rConnections_ *Create_( const str::dString &Token )
+	const str::dString &TUHeadSearch_(
+		const str::dString &Token,
+		str::dString &Head )
+	{
+		sRow Row = TUSearch_( Token );
+
+		if ( Row != qNIL )
+			Heads_.Recall( Row, Head );
+
+		return Head;
+	}
+
+	const str::dString &TSHeadSearch_(
+		const str::dString &Token,
+		str::dString &Head )
+	{
+	qRH;
+		mtx::rMutex Mutex;
+	qRB;
+		Mutex.InitAndLock( MutexHandler_ );
+
+		TUHeadSearch_( Token, Head );
+	qRR;
+	qRT;
+	qRE;
+		return Head;
+	}
+
+	rConnections_ *Create_(
+		const str::dString &Token,
+		const str::dString &Head )
 	{
 		rConnections_*Connections = NULL;
 	qRH;
@@ -108,10 +146,13 @@ namespace {
 	qRB;
 		Mutex.InitAndLock( MutexHandler_) ;
 
-		if ( TUSearch_( Token ) != NULL )
+		if ( TUSearch_( Token ) != qNIL )
 			qRGnr();
 
-		Row = Tokens_.Append( Token );
+		Row = _Tokens_.Append( Token );
+
+		if ( Row != Heads_.Append( Head ) )
+			qRGnr();
 
 		if ( (Connections = new rConnections_) == NULL )
 			qRAlc();
@@ -148,7 +189,7 @@ namespace {
 	{
 	qRFH;
 		sck::sSocket Socket = *(sck::sSocket *)UP;
-		str::wString Token;
+		str::wString Token, Head;
 		sck::rRWFlow Flow;
 		tol::bUUID UUID;
 		rConnections_ *Connections = NULL;
@@ -164,9 +205,12 @@ namespace {
 		if ( Token.Amount() == 0 ) {
 			Token.Append( tol::UUIDGen( UUID ) );
 
-			Connections = Create_( Token );
+			Head.Init();
+			Get_( Flow, Head );
+
+			Connections = Create_( Token, Head );
 		} else {
-			Connections = TSSearch_( Token );
+			Connections = TSConnSearch_( Token );
 		}
 
 		if ( Connections == NULL )
@@ -220,7 +264,7 @@ qRE;
 sck::sSocket dmopool::GetConnection( const str::dString &Token )
 {
 	sck::sSocket Socket = sck::Undefined;
-	rConnections_ *Connections = TSSearch_( Token );
+	rConnections_ *Connections = TSConnSearch_( Token );
 
 	if ( Connections == NULL )
 		qRGnr();
@@ -246,8 +290,23 @@ sck::sSocket dmopool::GetConnection( const str::dString &Token )
 qGCTOR( dmopool )
 {
 	MutexHandler_ = mtx::Create();
-	Tokens_.Init();
+	_Tokens_.Init();
+	Heads_.Init();
 	Clients_.Init();
+}
+
+namespace {
+	void GetHead_(
+		void *UP,
+		str::dString &Head )
+	{
+		TSHeadSearch_( *(const str::wString *)UP, Head );
+	}
+}
+
+qGCTOR( dlopool )
+{
+	sclxdhtml::SetHeadFunction( GetHead_ );
 }
 
 qGDTOR( dmopool )

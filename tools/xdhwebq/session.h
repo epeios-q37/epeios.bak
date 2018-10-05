@@ -38,7 +38,7 @@
 namespace session {
 	class rSession;	// Predeclaration.
 
-	typedef xdhups::agent___ rAgent;
+	using xdhups::rAgent;
 
 	struct shared_data__
 	{

@@ -25,7 +25,7 @@ using namespace xdhups;
 
 extern "C" typedef xdhcmn::retrieve retrieve;
 
-bso::bool__ xdhups::agent___::Init(
+bso::bool__ xdhups::rAgent::Init(
 	xdhcmn::eMode Mode,
 	const str::string_ &ModuleFileName,
 	dlbrry::eNormalization Normalization,

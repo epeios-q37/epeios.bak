@@ -69,10 +69,10 @@ const body = [
 '</div>'].join('\n');
 
 const callbacks = {
-//	"Connect": (dom, id) => dom.headUp( head, () => dom.setLayout("", body)),
-	"Connect": (dom, id) => dom.headUp( readAsset('Head.html'), () => dom.setLayout("", readAsset("Main.html"))),
+	"Connect": (dom, id) => dom.setLayout("", body),
+//	"Connect": (dom, id) => dom.headUp( readAsset('Head.html'), () => dom.setLayout("", readAsset("Main.html"))),
 	"Typing": (dom, id) => dom.getContent(id, (name) => dom.setContent("name", name)),
 	"Clear": (dom, id) => dom.confirm("Are you sure ?", (answer) => { if (answer) dom.setContents({ "input": "", "name": "" }) }),
 };
 
-atlas.launch(() => new atlas.DOM(), "Connect", callbacks );
+atlas.launch(() => new atlas.DOM(), "Connect", callbacks, readAsset( 'Head.html' ) );

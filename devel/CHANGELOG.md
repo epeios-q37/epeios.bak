@@ -6,9 +6,19 @@
 - [stdz]: modification to comply with current standards,
 - [trvl]: trivial modifications,
 
+## 2018-10-05
+
+- SCLXDHTML:
+  - adding handling of the *HTML* user's head section for the *Atlas* toolkit,
+- XDHCMN:
+  - changing `cUpstream::[XDHCMN]` return type,
+- XDHUPS:
+  - [adpt],
+  - [stdz],
+
 ## 2018-10-03
 - SCLI:
-  - adding control feature to ensure compatibility so theobject can be moved between binaries,
+  - adding control feature to ensure compatibility so the object can be moved between binaries,
 - XDHCMN:
   - `sUpstream::[XDHCMN]GetInfo(...)` does no more deal with strings, but returns a `scli::sInfo`,
 - XDHUPS:

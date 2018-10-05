@@ -41,6 +41,7 @@ rgstry::rEntry registry::definition::HeadFile( "HeadFile", XMLFiles_ );
 namespace {
 	E_CDEF(char *, StraightBackendType_, "Straight" );
 	E_CDEF(char *, EmbeddedBackendType_, "Embedded" );
+	fHead HeadFunction_ = NULL;	// Function returning the user's HTML head section used by the Atlas toolkit.
 }
 
 static bso::bool__ IsInitialized_ = false;
@@ -58,6 +59,14 @@ const char *sclxdhtml::GetLauncher( void )
 		qRFwk();
 
 	return Launcher_;
+}
+
+void sclxdhtml::SetHeadFunction( fHead HeadFunction )
+{
+	if ( HeadFunction_ != NULL )
+		qRFwk();
+
+	HeadFunction_ = HeadFunction;
 }
 
 #ifdef CPE_S_WIN
@@ -116,9 +125,13 @@ namespace {
 		{
 			return SCLXDHTMLInfo();
 		}
-		bso::sBool XDHCMNGetHead( str::dString &Head ) override
+		void XDHCMNGetHead(
+			void *UP,
+			str::dString &Head ) override
 		{
-			return sclmisc::LoadXMLAndTranslateTags( registry::definition::HeadFile, sclrgstry::GetCommonRegistry(), Head, sclrgstry::nOptional, 1, DefaultMarker );
+			if ( !sclmisc::LoadXMLAndTranslateTags( registry::definition::HeadFile, sclrgstry::GetCommonRegistry(), Head, sclrgstry::nOptional, 1, DefaultMarker ) )
+				if ( HeadFunction_ != NULL )
+					HeadFunction_( UP, Head );
 		}
 	public:
 		void reset( bso::bool__ P = true )

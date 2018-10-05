@@ -192,7 +192,9 @@ namespace xdhcmn {
 			cUpstream *Upstream ) = 0;
 		virtual void XDHCMNReleaseCallback( cSession *Session ) = 0;
 		virtual const scli::sInfo &XDHCMNGetInfo( void ) = 0;
-		virtual bso::sBool XDHCMNGetHead( str::dString &Head ) = 0;
+		virtual void XDHCMNGetHead(
+			void *UP,
+			str::dString &Head ) = 0;
 	public:
 		qCALLBACK( Downstream )
 		void Initialize( const shared_data__ &Data )
@@ -221,9 +223,13 @@ namespace xdhcmn {
 		{
 			return XDHCMNGetInfo();
 		}
-		bso::sBool GetHead( str::dString &Head )
+		const str::dString &GetHead(
+			void *UP,
+			str::dString &Head )
 		{
-			return XDHCMNGetHead( Head );
+			XDHCMNGetHead( UP, Head );
+
+			return Head;
 		}
 	};
 

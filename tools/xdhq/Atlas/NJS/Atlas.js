@@ -91,7 +91,7 @@ if (xdhq.isDev()) {
 	defaultGUI = guis.NONE;
 }
 
-function launch(createCallback, newSessionAction, callbacks, gui) {
+function launch(createCallback, newSessionAction, callbacks, head, gui) {
 	var dir = xdhq.getAssetDir();
 	var arg = "";
 	var prod = false;
@@ -133,10 +133,9 @@ function launch(createCallback, newSessionAction, callbacks, gui) {
 
 	prod = mode == modes.PROD;
 
-	xdhq.launch(createCallback, newSessionAction, callbacks, mode);
+	xdhq.launch(createCallback, newSessionAction, callbacks, head, mode);
 
 	module.exports.mode = mode;
-
 
 	switch (gui) {
 		case guis.NONE:

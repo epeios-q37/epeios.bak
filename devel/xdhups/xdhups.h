@@ -67,7 +67,7 @@ namespace xdhups {
 		}
 	};
 
-    class agent___
+    class rAgent
     {
     private:
 		dlbrry::dynamic_library___ Library_;
@@ -79,7 +79,7 @@ namespace xdhups {
 			Library_.reset( P );
 			Callback_ = NULL;
         }
-        E_CDTOR( agent___ );
+        E_CDTOR( rAgent );
 		bso::bool__ Init(
 			xdhcmn::eMode Mode,
 			const str::string_ &ModuleFileName,
@@ -113,9 +113,11 @@ namespace xdhups {
 
 			return Info;
 		}
-		bso::sBool Head( str::dString &Head )
+		const str::dString &Head(
+			void *UP,
+			str::dString &Head )
 		{
-			return C_().GetHead( Head );
+			return C_().GetHead( UP, Head );
 		}
 
 	};
