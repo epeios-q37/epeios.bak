@@ -1,6 +1,6 @@
 # *TodoMVC* in *PHP*
 
-![PHP.js logo](https://q37.info/download/assets/PHP.png "PHP.js")
+![PHP logo](https://q37.info/download/assets/PHP.png "PHP")
 
 A *PHP* version of the *TodoMVC* (<http://todomvc.com/>) application, made with the [*Atlas* toolkit](http://atlastk.org).
 

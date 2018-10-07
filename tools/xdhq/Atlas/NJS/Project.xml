@@ -4,7 +4,7 @@
 	<xpp:bloc>
 		<!-- User definitions -->
 		<xpp:define name="Version">
-			<xpp:bloc>0.2.0</xpp:bloc>
+			<xpp:bloc>0.3.0</xpp:bloc>
 		</xpp:define>
 		<xpp:define name="CopyrightYears">
 			<xpp:bloc>2018</xpp:bloc>
@@ -19,7 +19,7 @@
 		<UUID>45ce6ec4-6d3d-428b-9764-cc1f5588eaf6</UUID>
 	</About>
 	<!-- NO SPACE in 'Keywords' attribute !!! ("a,b,c", NOT "a, b, c")-->
-	<RTW Description="Toolkit for developing web applications" Keywords="XDHTML,Atlas,web,interface,front-end,prototyping">
+	<RTW Description="Toolkit for prototyping web applications" Keywords="XDHTML,Atlas,web,interface,front-end,prototyping">
 		<Dir>atlas-node</Dir>
 	</RTW>
 	<NodeJS>

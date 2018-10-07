@@ -19,7 +19,6 @@
 
 /*
 	This is the one-file version, which does not need the 'Head.html' and the 'Main.html' files.
-	See also comment belows.
 */
 
 import info.q37.atlas.*;
@@ -28,7 +27,6 @@ import java.util.HashMap;
 class Hello extends Atlas {
 	public void handle( DOM dom, String action, String id )
 	{
-
 		String html = 
 		"<div class=\"vcenter-out\">" +
 		" <div class=\"vcenter-in\">" +

@@ -25,8 +25,9 @@ import java.util.*;
 import java.awt.Desktop;
 
 public class DOM_DEMO extends DOM_SHRD {
-//	static private String address = "atlastk.org"; static private String httpPort = "";
-	static private String address = "localhost"; static private String httpPort = ":8080";
+	static private String address = "atlastk.org";
+	static private String httpPort = "";
+	static private String cgi = "xdh";
 	static private int port = 53800;
 	static private String token = "";
 	private Socket socket;
@@ -34,56 +35,74 @@ public class DOM_DEMO extends DOM_SHRD {
 	static private String protocolLabel = "712a58bf-2c9a-47b2-ba5e-d359a99966de";
 	static private String protocolVersion = "0";
 
-	static private boolean isTokenEmpty_() {
-		return "".equals( token );
+	static {
+		String atk = System.getenv("ATK");
+
+		if ("DEV".equals(atk)) {
+			address = "localhost";
+			httpPort = ":8080";
+			System.out.println("\tDEV mode !");
+		} else if ("TEST".equals(atk)) {
+			cgi = "xdh_";
+			System.out.println("\tTEST mode !");
+		} else if (atk != null) {
+			throw new java.lang.RuntimeException("Bad 'ATK' environment variable value : should be 'DEV' or 'TEST' !");
+		}
+
+		if (System.getenv("ATK_TOKEN") != null)
+			token = "_" + System.getenv("ATK_TOKEN");
 	}
 
-	private void writeSize_( int size, OutputStream stream ) throws Exception {
+	static private boolean isTokenEmpty_() {
+		return "".equals(token) || (token.charAt(0) == '_');
+	}
+
+	private void writeSize_(int size, OutputStream stream) throws Exception {
 		byte data[] = new byte[8];
 		int i = 7;
 
-		data[i] = (byte)(size & 0x7F);
+		data[i] = (byte) (size & 0x7F);
 		size >>= 7;
 
-		while ( size != 0 ) {
-			data[--i] = (byte)(size | 0x80);
+		while (size != 0) {
+			data[--i] = (byte) (size | 0x80);
 			size >>= 7;
 		}
 
-		stream.write( data, i, 8 - i );
+		stream.write(data, i, 8 - i);
 	}
 
-	private void writeString_( String string, OutputStream stream ) throws Exception {
+	private void writeString_(String string, OutputStream stream) throws Exception {
 		byte bytes[] = string.getBytes();
 
-		writeSize_( bytes.length, stream );
-		stream.write( bytes );
+		writeSize_(bytes.length, stream);
+		stream.write(bytes);
 	}
 
-	private void writeString_( String string ) throws Exception {
-		writeString_( string, socket.getOutputStream() );
+	private void writeString_(String string) throws Exception {
+		writeString_(string, socket.getOutputStream());
 	}
 
-	private void writeStrings_( String[] strings, OutputStream stream ) throws Exception {
+	private void writeStrings_(String[] strings, OutputStream stream) throws Exception {
 		int size = strings.length;
 		int i = 0;
 
-		writeSize_( size, stream );
+		writeSize_(size, stream);
 
-		while ( i < size ) {
-			writeString_( strings[i++], stream );
+		while (i < size) {
+			writeString_(strings[i++], stream);
 		}
 	}
 
-	private void writeStrings_( String[] strings ) throws Exception {
-		writeStrings_( strings, socket.getOutputStream() );
+	private void writeStrings_(String[] strings) throws Exception {
+		writeStrings_(strings, socket.getOutputStream());
 	}
 
-	private int getSize_( InputStreamReader reader ) throws Exception {
+	private int getSize_(InputStreamReader reader) throws Exception {
 		int datum = reader.read();
 		int size = datum & 0x7f;
 
-		while ( (datum & 0x80) != 0 ) {
+		while ((datum & 0x80) != 0) {
 			datum = reader.read();
 
 			size = (size << 7) + (datum & 0x7f);
@@ -92,106 +111,108 @@ public class DOM_DEMO extends DOM_SHRD {
 		return size;
 	}
 
-	private String getString_( InputStreamReader reader ) throws Exception {
+	private String getString_(InputStreamReader reader) throws Exception {
 		String string = "";
-		int size = getSize_( reader );
+		int size = getSize_(reader);
 
-		while ( size-- != 0 ) {
-			string += (char)reader.read();
+		while (size-- != 0) {
+			string += (char) reader.read();
 		}
 
 		return string;
 	}
 
 	private String getString_() throws Exception {
-		return getString_( new InputStreamReader( socket.getInputStream() ) );
+		return getString_(new InputStreamReader(socket.getInputStream()));
 	}
 
-	private String[] getStrings_( InputStreamReader reader ) throws Exception {
-		int size = getSize_( reader );
+	private String[] getStrings_(InputStreamReader reader) throws Exception {
+		int size = getSize_(reader);
 		int i = 0;
 
 		String[] strings = new String[size];
 
-		while ( i < size )
-			strings[i++] = getString_( reader );
+		while (i < size)
+			strings[i++] = getString_(reader);
 
 		return strings;
 	}
 
 	private String[] getStrings_() throws Exception {
-		return getStrings_( new InputStreamReader( socket.getInputStream() ) );
+		return getStrings_(new InputStreamReader(socket.getInputStream()));
 	}
 
 	public DOM_DEMO() throws Exception {
 		try {
-			socket = new Socket( address, port );
-		} catch ( Exception e ) {
-			System.out.println( "Unable to connect to " + address + ":" + port + " !!!");
-			System.exit( 1 );
+			socket = new Socket(address, port);
+		} catch (Exception e) {
+			System.out.println("Unable to connect to " + address + ":" + port + " !!!");
+			System.exit(1);
 		}
 
 		OutputStream output = socket.getOutputStream();
-		InputStreamReader reader = new InputStreamReader( socket.getInputStream() );
+		InputStreamReader reader = new InputStreamReader(socket.getInputStream());
 
-		writeString_( token, output );
+		writeString_(token, output);
 
-		if ( isTokenEmpty_() ) {
-			writeString_( info.q37.xdhq.XDH_DEMO.headContent );
+		if (isTokenEmpty_()) {
+			writeString_(info.q37.xdhq.XDH_DEMO.headContent);
 		}
 
 		output.flush();
 
-		if ( isTokenEmpty_() ) {
-			token = getString_( reader );
+		if (isTokenEmpty_()) {
+			token = getString_(reader);
 
-			if ( isTokenEmpty_() )
-				throw new Exception( "Invalid connection information !!!");
+			if (isTokenEmpty_())
+				throw new Exception("Invalid connection information !!!");
 
-			String url = "http://" + address + httpPort + "/xdh.php?_token=" + token;
+			String url = "http://" + address + httpPort + "/" + cgi + ".php?_token=" + token;
 
-			if ( Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE) ) {
-				System.out.println( url );
-				System.out.println( "Open above URL in a web browser, if not already done. Enjoy!");
-				Desktop.getDesktop().browse( new URI( url ) );
+			if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+				System.out.println(url);
+				System.out.println("Open above URL in a web browser, if not already done. Enjoy!");
+				Desktop.getDesktop().browse(new URI(url));
 			} else
 				System.out.println("Open " + url + " in a web browser. Enjoy!");
 		} else {
-			if ( !getString_( reader ).equals( token ) )
-				throw new Exception( "Unmatched token !!!");
+			if (!getString_(reader).equals(token))
+				throw new Exception("Unmatched token !!!");
 		}
 
-		getString_( reader );	// Language.
-		writeString_( protocolLabel, output );
-		writeString_( protocolVersion, output );
+		getString_(reader); // Language.
+		writeString_(protocolLabel, output);
+		writeString_(protocolVersion, output);
 		output.flush();
 	}
 
-	@Override public void getAction(Event event) {
+	@Override
+	public void getAction(Event event) {
 		try {
-			if ( !firstLaunch ) {
+			if (!firstLaunch) {
 				OutputStream output = socket.getOutputStream();
-				output.write(new String( "StandBy_1" ).getBytes());
-				output.write( 0 );
+				output.write(new String("StandBy_1").getBytes());
+				output.write(0);
 				output.flush();
 			} else
 				firstLaunch = false;
 
-			InputStreamReader reader = new InputStreamReader( socket.getInputStream() );
+			InputStreamReader reader = new InputStreamReader(socket.getInputStream());
 
-			event.id = getString_( reader );
+			event.id = getString_(reader);
 
-			event.action = getString_( reader );
+			event.action = getString_(reader);
 
-			if ( "".equals( event.action ) )
+			if ("".equals(event.action))
 				event.action = info.q37.xdhq.XDH_DEMO.newSessionAction;
 
-		} catch ( Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	@Override public Object call(String command, Type type, String[] strings, String[][] xstrings )  {
+	@Override
+	public Object call(String command, Type type, String[] strings, String[][] xstrings) {
 		Object object = null;
 
 		try {
@@ -199,37 +220,37 @@ public class DOM_DEMO extends DOM_SHRD {
 			int size = strings.length;
 			int i = 0;
 
-			output.write( new String( command ).getBytes() );
-			output.write( 0 );
+			output.write(new String(command).getBytes());
+			output.write(0);
 
-			while( i < size ) {
-				writeString_( strings[i++], output );
+			while (i < size) {
+				writeString_(strings[i++], output);
 			}
 
 			size = xstrings.length;
 			i = 0;
 
-			while( i < size ) {
-				writeStrings_( xstrings[i++], output);
+			while (i < size) {
+				writeStrings_(xstrings[i++], output);
 			}
 
 			output.flush();
 
-			InputStreamReader reader = new InputStreamReader( socket.getInputStream() );
+			InputStreamReader reader = new InputStreamReader(socket.getInputStream());
 
-			switch ( type ) {
+			switch (type) {
 			case VOID:
 				break;
 			case STRING:
-				object = getString_( reader );
+				object = getString_(reader);
 				break;
 			case STRINGS:
-				object = getStrings_( reader );
+				object = getStrings_(reader);
 				break;
 			default:
-				throw new Exception( "Unknown return type !!!");
+				throw new Exception("Unknown return type !!!");
 			}
-		} catch ( Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 

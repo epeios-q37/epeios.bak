@@ -124,7 +124,7 @@ namespace xml {
 
 	E_TMIMIC__( stkctn::sRow, sMark );
 
-	qCDEF( sMark, Undefined, qNIL );
+	qCDEF( sMark, Undefined, (sMark)qNIL );
 
 	inline bso::bool__ WriteXMLHeader(
 		txf::text_oflow__ &OFlow,

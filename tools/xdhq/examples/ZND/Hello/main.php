@@ -25,27 +25,27 @@ function readAsset( $path ) {
 
 function getAtlas() {
  if (getenv("EPEIOS_SRC") === false) {
-  $zndq_path = realpath(dirname(__FILE__)) . '/../';
+  $atlasPath = "phar://Atlas.phar/";
  } else {
   switch (strtoupper(substr(php_uname('s'), 0, 3))) {
   case "WIN":
-   $epeios_path = "h:\\hg\\epeios\\";
+   $epeiosPath = "h:\\hg\\epeios\\";
    break;
   case "LIN":
-   $epeios_path = "/home/csimon/hg/epeios/";
+   $epeiosPath = "/home/csimon/hg/epeios/";
    break;
   case "DAR":
-   $epeios_path = "/Users/csimon/hg/epeios/";
+   $epeiosPath = "/Users/csimon/hg/epeios/";
    break;
   default:
    echo "Unknown OS !!!\n";
    break;
   }
 
-  $zndq_path = $epeios_path . "tools/xdhq/Atlas/ZND/";
+  $atlasPath = $epeiosPath . "tools/xdhq/Atlas/ZND/";
  }
 
- require $zndq_path . "Atlas.php";
+ require $atlasPath . "Atlas.php";
 }
 
 getAtlas();

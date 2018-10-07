@@ -6,6 +6,11 @@
 - [stdz]: modification to comply with current standards,
 - [trvl]: trivial modifications,
 
+## 2018-10-07
+
+- XML:
+  - fixing *g++* warning,
+
 ## 2018-10-05
 
 - SCLXDHTML:

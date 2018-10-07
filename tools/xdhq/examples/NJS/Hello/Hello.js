@@ -26,16 +26,16 @@
 var atlasId = "";
 
 if (process.env.EPEIOS_SRC) {
-	let epeiosPath = "";
+ let epeiosPath = "";
 
-	if (process.platform == 'win32')
-		epeiosPath = "h:/hg/epeios/"
-	else
-		epeiosPath = "~/hg/epeios/"
+ if (process.platform == 'win32')
+  epeiosPath = "h:/hg/epeios/"
+ else
+  epeiosPath = "~/hg/epeios/"
 
-	atlasId = epeiosPath + "tools/xdhq/Atlas/NJS/Atlas.js";
+ atlasId = epeiosPath + "tools/xdhq/Atlas/NJS/Atlas.js";
 } else {
-	atlasId = 'atlastk';
+ atlasId = 'atlastk';
 }
 
 const atlas = require(atlasId);
@@ -45,24 +45,22 @@ const head = `
 	<title>"Hello, World !" example</title>
 	<link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAMFBMVEUEAvyEhsxERuS8urQsKuycnsRkYtzc2qwUFvRUVtysrrx0ctTs6qTMyrSUksQ0NuyciPBdAAABHklEQVR42mNgwAa8zlxjDd2A4POfOXPmzZkFCAH2M8fNzyALzDlzg2ENssCbMwkMOsgCa858YOjBKxBzRoHhD7LAHiBH5swCT9HQ6A9ggZ4zp7YCrV0DdM6pBpAAG5Blc2aBDZA68wCsZPuZU0BDH07xvHOmAGKKvgMP2NA/Zw7ADIYJXGDgLQeBBSCBFu0aoAPYQUadMQAJAE29zwAVWMCWpgB08ZnDQGsbGhpsgCqBQHNfzRkDEIPlzFmo0T5nzoMovjPHoAK8Zw5BnA5yDosDSAVYQOYMKIDZzkoDzagAsjhqzjRAfXTmzAQgi/vMQZA6pjtAvhEk0E+ATWRRm6YBZuScCUCNN5szH1D4TGdOoSrggtiNAH3vBBjwAQCglIrSZkf1MQAAAABJRU5ErkJggg==" />
 	<style type="text/css">
-		html,
-		body {
-		height: 100%;
-		padding: 0;
-		margin: 0;
-	}
-
-		.vcenter-out,
-		.hcenter {
-		display: table;
-		height: 100%;
-		margin: auto;
-	}
+		html, body {
+			height: 100%;
+			padding: 0;
+			margin: 0;
+		}
+  
+		.vcenter-out, .hcenter {
+			display: table;
+			height: 100%;
+			margin: auto;
+		}
 
 		.vcenter-in {
-		display: table-cell;
-		vertical-align: middle;
-	}
+			display: table-cell;
+			vertical-align: middle;
+		}
 	</style>
 `;
 
@@ -78,8 +76,6 @@ const body = `
 	   <h1>
 		<span>Hello </span>
 		<span style="font-style: italic;" id="name"></span>
-		<!-- <span style="font-style: italic;" id="name" />	With this line rather then the above one,
-															 the following line becomes a child of the above tag !!! -->
 		<span>!</span>
 	   </h1>
 	  </fieldset>
@@ -88,10 +84,10 @@ const body = `
 `;
 
 const callbacks = {
-	"Connect": (dom, id) => dom.setLayout("", body),
-	"Typing": (dom, id) => dom.getContent(id, (name) => dom.setContent("name", name)),
-	"Clear": (dom, id) => dom.confirm("Are you sure ?",
-		(answer) => { if (answer) dom.setContents({ "input": "", "name": "" }) }),
+ "Connect": (dom, id) => dom.setLayout("", body),
+ "Typing": (dom, id) => dom.getContent(id, (name) => dom.setContent("name", name)),
+ "Clear": (dom, id) => dom.confirm("Are you sure ?",
+  (answer) => { if (answer) dom.setContents({ "input": "", "name": "" }) }),
 };
 
-atlas.launch(() => new atlas.DOM(), "Connect", callbacks, head );
+atlas.launch(() => new atlas.DOM(), "Connect", callbacks, head);

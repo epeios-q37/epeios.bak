@@ -19,8 +19,27 @@
 
 "use strict"
 
-const address = "atlastk.org";const httpPort = "";
-//const address = "localhost";const httpPort = ":8080";
+var address = "atlastk.org";
+var httpPort = "";
+var cgi = "xdh";
+
+
+if ( process.env.ATK ) {
+	switch (process.env.ATK) {
+		case 'DEV':
+			address = "localhost";
+			httpPort = ":8080";
+			console.log( "\tDEV mode !")
+			break;
+		case 'TEST':
+			cgi = "xdh_";
+			console.log("\tTEST mode !")
+			break;
+		default:
+			throw "Bad 'ATK' environment variable value : should be 'DEV' or 'TEST' !";
+			break;
+	}
+}
 
 const port = 53800;
 
@@ -159,8 +178,8 @@ function getResponse(query, type) {
 
 var token = "";
 
-if (process.env.ATLAS_TOKEN)
-	token = "_" + process.env.ATLAS_TOKEN;
+if (process.env.ATK_TOKEN)
+	token = "_" + process.env.ATK_TOKEN;
 
 function standBy(socket) {
 	socket.write(Buffer.from("StandBy_1\x00"));
@@ -194,7 +213,7 @@ function pseudoServer(createCallback, newSessionAction, callbacks, head) {
 					if ( isTokenEmpty() )
 						throw "Bad connection information !!!";
 
-					let completeURL = "http://" + address + httpPort + "/xdh.php?_token=" + token;
+					let completeURL = "http://" + address + httpPort + "/" + cgi + ".php?_token=" + token;
 
 					console.log(completeURL);
 

@@ -15,14 +15,6 @@ import java.util.HashMap;
 class Hello extends Atlas {
 	public void handle( DOM dom, String action, String id )
 	{
-		String head = 
-		"<title>\"Hello, World !\" example</title>" +
-		"<style type=\"text/css\">" +
-		" html, body { height: 100%; padding: 0; margin: 0; }" +
-		" .vcenter-out, .hcenter { display: table; height: 100%; margin: auto; }" +
-		" .vcenter-in { display: table-cell; vertical-align: middle; }" +
-		"</style>";
-	
 		String html = 
 		"<div class=\"vcenter-out\">" +
 		" <div class=\"vcenter-in\">" +
@@ -42,7 +34,6 @@ class Hello extends Atlas {
 		"</div>";
 
 		if ( "Connect".equals( action ) ) {
-			dom.headUp( head );
 			dom.setLayout("", html);
 		} else if ("Typing".equals( action ) ) {
 			dom.setContent("name", dom.getContent(id));
@@ -55,7 +46,17 @@ class Hello extends Atlas {
 		}
 	}
 	public static void main(String[] args) throws Exception {
-		launch("Connect" );
+		String head = 
+			"<title>\"Hello, World !\" example</title>" +
+			"<style type=\"text/css\">" +
+			" html, body { height: 100%; padding: 0; margin: 0; }" +
+			" .vcenter-out, .hcenter { display: table; height: 100%; margin: auto; }" +
+			" .vcenter-in { display: table-cell; vertical-align: middle; }" +
+			"</style>";
+
+		launch("Connect", head, "Hello", GUI.DEFAULT, args );
+		// Remove above line and uncomment following.
+		// launch("Connect" );
 
 		for (;;)
 			new Hello();

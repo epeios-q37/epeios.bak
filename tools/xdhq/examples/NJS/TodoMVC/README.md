@@ -10,6 +10,8 @@ A *Node.js* version of the *TodoMVC* (<http://todomvc.com/>) application, made w
 - launch, from inside of the retrieved repository, `npm install`,
 - launch, from same directory, `node main.js`.
 
+Or go to <http://runkit.com/epeios-q37/TodoMVC>.
+
 There is also a version for:
 
 * *PHP*: <http://github.com/epeios-q37/todomvc-php>,

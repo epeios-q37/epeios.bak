@@ -18,44 +18,34 @@
 	along with XDHq If not, see <http://www.gnu.org/licenses/>.
 */
 
-/*
-	This is the one-file version, which does not need the 'Head.html' and the 'Main.html' files.
-	See next comments.
-*/
+// This is the one-file version, which does not need the 'Head.html' and the 'Main.html' files.
 
 function getAtlas() {
  if (getenv("EPEIOS_SRC") === false) {
-  $atlas_path = realpath(dirname(__FILE__)) . '/../';
+  $atlasPath = "phar://Atlas.phar/";
  } else {
   switch (strtoupper(substr(php_uname('s'), 0, 3))) {
   case "WIN":
-   $epeios_path = "h:\\hg\\epeios\\";
+   $epeiosPath = "h:\\hg\\epeios\\";
    break;
   case "LIN":
-   $epeios_path = "/home/csimon/hg/epeios/";
+   $epeiosPath = "/home/csimon/hg/epeios/";
    break;
   case "DAR":
-   $epeios_path = "/Users/csimon/hg/epeios/";
+   $epeiosPath = "/Users/csimon/hg/epeios/";
    break;
   default:
    echo "Unknown OS !!!\n";
    break;
   }
 
-  $atlas_path = $epeios_path . "tools/xdhq/Atlas/ZND/";
+  $atlasPath = $epeiosPath . "tools/xdhq/Atlas/ZND/";
  }
 
- require $atlas_path . "Atlas.php";
+ require $atlasPath . "Atlas.php";
 }
 
 getAtlas();
-
-/*
-	Before publication, remove this comment, all the above lines
-	and uncomment following line.
-	See also next comment.
-*/
-// require "phar://Atlas.phar/Atlas.php";
 
 class Hello extends Threaded {
  // The content of the 'Main.html' file.
@@ -70,8 +60,6 @@ class Hello extends Threaded {
    <h1>
     <span>Hello </span>
     <span style="font-style: italic;" id="name"></span>
-    <!-- <span style="font-style: italic;" id="name" />	With this line rather then the above one,
-                                                         the following line becomes a child of the above tag !!! -->
     <span>!</span>
    </h1>
   </fieldset>
@@ -128,11 +116,5 @@ $head = <<<EOT
 </style>
 EOT;
 
-
 Atlas::launch("Connect", 'hello', $head, null, "Hello");
-/*
-	Before publication, remove above line
-	and uncomment following line.
-*/
-// Atlas::launch("Connect", 'hello', $head );
 ?>
