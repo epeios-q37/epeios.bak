@@ -67,8 +67,6 @@ class Hello extends Atlas {
 			"</style>";
 
 		launch("Connect", head, "Hello", GUI.DEFAULT, args );
-		// Remove above line and uncomment following.
-		// launch("Connect" );
 
 		for (;;)
 			new Hello();

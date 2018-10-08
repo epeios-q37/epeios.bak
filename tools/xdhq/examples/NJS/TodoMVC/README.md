@@ -8,9 +8,9 @@ A *Node.js* version of the *TodoMVC* (<http://todomvc.com/>) application, made w
 
 - Get this repository (with *git*: `git clone https://github.com/epeios-q37/todomvc-node`),
 - launch, from inside of the retrieved repository, `npm install`,
-- launch, from same directory, `node main.js`.
+- launch, from same directory, `node main.js`,
 
-Or go to <http://runkit.com/epeios-q37/TodoMVC>.
+or go to <https://npm.runkit.com/xdhq>.
 
 There is also a version for:
 

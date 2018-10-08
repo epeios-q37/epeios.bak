@@ -28,9 +28,10 @@
 				<!--
 				The default installation does NOT install native code,
 				hence the 3 last dependencies are skipped.
-				'xdhqnjs' only installs JS scripts (although it contains C++ sources.
+				'xdhq' (prviously 'xdhqnjs') only installs JS scripts
+				(although it contains C++ sources).
 				-->
-				<Dep>xdhqnjs</Dep>
+				<Dep>xdhq</Dep>
 				<!--
 				<Dep>xdhqxdh</Dep>
 				<Dep>xdhwebqnjs</Dep>

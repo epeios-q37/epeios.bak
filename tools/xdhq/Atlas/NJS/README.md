@@ -66,9 +66,9 @@ atlas.launch(() => new atlas.DOM(), "Connect", callbacks, head);
 
 - Launch `npm install atlastk`,
 - in the same directory, create a `Hello.js` file with above source code, or get it directly here: <https://q37.info/download/assets/Hello.js>,
-- launch `node Hello.js`.
+- launch `node Hello.js`,
 
-Or go to <http://runkit.com/epeios-q37/Hello>.
+or go to <https://npm.runkit.com/atlastk>.
 
 ## What's next ?
 
