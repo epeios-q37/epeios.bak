@@ -37,7 +37,6 @@ if (process.env.EPEIOS_SRC) {
 }
 
 const atlas = require(atlasId);
-const Tree = atlas.Tree;
 const DOM = atlas.DOM;
 
 const readAsset = atlas.readAsset;
@@ -56,7 +55,7 @@ function newSession() {
 }
 
 function acConnect(dom, id) {
-	dom.headUp( readAsset( "Head.html"), () => dom.setLayout("", readAsset( "Main.html")));
+	dom.setLayout("", readAsset( "Main.html"));
 }
 
 function acSubmit(dom, id) {
@@ -83,7 +82,7 @@ function main() {
 		}
 	);
 
-	atlas.launch(newSession, "Connect", callbacks );
+	atlas.launch(newSession, "Connect", callbacks, readAsset( "Head.html") );
 }
 
 main();

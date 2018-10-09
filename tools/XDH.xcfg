@@ -157,7 +157,6 @@
 												document.head.innerHTML = "";
 												document.head.appendChild( transformToFragment( xml, xsl ) );
 						}
-//				handleHead();
 					}
 					]]>
 				</Head>

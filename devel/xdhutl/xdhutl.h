@@ -137,23 +137,30 @@ namespace xdhutl {
 
 	inline void GetTagDefaultEvent(
 		const str::string_ &Name,
-		str::string_ &Event )
+		str::string_ &Event,
+		str::dString &Keys )	// If the event is key related.
 	{
 		if ( Name == "SELECT" )
 			Event.Append( "change" );
-		else if ( Name == "INPUT" )
-			Event.Append( "change" );
-		else
+		else if ( Name == "INPUT" ) {
+			Event.Append( "keypress" );
+			Keys.Append( "Enter" );
+		}  else if ( Name == "TEXTAREA" ) {
+			Event.Append( "keypress" );
+			Keys.Append( "Enter" );
+		}  else
 			Event.Append( "click" );
 	}
 
 	void FillEventAbstract(
 		const str::string_ &DefaultEvent,
+		const str::dString &DefaultEventKeys,
 		const xdhcmn::digest_ &Description,
 		event_abstract_ &Abstract);
 
 	void FillEventAbstractsMono(
 		const str::string_ &DefaultEvent,
+		const str::dString &DefaultEventKeys,
 		const xdhcmn::digest_ &Description,
 		event_abstracts_ &Abstracts );
 
@@ -164,6 +171,7 @@ namespace xdhutl {
 
 	amount__ FillEventAbstractsMulti(
 		const str::string_ &DefaultEvent,
+		const str::dString &DefaultEventKeys,
 		const xdhcmn::digest_ &Descriptions,
 		event_abstracts_ &Abstracts );
 

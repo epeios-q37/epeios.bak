@@ -76,6 +76,14 @@
 					<File>Main.html</File>
 				</Files>
 			</Files>
+			<Files Group="Chat">
+				<File Path="../../examples/NJS/chat/">main.js</File>
+				<Files Path="../../examples/common/chat/">
+					<File>Head.html</File>
+					<File>Main.html</File>
+					<File>Messages.xsl</File>
+				</Files>
+			</Files>
 			<Files Group="Hello">
 				<Files Path="../../examples/NJS/Hello/">
 					<File>Hello.js</File>

@@ -6,6 +6,12 @@
 - [stdz]: modification to comply with current standards,
 - [trvl]: trivial modifications,
 
+## 2018-10-09
+- XDHUTL:
+  - default events can now be key-related,
+  - the default event for *INPUT* tags is *keypress* on *Enter* (it's intended for input of type *text*, but may not be accurate for other types of *INPUT* elements…),
+  - the default event for *TEXTAREA* tags is *keypress* on *Enter*,
+
 ## 2018-10-07
 
 - XML:

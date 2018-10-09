@@ -174,6 +174,7 @@ void xdhutl::BuildKeyShortcut(
 
 void xdhutl::FillEventAbstract(
 	const str::string_ &DefaultEvent,
+	const str::dString &DefaultEventKeys,
 	const xdhcmn::digest_ &Description,
 	event_abstract_ &Abstract )
 {
@@ -216,8 +217,10 @@ qRB
 		Abstract.EventKeys = KeyShortcut;
 	}
 
-	if ( Abstract.Event.Amount() == 0 )
+	if ( Abstract.Event.Amount() == 0 ) {
 		Abstract.Event = DefaultEvent;
+		Abstract.EventKeys = DefaultEventKeys;
+	}
 qRR
 qRT
 qRE
@@ -225,6 +228,7 @@ qRE
 
 void xdhutl::FillEventAbstractsMono(
 	const str::string_ &DefaultEvent,
+	const str::dString &DefaultEventKeys,
 	const xdhcmn::digest_ &Description,
 	event_abstracts_ &Abstracts )
 {
@@ -233,7 +237,7 @@ qRH
 qRB
 	Abstract.Init();
 
-	FillEventAbstract( DefaultEvent, Description, Abstract );
+	FillEventAbstract( DefaultEvent, DefaultEventKeys, Description, Abstract );
 
 	Abstracts.Append( Abstract );
 qRR
@@ -243,6 +247,7 @@ qRE
 
 amount__ xdhutl::FillEventAbstractsMulti(
 	const str::string_ &DefaultEvent,
+	const str::dString &DefaultEventKeys,
 	const xdhcmn::digest_ &Descriptions,
 	event_abstracts_ &Abstracts )
 {
@@ -263,7 +268,7 @@ qRB
 
 		Retriever.GetTable( Definition );
 
-		FillEventAbstractsMono( DefaultEvent, Definition, Abstracts );
+		FillEventAbstractsMono( DefaultEvent, DefaultEventKeys, Definition, Abstracts );
 	}
 qRR
 qRT
@@ -279,13 +284,13 @@ amount__ xdhutl::FillEventAbstracts(
 {
 	amount__ Amount = 0;
 qRH
-	str::string DefaultEvent;
+	str::string DefaultEvent, DefaultEventKeys;
 	TOL_CBUFFER___ Buffer;
 qRB
-	DefaultEvent.Init();
-	GetTagDefaultEvent( TagName, DefaultEvent );
+	tol::Init( DefaultEvent, DefaultEventKeys );
+	GetTagDefaultEvent( TagName, DefaultEvent, DefaultEventKeys );
 
-	Amount = FillEventAbstractsMulti( DefaultEvent, Descriptions, Abstracts );
+	Amount = FillEventAbstractsMulti( DefaultEvent, DefaultEventKeys, Descriptions, Abstracts );
 qRR
 qRT
 qRE

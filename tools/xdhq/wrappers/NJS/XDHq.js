@@ -122,7 +122,7 @@ function launch(callback, action, tagsAndCallbacks, head, mode) {
 
 class XDH {
 	execute(script, callback) {
-		call(this, "Execute_1", types.VOID, 1, script, 0, callback);
+		call(this, "Execute_1", types.STRING, 1, script, 0, callback);
 	}
 	alert(message, callback) {
 		call(this, "Alert_1", types.VOID, 1, message, 0, callback);
