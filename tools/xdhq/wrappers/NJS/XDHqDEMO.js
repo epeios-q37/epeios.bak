@@ -193,7 +193,7 @@ function pseudoServer(createCallback, newSessionAction, callbacks, head) {
 	var client = new net.Socket();
 
 	client.connect(port, address, () => {
-		var relaunch = true;
+		let relaunch = true;
 
 		client.write(handleString(token));
 
@@ -235,14 +235,14 @@ function pseudoServer(createCallback, newSessionAction, callbacks, head) {
 
 				relaunch = false;
 			} else {
-				var query;
+				let query;
 
-				var cont = true;
+				let cont = true;
 
 				query = getQuery(client);
 
 				if (client._xdhDOM._xdhType === types.UNDEFINED) {
-					var id, action;
+					let id, action;
 
 					id = getId(query);
 					action = getAction(query);
@@ -261,7 +261,7 @@ function pseudoServer(createCallback, newSessionAction, callbacks, head) {
 
 				while (cont) {
 					if (client._xdhDOM._xdhCallback != undefined) {
-						var type = client._xdhDOM._xdhType;
+						let type = client._xdhDOM._xdhType;
 						client._xdhDOM._xdhType = types.UNDEFINED;
 						if (type === types.VOID)
 							client._xdhDOM._xdhCallback();

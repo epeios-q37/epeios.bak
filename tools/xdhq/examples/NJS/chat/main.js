@@ -50,6 +50,7 @@ class MyData extends DOM {
 	constructor() {
 		super();
 		this.timestamp = new Date();
+		this.pseudo = "";
 		this.lastMessage = 0;
 		this.blockId = 0;
 	}
@@ -62,7 +63,7 @@ function displayMessages(dom) {
 		var node = document.createElement('span');
 		var board = document.getElementById('Board');
 		board.insertBefore(node, board.firstChild);
-		node.id = "Block.` + dom.blockId + `";"qsdfqdsf";`;
+		node.id = "Block.` + dom.blockId + `";"";`;
 	var message;
 
 	tree = tree.ele("Messages", { 'pseudo': dom.pseudo } );
@@ -73,24 +74,22 @@ function displayMessages(dom) {
 		i--;
 	}
 
-	dom.lastMessage = messages.length - 1;
+	dom.lastMessage = messages.length;
 
 	tree = tree.up();
 
-	dom.execute(script);
-
-	dom.setLayoutXSL("Block." + dom.blockId++, tree.end(), "Messages.xsl" );
+	dom.execute(script, () => dom.setLayoutXSL("Block." + dom.blockId++, tree.end(), "Messages.xsl") );
 }
 
 
 function newSession() {
-	console.log("New session detected !");
-
 	return new MyData();
 }
 
 function acConnect(dom, id) {
-	dom.setLayout("", readAsset( "Main.html"), () => dom.focus( "Pseudo" ) );
+	dom.setLayout("", readAsset("Main.html"),
+		() => dom.focus("Pseudo")
+	);
 }
 
 function handlePseudo( pseudo ) 
@@ -117,6 +116,7 @@ function acSubmitPseudo(dom, id) {
 				dom.disableElements(["Pseudo", "PseudoButton"]);
 				dom.enableElements(["Message", "MessageButton"]);
 				dom.focus("Message");
+				console.log(">>>> New user: ", result);
 			} else
 				dom.alert("Pseudonyme pris !");
 		}
@@ -126,14 +126,24 @@ function acSubmitPseudo(dom, id) {
 function acSubmitMessage(dom, id) {
 	dom.getContent("Message",
 		(result) => {
-			dom.setContent("Message", "");
-			messages.push( {
-				"pseudo": dom.pseudo,
-				"content": result
-			});
-			displayMessages(dom);
-			dom.focus("Message");
+			result = result.trim();
+			if (result.length != 0) {
+				console.log(dom.pseudo, result);
+				messages.push({
+					"pseudo": dom.pseudo,
+					"content": result
+				});
+				dom.setContent("Message", "",
+					() => dom.focus("Message",
+						() => displayMessages(dom)
+					)
+				);
+			}
 		});
+}
+
+function acUpdate(dom, id) {
+	displayMessages(dom)
 }
 
 
@@ -143,6 +153,7 @@ function main() {
 			"Connect": acConnect,
 			"SubmitPseudo": acSubmitPseudo,
 			"SubmitMessage": acSubmitMessage,
+			"Update": acUpdate,
 		}
 	);
 

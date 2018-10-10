@@ -148,6 +148,8 @@ namespace xdhutl {
 		}  else if ( Name == "TEXTAREA" ) {
 			Event.Append( "keypress" );
 			Keys.Append( "Enter" );
+		} else if ( Name == "SCRIPT" ) {
+			Event.Append( "timeout" );
 		}  else
 			Event.Append( "click" );
 	}

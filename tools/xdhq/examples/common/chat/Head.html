@@ -25,8 +25,17 @@
  }
 
  .self {
-  color: forestgreen;
+  color: red;
   font-weight: bold;
  }
 
  </style>
+<script>
+
+ function update(digest) {
+  launchEvent(digest);
+  setTimeout( (digest) => update( digest ), 1000, digest );
+ }
+
+  setTimeout( (digest) => update(digest), 5000, "|SCRIPT|timeout||((Update))")
+</script>
