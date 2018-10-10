@@ -11,10 +11,17 @@
 	<xsl:template match="Message">
 		<li id="Message.{@id}" data-xdh-value="{@id}">
 			<xsl:element name="span">
-				<xsl:if test="@pseudo=../@pseudo">
-					<xsl:attribute name="class">self</xsl:attribute>
-				</xsl:if>
-			<xsl:value-of select="@pseudo"/>
+				<xsl:attribute name="class">
+					<xsl:choose>
+						<xsl:when test="@pseudo=../@pseudo">
+							<xsl:text>self</xsl:text>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:text>other</xsl:text>
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:attribute>
+				<xsl:value-of select="@pseudo"/>
 			</xsl:element>
 			<xsl:text> : </xsl:text>
 			<xsl:value-of select="."/>

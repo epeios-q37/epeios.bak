@@ -451,6 +451,7 @@ namespace fdr {
 		void reset( bso::bool__ P = true ) 
 		{
 			if ( P ) {
+				_flow_driver_base__::BaseTake( tht::Undefined );	// Prevent some unwanted error due to bad due to mutex owning.
 				Dismiss( true );
 			}
 

@@ -99,30 +99,34 @@ namespace {
 				Row = Sessions().New( SessionId, Language, Token );
 			} else {
 				Row = Sessions().Search( SessionId );
+			}
 
-				if ( Row == qNIL ) {
-					sclmisc::MGetValue( xdwrgstry::parameter::script::Fallback, Script );
+			if ( Row != qNIL ) {
+				Session = Sessions().Sessions( Row );
 
-					Continue = false;
-
-					SessionId.Init();
-
-					qRReturn;
+				if ( !Session->IsAlive() ) {
+					Sessions().Close( Row );
+					Row = qNIL;
+					Session = NULL;
 				}
 			}
 
-			Session = Sessions().Sessions( Row );
+			if ( Session == NULL ) {
+				sclmisc::MGetValue( xdwrgstry::parameter::script::Fallback, Script );
 
-			Session->Lock();	// Unlocked by 
+				Continue = false;
 
-			Sessions.reset();	// To unlock 'Sessions'.
+				SessionId.Init();
+			} else {
+				Session->Lock();
 
-			if ( Action == "_HandleEvent" )
-				HandleEvent_( Pairs, *Session, Script );
-			else if ( Action == "_Next" )
-				Report_( Response, *Session, Script );
-			else
-				HandleAction_( Action, *Session, Script );
+				if ( Action == "_HandleEvent" )
+					HandleEvent_( Pairs, *Session, Script );
+				else if ( Action == "_Next" )
+					Report_( Response, *Session, Script );
+				else
+					HandleAction_( Action, *Session, Script );
+			}
 		qRR;
 			if ( ERRFailure() ) {
 				Script.Init();
@@ -140,6 +144,7 @@ namespace {
 			if ( Session != NULL )
 				if ( Session->IsLocked() )
 					Session->Unlock();
+			Sessions.reset();	// To unlock 'Sessions'.
 		qRE;
 			return Continue;
 		}

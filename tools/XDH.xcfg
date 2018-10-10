@@ -29,7 +29,9 @@
 			<Value>
 				<Getter>
 					<![CDATA[
-							getValue( "%Id%" );
+							var result = getValue( "%Id%" );
+							console.log( "XDH: ", result );
+							result;
 						]]>
 				</Getter>
 				<Setter>

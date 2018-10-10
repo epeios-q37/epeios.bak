@@ -233,6 +233,7 @@ namespace session {
 		_mutexes___ _Mutexes;
 		str::string _Dispatch;
 		bso::bool__ _UpstreamCall;	// At 'true' when a upstream call (a call from JS when launching a action, or handling an event) is in progress.
+		bso::sBool Alive_;
 		void _Lock( target__ Target )
 		{
 			_Mutexes.Lock( Target );
@@ -253,6 +254,7 @@ namespace session {
 			_Mutexes.reset( P );
 			_Dispatch.reset( P );
 			_UpstreamCall = false;
+			Alive_ = false;
 		}
 		E_CDTOR( rSession );
 		void Init( xdhcmn::cSession &SessionCallback )
@@ -262,6 +264,15 @@ namespace session {
 			_Mutexes.Init();
 			_Dispatch.Init();
 			_UpstreamCall = false;
+			Alive_ = true;
+		}
+		void MarkAsDead( void )
+		{
+			Alive_ = false;
+		}
+		const bso::sBool IsAlive( void ) const
+		{
+			return Alive_;
 		}
 		void UpstreamCallInProgress( bso::bool__ Value )
 		{

@@ -6,6 +6,13 @@
 - [stdz]: modification to comply with current standards,
 - [trvl]: trivial modifications,
 
+## 2018-10-10
+
+- FDR:
+  - fixing bug about mutex owning when destructor is called (*fdr.h:409*),
+- XDHUTL:
+  - new *timeout* default event for *SCRIPT* tag: only a workaround to allow to launch an event regularly; see the *Head.html* file of the *Chat* application,
+
 ## 2018-10-09
 - XDHUTL:
   - default events can now be key-related,

@@ -67,6 +67,7 @@ qRB;
 
 	Callback.Launch( Id, Action );
 qRR;
+	Session.MarkAsDead();
 qRT;
 	if ( Locked ) {
 		Session.Lock();

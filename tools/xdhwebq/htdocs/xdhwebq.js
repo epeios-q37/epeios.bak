@@ -84,8 +84,6 @@ function handleQuery( query ) {
 
 function launchEvent( digest )
 {
-	console.log(digest);
-
 	query = buildQuery() + "_action=_HandleEvent&digest=" + encodeURIComponent( digest );
 
 	if ( queryInProgress )

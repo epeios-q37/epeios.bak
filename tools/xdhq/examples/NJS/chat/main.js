@@ -57,7 +57,7 @@ class MyData extends DOM {
 }
 
 function displayMessages(dom) {
-	var tree = require('xmlbuilder').create('XDHTML');
+	var tree = require('xmlbuilder').create('XDHTML',{version: '1.0', encoding: 'UTF-8'});
 	var i = messages.length - 1;
 	let script = `
 		var node = document.createElement('span');
@@ -116,7 +116,7 @@ function acSubmitPseudo(dom, id) {
 				dom.disableElements(["Pseudo", "PseudoButton"]);
 				dom.enableElements(["Message", "MessageButton"]);
 				dom.focus("Message");
-				console.log(">>>> New user: ", result);
+				console.log("\t>>>> New user: ", result);
 			} else
 				dom.alert("Pseudonyme pris !");
 		}
@@ -128,7 +128,7 @@ function acSubmitMessage(dom, id) {
 		(result) => {
 			result = result.trim();
 			if (result.length != 0) {
-				console.log(dom.pseudo, result);
+				console.log("'" + dom.pseudo + "' : ", result);
 				messages.push({
 					"pseudo": dom.pseudo,
 					"content": result
