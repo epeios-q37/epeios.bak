@@ -44,7 +44,7 @@ if (process.env.EPEIOS_SRC) {
 	xdhelcqBin = path.join(binPath, "xdhqxdh");
 	electronBin = xdhelcqPath + "node_modules/electron/dist/electron";
 } else {
-	xdhqId = "xdhqnjs";
+	xdhqId = "xdhq";
 	/*
 	xdhwebqId = "xdhwebq";
 	xdhelcqPath = path.dirname(require.resolve("xdhelcq"));

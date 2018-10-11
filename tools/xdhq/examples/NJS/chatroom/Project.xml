@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project 
+	xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<xpp:bloc>
+		<!-- User definitions -->
+		<xpp:define name="Version">
+			<xpp:bloc/>
+		</xpp:define>
+		<xpp:define name="CopyrightYears">
+			<xpp:bloc>2018</xpp:bloc>
+		</xpp:define>
+		<About>
+		<Software>Chatroom</Software>
+		</About>
+		<xpp:set name="Credits" value="Epeios"/>
+		<xpp:set name="Type" value="AtlasDemoNode"/>
+	</xpp:bloc>
+	<xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
+	<About>
+		<UUID>79666866-b6c2-4819-ab7d-3a0d284f0ba1</UUID>
+	</About>
+	<!-- NO SPACE in 'Keywords' attribute !!! ("a,b,c", NOT "a, b, c")-->
+	<RTW Description="A basic chatroom for 'Node.js' with 'Atlas'." Keywords="Demo,Atlas,chat,chatroom,Node,NodeJS,Node.js">
+		<Dir>chatroom-node</Dir>
+	</RTW>
+ <NodeJS>
+  <Deps>
+   <Regular>
+    <Dep>atlastk</Dep>
+				<Dep>xmlbuilder</Dep>
+			</Regular>
+  </Deps>
+ </NodeJS>
+	</Project>
