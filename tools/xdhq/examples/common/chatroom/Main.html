@@ -1,0 +1,20 @@
+<div class="vcenter-out">
+ <div class="vcenter-in">
+  <div style="display: flex; flex-direction: column;">
+   <fieldset>
+    <legend>Pseudonym</legend>
+    <input id="Pseudo" type="text" size="10" maxlength="10" data-xdh-onevent="SubmitPseudo" placeholder="Pseudonyme" />
+    <button title="Choisir un pseudonyme." data-xdh-onevent="SubmitPseudo" id="PseudoButton">Envoyer</button>
+   </fieldset>
+   <fieldset style="display: flex; flex-direction: column;">
+    <legend>Message</legend>
+    <textarea rows="3" cols="20" id="Message" type="text" maxlength="150" data-xdh-onevent="SubmitMessage" placeholder="Message to send" disabled="disabled"></textarea>
+    <button title="Envoyer un message." data-xdh-onevent="SubmitMessage" disabled="disabled" id="MessageButton">Envoyer</button>
+   </fieldset>
+   <fieldset>
+    <legend>Conversation</legend>
+    <div id="Board" class="hcenter" style="width: 90%;"/>
+   </fieldset>
+  </div>
+ </div>
+</div>
