@@ -21,6 +21,7 @@
   - [adpt],
 - XDHUTL:
   - [trvl],
+  - the default event for `SCRIPT` is replaced by `TIMEOUT` pseudo tag.
 
 ## 2018-10-10
 

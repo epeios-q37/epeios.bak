@@ -198,7 +198,7 @@
 				</Contents>
 				<Timeout>
 					<![CDATA[
-					setTimeout( (digest) => launchEvent(digest), %Delay%, "|SCRIPT|timeout||((%Action%))" );
+					setTimeout( (digest) => launchEvent(digest), %Delay%, "|TIMEOUT|timeout||((%Action%))" );
 				]]>
 				</Timeout>
 			</Setter>

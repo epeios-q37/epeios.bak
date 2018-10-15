@@ -540,8 +540,6 @@ void sclxdhtml::sProxy::SetTimeout(
 	Core_.SetTimeout( Delay, Action );
 }
 
-
-
 void sclxdhtml::sProxy::InsertCSSRule(
 	const str::dString &Rule,
 	xdhcmn::sIndex Index )

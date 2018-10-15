@@ -150,8 +150,8 @@ namespace xdhutl {
 		}  else if ( Name == "TEXTAREA" ) {
 			Event.Append( "keypress" );
 			Keys.Append( "Enter" );
-		} else if ( Name == "SCRIPT" ) {
-			Event.Append( "timeout" );
+		} else if ( Name == "TIMEOUT" ) {	// 'TIMEOUT' is a placeholder needed by the 'setTimeout(...)' function. It will never be used in a HTML file.
+			Event.Append( "timeout" );	// The 'timeout' event has the same purpose.
 		}  else
 			Event.Append( "click" );
 	}
