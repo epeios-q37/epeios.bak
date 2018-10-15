@@ -173,10 +173,14 @@
 						else {
 												removeChildren( id );
 												getElement( id ).appendChild( transformToFragment( xml, xsl ) );
-												if ( id == "" ) {
-												//	getElement( id ).insertBefore( document.createElement( 'hr' ), getElement( id ).firstChild );
-												}
 						}
+            
+						if ( id == "" ) {
+              let node = document.createElement("span");
+              node.innerHTML='Powered by the <span style="font-style: italic">Atlas</span> toolkit (<a href="http://atlastk.org" target="_blank">http://atlastk.org</a>).';
+							getElement( id ).insertBefore( node, getElement( id ).firstChild );
+						}
+
 						var digests = fetchEventHandlers( id );
 						digests;
 						}
