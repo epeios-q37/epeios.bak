@@ -272,58 +272,67 @@ qRB
 
 	SessionCallback = _A().RetrieveCallback( Language.Convert( Buffer ), Token, ProxyCallback );	// Session destroys 'ProxyCallback'.
 
-	if ( SessionCallback == NULL )
-		qRGnr();
+	if ( SessionCallback != NULL ) {
+		Session->Init( *SessionCallback );
 
-	Session->Init( *SessionCallback );
+		Sessions.Store( Session, Row );
 
-	Sessions.Store( Session, Row );
+		ProxyCallback->Init( Session->JSCallback() );
 
-	ProxyCallback->Init(Session->JSCallback() );
+		_AdjustSizes();
 
-	_AdjustSizes();
+		do {
+			Id.New();
+		} while ( Search( Id ) != qNIL );
 
-	do {
-		Id.New();
-	} while( Search( Id ) != qNIL );
+		Ids.Store( Id, Row );
 
-	Ids.Store( Id, Row );
+		if ( S_.Root == qNIL ) {
+			S_.Root = Row;
+			Order.Create( Row );
+		} else {
+			idxbtq::E_ISEEKERt__( row__ ) Seeker;
 
-	if ( S_.Root == qNIL ) {
-		S_.Root = Row;
-		Order.Create( Row );
-	} else {
-		idxbtq::E_ISEEKERt__( row__ ) Seeker;
+			Seeker.Init( Index, S_.Root );
 
-		Seeker.Init( Index, S_.Root );
+			switch ( Search_( Ids, Id.Value(), Seeker ) ) {
+			case 1:
+				S_.Root = Index.BecomeGreater( Row, Seeker.GetCurrent(), S_.Root );
+				break;
+			case -1:
+				S_.Root = Index.BecomeLesser( Row, Seeker.GetCurrent(), S_.Root );
+				break;
+			default:
+				qRGnr();
+				break;
+			}
 
-		switch ( Search_( Ids, Id.Value(), Seeker ) ) {
-		case 1:
-			S_.Root = Index.BecomeGreater( Row, Seeker.GetCurrent(), S_.Root );
-			break;
-		case -1:
-			S_.Root = Index.BecomeLesser( Row, Seeker.GetCurrent(), S_.Root );
-			break;
-		default:
-			qRGnr();
-			break;
+			Order.BecomeNext( Row, Order.Tail() );
 		}
 
-		Order.BecomeNext( Row, Order.Tail() );
+
+		if ( time( &Timer.Relative ) == -1 )
+			qRLbr();
+
+		if ( time( &Timer.Absolute ) == -1 )
+			qRLbr();
+
+		Timer.Persistent = false;
+
+		Timers.Store( Timer, Row );
+	} else {
+		Sessions.Delete( Row );
+		Row = qNIL;
 	}
-
-
-	if ( time( &Timer.Relative ) == -1 )
-		qRLbr();
-
-	if ( time( &Timer.Absolute ) == -1 )
-		qRLbr();
-
-	Timer.Persistent = false;
-
-	Timers.Store( Timer, Row );
 qRR
+	Row = qNIL;
 qRT
+	if ( Row == qNIL ) {
+		if ( ProxyCallback != NULL )
+		delete ProxyCallback;
+
+		ProxyCallback = NULL;
+	}
 qRE
 	return Row;
 }

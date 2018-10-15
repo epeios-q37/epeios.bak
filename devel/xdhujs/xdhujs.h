@@ -62,6 +62,7 @@ namespace xdhujs {
 		snWidgetFetcher,
 		snEventHandlersSetter,
 		snContentsSetter,
+		snTimeoutSetter,
 		snWidgetsInstantiator,
 		snCSSRuleInserter,
 		snCSSRuleAppender,

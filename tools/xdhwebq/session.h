@@ -490,7 +490,8 @@ namespace session {
 			id__ RawId;
 			row__ Row = New( RawId, Language, Token );
 
-			Id.Append( RawId.Value() );
+			if ( Row != qNIL )
+				Id.Append( RawId.Value() );
 
 			return Row;
 		}

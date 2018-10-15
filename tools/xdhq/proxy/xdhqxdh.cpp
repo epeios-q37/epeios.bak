@@ -49,6 +49,7 @@ namespace {
 		cSetLayout_1,
 		cGetContents_1,
 		cSetContents_1,
+		cSetTimeout_1,
 		cDressWidgets_1,
 		cAddClasses_1,
 		cRemoveClasses_1,
@@ -79,6 +80,7 @@ namespace {
 			C( SetLayout_1 );
 			C( GetContents_1 );
 			C( SetContents_1 );
+			C( SetTimeout_1 );
 			C( DressWidgets_1 );
 			C( AddClasses_1 );
 			C( RemoveClasses_1 );
@@ -326,6 +328,23 @@ namespace {
 		xdhcmn::FlatMerge( Contents, MergedContents, true );
 
 		Proxy.SetContents( MergedIds, MergedContents );
+	qRR;
+	qRT;
+	qRE;
+	}
+
+	void SetTimeout_(
+		flw::sRWFlow &Flow,
+		xdhdws::sProxy &Proxy )
+	{
+	qRH;
+		str::wString Delay, Action;
+	qRB;
+		tol::Init( Delay, Action );
+		prtcl::Get( Flow, Delay );
+		prtcl::Get( Flow, Action );
+
+		Proxy.SetTimeout( Delay, Action );
 	qRR;
 	qRT;
 	qRE;
@@ -614,6 +633,7 @@ namespace {
 				H( SetLayout );
 				H( GetContents );
 				H( SetContents );
+				H( SetTimeout );
 				H( DressWidgets );
 				H( AddClasses );
 				H( RemoveClasses );
@@ -646,11 +666,12 @@ namespace {
 			xdhdws::sProxy::reset( P );
 		}
 		qCVDTOR( rSession_ )
-		void Init(
+		bso::sBool Init(
 			xdhcmn::cUpstream *Callback,
 			const char *Language,
 			const str::dString &Token )	// If empty, PROD session, else token used for the DEMO session.
 		{
+			bso::sBool Success = false;
 		qRH;
 			flw::sDressedRWFlow<> Flow;
 			csdcmn::sVersion Version = csdcmn::UndefinedVersion;
@@ -661,24 +682,33 @@ namespace {
 			if ( Token.Amount() == 0 ) {
 				ProdDriver_.Init( Core_, fdr::ts_Default );
 				Mode_ = mProd;
+				Success = true;
 			} else {
-				DemoDriver_.Init( dmopool::GetConnection( Token ), true, fdr::ts_Default );
-				Mode_ = mDemo;
+				sck::sSocket Socket = dmopool::GetConnection( Token );
+
+				if ( Socket != sck::Undefined ) {
+					DemoDriver_.Init(Socket, true, fdr::ts_Default );
+					Mode_ = mDemo;
+					Success = true;
+				}
 			}
 
-			Flow.Init( D_() );
+			if ( Success ) {
+				Flow.Init( D_() );
 
-			prtcl::Put( Language, Flow );
+				prtcl::Put( Language, Flow );
 
-			Flow.Commit();
+				Flow.Commit();
 
-			if ( (Version = csdcmn::GetProtocolVersion( prtcl::ProtocolId, Flow )) != prtcl::ProtocolVersion )
-				qRGnr();
+				if ( (Version = csdcmn::GetProtocolVersion( prtcl::ProtocolId, Flow )) != prtcl::ProtocolVersion )
+					qRGnr();
 
-			xdhdws::sProxy::Init( Callback );
+				xdhdws::sProxy::Init( Callback );
+			}
 		qRR;
 		qRT;
 		qRE;
+			return Success;
 		}
 		operator fdr::rRWDriver &( void )
 		{
@@ -697,19 +727,30 @@ xdhcmn::cSession *sclxdhtml::SCLXDHTMLRetrieveCallback(
 	const str::dString &Token,
 	xdhcmn::cUpstream *UpstreamCallback )
 {
-	rSession_ *Session = new rSession_;
+	rSession_ *Session = NULL;
+qRH;
 	bso::sBool Continue = true;
+qRB;
+	if ( ( Session = new rSession_ ) == NULL )
+		qRAlc();
 
-	if ( Session == NULL )
-		qRGnr();
+	if ( !Session->Init( UpstreamCallback, Language, Token ) ) {
+		delete Session;
+		Session = NULL;
+	}
 
-	Session->Init( UpstreamCallback, Language, Token );
-
-	// WARNING ! In 'MultiUser' mode, 'ProxyCallback' is not correctly set yet!
+	// WARNING ! In 'MultiUser' mode, 'UpstreamCallback' is not correctly set yet!
 /*	if ( Mode == xdhcmn::mMonoUser ) {
 		Session->Launch( "", "" );
 	}
 */
+qRR;
+	if ( Session != NULL )
+		delete Session;
+
+	Session = NULL;
+qRT;
+qRE;
 	return Session;
 }
 

@@ -45,6 +45,7 @@
 namespace xdhcmn {
 	// NOTA : not used by this module, but by other 'upstream' and 'downtream' 'XDH...' modules.
 	typedef ntvstr::char__ nchar__;
+	typedef ntvstr::sChar sNChar;
 	typedef ntvstr::string___ nstring___;
 	typedef ntvstr::rString rNString;
 	qMIMICs( bso::sU16, sIndex );	// For the 'CSS' rules.
@@ -81,8 +82,9 @@ namespace xdhcmn {
 		fAlert,				// XML, XSL, Title.
 		fConfirm,			// XML, XSL, Title.
 		fSetHead,			// XML, XSL; if XSL is empty, XML is pure HTML.
-		fSetLayout,		// Id, XML, XSL; if XSL is empty, XML is pure HTML.
+		fSetLayout,			// Id, XML, XSL; if XSL is empty, XML is pure HTML.
 		fSetContents,		// Ids, Contents.
+		fSetTimeout,		// Id, Delay, Action.
 		fDressWidgets,		// Id.
 		fInsertCSSRule,		// Rule, Index.
 		fAppendCSSRule,		// Rule.

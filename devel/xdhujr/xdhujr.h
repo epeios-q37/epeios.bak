@@ -61,6 +61,7 @@ namespace xdhujr {
 			extern entry___ Layout;
 			extern entry___ EventHandlers;
 			extern entry___ Contents;
+			extern rEntry Timeout;
 		}
 		extern entry___ DraggableSetter;
 		extern entry___ DroppableSetter;

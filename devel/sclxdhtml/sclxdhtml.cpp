@@ -533,6 +533,15 @@ qRT;
 qRE;
 }
 
+void sclxdhtml::sProxy::SetTimeout(
+	const str::dString &Delay,
+	const str::dString &Action )
+{
+	Core_.SetTimeout( Delay, Action );
+}
+
+
+
 void sclxdhtml::sProxy::InsertCSSRule(
 	const str::dString &Rule,
 	xdhcmn::sIndex Index )

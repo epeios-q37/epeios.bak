@@ -34,7 +34,9 @@
 
 namespace xdhutl {
 	using xdhcmn::nchar__;
+	using xdhcmn::sNChar;
 	using xdhcmn::nstring___;
+	using xdhcmn::rNString;
 
 	E_ENUM( action ) {
 		aOpenFile,

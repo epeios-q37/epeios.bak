@@ -30,7 +30,9 @@
 using namespace xdhujp;
 
 using xdhutl::nstring___;
+using xdhutl::rNString;
 using xdhutl::nchar__;
+using xdhutl::sNChar;
 using xdhujs::script_name__;
 
 static const char *Execute_(
@@ -326,6 +328,31 @@ static void SetContents_(
 	const nchar__ *Contents = va_arg( List, const nchar__ * );
 
 	SetContents_( Callback, Ids, Contents );
+}
+
+static void SetTimeout_(
+	cJS &Callback,
+	const sNChar *Delay,
+	const sNChar *Action )
+{
+qRH;
+	TOL_CBUFFER___ Result;
+qRB;
+	Execute( Callback, xdhujs::snTimeoutSetter, NULL, Delay, Action );
+qRR;
+qRT;
+qRE;
+}
+
+static void SetTimeout_(
+	cJS &Callback,
+	va_list List )
+{
+	// NOTA : we use variables, because if we put 'va_arg()' directly as parameter to below function, it's not sure that they are called in the correct order.
+	const sNChar *Delay = va_arg( List, const sNChar * );
+	const sNChar *Action = va_arg( List, const sNChar * );
+
+	SetTimeout_( Callback, Delay, Action );
 }
 
 namespace{
@@ -744,6 +771,9 @@ static script_name__ Convert_( xdhcmn::function__ Function )
 	case xdhcmn::fSetContents:
 		qRFwk();
 		break;
+	case xdhcmn::fSetTimeout:
+		qRFwk();
+		break;
 	case xdhcmn::fInsertCSSRule:
 		qRFwk();
 		break;
@@ -819,6 +849,9 @@ void xdhujp::sProxyCallback::XDHCMNProcess(
 		break;
 	case xdhcmn::fSetContents:
 		SetContents_( C_(), List);
+		break;
+	case xdhcmn::fSetTimeout:
+		SetTimeout_( C_(), List );
 		break;
 	case xdhcmn::fInsertCSSRule:
 		InsertCSSRule_( C_(), List );

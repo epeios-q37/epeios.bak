@@ -456,6 +456,9 @@ namespace sclxdhtml {
 		void SetContent(
 			const str::dString &Id,
 			const str::dString &Content );
+		void SetTimeout(
+			const str::dString &Delay,
+			const str::dString &Action );
 		void InsertCSSRule(
 			const str::dString &Rule,
 			xdhcmn::sIndex Index );

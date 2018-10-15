@@ -196,6 +196,11 @@
 					setContents( %Ids_%, %Contents_% );
 				]]>
 				</Contents>
+				<Timeout>
+					<![CDATA[
+					setTimeout( (digest) => launchEvent(digest), %Delay%, "|SCRIPT|timeout||((%Action%))" );
+				]]>
+				</Timeout>
 			</Setter>
 			<WidgetsInstantiator>
 				<![CDATA[

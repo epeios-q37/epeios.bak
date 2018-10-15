@@ -111,22 +111,25 @@ namespace {
 				}
 			}
 
-			if ( Session == NULL ) {
-				sclmisc::MGetValue( xdwrgstry::parameter::script::Fallback, Script );
+			if ( Row != qNIL ) {
+				if ( Session == NULL ) {
+					sclmisc::MGetValue( xdwrgstry::parameter::script::Fallback, Script );
 
-				Continue = false;
+					Continue = false;
 
-				SessionId.Init();
-			} else {
-				Session->Lock();
+					SessionId.Init();
+				} else {
+					Session->Lock();
 
-				if ( Action == "_HandleEvent" )
-					HandleEvent_( Pairs, *Session, Script );
-				else if ( Action == "_Next" )
-					Report_( Response, *Session, Script );
-				else
-					HandleAction_( Action, *Session, Script );
-			}
+					if ( Action == "_HandleEvent" )
+						HandleEvent_( Pairs, *Session, Script );
+					else if ( Action == "_Next" )
+						Report_( Response, *Session, Script );
+					else
+						HandleAction_( Action, *Session, Script );
+				}
+			} else
+				misc::Report( "No corresponding web application launched. See http://atlastk.org.", Script );
 		qRR;
 			if ( ERRFailure() ) {
 				Script.Init();

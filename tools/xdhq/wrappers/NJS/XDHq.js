@@ -163,6 +163,10 @@ class XDH {
 	setContent(id, content, callback) {
 		return this.setContents(merge(id, content), callback);
 	}
+	setTimeout( delay, action, callback )
+	{
+		call(this, "SetTimeout_1", types.VOID, 2, delay, action, 0, callback);
+	}
 	dressWidgets(id, callback) {
 		call(this, "DressWidgets_1", types.VOID, 1, id, 0, callback);
 	}

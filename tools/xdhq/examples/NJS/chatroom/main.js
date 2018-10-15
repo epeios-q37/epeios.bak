@@ -88,7 +88,9 @@ function newSession() {
 
 function acConnect(dom, id) {
 	dom.setLayout("", readAsset("Main.html"),
-		() => dom.focus("Pseudo")
+		() => dom.focus("Pseudo",
+			() => dom.setTimeout("0", "Update" )
+		)
 	);
 }
 
@@ -155,7 +157,9 @@ function acSubmitMessage(dom, id) {
 }
 
 function acUpdate(dom, id) {
-	displayMessages(dom)
+	dom.setTimeout("1000", "Update",
+		() => displayMessages(dom)
+	);
 }
 
 

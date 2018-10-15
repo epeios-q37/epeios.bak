@@ -60,6 +60,7 @@ entry___ xdhujr::script::setter::Head( "Head", SetterScripts_ );
 entry___ xdhujr::script::setter::Layout("Layout", SetterScripts_);
 entry___ xdhujr::script::setter::EventHandlers( "EventHandlers", SetterScripts_ );
 entry___ xdhujr::script::setter::Contents( "Contents", SetterScripts_ );
+entry___ xdhujr::script::setter::Timeout( "Timeout", SetterScripts_ );
 
 
 entry___ xdhujr::script::DraggableSetter( "DraggableSetter", xdhujr::Scripts );

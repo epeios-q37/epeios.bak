@@ -132,6 +132,12 @@ namespace xdhdws {
 		{
 			C_().Process(xdhcmn::fSetContents, NULL, Ids.Internal()(), Contents.Internal()() );
 		}
+		void SetTimeout(
+			const rNString &Delay,
+			const rNString &Action )
+		{
+			C_().Process( xdhcmn::fSetTimeout, NULL, Delay.Internal()(), Action.Internal()() );
+		}
 		void InsertCSSRule(
 			const rNString &Rule,
 			xdhcmn::sIndex Index )

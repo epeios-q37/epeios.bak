@@ -6,6 +6,22 @@
 - [stdz]: modification to comply with current standards,
 - [trvl]: trivial modifications,
 
+## 2018-10-15
+
+- SCLXDHTML:
+  - [adpt],
+- XDHCMN:
+  - [trvl],
+  - [adpt],
+- XDHUJP:
+  - [adpt],
+- XDHUJR:
+  - introducing the *setTimeout* functionnality,
+- XDHUJS:
+  - [adpt],
+- XDHUTL:
+  - [trvl],
+
 ## 2018-10-10
 
 - FDR:

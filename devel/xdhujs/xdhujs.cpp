@@ -62,6 +62,7 @@ const str::string_ &xdhujs::GetTaggedScript(
 	C( Selector, Selector );
 	C( EventHandlersSetter, setter::EventHandlers );
 	C( ContentsSetter, setter::Contents );
+	C( TimeoutSetter, setter::Timeout );
 	C( WidgetsInstantiator, WidgetsInstantiator );
 	C( CSSRuleInserter, css_rule::Insert );
 	C( CSSRuleAppender, css_rule::Append );
@@ -145,6 +146,8 @@ D( Id );
 D( Name );
 D( Value );
 D( Method );
+D( Delay );
+D( Action );
 D( XML );
 D( XSL );
 D( Title );
@@ -198,6 +201,7 @@ qRB
 	S( Selector, Id_, NULL );
 	S( EventHandlersSetter, Ids_, Events_, NULL );
 	S( ContentsSetter, Ids_, Contents_, NULL );
+	S( TimeoutSetter, Delay_, Action_, NULL );
 	S( WidgetsInstantiator, Ids_, Types_, ParametersSets_, NULL );
 	S( CSSRuleInserter, Rule_, Index_, NULL );
 	S( CSSRuleAppender, Rule_, NULL );
