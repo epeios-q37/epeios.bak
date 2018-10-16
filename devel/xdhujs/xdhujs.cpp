@@ -45,7 +45,6 @@ const str::string_ &xdhujs::GetTaggedScript(
 	C( Log, Log );
 	C( DialogAlert, dialog::Alert );
 	C( DialogConfirm, dialog::Confirm );
-	C( HeadSetter, setter::Head );
 	C( LayoutSetter, setter::Layout );
 	C( PropertySetter, property::Setter );
 	C( PropertyGetter, property::Getter );
@@ -63,15 +62,27 @@ const str::string_ &xdhujs::GetTaggedScript(
 	C( EventHandlersSetter, setter::EventHandlers );
 	C( ContentsSetter, setter::Contents );
 	C( TimeoutSetter, setter::Timeout );
+	C( Parent, Parent );
+	C( FirstChild, child::First );
+	C( LastChild, child::Last );
+	C( PreviousSibling, sibling::Previous );
+	C( NextSibling, sibling::Next );
+	C( CreateElement, CreateElement );
+	C( AppendChild, child::Append );
+	C( InsertBefore, insert::Before );
+	C( InsertAfter, insert::After );
 	C( WidgetsInstantiator, WidgetsInstantiator );
+	/*
 	C( CSSRuleInserter, css_rule::Insert );
 	C( CSSRuleAppender, css_rule::Append );
 	C( CSSRuleRemover, css_rule::Remove );
+	*/
 	C( ClassesAdder, classes::Add );
 	C( ClassesRemover, classes::Remove );
 	C( ClassesToggler, classes::Toggle );
 	C( ElementsEnabler, elements::Enable );
 	C( ElementsDisabler, elements::Disable );
+	C( Dummy, Dummy );
 	default:
 		qRFwk();
 		break;
@@ -144,6 +155,8 @@ namespace {
 D( Message );
 D( Id );
 D( Name );
+D( Child );
+D( Sibling );
 D( Value );
 D( Method );
 D( Delay );
@@ -189,7 +202,6 @@ qRB
 	S( AttributeRemover, Id_, Name_, NULL  );
 	S( PropertySetter, Id_, Name_, Value_, NULL );
 	S( PropertyGetter, Id_, Name_, NULL );
-	S( HeadSetter, XML_, XSL_, NULL );
 	S( LayoutSetter, Id_, XML_, XSL_, NULL );
 	S( ValueSetter, Id_, Value_, NULL );
 	S( ValueGetter, Id_, NULL );
@@ -202,10 +214,21 @@ qRB
 	S( EventHandlersSetter, Ids_, Events_, NULL );
 	S( ContentsSetter, Ids_, Contents_, NULL );
 	S( TimeoutSetter, Delay_, Action_, NULL );
+	S( Parent, Id_, NULL );
+	S( FirstChild, Id_, NULL );
+	S( LastChild, Id_, NULL );
+	S( PreviousSibling, NULL );
+	S( NextSibling, NULL );
+	S( CreateElement, Name_, Id_, NULL );
+	S( AppendChild, Child_, Id_, NULL );
+	S( InsertBefore, Sibling_, Id_, NULL );
+	S( InsertAfter, Sibling_, Id_, NULL );
 	S( WidgetsInstantiator, Ids_, Types_, ParametersSets_, NULL );
+	/*
 	S( CSSRuleInserter, Rule_, Index_, NULL );
 	S( CSSRuleAppender, Rule_, NULL );
 	S( CSSRuleRemover, Index_, NULL );
+	*/
 	S( ClassesAdder, Ids_, Classes_, NULL );
 	S( ClassesRemover, Ids_, Classes_, NULL );
 	S( ClassesToggler, Ids_, Classes_, NULL );

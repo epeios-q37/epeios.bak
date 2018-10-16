@@ -42,7 +42,6 @@ namespace xdhujs {
 
 	E_ENUM(script_name) {
 		snExecute,
-		snHeadSetter,
 		snLayoutSetter,
 		snAttributeGetter,
 		snAttributeRemover,
@@ -63,15 +62,27 @@ namespace xdhujs {
 		snEventHandlersSetter,
 		snContentsSetter,
 		snTimeoutSetter,
+		snParent,
+		snFirstChild,
+		snLastChild,
+		snPreviousSibling,
+		snNextSibling,
+		snCreateElement,
+		snAppendChild,
+		snInsertBefore,
+		snInsertAfter,
 		snWidgetsInstantiator,
+		/*
 		snCSSRuleInserter,
 		snCSSRuleAppender,
 		snCSSRuleRemover,
+		*/
 		snClassesAdder,
 		snClassesRemover,
 		snClassesToggler,
 		snElementsEnabler,
 		snElementsDisabler,
+		snDummy,
 		sn_amount,
 		sn_Undefined,
 	};

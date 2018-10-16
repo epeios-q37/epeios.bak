@@ -457,13 +457,63 @@ namespace sclxdhtml {
 			const str::dString &Id,
 			const str::dString &Content );
 		void SetTimeout(
-			const str::dString &Delay,
-			const str::dString &Action );
+			const ntvstr::rString &Delay,
+			const ntvstr::rString &Action );
+		const char *Parent(
+			const ntvstr::rString &Id,
+			qCBUFFERr &Value )
+		{
+			return Core_.Parent( Id, Value );
+		}
+		const char *FirstChild(
+			const ntvstr::rString &Id,
+			qCBUFFERr &Value )
+		{
+			return Core_.FirstChild( Id, Value );
+		}
+		const char *LastChild(
+			const ntvstr::rString &Id,
+			qCBUFFERr &Value )
+		{
+			return Core_.LastChild( Id, Value );
+		}
+		const char *PreviousSibling(
+			const ntvstr::rString &Id,
+			qCBUFFERr &Value )
+		{
+			return Core_.PreviousSibling( Id, Value );
+		}
+		const char *NextSibling(
+			const ntvstr::rString &Id,
+			qCBUFFERr &Value )
+		{
+			return Core_.NextSibling( Id, Value );
+		}
+		void AppendChild(
+			const ntvstr::rString &Child,
+			const ntvstr::rString &Id )
+		{
+			return Core_.AppendChild( Child, Id );
+		}
+		void InsertBefore(
+			const ntvstr::rString &Sibling,
+			const ntvstr::rString &Id )
+		{
+			return Core_.InsertBefore( Sibling, Id );
+		}
+		void InsertAfter(
+			const ntvstr::rString &Sibling,
+			const ntvstr::rString &Id )
+		{
+			return Core_.InsertAfter( Sibling, Id );
+		}
+		/*
 		void InsertCSSRule(
 			const str::dString &Rule,
 			xdhcmn::sIndex Index );
 		xdhcmn::sIndex AppendCSSRule( const str::dString &Rule );
 		void RemoveCSSRule( xdhcmn::sIndex Index );
+		*/
 		void AddClasses(
 			const str::dStrings &Ids,
 			const str::dStrings &Classes );
@@ -515,6 +565,12 @@ namespace sclxdhtml {
 		void DressWidgets( const ntvstr::rString &Id )
 		{
 			Core_.DressWidgets( Id );
+		}
+		const char *Dummy(
+			const ntvstr::rString &Id,
+			qCBUFFERr &Value )
+		{
+			return Core_.Dummy( Id, Value );
 		}
 	};
 

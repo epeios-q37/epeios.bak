@@ -55,19 +55,37 @@ namespace xdhujr {
 	extern entry___ Scripts;
 		
 	namespace script {
+		extern rEntry Dummy;	// Not used; only to facilitate creation of new entries.
 		extern entry___ Log;
-		namespace setter{
-			extern entry___ Head;
-			extern entry___ Layout;
-			extern entry___ EventHandlers;
-			extern entry___ Contents;
-			extern rEntry Timeout;
-		}
 		extern entry___ DraggableSetter;
 		extern entry___ DroppableSetter;
 		extern entry___ WidgetsInstantiator;
 		extern entry___ Focuser;
 		extern entry___ Selector;
+		extern rEntry Parent;
+		extern rEntry CreateElement;
+		namespace setter {
+			extern entry___ Layout;
+			extern entry___ EventHandlers;
+			extern entry___ Contents;
+			extern rEntry Timeout;
+		}
+		namespace child {
+			extern rEntry
+				Append,
+				First,
+				Last;
+		}
+		namespace sibling {
+			extern rEntry
+				Previous,
+				Next;
+		}
+		namespace insert {
+			extern rEntry
+				After,
+				Before;
+		}
 		namespace property {
 			extern entry___ Setter;
 			extern entry___ Getter;
@@ -91,12 +109,14 @@ namespace xdhujr {
 			extern entry___ Selector;
 			extern entry___ Fetcher;
 		}
+		/*
 		namespace css_rule {
 			extern rEntry
 				Insert,
 				Append,
 				Remove;
 		}
+		*/
 		namespace classes	{
 			extern rEntry
 				Add,

@@ -38,7 +38,7 @@ function getElement(elementOrId) {
 
 function getOrGenerateId(element) {
 	if (!element.id)
-		element.id = "CGN" + String(counter++);
+		element.id = "_CGN" + String(counter++);
 
 	return element.id;
 }

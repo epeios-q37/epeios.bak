@@ -77,18 +77,31 @@ namespace xdhcmn {
 	};
 
 	enum function__ {		// Parameters :
-		fExecute,			// Script,
+		fExecute,			// Script
 		fLog,				// Message,
 		fAlert,				// XML, XSL, Title.
 		fConfirm,			// XML, XSL, Title.
-		fSetHead,			// XML, XSL; if XSL is empty, XML is pure HTML.
 		fSetLayout,			// Id, XML, XSL; if XSL is empty, XML is pure HTML.
 		fSetContents,		// Ids, Contents.
 		fSetTimeout,		// Id, Delay, Action.
+/**/
+		fDummy,				// Dummy entry, which helps creating new entries.
+		fParent,			// Id,
+		fFirstChild,		// Id,
+		fLastChild,			// Id,
+		fPreviousSibling,	// Id,
+		fNextSibling,		// Id,
+		fCreateElement,		// Name, Id.
+		fAppendChild,		// Child, Id.
+		fInsertBefore,		// Sibling, Id,
+		fInsertAfter,		// Sibling, Id,
+/**/
 		fDressWidgets,		// Id.
+		/*
 		fInsertCSSRule,		// Rule, Index.
 		fAppendCSSRule,		// Rule.
 		fRemoveCSSRule,		// Index.
+		*/
 		fAddClasses,		// Ids, Classes.
 		fRemoveClasses,		// Ids, Classes.
 		fToggleClasses,		// Ids, Classes.

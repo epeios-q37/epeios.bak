@@ -20,8 +20,6 @@
 #ifndef XDHQXDH_INC_
 # define XDHQXDH_INC_
 
-# include "sclxdhtml.h"
-
 # include "scli.h"
 
 # define PROGRAM_NAME		"xdhq"	SCLXDHTML_DEFAULT_SUFFIX

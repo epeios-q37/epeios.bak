@@ -534,12 +534,12 @@ qRE;
 }
 
 void sclxdhtml::sProxy::SetTimeout(
-	const str::dString &Delay,
-	const str::dString &Action )
+	const ntvstr::rString &Delay,
+	const ntvstr::rString &Action )
 {
 	Core_.SetTimeout( Delay, Action );
 }
-
+/*
 void sclxdhtml::sProxy::InsertCSSRule(
 	const str::dString &Rule,
 	xdhcmn::sIndex Index )
@@ -556,7 +556,7 @@ void sclxdhtml::sProxy::RemoveCSSRule( xdhcmn::sIndex Index )
 {
 	Core_.RemoveCSSRule( Index );
 }
-
+*/
 namespace {
 	void HandleClasses_(
 		const str::dStrings &Ids,

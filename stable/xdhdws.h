@@ -109,12 +109,6 @@ namespace xdhdws {
 		qRE
 			return Confirmed;
 		}
-		void SetHead(
-			const nstring___ &XML,
-			const nstring___ &XSL )
-		{
-			C_().Process( xdhcmn::fSetHead, NULL, XML.Internal()(), XSL.Internal()() );
-		}
 		void SetLayout(
 			const nstring___ &Id,
 			const nstring___ &XML,
@@ -138,6 +132,74 @@ namespace xdhdws {
 		{
 			C_().Process( xdhcmn::fSetTimeout, NULL, Delay.Internal()(), Action.Internal()() );
 		}
+		const char *Parent(
+			const nstring___ &Id,
+			qCBUFFERr &Buffer )
+		{
+			C_().Process( xdhcmn::fParent, &Buffer, Id.Internal()() );
+
+			return Buffer;
+		}
+		const char *FirstChild(
+			const nstring___ &Id,
+			qCBUFFERr &Buffer )
+		{
+			C_().Process( xdhcmn::fFirstChild, &Buffer, Id.Internal()() );
+
+			return Buffer;
+		}
+		const char *LastChild(
+			const nstring___ &Id,
+			qCBUFFERr &Buffer )
+		{
+			C_().Process( xdhcmn::fLastChild, &Buffer, Id.Internal()() );
+
+			return Buffer;
+		}
+		const char *PreviousSibling(
+			const nstring___ &Id,
+			qCBUFFERr &Buffer )
+		{
+			C_().Process( xdhcmn::fPreviousSibling, &Buffer, Id.Internal()() );
+
+			return Buffer;
+		}
+		const char *NextSibling(
+			const nstring___ &Id,
+			qCBUFFERr &Buffer )
+		{
+			C_().Process( xdhcmn::fNextSibling, &Buffer, Id.Internal()() );
+
+			return Buffer;
+		}
+		const char *CreateElement(
+			const nstring___ &Name,
+			const nstring___ &Id,
+			qCBUFFERr &Buffer )
+		{
+			C_().Process( xdhcmn::fCreateElement, &Buffer, Name.Internal()(), Id.Internal()() );
+
+			return Buffer;
+		}
+		void AppendChild(
+			const nstring___ &Child,
+			const nstring___ &Id )
+		{
+			C_().Process( xdhcmn::fAppendChild, NULL, Child.Internal()(), Id.Internal()() );
+		}
+		void InsertBefore(
+			const nstring___ &Sibling,
+			const nstring___ &Id )
+		{
+			C_().Process( xdhcmn::fInsertBefore, NULL, Sibling.Internal()(), Id.Internal()() );
+		}
+		void InsertAfter(
+			const nstring___ &Sibling,
+			const nstring___ &Id )
+		{
+			C_().Process( xdhcmn::fInsertAfter, NULL, Sibling.Internal()(), Id.Internal()() );
+		}
+		/*
 		void InsertCSSRule(
 			const rNString &Rule,
 			xdhcmn::sIndex Index )
@@ -179,6 +241,7 @@ namespace xdhdws {
 		qRT;
 		qRE;
 		}
+		*/
 		void AddClasses(
 			const rNString &Ids,
 			const rNString &Classes )
@@ -422,6 +485,14 @@ namespace xdhdws {
 		void Select( const nstring___ &Id )
 		{
 			C_().Process( xdhcmn::fSelect, NULL, Id.Internal()( ) );
+		}
+		const char *Dummy(
+			const nstring___ &Id,
+			qCBUFFERr &Buffer )
+		{
+			C_().Process( xdhcmn::fDummy, &Buffer, Id.Internal()() );
+
+			return Buffer;
 		}
 	};
 }

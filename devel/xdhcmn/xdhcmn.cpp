@@ -41,14 +41,24 @@ const char *xdhcmn::GetLabel( function__ Function )
 	C( Log );
 	C( Alert );
 	C( Confirm );
-	C( SetHead );
 	C( SetLayout );
 	C( DressWidgets );
 	C( SetContents );
 	C( SetTimeout );
+	/*
 	C( InsertCSSRule );
 	C( AppendCSSRule );
 	C( RemoveCSSRule );
+	*/
+	C( Parent );
+	C( FirstChild );
+	C( LastChild );
+	C( PreviousSibling );
+	C( NextSibling );
+	C( CreateElement );
+	C( AppendChild );
+	C( InsertBefore );
+	C( InsertAfter );
 	C( AddClasses );
 	C( RemoveClasses );
 	C( ToggleClasses );
@@ -64,6 +74,7 @@ const char *xdhcmn::GetLabel( function__ Function )
 	C( GetValue );
 	C( Focus );
 	C( Select );
+	C( Dummy );
 	default:
 		qRFwk();
 		break;

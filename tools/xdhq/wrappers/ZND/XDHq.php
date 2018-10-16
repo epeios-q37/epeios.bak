@@ -145,6 +145,9 @@ class XDHqDOM extends Threaded {
 	function setContent( string $id, string $content ) {
 		self::setContents( [ $id => $content ] );
 	}
+	function setTimeout( int $delay, string $action ) {
+		self::call_( "setTimeout_1", strval( $delay ), $action );
+	}
 	function dressWidgets( string $id ) {
 		return self::call_( "DressWidgets_1", XDHq::RT_NONE, 1, $id, 0 );
 	}

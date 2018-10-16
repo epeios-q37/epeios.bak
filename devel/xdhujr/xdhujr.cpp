@@ -56,7 +56,6 @@ entry___ xdhujr::script::value::Setter( "Setter", ValueScripts_ );
 entry___ xdhujr::script::value::Getter( "Getter", ValueScripts_ );
 
 static entry___ SetterScripts_( "Setter", xdhujr::Scripts );
-entry___ xdhujr::script::setter::Head( "Head", SetterScripts_ );
 entry___ xdhujr::script::setter::Layout("Layout", SetterScripts_);
 entry___ xdhujr::script::setter::EventHandlers( "EventHandlers", SetterScripts_ );
 entry___ xdhujr::script::setter::Contents( "Contents", SetterScripts_ );
@@ -80,12 +79,12 @@ entry___ xdhujr::script::Log( "Log", xdhujr::Scripts );
 entry___ xdhujr::script::Focuser( "Focuser", Scripts );
 entry___ xdhujr::script::Selector( "Selector", Scripts );
 entry___ xdhujr::script::WidgetsInstantiator( "WidgetsInstantiator",Scripts );
-
+/*
 static rEntry CSSRule_( "CSSRule", xdhujr::Scripts );
 rEntry xdhujr::script::css_rule::Insert( "Insert", CSSRule_ );
 rEntry xdhujr::script::css_rule::Append( "Append", CSSRule_ );
 rEntry xdhujr::script::css_rule::Remove( "Remove", CSSRule_ );
-
+*/
 static rEntry Classes_( "Classes", xdhujr::Scripts );
 rEntry xdhujr::script::classes::Add( "Add", Classes_ );
 rEntry xdhujr::script::classes::Remove( "Remove", Classes_ );

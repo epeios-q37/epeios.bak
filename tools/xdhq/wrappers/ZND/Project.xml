@@ -67,6 +67,17 @@
 				<File>Main.xsl</File>
 			</Files>
 		</Files>
+			<Files Group="Chatroom">
+				<Files Path="../../examples/ZND/chatroom/">
+					<File>main.php</File>
+					<File>Project.xml</File>
+				</Files>
+				<Files Path="../../examples/common/chatroom/">
+					<File>Head.html</File>
+					<File>Main.html</File>
+					<File>Messages.xsl</File>
+				</Files>
+			</Files>
 			<Files Group="Hello">
 				<Files Path="../../examples/ZND/Hello/">
 					<File>main.php</File>

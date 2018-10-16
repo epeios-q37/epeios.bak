@@ -305,20 +305,6 @@ qGCTOR( dmopool )
 	Clients_.Init();
 }
 
-namespace {
-	void GetHead_(
-		void *UP,
-		str::dString &Head )
-	{
-		TSHeadSearch_( *(const str::wString *)UP, Head );
-	}
-}
-
-qGCTOR( dlopool )
-{
-	sclxdhtml::SetHeadFunction( GetHead_ );
-}
-
 qGDTOR( dmopool )
 {
 	if ( MutexHandler_ != mtx::Undefined )
