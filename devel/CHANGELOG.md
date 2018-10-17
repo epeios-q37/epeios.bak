@@ -6,12 +6,19 @@
 - [stdz]: modification to comply with current standards;
 - [trvl]: trivial modifications;
 
+## 2018-10-17
+
+- *GLOBAL*:
+  - continued;
+- XDHUTL:
+  - handling new default event for tags, with replacing the `INPUT` tag with the content of the `type` attribute;
+
 ## 2018-10-16
 
 - XDHCMN
   - removing *CSSRule* related functionalities;
   - removing `SetHead`;
-  - adding `Parent`, `(First|Last)Child`, `(Previous|Next)Sibling`, `createElement`, `appendChild`, `insert(Before|After)`;
+  - adding `Parent`, `(First|Last)Child`, `(Previous|Next)Sibling`, `CreateElement`, `(Insert|Append)Child`, `Insert(Before|After)`;
 - XDHDWS:
   - [adpt];
 - XDHUJP:

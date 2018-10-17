@@ -92,6 +92,7 @@ namespace xdhcmn {
 		fPreviousSibling,	// Id,
 		fNextSibling,		// Id,
 		fCreateElement,		// Name, Id.
+		fInsertChild,		// Child, Id.
 		fAppendChild,		// Child, Id.
 		fInsertBefore,		// Sibling, Id,
 		fInsertAfter,		// Sibling, Id,

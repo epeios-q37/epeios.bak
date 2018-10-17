@@ -120,7 +120,7 @@ function displayTodos(dom) {
 
 	tree = tree.up();
 
-	dom.setLayout_("Todos", tree.end(), "data:text/xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4NCjwhLS0gTk8gQk9NICEhIC0tPg0KPHhzbDpzdHlsZXNoZWV0IHZlcnNpb249IjEuMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGh0bWwiIHhtbG5zOnhzbD0iaHR0cDovL3d3dy53My5vcmcvMTk5OS9YU0wvVHJhbnNmb3JtIj4NCgk8eHNsOm91dHB1dCBtZXRob2Q9Imh0bWwiIGVuY29kaW5nPSJVVEYtOCIvPg0KCTx4c2w6dGVtcGxhdGUgbWF0Y2g9Ii9YREhUTUwiPg0KCQk8eHNsOmFwcGx5LXRlbXBsYXRlcyBzZWxlY3Q9IlRvZG9zIi8+DQoJPC94c2w6dGVtcGxhdGU+DQoJPHhzbDp0ZW1wbGF0ZSBtYXRjaD0iVG9kb3MiPg0KCQk8eHNsOmFwcGx5LXRlbXBsYXRlcyBzZWxlY3Q9IlRvZG8iLz4NCgk8L3hzbDp0ZW1wbGF0ZT4NCgk8eHNsOnRlbXBsYXRlIG1hdGNoPSJUb2RvIj4NCgkJPGxpIGlkPSJUb2RvLntAaWR9IiBkYXRhLXhkaC1vbmV2ZW50cz0iKGRibGNsaWNrfEVkaXQpIiBkYXRhLXhkaC12YWx1ZT0ie0BpZH0iPg0KCQkJPHhzbDphdHRyaWJ1dGUgbmFtZT0iY2xhc3MiPg0KCQkJCTx4c2w6dGV4dD52aWV3PC94c2w6dGV4dD4NCgkJCQk8eHNsOmNob29zZT4NCgkJCQkJPHhzbDp3aGVuIHRlc3Q9IkBjb21wbGV0ZWQ9J3RydWUnIj4NCgkJCQkJCTx4c2w6dGV4dD4gY29tcGxldGVkPC94c2w6dGV4dD4NCgkJCQkJPC94c2w6d2hlbj4NCgkJCQkJPHhzbDpvdGhlcndpc2U+DQoJCQkJCQk8eHNsOnRleHQ+IGFjdGl2ZTwveHNsOnRleHQ+DQoJCQkJCTwveHNsOm90aGVyd2lzZT4NCgkJCQk8L3hzbDpjaG9vc2U+DQoJCQk8L3hzbDphdHRyaWJ1dGU+DQoJCQk8c3BhbiBpZD0iVmlldy57QGlkfSI+DQoJCQkJPGlucHV0IGNsYXNzPSJ0b2dnbGUiIHR5cGU9ImNoZWNrYm94IiBpZD0ie0BpZH0iIGRhdGEteGRoLW9uZXZlbnQ9IlRvZ2dsZSI+DQoJCQkJCTx4c2w6aWYgdGVzdD0iQGNvbXBsZXRlZD0ndHJ1ZSciPg0KCQkJCQkJPHhzbDphdHRyaWJ1dGUgbmFtZT0iY2hlY2tlZCIvPg0KCQkJCQk8L3hzbDppZj4NCgkJCQk8L2lucHV0Pg0KCQkJCTxsYWJlbCAgaWQ9IkxhYmVsLntAaWR9Ij4NCgkJCQkJPHhzbDp2YWx1ZS1vZiBzZWxlY3Q9Ii4iLz4NCgkJCQk8L2xhYmVsPg0KCQkJCTxidXR0b24gZGF0YS14ZGgtdmFsdWU9IntAaWR9IiBjbGFzcz0iZGVzdHJveSIgZGF0YS14ZGgtb25ldmVudD0iRGVzdHJveSIvPg0KCQkJPC9zcGFuPg0KCQkJPGlucHV0IGlkPSJJbnB1dC57QGlkfSIgY2xhc3M9ImVkaXQiIGRhdGEteGRoLW9uZXZlbnRzPSIoa2V5dXB8Q2FuY2VsfEVzYykoa2V5cHJlc3N8U3VibWl0fEVudGVyKShibHVyfFN1Ym1pdCkiLz4NCgkJPC9saT4NCgk8L3hzbDp0ZW1wbGF0ZT4NCjwveHNsOnN0eWxlc2hlZXQ+",
+	dom.setLayout_("Todos", tree.end(), "data:text/xml;charset=utf8," + encodedXSL,
 		() => handleCount(dom)
 	);
 }
@@ -320,7 +320,7 @@ function main() {
 	let head = `
 		<title>Atlas • TodoMVC</title>
 		<link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAMFBMVEUEAvyEhsxERuS8urQsKuycnsRkYtzc2qwUFvRUVtysrrx0ctTs6qTMyrSUksQ0NuyciPBdAAABHklEQVR42mNgwAa8zlxjDd2A4POfOXPmzZkFCAH2M8fNzyALzDlzg2ENssCbMwkMOsgCa858YOjBKxBzRoHhD7LAHiBH5swCT9HQ6A9ggZ4zp7YCrV0DdM6pBpAAG5Blc2aBDZA68wCsZPuZU0BDH07xvHOmAGKKvgMP2NA/Zw7ADIYJXGDgLQeBBSCBFu0aoAPYQUadMQAJAE29zwAVWMCWpgB08ZnDQGsbGhpsgCqBQHNfzRkDEIPlzFmo0T5nzoMovjPHoAK8Zw5BnA5yDosDSAVYQOYMKIDZzkoDzagAsjhqzjRAfXTmzAQgi/vMQZA6pjtAvhEk0E+ATWRRm6YBZuScCUCNN5szH1D4TGdOoSrggtiNAH3vBBjwAQCglIrSZkf1MQAAAABJRU5ErkJggg==" />
-		<!-- Only both lines below change between 'PROD' and 'DEMO' files. -->
+		<!--Only both lines below change between 'PROD' and 'DEMO' files.-->
 		<link rel="stylesheet" href="http://q37.info/download/assets/TodoMVC/todomvc-common/base.css">
 		<link rel="stylesheet" href="http://q37.info/download/assets/TodoMVC/todomvc-app-css/index.css">
 		<style>
@@ -352,7 +352,7 @@ function main() {
 		<section class ="todoapp">
 			<header class ="header">
 				<h1>todos</h1>
-				<input id="Input" class ="new-todo" placeholder="What needs to be done?" autofocus="" data-xdh-onevent="keypress|Submit|Enter"/>
+				<input id="Input" class ="new-todo" placeholder="What needs to be done?" autofocus="" data-xdh-onevent="Submit"/>
 			</header>
 			<section class ="main">
 				<input class ="toggle-all" type="checkbox"/>
@@ -387,6 +387,51 @@ function main() {
 			</p>
 		</footer>
 	`;
+
+	// Content of 'Todos.xsl'.
+	// DON'T PASTE TO Visual Studio : it inserts extraneous characters !
+	// There must be NO characters before ths XML declaration !
+	let xsl = `<?xml version="1.0" encoding="UTF-8"?>
+		<!-- NO BOM !! -->
+		<xsl:stylesheet version="1.0" xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+			<xsl:output method="html" encoding="UTF-8"/>
+			<xsl:template match="/XDHTML">
+				<xsl:apply-templates select="Todos"/>
+			</xsl:template>
+			<xsl:template match="Todos">
+				<xsl:apply-templates select="Todo"/>
+			</xsl:template>
+			<xsl:template match="Todo">
+				<li id="Todo.{@id}" data-xdh-onevents="(dblclick|Edit)" data-xdh-value="{@id}">
+					<xsl:attribute name="class">
+						<xsl:text>view</xsl:text>
+						<xsl:choose>
+							<xsl:when test="@completed='true'">
+								<xsl:text> completed</xsl:text>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:text> active</xsl:text>
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:attribute>
+					<span id="View.{@id}">
+						<input class="toggle" type="checkbox" id="{@id}" data-xdh-onevent="Toggle">
+							<xsl:if test="@completed='true'">
+								<xsl:attribute name="checked"/>
+							</xsl:if>
+						</input>
+						<label id="Label.{@id}">
+							<xsl:value-of select="."/>
+						</label>
+						<button data-xdh-value="{@id}" class="destroy" data-xdh-onevent="Destroy"/>
+					</span>
+					<input id="Input.{@id}" class="edit" data-xdh-onevents="(keyup|Cancel|Esc)(keypress|Submit|Enter)(blur|Submit)"/>
+				</li>
+			</xsl:template>
+		</xsl:stylesheet>
+`;
+
+	encodedXSL = encodeURIComponent(xsl);
 };
 
 main();

@@ -42,6 +42,21 @@ entry___ xdhujr::custom_item::attribute_name::Casts( "Casts", AttributeNames );
 
 entry___ xdhujr::Scripts( "Scripts", sclrgstry::Definitions );
 
+static rEntry ChildScripts_( "Child", xdhujr::Scripts );
+rEntry xdhujr::script::child::Insert( "Insert", ChildScripts_ );
+rEntry xdhujr::script::child::Append( "Append", ChildScripts_ );
+rEntry xdhujr::script::child::First( "First", ChildScripts_ );
+rEntry xdhujr::script::child::Last( "Last", ChildScripts_ );
+
+static rEntry SiblingScripts_( "Sibling", xdhujr::Scripts );
+rEntry xdhujr::script::sibling::Previous( "Previous", SiblingScripts_ );
+rEntry xdhujr::script::sibling::Next( "Next", SiblingScripts_ );
+
+static rEntry InsertScripts_( "Insert", xdhujr::Scripts );
+rEntry xdhujr::script::insert::Before( "Before", InsertScripts_ );
+rEntry xdhujr::script::insert::After( "After", InsertScripts_ );
+
+
 static entry___ PropertyScripts_( "Property", xdhujr::Scripts );
 entry___ xdhujr::script::property::Setter( "Setter", PropertyScripts_ );
 entry___ xdhujr::script::property::Getter( "Getter", PropertyScripts_ );
@@ -78,6 +93,8 @@ entry___ xdhujr::script::widget::Fetcher( "Fetcher", WidgetScripts_ );
 entry___ xdhujr::script::Log( "Log", xdhujr::Scripts );
 entry___ xdhujr::script::Focuser( "Focuser", Scripts );
 entry___ xdhujr::script::Selector( "Selector", Scripts );
+entry___ xdhujr::script::Parent( "Parent", Scripts );
+entry___ xdhujr::script::CreateElement( "CreateElement", Scripts );
 entry___ xdhujr::script::WidgetsInstantiator( "WidgetsInstantiator",Scripts );
 /*
 static rEntry CSSRule_( "CSSRule", xdhujr::Scripts );
@@ -93,3 +110,5 @@ rEntry xdhujr::script::classes::Toggle( "Toggle", Classes_ );
 static rEntry Elements_( "Elements", xdhujr::Scripts );
 rEntry xdhujr::script::elements::Enable( "Enable", Elements_ );
 rEntry xdhujr::script::elements::Disable( "Disable", Elements_ );
+
+entry___ xdhujr::script::Dummy( "Dummy", Scripts );

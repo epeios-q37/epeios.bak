@@ -489,6 +489,12 @@ namespace sclxdhtml {
 		{
 			return Core_.NextSibling( Id, Value );
 		}
+		void InsertChild(
+			const ntvstr::rString &Child,
+			const ntvstr::rString &Id )
+		{
+			return Core_.InsertChild( Child, Id );
+		}
 		void AppendChild(
 			const ntvstr::rString &Child,
 			const ntvstr::rString &Id )

@@ -56,6 +56,7 @@ const char *xdhcmn::GetLabel( function__ Function )
 	C( PreviousSibling );
 	C( NextSibling );
 	C( CreateElement );
+	C( InsertChild );
 	C( AppendChild );
 	C( InsertBefore );
 	C( InsertAfter );

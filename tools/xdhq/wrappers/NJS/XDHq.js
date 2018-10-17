@@ -167,6 +167,18 @@ class XDH {
 	{
 		call(this, "SetTimeout_1", types.VOID, 2, delay.toString(), action, 0, callback);
 	}
+	createElement_(name, id, callback ) {
+		call( this, "CreateElement_1", types.STRING, 2, name, id, 0, callback )
+	}
+	createElement(name, idOrCallback, callback ) {
+		if (typeof (idOrCallback) === "string")
+			return this.createElement_(name, idOrCallback, callback);
+		else
+			return this.createElement_(name, "", idOrCallback);
+	}
+	insertChild(child, id, callback) {
+		call(this, "InsertChild_1", types.VOID, 2, child, id, 0, callback);
+	}
 	dressWidgets(id, callback) {
 		call(this, "DressWidgets_1", types.VOID, 1, id, 0, callback);
 	}

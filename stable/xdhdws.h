@@ -181,6 +181,12 @@ namespace xdhdws {
 
 			return Buffer;
 		}
+		void InsertChild(
+			const nstring___ &Child,
+			const nstring___ &Id )
+		{
+			C_().Process( xdhcmn::fInsertChild, NULL, Child.Internal()(), Id.Internal()() );
+		}
 		void AppendChild(
 			const nstring___ &Child,
 			const nstring___ &Id )

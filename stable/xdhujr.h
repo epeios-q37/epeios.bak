@@ -72,6 +72,7 @@ namespace xdhujr {
 		}
 		namespace child {
 			extern rEntry
+				Insert,
 				Append,
 				First,
 				Last;

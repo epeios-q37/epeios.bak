@@ -52,35 +52,34 @@ class MyData extends DOM {
 		this.timestamp = new Date();
 		this.pseudo = "";
 		this.lastMessage = 0;
-		this.blockId = 0;
 	}
 }
 
 function displayMessages(dom) {
 	var tree = require('xmlbuilder').create('XDHTML',{version: '1.0', encoding: 'UTF-8'});
 	var i = messages.length - 1;
-	let script = `
-		var node = document.createElement('span');
-		var board = document.getElementById('Board');
-		board.insertBefore(node, board.firstChild);
-		node.id = "Block.` + dom.blockId + `";"";`;
 	var message;
 
-	tree = tree.ele("Messages", { 'pseudo': dom.pseudo } );
+	if (i >= dom.lastMessage) {
+		tree = tree.ele("Messages", { 'pseudo': dom.pseudo });
 
-	while (i >= dom.lastMessage) {
-		message = messages[i];
-		tree = tree.ele('Message', { 'id': i, 'pseudo': message["pseudo"] }, message["content"]).up();
-		i--;
+		while (i >= dom.lastMessage) {
+			message = messages[i];
+			tree = tree.ele('Message', { 'id': i, 'pseudo': message["pseudo"] }, message["content"]).up();
+			i--;
+		}
+
+		dom.lastMessage = messages.length;
+
+		tree = tree.up();
+
+		dom.createElement("span",
+			(id) => dom.setLayoutXSL(id, tree.end(), "Messages.xsl",
+				() => dom.insertChild("Board", id)
+			)
+		);
 	}
-
-	dom.lastMessage = messages.length;
-
-	tree = tree.up();
-
-	dom.execute(script, () => dom.setLayoutXSL("Block." + dom.blockId++, tree.end(), "Messages.xsl") );
 }
-
 
 function newSession() {
 	return new MyData();

@@ -68,6 +68,7 @@ const str::string_ &xdhujs::GetTaggedScript(
 	C( PreviousSibling, sibling::Previous );
 	C( NextSibling, sibling::Next );
 	C( CreateElement, CreateElement );
+	C( InsertChild, child::Insert );
 	C( AppendChild, child::Append );
 	C( InsertBefore, insert::Before );
 	C( InsertAfter, insert::After );
@@ -220,6 +221,7 @@ qRB
 	S( PreviousSibling, NULL );
 	S( NextSibling, NULL );
 	S( CreateElement, Name_, Id_, NULL );
+	S( InsertChild, Child_, Id_, NULL );
 	S( AppendChild, Child_, Id_, NULL );
 	S( InsertBefore, Sibling_, Id_, NULL );
 	S( InsertAfter, Sibling_, Id_, NULL );

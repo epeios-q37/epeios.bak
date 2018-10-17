@@ -138,13 +138,13 @@ namespace xdhutl {
 	E_AUTO( event_abstracts );
 
 	inline void GetTagDefaultEvent(
-		const str::string_ &Name,
+		const str::string_ &Name,	// For the 'INPUT' type, 'Name' contents the value of the 'type' attribute (uppercased).
 		str::string_ &Event,
 		str::dString &Keys )	// If the event is key related.
 	{
 		if ( Name == "SELECT" )
 			Event.Append( "change" );
-		else if ( Name == "INPUT" ) {
+		else if ( Name == "TEXT" ) {
 			Event.Append( "keypress" );
 			Keys.Append( "Enter" );
 		}  else if ( Name == "TEXTAREA" ) {

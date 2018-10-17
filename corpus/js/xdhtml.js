@@ -37,10 +37,28 @@ function getElement(elementOrId) {
 }
 
 function getOrGenerateId(element) {
+	if (element === null)
+		return "";
+
 	if (!element.id)
 		element.id = "_CGN" + String(counter++);
 
 	return element.id;
+}
+
+// Returns for the 'INPUT' tags the content of the 'type' attribute instead of 'INPUT'.
+function getPatchedNodeName(node) {
+	let name = node.nodeName;	// Should be always uppercased.
+
+	if (name === 'INPUT') {
+		let type = node.type;
+
+		if (type)
+			return type.toUpperCase();
+		else
+			return "TEXT";
+	} else
+		return name;
 }
 
 function parseXML(string) {
@@ -137,7 +155,6 @@ function setContent(doc, id, content) {
 				element.innerHTML = content;
 				break;
 			case "TEXTAREA":
-				console.log("Yo!");
 				element.value = content;
 				break;
 			default:
@@ -184,10 +201,10 @@ function fetchEventHandlers(id) {
 	while (cont) {
 		if (node.nodeType == Node.ELEMENT_NODE) {
 			if (node.hasAttribute(onEventAttributeName))
-				digests += "(" + getOrGenerateId(node) + "|" + node.nodeName + "|((" + node.getAttribute(onEventAttributeName) + ")))|";
+				digests += "(" + getOrGenerateId(node) + "|" + getPatchedNodeName( node ) + "|((" + node.getAttribute(onEventAttributeName) + ")))|";
 
 			if (node.hasAttribute(onEventsAttributeName))
-				digests += "(" + getOrGenerateId(node) + "|" + node.nodeName + "|(" + node.getAttribute(onEventsAttributeName) + "))|";
+				digests += "(" + getOrGenerateId(node) + "|" + getPatchedNodeName(node) + "|(" + node.getAttribute(onEventsAttributeName) + "))|";
 
 			if (node.nodeName == "A")
 				patchATag(node);
@@ -248,7 +265,7 @@ function getValue(elementOrId)	// Returns the value of element of id 'id'.
 	var element = getElement(elementOrId);
 	var tagName = element.tagName;
 
-	console.log("VALUE:", element.value);
+//	console.log("VALUE:", element.value);
 
 	switch (tagName) {
 		case "INPUT":
@@ -347,7 +364,7 @@ function buildDigest(target, type, keys) {
 	if (digest && !target.id)
 		throw "Event digest with no id !";
 
-	digest = target.id + "|" + target.nodeName + "|" + type + "|" + keys + "|(" + digest + ")";
+	digest = target.id + "|" + getPatchedNodeName(target) + "|" + type + "|" + keys + "|(" + digest + ")";
 
 	return digest;
 }
@@ -412,7 +429,7 @@ function handleEvent(event) {
 	if (keys)
 		message += "'" + keys + "' ";
 
-	message += "on '" + currentTarget.id + "' (" + currentTarget.nodeName + ").";
+	message += "on '" + currentTarget.id + "' (" + getPatchedNodeName(currentTarget) + ").";
 
 	log(message);
 
@@ -454,13 +471,13 @@ function insertCSSRule(rule, index) {
 
 	rules.insertRule(rule, index);
 
-	console.log(index);
+//	console.log(index);
 
 	return index;
 }
 
 function removeCSSRule(index) {
-	console.log(getCSSRules().cssRules.length + " : " + index);
+//	console.log(getCSSRules().cssRules.length + " : " + index);
 	getCSSRules().removeRule(index);
 }
 
@@ -493,7 +510,6 @@ function enableElements(ids) {
 	var i = 0;
 
 	while (i < ids.length) {
-		console.log(ids[i]);
 		document.getElementById(ids[i]).disabled = false;
 
 		i++;

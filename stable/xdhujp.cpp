@@ -440,6 +440,24 @@ static void CreateElement_(
 	CreateElement_( Callback, Name, Id, Result );
 }
 
+static void InsertChild_(
+	cJS &Callback,
+	const sNChar *Child,
+	const sNChar *Id )
+{
+	Execute( Callback, xdhujs::snInsertChild, NULL, Child, Id );
+}
+
+static void InsertChild_(
+	cJS &Callback,
+	va_list List )
+{
+	const sNChar *Child = va_arg( List, const sNChar * );
+	const sNChar *Id = va_arg( List, const sNChar * );
+
+	InsertChild_( Callback, Id, Child );
+}
+
 static void AppendChild_(
 	cJS &Callback,
 	const sNChar *Child,
@@ -947,6 +965,9 @@ static script_name__ Convert_( xdhcmn::function__ Function )
 	case xdhcmn::fCreateElement:
 		qRFwk();
 		break;
+	case xdhcmn::fInsertChild:
+		qRFwk();
+		break;
 	case xdhcmn::fAppendChild:
 		qRFwk();
 		break;
@@ -1054,6 +1075,9 @@ void xdhujp::sProxyCallback::XDHCMNProcess(
 		break;
 	case xdhcmn::fCreateElement:
 		CreateElement_( C_(), Result, List );
+		break;
+	case xdhcmn::fInsertChild:
+		InsertChild_( C_(), List );
 		break;
 	case xdhcmn::fAppendChild:
 		AppendChild_( C_(), List );

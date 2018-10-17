@@ -68,6 +68,7 @@ namespace xdhujs {
 		snPreviousSibling,
 		snNextSibling,
 		snCreateElement,
+		snInsertChild,
 		snAppendChild,
 		snInsertBefore,
 		snInsertAfter,

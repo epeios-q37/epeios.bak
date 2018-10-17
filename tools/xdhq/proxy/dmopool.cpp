@@ -297,12 +297,23 @@ sck::sSocket dmopool::GetConnection( const str::dString &Token )
 	return Socket;
 }
 
+namespace {
+	void GetHead_(
+		void *UP,
+		str::dString &Head )
+	{
+		TSHeadSearch_( *(const str::wString *)UP, Head );
+	}
+}
+
+
 qGCTOR( dmopool )
 {
 	MutexHandler_ = mtx::Create();
 	_Tokens_.Init();
 	Heads_.Init();
 	Clients_.Init();
+	sclxdhtml::SetHeadFunction( GetHead_ );
 }
 
 qGDTOR( dmopool )
