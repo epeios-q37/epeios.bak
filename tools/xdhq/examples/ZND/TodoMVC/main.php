@@ -92,6 +92,7 @@ class TodoMVC extends Threaded {
 
   return $count;
  }
+
  function push($todo, $id, &$xml) {
   $xml .= "<Todo";
 

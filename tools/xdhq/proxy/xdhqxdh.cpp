@@ -497,7 +497,7 @@ namespace {
 		prtcl::Get( Flow, Name );
 		prtcl::Get( Flow, SuggestedId );
 
-		Proxy.CreateElement( Name, SuggestedId, Id );	// Id 'SuggestedId' is empty, 'Id' will contain a computer generated one, else it will contain 'SuggestedId'.
+		Proxy.CreateElement( Name, SuggestedId, Id );	// If 'SuggestedId' is empty, 'Id' will contain a computer generated one, otherwise it will contain 'SuggestedId'.
 
 		Flow.Dismiss();
 

@@ -302,7 +302,7 @@ namespace {
 		void *UP,
 		str::dString &Head )
 	{
-		TSHeadSearch_( *(const str::wString *)UP, Head );
+		TSHeadSearch_( *(const str::wString *)UP, Head );	// 'UP' contains the token.
 	}
 }
 

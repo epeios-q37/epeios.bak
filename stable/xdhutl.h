@@ -138,7 +138,7 @@ namespace xdhutl {
 	E_AUTO( event_abstracts );
 
 	inline void GetTagDefaultEvent(
-		const str::string_ &Name,	// For the 'INPUT' type, 'Name' contents the value of the 'type' attribute (uppercased).
+		const str::string_ &Name,	// For the 'INPUT' tag, 'Name' contains the value of the 'type' attribute (uppercased).
 		str::string_ &Event,
 		str::dString &Keys )	// If the event is key related.
 	{

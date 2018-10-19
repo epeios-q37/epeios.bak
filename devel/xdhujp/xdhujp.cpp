@@ -455,7 +455,7 @@ static void InsertChild_(
 	const sNChar *Child = va_arg( List, const sNChar * );
 	const sNChar *Id = va_arg( List, const sNChar * );
 
-	InsertChild_( Callback, Id, Child );
+	InsertChild_( Callback, Child, Id );
 }
 
 static void AppendChild_(
@@ -473,7 +473,7 @@ static void AppendChild_(
 	const sNChar *Child = va_arg( List, const sNChar * );
 	const sNChar *Id = va_arg( List, const sNChar * );
 
-	AppendChild_( Callback, Id, Child );
+	AppendChild_( Callback, Child, Id );
 }
 
 static void InsertBefore_(

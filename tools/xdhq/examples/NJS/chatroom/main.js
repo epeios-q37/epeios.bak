@@ -75,7 +75,7 @@ function displayMessages(dom) {
 
 		dom.createElement("span",
 			(id) => dom.setLayoutXSL(id, tree.end(), "Messages.xsl",
-				() => dom.insertChild("Board", id)
+				() => dom.insertChild(id, "Board")
 			)
 		);
 	}
