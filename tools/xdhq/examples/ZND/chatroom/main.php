@@ -62,7 +62,6 @@ class Chatroom extends Threaded {
 
  function __construct( $shared ) {
  	 $this->shared = $shared;
-	 var_dump( $shared, $this->shared );
  }
 
  private function buildTree_( $dom ) {
@@ -84,10 +83,8 @@ class Chatroom extends Threaded {
    if ( ( count( $this->shared->messages) - 1 )>= $this->lastMessage ) {
 		$tree = $dom->synchronized( function( $dom ){ return $this->buildTree_( $dom ); }, $dom );
 
-		var_dump( $tree );
-
 		$id = $dom->createElement( "span" );
-		$dom->setLayout( $id, $tree, "Messages.xsl");
+		$dom->setLayoutXSL( $id, $tree, "Messages.xsl");
 		$dom->insertChild( $id, "Board");
 	}
  }
@@ -95,16 +92,11 @@ class Chatroom extends Threaded {
  private function connect_( $dom ) {
    $dom->setLayout("", readAsset("Main.html"));
    $dom->focus( "Pseudo");
-   echo( "P\n");
    $dom->setTimeout( 1000, "Update");
-   echo( "Av\n");
    $dom->synchronized( function($dom){$this->displayMessages_($dom);}, $dom );
-   echo( "Ap\n");
  }
 
  private function handlePseudo_( $pseudo ) {
-	var_dump( $this->shared->pseudos );
-
  	 if ( in_array( $pseudo, (array)$this->shared->pseudos ) )
 		return false;
 	else {
@@ -129,7 +121,7 @@ class Chatroom extends Threaded {
 		$dom->disableElements(["Pseudo", "PseudoButton"]);
 		$dom->enableElements(["Message", "MessageButton"]);
 		$dom->focus( "Message");
-		echo( "\t>>>> New user: " . $pseudo);
+		echo( "\t>>>> New user: " . $pseudo . "\n" );
 	 } else {
 	 	 $dom->alert( "Pseudo. not available !");
 		 $dom->setContent( "Pseudo", $pseudo );
@@ -142,13 +134,12 @@ class Chatroom extends Threaded {
  	 $message = trim( $message );
 
 	 if ( strlen( $message ) != 0 ) {
+	 echo "''" . $this->pseudo . "': " . $message . "\n";
 	 	 $this->shared->messages[] = [
 		 	 'pseudo' => $pseudo,
 			 'content' => $message
 		 ];
 	 }
-
-	 var_dump( $this->shared);
  }
 
  private function submitMessage_( $dom, $id ) {
@@ -176,7 +167,7 @@ class Chatroom extends Threaded {
    $this->submitMessage_( $dom, $id );
    break;
   case "Update":
-//   $this->update_( $dom, $id );
+   $this->update_( $dom, $id );
    break;
   default:
    throw new Exception("Unknown action '" . $action . "' !!!");

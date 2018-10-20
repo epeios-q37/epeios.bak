@@ -163,7 +163,6 @@ function acUpdate(dom, id) {
 	);
 }
 
-
 function main() {
 	const callbacks = (
 		{

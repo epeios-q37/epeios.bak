@@ -59,7 +59,17 @@
 					<File>Main.xsl</File>
 				</Files>
 			</Files>
-			<Files Group="Hello">
+			<Files Group="Chatroom">
+				<Files Path="../../examples/JRE/chatroom/">
+					<File>main.java</File>
+					<File>Project.xml</File>
+				</Files>
+				<Files Path="../../examples/common/chatroom/">
+					<File>Head.html</File>
+					<File>Main.html</File>
+					<File>Messages.xsl</File>
+				</Files>
+			</Files>			<Files Group="Hello">
 				<File Path="../../examples/JRE/Hello/">main.java</File>
 				<File Path="../../examples/JRE/Hello/">Hello.java</File>
 				<Files Path="../../examples/common/Hello/">
