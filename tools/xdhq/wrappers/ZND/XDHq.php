@@ -151,7 +151,7 @@ class XDHqDOM extends Threaded {
 	function createElement( string $name, string $id = "" ) {
 		return self::call_( "CreateElement_1", XDHq::RT_STRING, 2, $name, $id, 0 );
 	}
-	function insertChild( $child, $id ) {
+	function insertChild( qtring $child, string $id ) {
 		self::call_( "InsertChild_1", XDHq::RT_NONE, 2, $child, $id, 0 );
 	}
 	function dressWidgets( string $id ) {
