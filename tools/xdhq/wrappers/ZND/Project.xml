@@ -71,6 +71,7 @@
 				<Files Path="../../examples/ZND/chatroom/">
 					<File>main.php</File>
 					<File>Project.xml</File>
+					<File>README.md</File>
 				</Files>
 				<Files Path="../../examples/common/chatroom/">
 					<File>Head.html</File>

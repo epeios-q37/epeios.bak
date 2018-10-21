@@ -176,7 +176,18 @@ function getResponse(query, type) {
 	}
 }
 
-var token = "";
+function getToken() {
+	let token = process.env.ATK_TOKEN;
+
+	if (token)
+		token = token.trim();
+	else
+		token = "";
+
+	return token;
+}
+
+var token = getToken();
 
 if (process.env.ATK_TOKEN)
 	token = "_" + process.env.ATK_TOKEN;

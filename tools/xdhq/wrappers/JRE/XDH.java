@@ -26,6 +26,7 @@ import java.nio.file.*;
 
 public class XDH extends info.q37.jreq.JRE {
 	private static MODE mode_ = MODE.UNDEFINED;
+	static private String dir_;
 	static private String readFile_( String path ) {
 		String result = null;
 		try {
@@ -52,8 +53,9 @@ public class XDH extends info.q37.jreq.JRE {
 	public static String readAsset( String path, String dir ) {
 		return readFile_( getAssetFilename_( path, dir ) );
 	}
-	static public void launch( String newSessionAction, String headContent, MODE mode ) {
-		XDH.mode_ = mode;
+	static public void launch( String newSessionAction, String headContent, MODE mode, String dir ) {
+		mode_ = mode;
+		dir_ = dir;
 
 		switch ( mode ) {
 		case DEMO:
@@ -71,5 +73,8 @@ public class XDH extends info.q37.jreq.JRE {
 	}
 	static public boolean isDEMO() {
 		return getMode() == MODE.DEMO;
+	}
+	static public String getDir() {
+		return dir_;
 	}
 }

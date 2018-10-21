@@ -1,3 +1,4 @@
+
 /*
 	Copyright (C) 2018 Claude SIMON (http://q37.info/contact/).
 
@@ -18,34 +19,159 @@
 */
 
 import info.q37.atlas.*;
-import java.util.HashMap;
+import java.util.*;
 
-class Hello extends Atlas {
-	static private String readAsset_( String path )  {
-		return readAsset( path, "Hello" );
+class Message {
+	public String pseudo;
+	public String content;
+
+	Message(String pseudo, String content) {
+		this.pseudo = pseudo;
+		this.content = content;
 	}
-	public void handle( DOM dom, String action, String id )
-	{
-		switch( action) {
-		case "Connect":
-			dom.setLayout("", readAsset_( "Main.html") );
-			break;
-		case "Typing":
-			dom.setContent("name", dom.getContent(id));
-			break;
-		case "Clear":
-			if ( dom.confirm( "Are you sure ?" ) )
-				dom.setContents( new HashMap<String,String> ()
-					{{ put( "input", ""); put( "name", ""); }} );
-			break;
-		default:
-			throw new RuntimeException( "Unknown action '" + action + "' !!!");
+}
+
+class Shared {
+	public static List<Message> messages = new ArrayList<Message>();
+	public static List<String> pseudos = new ArrayList<String>();
+}
+
+class Chatroom extends Atlas {
+	private String pseudo;
+	private int lastMessage;
+
+	static private String readAsset_(String path) {
+		String dir;
+
+		if (System.getenv("EPEIOS_SRC") == null)
+			dir = ".";
+		else
+			dir = "chatroom";
+
+		return readAsset( path, dir );
+	}
+
+	private String buildTree_() {
+		String tree = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<XDHTML>\n<Messages pseudo=\"" + pseudo  + "\">\n";
+
+		synchronized (Shared.messages) {
+			ListIterator<Message> li = Shared.messages.listIterator(Shared.messages.size());
+
+			int i = li.previousIndex();
+
+			while (i >= this.lastMessage) {
+				Message message = li.previous();
+
+				tree += "\t\t<Message id=\"" + i + "\" pseudo=\"" + message.pseudo + "\">" + message.content + "</Message>\n";
+
+				i = li.previousIndex();
+			}
+
+			this.lastMessage = Shared.messages.size();
+		}
+
+		return tree + "\t</Messages>\n</XDHTML>";
+	}
+
+	private void displayMessages_(DOM dom) {
+		if ((Shared.messages.size() - 1) >= this.lastMessage) {
+			String tree = buildTree_();
+
+			String id = dom.createElement("span");
+			dom.setLayoutXSL(id, tree, "Messages.xsl");
+			dom.insertChild(id, "Board");
 		}
 	}
+
+	private void connect_(DOM dom, String id) {
+		dom.setLayout("", readAsset_("Main.html"));
+		dom.focus("Pseudo");
+		dom.setTimeout(1000, "Update");
+		displayMessages_(dom);
+	}
+
+	private boolean handlePseudo_(String pseudo) {
+		synchronized (Shared.pseudos) {
+			if (Shared.pseudos.contains(pseudo))
+				return false;
+			else {
+				Shared.pseudos.add(pseudo);
+				return true;
+			}
+		}
+	}
+
+	private void submitPseudo_(DOM dom, String id) {
+		String pseudo = dom.getContent("Pseudo");
+
+		pseudo = pseudo.trim();
+
+		if ("".equals(pseudo)) {
+			dom.alert("Pseudo. can not be empty !");
+			dom.setContent("Pseudo", "");
+			dom.focus("Pseudo");
+		} else if (handlePseudo_(pseudo.toUpperCase())) {
+			this.pseudo = pseudo;
+			dom.setContent("Pseudo", pseudo);
+			dom.addClass("PseudoButton", "hidden");
+			dom.disableElements(new String[] { "Pseudo", "PseudoButton" });
+			dom.enableElements(new String[] { "Message", "MessageButton" });
+			dom.focus("Message");
+			System.out.println("\t>>>> New user: " + pseudo);
+		} else {
+			dom.alert("Pseudo. not available !");
+			dom.setContent("Pseudo", pseudo);
+			dom.focus("Pseudo");
+		}
+	}
+
+	private void addMessage_(String pseudo, String message) {
+		message = message.trim();
+
+		if (!"".equals(message)) {
+			System.out.println("''" + pseudo + "': " + message + "\n");
+			synchronized (Shared.messages) {
+				Shared.messages.add(new Message(pseudo, message));
+			}
+		}
+	}
+
+	private void submitMessage_(DOM dom, String id) {
+		String message = dom.getContent("Message");
+		dom.setContent("Message", "");
+		dom.focus("Message");
+		addMessage_(pseudo, message);
+		displayMessages_(dom);
+	}
+
+	private void update_(DOM dom, String id) {
+		displayMessages_(dom);
+		dom.setTimeout(1000, "Update");
+	}
+
+	public void handle(DOM dom, String action, String id) {
+		switch (action) {
+		case "Connect":
+			connect_(dom, id);
+			break;
+		case "SubmitPseudo":
+			submitPseudo_(dom, id);
+			break;
+		case "SubmitMessage":
+			submitMessage_(dom, id);
+			break;
+		case "Update":
+			update_(dom, id);
+			break;
+		default:
+			throw new RuntimeException("Unknown action '" + action + "' !!!");
+		}
+	}
+
 	public static void main(String[] args) throws Exception {
-		launch("Connect", readAsset_( "Head.html" ), "Hello", GUI.DEFAULT, args );
+		launch("Connect", readAsset_("Head.html"), "chatroom", GUI.DEFAULT, args);
 
 		for (;;)
-			new Hello();
+			new Chatroom();
 	}
 }

@@ -136,7 +136,7 @@ public abstract class Atlas implements Runnable {
 			}
 		}
 
-		info.q37.xdhq.XDH.launch(newSessionAction, headContent, mode );
+		info.q37.xdhq.XDH.launch(newSessionAction, headContent, mode, dir );
 
 		switch (gui) {
 		case NONE:

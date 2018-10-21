@@ -128,9 +128,15 @@ class XDHqDOM_DEMO extends Threaded {
   }
 
   if ($this->isTokenEmpty_()) {
-   if (getenv("ATK_TOKEN") !== false) {
-    self::$token = "_" . getenv("ATK_TOKEN");
-   }
+
+   $token = getenv("ATK_TOKEN");
+
+   if ( $token !== false ) {
+
+    $token = trim( $token );
+
+	if ( $token !== "" ) 
+		self::$token = "_" . $token;
   }
 
   $this->socket = fsockopen($address, $port, $errno, $errstr);

@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project 
+	xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<xpp:bloc>
+		<!-- User definitions -->
+		<xpp:define name="Version">
+			<xpp:bloc/>
+		</xpp:define>
+		<xpp:define name="CopyrightYears">
+			<xpp:bloc>2018</xpp:bloc>
+		</xpp:define>
+		<About>
+		<Software>Chatroom</Software>
+		</About>
+		<xpp:set name="Credits" value="Epeios"/>
+		<xpp:set name="Type" value="AtlasDemoPHP"/>
+	</xpp:bloc>
+	<xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
+	<About>
+		<UUID>685d9fda-0dbd-4b2c-a68f-7f41dedbdf08</UUID>
+	</About>
+	<!-- NO SPACE in 'Keywords' attribute !!! ("a,b,c", NOT "a, b, c")-->
+	<RTW Description="'A basic chatrrom application for 'PHP' with 'Atlas'." Keywords="Demo,Atlas,chat,chatroom,PHP,Zend">
+		<Dir>chatroom-php</Dir>
+	</RTW>
+	</Project>

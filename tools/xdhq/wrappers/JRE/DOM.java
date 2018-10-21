@@ -26,16 +26,17 @@ import info.q37.xdhq.MODE;
 
 public class DOM {
 	private info.q37.xdhq.dom.DOM_SHRD DOM;
-	private String[] empty = {};
-	private String[][] emptys = {};
+	private static String[] empty = {};
+	private static String[][] emptys = {};
 
-	private String[][] split(Map<String,String> idsAndClasses) {
-		return new String[][] { idsAndClasses.keySet().toArray( new String[0] ), idsAndClasses.values().toArray( new String[0] ) };
+	private String[][] split(Map<String, String> idsAndClasses) {
+		return new String[][] { idsAndClasses.keySet().toArray(new String[0]),
+				idsAndClasses.values().toArray(new String[0]) };
 	}
 
-	public DOM( MODE mode ) {
+	public DOM(MODE mode) {
 		try {
-			switch ( mode ) {
+			switch (mode) {
 			case DEMO:
 				DOM = new info.q37.xdhq.dom.DOM_DEMO();
 				break;
@@ -43,80 +44,101 @@ public class DOM {
 				DOM = new info.q37.xdhq.dom.DOM_PROD();
 				break;
 			default:
-				throw new RuntimeException( "Unknown mode !!!");
+				throw new RuntimeException("Unknown mode !!!");
 			}
-		} catch ( Exception e ) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	public void getAction( info.q37.xdhq.dom.Event event ) {
-		DOM.getAction( event );
+	public void getAction(info.q37.xdhq.dom.Event event) {
+		DOM.getAction(event);
 	}
 
 	public String execute(String script) {
-		return (String)DOM.call( "Execute_1", Type.STRING, new String[]{script}, emptys );
+		return (String) DOM.call("Execute_1", Type.STRING, new String[] { script }, emptys);
 	}
 
 	public void alert(String message) {
-		DOM.call("Alert_1", Type.VOID, new String[]{message}, emptys);
+		DOM.call("Alert_1", Type.VOID, new String[] { message }, emptys);
 	}
 
 	public boolean confirm(String message) {
-		return "true".equals(DOM.call("Confirm_1", Type.STRING, new String[]{message}, emptys ));
+		return "true".equals(DOM.call("Confirm_1", Type.STRING, new String[] { message }, emptys));
 	}
 
 	private void setLayout_(String id, String xml, String xslFilename) {
-		DOM.call("SetLayout_1", Type.VOID, new String[]{id, xml, xslFilename}, emptys );
+		DOM.call("SetLayout_1", Type.VOID, new String[] { id, xml, xslFilename }, emptys);
 	}
 
 	public void setLayout(String id, String html) {
-		setLayout_( id, html, "" );
+		setLayout_(id, html, "");
 	}
 
 	public void setLayoutXSL(String id, String xml, String xslFilename) {
 		String xslURL = xslFilename;
 
-		throw new java.lang.RuntimeException( "readAsset() not correctly handled !");
-/*
 		if ( info.q37.xdhq.XDH.isDEMO() )
-			xslURL = new String( "data:text/xml;base64," + java.util.Base64.getEncoder().encodeToString( info.q37.xdhq.XDH.readAsset( xslFilename, "" ).getBytes() ) );
-
+			xslURL = new String( "data:text/xml;base64," + java.util.Base64.getEncoder().encodeToString( info.q37.xdhq.XDH.readAsset( xslFilename, info.q37.xdhq.XDH.getDir() ).getBytes() ) );
+		
 		setLayout_(id, xml, xslURL);
-		*/
 	}
 
 	public String[] getContents(String[] ids) {
-		return (String [])DOM.call("GetContents_1", Type.STRINGS, new String[0], new String[][]{ids});
+		return (String[]) DOM.call("GetContents_1", Type.STRINGS, empty, new String[][] { ids });
 	}
 
 	public String getContent(String id) {
-		return getContents( new String []{id} )[0];
+		return getContents(new String[] { id })[0];
 	}
 
-	public final void setContents(Map<String,String> idsAndContents) {
+	public final void setContents(Map<String, String> idsAndContents) {
 		DOM.call("SetContents_1", Type.VOID, empty, split(idsAndContents));
 	}
 
+	public final void setTimeout(int delay, String action) {
+		DOM.call("SetTimeout_1", Type.VOID, new String[] { Integer.toString(delay), action }, emptys);
+	}
+
+	public final String createElement( String name, String id ) {
+		return (String)DOM.call( "CreateElement_1", Type.STRING, new String[]{name, id }, emptys );
+	}
+
+	public final String createElement(String name) {
+		return createElement(name, "");
+	}
+
+	public final void insertChild( String child, String id ) {
+		DOM.call( "InsertChild_1", Type.VOID, new String[]{ child, id }, emptys );
+	}
+
 	public final void setContent(final String id, final String content) {
-		setContents( new HashMap<String,String> () {{ put(id, content ); }} );
+		setContents(new HashMap<String, String>() {
+			{
+				put(id, content);
+			}
+		});
 	}
 
 	public void dressWidgets(String id) {
-		DOM.call("DressWidgets_1", Type.VOID, new String[]{id}, emptys );
+		DOM.call("DressWidgets_1", Type.VOID, new String[] { id }, emptys);
 	}
 
-	private void handleClasses(String command, Map<String,String> idsAndClasses) {
+	private void handleClasses(String command, Map<String, String> idsAndClasses) {
 		String splittedIdsAndClasses[][] = split(idsAndClasses);
 
 		DOM.call(command, Type.VOID, empty, splittedIdsAndClasses);
 	}
 
-	private void handleClass( String command, final String id, final String clas) {
-		handleClasses(command, new HashMap<String,String>() {{ put( id, clas ); }} );
+	private void handleClass(String command, final String id, final String clas) {
+		handleClasses(command, new HashMap<String, String>() {
+			{
+				put(id, clas);
+			}
+		});
 	}
 
-	public void addClasses(Map<String,String> idsAndClasses) {
+	public void addClasses(Map<String, String> idsAndClasses) {
 		handleClasses("AddClasses_1", idsAndClasses);
 	}
 
@@ -124,7 +146,7 @@ public class DOM {
 		handleClass("AddClasses_1", id, clas);
 	}
 
-	public void removeClasses(Map<String,String> idsAndClasses) {
+	public void removeClasses(Map<String, String> idsAndClasses) {
 		handleClasses("RemoveClasses_1", idsAndClasses);
 	}
 
@@ -132,7 +154,7 @@ public class DOM {
 		handleClass("RemoveClasses_1", id, clas);
 	}
 
-	public void toggleClasses(Map<String,String> idsAndClasses) {
+	public void toggleClasses(Map<String, String> idsAndClasses) {
 		handleClasses("ToggleClasses_1", idsAndClasses);
 	}
 
@@ -141,42 +163,42 @@ public class DOM {
 	}
 
 	public void enableElements(String[] ids) {
-		DOM.call("EnableElements_1", Type.VOID, empty, new String[][] {ids});
+		DOM.call("EnableElements_1", Type.VOID, empty, new String[][] { ids });
 	}
 
 	public void enableElement(String id) {
-		enableElements( new String[] { id } );
+		enableElements(new String[] { id });
 	}
 
 	public void disableElements(String[] ids) {
-		DOM.call("DisableElements_1", Type.VOID, empty, new String[][] {ids});
+		DOM.call("DisableElements_1", Type.VOID, empty, new String[][] { ids });
 	}
 
 	public void disableElement(String id) {
-		disableElements(new String[] { id } );
+		disableElements(new String[] { id });
 	}
 
 	public void setAttribute(String id, String name, String value) {
-		DOM.call("SetAttribute_1", Type.VOID, new String[]{id, name, value}, emptys);
+		DOM.call("SetAttribute_1", Type.VOID, new String[] { id, name, value }, emptys);
 	}
 
 	public String getAttribute(String id, String name) {
-		return (String)DOM.call("GetAttribute_1", Type.STRING, new String[] {id, name}, emptys);
+		return (String) DOM.call("GetAttribute_1", Type.STRING, new String[] { id, name }, emptys);
 	}
 
 	public void removeAttribute(String id, String name) {
-		DOM.call("RemoveAttribute_1", Type.VOID, new String[]{id, name}, emptys);
+		DOM.call("RemoveAttribute_1", Type.VOID, new String[] { id, name }, emptys);
 	}
 
 	public void setProperty(String id, String name, String value) {
-		DOM.call("SetProperty_1", Type.VOID, new String[] {id, name, value}, emptys);
+		DOM.call("SetProperty_1", Type.VOID, new String[] { id, name, value }, emptys);
 	}
 
 	public String getProperty(String id, String name) {
-		return (String)DOM.call("GetPoperty_1", Type.STRING, new String[] {id, name}, emptys );
+		return (String) DOM.call("GetPoperty_1", Type.STRING, new String[] { id, name }, emptys);
 	}
 
 	public void focus(String id) {
-		DOM.call("Focus_1", Type.VOID, new String[]{id}, emptys );
+		DOM.call("Focus_1", Type.VOID, new String[] { id }, emptys);
 	}
 }

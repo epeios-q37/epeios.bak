@@ -49,8 +49,14 @@ public class DOM_DEMO extends DOM_SHRD {
 			throw new java.lang.RuntimeException("Bad 'ATK' environment variable value : should be 'DEV' or 'TEST' !");
 		}
 
-		if (System.getenv("ATK_TOKEN") != null)
-			token = "_" + System.getenv("ATK_TOKEN");
+		String token = System.getenv("ATK_TOKEN");
+
+		if ( token != null ) {
+			token = token.trim();
+
+			if ( !"".equals( token ))
+				DOM_DEMO.token = "_" + token; 
+		}
 	}
 
 	static private boolean isTokenEmpty_() {

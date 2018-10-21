@@ -111,10 +111,10 @@ class Chatroom extends Threaded {
 	 $pseudo = trim( $pseudo );
 
 	 if ( strlen( $pseudo ) == 0 ) {
-	 	 $dom.alert( "Pseudo. can not be empty !");
-		 $dom.setContent( "Pseudo", "" );
+	 	 $dom->alert( "Pseudo. can not be empty !");
+		 $dom->setContent( "Pseudo", "" );
 		 $dom->focus( "Pseudo");
-	 } else if ( $dom->synchronized( function($pseudo){return $this->handlePseudo_($pseudo);}, $pseudo ) ) {
+	 } else if ( $dom->synchronized( function($pseudo){return $this->handlePseudo_(strtoupper($pseudo));}, $pseudo ) ) {
 		$this->pseudo = $pseudo;
 		$dom->setContent( "Pseudo", $pseudo );
 		$dom->addClass( "PseudoButton", "hidden" );
@@ -134,10 +134,10 @@ class Chatroom extends Threaded {
  	 $message = trim( $message );
 
 	 if ( strlen( $message ) != 0 ) {
-	 echo "''" . $this->pseudo . "': " . $message . "\n";
-	 	 $this->shared->messages[] = [
-		 	 'pseudo' => $pseudo,
-			 'content' => $message
+		echo "''" . $pseudo . "': " . $message . "\n";
+	 	$this->shared->messages[] = [
+			'pseudo' => $pseudo,
+			'content' => $message
 		 ];
 	 }
  }
