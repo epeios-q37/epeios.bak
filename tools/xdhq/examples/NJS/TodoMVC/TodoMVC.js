@@ -120,7 +120,7 @@ function displayTodos(dom) {
 
 	tree = tree.up();
 
-	dom.setLayout_("Todos", tree.end(), "data:text/xml;charset=utf8," + encodedXSL,
+	dom.setLayoutXSL("Todos", tree.end(), xsl,
 		() => handleCount(dom)
 	);
 }
@@ -390,8 +390,8 @@ function main() {
 
 	// Content of 'Todos.xsl'.
 	// DON'T PASTE TO Visual Studio : it inserts extraneous characters !
-	// There must be NO characters before ths XML declaration !
-	let xsl = `<?xml version="1.0" encoding="UTF-8"?>
+	// There must be NO characters before the XML declaration !
+	xsl = `<?xml version="1.0" encoding="UTF-8"?>
 		<!-- NO BOM !! -->
 		<xsl:stylesheet version="1.0" xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 			<xsl:output method="html" encoding="UTF-8"/>
@@ -430,8 +430,6 @@ function main() {
 			</xsl:template>
 		</xsl:stylesheet>
 `;
-
-	encodedXSL = encodeURIComponent(xsl);
 };
 
 main();

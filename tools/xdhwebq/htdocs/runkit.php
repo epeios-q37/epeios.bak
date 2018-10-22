@@ -19,9 +19,47 @@
  */
 
  /*
-	Get a JS file (for Node.js) from the 'asset' directory on 'q37.info',
+	Gets a JS file (for Node.js) from the 'asset' directory on 'q37.info',
 	and creates a page which embeds it on RunKit.
 */
+
+$source = <<<EOT
+/*
+	This is a JavaScript source code for Node.js 
+	which uses the Atlas toolkit (http://atlastk.org).
+
+	RunKit allows to run program for Node.js in a web browser,
+	without having to install Node.js on your computer.
+
+	Feel free to modify this source code.
+
+	To run this program:
+	- go to the bottom of the page,
+	- click on the green 'run' button,
+	- scroll down as new things are displayed,
+	- follow the instructions.
+
+	The program will last only a few tens of seconds,
+	due to a RunKit timeout.
+	
+	Enjoy !
+*/
+
+
+EOT;
+
+
+if ( array_key_exists( 'token', $_GET ) ) {
+	$source .= "\n\nprocess.env.ATK_TOKEN=\"" . $_GET['token'] . "\";\n\n";
+}
+
+$source .= file_get_contents( "http://q37.info/download/assets/" . $_GET['app'] . ".js" );
+
+$source .=<<<EOT
+
+
+"NOTA: the program will be stopped after a while due to RunKit timeout."
+EOT;
 
 echo '
 <!DOCTYPE html>
@@ -34,9 +72,9 @@ echo '
   }
 </script>
 </head>
-<body style="width: 100%; height: 150%;" onload="expandFrame()">
+<body onload="expandFrame()">
 <div id="script">
-' . htmlspecialchars( file_get_contents( "http://q37.info/download/assets/" . $_GET['app'] . ".js" ) ) . '
+' . htmlspecialchars( $source ) . '
 </div>
 </body>
 </html>

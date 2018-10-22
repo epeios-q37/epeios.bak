@@ -227,11 +227,9 @@ function pseudoServer(createCallback, newSessionAction, callbacks, head) {
 					let completeURL = "http://" + address + httpPort + "/" + cgi + ".php?_token=" + token;
 
 					console.log(completeURL);
+					console.log("Open above URL in a web browser. Enjoy!");
 
-					if (open(completeURL))
-						console.log("Open above URL in a web browser, if not already done. Enjoy!");
-					else
-						console.log("Open above URL in a web browser. Enjoy!");
+					open(completeURL);
 				}
 
 				client._xdhDOM = createCallback(client);

@@ -65,6 +65,19 @@ function readAsset(fileName) {
 	return Buffer.from(fs.readFileSync(getAssetFileName(fileName))).toString();
 }
 
+/*
+To allow the use of embedded XSL, if the first character begins with '<'
+(as an XML declaration), the parameter is considered containing XSL,
+otherwise the file name containing the XSL.
+*/
+
+function readXSLAsset(xslContentOrFilename) {
+	if (xslContentOrFilename[0] === '<')
+		return xslContentOrFilename;
+	else
+		return readAsset(xslContentOrFilename);
+}
+
 const modes = {
 	DEMO: 0,
 	PROD: 1,
@@ -140,7 +153,7 @@ class XDH {
 		let xslURL = xslFilename;
 
 		if (this._xdhIsDEMO)
-			xslURL = "data:text/xml;charset=utf-8," + encodeURIComponent(readAsset(xslFilename));
+			xslURL = "data:text/xml;charset=utf-8," + encodeURIComponent(readXSLAsset(xslFilename));
 
 		this.setLayout_(id, xml, xslURL, callback);
 	}

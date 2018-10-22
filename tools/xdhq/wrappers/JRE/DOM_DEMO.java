@@ -175,12 +175,12 @@ public class DOM_DEMO extends DOM_SHRD {
 
 			String url = "http://" + address + httpPort + "/" + cgi + ".php?_token=" + token;
 
+			System.out.println(url);
+			System.out.println("Open above URL in a web browser. Enjoy!");
+
 			if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
-				System.out.println(url);
-				System.out.println("Open above URL in a web browser, if not already done. Enjoy!");
 				Desktop.getDesktop().browse(new URI(url));
-			} else
-				System.out.println("Open " + url + " in a web browser. Enjoy!");
+			}
 		} else {
 			if (!getString_(reader).equals(token))
 				throw new Exception("Unmatched token !!!");
