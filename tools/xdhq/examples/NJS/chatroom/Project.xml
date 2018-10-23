@@ -17,7 +17,7 @@
 	</xpp:bloc>
 	<xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
 	<About>
-		<UUID>79666866-b6c2-4819-ab7d-3a0d284f0ba1</UUID>
+		<UUID>7df99200b-2537-40f6-9f69-427171128f36</UUID>
 	</About>
 	<!-- NO SPACE in 'Keywords' attribute !!! ("a,b,c", NOT "a, b, c")-->
 	<RTW Description="A basic chatroom for 'Node.js' with 'Atlas'." Keywords="Demo,Atlas,chat,chatroom,Node,NodeJS,Node.js">

@@ -123,8 +123,6 @@ function displayTodos(dom) {
 }
 
 function newSession() {
-	console.log("New session detected !");
-
 	return new TodoMVC();
 }
 
@@ -313,39 +311,38 @@ function main() {
 		"Cancel": acCancel,
 	};
 
-	// Content of 'HeadDEMO.html'.
-	let head = `
-	<title>Atlas • TodoMVC</title>
-	<link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAMFBMVEUEAvyEhsxERuS8urQsKuycnsRkYtzc2qwUFvRUVtysrrx0ctTs6qTMyrSUksQ0NuyciPBdAAABHklEQVR42mNgwAa8zlxjDd2A4POfOXPmzZkFCAH2M8fNzyALzDlzg2ENssCbMwkMOsgCa858YOjBKxBzRoHhD7LAHiBH5swCT9HQ6A9ggZ4zp7YCrV0DdM6pBpAAG5Blc2aBDZA68wCsZPuZU0BDH07xvHOmAGKKvgMP2NA/Zw7ADIYJXGDgLQeBBSCBFu0aoAPYQUadMQAJAE29zwAVWMCWpgB08ZnDQGsbGhpsgCqBQHNfzRkDEIPlzFmo0T5nzoMovjPHoAK8Zw5BnA5yDosDSAVYQOYMKIDZzkoDzagAsjhqzjRAfXTmzAQgi/vMQZA6pjtAvhEk0E+ATWRRm6YBZuScCUCNN5szH1D4TGdOoSrggtiNAH3vBBjwAQCglIrSZkf1MQAAAABJRU5ErkJggg==" />
-	<!-- Only both lines below change between 'PROD' and 'DEMO' files. -->
-	<link rel="stylesheet" href="http://q37.info/download/assets/TodoMVC/todomvc-common/base.css">
-	<link rel="stylesheet" href="http://q37.info/download/assets/TodoMVC/todomvc-app-css/index.css">
-	<style>
-		.hide {
-			display: none;
-		}
-	</style>
-	<style id="HideClearCompleted">
-		.clear-completed {
-			display: none;
-		}
-	</style>
-	<style id="HideCompleted">
-		.completed {
-			display: none;
-		}
-	</style>
-	<style id="HideActive">
-		.active {
-			display: none;
-		}
-	</style>
-	`;
-
 	atlas.launch(newSession, "Connect", callbacks, head);
+};
 
-	// Content of 'Main.html'.
-	body = `
+const head = `
+<title>Atlas • TodoMVC</title>
+<link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAMFBMVEUEAvyEhsxERuS8urQsKuycnsRkYtzc2qwUFvRUVtysrrx0ctTs6qTMyrSUksQ0NuyciPBdAAABHklEQVR42mNgwAa8zlxjDd2A4POfOXPmzZkFCAH2M8fNzyALzDlzg2ENssCbMwkMOsgCa858YOjBKxBzRoHhD7LAHiBH5swCT9HQ6A9ggZ4zp7YCrV0DdM6pBpAAG5Blc2aBDZA68wCsZPuZU0BDH07xvHOmAGKKvgMP2NA/Zw7ADIYJXGDgLQeBBSCBFu0aoAPYQUadMQAJAE29zwAVWMCWpgB08ZnDQGsbGhpsgCqBQHNfzRkDEIPlzFmo0T5nzoMovjPHoAK8Zw5BnA5yDosDSAVYQOYMKIDZzkoDzagAsjhqzjRAfXTmzAQgi/vMQZA6pjtAvhEk0E+ATWRRm6YBZuScCUCNN5szH1D4TGdOoSrggtiNAH3vBBjwAQCglIrSZkf1MQAAAABJRU5ErkJggg==" />
+<!-- Only both lines below change between 'PROD' and 'DEMO' files. -->
+<link rel="stylesheet" href="http://q37.info/download/assets/TodoMVC/todomvc-common/base.css">
+<link rel="stylesheet" href="http://q37.info/download/assets/TodoMVC/todomvc-app-css/index.css">
+<style>
+	.hide {
+		display: none;
+	}
+</style>
+<style id="HideClearCompleted">
+	.clear-completed {
+		display: none;
+	}
+</style>
+<style id="HideCompleted">
+	.completed {
+		display: none;
+	}
+</style>
+<style id="HideActive">
+	.active {
+		display: none;
+	}
+</style>
+`;
+
+const body = `
 <section class="todoapp">
 	<header class="header">
 		<h1>todos</h1>
@@ -383,12 +380,12 @@ function main() {
 		<span>!</span>
 	</p>
 </footer>
-	`;
+`;
 
-	// Content of 'Todos.xsl'.
-	// DON'T PASTE TO Visual Studio : it inserts extraneous characters !
-	// There must be NO characters before the XML declaration !
-	xsl = `<?xml version="1.0" encoding="UTF-8"?>
+// Note to developer:
+// DON'T PASTE TO Visual Studio : it inserts extraneous characters !
+// There must be NO characters before the XML declaration !
+const xsl = `<?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<xsl:output method="html" encoding="UTF-8"/>
 	<xsl:template match="/XDHTML">
@@ -426,6 +423,5 @@ function main() {
 	</xsl:template>
 </xsl:stylesheet>
 `;
-};
 
 main();

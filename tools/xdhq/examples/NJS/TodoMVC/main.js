@@ -125,8 +125,6 @@ function displayTodos(dom) {
 }
 
 function newSession() {
-	console.log("New session detected !");
-
 	return new TodoMVC();
 }
 

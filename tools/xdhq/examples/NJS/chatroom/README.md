@@ -8,7 +8,7 @@ A *Node.js* version of a basic chat room application, made with the [*Atlas* too
 - launch, from inside of the retrieved repository, `npm install`,
 - launch, from same directory, `node main.js`,
 
-or go to <http://atlastk.org/runkit.php?app=chatroom> (scroll to bottom, click on the *run* button, an scroll again to the bottom).
+or go to <http://q37.info/runkit/Chatroom> (scroll to bottom, click on the *run* button, and scroll again to the bottom).
 
 There is also a version for:
 

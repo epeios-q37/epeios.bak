@@ -70,7 +70,7 @@ atlas.launch(() => new atlas.DOM(), "Connect", callbacks, head);
 - in the same directory, create a `Hello.js` file with above source code, or get it directly here: <https://q37.info/download/assets/Hello.js>,
 - launch `node Hello.js`,
 
-or go to <https://npm.runkit.com/atlastk>.
+or go to <http://q37.info/runkit/Hello> (scroll to bottom, click on the *run* button, and scroll again to the bottom).
 
 ## What's next ?
 

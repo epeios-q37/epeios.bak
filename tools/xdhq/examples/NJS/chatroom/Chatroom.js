@@ -17,8 +17,6 @@
 	along with XDHq If not, see <http://www.gnu.org/licenses/>.
 */
 
-"use strict"
-
 var atlas;
 
 if (process.env.EPEIOS_SRC) {
@@ -52,7 +50,7 @@ class MyData extends DOM {
 }
 
 function displayMessages(dom) {
-	var tree = require('xmlbuilder').create('XDHTML',{version: '1.0', encoding: 'UTF-8'});
+	var tree = require('xmlbuilder').create('XDHTML', { version: '1.0', encoding: 'UTF-8' });
 	var i = messages.length - 1;
 	var message;
 
@@ -70,7 +68,7 @@ function displayMessages(dom) {
 		tree = tree.up();
 
 		dom.createElement("span",
-			(id) => dom.setLayoutXSL(id, tree.end(), "Messages.xsl",
+			(id) => dom.setLayoutXSL(id, tree.end(), xsl,
 				() => dom.insertChild(id, "Board")
 			)
 		);
@@ -82,7 +80,7 @@ function newSession() {
 }
 
 function acConnect(dom, id) {
-	dom.setLayout("", readAsset("Main.html"),
+	dom.setLayout("", body,
 		() => dom.focus("Pseudo",
 			() => dom.setTimeout(1000, "Update",
 				() => displayMessages(dom)
@@ -91,8 +89,7 @@ function acConnect(dom, id) {
 	);
 }
 
-function handlePseudo( pseudo ) 
-{
+function handlePseudo(pseudo) {
 	if (pseudos.includes(pseudo))
 		return false;
 	else {
@@ -109,7 +106,7 @@ function acSubmitPseudo(dom, id) {
 			if (result.length == 0) {
 				dom.alert("Cannot be empty!",
 					() => dom.setContent("Pseudo", "",
-						() => dom.focus( "Pseudo" )
+						() => dom.focus("Pseudo")
 					)
 				);
 			} else if (handlePseudo(result.toUpperCase())) {
@@ -123,7 +120,7 @@ function acSubmitPseudo(dom, id) {
 			} else {
 				dom.alert("Already used!",
 					() => dom.setContent("Pseudo", result,
-						() => dom.focus( "Pseudo" )
+						() => dom.focus("Pseudo")
 					)
 				);
 			}
@@ -169,7 +166,85 @@ function main() {
 		}
 	);
 
-	atlas.launch(newSession, "Connect", callbacks, readAsset( "Head.html") );
+	atlas.launch(newSession, "Connect", callbacks, head);
+
 }
+
+const head = `
+<title>Chat room</title>
+<link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAMFBMVEUEAvyEhsxERuS8urQsKuycnsRkYtzc2qwUFvRUVtysrrx0ctTs6qTMyrSUksQ0NuyciPBdAAABHklEQVR42mNgwAa8zlxjDd2A4POfOXPmzZkFCAH2M8fNzyALzDlzg2ENssCbMwkMOsgCa858YOjBKxBzRoHhD7LAHiBH5swCT9HQ6A9ggZ4zp7YCrV0DdM6pBpAAG5Blc2aBDZA68wCsZPuZU0BDH07xvHOmAGKKvgMP2NA/Zw7ADIYJXGDgLQeBBSCBFu0aoAPYQUadMQAJAE29zwAVWMCWpgB08ZnDQGsbGhpsgCqBQHNfzRkDEIPlzFmo0T5nzoMovjPHoAK8Zw5BnA5yDosDSAVYQOYMKIDZzkoDzagAsjhqzjRAfXTmzAQgi/vMQZA6pjtAvhEk0E+ATWRRm6YBZuScCUCNN5szH1D4TGdOoSrggtiNAH3vBBjwAQCglIrSZkf1MQAAAABJRU5ErkJggg==" />
+<style type="text/css">
+	.hcenter {
+		display: table;
+		height: 100%;
+		margin: auto;
+	}
+
+	.hidden {
+		display: none;
+	}
+
+	.self {
+		color: red;
+		font-weight: bold;
+	}
+
+	.other {
+		font-style: oblique;
+	}
+</style>
+`;
+
+const body = `
+<div class="hcenter">
+	<div style="display: flex; flex-direction: column;">
+		<fieldset>
+			<legend>Pseudo.</legend>
+			<input id="Pseudo" type="text" size="10" maxlength="10" data-xdh-onevent="SubmitPseudo" placeholder="Pseudonyme" />
+			<button title="Choose a pseudonym." data-xdh-onevent="SubmitPseudo" id="PseudoButton">Send</button>
+		</fieldset>
+		<fieldset style="display: flex; flex-direction: column;">
+			<legend>Message</legend>
+			<textarea rows="3" cols="20" id="Message" type="text" maxlength="150" data-xdh-onevent="SubmitMessage" placeholder="Message to send" disabled="disabled"></textarea>
+			<button title="Send a message." data-xdh-onevent="SubmitMessage" disabled="disabled" id="MessageButton">Send</button>
+		</fieldset>
+		<fieldset>
+			<legend>Board</legend>
+			<div id="Board" class="hcenter" style="width: 90%;"/>
+		</fieldset>
+	</div>
+</div>
+`;
+
+const xsl = `<?xml version="1.0" encoding="UTF-8"?>
+<xsl:stylesheet version="1.0" xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+	<xsl:output method="html" encoding="UTF-8"/>
+	<xsl:template match="/XDHTML">
+		<xsl:apply-templates select="Messages"/>
+	</xsl:template>
+	<xsl:template match="Messages">
+		<xsl:apply-templates select="Message"/>
+	</xsl:template>
+	<xsl:template match="Message">
+		<li id="Message.{@id}" data-xdh-value="{@id}">
+			<xsl:element name="span">
+				<xsl:attribute name="class">
+					<xsl:choose>
+						<xsl:when test="@pseudo=../@pseudo">
+							<xsl:text>self</xsl:text>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:text>other</xsl:text>
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:attribute>
+				<xsl:value-of select="@pseudo"/>
+			</xsl:element>
+			<xsl:text> : </xsl:text>
+			<xsl:value-of select="."/>
+		</li>
+	</xsl:template>
+</xsl:stylesheet>
+`;
 
 main();

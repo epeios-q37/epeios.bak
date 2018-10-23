@@ -235,8 +235,6 @@ class TodoMVC extends Atlas {
 	}
 
 	public TodoMVC() {
-		System.out.println("Connection detected...");
-
 		todos = new ArrayList<Todo>();
 
 		if (false) { // At true for testing purpose.

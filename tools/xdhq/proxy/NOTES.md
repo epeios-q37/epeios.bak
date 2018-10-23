@@ -6,8 +6,8 @@ Concerne actuellement le *toolkit* *Atlas* en tant que bibliothèque de prototyp
 
 Il y a deux binaires à déployer sur le serveur distant:
 
-- *xdhwebq* (`tools/xdhwebq/CLI`),
-- *xdhqxdh* (`tools/xdhq/proxy`).
+- [*xdhwebq*](http://github.com/epeios-q37/xdhwebq-cli) (`tools/xdhwebq/CLI`),
+- [*xdhqxdh*](http://github.com/epeios-q37/xdhqxdh) (`tools/xdhq/proxy`).
 
 Vérifier, avant déploiement, qu'ils comspilent bien sous *Cygwin*.
 
@@ -19,7 +19,7 @@ Le déploiement pour *Node.js* doit se faire en premier, car ne nécessite pas l
 
 ### *Node.js*
 
-#### *xdhq-node*
+#### [*xdhq-node*](http://github.com/epeios-q37/xdhq-node)
 
 Chemin : `tools/xdhq/wrappers/NJS`.
 
@@ -28,7 +28,7 @@ Mettre à jour le dépôt *GitHub* et publier sur *NPM*.
 Ignorer les messages concernant l'absence de `runkit.js` et `test.js` lors de la mise à jour.
 Contrôler le changement de version dans `package.json`.
 
-#### *atlas-node*
+#### [*atlas-node*](http://github.com/epeios-q37/atlas-node)
 
 Chemin : `tools/xdhq/Atlas/NJS`.
 
@@ -51,12 +51,46 @@ Avant publication sur *NPM*, vérifier :
 Après avoir lancées en local les différentes applications pour voir si elles fonctionnent correctement :
 
 - `ATKJCompile`, (normalement déjà fait avant de lancer les tests),
-- `ÀTKJPack`.,
-- transférer `~/Atlas.jar` dans le répertoire `assets` sur *q37.info*.
+- `ATKJPack`,
+- transférer dans le répertoire `assets` sur *q37.info* :
+  - `~/Atlas.jar`,
+  - si modifié, `Hello.java`,
+- mettre à jour les dépôts *GitHub* :
+  - [*xdhq-java*](http://github.com/epeios-q37/xdhq-java) (`/tools/xdhq/wrappers/JRE`),
+  - [*atlas-java*](http://github.com/epeios-q37/atlas-java) (`tools/xdhq/Atlas/JRE`)
 
 ### *PHP*
 
 Après avoir lancées en local les différentes applications pour voir si elles fonctionnent correctement :
 
-- `ÀTKZPack`.,
-- transférer `~/Atlas.phar` dans le répertoire `assets` sur *q37.info*.
+- `ATKZPack`,
+- transférer dans le répertoire `assets` sur *q37.info* :
+  - `~/Atlas.phar`,
+  - si modifié, `Hello.php`,
+- mettre à jour les dépôts *GitHub* :
+  - [*xdhq-php*](http://github.com/epeios-q37/qdhq-php) (`/tools/xdhq/wrappers/PHP`),
+  - [*atlas-php*](http://github.com/epeios-q37/atlas-php) (`tools/xdhq/Atlas/PHP`).
+
+### Contrôle
+
+Dans une console *DOS*, vérifier si les instructions données dans les *README* des dépôts suivant fonctionnent :
+
+- <http://github.com/epeios-q37/atlas-java>,
+- <http://github.com/epeios-q37/atlas-node>,
+- <http://github.com/epeios-q37/atlas-php>.
+
+## *TodoMVC*
+
+Mettre à jour les dépôts suivants, puis contrôler :
+
+- [*todomvc-java*](http://github.com/epeios-q37/todomvc-java),
+- [*todomvc-node*](http://github.com/epeios-q37/todomvc-node),
+- [*todomvc-php*](http://github.com/epeios-q37/todomvc-php).
+
+## Chat room
+
+Mettre à jour les dépôts suivants, puis contrôler :
+
+- [*chatroom-java*](http://github.com/epeios-q37/chatroom-java),
+- [*chatroom-node*](http://github.com/epeios-q37/chatroom-node),
+- [*chatroom-php*](http://github.com/epeios-q37/chatroom-php).

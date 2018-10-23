@@ -10,7 +10,7 @@ A *Node.js* version of the *TodoMVC* (<http://todomvc.com/>) application, made w
 - launch, from inside of the retrieved repository, `npm install`,
 - launch, from same directory, `node main.js`,
 
-or go to <https://npm.runkit.com/xdhq>.
+or go to <http://q37.info/runkit/TodoMVC> (scroll to bottom, click on the *run* button, and scroll again to the bottom).
 
 There is also a version for:
 

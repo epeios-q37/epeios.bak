@@ -25,22 +25,19 @@
 
 $source = <<<EOT
 /*
-	This is a JavaScript source code for Node.js 
-	which uses the Atlas toolkit (http://atlastk.org).
-
-	RunKit allows to run program for Node.js in a web browser,
-	without having to install Node.js on your computer.
-
-	Feel free to modify this source code.
+	This is a JavaScript source code for Node.js.
+	It's an example of use of the Atlas toolkit (http://atlastk.org).
 
 	To run this program:
 	- go to the bottom of the page,
-	- click on the green 'run' button,
+	- click on the green 'run' button on the right,
 	- scroll down as new things are displayed,
 	- follow the instructions.
 
 	The program will last only a few tens of seconds,
 	due to a RunKit timeout.
+
+	Feel free to modify the source code.
 	
 	Enjoy !
 */

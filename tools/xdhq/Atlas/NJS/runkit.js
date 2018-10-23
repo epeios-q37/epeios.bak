@@ -65,8 +65,10 @@ const body = `
 `;
 
 const callbacks = {
-	"Connect": (dom, id) => dom.setLayout("", body, () => dom.focus("input") ),
-	"Typing": (dom, id) => dom.getContent(id, (name) => dom.setContent("name", name)),
+	"Connect": (dom, id) => dom.setLayout("", body,
+		() => dom.focus("input")),
+	"Typing": (dom, id) => dom.getContent(id,
+		(name) => dom.setContent("name", name)),
 	"Clear": (dom, id) => dom.confirm("Are you sure ?",
 		(answer) => { if (answer) dom.setContents({ "input": "", "name": "" }) }),
 };
