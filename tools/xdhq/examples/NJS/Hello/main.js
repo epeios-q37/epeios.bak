@@ -19,7 +19,7 @@
 
 "use strict"
 
-var atlasId = "";
+var atlas;
 
 if (process.env.EPEIOS_SRC) {
 	let epeiosPath = "";
@@ -29,50 +29,18 @@ if (process.env.EPEIOS_SRC) {
 	else
 		epeiosPath = "~/hg/epeios/"
 
-	atlasId = epeiosPath + "tools/xdhq/Atlas/NJS/Atlas.js";
+	atlas = require(epeiosPath + "tools/xdhq/Atlas/NJS/Atlas.js");
 } else {
-	atlasId = 'atlastk';
+	atlas = require('atlastk');
 }
 
-const atlas = require(atlasId);
-const fs = require('fs');
-
-const readAsset = atlas.readAsset;
-
-// 'head' and 'body' are used for the one file version of this app.
-const head = [
-'<title>"Hello World !" example</title>',
-'<style type="text/css">',
-' html, body { height: 100%; padding: 0; margin: 0; }',
-' .vcenter-out, .hcenter { display: table; height: 100%; margin: auto; }',
-' .vcenter-in { display: table-cell; vertical-align: middle;',
-'</style>',
-].join('\n');
-
-const body = [
-'<div class="vcenter-out">',
-' <div class="vcenter-in">',
-'  <fieldset>',
-'   <label>Name:</label>',
-'   <input id="input" maxlength="20" placeholder="Enter a name here" type="text" data-xdh-onevent="input|Typing"/>',
-'   <button data-xdh-onevent="Clear">Clear</button>',
-'   <hr/>',
-'   <h1>',
-'    <span>Hello </span>',
-'    <span style="font-style: italic;" id="name"></span>',
-// '    <span style="font-style: italic;" id="name"/>',	// With this line rather then the above one, 
-														// the following line becomes a child of the above tag !!!
-'    <span>!</span>',
-'   </h1>',
-'  </filedset>',
-' </div>',
-'</div>'].join('\n');
-
 const callbacks = {
-	"Connect": (dom, id) => dom.setLayout("", body),
-//	"Connect": (dom, id) => dom.headUp( readAsset('Head.html'), () => dom.setLayout("", readAsset("Main.html"))),
-	"Typing": (dom, id) => dom.getContent(id, (name) => dom.setContent("name", name)),
-	"Clear": (dom, id) => dom.confirm("Are you sure ?", (answer) => { if (answer) dom.setContents({ "input": "", "name": "" }) }),
+	"Connect": (dom, id) => dom.setLayout("", atlas.readAsset("Main.html"),
+		() => dom.focus("input")),
+	"Typing": (dom, id) => dom.getContent(id,
+		(name) => dom.setContent("name", name)),
+	"Clear": (dom, id) => dom.confirm("Are you sure ?",
+		(answer) => { if (answer) dom.setContents({ "input": "", "name": "" }) }),
 };
 
-atlas.launch(() => new atlas.DOM(), "Connect", callbacks, readAsset( 'Head.html' ) );
+atlas.launch(() => new atlas.DOM(), "Connect", callbacks, atlas.readAsset('Head.html'));

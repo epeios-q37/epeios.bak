@@ -47,6 +47,7 @@ class Hello extends Atlas {
 
 		if ( "Connect".equals( action ) ) {
 			dom.setLayout("", html);
+			dom.focus( "input");
 		} else if ("Typing".equals( action ) ) {
 			dom.setContent("name", dom.getContent(id));
 		} else if ( "Clear".equals( action ) ) {

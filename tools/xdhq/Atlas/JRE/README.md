@@ -15,7 +15,7 @@ import java.util.HashMap;
 class Hello extends Atlas {
 	public void handle( DOM dom, String action, String id )
 	{
-		String html = 
+		String body = 
 		"<div class=\"vcenter-out\">" +
 		" <div class=\"vcenter-in\">" +
 		"  <fieldset>" +
@@ -34,7 +34,8 @@ class Hello extends Atlas {
 		"</div>";
 
 		if ( "Connect".equals( action ) ) {
-			dom.setLayout("", html);
+			dom.setLayout("", body);
+			dom.focus("input");
 		} else if ("Typing".equals( action ) ) {
 			dom.setContent("name", dom.getContent(id));
 		} else if ( "Clear".equals( action ) ) {
@@ -54,7 +55,7 @@ class Hello extends Atlas {
 			" .vcenter-in { display: table-cell; vertical-align: middle; }" +
 			"</style>";
 
-		launch("Connect", head, "Hello", GUI.DEFAULT, args );
+		launch("Connect", head );
 
 		for (;;)
 			new Hello();

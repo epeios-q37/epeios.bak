@@ -25,7 +25,7 @@
 	that there is a timeout after which the application is killed.
 */
 
-var atlasId = "";
+var atlas;
 
 if (process.env.EPEIOS_SRC) {
 	let epeiosPath = "";
@@ -35,15 +35,12 @@ if (process.env.EPEIOS_SRC) {
 	else
 		epeiosPath = "~/hg/epeios/"
 
-	atlasId = epeiosPath + "tools/xdhq/Atlas/NJS/Atlas.js";
+	atlas = require(epeiosPath + "tools/xdhq/Atlas/NJS/Atlas.js");
 } else {
-	atlasId = 'atlastk';
+	atlas = require('atlastk');
 }
 
-const atlas = require(atlasId);
-const DOM = atlas.DOM;
-
-class MyData extends DOM {
+class TodoMVC extends atlas.DOM {
 	constructor() {
 		super();
 		this.timestamp = new Date();
@@ -58,7 +55,7 @@ class MyData extends DOM {
 				"label": "Note 2"
 			}
 		];
-		 this.todos = [];
+		this.todos = [];
 	}
 	itemsLeft() {
 		var i = this.todos.length;
@@ -114,7 +111,7 @@ function displayTodos(dom) {
 
 	while (i < dom.todos.length) {
 		todo = dom.todos[i];
-		tree = tree.ele('Todo', { 'id': i, 'completed' : todo["completed"] }, todo["label"] ).up();
+		tree = tree.ele('Todo', { 'id': i, 'completed': todo["completed"] }, todo["label"]).up();
 		i++;
 	}
 
@@ -128,7 +125,7 @@ function displayTodos(dom) {
 function newSession() {
 	console.log("New session detected !");
 
-	return new MyData();
+	return new TodoMVC();
 }
 
 function acConnect(dom, id) {
@@ -209,7 +206,7 @@ function acToggle(dom, id) {
 
 	// Can't use 'ToggleClasses', because then 2 elements would have same key...
 	dom.toggleClass("Todo." + id, "completed",
-		() => dom.toggleClass( "Todo." + id, "active",
+		() => dom.toggleClass("Todo." + id, "active",
 			() => handleCount(dom)
 		)
 	);
@@ -224,7 +221,7 @@ function acAll(dom, id) {
 				"Active": "selected",
 				"Completed": "selected"
 			},
-			() => dom.disableElements( ["HideActive", "HideCompleted"] )
+			() => dom.disableElements(["HideActive", "HideCompleted"])
 		)
 	)
 }
@@ -238,8 +235,8 @@ function acActive(dom, id) {
 				"All": "selected",
 				"Completed": "selected"
 			},
-			() => dom.disableElement( "HideActive",
-				() => dom.enableElement( "HideCompleted") )
+			() => dom.disableElement("HideActive",
+				() => dom.enableElement("HideCompleted"))
 		)
 	)
 }
@@ -254,7 +251,7 @@ function acCompleted(dom, id) {
 				"Active": "selected"
 			},
 			() => dom.disableElement("HideCompleted",
-				() =>dom.enableElement("HideActive"))
+				() => dom.enableElement("HideActive"))
 		)
 	)
 }
@@ -303,7 +300,7 @@ function acCancel(dom, id) {
 }
 
 function main() {
-	var callbacks =	{
+	var callbacks = {
 		"Connect": acConnect,
 		"Submit": acSubmit,
 		"Destroy": acDestroy,
@@ -318,117 +315,116 @@ function main() {
 
 	// Content of 'HeadDEMO.html'.
 	let head = `
-		<title>Atlas • TodoMVC</title>
-		<link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAMFBMVEUEAvyEhsxERuS8urQsKuycnsRkYtzc2qwUFvRUVtysrrx0ctTs6qTMyrSUksQ0NuyciPBdAAABHklEQVR42mNgwAa8zlxjDd2A4POfOXPmzZkFCAH2M8fNzyALzDlzg2ENssCbMwkMOsgCa858YOjBKxBzRoHhD7LAHiBH5swCT9HQ6A9ggZ4zp7YCrV0DdM6pBpAAG5Blc2aBDZA68wCsZPuZU0BDH07xvHOmAGKKvgMP2NA/Zw7ADIYJXGDgLQeBBSCBFu0aoAPYQUadMQAJAE29zwAVWMCWpgB08ZnDQGsbGhpsgCqBQHNfzRkDEIPlzFmo0T5nzoMovjPHoAK8Zw5BnA5yDosDSAVYQOYMKIDZzkoDzagAsjhqzjRAfXTmzAQgi/vMQZA6pjtAvhEk0E+ATWRRm6YBZuScCUCNN5szH1D4TGdOoSrggtiNAH3vBBjwAQCglIrSZkf1MQAAAABJRU5ErkJggg==" />
-		<!--Only both lines below change between 'PROD' and 'DEMO' files.-->
-		<link rel="stylesheet" href="http://q37.info/download/assets/TodoMVC/todomvc-common/base.css">
-		<link rel="stylesheet" href="http://q37.info/download/assets/TodoMVC/todomvc-app-css/index.css">
-		<style>
-		 .hide {
-				display: none;
-			}
-		</style>
-		<style id="HideClearCompleted">
-		 .clear-completed {
-				display: none;
-			}
-		</style>
-		<style id="HideCompleted">
-		 .completed {
-				display: none;
-			}
-		</style>
-		<style id="HideActive">
-		 .active {
-				display: none;
-			}
-		</style>
+	<title>Atlas • TodoMVC</title>
+	<link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAMFBMVEUEAvyEhsxERuS8urQsKuycnsRkYtzc2qwUFvRUVtysrrx0ctTs6qTMyrSUksQ0NuyciPBdAAABHklEQVR42mNgwAa8zlxjDd2A4POfOXPmzZkFCAH2M8fNzyALzDlzg2ENssCbMwkMOsgCa858YOjBKxBzRoHhD7LAHiBH5swCT9HQ6A9ggZ4zp7YCrV0DdM6pBpAAG5Blc2aBDZA68wCsZPuZU0BDH07xvHOmAGKKvgMP2NA/Zw7ADIYJXGDgLQeBBSCBFu0aoAPYQUadMQAJAE29zwAVWMCWpgB08ZnDQGsbGhpsgCqBQHNfzRkDEIPlzFmo0T5nzoMovjPHoAK8Zw5BnA5yDosDSAVYQOYMKIDZzkoDzagAsjhqzjRAfXTmzAQgi/vMQZA6pjtAvhEk0E+ATWRRm6YBZuScCUCNN5szH1D4TGdOoSrggtiNAH3vBBjwAQCglIrSZkf1MQAAAABJRU5ErkJggg==" />
+	<!-- Only both lines below change between 'PROD' and 'DEMO' files. -->
+	<link rel="stylesheet" href="http://q37.info/download/assets/TodoMVC/todomvc-common/base.css">
+	<link rel="stylesheet" href="http://q37.info/download/assets/TodoMVC/todomvc-app-css/index.css">
+	<style>
+		.hide {
+			display: none;
+		}
+	</style>
+	<style id="HideClearCompleted">
+		.clear-completed {
+			display: none;
+		}
+	</style>
+	<style id="HideCompleted">
+		.completed {
+			display: none;
+		}
+	</style>
+	<style id="HideActive">
+		.active {
+			display: none;
+		}
+	</style>
 	`;
 
 	atlas.launch(newSession, "Connect", callbacks, head);
 
 	// Content of 'Main.html'.
 	body = `
-		<section class ="todoapp">
-			<header class ="header">
-				<h1>todos</h1>
-				<input id="Input" class ="new-todo" placeholder="What needs to be done?" autofocus="" data-xdh-onevent="Submit"/>
-			</header>
-			<section class ="main">
-				<input class ="toggle-all" type="checkbox"/>
-				<label for="toggle-all">Mark all as complete</label>
-				<ul class ="todo-list" id="Todos"/>
-			</section>
-			<footer class ="footer">
-				<span class ="todo-count" id="Count"></span>
-				<ul class ="filters">
-					<li>
-						<a style="cursor: pointer;" id="All" class ="selected" data-xdh-onevent="All">All</a>
-					</li>
-					<li>
-						<a style="cursor: pointer;" id="Active" data-xdh-onevent="Active">Active</a>
-					</li>
-					<li>
-						<a style="cursor: pointer;" id="Completed" data-xdh-onevent="Completed">Completed</a>
-					</li>
-				</ul>
-				<button class ="clear-completed" data-xdh-onevent="Clear">Clear completed</button>
-			</footer>
-		</section>
-		<footer class ="info">
-			<p>Double-click to edit a todo</p>
-			<p>
-				<span>Created with the </span>
-				<a href="http://atlastk.org/">
-					<span style="font-style: italic;">Atlas</span>
-					<span> toolkit</span>
-				</a>
-				<span>!</span>
-			</p>
-		</footer>
+<section class="todoapp">
+	<header class="header">
+		<h1>todos</h1>
+		<input id="Input" class="new-todo" placeholder="What needs to be done?" autofocus="" data-xdh-onevent="Submit"/>
+	</header>
+	<section class="main">
+		<input class="toggle-all" type="checkbox"/>
+		<label for="toggle-all">Mark all as complete</label>
+		<ul class="todo-list" id="Todos"/>
+	</section>
+	<footer class="footer">
+		<span class="todo-count" id="Count"></span>
+		<ul class="filters">
+			<li>
+				<a style="cursor: pointer;" id="All" class="selected" data-xdh-onevent="All">All</a>
+			</li>
+			<li>
+				<a style="cursor: pointer;" id="Active" data-xdh-onevent="Active">Active</a>
+			</li>
+			<li>
+				<a style="cursor: pointer;" id="Completed" data-xdh-onevent="Completed">Completed</a>
+			</li>
+		</ul>
+		<button class="clear-completed" data-xdh-onevent="Clear">Clear completed</button>
+	</footer>
+</section>
+<footer class="info">
+	<p>Double-click to edit a todo</p>
+	<p>
+		<span>Created with the </span>
+		<a href="http://atlastk.org/">
+			<span style="font-style: italic;">Atlas</span>
+			<span> toolkit</span>
+		</a>
+		<span>!</span>
+	</p>
+</footer>
 	`;
 
 	// Content of 'Todos.xsl'.
 	// DON'T PASTE TO Visual Studio : it inserts extraneous characters !
 	// There must be NO characters before the XML declaration !
 	xsl = `<?xml version="1.0" encoding="UTF-8"?>
-		<!-- NO BOM !! -->
-		<xsl:stylesheet version="1.0" xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-			<xsl:output method="html" encoding="UTF-8"/>
-			<xsl:template match="/XDHTML">
-				<xsl:apply-templates select="Todos"/>
-			</xsl:template>
-			<xsl:template match="Todos">
-				<xsl:apply-templates select="Todo"/>
-			</xsl:template>
-			<xsl:template match="Todo">
-				<li id="Todo.{@id}" data-xdh-onevents="(dblclick|Edit)" data-xdh-value="{@id}">
-					<xsl:attribute name="class">
-						<xsl:text>view</xsl:text>
-						<xsl:choose>
-							<xsl:when test="@completed='true'">
-								<xsl:text> completed</xsl:text>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:text> active</xsl:text>
-							</xsl:otherwise>
-						</xsl:choose>
-					</xsl:attribute>
-					<span id="View.{@id}">
-						<input class="toggle" type="checkbox" id="{@id}" data-xdh-onevent="Toggle">
-							<xsl:if test="@completed='true'">
-								<xsl:attribute name="checked"/>
-							</xsl:if>
-						</input>
-						<label id="Label.{@id}">
-							<xsl:value-of select="."/>
-						</label>
-						<button data-xdh-value="{@id}" class="destroy" data-xdh-onevent="Destroy"/>
-					</span>
-					<input id="Input.{@id}" class="edit" data-xdh-onevents="(keyup|Cancel|Esc)(keypress|Submit|Enter)(blur|Submit)"/>
-				</li>
-			</xsl:template>
-		</xsl:stylesheet>
+<xsl:stylesheet version="1.0" xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+	<xsl:output method="html" encoding="UTF-8"/>
+	<xsl:template match="/XDHTML">
+		<xsl:apply-templates select="Todos"/>
+	</xsl:template>
+	<xsl:template match="Todos">
+		<xsl:apply-templates select="Todo"/>
+	</xsl:template>
+	<xsl:template match="Todo">
+		<li id="Todo.{@id}" data-xdh-onevents="(dblclick|Edit)" data-xdh-value="{@id}">
+			<xsl:attribute name="class">
+				<xsl:text>view</xsl:text>
+				<xsl:choose>
+					<xsl:when test="@completed='true'">
+						<xsl:text> completed</xsl:text>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:text> active</xsl:text>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:attribute>
+			<span id="View.{@id}">
+				<input class="toggle" type="checkbox" id="{@id}" data-xdh-onevent="Toggle">
+					<xsl:if test="@completed='true'">
+						<xsl:attribute name="checked"/>
+					</xsl:if>
+				</input>
+				<label id="Label.{@id}">
+					<xsl:value-of select="."/>
+				</label>
+				<button data-xdh-value="{@id}" class="destroy" data-xdh-onevent="Destroy"/>
+			</span>
+			<input id="Input.{@id}" class="edit" data-xdh-onevent="Submit" data-xdh-onevents="(keyup|Cancel|Esc)(blur|Submit)"/>
+		</li>
+	</xsl:template>
+</xsl:stylesheet>
 `;
 };
 

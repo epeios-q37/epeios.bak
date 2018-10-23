@@ -32,7 +32,7 @@
 				</label>
 				<button data-xdh-value="{@id}" class="destroy" data-xdh-onevent="Destroy"/>
 			</span>
-			<input id="Input.{@id}" class="edit" data-xdh-onevents="(keyup|Cancel|Esc)(keypress|Submit|Enter)(blur|Submit)"/>
+			<input id="Input.{@id}" class="edit" data-xdh-onevent="Submit" data-xdh-onevents="(keyup|Cancel|Esc)(blur|Submit)"/>
 		</li>
 	</xsl:template>
 </xsl:stylesheet>

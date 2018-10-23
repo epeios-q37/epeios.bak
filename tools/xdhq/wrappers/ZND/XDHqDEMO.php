@@ -85,7 +85,6 @@ class XDHqDOM_DEMO extends Threaded {
   } else {
    return "";
   }
-
  }
  private function getStrings_($socket) {
   $amount = $this->getSize_($socket);
@@ -131,12 +130,14 @@ class XDHqDOM_DEMO extends Threaded {
 
    $token = getenv("ATK_TOKEN");
 
-   if ( $token !== false ) {
+   if ($token !== false) {
 
-    $token = trim( $token );
+    $token = trim($token);
 
-	if ( $token !== "" ) 
-		self::$token = "_" . $token;
+    if ($token !== "") {
+     self::$token = "_" . $token;
+    }
+   }
   }
 
   $this->socket = fsockopen($address, $port, $errno, $errstr);
@@ -162,7 +163,7 @@ class XDHqDOM_DEMO extends Threaded {
 
    $url = "http://" . $address . $httpPort . "/" . $cgi . ".php?_token=" . self::$token;
    echo $url . "\n";
-   echo "Open above URL in a web browser, if not already done. Enjoy!\n";
+   echo "Open above URL in a web browser. Enjoy!\n";
    XDHq_SHRD::open($url);
   } else {
    if ($this->getString_($this->socket) != self::$token) {

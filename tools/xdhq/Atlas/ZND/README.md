@@ -36,6 +36,7 @@ EOT;
   switch ($action) {
   case "Connect":
    $dom->setLayout("", self::$body);
+   $dom->focus("input");
    break;
   case "Typing":
    $dom->setContent("name", $dom->getContent($id));

@@ -24,7 +24,7 @@ of the TodoMVC application (http://todomvc.com/).
 
 "use strict"
 
-var atlasId = "";
+var atlas;
 
 if (process.env.EPEIOS_SRC) {
 	let epeiosPath = "";
@@ -34,16 +34,15 @@ if (process.env.EPEIOS_SRC) {
 	else
 		epeiosPath = "~/hg/epeios/"
 
-	atlasId = epeiosPath + "tools/xdhq/Atlas/NJS/Atlas.js";
+	atlas = require(epeiosPath + "tools/xdhq/Atlas/NJS/Atlas.js");
 } else {
-	atlasId = 'atlastk';
+	atlas = require('atlastk');
 }
 
-const atlas = require(atlasId);
 const DOM = atlas.DOM;
 const readAsset = atlas.readAsset;
 
-class MyData extends DOM {
+class TodoMVC extends atlas.DOM {
 	constructor() {
 		super();
 		this.timestamp = new Date();
@@ -58,7 +57,7 @@ class MyData extends DOM {
 				"label": "Note 2"
 			}
 		];
-		 this.todos = [];
+		this.todos = [];
 	}
 	itemsLeft() {
 		var i = this.todos.length;
@@ -114,7 +113,7 @@ function displayTodos(dom) {
 
 	while (i < dom.todos.length) {
 		todo = dom.todos[i];
-		tree = tree.ele('Todo', { 'id': i, 'completed' : todo["completed"] }, todo["label"] ).up();
+		tree = tree.ele('Todo', { 'id': i, 'completed': todo["completed"] }, todo["label"]).up();
 		i++;
 	}
 
@@ -128,11 +127,11 @@ function displayTodos(dom) {
 function newSession() {
 	console.log("New session detected !");
 
-	return new MyData();
+	return new TodoMVC();
 }
 
 function acConnect(dom, id) {
-	dom.setLayout("", readAsset( "Main.html"),
+	dom.setLayout("", readAsset("Main.html"),
 		() => dom.focus("Input",
 			() => dom.disableElements(["HideActive", "HideCompleted"],
 				() => displayTodos(dom)
@@ -209,7 +208,7 @@ function acToggle(dom, id) {
 
 	// Can't use 'ToggleClasses', because then 2 elements would have same key...
 	dom.toggleClass("Todo." + id, "completed",
-		() => dom.toggleClass( "Todo." + id, "active",
+		() => dom.toggleClass("Todo." + id, "active",
 			() => handleCount(dom)
 		)
 	);
@@ -224,7 +223,7 @@ function acAll(dom, id) {
 				"Active": "selected",
 				"Completed": "selected"
 			},
-			() => dom.disableElements( ["HideActive", "HideCompleted"] )
+			() => dom.disableElements(["HideActive", "HideCompleted"])
 		)
 	)
 }
@@ -238,8 +237,8 @@ function acActive(dom, id) {
 				"All": "selected",
 				"Completed": "selected"
 			},
-			() => dom.disableElement( "HideActive",
-				() => dom.enableElement( "HideCompleted") )
+			() => dom.disableElement("HideActive",
+				() => dom.enableElement("HideCompleted"))
 		)
 	)
 }
@@ -254,7 +253,7 @@ function acCompleted(dom, id) {
 				"Active": "selected"
 			},
 			() => dom.disableElement("HideCompleted",
-				() =>dom.enableElement("HideActive"))
+				() => dom.enableElement("HideActive"))
 		)
 	)
 }
@@ -303,7 +302,7 @@ function acCancel(dom, id) {
 }
 
 function main() {
-	var callbacks =	{
+	var callbacks = {
 		"Connect": acConnect,
 		"Submit": acSubmit,
 		"Destroy": acDestroy,

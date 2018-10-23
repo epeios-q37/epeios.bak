@@ -4,7 +4,7 @@
 	<xpp:bloc>
 		<!-- User definitions -->
 		<xpp:define name="Version">
-			<xpp:bloc>0.3.3</xpp:bloc>
+			<xpp:bloc>0.4.0</xpp:bloc>
 		</xpp:define>
 		<xpp:define name="CopyrightYears">
 			<xpp:bloc>2018</xpp:bloc>
@@ -22,6 +22,9 @@
 	<RTW Description="Toolkit for prototyping web applications" Keywords="XDHTML,Atlas,web,interface,front-end,prototyping">
 		<Dir>atlas-node</Dir>
 	</RTW>
+	<Files>
+		<File>runkit.js</File>
+	</Files>
 	<NodeJS>
 		<Deps>
 			<Regular>

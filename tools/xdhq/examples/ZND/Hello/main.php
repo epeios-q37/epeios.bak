@@ -55,6 +55,7 @@ class Hello extends Threaded {
   switch ($action) {
   case "Connect":
    $dom->setLayout("", readAsset("Main.html"));
+   $dom->focus("input");
    break;
   case "Typing":
    $dom->setContent("name", $dom->getContent($id));
