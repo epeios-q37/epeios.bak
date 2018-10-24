@@ -25,7 +25,7 @@
 
 $source = <<<EOT
 /*
-	This is a JavaScript source code for Node.js.
+	JavaScript source code for Node.js of the '$NAME$' application.
 	It's an example of use of the Atlas toolkit (http://atlastk.org).
 
 	To run this program:
@@ -44,13 +44,16 @@ $source = <<<EOT
 
 
 EOT;
+$app = $_GET['app'];
+
+$source = str_replace( "$NAME$", $app, $source );
 
 
 if ( array_key_exists( 'token', $_GET ) ) {
 	$source .= "\n\nprocess.env.ATK_TOKEN=\"" . $_GET['token'] . "\";\n\n";
 }
 
-$source .= file_get_contents( "http://q37.info/download/assets/" . $_GET['app'] . ".js" );
+$source .= file_get_contents( "http://q37.info/download/assets/" . $app . ".js" );
 
 $source .=<<<EOT
 
