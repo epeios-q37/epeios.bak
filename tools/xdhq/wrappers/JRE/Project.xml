@@ -56,7 +56,7 @@
 				<Files Path="../../examples/common/blank/">
 					<File>CHANGELOG.md</File>
 					<File>head.html</File>
-					<File>Main.xsl</File>
+					<File>Main.html</File>
 				</Files>
 			</Files>
 			<Files Group="Chatroom">

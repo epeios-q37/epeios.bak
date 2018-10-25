@@ -19,9 +19,7 @@
 
 "use strict"
 
-const fs = require('fs');
-
-var atlasId = "";
+var atlas;
 
 if (process.env.EPEIOS_SRC) {
 	let epeiosPath = "";
@@ -31,17 +29,17 @@ if (process.env.EPEIOS_SRC) {
 	else
 		epeiosPath = "~/hg/epeios/"
 
-	atlasId = epeiosPath + "tools/xdhq/Atlas/NJS/Atlas.js";
+	atlas = require(epeiosPath + "tools/xdhq/Atlas/NJS/Atlas.js");
 } else {
-	atlasId = 'atlastk';
+	atlas = require('atlastk');
 }
 
-const atlas = require(atlasId);
+const fs = require('fs');
 const DOM = atlas.DOM;
 
 const readAsset = atlas.readAsset;
 
-class MyData extends DOM {
+class Blank extends DOM {
 	constructor() {
 		super();
 		this.timestamp = new Date();
@@ -49,9 +47,7 @@ class MyData extends DOM {
 }
 
 function newSession() {
-	console.log("New session detected !");
-
-	return new MyData();
+	return new Blank();
 }
 
 function acConnect(dom, id) {

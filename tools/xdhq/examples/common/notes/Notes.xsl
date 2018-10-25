@@ -10,8 +10,8 @@
 	<xsl:template match="Notes">
 		<ul>
 			<li>
-				<span id="View.0"/>
-				<span id="Edit.0"/>
+				<span id="View.0"></span>
+				<span id="Edit.0"></span>
 			</li>
 			<xsl:apply-templates select="Note"/>
 		</ul>
@@ -32,13 +32,13 @@
 						</div>
 						<span id="Buttons.{@id}" style="flex-direction: row;">
 							<button class="button" data-xdh-onevent="Edit" data-xdh-value="{@id}">Edit</button>
-							<span style="display:inline-block; width: 10px;"/>
+							<span style="display:inline-block; width: 10px;"></span>
 							<button class="button" data-xdh-onevent="Delete" data-xdh-value="{@id}">Delete</button>
 						</span>
 					</article>
 				</div>
 			</span>
-			<span id="Edit.{@id}"/>
+			<span id="Edit.{@id}"></span>
 		</li>
 	</xsl:template>
 </xsl:stylesheet>

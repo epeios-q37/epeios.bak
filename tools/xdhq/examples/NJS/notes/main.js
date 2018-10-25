@@ -19,7 +19,7 @@
 
 "use strict"
 
-var atlasId = "";
+var atlas;
 
 if (process.env.EPEIOS_SRC) {
 	let epeiosPath = "";
@@ -29,19 +29,18 @@ if (process.env.EPEIOS_SRC) {
 	else
 		epeiosPath = "~/hg/epeios/"
 
-	atlasId = epeiosPath + "tools/xdhq/Atlas/NJS/Atlas.js";
+	atlas = require(epeiosPath + "tools/xdhq/Atlas/NJS/Atlas.js");
 } else {
-	atlasId = 'atlastk';
+	atlas = require('atlastk');
 }
 
-const atlas = require(atlasId);
 const DOM = atlas.DOM;
 
 const readAsset = atlas.readAsset;
 
 const viewModeElements = ["Pattern", "CreateButton", "DescriptionToggling", "ViewNotes"];
 
-class MyData extends DOM {
+class Notes extends DOM {
 	constructor() {
 		super();
 		this.timestamp = new Date();
@@ -68,9 +67,7 @@ class MyData extends DOM {
 }
 
 function newSession() {
-	console.log("New session detected !");
-
-	return new MyData();
+	return new Notes();
 }
 
 function push(note, id, tree) {
@@ -94,7 +91,7 @@ function handleDescriptions(dom) {
 }
 
 function displayList(dom) {
-	var tree = atlas.createTree();
+	var tree = require('xmlbuilder').create('XDHTML');
 	var i = 1;	// 0 skipped, as it serves as buffer for the new ones.
 	var contents = {};
 
@@ -110,7 +107,7 @@ function displayList(dom) {
 
 	tree = tree.up();
 
-	dom.setLayoutXSL("Notes", tree, "Notes.xsl",
+	dom.setLayoutXSL("Notes", tree.end(), "Notes.xsl",
 		() => dom.setContents(contents,
 			() => dom.enableElements(viewModeElements,
 				() => handleDescriptions(dom)
@@ -120,10 +117,8 @@ function displayList(dom) {
 }
 
 function acConnect(dom, id) {
-	dom.headUp( readAsset("Head.html"),
-		() => dom.setLayout("", readAsset( "Main.html" ),
-			() => displayList(dom)
-		)
+	dom.setLayout("", readAsset( "Main.html" ),
+		() => displayList(dom)
 	);
 }
 
@@ -165,7 +160,9 @@ function edit(dom, id) {
 			},
 			() => dom.disableElements(
 				viewModeElements,
-				() => dom.dressWidgets("Notes")
+				() => dom.dressWidgets("Notes",
+					() => dom.focus("Title")
+				)
 			)
 		)
 	);
@@ -211,7 +208,8 @@ function acSubmit(dom, id) {
 					);
 				}
 			} else
-				dom.alert("Title can not be empty !");
+				dom.alert("Title can not be empty !",
+					() => dom.focus("Title") );
 		}
 	);
 }
@@ -242,7 +240,7 @@ function main() {
 		"Cancel": acCancel,
 	};
 
-	atlas.launch(newSession, "Connect", callbacks );
+	atlas.launch(newSession, "Connect", callbacks, readAsset("Head.html"));
 }
 
 main();

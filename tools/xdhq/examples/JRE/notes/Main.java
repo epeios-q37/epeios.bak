@@ -39,19 +39,46 @@ class Notes extends Atlas {
 	private String viewModeElements[] = { "Pattern", "CreateButton", "DescriptionToggling", "ViewNotes" };
 	private List<Note> notes;
 
-	private void push(Note note, int index, Tree tree) {
-		tree.pushTag("Note");
-		tree.putAttribute("id", index);
+	private static String readAsset_( String path ) {
+		String dir;
 
-		tree.pushTag("title");
-		tree.putValue(note.title);
-		tree.popTag();
+		if (System.getenv("EPEIOS_SRC") == null)
+			dir = ".";
+		else
+			dir = "notes";
 
-		tree.pushTag("description");
-		tree.putValue(note.description);
-		tree.popTag();
+		return readAsset( path, dir );
+	}
 
-		tree.popTag();
+
+	private String push(Note note, int index, String tree) {
+//		tree.pushTag("Note");
+		tree += "<Note";
+//		tree.putAttribute("id", index);
+		tree += " id=\"" + index + "\">\n";
+
+//		tree.pushTag("title");
+		tree += "<title>\n";
+		
+//		tree.putValue(note.title);
+		tree += note.title;
+
+//		tree.popTag();
+		tree += "</title>\n";
+
+//		tree.pushTag("description");
+		tree += "<description>\n";
+
+//		tree.putValue(note.description);
+		tree += note.description;
+
+//		tree.popTag();
+		tree += "</description>\n";
+
+//		tree.popTag();
+		tree += "</Note>";
+
+		return tree;
 	}
 
 	private void handleDescriptions( DOM dom ) {
@@ -62,11 +89,13 @@ class Notes extends Atlas {
 	}
 
 	private void displayList( DOM dom ) {
-		Tree tree = new Tree();
-		List<String[]> idsAndContents = new ArrayList<String[]>();
+//		Tree tree = new Tree();
+		String tree = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<XDHTML>\n";
+		Map<String,String> idsAndContents = new HashMap<String,String>();
 		ListIterator<Note> li = notes.listIterator(1); // 0 skipped, as it serves as buffer for the new notes.
 
-		tree.pushTag("Notes");
+//		tree.pushTag("Notes");
+		tree += "<Notes>\n";
 
 		while (li.hasNext()) {
 			int index = li.nextIndex();
@@ -74,13 +103,16 @@ class Notes extends Atlas {
 			int length = pattern.length();
 
 			if ((length == 0) || pattern.equals(note.title.substring(0, length).toLowerCase())) {
-				push(note, index, tree);
-				idsAndContents.add( new String[] { "Description." + index, note.description } );
+				tree = push(note, index, tree);
+				idsAndContents.put(  "Description." + index, note.description );
 			}
 		}
 
-		dom.setLayout("Notes", tree, "Notes.xsl");
-		dom.setContents(idsAndContents.toArray(new String[0][0]));
+		tree += "</Notes>\n";
+		tree += "</XDHTML>";
+
+		dom.setLayoutXSL("Notes", tree, "Notes.xsl" );
+		dom.setContents(idsAndContents);
 		dom.enableElements(viewModeElements);
 	}
 
@@ -94,10 +126,11 @@ class Notes extends Atlas {
 		index = Integer.parseInt(id);
 		Note note = notes.get(index);
 
-		dom.setLayout("Edit." + id, new Tree(), "Note.xsl");
-		dom.setContents( new String[][] { { "Title", note.title }, { "Description", note.description } } );
+		dom.setLayout("Edit." + id, readAsset_( "Note.html") );
+		dom.setContents( new HashMap<String,String> () {{ put( "Title", note.title); put("Description", note.description); }} );
 		dom.disableElements(viewModeElements);
 		dom.dressWidgets("Notes");
+		dom.focus("Title");
 	}
 
 	private void submit( DOM dom ) {
@@ -114,11 +147,13 @@ class Notes extends Atlas {
 				notes.add(0, new Note());
 				displayList( dom );
 			} else {
-				dom.setContents( new String[][] { { "Title." + index, title }, { "Description." + index, description } } );
+				dom.setContents( new HashMap<String,String> () {{ put( "Title." + index, title); put("Description." + index, description); }} );
 				view( dom );
 			}
-		} else
+		} else {
 			dom.alert("Title can not be empty !");
+			dom.focus( "Title");
+		}
 	}
 
 	private void cancel( DOM dom ) {
@@ -141,14 +176,14 @@ class Notes extends Atlas {
 		// First must be empty as it used as buffer for the new notes.
 		notes.add(new Note());
 		notes.add(new Note("Improve design",
-				"Tastes and colors... (aka &laquo;CSS aren&rsquo;t my cup of tea...&raquo;)"));
+				"Tastes and colors... (aka \"CSS aren't my cup of tea...\")"));
 		notes.add(new Note("Fixing bugs", "There are bugs ? Really ?"));
-		notes.add(new Note("Implement new functionalities", "Although it&rsquo;s almost perfect..., isn&rsquo;t it ?"));
+		notes.add(new Note("Implement new functionalities", "Although it's almost perfect..., isn't it ?"));
 	}
 
 	public void handle( DOM dom, String action, String id ) {
 		if ( action.equals( "Connect" ) ) {
-			dom.setLayout("", new Tree(), "Main.xsl");
+			dom.setLayout("", readAsset_( "Main.html") );
 			displayList( dom );
 		} else if ( action.equals( "ToggleDescriptions" ) ) {
 			hideDescriptions = "true".equals(dom.getContent(id));
@@ -173,8 +208,14 @@ class Notes extends Atlas {
 		}
 	}
 	public static void main(String args[]) throws Exception {
-		launch("Connect", "notes", GUI.DEFAULT, args );
+		String dir;
 
+		if (System.getenv("EPEIOS_SRC") == null)
+			dir = ".";
+		else
+			dir = "notes";
+
+		launch("Connect", readAsset_("Head.html"), dir, GUI.DEFAULT, args);
 		for (;;) new Notes();
 	}
 }

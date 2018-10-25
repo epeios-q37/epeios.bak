@@ -18,12 +18,22 @@
 */
 
 import info.q37.atlas.*;
-import info.q37.xdhq.XDHq;
 
 class Blank extends Atlas {
+	private static String readAsset_( String path ) {
+		String dir;
+
+		if (System.getenv("EPEIOS_SRC") == null)
+			dir = ".";
+		else
+			dir = "blank";
+
+		return readAsset( path, dir );
+	}
+
 	public void handle( DOM dom, String action, String id ) {
 		if ( action.equals( "Connect" ) ) {
-			dom.setLayout("", new Tree(), "Main.xsl");
+			dom.setLayout("",readAsset_( "Main.html") );
 			dom.addClass("Input", "hidden");
 		} else if ( action.equals( "Submit" ) ) {
 			dom.setContent("Pattern", dom.getContent("Pattern").toUpperCase());
@@ -31,28 +41,22 @@ class Blank extends Atlas {
 			dom.addClass("Input", "hidden");
 		} else if ( action.equals( "ShowInput" ) ) {
 			dom.removeClass("Input", "hidden");
+			dom.focus("Pattern");
 		} else {
 			System.out.println("No or unknown action !");
 			System.exit(1);
 		}
 	}
 
-	public void test() {
-		System.out.println("Essai from void method!");
-	}
-
-	private static void displayBytecodeBuildTimestamp() throws Exception {
-		System.out.println("Bytecode build : " + new java.util.Date(new java.io.File(Blank.class.getClassLoader()
-				.getResource(Blank.class.getCanonicalName().replace('.', '/') + ".class").toURI()).lastModified()));
-	}
-
 	public static void main(String[] args) throws Exception {
-		System.out.println(XDHq.wrapperInfo());
-		System.out.println(XDHq.componentInfo());
-		displayBytecodeBuildTimestamp();
-		System.out.println(XDHq.returnArgument("Text from JAVA file"));
+		String dir;
 
-		launch("Connect", "blank", Atlas.Type.DEFAULT, args );
+		if (System.getenv("EPEIOS_SRC") == null)
+			dir = ".";
+		else
+			dir = "blank";
+
+		launch("Connect", readAsset_("Head.html"), dir, GUI.DEFAULT, args);
 
 		for (;;) new Blank();
 	}
