@@ -54,12 +54,8 @@ class TodoMVC extends Atlas {
 		return (int) todos.stream().filter(todo -> !todo.completed).count();
 	}
 
-	private String escape(String text) {
-		return text.replace("&", "&amp;").replace("\"", "&quot;").replace("<", "&lt;").replace(">", "&gt;");
-	}
-
 	private String push(Todo todo, int id, String xml) {
-		return xml + "<Todo" + " id=\"" + id + "\"" + " completed=\"" + todo.completed + "\">" + escape(todo.label)
+		return xml + "<Todo" + " id=\"" + id + "\"" + " completed=\"" + todo.completed + "\">" + toXMLValue(todo.label)
 				+ "</Todo>\n";
 	}
 
@@ -131,7 +127,7 @@ class TodoMVC extends Atlas {
 		if (!"".equals(content.trim())) {
 			todos.set(index, new Todo(content, todos.get(index).completed));
 
-			dom.setContent("Label." + index, escape(content));
+			dom.setContent("Label." + index, toXMLValue(content));
 
 			dom.removeClasses(new HashMap<String, String>() {
 				{

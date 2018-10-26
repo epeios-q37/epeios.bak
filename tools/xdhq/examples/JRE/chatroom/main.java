@@ -52,7 +52,7 @@ class Chatroom extends Atlas {
 	}
 
 	private String buildTree_() {
-		String tree = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<XDHTML>\n<Messages pseudo=\"" + pseudo  + "\">\n";
+		String tree = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<XDHTML>\n<Messages pseudo=\"" + toXMLValue( pseudo ) + "\">\n";
 
 		synchronized (Shared.messages) {
 			ListIterator<Message> li = Shared.messages.listIterator(Shared.messages.size());
@@ -62,7 +62,7 @@ class Chatroom extends Atlas {
 			while (i >= this.lastMessage) {
 				Message message = li.previous();
 
-				tree += "\t\t<Message id=\"" + i + "\" pseudo=\"" + message.pseudo + "\">" + message.content + "</Message>\n";
+				tree += "\t\t<Message id=\"" + i + "\" pseudo=\"" + toXMLValue( message.pseudo ) + "\">" + toXMLValue( message.content ) + "</Message>\n";
 
 				i = li.previousIndex();
 			}

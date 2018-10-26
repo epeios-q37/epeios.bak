@@ -177,7 +177,7 @@ class XDHqDOM extends Threaded {
 		self::addClasses( [ $id => $class ] );
 	}
 	function removeClass( string $id, string $class  ) {
-		self::handleClasses( [ $id => $class ] );
+		self::removeClasses( [ $id => $class ] );
 	}
 	function toggleClass( string $id, string $class  ) {
 		self::toggleClasses( [ $id => $class ] );

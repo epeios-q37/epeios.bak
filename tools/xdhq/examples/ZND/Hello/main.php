@@ -18,11 +18,6 @@
 	along with XDHq If not, see <http://www.gnu.org/licenses/>.
 */
 
-function readAsset( $path ) {
-	// Due to multi-threading constraints, a global variable can not be used here.
-	return Atlas::readAsset( $path, "Hello" );
-}
-
 function getAtlas() {
  if (getenv("EPEIOS_SRC") === false) {
   $atlasPath = "phar://Atlas.phar/";
@@ -50,6 +45,11 @@ function getAtlas() {
 
 getAtlas();
 
+function readAsset( $path ) {
+	// Due to multi-threading constraints, a global variable can not be used here.
+	return Atlas::readAsset( $path, "Hello" );
+}
+
 class Hello extends Threaded {
  public function handle($dom, $action, $id) {
   switch ($action) {
@@ -71,9 +71,9 @@ class Hello extends Threaded {
  }
 }
 
-function myNew() {
+function hello() {
  return new Hello();
 }
 
-Atlas::launch("Connect", 'myNew', readAsset( "Head.html" ), null, "Hello" );
+Atlas::launch("Connect", 'hello', readAsset( "Head.html" ), null, "Hello" );
 ?>

@@ -143,7 +143,7 @@ class XDHqDOM_DEMO extends Threaded {
   $this->socket = fsockopen($address, $port, $errno, $errstr);
 
   if (!$this->socket) {
-   throw new Exception("$errstr ($errno)\n");
+   die("$errstr ($errno)\n");
   }
 
   $this->writeString_(self::$token, $this->socket);

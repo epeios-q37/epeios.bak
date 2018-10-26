@@ -1,206 +1,242 @@
 <?php
 /*
-	Copyright (C) 2018 Claude SIMON (http://q37.info/contact/).
+    Copyright (C) 2018 Claude SIMON (http://q37.info/contact/).
 
-	This file is part of XDHq.
+    This file is part of XDHq.
 
-	XDHq is free software: you can redistribute it and/or
-	modify it under the terms of the GNU Affero General Public License as
-	published by the Free Software Foundation, either version 3 of the
-	License, or (at your option) any later version.
+    XDHq is free software: you can redistribute it and/or
+    modify it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.
 
-	XDHq is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-	Affero General Public License for more details.
+    XDHq is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Affero General Public License for more details.
 
-	You should have received a copy of the GNU Affero General Public License
-	along with XDHq If not, see <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Affero General Public License
+    along with XDHq If not, see <http://www.gnu.org/licenses/>.
 */
 
 function getAtlas() {
-	if (getenv("EPEIOS_SRC") === false)
-		$atlasPath = "phar://Atlas.phar/";
-	else {
-		switch (strtoupper(substr(php_uname('s') , 0, 3))) {
-		case "WIN":
-			$epeiosPath = "h:\\hg\\epeios\\";
-		break;
-		case "LIN":
-			$epeiosPath = "/home/csimon/hg/epeios/";
-		break;
-		case "DAR":
-			$epeiosPath = "/Users/csimon/hg/epeios/";
-		break;
-		default:
-			echo "Unknown OS !!!\n";
-			break;
-		}
+ if (getenv("EPEIOS_SRC") === false) {
+  $atlasPath = "phar://Atlas.phar/";
+ } else {
+  switch (strtoupper(substr(php_uname('s'), 0, 3))) {
+  case "WIN":
+   $epeiosPath = "h:\\hg\\epeios\\";
+   break;
+  case "LIN":
+   $epeiosPath = "/home/csimon/hg/epeios/";
+   break;
+  case "DAR":
+   $epeiosPath = "/Users/csimon/hg/epeios/";
+   break;
+  default:
+   die("Unknown OS !!!\n");
+   break;
+  }
 
-		$atlasPath = $epeiosPath . "tools/xdhq/Atlas/ZND/";
-	}
+  $atlasPath = $epeiosPath . "tools/xdhq/Atlas/ZND/";
+ }
 
-	require( $atlasPath . "Atlas.php");
+ require $atlasPath . "Atlas.php";
 }
 
 getAtlas();
 
-$viewModeElements = ["Pattern", "CreateButton", "DescriptionToggling", "ViewNotes"];
-
-class MyData extends AtlasDOM {
-	public $pattern = "";
-	public $hideDescriptions = false;
-	public $id = 0;
-	public $notes = [
-		// First one must be empty; it is used as buffer for new entries.
-		[
-			'title' => '',
-			'description' => '',
-		],
-		[
-			'title' => 'Improve design',
-			'description' => 'Tastes and colors... (aka &laquo;CSS aren&rsquo;t my cup of tea...&raquo;)',
-		],
-		[ 
-			'title' => 'Fixing bugs',
-			'description' => 'There are bugs ? Really ?',
-		],
-		[
-			'title' => 'Implement new functionalities',
-			'description' =>  "Although it&rsquo;s almost perfect..., isn&rsquo;t it ?",
-		]
-	];
+function getViewModeElements() {
+ return ["Pattern", "CreateButton", "DescriptionToggling", "ViewNotes"];
 }
 
 function push($note, $id, $tree) {
-	$tree->pushTag('Note');
-	$tree->putAttribute('id', $id);
+ $tree .= "<Note";
+ $tree .= " id=\"" . $id . "\">\n";
 
-	foreach ($note as $key => $value) {
-		$tree->pushTag( $key );
-		$tree->putValue( $value );
-		$tree->popTag();
-	}
+ foreach ((array) $note as $key => $value) {
+  $tree .= "<" . $key . ">" . htmlspecialchars($value) . "</" . $key . ">\n";
+ }
 
-	$tree->popTag();
+ return $tree . "</Note>";
 }
 
-function handleDescriptions($dom) {
-	if ($dom->hideDescriptions)
-		$dom->disableElement("ViewDescriptions");
-	else
-		$dom->enableElement("ViewDescriptions");
+function readAsset($path) {
+ // Due to multi-threading constraints, a global variable can not be used here.
+ return Atlas::readAsset($path, "notes");
 }
 
-function displayList( $dom ) {
-	global $viewModeElements;
-	$tree = new AtlasTree();
-	$i = 1;	// 0 skipped, as it serves as buffer for the new ones.
-	$contents = [];
+class Notes extends Threaded {
+ public $pattern = "";
+ public $hideDescriptions = false;
+ public $id = 0;
+ public $notes = [
+  // First one must be empty; it is used as buffer for new entries.
+  [
+   'title' => '',
+   'description' => '',
+  ],
+  [
+   'title' => 'Improve design',
+   'description' => 'Tastes and colors... (aka &laquo;CSS aren&rsquo;t my cup of tea...&raquo;)',
+  ],
+  [
+   'title' => 'Fixing bugs',
+   'description' => 'There are bugs ? Really ?',
+  ],
+  [
+   'title' => 'Implement new functionalities',
+   'description' => "Although it&rsquo;s almost perfect..., isn&rsquo;t it ?",
+  ],
+ ];
 
-	$tree->pushTag( "Notes" );
+ function handleDescriptions($dom) {
+  if ($this->hideDescriptions) {
+   $dom->disableElement("ViewDescriptions");
+  } else {
+   $dom->enableElement("ViewDescriptions");
+  }
+ }
 
-	$count = count($dom->notes );
+ function displayList($dom) {
+  $tree = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<XDHTML>\n";
+  $i = 1; // 0 skipped, as it serves as buffer for the new ones.
+  $contents = [];
 
-	while ( $i < $count ) {
-		if ( strtolower(substr($dom->notes[$i]['title'],0,strlen($dom->pattern))) === $dom->pattern ) {
-			push( $dom->notes[$i], $i, $tree);
-			$contents["Description." . $i] = $dom->notes[$i]['description'];
-		}
-		$i++;
-	}
+  $tree .= "<Notes>\n";
 
-	$dom->setLayout( "Notes", $tree, "Notes.xsl");
-	$dom->setContents( $contents );
-	$dom->enableElements( $viewModeElements );
+  $count = count($this->notes);
+
+  while ($i < $count) {
+   if (strtolower(substr($this->notes[$i]['title'], 0, strlen($this->pattern))) === $this->pattern) {
+    $tree = push($this->notes[$i], $i, $tree);
+    $contents["Description." . $i] = $this->notes[$i]['description'];
+   }
+   $i++;
+  }
+
+  $tree .= "</Notes>\n";
+  $tree .= "</XDHTML>";
+
+  $dom->setLayoutXSL("Notes", $tree, "Notes.xsl");
+  $dom->setContents($contents);
+  $dom->enableElements(getViewModeElements());
+ }
+
+ function edit($dom, $id) {
+  $this->id = intval($id);
+  $dom->setLayout("Edit." . $id, readAsset("Note.html"));
+  $dom->setContents(
+   [
+    "Title" => $this->notes[$this->id]['title'],
+    "Description" => $this->notes[$this->id]['description'],
+   ]);
+  $dom->disableElements(getViewModeElements());
+  $dom->dressWidgets("Notes");
+ }
+
+ function view($dom) {
+  $dom->enableElements(getViewModeElements());
+  $dom->setContent("Edit." . $this->id, "");
+  $this->id = -1;
+ }
+
+ function shift() {
+  $i = count($this->notes) - 1;
+
+  while ($i >= 0) {
+   $this->notes[$i + 1] = $this->notes[$i];
+   $i--;
+  }
+ }
+
+ function delete($i) {
+  $l = count($this->notes) - 1;
+
+  while ($l > $i) {
+   $this->notes[$l - 1] = $this->notes[$l];
+   $l--;
+  }
+
+  unset($this->notes[count($this->notes) - 1]);
+ }
+
+ public function handle($dom, $action, $id) {
+  switch ($action) {
+  case "Connect":
+   $dom->setLayout("", readAsset("Main.html"));
+   $this->displayList($dom);
+   break;
+  case "ToggleDescriptions":
+   $this->hideDescriptions = $dom->getContent($id) == "true";
+   $this->handleDescriptions($dom);
+   break;
+  case "Search":
+   $this->pattern = strtolower($dom->getContent("Pattern"));
+   $this->displayList($dom);
+   break;
+  case "Edit":
+   $this->edit($dom, $dom->getContent($id));
+   $dom->focus("Title");
+   break;
+  case "Delete":
+   if ($dom->confirm("Are you sure you want to delete this entry ?")) {
+    $this->delete(intval($dom->getContent($id)));
+    // Below do not work in threaded class.
+    // array_splice($this->notes, intval($dom->getContent($id)), 1);
+    $this->displayList($dom);
+   }
+   break;
+  case "Submit":
+   $result = $dom->getContents(["Title", "Description"]);
+
+   $title = trim($result['Title']);
+   $description = $result['Description'];
+
+   if ($title != '') {
+    $this->notes[$this->id]['title'] = $title;
+    $this->notes[$this->id]['description'] = $description;
+    if ($this->id == 0) {
+     $new = array_merge(['title' => '', 'description' => ''], (array) $this->notes);
+     var_dump($this->notes);
+     $this->shift();
+     $this->notes[0] = ['title' => '', 'description' => ''];
+     // Below do not work in threaded class.
+     // array_unshift($this->notes, ['title' => '', 'description' => '']);
+     $this->displayList($dom);
+    } else {
+     $contents["Title." . $this->id] = $title;
+     $contents["Description." . $this->id] = $description;
+     $dom->setContents($contents);
+     $this->view($dom);
+    }
+   } else {
+    $dom->alert("Title can not be empty !");
+    $dom->focus("Title");
+   }
+
+   break;
+  case "Cancel":
+   $result = $dom->getContents(["Title", "Description"]);
+   if (($this->notes[$this->id]['title'] != $result['Title']) or ($this->notes[$this->id]['description'] != $result['Description'])) {
+    if ($dom->confirm("Are you sure you want to cancel your modifications ?")) {
+     $this->view($dom);
+    }
+
+   } else {
+    $this->view($dom);
+   }
+
+   break;
+  default:
+   die("???");
+   break;
+  }
+ }
 }
 
-function view($dom) {
-	global $viewModeElements;
-
-	$dom->enableElements( $viewModeElements );
-	$dom->setContent("Edit." . $dom->id, "");
-	$dom->id = -1;
+function notes() {
+ return new Notes();
 }
 
-function edit($dom, $id) {
-	global $viewModeElements;
-
-	$dom->id = intval($id);
-	$dom->setLayout("Edit." . $id, new AtlasTree(), "Note.xsl" );
-	$dom->setContents(
-			[
-				"Title" => $dom->notes[$dom->id]['title'],
-				"Description" => $dom->notes[$dom->id]['description'],
-			] );
-	$dom->disableElements( $viewModeElements );
-	$dom->dressWidgets("Notes");
-}
-
-function main() {
-	Atlas::launch( "Connect", null, "notes" );
-
-	$dom = new MyData();
-
-	while ( true ) {
-		switch( $dom->getAction( $id ) ) {
-		case "Connect":
-			$dom->setLayout( "", new AtlasTree(), "Main.xsl" );
-			displayList( $dom );
-			break;
-		case "ToggleDescriptions":
-			$dom->hideDescriptions = $dom->getContent($id) == "true";
-			handleDescriptions($dom);
-			break;
-		case "Search":
-			$dom->pattern = strtolower( $dom->getContent( "Pattern" ) );
-			displayList($dom);
-			break;
-		case "Edit":
-			edit( $dom, $dom->getContent($id));
-			break;
-		case "Delete":
-			if ( $dom->confirm("Are you sure you want to delete this entry ?" ) ) {
-				array_splice($dom->notes,intval($dom->getContent($id)),1);
-				displayList($dom);
-			}
-			break;
-		case "Submit":
-			$result = $dom->getContents(["Title", "Description"]);
-
-			$title = trim($result['Title']);
-			$description = $result['Description'];
-
-			if ($title != '') {
-				$dom->notes[$dom->id]['title'] = $title;
-				$dom->notes[$dom->id]['description'] = $description;
-				if ($dom->id == 0) {
-					array_unshift( $dom->notes, [ 'title' => '', 'description' => '' ] );
-					displayList($dom);
-				} else {
-					$contents["Title." . $dom->id] = $title;
-					$contents["Description." . $dom->id] = $description;
-					$dom->setContents($contents);
-					view($dom);
-				}
-			} else
-				$dom->alert("Title can not be empty !");
-			break;
-		case "Cancel":
-			$result = $dom->getContents(["Title", "Description"]);
-			if (($dom->notes[$dom->id]['title'] != $result['Title']) or ($dom->notes[$dom->id]['description'] != $result['Description'])) {
-				if ( $dom->confirm("Are you sure you want to cancel your modifications ?" ) )
-					view($dom);
-			} else
-				view($dom);
-		break;
-		default:
-			die( "???" );
-			break;
-		}
-	}
-}
-
-main();
-
+Atlas::launch("Connect", 'notes', readAsset("Head.html"), null, "notes");
 ?>

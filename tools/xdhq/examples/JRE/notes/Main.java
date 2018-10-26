@@ -50,32 +50,14 @@ class Notes extends Atlas {
 		return readAsset( path, dir );
 	}
 
-
 	private String push(Note note, int index, String tree) {
-//		tree.pushTag("Note");
 		tree += "<Note";
-//		tree.putAttribute("id", index);
 		tree += " id=\"" + index + "\">\n";
 
-//		tree.pushTag("title");
-		tree += "<title>\n";
-		
-//		tree.putValue(note.title);
-		tree += note.title;
+		tree += "<title>\n" + toXMLValue( note.title ) + "</title>\n";
 
-//		tree.popTag();
-		tree += "</title>\n";
+		tree += "<description>\n" + note.description + "</description>\n";
 
-//		tree.pushTag("description");
-		tree += "<description>\n";
-
-//		tree.putValue(note.description);
-		tree += note.description;
-
-//		tree.popTag();
-		tree += "</description>\n";
-
-//		tree.popTag();
 		tree += "</Note>";
 
 		return tree;
@@ -89,12 +71,10 @@ class Notes extends Atlas {
 	}
 
 	private void displayList( DOM dom ) {
-//		Tree tree = new Tree();
 		String tree = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<XDHTML>\n";
 		Map<String,String> idsAndContents = new HashMap<String,String>();
 		ListIterator<Note> li = notes.listIterator(1); // 0 skipped, as it serves as buffer for the new notes.
 
-//		tree.pushTag("Notes");
 		tree += "<Notes>\n";
 
 		while (li.hasNext()) {
