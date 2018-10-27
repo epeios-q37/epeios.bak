@@ -66,6 +66,7 @@ function acHideInput(dom, id) {
 
 function acShowInput(dom, id) {
 	dom.removeClass("Input", "hidden");
+	dom.focus("Pattern");
 }
 
 function main() {

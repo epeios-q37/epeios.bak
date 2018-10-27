@@ -56,7 +56,8 @@ class Notes extends Atlas {
 
 		tree += "<title>\n" + toXMLValue( note.title ) + "</title>\n";
 
-		tree += "<description>\n" + note.description + "</description>\n";
+		// Not used, due to d-o-e bug from Firefox (https://bugzilla.mozilla.org/show_bug.cgi?id=98168).
+//		tree += "<description>\n" + note.description + "</description>\n";
 
 		tree += "</Note>";
 

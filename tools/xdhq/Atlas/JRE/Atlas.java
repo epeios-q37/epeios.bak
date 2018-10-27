@@ -53,7 +53,7 @@ public abstract class Atlas implements Runnable {
 		return readAsset( path, "" );
 	}
 
-	static public toXMLValue(String text) {
+	static public String toXMLValue(String text) {
 		return info.q37.xdhq.XDH.toXMLValue( text );
 	}
 

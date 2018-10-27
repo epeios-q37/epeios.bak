@@ -33,8 +33,10 @@ class XDHq extends XDHq_SHRD{
 	private static function getAssetPath_( $dir ) {
 		if ( parent::isDev() )
 			return "h:/hg/epeios/tools/xdhq/examples/common/" . $dir . "/";
-		else
-			return "./";
+		else {
+			list($script)=get_included_files();
+			return dirname($script) . "/";
+		}
 	}
 	private static function getAssetFilename_( $path, $dir ) {
 		return self::getAssetPath_( $dir ) . $path;

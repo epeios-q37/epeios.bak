@@ -13,6 +13,8 @@ A *Java* version of the *TodoMVC* (<http://todomvc.com/>) application, made with
 	- under *Windows*: `java -cp .;Atlas.jar TodoMVC` (with a semi-colon as separator for the *classpath*),
 	- under other platforms: `java -cp .:Atlas.jar TodoMVC` (with a colon as separator for the *classpath*).
 
+ *NOTA* : you may have to give the full path for the *Java* compiler (`javac`), and may be for the *JVM* (`java`), if they are not in the [*PATH*](https://en.wikipedia.org/wiki/PATH_(variable)).
+
 
 There is also a version for:
 

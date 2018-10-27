@@ -197,7 +197,6 @@ class Notes extends Threaded {
     $this->notes[$this->id]['description'] = $description;
     if ($this->id == 0) {
      $new = array_merge(['title' => '', 'description' => ''], (array) $this->notes);
-     var_dump($this->notes);
      $this->shift();
      $this->notes[0] = ['title' => '', 'description' => ''];
      // Below do not work in threaded class.

@@ -1,6 +1,11 @@
-# Demonstration of the binding for *Node.js* from the *Atlas* toolkit
+# Demonstration of the version for *Node.js* from the *Atlas* toolkit
 
-Try this demonstration at <http://atlastk.org:8080>.
+![Node.js logo](https://q37.info/download/assets/Node.png "Node.js")
+
+- Get this repository (with *git*: `git clone https://github.com/epeios-q37/atlas-node-demo`),
+- go to the retrieved repository, and launch `npm install`,
+- for the *blank* demonstration, launch, from same directory, `node blank/main.js`,
+- for the *notes* demonstration, launch, from same directory, `node notes/main.js`,
 
 There is also a version for:
 

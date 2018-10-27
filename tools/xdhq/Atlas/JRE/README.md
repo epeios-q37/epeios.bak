@@ -70,6 +70,8 @@ class Hello extends Atlas {
   - under *Windows* : `java -cp .;Atlas.jar Hello` (with semi-colon as *classpath* separator),
   - under other platforms : `java -cp .:Atlas.jar Hello` (with colon as *classpath* separator).
 
+*NOTA* : you may have to give the full path for the *Java* compiler (`javac`), and may be for the *JVM* (`java`), if they are not in the [*PATH*](https://en.wikipedia.org/wiki/PATH_(variable)).
+
 ## What's next ?
 
 Here's how the *Atlas* toolkit version of the [*TodoMVC*](http://todomvc.com/) application looks like: 
