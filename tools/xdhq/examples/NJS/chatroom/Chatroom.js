@@ -216,6 +216,9 @@ const body = `
 </div>
 `;
 
+// Note to developer:
+// DON'T PASTE TO Visual Studio : it inserts extraneous characters !
+// There must be NO characters before the XML declaration !
 const xsl = `<?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<xsl:output method="html" encoding="UTF-8"/>

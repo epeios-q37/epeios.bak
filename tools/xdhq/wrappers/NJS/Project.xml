@@ -71,6 +71,7 @@
 			</Files>
 			<Files Group="Blank">
 				<File Path="../../examples/NJS/blank/">main.js</File>
+				<File Path="../../examples/NJS/blank/">Blank.js</File>
 				<Files Path="../../examples/common/blank/">
 					<File>CHANGELOG.md</File>
 					<File>Head.html</File>
@@ -104,6 +105,7 @@
 			<Files Group="Notes">
 				<Files Path="../../examples/NJS/">
 					<File Path="notes/">main.js</File>
+					<File Path="notes/">Notes.js</File>
 					<File>Project.xml</File>
 					<File>NOTES.md</File>
 					<File>README.md</File>
