@@ -49,15 +49,18 @@ function getViewModeElements() {
  return ["Pattern", "CreateButton", "DescriptionToggling", "ViewNotes"];
 }
 
-function push($note, $id, $tree) {
- $tree .= "<Note";
- $tree .= " id=\"" . $id . "\">\n";
+function push($note, $id, &$tree) {
+ $notes = $tree->xdhtml->notes;
+ $notes->note = $tree->createElement( "Note" );
+ $notes->note->setAttribute( "id", $id );
 
- foreach ((array) $note as $key => $value) {
-  $tree .= "<" . $key . ">" . htmlspecialchars($value) . "</" . $key . ">\n";
+ foreach ((array)$note as $key => $value) {
+  $item = $tree->createElement( $key );
+  $item->nodeValue = htmlspecialchars( $value );
+  $notes->note->appendChild( $item );
  }
 
- return $tree . "</Note>";
+  $notes->appendChild( $notes->note );
 }
 
 function readAsset($path) {
@@ -98,26 +101,26 @@ class Notes extends Threaded {
  }
 
  function displayList($dom) {
-  $tree = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<XDHTML>\n";
+  $tree = new DOMDocument( "1.0", "utf8" );
+  $tree->xdhtml = $tree->CreateElement( "XDHTML");
+  $tree->appendChild( $tree->xdhtml );
   $i = 1; // 0 skipped, as it serves as buffer for the new ones.
   $contents = [];
 
-  $tree .= "<Notes>\n";
+  $tree->xdhtml->notes = $tree->createElement( "Notes" );
+  $tree->xdhtml->appendChild( $tree->xdhtml->notes );
 
   $count = count($this->notes);
 
   while ($i < $count) {
    if (strtolower(substr($this->notes[$i]['title'], 0, strlen($this->pattern))) === $this->pattern) {
-    $tree = push($this->notes[$i], $i, $tree);
+    push($this->notes[$i], $i, $tree);
     $contents["Description." . $i] = $this->notes[$i]['description'];
    }
    $i++;
   }
 
-  $tree .= "</Notes>\n";
-  $tree .= "</XDHTML>";
-
-  $dom->setLayoutXSL("Notes", $tree, "Notes.xsl");
+  $dom->setLayoutXSL("Notes", $tree->saveXML(), "Notes.xsl");
   $dom->setContents($contents);
   $dom->enableElements(getViewModeElements());
  }
