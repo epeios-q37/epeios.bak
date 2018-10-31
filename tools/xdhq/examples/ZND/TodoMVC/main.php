@@ -1,31 +1,32 @@
 <?php
 /*
-Copyright (C) 2018 Claude SIMON (http://q37.info/contact/).
+    Copyright (C) 2018 Claude SIMON (http://q37.info/contact/).
 
-This file is part of XDHq.
+    This file is part of XDHq.
 
-WDHq is free software: you can redistribute it and/or
-modify it under the terms of the GNU Affero General Public License as
-published by the Free Software Foundation, either version 3 of the
-License, or (at your option) any later version.
+    WDHq is free software: you can redistribute it and/or
+    modify it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.
 
-XDHq is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-Affero General Public License for more details.
+    XDHq is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Affero General Public License for more details.
 
-You should have received a copy of the GNU Affero General Public License
-along with XDHq If not, see <http://www.gnu.org/licenses/>.
- */
+    You should have received a copy of the GNU Affero General Public License
+    along with XDHq If not, see <http://www.gnu.org/licenses/>.
+*/
 
- function readAsset( $path ) {
-  $dir = ".";
+function readAsset($path) {
+ $dir = ".";
 
-  if ( XDHq::isDev() )
-   $dir = "TodoMVC";
+ if (XDHq::isDev()) {
+  $dir = "TodoMVC";
+ }
 
-	// Due to multi-threading constraints, a global variable can not be used here.
-	return Atlas::readAsset( $path, $dir );
+ // Due to multi-threading constraints, a global variable can not be used here.
+ return Atlas::readAsset($path, $dir);
 }
 
 function getAtlas() {
@@ -55,18 +56,43 @@ function getAtlas() {
 
 getAtlas();
 
+class XML {
+ private $node_;
+
+ function __construct($tag) {
+  $doc = new DOMDocument("1.0", "utf8");
+
+  $this->node_ = $doc->appendChild($doc->createElement($tag));
+ }
+ function pushTag($tag) {
+  $this->node_ = $this->node_->appendChild($this->node_->ownerDocument->createElement($tag));
+ }
+ function popTag() {
+  $this->node_ = $this->node_->parentNode;
+ }
+ function setValue($value) {
+  $this->node_->nodeValue = htmlspecialchars($value);
+ }
+ function setAttribute($name, $value) {
+  $this->node_->setAttribute($name, $value);
+ }
+ function toString() {
+  return $this->node_->ownerDocument->saveXML();
+ }
+}
+
 /*
-  In threaded classes, arrays are volatile, so no function
-  which takes a reference can be used ('array-splice()', for example).
-  Arrays are also immutable.
-  Hence the way 'todos' member is handled.
-*/
+In threaded classes, arrays are volatile, so no function
+which takes a reference can be used ('array-splice()', for example).
+Arrays are also immutable.
+Hence the way 'todos' member is handled.
+ */
 class TodoMVC extends Threaded {
  private $exclude = NULL;
  private $id = -1;
  private $todos = [];
  private $next = 0; // next free index of '$todos'.
- 
+
  function remove($index) {
   $limit = $this->next - 1;
 
@@ -93,21 +119,12 @@ class TodoMVC extends Threaded {
   return $count;
  }
 
- function push($todo, $id, &$xml) {
-  $xml .= "<Todo";
-
-  $xml .= " id=\"" . $id . "\"";
-
-  if ($todo['completed']) {
-   $xml .= " completed=\"true\"";
-  } else {
-   $xml .= " completed=\"false\"";
-  }
-
-  $xml .= ">";
-  $xml .= htmlspecialchars($todo['label']);
-
-  $xml .= "</Todo>\n";
+ function put($todo, $id, $xml) {
+  $xml->pushTag("Todo");
+  $xml->setAttribute("id", $id);
+  $xml->setAttribute("completed", $todo['completed'] ? "true" : "false");
+  $xml->setValue($todo['label']);
+  $xml->popTag();
  }
 
  function displayCount($dom, $count) {
@@ -140,19 +157,18 @@ class TodoMVC extends Threaded {
  }
 
  function displayTodos($dom) {
-  $xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<XDHTML>\n<Todos>\n";
+  $xml = new XML("XDHTML");
+  $xml->pushTag("Todos");
   $i = 0;
   $count = $this->next;
 
   while ($i < $count) {
-   $this->push($this->todos[$i], $i, $xml);
+   $this->put($this->todos[$i], $i, $xml);
 
    $i++;
   }
 
-  $xml .= "</Todos>\n</XDHTML>";
-
-  $dom->setLayoutXSL("Todos", $xml, "Todos.xsl");
+  $dom->setLayoutXSL("Todos", $xml->toString(), "Todos.xsl");
   $this->handleCount($dom);
  }
 
@@ -257,7 +273,6 @@ class TodoMVC extends Threaded {
    } else {
     $i++;
    }
-
   }
 
   $this->displayTodos($dom);

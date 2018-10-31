@@ -1,26 +1,26 @@
 <?php
 /*
-	Copyright (C) 2018 Claude SIMON (http://q37.info/contact/).
+    Copyright (C) 2018 Claude SIMON (http://q37.info/contact/).
 
-	This file is part of XDHq.
+    This file is part of XDHq.
 
-	XDHq is free software: you can redistribute it and/or
-	modify it under the terms of the GNU Affero General Public License as
-	published by the Free Software Foundation, either version 3 of the
-	License, or (at your option) any later version.
+    XDHq is free software: you can redistribute it and/or
+    modify it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.
 
-	XDGq is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-	Affero General Public License for more details.
+    XDGq is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Affero General Public License for more details.
 
-	You should have received a copy of the GNU Affero General Public License
-	along with XDHq If not, see <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Affero General Public License
+    along with XDHq If not, see <http://www.gnu.org/licenses/>.
 */
 
-function readAsset( $path ) {
-	// Due to multi-threading constraints, a global variable can not be used here.
-	return Atlas::readAsset( $path, "chatroom" );
+function readAsset($path) {
+ // Due to multi-threading constraints, a global variable can not be used here.
+ return Atlas::readAsset($path, "chatroom");
 }
 
 function getAtlas() {
@@ -50,9 +50,34 @@ function getAtlas() {
 
 getAtlas();
 
+class XML {
+ private $node_;
+
+ function __construct($tag) {
+  $doc = new DOMDocument("1.0", "utf8");
+
+  $this->node_ = $doc->appendChild($doc->createElement($tag));
+ }
+ function pushTag($tag) {
+  $this->node_ = $this->node_->appendChild($this->node_->ownerDocument->createElement($tag));
+ }
+ function popTag() {
+  $this->node_ = $this->node_->parentNode;
+ }
+ function setValue($value) {
+  $this->node_->nodeValue = htmlspecialchars($value);
+ }
+ function setAttribute($name, $value) {
+  $this->node_->setAttribute($name, $value);
+ }
+ function toString() {
+  return $this->node_->ownerDocument->saveXML();
+ }
+}
+
 class Shared extends Threaded {
-	public $messages = [];
-	public $pseudos = [];
+ public $messages = [];
+ public $pseudos = [];
 }
 
 class Chatroom extends Threaded {
@@ -60,114 +85,119 @@ class Chatroom extends Threaded {
  private $pseudo = "";
  private $lastMessage = 0;
 
- function __construct( $shared ) {
- 	 $this->shared = $shared;
+ function __construct($shared) {
+  $this->shared = $shared;
  }
 
- private function buildTree_( $dom ) {
-	$i = count( $this->shared->messages) - 1;
-	$tree="<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<XDHTML>\n\t<Messages pseudo=\"" . $this->pseudo ."\">\n";
+ private function buildXML_($dom) {
+  $i = count($this->shared->messages) - 1;
+  $xml = new XML("XDHTML");
+  $xml->pushTag("Messages");
+  $xml->setAttribute("pseudo", $this->pseudo);
 
-	while ( $i >= $this->lastMessage ) {
-  		$message = $this->shared->messages[$i];
-		$tree .= "\t\t<Message id=\"" . $i . "\" pseudo=\"" . $message['pseudo'] . "\">" . $message['content'] . "</Message>\n";
-		$i--;
-	}
+  while ($i >= $this->lastMessage) {
+   $message = $this->shared->messages[$i];
+   $xml->pushTag("Message");
+   $xml->setAttribute("pseudo", $message['pseudo']);
+   $xml->setValue($message['content']);
+   $xml->popTag();
+   $i--;
+  }
 
-	$this->lastMessage = count( $this->shared->messages );
+  $this->lastMessage = count($this->shared->messages);
 
-	return $tree . "\t</Messages>\n</XDHTML>";
+  return $xml->toString();
  }
 
- private function displayMessages_( $dom ) {
-   if ( ( count( $this->shared->messages) - 1 )>= $this->lastMessage ) {
-		$tree = $dom->synchronized( function( $dom ){ return $this->buildTree_( $dom ); }, $dom );
+ private function displayMessages_($dom) {
+  if ((count($this->shared->messages) - 1) >= $this->lastMessage) {
+   $xml = $dom->synchronized(function ($dom) {return $this->buildXML_($dom);}, $dom);
 
-		$id = $dom->createElement( "span" );
-		$dom->setLayoutXSL( $id, $tree, "Messages.xsl");
-		$dom->insertChild( $id, "Board");
-	}
+   $id = $dom->createElement("span");
+   $dom->setLayoutXSL($id, $xml, "Messages.xsl");
+   $dom->insertChild($id, "Board");
+  }
  }
 
- private function connect_( $dom ) {
-   $dom->setLayout("", readAsset("Main.html"));
-   $dom->focus( "Pseudo");
-   $dom->setTimeout( 1000, "Update");
-   $dom->synchronized( function($dom){$this->displayMessages_($dom);}, $dom );
+ private function connect_($dom) {
+  $dom->setLayout("", readAsset("Main.html"));
+  $dom->focus("Pseudo");
+  $dom->setTimeout(1000, "Update");
+  $dom->synchronized(function ($dom) {$this->displayMessages_($dom);}, $dom);
  }
 
- private function handlePseudo_( $pseudo ) {
- 	 if ( in_array( $pseudo, (array)$this->shared->pseudos ) )
-		return false;
-	else {
-		$this->shared->pseudos[] = $pseudo;
-		return true;
-	}
+ private function handlePseudo_($pseudo) {
+  if (in_array($pseudo, (array) $this->shared->pseudos)) {
+   return false;
+  } else {
+   $this->shared->pseudos[] = $pseudo;
+   return true;
+  }
  }
 
- private function submitPseudo_( $dom, $id ) {
- 	 $pseudo = $dom->getContent( "Pseudo" );
+ private function submitPseudo_($dom, $id) {
+  $pseudo = $dom->getContent("Pseudo");
 
-	 $pseudo = trim( $pseudo );
+  $pseudo = trim($pseudo);
 
-	 if ( strlen( $pseudo ) == 0 ) {
-	 	 $dom->alert( "Pseudo. can not be empty !");
-		 $dom->setContent( "Pseudo", "" );
-		 $dom->focus( "Pseudo");
-	 } else if ( $dom->synchronized( function($pseudo){return $this->handlePseudo_(strtoupper($pseudo));}, $pseudo ) ) {
-		$this->pseudo = $pseudo;
-		$dom->setContent( "Pseudo", $pseudo );
-		$dom->addClass( "PseudoButton", "hidden" );
-		$dom->disableElements(["Pseudo", "PseudoButton"]);
-		$dom->enableElements(["Message", "MessageButton"]);
-		$dom->focus( "Message");
-		echo( "\t>>>> New user: " . $pseudo . "\n" );
-	 } else {
-	 	 $dom->alert( "Pseudo. not available !");
-		 $dom->setContent( "Pseudo", $pseudo );
-		 $dom->focus( "Pseudo" );
+  if (strlen($pseudo) == 0) {
+   $dom->alert("Pseudo. can not be empty !");
+   $dom->setContent("Pseudo", "");
+   $dom->focus("Pseudo");
+  } else if ($dom->synchronized(function ($pseudo) {return $this->handlePseudo_(strtoupper($pseudo));}, $pseudo)) {
+   $this->pseudo = $pseudo;
+   $dom->setContent("Pseudo", $pseudo);
+   $dom->addClass("PseudoButton", "hidden");
+   $dom->disableElements(["Pseudo", "PseudoButton"]);
+   $dom->enableElements(["Message", "MessageButton"]);
+   $dom->focus("Message");
+   echo ("\t>>>> New user: " . $pseudo . "\n");
+  } else {
+   $dom->alert("Pseudo. not available !");
+   $dom->setContent("Pseudo", $pseudo);
+   $dom->focus("Pseudo");
 
-	 }
+  }
  }
 
-  private function addMessage_( $pseudo, $message ) {
- 	 $message = trim( $message );
+ private function addMessage_($pseudo, $message) {
+  $message = trim($message);
 
-	 if ( strlen( $message ) != 0 ) {
-		echo "''" . $pseudo . "': " . $message . "\n";
-	 	$this->shared->messages[] = [
-			'pseudo' => $pseudo,
-			'content' => $message
-		 ];
-	 }
+  if (strlen($message) != 0) {
+   echo "'" . $pseudo . "': " . $message . "\n";
+   $this->shared->messages[] = [
+    'pseudo' => $pseudo,
+    'content' => $message,
+   ];
+  }
  }
 
- private function submitMessage_( $dom, $id ) {
-	$message = $dom->getContent( "Message" );
-	$dom->setContent( "Message", "" );
-	$dom->focus( "Message" );
-	$dom->synchronized( function($pseudo, $message){$this->addMessage_( $pseudo, $message);}, $this->pseudo, $message );
-	$this->displayMessages_( $dom );
+ private function submitMessage_($dom, $id) {
+  $message = $dom->getContent("Message");
+  $dom->setContent("Message", "");
+  $dom->focus("Message");
+  $dom->synchronized(function ($pseudo, $message) {$this->addMessage_($pseudo, $message);}, $this->pseudo, $message);
+  $this->displayMessages_($dom);
  }
 
- private function update_( $dom, $id ) {
-	$this->displayMessages_( $dom );
- 	$dom->setTimeout( 1000, "Update");
+ private function update_($dom, $id) {
+  $this->displayMessages_($dom);
+  $dom->setTimeout(1000, "Update");
  }
 
  public function handle($dom, $action, $id) {
   switch ($action) {
   case "Connect":
-   $this->connect_( $dom, $îd );
+   $this->connect_($dom, $ï¿½d);
    break;
   case "SubmitPseudo":
-   $this->submitPseudo_( $dom, $id );
+   $this->submitPseudo_($dom, $id);
    break;
   case "SubmitMessage":
-   $this->submitMessage_( $dom, $id );
+   $this->submitMessage_($dom, $id);
    break;
   case "Update":
-   $this->update_( $dom, $id );
+   $this->update_($dom, $id);
    break;
   default:
    throw new Exception("Unknown action '" . $action . "' !!!");
@@ -179,8 +209,8 @@ $shared = new Shared();
 
 function myNew() {
  global $shared;
- return new Chatroom( $shared );
+ return new Chatroom($shared);
 }
 
-Atlas::launch("Connect", 'myNew', readAsset( "Head.html" ), null, "chatroom" );
+Atlas::launch("Connect", 'myNew', readAsset("Head.html"), null, "chatroom");
 ?>

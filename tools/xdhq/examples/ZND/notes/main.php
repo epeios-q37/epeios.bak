@@ -49,18 +49,42 @@ function getViewModeElements() {
  return ["Pattern", "CreateButton", "DescriptionToggling", "ViewNotes"];
 }
 
-function push($note, $id, &$tree) {
- $notes = $tree->xdhtml->notes;
- $notes->note = $tree->createElement( "Note" );
- $notes->note->setAttribute( "id", $id );
+class XML {
+ private $node_;
 
- foreach ((array)$note as $key => $value) {
-  $item = $tree->createElement( $key );
-  $item->nodeValue = htmlspecialchars( $value );
-  $notes->note->appendChild( $item );
+ function __construct($tag) {
+  $doc = new DOMDocument("1.0", "utf8");
+
+  $this->node_ = $doc->appendChild($doc->createElement($tag));
+ }
+ function pushTag($tag) {
+  $this->node_ = $this->node_->appendChild($this->node_->ownerDocument->createElement($tag));
+ }
+ function popTag() {
+  $this->node_ = $this->node_->parentNode;
+ }
+ function setValue($value) {
+  $this->node_->nodeValue = htmlspecialchars($value);
+ }
+ function setAttribute($name, $value) {
+  $this->node_->setAttribute($name, $value);
+ }
+ function toString() {
+  return $this->node_->ownerDocument->saveXML();
+ }
+}
+
+function put($note, $id, $xml) {
+ $xml->pushTag("Note");
+ $xml->setAttribute("id", $id);
+
+ foreach ((array) $note as $key => $value) {
+  $xml->pushTag($key);
+  $xml->setValue($value);
+  $xml->popTag();
  }
 
-  $notes->appendChild( $notes->note );
+ $xml->popTag();
 }
 
 function readAsset($path) {
@@ -101,26 +125,23 @@ class Notes extends Threaded {
  }
 
  function displayList($dom) {
-  $tree = new DOMDocument( "1.0", "utf8" );
-  $tree->xdhtml = $tree->CreateElement( "XDHTML");
-  $tree->appendChild( $tree->xdhtml );
+  $xml = new XML("XDHTML");
   $i = 1; // 0 skipped, as it serves as buffer for the new ones.
   $contents = [];
 
-  $tree->xdhtml->notes = $tree->createElement( "Notes" );
-  $tree->xdhtml->appendChild( $tree->xdhtml->notes );
+  $xml->pushTag("Notes");
 
   $count = count($this->notes);
 
   while ($i < $count) {
    if (strtolower(substr($this->notes[$i]['title'], 0, strlen($this->pattern))) === $this->pattern) {
-    push($this->notes[$i], $i, $tree);
+    put($this->notes[$i], $i, $xml);
     $contents["Description." . $i] = $this->notes[$i]['description'];
    }
    $i++;
   }
 
-  $dom->setLayoutXSL("Notes", $tree->saveXML(), "Notes.xsl");
+  $dom->setLayoutXSL("Notes", $xml->toString(), "Notes.xsl");
   $dom->setContents($contents);
   $dom->enableElements(getViewModeElements());
  }
@@ -184,7 +205,7 @@ class Notes extends Threaded {
   case "Delete":
    if ($dom->confirm("Are you sure you want to delete this entry ?")) {
     $this->delete(intval($dom->getContent($id)));
-    // Below do not work in threaded class.
+    // Below does not work in threaded class.
     // array_splice($this->notes, intval($dom->getContent($id)), 1);
     $this->displayList($dom);
    }
@@ -202,7 +223,7 @@ class Notes extends Threaded {
      $new = array_merge(['title' => '', 'description' => ''], (array) $this->notes);
      $this->shift();
      $this->notes[0] = ['title' => '', 'description' => ''];
-     // Below do not work in threaded class.
+     // Below does not work in threaded class.
      // array_unshift($this->notes, ['title' => '', 'description' => '']);
      $this->displayList($dom);
     } else {
