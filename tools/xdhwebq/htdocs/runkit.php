@@ -46,21 +46,80 @@ $source = <<<EOT
 EOT;
 $app = $_GET['app'];
 
+$token = array_key_exists( 'token', $_GET ) ? $_GET['token'] : uniqid();
+
 $source = str_replace( "$NAME$", $app, $source );
 
-
-if ( array_key_exists( 'token', $_GET ) ) {
-	$source .= "\n\nprocess.env.ATK_TOKEN=\"" . $_GET['token'] . "\";\n\n";
-}
+$source .= "\n\nprocess.env.ATK_TOKEN=\"" . $token . "\";\n\n";
 
 $source .= file_get_contents( "http://q37.info/download/assets/" . $app . ".js" );
 
 $source .=<<<EOT
 
 
+console.log("Scroll down after a little while, as new things will be displayed.");
 "NOTA: the program will be stopped after a while due to RunKit timeout."
+
 EOT;
 
+$source = str_replace("<", "&lt;", $source);
+$source = str_replace(">", "&gt;", $source);
+$source = str_replace("\\", "\\\\", $source);
+$source = str_replace(array("\r\n", "\n", "\r"), '\\n', $source);
+$source = str_replace("'", "\\'", $source);
+$source = str_replace("\"", '\\"', $source);
+
+$url = 'http://atlastk.org/xdh.php?_token=' . $token;
+
+$page = '<!DOCTYPE html>
+<html>
+	<head>
+		<script src="https://embed.runkit.com"></script>
+	</head>
+	<body>
+		<div id="my-element"></div>
+		<script>
+function e()
+{
+window.scrollTo(0,document.body.scrollHeight);
+setTimeout( () => {
+	let url = "' . $url . '";
+	alert("The \'' . $app . '\' application now runs on RunKit. The URL to access this application is:\n\n" + url +"\n\nThis URL should now be automatically opened in your web browser. If not, follow the instructions at the bottom of the page.\n\nRemember: the application will be stopped after a few tens of seconds due to RunKit timeout!");
+	window.open( url );
+}, 2000 );
+}
+var source = "' . $source . '";
+var notebook = RunKit.createNotebook({
+// the parent element for the new notebook
+element: document.getElementById("my-element"),
+// specify the source of the notebook
+source: source.replace(/&gt;/g, ">").replace(/&lt;/g, "<"),
+onLoad: (notebook) => {notebook.evaluate()},
+onEvaluate: e
+});
+		</script>
+	</body>
+</html>';
+
+echo $page;
+
+/*
+echo '
+<!DOCTYPE html>
+<html>
+	<head>
+		<script>
+var url = "data:text/html;base64,' . base64_encode( $page ) . '";
+alert( url );
+window.open( url );
+		</script>
+	</head>
+	<body>
+	</body>
+</html>
+'
+*/
+/*
 echo '
 <!DOCTYPE html>
 <html>
@@ -72,11 +131,12 @@ echo '
   }
 </script>
 </head>
-<body onload="expandFrame()">
+<body onload_="expandFrame()">
 <div id="script">
 ' . htmlspecialchars( $source ) . '
 </div>
 </body>
 </html>
 '
+*/
 ?>
