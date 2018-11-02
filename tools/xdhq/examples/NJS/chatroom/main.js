@@ -119,7 +119,7 @@ function acSubmitPseudo(dom, id) {
 				dom.disableElements(["Pseudo", "PseudoButton"]);
 				dom.enableElements(["Message", "MessageButton"]);
 				dom.focus("Message");
-				console.log("\t>>>> New user: ", result);
+				console.log("\t>>>> New user: " + result);
 			} else {
 				dom.alert("Already used!",
 					() => dom.setContent("Pseudo", result,
@@ -139,7 +139,7 @@ function acSubmitMessage(dom, id) {
 					() => {
 						result = result.trim();
 						if (result.length != 0) {
-							console.log("'" + dom.pseudo + "' : ", result);
+							console.log("'" + dom.pseudo + "' : " + result);
 							messages.push({
 								"pseudo": dom.pseudo,
 								"content": result

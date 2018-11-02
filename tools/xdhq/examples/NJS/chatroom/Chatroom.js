@@ -116,7 +116,7 @@ function acSubmitPseudo(dom, id) {
 				dom.disableElements(["Pseudo", "PseudoButton"]);
 				dom.enableElements(["Message", "MessageButton"]);
 				dom.focus("Message");
-				console.log("\t>>>> New user: ", result);
+				console.log("\t>>>> New user: " + result);
 			} else {
 				dom.alert("Already used!",
 					() => dom.setContent("Pseudo", result,
