@@ -58,16 +58,18 @@ $source .=<<<EOT
 
 
 console.log("Scroll down after a little while, as new things will be displayed.");
+console.log("Below URL should have been automatically opened in your web browser.");
+console.log("If not, pop up windows are probably not allowed by your web browser.");
 "NOTA: the program will be stopped after a while due to RunKit timeout."
 
 EOT;
 
-$source = str_replace("<", "&lt;", $source);
-$source = str_replace(">", "&gt;", $source);
-$source = str_replace("\\", "\\\\", $source);
-$source = str_replace(array("\r\n", "\n", "\r"), '\\n', $source);
-$source = str_replace("'", "\\'", $source);
-$source = str_replace("\"", '\\"', $source);
+$esource = str_replace("<", "&lt;", $source);
+$esource = str_replace(">", "&gt;", $esource);
+$esource = str_replace("\\", "\\\\", $esource);
+$esource = str_replace(array("\r\n", "\n", "\r"), '\\n', $esource);
+$esource = str_replace("'", "\\'", $esource);
+$esource = str_replace("\"", '\\"', $esource);
 
 $url = 'http://atlastk.org/xdh.php?_token=' . $token;
 
@@ -84,11 +86,11 @@ function e()
 window.scrollTo(0,document.body.scrollHeight);
 setTimeout( () => {
 	let url = "' . $url . '";
-	alert("The \'' . $app . '\' application now runs on RunKit. The URL to access this application is:\n\n" + url +"\n\nThis URL should now be automatically opened in your web browser. If not, follow the instructions at the bottom of the page.\n\nRemember: the application will be stopped after a few tens of seconds due to RunKit timeout!");
+	alert("The \'' . $app . '\' application now runs on RunKit, and will be automatically opened in your web browser.\nIf not, follow the instructions at the bottom of the RunKit page.\n\nRemember: the application will be stopped after a few tens of seconds due to RunKit timeout!");
 	window.open( url );
 }, 2000 );
 }
-var source = "' . $source . '";
+var source = "' . $esource . '";
 var notebook = RunKit.createNotebook({
 // the parent element for the new notebook
 element: document.getElementById("my-element"),
@@ -101,10 +103,13 @@ onEvaluate: e
 	</body>
 </html>';
 
-echo $page;
 
-/*
-echo '
+// Microsoft Edge does have problems when the source is too long !
+if ( preg_match('/Edge/i', $_SERVER['HTTP_USER_AGENT']) == 1 )
+	$page = '<h3>Applications based on the <a href="http://atlastk.org"><em>Atlas</em> toolkit</a> will work on all modern web browser, including Microsoft Edge. But, due to limitations (bugs?) of Microsoft Edge, it can not be used to launch the online demos. You have to switch to another web navigator for this.</h3>';
+
+
+$page2 = '
 <!DOCTYPE html>
 <html>
 	<head>
@@ -117,10 +122,9 @@ window.open( url );
 	<body>
 	</body>
 </html>
-'
-*/
-/*
-echo '
+';
+
+$page3 = '
 <!DOCTYPE html>
 <html>
   <head>
@@ -131,12 +135,36 @@ echo '
   }
 </script>
 </head>
-<body onload_="expandFrame()">
+<body>
 <div id="script">
 ' . htmlspecialchars( $source ) . '
 </div>
 </body>
 </html>
-'
-*/
+';
+
+$page4 = '<!DOCTYPE html>
+<html>
+	<head>
+		<script src="https://embed.runkit.com"></script>
+	</head>
+	<body>
+		<div id="my-element"></div>
+		<script>
+		var source = "' . $esource . '";
+		source = source.replace(/&gt;/g, ">").replace(/&lt;/g, "<");
+		alert( source );
+		var notebook = RunKit.createNotebook({
+// the parent element for the new notebook
+element: document.getElementById("my-element"),
+// specify the source of the notebook
+source: source,
+onLoad: (notebook) => {notebook.evaluate()},
+});
+		</script>
+	</body>
+</html>';
+
+echo $page;
+
 ?>
