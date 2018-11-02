@@ -50,7 +50,7 @@ $token = array_key_exists( 'token', $_GET ) ? $_GET['token'] : uniqid();
 
 $source = str_replace( "$NAME$", $app, $source );
 
-$source .= "\n\nprocess.env.ATK_TOKEN=\"" . $token . "\";\n\n";
+// $source .= "\n\nprocess.env.ATK_TOKEN=\"" . $token . "\";\n\n";
 
 $source .= file_get_contents( "http://q37.info/download/assets/" . $app . ".js" );
 
@@ -97,7 +97,8 @@ element: document.getElementById("my-element"),
 // specify the source of the notebook
 source: source.replace(/&gt;/g, ">").replace(/&lt;/g, "<"),
 onLoad: (notebook) => {notebook.evaluate()},
-onEvaluate: e
+onEvaluate: e,
+env: [ "ATK_TOKEN=' . $token . '" ]
 });
 		</script>
 	</body>
