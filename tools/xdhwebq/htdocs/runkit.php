@@ -81,14 +81,18 @@ $page = '<!DOCTYPE html>
 	<body>
 		<div id="my-element"></div>
 		<script>
-function e()
+function onLoad( notebook )
 {
-window.scrollTo(0,document.body.scrollHeight);
-setTimeout( () => {
-	let url = "' . $url . '";
-	alert("The \'' . $app . '\' application now runs on RunKit, and will be automatically opened in your web browser.\nIf not, follow the instructions at the bottom of the RunKit page.\n\nRemember: the application will be stopped after a few tens of seconds due to RunKit timeout!");
-	window.open( url );
-}, 2000 );
+    alert("The \'' . $app . '\' application will now be launched on RunKit and be automatically opened in your web browser.\nIf not, follow the instructions at the bottom of the RunKit page.\n\nRemember: the application will be stopped after a few tens of seconds due to RunKit timeout!");
+    notebook.evaluate();
+}
+function onEvaluate()
+{
+	window.scrollTo(0,document.body.scrollHeight);
+    let url = "' . $url . '";
+	setTimeout( () => {
+		window.open( url );
+	}, 2000 );
 }
 var source = "' . $esource . '";
 var notebook = RunKit.createNotebook({
@@ -96,8 +100,8 @@ var notebook = RunKit.createNotebook({
 element: document.getElementById("my-element"),
 // specify the source of the notebook
 source: source.replace(/&gt;/g, ">").replace(/&lt;/g, "<"),
-onLoad: (notebook) => {notebook.evaluate()},
-onEvaluate: e,
+onLoad: onLoad,
+onEvaluate: onEvaluate,
 env: [ "ATK_TOKEN=' . $token . '" ]
 });
 		</script>
@@ -108,7 +112,6 @@ env: [ "ATK_TOKEN=' . $token . '" ]
 // Microsoft Edge does have problems when the source is too long !
 if ( preg_match('/Edge/i', $_SERVER['HTTP_USER_AGENT']) == 1 )
 	$page = '<h3>Applications based on the <a href="http://atlastk.org"><em>Atlas</em> toolkit</a> will work on all modern web browser, including Microsoft Edge. But, due to limitations (bugs?) of Microsoft Edge, it can not be used to launch the online demos. You have to switch to another web navigator for this.</h3>';
-
 
 $page2 = '
 <!DOCTYPE html>
