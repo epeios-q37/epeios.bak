@@ -118,11 +118,14 @@ class XDHqDOM_DEMO extends Threaded {
    case 'DEV':
     $address = "localhost";
     $httpPort = ":8080";
+	echo("\tDEV mode !\n");
     break;
    case 'TEST':
     $cgi = "xdh_";
+	echo("\tTEST mode !\n");
     break;
    default:
+	die( "Bad 'ATK' environment variable value : should be 'DEV' or 'TEST' !" );
    }
   }
 

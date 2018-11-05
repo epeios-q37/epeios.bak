@@ -85,7 +85,104 @@ function getStylesheet(xslName) {
 	return xsltProcessor;
 }
 
-function transformToFragment(xml, xslName ) {
+function getNulString(data, offset) {
+	let string = "";
+	let c = data.substr(offset++, 1);
+
+	while (c != 0) {
+		string += c;
+		c = data.substr(offset++, 1);
+	}
+
+	console.log("NUL: ", string);
+
+	return [string, offset];
+}
+
+function getSize(query, offset) {
+	var byte = query[offset++];
+	var size = byte & 0x7f;
+
+	while (byte & 0x80) {
+		byte = query[offset++];
+
+		size = (size << 7) + (byte & 0x7f);
+	}
+
+	return [size, offset];
+}
+
+function getString(query, offset) {
+	var size = 0;
+	[size, offset] = getSize(query, offset);
+
+	var string = "";
+
+	while (size--)
+		string += String.fromCodePoint(query[offset++]);
+
+	console.log("String: ", string);
+
+	return [string, offset];
+}
+
+function xmlEntities(str) {
+	return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;');
+}
+
+function convert(xml) {
+	let offset = 0;
+	let tag = "";
+	let name = "";
+	let value = "";
+	let length = xml.length;
+
+	console.log("XML: ", length, xml.substr( 8 ) );
+
+	[name, offset] = getNulString(xml, offset);	// Currently ignored.
+
+	[name, offset] = getString(xml, offset);
+
+	let node = document.implementation.createDocument(null, name);
+
+	console.log("Avant !");
+
+	while (offset < length) {
+		switch (xml[offset++]) {
+		case '>':	// Push tag.
+			[name, offset] = getString(xml, offset);
+			node = node.appendChild(node.ownerDocument.createElement(name));
+			break;
+		case '<':	//Pop tag.
+			node = node.parentNode;
+			break;
+		case 'A':	// Set attribute
+			[name, offset] = getString(xml, offset);
+			[value, offset] = getString(xml, ofsset);
+			node.setAttribute(name, xmlEntities( value) );
+			break;
+		case 'V':	// Set value.
+			[name,offset] = getString( xml, offset );
+			node.nodeValue = xmlEntities(value);
+			break;
+		default:
+			throw "Error !";
+			break;
+		}
+	}
+
+	console.log("Apres !");
+
+	let result = new XMLSerializer().serializeToString(node.ownerDocument.documentElement);
+
+	console.log( "Result: ", result );
+
+	return result;
+}
+
+function transformToFragment(xml, xslName) {
+	if (xml.substring(0, 1) != "<")
+		xml = convert(xml);
 	return getStylesheet(xslName).transformToFragment(parseXML(xml), document);
 }
 

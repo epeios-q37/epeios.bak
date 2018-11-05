@@ -48,7 +48,7 @@ getAtlas();
 function getViewModeElements() {
  return ["Pattern", "CreateButton", "DescriptionToggling", "ViewNotes"];
 }
-
+/*
 class XML {
  private $node_;
 
@@ -73,6 +73,49 @@ class XML {
   return $this->node_->ownerDocument->saveXML();
  }
 }
+*/
+class XML {
+ private $xml_;
+
+ private function writeSize_($size) {
+  $this->xml_ .= pack("C", $size & 0x7f);
+  $size >>= 7;
+
+  while ($size != 0) {
+   $this->xml_ = pack("C", ($size & 0x7f) | 0x80) . $this->xml_;
+   $size >>= 7;
+  }
+ }
+ private function writeString_($string) {
+  $this->writeSize_(strlen($string));
+  $this->xml_ .= $string;
+ }
+
+ function __construct($tag) {
+  $this->xml_ = "coucou\0";
+  $this->writeString_( $tag );
+ }
+ function pushTag($tag) {
+  $this->xml_ .= ">";
+  $this->writeString_( $tag );
+ }
+ function popTag() {
+  $this->xml_ .= "<";
+ }
+ function setValue($value) {
+  $this->xml_ .= "V";
+  $this->writeString_( $value );
+ }
+ function setAttribute($name, $value) {
+  $this->xml_ .= "V";
+  $this->writeString_( $name );
+  $this->writeString_( $value );
+ }
+ function toString() {
+  return $this->xml_;
+ }
+}
+
 
 function put($note, $id, $xml) {
  $xml->pushTag("Note");
