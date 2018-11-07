@@ -50,18 +50,19 @@ class Notes extends Atlas {
 		return readAsset( path, dir );
 	}
 
-	private String push(Note note, int index, String tree) {
-		tree += "<Note";
-		tree += " id=\"" + index + "\">\n";
-
-		tree += "<title>\n" + toXMLValue( note.title ) + "</title>\n";
+	private void push(Note note, int index, XML xml) {
+		xml.pushTag( "Note" );
+		xml.setAttribute( "id", + index );
+		xml.pushTag("title");
+		xml.setValue( note.title );
+		xml.popTag();
 
 		// Not used, due to d-o-e bug from Firefox (https://bugzilla.mozilla.org/show_bug.cgi?id=98168).
-//		tree += "<description>\n" + note.description + "</description>\n";
+		xml.pushTag( "description");
+		xml.setValue( note.description );
+		xml.popTag();
 
-		tree += "</Note>";
-
-		return tree;
+		xml.popTag();
 	}
 
 	private void handleDescriptions( DOM dom ) {
@@ -72,11 +73,11 @@ class Notes extends Atlas {
 	}
 
 	private void displayList( DOM dom ) {
-		String tree = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<XDHTML>\n";
+		XML xml = Atlas.createXML( "XDHTML" );
 		Map<String,String> idsAndContents = new HashMap<String,String>();
 		ListIterator<Note> li = notes.listIterator(1); // 0 skipped, as it serves as buffer for the new notes.
 
-		tree += "<Notes>\n";
+		xml.pushTag( "Notes" );
 
 		while (li.hasNext()) {
 			int index = li.nextIndex();
@@ -84,15 +85,14 @@ class Notes extends Atlas {
 			int length = pattern.length();
 
 			if ((length == 0) || pattern.equals(note.title.substring(0, length).toLowerCase())) {
-				tree = push(note, index, tree);
+				push(note, index, xml);
 				idsAndContents.put(  "Description." + index, note.description );
 			}
 		}
 
-		tree += "</Notes>\n";
-		tree += "</XDHTML>";
+		xml.popTag();
 
-		dom.setLayoutXSL("Notes", tree, "Notes.xsl" );
+		dom.setLayoutXSL("Notes", xml, "Notes.xsl" );
 		dom.setContents(idsAndContents);
 		dom.enableElements(viewModeElements);
 	}
@@ -157,7 +157,7 @@ class Notes extends Atlas {
 		// First must be empty as it used as buffer for the new notes.
 		notes.add(new Note());
 		notes.add(new Note("Improve design",
-				"Tastes and colors... (aka \"CSS aren't my cup of tea...\")"));
+				"Tastes and colors... (aka «CSS aren't my cup of tea...»)"));
 		notes.add(new Note("Fixing bugs", "There are bugs ? Really ?"));
 		notes.add(new Note("Implement new functionalities", "Although it's almost perfect..., isn't it ?"));
 	}

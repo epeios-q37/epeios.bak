@@ -37,7 +37,7 @@ class Shared {
 }
 
 class Chatroom extends Atlas {
-	private String pseudo;
+	private String pseudo ="";
 	private int lastMessage;
 
 	static private String readAsset_(String path) {
@@ -51,8 +51,10 @@ class Chatroom extends Atlas {
 		return readAsset( path, dir );
 	}
 
-	private String buildTree_() {
-		String tree = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<XDHTML>\n<Messages pseudo=\"" + toXMLValue( pseudo ) + "\">\n";
+	private XML buildXML_() {
+		XML xml = Atlas.createXML("XDHTML");
+		xml.pushTag( "Messages" );
+		xml.setAttribute( "pseudo", pseudo );
 
 		synchronized (Shared.messages) {
 			ListIterator<Message> li = Shared.messages.listIterator(Shared.messages.size());
@@ -62,7 +64,11 @@ class Chatroom extends Atlas {
 			while (i >= this.lastMessage) {
 				Message message = li.previous();
 
-				tree += "\t\t<Message id=\"" + i + "\" pseudo=\"" + toXMLValue( message.pseudo ) + "\">" + toXMLValue( message.content ) + "</Message>\n";
+				xml.pushTag( "Message" );
+				xml.setAttribute( "id", i );
+				xml.setAttribute( "pseudo", message.pseudo );
+				xml.setValue( message.content );
+				xml.popTag();
 
 				i = li.previousIndex();
 			}
@@ -70,15 +76,16 @@ class Chatroom extends Atlas {
 			this.lastMessage = Shared.messages.size();
 		}
 
-		return tree + "\t</Messages>\n</XDHTML>";
+		xml.popTag();
+//		xml.popTag();
+
+		return xml;
 	}
 
 	private void displayMessages_(DOM dom) {
 		if ((Shared.messages.size() - 1) >= this.lastMessage) {
-			String tree = buildTree_();
-
 			String id = dom.createElement("span");
-			dom.setLayoutXSL(id, tree, "Messages.xsl");
+			dom.setLayoutXSL(id, buildXML_(), "Messages.xsl");
 			dom.insertChild(id, "Board");
 		}
 	}
@@ -129,7 +136,7 @@ class Chatroom extends Atlas {
 		message = message.trim();
 
 		if (!"".equals(message)) {
-			System.out.println("''" + pseudo + "': " + message + "\n");
+			System.out.println("'" + pseudo + "': " + message);
 			synchronized (Shared.messages) {
 				Shared.messages.add(new Message(pseudo, message));
 			}

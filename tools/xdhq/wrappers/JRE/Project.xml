@@ -113,6 +113,7 @@
 				<File Pack="No">Atlas.java</File>
 				<File Pack="No">DOM.java</File>
 				<File Pack="No">GUI.java</File>
+				<File Pack="No">XML.java</File>
 			</Files>
 		</Files>
 	</Files>
@@ -126,6 +127,7 @@
 		<Files Group="JAVA">
 			<File Pack="No">DOM.java</File>
 			<File Pack="No">MODE.java</File>
+			<File Pack="No">XML.java</File>
 			<Files Group="DOM">
 				<File Pack="No">DOM_DEMO.java</File>
 				<File Pack="No">DOM_PROD.java</File>

@@ -55,12 +55,12 @@ public class DOM_DEMO extends DOM_SHRD {
 			token = token.trim();
 
 			if ( !"".equals( token ))
-				DOM_DEMO.token = "_" + token; 
+				DOM_DEMO.token = "&" + token; 
 		}
 	}
 
 	static private boolean isTokenEmpty_() {
-		return "".equals(token) || (token.charAt(0) == '_');
+		return "".equals(token) || (token.charAt(0) == '&');
 	}
 
 	private void writeSize_(int size, OutputStream stream) throws Exception {

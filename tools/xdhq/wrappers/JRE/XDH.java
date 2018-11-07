@@ -53,9 +53,6 @@ public class XDH extends info.q37.jreq.JRE {
 	public static String readAsset( String path, String dir ) {
 		return readFile_( getAssetFilename_( path, dir ) );
 	}
-	public static String toXMLValue(String text) {
-		return text.replace("&", "&amp;").replace("\"", "&quot;").replace("<", "&lt;").replace(">", "&gt;").replace("'", "&apos;");
-	}
 	static public void launch( String newSessionAction, String headContent, MODE mode, String dir ) {
 		mode_ = mode;
 		dir_ = dir;

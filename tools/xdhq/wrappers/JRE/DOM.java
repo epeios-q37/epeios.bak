@@ -84,6 +84,10 @@ public class DOM {
 		setLayout_(id, xml, xslURL);
 	}
 
+	public void setLayoutXSL( String id, info.q37.xdhq.XML xml, String xslFilename ) {
+		setLayoutXSL( id, xml.toString(), xslFilename );
+	}
+
 	public String[] getContents(String[] ids) {
 		return (String[]) DOM.call("GetContents_1", Type.STRINGS, empty, new String[][] { ids });
 	}
