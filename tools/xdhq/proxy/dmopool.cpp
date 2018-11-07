@@ -209,7 +209,9 @@ namespace {
 		Get_( Flow, Token );
 
 		if ( ( Token.Amount() == 0 )
-			   || ( ( Token.Amount() > 1 ) && ( Token( 0 ) == '_' ) ) ) {
+			   || ( ( Token.Amount() > 1 ) &&
+				    ( ( Token( 0 ) == '_' )	// This is deprecated; only '&' will be used as forced token marker in the future.
+					   || ( Token( 0 ) == '&' ) ) ) ) {
 
 			if ( Token.Amount() == 0 )
 				Token.Append( tol::UUIDGen( UUID ) );

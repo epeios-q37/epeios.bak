@@ -49,7 +49,8 @@
 		<File>XDHqDEMO.php</File>
 		<File>XDHqPROD.php</File>
 		<File>XDHqSHRD.php</File>
-  <!-- NOTA : '*.php' files will automatically be packed as such. -->
+		<File>XDHqXML.php</File>
+		<!-- NOTA : '*.php' files will automatically be packed as such. -->
   <!--File Pack="No">XDHq.php</File-->
 		<Files Group="Atlas">
 			<File Path="../../Atlas/">CHANGELOG.md</File>

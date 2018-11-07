@@ -6,6 +6,11 @@
 - [stdz]: modification to comply with current standards;
 - [trvl]: trivial modifications;
 
+## 2018-11-07
+
+- XDHCMN:
+  - introducing new *XML* serialization,
+
 ## 2018-10-17
 
 - *GLOBAL*:

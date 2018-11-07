@@ -19,6 +19,7 @@
 */
 require 'XDHqSHRD.php';
 require 'XDHqDEMO.php';
+require 'XDHqXML.php';
 
 if ( false && XDHq_SHRD::isDev() )
 	require 'XDHqPROD.php';
@@ -122,13 +123,13 @@ class XDHqDOM extends Threaded {
 	function setLayout(string  $id, string $html ) {
 		self::setLayout_( $id, $html, "" );
 	}
-	function setLayoutXSL(string  $id, string $xml, string $xsl ) {
+	function setLayoutXSL(string  $id, $xml, string $xsl ) {
 		$xslURL = $xsl;
 
 		if ( XDHq::isDEMO() )
 			$xslURL = "data:text/xml;charset=utf-8," . rawurlencode( XDHq::readAsset( $xsl, XDHq::$dir ) );
 			
-		self::setLayout_( $id, $xml, $xslURL );
+		self::setLayout_( $id, is_string($xml) ? $xml : $xml->toString(), $xslURL );
 	}
 	function getContents( array $ids ) {
 		return self::unsplit_($ids,self::call_( "GetContents_1", XDHq::RT_STRINGS, 0, 1, $ids ));

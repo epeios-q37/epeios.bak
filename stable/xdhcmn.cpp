@@ -140,9 +140,10 @@ void xdhcmn::Escape(
 
 			Target.Append( C );
 			break;
-		default:
+		default:	// The '\0' char sequence remains this 2 chars.
 			if ( C == EscapeChar )
-				Target.Append( EscapeChar );
+				if ( Source( Source.Next( Row ) ) != 'x' )
+					Target.Append( EscapeChar );
 
 			Target.Append( Source( Row ) );
 			break;

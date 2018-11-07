@@ -50,31 +50,6 @@ function getAtlas() {
 
 getAtlas();
 
-class XML {
- private $node_;
-
- function __construct($tag) {
-  $doc = new DOMDocument("1.0", "utf8");
-
-  $this->node_ = $doc->appendChild($doc->createElement($tag));
- }
- function pushTag($tag) {
-  $this->node_ = $this->node_->appendChild($this->node_->ownerDocument->createElement($tag));
- }
- function popTag() {
-  $this->node_ = $this->node_->parentNode;
- }
- function setValue($value) {
-  $this->node_->nodeValue = htmlspecialchars($value);
- }
- function setAttribute($name, $value) {
-  $this->node_->setAttribute($name, $value);
- }
- function toString() {
-  return $this->node_->ownerDocument->saveXML();
- }
-}
-
 class Shared extends Threaded {
  public $messages = [];
  public $pseudos = [];
@@ -91,7 +66,7 @@ class Chatroom extends Threaded {
 
  private function buildXML_($dom) {
   $i = count($this->shared->messages) - 1;
-  $xml = new XML("XDHTML");
+  $xml = Atlas::createXML("XDHTML");
   $xml->pushTag("Messages");
   $xml->setAttribute("pseudo", $this->pseudo);
 

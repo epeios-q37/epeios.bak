@@ -56,31 +56,6 @@ function getAtlas() {
 
 getAtlas();
 
-class XML {
- private $node_;
-
- function __construct($tag) {
-  $doc = new DOMDocument("1.0", "utf8");
-
-  $this->node_ = $doc->appendChild($doc->createElement($tag));
- }
- function pushTag($tag) {
-  $this->node_ = $this->node_->appendChild($this->node_->ownerDocument->createElement($tag));
- }
- function popTag() {
-  $this->node_ = $this->node_->parentNode;
- }
- function setValue($value) {
-  $this->node_->nodeValue = htmlspecialchars($value);
- }
- function setAttribute($name, $value) {
-  $this->node_->setAttribute($name, $value);
- }
- function toString() {
-  return $this->node_->ownerDocument->saveXML();
- }
-}
-
 /*
 In threaded classes, arrays are volatile, so no function
 which takes a reference can be used ('array-splice()', for example).
@@ -157,7 +132,7 @@ class TodoMVC extends Threaded {
  }
 
  function displayTodos($dom) {
-  $xml = new XML("XDHTML");
+  $xml = Atlas::createXML("XDHTML");
   $xml->pushTag("Todos");
   $i = 0;
   $count = $this->next;

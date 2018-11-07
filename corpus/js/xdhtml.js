@@ -85,11 +85,11 @@ function getStylesheet(xslName) {
 	return xsltProcessor;
 }
 
-function getNulString(data, offset) {
+function getNULString(data, offset) {
 	let string = "";
 	let c = data.substr(offset++, 1);
 
-	while (c != 0) {
+	while (c != '\0') {
 		string += c;
 		c = data.substr(offset++, 1);
 	}
@@ -99,35 +99,16 @@ function getNulString(data, offset) {
 	return [string, offset];
 }
 
-function getSize(query, offset) {
-	var byte = query[offset++];
-	var size = byte & 0x7f;
-
-	while (byte & 0x80) {
-		byte = query[offset++];
-
-		size = (size << 7) + (byte & 0x7f);
-	}
-
-	return [size, offset];
+function getString(data, offset) {
+	return getNULString(data, offset);
 }
 
-function getString(query, offset) {
-	var size = 0;
-	[size, offset] = getSize(query, offset);
+// Not used...
+function xmls(str) {
+	str = String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;');
 
-	var string = "";
-
-	while (size--)
-		string += String.fromCodePoint(query[offset++]);
-
-	console.log("String: ", string);
-
-	return [string, offset];
-}
-
-function xmlEntities(str) {
-	return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;');
+	console.log("Ent. : ", str);
+	return str;
 }
 
 function convert(xml) {
@@ -137,13 +118,13 @@ function convert(xml) {
 	let value = "";
 	let length = xml.length;
 
-	console.log("XML: ", length, xml.substr( 8 ) );
+	console.log("XML: ", length, xml );
 
-	[name, offset] = getNulString(xml, offset);	// Currently ignored.
+	[name, offset] = getNULString(xml, offset);	// Currently ignored.
 
 	[name, offset] = getString(xml, offset);
 
-	let node = document.implementation.createDocument(null, name);
+	let node = document.implementation.createDocument(null, name).firstChild;
 
 	console.log("Avant !");
 
@@ -158,12 +139,12 @@ function convert(xml) {
 			break;
 		case 'A':	// Set attribute
 			[name, offset] = getString(xml, offset);
-			[value, offset] = getString(xml, ofsset);
-			node.setAttribute(name, xmlEntities( value) );
+			[value, offset] = getString(xml, offset);
+			node.setAttribute(name, value );
 			break;
 		case 'V':	// Set value.
-			[name,offset] = getString( xml, offset );
-			node.nodeValue = xmlEntities(value);
+			[value,offset] = getString( xml, offset );
+			node.textContent = value;
 			break;
 		default:
 			throw "Error !";

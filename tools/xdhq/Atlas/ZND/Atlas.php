@@ -181,5 +181,9 @@ class Atlas extends Thread {
    call_user_func(array($this->userObject, 'handle'), $this->dom, $action, $id);
   }
  }
+
+ public static function createXML( string $rootTag ) {
+ 	 return new XDHqXML( $rootTag );
+ }
 };
 ?>

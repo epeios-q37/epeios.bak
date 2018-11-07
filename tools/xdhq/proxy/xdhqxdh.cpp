@@ -263,20 +263,51 @@ namespace {
 	qRE;
 	}
 
+	namespace {
+		void EscapeNULChars_(
+			const str::dString &Source,
+			str::dString &Target )
+		{
+			sdr::sRow Row = Source.First();
+			bso::sChar C = 0;
+
+			while ( Row != qNIL ) {
+				C = Source( Row );
+
+				if ( C == 0 )
+					Target.Append( "\\x00" );
+				else
+					Target.Append( C );
+
+				Row = Source.Next( Row );
+			}
+		}
+	}
+
 	void SetLayout_(
 		flw::sRWFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 	qRH;
-		str::wString Id, XML, XSL;
+		str::wString Id, RawXML, EscapedXML, XSL;
 	qRB;
-		tol::Init( Id, XML, XSL );
+		tol::Init( Id, RawXML, XSL );
 
 		prtcl::Get( Flow, Id );
-		prtcl::Get( Flow, XML );
+		prtcl::Get( Flow, RawXML );
 		prtcl::Get( Flow, XSL );
 
-		Proxy.SetLayout( Id, XML, XSL );
+		if ( RawXML.Amount() == 0 )
+			qRGnr();
+		else if ( RawXML( RawXML.First() ) == '<' )
+			Proxy.SetLayout( Id, RawXML, XSL );
+		else {
+			EscapedXML.Init();
+
+			EscapeNULChars_( RawXML, EscapedXML );
+
+			Proxy.SetLayout( Id, EscapedXML, XSL );
+		}
 	qRR;
 	qRT;
 	qRE;

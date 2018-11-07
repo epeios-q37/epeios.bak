@@ -24,7 +24,7 @@ $out = '
 			<head>
 			<!-- If modified, report modification in "xdhcefq.html" from "xdhcefq" -->
 			<!-- BEGIN -->
-			<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+			<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 			<script src="xdh/xdhtml.js"></script>
 			<script src="xdh/xdhwebq.js"></script>'
 . $head .

@@ -48,74 +48,6 @@ getAtlas();
 function getViewModeElements() {
  return ["Pattern", "CreateButton", "DescriptionToggling", "ViewNotes"];
 }
-/*
-class XML {
- private $node_;
-
- function __construct($tag) {
-  $doc = new DOMDocument("1.0", "utf8");
-
-  $this->node_ = $doc->appendChild($doc->createElement($tag));
- }
- function pushTag($tag) {
-  $this->node_ = $this->node_->appendChild($this->node_->ownerDocument->createElement($tag));
- }
- function popTag() {
-  $this->node_ = $this->node_->parentNode;
- }
- function setValue($value) {
-  $this->node_->nodeValue = htmlspecialchars($value);
- }
- function setAttribute($name, $value) {
-  $this->node_->setAttribute($name, $value);
- }
- function toString() {
-  return $this->node_->ownerDocument->saveXML();
- }
-}
-*/
-class XML {
- private $xml_;
-
- private function writeSize_($size) {
-  $this->xml_ .= pack("C", $size & 0x7f);
-  $size >>= 7;
-
-  while ($size != 0) {
-   $this->xml_ = pack("C", ($size & 0x7f) | 0x80) . $this->xml_;
-   $size >>= 7;
-  }
- }
- private function writeString_($string) {
-  $this->writeSize_(strlen($string));
-  $this->xml_ .= $string;
- }
-
- function __construct($tag) {
-  $this->xml_ = "coucou\0";
-  $this->writeString_( $tag );
- }
- function pushTag($tag) {
-  $this->xml_ .= ">";
-  $this->writeString_( $tag );
- }
- function popTag() {
-  $this->xml_ .= "<";
- }
- function setValue($value) {
-  $this->xml_ .= "V";
-  $this->writeString_( $value );
- }
- function setAttribute($name, $value) {
-  $this->xml_ .= "V";
-  $this->writeString_( $name );
-  $this->writeString_( $value );
- }
- function toString() {
-  return $this->xml_;
- }
-}
-
 
 function put($note, $id, $xml) {
  $xml->pushTag("Note");
@@ -147,15 +79,15 @@ class Notes extends Threaded {
   ],
   [
    'title' => 'Improve design',
-   'description' => 'Tastes and colors... (aka &laquo;CSS aren&rsquo;t my cup of tea...&raquo;)',
+   'description' => "Tastes and colors... (aka «CSS aren't my cup of tea...»)",
   ],
   [
    'title' => 'Fixing bugs',
-   'description' => 'There are bugs ? Really ?',
+   'description' => "There are bugs ? Really ?",
   ],
   [
    'title' => 'Implement new functionalities',
-   'description' => "Although it&rsquo;s almost perfect..., isn&rsquo;t it ?",
+   'description' => "Although it's almost perfect..., isn't it ?",
   ],
  ];
 
@@ -168,7 +100,7 @@ class Notes extends Threaded {
  }
 
  function displayList($dom) {
-  $xml = new XML("XDHTML");
+  $xml = Atlas::createXML("XDHTML");
   $i = 1; // 0 skipped, as it serves as buffer for the new ones.
   $contents = [];
 
@@ -184,7 +116,7 @@ class Notes extends Threaded {
    $i++;
   }
 
-  $dom->setLayoutXSL("Notes", $xml->toString(), "Notes.xsl");
+  $dom->setLayoutXSL("Notes", $xml, "Notes.xsl");
   $dom->setContents($contents);
   $dom->enableElements(getViewModeElements());
  }
