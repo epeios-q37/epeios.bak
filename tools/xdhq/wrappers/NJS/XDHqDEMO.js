@@ -80,13 +80,8 @@ function getSize(query, offset) {
 function getString(query, offset) {
 	var size = 0;
 	[size, offset] = getSize(query, offset);
-
-	var string = "";
-
-	while (size--)
-		string += String.fromCodePoint(query[offset++]);
-
-	return [string, offset];
+	
+	return [query.toString("utf-8", offset, offset + size), offset + size];
 }
 
 function getStrings(query, offset) {
@@ -190,14 +185,14 @@ function getToken() {
 var token = getToken();
 
 if (process.env.ATK_TOKEN)
-	token = "_" + process.env.ATK_TOKEN;
+	token = "&" + process.env.ATK_TOKEN;
 
 function standBy(socket) {
 	socket.write(Buffer.from("StandBy_1\x00"));
 }
 
 function isTokenEmpty() {
-	return ( token == "" ) || ( token.charAt( 0 ) == '_' );
+	return ( token == "" ) || ( token.charAt( 0 ) == '&' );
 }
 
 function pseudoServer(createCallback, newSessionAction, callbacks, head) {

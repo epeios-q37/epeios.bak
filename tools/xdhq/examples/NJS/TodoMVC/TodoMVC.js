@@ -101,23 +101,27 @@ function handleCount(dom) {
 }
 
 function displayTodos(dom) {
-	var tree = require('xmlbuilder').create('XDHTML');
+	var xml = atlas.createXML('XDHTML');
 	var i = 0;
 	var todo;
 
 	dom.index = -1;
 
-	tree = tree.ele("Todos");
+	xml.pushTag("Todos");
 
 	while (i < dom.todos.length) {
 		todo = dom.todos[i];
-		tree = tree.ele('Todo', { 'id': i, 'completed': todo["completed"] }, todo["label"]).up();
+		xml.pushTag('Todo');
+		xml.setAttribute('id', i);
+		xml.setAttribute('completed', todo["completed"]);
+		xml.setValue(todo["label"]);
+		xml.popTag();;
 		i++;
 	}
 
-	tree = tree.up();
+	xml.popTag();
 
-	dom.setLayoutXSL("Todos", tree.end(), xsl,
+	dom.setLayoutXSL("Todos", xml, "Todos.xsl",
 		() => handleCount(dom)
 	);
 }

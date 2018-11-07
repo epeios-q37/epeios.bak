@@ -155,6 +155,9 @@ class XDH {
 		if (this._xdhIsDEMO)
 			xslURL = "data:text/xml;charset=utf-8," + encodeURIComponent(readXSLAsset(xslFilename));
 
+		if (typeof (xml) !== "string")
+			xml = xml.toString();
+
 		this.setLayout_(id, xml, xslURL, callback);
 	}
 	getContents(ids, callback) {
@@ -260,6 +263,8 @@ module.exports.returnArgument = (text) => { return njsq._call(xdhq, 0, text) };
 module.exports.launch = launch;
 module.exports.XDH = XDH;
 module.exports.modes = modes;
+
+module.exports.XML = require("./XDHqXML").XML;
 
 // Following functions are dev helper.
 module.exports.isDev = isDev;

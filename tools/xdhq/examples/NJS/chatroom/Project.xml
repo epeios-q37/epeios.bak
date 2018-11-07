@@ -27,7 +27,6 @@
   <Deps>
    <Regular>
     <Dep>atlastk</Dep>
-				<Dep>xmlbuilder</Dep>
 			</Regular>
   </Deps>
  </NodeJS>

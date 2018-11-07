@@ -32,7 +32,7 @@ class XDHqDOM_DEMO extends Threaded {
  private static $protocolLabel = "712a58bf-2c9a-47b2-ba5e-d359a99966de";
  private static $protocolVersion = "0";
  private static function isTokenEmpty_() {
-  return empty(self::$token) || (substr(self::$token, 0, 1) == '_');
+  return empty(self::$token) || (substr(self::$token, 0, 1) == '&');
  }
  private function writeSize_($socket, $size) {
   $result = pack("C", $size & 0x7f);
@@ -138,7 +138,7 @@ class XDHqDOM_DEMO extends Threaded {
     $token = trim($token);
 
     if ($token !== "") {
-     self::$token = "_" . $token;
+     self::$token = "&" . $token;
     }
    }
   }

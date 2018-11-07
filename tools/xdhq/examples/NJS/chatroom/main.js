@@ -52,25 +52,30 @@ class MyData extends DOM {
 }
 
 function displayMessages(dom) {
-	var tree = require('xmlbuilder').create('XDHTML',{version: '1.0', encoding: 'UTF-8'});
+	var xml = atlas.createXML('XDHTML');
 	var i = messages.length - 1;
 	var message;
 
 	if (i >= dom.lastMessage) {
-		tree = tree.ele("Messages", { 'pseudo': dom.pseudo });
+		xml.pushTag("Messages");
+		xml.setAttribute( 'pseudo', dom.pseudo );
 
 		while (i >= dom.lastMessage) {
 			message = messages[i];
-			tree = tree.ele('Message', { 'id': i, 'pseudo': message["pseudo"] }, message["content"]).up();
+			xml.pushTag('Message');
+			xml.setAttribute( 'id', i );
+			xml.setAttribute( 'pseudo', message["pseudo"] );
+			xml.setValue(message["content"]);
+			xml.popTag();
 			i--;
 		}
 
 		dom.lastMessage = messages.length;
 
-		tree = tree.up();
+		xml.popTag();
 
 		dom.createElement("span",
-			(id) => dom.setLayoutXSL(id, tree.end(), "Messages.xsl",
+			(id) => dom.setLayoutXSL(id, xml, "Messages.xsl",
 				() => dom.insertChild(id, "Board")
 			)
 		);

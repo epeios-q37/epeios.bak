@@ -68,17 +68,18 @@ function newSession() {
 	return new Notes();
 }
 
-function push(note, id, tree) {
-	tree = tree.ele('Note');
-	tree = tree.att('id', id);
+function push(note, id, xml) {
+	xml.pushTag('Note');
+	xml.setAttribute('id', id);
 	for (var prop in note) {
-		tree = tree.ele(prop,note[prop]);
-		tree = tree.up();
+		xml.pushTag(prop);
+		xml.setValue(note[prop]);
+		xml.popTag();;
 	}
 
-	tree = tree.up();
+	xml.popTag();
 
-	return tree;
+	return xml;
 }
 
 function handleDescriptions(dom) {
@@ -89,23 +90,24 @@ function handleDescriptions(dom) {
 }
 
 function displayList(dom) {
-	var tree = require('xmlbuilder').create('XDHTML');
+	var xml = atlas.createXML('XDHTML');
 	var i = 1;	// 0 skipped, as it serves as buffer for the new ones.
 	var contents = {};
 
-	tree = tree.ele("Notes");
+	xml.pushTag("Notes");
 
 	while (i < dom.notes.length) {
 		if (dom.notes[i]['title'].toLowerCase().startsWith(dom.pattern)) {
-			tree = push(dom.notes[i], i, tree);
+
+			xml = push(dom.notes[i], i, xml);
 			contents["Description." + i] = dom.notes[i]['description'];
 		}
 		i++;
 	}
 
-	tree = tree.up();
+	xml.popTag();;
 
-	dom.setLayoutXSL("Notes", tree.end(), notes,
+	dom.setLayoutXSL("Notes", xml, "Notes.xsl",
 		() => dom.setContents(contents,
 			() => dom.enableElements(viewModeElements,
 				() => handleDescriptions(dom)

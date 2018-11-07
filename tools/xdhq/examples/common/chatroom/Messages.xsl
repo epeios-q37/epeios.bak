@@ -23,7 +23,7 @@
 				</xsl:attribute>
 				<xsl:value-of select="@pseudo"/>
 			</xsl:element>
-			<xsl:text> é: </xsl:text> à
+			<xsl:text> : </xsl:text>
 			<xsl:value-of select="."/>
 		</li>
 	</xsl:template>

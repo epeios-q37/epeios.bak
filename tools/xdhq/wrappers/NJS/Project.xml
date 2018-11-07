@@ -51,6 +51,7 @@
 		<File>XDHqDEMO.js</File>
 		<File>XDHqPROD.js</File>
 		<File>XDHqSHRD.js</File>
+		<File>XDHqXML.js</File>
 		<!--File Pack="No">XDHq.js</File-->
 		<!--Files Group="Rentals">
 			<File>rentals.js</File>

@@ -161,7 +161,12 @@ function launch(createCallback, newSessionAction, callbacks, head, gui) {
 	}
 }
 
+function createXML(rootTag) {
+	return new xdhq.XML(rootTag);
+}
+
 module.exports.launch = launch;
+module.exports.createXML = createXML;
 module.exports.DOM = xdhq.XDH;
 
 module.exports.readAsset = xdhq.readAsset;
