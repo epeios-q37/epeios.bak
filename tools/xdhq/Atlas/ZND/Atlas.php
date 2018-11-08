@@ -183,7 +183,7 @@ class Atlas extends Thread {
   }
  }
 
- public static function createXML( string $rootTag ) {
+ public static function createXML(string $rootTag) {
  	 return new XDHqXML( $rootTag );
  }
 };

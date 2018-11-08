@@ -17,14 +17,6 @@
 	along with XDHq If not, see <http://www.gnu.org/licenses/>.
 */
 
-/*
-	This is the one-file version ; no need of other files.
-
-	You can try this application online by pasting the content of this file
-	in http://npm.runkit.com/. It works only for some seconds, it seems
-	that there is a timeout after which the application is killed.
-*/
-
 var atlas;
 
 if (process.env.EPEIOS_SRC) {

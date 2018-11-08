@@ -1,14 +1,16 @@
-# Chat room with *Node.js*
+# Chat room for *Node.js* with the *Atlas* toolkit
 
 ![Node.js logo](https://q37.info/download/assets/Node.png "Node.js")
 
 A *Node.js* version of a basic chat room application, made with the [*Atlas* toolkit](https://atlastk.org/).
 
-- Get this repository (with *git*: `git clone https://github.com/epeios-q37/chatroom-node`),
+Online demonstration: <http://q37.info/runkit/Chatroom>.
+
+To install and run this application on your computer:
+
+- get this repository (with *git*: `git clone https://github.com/epeios-q37/chatroom-node`),
 - launch, from inside of the retrieved repository, `npm install`,
 - launch, from same directory, `node main.js`,
-
-or go to <http://q37.info/runkit/Chatroom> (scroll to bottom, click on the *run* button, and scroll again to the bottom).
 
 There is also a version for:
 

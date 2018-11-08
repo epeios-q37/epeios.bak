@@ -1,8 +1,17 @@
-# Demonstration of the *PHP* version from the *Atlas* toolkit
+# Examples of use of the *PHP* version of the *Atlas* toolkit
 
 ![PHP logo](https://q37.info/download/assets/PHP.png "PHP")
 
-- Get this repository (with *git*: `git clone https://github.com/epeios-q37/atlas-php-demo`),
+The *blank* application does almost nothing, and is intended as a basis for your own applications. The *notes* application is a more complex example which shows how to use widgets like [*CKEditor*](http://ckeditor.com/) with the *Atlas* toolkit.
+
+Online demonstration:
+
+  - of the *blank* application: <http://q37.info/runkit/Blank>,
+  - of the *notes* application: <http://q37.info/runkit/Notes>.
+
+To install and run these applications on your computer:
+
+- get this repository (with *git*: `git clone https://github.com/epeios-q37/atlas-php-demo`),
 - put, inside of the retrieved repository, the `Atlas.phar` file: https://q37.info/download/assets/Atlas.phar,
 - for the *blank* demonstration, launch, from same directory, `php blank/main.php`,
 - for the *notes* demonstration, launch, from same directory, `php notes/main.php`,

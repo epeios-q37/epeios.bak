@@ -34,13 +34,13 @@ class XML {
 	popTag() {
 		this.xml_ += "<";
 	}
-	setValue(value) {
-		this.xml_ += "V";
-		this.writeString_(value);
-	}
 	setAttribute(name, value) {
 		this.xml_ += "A";
 		this.writeString_(name);
+		this.writeString_(value);
+	}
+	setValue(value) {
+		this.xml_ += "V";
 		this.writeString_(value);
 	}
 	toString() {
