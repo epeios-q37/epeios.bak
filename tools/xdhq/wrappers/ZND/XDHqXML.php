@@ -25,18 +25,18 @@ class XDHqXML {
   $this->xml_ .= strval( $string ) . "\0";
  }
 
- function __construct($tag) {
+ function __construct(string $tag) {
   $this->writeString_( "coucou" );
   $this->writeString_( $tag );
  }
- function pushTag($tag) {
+ function pushTag(string $tag) {
   $this->xml_ .= ">";
   $this->writeString_( $tag );
  }
  function popTag() {
   $this->xml_ .= "<";
  }
- function setAttribute($name, $value) {
+ function setAttribute(string $name, $value) {
   $this->xml_ .= "A";
   $this->writeString_( $name );
   $this->writeString_( $value );

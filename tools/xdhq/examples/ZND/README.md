@@ -16,7 +16,7 @@ To install and run these applications on your computer:
 - for the *blank* demonstration, launch, from same directory, `php blank/main.php`,
 - for the *notes* demonstration, launch, from same directory, `php notes/main.php`,
 
-NOTA : **You need *PHP* with [*pthreads*](http://php.net/manual/book.pthreads.php)!**
+NOTA: **You need *PHP* with [*pthreads*](http://php.net/manual/book.pthreads.php)!**
 
 
 There is also a version for:

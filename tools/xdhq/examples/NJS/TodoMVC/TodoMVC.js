@@ -113,7 +113,7 @@ function displayTodos(dom) {
 
 	xml.popTag();
 
-	dom.setLayoutXSL("Todos", xml, "Todos.xsl",
+	dom.setLayoutXSL("Todos", xml, xsl,
 		() => handleCount(dom)
 	);
 }

@@ -14,7 +14,7 @@ To install and run this application on your computer:
 - put, inside of the retrieved repository, the `Atlas.phar` file: https://q37.info/download/assets/Atlas.phar,
 - launch, from same directory, `php main.php`.
 
-NOTA : **You need *PHP* with [*pthreads*](http://php.net/manual/book.pthreads.php)!**
+NOTA: **You need *PHP* with [*pthreads*](http://php.net/manual/book.pthreads.php)!**
 
 There is also a version for:
 

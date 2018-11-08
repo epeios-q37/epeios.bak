@@ -73,7 +73,7 @@ function displayMessages(dom) {
 		xml.popTag();
 
 		dom.createElement("span",
-			(id) => dom.setLayoutXSL(id, xml, "Messages.xsl",
+			(id) => dom.setLayoutXSL(id, xml, xsl,
 				() => dom.insertChild(id, "Board")
 			)
 		);

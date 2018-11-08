@@ -1,3 +1,4 @@
+
 /*
 	Copyright (C) 2018 Claude SIMON (http://q37.info/contact/).
 
@@ -39,7 +40,7 @@ class TodoMVC extends Atlas {
 	private int index = -1;
 	private List<Todo> todos;
 
-	private static String readAsset_( String path ) {
+	private static String readAsset_(String path) {
 		String dir;
 
 		if (System.getenv("EPEIOS_SRC") == null)
@@ -47,16 +48,19 @@ class TodoMVC extends Atlas {
 		else
 			dir = "TodoMVC";
 
-		return readAsset( path, dir );
+		return readAsset(path, dir);
 	}
 
 	private int itemsLeft() {
 		return (int) todos.stream().filter(todo -> !todo.completed).count();
 	}
 
-	private String push(Todo todo, int id, String xml) {
-		return xml + "<Todo" + " id=\"" + id + "\"" + " completed=\"" + todo.completed + "\">" + toXMLValue(todo.label)
-				+ "</Todo>\n";
+	private void push(Todo todo, int id, info.q37.xdhq.XML xml) {
+		xml.pushTag("Todo");
+		xml.setAttribute("id", id);
+		xml.setAttribute("completed", todo.completed);
+		xml.setValue(todo.label);
+		xml.popTag();
 	}
 
 	private void displayCount(DOM dom, int count) {
@@ -90,7 +94,9 @@ class TodoMVC extends Atlas {
 	private void displayTodos(DOM dom) {
 		ListIterator<Todo> li = todos.listIterator();
 
-		String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<XDHTML>\n<Todos>\n";
+		info.q37.xdhq.XML xml = Atlas.createXML("XDHTML");
+
+		xml.pushTag("Todos");
 
 		while (li.hasNext()) {
 			int index = li.nextIndex();
@@ -98,10 +104,10 @@ class TodoMVC extends Atlas {
 			Todo todo = li.next();
 
 			if ((exclude == null) || (todo.completed != exclude))
-				xml = push(todo, index, xml);
+				push(todo, index, xml);
 		}
 
-		xml += "</Todos>\n</XDHTML>";
+		xml.popTag();
 
 		dom.setLayoutXSL("Todos", xml, "Todos.xsl");
 		handleCount(dom);
@@ -127,7 +133,7 @@ class TodoMVC extends Atlas {
 		if (!"".equals(content.trim())) {
 			todos.set(index, new Todo(content, todos.get(index).completed));
 
-			dom.setContent("Label." + index, toXMLValue(content));
+			dom.setContent("Label." + index, content);
 
 			dom.removeClasses(new HashMap<String, String>() {
 				{

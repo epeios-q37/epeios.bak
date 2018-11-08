@@ -1,4 +1,4 @@
-# *PHP* binding of the *Atlas* toolkit
+# *PHP* version of the *Atlas* toolkit
 
 ![PHP logo](https://q37.info/download/assets/PHP.png "PHP")
 
@@ -7,6 +7,10 @@ The [*Atlas* toolkit](https://atlastk.org/) is a library which facilitates the p
 ## *Hello World!*
 
 [![Little demonstration](http://q37.info/download/Hello.gif "A basic example")](http://q37.info/s/atk/Hello/)
+
+Online demonstration: <http://q37.info/runkit/Hello>.
+
+Source code:
 
 ```PHP
 <?php
@@ -86,14 +90,20 @@ Atlas::launch("Connect", 'hello', $head, null, "Hello");
 ?>
 ```
 
+To install and run this example on your computer:
+
 - Get the `Atlas.phar` file: <https://q37.info/download/assets/Atlas.phar>,
 - in the same directory, create a `Hello.php` file with above source code, or get it directly here: <https://q37.info/download/assets/Hello.php>,
 - launch `php Hello.php`.
+
+NOTA: **You need *PHP* with [*pthreads*](http://php.net/manual/book.pthreads.php)!**
 
 ## What's next ?
 
 Here's how the *Atlas* toolkit version of the [*TodoMVC*](http://todomvc.com/) application looks like: 
 
 [![TodoMVC](http://q37.info/download/TodoMVC.gif "The TodoMVC application made with the Atlas toolkit")](http://q37.info/s/atk/TodoMVC)
+
+Online demonstration: <http://q37.info/runkit/TodoMVC>.
 
 The source code of this application and more information about the *Atlas* toolkit can be found at <http://atlastk.org/>

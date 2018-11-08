@@ -73,7 +73,6 @@ if (isset($_REQUEST["_prolog"]) || (isset($_REQUEST["_token"]) && !isset($_REQUE
   $in .= $key . "\00" . $value . "\00";
  }
 
- $in .= "_test\00" . strlen( $_REQUEST['_result'] ) . "\00";
  $in .= "_CGI\00" . $_SERVER['PHP_SELF'] . "\00\00";
 
  echo send($in);

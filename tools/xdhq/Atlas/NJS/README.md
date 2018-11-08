@@ -1,4 +1,4 @@
-# Binding for *Node.js* of the *Atlas* toolkit
+# *Node.js* version of the *Atlas* toolkit
 
 ![Node.js logo](https://q37.info/download/assets/Node.png "Node.js")
 
@@ -7,6 +7,10 @@ The [*Atlas* toolkit](https://atlastk.org/) is a library which facilitates the p
 ## *Hello, World!*
 
 [![Little demonstration](https://q37.info/download/Hello.gif "A basic example")](http://q37.info/s/atk/Hello/)
+
+Online demonstration: <http://q37.info/runkit/Hello>.
+
+Source code:
 
 ```javascript
 const atlas = require( 'atlastk' );
@@ -66,16 +70,18 @@ const callbacks = {
 atlas.launch(() => new atlas.DOM(), "Connect", callbacks, head);
 ```
 
-- Launch `npm install atlastk`,
+To install and run this example on your computer:
+
+- launch `npm install atlastk`,
 - in the same directory, create a `Hello.js` file with above source code, or get it directly here: <https://q37.info/download/assets/Hello.js>,
 - launch `node Hello.js`,
-
-or go to <http://q37.info/runkit/Hello> (scroll to bottom, click on the *run* button, and scroll again to the bottom).
 
 ## What's next ?
 
 Here's how the *Atlas* toolkit version of the [*TodoMVC*](http://todomvc.com/) application looks like: 
 
 [![TodoMVC](http://q37.info/download/TodoMVC.gif "The TodoMVC application made with the Atlas toolkit")](http://q37.info/s/atk/TodoMVC)
+
+Online demonstration: <http://q37.info/runkit/TodoMVC>.
 
 The source code of this application and more information about the *Atlas* toolkit can be found at <http://atlastk.org/>.

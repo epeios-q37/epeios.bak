@@ -107,7 +107,7 @@ function displayList(dom) {
 
 	xml.popTag();;
 
-	dom.setLayoutXSL("Notes", xml, "Notes.xsl",
+	dom.setLayoutXSL("Notes", xml, xsl,
 		() => dom.setContents(contents,
 			() => dom.enableElements(viewModeElements,
 				() => handleDescriptions(dom)
@@ -644,7 +644,7 @@ const body = `
   <span>!</span>
  </p>
  <a href="http://atlastk.org/" class ="button">
-  <xsl: text>    About   </xsl:text>
+  <span>    About   </span>
  </a>
 </div>
 <div>
@@ -689,7 +689,7 @@ const note = `
 // Note to developer:
 // DON'T PASTE TO Visual Studio : it inserts extraneous characters !
 // There must be NO characters before the XML declaration !
-const notes = `<?xml version="1.0" encoding="UTF-8"?>
+const xsl = `<?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" 
 	xmlns="http://www.w3.org/1999/xhtml" 
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
