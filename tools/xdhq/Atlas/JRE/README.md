@@ -86,4 +86,4 @@ Here's how the *Atlas* toolkit version of the [*TodoMVC*](http://todomvc.com/) a
 
 Online demonstration: <http://q37.info/runkit/TodoMVC>.
 
-See <https://github.com/epeios-q37/todomvc-java>.
+The source code of this application and more information about the *Atlas* toolkit can be found at <http://atlastk.org/>.

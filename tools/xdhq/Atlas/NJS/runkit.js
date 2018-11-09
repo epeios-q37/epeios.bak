@@ -17,7 +17,7 @@
 	along with XDHq If not, see <http://www.gnu.org/licenses/>.
 */
 
-const atlas = require('atlastk@0.4.0');
+const atlas = require('atlastk');
 
 // Content of 'Head.html'.
 const head = `

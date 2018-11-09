@@ -4,6 +4,8 @@
 
 The [*Atlas* toolkit](https://atlastk.org/) is a library which facilitates the prototyping of web applications.
 
+[![NPM badge of the Atlas toolkit](http://nodei.co/npm/atlastk.png)](http://npmjs.com/atlastk/ "NPM package of the Atlas toolkit")
+
 ## *Hello, World!*
 
 [![Little demonstration](https://q37.info/download/Hello.gif "A basic example")](http://q37.info/s/atk/Hello/)

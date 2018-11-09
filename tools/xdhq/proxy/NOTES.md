@@ -9,13 +9,13 @@ Il y a deux binaires à déployer sur le serveur distant:
 - [*xdhwebq*](http://github.com/epeios-q37/xdhwebq-cli) (`tools/xdhwebq/CLI`),
 - [*xdhqxdh*](http://github.com/epeios-q37/xdhqxdh) (`tools/xdhq/proxy`).
 
-Vérifier, avant déploiement, qu'ils comspilent bien sous *Cygwin*.
+Vérifier, avant déploiement, qu'ils compilent bien sous *Cygwin*.
 
 Mettre à jour les dépôts *GitHub*, puis les cloner sur les serveurs, les compiler et les mettre en place. Laisser tourner la version en cours.
 
 ## Le déploiement des bibliothèques utilisateurs
 
-Le déploiement pour *Node.js* doit se faire en premier, car ne nécessite pas l'arrêt du programme.
+Le déploiement pour *Node.js* doit se faire en premier, car ne nécessite pas l'arrêt de l'application.
 
 ### *Node.js*
 
@@ -33,16 +33,12 @@ Contrôler le changement de version dans `package.json`.
 Chemin : `tools/xdhq/Atlas/NJS`.
 
 - Mettre le numéro de version à jour dans `Project.xml`,
-- copier le cœur de `Hello.js` dans `runkit.js` en veillant:
-  - à mettre à jour la version de *atlastk* dans le `require(...)`,
-  - à la présence du texte sur le *timeout* de *RunKit* à la fin du programme,
+- copier le cœur de `Hello.js` dans `runkit.js` en, veillant à la présence du texte sur le *timeout* de *RunKit* à la fin du programme,
 
-Avant publication sur *NPM*, vérifier :
+Avant publication sur *NPM*, vérifier dans `package.json` :
 
-- dans `package.json` :
-  - que le numéro de version est le bon,
-  - que le numéro de version de `xdhqnjs` est également le bon,
-- dans `runkit.js`, que le numéro de version de `atlastk` est le bon.
+- que le numéro de version est le bon,
+- que le numéro de version de `xdhqnjs` est également le bon.
 
 Á ce moment-là, il convient probablement de mettre à jour les binaires, voire de basculer sur la version de maintenance de `xdh.php`.
 
@@ -68,7 +64,7 @@ Après avoir lancées en local les différentes applications pour voir si elles 
   - `~/Atlas.phar`,
   - si modifié, `Hello.php`,
 - mettre à jour les dépôts *GitHub* :
-  - [*xdhq-php*](http://github.com/epeios-q37/qdhq-php) (`/tools/xdhq/wrappers/PHP`),
+  - [*xdhq-php*](http://github.com/epeios-q37/xdhq-php) (`/tools/xdhq/wrappers/PHP`),
   - [*atlas-php*](http://github.com/epeios-q37/atlas-php) (`tools/xdhq/Atlas/PHP`).
 
 ### Contrôle
@@ -78,6 +74,16 @@ Dans une console *DOS*, vérifier si les instructions données dans les *README*
 - <http://github.com/epeios-q37/atlas-java>,
 - <http://github.com/epeios-q37/atlas-node>,
 - <http://github.com/epeios-q37/atlas-php>.
+
+## Miscellaneous examples
+
+Mettre à jour les dépôts suivants, puis contrôler :
+
+- [*atlas-java-demo*](http://github.com/epeios-q37/atlas-java-demo),
+- [*atlas-node-demo*](http://github.com/epeios-q37/atlas-node-demo),
+- [*atlas-php-demo*](http://github.com/epeios-q37/atlas-php-demo).
+
+## Chat room
 
 ## *TodoMVC*
 
