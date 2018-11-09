@@ -119,10 +119,10 @@ class Chatroom extends Atlas {
 			dom.focus("Pseudo");
 		} else if (handlePseudo_(pseudo.toUpperCase())) {
 			this.pseudo = pseudo;
-			dom.setContent("Pseudo", pseudo);
 			dom.addClass("PseudoButton", "hidden");
 			dom.disableElements(new String[] { "Pseudo", "PseudoButton" });
 			dom.enableElements(new String[] { "Message", "MessageButton" });
+			dom.setContent("Pseudo", pseudo);
 			dom.focus("Message");
 			System.out.println("\t>>>> New user: " + pseudo);
 		} else {

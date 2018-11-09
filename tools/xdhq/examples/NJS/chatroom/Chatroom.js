@@ -116,10 +116,10 @@ function acSubmitPseudo(dom, id) {
 				);
 			} else if (handlePseudo(result.toUpperCase())) {
 				dom.pseudo = result;
-				dom.setContent("Pseudo", result);
 				dom.addClass("PseudoButton", "hidden");
 				dom.disableElements(["Pseudo", "PseudoButton"]);
 				dom.enableElements(["Message", "MessageButton"]);
+				dom.setContent("Pseudo", result);
 				dom.focus("Message");
 				console.log("\t>>>> New user: " + result);
 			} else {

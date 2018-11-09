@@ -121,10 +121,10 @@ class Chatroom extends Threaded {
    $dom->focus("Pseudo");
   } else if ($dom->synchronized(function ($pseudo) {return $this->handlePseudo_(strtoupper($pseudo));}, $pseudo)) {
    $this->pseudo = $pseudo;
-   $dom->setContent("Pseudo", $pseudo);
    $dom->addClass("PseudoButton", "hidden");
    $dom->disableElements(["Pseudo", "PseudoButton"]);
    $dom->enableElements(["Message", "MessageButton"]);
+   $dom->setContent("Pseudo", $pseudo);
    $dom->focus("Message");
    echo ("\t>>>> New user: " . $pseudo . "\n");
   } else {
