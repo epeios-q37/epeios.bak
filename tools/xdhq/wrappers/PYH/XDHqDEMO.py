@@ -19,14 +19,23 @@
 
 import XDHqSHRD
 
-import os
-import socket
+import os, socket, sys
+
+if sys.version_info[0] == 2:
+	import XDHqDEMO2
+	_writeSize = XDHqDEMO2.writeSize
+elif sys.version_info[0] == 3:
+	import XDHqDEMO3
+	_writeSize = XDHqDEMO3.writeSize
+else:
+	sys.exit("Unknown python version!")
 
 _protocolLabel = "712a58bf-2c9a-47b2-ba5e-d359a99966de"
 _protocolVersion = "0"
 
 _newSessionAction = ""
 _headContent = ""
+_token = ""
 
 def launch(newSessionAction,headContent):
 	global _newSessionAction,_headContent
@@ -37,20 +46,13 @@ def launch(newSessionAction,headContent):
 
 class XDHqDOM_DEMO:
 	_firstLaunch = True
-	_token = ""
 
 	def _isTokenEmpty(this):
-		return not this._token or this._token[0] == "&"
+		global _token
+		return not _token or _token[0] == "&"
 
 	def _writeSize(this, size):
-		result = chr(size & 0x7f)
-		size >>= 7
-
-		while size != 0:
-			result = chr((size & 0x7f) | 0x80) + result
-			size >>= 7
-
-		this._socket.send(result)
+		_writeSize( this._socket, size )
 
 	def _writeString(this, string):
 		this._writeSize(len(string))
@@ -100,7 +102,7 @@ class XDHqDOM_DEMO:
 
 
 	def __init__(this):
-		global _protocolLabel, _protocolVersion, _newSessionAction,_headContent
+		global _protocolLabel, _protocolVersion, _newSessionAction,_headContent, _token
 		address = "atlastk.org"
 		httpPort = ""
 		cgi = "xdh"
@@ -122,30 +124,28 @@ class XDHqDOM_DEMO:
 				token = os.environ["ATK_TOKEN"].strip()
 
 				if token:
-					this._token = "&" + token
+					_token = "&" + token
 		
 		this._socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		this._socket.connect((address,port))
 
-		print("\tAv.",this._token)
-		this._writeString(this._token)
+		this._writeString(_token)
 
 		if this._isTokenEmpty():
 			this._writeString(_headContent)
 
-			this._token = this._getString()
-			print("\tAp.",this._token)
+			_token = this._getString()
 
 			if this._isTokenEmpty():
 				sys.exit("Invalid connection information !!!")
 
-			url = "http://" + address + httpPort + "/" + cgi + ".php?_token=" + this._token
+			url = "http://" + address + httpPort + "/" + cgi + ".php?_token=" + _token
 
 			print(url)
 			print("Open above URL in a web browser. Enjoy!\n")
 			XDHqSHRD.open(url)
 		else:
-			if this._getString() != this_.token:
+			if this._getString() != _token:
 				sys.exit("Unmatched token !!!")
 
 		this._getString()	# Language.

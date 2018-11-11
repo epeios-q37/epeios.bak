@@ -109,11 +109,8 @@ class XDHqDOM(Thread):
 def launch(newSessionAction, headContent, dir, new):
 	XDHqDEMO.launch(newSessionAction,headContent)
 
-	i = 2
-
-	while i:
+	while True:
 		new().start()
-		i -= 1
 
 
 
