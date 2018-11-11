@@ -78,18 +78,6 @@ class XDHqDOM extends Threaded {
 			$values[] = $value;
 		}
 	}
-	function __construct() {
-		switch ( XDHq::getMode() ) {
-		case XDHq::MODE_PROD:
-			$this->dom_ = new XDHqDOM_PROD;
-			break;
-		case XDHq::MODE_DEMO:
-			$this->dom_ = new XDHqDOM_DEMO;
-			break;
-		default:
-			die( "Unknown mode !!!");
-		}
-	}
 	private function unsplit_( array $keys, array $values ) {
 		$count = count( $keys );
 		$i = 0;
@@ -101,6 +89,18 @@ class XDHqDOM extends Threaded {
 		}
 
 		return $keysAndValues;
+	}
+	function __construct() {
+		switch ( XDHq::getMode() ) {
+		case XDHq::MODE_PROD:
+			$this->dom_ = new XDHqDOM_PROD;
+			break;
+		case XDHq::MODE_DEMO:
+			$this->dom_ = new XDHqDOM_DEMO;
+			break;
+		default:
+			die( "Unknown mode !!!");
+		}
 	}
 	private function call_( ...$args ) {
 		return $this->dom_->call( ...$args );
@@ -117,8 +117,8 @@ class XDHqDOM extends Threaded {
 	function confirm( string $message ) {
 		return self::call_( "Confirm_1", XDHq::RT_STRING, 1, $message, 0 ) == "true";
 	}
-	private function setLayout_(string  $id, $tree, string $xslFilename ) {
-		self::call_( "SetLayout_1", XDHq::RT_NONE, 3, $id, $tree, $xslFilename, 0 );
+	private function setLayout_(string  $id, $xml, string $xslFilename ) {
+		self::call_( "SetLayout_1", XDHq::RT_NONE, 3, $id, $xml, $xslFilename, 0 );
 	}
 	function setLayout(string  $id, string $html ) {
 		self::setLayout_( $id, $html, "" );
