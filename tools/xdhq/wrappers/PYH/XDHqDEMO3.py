@@ -28,8 +28,9 @@ def writeSize(socket, size):
 	socket.send(result)
 
 def writeString(socket, string):
-	writeSize(socket, len(string))
-	socket.send(bytes(string, "utf-8"))
+	bString = bytes(string, "utf-8")
+	writeSize(socket, len(bString))
+	socket.send(bString)
 
 def writeStringNUL(socket, string):
 	socket.send(bytes(string + "\0", "utf-8"))

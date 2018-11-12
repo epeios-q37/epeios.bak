@@ -19,6 +19,8 @@
 
 import XDHqDEMO, XDHqSHRD, XDHqXML
 
+import urllib.parse
+
 _dir = ""
 
 _VOID = XDHqSHRD.RT_VOID
@@ -48,7 +50,7 @@ def _unsplit(keys,values):
 
 def _getAssetPath(dir):
 	if XDHqSHRD.isDev():
-		return "h:/hg/epeios/tools/xdhq/examples/common/" + dir + "/"
+		return "/cygdrive/h/hg/epeios/tools/xdhq/examples/common/" + dir + "/"
 	else:
 		return os.path.dirname(os.path.realpath(sys.path[0]))
 
@@ -82,9 +84,9 @@ class DOM:
 		xslURL = xsl
 
 		if True:	# Testing if 'PROD' or 'DEMO' mode when available.
-			xslURL = "data:text/xml;charset=utf-8," + urllib.parse.urlencode( XDHq.readAsset( xsl, _dir ) )
-			
-		this.setLayout_( id, xml if type(xml) == "str" else xml.toString(), xslURL )
+			xslURL = "data:text/xml;charset=utf-8," + urllib.parse.quote( readAsset( xsl, _dir ) )
+
+		this._setLayout( id, xml if type(xml) == "str" else xml.toString(), xslURL )
 
 	def getContents(this, ids):
 		return _unsplit(ids,this._dom.call("GetContents_1",_STRINGS, 0, 1, ids))
@@ -135,7 +137,7 @@ class DOM:
 	def toggleClass(this, id, clas ):
 		this.toggleClasses({id: clas})
 
-	def enableElements(ids):
+	def enableElements(this,ids):
 		this._dom.call("EnableElements_1", _VOID, 0, 1, ids )
 
 	def enableElement(this, id):

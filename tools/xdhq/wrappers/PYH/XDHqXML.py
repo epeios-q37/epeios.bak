@@ -31,16 +31,16 @@ class XML:
 		this._write(tag)
 
 	def popTag(this):
-		this_.xml += "<"
+		this._xml += "<"
 
 	def setAttribute(this,name,value):
 		this._xml += "A"
-		_write(name)
-		_write(value)
+		this._write(name)
+		this._write(value)
 
 	def setValue(this,value):
 		this._xml += "V"
-		_write(value)
+		this._write(value)
 
 	def toString(this):
 		return this._xml
