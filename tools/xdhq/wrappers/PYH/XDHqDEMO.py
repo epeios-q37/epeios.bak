@@ -24,9 +24,19 @@ import os, socket, sys
 if sys.version_info[0] == 2:
 	import XDHqDEMO2
 	_writeSize = XDHqDEMO2.writeSize
+	_writeString = XDHqDEMO2.writeString
+	_writeStringNUL = XDHqDEMO2.writeStringNUL
+	_getByte = XDHqDEMO2.getByte
+	_getSize = XDHqDEMO2.getSize
+	_getString = XDHqDEMO2.getString
 elif sys.version_info[0] == 3:
 	import XDHqDEMO3
 	_writeSize = XDHqDEMO3.writeSize
+	_writeString = XDHqDEMO3.writeString
+	_writeStringNUL = XDHqDEMO3.writeStringNUL
+	_getByte = XDHqDEMO3.getByte
+	_getSize = XDHqDEMO3.getSize
+	_getString = XDHqDEMO3.getString
 else:
 	sys.exit("Unknown python version!")
 
@@ -55,8 +65,7 @@ class XDHqDOM_DEMO:
 		_writeSize( this._socket, size )
 
 	def _writeString(this, string):
-		this._writeSize(len(string))
-		this._socket.send(string)
+		_writeString(this._socket, string)
 
 	def _writeStrings(this, strings):
 		this._writeSize(len(strings))
@@ -65,25 +74,13 @@ class XDHqDOM_DEMO:
 			this._writeString(string)
 
 	def _getByte(this):
-		return ord(this._socket.recv(1))
+		return _getByte(this._socket)
 
 	def _getSize(this):
-		byte = this._getByte()
-		size = byte & 0x7f
-
-		while byte & 0x80:
-			byte = this._getByte()
-			size = (size << 7) + byte & 0x7f
-
-		return size
+		return _getSize( this._socket)
 
 	def _getString(this):
-		size = this._getSize()
-
-		if size:
-			return this._socket.recv(size)
-		else:
-			return ""
+		return _getString(this._socket)
 
 	def _getStrings(this):
 		amount = this._getSize()
@@ -95,11 +92,9 @@ class XDHqDOM_DEMO:
 
 		return strings
 
-
 	def _getQuery(this):
 		c = this._socket.rec(1)
 		query = ""
-
 
 	def __init__(this):
 		global _protocolLabel, _protocolVersion, _newSessionAction,_headContent, _token
@@ -144,8 +139,7 @@ class XDHqDOM_DEMO:
 			print(url)
 			print("Open above URL in a web browser. Enjoy!\n")
 			XDHqSHRD.open(url)
-		else:
-			if this._getString() != _token:
+		elif this._getString() != _token:
 				sys.exit("Unmatched token !!!")
 
 		this._getString()	# Language.
@@ -156,7 +150,7 @@ class XDHqDOM_DEMO:
 		if this._firstLaunch:
 			this._firstLaunch = False
 		else:
-			this._socket.send("StandBy_1\0")
+			_writeStringNUL( this._socket, "StandBy_1")
 
 		id = this._getString();
 		action = this._getString()
@@ -168,7 +162,7 @@ class XDHqDOM_DEMO:
 
 	def call(this, command, type, *args):
 		i=0
-		this._socket.send( command + "\0" )
+		_writeStringNUL( this._socket, command )
 
 		amount = args[i]
 		i += 1

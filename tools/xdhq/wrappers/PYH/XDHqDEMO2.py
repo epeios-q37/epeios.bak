@@ -26,3 +26,32 @@ def writeSize(socket, size):
 		size >>= 7
 
 	socket.send(result)
+
+def writeString(socket, string):
+	writeSize(socket, len(string))
+	socket.send(string)
+
+def writeStringNUL(socket, string):
+	socket.send(string + "\0")
+
+
+def getByte(socket):
+	return ord(socket.recv(1))
+
+def getSize(socket):
+	byte = getByte(socket)
+	size = byte & 0x7f
+
+	while byte & 0x80:
+		byte = getByte(socket)
+		size = (size << 7) + byte & 0x7f
+
+	return size
+
+def getString(socket):
+	size = getSize(socket)
+
+	if size:
+		return socket.recv(size)
+	else:
+		return ""
