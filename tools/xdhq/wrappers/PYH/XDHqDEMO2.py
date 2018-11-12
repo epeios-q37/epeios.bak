@@ -1,5 +1,5 @@
 """ 
-  Copyright (C) 2018 Claude SIMON (http://q37.info/contact/).
+Copyright (C) 2018 Claude SIMON (http://q37.info/contact/).
 
 	This file is part of XDHq.
 
@@ -35,15 +35,15 @@ def writeStringNUL(socket, string):
 	socket.send(string + "\0")
 
 
-def getByte(socket):
+def _getByte(socket):
 	return ord(socket.recv(1))
 
 def getSize(socket):
-	byte = getByte(socket)
+	byte = _getByte(socket)
 	size = byte & 0x7f
 
 	while byte & 0x80:
-		byte = getByte(socket)
+		byte = _getByte(socket)
 		size = (size << 7) + byte & 0x7f
 
 	return size

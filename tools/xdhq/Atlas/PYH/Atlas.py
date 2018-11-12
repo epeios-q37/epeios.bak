@@ -17,42 +17,31 @@
 	along with XDHq If not, see <http://www.gnu.org/licenses/>.
  """
 
-def writeSize(socket, size):
-	result = bytes([size & 0x7f])
-	size >>= 7
+import XDHq
+from threading import Thread
 
-	while size != 0:
-		result = bytes([(size & 0x7f) | 0x80]) + result
-		size >>= 7
+readAsset = XDHq.readAsset
+XML = XDHq.XML
 
-	socket.send(result)
+class DOM(Thread):
+	def __init__(this, userObject):
+		Thread.__init__(this)
+		this._dom = XDHq.DOM()
+		this._userObject = userObject
 
-def writeString(socket, string):
-	writeSize(socket, len(string))
-	socket.send(bytes(string, "utf-8"))
+	def run(this):
+		while True:
+			[action,id] = this._dom.getAction()
+			this._userObject.handle(this._dom,action,id)
 
-def writeStringNUL(socket, string):
-	socket.send(bytes(string + "\0", "utf-8"))
+def launch(newSessionAction, headContent, dir, new):
+	XDHq.launch(newSessionAction,headContent,dir)
 
-def _getByte(socket):
-	return ord(socket.recv(1))
+	while True:
+		new().start()
 
-def getSize(socket):
-	byte = _getByte(socket)
-	size = byte & 0x7f
 
-	while byte & 0x80:
-		byte = _getByte(socket)
-		size = (size << 7) + byte & 0x7f
 
-	return size
 
-def getString(socket):
-	size = getSize(socket)
-
-	if size:
-		return socket.recv(size).decode("utf-8")
-	else:
-		return ""
 
 

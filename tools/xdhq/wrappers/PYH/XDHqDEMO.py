@@ -26,7 +26,6 @@ if sys.version_info[0] == 2:
 	_writeSize = XDHqDEMO2.writeSize
 	_writeString = XDHqDEMO2.writeString
 	_writeStringNUL = XDHqDEMO2.writeStringNUL
-	_getByte = XDHqDEMO2.getByte
 	_getSize = XDHqDEMO2.getSize
 	_getString = XDHqDEMO2.getString
 elif sys.version_info[0] == 3:
@@ -34,7 +33,6 @@ elif sys.version_info[0] == 3:
 	_writeSize = XDHqDEMO3.writeSize
 	_writeString = XDHqDEMO3.writeString
 	_writeStringNUL = XDHqDEMO3.writeStringNUL
-	_getByte = XDHqDEMO3.getByte
 	_getSize = XDHqDEMO3.getSize
 	_getString = XDHqDEMO3.getString
 else:
@@ -54,7 +52,7 @@ def launch(newSessionAction,headContent):
 	_headContent = headContent
 
 
-class XDHqDOM_DEMO:
+class DOM_DEMO:
 	_firstLaunch = True
 
 	def _isTokenEmpty(this):
@@ -72,9 +70,6 @@ class XDHqDOM_DEMO:
 
 		for string in strings:
 			this._writeString(string)
-
-	def _getByte(this):
-		return _getByte(this._socket)
 
 	def _getSize(this):
 		return _getSize( this._socket)

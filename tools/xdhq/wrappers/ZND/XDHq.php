@@ -210,7 +210,7 @@ class XDHqDOM extends Threaded {
 		return self::call_( "SetProperty_1", XDHq::RT_NONE, 3, $id, $name, $value, 0 );
 	}
 	function getProperty( string $id, string $name ) {
-		return self::call_( "GetPropertY_1", XDHq::RT_STRING, 2, $id, $name, 0 );
+		return self::call_( "GetProperty_1", XDHq::RT_STRING, 2, $id, $name, 0 );
 	}
 	function focus( string $id ) {
 		self::call_( "Focus_1", XDHq::RT_NONE, 1, $id, 0 );

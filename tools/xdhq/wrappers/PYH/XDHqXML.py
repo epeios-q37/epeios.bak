@@ -17,42 +17,30 @@
 	along with XDHq If not, see <http://www.gnu.org/licenses/>.
  """
 
-def writeSize(socket, size):
-	result = bytes([size & 0x7f])
-	size >>= 7
+class XML:
+	def _write(this,value):
+		this._xml += str(value) + "\0"
 
-	while size != 0:
-		result = bytes([(size & 0x7f) | 0x80]) + result
-		size >>= 7
+	def __init__(this,rootTag):
+		this._xml = ""
+		this._write("dummy")
+		this._write(rootTag)
 
-	socket.send(result)
+	def pushTag(this,tag):
+		this._xml += ">"
+		this._write(tag)
 
-def writeString(socket, string):
-	writeSize(socket, len(string))
-	socket.send(bytes(string, "utf-8"))
+	def popTag(this):
+		this_.xml += "<"
 
-def writeStringNUL(socket, string):
-	socket.send(bytes(string + "\0", "utf-8"))
+	def setAttribute(this,name,value):
+		this._xml += "A"
+		_write(name)
+		_write(value)
 
-def _getByte(socket):
-	return ord(socket.recv(1))
+	def setValue(this,value):
+		this._xml += "V"
+		_write(value)
 
-def getSize(socket):
-	byte = _getByte(socket)
-	size = byte & 0x7f
-
-	while byte & 0x80:
-		byte = _getByte(socket)
-		size = (size << 7) + byte & 0x7f
-
-	return size
-
-def getString(socket):
-	size = getSize(socket)
-
-	if size:
-		return socket.recv(size).decode("utf-8")
-	else:
-		return ""
-
-
+	def toString(this):
+		return this._xml

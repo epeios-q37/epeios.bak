@@ -25,9 +25,9 @@ class XDHqXML {
   $this->xml_ .= strval( $string ) . "\0";
  }
 
- function __construct(string $tag) {
-  $this->writeString_( "coucou" );
-  $this->writeString_( $tag );
+ function __construct(string $rootTag) {
+  $this->writeString_( "dummy" );
+  $this->writeString_( $rootTag );
  }
  function pushTag(string $tag) {
   $this->xml_ .= ">";
