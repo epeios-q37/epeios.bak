@@ -19,7 +19,19 @@
 
 import XDHqDEMO, XDHqSHRD, XDHqXML
 
-import urllib.parse
+import sys
+
+if sys.version_info[0] == 2:
+	import urllib
+	def _encode(string):
+		return urllib.quote(string)
+elif sys.version_info[0] == 3:
+	import urllib.parse
+	def _encode(string):
+		return urllib.parse.quote(string)
+else:
+	print("Unhandled python version!")
+	os._exit(1)
 
 _dir = ""
 
@@ -70,6 +82,9 @@ class DOM:
 	def execute(this,script):
 		return this._dom.call("Execute_1" ,_STRING, 1, script, 0)
 
+	def alert(this,message):
+		this._dom.call( "Alert_1", _VOID, 1, message, 0 ) == "true"
+
 	def confirm(this,message):
 		return this._dom.call( "Confirm_1", _STRING, 1, message, 0 ) == "true"
 
@@ -84,7 +99,7 @@ class DOM:
 		xslURL = xsl
 
 		if True:	# Testing if 'PROD' or 'DEMO' mode when available.
-			xslURL = "data:text/xml;charset=utf-8," + urllib.parse.quote( readAsset( xsl, _dir ) )
+			xslURL = "data:text/xml;charset=utf-8," + _encode( readAsset( xsl, _dir ) )
 
 		this._setLayout( id, xml if type(xml) == "str" else xml.toString(), xslURL )
 
@@ -108,10 +123,10 @@ class DOM:
 	def createElement(this, name, id = "" ):
 		return this._dom.call( "CreateElement_1", _STRING, 2, name, id, 0 )
 
-	def insertChild(child, id):
+	def insertChild(this,child, id):
 		this._dom.call( "InsertChild_1", _VOID, 2, child, id, 0 );
 
-	def dressWidgets(id):
+	def dressWidgets(this,id):
 		return this._dom.call( "DressWidgets_1", _VOID, 1, id, 0 );
 
 	def _handleClasses(this, command, idsAndClasses):
@@ -147,7 +162,7 @@ class DOM:
 		this._dom.call("DisableElements_1", _VOID, 0, 1, ids )
 
 	def disableElement(this, id):
-		this._dom.call([id])
+		this.disableElements([id])
 
 	def setAttribute(this, id, name, value ):
 		return this._dom.call("SetAttribute_1", _VOID, 2, id, value, 0 )

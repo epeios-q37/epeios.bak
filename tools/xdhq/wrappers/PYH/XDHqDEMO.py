@@ -36,7 +36,8 @@ elif sys.version_info[0] == 3:
 	_getSize = XDHqDEMO3.getSize
 	_getString = XDHqDEMO3.getString
 else:
-	sys.exit("Unknown python version!")
+	print("Unhandled python version!")
+	os._exit(1)
 
 _protocolLabel = "712a58bf-2c9a-47b2-ba5e-d359a99966de"
 _protocolVersion = "0"

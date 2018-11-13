@@ -27,7 +27,7 @@ def isWin():
 	return sys.platform == "win32"
 
 def isDev():
-	return os.environ["EPEIOS_SRC"]
+	return "EPEIOS_SRC" in os.environ
 
 def open(document):
 	platform = sys.platform
