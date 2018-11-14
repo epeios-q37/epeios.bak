@@ -88,10 +88,10 @@ class Blank(Atlas.DOM):
 		this._handleCount(dom)
 
 	def _acConnect(this, dom, id):
-			dom.setLayout("", _readAsset("Main.html"))
-			dom.focus("Input")
-			this._displayTodos(dom)
-			dom.disableElements([ "HideActive", "HideCompleted"])
+		dom.setLayout("", _readAsset("Main.html"))
+		dom.focus("Input")
+		this._displayTodos(dom)
+		dom.disableElements([ "HideActive", "HideCompleted"])
 
 	def _submitNew(this, dom):
 		content = dom.getContent("Input").strip()
@@ -181,17 +181,17 @@ class Blank(Atlas.DOM):
 		dom.removeClasses({"View." + index: "hide", "Todo." + index: "editing"})
 
 	_callbacks = {
-			"Connect": _acConnect,
-			"Submit": lambda this, dom, id: this._submitNew(dom) if this._index == -1 else this._submitModification(dom),
-			"Destroy": _acDestroy,
-			"Toggle": _acToggle,
-			"All": _acAll,
-			"Active": _acActive,
-			"Completed": _acCompleted,
-			"Clear": _acClear,
-			"Edit": _acEdit,
-			"Cancel": _acCancel,
-		}
+		"Connect": _acConnect,
+		"Submit": lambda this, dom, id: this._submitNew(dom) if this._index == -1 else this._submitModification(dom),
+		"Destroy": _acDestroy,
+		"Toggle": _acToggle,
+		"All": _acAll,
+		"Active": _acActive,
+		"Completed": _acCompleted,
+		"Clear": _acClear,
+		"Edit": _acEdit,
+		"Cancel": _acCancel,
+	}
 
 	def handle(this,dom,action,id):
 		this._callbacks[action](this,dom,id)

@@ -76,13 +76,12 @@ class Notes(Atlas.DOM):
 
 		xml.pushTag("Notes")
 
-		length = len(this._notes)
+		length = 
 
-		while index < length:
+		while index in range(len(this._notes))
 			if this._notes[index]['title'][:len(this._pattern)].lower() == this._pattern:
 				_put(this._notes[index], index, xml)
 				contents["Description." + str(index)] = this._notes[index]['description']
-			index += 1
 
 		dom.setLayoutXSL("Notes", xml, "Notes.xsl")
 		dom.setContents(contents)

@@ -77,7 +77,6 @@ class Chatroom extends Atlas {
 		}
 
 		xml.popTag();
-//		xml.popTag();
 
 		return xml;
 	}
@@ -109,9 +108,7 @@ class Chatroom extends Atlas {
 	}
 
 	private void submitPseudo_(DOM dom, String id) {
-		String pseudo = dom.getContent("Pseudo");
-
-		pseudo = pseudo.trim();
+		String pseudo = dom.getContent("Pseudo").trim();
 
 		if ("".equals(pseudo)) {
 			dom.alert("Pseudo. can not be empty !");
