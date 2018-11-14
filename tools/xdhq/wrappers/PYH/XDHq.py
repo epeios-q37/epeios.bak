@@ -19,7 +19,7 @@
 
 import XDHqDEMO, XDHqSHRD, XDHqXML
 
-import sys
+import os, sys
 
 if sys.version_info[0] == 2:
 	import urllib
@@ -64,10 +64,10 @@ def _getAssetPath(dir):
 	if XDHqSHRD.isDev():
 		return "/cygdrive/h/hg/epeios/tools/xdhq/examples/common/" + dir + "/"
 	else:
-		return os.path.dirname(os.path.realpath(sys.path[0]))
+		return os.path.realpath(sys.path[0])
 
 def _getAssetFilename(path, dir):
-	return _getAssetPath(dir) + path
+	return os.path.join(_getAssetPath(dir), path )
 
 def readAsset(path, dir=""):
 	return open(_getAssetFilename(path, dir)).read()

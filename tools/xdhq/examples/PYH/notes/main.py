@@ -18,10 +18,12 @@
 	along with XDHq If not, see <http://www.gnu.org/licenses/>.
  """
 
+import os, sys
+
+if not "EPEIOS_SRV" in os.environ:
+	sys.path.append("Atlas.python.zip")
+
 import Atlas
-
-import os
-
 _viewModeElements = ["Pattern", "CreateButton", "DescriptionToggling", "ViewNotes"]
 
 def _readAsset(path):
