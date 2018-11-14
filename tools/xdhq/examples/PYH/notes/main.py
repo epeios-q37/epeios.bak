@@ -71,39 +71,57 @@ class Notes(Atlas.DOM):
 
 	def _displayList(this,dom):
 		xml = Atlas.XML("XDHTML")
-		i = 1 # 0 skipped, as it serves as buffer for the new ones.
+		index = 1 # 0 skipped, as it serves as buffer for the new ones.
 		contents = {}
 
 		xml.pushTag("Notes")
 
-		count = len(this._notes)
+		length = len(this._notes)
 
-		while i < count:
-			if this._notes[i]['title'][:len(this._pattern)].lower() == this._pattern:
-				_put(this._notes[i], i, xml)
-				contents["Description." + str(i)] = this._notes[i]['description']
-			i += 1
+		while index < length:
+			if this._notes[index]['title'][:len(this._pattern)].lower() == this._pattern:
+				_put(this._notes[index], index, xml)
+				contents["Description." + str(index)] = this._notes[index]['description']
+			index += 1
 
 		dom.setLayoutXSL("Notes", xml, "Notes.xsl")
 		dom.setContents(contents)
 		dom.enableElements(_viewModeElements)
 
-	def _view(this,dom ):
+	def _view(this, dom):
 		dom.enableElements(_viewModeElements)
 		dom.setContent("Edit." + str(this._index), "")
 		this._index = -1
 
-	def _edit(this,dom,id):
-		this._index = int(id)
+	def _acConnect(this, dom, id):
+			dom.setLayout("", _readAsset( "Main.html") )
+			this._displayList(dom)
+
+	def _acToggleDescriptions(this, dom, id):
+			this._hideDescriptions = dom.getContent(id)=="true"
+			this._handleDescriptions(dom)
+
+	def _acSearch(this, dom, id):
+			this._pattern = dom.getContent("Pattern").lower()
+			this._displayList(dom)
+
+	def _acEdit(this, dom, id):
+		index = dom.getContent(id)
+		this._index = int(index)
 		note = this._notes[this._index]
 
-		dom.setLayout("Edit." + id, _readAsset( "Note.html") )
+		dom.setLayout("Edit." + index, _readAsset( "Note.html") )
 		dom.setContents({ "Title": note['title'], "Description": note['description'] })
 		dom.disableElements(_viewModeElements)
 		dom.dressWidgets("Notes")
 		dom.focus("Title")
 
-	def _submit(this,dom):
+	def _acDelete(this, dom, id):
+		if dom.confirm("Are you sure you want to delete this entry ?"):
+			this._notes.pop(int(dom.getContent(id)))
+			this._displayList(dom)
+
+	def _acSubmit(this, dom, id):
 		result = dom.getContents(["Title", "Description"])
 		title = result["Title"].strip()
 		description = result["Description"]
@@ -121,7 +139,7 @@ class Notes(Atlas.DOM):
 			dom.alert("Title can not be empty !")
 			dom.focus("Title")
 
-	def _cancel(this,dom):
+	def _acCancel( this, dom, id):
 		note = this._notes[this._index]
 
 		result = dom.getContents(["Title", "Description"])
@@ -133,30 +151,19 @@ class Notes(Atlas.DOM):
 				this._view( dom )
 		else:
 			this._view( dom )
-		
+
+	_callbacks = {	
+		"Connect": _acConnect,
+		"ToggleDescriptions": _acToggleDescriptions,
+		"Search": _acSearch,
+		"Edit": _acEdit,
+		"Delete": _acDelete,
+		"Submit": _acSubmit,
+		"Cancel": _acCancel,
+	}
+
 	def handle(this,dom,action,id):
-		if action == "Connect":
-			dom.setLayout("", _readAsset( "Main.html") )
-			this._displayList(dom)
-		elif action == "ToggleDescriptions":
-			this._hideDescriptions = dom.getContent(id)=="true"
-			this._handleDescriptions(dom)
-		elif action == "Search":
-			this._pattern = dom.getContent("Pattern").lower()
-			this._displayList(dom)
-		elif action == "Edit":
-			this._edit(dom, dom.getContent(id))
-		elif action == "Delete":
-			if dom.confirm("Are you sure you want to delete this entry ?"):
-				this._notes.pop(int(dom.getContent(id)))
-				this._displayList(dom)
-		elif action == "Submit":
-			this._submit(dom)
-		elif action == "Cancel":
-			this._cancel(dom)
-		else:
-			print("???")
-			os._exit(1)
+		this._callbacks[action](this,dom,id)			
 
 def new():
 	return Notes()

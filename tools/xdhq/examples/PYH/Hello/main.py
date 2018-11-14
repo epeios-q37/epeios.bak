@@ -26,20 +26,20 @@ def readAsset(path):
 
 class Blank(Atlas.DOM):
 	def __init__(this):
-		Atlas.DOM.__init__(this,this)
+		Atlas.DOM.__init__(this)
+
+	def _acConnect(this, dom, id):
+		dom.setLayout("", readAsset( "Main.html") )
+		dom.focus( "input")
+
+	_callbacks = {
+			"Connect": _acConnect,
+			"Typing": lambda this, dom, id: dom.setContent("name", dom.getContent(id)),
+			"Clear": lambda this, dom, id: dom.setContents( {  "input": "", "name": ""} ) if dom.confirm( "Are you sure ?" ) else None
+		}
 		
 	def handle(this,dom,action,id):
-		if ( action == "Connect"):
-			dom.setLayout("", readAsset( "Main.html") );
-			dom.focus( "input");
-		elif action == "Typing":
-			dom.setContent("name", dom.getContent(id));
-		elif action =="Clear":
-			if dom.confirm( "Are you sure ?" ):
-				dom.setContents( {  "input": "", "name": ""} );
-		else:
-			print("???")
-			os._exit(1)
+		this._callbacks[action](this,dom,id)
 
 def new():
 	return Blank()

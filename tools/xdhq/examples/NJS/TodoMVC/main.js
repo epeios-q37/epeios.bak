@@ -146,7 +146,8 @@ function submitNew(dom) {
 	dom.getContent("Input",
 		(content) => dom.setContent("Input", "",
 			() => {
-				if (content.trim() != "") {
+				content = content.trim();
+				if (content != "") {
 					dom.todos.unshift(
 						{
 							"completed": false,
@@ -167,7 +168,8 @@ function submitModification(dom) {
 	dom.getContent("Input." + id,
 		(content) => dom.setContent("Input." + id, "",
 			() => {
-				if (content.trim() != "") {
+				content = content.trim();
+				if (content != "") {
 					dom.todos[id]['label'] = content;
 					dom.setContent("Label." + id, content,
 						() => dom.removeClasses(

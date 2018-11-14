@@ -27,21 +27,24 @@ def readAsset(path):
 class Blank(Atlas.DOM):
 	def __init__(this):
 		Atlas.DOM.__init__(this,this)
+
+	def _acConnect(this,dom,id):
+		dom.setLayout("", readAsset("Main.html"))
+		dom.addClass("Input","hidden")
+
+	def _acShowInput(this,dom,id):
+		dom.removeClass("Input", "hidden")
+		dom.focus("Pattern")
+
+	_callbacks = {
+		"Connect": _acConnect,
+		"Submit": lambda this, dom, id: dom.setContent("Pattern", dom.getContent("Pattern").upper() ),
+		"HideInput": lambda this, dom, id: dom.addClass("Input", "hidden"),
+		"ShowInput": _acShowInput,
+	}
 		
 	def handle(this,dom,action,id):
-		if ( action == "Connect"):
-			dom.setLayout("", readAsset("Main.html"))
-			dom.addClass("Input","hidden")
-		elif action == "Submit":
-			dom.setContent("Pattern", dom.getContent("Pattern").upper() )
-		elif action == "HideInput":
-			dom.addClass("Input", "hidden")
-		elif action =="ShowInput":
-			dom.removeClass("Input", "hidden")
-			dom.focus("Pattern")
-		else:
-			print("???")
-			os._exit(1)
+		this._callbacks[action](this,dom,id)
 
 def new():
 	return Blank()

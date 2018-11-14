@@ -114,10 +114,10 @@ class TodoMVC extends Atlas {
 	}
 
 	private void submitNew(DOM dom) {
-		String content = dom.getContent("Input");
+		String content = dom.getContent("Input").trim();
 		dom.setContent("Input", "");
 
-		if (!"".equals(content.trim())) {
+		if (!"".equals(content)) {
 			todos.add(0, new Todo(content));
 			displayTodos(dom);
 		}
@@ -127,10 +127,10 @@ class TodoMVC extends Atlas {
 		int index = this.index;
 		this.index = -1;
 
-		String content = dom.getContent("Input." + index);
+		String content = dom.getContent("Input." + index).trim();
 		dom.setContent("Input." + index, "");
 
-		if (!"".equals(content.trim())) {
+		if (!"".equals(content)) {
 			todos.set(index, new Todo(content, todos.get(index).completed));
 
 			dom.setContent("Label." + index, content);

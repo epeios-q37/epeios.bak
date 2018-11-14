@@ -148,10 +148,10 @@ class TodoMVC extends Threaded {
  }
 
  function submitNew($dom) {
-  $content = $dom->getContent("Input");
+  $content = trim($dom->getContent("Input"));
   $dom->setContent("Input", "");
 //  var_dump( $this->todos );
-  if (trim($content) != "") {
+  if ($content != "") {
    $this->todos[$this->next++] = [
     'completed' => false,
     'label' => $content,
@@ -164,10 +164,10 @@ class TodoMVC extends Threaded {
   $id = $this->id;
   $this->id = -1;
 
-  $content = $dom->getContent("Input." . $id);
+  $content = trim($dom->getContent("Input." . $id));
   $dom->setContent("Input." . $id, "");
 
-  if (trim($content) != "") {
+  if ($content != "") {
    $this->todos[$id]['label'] = $content;
 
    $dom->setContent("Label." . $id, $content);

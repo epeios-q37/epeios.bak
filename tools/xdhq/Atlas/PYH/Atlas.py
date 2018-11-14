@@ -21,18 +21,19 @@ import XDHq
 from threading import Thread
 
 readAsset = XDHq.readAsset
-XML = XDHq.XML
+
+def createXML( rootTag ):
+	return XDHq.XML(rootTag)
 
 class DOM(Thread):
-	def __init__(this, userObject):
+	def __init__(this):
 		Thread.__init__(this)
 		this._dom = XDHq.DOM()
-		this._userObject = userObject
 
 	def run(this):
 		while True:
 			[action,id] = this._dom.getAction()
-			this._userObject.handle(this._dom,action,id)
+			this.handle(this._dom,action,id)
 
 def launch(newSessionAction, headContent, dir, new):
 	XDHq.launch(newSessionAction,headContent,dir)
