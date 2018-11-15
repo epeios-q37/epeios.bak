@@ -24,9 +24,6 @@ if not "EPEIOS_SRV" in os.environ:
 
 import Atlas
 
-def readAsset(path):
-	return Atlas.readAsset(path, "Hello")
-
 class Blank(Atlas.DOM):
 	def __init__(this):
 		Atlas.DOM.__init__(this)
@@ -43,9 +40,6 @@ class Blank(Atlas.DOM):
 		
 	def handle(this,dom,action,id):
 		this._callbacks[action](this,dom,id)
-
-def new():
-	return Blank()
 
 head = """
 <title>"Hello, World !" example</title>
@@ -90,7 +84,4 @@ body = """
 </div>
 """
 
-Atlas.launch("Connect", head, "Hello", new)
-
-
-
+Atlas.launch("Connect", head, Blank)

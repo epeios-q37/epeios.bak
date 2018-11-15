@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project 
+<Project
 	xmlns:xpp="http://q37.info/ns/xpp/">
 	<xpp:bloc>
 		<!-- User definitions -->
@@ -51,62 +51,51 @@
 				<File>Project.xml</File>
 				<File>README.md</File>
 			</Files>
-			<Files Group="Blank">
-				<File Path="../../examples/JRE/blank/">main.java</File>
-				<Files Path="../../examples/common/blank/">
-					<File>CHANGELOG.md</File>
-					<File>head.html</File>
-					<File>Main.html</File>
+			<Files Group="Examples" Path="../../examples/JRE/">
+				<File>README.md</File>
+				<File>NOTES.md</File>
+				<Files Group="Blank">
+					<File Path="blank/">main.java</File>
+					<Files Path="../common/blank/">
+						<File>head.html</File>
+						<File>Main.html</File>
+					</Files>
 				</Files>
-			</Files>
-			<Files Group="Chatroom">
-				<Files Path="../../examples/JRE/chatroom/">
-					<File>main.java</File>
-					<File>Project.xml</File>
-					<File>README.md</File>
+				<Files Group="Chatroom">
+					<File Path="chatroom/">main.java</File>
+					<Files Path="../common/chatroom/">
+						<File>Head.html</File>
+						<File>Main.html</File>
+						<File>Messages.xsl</File>
+					</Files>
 				</Files>
-				<Files Path="../../examples/common/chatroom/">
-					<File>Head.html</File>
-					<File>Main.html</File>
-					<File>Messages.xsl</File>
+				<Files Group="Hello">
+					<Files Path="Hello/">
+						<File>main.java</File>
+						<File>Hello.java</File>
+					</Files>
+					<Files Path="../common/Hello/">
+						<File>head.html</File>
+						<File>Main.html</File>
+					</Files>
 				</Files>
-			</Files>
-			<Files Group="Hello">
-				<File Path="../../examples/JRE/Hello/">main.java</File>
-				<File Path="../../examples/JRE/Hello/">Hello.java</File>
-				<Files Path="../../examples/common/Hello/">
-					<File>CHANGELOG.md</File>
-					<File>head.html</File>
-					<File>Main.html</File>
-				</Files>
-			</Files>
-			<Files Group="Notes">
-				<Files Path="../../examples/JRE/">
+				<Files Group="Notes">
 					<File Path="notes/">main.java</File>
-					<File>NOTES.md</File>
-					<File>Project.xml</File>
-					<File>README.md</File>
+					<Files Path="../common/notes/">
+						<File>head.html</File>
+						<File>Main.html</File>
+						<File>Notes.xsl</File>
+						<File>Note.html</File>
+					</Files>
 				</Files>
-				<Files Path="../../examples/common/notes/">
-					<File>CHANGELOG.md</File>
-					<File>head.html</File>
-					<File>Main.xsl</File>
-					<File>Notes.xsl</File>
-					<File>Note.xsl</File>
-				</Files>
-			</Files>
-			<Files Group="TodoMVC">
-				<Files Path="../../examples/JRE/TodoMVC/">
-					<File>main.java</File>
-					<File>Project.xml</File>
-					<File>README.md</File>
-				</Files>
-				<Files Path="../../examples/common/TodoMVC/">
-					<File>CHANGELOG.md</File>
-					<File>head.html</File>
-					<File>Main.xsl</File>
-					<File>NOTES.md</File>
-					<File>Todos.xsl</File>
+				<Files Group="TodoMVC">
+					<File Path="TodoMVC/">main.java</File>
+					<Files Path="../common/TodoMVC/">
+						<File>headDEMO.html</File>
+						<File>headPROD.html</File>
+						<File>Main.html</File>
+						<File>Todos.xsl</File>
+					</Files>
 				</Files>
 			</Files>
 			<Files Group="JAVA" Path="../../Atlas/JRE/">
@@ -146,7 +135,7 @@
 		<Deps>
 			<Regular>
 				<Dep>jreq</Dep>
-				</Regular>
+			</Regular>
 		</Deps>
 	</NodeJS>
 	<RTW>

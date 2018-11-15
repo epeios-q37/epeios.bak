@@ -147,7 +147,4 @@ class Chatroom(Atlas.DOM):
 	def handle(this,dom,action,id):
 		this._callbacks[action](this,dom,id)
 
-def new():
-	return Chatroom()
-
-Atlas.launch("Connect", _readAsset("Head.html"), "chatroom", new)
+Atlas.launch("Connect", _readAsset("Head.html"), Chatroom, "chatroom")

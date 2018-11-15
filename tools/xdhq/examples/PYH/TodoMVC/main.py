@@ -26,7 +26,7 @@ import Atlas
 def _readAsset(path):
 	return Atlas.readAsset(path, "TodoMVC")
 
-class Blank(Atlas.DOM):
+class TodoMVC(Atlas.DOM):
 	def __init__(this):
 		Atlas.DOM.__init__(this)
 		this._exclude = None
@@ -198,7 +198,4 @@ class Blank(Atlas.DOM):
 	def handle(this,dom,action,id):
 		this._callbacks[action](this,dom,id)
 
-def new():
-	return Blank()
-
-Atlas.launch("Connect", _readAsset("HeadDEMO.html"), "TodoMVC", new)
+Atlas.launch("Connect", _readAsset("HeadDEMO.html"), TodoMVC, "TodoMVC")

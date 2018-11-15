@@ -1,35 +1,93 @@
-# Examples of use of the *Java* version of the *Atlas* toolkit
+# *Java* version of the *Atlas* toolkit
 
 ![Java logo](https://q37.info/download/assets/Java.png "Java")
 
-The *blank* application does almost nothing, and is intended as a basis for your own applications. The *notes* application is a more complex example which shows how to use widgets like [*CKEditor*](http://ckeditor.com/) with the *Atlas* toolkit.
+The [*Atlas* toolkit](https://atlastk.org/) is a library which facilitates the prototyping of web applications.
 
-Online demonstration:
+Here's how a [*Hello, World!*](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program) type application made with the *Atlas* toolkit looks like:
 
-  - of the *blank* application: <http://q37.info/runkit/Blank>,
-  - of the *notes* application: <http://q37.info/runkit/Notes>.
+![Little demonstration](http://q37.info/download/assets/Hello.gif "A basic example")
 
-To install and run these applications on your computer:
+For an online demonstration: <http://q37.info/runkit/Hello>.
 
-- get this repository (with *git*: `git clone https://github.com/epeios-q37/atlas-java-demo`),
-- put, inside of the retrieved repository, the `Atlas.jar` file: https://q37.info/download/assets/Atlas.jar,
-- for the *blank* demonstration:
-  - go to the `blank` directory,
-  - compile the source file (`javac -cp ../Atlas.jar main.java`),
-  - launch:
-	  - under *Windows*: `java -cp .;../Atlas.jar Blank` (with a semi-colon as separator for the *classpath*),
-	  - under other platforms: `java -cp .:../Atlas.jar Blank` (with a colon as separator for the *classpath*).
-- for the *notes* demonstration:
-  - go to the `notes` directory,
-  - compile the source file (`javac -cp ../Atlas.jar main.java`),
-  - launch:
-	  - under *Windows*: `java -cp .;../Atlas.jar Notes` (with a semi-colon as separator for the *classpath*),
-	  - under other platforms: `java -cp .:../Atlas.jar Notes` (with a colon as separator for the *classpath*).
+Source code:
 
-*NOTA*: you may have to give the full path for the *Java* compiler (`javac`), and may be for the *JVM* (`java`), if they are not in the [*PATH*](https://en.wikipedia.org/wiki/PATH_(variable)).
+```Java
+import info.q37.atlas.*;
+import java.util.HashMap;
 
-There is also a version for:
-  * *Node.js* : <http://github.com/epeios-q37/atlas-node-demo/>,
-  * *PHP* : <http://github.com/epeios-q37/atlas-php-demo/>.
+class Hello extends Atlas {
+	public void handle( DOM dom, String action, String id )
+	{
+		String body = 
+		"<div class=\"vcenter-out\">" +
+		" <div class=\"vcenter-in\">" +
+		"  <fieldset>" +
+		"   <label>Name:</label>" +
+		"   <input id=\"input\" maxlength=\"20\" placeholder=\"Enter a name here\"'" +
+		"	 type=\"text\" data-xdh-onevent=\"input|Typing\"/>" +
+		"   <button data-xdh-onevent=\"Clear\">Clear</button>" +
+		"   <hr/>" +
+		"   <h1>" +
+		"    <span>Hello </span>" +
+		"    <span style=\"font-style: italic;\" id=\"name\"></span>" +
+		"    <span>!</span>" +
+		"   </h1>" +
+		"  </fieldset>" +
+		" </div>" +
+		"</div>";
 
-For more information: <http://atlastk.org/>
+		if ( "Connect".equals( action ) ) {
+			dom.setLayout("", body);
+			dom.focus("input");
+		} else if ("Typing".equals( action ) ) {
+			dom.setContent("name", dom.getContent(id));
+		} else if ( "Clear".equals( action ) ) {
+			if ( dom.confirm( "Are you sure ?" ) )
+				dom.setContents( new HashMap<String,String> ()
+					{{ put( "input", ""); put( "name", ""); }} );
+		} else {
+			throw new RuntimeException( "Unknown action '" + action + "' !!!");
+		}
+	}
+	public static void main(String[] args) throws Exception {
+		String head = 
+			"<title>\"Hello, World !\" example</title>" +
+			"<style type=\"text/css\">" +
+			" html, body { height: 100%; padding: 0; margin: 0; }" +
+			" .vcenter-out, .hcenter { display: table; height: 100%; margin: auto; }" +
+			" .vcenter-in { display: table-cell; vertical-align: middle; }" +
+			"</style>";
+
+		launch("Connect", head );
+
+		for (;;)
+			new Hello();
+	}
+}
+```
+
+And here's how the *Atlas* toolkit version of the [*TodoMVC*](http://todomvc.com/) application looks like: 
+
+[![TodoMVC](http://q37.info/download/TodoMVC.gif "The TodoMVC application made with the Atlas toolkit")](https://github.com/epeios-q37/todomvc-java)
+
+For an online demonstration: <http://q37.info/runkit/TodoMVC>.
+
+The `Atlas` directory contains the *Java* source code of the *Atlas* toolkit.
+
+`Atlas.jar` is the file you have to reference in the [*classpath*](https://en.wikipedia.org/wiki/Classpath_(Java)) in order to use the *Atlas* toolkit in your own application.
+
+All other directories are examples.
+
+To launch an example, go inside its directory and lauch:
+ - under *Windows* : `java -cp .;../Atlas.jar <Name>` (with semi-colon as *classpath* separator),
+ - under other platforms : `java -cp .:../Atlas.jar <Name>` (with colon as *classpath* separator).
+
+where `<Name>` is the name of the application (`Blank`, `Chatroom`…).
+
+For more information about the *Atlas* toolkit, go to <http://atlastk.org/>.
+
+The *Atlas* tookit is also available for:
+- *Node.js*: <http://github.com/epeios-q37/atlas-node>
+- *PHP*: <http://github.com/epeios-q37/atlas-php>
+- *Python*: <http://github.com/epeios-q37/atlas-python>

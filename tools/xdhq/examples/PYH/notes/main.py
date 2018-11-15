@@ -42,7 +42,7 @@ def _put(note, id, xml ):
 
 class Notes(Atlas.DOM):
 	def __init__(this):
-		Atlas.DOM.__init__(this,this)
+		Atlas.DOM.__init__(this)
 		this._pattern = ""
 		this._hideDescriptions = False
 		this._index = 0
@@ -72,15 +72,14 @@ class Notes(Atlas.DOM):
 			dom.enableElement("ViewDescriptions")
 
 	def _displayList(this,dom):
-		xml = Atlas.XML("XDHTML")
-		index = 1 # 0 skipped, as it serves as buffer for the new ones.
+		xml = Atlas.createXML("XDHTML")
 		contents = {}
 
 		xml.pushTag("Notes")
 
-		length = 
-
-		while index in range(len(this._notes))
+		for index in range(len(this._notes)):
+			if index == 0: # 0 skipped, as it serves as buffer for the new ones.
+				continue
 			if this._notes[index]['title'][:len(this._pattern)].lower() == this._pattern:
 				_put(this._notes[index], index, xml)
 				contents["Description." + str(index)] = this._notes[index]['description']
@@ -166,7 +165,4 @@ class Notes(Atlas.DOM):
 	def handle(this,dom,action,id):
 		this._callbacks[action](this,dom,id)			
 
-def new():
-	return Notes()
-
-Atlas.launch("Connect", _readAsset("Head.html"), "notes", new)
+Atlas.launch("Connect", _readAsset("Head.html"), Notes, "notes")

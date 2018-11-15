@@ -35,7 +35,7 @@ class DOM(Thread):
 			[action,id] = this._dom.getAction()
 			this.handle(this._dom,action,id)
 
-def launch(newSessionAction, headContent, dir, new):
+def launch(newSessionAction, headContent, new, dir = ""):
 	XDHq.launch(newSessionAction,headContent,dir)
 
 	while True:

@@ -29,7 +29,7 @@ def readAsset(path):
 
 class Blank(Atlas.DOM):
 	def __init__(this):
-		Atlas.DOM.__init__(this,this)
+		Atlas.DOM.__init__(this)
 
 	def _acConnect(this,dom,id):
 		dom.setLayout("", readAsset("Main.html"))
@@ -49,7 +49,4 @@ class Blank(Atlas.DOM):
 	def handle(this,dom,action,id):
 		this._callbacks[action](this,dom,id)
 
-def new():
-	return Blank()
-
-Atlas.launch("Connect", readAsset("Head.html"), "blank", new)
+Atlas.launch("Connect", readAsset("Head.html"), Blank, "blank")

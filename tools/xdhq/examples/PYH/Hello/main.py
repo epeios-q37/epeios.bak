@@ -44,10 +44,7 @@ class Blank(Atlas.DOM):
 	def handle(this,dom,action,id):
 		this._callbacks[action](this,dom,id)
 
-def new():
-	return Blank()
-
-Atlas.launch("Connect", readAsset("Head.html"), "Hello", new)
+Atlas.launch("Connect", readAsset("Head.html"), Blank, "Hello")
 
 
 
