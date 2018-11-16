@@ -43,17 +43,15 @@
 		<Module>xdhp</Module>
 	</Modules>
 	<Files>
-		<File>NOTES.md</File>
 		<Files Group="Atlas">
-			<File Path="../../Atlas/">CHANGELOG.md</File>
-			<Files Path="../../Atlas/JRE/">
-				<File>NOTES.md</File>
-				<File>Project.xml</File>
-				<File>README.md</File>
+			<Files Path="../../Atlas/">
+				<File>CHANGELOG.md</File>
+				<Files Path="JRE/">
+					<File>NOTES.md</File>
+					<File>README.md</File>
+				</Files>
 			</Files>
 			<Files Group="Examples" Path="../../examples/JRE/">
-				<File>README.md</File>
-				<File>NOTES.md</File>
 				<Files Group="Blank">
 					<File Path="blank/">main.java</File>
 					<Files Path="../common/blank/">

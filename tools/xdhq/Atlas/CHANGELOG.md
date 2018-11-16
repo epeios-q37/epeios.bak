@@ -1,21 +1,32 @@
 # *CHANGELOG* for the *Atlas* toolkit
 
-**Common to all bindings!**
+- Common to all binding,
+- does <u>not</u> concern the native code.
+
+## 2018-11-15
+
+- introducing the *Python* binding,
+
+## 2018-11-09
+
+- version 0.5.0,
+
+## …
 
 ## 2018-09-03
 
-- upgrading to v.0.2.0,
+- version 0.2.0,
 
 ## 2018-08-19
 
-- upgrading to v.0.1.9,
+- version  0.1.9,
 
 ## 2018-04-20
 
 - *atlas-java*
   - simplification,
 - all bindings:
-  - upgrading to version `0.1.0`,
+  - version  0.1.0,
 
 ## 2018-03-07
 

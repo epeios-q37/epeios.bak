@@ -1,38 +1,19 @@
-# Developers/maintainers notes about the *Atlas* toolkit binding for *PHP*
+# Notes about the *PHP* version of *UnJSq*/*XDHq*
 
-* *zndq*, **à packager en premier !!!** : 
-  * *wrapper* *PHP*,
-  * `zndq/`
-  * <http://github.com/epeios-q37/zndq/>,
-  * [![NPM](https://nodei.co/npm/zndq.png)](https://nodei.co/npm/zndq/),
+## Running
 
-* *xdhqxdh*:
-  * *proxy*,
-  * `xdhq/proxy/`,
-  * <http://github.com/epeios-q37/xdhq/>,
-  * [![NPM](https://nodei.co/npm/xdhqxdh.png)](https://nodei.co/npm/xdhqxdh/).
+### Preamble
 
-* *xdhqznd*:
-  * *wrapper* *XDHTML*,
-  * `xdhq/wrapper/ZND/`
-  * <http://github.com/epeios-q37/xdhq-php/>,
-  * [![NPM](https://nodei.co/npm/xdhqznd.png)](https://nodei.co/npm/xdhqznd/).
+*UnJSq* (`UnJSq/ZND/UnJSq.php`) launches a web server through *Node.js*. If required, it also launches the desktop version through *Electron*.
 
-* *xdhwebqnjs*:
-  * *frontend* *web* *XDHTML*,
-  * `xdhwebq/NJS`,
-  * <https://github.com/epeios-q37/xdhwebq-node>
-  * [![NPM](https://nodei.co/npm/xdhwebqnjs.png)](https://nodei.co/npm/xdhwebqnjs/).
+The path to *php* executable have to be in the `PATH` environment variable.
 
-* *xdhelcq*:
-  * *frontend* *desktop* *XDHTML*,
-  * `xdhwelcq`,
-  * <https://github.com/epeios-q37/xdhelcq>
-  * [![NPM](https://nodei.co/npm/xdhelcq.png)](https://nodei.co/npm/xdhelcq/).
+### During development
 
-* *atlasznd* :
- 	* *wrapper* *XDHTML* + *httpd* server + *Electron*,
- 	* `xdhq/Atlas/ZND/`
- 	* <http://github.com/epeios-q37/atlas-php/>,
-  * [![NPM](https://nodei.co/npm/atlastk-php.png)](https://nodei.co/npm/atlastk-php/).
+When the web server is launched directly by the application, killing the application does not kill the web server. You should be able to relaunch the application; it fails to relaunch the web server, but this should not be a problem, as the previous launched server still runs. But, inexplicably, the port of the *xdhq* daemon is still in use, despite the application which bind to this port was killed. You have to kill the *Node.js* server to be able to launch the application again.
 
+To avoid to have to kill the *Node.js* web server, in addition of the application, each time you want to relaunch the application, launch manually the *Node.js* web server by launching `node httpd.js <dir>` at `.../xdhq/examples/common/` `<dir>`must be the absolute path. Example : `node httpd.js h:/hg/epeios/tools/xdhq/examples/TodoMVC`.
+
+### *Cygwin*
+
+*Cygwin* doesn't properly send the *CTRL-C* to a windows application. Currently, this seems not be problematic, but it was once.

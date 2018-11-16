@@ -2,13 +2,15 @@
 
 ![Java logo](https://q37.info/download/assets/Java.png "Java")
 
-The [*Atlas* toolkit](https://atlastk.org/) is a library which facilitates the prototyping of web applications.
+The [*Atlas* toolkit](https://atlastk.org/) is a library dedicated to the handling of web interfaces.
 
-## *Hello World!*
+## *Hello, World!*
+
+Here's how a [*Hello, World!*](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program) type application made with the *Atlas* toolkit looks like:
 
 ![Little demonstration](http://q37.info/download/assets/Hello.gif "A basic example")
 
-Online demonstration: <http://q37.info/runkit/Hello>.
+For an online demonstration: <http://q37.info/runkit/Hello>.
 
 Source code:
 
@@ -67,23 +69,31 @@ class Hello extends Atlas {
 }
 ```
 
-To install and run this example on your computer:
+## *TodoMVC*
 
-- get the `Atlas.jar` file (https://q37.info/download/assets/Atlas.jar),
-- in the same directory, create a `Hello.java` file with above source code, or get it directly here : <https://q37.info/download/assets/Hello.java>,
-- compile this file : `javac -cp Atlas.jar Hello.java`,
-- launch :
-  - under *Windows* : `java -cp .;Atlas.jar Hello` (with semi-colon as *classpath* separator),
-  - under other platforms : `java -cp .:Atlas.jar Hello` (with colon as *classpath* separator).
-
-*NOTA*: you may have to give the full path for the *Java* compiler (`javac`), and may be for the *JVM* (`java`), if they are not in the [*PATH*](https://en.wikipedia.org/wiki/PATH_(variable)).
-
-## What's next ?
-
-Here's how the *Atlas* toolkit version of the [*TodoMVC*](http://todomvc.com/) application looks like: 
+And here's how the *Atlas* toolkit version of the [*TodoMVC*](http://todomvc.com/) application looks like: 
 
 [![TodoMVC](http://q37.info/download/TodoMVC.gif "The TodoMVC application made with the Atlas toolkit")](https://github.com/epeios-q37/todomvc-java)
 
-Online demonstration: <http://q37.info/runkit/TodoMVC>.
+For an online demonstration: <http://q37.info/runkit/TodoMVC>.
 
-The source code of this application and more information about the *Atlas* toolkit can be found at <http://atlastk.org/>.
+## Content of the repository
+
+The `Atlas` directory contains the *Java* source code of the *Atlas* toolkit, which is not needed to run the examples.
+
+`Atlas.jar` is the file you have to reference in the [*classpath*](https://en.wikipedia.org/wiki/Classpath_(Java)) in order to use the *Atlas* toolkit in your own application.
+
+All other directories are examples.
+
+To run an example, go inside its directory (`Blank`, `Chatroom`…) and launch:
+- under *Windows* : `java -cp .;../Atlas.jar <Name>` (with semi-colon as *classpath* separator),
+- under other platforms : `java -cp .:../Atlas.jar <Name>` (with colon as *classpath* separator).
+
+where `<Name>` is the name of the example (`Blank`, `Chatroom`…).
+
+The *Atlas* toolkit is also available for:
+- *Node.js*: <http://github.com/epeios-q37/atlas-node>
+- *PHP*: <http://github.com/epeios-q37/atlas-php>
+- *Python*: <http://github.com/epeios-q37/atlas-python>
+
+For more information about the *Atlas* toolkit, go to <http://atlastk.org/>.

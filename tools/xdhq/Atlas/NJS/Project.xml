@@ -20,7 +20,7 @@
 	</About>
 	<!-- NO SPACE in 'Keywords' attribute !!! ("a,b,c", NOT "a, b, c")-->
 	<RTW Description="Toolkit for prototyping web applications" Keywords="XDHTML,Atlas,web,interface,front-end,prototyping">
-		<Dir>atlas-node</Dir>
+		<Dir>atlas-npm</Dir>
 	</RTW>
 	<Files>
 		<File>runkit.js</File>

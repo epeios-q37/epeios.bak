@@ -2,13 +2,15 @@
 
 ![PHP logo](https://q37.info/download/assets/PHP.png "PHP")
 
-The [*Atlas* toolkit](https://atlastk.org/) is a library which facilitates the prototyping of web applications.
+The [*Atlas* toolkit](https://atlastk.org/) is a library dedicated to the handling of web interfaces.
 
-## *Hello World!*
+## *Hello, World!*
 
-[![Little demonstration](http://q37.info/download/Hello.gif "A basic example")](http://q37.info/s/atk/Hello/)
+Here's how a [*Hello, World!*](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program) type application made with the *Atlas* toolkit looks like:
 
-Online demonstration: <http://q37.info/runkit/Hello>.
+![Little demonstration](http://q37.info/download/assets/Hello.gif "A basic example")
+
+For an online demonstration: <http://q37.info/runkit/Hello>.
 
 Source code:
 
@@ -90,20 +92,29 @@ Atlas::launch("Connect", 'hello', $head, null, "Hello");
 ?>
 ```
 
-To install and run this example on your computer:
+## *TodoMVC*
 
-- Get the `Atlas.phar` file: <https://q37.info/download/assets/Atlas.phar>,
-- in the same directory, create a `Hello.php` file with above source code, or get it directly here: <https://q37.info/download/assets/Hello.php>,
-- launch `php Hello.php`.
+And here's how the *Atlas* toolkit version of the [*TodoMVC*](http://todomvc.com/) application looks like: 
+
+[![TodoMVC](http://q37.info/download/TodoMVC.gif "The TodoMVC application made with the Atlas toolkit")](https://github.com/epeios-q37/todomvc-java)
+
+For an online demonstration: <http://q37.info/runkit/TodoMVC>.
+
+## Content of the repository
+
+The `Atlas` directory contains the *PHP* source code of the *Atlas* toolki, which is not needed to run the examples.
+
+`Atlas.phar` is the file which is needed to use the *Atlas* toolkit in your own application.
+
+All other directories are examples.
+
+To run an example, launch `php <Name> main.php`, where `<Name>` is the name of the example (`Blank`, `Chatroom`…).
 
 NOTA: **You need *PHP* with [*pthreads*](http://php.net/manual/book.pthreads.php)!**
 
-## What's next ?
+The *Atlas* toolkit is also available for:
+- *Java*: <http://github.com/epeios-q37/atlas-java>
+- *Node.js*: <http://github.com/epeios-q37/atlas-node>
+- *Python*: <http://github.com/epeios-q37/atlas-python>
 
-Here's how the *Atlas* toolkit version of the [*TodoMVC*](http://todomvc.com/) application looks like: 
-
-[![TodoMVC](http://q37.info/download/TodoMVC.gif "The TodoMVC application made with the Atlas toolkit")](http://q37.info/s/atk/TodoMVC)
-
-Online demonstration: <http://q37.info/runkit/TodoMVC>.
-
-The source code of this application and more information about the *Atlas* toolkit can be found at <http://atlastk.org/>
+For more information about the *Atlas* toolkit, go to <http://atlastk.org/>.

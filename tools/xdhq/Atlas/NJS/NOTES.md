@@ -4,8 +4,7 @@
 
 Currently, the new packaging is being developed for the *Node.js* binding. It will later be developed for the other bindings.
 
-As the core of the *Atlas* toolkit is written *C/C++*, and the package manager for the different language (*NPM* for *Node.js*, *Composer* for *PHP*...) aren't designed to deploy native code, the installation process
-is somewhat cumbersome.
+As the core of the *Atlas* toolkit is written *C/C++*, and the package manager for the different language (*NPM* for *Node.js*, *Composer* for *PHP*...) aren't designed to deploy native code, the installation process is somewhat cumbersome.
 
 To allow those who are interested to fiddle with the *Atlas* toolkit, all the native component are on a server, and only components written in the language of the binding, an d hence easily installable with the package manager for this language, is locally installed.
 

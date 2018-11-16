@@ -62,77 +62,71 @@
 			</Files>
 		</Files-->
 		<Files Group="Atlas">
-			<Files Path="../../Atlas/NJS/">
-				<File Path="../">CHANGELOG.md</File>
-				<File>NOTES.md</File>
-				<File>Project.xml</File>
-				<File>README.md</File>
-				<File>Atlas.js</File>
-				<File>runkit.js</File>
-			</Files>
-			<Files Group="Blank">
-				<File Path="../../examples/NJS/blank/">main.js</File>
-				<File Path="../../examples/NJS/blank/">Blank.js</File>
-				<Files Path="../../examples/common/blank/">
-					<File>CHANGELOG.md</File>
-					<File>Head.html</File>
-					<File>Main.html</File>
-				</Files>
-			</Files>
-			<Files Group="Chatroom">
-				<Files Path="../../examples/NJS/chatroom/">
-					<File>main.js</File>
-					<File>Chatroom.js</File>
-					<File>Project.xml</File>
-					<File>README.md</File>
-				</Files>
-				<Files Path="../../examples/common/chatroom/">
-					<File>Head.html</File>
-					<File>Main.html</File>
-					<File>Messages.xsl</File>
-				</Files>
-			</Files>
-			<Files Group="Hello">
-				<Files Path="../../examples/NJS/Hello/">
-					<File>Hello.js</File>
-					<File>main.js</File>
-				</Files>
-				<Files Path="../../examples/common/Hello/">
-					<File>CHANGELOG.md</File>
-					<File>Head.html</File>
-					<File>Main.html</File>
-				</Files>
-			</Files>
-			<Files Group="Notes">
-				<Files Path="../../examples/NJS/">
-					<File Path="notes/">main.js</File>
-					<File Path="notes/">Notes.js</File>
-					<File>Project.xml</File>
+			<Files Path="../../Atlas/">
+				<File>CHANGELOG.md</File>
+				<Files Path="NJS/">
 					<File>NOTES.md</File>
-					<File>README.md</File>
-				</Files>
-				<Files Path="../../examples/common/notes/">
-					<File>CHANGELOG.md</File>
-					<File>Head.html</File>
-					<File>Main.html</File>
-					<File>Note.html</File>
-					<File>Notes.xsl</File>
-				</Files>
-			</Files>
-			<Files Group="TodoMVC">
-				<Files Path="../../examples/NJS/TodoMVC/">
-					<File>main.js</File>
 					<File>Project.xml</File>
 					<File>README.md</File>
-					<File>TodoMVC.js</File>
+					<File>Atlas.js</File>
+					<File>runkit.js</File>
 				</Files>
-				<Files Path="../../examples/common/TodoMVC/">
-					<File>CHANGELOG.md</File>
-					<File>HeadDEMO.html</File>
-					<File>HeadPROD.html</File>
-					<File>Main.html</File>
-					<File>NOTES.md</File>
-					<File>Todos.xsl</File>
+			</Files>
+			<Files Group="Examples" Path="../../examples/NJS/">
+				<Files Group="Blank">
+					<Files Path="blank/">
+						<File>main.js</File>
+						<File>Blank.js</File>
+					</Files>
+					<Files Path="../common/blank/">
+						<File>Head.html</File>
+						<File>Main.html</File>
+					</Files>
+				</Files>
+				<Files Group="Chatroom">
+					<Files Path="chatroom/">
+						<File>main.js</File>
+						<File>Chatroom.js</File>
+					</Files>
+					<Files Path="../common/chatroom/">
+						<File>Head.html</File>
+						<File>Main.html</File>
+						<File>Messages.xsl</File>
+					</Files>
+				</Files>
+				<Files Group="Hello">
+					<Files Path="Hello/">
+						<File>Hello.js</File>
+						<File>main.js</File>
+					</Files>
+					<Files Path="../common/Hello/">
+						<File>Head.html</File>
+						<File>Main.html</File>
+					</Files>
+				</Files>
+				<Files Group="Notes">
+					<Files Path="notes/">
+						<File>main.js</File>
+						<File>Notes.js</File>
+					</Files>
+					<Files Path="../common/notes/">
+						<File>Head.html</File>
+						<File>Main.html</File>
+						<File>Note.html</File>
+						<File>Notes.xsl</File>
+					</Files>
+				</Files>
+				<Files Group="TodoMVC">
+					<Files Path="TodoMVC/">
+						<File>main.js</File>
+						<File>TodoMVC.js</File>
+					</Files>
+					<Files Path="../common/TodoMVC/">
+						<File>HeadDEMO.html</File>
+						<File>HeadPROD.html</File>
+						<File>Main.html</File>
+						<File>Todos.xsl</File>
+					</Files>
 				</Files>
 			</Files>
 		</Files>
@@ -145,6 +139,6 @@
 	hence the packaging scripts explicitly skip all the native-related stuffs.
 	-->
 	<RTW Description="'XDHTML' wrapper." Keywords="XDHTML">
-		<Dir>xdhq-node</Dir>
+		<Dir>xdhq-npm</Dir>
 	</RTW>
 </Project>

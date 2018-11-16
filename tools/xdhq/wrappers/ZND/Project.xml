@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project xmlns:xpp="http://q37.info/ns/xpp/" >
- <xpp:bloc>
-  <!-- User definitions -->
-  <xpp:define name="Version">
+	<xpp:bloc>
+		<!-- User definitions -->
+		<xpp:define name="Version">
 			<xpp:bloc/>
-  </xpp:define>
-  <xpp:set name="Credits" value="Epeios"/>
-  <xpp:set name="Type" value="ZNDComponent"/>
-  <xpp:define name="CopyrightYears">
-   <xpp:bloc>2007-2017</xpp:bloc>
-  </xpp:define>
- </xpp:bloc>
- <xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
- <About>
-  <Program>xdhqznd</Program>
-  <Software>XDHq</Software>
- </About>
- <Modules>
-  <Modules Group="Epeios" Path="h:/hg/epeios/stable/">
-   <Modules Group="Core">
-    <xpp:expand select="Core"/>
+		</xpp:define>
+		<xpp:set name="Credits" value="Epeios"/>
+		<xpp:set name="Type" value="ZNDComponent"/>
+		<xpp:define name="CopyrightYears">
+			<xpp:bloc>2007-2017</xpp:bloc>
+		</xpp:define>
+	</xpp:bloc>
+	<xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
+	<About>
+		<Program>xdhqznd</Program>
+		<Software>XDHq</Software>
+	</About>
+	<Modules>
+		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
+			<Modules Group="Core">
+				<xpp:expand select="Core"/>
 				<Module>sck</Module>
 			</Modules>
 			<Modules Group="CSD">
@@ -31,9 +31,9 @@
 				<Module>csdscb</Module>
 			</Modules>
 			<Modules Group="SCL">
-    <xpp:expand select="SCL"/>
-   </Modules>
-  </Modules>
+				<xpp:expand select="SCL"/>
+			</Modules>
+		</Modules>
 		<Modules Group="Shared" Path="../">
 			<Module Path="../">prtcl</Module>
 			<Module>proxy</Module>
@@ -51,7 +51,7 @@
 		<File>XDHqSHRD.php</File>
 		<File>XDHqXML.php</File>
 		<!-- NOTA : '*.php' files will automatically be packed as such. -->
-  <!--File Pack="No">XDHq.php</File-->
+		<!--File Pack="No">XDHq.php</File-->
 		<Files Group="Atlas">
 			<File Path="../../Atlas/">CHANGELOG.md</File>
 			<Files Path="../../Atlas/ZND/">
@@ -60,69 +60,52 @@
 				<File>Project.xml</File>
 				<File>README.md</File>
 			</Files>
-			<Files Group="Blank">
-			<File Path="../../examples/ZND/blank/">main.php</File>
-			<Files Path="../../examples/common/blank/">
-				<File>CHANGELOG.md</File>
-				<File>head.html</File>
-				<File>Main.xsl</File>
+			<Files Group="Examples" Path="../../examples/ZND/">
+				<Files Group="Blank">
+					<File Path="blank/">main.php</File>
+					<Files Path="../common/blank/">
+						<File>head.html</File>
+						<File>Main.html</File>
+					</Files>
+				</Files>
+				<Files Group="Chatroom">
+					<File Path="chatroom/">main.php</File>
+					<Files Path="../common/chatroom/">
+						<File>Head.html</File>
+						<File>Main.html</File>
+						<File>Messages.xsl</File>
+					</Files>
+				</Files>
+				<Files Group="Hello">
+					<Files Path="Hello/">
+						<File>main.php</File>
+						<File>Hello.php</File>
+					</Files>
+					<Files Path="../common/Hello/">
+						<File>head.html</File>
+						<File>Main.html</File>
+					</Files>
+				</Files>
+				<Files Group="Notes">
+					<File Path="notes/">main.php</File>
+					<Files Path="../common/notes/">
+						<File>head.html</File>
+						<File>Main.html</File>
+						<File>Notes.xsl</File>
+						<File>Note.html</File>
+					</Files>
+				</Files>
+				<Files Group="TodoMVC">
+					<File Path="TodoMVC/">main.php</File>
+					<Files Path="../common/TodoMVC/">
+						<File>headDEMO.html</File>
+						<File>headPROD.html</File>
+						<File>Main.html</File>
+						<File>Todos.xsl</File>
+					</Files>
+				</Files>
 			</Files>
 		</Files>
-			<Files Group="Chatroom">
-				<Files Path="../../examples/ZND/chatroom/">
-					<File>main.php</File>
-					<File>Project.xml</File>
-					<File>README.md</File>
-				</Files>
-				<Files Path="../../examples/common/chatroom/">
-					<File>Head.html</File>
-					<File>Main.html</File>
-					<File>Messages.xsl</File>
-				</Files>
-			</Files>
-			<Files Group="Hello">
-				<Files Path="../../examples/ZND/Hello/">
-					<File>main.php</File>
-					<File>Hello.php</File>
-				</Files>
-					<File Path="../../examples/ZND/Hello/">Hello.php</File>
-				<Files Path="../../examples/common/Hello/">
-					<File>CHANGELOG.md</File>
-					<File>head.html</File>
-					<File>Main.xsl</File>
-				</Files>
-			</Files>
-			<Files Group="Notes">
-			<Files Path="../../examples/ZND/">
-				<File Path="notes/">main.php</File>
-				<File>NOTES.md</File>
-				<File>Project.xml</File>
-				<File>README.md</File>
-			</Files>
-			<Files Path="../../examples/common/notes/">
-				<File>CHANGELOG.md</File>
-				<File>head.html</File>
-				<File>Main.xsl</File>
-				<File>Notes.xsl</File>
-				<File>Note.xsl</File>
-			</Files>
-		</Files>
-		<Files Group="TodoMVC">
-			<Files Path="../../examples/ZND/TodoMVC/">
-				<File>main.php</File>
-				<File>Project.xml</File>
-				<File>README.md</File>
-			</Files>
-			<Files Path="../../examples/common/TodoMVC/">
-				<File>CHANGELOG.md</File>
-				<File>head.html</File>
-				<File>Main.xsl</File>
-				<File>NOTES.md</File>
-				<File>Todos.xsl</File>
-			</Files>
-		</Files>
-		</Files>
-		<File>NOTES.md</File>
 	</Files>
 	<NodeJS>
 		<Deps>
@@ -132,6 +115,6 @@
 		</Deps>
 	</NodeJS>
 	<RTW Description="PHP extension template" Keywords="XDHq">
-  <Dir>xdhq-php</Dir>
- </RTW>
+		<Dir>xdhq-php</Dir>
+	</RTW>
 </Project>

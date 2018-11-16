@@ -1,38 +1,42 @@
-# Developers/maintainers notes about the *Atlas* toolkit binding for *Java*
+# Notes concernant la version *Java*
 
-* *jreq*, **à packager en premier !!!** : 
-  * *wrapper* *Java*,
-  * `jreq/`
-  * <http://github.com/epeios-q37/jreq/>,
-  * [![NPM](https://nodei.co/npm/jreq.png)](https://nodei.co/npm/jreq/),
+Concerne et le code *Java*, et le code natif.
 
-* *xdhqxdh*:
-  * *proxy*,
-  * `xdhq/proxy/`,
-  * <http://github.com/epeios-q37/xdhq/>,
-  * [![NPM](https://nodei.co/npm/xdhqxdh.png)](https://nodei.co/npm/xdhqxdh/).
+## <u>Important</u>
 
-* *xdhqjre*:
-  * *wrapper* *XDHTML*,
-  * `xdhq/wrapper/JRE/`
-  * <http://github.com/epeios-q37/xdhq-java/>,
-  * [![NPM](https://nodei.co/npm/xdhqjre.png)](https://nodei.co/npm/xdhqjre/).
+Le séparateur de l'argument `-cp`  ou `-classpath` ainsi que du contenu de la variable d'environnement `CLASSPATH`est `;` (point-virgule) **sous Windows** (nécessitant d'entourer le paramètre de `-cp` ou `--classpath` par des quotes sous *Cygwin*).
+Pour les autres *OSes*, cela semble être `:` (double-point).
 
-* *xdhwebqnjs*:
-  * *frontend* *web* *XDHTML*,
-  * `xdhwebq/NJS`,
-  * <https://github.com/epeios-q37/xdhwebq-node>
-  * [![NPM](https://nodei.co/npm/xdhwebqnjs.png)](https://nodei.co/npm/xdhwebqnjs/).
+- Pour afficher le fichier et le ligne courante : `System.out.println(Thread.currentThread().getStackTrace()[1]);`
+- Code pour le *catch* : `System.out.println(e.getStackTrace());` 
 
-* *xdhelcq*:
-  * *frontend* *desktop* *XDHTML*,
-  * `xdhwelcq`,
-  * <https://github.com/epeios-q37/xdhelcq>
-  * [![NPM](https://nodei.co/npm/xdhelcq.png)](https://nodei.co/npm/xdhelcq/).
+## Compilation
 
-* *atlasjre* :
- 	* *wrapper* *XDHTML* + *httpd* server + *Electron*,
- 	* `xdhq/Atlas/JRE/`
- 	* <http://github.com/epeios-q37/atlas-java/>,
-  * [![NPM](https://nodei.co/npm/atlastk-java.png)](https://nodei.co/npm/atlastk-java/).
+Script pour *recompiler* l'ensemble des sources *JAVA* (*attention*: les répertoires `classes` respectifs **doivent** exister !) :
 
+`ver=1.5;pushd /cygdrive/h/hg/epeios/tools/jreq;rm -rf classes/*;javac -target $ver -source $ver -d classes *.java;cd /cygdrive/h/hg/epeios/tools/xdhq/wrappers/JRE;rm -rf classes/*;javac -target $ver -source $ver -d classes *.java;cd /cygdrive/h/hg/epeios/tools/xdhq/Atlas/JRE;rm -rf classes/*;javac -source $ver -target $ver -d classes *.java;popd;`
+
+Nom du script : `ATKJRECompile`.
+
+## Déploiement
+
+`pushd /cygdrive/h/temp;rm -rf classes;mkdir classes;cp -R h:/hg/epeios/tools/jreq/classes/* classes/;cp -R h:/hg/epeios/tools/xdhq/wrappers/JRE/classes/* classes;cp -R h:/hg/epeios/tools/xdhq/Atlas/JRE/classes/* classes;popd;jar cvf Atlas.jar -C h:/temp/classes/ .` 
+
+Nom du script : `ATKJREPack`. Lance également la compilation.
+  
+## Lancement
+
+### *Cygwin*
+
+*Atlas* (`info.q37.atlas.Atlas`) lance un serveur web via *node.js*, qui est normalement interrompu lors d'un *CTRL-C*, mais cela ne fonctionne pas sous *Cygwin*. Il faut donc lancer le programme sous une session *DOS* classique.
+
+Si lancé directement (et non pas à l'aide de la commande ci-dessous) sous *Cygwin*, il faudra tuer le serveur *httpd* manuellement.
+
+Pour contourner ce problème, lancer avec de la manière suivante :
+
+- pour lancer uniquement : `cmd /c start java <class>`,
+- pour compiler puis lancer en cas de succés : `javac *.java && cmd /c start java <class>`.
+
+## `CLASSPATH` pour le développement
+
+`.;h:/hg/epeios/tools/jreq/classes/;h:/hg/epeios/tools/xdhq/wrappers/JRE/classes/;h:/hg/epeios/tools/xdhq/Atlas/JRE/classes/`
