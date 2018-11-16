@@ -98,6 +98,7 @@ To launch an example:
 where `<Name>` is the name of the example (`Blank`, `Chatroom`…).
 
 The *Atlas* toolkit is also available for:
+
 - *Java*: <http://github.com/epeios-q37/atlas-java>
 - *PHP*: <http://github.com/epeios-q37/atlas-php>
 - *Python*: <http://github.com/epeios-q37/atlas-python>

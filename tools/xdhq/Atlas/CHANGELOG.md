@@ -1,7 +1,9 @@
 # *CHANGELOG* for the *Atlas* toolkit
 
-- Common to all binding,
-- does <u>not</u> concern the native code.
+- Common to all bindings,
+- does **not** concern the native code,
+
+---
 
 ## 2018-11-15
 
@@ -11,7 +13,7 @@
 
 - version 0.5.0,
 
-## …
+## â€¦
 
 ## 2018-09-03
 
