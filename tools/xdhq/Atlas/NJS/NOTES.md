@@ -1,5 +1,10 @@
 # Developers/maintainers notes about the *Atlas* toolkit binding for *Node.js*
 
+## The README files
+
+- `README.md` is for the `atlas-npm` repository (the one used as source for the *NPM* package),
+- `README-node.md` is renamed and used for the `atlas-node` package.
+
 ## New packages
 
 Currently, the new packaging is being developed for the *Node.js* binding. It will later be developed for the other bindings.

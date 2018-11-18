@@ -6,6 +6,8 @@ The [*Atlas* toolkit](https://atlastk.org/) is a library to handle web interface
 
 [![NPM badge of the Atlas toolkit](http://nodei.co/npm/atlastk.png)](http://npmjs.com/atlastk/ "NPM package of the Atlas toolkit")
 
+## *Hello, World!*
+
 Here's how a [*Hello, World!*](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program) type application made with the *Atlas* toolkit looks like:
 
 ![Little demonstration](http://q37.info/download/assets/Hello.gif "A basic example")
@@ -63,6 +65,8 @@ To install and run this example on your computer:
 - in the same directory, create a `Hello.js` file with above source code, or get it directly here: <https://q37.info/download/assets/Hello.js>,
 - launch `node Hello.js`.
 
+## *TodoMVC*
+
 And here's how the *Atlas* toolkit version of the [*TodoMVC*](http://todomvc.com/) application looks like: 
 
 [![TodoMVC](http://q37.info/download/TodoMVC.gif "The TodoMVC application made with the Atlas toolkit")](https://github.com/epeios-q37/todomvc-java)
@@ -75,6 +79,8 @@ To install and run this example on your computer:
 - in the same directory, put <https://q37.info/download/assets/TodoMVC.js>,
 - launch `node TodoMVC.js`.
 
+## Other examples
+
 There are a total of 5 example source files, you can install and run on your computer, after a `npm install atlastk`:
 
 - <https://q37.info/download/assets/Blank.js>,
@@ -83,6 +89,27 @@ There are a total of 5 example source files, you can install and run on your com
 - <https://q37.info/download/assets/Notes.js>,
 - <https://q37.info/download/assets/TodoMVC.js>.
 
+In below described repository, the examples come with files they need to work. Above source files embed the content of this files.
+
+## Content of the repository
+
+The `Atlas` directory contains the *JavaScript* source code for *Node.js* of the *Atlas* toolkit, which is not needed to run the examples.
+
+The `notes_modules` directory (not provided by the repository, but will be created when launching `npm install`) contains the files that are needed in order to use the *Atlas* toolkit.
+
+All other directories are examples.
+
+To launch an example:
+
+- launch `npm install` (this have only to be do once),
+- launch `node <Name>/main.js`,
+
+where `<Name>` is the name of the example (`Blank`, `Chatroom`…).
+
+The *Atlas* toolkit is also available for:
+
+- *Java*: <http://github.com/epeios-q37/atlas-java>
+- *PHP*: <http://github.com/epeios-q37/atlas-php>
+- *Python*: <http://github.com/epeios-q37/atlas-python>
 
 For more information about the *Atlas* toolkit: <http://atlastk.org/>.
-

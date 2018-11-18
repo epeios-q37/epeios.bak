@@ -3,7 +3,7 @@
 	<xpp:bloc>
 		<!-- User definitions -->
 		<xpp:define name="Version">
-			<xpp:bloc></xpp:bloc>
+			<xpp:bloc>20181117</xpp:bloc>
 		</xpp:define>
 		<xpp:define name="CopyrightYears">
 			<xpp:bloc>2017</xpp:bloc>
@@ -61,13 +61,14 @@
 				<File>Rentals.xsl</File>
 			</Files>
 		</Files-->
-		<Files Group="Atlas">
+		<Files Group="Atlas" Pack="No">
 			<Files Path="../../Atlas/">
 				<File>CHANGELOG.md</File>
 				<Files Path="NJS/">
 					<File>NOTES.md</File>
 					<File>Project.xml</File>
 					<File>README.md</File>
+					<File>README-node.md</File>
 					<File>Atlas.js</File>
 					<File>runkit.js</File>
 				</Files>
@@ -139,6 +140,6 @@
 	hence the packaging scripts explicitly skip all the native-related stuffs.
 	-->
 	<RTW Description="'XDHTML' wrapper." Keywords="XDHTML">
-		<Dir>xdhq-npm</Dir>
+		<Dir>xdhq-node</Dir>
 	</RTW>
 </Project>

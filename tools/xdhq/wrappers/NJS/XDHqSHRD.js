@@ -79,13 +79,12 @@ function open(document) {
 	var command = "";
 	var available = false;
 	switch (platform) {
-		case platforms.ANDROID:
-			break;
 		case platforms.DARWIN:
 			command = "open " + document;
 			available = true;
 			break;
 		case platforms.AIX:
+		case platforms.ANDROID:
 		case platforms.FREEBSD:
 		case platforms.LINUX:
 		case platforms.OPENDBSD:

@@ -5,6 +5,12 @@
 
 ---
 
+## 2018-11-17
+
+- *Node.js* binding:
+  - the *URL* is now also automatically opened in a web browser with *Termux* (*Android*),
+  - version 0.5.0a
+
 ## 2018-11-15
 
 - introducing the *Python* binding,

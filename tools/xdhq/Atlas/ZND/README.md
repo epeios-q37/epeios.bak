@@ -2,7 +2,7 @@
 
 ![PHP logo](https://q37.info/download/assets/PHP.png "PHP")
 
-The [*Atlas* toolkit](https://atlastk.org/) is a library dedicated to the handling of web interfaces.
+The [*Atlas* toolkit](https://atlastk.org/) is a library to handle web interfaces.
 
 ## *Hello, World!*
 
@@ -10,7 +10,7 @@ Here's how a [*Hello, World!*](https://en.wikipedia.org/wiki/%22Hello,_World!%22
 
 ![Little demonstration](http://q37.info/download/assets/Hello.gif "A basic example")
 
-For an online demonstration: <http://q37.info/runkit/Hello>.
+For a live demonstration: <http://q37.info/runkit/Hello>.
 
 Source code:
 
@@ -19,7 +19,6 @@ Source code:
 require "phar://Atlas.phar/Atlas.php";
 
 class Hello extends Threaded {
- // The content of the 'Main.html' file.
  static $body = <<<EOT
 <div class="vcenter-out">
  <div class="vcenter-in">
@@ -62,33 +61,17 @@ function hello() {
  return new Hello();
 }
 
- // The content of the 'Head.html' file.
 $head = <<<EOT
 <title>"Hello, World !" example</title>
 <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAMFBMVEUEAvyEhsxERuS8urQsKuycnsRkYtzc2qwUFvRUVtysrrx0ctTs6qTMyrSUksQ0NuyciPBdAAABHklEQVR42mNgwAa8zlxjDd2A4POfOXPmzZkFCAH2M8fNzyALzDlzg2ENssCbMwkMOsgCa858YOjBKxBzRoHhD7LAHiBH5swCT9HQ6A9ggZ4zp7YCrV0DdM6pBpAAG5Blc2aBDZA68wCsZPuZU0BDH07xvHOmAGKKvgMP2NA/Zw7ADIYJXGDgLQeBBSCBFu0aoAPYQUadMQAJAE29zwAVWMCWpgB08ZnDQGsbGhpsgCqBQHNfzRkDEIPlzFmo0T5nzoMovjPHoAK8Zw5BnA5yDosDSAVYQOYMKIDZzkoDzagAsjhqzjRAfXTmzAQgi/vMQZA6pjtAvhEk0E+ATWRRm6YBZuScCUCNN5szH1D4TGdOoSrggtiNAH3vBBjwAQCglIrSZkf1MQAAAABJRU5ErkJggg==" />
 <style type="text/css">
- html,
- body {
-  height: 100%;
-  padding: 0;
-  margin: 0;
- }
-
- .vcenter-out,
- .hcenter {
-  display: table;
-  height: 100%;
-  margin: auto;
- }
-
- .vcenter-in {
-  display: table-cell;
-  vertical-align: middle;
- }
+ html, body {height: 100%; padding: 0; 	margin: 0;}
+ .vcenter-out, .hcenter {display: table; height: 100%; margin: auto;}
+ .vcenter-in {display: table-cell; vertical-align: middle;}
 </style>
 EOT;
 
-Atlas::launch("Connect", 'hello', $head, null, "Hello");
+Atlas::launch("Connect", 'hello', $head);
 ?>
 ```
 
@@ -98,7 +81,7 @@ And here's how the *Atlas* toolkit version of the [*TodoMVC*](http://todomvc.com
 
 [![TodoMVC](http://q37.info/download/TodoMVC.gif "The TodoMVC application made with the Atlas toolkit")](https://github.com/epeios-q37/todomvc-java)
 
-For an online demonstration: <http://q37.info/runkit/TodoMVC>.
+For a live demonstration: <http://q37.info/runkit/TodoMVC>.
 
 ## Content of the repository
 
@@ -117,4 +100,4 @@ The *Atlas* toolkit is also available for:
 - *Node.js*: <http://github.com/epeios-q37/atlas-node>
 - *Python*: <http://github.com/epeios-q37/atlas-python>
 
-For more information about the *Atlas* toolkit, go to <http://atlastk.org/>.
+For more information about the *Atlas* toolkit: <http://atlastk.org/>.
