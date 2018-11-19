@@ -207,6 +207,7 @@ function pseudoServer(createCallback, newSessionAction, callbacks, head) {
 			if (head === undefined)
 				head = "";
 			client.write(handleString(head));
+			client.write(handleString("NJS"));
 		}
 
 		client.on('readable', () => {

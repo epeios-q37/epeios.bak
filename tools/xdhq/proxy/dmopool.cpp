@@ -29,6 +29,7 @@ using namespace dmopool;
 #include "crt.h"
 #include "csdbns.h"
 #include "flx.h"
+#include "logq.h"
 #include "mtk.h"
 #include "sclmisc.h"
 #include "str.h"
@@ -41,6 +42,7 @@ namespace {
 		sck::sSocket Socket;
 		tht::rReadWrite Access;
 		bso::sBool GiveUp;
+		str::wString Info;
 		void reset( bso::sBool P = true )
 		{
 			if ( P ) {
@@ -51,20 +53,22 @@ namespace {
 			Socket = sck::Undefined;
 			Access.reset( P );
 			GiveUp = false;	// If at 'true', the client is deemed to be disconnected.
+			Info.reset( P );
 		}
 		qCDTOR( rClient_ );
-		void Init( void )
+		void Init( const str::wString &Info )
 		{
 			reset();
 
 			Access.Init();
 			GiveUp = false;
+			this->Info.Init( Info );
 		}
 	};
 
 	mtx::rHandler MutexHandler_ = mtx::Undefined;
 	qROW( Row );
-	crt::qMCRATEw( str::dString, sRow ) _Tokens_;
+	crt::qMCRATEw( str::dString, sRow ) Tokens_;
 	crt::qMCRATEw( str::dString, sRow ) Heads_;
 	bch::qBUNCHw( rClient_ *, sRow ) Clients_;
 	csdbns::rListener Listener_;
@@ -74,10 +78,10 @@ namespace {
 		if ( !mtx::IsLocked( MutexHandler_ ) )
 			qRGnr();
 
-		sRow Row = _Tokens_.First();
+		sRow Row = Tokens_.First();
 
-		while ( (Row != qNIL) && (_Tokens_( Row ) != Token) )
-			Row = _Tokens_.Next( Row );
+		while ( (Row != qNIL) && ( Tokens_( Row ) != Token) )
+			Row = Tokens_.Next( Row );
 
 		return Row;
 	}
@@ -137,7 +141,8 @@ namespace {
 
 	rClient_ *Create_(
 		const str::dString &Token,
-		const str::dString &Head )
+		const str::dString &Head,
+		const str::dString &Info )
 	{
 		rClient_ *Client = NULL;
 	qRH;
@@ -149,7 +154,7 @@ namespace {
 		Row = TUSearch_( Token );
 
 		if ( Row == qNIL ) {
-			Row = _Tokens_.Append( Token );
+			Row = Tokens_.Append( Token );
 
 			if ( Row != Clients_.New() )
 				qRGnr();
@@ -162,7 +167,7 @@ namespace {
 		if ( (Client = new rClient_) == NULL )
 			qRAlc();
 
-		Client->Init();
+		Client->Init( Info );
 
 		Clients_.Store( Client, Row );
 
@@ -195,7 +200,7 @@ namespace {
 	{
 	qRFH;
 		sck::sSocket Socket = *(sck::sSocket *)UP;
-		str::wString Token, Head;
+		str::wString Token, Head, Info;
 		sck::rRWFlow Flow;
 		tol::bUUID UUID;
 		rClient_ *Client = NULL;
@@ -221,7 +226,10 @@ namespace {
 			Head.Init();
 			Get_( Flow, Head );
 
-			Client = Create_( Token, Head );
+			Info.Init();
+			Get_( Flow, Info );
+
+			Client = Create_( Token, Head, Info );
 		} else {
 			Client = TSClientSearch_( Token );
 		}
@@ -274,7 +282,9 @@ qRT;
 qRE;
 }
 
-sck::sSocket dmopool::GetConnection( const str::dString &Token )
+sck::sSocket dmopool::GetConnection(
+	const str::dString &Token,
+	str::dString &LogMessage )
 {
 	sck::sSocket Socket = sck::Undefined;
 	rClient_ *Client = TSClientSearch_( Token );
@@ -292,6 +302,7 @@ sck::sSocket dmopool::GetConnection( const str::dString &Token )
 			qRGnr();
 		}
 
+		LogMessage.Append( Client->Info );
 		Socket = Client->Socket;
 		Client->Access.ReadEnd();
 	}
@@ -312,7 +323,7 @@ namespace {
 qGCTOR( dmopool )
 {
 	MutexHandler_ = mtx::Create();
-	_Tokens_.Init();
+	Tokens_.Init();
 	Heads_.Init();
 	Clients_.Init();
 	sclxdhtml::SetHeadFunction( GetHead_ );

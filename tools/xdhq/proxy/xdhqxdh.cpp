@@ -24,6 +24,9 @@
 
 #include "prtcl.h"
 
+#include "logq.h"
+#include "idsq.h"
+
 #include "csdmnc.h"
 #include "csdcmn.h"
 #include "csdbns.h"
@@ -34,6 +37,10 @@ SCLI_DEF( xdhqxdh, PROGRAM_NAME, SOFTWARE_NAME );
 
 namespace {
 	csdmnc::rCore Core_;
+	logq::rFDriver<> LogDriver_;
+	qMIMICs( bso::sU32, sId_ );
+	sId_ UndefinedId_ = bso::U32Max;
+	idsq::wIdStore <sId_> Ids_;
 }
 
 namespace {
@@ -147,6 +154,7 @@ qRB;
 		Core_.Init( HostService.Convert( Buffer ), 0, sck::NoTimeout );
 
 	dmopool::Initialize();
+	LogDriver_.Init( cio::COut );
 qRR;
 qRT;
 qRE;
@@ -845,6 +853,7 @@ namespace {
 		eMode_ Mode_;
 		sck::rRWDriver DemoDriver_;
 		csdmnc::rRWDriver ProdDriver_;
+		sId_ Id_;
 		fdr::rRWDriver &D_( void )
 		{
 			switch ( Mode_ ) {
@@ -870,6 +879,8 @@ namespace {
 		qRH;
 			bso::sBool Continue = true;
 			flw::sDressedRWFlow<> Flow;
+			eCommand_ Command = c_Undefined;
+			logq::rLogRack<> Log;
 		qRB;
 			Flow.Init( D_() );
 
@@ -877,13 +888,19 @@ namespace {
 			prtcl::Put( Action, Flow );
 			Flow.Commit();
 
+			Log.Init( LogDriver_ );
+
 # define H( name )\
 	case c##name##_1:\
 		::name##_( Flow, *this );\
 		break
 
-			while( Continue )
-				switch ( GetCommand_( Flow ) ) {
+			while ( Continue ) {
+				Command = GetCommand_( Flow );
+
+				Log << *Id_ << ": " << GetLabel_( Command ) << txf::commit;
+
+				switch ( Command ) {
 				case cStandBy_1:
 					Return = true;
 					Continue = false;
@@ -918,10 +935,11 @@ namespace {
 				H( SetProperty );
 				H( GetProperty );
 				H( Focus );
-				default:
-					qRGnr();
-					break;
+			default:
+				qRGnr();
+				break;
 			}
+		}
 
 #undef H
 
@@ -936,6 +954,7 @@ namespace {
 			tol::reset( P, DemoDriver_, ProdDriver_ );
 			Mode_ = m_Undefined;
 			xdhdws::sProxy::reset( P );
+			Id_ = UndefinedId_;
 		}
 		qCVDTOR( rSession_ )
 		bso::sBool Init(
@@ -947,16 +966,23 @@ namespace {
 		qRH;
 			flw::sDressedRWFlow<> Flow;
 			csdcmn::sVersion Version = csdcmn::UndefinedVersion;
+			str::wString LogMessage;
+			logq::rLogRack<> Log;
 		qRB;
 			tol::reset( DemoDriver_, ProdDriver_ );
 			Mode_ = m_Undefined;
+
+			LogMessage.Init();
 
 			if ( Token.Amount() == 0 ) {
 				ProdDriver_.Init( Core_, fdr::ts_Default );
 				Mode_ = mProd;
 				Success = true;
+				LogMessage.Append( "PROD" );
 			} else {
-				sck::sSocket Socket = dmopool::GetConnection( Token );
+				LogMessage.Append( Token );
+				LogMessage.Append( ": " );
+				sck::sSocket Socket = dmopool::GetConnection( Token, LogMessage );
 
 				if ( Socket != sck::Undefined ) {
 					DemoDriver_.Init(Socket, true, fdr::ts_Default );
@@ -967,7 +993,6 @@ namespace {
 
 			if ( Success ) {
 				Flow.Init( D_() );
-
 				prtcl::Put( Language, Flow );
 
 				Flow.Commit();
@@ -975,7 +1000,10 @@ namespace {
 				if ( (Version = csdcmn::GetProtocolVersion( prtcl::ProtocolId, Flow )) != prtcl::ProtocolVersion )
 					qRGnr();
 
-				xdhdws::sProxy::Init( Callback );
+				Log.Init( LogDriver_ );
+				Log << *(Id_ = Ids_.New()) << ": " << LogMessage;
+
+				xdhdws::sProxy::Init( Callback );	// To be last, otherwise if an error occurs, 'Callback' will be frred twice!
 			}
 		qRR;
 		qRT;

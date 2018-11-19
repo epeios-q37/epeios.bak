@@ -155,7 +155,7 @@ namespace logq {
 	{
 	private:
 		rFDriver<> Driver_;
-		flw::sDressedOFlow<> OFlow_;
+		flw::sDressedWFlow<> OFlow_;
 	public:
 		void reset( bso::sBool P = true )
 		{
@@ -175,7 +175,7 @@ namespace logq {
 	: public rTFlow_
 	{
 	private:
-		flw::sDressedOFlow<> OFlow_;
+		flw::sDressedWFlow<> OFlow_;
 	public:
 		void reset( bso::sBool P = true )
 		{

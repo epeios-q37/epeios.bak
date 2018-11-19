@@ -953,12 +953,12 @@ namespace sclxdhtml {
 	const scli::sInfo &SCLXDHTMLInfo( void );	// To define by user.
 	void SCLXDHTMLInitialization( xdhcmn::eMode Mode );	// To define by user.
 
-	xdhcmn::cSession *SCLXDHTMLRetrieveCallback(
+	xdhcmn::cSession *SCLXDHTMLRetrieveCallback(	// To define by user. 
 		const char *Language,
 		xdhcmn::eMode Mode,
 		const str::dString &Token,	// If not empty, DEMO mode with connexion identified by 'Token',
 									// otherwise PROD mode, with host/service retrieved from registry.
-		xdhcmn::cUpstream *UpstreamCallback );	// To define by user.
+		xdhcmn::cUpstream *UpstreamCallback );	// 'IpserteamCallback' will set to 'NULL' when it will be managed downstream.
 
 	void SCLXDHTMLReleaseCallback( xdhcmn::cSession *Callback );	// To define by user.
 

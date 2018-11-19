@@ -40,8 +40,7 @@ function getXDHq() {
   $xdhqPath = "phar://Atlas.phar/";
  }
 
-// require $xdhqPath . "XDHq.php";
-	require( "XDHq.php");
+  require $xdhqPath . "XDHq.php";
 }
 
 getXDHq();

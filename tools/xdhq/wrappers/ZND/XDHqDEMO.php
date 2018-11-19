@@ -153,6 +153,7 @@ class XDHqDOM_DEMO extends Threaded {
 
   if ($this->isTokenEmpty_()) {
    $this->writeString_(XDHq_DEMO::$headContent, $this->socket);
+   $this->writeString_("ZND", $this->socket);
   }
 
   fflush($this->socket);

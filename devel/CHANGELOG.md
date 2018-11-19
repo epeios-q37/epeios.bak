@@ -6,6 +6,11 @@
 - [stdz]: modification to comply with current standards;
 - [trvl]: trivial modifications;
 
+## 2018-11-19
+
+- LOGQ:
+  - [adpt],
+
 ## 2018-11-07
 
 - XDHCMN:

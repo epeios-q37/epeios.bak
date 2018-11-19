@@ -270,7 +270,7 @@ qRB
 	if ( ProxyCallback == NULL )
 		qRAlc();
 
-	SessionCallback = _A().RetrieveCallback( Language.Convert( Buffer ), Token, ProxyCallback );	// Session destroys 'ProxyCallback'.
+	SessionCallback = _A().RetrieveCallback( Language.Convert( Buffer ), Token, ProxyCallback );
 
 	if ( SessionCallback != NULL ) {
 		Session->Init( *SessionCallback );
@@ -329,7 +329,7 @@ qRR
 qRT
 	if ( Row == qNIL ) {
 		if ( ProxyCallback != NULL )
-		delete ProxyCallback;
+			delete ProxyCallback;
 
 		ProxyCallback = NULL;
 	}

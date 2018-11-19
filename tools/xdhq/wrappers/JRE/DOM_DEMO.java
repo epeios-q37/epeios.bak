@@ -163,6 +163,7 @@ public class DOM_DEMO extends DOM_SHRD {
 
 		if (isTokenEmpty_()) {
 			writeString_(info.q37.xdhq.XDH_DEMO.headContent);
+			writeString_("JRE");
 		}
 
 		output.flush();

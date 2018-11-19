@@ -50,7 +50,7 @@ $token = array_key_exists('token', $_GET) ? $_GET['token'] : uniqid();
 
 $source = str_replace("$NAME$", $app, $source);
 
-$source .= file_get_contents("http://q37.info/download/assets/" . $app . ".js");
+$source .= file_get_contents("https://raw.githubusercontent.com/epeios-q37/atlas-node/master/" . $app . "/" . $app . ".js");
 
 $source .= <<<EOT
 

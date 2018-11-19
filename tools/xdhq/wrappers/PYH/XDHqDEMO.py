@@ -124,6 +124,7 @@ class DOM_DEMO:
 
 		if this._isTokenEmpty():
 			this._writeString(_headContent)
+			this._writeString("PYH")
 
 			_token = this._getString()
 
