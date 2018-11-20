@@ -6,6 +6,11 @@
 - [stdz]: modification to comply with current standards;
 - [trvl]: trivial modifications;
 
+## 2018-11-20
+
+- MTK:
+  - the routine can now receive a reference to an object instead of the usual `void *` as user parameter,
+
 ## 2018-11-19
 
 - LOGQ:

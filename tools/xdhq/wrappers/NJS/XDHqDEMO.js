@@ -50,7 +50,7 @@ const types = shared.types;
 const open = shared.open;
 
 const protocolLabel = "712a58bf-2c9a-47b2-ba5e-d359a99966de";
-const protocolVersion = "0";
+const protocolVersion = "1";
 
 function byteLength(str) {
 	// returns the byte length of an utf8 string
@@ -207,7 +207,6 @@ function pseudoServer(createCallback, newSessionAction, callbacks, head) {
 			if (head === undefined)
 				head = "";
 			client.write(handleString(head));
-			client.write(handleString("NJS"));
 		}
 
 		client.on('readable', () => {
@@ -232,7 +231,7 @@ function pseudoServer(createCallback, newSessionAction, callbacks, head) {
 				client._xdhDOM._xdhSocket = client;
 				client._xdhDOM._xdhIsDEMO = true;
 				client._xdhDOM._xdhType = types.UNDEFINED;
-				client .write( addString(addString(Buffer.from(""),protocolLabel),protocolVersion));
+				client .write( addString(addString(addString(Buffer.from(""),protocolLabel),protocolVersion),"NJS"));
 			} else if (relaunch) {
 				pseudoServer(createCallback, newSessionAction, callbacks);	// Useless to give 'head', as it will no more be used.
 

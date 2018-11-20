@@ -18,13 +18,13 @@
 */
 
 #ifndef MTK__INC
-#define MTK__INC
+# define MTK__INC
 
-#define MTK_NAME		"MTK"
+# define MTK_NAME		"MTK"
 
-#if defined( E_DEBUG ) && !defined( MTK_NODBG )
-#define MTK_DBG
-#endif
+# if defined( E_DEBUG ) && !defined( MTK_NODBG )
+#  define MTK_DBG
+# endif
 
 // MultiTasKing
 
@@ -139,7 +139,7 @@ namespace mtk {
 		friend class gBlocker_;
 	};
 
-	// 'Blocker' protects data in 'UP' from being deleted before it 'Release()' method will ba called.
+	// 'Blocker' protects data in 'UP' from being deleted before it 'Release()' method will be called.
 	typedef void (* sXRoutine)(void *UP, gBlocker &Blocker );
 
 	void LaunchAndKill(
@@ -162,6 +162,59 @@ namespace mtk {
 #	error "None of 'MTK_KEEP' or 'MTK_KILL' are defined."
 #endif
 	}
+
+	template <typename type> struct sData_
+	{
+		void( *Routine )(type &UP, gBlocker &Blocker);
+		type *UP;
+	};
+
+	template <typename type> inline void sRoutine_(
+		void *UP,
+		gBlocker &Blocker)
+	{
+		sData_<type> &Data = *(sData_<type> *)UP;
+
+		Data.Routine( *Data.UP, Blocker );
+	}
+
+	template <typename type> void LaunchAndKill(
+		void( *Routine )(type &UP, gBlocker &Blocker),
+		type &UserObject )
+	{
+		sData_<type> Data;
+
+		Data.Routine = Routine;
+		Data.UP = &UserObject;
+
+		LaunchAndKill( sRoutine_<type>, &Data );
+	}
+
+	template <typename type> void LaunchAndKeep(
+		void( *Routine )(type &UP, gBlocker &Blocker),
+		type &UserObject )
+	{
+		sData_<type> Data;
+
+		Data.Routine = Routine;
+		Data.UP = &UserObject;
+
+		LaunchAndKeep( sRoutine_<type>, &Data );
+	}
+
+	template <typename type> inline void Launch(
+		void( *Routine )(type &UP, gBlocker &Blocker),
+		type &UserObject )
+	{
+		sData_<type> Data;
+
+		Data.Routine = Routine;
+		Data.UP = &UserObject;
+
+		Launch( sRoutine_<type>, &Data );
+	}
+
+
 }
 
 #endif

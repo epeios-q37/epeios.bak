@@ -214,6 +214,7 @@ namespace proxy {
 	};
 
 	void Handshake_(
+		const str::dString &Info,	// Various infos for logging.
 		flw::sRWFlow &Flow,
 		str::dString &Language );
 
@@ -227,7 +228,7 @@ namespace proxy {
 	{
 	private:
 		// Action to launch on a new session.
-		str::wString NewSessionAction_;
+		str::wString NewSessionAction_, Info_;
 	protected:
 		virtual void *CSDSCBPreProcess(
 			fdr::rRWDriver *RWDriver,
@@ -246,7 +247,7 @@ namespace proxy {
 
 			Data->Recv.WriteDismiss();
 
-			Handshake_( Flow, Data->Language );
+			Handshake_( Info_, Flow, Data->Language );
 		qRR;
 			if ( Data != NULL )
 				delete Data;
@@ -325,12 +326,15 @@ namespace proxy {
 	public:
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, NewSessionAction_ );
+			tol::reset( P, NewSessionAction_, Info_ );
 		}
 		qCVDTOR( rProcessing );
-		void Init( const str::dString &NewSessionAction )
+		void Init(
+			const str::dString &NewSessionAction,
+			const str::dString &Info )
 		{
 			NewSessionAction_.Init( NewSessionAction );
+			Info_.Init( Info );
 		}
 	};
 

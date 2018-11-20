@@ -78,6 +78,7 @@ void proxy::Recv_(
 }
 
 void proxy::Handshake_(
+	const str::dString &Info,
 	flw::sRWFlow &Flow,
 	str::dString & Language )
 {
@@ -86,6 +87,7 @@ void proxy::Handshake_(
 	Flow.Dismiss();
 
 	csdcmn::SendProtocol( prtcl::ProtocolId, prtcl::ProtocolVersion, Flow );
+	csdcmn::Put( Info, Flow );
 
 	Flow.Commit();
 }

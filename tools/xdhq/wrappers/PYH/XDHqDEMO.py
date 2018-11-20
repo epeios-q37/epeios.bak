@@ -40,7 +40,7 @@ else:
 	os._exit(1)
 
 _protocolLabel = "712a58bf-2c9a-47b2-ba5e-d359a99966de"
-_protocolVersion = "0"
+_protocolVersion = "1"
 
 _newSessionAction = ""
 _headContent = ""
@@ -124,7 +124,6 @@ class DOM_DEMO:
 
 		if this._isTokenEmpty():
 			this._writeString(_headContent)
-			this._writeString("PYH")
 
 			_token = this._getString()
 
@@ -142,6 +141,7 @@ class DOM_DEMO:
 		this._getString()	# Language.
 		this._writeString(_protocolLabel)
 		this._writeString(_protocolVersion)
+		this._writeString("PYH")
 
 	def getAction(this):
 		if this._firstLaunch:

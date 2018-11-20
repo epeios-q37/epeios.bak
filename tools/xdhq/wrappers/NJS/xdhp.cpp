@@ -238,7 +238,7 @@ namespace {
 			csdbns::sService Service,
 			const str::dString &NewSessionAction )
 		{
-			Processing_.Init( NewSessionAction );
+			Processing_.Init( NewSessionAction, str::wString( "NJS" ) );
 			Server_.Init( Service, Processing_ );
 			mtk::Launch( LaunchServer_, &Server_ );
 			Data_ = NULL;

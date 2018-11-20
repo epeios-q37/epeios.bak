@@ -34,7 +34,7 @@ namespace dmopool {
 	void Initialize();
 	sck::sSocket GetConnection(
 		const str::dString &Token,
-		str::dString &LogMessage );
+		str::dString &IP );
 }
 
 #endif

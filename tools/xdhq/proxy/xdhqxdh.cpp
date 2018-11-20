@@ -991,6 +991,8 @@ namespace {
 				}
 			}
 
+			LogMessage.Append( " - " );
+
 			if ( Success ) {
 				Flow.Init( D_() );
 				prtcl::Put( Language, Flow );
@@ -999,6 +1001,18 @@ namespace {
 
 				if ( (Version = csdcmn::GetProtocolVersion( prtcl::ProtocolId, Flow )) != prtcl::ProtocolVersion )
 					qRGnr();
+
+				switch ( Version ) {
+				case 0:
+					LogMessage.Append( "N/A" );
+					break;
+				case 1:
+					csdcmn::Get( Flow, LogMessage );
+					break;
+				default:
+					qRGnr();
+					break;
+				}
 
 				Log.Init( LogDriver_ );
 				Log << *(Id_ = Ids_.New()) << ": " << LogMessage;

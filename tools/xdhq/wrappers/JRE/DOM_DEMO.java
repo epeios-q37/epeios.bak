@@ -33,7 +33,7 @@ public class DOM_DEMO extends DOM_SHRD {
 	private Socket socket;
 	private boolean firstLaunch = true;
 	static private String protocolLabel = "712a58bf-2c9a-47b2-ba5e-d359a99966de";
-	static private String protocolVersion = "0";
+	static private String protocolVersion = "1";
 
 	static {
 		String atk = System.getenv("ATK");
@@ -163,7 +163,6 @@ public class DOM_DEMO extends DOM_SHRD {
 
 		if (isTokenEmpty_()) {
 			writeString_(info.q37.xdhq.XDH_DEMO.headContent);
-			writeString_("JRE");
 		}
 
 		output.flush();
@@ -190,6 +189,7 @@ public class DOM_DEMO extends DOM_SHRD {
 		getString_(reader); // Language.
 		writeString_(protocolLabel, output);
 		writeString_(protocolVersion, output);
+		writeString_("JRE");
 		output.flush();
 	}
 

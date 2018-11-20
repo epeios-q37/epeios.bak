@@ -42,7 +42,7 @@ namespace {
 		sck::sSocket Socket;
 		tht::rReadWrite Access;
 		bso::sBool GiveUp;
-		str::wString Info;
+		str::wString IP;
 		void reset( bso::sBool P = true )
 		{
 			if ( P ) {
@@ -53,16 +53,14 @@ namespace {
 			Socket = sck::Undefined;
 			Access.reset( P );
 			GiveUp = false;	// If at 'true', the client is deemed to be disconnected.
-			Info.reset( P );
 		}
 		qCDTOR( rClient_ );
-		void Init( const str::wString &Info )
+		void Init( void )
 		{
 			reset();
 
 			Access.Init();
 			GiveUp = false;
-			this->Info.Init( Info );
 		}
 	};
 
@@ -141,8 +139,7 @@ namespace {
 
 	rClient_ *Create_(
 		const str::dString &Token,
-		const str::dString &Head,
-		const str::dString &Info )
+		const str::dString &Head )
 	{
 		rClient_ *Client = NULL;
 	qRH;
@@ -167,7 +164,7 @@ namespace {
 		if ( (Client = new rClient_) == NULL )
 			qRAlc();
 
-		Client->Init( Info );
+		Client->Init();
 
 		Clients_.Store( Client, Row );
 
@@ -194,18 +191,28 @@ namespace {
 		prtcl::Put( String, Flow );
 	}
 
+	struct sData_
+	{
+		sck::sSocket Socket = sck::Undefined;
+		const char *IP = NULL;
+	};
+
 	void NewConnexionRoutine_(
-		void *UP,
+		sData_ &Data,
 		mtk::gBlocker &Blocker )
 	{
 	qRFH;
-		sck::sSocket Socket = *(sck::sSocket *)UP;
-		str::wString Token, Head, Info;
+		sck::sSocket Socket = sck::Undefined;
+		str::wString IP;
+		str::wString Token, Head;
 		sck::rRWFlow Flow;
 		tol::bUUID UUID;
 		rClient_ *Client = NULL;
 		mtx::rMutex Mutex;
 	qRFB;
+		Socket = Data.Socket;
+		IP.Init( Data.IP );
+
 		Blocker.Release();
 
 		Flow.Init( Socket, false, sck::NoTimeout );
@@ -226,10 +233,7 @@ namespace {
 			Head.Init();
 			Get_( Flow, Head );
 
-			Info.Init();
-			Get_( Flow, Info );
-
-			Client = Create_( Token, Head, Info );
+			Client = Create_( Token, Head);
 		} else {
 			Client = TSClientSearch_( Token );
 		}
@@ -239,6 +243,7 @@ namespace {
 		else {
 			Client->Access.WriteBegin();
 			Client->Socket = Socket;
+			Client->IP.Init( IP );
 			Client->Access.WriteEnd();
 		}
 
@@ -251,15 +256,12 @@ namespace {
 	void ListeningRoutine_( void * )
 	{
 	qRFH;
-		sck::sSocket Socket = sck::Undefined;
-		const char *IP;
+		sData_ Data;
 	qRFB;
 		while ( true ) {
-			Socket = sck::Undefined;
+			Data.Socket = Listener_.GetConnection( Data.IP );
 
-			Socket = Listener_.GetConnection( IP );
-
-			mtk::Launch( NewConnexionRoutine_, &Socket );
+			mtk::Launch( NewConnexionRoutine_, Data );
 		}
 	qRFR;
 	qRFT;
@@ -284,7 +286,7 @@ qRE;
 
 sck::sSocket dmopool::GetConnection(
 	const str::dString &Token,
-	str::dString &LogMessage )
+	str::dString &IP )
 {
 	sck::sSocket Socket = sck::Undefined;
 	rClient_ *Client = TSClientSearch_( Token );
@@ -302,8 +304,8 @@ sck::sSocket dmopool::GetConnection(
 			qRGnr();
 		}
 
-		LogMessage.Append( Client->Info );
 		Socket = Client->Socket;
+		IP.Append( Client->IP );
 		Client->Access.ReadEnd();
 	}
 

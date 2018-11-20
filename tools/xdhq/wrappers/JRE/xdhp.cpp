@@ -101,7 +101,7 @@ qRB;
 
 	sclargmnt::FillRegistry( Arguments, sclargmnt::faIsArgument, sclargmnt::uaReport );
 
-	Processing_.Init( NewSessionAction );
+	Processing_.Init( NewSessionAction, str::wString( "JRE" ) );
 	Server_.Init( sclmisc::MGetU16( registry::parameter::Service ), Processing_ );
 
 	mtk::RawLaunch( Process_, NULL );

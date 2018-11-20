@@ -30,7 +30,7 @@ class XDHqDOM_DEMO extends Threaded {
  private $socket;
  private static $token = "";
  private static $protocolLabel = "712a58bf-2c9a-47b2-ba5e-d359a99966de";
- private static $protocolVersion = "0";
+ private static $protocolVersion = "1";
  private static function isTokenEmpty_() {
   return empty(self::$token) || (substr(self::$token, 0, 1) == '&');
  }
@@ -153,7 +153,6 @@ class XDHqDOM_DEMO extends Threaded {
 
   if ($this->isTokenEmpty_()) {
    $this->writeString_(XDHq_DEMO::$headContent, $this->socket);
-   $this->writeString_("ZND", $this->socket);
   }
 
   fflush($this->socket);
@@ -179,6 +178,7 @@ class XDHqDOM_DEMO extends Threaded {
   $this->getString_($this->socket); // Language.
   $this->writeString_(self::$protocolLabel, $this->socket);
   $this->writeString_(self::$protocolVersion, $this->socket);
+  $this->writeString_("ZND", $this->socket);
   fflush($this->socket);
  }
  function getAction(&$id) {
