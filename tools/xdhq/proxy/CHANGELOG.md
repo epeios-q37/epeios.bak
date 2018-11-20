@@ -1,5 +1,10 @@
 # *XDHq* *CHANGELOG*
 
+## 2018-11-20
+
+- adding logging,
+- switching to protocol version 1,
+
 ## 2018-09-09
 
 - improving previous bug fix,

@@ -25,6 +25,8 @@
 				<xpp:expand select="Core"/>
 				<Module>cdgurl</Module>
 				<Module>cnvfdr</Module>
+				<Module>logq</Module>
+				<Module>ltf</Module>
 				<Module>sck</Module>
 			</Modules>
 			<Modules Group="CSD">

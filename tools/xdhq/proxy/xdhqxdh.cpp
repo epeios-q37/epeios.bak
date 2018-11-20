@@ -935,11 +935,11 @@ namespace {
 				H( SetProperty );
 				H( GetProperty );
 				H( Focus );
-			default:
-				qRGnr();
-				break;
+				default:
+					qRGnr();
+					break;
+				}
 			}
-		}
 
 #undef H
 
@@ -999,8 +999,7 @@ namespace {
 
 				Flow.Commit();
 
-				if ( (Version = csdcmn::GetProtocolVersion( prtcl::ProtocolId, Flow )) != prtcl::ProtocolVersion )
-					qRGnr();
+				Version = csdcmn::GetProtocolVersion( prtcl::ProtocolId, Flow );
 
 				switch ( Version ) {
 				case 0:

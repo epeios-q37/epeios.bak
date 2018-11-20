@@ -165,6 +165,7 @@ namespace mtk {
 
 	template <typename type> struct sData_
 	{
+	public:
 		void( *Routine )(type &UP, gBlocker &Blocker);
 		type *UP;
 	};
@@ -178,7 +179,7 @@ namespace mtk {
 		Data.Routine( *Data.UP, Blocker );
 	}
 
-	template <typename type> void LaunchAndKill(
+	template <typename type> inline void LaunchAndKill(
 		void( *Routine )(type &UP, gBlocker &Blocker),
 		type &UserObject )
 	{
@@ -190,7 +191,7 @@ namespace mtk {
 		LaunchAndKill( sRoutine_<type>, &Data );
 	}
 
-	template <typename type> void LaunchAndKeep(
+	template <typename type> inline void LaunchAndKeep(
 		void( *Routine )(type &UP, gBlocker &Blocker),
 		type &UserObject )
 	{

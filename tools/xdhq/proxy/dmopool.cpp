@@ -233,7 +233,7 @@ namespace {
 			Head.Init();
 			Get_( Flow, Head );
 
-			Client = Create_( Token, Head);
+			Client = Create_( Token, Head );
 		} else {
 			Client = TSClientSearch_( Token );
 		}

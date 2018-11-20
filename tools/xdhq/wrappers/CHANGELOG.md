@@ -3,7 +3,7 @@
 ## 2018-11-20
 
 - sending some information for logging purpose,
-- switching to protocol version 2,
+- switching to protocol version 1,
 
 ## 2018-07-12
 - *xdhqnjs*:

@@ -5,6 +5,10 @@
 
 ---
 
+## 2018-11-20
+
+- switching to protocol version 1,
+
 ## 2018-11-18
 - *Node.js* binding
   - version 0.5.0b; only to fix a *NPM*/*Github* issue,
