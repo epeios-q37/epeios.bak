@@ -78,7 +78,6 @@ class XDHqDOM_DEMO extends Threaded {
 
   while ($byte & 0x80) {
    $byte = $this->getByte_($socket);
-
    $size = ($size << 7) + ($byte & 0x7f);
   }
 
@@ -142,14 +141,13 @@ class XDHqDOM_DEMO extends Threaded {
   $wAddr = getEnv_( "ATK_WADDR", $wAddr);
   $wPort = getEnv_( "ATK_WPORT", $wPort);
 
-  if ( $wPort != "" ) 
+  if ( $wPort != "" )
    $wPort = ":" . $wPort;
 
   if ($this->isTokenEmpty_()) {
-
    $token = getEnv_("ATK_TOKEN");
 
-   if ($token !== "") {
+   if (!empty($token))
     self::$token = "&" . $token;
   }
 
@@ -162,17 +160,15 @@ class XDHqDOM_DEMO extends Threaded {
   $this->writeString_(self::$token, $this->socket);
 
   if ($this->isTokenEmpty_()) {
-   $this->writeString_(XDHq_DEMO::$headContent, $this->socket);
-  }
+    $this->writeString_(XDHq_DEMO::$headContent, $this->socket);
 
-  fflush($this->socket);
+    fflush($this->socket);
 
   if ($this->isTokenEmpty_()) {
-   self::$token = $this->getString_($this->socket);
+    self::$token = $this->getString_($this->socket);
 
-   if ($this->isTokenEmpty_()) {
-    throw new Exception("Invalid connection information !!!");
-   }
+    if ($this->isTokenEmpty_())
+     throw new Exception("Invalid connection information !!!");
   }
 
   if ($wPort != ":0") {
@@ -180,11 +176,9 @@ class XDHqDOM_DEMO extends Threaded {
     echo $url . "\n";
     echo "Open above URL in a web browser. Enjoy!\n";
     XDHq_SHRD::open($url);
-   }
-  } else {
-   if ($this->getString_($this->socket) != self::$token) {
+    }
+  } else if ($this->getString_($this->socket) != self::$token) {
     throw new Exception("Unmatched token !!!");
-   }
   }
 
   $this->getString_($this->socket); // Language.
@@ -204,7 +198,6 @@ class XDHqDOM_DEMO extends Threaded {
   }
 
   $id = $this->getString_($this->socket);
-
   $action = $this->getString_($this->socket);
 
   if (empty($action)) {
