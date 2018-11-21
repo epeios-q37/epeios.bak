@@ -116,7 +116,7 @@ class XDHqDOM_DEMO extends Threaded {
   // Due to multithreading handling of PHP, global variables can not be used in methods !
   $pAddr = "atlastk.org";
   $pPort = 53800;
-  $wAddr = $pAddr;
+  $wAddr = "";
   $wPort = "";
   $cgi = "xdh";
   
@@ -140,6 +140,9 @@ class XDHqDOM_DEMO extends Threaded {
   $pPort = intval( getEnv_("ATK_PPORT", strval( $pPort)));
   $wAddr = getEnv_( "ATK_WADDR", $wAddr);
   $wPort = getEnv_( "ATK_WPORT", $wPort);
+
+  if ( $wAddr == "" )
+	$wAddr = $pAddr;
 
   if ( $wPort != "" )
    $wPort = ":" . $wPort;

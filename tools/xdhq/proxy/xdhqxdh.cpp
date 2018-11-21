@@ -853,7 +853,10 @@ namespace {
 		eMode_ Mode_;
 		sck::rRWDriver DemoDriver_;
 		csdmnc::rRWDriver ProdDriver_;
-		sId_ Id_;
+		struct {
+			sId_ Id;
+			str::wString IP;
+		} Logging_;
 		fdr::rRWDriver &D_( void )
 		{
 			switch ( Mode_ ) {
@@ -870,6 +873,23 @@ namespace {
 
 			return *(fdr::rRWDriver *)NULL;	// To avoid a warning.
 		}
+		void Log_( const str::dString &Message )
+		{
+		qRH;
+			logq::rLogRack<> Log;
+		qRB;
+			Log.Init( LogDriver_ );
+
+			Log << *Logging_.Id;
+
+			if ( Logging_.IP.Amount() != 0 )
+				Log << " (" << Logging_.IP << ")";
+			
+			Log << " : " <<  Message;
+		qRR;
+		qRT;
+		qRE;
+		}
 	protected:
 		virtual bso::bool__ XDHCMNLaunch(
 			const char *Id,
@@ -880,7 +900,6 @@ namespace {
 			bso::sBool Continue = true;
 			flw::sDressedRWFlow<> Flow;
 			eCommand_ Command = c_Undefined;
-			logq::rLogRack<> Log;
 		qRB;
 			Flow.Init( D_() );
 
@@ -888,7 +907,6 @@ namespace {
 			prtcl::Put( Action, Flow );
 			Flow.Commit();
 
-			Log.Init( LogDriver_ );
 
 # define H( name )\
 	case c##name##_1:\
@@ -898,7 +916,7 @@ namespace {
 			while ( Continue ) {
 				Command = GetCommand_( Flow );
 
-				Log << *Id_ << ": " << GetLabel_( Command ) << txf::commit;
+				Log_( str::wString( GetLabel_( Command ) ) );
 
 				switch ( Command ) {
 				case cStandBy_1:
@@ -954,7 +972,8 @@ namespace {
 			tol::reset( P, DemoDriver_, ProdDriver_ );
 			Mode_ = m_Undefined;
 			xdhdws::sProxy::reset( P );
-			Id_ = UndefinedId_;
+			Logging_.Id = UndefinedId_;
+			Logging_.IP.reset( P );
 		}
 		qCVDTOR( rSession_ )
 		bso::sBool Init(
@@ -967,11 +986,11 @@ namespace {
 			flw::sDressedRWFlow<> Flow;
 			csdcmn::sVersion Version = csdcmn::UndefinedVersion;
 			str::wString LogMessage;
-			logq::rLogRack<> Log;
 		qRB;
 			tol::reset( DemoDriver_, ProdDriver_ );
 			Mode_ = m_Undefined;
 
+			Logging_.IP.Init();
 			LogMessage.Init();
 
 			if ( Token.Amount() == 0 ) {
@@ -981,8 +1000,7 @@ namespace {
 				LogMessage.Append( "PROD" );
 			} else {
 				LogMessage.Append( Token );
-				LogMessage.Append( ": " );
-				sck::sSocket Socket = dmopool::GetConnection( Token, LogMessage );
+				sck::sSocket Socket = dmopool::GetConnection( Token, Logging_.IP );
 
 				if ( Socket != sck::Undefined ) {
 					DemoDriver_.Init(Socket, true, fdr::ts_Default );
@@ -1013,10 +1031,10 @@ namespace {
 					break;
 				}
 
-				Log.Init( LogDriver_ );
-				Log << *(Id_ = Ids_.New()) << ": " << LogMessage;
+				Logging_.Id = Ids_.New();
+				Log_( LogMessage );
 
-				xdhdws::sProxy::Init( Callback );	// To be last, otherwise if an error occurs, 'Callback' will be frred twice!
+				xdhdws::sProxy::Init( Callback );	// To be last, otherwise if an error occurs, 'Callback' will be freed twice!
 			}
 		qRR;
 		qRT;
