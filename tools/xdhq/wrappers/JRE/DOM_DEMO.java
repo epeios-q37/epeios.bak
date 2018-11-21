@@ -25,42 +25,62 @@ import java.util.*;
 import java.awt.Desktop;
 
 public class DOM_DEMO extends DOM_SHRD {
-	static private String address = "atlastk.org";
-	static private String httpPort = "";
+	static private String pAddr = "atlastk.org";
+	static private int pPort = 53800;
+	static private String wAddr = pAddr;
+	static private String wPort = "";
 	static private String cgi = "xdh";
-	static private int port = 53800;
 	static private String token = "";
 	private Socket socket;
 	private boolean firstLaunch = true;
 	static private String protocolLabel = "712a58bf-2c9a-47b2-ba5e-d359a99966de";
 	static private String protocolVersion = "1";
 
-	static {
-		String atk = System.getenv("ATK");
+	static private String getEnv_(String name, String value) {
+		String env = System.getenv(name);
 
-		if ("DEV".equals(atk)) {
-			address = "localhost";
-			httpPort = ":8080";
-			System.out.println("\tDEV mode !");
-		} else if ("TEST".equals(atk)) {
-			cgi = "xdh_";
-			System.out.println("\tTEST mode !");
-		} else if (atk != null) {
-			throw new java.lang.RuntimeException("Bad 'ATK' environment variable value : should be 'DEV' or 'TEST' !");
-		}
+		if (env == null)
+			return value.trim();
+		else
+			return env.trim();
+	}
 
-		String token = System.getenv("ATK_TOKEN");
-
-		if ( token != null ) {
-			token = token.trim();
-
-			if ( !"".equals( token ))
-				DOM_DEMO.token = "&" + token; 
-		}
+	static private String getEnv_(String name) {
+		return getEnv_(name, "");
 	}
 
 	static private boolean isTokenEmpty_() {
 		return "".equals(token) || (token.charAt(0) == '&');
+	}
+
+	static {
+		String atk = getEnv_("ATK");
+
+		if ("DEV".equals(atk)) {
+			pAddr = "localhost";
+			wPort = "8080";
+			System.out.println("\tDEV mode !");
+		} else if ("TEST".equals(atk)) {
+			cgi = "xdh_";
+			System.out.println("\tTEST mode !");
+		} else if (!"".equals(atk)) {
+			throw new java.lang.RuntimeException("Bad 'ATK' environment variable value : should be 'DEV' or 'TEST' !");
+		}
+
+		if ( isTokenEmpty_() ) {
+			String token = getEnv_("ATK_TOKEN");
+
+			if ( !"".equals( token ))
+				DOM_DEMO.token = "&" + token; 
+		}
+
+		pAddr = getEnv_( "ATK_PADDR", pAddr );
+		pPort = Integer.parseInt(getEnv_( "ATK_PPORT", String.valueOf(pPort)));
+		wAddr = getEnv_( "ATK_WADDR", wAddr );
+		wPort = getEnv_( "ATK_WPORT", wPort );
+
+		if (!"".equals(wPort))
+			wPort = ":" + wPort;
 	}
 
 	private void writeSize_(int size, OutputStream stream) throws Exception {
@@ -150,9 +170,9 @@ public class DOM_DEMO extends DOM_SHRD {
 
 	public DOM_DEMO() throws Exception {
 		try {
-			socket = new Socket(address, port);
+			socket = new Socket(pAddr, pPort);
 		} catch (Exception e) {
-			System.out.println("Unable to connect to " + address + ":" + port + " !!!");
+			System.out.println("Unable to connect to " + pAddr + ":" + pPort + " !!!");
 			System.exit(1);
 		}
 
@@ -173,13 +193,15 @@ public class DOM_DEMO extends DOM_SHRD {
 			if (isTokenEmpty_())
 				throw new Exception("Invalid connection information !!!");
 
-			String url = "http://" + address + httpPort + "/" + cgi + ".php?_token=" + token;
+			if ( !":0".equals(wPort)) {
+				String url = "http://" + wAddr + wPort + "/" + cgi + ".php?_token=" + token;
 
-			System.out.println(url);
-			System.out.println("Open above URL in a web browser. Enjoy!");
+				System.out.println(url);
+				System.out.println("Open above URL in a web browser. Enjoy!");
 
-			if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
-				Desktop.getDesktop().browse(new URI(url));
+				if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+					Desktop.getDesktop().browse(new URI(url));
+				}
 			}
 		} else {
 			if (!getString_(reader).equals(token))

@@ -46,6 +46,12 @@ _newSessionAction = ""
 _headContent = ""
 _token = ""
 
+def _getEnv( name, value= "" ):
+	if name in os.environ:
+		return os.envviron[name].strip()
+	else:
+		return value.strip()
+
 def launch(newSessionAction,headContent):
 	global _newSessionAction,_headContent
 
@@ -94,31 +100,40 @@ class DOM_DEMO:
 
 	def __init__(this):
 		global _protocolLabel, _protocolVersion, _newSessionAction,_headContent, _token
-		address = "atlastk.org"
-		httpPort = ""
+		wAddr = "atlastk.org"
+		wPort = ""
+		pAddr = wAddr
+		pPort = 53800
 		cgi = "xdh"
-		port = 53800
-		if "ATK" in os.environ:
-			atk = os.environ["ATK"]
-			if atk == "DEV":
-				address = "localhost"
-				httpPort = ":8080"
-				print("\tDEV mode !")
-			elif atk == "TEST":
-				cgi = "xdh_"
-				print("\tTEST mode!")
-			else:
-				sys.exit("Bad 'ATK' environment variable value : should be 'DEV' or 'TEST' !")
+
+		atk = _getEnv("ATK")
+
+		if atk == "DEV":
+			pAddr = "localhost"
+			wPort = "8080"
+			print("\tDEV mode !")
+		elif atk == "TEST":
+			cgi = "xdh_"
+			print("\tTEST mode!")
+		elif atk:
+			sys.exit("Bad 'ATK' environment variable value : should be 'DEV' or 'TEST' !")
+
+		pAddr = _getEnv("ATK_PADDR", pAddr)
+		pPort = int(_getEnv("ATK_PPORT", str(pPort)))
+		wAddr = _getEnv("ATK_WADDR", wAddr)
+		wPort = _getEnv("ATK_WPORT",wPort)
+
+		if wPort != "":
+			wPort = ":" + wPort
 
 		if this._isTokenEmpty():
-			if "ATK_TOKEN" in os.environ:
-				token = os.environ["ATK_TOKEN"].strip()
+			token = _getEnv("ATK_TOKEN", "")
 
-				if token:
-					_token = "&" + token
+			if token:
+				_token = "&" + token
 		
 		this._socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		this._socket.connect((address,port))
+		this._socket.connect((pAddr,pPort))
 
 		this._writeString(_token)
 
@@ -130,11 +145,13 @@ class DOM_DEMO:
 			if this._isTokenEmpty():
 				sys.exit("Invalid connection information !!!")
 
-			url = "http://" + address + httpPort + "/" + cgi + ".php?_token=" + _token
+			if ( wPort != ":0" ):
+				url = "http://" + wAddr + wPort + "/" + cgi + ".php?_token=" + _token
 
-			print(url)
-			print("Open above URL in a web browser. Enjoy!\n")
-			XDHqSHRD.open(url)
+				print(url)
+				print("Open above URL in a web browser. Enjoy!\n")
+				XDHqSHRD.open(url)
+
 		elif this._getString() != _token:
 				sys.exit("Unmatched token !!!")
 

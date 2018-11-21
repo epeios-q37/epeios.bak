@@ -19,29 +19,47 @@
 
 "use strict"
 
-var address = "atlastk.org";
-var httpPort = "";
+var pAddr = "atlastk.org";
+var pPort = 53800;
+var wAddr = pAddr;
+var wPort = "";
 var cgi = "xdh";
 
+function getEnv(name, value) {
+	let env = process.env[name];
 
-if ( process.env.ATK ) {
-	switch (process.env.ATK) {
-		case 'DEV':
-			address = "localhost";
-			httpPort = ":8080";
-			console.log( "\tDEV mode !")
-			break;
-		case 'TEST':
-			cgi = "xdh_";
-			console.log("\tTEST mode !")
-			break;
-		default:
-			throw "Bad 'ATK' environment variable value : should be 'DEV' or 'TEST' !";
-			break;
-	}
+	if (env)
+		return env.trim();
+	else if (value)
+		return value.trim();
+	else
+		return "";
 }
 
-const port = 53800;
+switch (getEnv("ATK") ) {
+case 'DEV':
+	pAddr = "localhost";
+	wPort = "8080";
+	console.log( "\tDEV mode !")
+	break;
+case 'TEST':
+	cgi = "xdh_";
+	console.log("\tTEST mode !")
+	break;
+case '':
+	break;
+default:
+	throw "Bad 'ATK' environment variable value : should be 'DEV' or 'TEST' !";
+	break;
+}
+
+pAddr = getEnv("ATK_PADDR", pAddr);
+pPort = parseInt(getEnv("ATK_PPORT", pPort.toString()));
+wAddr = getEnv("ATK_WADDR", wAddr);
+wPort = getEnv("ATK_PPORT", wPort);
+
+if (wPort !== "")
+	wPort = ":" + wPort;
 
 const shared = require('./XDHqSHRD.js');
 const net = require('net');
@@ -172,20 +190,13 @@ function getResponse(query, type) {
 }
 
 function getToken() {
-	let token = process.env.ATK_TOKEN;
-
-	if (token)
-		token = token.trim();
-	else
-		token = "";
-
-	return token;
+	return getEnv("ATK_TOKEN");
 }
 
 var token = getToken();
 
-if (process.env.ATK_TOKEN)
-	token = "&" + process.env.ATK_TOKEN;
+if (token !== "" )
+	token = "&" + token;
 
 function standBy(socket) {
 	socket.write(Buffer.from("StandBy_1\x00"));
@@ -198,7 +209,7 @@ function isTokenEmpty() {
 function pseudoServer(createCallback, newSessionAction, callbacks, head) {
 	var client = new net.Socket();
 
-	client.connect(port, address, () => {
+	client.connect(pPort, pAddr, () => {
 		let relaunch = true;
 
 		client.write(handleString(token));
@@ -219,12 +230,14 @@ function pseudoServer(createCallback, newSessionAction, callbacks, head) {
 					if ( isTokenEmpty() )
 						throw "Bad connection information !!!";
 
-					let completeURL = "http://" + address + httpPort + "/" + cgi + ".php?_token=" + token;
+					if (wPort != ":0") {
+						let completeURL = "http://" + wAddr + wPort + "/" + cgi + ".php?_token=" + token;
 
-					console.log(completeURL);
-					console.log("Open above URL in a web browser. Enjoy!");
+						console.log(completeURL);
+						console.log("Open above URL in a web browser. Enjoy!");
 
-					open(completeURL);
+						open(completeURL);
+					}
 				}
 
 				client._xdhDOM = createCallback(client);
