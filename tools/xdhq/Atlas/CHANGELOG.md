@@ -5,6 +5,9 @@
 
 ---
 
+## 2018-11-22
+- both application address and port and proxy address and port can be set with environment variables,
+
 ## 2018-11-20
 
 - switching to protocol version 1,

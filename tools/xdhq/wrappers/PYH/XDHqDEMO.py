@@ -100,10 +100,10 @@ class DOM_DEMO:
 
 	def __init__(this):
 		global _protocolLabel, _protocolVersion, _newSessionAction,_headContent, _token
-		wAddr = "atlastk.org"
-		wPort = ""
-		pAddr = wAddr
+		pAddr = "atlastk.org"
 		pPort = 53800
+		wAddr = ""
+		wPort = ""
 		cgi = "xdh"
 
 		atk = _getEnv("ATK")
@@ -122,6 +122,9 @@ class DOM_DEMO:
 		pPort = int(_getEnv("ATK_PPORT", str(pPort)))
 		wAddr = _getEnv("ATK_WADDR", wAddr)
 		wPort = _getEnv("ATK_WPORT",wPort)
+
+		if wAddr == "":
+			wAddr = pAddr
 
 		if wPort != "":
 			wPort = ":" + wPort

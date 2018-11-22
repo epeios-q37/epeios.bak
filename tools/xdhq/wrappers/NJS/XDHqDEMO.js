@@ -21,7 +21,7 @@
 
 var pAddr = "atlastk.org";
 var pPort = 53800;
-var wAddr = pAddr;
+var wAddr = "";
 var wPort = "";
 var cgi = "xdh";
 
@@ -58,7 +58,10 @@ pPort = parseInt(getEnv("ATK_PPORT", pPort.toString()));
 wAddr = getEnv("ATK_WADDR", wAddr);
 wPort = getEnv("ATK_PPORT", wPort);
 
-if (wPort !== "")
+if (wAddr == "")
+	wAddr = pAddr;
+
+if (wPort != "")
 	wPort = ":" + wPort;
 
 const shared = require('./XDHqSHRD.js');

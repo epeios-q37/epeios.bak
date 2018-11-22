@@ -27,7 +27,7 @@ import java.awt.Desktop;
 public class DOM_DEMO extends DOM_SHRD {
 	static private String pAddr = "atlastk.org";
 	static private int pPort = 53800;
-	static private String wAddr = pAddr;
+	static private String wAddr = "";
 	static private String wPort = "";
 	static private String cgi = "xdh";
 	static private String token = "";
@@ -78,6 +78,9 @@ public class DOM_DEMO extends DOM_SHRD {
 		pPort = Integer.parseInt(getEnv_( "ATK_PPORT", String.valueOf(pPort)));
 		wAddr = getEnv_( "ATK_WADDR", wAddr );
 		wPort = getEnv_( "ATK_WPORT", wPort );
+
+		if ( "".equals(wAddr))
+			wAddr = pAddr;
 
 		if (!"".equals(wPort))
 			wPort = ":" + wPort;

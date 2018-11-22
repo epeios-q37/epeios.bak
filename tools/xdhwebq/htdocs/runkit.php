@@ -79,7 +79,7 @@ $page = '<!DOCTYPE html>
 		<script>
 function onLoad( notebook )
 {
-    if ( confirm("The \'' . $app . '\' application will now be launched on RunKit and be automatically opened in your web browser.\n\nThe application will become unresponsive after a few tens of seconds due to RunKit timeout!\nYou can then simply go back to the RunKit page.") )
+    if ( confirm("The \'' . $app . '\' application will now be launched on RunKit and be automatically opened in your web browser.\n\nNOTA: the application will stop working after a few tens of seconds due to RunKit timeout.\nYou can then simply go back to the RunKit page.") )
 					notebook.evaluate();
 				else
 				 window.scrollTo(0,0);
