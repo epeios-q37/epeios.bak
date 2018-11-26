@@ -34,7 +34,6 @@ def writeString(socket, string):
 def writeStringNUL(socket, string):
 	socket.send(string + "\0")
 
-
 def _getByte(socket):
 	return ord(socket.recv(1))
 

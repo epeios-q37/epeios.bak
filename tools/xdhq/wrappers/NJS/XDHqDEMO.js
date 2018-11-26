@@ -304,7 +304,7 @@ function pseudoServer(createCallback, newSessionAction, callbacks, head) {
 		});
 	});
 	client.on('error', (err) => {
-		throw "Unable to connect to '" + address + ":" + port + "' !!!";
+		throw "Unable to connect to '" + pAddr + ":" + pPort + "' !!!";
 	}); 
 }
 
