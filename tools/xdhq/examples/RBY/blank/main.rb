@@ -31,10 +31,6 @@ head =
 HEREDOC
 
 
-Atlas.launch("Connect",head,"")
-
-dom = Atlas::DOM.new()
-
 $html =
 <<~HEREDOC
 <div class="vcenter-out">
@@ -59,24 +55,10 @@ def acConnect( dom, id)
 	dom.focus("input")
 end
 
+callbacks = {
+	"Connect" => method(:acConnect),
+	"Typing" => -> (dom, id) { dom.setContent("name", dom.getContent(id))},
+	"Clear" => -> (dom, id) { if dom.confirm?("Are you sure?") then dom.setContents({"input" => "", "name" => "" }) end }
+ }
 
-while true
-	action, id = dom.getAction()
-
-	case action
-	when "Connect"
-		acConnect(dom, id)
-	when "Typing"
-		dom.setContent("name", dom.getContent(id))
-	when "Clear"
-		if dom.confirm?("Are you sure?")
-			dom.setContents({"input" => "", "name" => "" })
-		end
-	else
-		abort("Unknown action: #{action}")
-	end
-end
-
-
-
-
+Atlas.launch("Connect",callbacks,head,"")

@@ -23,7 +23,21 @@ module Atlas
 	class DOM < XDHq::DOM
 	end
 
-	def Atlas::launch(newSessionAction,headContent,dir)
+	def Atlas::thread(dom,callbacks)
+
+		while true
+			action, id = dom.getAction()
+
+			callbacks[action].call(dom,id)
+		end
+	end
+
+
+	def Atlas::launch(newSessionAction,callbacks,headContent,dir)
 		XDHq.launch(newSessionAction,headContent,dir)
+
+		while true
+			Thread.new(Atlas::DOM.new(),callbacks) do |dom,callbacks| thread(dom, callbacks) end
+		end
 	end
 end

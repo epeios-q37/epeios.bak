@@ -33,8 +33,6 @@ module XDHq
 			values.push(value)
 		end
 
-		pp(keysAndValues, keys, values)
-
 		return keys, values
 	end
 
@@ -90,7 +88,6 @@ module XDHq
 
 		def setContents(idsAndContents)
 			ids, contents = split(idsAndContents)
-			pp(idsAndContents, ids, contents)
 			call("SetContents_1", $VOID, 0, 2, ids, contents)
 		end
 
