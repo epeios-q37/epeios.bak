@@ -43,7 +43,7 @@ def getSize(socket):
 
 	while byte & 0x80:
 		byte = _getByte(socket)
-		size = (size << 7) + byte & 0x7f
+		size = (size << 7) + (byte & 0x7f)
 
 	return size
 

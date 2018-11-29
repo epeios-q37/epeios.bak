@@ -17,213 +17,230 @@
 	along with XDHq If not, see <http://www.gnu.org/licenses/>.
 =end
 
-require 'socket'
+module XDHqDEMO
+    require 'XDHqSHRD'
 
-$RT_VOID = 0
-$RT_STRING = 1
-$RT_STRINGS = 2
+    require 'socket'
+    require 'pp'
 
-$protocolLabel = "712a58bf-2c9a-47b2-ba5e-d359a99966de"
-$protocolVersion = "1"
-
-$pAddr = "atlastk.org"
-$pPort = 53800
-$wAddr = ""
-$wPort = ""
-$cgi = "xdh"
-
-$newSessionAction = ""
-$headContent = ""
-$token = ""
-
-def tokenEmpty?()
-    return !$token.empty?() || $token[0] == "&"
-end
-
-def getEnv(name, value = "")
-    if ENV.include?(name)
-        return ENV[name].strip
-    else
-        return value.strip
-    end
-end
-
-def launch(newSessionAction,headContent)
-    $newSessionAction = newSessionAction
-    $headContent = headContent
-end
-    
-def open(document)
-    opener = case RbConfig::CONFIG['host_os']
-    when /mswin|mingw/
-       "start"
-    when /cygwin/
-        "cygstart"
-    when /darwin/
-        "open"
-    else
-        "xdg-open"
+    def XDHq::l
+        caller_infos = caller.first.split(":")
+        puts "#{caller_infos[0]} - #{caller_infos[1]}"  
     end
 
-    system opener + " #{document}"
-end
+    $protocolLabel = "712a58bf-2c9a-47b2-ba5e-d359a99966de"
+    $protocolVersion = "1"
 
-class DOM_DEMO
-    def writeSize(size)
-        result = size & 0x7F
-        size >>= 7
+    $pAddr = "atlastk.org"
+    $pPort = 53800
+    $wAddr = ""
+    $wPort = ""
+    $cgi = "xdh"
 
-        while size != 0
-            result = ((size & 0x7f) | 0x80) + result
+    $newSessionAction = ""
+    $headContent = ""
+    $token = ""
+
+    def XDHq::getEnv(name, value = "")
+        env = ENV[name]
+
+        if env
+            return env.strip()
+        else
+            return value.strip()
+        end
+    end
+
+    def XDHqDEMO::launch(newSessionAction,headContent)
+        $newSessionAction = newSessionAction
+        $headContent = headContent
+    end
+        
+    class DOM
+        def getEnv(name, value = "" )
+            return XDHq.getEnv(name, value)
+        end
+        def tokenEmpty?()
+            return $token.empty?() || $token[0] == "&"
+        end
+        def writeSize(size)
+            result = (size & 0x7F).chr()
             size >>= 7
+
+            while size != 0
+                result = ((size & 0x7f) | 0x80).chr() + result
+                size >>= 7
+            end
+
+            result = result.to_s()
+
+            @socket.write(result)
         end
-
-        @socket.write(result)
-    end
-    def writeString(string)
-        writeSize(string.length())
-        @socket.weite(string)
-    end
-    def writeStringNUL(string)
-        socket.send "#{string}\0"
-    end
-    def getByte()
-        return @socket.recv 1
-    end
-    def getString
-        size = getSize()
-
-        if size
-            return @socket.recv(size)
-        else
-            return ""
+        def writeString(string)
+            writeSize(string.length())
+            @socket.write(string)
         end
-    end
-    def getStrings()
-        amount = getSize()
-        strings = []
-
-        while amount
-            strings.push(getString())
-            amount += 1
+        def writeStrings(strings)
+            writeSize(strings.length())
+    
+            for string in strings
+                writeString(string)
+            end
         end
-
-        return strings
-    end
-    def initialize
-        @firstLaunch = true
-        token = ""
-
-        case getEnv("ATK")
-        when ""
-        when "DEV"
-            $pADDR = "localhost"
-            $wPort = "8080"
-            print("\tDEV mode !")
-        when "TEST"
-            $cgi = "xdh_"
-        else
-            abort("Bad 'ATK' environment variable value : should be 'DEV' or 'TEST' !")
+        def writeStringNUL(string)
+            @socket.write("#{string}\0")
         end
-
-		$pAddr = getEnv("ATK_PADDR", $pAddr)
-		$pPort = getEnv("ATK_PPORT", $pPort.to_s())
-		$wAddr = getEnv("ATK_WADDR", $wAddr)
-		$wPort = getEnv("ATK_WPORT",$wPort)
-
-		if $wAddr.empty?
-            $wAddr = $pAddr
+        def getByte()
+            return @socket.recv(1).unpack('C')[0]
         end
+        def getSize()
+            byte = getByte()
+            size = byte & 0x7f
 
-		if !$wPort.empty?
-            $wPort = ":" + $wPort
+            while (byte & 0x80) != 0    # For Ruby, 0 == true
+                byte = getByte()
+                size = (size << 7) + (byte & 0x7f)
+            end
+
+            return size
         end
+        def getString
+            size = getSize()
 
-        if tokenEmpty?()
-            token = getEnv("ATK_TOKEN")
+            if size != 0    # For Ruby, 0 == true
+                return @socket.recv(size)
+            else
+                return ""
+            end
         end
+        def getStrings()
+            amount = getSize()
+            strings = []
 
-        if !token.empty?
-            $token = "&" + token
+            while amount != 0    # For Ruby, 0 == true
+                strings.push(getString())
+                amount -= 1
+            end
+
+            return strings
         end
+        def initialize()
+            @firstLaunch = true
+            token = ""
 
-        @socket = TCPSocket.new $pAddr, $pPort
+            getEnv("ATK")
 
-        writeString($token)
+            case getEnv("ATK")
+            when ""
+            when "DEV"
+                $pAddr = "localhost"
+                $wPort = "8080"
+                puts("\tDEV mode !")
+            when "TEST"
+                $cgi = "xdh_"
+            else
+                abort("Bad 'ATK' environment variable value : should be 'DEV' or 'TEST' !")
+            end
 
-        if tokenEmpty?()
-            writeString(headContent)
+            $pAddr = getEnv("ATK_PADDR", $pAddr)
+            $pPort = getEnv("ATK_PPORT", $pPort.to_s())
+            $wAddr = getEnv("ATK_WADDR", $wAddr)
+            $wPort = getEnv("ATK_WPORT",$wPort)
 
-            $token = getString()
+            if $wAddr.empty?
+                $wAddr = $pAddr
+            end
+
+            if !$wPort.empty?
+                $wPort = ":" + $wPort
+            end
 
             if tokenEmpty?()
-                abort("Invalid connection information !!!")
+                token = getEnv("ATK_TOKEN")
             end
 
-            if $wPort != ":0"
-                url = "http://#{$wAddr}#{$wPort}/#{$cgi}.php?_token=#{$token}"
-
-                print(url)
-                print("Open above URL in a web browser. Enjoy!\n")
-                open(url)
+            if !token.empty?
+                $token = "&" + token
             end
-        elsif getString() != $token
-            abort("Unmatched token !!!")
+
+            @socket = TCPSocket.new($pAddr, $pPort)
+
+            writeString($token)
+
+            if tokenEmpty?()
+                writeString($headContent)
+
+                $token = getString()
+
+                if tokenEmpty?()
+                    abort("Invalid connection information !!!")
+                end
+
+                if $wPort != ":0"
+                    url = "http://#{$wAddr}#{$wPort}/#{$cgi}.php?_token=#{$token}"
+
+                    puts(url)
+                    puts("Open above URL in a web browser. Enjoy!\n")
+                    XDHqSHRD::open(url)
+                end
+            elsif getString() != $token
+                abort("Unmatched token !!!")
+            end
+
+            getString() # Language.
+            writeString($protocolLabel)
+            writeString($protocolVersion)
+            writeString("RBY")
         end
 
-        getString() # Language.
-        writeString($protocolLabel)
-        writeString($protocolVersion)
-        writeString("RBY")
-    end
+        def getAction()
+            if @firstLaunch
+                @firstLaunch = false
+            else
+                writeStringNUL("StandBy_1")
+            end
 
-    def getAction()
-        if @firstLaunch
-            @firstLaunch = false
-        else
-            writeStringNUL("StandBy_1")
+            id = getString()
+            action = getString()
+
+            if action.empty?()
+                action = $newSessionAction
+            end
+
+            return action,id
         end
 
-        id = getString()
-        action = getString()
+        def call(command, type, *args)
+            i = 0
+            writeStringNUL(command)
 
-        if action.empty?()
-            action = $newSessionAction
-        end
-
-        return[action,id]
-    end
-
-    def call(command, type, *args)
-        i = 0
-        writeStringNUL(command)
-
-        amount = args[i]
-
-        while amount
-            writeString(args[i])
+            amount = args[i]
             i += 1
-            amount -= 1
-        end
 
-        amount = args[i]
+            while amount != 0    # For Ruby, 0 == true
+                writeString(args[i])
+                i += 1
+                amount -= 1
+            end
 
-        while amount
-            writeString(args[i])
+            amount = args[i]
             i += 1
-            amount -= 1
-        end
 
-        case type
-        when RT_VOID
-        when RT_STRING
-            return getString()
-        when RT_STRINGS
-            return getStrings()
-        else
-            abort("Unknown return type !!!")
+            while amount != 0    # For Ruby, 0 == true
+                writeStrings(args[i])
+                i += 1
+                amount -= 1
+            end
+
+            case type
+            when XDHqSHRD::VOID
+            when XDHqSHRD::STRING
+                return getString()
+            when XDHqSHRD::STRINGS
+                return getStrings()
+            else
+                abort("Unknown return type !!!")
+            end
         end
     end
 end
-
-DOM_DEMO.new()

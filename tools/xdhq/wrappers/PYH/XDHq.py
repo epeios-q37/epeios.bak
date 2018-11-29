@@ -53,8 +53,9 @@ def _split(keysAndValues):
 def _unsplit(keys,values):
 	i = 0
 	keysAndValues = {}
+	length = len(keys)
 
-	while i < len(keys):
+	while i < length:
 		keysAndValues[keys[i]] = values[i]
 		i += 1
 
