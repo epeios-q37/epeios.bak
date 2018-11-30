@@ -23,18 +23,21 @@ module XDHqSHRD
 	XDHqSHRD::STRINGS = 2
 
 	def XDHqSHRD::open(document)
-    opener = case RbConfig::CONFIG['host_os']
-    when /mswin|mingw/
-       "start"
-    when /cygwin/
-        "cygstart"
-    when /darwin/
-        "open"
-    else
-        "xdg-open"
-    end
+		opener = case RbConfig::CONFIG['host_os']
+		when /mswin|mingw/
+		"start"
+		when /cygwin/
+			"cygstart"
+		when /darwin/
+			"open"
+		else
+			"xdg-open"
+		end
 
-    system opener + " #{document}"
+	    system opener + " #{document}"
 	end
 
+	def XDHqSHRD::isDev?()
+		return ENV.include?("EPEIOS_SRC")
+	end
 end

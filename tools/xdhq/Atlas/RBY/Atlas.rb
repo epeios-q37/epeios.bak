@@ -17,27 +17,57 @@
 	along with XDHq If not, see <http://www.gnu.org/licenses/>.
 =end
 
+$threads = []
+
 module Atlas
 	require 'XDHq'
+	require 'XDHqXML'
 
-	class DOM < XDHq::DOM
+	def Atlas::l()
+		caller_infos = caller.first.split(":")
+		puts "#{caller_infos[0]}:#{caller_infos[1]}"  
 	end
 
-	def Atlas::thread(dom,callbacks)
+	def Atlas::createXML(rootTag)
+		return XDHqXML::XML.new(rootTag)
+	end
 
+	def Atlas::thread(userObject,dom,callbacks)
 		while true
 			action, id = dom.getAction()
 
-			callbacks[action].call(dom,id)
+			callbacks[action].call(userObject,dom,id)
 		end
 	end
 
-
-	def Atlas::launch(newSessionAction,callbacks,headContent,dir)
+	def Atlas::launch(newSessionAction,callbacks,new,headContent="",dir="")
 		XDHq.launch(newSessionAction,headContent,dir)
 
 		while true
-			Thread.new(Atlas::DOM.new(),callbacks) do |dom,callbacks| thread(dom, callbacks) end
+			thread = Thread.new(new.call(),XDHq::DOM.new(),callbacks) do |userObject,dom,callbacks| thread(userObject, dom, callbacks) end
+			$threads << thread
 		end
 	end
+
+	def Atlas::readAsset(path, dir="")
+		return XDHq::readAsset(path, dir)
+	end
 end
+
+=begin
+trap("INT") {
+		pp($threads)
+		pp(Thread.list)
+  puts "trapping"
+		XDHq::l
+  $Thread.list.each{|t|
+    puts "killing"
+    Thread.kill t
+		}
+		XDHq::l
+		exit 130
+		XDHq::l
+		abort( "Yo !")
+		XDHq::l
+}
+=end

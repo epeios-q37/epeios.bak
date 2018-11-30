@@ -19,6 +19,9 @@
 
 module XDHq
 	require 'XDHqDEMO'
+	require 'URI'
+
+	$dir = ""
 
 	$VOID=XDHqSHRD::VOID
 	$STRING=XDHqSHRD::STRING
@@ -49,20 +52,36 @@ module XDHq
 		return keysAndValues
 	end
 
+	def XDHq::getAssetPath(dir)
+		if XDHqSHRD::isDev?()
+			return File.join("/cygdrive/h/hg/epeios/tools/xdhq/examples/common/", dir)
+		else
+			return Dir.pwd
+		end
+	end
+
+	def XDHq::getAssetFilename(path, dir)
+		return File.join(XDHq::getAssetPath(dir),path)
+	end
+
+	def XDHq::readAsset(path, dir = "")
+		return File.read(XDHq::getAssetFilename(path,dir))
+	end
+
 	class DOM
 		def initialize()
 			@dom = XDHqDEMO::DOM.new()
 		end
 
-		def unsplit(*args)
+		private def unsplit(*args)
 			return XDHq.unsplit(*args)
 		end
 
-		def split(*args)
+		private def split(*args)
 			return XDHq.split(*args)
 		end
 
-		def call(command, type, *args)
+		private def call(command, type, *args)
 			return @dom.call(command,type,*args)
 		end
 
@@ -70,14 +89,32 @@ module XDHq
 			return @dom.getAction()
 		end
 
-		def setLayout(id, xml, xslFilename = "")
-			call("SetLayout_1", $VOID, 3, id, xml, xslFilename, 0)
+		def execute(script)
+			return call("Execute_1" ,$STRING, 1, script, 0)
+		end
+	
+		def alert(message)
+			call( "Alert_1", $VOID, 1, message, 0 )
 		end
 
 		def confirm?(message)
 			return call("Confirm_1", $STRING, 1, message, 0) == "true"
 		end
 
+		def setLayout(id, xml, xslFilename = "")
+			call("SetLayout_1", $VOID, 3, id, xml, xslFilename, 0)
+		end
+
+		def setLayoutXSL(id, xml, xsl)
+			xslURL = xsl
+
+			if true	# Testing if 'PROD' or 'DEMO' mode when available.
+				xslURL = "data:text/xml;charset=utf-8," + URI::encode(XDHq::readAsset( xsl, $dir ))
+			end
+
+			setLayout( id, if xml.is_a?( String ) then xml else xml.toString() end, xslURL )
+		end
+	
 		def getContents(ids)
 			return unsplit(ids, call("GetContents_1", $STRINGS, 0, 1, ids))
 		end
@@ -95,12 +132,95 @@ module XDHq
 			setContents({id => content})
 		end
 
+		def setTimeout(delay,action )
+			call( "SetTimeout_1", $VOID, 2, delay.to_s(), action, 0 )
+		end
+	
+		def createElement(name, id = "" )
+			return call( "CreateElement_1", $STRING, 2, name, id, 0 )
+		end
+	
+		def insertChild(child, id)
+			call( "InsertChild_1", $VOID, 2, child, id, 0 )
+		end
+	
+		def dressWidgets(id)
+			return call( "DressWidgets_1", $VOID, 1, id, 0 )
+		end
+	
+		private def handleClasses(command, idsAndClasses)
+			ids, classes = split(idsAndClasses)
+	
+			call(command, $VOID, 0, 2, ids, classes)
+		end
+	
+		def addClasses(idsAndClasses)
+			handleClasses("AddClasses_1", idsAndClasses)
+		end
+	
+		def removeClasses(idsAndClasses)
+			handleClasses("RemoveClasses_1", idsAndClasses)
+		end
+	
+		def toggleClasses(idsAndClasses)
+			handleClasses("ToggleClasses_1", idsAndClasses)
+		end
+	
+		def addClass(id, clas)
+			addClasses({id => clas})
+		end
+	
+		def removeClass(id, clas )
+			removeClasses({id => clas})
+		end
+	
+		def toggleClass(id, clas)
+			this.toggleClasses({id => clas})
+		end
+	
+		def enableElements(ids)
+			call("EnableElements_1", $VOID, 0, 1, ids)
+		end
+	
+		def enableElement(id)
+			enableElements([id])
+		end
+	
+		def disableElements(ids)
+			call("DisableElements_1", $VOID, 0, 1, ids)
+		end
+	
+		def disableElement(id)
+			disableElements([id])
+		end
+	
+		def setAttribute(id, name, value )
+			call("SetAttribute_1", $VOID, 2, id, value, 0 )
+		end
+	
+		def getAttribute(id, name)
+			return call("GetAttribute_1", $STRING, 2, id, name, 0 )
+		end
+	
+		def removeAttribute(id, name )
+			call("RemoveAttribute_1", $VOID, 1, id, 0 )
+		end
+	
+		def setProperty(id, name, value )
+			call("SetProperty_1", $VOID, 3, id, name, value, 0 )
+		end
+	
+		def getProperty(id, name )
+			return call("GetProperty_1", _STRING, 2, id, name, 0 )
+		end
+
 		def focus(id)
 			call("Focus_1", $VOID, 1, id, 0)
 		end
 	end
 
 	def XDHq::launch(newSessionAction, headContent, dir)
+		$dir = dir
 		XDHqDEMO.launch(newSessionAction, headContent)
 	end
 

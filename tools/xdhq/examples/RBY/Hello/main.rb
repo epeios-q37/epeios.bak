@@ -17,40 +17,21 @@
 	along with XDHq If not, see <http://www.gnu.org/licenses/>.
 =end
 
-module XDHqXML
-	class XML
-		private def write(value)
-			@xml += value.to_s() + "\0"
-		end
+require 'Atlas'
 
-		def initialize(rootTag)
-			@xml = ""
-			write("dummy")
-			write(rootTag)
-		end
-
-		def pushTag(tag)
-			@xml += '>'
-			write(tag)
-		end
-
-		def popTag()
-			@xml += '<'
-		end
-
-		def setAttribute(name,value)
-			@xml += 'A'
-			write(name)
-			write(value)
-		end
-
-		def setValue(value)
-			@xml += "V"
-			write(value)
-		end
-
-		def toString()
-			return @xml
-		end
-	end
+def readAsset(path)
+	return Atlas::readAsset(path, "Hello")
 end
+
+def acConnect(userObject, dom, id)
+	dom.setLayout("", readAsset("Main.html"))
+	dom.focus("input")
+end
+
+callbacks = {
+	"Connect" => method(:acConnect),
+	"Typing" => -> (userObject, dom, id) { dom.setContent("name", dom.getContent(id))},
+	"Clear" => -> (userObject, dom, id) { if dom.confirm?("Are you sure?") then dom.setContents({"input" => "", "name" => "" }) end }
+}
+
+Atlas.launch("Connect",callbacks, -> () {}, readAsset("Head.html"))
