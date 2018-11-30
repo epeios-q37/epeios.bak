@@ -102,6 +102,8 @@ module XDHq
 		end
 
 		def setLayout(id, xml, xslFilename = "")
+			pp(id,xml,xslFilename)
+
 			call("SetLayout_1", $VOID, 3, id, xml, xslFilename, 0)
 		end
 
@@ -111,7 +113,6 @@ module XDHq
 			if true	# Testing if 'PROD' or 'DEMO' mode when available.
 				xslURL = "data:text/xml;charset=utf-8," + URI::encode(XDHq::readAsset( xsl, $dir ))
 			end
-
 			setLayout( id, if xml.is_a?( String ) then xml else xml.toString() end, xslURL )
 		end
 	
