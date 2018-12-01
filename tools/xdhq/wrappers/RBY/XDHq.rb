@@ -65,7 +65,7 @@ module XDHq
 	end
 
 	def XDHq::readAsset(path, dir = "")
-		return File.read(XDHq::getAssetFilename(path,dir))
+		return File.read(XDHq::getAssetFilename(path,dir), :encoding => 'UTF-8')
 	end
 
 	class DOM
@@ -102,7 +102,7 @@ module XDHq
 		end
 
 		def setLayout(id, xml, xslFilename = "")
-			pp(id,xml,xslFilename)
+			pp(xml.encoding)
 
 			call("SetLayout_1", $VOID, 3, id, xml, xslFilename, 0)
 		end

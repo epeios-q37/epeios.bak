@@ -51,8 +51,8 @@ class Notes
 			},
 			{
 				'title' => 'Improve design',
-				'description' => "Tastes and colors... (aka CSS aren't my cup of tea...)",
-#				'description' => "Tastes and colors... (aka «CSS aren't my cup of tea...»)",
+#				'description' => "Tastes and colors... (aka CSS aren't my cup of tea...)",
+				'description' => "Tastes and colors... (aka «CSS aren't my cup of tea...»)",
 			},
 			{
 				'title' => 'Fixing bugs',
