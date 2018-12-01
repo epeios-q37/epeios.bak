@@ -263,7 +263,7 @@ namespace xml {
 			TagValueInProgress_ = false;
 
 			if ( Outfit_ == oIndent )
-				Indent_( Tags_.Amount() );
+				Indent_( Tags_.Amount() - 1 );
 
 			F_() << '<' << Name;
 

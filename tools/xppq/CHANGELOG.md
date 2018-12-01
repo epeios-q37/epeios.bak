@@ -1,5 +1,9 @@
 # *XPPq* changelog
 
+2018-12-01:
+- space-like characters (`\r`, `\n`, `\t`...) are now allowed in attribute values,
+- fixing bad indentation,
+
 2018-02-01:
 - *xppqjre*:
   - adaptation to changes in underlying libraries,

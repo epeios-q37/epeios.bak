@@ -440,7 +440,6 @@ static unsigned char HandleEntity_( _flow___ &Flow )
 static status__ GetValue_(
 	_flow___ &Flow,
 	bso::char__ Delimiter,
-	bso::bool__ ErrorIfSpaceInValue,
 	entities_handling__ EntitiesHandling,
 	str::string_ &Value,
 	bso::bool__ &OnlySpaces )
@@ -456,8 +455,6 @@ static status__ GetValue_(
 
 		if ( !isspace( C = Flow.Get( UTF ) ) )
 			OnlySpaces = false;
-		else if ( !OnlySpaces && ErrorIfSpaceInValue && ( C != ' ' ) )
-			return sUnexpectedCharacter;
 
 		if ( ( C == '&' ) && ( EntitiesHandling == ehReplace ) ) {
 			C = HandleEntity_( Flow );
@@ -486,7 +483,7 @@ inline status__ GetAttributeValue_(
 {	
 	bso::bool__ Dummy;
 
-	return GetValue_( Flow, Delimiter, true, EntitiesHandling, Value, Dummy );
+	return GetValue_( Flow, Delimiter, EntitiesHandling, Value, Dummy );
 }
 
 #define HANDLE( F )\
@@ -542,7 +539,7 @@ inline static status__ GetTagValue_(
 	entities_handling__ EntitiesHandling,
 	bso::bool__ &OnlySpaces )
 {
-	return GetValue_( Flow, '<', false, EntitiesHandling, Value, OnlySpaces );
+	return GetValue_( Flow, '<', EntitiesHandling, Value, OnlySpaces );
 }
 
 #define XMLNS	"xmlns"
@@ -967,7 +964,6 @@ qRB
 					HANDLE( GetTagValue_( _Flow, _Value, _EntitiesHandling, OnlySpaces ) );
 
 					if ( !OnlySpaces ) {
-
 						_TagName.Init();
 
 						if ( _Tags.IsEmpty() )

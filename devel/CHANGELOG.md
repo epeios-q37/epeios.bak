@@ -6,6 +6,12 @@
 - [stdz]: modification to comply with current standards;
 - [trvl]: trivial modifications;
 
+## 2018-12-01
+
+- XML:
+  - space-like characters (`\r`, `\n`, `\t`...) are now allowed in attribute values,
+  - fixing bad indentation,
+
 ## 2018-11-20
 
 - MTK:

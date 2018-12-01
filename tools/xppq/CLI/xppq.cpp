@@ -81,7 +81,7 @@ namespace {
 			OFlow.Put( (const fdr::byte__ *)BOMContent.Data, BOMContent.Size );
 		}
 
-		if ( ( Status = xpp::Process( XFlow, xpp::criterions___( Directory == NULL ? "" : Directory, str::string(),
+		if ( ( Status = xpp::Process( XFlow, xpp::criterions___( Directory == NULL ? "" : Directory, 0, str::string(),
 																 str::string( Namespace == NULL ? DefaultNamespace : Namespace ), Preserve ),
 									  Outfit, OFlow,  Context ) ) != xpp::sOK )	{
 			Meaning.Init();

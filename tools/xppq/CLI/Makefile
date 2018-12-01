@@ -1,19 +1,19 @@
-#	Copyright (C) 2007-2016 Claude SIMON (http://q37.info/contact/).
+#	Copyright (C) 2007 Claude SIMON (http://q37.info/contact/).
 #
-#	This file is part of xppq.
+#	This file is part of XPPq.
 #
-#	xppq is free software: you can redistribute it and/or
+#	XPPq is free software: you can redistribute it and/or
 #	modify it under the terms of the GNU Affero General Public License
 #	published by the Free Software Foundation, either version 3 of the
 #	License, or (at your option) any later version.
 #
-#	xppq is distributed in the hope that it will be useful,
+#	XPPq is distributed in the hope that it will be useful,
 #	but WITHOUT ANY WARRANTY; without even the implied warranty of
 #	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 #	Affero General Public License for more details.
 #
 #	You should have received a copy of the GNU Affero General Public License
-#	along with xppq. If not, see <http://www.gnu.org/licenses/>.
+#	along with XPPq. If not, see <http://www.gnu.org/licenses/>.
 
 name = xppq
 
@@ -25,21 +25,21 @@ copt += -DE_DEBUG
 # For using <setjmp.h> instead of C++ exceptions.
 #copt += -DERR_JMPUSE
 	
-mods += ags aem bch bitbch bso 
-mods += cio cpe crptgr cslio crt 
-mods += ctn dir dte dtfbsc dtfptb 
-mods += epsmsc err fdr flf flsq 
-mods += flw flx ias idsq iof 
-mods += iop lck lst lstbch lstcrt 
+mods += ags aem bch bitbch bomhdl 
+mods += bso cdgb64 cio cpe crptgr 
+mods += cslio crt ctn dir dte 
+mods += dtfbsc dtfptb epsmsc err fdr 
+mods += fil flf flsq flw flx 
+mods += fnm ias idsq iof iop 
+mods += lcl lck lst lstbch lstcrt 
 mods += lstctn mns mtk mtx ntvstr 
-mods += que sdr stkbse stkbch stkctn 
-mods += str strng tagsbs tol txf 
-mods += tys uys utf xtf llio 
-mods += tht thtsub bomhdl cdgb64 dlbrry 
-mods += fil fnm lcl plgn plgncore 
-mods += rgstry stsfsm xml xpp 
-mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
-mods += scltool 
+mods += que rgstry sdr stkbse stkbch 
+mods += stkcrt stkctn str strng stsfsm 
+mods += tagsbs tht thtsub tol txf 
+mods += tys uys utf xml xpp 
+mods += xtf llio dlbrry plgn plgncore 
+mods += sclargmnt scli sclmisc sclerror scllocale 
+mods += sclrgstry scltool 
 mods += i18n registry 
 
 pmods += pllio 
@@ -144,6 +144,17 @@ endif
 
 ##########################
 		
+
+####################################
+# For Android (Termux) environment #
+####################################
+
+ifeq ("$(os)","$(Android)")
+
+endif
+
+#############################
+	
 ###################################
 ###################################
 ##### DON'T MODIFY BELOW !!! ######
@@ -333,15 +344,41 @@ endif
 
 ##########################
 		
-all: $(binary)
 
+####################################
+# For Android (Termux) environment #
+####################################
+
+ifeq ("$(os)","$(Android)")
+ 
+	co += -std=gnu++11 -DUNICODE -D_FILE_OFFSET_BITS=64
+	
+	mods += $(pmods)
+
+	libs += -lpthread -ldl -lrt
+	
+	ifeq ("$(target)","$(IA_32)")
+		co += -m32
+		lo += -m32
+	else # 'ifeq' on other line due to GNU 3.80 (Maemo on N900).
+		ifeq ("$(target)","$(AMD64)")
+			co += -m64
+			lo += -m64
+		endif
+	endif
+	binary=$(name)
+endif
+
+#############################
+		
+all: $(binary)
 	rm -rf *.o
 ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20170716"\"
-copt += -DCOPYRIGHT_YEARS=\""2007-2016"\"
+copt += -DVERSION=\""20181201"\"
+copt += -DCOPYRIGHT_YEARS=\""2007"\"
 copt += -DIDENTIFIER=\""4e0195ad-2b3d-4fc2-8b1f-73a59bd765fe"\"
 
 ifndef EPEIOS_SRC
