@@ -174,7 +174,7 @@ module XDHq
 		end
 	
 		def toggleClass(id, clas)
-			this.toggleClasses({id => clas})
+			toggleClasses({id => clas})
 		end
 	
 		def enableElements(ids)
