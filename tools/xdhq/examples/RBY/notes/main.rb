@@ -51,7 +51,6 @@ class Notes
 			},
 			{
 				'title' => 'Improve design',
-#				'description' => "Tastes and colors... (aka CSS aren't my cup of tea...)",
 				'description' => "Tastes and colors... (aka «CSS aren't my cup of tea...»)",
 			},
 			{
@@ -65,16 +64,15 @@ class Notes
 		]
 	end
 
-	def handleDescriptions(dom, hide)
-		@hideDescription = hide
-		if hide
+	private def handleDescriptions(dom)
+		if @hideDescriptions
 			dom.disableElement("ViewDescriptions")
 		else
 			dom.enableElement("ViewDescriptions")
 		end
 	end
 
-	def displayList(dom)
+	private def displayList(dom)
 		xml = Atlas.createXML("XDHTML")
 		contents = {}
 
@@ -95,20 +93,93 @@ class Notes
 		dom.setContents(contents)
 		dom.enableElements($viewModeElements)
 	end
-end
 
-def acConnect(notes, dom, id)
-	dom.setLayout("", readAsset("Main.html"))
-	notes.displayList(dom)
-end
+	private def view(dom)
+		dom.enableElements($viewModeElements)
+		dom.setContent("Edit." + @index.to_s(), "")
+		@index = -1
+	end
 
-def acToggleDescriptions(notes, dom, id)
-	notes.handleDescriptions(dom,dom.getContent(id)=="true")
+	def acConnect(dom, id)
+		dom.setLayout("", readAsset("Main.html"))
+		displayList(dom)
+	end
+
+	def acToggleDescriptions(dom, id)
+		@hideDescriptions = dom.getContent(id) == "true"
+		handleDescriptions(dom)
+	end
+
+	def acSearch(dom, id)
+		@pattern = dom.getContent("Pattern").downcase()
+		displayList(dom)
+	end
+
+	def acEdit(dom, id)
+		index = dom.getContent(id)
+		@index = index.to_i()
+		note = @notes[@index]
+		
+		dom.setLayout("Edit." + index, readAsset( "Note.html") )
+		dom.setContents({ "Title" => note['title'], "Description" => note['description'] })
+		dom.disableElements($viewModeElements)
+		dom.dressWidgets("Notes")
+		dom.focus("Title")
+	end	
+
+	def acDelete(dom, id)
+		if dom.confirm?("Are you sure you want to delete this entry ?")
+			@notes.delete_at(dom.getContent(id).to_i())
+			displayList(dom)	
+		end
+	end
+
+	def acSubmit(dom, id)
+		result = dom.getContents(["Title", "Description"])
+		title = result["Title"].strip()
+		description = result["Description"]
+	
+		if !title.empty?()
+			@notes[@index] = { "title" => title, "description" => description }
+	
+			if @index == 0
+				@notes.unshift( {'title' => '', 'description' => ''})
+				displayList( dom )
+			else
+				dom.setContents( { "Title." + @index.to_s() => title, "Description." + @index.to_s() => description })
+				view(dom)
+			end
+		else
+			dom.alert("Title can not be empty !")
+			dom.focus("Title")
+		end
+	end
+
+	def acCancel(dom, id)
+		note = @notes[@index]
+	
+		result = dom.getContents(["Title", "Description"])
+		title = result["Title"].strip()
+		description = result["Description"]
+	
+		if (title != note['title']) or (description != note['description'])
+			if dom.confirm?("Are you sure you want to cancel your modifications ?")
+				view( dom )
+			end
+		else
+			view( dom )
+		end
+	end
 end
 
 callbacks = {
-	"Connect" => method(:acConnect),
-	"ToggleDescriptions" => method(:acToggleDescriptions),
+	"Connect" => -> (notes, dom, id) {notes.acConnect(dom,id)},
+	"ToggleDescriptions"  => -> (notes, dom, id) {notes.acToggleDescriptions(dom,id)},
+	"Search" => -> (notes, dom, id) {notes.acSearch(dom,id)},
+	"Edit" => -> (notes, dom, id) {notes.acEdit(dom,id)},
+	"Delete" => -> (notes, dom, id) {notes.acDelete(dom,id)},
+	"Submit" => -> (notes, dom, id) {notes.acSubmit(dom,id)},
+	"Cancel" => -> (notes, dom, id) {notes.acCancel(dom,id)},
 }
 
 Atlas.launch("Connect",callbacks, -> () {Notes.new()}, readAsset("Head.html"),"notes")
