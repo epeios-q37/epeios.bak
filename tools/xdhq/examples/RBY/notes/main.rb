@@ -83,27 +83,17 @@ class Notes
 		index = 1
 
 		while index < @notes.length()
-			Atlas::l
 			if @notes[index]['title'][0,@pattern.length()].downcase() == @pattern
-				Atlas::l
 				put(@notes[index], index, xml)
-				Atlas::l
 				contents["Description." + index.to_s()] = @notes[index]['description']
-				Atlas::l
 			end
 
 			index += 1
 		end
 
-		Atlas::l
-		pp(xml.toString())
-		Atlas::l
 		dom.setLayoutXSL("Notes", xml, "Notes.xsl")
-		Atlas::l
 		dom.setContents(contents)
-		Atlas::l
 		dom.enableElements($viewModeElements)
-		Atlas::l
 	end
 end
 

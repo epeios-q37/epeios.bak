@@ -102,8 +102,6 @@ module XDHq
 		end
 
 		def setLayout(id, xml, xslFilename = "")
-			pp(xml.encoding)
-
 			call("SetLayout_1", $VOID, 3, id, xml, xslFilename, 0)
 		end
 

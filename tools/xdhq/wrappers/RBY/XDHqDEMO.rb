@@ -77,8 +77,7 @@ module XDHqDEMO
             @socket.write(result)
         end
         def writeString(string)
-            pp(">>>>>>>>>>>>>",string.encoding, string)
-            writeSize(string.length())
+            writeSize(string.bytes.length())
             @socket.write(string)
         end
         def writeStrings(strings)
@@ -165,8 +164,6 @@ module XDHqDEMO
             end
 
             @socket = TCPSocket.new($pAddr, $pPort)
-
-            @socket.set_encoding("UTF-8")
 
             writeString($token)
 
