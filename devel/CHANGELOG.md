@@ -12,8 +12,8 @@
   - [adpt],
 - XML:
   - it is now possible to specify the delimiter used for the attribute value,
-- RGSTRY:
-   - the attributes delimiter are now kept and not systematically replaced with `"`,
+- XPP:
+   - attribute delimiters are now preserved and no more systematically replaced with `"`,
 
 ## 2018-12-01
 
