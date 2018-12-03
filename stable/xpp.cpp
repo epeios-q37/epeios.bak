@@ -1742,7 +1742,7 @@ qRB
 			break;
 		case xml::tAttribute:
 		case xml::tSpecialAttribute:
-			Writer.PutAttribute( Parser.AttributeName(), Parser.Value() );
+			Writer.PutAttribute( Parser.AttributeName(), Parser.Value(), xml::Convert( Parser.AttributeDelimiter() ) );
 			break;
 		case xml::tValue:
 			Writer.PutValue( Parser.Value() );

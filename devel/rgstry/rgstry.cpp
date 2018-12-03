@@ -906,13 +906,13 @@ namespace {
 		eRootTagHandling RootTagHandling_;
 		bso::sBool Ignore_;	// At true when the first call of 'XMLStartTag()' has to be ignored.
 	protected:
-		virtual bso::bool__ XMLProcessingInstruction( const xml::dump_ & )
+		virtual bso::bool__ XMLProcessingInstruction( const xml::dump_ & ) override
 		{
 			return true;
 		}
 		virtual bso::bool__ XMLStartTag(
 			const str::string_ &TagName,
-			const xml::dump_ &Dump )
+			const xml::dump_ &Dump ) override
 		{
 			if ( Ignore_ )
 				Ignore_ = false;
@@ -928,8 +928,9 @@ namespace {
 		virtual bso::bool__ XMLAttribute(
 			const str::string_ &TagName,
 			const str::string_ &Name,
+			bso::sChar Delimiter,
 			const str::string_ &Value,
-			const xml::dump_ &Dump )
+			const xml::dump_ &Dump ) override
 		{
 			_Registry.AddAttribute( Name, Value, _Current );
 
@@ -937,14 +938,14 @@ namespace {
 		}
 		virtual bso::bool__ XMLStartTagClosed(
 			const str::string_ &TagName,
-			const xml::dump_ &Dump )
+			const xml::dump_ &Dump ) override
 		{
 			return true;
 		}
 		virtual bso::bool__ XMLValue(
 			const str::string_ &TagName,
 			const str::string_ &Value,
-			const xml::dump_ &Dump )
+			const xml::dump_ &Dump ) override
 		{
 			_Registry.SetValue( Value, _Current, true );
 
@@ -952,7 +953,7 @@ namespace {
 		}
 		virtual bso::bool__ XMLEndTag(
 			const str::string_ &TagName,
-			const xml::dump_ &Dump )
+			const xml::dump_ &Dump ) override
 		{
 			if ( _Current == qNIL )
 				qRFwk();
@@ -963,7 +964,7 @@ namespace {
 		}
 		virtual bso::bool__ XMLComment(
 			const str::string_ &Value,
-			const xml::dump_ &Dump )
+			const xml::dump_ &Dump ) override
 		{
 			return true;
 		}

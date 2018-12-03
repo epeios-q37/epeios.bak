@@ -158,6 +158,39 @@ namespace xml {
 
 	typedef bso::sU8 sLevel;
 
+	qENUM( Delimiter )
+	{
+		dAPOS,
+		dQUOT,
+		d_amount,
+		d_Undefined,
+		d_Default
+	};
+
+	namespace delimiter {
+		qCDEF( char, sAPOS, '\'' );
+		qCDEF( char, sQUOT, '"' );
+		qCDEF( char, sDefault, sQUOT );
+		qCDEF( char, sUndefined, sQUOT );
+	}
+
+	inline eDelimiter Convert( bso::sChar Delimiter )
+	{
+		switch ( Delimiter ) {
+		case delimiter::sAPOS:
+			return dAPOS;
+			break;
+		case delimiter::sQUOT:
+			return dQUOT;
+			break;
+		default:
+			qRFwk();
+			break;
+		}
+
+		return d_Undefined;	// To avoid a warning.
+	}
+
 	class rWriter
 	{
 	private:
@@ -170,6 +203,7 @@ namespace xml {
 		sLevel LevelsToIgnore_;	// Tags which level (beginning at 1) are inferior to this value are ignored.
 									// With a value of '1', the root tag is ignored.
 		bso::bool__ AlwaysCommit_;	// Fait un 'commit' aprs chaque criture. Utile pour le dboguage d'application.
+		bso::sChar AttributeDelimiter_;
 		void CloseAllTags_( void );
 		void Indent_( bso::size__ Amount ) const;
 		txf::text_oflow__ &F_( void ) const
@@ -191,6 +225,26 @@ namespace xml {
 			if ( AlwaysCommit_ )
 				F_().Commit();
 		}
+		bso::sChar GetAttributeDelimiter_( eDelimiter Delimiter ) const
+		{
+			switch ( Delimiter ) {
+			case dAPOS:
+				return delimiter::sAPOS;
+				break;
+			case dQUOT:
+				return delimiter::sQUOT;
+				break;
+			case d_Default:
+				if ( strchr( "\"'", AttributeDelimiter_ ) == NULL )
+					qRFwk();
+				break;
+			default:
+				qRFwk();
+				break;
+			}
+
+			return AttributeDelimiter_;
+		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -206,6 +260,7 @@ namespace xml {
 			SpecialCharHandling_ = sch_Undefined;
 			LevelsToIgnore_ = 0;
 			AlwaysCommit_ = false;
+			AttributeDelimiter_ = delimiter::sUndefined;
 		}
 		qCDTOR( rWriter );
 		void Init(
@@ -222,6 +277,7 @@ namespace xml {
 			Outfit_ = Outfit;
 			LevelsToIgnore_ = LevelsToIgnore;
 			SpecialCharHandling_ = SpecialCharHandling;
+			AttributeDelimiter_ = delimiter::sDefault;
 
 			if ( WriteXMLHeader( Flow, Encoding ) )
 				switch ( Outfit ) {
@@ -349,10 +405,12 @@ namespace xml {
 		}
 		void PutRawAttribute(
 			const name_ &Name,
-			flw::sRFlow &Flow );
+			flw::sRFlow &Flow,
+			eDelimiter Delimiter = d_Default );
 		void PutAttribute(
 			const name_ &Name,
-			flw::sRFlow &Flow );
+			flw::sRFlow &Flow,
+			eDelimiter Delimiter = d_Default );
 		void PutAttribute(
 			const name &Name,
 			flw::sRFlow &Flow )
@@ -361,74 +419,86 @@ namespace xml {
 		}
 		void PutRawAttribute(
 			const name_ &Name,
-			const value_ &Value );
+			const value_ &Value,
+			eDelimiter Delimiter = d_Default );
 		void PutAttribute(
 			const name_ &Name,
-			const value_ &Value );
+			const value_ &Value,
+			eDelimiter Delimiter = d_Default );
 		void PutAttribute(
 			const value_ &Value,
-			const name &Name )
+			const name &Name,
+			eDelimiter Delimiter = d_Default )
 		{
-			PutAttribute( Value, *Name );
+			PutAttribute( Value, *Name, Delimiter );
 		}
 		void PutAttribute(
 			const value &Value,
-			const name &Name )
+			const name &Name,
+			eDelimiter Delimiter = d_Default )
 		{
-			PutAttribute( *Value, *Name );
+			PutAttribute( *Value, *Name, Delimiter );
 		}
 		void PutAttribute(
 			const value &Value,
-			const name_ &Name )
+			const name_ &Name,
+			eDelimiter Delimiter = d_Default )
 		{
-			PutAttribute( *Value, Name );
+			PutAttribute( *Value, Name, Delimiter );
 		}
 		void PutAttribute(
 			const value_ &Value,
-			const char *Name )
+			const char *Name,
+			eDelimiter Delimiter = d_Default )
 		{
-			PutAttribute( Value, name( Name ) );
+			PutAttribute( Value, name( Name ), Delimiter );
 		}
 		void PutAttribute(
 			const value &Value,
-			const char *Name )
+			const char *Name,
+			eDelimiter Delimiter = d_Default )
 		{
-			PutAttribute( *Value, Name );
+			PutAttribute( *Value, Name, Delimiter );
 		}
 		void PutAttribute(
 			const char *Name,
-			const char *Value )
+			const char *Value,
+			eDelimiter Delimiter = d_Default )
 		{
-			PutAttribute( name( Name ), value( Value ) );
+			PutAttribute( name( Name ), value( Value ), Delimiter );
 		}
 		void PutAttribute(
 			const char *Name,
-			const value_ &Value )
+			const value_ &Value,
+			eDelimiter Delimiter = d_Default )
 		{
-			PutAttribute( name( Name ), Value );
+			PutAttribute( name( Name ), Value, Delimiter );
 		}
 		void PutAttribute(
 			const char *Name,
-			const value &Value )
+			const value &Value,
+			eDelimiter Delimiter = d_Default )
 		{
-			PutAttribute( Name, *Value );
+			PutAttribute( Name, *Value, Delimiter );
 		}
 		template <typename s, typename i> void PutAttribute(
 			const s &Name,
-			i Value )
+			i Value,
+			eDelimiter Delimiter = d_Default )
 		{
 			bso::integer_buffer__ IBuffer;
 
-			PutAttribute( Name, bso::Convert( Value, IBuffer ) );
+			PutAttribute( Name, bso::Convert( Value, IBuffer ), Delimiter );
 		}
 		// No attribute is added if 'Value' == 'UndefinedValue'.
 		template <typename s, typename i> void PutAttribute(
 			const s &Name,
 			i Value,
-			i UndefinedValue )
+			i UndefinedValue,
+			eDelimiter Delimiter = d_Default )
 		{
 			if ( Value != UndefinedValue )
-				PutAttribute( Name, Value );
+				PutAttribute( Name, Value, Delimiter );
 		}
 		void PutCData( flw::sRFlow &Flow );
 		void PutCData( const str::string_ &Value );
@@ -717,7 +787,8 @@ namespace xml {
 		bso::bool__ _EmptyTag;	// A 'true' pour '<tag/>', sinon  'false'.
 		_flow___ _Flow;
 		str::string _TagName;
-		str::string _AttributeName;
+		str::string AttributeName_;
+		bso::sChar AttributeDelimiter_;
 		str::string _Value;
 		status__ _Status;
 		entities_handling__ _EntitiesHandling;
@@ -730,7 +801,8 @@ namespace xml {
 			_Flow.reset( P );
 
 			_TagName.reset( P );
-			_AttributeName.reset( P );
+			AttributeName_.reset( P );
+			AttributeDelimiter_ = delimiter::sUndefined;
 			_Value.reset( P );
 			_Status = s_Undefined;
 			_EntitiesHandling = eh_Undefined;
@@ -756,7 +828,8 @@ namespace xml {
 			_Context = cHeaderExpected;
 
 			_TagName.Init();
-			_AttributeName.Init();
+			AttributeName_.Init();
+			AttributeDelimiter_ = delimiter::sUndefined;
 			_Value.Init();
 
 			_EntitiesHandling = EntitiesHandling;
@@ -765,6 +838,7 @@ namespace xml {
 		token__ Parse(
 			str::string_ &TagName,
 			str::string_ &AttributeName,
+			bso::sChar &AttributeDelimiter,
 			str::string_ &Value,	// Contient la valeur d'une balise ('tag') our d'un attribut, en fonction de la valeur retourne ('tTag' ou 'tAttribute').
 			xml::dump_ &Dump,
 			status__ &Status,
@@ -773,7 +847,8 @@ namespace xml {
 			token__ Token = Parse( TokenToReport );
 
 			TagName = _TagName;
-			AttributeName = _AttributeName;
+			AttributeName = AttributeName_;
+			AttributeDelimiter = AttributeDelimiter_;
 			Value = _Value;
 			Status = _Status;
 
@@ -793,7 +868,8 @@ namespace xml {
 			_Flow.Dump.PurgeData();
 		}
 		E_RODISCLOSE__( str::string_, TagName );
-		E_RODISCLOSE__( str::string_, AttributeName );
+		qRODISCLOSEr( str::string_, AttributeName );
+		qRODISCLOSEr( bso::sChar, AttributeDelimiter );
 		E_RODISCLOSE__( str::string_, Value );
 		E_RODISCLOSE__( status__, Status );
 		E_RODISCLOSE__( token__, Token );
@@ -835,11 +911,13 @@ namespace xml {
 		virtual bso::bool__ XMLAttribute(
 			const str::string_ &TagName,
 			const str::string_ &Name,
+			bso::sChar Delimiter,
 			const str::string_ &Value,
 			const dump_ &Dump ) = 0;
 		virtual bso::bool__ XMLSpecialAttribute(
 			const str::string_ &TagName,
 			const str::string_ &Name,
+			bso::sChar Delimiter,
 			const str::string_ &Value,
 			const dump_ &Dump )
 		{

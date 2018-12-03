@@ -1,5 +1,8 @@
 # *XPPq* changelog
 
+2018-12-03
+- attribute delimiters should now be kept, and no more systematically be replaced with `"`,
+
 2018-12-01:
 - space-like characters (`\r`, `\n`, `\t`...) are now allowed in attribute values,
 - fixing bad indentation,
