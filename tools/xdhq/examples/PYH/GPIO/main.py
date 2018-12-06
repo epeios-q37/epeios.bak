@@ -18,9 +18,13 @@
  """
 
 import os, pprint, sys, threading
+import wiringpi
+
+os.environ['ATK_TOKEN'] = "GPIO"
 
 sys.path.append("./Atlas.python.zip")
 sys.path.append("../Atlas.python.zip")
+sys.path.append("./Atlas")
 
 import Atlas
 
@@ -36,7 +40,31 @@ mappings = {
 		0: {},
 		1: {},
 		2: {},
-		3: {}
+		3: {},
+		4: {},
+		5: {},
+		6: {},
+		7: {},
+# 8: {},
+# 9: {},
+		10: {},
+		11: {},
+		12: {},
+		13: {},
+		14: {},
+#	15: {},
+#	16: {},
+		21: {},
+		22: {},
+		23: {},
+		24: {},
+#	25: {},
+		26: {},
+		27: {},
+#	28: {},
+#	29: {},
+#	30: {},
+#	31: {},
 	}
 }
 
@@ -107,10 +135,10 @@ def set(userId,wId,field,value):
 		return False
 
 def retrieveMode(wId):
-	return wId % 3
+	return 0
 
 def retrieveValue(wId):
-	return wId % 2
+	return wiringpi.digitalRead(wId)
 
 def retrieveSetting(wId):
 	return {
@@ -123,6 +151,7 @@ def retrieveSettings():
 
 	for key in mapping:
 		settings[key] = retrieveSetting(key)
+		wiringpi.pinMode(key,0)	# Default to IN mode, to avoid short-circiot.
 
 	return settings
 
@@ -176,7 +205,13 @@ class GPIO:
 		return this._getSetting(wId)[Setting.MODE]
 
 	def _setMode(this,dom,wId,mode):
-		return this._set(dom,wId,Setting.MODE, mode)
+		if (this._set(dom,wId,Setting.MODE, mode)):
+			wiringpi.pinMode(wId,1 if mode > 1 else mode)
+			if ( mode == Mode.PWM ):
+				wiringpi.softPwmCreate(wId,0,100)
+			return True
+		else:
+			return False
 
 	def _getValue(this,wId):
 		value = this._getSetting(wId)[Setting.VALUE]
@@ -187,7 +222,19 @@ class GPIO:
 		return value
 
 	def _setValue(this,dom,wId,value):
-		return this._set(dom,wId,Setting.VALUE,value)
+		if ( this._set(dom,wId,Setting.VALUE,value) ):
+			mode = this._getMode(wId)
+			if ( mode == Mode.IN ):
+				sys.exit("Can not set value for a pin in IN mode !")
+			elif (mode == Mode.OUT):
+				wiringpi.digitalWrite( wId, 1 if value > 0 else 0 )
+			elif (mode == Mode.PWM):
+				wiringpi.softPwmWrite(wId,value)
+			else:
+				sys.exit("Unknown mode !")
+			return True
+		else:
+			return False
 
 	def _getModeLabel(this,wId):
 		return Mode.label[this._getSetting(wId)[Setting.MODE]]
@@ -291,6 +338,8 @@ callbacks = {
 		"SwitchMode": acSwitchMode,
 		"ChangeValue": acChangeValue,
 	}
+
+wiringpi.wiringPiSetup()
 
 syncSettings()
 		
