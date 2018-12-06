@@ -194,7 +194,7 @@ module XDHq
 		end
 	
 		def setAttribute(id, name, value )
-			call("SetAttribute_1", $VOID, 2, id, value, 0 )
+			call("SetAttribute_1", $VOID, 3, id, name, value, 0 )
 		end
 	
 		def getAttribute(id, name)
@@ -202,7 +202,7 @@ module XDHq
 		end
 	
 		def removeAttribute(id, name )
-			call("RemoveAttribute_1", $VOID, 1, id, 0 )
+			call("RemoveAttribute_1", $VOID, 2, id, name, 0 )
 		end
 	
 		def setProperty(id, name, value )
