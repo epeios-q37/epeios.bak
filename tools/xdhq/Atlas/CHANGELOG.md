@@ -3,7 +3,12 @@
 - Common to **all** bindings,
 - does **not** concern the native code,
 
----
+## 2018-12-07
+
+- *Python*
+    - fixing `(set|remove)Attribute(…)` bug,
+- **ALL**:
+  - switching to new protocol, resetting version to 0,
 
 ## 2018-11-24
 

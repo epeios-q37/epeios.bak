@@ -20,8 +20,6 @@
 import os, pprint, sys, threading
 import wiringpi
 
-os.environ['ATK_TOKEN'] = "GPIO"
-
 sys.path.append("./Atlas.python.zip")
 sys.path.append("../Atlas.python.zip")
 sys.path.append("./Atlas")
@@ -84,15 +82,6 @@ class Mode:
 		PWM: "PWM",
 	}
 
-def getGPIOElements():
-	elements = []
-
-	for key in mapping:
-		elements.append("Mode." + str(key))
-		elements.append("Value." + str(key))
-
-	return elements
-
 def getNewUserId():
 	global availableUserId, lock
 
@@ -104,11 +93,6 @@ def getNewUserId():
 	lock.release()
 
 	return userId
-
-def getCurrentUserId():
-	global currentUserId
-
-	return currentUserId
 
 def setCurrentUserId(id):
 	global currentUserId, lock
@@ -123,10 +107,9 @@ def setCurrentUserId(id):
 
 	return wasMe
 
-
 def set(userId,wId,field,value):
 	global settings, lock
-	if (getCurrentUserId() == userId):
+	if (setCurrentUserId(userId)):
 		lock.acquire()
 		settings[wId][field] = value
 		lock.release()
@@ -151,7 +134,7 @@ def retrieveSettings():
 
 	for key in mapping:
 		settings[key] = retrieveSetting(key)
-		wiringpi.pinMode(key,0)	# Default to IN mode, to avoid short-circiot.
+		wiringpi.pinMode(key,0)	# Default to IN mode, to avoid short-circuit.
 
 	return settings
 
@@ -176,18 +159,6 @@ class GPIO:
 		this._settings = {}
 # 	setCurrentUserId(this._userId)	To early ! Must be done at connection !
 
-	def _amIOwner(this):
-		return getCurrentUserId() == this._userId
-
-	def updateAccessibility(this,dom):
-		if (this._amIOwner()):
-			dom.addClass("Acquire", "hidden")
-			dom.enableElements(getGPIOElements())
-		else:
-			dom.removeClass("Acquire", "hidden")
-			dom.disableElements(getGPIOElements())
-
-
 	def _set(this,dom,field,wId,mode):
 		if (not(set(this._userId, field, wId, mode))):
 			dom.alert( "State externally modified: updating!")
@@ -209,6 +180,8 @@ class GPIO:
 			wiringpi.pinMode(wId,1 if mode > 1 else mode)
 			if ( mode == Mode.PWM ):
 				wiringpi.softPwmCreate(wId,0,100)
+			if ( this._set(dom,wId,Setting.VALUE,wiringpi.digitalRead(wId))):
+				dom.setContent("Value." + str(wId),this._getValue(wId))
 			return True
 		else:
 			return False
@@ -260,7 +233,6 @@ class GPIO:
 	def _buildXML(this):
 		global mapping
 		xml = Atlas.createXML("XDHTML")
-		xml.setAttribute("IsOwner",this._amIOwner())
 		this._buildCorpus(xml)
 		xml.pushTag("GPIOs")
 
@@ -279,11 +251,6 @@ class GPIO:
 
 	def take(this):
 		setCurrentUserId(this._userId)
-
-	def sync(this,dom):
-		if ( not(this._amIOwner())):
-			this.updateAccessibility(dom)
-			this.display(dom)
 
 	def display(this,dom):
 		dom.setLayoutXSL("GPIO", this._buildXML(), "GPIO.xsl")
@@ -314,8 +281,6 @@ def acConnect(GPIO,dom,id):
 	dom.setLayout("", readAsset( "Main.html") )
 	GPIO.take()
 	GPIO.display(dom)
-	GPIO.updateAccessibility(dom)
-	dom.setTimeout(1000,"Sync")
 
 def acSwitchMode(GPIO,dom,id):
 	GPIO.setMode(dom,getWId(id),int(dom.getContent(id)))
@@ -323,18 +288,8 @@ def acSwitchMode(GPIO,dom,id):
 def acChangeValue(GPIO,dom,id):
 	GPIO.setValue(dom,getWId(id),int(dom.getContent(id)))
 
-def acSync(GPIO,dom,id):
-	GPIO.sync(dom)
-	dom.setTimeout(1000,"Sync")
-
-def acAcquire(GPIO,dom,id):
-	GPIO.take()
-	GPIO.updateAccessibility(dom)
-
 callbacks = {
 		"Connect": acConnect,
-		"Sync": acSync,
-		"Acquire": acAcquire,
 		"SwitchMode": acSwitchMode,
 		"ChangeValue": acChangeValue,
 	}

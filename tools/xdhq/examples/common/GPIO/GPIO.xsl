@@ -35,9 +35,6 @@
 			</td>
 			<td>
 				<select data-xdh-onevent="SwitchMode" id="Mode.{@id}">
-					<xsl:if test="/XDHTML/@IsOwner='False'">
-						<xsl:attribute name="disabled">disabled</xsl:attribute>
-					</xsl:if>
 					<xsl:apply-templates select="/XDHTML/Corpus/Modes/Mode">
 						<xsl:with-param name="Mode" select="@Mode"/>
 					</xsl:apply-templates>
@@ -45,9 +42,6 @@
 			</td>
 			<td>
 				<xsl:element name="input">
-				<xsl:if test="/XDHTML/@IsOwner='False'">
-					<xsl:attribute name="disabled">disabled</xsl:attribute>
-				</xsl:if>
 				<xsl:attribute name="data-xdh-onevent">ChangeValue</xsl:attribute>
 					<xsl:attribute name="id">
 						<xsl:text>Value.</xsl:text>

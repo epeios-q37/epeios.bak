@@ -33,8 +33,8 @@ public class DOM_DEMO extends DOM_SHRD {
 	static private String token = "";
 	private Socket socket;
 	private boolean firstLaunch = true;
-	static private String protocolLabel = "712a58bf-2c9a-47b2-ba5e-d359a99966de";
-	static private String protocolVersion = "1";
+	static private String protocolLabel = "3f0aef6b-b893-4ccd-9316-d468588fc572";
+	static private String protocolVersion = "0";
 
 	static private String getEnv_(String name, String value) {
 		String env = System.getenv(name);
@@ -211,9 +211,16 @@ public class DOM_DEMO extends DOM_SHRD {
 				throw new Exception("Unmatched token !!!");
 		}
 
-		getString_(reader); // Language.
 		writeString_(protocolLabel, output);
 		writeString_(protocolVersion, output);
+		output.flush();
+
+		String errorMessage = getString_(reader);
+
+		if ( !"".equals(errorMessage))
+			throw new Exception(errorMessage);
+
+		getString_(reader);	// Language.
 		writeString_("JRE");
 		output.flush();
 	}

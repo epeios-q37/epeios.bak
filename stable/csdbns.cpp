@@ -195,7 +195,7 @@ qRT
 
 	if ( Socket != SCK_INVALID_SOCKET )
 		if ( CloseSocket )
-			sck::Close( Socket );
+			sck::Close( Socket, err::h_Default );
 qRE
 	return Continue;
 }
@@ -359,7 +359,7 @@ qRFB
 	qRT
 		if ( Row != qNIL )
 			if ( Clean_( Row ) )
-				sck::Close( Socket );
+				sck::Close( Socket, err::h_Default );
 	qRE
 qRFR
 qRFT
@@ -415,7 +415,7 @@ qRB
 qRR
 qRT
 	if ( Socket != SCK_INVALID_SOCKET )
-		sck::Close( Socket );
+		sck::Close( Socket, err::h_Default );
 
 	if ( Data.Mutex != MTX_INVALID_HANDLER )
 		mtx::Delete( Data.Mutex );

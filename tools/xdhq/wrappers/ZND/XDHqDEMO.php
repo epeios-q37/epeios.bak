@@ -36,8 +36,8 @@ function getEnv_( $name, $value = ""  ) {
 class XDHqDOM_DEMO extends Threaded {
  private $socket;
  private static $token = "";
- private static $protocolLabel = "712a58bf-2c9a-47b2-ba5e-d359a99966de";
- private static $protocolVersion = "1";
+ private static $protocolLabel = "3f0aef6b-b893-4ccd-9316-d468588fc572";
+ private static $protocolVersion = "0";
  private static function isTokenEmpty_() {
   return empty(self::$token) || (substr(self::$token, 0, 1) == '&');
  }
@@ -184,9 +184,16 @@ class XDHqDOM_DEMO extends Threaded {
     throw new Exception("Unmatched token !!!");
   }
 
-  $this->getString_($this->socket); // Language.
   $this->writeString_(self::$protocolLabel, $this->socket);
   $this->writeString_(self::$protocolVersion, $this->socket);
+  fflush($this->socket);
+
+  $errorMessage = $this->getString_($this->socket);
+
+  if ( $errorMessage != "")
+	throw new Exception($errorMessage);
+
+  $this->getString_($this->socket); // Language.
   $this->writeString_("ZND", $this->socket);
   fflush($this->socket);
  }

@@ -235,19 +235,30 @@ namespace sck {
 		duration__ Timeout );	// En secondes.
 
 	//f Close the socket 'Socket'.
-	inline void Close( socket__ Socket )
+	inline bso::sBool Close(
+		socket__ Socket,
+		qRPN )	// To set to 'qRPU' when called from destructors !
 	{
 #ifdef SCK__WIN
 	//	shutdown( Socket, 2 );
-		if ( closesocket( Socket ) == SCK_SOCKET_ERROR )
-			qRLbr();
+		if ( closesocket( Socket ) == SCK_SOCKET_ERROR ) {
+			if ( qRPT )
+				qRLbr();
+
+			return false;
+		}
 #elif defined( SCK__POSIX )
-	//	shutdown( Socket, 2 );
-		if ( close( Socket ) == SCK_SOCKET_ERROR )
-			qRLbr();
+		//	shutdown( Socket, 2 );
+		if ( close( Socket ) == SCK_SOCKET_ERROR ) {
+			if ( qRPT )
+				qRLbr();
+
+			return false;
+		}
 #else
 #	error
 #endif
+		return true;
 	}
 
 	typedef fdr::ioflow_driver___<> _ioflow_driver___;
@@ -315,7 +326,7 @@ namespace sck {
 			if ( P ) {
 				if ( _Socket != SCK_INVALID_SOCKET ) {
 					if ( Owner_ )
-						Close( _Socket );
+						Close( _Socket, qRPU );
 				}
 			}
 

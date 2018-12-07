@@ -6,6 +6,15 @@
 - [stdz]: modification to comply with current standards;
 - [trvl]: trivial modifications;
 
+## 2018-12-07
+
+- CSDBNC:
+  - [adpt],
+- CSDBNS:
+  - [adpt],
+- SCK
+  - the `close(…)` takes now an error handling parameter (and returns a success/failure boolean), to avoid the throwing of errors in destructors,
+
 ## 2018-12-03
 
 - RGSTRY:

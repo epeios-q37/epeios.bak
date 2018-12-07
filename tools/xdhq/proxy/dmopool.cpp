@@ -47,7 +47,7 @@ namespace {
 		{
 			if ( P ) {
 				if ( Socket != sck::Undefined )
-					sck::Close( Socket );
+					sck::Close( Socket, qRPU );
 			}
 
 			Socket = sck::Undefined;

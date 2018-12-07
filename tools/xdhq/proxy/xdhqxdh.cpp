@@ -966,6 +966,24 @@ namespace {
 		qRE;
 			return Return;
 	}
+		void ReportError_(
+			const char *Message,
+			flw::sWFlow &Flow )
+		{
+			if ( Message == NULL )
+				Message = "";
+
+			prtcl::Put( Message, Flow );	// If 'Message' not empty, client will display content and abort.
+
+			if ( Message[0] ) {
+				Flow.Commit();
+				qRGnr();
+			}
+		}
+		void ReportNoError_( flw::sWFlow &Flow )
+		{
+			ReportError_( NULL, Flow );
+		}
 	public:
 		void reset( bso::sBool P = true )
 		{
@@ -1013,23 +1031,22 @@ namespace {
 
 			if ( Success ) {
 				Flow.Init( D_() );
-				prtcl::Put( Language, Flow );
-
-				Flow.Commit();
 
 				Version = csdcmn::GetProtocolVersion( prtcl::ProtocolId, Flow );
 
 				switch ( Version ) {
 				case 0:
-					LogMessage.Append( "N/A" );
-					break;
-				case 1:
-					csdcmn::Get( Flow, LogMessage );
+					ReportNoError_( Flow );
 					break;
 				default:
-					qRGnr();
+					ReportError_( "Unknown protocol version !!!", Flow );
 					break;
 				}
+
+				prtcl::Put( Language, Flow );
+				Flow.Commit();
+
+				csdcmn::Get( Flow, LogMessage );
 
 				Logging_.Id = Ids_.New();
 				Log_( LogMessage );

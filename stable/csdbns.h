@@ -99,7 +99,7 @@ namespace csdbns {
 			if ( P )
 			{
 				if ( Socket_ != SCK_INVALID_SOCKET )
-					Close( Socket_ );
+					Close( Socket_, qRPU );
 
 				if ( _CallbackAvailable() )
 					_Callback->PostProcess( _UP );	// Mme si 'UP' != NULL;

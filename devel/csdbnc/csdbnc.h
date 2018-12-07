@@ -157,7 +157,7 @@ namespace csdbnc {
 		{
 			if ( P )
 				if ( Socket != SCK_INVALID_SOCKET )
-					sck::Close( Socket );
+					sck::Close( Socket, qRPU );
 
 			Socket = SCK_INVALID_SOCKET;
 		}

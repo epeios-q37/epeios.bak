@@ -1,5 +1,10 @@
 # *XDHq* *CHANGELOG*
 
+## 2018-12-07
+
+- switching to new protocol, to allow handling of error messages in future evolution,
+- reseting protocol version,
+
 ## 2018-11-20
 
 - adding logging,

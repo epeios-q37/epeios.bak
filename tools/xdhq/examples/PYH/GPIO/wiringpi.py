@@ -1,5 +1,5 @@
 """ 
-  Copyright (C) 2018 Claude SIMON (http://q37.info/contact/).
+ Copyright (C) 2018 Claude SIMON (http://q37.info/contact/).
 
 	This file is part of XDHq.
 
@@ -17,24 +17,22 @@
 	along with XDHq If not, see <http://www.gnu.org/licenses/>.
  """
 
-import XDHq
-from threading import Thread
-import threading
+# Dummy file to simplify development when 'WiringPi' not installed.
 
-readAsset = XDHq.readAsset
+def wiringPiSetup(*args):
+	pass
 
-def createXML(rootTag):
-	return XDHq.XML(rootTag)
+def digitalRead(*args):
+	return 0
 
-def worker(userObject,dom,callbacks):
-	while True:
-		[action,id] = dom.getAction()
-		callbacks[action](userObject, dom, id )
+def pinMode(*args):
+	pass
 
-def launch(newSessionAction, callbacks, new = lambda: None, headContent = "", dir = ""):
-	XDHq.launch(newSessionAction,headContent,dir)
+def digitalWrite(*args):
+	pass
 
-	while True:
-		thread = threading.Thread(target=worker, args=(new(), XDHq.DOM(), callbacks))
-		thread.daemon = True
-		thread.start()
+def softPwmCreate(*args):
+	pass
+
+def softPwmWrite(*args):
+	pass	
