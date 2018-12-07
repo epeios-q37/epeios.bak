@@ -15,7 +15,7 @@
 		<table>
 			<thead>
 				<tr>
-					<th>Id</th>
+					<th>wPi</th>
 					<th>Mode</th>
 					<th>Value</th>
 				</tr>
@@ -30,51 +30,37 @@
 			<xsl:call-template name="GetModeLabel"/>
 		</xsl:variable>
 		<tr>
-			<td>
+			<td title="WringPi id.">
 				<xsl:value-of select="@id"/>
 			</td>
 			<td>
-				<select data-xdh-onevent="SwitchMode" id="Mode.{@id}">
+				<select data-xdh-onevent="SwitchMode" id="Mode.{@id}" title="Select pin mode.">
 					<xsl:apply-templates select="/XDHTML/Corpus/Modes/Mode">
 						<xsl:with-param name="Mode" select="@Mode"/>
 					</xsl:apply-templates>
 				</select>
 			</td>
 			<td>
-				<xsl:element name="input">
-				<xsl:attribute name="data-xdh-onevent">ChangeValue</xsl:attribute>
-					<xsl:attribute name="id">
-						<xsl:text>Value.</xsl:text>
-						<xsl:value-of select="@id"/>
-					</xsl:attribute>
-					<xsl:attribute name="type">range</xsl:attribute>
-					<xsl:attribute name="min">0</xsl:attribute>
-					<xsl:attribute name="max">100</xsl:attribute>
-					<xsl:attribute name="value">
-						<xsl:value-of select="@Value"/>
-					</xsl:attribute>
+				<input data-xdh-onevent="ChangeValue" id="Value.{@id}" type="range" min="0" max="100" value="{@Value}" title="Set pin value, in OUT and PWM mode.">
 					<xsl:choose>
-					<xsl:when test="$ModeLabel='IN'">
-						<xsl:attribute name="disabled">disabled</xsl:attribute>
-					</xsl:when>
-					<xsl:when test="$ModeLabel='OUT'">
-						<xsl:attribute name="step">100</xsl:attribute>
-					</xsl:when>
+						<xsl:when test="$ModeLabel='IN'">
+							<xsl:attribute name="disabled">disabled</xsl:attribute>
+						</xsl:when>
+						<xsl:when test="$ModeLabel='OUT'">
+							<xsl:attribute name="step">100</xsl:attribute>
+						</xsl:when>
 					</xsl:choose>
-				</xsl:element>
+				</input>
 			</td>
 		</tr>
 	</xsl:template>
 	<xsl:template match="/XDHTML/Corpus/Modes/Mode">
 		<xsl:param name="Mode"/>
-		<xsl:element name="option">
-			<xsl:attribute name="value">
-				<xsl:value-of select="@id"/>
-			</xsl:attribute>
+		<option value="{@id}">
 			<xsl:if test="$Mode=@id">
 				<xsl:attribute name="selected">selected</xsl:attribute>
 			</xsl:if>
 			<xsl:value-of select="@Label"/>
-		</xsl:element>
+		</option>
 	</xsl:template>
 </xsl:stylesheet>

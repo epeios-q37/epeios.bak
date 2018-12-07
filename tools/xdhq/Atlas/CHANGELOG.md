@@ -6,9 +6,10 @@
 ## 2018-12-07
 
 - *Python*
-    - fixing `(set|remove)Attribute(…)` bug,
+  - fixing `(set|remove)Attribute(…)` bug,
 - **ALL**:
-  - switching to new protocol, resetting version to 0,
+  - switching to new protocol and resetting version,
+  - switching to version 5.2,
 
 ## 2018-11-24
 
