@@ -71,6 +71,7 @@ mapping = mappings["Odroid C2"]
 class Setting:
 	MODE = 0
 	VALUE = 1
+	SELECTED = 2
 
 class Mode:
 	IN = 0
@@ -123,10 +124,14 @@ def retrieveMode(wId):
 def retrieveValue(wId):
 	return wiringpi.digitalRead(wId)
 
+def retrieveSelected(wId):
+	return False
+
 def retrieveSetting(wId):
 	return {
 		Setting.MODE: retrieveMode(wId),
 		Setting.VALUE: retrieveValue(wId),
+		Setting.SELECTED: retrieveSelected(wId),
 	}
 
 def retrieveSettings():
@@ -158,6 +163,24 @@ class GPIO:
 		this._userId = getNewUserId()
 		this._settings = {}
 # 	setCurrentUserId(this._userId)	To early ! Must be done at connection !
+
+	def _handleModeButtons(this,dom):
+		global mapping
+		enable = False;
+		buttons=[]
+
+		for label in Mode.label:
+			buttons.append(Mode.label[label])
+
+		for key in mapping:
+			if settings[key][Setting.SELECTED]:
+				enable = True
+				break
+
+		if enable:
+			dom.enableElements(buttons)
+		else:
+			dom.disableElements(buttons)
 
 	def _set(this,dom,field,wId,mode):
 		if (not(set(this._userId, field, wId, mode))):
@@ -209,16 +232,22 @@ class GPIO:
 		else:
 			return False
 
+	def _setSelected(this,dom,wId,value):
+		return this._set(dom,wId,Setting.SELECTED, not this._getSetting(wId)[Setting.SELECTED] if value == None else value )
+
 	def _getModeLabel(this,wId):
 		return Mode.label[this._getSetting(wId)[Setting.MODE]]
+
+	def _getSelected(this,wId):
+		return this._getSetting(wId)[Setting.SELECTED]
 
 	def _buildModeCorpus(this,xml):
 		xml.pushTag("Modes")
 
-		for wId in Mode.label:
+		for mode in Mode.label:
 			xml.pushTag("Mode")
-			xml.setAttribute("id", wId)
-			xml.setAttribute("Label", Mode.label[wId])
+			xml.setAttribute("id", mode)
+			xml.setAttribute("Label", Mode.label[mode])
 			xml.popTag()
 
 		xml.popTag()
@@ -239,6 +268,7 @@ class GPIO:
 		for wId in mapping:
 			xml.pushTag("GPIO")
 			xml.setAttribute( "id", wId)
+			xml.setAttribute("Selected", this._getSelected(wId))
 			xml.setAttribute("Mode",this._getMode(wId))
 			xml.setAttribute("Value",this._getValue(wId))
 			xml.popTag()
@@ -254,6 +284,7 @@ class GPIO:
 
 	def display(this,dom):
 		dom.setLayoutXSL("GPIO", this._buildXML(), "GPIO.xsl")
+		this._handleModeButtons(dom)
 
 	def setMode(this,dom,wId,mode):
 		id = "Value."+str(wId);
@@ -277,6 +308,19 @@ class GPIO:
 		if (this._setValue(dom,wId,value)):
 			pass
 
+	def setSelected(this,dom,wId,value):
+		if ( this._setSelected(dom,wId,value) ):
+			this._handleModeButtons(dom)
+
+	def setAllSelected(this,dom,value):
+		global mapping
+
+		for key in mapping:
+			if (not this._setSelected(dom,int(key),value)):
+				return
+
+		this.display(dom)	
+
 def acConnect(GPIO,dom,id):
 	dom.setLayout("", readAsset( "Main.html") )
 	GPIO.take()
@@ -292,6 +336,10 @@ callbacks = {
 		"Connect": acConnect,
 		"SwitchMode": acSwitchMode,
 		"ChangeValue": acChangeValue,
+		"Toggle": lambda GPIO, dom, id: GPIO.setSelected(dom,getWId(id),None),
+		"All": lambda GPIO, dom, id: GPIO.setAllSelected(dom, True),
+		"None": lambda GPIO, dom, id: GPIO.setAllSelected(dom, False),
+		"Invert": lambda GPIO, dom, id: GPIO.setAllSelected(dom, None),
 	}
 
 wiringpi.wiringPiSetup()

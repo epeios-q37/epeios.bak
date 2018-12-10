@@ -19,8 +19,8 @@ along with xdhwebq. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /*
-Gets a JS file (for Node.js) from the 'assets' directory on 'q37.info',
-and creates a page which embeds it on RunKit.
+Gets a JS file (for Node.js) from the 'atlas-node' repository on GitHub,
+and creates a page which embeds it on RunKit. Also runs it.
  */
 
 $source = <<<EOT
@@ -50,7 +50,9 @@ $token = array_key_exists('token', $_GET) ? $_GET['token'] : uniqid();
 
 $source = str_replace("$NAME$", $app, $source);
 
-$source .= file_get_contents("https://raw.githubusercontent.com/epeios-q37/atlas-node/master/" . $app . "/" . $app . ".js");
+// $source .= file_get_contents("https://raw.githubusercontent.com/epeios-q37/atlas-node/master/" . $app . "/" . $app . ".js");
+
+$source .= file_get_contents("http://q37.info/download/assets/" . $app . ".js");
 
 $source .= <<<EOT
 
@@ -79,10 +81,12 @@ $page = '<!DOCTYPE html>
 		<script>
 function onLoad( notebook )
 {
-    if ( confirm("The \'' . $app . '\' application will now be launched on RunKit and be automatically opened in your web browser.\n\nNOTA: the application will stop working after a few tens of seconds due to RunKit timeout.\nYou can then simply go back to the RunKit page.") )
-					notebook.evaluate();
-				else
-				 window.scrollTo(0,0);
+ notebook.setSource(source.replace(/&gt;/g, ">").replace(/&lt;/g, "<"))
+
+	if ( confirm("The \'' . $app . '\' application will now be launched on RunKit and be automatically opened in your web browser.\n\nNOTA: the application will stop working after a few tens of seconds due to RunKit timeout.\nYou can then simply go back to the RunKit page.") )
+		notebook.evaluate();
+	else
+		window.scrollTo(0,0);
 
 }
 function onEvaluate()
@@ -98,7 +102,7 @@ var notebook = RunKit.createNotebook({
 // the parent element for the new notebook
 element: document.getElementById("my-element"),
 // specify the source of the notebook
-source: source.replace(/&gt;/g, ">").replace(/&lt;/g, "<"),
+// source: source.replace(/&gt;/g, ">").replace(/&lt;/g, "<"),	// Does not work if content too long !
 onLoad: onLoad,
 onEvaluate: onEvaluate,
 env: [ "ATK_TOKEN=' . $token . '" ]
@@ -108,10 +112,12 @@ env: [ "ATK_TOKEN=' . $token . '" ]
 </html>';
 
 // Microsoft Edge does have problems when the source is too long !
+// NO MORE ACCURATE : Works when the source code is loaded with 'setCode()'.
+/*
 if (preg_match('/Edge/i', $_SERVER['HTTP_USER_AGENT']) == 1) {
  $page = '<h3>Applications based on the <a href="http://atlastk.org"><em>Atlas</em> toolkit</a> will work on all modern web browser, including Microsoft Edge. But, due to limitations (bugs?) of Microsoft Edge, it can not be used to launch the online demos. You have to switch to another web navigator for this.</h3>';
 }
-
+*/
 $page2 = '
 <!DOCTYPE html>
 <html>
