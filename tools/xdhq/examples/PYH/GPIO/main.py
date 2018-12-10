@@ -87,10 +87,8 @@ def getNewUserId():
 	global availableUserId, lock
 
 	lock.acquire()
-
 	userId = availableUserId
 	availableUserId += 1
-
 	lock.release()
 
 	return userId
@@ -99,24 +97,17 @@ def setCurrentUserId(id):
 	global currentUserId, lock
 
 	lock.acquire()
-
-	wasMe = currentUserId == id
-
+	wasMe = currentUserId == id or currentUserId == None
 	currentUserId = id
-
 	lock.release()
 
 	return wasMe
 
-def set(userId,wId,field,value):
+def set(wId,field,value):
 	global settings, lock
-	if (setCurrentUserId(userId)):
-		lock.acquire()
-		settings[wId][field] = value
-		lock.release()
-		return True
-	else:
-		return False
+	lock.acquire()
+	settings[wId][field] = value
+	lock.release()
 
 def retrieveMode(wId):
 	return 0
@@ -147,9 +138,7 @@ def syncSettings():
 	global settings, lock
 
 	lock.acquire()
-
 	settings = retrieveSettings()
-
 	lock.release()
 
 def readAsset(path):
@@ -182,14 +171,6 @@ class GPIO:
 		else:
 			dom.disableElements(buttons)
 
-	def _set(this,dom,field,wId,mode):
-		if (not(set(this._userId, field, wId, mode))):
-			dom.alert( "State externally modified: updating!")
-			this.display(dom)
-			return False
-		else:
-			return True
-
 	def _getSetting(this,wId):
 		global settings
 
@@ -198,16 +179,12 @@ class GPIO:
 	def _getMode(this,wId):
 		return this._getSetting(wId)[Setting.MODE]
 
-	def _setMode(this,dom,wId,mode):
-		if (this._set(dom,wId,Setting.MODE, mode)):
-			wiringpi.pinMode(wId,1 if mode > 1 else mode)
-			if ( mode == Mode.PWM ):
-				wiringpi.softPwmCreate(wId,0,100)
-			if ( this._set(dom,wId,Setting.VALUE,wiringpi.digitalRead(wId))):
-				dom.setContent("Value." + str(wId),this._getValue(wId))
-			return True
-		else:
-			return False
+	def _setMode(this,wId,mode):
+		set(wId,Setting.MODE,mode)
+		wiringpi.pinMode(wId,1 if mode > 1 else mode)
+		if ( mode == Mode.PWM ):
+			wiringpi.softPwmCreate(wId,0,100)
+		set(wId,Setting.VALUE,wiringpi.digitalRead(wId))
 
 	def _getValue(this,wId):
 		value = this._getSetting(wId)[Setting.VALUE]
@@ -217,23 +194,20 @@ class GPIO:
 
 		return value
 
-	def _setValue(this,dom,wId,value):
-		if ( this._set(dom,wId,Setting.VALUE,value) ):
-			mode = this._getMode(wId)
-			if ( mode == Mode.IN ):
-				sys.exit("Can not set value for a pin in IN mode !")
-			elif (mode == Mode.OUT):
-				wiringpi.digitalWrite( wId, 1 if value > 0 else 0 )
-			elif (mode == Mode.PWM):
-				wiringpi.softPwmWrite(wId,value)
-			else:
-				sys.exit("Unknown mode !")
-			return True
+	def _setValue(this,wId,value):
+		set(wId,Setting.VALUE,value)
+		mode = this._getMode(wId)
+		if ( mode == Mode.IN ):
+			sys.exit("Can not set value for a pin in IN mode !")
+		elif (mode == Mode.OUT):
+			wiringpi.digitalWrite( wId, 1 if value > 0 else 0 )
+		elif (mode == Mode.PWM):
+			wiringpi.softPwmWrite(wId,value)
 		else:
-			return False
+			sys.exit("Unknown mode !")
 
-	def _setSelected(this,dom,wId,value):
-		return this._set(dom,wId,Setting.SELECTED, not this._getSetting(wId)[Setting.SELECTED] if value == None else value )
+	def _setSelected(this,wId,value):
+		set(wId,Setting.SELECTED, not this._getSetting(wId)[Setting.SELECTED] if value == None else value )
 
 	def _getModeLabel(this,wId):
 		return Mode.label[this._getSetting(wId)[Setting.MODE]]
@@ -275,12 +249,10 @@ class GPIO:
 
 		xml.popTag()
 
-#		pprint.pprint(xml.toString())
-
 		return xml
 
 	def take(this):
-		setCurrentUserId(this._userId)
+		return setCurrentUserId(this._userId)
 
 	def display(this,dom):
 		dom.setLayoutXSL("GPIO", this._buildXML(), "GPIO.xsl")
@@ -289,37 +261,53 @@ class GPIO:
 	def setMode(this,dom,wId,mode):
 		id = "Value."+str(wId);
 
-		if (this._setMode(dom,wId,mode)):
-			dom.setAttribute(id,"value",this._getValue(wId))
+		this._setMode(wId, mode)
 
-			if (mode==Mode.IN):
-				dom.disableElement(id)
-				dom.setAttribute(id,"step","100")
-			elif (mode==Mode.OUT):
-				dom.enableElement(id)
-				dom.setAttribute(id,"step","100")
-			elif (mode==Mode.PWM):
-				dom.enableElement(id)
-				dom.setAttribute(id,"step","1")
-			else:
-				sys.exit("???")
+		dom.setContent("Value." + str(wId),this._getValue(wId))
+		dom.setAttribute(id,"value",this._getValue(wId))
+
+		if (mode==Mode.IN):
+			dom.disableElement(id)
+			dom.setAttribute(id,"step","100")
+		elif (mode==Mode.OUT):
+			dom.enableElement(id)
+			dom.setAttribute(id,"step","100")
+		elif (mode==Mode.PWM):
+			dom.enableElement(id)
+			dom.setAttribute(id,"step","1")
+		else:
+			sys.exit("???")
 
 	def setValue(this,dom,wId,value):
-		if (this._setValue(dom,wId,value)):
-			pass
+		this._setValue(wId,value)
 
 	def setSelected(this,dom,wId,value):
-		if ( this._setSelected(dom,wId,value) ):
-			this._handleModeButtons(dom)
+		this._setSelected(wId,value)
+		this._handleModeButtons(dom)
 
 	def setAllSelected(this,dom,value):
 		global mapping
 
 		for key in mapping:
-			if (not this._setSelected(dom,int(key),value)):
-				return
+			this._setSelected(int(key),value)
 
 		this.display(dom)	
+
+	def setAllMode(this,dom,mode):
+		global mapping,settings
+
+		for key in settings:
+			if settings[key][Setting.SELECTED]:
+				this._setMode(int(key),mode)
+
+		this.display(dom)
+	
+def preProcessing(GPIO,dom,action,id):
+	if GPIO.take() or action=="Connect":
+		return True
+	else:
+		dom.alert("Out of sync! Resynchronizing !")
+		GPIO.display(dom)
 
 def acConnect(GPIO,dom,id):
 	dom.setLayout("", readAsset( "Main.html") )
@@ -333,6 +321,7 @@ def acChangeValue(GPIO,dom,id):
 	GPIO.setValue(dom,getWId(id),int(dom.getContent(id)))
 
 callbacks = {
+		"_PreProcessing": preProcessing,
 		"Connect": acConnect,
 		"SwitchMode": acSwitchMode,
 		"ChangeValue": acChangeValue,
@@ -340,6 +329,9 @@ callbacks = {
 		"All": lambda GPIO, dom, id: GPIO.setAllSelected(dom, True),
 		"None": lambda GPIO, dom, id: GPIO.setAllSelected(dom, False),
 		"Invert": lambda GPIO, dom, id: GPIO.setAllSelected(dom, None),
+		"IN": lambda GPIO, dom, id: GPIO.setAllMode(dom,Mode.IN),
+		"OUT": lambda GPIO, dom, id: GPIO.setAllMode(dom,Mode.OUT),
+		"PWM": lambda GPIO, dom, id: GPIO.setAllMode(dom,Mode.PWM),
 	}
 
 wiringpi.wiringPiSetup()
