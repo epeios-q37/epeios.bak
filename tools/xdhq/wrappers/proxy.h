@@ -228,7 +228,7 @@ namespace proxy {
 	{
 	private:
 		// Action to launch on a new session.
-		str::wString NewSessionAction_, Info_;
+		str::wString Info_;
 	protected:
 		virtual void *CSDSCBPreProcess(
 			fdr::rRWDriver *RWDriver,
@@ -282,9 +282,7 @@ namespace proxy {
 					tol::Init( Data.Recv.Id, Data.Recv.Action );
 					GetAction_( Flow, Data.Recv.Id, Data.Recv.Action );
 					if ( Data.Recv.Action.Amount() == 0 ) {
-						if ( Data.Recv.Id.Amount() == 0 )
-							Data.Recv.Action = NewSessionAction_;
-						else
+						if ( Data.Recv.Id.Amount() != 0 )
 							qRGnr();
 					}
 					Data.Recv.WriteEnd();
@@ -326,14 +324,11 @@ namespace proxy {
 	public:
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, NewSessionAction_, Info_ );
+			tol::reset( P, Info_ );
 		}
 		qCVDTOR( rProcessing );
-		void Init(
-			const str::dString &NewSessionAction,
-			const str::dString &Info )
+		void Init( const str::dString &Info )
 		{
-			NewSessionAction_.Init( NewSessionAction );
 			Info_.Init( Info );
 		}
 	};

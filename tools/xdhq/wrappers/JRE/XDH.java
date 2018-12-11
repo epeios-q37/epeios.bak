@@ -53,16 +53,16 @@ public class XDH extends info.q37.jreq.JRE {
 	public static String readAsset( String path, String dir ) {
 		return readFile_( getAssetFilename_( path, dir ) );
 	}
-	static public void launch( String newSessionAction, String headContent, MODE mode, String dir ) {
+	static public void launch(String headContent, MODE mode, String dir ) {
 		mode_ = mode;
 		dir_ = dir;
 
 		switch ( mode ) {
 		case DEMO:
-			XDH_DEMO.launch( newSessionAction, headContent );
+			XDH_DEMO.launch(headContent );
 			break;
 		case PROD:
-			XDH_PROD.launch( newSessionAction );
+			XDH_PROD.launch();
 			break;
 		default:
 			throw new RuntimeException( "Unknown mode !!!");

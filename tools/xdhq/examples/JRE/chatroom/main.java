@@ -155,7 +155,7 @@ class Chatroom extends Atlas {
 
 	public void handle(DOM dom, String action, String id) {
 		switch (action) {
-		case "Connect":
+		case "":
 			connect_(dom, id);
 			break;
 		case "SubmitPseudo":
@@ -173,7 +173,7 @@ class Chatroom extends Atlas {
 	}
 
 	public static void main(String[] args) throws Exception {
-		launch("Connect", readAsset_("Head.html"), "chatroom", GUI.DEFAULT, args);
+		launch(readAsset_("Head.html"), "chatroom", GUI.DEFAULT, args);
 
 		for (;;)
 			new Chatroom();

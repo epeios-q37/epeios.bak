@@ -45,16 +45,16 @@ class XDHq extends XDHq_SHRD{
 	static function readAsset( $path, string $dir = "" ) {
 		return file_get_contents( self::getAssetFilename_( $path, $dir ) );
 	}
-	static function launch( string $newSessionAction, string $headContent, $mode, string $dir ) {
+	static function launch(string $headContent, $mode, string $dir ) {
 		self::$mode_ = $mode;
 		self::$dir = $dir;
 
 		switch ( $mode ) {
 		case self::MODE_PROD:
-			XDHq_PROD::launch( $newSessionAction );
+			XDHq_PROD::launch();
 			break;
 		case self::MODE_DEMO:
-			XDHq_DEMO::launch( $newSessionAction, $headContent );
+			XDHq_DEMO::launch($headContent );
 			break;
 		default:
 			throw new Exception( "Unknown mode !!!");

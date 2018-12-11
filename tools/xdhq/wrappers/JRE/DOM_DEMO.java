@@ -241,10 +241,6 @@ public class DOM_DEMO extends DOM_SHRD {
 			event.id = getString_(reader);
 
 			event.action = getString_(reader);
-
-			if ("".equals(event.action))
-				event.action = info.q37.xdhq.XDH_DEMO.newSessionAction;
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

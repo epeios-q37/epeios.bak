@@ -27,7 +27,7 @@ class Hello extends Atlas {
 	public void handle( DOM dom, String action, String id )
 	{
 		switch( action) {
-		case "Connect":
+		case "":
 			dom.setLayout("", readAsset_( "Main.html") );
 			dom.focus( "input");
 			break;
@@ -44,7 +44,7 @@ class Hello extends Atlas {
 		}
 	}
 	public static void main(String[] args) throws Exception {
-		launch("Connect", readAsset_( "Head.html" ), "Hello", GUI.DEFAULT, args );
+		launch(readAsset_( "Head.html" ), "Hello", GUI.DEFAULT, args );
 
 		for (;;)
 			new Hello();

@@ -218,9 +218,9 @@ module XDHq
 		end
 	end
 
-	def XDHq::launch(newSessionAction, headContent, dir)
+	def XDHq::launch(headContent, dir)
 		$dir = dir
-		XDHqDEMO.launch(newSessionAction, headContent)
+		XDHqDEMO.launch(headContent)
 	end
 
 end

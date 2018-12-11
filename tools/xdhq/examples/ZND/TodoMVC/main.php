@@ -280,7 +280,7 @@ class TodoMVC extends Threaded {
  function handle($dom, $action, $id) {
   $this->test = "Hello !!!";
   switch ($action) {
-  case "Connect":
+  case "":
    $dom->setLayout("", readAsset("Main.html"));
    $dom->focus("Input");
    $dom->disableElements(["HideActive", "HideCompleted"]);
@@ -332,9 +332,9 @@ function main() {
  $type = null;
 
  if (XDHq::isDev()) {
-  Atlas::launch("Connect", 'myNew', readAsset("HeadDEMO.html"), null, "TodoMVC");
+  Atlas::launch('myNew', readAsset("HeadDEMO.html"), null, "TodoMVC");
  } else {
-  Atlas::launch("Connect", 'myNew', readAsset("HeadDEMO.html"), null, ".");
+  Atlas::launch('myNew', readAsset("HeadDEMO.html"), null, ".");
  }
 }
 

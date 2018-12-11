@@ -247,7 +247,7 @@ class TodoMVC extends Atlas {
 
 	public void handle(DOM dom, String action, String id) {
 		switch (action) {
-		case "Connect":
+		case "":
 			dom.setLayout("", readAsset_("Main.html"));
 			dom.focus("Input");
 			dom.disableElements(new String[] { "HideActive", "HideCompleted" });
@@ -297,7 +297,7 @@ class TodoMVC extends Atlas {
 		else
 			dir = "TodoMVC";
 
-		launch("Connect", readAsset_("HeadDEMO.html"), dir, GUI.DEFAULT, args);
+		launch(readAsset_("HeadDEMO.html"), dir, GUI.DEFAULT, args);
 
 		for (;;)
 			new TodoMVC();

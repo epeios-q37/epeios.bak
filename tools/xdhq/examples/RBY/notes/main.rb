@@ -173,7 +173,7 @@ class Notes
 end
 
 callbacks = {
-	"Connect" => -> (notes, dom, id) {notes.acConnect(dom,id)},
+	"" => -> (notes, dom, id) {notes.acConnect(dom,id)},
 	"ToggleDescriptions"  => -> (notes, dom, id) {notes.acToggleDescriptions(dom,id)},
 	"Search" => -> (notes, dom, id) {notes.acSearch(dom,id)},
 	"Edit" => -> (notes, dom, id) {notes.acEdit(dom,id)},
@@ -182,4 +182,4 @@ callbacks = {
 	"Cancel" => -> (notes, dom, id) {notes.acCancel(dom,id)},
 }
 
-Atlas.launch("Connect",callbacks, -> () {Notes.new()}, readAsset("Head.html"),"notes")
+Atlas.launch(callbacks, -> () {Notes.new()}, readAsset("Head.html"),"notes")

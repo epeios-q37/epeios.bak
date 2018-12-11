@@ -303,7 +303,7 @@ class GPIO:
 		this.display(dom)
 	
 def preProcessing(GPIO,dom,action,id):
-	if GPIO.take() or action=="Connect":
+	if GPIO.take():
 		return True
 	else:
 		dom.alert("Out of sync! Resynchronizing !")
@@ -322,7 +322,7 @@ def acChangeValue(GPIO,dom,id):
 
 callbacks = {
 		"_PreProcessing": preProcessing,
-		"Connect": acConnect,
+		"": acConnect,
 		"SwitchMode": acSwitchMode,
 		"ChangeValue": acChangeValue,
 		"Toggle": lambda GPIO, dom, id: GPIO.setSelected(dom,getWId(id),None),
@@ -338,4 +338,4 @@ wiringpi.wiringPiSetup()
 
 syncSettings()
 		
-Atlas.launch("Connect", callbacks, GPIO, readAsset("Head.html"), "GPIO")
+Atlas.launch(callbacks, GPIO, readAsset("Head.html"), "GPIO")

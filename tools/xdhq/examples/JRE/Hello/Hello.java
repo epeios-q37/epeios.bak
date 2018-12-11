@@ -25,9 +25,7 @@ import info.q37.atlas.*;
 import java.util.HashMap;
 
 class Hello extends Atlas {
-	public void handle( DOM dom, String action, String id )
-	{
-		String html = 
+	private static String html = 
 		"<div class=\"vcenter-out\">" +
 		" <div class=\"vcenter-in\">" +
 		"  <fieldset>" +
@@ -45,7 +43,9 @@ class Hello extends Atlas {
 		" </div>" +
 		"</div>";
 
-		if ( "Connect".equals( action ) ) {
+	public void handle( DOM dom, String action, String id )
+	{
+		if ( "".equals( action ) ) {
 			dom.setLayout("", html);
 			dom.focus( "input");
 		} else if ("Typing".equals( action ) ) {
@@ -67,7 +67,7 @@ class Hello extends Atlas {
 			" .vcenter-in { display: table-cell; vertical-align: middle; }" +
 			"</style>";
 
-		launch("Connect", head, "Hello", GUI.DEFAULT, args );
+		launch(head, "Hello", GUI.DEFAULT, args );
 
 		for (;;)
 			new Hello();

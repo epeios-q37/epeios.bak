@@ -94,14 +94,14 @@ namespace {
 SCLJRE_F( xdhp::Listen )
 {
 qRH;
-	str::wString Arguments, NewSessionAction;
+	str::wString Arguments;
 qRB;
-	tol::Init( Arguments, NewSessionAction );
-	Caller.Get( Arguments, NewSessionAction );
+	tol::Init( Arguments);
+	Caller.Get( Arguments);
 
 	sclargmnt::FillRegistry( Arguments, sclargmnt::faIsArgument, sclargmnt::uaReport );
 
-	Processing_.Init( NewSessionAction, str::wString( "JRE" ) );
+	Processing_.Init(str::wString( "JRE" ) );
 	Server_.Init( sclmisc::MGetU16( registry::parameter::Service ), Processing_ );
 
 	mtk::RawLaunch( Process_, NULL );

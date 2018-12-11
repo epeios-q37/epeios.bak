@@ -34,10 +34,10 @@ def acShowInput(blank, dom, id)
 end
 
 callbacks = {
-	"Connect" => method(:acConnect),
+	"" => method(:acConnect),
 	"Submit" => -> (blank, dom, id) {dom.setContent("Pattern", dom.getContent("Pattern").upcase())},
 	"HideInput" => -> (blank, dom, id) { dom.addClass("Input", "hidden")},
 	"ShowInput" => method(:acShowInput)
 }
 
-Atlas.launch("Connect",callbacks, -> () {}, readAsset("Head.html"),"blank")
+Atlas.launch(callbacks, -> () {}, readAsset("Head.html"),"blank")

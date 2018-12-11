@@ -19,9 +19,8 @@ along with XDHq.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 class XDHq_DEMO extends XDHq_SHRD {
- static $newSessionAction, $headContent;
- static function launch(string $newSessionAction, string $headContent) {
-  self::$newSessionAction = $newSessionAction;
+ static $headContent;
+ static function launch(string $headContent) {
   self::$headContent = $headContent;
  }
 }
@@ -209,10 +208,6 @@ class XDHqDOM_DEMO extends Threaded {
 
   $id = $this->getString_($this->socket);
   $action = $this->getString_($this->socket);
-
-  if (empty($action)) {
-   $action = XDHq_DEMO::$newSessionAction;
-  }
 
   return $action;
  }

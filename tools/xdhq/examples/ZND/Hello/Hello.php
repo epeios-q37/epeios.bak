@@ -69,7 +69,7 @@ EOT;
 
  public function handle($dom, $action, $id) {
   switch ($action) {
-  case "Connect":
+  case "":
    $dom->setLayout("", self::$body);
    $dom->focus("input");
    break;
@@ -117,5 +117,5 @@ $head = <<<EOT
 </style>
 EOT;
 
-Atlas::launch("Connect", 'hello', $head, null, "Hello");
+Atlas::launch('hello', $head, null, "Hello");
 ?>

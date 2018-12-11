@@ -39,7 +39,7 @@ EOT;
  
  public function handle($dom, $action, $id) {
   switch ($action) {
-  case "Connect":
+  case "":
    $dom->setLayout("", self::$body);
    $dom->focus("input");
    break;
@@ -71,7 +71,7 @@ $head = <<<EOT
 </style>
 EOT;
 
-Atlas::launch("Connect", 'hello', $head);
+Atlas::launch('hello', $head);
 ?>
 ```
 
@@ -91,7 +91,7 @@ The `Atlas` directory contains the *PHP* source code of the *Atlas* toolki, whic
 
 All other directories are examples.
 
-To run an example, launch `php <Name>/main.php`, where `<Name>` is the name of the example (`Blank`, `Chatroom`…).
+To run an example, launch `php <Name>/main.php`, where `<Name>` is the name of the example (`Blank`, `Chatroom`ï¿½).
 
 NOTA: **You need *PHP* with [*pthreads*](http://php.net/manual/book.pthreads.php)!**
 

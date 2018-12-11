@@ -92,16 +92,16 @@ function main() {
  $type = null;
 
  if (isDev()) {
-  Atlas::launch("Connect", null, "Tuto");
+  Atlas::launch(null, "Tuto");
  } else {
-  Atlas::launch("Connect");
+  Atlas::launch();
  }
 
  $dom = new DOM();
 
  while (true) {
   switch ($dom->getAction($id)) {
-  case "Connect":
+  case "":
    $dom->setLayout("", new AtlasTree(), "Main.1.xsl");
    $dom->focus("Input");
    break;

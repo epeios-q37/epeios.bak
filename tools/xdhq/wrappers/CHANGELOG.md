@@ -1,5 +1,9 @@
 # *CHANGELOG* for the *XDHTML* wrappers (*all bindings*).
 
+## 2018-12-11
+
+- removing the new session related stuff,
+
 ## 2018-11-20
 
 - sending some information for logging purpose,

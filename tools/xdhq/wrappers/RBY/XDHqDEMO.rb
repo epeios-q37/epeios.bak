@@ -37,7 +37,6 @@ module XDHqDEMO
     $wPort = ""
     $cgi = "xdh"
 
-    $newSessionAction = ""
     $headContent = ""
     $token = ""
 
@@ -51,8 +50,7 @@ module XDHqDEMO
         end
     end
 
-    def XDHqDEMO::launch(newSessionAction,headContent)
-        $newSessionAction = newSessionAction
+    def XDHqDEMO::launch(headContent)
         $headContent = headContent
     end
         
@@ -202,10 +200,6 @@ module XDHqDEMO
 
             id = getString()
             action = getString()
-
-            if action.empty?()
-                action = $newSessionAction
-            end
 
             return action,id
         end

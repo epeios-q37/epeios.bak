@@ -53,7 +53,7 @@ function readAsset($path) {
 class Blank extends Threaded {
  public function handle($dom, $action, $id) {
   switch ($action) {
-  case "Connect":
+  case "":
    $dom->setLayout("", readAsset("Main.html"));
    $dom->addClass("Input", "hidden");
    break;
@@ -78,5 +78,5 @@ function blank() {
  return new Blank();
 }
 
-Atlas::launch("Connect", 'blank', readAsset("Head.html"), null, "blank");
+Atlas::launch( 'blank', readAsset("Head.html"), null, "blank");
 ?>

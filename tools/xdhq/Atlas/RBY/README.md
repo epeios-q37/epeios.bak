@@ -55,12 +55,12 @@ def acConnect( hello, dom, id)
 end
 
 callbacks = {
-  "Connect" => method(:acConnect),
+  "" => method(:acConnect),
   "Typing" => -> (userObject,dom, id) { dom.setContent("name", dom.getContent(id))},
   "Clear" => -> (userObject,dom, id) { if dom.confirm?("Are you sure?") then dom.setContents({"input" => "", "name" => "" }) end }
  }
 
-Atlas.launch("Connect",callbacks,-> () {}, head)
+Atlas.launch(callbacks,-> () {}, head)
 ```
 
 ## *TodoMVC*

@@ -40,8 +40,8 @@ module Atlas
 		end
 	end
 
-	def Atlas::launch(newSessionAction,callbacks,new,headContent="",dir="")
-		XDHq.launch(newSessionAction,headContent,dir)
+	def Atlas::launch(callbacks,new,headContent="",dir="")
+		XDHq.launch(headContent,dir)
 
 		while true
 			thread = Thread.new(new.call(),XDHq::DOM.new(),callbacks) do |userObject,dom,callbacks| thread(userObject, dom, callbacks) end

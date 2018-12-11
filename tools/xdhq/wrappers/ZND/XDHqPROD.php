@@ -61,8 +61,8 @@ class XDHqWrapper extends ZNDq {
 XDHqWrapper::init();
 
 class XDHq_PROD extends XDHq_SHRD {
-	static function launch( string $newSessionAction ) {
-		XDHqWrapper::_call( 1, "53752", $newSessionAction );
+	static function launch() {
+		XDHqWrapper::_call( 1, "53752");
 	}
 }
 

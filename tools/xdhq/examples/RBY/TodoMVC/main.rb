@@ -225,7 +225,7 @@ class TodoMVC
 end
 
 callbacks = {
-	"Connect" => -> (notes, dom, id) {notes.acConnect(dom,id)},
+	"" => -> (notes, dom, id) {notes.acConnect(dom,id)},
 	"Submit" => -> (notes, dom, id) {notes.submit(dom,id)},
 	"Destroy" => -> (notes, dom, id) {notes.acDestroy(dom,id)},
 	"Toggle" => -> (notes, dom, id) {notes.acToggle(dom,id)},
@@ -237,4 +237,4 @@ callbacks = {
 	"Cancel" => -> (notes, dom, id) {notes.acCancel(dom,id)},
 }
 
-Atlas.launch("Connect",callbacks, -> () {TodoMVC.new()}, readAsset("HeadDEMO.html"),"TodoMVC")
+Atlas.launch(callbacks, -> () {TodoMVC.new()}, readAsset("HeadDEMO.html"),"TodoMVC")

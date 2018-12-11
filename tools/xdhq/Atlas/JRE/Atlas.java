@@ -115,7 +115,7 @@ public abstract class Atlas implements Runnable {
 			return MODE.DEMO;
 	}
 
-	private static void launch(String newSessionAction, String headContent, String dir, GUI gui, String arg) {
+	private static void launch(String headContent, String dir, GUI gui, String arg) {
 		MODE mode = getDefaultMODE();
 
 		if (gui == GUI.DEFAULT) {
@@ -140,7 +140,7 @@ public abstract class Atlas implements Runnable {
 			}
 		}
 
-		info.q37.xdhq.XDH.launch(newSessionAction, headContent, mode, dir );
+		info.q37.xdhq.XDH.launch(headContent, mode, dir );
 
 		switch (gui) {
 		case NONE:
@@ -162,18 +162,18 @@ public abstract class Atlas implements Runnable {
 		}
 	}
 
-	public static void launch(String newSessionAction, String headContent, String dir, GUI gui, String[] args) {
+	public static void launch(String headContent, String dir, GUI gui, String[] args) {
 		if (args.length > 0)
-			launch(newSessionAction, headContent,dir, gui, args[0]);
+			launch(headContent,dir, gui, args[0]);
 		else
-			launch(newSessionAction, headContent, dir, gui, "");
+			launch(headContent, dir, gui, "");
 	}
 
-	public static void launch(String newSessionAction, String headContent, GUI gui) {
-		launch(newSessionAction, headContent, ".", gui, "");
+	public static void launch(String headContent, GUI gui) {
+		launch(headContent, ".", gui, "");
 	}
 
-	public static void launch(String newSessionAction, String headContent) {
-		launch(newSessionAction, headContent, ".", GUI.DEFAULT, "");
+	public static void launch(String headContent) {
+		launch(headContent, ".", GUI.DEFAULT, "");
 	}
 };

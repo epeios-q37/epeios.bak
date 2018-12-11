@@ -29,7 +29,7 @@ public class XDH_PROD extends XDH_SHRD {
 	static public Object call(int index, Object... objects) {
 		return JRE.call( launcher, index, objects );
 	}
-	static public void launch( String newSessionAction ) {
-		JRE.call( launcher, 1, "53752", newSessionAction );
+	static public void launch() {
+		JRE.call( launcher, 1, "53752" );
 	}
 }

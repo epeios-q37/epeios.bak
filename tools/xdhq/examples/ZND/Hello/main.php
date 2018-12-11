@@ -53,7 +53,7 @@ function readAsset($path) {
 class Hello extends Threaded {
  public function handle($dom, $action, $id) {
   switch ($action) {
-  case "Connect":
+  case "":
    $dom->setLayout("", readAsset("Main.html"));
    $dom->focus("input");
    break;
@@ -75,5 +75,5 @@ function hello() {
  return new Hello();
 }
 
-Atlas::launch("Connect", 'hello', readAsset("Head.html"), null, "Hello");
+Atlas::launch('hello', readAsset("Head.html"), null, "Hello");
 ?>

@@ -109,7 +109,7 @@ class Atlas extends Thread {
   $this->userObject = $userObject;
  }
 
- public static function launch(string $newSessionAction, callable $callback, string $headContent = "", $gui = null, string $dir = ".") {
+ public static function launch(callable $callback, string $headContent = "", $gui = null, string $dir = ".") {
   global $argv;
 
   $mode = self::getDefaultMode_();
@@ -146,7 +146,7 @@ class Atlas extends Thread {
    }
   }
 
-  XDHq::launch($newSessionAction, $headContent, $mode, $dir);
+  XDHq::launch($headContent, $mode, $dir);
 
   switch ($gui) {
   case self::GUI_NONE:

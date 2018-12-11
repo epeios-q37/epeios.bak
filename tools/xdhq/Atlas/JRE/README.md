@@ -39,7 +39,7 @@ class Hello extends Atlas {
 		" </div>" +
 		"</div>";
 
-		if ( "Connect".equals( action ) ) {
+		if ( "".equals( action ) ) {
 			dom.setLayout("", body);
 			dom.focus("input");
 		} else if ("Typing".equals( action ) ) {
@@ -62,7 +62,7 @@ class Hello extends Atlas {
 			" .vcenter-in { display: table-cell; vertical-align: middle; }" +
 			"</style>";
 
-		launch("Connect", head );
+		launch(head );
 
 		for (;;)
 			new Hello();
@@ -86,11 +86,11 @@ The `Atlas` directory contains the *Java* source code of the *Atlas* toolkit, wh
 
 All other directories are examples.
 
-To run an example, go inside its directory (`Blank`, `Chatroom`…) and launch:
+To run an example, go inside its directory (`Blank`, `Chatroom`ï¿½) and launch:
 - under *Windows* : `java -cp .;../Atlas.jar <Name>` (with semi-colon as *classpath* separator),
 - under other platforms : `java -cp .:../Atlas.jar <Name>` (with colon as *classpath* separator).
 
-where `<Name>` is the name of the example (`Blank`, `Chatroom`…).
+where `<Name>` is the name of the example (`Blank`, `Chatroom`ï¿½).
 
 The *Atlas* toolkit is also available for:
 - *Node.js*: <http://github.com/epeios-q37/atlas-node>

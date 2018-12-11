@@ -26,12 +26,12 @@
 			</tbody>
 		</table>
 		<div>
-			<fieldset>
+			<fieldset style="text-align: center;">
 				<button data-xdh-onevent="All">All</button>
 				<button data-xdh-onevent="None">None</button>
 				<button data-xdh-onevent="Invert">Invert</button>
 			</fieldset>
-			<fieldset>
+			<fieldset style="text-align: center;">
 				<xsl:apply-templates select="/XDHTML/Corpus/Modes/Mode" mode="Button"/>
 			</fieldset>
 		</div>

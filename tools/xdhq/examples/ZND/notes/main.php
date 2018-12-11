@@ -161,7 +161,7 @@ class Notes extends Threaded {
 
  public function handle($dom, $action, $id) {
   switch ($action) {
-  case "Connect":
+  case "":
    $dom->setLayout("", readAsset("Main.html"));
    $this->displayList($dom);
    break;
@@ -236,5 +236,5 @@ function notes() {
  return new Notes();
 }
 
-Atlas::launch("Connect", 'notes', readAsset("Head.html"), null, "notes");
+Atlas::launch('notes', readAsset("Head.html"), null, "notes");
 ?>

@@ -96,14 +96,14 @@ namespace {
 SCLZND_F( xdhp::Listen )
 {
 qRH;
-	str::wString Arguments, NewSessionAction;
+	str::wString Arguments;
 qRB;
-	tol::Init( Arguments, NewSessionAction );
-	Caller.Get( Arguments, NewSessionAction );
+	tol::Init( Arguments);
+	Caller.Get( Arguments);
 
 	sclargmnt::FillRegistry( Arguments, sclargmnt::faIsArgument, sclargmnt::uaReport );
 
-	Processing_.Init( NewSessionAction );
+	Processing_.Init(str::wString( "ZND" ));
 	Server_.Init( sclmisc::MGetU16( registry::parameter::Service ), Processing_ );
 
 	mtk::RawLaunch( Process_, NULL );

@@ -163,7 +163,7 @@ class Notes extends Atlas {
 	}
 
 	public void handle( DOM dom, String action, String id ) {
-		if ( action.equals( "Connect" ) ) {
+		if ( action.equals( "" ) ) {
 			dom.setLayout("", readAsset_( "Main.html") );
 			displayList( dom );
 		} else if ( action.equals( "ToggleDescriptions" ) ) {
@@ -196,7 +196,7 @@ class Notes extends Atlas {
 		else
 			dir = "notes";
 
-		launch("Connect", readAsset_("Head.html"), dir, GUI.DEFAULT, args);
+		launch(readAsset_("Head.html"), dir, GUI.DEFAULT, args);
 		for (;;) new Notes();
 	}
 }

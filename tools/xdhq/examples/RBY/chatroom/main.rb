@@ -137,10 +137,10 @@ def acUpdate(chatroom, dom, id)
 end
 
 callbacks = {
-	"Connect" => method(:acConnect),
+	"" => method(:acConnect),
 	"SubmitPseudo" => method(:acSubmitPseudo),
 	"SubmitMessage" => method(:acSubmitMessage),
 	"Update" => method(:acUpdate),
 }
 
-Atlas.launch("Connect",callbacks, ->() {return Chatroom.new()}, readAsset("Head.html"),"chatroom")
+Atlas.launch(callbacks, ->() {return Chatroom.new()}, readAsset("Head.html"),"chatroom")

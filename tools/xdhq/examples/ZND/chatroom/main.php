@@ -162,7 +162,7 @@ class Chatroom extends Threaded {
 
  public function handle($dom, $action, $id) {
   switch ($action) {
-  case "Connect":
+  case "":
    $this->connect_($dom, $�d);
    break;
   case "SubmitPseudo":
@@ -187,5 +187,5 @@ function myNew() {
  return new Chatroom($shared);
 }
 
-Atlas::launch("Connect", 'myNew', readAsset("Head.html"), null, "chatroom");
+Atlas::launch('myNew', readAsset("Head.html"), null, "chatroom");
 ?>
