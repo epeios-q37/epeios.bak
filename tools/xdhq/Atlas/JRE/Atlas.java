@@ -22,14 +22,14 @@ package info.q37.atlas;
 import info.q37.xdhq.MODE;
 
 public abstract class Atlas implements Runnable {
-	private DOM dom;
+	public DOM dom;
 
 	public Atlas() {
 		this.dom = new DOM( info.q37.xdhq.XDH.getMode() );
 		new Thread( this ).start();
 	}
 
-	public abstract void handle( DOM dom, String action, String id );
+	public abstract void handle(String action, String id );
 
 	@Override
 	public final void run() {
@@ -37,7 +37,7 @@ public abstract class Atlas implements Runnable {
 		for (;;) {
 			dom.getAction(event);
 
-			handle( dom, event.action, event.id );
+			handle(event.action, event.id );
 		}
 	}
 

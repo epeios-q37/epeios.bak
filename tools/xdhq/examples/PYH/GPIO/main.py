@@ -33,7 +33,7 @@ currentUserId = None
 settings = {}
 
 mappings = {
-	"Odroid C2":
+	"ODROID-C2":
 	{
 		0: {},
 		1: {},
@@ -63,10 +63,71 @@ mappings = {
 #	29: {},
 #	30: {},
 #	31: {},
+	},
+	"Raspberry Pi":
+	{
+		0: {},
+		1: {},
+		2: {},
+		3: {},
+		4: {},
+		5: {},
+		6: {},
+		7: {},
+#		8: {},
+#		9: {},
+#		10: {},
+#		11: {},
+#		12: {},
+#		13: {},
+#		14: {},
+#		15: {},
+#		16: {},
+		21: {},
+		22: {},
+		23: {},
+		24: {},
+		25: {},
+		26: {},
+		27: {},
+		28: {},
+		29: {},
+#		30: {},
+#		31: {},
 	}
 }
 
-mapping = mappings["Odroid C2"]
+mappings["Testing"] = mappings["ODROID-C2"]
+
+mapping = None
+
+def getModel():
+	file = "/proc/device-tree/model"
+	if os.path.isfile(file):
+		return open(file).read()
+	elif os.path.isfile("./wiringpi.py"):	# true in development environment.
+		return "Testing environment"
+	else:
+		sys.exit("Unable to identify device!")
+
+def detectDevice(model):
+	global mappings
+	for key in mappings.keys():
+		if model.startswith(key):
+			return key
+
+	return None
+
+def setMapping(model):
+	global mapping, mappings
+	key = detectDevice(model)
+
+	if ( key == None ):
+		sys.exit( "Unable to find device from '" + model + "'.")
+
+	print( "Using mapping '" + key + "' deduced from '" + model + "'.")
+
+	mapping = mappings[key]
 
 class Setting:
 	MODE = 0
@@ -335,6 +396,8 @@ callbacks = {
 	}
 
 wiringpi.wiringPiSetup()
+
+setMapping(getModel())
 
 syncSettings()
 		

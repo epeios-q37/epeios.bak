@@ -43,7 +43,8 @@ class Hello extends Atlas {
 		" </div>" +
 		"</div>";
 
-	public void handle( DOM dom, String action, String id )
+	@Override
+	public void handle(String action, String id )
 	{
 		if ( "".equals( action ) ) {
 			dom.setLayout("", html);
