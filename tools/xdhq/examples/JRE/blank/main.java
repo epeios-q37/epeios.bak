@@ -31,7 +31,8 @@ class Blank extends Atlas {
 		return readAsset( path, dir );
 	}
 
-	public void handle( DOM dom, String action, String id ) {
+	@Override
+	public void handle(String action, String id ) {
 		if ( action.equals( "" ) ) {
 			dom.setLayout("",readAsset_( "Main.html") );
 			dom.addClass("Input", "hidden");

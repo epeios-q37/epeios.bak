@@ -245,7 +245,8 @@ class TodoMVC extends Atlas {
 		}
 	}
 
-	public void handle(DOM dom, String action, String id) {
+	@Override
+	public void handle(String action, String id) {
 		switch (action) {
 		case "":
 			dom.setLayout("", readAsset_("Main.html"));

@@ -153,7 +153,8 @@ class Chatroom extends Atlas {
 		dom.setTimeout(1000, "Update");
 	}
 
-	public void handle(DOM dom, String action, String id) {
+	@Override
+	public void handle(String action, String id) {
 		switch (action) {
 		case "":
 			connect_(dom, id);

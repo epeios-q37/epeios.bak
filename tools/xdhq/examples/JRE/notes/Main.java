@@ -162,7 +162,8 @@ class Notes extends Atlas {
 		notes.add(new Note("Implement new functionalities", "Although it's almost perfect..., isn't it ?"));
 	}
 
-	public void handle( DOM dom, String action, String id ) {
+	@Override
+	public void handle(String action, String id ) {
 		if ( action.equals( "" ) ) {
 			dom.setLayout("", readAsset_( "Main.html") );
 			displayList( dom );

@@ -28,8 +28,8 @@ module XDHqDEMO
         puts "#{caller_infos[0]} - #{caller_infos[1]}"  
     end
 
-    $protocolLabel = "712a58bf-2c9a-47b2-ba5e-d359a99966de"
-    $protocolVersion = "1"
+    $protocolLabel = "3f0aef6b-b893-4ccd-9316-d468588fc572"
+    $protocolVersion = "0"
 
     $pAddr = "atlastk.org"
     $pPort = 53800
@@ -185,9 +185,16 @@ module XDHqDEMO
                 abort("Unmatched token !!!")
             end
 
-            getString() # Language.
             writeString($protocolLabel)
             writeString($protocolVersion)
+
+            errorMessage = getString()
+
+            if ( errorMessage != "" )
+                abort(errorMessage)
+            end
+
+            getString() # Language.
             writeString("RBY")
         end
 
