@@ -91,7 +91,7 @@ The `Atlas` directory contains the *PHP* source code of the *Atlas* toolki, whic
 
 All other directories are examples.
 
-To run an example, launch `php <Name>/main.php`, where `<Name>` is the name of the example (`Blank`, `Chatroom`�).
+To run an example, launch `php <Name>/main.php`, where `<Name>` is the name of the example (`Blank`, `Chatroom`…).
 
 NOTA: **You need *PHP* with [*pthreads*](http://php.net/manual/book.pthreads.php)!**
 

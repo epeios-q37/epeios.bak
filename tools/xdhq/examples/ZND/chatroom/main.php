@@ -163,7 +163,7 @@ class Chatroom extends Threaded {
  public function handle($dom, $action, $id) {
   switch ($action) {
   case "":
-   $this->connect_($dom, $�d);
+   $this->connect_($dom, $id);
    break;
   case "SubmitPseudo":
    $this->submitPseudo_($dom, $id);
