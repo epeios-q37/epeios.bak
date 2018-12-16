@@ -144,6 +144,12 @@ namespace xdhutl {
 	{
 		if ( Name == "SELECT" )
 			Event.Append( "change" );
+		else if ( Name == "RANGE" )
+			Event.Append( "change" );
+		else if ( Name == "CHECKBOX" )
+			Event.Append( "change" );
+		else if ( Name == "RADIO" )
+			Event.Append( "change" );
 		else if ( Name == "TEXT" ) {
 			Event.Append( "keypress" );
 			Keys.Append( "Enter" );

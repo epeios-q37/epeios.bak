@@ -6,6 +6,11 @@
 - [stdz]: modification to comply with current standards;
 - [trvl]: trivial modifications;
 
+## 2018-12-16
+- XDHUTL:
+  - the default event for `range` input type was not appropriate for mobile devices,
+  - changing also preventively the default event for `radio` and `checkbox` input types,
+
 ## 2018-12-07
 
 - CSDBNC:
