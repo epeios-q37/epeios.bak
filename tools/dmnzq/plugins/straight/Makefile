@@ -40,8 +40,8 @@ mods += tys uys utf xml xpp
 mods += xtf llio dlbrry plgn plgncore 
 mods += sck 
 mods += csdbns csdscb 
-mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
-mods += sclplugin 
+mods += sclargmnt scli sclmisc sclerror scllocale 
+mods += sclrgstry sclplugin 
 mods += misc 
 mods += registry 
 
@@ -393,7 +393,7 @@ ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20171122"\"
+copt += -DVERSION=\""20181207"\"
 copt += -DCOPYRIGHT_YEARS=\""2015-2016"\"
 copt += -DIDENTIFIER=\""24913b17-c969-4327-866c-9639791acb5e"\"
 

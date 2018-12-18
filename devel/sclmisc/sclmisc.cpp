@@ -1273,20 +1273,21 @@ namespace {
 		Tags.Append( Id );
 	}
 
-	 void GetPluginRelatedTags_(
+	 bso::sBool GetPluginRelatedTags_(
 		const char *Target,
 		rgstry::tags_ &Tags )
 	{
+		 bso::sBool Exists = false;
 	qRH
 		str::string Id;
 	qRB
 		Id.Init();
-		sclmisc::MGetValue( rgstry::tentry___( sclrgstry::parameter::targeted_plugin::Id, Target ), Id );
-
-		FillPluginRelatedTags_( Target, Id, Tags );
+		if ( Exists = sclmisc::OGetValue( rgstry::tentry___( sclrgstry::parameter::targeted_plugin::Id, Target ), Id ) )
+			FillPluginRelatedTags_( Target, Id, Tags );
 	qRR
 	qRT
 	qRE
+		return Exists;
 	}
 }
 
@@ -1349,27 +1350,30 @@ qRE
 }
 
 
-const str::string_ &sclmisc::GetPluginFeatures(
+bso::sBool sclmisc::GetPluginFeatures(
 	const char *Target,
 	str::string_ &Filename,
 	rgstry::entry__ &Configuration,
 	rgstry::entry__ &Locale,
-	str::string_ &Arguments )
+	str::string_ &Arguments,
+	qRPN )
 {
+	bso::sBool Exists = false;
 qRH
 	rgstry::tags Tags;
 qRB
 	Tags.Init();
 
-	GetPluginRelatedTags_( Target, Tags );
-
-	GetPluginFeatures_( Target, Tags, Filename, Configuration, Locale );
+	if ( Exists = GetPluginRelatedTags_( Target, Tags ) ) {
+		GetPluginFeatures_( Target, Tags, Filename, Configuration, Locale );
 	
-	sclmisc::MGetValue( rgstry::tentry___( sclrgstry::parameter::TargetedPlugin, Target ), Arguments );
+		sclmisc::MGetValue( rgstry::tentry___( sclrgstry::parameter::TargetedPlugin, Target ), Arguments );
+	} else if ( qRPT )
+		qRFwk();
 qRR
 qRT
 qRE
-	return Filename;
+	return Exists;
 }
 
 namespace {

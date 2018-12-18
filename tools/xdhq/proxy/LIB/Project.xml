@@ -51,10 +51,14 @@
 		</Modules>
 		<Module>dmopool</Module>
 		<Module>registry</Module>
-		<Module Path="../">prtcl</Module>
+		<Module Path="../../">prtcl</Module>
+		<Modules Path="../" Group="Shared">
+			<Module>plugins</Module>
+		</Modules>
 	</Modules>
 	<SourceDirs>
 		<SourceDir>..</SourceDir>
+		<SourceDir>../..</SourceDir>
 	</SourceDirs>
 	<Files>
 		<File Path="../">README.md</File>

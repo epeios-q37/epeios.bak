@@ -23,6 +23,8 @@ using namespace dmopool;
 
 #include "prtcl.h"
 
+#include "plugins.h"
+
 #include "registry.h"
 
 #include "bch.h"
@@ -197,6 +199,50 @@ namespace {
 		const char *IP = NULL;
 	};
 
+	namespace token_ {
+		plgn::rRetriever<plugins::cToken> PluginRetriever_;
+
+		class sToken_
+		: public plugins::cToken
+		{
+		protected:
+			virtual bso::sBool PLUGINSHandle(
+				const str::dString &Raw,
+				str::dString &Normalized ) override
+			{
+				bso::sBool New = true;
+				tol::bUUID UUID;
+
+				Normalized = Raw;
+
+				if ( Raw.Amount() == 0 )
+					Normalized.Append( tol::UUIDGen( UUID ) );
+				else if ( (Raw.Amount() > 1) && (Raw( 0 ) == '&') )
+					Normalized.Remove( Normalized.First() );
+				else
+					New = false;
+
+				return New;
+			}
+		public:
+			void reset(bso::sBool = true ) {}
+			qCVDTOR( sToken_ );
+			void Init( void ) {}
+		} DefaultHandler_;
+
+		plugins::cToken &GetPlugin( void )
+		{
+			PluginRetriever_.Init();
+
+			if ( sclmisc::Plug( plugins::TokenPluginTarget, NULL, PluginRetriever_, qRPU ) )
+				return PluginRetriever_.Plugin();
+			else {
+				DefaultHandler_.Init();
+				return DefaultHandler_;
+			}
+		}
+	}
+
 	void NewConnexionRoutine_(
 		sData_ &Data,
 		mtk::gBlocker &Blocker )
@@ -206,7 +252,6 @@ namespace {
 		str::wString IP;
 		str::wString Token, Head;
 		sck::rRWFlow Flow;
-		tol::bUUID UUID;
 		rClient_ *Client = NULL;
 		mtx::rMutex Mutex;
 	qRFB;
@@ -220,16 +265,7 @@ namespace {
 		Token.Init();
 		Get_( Flow, Token );
 
-		if ( ( Token.Amount() == 0 )
-			   || ( ( Token.Amount() > 1 ) &&
-				    ( ( Token( 0 ) == '_' )	// This is deprecated; only '&' will be used as forced token marker in the future.
-					   || ( Token( 0 ) == '&' ) ) ) ) {
-
-			if ( Token.Amount() == 0 )
-				Token.Append( tol::UUIDGen( UUID ) );
-			else
-				Token.Remove( Token.First() );
-
+		if ( token_::GetPlugin().Handle(Token) ) {
 			Head.Init();
 			Get_( Flow, Head );
 

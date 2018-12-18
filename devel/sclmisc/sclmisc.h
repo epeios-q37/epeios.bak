@@ -710,25 +710,28 @@ namespace sclmisc {
 		rgstry::entry__ &Locale );
 
 	// Retrieve a plugin with given target. Its id is retrieved from the registry.
-	const str::string_ &GetPluginFeatures(
+	bso::sBool GetPluginFeatures(
 		const char *Target,
 		str::string_ &Filename,
 		rgstry::entry__ &Configuration,
 		rgstry::entry__ &Locale,
-		str::string_ &Arguments );
+		str::string_ &Arguments,
+		qRPD );
 
 	void HandleLocale_(
 		const rgstry::entry__ &Entry,
 		const str::string_ &Filename );
 
 	// Retrieve a plugin with given target AND Id.
-	template <typename retriever> inline void Plug(
+	template <typename retriever> inline bso::sBool Plug(
 		const char *Target,
 		const str::dString &Id,
 		const str::dString &Arguments,	// Useless if 'Id' empty.
 		const char *Identifier,
-		retriever &PluginRetriever )
+		retriever &PluginRetriever,
+		qRPD )
 	{
+		bso::sBool Exists = false;
 	qRH
 		str::string Filename, TrueArguments;
 		rgstry::entry__ Configuration, Locale;
@@ -741,24 +744,29 @@ namespace sclmisc {
 		if ( Id.Amount() != 0 ) {
 			GetPluginFeatures( Target, Id, Filename, Configuration, Locale );
 			TrueArguments = Arguments;
+			Exists = true;
 		} else
-			GetPluginFeatures( Target, Filename, Configuration, Locale, TrueArguments );
+			Exists = GetPluginFeatures( Target, Filename, Configuration, Locale, TrueArguments, qRP );
 
-		HandleLocale_( Locale, Filename );
+		if ( Exists ) {
+			HandleLocale_( Locale, Filename );
 
-		PluginRetriever.Initialize( Filename, Identifier, Configuration, TrueArguments, plgn::EmptyAbstracts );
+			PluginRetriever.Initialize( Filename, Identifier, Configuration, TrueArguments, plgn::EmptyAbstracts );
+		}
 	qRR
 	qRT
 	qRE
+		return Exists;
 	}
 
 	// Retrieve a plugin with given target. Its id is retrieved from the registry.
-	template <typename retriever> inline void Plug(
+	template <typename retriever> inline bso::sBool Plug(
 		const char *Target,
 		const char *Identifier,
-		retriever &PluginRetriever )
+		retriever &PluginRetriever,
+		qRPD )
 	{
-		Plug( Target, str::wString(), str::wString(), Identifier, PluginRetriever );
+		return Plug( Target, str::wString(), str::wString(), Identifier, PluginRetriever, qRP );
 	}
 
 	void Plug_(
