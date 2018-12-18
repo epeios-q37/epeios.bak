@@ -30,37 +30,52 @@ namespace plugins {
 	static E_CDEF( char *, TokenPluginTarget, PLUGINS_TOKEN_PLUGIN_TARGET );
 	static E_CDEF( char *, TokenPluginVersion, PLUGINS_TOKEN_PLUGIN_VERSION );
 
+	// A client is NOT the web browser, but the app. using a the Atlas library.
+	qENUM( Status )
+	{
+		sNew,					// New client.
+			sPending,			// New connexion from an existing client.
+			// Below value stop the client and display an error message.
+			sBad,				// Bad token (unrecognized format).
+			sForbidden,			// Such token are forbidden,
+			sBadCredentials,	// The credentials are not provided in the proper format.
+			sWrongCredentials,	// Credentials are wrong.
+			s_amount,
+			s_Undefined
+	};
+
+	const char *GetLabel( eStatus Status );
 
 	class cToken
 	{
 	protected:
 		// Returns true when the token is new.
-		virtual bso::sBool PLUGINSHandle(
+		virtual eStatus PLUGINSHandle(
 			const str::dString &Raw,
 			str::dString &Normalized ) = 0;
 	public:
 		qCALLBACK( Token )
-		bso::sBool Handle(
+		eStatus Handle(
 			const str::dString &Raw,
 			str::dString &Normalized )
 		{
 			return PLUGINSHandle( Raw, Normalized );
 		}
-		bso::sBool Handle( str::dString &Token )
+		eStatus Handle( str::dString &Token )
 		{
-			bso::sBool New = false;
+			eStatus Status = s_Undefined;
 		qRH;
 			str::wString Normalized;
 		qRB;
 			Normalized.Init();
 
-			New = Handle( Token, Normalized );
+			Status = Handle( Token, Normalized );
 
 			Token = Normalized;
 		qRR;
 		qRT;
 		qRE;
-			return New;
+			return Status;
 		}
 		static const char *Label( void );
 	};

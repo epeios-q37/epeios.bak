@@ -193,8 +193,10 @@ public class DOM_DEMO extends DOM_SHRD {
 		if (isTokenEmpty_()) {
 			token = getString_(reader);
 
-			if (isTokenEmpty_())
-				throw new Exception("Invalid connection information !!!");
+			if (isTokenEmpty_()) {
+				System.out.println(getString_( reader ));
+				System.exit(1);
+			}
 
 			if ( !":0".equals(wPort)) {
 				String url = "http://" + wAddr + wPort + "/" + cgi + ".php?_token=" + token;
@@ -207,7 +209,14 @@ public class DOM_DEMO extends DOM_SHRD {
 				}
 			}
 		} else {
-			if (!getString_(reader).equals(token))
+			String returnedToken = getString_(reader);
+
+			if ( returnedToken.equals("")) {
+				System.out.println(getString_( reader ));
+				System.exit(1);
+			}
+
+			if (!returnedToken.equals(token))
 				throw new Exception("Unmatched token !!!");
 		}
 

@@ -8,7 +8,7 @@
 
 ## 2018-12-18
 - SCLMISC:
-  - the attempt to retrieve a not available plugin can be reported and do no more systematically generate an error,
+  - the attempt to retrieve a not available plugin can be reported and do no more systematically generate an error (this remains the default behavior),
 
 ## 2018-12-16
 - XDHUTL:

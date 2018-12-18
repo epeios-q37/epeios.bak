@@ -171,7 +171,7 @@ module XDHqDEMO
                 $token = getString()
 
                 if tokenEmpty?()
-                    abort("Invalid connection information !!!")
+                    abort(getString())
                 end
 
                 if $wPort != ":0"
@@ -181,8 +181,16 @@ module XDHqDEMO
                     puts("Open above URL in a web browser. Enjoy!\n")
                     XDHqSHRD::open(url)
                 end
-            elsif getString() != $token
-                abort("Unmatched token !!!")
+            else
+                returnedToken = getString()
+
+                if ( returnedToken == "" )
+                    abort(getString())
+                end
+
+                if getString() != $token
+                    abort("Unmatched token !!!")
+                end
             end
 
             writeString($protocolLabel)

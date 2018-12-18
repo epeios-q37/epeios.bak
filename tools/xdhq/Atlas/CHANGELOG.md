@@ -3,6 +3,10 @@
 - Common to **all** bindings,
 - does **not** concern the native code,
 
+## 2018-12-18
+
+- handling error on token,
+
 ## 2018-12-14
 
 - switching to version 0.6,

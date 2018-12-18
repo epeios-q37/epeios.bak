@@ -54,6 +54,7 @@ namespace {
 
 			Socket = sck::Undefined;
 			Access.reset( P );
+			tol::reset( P, IP );
 			GiveUp = false;	// If at 'true', the client is deemed to be disconnected.
 		}
 		qCDTOR( rClient_ );
@@ -62,6 +63,7 @@ namespace {
 			reset();
 
 			Access.Init();
+			tol::Init( IP );
 			GiveUp = false;
 		}
 	};
@@ -206,23 +208,25 @@ namespace {
 		: public plugins::cToken
 		{
 		protected:
-			virtual bso::sBool PLUGINSHandle(
+			virtual plugins::eStatus PLUGINSHandle(
 				const str::dString &Raw,
 				str::dString &Normalized ) override
 			{
-				bso::sBool New = true;
+				plugins::eStatus Status = plugins::sNew;
 				tol::bUUID UUID;
 
 				Normalized = Raw;
+
+				return plugins::sBad;
 
 				if ( Raw.Amount() == 0 )
 					Normalized.Append( tol::UUIDGen( UUID ) );
 				else if ( (Raw.Amount() > 1) && (Raw( 0 ) == '&') )
 					Normalized.Remove( Normalized.First() );
 				else
-					New = false;
+					Status = plugins::sPending;
 
-				return New;
+				return Status;
 			}
 		public:
 			void reset(bso::sBool = true ) {}
@@ -250,33 +254,44 @@ namespace {
 	qRFH;
 		sck::sSocket Socket = sck::Undefined;
 		str::wString IP;
-		str::wString Token, Head;
+		str::wString Token, Head, ErrorMessageLabel, ErrorMessage;
 		sck::rRWFlow Flow;
 		rClient_ *Client = NULL;
 		mtx::rMutex Mutex;
+		plugins::eStatus Status = plugins::s_Undefined;
 	qRFB;
 		Socket = Data.Socket;
 		IP.Init( Data.IP );
 
 		Blocker.Release();
 
+		ErrorMessage.Init();
+
 		Flow.Init( Socket, false, sck::NoTimeout );
 
 		Token.Init();
 		Get_( Flow, Token );
 
-		if ( token_::GetPlugin().Handle(Token) ) {
+		switch ( Status = token_::GetPlugin().Handle( Token ) ) {
+		case plugins::sNew:
 			Head.Init();
 			Get_( Flow, Head );
 
 			Client = Create_( Token, Head );
-		} else {
+			break;
+		case plugins::sPending:
 			Client = TSClientSearch_( Token );
+			break;
+		default:
+			Token.Init();
+			ErrorMessageLabel.Init( "PLUGINS_" );
+			ErrorMessageLabel.Append( plugins::GetLabel( Status ) );
+			sclmisc::GetBaseTranslation( ErrorMessageLabel, ErrorMessage );
+			break;
 		}
 
-		if ( Client == NULL )
-			Token.Init();
-		else {
+
+		if ( Client != NULL ) {
 			Client->Access.WriteBegin();
 			Client->Socket = Socket;
 			Client->IP.Init( IP );
@@ -284,6 +299,9 @@ namespace {
 		}
 
 		Put_( Token, Flow );
+
+		if ( Token.Amount() == 0 )
+			Put_( ErrorMessage, Flow );
 	qRFR;
 	qRFT;
 	qRFE( sclmisc::ErrFinal() );

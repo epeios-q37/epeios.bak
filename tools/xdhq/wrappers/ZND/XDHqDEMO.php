@@ -170,7 +170,7 @@ class XDHqDOM_DEMO extends Threaded {
     self::$token = $this->getString_($this->socket);
 
     if ($this->isTokenEmpty_())
-     throw new Exception("Invalid connection information !!!");
+     throw new Exception($this->getString_($this->socket));
   }
 
   if ($wPort != ":0") {
@@ -179,8 +179,15 @@ class XDHqDOM_DEMO extends Threaded {
     echo "Open above URL in a web browser. Enjoy!\n";
     XDHq_SHRD::open($url);
     }
-  } else if ($this->getString_($this->socket) != self::$token) {
-    throw new Exception("Unmatched token !!!");
+  } else {
+
+	$returnedToken = $this->getString_($this->socket);
+
+	if( $returnedToken == "" )
+		throw new Exception($this->getString_($this->socket));
+
+	if ($returnedToken != self::$token)
+		throw new Exception("Unmatched token !!!");
   }
 
   $this->writeString_(self::$protocolLabel, $this->socket);

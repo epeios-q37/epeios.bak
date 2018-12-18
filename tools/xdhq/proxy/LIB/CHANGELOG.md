@@ -3,6 +3,7 @@
 ## 2018-12-18
 
 - adding token handling through plugin,
+- handling error message when problem on connection (added to handle error on token handling)
 
 ## 2018-12-07
 

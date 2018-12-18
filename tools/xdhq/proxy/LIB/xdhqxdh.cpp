@@ -1008,8 +1008,7 @@ namespace {
 			tol::reset( DemoDriver_, ProdDriver_ );
 			Mode_ = m_Undefined;
 
-			Logging_.IP.Init();
-			LogMessage.Init();
+			tol::Init( Logging_.IP, LogMessage );
 
 			if ( Token.Amount() == 0 ) {
 				ProdDriver_.Init( Core_, fdr::ts_Default );

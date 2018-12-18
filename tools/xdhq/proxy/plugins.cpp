@@ -19,6 +19,28 @@
 
 #include "plugins.h"
 
+#define C( name )	case s##name : return #name; break
+
+const char *plugins::GetLabel( eStatus Status )
+{
+	switch ( Status ) {
+	case sNew:
+	case sPending:
+		qRGnr();	// This values are not errors, so we do not have to retrieve their labels.
+		break;
+	C( Bad );
+	C( Forbidden );
+	C( BadCredentials );
+	C( WrongCredentials );
+	default:
+		qRFwk();
+		break;
+	}
+
+	return NULL;	// To avoid a warning.
+}
+
+#undef C
 
 const char *plugins::cToken::Label( void )
 {
