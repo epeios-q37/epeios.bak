@@ -10,8 +10,35 @@
 			<!-- Listening service (port) for the DEMO mode. If empty or == '0', DEMO behavior not launched. -->
 			<DemoService>53800</DemoService>
 			<!-- Default command -->
+			<Plugins>
+				<!--Plugin target="Token" Id="Forbidden"/-->
+			</Plugins>
 		</Parameters>
 		<Definitions>
+			<Plugins target="Token">
+				<xpp:define name="TokenPluginsDir">
+					<xpp:bloc>
+						<xpp:ifeq select="packing" value="no">
+							<xpp:bloc>
+								<xpp:expand select="PlgPath"/>
+								<xpp:bloc>xdhq/proxy/token/</xpp:bloc>
+							</xpp:bloc>
+						</xpp:ifeq>
+					</xpp:bloc>
+				</xpp:define>
+				<Plugin id="Forbidden">
+					<Filename>
+						<xpp:expand select="TokenPluginsDir"/>
+						<xpp:bloc>Forbidden/forbidden</xpp:bloc>
+					</Filename>
+					<Configuration>
+						<xpp:expand href="../plugins/token/Forbidden/forbidden.xcfg"/>
+					</Configuration>
+					<Locale>
+						<xpp:expand href="../plugins/token/Forbidden/forbidden.xlcl"/>
+					</Locale>
+				</Plugin>
+			</Plugins>
 		</Definitions>
 		<Locale>
 			<Translations text="TestCommandDescription">

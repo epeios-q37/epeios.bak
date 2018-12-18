@@ -49,7 +49,6 @@ namespace plugins {
 	class cToken
 	{
 	protected:
-		// Returns true when the token is new.
 		virtual eStatus PLUGINSHandle(
 			const str::dString &Raw,
 			str::dString &Normalized ) = 0;

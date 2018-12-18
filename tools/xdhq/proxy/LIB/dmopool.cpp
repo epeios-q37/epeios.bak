@@ -208,7 +208,7 @@ namespace {
 		: public plugins::cToken
 		{
 		protected:
-			virtual plugins::eStatus PLUGINSHandle(
+			plugins::eStatus PLUGINSHandle(
 				const str::dString &Raw,
 				str::dString &Normalized ) override
 			{
@@ -216,8 +216,6 @@ namespace {
 				tol::bUUID UUID;
 
 				Normalized = Raw;
-
-				return plugins::sBad;
 
 				if ( Raw.Amount() == 0 )
 					Normalized.Append( tol::UUIDGen( UUID ) );

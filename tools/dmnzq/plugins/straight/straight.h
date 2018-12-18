@@ -24,7 +24,7 @@
 
 # define NAME_MC			"Straight"
 # define NAME_LC			"straight"
-# define NAME_UC			"Straight"
+# define NAME_UC			"STRAIGHT"
 # define WEBSITE_URL		"http://q37.info/"
 # define AUTHOR_NAME		"Claude SIMON"
 # define AUTHOR_CONTACT		"http://q37.info/contact/"
