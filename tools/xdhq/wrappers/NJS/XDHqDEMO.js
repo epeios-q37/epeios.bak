@@ -233,7 +233,7 @@ function pseudoServer(createCallback, callbacks, head) {
 					[token, offset] = getString(query, offset);
 
 					if (isTokenEmpty())
-						throw getString(query,offset)[0];
+						throw getString(query, offset)[0];
 
 					if (wPort != ":0") {
 						let completeURL = "http://" + wAddr + wPort + "/" + cgi + ".php?_token=" + token;
@@ -242,17 +242,17 @@ function pseudoServer(createCallback, callbacks, head) {
 						console.log("Open above URL in a web browser. Enjoy!");
 
 						open(completeURL);
-					} else {
-						let returnedToken = "";
-
-						[returnedToken, offset] = getString(query, offset);
-
-						if (returnedToken == "")
-							throw getString(query, offset)[0];
-
-						if (returnedToken != token)
-							throw "Unmatched token !!!";
 					}
+				} else {
+					let returnedToken = "";
+
+					[returnedToken, offset] = getString(query, offset);
+
+					if (returnedToken == "")
+						throw getString(query, offset)[0];
+
+					if (returnedToken != token)
+						throw "Unmatched token !!!";
 				}
 
 				client._xdhDOM = createCallback(client);

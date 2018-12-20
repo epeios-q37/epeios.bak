@@ -86,11 +86,12 @@ function launchEvent( digest )
 {
 	query = buildQuery() + "_action=_HandleEvent&digest=" + encodeURIComponent( digest );
 
-	if ( queryInProgress )
-		queryQueue.push( query );
-	else {
+	if (queryInProgress) {
+		if (query != queryQueue[queryQueue.length - 1])
+			queryQueue.push(query);
+	}  else {
 		queryInProgress = true;
-		handleQuery( query );
+		handleQuery(query);
 	}
 
 	return true;
