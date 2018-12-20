@@ -26,6 +26,10 @@ sys.path.append("./Atlas")
 
 import Atlas
 
+RPin = 13
+GPin = 14
+BPin = 21
+
 def readAsset(path):
 	return Atlas.readAsset(path, "RGB")
 
@@ -37,16 +41,17 @@ def acConnect(RGB,dom,id):
 	dom.setLayout("", readAsset( "Main.html") )
 
 def convert(hex):
-	return int(hex,16) * 100 / 256
+	return int(int(hex,16) * 100 / 256)
 
 def acSelect(RGB, dom, id):
+	global RPin, GPin, BPin
 	R = convert(id[0:2])
-	V = convert(id[2:4])
+	G = convert(id[2:4])
 	B = convert(id[4:6])
-	print (R, V, B)
-	wiringpi.softPwmWrite(12,R)
-	wiringpi.softPwmWrite(13,V)
-	wiringpi.softPwmWrite(14,B)
+	print (R, G, B)
+	wiringpi.softPwmWrite(RPin,100 - R)
+	wiringpi.softPwmWrite(GPin,100 - G)
+	wiringpi.softPwmWrite(BPin,100 - B)
 
 callbacks = {
 		"": acConnect,
@@ -55,8 +60,8 @@ callbacks = {
 
 wiringpi.wiringPiSetup()
 
-wiringpi.softPwmCreate(13,0,100)
-wiringpi.softPwmCreate(14,0,100)
-wiringpi.softPwmCreate(15,0,100)
+wiringpi.softPwmCreate(RPin,0,100)
+wiringpi.softPwmCreate(GPin,0,100)
+wiringpi.softPwmCreate(BPin,0,100)
 
 Atlas.launch(callbacks, RGB, readAsset("Head.html"), "RGB")
