@@ -148,8 +148,6 @@ class DOM_DEMO:
 				print(url)
 				print("Open above URL in a web browser. Enjoy!\n")
 				XDHqSHRD.open(url)
-				while True:
-					pass
 
 		else:
 			returnedToken = this._getString();

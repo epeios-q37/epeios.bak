@@ -61,11 +61,9 @@
 		<SourceDir>../..</SourceDir>
 	</SourceDirs>
 	<Files>
-		<File Path="../">README.md</File>
+		<File>README.md</File>
 		<File>CHANGELOG.md</File>
 		<File>NOTES.md</File>
-		<File>runkit.js</File>
-		<File>test.js</File>
 		<File>XDHq.js</File>
 	</Files>
 	<NodeJS>
