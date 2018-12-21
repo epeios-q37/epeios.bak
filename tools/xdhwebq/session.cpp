@@ -96,7 +96,7 @@ qRFT;
 qRFE( sclmisc::ErrFinal() );
 }
 
-void session::rSession::_UpstreamLaunch(
+void session::rSession::UpstreamLaunch(
 	const str::string_ &Id,
 	const str::string_ &Action,
 	str::string_ &Script )

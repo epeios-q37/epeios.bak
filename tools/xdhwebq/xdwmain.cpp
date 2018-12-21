@@ -28,7 +28,7 @@ using namespace xdwmain;
 namespace {
 	namespace {
 		namespace {
-			void _HandleEvent_(
+			void HandleEvent_(
 				const query::dPairs &Pairs,
 				session::rSession &Session,
 				str::string_ &Script )
@@ -46,7 +46,7 @@ namespace {
 					if ( xdhutl::IsPredefined( Abstract.Action() ) )
 						qRVct();
 					else if ( Abstract.Action() == xdhutl::a_User )
-						Session._UpstreamLaunch( Id, Abstract.UserAction, Script );
+						Session.UpstreamLaunch( Id, Abstract.UserAction, Script );
 					else
 						qRGnr();
 				}
@@ -55,12 +55,12 @@ namespace {
 			qRE;
 			}
 
-			void _HandleAction_(
+			void HandleAction_(
 				const str::string_ &Action,
 				session::rSession &Session,
 				str::string_ &Script )
 			{
-				Session._UpstreamLaunch( str::string(), Action, Script );
+				Session.UpstreamLaunch( str::string(), Action, Script );
 			}
 
 			void Report_(
@@ -126,11 +126,11 @@ namespace {
 					Session->Lock();
 
 					if ( Action == "_HandleEvent" )
-						_HandleEvent_( Pairs, *Session, Script );
+						HandleEvent_( Pairs, *Session, Script );
 					else if ( Action == "_Next" )
 						Report_( Response, *Session, Script );
 					else
-						_HandleAction_( Action, *Session, Script );
+						HandleAction_( Action, *Session, Script );
 				}
 			} else
 				misc::Report( "No corresponding web application launched. See http://atlastk.org.", Script );

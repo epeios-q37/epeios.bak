@@ -307,7 +307,7 @@ namespace session {
 			return Session_.Callback();
 		}
 		// upstream side.
-		void _UpstreamLaunch(
+		void UpstreamLaunch(
 			const str::string_ &Id,
 			const str::string_ &Action,
 			str::string_ &Script );	// Script to execute. Empty if nothing to do.
