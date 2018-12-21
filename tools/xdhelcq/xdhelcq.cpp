@@ -261,7 +261,7 @@ namespace {
 
 	sJS JS_;
 	xdhups::sSession Session_;
-	xdhups::agent___ Agent_;
+	xdhups::rAgent Agent_;
 	TOL_CBUFFER___ LanguageBuffer_, IdentificationBuffer_;
 
 	void InitializeSession_( const str::dString &Token )	// IF empty, PROD, otherwise DEMO.
@@ -291,7 +291,8 @@ namespace {
 		Agent_.Init( xdhcmn::mMonoUser, ModuleFilename, dlbrry::nExtOnly,  Identification.Convert( IdentificationBuffer_ ) );
 
 		Session_.Init( Agent_.RetrieveCallback( Agent_.BaseLanguage( LanguageBuffer_ ), Token, ProxyCallback ) );
-		sclmisc::SetBaseLanguage( str::wString( Agent_.BaseLanguage( Buffer ) ) );
+		Session_.Initialize( ProxyCallback, str::wString( LanguageBuffer_ ), Token );
+		sclmisc::SetBaseLanguage( str::wString( LanguageBuffer_ ) );
 	qRR;
 		if ( ProxyCallback != NULL )
 			delete ProxyCallback;
@@ -395,20 +396,25 @@ namespace {
 		String.Init( Info );
 
 		Args.GetReturnValue().Set( String.Core() );
-		qRR;
-		qRT;
-		qRE;
+	qRR;
+	qRT;
+	qRE;
 	}
 
 	void GetHead_( const v8::FunctionCallbackInfo<v8::Value>& Args )
 	{
 	qRH;
-		str::wString Head;
-		v8q::sLString String;
+		str::wString Head, Token;
+		v8q::sLString String, RawToken;
 	qRB;
-		Head.Init();
+		// Token handling NOT TESTED !!!
 
-		Agent_.Head( Head );
+		tol::Init( Token, Head );
+
+		RawToken.Init( Args[0] );
+		RawToken.Get( Token );
+
+		Agent_.Head( (void *)&Token, Head );
 
 		String.Init( Head );
 

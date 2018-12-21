@@ -28,7 +28,7 @@ using namespace xdwmain;
 namespace {
 	namespace {
 		namespace {
-			void HandleEvent_(
+			void _HandleEvent_(
 				const query::dPairs &Pairs,
 				session::rSession &Session,
 				str::string_ &Script )
@@ -46,7 +46,7 @@ namespace {
 					if ( xdhutl::IsPredefined( Abstract.Action() ) )
 						qRVct();
 					else if ( Abstract.Action() == xdhutl::a_User )
-						Session.UpstreamLaunch( Id, Abstract.UserAction, Script );
+						Session._UpstreamLaunch( Id, Abstract.UserAction, Script );
 					else
 						qRGnr();
 				}
@@ -55,12 +55,12 @@ namespace {
 			qRE;
 			}
 
-			void HandleAction_(
+			void _HandleAction_(
 				const str::string_ &Action,
 				session::rSession &Session,
 				str::string_ &Script )
 			{
-				Session.UpstreamLaunch( str::string(), Action, Script );
+				Session._UpstreamLaunch( str::string(), Action, Script );
 			}
 
 			void Report_(
@@ -88,6 +88,7 @@ namespace {
 			session::rSession *Session = NULL;
 			err::buffer__ ERRBuffer;
 			str::string Token, AbortMessage;
+			xdhujp::sProxyCallback *ProxyCallback = NULL;
 		qRB;
 			Sessions.Init( RawSessions );
 
@@ -96,7 +97,10 @@ namespace {
 
 			if ( SessionId.Amount() == 0 ) {
 				SessionId.Init();
-				Row = Sessions().New( SessionId, Language, Token );
+				Row = Sessions().New( SessionId, Language, Token, ProxyCallback);
+				Session = Sessions().Sessions( Row );
+				Sessions.Release();
+				Session->Initialize( ProxyCallback, Language, Token );
 			} else {
 				Row = Sessions().Search( SessionId );
 			}
@@ -122,11 +126,11 @@ namespace {
 					Session->Lock();
 
 					if ( Action == "_HandleEvent" )
-						HandleEvent_( Pairs, *Session, Script );
+						_HandleEvent_( Pairs, *Session, Script );
 					else if ( Action == "_Next" )
 						Report_( Response, *Session, Script );
 					else
-						HandleAction_( Action, *Session, Script );
+						_HandleAction_( Action, *Session, Script );
 				}
 			} else
 				misc::Report( "No corresponding web application launched. See http://atlastk.org.", Script );

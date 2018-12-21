@@ -1,4 +1,8 @@
-# *XDHELCq* changelog.
+# *XDHELCq* changelog
+
+## 2018-12-21
+
+- adaptation to changes in underlying modules,
 
 ## 2018-09-14
 

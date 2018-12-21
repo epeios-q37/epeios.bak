@@ -88,7 +88,7 @@ namespace xdhujp {
 		Q37_MRMDF( cJS, C_, Callback_ );
 	protected:
 		virtual void XDHCMNProcess(
-			xdhcmn::function__ Function,
+			xdhcmn::eFunction Function,
 			TOL_CBUFFER___ *Result,
 			va_list List ) override; 
 	public:

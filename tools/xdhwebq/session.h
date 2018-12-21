@@ -229,7 +229,7 @@ namespace session {
 	{
 	private:
 		sJS _JSCallback;
-		Q37_MRMDF( xdhcmn::cSession, _SC, _SessionCallback );
+		xdhups::sSession Session_;
 		_mutexes___ _Mutexes;
 		str::string _Dispatch;
 		bso::bool__ _UpstreamCall;	// At 'true' when a upstream call (a call from JS when launching a action, or handling an event) is in progress.
@@ -250,7 +250,7 @@ namespace session {
 		void reset( bso::bool__ P = true )
 		{
 			_JSCallback.reset( P );
-			_SessionCallback = NULL;
+			Session_.reset( P );
 			_Mutexes.reset( P );
 			_Dispatch.reset( P );
 			_UpstreamCall = false;
@@ -260,11 +260,18 @@ namespace session {
 		void Init( xdhcmn::cSession &SessionCallback )
 		{
 			_JSCallback.Init( *this );
-			_SessionCallback = &SessionCallback;
+			Session_.Init( &SessionCallback );
 			_Mutexes.Init();
 			_Dispatch.Init();
 			_UpstreamCall = false;
 			Alive_ = true;
+		}
+		void Initialize(
+			xdhcmn::cUpstream *Callback,
+			const str::dString &Language,
+			const str::dString &Token )	// If empty, PROD session, else token used for the DEMO session.
+		{
+			Session_.Initialize(Callback, Language, Token);
 		}
 		void MarkAsDead( void )
 		{
@@ -297,10 +304,10 @@ namespace session {
 		}
 		xdhcmn::cSession *SessionCallback( void ) const
 		{
-			return _SessionCallback;
+			return Session_.Callback();
 		}
 		// upstream side.
-		void UpstreamLaunch(
+		void _UpstreamLaunch(
 			const str::string_ &Id,
 			const str::string_ &Action,
 			str::string_ &Script );	// Script to execute. Empty if nothing to do.
@@ -481,14 +488,16 @@ namespace session {
 		row__ New(
 			id__ &Id,
 			const str::string_ &Language,
-			const str::dString &Token );
+			const str::dString &Token,
+			xdhujp::sProxyCallback *&ProxyCallback );
 		row__ New(
 			str::string_ &Id,
 			const str::string_ &Language,
-			const str::dString &Token )
+			const str::dString &Token,
+			xdhujp::sProxyCallback *&ProxyCallback )
 		{
 			id__ RawId;
-			row__ Row = New( RawId, Language, Token );
+			row__ Row = New( RawId, Language, Token, ProxyCallback );
 
 			if ( Row != qNIL )
 				Id.Append( RawId.Value() );

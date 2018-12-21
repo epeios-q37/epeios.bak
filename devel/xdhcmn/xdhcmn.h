@@ -60,23 +60,7 @@ namespace xdhcmn {
 		m_Undefined
 	};
 
-	class cSession
-	{
-	protected:
-		virtual bso::bool__ XDHCMNLaunch(
-			const char *Id,
-			const char *Action ) = 0;
-	public:
-		qCALLBACK( Session );
-		bso::bool__ Launch(
-			const char *Id,
-			const char *Action )
-		{
-			return XDHCMNLaunch( Id, Action );
-		}
-	};
-
-	enum function__ {		// Parameters :
+	qENUM( Function ) {		// Parameters :
 		fExecute,			// Script
 		fLog,				// Message,
 		fAlert,				// XML, XSL, Title.
@@ -122,19 +106,18 @@ namespace xdhcmn {
 		f_Undefined
 	};
 
-	const char *GetLabel( function__ Function );
-
+	const char *GetLabel( eFunction Function );
 	class cUpstream
 	{
 	protected:
 		virtual void XDHCMNProcess(
-			function__ Function,
+			eFunction Function,
 			TOL_CBUFFER___ *Result,
 			va_list List ) = 0;
 	public:
 		qCALLBACK( Upstream );
 		void Process(
-			function__ Function,
+			eFunction Function,
 			TOL_CBUFFER___ *Result,
 			...	)
 		{
@@ -148,6 +131,33 @@ namespace xdhcmn {
 		qRT
 			va_end( List );
 		qRE
+		}
+	};
+
+	class cSession
+	{
+	protected:
+		virtual void XDHCMNInitialize(
+			cUpstream *Callback,
+			const str::dString &Language,
+			const str::dString &Token ) = 0;	// If empty, PROD session, else token used for the DEMO session.
+		virtual bso::bool__ XDHCMNLaunch(
+			const char *Id,
+			const char *Action ) = 0;
+	public:
+		qCALLBACK( Session );
+		void Initialize(
+			cUpstream *Callback,
+			const str::dString &Language,
+			const str::dString &Token )	// If empty, PROD session, else token used for the DEMO session.
+		{
+			return XDHCMNInitialize( Callback, Language, Token );
+		}
+		bso::bool__ Launch(
+			const char *Id,
+			const char *Action )
+		{
+			return XDHCMNLaunch( Id, Action );
 		}
 	};
 

@@ -44,8 +44,8 @@
 			<Module>misc</Module>
 			<Module>query</Module>
 			<Module>session</Module>
+			<Module>xdwmain</Module>
 			<Module>xdwrgstry</Module>
-			<Module>xdhwebq</Module>
 		</Modules>
 		<Module>registry</Module>
  </Modules>

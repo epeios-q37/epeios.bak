@@ -21,7 +21,7 @@
 
 #include "registry.h"
 
-#include "xdhwebq.h"
+#include "xdwmain.h"
 
 #include "iof.h"
 #include "xpp.h"
@@ -57,9 +57,9 @@ namespace {
 	}
 
 	namespace {
-		xdhwebq::rAgent Agent_;
-		xdhwebq::wSessions UnprotectedSessions_;
-		xdhwebq::rSessions Sessions_;
+		xdwmain::rAgent Agent_;
+		xdwmain::wSessions UnprotectedSessions_;
+		xdwmain::rSessions Sessions_;
 		bso::sBool Initialized_ = false;
 	}
 
@@ -95,7 +95,7 @@ namespace {
 	{
 	qRH;
 		str::wStrings Keys, Values;
-		xdhwebq::wPairs Pairs;
+		xdwmain::wPairs Pairs;
 		str::wString Response;
 	qRB;
 		tol::Init( Keys, Values );
@@ -105,7 +105,7 @@ namespace {
 		Pairs.Add( Keys, Values );
 
 		Response.Init();
-		xdhwebq::Handle( Pairs, Sessions_, Response );
+		xdwmain::Handle( Pairs, Sessions_, Response );
 
 		Caller.SetReturnValue( Response );
 	qRR;

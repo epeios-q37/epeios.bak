@@ -96,7 +96,7 @@ qRFT;
 qRFE( sclmisc::ErrFinal() );
 }
 
-void session::rSession::UpstreamLaunch(
+void session::rSession::_UpstreamLaunch(
 	const str::string_ &Id,
 	const str::string_ &Action,
 	str::string_ &Script )
@@ -110,7 +110,7 @@ qRB
 	if ( IsUpstreamCallInProgress() )
 		qRReturn;
 
-	Data.Init ( Id, Action, *this, _SC() );
+	Data.Init ( Id, Action, *this, *Session_.Callback() );
 
 	mtk::Launch( Launch_, &Data );
 
@@ -248,15 +248,15 @@ static bso::sign__ Search_(
 row__ session::dSessions::New(
 	id__ &Id,
 	const str::string_ &Language,
-	const str::dString &Token )	// If _not_ empty, DEMO.
+	const str::dString &Token,	// If _not_ empty, DEMO.
+	xdhujp::sProxyCallback *&ProxyCallback)
 {
 	row__ Row = qNIL;
 qRH
 	xdhcmn::cSession *SessionCallback = NULL;
 	rSession *Session = NULL;
-	xdhujp::sProxyCallback *ProxyCallback = NULL;
 	timer__ Timer;
-	TOL_CBUFFER___ Buffer;
+	TOL_CBUFFER___ LanguageBuffer;
 qRB
 	Row = Sessions.New();
 
@@ -270,7 +270,9 @@ qRB
 	if ( ProxyCallback == NULL )
 		qRAlc();
 
-	SessionCallback = _A().RetrieveCallback( Language.Convert( Buffer ), Token, ProxyCallback );
+	Language.Convert( LanguageBuffer );
+
+	SessionCallback = _A().RetrieveCallback( LanguageBuffer, Token, ProxyCallback );
 
 	if ( SessionCallback != NULL ) {
 		Session->Init( *SessionCallback );

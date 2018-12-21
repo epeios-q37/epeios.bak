@@ -890,7 +890,7 @@ static void Dummy_(
 	Dummy_( Callback, Id, Result );
 }
 
-static script_name__ Convert_( xdhcmn::function__ Function )
+static script_name__ Convert_( xdhcmn::eFunction Function )
 {
 	switch ( Function ) {
 	case xdhcmn::fExecute:
@@ -1015,7 +1015,7 @@ static script_name__ Convert_( xdhcmn::function__ Function )
 }
 
 void xdhujp::sProxyCallback::XDHCMNProcess(
-	xdhcmn::function__ Function,
+	xdhcmn::eFunction Function,
 	TOL_CBUFFER___ *Result,
 	va_list List )
 {

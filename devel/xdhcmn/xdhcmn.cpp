@@ -34,7 +34,7 @@ using namespace xdhcmn;
 	break
 
 
-const char *xdhcmn::GetLabel( function__ Function )
+const char *xdhcmn::GetLabel( eFunction Function )
 {
 	switch ( Function ) {
 	C( Execute );

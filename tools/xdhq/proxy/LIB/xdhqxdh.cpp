@@ -891,6 +891,66 @@ namespace {
 		qRE;
 		}
 	protected:
+		virtual void XDHCMNInitialize(
+			xdhcmn::cUpstream *Callback,
+			const str::dString &Language,
+			const str::dString &Token ) override
+		{
+			bso::sBool Success = false;
+		qRH;
+			flw::sDressedRWFlow<> Flow;
+			csdcmn::sVersion Version = csdcmn::UndefinedVersion;
+			str::wString LogMessage;
+		qRB;
+			LogMessage.Init();
+
+			if ( Token.Amount() == 0 ) {
+				ProdDriver_.Init( Core_, fdr::ts_Default );
+				Mode_ = mProd;
+				Success = true;
+				LogMessage.Append( "PROD" );
+			} else {
+				LogMessage.Append( Token );
+				sck::sSocket Socket = dmopool::GetConnection( Token, Logging_.IP );
+
+				if ( Socket != sck::Undefined ) {
+					DemoDriver_.Init(Socket, true, fdr::ts_Default );
+					Mode_ = mDemo;
+					Success = true;
+				}
+			}
+
+			LogMessage.Append( " - " );
+
+			if ( Success ) {
+				Flow.Init( D_() );
+
+				Version = csdcmn::GetProtocolVersion( prtcl::ProtocolId, Flow );
+
+				switch ( Version ) {
+				case 0:
+					ReportNoError_( Flow );
+					break;
+				default:
+					ReportError_( "Unknown protocol version !!!", Flow );
+					break;
+				}
+
+				prtcl::Put( Language, Flow );
+				Flow.Commit();
+
+				csdcmn::Get( Flow, LogMessage );
+
+				Logging_.Id = Ids_.New();
+				Log_( LogMessage );
+
+				xdhdws::sProxy::Init( Callback );	// To be last, otherwise if an error occurs, 'Callback' will be freed twice!
+			}
+		qRR;
+		qRT;
+		qRE;
+//			return Success;
+		}
 		virtual bso::bool__ XDHCMNLaunch(
 			const char *Id,
 			const char *Action ) override
@@ -994,68 +1054,14 @@ namespace {
 			Logging_.IP.reset( P );
 		}
 		qCVDTOR( rSession_ )
-		bso::sBool Init(
-			xdhcmn::cUpstream *Callback,
-			const char *Language,
-			const str::dString &Token )	// If empty, PROD session, else token used for the DEMO session.
+		bso::sBool Init( void )	// If empty, PROD session, else token used for the DEMO session.
 		{
-			bso::sBool Success = false;
-		qRH;
-			flw::sDressedRWFlow<> Flow;
-			csdcmn::sVersion Version = csdcmn::UndefinedVersion;
-			str::wString LogMessage;
-		qRB;
 			tol::reset( DemoDriver_, ProdDriver_ );
 			Mode_ = m_Undefined;
 
-			tol::Init( Logging_.IP, LogMessage );
+			Logging_.IP.Init();
 
-			if ( Token.Amount() == 0 ) {
-				ProdDriver_.Init( Core_, fdr::ts_Default );
-				Mode_ = mProd;
-				Success = true;
-				LogMessage.Append( "PROD" );
-			} else {
-				LogMessage.Append( Token );
-				sck::sSocket Socket = dmopool::GetConnection( Token, Logging_.IP );
-
-				if ( Socket != sck::Undefined ) {
-					DemoDriver_.Init(Socket, true, fdr::ts_Default );
-					Mode_ = mDemo;
-					Success = true;
-				}
-			}
-
-			LogMessage.Append( " - " );
-
-			if ( Success ) {
-				Flow.Init( D_() );
-
-				Version = csdcmn::GetProtocolVersion( prtcl::ProtocolId, Flow );
-
-				switch ( Version ) {
-				case 0:
-					ReportNoError_( Flow );
-					break;
-				default:
-					ReportError_( "Unknown protocol version !!!", Flow );
-					break;
-				}
-
-				prtcl::Put( Language, Flow );
-				Flow.Commit();
-
-				csdcmn::Get( Flow, LogMessage );
-
-				Logging_.Id = Ids_.New();
-				Log_( LogMessage );
-
-				xdhdws::sProxy::Init( Callback );	// To be last, otherwise if an error occurs, 'Callback' will be freed twice!
-			}
-		qRR;
-		qRT;
-		qRE;
-			return Success;
+			return true;
 		}
 		operator fdr::rRWDriver &( void )
 		{
@@ -1081,7 +1087,7 @@ qRB;
 	if ( ( Session = new rSession_ ) == NULL )
 		qRAlc();
 
-	if ( !Session->Init( UpstreamCallback, Language, Token ) ) {
+	if ( !Session->Init() ) {
 		delete Session;
 		Session = NULL;
 	}

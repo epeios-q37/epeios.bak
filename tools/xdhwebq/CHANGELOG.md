@@ -1,5 +1,12 @@
 # *XDHWebQ* *CHANGELOG*
 
+## 2018-12-21
+
+- a *XDH* module does no more block all the application when stalled,
+- *xdhqwebqznd*:
+  - adaptation to changes in underlying modules,
+
+
 ## 2018-04-16
 
 - *xdhqwebqnjs*:

@@ -29,8 +29,6 @@ namespace misc {
 	typedef ntvstr::char__ nchar__;
 	typedef ntvstr::string___ nstring___;
 
-	typedef xdhups::sSession sSession;
-
 	void Report(
 		const nstring___ &Message,
 		str::string_ &Script );
