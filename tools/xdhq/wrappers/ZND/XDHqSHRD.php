@@ -42,17 +42,20 @@ class XDHq_SHRD {
 	static function open( $document ) {
 		switch (strtoupper(substr(php_uname('s') , 0, 3))) {
 			case "WIN":
-				$command = "start";
+				$command = "start /B ";
+				$suffix = "";
 				break;
 			case "DAR":	// macOS.
-				$command = "open";
+				$command = "open ";
+				$suffix = " &";
 				break;
 			default:	// Linux and others.
-				$command = "xdg-open";
+				$command = "xdg-open ";
+				$suffix = " &";
 				break;
 		}
 
-		exec( $command . " " . $document );
+		exec( $command . $document . $suffix );
 	}
 }
 

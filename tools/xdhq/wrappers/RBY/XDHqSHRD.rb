@@ -23,18 +23,14 @@ module XDHqSHRD
 	XDHqSHRD::STRINGS = 2
 
 	def XDHqSHRD::open(document)
-		opener = case RbConfig::CONFIG['host_os']
-		when /mswin|mingw/
-		"start"
-		when /cygwin/
-			"cygstart"
-		when /darwin/
-			"open"
-		else
-			"xdg-open"
+		opener, suffix = case RbConfig::CONFIG['host_os']
+		when /mswin|mingw/ then ["start /B ", ""]
+		when /cygwin/ then ["cygstart ", " &" ]
+		when /darwin/	then ["open ", " &"]
+		else ["xdg-open ", " &"]
 		end
 
-	    system opener + " #{document}"
+	    system opener + document + suffix
 	end
 
 	def XDHqSHRD::isDev?()
