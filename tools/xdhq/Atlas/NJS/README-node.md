@@ -63,7 +63,7 @@ atlas.launch(() => new atlas.DOM(), callbacks, head);
 
 And here's how the *Atlas* toolkit version of the [*TodoMVC*](http://todomvc.com/) application looks like:
 
-[![TodoMVC](http://q37.info/download/TodoMVC.gif "The TodoMVC application made with the Atlas toolkit")](https://github.com/epeios-q37/todomvc-java)
+[![TodoMVC](http://q37.info/download/TodoMVC.gif "The TodoMVC application made with the Atlas toolkit")]
 
 For a live demonstration: <http://q37.info/runkit/TodoMVC>.
 

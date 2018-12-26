@@ -11,7 +11,7 @@ Here's how a [*Hello, World!*](https://en.wikipedia.org/wiki/%22Hello,_World!%22
 
 ![Little demonstration](http://q37.info/download/assets/Hello.gif "A basic example")
 
-For an live demonstration: <http://q37.info/runkit/Hello>.
+For a live demonstration: <http://q37.info/runkit/Hello>.
 
 Source code:
 
@@ -67,9 +67,9 @@ Atlas.launch(callbacks,-> () {}, head)
 
 And here's how the *Atlas* toolkit version of the [*TodoMVC*](http://todomvc.com/) application looks like:
 
-[![TodoMVC](http://q37.info/download/TodoMVC.gif "The TodoMVC application made with the Atlas toolkit")](https://github.com/epeios-q37/todomvc-java)
+[![TodoMVC](http://q37.info/download/TodoMVC.gif "The TodoMVC application made with the Atlas toolkit")]
 
-For an live demonstration: <http://q37.info/runkit/TodoMVC>.
+For a live demonstration: <http://q37.info/runkit/TodoMVC>.
 
 ## Content of the repository
 

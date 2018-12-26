@@ -174,6 +174,10 @@ public abstract class Atlas implements Runnable {
 	}
 
 	public static void launch(String headContent) {
-		launch(headContent, ".", GUI.DEFAULT, "");
+		launch(headContent, GUI.DEFAULT);
+	}
+
+	public static void launch() {
+		launch("");
 	}
 };
