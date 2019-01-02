@@ -79,7 +79,7 @@ Atlas::launch('hello', $head);
 
 And here's how the *Atlas* toolkit version of the [*TodoMVC*](http://todomvc.com/) application looks like: 
 
-[![TodoMVC](http://q37.info/download/TodoMVC.gif "The TodoMVC application made with the Atlas toolkit")]
+![TodoMVC](http://q37.info/download/TodoMVC.gif "The TodoMVC application made with the Atlas toolkit")
 
 For a live demonstration: <http://q37.info/runkit/TodoMVC>.
 
@@ -96,8 +96,10 @@ To run an example, launch `php <Name>/main.php`, where `<Name>` is the name of t
 NOTA: **You need *PHP* with [*pthreads*](http://php.net/manual/book.pthreads.php)!**
 
 The *Atlas* toolkit is also available for:
+
 - *Java*: <http://github.com/epeios-q37/atlas-java>
 - *Node.js*: <http://github.com/epeios-q37/atlas-node>
 - *Python*: <http://github.com/epeios-q37/atlas-python>
+- *Ruby*: <http://github.com/epeios-q37/atlas-ruby>
 
 For more information about the *Atlas* toolkit: <http://atlastk.org/>.
