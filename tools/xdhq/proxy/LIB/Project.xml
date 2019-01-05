@@ -49,7 +49,7 @@
 				<xpp:expand select="XDH"/>
 			</Modules>
 		</Modules>
-		<Module>dmopool</Module>
+    <!--Module>dmopool</Module-->
 		<Module>registry</Module>
 		<Module Path="../../">prtcl</Module>
 		<Modules Path="../" Group="Shared">
