@@ -56,7 +56,7 @@ module XDHq
 		if XDHqSHRD::isDev?()
 			return File.join("/cygdrive/h/hg/epeios/tools/xdhq/examples/common/", dir)
 		else
-			return Dir.pwd
+			return File.join(Dir.pwd,dir)
 		end
 	end
 

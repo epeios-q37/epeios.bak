@@ -73,11 +73,11 @@ For a live demonstration: <http://q37.info/runkit/TodoMVC>.
 
 ## Content of the repository
 
-The `Atlas` directory contains the *Ruby* source code of the *Atlas* toolkit, which is not needed to run the examples.s
+The `Atlas` directory contains the *Ruby* source code of the *Atlas* toolkit, which is not needed to run the examples.
 
 All other directories are examples.
 
-To run an example, launch `ruby <Name>`, where `<Name>` is the name of the example (`Blank`, `Chatroom`…).
+To run an example, launch `ruby -IAtlas <Name>/main.rb`, where `<Name>` is the name of the example (`Blank`, `Chatroom`…).
 
 The *Atlas* toolkit is also available for:
 
