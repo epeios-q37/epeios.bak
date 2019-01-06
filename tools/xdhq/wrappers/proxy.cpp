@@ -82,14 +82,30 @@ void proxy::Handshake_(
 	flw::sRWFlow &Flow,
 	str::dString & Language )
 {
+qRH;
+	str::wString ErrorMessage;
+qRB;
+	csdcmn::SendProtocol( prtcl::ProtocolId, prtcl::ProtocolVersion, Flow );
+
+	Flow.Commit();
+
+	ErrorMessage.Init();
+	prtcl::Get( Flow, ErrorMessage );
+
+	if ( ErrorMessage.Amount() != 0 ) {
+		sclmisc::ReportAndAbort( ErrorMessage );
+	}
+
 	prtcl::Get( Flow, Language );
 
-	Flow.Dismiss();
+//	Flow.Dismiss();
 
-	csdcmn::SendProtocol( prtcl::ProtocolId, prtcl::ProtocolVersion, Flow );
 	csdcmn::Put( Info, Flow );
 
 	Flow.Commit();
+qRR;
+qRT;
+qRE
 }
 
 void proxy::GetAction_(

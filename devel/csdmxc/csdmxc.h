@@ -466,8 +466,11 @@ qRE
 		{
 			fdr::size__ Amount = 0;
 		qRH
-			qRB
+		qRB
 			if ( Core_ != NULL ) {
+				if ( !Prepare_() )
+					Commit_( false );
+
 				Amount = Flow_.ReadUpTo( Maximum, Buffer );
 
 				if ( Amount == 0 )

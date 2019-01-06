@@ -137,7 +137,7 @@ namespace xdhcmn {
 	class cSession
 	{
 	protected:
-		virtual void XDHCMNInitialize(
+		virtual bso::sBool XDHCMNInitialize(
 			cUpstream *Callback,
 			const str::dString &Language,
 			const str::dString &Token ) = 0;	// If empty, PROD session, else token used for the DEMO session.
@@ -146,7 +146,7 @@ namespace xdhcmn {
 			const char *Action ) = 0;
 	public:
 		qCALLBACK( Session );
-		void Initialize(
+		bso::sBool Initialize(
 			cUpstream *Callback,
 			const str::dString &Language,
 			const str::dString &Token )	// If empty, PROD session, else token used for the DEMO session.

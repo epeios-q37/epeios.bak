@@ -266,12 +266,12 @@ namespace session {
 			_UpstreamCall = false;
 			Alive_ = true;
 		}
-		void Initialize(
+		bso::sBool Initialize(
 			xdhcmn::cUpstream *Callback,
 			const str::dString &Language,
 			const str::dString &Token )	// If empty, PROD session, else token used for the DEMO session.
 		{
-			Session_.Initialize(Callback, Language, Token);
+			return Session_.Initialize(Callback, Language, Token);
 		}
 		void MarkAsDead( void )
 		{

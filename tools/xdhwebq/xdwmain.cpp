@@ -100,7 +100,11 @@ namespace {
 				Row = Sessions().New( SessionId, Language, Token, ProxyCallback);
 				Session = Sessions().Sessions( Row );
 				Sessions.Release();
-				Session->Initialize( ProxyCallback, Language, Token );
+				if ( !Session->Initialize( ProxyCallback, Language, Token ) ) {
+					Sessions().Close( Row );
+					Session = NULL;
+					Row = qNIL;
+				}
 			} else {
 				Row = Sessions().Search( SessionId );
 			}

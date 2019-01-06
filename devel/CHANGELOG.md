@@ -6,6 +6,13 @@
 - [stdz]: modification to comply with current standards;
 - [trvl]: trivial modifications;
 
+## 2019-01-06
+
+- XDHCMN:
+  - introducing handling of session initialization failure,
+- XDHUPS:
+- [adpt]
+
 ## 2018-12-21
 
 - XDHCMN:

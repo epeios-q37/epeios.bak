@@ -891,7 +891,7 @@ namespace {
 		qRE;
 		}
 	protected:
-		virtual void XDHCMNInitialize(
+		virtual bso::sBool XDHCMNInitialize(
 			xdhcmn::cUpstream *Callback,
 			const str::dString &Language,
 			const str::dString &Token ) override
@@ -926,6 +926,7 @@ namespace {
 				Flow.Init( D_() );
 
 				Version = csdcmn::GetProtocolVersion( prtcl::ProtocolId, Flow );
+				Flow.Dismiss();
 
 				switch ( Version ) {
 				case 0:
@@ -949,7 +950,7 @@ namespace {
 		qRR;
 		qRT;
 		qRE;
-//			return Success;
+			return Success;
 		}
 		virtual bso::bool__ XDHCMNLaunch(
 			const char *Id,

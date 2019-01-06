@@ -59,7 +59,7 @@ namespace xdhups {
 		{
 			return Callback_;
 		}
-		void Initialize(
+		bso::sBool Initialize(
 			xdhcmn::cUpstream *Callback,
 			const str::dString &Language,
 			const str::dString &Token )	// If empty, PROD session, else token used for the DEMO session.

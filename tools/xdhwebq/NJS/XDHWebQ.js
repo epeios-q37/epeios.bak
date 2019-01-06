@@ -78,7 +78,7 @@ if (isDev()) {
 	njsq = require(getComponentPath() + 'njsq.node');
 	xdhtmlJSPath = epeiosPath + "corpus/js/";
 	xdhwebqJSPath = epeiosPath + "tools/xdhwebq/js/";
-	xdhqxdhId = epeiosPath + "tools/xdhq/proxy/XDHq.js";
+	xdhqxdhId = epeiosPath + "tools/xdhq/proxy/LIB/XDHq.js";
 } else {
 	njsq = require('njsq');
 	let jsPath = path.join(__dirname, "js");
