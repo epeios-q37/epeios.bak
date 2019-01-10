@@ -83,11 +83,11 @@ The `Atlas` directory contains the *Python* source code of the *Atlas* toolkit, 
 
 All other directories are examples.
 
-To run an example, launch `python <Name>`, where `<Name>` is the name of the example (`Blank`, `Chatroom`…), except for the *GPIO* and *RGB* applications, which are detailed just below.
+To run an example, launch `python <Name>`, where `<Name>` is the name of the example (`Blank`, `Chatroom`…), except for the *ErgoJr*, *GPIO* and *RGB* applications, which are detailed just below.
 
 ## *Raspberry Pi*/*ODROID-C2*
 
-The *GPIO* and *RGB* applications are designed to be used on a *Raspberry Pi* or a *ODROID-C2*. The *Python* version of *WiringPi* must be installed (`pip install wiringpi`), and the application has to be launched with `sudo` (`sudo python GPIO` or `sudo python RGB`).
+The *GPIO* and *RGB* applications are designed to be used on a *Raspberry Pi* or a *ODROID-C2*. The *Python* version of *WiringPi* must be installed (`pip install wiringpi`), and the application has to be launched with `sudo` (`sudo python GPIO` or `sudo python RGB`).The 
 
 Below applications are only examples. You can easily write your own applications.
 
