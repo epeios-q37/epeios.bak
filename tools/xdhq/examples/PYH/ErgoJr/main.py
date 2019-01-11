@@ -27,10 +27,12 @@ sys.path.append("./Atlas")
 
 import Atlas
 
-#Import des librairies et creation du robot
+# Import des librairies et creation du robot
 from poppy_ergo_jr import PoppyErgoJr
 
-poppy = PoppyErgoJr(simulator='vrep',use_snap=True)#vrep ou poppy-simu
+poppy = PoppyErgoJr()
+# Comment above and uncomment below to control a simulated robot.
+# poppy = PoppyErgoJr(simulator='vrep',use_snap=True) # vrep ou poppy-simu
 
 import Atlas
 

@@ -87,7 +87,9 @@ To run an example, launch `python <Name>`, where `<Name>` is the name of the exa
 
 ## *Raspberry Pi*/*ODROID-C2*
 
-The *GPIO* and *RGB* applications are designed to be used on a *Raspberry Pi* or a *ODROID-C2*. The *Python* version of *WiringPi* must be installed (`pip install wiringpi`), and the application has to be launched with `sudo` (`sudo python GPIO` or `sudo python RGB`).The 
+The *GPIO* and *RGB* applications are designed to be used on a *Raspberry Pi* or a *ODROID-C2*. The *Python* version of *WiringPi* must be installed (`pip install wiringpi`), and the application has to be launched with `sudo` (`sudo python GPIO` or `sudo python RGB`).
+
+The *ErgoJr* application is experimental and to control a *Poppy* *Ergo Jr* robot.
 
 Below applications are only examples. You can easily write your own applications.
 
