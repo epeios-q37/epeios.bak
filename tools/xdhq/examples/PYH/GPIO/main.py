@@ -33,7 +33,50 @@ settings = {}
 
 mappings = {
 	GPIOq.D_ODROID_C2:
-	{
+	sorted({
+#		1: {},
+#		2: {},
+		3: {},
+#		4: {},
+		5: {},
+#		6: {},
+		7: {},
+#		8: {},
+#		9: {},
+#		10: {},
+		11: {},
+		12: {},
+		13: {},
+#		14: {},
+		15: {},
+		16: {},
+#		17: {},
+		18: {},
+		19: {},
+#		20: {},
+		21: {},
+		22: {},
+		23: {},
+		24: {},
+#		25: {},
+		26: {},
+#		27: {},
+#		28: {},
+		29: {},
+#		30: {},
+		31: {},
+		32: {},
+		33: {},
+#		34: {},
+		35: {},
+		36: {},
+#		37: {},
+#		38: {},
+#		39: {},
+#		40: {},
+	}),
+	GPIOq.D_RASPBERRY_PI:
+	sorted({
 #		1: {},
 #		2: {},
 		3: {},
@@ -60,8 +103,8 @@ mappings = {
 		24: {},
 #		25: {},
 		26: {},
-#		27: {},	# A tester sur C2.
-#		28: {},	# A tester sur C2.
+#		27: {},
+#		28: {},
 		29: {},
 #		30: {},
 		31: {},
@@ -74,10 +117,9 @@ mappings = {
 		38: {},
 #		39: {},
 		40: {},
-	},
+	}),
 }
 
-mappings[GPIOq.D_RASPBERRY_PI] = mappings[GPIOq.D_ODROID_C2]	# Will change whe handling the advanced pin mode.
 mappings[GPIOq.D_TESTING] = mappings[GPIOq.D_ODROID_C2]
 
 mapping = mappings[GPIOq.device]
