@@ -30,7 +30,8 @@ namespace registry {
 
 		extern rEntry
 			HostService,
-			DemoService;
+			DemoService,
+			Notification;
 	}
 
 	namespace definition {

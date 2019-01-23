@@ -890,6 +890,41 @@ namespace {
 		qRT;
 		qRE;
 		}
+		void ReportError_(
+			const char *Message,
+			flw::sWFlow &Flow )
+		{
+			if ( Message == NULL )
+				Message = "";
+
+			prtcl::Put( Message, Flow );	// If 'Message' not empty, client will display content and abort.
+
+			if ( Message[0] ) {
+				Flow.Commit();
+				qRGnr();
+			}
+		}
+		void Notify_(
+			const char *Message,
+			flw::sWFlow &Flow )
+		{
+		qRH;
+			str::wString Notification;
+		qRB;
+			Notification.Init( Message );
+
+			if ( Notification.IsEmpty() )
+				sclmisc::OGetValue( registry::parameter::Notification, Notification );
+
+			prtcl::Put( Notification, Flow );
+		qRR;
+		qRT;
+		qRE;
+		}
+		void ReportNoError_( flw::sWFlow &Flow )
+		{
+			ReportError_( NULL, Flow );
+		}
 	protected:
 		virtual bso::sBool XDHCMNInitialize(
 			xdhcmn::cUpstream *Callback,
@@ -932,6 +967,10 @@ namespace {
 				case 0:
 					ReportNoError_( Flow );
 					break;
+				case 1:
+					ReportNoError_( Flow );
+					Notify_( NULL, Flow );
+					break;
 				default:
 					ReportError_( "Unknown protocol version !!!", Flow );
 					break;
@@ -970,80 +1009,60 @@ namespace {
 
 
 # define H( name )\
-	case c##name##_1:\
-		::name##_( Flow, *this );\
-		break
+		case c##name##_1:\
+			::name##_( Flow, *this );\
+			break
 
-			while ( Continue ) {
-				Command = GetCommand_( Flow );
+				while ( Continue ) {
+					Command = GetCommand_( Flow );
 
-				Log_( str::wString( GetLabel_( Command ) ) );
+					Log_( str::wString( GetLabel_( Command ) ) );
 
-				switch ( Command ) {
-				case cStandBy_1:
-					Return = true;
-					Continue = false;
-					Flow.Dismiss();
-					break;
-				H( Execute );
-				H( Alert );
-				H( Confirm );
-				H( SetLayout );
-				H( GetContents );
-				H( SetContents );
-				H( SetTimeout );
-				H( Parent );
-				H( FirstChild );
-				H( LastChild );
-				H( PreviousSibling );
-				H( NextSibling );
-				H( CreateElement );
-				H( InsertChild );
-				H( AppendChild );
-				H( InsertBefore );
-				H( InsertAfter );
-				H( DressWidgets );
-				H( AddClasses );
-				H( RemoveClasses );
-				H( ToggleClasses );
-				H( EnableElements );
-				H( DisableElements );
-				H( SetAttribute );
-				H( GetAttribute );
-				H( RemoveAttribute );
-				H( SetProperty );
-				H( GetProperty );
-				H( Focus );
-				default:
-					qRGnr();
-					break;
+					switch ( Command ) {
+					case cStandBy_1:
+						Return = true;
+						Continue = false;
+						Flow.Dismiss();
+						break;
+					H( Execute );
+					H( Alert );
+					H( Confirm );
+					H( SetLayout );
+					H( GetContents );
+					H( SetContents );
+					H( SetTimeout );
+					H( Parent );
+					H( FirstChild );
+					H( LastChild );
+					H( PreviousSibling );
+					H( NextSibling );
+					H( CreateElement );
+					H( InsertChild );
+					H( AppendChild );
+					H( InsertBefore );
+					H( InsertAfter );
+					H( DressWidgets );
+					H( AddClasses );
+					H( RemoveClasses );
+					H( ToggleClasses );
+					H( EnableElements );
+					H( DisableElements );
+					H( SetAttribute );
+					H( GetAttribute );
+					H( RemoveAttribute );
+					H( SetProperty );
+					H( GetProperty );
+					H( Focus );
+					default:
+						qRGnr();
+						break;
+					}
 				}
-			}
-
 #undef H
-
-		qRR;
-		qRT;
-		qRE;
-			return Return;
-	}
-		void ReportError_(
-			const char *Message,
-			flw::sWFlow &Flow )
-		{
-			if ( Message == NULL )
-				Message = "";
-
-			prtcl::Put( Message, Flow );	// If 'Message' not empty, client will display content and abort.
-
-			if ( Message[0] ) {
-				Flow.Commit();
-				qRGnr();
-			}
-		}
-		void ReportNoError_( flw::sWFlow &Flow )
-		{
-			ReportError_( NULL, Flow );
+			qRR;
+			qRT;
+			qRE;
+				return Return;
 		}
 	public:
 		void reset( bso::sBool P = true )

@@ -71,7 +71,7 @@ const types = shared.types;
 const open = shared.open;
 
 const protocolLabel = "3f0aef6b-b893-4ccd-9316-d468588fc572";
-const protocolVersion = "0";
+const protocolVersion = "1";
 
 function byteLength(str) {
 	// returns the byte length of an utf8 string
@@ -227,7 +227,6 @@ function pseudoServer(createCallback, callbacks, head) {
 			if (client._xdhDOM === undefined) {
 				let offset = 0;
 				let query = getQuery(client);
-				let errorMessage = "";
 
 				if (isTokenEmpty()) {
 					[token, offset] = getString(query, offset);
@@ -239,6 +238,7 @@ function pseudoServer(createCallback, callbacks, head) {
 						let completeURL = "http://" + wAddr + wPort + "/" + cgi + ".php?_token=" + token;
 
 						console.log(completeURL);
+						console.log(new Array(completeURL.length + 1).join('^'))
 						console.log("Open above URL in a web browser. Enjoy!");
 
 						open(completeURL);
@@ -264,6 +264,7 @@ function pseudoServer(createCallback, callbacks, head) {
 				let query = ""
 				let offset = 0;
 				let errorMessage = "";
+				let notification = "";
 
 				pseudoServer(createCallback, callbacks);	// Useless to give 'head', as it will no more be used.
 
@@ -273,6 +274,11 @@ function pseudoServer(createCallback, callbacks, head) {
 
 				if (errorMessage != "")
 					throw (errorMessage);
+
+				[notification, offset] = getString(query, offset);
+
+				if (notification != "")
+					console.log(notification);
 
 				getString(query, offset);	// Language.
 

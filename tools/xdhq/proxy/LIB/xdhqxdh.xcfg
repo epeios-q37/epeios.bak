@@ -13,6 +13,12 @@
 			<Plugins>
 				<!--Plugin target="Token" Id="Forbidden"/-->
 			</Plugins>
+			<Notification>
+**********
+Ceci est une notification !!!
+Eh oui !
+**********
+			</Notification>
 		</Parameters>
 		<Definitions>
 			<Plugins target="Token">

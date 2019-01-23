@@ -350,7 +350,7 @@ sck::sSocket dmopool::GetConnection(
 			qRGnr();
 		}
 
-		if ( Client->GiveUp ) {	// 'ReadBegin()' succeeded, but we have were instructed to give up.
+		if ( Client->GiveUp ) {	// 'ReadBegin()' succeeded, but we were instructed to give up.
 			Client->Access.ReadEnd();	// For the following 'WriteDismiss()' to succeed.
 			Client->Access.WriteDismiss();		// The 'ReadBegin()' from another thread will now succeed.
 			qRGnr();
