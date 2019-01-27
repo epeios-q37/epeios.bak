@@ -70,8 +70,8 @@ const net = require('net');
 const types = shared.types;
 const open = shared.open;
 
-const protocolLabel = "3f0aef6b-b893-4ccd-9316-d468588fc572";
-const protocolVersion = "1";
+const mainProtocolLabel = "6e010737-31d8-4be3-9195-c5b5b2a9d5d9";
+const mainProtocolVersion = "0";
 
 function byteLength(str) {
 	// returns the byte length of an utf8 string
@@ -209,7 +209,73 @@ function isTokenEmpty() {
 	return ( token == "" ) || ( token.charAt( 0 ) == '&' );
 }
 
+function serve(client, createCallback, callbacks) {
+
+}
+
+function handshake(client, createCallback, callbacks) {
+	let offset = 0;
+	let query = getQuery(client);
+
+	[token, offset] = getString(query, offset);
+
+	if (isTokenEmpty())
+		throw getString(query, offset)[0];	// Display error message.
+
+	if (wPort != ":0") {
+		let completeURL = "http://" + wAddr + wPort + "/" + cgi + ".php?_token=" + token;
+
+		console.log(completeURL);
+		console.log(new Array(completeURL.length + 1).join('^'))
+		console.log("Open above URL in a web browser. Enjoy!");
+
+		open(completeURL);
+	}
+
+	client.on('readable', () => serve(client, createCallback, callbacks));
+}
+
+function handshake(client, createCallback, callbacks, head) {
+	let offset = 0;
+	let error = "";
+	let notification = "";
+	let query = getQuery(client);
+
+	[error, offset] = getString(query, offset);
+
+	if (error != "")
+		throw error;
+
+	[notification, offset] = getString(query, offset);
+
+	if (notification != "")
+		console.log(notification);
+
+	client.write(handleString(token));
+
+	if (head === undefined)
+		head = "";
+
+	client.write(handleString(head));
+}
+
 function pseudoServer(createCallback, callbacks, head) {
+	var client = new net.Socket();
+
+	client.connect(pPort, pAddr, () => {
+		client.write(handleString(demoProtocolLabel));
+		client.write(handleString(demoProtocolVersion));
+
+		client.on('readable', () => handshake(client, createCallback, callbacks, head));
+	});
+
+	client.on('error', (err) => {
+		throw "Unable to connect to '" + pAddr + ":" + pPort + "' !!!";
+	});
+}
+
+
+function pseudoServer_(createCallback, callbacks, head) {
 	var client = new net.Socket();
 
 	client.connect(pPort, pAddr, () => {
@@ -255,11 +321,11 @@ function pseudoServer(createCallback, callbacks, head) {
 						throw "Unmatched token !!!";
 				}
 
-				client._xdhDOM = createCallback(client);
+				client._xdhDOM = createCallback();
 				client._xdhDOM._xdhSocket = client;
 				client._xdhDOM._xdhIsDEMO = true;
 				client._xdhDOM._xdhType = types.UNDEFINED;
-				client.write(addString(addString(Buffer.from(""), protocolLabel), protocolVersion));
+				client.write(addString(addString(Buffer.from(""), mainProtocolLabel), mainProtocolVersion));
 			} else if (relaunch) {
 				let query = ""
 				let offset = 0;

@@ -24,9 +24,8 @@
 const char *plugins::GetLabel( eStatus Status )
 {
 	switch ( Status ) {
-	case sNew:
-	case sPending:
-		qRGnr();	// This values are not errors, so we do not have to retrieve their labels.
+	case sOK:
+		qRGnr();	// This value is not an error, so we do not have to retrieve their labels.
 		break;
 	C( Bad );
 	C( Forbidden );

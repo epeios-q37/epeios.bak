@@ -904,23 +904,6 @@ namespace {
 				qRGnr();
 			}
 		}
-		void Notify_(
-			const char *Message,
-			flw::sWFlow &Flow )
-		{
-		qRH;
-			str::wString Notification;
-		qRB;
-			Notification.Init( Message );
-
-			if ( Notification.IsEmpty() )
-				sclmisc::OGetValue( registry::parameter::Notification, Notification );
-
-			prtcl::Put( Notification, Flow );
-		qRR;
-		qRT;
-		qRE;
-		}
 		void ReportNoError_( flw::sWFlow &Flow )
 		{
 			ReportError_( NULL, Flow );
@@ -969,7 +952,9 @@ namespace {
 					break;
 				case 1:
 					ReportNoError_( Flow );
-					Notify_( NULL, Flow );
+					break;
+				case csdcmn::UndefinedVersion:
+					ReportError_( "Unknown protocol !!!", Flow );
 					break;
 				default:
 					ReportError_( "Unknown protocol version !!!", Flow );

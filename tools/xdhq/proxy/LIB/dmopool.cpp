@@ -38,9 +38,18 @@ using namespace dmopool;
 
 
 namespace {
+	static qCDEF( char *, ProtocolId_, "877c913f-62df-40a1-bf5d-4bb5e66a6dd9" );
+
+	namespace registry_ {
+		namespace parameter {
+			sclrgstry::rEntry Notification( "DemoNotification", sclrgstry::Parameters );
+		}
+	}
+
 	class rClient_
 	{
 	public:
+		sId Id;
 		sck::sSocket Socket;
 		tht::rReadWrite Access;
 		bso::sBool GiveUp;
@@ -52,6 +61,7 @@ namespace {
 					sck::Close( Socket, qRPU );
 			}
 
+			Id = Undefined;
 			Socket = sck::Undefined;
 			Access.reset( P );
 			tol::reset( P, IP );
@@ -62,9 +72,24 @@ namespace {
 		{
 			reset();
 
+			Id = 0;
 			Access.Init();
 			tol::Init( IP );
 			GiveUp = false;
+		}
+		sXSocket NewXSocket( void )
+		{
+			sXSocket XSocket;
+
+			if ( Socket == sck::Undefined )
+				qRGnr();
+
+			if ( Id == Max )
+				qRLmt();
+
+			XSocket.Init( Id++, Socket );
+
+			return XSocket;
 		}
 	};
 
@@ -195,6 +220,13 @@ namespace {
 		prtcl::Put( String, Flow );
 	}
 
+	void Put_(
+		const char *String,
+		flw::sWFlow &Flow )
+	{
+		prtcl::Put( String, Flow );
+	}
+
 	struct sData_
 	{
 		sck::sSocket Socket = sck::Undefined;
@@ -212,19 +244,14 @@ namespace {
 				const str::dString &Raw,
 				str::dString &Normalized ) override
 			{
-				plugins::eStatus Status = plugins::sNew;
 				tol::bUUID UUID;
 
 				Normalized = Raw;
 
 				if ( Raw.Amount() == 0 )
 					Normalized.Append( tol::UUIDGen( UUID ) );
-				else if ( (Raw.Amount() > 1) && (Raw( 0 ) == '&') )
-					Normalized.Remove( Normalized.First() );
-				else
-					Status = plugins::sPending;
 
-				return Status;
+				return plugins::sOK;
 			}
 		public:
 			void reset(bso::sBool = true ) {}
@@ -244,6 +271,25 @@ namespace {
 			}
 		}
 	}
+
+	void Notify_(
+		const char *Message,
+		flw::sWFlow &Flow )
+	{
+	qRH;
+		str::wString Notification;
+	qRB;
+		Notification.Init( Message );
+
+		if ( Notification.IsEmpty() )
+			sclmisc::OGetValue( registry_::parameter::Notification, Notification );
+
+		prtcl::Put( Notification, Flow );
+	qRR;
+	qRT;
+	qRE;
+	}
+
 
 	void NewConnexionRoutine_(
 		sData_ &Data,
@@ -267,18 +313,32 @@ namespace {
 
 		Flow.Init( Socket, false, sck::NoTimeout );
 
+		switch ( csdcmn::GetProtocolVersion( ProtocolId_, Flow ) ) {
+		case 0:
+			Put_( "", Flow );
+			Notify_( NULL, Flow );
+			Flow.Commit();
+			break;
+		case csdcmn::UndefinedVersion:
+			Put_( "Unknown demo protocol !!!", Flow );
+			Flow.Commit();
+			qRGnr();
+		default:
+			Put_( "Unknown demo version !!!", Flow );
+			Flow.Commit();
+			qRGnr();
+			break;
+		}
+
 		Token.Init();
 		Get_( Flow, Token );
 
 		switch ( Status = token_::GetPlugin().Handle( Token ) ) {
-		case plugins::sNew:
+		case plugins::sOK:
 			Head.Init();
 			Get_( Flow, Head );
 
 			Client = Create_( Token, Head );
-			break;
-		case plugins::sPending:
-			Client = TSClientSearch_( Token );
 			break;
 		default:
 			Token.Init();
@@ -336,12 +396,14 @@ qRT;
 qRE;
 }
 
-sck::sSocket dmopool::GetConnection(
+sXSocket dmopool::GetConnection(
 	const str::dString &Token,
 	str::dString &IP )
 {
-	sck::sSocket Socket = sck::Undefined;
+	sXSocket XSocket;
 	rClient_ *Client = TSClientSearch_( Token );
+
+	XSocket.Init();
 
 	if ( Client != NULL ) {
 		if ( !Client->Access.ReadBegin( 1000 ) ) {	// Give 1 second to the client to respond.
@@ -356,12 +418,12 @@ sck::sSocket dmopool::GetConnection(
 			qRGnr();
 		}
 
-		Socket = Client->Socket;
+		XSocket = Client->NewXSocket();
 		IP.Append( Client->IP );
 		Client->Access.ReadEnd();
 	}
 
-	return Socket;
+	return XSocket;
 }
 
 namespace {

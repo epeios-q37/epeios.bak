@@ -32,7 +32,35 @@
 
 namespace dmopool {
 	void Initialize();
-	sck::sSocket GetConnection(
+
+	typedef bso::sU8 sId;
+
+	qCDEF(sId, Max, bso::U8Max);
+
+	qCDEF( sId, Undefined,Max );
+
+	// eXetended socket.
+	struct sXSocket
+	{
+	public:
+		sId Id;
+		sck::sSocket Socket;
+		void reset( bso::sBool P = true )
+		{
+			Id = Undefined;
+			Socket = sck::Undefined;
+		}
+		qCVDTOR( sXSocket );
+		void Init(
+			sId Id = Undefined,
+			sck::sSocket Socket = sck::Undefined )
+		{
+			this->Id = Id;
+			this->Socket = Socket;
+		}
+	};
+
+	sXSocket GetConnection(
 		const str::dString &Token,
 		str::dString &IP );
 }
