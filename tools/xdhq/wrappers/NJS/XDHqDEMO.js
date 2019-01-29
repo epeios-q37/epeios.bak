@@ -220,7 +220,7 @@ function handshake(client, createCallback, callbacks) {
 	[token, offset] = getString(query, offset);
 
 	if (isTokenEmpty())
-		throw getString(query, offset)[0];	// Display error message.
+		throw getString(query, offset)[0];	// Displays error message.
 
 	if (wPort != ":0") {
 		let completeURL = "http://" + wAddr + wPort + "/" + cgi + ".php?_token=" + token;
@@ -257,6 +257,8 @@ function handshake(client, createCallback, callbacks, head) {
 		head = "";
 
 	client.write(handleString(head));
+
+	client.on('readable', () => ignition(client, createCallback, callbacks));
 }
 
 function pseudoServer(createCallback, callbacks, head) {
