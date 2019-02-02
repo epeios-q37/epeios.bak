@@ -2,7 +2,7 @@
 
 ![Java logo](https://q37.info/download/assets/Java.png "Java")
 
-The [*Atlas* toolkit](https://atlastk.org/) is a library to handle web interfaces.
+A fast and easy way to add web interfaces to *Java* applications.
 
 ## *Hello, World!*
 

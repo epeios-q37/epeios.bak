@@ -4,7 +4,7 @@
 
 ![Python logo](https://q37.info/download/assets/Python.png "Python")
 
-The [*Atlas* toolkit](https://atlastk.org/) is a library dedicated to the handling of web interfaces.
+A fast and easy way to add web interfaces to *Python* applications.
 
 ## *Hello, World!*
 

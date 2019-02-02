@@ -2,8 +2,7 @@
 
 ![Ruby logo](https://q37.info/download/assets/Ruby.png "Ruby")
 
-
-The [*Atlas* toolkit](https://atlastk.org/) is a library dedicated to the handling of web interfaces.
+A fast and easy way to add web interfaces to *Ruby* applications.
 
 ## *Hello, World!*
 

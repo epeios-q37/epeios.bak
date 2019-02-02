@@ -2,7 +2,7 @@
 
 ![Node.js logo](https://q37.info/download/assets/Node.png "Node.js")
 
-The [*Atlas* toolkit](https://atlastk.org/) is a library to handle web interfaces.
+A fast and easy way to add web interfaces to *Node.js* applications.
 
 [![NPM badge of the Atlas toolkit](http://nodei.co/npm/atlastk.png)](http://npmjs.com/atlastk/ "NPM package of the Atlas toolkit")
 
