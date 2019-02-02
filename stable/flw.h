@@ -157,7 +157,7 @@ namespace flw {
 			if ( Owner == tht::Undefined )
 				Owner = tht::GetTID();
 
-			return _D().ITake( Owner );
+			return _D().RTake( Owner );
 		}
 		tht::sTID Owner( void ) const
 		{
@@ -453,7 +453,7 @@ namespace flw {
 			if ( Owner == tht::Undefined )
 				Owner = tht::GetTID();
 			
-			return _D().OTake( tht::GetTID() );
+			return _D().WTake( tht::GetTID() );
 		}
 		tht::sTID Owner( void ) const
 		{

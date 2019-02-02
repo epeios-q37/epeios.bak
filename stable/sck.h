@@ -291,7 +291,7 @@ namespace sck {
 		}
 		virtual void FDRDismiss( bso::sBool Unlock ) override
 		{}
-		virtual fdr::sTID FDRITake( fdr::sTID Owner ) override
+		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
 		{
 			return fdr::UndefinedTID;
 		}
@@ -314,7 +314,7 @@ namespace sck {
 		}
 		virtual void FDRCommit( bso::sBool Unlock ) override
 		{}
-		virtual fdr::sTID FDROTake( fdr::sTID Owner ) override
+		virtual fdr::sTID FDRWTake( fdr::sTID Owner ) override
 		{
 			return fdr::UndefinedTID;
 		}

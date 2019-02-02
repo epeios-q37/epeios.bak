@@ -141,9 +141,9 @@ namespace csducl {
 		{
 			_Get().Dismiss( Unlock );
 		}
-		virtual fdr::sTID FDRITake( fdr::sTID Owner ) override
+		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
 		{
-			return _Get().IDriver().ITake( Owner );
+			return _Get().IDriver().RTake( Owner );
 		}
 		virtual fdr::size__ FDRWrite(
 			const fdr::byte__ *Buffer,
@@ -155,9 +155,9 @@ namespace csducl {
 		{
 			_Get().Commit( Unlock );
 		}
-		virtual fdr::sTID FDROTake( fdr::sTID Owner ) override
+		virtual fdr::sTID FDRWTake( fdr::sTID Owner ) override
 		{
-			return _Get().ODriver().OTake( Owner );
+			return _Get().ODriver().WTake( Owner );
 		}
 	public:
 		void reset( bso::bool__ P = true )

@@ -320,9 +320,9 @@ void flx::rRWMonitor::FDRDismiss( bso::sBool Unlock )
 	return ID_().Dismiss( Unlock );
 }
 
-fdr::sTID flx::rRWMonitor::FDRITake( fdr::sTID Owner )
+fdr::sTID flx::rRWMonitor::FDRRTake( fdr::sTID Owner )
 {
-	return ID_().ITake( Owner );
+	return ID_().RTake( Owner );
 }
 
 fdr::sSize flx::rRWMonitor::FDRWrite(
@@ -366,9 +366,9 @@ void flx::rRWMonitor::FDRCommit( bso::sBool Unlock )
 	Uncommited_ = false;
 }
 
-fdr::sTID flx::rRWMonitor::FDROTake( fdr::sTID Owner )
+fdr::sTID flx::rRWMonitor::FDRWTake( fdr::sTID Owner )
 {
-	return OD_().OTake( Owner );
+	return OD_().WTake( Owner );
 }
 
 namespace async_ {

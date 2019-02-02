@@ -147,9 +147,9 @@ namespace cnvfdr {
 		{
 			return D_().Dismiss( Unlock );
 		}
-		virtual fdr::sTID FDRITake( fdr::sTID Owner ) override
+		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
 		{
-			return D_().ITake( Owner );
+			return D_().RTake( Owner );
 		}
 	};
 
@@ -181,9 +181,9 @@ namespace cnvfdr {
 		{
 			D_().Commit( Unlock );
 		}
-		virtual fdr::sTID FDROTake( fdr::sTID Owner ) override
+		virtual fdr::sTID FDRWTake( fdr::sTID Owner ) override
 		{
-			return D_().OTake( Owner );
+			return D_().WTake( Owner );
 		}
 	};
 

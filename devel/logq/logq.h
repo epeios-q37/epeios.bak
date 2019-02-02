@@ -125,9 +125,9 @@ namespace logq {
 				LTFlow_.Commit( Unlock );
 			}
 		}
-		virtual fdr::sTID FDROTake( fdr::sTID Owner ) override
+		virtual fdr::sTID FDRWTake( fdr::sTID Owner ) override
 		{
-			return LTFlow_.Flow().ODriver().OTake( Owner );
+			return LTFlow_.Flow().ODriver().WTake( Owner );
 		}
 	public:
 		void reset( bso::sBool P = true )

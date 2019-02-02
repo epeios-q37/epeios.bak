@@ -54,7 +54,7 @@ namespace prxy {
 		const char *HostService,
 		lcl::meaning_ &Meaning );
 
-	typedef csdbnc::rIOFlow rFlow_;
+	typedef csdbnc::rRWFlow rFlow_;
 
 	class rProxy_
 	: public rFlow_
@@ -143,9 +143,9 @@ namespace prxy {
 		{
 			Proxy_.Commit( Unlock );
 		}
-		virtual fdr::sTID FDROTake( fdr::sTID Owner ) override
+		virtual fdr::sTID FDRWTake( fdr::sTID Owner ) override
 		{
-			return Proxy_.ODriver().OTake( Owner );
+			return Proxy_.ODriver().WTake( Owner );
 		}
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
@@ -157,9 +157,9 @@ namespace prxy {
 		{
 			Proxy_.Dismiss( Unlock );
 		}
-		virtual fdr::sTID FDRITake( fdr::sTID Owner ) override
+		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
 		{
-			return Proxy_.IDriver().ITake( Owner );
+			return Proxy_.IDriver().RTake( Owner );
 		}
 	public:
 		void reset( bso::bool__ P = true )

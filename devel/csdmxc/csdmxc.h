@@ -456,9 +456,9 @@ qRE
 		qRT
 		qRE
 		}
-		virtual fdr::sTID FDROTake( fdr::sTID Owner ) override
+		virtual fdr::sTID FDRWTake( fdr::sTID Owner ) override
 		{
-			 return Driver_().OTake( Owner );
+			 return Driver_().WTake( Owner );
 		}
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
@@ -497,9 +497,9 @@ qRE
 		qRT
 		qRE
 		}
-		virtual fdr::sTID FDRITake( fdr::sTID Owner ) override
+		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
 		{
-			 return Driver_().ITake( Owner );
+			 return Driver_().RTake( Owner );
 		}
 		public:
 			void reset( bso::bool__ P = true )

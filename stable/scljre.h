@@ -591,7 +591,7 @@ namespace scljre {
 			fdr::sByte *Buffer ) override;
 		virtual void FDRDismiss( bso::sBool Unlock ) override
 		{}
-		virtual fdr::sTID FDRITake( fdr::sTID Owner ) override
+		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
 		{
 			return Owner;
 		}

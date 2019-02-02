@@ -446,7 +446,7 @@ namespace fdr {
 			size__ Maximum,
 			byte__ *Buffer ) = 0;
 		virtual void FDRDismiss( bso::sBool Unlock ) = 0;
-		virtual sTID FDRITake( sTID Owner ) = 0;
+		virtual sTID FDRRTake( sTID Owner ) = 0;
 	public:
 		void reset( bso::bool__ P = true ) 
 		{
@@ -487,9 +487,9 @@ namespace fdr {
 		{
 			AutoDismissOnEOF_ = Value;
 		}
-		sTID ITake( sTID Owner )
+		sTID RTake( sTID Owner )
 		{
-			return GetTID_( FDRITake( Owner ), BaseTake( Owner ) );
+			return GetTID_( FDRRTake( Owner ), BaseTake( Owner ) );
 		}
 		void Dismiss( bso::sBool Unlock )	// When 'Unlock' is set to false, the 'Red_' value is NOT set to 0.
 		{
@@ -606,7 +606,7 @@ namespace fdr {
 			size__ Maximum ) = 0;
 		// Returns 'false' when underlying write fails, 'true' otherwise.
 		virtual void FDRCommit( bso::sBool Unlock ) = 0;
-		virtual sTID FDROTake( sTID Owner ) = 0;
+		virtual sTID FDRWTake( sTID Owner ) = 0;
 	public:
 		void reset( bso::bool__ P = true ) 
 		{
@@ -660,9 +660,9 @@ namespace fdr {
 
 			return Maximum;
 		}
-		sTID OTake( sTID Owner )
+		sTID WTake( sTID Owner )
 		{
-			return GetTID_( FDROTake( Owner ), BaseTake( Owner ) );
+			return GetTID_( FDRWTake( Owner ), BaseTake( Owner ) );
 		}
 		bso::bool__ OFlowIsLocked( void )	// Simplifie l'utilisation de 'ioflow_driver_...'
 		{
@@ -775,6 +775,96 @@ namespace fdr {
 
 		Purge_( Driver, Buffer, BufferSize );
 	}
+
+	// Template to copy/paste for a read driver. 
+	class rRDriver_
+	: public fdr::rRDressedDriver
+	{
+	protected:
+		virtual fdr::size__ FDRRead(
+			fdr::size__ Maximum,
+			fdr::byte__ *Buffer ) override;
+		virtual void FDRDismiss( bso::sBool Unlock ) override;
+		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
+		{
+			return fdr::UndefinedTID;
+		}
+	public:
+		void reset( bso::sBool P = true )
+		{
+			rRDressedDriver::reset( P );
+		}
+		qCVDTOR( rRDriver_ );
+		void Init( fdr::eThreadSafety ThreadSafety = ts_Default )
+		{
+			rRDressedDriver::Init( ThreadSafety );
+		}
+	};
+
+	extern rRDriver_ RDriver_;
+
+	// Template to copy/paste for a write driver. 
+	class rWDriver_
+	: public fdr::rWDressedDriver
+	{
+	protected:
+		virtual fdr::size__ FDRWrite(
+			const fdr::byte__ *Buffer,
+			fdr::size__ Maximum ) override;
+		virtual void FDRCommit( bso::sBool Unlock ) override;
+		virtual fdr::sTID FDRWTake( fdr::sTID Owner ) override
+		{
+			return fdr::UndefinedTID;
+		}
+	public:
+		void reset( bso::sBool P = true )
+		{
+			rWDressedDriver::reset( P );
+		}
+		qCVDTOR( rWDriver_ );
+		void Init( fdr::eThreadSafety ThreadSafety = ts_Default )
+		{
+			rWDressedDriver::Init( ThreadSafety );
+		}
+	};
+
+	extern rWDriver_  WDriver_;
+
+	// Template to copy/paste for a read/write driver. 
+	class rRWDriver_
+	: public fdr::rRWDressedDriver
+	{
+	protected:
+		virtual fdr::size__ FDRRead(
+			fdr::size__ Maximum,
+			fdr::byte__ *Buffer ) override;
+		virtual void FDRDismiss( bso::sBool Unlock ) override;
+		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
+		{
+			return fdr::UndefinedTID;
+		}
+		virtual fdr::size__ FDRWrite(
+			const fdr::byte__ *Buffer,
+			fdr::size__ Maximum ) override;
+		virtual void FDRCommit( bso::sBool Unlock ) override;
+		virtual fdr::sTID FDRWTake( fdr::sTID Owner ) override
+		{
+			return fdr::UndefinedTID;
+		}
+	public:
+		void reset( bso::sBool P = true )
+		{
+			rRWDressedDriver::reset( P );
+		}
+		qCVDTOR( rRWDriver_ );
+		void Init( fdr::eThreadSafety ThreadSafety = ts_Default )
+		{
+			rRWDressedDriver::Init( ThreadSafety );
+		}
+	};
+
+	extern rRWDriver_ RWDriver;
+
 }
 
 #endif

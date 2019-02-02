@@ -6,6 +6,47 @@
 - [stdz]: modification to comply with current standards;
 - [trvl]: trivial modifications;
 
+## 2019-02-02:
+
+- CDGB64:
+  - [adpt]
+- CNVFDR:
+  - [adpt]
+- CRPTGR:
+  - [adpt]
+- CSDLEC:
+  - [adpt]
+- CSDUCL:
+  - [adpt]
+- CSDMXC:
+  - [adpt]
+- FDR:
+  - `(I|O)Take(...)` -> `(R|W)Take(...)`,
+- FLW:
+  - [adpt]
+- FLX:
+  - [adpt]
+- HTP:
+  - [adpt]
+- IOF:
+  - [adpt]
+- LOG:
+  - [adpt]
+- LTF:
+  - [adpt]
+- MSCMDD:
+  - [adpt]
+- PRXY:
+  - [adpt]
+- SCK:
+  - [adpt]
+- SCLJRE:
+  - [adpt]
+- XML:
+  - [adpt]
+- XPP:
+  - [adpt]
+
 ## 2019-01-06
 
 - XDHCMN:

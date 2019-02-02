@@ -152,9 +152,9 @@ namespace sclznd {
 		{
 			D_().Dismiss( Unlock );
 		}
-		virtual fdr::sTID FDRITake( fdr::sTID Owner ) override
+		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
 		{
-			return D_().ITake( Owner );
+			return D_().RTake( Owner );
 		}
 		virtual fdr::sSize FDRWrite(
 			const fdr::sByte *Buffer,
@@ -166,9 +166,9 @@ namespace sclznd {
 		{
 			D_().Commit( Unlock );
 		}
-		virtual fdr::sTID FDROTake( fdr::sTID Owner ) override
+		virtual fdr::sTID FDRWTake( fdr::sTID Owner ) override
 		{
-			return D_().OTake( Owner );
+			return D_().WTake( Owner );
 		}
 	public:
 		void reset( bso::sBool P = true )

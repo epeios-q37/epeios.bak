@@ -204,9 +204,9 @@ namespace cdgb64 {
 
 			_Flow->Commit( Unlock );
 		}
-		virtual fdr::sTID FDROTake( fdr::sTID Owner ) override
+		virtual fdr::sTID FDRWTake( fdr::sTID Owner ) override
 		{
-			return _Flow->ODriver().OTake( Owner );
+			return _Flow->ODriver().WTake( Owner );
 		}
 	public:
 		void reset( bso::bool__ P = true )
@@ -313,9 +313,9 @@ namespace cdgb64 {
 		{
 			F_().Dismiss( Unlock );
 		}
-		virtual fdr::sTID FDRITake( fdr::sTID Owner ) override
+		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
 		{
-			return F_().IDriver().ITake( Owner );
+			return F_().IDriver().RTake( Owner );
 		}
 	public:
 		void reset( bso::sBool P = true )
@@ -458,9 +458,9 @@ namespace cdgb64 {
 
 			SkippingIFlow_.Dismiss( Unlock );
 		}
-		virtual fdr::sTID FDRITake( fdr::sTID Owner ) override
+		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
 		{
-			return SkippingIFlowDriver_.ITake( Owner );
+			return SkippingIFlowDriver_.RTake( Owner );
 		}
 	public:
 		void reset( bso::bool__ P = true )

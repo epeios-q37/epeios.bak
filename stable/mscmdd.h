@@ -217,7 +217,7 @@ namespace mscmdd {
 		}
 		virtual void FDRCommit( bso::sBool ) override
 		{}
-		virtual tht::sTID FDROTake( tht::sTID TID ) override
+		virtual tht::sTID FDRWTake( tht::sTID TID ) override
 		{
 			return TID;
 		}
@@ -470,7 +470,7 @@ namespace mscmdd {
 		{
 			_In.Stop();
 		}
-		virtual tht::sTID FDRITake( tht::sTID TID ) override
+		virtual tht::sTID FDRRTake( tht::sTID TID ) override
 		{
 			return TID;
 		}
@@ -561,7 +561,7 @@ namespace mscmdd {
 		{
 			_In.Stop();
 		}
-		virtual tht::sTID FDRITake( tht::sTID TID ) override
+		virtual tht::sTID FDRRTake( tht::sTID TID ) override
 		{
 			return TID;
 		}
@@ -574,7 +574,7 @@ namespace mscmdd {
 		}
 		virtual void FDRCommit( bso::sBool ) override
 		{}
-		virtual tht::sTID FDROTake( tht::sTID TID ) override
+		virtual tht::sTID FDRWTake( tht::sTID TID ) override
 		{
 			return TID;
 		}

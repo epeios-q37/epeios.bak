@@ -49,7 +49,7 @@ namespace {
 	class rClient_
 	{
 	public:
-		sId Id;
+		sId FreeId;	// First available id.
 		sck::sSocket Socket;
 		tht::rReadWrite Access;
 		bso::sBool GiveUp;

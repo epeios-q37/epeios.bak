@@ -82,7 +82,7 @@ namespace iof {
 		{
 			return _output_driver__::_Commit();
 		}
-		virtual fdr::sTID FDROTake( fdr::sTID Owner ) override
+		virtual fdr::sTID FDRWTake( fdr::sTID Owner ) override
 		{
 			return fdr::UndefinedTID;
 		}
@@ -174,7 +174,7 @@ namespace iof {
 		{
 			_input_driver__::_Dismiss();
 		}
-		virtual fdr::sTID FDRITake( fdr::sTID Owner ) override
+		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
 		{
 			return fdr::UndefinedTID;
 		}
@@ -245,7 +245,7 @@ namespace iof {
 		{
 			_output_driver__::_Commit();
 		}
-		virtual fdr::sTID FDROTake( fdr::sTID Owner ) override
+		virtual fdr::sTID FDRWTake( fdr::sTID Owner ) override
 		{
 			return fdr::UndefinedTID;
 		}
@@ -259,7 +259,7 @@ namespace iof {
 		{
 			return _input_driver__::_Dismiss();
 		}
-		virtual fdr::sTID FDRITake( fdr::sTID Owner ) override
+		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
 		{
 			return fdr::UndefinedTID;
 		}

@@ -135,7 +135,7 @@ namespace flx {
 		}
 		virtual void FDRDismiss( bso::sBool Unlock ) override
 		{}
-		virtual fdr::sTID FDRITake( fdr::sTID Owner ) override
+		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
 		{
 			return fdr::UndefinedTID;
 		}
@@ -236,7 +236,7 @@ namespace flx {
 		}
 		virtual void FDRCommit( bso::sBool Unlock ) override
 		{}
-		virtual fdr::sTID FDROTake( fdr::sTID Owner ) override
+		virtual fdr::sTID FDRWTake( fdr::sTID Owner ) override
 		{
 			return fdr::UndefinedTID;
 		}
@@ -334,7 +334,7 @@ namespace flx {
 		}
 		virtual void FDRDismiss( bso::sBool Unlock ) override
 		{}
-		virtual fdr::sTID FDRITake( fdr::sTID Owner ) override
+		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
 		{
 			return fdr::UndefinedTID;
 		}
@@ -460,7 +460,7 @@ namespace flx {
 		}
 		virtual void FDRCommit( bso::sBool Unlock ) override
 		{}
-		virtual fdr::sTID FDROTake( fdr::sTID Owner ) override
+		virtual fdr::sTID FDRWTake( fdr::sTID Owner ) override
 		{
 			return fdr::UndefinedTID;
 		}
@@ -599,7 +599,7 @@ namespace flx {
 		}
 		virtual void FDRCommit( bso::sBool Unlock ) override
 		{}
-		virtual fdr::sTID FDROTake( fdr::sTID Owner ) override
+		virtual fdr::sTID FDRWTake( fdr::sTID Owner ) override
 		{
 			return fdr::UndefinedTID;
 		}
@@ -674,7 +674,7 @@ namespace flx {
 		}
 		virtual void FDRDismiss( bso::sBool Unlock ) override
 		{}
-		virtual fdr::sTID FDRITake( fdr::sTID Owner ) override
+		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
 		{
 			return fdr::UndefinedTID;
 		}
@@ -892,9 +892,9 @@ namespace flx {
 			if ( CommitHandling_ == chPropagate )
 				_Flow->Commit( Unlock );
 		}
-		virtual fdr::sTID FDROTake( fdr::sTID Owner ) override
+		virtual fdr::sTID FDRWTake( fdr::sTID Owner ) override
 		{
-			return _Flow->ODriver().OTake( Owner );
+			return _Flow->ODriver().WTake( Owner );
 		}
 	public:
 		void reset( bso::bool__ P = true )
@@ -1003,9 +1003,9 @@ namespace flx {
 			if ( _DismissHandling == dhPropagate )
 				_Flow->Dismiss( Unlock );
 		}
-		virtual fdr::sTID FDRITake( fdr::sTID Owner ) override
+		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
 		{
-			return _Flow->IDriver().ITake( Owner );
+			return _Flow->IDriver().RTake( Owner );
 		}
 	public:
 		void reset( bso::bool__ P = true )
@@ -1265,7 +1265,7 @@ namespace flx {
 		{
 			// Nothing to do.
 		}
-		virtual fdr::sTID FDRITake( fdr::sTID Owner ) override
+		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
 		{
 			return fdr::UndefinedTID;
 		}
@@ -1305,7 +1305,7 @@ namespace flx {
 		{
 			IO().Flush();
 		}
-		virtual fdr::sTID FDROTake( fdr::sTID Owner ) override
+		virtual fdr::sTID FDRWTake( fdr::sTID Owner ) override
 		{
 			return fdr::UndefinedTID;
 		}
@@ -1363,7 +1363,7 @@ namespace flx {
 
 			_In = UndefinedPipeDescriptor;
 		}
-		virtual fdr::sTID FDROTake( fdr::sTID Owner ) override
+		virtual fdr::sTID FDRWTake( fdr::sTID Owner ) override
 		{
 			return fdr::UndefinedTID;
 		}
@@ -1374,7 +1374,7 @@ namespace flx {
 		{
 			// Nothing to do.
 		}
-		virtual fdr::sTID FDRITake( fdr::sTID Owner ) override
+		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
 		{
 			return fdr::UndefinedTID;
 		}
@@ -1472,9 +1472,9 @@ namespace flx {
 
 			Flow_.Dismiss( Unlock );
 		}
-		virtual fdr::sTID FDRITake( fdr::sTID Owner ) override
+		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
 		{
-			return Flow_.IDriver().ITake( Owner );
+			return Flow_.IDriver().RTake( Owner );
 		}
 	public:
 		void reset( bso::sBool P = true )
@@ -1594,12 +1594,12 @@ namespace flx {
 			fdr::sSize Maximum,
 			fdr::sByte *Buffer ) override;
 		virtual void FDRDismiss( bso::sBool Unlock ) override;
-		virtual fdr::sTID FDRITake( fdr::sTID Owner ) override;
+		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override;
 		virtual fdr::sSize FDRWrite(
 			const fdr::sByte *Buffer,
 			fdr::sSize Maximum ) override;
 		virtual void FDRCommit( bso::sBool Unlock ) override;
-		virtual fdr::sTID FDROTake( fdr::sTID Owner ) override;
+		virtual fdr::sTID FDRWTake( fdr::sTID Owner ) override;
 		void Init_(
 			fdr::rRDriver *RDriver,
 			fdr::rWDriver *WDriver,
@@ -1857,7 +1857,7 @@ namespace flx {
 		}
 		virtual void FDRDismiss( bso::sBool Unlock ) override
 		{}
-		virtual fdr::sTID FDRITake( fdr::sTID Owner ) override
+		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
 		{
 			return fdr::UndefinedTID;
 		}
@@ -1900,7 +1900,7 @@ namespace flx {
 		{
 			C_().Write( NULL, 0 );
 		}
-		virtual fdr::sTID FDROTake( fdr::sTID Owner )  override
+		virtual fdr::sTID FDRWTake( fdr::sTID Owner )  override
 		{
 			return fdr::UndefinedTID;
 		}
