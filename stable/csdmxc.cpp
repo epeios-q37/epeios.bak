@@ -52,7 +52,7 @@ namespace {
 		cCallback &Callback )
 	{
 	qRH
-		flw::sDressedRWFlow<> Flow;
+		flw::rDressedRWFlow<> Flow;
 	qRB
 		Flow.Init( Callback.ExtractDriver( UP ) );
 
@@ -130,7 +130,7 @@ void csdmxc::rCore::KeepAlive_( time_t Delay )
 void csdmxc::rCore::ReleaseUPs_( void )
 {
 qRH
-	flw::sDressedWFlow<> Flow;
+	flw::rDressedWFlow<> Flow;
 qRB
 	while ( UPs.Amount() != 0 )
 	{

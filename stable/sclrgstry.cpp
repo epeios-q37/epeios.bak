@@ -345,7 +345,7 @@ void sclrgstry::Load(
 
 void sclrgstry::Load(
 	eLevel Level,
-	flw::sRFlow &Flow,
+	flw::rRFlow &Flow,
 	const fnm::name___ &Directory,
 	const char *RootPath )
 {

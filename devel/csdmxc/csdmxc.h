@@ -358,7 +358,7 @@ qRE
 	private:
 		void *UP_;
 		qRMV( rCore, C_, Core_ );
-		flw::sDressedRWFlow<> Flow_;
+		flw::rDressedRWFlow<> Flow_;
 		rDriver_ &Driver_( void )
 		{
 			if ( UP_ == NULL )

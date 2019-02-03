@@ -202,7 +202,7 @@ namespace iof {
 	};
 
 	class io_iflow___
-	: public flw::sDressedRFlow<>
+	: public flw::rDressedRFlow<>
 	{
 	private:
 		io_iflow_driver___ _Driver;
@@ -210,7 +210,7 @@ namespace iof {
 		void reset( bso::bool__ P = true )
 		{
 			_Driver.reset( P );
-			sDressedRFlow<>::reset( P );
+			rDressedRFlow<>::reset( P );
 		}
 		io_iflow___( void )
 		{
@@ -223,7 +223,7 @@ namespace iof {
 		void Init( iop::descriptor__ D )
 		{
 			_Driver.Init( D, fdr::tsDisabled );
-			sDressedRFlow<>::Init( _Driver );
+			rDressedRFlow<>::Init( _Driver );
 		}
 	};
 

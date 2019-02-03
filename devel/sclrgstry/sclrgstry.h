@@ -175,7 +175,7 @@ namespace sclrgstry {
 
 	void Load(
 		eLevel Level,
-		flw::sRFlow &Flow,
+		flw::rRFlow &Flow,
 		const fnm::name___ &Directory,
 		const char *RootPath );
 

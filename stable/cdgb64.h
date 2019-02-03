@@ -283,7 +283,7 @@ namespace cdgb64 {
 	: public rIFlowDriver_
 	{
 	private:
-		qRMV( flw::sRFlow, F_, Flow_ );
+		qRMV( flw::rRFlow, F_, Flow_ );
 	protected:
 		virtual fdr::sSize FDRRead(
 			fdr::sSize Maximum,
@@ -325,7 +325,7 @@ namespace cdgb64 {
 		}
 		qCVDTOR( rSkippingIFlowDriver_ );
 		void Init(
-			flw::sRFlow &Flow, 
+			flw::rRFlow &Flow, 
 			fdr::eThreadSafety ThreadSafety )
 		{
 			rIFlowDriver_::Init( ThreadSafety );
@@ -405,7 +405,7 @@ namespace cdgb64 {
 	{
 	private:
 		rSkippingIFlowDriver_ SkippingIFlowDriver_;
-		flw::sDressedRFlow<> SkippingIFlow_;
+		flw::rDressedRFlow<> SkippingIFlow_;
 		fdr::byte__ _Cache[4];
 		bso::u8__ _Size;
 	protected:
@@ -520,7 +520,7 @@ namespace cdgb64 {
 	: public encoding_oflow_driver___
 	{
 	private:
-		flw::sDressedWFlow<> Flow_;
+		flw::rDressedWFlow<> Flow_;
 	public:
 		void reset( bso::sBool P = true )
 		{
@@ -542,7 +542,7 @@ namespace cdgb64 {
 	: public decoding_iflow_driver___
 	{
 	private:
-		flw::sDressedRFlow<> Flow_;
+		flw::rDressedRFlow<> Flow_;
 	public:
 		void reset( bso::sBool P = true )
 		{

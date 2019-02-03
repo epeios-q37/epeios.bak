@@ -331,8 +331,8 @@ namespace xml {
 		{
 			return PushTag( name( Name ) );
 		}
-		void PutRawValue( flw::sRFlow &Flow );
-		void PutValue( flw::sRFlow &Flow );
+		void PutRawValue( flw::rRFlow &Flow );
+		void PutValue( flw::rRFlow &Flow );
 		void PuRawValue( const value_ &Value );
 		void PutValue( const value_ &Value );
 		void PutValue( const char *Value )
@@ -405,15 +405,15 @@ namespace xml {
 		}
 		void PutRawAttribute(
 			const name_ &Name,
-			flw::sRFlow &Flow,
+			flw::rRFlow &Flow,
 			eDelimiter Delimiter = d_Default );
 		void PutAttribute(
 			const name_ &Name,
-			flw::sRFlow &Flow,
+			flw::rRFlow &Flow,
 			eDelimiter Delimiter = d_Default );
 		void PutAttribute(
 			const name &Name,
-			flw::sRFlow &Flow )
+			flw::rRFlow &Flow )
 		{
 			PutAttribute( *Name, Flow );
 		}
@@ -500,7 +500,7 @@ namespace xml {
 			if ( Value != UndefinedValue )
 				PutAttribute( Name, Value, Delimiter );
 		}
-		void PutCData( flw::sRFlow &Flow );
+		void PutCData( flw::rRFlow &Flow );
 		void PutCData( const str::string_ &Value );
 		void PutCData( const char *Value )
 		{
@@ -517,9 +517,9 @@ namespace xml {
 			AlwaysCommit_ = Value;
 		}
 		bso::sBool Put( rParser &Parser );
-		// Ident and put the content of 'XFlow' (reparse it).
+		// Indent and put the content of 'XFlow' (reparse it).
 		bso::sBool Put( xtf::extended_text_iflow__ &XFlow );
-		// Ident and put the content of 'XML' (reparse it).
+		// Indent and put the content of 'XML' (reparse it).
 		bso::sBool Put( const str::dString &XML );
 		qRODISCLOSEr( eLayout, Outfit )
 		qRODISCLOSEr( eSpecialCharHandling, SpecialCharHandling )

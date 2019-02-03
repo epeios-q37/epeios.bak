@@ -77,9 +77,9 @@ namespace cdgurl {
 	{
 	protected:
 		virtual void CNVFDRConvert(
-			flw::sRFlow &In,
+			flw::rRFlow &In,
 			fdr::sSize InMax,
-			flw::sWFlow &Out,
+			flw::rWFlow &Out,
 			fdr::sSize OutMax ) override
 		{
 			fdr::byte__ Byte = 0;
@@ -128,7 +128,7 @@ namespace cdgurl {
 
 	typedef rURLEncoderDriver_<cnvfdr::rConverterRDriver, fdr::rRDriver> rURLEncoderRDriver;
 
-	typedef flw::rDressedRFlow<rURLEncoderRDriver> rEncoderRFlow_;
+	typedef flw::rXDressedRFlow<rURLEncoderRDriver> rEncoderRFlow_;
 
 	class rURLEncoderRFlow
 	: public rEncoderRFlow_
@@ -145,7 +145,7 @@ namespace cdgurl {
 
 	typedef rURLEncoderDriver_<cnvfdr::rConverterWDriver, fdr::rWDriver> rURLEncoderWDriver;
 
-	typedef flw::rDressedWFlow<rURLEncoderWDriver> rEncoderWFlow_;
+	typedef flw::rXDressedWFlow<rURLEncoderWDriver> rEncoderWFlow_;
 
 	class rURLEncoderWFlow
 	: public rEncoderWFlow_
@@ -164,131 +164,6 @@ namespace cdgurl {
 		const str::string_ &Plain,
 		str::string_ &Encoded );
 
-#if 0
-
-	template <class rURLEncoderRDriver
-	: public rRConverter_
-	{
-	private:
-		sURLEncoder Encoder_;
-	public:
-		void reset( bso::sBool P = true )
-		{
-			Encoder_.reset( P );
-		}
-		qCDTOR( rURLEncoderRDriver );
-		void Init( void )
-		{
-			Encoder_.Init();
-		}
-	};
-
-	class rEncodingRFlow
-	: public sWFlow_
-	{
-	private:
-		rEncodeDriver Driver_;
-	public:
-		void reset( bso::bool__ P = true )
-		{
-			sWFlow_::reset( P );
-			Driver_.reset( P );
-		}
-		qCDTOR( rEncodingRFlow );
-		void Init( flw::oflow__ &Flow )
-		{
-			Driver_.Init( Flow );
-			sOFlow_::Init( Driver_ );
-		}
-	};
-
-
-	class rEncodeDriver
-	: public rOFlowDriver_
-	{
-	private:
-		qRMV( flw::oflow__, F_, Flow_ );
-	protected:
-		virtual fdr::size__ FDRWrite(
-			const fdr::byte__ *Buffer,
-			fdr::size__ Maximum ) override
-		{
-			fdr::byte__ Byte = 0;
-			fdr::size__ Written = 0;
-
-			while ( Written < Maximum ) {
-				switch ( Byte = Buffer[Written++] ) {
-				default:
-					if ( !isalnum( Byte ) ) {
-						fdr::byte__ Buffer[3] = { '%' };
-						Buffer[1] = ToHex_( Byte >> 4 );
-						Buffer[2] = ToHex_( Byte & 15 );
-						F_().Write( Buffer, sizeof( Buffer ) );
-						break;
-					}
-				case '-':
-				case '_':
-				case '.':
-				case '~':
-					F_().Put( Byte );
-					break;
-				case ' ':
-					F_().Put( '+' );
-					break;
-				}
-			}
-
-			return Written;
-		}
-		virtual void FDRCommit( bso::sBool Unlock ) override
-		{
-			F_().Commit( Unlock );
-		}
-		virtual fdr::sTID FDROTake( fdr::sTID Owner ) override
-		{
-			 return F_().ODriver().OTake( Owner );
-		}
-	public:
-		void reset( bso::sBool P = true )
-		{
-			rOFlowDriver_::reset( P );
-			Flow_ = NULL;
-		}
-		qCVDTOR( rEncodeDriver );
-		void Init( flw::oflow__ &Flow )
-		{
-			rOFlowDriver_::Init( fdr::ts_Default );
-			Flow_ = &Flow;
-		}
-	};
-
-	typedef flw::standalone_oflow__<>	sOFlow_;
-
-	class rEncodingOFlow
-	: public sOFlow_
-	{
-	private:
-		rEncodeDriver Driver_;
-	public:
-		void reset( bso::bool__ P = true )
-		{
-			sOFlow_::reset( P );
-			Driver_.reset( P );
-		}
-		qCDTOR( rEncodingOFlow );
-		void Init( flw::oflow__ &Flow )
-		{
-			Driver_.Init( Flow );
-			sOFlow_::Init( Driver_  );
-		}
-	};
-
-	const str::string_ &Encode(
-		const str::string_ &Plain,
-		str::string_ &Encoded );
-
-# endif
-
 	inline fdr::byte__ FromHex_( fdr::byte__ Byte )
 	{
 		if ( !isxdigit( Byte ) )
@@ -302,9 +177,9 @@ namespace cdgurl {
 	{
 	protected:
 		virtual void CNVFDRConvert(
-			flw::sRFlow &In,
+			flw::rRFlow &In,
 			fdr::sSize InMax,
-			flw::sWFlow &Out,
+			flw::rWFlow &Out,
 			fdr::sSize OutMax ) override
 		{
 			fdr::byte__ Byte = 0;
@@ -353,7 +228,7 @@ namespace cdgurl {
 
 	typedef rURLDecoderDriver_<cnvfdr::rConverterRDriver, fdr::rRDriver> rURLDecoderRDriver;
 
-	typedef flw::rDressedRFlow<rURLDecoderRDriver> rRFlow_;
+	typedef flw::rXDressedRFlow<rURLDecoderRDriver> rRFlow_;
 
 	class rURLDecoderRFlow
 	: public rRFlow_
@@ -370,7 +245,7 @@ namespace cdgurl {
 
 	typedef rURLDecoderDriver_<cnvfdr::rConverterWDriver, fdr::rWDriver> rURLDecoderWDriver;
 
-	typedef flw::rDressedWFlow<rURLDecoderWDriver> rWFlow_;
+	typedef flw::rXDressedWFlow<rURLDecoderWDriver> rWFlow_;
 
 	class rURLDecoderWFlow
 	: public rWFlow_
@@ -388,108 +263,7 @@ namespace cdgurl {
 	const str::string_ &Decode(
 		const str::string_ &Encoded,
 		str::string_ &Plain );
-	
-# if 0
 
-	typedef fdr::iflow_driver___<> rIFlowDriver_;
-
-	inline fdr::byte__ FromHex_( fdr::byte__ Byte )
-	{
-		if ( !isxdigit( Byte ) )
-			qRFwk();
-
-		return isdigit( Byte ) ? Byte - '0' : tolower( Byte ) - 'a' + 10;
-	}
-
-	class rDecodeDriver
-	: public rIFlowDriver_
-	{
-	private:
-		qRMV( flw::iflow__, F_, Flow_ );
-	protected:
-		virtual fdr::size__ FDRRead(
-			fdr::size__ Maximum,
-			fdr::byte__ *Buffer ) override
-		{
-			fdr::size__ Red = 0;
-			bso::sSize Available = 0;
-			fdr::byte__ Byte = 0;
-			bso::sBool Stop = F_().EndOfFlow() || ( Red >= Maximum );
-
-			while ( !Stop ) {
-				switch ( Byte = F_().View() ) {
-				case '+':
-					F_().Skip();
-					Buffer[Red++] = ' ';
-					break;
-				case '%':
-					if ( F_().IsCacheEmpty( &Available ) )
-						qRFwk();
-
-					if ( ( Available >= 3 ) || ( Red == 0 ) ) {
-						F_().Skip();
-						Buffer[Red++] = ( FromHex_( F_().Get() ) << 4 ) + FromHex_( F_().Get() );
-					} else
-						Stop = true;
-					break;
-				default:
-					Buffer[Red++] = F_().Get();
-					break;
-				}
-
-				Stop = Stop || ( Red >= Maximum ) || F_().IsCacheEmpty() || F_().EndOfFlow();
-			}
-
-			return Red;
-		}
-		virtual void FDRDismiss( bso::sBool Unlock ) override
-		{
-			F_().Dismiss( Unlock );
-		}
-		virtual fdr::sTID FDRITake( fdr::sTID Owner ) override
-		{
-			 return F_().IDriver().ITake( Owner );
-		}
-	public:
-		void reset( bso::sBool P = true )
-		{
-			rIFlowDriver_::reset( P );
-			Flow_ = NULL;
-		}
-		qCVDTOR( rDecodeDriver );
-		void Init( flw::iflow__ &Flow )
-		{
-			rIFlowDriver_::Init( fdr::ts_Default );
-			Flow_ = &Flow;
-		}
-	};
-
-	typedef flw::standalone_iflow__<> sIFlow_;
-
-	class rDecodingIflow
-	: public sIFlow_
-	{
-	private:
-		rDecodeDriver Driver_;
-	public:
-		void reset( bso::bool__ P = true )
-		{
-			sIFlow_::reset( P );
-			Driver_.reset( P );
-		}
-		qCDTOR( rDecodingIflow );
-		void Init( flw::iflow__ &Flow )
-		{
-			Driver_.Init( Flow );
-			sIFlow_::Init( Driver_  );
-		}
-	};
-
-	const str::string_ &Decode(
-		const str::string_ &Encoded,
-		str::string_ &Plain );
-
-#endif
 }
 
 #endif

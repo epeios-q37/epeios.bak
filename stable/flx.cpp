@@ -387,8 +387,8 @@ namespace async_ {
 		mtk::gBlocker &Blocker )
 	{
 	qRH
-		flw::sDressedRFlow<> IFlow;
-		flw::sDressedWFlow<> OFlow;
+		flw::rDressedRFlow<> IFlow;
+		flw::rDressedWFlow<> OFlow;
 		fdr::sByte Buffer[100];
 		rData &Data = *(rData *)UP;
 	qRB
@@ -430,8 +430,8 @@ qRE
 fdr::rRDriver &flx::VoidRDriver = flx::VoidIDriver;
 fdr::rWDriver &flx::VoidWDriver = flx::VoidODriver;
 
-flw::sRFlow &flx::VoidRFlow = flx::VoidIFlow;
-flw::sWFlow &flx::VoidWFlow = flx::VoidOFlow;
+flw::rRFlow &flx::VoidRFlow = flx::VoidIFlow;
+flw::rWFlow &flx::VoidWFlow = flx::VoidOFlow;
 
 
 Q37_GCTOR( flx )

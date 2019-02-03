@@ -792,12 +792,12 @@ namespace fdr {
 	public:
 		void reset( bso::sBool P = true )
 		{
-			rRDressedDriver::reset( P );
+			fdr::rRDressedDriver::reset( P );
 		}
 		qCVDTOR( rRDriver_ );
-		void Init( fdr::eThreadSafety ThreadSafety = ts_Default )
+		void Init( fdr::eThreadSafety ThreadSafety = fdr::ts_Default )
 		{
-			rRDressedDriver::Init( ThreadSafety );
+			fdr::rRDressedDriver::Init( ThreadSafety );
 		}
 	};
 
@@ -819,12 +819,12 @@ namespace fdr {
 	public:
 		void reset( bso::sBool P = true )
 		{
-			rWDressedDriver::reset( P );
+			fdr::rWDressedDriver::reset( P );
 		}
 		qCVDTOR( rWDriver_ );
-		void Init( fdr::eThreadSafety ThreadSafety = ts_Default )
+		void Init( fdr::eThreadSafety ThreadSafety = fdr::ts_Default )
 		{
-			rWDressedDriver::Init( ThreadSafety );
+			fdr::rWDressedDriver::Init( ThreadSafety );
 		}
 	};
 
@@ -854,12 +854,12 @@ namespace fdr {
 	public:
 		void reset( bso::sBool P = true )
 		{
-			rRWDressedDriver::reset( P );
+			fdr::rRWDressedDriver::reset( P );
 		}
 		qCVDTOR( rRWDriver_ );
-		void Init( fdr::eThreadSafety ThreadSafety = ts_Default )
+		void Init( fdr::eThreadSafety ThreadSafety = fdr::ts_Default )
 		{
-			rRWDressedDriver::Init( ThreadSafety );
+			fdr::rRWDressedDriver::Init( ThreadSafety );
 		}
 	};
 

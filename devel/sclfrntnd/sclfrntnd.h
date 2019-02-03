@@ -156,10 +156,10 @@ namespace sclfrntnd {
 		}
 	};
 
-	typedef flw::sDressedRWFlow<> sDressedIOFlow_;
+	typedef flw::rDressedRWFlow<> rDressedIOFlow_;
 
 	class rIOFlow_
-	: public sDressedIOFlow_
+	: public rDressedIOFlow_
 	{
 	private:
 		qRMV( rKernel, K_, Kernel_ );
@@ -172,7 +172,7 @@ namespace sclfrntnd {
 	public:
 		void reset( bso::sBool P = true )
 		{
-			sDressedIOFlow_::reset( P );
+			rDressedIOFlow_::reset( P );
 
 			if ( P ) {
 				DeleteDriver_();
@@ -189,7 +189,7 @@ namespace sclfrntnd {
 			Kernel_ = &Kernel;
 			Driver_ = K_().New();
 
-			sDressedIOFlow_::Init( D_() );
+			rDressedIOFlow_::Init( D_() );
 		}
 	};
 

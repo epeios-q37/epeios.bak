@@ -77,9 +77,9 @@ namespace cdgurl {
 	{
 	protected:
 		virtual void CNVFDRConvert(
-			flw::sRFlow &In,
+			flw::rRFlow &In,
 			fdr::sSize InMax,
-			flw::sWFlow &Out,
+			flw::rWFlow &Out,
 			fdr::sSize OutMax ) override
 		{
 			fdr::byte__ Byte = 0;
@@ -128,7 +128,7 @@ namespace cdgurl {
 
 	typedef rURLEncoderDriver_<cnvfdr::rConverterRDriver, fdr::rRDriver> rURLEncoderRDriver;
 
-	typedef flw::rDressedRFlow<rURLEncoderRDriver> rEncoderRFlow_;
+	typedef flw::rXDressedRFlow<rURLEncoderRDriver> rEncoderRFlow_;
 
 	class rURLEncoderRFlow
 	: public rEncoderRFlow_
@@ -145,7 +145,7 @@ namespace cdgurl {
 
 	typedef rURLEncoderDriver_<cnvfdr::rConverterWDriver, fdr::rWDriver> rURLEncoderWDriver;
 
-	typedef flw::rDressedWFlow<rURLEncoderWDriver> rEncoderWFlow_;
+	typedef flw::rXDressedWFlow<rURLEncoderWDriver> rEncoderWFlow_;
 
 	class rURLEncoderWFlow
 	: public rEncoderWFlow_
@@ -177,9 +177,9 @@ namespace cdgurl {
 	{
 	protected:
 		virtual void CNVFDRConvert(
-			flw::sRFlow &In,
+			flw::rRFlow &In,
 			fdr::sSize InMax,
-			flw::sWFlow &Out,
+			flw::rWFlow &Out,
 			fdr::sSize OutMax ) override
 		{
 			fdr::byte__ Byte = 0;
@@ -228,7 +228,7 @@ namespace cdgurl {
 
 	typedef rURLDecoderDriver_<cnvfdr::rConverterRDriver, fdr::rRDriver> rURLDecoderRDriver;
 
-	typedef flw::rDressedRFlow<rURLDecoderRDriver> rRFlow_;
+	typedef flw::rXDressedRFlow<rURLDecoderRDriver> rRFlow_;
 
 	class rURLDecoderRFlow
 	: public rRFlow_
@@ -245,7 +245,7 @@ namespace cdgurl {
 
 	typedef rURLDecoderDriver_<cnvfdr::rConverterWDriver, fdr::rWDriver> rURLDecoderWDriver;
 
-	typedef flw::rDressedWFlow<rURLDecoderWDriver> rWFlow_;
+	typedef flw::rXDressedWFlow<rURLDecoderWDriver> rWFlow_;
 
 	class rURLDecoderWFlow
 	: public rWFlow_

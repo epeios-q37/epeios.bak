@@ -66,6 +66,8 @@ namespace dtfptb {
 
 	bso::u32__ OldGetSize( flw::iflow__ &Flow );
 
+	bso::u32__ OldGetSize( fdr::rRDriver &Driver );
+
 	bso::u32__ OldGetSize( const size_buffer__ &Buffer );
 
 	typedef bso::u8__ _length__;

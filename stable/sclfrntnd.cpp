@@ -521,8 +521,8 @@ static void GetBackendFeatures_(
 
 namespace {
 	void EscapeBackslashs_(
-		flw::sRFlow &IFlow,
-		flw::sWFlow &OFlow )
+		flw::rRFlow &IFlow,
+		flw::rWFlow &OFlow )
 	{
 		bso::char__ C = 0;
 

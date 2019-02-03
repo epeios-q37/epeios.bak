@@ -160,6 +160,21 @@ bso::u32__ dtfptb::OldGetSize( flw::iflow__ &IFlow )
 	return Size;
 }
 
+bso::u32__ dtfptb::OldGetSize( fdr::rRDriver &Driver )
+{
+	bso::sU32 Value = 0;
+qRH;
+	flw::rDressedRFlow<> Flow;
+qRB;
+	Flow.Init( Driver );
+
+	Value = OldGetSize( Flow );
+qRR;
+qRT;
+qRE;
+	return Value;
+}
+
 bso::u32__ dtfptb::OldGetSize( const size_buffer__ &Buffer )
 {
 	bso::u32__ Size = Buffer[0];

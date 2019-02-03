@@ -44,11 +44,11 @@ namespace dmopool {
 	{
 	public:
 		sId Id;
-		sck::sSocket Socket;
+		sck::rRWDriver Driver;
 		void reset( bso::sBool P = true )
 		{
+			Driver.reset( P );
 			Id = Undefined;
-			Socket = sck::Undefined;
 		}
 		qCVDTOR( sXSocket );
 		void Init(
@@ -56,7 +56,79 @@ namespace dmopool {
 			sck::sSocket Socket = sck::Undefined )
 		{
 			this->Id = Id;
-			this->Socket = Socket;
+
+			if ( Socket != sck::Undefined )
+				Driver.Init( Socket, true, fdr::ts_Default );
+			else
+				Driver.reset();
+		}
+	};
+
+	class rRWDriver_
+	: public fdr::rRWDressedDriver
+	{
+	private:
+		sXSocket XSocket_;
+		mtx::rMutex Mutex_;
+		bso::sBool IdSent_;
+	protected:
+		virtual fdr::size__ FDRRead(
+			fdr::size__ Maximum,
+			fdr::byte__ *Buffer ) override
+		{
+			Mutex_.Lock();
+
+			return XSocket_.Driver.Read( Maximum, Buffer );
+		}
+		virtual void FDRDismiss( bso::sBool Unlock ) override
+		{
+			XSocket_.Driver.Dismiss( Unlock );
+
+			Mutex_.Unlock();
+		}
+		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
+		{
+			return XSocket_.Driver.RTake( Owner );
+		}
+		virtual fdr::size__ FDRWrite(
+			const fdr::byte__ *Buffer,
+			fdr::size__ Maximum ) override
+		{
+			if ( !IdSent_ ) {
+				prtcl::Put( XSocket_.Id, XSocket_.Driver );
+				IdSent_ = true;
+			}
+
+			return XSocket_.Driver.Write( Buffer, Maximum );
+		}
+		virtual void FDRCommit( bso::sBool Unlock ) override
+		{
+			XSocket_.Driver.Commit( Unlock );
+
+			IdSetn_ = false;
+		}
+		virtual fdr::sTID FDRWTake( fdr::sTID Owner ) override
+		{
+			return fdr::UndefinedTID;
+		}
+	public:
+		void reset( bso::sBool P = true )
+		{
+			fdr::rRWDressedDriver::reset( P );
+			XSocket_.reset( P );
+			Mutex_.reset( P );
+			IdSent_ = false;
+		}
+		qCVDTOR( rRWDriver_ );
+		void Init(
+			sXSocket XSocket,
+			mtx::rHandler MutexHandler,
+			fdr::eThreadSafety ThreadSafety = fdr::ts_Default )
+		{
+			fdr::rRWDressedDriver::Init( ThreadSafety );
+			XSocket_ = XSocket;
+			Mutex_.Init( MutexHandler );
+			IdSent_ = false;
 		}
 	};
 

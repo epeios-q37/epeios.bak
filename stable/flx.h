@@ -411,7 +411,7 @@ namespace flx {
 			_Driver.Init( Bunch, fdr::tsDisabled, Position );
 			standalone_iflow__<>::Init( _Driver );
 		}
-		flw::sRFlow &operator *( void )
+		flw::rRFlow &operator *( void )
 		{
 			return *this;
 		}
@@ -1447,7 +1447,7 @@ namespace flx {
 	{
 	private:
 		fdr::sSize Size_;
-		flw::sDressedRFlow<> Flow_;
+		flw::rDressedRFlow<> Flow_;
 		cSizeDelimitedWFlow *Callback_;
 	protected:
 		virtual fdr::size__ FDRRead(
@@ -1500,17 +1500,17 @@ namespace flx {
 		}
 	};
 
-	typedef flw::sDressedRFlow<> sDressedRFlow_;
+	typedef flw::rDressedRFlow<> rDressedRFlow_;
 
 	class rSizeDelimitedWFlow
-	: public sDressedRFlow_
+	: public rDressedRFlow_
 	{
 	private:
 		rSizeDelimitedIDriver Driver_;
 	public:
 		void reset( bso::sBool P = true )
 		{
-			sDressedRFlow_::reset( P );
+			rDressedRFlow_::reset( P );
 			tol::reset( P, Driver_ );
 		}
 		qCDTOR( rSizeDelimitedWFlow );
@@ -1520,7 +1520,7 @@ namespace flx {
 			cSizeDelimitedWFlow *Callback = NULL )
 		{
 			Driver_.Init( Size, Driver, Callback, fdr::ts_Default );
-			sDressedRFlow_::Init( Driver_ );
+			rDressedRFlow_::Init( Driver_ );
 		}
 		void Init(
 			fdr::sSize Size,
@@ -2034,8 +2034,8 @@ namespace flx {
 	extern fdr::rRDriver &VoidRDriver;
 	extern fdr::rWDriver &VoidWDriver;
 
-	extern flw::sRFlow &VoidRFlow;
-	extern flw::sWFlow &VoidWFlow;
+	extern flw::rRFlow &VoidRFlow;
+	extern flw::rWFlow &VoidWFlow;
 }
 
 #endif

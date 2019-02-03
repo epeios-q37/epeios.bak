@@ -209,7 +209,7 @@ qRE
 }
 
 void xdhcmn::FlatSplit(
-	flw::sRFlow &Flow,
+	flw::rRFlow &Flow,
 	str::dStrings &Splitted )
 {
 qRH;

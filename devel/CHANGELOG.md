@@ -6,6 +6,44 @@
 - [stdz]: modification to comply with current standards;
 - [trvl]: trivial modifications;
 
+## 2019-02-03
+
+- CDGB64:
+  - [adpt]
+- CDGURL:
+  - [adpt]
+- CNVFDR:
+  - [adpt]
+- CSDCMN:
+  - [adpt]
+- CSDMXC:
+  - [adpt]
+- DFTPTB:
+  - introducing file driver based version of functions,
+  - [stdz],
+- DIR:
+  - [adpt]
+- FLW:
+  - fixing incoherency (objects were static instead of dynamic),
+- FLX:
+  - [adpt]
+- IOF:
+  - [adpt]
+- LOGQ:
+  - [adpt]
+- SCLARGMNT:
+  - [adpt]
+- SCLAFRNTND:
+  - [adpt]
+- SCLRGSTRY:
+  - [adpt]
+- TXF:
+  - [adpt]
+- XDHCMN:
+  - [adpt]
+- XML:
+  - [adpt]
+
 ## 2019-02-02:
 
 - CDGB64:
@@ -30,7 +68,7 @@
   - [adpt]
 - IOF:
   - [adpt]
-- LOG:
+- LOGQ:
   - [adpt]
 - LTF:
   - [adpt]

@@ -458,7 +458,7 @@ namespace txf {
 	: public text_oflow__
 	{
 	private:
-		flw::sDressedWFlow<> Flow_;
+		flw::rDressedWFlow<> Flow_;
 	public:
 		void reset( bso::sBool P = true )
 		{
@@ -479,7 +479,7 @@ namespace txf {
 	class rRFlow
 	: public text_iflow__ {
 	private:
-		flw::sDressedRFlow<> Flow_;
+		flw::rDressedRFlow<> Flow_;
 	public:
 		void reset( bso::sBool P = true )
 		{

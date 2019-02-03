@@ -1224,7 +1224,7 @@ void xml::rWriter::Indent_( bso::size__ Amount ) const
 		F_() << ' ';
 }
 
-void xml::rWriter::PutRawValue( flw::sRFlow &Flow )
+void xml::rWriter::PutRawValue( flw::rRFlow &Flow )
 {
 	if ( TagNameInProgress_ ) {
 		F_() << '>';
@@ -1240,7 +1240,7 @@ void xml::rWriter::PutRawValue( flw::sRFlow &Flow )
 
 namespace {
 	void TransformAndPutValue_(
-		flw::sRFlow &Flow,
+		flw::rRFlow &Flow,
 		rWriter &Writer )
 	{
 	qRH
@@ -1257,7 +1257,7 @@ namespace {
 	}
 }
 
-void xml::rWriter::PutValue( flw::sRFlow &Flow )
+void xml::rWriter::PutValue( flw::rRFlow &Flow )
 {
 	switch ( SpecialCharHandling_ ) {
 	case schReplace:
@@ -1291,7 +1291,7 @@ void xml::rWriter::PutValue( const value_ &Value )
 
 void xml::rWriter::PutRawAttribute(
 	const name_ &Name,
-	flw::sRFlow &Flow,
+	flw::rRFlow &Flow,
 	eDelimiter Delimiter )
 {
 	if ( !TagNameInProgress_ )
@@ -1309,7 +1309,7 @@ void xml::rWriter::PutRawAttribute(
 namespace {
 	void TransformAndPutAttribute_(
 		const name_ &Name,
-		flw::sRFlow &Flow,
+		flw::rRFlow &Flow,
 		rWriter &Writer,
 		eDelimiter Delimiter )
 	{
@@ -1329,7 +1329,7 @@ namespace {
 
 void xml::rWriter::PutAttribute(
 	const name_ &Name,
-	flw::sRFlow &Flow,
+	flw::rRFlow &Flow,
 	eDelimiter Delimiter )
 {
 	switch ( SpecialCharHandling_ ) {
@@ -1367,7 +1367,7 @@ void xml::rWriter::PutRawAttribute(
 	PutRawAttribute( Name, Flow, Delimiter );
 }
 
-void xml::rWriter::PutCData( flw::sRFlow &Flow )
+void xml::rWriter::PutCData( flw::rRFlow &Flow )
 {
 	if ( TagNameInProgress_ ) {
 		F_() << '>';

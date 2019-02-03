@@ -61,7 +61,7 @@ namespace {
 					sck::Close( Socket, qRPU );
 			}
 
-			Id = Undefined;
+			FreeId = Undefined;
 			Socket = sck::Undefined;
 			Access.reset( P );
 			tol::reset( P, IP );
@@ -72,7 +72,7 @@ namespace {
 		{
 			reset();
 
-			Id = 0;
+			FreeId = 0;
 			Access.Init();
 			tol::Init( IP );
 			GiveUp = false;
@@ -84,10 +84,10 @@ namespace {
 			if ( Socket == sck::Undefined )
 				qRGnr();
 
-			if ( Id == Max )
+			if ( FreeId == Max )
 				qRLmt();
 
-			XSocket.Init( Id++, Socket );
+			XSocket.Init( FreeId++, Socket );
 
 			return XSocket;
 		}

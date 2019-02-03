@@ -39,9 +39,9 @@ namespace cnvfdr {
 	{
 	protected:
 		virtual void CNVFDRConvert(
-			flw::sRFlow &In,
+			flw::rRFlow &In,
 			fdr::sSize InMax,	// Maximum amount of data available in 'In'. There can be less, so you have also to take care of EOF. Not all data must be red, but at least one.
-			flw::sWFlow &Out,
+			flw::rWFlow &Out,
 			fdr::sSize OutMax )	// Amount of which can be written in 'Out'. At least one character must be written.
 		{
 			qRGnr();
@@ -53,8 +53,8 @@ namespace cnvfdr {
 			fdr::sSize OutAmount )	// Amount of which can be written in 'Out'. At least one character must be written.
 		{
 		qRH;
-			flw::sDressedRFlow<> FIn;
-			flw::sDressedWFlow<> FOut;
+			flw::rDressedRFlow<> FIn;
+			flw::rDressedWFlow<> FOut;
 		qRB;
 			FIn.Init( In );
 			FOut.Init( Out );
@@ -153,7 +153,7 @@ namespace cnvfdr {
 		}
 	};
 
-	typedef rFlow_<flw::rDressedRFlow<rConverterRDriver>, fdr::rRDriver> rConverterRFlow;
+	typedef rFlow_<flw::rXDressedRFlow<rConverterRDriver>, fdr::rRDriver> rConverterRFlow;
 
 	class rConverterWDriver
 	: public sDriver_<fdr::rWDriver, fdr::rWDressedDriver>
@@ -187,7 +187,7 @@ namespace cnvfdr {
 		}
 	};
 
-	typedef rFlow_<flw::rDressedWFlow<rConverterWDriver>, fdr::rWDriver> rConverterWFlow;
+	typedef rFlow_<flw::rXDressedWFlow<rConverterWDriver>, fdr::rWDriver> rConverterWFlow;
 }
 
 #endif

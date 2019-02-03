@@ -295,7 +295,7 @@ namespace xdhcmn {
 
 	// Reverse of above (if 'AsJSArray' was to 'false').
 	void FlatSplit(
-		flw::sRFlow &Flow,
+		flw::rRFlow &Flow,
 		str::dStrings &Splitted );
 
 	// Variant of above.

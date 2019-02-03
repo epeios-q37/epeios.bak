@@ -727,18 +727,18 @@ namespace flw {
 		qCDTOR( rDressedFlow );
 	};
 
-	typedef flw::iflow__ sRFlow;
-	template <int Dummy = 0> qTCLONEs( standalone_iflow__<Dummy>, sDressedRFlow );
-	template <typename driver, int Dummy = 0> qTCLONE( flw::rDressedFlow<qCOVER2( flw::sDressedRFlow<Dummy>, driver )>, rDressedRFlow );
+	typedef flw::iflow__ rRFlow;	// '__' -> 'r...' instead of 's... : see comment of 'iflow__'.
+	template <int Dummy = 0> qTCLONEs( standalone_iflow__<Dummy>, rDressedRFlow );
+	template <typename driver, int Dummy = 0> qTCLONE( flw::rDressedFlow<qCOVER2( flw::rDressedRFlow<Dummy>, driver )>, rXDressedRFlow );
 
 
-	typedef flw::oflow__ sWFlow;
-	template <int CacheSize = FLW__OUTPUT_CACHE_SIZE> qTCLONEs( standalone_oflow__<CacheSize>, sDressedWFlow );
-	template <typename driver, int CacheSize = FLW__OUTPUT_CACHE_SIZE> qTCLONE( flw::rDressedFlow<qCOVER2( flw::sDressedWFlow<CacheSize>, driver )>, rDressedWFlow );
+	typedef flw::oflow__ rWFlow;	// '__' -> 'r...' instead of 's... : see comment of 'oflow__'.
+	template <int CacheSize = FLW__OUTPUT_CACHE_SIZE> qTCLONEs( standalone_oflow__<CacheSize>, rDressedWFlow );
+	template <typename driver, int CacheSize = FLW__OUTPUT_CACHE_SIZE> qTCLONE( flw::rDressedFlow<qCOVER2( flw::rDressedWFlow<CacheSize>, driver )>, rXDressedWFlow );
 
-	typedef flw::ioflow__ sRWFlow;
-	template <int OutCacheSize = FLW__OUTPUT_CACHE_SIZE> qTCLONEs( standalone_ioflow__<OutCacheSize>, sDressedRWFlow );
-	template <typename driver, int CacheSize = FLW__OUTPUT_CACHE_SIZE> qTCLONE( flw::rDressedFlow<qCOVER2( flw::sDressedRWFlow<CacheSize>, driver )>, rDressedRWFlow );
+	typedef flw::ioflow__ rRWFlow;	// '__' -> 'r...' instead of 's... : see comment of 'ioflow__'.
+	template <int OutCacheSize = FLW__OUTPUT_CACHE_SIZE> qTCLONEs( standalone_ioflow__<OutCacheSize>, rDressedRWFlow );
+	template <typename driver, int CacheSize = FLW__OUTPUT_CACHE_SIZE> qTCLONE( flw::rDressedFlow<qCOVER2( flw::rDressedRWFlow<CacheSize>, driver )>, rXDressedRWFlow );
 }
 
 #endif

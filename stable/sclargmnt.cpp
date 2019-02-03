@@ -1170,7 +1170,7 @@ namespace {
 namespace {
 	namespace {
 		void Split_(
-			flw::sRFlow &Flow,
+			flw::rRFlow &Flow,
 			str::dStrings &Splitted )
 		{
 		qRH
@@ -1587,7 +1587,7 @@ qRE
 
 namespace {
 	void Normalize_(
-		flw::sRFlow &Flow,
+		flw::rRFlow &Flow,
 		str::dString &Normalized )
 	{
 		char C = 0;
