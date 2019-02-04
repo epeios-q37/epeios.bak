@@ -197,7 +197,7 @@ bso::u32__ dtfptb::OldGetSize( const size_buffer__ &Buffer )
 	return Size;
 }
 
-static bso::byte__ *_GetInt(
+static bso::byte__ *GetInt_(
 	flw::iflow__ &Flow,
 	bso::byte__ *DInt )
 {
@@ -212,11 +212,42 @@ static bso::byte__ *_GetInt(
 	return DInt;
 }
 
-static void _PutInt(
+static bso::byte__ *GetInt_(
+	fdr::rRDriver &Driver,
+	bso::byte__ *DInt )
+{
+qRH;
+	flw::rDressedRFlow<> Flow;
+qRB;
+	Flow.Init( Driver );
+
+	GetInt_( Flow, DInt );
+qRR;
+qRT;
+qRE;
+	return DInt;
+}
+
+static void PutInt_(
 	const bso::xint__ &XInt,
 	flw::oflow__ &Flow )
 {
 	Flow.Write( XInt.DSizeBuffer(), XInt.BufferSize() );
+}
+
+static void PutInt_(
+	const bso::xint__ &XInt,
+	fdr::rWDriver &Driver )
+{
+qRH;
+	flw::rDressedWFlow<> Flow;
+qRB;
+	Flow.Init( Driver );
+
+	PutInt_( XInt, Flow );
+qRR;
+qRT;
+qRE;
 }
 
 #define M( s )	Flow.Put( (flw::byte__)( Int >> ( s * 8 ) ) )
@@ -249,6 +280,23 @@ void dtfptb::_FPutInt(
 		break;
 	}
 }
+
+void dtfptb::_FPutInt(
+	bso::int__ Int,
+	_length__ Length,
+	fdr::rWDriver & Driver )
+{
+qRH;
+	flw::rDressedWFlow<> Flow;
+qRB;
+	Flow.Init( Driver );
+
+	_FPutInt( Int, Length, Flow );
+qRR;
+qRT;
+qRE;
+}
+
 #undef M
 
 #define M( s )	Int += (bso::int__)( Flow.Get() ) << ( s * 8 )
@@ -287,12 +335,60 @@ bso::int__ dtfptb::_FGetInt(
 
 #undef M
 
+bso::int__ dtfptb::_FGetInt(
+	fdr::rRDriver &Driver,
+	_length__ Length )
+{
+	bso::sSInt Int = 0;
+qRH;
+	flw::rDressedRFlow<> Flow;
+qRB;
+	Flow.Init( Driver );
+
+	Int = _FGetInt( Flow, Length );
+qRR;
+qRT;
+qRE;
+	return Int;
+}
+
+template <typename fd> static bso::sUBig VGetUBig_(
+	fd &FD,
+	bso::sUBig Max )
+{
+	bso::byte__ DInt[BSO_DINT_SIZE_MAX];
+	bso::sUBig Value = bso::ConvertToUBig( GetInt_( FD, DInt ) );
+
+	if ( Value > Max )
+		qRFwk();
+
+	return Value;
+}
+
 bso::sUBig dtfptb::_VGetUBig(
 	flw::iflow__ &Flow,
 	bso::sUBig Max )
 {
+	return VGetUBig_( Flow, Max );
+}
+
+bso::sUBig dtfptb::_VGetUBig(
+	fdr::rRDriver &Driver,
+	bso::sUBig Max )
+{
+	return VGetUBig_( Driver, Max );
+}
+
+template <typename fd> bso::sSBig VGetSBig_(
+	fd &FD,
+	bso::sSBig Min,
+	bso::sSBig Max )
+{
 	bso::byte__ DInt[BSO_DINT_SIZE_MAX];
-	bso::sUBig Value = bso::ConvertToUBig( _GetInt( Flow, DInt ) );
+	bso::sSBig Value = bso::ConvertToSBig( GetInt_( FD, DInt ) );
+
+	if ( Value < Min )
+		qRFwk();
 
 	if ( Value > Max )
 		qRFwk();
@@ -305,34 +401,61 @@ bso::sSBig dtfptb::_VGetSBig(
 	bso::sSBig Min,
 	bso::sSBig Max )
 {
-	bso::byte__ DInt[BSO_DINT_SIZE_MAX];
-	bso::sSBig Value = bso::ConvertToSBig( _GetInt( Flow, DInt ) );
+	return VGetSBig_( Flow, Min, Max );
+}
 
-	if ( Value < Min )
-		qRFwk();
+bso::sSBig dtfptb::_VGetSBig(
+	fdr::rRDriver &Driver,
+	bso::sSBig Min,
+	bso::sSBig Max )
+{
+	return VGetSBig_( Driver, Min, Max );
+}
 
-	if ( Value > Max )
-		qRFwk();
+template <typename fd> static void VPutUBig_(
+	bso::sUBig UBig,
+	fd &FD )
+{
+	bso::xint__ XInt;
 
-	return Value;
+	PutInt_( bso::ConvertToDInt( UBig, XInt ), FD );
 }
 
 void dtfptb::_VPutUBig(
 	bso::sUBig UBig,
 	flw::oflow__ &Flow )
 {
+	VPutUBig_( UBig, Flow );
+}
+
+void dtfptb::_VPutUBig(
+	bso::sUBig UBig,
+	fdr::rWDriver &Driver )
+{
+	VPutUBig_( UBig, Driver );
+}
+
+template <typename fd> void VPutSBig_(
+	bso::sSBig SBig,
+	fd &FD )
+{
 	bso::xint__ XInt;
 
-	_PutInt( bso::ConvertToDInt( UBig, XInt ), Flow );
+	PutInt_( bso::ConvertToDInt( SBig, XInt ), FD );
 }
 
 void dtfptb::_VPutSBig(
 	bso::sSBig SBig,
 	flw::oflow__ &Flow )
 {
-	bso::xint__ XInt;
+	VPutSBig_( SBig, Flow );
+}
 
-	_PutInt( bso::ConvertToDInt( SBig, XInt ), Flow );
+void dtfptb::_VPutSBig(
+	bso::sSBig SBig,
+	fdr::rWDriver &Driver )
+{
+	VPutSBig_( SBig, Driver );
 }
 
 Q37_GCTOR( dtfptb )

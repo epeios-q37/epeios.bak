@@ -159,18 +159,32 @@ namespace csdcmn {
 		Get_( Flow, Strings );
 	}
 
-	template <typename integer> void Put(
+	template <typename integer> inline void Put(
 		integer Integer,
 		flw::rWFlow &Flow )
 	{
 		return dtfptb::VPut( Integer, Flow );
 	}
 
-	template <typename integer> integer Get(
+	template <typename integer> inline void Put(
+		integer Integer,
+		fdr::rWDriver &Driver )
+	{
+		return dtfptb::VPut( Integer, Driver );
+	}
+
+	template <typename integer> inline integer Get(
 		flw::rRFlow &Flow,
 		integer &Integer )
 	{
 		return dtfptb::VGet( Flow, Integer );
+	}
+
+	template <typename integer> inline integer Get(
+		fdr::rRDriver &Driver,
+		integer &Integer )
+	{
+		return dtfptb::VGet( Driver, Integer );
 	}
 }
 

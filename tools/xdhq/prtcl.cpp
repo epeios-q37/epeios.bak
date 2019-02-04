@@ -23,6 +23,7 @@
 
 using namespace prtcl;
 
+# if 0
 namespace {
 	inline void Put_(
 		const char *Identifier,
@@ -39,3 +40,4 @@ namespace {
 		Put_( Get( T ), Flow );
 	}
 }
+# endif

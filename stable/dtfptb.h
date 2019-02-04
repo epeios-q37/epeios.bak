@@ -66,6 +66,8 @@ namespace dtfptb {
 
 	bso::u32__ OldGetSize( flw::iflow__ &Flow );
 
+	bso::u32__ OldGetSize( fdr::rRDriver &Driver );
+
 	bso::u32__ OldGetSize( const size_buffer__ &Buffer );
 
 	typedef bso::u8__ _length__;
@@ -75,37 +77,46 @@ namespace dtfptb {
 		_length__ Length,
 		flw::oflow__ &Flow );
 
+	void _FPutInt(
+		bso::int__ Int,
+		_length__ Length,
+		fdr::rWDriver &Driver );
+
 	bso::int__ _FGetInt(
 		flw::iflow__ &Flow,
 		_length__ Length );
 
-	template <typename i> inline void FPut(
+	bso::int__ _FGetInt(
+		fdr::rRDriver &Driver,
+		_length__ Length );
+
+	template <typename i, typename fd> inline void FPut(
 		i Int,
-		flw::oflow__ &Flow )
+		fd &FD )
 	{
-		_FPutInt( Int, sizeof( Int ), Flow );
+		_FPutInt( Int, sizeof( Int ), FD );
 	}
 
-	template <typename i> inline i FGet(
-		flw::iflow__ &Flow,
+	template <typename i, typename fd> inline i FGet(
+		fd &FD,
 		i &Int )
 	{
-		return Int = (i)_FGetInt( Flow, sizeof( Int ) );
+		return Int = (i)_FGetInt( FD, sizeof( Int ) );
 	}
 
 # ifdef CPE_S_DARWIN
-	inline void FPut(
+	template <typename fd> inline void FPut(
 		bso::size__ Size,
-		flw::oflow__ &Flow )
+		fd &FD )
 	{
-		_FPutInt( Size, sizeof( Size ), Flow );
+		_FPutInt( Size, sizeof( Size ), FD );
 	}
 
-	inline bso::size__ FGet(
-		flw::iflow__ &Flow,
+	template <typename fd> inline bso::size__ FGet(
+		fd &FD,
 		bso::size__ &Size )
 	{
-		return Size = _FGetInt( Flow, sizeof( Size ) );
+		return Size = _FGetInt( FD, sizeof( Size ) );
 	}
 # endif
 
@@ -113,8 +124,17 @@ namespace dtfptb {
 		flw::iflow__ &Flow,
 		bso::sUBig Max );
 
+	bso::sUBig _VGetUBig(
+		fdr::rRDriver &Driver,
+		bso::sUBig Max );
+
 	bso::sSBig _VGetSBig(
 		flw::iflow__ &Flow,
+		bso::sSBig Min,
+		bso::sSBig Max );
+
+	bso::sSBig _VGetSBig(
+		fdr::rRDriver &Driver,
 		bso::sSBig Min,
 		bso::sSBig Max );
 
@@ -122,9 +142,17 @@ namespace dtfptb {
 		bso::sUBig UBig,
 		flw::oflow__ &Flow );
 
+	void _VPutUBig(
+		bso::sUBig UBig,
+		fdr::rWDriver &Driver );
+
 	void _VPutSBig(
 		bso::sSBig SBig,
 		flw::oflow__ &Flow );
+
+	void _VPutSBig(
+		bso::sSBig SBig,
+		fdr::rWDriver &Driver );
 
 # ifdef CPE_S_DARWIN
 	inline bso::size__ VGet(
@@ -144,28 +172,52 @@ namespace dtfptb {
 
 # define DTFPTB__M( bitness, umax, smin, smax )\
 	inline bso::u##bitness##__ VGet(\
-		flw::iflow__ &Flow,\
+		flw::rRFlow &Flow,\
 		bso::u##bitness##__ &Int )\
 	{\
 		return Int = (bso::u##bitness##__)_VGetUBig( Flow, umax );\
 	}\
+	inline bso::u##bitness##__ VGet(\
+		fdr::rRDriver &Driver,\
+		bso::u##bitness##__ &Int )\
+	{\
+		return Int = (bso::u##bitness##__)_VGetUBig( Driver, umax );\
+	}\
 	inline bso::s##bitness##__ VGet(\
-		flw::iflow__ &Flow,\
+		flw::rRFlow &Flow,\
 		bso::s##bitness##__ &Int )\
 	{\
 		return Int = (bso::s##bitness##__)_VGetSBig( Flow, smin, smax );\
 	}\
+	inline bso::s##bitness##__ VGet(\
+		fdr::rRDriver &Driver,\
+		bso::s##bitness##__ &Int )\
+	{\
+		return Int = (bso::s##bitness##__)_VGetSBig( Driver, smin, smax );\
+	}\
 	inline void VPut(\
 		bso::u##bitness##__ Int,\
-		flw::oflow__ &Flow )\
+		flw::rWFlow &Flow )\
 	{\
 		_VPutUBig( Int, Flow );\
 	}\
 	inline void VPut(\
+		bso::u##bitness##__ Int,\
+		fdr::rWDriver &Driver )\
+	{\
+		_VPutUBig( Int, Driver );\
+	}\
+	inline void VPut(\
 		bso::s##bitness##__ Int,\
-		flw::oflow__ &Flow )\
+		flw::rWFlow &Flow )\
 	{\
 		_VPutSBig( Int, Flow );\
+	}\
+	inline void VPut( \
+		  bso::s##bitness##__ Int, \
+		fdr::rWDriver &Driver )\
+	{\
+		_VPutSBig( Int, Driver );\
 	}
 
 
@@ -173,22 +225,35 @@ DTFPTB__M( 32, BSO_U32_MAX, BSO_S32_MIN, BSO_S32_MAX )
 DTFPTB__M( 16, BSO_U16_MAX, BSO_S16_MIN, BSO_S16_MAX )
 DTFPTB__M( 64, BSO_U64_MAX, BSO_S64_MIN, BSO_S64_MAX )
 
-// Pour un octet, on envoit/reoit l'octet tel quel ; pas besoin de conversion.
+// One byte is sent/received as is ; no conversion needed.
 // DTFPTB__M( 8, BSO_U8_MAX, BSO_S8_MIN, BSO_S8_MAX )
 	inline void VPut(
 		bso::u8__ Int,
-		flw::oflow__ &Flow )
+		flw::rWFlow &Flow )
 	{
 		FPut( Int, Flow );
 	}
 
+	inline void VPut(
+		bso::u8__ Int,
+		fdr::rWDriver &Driver )
+	{
+		FPut( Int, Driver );
+	}
+
 	inline bso::u8__ VGet(
-		flw::iflow__ &Flow,
+		flw::rRFlow &Flow,
 		bso::u8__ &Int )
 	{
 		return FGet( Flow, Int );
 	}
+
+	inline bso::u8__ VGet(
+		fdr::rRDriver &Driver,
+		bso::u8__ &Int )
+	{
+		return FGet( Driver, Int );
+	}
 }
 
-/*$END$*/
 #endif

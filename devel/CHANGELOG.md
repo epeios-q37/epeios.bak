@@ -6,6 +6,13 @@
 - [stdz]: modification to comply with current standards;
 - [trvl]: trivial modifications;
 
+## 2019-02-04
+
+- CSDCMN:
+  - disambiguation,
+- DTFPTB:
+  - disambiguation,
+
 ## 2019-02-03
 
 - CDGB64:

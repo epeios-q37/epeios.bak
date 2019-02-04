@@ -28,6 +28,8 @@
 #ifndef DMOPOOL_INC_
 # define DMOPOOL_INC_
 
+# include "prtcl.h"
+
 # include "sck.h"
 
 namespace dmopool {
@@ -40,36 +42,28 @@ namespace dmopool {
 	qCDEF( sId, Undefined,Max );
 
 	// eXetended socket.
-	struct sXSocket
+	struct gData
 	{
 	public:
 		sId Id;
-		sck::rRWDriver Driver;
+		sck::sSocket Socket;
+		mtx::rHandler Mutex;
 		void reset( bso::sBool P = true )
 		{
-			Driver.reset( P );
 			Id = Undefined;
+			Socket = sck::Undefined;
+			Mutex = mtx::Undefined;
 		}
-		qCVDTOR( sXSocket );
-		void Init(
-			sId Id = Undefined,
-			sck::sSocket Socket = sck::Undefined )
-		{
-			this->Id = Id;
-
-			if ( Socket != sck::Undefined )
-				Driver.Init( Socket, true, fdr::ts_Default );
-			else
-				Driver.reset();
-		}
+		qCDTOR( gData );
 	};
 
-	class rRWDriver_
+	class rRWDriver
 	: public fdr::rRWDressedDriver
 	{
 	private:
-		sXSocket XSocket_;
+		sck::rRWDriver Driver_;
 		mtx::rMutex Mutex_;
+		sId Id_;
 		bso::sBool IdSent_;
 	protected:
 		virtual fdr::size__ FDRRead(
@@ -78,63 +72,75 @@ namespace dmopool {
 		{
 			Mutex_.Lock();
 
-			return XSocket_.Driver.Read( Maximum, Buffer );
+			return Driver_.Read( Maximum, Buffer, fdr::b_Relay );
 		}
 		virtual void FDRDismiss( bso::sBool Unlock ) override
 		{
-			XSocket_.Driver.Dismiss( Unlock );
+			Driver_.Dismiss( Unlock );
 
 			Mutex_.Unlock();
 		}
 		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
 		{
-			return XSocket_.Driver.RTake( Owner );
+			return Driver_.RTake( Owner );
 		}
 		virtual fdr::size__ FDRWrite(
 			const fdr::byte__ *Buffer,
 			fdr::size__ Maximum ) override
 		{
 			if ( !IdSent_ ) {
-				prtcl::Put( XSocket_.Id, XSocket_.Driver );
+				prtcl::Put( Id_, Driver_ );
 				IdSent_ = true;
 			}
 
-			return XSocket_.Driver.Write( Buffer, Maximum );
+			return Driver_.Write( Buffer, Maximum );
 		}
 		virtual void FDRCommit( bso::sBool Unlock ) override
 		{
-			XSocket_.Driver.Commit( Unlock );
+			Driver_.Commit( Unlock );
 
-			IdSetn_ = false;
+			IdSent_ = false;
 		}
 		virtual fdr::sTID FDRWTake( fdr::sTID Owner ) override
 		{
-			return fdr::UndefinedTID;
+			return Driver_.WTake( Owner );
 		}
 	public:
 		void reset( bso::sBool P = true )
 		{
 			fdr::rRWDressedDriver::reset( P );
-			XSocket_.reset( P );
+			Driver_.reset( P );
 			Mutex_.reset( P );
+			Id_ = Undefined;
 			IdSent_ = false;
 		}
-		qCVDTOR( rRWDriver_ );
+		qCVDTOR( rRWDriver );
 		void Init(
-			sXSocket XSocket,
-			mtx::rHandler MutexHandler,
+			const gData &Data,
 			fdr::eThreadSafety ThreadSafety = fdr::ts_Default )
 		{
 			fdr::rRWDressedDriver::Init( ThreadSafety );
-			XSocket_ = XSocket;
-			Mutex_.Init( MutexHandler );
+
+			if ( Data.Socket == sck::Undefined )
+				qRGnr();
+			Driver_.Init( Data.Socket, false, ThreadSafety );
+
+			if ( Data.Mutex == mtx::Undefined )
+				qRGnr();
+			Mutex_.Init( Data.Mutex );
+
+			if ( Data.Id == Undefined )
+				qRGnr();
+			Id_ = Data.Id;
+
 			IdSent_ = false;
 		}
 	};
 
-	sXSocket GetConnection(
+	void GetConnection(
 		const str::dString &Token,
-		str::dString &IP );
+		str::dString &IP,
+		gData &Data );
 }
 
 #endif

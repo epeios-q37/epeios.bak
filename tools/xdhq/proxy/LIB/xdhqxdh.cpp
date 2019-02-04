@@ -203,7 +203,7 @@ namespace {
 	};
 
 	void Execute_(
-		flw::sRWFlow &Flow,
+		flw::rRWFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 	qRH;
@@ -217,7 +217,7 @@ namespace {
 
 		Flow.Dismiss();
 
-		prtcl::Put( (char *)Buffer(), Flow );
+		prtcl::Put( Buffer(), Flow );
 		Flow.Commit();
 	qRR;
 	qRT;
@@ -225,7 +225,7 @@ namespace {
 	}
 
 	void Alert_(
-		flw::sRWFlow &Flow,
+		flw::rRWFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 	qRH;
@@ -246,7 +246,7 @@ namespace {
 	}
 
 	void Confirm_(
-		flw::sRWFlow &Flow,
+		flw::rRWFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 	qRH;
@@ -264,7 +264,7 @@ namespace {
 
 		Flow.Dismiss();
 
-		prtcl::Put( (char *)Buffer(), Flow );
+		prtcl::Put( Buffer(), Flow );
 		Flow.Commit();
 	qRR;
 	qRT;
@@ -293,7 +293,7 @@ namespace {
 	}
 
 	void SetLayout_(
-		flw::sRWFlow &Flow,
+		flw::rRWFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 	qRH;
@@ -348,7 +348,7 @@ namespace {
 	}
 
 	void GetContents_(
-		flw::sRWFlow &Flow,
+		flw::rRWFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 	qRH;
@@ -370,7 +370,7 @@ namespace {
 	}
 
 	void SetContents_(
-		flw::sRWFlow &Flow,
+		flw::rRWFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 	qRH;
@@ -393,7 +393,7 @@ namespace {
 	}
 
 	void SetTimeout_(
-		flw::sRWFlow &Flow,
+		flw::rRWFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 	qRH;
@@ -410,7 +410,7 @@ namespace {
 	}
 
 	void Parent_(
-		flw::sRWFlow &Flow,
+		flw::rRWFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 	qRH;
@@ -432,7 +432,7 @@ namespace {
 	}
 
 	void FirstChild_(
-		flw::sRWFlow &Flow,
+		flw::rRWFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 	qRH;
@@ -455,7 +455,7 @@ namespace {
 	}
 
 	void LastChild_(
-		flw::sRWFlow &Flow,
+		flw::rRWFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 	qRH;
@@ -478,7 +478,7 @@ namespace {
 	}
 
 	void PreviousSibling_(
-		flw::sRWFlow &Flow,
+		flw::rRWFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 	qRH;
@@ -501,7 +501,7 @@ namespace {
 	}
 
 	void NextSibling_(
-		flw::sRWFlow &Flow,
+		flw::rRWFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 	qRH;
@@ -524,7 +524,7 @@ namespace {
 	}
 
 	void CreateElement_(
-		flw::sRWFlow &Flow,
+		flw::rRWFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 	qRH;
@@ -549,7 +549,7 @@ namespace {
 	}
 
 	void InsertChild_(
-		flw::sRWFlow &Flow,
+		flw::rRWFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 	qRH;
@@ -567,7 +567,7 @@ namespace {
 	}
 
 	void AppendChild_(
-		flw::sRWFlow &Flow,
+		flw::rRWFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 	qRH;
@@ -585,7 +585,7 @@ namespace {
 	}
 
 	void InsertBefore_(
-		flw::sRWFlow &Flow,
+		flw::rRWFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 	qRH;
@@ -603,7 +603,7 @@ namespace {
 	}
 
 	void InsertAfter_(
-		flw::sRWFlow &Flow,
+		flw::rRWFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 	qRH;
@@ -621,7 +621,7 @@ namespace {
 	}
 
 	void DressWidgets_(
-		flw::sRWFlow &Flow,
+		flw::rRWFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 	qRH;
@@ -638,7 +638,7 @@ namespace {
 
 	namespace {
 		void HandleClasses_(
-			flw::sRWFlow &Flow,
+			flw::rRWFlow &Flow,
 			void (xdhdws::sProxy::* Method)(
 				const xdhdws::rNString &Ids,
 				const xdhdws::rNString &Classes),
@@ -665,21 +665,21 @@ namespace {
 	}
 
 	void AddClasses_(
-		flw::sRWFlow &Flow,
+		flw::rRWFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 		HandleClasses_( Flow, &xdhdws::sProxy::AddClasses, Proxy );
 	}
 
 	void RemoveClasses_(
-		flw::sRWFlow &Flow,
+		flw::rRWFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 		HandleClasses_( Flow, &xdhdws::sProxy::RemoveClasses, Proxy );
 	}
 
 	void ToggleClasses_(
-		flw::sRWFlow &Flow,
+		flw::rRWFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 		HandleClasses_( Flow, &xdhdws::sProxy::ToggleClasses, Proxy );
@@ -687,7 +687,7 @@ namespace {
 
 	namespace {
 		void HandleElements_(
-			flw::sRWFlow &Flow,
+			flw::rRWFlow &Flow,
 			void (xdhdws::sProxy::* Method)( const xdhdws::rNString &Ids ),
 			xdhdws::sProxy &Proxy )
 		{
@@ -710,21 +710,21 @@ namespace {
 	}
 
 	void EnableElements_(
-		flw::sRWFlow &Flow,
+		flw::rRWFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 		HandleElements_( Flow, &xdhdws::sProxy::EnableElements, Proxy );
 	}
 
 	void DisableElements_(
-		flw::sRWFlow &Flow,
+		flw::rRWFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 		HandleElements_( Flow, &xdhdws::sProxy::DisableElements, Proxy );
 	}
 
 	void SetAttribute_(
-		flw::sRWFlow &Flow,
+		flw::rRWFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 	qRH;
@@ -742,7 +742,7 @@ namespace {
 	}
 
 	void GetAttribute_(
-		flw::sRWFlow &Flow,
+		flw::rRWFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 	qRH;
@@ -765,7 +765,7 @@ namespace {
 	}
 
 	void RemoveAttribute_(
-		flw::sRWFlow &Flow,
+		flw::rRWFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 	qRH;
@@ -782,7 +782,7 @@ namespace {
 	}
 
 	void SetProperty_(
-		flw::sRWFlow &Flow,
+		flw::rRWFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 	qRH;
@@ -800,7 +800,7 @@ namespace {
 	}
 
 	void GetProperty_(
-		flw::sRWFlow &Flow,
+		flw::rRWFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 	qRH;
@@ -823,7 +823,7 @@ namespace {
 	}
 
 	void Focus_(
-		flw::sRWFlow &Flow,
+		flw::rRWFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 	qRH;
@@ -851,8 +851,8 @@ namespace {
 	{
 	private:
 		eMode_ Mode_;
-		sck::rRWDriver DemoDriver_;
-		csdmnc::rRWDriver ProdDriver_;
+		dmopool::rRWDriver DemoDriver_;
+		csdmxc::rRWDriver ProdDriver_;
 		struct {
 			sId_ Id;
 			str::wString IP;
@@ -892,7 +892,7 @@ namespace {
 		}
 		void ReportError_(
 			const char *Message,
-			flw::sWFlow &Flow )
+			flw::rWFlow &Flow )
 		{
 			if ( Message == NULL )
 				Message = "";
@@ -904,7 +904,7 @@ namespace {
 				qRGnr();
 			}
 		}
-		void ReportNoError_( flw::sWFlow &Flow )
+		void ReportNoError_( flw::rWFlow &Flow )
 		{
 			ReportError_( NULL, Flow );
 		}
@@ -916,7 +916,7 @@ namespace {
 		{
 			bso::sBool Success = false;
 		qRH;
-			flw::sDressedRWFlow<> Flow;
+			flw::rDressedRWFlow<> Flow;
 			csdcmn::sVersion Version = csdcmn::UndefinedVersion;
 			str::wString LogMessage;
 		qRB;
@@ -928,14 +928,14 @@ namespace {
 				Success = true;
 				LogMessage.Append( "PROD" );
 			} else {
-				LogMessage.Append( Token );
-				sck::sSocket Socket = dmopool::GetConnection( Token, Logging_.IP );
+				dmopool::gData Data;
 
-				if ( Socket != sck::Undefined ) {
-					DemoDriver_.Init(Socket, true, fdr::ts_Default );
-					Mode_ = mDemo;
-					Success = true;
-				}
+				LogMessage.Append( Token );
+				dmopool::GetConnection( Token, Logging_.IP, Data );
+
+				DemoDriver_.Init( Data );
+				Mode_ = mDemo;
+				Success = true;
 			}
 
 			LogMessage.Append( " - " );
@@ -983,7 +983,7 @@ namespace {
 			bso::sBool Return = false;
 		qRH;
 			bso::sBool Continue = true;
-			flw::sDressedRWFlow<> Flow;
+			flw::rDressedRWFlow<> Flow;
 			eCommand_ Command = c_Undefined;
 		qRB;
 			Flow.Init( D_() );

@@ -90,7 +90,8 @@ namespace fdr {
 		bBlocking,		// Sauf si 'EOF', le nombre d'octets demand sera lu, mme si blocage.
 		bKeep,			// Sauf si 'EOF', le nombre d'octets demands sera lu, mme si blocage, mais ils restent dans le flux.
 		b_amount,
-		b_Undefined
+		b_Undefined,
+		b_Relay = bNonBlocking	// To use when between between drivers.
 	};
 
 	//d The max value for a amount.

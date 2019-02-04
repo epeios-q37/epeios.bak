@@ -48,6 +48,8 @@ namespace {
 
 	class rClient_
 	{
+	private:
+		mtx::rHandler Mutex_;
 	public:
 		sId FreeId;	// First available id.
 		sck::sSocket Socket;
@@ -59,8 +61,12 @@ namespace {
 			if ( P ) {
 				if ( Socket != sck::Undefined )
 					sck::Close( Socket, qRPU );
+
+				if ( Mutex_ != mtx::Undefined )
+					mtx::Delete( Mutex_, true );
 			}
 
+			Mutex_ = mtx::Undefined;
 			FreeId = Undefined;
 			Socket = sck::Undefined;
 			Access.reset( P );
@@ -72,24 +78,25 @@ namespace {
 		{
 			reset();
 
+			Mutex_ = mtx::Create();
 			FreeId = 0;
 			Access.Init();
 			tol::Init( IP );
 			GiveUp = false;
 		}
-		sXSocket NewXSocket( void )
+		void Get( gData &Data )
 		{
-			sXSocket XSocket;
-
 			if ( Socket == sck::Undefined )
 				qRGnr();
+			Data.Socket = Socket;
 
 			if ( FreeId == Max )
 				qRLmt();
+			Data.Id = FreeId++;;
 
-			XSocket.Init( FreeId++, Socket );
-
-			return XSocket;
+			if ( Mutex_ == mtx::Undefined )
+				qRGnr();
+			Data.Mutex = Mutex_;
 		}
 	};
 
@@ -207,7 +214,7 @@ namespace {
 	}
 
 	void Get_(
-		flw::sRFlow &Flow,
+		flw::rRFlow &Flow,
 		str::dString &String )
 	{
 		prtcl::Get( Flow, String );
@@ -215,14 +222,14 @@ namespace {
 
 	void Put_(
 		const str::dString &String,
-		flw::sWFlow &Flow )
+		flw::rWFlow &Flow )
 	{
 		prtcl::Put( String, Flow );
 	}
 
 	void Put_(
 		const char *String,
-		flw::sWFlow &Flow )
+		flw::rWFlow &Flow )
 	{
 		prtcl::Put( String, Flow );
 	}
@@ -274,7 +281,7 @@ namespace {
 
 	void Notify_(
 		const char *Message,
-		flw::sWFlow &Flow )
+		flw::rWFlow &Flow )
 	{
 	qRH;
 		str::wString Notification;
@@ -396,14 +403,12 @@ qRT;
 qRE;
 }
 
-sXSocket dmopool::GetConnection(
+void dmopool::GetConnection(
 	const str::dString &Token,
-	str::dString &IP )
+	str::dString &IP,
+	gData &Data )
 {
-	sXSocket XSocket;
 	rClient_ *Client = TSClientSearch_( Token );
-
-	XSocket.Init();
 
 	if ( Client != NULL ) {
 		if ( !Client->Access.ReadBegin( 1000 ) ) {	// Give 1 second to the client to respond.
@@ -418,12 +423,10 @@ sXSocket dmopool::GetConnection(
 			qRGnr();
 		}
 
-		XSocket = Client->NewXSocket();
+		Client->Get( Data );
 		IP.Append( Client->IP );
 		Client->Access.ReadEnd();
 	}
-
-	return XSocket;
 }
 
 namespace {
