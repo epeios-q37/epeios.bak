@@ -385,7 +385,7 @@ namespace sclxdhtml {
 			const ntvstr::string___ &Title,
 			const char *Language )
 		{
-			Confirm_( XML, XSL, Title, Language );
+			return Confirm_( XML, XSL, Title, Language );
 		}
 		bso::bool__ ConfirmT(
 			const ntvstr::string___ &RawMessage,

@@ -871,7 +871,17 @@ namespace {
 				break;
 			}
 
+#ifdef CPE_C_CLANG
+# pragma clang diagnostic push
+# pragma clang diagnostic ignored "-Wnull-dereference"
+#endif
+
 			return *(fdr::rRWDriver *)NULL;	// To avoid a warning.
+
+#ifdef CPE_C_CLANG
+# pragma clang diagnostic pop
+#endif
+
 		}
 		void Log_( const str::dString &Message )
 		{

@@ -6,6 +6,15 @@
 - [stdz]: modification to comply with current standards;
 - [trvl]: trivial modifications;
 
+## 2019-02-05
+
+- SCLXDHTML:
+  - fixing bad return value,
+- SCLMISC:
+  - fixing *clang* issues,
+- SCLRGSTRY:
+  - fixing *clang* issues,
+
 ## 2019-02-04
 
 - CSDCMN:

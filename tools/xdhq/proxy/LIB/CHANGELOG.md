@@ -1,5 +1,8 @@
 # *XDHq* *CHANGELOG*
 
+## 2019-02-05
+- fixing *clang* issue,
+
 ## 2018-12-18
 
 - adding token handling through plugin,

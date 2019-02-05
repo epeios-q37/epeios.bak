@@ -542,6 +542,9 @@ bso::bool__ sclrgstry::BGetValue(
 	case nOptional:
 		Return =  OGetValue( Registry, Entry, Value );
 		break;
+	default:
+		qRFwk();
+		break;
 	}
 
 	return Return;
