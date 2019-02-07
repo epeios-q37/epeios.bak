@@ -852,7 +852,7 @@ namespace {
 	private:
 		eMode_ Mode_;
 		dmopool::rRWDriver DemoDriver_;
-		csdmxc::rRWDriver ProdDriver_;
+		csdmnc::rRWDriver ProdDriver_;
 		struct {
 			sId_ Id;
 			str::wString IP;
@@ -938,14 +938,14 @@ namespace {
 				Success = true;
 				LogMessage.Append( "PROD" );
 			} else {
-				dmopool::gData Data;
-
 				LogMessage.Append( Token );
-				dmopool::GetConnection( Token, Logging_.IP, Data );
 
-				DemoDriver_.Init( Data );
-				Mode_ = mDemo;
-				Success = true;
+				DemoDriver_.Init();
+
+				if ( dmopool::GetConnection( Token, Logging_.IP, DemoDriver_.GetShared() ) ) {
+					Mode_ = mDemo;
+					Success = true;
+				}
 			}
 
 			LogMessage.Append( " - " );
@@ -979,7 +979,7 @@ namespace {
 				Logging_.Id = Ids_.New();
 				Log_( LogMessage );
 
-				xdhdws::sProxy::Init( Callback );	// To be last, otherwise if an error occurs, 'Callback' will be freed twice!
+				xdhdws::sProxy::Init( Callback );	// Has to be last, otherwise if an error occurs, 'Callback' will be freed twice!
 			}
 		qRR;
 		qRT;
@@ -1069,7 +1069,7 @@ namespace {
 			Logging_.IP.reset( P );
 		}
 		qCVDTOR( rSession_ )
-		bso::sBool Init( void )	// If empty, PROD session, else token used for the DEMO session.
+		bso::sBool Init( void )
 		{
 			tol::reset( DemoDriver_, ProdDriver_ );
 			Mode_ = m_Undefined;

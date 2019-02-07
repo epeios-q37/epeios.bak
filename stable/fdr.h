@@ -488,7 +488,7 @@ namespace fdr {
 		{
 			AutoDismissOnEOF_ = Value;
 		}
-		sTID RTake( sTID Owner )
+		sTID RTake( sTID Owner = tht::Undefined )
 		{
 			return GetTID_( FDRRTake( Owner ), BaseTake( Owner ) );
 		}
@@ -661,7 +661,7 @@ namespace fdr {
 
 			return Maximum;
 		}
-		sTID WTake( sTID Owner )
+		sTID WTake( sTID Owner = tht::Undefined )
 		{
 			return GetTID_( FDRWTake( Owner ), BaseTake( Owner ) );
 		}

@@ -76,7 +76,7 @@ namespace {
 				query::wPairs Pairs;
 				str::string Token, Response;
 				TOL_CBUFFER___ Buffer;
-				flw::sDressedRWFlow<> Flow;
+				flw::rDressedRWFlow<> Flow;
 			qRB
 				Flow.Init( *IODriver );
 				Pairs.Init();

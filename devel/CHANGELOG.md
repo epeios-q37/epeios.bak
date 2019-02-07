@@ -6,6 +6,11 @@
 - [stdz]: modification to comply with current standards;
 - [trvl]: trivial modifications;
 
+## 2019-02-07
+
+- FDR:
+  - adding default value for some parameters,
+
 ## 2019-02-05
 
 - SCLXDHTML:

@@ -35,112 +35,131 @@
 namespace dmopool {
 	void Initialize();
 
+	// If modified, modify also the 'Undefined' definition.
 	typedef bso::sU8 sId;
 
-	qCDEF(sId, Max, bso::U8Max);
+	qCDEF( sId, Undefined, bso::U8Max );
+	qCDEF( sId, Max, Undefined - 1 );
 
-	qCDEF( sId, Undefined,Max );
 
-	// eXetended socket.
-	struct gData
+	// Shared between upstream and downstream.
+	struct rShared
 	{
 	public:
 		sId Id;
-		sck::sSocket Socket;
-		mtx::rHandler Mutex;
+		fdr::rRWDriver *Driver;
+		tht::rBlocker Read;	// Handled (creates/destroyed) upstream.
+		tht::rBlocker *Switch;
 		void reset( bso::sBool P = true )
 		{
 			Id = Undefined;
-			Socket = sck::Undefined;
-			Mutex = mtx::Undefined;
+			Driver = NULL;
+			Read.reset( P );
+			Switch = NULL;
 		}
-		qCDTOR( gData );
+		void Init( void )
+		{
+			reset();
+
+			Read.Init();
+		}
+		qCDTOR( rShared );
+		bso::sBool IsValid( void ) const
+		{
+			return Id != Undefined;
+		}
 	};
 
 	class rRWDriver
 	: public fdr::rRWDressedDriver
 	{
 	private:
-		sck::rRWDriver Driver_;
-		mtx::rMutex Mutex_;
-		sId Id_;
 		bso::sBool IdSent_;
+		rShared Shared_;
 	protected:
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
 			fdr::byte__ *Buffer ) override
 		{
-			Mutex_.Lock();
+			if ( !Shared_.IsValid() )
+				return 0;
 
-			return Driver_.Read( Maximum, Buffer, fdr::b_Relay );
+			Shared_.Read.Wait();
+
+			if ( !Shared_.IsValid() )
+				return 0;
+
+			Shared_.Driver->RTake();
+
+			return Shared_.Driver->Read( Maximum, Buffer, fdr::b_Relay );
 		}
 		virtual void FDRDismiss( bso::sBool Unlock ) override
 		{
-			Driver_.Dismiss( Unlock );
+			if ( !Shared_.IsValid() )
+				return;
 
-			Mutex_.Unlock();
+			Shared_.Driver->Dismiss( Unlock );
+
+			Shared_.Switch->Unblock();
 		}
 		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
 		{
-			return Driver_.RTake( Owner );
+			return Shared_.Driver->RTake( Owner );
 		}
 		virtual fdr::size__ FDRWrite(
 			const fdr::byte__ *Buffer,
 			fdr::size__ Maximum ) override
 		{
+			if ( !Shared_.IsValid() )
+				return 0;
+
 			if ( !IdSent_ ) {
-				prtcl::Put( Id_, Driver_ );
+				prtcl::Put( Shared_.Id, *Shared_.Driver );
 				IdSent_ = true;
 			}
 
-			return Driver_.Write( Buffer, Maximum );
+			return Shared_.Driver->Write( Buffer, Maximum );
 		}
 		virtual void FDRCommit( bso::sBool Unlock ) override
 		{
-			Driver_.Commit( Unlock );
+			if ( !Shared_.IsValid() )
+				return;
+
+			Shared_.Driver->Commit( Unlock );
 
 			IdSent_ = false;
 		}
 		virtual fdr::sTID FDRWTake( fdr::sTID Owner ) override
 		{
-			return Driver_.WTake( Owner );
+			return Shared_.Driver->WTake( Owner );
 		}
 	public:
 		void reset( bso::sBool P = true )
 		{
 			fdr::rRWDressedDriver::reset( P );
-			Driver_.reset( P );
-			Mutex_.reset( P );
-			Id_ = Undefined;
+			Shared_.IsValid();
 			IdSent_ = false;
 		}
 		qCVDTOR( rRWDriver );
-		void Init(
-			const gData &Data,
-			fdr::eThreadSafety ThreadSafety = fdr::ts_Default )
+		void Init( fdr::eThreadSafety ThreadSafety = fdr::ts_Default )
 		{
 			fdr::rRWDressedDriver::Init( ThreadSafety );
 
-			if ( Data.Socket == sck::Undefined )
-				qRGnr();
-			Driver_.Init( Data.Socket, false, ThreadSafety );
-
-			if ( Data.Mutex == mtx::Undefined )
-				qRGnr();
-			Mutex_.Init( Data.Mutex );
-
-			if ( Data.Id == Undefined )
-				qRGnr();
-			Id_ = Data.Id;
+			Shared_.Init();
 
 			IdSent_ = false;
 		}
+		rShared &GetShared( void )
+		{
+			return Shared_;
+		}
+
 	};
 
-	void GetConnection(
+	bso::sBool GetConnection(
 		const str::dString &Token,
 		str::dString &IP,
-		gData &Data );
+		rShared &Shared );
 }
 
 #endif

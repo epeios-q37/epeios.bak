@@ -85,6 +85,10 @@ function byteLength(str) {
 	return s;
 }
 
+function getByte(query, offset) {
+	return [query[offset], offset + 1];
+}
+
 function getSize(query, offset) {
 	var byte = query[offset++];
 	var size = byte & 0x7f;
@@ -210,10 +214,16 @@ function isTokenEmpty() {
 }
 
 function serve(client, createCallback, callbacks) {
+	let offset = 0;
+	let query = getQuery(client);
+	let id = 0;
+	
+	[id, offset] = getByte(query, offset);
 
+	if ( id == 255 )	// New connection
 }
 
-function handshake(client, createCallback, callbacks) {
+function ignition(client, createCallback, callbacks) {
 	let offset = 0;
 	let query = getQuery(client);
 
@@ -264,18 +274,17 @@ function handshake(client, createCallback, callbacks, head) {
 function pseudoServer(createCallback, callbacks, head) {
 	var client = new net.Socket();
 
+	client.on('error', (err) => {
+		throw "Unable to connect to '" + pAddr + ":" + pPort + "' !!!";
+	});
+
 	client.connect(pPort, pAddr, () => {
 		client.write(handleString(demoProtocolLabel));
 		client.write(handleString(demoProtocolVersion));
 
 		client.on('readable', () => handshake(client, createCallback, callbacks, head));
 	});
-
-	client.on('error', (err) => {
-		throw "Unable to connect to '" + pAddr + ":" + pPort + "' !!!";
-	});
 }
-
 
 function pseudoServer_(createCallback, callbacks, head) {
 	var client = new net.Socket();
