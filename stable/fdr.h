@@ -453,7 +453,7 @@ namespace fdr {
 		{
 			if ( P ) {
 				_flow_driver_base__::BaseTake( tht::Undefined );	// Prevent some unwanted error due to bad due to mutex owning.
-				Dismiss( true );
+				Dismiss();
 			}
 
 			_Cache = NULL;
@@ -492,7 +492,7 @@ namespace fdr {
 		{
 			return GetTID_( FDRRTake( Owner ), BaseTake( Owner ) );
 		}
-		void Dismiss( bso::sBool Unlock )	// When 'Unlock' is set to false, the 'Red_' value is NOT set to 0.
+		void Dismiss( bso::sBool Unlock = true)	// When 'Unlock' is set to false, the 'Red_' value is NOT set to 0.
 		{
 			if ( DismissPending_ ) {
 				if ( _Cache != NULL ) {
@@ -612,7 +612,7 @@ namespace fdr {
 		void reset( bso::bool__ P = true ) 
 		{
 			if ( P ) {
-				Commit( true );
+				Commit();
 			}
 
 			_Initialized = false;
@@ -629,7 +629,7 @@ namespace fdr {
 			CommitPending_ = false;
 			_flow_driver_base__::Init( ThreadSafety );
 		}
-		void Commit( bso::sBool Unlock )	// When 'Unlock' is set to false, the 'Written_' value is NOT set to 0.
+		void Commit( bso::sBool Unlock = true )	// When 'Unlock' is set to false, the 'Written_' value is NOT set to 0.
 		{
 			if ( CommitPending_ ) {
 				if ( _Initialized ) {

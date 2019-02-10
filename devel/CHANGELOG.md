@@ -6,6 +6,13 @@
 - [stdz]: modification to comply with current standards;
 - [trvl]: trivial modifications;
 
+## 2019-02-08
+
+- CSDMXS:
+  - [adpt]
+- FDR:
+  - adding default value to some parameters,
+
 ## 2019-02-07
 
 - FDR:

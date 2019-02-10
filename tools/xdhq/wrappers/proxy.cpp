@@ -27,7 +27,7 @@ using namespace proxy;
 
 template <typename items> static void Send_(
 	const items &Items,
-	flw::sWFlow &Flow )
+	flw::rWFlow &Flow )
 {
 	//			prtcl::Put( Items.Amount(), Flow );
 
@@ -43,7 +43,7 @@ template <typename items> static void Send_(
 }
 
 void proxy::Send_(
-	flw::sWFlow &Flow,
+	flw::rWFlow &Flow,
 	const rArguments &Arguments )
 {
 qRH;
@@ -59,7 +59,7 @@ qRE;
 
 void proxy::Recv_(
 	eType ReturnType,
-	flw::sRFlow &Flow,
+	flw::rRFlow &Flow,
 	rReturn &Return )
 {
 	switch ( ReturnType ) {
@@ -79,7 +79,7 @@ void proxy::Recv_(
 
 void proxy::Handshake_(
 	const str::dString &Info,
-	flw::sRWFlow &Flow,
+	flw::rRWFlow &Flow,
 	str::dString & Language )
 {
 qRH;
@@ -109,7 +109,7 @@ qRE
 }
 
 void proxy::GetAction_(
-	flw::sRWFlow &Flow,
+	flw::rRWFlow &Flow,
 	str::dString &Id,
 	str::dString &Action )
 {

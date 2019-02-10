@@ -73,6 +73,9 @@ const open = shared.open;
 const mainProtocolLabel = "6e010737-31d8-4be3-9195-c5b5b2a9d5d9";
 const mainProtocolVersion = "0";
 
+const demoProtocolLabel = "877c913f-62df-40a1-bf5d-4bb5e66a6dd9";
+const demoProtocolVersion = "0";
+
 function byteLength(str) {
 	// returns the byte length of an utf8 string
 	var s = str.length;
@@ -213,19 +216,109 @@ function isTokenEmpty() {
 	return ( token == "" ) || ( token.charAt( 0 ) == '&' );
 }
 
-function serve(client, createCallback, callbacks) {
+function createInstance( id, socket, createCallback ) {
+	var instance = createCallback();
+
+	instance._xdh.id = id;
+	instance._xdh.socket = socket;
+	instance._xdh.isDEMO = true;
+	instance._xdh.type = types.UNDEFINED;
+	instance._xdh.handshakeDone = false;
+
+	return instance;
+}
+
+function handleInstanceHandshake(instance, query, offset) {
+	let errorMessage = "";
+	let notification = "";
+
+	[errorMessage, offset] = getString(query, offset);
+
+	if (errorMessage != "")
+		throw (errorMessage);
+
+	[notification, offset] = getString(query, offset);
+
+	if (notification != "")
+		console.log(notification);
+
+	getString(query, offset);	// Language. Not handled yet.
+	instance._xdh.handshakeDone = true;
+}
+
+function handleInstance(instance, callbacks, socket, query, offset) {
+	let cont = true;
+
+	if (instance._xdh.type === types.UNDEFINED) {
+		let id, action;
+
+		id = getId(query);
+		action = getAction(query);
+
+		callbacks[action](instance, id);
+
+		if (instance._xdh.type === types.UNDEFINED) {
+			cont = false;
+			standBy(socket);
+		} else
+			cont = instance._xdh.type === types.VOID;
+	}
+
+	while (cont) {
+		if (instance._xdh.callback != undefined) {
+			let type = instance._xdh.type;
+			instance._xdh.type = types.UNDEFINED;
+			if (type === types.VOID)
+				instance._xdh.callback();
+			else
+				instance._xdh.callback(getResponse(query, type));
+
+			if (instance._xdh.type === types.UNDEFINED) {
+				cont = false;
+				standBy(socket);
+			} else if (instance._xdh.type !== types.VOID)
+				cont = false;
+		} else {
+			if (instance._xdh.type !== types.VOID)
+				getResponse(query, instance._xdh.type);
+			instance._xdh.type = types.UNDEFINED;
+			cont = false;
+			standBy(socket);
+		}
+	}
+}
+
+function serve(socket, createCallback, callbacks) {
 	let offset = 0;
-	let query = getQuery(client);
+	let query = getQuery(socket);
 	let id = 0;
 	
 	[id, offset] = getByte(query, offset);
 
-	if ( id == 255 )	// New connection
+	if (id == 255) {	// New connection
+		[id, offset] = getByte(query, offset);	// Real id of the new connection.
+
+		if (id in instances)
+			throw "Instance of id  '" + id + "' exists but should not !";
+
+		instances[id] = createInstance(id, createCallback);
+		socket.write(addString(addString(Buffer.from(""), mainProtocolLabel), mainProtocolVersion));
+	} else {
+		if ( !(id in instances ))
+			throw "Unknow instance of id '" + id + "'!";
+
+		if (!instances[id]._xdh.handshakeDone) {
+			handleInstanceHandshake(instances[id], query, offset);
+			socket.write(handleString("NJS"));
+		} else {
+			handleInstance(instances[id], callbacks, query, offset);
+		}
+	}
 }
 
-function ignition(client, createCallback, callbacks) {
+function ignition(socket, createCallback, callbacks) {
 	let offset = 0;
-	let query = getQuery(client);
+	let query = getQuery(socket);
 
 	[token, offset] = getString(query, offset);
 
@@ -242,14 +335,14 @@ function ignition(client, createCallback, callbacks) {
 		open(completeURL);
 	}
 
-	client.on('readable', () => serve(client, createCallback, callbacks));
+	socket.on('readable', () => serve(socket, createCallback, callbacks));
 }
 
-function handshake(client, createCallback, callbacks, head) {
+function handshake(socket, createCallback, callbacks, head) {
 	let offset = 0;
 	let error = "";
 	let notification = "";
-	let query = getQuery(client);
+	let query = getQuery(socket);
 
 	[error, offset] = getString(query, offset);
 
@@ -261,31 +354,32 @@ function handshake(client, createCallback, callbacks, head) {
 	if (notification != "")
 		console.log(notification);
 
-	client.write(handleString(token));
+	socket.write(handleString(token));
 
 	if (head === undefined)
 		head = "";
 
-	client.write(handleString(head));
+	socket.write(handleString(head));
 
-	client.on('readable', () => ignition(client, createCallback, callbacks));
+	socket.on('readable', () => ignition(socket, createCallback, callbacks));
 }
 
 function pseudoServer(createCallback, callbacks, head) {
-	var client = new net.Socket();
+	var socket = new net.Socket();
 
-	client.on('error', (err) => {
+	socket.on('error', (err) => {
 		throw "Unable to connect to '" + pAddr + ":" + pPort + "' !!!";
 	});
 
-	client.connect(pPort, pAddr, () => {
-		client.write(handleString(demoProtocolLabel));
-		client.write(handleString(demoProtocolVersion));
+	socket.connect(pPort, pAddr, () => {
+		socket.write(handleString(demoProtocolLabel));
+		socket.write(handleString(demoProtocolVersion));
 
-		client.on('readable', () => handshake(client, createCallback, callbacks, head));
+		socket.on('readable', () => handshake(socket, createCallback, callbacks, head));
 	});
 }
 
+// Old.
 function pseudoServer_(createCallback, callbacks, head) {
 	var client = new net.Socket();
 
@@ -392,6 +486,7 @@ function pseudoServer_(createCallback, callbacks, head) {
 							client._xdhDOM._xdhCallback();
 						else
 							client._xdhDOM._xdhCallback(getResponse(query, type));
+
 						if (client._xdhDOM._xdhType === types.UNDEFINED) {
 							cont = false;
 							standBy(client);
@@ -431,7 +526,29 @@ function add(data, argument) {
 		throw "Unexpected argument type: " + typeof (argument);
 }
 
-function call(dom, command, type) {
+function call(instance, command, type) {
+	var i = 3;
+	var data = Buffer.concat(Buffer.alloc(1, id), Buffer.from(command + '\x00'));
+	var amount = arguments[i++];
+
+	instance._xdh.type = type;
+
+	while (amount--)
+		data = add(data, arguments[i++]);
+
+	amount = arguments[i++];
+
+	while (amount--)
+		data = add(data, arguments[i++]);
+
+	instance._xdh.callback = arguments[i++];
+
+	instance._xdh.socket.write(data);
+}
+
+
+// Old
+function call_(dom, command, type) {
 	var i = 3;
 	var data = Buffer.from(command + '\x00');
 	var amount = arguments[i++];

@@ -309,7 +309,8 @@ namespace {
 
 		while ( true ) {
 			Id = Undefined;
-			prtcl::Get( Flow, Id );
+
+			Id = GetId( Flow );
 
 			if ( !Shareds.Exists( Id ) )
 				qRGnr();
@@ -442,9 +443,12 @@ qRB;
 
 		Mutex.Lock();
 
-		if ( Backend->Set( Shared ) )
+		if ( Backend->Set( Shared ) ) {
 			IP.Append( Backend->IP );
-		else
+			PutId( Undefined, Backend->Driver );	// To signal to the back-end a new connection.
+			PutId( Shared.Id, Backend->Driver );	// The id of the new front-end.
+			Backend->Driver.Commit();
+		}  else
 			Backend = NULL;
 	}
 qRR;

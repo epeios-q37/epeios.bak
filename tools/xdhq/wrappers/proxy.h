@@ -51,7 +51,7 @@ namespace proxy {
 
 	// Returns 'false' if type is 'void' (i.e. no data were read from 'Flow').
 	void Send_(
-		flw::sWFlow &Flow,
+		flw::rWFlow &Flow,
 		const rArguments &NewArguments );
 
 	qENUM( Type )
@@ -122,7 +122,7 @@ namespace proxy {
 
 	void Recv_(
 		eType ReturnType,
-		flw::sRFlow &Flow,
+		flw::rRFlow &Flow,
 		rReturn &Return );
 
 
@@ -215,11 +215,11 @@ namespace proxy {
 
 	void Handshake_(
 		const str::dString &Info,	// Various infos for logging.
-		flw::sRWFlow &Flow,
+		flw::rRWFlow &Flow,
 		str::dString &Language );
 
 	void GetAction_(
-		flw::sRWFlow &Flow,
+		flw::rRWFlow &Flow,
 		str::dString &Id,
 		str::dString &Action );
 
@@ -236,7 +236,7 @@ namespace proxy {
 		{
 			data *Data = NULL;
 		qRH;
-			flw::sDressedRWFlow<> Flow;
+			flw::rDressedRWFlow<> Flow;
 		qRB;
 			Data = PRXYNew();
 
@@ -260,7 +260,7 @@ namespace proxy {
 			void *UP ) override
 		{
 		qRH;
-			flw::sDressedRWFlow<> Flow;
+			flw::rDressedRWFlow<> Flow;
 			data &Data = *(data *)UP;
 			bso::sBool Cont = true;
 		qRB;

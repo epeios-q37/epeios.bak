@@ -303,7 +303,7 @@ qRE
 			sId Id = CSDMXB_UNDEFINED;
 			csdscb::action__ Action = csdscb::aContinue;
 			bso::sBool OwnerShipTaken = false;
-			flw::sDressedRWFlow<> Flow;
+			flw::rDressedRWFlow<> Flow;
 		qRB
 #ifdef CSDMXS_DBG
 			if ( UP == NULL )

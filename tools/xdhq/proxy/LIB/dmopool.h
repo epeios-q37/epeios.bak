@@ -41,6 +41,19 @@ namespace dmopool {
 	qCDEF( sId, Undefined, bso::U8Max );
 	qCDEF( sId, Max, Undefined - 1 );
 
+	template <typename fd> inline void PutId(
+		sId Id,
+		fd &FD )
+	{
+		dtfptb::FPut( Id, FD );
+	}
+
+	template <typename fd> inline sId GetId( fd &FD )
+	{
+		sId Id = Undefined;
+
+		return dtfptb::FGet( FD, Id );
+	}
 
 	// Shared between upstream and downstream.
 	struct rShared
@@ -114,7 +127,7 @@ namespace dmopool {
 				return 0;
 
 			if ( !IdSent_ ) {
-				prtcl::Put( Shared_.Id, *Shared_.Driver );
+				PutId( Shared_.Id, *Shared_.Driver );
 				IdSent_ = true;
 			}
 
