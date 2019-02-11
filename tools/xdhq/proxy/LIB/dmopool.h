@@ -41,11 +41,11 @@ namespace dmopool {
 	qCDEF( sId, Undefined, bso::U8Max );
 	qCDEF( sId, Max, Undefined - 1 );
 
-	template <typename fd> inline void PutId(
+	inline void PutId(
 		sId Id,
-		fd &FD )
+		flw::rWFlow &Flow )
 	{
-		dtfptb::FPut( Id, FD );
+		dtfptb::FPut( Id, Flow );
 	}
 
 	template <typename fd> inline sId GetId( fd &FD )
@@ -89,6 +89,7 @@ namespace dmopool {
 	private:
 		bso::sBool IdSent_;
 		rShared Shared_;
+		bso::sBool ReadInProgress_;
 	protected:
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
@@ -97,7 +98,10 @@ namespace dmopool {
 			if ( !Shared_.IsValid() )
 				return 0;
 
-			Shared_.Read.Wait();
+			if ( !ReadInProgress_ ) {
+				Shared_.Read.Wait();
+				ReadInProgress_ = true;
+			}
 
 			if ( !Shared_.IsValid() )
 				return 0;
@@ -113,6 +117,8 @@ namespace dmopool {
 
 			Shared_.Driver->Dismiss( Unlock );
 
+			ReadInProgress_ = false;
+
 			Shared_.Switch->Unblock();
 		}
 		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
@@ -123,15 +129,34 @@ namespace dmopool {
 			const fdr::byte__ *Buffer,
 			fdr::size__ Maximum ) override
 		{
-			if ( !Shared_.IsValid() )
-				return 0;
+		qRH;
+			fdr::sByte *NewBuffer = NULL;
+		qRB;
+			if ( Shared_.IsValid() ) {
+				if ( !IdSent_ ) {
+					if ( ( NewBuffer = (fdr::sByte *)malloc( Maximum + 1 ) ) == NULL )
+						 qRAlc();
 
-			if ( !IdSent_ ) {
-				PutId( Shared_.Id, *Shared_.Driver );
-				IdSent_ = true;
-			}
+					NewBuffer[0] = Shared_.Id;
+					memcpy( NewBuffer + 1, Buffer, Maximum );
 
-			return Shared_.Driver->Write( Buffer, Maximum );
+					Buffer = NewBuffer;
+					Maximum++;
+					IdSent_ = true;
+				}
+
+				Maximum = Shared_.Driver->Write( Buffer, Maximum );
+
+				if ( Maximum > 0 )
+					Maximum--;
+			} else
+				Maximum = 0;
+		qRR;
+		qRT;
+			if ( NewBuffer != NULL )
+				free( NewBuffer );
+		qRE;
+			return Maximum;
 		}
 		virtual void FDRCommit( bso::sBool Unlock ) override
 		{
@@ -152,6 +177,7 @@ namespace dmopool {
 			fdr::rRWDressedDriver::reset( P );
 			Shared_.IsValid();
 			IdSent_ = false;
+			ReadInProgress_ = false;
 		}
 		qCVDTOR( rRWDriver );
 		void Init( fdr::eThreadSafety ThreadSafety = fdr::ts_Default )
@@ -161,6 +187,7 @@ namespace dmopool {
 			Shared_.Init();
 
 			IdSent_ = false;
+			ReadInProgress_ = false;
 		}
 		rShared &GetShared( void )
 		{

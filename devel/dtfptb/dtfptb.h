@@ -28,7 +28,7 @@
 #define DTFPTB_DBG
 #endif
 
-//D Data TransFert PorTaBle 
+//D Data TransFert PorTaBle
 
 #include "err.h"
 #include "flw.h"
@@ -77,11 +77,6 @@ namespace dtfptb {
 		_length__ Length,
 		flw::oflow__ &Flow );
 
-	void _FPutInt(
-		bso::int__ Int,
-		_length__ Length,
-		fdr::rWDriver &Driver );
-
 	bso::int__ _FGetInt(
 		flw::iflow__ &Flow,
 		_length__ Length );
@@ -90,11 +85,11 @@ namespace dtfptb {
 		fdr::rRDriver &Driver,
 		_length__ Length );
 
-	template <typename i, typename fd> inline void FPut(
+	template <typename i> inline void FPut(
 		i Int,
-		fd &FD )
+		flw::rWFlow &Flow )
 	{
-		_FPutInt( Int, sizeof( Int ), FD );
+		_FPutInt( Int, sizeof( Int ), Flow );
 	}
 
 	template <typename i, typename fd> inline i FGet(
@@ -107,9 +102,9 @@ namespace dtfptb {
 # ifdef CPE_S_DARWIN
 	template <typename fd> inline void FPut(
 		bso::size__ Size,
-		fd &FD )
+		flw::rWFlow &Flow )
 	{
-		_FPutInt( Size, sizeof( Size ), FD );
+		_FPutInt( Size, sizeof( Size ), Flow );
 	}
 
 	template <typename fd> inline bso::size__ FGet(
@@ -142,17 +137,9 @@ namespace dtfptb {
 		bso::sUBig UBig,
 		flw::oflow__ &Flow );
 
-	void _VPutUBig(
-		bso::sUBig UBig,
-		fdr::rWDriver &Driver );
-
 	void _VPutSBig(
 		bso::sSBig SBig,
 		flw::oflow__ &Flow );
-
-	void _VPutSBig(
-		bso::sSBig SBig,
-		fdr::rWDriver &Driver );
 
 # ifdef CPE_S_DARWIN
 	inline bso::size__ VGet(
@@ -202,24 +189,11 @@ namespace dtfptb {
 		_VPutUBig( Int, Flow );\
 	}\
 	inline void VPut(\
-		bso::u##bitness##__ Int,\
-		fdr::rWDriver &Driver )\
-	{\
-		_VPutUBig( Int, Driver );\
-	}\
-	inline void VPut(\
 		bso::s##bitness##__ Int,\
 		flw::rWFlow &Flow )\
 	{\
 		_VPutSBig( Int, Flow );\
 	}\
-	inline void VPut( \
-		  bso::s##bitness##__ Int, \
-		fdr::rWDriver &Driver )\
-	{\
-		_VPutSBig( Int, Driver );\
-	}
-
 
 DTFPTB__M( 32, BSO_U32_MAX, BSO_S32_MIN, BSO_S32_MAX )
 DTFPTB__M( 16, BSO_U16_MAX, BSO_S16_MIN, BSO_S16_MAX )
@@ -232,13 +206,6 @@ DTFPTB__M( 64, BSO_U64_MAX, BSO_S64_MIN, BSO_S64_MAX )
 		flw::rWFlow &Flow )
 	{
 		FPut( Int, Flow );
-	}
-
-	inline void VPut(
-		bso::u8__ Int,
-		fdr::rWDriver &Driver )
-	{
-		FPut( Int, Driver );
 	}
 
 	inline bso::u8__ VGet(

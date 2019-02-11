@@ -971,7 +971,7 @@ namespace {
 					break;
 				}
 
-				prtcl::Put( "Test", Flow );
+				prtcl::Put( "", Flow );
 				Flow.Commit();
 
 				csdcmn::Get( Flow, LogMessage );
@@ -1017,7 +1017,7 @@ namespace {
 					case cStandBy_1:
 						Return = true;
 						Continue = false;
-						Flow.Dismiss();
+//						Flow.Dismiss();
 						break;
 					H( Execute );
 					H( Alert );
@@ -1052,6 +1052,9 @@ namespace {
 						qRGnr();
 						break;
 					}
+
+					Flow.Dismiss();
+
 				}
 #undef H
 			qRR;

@@ -281,22 +281,6 @@ void dtfptb::_FPutInt(
 	}
 }
 
-void dtfptb::_FPutInt(
-	bso::int__ Int,
-	_length__ Length,
-	fdr::rWDriver & Driver )
-{
-qRH;
-	flw::rDressedWFlow<> Flow;
-qRB;
-	Flow.Init( Driver );
-
-	_FPutInt( Int, Length, Flow );
-qRR;
-qRT;
-qRE;
-}
-
 #undef M
 
 #define M( s )	Int += (bso::int__)( Flow.Get() ) << ( s * 8 )
@@ -428,13 +412,6 @@ void dtfptb::_VPutUBig(
 	VPutUBig_( UBig, Flow );
 }
 
-void dtfptb::_VPutUBig(
-	bso::sUBig UBig,
-	fdr::rWDriver &Driver )
-{
-	VPutUBig_( UBig, Driver );
-}
-
 template <typename fd> void VPutSBig_(
 	bso::sSBig SBig,
 	fd &FD )
@@ -449,13 +426,6 @@ void dtfptb::_VPutSBig(
 	flw::oflow__ &Flow )
 {
 	VPutSBig_( SBig, Flow );
-}
-
-void dtfptb::_VPutSBig(
-	bso::sSBig SBig,
-	fdr::rWDriver &Driver )
-{
-	VPutSBig_( SBig, Driver );
 }
 
 Q37_GCTOR( dtfptb )

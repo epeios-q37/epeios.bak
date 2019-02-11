@@ -6,6 +6,11 @@
 - [stdz]: modification to comply with current standards;
 - [trvl]: trivial modifications;
 
+## 2019-02-11
+
+- DTFPTB :
+  - removing function with file **write** driver as parameter due to commit/cache issue,
+
 ## 2019-02-08
 
 - CSDMXS:

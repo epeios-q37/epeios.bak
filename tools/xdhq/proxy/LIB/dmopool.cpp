@@ -424,13 +424,15 @@ namespace {
 
 		Blocker.Release();
 
-		Driver.Init( Socket, true, fdr::ts_Default );
+		Driver.Init( Socket, false, fdr::ts_Default );
 
 		Handshake_( Driver );
 
 		if ( ( Backend = CreateBackend_( Driver, IP ) ) != NULL )
 			HandleSwitching_( Driver, Backend->Shareds, Backend->Switch );
 	qRFR;
+		Driver.reset();	// Otherwise it will be done after the destruction of the socket, hence the commit will fail.
+
 		if ( Socket != sck::Undefined )
 			sck::Close( Socket, err::hUserDefined );	// An error occurring during closing is ignored.
 	qRFT;

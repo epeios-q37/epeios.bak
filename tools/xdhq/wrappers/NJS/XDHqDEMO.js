@@ -71,7 +71,7 @@ const net = require('net');
 const types = shared.types;
 const open = shared.open;
 
-const mainProtocolLabel = "6e010737-31d8-4be3-9195-c5b5b2a9d5d9-";
+const mainProtocolLabel = "6e010737-31d8-4be3-9195-c5b5b2a9d5d9";
 const mainProtocolVersion = "0";
 
 const demoProtocolLabel = "877c913f-62df-40a1-bf5d-4bb5e66a6dd9";
@@ -172,15 +172,7 @@ function getQuery(socket) {
 	return query;
 }
 
-function getId(query) {
-	return getString(query, 0)[0];
-}
-
-function getAction(query) {
-	return getString(query, getSize(query, 0)[0] + 1)[0];
-}
-
-function getResponse(query, type) {
+function getResponse(query, offset, type) {
 	switch (type) {
 		case types.UNDEFINED:
 			throw "This function should not be called with UNDEFINED type !!!";
@@ -189,10 +181,10 @@ function getResponse(query, type) {
 			throw "The VOID type should be handled upstream !!!";
 			break;
 		case types.STRING:
-			return getString(query, 0)[0];
+			return getString(query, offset)[0];
 			break;
 		case types.STRINGS:
-			return getStrings(query, 0)[0];
+			return getStrings(query, offset)[0];
 			break;
 		default:
 			throw "Unknown response type !!!";
@@ -209,8 +201,9 @@ var token = getToken();
 if (token !== "" )
 	token = "&" + token;
 
-function standBy(socket) {
-	socket.write(Buffer.from("StandBy_1\x00"));
+function standBy(socket, id) {
+	socket.write(Buffer.concat([Buffer.alloc(1, id), Buffer.from("StandBy_1\x00")]));
+//	socket.write(Buffer.from("StandBy_1\x00"));
 }
 
 function isTokenEmpty() {
@@ -239,7 +232,6 @@ function instanceHandshake(instance, query, offset) {
 	if (errorMessage != "")
 		throw (errorMessage);
 
-	console.log(getString(query, offset));	// Language. Not handled yet.
 	instance._xdh.handshakeDone = true;
 }
 
@@ -249,40 +241,40 @@ function handleInstance(instance, callbacks, socket, query, offset) {
 	if (instance._xdh.type === types.UNDEFINED) {
 		let id, action;
 
-			console.log(query);
+		[id, offset] = getString(query, offset);
+		[action, offset] = getString(query, offset);
 
-		id = getId(query);
-		action = getAction(query);
+		console.log(id, action);
 
 		callbacks[action](instance, id);
 
 		if (instance._xdh.type === types.UNDEFINED) {
 			cont = false;
-			standBy(socket);
+			standBy(socket, instance._xdh.id);
 		} else
 			cont = instance._xdh.type === types.VOID;
 	}
 
-	while (cont) {
+	while (cont) {	// Pending callbacks are handled as long as they don't have a return value.
 		if (instance._xdh.callback != undefined) {
 			let type = instance._xdh.type;
 			instance._xdh.type = types.UNDEFINED;
 			if (type === types.VOID)
 				instance._xdh.callback();
 			else
-				instance._xdh.callback(getResponse(query, type));
+				instance._xdh.callback(getResponse(query, offset, type));
 
 			if (instance._xdh.type === types.UNDEFINED) {
 				cont = false;
-				standBy(socket);
+				standBy(socket, instance._xdh.id);
 			} else if (instance._xdh.type !== types.VOID)
 				cont = false;
 		} else {
 			if (instance._xdh.type !== types.VOID)
-				getResponse(query, instance._xdh.type);
+				getResponse(query, offset, instance._xdh.type);
 			instance._xdh.type = types.UNDEFINED;
 			cont = false;
-			standBy(socket);
+			standBy(socket, instance._xdh.id);
 		}
 	}
 }
@@ -294,10 +286,8 @@ function serve(socket, createCallback, callbacks) {
 	
 	[id, offset] = getByte(query, offset);
 
-	console.log("Id : ", id);
-
-	if (id == 255) {	// New connection
-		[id, offset] = getByte(query, offset);	// Real id of the new connection.
+	if (id == 255) {	// Value corresponding a new front-end.
+		[id, offset] = getByte(query, offset);	// Id of the new front-end.
 
 		if (id in instances)
 			throw "Instance of id  '" + id + "' exists but should not !";
@@ -310,10 +300,10 @@ function serve(socket, createCallback, callbacks) {
 
 		if (!instances[id]._xdh.handshakeDone) {
 			instanceHandshake(instances[id], query, offset);
-			console.log("Here !!!");
 			socket.write(addString(Buffer.alloc(1, id), "NJS"));
 		} else {
-			handleInstance(instances[id], callbacks, query, offset);
+				console.log(query);
+			handleInstance(instances[id], callbacks, socket, query, offset);
 		}
 	}
 }
@@ -515,7 +505,7 @@ function launch(createCallback, callbacks, head) {
 		console.log("DEMO mode !");
 	}
 
-	setTimeout(() => pseudoServer(createCallback, callbacks, head), 1000);
+	setTimeout(() => pseudoServer(createCallback, callbacks, head), 0);
 }
 
 function add(data, argument) {
@@ -528,12 +518,14 @@ function add(data, argument) {
 }
 
 function call(instance, command, type) {
-	var i = 3;
+	let i = 3;
+	let data = Buffer.from(command + '\x00');
+	let amount = arguments[i++];
 
-	console.log("Command: ", command);
+	console.log("Command: ", command, type, instance._xdh.type);
 
-	var data = Buffer.concat(Buffer.alloc(1, id), Buffer.from(command + '\x00'));
-	var amount = arguments[i++];
+//	if (instance._xdh.type === types.UNDEFINED || instance._xdh.type === types.VOID)
+		data = Buffer.concat([Buffer.alloc(1, instance._xdh.id), data]);
 
 	instance._xdh.type = type;
 
