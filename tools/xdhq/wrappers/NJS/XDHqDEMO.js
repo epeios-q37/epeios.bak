@@ -24,6 +24,7 @@ var pPort = 53800;
 var wAddr = "";
 var wPort = "";
 var cgi = "xdh";
+var instances = {};
 
 function getEnv(name, value) {
 	let env = process.env[name];
@@ -70,7 +71,7 @@ const net = require('net');
 const types = shared.types;
 const open = shared.open;
 
-const mainProtocolLabel = "6e010737-31d8-4be3-9195-c5b5b2a9d5d9";
+const mainProtocolLabel = "6e010737-31d8-4be3-9195-c5b5b2a9d5d9-";
 const mainProtocolVersion = "0";
 
 const demoProtocolLabel = "877c913f-62df-40a1-bf5d-4bb5e66a6dd9";
@@ -108,7 +109,7 @@ function getSize(query, offset) {
 function getString(query, offset) {
 	var size = 0;
 	[size, offset] = getSize(query, offset);
-	
+
 	return [query.toString("utf-8", offset, offset + size), offset + size];
 }
 
@@ -216,8 +217,10 @@ function isTokenEmpty() {
 	return ( token == "" ) || ( token.charAt( 0 ) == '&' );
 }
 
-function createInstance( id, socket, createCallback ) {
+function createInstance(id, socket, createCallback) {
 	var instance = createCallback();
+
+	instance._xdh = new Object;
 
 	instance._xdh.id = id;
 	instance._xdh.socket = socket;
@@ -228,21 +231,15 @@ function createInstance( id, socket, createCallback ) {
 	return instance;
 }
 
-function handleInstanceHandshake(instance, query, offset) {
+function instanceHandshake(instance, query, offset) {
 	let errorMessage = "";
-	let notification = "";
 
 	[errorMessage, offset] = getString(query, offset);
 
 	if (errorMessage != "")
 		throw (errorMessage);
 
-	[notification, offset] = getString(query, offset);
-
-	if (notification != "")
-		console.log(notification);
-
-	getString(query, offset);	// Language. Not handled yet.
+	console.log(getString(query, offset));	// Language. Not handled yet.
 	instance._xdh.handshakeDone = true;
 }
 
@@ -251,6 +248,8 @@ function handleInstance(instance, callbacks, socket, query, offset) {
 
 	if (instance._xdh.type === types.UNDEFINED) {
 		let id, action;
+
+			console.log(query);
 
 		id = getId(query);
 		action = getAction(query);
@@ -295,21 +294,24 @@ function serve(socket, createCallback, callbacks) {
 	
 	[id, offset] = getByte(query, offset);
 
+	console.log("Id : ", id);
+
 	if (id == 255) {	// New connection
 		[id, offset] = getByte(query, offset);	// Real id of the new connection.
 
 		if (id in instances)
 			throw "Instance of id  '" + id + "' exists but should not !";
 
-		instances[id] = createInstance(id, createCallback);
-		socket.write(addString(addString(Buffer.from(""), mainProtocolLabel), mainProtocolVersion));
+		instances[id] = createInstance(id, socket, createCallback);
+		socket.write(addString(addString(Buffer.alloc(1, id), mainProtocolLabel), mainProtocolVersion));
 	} else {
-		if ( !(id in instances ))
+		if ( !(id in instances ) )
 			throw "Unknow instance of id '" + id + "'!";
 
 		if (!instances[id]._xdh.handshakeDone) {
-			handleInstanceHandshake(instances[id], query, offset);
-			socket.write(handleString("NJS"));
+			instanceHandshake(instances[id], query, offset);
+			console.log("Here !!!");
+			socket.write(addString(Buffer.alloc(1, id), "NJS"));
 		} else {
 			handleInstance(instances[id], callbacks, query, offset);
 		}
@@ -338,11 +340,13 @@ function ignition(socket, createCallback, callbacks) {
 	socket.on('readable', () => serve(socket, createCallback, callbacks));
 }
 
-function handshake(socket, createCallback, callbacks, head) {
+function demoHandshake(socket, createCallback, callbacks, head) {
 	let offset = 0;
 	let error = "";
 	let notification = "";
 	let query = getQuery(socket);
+
+	socket.once('readable', () => ignition(socket, createCallback, callbacks));
 
 	[error, offset] = getString(query, offset);
 
@@ -360,26 +364,24 @@ function handshake(socket, createCallback, callbacks, head) {
 		head = "";
 
 	socket.write(handleString(head));
-
-	socket.on('readable', () => ignition(socket, createCallback, callbacks));
 }
 
 function pseudoServer(createCallback, callbacks, head) {
 	var socket = new net.Socket();
 
 	socket.on('error', (err) => {
-		throw "Unable to connect to '" + pAddr + ":" + pPort + "' !!!";
+		throw "Error on connection to '" + pAddr + ":" + pPort + "' !!!";
 	});
 
 	socket.connect(pPort, pAddr, () => {
 		socket.write(handleString(demoProtocolLabel));
 		socket.write(handleString(demoProtocolVersion));
 
-		socket.on('readable', () => handshake(socket, createCallback, callbacks, head));
+		socket.once('readable', () => demoHandshake(socket, createCallback, callbacks, head));
 	});
 }
 
-// Old.
+// ********** OLD !!! **********
 function pseudoServer_(createCallback, callbacks, head) {
 	var client = new net.Socket();
 
@@ -514,7 +516,6 @@ function launch(createCallback, callbacks, head) {
 	}
 
 	setTimeout(() => pseudoServer(createCallback, callbacks, head), 1000);
-
 }
 
 function add(data, argument) {
@@ -528,6 +529,9 @@ function add(data, argument) {
 
 function call(instance, command, type) {
 	var i = 3;
+
+	console.log("Command: ", command);
+
 	var data = Buffer.concat(Buffer.alloc(1, id), Buffer.from(command + '\x00'));
 	var amount = arguments[i++];
 

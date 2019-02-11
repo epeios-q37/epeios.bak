@@ -55,7 +55,7 @@ namespace {
 	class rBackend_
 	{
 	public:
-		sck::rRWDriver Driver;
+		fdr::rRWDriver *Driver;
 		wShareds_ Shareds;
 		mtx::rHandler Access;
 		tht::rBlocker Switch;
@@ -68,8 +68,8 @@ namespace {
 					mtx::Delete( Access, true );
 			}
 
+			Driver = NULL;
 			Shareds.reset( P );
-			Driver.reset( P );
 			Access = mtx::Undefined;
 			Switch.reset( P );
 			tol::reset( P, IP );
@@ -77,11 +77,12 @@ namespace {
 		}
 		qCDTOR( rBackend_ );
 		void Init(
-			sck::sSocket Socket,
+			fdr::rRWDriver &Driver,
 			const str::dString &IP )
 		{
 			reset();
 
+			this->Driver = &Driver;
 			Shareds.Init();
 			Access = mtx::Create();
 			Switch.Init();
@@ -96,7 +97,7 @@ namespace {
 				Shareds.Store( &Shared, Row );
 
 				Shared.Id = (sId)*Row;
-				Shared.Driver = &Driver;
+				Shared.Driver = Driver;
 				Shared.Switch = &Switch;
 
 				return true;
@@ -181,7 +182,7 @@ namespace {
 	}
 
 	rBackend_ *Create_(
-		sck::sSocket Socket,
+		fdr::rRWDriver &Driver,
 		const str::dString &IP,
 		const str::dString &Token,
 		const str::dString &Head )
@@ -209,7 +210,7 @@ namespace {
 		if ( (Backend = new rBackend_) == NULL )
 			qRAlc();
 
-		Backend->Init( Socket, IP );
+		Backend->Init( Driver, IP );
 
 		Backends_.Store( Backend, Row );
 
@@ -300,52 +301,12 @@ namespace {
 	qRE;
 	}
 
-	void HandleSwitching_(
-		flw::rRFlow &Flow,
-		const dShareds_ &Shareds,
-		tht::rBlocker &Blocker )
+	void Handshake_( fdr::rRWDriver &Driver )
 	{
-		sId Id = Undefined;
-
-		while ( true ) {
-			Id = Undefined;
-
-			Id = GetId( Flow );
-
-			if ( !Shareds.Exists( Id ) )
-				qRGnr();
-
-			Shareds( Id )->Read.Unblock();
-
-			Blocker.Wait();	// Waits until all data in flow red.
-		}
-	}
-
-	struct gConnectionData_
-	{
-		sck::sSocket Socket = sck::Undefined;
-		const char *IP = NULL;
-	};
-
-	void NewConnexionRoutine_(
-		gConnectionData_ &Data,
-		mtk::gBlocker &Blocker )
-	{
-	qRFH;
-		sck::sSocket Socket = sck::Undefined;
-		str::wString IP;
-		str::wString Token, Head, ErrorMessageLabel, ErrorMessage;
-		rBackend_ *Backend = NULL;
-		mtx::rMutex Mutex;
-		plugins::eStatus Status = plugins::s_Undefined;
+	qRH;
 		flw::rDressedRWFlow<> Flow;
-	qRFB;
-		Socket = Data.Socket;
-		IP.Init( Data.IP );
-
-		Blocker.Release();
-
-		ErrorMessage.Init();
+	qRB;
+		Flow.Init( Driver );
 
 		switch ( csdcmn::GetProtocolVersion( ProtocolId_, Flow ) ) {
 		case 0:
@@ -363,6 +324,22 @@ namespace {
 			qRGnr();
 			break;
 		}
+	qRR;
+	qRT;
+	qRE;
+	}
+
+	rBackend_ *CreateBackend_(
+		fdr::rRWDriver &Driver,
+		const str::dString &IP )
+	{
+		rBackend_ *Backend = NULL;
+	qRH;
+		flw::rDressedRWFlow<> Flow;
+		str::wString Token, Head, ErrorMessageLabel, ErrorMessage;
+		plugins::eStatus Status = plugins::s_Undefined;
+	qRB;
+		Flow.Init( Driver );
 
 		Token.Init();
 		Get_( Flow, Token );
@@ -372,26 +349,90 @@ namespace {
 			Head.Init();
 			Get_( Flow, Head );
 
-			Backend = Create_( Socket, IP, Token, Head );
+			Backend = Create_( Driver, IP, Token, Head );
 			break;
 		default:
-			Token.Init();
+			Token.Init();	// To report an error (see below).
 			ErrorMessageLabel.Init( "PLUGINS_" );
 			ErrorMessageLabel.Append( plugins::GetLabel( Status ) );
+			ErrorMessage.Init();
 			sclmisc::GetBaseTranslation( ErrorMessageLabel, ErrorMessage );
 			break;
 		}
 
 		Put_( Token, Flow );
 
-		if ( Token.Amount() == 0 )
+		if ( Backend == NULL )
 			Put_( ErrorMessage, Flow );
-		else {
-			Flow.Init( Backend->Driver );
-			HandleSwitching_( Flow, Backend->Shareds, Backend->Switch );
-		}
+	qRR;
+		if ( Backend != NULL )
+			delete Backend;
 
+		Backend = NULL;
+	qRT;
+	qRE;
+		return Backend;
+	}
+
+	void HandleSwitching_(
+		fdr::rRWDriver &Driver,
+		const dShareds_ &Shareds,
+		tht::rBlocker &Blocker )
+	{
+	qRH;
+		flw::rDressedRFlow<> Flow;
+		sId Id = Undefined;
+	qRB;
+		Flow.Init( Driver );
+
+		while ( true ) {
+			Id = Undefined;
+
+			Id = GetId( Flow );
+
+			if ( !Shareds.Exists( Id ) )
+				qRGnr();
+
+			Shareds( Id )->Read.Unblock();
+
+			Blocker.Wait();	// Waits until all data in flow red.
+		}
+	qRR;
+	qRT;
+	qRE;
+	}
+
+	struct gConnectionData_
+	{
+		sck::sSocket Socket = sck::Undefined;
+		const char *IP = NULL;
+	};
+
+	void NewConnexionRoutine_(
+		gConnectionData_ &Data,
+		mtk::gBlocker &Blocker )
+	{
+	qRFH;
+		sck::sSocket Socket = sck::Undefined;
+		str::wString IP;
+		mtx::rMutex Mutex;
+		sck::rRWDriver Driver;
+		rBackend_ *Backend = NULL;
+	qRFB;
+		Socket = Data.Socket;
+		IP.Init( Data.IP );
+
+		Blocker.Release();
+
+		Driver.Init( Socket, true, fdr::ts_Default );
+
+		Handshake_( Driver );
+
+		if ( ( Backend = CreateBackend_( Driver, IP ) ) != NULL )
+			HandleSwitching_( Driver, Backend->Shareds, Backend->Switch );
 	qRFR;
+		if ( Socket != sck::Undefined )
+			sck::Close( Socket, err::hUserDefined );	// An error occurring during closing is ignored.
 	qRFT;
 	qRFE( sclmisc::ErrFinal() );
 	}
@@ -435,6 +476,7 @@ bso::sBool dmopool::GetConnection(
 	rBackend_ *Backend = NULL;
 qRH;
 	mtx::rMutex Mutex;
+	flw::rDressedWFlow<> Flow;
 qRB;
 	Backend = TSGetBackend_( Token );
 
@@ -444,10 +486,11 @@ qRB;
 		Mutex.Lock();
 
 		if ( Backend->Set( Shared ) ) {
+			Flow.Init( *Backend->Driver );
 			IP.Append( Backend->IP );
-			PutId( Undefined, Backend->Driver );	// To signal to the back-end a new connection.
-			PutId( Shared.Id, Backend->Driver );	// The id of the new front-end.
-			Backend->Driver.Commit();
+			PutId( Undefined, Flow );	// To signal to the back-end a new connection.
+			PutId( Shared.Id, Flow );	// The id of the new front-end.
+			Flow.Commit();
 		}  else
 			Backend = NULL;
 	}

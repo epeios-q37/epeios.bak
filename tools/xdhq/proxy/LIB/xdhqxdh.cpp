@@ -971,7 +971,7 @@ namespace {
 					break;
 				}
 
-				prtcl::Put( Language, Flow );
+				prtcl::Put( "Test", Flow );
 				Flow.Commit();
 
 				csdcmn::Get( Flow, LogMessage );
