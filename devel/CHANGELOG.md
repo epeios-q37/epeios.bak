@@ -5,11 +5,15 @@
 - [adpt]: Adaptation to changes in underlying modules;
 - [stdz]: modification to comply with current standards;
 - [trvl]: trivial modifications;
+- [rvrt]: reverting modifications;
 
 ## 2019-02-12
 
 - FRD:
   - introducing the possibility for a read driver to have no cache ; useful for relaying driver,
+  - [rvrt] above modifications:
+    - need at least a cache of one byte (handling of EOF),
+    - a cache with only one byte fixes issue encounterd with relaying driver,
 
 ## 2019-02-11
 
@@ -3395,6 +3399,7 @@
 [adpt]:#Adaptation
 [stdz]:#Standardization
 [trvl]:#Trivial
+[rvrt]:#Reverting
   
 ### Adaptation
 
@@ -3407,3 +3412,7 @@ Modification to comply with current standards.
 ### Trivial
 
 Trivial modifications.
+
+### Reverting
+
+Reverting previous modifications.

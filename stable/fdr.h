@@ -86,9 +86,9 @@ namespace fdr {
 	};
 
 	enum behavior__ {
-		bNonBlocking,	// At least one byte is red, more if this not block.
-		bBlocking,		// Unless EOF, the wanted amount is red, even if blocks.
-		bKeep,			// Same as above, but the same data will still be available at next reading.
+		bNonBlocking,	// Au moins un octet est lu, davantage si cela n'entrne pas de blocage.
+		bBlocking,		// Sauf si 'EOF', le nombre d'octets demand sera lu, mme si blocage.
+		bKeep,			// Sauf si 'EOF', le nombre d'octets demands sera lu, mme si blocage, mais ils restent dans le flux.
 		b_amount,
 		b_Undefined,
 		b_Relay = bNonBlocking	// To use when between between drivers.
@@ -289,9 +289,8 @@ namespace fdr {
 	: public _flow_driver_base__
 	{
 	private:
-		bso::sBool EOF_;
-		byte__ *_Cache;	// If == null, data are not cached.
-		size__ Size_;	// If == '0', report EOF.
+		byte__ *_Cache;
+		size__ _Size;	// If == '0', report EOF.
 		size__ _Available;
 		size__ _Position;
 		size__ Red_;	// Amount of red data since last dismiss (NOT physically red, but what was returned to user).
@@ -306,7 +305,7 @@ namespace fdr {
 			if ( Wanted == 0 )
 				qRFwk();
 # endif
-			if ( !EOF_ ) {
+			if ( _Size != 0 ) {
 				Amount = FDRRead( Wanted, Buffer );
 
 				if ( ( Amount == 0 ) && AutoDismissOnEOF_ && DismissPending_ )
@@ -331,7 +330,7 @@ namespace fdr {
 
 			return Red;
 		}
-		size__ _FillCache( size__ Size )	// If != 0, everything is done to retrieve the wanted quantity. Otherwise, at least one byte is retrieved, unless EOF.
+		size__ _FillCache( size__ Size )	// Si != 0, alors on fait le maximum pour lire la quantit demande. Sinon, on en lit au moins 1, sauf si 'EOF'.
 		{
 #ifdef FDR_DBG
 			if ( _Cache == NULL )
@@ -342,31 +341,31 @@ namespace fdr {
 #endif
 			_Position = 0;
 
-			if ( Size_ < Size )
+			if ( _Size < Size )
 				qRFwk();
 
 			if ( Size != 0 ) {
 				_Available = _LoopingRead( Size, _Cache, NULL );
 
 				if ( _Available < Size )
-					EOF_ = true;
+					_Size = 0;	// Pour signaler 'EOF' atteint.
 			} else {
-				_Available = _Read( Size_, _Cache );
+				_Available = _Read( _Size, _Cache );
 
 				if ( _Available == 0 )
-					EOF_ = true;
+					_Size = 0;	// Pour signaler 'EOF' atteint.
 			}
 
 			return _Available;
 		}
-		void _CompleteCache( size__ Size )	// If the cache does not already contain 'Size' bytes, missing data will be red.
+		void _CompleteCache( size__ Size )	// Fait le maximum pour que le cache, avec les donnes dj disponibles, contienne la quantit demande.
 		{
-			if ( EOF_ )	// No more data available.
+			if ( _Size == 0 )	// Plus de donne disponibles.
 				return;
 
 			if ( _Available < Size ) {
-				if ( ( Size_ - _Position ) < Size ) {
-					if ( Size_ < Size )
+				if ( ( _Size - _Position ) < Size ) {
+					if ( _Size < Size )
 						qRFwk();
 
 					if ( _Available != 0 )
@@ -378,7 +377,7 @@ namespace fdr {
 				_Available += _LoopingRead( Size - _Available, _Cache + _Position + _Available, NULL );
 
 				if ( _Available < Size )
-					EOF_ = true;
+					_Size = 0;	// Pour signaler 'EOF' atteint.
 			}
 		}
 		size__ _ReadFromCache(
@@ -425,14 +424,15 @@ namespace fdr {
 
 			return Red;
 		}
-		bso::bool__ EOFReached_( void )
+
+		bso::bool__ EOF_( void )
 		{
 			Lock();
 
 			if ( _Available ) {
 				DismissPending_ = true;
 				return false;
-			} else if ( !EOF_ && (_FillCache( 0 ) != 0) ) {
+			} else if ( ( _Size != 0 ) && (_FillCache( 0 ) != 0) ) {
 				DismissPending_ = true;
 				return false;
 			} else {
@@ -442,7 +442,7 @@ namespace fdr {
 			}
 		}
 	protected:
-		// Returns the amount of data red. If 0, then no more data are available (EOF).
+		// Retourne le nombre d'octets effectivement lus. Ne retourne '0' que si plus aucune donne n'est disponibe.
 		virtual size__ FDRRead(
 			size__ Maximum,
 			byte__ *Buffer ) = 0;
@@ -457,8 +457,7 @@ namespace fdr {
 			}
 
 			_Cache = NULL;
-			Size_ = _Available = _Position = 0;
-			EOF_ = true;
+			_Size = _Available = _Position = 0;
 			_flow_driver_base__::reset( P );
 			Red_ = 0;
 			DismissPending_ = false;
@@ -471,23 +470,19 @@ namespace fdr {
 			thread_safety__ ThreadSafety )
 		{
 			reset();
-
-			if ( ( Cache == NULL) != ( Size == 0) )
+#ifdef FDR_DBG
+			if ( Cache == NULL )
 				qRFwk();
+#endif
 
-			EOF_ = false;
 			_Cache = Cache;
-			Size_ = Size;
+			_Size = Size;
 			Red_ = 0;
 			DismissPending_ = false;
 
 			_Available = _Position = 0;
 			_flow_driver_base__::Init( ThreadSafety );
 			AutoDismissOnEOF_ = false;
-		}
-		void Init( thread_safety__ ThreadSafety )
-		{
-			return Init( NULL, 0, ThreadSafety );
 		}
 		void SetAutoDismissOnEOF( bso::sBool Value = true )
 		{
@@ -526,24 +521,16 @@ namespace fdr {
 			if ( Wanted < 1 )
 				qRFwk();
 #endif
-			if ( EOFReached_() )
+			if ( EOF_() )
 				return 0;
 
 			switch ( Behavior ) {
 			case bNonBlocking:
-				if ( _Cache == NULL ) {
-					EOF_ = (Wanted = _Read( Wanted, Buffer )) == 0;
-					Red_ += Wanted;
-					return Wanted;
-				}  else
-					return _ReadThroughCache( Wanted, Buffer, false, &Red_ );
+				return _ReadThroughCache( Wanted, Buffer, false, &Red_ );
 				break;
 			case bBlocking:
-				if ( _Cache == NULL ) {
-					bso::sSize Red = 0;
-					EOF_ = (Red = _LoopingRead( Wanted, Buffer, &Red_ ) ) != Wanted;
-					return Red;
-				} else if ( ( _Available >= Wanted ) || ( Size_ > ( Wanted - _Available ) ) )
+
+				if ( ( _Available >= Wanted ) || ( _Size > ( Wanted - _Available ) ) )
 					return _ReadThroughCache( Wanted, Buffer, true, &Red_ );
 				else {
 					size__ Red = _ReadFromCache( Wanted, Buffer, true, &Red );
@@ -556,9 +543,6 @@ namespace fdr {
 
 				break;
 			case bKeep:
-				if ( _Cache == NULL )
-					qRFwk();
-
 				_CompleteCache( Wanted );
 
 				return _ReadFromCache( Wanted, Buffer, false, &Red_ );
@@ -567,6 +551,7 @@ namespace fdr {
 				qRFwk();
 				break;
 			}
+
 
 			return 0;	// Pour viter un 'warning'.
 		}
@@ -579,7 +564,7 @@ namespace fdr {
 		}
 		bso::bool__ EndOfFlow( void )
 		{
-			return EOFReached_();
+			return EOF_();
 		}
 		bso::bool__ IFlowIsLocked( void )	// Simplifie l'utilisation de 'ioflow_driver_...'
 		{
@@ -725,17 +710,13 @@ namespace fdr {
 			iflow_driver_base___::Init( InputCache, InputCacheSize, ThreadSafety );
 			oflow_driver_base___::Init( ThreadSafety );
 		}
-		void Init( thread_safety__ ThreadSafety )
-		{
-			return Init( NULL, 0, ThreadSafety );
-		}
 	};
 
 	template <int input_cache_size = FDR__DEFAULT_CACHE_SIZE> class ioflow_driver___
 	: public ioflow_driver_base___
 	{
 	private:
-		byte__ _InputCache[input_cache_size];
+		byte__ _InputCache[input_cache_size+1];	// '+1' to handle 'Unget()'.
 	public:
 		void Init( thread_safety__ ThreadSafety )
 		{
@@ -762,6 +743,12 @@ namespace fdr {
 	typedef fdr::iflow_driver___<> rRDressedDriver;
 	typedef fdr::oflow_driver___<> rWDressedDriver;
 	typedef fdr::ioflow_driver___<> rRWDressedDriver;
+
+	typedef fdr::iflow_driver___<0> rRRelayDriver;
+	typedef fdr::oflow_driver___<0> rWRelayDriver;
+	typedef fdr::ioflow_driver___<0> rRWRelayDriver;
+
+
 
 	typedef fdr::size__ sSize;
 	typedef fdr::byte__ sByte;
