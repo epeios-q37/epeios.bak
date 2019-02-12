@@ -86,9 +86,9 @@ namespace fdr {
 	};
 
 	enum behavior__ {
-		bNonBlocking,	// Au moins un octet est lu, davantage si cela n'entrne pas de blocage.
-		bBlocking,		// Sauf si 'EOF', le nombre d'octets demand sera lu, mme si blocage.
-		bKeep,			// Sauf si 'EOF', le nombre d'octets demands sera lu, mme si blocage, mais ils restent dans le flux.
+		bNonBlocking,	// At least one byte is red, more if this not block.
+		bBlocking,		// Unless EOF, the wanted amount is red, even if blocks.
+		bKeep,			// Same as above, but the same data will still be available at next reading.
 		b_amount,
 		b_Undefined,
 		b_Relay = bNonBlocking	// To use when between between drivers.
@@ -330,7 +330,7 @@ namespace fdr {
 
 			return Red;
 		}
-		size__ _FillCache( size__ Size )	// Si != 0, alors on fait le maximum pour lire la quantit demande. Sinon, on en lit au moins 1, sauf si 'EOF'.
+		size__ _FillCache( size__ Size )	// If != 0, everything is done to retrieve the wanted quantity. Otherwise, at least one byte is retrieved, unless EOF.
 		{
 #ifdef FDR_DBG
 			if ( _Cache == NULL )
@@ -358,9 +358,9 @@ namespace fdr {
 
 			return _Available;
 		}
-		void _CompleteCache( size__ Size )	// Fait le maximum pour que le cache, avec les donnes dj disponibles, contienne la quantit demande.
+		void _CompleteCache( size__ Size )// If the cache does not already contain 'Size' bytes, missing data will be red.
 		{
-			if ( _Size == 0 )	// Plus de donne disponibles.
+			if ( _Size == 0 )	// No more data available.
 				return;
 
 			if ( _Available < Size ) {
@@ -442,7 +442,7 @@ namespace fdr {
 			}
 		}
 	protected:
-		// Retourne le nombre d'octets effectivement lus. Ne retourne '0' que si plus aucune donne n'est disponibe.
+		// Returns the amount of data red. If 0, then no more data are available (EOF).
 		virtual size__ FDRRead(
 			size__ Maximum,
 			byte__ *Buffer ) = 0;
