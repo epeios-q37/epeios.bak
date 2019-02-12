@@ -390,8 +390,10 @@ namespace {
 
 			Id = GetId( Flow );
 
-			if ( !Shareds.Exists( Id ) )
+			if ( !Shareds.Exists( Id ) ) {
+				Id = Undefined;
 				qRGnr();
+			}
 
 			Shareds( Id )->Read.Unblock();
 
@@ -400,6 +402,17 @@ namespace {
 	qRR;
 	qRT;
 	qRE;
+	}
+
+	void InvalidAll_( dShareds_ &Shareds )
+	{
+		sFRow Row = Shareds.First();
+
+		while ( Row != qNIL ) {
+			Shareds( Row )->Id = Undefined;
+
+			Row = Shareds.Next( Row );
+		}
 	}
 
 	struct gConnectionData_
@@ -429,13 +442,22 @@ namespace {
 		Handshake_( Driver );
 
 		if ( ( Backend = CreateBackend_( Driver, IP ) ) != NULL )
-			HandleSwitching_( Driver, Backend->Shareds, Backend->Switch );
+			HandleSwitching_( Driver, Backend->Shareds, Backend->Switch );	// Don't return until disconnection or error.
 	qRFR;
+	qRFT;
+		if ( Backend != NULL ) {
+			InvalidAll_( Backend->Shareds );
+			delete Backend;
+
+			Backend = NULL;
+		}
+
 		Driver.reset();	// Otherwise it will be done after the destruction of the socket, hence the commit will fail.
 
-		if ( Socket != sck::Undefined )
+		if ( Socket != sck::Undefined ) {
 			sck::Close( Socket, err::hUserDefined );	// An error occurring during closing is ignored.
-	qRFT;
+			Socket = sck::Undefined;
+		}
 	qRFE( sclmisc::ErrFinal() );
 	}
 

@@ -201,9 +201,15 @@ var token = getToken();
 if (token !== "" )
 	token = "&" + token;
 
-function standBy(socket, id) {
-	socket.write(Buffer.concat([Buffer.alloc(1, id), Buffer.from("StandBy_1\x00")]));
-//	socket.write(Buffer.from("StandBy_1\x00"));
+function standBy(socket, instance) {
+	let data = Buffer.from("StandBy_1\x00");
+
+	if (!instance._xdh.idSent)
+		data = Buffer.concat([Buffer.alloc(1, instance._xdh.id), data])
+	else
+		instance._xdh.idSent = false;
+
+	socket.write( data );
 }
 
 function isTokenEmpty() {
@@ -220,6 +226,7 @@ function createInstance(id, socket, createCallback) {
 	instance._xdh.isDEMO = true;
 	instance._xdh.type = types.UNDEFINED;
 	instance._xdh.handshakeDone = false;
+	instance._xdh.idSent = false;
 
 	return instance;
 }
@@ -250,7 +257,7 @@ function handleInstance(instance, callbacks, socket, query, offset) {
 
 		if (instance._xdh.type === types.UNDEFINED) {
 			cont = false;
-			standBy(socket, instance._xdh.id);
+			standBy(socket, instance);
 		} else
 			cont = instance._xdh.type === types.VOID;
 	}
@@ -261,20 +268,26 @@ function handleInstance(instance, callbacks, socket, query, offset) {
 			instance._xdh.type = types.UNDEFINED;
 			if (type === types.VOID)
 				instance._xdh.callback();
-			else
+			else {
+				instance._xdh.idSent = false;
 				instance._xdh.callback(getResponse(query, offset, type));
+			}
+
 
 			if (instance._xdh.type === types.UNDEFINED) {
 				cont = false;
-				standBy(socket, instance._xdh.id);
+				standBy(socket, instance);
 			} else if (instance._xdh.type !== types.VOID)
 				cont = false;
 		} else {
-			if (instance._xdh.type !== types.VOID)
+			if (instance._xdh.type !== types.VOID) {
 				getResponse(query, offset, instance._xdh.type);
+				instance._xdh.idSent = false;
+			}
+
 			instance._xdh.type = types.UNDEFINED;
 			cont = false;
-			standBy(socket, instance._xdh.id);
+			standBy(socket, instance);
 		}
 	}
 }
@@ -524,8 +537,10 @@ function call(instance, command, type) {
 
 	console.log("Command: ", command, type, instance._xdh.type);
 
-//	if (instance._xdh.type === types.UNDEFINED || instance._xdh.type === types.VOID)
+	if (!instance._xdh.idSent) {
 		data = Buffer.concat([Buffer.alloc(1, instance._xdh.id), data]);
+		instance._xdh.idSent = true;
+	}
 
 	instance._xdh.type = type;
 

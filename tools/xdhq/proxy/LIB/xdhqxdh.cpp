@@ -213,9 +213,9 @@ namespace {
 		Script.Init();
 		prtcl::Get( Flow, Script );
 
-		Proxy.Execute( Script, Buffer );
-
 		Flow.Dismiss();
+
+		Proxy.Execute( Script, Buffer );
 
 		prtcl::Put( Buffer(), Flow );
 		Flow.Commit();
@@ -260,9 +260,9 @@ namespace {
 		xdhcmn::Escape( Message, Script, '"' );
 		Script.Append( "\") ) 'true'; else 'false';");
 
-		Proxy.Execute( Script, Buffer );
-
 		Flow.Dismiss();
+
+		Proxy.Execute( Script, Buffer );
 
 		prtcl::Put( Buffer(), Flow );
 		Flow.Commit();
@@ -357,10 +357,10 @@ namespace {
 		Ids.Init();
 		prtcl::Get( Flow, Ids );
 
+		Flow.Dismiss();
+
 		Contents.Init();
 		GetContents_( Ids, Proxy, Contents );
-
-		Flow.Dismiss();
 
 		prtcl::Put( Contents, Flow );
 		Flow.Commit();
@@ -420,9 +420,9 @@ namespace {
 		tol::Init( Id );
 		prtcl::Get( Flow, Id );
 
-		Proxy.Parent( Id, Parent );
-
 		Flow.Dismiss();
+
+		Proxy.Parent( Id, Parent );
 
 		prtcl::Put( Parent(), Flow );
 		Flow.Commit();
@@ -442,9 +442,9 @@ namespace {
 		tol::Init( Id );
 		prtcl::Get( Flow, Id );
 
-		Proxy.FirstChild( Id, Child );
-
 		Flow.Dismiss();
+
+		Proxy.FirstChild( Id, Child );
 
 		prtcl::Put( Child(), Flow );
 
@@ -465,9 +465,9 @@ namespace {
 		tol::Init( Id );
 		prtcl::Get( Flow, Id );
 
-		Proxy.LastChild( Id, Child );
-
 		Flow.Dismiss();
+
+		Proxy.LastChild( Id, Child );
 
 		prtcl::Put( Child(), Flow );
 
@@ -488,9 +488,9 @@ namespace {
 		tol::Init( Id );
 		prtcl::Get( Flow, Id );
 
-		Proxy.PreviousSibling( Id, Sibling );
-
 		Flow.Dismiss();
+
+		Proxy.PreviousSibling( Id, Sibling );
 
 		prtcl::Put( Sibling(), Flow );
 
@@ -511,9 +511,9 @@ namespace {
 		tol::Init( Id );
 		prtcl::Get( Flow, Id );
 
-		Proxy.NextSibling( Id, Sibling );
-
 		Flow.Dismiss();
+
+		Proxy.NextSibling( Id, Sibling );
 
 		prtcl::Put( Sibling(), Flow );
 
@@ -536,9 +536,9 @@ namespace {
 		prtcl::Get( Flow, Name );
 		prtcl::Get( Flow, SuggestedId );
 
-		Proxy.CreateElement( Name, SuggestedId, Id );	// If 'SuggestedId' is empty, 'Id' will contain a computer generated one, otherwise it will contain 'SuggestedId'.
-
 		Flow.Dismiss();
+
+		Proxy.CreateElement( Name, SuggestedId, Id );	// If 'SuggestedId' is empty, 'Id' will contain a computer generated one, otherwise it will contain 'SuggestedId'.
 
 		prtcl::Put( Id(), Flow );
 
@@ -752,10 +752,10 @@ namespace {
 		prtcl::Get( Flow, Id );
 		prtcl::Get( Flow, Name );
 
+		Flow.Dismiss();
+
 		Value.Init();
 		Proxy.GetAttribute( Id, Name, Value );
-
-		Flow.Dismiss();
 
 		prtcl::Put( Value, Flow );
 		Flow.Commit();
@@ -810,10 +810,10 @@ namespace {
 		prtcl::Get( Flow, Id );
 		prtcl::Get( Flow, Name );
 
+		Flow.Dismiss();
+
 		Value.Init();
 		Proxy.GetProperty( Id, Name, Value );
-
-		Flow.Dismiss();
 
 		prtcl::Put( Value, Flow );
 		Flow.Commit();
@@ -1017,7 +1017,7 @@ namespace {
 					case cStandBy_1:
 						Return = true;
 						Continue = false;
-//						Flow.Dismiss();
+						Flow.Dismiss();
 						break;
 					H( Execute );
 					H( Alert );
@@ -1052,9 +1052,6 @@ namespace {
 						qRGnr();
 						break;
 					}
-
-					Flow.Dismiss();
-
 				}
 #undef H
 			qRR;

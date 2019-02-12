@@ -242,7 +242,7 @@
 						if ( id == "" ) {
               let node = document.createElement("span");
 														node.style.all="initial";
-              node.innerHTML='Powered by the <span style="all: initial; font-style: italic;">Atlas</span> toolkit (<a href="http://atlastk.org" target="_blank"><span style="font: initial;">http://atlastk.org</span></a>).';
+              node.innerHTML='<span style="all: initial; font-size: larger; text-shadow: 1px 1px 3px #666, -1px -1px 3px #FFF, 1px 1px #666, -1px -1px #FFF;">Powered by the <span style="font-style: italic;">Atlas</span> toolkit (<a href="http://atlastk.org/" target="_blank">http://atlastk.org/</a>).</span>';
 //							getElement( id ).insertBefore( node, getElement( id ).firstChild );
 							getElement( id ).appendChild( node );
 						}
