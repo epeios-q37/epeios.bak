@@ -84,7 +84,7 @@ namespace dmopool {
 	};
 
 	class rRWDriver
-	: public fdr::rRWDressedDriver
+	: public fdr::ioflow_driver___<1>
 	{
 	private:
 		bso::sBool IdSent_;
@@ -133,7 +133,7 @@ namespace dmopool {
 			fdr::sByte *NewBuffer = NULL;
 		qRB;
 			if ( Shared_.IsValid() ) {
-				if ( !IdSent_ ) {
+				if ( !IdSent_ ) {	// To optimize.
 					if ( ( NewBuffer = (fdr::sByte *)malloc( Maximum + 1 ) ) == NULL )
 						 qRAlc();
 
@@ -174,7 +174,7 @@ namespace dmopool {
 	public:
 		void reset( bso::sBool P = true )
 		{
-			fdr::rRWDressedDriver::reset( P );
+			fdr::ioflow_driver___<1>::reset( P );
 			Shared_.IsValid();
 			IdSent_ = false;
 			ReadInProgress_ = false;
@@ -182,7 +182,7 @@ namespace dmopool {
 		qCVDTOR( rRWDriver );
 		void Init( fdr::eThreadSafety ThreadSafety = fdr::ts_Default )
 		{
-			fdr::rRWDressedDriver::Init( ThreadSafety );
+			fdr::ioflow_driver___<1>::Init( ThreadSafety );
 
 			Shared_.Init();
 

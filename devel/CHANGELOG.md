@@ -6,6 +6,11 @@
 - [stdz]: modification to comply with current standards;
 - [trvl]: trivial modifications;
 
+## 2019-02-12
+
+- FRD:
+  - introducing the possibility for a read driver to have no cache ; useful for relaying driver,
+
 ## 2019-02-11
 
 - DTFPTB :

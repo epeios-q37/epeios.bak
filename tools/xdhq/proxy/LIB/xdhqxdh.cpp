@@ -218,6 +218,7 @@ namespace {
 		Proxy.Execute( Script, Buffer );
 
 		prtcl::Put( Buffer(), Flow );
+
 		Flow.Commit();
 	qRR;
 	qRT;
@@ -234,6 +235,8 @@ namespace {
 	qRB;
 		Message.Init();
 		prtcl::Get( Flow, Message );
+
+		Flow.Dismiss();
 
 		Script.Init( "window.alert(\"");
 		xdhcmn::Escape( Message, Script, '"' );
@@ -256,15 +259,16 @@ namespace {
 		Message.Init();
 		prtcl::Get( Flow, Message );
 
+		Flow.Dismiss();
+
 		Script.Init( "if ( window.confirm(\"");
 		xdhcmn::Escape( Message, Script, '"' );
 		Script.Append( "\") ) 'true'; else 'false';");
 
-		Flow.Dismiss();
-
 		Proxy.Execute( Script, Buffer );
 
 		prtcl::Put( Buffer(), Flow );
+
 		Flow.Commit();
 	qRR;
 	qRT;
@@ -304,6 +308,8 @@ namespace {
 		prtcl::Get( Flow, Id );
 		prtcl::Get( Flow, RawXML );
 		prtcl::Get( Flow, XSL );
+
+		Flow.Dismiss();
 
 		if ( RawXML.Amount() == 0 )
 			qRGnr();
@@ -363,6 +369,7 @@ namespace {
 		GetContents_( Ids, Proxy, Contents );
 
 		prtcl::Put( Contents, Flow );
+
 		Flow.Commit();
 	qRR;
 	qRT;
@@ -380,6 +387,8 @@ namespace {
 		tol::Init( Ids, Contents );
 		prtcl::Get( Flow, Ids );
 		prtcl::Get( Flow, Contents );
+
+		Flow.Dismiss();
 
 		tol::Init( MergedIds, MergedContents );
 
@@ -403,6 +412,8 @@ namespace {
 		prtcl::Get( Flow, Delay );
 		prtcl::Get( Flow, Action );
 
+		Flow.Dismiss();
+
 		Proxy.SetTimeout( Delay, Action );
 	qRR;
 	qRT;
@@ -425,6 +436,7 @@ namespace {
 		Proxy.Parent( Id, Parent );
 
 		prtcl::Put( Parent(), Flow );
+
 		Flow.Commit();
 	qRR;
 	qRT;
@@ -560,6 +572,8 @@ namespace {
 		prtcl::Get( Flow, Child );
 		prtcl::Get( Flow, Id );
 
+		Flow.Dismiss();
+
 		Proxy.InsertChild( Child, Id );
 	qRR;
 	qRT;
@@ -577,6 +591,8 @@ namespace {
 
 		prtcl::Get( Flow, Child );
 		prtcl::Get( Flow, Id );
+
+		Flow.Dismiss();
 
 		Proxy.AppendChild( Child, Id );
 	qRR;
@@ -596,6 +612,8 @@ namespace {
 		prtcl::Get( Flow, Sibling );
 		prtcl::Get( Flow, Id );
 
+		Flow.Dismiss();
+
 		Proxy.InsertBefore( Sibling, Id );
 	qRR;
 	qRT;
@@ -614,6 +632,8 @@ namespace {
 		prtcl::Get( Flow, Sibling );
 		prtcl::Get( Flow, Id );
 
+		Flow.Dismiss();
+
 		Proxy.InsertAfter( Sibling, Id );
 	qRR;
 	qRT;
@@ -629,6 +649,8 @@ namespace {
 	qRB;
 		Id.Init();
 		prtcl::Get( Flow, Id );
+
+		Flow.Dismiss();
 
 		Proxy.DressWidgets( Id );
 	qRR;
@@ -652,6 +674,8 @@ namespace {
 
 			prtcl::Get( Flow, Ids );
 			prtcl::Get( Flow, Classes );
+
+			Flow.Dismiss();
 
 			tol::Init( MergedIds, MergedClasses );
 			xdhcmn::FlatMerge( Ids, MergedIds, true );
@@ -699,6 +723,8 @@ namespace {
 
 			prtcl::Get( Flow, Ids );
 
+			Flow.Dismiss();
+
 			tol::Init( MergedIds );
 			xdhcmn::FlatMerge( Ids, MergedIds, true );
 
@@ -734,6 +760,8 @@ namespace {
 		prtcl::Get( Flow, Id );
 		prtcl::Get( Flow, Name );
 		prtcl::Get( Flow, Value );
+
+		Flow.Dismiss();
 
 		Proxy.SetAttribute( Id, Name, Value );
 	qRR;
@@ -775,6 +803,8 @@ namespace {
 		prtcl::Get( Flow, Id );
 		prtcl::Get( Flow, Name );
 
+		Flow.Dismiss();
+
 		Proxy.RemoveAttribute( Id, Name );
 	qRR;
 	qRT;
@@ -792,6 +822,8 @@ namespace {
 		prtcl::Get( Flow, Id );
 		prtcl::Get( Flow, Name );
 		prtcl::Get( Flow, Value );
+
+		Flow.Dismiss();
 
 		Proxy.SetProperty( Id, Name, Value );
 	qRR;
@@ -816,6 +848,7 @@ namespace {
 		Proxy.GetProperty( Id, Name, Value );
 
 		prtcl::Put( Value, Flow );
+
 		Flow.Commit();
 	qRR;
 	qRT;
@@ -831,6 +864,8 @@ namespace {
 	qRB;
 		tol::Init( Id );
 		prtcl::Get( Flow, Id );
+
+		Flow.Dismiss();
 
 		Proxy.Focus( Id );
 	qRR;

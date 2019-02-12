@@ -202,14 +202,7 @@ if (token !== "" )
 	token = "&" + token;
 
 function standBy(socket, instance) {
-	let data = Buffer.from("StandBy_1\x00");
-
-	if (!instance._xdh.idSent)
-		data = Buffer.concat([Buffer.alloc(1, instance._xdh.id), data])
-	else
-		instance._xdh.idSent = false;
-
-	socket.write( data );
+	socket.write(Buffer.concat([Buffer.alloc(1, instance._xdh.id), Buffer.from("StandBy_1\x00")]));
 }
 
 function isTokenEmpty() {
@@ -226,7 +219,6 @@ function createInstance(id, socket, createCallback) {
 	instance._xdh.isDEMO = true;
 	instance._xdh.type = types.UNDEFINED;
 	instance._xdh.handshakeDone = false;
-	instance._xdh.idSent = false;
 
 	return instance;
 }
@@ -268,11 +260,8 @@ function handleInstance(instance, callbacks, socket, query, offset) {
 			instance._xdh.type = types.UNDEFINED;
 			if (type === types.VOID)
 				instance._xdh.callback();
-			else {
-				instance._xdh.idSent = false;
+			else
 				instance._xdh.callback(getResponse(query, offset, type));
-			}
-
 
 			if (instance._xdh.type === types.UNDEFINED) {
 				cont = false;
@@ -280,10 +269,8 @@ function handleInstance(instance, callbacks, socket, query, offset) {
 			} else if (instance._xdh.type !== types.VOID)
 				cont = false;
 		} else {
-			if (instance._xdh.type !== types.VOID) {
+			if (instance._xdh.type !== types.VOID)
 				getResponse(query, offset, instance._xdh.type);
-				instance._xdh.idSent = false;
-			}
 
 			instance._xdh.type = types.UNDEFINED;
 			cont = false;
@@ -532,15 +519,10 @@ function add(data, argument) {
 
 function call(instance, command, type) {
 	let i = 3;
-	let data = Buffer.from(command + '\x00');
+	let data = Buffer.concat([Buffer.alloc(1, instance._xdh.id), Buffer.from(command + '\x00')]);;
 	let amount = arguments[i++];
 
 	console.log("Command: ", command, type, instance._xdh.type);
-
-	if (!instance._xdh.idSent) {
-		data = Buffer.concat([Buffer.alloc(1, instance._xdh.id), data]);
-		instance._xdh.idSent = true;
-	}
 
 	instance._xdh.type = type;
 
