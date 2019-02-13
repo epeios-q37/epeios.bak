@@ -352,15 +352,21 @@ namespace mtx {
 				return false;
 			}
 		}
-		void Unlock( void )
+		bso::sBool Unlock( qRPN )
 		{
 			if ( IsDisabled() )
-				return;
+				return true;
 
-			if ( !IsLocked() )
-				qRFwk();
+			if ( !IsLocked() ) {
+				if ( ErrHandling == err::hThrowException )
+					qRFwk();
+				else
+					return false;
+			}
 
 			_Inc( Counter );
+
+			return true;
 		}
 		_mutex__( bso::bool__ Disabled )
 		{
@@ -442,13 +448,15 @@ namespace mtx {
 	}
 
 	//f Unlock 'Handler'.
-	inline void Unlock( handler___ Handler )
+	inline bso::sBool Unlock(
+		handler___ Handler,
+		qRPD )
 	{
 #ifdef MTX_DBG
 		if ( Handler == NULL )
 			qRFwk();
 #endif
-		Handler->Unlock();
+		return Handler->Unlock( ErrHandling );
 	}
 
 	//f Delete the mutex of handler 'Handler'.
@@ -476,23 +484,11 @@ namespace mtx {
 	class mutex___
 	{
 	private:
-		state__ _State;
-		handler___ _Handler;
-		void _Test( void )
-		{
-# ifdef MTX_DBG
-			if ( _Handler == MTX__INVALID_HANDLER )
-				qRFwk();
-# endif
-		}
+		qPMV( _mutex__, H_, Handler_ );
 		void _UnlockIfInitializedAndLocked( void )
 		{
-			if ( _Handler != MTX__INVALID_HANDLER )
-				if ( _State == sLocked ) {
-					mtx::Unlock( _Handler );
-
-					_State = sUnlocked;
-				}
+			if ( Handler_ != NULL )
+				mtx::Unlock( Handler_, err::hUserDefined );	// Ignore error if already unlocked;
 		}
 	public:
 		void reset( bool P = true )
@@ -500,8 +496,7 @@ namespace mtx {
 			if ( P )
 				_UnlockIfInitializedAndLocked();
 
-			_Handler = MTX__INVALID_HANDLER;
-			_State = s_Undefined;
+			Handler_ = NULL;
 
 		}
 		E_CDTOR( mutex___ );
@@ -509,9 +504,7 @@ namespace mtx {
 		{
 			_UnlockIfInitializedAndLocked();
 			
-			_Handler = Handler;
-
-			_State = sUnlocked;
+			Handler_ = Handler;
 		}
 		void InitAndLock( handler___ Handler )
 		{
@@ -520,39 +513,15 @@ namespace mtx {
 		}
 		bso::bool__ TryToLock( void )
 		{
-			_Test();
-
-			if ( _State == sLocked )
-				return true;
-			else if ( mtx::TryToLock( _Handler ) ) {
-				_State = sLocked;
-				return true;
-			} else
-				return false;
+			return mtx::TryToLock( H_() );
 		}
 		bso::sBool Lock( tol::sDelay Timeout = 0 ) // If == '0' or lock succeed, returns always 'true', or returns false after 'Timeout' ms.
 		{
-			_Test();
-
-			if ( _State != sLocked ) {
-				if ( mtx::Lock( _Handler, Timeout ) ) {
-					_State = sLocked;
-					return true;
-				} else
-					return false;
-			} else
-				return true;
+			return mtx::Lock( H_() );
 		}
-		void Unlock( void )
+		bso::sBool Unlock( qRPD )
 		{
-			_Test();
-
-			if ( _State == sUnlocked )
-				qRFwk();
-
-			_State = sUnlocked;
-
-			mtx::Unlock( _Handler );
+			return mtx::Unlock( H_(), ErrHandling );
 		}
 	};
 }

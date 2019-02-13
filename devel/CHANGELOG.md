@@ -9,9 +9,15 @@
 
 ## 2019-02-13
 
+- FDR:
+  - fixing locking/unlocking bug,
 - FLW:
   - fix useless write attempt on two successive commit (intentional commit followed by the one launched on object destruction) which could lead to a false error,
   - fixing unwanted error on destruction after an error occurs,
+- MDR:
+  - simplification,
+- MTK:
+  - [trvl],
 - THT:
   - fix `rBlocker` blocking/unblocking cycling,
 

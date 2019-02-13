@@ -187,7 +187,6 @@ namespace {
 	void Create_( void )
 	{
 	qRH
-		mtx::mutex___ Mutex;
 	qRB
 		Common.Thread = Common.Data = Common.Store = Common.Exclusion = MTX_INVALID_HANDLER;
 

@@ -249,9 +249,9 @@ namespace fdr {
 					if ( Owner_ != Caller )
 						qRFwk();
 
-					Unlock_( _Mutex );
-
 					Owner_ = tht::Undefined;
+
+					Unlock_( _Mutex );
 				}
 			}
 # else
