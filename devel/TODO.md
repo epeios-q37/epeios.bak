@@ -1,9 +1,11 @@
 # *Epeios* TODO
 
 FAST:
+
 - Study the possibility to adapt the framework to 'emscripten'.
 
-MIDDLE
+MIDDLE:
+
 - CSDL...:
 	- Reimplementation ; has no more to do with embedded library.
 - ERR:
@@ -12,7 +14,7 @@ MIDDLE
 	- Reimplementing flow handling to be based on driver rather then on flow.
 	- Implement the possibility to read/write in a flow without blocking (even without reading/writing a minimal amount of data).
 - LOG:
-	Reimplementation of log handling to put is as part of 'SCLMISC' (depends if it's a file log or a console log).
+	- Reimplementation of log handling to put is as part of 'SCLMISC' (depends if it's a file log or a console log).
 - N4ALLW:
   - Sometimes, the path to the component can be `~/bin/` (*PHP*, *Java*), and sometime it must be `/home/csimon/bin/` (*Node.js*).
 - SCL...:
@@ -35,12 +37,14 @@ MIDDLE
 
 
 LONG:
+
 - XPP:
 	- Reimplementation in a simplified manner.
 - Socket:
 	- Adaptation of the network related libraries to IPv6.
 
 DISMISSED :
+
 - 2016-12-31 : 'XULRunner' is no longer maintained !
   - Implementing 'XDHTML' technology under 'Gecko' (without 'XUL' ; only 'HTML 5'). There are more platforms for 'Gecko' than for 'CEF', as,
     for 'Gecko', if there is no 'XULRunner', there will be 'Firefox' (check if the '--app' option is always available for 'Firefox').
@@ -53,6 +57,7 @@ DISMISSED :
 IN PROGRESS:
 
 SUSPENDED:
+
 - XDHTML:
 	- Implementation for Android.
 - Flow:
@@ -60,6 +65,7 @@ SUSPENDED:
 
 	
 MADE:
+
 2016-09-24:
 - Adding detection of 'crate' using as list without being a list (use of 'CRT' instead of 'LSTCRT' ; accessing a 'CRT' item with 'qNIL' row).
 
@@ -67,5 +73,5 @@ MADE:
 - Fixing errors occurring when compiling using WSL (Widows Subsystem for Linux).
 
 2016-08-22:
-- Fixing errors which occurs in backends on regular deconnection from frontend.
+- Fixing errors which occurs in backends on regular disconnection from front-end.
 

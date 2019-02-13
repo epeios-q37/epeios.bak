@@ -7,6 +7,13 @@
 - [trvl]: trivial modifications;
 - [rvrt]: reverting modifications;
 
+## 2019-02-13
+
+- FLW:
+  - fix useless write attempt on two successive commit (intentional commit followed by the one launched on object destruction) which could lead to a false error,
+- THT:
+  - fix `rBlocker` blocking/unblocking cycling,
+
 ## 2019-02-12
 
 - FRD:

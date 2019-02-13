@@ -348,7 +348,11 @@ namespace flw {
 			const byte__ *Buffer,
 			size__ Wanted,
 			size__ Minimum );
-		bso::sBool DumpCache_( void )
+		// Returns true if the cache was successful dumped ; in this case,
+		// 'Empty' is set to true if the cache was already empty, otherwise
+		// its value is not changed. Returns false if the content of the cache
+		// could not be written.
+		bso::sBool DumpCache_( bso::sBool *WasEmpty )
 		{
 			size__ Stayed = _Size - _Free;
 			
@@ -358,8 +362,11 @@ namespace flw {
 					return true;
 				} else
 					return false;
-			} else
+			} else {
+				if ( WasEmpty != NULL )
+					*WasEmpty = true;
 				return true;
+			}
 		}
 		size__ _WriteIntoCache(
 			const byte__ *Buffer,
@@ -392,8 +399,11 @@ namespace flw {
 		// Synchronization.
 		bso::sBool _Commit( bso::sBool Unlock )
 		{
-			if ( DumpCache_() ) {
-				_D().Commit( Unlock );
+			bso::sBool WasEmpty = false;
+
+			if ( DumpCache_( &WasEmpty ) ) {
+				if ( !WasEmpty )
+					_D().Commit( Unlock );
 				return true;
 			} else
 				return false;
@@ -412,7 +422,8 @@ namespace flw {
 			size__ AmountWritten = _WriteIntoCache( Buffer, Amount );
 
 			if ( ( AmountWritten == 0 )  && ( Amount != 0 ) ) {
-				DumpCache_();
+				if ( !DumpCache_( NULL ) )
+					qRFwk();
 				AmountWritten = _DirectWriteOrIntoCache( Buffer, Amount );
 			}
 

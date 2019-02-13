@@ -243,8 +243,6 @@ function handleInstance(instance, callbacks, socket, query, offset) {
 		[id, offset] = getString(query, offset);
 		[action, offset] = getString(query, offset);
 
-		console.log(id, action);
-
 		callbacks[action](instance, id);
 
 		if (instance._xdh.type === types.UNDEFINED) {
@@ -301,10 +299,8 @@ function serve(socket, createCallback, callbacks) {
 		if (!instances[id]._xdh.handshakeDone) {
 			instanceHandshake(instances[id], query, offset);
 			socket.write(addString(Buffer.alloc(1, id), "NJS"));
-		} else {
-				console.log(query);
+		} else
 			handleInstance(instances[id], callbacks, socket, query, offset);
-		}
 	}
 }
 
@@ -522,7 +518,7 @@ function call(instance, command, type) {
 	let data = Buffer.concat([Buffer.alloc(1, instance._xdh.id), Buffer.from(command + '\x00')]);;
 	let amount = arguments[i++];
 
-	console.log("Command: ", command, type, instance._xdh.type);
+	console.log( Date.now(), " Command: ", command, instance._xdh.id);
 
 	instance._xdh.type = type;
 
