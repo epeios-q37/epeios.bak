@@ -352,7 +352,9 @@ namespace flw {
 		// 'Empty' is set to true if the cache was already empty, otherwise
 		// its value is not changed. Returns false if the content of the cache
 		// could not be written.
-		bso::sBool DumpCache_( bso::sBool *WasEmpty )
+		bso::sBool DumpCache_(
+			bso::sBool *WasEmpty,
+			qRPN )
 		{
 			size__ Stayed = _Size - _Free;
 			
@@ -360,8 +362,11 @@ namespace flw {
 				if ( _DirectWrite( _Cache, Stayed, Stayed ) == Stayed ) {
 					_Free = _Size;
 					return true;
-				} else
-					return false;
+				} else if ( ErrHandling == err::hThrowException ) {
+					_Free = _Size;	// So the next attempt (probably on destruction) will not throw an error.
+					qRFwk();
+				}
+				return false;
 			} else {
 				if ( WasEmpty != NULL )
 					*WasEmpty = true;
@@ -397,11 +402,13 @@ namespace flw {
 				return _WriteIntoCache( Buffer, Amount );
 		}
 		// Synchronization.
-		bso::sBool _Commit( bso::sBool Unlock )
+		bso::sBool _Commit(
+			bso::sBool Unlock,
+			qRPN )
 		{
 			bso::sBool WasEmpty = false;
 
-			if ( DumpCache_( &WasEmpty ) ) {
+			if ( DumpCache_( &WasEmpty, ErrHandling ) ) {
 				if ( !WasEmpty )
 					_D().Commit( Unlock );
 				return true;
@@ -422,8 +429,7 @@ namespace flw {
 			size__ AmountWritten = _WriteIntoCache( Buffer, Amount );
 
 			if ( ( AmountWritten == 0 )  && ( Amount != 0 ) ) {
-				if ( !DumpCache_( NULL ) )
-					qRFwk();
+				DumpCache_( NULL, err::hThrowException );
 				AmountWritten = _DirectWriteOrIntoCache( Buffer, Amount );
 			}
 
@@ -508,10 +514,8 @@ namespace flw {
 			qRPD )
 		{
 			if ( _Driver != NULL ) {
-				if ( _Commit( Unlock ) )
+				if ( _Commit( Unlock, ErrHandling ) )
 					return true;
-				else if ( qRPT )
-					qRFwk();
 				else
 					return false;
 			} else

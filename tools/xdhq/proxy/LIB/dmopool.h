@@ -100,13 +100,13 @@ namespace dmopool {
 
 			if ( !ReadInProgress_ ) {
 				Shared_.Read.Wait();
+
+				if ( !Shared_.IsValid() )
+					return 0;
+
+				Shared_.Driver->RTake();
 				ReadInProgress_ = true;
 			}
-
-			if ( !Shared_.IsValid() )
-				return 0;
-
-			Shared_.Driver->RTake();
 
 			return Shared_.Driver->Read( Maximum, Buffer, fdr::b_Relay );
 		}

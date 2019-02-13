@@ -953,6 +953,79 @@ namespace {
 		{
 			ReportError_( NULL, Flow );
 		}
+		bso::bool__ Launch_(
+			const char *Id,
+			const char *Action )
+		{
+			bso::sBool Return = false;
+		qRH;
+			bso::sBool Continue = true;
+			flw::rDressedRWFlow<> Flow;
+			eCommand_ Command = c_Undefined;
+		qRB;
+			Flow.Init( D_() );
+
+			prtcl::Put( Id, Flow );
+			prtcl::Put( Action, Flow );
+			Flow.Commit();
+
+
+# define H( name )\
+	case c##name##_1:\
+		::name##_( Flow, *this );\
+		break
+
+			while ( Continue ) {
+				Command = GetCommand_( Flow );
+
+				Log_( str::wString( GetLabel_( Command ) ) );
+
+				switch ( Command ) {
+				case cStandBy_1:
+					Return = true;
+					Continue = false;
+					Flow.Dismiss();
+					break;
+				H( Execute );
+				H( Alert );
+				H( Confirm );
+				H( SetLayout );
+				H( GetContents );
+				H( SetContents );
+				H( SetTimeout );
+				H( Parent );
+				H( FirstChild );
+				H( LastChild );
+				H( PreviousSibling );
+				H( NextSibling );
+				H( CreateElement );
+				H( InsertChild );
+				H( AppendChild );
+				H( InsertBefore );
+				H( InsertAfter );
+				H( DressWidgets );
+				H( AddClasses );
+				H( RemoveClasses );
+				H( ToggleClasses );
+				H( EnableElements );
+				H( DisableElements );
+				H( SetAttribute );
+				H( GetAttribute );
+				H( RemoveAttribute );
+				H( SetProperty );
+				H( GetProperty );
+				H( Focus );
+				default:
+					qRGnr();
+					break;
+				}
+			}
+#undef H
+		qRR;
+		qRT;
+		qRE;
+			return Return;
+		}
 	protected:
 		virtual bso::sBool XDHCMNInitialize(
 			xdhcmn::cUpstream *Callback,
@@ -960,11 +1033,11 @@ namespace {
 			const str::dString &Token ) override
 		{
 			bso::sBool Success = false;
-		qRH;
+		qRFH;
 			flw::rDressedRWFlow<> Flow;
 			csdcmn::sVersion Version = csdcmn::UndefinedVersion;
 			str::wString LogMessage;
-		qRB;
+		qRFB;
 			LogMessage.Init();
 
 			if ( Token.Amount() == 0 ) {
@@ -1026,73 +1099,13 @@ namespace {
 			const char *Action ) override
 		{
 			bso::sBool Return = false;
-		qRH;
-			bso::sBool Continue = true;
-			flw::rDressedRWFlow<> Flow;
-			eCommand_ Command = c_Undefined;
-		qRB;
-			Flow.Init( D_() );
-
-			prtcl::Put( Id, Flow );
-			prtcl::Put( Action, Flow );
-			Flow.Commit();
-
-
-# define H( name )\
-		case c##name##_1:\
-			::name##_( Flow, *this );\
-			break
-
-				while ( Continue ) {
-					Command = GetCommand_( Flow );
-
-					Log_( str::wString( GetLabel_( Command ) ) );
-
-					switch ( Command ) {
-					case cStandBy_1:
-						Return = true;
-						Continue = false;
-						Flow.Dismiss();
-						break;
-					H( Execute );
-					H( Alert );
-					H( Confirm );
-					H( SetLayout );
-					H( GetContents );
-					H( SetContents );
-					H( SetTimeout );
-					H( Parent );
-					H( FirstChild );
-					H( LastChild );
-					H( PreviousSibling );
-					H( NextSibling );
-					H( CreateElement );
-					H( InsertChild );
-					H( AppendChild );
-					H( InsertBefore );
-					H( InsertAfter );
-					H( DressWidgets );
-					H( AddClasses );
-					H( RemoveClasses );
-					H( ToggleClasses );
-					H( EnableElements );
-					H( DisableElements );
-					H( SetAttribute );
-					H( GetAttribute );
-					H( RemoveAttribute );
-					H( SetProperty );
-					H( GetProperty );
-					H( Focus );
-					default:
-						qRGnr();
-						break;
-					}
-				}
-#undef H
-			qRR;
-			qRT;
-			qRE;
-				return Return;
+		qRFH;
+		qRFB;
+			Return = Launch_( Id, Action );
+		qRFR;
+		qRFT;
+		qRFE(sclmisc::ErrFinal());
+			return Return;
 		}
 	public:
 		void reset( bso::sBool P = true )
