@@ -212,13 +212,15 @@ namespace fdr {
 #ifdef FDR__TS
 			sTID Old = Owner_;
 
-//			if ( Old != tht::Undefined ) {
-
+			if ( _Mutex != mtx::Undefined ) {
 				if ( TID == tht::Undefined )
 					TID = tht::GetTID();
 
+				if ( TryToLock( _Mutex ) != ( Owner_ == tht::Undefined ) )
+					qRFwk();
+
 				Owner_ = TID;
-//			}
+			}
 
 			return Old;
 #else
@@ -239,7 +241,7 @@ namespace fdr {
 		{
 			return IsLocked_( _Mutex );
 		}
-		void Unlock( void )
+		bso::sBool Unlock( qRPN )
 		{
 #ifdef FDR__TS
 			sTID Caller = tht::GetTID();
@@ -252,11 +254,19 @@ namespace fdr {
 					Owner_ = tht::Undefined;
 
 					Unlock_( _Mutex );
-				}
+
+					return true;
+				} else if ( Owner_ != tht::Undefined )
+					qRFwk();
+				else if ( ErrHandling == err::hThrowException )
+					qRFwk();
+
+				return false;
 			}
 # else
 			Unlock_( _Mutex );
 # endif
+			return true;
 		}
 		sTID Owner( void ) const
 		{
@@ -309,7 +319,7 @@ namespace fdr {
 				Amount = FDRRead( Wanted, Buffer );
 
 				if ( ( Amount == 0 ) && AutoDismissOnEOF_ && DismissPending_ )
-					Dismiss( true );	// Relaying dismissing to underlying level on EOF.
+					Dismiss( true, err::h_Default );	// Relaying dismissing to underlying level on EOF.
 
 				return Amount;
 			} else
@@ -437,7 +447,7 @@ namespace fdr {
 				return false;
 			} else {
 				if ( !DismissPending_ )
-					Unlock();
+					Unlock( err::h_Default);
 				return true;
 			}
 		}
@@ -446,14 +456,16 @@ namespace fdr {
 		virtual size__ FDRRead(
 			size__ Maximum,
 			byte__ *Buffer ) = 0;
-		virtual void FDRDismiss( bso::sBool Unlock ) = 0;
+		virtual bso::sBool FDRDismiss(
+			bso::sBool Unlock,
+			qRPN ) = 0;	// If 'Unlock' at true, returns true if unlocking succeed (i.e. was locked, and by the same thread), if 'ErrHandling' allows it.
 		virtual sTID FDRRTake( sTID Owner ) = 0;
 	public:
 		void reset( bso::bool__ P = true ) 
 		{
 			if ( P ) {
 				_flow_driver_base__::BaseTake( tht::Undefined );	// Prevent some unwanted error due to bad due to mutex owning.
-				Dismiss();
+				Dismiss( true, err::hUserDefined);	// Ignore errors.
 			}
 
 			_Cache = NULL;
@@ -492,17 +504,24 @@ namespace fdr {
 		{
 			return GetTID_( FDRRTake( Owner ), BaseTake( Owner ) );
 		}
-		void Dismiss( bso::sBool Unlock = true)	// When 'Unlock' is set to false, the 'Red_' value is NOT set to 0.
+		bso::sBool Dismiss(
+			bso::sBool Unlock,	// When 'Unlock' is set to false, the 'Red_' value is NOT set to 0.
+			qRPN )
 		{
+			bso::sBool Success = true;
+
 			if ( DismissPending_ ) {
 				if ( _Cache != NULL ) {
 				qRH
 				qRB
-					FDRDismiss( Unlock );
+					Success = FDRDismiss( Unlock, ErrHandling );
 				qRR
 				qRT
 					if ( Unlock )
-						this->Unlock();
+						if ( Success )
+							Success = this->Unlock( ErrHandling );
+						else
+							this->Unlock( err::hUserDefined );	// Ignore errors.
 				qRE
 				}
 
@@ -511,6 +530,8 @@ namespace fdr {
 
 				DismissPending_ = false;
 			}
+
+			return Success;
 		}
 		size__ Read(
 			size__ Wanted,
@@ -606,13 +627,15 @@ namespace fdr {
 			const byte__ *Buffer,
 			size__ Maximum ) = 0;
 		// Returns 'false' when underlying write fails, 'true' otherwise.
-		virtual void FDRCommit( bso::sBool Unlock ) = 0;
+		virtual bso::sBool FDRCommit(
+			bso::sBool Unlock,
+			qRPN ) = 0;	// If 'Unlock' at true, returns true if unlocking succeed (i.e. was locked, and by the same thread), if 'ErrHandling' allows it.
 		virtual sTID FDRWTake( sTID Owner ) = 0;
 	public:
 		void reset( bso::bool__ P = true ) 
 		{
 			if ( P ) {
-				Commit();
+				Commit( true, err::hUserDefined);	// Errors are ignored.
 			}
 
 			_Initialized = false;
@@ -629,17 +652,25 @@ namespace fdr {
 			CommitPending_ = false;
 			_flow_driver_base__::Init( ThreadSafety );
 		}
-		void Commit( bso::sBool Unlock = true )	// When 'Unlock' is set to false, the 'Written_' value is NOT set to 0.
+		bso::sBool Commit(
+			bso::sBool Unlock,	// When 'Unlock' is set to false, the 'Written_' value is NOT set to 0.
+			qRPN )
+
 		{
+			bso::sBool Success = true;
+
 			if ( CommitPending_ ) {
 				if ( _Initialized ) {
 				qRH
 				qRB
-					FDRCommit( Unlock );
+					Success = FDRCommit( Unlock, ErrHandling );
 				qRR
 				qRT
 					if ( Unlock )
-						this->Unlock();
+						if ( Success )
+							Success = this->Unlock( ErrHandling );
+						else
+							this->Unlock( err::hUserDefined );	// Errors are ignored.
 				qRE
 				}
 
@@ -648,6 +679,8 @@ namespace fdr {
 				if ( Unlock )
 					Written_ = 0;
 			}
+
+			return Success;
 		}
 		size__ Write(
 			const byte__ *Buffer,
@@ -791,7 +824,9 @@ namespace fdr {
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
 			fdr::byte__ *Buffer ) override;
-		virtual void FDRDismiss( bso::sBool Unlock ) override;
+		virtual bso::sBool FDRDismiss(
+			bso::sBool Unlock,
+			qRPN ) override;
 		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
 		{
 			return fdr::UndefinedTID;
@@ -818,7 +853,9 @@ namespace fdr {
 		virtual fdr::size__ FDRWrite(
 			const fdr::byte__ *Buffer,
 			fdr::size__ Maximum ) override;
-		virtual void FDRCommit( bso::sBool Unlock ) override;
+		virtual bso::sBool FDRCommit(
+			bso::sBool Unlock,
+			qRPN ) override;
 		virtual fdr::sTID FDRWTake( fdr::sTID Owner ) override
 		{
 			return fdr::UndefinedTID;
@@ -845,7 +882,9 @@ namespace fdr {
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
 			fdr::byte__ *Buffer ) override;
-		virtual void FDRDismiss( bso::sBool Unlock ) override;
+		virtual bso::sBool FDRDismiss(
+			bso::sBool Unlock,
+			qRPN ) override;
 		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
 		{
 			return fdr::UndefinedTID;
@@ -853,7 +892,9 @@ namespace fdr {
 		virtual fdr::size__ FDRWrite(
 			const fdr::byte__ *Buffer,
 			fdr::size__ Maximum ) override;
-		virtual void FDRCommit( bso::sBool Unlock ) override;
+		virtual bso::sBool FDRCommit(
+			bso::sBool Unlock,
+			qRPN ) override;
 		virtual fdr::sTID FDRWTake( fdr::sTID Owner ) override
 		{
 			return fdr::UndefinedTID;

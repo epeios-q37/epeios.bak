@@ -78,9 +78,13 @@ namespace iof {
 		{
 			return (fdr::size__)_output_driver__::Write( Tampon, Maximum );
 		}
-		virtual void FDRCommit( bso::sBool Unlock ) override
+		virtual bso::sBool FDRCommit(
+			bso::sBool Unlock,
+			qRPN ) override
 		{
-			return _output_driver__::_Commit();
+			_output_driver__::_Commit();
+
+			return true;
 		}
 		virtual fdr::sTID FDRWTake( fdr::sTID Owner ) override
 		{
@@ -170,9 +174,13 @@ namespace iof {
 		{
 			return _input_driver__::_Read( Maximum, Buffer );
 		}
-		virtual void FDRDismiss(  bso::sBool Unlock  ) override
+		virtual bso::sBool FDRDismiss(
+			bso::sBool Unlock,
+			qRPN ) override
 		{
 			_input_driver__::_Dismiss();
+
+			return true;
 		}
 		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
 		{
@@ -241,9 +249,13 @@ namespace iof {
 		{
 			return _output_driver__::_Write( Buffer, Maximum );
 		}
-		virtual void FDRCommit(  bso::sBool Unlock  ) override
+		virtual bso::sBool FDRCommit(
+			bso::sBool Unlock,
+			qRPN ) override
 		{
 			_output_driver__::_Commit();
+
+			return true;
 		}
 		virtual fdr::sTID FDRWTake( fdr::sTID Owner ) override
 		{
@@ -255,9 +267,13 @@ namespace iof {
 		{
 			return _input_driver__::_Read( Maximum, Buffer );
 		}
-		virtual void FDRDismiss(  bso::sBool Unlock  ) override
+		virtual bso::sBool FDRDismiss(
+			bso::sBool Unlock,
+			qRPN ) override
 		{
-			return _input_driver__::_Dismiss();
+			_input_driver__::_Dismiss();
+
+			return true;
 		}
 		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
 		{

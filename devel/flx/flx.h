@@ -133,8 +133,12 @@ namespace flx {
 
 			return Maximum;
 		}
-		virtual void FDRDismiss( bso::sBool Unlock ) override
-		{}
+		virtual bso::sBool FDRDismiss(
+			bso::sBool Unlock,
+			qRPN ) override
+		{
+			return true;
+		}
 		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
 		{
 			return fdr::UndefinedTID;
@@ -234,8 +238,12 @@ namespace flx {
 
 			return Maximum;
 		}
-		virtual void FDRCommit( bso::sBool Unlock ) override
-		{}
+		virtual bso::sBool FDRCommit(
+			bso::sBool Unlock,
+			qRPN ) override
+		{
+			return true;
+		}
 		virtual fdr::sTID FDRWTake( fdr::sTID Owner ) override
 		{
 			return fdr::UndefinedTID;
@@ -332,8 +340,12 @@ namespace flx {
 
 			return Maximum;
 		}
-		virtual void FDRDismiss( bso::sBool Unlock ) override
-		{}
+		virtual bso::sBool FDRDismiss(
+			bso::sBool Unlock,
+			qRPN ) override
+		{
+			return true;
+		}
 		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
 		{
 			return fdr::UndefinedTID;
@@ -458,8 +470,12 @@ namespace flx {
 
 			return Maximum;
 		}
-		virtual void FDRCommit( bso::sBool Unlock ) override
-		{}
+		virtual bso::sBool FDRCommit(
+			bso::sBool Unlock,
+			qRPN ) override
+		{
+			return true;
+		}
 		virtual fdr::sTID FDRWTake( fdr::sTID Owner ) override
 		{
 			return fdr::UndefinedTID;
@@ -597,8 +613,12 @@ namespace flx {
 
 			return Maximum;
 		}
-		virtual void FDRCommit( bso::sBool Unlock ) override
-		{}
+		virtual bso::sBool FDRCommit(
+			bso::sBool Unlock,
+			qRPN ) override
+		{
+			return true;
+		}
 		virtual fdr::sTID FDRWTake( fdr::sTID Owner ) override
 		{
 			return fdr::UndefinedTID;
@@ -672,8 +692,12 @@ namespace flx {
 
 			return 0;
 		}
-		virtual void FDRDismiss( bso::sBool Unlock ) override
-		{}
+		virtual bso::sBool FDRDismiss(
+			bso::sBool Unlock,
+			qRPN ) override
+		{
+			return true;
+		}
 		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
 		{
 			return fdr::UndefinedTID;
@@ -876,10 +900,12 @@ namespace flx {
 
 			return Size;
 		}
-		virtual void FDRCommit( bso::sBool Unlock ) override
+		virtual bso::sBool FDRCommit(
+			bso::sBool Unlock,
+			qRPN ) override
 		{
 			if ( !_PendingCommit )	// Pour viter qu'un 'commit( suite  un 'reset()' recrive un '0'.
-				return;
+				return true;
 
 			if ( _Flow == NULL )
 				qRFwk();
@@ -890,7 +916,9 @@ namespace flx {
 			_PendingCommit = false;
 
 			if ( CommitHandling_ == chPropagate )
-				_Flow->Commit( Unlock );
+				return _Flow->Commit( Unlock, ErrHandling );
+			else
+				return true;
 		}
 		virtual fdr::sTID FDRWTake( fdr::sTID Owner ) override
 		{
@@ -990,7 +1018,9 @@ namespace flx {
 
 			return Size;
 		}
-		virtual void FDRDismiss( bso::sBool Unlock ) override
+		virtual bso::sBool FDRDismiss(
+			bso::sBool Unlock,
+			qRPN ) override
 		{
 			if ( _Flow == NULL )
 				qRFwk();
@@ -1001,7 +1031,9 @@ namespace flx {
 			_AllRed = true;
 
 			if ( _DismissHandling == dhPropagate )
-				_Flow->Dismiss( Unlock );
+				return _Flow->Dismiss( Unlock, ErrHandling );
+			else
+				return true;
 		}
 		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
 		{
@@ -1261,9 +1293,11 @@ namespace flx {
 			return Maximum;
 
 		}
-		virtual void FDRDismiss( bso::sBool Unlock ) override
+		virtual bso::sBool FDRDismiss(
+			bso::sBool Unlock,
+			qRPN ) override
 		{
-			// Nothing to do.
+			return true;
 		}
 		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
 		{
@@ -1301,9 +1335,13 @@ namespace flx {
 		{
 			return IO().Write( Buffer, Maximum );
 		}
-		virtual void FDRCommit( bso::sBool Unlock ) override
+		virtual bso::sBool FDRCommit(
+			bso::sBool Unlock,
+			qRPN ) override
 		{
 			IO().Flush();
+
+			return true;
 		}
 		virtual fdr::sTID FDRWTake( fdr::sTID Owner ) override
 		{
@@ -1356,12 +1394,16 @@ namespace flx {
 		virtual fdr::size__ FDRWrite(
 			const fdr::byte__ *Buffer,
 			fdr::size__ Maximum ) override;
-		virtual void FDRCommit( bso::sBool Unlock ) override
+		virtual bso::sBool FDRCommit(
+			bso::sBool Unlock,
+			qRPN ) override
 		{
 			if ( _In != UndefinedPipeDescriptor )
 				Close_( _In );
 
 			_In = UndefinedPipeDescriptor;
+
+			return true;
 		}
 		virtual fdr::sTID FDRWTake( fdr::sTID Owner ) override
 		{
@@ -1370,9 +1412,11 @@ namespace flx {
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
 			fdr::byte__ *Buffer ) override;
-		virtual void FDRDismiss( bso::sBool Unlock ) override
+		virtual bso::sBool FDRDismiss(
+			bso::sBool Unlock,
+			qRPN ) override
 		{
-			// Nothing to do.
+			return true;
 		}
 		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
 		{
@@ -1465,12 +1509,14 @@ namespace flx {
 
 			return Amount;
 		}
-		virtual void FDRDismiss( bso::sBool Unlock ) override
+		virtual bso::sBool FDRDismiss(
+			bso::sBool Unlock,
+			qRPN ) override
 		{
 			if ( Size_ != 0 )
 				qRFwk();
 
-			Flow_.Dismiss( Unlock );
+			return Flow_.Dismiss( Unlock, ErrHandling );
 		}
 		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
 		{
@@ -1593,12 +1639,16 @@ namespace flx {
 		virtual fdr::sSize FDRRead(
 			fdr::sSize Maximum,
 			fdr::sByte *Buffer ) override;
-		virtual void FDRDismiss( bso::sBool Unlock ) override;
+		virtual bso::sBool FDRDismiss(
+			bso::sBool Unlock,
+			qRPN ) override;
 		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override;
 		virtual fdr::sSize FDRWrite(
 			const fdr::sByte *Buffer,
 			fdr::sSize Maximum ) override;
-		virtual void FDRCommit( bso::sBool Unlock ) override;
+		virtual bso::sBool FDRCommit(
+			bso::sBool Unlock,
+			qRPN ) override;
 		virtual fdr::sTID FDRWTake( fdr::sTID Owner ) override;
 		void Init_(
 			fdr::rRDriver *RDriver,
@@ -1855,8 +1905,12 @@ namespace flx {
 		{
 			return C_().Read( Buffer, Wanted );
 		}
-		virtual void FDRDismiss( bso::sBool Unlock ) override
-		{}
+		virtual bso::sBool FDRDismiss(
+			bso::sBool Unlock,
+			qRPN ) override
+		{
+			return true;
+		}
 		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
 		{
 			return fdr::UndefinedTID;
@@ -1896,9 +1950,13 @@ namespace flx {
 
 			return Amount;
 		}
-		virtual void FDRCommit( bso::sBool Unlock ) override
+		virtual bso::sBool FDRCommit(
+			bso::sBool Unlock,
+			qRPN ) override
 		{
 			C_().Write( NULL, 0 );
+
+			return true;
 		}
 		virtual fdr::sTID FDRWTake( fdr::sTID Owner )  override
 		{

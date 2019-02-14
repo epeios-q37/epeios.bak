@@ -1168,9 +1168,11 @@ namespace {
 
 			return Size;
 		}
-		virtual void FDRDismiss( bso::sBool Unlock ) override
+		virtual bso::sBool FDRDismiss(
+			bso::sBool Unlock,
+			qRPN ) override
 		{
-			F_().Dismiss( Unlock );
+			return F_().Dismiss( Unlock, ErrHandling );
 		}
 		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
 		{

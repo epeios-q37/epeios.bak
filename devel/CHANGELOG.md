@@ -7,6 +7,37 @@
 - [trvl]: trivial modifications;
 - [rvrt]: reverting modifications;
 
+## 2019-02-14
+
+- CDGB64:
+  - [adpt]
+- CNVFDR:
+  - [adpt]
+- CRPTGR:
+  - [adpt]
+- CSDMXC:
+  - [adpt]
+- FDR:
+  - some redesigning,
+- FLW:
+  - [adpt]
+- FLX:
+  - [adpt]
+- IOF:
+  - [adpt]
+- LOGQ:
+  - [adpt]
+- LTF:
+  - [adpt]
+- SCK:
+  - [adpt]
+- TXF:
+  - [adpt]
+- XML:
+  - [adpt]
+- XPP:
+  - [adpt]
+
 ## 2019-02-13
 
 - FDR:

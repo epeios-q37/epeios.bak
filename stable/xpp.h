@@ -735,8 +735,12 @@ namespace xpp {
 		virtual sdr::size__ FDRRead(
 			sdr::size__ Maximum,
 			sdr::byte__ *Buffer ) override;
-		virtual void FDRDismiss( bso::sBool Unlock ) override
-		{}
+		virtual bso::sBool FDRDismiss(
+			bso::sBool Unlock,
+			qRPN ) override
+		{
+			return true;
+		}
 		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
 		{
 			return _Parser().Flow().UndelyingFlow().Take( Owner );

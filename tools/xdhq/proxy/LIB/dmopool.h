@@ -110,16 +110,21 @@ namespace dmopool {
 
 			return Shared_.Driver->Read( Maximum, Buffer, fdr::b_Relay );
 		}
-		virtual void FDRDismiss( bso::sBool Unlock ) override
+		virtual bso::sBool FDRDismiss(
+			bso::sBool Unlock,
+			qRPN ) override
 		{
 			if ( !Shared_.IsValid() )
-				return;
+				return true;
 
-			Shared_.Driver->Dismiss( Unlock );
+			if ( Shared_.Driver->Dismiss( Unlock, ErrHandling ) ) {
+				ReadInProgress_ = false;
 
-			ReadInProgress_ = false;
+				Shared_.Switch->Unblock();
 
-			Shared_.Switch->Unblock();
+				return true;
+			} else
+				return false;
 		}
 		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
 		{
@@ -158,14 +163,18 @@ namespace dmopool {
 		qRE;
 			return Maximum;
 		}
-		virtual void FDRCommit( bso::sBool Unlock ) override
+		virtual bso::sBool FDRCommit(
+			bso::sBool Unlock,
+			qRPN ) override
 		{
 			if ( !Shared_.IsValid() )
-				return;
+				return true;
 
-			Shared_.Driver->Commit( Unlock );
-
-			IdSent_ = false;
+			if ( Shared_.Driver->Commit( Unlock, ErrHandling ) ) {
+				IdSent_ = false;
+				return true;
+			} else
+				return false;
 		}
 		virtual fdr::sTID FDRWTake( fdr::sTID Owner ) override
 		{

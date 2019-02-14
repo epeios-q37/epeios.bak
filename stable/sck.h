@@ -289,8 +289,12 @@ namespace sck {
 
 			return Maximum;
 		}
-		virtual void FDRDismiss( bso::sBool Unlock ) override
-		{}
+		virtual bso::sBool FDRDismiss(
+			bso::sBool Unlock,
+			qRPN ) override
+		{
+			return true;
+		}
 		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
 		{
 			return fdr::UndefinedTID;
@@ -312,8 +316,12 @@ namespace sck {
 
 			return Maximum;
 		}
-		virtual void FDRCommit( bso::sBool Unlock ) override
-		{}
+		virtual bso::sBool FDRCommit(
+			bso::sBool Unlock,
+			qRPN ) override
+		{
+			return true;
+		}
 		virtual fdr::sTID FDRWTake( fdr::sTID Owner ) override
 		{
 			return fdr::UndefinedTID;

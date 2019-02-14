@@ -66,7 +66,9 @@ namespace logq {
 
 			return Maximum;
 		}
-		virtual void FDRCommit( bso::sBool Unlock ) override
+		virtual bso::sBool FDRCommit(
+			bso::sBool Unlock,
+			qRPN ) override
 		{
 			tol::bDate Date;
 			tol::bTime Time;
@@ -80,7 +82,8 @@ namespace logq {
 
 				if ( Changed_ ) {
 					LTFlow_ << txf::nl;
-					LTFlow_.Commit( Unlock );
+					if ( !LTFlow_.Commit( Unlock, ErrHandling ) )
+						return false;
 				}
 
 				LTFlow_ << '(';
@@ -122,8 +125,9 @@ namespace logq {
 
 				Pos_ = 0;
 
-				LTFlow_.Commit( Unlock );
-			}
+				return LTFlow_.Commit( Unlock, ErrHandling );
+			} else
+				return true;
 		}
 		virtual fdr::sTID FDRWTake( fdr::sTID Owner ) override
 		{

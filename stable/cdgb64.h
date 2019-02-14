@@ -172,15 +172,17 @@ namespace cdgb64 {
 
 			return Amount;
 		}
-		virtual void FDRCommit( bso::sBool Unlock ) override
+		virtual bso::sBool FDRCommit(
+			bso::sBool Unlock,
+			qRPN ) override
 		{
 			flw::byte__ Result[4];
 
 			if ( _Flow == NULL )
-				return;
+				return true;
 
 			if ( _Amount == CDGB64__PROCESSED )
-				return;
+				return true;
 
 			Encode_( _Cache, Flavor_, Result );
 			memset(_Cache, 0, sizeof( _Cache ) );
@@ -202,7 +204,7 @@ namespace cdgb64 {
 
 			_Amount = CDGB64__PROCESSED;
 
-			_Flow->Commit( Unlock );
+			return _Flow->Commit( Unlock, ErrHandling );
 		}
 		virtual fdr::sTID FDRWTake( fdr::sTID Owner ) override
 		{
@@ -212,7 +214,7 @@ namespace cdgb64 {
 		void reset( bso::bool__ P = true )
 		{
 			if ( P )
-				Commit( true );
+				Commit( true, err::hUserDefined );	// Errors are ignored.
 
 			_oflow_driver___::reset( P );
 			_Amount = CDGB64__PROCESSED;
@@ -232,7 +234,7 @@ namespace cdgb64 {
 			eFlavor Flavor,
 			fdr::thread_safety__ ThreadSafety = fdr::ts_Default )
 		{
-			Commit( true );
+			Commit( true, err::hUserDefined );	// Errors are ignored.
 
 			_Amount = CDGB64__PROCESSED;
 			_Flow = &Flow;
@@ -309,9 +311,11 @@ namespace cdgb64 {
 
 			return Amount;
 		}
-		virtual void FDRDismiss( bso::sBool Unlock ) override
+		virtual bso::sBool FDRDismiss(
+			bso::sBool Unlock,
+			qRPN ) override
 		{
-			F_().Dismiss( Unlock );
+			return F_().Dismiss( Unlock, ErrHandling );
 		}
 		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
 		{
@@ -451,12 +455,14 @@ namespace cdgb64 {
 
 			return 3 * ( Amount >> 2 ) + ( ( Amount & 3 ) > 1 ? ( Amount & 3 ) - 1 : 0 ); 
 		}
-		virtual void FDRDismiss( bso::sBool Unlock ) override
+		virtual bso::sBool FDRDismiss(
+			bso::sBool Unlock,
+			qRPN ) override
 		{
 			if ( _Size != 0 )
 				qRFwk();
 
-			SkippingIFlow_.Dismiss( Unlock );
+			return SkippingIFlow_.Dismiss( Unlock, ErrHandling );
 		}
 		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
 		{

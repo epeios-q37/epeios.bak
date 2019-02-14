@@ -122,9 +122,11 @@ namespace flw {
 			bso::bool__ Adjust,
 			bso::bool__ &CacheIsEmpty );
 # endif
-		void _Dismiss( bso::sBool Unlock )
+		bso::sBool _Dismiss(
+			bso::sBool Unlock,
+			qRPN )
 		{
-			_D().Dismiss( Unlock );
+			return _D().Dismiss( Unlock, ErrHandling );
 		}
 		void Init( fdr::iflow_driver_base___ &Driver )	// To force the use of the 'Dressed' version.
 		{
@@ -135,7 +137,7 @@ namespace flw {
 		{
 			if ( P ) {
 				if ( _Driver != NULL )
-					_Dismiss( true );
+					_Dismiss( true, err::hUserDefined );	// Errors are ignored.
 			}
 
 			_Driver = NULL;
@@ -221,10 +223,14 @@ namespace flw {
 		{
 			return _D().AmountRed();
 		}
-		void Dismiss( bso::sBool Unlock = true )
+		bso::sBool Dismiss(
+			bso::sBool Unlock = true,
+			qRPD )
 		{
 			if ( _Driver != NULL )
-				_Dismiss( Unlock );
+				return _Dismiss( Unlock, ErrHandling );
+			else
+				return true;
 		}
 		bso::bool__ IsInitialized( void ) const
 		{
@@ -410,16 +416,16 @@ namespace flw {
 
 			if ( DumpCache_( &WasEmpty, ErrHandling ) ) {
 				if ( !WasEmpty )
-					_D().Commit( Unlock );
-				return true;
-			} else
-				return false;
+					return _D().Commit( Unlock, ErrHandling );
+				else
+					return true;
+			} 
 
-			return false;	// To avoid a warning'.
+			return false;
 		}
-		void _Unlock( void )
+		bso::sBool _Unlock( qRPN )
 		{
-			_D().Unlock();
+			return _D().Unlock( ErrHandling );
 		}
 		// Put up to 'Amount' bytes from 'Buffer'. Return number of bytes written.
 		size__ _WriteUpTo(
@@ -445,7 +451,7 @@ namespace flw {
 		{
 			if ( P ) {
 				if ( _Size != _Free )
-					Commit();
+					Commit(true, err::hUserDefined);	// Errors are ignored.
 			}
 
 			_Driver = NULL;
@@ -459,7 +465,7 @@ namespace flw {
 			size__ Size )
 		{
 			if ( _Size != _Free )
-				Commit();
+				Commit( true, err::hUserDefined );	// Errors are ignored.
 
 			_Driver = &Driver;
 			_Cache = Cache;
@@ -513,15 +519,10 @@ namespace flw {
 			bso::sBool Unlock = true,
 			qRPD )
 		{
-			if ( _Driver != NULL ) {
-				if ( _Commit( Unlock, ErrHandling ) )
-					return true;
-				else
-					return false;
-			} else
+			if ( _Driver != NULL )
+				return _Commit( Unlock, ErrHandling );
+			else
 				return true;
-
-			return false;	// To avoid a warning.
 		}
 		//f Return the amount of data written since last 'Synchronize()'.
 		size__ AmountWritten( void ) const

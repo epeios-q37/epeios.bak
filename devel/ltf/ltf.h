@@ -87,11 +87,14 @@ namespace ltf {
 
 			return Maximum;
 		}
-		virtual void FDRCommit( bso::sBool Unlock ) override
+		virtual bso::sBool FDRCommit(
+			bso::sBool Unlock,
+			qRPN ) override
 		{
 			_TF().Put(_Data, _Amount );
 			_Amount = 0;
-			_TF().Commit( Unlock );
+
+			return _TF().Commit( Unlock, ErrHandling );
 		}
 		virtual fdr::sTID FDRWTake( fdr::sTID Owner ) override
 		{

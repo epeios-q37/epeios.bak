@@ -143,9 +143,11 @@ namespace cnvfdr {
 		qRE;
 			return Maximum;
 		}
-		virtual void FDRDismiss( bso::sBool Unlock ) override
+		virtual bso::sBool FDRDismiss(
+			bso::sBool Unlock,
+			qRPN ) override
 		{
-			return D_().Dismiss( Unlock );
+			return D_().Dismiss( Unlock, ErrHandling );
 		}
 		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
 		{
@@ -177,9 +179,11 @@ namespace cnvfdr {
 			return Maximum;
 		}
 		// Returns 'false' when underlying write fails, 'true' otherwise.
-		virtual void FDRCommit( bso::sBool Unlock ) override
+		virtual bso::sBool FDRCommit(
+			bso::sBool Unlock,
+			qRPN ) override
 		{
-			D_().Commit( Unlock );
+			return D_().Commit( Unlock, ErrHandling );
 		}
 		virtual fdr::sTID FDRWTake( fdr::sTID Owner ) override
 		{

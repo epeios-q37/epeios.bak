@@ -82,9 +82,11 @@ namespace crptgr {
 
 			return Amount;
 		}
-		virtual void FDRCommit(  bso::sBool Unlock  ) override
+		virtual bso::sBool FDRCommit(
+			bso::sBool Unlock,
+			qRPN ) override
 		{
-			_Flow->Commit( Unlock );
+			return _Flow->Commit( Unlock, ErrHandling );
 		}
 		virtual fdr::sTID FDRWTake( fdr::sTID Owner ) override
 		{
@@ -193,9 +195,11 @@ namespace crptgr {
 
 			return Maximum;
 		}
-		virtual void FDRDismiss(  bso::sBool Unlock  ) override
+		virtual bso::sBool FDRDismiss(
+			bso::sBool Unlock,
+			qRPN ) override
 		{
-			_Flow->Dismiss( Unlock );
+			return _Flow->Dismiss( Unlock, ErrHandling );
 		}
 		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
 		{

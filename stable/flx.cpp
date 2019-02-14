@@ -307,7 +307,9 @@ qRE
 	return Maximum;
 }
 
-void flx::rRWMonitor::FDRDismiss( bso::sBool Unlock )
+bso::sBool flx::rRWMonitor::FDRDismiss(
+	bso::sBool Unlock,
+	qRPN )
 {
 	if ( Undismissed_ ) {
 		if ( M_().In.After != NULL )
@@ -317,7 +319,7 @@ void flx::rRWMonitor::FDRDismiss( bso::sBool Unlock )
 
 	Undismissed_ = false;
 
-	return ID_().Dismiss( Unlock );
+	return ID_().Dismiss( Unlock, ErrHandling );
 }
 
 fdr::sTID flx::rRWMonitor::FDRRTake( fdr::sTID Owner )
@@ -352,7 +354,9 @@ fdr::sSize flx::rRWMonitor::FDRWrite(
 	return Maximum;
 }
 
-void flx::rRWMonitor::FDRCommit( bso::sBool Unlock )
+bso::sBool flx::rRWMonitor::FDRCommit(
+	bso::sBool Unlock,
+	qRPN )
 {
 	if ( IsOut_() ) {
 		if ( Uncommited_ ) {
@@ -362,8 +366,9 @@ void flx::rRWMonitor::FDRCommit( bso::sBool Unlock )
 		}
 	}
 
-	OD_().Commit( Unlock );
 	Uncommited_ = false;
+
+	return OD_().Commit( Unlock, ErrHandling );
 }
 
 fdr::sTID flx::rRWMonitor::FDRWTake( fdr::sTID Owner )

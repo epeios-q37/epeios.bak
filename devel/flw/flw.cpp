@@ -123,7 +123,7 @@ qRB
 #endif
 qRR
 	_Size = _Free = 0;	// Pour viter toute nouvelle criture dans le cache. La prochaine tentative gnrera une erreur.
-	_Unlock();	
+	_Unlock( err::hUserDefined );		// Errors are ignored.
 qRT
 qRE
 	return Amount;

@@ -410,7 +410,7 @@ qRE
 		qRR;
 		qRT;
 			if ( Unlocked )
-				Flow_.IDriver().Unlock();
+				Flow_.IDriver().Unlock( err::h_Default );
 		qRE;
 			return Return;
 		}
@@ -444,17 +444,20 @@ qRE
 		qRE
 			return Amount;
 		}
-		virtual void FDRCommit( bso::sBool Unlock ) override
+		virtual bso::sBool FDRCommit(
+			bso::sBool Unlock,
+			qRPN ) override
 		{
 		qRH
 		qRB
 			if ( UP_ != NULL )
-				if ( !Commit_( Unlock ) )
+				if ( !Commit_( Unlock ) )	// This 'Commit_' is specific to this object.
 					GiveUp_();
 		qRR
 			GiveUp_();
 		qRT
 		qRE
+			return true;
 		}
 		virtual fdr::sTID FDRWTake( fdr::sTID Owner ) override
 		{
@@ -482,12 +485,15 @@ qRE
 		qRE
 			return Amount;
 		}
-		virtual void FDRDismiss( bso::sBool Unlock ) override
+		virtual bso::sBool FDRDismiss(
+			bso::sBool Unlock,
+			qRPN ) override
 		{
+			bso::sBool Success = true;
 		qRH
 		qRB
 			if ( UP_ != NULL ) {
-				Driver_().Dismiss( Unlock );
+				Success = Driver_().Dismiss( Unlock, ErrHandling );
 				C_().Release( UP_ );
 			}
 
@@ -496,6 +502,7 @@ qRE
 			GiveUp_();
 		qRT
 		qRE
+			return Success;
 		}
 		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
 		{
