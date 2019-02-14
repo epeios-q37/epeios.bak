@@ -337,6 +337,10 @@ namespace tht {
 
 			mtx::Lock( Main_ );
 			Log_( __LOC__ );
+
+			// To be sure that we are no more in the 'Unblock()' function.
+			Mutex.Lock();
+			Mutex.Unlock();
 		qRR
 		qRT
 		qRE

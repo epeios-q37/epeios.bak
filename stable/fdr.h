@@ -230,8 +230,10 @@ namespace fdr {
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			if ( P )
-				Delete_( _Mutex );
+			if ( P ) {
+				if ( _Mutex != mtx::Undefined )
+					Delete_( _Mutex );
+			}
 
 			Owner_ = tht::Undefined;
 			_Mutex = NULL;
