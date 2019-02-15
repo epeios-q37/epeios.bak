@@ -127,10 +127,8 @@ namespace mtx {
 			if ( IsDisabled_() )
 				return;
 
-			if ( IsLocked_() ) {
-				while ( State_ != sFree )	// Handling of spurious awake.
-					Core_.wait( Lock );
-			}
+			if ( IsLocked_() )
+				Core_.wait( Lock, [this]() {return State_ == sFree;} );	// third parameter to handle spurious awake.
 
 			State_ = sLocked;
 		}
@@ -147,7 +145,7 @@ namespace mtx {
 				return true;
 
 			if ( IsLocked_() ) {
-				if ( ( TimeOut == 0 ) || !Core_.wait_for( Lock, std::chrono::milliseconds( TimeOut ), [this]() {return State_ != sFree;} ) )	// third parameter to handle spurious awake.
+				if ( ( TimeOut == 0 ) || !Core_.wait_for( Lock, std::chrono::milliseconds( TimeOut ), [this]() {return State_ == sFree;} ) )	// third parameter to handle spurious awake.
 					return false;
 			}
 
@@ -171,6 +169,8 @@ namespace mtx {
 			}
 
 			State_ = sFree;
+
+			Lock.unlock();
 
 			Core_.notify_one();
 

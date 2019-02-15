@@ -74,6 +74,7 @@ void tht::Defer( void )
 
 void tht::rBlocker::Log_( const char *Loc )
 {
+//	return;
 qRH;
 	txf::rWFlow Flow;
 qRB;

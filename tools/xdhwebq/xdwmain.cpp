@@ -84,36 +84,42 @@ namespace {
 			bso::bool__ Continue = true;
 		qRH;
 			session::row__ Row = qNIL;
-			lck::exclusive_access___<session::dSessions> Sessions;
+			lck::rReadOnlyAccess<session::dSessions> ROSessions;
+			lck::rReadWriteAccess<session::dSessions> RWSessions;
 			session::rSession *Session = NULL;
 			err::buffer__ ERRBuffer;
 			str::string Token, AbortMessage;
 			xdhujp::sProxyCallback *ProxyCallback = NULL;
 		qRB;
-			Sessions.Init( RawSessions );
+			RWSessions.Init( RawSessions );
+			ROSessions.Init( RawSessions );
 
 			Token.Init();
 			Pairs.GetValue( str::wString( "_token" ), Token );
 
 			if ( SessionId.Amount() == 0 ) {
 				SessionId.Init();
-				Row = Sessions().New( SessionId, Language, Token, ProxyCallback);
-				Session = Sessions().Sessions( Row );
-				Sessions.Release();
+				Row = RWSessions().New( SessionId, Language, Token, ProxyCallback);
+				Session = RWSessions().Sessions( Row );
+				RWSessions.Release();
 				if ( !Session->Initialize( ProxyCallback, Language, Token ) ) {
-					Sessions().Close( Row );
+					RWSessions().Close( Row );
+					RWSessions.Release();
 					Session = NULL;
 					Row = qNIL;
 				}
 			} else {
-				Row = Sessions().Search( SessionId );
+				Row = ROSessions().Search( SessionId );
+				ROSessions.Release();
 			}
 
 			if ( Row != qNIL ) {
-				Session = Sessions().Sessions( Row );
+				Session = ROSessions().Sessions( Row );
+				ROSessions.Release();
 
 				if ( !Session->IsAlive() ) {
-					Sessions().Close( Row );
+					RWSessions().Close( Row );
+					RWSessions.Release();
 					Row = qNIL;
 					Session = NULL;
 				}
@@ -155,7 +161,7 @@ namespace {
 			if ( Session != NULL )
 				if ( Session->IsLocked() )
 					Session->Unlock();
-			Sessions.reset();	// To unlock 'Sessions'.
+			// Sessions.reset();	// To unlock 'Sessions'.
 		qRE;
 			return Continue;
 		}

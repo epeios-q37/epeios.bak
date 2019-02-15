@@ -339,8 +339,8 @@ namespace tht {
 			Log_( __LOC__ );
 
 			// To be sure that we are no more in the 'Unblock()' function.
-			Mutex.Lock();
-			Mutex.Unlock();
+//			Mutex.Lock();
+//			Mutex.Unlock();
 		qRR
 		qRT
 		qRE
@@ -348,11 +348,15 @@ namespace tht {
 		void Unblock( void )
 		{
 		qRH
-			mtx::rMutex Mutex;
+			//			mtx::rMutex Mutex;
+			bso::sBool Locked = false;
 		qRB
-			Mutex.InitAndLock( Local_ );
+			mtx::Lock( Local_ );
+			Locked = true;
 
 			if ( mtx::IsLocked( Main_ ) ) {
+				mtx::Unlock( Local_ );
+				Locked = false;
 				mtx::Unlock( Main_ );
 				Log_( __LOC__ );
 			}
@@ -360,6 +364,8 @@ namespace tht {
 			Log_( __LOC__ );
 		qRR
 		qRT
+			if ( Locked )
+				mtx::Unlock( Local_ );
 		qRE
 		}
 	};
