@@ -24,10 +24,3 @@
 #include "tht.h"
 
 using namespace mtx;
-
-void mtx::Defer_( void )
-{
-	tol::InitializeRandomGenerator();
-	tht::Defer( ( (bso::uint__)tht::GetTID() + rand() ) % 5 + 1 ); // 'rand() donne-t'il la mme suite dans des coeurs diffrents ?
-}
-

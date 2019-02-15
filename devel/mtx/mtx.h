@@ -65,10 +65,11 @@ namespace mtx {
 		s_Undefined
 	};
 
-	//t A mutex handler.
+	// NOTA: 'lock_guard' is not always used in case of the use of the 'setjmp' version of the error (ERR) library.
 	typedef struct _mutex__ {
 	private:
-		std::mutex Lock_;
+		std::mutex Mutex_;
+		std::condition_variable Core_;
 		eState_ State_;
 	private:
 		bso::bool__ IsReleased_( void ) const
@@ -87,11 +88,9 @@ namespace mtx {
 #ifdef MTX__CONTROL
 		void Release( void )
 		{
-			Lock_.lock();
+			std::lock_guard<decltype(Mutex_)> Lock( Mutex_ );
 
 			State_ = sReleased;
-
-			Lock_.unlock();
 		}
 		bso::bool__ IsReleased( void ) const
 		{
@@ -104,72 +103,76 @@ namespace mtx {
 		}
 		bso::bool__ IsLocked( void )
 		{
-			bso::sBool Return = false;
-
-			Lock_.lock();
+			std::unique_lock<decltype(Mutex_)> Lock( Mutex_ );
 #ifdef MTX__CONTROL
 			if ( IsReleased_() ) {
-				Lock_.unlock();
+				Lock.unlock();	// In case of the use of the 'setjmp' version or the error library.
 				qRFwk();
 			}
 #endif
-			if ( IsDisabled_() ) {
-				Lock_.unlock();
+			if ( IsDisabled_() )
 				return false;
-			}
 
-			Return = IsLocked_();
-
-			Lock_.unlock();
-
-			return Return;
+			return IsLocked_();
 		}
-		bso::bool__ TryToLock( void )
+		void Lock( void )
 		{
-			Lock_.lock();
+			std::unique_lock<decltype(Mutex_)> Lock( Mutex_ );
 #ifdef MTX__CONTROL
 			if ( IsReleased_() ) {
-				Lock_.unlock();
+				Lock.unlock();	// In case of the use of the 'setjmp' version or the error library.
 				qRFwk();
 			}
 #endif
-			if ( IsDisabled_() ) {
-				Lock_.unlock();
-				return true;
-			}
+			if ( IsDisabled_() )
+				return;
 
 			if ( IsLocked_() ) {
-				Lock_.unlock();
-				return false;
+				while ( State_ != sFree )	// Handling of spurious awake.
+					Core_.wait( Lock );
 			}
 
 			State_ = sLocked;
+		}
+		bso::bool__ TryToLock( tol::sDelay TimeOut )
+		{
+			std::unique_lock<decltype(Mutex_)> Lock( Mutex_ );
+#ifdef MTX__CONTROL
+			if ( IsReleased_() ) {
+				Lock.unlock();	// In case of the use of the 'setjmp' version or the error library.
+				qRFwk();
+			}
+#endif
+			if ( IsDisabled_() )
+				return true;
 
-			Lock_.unlock();
+			if ( IsLocked_() ) {
+				if ( ( TimeOut == 0 ) || !Core_.wait_for( Lock, std::chrono::milliseconds( TimeOut ), [this]() {return State_ != sFree;} ) )	// third parameter to handle spurious awake.
+					return false;
+			}
+
+			State_ = sLocked;
 
 			return true;
 		}
 		bso::sBool Unlock( qRPN )
 		{
-			Lock_.lock();
+			std::unique_lock<decltype(Mutex_)> Lock( Mutex_ );
 
-			if ( IsDisabled_() ) {
-				Lock_.unlock();
+			if ( IsDisabled_() )
 				return true;
-			}
 
 			if ( !IsLocked_() ) {
-				Lock_.unlock();
-
-				if ( ErrHandling == err::hThrowException )
+				if ( ErrHandling == err::hThrowException ) {
+					Lock.unlock();	// In case of the use of the 'setjmp' version or the error library.
 					qRFwk();
-				else
+				} else
 					return false;
 			}
 
 			State_ = sFree;
 
-			Lock_.unlock();
+			Core_.notify_one();
 
 			return true;
 		}
@@ -208,48 +211,38 @@ namespace mtx {
 	}
 
 
-	inline bso::bool__ TryToLock( handler___ Handler)
+	inline bso::bool__ TryToLock(
+		handler___ Handler,
+		tol::sDelay TimeOut = 0 )	// Returns 'true' if lock successful, or return false after timeout.
 	{
 #ifdef MTX_DBG
 		if ( Handler == NULL )
 			qRFwk();
 #endif
-		return Handler->TryToLock();
+		return Handler->TryToLock( TimeOut );
 	}
 
-	void Defer_( void );
-
-	// Wait until mutex unlocked.
-	inline bso::sBool WaitUntilUnlocked_(
-		handler___ Handler,
-		tol::sDelay Timeout ) // If == '0' or lock succeed, returns always 'true', or returns false after 'Timeout' ms.
+	inline void Lock( handler___ Handler )
 	{
-		tol::sTimer Timer;
-		bso::sBool NoTimeout = true;
-
-		Timer.Init( Timeout );
-
-		Timer.Launch();
-
-		while( !TryToLock( Handler ) && ( NoTimeout = !Timer.IsElapsed() ) )
-			Defer_();
-
-		return NoTimeout;
+#ifdef MTX_DBG
+		if ( Handler == NULL )
+			qRFwk();
+#endif
+		return Handler->Lock();
 	}
 
-	// Lock 'Handler'. Blocks until lock succeed or after 'Timeout' ms.
 	inline bso::sBool Lock(
 		handler___ Handler,
-		tol::sDelay Timeout = 0 ) // If == '0' or lock succeed, returns always 'true', or returns false after 'Timeout' ms.
+		tol::sDelay TimeOut )	// Returns 'true' as soon as the lock succeeds, or false if timeout expired.
 	{
 #ifdef MTX_DBG
 		if ( Handler == NULL )
 			qRFwk();
 #endif
-		if ( !TryToLock( Handler ) )
-			return WaitUntilUnlocked_( Handler, Timeout );
-		else
-			return true;
+		if ( TimeOut == 0 )
+			qRFwk();
+
+		return Handler->TryToLock( TimeOut );
 	}
 
 	//f Unlock 'Handler'.
@@ -317,13 +310,19 @@ namespace mtx {
 			Init( Handler );
 			Lock();
 		}
-		bso::bool__ TryToLock( void )
+		bso::bool__ TryToLock( tol::sDelay TimeOut = 0 )	// Returns 'true' if lock successful, or return false after timeout.
 		{
-			return mtx::TryToLock( H_() );
+			return mtx::TryToLock( H_(), TimeOut );
 		}
-		bso::sBool Lock( tol::sDelay Timeout = 0 ) // If == '0' or lock succeed, returns always 'true', or returns false after 'Timeout' ms.
+		void Lock( void )
 		{
 			return mtx::Lock( H_() );
+		}
+		bso::sBool Lock(
+			handler___ Handler,
+			tol::sDelay TimeOut )	// Returns 'true' as soon as the lock succeeds, or false if timeout expired.
+		{
+			return mtx::Lock( H_(), TimeOut );
 		}
 		bso::sBool Unlock( qRPD )
 		{

@@ -7,6 +7,13 @@
 - [trvl]: trivial modifications;
 - [rvrt]: reverting modifications;
 
+## 2019-02-15
+
+- MTX:
+  - redesign,
+- TOL:
+  - [stdz],
+
 ## 2019-02-14
 
 - CDGB64:
