@@ -920,6 +920,7 @@ namespace {
 		}
 		void Log_( const str::dString &Message )
 		{
+			return;
 		qRH;
 			logq::rLogRack<> Log;
 		qRB;

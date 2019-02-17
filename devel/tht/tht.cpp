@@ -79,7 +79,7 @@ qRH;
 	txf::rWFlow Flow;
 qRB;
 	Flow.Init( cio::GetOutDriver() );
-	Flow << Loc << this << txf::nl << txf::commit;
+	Flow << Loc << this << " ; " << tht::GetTID() << txf::nl << txf::commit;
 qRR;
 qRT;
 qRE;

@@ -249,7 +249,7 @@ namespace txf {
 		{
 #ifdef TXF_DBG
 			if ( _Flow == NULL )
-				qRFwk();
+				qRFwk();	// If this occurs with the console I/O (COut(F), CIn(F),CErr(F)), this means that the CIO module is not initialized.
 #endif
 			return *_Flow;
 		}

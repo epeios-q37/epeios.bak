@@ -56,10 +56,14 @@
     <ClCompile Include="..\..\stable\ags.cpp" />
     <ClCompile Include="..\..\stable\bso.cpp" />
     <ClCompile Include="..\..\stable\dtfptb.cpp" />
+    <ClCompile Include="..\..\stable\fdr.cpp" />
+    <ClCompile Include="..\..\stable\flx.cpp" />
+    <ClCompile Include="..\..\stable\mtk.cpp" />
     <ClCompile Include="..\..\stable\mtx.cpp" />
     <ClCompile Include="..\..\stable\ntvstr.cpp" />
     <ClCompile Include="..\..\stable\str.cpp" />
     <ClCompile Include="..\..\stable\tht.cpp" />
+    <ClCompile Include="..\..\stable\txf.cpp" />
     <ClCompile Include="..\..\stable\uys.cpp" />
     <ClCompile Include="skt.cpp" />
     <ClCompile Include="skt_test.cpp" />

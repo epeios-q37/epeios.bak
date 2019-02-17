@@ -61,7 +61,9 @@ int main( int argc, char *argv[] )
 	int ExitValue = EXIT_SUCCESS;
 qRFH
 qRFB
-	COut << "Test of library " << SKT_NAME << ' ' << __DATE__" "__TIME__"\n";
+	cio::Initialize( cio::t_Default );
+
+	COut << "Test of library " << SKT_NAME << ' ' << __DATE__ " " __TIME__ "\n";
 
 	Generic( argc, argv );
 qRFR

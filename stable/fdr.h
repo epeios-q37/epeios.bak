@@ -620,7 +620,6 @@ namespace fdr {
 	: public _flow_driver_base__
 	{
 	private:
-		bso::bool__ _Initialized;	// Pour viter des 'pure virtual function call'.
 		bso::sBool CommitPending_;
 		size__ Written_;	// Amount of data written since last commit.
 	protected:
@@ -637,10 +636,10 @@ namespace fdr {
 		void reset( bso::bool__ P = true ) 
 		{
 			if ( P ) {
-				Commit( true, err::hUserDefined);	// Errors are ignored.
+				if ( CommitPending_ )
+					Commit( true, err::hUserDefined);	// Errors are ignored.
 			}
 
-			_Initialized = false;
 			CommitPending_ = false;
 			_flow_driver_base__::reset( P );
 			Written_ = 0;
@@ -650,7 +649,6 @@ namespace fdr {
 		{
 			reset();
 
-			_Initialized = true;
 			CommitPending_ = false;
 			_flow_driver_base__::Init( ThreadSafety );
 		}
@@ -662,25 +660,23 @@ namespace fdr {
 			bso::sBool Success = true;
 
 			if ( CommitPending_ ) {
-				if ( _Initialized ) {
-				qRH
-				qRB
-					Success = FDRCommit( Unlock, ErrHandling );
-				qRR
-				qRT
-					if ( Unlock )
-						if ( Success )
-							Success = this->Unlock( ErrHandling );
-						else
-							this->Unlock( err::hUserDefined );	// Errors are ignored.
-				qRE
-				}
-
+			qRH
+			qRB
+				Success = FDRCommit( Unlock, ErrHandling );
 				CommitPending_ = false;
-
+			qRR
+			qRT
 				if ( Unlock )
-					Written_ = 0;
+					if ( Success )
+						Success = this->Unlock( ErrHandling );
+					else
+						this->Unlock( err::hUserDefined );	// Errors are ignored.
+			qRE
+
 			}
+
+			if ( Unlock )
+				Written_ = 0;
 
 			return Success;
 		}

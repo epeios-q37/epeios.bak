@@ -7,6 +7,14 @@
 - [trvl]: trivial modifications;
 - [rvrt]: reverting modifications;
 
+## 2019-02-17
+
+- FDR:
+  - simplification,
+  - fixing deadlock,
+- TXF:
+  - [trvl],
+
 ## 2019-02-15
 
 - MTX:
