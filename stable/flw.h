@@ -192,7 +192,7 @@ namespace flw {
 			size__ Size,
 			byte__ *Datum )
 		{
-      			return _D().Read( Size, Datum, fdr::bKeep );
+      		return _D().Read( Size, Datum, fdr::bKeepBlocking );
 		}
 		byte__ View( void )
 		{

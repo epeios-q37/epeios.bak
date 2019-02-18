@@ -7,6 +7,14 @@
 - [trvl]: trivial modifications;
 - [rvrt]: reverting modifications;
 
+## 2019-02-18
+
+- FDR:
+  - introducing the possibility to consume data without retrieving,
+  - removing relaying stuff,
+  - removing `bKeep`, introducing `bKeepNonBlocking` and `bKeepBlocking`,
+  - adding `iflow_driver_base___::EmptyCache(…)`,
+
 ## 2019-02-17
 
 - FDR:

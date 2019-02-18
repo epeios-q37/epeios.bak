@@ -152,8 +152,6 @@ class XDH {
 	setLayoutXSL(id, xml, xslFilename, callback) {
 		let xslURL = xslFilename;
 
-		console.log(this);
-
 		if (this._xdh.isDEMO)
 			xslURL = "data:text/xml;charset=utf-8," + encodeURIComponent(readXSLAsset(xslFilename));
 

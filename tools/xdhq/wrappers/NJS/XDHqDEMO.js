@@ -518,7 +518,7 @@ function call(instance, command, type) {
 	let data = Buffer.concat([Buffer.alloc(1, instance._xdh.id), Buffer.from(command + '\x00')]);;
 	let amount = arguments[i++];
 
-	console.log( Date.now(), " Command: ", command, instance._xdh.id);
+//	console.log( Date.now(), " Command: ", command, instance._xdh.id);
 
 	instance._xdh.type = type;
 

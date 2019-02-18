@@ -280,7 +280,6 @@ namespace tht {
 		mtx::rHandler
 			Local_,	// To protect access to below mutex.
 			Main_;	// Main mutex.
-		void Log_( const char *Loc );
 		void ReleaseMutex_( mtx::rHandler &Handler )
 		{
 			if ( Handler != mtx::Undefined )
@@ -327,20 +326,12 @@ namespace tht {
 		qRB
 			Mutex.InitAndLock( Local_ );
 
-			if ( mtx::TryToLock( Main_ ) ) {
+			if ( mtx::TryToLock( Main_ ) ) 
 				mtx::Unlock( Main_ );
-				Log_( __LOC__ );
-			} else {
+			else
 				Mutex.Unlock();
-				Log_( __LOC__ );
-			}
-
+				
 			mtx::Lock( Main_ );
-			Log_( __LOC__ );
-
-			// To be sure that we are no more in the 'Unblock()' function.
-//			Mutex.Lock();
-//			Mutex.Unlock();
 		qRR
 		qRT
 		qRE
@@ -348,7 +339,7 @@ namespace tht {
 		void Unblock( void )
 		{
 		qRH
-			//			mtx::rMutex Mutex;
+//			mtx::rMutex Mutex;	// Can not be used, because the destructor could be called after destruction of underlying mutes.
 			bso::sBool Locked = false;
 		qRB
 			mtx::Lock( Local_ );
@@ -358,10 +349,7 @@ namespace tht {
 				mtx::Unlock( Local_ );
 				Locked = false;
 				mtx::Unlock( Main_ );
-				Log_( __LOC__ );
 			}
-
-			Log_( __LOC__ );
 		qRR
 		qRT
 			if ( Locked )

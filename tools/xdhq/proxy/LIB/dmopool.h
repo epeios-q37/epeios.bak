@@ -84,12 +84,27 @@ namespace dmopool {
 	};
 
 	class rRWDriver
-	: public fdr::rRWRelayDriver
+	: public fdr::rRWDressedDriver
 	{
 	private:
+		bso::sSize Consumed_;
 		bso::sBool IdSent_;
 		rShared Shared_;
-		bso::sBool ReadInProgress_;
+		bso::sBool Consume_( bso::sSize Amount )
+		{
+			if ( Amount < Consumed_ )
+				qRGnr();
+
+			Amount -= Consumed_;
+
+			Consumed_ += Amount;
+
+			if ( Amount )
+				if ( Shared_.Driver->Read( Amount, NULL, fdr::bBlocking ) != Amount )
+					qRGnr();
+
+			return Amount != 0;
+		}
 	protected:
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
@@ -98,17 +113,16 @@ namespace dmopool {
 			if ( !Shared_.IsValid() )
 				return 0;
 
-			if ( !ReadInProgress_ ) {
+			if ( !Consume_( fdr::rRWDressedDriver::AmountRed() ) ) {
 				Shared_.Read.Wait();
 
 				if ( !Shared_.IsValid() )
 					return 0;
 
 				Shared_.Driver->RTake();
-				ReadInProgress_ = true;
 			}
 
-			return Shared_.Driver->Read( Maximum, Buffer, fdr::b_Relay );
+			return Shared_.Driver->Read( Maximum, Buffer, fdr::bKeepNonBlocking );
 		}
 		virtual bso::sBool FDRDismiss(
 			bso::sBool Unlock,
@@ -117,8 +131,13 @@ namespace dmopool {
 			if ( !Shared_.IsValid() )
 				return true;
 
+			Consume_( fdr::rRWDressedDriver::AmountRed() );
+
+			fdr::rRWDressedDriver::EmptyCache();
+
+			Consumed_ = 0;
+
 			if ( Shared_.Driver->Dismiss( Unlock, ErrHandling ) ) {
-				ReadInProgress_ = false;
 
 				Shared_.Switch->Unblock();
 
@@ -183,20 +202,21 @@ namespace dmopool {
 	public:
 		void reset( bso::sBool P = true )
 		{
-			fdr::rRWRelayDriver::reset( P );
+			fdr::rRWDressedDriver::reset( P );
+			Consumed_ = 0;
 			Shared_.IsValid();
 			IdSent_ = false;
-			ReadInProgress_ = false;
 		}
 		qCVDTOR( rRWDriver );
 		void Init( fdr::eThreadSafety ThreadSafety = fdr::ts_Default )
 		{
-			fdr::rRWRelayDriver::Init( ThreadSafety );
+			fdr::rRWDressedDriver::Init( ThreadSafety );
+
+			Consumed_ = 0;
 
 			Shared_.Init();
 
 			IdSent_ = false;
-			ReadInProgress_ = false;
 		}
 		rShared &GetShared( void )
 		{

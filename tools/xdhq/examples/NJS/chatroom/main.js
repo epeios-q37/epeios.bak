@@ -159,7 +159,7 @@ function acSubmitMessage(dom, id) {
 }
 
 function acUpdate(dom, id) {
-	dom.setTimeout(100, "Update",
+	dom.setTimeout(1000, "Update",
 		() => displayMessages(dom)
 	);
 }

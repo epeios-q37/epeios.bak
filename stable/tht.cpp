@@ -72,15 +72,3 @@ void tht::Defer( void )
 #endif
 }
 
-void tht::rBlocker::Log_( const char *Loc )
-{
-//	return;
-qRH;
-	txf::rWFlow Flow;
-qRB;
-	Flow.Init( cio::GetOutDriver() );
-	Flow << Loc << this << " ; " << tht::GetTID() << txf::nl << txf::commit;
-qRR;
-qRT;
-qRE;
-}

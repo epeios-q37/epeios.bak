@@ -88,10 +88,11 @@ namespace fdr {
 	enum behavior__ {
 		bNonBlocking,	// At least one byte is red, more if this not block.
 		bBlocking,		// Unless EOF, the wanted amount is red, even if blocks.
-		bKeep,			// Same as above, but the same data will still be available at next reading.
+		// Same as above with same name, but the data is kept in the flow and will be available again at next reading.
+		bKeepNonBlocking,
+		bKeepBlocking,
 		b_amount,
-		b_Undefined,
-		b_Relay = bNonBlocking	// To use when between between drivers.
+		b_Undefined
 	};
 
 	//d The max value for a amount.
@@ -392,9 +393,9 @@ namespace fdr {
 					_Size = 0;	// Pour signaler 'EOF' atteint.
 			}
 		}
-		size__ _ReadFromCache(
+		size__ ReadFromCache_(
 			size__ Size,
-			byte__ *Buffer,
+			byte__ *Buffer,	// Can be == NULL, if we only want to consume data.
 			bso::bool__ Adjust,
 			size__ *TotalRed )
 		{
@@ -402,7 +403,8 @@ namespace fdr {
 				Size = _Available;
 
 			if ( _Available != 0 )  {
-				memcpy( Buffer, _Cache + _Position, Size );
+				if ( Buffer != NULL  )
+					memcpy( Buffer, _Cache + _Position, Size );
 
 				if ( Adjust ) {
 					_Available -= Size;
@@ -415,13 +417,13 @@ namespace fdr {
 
 			return Size;
 		}
-		size__ _ReadThroughCache(
+		size__ ReadThroughCache_(
 			size__ Size,
-			byte__ *Buffer,
+			byte__ *Buffer,	// Can be == NULL if we want only to consume data.
 			bso::bool__ Force,
 			size__ *TotalRed )	// Si == 'true', on fait le maximum pour lire la quantite demande.
 		{
-			size__ Red = _ReadFromCache( Size, Buffer, true, TotalRed );
+			size__ Red = ReadFromCache_( Size, Buffer, true, TotalRed );
 
 			if ( Red < Size )  {
 				if ( Force )
@@ -431,7 +433,7 @@ namespace fdr {
 				else
 					return Red;
 
-				Red += _ReadFromCache( Size - Red, Buffer + Red, true, TotalRed );
+				Red += ReadFromCache_( Size - Red, Buffer == NULL ? Buffer : Buffer + Red, true, TotalRed );
 			}
 
 			return Red;
@@ -537,7 +539,7 @@ namespace fdr {
 		}
 		size__ Read(
 			size__ Wanted,
-			byte__ *Buffer,
+			byte__ *Buffer,	// Can be null if we only want to consume data.
 			behavior__ Behavior )
 		{
 #ifdef FDR_DBG
@@ -549,14 +551,13 @@ namespace fdr {
 
 			switch ( Behavior ) {
 			case bNonBlocking:
-				return _ReadThroughCache( Wanted, Buffer, false, &Red_ );
+				return ReadThroughCache_( Wanted, Buffer, false, &Red_ );
 				break;
 			case bBlocking:
-
 				if ( ( _Available >= Wanted ) || ( _Size > ( Wanted - _Available ) ) )
-					return _ReadThroughCache( Wanted, Buffer, true, &Red_ );
+					return ReadThroughCache_( Wanted, Buffer, true, &Red_ );
 				else {
-					size__ Red = _ReadFromCache( Wanted, Buffer, true, &Red );
+					size__ Red = ReadFromCache_( Wanted, Buffer, true, &Red_ );
 
 					if ( Red < Wanted )
 						Red += _LoopingRead( Wanted - Red, Buffer + Red, &Red_ );
@@ -565,10 +566,13 @@ namespace fdr {
 				}
 
 				break;
-			case bKeep:
+			case bKeepBlocking:
 				_CompleteCache( Wanted );
+			case bKeepNonBlocking:
+				if ( Buffer == NULL )	// Does not make sense in this case.
+					qRFwk();
 
-				return _ReadFromCache( Wanted, Buffer, false, &Red_ );
+				return ReadFromCache_( Wanted, Buffer, false, NULL );
 				break;
 			default:
 				qRFwk();
@@ -596,6 +600,13 @@ namespace fdr {
 		size__ AmountRed( void ) const
 		{
 			return Red_;
+		}
+		void EmptyCache( void )
+		{
+			if ( !IsLocked() )
+				qRFwk();
+
+			_Available = _Position = 0;
 		}
 	};
 
@@ -774,12 +785,6 @@ namespace fdr {
 	typedef fdr::iflow_driver___<> rRDressedDriver;
 	typedef fdr::oflow_driver___<> rWDressedDriver;
 	typedef fdr::ioflow_driver___<> rRWDressedDriver;
-
-	typedef fdr::iflow_driver___<0> rRRelayDriver;
-	typedef fdr::oflow_driver___<0> rWRelayDriver;
-	typedef fdr::ioflow_driver___<0> rRWRelayDriver;
-
-
 
 	typedef fdr::size__ sSize;
 	typedef fdr::byte__ sByte;
