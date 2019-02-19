@@ -308,6 +308,8 @@ function ignition(socket, createCallback, callbacks) {
 	let offset = 0;
 	let query = getQuery(socket);
 
+	socket.on('readable', () => serve(socket, createCallback, callbacks));
+
 	[token, offset] = getString(query, offset);
 
 	if (isTokenEmpty())
@@ -322,8 +324,6 @@ function ignition(socket, createCallback, callbacks) {
 
 		open(completeURL);
 	}
-
-	socket.on('readable', () => serve(socket, createCallback, callbacks));
 }
 
 function demoHandshake(socket, createCallback, callbacks, head) {

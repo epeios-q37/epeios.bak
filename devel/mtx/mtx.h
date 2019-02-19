@@ -38,7 +38,8 @@
 #  undef system
 # endif
 
-#include <mutex>	// Before 'tol.h', otherwise they may be some conflict.
+# include <condition_variable>
+# include <mutex>	// Before 'tol.h', otherwise they may be some conflict.
 
 # ifdef MTX_SYSTEM_BUFFER_
 #  define system MTX_SYSTEM_BUFFER_
