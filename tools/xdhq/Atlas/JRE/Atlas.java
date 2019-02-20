@@ -24,8 +24,8 @@ import info.q37.xdhq.MODE;
 public abstract class Atlas implements Runnable {
 	public DOM dom;
 
-	public Atlas() {
-		this.dom = new DOM( info.q37.xdhq.XDH.getMode() );
+	public Atlas( byte id) {
+		this.dom = new DOM( info.q37.xdhq.XDH.getMode(), id );
 		new Thread( this ).start();
 	}
 
@@ -115,7 +115,7 @@ public abstract class Atlas implements Runnable {
 			return MODE.DEMO;
 	}
 
-	private static void launch(String headContent, String dir, GUI gui, String arg) {
+	private static void launch(info.q37.xdhq.XDH_SHRD.Callback callback, String headContent, String dir, GUI gui, String arg) {
 		MODE mode = getDefaultMODE();
 
 		if (gui == GUI.DEFAULT) {
@@ -140,7 +140,7 @@ public abstract class Atlas implements Runnable {
 			}
 		}
 
-		info.q37.xdhq.XDH.launch(headContent, mode, dir );
+		info.q37.xdhq.XDH.launch(callback, headContent, mode, dir );
 
 		switch (gui) {
 		case NONE:
@@ -162,22 +162,22 @@ public abstract class Atlas implements Runnable {
 		}
 	}
 
-	public static void launch(String headContent, String dir, GUI gui, String[] args) {
+	public static void launch(info.q37.xdhq.XDH_SHRD.Callback callback, String headContent, String dir, GUI gui, String[] args) {
 		if (args.length > 0)
-			launch(headContent,dir, gui, args[0]);
+			launch(callback, headContent,dir, gui, args[0]);
 		else
-			launch(headContent, dir, gui, "");
+			launch(callback, headContent, dir, gui, "");
 	}
 
-	public static void launch(String headContent, GUI gui) {
-		launch(headContent, ".", gui, "");
+	public static void launch(info.q37.xdhq.XDH_SHRD.Callback callback, String headContent, GUI gui) {
+		launch(callback, headContent, ".", gui, "");
 	}
 
-	public static void launch(String headContent) {
-		launch(headContent, GUI.DEFAULT);
+	public static void launch(info.q37.xdhq.XDH_SHRD.Callback callback, String headContent) {
+		launch(callback, headContent, GUI.DEFAULT);
 	}
 
-	public static void launch() {
-		launch("");
+	public static void launch(info.q37.xdhq.XDH_SHRD.Callback callback) {
+		launch(callback, "");
 	}
 };

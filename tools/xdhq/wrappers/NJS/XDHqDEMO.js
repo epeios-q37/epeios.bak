@@ -294,7 +294,7 @@ function serve(socket, createCallback, callbacks) {
 		socket.write(addString(addString(Buffer.alloc(1, id), mainProtocolLabel), mainProtocolVersion));
 	} else {
 		if ( !(id in instances ) )
-			throw "Unknow instance of id '" + id + "'!";
+			throw "Unknown instance of id '" + id + "'!";
 
 		if (!instances[id]._xdh.handshakeDone) {
 			instanceHandshake(instances[id], query, offset);

@@ -34,11 +34,11 @@ public class DOM {
 				idsAndClasses.values().toArray(new String[0]) };
 	}
 
-	public DOM(MODE mode) {
+	public DOM(MODE mode, byte id) {
 		try {
 			switch (mode) {
 			case DEMO:
-				DOM = new info.q37.xdhq.dom.DOM_DEMO();
+				DOM = new info.q37.xdhq.dom.DOM_DEMO(id);
 				break;
 			case PROD:
 				DOM = new info.q37.xdhq.dom.DOM_PROD();

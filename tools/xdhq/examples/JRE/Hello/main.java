@@ -25,7 +25,16 @@ class Hello extends Atlas {
 		return readAsset( path, "Hello" );
 	}
 
-	
+	Hello( byte id ) {
+		super( id );
+	}
+
+	static class MyCallback implements info.q37.xdhq.XDH_SHRD.Callback {
+		public Object callback( byte id) {
+			return new Hello(id);
+		}
+	}
+
 	@Override
 	public void handle(String action, String id )
 	{
@@ -46,10 +55,7 @@ class Hello extends Atlas {
 			throw new RuntimeException( "Unknown action '" + action + "' !!!");
 		}
 	}
-	public static void main(String[] args) throws Exception {
-		launch(readAsset_( "Head.html" ), "Hello", GUI.DEFAULT, args );
-
-		for (;;)
-			new Hello();
+	public static void main( String[] args) throws Exception {
+		launch(new MyCallback(),readAsset_( "Head.html" ), "Hello", GUI.DEFAULT, args );
 	}
 }

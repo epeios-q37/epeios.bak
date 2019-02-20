@@ -53,13 +53,13 @@ public class XDH extends info.q37.jreq.JRE {
 	public static String readAsset( String path, String dir ) {
 		return readFile_( getAssetFilename_( path, dir ) );
 	}
-	static public void launch(String headContent, MODE mode, String dir ) {
+	static public void launch(info.q37.xdhq.XDH_SHRD.Callback callback,String headContent, MODE mode, String dir ) {
 		mode_ = mode;
 		dir_ = dir;
 
 		switch ( mode ) {
 		case DEMO:
-			XDH_DEMO.launch(headContent );
+			XDH_DEMO.launch(headContent,callback );
 			break;
 		case PROD:
 			XDH_PROD.launch();

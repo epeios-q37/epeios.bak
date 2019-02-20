@@ -22,6 +22,7 @@ package info.q37.xdhq.dom;
 import java.net.*;
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.locks.*;
 import java.awt.Desktop;
 
 public class DOM_DEMO extends DOM_SHRD {
@@ -31,19 +32,30 @@ public class DOM_DEMO extends DOM_SHRD {
 	static private String wPort = "";
 	static private String cgi = "xdh";
 	static private String token = "";
-	private Socket socket_;
-	private InputStreamReader reader_;
-	private boolean firstLaunch = true;
+	static private InputStream input_;
+	static private OutputStream output_;
+	// Both object are to block the switcher.
+	static private Lock lock_ = new ReentrantLock();
+	static private Condition condition_ = lock_.newCondition();;
 	static private String demoProtocolLabel = "877c913f-62df-40a1-bf5d-4bb5e66a6dd9";
 	static private String demoProtocolVersion = "0";
 	static private String mainProtocolLabel = "6e010737-31d8-4be3-9195-c5b5b2a9d5d9";
 	static private String mainProtocolVersion = "0";
 
-	class Instance_ {
-		byte id;
+	private byte id_;
+	private boolean firstLaunch_ =  true;
+
+	static class Instance_ {
+		private boolean handshakeDone = false;
+		Lock lock = new ReentrantLock();
+		Condition condition = lock.newCondition();
+		Object userObject;	// Just to avoid that the GC destroys the object.
+		Instance_( Object object ) {
+			this.userObject = object;
+		}
 	}
 
-	Map<Byte, Instance_> instances_ = new HashMap<Byte, Instance_>();
+	static private Map<Byte, Instance_> instances_ = new HashMap<Byte, Instance_>();
 
 	static private String getEnv_(String name, String value) {
 		String env = System.getenv(name);
@@ -95,11 +107,11 @@ public class DOM_DEMO extends DOM_SHRD {
 			wPort = ":" + wPort;
 	}
 
-	private void writeByte_( byte data, OutputStream stream) throws Exception {
-		stream.write( data );
+	private static void writeByte_( byte data) throws Exception {
+		output_.write( data );
 	}
 
-	private void writeSize_(int size, OutputStream stream) throws Exception {
+	private static void writeSize_(int size) throws Exception {
 		byte data[] = new byte[8];
 		int i = 7;
 
@@ -111,37 +123,29 @@ public class DOM_DEMO extends DOM_SHRD {
 			size >>= 7;
 		}
 
-		stream.write(data, i, 8 - i);
+		output_.write(data, i, 8 - i);
 	}
 
-	private void writeString_(String string, OutputStream stream) throws Exception {
+	private static void writeString_(String string) throws Exception {
 		byte bytes[] = string.getBytes();
 
-		writeSize_(bytes.length, stream);
-		stream.write(bytes);
+		writeSize_(bytes.length);
+		output_.write(bytes);
 	}
 
-	private void writeString_(String string) throws Exception {
-		writeString_(string, socket_.getOutputStream());
-	}
-
-	private void writeStrings_(String[] strings, OutputStream stream) throws Exception {
+	private static void writeStrings_(String[] strings) throws Exception {
 		int size = strings.length;
 		int i = 0;
 
-		writeSize_(size, stream);
+		writeSize_(size);
 
 		while (i < size) {
-			writeString_(strings[i++], stream);
+			writeString_(strings[i++]);
 		}
 	}
 
-	private void writeStrings_(String[] strings) throws Exception {
-		writeStrings_(strings, socket_.getOutputStream());
-	}
-
-	private byte getByte_() throws Exception {
-		int data = reader_.read();
+	private static byte getByte_() throws Exception {
+		int data = input_.read();
 
 		if ( data == -1 )
 			throw new Exception( "EOF !!!");
@@ -149,12 +153,12 @@ public class DOM_DEMO extends DOM_SHRD {
 		return (byte)data;
 	}
 
-	private int getSize_() throws Exception {
-		int datum = reader_.read();
+	private static int getSize_() throws Exception {
+		int datum = input_.read();
 		int size = datum & 0x7f;
 
 		while ((datum & 0x80) != 0) {
-			datum = reader_.read();
+			datum = input_.read();
 
 			size = (size << 7) + (datum & 0x7f);
 		}
@@ -162,18 +166,18 @@ public class DOM_DEMO extends DOM_SHRD {
 		return size;
 	}
 
-	private String getString_() throws Exception {
+	private static String getString_() throws Exception {
 		String string = "";
 		int size = getSize_();
 
 		while (size-- != 0) {
-			string += (char) reader_.read();
+			string += (char) input_.read();
 		}
 
 		return string;
 	}
 
-	private String[] getStrings_() throws Exception {
+	private static String[] getStrings_() throws Exception {
 		int size = getSize_();
 		int i = 0;
 
@@ -185,49 +189,14 @@ public class DOM_DEMO extends DOM_SHRD {
 		return strings;
 	}
 
-	class Reader implements Runnable
-	{
-		@Override
-		public final void run() {
-			try {
-				for (;;) {
-					byte id = getByte_();
-
-					if ( id == -1 ) {	// Value reporting a new front-end.
-						id = getByte_();	// The id of the new front-end.
-
-						if ( instances_.containsKey( id )) {
-							throw new Exception( "Instance of id  '" + id + "' exists but should not !" );
-						}
-
-						instances_.put( id, new Instance_() );
-
-						synchronized( socket_) {
-							OutputStream output = socket_.getOutputStream();
-
-							writeByte_( id, output );
-							writeString_( mainProtocolLabel, output );
-							writeString_( mainProtocolVersion, output );
-					
-						}
-					}
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-	private void ignition_() throws Exception {
-		OutputStream output = socket_.getOutputStream();
-
-		writeString_(token, output);
+	private static void ignition_() throws Exception {
+		writeString_(token);
 
 		if (isTokenEmpty_()) {
 			writeString_(info.q37.xdhq.XDH_DEMO.headContent);
 		}
 		
-		output.flush();
+		output_.flush();
 
 		token = getString_();
 
@@ -248,8 +217,7 @@ public class DOM_DEMO extends DOM_SHRD {
 		}
 	}
 
-	private void demoHandshake_() throws Exception {
-		OutputStream output = socket_.getOutputStream();
+	private static void demoHandshake_() throws Exception {
 		String error, notification;
 
 		writeString_( demoProtocolLabel );
@@ -268,22 +236,91 @@ public class DOM_DEMO extends DOM_SHRD {
 			System.out.println(notification );
 	}
 
+	 private static void serve_(info.q37.xdhq.XDH_SHRD.Callback callback) {
+		try {
+			for (;;) {
+				byte id = getByte_();
 
-	public DOM_DEMO() throws Exception {
-//		System.out.println( pAddr + ":" + pPort );
+				if ( id == -1 ) {	// Value reporting a new front-end.
+					id = getByte_();	// The id of the new front-end.
+
+					if ( instances_.containsKey( id )) {
+						throw new Exception( "Instance of id  '" + id + "' exists but should not !" );
+					}
+
+					instances_.put( id, new Instance_( callback.callback( id ) ) );
+
+					synchronized( output_) {
+						writeByte_( id );
+						writeString_( mainProtocolLabel );
+						writeString_( mainProtocolVersion );
+						output_.flush();
+					}
+				} else {
+					System.out.println( id );
+
+					if ( !instances_.containsKey( id ) ) {
+						System.out.println( "Unknown instance of id '" + id + "'!" );
+						System.exit( -1 );
+					}
+
+					if ( !instances_.get(id).handshakeDone ) {
+						String error;
+
+						error = getString_();
+
+						if ( !error.isEmpty() ) {
+							System.out.println( error );
+							System.exit( -1 );
+						}
+					
+						getString_();	// Language. Ignored yet.
+
+						synchronized( output_) {
+							writeByte_( id );
+							writeString_("JRE");
+							output_.flush();
+						}
+
+						instances_.get(id).handshakeDone = true;
+					} else {
+						instances_.get(id).lock.lock();
+						instances_.get(id).condition.signal();
+						instances_.get(id).lock.unlock();
+
+						lock_.lock();
+						condition_.await();
+						lock_.unlock();
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	static public void launch(info.q37.xdhq.XDH_SHRD.Callback callback) {
+		System.out.println( pAddr + ":" + pPort );
 
 		try {
-			socket_ = new Socket(pAddr, pPort);
+			try {
+				Socket socket = new Socket(pAddr, pPort);
+				input_ = socket.getInputStream();
+				output_ = socket.getOutputStream();
+			} catch (Exception e) {
+				System.out.println("Unable to connect to " + pAddr + ":" + pPort + " !!!");
+				System.exit(1);
+			}
+
+			demoHandshake_();
+
+			ignition_();
+
+			serve_(callback);
+
 		} catch (Exception e) {
-			System.out.println("Unable to connect to " + pAddr + ":" + pPort + " !!!");
-			System.exit(1);
+			e.printStackTrace();
 		}
-
-		reader_ = new InputStreamReader( socket_.getInputStream() );
-
-		demoHandshake_();
-
-		ignition_();
 
 /*
 
@@ -344,17 +381,32 @@ public class DOM_DEMO extends DOM_SHRD {
 	@Override
 	public void getAction(Event event) {
 		try {
-			if (!firstLaunch) {
-				OutputStream output = socket_.getOutputStream();
-				output.write(new String("StandBy_1").getBytes());
-				output.write(0);
-				output.flush();
+			System.out.println( id_ + " : " + firstLaunch_ );
+			if (!firstLaunch_) {
+				synchronized( output_ ) {
+					writeByte_(id_ );
+					output_.write(new String("StandBy_1").getBytes());
+					output_.write(0);
+					output_.flush();
+				}
 			} else
-				firstLaunch = false;
+				firstLaunch_ = false;
+
+			instances_.get(id_).lock.lock();
+			instances_.get(id_).condition.await();
 
 			event.id = getString_();
 
 			event.action = getString_();
+
+			System.out.println( event );
+
+			instances_.get(id_).lock.unlock();
+
+			lock_.lock();
+			condition_.signal();
+			lock_.unlock();
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -365,42 +417,64 @@ public class DOM_DEMO extends DOM_SHRD {
 		Object object = null;
 
 		try {
-			OutputStream output = socket_.getOutputStream();
-			int size = strings.length;
-			int i = 0;
+			synchronized( output_ ) {
+				int size = strings.length;
+				int i = 0;
 
-			output.write(new String(command).getBytes());
-			output.write(0);
+				writeByte_( id_ );
+				output_.write(new String(command).getBytes());
+				output_.write(0);
 
-			while (i < size) {
-				writeString_(strings[i++], output);
+				while (i < size) {
+					writeString_(strings[i++]);
+				}
+
+				size = xstrings.length;
+				i = 0;
+
+				while (i < size) {
+					writeStrings_(xstrings[i++]);
+				}
+
+				output_.flush();
 			}
 
-			size = xstrings.length;
-			i = 0;
-
-			while (i < size) {
-				writeStrings_(xstrings[i++], output);
-			}
-
-			output.flush();
 
 			switch (type) {
 			case VOID:
 				break;
 			case STRING:
+				instances_.get(id_).lock.lock();
+				instances_.get(id_).condition.await();
 				object = getString_();
+				instances_.get(id_).lock.unlock();
+				lock_.lock();
+				condition_.signal();
+				lock_.unlock();
 				break;
 			case STRINGS:
+				instances_.get(id_).lock.lock();
+				instances_.get(id_).condition.await();
 				object = getStrings_();
+				instances_.get(id_).lock.unlock();
+				lock_.lock();
+				condition_.signal();
+				lock_.unlock();
 				break;
 			default:
 				throw new Exception("Unknown return type !!!");
 			}
+
+
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		return object;
+	}
+
+	public DOM_DEMO( byte id ) {
+		id_ = id;
 	}
 }

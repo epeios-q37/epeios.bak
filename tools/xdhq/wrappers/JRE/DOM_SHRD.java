@@ -34,5 +34,4 @@ public abstract class DOM_SHRD {
 	public abstract void getAction(Event event);
 
 	public abstract Object call(String command, Type type, String[] strings, String [][] xstrings );
-
 }

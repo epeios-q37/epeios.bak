@@ -21,7 +21,8 @@ package info.q37.xdhq;
 
 public class XDH_DEMO extends XDH_SHRD {
 	static public String headContent;
-	static public void launch(String headContent ) {
+	static public void launch(String headContent, info.q37.xdhq.XDH_SHRD.Callback callback ) {
 		XDH_DEMO.headContent = headContent;
+		info.q37.xdhq.dom.DOM_DEMO.launch(callback);
 	}
 }
