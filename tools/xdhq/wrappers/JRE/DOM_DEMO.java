@@ -248,15 +248,17 @@ public class DOM_DEMO extends DOM_SHRD {
 						throw new Exception( "Instance of id  '" + id + "' exists but should not !" );
 					}
 
-					Object userObject = callback.callback();
+					synchronized( instances_ ) {
+						Object userObject = callback.callback();	//  from here, 'getAction()' could access the instance before being stored, hence the 'synchronized' .
 
-					instances_.put( id, new Instance_( userObject ) );
+						instances_.put( id, new Instance_( userObject ) );
 
-					Object object1 = userObject.getClass().getField( "dom" ).get(userObject);
+						Object object1 = userObject.getClass().getField( "dom" ).get(userObject);
 
-					Object object2 = object1.getClass().getMethod( "getDOM", (Class [])null).invoke( object1 );
+						Object object2 = object1.getClass().getMethod( "getDOM", (Class [])null).invoke( object1 );
 					
-					object2.getClass().getMethod( "setId", new Class[]{Byte.class}).invoke( object2, id );
+						object2.getClass().getMethod( "setId", new Class[]{Byte.class}).invoke( object2, id );
+					}
 
 					synchronized( output_) {
 						writeByte_( id );
@@ -395,14 +397,16 @@ public class DOM_DEMO extends DOM_SHRD {
 			} else
 				firstLaunch_ = false;
 
-			instances_.get(id_).lock.lock();
-			instances_.get(id_).condition.await();
+			synchronized(instances_) {	// See 'serve_(...)'.
+				instances_.get(id_).lock.lock();
+				instances_.get(id_).condition.await();
 
-			event.id = getString_();
+				event.id = getString_();
 
-			event.action = getString_();
+				event.action = getString_();
 
-			instances_.get(id_).lock.unlock();
+				instances_.get(id_).lock.unlock();
+			}
 
 			lock_.lock();
 			condition_.signal();

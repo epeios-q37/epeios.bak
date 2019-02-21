@@ -68,9 +68,6 @@ class Hello extends Atlas {
 			" .vcenter-in { display: table-cell; vertical-align: middle; }" +
 			"</style>";
 
-		launch(head, "Hello", GUI.DEFAULT, args );
-
-		for (;;)
-			new Hello();
+		launch(() -> new Hello(), head, "Hello", GUI.DEFAULT, args );
 	}
 }

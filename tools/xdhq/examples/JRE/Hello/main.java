@@ -25,12 +25,6 @@ class Hello extends Atlas {
 		return readAsset( path, "Hello" );
 	}
 
-	static class MyCallback implements info.q37.xdhq.XDH_SHRD.Callback {
-		public Object callback() {
-			return new Hello();
-		}
-	}
-
 	@Override
 	public void handle(String action, String id )
 	{
@@ -52,6 +46,6 @@ class Hello extends Atlas {
 		}
 	}
 	public static void main( String[] args) throws Exception {
-		launch(new MyCallback(),readAsset_( "Head.html" ), "Hello", GUI.DEFAULT, args );
+		launch(()->new Hello(),readAsset_( "Head.html" ), "Hello", GUI.DEFAULT, args );
 	}
 }

@@ -197,7 +197,6 @@ class Notes extends Atlas {
 		else
 			dir = "notes";
 
-		launch(readAsset_("Head.html"), dir, GUI.DEFAULT, args);
-		for (;;) new Notes();
+		launch(() -> new Notes(),readAsset_("Head.html"), dir, GUI.DEFAULT, args);
 	}
 }

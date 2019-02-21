@@ -298,9 +298,6 @@ class TodoMVC extends Atlas {
 		else
 			dir = "TodoMVC";
 
-		launch(readAsset_("HeadDEMO.html"), dir, GUI.DEFAULT, args);
-
-		for (;;)
-			new TodoMVC();
+		launch(() -> new TodoMVC(), readAsset_("HeadDEMO.html"), dir, GUI.DEFAULT, args);
 	}
 }

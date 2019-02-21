@@ -174,9 +174,6 @@ class Chatroom extends Atlas {
 	}
 
 	public static void main(String[] args) throws Exception {
-		launch(readAsset_("Head.html"), "chatroom", GUI.DEFAULT, args);
-
-		for (;;)
-			new Chatroom();
+		launch(() -> new Chatroom(),readAsset_("Head.html"), "chatroom", GUI.DEFAULT, args);
 	}
 }
