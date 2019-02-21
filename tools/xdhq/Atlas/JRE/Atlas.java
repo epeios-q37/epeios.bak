@@ -24,8 +24,8 @@ import info.q37.xdhq.MODE;
 public abstract class Atlas implements Runnable {
 	public DOM dom;
 
-	public Atlas( byte id) {
-		this.dom = new DOM( info.q37.xdhq.XDH.getMode(), id );
+	public Atlas() {
+		this.dom = new DOM( info.q37.xdhq.XDH.getMode());
 		new Thread( this ).start();
 	}
 

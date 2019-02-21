@@ -25,13 +25,9 @@ class Hello extends Atlas {
 		return readAsset( path, "Hello" );
 	}
 
-	Hello( byte id ) {
-		super( id );
-	}
-
 	static class MyCallback implements info.q37.xdhq.XDH_SHRD.Callback {
-		public Object callback( byte id) {
-			return new Hello(id);
+		public Object callback() {
+			return new Hello();
 		}
 	}
 

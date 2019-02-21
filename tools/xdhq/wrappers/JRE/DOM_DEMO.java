@@ -248,7 +248,15 @@ public class DOM_DEMO extends DOM_SHRD {
 						throw new Exception( "Instance of id  '" + id + "' exists but should not !" );
 					}
 
-					instances_.put( id, new Instance_( callback.callback( id ) ) );
+					Object userObject = callback.callback();
+
+					instances_.put( id, new Instance_( userObject ) );
+
+					Object object1 = userObject.getClass().getField( "dom" ).get(userObject);
+
+					Object object2 = object1.getClass().getMethod( "getDOM", (Class [])null).invoke( object1 );
+					
+					object2.getClass().getMethod( "setId", new Class[]{Byte.class}).invoke( object2, id );
 
 					synchronized( output_) {
 						writeByte_( id );
@@ -257,8 +265,6 @@ public class DOM_DEMO extends DOM_SHRD {
 						output_.flush();
 					}
 				} else {
-					System.out.println( id );
-
 					if ( !instances_.containsKey( id ) ) {
 						System.out.println( "Unknown instance of id '" + id + "'!" );
 						System.exit( -1 );
@@ -300,8 +306,6 @@ public class DOM_DEMO extends DOM_SHRD {
 	}
 
 	static public void launch(info.q37.xdhq.XDH_SHRD.Callback callback) {
-		System.out.println( pAddr + ":" + pPort );
-
 		try {
 			try {
 				Socket socket = new Socket(pAddr, pPort);
@@ -381,7 +385,6 @@ public class DOM_DEMO extends DOM_SHRD {
 	@Override
 	public void getAction(Event event) {
 		try {
-			System.out.println( id_ + " : " + firstLaunch_ );
 			if (!firstLaunch_) {
 				synchronized( output_ ) {
 					writeByte_(id_ );
@@ -398,8 +401,6 @@ public class DOM_DEMO extends DOM_SHRD {
 			event.id = getString_();
 
 			event.action = getString_();
-
-			System.out.println( event );
 
 			instances_.get(id_).lock.unlock();
 
@@ -474,7 +475,7 @@ public class DOM_DEMO extends DOM_SHRD {
 		return object;
 	}
 
-	public DOM_DEMO( byte id ) {
+	public void setId( Byte id ) {
 		id_ = id;
 	}
 }
