@@ -189,12 +189,31 @@ public class DOM_DEMO extends DOM_SHRD {
 		return strings;
 	}
 
+	private static void demoHandshake_() throws Exception {
+		String error, notification;
+
+		writeString_( demoProtocolLabel );
+		writeString_( demoProtocolVersion );
+
+		output_.flush();
+
+		error = getString_();
+
+		if ( !error.isEmpty()) {
+			System.out.println(error);
+			System.exit(1);
+		}
+
+		notification = getString_();
+
+		if ( !notification.isEmpty())
+			System.out.println(notification );
+	}
+
 	private static void ignition_() throws Exception {
 		writeString_(token);
 
-		if (isTokenEmpty_()) {
-			writeString_(info.q37.xdhq.XDH_DEMO.headContent);
-		}
+		writeString_(info.q37.xdhq.XDH_DEMO.headContent);
 		
 		output_.flush();
 
@@ -215,25 +234,6 @@ public class DOM_DEMO extends DOM_SHRD {
 				Desktop.getDesktop().browse(new URI(url));
 			}
 		}
-	}
-
-	private static void demoHandshake_() throws Exception {
-		String error, notification;
-
-		writeString_( demoProtocolLabel );
-		writeString_( demoProtocolVersion );
-
-		error = getString_();
-
-		if ( !error.isEmpty()) {
-			System.out.println(error);
-			System.exit(1);
-		}
-
-		notification = getString_();
-
-		if ( !notification.isEmpty())
-			System.out.println(notification );
 	}
 
 	 private static void serve_(info.q37.xdhq.XDH_SHRD.Callback callback) {
@@ -327,61 +327,6 @@ public class DOM_DEMO extends DOM_SHRD {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-/*
-
-		writeString_(token, output);
-
-		if (isTokenEmpty_()) {
-			writeString_(info.q37.xdhq.XDH_DEMO.headContent);
-		}
-
-		output.flush();
-
-		if (isTokenEmpty_()) {
-			token = getString_(reader);
-
-			if (isTokenEmpty_()) {
-				System.out.println(getString_( reader ));
-				System.exit(1);
-			}
-
-			if ( !":0".equals(wPort)) {
-				String url = "http://" + wAddr + wPort + "/" + cgi + ".php?_token=" + token;
-
-				System.out.println(url);
-				System.out.println("Open above URL in a web browser. Enjoy!");
-
-				if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
-					Desktop.getDesktop().browse(new URI(url));
-				}
-			}
-		} else {
-			String returnedToken = getString_(reader);
-
-			if ( returnedToken.equals("")) {
-				System.out.println(getString_( reader ));
-				System.exit(1);
-			}
-
-			if (!returnedToken.equals(token))
-				throw new Exception("Unmatched token !!!");
-		}
-
-		writeString_(demoProtocolLabel, output);
-		writeString_(demoProtocolVersion, output);
-		output.flush();
-
-		String errorMessage = getString_(reader);
-
-		if ( !"".equals(errorMessage))
-			throw new Exception(errorMessage);
-
-		getString_(reader);	// Language.
-		writeString_("JRE");
-		output.flush();
-
-		*/
 	}
 
 	@Override
