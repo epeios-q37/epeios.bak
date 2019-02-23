@@ -34,15 +34,20 @@ function getEnv_($name, $value = "") {
 
 }
 
-class XDHqDOM_DEMO extends Threaded {
+class XDHqDOM_DEMO {
     private static $socket;
     private static $token = "";
     private static $demoprotocolLabel = "877c913f-62df-40a1-bf5d-4bb5e66a6dd9";
     private static $demoProtocolVersion = "0";
     private static $mainProtocolLabel = "6e010737-31d8-4be3-9195-c5b5b2a9d5d9";
     private static $mainProtocolVersion = "0";
+	private static $instances_;
     private static function isTokenEmpty_() {
         return empty(self::$token) || (substr(self::$token, 0, 1) == '&');
+    }
+	// All write function returns data and do not write directly to socket.
+    private function writeByte_($datum) {
+        fwrite($this->socket, pack("C", $datum));
     }
     private function writeSize_($size) {
         $result = pack("C", $size & 0x7f);
@@ -70,6 +75,13 @@ class XDHqDOM_DEMO extends Threaded {
             $i++;
         }
     }
+	private function subWrite_( $data ) {
+		fwrite($this->socket,$data);
+		fflush( $this->socket );
+	}
+	private function write_( $data, $thread ) {
+		$thread->synchronize( function($thread) {$this->subWrite_($data);});
+	}
     private function getByte_() {
         while (!($c = fgetc($this->socket))); // Workaround concerning an arbitrary timeout!
 
@@ -115,7 +127,7 @@ class XDHqDOM_DEMO extends Threaded {
 
         return $string;
     }
-	private demosHandshake_() {
+	private function demosHandshake_() {
         $this->writeString_(self::$demoProtocolLabel);
         $this->writeString_(self::$demoProtocolVersion);
         fflush($this->socket);
@@ -123,7 +135,7 @@ class XDHqDOM_DEMO extends Threaded {
         $errorMessage = $this->getString_();
 
         if ($errorMessage != "") {
-            die($errorMessage));
+            die($errorMessage);
         }
 
         $notificationMessage = $this->getString_();
@@ -132,7 +144,7 @@ class XDHqDOM_DEMO extends Threaded {
             echo $errorMessage . "\n";
         }
 	}
-	private ignition_() {
+	private function ignition_() {
         $this->writeString_(self::$token);
 
         $this->writeString_(XDHq_DEMO::$headContent);
@@ -149,6 +161,38 @@ class XDHqDOM_DEMO extends Threaded {
             echo "Open above URL in a web browser. Enjoy!\n";
             XDHq_SHRD::open($url);
         }
+	}
+	private function serve_(callable $callback) {
+		while(true) {
+			$id = getByte_();
+
+			if ($id == 255) {	// Value reporting a new front-end.
+				$if = getByte_();
+
+				if ( in_array( $if, $this->instances_) )
+					die(  "Instance of id  '" . id . "' exists but should not !");
+
+				$this->instances_[id] = call_user_func($callback);
+
+				$this->write_( $this->writeByte_( $id ) . $this->writString_( $this->mainProtocolLabel_ ) . $this->writeString_( $this->mainProtocolVersion_ ) );
+			} else if ( !id_array( $id, $this->instances_ ) ) {
+				die( "Unknown instance of id '" . $id . "'!" );
+			} else if ( !$this->instances_[$id].handshakeDone ) {
+				$error = getString_();
+
+				if ( $error != "" )
+					die( $error );
+
+				$this->getString_();	// Language. Not currently handled.
+
+				$this->write_( writeByte_($i) . writeString_("ZND") );
+
+			} else {
+				$this->instances_[$id]->notify();
+
+				$this->wait();
+			}
+		}
 	}
     public function __construct() {
         // Due to multithreading handling of PHP, global variables can not be used in methods !
@@ -187,7 +231,6 @@ class XDHqDOM_DEMO extends Threaded {
             $wPort = ":" . $wPort;
         }
 
-/**/
 
         if ($this->isTokenEmpty_()) {
             $token = getEnv_("ATK_TOKEN");
@@ -203,6 +246,8 @@ class XDHqDOM_DEMO extends Threaded {
         if (!$this->socket) {
             die("$errstr ($errno)\n");
         }
+
+/*
 
         $this->writeString_(self::$token);
 
@@ -253,6 +298,7 @@ class XDHqDOM_DEMO extends Threaded {
         $this->getString_(); // Language.
         $this->writeString_("ZND");
         fflush($this->socket);
+*/
     }
     public function getAction(&$id) {
         static $firstLaunch = true;
@@ -272,13 +318,15 @@ class XDHqDOM_DEMO extends Threaded {
     public function call($command, $type, ...$args) {
         $i = 0;
 
-        fwrite($this->socket, pack("a*x", $command));
+		$data = writeByte_($this->id );
+
+        $data .= pack("a*x", $command);
 
         $amount = $args[$i];
         $i++;
 
         while ($amount--) {
-            $this->writeString_($args[$i]);
+            $data .= $this->writeString_($args[$i]);
             $i++;
         }
 
@@ -286,11 +334,13 @@ class XDHqDOM_DEMO extends Threaded {
         $i++;
 
         while ($amount--) {
-            $this->writeStrings_($args[$i]);
+            $data .= $this->writeStrings_($args[$i]);
             $i++;
         }
 
-        fflush($this->socket);
+        $write_( $data );
+
+		$this->wait();
 
         switch ($type) {
         case XDHq::RT_NONE:
@@ -304,5 +354,7 @@ class XDHqDOM_DEMO extends Threaded {
         default:
             throw new Exception("Unknown return type !!!");
         }
+
+		$this->mainThread->notify();
     }
 }

@@ -48,7 +48,7 @@ mods += sclargmnt scli sclmisc sclerror scllocale
 mods += sclrgstry sclxdhtml sclfrntnd 
 mods += xdhcmn xdhdws 
 mods += plugins 
-mods += registry prtcl 
+mods += dmopool registry prtcl 
 
 pmods += pllio 
 
