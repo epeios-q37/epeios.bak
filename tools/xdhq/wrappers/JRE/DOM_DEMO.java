@@ -266,13 +266,10 @@ public class DOM_DEMO extends DOM_SHRD {
 						writeString_( mainProtocolVersion );
 						output_.flush();
 					}
-				} else {
-					if ( !instances_.containsKey( id ) ) {
+				} else if ( !instances_.containsKey( id ) ) {
 						System.out.println( "Unknown instance of id '" + id + "'!" );
 						System.exit( -1 );
-					}
-
-					if ( !instances_.get(id).handshakeDone ) {
+				} else if ( !instances_.get(id).handshakeDone ) {
 						String error;
 
 						error = getString_();
@@ -291,15 +288,14 @@ public class DOM_DEMO extends DOM_SHRD {
 						}
 
 						instances_.get(id).handshakeDone = true;
-					} else {
-						instances_.get(id).lock.lock();
-						instances_.get(id).condition.signal();
-						instances_.get(id).lock.unlock();
+				} else {
+					instances_.get(id).lock.lock();
+					instances_.get(id).condition.signal();
+					instances_.get(id).lock.unlock();
 
-						lock_.lock();
-						condition_.await();
-						lock_.unlock();
-					}
+					lock_.lock();
+					condition_.await();
+					lock_.unlock();
 				}
 			}
 		} catch (Exception e) {

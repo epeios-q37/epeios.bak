@@ -45,7 +45,7 @@ class XDHq extends XDHq_SHRD{
 	static function readAsset( $path, string $dir = "" ) {
 		return file_get_contents( self::getAssetFilename_( $path, $dir ) );
 	}
-	static function launch(string $headContent, $mode, string $dir ) {
+	static function launch(callable $callback, callable $userCallback, string $headContent, $mode, string $dir ) {
 		self::$mode_ = $mode;
 		self::$dir = $dir;
 
@@ -54,7 +54,7 @@ class XDHq extends XDHq_SHRD{
 			XDHq_PROD::launch();
 			break;
 		case self::MODE_DEMO:
-			XDHq_DEMO::launch($headContent );
+			XDHq_DEMO::launch($callback, $userCallback, $headContent );
 			break;
 		default:
 			throw new Exception( "Unknown mode !!!");
