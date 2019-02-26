@@ -104,7 +104,7 @@ class XDHqDOM extends Threaded {
 
 		$this->parent = $parent;
 	}
-	function setDEMOStuff( Thread $thread, $id )
+	function setDEMOStuff( Threaded $thread, $id )
 	{
 		$this->dom_->daemonThread = $thread;
 		$this->dom_->shared = $thread->shared;

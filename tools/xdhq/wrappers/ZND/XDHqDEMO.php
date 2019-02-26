@@ -66,7 +66,7 @@ class XDHqDEMO_Shared extends Threaded {
 		fwrite($this->socket,$data);
 		fflush($this->socket);
 	}
-	function write( $data, Thread $thread ) {
+	function write( $data, Threaded $thread ) {
 		$thread->synchronized( function($data) {$this->writeTU($data);}, $data);
 	}
 	function getByte() {
@@ -119,7 +119,7 @@ class XDHqDEMO_Shared extends Threaded {
 global $xdhq_shared_;
 $xdhq_shared_ = new XDHqDEMO_Shared();
 
-class XDHqDEMO_Daemon extends Thread {
+class XDHqDEMO_Daemon extends Threaded {
 	private static $pAddr = "atlastk.org";
 	private static $pPort = 53800;
 	private static $wAddr = "";
@@ -253,20 +253,12 @@ class XDHqDEMO_Daemon extends Thread {
 			}
 		}
 	}
-	public function run() {
-		$this->serve_( $this->callback, $this->userCallback );
-	}
 	public function launch(callable $callback, callable $userCallback) {
 		self::init_();
 		self::demoHandshake_();
 		self::ignition_();
 
-		$this->callback = $callback;
-		$this->userCallback = $userCallback;
-
-		$this->start();
-
-		$this->join();
+		$this->serve_( $callback, $userCallback );
 	}
 }
 
