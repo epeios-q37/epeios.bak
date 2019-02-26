@@ -56,7 +56,6 @@ class Shared extends Threaded {
 }
 
 class Chatroom extends Threaded {
-    private $shared;
     private $pseudo = "";
     private $lastMessage = 0;
 

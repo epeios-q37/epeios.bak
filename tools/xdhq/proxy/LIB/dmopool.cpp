@@ -52,9 +52,23 @@ namespace {
 	typedef lstbch::qLBUNCHd( rShared *, sFRow ) dShareds_;
 	qW( Shareds_ );
 
+	qROW( BRow );	// Back-end Row.
+
 	class rBackend_
 	{
+	private:
+		void InvalidAll_( void )
+		{
+			sFRow Row = Shareds.First();
+
+			while ( Row != qNIL ) {
+				Shareds( Row )->Id = Undefined;
+
+				Row = Shareds.Next( Row );
+			}
+		}
 	public:
+		sBRow Row;
 		fdr::rRWDriver *Driver;
 		wShareds_ Shareds;
 		mtx::rHandler Access;
@@ -66,8 +80,11 @@ namespace {
 			if ( P ) {
 				if ( Access != mtx::Undefined )
 					mtx::Delete( Access, true );
+
+				InvalidAll_();
 			}
 
+			Row = qNIL;
 			Driver = NULL;
 			Shareds.reset( P );
 			Access = mtx::Undefined;
@@ -77,11 +94,13 @@ namespace {
 		}
 		qCDTOR( rBackend_ );
 		void Init(
+			sBRow Row,
 			fdr::rRWDriver &Driver,
 			const str::dString &IP )
 		{
 			reset();
 
+			this->Row = Row;
 			this->Driver = &Driver;
 			Shareds.Init();
 			Access = mtx::Create();
@@ -107,7 +126,6 @@ namespace {
 	};
 
 	mtx::rHandler MutexHandler_ = mtx::Undefined;
-	qROW( BRow );	// Back-end Row.
 	crt::qMCRATEw( str::dString, sBRow ) Tokens_;
 	crt::qMCRATEw( str::dString, sBRow ) Heads_;
 	bch::qBUNCHw( rBackend_ *, sBRow ) Backends_;
@@ -181,6 +199,24 @@ namespace {
 		return Head;
 	}
 
+	void Remove_( sBRow Row )
+	{
+	qRH;
+		mtx::rMutex Mutex;
+	qRB;
+		Mutex.Init( MutexHandler_ );
+
+		if ( !Backends_.Exists( Row ) || !Tokens_.Exists( Row ) || !Heads_.Exists( Row ) )
+			qRGnr();
+
+		Backends_.Remove( Row );
+		Tokens_.Remove( Row );
+		Heads_.Remove( Row );
+	qRR;
+	qRT;
+	qRE;
+	}
+
 	rBackend_ *Create_(
 		fdr::rRWDriver &Driver,
 		const str::dString &IP,
@@ -210,7 +246,7 @@ namespace {
 		if ( (Backend = new rBackend_) == NULL )
 			qRAlc();
 
-		Backend->Init( Driver, IP );
+		Backend->Init( Row, Driver, IP );
 
 		Backends_.Store( Backend, Row );
 
@@ -404,17 +440,6 @@ namespace {
 	qRE;
 	}
 
-	void InvalidAll_( dShareds_ &Shareds )
-	{
-		sFRow Row = Shareds.First();
-
-		while ( Row != qNIL ) {
-			Shareds( Row )->Id = Undefined;
-
-			Row = Shareds.Next( Row );
-		}
-	}
-
 	struct gConnectionData_
 	{
 		sck::sSocket Socket = sck::Undefined;
@@ -446,7 +471,7 @@ namespace {
 	qRFR;
 	qRFT;
 		if ( Backend != NULL ) {
-			InvalidAll_( Backend->Shareds );
+			Remove_( Backend->Row );
 			delete Backend;
 
 			Backend = NULL;

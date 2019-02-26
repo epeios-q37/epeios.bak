@@ -170,8 +170,6 @@ class Atlas extends Thread {
             die("Unknown gui !!!");
             break;
         }
-
-//		while( true );
     }
 
     public function run() {

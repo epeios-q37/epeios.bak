@@ -102,6 +102,12 @@ class XDHqDOM extends Threaded {
 			die( "Unknown mode !!!");
 		}
 	}
+	function setDEMOStuff( Thread $thread, $id )
+	{
+		$this->dom_->daemonThread = $thread;
+		$this->dom_->shared = $thread->shared;
+		$this->dom_->id = $id;
+	}
 	private function call_( ...$args ) {
 		return $this->dom_->call( ...$args );
 	}

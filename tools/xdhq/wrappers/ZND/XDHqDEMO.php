@@ -18,253 +18,279 @@ You should have received a copy of the GNU Affero General Public License
 along with XDHq.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-function getEnv_($name, $value = "") {
-    if (getenv($name) !== false) {
-        return trim(getenv($name));
-    } else {
-        return trim($value);
-    }
-
+class XDHqDEMO {
+	function getEnv_($name, $value = "") {
+		if (getenv($name) !== false) {
+			return trim(getenv($name));
+		} else {
+			return trim($value);
+		}
+	}
 }
 
-class XDHqDOM_DEMO {
-    private static $pAddr = "atlastk.org";
-    private static $pPort = 53800;
-    private static $wAddr = "";
-    private static $wPort = "";
-    private static $cgi = "xdh";
-    private static $demoProtocolLabel = "877c913f-62df-40a1-bf5d-4bb5e66a6dd9";
-    private static $demoProtocolVersion = "0";
-    private static $mainProtocolLabel = "6e010737-31d8-4be3-9195-c5b5b2a9d5d9";
-    private static $mainProtocolVersion = "0";
-    private static $socket;
-    private static $token = "";
-	private static $instances_;
-    private static function isTokenEmpty_() {
-        return empty(self::$token) || (substr(self::$token, 0, 1) == '&');
-    }
-	// All write function returns data and do not write directly to socket.
-    private function writeByte_($datum) {
-        return pack("C", $datum);
-    }
-    private function writeSize_($size) {
-        $result = pack("C", $size & 0x7f);
-        $size >>= 7;
+class XDHqDEMO_Shared extends Threaded {
+	public $socket;
+	public $instances = [];
+	function writeByte($datum) {
+		return pack("C", $datum);
+	}
+	function writeSize($size) {
+		$result = pack("C", $size & 0x7f);
+		$size >>= 7;
 
-        while ($size != 0) {
-            $result = pack("C", ($size & 0x7f) | 0x80) . $result;
-            $size >>= 7;
-        }
+		while ($size != 0) {
+			$result = pack("C", ($size & 0x7f) | 0x80) . $result;
+			$size >>= 7;
+		}
 
-        return $result;
-    }
-    private function writeString_($string) {
-        return self::writeSize_(strlen($string)) . $string;
-    }
-    private function writeStrings_($strings) {
-        $count = count($strings);
-        $i = 0;
+		return $result;
+	}
+	function writeString($string) {
+		return self::writeSize(strlen($string)) . $string;
+	}
+	function writeStrings($strings) {
+		$count = count($strings);
+		$i = 0;
 		
-        $data = self::writeSize_($count);
+		$data = self::writeSize_($count);
 
-        while ($i < $count) {
-            $data .= self::writeString_($strings[$i]);
-            $i++;
-        }
+		while ($i < $count) {
+			$data .= self::writeString_($strings[$i]);
+			$i++;
+		}
 
 		return $data;
-    }
+	}
 	// Thread-unsafe write.
-	private function writeTU_( $data ) {
-		fwrite(self::$socket,$data);
-		fflush(self::$socket);
+	function writeTU( $data ) {
+		fwrite($this->socket,$data);
+		fflush($this->socket);
 	}
-	private function write_( $data, $thread ) {
-		$thread->synchronize( function($thread) {self::writeTU_($data);});
+	function write( $data, Thread $thread ) {
+		$thread->synchronized( function($data) {$this->writeTU($data);}, $data);
 	}
-    private function getByte_() {
-        while (!($c = fgetc(self::$socket))); // Workaround concerning an arbitrary timeout!
+	function getByte() {
+		while (!($c = fgetc($this->socket))); // Workaround concerning an arbitrary timeout!
 
-        return unpack("C", $c)[1];
+		return unpack("C", $c)[1];
+	}
+	function getSize() {
+		$byte = self::getByte();
+		$size = $byte & 0x7f;
+
+		while ($byte & 0x80) {
+			$byte = $self::getByte_();
+			$size = ($size << 7) + ($byte & 0x7f);
+		}
+
+		return $size;
+	}
+	function getString() {
+		$size = self::getSize();
+
+		if ($size) {
+			return fread($this->socket, $size);
+		} else {
+			return "";
+		}
+	}
+	function getStrings() {
+		$amount = $self::getSize();
+
+		while ($amount--) {
+			$strings[] = self::getString();
+		}
+
+		return $strings;
+	}
+	function getQuery() {
+		$c = fgetc($this->socket);
+		$string = "";
+
+		while ($c != "\0") {
+			$string .= $c;
+			$c = fgetc(self::$socket);
+		}
+
+		return $string;
+	}
+}
+
+global $shared;
+$shared = new XDHqDEMO_Shared();
+
+class XDHqDEMO_Daemon extends Thread {
+	private static $pAddr = "atlastk.org";
+	private static $pPort = 53800;
+	private static $wAddr = "";
+	private static $wPort = "";
+	private static $cgi = "xdh";
+	private static $demoProtocolLabel = "877c913f-62df-40a1-bf5d-4bb5e66a6dd9";
+	private static $demoProtocolVersion = "0";
+	private static $mainProtocolLabel = "6e010737-31d8-4be3-9195-c5b5b2a9d5d9";
+	private static $mainProtocolVersion = "0";
+	private static $token = "";
+    function __construct(XDHqDEMO_Shared $shared) {
+        $this->shared = $shared;
     }
-    private function getSize_() {
-        $byte = self::getByte_();
-        $size = $byte & 0x7f;
+	private static function isTokenEmpty_() {
+		return empty(self::$token) || (substr(self::$token, 0, 1) == '&');
+	}
+	// All write function returns data and do not write directly to socket.
+	public function init_() {
+		switch (XDHqDEMO::getEnv_("ATK")) {
+		case 'DEV':
+			self::$pAddr = "localhost";
+			self::$wPort = "8080";
+			echo ("\tDEV mode !\n");
+			break;
+		case 'TEST':
+			self::$cgi = "xdh_";
+			echo ("\tTEST mode !\n");
+			break;
+		case '':
+			break;
+		default:
+			die("Bad 'ATK' environment variable value : should be 'DEV' or 'TEST' !");
+		}
 
-        while ($byte & 0x80) {
-            $byte = $self::getByte_();
-            $size = ($size << 7) + ($byte & 0x7f);
-        }
+		self::$pAddr = XDHqDEMO::getEnv_("ATK_PADDR", self::$pAddr);
+		self::$pPort = intval(XDHqDEMO::getEnv_("ATK_PPORT", strval(self::$pPort)));
+		self::$wAddr = XDHqDEMO::getEnv_("ATK_WADDR", self::$wAddr);
+		self::$wPort = XDHqDEMO::getEnv_("ATK_WPORT", self::$wPort);
 
-        return $size;
-    }
-    private function getString_() {
-        $size = self::getSize_();
+		if (self::$wAddr == "") {
+			self::$wAddr = self::$pAddr;
+		}
 
-        if ($size) {
-            return fread(self::$socket, $size);
-        } else {
-            return "";
-        }
-    }
-    private function getStrings_() {
-        $amount = $self::getSize_();
-
-        while ($amount--) {
-            $strings[] = self::getString_();
-        }
-
-        return $strings;
-    }
-    private function getQuery_() {
-        $c = fgetc(self::$socket);
-        $string = "";
-
-        while ($c != "\0") {
-            $string .= $c;
-            $c = fgetc(self::$socket);
-        }
-
-        return $string;
-    }
-    public static function init_() {
-        switch (getEnv_("ATK")) {
-        case 'DEV':
-            self::$pAddr = "localhost";
-            self::$wPort = "8080";
-            echo ("\tDEV mode !\n");
-            break;
-        case 'TEST':
-            self::$cgi = "xdh_";
-            echo ("\tTEST mode !\n");
-            break;
-        case '':
-            break;
-        default:
-            die("Bad 'ATK' environment variable value : should be 'DEV' or 'TEST' !");
-        }
-
-        self::$pAddr = getEnv_("ATK_PADDR", self::$pAddr);
-        self::$pPort = intval(getEnv_("ATK_PPORT", strval(self::$pPort)));
-        self::$wAddr = getEnv_("ATK_WADDR", self::$wAddr);
-        self::$wPort = getEnv_("ATK_WPORT", self::$wPort);
-
-        if (self::$wAddr == "") {
-            self::$wAddr = self::$pAddr;
-        }
-
-        if (self::$wPort != "") {
-            self::$wPort = ":" . self::$wPort;
-        }
+		if (self::$wPort != "") {
+			self::$wPort = ":" . self::$wPort;
+		}
 
 
-        if (self::isTokenEmpty_()) {
-            $token = getEnv_("ATK_TOKEN");
+		if (self::isTokenEmpty_()) {
+			$token = XDHqDEMO::getEnv_("ATK_TOKEN");
 
-            if (!empty($token)) {
-                self::$token = "&" . $token;
-            }
+			if (!empty($token)) {
+				self::$token = "&" . $token;
+			}
 
-        }
+		}
 
-        self::$socket = fsockopen(self::$pAddr, self::$pPort, $errno, $errstr);
+		($this->shared->socket = fsockopen(self::$pAddr, self::$pPort, $errno, $errstr) );
 
-        if (!self::$socket) {
-            die("$errstr ($errno)\n");
-        }
-    }
+		if (!$this->shared->socket) {
+			die("$errstr ($errno)\n");
+		}
+	}
 	private function demosHandshake_() {
-        self::writeTU_( self::writeString_(self::$demoProtocolLabel) . self::writeString_(self::$demoProtocolVersion));
+		$this->shared->writeTU( $this->shared->writeString(self::$demoProtocolLabel) . $this->shared->writeString(self::$demoProtocolVersion));
 
-        $errorMessage = self::getString_();
+		$errorMessage = $this->shared->getString();
 
-        if ($errorMessage != "") {
-            die($errorMessage);
-        }
+		if ($errorMessage != "") {
+			die($errorMessage);
+		}
 
-        $notificationMessage = self::getString_();
+		$notificationMessage = $this->shared->getString();
 
-        if ($notificationMessage != "") {
-            echo $errorMessage . "\n";
-        }
+		if ($notificationMessage != "") {
+			echo $errorMessage . "\n";
+		}
 	}
 	private function ignition_() {
-        self::writeTU_(self::writeString_(self::$token) . self::writeString_(XDHq_DEMO::$headContent));
+		$this->shared->writeTU($this->shared->writeString(self::$token) . $this->shared->writeString(XDHq_DEMO::$headContent));
 
-		self::$token = self::getString_();
+		self::$token = $this->shared->getString();
 
-        if (self::isTokenEmpty_()) {
-            die( self::getString_());
-        }
+		if (self::isTokenEmpty_()) {
+			die( $this->shared->getString_());
+		}
 
-        if (self::$wPort != ":0") {
-            $url = "http://" . self::$wAddr . self::$wPort . "/" . self::$cgi . ".php?_token=" . self::$token;
-            echo $url . "\n";
-            echo "Open above URL in a web browser. Enjoy!\n";
-            XDHq_SHRD::open($url);
-        }
+		if (self::$wPort != ":0") {
+			$url = "http://" . self::$wAddr . self::$wPort . "/" . self::$cgi . ".php?_token=" . self::$token;
+			echo $url . "\n";
+			echo "Open above URL in a web browser. Enjoy!\n";
+			XDHq_SHRD::open($url);
+		}
 	}
-	private function serve_(callable $callback, $userCallback) {
+	private function serve_($callback,$userCallback) {
 		while(true) {
-			$id = self::getByte_();
+			$id = $this->shared->getByte();
 
 			echo "Id : " . $id   . "\n";
 
 			if ($id == 255) {	// Value reporting a new front-end.
-				$id= self::getByte_();
+				$id= $this->shared->getByte();
 
-				if ( in_array( $id, self::$instances_) )
+				if ( in_array( $id, (array)$this->shared->instances) )
 					die(  "Instance of id  '" . $id . "' exists but should not !");
 
-				self::$instances_[id] = call_user_func($callback, $userCallback);
+				$this->shared->instances[$id] = call_user_func((array)$callback, $userCallback);
+				$this->shared->instances[$id]->dom->setDEMOStuff( $this, $id );
+				$this->shared->write( $this->shared->writeByte( $id ) . $this->shared->writeString( self::$mainProtocolLabel ) . $this->shared->writeString( self::$mainProtocolVersion ), $this );
 
-				self::write_( self::writeByte_( $id ) . self::writeString_( self::$mainProtocolLabel ) . self::writeString_( self::$mainProtocolVersion ), Thread::getCurrentThread() );
-			} else if ( !id_array( $id, self::$instances_ ) ) {
+				$this->shared->instances[$id]->start();
+
+			} else if ( !key_exists( $id, (array)$this->shared->instances ) ) {
 				die( "Unknown instance of id '" . $id . "'!" );
-			} else if ( !self::$instances_[$id].handshakeDone ) {
-				$error = self::getString_();
+			} else if ( !$this->shared->instances[$id]->handshakeDone ) {
+				$error = $this->shared->getString();
 
 				if ( $error != "" )
 					die( $error );
 
-				self::getString_();	// Language. Not currently handled.
+				$this->shared->getString();	// Language. Not currently handled.
 
-				self::write_( writeByte_($i) . writeString_("ZND") );
-
+				$this->shared->write( $this->shared->writeByte($id) . $this->shared->writeString("ZND"), $this );
+				$this->shared->instances[$id]->handshakeDone = true;
 			} else {
-				self::instances_[$id]->notify();
-
-				self::wait();
+				echo "1\n";
+				$this->shared->instances[$id]->notify();
+				echo "2\n";
+				$this->wait();
+				echo "3\n";
 			}
 		}
 	}
-	public static function launch(callable $callback, callable $userCallback) {
+	public function run() {
+		$this->serve_( $this->callback, $this->userCallback );
+	}
+	public function launch(callable $callback, callable $userCallback) {
 		self::init_();
-
 		self::demosHandshake_();
-
 		self::ignition_();
 
-		self::serve_( $callback, $userCallback );
-	}
-    public function getAction(&$id) {
-        static $firstLaunch = true;
+		$this->callback = $callback;
+		$this->userCallback = $userCallback;
 
-        if (!$firstLaunch) {
+		$this->start();
+
+		$this->join();
+	}
+}
+
+class XDHqDOM_DEMO extends Threaded {
+	function __construct () {
+		$this->firstLaunch = true;
+	}
+
+    public function getAction(&$id) {
+        if (!$this->firstLaunch) {
             $this->write_(pack("a*x", "StandBy_1"));
         } else {
-            $firstLaunch = false;
+            $this->firstLaunch = false;
         }
 
-        $id = $this->getString_();
-        $action = $this->getString_();
+        $id = $this->shared->getString();
+        $action = $this->shared->getString();
 
         return $action;
     }
     public function call($command, $type, ...$args) {
         $i = 0;
 
-		$data = writeByte_($this->id );
+		$data = $this->shared->writeByte($this->id );
 
         $data .= pack("a*x", $command);
 
@@ -272,7 +298,7 @@ class XDHqDOM_DEMO {
         $i++;
 
         while ($amount--) {
-            $data .= $this->writeString_($args[$i]);
+            $data .= $this->shared->writeString($args[$i]);
             $i++;
         }
 
@@ -280,13 +306,15 @@ class XDHqDOM_DEMO {
         $i++;
 
         while ($amount--) {
-            $data .= $this->writeStrings_($args[$i]);
+            $data .= $this->shared->writeStrings($args[$i]);
             $i++;
         }
 
-        $write_( $data );
+        $this->shared->write( $data, $this->daemonThread );
 
+//		echo "A\n";
 		$this->wait();
+//		echo "B\n";
 
         switch ($type) {
         case XDHq::RT_NONE:
@@ -301,15 +329,17 @@ class XDHqDOM_DEMO {
             throw new Exception("Unknown return type !!!");
         }
 
-		$this->mainThread->notify();
+		$this->daemonThread->notify();
     }
 }
 
 class XDHq_DEMO extends XDHq_SHRD {
     static $headContent;
     public static function launch(callable $callback, callable $userCallback, string $headContent) {
+		global $shared;
         self::$headContent = $headContent;
-		XDHqDOM_DEMO::launch( $callback, $userCallback );
+		$daemon = new XDHqDEMO_Daemon($shared);
+		$daemon->launch( $callback, $userCallback );
     }
 }
 
