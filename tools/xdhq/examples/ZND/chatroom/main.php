@@ -84,7 +84,7 @@ class Chatroom extends Threaded {
     }
 
     private function displayMessages_($dom) {
-        if ((count($this->shared->messages) - 1) >= $this->lastMessage) {
+        if ((count((array)$this->shared->messages) - 1) >= $this->lastMessage) {
             $xml = $dom->synchronized(function ($dom) {return $this->buildXML_($dom);}, $dom);
 
             $id = $dom->createElement("span");
@@ -96,7 +96,7 @@ class Chatroom extends Threaded {
     private function connect_($dom) {
         $dom->setLayout("", readAsset("Main.html"));
         $dom->focus("Pseudo");
-        $dom->setTimeout(1000, "Update");
+//        $dom->setTimeout(1000, "Update");
         $dom->synchronized(function ($dom) {$this->displayMessages_($dom);}, $dom);
     }
 
@@ -151,6 +151,7 @@ class Chatroom extends Threaded {
         $dom->setContent("Message", "");
         $dom->focus("Message");
         $dom->synchronized(function ($pseudo, $message) {$this->addMessage_($pseudo, $message);}, $this->pseudo, $message);
+		var_dump($this->shared->messages);
         $this->displayMessages_($dom);
     }
 
@@ -179,10 +180,12 @@ class Chatroom extends Threaded {
     }
 }
 
+global $shared;
 $shared = new Shared();
 
 function myNew() {
     global $shared;
+	var_dump($shared);
     return new Chatroom($shared);
 }
 

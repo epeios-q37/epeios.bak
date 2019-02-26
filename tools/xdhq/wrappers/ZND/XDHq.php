@@ -90,7 +90,7 @@ class XDHqDOM extends Threaded {
 
 		return $keysAndValues;
 	}
-	function __construct() {
+	function __construct($parent) {
 		switch ( XDHq::getMode() ) {
 		case XDHq::MODE_PROD:
 			$this->dom_ = new XDHqDOM_PROD;
@@ -101,12 +101,15 @@ class XDHqDOM extends Threaded {
 		default:
 			die( "Unknown mode !!!");
 		}
+
+		$this->parent = $parent;
 	}
 	function setDEMOStuff( Thread $thread, $id )
 	{
 		$this->dom_->daemonThread = $thread;
 		$this->dom_->shared = $thread->shared;
 		$this->dom_->id = $id;
+		$this->dom_->parent = $this->parent;
 	}
 	private function call_( ...$args ) {
 		return $this->dom_->call( ...$args );

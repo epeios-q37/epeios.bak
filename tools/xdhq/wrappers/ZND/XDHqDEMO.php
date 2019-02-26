@@ -52,10 +52,10 @@ class XDHqDEMO_Shared extends Threaded {
 		$count = count($strings);
 		$i = 0;
 		
-		$data = self::writeSize_($count);
+		$data = self::writeSize($count);
 
 		while ($i < $count) {
-			$data .= self::writeString_($strings[$i]);
+			$data .= self::writeString($strings[$i]);
 			$i++;
 		}
 
@@ -95,7 +95,7 @@ class XDHqDEMO_Shared extends Threaded {
 		}
 	}
 	function getStrings() {
-		$amount = $self::getSize();
+		$amount = self::getSize();
 
 		while ($amount--) {
 			$strings[] = self::getString();
@@ -116,8 +116,8 @@ class XDHqDEMO_Shared extends Threaded {
 	}
 }
 
-global $shared;
-$shared = new XDHqDEMO_Shared();
+global $xdhq_shared_;
+$xdhq_shared_ = new XDHqDEMO_Shared();
 
 class XDHqDEMO_Daemon extends Thread {
 	private static $pAddr = "atlastk.org";
@@ -159,11 +159,11 @@ class XDHqDEMO_Daemon extends Thread {
 		self::$wAddr = XDHqDEMO::getEnv_("ATK_WADDR", self::$wAddr);
 		self::$wPort = XDHqDEMO::getEnv_("ATK_WPORT", self::$wPort);
 
-		if (self::$wAddr == "") {
+		if ( empty(self::$wAddr)) {
 			self::$wAddr = self::$pAddr;
 		}
 
-		if (self::$wPort != "") {
+		if (!empty(self::$wPort)) {
 			self::$wPort = ":" . self::$wPort;
 		}
 
@@ -183,19 +183,19 @@ class XDHqDEMO_Daemon extends Thread {
 			die("$errstr ($errno)\n");
 		}
 	}
-	private function demosHandshake_() {
+	private function demoHandshake_() {
 		$this->shared->writeTU( $this->shared->writeString(self::$demoProtocolLabel) . $this->shared->writeString(self::$demoProtocolVersion));
 
 		$errorMessage = $this->shared->getString();
 
-		if ($errorMessage != "") {
+		if (!empty($errorMessage)) {
 			die($errorMessage);
 		}
 
 		$notificationMessage = $this->shared->getString();
 
-		if ($notificationMessage != "") {
-			echo $errorMessage . "\n";
+		if (!empty($notificationMessage)) {
+			echo $notificationMessage . "\n";
 		}
 	}
 	private function ignition_() {
@@ -218,38 +218,38 @@ class XDHqDEMO_Daemon extends Thread {
 		while(true) {
 			$id = $this->shared->getByte();
 
-			echo "Id : " . $id   . "\n";
-
 			if ($id == 255) {	// Value reporting a new front-end.
 				$id= $this->shared->getByte();
 
-				if ( in_array( $id, (array)$this->shared->instances) )
+				if ( key_exists( $id, (array)$this->shared->instances) )
 					die(  "Instance of id  '" . $id . "' exists but should not !");
 
 				$this->shared->instances[$id] = call_user_func((array)$callback, $userCallback);
 				$this->shared->instances[$id]->dom->setDEMOStuff( $this, $id );
 				$this->shared->write( $this->shared->writeByte( $id ) . $this->shared->writeString( self::$mainProtocolLabel ) . $this->shared->writeString( self::$mainProtocolVersion ), $this );
-
 				$this->shared->instances[$id]->start();
-
 			} else if ( !key_exists( $id, (array)$this->shared->instances ) ) {
 				die( "Unknown instance of id '" . $id . "'!" );
 			} else if ( !$this->shared->instances[$id]->handshakeDone ) {
 				$error = $this->shared->getString();
 
-				if ( $error != "" )
+				if ( !empty($error))
 					die( $error );
 
 				$this->shared->getString();	// Language. Not currently handled.
 
 				$this->shared->write( $this->shared->writeByte($id) . $this->shared->writeString("ZND"), $this );
 				$this->shared->instances[$id]->handshakeDone = true;
+
 			} else {
-				echo "1\n";
-				$this->shared->instances[$id]->notify();
-				echo "2\n";
-				$this->wait();
-				echo "3\n";
+				$this->shared->instances[$id]->synchronized( function($thread) {
+					if ( !$thread->notify() )
+						die( __LINE__ . ": Notify failed !!!\n" );
+				}, $this->shared->instances[$id]);
+				$this->synchronized(function ($thread) {
+					if ( !$thread->wait())
+						die( __LINE__ . ": Wait failed !!!\n" );
+				}, $this );
 			}
 		}
 	}
@@ -258,7 +258,7 @@ class XDHqDEMO_Daemon extends Thread {
 	}
 	public function launch(callable $callback, callable $userCallback) {
 		self::init_();
-		self::demosHandshake_();
+		self::demoHandshake_();
 		self::ignition_();
 
 		$this->callback = $callback;
@@ -274,23 +274,38 @@ class XDHqDOM_DEMO extends Threaded {
 	function __construct () {
 		$this->firstLaunch = true;
 	}
-
+	private function wait_() {
+		$this->parent->synchronized(function ($thread) {
+			if ( !$thread->wait())
+				die( __LINE__ . ": Wait failed !!!\n" );
+		}, $this->parent);
+	}
+	private function notify_() {
+		$this->daemonThread->synchronized( function ($thread) {
+			if ( !$thread->notify())
+				die( __LINE__ . ": Notify failed !!!\n" );
+		}, $this->daemonThread);
+	}
     public function getAction(&$id) {
         if (!$this->firstLaunch) {
-            $this->write_(pack("a*x", "StandBy_1"));
+            $this->shared->write($this->shared->writeByte($this->id) . pack("a*x", "StandBy_1"),$this->daemonThread);
         } else {
             $this->firstLaunch = false;
         }
 
+		$this->wait_();
+
         $id = $this->shared->getString();
         $action = $this->shared->getString();
 
+		$this->notify_();
+		
         return $action;
     }
     public function call($command, $type, ...$args) {
         $i = 0;
 
-		$data = $this->shared->writeByte($this->id );
+		$data = $this->shared->writeByte($this->id);
 
         $data .= pack("a*x", $command);
 
@@ -312,33 +327,35 @@ class XDHqDOM_DEMO extends Threaded {
 
         $this->shared->write( $data, $this->daemonThread );
 
-//		echo "A\n";
-		$this->wait();
-//		echo "B\n";
+		$object = NULL;
 
         switch ($type) {
         case XDHq::RT_NONE:
             break;
         case XDHq::RT_STRING:
-            return $this->getString_();
+			$this->wait_();
+            $object = $this->shared->getString();
+			$this->notify_();
             break;
         case XDHq::RT_STRINGS:
-            return $this->getStrings_();
+			$this->wait_();
+            $object = $this->shared->getStrings();
+			$this->notify_();
             break;
         default:
             throw new Exception("Unknown return type !!!");
         }
 
-		$this->daemonThread->notify();
+		return $object;
     }
 }
 
 class XDHq_DEMO extends XDHq_SHRD {
     static $headContent;
     public static function launch(callable $callback, callable $userCallback, string $headContent) {
-		global $shared;
+		global $xdhq_shared_;
         self::$headContent = $headContent;
-		$daemon = new XDHqDEMO_Daemon($shared);
+		$daemon = new XDHqDEMO_Daemon($xdhq_shared_);
 		$daemon->launch( $callback, $userCallback );
     }
 }

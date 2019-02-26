@@ -105,7 +105,7 @@ class Atlas extends Thread {
     }
 
     public function __construct($userObject) {
-        $this->dom = new XDHqDOM();
+        $this->dom = new XDHqDOM($this);
         $this->userObject = $userObject;
     }
 
