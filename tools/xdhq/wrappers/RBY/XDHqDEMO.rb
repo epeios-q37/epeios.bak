@@ -23,6 +23,34 @@ module XDHqDEMO
     require 'socket'
     require 'pp'
 
+    class Instance
+        def initialize(userObject,id)
+            @userOject = userObject
+            @id = id
+            @mutex = Mutex.new
+            @condVar = ConditionVariable.new
+            @handshakeDone = false
+        end
+        def handshakeDone?
+            if @handshakeDone
+                return true
+            else
+                @handshakeDone = true
+                return false
+            end
+        end
+        def wait
+            @mutex.synchronize {
+                @conVar.wait(@mutex)
+            }
+        end
+        def signal
+            @mutex.synchronize {
+                    @condVar.signal()
+            }
+        end
+    end
+
     def XDHq::l
         caller_infos = caller.first.split(":")
         puts "#{caller_infos[0]} - #{caller_infos[1]}"  
@@ -39,6 +67,13 @@ module XDHqDEMO
     @wPort = ""
     @cgi = "xdh"
 
+    @instances = {}
+    @globalMutex = Mutex.new
+    @globalCondVar = ConditionVariable.new
+    @outputMutex = Mutex.new
+    @headContent = ""
+    @token = ""
+
     def XDHq::getEnv(name, value = "")
         env = ENV[name]
 
@@ -48,11 +83,13 @@ module XDHqDEMO
             return value.strip()
         end
     end
-
+    def self.tokenEmpty?()
+        return @token.empty?() || @token[0] == "&"
+    end
     def self.init
         token = ""
 
-        case getEnv("ATK")
+        case XDHq::getEnv("ATK")
         when ""
         when "DEV"
             @pAddr = "localhost"
@@ -64,10 +101,10 @@ module XDHqDEMO
             abort("Bad 'ATK' environment variable value : should be 'DEV' or 'TEST' !")
         end
 
-        @pAddr = getEnv("ATK_PADDR", $pAddr)
-        @pPort = getEnv("ATK_PPORT", $pPort.to_s())
-        @wAddr = getEnv("ATK_WADDR", $wAddr)
-        @wPort = getEnv("ATK_WPORT",$wPort)
+        @pAddr = XDHq::getEnv("ATK_PADDR", @pAddr)
+        @pPort = XDHq::getEnv("ATK_PPORT", @pPort.to_s())
+        @wAddr = XDHq::getEnv("ATK_WADDR", @wAddr)
+        @wPort = XDHq::getEnv("ATK_WPORT", @wPort)
 
         if @wAddr.empty?
             @wAddr = @pAddr
@@ -77,96 +114,177 @@ module XDHqDEMO
             @wPort = ":" + @wPort
         end
 
-        if tokenEmpty?()
-            token = getEnv("ATK_TOKEN")
+        if self.tokenEmpty?()
+            token = XDHq::getEnv("ATK_TOKEN")
         end
 
         if !token.empty?
-            $token = "&" + token
+            @token = "&" + token
         end
     end
 
     init()
 
-    @headContent = ""
-    @token = ""
+    def self.writeByte(byte)
+        return byte.chr()
+    end
+    def self.writeSize(size)
+        result = (size & 0x7F).chr()
+        size >>= 7
 
-    def demoHandshake_
-        
+        while size != 0
+            result = ((size & 0x7f) | 0x80).chr() + result
+            size >>= 7
+        end
 
-    def XDHqDEMO::launch(headContent)
+        return result.to_s()
+    end
+    def self.writeString(string)
+        return writeSize(string.bytes.length()) + string
+    end
+    def self.writeStrings(strings)
+        result = writeSize(strings.length())
+
+        for string in strings
+            result += writeString(string)
+        end
+
+        return result
+    end
+    def self.writeStringNUL(string)
+        return "#{string}\0"
+    end
+    def self.writeTU(data)
+        @socket.write(data)
+    end
+    def self.writeTS(data)
+        @outputMutex.synchronize {
+            writeTU(data)
+        }
+    end
+    def self.getByte
+        return @socket.recv(1).unpack('C')[0]
+    end
+    def self.getSize
+        byte = getByte()
+        size = byte & 0x7f
+
+        while (byte & 0x80) != 0    # For Ruby, 0 == true
+            byte = getByte()
+            size = (size << 7) + (byte & 0x7f)
+        end
+
+        return size
+    end
+    def self.getString
+        size = getSize()
+
+        if size != 0    # For Ruby, 0 == true
+            return @socket.recv(size)
+        else
+            return ""
+        end
+    end
+    def self.getStrings
+        amount = getSize()
+        strings = []
+
+        while amount != 0    # For Ruby, 0 == true
+            strings.push(getString())
+            amount -= 1
+        end
+
+        return strings
+    end
+    def self.demoHandshake
+        writeTS( writeString(@demoProtocolLabel) + writeString(@demoProtocolVersion))
+
+        error = getString()
+
+        if !error.empty?()
+            abort error
+        end
+
+        notification = getString()
+
+        if !notification.empty?()
+            puts(notification)
+        end
+    end
+    def self.ignition
+        writeTS(writeString(@token) + writeString(@headContent))
+
+        @token = getString()
+
+        if tokenEmpty?()
+            abort(getString())
+        end
+
+        if $wPort != ":0"
+            url = "http://#{@wAddr}#{@wPort}/#{@cgi}.php?_token=#{@token}"
+
+            puts(url)
+            puts("Open above URL in a web browser. Enjoy!\n")
+            XDHqSHRD::open(url)
+        end
+    end
+    def self.serve(callback, userCallback,callbacks)
+        while true
+            id = getByte()
+
+            p "id: " + id.to_s
+
+            if id == 255    # Value reporting a new front-end.
+                id = getByte()  # The id of the new front-end.
+
+                if @instances.has_key?(id)
+                    abort("Instance of id '#{id}' exists but should not !")
+                end
+
+                @instances[id]=Instance.new(callback.call(userCallback.call(),callbacks),id)
+
+                writeTS( writeByte(id) + writeString(@mainProtocolLabel) + writeString(@mainProtocolVersion))
+            elsif !@instances.has_key?(id)
+                abort("Unknown instance of id '#{id}'!")
+            elsif !@instances[id].handshakeDone?
+                error = getString()
+
+                if !error.empty?()
+                    abort( error )
+                end
+
+                getString() # Language. Currently ignored.
+
+                writeTS( writeByte(id) + writeString("RBY"))
+            else
+                @instances[id].signal()
+
+                @globalMutex.synchronize {
+                    @globalCondVar.wait(@globalMutex)
+                }
+            end
+
+        end
+    end
+    def XDHqDEMO::launch(callback,userCallback,callbacks,headContent)
         @headContent = headContent
 
-        @socket = TCPSocket.new($pAddr, $pPort)
+        @socket = TCPSocket.new(@pAddr, @pPort)
+
+        self.demoHandshake()
+
+        self.ignition()
+
+        self.serve(callback,userCallback,callbacks)
     end
         
     class DOM
+=begin
         def getEnv(name, value = "" )
             return XDHq.getEnv(name, value)
         end
         def tokenEmpty?()
             return $token.empty?() || $token[0] == "&"
-        end
-        def writeSize(size)
-            result = (size & 0x7F).chr()
-            size >>= 7
-
-            while size != 0
-                result = ((size & 0x7f) | 0x80).chr() + result
-                size >>= 7
-            end
-
-            result = result.to_s()
-
-            @socket.write(result)
-        end
-        def writeString(string)
-            writeSize(string.bytes.length())
-            @socket.write(string)
-        end
-        def writeStrings(strings)
-            writeSize(strings.length())
-    
-            for string in strings
-                writeString(string)
-            end
-        end
-        def writeStringNUL(string)
-            @socket.write("#{string}\0")
-        end
-        def getByte()
-            return @socket.recv(1).unpack('C')[0]
-        end
-        def getSize()
-            byte = getByte()
-            size = byte & 0x7f
-
-            while (byte & 0x80) != 0    # For Ruby, 0 == true
-                byte = getByte()
-                size = (size << 7) + (byte & 0x7f)
-            end
-
-            return size
-        end
-        def getString
-            size = getSize()
-
-            if size != 0    # For Ruby, 0 == true
-                return @socket.recv(size)
-            else
-                return ""
-            end
-        end
-        def getStrings()
-            amount = getSize()
-            strings = []
-
-            while amount != 0    # For Ruby, 0 == true
-                strings.push(getString())
-                amount -= 1
-            end
-
-            return strings
         end
         def initialize()
             @firstLaunch = true
@@ -251,29 +369,44 @@ module XDHqDEMO
             getString() # Language.
             writeString("RBY")
         end
-
+=end
+        def wait(id)
+            @instances[id].xdhq_mutex.synchronize {
+                @instances[id].xdhq_condVar.wait(@instances[id].xdhq_mutex)
+            }
+        end
+        def signal()
+            @globalMutex.synchronize {
+                @globalCondVar.signal()
+            }
+        end
         def getAction()
+            l
             if @firstLaunch
                 @firstLaunch = false
             else
-                writeStringNUL("StandBy_1")
+                writeTS( writeStringNUL("StandBy_1"))
             end
+
+            wait()
 
             id = getString()
             action = getString()
 
+            signal()
+
             return action,id
         end
-
         def call(command, type, *args)
             i = 0
-            writeStringNUL(command)
+            data = writeByte(@id)
+            data += writeStringNUL(command)
 
             amount = args[i]
             i += 1
 
             while amount != 0    # For Ruby, 0 == true
-                writeString(args[i])
+                data += writeString(args[i])
                 i += 1
                 amount -= 1
             end
@@ -282,17 +415,25 @@ module XDHqDEMO
             i += 1
 
             while amount != 0    # For Ruby, 0 == true
-                writeStrings(args[i])
+                data += writeStrings(args[i])
                 i += 1
                 amount -= 1
             end
+
+            writeTS(data)
 
             case type
             when XDHqSHRD::VOID
             when XDHqSHRD::STRING
-                return getString()
+                wait()
+                string = getString()
+                signal()
+                return string
             when XDHqSHRD::STRINGS
-                return getStrings()
+                wait()
+                strings = getStrings()
+                signal
+                return strings
             else
                 abort("Unknown return type !!!")
             end

@@ -33,20 +33,28 @@ module Atlas
 	end
 
 	def Atlas::thread(userObject,dom,callbacks)
+		l
 		while true
+			l
 			action, id = dom.getAction()
-
+			l
 			callbacks[action].call(userObject,dom,id)
+			l
 		end
 	end
 
-	def Atlas::launch(callbacks,new,headContent="",dir="")
-		XDHq.launch(headContent,dir)
+	def self.cb(userObject, callbacks)
+		return Thread.new(userObject,XDHq::DOM.new(),callbacks) do |userObject,dom,callbacks| thread(userObject, dom, callbacks) end
+ end
 
+	def Atlas::launch(callbacks,callback,headContent="",dir="")
+		XDHq.launch(-> (callback, callbacks) {self.cb(callback, callbacks)},callback,callbacks,headContent,dir)
+=begin
 		while true
 			thread = Thread.new(new.call(),XDHq::DOM.new(),callbacks) do |userObject,dom,callbacks| thread(userObject, dom, callbacks) end
 			$threads << thread
 		end
+=end
 	end
 
 	def Atlas::readAsset(path, dir="")

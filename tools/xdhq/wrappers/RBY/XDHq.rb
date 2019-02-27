@@ -218,9 +218,9 @@ module XDHq
 		end
 	end
 
-	def XDHq::launch(headContent, dir)
+	def XDHq::launch(callback,userCallback,callbacks,headContent, dir)
 		$dir = dir
-		XDHqDEMO.launch(headContent)
+		XDHqDEMO.launch(callback, userCallback, callbacks, headContent)
 	end
 
 end
