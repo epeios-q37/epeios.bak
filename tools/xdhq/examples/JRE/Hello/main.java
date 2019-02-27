@@ -31,20 +31,22 @@ class Hello extends Atlas {
 		switch( action) {
 		case "":
 			dom.setLayout("", readAsset_( "Main.html") );
-			dom.focus( "input");
+			dom.setContent( "input", "World");
 			break;
-		case "Typing":
-			dom.setContent("name", dom.getContent(id));
+		case "Submit":
+			dom.alert("Hello, " + dom.getContent("input").trim() + "!" );
 			break;
 		case "Clear":
 			if ( dom.confirm( "Are you sure ?" ) )
-				dom.setContents( new HashMap<String,String> ()
-					{{ put( "input", ""); put( "name", ""); }} );
+				dom.setContent( "input", "");
 			break;
 		default:
 			throw new RuntimeException( "Unknown action '" + action + "' !!!");
 		}
+
+		dom.focus( "input");
 	}
+
 	public static void main( String[] args) throws Exception {
 		launch(()->new Hello(),readAsset_( "Head.html" ), "Hello", GUI.DEFAULT, args );
 	}

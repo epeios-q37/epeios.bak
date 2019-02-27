@@ -53,21 +53,3 @@ module Atlas
 		return XDHq::readAsset(path, dir)
 	end
 end
-
-=begin
-trap("INT") {
-		pp($threads)
-		pp(Thread.list)
-  puts "trapping"
-		XDHq::l
-  $Thread.list.each{|t|
-    puts "killing"
-    Thread.kill t
-		}
-		XDHq::l
-		exit 130
-		XDHq::l
-		abort( "Yo !")
-		XDHq::l
-}
-=end

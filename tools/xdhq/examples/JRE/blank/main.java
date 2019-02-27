@@ -57,8 +57,6 @@ class Blank extends Atlas {
 		else
 			dir = "blank";
 
-		launch(readAsset_("Head.html"), dir, GUI.DEFAULT, args);
-
-		for (;;) new Blank();
+		launch(() -> new Blank(), readAsset_("Head.html"), dir, GUI.DEFAULT, args);
 	}
 }

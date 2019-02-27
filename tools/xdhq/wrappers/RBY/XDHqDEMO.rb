@@ -28,17 +28,16 @@ module XDHqDEMO
         puts "#{caller_infos[0]} - #{caller_infos[1]}"  
     end
 
-    $protocolLabel = "3f0aef6b-b893-4ccd-9316-d468588fc572"
-    $protocolVersion = "0"
+    @demoProtocolLabel = "877c913f-62df-40a1-bf5d-4bb5e66a6dd9"
+    @demoProtocolVersion = "0"
+    @mainProtocolLabel = "6e010737-31d8-4be3-9195-c5b5b2a9d5d9"
+    @mainProtocolVersion = "0"
 
-    $pAddr = "atlastk.org"
-    $pPort = 53800
-    $wAddr = ""
-    $wPort = ""
-    $cgi = "xdh"
-
-    $headContent = ""
-    $token = ""
+    @pAddr = "atlastk.org"
+    @pPort = 53800
+    @wAddr = ""
+    @wPort = ""
+    @cgi = "xdh"
 
     def XDHq::getEnv(name, value = "")
         env = ENV[name]
@@ -50,8 +49,55 @@ module XDHqDEMO
         end
     end
 
+    def self.init
+        token = ""
+
+        case getEnv("ATK")
+        when ""
+        when "DEV"
+            @pAddr = "localhost"
+            @wPort = "8080"
+            puts("\tDEV mode !")
+        when "TEST"
+            @cgi = "xdh_"
+        else
+            abort("Bad 'ATK' environment variable value : should be 'DEV' or 'TEST' !")
+        end
+
+        @pAddr = getEnv("ATK_PADDR", $pAddr)
+        @pPort = getEnv("ATK_PPORT", $pPort.to_s())
+        @wAddr = getEnv("ATK_WADDR", $wAddr)
+        @wPort = getEnv("ATK_WPORT",$wPort)
+
+        if @wAddr.empty?
+            @wAddr = @pAddr
+        end
+
+        if !@wPort.empty?
+            @wPort = ":" + @wPort
+        end
+
+        if tokenEmpty?()
+            token = getEnv("ATK_TOKEN")
+        end
+
+        if !token.empty?
+            $token = "&" + token
+        end
+    end
+
+    init()
+
+    @headContent = ""
+    @token = ""
+
+    def demoHandshake_
+        
+
     def XDHqDEMO::launch(headContent)
-        $headContent = headContent
+        @headContent = headContent
+
+        @socket = TCPSocket.new($pAddr, $pPort)
     end
         
     class DOM
