@@ -33,22 +33,18 @@ module Atlas
 	end
 
 	def Atlas::thread(userObject,dom,callbacks)
-		l
 		while true
-			l
 			action, id = dom.getAction()
-			l
 			callbacks[action].call(userObject,dom,id)
-			l
 		end
 	end
 
-	def self.cb(userObject, callbacks)
-		return Thread.new(userObject,XDHq::DOM.new(),callbacks) do |userObject,dom,callbacks| thread(userObject, dom, callbacks) end
+	def self.cb(userObject, callbacks,instance)
+		return Thread.new(userObject,XDHq::DOM.new(instance),callbacks) do |userObject,dom,callbacks| thread(userObject, dom, callbacks) end
  end
 
 	def Atlas::launch(callbacks,callback,headContent="",dir="")
-		XDHq.launch(-> (callback, callbacks) {self.cb(callback, callbacks)},callback,callbacks,headContent,dir)
+		XDHq.launch(-> (userObject,callbacks,id) {self.cb(userObject,callbacks,id)},callback,callbacks,headContent,dir)
 =begin
 		while true
 			thread = Thread.new(new.call(),XDHq::DOM.new(),callbacks) do |userObject,dom,callbacks| thread(userObject, dom, callbacks) end

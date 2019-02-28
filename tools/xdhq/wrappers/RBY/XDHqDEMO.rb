@@ -24,8 +24,13 @@ module XDHqDEMO
     require 'pp'
 
     class Instance
-        def initialize(userObject,id)
-            @userOject = userObject
+        def initialize
+            @mutex = Mutex.new
+            @condVar = ConditionVariable.new
+            @handshakeDone = false
+        end
+        def set(thread,id)
+            @thread = thread
             @id = id
             @mutex = Mutex.new
             @condVar = ConditionVariable.new
@@ -39,9 +44,12 @@ module XDHqDEMO
                 return false
             end
         end
+        def getId()
+            return @id
+        end
         def wait
             @mutex.synchronize {
-                @conVar.wait(@mutex)
+                @condVar.wait(@mutex)
             }
         end
         def signal
@@ -73,6 +81,12 @@ module XDHqDEMO
     @outputMutex = Mutex.new
     @headContent = ""
     @token = ""
+
+    def self.signal()
+        @globalMutex.synchronize {
+            @globalCondVar.signal()
+        }
+    end
 
     def XDHq::getEnv(name, value = "")
         env = ENV[name]
@@ -232,8 +246,6 @@ module XDHqDEMO
         while true
             id = getByte()
 
-            p "id: " + id.to_s
-
             if id == 255    # Value reporting a new front-end.
                 id = getByte()  # The id of the new front-end.
 
@@ -241,7 +253,9 @@ module XDHqDEMO
                     abort("Instance of id '#{id}' exists but should not !")
                 end
 
-                @instances[id]=Instance.new(callback.call(userCallback.call(),callbacks),id)
+                instance = Instance.new
+                instance.set(callback.call(userCallback.call(),callbacks,instance),id)
+                @instances[id]=instance
 
                 writeTS( writeByte(id) + writeString(@mainProtocolLabel) + writeString(@mainProtocolVersion))
             elsif !@instances.has_key?(id)
@@ -258,15 +272,15 @@ module XDHqDEMO
                 writeTS( writeByte(id) + writeString("RBY"))
             else
                 @instances[id].signal()
-
+                
                 @globalMutex.synchronize {
                     @globalCondVar.wait(@globalMutex)
                 }
             end
-
         end
     end
     def XDHqDEMO::launch(callback,userCallback,callbacks,headContent)
+        Thread::abort_on_exception = true
         @headContent = headContent
 
         @socket = TCPSocket.new(@pAddr, @pPort)
@@ -279,6 +293,10 @@ module XDHqDEMO
     end
         
     class DOM
+        def initialize(instance)
+            @instance = instance
+            @firstLaunch = true
+        end
 =begin
         def getEnv(name, value = "" )
             return XDHq.getEnv(name, value)
@@ -370,28 +388,22 @@ module XDHqDEMO
             writeString("RBY")
         end
 =end
-        def wait(id)
-            @instances[id].xdhq_mutex.synchronize {
-                @instances[id].xdhq_condVar.wait(@instances[id].xdhq_mutex)
-            }
+        def wait()
+            @instance.wait()
         end
         def signal()
-            @globalMutex.synchronize {
-                @globalCondVar.signal()
-            }
+            XDHqDEMO::signal()
         end
         def getAction()
-            l
             if @firstLaunch
                 @firstLaunch = false
             else
-                writeTS( writeStringNUL("StandBy_1"))
+                XDHqDEMO::writeTS( XDHqDEMO::writeByte(@instance.getId()) + XDHqDEMO::writeStringNUL("StandBy_1"))
             end
-
             wait()
 
-            id = getString()
-            action = getString()
+            id = XDHqDEMO::getString()
+            action = XDHqDEMO::getString()
 
             signal()
 
@@ -399,14 +411,14 @@ module XDHqDEMO
         end
         def call(command, type, *args)
             i = 0
-            data = writeByte(@id)
-            data += writeStringNUL(command)
+            data = XDHqDEMO::writeByte(@instance.getId())
+            data += XDHqDEMO::writeStringNUL(command)
 
             amount = args[i]
             i += 1
 
             while amount != 0    # For Ruby, 0 == true
-                data += writeString(args[i])
+                data += XDHqDEMO::writeString(args[i])
                 i += 1
                 amount -= 1
             end
@@ -415,23 +427,23 @@ module XDHqDEMO
             i += 1
 
             while amount != 0    # For Ruby, 0 == true
-                data += writeStrings(args[i])
+                data += XDHqDEMO::writeStrings(args[i])
                 i += 1
                 amount -= 1
             end
 
-            writeTS(data)
+            XDHqDEMO::writeTS(data)
 
             case type
             when XDHqSHRD::VOID
             when XDHqSHRD::STRING
                 wait()
-                string = getString()
+                string = XDHqDEMO::getString()
                 signal()
                 return string
             when XDHqSHRD::STRINGS
                 wait()
-                strings = getStrings()
+                strings = XDHqDEMO::getStrings()
                 signal
                 return strings
             else

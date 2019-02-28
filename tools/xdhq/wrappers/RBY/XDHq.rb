@@ -69,8 +69,8 @@ module XDHq
 	end
 
 	class DOM
-		def initialize()
-			@dom = XDHqDEMO::DOM.new()
+		def initialize(id)
+			@dom = XDHqDEMO::DOM.new(id)
 		end
 
 		private def unsplit(*args)

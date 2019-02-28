@@ -25,13 +25,27 @@ end
 
 def acConnect(userObject, dom, id)
 	dom.setLayout("", readAsset("Main.html"))
+	dom.setContent("input", "World")
 	dom.focus("input")
 end
 
+def acSubmit(userObject, dom, id)
+	dom.alert("Hello, " + dom.getContent("input") + "!")
+	dom.focus("input")
+end
+
+def acClear(userObject, dom, id)
+	if dom.confirm?("Are you sure?")
+		dom.setContent("input", "")
+	end
+	dom.focus("input")
+end
+
+
 callbacks = {
 	"" => method(:acConnect),
-	"Typing" => -> (userObject, dom, id) { dom.setContent("name", dom.getContent(id))},
-	"Clear" => -> (userObject, dom, id) { if dom.confirm?("Are you sure?") then dom.setContents({"input" => "", "name" => "" }) end }
+	"Submit" => method(:acSubmit),
+	"Clear" => method(:acClear),
 }
 
 Atlas.launch(callbacks, -> () {}, readAsset("Head.html"))
