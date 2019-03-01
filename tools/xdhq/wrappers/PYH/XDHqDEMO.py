@@ -39,59 +39,156 @@ else:
 	print("Unhandled python version!")
 	os._exit(1)
 
-_protocolLabel = "3f0aef6b-b893-4ccd-9316-d468588fc572"
-_protocolVersion = "0"
+_demoProtocolLabel = "877c913f-62df-40a1-bf5d-4bb5e66a6dd9"
+_demoProtocolVersion = "0"
+_mainProtocolLabel = "6e010737-31d8-4be3-9195-c5b5b2a9d5d9"
+_mainProtocolVersion = "0"
+
+_writeLock = threading.Lock()
 
 _headContent = ""
 _token = ""
 
-def _getEnv( name, value= "" ):
+def isTokenEmpty():
+	global _token
+	return not _token or _token[0] == "&"
+
+def getEnv( name, value= "" ):
 	if name in os.environ:
 		return os.environ[name].strip()
 	else:
 		return value.strip()
+
+def writeSize(size):
+	global _socket;
+	_writeSize( _socket, size )
+
+def writeString(string):
+	global _socket;
+	_writeString(_socket, string)
+
+def writeStrings(strings):
+	writeSize(len(strings))
+
+	for string in strings:
+		writeString(string)
+
+def getSize():
+	global _socket;
+	return _getSize( _socket)
+
+def getString():
+	global _socket;
+	return _getString(_socket)
+
+def getStrings():
+	amount = getSize()
+	strings = []
+
+	while amount:
+		strings.append(getString())
+		amount -= 1
+
+	return strings
+
+def _init:
+	global _token, _socket
+	pAddr = "atlastk.org"
+	pPort = 53800
+	wAddr = ""
+	wPort = ""
+	cgi = "xdh"
+
+	atk = getEnv("ATK")
+
+	if atk == "DEV":
+		pAddr = "localhost"
+		wPort = "8080"
+		print("\tDEV mode !")
+	elif atk == "TEST":
+		cgi = "xdh_"
+		print("\tTEST mode!")
+	elif atk:
+		sys.exit("Bad 'ATK' environment variable value : should be 'DEV' or 'TEST' !")
+
+	pAddr = _getEnv("ATK_PADDR", pAddr)
+	pPort = int(_getEnv("ATK_PPORT", str(pPort)))
+	wAddr = _getEnv("ATK_WADDR", wAddr)
+	wPort = _getEnv("ATK_WPORT",wPort)
+
+	if wAddr == "":
+		wAddr = pAddr
+
+	if wPort != "":
+		wPort = ":" + wPort
+
+	if this._isTokenEmpty():
+		token = _getEnv("ATK_TOKEN")
+
+	if token:
+		_token = "&" + token
+
+	_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	_socket.connect((pAddr,pPort))
+
+def _demoHandshake:
+	global _writeLock, _demoProtocolLabel, _demoProtocolVersion
+
+	_writeLock.acquire()
+
+	writeString(_demoProtocolLabel)
+	writeString(_demoProtocolVersion)
+
+	_writeLock.release()
+
+	error = getString()
+
+	if error:
+		sys.exit(error)
+
+	notification = getString()
+
+	if notification:
+		print(notification)
+
+def ignition:
+	global _token, _headContent, _
+	_writeLock.acquire()
+
+	write( _token)
+	write_(headContent)
+
+	_writeLock.release()
+
+	_token = getString()
+
+	if isTokenEmpty():
+		sys.exit(getString())
+
+	if ( wPort != ":0" ):
+		url = "http://" + wAddr + wPort + "/" + cgi + ".php?_token=" + _token
+
+		print(url)
+		print("Open above URL in a web browser. Enjoy!\n")
+		XDHqSHRD.open(url)
+
+
+
+
+
+
 
 def launch(headContent):
 	global _headContent
 
 	_headContent = headContent
 
+	_init()
 
 class DOM_DEMO:
 	_firstLaunch = True
 
-	def _isTokenEmpty(this):
-		global _token
-		return not _token or _token[0] == "&"
-
-	def _writeSize(this, size):
-		_writeSize( this._socket, size )
-
-	def _writeString(this, string):
-		_writeString(this._socket, string)
-
-	def _writeStrings(this, strings):
-		this._writeSize(len(strings))
-
-		for string in strings:
-			this._writeString(string)
-
-	def _getSize(this):
-		return _getSize( this._socket)
-
-	def _getString(this):
-		return _getString(this._socket)
-
-	def _getStrings(this):
-		amount = this._getSize()
-		strings = []
-
-		while amount:
-			strings.append(this._getString())
-			amount -= 1
-
-		return strings
-
+"""
 	def __init__(this):
 		global _protocolLabel, _protocolVersion,_headContent, _token
 		pAddr = "atlastk.org"
@@ -100,7 +197,7 @@ class DOM_DEMO:
 		wPort = ""
 		cgi = "xdh"
 
-		atk = _getEnv("ATK")
+		atk = getEnv("ATK")
 
 		if atk == "DEV":
 			pAddr = "localhost"
@@ -168,6 +265,7 @@ class DOM_DEMO:
 
 		this._getString()	# Language.
 		this._writeString("PYH")
+"""
 
 	def getAction(this):
 		if this._firstLaunch:

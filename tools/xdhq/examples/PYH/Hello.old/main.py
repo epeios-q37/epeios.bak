@@ -1,4 +1,4 @@
-=begin
+""" 
  Copyright (C) 2018 Claude SIMON (http://q37.info/contact/).
 
 	This file is part of XDHq.
@@ -15,36 +15,28 @@
 
 	You should have received a copy of the GNU Affero General Public License
 	along with XDHq If not, see <http://www.gnu.org/licenses/>.
-=end
+ """
 
-require 'Atlas'
+import os, sys
 
-def readAsset(path)
-	return Atlas::readAsset(path, "Hello")
-end
+sys.path.append("./Atlas.python.zip")
+sys.path.append("../Atlas.python.zip")
 
-def acConnect(userObject, dom, id)
-	dom.setLayout("", readAsset("Main.html"))
-	dom.focus("input")
-end
+import Atlas
 
-def acSubmit(userObject, dom, id)
-	dom.alert("Hello, " + dom.getContent("input") + "!")
-	dom.focus("input")
-end
+def readAsset(path):
+	return Atlas.readAsset(path, "Hello")
 
-def acClear(userObject, dom, id)
-	if dom.confirm?("Are you sure?")
-		dom.setContent("input", "")
-	end
-	dom.focus("input")
-end
-
+def acConnect(this, dom, id):
+	dom.setLayout("", readAsset( "Main.html") )
+	dom.focus( "input")
 
 callbacks = {
-	"" => method(:acConnect),
-	"Submit" => method(:acSubmit),
-	"Clear" => method(:acClear),
-}
-
-Atlas.launch(callbacks, -> () {}, readAsset("Head.html"))
+		"": acConnect,
+		"Typing": lambda this, dom, id: dom.setContent("name", dom.getContent(id)),
+		"Clear": lambda this, dom, id:
+			dom.setContents( {  "input": "", "name": ""} )
+			if dom.confirm( "Are you sure ?" ) else None
+	}
+		
+Atlas.launch(callbacks, lambda: None, readAsset("Head.html"))

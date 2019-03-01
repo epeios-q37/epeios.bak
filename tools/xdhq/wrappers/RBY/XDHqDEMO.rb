@@ -82,6 +82,15 @@ module XDHqDEMO
     @headContent = ""
     @token = ""
 
+    def self.lockOutputMutex()
+        @outputMutex.lock();
+    end
+
+    def self.unlockOutputMutex()
+        @outputMutex.unlock();
+    end
+
+
     def self.signal()
         @globalMutex.synchronize {
             @globalCondVar.signal()
@@ -140,7 +149,7 @@ module XDHqDEMO
     init()
 
     def self.writeByte(byte)
-        return byte.chr()
+        @socket.write(byte.chr())
     end
     def self.writeSize(size)
         result = (size & 0x7F).chr()
@@ -151,30 +160,21 @@ module XDHqDEMO
             size >>= 7
         end
 
-        return result.to_s()
+        @socket.write(result.to_s())
     end
     def self.writeString(string)
-        return writeSize(string.bytes.length()) + string
+        writeSize(string.bytes.length())
+        @socket.write(string)
     end
     def self.writeStrings(strings)
-        result = writeSize(strings.length())
-
+        writeSize(strings.length())
+    
         for string in strings
-            result += writeString(string)
+            writeString(string)
         end
-
-        return result
     end
     def self.writeStringNUL(string)
-        return "#{string}\0"
-    end
-    def self.writeTU(data)
-        @socket.write(data)
-    end
-    def self.writeTS(data)
-        @outputMutex.synchronize {
-            writeTU(data)
-        }
+        @socket.write("#{string}\0")
     end
     def self.getByte
         return @socket.recv(1).unpack('C')[0]
@@ -211,7 +211,10 @@ module XDHqDEMO
         return strings
     end
     def self.demoHandshake
-        writeTS( writeString(@demoProtocolLabel) + writeString(@demoProtocolVersion))
+        @outputMutex.synchronize {
+            writeString(@demoProtocolLabel)
+            writeString(@demoProtocolVersion)
+        }
 
         error = getString()
 
@@ -226,7 +229,10 @@ module XDHqDEMO
         end
     end
     def self.ignition
-        writeTS(writeString(@token) + writeString(@headContent))
+        @outputMutex.synchronize {
+            writeString(@token)
+            writeString(@headContent)
+        }
 
         @token = getString()
 
@@ -257,7 +263,11 @@ module XDHqDEMO
                 instance.set(callback.call(userCallback.call(),callbacks,instance),id)
                 @instances[id]=instance
 
-                writeTS( writeByte(id) + writeString(@mainProtocolLabel) + writeString(@mainProtocolVersion))
+                @outputMutex.synchronize {
+                    writeByte(id)
+                    writeString(@mainProtocolLabel)
+                    writeString(@mainProtocolVersion)
+                }
             elsif !@instances.has_key?(id)
                 abort("Unknown instance of id '#{id}'!")
             elsif !@instances[id].handshakeDone?
@@ -269,7 +279,10 @@ module XDHqDEMO
 
                 getString() # Language. Currently ignored.
 
-                writeTS( writeByte(id) + writeString("RBY"))
+                @outputMutex.synchronize {
+                    writeByte(id)
+                    writeString("RBY")
+                }
             else
                 @instances[id].signal()
                 
@@ -297,97 +310,6 @@ module XDHqDEMO
             @instance = instance
             @firstLaunch = true
         end
-=begin
-        def getEnv(name, value = "" )
-            return XDHq.getEnv(name, value)
-        end
-        def tokenEmpty?()
-            return $token.empty?() || $token[0] == "&"
-        end
-        def initialize()
-            @firstLaunch = true
-            token = ""
-
-            getEnv("ATK")
-
-            case getEnv("ATK")
-            when ""
-            when "DEV"
-                $pAddr = "localhost"
-                $wPort = "8080"
-                puts("\tDEV mode !")
-            when "TEST"
-                $cgi = "xdh_"
-            else
-                abort("Bad 'ATK' environment variable value : should be 'DEV' or 'TEST' !")
-            end
-
-            $pAddr = getEnv("ATK_PADDR", $pAddr)
-            $pPort = getEnv("ATK_PPORT", $pPort.to_s())
-            $wAddr = getEnv("ATK_WADDR", $wAddr)
-            $wPort = getEnv("ATK_WPORT",$wPort)
-
-            if $wAddr.empty?
-                $wAddr = $pAddr
-            end
-
-            if !$wPort.empty?
-                $wPort = ":" + $wPort
-            end
-
-            if tokenEmpty?()
-                token = getEnv("ATK_TOKEN")
-            end
-
-            if !token.empty?
-                $token = "&" + token
-            end
-
-            @socket = TCPSocket.new($pAddr, $pPort)
-
-            writeString($token)
-
-            if tokenEmpty?()
-                writeString($headContent)
-
-                $token = getString()
-
-                if tokenEmpty?()
-                    abort(getString())
-                end
-
-                if $wPort != ":0"
-                    url = "http://#{$wAddr}#{$wPort}/#{$cgi}.php?_token=#{$token}"
-
-                    puts(url)
-                    puts("Open above URL in a web browser. Enjoy!\n")
-                    XDHqSHRD::open(url)
-                end
-            else
-                returnedToken = getString()
-
-                if ( returnedToken == "" )
-                    abort(getString())
-                end
-
-                if getString() != $token
-                    abort("Unmatched token !!!")
-                end
-            end
-
-            writeString($protocolLabel)
-            writeString($protocolVersion)
-
-            errorMessage = getString()
-
-            if ( errorMessage != "" )
-                abort(errorMessage)
-            end
-
-            getString() # Language.
-            writeString("RBY")
-        end
-=end
         def wait()
             @instance.wait()
         end
@@ -398,7 +320,10 @@ module XDHqDEMO
             if @firstLaunch
                 @firstLaunch = false
             else
-                XDHqDEMO::writeTS( XDHqDEMO::writeByte(@instance.getId()) + XDHqDEMO::writeStringNUL("StandBy_1"))
+                XDHqDEMO::lockOutputMutex() # '@outputMutex.synchronize {...}' does not work as '@outputMutex' is not the good one.
+                XDHqDEMO::writeByte(@instance.getId())
+                XDHqDEMO::writeStringNUL("StandBy_1")
+                XDHqDEMO::unlockOutputMutex()
             end
             wait()
 
@@ -411,14 +336,16 @@ module XDHqDEMO
         end
         def call(command, type, *args)
             i = 0
-            data = XDHqDEMO::writeByte(@instance.getId())
-            data += XDHqDEMO::writeStringNUL(command)
+            
+            XDHqDEMO::lockOutputMutex() # '@outputMutex.synchronize {...}' does not work as '@outputMutex' is not the good one.
+            XDHqDEMO::writeByte(@instance.getId())
+            XDHqDEMO::writeStringNUL(command)
 
             amount = args[i]
             i += 1
 
             while amount != 0    # For Ruby, 0 == true
-                data += XDHqDEMO::writeString(args[i])
+                XDHqDEMO::writeString(args[i])
                 i += 1
                 amount -= 1
             end
@@ -427,12 +354,12 @@ module XDHqDEMO
             i += 1
 
             while amount != 0    # For Ruby, 0 == true
-                data += XDHqDEMO::writeStrings(args[i])
+                XDHqDEMO::writeStrings(args[i])
                 i += 1
                 amount -= 1
             end
 
-            XDHqDEMO::writeTS(data)
+            XDHqDEMO::unlockOutputMutex()
 
             case type
             when XDHqSHRD::VOID
