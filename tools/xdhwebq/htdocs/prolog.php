@@ -27,7 +27,8 @@ $out = '
 			<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 			<meta http-equiv="Cache-Control" content="no-cache"/>
 			<script src="xdh/xdhtml.js"></script>
-			<script src="xdh/xdhwebq.js"></script>'
+			<script src="xdh/xdhwebq.js"></script>
+			<script src="xdh/qrcode.min.js"></script>'
 . $head .
   '<script>handleQuery("' . $cgi . '?_token=' . $token . '&_language=' . $language . '&_action=' . $action . '&_cont=' . '" )</script>
 		</head>

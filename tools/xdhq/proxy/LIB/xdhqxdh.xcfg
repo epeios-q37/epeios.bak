@@ -14,10 +14,9 @@
 				<!--Plugin target="Token" Id="Forbidden"/-->
 			</Plugins>
 			<DemoNotification>
-**********
-Ceci est une notification dédiée à la version DEMO !!!
-Eh oui !
-**********
+****************************************************************************
+     Your application is connected to the free public server. Welcome !
+****************************************************************************
 			</DemoNotification>
 		</Parameters>
 		<Definitions>

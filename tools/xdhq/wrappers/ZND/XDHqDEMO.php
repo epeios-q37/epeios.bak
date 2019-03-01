@@ -79,7 +79,7 @@ class XDHqDEMO_Shared extends Threaded {
 		$size = $byte & 0x7f;
 
 		while ($byte & 0x80) {
-			$byte = $self::getByte_();
+			$byte = self::getByte();
 			$size = ($size << 7) + ($byte & 0x7f);
 		}
 

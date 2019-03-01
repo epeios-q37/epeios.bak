@@ -240,11 +240,24 @@
 						}
             
 						if ( id == "" ) {
-              let node = document.createElement("span");
-														node.style.all="initial";
-              node.innerHTML='<div style="display: table; margin: 15px auto auto auto; border: 1px solid; padding: 10px;box-shadow: 5px 5px;"><span style="text-shadow: 1px 1px;">Powered by the <span style="font-style: italic;">Atlas</span> toolkit (<a href="http://atlastk.org/" target="_blank">http://atlastk.org/</a>).</span></div>';
+							let node = document.createElement("span");
+							node.style.all="initial";
+							node.innerHTML=`
+								<div style="display:table; margin: auto;">
+								 <div style="display: table; margin: 15px auto auto auto; border: 1px solid; padding: 10px;box-shadow: 5px 5px;">
+								  <span style="text-shadow: 1px 1px;">Powered by the <span style="font-style: italic;">Atlas</span> toolkit (<a href="http://atlastk.org/">http://atlastk.org/</a>)</span>
+								 </div>
+								<span style="display: table; margin: 10px auto 5px auto;font-style: oblique;">QRCode to this app:</span>
+								<div style="display: flex; justify-content: space-around;">
+ 								 <a href="#">
+ 								  <div id="qrcode"></div>
+								 </a>
+							    </div>
+							    <span style="display: table; margin: auto;font-style: oblique;margin: 5px auto auto auto;">Generated with <a href="https://davidshimjs.github.io/qrcodejs/">qrcode.js</a></span>
+							   </div>`;
 //							getElement( id ).insertBefore( node, getElement( id ).firstChild );
 							getElement( id ).appendChild( node );
+							new QRCode("qrcode", {width:125, height:125, correctLevel: QRCode.CorrectLevel.L}).makeCode(window.location.href);
 						}
 
 						var digests = fetchEventHandlers( id );
