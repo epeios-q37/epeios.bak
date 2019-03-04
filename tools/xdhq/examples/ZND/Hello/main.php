@@ -57,13 +57,15 @@ class Hello extends Threaded {
    $dom->setLayout("", readAsset("Main.html"));
    $dom->focus("input");
    break;
-  case "Typing":
-   $dom->setContent("name", $dom->getContent($id));
+  case "Submit":
+   $dom->alert("Hello, " . $dom->getContent("input") . "!" );
+   $dom->focus("input");
    break;
   case "Clear":
    if ($dom->confirm("Are you sure?")) {
-    $dom->setContents(["input" => "", "name" => ""]);
+    $dom->setContent("input", "");
    }
+   $dom->focus("input");
    break;
   default:
    throw new Exception("Unknown action '" . $action . "' !!!");

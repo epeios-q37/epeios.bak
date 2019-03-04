@@ -243,6 +243,18 @@ namespace {
 		Script.Append( "\");'';");
 
 		Proxy.Execute( Script, Buffer );
+
+/*
+	Despite the fact that this primitive does not need a return value,
+	an empty string is returned in order for the back-end to wait
+	that this primitive is achieved before launching another primitive.
+	Without this, all other threads of the same back-end will be blocked
+	until this primitive will return.
+*/
+
+		prtcl::Put( "", Flow );
+
+		Flow.Commit();
 	qRR;
 	qRT;
 	qRE;
@@ -297,7 +309,7 @@ namespace {
 	}
 
 	void SetLayout_(
-		flw::rRWFlow &Flow,
+		flw::rRFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 	qRH;
@@ -377,7 +389,7 @@ namespace {
 	}
 
 	void SetContents_(
-		flw::rRWFlow &Flow,
+		flw::rRFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 	qRH;
@@ -402,7 +414,7 @@ namespace {
 	}
 
 	void SetTimeout_(
-		flw::rRWFlow &Flow,
+		flw::rRFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 	qRH;
@@ -561,7 +573,7 @@ namespace {
 	}
 
 	void InsertChild_(
-		flw::rRWFlow &Flow,
+		flw::rRFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 	qRH;
@@ -581,7 +593,7 @@ namespace {
 	}
 
 	void AppendChild_(
-		flw::rRWFlow &Flow,
+		flw::rRFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 	qRH;
@@ -601,7 +613,7 @@ namespace {
 	}
 
 	void InsertBefore_(
-		flw::rRWFlow &Flow,
+		flw::rRFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 	qRH;
@@ -621,7 +633,7 @@ namespace {
 	}
 
 	void InsertAfter_(
-		flw::rRWFlow &Flow,
+		flw::rRFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 	qRH;
@@ -641,7 +653,7 @@ namespace {
 	}
 
 	void DressWidgets_(
-		flw::rRWFlow &Flow,
+		flw::rRFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 	qRH;
@@ -660,7 +672,7 @@ namespace {
 
 	namespace {
 		void HandleClasses_(
-			flw::rRWFlow &Flow,
+			flw::rRFlow &Flow,
 			void (xdhdws::sProxy::* Method)(
 				const xdhdws::rNString &Ids,
 				const xdhdws::rNString &Classes),
@@ -689,21 +701,21 @@ namespace {
 	}
 
 	void AddClasses_(
-		flw::rRWFlow &Flow,
+		flw::rRFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 		HandleClasses_( Flow, &xdhdws::sProxy::AddClasses, Proxy );
 	}
 
 	void RemoveClasses_(
-		flw::rRWFlow &Flow,
+		flw::rRFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 		HandleClasses_( Flow, &xdhdws::sProxy::RemoveClasses, Proxy );
 	}
 
 	void ToggleClasses_(
-		flw::rRWFlow &Flow,
+		flw::rRFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 		HandleClasses_( Flow, &xdhdws::sProxy::ToggleClasses, Proxy );
@@ -711,7 +723,7 @@ namespace {
 
 	namespace {
 		void HandleElements_(
-			flw::rRWFlow &Flow,
+			flw::rRFlow &Flow,
 			void (xdhdws::sProxy::* Method)( const xdhdws::rNString &Ids ),
 			xdhdws::sProxy &Proxy )
 		{
@@ -736,21 +748,21 @@ namespace {
 	}
 
 	void EnableElements_(
-		flw::rRWFlow &Flow,
+		flw::rRFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 		HandleElements_( Flow, &xdhdws::sProxy::EnableElements, Proxy );
 	}
 
 	void DisableElements_(
-		flw::rRWFlow &Flow,
+		flw::rRFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 		HandleElements_( Flow, &xdhdws::sProxy::DisableElements, Proxy );
 	}
 
 	void SetAttribute_(
-		flw::rRWFlow &Flow,
+		flw::rRFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 	qRH;
@@ -793,7 +805,7 @@ namespace {
 	}
 
 	void RemoveAttribute_(
-		flw::rRWFlow &Flow,
+		flw::rRFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 	qRH;
@@ -812,7 +824,7 @@ namespace {
 	}
 
 	void SetProperty_(
-		flw::rRWFlow &Flow,
+		flw::rRFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 	qRH;
@@ -856,7 +868,7 @@ namespace {
 	}
 
 	void Focus_(
-		flw::rRWFlow &Flow,
+		flw::rRFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 	qRH;

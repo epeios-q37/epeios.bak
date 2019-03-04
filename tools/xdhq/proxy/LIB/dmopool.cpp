@@ -446,17 +446,17 @@ namespace {
 		const char *IP = NULL;
 	};
 
-	void NewConnexionRoutine_(
+	void NewConnexion_(
 		gConnectionData_ &Data,
 		mtk::gBlocker &Blocker )
 	{
-	qRFH;
+	qRH;
 		sck::sSocket Socket = sck::Undefined;
 		str::wString IP;
 		mtx::rMutex Mutex;
 		sck::rRWDriver Driver;
 		rBackend_ *Backend = NULL;
-	qRFB;
+	qRB;
 		Socket = Data.Socket;
 		IP.Init( Data.IP );
 
@@ -468,8 +468,8 @@ namespace {
 
 		if ( ( Backend = CreateBackend_( Driver, IP ) ) != NULL )
 			HandleSwitching_( Driver, Backend->Shareds, Backend->Switch );	// Don't return until disconnection or error.
-	qRFR;
-	qRFT;
+	qRR;
+	qRT;
 		if ( Backend != NULL ) {
 			Remove_( Backend->Row );
 			delete Backend;
@@ -483,6 +483,18 @@ namespace {
 			sck::Close( Socket, err::hUserDefined );	// An error occurring during closing is ignored.
 			Socket = sck::Undefined;
 		}
+	qRE( sclmisc::ErrFinal() );
+	}
+
+	void NewConnexionRoutine_(
+		gConnectionData_ &Data,
+		mtk::gBlocker &Blocker )
+	{
+	qRFH;
+	qRFB;
+	NewConnexion_( Data, Blocker );
+	qRFR;
+	qRFT;
 	qRFE( sclmisc::ErrFinal() );
 	}
 

@@ -121,7 +121,9 @@ class XDHqDOM extends Threaded {
 		return self::call_( "Execute_1", XDHq::RT_STRING, 1, $script, 0 );
 	}
 	function alert( string $message ) {
-		self::call_( "Alert_1", XDHq::RT_NONE, 1, $message, 0 );
+		self::call_( "Alert_1", XDHq::RT_STRING, 1, $message, 0 );
+		# For the return value being 'RT_STRING' instead of 'RT_NONE',
+		# see the 'alert' primitive in 'XDHqXDH'.
 	}
 	function confirm( string $message ) {
 		return self::call_( "Confirm_1", XDHq::RT_STRING, 1, $message, 0 ) == "true";

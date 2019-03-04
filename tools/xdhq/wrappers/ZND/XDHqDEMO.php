@@ -210,6 +210,7 @@ class XDHqDEMO_Daemon extends Threaded {
 		if (self::$wPort != ":0") {
 			$url = "http://" . self::$wAddr . self::$wPort . "/" . self::$cgi . ".php?_token=" . self::$token;
 			echo $url . "\n";
+			echo str_pad("",strlen($url),'^') . "\n";
 			echo "Open above URL in a web browser. Enjoy!\n";
 			XDHq_SHRD::open($url);
 		}

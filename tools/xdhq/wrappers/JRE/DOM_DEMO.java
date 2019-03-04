@@ -228,6 +228,9 @@ public class DOM_DEMO extends DOM_SHRD {
 			String url = "http://" + wAddr + wPort + "/" + cgi + ".php?_token=" + token;
 
 			System.out.println(url);
+			char[] filler = new char[url.length()];
+			Arrays.fill(filler,'^');
+			System.out.println(filler);
 			System.out.println("Open above URL in a web browser. Enjoy!");
 
 			if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
@@ -338,16 +341,20 @@ public class DOM_DEMO extends DOM_SHRD {
 			} else
 				firstLaunch_ = false;
 
+			Instance_ instance;
+
 			synchronized(instances_) {	// See 'serve_(...)'.
-				instances_.get(id_).lock.lock();
-				instances_.get(id_).condition.await();
-
-				event.id = getString_();
-
-				event.action = getString_();
-
-				instances_.get(id_).lock.unlock();
+				instance = instances_.get(id_);
 			}
+
+			instance.lock.lock();
+			instance.condition.await();
+
+			event.id = getString_();
+
+			event.action = getString_();
+
+			instance.lock.unlock();
 
 			lock_.lock();
 			condition_.signal();

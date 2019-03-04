@@ -94,7 +94,9 @@ module XDHq
 		end
 	
 		def alert(message)
-			call( "Alert_1", $VOID, 1, message, 0 )
+			call( "Alert_1", $STRING, 1, message, 0 )
+		# For the return value being 'STRING' instead of 'VOID',
+		# see the 'alert' primitive in 'XDHqXDH'.
 		end
 
 		def confirm?(message)

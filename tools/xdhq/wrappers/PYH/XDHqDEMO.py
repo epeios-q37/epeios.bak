@@ -23,6 +23,7 @@ import inspect, os, socket, sys, threading
 
 if sys.version_info[0] == 2:
 	import XDHqDEMO2
+	l = XDHqDEMO2.l
 	_writeByte = XDHqDEMO2.writeByte
 	_writeSize = XDHqDEMO2.writeSize
 	_writeString = XDHqDEMO2.writeString
@@ -32,6 +33,7 @@ if sys.version_info[0] == 2:
 	_getString = XDHqDEMO2.getString
 elif sys.version_info[0] == 3:
 	import XDHqDEMO3
+	l = XDHqDEMO3.l
 	_writeByte = XDHqDEMO3.writeByte
 	_writeSize = XDHqDEMO3.writeSize
 	_writeString = XDHqDEMO3.writeString
@@ -208,6 +210,7 @@ def _ignition():
 		url = "http://" + _wAddr + _wPort + "/" + _cgi + ".php?_token=" + _token
 
 		print(url)
+		print("".rjust(len(url),'^'))
 		print("Open above URL in a web browser. Enjoy!\n")
 		XDHqSHRD.open(url)
 
@@ -215,16 +218,12 @@ def _serve(callback, userCallback, callbacks ):
 	global _writeLock, _globalCondition
 	while True:
 
-		print(inspect.getframeinfo(inspect.currentframe()).lineno)
+#		l()
 
 		id = getByte()
 		
-		print(inspect.getframeinfo(inspect.currentframe()).lineno)
-
 		if id == 255:    # Value reporting a new front-end.
 			id = getByte()  # The id of the new front-end.
-
-			print(id)
 
 			if id in _instances:
 				sys.exit("Instance of id '" + id + "' exists but should not !")
@@ -233,14 +232,11 @@ def _serve(callback, userCallback, callbacks ):
 			instance.set(callback(userCallback(), callbacks, instance),id)
 			_instances[id] = instance
 
-			print(inspect.getframeinfo(inspect.currentframe()).lineno)
 			_writeLock.acquire()
 			writeByte(id)
 			writeString(_mainProtocolLabel)
 			writeString(_mainProtocolVersion)
 			_writeLock.release()
-
-			print(inspect.getframeinfo(inspect.currentframe()).lineno)
 
 		elif not id in _instances:
 			sys.exit("Unknown instance of id '" + str(id) + "'!")
@@ -286,36 +282,25 @@ class DOM_DEMO:
 		with _globalCondition:
 			_globalCondition.notify()
 	def getAction(this):
-		print(inspect.getframeinfo(inspect.currentframe()).lineno)
 		if this._firstLaunch:
 			this._firstLaunch = False
 		else:
-			print(inspect.getframeinfo(inspect.currentframe()).lineno)
 			_writeLock.acquire()
 			writeByte(this.instance.getId())
 			writeStringNUL("StandBy_1")
 			_writeLock.release()
-			print(inspect.getframeinfo(inspect.currentframe()).lineno)
-
-		print(inspect.getframeinfo(inspect.currentframe()).lineno)
 
 		this.wait()
-
-		print(inspect.getframeinfo(inspect.currentframe()).lineno)
 
 		id = getString();
 		action = getString()
 
 		this.signal()
 
-		print(inspect.getframeinfo(inspect.currentframe()).lineno)
-
 		return [action,id]
 
 	def call(this, command, type, *args):
 		i=0
-
-		print(command)
 
 		_writeLock.acquire()
 		writeByte(this.instance.getId())
@@ -336,7 +321,6 @@ class DOM_DEMO:
 			writeStrings(args[i])
 			i += 1
 			amount -= 1
-
 		_writeLock.release()
 
 		if type == XDHqSHRD.RT_STRING:
@@ -351,5 +335,3 @@ class DOM_DEMO:
 			return strings
 		elif type != XDHqSHRD.RT_VOID:
 			sys.exit("Unknown return type !!!")
-
-		

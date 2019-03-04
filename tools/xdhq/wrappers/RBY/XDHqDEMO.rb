@@ -241,6 +241,7 @@ module XDHqDEMO
             url = "http://#{@wAddr}#{@wPort}/#{@cgi}.php?_token=#{@token}"
 
             puts(url)
+            puts("".rjust(url.length,'^'))
             puts("Open above URL in a web browser. Enjoy!\n")
             XDHqSHRD::open(url)
         end
@@ -368,7 +369,7 @@ module XDHqDEMO
             when XDHqSHRD::STRINGS
                 wait()
                 strings = XDHqDEMO::getStrings()
-                signal
+                signal()
                 return strings
             else
                 abort("Unknown return type !!!")

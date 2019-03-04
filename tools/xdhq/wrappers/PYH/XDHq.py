@@ -84,7 +84,9 @@ class DOM:
 		return this._dom.call("Execute_1" ,_STRING, 1, script, 0)
 
 	def alert(this,message):
-		this._dom.call( "Alert_1", _VOID, 1, message, 0 )
+		this._dom.call( "Alert_1", _STRING, 1, message, 0 )
+		# For the return value being 'STRING' instead of 'VOID',
+		# see the 'alert' primitive in 'XDHqXDH'.
 
 	def confirm(this,message):
 		return this._dom.call( "Confirm_1", _STRING, 1, message, 0 ) == "true"
@@ -185,9 +187,5 @@ class DOM:
 
 def launch(callback, userCallback, callbacks, headContent, dir):
 	global _dir
-	XDHqDEMO.launch(callback, userCallback,callbacks,headContent)
 	_dir = dir
-
-
-
-
+	XDHqDEMO.launch(callback, userCallback,callbacks,headContent)

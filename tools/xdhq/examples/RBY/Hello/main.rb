@@ -40,7 +40,6 @@ def acClear(userObject, dom, id)
 	dom.focus("input")
 end
 
-
 callbacks = {
 	"" => method(:acConnect),
 	"Submit" => method(:acSubmit),

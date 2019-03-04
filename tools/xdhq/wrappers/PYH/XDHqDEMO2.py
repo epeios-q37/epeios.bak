@@ -17,6 +17,12 @@ Copyright (C) 2018 Claude SIMON (http://q37.info/contact/).
 	along with XDHq If not, see <http://www.gnu.org/licenses/>.
  """
 
+import inspect
+
+def l():
+	frameInfo = inspect.getouterframes(inspect.currentframe())[1]
+	print(frameInfo[1] + ":" + str(frameInfo[2]))
+
 def writeByte(socket, byte):
 	socket.send(chr(byte))
 

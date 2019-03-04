@@ -138,7 +138,9 @@ class XDH {
 		call(this, "Execute_1", types.STRING, 1, script, 0, callback);
 	}
 	alert(message, callback) {
-		call(this, "Alert_1", types.VOID, 1, message, 0, callback);
+        call(this, "Alert_1", types.STRING, 1, message, 0, callback);
+        // For the return value being 'STRING' instead of 'VOID',
+        // see the 'alert' primitive in 'XDHqXDH'.
 	}
 	confirm(message, callback) {
 		call(this, "Confirm_1", types.STRING, 1, message, 0, (answer) => callback(answer == "true"));

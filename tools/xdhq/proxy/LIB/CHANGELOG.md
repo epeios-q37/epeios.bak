@@ -1,5 +1,8 @@
 # *XDHq* *CHANGELOG*
 
+## 2019-03-04
+- fixing *alert* primitive blocking issue,
+
 ## 2019-02-05
 - fixing *clang* issue,
 

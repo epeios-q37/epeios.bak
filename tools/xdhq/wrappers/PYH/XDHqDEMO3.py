@@ -17,8 +17,13 @@
 	along with XDHq If not, see <http://www.gnu.org/licenses/>.
  """
 
+import inspect
+
+def l():
+	frameInfo = inspect.getouterframes(inspect.currentframe())[1]
+	print(frameInfo.filename + ":" + str(frameInfo.lineno))
+
 def writeByte(socket, byte):
-	print("== ", byte)
 	socket.send(bytes([byte]))
 
 def writeSize(socket, size):

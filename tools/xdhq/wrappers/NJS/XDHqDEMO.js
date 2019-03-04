@@ -17,7 +17,7 @@
 	along with XDHq. If not, see <http://www.gnu.org/licenses/>.
 */
 
-"use strict"
+"use strict";
 
 var pAddr = "atlastk.org";
 var pPort = 53800;
@@ -41,11 +41,11 @@ switch (getEnv("ATK") ) {
 case 'DEV':
 	pAddr = "localhost";
 	wPort = "8080";
-	console.log( "\tDEV mode !")
+    console.log("\tDEV mode !");
 	break;
 case 'TEST':
 	cgi = "xdh_";
-	console.log("\tTEST mode !")
+    console.log("\tTEST mode !");
 	break;
 case '':
 	break;
@@ -319,8 +319,7 @@ function ignition(socket, createCallback, callbacks) {
 		let completeURL = "http://" + wAddr + wPort + "/" + cgi + ".php?_token=" + token;
 
 		console.log(completeURL);
-		console.log(new Array(completeURL.length + 1).join('^'))
-		console.log("Open above URL in a web browser. Enjoy!");
+        console.log(new Array(completeURL.length + 1).join('^'));		console.log("Open above URL in a web browser. Enjoy!");
 
 		open(completeURL);
 	}
@@ -397,7 +396,7 @@ function pseudoServer_(createCallback, callbacks, head) {
 						let completeURL = "http://" + wAddr + wPort + "/" + cgi + ".php?_token=" + token;
 
 						console.log(completeURL);
-						console.log(new Array(completeURL.length + 1).join('^'))
+                        console.log(new Array(completeURL.length + 1).join('^'));
 						console.log("Open above URL in a web browser. Enjoy!");
 
 						open(completeURL);
@@ -420,7 +419,7 @@ function pseudoServer_(createCallback, callbacks, head) {
 				client._xdhDOM._xdhType = types.UNDEFINED;
 				client.write(addString(addString(Buffer.from(""), mainProtocolLabel), mainProtocolVersion));
 			} else if (relaunch) {
-				let query = ""
+                let query = "";
 				let offset = 0;
 				let errorMessage = "";
 				let notification = "";
@@ -505,17 +504,17 @@ function launch(createCallback, callbacks, head) {
 }
 
 function add(data, argument) {
-	if (typeof (argument) === "string")
+	if (typeof argument === "string")
 		return addString(data, argument);
-	else if (typeof (argument) === "object")
+	else if (typeof argument === "object")
 		return addStrings(data, argument);
 	else
-		throw "Unexpected argument type: " + typeof (argument);
+		throw "Unexpected argument type: " + typeof argument;
 }
 
 function call(instance, command, type) {
 	let i = 3;
-	let data = Buffer.concat([Buffer.alloc(1, instance._xdh.id), Buffer.from(command + '\x00')]);;
+	let data = Buffer.concat([Buffer.alloc(1, instance._xdh.id), Buffer.from(command + '\x00')]);
 	let amount = arguments[i++];
 
 //	console.log( Date.now(), " Command: ", command, instance._xdh.id);
