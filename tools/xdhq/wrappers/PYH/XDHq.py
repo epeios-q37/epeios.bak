@@ -74,8 +74,8 @@ def readAsset(path, dir=""):
 	return open(_getAssetFilename(path, dir)).read()
 
 class DOM:
-	def __init__(this):
-		this._dom = XDHqDEMO.DOM_DEMO()
+	def __init__(this,instance):
+		this._dom = XDHqDEMO.DOM_DEMO(instance)
 
 	def getAction(this):
 		return this._dom.getAction()
@@ -183,9 +183,9 @@ class DOM:
 	def focus(this, id):
 		this._dom.call("Focus_1", _VOID,1, id, 0)
 
-def launch(headContent, dir):
+def launch(callback, userCallback, callbacks, headContent, dir):
 	global _dir
-	XDHqDEMO.launch(headContent)
+	XDHqDEMO.launch(callback, userCallback,callbacks,headContent)
 	_dir = dir
 
 

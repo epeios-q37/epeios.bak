@@ -17,6 +17,9 @@ Copyright (C) 2018 Claude SIMON (http://q37.info/contact/).
 	along with XDHq If not, see <http://www.gnu.org/licenses/>.
  """
 
+def writeByte(socket, byte):
+	socket.send(chr(byte))
+
 def writeSize(socket, size):
 	result = chr(size & 0x7f)
 	size >>= 7
@@ -34,15 +37,15 @@ def writeString(socket, string):
 def writeStringNUL(socket, string):
 	socket.send(string + "\0")
 
-def _getByte(socket):
+def getByte(socket):
 	return ord(socket.recv(1))
 
 def getSize(socket):
-	byte = _getByte(socket)
+	byte = getByte(socket)
 	size = byte & 0x7f
 
 	while byte & 0x80:
-		byte = _getByte(socket)
+		byte = getByte(socket)
 		size = (size << 7) + (byte & 0x7f)
 
 	return size

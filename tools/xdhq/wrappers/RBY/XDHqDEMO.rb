@@ -32,9 +32,6 @@ module XDHqDEMO
         def set(thread,id)
             @thread = thread
             @id = id
-            @mutex = Mutex.new
-            @condVar = ConditionVariable.new
-            @handshakeDone = false
         end
         def handshakeDone?
             if @handshakeDone
@@ -54,7 +51,7 @@ module XDHqDEMO
         end
         def signal
             @mutex.synchronize {
-                    @condVar.signal()
+                @condVar.signal()
             }
         end
     end
