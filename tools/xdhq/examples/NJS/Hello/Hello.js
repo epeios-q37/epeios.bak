@@ -64,5 +64,4 @@ const callbacks = {
         (answer) => { if (answer) dom.setContent("input", ""); dom.focus("input"); })
 };
 
-
 atlas.launch(() => new atlas.DOM(), callbacks, head);
