@@ -412,7 +412,6 @@ qRB
 		} 
 		break;
 	case err::t_Free:
-	case err::t_Return:
 		Proxy.AlertB( "???" );
 		break;
 	default:

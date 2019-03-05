@@ -52,16 +52,15 @@ qRB
 	Incoming.Init();
 	csdcmn::Get( Flow, Incoming );	// 'csdcmn::' should not be necessary, but VC++ is confused.
 
-	if ( Incoming != Label )
-		qRReturn;
+	if ( Incoming == Label ) {
+		Incoming.Init();
+		csdcmn::Get( Flow, Incoming );
 
-	Incoming.Init();
-	csdcmn::Get( Flow, Incoming );
+		Incoming.ToNumber( Version, &Error );
 
-	Incoming.ToNumber( Version, &Error );
-
-	if ( Error != qNIL )
-		Version = UndefinedVersion;
+		if ( Error != qNIL )
+			Version = UndefinedVersion;
+	}
 qRR
 qRT
 qRE

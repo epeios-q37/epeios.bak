@@ -107,26 +107,25 @@ qRB
 	if ( !IsLocked() )
 		qRGnr();
 
-	if ( IsUpstreamCallInProgress() )
-		qRReturn;
+	if ( !IsUpstreamCallInProgress() ) {
+		Data.Init ( Id, Action, *this, *Session_.Callback() );
 
-	Data.Init ( Id, Action, *this, *Session_.Callback() );
+		mtk::Launch( Launch_, &Data );
 
-	mtk::Launch( Launch_, &Data );
+		_Lock( tUpstream );
 
-	_Lock( tUpstream );
+		_Unlock( tGlobal );
 
-	_Unlock( tGlobal );
+		_Lock( tUpstream );	// Unlocked by 'DownstreamExecute', when a new script is available (or when no more script is available).
 
-	_Lock( tUpstream );	// Unlocked by 'DownstreamExecute', when a new script is available (or when no more script is available).
+		_Lock( tGlobal );
 
-	_Lock( tGlobal );
+		_Unlock( tUpstream );
 
-	_Unlock( tUpstream );
+		Script.Append( _Dispatch );
 
-	Script.Append( _Dispatch );
-
-	_Dispatch.Init();
+		_Dispatch.Init();
+	}
 qRR
 qRT
 	if ( IsLocked() )

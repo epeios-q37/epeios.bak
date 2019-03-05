@@ -402,13 +402,12 @@ qRB
 		case '\n':
 		case '\r':
 		case '\t':
-			if ( Escape )
-				qRReturn;
+			if ( !Escape ) {
+				if ( TFlow.Flow().AmountWritten() )
+					TFlow << ' ';
 
-			if ( TFlow.Flow().AmountWritten() )
-				TFlow << ' ';
-
-			Row = SkipLFCRTab_( In, Row );
+				Row = SkipLFCRTab_( In, Row );
+			}
 			break;
 		case 'n':
 		case 'r':
@@ -440,14 +439,15 @@ qRB
 				Escape = true;
 			break;
 		default:
-			if ( Escape )
-				qRReturn;
-			else
+			if ( !Escape )
 				TFlow << C;
 			break;
 		}
 
 		Row = In.Next( Row );
+
+		if ( Escape )
+			break;
 	}
 
 	if ( !Escape )

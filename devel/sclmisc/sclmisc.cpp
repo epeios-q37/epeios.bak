@@ -302,16 +302,15 @@ namespace {
 	qRB
 		Row = GetRegistry().Search( Level, sclrgstry::Locale );
 
-		if ( Row == qNIL )
-			qRReturn;
+		if ( Row != qNIL ) {
+			Flow.Init( Locale );
+			TFlow.Init( Flow );
+			Writer.Init( TFlow, xml::lCompact, xml::e_Default );
 
-		Flow.Init( Locale );
-		TFlow.Init( Flow );
-		Writer.Init( TFlow, xml::lCompact, xml::e_Default );
+			GetRegistry().Dump( Level, Row, true, Writer );
 
-		GetRegistry().Dump( Level, Row, true, Writer );
-
-		Found = true;
+			Found = true;
+		}
 	qRR
 	qRT
 	qRE

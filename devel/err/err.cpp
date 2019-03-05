@@ -120,9 +120,6 @@ const char *err::Message(
 	case t_Free:
 		strcat( Buffer, "Free" );
 		break;
-	case t_Return:
-		strcat( Buffer, "Return" );
-		break;
 	case t_Abort:
 		strcat( Buffer, "Abort" );
 		break;
@@ -172,11 +169,6 @@ void err___::Set(
 	int Ligne,
 	err::type Type )
 {
-	if ( ERRHit() && ( Type == err::t_Return ) ) {
-		cio::CErr << __LOC__ " : Using 'qRReturn' when a error already in progress is actually not handled correctly !!!" << txf::nl << txf::commit;
-		abort();
-	}
-
 	if ( ( !ERRHit() ) || !err::Concerned() )
 	{
 		if ( Mutex == NULL ) {

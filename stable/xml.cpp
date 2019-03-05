@@ -566,22 +566,23 @@ inline static bso::bool__ IsSpecialAttribute_( const str::string_ &Attribute )
 	if ( ( _Status = ( F ) ) != sOK )\
 	{\
 		_Token = t_Error;\
-		qRReturn;\
+		Error = true;\
+		break;\
 	}
 
 #define RETURN( V )\
 	{\
 		_Status = V;\
 		_Token = t_Error;\
-		qRReturn;\
+		Error = true;\
+		break;\
 	}
 
 token__ xml::parser___::Parse( int TokenToReport )
 {
 qRH
-	bso::bool__ OnlySpaces = false, Continue = true, TEOX = true;	// 'TEOX' : Test EOX.
+	bso::bool__ OnlySpaces = false, Continue = true, TEOX = true, Error = false;	// 'TEOX' : Test EOX.
 qRB
-
 	_Flow.Purge();
 
 	while ( Continue ) {
@@ -994,23 +995,29 @@ qRB
 			qRFwk();
 			break;
 		}
+
+		if ( Error )
+			break;
 	}
 
-	if ( _Tags.IsEmpty() )
-		if ( _Token == t_Undefined )
-			_Token = t_Processed;
 
-	_Status = sOK;
+	if ( !Error ) {
+		if ( _Tags.IsEmpty() )
+			if ( _Token == t_Undefined )
+				_Token = t_Processed;
+
+		_Status = sOK;
+	}
 qRR
-		if ( ERRType == err::t_Free ) {
-			xtf::error__ Error = xtf::e_NoError;
+	if ( ERRType == err::t_Free ) {
+		xtf::error__ Error = xtf::e_NoError;
 
-			if ( _Flow.Flow().EndOfFlow( Error ) && ( Error != xtf::e_NoError ) ) {
-				_Status = (status__)( s_FirstXTFError + Error );
-				_Token = t_Error;
-				ERRRst();
-			}
+		if ( _Flow.Flow().EndOfFlow( Error ) && ( Error != xtf::e_NoError ) ) {
+			_Status = (status__)( s_FirstXTFError + Error );
+			_Token = t_Error;
+			ERRRst();
 		}
+	}
 qRT
 qRE
 	return _Token;

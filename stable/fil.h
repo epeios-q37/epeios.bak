@@ -356,18 +356,11 @@ namespace fil {
 	qRB
 		Handle = CreateFileW( Filename.Internal(), GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
 
-		if ( Handle == INVALID_HANDLE_VALUE )
-			qRReturn;
-		
-		GetSystemTime( &st );
+		if ( Handle != INVALID_HANDLE_VALUE ) {
+			GetSystemTime( &st );
 
-		if ( !SystemTimeToFileTime( &st, &ft ) )
-			qRReturn;
-
-		if ( !SetFileTime( Handle, (LPFILETIME) NULL, (LPFILETIME) NULL, &ft ) )
-			qRReturn;
-
-		Success = true;
+			Success = SystemTimeToFileTime( &st, &ft ) && SetFileTime( Handle, (LPFILETIME)NULL, (LPFILETIME)NULL, &ft );
+		}
 	qRR
 	qRT
 		if ( Handle != INVALID_HANDLE_VALUE )
@@ -444,21 +437,12 @@ namespace fil {
 	qRB
 		Source = CreateFileW( SourceFilename.Internal(), GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
 
-		if ( Source == INVALID_HANDLE_VALUE )
-			qRReturn;
+		if ( Source != INVALID_HANDLE_VALUE ) {
 
-		Target = CreateFileW( TargetFilename.Internal(), GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
+			Target = CreateFileW( TargetFilename.Internal(), GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
 
-		if ( Target == INVALID_HANDLE_VALUE )
-			qRReturn;
-
-		if ( !GetFileTime( Source, &Creation, &Access, &Write ) )
-			qRReturn;
-
-		if ( !SetFileTime( Target, &Creation, &Access, &Write ) )
-			qRReturn;
-
-		Success = true;
+			Success = (Target != INVALID_HANDLE_VALUE) && GetFileTime( Source, &Creation, &Access, &Write ) && SetFileTime( Target, &Creation, &Access, &Write );
+		}
 	qRR
 	qRT
 		if ( Source != INVALID_HANDLE_VALUE )
@@ -473,16 +457,13 @@ namespace fil {
 	qRB
 		Info.Init();
 	
-		if ( GetInfo( SourceFilename, Info ) != eNone )
-			qRReturn;
+		if ( GetInfo( SourceFilename, Info ) == eNone ) {
 
-		TimeBuf.actime = Info.Time.Access;
-		TimeBuf.modtime = Info.Time.Modification;
+			TimeBuf.actime = Info.Time.Access;
+			TimeBuf.modtime = Info.Time.Modification;
 
-		if ( utime( TargetFilename.UTF8( Buffer ), &TimeBuf ) != 0 )
-			qRReturn;
-
-		Success = true;
+			Success = utime( TargetFilename.UTF8( Buffer ), &TimeBuf ) == 0;
+		}
 	qRR
 	qRT
 # else
@@ -510,24 +491,24 @@ namespace fil {
 	qRB
 		Source = Open( SourceFilename, mReadOnly );
 
-		if ( Source == FIL_UNDEFINED_DESCRIPTOR )
-			qRReturn;
+		if ( Source != FIL_UNDEFINED_DESCRIPTOR )  {
 
-		Target = Open( TargetFilename, mRemove);
+			Target = Open( TargetFilename, mRemove);
 
-		if ( Target == FIL_UNDEFINED_DESCRIPTOR )
-			qRReturn;
+			if ( Target != FIL_UNDEFINED_DESCRIPTOR ) {
 
-		while ( ( Size = read( Source, Buffer, sizeof( Buffer ) ) ) > 0 )  {
-			if ( write( Target, Buffer, Size ) == -1 )
-				qRReturn;
+				while ( (Size = read( Source, Buffer, sizeof( Buffer ) )) > 0 ) {
+					if ( write( Target, Buffer, Size ) == -1 ) {
+						Size = -1;	// To report an error.
+						break;
+					}
+				}
+
+				if ( Size != -1 )
+					// NOTA : to mimic Windows, where the copied file has the same timestamp as the original.
+					Success = AssignSameTimes_( SourceFilename, TargetFilename );
+			}
 		}
-
-		if ( Size == -1 )
-			qRReturn;
-
-		// NOTA : le fichier copi avec la version Windows de cette fonction possde les mmes horodatages, on s'arrange donc pour avoir le mme rsultat sous POSIX.
-		Success = AssignSameTimes_( SourceFilename, TargetFilename );
 	qRR
 	qRT
 		if ( Source != FIL_UNDEFINED_DESCRIPTOR )

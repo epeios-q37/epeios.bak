@@ -401,24 +401,23 @@ qRH
 	str::string Value, Intermediate;
 	TOL_CBUFFER___ Buffer;
 qRB
-	if ( Basic.S_.Value == qNIL )
-		qRReturn;
+	if ( Basic.S_.Value != qNIL ) {
+		Value.Init();
+		Core.Values.Recall( Basic.S_.Value, Value );
 
-	Value.Init();
-	Core.Values.Recall( Basic.S_.Value, Value );
+		Intermediate.Init();
+		if ( Basic.GetToTranslate() )
+			Locale.GetTranslation_( Value, Language, Intermediate );
+		else
+			Intermediate = Value;
 
-	Intermediate.Init();
-	if ( Basic.GetToTranslate() )
-		Locale.GetTranslation_( Value, Language, Intermediate );
-	else
-		Intermediate = Value;
+		Tags.Init();
+		GetTags_( Basic.Tags, Core, Language, Locale, Tags );
 
-	Tags.Init();
-	GetTags_( Basic.Tags, Core, Language, Locale, Tags );
+		tagsbs::SubstituteShortTags( Intermediate, Tags, LCL_TAG_MARKER_C );
 
-	tagsbs::SubstituteShortTags( Intermediate, Tags, LCL_TAG_MARKER_C );
-
-	Translation = Intermediate;
+		Translation = Intermediate;
+	}
 qRR
 qRT
 qRE

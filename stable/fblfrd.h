@@ -418,20 +418,18 @@ namespace fblfrd {
 
 			ParametersCallback_ = ParametersCallback;
 
-			if ( ParametersCallback_ == NULL )
-				qRReturn;
-
-			Channel_ = &Channel;
+			if ( ParametersCallback_ != NULL ) {
+				Channel_ = &Channel;
 
 
-			if ( !_TestCompatibility( Language, CompatibilityInformations, C_(), IncompatibilityInformations ) ) {
-				Success = false;
-				qRReturn;
+				if ( !_TestCompatibility( Language, CompatibilityInformations, C_(), IncompatibilityInformations ) )
+					Success = false;
+				else {
+					RetrieveBackendCommands_();
+
+					F_().OnConnection();
+				}
 			}
-			
-			RetrieveBackendCommands_();
-
-			F_().OnConnection();
 		qRR
 			Channel_ = NULL;	// Pour viter toute future tentative de communication avec le backend.
 		qRT

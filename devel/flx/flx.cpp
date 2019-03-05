@@ -132,22 +132,22 @@ qRB
 									   on ne peut donc pas lui passer directement 'ConstCommand', qui est 'const' (voir doc. 'CreateProcessW(...)'. */
  
 	// Launch the process.
-	if ( !CreateProcessW( NULL,
-		Command.ExposedInternal(), 0, 0, TRUE,
-		0, 0, 0,
-		&siStartupInfo, &piProcessInfo ) )
-		qRReturn;
+	if ( CreateProcessW( NULL,
+						 Command.ExposedInternal(), 0, 0, TRUE,
+						 0, 0, 0,
+						 &siStartupInfo, &piProcessInfo ) ) {
 
-//   WaitForSingleObject( piProcessInfo.hProcess, INFINITE );
+		//   WaitForSingleObject( piProcessInfo.hProcess, INFINITE );
 
-	In = hChildStdinWr;
-	Out = hChildStdoutRd;
-	Err = hChildStderrRd;
+		In = hChildStdinWr;
+		Out = hChildStdoutRd;
+		Err = hChildStderrRd;
 
-	CloseHandle( piProcessInfo.hProcess );
-	CloseHandle( piProcessInfo.hThread );
+		CloseHandle( piProcessInfo.hProcess );
+		CloseHandle( piProcessInfo.hThread );
 
-	Success = true;
+		Success = true;
+	}
 qRR
 qRT
 qRE

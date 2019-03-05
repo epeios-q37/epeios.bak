@@ -29,10 +29,10 @@
 // ERRor
 
 /*
-	NOTA : Quelque soit le mode dans lequel est compilï¿½ un exï¿½cutable (programme ou bibliothï¿½que dynamique),
-	ce module est TOUJOURS compilï¿½ en mode 'thread safe', du fait que, mï¿½me si un exï¿½cutable est 'mono-threading',
-	les bibliothï¿½ques dynamiques auxquelles il peut ï¿½ventuellement recourir ('plugin', p. ex.) peuvent, elles,
-	ï¿½tre 'multi-threading', et comme elles partagent le mï¿½me objet 'error' ...
+	NOTA : Quelque soit le mode dans lequel est compilé un exécutable (programme ou bibliothèque dynamique),
+	ce module est TOUJOURS compilé en mode 'thread safe', du fait que, même si un exécutable est 'mono-threading',
+	les bibliothèques dynamiques auxquelles il peut éventuellement recourir ('plugin', p. ex.) peuvent, elles,
+	être 'multi-threading', et comme elles partagent le même objet 'error' ...
 */
 
 # include <stdio.h>
@@ -49,7 +49,7 @@
 # include "cpe.h"
 # include "thtsub.h"
 
-// Prï¿½dï¿½claration.
+// Prédéclaration.
 namespace mtx {
 	struct _mutex__;
 }
@@ -59,10 +59,10 @@ namespace err {
 
 	enum handling__ {
 		hThrowException,	// Une erreur provoque une exception.
-		hUserDefined,		// Le traitement de l'erreur est ï¿½ la charge de l'utilisateur.
+		hUserDefined,		// Le traitement de l'erreur est à la charge de l'utilisateur.
 		h_amount,
 		h_Undefined,
-		h_Default = hThrowException	// Comportement par dï¿½faut.
+		h_Default = hThrowException	// Comportement par défaut.
 	};
 
 	enum type {
@@ -78,7 +78,6 @@ namespace err {
 		t_amount,
 		t_None,			// No error.
 		t_Free,			// (ERRFree) Not really an error. Allows the use or ther error mechanism.
-		t_Return,		// Make the handling of 'ERRReturn' easier.
 		t_Abort,		// Make the handling of 'ERRAbort()' easier.
 		t_Undefined
 	};
@@ -175,7 +174,7 @@ namespace err {
 #  define qRB	if ( !setjmp( ERRJmp ) ) {
 
 // 'Error' : to execute if an error occurs.
-#  define qRR		} else { ERRPutJ( ERROJmp ); ERRNoError = false; if ( ERRType != err::t_Return ) {
+#  define qRR		} else { ERRPutJ( ERROJmp ); ERRNoError = false; {
 
 // 'Tail' : to execute, error or not.
 #  define qRT		} }
@@ -185,25 +184,24 @@ namespace err {
 # else
 
 #  define qRH	bso::bool__ ERRNoError = true; {
-// prï¿½cï¿½de les dï¿½clarations
+// précède les déclarations
 #  define qRB	try {
-// prï¿½cï¿½de les instructions proprement dites
-#  define qRR		} catch ( err::err___ ) { ERRNoError = false; if ( ERRType != err::t_Return ) {
-// prï¿½cï¿½de les instructions ï¿½ effectuer lors d'une erreur
+// précède les instructions proprement dites
+#  define qRR		} catch ( err::err___ ) { ERRNoError = false; {
+// précède les instructions à effectuer lors d'une erreur
 #  define qRT		} }
-// prï¿½cï¿½de les instructions ï¿½ exï¿½cuter, erreur ou pas
+// précède les instructions à exécuter, erreur ou pas
 #  define ERRCommonEnd	}
 // boucle la partie de traitement d'erreur
 
 # endif
 
 # define ERRTestEnd		if ( ERRHit() && !ERRNoError && err::Concerned() ) {\
-							if ( ERRType == err::t_Return ) {\
-								ERRRst()
+							{
 
 // 'End' : end of error handling bloc.
-# define qRE					ERRCommonEnd ERRTestEnd } else ERRT();  };
-# define qRFE( action )			ERRCommonEnd ERRTestEnd } else { action; if ( ERRHit() && err::Concerned() ) ERRRst(); } };
+# define qRE					ERRCommonEnd ERRTestEnd } ERRT();  };
+# define qRFE( action )			ERRCommonEnd ERRTestEnd } { action; if ( ERRHit() && err::Concerned() ) ERRRst(); } };
 # define qRFH					qRH
 # define qRFB					qRB
 # define qRFR					qRR
@@ -242,13 +240,13 @@ namespace err {
 # define ERRHit()	( ERRType != err::t_None )
 
 
-// Similaire ï¿½ un simple 'return', mais dans une section surveillï¿½ ('qRB'...'qRR'; un simple 'return' poserait problï¿½me dans une telle section).
+// Similaire à un simple 'return', mais dans une section surveillé ('qRB'...'qRR'; un simple 'return' poserait problème dans une telle section).
 # define qRReturn		ERRCommon( err::t_Return )
 
-// Interruption de l'action en cours. Utilisï¿½ avec un gestionnaire d'interface ï¿½vennementielle, pour revenir rapï¿½dement ï¿½ la boucle d'attente.
+// Interruption de l'action en cours. Utilisé avec un gestionnaire d'interface évennementielle, pour revenir rapîdement à la boucle d'attente.
 # define qRAbort()		ERRCommon( err::t_Abort )
 
-// Pour profiter du mï¿½canisme de gestion d'erreur, sans qu'il n'y ai rï¿½ellement une erreur dans le sens de cette bibliothï¿½que.
+// Pour profiter du mécanisme de gestion d'erreur, sans qu'il n'y ai réellement une erreur dans le sens de cette bibliothèque.
 # define qRFree()		ERRCommon( err::t_Free )
 }
 

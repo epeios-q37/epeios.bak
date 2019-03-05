@@ -709,13 +709,12 @@ qRH
 qRB
 	Path.Init();
 
-	if ( *Missing )
-		qRReturn;
-
-	if ( BuildPath_( PathString, Path, PathErrorRow ) )
-		GetValue( Path, Row, Value, Missing );
-	else
-		*Missing = true;
+	if ( !*Missing ) {
+		if ( BuildPath_( PathString, Path, PathErrorRow ) )
+			GetValue( Path, Row, Value, Missing );
+		else
+			*Missing = true;
+	}
 qRR
 qRT
 qRE
@@ -1052,26 +1051,24 @@ const value_ &rgstry::overloaded_registry___::GetValue(
 qRH
 	path Path;
 qRB
-	if ( *Missing )
-		qRReturn;
+	if ( !*Missing ) {
 
-	Path.Init();
+		Path.Init();
 
-	if ( !BuildPath_( PathString, Path, PathErrorRow ) ) {
-		*Missing = true;
-		qRReturn;
-	}
+		if ( BuildPath_( PathString, Path, PathErrorRow ) ) {
+			if ( Local.Registry != NULL )
+				Local.Registry->GetValue( Path, Local.Root, Value, Missing );
+			else
+				*Missing = true;
 
-	if ( Local.Registry != NULL )
-		Local.Registry->GetValue( Path, Local.Root, Value, Missing );
-	else
-		*Missing = true;
+			if ( *Missing ) {
+				*Missing = false;
 
-	if ( *Missing ) {
-		*Missing = false;
-
-		if ( Global.Registry != NULL )
-			Global.Registry->GetValue( Path, Global.Root, Value, Missing );
+				if ( Global.Registry != NULL )
+					Global.Registry->GetValue( Path, Global.Root, Value, Missing );
+			}
+		} else
+			*Missing = true;
 	}
 qRR
 qRT
@@ -1090,13 +1087,12 @@ qRH
 qRB
 	Path.Init();
 
-	if ( !BuildPath_( PathString, Path, PathErrorRow ) )
-		qRReturn;
+	if ( BuildPath_( PathString, Path, PathErrorRow ) ) {
+		if ( Local.Registry != NULL )
+			Exists = Local.Registry->GetValues( Path, Local.Root, Values );
 
-	if ( Local.Registry != NULL )
-		Exists = Local.Registry->GetValues( Path, Local.Root, Values );
-
-	Exists = Global.Registry->GetValues( Path, Global.Root, Values ) || Exists;
+		Exists = Global.Registry->GetValues( Path, Global.Root, Values ) || Exists;
+	}
 qRR
 qRT
 qRE
@@ -1175,25 +1171,23 @@ qRH
 	level__ Level = qNIL;
 	path Path;
 qRB
-	if ( *Missing )
-		qRReturn;
+	if ( !*Missing ) {
+		Path.Init();
 
-	Path.Init();
+		if ( BuildPath_( PathString, Path, PathErrorRow ) ) {
+			Level = Entries.Last();
 
-	if ( !BuildPath_( PathString, Path, PathErrorRow ) )
-		qRReturn;
+			while ( Level != qNIL ) {
+				*Missing = false;
 
-	Level = Entries.Last();
+				GetValue( Level, Path, Value, Missing );
 
-	while ( Level != qNIL ) {
-		*Missing = false;
-
-		GetValue( Level, Path, Value, Missing );
-
-		if ( *Missing  )
-			Level = Entries.Previous( Level );
-		else
-			Level = qNIL;
+				if ( *Missing )
+					Level = Entries.Previous( Level );
+				else
+					Level = qNIL;
+			}
+		}
 	}
 qRR
 qRT
@@ -1213,15 +1207,14 @@ qRH
 qRB
 	Path.Init();
 
-	if ( !BuildPath_( PathString, Path, PathErrorRow ) )
-		qRReturn;
+	if ( BuildPath_( PathString, Path, PathErrorRow ) ) {
+		Level = Entries.Last();
 
-	Level = Entries.Last();
+		while ( ( Level != qNIL ) && ( !Found ) ) {
+			Found = GetValue( Level, Path, Value );
 
-	while ( ( Level != qNIL ) && ( !Found ) ) {
-		Found = GetValue( Level, Path, Value );
-
-		Level = Entries.Previous( Level );
+			Level = Entries.Previous( Level );
+		}
 	}
 qRR
 qRT
@@ -1325,15 +1318,14 @@ qRH
 qRB
 	Path.Init();
 
-	if ( !BuildPath_( PathString, Path, PathErrorRow ) )
-		qRReturn;
+	if ( BuildPath_( PathString, Path, PathErrorRow ) ) {
+		Level = Entries.Last();
 
-	Level = Entries.Last();
+		while ( Level != qNIL ) {
+			Found |= GetValues( Level, Path, Values );
 
-	while ( Level != qNIL ) {
-		Found |= GetValues( Level, Path, Values );
-
-		Level = Entries.Previous( Level );
+			Level = Entries.Previous( Level );
+		}
 	}
 qRR
 qRT
@@ -1390,7 +1382,7 @@ bso::bool__ rgstry::multi_level_registry_::SetValue(
 	const value_ &Value,
 	sdr::row__ *PathErrorRow )
 {
-	bso::bool__ Set = false;
+	bso::bool__ Set = true;
 qRH
 	value CurrentValue;
 	sdr::row__ LocalPathErrorRow = qNIL;
@@ -1400,15 +1392,14 @@ qRB
 	if ( !GetValue( PathString, CurrentValue, &LocalPathErrorRow ) ) {
 		if ( LocalPathErrorRow != qNIL ) {
 			*PathErrorRow = LocalPathErrorRow;
-			qRReturn;
+			Set = false;
 		}
-	} else 
+	} else
 		if ( CurrentValue == Value )
-			qRReturn;
+			Set = false;
 
-	SetValue( Entries.Last(), PathString, Value, PathErrorRow );
-
-	Set = true;
+	if ( Set )
+		SetValue( Entries.Last(), PathString, Value, PathErrorRow );
 qRR
 qRT
 qRE
@@ -1438,7 +1429,7 @@ bso::bool__ rgstry::multi_level_registry_::AddValue(
 	const value_ &Value,
 	sdr::row__ *PathErrorRow )
 {
-	bso::bool__ Set = false;
+	bso::bool__ Set = true;
 qRH
 	value CurrentValue;
 	sdr::row__ LocalPathErrorRow = qNIL;
@@ -1448,13 +1439,12 @@ qRB
 	if ( !GetValue( PathString, CurrentValue, &LocalPathErrorRow ) ) {
 		if ( LocalPathErrorRow != qNIL ) {
 			*PathErrorRow = LocalPathErrorRow;
-			qRReturn;
+			Set = false;
 		}
 	}
 
-	AddValue( Entries.Last(), PathString, Value, PathErrorRow );
-
-	Set = true;
+	if ( Set )
+		AddValue( Entries.Last(), PathString, Value, PathErrorRow );
 qRR
 qRT
 qRE
@@ -1535,15 +1525,14 @@ qRH
 qRB
 	Path.Init();
 
-	if ( !BuildPath_( PathString, Path, PathErrorRow ) )
-		qRReturn;
+	if ( BuildPath_( PathString, Path, PathErrorRow ) ) {
+		Level = Entries.Last();
 
-	Level = Entries.Last();
+		while ( Level != qNIL ) {
+			Deleted |= Delete( Path, Level );
 
-	while ( Level != qNIL ) {
-		Deleted |= Delete( Path, Level );
-
-		Level = Entries.Previous( Level );
+			Level = Entries.Previous( Level );
+		}
 	}
 qRR
 qRT
@@ -1610,16 +1599,15 @@ qRB
 	Level = qNIL;
 	Path.Init();
 
-	if ( !BuildPath_( PathString, Path, PathErrorRow ) )
-		qRReturn;
+	if ( BuildPath_( PathString, Path, PathErrorRow ) ) {
+		Level = Entries.Last();
 
-	Level = Entries.Last();
+		while ( (Level != qNIL) && (Row == qNIL) ) {
+			Row = Search( Level, Path );
 
-	while ( ( Level != qNIL ) && ( Row == qNIL ) ) {
-		Row = Search( Level, Path );
-
-		if ( Row == qNIL )
-			Level = Entries.Previous( Level );
+			if ( Row == qNIL )
+				Level = Entries.Previous( Level );
+		}
 	}
 qRR
 qRT
@@ -1703,22 +1691,21 @@ qRB
 	if ( FFlow.Init( FileName, err::hUserDefined ) != tol::rSuccess ) {
 		Context.Status = sUnableToOpenFile;
 		Context.Coordinates.FileName = FileName;
-		qRReturn;
+	} else {
+		XFlow.Init( FFlow, utf::f_Default );
+
+		if ( !Criterions.Directory.IsEmpty() )
+			qRFwk();
+
+		Location.Init();
+		Buffer.Init();
+		Root = Fill( XFlow, xpp::criterions___( fnm::GetLocation( FileName, Location ).UTF8( Buffer ), 0, Criterions.CypherKey, Criterions.Namespace ), RootPath, Registry, Context );	//NOTA: 'Level' member is not used.
+
+		if ( Root == qNIL )
+			if ( Context.Status == sParseError )
+				if ( Context.Coordinates.FileName.IsEmpty() )
+					Context.Coordinates.FileName = FileName;
 	}
-
-	XFlow.Init( FFlow, utf::f_Default );
-
-	if ( !Criterions.Directory.IsEmpty() )
-		qRFwk();
-
-	Location.Init();
-	Buffer.Init();
-	Root = Fill( XFlow, xpp::criterions___( fnm::GetLocation( FileName, Location ).UTF8( Buffer ), 0, Criterions.CypherKey, Criterions.Namespace ), RootPath, Registry, Context );	//NOTA: 'Level' member is not used.
-
-	if ( Root == qNIL )
-		if ( Context.Status == sParseError )
-			if ( Context.Coordinates.FileName.IsEmpty() )
-				Context.Coordinates.FileName = FileName;
 qRR
 qRT
 qRE

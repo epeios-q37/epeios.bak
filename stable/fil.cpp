@@ -299,69 +299,58 @@ backup_status__ fil::CreateBackupFile(
 	backup_mode__ Mode,
 	err::handling__ ErrorHandling )
 {
-	backup_status__ Status = bs_Undefined;
+	backup_status__ Status = bsOK;
 qRH
 	fnm::name___ BackupFilename;
 qRB
-	if ( Exists( Filename ) )
-	{
+	if ( Exists( Filename ) ) {
 		GetBackupFilename( Filename, BackupFilename );
 
 		if ( Exists( BackupFilename ) )
-			if ( !Remove( BackupFilename ) ) {
+			if ( !Remove( BackupFilename ) )
 				Status = bsUnableToSuppress;
-				qRReturn;
-			}
 
-		if ( Mode == bmDuplicate )
-		{
+		if ( Status == bsOK ) {
+			if ( Mode == bmDuplicate ) {
 #if 0	// Old		
-			FILE *In, *Out;
+				FILE *In, *Out;
 
-			/* Ouverture de l'ancien fichier en lecture */
-			In = fopen( NomFichier, "rb");
+				/* Ouverture de l'ancien fichier en lecture */
+				In = fopen( NomFichier, "rb" );
 
-			if ( In == NULL )
-			{
-				Status = bsUnableToDuplicate;
-				qRReturn;
-			}
-
-			Out = fopen(NomFichierSecurite, "w");
-			if ( Out == NULL )
-			{
-				fclose ( In );
-				Status = bsUnableToDuplicate;
-				qRReturn;
-			}
-
-			while (! feof( In ) )
-			{
-				if ( fputc( fgetc( In ), Out ) == EOF )
-				{
+				if ( In == NULL ) {
 					Status = bsUnableToDuplicate;
-					fclose( In );
-					fclose( Out );
-					remove( NomFichierSecurite );
 					qRReturn;
 				}
-			}
 
-			fclose(Out);
-			fclose(In);
+				Out = fopen( NomFichierSecurite, "w" );
+				if ( Out == NULL ) {
+					fclose( In );
+					Status = bsUnableToDuplicate;
+					qRReturn;
+				}
+
+				while ( !feof( In ) ) {
+					if ( fputc( fgetc( In ), Out ) == EOF ) {
+						Status = bsUnableToDuplicate;
+						fclose( In );
+						fclose( Out );
+						remove( NomFichierSecurite );
+						qRReturn;
+					}
+				}
+
+				fclose( Out );
+				fclose( In );
 #endif
-			qRVct();
+				qRVct();
+			} else if ( Mode == bmRename ) {
+				if ( !Rename( Filename, BackupFilename ) )
+					Status = bsUnableToRename;
+			} else
+				qRFwk();
 		}
-		else if ( Mode == bmRename )
-		{
-			if ( !Rename( Filename, BackupFilename ) )
-				Status = bsUnableToRename;
-		}
-		else
-			qRFwk();
 	}
-
-	Status = bsOK;
 qRR
 qRT
 	if ( Status != bsOK )
@@ -424,28 +413,23 @@ recover_status__ fil::RecoverBackupFile(
 	const fnm::name___ &Filename,
 	err::handling__ ErrorHandling )
 {
-	recover_status__ Status = rs_Undefined;
+	recover_status__ Status = rsOK;
 qRH
 	fnm::name___ BackupFilename;
 	TOL_CBUFFER___ Buffer;
 qRB
 	if ( Exists( Filename ) )
-		if ( !Remove( Filename ) ) {
+		if ( !Remove( Filename ) )
 			Status = rsUnableToSuppress;
-			qRReturn;
-		}
 
-	BackupFilename.Init();
-	GetBackupFilename( Filename, BackupFilename );
+	if ( Status == rsOK ) {
+		BackupFilename.Init();
+		GetBackupFilename( Filename, BackupFilename );
 
-	if ( Exists( BackupFilename ) )
-		if ( !Rename( BackupFilename, Filename ) ) {
-			Status = rsUnableToRename;
-			qRReturn;
-		}
-
-	Status = rsOK;
-
+		if ( Exists( BackupFilename ) )
+			if ( !Rename( BackupFilename, Filename ) )
+				Status = rsUnableToRename;
+	}
 qRR
 qRT
 	if ( Status != rsOK )

@@ -420,20 +420,19 @@ qRH
 	rgstry::level__ Level = rgstry::UndefinedLevel;
 	str::string SetupPath;
 qRB
-	if ( SetupId.Amount() == 0  )
-		qRReturn;
+	if ( SetupId.Amount() != 0  ) {
+		SetupPath.Init( "Setups/Setup[id=\"" );
+		SetupPath.Append( SetupId );
+		SetupPath.Append( "\"]" );
 
-	SetupPath.Init( "Setups/Setup[id=\"" );
-	SetupPath.Append( SetupId );
-	SetupPath.Append( "\"]" );
+		OFlow.Init( Content );
+		TFlow.Init( OFlow );
 
-	OFlow.Init( Content );
-	TFlow.Init( OFlow );
+		Row = Registry_.Search( SetupPath, Level );
 
-	Row = Registry_.Search( SetupPath, Level );
-
-	if ( Row != qNIL )
-		Registry_.Dump( Level, Row, false, xml::oCompact, xml::e_None, TFlow );
+		if ( Row != qNIL )
+			Registry_.Dump( Level, Row, false, xml::oCompact, xml::e_None, TFlow );
+	}
 qRR
 qRT
 qRE
@@ -746,13 +745,12 @@ qRH
 qRB
 	RawValue.Init();
 
-	if ( !( Present = BGetValue( Registry, Entry, RawValue ) ) )
-		qRReturn;
+	if ( ( Present = BGetValue( Registry, Entry, RawValue ) ) ) {
+		RawValue.ToNumber( Value, Limit, &Error );
 
-	RawValue.ToNumber( Value, Limit, &Error );
-
-	if ( Error != qNIL )
-		sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( Entry );
+		if ( Error != qNIL )
+			sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( Entry );
+	}
 qRR
 qRT
 qRE
@@ -773,13 +771,12 @@ qRH
 qRB
 	RawValue.Init();
 
-	if ( !( Present = BGetValue( Registry, Entry, RawValue ) ) )
-		qRReturn;
+	if ( ( Present = BGetValue( Registry, Entry, RawValue ) ) ) {
+		RawValue.ToNumber( Value, UpperLimit, LowerLimit, &Error );
 
-	RawValue.ToNumber( Value, UpperLimit, LowerLimit, &Error );
-
-	if ( Error != qNIL )
-		sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( Entry );
+		if ( Error != qNIL )
+			sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( Entry );
+	}
 qRR
 qRT
 qRE

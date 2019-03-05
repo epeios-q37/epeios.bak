@@ -227,7 +227,7 @@ bso::bool__ tagsbs::SubstituteShortTags(
 	flw::oflow__ &OFlow,
 	char TagMarker )
 {
-	bso::bool__ Success = false;
+	bso::bool__ Success = true;
 qRH
 	str::string Tag, Value, MergedValues;
 	bso::char__ C = 0;
@@ -247,23 +247,26 @@ qRB
 						MergedValues.WriteToFlow( OFlow, false );
 					else {
 						Value.Init();
-						if ( !Callback.GetTagValue( C, Value ) )
-							qRReturn;
+						if ( !Callback.GetTagValue( C, Value ) ) {
+							Success = false;
+							break;
+						}
+
 						Value.WriteToFlow( OFlow, false );
 					}
 				} else if ( C == TagMarker )  {
 					OFlow.Put( TagMarker );
 				} else  {
-					qRReturn;
+					Success = false;
+					break;
 				}
 			} else {
-				qRReturn;
+				Success = false;
+				break;
 			}
 		} else
 			OFlow.Put( IFlow.Get() );
 	}
-
-	Success = true;
 qRR
 qRT
 qRE
@@ -432,7 +435,7 @@ bso::bool__ tagsbs::SubstituteLongTags(
 	flw::oflow__ &OFlow,
 	char Marker )
 {
-	bso::bool__ Success = false;
+	bso::bool__ Success = true;
 qRH
 	str::string Tag, Value;
 qRB
@@ -442,8 +445,10 @@ qRB
 			if ( GetTag_( IFlow, Tag, Marker ) ) {
 
 				Value.Init();
-				if ( !Callback.GetTagValue( Tag, Value ) )
-					qRReturn;
+				if ( !Callback.GetTagValue( Tag, Value ) ) {
+					Success = false;
+					break;
+				}
 
 				Value.WriteToFlow( OFlow, false );
 			} else
@@ -451,8 +456,6 @@ qRB
 		} else
 			OFlow.Put( IFlow.Get() );
 	}
-
-	Success = true;
 qRR
 qRT
 qRE

@@ -44,17 +44,16 @@ qRB
 
 	retrieve *Retrieve = dlbrry::GetFunction<retrieve *>( E_STRING( XDHCMN_RETRIEVE_FUNCTION_NAME ), Library_ );
 
-	if ( Retrieve == NULL )
-		qRReturn;
+	if ( Retrieve != NULL ) {
+		Callback_ = Retrieve();
 
-   Callback_ = Retrieve();
+		if ( Callback_ == NULL )
+			qRFwk();
 
-	if ( Callback_ == NULL )
-		qRFwk();
+		Callback_->Initialize( Data );
 
-	Callback_->Initialize( Data );
-
-	Success = true;
+		Success = true;
+	}
 qRR
 qRT
 qRE

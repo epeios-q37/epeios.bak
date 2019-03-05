@@ -116,10 +116,6 @@ qRR
 			ERRRst();
 			qRFwk();
 			break;
-		case err::t_Return:
-			ERRRst();
-			qRFwk();
-			break;
 		default:
 			ERRRst();
 			qRFwk();

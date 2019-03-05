@@ -433,10 +433,8 @@ qRB
 	Name.Init();
 	Content.Init();
 
-	if ( ( Status = GetDefineNameAndContent_( _Parser, Name, Content ) ) != sOK )
-		qRReturn;
-
-	_Repository.Store( Name, Position, _LocalizedFileName, Content );
+	if ( ( Status = GetDefineNameAndContent_( _Parser, Name, Content ) ) == sOK )
+		_Repository.Store( Name, Position, _LocalizedFileName, Content );
 qRR
 qRT
 qRE
@@ -462,27 +460,23 @@ qRH
 qRB
 	AttributeName.Init();
 
-	if ( ( Status = AwaitingToken_( Parser, xml::tAttribute, sMissingSelectOrHRefAttribute ) ) != sOK )
-		qRReturn;
+	if ( ( Status = AwaitingToken_( Parser, xml::tAttribute, sMissingSelectOrHRefAttribute ) ) == sOK ) {
+		Value = Parser.Value();
 
-	Value = Parser.Value();
-
-	if ( Value.Amount() == 0 ) {
-		Status = sEmptySelectOrHRefAttributeValue;
-		qRReturn;
+		if ( Value.Amount() == 0 ) {
+			Status = sEmptySelectOrHRefAttributeValue;
+		} else {
+			if ( Parser.AttributeName() == EXPAND_TAG_HREF_ATTRIBUTE )
+				Type = etFile;
+			else if ( Parser.AttributeName() == EXPAND_TAG_SELECT_ATTRIBUTE )
+				Type = etMacro;
+			else if ( Parser.AttributeName() == EXPAND_TAG_VALUE_OF_ATTRIBUTE )
+				Type = etVariable;
+			else {
+				Status = sUnexpectedAttribute;
+			}
+		}
 	}
-
-	if ( Parser.AttributeName() == EXPAND_TAG_HREF_ATTRIBUTE )
-		Type = etFile;
-	else if ( Parser.AttributeName() == EXPAND_TAG_SELECT_ATTRIBUTE )
-		Type = etMacro;
-	else if ( Parser.AttributeName() == EXPAND_TAG_VALUE_OF_ATTRIBUTE )
-		Type = etVariable;
-	else {
-		Status = sUnexpectedAttribute;
-		qRReturn;
-	}
-
 qRR
 qRT
 qRE
@@ -527,7 +521,7 @@ status__ xpp::_extended_parser___::_HandleMacroExpand(
 	const str::string_ &RawMacroName,
 	_extended_parser___ *&Parser )
 {
-	status__ Status = s_Undefined;
+	status__ Status = sOK;
 qRH
 	str::string MacroName;
 	str::string FileName;
@@ -543,19 +537,19 @@ qRB
 		Callback.Init( _Variables, _Directory );
 		if ( !tagsbs::SubstituteLongTags( RawMacroName, Callback, MacroName, SubstitutionMarker_() ) ) {
 			Status = sUnknownVariable;
-			qRReturn;
 		}
 	} else
 		MacroName = RawMacroName;
 
-	if ( !_Repository.Get( MacroName, Position, FileName, Content ) ) {
-		Status = sUnknownMacro;
-		qRReturn;
+	if ( Status == sOK ) {
+		if ( !_Repository.Get( MacroName, Position, FileName, Content ) ) {
+			Status = sUnknownMacro;
+		} else {
+			Parser = NewParser( _Repository, _Variables, _Directives );
+
+			Status = Parser->_InitWithContent( Content, FileName, Position, _Directory, _CypherKey, Preserve_, SubstitutionMarker_(), _Parser.GetFormat() );
+		}
 	}
-
-	Parser = NewParser( _Repository, _Variables, _Directives );
-
-	Status = Parser->_InitWithContent( Content, FileName, Position, _Directory, _CypherKey, Preserve_, SubstitutionMarker_(), _Parser.GetFormat() );
 qRR
 	if ( Parser != NULL ) {
 		delete Parser;
@@ -576,7 +570,7 @@ status__ xpp::_extended_parser___::_HandleFileExpand(
 	const str::string_ &RawFilename,
 	_extended_parser___ *&Parser )
 {
-	status__ Status = s_Undefined;
+	status__ Status = sOK;
 qRH
 	str::string Filename;
 	attribute_value_substitution_callback Callback;
@@ -588,13 +582,12 @@ qRB
 		Callback.Init( _Variables, _Directory );
 		if ( !tagsbs::SubstituteLongTags(RawFilename, Callback, Filename, SubstitutionMarker_() ) ) {
 			Status = sUnknownVariable;
-			qRReturn;
 		}
 	} else
 		Filename = RawFilename;
 
-
-	Status = Parser->_InitWithFile( Filename, _Directory, _CypherKey, Preserve_, SubstitutionMarker_(), _Parser.GetFormat() );
+	if ( Status == sOK )
+		Status = Parser->_InitWithFile( Filename, _Directory, _CypherKey, Preserve_, SubstitutionMarker_(), _Parser.GetFormat() );
 qRR
 	if ( Parser != NULL ) {
 		delete Parser;
@@ -758,7 +751,7 @@ static status__ GetSetNameAndValue_(
 
 status__ xpp::_extended_parser___::_HandleSetDirective( _extended_parser___ *&Parser )	// 'Parser' est mis  'NULL', ce qui est normal. 
 {
-	status__ Status = s_Undefined;
+	status__ Status = sOK;
 qRH
 	str::string Name, RawValue, Value;
 	attribute_value_substitution_callback Callback;
@@ -768,29 +761,28 @@ qRB
 	Name.Init();
 	RawValue.Init();
 
-	if ( ( Status = GetSetNameAndValue_( _Parser, Name, RawValue ) ) != sOK )
-		qRReturn;
+	if ( (Status = GetSetNameAndValue_( _Parser, Name, RawValue )) == sOK ) {
+		Value.Init();
+		if ( SubstitutionMarker_() != 0 ) {
+			Callback.Init( _Variables, _Directory );
+			if ( !tagsbs::SubstituteLongTags( RawValue, Callback, Value, SubstitutionMarker_() ) ) {
+				Status = sUnknownVariable;
+			}
+		} else
+			Value = RawValue;
 
-	Value.Init();
-	if ( SubstitutionMarker_() != 0  ) {
-		Callback.Init( _Variables, _Directory );
-		if ( !tagsbs::SubstituteLongTags( RawValue, Callback, Value, SubstitutionMarker_() ) ) {
-			Status = sUnknownVariable;
-			qRReturn;
+		if ( Status == sOK ) {
+			_Variables.Set( Name, Value );
+
+			if ( Status == sOK )
+				Status = AwaitingToken_( _Parser, xml::tStartTagClosed, sUnexpectedAttribute );
+
+			if ( Status == sOK )
+				Status = AwaitingToken_( _Parser, xml::tEndTag, sMustBeEmpty );
+
+			_Parser.PurgeDumpData();
 		}
-	} else
-		Value = RawValue;
-
-	_Variables.Set( Name, Value );
-
-	if ( Status == sOK )
-		Status = AwaitingToken_( _Parser, xml::tStartTagClosed, sUnexpectedAttribute );
-
-	if ( Status == sOK )
-		Status = AwaitingToken_( _Parser, xml::tEndTag, sMustBeEmpty );
-
-	_Parser.PurgeDumpData();
-
+	}
 qRR
 qRT
 qRE
@@ -845,27 +837,22 @@ qRB
 	Name.Init();
 	ExpectedValue.Init();
 
-	if ( ( Status = GetIfeqSelectAndValue_( _Parser, Name, ExpectedValue ) ) != sOK )
-		qRReturn;
+	if ( (Status = GetIfeqSelectAndValue_( _Parser, Name, ExpectedValue )) == sOK ) {
+		if ( (Status = AwaitingToken_( _Parser, xml::tStartTagClosed, sUnexpectedAttribute )) == sOK ) {
+			Content.Init();
 
-	if ( ( Status = AwaitingToken_( _Parser, xml::tStartTagClosed, sUnexpectedAttribute ) ) != sOK )
-		qRReturn;
+			Position = _Parser.GetCurrentPosition();
 
+			if ( (Status = RetrieveTree_( _Parser, Content )) == sOK ) {
+				TrueValue.Init();
 
-	Content.Init();
+				if ( (GetVariableValue_( Name, TrueValue )) && (ExpectedValue == TrueValue) ) {
+					Parser = NewParser( _Repository, _Variables, _Directives );
 
-	Position = _Parser.GetCurrentPosition();
-
-	if ( ( Status = RetrieveTree_( _Parser, Content ) ) != sOK)
-		qRReturn;
-
-
-	TrueValue.Init();
-
-	if ( ( GetVariableValue_( Name, TrueValue ) ) && ( ExpectedValue == TrueValue ) ) {
-		Parser = NewParser( _Repository, _Variables, _Directives );
-
-		Status = Parser->_InitWithContent( Content, _LocalizedFileName, Position, _Directory, _CypherKey, Preserve_, SubstitutionMarker_(), _Parser.GetFormat() );
+					Status = Parser->_InitWithContent( Content, _LocalizedFileName, Position, _Directory, _CypherKey, Preserve_, SubstitutionMarker_(), _Parser.GetFormat() );
+				}
+			}
+		}
 	}
 qRR
 	if ( Parser != NULL ) {
@@ -894,7 +881,7 @@ enum cypher_mode__
 static inline cypher_mode__ GetCypherModeAndValue_(
 	parser___ &Parser,
 	str::string_ &Value,
-	status__ &Status )	// Siginfiant seulement si valeur retourne == 'et_Undefined'.
+	status__ &Status )	// Siginfiant seulement si valeur retourne == 'cm_Undefined'.
 {
 	cypher_mode__ Mode = cm_Undefined;
 qRH
@@ -902,19 +889,17 @@ qRH
 qRB
 	AttributeName.Init();
 
-	if ( ( Status = AwaitingToken_( Parser, xml::tAttribute, sMissingKeyOrFormatAttribute ) ) != sOK )
-		qRReturn;
+	if ( ( Status = AwaitingToken_( Parser, xml::tAttribute, sMissingKeyOrFormatAttribute ) ) == sOK ) {
+		if ( Parser.AttributeName() == CYPHER_TAG_KEY_ATTRIBUTE )
+			Mode = cmOverriden;
+		else if ( Parser.AttributeName() == CYPHER_TAG_METHOD_ATTRIBUTE )
+			Mode = cmEncrypted;
+		else
+			Status = sUnexpectedAttribute;
 
-	if ( Parser.AttributeName() == CYPHER_TAG_KEY_ATTRIBUTE )
-		Mode = cmOverriden;
-	else if ( Parser.AttributeName() == CYPHER_TAG_METHOD_ATTRIBUTE )
-		Mode = cmEncrypted;
-	else {
-		Status = sUnexpectedAttribute;
-		qRReturn;
+		if ( Status == sOK )
+			Value = Parser.Value();
 	}
-
-	Value = Parser.Value();
 qRR
 qRT
 qRE
@@ -1078,17 +1063,16 @@ qRB
 		  || ( AttributeName.Amount() == 0 )
 		  || ( Parameters( Row ) != ',' ) ) {
 		Status = sBadAttributeDefinitionSyntax;
-		qRReturn;
+	} else {
+		MacroName.Init( Parameters );
+		MacroName.Remove( MacroName.First(), *Row + 1 );
+
+		Data.Append( AttributeName );
+		Data.Append( "=\"" );
+		Status = this->_HandleMacroExpand( MacroName, Parser );
+
+		_AttributeDefinitionInProgress = true;
 	}
-
-	MacroName.Init( Parameters );
-	MacroName.Remove( MacroName.First(), *Row + 1 );
-
-	Data.Append( AttributeName );
-	Data.Append( "=\"" );
-	Status = this->_HandleMacroExpand( MacroName, Parser );
-
-	_AttributeDefinitionInProgress = true;
 qRR
 qRT
 qRE
@@ -1115,22 +1099,17 @@ qRB
 
 	if ( _FFlow.Init( fnm::Normalize( Path ), fil::mReadOnly, err::hUserDefined ) != tol::rSuccess ) {
 		Status = sUnableToOpenFile;
-		qRReturn;
+	} else {
+		_XFlow.Init( _FFlow, Format );
+
+		fnm::GetLocation( Path, Location );
+
+		LocalizedFileNameBuffer.Init();
+		LocationBuffer.Init();
+
+		if ( (Status = Init( _XFlow, Path.UTF8( LocalizedFileNameBuffer ), Location.UTF8( LocationBuffer ), CypherKey, Preserve, SubstitutionMarker )) == sOK )
+			_IgnorePreprocessingInstruction = true;
 	}
-
-	_XFlow.Init( _FFlow, Format );
-
-	fnm::GetLocation( Path, Location );
-
-	LocalizedFileNameBuffer.Init();
-	LocationBuffer.Init();
-
-	if ( ( Status = Init( _XFlow, Path.UTF8( LocalizedFileNameBuffer ), Location.UTF8( LocationBuffer ), CypherKey, Preserve, SubstitutionMarker ) ) != sOK )
-		qRReturn;
-
-	_IgnorePreprocessingInstruction = true;
-
-	Status = sOK;
 qRR
 qRT
 qRE
@@ -1156,10 +1135,8 @@ qRB
 
 	_XFlow.Init( _SFlow, Format, Position );
 
-	if ( ( Status = Init( _XFlow, NameOfTheCurrentFile, Directory, CypherKey, Preserve, SubstitutionMarker ) ) != sOK )
-		qRReturn;
-
-	_IgnorePreprocessingInstruction = false;
+	if ( ( Status = Init( _XFlow, NameOfTheCurrentFile, Directory, CypherKey, Preserve, SubstitutionMarker ) ) == sOK )
+		_IgnorePreprocessingInstruction = false;
 qRR
 qRT
 qRE
@@ -1656,7 +1633,7 @@ static status__ HandleCypherDirective_(
 	xml::rWriter &Writer,
 	xtf::pos__ &Position )
 {
-	status__ Status = s_Undefined;
+	status__ Status = sOK;
 qRH
 	str::string CypherKey;
 	bso::bool__ Continue = true;
@@ -1667,30 +1644,26 @@ qRB
 		switch ( Parser.Parse( xml::tfAll & ~xml::tfSpecialAttribute ) ) {
 		case xml::tAttribute:
 			if ( Parser.AttributeName() == CYPHER_TAG_KEY_ATTRIBUTE ) {
-				if ( CypherKey.Amount() != 0 ) {
+				if ( CypherKey.Amount() != 0 )
 					Status = sUnexpectedAttribute;
-					qRReturn;
-				}
-
-				CypherKey = Parser.Value();
-			} else {
+				else
+					CypherKey = Parser.Value();
+			} else
 				Status = sUnexpectedAttribute;
-				qRReturn;
-			}
 			break;
 		case xml::tStartTagClosed:
-			if ( CypherKey.Amount() == 0 ) {
+			if ( CypherKey.Amount() == 0 )
 				Status = sMissingCypherKey;
-				qRReturn;
-			}
-			if ( ( Status = Encrypt_( Parser, Namespace, CypherKey, Writer, Position ) ) != sOK )
-				qRReturn;
-			Continue = false;
+			else if ( ( Status = Encrypt_( Parser, Namespace, CypherKey, Writer, Position ) ) == sOK )
+				Continue = false;
 			break;
 		default:
 			qRFwk();
 			break;
 		}
+
+		if ( Status != sOK )
+			Continue = false;
 	}
 
 qRR
@@ -1706,7 +1679,7 @@ status__ xpp::Encrypt(
 	xml::rWriter &Writer,
 	context___ &Context )
 {
-	status__ Status = s_Undefined;
+	status__ Status = sOK;
 qRH
 	xtf::extended_text_iflow__ XFlow;
 	bso::bool__ Continue = true;
@@ -1719,7 +1692,7 @@ qRB
 
 	Parser.Init( XFlow, xml::ehKeep );
 
-	while ( Continue ) {
+	while ( Continue && ( Status == sOK ) ) {
 		switch( Parser.Parse( xml::tfAll ) ) {
 		case xml::tProcessingInstruction:
 			Writer.GetFlow() << Parser.DumpData();
@@ -1730,10 +1703,8 @@ qRB
 			break;
 		case xml::tStartTag:
 			if ( Parser.TagName() == Directives.CypherTag ) {
-				if ( ( Status = HandleCypherDirective_( Namespace, Parser, Writer, Context.Coordinates.Position ) ) != sOK ) {
+				if ( ( Status = HandleCypherDirective_( Namespace, Parser, Writer, Context.Coordinates.Position ) ) != sOK )
 					Context.Status = Status;
-					qRReturn;
-				}
 			} else
 				Writer.PushTag( Parser.TagName() );
 			break;
@@ -1761,15 +1732,12 @@ qRB
 		case xml::t_Error:
 			Context.Status = Status = _Convert( Parser.Status() );
 			Context.Coordinates.Position = XFlow.Position();
-			qRReturn;
 			break;
 		default:
 			qRFwk();
 			break;
 		}
 	}
-
-	Status = sOK;
 qRR
 qRT
 qRE

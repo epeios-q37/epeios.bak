@@ -118,11 +118,8 @@ namespace plgn {
 		qRB
 			ConfigurationEntry.Init();
 
-			if ( !Registry.Convert( Configuration, ConfigurationEntry ) )
-				qRReturn;
-
-			if ( ( Row = Initialize( PluginPath, Label, Identifier, ConfigurationEntry, Arguments, Abstracts ) ) != qNIL )
-				qRReturn;
+			if ( Registry.Convert( Configuration, ConfigurationEntry ) )
+				Row = Initialize( PluginPath, Label, Identifier, ConfigurationEntry, Arguments, Abstracts );
 		qRR
 		qRT
 		qRE

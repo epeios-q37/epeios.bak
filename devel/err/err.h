@@ -78,7 +78,6 @@ namespace err {
 		t_amount,
 		t_None,			// No error.
 		t_Free,			// (ERRFree) Not really an error. Allows the use or ther error mechanism.
-		t_Return,		// Make the handling of 'ERRReturn' easier.
 		t_Abort,		// Make the handling of 'ERRAbort()' easier.
 		t_Undefined
 	};
@@ -175,7 +174,7 @@ namespace err {
 #  define qRB	if ( !setjmp( ERRJmp ) ) {
 
 // 'Error' : to execute if an error occurs.
-#  define qRR		} else { ERRPutJ( ERROJmp ); ERRNoError = false; if ( ERRType != err::t_Return ) {
+#  define qRR		} else { ERRPutJ( ERROJmp ); ERRNoError = false; {
 
 // 'Tail' : to execute, error or not.
 #  define qRT		} }
@@ -188,7 +187,7 @@ namespace err {
 // précède les déclarations
 #  define qRB	try {
 // précède les instructions proprement dites
-#  define qRR		} catch ( err::err___ ) { ERRNoError = false; if ( ERRType != err::t_Return ) {
+#  define qRR		} catch ( err::err___ ) { ERRNoError = false; {
 // précède les instructions à effectuer lors d'une erreur
 #  define qRT		} }
 // précède les instructions à exécuter, erreur ou pas
@@ -198,12 +197,11 @@ namespace err {
 # endif
 
 # define ERRTestEnd		if ( ERRHit() && !ERRNoError && err::Concerned() ) {\
-							if ( ERRType == err::t_Return ) {\
-								ERRRst()
+							{
 
 // 'End' : end of error handling bloc.
-# define qRE					ERRCommonEnd ERRTestEnd } else ERRT();  };
-# define qRFE( action )			ERRCommonEnd ERRTestEnd } else { action; if ( ERRHit() && err::Concerned() ) ERRRst(); } };
+# define qRE					ERRCommonEnd ERRTestEnd } ERRT();  };
+# define qRFE( action )			ERRCommonEnd ERRTestEnd } { action; if ( ERRHit() && err::Concerned() ) ERRRst(); } };
 # define qRFH					qRH
 # define qRFB					qRB
 # define qRFR					qRR

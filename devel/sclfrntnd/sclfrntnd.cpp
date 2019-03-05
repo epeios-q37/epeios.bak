@@ -162,21 +162,20 @@ qRB
 
 	if ( !sclmisc::OGetValue( parameter_::login_::Mode_, Mode ) ) {
 		Login = lBlank;
-		qRReturn;
-	}
-
-	switch ( Login = GetLogin( Mode ) ) {
-	case lBlank:
-		break;
-	case lFull:
-	case lAutomatic:
-		sclmisc::MGetValue( parameter_::login_::Password_, Password );
-	case lPartial:
-		sclmisc::MGetValue( parameter_::login_::UserID_, UserID );
-		break;
-	default:
-		sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( parameter_::login_::Mode_ );
-		break;
+	} else {
+		switch ( Login = GetLogin( Mode ) ) {
+		case lBlank:
+			break;
+		case lFull:
+		case lAutomatic:
+			sclmisc::MGetValue( parameter_::login_::Password_, Password );
+		case lPartial:
+			sclmisc::MGetValue( parameter_::login_::UserID_, UserID );
+			break;
+		default:
+			sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( parameter_::login_::Mode_ );
+			break;
+		}
 	}
 qRR
 qRT

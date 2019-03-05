@@ -114,6 +114,7 @@ static const name___ &BuildPath_(
 {
 qRH
 	size_t DirSize = 0, PathSize = 0, ExtSize = 0;
+	bso::sBool Skip = false;
 qRB
 	ncore___ &Core = Result.ExposedInternal();
 
@@ -131,55 +132,56 @@ qRB
 
 	Core.Calloc( DirSize + PathSize + ExtSize + 2 );
 
-	if ( ( PathSize == 0 ) && ( ExtSize == 0 ) )
-		qRReturn;
+	if ( (PathSize != 0) || (ExtSize != 0) ) {
+		if ( DirSize != 0 ) {
+			strcpy_( Core, Dir );
 
-	if ( DirSize != 0 ) {
-		strcpy_( Core, Dir );
+			if ( PathSize != 0 ) {
+				switch ( Dir[DirSize - 1] ) {
+				case ':':
+				case '/':
+				case '\\':
+					break;
+				default:
+					strcat_( Core, SLASH );
+					break;
+				}
+			} else {
+				while ( --DirSize &&
+					((Core[DirSize] == '/')
+					  || (Core[DirSize] == '\\')) );
 
-		if ( PathSize != 0 ) {
-			switch( Dir[DirSize-1] ) {
-			case ':':
-			case '/':
-			case '\\':
+				if ( (Core[DirSize] == ':') || (DirSize == 0) )
+					Skip = true;
+				else
+					Core[DirSize + 1] = 0;
+			}
+		} else if ( PathSize == 0 )
+			Skip = true;
+
+		if ( !Skip ) {
+			switch ( Type_( Path ) ) {
+			case fnm::tEmpty:
+				strcat_( Core, Ext );
+				break;
+			case fnm::tSuffixed:
+			case fnm::tRelative:
+			case fnm::tAbsolute:
+			case fnm::tFree:
+				strcat_( Core, Path );
+
+				if ( ExtSize )
+					strcat_( Core, Ext );
+
+				break;
+			case fnm::tDirectory:
+				strcpy_( Core, Result );
 				break;
 			default:
-				strcat_( Core, SLASH );
+				qRFwk();
 				break;
 			}
-		} else {
-			while( --DirSize &&
-				   ( ( Core[DirSize] == '/' )
-					 || ( Core[DirSize] == '\\' ) ) );
-
-			if ( ( Core[DirSize] == ':' ) || ( DirSize == 0 ) )
-				qRReturn;
-			else 
-				Core[DirSize+1] = 0;
 		}
-	} else if ( PathSize == 0 )
-		qRReturn;
-
-	switch ( Type_( Path ) ) {
-	case fnm::tEmpty:
-		strcat_( Core, Ext );
-		break;
-	case fnm::tSuffixed:
-	case fnm::tRelative:
-	case fnm::tAbsolute:
-	case fnm::tFree:
-		strcat_( Core, Path );
-
-		if ( ExtSize )
-			strcat_( Core, Ext );
-
-		break;
-	case fnm::tDirectory:
-		strcpy_( Core, Result );
-		break;
-	default:
-		qRFwk();
-		break;
 	}
 qRR
 	Result.Init();

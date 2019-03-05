@@ -723,12 +723,13 @@ qRH
 	str::string Value;
 	sdr::row__ Error = qNIL;
 	str::string Name, EntryPath;
+	bso::sBool Skip = false;
 qRB
 	Id.Init();
 
 	if ( GetId_( Flag, Id ).Amount() == 0 ) {
 		if ( IgnoreUnknownArguments )
-			qRReturn;
+			Skip = true;
 		else {
 			Meaning.Init();
 			Meaning.SetValue( SCLARGMNT_NAME "_UnknownFlag" );
@@ -753,42 +754,33 @@ qRB
 		}
 	}
 
-	Path.Init();
-	GetPath_( Id, Path );
+	if ( !Skip ) {
+		Path.Init();
+		GetPath_( Id, Path );
 
-#if 1
-	if ( Path.Amount() == 0 )	// Il s'agit d'une commande.
-		Command_.GetPath( Path );
+		if ( Path.Amount() == 0 )	// Il s'agit d'une commande.
+			Command_.GetPath( Path );
 
-#else // Obsolete
-	if ( Path.Amount() == 0 ) {
-		Meaning.Init();
-		Meaning.SetValue( SCLTOOL_NAME "_NoPathForFlag" );
-		Meaning.AddTag( Flag.Name );
-		sclerror::SetMeaning( Meaning );
-		qRAbort();
-	}
-#endif
+		Value.Init();
+		GetValue_( Id, Value );
 
-	Value.Init();
-	GetValue_( Id, Value );
+		if ( Value.Amount() == 0 ) {
+			Meaning.Init();
+			Meaning.SetValue( SCLARGMNT_NAME "_NoValueForFlag" );
+			Meaning.AddTag( Flag.Name );
+			sclerror::SetMeaning( Meaning );
+			qRAbort();
+		}
 
-	if ( Value.Amount() == 0 ) {
-		Meaning.Init();
-		Meaning.SetValue( SCLARGMNT_NAME "_NoValueForFlag" );
-		Meaning.AddTag( Flag.Name );
-		sclerror::SetMeaning( Meaning );
-		qRAbort();
-	}
+		SetValue_( Path, Value, &Error );
 
-	SetValue_( Path, Value, &Error );
-
-	if ( Error != qNIL ) {
-		Meaning.Init();
-		Meaning.SetValue( SCLARGMNT_NAME "_BadPathForFlag" );
-		Meaning.AddTag( Flag.Name );
-		sclerror::SetMeaning( Meaning );
-		qRAbort();
+		if ( Error != qNIL ) {
+			Meaning.Init();
+			Meaning.SetValue( SCLARGMNT_NAME "_BadPathForFlag" );
+			Meaning.AddTag( Flag.Name );
+			sclerror::SetMeaning( Meaning );
+			qRAbort();
+		}
 	}
 qRR
 qRT
@@ -807,12 +799,13 @@ qRH
 	str::string Path;
 	sdr::row__ Error = qNIL;
 	str::string Name;
+	bso::sBool Skip = false;
 qRB
 	Id.Init();
 
 	if ( GetId_( Option, Id ).Amount() == 0 ) {
 		if ( IgnoreUnknownArguments )
-			qRReturn;
+			Skip = true;
 		else {
 			Meaning.Init();
 			Meaning.SetValue( SCLARGMNT_NAME "_UnknownOption" );
@@ -837,25 +830,27 @@ qRB
 		}
 	}
 
-	Path.Init();
-	GetPath_( Id, Path );
+	if ( !Skip ) {
+		Path.Init();
+		GetPath_( Id, Path );
 
-	if ( Path.Amount() == 0 ) {
-		Meaning.Init();
-		Meaning.SetValue( SCLARGMNT_NAME "_NoPathForOption" );
-		Meaning.AddTag( Option.Name );
-		sclerror::SetMeaning( Meaning );
-		qRAbort();
-	}
+		if ( Path.Amount() == 0 ) {
+			Meaning.Init();
+			Meaning.SetValue( SCLARGMNT_NAME "_NoPathForOption" );
+			Meaning.AddTag( Option.Name );
+			sclerror::SetMeaning( Meaning );
+			qRAbort();
+		}
 
-	SetValue_( Path, Option.Value, &Error );
+		SetValue_( Path, Option.Value, &Error );
 
-	if ( Error != qNIL ) {
-		Meaning.Init();
-		Meaning.SetValue( SCLARGMNT_NAME "_BadPathForOption" );
-		Meaning.AddTag( Option.Name );
-		sclerror::SetMeaning( Meaning );
-		qRAbort();
+		if ( Error != qNIL ) {
+			Meaning.Init();
+			Meaning.SetValue( SCLARGMNT_NAME "_BadPathForOption" );
+			Meaning.AddTag( Option.Name );
+			sclerror::SetMeaning( Meaning );
+			qRAbort();
+		}
 	}
 qRR
 qRT
@@ -876,46 +871,45 @@ qRH
 	bso::integer_buffer__ Buffer;
 	bso::bool__ AdditionalArg = false;
 qRB
-	if ( IgnoreUnknownArguments )
-		qRReturn;
+	if ( !IgnoreUnknownArguments ) {
+		Id.Init();
 
-	Id.Init();
+		Command.Init();
+		MGetValue( Command_, Command );
 
-	Command.Init();
-	MGetValue( Command_, Command );
-
-	Tags.Init();
-	Tags.Append( Command );
-	Tags.Append( str::string( bso::Convert( *Index, Buffer ) ) );
-
-	Id.Init();
-	if ( !BGetValue(rgstry::tentry__(IndexTaggedArgumentLinkTarget_, Tags), Id) ) {
 		Tags.Init();
 		Tags.Append( Command );
-		Tags.Append( str::string() );
-		AdditionalArg = true;
+		Tags.Append( str::string( bso::Convert( *Index, Buffer ) ) );
+
+		Id.Init();
 		if ( !BGetValue(rgstry::tentry__(IndexTaggedArgumentLinkTarget_, Tags), Id) ) {
-			sclmisc::ReportAndAbort( SCLARGMNT_NAME "_BadAmountOfArguments" );
+			Tags.Init();
+			Tags.Append( Command );
+			Tags.Append( str::string() );
+			AdditionalArg = true;
+			if ( !BGetValue(rgstry::tentry__(IndexTaggedArgumentLinkTarget_, Tags), Id) ) {
+				sclmisc::ReportAndAbort( SCLARGMNT_NAME "_BadAmountOfArguments" );
+			}
 		}
+
+		Tags.Init();
+		Tags.Append( Command );
+		Tags.Append( Id );
+
+		Path.Init();
+		GetPath_( Id, Path );
+
+		if ( Path.Amount() == 0 )
+			sclmisc::ReportAndAbort( SCLARGMNT_NAME "_NoPathForArgument", Id );
+
+		if ( AdditionalArg )
+			AddValue_( Path, Argument, &Error );
+		else
+			SetValue_( Path, Argument, &Error );
+
+		if (Error != qNIL)
+			sclmisc::ReportAndAbort( SCLARGMNT_NAME "_BadPathForArgument", Id );
 	}
-
-	Tags.Init();
-	Tags.Append( Command );
-	Tags.Append( Id );
-
-	Path.Init();
-	GetPath_( Id, Path );
-
-	if ( Path.Amount() == 0 )
-		sclmisc::ReportAndAbort( SCLARGMNT_NAME "_NoPathForArgument", Id );
-
-	if ( AdditionalArg )
-		AddValue_( Path, Argument, &Error );
-	else
-		SetValue_( Path, Argument, &Error );
-
-	if (Error != qNIL)
-		sclmisc::ReportAndAbort( SCLARGMNT_NAME "_BadPathForArgument", Id );
 qRR
 qRT
 qRE

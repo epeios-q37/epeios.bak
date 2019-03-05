@@ -7,6 +7,32 @@
 - [trvl]: trivial modifications;
 - [rvrt]: reverting modifications;
 
+## 2019-03-05
+
+- CSDCMN: [adpt],
+- DIR: [adpt],
+- ERR:
+	- removing `t_Return` related stuff,
+- FBLFRD: [adpt],
+- FIL: [adpt],
+- FLX: [adpt],
+- FNM: [adpt],
+- LCL: [adpt],
+- PLGN: [adpt],
+- RGSTRY: [adpt],
+- SCLARGMNT: [adpt],
+- SCLFRNTND: [adpt],
+- SCLLOCALE: [adpt],
+- SCLMISC: [adpt],
+- SCLRGSTRY: [adpt],
+- SCLTOOL: [adpt],
+- SCLXDHTML: [adpt],
+- TAGSBS: [adpt],
+- XDHUPS: [adpt],
+- XDHUTL: [adpt],
+- XML: [adpt],
+- XPP: [adpt],
+
 ## 2019-02-18
 
 - FDR:
@@ -20,8 +46,7 @@
 - FDR:
   - simplification,
   - fixing deadlock,
-- TXF:
-  - [trvl],
+- TXF: [trvl],
 
 ## 2019-02-15
 

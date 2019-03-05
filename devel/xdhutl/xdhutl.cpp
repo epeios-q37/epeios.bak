@@ -429,13 +429,11 @@ qRB
 	if ( Row == qNIL ) {
 		if ( !xdhutl::IsKeyEvent( Type ) )
 			qRGnr();
+	} else {
+		Found = true;
 
-		qRReturn;
+		AbstractBuffer = Abstracts( Row );	// To set the position of 'Handler'.
 	}
-
-	Found = true;
-
-	AbstractBuffer = Abstracts( Row );	// To set the position of 'Handler'.
 qRR
 qRT
 qRE
