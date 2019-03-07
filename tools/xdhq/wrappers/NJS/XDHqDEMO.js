@@ -319,7 +319,8 @@ function ignition(socket, createCallback, callbacks) {
 		let completeURL = "http://" + wAddr + wPort + "/" + cgi + ".php?_token=" + token;
 
 		console.log(completeURL);
-        console.log(new Array(completeURL.length + 1).join('^'));		console.log("Open above URL in a web browser. Enjoy!");
+		console.log(new Array(completeURL.length + 1).join('^'));
+		console.log("Open above URL in a web browser. Enjoy!");
 
 		open(completeURL);
 	}
