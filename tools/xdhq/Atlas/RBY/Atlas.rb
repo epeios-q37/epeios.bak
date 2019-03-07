@@ -43,7 +43,7 @@ module Atlas
 		return Thread.new(userObject,XDHq::DOM.new(instance),callbacks) do |userObject,dom,callbacks| thread(userObject, dom, callbacks) end
  end
 
-	def Atlas::launch(callbacks,callback,headContent="",dir="")
+	def Atlas::launch(callbacks,callback = -> () {},headContent="",dir="")
 		XDHq.launch(-> (userObject,callbacks,id) {self.cb(userObject,callbacks,id)},callback,callbacks,headContent,dir)
 =begin
 		while true

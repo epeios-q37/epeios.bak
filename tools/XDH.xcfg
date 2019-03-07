@@ -241,7 +241,7 @@
             
 						if ( id == "" ) {
 							let node = document.createElement("span");
-							node.style.all="initial";
+							node.style.all="revert";
 							node.innerHTML=`
 								<div style="display:table; margin: auto;">
 								 <div style="display: table; margin: 15px auto auto auto; border: 1px solid; padding: 10px;box-shadow: 5px 5px;">

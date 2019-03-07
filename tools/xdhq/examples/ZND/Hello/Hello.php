@@ -72,9 +72,8 @@ EOT;
    $dom->focus("input");
    break;
   case "Clear":
-   if ($dom->confirm("Are you sure?")) {
+   if ($dom->confirm("Are you sure?"))
     $dom->setContent("input", "");
-   }
    $dom->focus("input");
    break;
   default:

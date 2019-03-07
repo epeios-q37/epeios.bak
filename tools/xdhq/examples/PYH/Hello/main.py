@@ -41,9 +41,9 @@ def acClear(this, dom, id):
 	dom.focus( "input")
 
 callbacks = {
-		"": acConnect,
-		"Submit": acSubmit,
-		"Clear": acClear,
-	}
+	"": acConnect,
+	"Submit": acSubmit,
+	"Clear": acClear,
+}
 		
 Atlas.launch(callbacks, lambda: None, readAsset("Head.html"))
