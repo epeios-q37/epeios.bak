@@ -14,7 +14,7 @@ For a live demonstration: <http://q37.info/runkit/Hello>.
 
 Source code:
 
-```PHP
+```php
 <?php
 require "phar://Atlas.phar/Atlas.php";
 
