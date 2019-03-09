@@ -297,6 +297,10 @@ namespace {
 
 				if ( Raw.Amount() == 0 )
 					Normalized.Append( tol::UUIDGen( UUID ) );
+				else if ( (Raw.Amount() > 1) && (Raw( 0 ) == '&') )
+					Normalized.Remove( Normalized.First() );
+				else
+					return plugins::sBad;
 
 				return plugins::sOK;
 			}
