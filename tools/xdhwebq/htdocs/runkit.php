@@ -89,7 +89,7 @@ function onLoad( notebook )
 		window.scrollTo(0,0);
 
 }
-function onEvaluate_()
+function onEvaluate()
 {
 	window.scrollTo(0,document.body.scrollHeight);
     let url = "' . $url . '";
@@ -104,7 +104,7 @@ element: document.getElementById("my-element"),
 // specify the source of the notebook
 // source: source.replace(/&gt;/g, ">").replace(/&lt;/g, "<"),	// Does not work if content too long !
 onLoad: onLoad,
-// onEvaluate: onEvaluate,
+onEvaluate: onEvaluate,
 env: [ "ATK_TOKEN=' . $token . '" ]
 });
 		</script>
