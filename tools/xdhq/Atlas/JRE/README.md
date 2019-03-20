@@ -10,6 +10,11 @@ Here's how a [*Hello, World!*](https://en.wikipedia.org/wiki/%22Hello,_World!%22
 
 ![Little demonstration](http://q37.info/download/assets/Hello.gif "A basic example")
 
+- `git clone http://github.com/epeios-q37/atlas-java`
+- `cd atlas-java/Hello`
+- *Windows*: `java -cp .;../Atlas.jar Hello`
+- other platforms: `java -cp .:../Atlas.jar Hello`
+
 For a live demonstration: <http://q37.info/runkit/Hello>.
 
 Source code:

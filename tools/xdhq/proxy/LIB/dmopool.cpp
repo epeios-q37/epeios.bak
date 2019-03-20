@@ -27,12 +27,11 @@ using namespace dmopool;
 
 #include "registry.h"
 
-#include "bch.h"
-#include "crt.h"
 #include "csdbns.h"
 #include "flx.h"
 #include "logq.h"
 #include "lstbch.h"
+#include "lstcrt.h"
 #include "mtk.h"
 #include "sclmisc.h"
 #include "str.h"
@@ -126,9 +125,9 @@ namespace {
 	};
 
 	mtx::rHandler MutexHandler_ = mtx::Undefined;
-	crt::qMCRATEw( str::dString, sBRow ) Tokens_;
-	crt::qMCRATEw( str::dString, sBRow ) Heads_;
-	bch::qBUNCHw( rBackend_ *, sBRow ) Backends_;
+	lstcrt::qLMCRATEw( str::dString, sBRow ) Tokens_;
+	lstcrt::qLMCRATEw( str::dString, sBRow ) Heads_;
+	lstbch::qLBUNCHw( rBackend_ *, sBRow ) Backends_;
 	csdbns::rListener Listener_;
 
 	// NOTA : TU : Thread Unsafe ; TS : Thread Safe.
@@ -233,7 +232,7 @@ namespace {
 		Row = TUGetBackendRow_( Token );
 
 		if ( Row == qNIL ) {
-			Row = Tokens_.Append( Token );
+			Row = Tokens_.New();
 
 			if ( Row != Backends_.New() )
 				qRGnr();
@@ -247,6 +246,8 @@ namespace {
 			qRAlc();
 
 		Backend->Init( Row, Driver, IP );
+
+		Tokens_.Store( Token, Row );
 
 		Backends_.Store( Backend, Row );
 
@@ -496,7 +497,7 @@ namespace {
 	{
 	qRFH;
 	qRFB;
-	NewConnexion_( Data, Blocker );
+		NewConnexion_( Data, Blocker );
 	qRFR;
 	qRFT;
 	qRFE( sclmisc::ErrFinal() );

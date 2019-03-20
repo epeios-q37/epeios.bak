@@ -1,9 +1,15 @@
 # *XDHq* *CHANGELOG*
 
+## 2019-03-20
+
+- fixing bug due to use of simple crate/bunch instead of list ones,
+
 ## 2019-03-04
+
 - fixing *alert* primitive blocking issue,
 
 ## 2019-02-05
+
 - fixing *clang* issue,
 
 ## 2018-12-18

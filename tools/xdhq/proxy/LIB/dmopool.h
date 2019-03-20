@@ -61,7 +61,7 @@ namespace dmopool {
 	public:
 		sId Id;
 		fdr::rRWDriver *Driver;
-		tht::rBlocker Read;	// Handled (creates/destroyed) upstream.
+		tht::rBlocker Read;	// Handled (created/destroyed) upstream.
 		tht::rBlocker *Switch;
 		void reset( bso::sBool P = true )
 		{
@@ -156,19 +156,19 @@ namespace dmopool {
 		qRH;
 			fdr::sByte *NewBuffer = NULL;
 		qRB;
+			if ( !IdSent_ ) {	// To optimize.
+				if ( ( NewBuffer = (fdr::sByte *)malloc( Maximum + 1 ) ) == NULL )
+						qRAlc();
+
+				NewBuffer[0] = Shared_.Id;
+				memcpy( NewBuffer + 1, Buffer, Maximum );
+
+				Buffer = NewBuffer;
+				Maximum++;
+				IdSent_ = true;
+			}
+
 			if ( Shared_.IsValid() ) {
-				if ( !IdSent_ ) {	// To optimize.
-					if ( ( NewBuffer = (fdr::sByte *)malloc( Maximum + 1 ) ) == NULL )
-						 qRAlc();
-
-					NewBuffer[0] = Shared_.Id;
-					memcpy( NewBuffer + 1, Buffer, Maximum );
-
-					Buffer = NewBuffer;
-					Maximum++;
-					IdSent_ = true;
-				}
-
 				Maximum = Shared_.Driver->Write( Buffer, Maximum );
 
 				if ( Maximum > 0 )

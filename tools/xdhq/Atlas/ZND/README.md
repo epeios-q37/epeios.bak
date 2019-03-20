@@ -10,6 +10,12 @@ Here's how a [*Hello, World!*](https://en.wikipedia.org/wiki/%22Hello,_World!%22
 
 ![Little demonstration](http://q37.info/download/assets/Hello.gif "A basic example")
 
+- `git clone http://github.com/epeios-q37/atlas-php`
+- `cd atlas-php`
+- `php Hello/Hello.php`
+
+(with the [*pthreads*](http://php.net/manual/book.pthreads.php) extension)
+
 For a live demonstration: <http://q37.info/runkit/Hello>.
 
 Source code:
