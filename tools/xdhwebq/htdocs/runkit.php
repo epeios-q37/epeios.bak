@@ -83,7 +83,7 @@ function onLoad( notebook )
 {
  notebook.setSource(source.replace(/&gt;/g, ">").replace(/&lt;/g, "<"))
 
-	if ( confirm("The \'' . $app . '\' application will now be launched on RunKit and be automatically opened in your web browser.\n\nNOTA: the application will stop working after a few tens of seconds due to RunKit timeout.\nYou can then simply go back to the RunKit page.") )
+	if ( confirm("The \'' . $app . '\' application will now be launched on RunKit and be automatically opened in your web browser.\n\nNOTA: the application will stop working after a few tens of seconds due to RunKit timeout.\nYou can then simply go back to the RunKit page, modify the source code if you like, and relaunch the application.") )
 		notebook.evaluate();
 	else
 		window.scrollTo(0,0);
