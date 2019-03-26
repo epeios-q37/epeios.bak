@@ -247,7 +247,7 @@
 								 <div style="display: table; margin: 15px auto auto auto; border: 1px solid; padding: 10px;box-shadow: 5px 5px;">
 								  <span style="text-shadow: 1px 1px;">Powered by the <span style="font-style: italic;">Atlas</span> toolkit (<a href="http://atlastk.org/">http://atlastk.org/</a>)</span>
 								 </div>
-								<span style="display: table; margin: 10px auto 5px auto;font-style: oblique;">QRCode for this app:</span>
+								<span style="display: table; margin: 10px auto 5px auto;font-style: oblique;">QR code for this app:</span>
 								<div style="display: flex; justify-content: space-around;">
  								 <a href="#">
  								  <div id="qrcode"></div>

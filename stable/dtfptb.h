@@ -72,31 +72,34 @@ namespace dtfptb {
 
 	typedef bso::u8__ _length__;
 
-	void _FPutInt(
+	void FPutInt_(
 		bso::int__ Int,
 		_length__ Length,
 		flw::oflow__ &Flow );
 
-	bso::int__ _FGetInt(
+	bso::int__ FGetInt_(
 		flw::iflow__ &Flow,
-		_length__ Length );
+		_length__ Length,
+		bso::sBool *IsError );
 
-	bso::int__ _FGetInt(
+	bso::int__ FGetInt_(
 		fdr::rRDriver &Driver,
-		_length__ Length );
+		_length__ Length,
+		bso::sBool *IsError );
 
 	template <typename i> inline void FPut(
 		i Int,
 		flw::rWFlow &Flow )
 	{
-		_FPutInt( Int, sizeof( Int ), Flow );
+		FPutInt_( Int, sizeof( Int ), Flow );
 	}
 
 	template <typename i, typename fd> inline i FGet(
 		fd &FD,
-		i &Int )
+		i &Int,
+		bso::sBool *IsError = NULL )
 	{
-		return Int = (i)_FGetInt( FD, sizeof( Int ) );
+		return Int = (i)FGetInt_( FD, sizeof( Int ), IsError );
 	}
 
 # ifdef CPE_S_DARWIN
@@ -115,23 +118,27 @@ namespace dtfptb {
 	}
 # endif
 
-	bso::sUBig _VGetUBig(
+	bso::sUBig VGetUBig_(
 		flw::iflow__ &Flow,
-		bso::sUBig Max );
+		bso::sUBig Max,
+		bso::sBool *IsError );
 
-	bso::sUBig _VGetUBig(
+	bso::sUBig VGetUBig_(
 		fdr::rRDriver &Driver,
-		bso::sUBig Max );
+		bso::sUBig Max,
+		bso::sBool *IsError );
 
-	bso::sSBig _VGetSBig(
+	bso::sSBig VGetSBig_(
 		flw::iflow__ &Flow,
 		bso::sSBig Min,
-		bso::sSBig Max );
+		bso::sSBig Max,
+		bso::sBool *IsError );
 
-	bso::sSBig _VGetSBig(
+	bso::sSBig VGetSBig_(
 		fdr::rRDriver &Driver,
 		bso::sSBig Min,
-		bso::sSBig Max );
+		bso::sSBig Max,
+		bso::sBool *IsError );
 
 	void _VPutUBig(
 		bso::sUBig UBig,
@@ -160,27 +167,31 @@ namespace dtfptb {
 # define DTFPTB__M( bitness, umax, smin, smax )\
 	inline bso::u##bitness##__ VGet(\
 		flw::rRFlow &Flow,\
-		bso::u##bitness##__ &Int )\
+		bso::u##bitness##__ &Int,\
+		bso::sBool *IsError = NULL)\
 	{\
-		return Int = (bso::u##bitness##__)_VGetUBig( Flow, umax );\
+		return Int = (bso::u##bitness##__)VGetUBig_( Flow, umax, IsError );\
 	}\
 	inline bso::u##bitness##__ VGet(\
 		fdr::rRDriver &Driver,\
-		bso::u##bitness##__ &Int )\
+		bso::u##bitness##__ &Int,\
+		bso::sBool *IsError = NULL)\
 	{\
-		return Int = (bso::u##bitness##__)_VGetUBig( Driver, umax );\
+		return Int = (bso::u##bitness##__)VGetUBig_( Driver, umax, IsError );\
 	}\
 	inline bso::s##bitness##__ VGet(\
 		flw::rRFlow &Flow,\
-		bso::s##bitness##__ &Int )\
+		bso::s##bitness##__ &Int,\
+		bso::sBool *IsError = NULL)\
 	{\
-		return Int = (bso::s##bitness##__)_VGetSBig( Flow, smin, smax );\
+		return Int = (bso::s##bitness##__)VGetSBig_( Flow, smin, smax, IsError );\
 	}\
 	inline bso::s##bitness##__ VGet(\
 		fdr::rRDriver &Driver,\
-		bso::s##bitness##__ &Int )\
+		bso::s##bitness##__ &Int,\
+		bso::sBool *IsError = NULL)\
 	{\
-		return Int = (bso::s##bitness##__)_VGetSBig( Driver, smin, smax );\
+		return Int = (bso::s##bitness##__)VGetSBig_( Driver, smin, smax, IsError );\
 	}\
 	inline void VPut(\
 		bso::u##bitness##__ Int,\

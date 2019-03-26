@@ -1,5 +1,10 @@
 # *XDHq* *CHANGELOG*
 
+## 2019-03-26
+
+- back-end disconnection does no more generate an exception,
+- fixing use of same token bug,
+
 ## 2019-03-20
 
 - fixing bug due to use of simple crate/bunch instead of list ones,

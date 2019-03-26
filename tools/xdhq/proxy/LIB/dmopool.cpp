@@ -29,7 +29,6 @@ using namespace dmopool;
 
 #include "csdbns.h"
 #include "flx.h"
-#include "logq.h"
 #include "lstbch.h"
 #include "lstcrt.h"
 #include "mtk.h"
@@ -239,19 +238,18 @@ namespace {
 
 			if ( Row != Heads_.New() )
 				qRGnr();
-		} else
-			delete Backends_( Row );
 
-		if ( (Backend = new rBackend_) == NULL )
-			qRAlc();
+			if ( (Backend = new rBackend_) == NULL )
+				qRAlc();
 
-		Backend->Init( Row, Driver, IP );
+			Backend->Init( Row, Driver, IP );
 
-		Tokens_.Store( Token, Row );
+			Tokens_.Store( Token, Row );
 
-		Backends_.Store( Backend, Row );
+			Backends_.Store( Backend, Row );
 
-		Heads_.Store( Head, Row );
+			Heads_.Store( Head, Row );
+		}
 	qRR;
 		if ( Backend != NULL )
 			delete Backend;
@@ -390,7 +388,11 @@ namespace {
 			Head.Init();
 			Get_( Flow, Head );
 
-			Backend = Create_( Driver, IP, Token, Head );
+			if ( (Backend = Create_( Driver, IP, Token, Head )) == NULL ) {
+				ErrorMessage.Init();
+				sclmisc::GetBaseTranslation( "TokenAlreadyInUse", ErrorMessage, Token );
+				Token.Init();	// To report backned that there is an error.
+			}
 			break;
 		default:
 			Token.Init();	// To report an error (see below).
@@ -423,13 +425,17 @@ namespace {
 	qRH;
 		flw::rDressedRFlow<> Flow;
 		sId Id = Undefined;
+		bso::sBool IsError = false;
 	qRB;
 		Flow.Init( Driver );
 
 		while ( true ) {
 			Id = Undefined;
 
-			Id = GetId( Flow );
+			Id = GetId( Flow, &IsError );
+
+			if ( IsError )
+				break;
 
 			if ( !Shareds.Exists( Id ) ) {
 				Id = Undefined;
@@ -488,7 +494,7 @@ namespace {
 			sck::Close( Socket, err::hUserDefined );	// An error occurring during closing is ignored.
 			Socket = sck::Undefined;
 		}
-	qRE( sclmisc::ErrFinal() );
+	qRE;
 	}
 
 	void NewConnexionRoutine_(

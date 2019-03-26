@@ -11,6 +11,10 @@
 		<Translation language="fr">Mauvais jeton !</Translation>
 		<Translation language="en">Bad token!</Translation>
 	</Translations>
+	<Translations text="TokenAlreadyInUse">
+		<Translation language="fr">Jeton '%1' déjà en cours d'utilisation !</Translation>
+		<Translation language="en">Token '%1' already in use !</Translation>
+	</Translations>
 	<!--
 	<Translations text="">
 		<Translation language="fr"></Translation>

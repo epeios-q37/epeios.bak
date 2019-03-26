@@ -197,35 +197,40 @@ bso::u32__ dtfptb::OldGetSize( const size_buffer__ &Buffer )
 	return Size;
 }
 
-static bso::byte__ *GetInt_(
+static bso::sBool GetInt_(
 	flw::iflow__ &Flow,
 	bso::byte__ *DInt )
 {
 	bso::u8__ Counter = 0;
+	bso::sBool IsError = false;
 
-	while ( ( Counter < BSO_DINT_SIZE_MAX ) && ( ( DInt[Counter] = Flow.Get() ) & 0x80 ) )
+	while ( (Counter < BSO_DINT_SIZE_MAX) && ((DInt[Counter] = Flow.Get( &IsError )) & 0x80) ) {
+		if ( IsError )
+			return false;
 		Counter++;
+	}
 
 	if ( Counter >= BSO_DINT_SIZE_MAX )
 		qRFwk();
 
-	return DInt;
+	return true;
 }
 
-static bso::byte__ *GetInt_(
+bso::sBool GetInt_(
 	fdr::rRDriver &Driver,
 	bso::byte__ *DInt )
 {
+	bso::sBool Success = false;
 qRH;
 	flw::rDressedRFlow<> Flow;
 qRB;
 	Flow.Init( Driver );
 
-	GetInt_( Flow, DInt );
+	Success = GetInt_( Flow, DInt );
 qRR;
 qRT;
 qRE;
-	return DInt;
+	return Success;
 }
 
 static void PutInt_(
@@ -252,7 +257,7 @@ qRE;
 
 #define M( s )	Flow.Put( (flw::byte__)( Int >> ( s * 8 ) ) )
 
-void dtfptb::_FPutInt(
+void dtfptb::FPutInt_(
 	bso::int__ Int,
 	_length__ Length,
 	flw::oflow__ &Flow )
@@ -283,11 +288,12 @@ void dtfptb::_FPutInt(
 
 #undef M
 
-#define M( s )	Int += (bso::int__)( Flow.Get() ) << ( s * 8 )
+#define M( s )	Int += (bso::int__)( Flow.Get( IsError ) ) << ( s * 8 )
 
-bso::int__ dtfptb::_FGetInt(
+bso::int__ dtfptb::FGetInt_(
 	flw::iflow__ &Flow,
-	_length__ Length )
+	_length__ Length,
+	bso::sBool *IsError )
 {
 	bso::int__ Int = 0;
 
@@ -319,9 +325,10 @@ bso::int__ dtfptb::_FGetInt(
 
 #undef M
 
-bso::int__ dtfptb::_FGetInt(
+bso::int__ dtfptb::FGetInt_(
 	fdr::rRDriver &Driver,
-	_length__ Length )
+	_length__ Length,
+	bso::sBool *IsError )
 {
 	bso::sSInt Int = 0;
 qRH;
@@ -329,19 +336,29 @@ qRH;
 qRB;
 	Flow.Init( Driver );
 
-	Int = _FGetInt( Flow, Length );
+	Int = FGetInt_( Flow, Length, IsError );
 qRR;
 qRT;
 qRE;
 	return Int;
 }
 
-template <typename fd> static bso::sUBig VGetUBig_(
+template <typename fd> static bso::sUBig TemplatedVGetUBig_(
 	fd &FD,
-	bso::sUBig Max )
+	bso::sUBig Max,
+	bso::sBool *IsError )
 {
 	bso::byte__ DInt[BSO_DINT_SIZE_MAX];
-	bso::sUBig Value = bso::ConvertToUBig( GetInt_( FD, DInt ) );
+
+	if ( !GetInt_( FD, DInt ) )
+		if ( IsError == NULL )
+			qRFwk();
+		else {
+			*IsError = true;
+			return 0;
+		}
+
+	bso::sUBig Value = bso::ConvertToUBig( DInt );
 
 	if ( Value > Max )
 		qRFwk();
@@ -349,27 +366,39 @@ template <typename fd> static bso::sUBig VGetUBig_(
 	return Value;
 }
 
-bso::sUBig dtfptb::_VGetUBig(
+bso::sUBig dtfptb::VGetUBig_(
 	flw::iflow__ &Flow,
-	bso::sUBig Max )
+	bso::sUBig Max,
+	bso::sBool *IsError )
 {
-	return VGetUBig_( Flow, Max );
+	return TemplatedVGetUBig_( Flow, Max, IsError );
 }
 
-bso::sUBig dtfptb::_VGetUBig(
+bso::sUBig dtfptb::VGetUBig_(
 	fdr::rRDriver &Driver,
-	bso::sUBig Max )
+	bso::sUBig Max,
+	bso::sBool *IsError )
 {
-	return VGetUBig_( Driver, Max );
+	return TemplatedVGetUBig_( Driver, Max, IsError );
 }
 
-template <typename fd> bso::sSBig VGetSBig_(
+template <typename fd> bso::sSBig TemplatedVGetSBig_(
 	fd &FD,
 	bso::sSBig Min,
-	bso::sSBig Max )
+	bso::sSBig Max,
+	bso::sBool *IsError )
 {
 	bso::byte__ DInt[BSO_DINT_SIZE_MAX];
-	bso::sSBig Value = bso::ConvertToSBig( GetInt_( FD, DInt ) );
+
+	if ( !GetInt_( FD, DInt ) )
+		if ( IsError == NULL )
+			qRFwk();
+		else {
+			*IsError = true;
+			return 0;
+		}
+
+	bso::sSBig Value = bso::ConvertToSBig( DInt );
 
 	if ( Value < Min )
 		qRFwk();
@@ -380,20 +409,22 @@ template <typename fd> bso::sSBig VGetSBig_(
 	return Value;
 }
 
-bso::sSBig dtfptb::_VGetSBig(
+bso::sSBig dtfptb::VGetSBig_(
 	flw::iflow__ &Flow,
 	bso::sSBig Min,
-	bso::sSBig Max )
+	bso::sSBig Max,
+	bso::sBool *IsError )
 {
-	return VGetSBig_( Flow, Min, Max );
+	return TemplatedVGetSBig_( Flow, Min, Max, IsError );
 }
 
-bso::sSBig dtfptb::_VGetSBig(
+bso::sSBig dtfptb::VGetSBig_(
 	fdr::rRDriver &Driver,
 	bso::sSBig Min,
-	bso::sSBig Max )
+	bso::sSBig Max,
+	bso::sBool *IsError )
 {
-	return VGetSBig_( Driver, Min, Max );
+	return TemplatedVGetSBig_( Driver, Min, Max, IsError );
 }
 
 template <typename fd> static void VPutUBig_(

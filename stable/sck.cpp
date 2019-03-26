@@ -52,8 +52,7 @@ flw::size__ sck::Read(
 
 	if ( Timeout == SCK_INFINITE )
 		Result = select( (int)( Socket + 1 ), &fds, NULL, NULL, NULL );
-	else
-	{
+	else {
 		timeval TV;
 
 		TV.tv_sec = Timeout;
@@ -62,21 +61,17 @@ flw::size__ sck::Read(
 		Result = select( (int)( Socket + 1 ), &fds, NULL, NULL, &TV );
 	}
 
-	if ( Result == 1 )
-	{
+	if ( Result == 1 ) {
 		Result = recv( Socket, (cast__)Buffer, (int)Amount, 0 );
 
-		if ( Result == SCK_SOCKET_ERROR )
-		{
+		if ( Result == SCK_SOCKET_ERROR ) {
 			Result = SCK_DISCONNECTED;
 
 			if ( Error() != SCK_ECONNRESET )
 				qRLbr();
-		}
-		else if ( !Result && Amount )
+		} else if ( !Result && Amount )
 			Result = SCK_DISCONNECTED;
-	}
-	else if ( Result == SCK_SOCKET_ERROR )
+	} else if ( Result == SCK_SOCKET_ERROR )
 		qRLbr();
 	else if ( Result == 0 )
 		qRLbr();
@@ -133,6 +128,44 @@ flw::size__ sck::Write(
 
 	return Result;
 }
+
+// Some errors are ignored.
+bso::sBool sck::Close(
+	socket__ Socket,
+	qRPN )	// To set to 'qRPU' when called from destructors !
+{
+#ifdef SCK__WIN
+	u_long Mode = 1;	// Non-blocking.
+	bso::sBool Error = ioctlsocket( Socket, FIONBIO, &Mode ) != 0;
+
+	Error |= shutdown( Socket, 2 ) != 0;	// '2' instead of 'SD_BOTH' because inlusion of 'winsock2.h' fails.
+
+	if ( (closesocket( Socket ) != 0) || Error ) {
+		if ( qRPT )
+			qRLbr();
+
+		return false;
+	}
+
+#elif defined( SCK__POSIX )
+	u_long Mode = 1;	// Non-blocking.
+	bso::sBool Error = ioctl( Socket, FIONBIO, &Mode ) != 0;
+
+	Error |= shutdown( Socket, SHUT_RDWR ) != 0;
+
+	//		while ( recv( Socket, (sCast_)Buffer, sizeof( Buffer ), MSG_DONTWAIT ) > 0 );
+	if ( (close( Socket ) != 0) || Error ) {
+		if ( qRPT )
+			qRLbr();
+
+		return false;
+	}
+#else
+#	error
+#endif
+	return true;
+}
+
 
 Q37_GCTOR( sck )
 {

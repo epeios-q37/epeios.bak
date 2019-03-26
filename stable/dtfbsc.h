@@ -59,9 +59,11 @@ namespace dtfbsc {
 	}
 
 	//f Return unsigned byte in 'Flow'.
-	inline u8__ GetU8( flw::iflow__ &Flow )
+	inline u8__ GetU8(
+		flw::iflow__ &Flow,
+		bso::sBool *IsError = NULL )
 	{
-		return (u8__)Flow.Get();
+		return (u8__)Flow.Get( IsError );
 	}
 
 	//f Put 'SByte' in 'Flow'.
@@ -73,9 +75,11 @@ namespace dtfbsc {
 	}
 
 	//f Return unsigned byte in 'Flow'.
-	inline s8__ GetS8( flw::iflow__ &Flow )
+	inline s8__ GetS8(
+		flw::iflow__ &Flow,
+		bso::sBool *IsError = NULL )
 	{
-		return (s8__)Flow.Get();
+		return (s8__)Flow.Get( IsError );
 	}
 
 }

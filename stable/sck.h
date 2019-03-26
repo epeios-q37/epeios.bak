@@ -106,6 +106,7 @@ namespace sck {
 #else
 #	error
 #endif
+	typedef cast__ sCast_;
 
 	typedef int error__;
 
@@ -235,31 +236,9 @@ namespace sck {
 		duration__ Timeout );	// En secondes.
 
 	//f Close the socket 'Socket'.
-	inline bso::sBool Close(
+	bso::sBool Close(
 		socket__ Socket,
-		qRPN )	// To set to 'qRPU' when called from destructors !
-	{
-#ifdef SCK__WIN
-	//	shutdown( Socket, 2 );
-		if ( closesocket( Socket ) == SCK_SOCKET_ERROR ) {
-			if ( qRPT )
-				qRLbr();
-
-			return false;
-		}
-#elif defined( SCK__POSIX )
-		//	shutdown( Socket, 2 );
-		if ( close( Socket ) == SCK_SOCKET_ERROR ) {
-			if ( qRPT )
-				qRLbr();
-
-			return false;
-		}
-#else
-#	error
-#endif
-		return true;
-	}
+		qRPN );	// To set to 'qRPU' when called from destructors !
 
 	typedef fdr::ioflow_driver___<> _ioflow_driver___;
 

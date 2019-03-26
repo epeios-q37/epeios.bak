@@ -48,11 +48,13 @@ namespace dmopool {
 		dtfptb::FPut( Id, Flow );
 	}
 
-	template <typename fd> inline sId GetId( fd &FD )
+	template <typename fd> inline sId GetId(
+		fd &FD,
+		bso::sBool *IsError )
 	{
 		sId Id = Undefined;
 
-		return dtfptb::FGet( FD, Id );
+		return dtfptb::FGet( FD, Id, IsError );
 	}
 
 	// Shared between upstream and downstream.

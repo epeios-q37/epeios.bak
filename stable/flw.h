@@ -122,6 +122,18 @@ namespace flw {
 			bso::bool__ Adjust,
 			bso::bool__ &CacheIsEmpty );
 # endif
+		byte__ Get_( bso::sBool *IsError )
+		{
+			byte__ C = 0;
+
+			if ( _D().Read( 1, &C, fdr::bBlocking ) != 1 )
+				if ( IsError != NULL )
+					*IsError = true;
+				else
+					qRFwk();
+
+			return C;
+		}
 		bso::sBool _Dismiss(
 			bso::sBool Unlock,
 			qRPN )
@@ -192,7 +204,7 @@ namespace flw {
 			size__ Size,
 			byte__ *Datum )
 		{
-      		return _D().Read( Size, Datum, fdr::bKeepBlocking );
+      			return _D().Read( Size, Datum, fdr::bKeepBlocking );
 		}
 		byte__ View( void )
 		{
@@ -203,20 +215,26 @@ namespace flw {
 
 			return C;
 		}
-		byte__ Get( void )
+		// Returns immediately if 'IsError' != NULL and '*IsError' == true.
+		byte__ Get( bso::sBool *IsError = NULL )
 		{
-			byte__ C = 0;
-
-			if ( _D().Read( 1, &C, fdr::bBlocking ) != 1 )
-				qRFwk();
-
-			return C;
+			if ( (IsError == NULL) || !*IsError )
+				return Get_( IsError );
+			else
+				return 0;
+		}
+		//f Skip 'Amount' bytes.
+		void Skip(
+			size__ Amount,
+			bso::sBool *IsError )
+		{
+			while ( Amount-- )
+				Get( IsError );
 		}
 		//f Skip 'Amount' bytes.
 		void Skip( size__ Amount = 1 )
 		{
-			while ( Amount-- )
-				Get();
+			return Skip( Amount, NULL );
 		}
 		//f Return the amount of data red since last 'Reset()'.
 		size__ AmountRed( void ) const

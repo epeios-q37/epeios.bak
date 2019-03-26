@@ -3,9 +3,26 @@
 ## *Shortcuts*
 
 - [adpt]: Adaptation to changes in underlying modules;
+- [ctnd]: continued;
+- [rvrt]: reverting modifications;
 - [stdz]: modification to comply with current standards;
 - [trvl]: trivial modifications;
-- [rvrt]: reverting modifications;
+
+## 2019-03-26
+
+- DTFBSC:
+	- [adpt],
+- DTFPTB:
+	- [adpt],
+- FLW:
+	- introducing `Get(…)` and `Skip(…)` returning a flag instead throwing an exception when an error occurs.
+- SCK:
+	- [ctnd],
+
+## 2019-03-25
+
+- SCK:
+	- fixing persistent `CLOSE_WAIT` socket status,
 
 ## 2019-03-05
 
@@ -3492,13 +3509,22 @@
 ## Notes
 
 [adpt]:#Adaptation
+[ctnd]:#Continued
+[rvrt]:#Reverting
 [stdz]:#Standardization
 [trvl]:#Trivial
-[rvrt]:#Reverting
   
 ### Adaptation
 
 Adaptation to changes in underlying modules.
+
+### Continued
+
+Continuation of the modifications.
+
+### Reverting
+
+Reverting previous modifications.
 
 ### Standardization
 
@@ -3508,6 +3534,3 @@ Modification to comply with current standards.
 
 Trivial modifications.
 
-### Reverting
-
-Reverting previous modifications.
