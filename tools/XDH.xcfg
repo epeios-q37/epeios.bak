@@ -233,10 +233,10 @@
 						let xsl = "%XSL%";
 						let id = "%Id%";
 						if( xsl == "" )
-												getElement( id ).innerHTML = xml;
+							getElement( id ).innerHTML = xml;
 						else {
-												removeChildren( id );
-												getElement( id ).appendChild( transformToFragment( xml, xsl ) );
+							removeChildren( id );
+							getElement( id ).appendChild( transformToFragment( xml, xsl ) );
 						}
             
 						if ( id == "" ) {
