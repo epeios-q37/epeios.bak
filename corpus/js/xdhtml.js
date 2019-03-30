@@ -28,7 +28,7 @@ var drag = false;
 
 function getElement(elementOrId) {
 	if (typeof elementOrId === "string")
-		if (elementOrId == "")
+		if (elementOrId === "")
 			return document.body;
 		else
 			return document.getElementById(elementOrId);
@@ -89,7 +89,7 @@ function getNULString(data, offset) {
 	let string = "";
 	let c = data.substr(offset++, 1);
 
-	while (c != '\0') {
+	while (c !== '\0') {
 		string += c;
 		c = data.substr(offset++, 1);
 	}
@@ -162,7 +162,7 @@ function convert(xml) {
 }
 
 function transformToFragment(xml, xslName) {
-	if (xml.substring(0, 1) != "<")
+	if (xml.substring(0, 1) !== "<")
 		xml = convert(xml);
 	return getStylesheet(xslName).transformToFragment(parseXML(xml), document);
 }
@@ -196,18 +196,18 @@ function patchATags(node)  // Patches the 'A' tags, so it does open in another b
 	var root = node;
 	var candidate;
 
-	if (node.firstChild == null)
+	if (node.firstChild === null)
 		cont = false;
 
 	while (cont) {
-		if (node.nodeType == Node.ELEMENT_NODE) {
-			if (node.nodeName == "A")
+		if (node.nodeType === Node.ELEMENT_NODE) {
+			if (node.nodeName === "A")
 				patchATag(node);
 		}
 
-		if ((candidate = node.firstChild) == null) {
+		if ((candidate = node.firstChild) === null) {
 			while (cont
-				&& ((candidate = node.nextSibling) == null)) {
+				&& (candidate = node.nextSibling) === null) {
 				node = node.parentNode;
 
 				if (node.isEqualNode(root))
@@ -222,7 +222,7 @@ function patchATags(node)  // Patches the 'A' tags, so it does open in another b
 function setContent(doc, id, content) {
 	var element = doc.getElementById(id);
 
-	if (element != null) {
+	if (element !== null) {
 		var tagName = element.tagName;
 
 		switch (tagName) {
@@ -248,7 +248,7 @@ function setContent(doc, id, content) {
 function setContents(ids, contents) {
 	var i = ids.length;
 
-	if (ids.length != contents.length)
+	if (ids.length !== contents.length)
 		throw "Inconsistency";
 
 	while (i--) {
@@ -257,8 +257,8 @@ function setContents(ids, contents) {
 }
 
 function patchATag(node) {
-	if (node.nodeName != "A")
-		throw "Not a 'A' tag !!!"
+    if (node.nodeName !== "A")
+        throw "Not a 'A' tag !!!";
 
 	if (!node.hasAttribute("target")) {
 		node.setAttribute("target", "_blank");	// So the app isn't overwritten by the content of the link...
@@ -273,24 +273,24 @@ function fetchEventHandlers(id) {
 	var candidate;
 	var digests = "";
 
-	if (node.firstChild == null)
+	if (node.firstChild === null)
 		cont = false;
 
 	while (cont) {
-		if (node.nodeType == Node.ELEMENT_NODE) {
+		if (node.nodeType === Node.ELEMENT_NODE) {
 			if (node.hasAttribute(onEventAttributeName))
 				digests += "(" + getOrGenerateId(node) + "|" + getPatchedNodeName( node ) + "|((" + node.getAttribute(onEventAttributeName) + ")))|";
 
 			if (node.hasAttribute(onEventsAttributeName))
 				digests += "(" + getOrGenerateId(node) + "|" + getPatchedNodeName(node) + "|(" + node.getAttribute(onEventsAttributeName) + "))|";
 
-			if (node.nodeName == "A")
+			if (node.nodeName === "A")
 				patchATag(node);
 		}
 
-		if ((candidate = node.firstChild) == null) {
+		if ((candidate = node.firstChild) === null) {
 			while (cont
-				&& ((candidate = node.nextSibling) == null)) {
+				&& (candidate = node.nextSibling === null)) {
 				node = node.parentNode;
 
 				if (node.isEqualNode(root))
@@ -314,17 +314,17 @@ function fetchWidgets(id) {
 	var candidate;
 	var digests = "";
 
-	if (node == null)
+	if (node === null)
 		cont = false;
 
 	while (cont) {
-		if (node.nodeType == Node.ELEMENT_NODE) {
+		if (node.nodeType === Node.ELEMENT_NODE) {
 			if (node.hasAttribute(widgetAttributeName))
 				digests += "(" + getOrGenerateId(node) + "|(" + node.getAttribute(widgetAttributeName) + "))|";
 		}
 
-		if ((candidate = node.firstChild) == null) {
-			while (cont && ((candidate = node.nextSibling) == null)) {
+		if ((candidate = node.firstChild) === null) {
+			while (cont && (candidate = node.nextSibling) === null) {
 				node = node.parentNode;
 
 				if (node.isEqualNode(root))
@@ -395,7 +395,7 @@ function setValue(id, value) {
 function setEventHandlers(ids, events) {
 	var i = ids.length;
 
-	if (ids.length != events.length)
+	if (ids.length !== events.length)
 		throw "Inconsistency !";
 
 	while (i--) {
@@ -413,10 +413,10 @@ function instantiateWidgets(ids, types, parametersSets) {
 	var i = ids.length;
 	var script = "";
 
-	if (ids.length != types.length)
+	if (ids.length !== types.length)
 		throw "Inconsistency";
 
-	if (ids.length != parametersSets.length)
+	if (ids.length !== parametersSets.length)
 		throw "Inconsistency";
 
 	while (i--) {
@@ -456,15 +456,15 @@ function handleEvent(event) {
 
 	event.stopPropagation();
 
-	if (event.type == "dragstart") {
+	if (event.type === "dragstart") {
 		event.dataTransfer.clearData();
 		event.dataTransfer.setData("Untyped", "Dummy");	// Otherwise drag & drop doesn't work with Firefox.
 	}
 
-	if (event.type == "drop")
+	if (event.type === "drop")
 		event.preventDefault();
 
-	if (event.type.search("key") == 0) {
+	if (event.type.search("key") === 0) {
 		if (event.ctrlKey)
 			keys += "C";
 
@@ -482,12 +482,12 @@ function handleEvent(event) {
 
 		var key = event.which || event.keyCode;
 
-		if (key == 13) {
+		if (key === 13) {
 			keys += "Enter"
 			event.preventDefault();	/* Without this, when a text box has an 'Enter' event handler, the 'Enter' will be also applied to a
 									   to a potential alert box reporting an error, preventing it to be displayed. This is only a workaround ;
 									   another solution should be found. */
-		} else if (key == 27)
+		} else if (key === 27)
 			keys += "Esc"
 		else if (key < 32)
 			key += 96;
@@ -495,7 +495,7 @@ function handleEvent(event) {
 		if (key >= 32) {
 			key = String.fromCharCode(key)
 
-			if ((key == '(') || (key == '|') || (key == '\\') || (key == ')'))	// This keys are used as separators, or escape char ('\'), by 'strmrg' module, so they must be escaped.
+			if (key === '(' || key === '|' || key === '\\' || key === ')')	// This keys are used as separators, or escape char ('\'), by 'strmrg' module, so they must be escaped.
 				keys += '\\';
 
 			keys += key.toLowerCase();
@@ -525,11 +525,11 @@ function handleEvent(event) {
 function mktreeExpandToNode(element) {
 	var tree = element;
 
-	while (tree && (tree.className != "mktree"))
+	while (tree && tree.className !== "mktree")
 		tree = tree.parentNode;
 
 	if (tree) {
-		while (element && (element.tagName != "LI"))
+		while (element && element.tagName !== "LI")
 			element = element.parentNode;
 
 		if (element)
@@ -544,7 +544,7 @@ function getCSSRules() {
 function insertCSSRule(rule, index) {
 	var rules = getCSSRules();
 
-	if (index == -1)
+	if (index === -1)
 		index = rules.cssRules.length;
 
 	rules.insertRule(rule, index);
@@ -562,7 +562,7 @@ function removeCSSRule(index) {
 function handleClasses(ids, classes, method) {
 	var i = 0;
 
-	if (ids.length != classes.length)
+	if (ids.length !== classes.length)
 		throw "Inconsistency !";
 
 	while (i < ids.length) {

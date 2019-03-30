@@ -27,7 +27,7 @@ var queryQueue = [];
 
 function log( message )
 {
-	if ( navigator.userAgent.search( "Edge" ) == -1 )	// MS Edge web browser does not like too much log messages...
+	if ( navigator.userAgent.search( "Edge" ) === -1 )	// MS Edge web browser does not like too much log messages...
 		console.log( message );
 }
 
@@ -45,16 +45,17 @@ function t( s )
 function handleQuery( query ) {
 
 //	log( "Q : " + query );
+    var xmlhttp;
 
 	if (window.XMLHttpRequest) {	// code for IE7+, Firefox, Chrome, Opera, Safari
-		var xmlhttp = new XMLHttpRequest();
+		xmlhttp = new XMLHttpRequest();
 	} else {	// code for IE6, IE5
-		var xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+		xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
 	}
 	
 	xmlhttp.onreadystatechange=function()
 	{
-		if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+		if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
 			var query = "";
 
 //			log( "R : " + xmlhttp.responseText );
@@ -72,7 +73,7 @@ function handleQuery( query ) {
 		}
 	}
 
-	if ( before == 0 ) {
+	if ( before === 0 ) {
 		d = new Date();
 		before = d.getTime();
 	}
@@ -87,7 +88,7 @@ function launchEvent( digest )
 	query = buildQuery() + "_action=_HandleEvent&digest=" + encodeURIComponent( digest );
 
 	if (queryInProgress) {
-		if (query != queryQueue[queryQueue.length - 1])
+		if (query !== queryQueue[queryQueue.length - 1])
 			queryQueue.push(query);
 	}  else {
 		queryInProgress = true;
