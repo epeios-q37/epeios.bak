@@ -2,13 +2,17 @@
 
 **If you are looking for the *WebGPIO* application, you will find it at the bottom of this page (in the *Raspberry Pi*/*ODROID-C2* section).**
 
-![Python logo](https://q37.info/download/assets/Python.png "Python")
+![For Python](https://q37.info/download/assets/Python.png "Python logo")
 
-A fast and easy way to add web interfaces to *Python* applications.
+[![Version 0.7](https://img.shields.io/static/v1.svg?&color=90b4ed&label=Version&message=0.7)](https://q37.info/s/gei0veus)
+
+A fast and easy way to add sharable web interfaces to *Python* programs.
+
+If you want to use the *Atlas* toolkit without installing the examples, simply install the [*atlastk* package from *PyPI*](https://q37.info/s/9srmskcm) (`pip install atlastk`).
 
 ## *Hello, World!*
 
-Here's how a [*Hello, World!*](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program) type application made with the *Atlas* toolkit looks like:
+Here's how a [*Hello, World!*](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program) type program made with the *Atlas* toolkit looks like:
 
 ![Little demonstration](http://q37.info/download/assets/Hello.gif "A basic example")
 
@@ -16,16 +20,21 @@ Here's how a [*Hello, World!*](https://en.wikipedia.org/wiki/%22Hello,_World!%22
 - `cd atlas-python`
 - `python Hello/Hello.py`
 
+You can also put below code source in a file and launch it after having installed the [*atlastk* package](http://q37.info/s/9srmskcm) (`pip install atlastk`).
+
 For a live demonstration: <http://q37.info/runkit/Hello>.
 
 Source code:
 
 ```python
-# Following two lines can be removed if the 'Atlas.python.zip' file is referenced in 'PYTHONPATH'
+# Following two lines can be removed:
+# - if the 'Atlas.python.zip' file is referenced in 'PYTHONPATH'
+# or
+# - if you made a '[python -m] pip install [--user] atlastk'
 import os, sys
 sys.path.append("Atlas.python.zip") # Add the path to 'Atlas.python.zip' if needed.
 
-import Atlas
+import atlastk as Atlas
 
 body = """
 <div style="display: table; margin: 50px auto auto auto;">
@@ -72,9 +81,9 @@ For a live demonstration: <http://q37.info/runkit/TodoMVC>.
 
 ## Content of the repository
 
-The `Atlas` directory contains the *Python* source code of the *Atlas* toolkit, which is not needed to run the examples.
+The `atlastk` directory contains the *Python* source code of the *Atlas* toolkit, which is not needed to run the examples.
 
-`Atlas.python.zip` is the file you have to reference in `PYTHONPATH` in order to use the *Atlas* toolkit in your own application.
+`Atlas.python.zip` is the file you have to reference in `PYTHONPATH` in order to use the *Atlas* toolkit in your own program (unless you have installed the [*atlastk* package](http://q37.info/s/9srmskcm) with `pip install atlastk`).
 
 All other directories are examples.
 

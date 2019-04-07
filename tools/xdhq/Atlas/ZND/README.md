@@ -1,12 +1,14 @@
 # *PHP* version of the *Atlas* toolkit
 
-![PHP logo](https://q37.info/download/assets/PHP.png "PHP")
+![For PHP](https://q37.info/download/assets/PHP.png "PHP logo")
 
-A fast and easy way to add web interfaces to *PHP* applications.
+![Version 0.7](https://img.shields.io/static/v1.svg?&color=90b4ed&label=Version&message=0.7)
+
+A fast and easy way to add sharable web interfaces to *PHP* programs.
 
 ## *Hello, World!*
 
-Here's how a [*Hello, World!*](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program) type application made with the *Atlas* toolkit looks like:
+Here's how a [*Hello, World!*](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program) type program made with the *Atlas* toolkit looks like:
 
 ![Little demonstration](http://q37.info/download/assets/Hello.gif "A basic example")
 
@@ -67,7 +69,7 @@ Atlas::launch('hello');
 
 ## *TodoMVC*
 
-And here's how the *Atlas* toolkit version of the [*TodoMVC*](http://todomvc.com/) application looks like: 
+And here's how the *Atlas* toolkit version of the [*TodoMVC*](http://todomvc.com/) application looks like:
 
 ![TodoMVC](http://q37.info/download/TodoMVC.gif "The TodoMVC application made with the Atlas toolkit")
 
@@ -77,7 +79,7 @@ For a live demonstration: <http://q37.info/runkit/TodoMVC>.
 
 The `Atlas` directory contains the *PHP* source code of the *Atlas* toolki, which is not needed to run the examples.
 
-`Atlas.phar` is the file which is needed to use the *Atlas* toolkit in your own application.
+`Atlas.phar` is the file which is needed to use the *Atlas* toolkit in your own program.
 
 All other directories are examples.
 

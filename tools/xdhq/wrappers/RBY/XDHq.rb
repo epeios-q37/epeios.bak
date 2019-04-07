@@ -19,7 +19,7 @@
 
 module XDHq
 	require 'XDHqDEMO'
-	require 'URI'
+	require 'uri'
 
 	$dir = ""
 

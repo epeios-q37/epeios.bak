@@ -215,8 +215,12 @@ namespace mscmdd {
 		{
 			return Out_.Write( Buffer, Maximum );
 		}
-		virtual void FDRCommit( bso::sBool ) override
-		{}
+		virtual bso::sBool FDRCommit(
+			bso::sBool,
+			qRPN ) override
+		{
+			return true;
+		}
 		virtual tht::sTID FDRWTake( tht::sTID TID ) override
 		{
 			return TID;
@@ -239,7 +243,7 @@ namespace mscmdd {
 		}
 	};
 
-	typedef flw::sDressedWFlow<MSCMDD__OUTPUT_CACHE_SIZE> WFlow_;
+	typedef flw::rDressedWFlow<MSCMDD__OUTPUT_CACHE_SIZE> WFlow_;
 
 	class rWFlow
 	: public WFlow_
@@ -466,9 +470,13 @@ namespace mscmdd {
 		{
 			return _In.Read( Maximum, Buffer );
 		}
-		virtual void FDRDismiss( bso::sBool ) override
+		virtual bso::sBool FDRDismiss(
+			bso::sBool,
+			qRPN ) override
 		{
 			_In.Stop();
+
+			return true;
 		}
 		virtual tht::sTID FDRRTake( tht::sTID TID ) override
 		{
@@ -557,9 +565,13 @@ namespace mscmdd {
 		{
 			return _In.Read( Maximum, Buffer );
 		}
-		virtual void FDRDismiss( bso::sBool ) override
+		virtual bso::sBool FDRDismiss(
+			bso::sBool,
+			qRPN ) override
 		{
 			_In.Stop();
+
+			return true;
 		}
 		virtual tht::sTID FDRRTake( tht::sTID TID ) override
 		{
@@ -572,8 +584,12 @@ namespace mscmdd {
 			_In.Start();
 			return _Out.Write( Buffer, Maximum );
 		}
-		virtual void FDRCommit( bso::sBool ) override
-		{}
+		virtual bso::sBool FDRCommit(
+			bso::sBool,
+			qRPN ) override
+		{
+			return true;
+		}
 		virtual tht::sTID FDRWTake( tht::sTID TID ) override
 		{
 			return TID;

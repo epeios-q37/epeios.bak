@@ -23,7 +23,7 @@ require 'Atlas'
 $viewModeElements = ["Pattern", "CreateButton", "DescriptionToggling", "ViewNotes"]
 
 def readAsset(path)
-	return Atlas::readAsset(path, "notes")
+	return Atlas::readAsset(path, "Notes")
 end
 
 def put(note, id, xml)
@@ -51,7 +51,7 @@ class Notes
 			},
 			{
 				'title' => 'Improve design',
-				'description' => "Tastes and colors... (aka «CSS aren't my cup of tea...»)",
+				'description' => "Tastes and colors… (aka «CSS aren't my cup of tea…»)",
 			},
 			{
 				'title' => 'Fixing bugs',
@@ -59,7 +59,7 @@ class Notes
 			},
 			{
 				'title' => 'Implement new functionalities',
-				'description' => "Although it's almost perfect..., isn't it ?",
+				'description' => "Although it's almost perfect…, isn't it ?",
 			},
 		]
 	end
@@ -182,4 +182,4 @@ callbacks = {
 	"Cancel" => -> (notes, dom, id) {notes.acCancel(dom,id)},
 }
 
-Atlas.launch(callbacks, -> () {Notes.new()}, readAsset("Head.html"),"notes")
+Atlas.launch(callbacks, -> () {Notes.new()}, readAsset("Head.html"), "Notes")

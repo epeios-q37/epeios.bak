@@ -23,7 +23,7 @@ import os, sys
 if not "EPEIOS_SRV" in os.environ:
 	sys.path.append("Atlas.python.zip")
 
-import Atlas
+import atlastk as Atlas
 
 viewModeElements = ["Pattern", "CreateButton", "DescriptionToggling", "ViewNotes"]
 
@@ -53,7 +53,7 @@ class Notes:
 			},
 			{
 			'title': 'Improve design',
-			'description': "Tastes and colors... (aka «CSS aren't my cup of tea...»)",
+			'description': "Tastes and colors… (aka «CSS aren't my cup of tea…»)",
 			},
 			{
 			'title': 'Fixing bugs',
@@ -61,7 +61,7 @@ class Notes:
 			},
 			{
 			'title': 'Implement new functionalities',
-			'description': "Although it's almost perfect..., isn't it ?",
+			'description': "Although it's almost perfect…, isn't it ?",
 			},
 		]
 

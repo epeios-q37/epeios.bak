@@ -845,29 +845,28 @@ qRB
 	PreviousData.Init();
 
 	while ( Continue ) {
-		if ( !( Success = GetEventHeader( IFlow, Extraneous, EventHeader ) ) )
-			qRReturn;
+		if ( (Success = GetEventHeader( IFlow, Extraneous, EventHeader )) ) {
+			Data.Init();
+			GetEventData( EventHeader, IFlow, Extraneous, Data );
 
-		Data.Init();
-		GetEventData( EventHeader, IFlow, Extraneous, Data );
+			if ( Flags & fmSkipDoublons )
+				if ( EventIsDoublon_( EventHeader, Data, PreviousEventHeader, PreviousData ) )
+					continue;
 
-		if ( Flags & fmSkipDoublons )
-			if ( EventIsDoublon_( EventHeader, Data, PreviousEventHeader, PreviousData ) )
-				continue;
+			if ( Flags & fmZeroVelocityBecomesNoteOff )
+				if ( (EventHeader.EventType == etMIDI)
+					 && (EventHeader.MIDIEvent.Event == midNoteOn)
+					 && (Data( 2 ) == 0) ) { // Velocity
+					EventHeader.Id = (EventHeader.Id & 0xf) | 0x90;
+					EventHeader.MIDIEvent.Event = midNoteOff;
+					EventHeader.MIDIEvent.Tied = false;
+				}
 
-		if ( Flags & fmZeroVelocityBecomesNoteOff )
-			if ( ( EventHeader.EventType == etMIDI )
-				  && ( EventHeader.MIDIEvent.Event == midNoteOn )
-				  && ( Data( 2 ) == 0 ) ) { // Velocity
-				EventHeader.Id = ( EventHeader.Id & 0xf ) | 0x90;
-				EventHeader.MIDIEvent.Event = midNoteOff;
-				EventHeader.MIDIEvent.Tied = false;
-			}
+			Continue = Callback.HandleEvent( EventHeader, Data, Extraneous );
 
-		Continue = Callback.HandleEvent( EventHeader, Data, Extraneous );
-
-		PreviousEventHeader = EventHeader;
-		PreviousData = Data;
+			PreviousEventHeader = EventHeader;
+			PreviousData = Data;
+		}
 	}
 qRR
 qRT

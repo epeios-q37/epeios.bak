@@ -1,18 +1,20 @@
 # *Ruby* version of the *Atlas* toolkit
 
-![Ruby logo](https://q37.info/download/assets/Ruby.png "Ruby")
+![For Ruby](https://q37.info/download/assets/Ruby.png "Ruby logo")
 
-A fast and easy way to add web interfaces to *Ruby* applications.
+![Version 0.7.1](https://img.shields.io/static/v1.svg?&color=90b4ed&label=Version&message=0.7.1 )
+
+A fast and easy way to add sharable web interfaces to *Ruby* programs.
 
 ## *Hello, World!*
 
-Here's how a [*Hello, World!*](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program) type application made with the *Atlas* toolkit looks like:
+Here's how a [*Hello, World!*](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program) type program made with the *Atlas* toolkit looks like:
 
 ![Little demonstration](http://q37.info/download/assets/Hello.gif "A basic example")
 
 - `git clone http://github.com/epeios-q37/atlas-ruby`
 - `cd atlas-ruby`
-- `php Hello/Hello.rb`
+- `ruby -IAtlas Hello/Hello.rb`
 
 For a live demonstration: <http://q37.info/runkit/Hello>.
 
