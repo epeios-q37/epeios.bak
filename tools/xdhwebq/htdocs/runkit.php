@@ -26,7 +26,11 @@ and creates a page which embeds it on RunKit. Also runs it.
 $source = <<<EOT
 /*
 	JavaScript source code for Node.js of the '$NAME$' application.
-	It's an example of use of the Atlas toolkit (http://atlastk.org).
+	It's an example of use of the Atlas toolkit (https://atlastk.org).
+
+	The source code of this application for other languages
+	(Java, Node.js, RUBY...), and links to live demonstrations of
+	other applications can also be found on https://atlastk.org.
 
 	To run this program:
 	- go to the bottom of the page,
@@ -83,7 +87,7 @@ function onLoad( notebook )
 {
  notebook.setSource(source.replace(/&gt;/g, ">").replace(/&lt;/g, "<"))
 
-	if ( confirm("The \'' . $app . '\' application will now be launched on RunKit and be automatically opened in your web browser.\n\nNOTA: the application will stop working after a few tens of seconds due to RunKit timeout.\nYou can then simply go back to the RunKit page, modify the source code if you like, and relaunch the application.\n\nClicking on Cancel gives you access to the source code.") )
+	if ( confirm("The \'' . $app . '\' application will now be launched on RunKit and be automatically opened in your web browser.\n\nNOTA: the application will stop working after a few tens of seconds due to RunKit timeout.\nYou can then simply go back to the RunKit page, modify the source code if you like, and relaunch the application.\n\nClicking on Cancel gives you access to the source code.\n\nFor live demonstrations of other examples, see https://atlastk.org.\n\n") )
 		notebook.evaluate();
 	else
 		window.scrollTo(0,0);
