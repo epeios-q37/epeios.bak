@@ -34,6 +34,13 @@ $out = '
 		</head>
 		<!--body id="Root" data-xdh-onevents="(keypress|About|SC+a)(keypress|Q37Refresh|SC+r)"-->
 		<body>
+			<noscript>
+				<div style="display: table; margin: 50px auto auto auto;">
+					<fieldset>
+						<h3><i>JavaScript</i> is disabled! You have to enable <i>JavaScript</i> for this application to work!</h3>
+					</fieldset>
+				</div>
+			</noscript>
 			<input type="hidden" id="LoginUserID" value="' . $UserID . '"/>
 			<input type="hidden" id="LoginPassword" value="' . $Password . '"/>
 		</body>
