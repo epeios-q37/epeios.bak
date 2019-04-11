@@ -1,11 +1,14 @@
 # *XDHWebQ* *CHANGELOG*
 
+## 2019-04-10
+
+- a message is now displayed when *JavaScript* is not enabled,
+
 ## 2018-12-21
 
 - a *XDH* module does no more block all the application when stalled,
 - *xdhqwebqznd*:
   - adaptation to changes in underlying modules,
-
 
 ## 2018-04-16
 
