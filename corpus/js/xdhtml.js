@@ -290,7 +290,7 @@ function fetchEventHandlers(id) {
 
 		if ((candidate = node.firstChild) === null) {
 			while (cont
-				&& (candidate = node.nextSibling === null)) {
+				&& (candidate = node.nextSibling) === null) {
 				node = node.parentNode;
 
 				if (node.isEqualNode(root))

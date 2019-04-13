@@ -282,6 +282,8 @@ qRB
 
 		_AdjustSizes();
 
+		tol::InitializeRandomGenerator();	// Without this, the seed is always the same under Windows.
+
 		do {
 			Id.New();
 		} while ( Search( Id ) != qNIL );

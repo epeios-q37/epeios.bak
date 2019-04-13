@@ -44,7 +44,7 @@ function t( s )
 		
 function handleQuery( query ) {
 
-//	log( "Q : " + query );
+	log( "Q : " + query );
     var xmlhttp;
 
 	if (window.XMLHttpRequest) {	// code for IE7+, Firefox, Chrome, Opera, Safari
@@ -53,25 +53,26 @@ function handleQuery( query ) {
 		xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
 	}
 	
-	xmlhttp.onreadystatechange=function()
-	{
-		if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-			var query = "";
+    xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+            let query = "";
 
-//			log( "R : " + xmlhttp.responseText );
-			var result = eval( xmlhttp.responseText );
+            log("R : " + xmlhttp.responseText);
+            let xdh_result = eval(xmlhttp.responseText);
+            log("Result: " + xdh_result);
 
-			if ( query ) {
-				if ( ( typeof result !== "undefined" ) && ( typeof result !== "object" ) )	// 'typeof result !== "object"' == 'result != null' !!!!
-					query += "&_result=" + encodeURIComponent( result );
-				handleQuery( buildQuery() + query );
-			} else if ( queryQueue.length )
-				handleQuery( queryQueue.shift() );
-			else
-				queryInProgress = false;
+            if (query) {
+                log("Yo!");
+                if (typeof xdh_result !== "undefined" && typeof xdh_result !== "object")	// 'typeof xdh_result !== "object"' == 'xdh_result != null' !!!!
+                    query += "&_result=" + encodeURIComponent(xdh_result);
+                handleQuery(buildQuery() + query);
+            } else if (queryQueue.length)
+                handleQuery(queryQueue.shift());
+            else
+                queryInProgress = false;
 
-		}
-	}
+        }
+    };
 
 	if ( before === 0 ) {
 		d = new Date();

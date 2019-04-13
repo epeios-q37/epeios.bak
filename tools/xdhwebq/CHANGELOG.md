@@ -1,5 +1,9 @@
 # *XDHWebQ* *CHANGELOG*
 
+## 2019-04-12
+
+- fixing session id random generation,
+
 ## 2019-04-10
 
 - a message is now displayed when *JavaScript* is not enabled,
