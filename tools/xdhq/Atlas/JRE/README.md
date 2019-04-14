@@ -1,10 +1,12 @@
 # *Java* version of the *Atlas* toolkit
 
-![For Java](https://q37.info/download/assets/Java.png "Java logo")
+![For Java](http://q37.info/download/assets/Java.png "Java logo")
 
 ![Version 0.7](https://img.shields.io/static/v1.svg?&color=90b4ed&label=Version&message=0.7)
 
-A fast and easy way to add sharable web interfaces to *Java* programs.
+A fast and easy way to add a graphical user interface to your *Java* programs.
+
+With the *Atlas* toolkit, you obtain hybrid programs. Like desktop applications, the same code can handle both [front and back ends](http://q37.info/s/px7hhztd), and, like web applications, the programs will be reachable from all over the internet.
 
 ## *Hello, World!*
 

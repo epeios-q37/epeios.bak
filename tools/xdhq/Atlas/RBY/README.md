@@ -1,10 +1,12 @@
 # *Ruby* version of the *Atlas* toolkit
 
-![For Ruby](https://q37.info/download/assets/Ruby.png "Ruby logo")
+![For Ruby](http://q37.info/download/assets/Ruby.png "Ruby logo")
 
 ![Version 0.7.1](https://img.shields.io/static/v1.svg?&color=90b4ed&label=Version&message=0.7.1 )
 
-A fast and easy way to add sharable web interfaces to *Ruby* programs.
+A fast and easy way to add a graphical user interface to your *Ruby* programs.
+
+With the *Atlas* toolkit, you obtain hybrid programs. Like desktop applications, the same code can handle both [front and back ends](http://q37.info/s/px7hhztd), and, like web applications, the programs will be reachable from all over the internet.
 
 ## *Hello, World!*
 

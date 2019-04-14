@@ -1,10 +1,12 @@
 # *Node.js* version of the *Atlas* toolkit
 
-![For Node.js](https://q37.info/download/assets/Node.png "Node.js logo")
+![For Node.js](http://q37.info/download/assets/Node.png "Node.js logo")
 
 ![Version 0.7](https://img.shields.io/static/v1.svg?&color=90b4ed&label=Version&message=0.7)
 
-A fast and easy way to add sharable web interfaces to *Node.js* programs.
+A fast and easy way to add a graphical user interface to your *Node.js* programs.
+
+With the *Atlas* toolkit, you obtain hybrid programs. Like desktop applications, the same code can handle both [front and back ends](http://q37.info/s/px7hhztd), and, like web applications, the programs will be reachable from all over the internet.
 
 [![NPM badge of the Atlas toolkit](http://nodei.co/npm/atlastk.png)](http://npmjs.com/atlastk/ "NPM package of the Atlas toolkit")
 

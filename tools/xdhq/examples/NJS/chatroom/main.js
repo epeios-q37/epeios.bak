@@ -24,10 +24,10 @@ var atlas;
 if (process.env.EPEIOS_SRC) {
 	let epeiosPath = "";
 
-    if (process.platform === 'win32')
-        epeiosPath = "h:/hg/epeios/";
-    else
-        epeiosPath = "~/hg/epeios/";
+	if (process.platform === 'win32')
+		epeiosPath = "h:/hg/epeios/";
+	else
+		epeiosPath = "~/hg/epeios/";
 
 	atlas = require(epeiosPath + "tools/xdhq/Atlas/NJS/Atlas.js");
 } else {
@@ -139,21 +139,21 @@ function acSubmitPseudo(dom, id) {
 function acSubmitMessage(dom, id) {
 	dom.getContent("Message",
 		(result) => {
-            dom.setContent("Message", "",
-                () => dom.focus("Message",
-                    () => {
-                        result = result.trim();
-                        if (result.length !== 0) {
-                            console.log("'" + dom.pseudo + "' : " + result);
-                            messages.push({
-                                "pseudo": dom.pseudo,
-                                "content": result
-                            });
-                            displayMessages(dom);
-                        }
-                    }
-                )
-            );
+			dom.setContent("Message", "",
+				() => dom.focus("Message",
+					() => {
+						result = result.trim();
+						if (result.length !== 0) {
+							console.log("'" + dom.pseudo + "' : " + result);
+							messages.push({
+								"pseudo": dom.pseudo,
+								"content": result
+							});
+							displayMessages(dom);
+						}
+					}
+				)
+			);
 		}
 	);
 }

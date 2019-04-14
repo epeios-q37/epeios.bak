@@ -24,10 +24,10 @@ var atlas;
 if (process.env.EPEIOS_SRC) {
 	let epeiosPath = "";
 
-    if (process.platform === 'win32')
-        epeiosPath = "h:/hg/epeios/";
-    else
-        epeiosPath = "~/hg/epeios/";
+	if (process.platform === 'win32')
+		epeiosPath = "h:/hg/epeios/";
+	else
+		epeiosPath = "~/hg/epeios/";
 
 	atlas = require(epeiosPath + "tools/xdhq/Atlas/NJS/Atlas.js");
 } else {

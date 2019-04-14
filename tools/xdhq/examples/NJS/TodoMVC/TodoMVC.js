@@ -22,10 +22,10 @@ var atlas;
 if (process.env.EPEIOS_SRC) {
 	let epeiosPath = "";
 
-    if (process.platform === 'win32')
-        epeiosPath = "h:/hg/epeios/";
-    else
-        epeiosPath = "~/hg/epeios/";
+	if (process.platform === 'win32')
+		epeiosPath = "h:/hg/epeios/";
+	else
+		epeiosPath = "~/hg/epeios/";
 
 	atlas = require(epeiosPath + "tools/xdhq/Atlas/NJS/Atlas.js");
 } else {
@@ -82,14 +82,14 @@ function displayCount(dom, count) {
 function handleCount(dom) {
 	var count = dom.itemsLeft();
 
-    if (count !== dom.todos.length)
-        dom.disableElement("HideClearCompleted",
-            () => displayCount(dom, count)
-        );
-    else
-        dom.enableElement("HideClearCompleted",
-            () => displayCount(dom, count)
-        );
+	if (count !== dom.todos.length)
+		dom.disableElement("HideClearCompleted",
+			() => displayCount(dom, count)
+		);
+	else
+		dom.enableElement("HideClearCompleted",
+			() => displayCount(dom, count)
+		);
 }
 
 function displayTodos(dom) {
@@ -209,45 +209,45 @@ function acToggle(dom, id) {
 function acAll(dom, id) {
 	dom.exclude = null;
 
-    dom.addClass("All", "selected",
-        () => dom.removeClasses(
-            {
-                "Active": "selected",
-                "Completed": "selected"
-            },
-            () => dom.disableElements(["HideActive", "HideCompleted"])
-        )
-    );
+	dom.addClass("All", "selected",
+		() => dom.removeClasses(
+			{
+				"Active": "selected",
+				"Completed": "selected"
+			},
+			() => dom.disableElements(["HideActive", "HideCompleted"])
+		)
+	);
 }
 
 function acActive(dom, id) {
 	dom.exclude = true;
 
-    dom.addClass("Active", "selected",
-        () => dom.removeClasses(
-            {
-                "All": "selected",
-                "Completed": "selected"
-            },
-            () => dom.disableElement("HideActive",
-                () => dom.enableElement("HideCompleted"))
-        )
-    );
+	dom.addClass("Active", "selected",
+		() => dom.removeClasses(
+			{
+				"All": "selected",
+				"Completed": "selected"
+			},
+			() => dom.disableElement("HideActive",
+				() => dom.enableElement("HideCompleted"))
+		)
+	);
 }
 
 function acCompleted(dom, id) {
 	dom.exclude = false;
 
-    dom.addClass("Completed", "selected",
-        () => dom.removeClasses(
-            {
-                "All": "selected",
-                "Active": "selected"
-            },
-            () => dom.disableElement("HideCompleted",
-                () => dom.enableElement("HideActive"))
-        )
-    );
+	dom.addClass("Completed", "selected",
+		() => dom.removeClasses(
+			{
+				"All": "selected",
+				"Active": "selected"
+			},
+			() => dom.disableElement("HideCompleted",
+				() => dom.enableElement("HideActive"))
+		)
+	);
 }
 
 function acClear(dom, id) {
@@ -272,8 +272,8 @@ function acEdit(dom, id) {
 			},
 			() => {
 				dom.index = parseInt(content);
-                dom.setContent("Input." + content, dom.todos[dom.index]['label'],
-                    () => dom.focus("Input." + content));
+				dom.setContent("Input." + content, dom.todos[dom.index]['label'],
+					() => dom.focus("Input." + content));
 			}
 		)
 	);
