@@ -92,7 +92,7 @@ class DOM:
 		return this._dom.call( "Confirm_1", _STRING, 1, message, 0 ) == "true"
 
 	def _setLayout(this, id, xml, xslFilename):
-		this._dom.call("SetLayout_1", _VOID, 3, id, xml, xslFilename, 0)
+		this._dom.call("SetLayout_1", _VOID, 3, id, xml if isinstance(xml,str) else xml.toString(), xslFilename, 0)
 
 	def setLayout(this,id,html):
 		this._setLayout(id,html,"")
@@ -104,7 +104,7 @@ class DOM:
 		if True:	# Testing if 'PROD' or 'DEMO' mode when available.
 			xslURL = "data:text/xml;charset=utf-8," + _encode( readAsset( xsl, _dir ) )
 
-		this._setLayout( id, xml if type(xml) == "str" else xml.toString(), xslURL )
+		this._setLayout( id, xml, xslURL )
 
 	def getContents(this, ids):
 		return _unsplit(ids,this._dom.call("GetContents_1",_STRINGS, 0, 1, ids))

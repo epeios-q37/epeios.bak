@@ -44,7 +44,7 @@ function t( s )
 		
 function handleQuery( query ) {
 
-	log( "Q : " + query );
+//	log( "Q : " + query );
     var xmlhttp;
 
 	if (window.XMLHttpRequest) {	// code for IE7+, Firefox, Chrome, Opera, Safari
@@ -57,12 +57,10 @@ function handleQuery( query ) {
         if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
             let query = "";
 
-            log("R : " + xmlhttp.responseText);
+//          log("R : " + xmlhttp.responseText);
             let xdh_result = eval(xmlhttp.responseText);
-            log("Result: " + xdh_result);
 
             if (query) {
-                log("Yo!");
                 if (typeof xdh_result !== "undefined" && typeof xdh_result !== "object")	// 'typeof xdh_result !== "object"' == 'xdh_result != null' !!!!
                     query += "&_result=" + encodeURIComponent(xdh_result);
                 handleQuery(buildQuery() + query);

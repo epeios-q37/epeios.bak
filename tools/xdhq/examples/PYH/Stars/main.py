@@ -87,7 +87,6 @@ def move_stars(stars):
             vel[1] = vel[1] * 1.05
 
 def readAsset(path):
-#     return open(path, 'r').read()
 	return Atlas.readAsset(path, "Stars")
 
 def acConnect(this,dom,id):

@@ -94,8 +94,6 @@ function getNULString(data, offset) {
 		c = data.substr(offset++, 1);
 	}
 
-	console.log("NUL: ", string);
-
 	return [string, offset];
 }
 
@@ -107,7 +105,6 @@ function getString(data, offset) {
 function xmls(str) {
 	str = String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;');
 
-	console.log("Ent. : ", str);
 	return str;
 }
 
@@ -118,15 +115,11 @@ function convert(xml) {
 	let value = "";
 	let length = xml.length;
 
-	console.log("XML: ", length, xml );
-
 	[name, offset] = getNULString(xml, offset);	// Currently ignored.
 
 	[name, offset] = getString(xml, offset);
 
 	let node = document.implementation.createDocument(null, name).firstChild;
-
-	console.log("Avant !");
 
 	while (offset < length) {
 		switch (xml[offset++]) {
@@ -152,18 +145,12 @@ function convert(xml) {
 		}
 	}
 
-	console.log("Apres !");
-
 	let result = new XMLSerializer().serializeToString(node.ownerDocument.documentElement);
-
-	console.log( "Result: ", result );
 
 	return result;
 }
 
 function transformToFragment(xml, xslName) {
-	if (xml.substring(0, 1) !== "<")
-		xml = convert(xml);
 	return getStylesheet(xslName).transformToFragment(parseXML(xml), document);
 }
 
@@ -181,6 +168,18 @@ function transformToHTML(xml, xslName) {
 
 function removeChildren(elementOrId) {
 	getElement(elementOrId).innerHTML = "";
+}
+
+function setLayout(id, xml, xsl) {
+	if (xml.substring(0, 1) !== "<")
+		xml = convert(xml);
+
+	if (xsl === "") {
+		getElement(id).innerHTML = xml;
+	} else {
+		removeChildren(id);
+		getElement(id).appendChild(transformToFragment(xml, xsl));
+	}
 }
 
 function handleBooleanAttribute(element, name, flag) {
@@ -236,7 +235,7 @@ function setContent(doc, id, content) {
 				element.value = content;
 				break;
 			default:
-				element.innerHTML = content;
+				element.textContent = content;
 				// throw tagName + ": content setting not handled !";
 				break;
 		}
@@ -343,7 +342,7 @@ function getValue(elementOrId)	// Returns the value of element of id 'id'.
 	var element = getElement(elementOrId);
 	var tagName = element.tagName;
 
-//	console.log("VALUE:", element.value);
+//	console.log("VALUE:", element.textContent);
 
 	switch (tagName) {
 		case "INPUT":
@@ -368,6 +367,9 @@ function getValue(elementOrId)	// Returns the value of element of id 'id'.
 			break;
 		case "OPTION":
 			return element.value;
+			break;
+		case "text":	// SVG
+			return element.textContent;
 			break;
 		default:
 			return element.getAttribute(valueAttributeName);
