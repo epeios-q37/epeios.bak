@@ -86,15 +86,12 @@ def setText(xml,x,y):
 
 def setTexts(dom):
 	xml = Atlas.createXML("text")
-#	xml.setAttribute("style", "font-size: 30px; text-anchor: middle;")
 	for x in range(0,4):
 		for y in range(0,4):
 			setText(xml,x,y)
 	dom.setLayout("Texts",xml)
 
 def scramble(puzzle,dom):
-	xml = Atlas.createXML("g")
-	xml.setAttribute("xmlns","http://www.w3.org/2000/svg")
 	drawGrid(dom)
 	setTexts(dom)
 #	dom.setLayout("Grid", xml.toString())
@@ -109,13 +106,10 @@ def acSwap(this,dom,id):
 	if this.blank in [id+1, id-1, id+4, id-4]:
 		swap(this,dom,id)
 
-def acScramble(this,dom,id):
-	scramble(this,dom)
-
 callbacks = {
 	"": acConnect,
 	"Swap": acSwap,
-	"Scramble": acScramble
+	"Scramble": lambda this,dom,id : scramble(this,dom)
 }
 
 Atlas.launch(callbacks, Puzzle, readAsset("Head.html"), "15-puzzle")

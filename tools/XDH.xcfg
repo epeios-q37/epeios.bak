@@ -217,12 +217,7 @@
 					{
 						let xml = "%XML%";
 						let xsl = "%XSL%";
-						if( xsl == "" )
-												document.head.innerHTML = xml;
-						else {
-												document.head.innerHTML = "";
-												document.head.appendChild( transformToFragment( xml, xsl ) );
-						}
+						setLayout(document.head, xml, xsl);
 					}
 					]]>
 				</Head>

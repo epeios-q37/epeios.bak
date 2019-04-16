@@ -1,9 +1,24 @@
 # Developers/maintainers notes about the *Atlas* toolkit binding for *Node.js*
 
-## The README files
+## New packaging
+
+- *xdhq-node*:
+  - le numéro devrait se mettre à jour tout seul, sinon définir temporairement sa valeur dans le fichier projet du répertoire ci-dessous ;
+  - dans `epeios/tools/xdhq/wrappers/NJS` : `DVLRTW[_N(C|G)]` ;
+  - dans `RTW/xdhq-node` : `npm publish` ;
+- *atlas-node*:
+  - **ATTENTION**: mettre à jour le *README* !
+  - mettre le numéro de version à jour dans le répertoire ci-dessous ;
+  - dans `epeios/tools/xdhq/Atlas/NJS` : `DVLRTW_N(C|G)` (pas de `DVLRTW` à ce stade !),
+  - dans `RTW/atlas-node` : `npm publish`
+  - dans `epeios/tools/xdhq/Atlas/NJS` : `DVLRTW`
+
+## The *README* files
 
 - `README.md` is for the `atlas-npm` repository (the one used as source for the *NPM* package),
 - `README-node.md` is renamed and used for the `atlas-node` package.
+
+----
 
 ## New packages
 

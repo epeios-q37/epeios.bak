@@ -171,7 +171,7 @@ function removeChildren(elementOrId) {
 }
 
 function setLayout(id, xml, xsl) {
-	if (xml.substring(0, 1) !== "<")
+	if (xml.trim().substring(0, 1) !== "<")
 		xml = convert(xml);
 
 	if (xsl === "") {

@@ -85,8 +85,8 @@ const modes = {
 // {'a': b, 'c': d, 'e': f} -> ['a','c','e'] [b,d,f]
 function split(keysAndValues, keys, values) {
 	for (var prop in keysAndValues) {
-		keys.push(prop);
-		values.push(keysAndValues[prop]);
+		keys.push(prop.toString());
+		values.push(keysAndValues[prop].toString());
 	}
 }
 
@@ -145,6 +145,9 @@ class XDH {
 		call(this, "Confirm_1", types.STRING, 1, message, 0, (answer) => callback(answer == "true"));
 	}
 	setLayout_(id, xml, xsl, callback) {
+		if (typeof xml !== "string")
+			xml = xml.toString();
+
 		call(this, "SetLayout_1", types.VOID, 3, id, xml, xsl, 0, callback);
 	}
 	setLayout(id, html, callback) {
@@ -155,9 +158,6 @@ class XDH {
 
 		if (this._xdh.isDEMO)
 			xslURL = "data:text/xml;charset=utf-8," + encodeURIComponent(readXSLAsset(xslFilename));
-
-		if (typeof xml !== "string")
-			xml = xml.toString();
 
 		this.setLayout_(id, xml, xslURL, callback);
 	}

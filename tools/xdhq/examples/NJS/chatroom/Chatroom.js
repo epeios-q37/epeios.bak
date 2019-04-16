@@ -33,7 +33,6 @@ if (process.env.EPEIOS_SRC) {
 }
 
 const DOM = atlas.DOM;
-const readAsset = atlas.readAsset;
 
 var pseudos = [];
 var messages = [];

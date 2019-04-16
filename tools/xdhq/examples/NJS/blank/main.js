@@ -34,7 +34,6 @@ if (process.env.EPEIOS_SRC) {
 	atlas = require('atlastk');
 }
 
-const fs = require('fs');
 const DOM = atlas.DOM;
 
 const readAsset = atlas.readAsset;

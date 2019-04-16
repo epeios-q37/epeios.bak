@@ -34,8 +34,6 @@ if (process.env.EPEIOS_SRC) {
 
 const DOM = atlas.DOM;
 
-const readAsset = atlas.readAsset;
-
 const viewModeElements = ["Pattern", "CreateButton", "DescriptionToggling", "ViewNotes"];
 
 class Notes extends DOM {

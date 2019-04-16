@@ -74,6 +74,16 @@
 				</Files>
 			</Files>
 			<Files Group="Examples" Path="../../examples/NJS/">
+				<Files Group="15-puzzle">
+					<Files Path="15-puzzle/">
+						<File>main.js</File>
+						<File>15-puzzle.js</File>
+					</Files>
+					<Files Path="../common/15-puzzle/">
+						<File>Head.html</File>
+						<File>Main.html</File>
+					</Files>
+				</Files>
 				<Files Group="Blank">
 					<Files Path="blank/">
 						<File>main.js</File>
