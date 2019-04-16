@@ -235,7 +235,7 @@ function setContent(doc, id, content) {
 				element.value = content;
 				break;
 			default:
-				element.textContent = content;
+				element.innerHTML = content;
 				// throw tagName + ": content setting not handled !";
 				break;
 		}
@@ -369,6 +369,7 @@ function getValue(elementOrId)	// Returns the value of element of id 'id'.
 			return element.value;
 			break;
 		case "text":	// SVG
+		case "tspan":	// SVG
 			return element.textContent;
 			break;
 		default:

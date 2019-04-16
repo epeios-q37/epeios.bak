@@ -25,13 +25,13 @@ sys.path.append("../Atlas.python.zip")
 
 import atlastk as Atlas
 
-class Tiles:
+class Puzzle:
 	pass
 
 def readAsset(path):
-	return Atlas.readAsset(path, "Tiles")
+	return Atlas.readAsset(path, "15-puzzle")
 
-def fill(tiles,dom):
+def fill(puzzle,dom):
 	numbers = []
 	contents = {}
 
@@ -43,70 +43,79 @@ def fill(tiles,dom):
 		if number != 0:
 			contents["t"+str(i)]=number
 		else:
-			tiles.blank=i
+			puzzle.blank=i
 
 	dom.setContents(contents)
+	dom.toggleClass(puzzle.blank,"hidden")
 
-def swap(tiles,dom,source):
+def swap(puzzle,dom,source):
 	dom.setContents({
-		"t"+str(tiles.blank): dom.getContent("t"+str(source)),
+		"t"+str(puzzle.blank): dom.getContent("t"+str(source)),
 		"t"+str(source): ""
 	})
 
-	tiles.blank=source
+	dom.toggleClasses({
+		puzzle.blank: "hidden",
+		source: "hidden"
+	})
 
+	puzzle.blank=source
 
 def drawSquare(xml,x,y):
-	xml.pushTag("rect")
+	xml.pushTag("use")
 	xml.setAttribute("id", y * 4 + x)
 	xml.setAttribute("data-xdh-onevent","Swap")
-	xml.setAttribute("x",x * 65 + 1)
-	xml.setAttribute("y",y * 65 + 1)
-	xml.setAttribute("width",60)
-	xml.setAttribute("height",60)
+	xml.setAttribute("x",x * 100 + 24)
+	xml.setAttribute("y",y * 100 + 24)
+	xml.setAttribute("xlink:href","#stone")
 	xml.popTag()
 
-def drawGrid(xml):
-	xml.pushTag("g")
-	xml.setAttribute("style", "fill-opacity: 0; stroke: black;")
+def drawGrid(dom):
+	xml = Atlas.createXML("g")
 	for x in range(0,4):
 		for y in range(0,4):
 			drawSquare(xml,x,y)
-	xml.popTag()
+	dom.setLayout("Stones",xml)
 
 def setText(xml,x,y):
-	xml.pushTag("Text")
+	xml.pushTag("tspan")
 	xml.setAttribute("id", "t" + str(y * 4 + x))
-	xml.setAttribute("style", "dominant-baseline: central;")
-	xml.setAttribute("x", x * 65 + 30 )
-	xml.setAttribute("y", y * 65 + 30 )
+	xml.setAttribute("x", x * 100 + 72 )
+	xml.setAttribute("y", y * 100 + 90 )
 	xml.popTag()
 
-def setTexts(xml):
-	xml.pushTag("g")
-	xml.setAttribute("style", "font-size: 30px; text-anchor: middle;")
+def setTexts(dom):
+	xml = Atlas.createXML("text")
+#	xml.setAttribute("style", "font-size: 30px; text-anchor: middle;")
 	for x in range(0,4):
 		for y in range(0,4):
 			setText(xml,x,y)
-	xml.popTag()
+	dom.setLayout("Texts",xml)
+
+def scramble(puzzle,dom):
+	xml = Atlas.createXML("g")
+	xml.setAttribute("xmlns","http://www.w3.org/2000/svg")
+	drawGrid(dom)
+	setTexts(dom)
+#	dom.setLayout("Grid", xml.toString())
+	fill(puzzle,dom)
 
 def acConnect(this,dom,id):
 	dom.setLayout("", readAsset( "Main.html"))
-	xml = Atlas.createXML("g")
-	xml.setAttribute("xmlns","http://www.w3.org/2000/svg")
-	setTexts(xml)
-	drawGrid(xml)
-	dom.setLayout("Grid", xml.toString())
-	fill(this,dom)
+	scramble(this,dom)
 
 def acSwap(this,dom,id):
 	id = int(id)
 	if this.blank in [id+1, id-1, id+4, id-4]:
 		swap(this,dom,id)
 
+def acScramble(this,dom,id):
+	scramble(this,dom)
+
 callbacks = {
 	"": acConnect,
 	"Swap": acSwap,
+	"Scramble": acScramble
 }
 
-Atlas.launch(callbacks, Tiles, "", "Tiles")
+Atlas.launch(callbacks, Puzzle, readAsset("Head.html"), "15-puzzle")
