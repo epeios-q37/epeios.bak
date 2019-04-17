@@ -14,6 +14,10 @@ If you want to use the *Atlas* toolkit without installing the examples, simply i
 
 *To support this project, please upvote this [pull request](https://github.com/vinta/awesome-python/pull/1272).*
 
+## *15-puzzle* game
+
+Before we dive into source code, let's begin with a live demonstration of the [*15-puzzle* game](http://q37.info/s/jn9zg3bn) made with *Atlas* toolkit: <http://q37.info/s/bmbgtt47> (other live demonstrations are available [here](http://q37.info/s/zgvcwv7j))!
+
 ## *Hello, World!*
 
 Here's how a [*Hello, World!*](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program) type program made with the *Atlas* toolkit looks like:
@@ -26,7 +30,7 @@ Here's how a [*Hello, World!*](https://en.wikipedia.org/wiki/%22Hello,_World!%22
 
 You can also put below code source in a file and launch it after having installed the [*atlastk* package](http://q37.info/s/9srmskcm) (`pip install atlastk`).
 
-For a live demonstration: <http://q37.info/runkit/Hello> ([live demonstrations of other examples](http://q37.info/s/sssznrb4)).
+For a live demonstration: <http://q37.info/runkit/Hello>.
 
 Source code:
 

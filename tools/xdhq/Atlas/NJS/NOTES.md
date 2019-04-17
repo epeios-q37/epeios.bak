@@ -6,12 +6,15 @@
   - le numéro devrait se mettre à jour tout seul, sinon définir temporairement sa valeur dans le fichier projet du répertoire ci-dessous ;
   - dans `epeios/tools/xdhq/wrappers/NJS` : `DVLRTW[_N(C|G)]` ;
   - dans `RTW/xdhq-node` : `npm publish` ;
-- *atlas-node*:
-  - **ATTENTION**: mettre à jour le *README* !
-  - mettre le numéro de version à jour dans le répertoire ci-dessous ;
+- *atlas-npm*
+  - metre à jour le numéro de version dans le fichier projet du répertoire ci-dessous,
   - dans `epeios/tools/xdhq/Atlas/NJS` : `DVLRTW_N(C|G)` (pas de `DVLRTW` à ce stade !),
-  - dans `RTW/atlas-node` : `npm publish`
+  - dans `RTW/atlas-npm` : `npm pack`, et faire une simulation du *atlas-node* ci-dessous en modifiant le `package.json` pour le faire pointer sur le *package* génèré,
+  - dans `RTW/atlas-npm` : `npm publish`
   - dans `epeios/tools/xdhq/Atlas/NJS` : `DVLRTW`
+- *atlas-node*:
+  - **ATTENTION**: mettre à jour le *README*, notamment le numéro de version (le badge, deux modifications à faire) !
+  - mettre le numéro de version à jour dans le répertoire ci-dessous ;
 
 ## The *README* files
 

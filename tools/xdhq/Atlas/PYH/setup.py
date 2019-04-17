@@ -35,7 +35,7 @@ setuptools.setup(
     author="Claude SIMON",
 #    author_email="author@example.com",
     description="A fast and easy way to add sharable web interfaces to Python programs.",
-    keywords="web interface",
+    keywords="GUI graphical user interface web",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="http://q37.info/s/c7hfkzvs",
