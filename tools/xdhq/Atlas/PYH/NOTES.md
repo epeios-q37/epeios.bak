@@ -13,6 +13,7 @@ En créant, dans le répertoire de l'application, un fichier `__main__.py` conte
 
 ## Publication sur *PyPI*
 
+**Effacer, si nécessaire, la variable d'environnement `PYTHONPATH` (`unset PYTHONPATH`).**
 **Mettre à jour le numéro de version dans `setup.py` !**
 
 ### Packaging

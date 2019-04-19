@@ -130,8 +130,27 @@ function swap(dom, source,id) {
 				},
 				() => {
 					dom.blank = source;
-					acSwap(dom, id);
+					testAndSwap(dom, id);
 				})));
+}
+
+function testAndSwap(dom, id) {
+	let ix = convertX(parseInt(id));
+	let iy = convertY(parseInt(id));
+	let bx = convertX(dom.blank);
+	let by = convertY(dom.blank);
+
+	if (ix === bx) {
+		if (by < iy)
+			swap(dom, dom.blank + 4, id);
+		else if (by > iy)
+			swap(dom, dom.blank - 4, id);
+	} else if (iy === by) {
+		if (bx < ix)
+			swap(dom, dom.blank + 1, id);
+		else if (bx > ix)
+			swap(dom, dom.blank - 1, id);
+	}
 }
 
 function scramble(dom) {
@@ -147,22 +166,7 @@ function acConnect(dom, id) {
 
 function acSwap(dom, id)
 {
-	let ix = convertX(parseInt(id));
-	let iy = convertY(parseInt(id));
-	let bx = convertX(dom.blank);
-	let by = convertY(dom.blank);
-
-	if (ix === bx) {
-		if (by < iy)
-			swap(dom, dom.blank + 1,id);
-		else if (by > iy)
-			swap(dom, dom.blank - 1,id);
-	} else if (iy === by) {
-		if (bx < ix)
-			swap(dom, dom.blank + 4, id);
-		else if (bx > ix)
-			swap(dom, dom.blank - 4, id);
-	}
+	testAndSwap(dom, id);
 }
 
 function newSession() {
