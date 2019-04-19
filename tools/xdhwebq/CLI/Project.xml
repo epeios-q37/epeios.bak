@@ -76,6 +76,7 @@
 			<File>xdhwebq.js</File>
 			<File Path="../../../corpus/js/">xdhtml.js</File>
 			<File>runkit.php</File>
+			<File>runkit_off.php</File>
 			<File>xdh.php</File>
 			<File>prolog.php</File>
 		</Files>

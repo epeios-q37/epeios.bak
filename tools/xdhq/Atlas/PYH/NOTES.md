@@ -27,7 +27,12 @@ Dans une session *DOS* :
 
 - `python -m pipenv clean`
 - `python -m pipenv shell`
-- `pip install h:\RTW\`
+- aller dans `RTW/atlas-python`
+- faire un test
+- effacer `Atlas.python.zip`
+- faire un test (échec: `atlastk` manquant)
+- `pip install .`
+- faire un test.
 
 ### Test distant avec l'instance de test
 
@@ -48,5 +53,3 @@ Dans `RTW/atlas-python` :
 Dans `RTW/atlas-python` :
 
 `python3 -m twine upload dist/*`
-
-

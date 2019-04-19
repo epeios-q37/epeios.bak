@@ -3,18 +3,24 @@
 ## New packaging
 
 - *xdhq-node*:
-  - le numéro devrait se mettre à jour tout seul, sinon définir temporairement sa valeur dans le fichier projet du répertoire ci-dessous ;
+  - le numéro devrait se mettre à jour tout seul, sinon définir temporairement sa valeur dans le fichier projet du répertoire ci-dessous ; **Attention** :
+    - `mm` (si `yyyy` identique) **doit** être différent de celui en cours, sinon *RunKit* ne prendra pas le  *package* en compte,
+    - si modifié manuellement, le numéro doit être au format `yyyymmdd` dans le fichier projet,
   - dans `epeios/tools/xdhq/wrappers/NJS` : `DVLRTW[_N(C|G)]` ;
   - dans `RTW/xdhq-node` : `npm publish` ;
 - *atlas-npm*
   - metre à jour le numéro de version dans le fichier projet du répertoire ci-dessous,
   - dans `epeios/tools/xdhq/Atlas/NJS` : `DVLRTW_N(C|G)` (pas de `DVLRTW` à ce stade !),
   - dans `RTW/atlas-npm` : `npm pack`, et faire une simulation du *atlas-node* ci-dessous en modifiant le `package.json` pour le faire pointer sur le *package* génèré,
-  - dans `RTW/atlas-npm` : `npm publish`
+  - dans `RTW/atlas-npm` : `npm publish`; **ATTENTION**: avant publication, vérifier dans *RunKit* que la dernière version du module *xdhq* est bien la dernière !!!
   - dans `epeios/tools/xdhq/Atlas/NJS` : `DVLRTW`
 - *atlas-node*:
-  - **ATTENTION**: mettre à jour le *README*, notamment le numéro de version (le badge, deux modifications à faire) !
-  - mettre le numéro de version à jour dans le répertoire ci-dessous ;
+  - **ATTENTION**: mettre à jour le `README.md`, notamment le numéro de version (le badge, deux modifications à faire) !
+  - `ATKNJSRTW`,
+  - dans `RTW/atlas-node` : `ATKRTWUpdate`,
+  - vérifier le contenu (faire également un *git diff*)
+  - `ATKRTWCommit`
+  - clôner et tester.
 
 ## The *README* files
 

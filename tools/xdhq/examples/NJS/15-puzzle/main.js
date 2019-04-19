@@ -66,6 +66,14 @@ function fill(dom) {
 	dom.toggleClass(dom.blank, "hidden");
 }
 
+function convertX(pos) {
+	return pos % 4;
+}
+
+function convertY(pos) {
+	return pos >> 2;  // pos / 4
+}
+
 function drawSquare(xml, x, y) {
 	xml.pushTag("use");
 	xml.setAttribute("id", y * 4 + x);
@@ -109,7 +117,7 @@ function setTexts(dom) {
 	dom.setLayout("Texts", xml);
 }
 
-function swap(dom, source) {
+function swap(dom, source,id) {
 	dom.getContent(
 		"t" + source,
 		(value) => dom.setContents({
@@ -120,7 +128,10 @@ function swap(dom, source) {
 				[dom.blank]: "hidden",
 				[source]: "hidden"
 				},
-				() => dom.blank = source)));
+				() => {
+					dom.blank = source;
+					acSwap(dom, id);
+				})));
 }
 
 function scramble(dom) {
@@ -134,10 +145,24 @@ function acConnect(dom, id) {
 	scramble(dom);
 }
 
-function acSwap(dom, id) {
-	id = parseInt(id);
-	if ([id - 1, id + 1, id + 4, id - 4].includes(dom.blank))
-		swap(dom, id);
+function acSwap(dom, id)
+{
+	let ix = convertX(parseInt(id));
+	let iy = convertY(parseInt(id));
+	let bx = convertX(dom.blank);
+	let by = convertY(dom.blank);
+
+	if (ix === bx) {
+		if (by < iy)
+			swap(dom, dom.blank + 1,id);
+		else if (by > iy)
+			swap(dom, dom.blank - 1,id);
+	} else if (iy === by) {
+		if (bx < ix)
+			swap(dom, dom.blank + 4, id);
+		else if (bx > ix)
+			swap(dom, dom.blank - 4, id);
+	}
 }
 
 function newSession() {
