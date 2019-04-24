@@ -24,13 +24,13 @@ Dans `RTW/atlas-python` :
 
 ### Test local
 
-Dans une session *DOS* :
-
+- Dupliquer `RTW/atlas-python`
 - `python -m pipenv clean`
 - `python -m pipenv shell`
-- aller dans `RTW/atlas-python`
+- `unset EPEIOS_SRC PYTHONPATH`
+- aller dans le répertoire dupliqué
 - faire un test
-- effacer `Atlas.python.zip`
+- supprimer `Atlas.python.zip` et `atlastk`,
 - faire un test (échec: `atlastk` manquant)
 - `pip install .`
 - faire un test.
