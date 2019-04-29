@@ -30,7 +30,7 @@ Here's how a [*Hello, World!*](https://en.wikipedia.org/wiki/%22Hello,_World!%22
 
 You can also put below code source in a file and launch it after having installed the [*atlastk* package](http://q37.info/s/9srmskcm) (`pip install atlastk`).
 
-For a live demonstration: <http://q37.info/runkit/Hello>.
+For a live demonstration: <https://q37.info/s/oe1hipoh>.
 
 Source code:
 
@@ -85,7 +85,7 @@ And here's how the *Atlas* toolkit version of the [*TodoMVC*](http://todomvc.com
 
 ![TodoMVC](http://q37.info/download/TodoMVC.gif "The TodoMVC application made with the Atlas toolkit")
 
-For a live demonstration: <http://q37.info/runkit/TodoMVC>.
+For a live demonstration: <https://q37.info/s/dfshrt4p>.
 
 ## Content of the repository
 

@@ -6,6 +6,37 @@ Concerne le code *Python* <u>et</u> natif.
 
 En créant, dans le répertoire de l'application, un fichier `__main__.py` contenant juste un `import` du fichier à lancer pour lancer l'application, on peut alors lancer l'application en passant juste le nom du répertoire à la commande `python`.
 
+## *repl.it*
+
+Code à mettre dans le source pour <http://repl.it>.
+
+``` python
+# coding: utf-8
+"""
+IMPORTANT !!!
+
+First of all, fork the application by hitting above
+'fork' button, or it won't work properly!
+
+Once launched, to open the application in a new tab,
+click on the QR code at its bottom.
+
+For more details: http://q37.info/s/zgvcwv7j
+
+Copyright (c) 2019 Claude SIMON (https://q37.info/s/rmnmqd49)
+MIT License
+"""
+
+import atlastk as Atlas
+import os
+
+os.environ["ATK"]="REPLit" #
+
+def readAsset(path):
+  return open(path).read()
+
+```
+
 ## *pipenv*
 
 - `python3 -m pipenv shell` : créer un environnement d'exécution python isolé.
