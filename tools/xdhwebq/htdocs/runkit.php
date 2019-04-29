@@ -73,7 +73,9 @@ $esource = str_replace(array("\r\n", "\n", "\r"), '\\n', $esource);
 $esource = str_replace("'", "\\'", $esource);
 $esource = str_replace("\"", '\\"', $esource);
 
-$url = 'http://atlastk.org/xdh.php?_token=' . $token;
+ $url = 'http://localhost:8080/xdh.php?_token=' . $token;
+
+// $url = 'http://atlastk.org/xdh.php?_token=' . $token;
 
 $page = '<!DOCTYPE html>
 <html>

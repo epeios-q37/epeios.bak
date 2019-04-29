@@ -22,11 +22,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-import sys
+import sys, os
 from random import *
 
 sys.path.append("./Atlas.python.zip")
 sys.path.append("../Atlas.python.zip")
+
+os.environ["ATK"]="REPLit"
 
 import atlastk as Atlas
 

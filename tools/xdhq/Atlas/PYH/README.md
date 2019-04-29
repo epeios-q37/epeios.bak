@@ -4,7 +4,7 @@
 
 ![For Python](http://q37.info/download/assets/Python.png "Python logo")
 
-[![Version 0.9.1](https://img.shields.io/static/v1.svg?&color=90b4ed&label=Version&message=0.9.1)](http://q37.info/s/gei0veus)
+[![Version 0.932](https://img.shields.io/static/v1.svg?&color=90b4ed&label=Version&message=0.9.3)](http://q37.info/s/gei0veus)
 
 A fast and easy way to add a graphical user interface to your *Python* programs.
 

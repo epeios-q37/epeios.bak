@@ -14,9 +14,11 @@
 				<!--Plugin target="Token" Id="Forbidden"/-->
 			</Plugins>
 			<DemoNotification>
+				<xpp:cdata>
 ****************************************************************************
      Your application is connected to the free public server. Welcome!
 ****************************************************************************
+				</xpp:cdata>
 			</DemoNotification>
 		</Parameters>
 		<Definitions>
