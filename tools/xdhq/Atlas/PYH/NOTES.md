@@ -2,11 +2,17 @@
 
 Concerne le code *Python* <u>et</u> natif.
 
-## `__main__.py`
+## Exemple de description en anglais:
+
+> Lightweight and dependency-free module to easily add a GUI to Python programs. Requires only basic knowledge of web technologies (no JavaScript knowledge required). CLI and GUI can easily coexist in the same program, so the user can choose the interface s/he wants to use.
+
+## Considérations techniques
+
+### `__main__.py`
 
 En créant, dans le répertoire de l'application, un fichier `__main__.py` contenant juste un `import` du fichier à lancer pour lancer l'application, on peut alors lancer l'application en passant juste le nom du répertoire à la commande `python`.
 
-## *repl.it*
+### *repl.it*
 
 Code à mettre dans le source pour <http://repl.it>.
 
@@ -15,8 +21,10 @@ Code à mettre dans le source pour <http://repl.it>.
 """
 IMPORTANT !!!
 
-First of all, fork the application by hitting above
-'fork' button, or it won't work properly!
+First of all, fork the application, or it won't work properly!
+This can be done:
+- by hitting above 'fork' button,
+- or, if not available, by modifying this source code.
 
 Once launched, to open the application in a new tab,
 click on the QR code at its bottom.
@@ -37,7 +45,7 @@ def readAsset(path):
 
 ```
 
-## *pipenv*
+### *pipenv*
 
 - `python3 -m pipenv shell` : créer un environnement d'exécution python isolé.
 - `python3 -m pipenv clean` : désinstalle tout les *package* de l'environnement d'exécution.
@@ -85,3 +93,14 @@ Dans `RTW/atlas-python` :
 Dans `RTW/atlas-python` :
 
 `python3 -m twine upload dist/*`
+
+## Ressources
+
+Liste des sites faisant références à la version *Python* du *toolkit* *Atlas*
+
+- <http://github.com/epeios-q37/atlas-python>,
+- le wiki sur le site de*Python*: <https://wiki.python.org/moin/GuiProgramming>,
+- *Pypi: <https://pypi.org/project/atlastk/>
+- *Curly* (demande en cours ; mettre le lien à jour lorsque (si) accepté): <https://curlie.org/Computers/Programming/Languages/Python>
+
+
