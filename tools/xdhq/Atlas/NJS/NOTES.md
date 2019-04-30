@@ -22,6 +22,38 @@
   - `ATKRTWCommit`
   - clôner et tester.
 
+### *Repl.it*
+
+Code à mettre dans le source pour <http://repl.it>.
+
+``` javascript
+/*
+IMPORTANT !!!
+
+First of all, fork the application, or it won't work properly!
+This can be done:
+- by hitting above 'fork' button,
+- or, if not available, by modifying this source code.
+
+Once launched, to open the application in a new tab,
+click on the QR code at its bottom.
+
+For more details: http://q37.info/s/zbgfjtp9
+
+Copyright (c) 2019 Claude SIMON (https://q37.info/s/rmnmqd49)
+MIT License
+*/
+
+process.env['ATK'] = 'REPLit';
+
+const atlas = require('atlastk');
+
+function readAsset(fileName) {
+  return Buffer.from(fs.readFileSync(fileName)).toString();
+}
+
+```
+
 ## The *README* files
 
 - `README.md` is for the `atlas-npm` repository (the one used as source for the *NPM* package),

@@ -12,7 +12,7 @@ Concerne le code *Python* <u>et</u> natif.
 
 En créant, dans le répertoire de l'application, un fichier `__main__.py` contenant juste un `import` du fichier à lancer pour lancer l'application, on peut alors lancer l'application en passant juste le nom du répertoire à la commande `python`.
 
-### *repl.it*
+### *Repl.it*
 
 Code à mettre dans le source pour <http://repl.it>.
 
@@ -29,7 +29,7 @@ This can be done:
 Once launched, to open the application in a new tab,
 click on the QR code at its bottom.
 
-For more details: http://q37.info/s/zgvcwv7j
+For more details: http://q37.info/s/zbgfjtp9
 
 Copyright (c) 2019 Claude SIMON (https://q37.info/s/rmnmqd49)
 MIT License
@@ -101,6 +101,4 @@ Liste des sites faisant références à la version *Python* du *toolkit* *Atlas*
 - <http://github.com/epeios-q37/atlas-python>,
 - le wiki sur le site de*Python*: <https://wiki.python.org/moin/GuiProgramming>,
 - *Pypi: <https://pypi.org/project/atlastk/>
-- *Curly* (demande en cours ; mettre le lien à jour lorsque (si) accepté): <https://curlie.org/Computers/Programming/Languages/Python>
-
-
+- *Curlie* (demande en cours): <https://curlie.org/Computers/Programming/Languages/Python/Modules/GUI/>
