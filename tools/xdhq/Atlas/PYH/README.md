@@ -18,9 +18,11 @@ You can also use the *Atlas* toolkit on [*Repl.it*](http://q37.info/s/mxmgq3qm),
 
 *To support this project, please upvote this [pull request](https://github.com/vinta/awesome-python/pull/1272).*
 
-## *15-puzzle* game
+## Some games
 
 Before we dive into source code, let's begin with a live demonstration of the [*15-puzzle* game](http://q37.info/s/jn9zg3bn) made with *Atlas* toolkit: <http://q37.info/s/mdghbt3n> ([more about live demonstrations](http://q37.info/s/zgvcwv7j))!
+
+You can also try the [Reversi](http://q37.info/s/zz3dzmf7) game: <http://q37.info/s/jhv7dtsp>.
 
 ## *Hello, World!*
 
