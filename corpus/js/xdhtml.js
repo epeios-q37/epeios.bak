@@ -177,8 +177,12 @@ function setLayout(id, xml, xsl) {
 	if (xsl === "") {
 		getElement(id).innerHTML = xml;
 	} else {
-		removeChildren(id);
-		getElement(id).appendChild(transformToFragment(xml, xsl));
+		let div = document.createElement('div');
+		div.appendChild(transformToFragment(xml, xsl));
+		getElement(id).innerHTML = div.innerHTML;
+//		div = null;
+//		removeChildren(id);
+//		getElement(id).appendChild(transformToFragment(xml, xsl));
 	}
 }
 

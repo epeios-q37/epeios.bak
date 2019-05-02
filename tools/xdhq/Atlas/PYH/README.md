@@ -4,7 +4,7 @@
 
 ![For Python](http://q37.info/download/assets/Python.png "Python logo")
 
-[![Version 0.9.4](https://img.shields.io/static/v1.svg?&color=90b4ed&label=Version&message=0.9.4)](http://q37.info/s/gei0veus)
+[![Version 0.9.5](https://img.shields.io/static/v1.svg?&color=90b4ed&label=Version&message=0.9.5)](http://q37.info/s/gei0veus)
 
 A fast and easy way to add a graphical user interface ([GUI](http://q37.info/s/hw9n3pjs)) to your *Python* programs.
 
@@ -18,11 +18,13 @@ You can also use the *Atlas* toolkit on [*Repl.it*](http://q37.info/s/mxmgq3qm),
 
 *To support this project, please upvote this [pull request](https://github.com/vinta/awesome-python/pull/1272).*
 
-## Some games
+## *15-puzzle* game
 
 Before we dive into source code, let's begin with a live demonstration of the [*15-puzzle* game](http://q37.info/s/jn9zg3bn) made with *Atlas* toolkit: <http://q37.info/s/mdghbt3n> ([more about live demonstrations](http://q37.info/s/zgvcwv7j))!
 
-You can also try the [Reversi](http://q37.info/s/zz3dzmf7) game: <http://q37.info/s/jhv7dtsp>.
+## *Reversi* game
+
+Yet another game ; the [*Reversi* (aka *Othello*) game](http://q37.info/s/zz3dzmf7): <http://q37.info/s/jhv7dtsp>. This is intended as part of a future tutorial.
 
 ## *Hello, World!*
 

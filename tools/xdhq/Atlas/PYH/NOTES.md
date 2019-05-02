@@ -21,13 +21,11 @@ Code à mettre dans le source pour <http://repl.it>.
 """
 IMPORTANT !!!
 
-First of all, fork the application, or it won't work properly!
+Fork the application, or it won't work properly!
+
 This can be done:
 - by hitting above 'fork' button,
 - or, if not available, by modifying this source code.
-
-Once launched, to open the application in a new tab,
-click on the QR code at its bottom.
 
 For more details: http://q37.info/s/zbgfjtp9
 

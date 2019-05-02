@@ -39,7 +39,7 @@ import atlastk as Atlas
 
 
 def readAsset(path):
-    return Atlas.readAsset(path, "Reversi")
+    return Atlas.readAsset(path, "ReversiIMG")
 
 
 EMPTY = 0
@@ -48,7 +48,7 @@ WHITE = 1
 
 # http://uguisu.skr.jp/othello/5-1.html
 
-WEIGHT1_MATRIX = [
+WEIGHT_MATRIX = [
     [120, -20, 20, 5, 5, 20, -20, 120],
     [-20, -40, -5, -5, -5, -5, -40, -20],
     [20, -5, 15, 3, 3, 15, -5, 20],
@@ -57,18 +57,6 @@ WEIGHT1_MATRIX = [
     [20, -5, 15, 3, 3, 15, -5, 20],
     [-20, -40, -5, -5, -5, -5, -40, -20],
     [120, -20, 20, 5, 5, 20, -20, 120],
-]
-
-
-WEIGHT2_MATRIX = [
-    [30, -12, 0, -1, -1, 0, -12, 30],
-    [-12, -15, -3, -3, -3, -3, -15, -12],
-    [0, -3, 0, -1, -1, 0, -3, 0],
-    [-1, -3, -1, -1, -1, -1, -3, -1],
-    [-1, -3, -1, -1, -1, -1, -3, -1],
-    [0, -3, 0, -1, -1, 0, -3, 0],
-    [-12, -15, -3, -3, -3, -3, -15, -12],
-    [30, -12, 0, -1, -1, 0, -12, 30],
 ]
 
 
@@ -200,7 +188,7 @@ class Reversi:
 # -------------------------------------------------------------------------------
 
 def drawBoard(reversi, dom, prefetch=False):
-    board = Atlas.createXML("tbody")
+    board = Atlas.createHTML("tbody")
     for y, row in enumerate(reversi.board):
         board.pushTag("tr")
         for x, r in enumerate(row):
@@ -227,7 +215,7 @@ def drawBoard(reversi, dom, prefetch=False):
 
 def acConnect(reversi, dom, id):
     reversi.player = BLACK
-    reversi.weight_matrix = WEIGHT1_MATRIX
+    reversi.weight_matrix = WEIGHT_MATRIX
     dom.setLayout("", readAsset("Main.html"))
     drawBoard(reversi, dom)
     dom.alert("Welcome to this Reversi (aka Othello) game made with the Atlas toolkit.\n\nYou play against the computer with the black pieces.")
@@ -271,4 +259,4 @@ callbacks = {
     "New": acNew
 }
 
-Atlas.launch(callbacks, lambda: Reversi(), readAsset("Head.html"), "Reversi")
+Atlas.launch(callbacks, lambda: Reversi(), readAsset("Head.html"), "ReversiIMG")

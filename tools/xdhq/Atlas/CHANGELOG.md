@@ -3,6 +3,13 @@
 - Common to **all** bindings,
 - does **not** concern the native code,
 
+## 2019-05-02
+
+- *Python*
+  - modification of the *Repl.it* related stuff,
+  - `CreateHTML(…)` becomes an alias of `CreateXML(…)`,
+  - switching to 0.9.5
+
 ## 2019-04-30
 
 - *Node.js*
