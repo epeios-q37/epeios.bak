@@ -1,22 +1,27 @@
-<title>Reversi • Text version</title>
+<title>Reversi • XSL version</title>
 <link rel="icon" type="image/png"
     href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAMFBMVEUEAvyEhsxERuS8urQsKuycnsRkYtzc2qwUFvRUVtysrrx0ctTs6qTMyrSUksQ0NuyciPBdAAABHklEQVR42mNgwAa8zlxjDd2A4POfOXPmzZkFCAH2M8fNzyALzDlzg2ENssCbMwkMOsgCa858YOjBKxBzRoHhD7LAHiBH5swCT9HQ6A9ggZ4zp7YCrV0DdM6pBpAAG5Blc2aBDZA68wCsZPuZU0BDH07xvHOmAGKKvgMP2NA/Zw7ADIYJXGDgLQeBBSCBFu0aoAPYQUadMQAJAE29zwAVWMCWpgB08ZnDQGsbGhpsgCqBQHNfzRkDEIPlzFmo0T5nzoMovjPHoAK8Zw5BnA5yDosDSAVYQOYMKIDZzkoDzagAsjhqzjRAfXTmzAQgi/vMQZA6pjtAvhEk0E+ATWRRm6YBZuScCUCNN5szH1D4TGdOoSrggtiNAH3vBBjwAQCglIrSZkf1MQAAAABJRU5ErkJggg==" />
-<!--style disabled="disabled">
-    table[id="board"] td {
+<style>
+    .hidden {
+        display: none;
+    }
+</style>
+<style id="styleTXT">
+    div[id="board"] table td {
         text-align: center;
         width: 1.2rem;
         height: 1.2rem;
         border: 1px solid black;
     }
-</style-->
-<style>
-    table[id="board"] td {
-        margin: 0;
+</style>
+<style id="styleIMG">
+    div[id="board"] table td {
+        margin: 0px;
         border: none;
         height: 48px;
         width: 48px;
-        padding: 0;
-        border-spacing: 0;
+        padding: 0px;
+        border-spacing: 0px;
         border-collapse : collapse;
     }
 

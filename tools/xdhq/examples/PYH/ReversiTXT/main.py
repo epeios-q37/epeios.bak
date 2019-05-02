@@ -26,6 +26,8 @@ SOFTWARE.
 # This is the adaptation of the program found on:
 # https://gist.github.com/nakagami/7a7d799bd4bd4ad8fcea96135c4af179
 
+# Pure text version, without heavy CSS stuff.
+
 import os
 import sys
 import random
@@ -213,7 +215,7 @@ def acConnect(reversi, dom, id):
     reversi.weight_matrix = WEIGHT_MATRIX
     dom.setLayout("", readAsset("Main.html"))
     drawBoard(reversi, dom)
-    dom.alert("Welcome to this Reversi (aka Othello) game made with the Atlas toolkit.\n\nYou play against the computer with the black pieces.")
+    dom.alert("Welcome to this Reversi (aka Othello) game made with the Atlas toolkit.\n\nYou play against the computer with the 'X' pieces.")
 
 
 def acPlay(reversi, dom, id):

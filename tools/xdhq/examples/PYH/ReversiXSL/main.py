@@ -26,6 +26,8 @@ SOFTWARE.
 # This is the adaptation of the program found on:
 # https://gist.github.com/nakagami/7a7d799bd4bd4ad8fcea96135c4af179
 
+# Demonstrates the use of XSL.
+
 import os
 import sys
 import random
@@ -45,6 +47,9 @@ def readAsset(path):
 EMPTY = 0
 BLACK = -1
 WHITE = 1
+
+TXT = 0
+IMG = 1
 
 # http://uguisu.skr.jp/othello/5-1.html
 
@@ -187,7 +192,7 @@ class Reversi:
 
 # -------------------------------------------------------------------------------
 
-def drawBoard(reversi, dom, prefetch=False):
+def drawBoard(reversi, dom):
     board = Atlas.createXML("Board")
     for y, row in enumerate(reversi.board):
         board.pushTag("Row")
@@ -201,20 +206,35 @@ def drawBoard(reversi, dom, prefetch=False):
             board.popTag()
         board.popTag()
 
-    dom.setLayoutXSL("board", board, "BoardIMG.xsl")
-
-    dom.setContents({
-        "black": reversi.count(BLACK),
-        "white": reversi.count(WHITE)
-    })
+    if ( reversi.layout == TXT ):
+        dom.setContents({
+            "blackTXT": reversi.count(BLACK),
+            "whiteTXT": reversi.count(WHITE)
+        })
+        dom.setLayoutXSL("board", board, "BoardTXT.xsl")
+        dom.enableElement("styleTXT")
+        dom.disableElement("styleIMG")
+        dom.addClass("scoreIMG", "hidden")
+        dom.removeClass("scoreTXT", "hidden")
+    elif ( reversi.layout == IMG ):
+        dom.setContents({
+            "blackIMG": reversi.count(BLACK),
+            "whiteIMG": reversi.count(WHITE)
+        })
+        dom.setLayoutXSL("board", board, "BoardIMG.xsl")
+        dom.disableElement("styleTXT")
+        dom.enableElement("styleIMG")
+        dom.addClass("scoreTXT", "hidden")
+        dom.removeClass("scoreIMG", "hidden")
 
 
 def acConnect(reversi, dom, id):
     reversi.player = BLACK
     reversi.weight_matrix = WEIGHT_MATRIX
+    reversi.layout = TXT
     dom.setLayout("", readAsset("Main.html"))
     drawBoard(reversi, dom)
-    dom.alert("Welcome to this Reversi (aka Othello) game made with the Atlas toolkit.\n\nYou play against the computer with the black pieces.")
+    dom.alert("Welcome to this Reversi (aka Othello) game made with the Atlas toolkit.\n\nYou play against the computer with the black, or 'X', pieces.")
 
 
 def acPlay(reversi, dom, id):
@@ -224,7 +244,7 @@ def acPlay(reversi, dom, id):
     weight_matrix = reversi.weight_matrix
 
     if (reversi.put(xy[0], xy[1], player)):
-        drawBoard(reversi, dom, False)
+        drawBoard(reversi, dom)
 
         xy = reversi.find_best_position(player * -1, weight_matrix)
         if xy:
@@ -248,11 +268,20 @@ def acNew(reversi, dom, id):
     reversi.reset()
     drawBoard(reversi, dom)
 
+def acToggleLayout(reversi, dom, id):
+    if ( reversi.layout == TXT):
+        reversi.layout = IMG
+    else:
+        reversi.layout = TXT
+
+    drawBoard(reversi,dom)
+
 
 callbacks = {
     "": acConnect,
     "Play": acPlay,
-    "New": acNew
+    "New": acNew,
+    "ToggleLayout": acToggleLayout,
 }
 
 Atlas.launch(callbacks, lambda: Reversi(), readAsset("Head.html"), "ReversiXSL")

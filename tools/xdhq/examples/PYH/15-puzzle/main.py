@@ -100,20 +100,20 @@ def drawGrid(dom):
     dom.setLayout("Stones", board)
 
 
-def setText(board, x, y):
-    board.pushTag("tspan")
-    board.setAttribute("id", "t" + str(y * 4 + x))
-    board.setAttribute("x", x * 100 + 72)
-    board.setAttribute("y", y * 100 + 90)
-    board.popTag()
+def setText(texts, x, y):
+    texts.pushTag("tspan")
+    texts.setAttribute("id", "t" + str(y * 4 + x))
+    texts.setAttribute("x", x * 100 + 72)
+    texts.setAttribute("y", y * 100 + 90)
+    texts.popTag()
 
 
 def setTexts(dom):
-    board = Atlas.createHTML("text")
+    texts = Atlas.createHTML("text")
     for x in range(0, 4):
         for y in range(0, 4):
-            setText(board, x, y)
-    dom.setLayout("Texts", board)
+            setText(texts, x, y)
+    dom.setLayout("Texts", texts)
 
 
 def scramble(puzzle, dom):
