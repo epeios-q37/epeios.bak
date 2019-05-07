@@ -75,8 +75,9 @@
 			<!-- No 'Pack="yes"', because the whole 'htdocs' directory is packed directly by the 'pack' tool.-->
 			<File>xdhwebq.js</File>
 			<File Path="../../../corpus/js/">xdhtml.js</File>
-			<File>runkit.php</File>
-			<File>runkit_off.php</File>
+      <File>repl_it.php</File>
+      <File>runkit.php</File>
+      <File>runkit-off.php</File>
 			<File>xdh.php</File>
 			<File>prolog.php</File>
 		</Files>
