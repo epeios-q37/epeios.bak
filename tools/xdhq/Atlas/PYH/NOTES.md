@@ -19,13 +19,14 @@ Code à mettre dans le source pour <http://repl.it>.
 ``` python
 # coding: utf-8
 """
-IMPORTANT !!!
+IMPORTANT: FORK BEFORE RUNNING !!!
 
-Fork the application, or it won't work properly!
+Do not start the program before forking it,
+or it won't work properly!
 
 This can be done:
 - by hitting above 'fork' button,
-- or, if not available, by modifying this source code.
+- or by modifying this source code.
 
 For more details: http://q37.info/s/zbgfjtp9
 
