@@ -33,7 +33,8 @@ var instances = {};
 
 function REPLit(url) {
 	require('http').createServer(function (req, res) {
-		res.end("<html><body><iframe style=\"border-style: none; width: 100%;height: 100%\" src=\"" + url + "\"</iframe></body></html>");
+//		res.end("<html><body><iframe style=\"border-style: none; width: 100%;height: 100%\" src=\"" + url + "\"</iframe></body></html>");
+		res.end("<html><body><iframe style=\"border-style: none; width: 100%;height: 100%\" src=\"https://atlastk.org/repl_it.php?url=" + url + "\"</iframe></body></html>");
 	}).listen(8080);
 }
 
@@ -331,11 +332,14 @@ function ignition(socket, createCallback, callbacks) {
 
 		console.log(completeURL);
 		console.log(new Array(completeURL.length + 1).join('^'));
-		console.log("Open above URL in a web browser. Enjoy!");
+		console.log("Open above URL in a web browser. Enjoy!\n");
 
 		if (getEnv("ATK") === "REPLit") {
 			REPLit(completeURL);
-			console.log("\nIF THE PROGRAM DOES NOT WORK PROPERLY, PLEASE SEE http://q37.info/s/zbgfjtp9");
+//			console.log("\nIF THE PROGRAM DOES NOT WORK PROPERLY, PLEASE SEE http://q37.info/s/zbgfjtp9");
+			console.log("IF THE PROGRAM DOES NOT WORK PROPERLY, YOU PROBABLY FORGOT TO FORK!");
+			console.log("See http://q37.info/s/zbgfjtp9 for more details.");
+
 		} else
 			open(completeURL);
 	}
