@@ -6,13 +6,13 @@
 
 [![NPM badge of the Atlas toolkit](http://nodei.co/npm/atlastk.png)](http://npmjs.com/atlastk/ "NPM package of the Atlas toolkit")
 
-A fast and easy way to add a graphical user interface to your *Node.js* programs.
+The *Atlas* toolkit, a fast and easy way to add a [graphical user interface](http://q37.info/s/hw9n3pjs) to your *Node.js* programs.
 
-With the *Atlas* toolkit, you obtain hybrid programs. Like desktop applications, the same code can handle both [front and back ends](http://q37.info/s/px7hhztd), and, like web applications, the programs will be reachable from all over the internet.
+With the *Atlas* toolkit, both [front and back ends](http://q37.info/s/px7hhztd) are handled by the same code, and the programs will also be reachable from all over the internet.
 
-Only basic knowledge of web technologies are required . And, with the *Atlas* toolkit, you can easily add a GUI to a programs originally designed to have a [CLI](https://q37.info/s/cnh9nrw9), so the users of this programs can choose which interface they want to use.
+Only basic knowledge of web technologies are required. And, with the *Atlas* toolkit, you can easily add a GUI to programs originally designed to have a [CLI](https://q37.info/s/cnh9nrw9), so the users of this programs can choose which interface they want to use.
 
-If you want to use the *Atlas* toolkit without installing the examples, simply install the [*atlastk* package from *NPM*](http://q37.info/s/h3zjb39j) (`npm install atlastk`). This package has only one internal dependency, which, in turn, has no dependency.
+If you want to use the *Atlas* toolkit without installing the examples, simply install the [*atlastk* package from *NPM*](http://q37.info/s/h3zjb39j) (`npm install atlastk`). This package has only one internal dependency, with no other dependencies.
 
 You can also use the *Atlas* toolkit on [*Repl.it*](http://q37.info/s/mxmgq3qm), an [online IDE](http://q37.info/s/zzkzbdw7), so you have nothing to install. You will find some examples in the next sections. **Important**: you have to ***fork*** this examples before launching them (by clicking the dedicated button or by modifying the source code), or they won't work properly! See <http://q37.info/s/zbgfjtp9> for more details.
 

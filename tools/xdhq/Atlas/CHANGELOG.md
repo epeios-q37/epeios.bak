@@ -7,6 +7,7 @@
 
 - *Node.js*:
 	- changing some stuff related to *Repl.it*,
+	- switching to 0.9.2,
 
 ## 2019-05-07
 
