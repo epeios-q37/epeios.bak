@@ -1,0 +1,43 @@
+<div style="display: table; margin: 50px auto auto auto;">
+    <fieldset id="Note">
+        <fieldset id="Contact">
+            <table style="text-align: right;">
+                <tr>
+                    <td>
+                        <label>Full name:</label>
+                    </td>
+                    <td>
+                        <input id="Name" size="50"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Address:</label>
+                    </td>
+                    <td>
+                        <input id="Address" size="50"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Phone number:</label>
+                    </td>
+                    <td>
+                        <input id="Phone" type="tel" size="50"/>
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+        <button style="display: table; margin: 10px auto auto auto;" data-xdh-onevent="Submit">Submit</button>
+    </fieldset>
+    <div style="display: table; margin: 10px auto auto auto; border-collapse: collapse;">
+        <table id="Contacts" class="_hidden" style="cursor: default; border-collapse: collapse;">
+            <thead>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Phone</th>
+            </thead>
+            <tbody id="Content" />
+        </table>
+    </div>
+</div>
