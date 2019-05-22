@@ -43,13 +43,6 @@ For a live demonstration: <http://q37.info/s/vhnb3q3v>.
 Source code:
 
 ```python
-# Following two lines can be removed:
-# - if the 'Atlas.python.zip' file is referenced in 'PYTHONPATH',
-# - if you made a '[python -m] pip install [--user] atlastk',
-# - if you paste this code in Repl.it.
-import os, sys
-sys.path.append("Atlas.python.zip") # Add the path to 'Atlas.python.zip' if needed.
-
 import atlastk as Atlas
 
 body = """

@@ -30,7 +30,7 @@ from XDHq import readAsset
 def createXML(rootTag):
 	return XDHq.XML(rootTag)
 
-def createHTML(rootTag):
+def createHTML(rootTag=""):	# If 'rootTag' is empty, there will be no root tag in the tree.
 	return XDHq.XML(rootTag)
 
 def worker(userObject,dom,callbacks):

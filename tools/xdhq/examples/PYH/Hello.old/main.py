@@ -32,14 +32,14 @@ import atlastk as Atlas
 def readAsset(path):
 	return Atlas.readAsset(path, "Hello")
 
-def acConnect(this, dom, id):
+def acConnect(self, dom, id):
 	dom.setLayout("", readAsset( "Main.html") )
 	dom.focus( "input")
 
 callbacks = {
 		"": acConnect,
-		"Typing": lambda this, dom, id: dom.setContent("name", dom.getContent(id)),
-		"Clear": lambda this, dom, id:
+		"Typing": lambda self, dom, id: dom.setContent("name", dom.getContent(id)),
+		"Clear": lambda self, dom, id:
 			dom.setContents( {  "input": "", "name": ""} )
 			if dom.confirm( "Are you sure ?" ) else None
 	}

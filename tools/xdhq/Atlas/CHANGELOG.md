@@ -3,6 +3,12 @@
 - Common to **all** bindings,
 - does **not** concern the native code,
 
+## 2019-05-22
+
+- *Python*:
+  - `createHTML(…)` can now be used with no parameters, in which case only the children are used,
+  - new `setTag(…)` function for the XML/HTML tree,
+
 ## 2019-05-09
 
 - *Node.js*:

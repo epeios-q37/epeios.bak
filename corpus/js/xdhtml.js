@@ -119,7 +119,14 @@ function convert(xml) {
 
 	[name, offset] = getString(xml, offset);
 
-	let node = document.implementation.createDocument(null, name).firstChild;
+	let noRoot = name === "";
+
+	if (noRoot)
+		name = "dummy";
+
+	let rootNode = document.implementation.createDocument(null, name).firstChild;
+
+	let node = rootNode;
 
 	while (offset < length) {
 		switch (xml[offset++]) {
@@ -145,7 +152,20 @@ function convert(xml) {
 		}
 	}
 
-	let result = new XMLSerializer().serializeToString(node.ownerDocument.documentElement);
+	node = rootNode;
+
+	if (noRoot)
+		node = node.firstChild;
+
+	let result = "";
+
+	while (node !== null) {
+		log(node);
+		result += new XMLSerializer().serializeToString(node);
+		node = node.nextSibling;
+	}
+
+	log(result);
 
 	return result;
 }
