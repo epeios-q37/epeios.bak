@@ -1,13 +1,14 @@
 <div style="display: table; margin: 50px auto auto auto;">
-    <fieldset id="Note">
+    <fieldset>
         <fieldset id="Contact">
-            <table style="text-align: right;">
+            <table>
                 <tr>
                     <td>
                         <label>Full name:</label>
                     </td>
                     <td>
-                        <input id="Name" size="50"/>
+                        <span id="Name" />
+                        <input id="Name.edit" class="hidden" size="50" />
                     </td>
                 </tr>
                 <tr>
@@ -15,25 +16,45 @@
                         <label>Address:</label>
                     </td>
                     <td>
-                        <input id="Address" size="50"/>
+                        <span id="Address" />
+                        <input id="Address.edit" class="hidden" size="50" />
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <label>Phone number:</label>
+                        <label>Phone:</label>
                     </td>
                     <td>
-                        <input id="Phone" type="tel" size="50"/>
+                        <span id="Phone" />
+                        <input id="Phone.edit" class="hidden" type="tel" size="50" />
                     </td>
                 </tr>
+                <tr>
+                    <td>
+                        <label>Note:</label>
+                    </td>
+                    <td>
+                        <span id="Note" />
+                        <div id="Note.edit"
+                            data-xdh-widget="ckeditor|{entities: false, enterMode : CKEDITOR.ENTER_BR, linkShowTargetTab: false}|val\(\)|">
+                        </div>
+                    </td>
+                </tr>
+
             </table>
         </fieldset>
         <div style="display: table; margin: 10px auto auto auto;">
-            <button>Duplicate</button>
-            <button>New</button>
-            <button>Delete</button>
-            <button>Cancel</button>
-            <button data-xdh-onevent="Submit">Submit</button>
+            <div>
+                <button class="ConsultationAndSelection">Edit</button>
+                <button class="ConsultationAndSelection">Duplicate</button>
+                <button class="Consultation">New</button>
+                <button class="ConsultationAndSelection">Delete</button>
+            </div>
+            <div class="Edition">
+                <button>Cancel</button>
+                <button data-xdh-onevent="Submit">Submit</button>
+            </div>
+        </div>
     </fieldset>
     <div style="display: table; margin: 10px auto auto auto; border-collapse: collapse;">
         <table id="Contacts" class="_hidden" style="cursor: default; border-collapse: collapse;">
@@ -41,6 +62,7 @@
                 <th>Name</th>
                 <th>Address</th>
                 <th>Phone</th>
+                <th>Note</th>
             </thead>
             <tbody id="Content" />
         </table>

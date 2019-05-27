@@ -33,38 +33,41 @@ import atlastk as Atlas
 
 
 class State(Enum):
-    SHOW = auto()
-    CREATE = auto()
+    DISPLAY = auto()
     EDIT = auto()
 
 
-state = State.SHOW
+state = State.DISPLAY
 
 # contacts = []
 contacts = [
     {
         "Name": "Holmes, Sherlock",
         "Address": "221B Baker Street, Londres",
-        "Phone": "(use telegraph)"
+        "Phone": "(use telegraph)",
+        "Note": "Great detective!"
     },
     {
         "Name": "Holmes, Mycroft",
         "Address": "Diogenes Club, Pall Mall, Londres",
-        "Phone": "(use telegraph)"
+        "Phone": "(use telegraph)",
+        "Note": "Works for the British governement."
     },
     {
         "Name": "Tintin",
         "Address": "Château de Moulinsart",
-        "Phone": "421"
+        "Phone": "421",
+        "Note": "Has a dog named <span style=\"font-style: italic\">Snowy</span>."
     },
     {
         "Name": "Tournesol, Tryphon (prof.)",
         "Address": "Château de Moulinsart",
-        "Phone": "421"
+        "Phone": "421",
+        "Note": "Loves <span style=\"font-style: italic\">Loch Lomond</span> whiskey."
     }
 ]
 
-current = 1
+current = None
 
 
 def readAsset(path):
@@ -75,9 +78,9 @@ def displayContact(dom, contact):
     global state
     dom.setContents(contact)
 
-    if ((state == State.CREATE) or (state == State.EDIT)):
+    if (state == State.EDIT):
         dom.enableElement("Contact")
-    elif (state == State.SHOW):
+    elif (state == State.DISPLAY):
         dom.disableElement("Contact")
     else:
         raise Exception("Unknown state!")
@@ -85,19 +88,27 @@ def displayContact(dom, contact):
 
 def displayContacts(dom, contacts):
     #   html="<tr><td>a</td><td>b</td><td>c</td></tr>"
-    html=Atlas.createHTML()
+    html = Atlas.createHTML()
+    notes = {}
 
     for i in range(len(contacts)):
-        contact=contacts[i]
+        contact = contacts[i]
         html.pushTag("tr")
         html.setAttribute("id", i)
         html.setAttribute("data-xdh-onevent", "Select")
         for key in contact:
-            print(key)
-            html.setTagAndValue("td", contact[key])
+            if (key == 'Note'):
+                id = "Note." + str(i)
+                html.pushTag("td")
+                html.setAttribute("id", id)
+                notes[id] = contact[key]
+            else:
+                html.setTagAndValue("td", contact[key])
         html.popTag()
 
     dom.setLayout("Content", html)
+
+    dom.setContents(notes)
 
 
 def display(dom, contacts):
@@ -116,25 +127,27 @@ def display(dom, contacts):
 def acConnect(self, dom, id):
     global contacts, state
     dom.setLayout("", readAsset("Main.html"))
+    dom.dressWidgets("")
     display(dom, contacts)
-    state = State.SHOW
+    state = State.DISPLAY
 
 
 def acSelect(self, dom, id):
-    global contacts
+    global contacts, state
 
     displayContact(dom, contacts[int(id)])
-    state = State.SHOW
+    state = State.DISPLAY
 
 
 def acSubmit(self, dom, id):
     global contacts
-    [name, address, phone]=dom.getContents(
-        ["Name", "Address", "Phone"]).values()
+    [name, address, phone, note] = dom.getContents(
+        ["Name.edit", "Address.edit", "Phone.edit", "Note.edit"]).values()
 
-    name=name.strip()
-    address=address.strip()
-    phone=phone.strip()
+    name = name.strip()
+    address = address.strip()
+    phone = phone.strip()
+    note = note.strip()
 
     if (not name):
         dom.alert("The name can not be empty!")
@@ -142,18 +155,17 @@ def acSubmit(self, dom, id):
     contacts.append({
         "Name": name,
         "Address": address,
-        "phone": phone
+        "Phone": phone,
+        "Note": note
     })
 
     display(dom, contacts)
 
 
-callbacks={
+callbacks = {
     "": acConnect,
     "Select": acSelect,
     "Submit": acSubmit,
-
-
 }
 
 Atlas.launch(callbacks, lambda: None, readAsset("Head.html"), "Contact")
