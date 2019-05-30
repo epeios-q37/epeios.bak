@@ -51,7 +51,7 @@ contacts = [
         "Name": "Holmes, Mycroft",
         "Address": "Diogenes Club, Pall Mall, Londres",
         "Phone": "(use telegraph)",
-        "Note": "Works for the British governement."
+        "Note": "Works for the British government."
     },
     {
         "Name": "Tintin",

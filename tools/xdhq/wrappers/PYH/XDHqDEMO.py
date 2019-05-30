@@ -282,6 +282,7 @@ def _ignition():
 		if ( getEnv("ATK") == "REPLit"):
 #			print("IF THE PROGRAM DOES NOT WORK PROPERLY, PLEASE SEE http://q37.info/s/zbgfjtp9")
 			print("IF THE PROGRAM DOES NOT WORK PROPERLY, YOU PROBABLY FORGOT TO FORK!")
+			print("IF IT STILL DOES NOT WORK AFTER FORKING, RELOAD THE COMPLETE PAGE!")
 			print( "See http://q37.info/s/zbgfjtp9 for more details.\n")
 			_REPLit(url)
 		else:
