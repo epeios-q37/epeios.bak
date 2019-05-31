@@ -123,6 +123,14 @@ def display(dom, contacts):
     if (current):
         displayContact(dom, contacts[current])
 
+def handleButtonVisibility(dom):
+    global state
+
+    if state == State.DISPLAY:
+        dom.addClass("EditionButtons", "hidden")
+    elif State == State.EDIT:
+        dom.removeClass("EditionButtons", "hidden")
+
 
 def acConnect(self, dom, id):
     global contacts, state
@@ -130,6 +138,7 @@ def acConnect(self, dom, id):
     dom.dressWidgets("")
     display(dom, contacts)
     state = State.DISPLAY
+    handleButtonVisibility(dom)
 
 
 def acSelect(self, dom, id):

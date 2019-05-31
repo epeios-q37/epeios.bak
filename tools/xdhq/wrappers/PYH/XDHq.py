@@ -139,8 +139,17 @@ class DOM:
 	def createElement(self, name, id = "" ):
 		return self._dom.call( "CreateElement_1", _STRING, 2, name, id, 0 )
 
-	def insertChild(self,child, id):
+	def insertChild(self,child,id):
 		self._dom.call( "InsertChild_1", _VOID, 2, child, id, 0 )
+
+	def insertCSSRule(self,rule,index):
+		self._dom.call("InsertCSSRule_1", _VOID, 2, rule, str(index), 0)
+
+	def appendCSSRule(self,rule):
+		return int(self._dom.call("AppendCSSRule_1", _STRING, 1, rule, 0))
+
+	def removeCSSRule(self,index):
+		self._dom.call("RemoveCSSRule_1", _VOID, 1, str(index), 0)
 
 	def dressWidgets(self,id):
 		return self._dom.call( "DressWidgets_1", _VOID, 1, id, 0 )

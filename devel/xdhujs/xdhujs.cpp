@@ -73,11 +73,9 @@ const str::string_ &xdhujs::GetTaggedScript(
 	C( InsertBefore, insert::Before );
 	C( InsertAfter, insert::After );
 	C( WidgetsInstantiator, WidgetsInstantiator );
-	/*
 	C( CSSRuleInserter, css_rule::Insert );
 	C( CSSRuleAppender, css_rule::Append );
 	C( CSSRuleRemover, css_rule::Remove );
-	*/
 	C( ClassesAdder, classes::Add );
 	C( ClassesRemover, classes::Remove );
 	C( ClassesToggler, classes::Toggle );
@@ -226,11 +224,9 @@ qRB
 	S( InsertBefore, Sibling_, Id_, NULL );
 	S( InsertAfter, Sibling_, Id_, NULL );
 	S( WidgetsInstantiator, Ids_, Types_, ParametersSets_, NULL );
-	/*
 	S( CSSRuleInserter, Rule_, Index_, NULL );
 	S( CSSRuleAppender, Rule_, NULL );
 	S( CSSRuleRemover, Index_, NULL );
-	*/
 	S( ClassesAdder, Ids_, Classes_, NULL );
 	S( ClassesRemover, Ids_, Classes_, NULL );
 	S( ClassesToggler, Ids_, Classes_, NULL );

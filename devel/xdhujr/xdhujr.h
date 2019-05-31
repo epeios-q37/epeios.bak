@@ -110,14 +110,14 @@ namespace xdhujr {
 			extern entry___ Selector;
 			extern entry___ Fetcher;
 		}
-		/*
+
 		namespace css_rule {
 			extern rEntry
 				Insert,
 				Append,
 				Remove;
 		}
-		*/
+
 		namespace classes	{
 			extern rEntry
 				Add,

@@ -8,6 +8,11 @@
 - [stdz]: modification to comply with current standards;
 - [trvl]: trivial modifications;
 
+## 2019-05-31
+
+- XDH(CMN|DWS), XDHUJ(P|R|S):
+	- reactivating CSS rules related functionnalities,
+
 ## 2019-03-26
 
 - DTFBSC:

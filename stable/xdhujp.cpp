@@ -727,7 +727,7 @@ static void GetResult_(
 {
 	GetResult_( Callback, va_arg( List, const nchar__ * ), Result );
 }
-/*
+
 namespace {
 	void InsertCSSRule_(
 		cJS &Callback,
@@ -777,8 +777,6 @@ static void AppendCSSRule_(
 	AppendCSSRule_( Callback, va_arg( List, const nchar__ * ), Result );
 }
 
-
-
 namespace {
 	void RemoveCSSRule_(
 		cJS &Callback,
@@ -799,7 +797,6 @@ static void RemoveCSSRule_(
 {
 	RemoveCSSRule_( Callback, va_arg( List, const nchar__ * ) );
 }
-*/
 
 namespace {
 	void HandleClasses_(
@@ -977,7 +974,6 @@ static script_name__ Convert_( xdhcmn::eFunction Function )
 	case xdhcmn::fInsertAfter:
 		qRFwk();
 		break;
-		/*
 	case xdhcmn::fInsertCSSRule:
 		qRFwk();
 		break;
@@ -987,7 +983,6 @@ static script_name__ Convert_( xdhcmn::eFunction Function )
 	case xdhcmn::fRemoveCSSRule:
 		qRFwk();
 		break;
-*/
 	case xdhcmn::fAddClasses:
 		qRFwk();
 		break;
@@ -1088,7 +1083,6 @@ void xdhujp::sProxyCallback::XDHCMNProcess(
 	case xdhcmn::fInsertAfter:
 		InsertAfter_( C_(), List );
 		break;
-		/*
 	case xdhcmn::fInsertCSSRule:
 		InsertCSSRule_( C_(), List );
 		break;
@@ -1098,7 +1092,6 @@ void xdhujp::sProxyCallback::XDHCMNProcess(
 	case xdhcmn::fRemoveCSSRule:
 		RemoveCSSRule_( C_(), List );
 		break;
-	*/
 	case xdhcmn::fAddClasses:
 		HandleClasses_( C_(), xdhujs::snClassesAdder, List );
 		break;

@@ -45,11 +45,9 @@ const char *xdhcmn::GetLabel( eFunction Function )
 	C( DressWidgets );
 	C( SetContents );
 	C( SetTimeout );
-	/*
 	C( InsertCSSRule );
 	C( AppendCSSRule );
 	C( RemoveCSSRule );
-	*/
 	C( Parent );
 	C( FirstChild );
 	C( LastChild );

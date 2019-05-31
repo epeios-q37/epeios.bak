@@ -73,11 +73,9 @@ namespace xdhujs {
 		snInsertBefore,
 		snInsertAfter,
 		snWidgetsInstantiator,
-		/*
 		snCSSRuleInserter,
 		snCSSRuleAppender,
 		snCSSRuleRemover,
-		*/
 		snClassesAdder,
 		snClassesRemover,
 		snClassesToggler,

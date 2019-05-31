@@ -96,12 +96,12 @@ entry___ xdhujr::script::Selector( "Selector", Scripts );
 entry___ xdhujr::script::Parent( "Parent", Scripts );
 entry___ xdhujr::script::CreateElement( "CreateElement", Scripts );
 entry___ xdhujr::script::WidgetsInstantiator( "WidgetsInstantiator",Scripts );
-/*
+
 static rEntry CSSRule_( "CSSRule", xdhujr::Scripts );
 rEntry xdhujr::script::css_rule::Insert( "Insert", CSSRule_ );
 rEntry xdhujr::script::css_rule::Append( "Append", CSSRule_ );
 rEntry xdhujr::script::css_rule::Remove( "Remove", CSSRule_ );
-*/
+
 static rEntry Classes_( "Classes", xdhujr::Scripts );
 rEntry xdhujr::script::classes::Add( "Add", Classes_ );
 rEntry xdhujr::script::classes::Remove( "Remove", Classes_ );

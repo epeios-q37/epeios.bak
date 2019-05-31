@@ -82,11 +82,9 @@ namespace xdhcmn {
 		fInsertAfter,		// Sibling, Id,
 /**/
 		fDressWidgets,		// Id.
-		/*
 		fInsertCSSRule,		// Rule, Index.
 		fAppendCSSRule,		// Rule.
 		fRemoveCSSRule,		// Index.
-		*/
 		fAddClasses,		// Ids, Classes.
 		fRemoveClasses,		// Ids, Classes.
 		fToggleClasses,		// Ids, Classes.
