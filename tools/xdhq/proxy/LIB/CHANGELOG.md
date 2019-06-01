@@ -1,5 +1,9 @@
 # *XDHq* *CHANGELOG*
 
+## 2019-06-01
+
+- adding CSS rules related functionnalities,
+
 ## 2019-03-26
 
 - back-end disconnection does no more generate an exception,

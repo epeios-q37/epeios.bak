@@ -8,6 +8,11 @@
 - [stdz]: modification to comply with current standards;
 - [trvl]: trivial modifications;
 
+## 2019-06-01
+
+- XDHDWS, XDHUJ(P|S):
+	- adding the *id* parameter to CSS rules related functionnalities,
+
 ## 2019-05-31
 
 - XDH(CMN|DWS), XDHUJ(P|R|S):

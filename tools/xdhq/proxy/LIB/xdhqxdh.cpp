@@ -663,16 +663,17 @@ namespace {
 		xdhdws::sProxy &Proxy)
 	{
 	qRH;
-		str::wString Rule, Id;
+		str::wString Id, Rule, Index;
 	qRB;
-		tol::Init(Rule, Id);
+		tol::Init(Id, Rule, Index);
 
-		prtcl::Get(Flow, Rule);
 		prtcl::Get(Flow, Id);
+		prtcl::Get(Flow, Rule);
+		prtcl::Get(Flow, Index);
 
 		Flow.Dismiss();
 
-		Proxy.InsertCSSRule(Rule, Id);
+		Proxy.InsertCSSRule(Id, Rule, Index);
 	qRR;
 	qRT;
 	qRE;
@@ -683,16 +684,17 @@ namespace {
 		xdhdws::sProxy &Proxy)
 	{
 	qRH;
-		str::wString Rule;
+		str::wString Id, Rule;
 		qCBUFFERr Index;
 	qRB;
-		tol::Init(Rule);
+		tol::Init(Id, Rule);
 
+		prtcl::Get(Flow, Id);
 		prtcl::Get(Flow, Rule);
 
 		Flow.Dismiss();
 
-		Proxy.AppendCSSRule(Rule, Index);
+		Proxy.AppendCSSRule(Id, Rule, Index);
 
 		prtcl::Put(Index(), Flow);
 
@@ -707,15 +709,16 @@ namespace {
 		xdhdws::sProxy &Proxy)
 	{
 	qRH;
-		str::wString Index;
+		str::wString Id, Index;
 	qRB;
-		tol::Init(Index);
+		tol::Init(Id, Index);
 
+		prtcl::Get(Flow, Id);
 		prtcl::Get(Flow, Index);
 
 		Flow.Dismiss();
 
-		Proxy.RemoveCSSRule(Index);
+		Proxy.RemoveCSSRule(Id, Index);
 	qRR;
 	qRT;
 	qRE;

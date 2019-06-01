@@ -564,12 +564,15 @@ function mktreeExpandToNode(element) {
 	}
 }
 
-function getCSSRules() {
-	return document.getElementById(styleId).sheet;
+function getCSSRules(id) {
+	if (id === "")
+		id = styleId;
+
+	return document.getElementById(id).sheet;
 }
 
-function insertCSSRule(rule, index) {
-	var rules = getCSSRules();
+function insertCSSRule(id, rule, index) {
+	var rules = getCSSRules(id);
 
 	if (index === -1)
 		index = rules.cssRules.length;
@@ -581,9 +584,9 @@ function insertCSSRule(rule, index) {
 	return index;
 }
 
-function removeCSSRule(index) {
+function removeCSSRule(id, index) {
 //	console.log(getCSSRules().cssRules.length + " : " + index);
-	getCSSRules().removeRule(index);
+	getCSSRules(id).removeRule(index);
 }
 
 function handleClasses(ids, classes, method) {

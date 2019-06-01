@@ -336,17 +336,17 @@
 			<CSSRule>
 				<Insert>
 					<![CDATA[
-							insertCSSRule( "%Rule%", %Index% );
+							insertCSSRule( "%Id", "%Rule%", %Index% );
 						]]>
 				</Insert>
 				<Append>
 					<![CDATA[
-							insertCSSRule( "%Rule%", -1 ).toString();
+							insertCSSRule( "%Id", "%Rule%", -1 ).toString();
 						]]>
 				</Append>
 				<Remove>
 					<![CDATA[
-							removeCSSRule( %Index% );
+							removeCSSRule( "%Id", %Index% );
 						]]>
 				</Remove>
 			</CSSRule>

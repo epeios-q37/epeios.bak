@@ -69,7 +69,6 @@ contacts = [
 
 current = None
 
-
 def readAsset(path):
     return Atlas.readAsset(path, "Contacts")
 
@@ -123,13 +122,22 @@ def display(dom, contacts):
     if (current):
         displayContact(dom, contacts[current])
 
+
 def handleButtonVisibility(dom):
-    global state
+    global state, current
 
     if state == State.DISPLAY:
         dom.addClass("EditionButtons", "hidden")
+        dom.disableElement("HideConsultation")
+        if current is None:
+            dom.enableElement("HideConsultationAndSelection")
+        else:
+            dom.disableElement("HideConsultationAndSelection")
     elif State == State.EDIT:
         dom.removeClass("EditionButtons", "hidden")
+        dom.enableElements(("HideConsultation", "HideConsultationAndSelection"))
+    else:
+        raise Exception("Unknown state!")
 
 
 def acConnect(self, dom, id):
@@ -142,11 +150,21 @@ def acConnect(self, dom, id):
 
 
 def acSelect(self, dom, id):
-    global contacts, state
+    global contacts, state, current
 
-    displayContact(dom, contacts[int(id)])
+    current = int(id)
+
+    displayContact(dom, contacts[current])
     state = State.DISPLAY
+    handleButtonVisibility(dom)
 
+def acEdit(self, dom, id):
+    global contacts, current
+
+    if current is None:
+        dom.alert("No selected item!")
+    else:
+        contact = contacts[current]
 
 def acSubmit(self, dom, id):
     global contacts
@@ -174,6 +192,7 @@ def acSubmit(self, dom, id):
 callbacks = {
     "": acConnect,
     "Select": acSelect,
+    "Edit": acEdit,
     "Submit": acSubmit,
 }
 

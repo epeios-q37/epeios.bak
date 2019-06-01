@@ -303,7 +303,7 @@ def _serve(callback, userCallback, callbacks ):
 				sys.exit("Instance of id '" + id + "' exists but should not !")
 
 			instance = Instance()
-			instance.set(callback(userCallback(), callbacks, instance),id)
+			instance.set(callback(userCallback, callbacks, instance),id)
 			_instances[id] = instance
 
 			_writeLock.acquire()
