@@ -3,6 +3,14 @@
 - Common to **all** bindings,
 - does **not** concern the native code,
 
+## 2019-06-01
+
+- *Python*:
+  - adding CSS rules related functions,
+  - user callback to create new user object is now called from same thread as the action callbacks (fixes issue with *sqlite3*, which prevents the use of the constructor to initialize a db),
+  - HTML data sent to `setLayout(…)` function does no more require a unique root tag,
+  - switching to 0.9.7,
+
 ## 2019-05-22
 
 - *Python*:

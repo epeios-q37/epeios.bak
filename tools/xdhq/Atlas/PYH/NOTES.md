@@ -41,7 +41,6 @@ os.environ["ATK"]="REPLit" #
 
 def readAsset(path):
   return open(path).read()
-
 ```
 
 ### *pipenv*
@@ -52,6 +51,7 @@ def readAsset(path):
 ## Publication sur *PyPI*
 
 **Effacer, si nécessaire, la variable d'environnement `PYTHONPATH` (`unset PYTHONPATH`).**
+
 **Mettre à jour le numéro de version dans `setup.py` !**
 
 ### Packaging
