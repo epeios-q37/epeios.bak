@@ -289,7 +289,6 @@ namespace sck {
 				_Socket = SCK_INVALID_SOCKET;
 				_Error = true;
 				Maximum = 0;
-				qRLbr();
 			} else
 				_Touch();
 
