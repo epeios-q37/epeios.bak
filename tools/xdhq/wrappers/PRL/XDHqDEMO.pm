@@ -159,6 +159,10 @@ my sub ignition {
     if ( $token eq "") {
         die(getString());
     }
+
+    if (not($wPort eq ":0")) {
+        
+    }
 }
         
 sub launch {
