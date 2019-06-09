@@ -1,4 +1,29 @@
+=pod
+MIT License
+
+Copyright (c) 2019 Claude SIMON (https://q37.info/s/rmnmqd49)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+=cut
+
 package XDHqDEMO;
+use XDHqSHRD;
 use IO::Socket::INET;
 use threads::shared;
 use strict;
@@ -71,9 +96,19 @@ my sub init {
     if ($token ne "") {
         $token = "&" . $token;
     }
-}
 
-init();
+    # auto-flush on socket
+    $| = 1;
+
+    # create a connecting socket
+    $socket = new IO::Socket::INET (
+        PeerHost => $pAddr,
+        PeerPort => $pPort,
+        Proto => 'tcp',
+    );
+
+    die("Error on connection to '$pAddr:$pPort': $! !!!\n" unless $socket);
+}
 
 my sub writeByte {
     $socket->send(shift);
@@ -161,25 +196,71 @@ my sub ignition {
     }
 
     if (not($wPort eq ":0")) {
-        
+        my $url = "http://${wAddr}${wPort}/${cgi}.php?_token=${token}";
+
+        CORE::say($url);
+        CORE::say("^" x length($url));
+        CORE::say("Open above URL in a web browser. Enjoy!");
+        XDHqSHRD::open($url);
+    }
+}
+
+my sub serve {
+    my {$callback, $userCallback, @callbacks = @_;
+
+    while(XDHqSHRD::TRUE) {
+        my $id = getByte();
+
+        if ( $id eq 255) {   # Value reporting a new front-end.
+            $id = getByte();    # The id of the new front-end.
+
+            if( grep $_ eq $id, @instances ) {
+                die("Instance of id '${id}' exists but should not !")
+            }
+
+            my $instance = XDHq::Instance::new();
+
+            $instance.set($callback($userCallback, @callbacks, $instance),$id);
+
+            @instances[$id]=$instance;
+
+            {   # Locking scope.
+                lock($writeLock);
+                writeBute($id);
+                writeString($mainProtocolLabel);
+                writeString($mainProtocolVersion);
+            }
+        } elsif ( not(grep $_ eq $id, @instances)) {
+            die("Unknown instance of id '${id}'!")
+        } elsif (not(@instances[$id]->testAndSetHandshake()) {
+            $my error = getString();
+
+            if ($error) {
+                die($error);
+            }
+
+            getString();    # Language. Not handled yet.
+
+            {   # Lock scope;
+                lock($writeLock);
+                writeByte($id);
+                writeString("PRL");
+            }
+        } else {
+            @instances[$id]->signal();
+
+            cond_wait($globalCondition);
+        }
     }
 }
         
 sub launch {
-    # auto-flush on socket
-    $| = 1;
+    my ($callback, $userCallback, @callbacks, $headContent) = @_;
 
-    # create a connecting socket
-    $socket = new IO::Socket::INET (
-        PeerHost => $pAddr,
-        PeerPort => $pPort,
-        Proto => 'tcp',
-    );
-    die "Error on connection to '$pAddr:$pPort': $! !!!\n" unless $socket;
-
+    init();
     demoHandshake();
     ignition();
+    serve($callback, $userCallback, @callbacks);
 }
 
-return 1;
-
+return XDHqSHRD::TRUE;
