@@ -22,8 +22,26 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 =cut
 
+package XDHq;
+
+use XDHq::SHRD;
+use XDHq::DEMO;
+use XDHq::DEMO::DOM;
+
 sub readAsset {
     open FILEHANDLE, shift or die $!;
 
     return do { local $/; <FILEHANDLE> };
 }
+
+sub new {
+    return XDHq::DEMO::DOM::new(@_);
+}
+
+sub launch {
+    my ($callback,$userCallback,%callbacks,$headContent,$dir) = @_;
+
+    XDHq::DEMO::launch($callback,$userCallback,%callbacks,$headContent);
+}
+
+return XDHq::SHRD::TRUE;

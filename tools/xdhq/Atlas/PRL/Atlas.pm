@@ -23,5 +23,34 @@ SOFTWARE.
 =cut
 
 use XDHq;
+use threads;
 
-our XDHq::readAsset;
+sub readAsset {
+    return XDHq::readAsset(@_);
+}
+
+my sub worker {
+    my ($userCallback, $dom, %callbacks) = @_;
+
+    $userObject = &$userCallback();
+
+    while (XDHQ::SHRD::TRUE) {
+        my ($action, $id) = $dom->getAction();
+
+        $callbacks[$action]($userObject,$dom, $id);
+    }
+}
+
+my sub callback {
+    my ($userCallback, %callbacks, $instance) = @_;
+
+    threads::create('worker', $userCallback, XDHq->new($instance), %callbacks);
+}
+
+sub launch {
+    my (%callbacks,$userCallback,$headContent,$dir) = @_;
+
+    XDHq::launch(%callback,$userCallback,callback,$headContent,$dir);
+}
+
+return XDHq::SHRD::TRUE;

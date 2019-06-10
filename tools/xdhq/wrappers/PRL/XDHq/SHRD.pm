@@ -22,20 +22,20 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 =cut
 
-package XDHqSHRD;
+package SHRD;
 
-use Config
+use Config;
 
 use constant {
     RT_VOID => 0,
     RT_STRING => 1,
     RT_STRINGS => 2
-}
+};
 
 use constant {
     FALSE => undef,
     TRUE =>not (undef)
-}
+};
 
 sub isWin {
     return $Config{osname} eq "MSWin32";
@@ -45,20 +45,22 @@ sub isDev {
     return defined($ENV{"EPEIOS_SRC"});
 }
 
-sun open {
+sub open {
     my $os = $Config{osname};
     my $opener;
 
     if ( $os eq "MSWin32" ) {
-        opener = "start";
-    } elif ( $os eq "darwin" ) {
-        opener = "open"
-    } elif ( $os eq "cygwin" ) {
-        opener = "cygstart";
+        $opener = "start";
+    } elsif ( $os eq "darwin" ) {
+        $opener = "open"
+    } elsif ( $os eq "cygwin" ) {
+        $opener = "cygstart";
     } else {
-        opener = "xdg-open";
+        $opener = "xdg-open";
     }
 
-    system(opener,shift);
+    system($opener,shift);
 }
+
+return TRUE;
 

@@ -22,19 +22,20 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 =cut
 
-package DOM;
+package XDHq::DEMO::DOM;
 
-use XDHqSHRD;
+use XDHq::SHRD;
 use warnings;
+use threads;
 use threads::shared;
 
-$globalCondition : shared;
+my $globalCondition : shared;
 
-lock($globalCondition)
+lock($globalCondition);
 
 sub new {
     my $class = shift;
-    my $self = {}
+    my $self = {};
 
     bless $self, $class;
 
@@ -51,14 +52,16 @@ sub signal {
 }
 
 sub getAction {
+    my $self = shift;
+
     if ( $self->{firstLaunch}) {
         $self->{firstLaunch} = XDHqSHRD::TRUE;
     } else { # Also a lock scope.
-        writeByte(self->{instance}->getId());
+        writeByte($self->{instance}->getId());
         writeStringNUL("StandBy_1");
     }
 
-    self->wait();
+    $self->wait();
 
     my $id = getString();
     my $action = getString();
@@ -91,17 +94,17 @@ sub call {
             $amount-=1;
         }
 
-        if($type eq XDHqSHRD::RT_STRINGS) {
+        if($type eq XDHq::SHRD::RT_STRINGS) {
             $self->wait();
             my $result = getString();
             $self->signal();
             return $result;
-        } elsif($type eq XDHqSHRD::RT_STRINGS) {
+        } elsif($type eq XDHq::SHRD::RT_STRINGS) {
             $self->wait();
             my $result = getStrings();
             $self->signal();
             return $result;
-        } elif (not ($type eq XDHqSHRD::RT_VOID) {
+        } elsif (not ($type eq XDHq::SHRD::RT_VOID)) {
             die("Unknown return type !!!")
         }
     }

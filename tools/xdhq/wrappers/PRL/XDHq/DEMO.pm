@@ -22,9 +22,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 =cut
 
-package XDHqDEMO;
-use XDHqSHRD;
+package XDHq::DEMO;
+
+use XDHq::SHRD;
 use IO::Socket::INET;
+use threads;
 use threads::shared;
 use strict;
 
@@ -41,6 +43,10 @@ my $cgi = "xdh";
 
 my $token = "";
 my $socket;
+
+my @instances;
+my $writeLock: shared;
+my $globalCondition: shared;
 
 sub trim { my $s = shift; $s =~ s/^\s+|\s+$//g; return $s };
 
@@ -107,7 +113,7 @@ my sub init {
         Proto => 'tcp',
     );
 
-    die("Error on connection to '$pAddr:$pPort': $! !!!\n" unless $socket);
+    die("Error on connection to '${pAddr}:${pPort}': $! !!!\n") unless $socket;
 }
 
 my sub writeByte {
@@ -206,7 +212,7 @@ my sub ignition {
 }
 
 my sub serve {
-    my {$callback, $userCallback, @callbacks = @_;
+    my ($callback, $userCallback, @callbacks) = @_;
 
     while(XDHqSHRD::TRUE) {
         my $id = getByte();
@@ -220,20 +226,20 @@ my sub serve {
 
             my $instance = XDHq::Instance::new();
 
-            $instance.set($callback($userCallback, @callbacks, $instance),$id);
+            $instance.set(&$callback($userCallback, @callbacks, $instance),$id);
 
             @instances[$id]=$instance;
 
             {   # Locking scope.
                 lock($writeLock);
-                writeBute($id);
+                writeByte($id);
                 writeString($mainProtocolLabel);
                 writeString($mainProtocolVersion);
             }
         } elsif ( not(grep $_ eq $id, @instances)) {
             die("Unknown instance of id '${id}'!")
-        } elsif (not(@instances[$id]->testAndSetHandshake()) {
-            $my error = getString();
+        } elsif (not(@instances[$id]->testAndSetHandshake())) {
+            my $error = getString();
 
             if ($error) {
                 die($error);
