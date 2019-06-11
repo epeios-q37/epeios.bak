@@ -41,6 +41,8 @@ sub new {
 
     $self->{firstLaunch} = XDHqSHRD::TRUE;
     $self->{instance} = shift;
+
+    return $self;
 }
 
 sub wait {

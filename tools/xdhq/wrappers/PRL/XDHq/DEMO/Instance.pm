@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 =cut
 
-package Instance;
+package XDHq::DEMO::Instance;
 
 use warnings;
 use threads::shared;
@@ -36,6 +36,8 @@ sub new {
     $self->{lock} : shared;
     $self->{handshakeDone} = undef;
     lock($self->{lock});
+
+    return $self;
 }
 
 sub set {

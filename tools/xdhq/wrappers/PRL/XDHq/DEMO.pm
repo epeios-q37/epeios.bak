@@ -207,14 +207,14 @@ my sub ignition {
         CORE::say($url);
         CORE::say("^" x length($url));
         CORE::say("Open above URL in a web browser. Enjoy!");
-        XDHqSHRD::open($url);
+#        XDHq::SHRD::open($url);
     }
 }
 
 my sub serve {
     my ($callback, $userCallback, @callbacks) = @_;
 
-    while(XDHqSHRD::TRUE) {
+    while(XDHq::SHRD::TRUE) {
         my $id = getByte();
 
         if ( $id eq 255) {   # Value reporting a new front-end.
@@ -224,7 +224,7 @@ my sub serve {
                 die("Instance of id '${id}' exists but should not !")
             }
 
-            my $instance = XDHq::Instance::new();
+            my $instance = XDHq::Instance->new();
 
             $instance.set(&$callback($userCallback, @callbacks, $instance),$id);
 
@@ -269,4 +269,4 @@ sub launch {
     serve($callback, $userCallback, @callbacks);
 }
 
-return XDHqSHRD::TRUE;
+return XDHq::SHRD::TRUE;

@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 =cut
 
-package SHRD;
+package XDHq::SHRD;
 
 use Config;
 
@@ -34,7 +34,7 @@ use constant {
 
 use constant {
     FALSE => undef,
-    TRUE =>not (undef)
+    TRUE => not (undef)
 };
 
 sub isWin {
