@@ -51,13 +51,15 @@ my sub worker {
 my sub callback {
     my ($userCallback, %callbacks, $instance) = @_;
 
-    threads->create(\&worker, $userCallback, XDHq::DEMO::DOM->new($instance), %callbacks);
+    print("-------------> ${instance}\n");
+
+    return threads->create(\&worker, $userCallback, XDHq::DEMO::DOM->new($instance), %callbacks);
 }
 
 sub launch {
     my (%callbacks,$userCallback,$headContent,$dir) = @_;
 
-    XDHq::launch(%callbacks,$userCallback,callback,$headContent,$dir);
+    XDHq::launch(\&callback,$userCallback,%callbacks,$headContent,$dir);
 }
 
 return XDHq::SHRD::TRUE;

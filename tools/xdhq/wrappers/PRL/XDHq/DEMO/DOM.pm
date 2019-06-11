@@ -41,6 +41,7 @@ sub new {
 
     $self->{firstLaunch} = XDHqSHRD::TRUE;
     $self->{instance} = shift;
+    print($self->{instance});
 
     return $self;
 }

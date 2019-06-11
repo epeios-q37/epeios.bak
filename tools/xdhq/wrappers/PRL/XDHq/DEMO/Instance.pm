@@ -24,18 +24,23 @@ SOFTWARE.
 
 package XDHq::DEMO::Instance;
 
+use XDHq::SHRD;
 use warnings;
+use threads;
 use threads::shared;
 
 sub new {
     my $class = shift;
-    my $self = {}
+    my $self = {};
 
     bless $self, $class;
 
-    $self->{lock} : shared;
-    $self->{handshakeDone} = undef;
+    $self->{lock} = "";
+    share($self->{lock});
+    $self->{handshakeDone} = XDHq::SHRD::FALSE;
     lock($self->{lock});
+
+    print("-------------- ${self}\n");
 
     return $self;
 }
@@ -47,10 +52,10 @@ sub set {
 
 sub setAndTestHandshake {
     if ($self->{handshakeDone}) {
-        return true;
+        return XDHq::SHRD::TRUE;
     } else {
         $self->{handshakeDone} = !undef;
-        return false;
+        return XDHq::SHRD::FALSE;
     }
 }
 
@@ -66,3 +71,4 @@ sub signal {
     cond_signal($self->{lock})
 }
 
+return XDHq::SHRD::TRUE;

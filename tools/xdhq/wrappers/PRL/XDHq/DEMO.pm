@@ -25,6 +25,7 @@ SOFTWARE.
 package XDHq::DEMO;
 
 use XDHq::SHRD;
+use XDHq::DEMO::Instance;
 use IO::Socket::INET;
 use threads;
 use threads::shared;
@@ -207,12 +208,12 @@ my sub ignition {
         CORE::say($url);
         CORE::say("^" x length($url));
         CORE::say("Open above URL in a web browser. Enjoy!");
-#        XDHq::SHRD::open($url);
+        XDHq::SHRD::open($url);
     }
 }
 
 my sub serve {
-    my ($callback, $userCallback, @callbacks) = @_;
+    my ($callback, $userCallback, %callbacks) = @_;
 
     while(XDHq::SHRD::TRUE) {
         my $id = getByte();
@@ -224,9 +225,11 @@ my sub serve {
                 die("Instance of id '${id}' exists but should not !")
             }
 
-            my $instance = XDHq::Instance->new();
+            my $instance = XDHq::DEMO::Instance->new();
 
-            $instance.set(&$callback($userCallback, @callbacks, $instance),$id);
+            print("--------------! ${instance}\n");
+
+            $instance.set($callback->($userCallback, %callbacks, &$instance),$id);
 
             @instances[$id]=$instance;
 
@@ -261,12 +264,15 @@ my sub serve {
 }
         
 sub launch {
-    my ($callback, $userCallback, @callbacks, $headContent) = @_;
+    my ($callback, $userCallback, %callbacks, $headContent) = @_;
+
+    print("${callback}\n");
+
 
     init();
     demoHandshake();
     ignition();
-    serve($callback, $userCallback, @callbacks);
+    serve($callback, $userCallback, %callbacks);
 }
 
 return XDHq::SHRD::TRUE;
