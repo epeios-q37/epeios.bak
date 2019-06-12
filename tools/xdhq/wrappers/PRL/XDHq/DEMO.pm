@@ -25,6 +25,7 @@ SOFTWARE.
 package XDHq::DEMO;
 
 use XDHq::SHRD;
+use XDHq::DEMO::SHRD;
 use XDHq::DEMO::Instance;
 use IO::Socket::INET;
 use threads;
@@ -43,9 +44,8 @@ my $wPort = "";
 my $cgi = "xdh";
 
 my $token = "";
-my $socket;
 
-my @instances;
+my %instances;
 my $writeLock: shared;
 my $globalCondition: shared;
 
@@ -108,84 +108,27 @@ my sub init {
     $| = 1;
 
     # create a connecting socket
-    $socket = new IO::Socket::INET (
+    $XDHq::DEMO::SHRD::socket = new IO::Socket::INET (
         PeerHost => $pAddr,
         PeerPort => $pPort,
         Proto => 'tcp',
     );
 
-    die("Error on connection to '${pAddr}:${pPort}': $! !!!\n") unless $socket;
+    die("Error on connection to '${pAddr}:${pPort}': $! !!!\n") unless $XDHq::DEMO::SHRD::socket;
 }
 
-my sub writeByte {
-    $socket->send(shift);
-}
-
-my sub writeSize {
-    my $size = shift;
-
-    my $result = chr($size & 0x7f);
-    $size >>= 7;
-
-    while ( $size ne 0) {
-        $result =chr(($size & 0x7f) | 0x80) . $result;
-        $size >>=7;
-    }
-
-    $socket->send($result);
-}
-
-my sub writeString {
-    my $string = shift;
-
-    writeSize(length($string));
-    $socket->send($string);
-}
-
-my sub getByte {
-    my $byte;
-    $socket->recv($byte,1);
-
-    return ord($byte);
-}
-
-my sub getSize {
-    my $byte = getByte();
-    my $size = $byte & 0x7f;
-
-    while ($byte & 0x80) {
-        $byte = getByte();
-        $size = ($size << 7) + ($byte & 0x7f);
-    }
-
-    return $size;
-}
-
-my sub getString {
-    my $size = getSize();
-
-    if ($size) {
-        my $string;
-
-        $socket->recv($string,$size);
-
-        return $string;
-    } else {
-        return "";
-    }
-}
 
 my sub demoHandshake {
-    writeString($demoProtocolLabel);
-    writeString($demoProtocolVersion);
+    XDHq::DEMO::SHRD::writeString($demoProtocolLabel);
+    XDHq::DEMO::SHRD::writeString($demoProtocolVersion);
 
-    my $error = getString();
+    my $error = XDHq::DEMO::SHRD::getString();
 
     if ( $error ne "") {
         die($error);
     }
 
-    my $notification = getString();
+    my $notification = XDHq::DEMO::SHRD::getString();
 
     if ( $notification ne "") {
         CORE::say($notification);
@@ -193,13 +136,13 @@ my sub demoHandshake {
 }
 
 my sub ignition {
-    writeString($token);
-    writeString("");
+    XDHq::DEMO::SHRD::writeString($token);
+    XDHq::DEMO::SHRD::writeString("");
 
-    $token = getString();
+    $token = XDHq::DEMO::SHRD::getString();
 
     if ( $token eq "") {
-        die(getString());
+        die(XDHq::DEMO::SHRD::getString());
     }
 
     if (not($wPort eq ":0")) {
@@ -213,66 +156,71 @@ my sub ignition {
 }
 
 my sub serve {
-    my ($callback, $userCallback, %callbacks) = @_;
+    my ($callback, $userCallback, $callbacks) = @_;
+
+        print("\t>>>>> " . __FILE__ . ":" . __LINE__ . " ! " . $callbacks->{""} . "\n");
+
 
     while(XDHq::SHRD::TRUE) {
-        my $id = getByte();
+        my $id = XDHq::DEMO::SHRD::getByte();
 
         if ( $id eq 255) {   # Value reporting a new front-end.
-            $id = getByte();    # The id of the new front-end.
+            $id = XDHq::DEMO::SHRD::getByte();    # The id of the new front-end.
 
-            if( grep $_ eq $id, @instances ) {
+            print("\t>>>>> " . __FILE__ . ":" . __LINE__ . "\n");
+
+
+            if( %instances{$id} ) {
                 die("Instance of id '${id}' exists but should not !")
             }
 
             my $instance = XDHq::DEMO::Instance->new();
 
-            print("--------------! ${instance}\n");
+            $instance->set($callback->($userCallback, $callbacks, $instance),$id);
 
-            $instance.set($callback->($userCallback, %callbacks, &$instance),$id);
-
-            @instances[$id]=$instance;
+            $instances{$id}=$instance;
 
             {   # Locking scope.
                 lock($writeLock);
-                writeByte($id);
-                writeString($mainProtocolLabel);
-                writeString($mainProtocolVersion);
+                XDHq::DEMO::SHRD::writeByte($id);
+                XDHq::DEMO::SHRD::writeString($mainProtocolLabel);
+                XDHq::DEMO::SHRD::writeString($mainProtocolVersion);
             }
-        } elsif ( not(grep $_ eq $id, @instances)) {
+        } elsif ( not(%instances{$id})) {
             die("Unknown instance of id '${id}'!")
-        } elsif (not(@instances[$id]->testAndSetHandshake())) {
-            my $error = getString();
+        } elsif (not(%instances{$id}->testAndSetHandshake())) {
+            my $error = XDHq::DEMO::SHRD::getString();
 
             if ($error) {
                 die($error);
             }
 
-            getString();    # Language. Not handled yet.
+            XDHq::DEMO::SHRD::getString();    # Language. Not handled yet.
 
             {   # Lock scope;
                 lock($writeLock);
-                writeByte($id);
-                writeString("PRL");
+                XDHq::DEMO::SHRD::writeByte($id);
+                XDHq::DEMO::SHRD::writeString("PRL");
             }
         } else {
-            @instances[$id]->signal();
+            %instances{$id}->signal();
 
+            lock($globalCondition);
             cond_wait($globalCondition);
         }
     }
 }
         
 sub launch {
-    my ($callback, $userCallback, %callbacks, $headContent) = @_;
+    my ($callback, $userCallback, $callbacks, $headContent) = @_;
 
-    print("${callback}\n");
+        print("\t>>>>> " . __FILE__ . ":" . __LINE__ . " ! " . $callbacks->{""} . "\n");
 
 
     init();
     demoHandshake();
     ignition();
-    serve($callback, $userCallback, %callbacks);
+    serve($callback, $userCallback, $callbacks);
 }
 
 return XDHq::SHRD::TRUE;

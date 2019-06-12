@@ -38,7 +38,6 @@ sub new {
     $self->{lock} = "";
     share($self->{lock});
     $self->{handshakeDone} = XDHq::SHRD::FALSE;
-    lock($self->{lock});
 
     print("-------------- ${self}\n");
 
@@ -50,7 +49,7 @@ sub set {
     $self->{id} = shift;
 }
 
-sub setAndTestHandshake {
+sub testAndSetHandshake {
     if ($self->{handshakeDone}) {
         return XDHq::SHRD::TRUE;
     } else {
@@ -60,15 +59,23 @@ sub setAndTestHandshake {
 }
 
 sub getId {
+    my $self = shift;
+
     return $self{id};
 }
 
 sub wait {
-    cond_wait($self->{lock})
+    my $self = shift;
+
+    lock($self->{lock});
+    cond_wait($self->{lock});
 }
 
 sub signal {
-    cond_signal($self->{lock})
+    my $self = shift;
+
+    lock($self->{lock});
+    cond_signal($self->{lock});
 }
 
 return XDHq::SHRD::TRUE;

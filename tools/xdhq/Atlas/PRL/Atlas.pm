@@ -22,6 +22,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 =cut
 
+package Atlas;
+
 use XDHq;
 use XDHq::SHRD;
 use XDHq::DEMO::DOM;
@@ -33,8 +35,11 @@ sub readAsset {
 }
 
 my sub worker {
-    my ($userCallback, $dom, %callbacks) = @_;
+    my ($userCallback, $dom, $callbacks) = @_;
     my $userObject;
+
+        print("\t>>>>> " . __FILE__ . ":" . __LINE__ . " ! " . $callbacks->{""} . "\n");
+
 
     if ( $userCallback ) {
         $userObject = &$userCallback();
@@ -42,24 +47,37 @@ my sub worker {
 
     while (XDHq::SHRD::TRUE) {
         my ($action, $id) = $dom->getAction();
-        my $callback = $callbacks{$action};
 
-        &$callback($userObject,$dom, $id);
+    print("\t>>>>> " . __FILE__ . ":" . __LINE__ . $callbacks->{""} . "\n");
+
+        my $callback = $callbacks->{$action};
+
+            print("\t>>>>> " . __FILE__ . ":" . __LINE__ . "\n");
+
+
+        $callback->($userObject,$dom, $id);
+
+            print("\t>>>>> " . __FILE__ . ":" . __LINE__ . "\n");
+
     }
 }
 
 my sub callback {
-    my ($userCallback, %callbacks, $instance) = @_;
+    my ($userCallback, $callbacks, $instance) = @_;
 
-    print("-------------> ${instance}\n");
+        print("\t>>>>> " . __FILE__ . ":" . __LINE__ . " ! " . $callbacks->{""} . "\n");
 
-    return threads->create(\&worker, $userCallback, XDHq::DEMO::DOM->new($instance), %callbacks);
+
+    return threads->create(\&worker, $userCallback, XDHq::DEMO::DOM->new($instance), $callbacks);
 }
 
 sub launch {
-    my (%callbacks,$userCallback,$headContent,$dir) = @_;
+    my ($callbacks,$userCallback,$headContent,$dir) = @_;
 
-    XDHq::launch(\&callback,$userCallback,%callbacks,$headContent,$dir);
+        print("\t>>>>> " . __FILE__ . ":" . __LINE__ . " ! " . $callbacks->{""} . "\n");
+
+
+    XDHq::launch(\&callback,$userCallback,$callbacks,$headContent,$dir);
 }
 
 return XDHq::SHRD::TRUE;

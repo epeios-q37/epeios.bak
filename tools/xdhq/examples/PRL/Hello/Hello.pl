@@ -44,10 +44,16 @@ $body = '
 
 sub acConnect {
     my ($hello, $dom) = @_;
+
+    print("Coucou!!!\n");
 }
 
-my @callbacks = {
-    "" => acConnect
+my %callbacks = {
+#    "" => \&acConnect
 };
 
-Atlas.launch(@callbacks, sub {}, $head);
+$callbacks{""} = \&acConnect;
+
+print($callbacks{""} . "\n");
+
+Atlas::launch(\%callbacks, sub {print("Trololo\n");return undef;}, $head);

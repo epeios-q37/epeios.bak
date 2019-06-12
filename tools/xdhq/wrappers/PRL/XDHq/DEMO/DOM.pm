@@ -31,26 +31,27 @@ use threads::shared;
 
 my $globalCondition : shared;
 
-lock($globalCondition);
-
 sub new {
     my $class = shift;
     my $self = {};
 
     bless $self, $class;
 
-    $self->{firstLaunch} = XDHqSHRD::TRUE;
+    $self->{firstLaunch} = XDHq::SHRD::TRUE;
     $self->{instance} = shift;
-    print($self->{instance});
+    print($self->{instance} . "\n");
 
     return $self;
 }
 
 sub wait {
+    my $self = shift;
+
     $self->{instance}->wait();
 }
 
 sub signal {
+    lock($globalCondition);
     cond_signal($globalCondition);
 }
 
@@ -58,16 +59,19 @@ sub getAction {
     my $self = shift;
 
     if ( $self->{firstLaunch}) {
-        $self->{firstLaunch} = XDHqSHRD::TRUE;
+        $self->{firstLaunch} = XDHq::SHRD::FALSE;
     } else { # Also a lock scope.
-        writeByte($self->{instance}->getId());
-        writeStringNUL("StandBy_1");
+        XDHq::DEMO::SHRD::writeByte($self->{instance}->getId());
+        XDHq::DEMO::SHRD::writeStringNUL("StandBy_1");
     }
 
     $self->wait();
 
-    my $id = getString();
-    my $action = getString();
+    my $id = XDHq::DEMO::SHRD::getString();
+    my $action = XDHq::DEMO::SHRD::getString();
+
+    print("\t>>>>> " . __FILE__ . ":" . __LINE__ . " ${id}/${action}\n");
+
 
     $self->signal();
 
@@ -80,20 +84,20 @@ sub call {
     my $type = shift;
 
     {   # Lock scope;
-        writeByte($self->{instance}->getId());
-        writeStringNUL($command);
+        XDHq::DEMO::SHRD::writeByte($self->{instance}->getId());
+        XDHq::DEMO::SHRD::writeStringNUL($command);
 
         my $amount = shift;
 
         while($amount) {
-            writeString(shift);
+            XDHq::DEMO::SHRD::writeString(shift);
             $amount -= 1;
         }
 
         $amount = shift;
 
         while($amount) {
-            writeStrings(shift);
+            XDHq::DEMO::SHRD::writeStrings(shift);
             $amount-=1;
         }
 

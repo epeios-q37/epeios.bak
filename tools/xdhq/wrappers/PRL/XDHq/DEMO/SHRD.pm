@@ -22,29 +22,67 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 =cut
 
-package XDHq;
+package XDHq::DEMO::SHRD;
 
-use XDHq::SHRD;
-use XDHq::DEMO;
-use XDHq::DEMO::DOM;
+$XDHq::DEMO::SHRD::socket;
 
-sub readAsset {
-    open FILEHANDLE, shift or die $!;
-
-    return do { local $/; <FILEHANDLE> };
+sub writeByte {
+    $socket->send(shift);
 }
 
-sub new {
-    return XDHq::DEMO::DOM->new(@_);
+sub writeSize {
+    my $size = shift;
+
+    my $result = chr($size & 0x7f);
+    $size >>= 7;
+
+    while ( $size ne 0) {
+        $result =chr(($size & 0x7f) | 0x80) . $result;
+        $size >>=7;
+    }
+
+    $socket->send($result);
 }
 
-sub launch {
-    my ($callback,$userCallback,$callbacks,$headContent,$dir) = @_;
+sub writeString {
+    my $string = shift;
 
-        print("\t>>>>> " . __FILE__ . ":" . __LINE__ . " ! " . $callbacks->{""} . "\n");
-
-
-    XDHq::DEMO::launch($callback,$userCallback,$callbacks,$headContent);
+    writeSize(length($string));
+    $socket->send($string);
 }
 
-return XDHq::SHRD::TRUE;
+sub getByte {
+    my $byte;
+    $socket->recv($byte,1);
+
+    return ord($byte);
+}
+
+sub getSize {
+    my $byte = getByte();
+    my $size = $byte & 0x7f;
+
+    while ($byte & 0x80) {
+        $byte = getByte();
+        $size = ($size << 7) + ($byte & 0x7f);
+    }
+
+    return $size;
+}
+
+sub getString {
+    my $size = getSize();
+
+    if ($size) {
+        my $string;
+
+        $socket->recv($string,$size);
+
+        return $string;
+    } else {
+        return "";
+    }
+}
+
+return TRUE;
+
