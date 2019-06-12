@@ -158,17 +158,11 @@ my sub ignition {
 my sub serve {
     my ($callback, $userCallback, $callbacks) = @_;
 
-        print("\t>>>>> " . __FILE__ . ":" . __LINE__ . " ! " . $callbacks->{""} . "\n");
-
-
     while(XDHq::SHRD::TRUE) {
         my $id = XDHq::DEMO::SHRD::getByte();
 
         if ( $id eq 255) {   # Value reporting a new front-end.
             $id = XDHq::DEMO::SHRD::getByte();    # The id of the new front-end.
-
-            print("\t>>>>> " . __FILE__ . ":" . __LINE__ . "\n");
-
 
             if( %instances{$id} ) {
                 die("Instance of id '${id}' exists but should not !")
@@ -213,9 +207,6 @@ my sub serve {
         
 sub launch {
     my ($callback, $userCallback, $callbacks, $headContent) = @_;
-
-        print("\t>>>>> " . __FILE__ . ":" . __LINE__ . " ! " . $callbacks->{""} . "\n");
-
 
     init();
     demoHandshake();

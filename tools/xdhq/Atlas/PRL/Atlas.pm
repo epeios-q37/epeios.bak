@@ -30,6 +30,8 @@ use XDHq::DEMO::DOM;
 use strict;
 use threads;
 
+print("\t>>>>> " . __FILE__ . ":" . __LINE__ . "\n");
+
 sub readAsset {
     return XDHq::readAsset(@_);
 }
@@ -38,9 +40,6 @@ my sub worker {
     my ($userCallback, $dom, $callbacks) = @_;
     my $userObject;
 
-        print("\t>>>>> " . __FILE__ . ":" . __LINE__ . " ! " . $callbacks->{""} . "\n");
-
-
     if ( $userCallback ) {
         $userObject = &$userCallback();
     }
@@ -48,34 +47,18 @@ my sub worker {
     while (XDHq::SHRD::TRUE) {
         my ($action, $id) = $dom->getAction();
 
-    print("\t>>>>> " . __FILE__ . ":" . __LINE__ . $callbacks->{""} . "\n");
-
-        my $callback = $callbacks->{$action};
-
-            print("\t>>>>> " . __FILE__ . ":" . __LINE__ . "\n");
-
-
-        $callback->($userObject,$dom, $id);
-
-            print("\t>>>>> " . __FILE__ . ":" . __LINE__ . "\n");
-
+        $callbacks->{$action}->($userObject,$dom, $id);
     }
 }
 
 my sub callback {
     my ($userCallback, $callbacks, $instance) = @_;
 
-        print("\t>>>>> " . __FILE__ . ":" . __LINE__ . " ! " . $callbacks->{""} . "\n");
-
-
     return threads->create(\&worker, $userCallback, XDHq::DEMO::DOM->new($instance), $callbacks);
 }
 
 sub launch {
     my ($callbacks,$userCallback,$headContent,$dir) = @_;
-
-        print("\t>>>>> " . __FILE__ . ":" . __LINE__ . " ! " . $callbacks->{""} . "\n");
-
 
     XDHq::launch(\&callback,$userCallback,$callbacks,$headContent,$dir);
 }

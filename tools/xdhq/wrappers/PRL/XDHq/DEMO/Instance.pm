@@ -39,8 +39,6 @@ sub new {
     share($self->{lock});
     $self->{handshakeDone} = XDHq::SHRD::FALSE;
 
-    print("-------------- ${self}\n");
-
     return $self;
 }
 

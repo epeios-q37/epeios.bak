@@ -48,12 +48,8 @@ sub acConnect {
     print("Coucou!!!\n");
 }
 
-my %callbacks = {
-#    "" => \&acConnect
-};
-
-$callbacks{""} = \&acConnect;
-
-print($callbacks{""} . "\n");
+my %callbacks = (
+    "" => \&acConnect,
+);
 
 Atlas::launch(\%callbacks, sub {print("Trololo\n");return undef;}, $head);

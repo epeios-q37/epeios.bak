@@ -39,7 +39,6 @@ sub new {
 
     $self->{firstLaunch} = XDHq::SHRD::TRUE;
     $self->{instance} = shift;
-    print($self->{instance} . "\n");
 
     return $self;
 }
@@ -69,9 +68,6 @@ sub getAction {
 
     my $id = XDHq::DEMO::SHRD::getString();
     my $action = XDHq::DEMO::SHRD::getString();
-
-    print("\t>>>>> " . __FILE__ . ":" . __LINE__ . " ${id}/${action}\n");
-
 
     $self->signal();
 

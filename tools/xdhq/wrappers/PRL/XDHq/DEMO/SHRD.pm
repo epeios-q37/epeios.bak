@@ -51,6 +51,10 @@ sub writeString {
     $socket->send($string);
 }
 
+sub writeStringNUL {
+    $socket->send(shift . "\0");
+}
+
 sub getByte {
     my $byte;
     $socket->recv($byte,1);

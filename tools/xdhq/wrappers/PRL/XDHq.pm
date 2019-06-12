@@ -41,9 +41,6 @@ sub new {
 sub launch {
     my ($callback,$userCallback,$callbacks,$headContent,$dir) = @_;
 
-        print("\t>>>>> " . __FILE__ . ":" . __LINE__ . " ! " . $callbacks->{""} . "\n");
-
-
     XDHq::DEMO::launch($callback,$userCallback,$callbacks,$headContent);
 }
 
