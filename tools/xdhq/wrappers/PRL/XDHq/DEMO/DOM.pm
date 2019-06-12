@@ -40,13 +40,15 @@ sub new {
     $self->{firstLaunch} = XDHq::SHRD::TRUE;
     $self->{instance} = shift;
 
+    print("\t>>>>> " . __FILE__ . ":" . __LINE__ . " ! " . $self->{instance} . "\n");
+
     return $self;
 }
 
 sub wait {
     my $self = shift;
 
-    $self->{instance}->wait();
+    XDHq::DEMO::Instance::wait($self->{instance});
 }
 
 sub signal {
@@ -60,7 +62,8 @@ sub getAction {
     if ( $self->{firstLaunch}) {
         $self->{firstLaunch} = XDHq::SHRD::FALSE;
     } else { # Also a lock scope.
-        XDHq::DEMO::SHRD::writeByte($self->{instance}->getId());
+        lock($XDHq::DEMO::SHRD::writeLock);
+        XDHq::DEMO::SHRD::writeByte($self->{instance}->{id});
         XDHq::DEMO::SHRD::writeStringNUL("StandBy_1");
     }
 
@@ -80,9 +83,14 @@ sub call {
     my $type = shift;
 
     {   # Lock scope;
-        XDHq::DEMO::SHRD::writeByte($self->{instance}->getId());
+        lock($XDHq::DEMO::SHRD::writeLock);
+        print("\t>>>>> " . __FILE__ . ":" . __LINE__ . " ! " . $self->{instance}->{id} . "\n");
+
+        XDHq::DEMO::SHRD::writeByte($self->{instance}->{id});
         XDHq::DEMO::SHRD::writeStringNUL($command);
 
+        print("\t>>>>> " . __FILE__ . ":" . __LINE__ . "\n");
+    
         my $amount = shift;
 
         while($amount) {
@@ -97,19 +105,21 @@ sub call {
             $amount-=1;
         }
 
-        if($type eq XDHq::SHRD::RT_STRINGS) {
-            $self->wait();
-            my $result = getString();
-            $self->signal();
-            return $result;
-        } elsif($type eq XDHq::SHRD::RT_STRINGS) {
-            $self->wait();
-            my $result = getStrings();
-            $self->signal();
-            return $result;
-        } elsif (not ($type eq XDHq::SHRD::RT_VOID)) {
-            die("Unknown return type !!!")
-        }
+        print("\t>>>>> " . __FILE__ . ":" . __LINE__ . "\n");
+    }
+
+    if($type eq XDHq::SHRD::RT_STRING) {
+        $self->wait();
+        my $result = getString();
+        $self->signal();
+        return $result;
+    } elsif($type eq XDHq::SHRD::RT_STRINGS) {
+        $self->wait();
+        my $result = getStrings();
+        $self->signal();
+        return $result;
+    } elsif (not ($type eq XDHq::SHRD::RT_VOID)) {
+        die("Unknown return type !!!")
     }
 }
 

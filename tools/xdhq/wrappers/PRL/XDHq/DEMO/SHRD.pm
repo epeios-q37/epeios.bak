@@ -24,10 +24,16 @@ SOFTWARE.
 
 package XDHq::DEMO::SHRD;
 
+use threads;
+use threads::shared;
+
 $XDHq::DEMO::SHRD::socket;
+$XDHq::DEMO::SHRD::writeLock;
+
+share ($XDHq::DEMO::SHRD::writeLock);
 
 sub writeByte {
-    $socket->send(shift);
+    $socket->send(chr(shift));
 }
 
 sub writeSize {

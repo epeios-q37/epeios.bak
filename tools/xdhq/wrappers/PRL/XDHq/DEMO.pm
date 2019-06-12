@@ -46,7 +46,6 @@ my $cgi = "xdh";
 my $token = "";
 
 my %instances;
-my $writeLock: shared;
 my $globalCondition: shared;
 
 sub trim { my $s = shift; $s =~ s/^\s+|\s+$//g; return $s };
@@ -92,7 +91,7 @@ my sub init {
         $wAddr = $pAddr;
     }
 
-    if ($wPort eq "") {
+    if ($wPort ne "") {
         $wPort = ":" . $wPort;
     }
 
@@ -164,25 +163,32 @@ my sub serve {
         if ( $id eq 255) {   # Value reporting a new front-end.
             $id = XDHq::DEMO::SHRD::getByte();    # The id of the new front-end.
 
-            if( %instances{$id} ) {
+            if( $instances{$id} ) {
                 die("Instance of id '${id}' exists but should not !")
             }
 
-            my $instance = XDHq::DEMO::Instance->new();
+            my $instance : shared = XDHq::DEMO::Instance::new();
 
-            $instance->set($callback->($userCallback, $callbacks, $instance),$id);
+            print("\t>>>>> " . __FILE__ . ":" . __LINE__ . " ! " . $instance . "\n");
+
+
+            XDHq::DEMO::Instance::set($instance, $callback->($userCallback, $callbacks, $instance),$id);
+
+            print("\t>>>>> " . __FILE__ . ":" . __LINE__ . " ! " . $instance->{thread} . "," . $instance->{id} . "\n");
 
             $instances{$id}=$instance;
 
+            print("\t>>>>> " . __FILE__ . ":" . __LINE__ . " ! " . $instances{$id}->{thread} . "," . $instances{$id}->{id} . "\n");
+
             {   # Locking scope.
-                lock($writeLock);
+                lock($XDHq::DEMO::SHRD::writeLock);
                 XDHq::DEMO::SHRD::writeByte($id);
                 XDHq::DEMO::SHRD::writeString($mainProtocolLabel);
                 XDHq::DEMO::SHRD::writeString($mainProtocolVersion);
             }
-        } elsif ( not(%instances{$id})) {
+        } elsif ( not($instances{$id})) {
             die("Unknown instance of id '${id}'!")
-        } elsif (not(%instances{$id}->testAndSetHandshake())) {
+        } elsif (not(XDHq::DEMO::Instance::testAndSetHandshake($instances{$id}))) {
             my $error = XDHq::DEMO::SHRD::getString();
 
             if ($error) {
@@ -192,12 +198,12 @@ my sub serve {
             XDHq::DEMO::SHRD::getString();    # Language. Not handled yet.
 
             {   # Lock scope;
-                lock($writeLock);
+                lock($XDHq::DEMO::SHRD::writeLock);
                 XDHq::DEMO::SHRD::writeByte($id);
                 XDHq::DEMO::SHRD::writeString("PRL");
             }
         } else {
-            %instances{$id}->signal();
+            XDHq::DEMO::Instance::signal($instances{$id});
 
             lock($globalCondition);
             cond_wait($globalCondition);

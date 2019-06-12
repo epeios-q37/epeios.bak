@@ -34,10 +34,6 @@ sub readAsset {
     return do { local $/; <FILEHANDLE> };
 }
 
-sub new {
-    return XDHq::DEMO::DOM->new(@_);
-}
-
 sub launch {
     my ($callback,$userCallback,$callbacks,$headContent,$dir) = @_;
 

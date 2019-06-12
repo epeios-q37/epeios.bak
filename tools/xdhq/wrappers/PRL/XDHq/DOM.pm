@@ -22,47 +22,32 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 =cut
 
-package Atlas;
+package XDHq::DOM;
 
-use XDHq;
 use XDHq::SHRD;
-use XDHq::DOM;
-use strict;
-use threads;
 
-print("\t>>>>> " . __FILE__ . ":" . __LINE__ . "\n");
+sub new {
+    my $class = shift;
+    my $self = {};
 
-sub readAsset {
-    return XDHq::readAsset(@_);
+    bless $self, $class;
+    
+    $self->{dom} = XDHq::DEMO::DOM->new(shift);
+
+    return $self;
 }
 
-my sub worker {
-    my ($userCallback, $instance, $callbacks) = @_;
-    my $userObject;
-
-    my $dom = XDHq::DOM->new($instance);
-
-    if ( $userCallback ) {
-        $userObject = &$userCallback();
-    }
-
-    while (XDHq::SHRD::TRUE) {
-        my ($action, $id) = $dom->getAction();
-
-        $callbacks->{$action}->($userObject,$dom, $id);
-    }
+sub getAction {
+    return shift->{dom}->getAction();
 }
 
-my sub callback {
-    my ($userCallback, $callbacks, $instance) = @_;
+sub alert {
+    my ($self, $message) = @_;
 
-    return threads->create(\&worker, $userCallback, $instance, $callbacks);
+    $self->{dom}->call("Alert_1", XDHq::SHRD::RT_STRING, 1, $message, 0);
+
+    # For the return value being 'RT_STRING' instead of 'TR_VOID',
+	# see the 'alert' primitive in 'XDHqXDH'.
 }
 
-sub launch {
-    my ($callbacks,$userCallback,$headContent,$dir) = @_;
-
-    XDHq::launch(\&callback,$userCallback,$callbacks,$headContent,$dir);
-}
-
-return XDHq::SHRD::TRUE;
+return XDHqSHRD::TRUE;

@@ -30,28 +30,35 @@ use threads;
 use threads::shared;
 
 sub new {
-    my $class = shift;
-    my $self = {};
 
-    bless $self, $class;
+    my $lock: shared;
 
-    $self->{lock} = "";
-    share($self->{lock});
-    $self->{handshakeDone} = XDHq::SHRD::FALSE;
+    my %self : shared = (
+        lock => \$lock,
+        handshakeDone => XDHq::SHRD::FALSE
+    );
 
-    return $self;
+    return \%self;
 }
 
 sub set {
-    $self->{thread} = shift;
-    $self->{id} = shift;
+    my ($self, $thread, $id) = @_;
+
+    print("\t>>>>> " . __FILE__ . ":" . __LINE__ . " ! ${thread},${id}\n");
+
+#    $self->{thread} = $thread;
+    $self->{id} = $id;
+
+    print("\t>>>>> " . __FILE__ . ":" . __LINE__ . " ! " . $self->{id} . "\n");
 }
 
 sub testAndSetHandshake {
+    my $self = shift;
+
     if ($self->{handshakeDone}) {
         return XDHq::SHRD::TRUE;
     } else {
-        $self->{handshakeDone} = !undef;
+        $self->{handshakeDone} = XDHq::SHRD::TRUE;
         return XDHq::SHRD::FALSE;
     }
 }
@@ -59,21 +66,23 @@ sub testAndSetHandshake {
 sub getId {
     my $self = shift;
 
-    return $self{id};
+    print("\t>>>>> " . __FILE__ . ":" . __LINE__ . " ! " . $self->{id} . "\n");
+
+    return $self->{id};
 }
 
 sub wait {
     my $self = shift;
 
-    lock($self->{lock});
-    cond_wait($self->{lock});
+    lock(${$self->{lock}});
+    cond_wait(${$self->{lock}});
 }
 
 sub signal {
     my $self = shift;
 
-    lock($self->{lock});
-    cond_signal($self->{lock});
+    lock(${$self->{lock}});
+    cond_signal(${$self->{lock}});
 }
 
 return XDHq::SHRD::TRUE;
