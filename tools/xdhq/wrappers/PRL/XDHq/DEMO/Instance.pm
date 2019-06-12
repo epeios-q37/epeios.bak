@@ -22,6 +22,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 =cut
 
+# Althought it bares some similarities with a class definition,
+# this file does NOT define a class, due to its sharing between several threads.
+
 package XDHq::DEMO::Instance;
 
 use XDHq::SHRD;
@@ -44,12 +47,8 @@ sub new {
 sub set {
     my ($self, $thread, $id) = @_;
 
-    print("\t>>>>> " . __FILE__ . ":" . __LINE__ . " ! ${thread},${id}\n");
-
 #    $self->{thread} = $thread;
     $self->{id} = $id;
-
-    print("\t>>>>> " . __FILE__ . ":" . __LINE__ . " ! " . $self->{id} . "\n");
 }
 
 sub testAndSetHandshake {
@@ -65,8 +64,6 @@ sub testAndSetHandshake {
 
 sub getId {
     my $self = shift;
-
-    print("\t>>>>> " . __FILE__ . ":" . __LINE__ . " ! " . $self->{id} . "\n");
 
     return $self->{id};
 }

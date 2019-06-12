@@ -29,8 +29,6 @@ use warnings;
 use threads;
 use threads::shared;
 
-my $globalCondition : shared;
-
 sub new {
     my $class = shift;
     my $self = {};
@@ -39,8 +37,6 @@ sub new {
 
     $self->{firstLaunch} = XDHq::SHRD::TRUE;
     $self->{instance} = shift;
-
-    print("\t>>>>> " . __FILE__ . ":" . __LINE__ . " ! " . $self->{instance} . "\n");
 
     return $self;
 }
@@ -52,8 +48,10 @@ sub wait {
 }
 
 sub signal {
-    lock($globalCondition);
-    cond_signal($globalCondition);
+    print("\t>>>>> " . __FILE__ . ":" . __LINE__ . "\n");    
+    lock($XDHq::DEMO::SHRD::globalCondition);
+    cond_signal($XDHq::DEMO::SHRD::globalCondition);
+    print("\t>>>>> " . __FILE__ . ":" . __LINE__ . "\n");    
 }
 
 sub getAction {
@@ -61,20 +59,26 @@ sub getAction {
 
     if ( $self->{firstLaunch}) {
         $self->{firstLaunch} = XDHq::SHRD::FALSE;
-    } else { # Also a lock scope.
+    } else { 
+        {# Also a lock scope.
         lock($XDHq::DEMO::SHRD::writeLock);
         XDHq::DEMO::SHRD::writeByte($self->{instance}->{id});
         XDHq::DEMO::SHRD::writeStringNUL("StandBy_1");
+        }
     }
 
+    print("\t>>>>> " . __FILE__ . ":" . __LINE__ . "\n");    
+
     $self->wait();
+
+    print("\t>>>>> " . __FILE__ . ":" . __LINE__ . "\n");    
 
     my $id = XDHq::DEMO::SHRD::getString();
     my $action = XDHq::DEMO::SHRD::getString();
 
     $self->signal();
 
-    return ($id, $action);
+    return ($action,$id);
 }
 
 sub call {
@@ -84,13 +88,11 @@ sub call {
 
     {   # Lock scope;
         lock($XDHq::DEMO::SHRD::writeLock);
-        print("\t>>>>> " . __FILE__ . ":" . __LINE__ . " ! " . $self->{instance}->{id} . "\n");
 
         XDHq::DEMO::SHRD::writeByte($self->{instance}->{id});
         XDHq::DEMO::SHRD::writeStringNUL($command);
 
-        print("\t>>>>> " . __FILE__ . ":" . __LINE__ . "\n");
-    
+   
         my $amount = shift;
 
         while($amount) {
@@ -104,18 +106,16 @@ sub call {
             XDHq::DEMO::SHRD::writeStrings(shift);
             $amount-=1;
         }
-
-        print("\t>>>>> " . __FILE__ . ":" . __LINE__ . "\n");
     }
 
     if($type eq XDHq::SHRD::RT_STRING) {
         $self->wait();
-        my $result = getString();
+        my $result = XDHq::DEMO::SHRD::getString();
         $self->signal();
         return $result;
     } elsif($type eq XDHq::SHRD::RT_STRINGS) {
         $self->wait();
-        my $result = getStrings();
+        my $result = XDHq::DEMO::SHRD::getStrings();
         $self->signal();
         return $result;
     } elsif (not ($type eq XDHq::SHRD::RT_VOID)) {

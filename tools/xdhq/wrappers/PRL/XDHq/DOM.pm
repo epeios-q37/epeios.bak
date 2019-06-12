@@ -50,4 +50,24 @@ sub alert {
 	# see the 'alert' primitive in 'XDHqXDH'.
 }
 
+sub confirm {
+    my ($self, $message) = @_;
+
+    return $self->{dom}->call("Confirm_1", XDHq::SHRD::RT_STRING, 1, $message, 0) eq "True";
+}
+
+sub setLayoutPrivate {
+    my ($self, $id, $xml, $xslFilename) = @_;
+
+    $self->{dom}->call("SetLayout_1", XDHq::SHRD::RT_VOID, 3, $id, $xml, $xslFilename, 0);
+}
+
+sub setLayout {
+    shift->setLayoutPrivate(shift, shift, "");
+}
+
+sub focus {
+    shift->{dom}->call("Focus_1", XDHq::SHRD::RT_VOID, 1, shift, 0);
+}
+
 return XDHqSHRD::TRUE;

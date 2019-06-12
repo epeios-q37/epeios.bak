@@ -30,7 +30,7 @@ use XDHq::DOM;
 use strict;
 use threads;
 
-print("\t>>>>> " . __FILE__ . ":" . __LINE__ . "\n");
+# print("\t>>>>> " . __FILE__ . ":" . __LINE__ . "\n");
 
 sub readAsset {
     return XDHq::readAsset(@_);
@@ -48,6 +48,9 @@ my sub worker {
 
     while (XDHq::SHRD::TRUE) {
         my ($action, $id) = $dom->getAction();
+
+        print("\t>>>>> " . __FILE__ . ":" . __LINE__ . " '${action}'\n");    
+
 
         $callbacks->{$action}->($userObject,$dom, $id);
     }

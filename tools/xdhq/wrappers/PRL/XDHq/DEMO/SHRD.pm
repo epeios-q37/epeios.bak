@@ -28,9 +28,12 @@ use threads;
 use threads::shared;
 
 $XDHq::DEMO::SHRD::socket;
-$XDHq::DEMO::SHRD::writeLock;
 
+$XDHq::DEMO::SHRD::writeLock;
 share ($XDHq::DEMO::SHRD::writeLock);
+
+$XDHq::DEMO::SHRD::globalCondition;
+share($XDHq::DEMO::SHRD::globalCondition);
 
 sub writeByte {
     $socket->send(chr(shift));

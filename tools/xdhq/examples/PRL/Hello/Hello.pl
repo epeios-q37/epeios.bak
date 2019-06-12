@@ -45,12 +45,28 @@ $body = '
 sub acConnect {
     my ($hello, $dom) = @_;
 
-    print("'acConnect' !!!\n");
+    $dom->setLayout("",$body);
+    $dom->focus("input");
+}
+
+sub acSubmit {
+    my ($hello, $dom) = @_;
+
     $dom->alert("Hello, the world !!!");
+    $dom->focus("input");
+}
+
+sub acClear {
+    my ($hello, $dom) = @_;
+
+    $dom->confirm("Are you sure?");
+    $dom->focus("input");
 }
 
 my %callbacks = (
     "" => \&acConnect,
+    "Submit" => \&acSubmit,
+    "Clear" => \&acClear,
 );
 
 Atlas::launch(\%callbacks, sub {return undef;}, $head);
