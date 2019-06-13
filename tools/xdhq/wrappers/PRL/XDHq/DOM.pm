@@ -26,6 +26,30 @@ package XDHq::DOM;
 
 use XDHq::SHRD;
 
+my sub split {
+    my $keysAndValues = shift;
+
+    my @keys, @values;
+
+    foreach my $key (keys(%h)) {
+        push(@keys, $key);
+        push(@values, $keysAndValues{$key});
+    }
+
+    return [@keys,@values];
+}
+
+my sub unsplit {
+    my ($keys, $values) = @_;
+    my %keysAndValues;
+
+    foreach my $i (0 .. $#{$keys}) {
+       $keysAndValues{${keys}[$i]}=${values}[$i];
+    }
+
+    return %keysAndValues;
+}
+
 sub new {
     my $class = shift;
     my $self = {};
@@ -64,6 +88,18 @@ sub setLayoutPrivate {
 
 sub setLayout {
     shift->setLayoutPrivate(shift, shift, "");
+}
+
+sub getContents {
+    my ($self, $ids) = @_;
+
+    return unsplit($ids, $self->{dom}->call("GetContents_1", XDHq::SHRD::RT_STRINGS, 0, 1, $ids));
+}
+
+sub getContent {
+    my ($self, $id) = @_;
+
+    return %{$self->getContents([$id])}{$id};
 }
 
 sub focus {

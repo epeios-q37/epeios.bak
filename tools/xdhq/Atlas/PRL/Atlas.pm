@@ -49,9 +49,6 @@ my sub worker {
     while (XDHq::SHRD::TRUE) {
         my ($action, $id) = $dom->getAction();
 
-        print("\t>>>>> " . __FILE__ . ":" . __LINE__ . " '${action}'\n");    
-
-
         $callbacks->{$action}->($userObject,$dom, $id);
     }
 }

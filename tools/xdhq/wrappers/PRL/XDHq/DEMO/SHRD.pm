@@ -60,6 +60,16 @@ sub writeString {
     $socket->send($string);
 }
 
+sub writeStrings {
+    my $strings = shift;
+
+    writeSize(@{$strings});
+
+    foreach my $string (@{$strings}) {
+            writeString($string);
+    }
+}
+
 sub writeStringNUL {
     $socket->send(shift . "\0");
 }
@@ -95,6 +105,17 @@ sub getString {
     } else {
         return "";
     }
+}
+
+sub getStrings {
+    my $size = getSize();
+    my @strings;
+
+    while ($size--) {
+        push(@strings, getString());
+    }
+
+    return @strings;
 }
 
 return TRUE;

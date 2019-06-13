@@ -157,11 +157,7 @@ my sub serve {
     my ($callback, $userCallback, $callbacks) = @_;
 
     while(XDHq::SHRD::TRUE) {
-        print("\t>>>>> " . __FILE__ . ":" . __LINE__ . "\n");    
-
         my $id = XDHq::DEMO::SHRD::getByte();
-
-        print("\t>>>>> " . __FILE__ . ":" . __LINE__ . " ! ${id}\n");
 
         if ( $id eq 255) {   # Value reporting a new front-end.
             $id = XDHq::DEMO::SHRD::getByte();    # The id of the new front-end.
@@ -199,19 +195,12 @@ my sub serve {
                 XDHq::DEMO::SHRD::writeString("PRL");
             }
         } else {
-            print("\t>>>>> " . __FILE__ . ":" . __LINE__ . "\n");    
             XDHq::DEMO::Instance::signal($instances{$id});
-            print("\t>>>>> " . __FILE__ . ":" . __LINE__ . "\n");    
 
             lock($XDHq::DEMO::SHRD::globalCondition);
             cond_wait($XDHq::DEMO::SHRD::globalCondition);
-
-            print("\t>>>>> " . __FILE__ . ":" . __LINE__ . "\n");    
-
         }
     }
-
-    print("\t>>>>> " . __FILE__ . ":" . __LINE__ . "\n");    
 }
         
 sub launch {

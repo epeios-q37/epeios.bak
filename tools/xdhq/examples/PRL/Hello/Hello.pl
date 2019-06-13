@@ -52,7 +52,8 @@ sub acConnect {
 sub acSubmit {
     my ($hello, $dom) = @_;
 
-    $dom->alert("Hello, the world !!!");
+    $dom->alert("Hello, " . $dom->getContent("input") . "!");
+#    $dom->alert("Yo !");
     $dom->focus("input");
 }
 

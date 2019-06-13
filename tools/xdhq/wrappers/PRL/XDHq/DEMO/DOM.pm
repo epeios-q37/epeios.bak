@@ -48,10 +48,8 @@ sub wait {
 }
 
 sub signal {
-    print("\t>>>>> " . __FILE__ . ":" . __LINE__ . "\n");    
     lock($XDHq::DEMO::SHRD::globalCondition);
     cond_signal($XDHq::DEMO::SHRD::globalCondition);
-    print("\t>>>>> " . __FILE__ . ":" . __LINE__ . "\n");    
 }
 
 sub getAction {
@@ -67,11 +65,7 @@ sub getAction {
         }
     }
 
-    print("\t>>>>> " . __FILE__ . ":" . __LINE__ . "\n");    
-
     $self->wait();
-
-    print("\t>>>>> " . __FILE__ . ":" . __LINE__ . "\n");    
 
     my $id = XDHq::DEMO::SHRD::getString();
     my $action = XDHq::DEMO::SHRD::getString();
@@ -91,31 +85,32 @@ sub call {
 
         XDHq::DEMO::SHRD::writeByte($self->{instance}->{id});
         XDHq::DEMO::SHRD::writeStringNUL($command);
-
    
         my $amount = shift;
 
         while($amount) {
             XDHq::DEMO::SHRD::writeString(shift);
-            $amount -= 1;
+            $amount--;
         }
 
         $amount = shift;
 
         while($amount) {
             XDHq::DEMO::SHRD::writeStrings(shift);
-            $amount-=1;
+            $amount--;
         }
     }
 
-    if($type eq XDHq::SHRD::RT_STRING) {
+    if ($type eq XDHq::SHRD::RT_STRING) {
         $self->wait();
         my $result = XDHq::DEMO::SHRD::getString();
         $self->signal();
         return $result;
-    } elsif($type eq XDHq::SHRD::RT_STRINGS) {
+    } elsif ($type eq XDHq::SHRD::RT_STRINGS) {
         $self->wait();
+        print("\t>>>>> " . __FILE__ . ":" . __LINE__ . "\n");    
         my $result = XDHq::DEMO::SHRD::getStrings();
+        print("\t>>>>> " . __FILE__ . ":" . __LINE__ . "\n");    
         $self->signal();
         return $result;
     } elsif (not ($type eq XDHq::SHRD::RT_VOID)) {
