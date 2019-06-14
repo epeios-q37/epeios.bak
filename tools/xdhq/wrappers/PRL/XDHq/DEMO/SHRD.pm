@@ -63,10 +63,10 @@ sub writeString {
 sub writeStrings {
     my $strings = shift;
 
-    writeSize(@{$strings});
+    writeSize(scalar @{$strings});
 
     foreach my $string (@{$strings}) {
-            writeString($string);
+        writeString($string);
     }
 }
 

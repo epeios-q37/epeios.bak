@@ -26,17 +26,15 @@ package XDHq::DOM;
 
 use XDHq::SHRD;
 
+use strict; use warnings;
+
 my sub split {
     my $keysAndValues = shift;
 
-    my @keys, @values;
+    my @keys = keys %$keysAndValues;
+    my @values = values %$keysAndValues;
 
-    foreach my $key (keys(%h)) {
-        push(@keys, $key);
-        push(@values, $keysAndValues{$key});
-    }
-
-    return [@keys,@values];
+    return (\@keys, \@values);
 }
 
 my sub unsplit {
@@ -44,7 +42,7 @@ my sub unsplit {
     my %keysAndValues;
 
     foreach my $i (0 .. $#{$keys}) {
-       $keysAndValues{${keys}[$i]}=${values}[$i];
+       $keysAndValues{@{$keys}[$i]}=@{$values}[$i];
     }
 
     return %keysAndValues;
@@ -77,7 +75,7 @@ sub alert {
 sub confirm {
     my ($self, $message) = @_;
 
-    return $self->{dom}->call("Confirm_1", XDHq::SHRD::RT_STRING, 1, $message, 0) eq "True";
+    return $self->{dom}->call("Confirm_1", XDHq::SHRD::RT_STRING, 1, $message, 0) eq "true";
 }
 
 sub setLayoutPrivate {
@@ -93,17 +91,35 @@ sub setLayout {
 sub getContents {
     my ($self, $ids) = @_;
 
-    return unsplit($ids, $self->{dom}->call("GetContents_1", XDHq::SHRD::RT_STRINGS, 0, 1, $ids));
+    my @result = $self->{dom}->call("GetContents_1", XDHq::SHRD::RT_STRINGS, 0, 1, $ids);
+
+    return unsplit($ids, \@result); # To modify to avoid the use of the @result variable.
 }
 
 sub getContent {
     my ($self, $id) = @_;
 
-    return %{$self->getContents([$id])}{$id};
+    my %result = $self->getContents([$id]);
+
+    return $result{$id}; # To modify to avoid the use of the %result variable.
+}
+
+sub setContents {
+    my $self = shift;
+
+    my ($ids, $contents) = split(shift);
+
+    $self->{dom}->call("SetContents_1", XDHq::SHRD::RT_VOID, 0, 2, $ids, $contents);
+}
+
+sub setContent {
+    my ($self, $id, $value) = @_;
+
+    $self->setContents({$id => $value});
 }
 
 sub focus {
     shift->{dom}->call("Focus_1", XDHq::SHRD::RT_VOID, 1, shift, 0);
 }
 
-return XDHqSHRD::TRUE;
+return XDHq::SHRD::TRUE;

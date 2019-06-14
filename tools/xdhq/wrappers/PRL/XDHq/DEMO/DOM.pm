@@ -108,11 +108,9 @@ sub call {
         return $result;
     } elsif ($type eq XDHq::SHRD::RT_STRINGS) {
         $self->wait();
-        print("\t>>>>> " . __FILE__ . ":" . __LINE__ . "\n");    
-        my $result = XDHq::DEMO::SHRD::getStrings();
-        print("\t>>>>> " . __FILE__ . ":" . __LINE__ . "\n");    
+        my @result = XDHq::DEMO::SHRD::getStrings();
         $self->signal();
-        return $result;
+        return @result;
     } elsif (not ($type eq XDHq::SHRD::RT_VOID)) {
         die("Unknown return type !!!")
     }
