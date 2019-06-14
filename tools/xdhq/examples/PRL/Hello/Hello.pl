@@ -24,6 +24,8 @@ SOFTWARE.
 
 use strict; use warnings;
 
+use lib "atlastk";
+
 use Atlas;
 
 my $head = '
@@ -41,8 +43,7 @@ my $body = '
    <button data-xdh-onevent="Clear">Clear</button>
   </div>
  </fieldset>
-</div>
-';
+</div>';
 
 sub acConnect {
     my ($hello, $dom) = @_;
@@ -55,7 +56,6 @@ sub acSubmit {
     my ($hello, $dom) = @_;
 
     $dom->alert("Hello, " . $dom->getContent("input") . "!");
-#    $dom->alert("Yo !");
     $dom->focus("input");
 }
 

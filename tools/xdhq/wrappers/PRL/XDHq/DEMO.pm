@@ -22,6 +22,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 =cut
 
+use strict; use warnings;
+
 package XDHq::DEMO;
 
 use XDHq::SHRD;
@@ -43,8 +45,8 @@ my $wAddr = "";
 my $wPort = "";
 my $cgi = "xdh";
 
+my $headContent: shared;
 my $token = "";
-
 my %instances;
 
 sub trim { my $s = shift; $s =~ s/^\s+|\s+$//g; return $s };
@@ -135,7 +137,7 @@ my sub demoHandshake {
 
 my sub ignition {
     XDHq::DEMO::SHRD::writeString($token);
-    XDHq::DEMO::SHRD::writeString("");
+    XDHq::DEMO::SHRD::writeString($main::headContent);
 
     $token = XDHq::DEMO::SHRD::getString();
 
@@ -205,6 +207,8 @@ my sub serve {
         
 sub launch {
     my ($callback, $userCallback, $callbacks, $headContent) = @_;
+
+    $main::headContent = $headContent;
 
     init();
     demoHandshake();

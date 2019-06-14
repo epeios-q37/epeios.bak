@@ -34,7 +34,7 @@ my sub split {
     my @keys = keys %$keysAndValues;
     my @values = values %$keysAndValues;
 
-    return (\@keys, \@values);
+    return (\@keys, \@values);  # Is there a way to avoid the use of variables?
 }
 
 my sub unsplit {
