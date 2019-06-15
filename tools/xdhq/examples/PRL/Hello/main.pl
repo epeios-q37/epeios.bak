@@ -22,38 +22,44 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 =cut
 
-package XDHq;
+use strict; use warnings;
 
-use XDHq::SHRD;
-use XDHq::DEMO;
-use XDHq::DEMO::DOM;
+use lib "atlastk";
 
-use Cwd;
+use Atlas;
 
-my sub getAssetPath {
-    if (XDHq::SHRD::isDev() ) {
-        return "/cygdrive/h/hg/epeios/tools/xdhq/examples/common/" . shift;
-    } else {
-        return getcwd . '/' . shift;
+my sub readAsset {
+    return Atlas::readAsset( shift, "Hello" );
+}
+
+sub acConnect {
+    my ($hello, $dom) = @_;
+
+    $dom->setLayout("",readAsset("Main.html"));
+    $dom->focus("input");
+}
+
+sub acSubmit {
+    my ($hello, $dom) = @_;
+
+    $dom->alert("Hello, " . $dom->getContent("input") . "!");
+    $dom->focus("input");
+}
+
+sub acClear {
+    my ($hello, $dom) = @_;
+
+    if ( $dom->confirm("Are you sure?") ) {
+        $dom->setContent("input", "");
     }
+
+    $dom->focus("input");
 }
 
-my sub getAssetFilename {
-    my ($path, $dir) = @_;
+my %callbacks = (
+    "" => \&acConnect,
+    "Submit" => \&acSubmit,
+    "Clear" => \&acClear,
+);
 
-    return getAssetPath($dir) . '/' . $path; 
-}
-
-sub readAsset {
-    open FILEHANDLE, getAssetFilename(shift, shift) or die $!;
-
-    return do { local $/; <FILEHANDLE> };
-}
-
-sub launch {
-    my ($callback,$userCallback,$callbacks,$headContent,$dir) = @_;
-
-    XDHq::DEMO::launch($callback,$userCallback,$callbacks,$headContent);
-}
-
-return XDHq::SHRD::TRUE;
+Atlas::launch(\%callbacks, sub {return undef;}, readAsset("Head.html"));

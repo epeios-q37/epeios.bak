@@ -117,7 +117,6 @@ my sub init {
     die("Error on connection to '${pAddr}:${pPort}': $! !!!\n") unless $XDHq::DEMO::SHRD::socket;
 }
 
-
 my sub demoHandshake {
     XDHq::DEMO::SHRD::writeString($demoProtocolLabel);
     XDHq::DEMO::SHRD::writeString($demoProtocolVersion);
@@ -150,7 +149,7 @@ my sub ignition {
 
         CORE::say($url);
         CORE::say("^" x length($url));
-        CORE::say("Open above URL in a web browser. Enjoy!");
+        CORE::say("Open above URL in a web browser. Enjoy!\n");
         XDHq::SHRD::open($url);
     }
 }
