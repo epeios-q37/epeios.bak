@@ -30,7 +30,7 @@ use XDHq::DEMO::DOM;
 
 use Cwd;
 
-my sub getAssetPath {
+sub _getAssetPath {
     if (XDHq::SHRD::isDev() ) {
         return "/cygdrive/h/hg/epeios/tools/xdhq/examples/common/" . shift;
     } else {
@@ -38,14 +38,14 @@ my sub getAssetPath {
     }
 }
 
-my sub getAssetFilename {
+sub _getAssetFilename {
     my ($path, $dir) = @_;
 
-    return getAssetPath($dir) . '/' . $path; 
+    return _getAssetPath($dir) . '/' . $path; 
 }
 
 sub readAsset {
-    open FILEHANDLE, getAssetFilename(shift, shift) or die $!;
+    open FILEHANDLE, _getAssetFilename(shift, shift) or die $!;
 
     return do { local $/; <FILEHANDLE> };
 }

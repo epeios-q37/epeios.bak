@@ -28,7 +28,7 @@ use lib "atlastk";
 
 use Atlas;
 
-my sub readAsset {
+sub readAsset {
     return Atlas::readAsset( shift, "Hello" );
 }
 

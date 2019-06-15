@@ -28,7 +28,7 @@ use XDHq::SHRD;
 
 use strict; use warnings;
 
-my sub split {
+sub _split {
     my $keysAndValues = shift;
 
     my @keys = keys %$keysAndValues;
@@ -37,7 +37,7 @@ my sub split {
     return (\@keys, \@values);  # Is there a way to avoid the use of variables?
 }
 
-my sub unsplit {
+sub _unsplit {
     my ($keys, $values) = @_;
     my %keysAndValues;
 
@@ -93,7 +93,7 @@ sub getContents {
 
     my @result = $self->{dom}->call("GetContents_1", XDHq::SHRD::RT_STRINGS, 0, 1, $ids);
 
-    return unsplit($ids, \@result); # To modify to avoid the use of the @result variable.
+    return _unsplit($ids, \@result); # To modify to avoid the use of the @result variable.
 }
 
 sub getContent {
@@ -107,7 +107,7 @@ sub getContent {
 sub setContents {
     my $self = shift;
 
-    my ($ids, $contents) = split(shift);
+    my ($ids, $contents) = _split(shift);
 
     $self->{dom}->call("SetContents_1", XDHq::SHRD::RT_VOID, 0, 2, $ids, $contents);
 }

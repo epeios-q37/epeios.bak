@@ -36,7 +36,7 @@ sub readAsset {
     return XDHq::readAsset(@_);
 }
 
-my sub worker {
+sub _worker {
     my ($userCallback, $instance, $callbacks) = @_;
     my $userObject;
 
@@ -53,16 +53,16 @@ my sub worker {
     }
 }
 
-my sub callback {
+sub _callback {
     my ($userCallback, $callbacks, $instance) = @_;
 
-    return threads->create(\&worker, $userCallback, $instance, $callbacks);
+    return threads->create(\&_worker, $userCallback, $instance, $callbacks);
 }
 
 sub launch {
     my ($callbacks,$userCallback,$headContent,$dir) = @_;
 
-    XDHq::launch(\&callback,$userCallback,$callbacks,$headContent,$dir);
+    XDHq::launch(\&_callback,$userCallback,$callbacks,$headContent,$dir);
 }
 
 return XDHq::SHRD::TRUE;

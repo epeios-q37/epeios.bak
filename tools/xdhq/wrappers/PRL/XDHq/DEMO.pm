@@ -64,11 +64,11 @@ sub getEnv {
     }
 }
 
-my sub tokenIsEmpty {
+sub _tokenIsEmpty {
     return ($token eq "") ||(substr($token,0,1) == "&");
 }
 
-my sub init {
+sub _init {
     $token = "";
     my $atk = getEnv("ATK");
 
@@ -96,7 +96,7 @@ my sub init {
         $wPort = ":" . $wPort;
     }
 
-    if (not(tokenIsEmpty())) {
+    if (not(_tokenIsEmpty())) {
         $token = getAnv("ATK_TOKEN");
     }
 
@@ -117,7 +117,7 @@ my sub init {
     die("Error on connection to '${pAddr}:${pPort}': $! !!!\n") unless $XDHq::DEMO::SHRD::socket;
 }
 
-my sub demoHandshake {
+sub _demoHandshake {
     XDHq::DEMO::SHRD::writeString($demoProtocolLabel);
     XDHq::DEMO::SHRD::writeString($demoProtocolVersion);
 
@@ -134,7 +134,7 @@ my sub demoHandshake {
     }
 }
 
-my sub ignition {
+sub _ignition {
     XDHq::DEMO::SHRD::writeString($token);
     XDHq::DEMO::SHRD::writeString($main::headContent);
 
@@ -154,7 +154,7 @@ my sub ignition {
     }
 }
 
-my sub serve {
+sub _serve {
     my ($callback, $userCallback, $callbacks) = @_;
 
     while(XDHq::SHRD::TRUE) {
@@ -209,10 +209,10 @@ sub launch {
 
     $main::headContent = $headContent;
 
-    init();
-    demoHandshake();
-    ignition();
-    serve($callback, $userCallback, $callbacks);
+    _init();
+    _demoHandshake();
+    _ignition();
+    _serve($callback, $userCallback, $callbacks);
 }
 
 return XDHq::SHRD::TRUE;
