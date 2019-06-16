@@ -25,7 +25,6 @@ SOFTWARE.
 use strict; use warnings;
 
 use lib "atlastk";
-
 use Atlas;
 
 sub readAsset {

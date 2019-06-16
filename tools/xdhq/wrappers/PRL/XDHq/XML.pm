@@ -22,52 +22,69 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 =cut
 
-package Atlas;
+package XDHq::XML;
 
-use XDHq;
 use XDHq::SHRD;
-use XDHq::DOM;
-use XDHq::XML;
-use strict;
-use threads;
 
-# print("\t>>>>> " . __FILE__ . ":" . __LINE__ . "\n");
+use strict; use warnings;
 
-sub readAsset {
-    return XDHq::readAsset(@_);
+sub _write {
+    shift->{xml} .= shift . "\0";
 }
 
-sub createXML {
-    return XDHq::XML->new(shift);
+sub new {
+    my $class = shift;
+    my $self = {
+        xml => ""
+    };
+
+    bless $self, $class;
+    
+    $self->{dom} = XDHq::DEMO::DOM->new(shift);
+
+    $self->_write("dummy");
+    $self->_write(shift);
+
+    return $self;
 }
 
-sub _worker {
-    my ($userCallback, $instance, $callbacks) = @_;
-    my $userObject;
+sub pushTag {
+    my $self = shift;
 
-    my $dom = XDHq::DOM->new($instance);
-
-    if ( $userCallback ) {
-        $userObject = &$userCallback();
-    }
-
-    while (XDHq::SHRD::TRUE) {
-        my ($action, $id) = $dom->getAction();
-
-        $callbacks->{$action}->($userObject,$dom, $id);
-    }
+    $self->{xml} .= ">";
+    $self
 }
 
-sub _callback {
-    my ($userCallback, $callbacks, $instance) = @_;
-
-    return threads->create(\&_worker, $userCallback, $instance, $callbacks);
+sub popTag {
+    shift->{xml} .= "<";
 }
 
-sub launch {
-    my ($callbacks,$userCallback,$headContent,$dir) = @_;
+sub setAttribute {
+    my $self = shift;
 
-    XDHq::launch(\&_callback,$userCallback,$callbacks,$headContent,$dir);
+    $self->{xml} .= "A";
+    $self->_write(shift);
+    $self->_write(shift);
 }
+
+sub setValue {
+    my $self = shift;
+
+    $self->{xml} .= "V";
+    $self->_write(shift);
+}
+
+sub setTagAndValue {
+    my $self = shift;
+
+    $self->pushTag(shift);
+    $self->setValue(shift);
+    $self->popTag();
+}
+
+sub toString {
+    return shift->{xml};
+}
+
 
 return XDHq::SHRD::TRUE;

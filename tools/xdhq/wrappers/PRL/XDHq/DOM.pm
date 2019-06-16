@@ -113,9 +113,39 @@ sub setContents {
 }
 
 sub setContent {
-    my ($self, $id, $value) = @_;
+    shift->setContents({shift() => shift});
+}
 
-    $self->setContents({$id => $value});
+sub setTimeout {
+    shift->{dom}->call("SetTimeout_1", XDHq::SHRD::RT_VOID, 2, shift, shift, 0);
+}
+
+sub _handleClasses {
+    shift->{dom}->call(shift, XDHq::SHRD::RT_VOID, 0, 2, _split(shift));
+}
+
+sub addClasses {
+    shift->_handleClasses("AddClasses_1", shift );
+}
+
+sub addClass {
+    shift->addClasses({shift() => shift})
+}
+
+sub enableElements {
+    shift->{dom}->call("EnableElements_1", XDHq::SHRD::RT_VOID, 0, 1, shift);
+}
+
+sub disableElement {
+    shift->enableElements([shift]);
+}
+
+sub disableElements {
+    shift->{dom}->call("DisableElements_1", XDHq::SHRD::RT_VOID, 0, 1, shift);
+}
+
+sub disableElement {
+    shift->disableElements([shift]);
 }
 
 sub focus {
