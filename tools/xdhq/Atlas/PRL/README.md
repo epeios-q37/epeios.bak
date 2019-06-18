@@ -29,7 +29,7 @@ Here's how a [*Hello, World!*](https://en.wikipedia.org/wiki/%22Hello,_World!%22
 <!-- You can also put below source code in a file and launch it after having installed the [*atlastk* package](http://q37.info/s/9srmskcm) (`pip install atlastk`), or, with absolutely no installation, paste the below code [here](http://q37.info/s/srnnb7hj), and open the displayed *URL* in a web browser.
 -->
 
-For a live demonstration: <http://q37.info/s/vhnb3q3v>.
+For a live demonstration: <http://q37.info/s/zmzcxvm9> (other live demonstrations: <https://q37.info/s/sssznrb4>).
 
 Source code:
 
