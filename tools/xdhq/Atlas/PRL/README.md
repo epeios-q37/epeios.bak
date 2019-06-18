@@ -1,10 +1,8 @@
 # *Perl* version of the *Atlas* toolkit
 
-**This repository will be for the newly created *Perl* version of the *Atlas* toolkit and may currently not be accurate!**
-
 ![For Perl](http://q37.info/download/assets/Perl.png "Perl logo")
 
-[![Version α](https://img.shields.io/static/v1.svg?&color=90b4ed&label=Version&message=α)](http://q37.info/s/gei0veus)[![License](https://img.shields.io/pypi/l/atlastk.svg?style=plastic)](https://github.com/epeios-q37/atlas-perl/blob/master/LICENSE)
+[![Version β](https://img.shields.io/static/v1.svg?&color=90b4ed&label=Version&message=β)](http://q37.info/s/gei0veus)[![License](https://img.shields.io/pypi/l/atlastk.svg?style=plastic)](https://github.com/epeios-q37/atlas-perl/blob/master/LICENSE)
 
 A fast and easy way to add a graphical user interface ([GUI](http://q37.info/s/hw9n3pjs)) to your *Perl* programs.
 
