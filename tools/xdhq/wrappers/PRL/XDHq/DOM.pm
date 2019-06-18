@@ -78,14 +78,26 @@ sub confirm {
     return $self->{dom}->call("Confirm_1", XDHq::SHRD::RT_STRING, 1, $message, 0) eq "true";
 }
 
-sub setLayoutPrivate {
+sub _setLayout {
     my ($self, $id, $xml, $xslFilename) = @_;
 
-    $self->{dom}->call("SetLayout_1", XDHq::SHRD::RT_VOID, 3, $id, $xml, $xslFilename, 0);
+    $self->{dom}->call("SetLayout_1", XDHq::SHRD::RT_VOID, 3, $id, ref $xml eq "XDHq::XML" ? $xml->toString() : $xml, $xslFilename, 0);
 }
 
 sub setLayout {
-    shift->setLayoutPrivate(shift, shift, "");
+    shift->_setLayout(shift, shift, "");
+}
+
+sub setLayoutXSL {
+    my ($self, $id, $xml, $xsl) = @_;
+
+    if( XDHq::SHRD::TRUE) { # Replaced with a DEMO/PROD test when available.
+        $xsl =~ s/([^-A-Za-z0-9_.!~*'() ])/sprintf("%%%02X", ord($1))/eg;
+#        $xsl =~ tr/ /+/;
+        $xsl = "data:text/xml;charset=utf-8," . $xsl;
+    }
+
+    $self->_setLayout( $id, $xml, $xsl);
 }
 
 sub getContents {
@@ -120,6 +132,14 @@ sub setTimeout {
     shift->{dom}->call("SetTimeout_1", XDHq::SHRD::RT_VOID, 2, shift, shift, 0);
 }
 
+sub insertChild {
+    shift->{dom}->call("InsertChild_1", XDHq::SHRD::RT_VOID, 2, shift, shift, 0);
+}
+
+sub createElement {
+    return shift->{dom}->call("CreateElement_1", XDHq::SHRD::RT_STRING, 2, shift, shift, 0);
+}
+
 sub _handleClasses {
     shift->{dom}->call(shift, XDHq::SHRD::RT_VOID, 0, 2, _split(shift));
 }
@@ -136,7 +156,7 @@ sub enableElements {
     shift->{dom}->call("EnableElements_1", XDHq::SHRD::RT_VOID, 0, 1, shift);
 }
 
-sub disableElement {
+sub enableElement {
     shift->enableElements([shift]);
 }
 

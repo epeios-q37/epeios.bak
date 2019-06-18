@@ -46,9 +46,6 @@ sub trim {
     return $s
 }
 
-@Shared::messageContents;
-share(@Shared::messageContents);
-@Shared::messagePseudos;
-share(@Shared::messagePSeudos);
-@Shared::pseudos;
-share(@Shared::pseudos);
+our (@messageContents, @messagePseudos, @pseudos): shared;
+
+return TRUE;

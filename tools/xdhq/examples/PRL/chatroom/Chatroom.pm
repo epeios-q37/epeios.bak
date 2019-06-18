@@ -50,15 +50,15 @@ sub _buildXML {
     $xml->pushTag("Messages");
     $xml->setAttribute("pseudo", $self->{pseudo});
 
-    foreach my $i (reverse $#Shared::messageContents .. $self->{lastMessage}) {
+    foreach my $i (reverse $self->{lastMessage} .. $#Shared::messageContents ) {
         $xml->pushTag("Message");
         $xml->setAttribute("id", $i);
-        $xml->setAttribute("pseudo", $Shared::messagePseudo[$i]);
+        $xml->setAttribute("pseudo", $Shared::messagePseudos[$i]);
         $xml->setValue($Shared::messageContents[$i]);
         $xml->popTag();
     }
 
-    $self->{lastMessage} = $#Shared::messageContents;
+    $self->{lastMessage} = $#Shared::messageContents + 1;
 
     $xml->popTag();
 
@@ -68,10 +68,10 @@ sub _buildXML {
 sub displayMessages {
     my ($self, $dom) = @_;
 
-    if (scalar $#Shared::messageContents > $self->{lastMessage}) {
+    if ($#Shared::messageContents >= $self->{lastMessage}) {
         my $id = $dom->createElement("span");
         $dom->setLayoutXSL($id, $self->_buildXML(), Shared::readAsset("Messages.xsl"));
-        $dom->insertChild($id, "board");
+        $dom->insertChild($id, "Board");
     }
 }
 

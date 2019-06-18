@@ -40,8 +40,6 @@ sub new {
 
     bless $self, $class;
     
-    $self->{dom} = XDHq::DEMO::DOM->new(shift);
-
     $self->_write("dummy");
     $self->_write(shift);
 
@@ -52,7 +50,7 @@ sub pushTag {
     my $self = shift;
 
     $self->{xml} .= ">";
-    $self
+    $self->_write(shift);
 }
 
 sub popTag {
@@ -83,8 +81,8 @@ sub setTagAndValue {
 }
 
 sub toString {
+#    CORE::say("XML: " . shift->{xml});
     return shift->{xml};
 }
-
 
 return XDHq::SHRD::TRUE;
