@@ -169,7 +169,7 @@ namespace {
 	}
 
 	void Process_(
-		flw::sRFlow &RFlow,
+		flw::rRFlow &RFlow,
 		txf::sWFlow &WFlow )
 	{
 	qRH;
@@ -192,15 +192,19 @@ namespace {
 				Flow.GetLine( Line );
 
 				if ( ( Line.Amount() != 0 ) || IsCode ) {
-					if ( Line == "---" ) {
+					if (Line.Search(str::wString("---")) == Line.AmountOfLeadChars()) {
 						Handle_( Slide, WFlow );
 
 						SeparatorPending = true;
 
 						Slide.Init();
 					} else {
-						if ( Line.Search( str::wString( "```" ) ) == 0 )
+						if (Line.Search(str::wString("```")) == Line.AmountOfLeadChars()) {
 							IsCode = !IsCode;
+
+							if (IsCode)
+								Slide.Append(str::wString('\n'));
+						}
 
 						if ( SeparatorPending ) {
 							PrintSlideSeparator_( WFlow );

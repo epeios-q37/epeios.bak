@@ -8,6 +8,14 @@
 - [stdz]: modification to comply with current standards;
 - [trvl]: trivial modifications;
 
+## 2019-06-20
+
+- SCLMISC: [adpt],
+- SCLRGSTRY: [adpt],
+- STR:
+	- adding `AmountOf(Lead|Tails)Chars(…)` methods,
+	- renamig and adapting stripping methods,
+
 ## 2019-06-04
 
 - SCK:

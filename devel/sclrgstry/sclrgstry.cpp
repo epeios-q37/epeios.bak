@@ -655,7 +655,7 @@ qRH
 	str::string Buffer;
 qRB
 	Buffer.Init( Value );
-	Buffer.StripCharacter(' ');
+	Buffer.StripChars(' ');
 	str::ToLower( Buffer );
 
 	if ( ( Buffer == "true" ) || ( Buffer == "yes" ) || ( Buffer == "1" ) )

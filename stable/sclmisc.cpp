@@ -1190,7 +1190,7 @@ qRH
 	str::string List;
 qRB
 	List.Init( RawList );
-	List.StripCharacter(' ');
+	List.StripChars(' ');
 
 	str::ToLower( List );
 
@@ -1237,7 +1237,7 @@ qRH
 	str::string List;
 qRB
 	List.Init( RawList );
-	List.StripCharacter(' ');
+	List.StripChars(' ');
 
 	str::ToLower( List );
 

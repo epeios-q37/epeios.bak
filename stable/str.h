@@ -187,15 +187,21 @@ namespace str {
 		}
 		//f Filter out the 'Model' charactere.
 		void FilterOut( char Model );
+		sdr::sSize AmountOfLeadChars(char model = ' ') const;
+		sdr::sSize AmountOfTailChars(char model = ' ') const;
 		//f Remove characters 'Model' beginnig the string.
-		void StripLeadingCharacter( char Model );
+		void StripLeadingChars(char Model = ' ') {
+			Remove(0, AmountOfLeadChars(Model));
+		}
 		//f Remove characters 'Model' at ending the string.
-		void StripTailingCharacter( char Model );
+		void StripTailingChars(char Model = ' ') {
+			Truncate(AmountOfTailChars(Model));
+		}
 		//f Remove characters 'Model' both beginning and ending the string.
-		void StripCharacter( char Model )
+		void StripChars( char Model )
 		{
-			StripLeadingCharacter( Model );
-			StripTailingCharacter( Model );
+			StripLeadingChars( Model );
+			StripTailingChars( Model );
 		}
 		bso::sBool IsBlank( void ) const;	// Returns 'true' if contains only blan characters.
 		string_ &Truncate( sdr::row__ Row )

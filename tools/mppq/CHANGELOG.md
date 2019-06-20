@@ -1,5 +1,11 @@
 # *MPPq* changelog
 
+## 2019-06-20
+
+- adaptation to modification in underlying modules,
+- adding an empty line before code blocks (or they will not be displayed correctly under some circumstances),
+- heading spaces in slide separators (`---`) and block delimiters (` ``` `) do no more produce messy results,
+
 ## 2018-09-24
 
 - blank lines inside code blocks are now preserved,

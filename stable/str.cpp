@@ -227,8 +227,8 @@ void string_::FilterOut( char Model )
 	Allocate( Dest );
 }
 
-// Could be easily optimized, would be when I have some time.
-void string_::StripLeadingCharacter( char Model )
+// Could be easily optimized.
+sdr::sSize string_::AmountOfLeadChars( char Model ) const
 {
 	sdr::row__ Row = First();
 	sdr::size__ Amount = 0;
@@ -238,11 +238,11 @@ void string_::StripLeadingCharacter( char Model )
 		Row = Next( Row );
 	}
 
-	Remove( 0, Amount );
+	return Amount;
 }
 
 // Could be easily optimized, would be when I have some time.
-void string_::StripTailingCharacter( char Model )
+sdr::sSize string_::AmountOfTailChars(char Model) const
 {
 	sdr::row__ Row = Last();
 	sdr::size__ Amount = 0;
@@ -252,7 +252,7 @@ void string_::StripTailingCharacter( char Model )
 		Row = Previous( Row );
 	}
 
-	Truncate( Amount );
+	return Amount;
 }
 
 bso::sBool string_::IsBlank( void ) const
