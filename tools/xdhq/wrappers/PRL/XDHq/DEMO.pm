@@ -96,8 +96,8 @@ sub _init {
         $wPort = ":" . $wPort;
     }
 
-    if (not(_tokenIsEmpty())) {
-        $token = getAnv("ATK_TOKEN");
+    if (_tokenIsEmpty()) {
+        $token = getEnv("ATK_TOKEN");
     }
 
     if ($token ne "") {

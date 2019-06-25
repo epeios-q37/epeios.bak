@@ -54,7 +54,11 @@ sub _worker {
     while (XDHq::SHRD::TRUE) {
         my ($action, $id) = $dom->getAction();
 
-        $callbacks->{$action}->($userObject,$dom, $id);
+        if (($action eq "" ) or not $callbacks->{"_PreProcess"} or $callbacks->{"_PreProcess"}->($userObject,$dom, $id)) {
+            if ( $callbacks->{$action}->($userObject,$dom, $id) and $callbacks->{"_PostProcess"} ) {
+                $callbacks->{"_PostProcess"}->($userObject,$dom, $id);
+            }
+        }
     }
 }
 
