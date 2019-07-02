@@ -63,6 +63,10 @@ sub getAction {
     return shift->{dom}->getAction();
 }
 
+sub execute {
+        return shift->{dom}->call("Execute_1", XDHq::SHRD::RT_STRING, 1, shift, 0);
+}
+
 sub alert {
     my ($self, $message) = @_;
 
@@ -140,6 +144,10 @@ sub insertChild {
     shift->{dom}->call("InsertChild_1", XDHq::SHRD::RT_VOID, 2, shift, shift, 0);
 }
 
+sub dressWidgets {
+     shift->{dom}->call( "DressWidgets_1", XDHq::SHRD::RT_VOID, 1, shift, 0 )   ;
+}
+
 sub _handleClasses {
     shift->{dom}->call(shift, XDHq::SHRD::RT_VOID, 0, 2, _split(shift));
 }
@@ -152,12 +160,20 @@ sub removeClasses {
     shift->_handleClasses("RemoveClasses_1", shift);
 }
 
+sub toggleClasses {
+    shift->_handleClasses("ToggleClasses_1", shift);
+}
+
 sub addClass {
     shift->addClasses({shift() => shift})
 }
 
 sub removeClass {
     shift->removeClasses({shift() => shift});
+}
+
+sub toggleClass {
+    shift->toggleClasses({shift() => shift});
 }
 
 sub enableElements {
@@ -174,6 +190,26 @@ sub disableElements {
 
 sub disableElement {
     shift->disableElements([shift]);
+}
+
+sub setAttribute {
+    shift->{dom}->call("SetAttribute_1", XDHq::SHRD::RT_VOID, 3, shift, shift, shift, 0 )
+}
+
+sub getAttribute {
+    return shift->{dom}->call("GetAttribute_1", XDHq::SHRD::RT_STRING, 2, shift, shift, 0 )
+}
+
+sub removeAttribute {
+    return shift->{dom}->call("RemoveAttribute_1", XDHq::SHRD::RT_VOID, 2, shift, shift, 0 )
+}
+
+sub setProperty {
+    shift->{dom}->call("SetProperty_1", XDHq::SHRD::RT_VOID, 3, shift, shift, shift, 0 )
+}
+
+sub getProperty {
+    return shift->{dom}->call("GetProperty_1", XDHq::SHRD::RT_STRING, 2, shift, shift, 0 )
 }
 
 sub focus {
