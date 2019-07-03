@@ -28,7 +28,7 @@ use lib "atlastk";
 use Atlas;
 
 sub readAsset {
-    return Atlas::readAsset( shift, "blank" );
+    return Atlas::readAsset( shift, "Blank" );
 }
 
 sub acConnect {

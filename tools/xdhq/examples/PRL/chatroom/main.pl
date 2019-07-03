@@ -27,7 +27,7 @@ use strict; use warnings;
 use lib "atlastk";
 use Atlas;
 
-use lib "chatroom";
+use lib "Chatroom";
 use Shared;
 use Chatroom;
 

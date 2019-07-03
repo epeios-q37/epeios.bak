@@ -2,7 +2,7 @@
 
 ![For Perl](http://q37.info/download/assets/Perl.png "Perl logo")
 
-[![Version β](https://img.shields.io/static/v1.svg?&color=90b4ed&label=Version&message=β)](http://q37.info/s/gei0veus)[![License](https://img.shields.io/pypi/l/atlastk.svg?style=plastic)](https://github.com/epeios-q37/atlas-perl/blob/master/LICENSE)
+[![Version 0.9.0](https://img.shields.io/static/v1.svg?&color=90b4ed&label=Version&message=0.9.0)](http://q37.info/s/gei0veus)[![License](https://img.shields.io/pypi/l/atlastk.svg?style=plastic)](https://github.com/epeios-q37/atlas-perl/blob/master/LICENSE)
 
 A fast and easy way to add a graphical user interface ([GUI](http://q37.info/s/hw9n3pjs)) to your *Perl* programs.
 

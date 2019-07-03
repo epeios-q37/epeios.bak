@@ -29,7 +29,7 @@ sys.path.append("../Atlas.python.zip")
 
 import atlastk as Atlas
 
-def acConnect(self, dom, id):
+def acConnect(self, dom):
 	dom.setLayout("", body )
 	dom.focus( "input")
 
@@ -37,7 +37,7 @@ callbacks = {
 		"": acConnect,
 		"Typing": lambda self, dom, id:
 			dom.setContent("name", dom.getContent(id)),
-		"Clear": lambda self, dom, id:
+		"Clear": lambda self, dom:
 			dom.setContents( {  "input": "", "name": ""} )
 			if dom.confirm( "Are you sure ?" ) else None
 	}

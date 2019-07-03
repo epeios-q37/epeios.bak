@@ -27,18 +27,14 @@ use strict; use warnings;
 use lib "atlastk";
 use Atlas;
 
-use lib "notes";
+use lib "Notes";
 use Shared;
 use Notes;
-
-sub readAsset {
-    return Atlas::readAsset( shift, "notes" );
-}
 
 sub acConnect {
     my ($notes, $dom) = @_;
 
-    $dom->setLayout("", readAsset("Main.html"));
+    $dom->setLayout("", Shared::readAsset("Main.html"));
     $notes->displayList($dom);
 }
 
@@ -131,4 +127,4 @@ my %callbacks = (
 	"Cancel" => \&acCancel,
 );
 
-Atlas::launch(\%callbacks, sub {return Notes->new()}, readAsset("Head.html"));
+Atlas::launch(\%callbacks, sub {return Notes->new()}, Shared::readAsset("Head.html"));

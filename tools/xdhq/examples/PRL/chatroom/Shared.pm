@@ -37,7 +37,7 @@ use constant {
 };
 
 sub readAsset {
-    return Atlas::readAsset( shift, "chatroom" );
+    return Atlas::readAsset( shift, "Chatroom" );
 }
 
 sub trim {

@@ -39,7 +39,7 @@ use constant {
 @Shared::viewModeElements = ("Pattern", "CreateButton", "DescriptionToggling", "ViewNotes");
 
 sub readAsset {
-    return Atlas::readAsset( shift, "notes" );
+    return Atlas::readAsset( shift, "Notes" );
 }
 
 sub trim {

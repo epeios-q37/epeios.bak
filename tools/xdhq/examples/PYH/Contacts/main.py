@@ -140,7 +140,7 @@ def handleButtonVisibility(dom):
         raise Exception("Unknown state!")
 
 
-def acConnect(self, dom, id):
+def acConnect(self, dom):
     global contacts, state
     dom.setLayout("", readAsset("Main.html"))
     dom.dressWidgets("")
@@ -158,7 +158,7 @@ def acSelect(self, dom, id):
     state = State.DISPLAY
     handleButtonVisibility(dom)
 
-def acEdit(self, dom, id):
+def acEdit(self, dom):
     global contacts, current
 
     if current is None:
@@ -166,7 +166,7 @@ def acEdit(self, dom, id):
     else:
         contact = contacts[current]
 
-def acSubmit(self, dom, id):
+def acSubmit(self, dom):
     global contacts
     [name, address, phone, note] = dom.getContents(
         ["Name.edit", "Address.edit", "Phone.edit", "Note.edit"]).values()

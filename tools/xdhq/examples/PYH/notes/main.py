@@ -96,7 +96,7 @@ class Notes:
 		dom.setContent("Edit." + str(self.index), "")
 		self.index = -1
 
-def acConnect(notes, dom, id):
+def acConnect(notes, dom):
 		dom.setLayout("", readAsset( "Main.html") )
 		notes.displayList(dom)
 
@@ -104,7 +104,7 @@ def acToggleDescriptions(notes, dom, id):
 		notes.hideDescriptions = dom.getContent(id)=="true"
 		notes.handleDescriptions(dom)
 
-def acSearch(notes, dom, id):
+def acSearch(notes, dom):
 		notes.pattern = dom.getContent("Pattern").lower()
 		notes.displayList(dom)
 
@@ -124,7 +124,7 @@ def acDelete(notes, dom, id):
 		notes.notes.pop(int(dom.getContent(id)))
 		notes.displayList(dom)
 
-def acSubmit(notes, dom, id):
+def acSubmit(notes, dom):
 	result = dom.getContents(["Title", "Description"])
 	title = result["Title"].strip()
 	description = result["Description"]
@@ -142,7 +142,7 @@ def acSubmit(notes, dom, id):
 		dom.alert("Title can not be empty!")
 		dom.focus("Title")
 
-def acCancel( notes, dom, id):
+def acCancel( notes, dom):
 	note = notes.notes[notes.index]
 
 	result = dom.getContents(["Title", "Description"])
