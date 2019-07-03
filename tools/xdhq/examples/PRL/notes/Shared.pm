@@ -36,7 +36,7 @@ use constant {
     TRUE => not (undef)
 };
 
-my @viewModeElements = ("Pattern", "CreateButton", "DescriptionToggling", "ViewNotes");
+@Shared::viewModeElements = ("Pattern", "CreateButton", "DescriptionToggling", "ViewNotes");
 
 sub readAsset {
     return Atlas::readAsset( shift, "notes" );

@@ -104,13 +104,13 @@ sub displayList {
 
     $dom->setLayoutXSL("Notes", $xml, Shared::readAsset("Notes.xsl"));
     $dom->setContents(\%contents);
-    $dom->enableElements(@Shared::viewModeElements);
+    $dom->enableElements(\@Shared::viewModeElements);
 }
 
 sub view {
     my ($self, $dom) = @_;
 
-    $dom->enableElements(@Shared::viewModeElements);
+    $dom->enableElements(\@Shared::viewModeElements);
     $dom->setContent("Edit.$self->{idx}", "");
     $self->{idx} = -1;
 }

@@ -66,7 +66,7 @@ sub acEdit {
 
     $dom->setLayout("Edit.$idx", Shared::readAsset("Note.html"));
     $dom->setContents({Title => $note{title}, Description => $note{description}});
-    $dom->disableElements($Shared::viewModeElements);
+    $dom->disableElements(\@Shared::viewModeElements);
     $dom->dressWidgets("Notes");
     $dom->focus("Title");
 }
