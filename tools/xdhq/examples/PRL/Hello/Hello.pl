@@ -49,14 +49,16 @@ sub acConnect {
     my ($hello, $dom) = @_;
 
     $dom->setLayout("",$body);
-    $dom->focus("input");
+
+    return 1;
 }
 
 sub acSubmit {
     my ($hello, $dom) = @_;
 
     $dom->alert("Hello, " . $dom->getContent("input") . "!");
-    $dom->focus("input");
+
+    return 1;
 }
 
 sub acClear {
@@ -66,11 +68,12 @@ sub acClear {
         $dom->setContent("input", "");
     }
 
-    $dom->focus("input");
+    return 1;
 }
 
 my %callbacks = (
     "" => \&acConnect,
+    "_PostProcess" => sub {$_[1]->focus("input");},
     "Submit" => \&acSubmit,
     "Clear" => \&acClear,
 );
