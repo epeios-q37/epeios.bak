@@ -24,7 +24,48 @@
 					getOrGenerateId( node );
 				]]>
 			</CreateElement>
-			<Child>
+      <Layout>
+        <Prepend>
+          <![CDATA[
+					{
+						let xml = "%XML%";
+						let xsl = "%XSL%";
+						let id = "%Id%";
+						prependLayout(id, xml, xsl);
+
+						var digests = fetchEventHandlers( id );
+						digests;
+						}
+					]]>
+        </Prepend>
+        <Set>
+          <![CDATA[
+					{
+						let xml = "%XML%";
+						let xsl = "%XSL%";
+						let id = "%Id%";
+						setLayout(id, xml, xsl);
+
+						var digests = fetchEventHandlers( id );
+						digests;
+						}
+					]]>
+        </Set>
+        <Append>
+          <![CDATA[
+					{
+						let xml = "%XML%";
+						let xsl = "%XSL%";
+						let id = "%Id%";
+						appendLayout(id, xml, xsl);
+
+						var digests = fetchEventHandlers( id );
+						digests;
+						}
+					]]>
+        </Append>
+      </Layout>
+      <Child>
 				<Insert>
 					<![CDATA[
 					 let node = getElement( "%Id%" );
@@ -212,50 +253,6 @@
 			<Fetcher>
 			</Fetcher>
 			<Setter>
-				<Head>
-					<![CDATA[
-					{
-						let xml = "%XML%";
-						let xsl = "%XSL%";
-						setLayout(document.head, xml, xsl);
-					}
-					]]>
-				</Head>
-				<Layout>
-					<![CDATA[
-					{
-						let xml = "%XML%";
-						let xsl = "%XSL%";
-						let id = "%Id%";
-						setLayout(id, xml, xsl);
-            
-						if ( id == "" ) {
-							let node = document.createElement("span");
-							node.style.all="revert";
-							node.innerHTML=`
-								<div style="display:table; margin: 5px auto auto auto;">
-                 <hr/>
-								 <span style="display: table; margin: 10px auto 5px auto;font-style: oblique;">For another instance, click or scan:</span>
-								 <div style="display: flex; justify-content: space-around;">
- 								  <a href="#">
- 								   <div id="qrcode"></div>
-								  </a>
-							   </div>
-							   <span style="display: table; margin: auto;font-style: oblique;margin: 5px auto auto auto;">Generated with <a href="https://davidshimjs.github.io/qrcodejs/">qrcode.js</a></span>
-								 <div style="display: table; margin: 15px auto 10px auto; border: 1px solid; padding: 10px;box-shadow: 5px 5px;">
-								  <span style="text-shadow: 1px 1px;">Powered by the <span style="font-style: italic;">Atlas</span> toolkit (<a href="http://atlastk.org/">http://atlastk.org/</a>)<br/>&gt;&gt;&gt;Live demonstrations&lt;&lt;&lt;</span>
-								 </div>
-							  </div>`;
-//							getElement( id ).insertBefore( node, getElement( id ).firstChild );
-							getElement( id ).appendChild( node );
-							new QRCode("qrcode", {width:125, height:125, correctLevel: QRCode.CorrectLevel.L}).makeCode(window.location.href);
-						}
-
-						var digests = fetchEventHandlers( id );
-						digests;
-						}
-					]]>
-				</Layout>
 				<EventHandlers>
 					<![CDATA[
 					setEventHandlers( %Ids_%, %Events_% );

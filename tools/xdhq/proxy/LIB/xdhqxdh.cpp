@@ -53,10 +53,12 @@ namespace {
 		cExecute_1,
 		cAlert_1,
 		cConfirm_1,
-		cSetLayout_1,
-		cGetContents_1,
 		cSetContents_1,
 		cSetTimeout_1,
+		cPrependLayout_1,
+		cSetLayout_1,
+		cAppendLayout_1,
+		cGetContents_1,
 		cParent_1,
 		cFirstChild_1,
 		cLastChild_1,
@@ -97,10 +99,12 @@ namespace {
 			C( Execute_1 );
 			C( Alert_1 );
 			C( Confirm_1 );
-			C( SetLayout_1 );
 			C( GetContents_1 );
 			C( SetContents_1 );
 			C( SetTimeout_1 );
+			C( PrependLayout_1);
+			C( SetLayout_1);
+			C( AppendLayout_1);
 			C( Parent_1 );
 			C( FirstChild_1 );
 			C( LastChild_1 );
@@ -314,9 +318,13 @@ namespace {
 		}
 	}
 
-	void SetLayout_(
+	void HandleLayout_(
 		flw::rRFlow &Flow,
-		xdhdws::sProxy &Proxy )
+		xdhdws::sProxy &Proxy,
+		void (xdhdws::sProxy::* Method)(
+			const ntvstr::rString &,
+			const ntvstr::rString &L,
+			const ntvstr::rString &) )
 	{
 	qRH;
 		str::wString Id, RawXML, EscapedXML, XSL;
@@ -332,17 +340,38 @@ namespace {
 		if ( RawXML.Amount() == 0 )
 			qRGnr();
 		else if ( RawXML( RawXML.First() ) == '<' )
-			Proxy.SetLayout( Id, RawXML, XSL );
+			(Proxy.*Method)( Id, RawXML, XSL );
 		else {
 			EscapedXML.Init();
 
 			EscapeNULChars_( RawXML, EscapedXML );
 
-			Proxy.SetLayout( Id, EscapedXML, XSL );
+			(Proxy.*Method)( Id, EscapedXML, XSL );
 		}
 	qRR;
 	qRT;
 	qRE;
+	}
+
+	void PrependLayout_(
+		flw::rRFlow &Flow,
+		xdhdws::sProxy &Proxy)
+	{
+		HandleLayout_(Flow, Proxy, &xdhdws::sProxy::PrependLayout);
+	}
+
+	void SetLayout_(
+		flw::rRFlow &Flow,
+		xdhdws::sProxy &Proxy)
+	{
+		HandleLayout_(Flow, Proxy, &xdhdws::sProxy::SetLayout);
+	}
+
+	void AppendLayout_(
+		flw::rRFlow &Flow,
+		xdhdws::sProxy &Proxy)
+	{
+		HandleLayout_(Flow, Proxy, &xdhdws::sProxy::AppendLayout);
 	}
 
 	namespace {
@@ -1073,7 +1102,9 @@ namespace {
 				H( Execute );
 				H( Alert );
 				H( Confirm );
-				H( SetLayout );
+				H( PrependLayout);
+				H( SetLayout);
+				H( AppendLayout);
 				H( GetContents );
 				H( SetContents );
 				H( SetTimeout );

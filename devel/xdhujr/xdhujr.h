@@ -64,12 +64,20 @@ namespace xdhujr {
 		extern entry___ Selector;
 		extern rEntry Parent;
 		extern rEntry CreateElement;
+
 		namespace setter {
-			extern entry___ Layout;
 			extern entry___ EventHandlers;
 			extern entry___ Contents;
 			extern rEntry Timeout;
 		}
+
+		namespace layout {
+			extern rEntry
+				Prepend,
+				Set,
+				Append;
+		}
+
 		namespace child {
 			extern rEntry
 				Insert,
@@ -77,33 +85,40 @@ namespace xdhujr {
 				First,
 				Last;
 		}
+
 		namespace sibling {
 			extern rEntry
 				Previous,
 				Next;
 		}
+
 		namespace insert {
 			extern rEntry
 				After,
 				Before;
 		}
+
 		namespace property {
 			extern entry___ Setter;
 			extern entry___ Getter;
 		}
+
 		namespace attribute {
 			extern entry___ Setter;
 			extern entry___ Getter;
 			extern entry___ Remover;
 		}
+
 		namespace value {
 			extern entry___ Setter;
 			extern entry___ Getter;
 		}
+
 		namespace dialog {
 			extern entry___ Alert;
 			extern entry___ Confirm;
 		}
+
 		namespace widget {
 			extern entry___ ValueRetriever;
 			extern entry___ Focuser;

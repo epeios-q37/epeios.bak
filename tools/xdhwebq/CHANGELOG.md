@@ -1,5 +1,9 @@
 # *XDHWebQ* *CHANGELOG*
 
+## 2019-07-06
+
+- adding new layout related functionalities,
+
 ## 2019-04-12
 
 - fixing session id random generation,

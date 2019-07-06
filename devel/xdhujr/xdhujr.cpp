@@ -42,6 +42,11 @@ entry___ xdhujr::custom_item::attribute_name::Casts( "Casts", AttributeNames );
 
 entry___ xdhujr::Scripts( "Scripts", sclrgstry::Definitions );
 
+static rEntry LayoutScripts_("Layout", xdhujr::Scripts);
+rEntry xdhujr::script::layout::Prepend("Prepend", LayoutScripts_);
+rEntry xdhujr::script::layout::Set("Set", LayoutScripts_);
+rEntry xdhujr::script::layout::Append("Append", LayoutScripts_);
+
 static rEntry ChildScripts_( "Child", xdhujr::Scripts );
 rEntry xdhujr::script::child::Insert( "Insert", ChildScripts_ );
 rEntry xdhujr::script::child::Append( "Append", ChildScripts_ );
@@ -71,7 +76,6 @@ entry___ xdhujr::script::value::Setter( "Setter", ValueScripts_ );
 entry___ xdhujr::script::value::Getter( "Getter", ValueScripts_ );
 
 static entry___ SetterScripts_( "Setter", xdhujr::Scripts );
-entry___ xdhujr::script::setter::Layout("Layout", SetterScripts_);
 entry___ xdhujr::script::setter::EventHandlers( "EventHandlers", SetterScripts_ );
 entry___ xdhujr::script::setter::Contents( "Contents", SetterScripts_ );
 entry___ xdhujr::script::setter::Timeout( "Timeout", SetterScripts_ );

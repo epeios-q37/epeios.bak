@@ -287,13 +287,27 @@ namespace sclxdhtml {
 			const char *MessageLanguage,	// If != 'NULL', 'Message' is translated, otherwise it is displayed as is.
 			const char *CloseTextLanguage );
 	protected:
+		void PrependLayout_(
+			const xdhdws::nstring___ &Id,
+			const rgstry::rEntry &XSLFilename,
+			const char *Target,
+			const sclrgstry::registry_ &Registry,
+			const str::dString &XML,
+			bso::char__ Marker);
 		void SetLayout_(
 			const xdhdws::nstring___ &Id,
 			const rgstry::rEntry &XSLFilename,
 			const char *Target,
 			const sclrgstry::registry_ &Registry,
 			const str::dString &XML,
-			bso::char__ Marker );
+			bso::char__ Marker);
+		void AppendLayout_(
+			const xdhdws::nstring___ &Id,
+			const rgstry::rEntry &XSLFilename,
+			const char *Target,
+			const sclrgstry::registry_ &Registry,
+			const str::dString &XML,
+			bso::char__ Marker);
 		template <typename session, typename rack> void SetLayout_(
 			const xdhdws::nstring___ &Id,
 			const char *Target,

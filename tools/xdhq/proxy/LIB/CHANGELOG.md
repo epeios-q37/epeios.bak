@@ -1,5 +1,9 @@
 # *XDHq* *CHANGELOG*
 
+## 2019-07-06
+
+- adding new layout related functionalities,
+
 ## 2019-06-01
 
 - adding CSS rules related functionnalities,

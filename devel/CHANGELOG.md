@@ -8,6 +8,12 @@
 - [stdz]: modification to comply with current standards;
 - [trvl]: trivial modifications;
 
+
+## 2019-07-06
+
+- SCLXDHTML, XDHCMN, XDHDWS, XDHUJP, XDHUJR, XDHUJS:
+	- adding new layout related functionnalities,
+
 ## 2019-06-20
 
 - SCLMISC: [adpt],

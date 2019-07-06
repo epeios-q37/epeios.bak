@@ -102,22 +102,37 @@ class DOM:
 	def confirm(self,message):
 		return self._dom.call( "Confirm_1", _STRING, 1, message, 0 ) == "true"
 
-	def _setLayout(self, id, xml, xslFilename):
-	#	If 'xslFilename' is empty, 'xml' contents HTML.
-	# 	If 'xml' is HTML and uses the compressed form, if it has a root tag, only the children will be used.
-		self._dom.call("SetLayout_1", _VOID, 3, id, xml if isinstance(xml,str) else xml.toString(), xslFilename, 0)
+	def _handleLayout(self, command, id, xml, xsl):
+		#	If 'xslFilename' is empty, 'xml' contents HTML.
+		# 	If 'xml' is HTML and uses the compressed form, if it has a root tag, only the children will be used.
+		self._dom.call(command, _VOID, 3, id, xml if isinstance(xml,str) else xml.toString(), xsl, 0)
+
+	def prependLayout(self,id,html):
+		self._handleLayout("PrependLayout_1",id,html,"")
 
 	def setLayout(self,id,html):
-		self._setLayout(id,html,"")
+		self._handleLayout("SetLayout_1",id,html,"")
 
-	def setLayoutXSL(self, id, xml, xsl ):
+	def appendLayout(self,id,html):
+		self._handleLayout("AppendLayout_1",id,html,"")
+
+	def _handleLayoutXSL(self, command, id, xml, xsl):
 		global _dir
 		xslURL = xsl
 
 		if True:	# Testing if 'PROD' or 'DEMO' mode when available.
 			xslURL = "data:text/xml;charset=utf-8," + _encode( _readXSLAsset( xsl, _dir ) )
 
-		self._setLayout( id, xml, xslURL )
+		self._handleLayout(command, id, xml, xslURL )
+
+	def prependLayoutXSL(self, id, xml, xsl):
+		self._handleLayoutXSL("PrependLayout_1",id,xml,xsl)
+
+	def setLayoutXSL(self, id, xml, xsl):
+		self._handleLayoutXSL("SetLayout_1",id,xml,xsl)
+
+	def appendLayoutXSL(self, id, xml, xsl):
+		self._handleLayoutXSL("AppendLayout_1",id,xml,xsl)
 
 	def getContents(self, ids):
 		return _unsplit(ids,self._dom.call("GetContents_1",_STRINGS, 0, 1, ids))

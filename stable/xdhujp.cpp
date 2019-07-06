@@ -197,8 +197,9 @@ static void HandleWidgets_(
 	ParametersSetsTag.Append( " ]");
 }
 
-static void SetLayout_(
+static void HandleLayout_(
 	cJS &Callback,
+	xdhujs::script_name__ Script,
 	const nchar__ *Id,	// If 'Id' != NULL, it's the id of the element to apply to, otherwise it applies to the document.
 	const nchar__ *XML,
 	const nchar__ *XSL )	// If empty, 'XML' contains pure '(X)HTML'.
@@ -208,7 +209,7 @@ qRH;
 	str::string RawDigest;
 	xdhcmn::digest Digest;
 qRB;
-	RawDigest.Init( Execute( Callback, xdhujs::snLayoutSetter, &Result, Id, XML, XSL ) );
+	RawDigest.Init( Execute( Callback, Script, &Result, Id, XML, XSL ) );
 
 	Digest.Init();
 	xdhcmn::Split( RawDigest, Digest );
@@ -219,8 +220,9 @@ qRT;
 qRE;
 }
 
-static void SetLayout_(
+static void HandleLayout_(
 	cJS &Callback,
+	xdhujs::script_name__ Script,
 	va_list List )
 {
 	// NOTA : we use variables, because if we put 'va_arg()' directly as parameter to below function, it's not sure that they are called in the correct order.
@@ -228,7 +230,28 @@ static void SetLayout_(
 	const nchar__ *XML = va_arg( List, const nchar__ * );
 	const nchar__ *XSL = va_arg( List, const nchar__ * );
 
-	SetLayout_( Callback, Id, XML, XSL );
+	HandleLayout_( Callback, Script, Id, XML, XSL );
+}
+
+static void PrependLayout_(
+	cJS &Callback,
+	va_list List)
+{
+	HandleLayout_(Callback, xdhujs::snLayoutPrepender, List);
+}
+
+static void SetLayout_(
+	cJS &Callback,
+	va_list List)
+{
+	HandleLayout_(Callback, xdhujs::snLayoutSetter, List);
+}
+
+static void AppendLayout_(
+	cJS &Callback,
+	va_list List)
+{
+	HandleLayout_(Callback, xdhujs::snLayoutAppender, List);
 }
 
 static void HandleWidgets_(
@@ -944,7 +967,13 @@ static script_name__ Convert_( xdhcmn::eFunction Function )
 	case xdhcmn::fSelect:
 		qRFwk();
 		break;
+	case xdhcmn::fPrependLayout:
+		qRFwk();
+		break;
 	case xdhcmn::fSetLayout:
+		qRFwk();
+		break;
+	case xdhcmn::fAppendLayout:
 		qRFwk();
 		break;
 	case xdhcmn::fDressWidgets:
@@ -1053,8 +1082,14 @@ void xdhujp::sProxyCallback::XDHCMNProcess(
 	case xdhcmn::fSelect:
 		Select_( C_(), List);
 		break;
+	case xdhcmn::fPrependLayout:
+		PrependLayout_(C_(), List);
+		break;
 	case xdhcmn::fSetLayout:
-		SetLayout_( C_(), List );
+		SetLayout_(C_(), List);
+		break;
+	case xdhcmn::fAppendLayout:
+		AppendLayout_(C_(), List);
 		break;
 	case xdhcmn::fDressWidgets:
 		DressWidgets_( C_(), List);

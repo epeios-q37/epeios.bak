@@ -42,7 +42,9 @@ namespace xdhujs {
 
 	E_ENUM(script_name) {
 		snExecute,
+		snLayoutPrepender,
 		snLayoutSetter,
+		snLayoutAppender,
 		snAttributeGetter,
 		snAttributeRemover,
 		snAttributeSetter,

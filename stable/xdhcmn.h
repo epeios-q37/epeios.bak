@@ -65,9 +65,13 @@ namespace xdhcmn {
 		fLog,				// Message,
 		fAlert,				// XML, XSL, Title.
 		fConfirm,			// XML, XSL, Title.
-		fSetLayout,			// Id, XML, XSL; if XSL is empty, XML is pure HTML.
 		fSetContents,		// Ids, Contents.
 		fSetTimeout,		// Id, Delay, Action.
+/**/
+		fPrependLayout,			// Id, XML, XSL; if XSL is empty, XML is pure HTML.
+		fSetLayout,			// Id, XML, XSL; if XSL is empty, XML is pure HTML.
+		fAppendLayout,			// Id, XML, XSL; if XSL is empty, XML is pure HTML.
+/**/
 /**/
 		fDummy,				// Dummy entry, which helps creating new entries.
 		fParent,			// Id,

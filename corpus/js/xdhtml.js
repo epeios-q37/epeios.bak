@@ -29,9 +29,11 @@ var drag = false;
 function getElement(elementOrId) {
 	if (typeof elementOrId === "string")
 		if (elementOrId === "")
-			return document.body;
+			return document.body.firstElementChild;
 		else
 			return document.getElementById(elementOrId);
+	else if (elementOrId === document.body)	// To avoid defacement.
+		return getElement("");
 	else
 		return elementOrId;
 }
@@ -190,20 +192,33 @@ function removeChildren(elementOrId) {
 	getElement(elementOrId).innerHTML = "";
 }
 
-function setLayout(id, xml, xsl) {
+function getLayoutHTML(xml, xsl) {
 	if (xml.trim().substring(0, 1) !== "<")
 		xml = convert(xml);
 
 	if (xsl === "") {
-		getElement(id).innerHTML = xml;
+		return xml;
 	} else {
 		let div = document.createElement('div');
 		div.appendChild(transformToFragment(xml, xsl));
-		getElement(id).innerHTML = div.innerHTML;
-//		div = null;
-//		removeChildren(id);
-//		getElement(id).appendChild(transformToFragment(xml, xsl));
+		return div.innerHTML;
 	}
+}
+
+function prependLayout(id, xml, xsl) {
+	element = getElement(id);
+
+	element.innerHTML = getLayoutHTML(xml, xsl) + element.innerHTML;
+}
+
+function setLayout(id, xml, xsl) {
+	getElement(id).innerHTML = getLayoutHTML(xml, xsl);
+}
+
+function appendLayout(id, xml, xsl) {
+	element = getElement(id);
+
+	element.innerHTML = element.innerHTML + getLayoutHTML(xml, xsl);
 }
 
 function handleBooleanAttribute(element, name, flag) {

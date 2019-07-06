@@ -426,28 +426,107 @@ qRE
 }
 
 namespace {
-	eXSLFileHandling GetXMLFileHandlingFromRegistry_( const sclrgstry::dRegistry &Registry )
+	namespace {
+		eXSLFileHandling GetXMLFileHandlingFromRegistry_(const sclrgstry::dRegistry &Registry)
+		{
+			eXSLFileHandling Result = xfh_Undefined;
+			qRH;
+			str::wString Handling;
+			qRB;
+			Handling.Init();
+
+			if (!sclrgstry::OGetValue(Registry, registry::definition::XMLFilesHandling, Handling))
+				Handling.Append("Content");	// Default value.
+
+			if (Handling == "Content")
+				Result = xfhContent;
+			else if (Handling == "Name")
+				Result = xfhName;
+			else
+				sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort(registry::definition::XMLFilesHandling);
+			qRR;
+			qRT;
+			qRE;
+			return Result;
+		}
+
+		void handleXSL_(
+			const rgstry::rEntry &XSLFilename,
+			const char *Target,
+			eXSLFileHandling Handling,
+			const sclrgstry::registry_ &Registry,
+			bso::sChar Marker,
+			str::dString &Result )
+		{
+		qRH;
+			str::wString XSL, RawXSL;
+		qRB;
+			XSL.Init();
+
+			if ( Handling == xfhRegistry )
+				Handling = GetXMLFileHandlingFromRegistry_( Registry );
+
+			switch ( Handling ) {
+			case xfhContent:
+				// The content of the XSL file is transmitted (global XDHTML behavior).
+				RawXSL.Init();
+				sclxdhtml::LoadXSLAndTranslateTags( rgstry::tentry___( XSLFilename, Target ), Registry, RawXSL, Marker );
+				XSL.Append( "data:text/xml;charset=utf-8," );
+				cdgurl::Encode( RawXSL, XSL );
+				break;
+			case xfhName:
+				// The _name_ of the XSL file is transmitted (Atlas toolkit behavior).
+				// NOTA: the Atlas toolkit does NOT use this function. It uses a underlying function which have this behavior.
+				XSL.Append( Target );
+				XSL.Append( ".xsl" );
+				break;
+			default:
+				qRFwk();
+				break;
+			}
+		qRR;
+		qRT;
+		qRE;
+		}
+	}
+
+	void HandleLayout_(
+		const xdhdws::nstring___ &Id,
+		const rgstry::rEntry &XSLFilename,
+		const char *Target,
+		eXSLFileHandling Handling,
+		const sclrgstry::registry_ &Registry,
+		const str::dString &XML,
+		xdhdws::sProxy &Proxy,
+		void (xdhdws::sProxy::* Method)(
+			const xdhdws::rNString &,
+			const xdhdws::rNString &XML,
+			const xdhdws::rNString &XSL),
+		bso::char__ Marker)
 	{
-		eXSLFileHandling Result = xfh_Undefined;
 	qRH;
-		str::wString Handling;
+		str::wString XSL;
 	qRB;
-		Handling.Init();
+		XSL.Init();
 
-		if ( !sclrgstry::OGetValue( Registry, registry::definition::XMLFilesHandling, Handling ) )
-			Handling.Append( "Content" );	// Default value.
+		handleXSL_(XSLFilename, Target, Handling, Registry, Marker, XSL);
 
-		if ( Handling == "Content" )
-			Result = xfhContent;
-		else if ( Handling == "Name" )
-			Result = xfhName;
-		else
-			sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( registry::definition::XMLFilesHandling );
+		(Proxy.*Method)(Id, XML, XSL);
 	qRR;
 	qRT;
 	qRE;
-		return Result;
 	}
+}
+
+void sclxdhtml::sProxy::PrependLayout_(
+	const xdhdws::nstring___ &Id,
+	const rgstry::rEntry &XSLFilename,
+	const char *Target,
+	const sclrgstry::registry_ &Registry,
+	const str::dString &XML,
+	bso::char__ Marker)
+{
+	HandleLayout_(Id, XSLFilename, Target, XSLFileHandling_, Registry, XML, Core_, &xdhdws::sProxy::PrependLayout, Marker);
 }
 
 void sclxdhtml::sProxy::SetLayout_(
@@ -456,40 +535,20 @@ void sclxdhtml::sProxy::SetLayout_(
 	const char *Target,
 	const sclrgstry::registry_ &Registry,
 	const str::dString &XML,
+	bso::char__ Marker)
+{
+	HandleLayout_(Id, XSLFilename, Target, XSLFileHandling_, Registry, XML, Core_, &xdhdws::sProxy::SetLayout, Marker);
+}
+
+void sclxdhtml::sProxy::AppendLayout_(
+	const xdhdws::nstring___ &Id,
+	const rgstry::rEntry &XSLFilename,
+	const char *Target,
+	const sclrgstry::registry_ &Registry,
+	const str::dString &XML,
 	bso::char__ Marker )
 {
-qRH;
-	str::wString XSL, RawXSL;
-	eXSLFileHandling Handling = XSLFileHandling_;
-qRB;
-	XSL.Init();
-
-	if ( Handling == xfhRegistry )
-		Handling = GetXMLFileHandlingFromRegistry_( Registry );
-
-	switch ( Handling ) {
-	case xfhContent:
-		// The content of the XSL file is transmitted (global XDHTML behavior).
-		RawXSL.Init();
-		sclxdhtml::LoadXSLAndTranslateTags( rgstry::tentry___( XSLFilename, Target ), Registry, RawXSL, Marker );
-		XSL.Append( "data:text/xml;charset=utf-8," );
-		cdgurl::Encode( RawXSL, XSL );
-		break;
-	case xfhName:
-		// The _name_ of the XSL file is transmitted (Atlas toolkit behavior).
-		// NOTA: the Atlas toolkit does NOT use this function. It uses a underlying function which have this behavior.
-		XSL.Append( Target );
-		XSL.Append( ".xsl" );
-		break;
-	default:
-		qRFwk();
-		break;
-	}
-
-	Core_.SetLayout( Id, XML, XSL );
-qRR;
-qRT;
-qRE;
+	HandleLayout_(Id, XSLFilename, Target, XSLFileHandling_, Registry, XML, Core_, &xdhdws::sProxy::AppendLayout, Marker);
 }
 
 void sclxdhtml::sProxy::SetContents(

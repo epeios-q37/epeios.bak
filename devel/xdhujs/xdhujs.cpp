@@ -45,7 +45,9 @@ const str::string_ &xdhujs::GetTaggedScript(
 	C( Log, Log );
 	C( DialogAlert, dialog::Alert );
 	C( DialogConfirm, dialog::Confirm );
-	C( LayoutSetter, setter::Layout );
+	C( LayoutPrepender, layout::Prepend);
+	C( LayoutSetter, layout::Set);
+	C( LayoutAppender, layout::Append);
 	C( PropertySetter, property::Setter );
 	C( PropertyGetter, property::Getter );
 	C( AttributeSetter, attribute::Setter );
@@ -201,7 +203,9 @@ qRB
 	S( AttributeRemover, Id_, Name_, NULL  );
 	S( PropertySetter, Id_, Name_, Value_, NULL );
 	S( PropertyGetter, Id_, Name_, NULL );
-	S( LayoutSetter, Id_, XML_, XSL_, NULL );
+	S( LayoutPrepender, Id_, XML_, XSL_, NULL);
+	S( LayoutSetter, Id_, XML_, XSL_, NULL);
+	S( LayoutAppender, Id_, XML_, XSL_, NULL);
 	S( ValueSetter, Id_, Value_, NULL );
 	S( ValueGetter, Id_, NULL );
 	S( WidgetValueRetriever, Id_, Method_, NULL );

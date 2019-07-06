@@ -41,10 +41,12 @@ const char *xdhcmn::GetLabel( eFunction Function )
 	C( Log );
 	C( Alert );
 	C( Confirm );
-	C( SetLayout );
 	C( DressWidgets );
 	C( SetContents );
 	C( SetTimeout );
+	C( PrependLayout );
+	C( SetLayout );
+	C( AppendLayout );
 	C( InsertCSSRule );
 	C( AppendCSSRule );
 	C( RemoveCSSRule );

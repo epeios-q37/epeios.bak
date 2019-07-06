@@ -109,12 +109,26 @@ namespace xdhdws {
 		qRE
 			return Confirmed;
 		}
+		void PrependLayout(
+			const nstring___ &Id,
+			const nstring___ &XML,
+			const nstring___ &XSL)
+		{
+			C_().Process(xdhcmn::fPrependLayout, NULL, Id.Internal()(), XML.Internal()(), XSL.Internal()());
+		}
 		void SetLayout(
 			const nstring___ &Id,
 			const nstring___ &XML,
-			const nstring___ &XSL )
+			const nstring___ &XSL)
 		{
-			C_().Process( xdhcmn::fSetLayout, NULL, Id.Internal()(), XML.Internal()(), XSL.Internal()() );
+			C_().Process(xdhcmn::fSetLayout, NULL, Id.Internal()(), XML.Internal()(), XSL.Internal()());
+		}
+		void AppendLayout(
+			const nstring___ &Id,
+			const nstring___ &XML,
+			const nstring___ &XSL)
+		{
+			C_().Process(xdhcmn::fAppendLayout, NULL, Id.Internal()(), XML.Internal()(), XSL.Internal()());
 		}
 		void DressWidgets( const nstring___ &Id )
 		{
