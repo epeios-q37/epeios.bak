@@ -41,6 +41,10 @@ sub createXML {
     return XDHq::XML->new(shift);
 }
 
+sub createHTML {
+    return createHTML(shift);
+}
+
 sub _worker {
     my ($userCallback, $instance, $callbacks) = @_;
     my $userObject;

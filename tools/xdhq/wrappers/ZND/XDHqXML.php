@@ -36,14 +36,19 @@ class XDHqXML {
     function popTag() {
         $this->xml_ .= "<";
     }
-    function setAttribute(string $name, $value) {
+    function putAttribute(string $name, $value) {
         $this->xml_ .= "A";
         $this->writeString_($name);
         $this->writeString_($value);
     }
-    function setValue($value) {
+    function putValue($value) {
         $this->xml_ .= "V";
         $this->writeString_($value);
+    }
+    function putTagAndValue(string $tag, $value) {
+        $this->pushTag($tag)
+        $this->putValue($value);
+        $this->popTag();
     }
     function toString() {
         return $this->xml_;

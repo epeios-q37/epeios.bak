@@ -57,7 +57,7 @@ sub popTag {
     shift->{xml} .= "<";
 }
 
-sub setAttribute {
+sub putAttribute {
     my $self = shift;
 
     $self->{xml} .= "A";
@@ -65,14 +65,14 @@ sub setAttribute {
     $self->_write(shift);
 }
 
-sub setValue {
+sub putValue {
     my $self = shift;
 
     $self->{xml} .= "V";
     $self->_write(shift);
 }
 
-sub setTagAndValue {
+sub putTagAndValue {
     my $self = shift;
 
     $self->pushTag(shift);

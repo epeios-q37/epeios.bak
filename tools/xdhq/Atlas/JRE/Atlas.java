@@ -57,6 +57,14 @@ public abstract class Atlas implements Runnable {
 		return new XML(rootTag);
 	}
 
+	static public XML createHTML(String rootTag) {
+		return new XML(rootTag);
+	}
+
+	static public XML createHTML() {
+		return createHTML("");
+	}
+
 	private static void launchWeb(String dir) {
 		try {
 			ProcessBuilder processBuilder;

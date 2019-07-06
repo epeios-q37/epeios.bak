@@ -151,14 +151,20 @@ class DOM:
 	def setTimeout(self,delay,action ):
 		self._dom.call( "SetTimeout_1", _VOID, 2, str( delay ), action, 0 )
 
+	"""
+	# Following 4 methods will either be removed or redesigned.
+
+	# Will become a variation of 'createElementNS(…)',
+	# with a optional list of attributes.
 	def createElement(self, name, id = "" ):
 		return self._dom.call( "CreateElement_1", _STRING, 2, name, id, 0 )
 
+	# Will become 'prependChild(…)', with variations.
 	def insertChild(self,child,id):
 		self._dom.call( "InsertChild_1", _VOID, 2, child, id, 0 )
 
-# NOTA: The 'CSSRule' related methods will be probably removed.
-# Enabling/disabling styles are easier to use.
+	# NOTA: The 'CSSRule' related methods will be probably removed.
+	# Enabling/disabling styles are easier to use.
 	def insertCSSRule(self,rule,index,id=""):
 		self._dom.call("InsertCSSRule_1", _VOID, 3, id, rule, str(index), 0)
 
@@ -167,6 +173,7 @@ class DOM:
 
 	def removeCSSRule(self,index,id=""):
 		self._dom.call("RemoveCSSRule_1", _VOID, 2, id, str(index), 0)
+	"""
 
 	def dressWidgets(self,id):
 		return self._dom.call( "DressWidgets_1", _VOID, 1, id, 0 )

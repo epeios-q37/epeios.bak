@@ -39,15 +39,21 @@ public class XML {
 		xml_ += "<";
 	}
 
-	public <Value> void setAttribute( String name, Value value ) {
+	public <Value> void putAttribute( String name, Value value ) {
 		xml_ += "A";
 		write_( name );
 		write_( value.toString() );
 	}
 
-	public <Value> void setValue( Value value ) {
+	public <Value> void putValue( Value value ) {
 		xml_ += "V";
 		write_( value.toString() );
+	}
+
+	public <Value> void putTagAndValue( String tag, Value value ) {
+		pushTag( tag );
+		putValue( value );
+		popTag();
 	}
 
 	public String toString() {
