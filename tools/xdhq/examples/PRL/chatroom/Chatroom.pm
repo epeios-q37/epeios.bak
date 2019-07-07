@@ -48,13 +48,13 @@ sub _buildXML {
 
     my $xml = Atlas::createXML("XDHTML");
     $xml->pushTag("Messages");
-    $xml->setAttribute("pseudo", $self->{pseudo});
+    $xml->putAttribute("pseudo", $self->{pseudo});
 
     foreach my $i (reverse $self->{lastMessage} .. $#Shared::messageContents ) {
         $xml->pushTag("Message");
-        $xml->setAttribute("id", $i);
-        $xml->setAttribute("pseudo", $Shared::messagePseudos[$i]);
-        $xml->setValue($Shared::messageContents[$i]);
+        $xml->putAttribute("id", $i);
+        $xml->putAttribute("pseudo", $Shared::messagePseudos[$i]);
+        $xml->putValue($Shared::messageContents[$i]);
         $xml->popTag();
     }
 
@@ -69,9 +69,7 @@ sub displayMessages {
     my ($self, $dom) = @_;
 
     if ($#Shared::messageContents >= $self->{lastMessage}) {
-        my $id = $dom->createElement("span");
-        $dom->setLayoutXSL($id, $self->_buildXML(), Shared::readAsset("Messages.xsl"));
-        $dom->insertChild($id, "Board");
+        $dom->prependLayoutXSL("Board", $self->_buildXML(), Shared::readAsset("Messages.xsl"));
     }
 }
 

@@ -46,7 +46,7 @@ class XDHqXML {
         $this->writeString_($value);
     }
     function putTagAndValue(string $tag, $value) {
-        $this->pushTag($tag)
+        $this->pushTag($tag);
         $this->putValue($value);
         $this->popTag();
     }

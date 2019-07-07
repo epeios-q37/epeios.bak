@@ -73,27 +73,47 @@ public class DOM {
 		return "true".equals(DOM.call("Confirm_1", Type.STRING, new String[] { message }, emptys));
 	}
 
-	private void setLayout_(String id, String xml, String xslFilename) {
-		DOM.call("SetLayout_1", Type.VOID, new String[] { id, xml, xslFilename }, emptys);
+	private <XML> void handleLayout_(String command, String id, XML xml, String xslFilename) {
+		DOM.call(command, Type.VOID, new String[] { id, xml.toString(), xslFilename }, emptys);
+	}
+/*
+	private void handleLayout_(String command, String id, info.q37.xdhq.XML xml, String xslFilename) {
+		handleLayout_(command, id, xml.toString(), xslFilename);
+	}
+*/
+	public <XML> void prependLayout(String id, XML html) {
+		handleLayout_( "PrependLayout_1", id, html, "");
 	}
 
-	public void setLayout(String id, String html) {
-		setLayout_(id, html, "");
+	public <XML> void setLayout(String id, XML html) {
+		handleLayout_( "SetLayout_1",id, html, "");
 	}
 
-	public void setLayoutXSL(String id, String xml, String xslFilename) {
+	public <XML> void appendLayout(String id, XML html) {
+		handleLayout_( "AppendLayout_1",id, html, "");
+	}
+	   	 
+	private <XML> void handleLayoutXSL_(String command, String id, XML xml, String xslFilename) {
 		String xslURL = xslFilename;
 
 		if ( info.q37.xdhq.XDH.isDEMO() )
 			xslURL = new String( "data:text/xml;base64," + java.util.Base64.getEncoder().encodeToString( info.q37.xdhq.XDH.readAsset( xslFilename, info.q37.xdhq.XDH.getDir() ).getBytes() ) );
 		
-		setLayout_(id, xml, xslURL);
+		handleLayout_(command, id, xml, xslURL);
 	}
 
-	public void setLayoutXSL( String id, info.q37.xdhq.XML xml, String xslFilename ) {
-		setLayoutXSL( id, xml.toString(), xslFilename );
+	public <XML> void prependLayoutXSL(String id, XML xml, String xslFilename) {
+		handleLayoutXSL_( "PrependLayout_1",id, xml, xslFilename);
 	}
 
+	public <XML> void setLayoutXSL(String id, XML xml, String xslFilename) {
+		handleLayoutXSL_( "SetLayout_1",id, xml, xslFilename);
+	}
+
+	public <XML> void appendLayoutXSL(String id, XML xml, String xslFilename) {
+		handleLayoutXSL_( "AppendLayout_1",id, xml, xslFilename);
+	}
+	   	 
 	public String[] getContents(String[] ids) {
 		return (String[]) DOM.call("GetContents_1", Type.STRINGS, empty, new String[][] { ids });
 	}
@@ -106,28 +126,16 @@ public class DOM {
 		DOM.call("SetContents_1", Type.VOID, empty, split(idsAndContents));
 	}
 
-	public final void setTimeout(int delay, String action) {
-		DOM.call("SetTimeout_1", Type.VOID, new String[] { Integer.toString(delay), action }, emptys);
-	}
-
-	public final String createElement( String name, String id ) {
-		return (String)DOM.call( "CreateElement_1", Type.STRING, new String[]{name, id }, emptys );
-	}
-
-	public final String createElement(String name) {
-		return createElement(name, "");
-	}
-
-	public final void insertChild( String child, String id ) {
-		DOM.call( "InsertChild_1", Type.VOID, new String[]{ child, id }, emptys );
-	}
-
 	public final void setContent(final String id, final String content) {
 		setContents(new HashMap<String, String>() {
 			{
 				put(id, content);
 			}
 		});
+	}
+
+	public final void setTimeout(int delay, String action) {
+		DOM.call("SetTimeout_1", Type.VOID, new String[] { Integer.toString(delay), action }, emptys);
 	}
 
 	public void dressWidgets(String id) {

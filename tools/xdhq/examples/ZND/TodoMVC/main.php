@@ -96,9 +96,9 @@ class TodoMVC extends Threaded {
 
  function put($todo, $id, $xml) {
   $xml->pushTag("Todo");
-  $xml->setAttribute("id", $id);
-  $xml->setAttribute("completed", $todo['completed'] ? "true" : "false");
-  $xml->setValue($todo['label']);
+  $xml->putAttribute("id", $id);
+  $xml->puttAttribute("completed", $todo['completed'] ? "true" : "false");
+  $xml->puttValue($todo['label']);
   $xml->popTag();
  }
 

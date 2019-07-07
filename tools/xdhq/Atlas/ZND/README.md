@@ -2,7 +2,7 @@
 
 ![For PHP](http://q37.info/download/assets/PHP.png "PHP logo")
 
-![Version 0.7](https://img.shields.io/static/v1.svg?&color=90b4ed&label=Version&message=0.7)
+[![Version 0.10.0](https://img.shields.io/static/v1.svg?&color=90b4ed&label=Version&message=0.10.0)](http://q37.info/s/gei0veus) 
 
 A fast and easy way to write *PHP* programs with a graphical user interface ([*SPA*](http://q37.info/s/7sbmxd3j) like program).
 
@@ -93,6 +93,7 @@ The *Atlas* toolkit is also available for:
 
 - *Java*: <http://github.com/epeios-q37/atlas-java>
 - *Node.js*: <http://github.com/epeios-q37/atlas-node>
+- *Perl*: <http://github.com/epeios-q37/atlas-perl>
 - *Python*: <http://github.com/epeios-q37/atlas-python>
 - *Ruby*: <http://github.com/epeios-q37/atlas-ruby>
 

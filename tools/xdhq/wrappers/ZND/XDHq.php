@@ -128,19 +128,34 @@ class XDHqDOM extends Threaded {
 	function confirm( string $message ) {
 		return self::call_( "Confirm_1", XDHq::RT_STRING, 1, $message, 0 ) == "true";
 	}
-	private function setLayout_(string  $id, $xml, string $xslFilename ) {
-		self::call_( "SetLayout_1", XDHq::RT_NONE, 3, $id, $xml, $xslFilename, 0 );
+	private function handleLayout_(string $command, string  $id, $xml, string $xslFilename ) {
+		self::call_( $command, XDHq::RT_NONE, 3, $id, is_string($xml) ? $xml : $xml->toString(), $xslFilename, 0 );
 	}
-	function setLayout(string  $id, string $html ) {
-		self::setLayout_( $id, $html, "" );
+	function prependLayout(string $id, $html ) {
+		self::handleLayout_( "PrependLayout_1", $id, $html, "" );
 	}
-	function setLayoutXSL(string  $id, $xml, string $xsl ) {
+	function setLayout(string $id, $html ) {
+		self::handleLayout_( "SetLayout_1", $id, $html, "" );
+	}
+	function appendLayout(string $id, $html ) {
+		self::handleLayout_( "AppendLayout_1", $id, $html, "" );
+	}
+	private function handleLayoutXSL_(string $command, string  $id, $xml, string $xsl ) {
 		$xslURL = $xsl;
 
 		if ( XDHq::isDEMO() )
 			$xslURL = "data:text/xml;charset=utf-8," . rawurlencode( XDHq::readAsset( $xsl, XDHq::$dir ) );
 			
-		self::setLayout_( $id, is_string($xml) ? $xml : $xml->toString(), $xslURL );
+		self::handleLayout_( $command, $id, $xml, $xslURL );
+	}
+	function prependLayoutXSL(string $id, $xml, string $xsl ) {
+		self::handleLayoutXSL_( "PrependLayout_1", $id, $xml, $xsl );
+	}
+	function setLayoutXSL(string $id, $xml, string $xsl ) {
+		self::handleLayoutXSL_( "SetLayout_1", $id, $xml, $xsl );
+	}
+	function appendLayoutXSL(string $id, $xml, string $xsl ) {
+		self::handleLayoutXSL_( "AppendLayout_1", $id, $xml, $xsl );
 	}
 	function getContents( array $ids ) {
 		return self::unsplit_($ids,self::call_( "GetContents_1", XDHq::RT_STRINGS, 0, 1, $ids ));
@@ -162,12 +177,14 @@ class XDHqDOM extends Threaded {
 	function setTimeout( int $delay, string $action ) {
 		self::call_( "SetTimeout_1", XDHq::RT_NONE, 2, strval( $delay ), $action, 0 );
 	}
+/*
 	function createElement( string $name, string $id = "" ) {
 		return self::call_( "CreateElement_1", XDHq::RT_STRING, 2, $name, $id, 0 );
 	}
 	function insertChild( string $child, string $id ) {
 		self::call_( "InsertChild_1", XDHq::RT_NONE, 2, $child, $id, 0 );
 	}
+*/
 	function dressWidgets( string $id ) {
 		return self::call_( "DressWidgets_1", XDHq::RT_NONE, 1, $id, 0 );
 	}

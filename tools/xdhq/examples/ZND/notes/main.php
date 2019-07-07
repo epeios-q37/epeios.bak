@@ -51,12 +51,10 @@ function getViewModeElements() {
 
 function put($note, $id, $xml) {
  $xml->pushTag("Note");
- $xml->setAttribute("id", $id);
+ $xml->putAttribute("id", $id);
 
  foreach ((array) $note as $key => $value) {
-  $xml->pushTag($key);
-  $xml->setValue($value);
-  $xml->popTag();
+  $xml->putTagAndValue($key, $value);
  }
 
  $xml->popTag();

@@ -67,13 +67,13 @@ class Chatroom extends Threaded {
         $i = count($this->shared->messages) - 1;
         $xml = Atlas::createXML("XDHTML");
         $xml->pushTag("Messages");
-        $xml->setAttribute("pseudo", $this->pseudo);
+        $xml->putAttribute("pseudo", $this->pseudo);
 
         while ($i >= $this->lastMessage) {
             $message = $this->shared->messages[$i];
             $xml->pushTag("Message");
-            $xml->setAttribute("pseudo", $message['pseudo']);
-            $xml->setValue($message['content']);
+            $xml->putAttribute("pseudo", $message['pseudo']);
+            $xml->putValue($message['content']);
             $xml->popTag();
             $i--;
         }
@@ -86,10 +86,7 @@ class Chatroom extends Threaded {
     private function displayMessages_($dom) {
         if ((count((array)$this->shared->messages) - 1) >= $this->lastMessage) {
             $xml = $dom->synchronized(function ($dom) {return $this->buildXML_($dom);}, $dom);
-
-            $id = $dom->createElement("span");
-            $dom->setLayoutXSL($id, $xml, "Messages.xsl");
-            $dom->insertChild($id, "Board");
+            $dom->prependLayoutXSL("Board", $xml, "Messages.xsl");
         }
     }
 

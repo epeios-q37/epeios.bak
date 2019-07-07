@@ -136,7 +136,8 @@ module XDHq
 		def setTimeout(delay,action )
 			call( "SetTimeout_1", $VOID, 2, delay.to_s(), action, 0 )
 		end
-	
+
+=begin	
 		def createElement(name, id = "" )
 			return call( "CreateElement_1", $STRING, 2, name, id, 0 )
 		end
@@ -144,7 +145,8 @@ module XDHq
 		def insertChild(child, id)
 			call( "InsertChild_1", $VOID, 2, child, id, 0 )
 		end
-	
+=end	
+
 		def dressWidgets(id)
 			return call( "DressWidgets_1", $VOID, 1, id, 0 )
 		end

@@ -35,7 +35,7 @@ sub _put {
     my ($note, $id, $xml) = @_;
 
     $xml->pushTag("Note");
-    $xml->setAttribute("id", $id);
+    $xml->putAttribute("id", $id);
 
     foreach my $key (keys %{$note}) {
         $xml->setTagAndValue($key,$note->{$key});

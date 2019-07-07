@@ -43,17 +43,14 @@ class Hello extends Atlas {
 		switch( action) {
 		case "":
 			dom.setLayout("", html );
-			dom.setFocus( "input");
 			break;
 		case "Submit":
 			dom.alert("Hello, " + dom.getContent("input").trim() + "!" );
-			dom.setFocus( "input");
 			break;
 		case "Clear":
 			if ( dom.confirm( "Are you sure ?" ) )
 				dom.setContent( "input", "");
 			break;
-			dom.setFocus( "input");
 		default:
 			throw new RuntimeException( "Unknown action '" + action + "' !!!");
 		}

@@ -82,18 +82,26 @@ sub confirm {
     return $self->{dom}->call("Confirm_1", XDHq::SHRD::RT_STRING, 1, $message, 0) eq "true";
 }
 
-sub _setLayout {
-    my ($self, $id, $xml, $xslFilename) = @_;
+sub _handleLayout {
+    my ($self, $command, $id, $xml, $xslFilename) = @_;
 
-    $self->{dom}->call("SetLayout_1", XDHq::SHRD::RT_VOID, 3, $id, ref $xml eq "XDHq::XML" ? $xml->toString() : $xml, $xslFilename, 0);
+    $self->{dom}->call($command, XDHq::SHRD::RT_VOID, 3, $id, ref $xml eq "XDHq::XML" ? $xml->toString() : $xml, $xslFilename, 0);
+}
+
+sub prependLayout {
+    shift->_handleLayout("PrependLayout_1", shift, shift, "");
 }
 
 sub setLayout {
-    shift->_setLayout(shift, shift, "");
+    shift->_handleLayout("SetLayout_1", shift, shift, "");
 }
 
-sub setLayoutXSL {
-    my ($self, $id, $xml, $xsl) = @_;
+sub appendLayout {
+    shift->_handleLayout("AppendLayout_1", shift, shift, "");
+}
+
+sub _handleLayoutXSL {
+    my ($self, $command, $id, $xml, $xsl) = @_;
 
     if( XDHq::SHRD::TRUE) { # Replaced with a DEMO/PROD test when available.
         $xsl =~ s/([^-A-Za-z0-9_.!~*'() ])/sprintf("%%%02X", ord($1))/eg;
@@ -101,8 +109,21 @@ sub setLayoutXSL {
         $xsl = "data:text/xml;charset=utf-8," . $xsl;
     }
 
-    $self->_setLayout( $id, $xml, $xsl);
+    $self->_handleLayout( $command, $id, $xml, $xsl);
 }
+
+sub prependLayoutXSL {
+    shift->_handleLayoutXSL("PrependLayout_1", shift, shift, shift);
+}
+
+sub setLayoutXSL {
+    shift->_handleLayoutXSL("SetLayout_1", shift, shift, shift);
+}
+
+sub appendLayoutXSL {
+    shift->_handleLayoutXSL("AppendLayout_1", shift, shift, shift);
+}
+
 
 sub getContents {
     my ($self, $ids) = @_;
@@ -136,6 +157,7 @@ sub setTimeout {
     shift->{dom}->call("SetTimeout_1", XDHq::SHRD::RT_VOID, 2, shift, shift, 0);
 }
 
+=pod
 sub createElement {
     return shift->{dom}->call("CreateElement_1", XDHq::SHRD::RT_STRING, 2, shift, shift, 0);
 }
@@ -143,6 +165,7 @@ sub createElement {
 sub insertChild {
     shift->{dom}->call("InsertChild_1", XDHq::SHRD::RT_VOID, 2, shift, shift, 0);
 }
+=cut
 
 sub dressWidgets {
      shift->{dom}->call( "DressWidgets_1", XDHq::SHRD::RT_VOID, 1, shift, 0 )   ;

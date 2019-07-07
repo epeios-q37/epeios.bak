@@ -54,7 +54,7 @@ class Chatroom extends Atlas {
 	private XML buildXML_() {
 		XML xml = Atlas.createXML("XDHTML");
 		xml.pushTag( "Messages" );
-		xml.setAttribute( "pseudo", pseudo );
+		xml.putAttribute( "pseudo", pseudo );
 
 		synchronized (Shared.messages) {
 			ListIterator<Message> li = Shared.messages.listIterator(Shared.messages.size());
@@ -65,9 +65,9 @@ class Chatroom extends Atlas {
 				Message message = li.previous();
 
 				xml.pushTag( "Message" );
-				xml.setAttribute( "id", i );
-				xml.setAttribute( "pseudo", message.pseudo );
-				xml.setValue( message.content );
+				xml.putAttribute( "id", i );
+				xml.putAttribute( "pseudo", message.pseudo );
+				xml.putValue( message.content );
 				xml.popTag();
 
 				i = li.previousIndex();
@@ -83,9 +83,7 @@ class Chatroom extends Atlas {
 
 	private void displayMessages_(DOM dom) {
 		if ((Shared.messages.size() - 1) >= this.lastMessage) {
-			String id = dom.createElement("span");
-			dom.setLayoutXSL(id, buildXML_(), "Messages.xsl");
-			dom.insertChild(id, "Board");
+			dom.prependLayoutXSL("Board", buildXML_(), "Messages.xsl");
 		}
 	}
 

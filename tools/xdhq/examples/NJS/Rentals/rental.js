@@ -189,9 +189,9 @@ function acConnect( xdh, id ) {
 function handleImage( xdh, result ) {
 	LOG();
 	if (result == 'image')
-		xdh.setAttribute( xdh.imageToHandle, 'class', 'image wide' );
+		xdh.putAttribute( xdh.imageToHandle, 'class', 'image wide' );
 	else
-		xdh.setAttribute( xdh.imageToHandle, 'class', 'image' );
+		xdh.putAttribute( xdh.imageToHandle, 'class', 'image' );
 }
 
 function acHandlePicture( xdh, id ) {

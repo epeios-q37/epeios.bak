@@ -57,9 +57,9 @@ class TodoMVC extends Atlas {
 
 	private void push(Todo todo, int id, info.q37.xdhq.XML xml) {
 		xml.pushTag("Todo");
-		xml.setAttribute("id", id);
-		xml.setAttribute("completed", todo.completed);
-		xml.setValue(todo.label);
+		xml.putAttribute("id", id);
+		xml.putAttribute("completed", todo.completed);
+		xml.putValue(todo.label);
 		xml.popTag();
 	}
 

@@ -52,15 +52,11 @@ class Notes extends Atlas {
 
 	private void push(Note note, int index, XML xml) {
 		xml.pushTag( "Note" );
-		xml.setAttribute( "id", + index );
-		xml.pushTag("title");
-		xml.setValue( note.title );
-		xml.popTag();
+		xml.putAttribute( "id", + index );
+		xml.putTagAndValue("title", note.title);
 
 		// Not used, due to d-o-e bug from Firefox (https://bugzilla.mozilla.org/show_bug.cgi?id=98168).
-		xml.pushTag( "description");
-		xml.setValue( note.description );
-		xml.popTag();
+		xml.putTagAndValue( "description", note.description );
 
 		xml.popTag();
 	}
