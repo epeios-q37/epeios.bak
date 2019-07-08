@@ -3,6 +3,11 @@
 - Common to **all** bindings,
 - does **not** concern the native code,
 
+## 2019-07-08:
+
+*ALL*:
+    - switching to 0.10.0,
+
 ## 2019-07-03
 
 - *Perl*
