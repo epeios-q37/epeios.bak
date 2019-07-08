@@ -38,7 +38,7 @@ module XDHqXML
 			@xml += '<'
 		end
 
-		def puttAttribute(name,value)
+		def putAttribute(name,value)
 			@xml += 'A'
 			write(name)
 			write(value)

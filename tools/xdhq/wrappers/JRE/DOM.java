@@ -76,11 +76,7 @@ public class DOM {
 	private <XML> void handleLayout_(String command, String id, XML xml, String xslFilename) {
 		DOM.call(command, Type.VOID, new String[] { id, xml.toString(), xslFilename }, emptys);
 	}
-/*
-	private void handleLayout_(String command, String id, info.q37.xdhq.XML xml, String xslFilename) {
-		handleLayout_(command, id, xml.toString(), xslFilename);
-	}
-*/
+
 	public <XML> void prependLayout(String id, XML html) {
 		handleLayout_( "PrependLayout_1", id, html, "");
 	}
@@ -137,7 +133,19 @@ public class DOM {
 	public final void setTimeout(int delay, String action) {
 		DOM.call("SetTimeout_1", Type.VOID, new String[] { Integer.toString(delay), action }, emptys);
 	}
+/*
+	public final String createElement( String name, String id ) {
+		return (String)DOM.call( "CreateElement_1", Type.STRING, new String[]{name, id }, emptys );
+	}
 
+	public final String createElement(String name) {
+		return createElement(name, "");
+	}
+
+	public final void insertChild( String child, String id ) {
+		DOM.call( "InsertChild_1", Type.VOID, new String[]{ child, id }, emptys );
+	}
+*/
 	public void dressWidgets(String id) {
 		DOM.call("DressWidgets_1", Type.VOID, new String[] { id }, emptys);
 	}

@@ -35,16 +35,14 @@ sub acConnect {
     my ($hello, $dom) = @_;
 
     $dom->setLayout("",readAsset("Main.html"));
-
-    return 1;
+    $dom->focus("input");
 }
 
 sub acSubmit {
     my ($hello, $dom) = @_;
 
     $dom->alert("Hello, " . $dom->getContent("input") . "!");
-
-    return 1;
+    $dom->focus("input");
 }
 
 sub acClear {
@@ -53,13 +51,11 @@ sub acClear {
     if ( $dom->confirm("Are you sure?") ) {
         $dom->setContent("input", "");
     }
-
-    return 1;
+    $dom->focus("input");
 }
 
 my %callbacks = (
     "" => \&acConnect,
-    "_PostProcess" => sub {$_[1]->focus("input");},
     "Submit" => \&acSubmit,
     "Clear" => \&acClear,
 );

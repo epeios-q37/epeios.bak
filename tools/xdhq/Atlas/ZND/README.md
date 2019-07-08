@@ -46,18 +46,16 @@ EOT;
   switch ($action) {
   case "":    // Action label for a new connection.
    $dom->setLayout("", self::$body);
-   $dom->focus("input");
    break;
   case "Submit":
    $dom->alert("Hello, " . $dom->getContent("input") . "!");
-   $dom->focus("input");
    break;
   case "Clear":
    if ($dom->confirm("Are you sure?"))
     $dom->setContent("input", "");
-   $dom->focus("input");
    break;
   }
+  $dom->focus("input");
  }
 }
 

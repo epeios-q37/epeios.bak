@@ -76,7 +76,7 @@ sub putTagAndValue {
     my $self = shift;
 
     $self->pushTag(shift);
-    $self->setValue(shift);
+    $self->putValue(shift);
     $self->popTag();
 }
 
