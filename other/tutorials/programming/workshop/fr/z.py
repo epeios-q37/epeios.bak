@@ -18,5 +18,5 @@ def affiche(text):
   workshop.display(text)
 
 
-def z(function):
-  workshop.main(function, _data, _.defaultTitle )
+def go(function,handleError):
+  workshop.main(function, _data, _.defaultTitle, handleError )

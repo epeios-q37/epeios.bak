@@ -28,7 +28,7 @@ def _acSubmit(c, dom):
         dom.focus("input")
 
 
-def main(function, callback, title=None):
+def main(function, callback, title):
   globals()['_function']=function
   _.main("c", callback,
     {

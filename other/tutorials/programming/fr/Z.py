@@ -42,4 +42,9 @@ def maFonction(a,b,c,operator):
     else:
         affiche("x = " + resoudreInequationPremierDegre(a,b,operator,c))
 
-z(maFonction)
+go(maFonction,True)
+"""
+Second paramètre :
+- si à 'True', il y a un message d'erreur qui est affiché si les velurs sisies sont incorrectes ;
+- si à 'False', c'est les exceptions Python qui sont affichées.
+"""

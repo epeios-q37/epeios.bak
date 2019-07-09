@@ -28,11 +28,10 @@ def _test(value):
   number = float(value)
 
   if number <-100 or number > 100:
-    raise ValueError
+    raise ValueError("Out of range")
 
   return number
   
-
 def _acSubmit(d,dom,id):
   [a,b,c,operator] = dom.getContents(['a','b','c','operator']).values()
 
@@ -40,10 +39,13 @@ def _acSubmit(d,dom,id):
     a = _test(a)
     b = _test(b)
     c = _test(c)
-  except:
-    dom.alert(d.i18n["BadValue"])
+  except Exception as e:
+    if _reportErrors:
+      dom.alert(d.i18n["BadValue"])
+    else:
+      raise e
   else:
-    if a == 0:
+    if a == 0 and _reportErrors:
       dom.alert(d.i18n["ACannotBe0"])
     else:
       _function(a, b, c, operator)
@@ -51,12 +53,12 @@ def _acSubmit(d,dom,id):
       dom.disableElement("Hide")
       _.store('html', _.Atlas.createHTML())
 
-
   dom.focus('a')
 
 
-def main(function,callback,title = None):
+def main(function,callback,title,reportErrors):
   globals()['_function'] = function
+  globals()['_reportErrors'] = reportErrors
   _.main(_dir, callback,    {
       "" : _acConnect,
       "Submit": _acSubmit
