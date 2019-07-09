@@ -45,6 +45,6 @@ def maFonction(a,b,c,operator):
 go(maFonction,True)
 """
 Second paramètre :
-- si à 'True', il y a un message d'erreur qui est affiché si les velurs sisies sont incorrectes ;
-- si à 'False', c'est les exceptions Python qui sont affichées.
+- si à 'True', il y a un message d'erreur qui est affiché si les valeurs saisies sont incorrectes ;
+- si à 'False', ce sont les exceptions Python qui sont affichées.
 """

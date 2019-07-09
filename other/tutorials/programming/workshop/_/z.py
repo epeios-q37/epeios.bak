@@ -28,7 +28,7 @@ def _test(value):
   number = float(value)
 
   if number <-100 or number > 100:
-    raise ValueError("Out of range")
+    raise ValueError("Out of range: " + value)
 
   return number
   
