@@ -36,10 +36,10 @@ def resoudreInequationPremierDegre(a,b,ineg,c):
 
 
 def maFonction(a,b,c,operator):
-    afficher("La solution est :")
+    affiche("La solution est :")
     if operator == '=':
-        afficher("x = " + resoudreEquationPremierDegre(a,b,c))
+        affiche("x = " + resoudreEquationPremierDegre(a,b,c))
     else:
-        afficher("x = " + resoudreInequationPremierDegre(a,b,operator,c))
+        affiche("x = " + resoudreInequationPremierDegre(a,b,operator,c))
 
 z(maFonction)

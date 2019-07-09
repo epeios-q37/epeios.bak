@@ -14,7 +14,7 @@ class _data:
     }
 
 
-def afficher(text):
+def affiche(text):
   workshop.display(text)
 
 
