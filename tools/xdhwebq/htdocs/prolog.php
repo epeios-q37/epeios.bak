@@ -61,7 +61,7 @@ $out = '
 						<span style="text-shadow: 1px 1px;">
 							<span>Powered by the <span style="font-style: italic;">Atlas</span> toolkit (<a href="http://atlastk.org/" target="_blank">http://atlastk.org/</a>)</span>
 							<br/>
-							<span>&gt;&gt;&gt;&nbsp;<a href="https://q37.info/s/sssznrb4" target="_blank">Live demonstrations</a>&nbsp;&lt;&lt;&lt;</span>
+							<span>⯈⯈⯈&nbsp;&nbsp;&nbsp;<a href="https://q37.info/s/sssznrb4" target="_blank">Live demonstrations</a>&nbsp;&nbsp;&nbsp;⯇⯇⯇</span>
 						</span>
 					 </div>
 				 </div>

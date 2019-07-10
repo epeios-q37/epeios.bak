@@ -1,6 +1,6 @@
 # coding: utf-8
 
-import workshop._.z as workshop
+import workshop._.z_1 as workshop
 import workshop.fr._ as _
 
 class _data:

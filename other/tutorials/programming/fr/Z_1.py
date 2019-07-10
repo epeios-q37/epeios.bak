@@ -2,7 +2,7 @@
 
 # From '4.3 Résolution inéquation ax+b=c.py'
 
-from workshop.fr.z import *
+from workshop.fr.z_1 import *
 
 
 def resoudreEquationPremierDegre(a,b,c):
@@ -13,7 +13,7 @@ def resoudreEquationPremierDegre(a,b,c):
 def resoudreInequationPremierDegre(a,b,ineg,c):
   sol = resoudreEquationPremierDegre(a,b,c)
 
-  if ineg == ">=" :
+  if ineg == "≥" :
       if a > 0 :
           return "[" + sol + " ; " + "+∞["
       else:
@@ -23,7 +23,7 @@ def resoudreInequationPremierDegre(a,b,ineg,c):
           return "]" + sol +" ; " + "+∞["
       else:
           return "]-∞" +" ; " + sol + "["
-  if ineg == "<=" :
+  if ineg == "≤" :
       if a > 0 :
           return "]-∞" + " ; " + sol + "]"
       else:
@@ -36,7 +36,8 @@ def resoudreInequationPremierDegre(a,b,ineg,c):
 
 
 def maFonction(a,b,c,operator):
-    affiche("La solution est :")
+    affiche("Solution de l'équation")
+    affiche("{} × x + {} {} {} :".format(a, b, operator, c))
     if operator == '=':
         affiche("x = " + resoudreEquationPremierDegre(a,b,c))
     else:
