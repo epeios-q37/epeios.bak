@@ -36,7 +36,7 @@ def resoudreInequationPremierDegre(a,b,ineg,c):
 
 
 def maFonction(a,b,c,operator):
-    affiche("Solution de l'équation")
+    affiche("Solution de")
     affiche("{} × x + {} {} {} :".format(a, b, operator, c))
     if operator == '=':
         affiche("x = " + resoudreEquationPremierDegre(a,b,c))

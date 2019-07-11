@@ -2,7 +2,12 @@
 
 from workshop.fr.z_3 import *
 
-def maFonction(polygones,segments,taille):
+import math
+
+def maFonction(polygones,segments):
+    polygones = int(polygones)
+    segments = int(segments)
+    taille = 140 * math.sin(math.pi/segments)
     T = 0
     pasPolygon = 360/polygones
     pasSegment = 360/segments
@@ -12,6 +17,6 @@ def maFonction(polygones,segments,taille):
         for x in range(0, segments):
             avance(taille)
             tourneDroite(pasSegment)
-        tourneDroite(pasPolygon)
+        tourneGauche(pasPolygon)
 
 go(maFonction)

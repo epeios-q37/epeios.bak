@@ -8,6 +8,12 @@ The `workshop/assets` directory contains files used for the exercises. The `ab` 
 
 The content of the `Body.html` will be put in the *body* section of the HTML main page, and the content of the `Head.html` file will be put in the *head* section of the same page. The CSS rules are usually put in the latter file.
 
-- Exercise A: introducing string and function call,
-- exercise B: introducing variable and string concatenation,
-- exercise C: introducing function definition.
+- Exercise *A*: introducing string and function call,
+- exercise *B*: introducing variable and string concatenation,
+- exercise *C*: introducing function definition (interactive).
+
+Below exercises are available for *fr* only.
+
+- exercise *Z_1*: (in)equation of the first degree  (interactive),
+- exercise *Z_2*: example of use of turtle graphics,
+- exercise *Z_3*: drawing of polygons using turtle graphics  (interactive).

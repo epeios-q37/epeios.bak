@@ -30,7 +30,6 @@ class _Core:
     i18n = {
       "AmountOfPolygons": "Nombre de polygones ",
       "AmountOfSegments": "Nombre de segments ",
-      "SizeOfSegments": "Taille des segments ",
       "Draw": "Afficher"
     }
 

@@ -35,8 +35,8 @@ def _acConnect(core,dom,id):
   dom.setLayout("",_.readBody(_dir, core.i18n))
 
 def _acDraw(core,dom):
-  (polygons, segments, size) = dom.getContents(("polygons","segments","size")).values()
-  _.recall(_FUNCTION)(int(polygons), int(segments), int(size))
+  (polygons, segments) = dom.getContents(("polygons","segments")).values()
+  _.recall(_FUNCTION)(polygons, segments)
   draw(dom)
 
 
