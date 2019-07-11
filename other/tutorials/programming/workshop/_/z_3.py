@@ -23,6 +23,28 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  """
  
+import math
 import workshop._._ as _
+from .turtle import *
 
-defaultTitle = _.titles["de"]
+_dir = "z_3"
+
+_FUNCTION = 'function'
+
+def _acConnect(core,dom,id):
+  dom.setLayout("",_.readBody(_dir, core.i18n))
+
+def _acDraw(core,dom):
+  (polygons, segments, size) = dom.getContents(("polygons","segments","size")).values()
+  _.recall(_FUNCTION)(int(polygons), int(segments), int(size))
+  draw(dom)
+
+
+def main(callback,function,title):
+  _.store(_FUNCTION,function)
+  _.main(_dir, callback, {
+      "" : _acConnect,
+      "Draw" : _acDraw,
+    }, title )
+
+initTurtle()

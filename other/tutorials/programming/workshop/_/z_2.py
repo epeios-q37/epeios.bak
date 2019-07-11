@@ -1,58 +1,41 @@
 # coding: utf-8
+""" 
+MIT License
 
+Copyright (c) 2019 Claude SIMON (https://q37.info/s/rmnmqd49)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+ """
+ 
 import math
 import workshop._._ as _
+from .turtle import *
 
 _dir = "z_2"
 
-_.store('posx',100)
-_.store('posy',100)
-_.store('angle', 0)
-_.store('stack',[])
-
-def _push(path):
-  _.recall('stack').append(path)
-
-_push("M 100 100")
-
-
-def forward(distance):
-  angle = _.recall('angle')
-  posx = _.recall('posx') + distance * math.sin(angle)
-  posy = _.recall('posy') - distance * math.cos(angle)
-
-  _push("L {} {}".format(posx, posy))
-
-  _.store('posx', posx)
-  _.store('posy', posy)
-
-def right(angle):
-  _.store('angle',math.radians((math.degrees(_.recall('angle')) + angle ) % 360))
-
-def left(angle):
-  right(360 - angle)
-
-def _mergePaths():
-  mergedPaths = ""
-
-  for path in _.recall('stack'):
-    mergedPaths += " " + path
-
-  return mergedPaths
-
 def _acConnect(d,dom,id):
   dom.setLayout("",_.readBody(_dir))
-
-  html = _.Atlas.createHTML()
-  html.pushTag("path")
-  html.putAttribute("stroke", "blue")
-  html.putAttribute("stroke-width", "2")
-  html.putAttribute("fill", "none")
-  html.putAttribute('d', _mergePaths())
-
-  dom.setLayout("SVG", html)
+  draw(dom)
 
 def main(callback,title):
   _.main(_dir, callback, {
       "" : _acConnect,
     }, title )
+
+initTurtle()

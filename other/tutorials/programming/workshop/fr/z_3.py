@@ -23,6 +23,31 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  """
  
-import workshop._._ as _
+import workshop._.z_3 as workshop
+import workshop.fr._ as _
 
-defaultTitle = _.titles["de"]
+class _Core:
+    i18n = {
+      "AmountOfPolygons": "Nombre de polygones ",
+      "AmountOfSegments": "Nombre de segments ",
+      "SizeOfSegments": "Taille des segments ",
+      "Draw": "Afficher"
+    }
+
+def avance(distance):
+  workshop.forward(distance)
+
+def tourneDroite(angle):
+  workshop.right(angle)
+
+def tourneGauche(angle):
+  workshop.left(angle)
+
+def RVB(r,v,b):
+  workshop.RGB(r,v,b)
+
+def TSL(t,s,l):
+  workshop.HSL(t,s,l)
+
+def go(function):
+  workshop.main(_Core, function, _.defaultTitle)
