@@ -1,5 +1,7 @@
 # coding: utf-8
 
+import sys
+sys.path.append(".")
 from workshop.fr.z_3 import *
 
 import math

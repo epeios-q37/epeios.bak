@@ -1,5 +1,7 @@
 # coding: utf-8
 
+import sys
+sys.path.append(".")
 from workshop.fr.z_2 import *
 
 T = 0;

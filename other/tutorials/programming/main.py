@@ -8,6 +8,4 @@ import starter
 
 # starter.lang = "en" # "de", "en" or "fr" ("fr" is the default one).
 
-print("youhou!")
-
 starter.go()

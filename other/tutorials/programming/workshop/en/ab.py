@@ -24,7 +24,7 @@ SOFTWARE.
  """
  
 import workshop._.ab as workshop
-import workshop.fr._ as _
+import workshop.en._ as _
 
 def display(text):
   workshop.display(text)

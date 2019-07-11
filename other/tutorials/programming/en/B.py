@@ -1,5 +1,7 @@
 # coding: utf-8
 
+import sys
+sys.path.append(".")
 from workshop.en.b import *
 
 name = "Patricia"

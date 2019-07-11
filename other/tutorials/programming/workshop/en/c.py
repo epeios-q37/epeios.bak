@@ -24,14 +24,14 @@ SOFTWARE.
  """
  
 import workshop._.c as workshop
-import workshop.de._ as _
+import workshop.en._ as _
 
 class _Core:
     i18n = {
-      "NameIsMandatory": "Il faut saisir un nom !"
+      "NameIsMandatory": "The name is mandatory!"
     }
     bodyI18n = {
-      "NameToDisplay": "Nom à afficher"
+      "NameToDisplay": "Name to display"
     }
 
 
