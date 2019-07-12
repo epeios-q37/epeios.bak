@@ -284,4 +284,4 @@ callbacks = {
     "ToggleLayout": acToggleLayout,
 }
 
-Atlas.launch(callbacks, lambda: Reversi(), readAsset("Head.html"), "ReversiXSL")
+Atlas.launch(callbacks, Reversi, readAsset("Head.html"), "ReversiXSL")

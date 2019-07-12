@@ -56,7 +56,7 @@ def _call(func, userObject, dom, id, action):
 def worker(userCallback,dom,callbacks):
 	args=[]
 
-	if ( len(inspect.getargspec(userCallback).args) == 1 ):
+	if ( not(inspect.isclass(userCallback)) and len(inspect.getargspec(userCallback).args) == 1 ):
 		args.append(dom)
 
 	userObject = userCallback(*args)

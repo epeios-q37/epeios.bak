@@ -215,7 +215,7 @@ class GPIO:
 
 	def _handleModeButtons(self,dom):
 		global mapping
-		enable = False;
+		enable = False
 		buttons=[]
 
 		for label in Mode.label:
@@ -324,17 +324,17 @@ class GPIO:
 		self._setMode(wId, mode)
 
 		dom.setContent("Value." + str(wId),self._getValue(wId))
-		dom.putAttribute(id,"value",self._getValue(wId))
+		dom.setAttribute(id,"value",self._getValue(wId))
 
 		if (mode==Mode.IN):
 			dom.disableElement(id)
-			dom.putAttribute(id,"step","100")
+			dom.setAttribute(id,"step","100")
 		elif (mode==Mode.OUT):
 			dom.enableElement(id)
-			dom.putAttribute(id,"step","100")
+			dom.setAttribute(id,"step","100")
 		elif (mode==Mode.PWM):
 			dom.enableElement(id)
-			dom.putAttribute(id,"step","1")
+			dom.setAttribute(id,"step","1")
 		else:
 			sys.exit("???")
 
