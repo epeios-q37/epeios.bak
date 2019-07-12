@@ -21,7 +21,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
- """
+"""
  
 import workshop._.c as workshop
 import workshop.fr._ as _
@@ -33,11 +33,6 @@ class _Core:
     bodyI18n = {
       "NameToDisplay": "Nom à afficher"
     }
-
-
-def affiche(text):
-  workshop.display(text)
-
 
 def go(function):
   workshop.main(function, _Core, _.defaultTitle )

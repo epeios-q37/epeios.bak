@@ -14,7 +14,7 @@ def maFonction(polygones,segments):
     pasPolygon = 360/polygones
     pasSegment = 360/segments
     for y in range (0, polygones):
-        TSL(T, 100, 50)
+        fixeCouleurTSL(T, 100, 50)
         T += pasPolygon
         for x in range(0, segments):
             avance(taille)

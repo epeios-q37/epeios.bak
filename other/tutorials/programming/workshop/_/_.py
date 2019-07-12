@@ -21,7 +21,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
- """
+"""
  
 import os
 import threading
@@ -64,11 +64,6 @@ def _threadId():
 # Does not work as static member of '_Core' with Python 2!
 _userCallback = None
 
-class _Core:
-  def __init__(self):
-    globals()['_data'][_threadId()] = {}
-    self.userObject = _userCallback()
-
 def _store(set,key,value):
   globals()['_data'][set][key] = value
 
@@ -87,6 +82,11 @@ def recall(key):
   except KeyError:
     return _recall('global',key)
 
+class _Core:
+  def __init__(self, dom):
+    store('dom',dom)
+    globals()['_data'][_threadId()] = {}
+    self.userObject = _userCallback()
 
 def _read(path):
   return open(path).read()
@@ -156,4 +156,4 @@ def _patch(userCallbacks):
 
 def main(path,callback,callbacks,title = None):
   globals()['_userCallback'] = callback
-  Atlas.launch( _patch(callbacks), _Core, _readHead(path, title)) 
+  Atlas.launch( _patch(callbacks), lambda dom: _Core(dom), _readHead(path, title)) 

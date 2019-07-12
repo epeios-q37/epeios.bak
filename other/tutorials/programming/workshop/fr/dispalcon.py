@@ -23,7 +23,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
  
-from workshop.fr.ab import *
+import workshop._.dispalcon as dispalcon
 
-def go():
-    main()
+def efface():
+  dispalcon.clear()
+
+def affiche(text):
+  dispalcon.display(text)

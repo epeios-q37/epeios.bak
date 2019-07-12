@@ -21,25 +21,11 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
- """
+"""
  
 import workshop._.z_2 as workshop
 import workshop.fr._ as _
-
-def avance(distance):
-  workshop.forward(distance)
-
-def tourneDroite(angle):
-  workshop.right(angle)
-
-def tourneGauche(angle):
-  workshop.left(angle)
-
-def RVB(r,v,b):
-  workshop.RGB(r,v,b)
-
-def TSL(t,s,l):
-  workshop.HSL(t,s,l)
+from workshop.fr.turtle import *
 
 def go():
   workshop.main(lambda: None, _.defaultTitle)

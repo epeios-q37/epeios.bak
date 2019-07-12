@@ -21,20 +21,13 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
- """
+"""
  
 import workshop._._ as _
 
 _dir = "z_1"
 
-
-def display(text):
-    html = _.recall('html')
-    html.putTagAndValue("h1", text)
-
-
 def _acConnect(d,dom,id):
-  _.store('html', _.Atlas.createHTML())
   dom.setLayout("",_.readBody(_dir,d.bodyI18n))
   dom.focus("a")
 
@@ -72,9 +65,7 @@ def _acSubmit(d,dom,id):
       dom.alert(d.i18n["ACannotBe0"])
     else:
       _function(a, b, c, operator)
-      dom.setLayout("output", _.recall('html'))
       dom.disableElement("Hide")
-      _.store('html', _.Atlas.createHTML())
 
   dom.focus('a')
 

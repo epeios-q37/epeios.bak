@@ -5,7 +5,7 @@
 import sys
 sys.path.append(".")
 from workshop.fr.z_1 import *
-
+from workshop.fr.dispalcon import *
 
 def resoudreEquationPremierDegre(a,b,c):
     solution = (c-b)/a
@@ -38,6 +38,7 @@ def resoudreInequationPremierDegre(a,b,ineg,c):
 
 
 def maFonction(a,b,c,operator):
+    efface()
     affiche("Solution de")
     affiche("{} × x + {} {} {} :".format(a, b, operator, c))
     if operator == '=':

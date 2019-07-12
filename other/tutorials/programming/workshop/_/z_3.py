@@ -21,11 +21,11 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
- """
+"""
  
 import math
 import workshop._._ as _
-from .turtle import *
+import workshop._.turtle as turtle
 
 _dir = "z_3"
 
@@ -37,7 +37,7 @@ def _acConnect(core,dom,id):
 def _acDraw(core,dom):
   (polygons, segments) = dom.getContents(("polygons","segments")).values()
   _.recall(_FUNCTION)(polygons, segments)
-  draw(dom)
+  turtle.draw(dom)
 
 
 def main(callback,function,title):
@@ -47,4 +47,4 @@ def main(callback,function,title):
       "Draw" : _acDraw,
     }, title )
 
-initTurtle()
+turtle.init()

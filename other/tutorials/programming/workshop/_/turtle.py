@@ -21,7 +21,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
- """
+"""
  
 import math, colorsys
 
@@ -33,10 +33,12 @@ _ANGLE = "angle"
 _COLOR = "color"
 _PATH = "path"
 
+_CENTRE_X = 150
+_CENTRE_Y = 150
 
-def initTurtle():
-  _.store(_POS_X,150)
-  _.store(_POS_Y,150)
+def init():
+  _.store(_POS_X,_CENTRE_X)
+  _.store(_POS_Y,_CENTRE_Y)
   _.store(_ANGLE, 0)
   _.store(_COLOR,(0,0,0))
   _.store(_PATH,_.Atlas.createHTML())
@@ -63,10 +65,10 @@ def forward(distance):
   _.store('posx', posx)
   _.store('posy', posy)
 
-def RGB(r,g,b): # 0 to 255
+def setColorRGB(r,g,b): # 0 to 255
   _.store(_COLOR,(r,g,b))
 
-def HSL(h,s,l): # h: 0-360, s & l: 0-100 (%)
+def setColorHSL(h,s,l): # h: 0-360, s & l: 0-100 (%)
   _.store(_COLOR,tuple(_round(255*x) for x in colorsys.hls_to_rgb(h/360,l/100,s/100)))
 
 def right(angle):
@@ -78,4 +80,6 @@ def left(angle):
 def draw(dom):
   dom.setLayout("SVG", _.recall(_PATH))
   _.store(_PATH,_.Atlas.createHTML())
+  _.store(_POS_X,_CENTRE_X)
+  _.store(_POS_Y,_CENTRE_Y)
 

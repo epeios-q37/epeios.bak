@@ -21,7 +21,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
- """
+"""
  
 import workshop._.z_1 as workshop
 import workshop.fr._ as _
@@ -35,11 +35,6 @@ class _Data:
       "BadValue": "Seuls des nombres compris entre 100 et -100 exclus sont autorisés !",
       "ACannotBe0": "'a' ne peut être nul !"
     }
-
-
-def affiche(text):
-  workshop.display(text)
-
 
 def go(function,handleError):
   workshop.main(function, _Data, _.defaultTitle, handleError )

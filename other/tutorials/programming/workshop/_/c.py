@@ -21,17 +21,11 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
- """
+"""
  
 import workshop._._ as _
 
-def display(text):
-    html = _.recall('html')
-    html.putTagAndValue("h1", text)
-
-
 def _acConnect(c, dom):
-    _.store('html', _.Atlas.createHTML())
     dom.setLayout("", _.readBody("c", c.bodyI18n))
     dom.focus("input")
 
@@ -42,9 +36,7 @@ def _acSubmit(c, dom):
     if (len(input)) != 0:
         globals()['_function'](dom.getContent("input"))
         dom.setContent( "input", "")
-        dom.setLayout("output", _.recall('html'))
         dom.removeClass("output", "hidden")
-        _.store('html', _.Atlas.createHTML())
     else:
         dom.alert(c.i18n["NameIsMandatory"])
         dom.setContent("input", "")
