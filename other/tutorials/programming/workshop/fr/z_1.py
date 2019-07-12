@@ -25,6 +25,7 @@ SOFTWARE.
  
 import workshop._.z_1 as workshop
 import workshop.fr._ as _
+from workshop.fr.dispalcon import *
 
 class _Data:
     bodyI18n = {

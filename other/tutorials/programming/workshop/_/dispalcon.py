@@ -37,3 +37,10 @@ def display(text):
   output = _.Atlas.createHTML()
   output.putTagAndValue("h1", text)
   _dom().appendLayout(_OUTPUT, output)
+
+def alert(text):
+  _dom().alert(text)
+
+def confirm(text):
+  return _dom().confirm(text)
+

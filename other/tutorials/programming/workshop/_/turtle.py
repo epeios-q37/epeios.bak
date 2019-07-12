@@ -69,7 +69,8 @@ def setColorRGB(r,g,b): # 0 to 255
   _.store(_COLOR,(r,g,b))
 
 def setColorHSL(h,s,l): # h: 0-360, s & l: 0-100 (%)
-  _.store(_COLOR,tuple(_round(255*x) for x in colorsys.hls_to_rgb(h/360,l/100,s/100)))
+  # _.store(_COLOR,tuple(_round(255*x) for x in colorsys.hls_to_rgb(h/360,l/100,s/100))) With Python 2, calculation return integer instaed of float…
+    _.store(_COLOR,tuple(_round(255*x) for x in colorsys.hls_to_rgb(h/360.0,l/100.0,s/100.0)))
 
 def right(angle):
   _.store(_ANGLE,math.radians((math.degrees(_.recall(_ANGLE)) + angle ) % 360))

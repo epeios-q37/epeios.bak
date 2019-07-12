@@ -23,17 +23,17 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
  
-import workshop._.c as workshop
-import workshop.fr._ as _
-from workshop.fr.dispalcon import *
+import workshop._.dispalcon as dispalcon
 
-class _Core:
-    i18n = {
-      "NameIsMandatory": "Il faut saisir un nom !"
-    }
-    bodyI18n = {
-      "NameToDisplay": "Nom à afficher"
-    }
+# def lösche(): 'ö': Python 3 OK, but does not work with Python 2.
+def reinige():
+  dispalcon.clear()
 
-def go(function):
-  workshop.main(function, _Core, _.defaultTitle )
+def anzeige(text):
+  dispalcon.display(text)
+
+def warne(text):
+  dispalcon.alert(text)
+
+def frage(text):
+  return dispalcon.confirm(text)

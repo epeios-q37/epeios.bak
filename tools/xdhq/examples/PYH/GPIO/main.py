@@ -280,8 +280,8 @@ class GPIO:
 
 		for mode in Mode.label:
 			xml.pushTag("Mode")
-			xml.setAttribute("id", mode)
-			xml.setAttribute("Label", Mode.label[mode])
+			xml.putAttribute("id", mode)
+			xml.putAttribute("Label", Mode.label[mode])
 			xml.popTag()
 
 		xml.popTag()
@@ -301,10 +301,10 @@ class GPIO:
 
 		for wId in mapping:
 			xml.pushTag("GPIO")
-			xml.setAttribute( "id", wId)
-			xml.setAttribute("Selected", self._getSelected(wId))
-			xml.setAttribute("Mode",self._getMode(wId))
-			xml.setAttribute("Value",self._getValue(wId))
+			xml.putAttribute( "id", wId)
+			xml.putAttribute("Selected", self._getSelected(wId))
+			xml.putAttribute("Mode",self._getMode(wId))
+			xml.putAttribute("Value",self._getValue(wId))
 			xml.popTag()
 
 		xml.popTag()
@@ -324,17 +324,17 @@ class GPIO:
 		self._setMode(wId, mode)
 
 		dom.setContent("Value." + str(wId),self._getValue(wId))
-		dom.setAttribute(id,"value",self._getValue(wId))
+		dom.putAttribute(id,"value",self._getValue(wId))
 
 		if (mode==Mode.IN):
 			dom.disableElement(id)
-			dom.setAttribute(id,"step","100")
+			dom.putAttribute(id,"step","100")
 		elif (mode==Mode.OUT):
 			dom.enableElement(id)
-			dom.setAttribute(id,"step","100")
+			dom.putAttribute(id,"step","100")
 		elif (mode==Mode.PWM):
 			dom.enableElement(id)
-			dom.setAttribute(id,"step","1")
+			dom.putAttribute(id,"step","1")
 		else:
 			sys.exit("???")
 

@@ -25,6 +25,7 @@ SOFTWARE.
  
 import workshop._.c as workshop
 import workshop.de._ as _
+from workshop.de.dispalcon import *
 
 class _Core:
     i18n = {
@@ -33,10 +34,6 @@ class _Core:
     bodyI18n = {
       "NameToDisplay": "Anzeigename"
     }
-
-
-def anzeige(text):
-  workshop.display(text)
 
 
 def go(function):

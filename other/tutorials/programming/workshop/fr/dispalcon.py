@@ -30,3 +30,9 @@ def efface():
 
 def affiche(text):
   dispalcon.display(text)
+
+def alerte(text):
+  dispalcon.alert(text)
+
+def demande(text):
+  return dispalcon.confirm(text)
