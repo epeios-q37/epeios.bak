@@ -2,9 +2,9 @@
 
 # From '4.3 Résolution inéquation ax+b=c.py'
 
-from workshop.fr.z_1 import *
 import sys
 sys.path.append(".")
+from workshop.fr.z_1 import *
 
 
 traiteErreurs = True
