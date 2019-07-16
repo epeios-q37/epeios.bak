@@ -12,6 +12,12 @@ Simply retrieve the repository (`git clone …` or load and unpack the zip file)
 
 The *Z_…* exercises are currently only available for *fr*.
 
+All those files found under the ``de``/``en``/``fr`` directories are example that can be shown to students, or what they have to figure out.
+
+Each exercise file has a header, and a footer.
+
+The header, which goes 
+
 The `workshop/assets` directory contains files used for the exercises. The `ab` sub-directory is for exercises *A* and *B*, the `c`, `z_1`, `z_2` and `z_3 ` sub-directories are respectively for the *C*, *Z_1*, *Z_2* and *Z_3* exercises (the *Z_…* exercises are for *fr* only).
 
 The content of the `Body.html` will be put in the *body* section of the HTML main page, and the content of the `Head.html` file will be put in the *head* section of the same page. The CSS rules are usually put in the latter file.
