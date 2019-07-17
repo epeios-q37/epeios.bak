@@ -31,6 +31,9 @@ def efface():
 def affiche(text):
   dispalcon.display(text)
 
+def effaceEtAffiche(text):
+  dispalcon.clearAndDisplay(text)
+
 def alerte(text):
   dispalcon.alert(text)
 

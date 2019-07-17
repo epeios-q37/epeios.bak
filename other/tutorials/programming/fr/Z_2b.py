@@ -13,15 +13,15 @@ def maFonction(polygones, segments):
     segments = int(segments)
     taille = 140 * math.sin(math.pi/segments)
     T = 0
-    pasPolygon = 360/polygones
+    pasPolygone = 360/polygones
     pasSegment = 360/segments
     for y in range(0, polygones):
         fixeCouleurTSL(T, 100, 50)
-        T += pasPolygon
+        T += pasPolygone
         for x in range(0, segments):
             avance(taille)
             tourneDroite(pasSegment)
-        tourneGauche(pasPolygon)
+        tourneGauche(pasPolygone)
 
 
 go(maFonction)

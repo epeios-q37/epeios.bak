@@ -8,8 +8,11 @@
         font-size: 61.80482101px;
         font-family: Arial;
         text-anchor: middle;
-        fill: rgb(0, 0, 0);
         stroke-width: 4.41463029pt
+    }
+
+    #Keyboard :not(.chosen) text {
+        fill: rgb(0, 0, 0);
     }
 
     #Keyboard g:not(.chosen) {
@@ -25,14 +28,16 @@
     }
 
     .chosen {
-        cursor:not-allowed;
+        cursor: not-allowed;
     }
 
     .chosen text {
-        display: none;
+        fill:red;
     }
 
     h1 {
         margin: 0;
+        font-family: monospace;
+        letter-spacing: 5px;
     }
 </style>

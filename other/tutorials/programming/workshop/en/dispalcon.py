@@ -31,6 +31,9 @@ def erase():
 def display(text):
   dispalcon.display(text)
 
+def eraseAndDisplay(text):
+  dispalcon.clearAndDisplay(text)
+
 def warn(text):
   dispalcon.alert(text)
 

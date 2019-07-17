@@ -32,6 +32,9 @@ def reinige():
 def anzeige(text):
   dispalcon.display(text)
 
+def reinigeUndAnzeige(text):
+  dispalcon.clearAndDisplay(text)
+
 def warne(text):
   dispalcon.alert(text)
 

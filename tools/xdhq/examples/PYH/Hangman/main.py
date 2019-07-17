@@ -58,7 +58,6 @@ class Core:
         self.errors = []
         self.correctGuesses = []
         self.secretWord = ""
-        self.correct = 0
 
     def __init__(self):
         self.reset()
@@ -80,7 +79,7 @@ def showWord(dom, secretWord, errors, correctGuesses):
         if secretWord[i] in correctGuesses:
             blanks = blanks[:i] + secretWord[i] + blanks[i + 1:]
     for letter in blanks:
-        output += letter + " "
+        output += letter
 
     html = Atlas.createHTML()
 
@@ -108,14 +107,15 @@ def acSuggest(core, dom, id):
 
     if guess in core.secretWord:
         core.correctGuesses.append(guess)
-        core.correct = 0
+        correct = 0
         for i in range(len(core.secretWord)):
             if core.secretWord[i] in core.correctGuesses:
-                core.correct += 1
+                correct += 1
 
-        if core.correct == len(core.secretWord):
+        if correct == len(core.secretWord):
             showWord(dom, core.secretWord, core.errors, core.correctGuesses)
             dom.alert("You've won! Congratulations!")
+            core.secretWord = ""
             return
     else:
         core.errors += guess
@@ -127,10 +127,11 @@ def acSuggest(core, dom, id):
         dom.alert("\nYou've run out of guesses. \nYou had " + str(len(core.errors)) +
                   " errors and " + str(len(core.correctGuesses)) + " correct guesses. " +
                   "\nThe word was '" + core.secretWord + "'.")
+        core.secretWord = ""
 
 
 def acRestart(core, dom):
-	if (core.correct != len(core.secretWord)) and (len(core.errors) < len(HANGED_MAN)):
+	if (core.secretWord != "" ):
 		dom.alert("You had " + str(len(core.errors)) +
 				" errors and " + str(len(core.correctGuesses)) + " correct guesses. " +
 				"\nThe word was '" + core.secretWord + "'.")

@@ -8,7 +8,7 @@ It's only a support, not a complete tutorial. It's intended for those who want t
 
 Although very powerful, it remains lightweight and easy to install thanks to the [*Atlas* toolkit](http://atlastk.org) (<http://atlastk.org>).
 
-Simply retrieve the repository (`git clone …` or load and unpack the zip file) and go, in a console, to the root directory. Then, to launch an exercise: `python (de|en|fr)/(A|B|C|Z_(1|2|3)).py`. For example: `python fr/B.py`.
+Simply retrieve the repository (`git clone …` or load and unpack the zip file) and go, in a console, to the root directory. Then, to launch an exercise: `python (de|en|fr)/(A|B|C|Z_(1|2(a|b)|3)).py`. For example: `python fr/B.py`.
 
 The *Z_…* exercises are currently only available for *fr*.
 
@@ -29,7 +29,7 @@ The content of the `Body.html` will be put in the *body* section of the HTML mai
 Below exercises are currently only available for *fr*.
 
 - exercise *Z_1*: (in)equation of the first degree (interactive),
-- exercise *Z_2*: example of use of turtle graphics,
-- exercise *Z_3*: drawing of polygons using turtle graphics (interactive).
+- exercise *Z_2a*: example of use of turtle graphics,
+- exercise *Z_2b*: drawing of polygons using turtle graphics (interactive).
 
 The `main.py` and `starter.py` files are mainly to use with *repl.it*.
