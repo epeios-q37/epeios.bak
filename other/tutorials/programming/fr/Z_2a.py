@@ -2,7 +2,7 @@
 
 import sys
 sys.path.append(".")
-from workshop.fr.z_2 import *
+from workshop.fr.z_2a import *
 
 
 T = 0

@@ -2,7 +2,7 @@
 
 import sys
 sys.path.append(".")
-from workshop.fr.z_3 import *
+from workshop.fr.z_2b import *
 
 
 import math

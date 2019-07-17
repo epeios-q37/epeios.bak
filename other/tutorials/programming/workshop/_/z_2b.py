@@ -23,16 +23,28 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
  
-import workshop._.z_3 as workshop
-import workshop.fr._ as _
-from workshop.fr.turtle import *
+import math
+import workshop._._ as _
+import workshop._.turtle as turtle
 
-class _Core:
-    i18n = {
-      "AmountOfPolygons": "Nombre de polygones ",
-      "AmountOfSegments": "Nombre de segments ",
-      "Draw": "Afficher"
-    }
+_dir = "z_2b"
 
-def go(function):
-  workshop.main(_Core, function, _.defaultTitle)
+_FUNCTION = 'function'
+
+def _acConnect(core,dom,id):
+  dom.setLayout("",_.readBody(_dir, core.i18n))
+
+def _acDraw(core,dom):
+  (polygons, segments) = dom.getContents(("polygons","segments")).values()
+  _.recall(_FUNCTION)(polygons, segments)
+  turtle.draw(dom)
+
+
+def main(callback,function,title):
+  _.store(_FUNCTION,function)
+  _.main(_dir, callback, {
+      "" : _acConnect,
+      "Draw" : _acDraw,
+    }, title )
+
+turtle.init()

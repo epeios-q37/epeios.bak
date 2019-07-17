@@ -23,9 +23,19 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
  
-import workshop._.z_2 as workshop
-import workshop.fr._ as _
-from workshop.fr.turtle import *
+import math
+import workshop._._ as _
+import workshop._.turtle as turtle
 
-def go():
-  workshop.main(lambda: None, _.defaultTitle)
+_dir = "z_2a"
+
+def _acConnect(d,dom,id):
+  dom.setLayout("",_.readBody(_dir))
+  turtle.draw(dom)
+
+def main(callback,title):
+  _.main(_dir, callback, {
+      "" : _acConnect,
+    }, title )
+
+turtle.init()
