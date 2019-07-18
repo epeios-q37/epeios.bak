@@ -63,12 +63,14 @@ def majMasque(motSecret, bonnePioches):
 
     effaceEtAffiche(masque)
 
+
 def raz(pendu):
     redessine()
     pendu.raz()
     pendu.motSecret = obtenirMot()
     print(pendu.motSecret)
     majMasque(pendu.motSecret, pendu.bonnePioches)
+
 
 def connection(pendu):
     raz(pendu)
@@ -92,7 +94,6 @@ def pioche(pendu, pioche):
         pendu.nbErreurs += 1
         majDessin(pendu.nbErreurs)
 
-
     if pendu.nbErreurs >= len(PENDU):
         dessinePendu(P_VISAGE)
         alerte("\nPerdu !\nErreurs : " + str(pendu.nbErreurs) +
@@ -109,4 +110,6 @@ def recommencer(pendu):
 
     raz(pendu)
 
-go(Pendu, {"connecter": connection, "annoncer": pioche, "recommencer": recommencer})
+
+go(Pendu, {"connecter": connection,
+           "annoncer": pioche, "recommencer": recommencer})

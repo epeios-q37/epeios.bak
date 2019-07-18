@@ -25,9 +25,10 @@ SOFTWARE.
  
 import workshop._.c as workshop
 import workshop.de._ as _
-from workshop.de.dispalcon import *
+from workshop.de.display import *
 
-class _Core:
+
+class _Core(_.Core):
     i18n = {
       "NameIsMandatory": "Sie müssen einen Name eingeben !"
     }
@@ -35,6 +36,9 @@ class _Core:
       "NameToDisplay": "Anzeigename"
     }
 
+    def __init__(self, dom):
+        _.Core.__init__(self, dom)
+
 
 def go(function):
-  workshop.main(function, _Core, _.defaultTitle )
+    workshop.main(function, lambda dom: _Core(dom), _.defaultTitle)

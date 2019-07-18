@@ -28,6 +28,8 @@ import threading
 import sys
 import inspect
 
+_DEBUG = True
+
 import signal
 
 def signal_handler(sig, frame):
@@ -151,7 +153,8 @@ def _call(func, userObject, dom, id, action):
 		return func(*args)
 	except Exception as e:
 		dom.alert("PYTHON ERROR: \n\n" + str(e))
-#		raise e
+		if _DEBUG:
+		  raise e
 
 
 def _patch(userCallbacks):

@@ -25,7 +25,7 @@ SOFTWARE.
 
 import workshop._.z_1 as workshop
 import workshop.fr._ as _
-from workshop.fr.dispalcon import *
+from workshop.fr.display import *
 
 
 class _Core(_.Core):

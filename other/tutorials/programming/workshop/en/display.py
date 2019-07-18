@@ -23,19 +23,19 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
  
-import workshop._.dispalcon as dispalcon
+import workshop._.display as display_
 
-def efface():
-  dispalcon.clear()
+def erase():
+  display_.clear()
 
-def affiche(text):
-  dispalcon.display(text)
+def display(text):
+  display_.display(text)
 
-def effaceEtAffiche(text):
-  dispalcon.clearAndDisplay(text)
+def eraseAndDisplay(text):
+  display_.clearAndDisplay(text)
 
-def alerte(text):
-  dispalcon.alert(text)
+def warn(text):
+  display_.alert(text)
 
-def demande(text):
-  return dispalcon.confirm(text)
+def ask(text):
+  return display_.confirm(text)

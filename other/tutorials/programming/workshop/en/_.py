@@ -25,4 +25,9 @@ SOFTWARE.
  
 import workshop._._ as _
 
+
+class Core(_.Core):
+    pass
+
+
 defaultTitle = _.titles["en"]

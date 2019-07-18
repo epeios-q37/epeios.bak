@@ -25,18 +25,19 @@ SOFTWARE.
 
 import workshop._.c as workshop
 import workshop.fr._ as _
-from workshop.fr.dispalcon import *
+from workshop.fr.display import *
 
 
 class _Core(_.Core):
-    def __init__(self, dom):
-        _.Core.__init__(self, dom)
     i18n = {
         "NameIsMandatory": "Il faut saisir un nom !"
     }
     bodyI18n = {
         "NameToDisplay": "Nom à afficher"
     }
+
+    def __init__(self, dom):
+        _.Core.__init__(self, dom)
 
 
 def go(function):

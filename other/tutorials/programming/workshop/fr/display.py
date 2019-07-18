@@ -23,20 +23,19 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
  
-import workshop._.dispalcon as dispalcon
+import workshop._.display as display_
 
-# def lösche(): 'ö': Python 3 OK, but does not work with Python 2.
-def reinige():
-  dispalcon.clear()
+def efface():
+  display_.clear()
 
-def anzeige(text):
-  dispalcon.display(text)
+def affiche(text):
+  display_.display(text)
 
-def reinigeUndAnzeige(text):
-  dispalcon.clearAndDisplay(text)
+def effaceEtAffiche(text):
+  display_.clearAndDisplay(text)
 
-def warne(text):
-  dispalcon.alert(text)
+def alerte(text):
+  display_.alert(text)
 
-def frage(text):
-  return dispalcon.confirm(text)
+def demande(text):
+  return display_.confirm(text)
