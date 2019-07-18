@@ -1,33 +1,8 @@
-"""
-MIT License
-
-Copyright (c) 2019 Claude SIMON (https://q37.info/s/rmnmqd49)
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-"""
+# coding: utf-8
 
 import sys
-
-sys.path.append("./Atlas.python.zip")
-sys.path.append("../Atlas.python.zip")
-
-import atlastk as Atlas
+sys.path.append(".")
+from workshop.fr.z_3 import *
 
 from random import randint
 
@@ -46,12 +21,6 @@ DICTIONARY = [
     "violate", "vital", "vivid", "wistful", "yield", "zest"
 ]
 
-HANGED_MAN = "Head Body LeftArm RightArm LeftLeg RightLeg".split()
-
-
-def readAsset(path):
-    return Atlas.readAsset(path, "Hangman")
-
 
 class Core:
     def reset(self):
@@ -63,41 +32,38 @@ class Core:
         self.reset()
 
 
+PENDU = [P_TETE, P_CORPS, P_BRAS_GAUCHE, P_BRAS_DROIT, P_PIED_GAUCHE, P_PIED_DROIT]
+
 def randword():
     return DICTIONARY[randint(0, len(DICTIONARY))]
 
 
-def showHanged(dom, errors):
+def showHanged(errors):
     if (errors):
-    	dom.removeClass(HANGED_MAN[errors-1], "hidden")
+    	dessinePendu(PENDU[errors-1])
 
 
-def showWord(dom, secretWord, correctGuesses):
+def showWord(secretWord, correctGuesses):
     output = ("_" * len(secretWord))
     for i in range(len(secretWord)):
         if secretWord[i] in correctGuesses:
             output = output[:i] + secretWord[i] + output[i + 1:]
 
-    html = Atlas.createHTML()
-    html.putTagAndValue("h1", output)
-    dom.setLayout("output", html)
+    effaceEtAffiche(output)
 
 
-def showBoard(dom, secretWord, errors, correctGuesses):
-    showHanged(dom, errors)
-    showWord(dom, secretWord, correctGuesses)
+def showBoard(secretWord, errors, correctGuesses):
+    showHanged(errors)
+    showWord(secretWord, correctGuesses)
 
 
-def acConnect(core, dom):
-    dom.setLayout("", readAsset("Main.html"))
+def Connect(core):
     core.secretWord = randword()
     print(core.secretWord)
-    showWord(dom, core.secretWord, core.correctGuesses)
+    showWord(core.secretWord, core.correctGuesses)
 
 
-def acSubmit(core, dom, id):
-    dom.addClass(id, "chosen")
-
+def Submit(core, id):
     guess = id.lower()
 
     if guess in core.secretWord:
@@ -108,40 +74,33 @@ def acSubmit(core, dom, id):
                 correct += 1
 
         if correct == len(core.secretWord):
-            showWord(dom, core.secretWord, core.correctGuesses)
-            dom.alert("You've won! Congratulations!")
+            showWord(core.secretWord, core.correctGuesses)
+            alerte("You've won! Congratulations!")
             core.reset()
             return
     else:
         core.errors += 1
 
-    showBoard(dom, core.secretWord, core.errors, core.correctGuesses)
+    showBoard(core.secretWord, core.errors, core.correctGuesses)
 
-    if core.errors >= len(HANGED_MAN):
-        dom.removeClass("Face", "hidden")
-        dom.alert("\nYou've run out of guesses. \nYou had " + str(core.errors) +
+    if core.errors >= len(PENDU):
+        dessinePendu(P_VISAGE)
+        alerte("\nYou've run out of guesses. \nYou had " + str(core.errors) +
                   " errors and " + str(len(core.correctGuesses)) + " correct guesses. " +
                   "\n\nThe word was '" + core.secretWord + "'.")
         core.reset()
 
 
-def acRestart(core, dom):
+def Restart(core):
 	if (core.secretWord != "" ):
-		dom.alert("You had " + str(core.errors) +
+		alerte("You had " + str(core.errors) +
 				" errors and " + str(len(core.correctGuesses)) + " correct guesses. " +
 				"\nThe word was '" + core.secretWord + "'.")
 		core.reset()
 
-	dom.setLayout("", readAsset("Main.html"))
+	redessine()
 	core.secretWord = randword()
 	print(core.secretWord)
-	showWord(dom, core.secretWord, core.correctGuesses)
+	showWord(core.secretWord, core.correctGuesses)
 
-
-callbacks = {
-    "": acConnect,
-    "Submit": acSubmit,
-	"Restart": acRestart
-}
-
-Atlas.launch(callbacks, Core, readAsset("Head.html"), "Hangman")
+go(Core,{"connecter": Connect, "annoncer": Submit, "recommencer": Restart})

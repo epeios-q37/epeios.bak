@@ -82,6 +82,9 @@ def recall(key):
   except KeyError:
     return _recall('global',key)
 
+def dom():
+  return recall('dom')
+
 class _Core:
   def __init__(self, dom):
     store('dom',dom)
@@ -144,6 +147,7 @@ def _call(func, userObject, dom, id, action):
 		return func(*args)
 	except Exception as e:
 		dom.alert("PYTHON ERROR: \n\n" + str(e))
+#		raise e
 
 
 def _patch(userCallbacks):

@@ -25,27 +25,48 @@ SOFTWARE.
  
 import workshop._._ as _
 
-_OUTPUT = "output"
+_dir = "z_3"
+
+_CONNECT_CALLBACK = 'connect_callback'
+_SUBMIT_CALLBACK = 'submit_callback'
+_RESTART_CALLBACK = 'restart_callback'
+
+F_FACE = "Face"
+F_HEAD = "Head"
+F_BODY = "Body"
+F_LEFT_ARM = "LeftArm"
+F_RIGHT_ARM = "RightArm"
+F_LEFT_LEG = "LeftLeg"
+F_RIGHT_LEG = "RightLeg"
+
+
+def _acConnect(core, dom ,id):
+  dom.setLayout("",_.readBody(_dir))
+  _.recall(_CONNECT_CALLBACK)(core)
+
+def _acSubmit(core, dom, id):
+  dom.addClass(id, "chosen")
+
+  _.recall(_SUBMIT_CALLBACK)( core, id)
 
 def _dom():
   return _.dom()
 
-def clear():
-  _dom().setLayout(_OUTPUT, "<span/>")
+def _acRestart(core, dom):
+  _.recall(_RESTART_CALLBACK)( core)
 
-def display(text):
-  output = _.Atlas.createHTML()
-  output.putTagAndValue("h1", text)
-  _dom().appendLayout(_OUTPUT, output)
+def redraw():
+  _.dom().setLayout("",_.readBody(_dir))
 
-def clearAndDisplay(text):
-  output = _.Atlas.createHTML()
-  output.putTagAndValue("h1", text)
-  _dom().setLayout(_OUTPUT, output)
+def drawFigure(part):
+  _dom().removeClass(part, "hidden")
 
-def alert(text):
-  _dom().alert(text)
-
-def confirm(text):
-  return _dom().confirm(text)
-
+def main(callback, callbacks, title):
+  _.store(_CONNECT_CALLBACK, callbacks[0])
+  _.store(_SUBMIT_CALLBACK, callbacks[1])
+  _.store(_RESTART_CALLBACK, callbacks[2])
+  _.main(_dir, callback, {
+      "" : _acConnect,
+      "Submit" : _acSubmit,
+      "Restart" : _acRestart
+    }, title)

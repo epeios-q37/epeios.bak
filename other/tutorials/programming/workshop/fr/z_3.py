@@ -23,29 +23,23 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
  
-import workshop._._ as _
+import workshop._.z_3 as workshop
+import workshop.fr._ as _
+from workshop.fr.dispalcon import *
 
-_OUTPUT = "output"
+P_VISAGE = workshop.F_FACE
+P_TETE = workshop.F_HEAD
+P_CORPS = workshop.F_BODY
+P_BRAS_GAUCHE = workshop.F_LEFT_ARM
+P_BRAS_DROIT = workshop.F_RIGHT_ARM
+P_PIED_GAUCHE = workshop.F_LEFT_LEG
+P_PIED_DROIT = workshop.F_RIGHT_LEG
 
-def _dom():
-  return _.dom()
+def redessine():
+  workshop.redraw()
 
-def clear():
-  _dom().setLayout(_OUTPUT, "<span/>")
+def dessinePendu(partie):
+  workshop.drawFigure(partie)
 
-def display(text):
-  output = _.Atlas.createHTML()
-  output.putTagAndValue("h1", text)
-  _dom().appendLayout(_OUTPUT, output)
-
-def clearAndDisplay(text):
-  output = _.Atlas.createHTML()
-  output.putTagAndValue("h1", text)
-  _dom().setLayout(_OUTPUT, output)
-
-def alert(text):
-  _dom().alert(text)
-
-def confirm(text):
-  return _dom().confirm(text)
-
+def go(callback, callbacks):
+  workshop.main(callback, [callbacks['connecter'],callbacks['annoncer'], callbacks['recommencer']], _.defaultTitle)
