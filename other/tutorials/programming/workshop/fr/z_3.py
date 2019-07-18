@@ -27,6 +27,11 @@ import workshop._.z_3 as workshop
 import workshop.fr._ as _
 from workshop.fr.dispalcon import *
 
+class _Core(_.Core):
+  i18n = {
+    "Restart": "Recommencer"
+  }
+
 P_VISAGE = workshop.F_FACE
 P_TETE = workshop.F_HEAD
 P_CORPS = workshop.F_BODY
@@ -42,4 +47,4 @@ def dessinePendu(partie):
   workshop.drawFigure(partie)
 
 def go(callback, callbacks):
-  workshop.main(callback, [callbacks['connecter'],callbacks['annoncer'], callbacks['recommencer']], _.defaultTitle)
+  workshop.main(lambda dom: _Core(dom), [callbacks['connecter'], callbacks['annoncer'], callbacks['recommencer']], _.defaultTitle, callback)

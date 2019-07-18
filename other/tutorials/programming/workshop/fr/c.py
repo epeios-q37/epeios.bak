@@ -1,5 +1,5 @@
 # coding: utf-8
-""" 
+"""
 MIT License
 
 Copyright (c) 2019 Claude SIMON (https://q37.info/s/rmnmqd49)
@@ -22,18 +22,22 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
- 
+
 import workshop._.c as workshop
 import workshop.fr._ as _
 from workshop.fr.dispalcon import *
 
-class _Core:
+
+class _Core(_.Core):
+    def __init__(self, dom):
+        _.Core.__init__(self, dom)
     i18n = {
-      "NameIsMandatory": "Il faut saisir un nom !"
+        "NameIsMandatory": "Il faut saisir un nom !"
     }
     bodyI18n = {
-      "NameToDisplay": "Nom à afficher"
+        "NameToDisplay": "Nom à afficher"
     }
 
+
 def go(function):
-  workshop.main(function, _Core, _.defaultTitle )
+    workshop.main(function, lambda dom: _Core(dom), _.defaultTitle)

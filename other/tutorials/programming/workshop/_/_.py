@@ -61,9 +61,6 @@ _data['global'] = {}
 def _threadId():
   return threading.currentThread().ident
 
-# Does not work as static member of '_Core' with Python 2!
-_userCallback = None
-
 def _store(set,key,value):
   globals()['_data'][set][key] = value
 
@@ -85,11 +82,18 @@ def recall(key):
 def dom():
   return recall('dom')
 
-class _Core:
+
+def core():
+  return recall('core')
+
+_userCallback = None
+
+class Core:
   def __init__(self, dom):
     store('dom',dom)
+    store('core',self)
     globals()['_data'][_threadId()] = {}
-    self.userObject = _userCallback()
+    self.userObject = _userCallback() if _userCallback else None
 
 def _read(path):
   return open(path).read()
@@ -154,10 +158,11 @@ def _patch(userCallbacks):
   callbacks = {}
 
   for action in userCallbacks:
-    callbacks[action] = lambda core,dom,id,action: _call(userCallbacks[action],core.userObject,dom,id,action)
+    callbacks[action] = lambda core, dom, id, action: _call(userCallbacks[action], core, dom, id, action)
 
   return callbacks
 
-def main(path,callback,callbacks,title = None):
-  globals()['_userCallback'] = callback
-  Atlas.launch( _patch(callbacks), lambda dom: _Core(dom), _readHead(path, title)) 
+
+def main(path, callback, callbacks, title, userCallback = None):
+  globals()['_userCallback'] = userCallback
+  Atlas.launch( _patch(callbacks), callback, _readHead(path, title)) 

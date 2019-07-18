@@ -22,7 +22,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
- 
+
 import workshop._._ as _
 
 _dir = "z_3"
@@ -40,33 +40,34 @@ F_LEFT_LEG = "LeftLeg"
 F_RIGHT_LEG = "RightLeg"
 
 
-def _acConnect(core, dom ,id):
-  dom.setLayout("",_.readBody(_dir))
-  _.recall(_CONNECT_CALLBACK)(core)
+def _acConnect(core, dom, id):
+    _.recall(_CONNECT_CALLBACK)(core.userObject)
+
 
 def _acSubmit(core, dom, id):
-  dom.addClass(id, "chosen")
+    dom.addClass(id, "chosen")
 
-  _.recall(_SUBMIT_CALLBACK)( core, id.lower())
+    _.recall(_SUBMIT_CALLBACK)(core.userObject, id.lower())
 
-def _dom():
-  return _.dom()
 
 def _acRestart(core, dom):
-  _.recall(_RESTART_CALLBACK)( core)
+    _.recall(_RESTART_CALLBACK)(core.userObject)
+
 
 def redraw():
-  _.dom().setLayout("",_.readBody(_dir))
+    _.dom().setLayout("", _.readBody(_dir, _.core().i18n))
+
 
 def drawFigure(part):
-  _dom().removeClass(part, "hidden")
+    _.dom().removeClass(part, "hidden")
 
-def main(callback, callbacks, title):
-  _.store(_CONNECT_CALLBACK, callbacks[0])
-  _.store(_SUBMIT_CALLBACK, callbacks[1])
-  _.store(_RESTART_CALLBACK, callbacks[2])
-  _.main(_dir, callback, {
-      "" : _acConnect,
-      "Submit" : _acSubmit,
-      "Restart" : _acRestart
-    }, title)
+
+def main(callback, callbacks, title, userCallback):
+    _.store(_CONNECT_CALLBACK, callbacks[0])
+    _.store(_SUBMIT_CALLBACK, callbacks[1])
+    _.store(_RESTART_CALLBACK, callbacks[2])
+    _.main(_dir, callback, {
+        "": _acConnect,
+        "Submit": _acSubmit,
+        "Restart": _acRestart
+    }, title, userCallback)

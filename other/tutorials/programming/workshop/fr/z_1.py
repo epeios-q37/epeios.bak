@@ -22,20 +22,26 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
- 
+
 import workshop._.z_1 as workshop
 import workshop.fr._ as _
 from workshop.fr.dispalcon import *
 
-class _Data:
+
+class _Core(_.Core):
     bodyI18n = {
-      "Solve": "Résoudre",
-      "Solution": "Solution"
+        "Solve": "Résoudre",
+        "Solution": "Solution"
     }
     i18n = {
-      "BadValue": "Seuls des nombres compris entre 100 et -100 exclus sont autorisés !",
-      "ACannotBe0": "'a' ne peut être nul !"
+        "BadValue": "Seuls des nombres compris entre 100 et -100 exclus sont autorisés !",
+        "ACannotBe0": "'a' ne peut être nul !"
     }
 
-def go(function,handleError):
-  workshop.main(function, _Data, _.defaultTitle, handleError )
+    def __init__(self, dom):
+        _.Core.__init__(self, dom)
+
+
+def go(function, handleError):
+    workshop.main(function, lambda dom: _Core(
+        dom), _.defaultTitle, handleError)

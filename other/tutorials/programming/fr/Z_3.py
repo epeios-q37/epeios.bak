@@ -46,7 +46,7 @@ PENDU = [P_TETE, P_CORPS, P_BRAS_GAUCHE,
 
 
 def obtenirMot():
-    return DICTIONNAIRE[randint(0, len(DICTIONNAIRE))]
+    return DICTIONNAIRE[randint(0, len(DICTIONNAIRE)-1)]
 
 
 def majDessin(nbErreurs):
@@ -63,11 +63,15 @@ def majMasque(motSecret, bonnePioches):
 
     effaceEtAffiche(masque)
 
-
-def connection(pendu):
+def raz(pendu):
+    redessine()
+    pendu.raz()
     pendu.motSecret = obtenirMot()
     print(pendu.motSecret)
     majMasque(pendu.motSecret, pendu.bonnePioches)
+
+def connection(pendu):
+    raz(pendu)
 
 
 def pioche(pendu, pioche):
@@ -82,7 +86,7 @@ def pioche(pendu, pioche):
         if correcte == len(pendu.motSecret):
             majMasque(pendu.motSecret, pendu.bonnePioches)
             alerte("Tu as gagné ! Félicitations !")
-            pendu.raz()
+            raz(pendu)
             return
     else:
         pendu.nbErreurs += 1
@@ -93,21 +97,16 @@ def pioche(pendu, pioche):
         dessinePendu(P_VISAGE)
         alerte("\nPerdu !\nErreurs : " + str(pendu.nbErreurs) +
                " ; bonne pioches : " + str(len(pendu.bonnePioches)) +
-               "\n\nMot à deviner : '" + pendu.motSecret + "'.")
-        pendu.raz()
+               "\n\nLe mot à deviner était : '" + pendu.motSecret + "'.")
+        raz(pendu)
 
 
 def recommencer(pendu):
     if (pendu.motSecret != ""):
         alerte("Erreurs : " + str(pendu.nbErreurs) +
                " ; bonne pioches : " + str(len(pendu.bonnePioches)) +
-               "\n\nMot à deviner : '" + pendu.motSecret + "'.")
-        pendu.raz()
+               "\n\nLe mot à deviner était : '" + pendu.motSecret + "'.")
 
-    redessine()
-    pendu.motSecret = obtenirMot()
-    print(pendu.motSecret)
-    majMasque(pendu.motSecret, pendu.bonnePioches)
-
+    raz(pendu)
 
 go(Pendu, {"connecter": connection, "annoncer": pioche, "recommencer": recommencer})
