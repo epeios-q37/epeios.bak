@@ -47,7 +47,7 @@ def _acConnect(core, dom ,id):
 def _acSubmit(core, dom, id):
   dom.addClass(id, "chosen")
 
-  _.recall(_SUBMIT_CALLBACK)( core, id)
+  _.recall(_SUBMIT_CALLBACK)( core, id.lower())
 
 def _dom():
   return _.dom()

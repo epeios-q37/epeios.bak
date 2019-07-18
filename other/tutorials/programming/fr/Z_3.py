@@ -6,101 +6,108 @@ from workshop.fr.z_3 import *
 
 from random import randint
 
-DICTIONARY = [
-    "accommodate", "afterthought", "allegiance", "aloft", "ancestor", "anticipation", "antics",
-    "apparel", "ascend", "beckon", "brink", "catastrophe", "coax", "compassion", "complexion", "content",
-    "courteous", "cringe", "derelict", "dignity", "distaste", "dormant", "elaborate", "endure", "enforce",
-    "exertion", "expanse", "extraordinary", "foliage", "foremost", "frank", "function", "futile", "gaze",
-    "glimmer", "glimpse", "grimace", "headstrong", "hesitate", "hoist", "immense", "imperceptibly",
-    "indication", "inscription", "instinctive", "intent", "interior", "jar", "keepsake", "knack",
-    "literacy", "lurch", "makeshift", "malicious", "massive", "meager", "melancholy", "merge", "mingle",
-    "minuscule", "momentary", "nape", "nimble", "obstinate", "opt", "overwhelming", "pact", "pandemonium",
-    "persuade", "phenomenal", "ponder", "quantity", "quaver", "quench", "radiant", "ravine", "recipient",
-    "resentful", "satisfactory", "sensitive", "sentiment", "shudder", "sickly", "sleek", "solemn", "soothe",
-    "stagger", "stern", "tantalize", "temptation", "transform", "unscrupulous", "vain", "vengeance",
-    "violate", "vital", "vivid", "wistful", "yield", "zest"
+
+DICTIONNAIRE = [
+    "armoire",
+    "boucle",
+    "buisson",
+    "bureau",
+    "chaise",
+    "carton",
+    "couteau",
+    "fichier",
+    "garage",
+    "glace",
+    "journal",
+    "kiwi",
+    "lampe",
+    "liste",
+    "montagne",
+    "remise",
+    "sandale",
+    "taxi",
+    "vampire",
+    "volant",
 ]
 
 
-class Core:
-    def reset(self):
-        self.errors = 0
-        self.correctGuesses = []
-        self.secretWord = ""
+class Pendu:
+    def raz(self):
+        self.nbErreurs = 0
+        self.bonnePioches = []
+        self.motSecret = ""
 
     def __init__(self):
-        self.reset()
+        self.raz()
 
 
-PENDU = [P_TETE, P_CORPS, P_BRAS_GAUCHE, P_BRAS_DROIT, P_PIED_GAUCHE, P_PIED_DROIT]
-
-def randword():
-    return DICTIONARY[randint(0, len(DICTIONARY))]
+PENDU = [P_TETE, P_CORPS, P_BRAS_GAUCHE,
+         P_BRAS_DROIT, P_PIED_GAUCHE, P_PIED_DROIT]
 
 
-def showHanged(errors):
-    if (errors):
-    	dessinePendu(PENDU[errors-1])
+def obtenirMot():
+    return DICTIONNAIRE[randint(0, len(DICTIONNAIRE))]
 
 
-def showWord(secretWord, correctGuesses):
-    output = ("_" * len(secretWord))
-    for i in range(len(secretWord)):
-        if secretWord[i] in correctGuesses:
-            output = output[:i] + secretWord[i] + output[i + 1:]
-
-    effaceEtAffiche(output)
+def majDessin(nbErreurs):
+    if (nbErreurs):
+        dessinePendu(PENDU[nbErreurs-1])
 
 
-def showBoard(secretWord, errors, correctGuesses):
-    showHanged(errors)
-    showWord(secretWord, correctGuesses)
+def majMasque(motSecret, bonnePioches):
+    masque = ("_" * len(motSecret))
+
+    for i in range(len(motSecret)):
+        if motSecret[i] in bonnePioches:
+            masque = masque[:i] + motSecret[i] + masque[i + 1:]
+
+    effaceEtAffiche(masque)
 
 
-def Connect(core):
-    core.secretWord = randword()
-    print(core.secretWord)
-    showWord(core.secretWord, core.correctGuesses)
+def connection(pendu):
+    pendu.motSecret = obtenirMot()
+    print(pendu.motSecret)
+    majMasque(pendu.motSecret, pendu.bonnePioches)
 
 
-def Submit(core, id):
-    guess = id.lower()
+def pioche(pendu, pioche):
+    if pioche in pendu.motSecret:
+        pendu.bonnePioches.append(pioche)
+        correcte = 0
+        for i in range(len(pendu.motSecret)):
+            if pendu.motSecret[i] in pendu.bonnePioches:
+                correcte += 1
+                majMasque(pendu.motSecret, pendu.bonnePioches)
 
-    if guess in core.secretWord:
-        core.correctGuesses.append(guess)
-        correct = 0
-        for i in range(len(core.secretWord)):
-            if core.secretWord[i] in core.correctGuesses:
-                correct += 1
-
-        if correct == len(core.secretWord):
-            showWord(core.secretWord, core.correctGuesses)
-            alerte("You've won! Congratulations!")
-            core.reset()
+        if correcte == len(pendu.motSecret):
+            majMasque(pendu.motSecret, pendu.bonnePioches)
+            alerte("Tu as gagné ! Félicitations !")
+            pendu.raz()
             return
     else:
-        core.errors += 1
+        pendu.nbErreurs += 1
+        majDessin(pendu.nbErreurs)
 
-    showBoard(core.secretWord, core.errors, core.correctGuesses)
 
-    if core.errors >= len(PENDU):
+    if pendu.nbErreurs >= len(PENDU):
         dessinePendu(P_VISAGE)
-        alerte("\nYou've run out of guesses. \nYou had " + str(core.errors) +
-                  " errors and " + str(len(core.correctGuesses)) + " correct guesses. " +
-                  "\n\nThe word was '" + core.secretWord + "'.")
-        core.reset()
+        alerte("\nPerdu !\nErreurs : " + str(pendu.nbErreurs) +
+               " ; bonne pioches : " + str(len(pendu.bonnePioches)) +
+               "\n\nMot à deviner : '" + pendu.motSecret + "'.")
+        pendu.raz()
 
 
-def Restart(core):
-	if (core.secretWord != "" ):
-		alerte("You had " + str(core.errors) +
-				" errors and " + str(len(core.correctGuesses)) + " correct guesses. " +
-				"\nThe word was '" + core.secretWord + "'.")
-		core.reset()
+def recommencer(pendu):
+    if (pendu.motSecret != ""):
+        alerte("Erreurs : " + str(pendu.nbErreurs) +
+               " ; bonne pioches : " + str(len(pendu.bonnePioches)) +
+               "\n\nMot à deviner : '" + pendu.motSecret + "'.")
+        pendu.raz()
 
-	redessine()
-	core.secretWord = randword()
-	print(core.secretWord)
-	showWord(core.secretWord, core.correctGuesses)
+    redessine()
+    pendu.motSecret = obtenirMot()
+    print(pendu.motSecret)
+    majMasque(pendu.motSecret, pendu.bonnePioches)
 
-go(Core,{"connecter": Connect, "annoncer": Submit, "recommencer": Restart})
+
+go(Pendu, {"connecter": connection, "annoncer": pioche, "recommencer": recommencer})
