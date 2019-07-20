@@ -25,17 +25,17 @@ SOFTWARE.
  
 import workshop._.turtle as turtle
 
-def avance(distance):
+def forward(distance):
   turtle.forward(distance)
 
-def tourneDroite(angle):
+def turnRight(angle):
   turtle.right(angle)
 
-def tourneGauche(angle):
+def turnLeft(angle):
   turtle.left(angle)
 
-def fixeCouleurRVB(r,v,b):
+def setColorRGB(r,v,b):
   turtle.setColorRGB(r,v,b)
 
-def fixeCouleurTSL(t,s,l):
+def setColorHSL(t,s,l):
   turtle.setColorHSL(t,s,l)

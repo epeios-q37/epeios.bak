@@ -23,19 +23,32 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
  
-import workshop._.turtle as turtle
+import workshop._.z_3 as workshop
+import workshop.en._ as _
+from workshop.en.display import *
 
-def avance(distance):
-  turtle.forward(distance)
+class _Core(_.Core):
+  i18n = {
+    "Restart": "Restart"
+  }
 
-def tourneDroite(angle):
-  turtle.right(angle)
+P_FACE = workshop.F_FACE
+P_HEAD = workshop.F_HEAD
+P_BODY = workshop.F_BODY
+P_LEFT_ARM = workshop.F_LEFT_ARM
+P_RIGHT_ARM = workshop.F_RIGHT_ARM
+P_LEFT_LEG = workshop.F_LEFT_LEG
+P_RIGHT_LEG = workshop.F_RIGHT_LEG
 
-def tourneGauche(angle):
-  turtle.left(angle)
+A_CONNECTION = workshop.A_CONNECT
+A_GUESS = workshop.A_SUBMIT
+A_RESTART = workshop.A_RESTART
 
-def fixeCouleurRVB(r,v,b):
-  turtle.setColorRGB(r,v,b)
+def redraw():
+  workshop.redraw()
 
-def fixeCouleurTSL(t,s,l):
-  turtle.setColorHSL(t,s,l)
+def drawFigure(part):
+  workshop.drawFigure(part)
+
+def go(callback, callbacks):
+  workshop.main(lambda dom: _Core(dom), callbacks, _.defaultTitle, callback)

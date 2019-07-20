@@ -28,15 +28,7 @@ import threading
 import sys
 import inspect
 
-_DEBUG = True
-
-import signal
-
-def signal_handler(sig, frame):
-  sys.exit(0)
-
-
-signal.signal(signal.SIGINT, signal_handler)
+_DEBUG = False
 
 if ('HOME' in os.environ) and (os.environ['HOME'] == '/home/runner'):
   os.environ["ATK"] = "REPLit"

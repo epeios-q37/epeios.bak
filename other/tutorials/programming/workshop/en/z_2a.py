@@ -23,19 +23,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
  
-import workshop._.turtle as turtle
+import workshop._.z_2a as workshop
+import workshop.en._ as _
+from workshop.en.turtle import *
 
-def avance(distance):
-  turtle.forward(distance)
-
-def tourneDroite(angle):
-  turtle.right(angle)
-
-def tourneGauche(angle):
-  turtle.left(angle)
-
-def fixeCouleurRVB(r,v,b):
-  turtle.setColorRGB(r,v,b)
-
-def fixeCouleurTSL(t,s,l):
-  turtle.setColorHSL(t,s,l)
+def go():
+  workshop.main(lambda: None, _.defaultTitle)

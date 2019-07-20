@@ -22,20 +22,26 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
- 
-import workshop._.turtle as turtle
 
-def avance(distance):
-  turtle.forward(distance)
+import workshop._.z_1 as workshop
+import workshop.en._ as _
+from workshop.en.display import *
 
-def tourneDroite(angle):
-  turtle.right(angle)
 
-def tourneGauche(angle):
-  turtle.left(angle)
+class _Core(_.Core):
+    bodyI18n = {
+        "Solve": "Solve",
+        "Solution": "Solution"
+    }
+    i18n = {
+        "BadValue": "Only numbers between 100 and -100 excluded are allowed!",
+        "ACannotBe0": "'a' can't be null!"
+    }
 
-def fixeCouleurRVB(r,v,b):
-  turtle.setColorRGB(r,v,b)
+    def __init__(self, dom):
+        _.Core.__init__(self, dom)
 
-def fixeCouleurTSL(t,s,l):
-  turtle.setColorHSL(t,s,l)
+
+def go(function, handleError):
+    workshop.main(function, lambda dom: _Core(
+        dom), _.defaultTitle, handleError)

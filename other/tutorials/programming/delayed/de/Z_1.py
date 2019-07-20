@@ -1,5 +1,7 @@
 # coding: utf-8
 
+# From '4.3 Résolution inéquation ax+b=c.py'
+
 import sys
 sys.path.append(".")
 from workshop.fr.z_1 import *

@@ -22,21 +22,26 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
- 
-import workshop._.display as display_
 
-# def lösche(): 'ö': Python 3 OK, but does not work with Python 2.
-def reinige():
-  display_.clear()
+import workshop._.z_1 as workshop
+import workshop.de._ as _
+from workshop.de.display import *
 
-def anzeige(text):
-  display_.display(text)
 
-def reinigeUndAnzeige(text):
-  display_.clearAndDisplay(text)
+class _Core(_.Core):
+    bodyI18n = {
+        "Solve": "Lösen",
+        "Solution": "Lösung"
+    }
+    i18n = {
+        "BadValue": "Nur Zahlen zwischen 100 und -100 sind erlaubt!",
+        "ACannotBe0": "'a' kann nicht Null sein!"
+    }
 
-def warne(text):
-  display_.alert(text)
+    def __init__(self, dom):
+        _.Core.__init__(self, dom)
 
-def frage(text):
-  return display_.confirm(text)
+
+def go(function, handleError):
+    workshop.main(function, lambda dom: _Core(
+        dom), _.defaultTitle, handleError)

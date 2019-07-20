@@ -23,19 +23,20 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
  
-import workshop._.turtle as turtle
+import workshop._.display as display_
 
-def avance(distance):
-  turtle.forward(distance)
+# def lösche(): 'ö': Python 3 OK, but does not work with Python 2.
+def radiere():
+  display_.clear()
 
-def tourneDroite(angle):
-  turtle.right(angle)
+def anzeige(text):
+  display_.display(text)
 
-def tourneGauche(angle):
-  turtle.left(angle)
+def radiereUndAnzeige(text):
+  display_.clearAndDisplay(text)
 
-def fixeCouleurRVB(r,v,b):
-  turtle.setColorRGB(r,v,b)
+def warne(text):
+  display_.alert(text)
 
-def fixeCouleurTSL(t,s,l):
-  turtle.setColorHSL(t,s,l)
+def frage(text):
+  return display_.confirm(text)

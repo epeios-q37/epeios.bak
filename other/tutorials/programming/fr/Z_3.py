@@ -102,7 +102,7 @@ def pioche(pendu, pioche):
         raz(pendu)
 
 
-def recommencer(pendu):
+def redemarrer(pendu):
     if (pendu.motSecret != ""):
         alerte("Erreurs : " + str(pendu.nbErreurs) +
                " ; bonne pioches : " + str(len(pendu.bonnePioches)) +
@@ -111,5 +111,7 @@ def recommencer(pendu):
     raz(pendu)
 
 
-go(Pendu, {"connecter": connection,
-           "annoncer": pioche, "recommencer": recommencer})
+go(Pendu, {
+    A_CONNECTION: connection,
+    A_PIOCHE: pioche,
+    A_REDEMARRAGE: redemarrer})

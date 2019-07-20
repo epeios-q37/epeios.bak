@@ -23,19 +23,16 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
  
-import workshop._.turtle as turtle
+import workshop._.z_2b as workshop
+import workshop.en._ as _
+from workshop.en.turtle import *
 
-def avance(distance):
-  turtle.forward(distance)
+class _Core:
+    i18n = {
+      "AmountOfPolygons": "Amount of polygons ",
+      "AmountOfSegments": "Amount of segments ",
+      "Draw": "Draw"
+    }
 
-def tourneDroite(angle):
-  turtle.right(angle)
-
-def tourneGauche(angle):
-  turtle.left(angle)
-
-def fixeCouleurRVB(r,v,b):
-  turtle.setColorRGB(r,v,b)
-
-def fixeCouleurTSL(t,s,l):
-  turtle.setColorHSL(t,s,l)
+def go(function):
+  workshop.main(_Core, function, _.defaultTitle)

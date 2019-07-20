@@ -33,3 +33,14 @@ Below exercises are currently only available for *fr*.
 - exercise *Z_2b*: drawing of polygons using turtle graphics (interactive).
 
 The `main.py` and `starter.py` files are mainly to use with *repl.it*.
+
+| English | Français |
+|-|-|
+| erase | efface |
+| display | affiche |
+| eraseAndDisplay | effaceEtAffiche |
+| warn | alerte |
+| ask | demande |
+
+| English | Français |
+|-|-|

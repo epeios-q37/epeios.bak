@@ -27,9 +27,9 @@ import workshop._._ as _
 
 _dir = "z_3"
 
-_CONNECT_CALLBACK = 'connect_callback'
-_SUBMIT_CALLBACK = 'submit_callback'
-_RESTART_CALLBACK = 'restart_callback'
+A_CONNECT = 'connect'
+A_SUBMIT = 'submit'
+A_RESTART = 'restart'
 
 F_FACE = "Face"
 F_HEAD = "Head"
@@ -39,19 +39,21 @@ F_RIGHT_ARM = "RightArm"
 F_LEFT_LEG = "LeftLeg"
 F_RIGHT_LEG = "RightLeg"
 
+_CALLBACKS = "callbacks"
+
 
 def _acConnect(core, dom, id):
-    _.recall(_CONNECT_CALLBACK)(core.userObject)
+    _.recall(_CALLBACKS)[A_CONNECT](core.userObject)
 
 
 def _acSubmit(core, dom, id):
     dom.addClass(id, "chosen")
 
-    _.recall(_SUBMIT_CALLBACK)(core.userObject, id.lower())
+    _.recall(_CALLBACKS)[A_SUBMIT](core.userObject, id.lower())
 
 
 def _acRestart(core, dom):
-    _.recall(_RESTART_CALLBACK)(core.userObject)
+    _.recall(_CALLBACKS)[A_RESTART](core.userObject)
 
 
 def redraw():
@@ -63,9 +65,7 @@ def drawFigure(part):
 
 
 def main(callback, callbacks, title, userCallback):
-    _.store(_CONNECT_CALLBACK, callbacks[0])
-    _.store(_SUBMIT_CALLBACK, callbacks[1])
-    _.store(_RESTART_CALLBACK, callbacks[2])
+    _.store(_CALLBACKS, callbacks),
     _.main(_dir, callback, {
         "": _acConnect,
         "Submit": _acSubmit,
