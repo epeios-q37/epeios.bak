@@ -15,4 +15,14 @@ for y in range(0, 24):
         tourneDroite(30)
     tourneDroite(15)
 
+
+# Autre
+"""
+for i in range(0, 9):
+  tourneDroite(100)
+  avance(50)
+  tourneGauche(140)
+  avance(50)    
+"""
+
 go()

@@ -6,6 +6,6 @@
 
 import starter
 
-# starter.lang = "en" # "de", "en" or "fr" ("fr" is the default one).
+# starter.lang = "fr" # "en" (default) or "fr"
 
 starter.go()

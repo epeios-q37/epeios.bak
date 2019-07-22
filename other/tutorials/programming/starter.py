@@ -3,13 +3,13 @@
 import sys
 import os
 
-lang = "fr"
+lang = "en"
 
 _messages = {
     "input": {
-        "en": "Please enter the exercise ID: ",
-        "de": "Bitte geben Sie die Übungs-ID ein: ",
-        "fr": "Veuillez saisir l'identifiant de l'exercice : ",
+        "en": "Please enter the exercise ID{}: ",
+        "de": "Bitte geben Sie die Übungs-ID ein{}: ",
+        "fr": "Veuillez saisir l'identifiant de l'exercice{} : ",
     },
     "error": {
         "en": " not found!",
@@ -20,11 +20,11 @@ _messages = {
 
 def go(exercise=None):
     if not exercise:
-        exercise = input("\n" + _messages["input"][lang])
+        exercise = input("\n" + _messages["input"][lang].format(" (a,b,c,z_1,z_2a,z_2b,z_3)"))
 
 #  exerciseFilename = "Exercise" + exercise.upper() + "_" + lang
 
-    exerciseFilename = lang + "." + exercise.upper()
+    exerciseFilename = lang + "." + exercise[:1].upper() + exercise[1:].lower()
 
     if True:  # Simplifies debuggins when set to False
         try:
