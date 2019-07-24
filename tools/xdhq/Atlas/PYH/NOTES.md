@@ -16,6 +16,37 @@ En créant, dans le répertoire de l'application, un fichier `__main__.py` conte
 
 Code à mettre dans le source pour <http://repl.it>.
 
+#### Nouvelle version
+
+``` python
+# coding: utf-8
+"""
+To launch the application:
+- click on the green button (you may have to wait a little until the button is displayed),
+- open the URL displayed in the black console (above the '^^^^…' line) in a web browser.
+
+You can also
+- uncomment below 'os.environ["ATK"]="REPLit"' line,
+- click on the green button,
+- click on the then displayed QR code.
+
+For more details: http://q37.info/s/zbgfjtp9
+
+Copyright (c) 2019 Claude SIMON (http://q37.info/s/rmnmqd49)
+MIT License
+"""
+
+import atlastk as Atlas
+import os
+
+# os.environ["ATK"]="REPLit"
+
+def readAsset(path):
+  return open(path).read()
+```
+
+#### Ancienne version
+
 ``` python
 # coding: utf-8
 """

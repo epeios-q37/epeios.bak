@@ -26,10 +26,10 @@
 
 Code à mettre dans le source pour <http://repl.it>.
 
-**Pour le commentaire en tête de fichier, voir celui de *Python*** !
+**Pour le commentaire en tête de fichier, voir celui de *Python*** (ne pas oublier de modifier la ligne à décommnenter!
 
 ``` javascript
-process.env['ATK'] = 'REPLit';
+// process.env["ATK"]="REPLit";
 
 const atlas = require('atlastk');
 
