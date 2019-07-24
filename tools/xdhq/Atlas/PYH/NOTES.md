@@ -25,7 +25,7 @@ To launch the application:
 - click on the green button (you may have to wait a little until the button is displayed),
 - open the URL displayed in the black console (above the '^^^^…' line) in a web browser.
 
-You can also
+You can also:
 - uncomment below 'os.environ["ATK"]="REPLit"' line,
 - click on the green button,
 - click on the then displayed QR code.
