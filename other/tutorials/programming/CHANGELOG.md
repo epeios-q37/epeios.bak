@@ -1,5 +1,9 @@
 # CHANGELOG for the programming workshop
 
+## 2019-07-24
+
+- fixing faulty separation of sessions issue,
+
 ## 2019-07-22
 
 - adding hangman game

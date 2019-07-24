@@ -1,5 +1,5 @@
 # coding: utf-8
-
+""
 import sys
 sys.path.append(".")
 from workshop.fr.z_3 import *
@@ -34,7 +34,7 @@ DICTIONNAIRE = [
 class Pendu:
     def raz(self):
         self.nbErreurs = 0
-        self.bonnePioches = []
+        self.bonnesPioches = []
         self.motSecret = ""
 
     def __init__(self):
@@ -54,11 +54,11 @@ def majDessin(nbErreurs):
         dessinePendu(PENDU[nbErreurs-1])
 
 
-def majMasque(motSecret, bonnePioches):
+def majMasque(motSecret, bonnesPioches):
     masque = ("_" * len(motSecret))
 
     for i in range(len(motSecret)):
-        if motSecret[i] in bonnePioches:
+        if motSecret[i] in bonnesPioches:
             masque = masque[:i] + motSecret[i] + masque[i + 1:]
 
     effaceEtAffiche(masque)
@@ -69,7 +69,7 @@ def raz(pendu):
     pendu.raz()
     pendu.motSecret = obtenirMot()
     print(pendu.motSecret)
-    majMasque(pendu.motSecret, pendu.bonnePioches)
+    majMasque(pendu.motSecret, pendu.bonnesPioches)
 
 
 def connection(pendu):
@@ -78,15 +78,17 @@ def connection(pendu):
 
 def pioche(pendu, pioche):
     if pioche in pendu.motSecret:
-        pendu.bonnePioches.append(pioche)
+        pendu.bonnesPioches.append(pioche)
+
         correcte = 0
+
         for i in range(len(pendu.motSecret)):
-            if pendu.motSecret[i] in pendu.bonnePioches:
+            if pendu.motSecret[i] in pendu.bonnesPioches:
                 correcte += 1
-                majMasque(pendu.motSecret, pendu.bonnePioches)
+
+        majMasque(pendu.motSecret, pendu.bonnesPioches)
 
         if correcte == len(pendu.motSecret):
-            majMasque(pendu.motSecret, pendu.bonnePioches)
             alerte("Tu as gagné ! Félicitations !")
             raz(pendu)
             return
@@ -97,7 +99,7 @@ def pioche(pendu, pioche):
     if pendu.nbErreurs >= len(PENDU):
         dessinePendu(P_VISAGE)
         alerte("\nPerdu !\nErreurs : " + str(pendu.nbErreurs) +
-               " ; bonne pioches : " + str(len(pendu.bonnePioches)) +
+               " ; bonne pioches : " + str(len(pendu.bonnesPioches)) +
                "\n\nLe mot à deviner était : '" + pendu.motSecret + "'.")
         raz(pendu)
 
@@ -105,7 +107,7 @@ def pioche(pendu, pioche):
 def redemarrer(pendu):
     if (pendu.motSecret != ""):
         alerte("Erreurs : " + str(pendu.nbErreurs) +
-               " ; bonne pioches : " + str(len(pendu.bonnePioches)) +
+               " ; bonne pioches : " + str(len(pendu.bonnesPioches)) +
                "\n\nLe mot à deviner était : '" + pendu.motSecret + "'.")
 
     raz(pendu)

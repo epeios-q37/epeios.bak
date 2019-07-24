@@ -65,13 +65,15 @@ def store(key, value):
   try:
     _store(_threadId(),key,value)
   except KeyError:
+#    print('KE store ' + key)
     _store('global',key,value)
 
 def recall(key):
   try:
     return _recall(_threadId(),key)
   except KeyError:
-    return _recall('global',key)
+#    print('KE recall ' + key)
+    return _recall('global', key)
 
 def dom():
   return recall('dom')
@@ -84,9 +86,9 @@ _userCallback = None
 
 class Core:
   def __init__(self, dom):
-    store('dom',dom)
-    store('core',self)
     globals()['_data'][_threadId()] = {}
+    store('dom', dom)
+    store('core',self)
     self.userObject = _userCallback() if _userCallback else None
 
 def _read(path):

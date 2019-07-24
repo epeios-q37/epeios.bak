@@ -70,14 +70,16 @@ def connection(hangman):
 def guess(hangman, guess):
     if guess in hangman.secretWord:
         hangman.goodGuesses.append(guess)
+
         correct = 0
+
         for i in range(len(hangman.secretWord)):
             if hangman.secretWord[i] in hangman.goodGuesses:
                 correct += 1
-                updateMask(hangman.secretWord, hangman.goodGuesses)
+
+        updateMask(hangman.secretWord, hangman.goodGuesses)
 
         if correct == len(hangman.secretWord):
-            updateMask(hangman.secretWord, hangman.goodGuesses)
             warn("You won ! Congratulations !")
             reset(hangman)
             return
