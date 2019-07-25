@@ -1,5 +1,5 @@
 # coding: utf-8
-""
+
 import sys
 sys.path.append(".")
 from workshop.fr.z_3 import *
@@ -80,15 +80,15 @@ def pioche(pendu, pioche):
     if pioche in pendu.motSecret:
         pendu.bonnesPioches.append(pioche)
 
-        correcte = 0
+        exact = 0
 
         for i in range(len(pendu.motSecret)):
             if pendu.motSecret[i] in pendu.bonnesPioches:
-                correcte += 1
+                exact += 1
 
         majMasque(pendu.motSecret, pendu.bonnesPioches)
 
-        if correcte == len(pendu.motSecret):
+        if exact == len(pendu.motSecret):
             alerte("Tu as gagné ! Félicitations !")
             raz(pendu)
             return

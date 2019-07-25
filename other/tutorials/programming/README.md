@@ -1,4 +1,4 @@
-# Programming tutorial
+# Modern exercises for programming tutorials
 
 *Project currently under development. Contributions are welcome.*
 
@@ -26,18 +26,18 @@ For the displaying, here are the currently available functions:
 
 English | Français
 -|-
-erase | efface
-display | affiche
-eraseAndDisplay | effaceEtAffiche
-warn | alerte
-ask | demande
+`erase` | `efface`
+`display` | `affiche`
+`eraseAndDisplay` | `effaceEtAffiche`
+`warn` | `alerte`
+`ask` | `demande`
 
-For the tutle graphics, here are the currently available functions:
+For the turtle graphics, here are the currently available functions:
 
 English | Français
 -|-
-| forward | avance 
-| turnRight | tourneDroite
-| turnLeft | tourneGauche
-| setColorRGB | fixeCouleurRVB
-| setColorHSL | fixeCouleurTSL
+`forward` | `avance`
+`turnRight` | `tourneDroite`
+`turnLeft` | `tourneGauche`
+`setColorRGB` | `fixeCouleurRVB`
+`setColorHSL` | `fixeCouleurTSL`

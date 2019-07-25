@@ -80,7 +80,7 @@ def guess(hangman, guess):
         updateMask(hangman.secretWord, hangman.goodGuesses)
 
         if correct == len(hangman.secretWord):
-            warn("You won ! Congratulations !")
+            warn("You won! Congratulations!")
             reset(hangman)
             return
     else:
@@ -89,7 +89,7 @@ def guess(hangman, guess):
 
     if hangman.errorsAmount >= len(HANGED):
         drawFigure(P_FACE)
-        warn("\nYou lose !\nErrors: " + str(hangman.errorsAmount) +
+        warn("\nYou lose!\nErrors: " + str(hangman.errorsAmount) +
              "; good guesses: " + str(len(hangman.goodGuesses)) +
              "\n\nThe secret word was: '" + hangman.secretWord + "'.")
         reset(hangman)
