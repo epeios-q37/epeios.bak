@@ -64,7 +64,7 @@ class Core:
 
 
 def randword():
-    return DICTIONARY[randint(0, len(DICTIONARY))]
+    return DICTIONARY[randint(0, len(DICTIONARY)-1)]
 
 
 def showHanged(dom, errors):
@@ -74,6 +74,7 @@ def showHanged(dom, errors):
 
 def showWord(dom, secretWord, correctGuesses):
     output = ("_" * len(secretWord))
+    
     for i in range(len(secretWord)):
         if secretWord[i] in correctGuesses:
             output = output[:i] + secretWord[i] + output[i + 1:]
