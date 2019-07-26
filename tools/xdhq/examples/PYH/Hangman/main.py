@@ -84,16 +84,18 @@ def showWord(dom, secretWord, correctGuesses):
     dom.setLayout("output", html)
 
 
-def showBoard(dom, secretWord, errors, correctGuesses):
-    showHanged(dom, errors)
-    showWord(dom, secretWord, correctGuesses)
 
-
-def acConnect(core, dom):
+def reset(core,dom):
+    core.reset()
     dom.setLayout("", readAsset("Main.html"))
     core.secretWord = randword()
     print(core.secretWord)
     showWord(dom, core.secretWord, core.correctGuesses)
+
+
+
+def acConnect(core, dom):
+    reset(core,dom)
 
 
 def acSubmit(core, dom, id):
@@ -103,27 +105,29 @@ def acSubmit(core, dom, id):
 
     if guess in core.secretWord:
         core.correctGuesses.append(guess)
+
         correct = 0
+
         for i in range(len(core.secretWord)):
             if core.secretWord[i] in core.correctGuesses:
                 correct += 1
 
+        showWord(dom, core.secretWord, core.correctGuesses)
+
         if correct == len(core.secretWord):
-            showWord(dom, core.secretWord, core.correctGuesses)
             dom.alert("You've won! Congratulations!")
-            core.reset()
+            reset(core,dom)
             return
     else:
         core.errors += 1
-
-    showBoard(dom, core.secretWord, core.errors, core.correctGuesses)
+        showHanged(dom, core.errors)
 
     if core.errors >= len(HANGED_MAN):
         dom.removeClass("Face", "hidden")
         dom.alert("\nYou've run out of guesses. \nYou had " + str(core.errors) +
                   " errors and " + str(len(core.correctGuesses)) + " correct guesses. " +
                   "\n\nThe word was '" + core.secretWord + "'.")
-        core.reset()
+        reset(core, dom)
 
 
 def acRestart(core, dom):
@@ -131,13 +135,8 @@ def acRestart(core, dom):
 		dom.alert("You had " + str(core.errors) +
 				" errors and " + str(len(core.correctGuesses)) + " correct guesses. " +
 				"\nThe word was '" + core.secretWord + "'.")
-		core.reset()
 
-	dom.setLayout("", readAsset("Main.html"))
-	core.secretWord = randword()
-	print(core.secretWord)
-	showWord(dom, core.secretWord, core.correctGuesses)
-
+	reset(core, dom)
 
 callbacks = {
     "": acConnect,
