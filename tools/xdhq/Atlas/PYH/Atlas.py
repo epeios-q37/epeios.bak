@@ -62,11 +62,14 @@ def _call(func, userObject, dom, id, action):
 
 def worker(userCallback,dom,callbacks):
 	args=[]
+	userObject = None
 
-	if ( not(inspect.isclass(userCallback)) and len(inspect.getargspec(userCallback).args) == 1 ):
-		args.append(dom)
+	if ( userCallback != None ):
 
-	userObject = userCallback(*args)
+		if ( not(inspect.isclass(userCallback)) and len(inspect.getargspec(userCallback).args) == 1 ):
+			args.append(dom)
+
+		userObject = userCallback(*args)
 	
 	while True:
 		[action,id] = dom.getAction()
