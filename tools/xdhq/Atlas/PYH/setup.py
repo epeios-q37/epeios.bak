@@ -42,9 +42,10 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     project_urls= {
     'Contact': 'http://q37.info/s/ggq7x4w7',
-    'Homepage': 'http://atlastk.org',
+    'Homepage': 'https://github.com/epeios-q37/atlas-python',
     'Source': 'http://q37.info/s/c7hfkzvs',
     'API': 'http://q37.info/s/gei0veus',
+    'Website': 'http://atlastk.org',
     },
     classifiers=[
       "Environment :: Web Environment",

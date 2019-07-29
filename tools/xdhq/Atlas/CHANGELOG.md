@@ -3,6 +3,11 @@
 - Common to **all** bindings,
 - does **not** concern the native code,
 
+## 2019-07-28
+
+- *Python*:
+  - the user callback can now be `None`,
+
 ## 2019-07-26
 
 - *Python*:

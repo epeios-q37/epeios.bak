@@ -24,8 +24,7 @@ SOFTWARE.
 """
 
 import atlastk as Atlas
-import math
-import colorsys
+import math, colorsys, random
 
 _S_UP = True
 _S_DOWN = False
@@ -51,6 +50,7 @@ class Tortoise:
         self._dom.appendLayout("SVG", self._path)
         self._path = Atlas.createHTML()
         self._autoDrawCount = 0
+        self._dom.flush()
 
     def _push(self, x1, y1, x2, y2):
         self._path.pushTag("path")
