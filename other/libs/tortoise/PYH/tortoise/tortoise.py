@@ -23,7 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-import atlastk as Atlas
+import atlastk
 import math, colorsys, random
 
 _S_UP = True
@@ -40,7 +40,7 @@ class Tortoise:
         self._posy = 150
         self._angle = 0
         self._color = (0, 0, 0)
-        self._path = Atlas.createHTML()
+        self._path = atlastk.createHTML()
         self._dom = dom
         self._autoDraw = 1
         self._autoDrawCount = 0
@@ -48,7 +48,7 @@ class Tortoise:
 
     def _draw(self):
         self._dom.appendLayout("SVG", self._path)
-        self._path = Atlas.createHTML()
+        self._path = atlastk.createHTML()
         self._autoDrawCount = 0
         self._dom.flush()
 

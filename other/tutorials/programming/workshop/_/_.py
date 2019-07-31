@@ -23,10 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
  
-import os
-import threading
-import sys
-import inspect
+import os, threading, sys, inspect, traceback
 
 _DEBUG = False
 
@@ -121,15 +118,13 @@ def _readHead(path, title, i18n=None):
   return "<title>" + title + "</title>\n" + _headCommon + readHTML(path, "Head", i18n)
 
 
-def _acPreProcessing(core, dom, action, id):
-  core.action = action
-
-  return True
-
-
+# Should be the almost identical as it 'Atlas.py'
 def _call(func, userObject, dom, id, action):
 	amount = len(inspect.getargspec(func).args)
 	args = []
+
+	if (not(userObject)):
+		amount += 1
 
 	if (amount == 4):
 		args.insert(0, action)
@@ -140,18 +135,18 @@ def _call(func, userObject, dom, id, action):
 	if(amount >= 2):
 		args.insert(0, dom)
 
-	if(amount >= 1):
+	if(userObject and (amount >= 1)):
 		args.insert(0, userObject)
 
 	try:
 		return func(*args)
 	except Exception as e:
-		dom.alert("PYTHON ERROR: \n\n" + str(e))
+		dom.alert("PYTHON EXCEPTION:\n\n" + traceback.format_exc())
 		if _DEBUG:
 		  raise e
 
 
-def _patch(userCallbacks):
+def _patchWithUserObject(userCallbacks):
   callbacks = {}
 
   for action in userCallbacks:
@@ -159,7 +154,15 @@ def _patch(userCallbacks):
 
   return callbacks
 
+def _patchWithoutUserObject(userCallbacks):
+  callbacks = {}
+
+  for action in userCallbacks:
+    callbacks[action] = lambda dom, id, action: _call(userCallbacks[action], None, dom, id, action)
+
+  return callbacks
+
 
 def main(path, callback, callbacks, title, userCallback = None):
   globals()['_userCallback'] = userCallback
-  Atlas.launch( _patch(callbacks), callback, _readHead(path, title)) 
+  Atlas.launch( _patchWithUserObject(callbacks) if callback else _patchWithoutUserObject(callbacks), callback, _readHead(path, title)) 

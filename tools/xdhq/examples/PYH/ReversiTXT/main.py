@@ -256,4 +256,4 @@ callbacks = {
     "New": acNew
 }
 
-Atlas.launch(callbacks, lambda: Reversi(), readAsset("Head.html"), "ReversiTXT")
+Atlas.launch(callbacks, Reversi, readAsset("Head.html"), "ReversiTXT")

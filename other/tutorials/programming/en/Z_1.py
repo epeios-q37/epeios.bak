@@ -5,7 +5,7 @@ sys.path.append(".")
 from workshop.en.z_1 import *
 
 
-handleErrors = True
+handleErrors = False
 """
 - when 'True', the validuty of the values are checked upstream.
 - when 'False', no check; if errors, Python exceptions are displayed.

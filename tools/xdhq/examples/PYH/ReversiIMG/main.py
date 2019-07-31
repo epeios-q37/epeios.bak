@@ -259,4 +259,4 @@ callbacks = {
     "New": acNew
 }
 
-Atlas.launch(callbacks, lambda: Reversi(), readAsset("Head.html"), "ReversiIMG")
+Atlas.launch(callbacks, Reversi, readAsset("Head.html"), "ReversiIMG")

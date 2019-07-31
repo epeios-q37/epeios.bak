@@ -45,6 +45,9 @@ def _call(func, userObject, dom, id, action):
 	amount = len(inspect.getargspec(func).args)
 	args = []
 
+	if ( not(userObject)) :
+		amount += 1
+
 	if ( amount == 4 ):
 		args.insert(0,action)
 
@@ -54,7 +57,7 @@ def _call(func, userObject, dom, id, action):
 	if( amount >= 2 ):
 		args.insert(0,dom)
 
-	if( amount >= 1 ):
+	if( userObject and (amount >= 1 )):
 		args.insert(0,userObject)
 
 	return func(*args)

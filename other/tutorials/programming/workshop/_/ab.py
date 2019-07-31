@@ -27,7 +27,7 @@ import workshop._._ as _
 
 _.store('html', _.Atlas.createHTML())
 
-def _acConnect(c,dom):
+def _acConnect(dom):
   dom.setLayout("",_.readBody("ab"))
   dom.setLayout("output", _.recall('html'))
 
@@ -36,7 +36,7 @@ def display(text):
   _.recall('html').putTagAndValue("h1", text)
 
 def main(title):
-    _.main("ab", lambda : None,
+    _.main("ab", None,
     {
       "" : _acConnect,
     }, title )

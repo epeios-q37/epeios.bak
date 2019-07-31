@@ -1,4 +1,3 @@
-"""
 MIT License
 
 Copyright (c) 2018 Claude SIMON (https://q37.info/s/rmnmqd49)
@@ -20,31 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-"""
-
-import os, sys
-
-sys.path.append("./Atlas.python.zip")
-sys.path.append("../Atlas.python.zip")
-
-import atlastk as Atlas
-
-def readAsset(path):
-	return Atlas.readAsset(path, "blank")
-
-def acConnect(dom):
-	dom.setLayout("", readAsset("Main.html"))
-	dom.addClass("Input","hidden")
-
-def acShowInput(dom):
-	dom.removeClass("Input", "hidden")
-	dom.focus("Pattern")
-
-callbacks = {
-	"": acConnect,
-	"Submit": lambda dom, id: dom.setContent("Pattern", dom.getContent("Pattern").upper() ),
-	"HideInput": lambda dom, id: dom.addClass("Input", "hidden"),
-	"ShowInput": acShowInput,
-}
-
-Atlas.launch(callbacks, None, readAsset("Head.html"), "blank")

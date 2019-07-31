@@ -29,7 +29,7 @@ import workshop._.turtle as turtle
 
 _dir = "z_2a"
 
-def _acConnect(d,dom,id):
+def _acConnect(dom,id):
   dom.setLayout("",_.readBody(_dir))
   turtle.draw(dom)
 

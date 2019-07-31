@@ -102,7 +102,7 @@ def displayContacts(dom, contacts):
                 html.putAttribute("id", id)
                 notes[id] = contact[key]
             else:
-                html.setTagAndValue("td", contact[key])
+                html.putTagAndValue("td", contact[key])
         html.popTag()
 
     dom.setLayout("Content", html)
@@ -140,7 +140,7 @@ def handleButtonVisibility(dom):
         raise Exception("Unknown state!")
 
 
-def acConnect(self, dom):
+def acConnect(dom):
     global contacts, state
     dom.setLayout("", readAsset("Main.html"))
     dom.dressWidgets("")
@@ -149,7 +149,7 @@ def acConnect(self, dom):
     handleButtonVisibility(dom)
 
 
-def acSelect(self, dom, id):
+def acSelect(dom, id):
     global contacts, state, current
 
     current = int(id)
@@ -158,7 +158,7 @@ def acSelect(self, dom, id):
     state = State.DISPLAY
     handleButtonVisibility(dom)
 
-def acEdit(self, dom):
+def acEdit(dom):
     global contacts, current
 
     if current is None:
@@ -166,7 +166,7 @@ def acEdit(self, dom):
     else:
         contact = contacts[current]
 
-def acSubmit(self, dom):
+def acSubmit(dom):
     global contacts
     [name, address, phone, note] = dom.getContents(
         ["Name.edit", "Address.edit", "Phone.edit", "Note.edit"]).values()
@@ -196,4 +196,4 @@ callbacks = {
     "Submit": acSubmit,
 }
 
-Atlas.launch(callbacks, lambda: None, readAsset("Head.html"), "Contact")
+Atlas.launch(callbacks, None, readAsset("Head.html"), "Contact")

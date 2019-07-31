@@ -1,4 +1,3 @@
-# coding: utf-8
 """ 
 MIT License
 
@@ -22,10 +21,39 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
- 
-import workshop._.z_2a as workshop
-import workshop.en._ as _
-from workshop.en.turtle import *
 
-def go():
-  workshop.main(None, _.defaultTitle)
+import setuptools
+
+version = "0.1.0"
+
+with open("README.md", "r") as fh:
+    long_description = fh.read()
+
+setuptools.setup(
+    name="tortoise",
+    version=version,
+    author="Claude SIMON",
+#    author_email="author@example.com",
+    description="Turtle graphics on the web.",
+    keywords="turtle, web",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
+    url="https://github.com/epeios-q37/tortoise-python",
+    packages=setuptools.find_packages(),
+    install_requires=[
+        'atlastk',
+    ],
+    classifiers=[
+      "Environment :: Web Environment",
+      "Development Status :: 5 - Production/Stable",
+      "Intended Audience :: Developers",
+      "Intended Audience :: Education",
+      "Intended Audience :: Other Audience",
+      "License :: OSI Approved :: MIT License ",
+      "Operating System :: OS Independent",
+      "Programming Language :: Python :: 2",
+      "Programming Language :: Python :: 3",
+      "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+      "Topic :: Software Development :: User Interfaces"
+    ]
+)
