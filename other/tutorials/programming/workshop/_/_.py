@@ -118,7 +118,7 @@ def _readHead(path, title, i18n=None):
   return "<title>" + title + "</title>\n" + _headCommon + readHTML(path, "Head", i18n)
 
 
-# Should be the almost identical as it 'Atlas.py'
+# Should be the almost identical as in 'Atlas.py'
 def _call(func, userObject, dom, id, action):
 	amount = len(inspect.getargspec(func).args)
 	args = []
@@ -146,7 +146,7 @@ def _call(func, userObject, dom, id, action):
 		  raise e
 
 
-def _patchWithUserObject(userCallbacks):
+def _patchWithCoreObject(userCallbacks):
   callbacks = {}
 
   for action in userCallbacks:
@@ -154,7 +154,7 @@ def _patchWithUserObject(userCallbacks):
 
   return callbacks
 
-def _patchWithoutUserObject(userCallbacks):
+def _patchWithoutCoreObject(userCallbacks):
   callbacks = {}
 
   for action in userCallbacks:
@@ -165,4 +165,4 @@ def _patchWithoutUserObject(userCallbacks):
 
 def main(path, callback, callbacks, title, userCallback = None):
   globals()['_userCallback'] = userCallback
-  Atlas.launch( _patchWithUserObject(callbacks) if callback else _patchWithoutUserObject(callbacks), callback, _readHead(path, title)) 
+  Atlas.launch( _patchWithCoreObject(callbacks) if callback else _patchWithoutCoreObject(callbacks), callback, _readHead(path, title)) 

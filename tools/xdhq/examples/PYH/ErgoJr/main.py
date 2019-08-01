@@ -26,9 +26,9 @@ SOFTWARE.
 
 import time, sys
 
-sys.path.append("./Atlas.python.zip")
-sys.path.append("../Atlas.python.zip")
-sys.path.append("./Atlas")
+sys.path.append("./src")
+sys.path.append("../src")
+# sys.path.append("./Atlas")
 
 import atlastk as Atlas
 

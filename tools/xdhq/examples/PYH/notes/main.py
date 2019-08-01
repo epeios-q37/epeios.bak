@@ -25,8 +25,8 @@ SOFTWARE.
 
 import os, sys
 
-if not "EPEIOS_SRV" in os.environ:
-	sys.path.append("Atlas.python.zip")
+sys.path.append("./src")
+sys.path.append("../src")
 
 import atlastk as Atlas
 

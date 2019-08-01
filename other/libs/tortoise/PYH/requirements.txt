@@ -1,0 +1,2 @@
+# No dependencies ; all needed modules are in the repository ('Atlas.python.zip' and 'src').
+# This file exists to force 'Repl.it' to use 'Atlas.python.zip' for 'atlastk '.
