@@ -25,7 +25,7 @@ SOFTWARE.
 
 import os, sys
 sys.path.append("./Atlas.python.zip")
-sys.path.append("./src")
+sys.path.append("./tortoise")
 
 # For using in Repl.it
 if ('HOME' in os.environ) and (os.environ['HOME'] == '/home/runner'):
@@ -37,7 +37,9 @@ from tortoise import *
 
 HTML = """
 <div style="display: table; margin: auto;">
- <svg id="SVG" width="300" height="300" />
+ <svg id="SVG" width="300" height="300">
+  <text x="30" y="30">Click on a button below!</text>
+ </svg>
  <div id="buttons" style="display: table; margin: 10px auto auto auto;">
   <button id="All" data-xdh-onevent="All">All</button>
   <button id="0" data-xdh-onevent="Draw">1</button>

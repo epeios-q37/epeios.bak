@@ -45,15 +45,13 @@ setuptools.setup(
     ],
     classifiers=[
       "Environment :: Web Environment",
-      "Development Status :: 5 - Production/Stable",
-      "Intended Audience :: Developers",
+      "Development Status :: 3 - Alpha",
       "Intended Audience :: Education",
       "Intended Audience :: Other Audience",
       "License :: OSI Approved :: MIT License ",
       "Operating System :: OS Independent",
       "Programming Language :: Python :: 2",
       "Programming Language :: Python :: 3",
-      "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
-      "Topic :: Software Development :: User Interfaces"
+      "Topic :: Education"
     ]
 )
