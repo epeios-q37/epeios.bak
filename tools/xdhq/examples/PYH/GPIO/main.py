@@ -24,8 +24,8 @@ SOFTWARE.
 
 import GPIOq, sys, threading
 
-sys.path.append("./src")
-sys.path.append("../src")
+sys.path.append("./atlastk")
+sys.path.append("../atlastk")
 
 import atlastk as Atlas
 

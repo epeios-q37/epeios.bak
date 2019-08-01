@@ -6,7 +6,7 @@
 ## 2019-08-01
 
 - *Python*
-  - switching to 0.10.5,
+  - switching to 0.10.7,
 
 ## 2019-07-31
 

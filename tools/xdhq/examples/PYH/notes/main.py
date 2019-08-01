@@ -25,8 +25,8 @@ SOFTWARE.
 
 import os, sys
 
-sys.path.append("./src")
-sys.path.append("../src")
+sys.path.append("./atlastk")
+sys.path.append("../atlastk")
 
 import atlastk as Atlas
 

@@ -86,6 +86,6 @@ def callback(userCallback,callbacks,instance):
 	thread.start()
 	return thread
 
-def launch(callbacks, userCallback = lambda: None, headContent = "", dir = ""):
+def launch(callbacks, userCallback = None, headContent = "", dir = ""):
 	XDHq.launch(callback,userCallback,callbacks,headContent,dir)
 
