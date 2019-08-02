@@ -17,6 +17,8 @@
 				<xpp:cdata>
 ****************************************************************************
      Your application is connected to the free public server. Welcome!
+     THIS SERVICE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+     EXPRESS OR IMPLIED. THE USE OF THIS SERVICE IS AT YOUR OWN RISK.
 ****************************************************************************
 				</xpp:cdata>
 			</DemoNotification>
