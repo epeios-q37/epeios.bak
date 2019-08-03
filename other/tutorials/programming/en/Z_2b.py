@@ -8,7 +8,9 @@ from workshop.en.z_2b import *
 import math
 
 
+
 def myFunction(polygons, segments):
+    down()
     polygons = int(polygons)
     segments = int(segments)
     length = 140 * math.sin(math.pi/segments)

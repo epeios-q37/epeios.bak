@@ -4,8 +4,9 @@ import sys
 sys.path.append(".")
 from workshop.fr.z_2a import *
 
-
 T = 0
+
+baisse()
 
 for y in range(0, 24):
     fixeCouleurTSL(T, 100, 50)

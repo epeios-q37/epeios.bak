@@ -7,7 +7,6 @@ from workshop.fr.z_2b import *
 
 import math
 
-
 def maFonction(polygones, segments):
     polygones = int(polygones)
     segments = int(segments)
@@ -15,6 +14,7 @@ def maFonction(polygones, segments):
     T = 0
     pasPolygone = 360/polygones
     pasSegment = 360/segments
+    baisse()
     for y in range(0, polygones):
         fixeCouleurTSL(T, 100, 50)
         T += pasPolygone

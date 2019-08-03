@@ -27,6 +27,7 @@ import os, threading, sys, inspect, traceback
 
 _DEBUG = False
 
+# Detecting 'Repl.it' environment.
 if ('HOME' in os.environ) and (os.environ['HOME'] == '/home/runner'):
   os.environ["ATK"] = "REPLit"
 

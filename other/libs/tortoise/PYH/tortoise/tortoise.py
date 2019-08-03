@@ -35,22 +35,26 @@ def _round(value):
 
 
 class Tortoise:
-    def __init__(self, dom):
-        self._posx = 150
-        self._posy = 150
+    def __init__(self, dom, id):
+        self._id = id   # id of the SVG element.
+        self._posx = 0
+        self._posy = 0
         self._angle = 0
         self._color = (0, 0, 0)
         self._path = atlastk.createHTML()
         self._dom = dom
-        self._autoDraw = 1
+        self._autoDraw = 0 if dom == None else 1
         self._autoDrawCount = 0
         self._state = _S_UP
 
-    def _draw(self):
-        self._dom.appendLayout("SVG", self._path)
+    def _draw(self, dom = None):
+        if dom == None:
+            dom = self._dom
+
+        dom.appendLayout(self._id, self._path)
         self._path = atlastk.createHTML()
         self._autoDrawCount = 0
-        self._dom.flush()
+        dom.flush()
 
     def _push(self, x1, y1, x2, y2):
         self._path.pushTag("path")
@@ -80,8 +84,8 @@ class Tortoise:
         self._autoDraw = value
 
     def setPosition(self,x,y):
-        self._posx = x + 150
-        self._posy = y + 150
+        self._posx = x
+        self._posy = y
 
     def forward(self, distance):
         posx = self._posx + distance * math.sin(self._angle)
@@ -107,6 +111,6 @@ class Tortoise:
     def left(self, angle):
         self.right(360 - angle)
 
-    def draw(self):
-        self._draw()
+    def draw(self, dom = None):
+        self._draw(dom)
 

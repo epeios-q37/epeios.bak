@@ -34,46 +34,10 @@ if ('HOME' in os.environ) and (os.environ['HOME'] == '/home/runner'):
 import atlastk
 from tortoise import *
 
-svgViewBoxScript = """
-function svgViewBox( id ) {
- let x = 0;
- let y = 0;
- let width = 0;
- let height = 0;
- let svg = document.getElementById(id);
- let viewBox = svg.viewBox.baseVal;
-
- if ( viewBox !== null ) {
-  x = viewBox.x;
-  y = viewBox.y;
-  width = viewBox.width;
-  height = viewBox.height;
-}
-
- if ( height === 0 ) {
-  if ( width !== 0 )
-   return "";
- } else if ( width === 0 ) 
-  return ""
-
- if ( width === 0 ) {
-  x = 0;
-  y = 0;
-  width = svg.width.baseVal.value;         
-  height = svg.height.baseVal.value;         
- }
-
-  return x.toString() + " " +  y.toString() + " " + width.toString() + " " + height.toString();
-}
-
-svgViewBox('SVG');
-"""
-
-
 HTML = """
 <div style="display: table; margin: auto;">
- <svg id="SVG" width="200" height="300">
-  <text x="30" y="30">Click on a button below!</text>
+ <svg id="SVG" viewbox="-150 -150 300 300">
+  <text x="-100" y="-100">Click on a button below!</text>
  </svg>
  <div id="buttons" style="display: table; margin: 10px auto auto auto;">
   <button id="All" data-xdh-onevent="All">All</button>
@@ -97,6 +61,8 @@ HEAD = """
   display: table;
   margin: auto;
   text-align: center;
+  width: 300px;
+  height: 300px;
  }
 </style>
 """
@@ -177,7 +143,7 @@ def drawing4(tortoise):
 
 def clear(dom):
     dom.setLayout("SVG", atlastk.createHTML())
-    tortoise = Tortoise(dom)
+    tortoise = Tortoise(dom, "SVG")
     tortoise.setAutoDraw(autoDraw)
     return tortoise
 
@@ -192,10 +158,12 @@ def call(dom, id):
 def acConnect(dom):
     dom.setLayout("", HTML)
     dom.enableElements(ids)
+"""    
     print(">>>> " + dom.execute("document.getElementById('SVG').getBoundingClientRect().width"))
     print("!!! " + dom.execute("document.getElementById('SVG').width.animVal.value"))
     print(">>> " + dom.execute(svgViewBoxScript))
     print(dom.getProperty("SVG","width"))
+"""
 
 
 def acAll(dom, id):

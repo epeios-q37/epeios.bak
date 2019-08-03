@@ -25,6 +25,12 @@ SOFTWARE.
  
 import workshop._.turtle as turtle
 
+def up():
+  turtle.up()
+
+def down():
+  turtle.down()
+
 def forward(distance):
   turtle.forward(distance)
 

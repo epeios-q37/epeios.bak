@@ -7,6 +7,8 @@ from workshop.en.z_2a import *
 
 T = 0
 
+down()
+
 for y in range(0, 24):
     setColorHSL(T, 100, 50)
     T += 15

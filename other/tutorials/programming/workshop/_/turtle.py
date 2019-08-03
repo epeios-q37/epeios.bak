@@ -24,63 +24,61 @@ SOFTWARE.
 """
  
 import math, colorsys
-
 import workshop._._ as _
+
+import sys, os
+
+sys.path.append("./Tortoise.python.zip")
+sys.path.append("../Tortoise.python.zip")
+
+sys.path.append("./Tortoise.python.zip")
+sys.path.append("../Tortoise.python.zip")
+
+if ('EPEIOS_SRC' in os.environ):
+  sys.path.append("/cygdrive/h/hg/epeios/other/libs/tortoise/pyh/tortoise")
+
+import tortoise
 
 _POS_X = "posx"
 _POS_Y = "posy"
 _ANGLE = "angle"
 _COLOR = "color"
-_PATH = "path"
+_TURTLE = "turtle"
 
-_CENTRE_X = 150
-_CENTRE_Y = 150
+_CENTRE_X = 0
+_CENTRE_Y = 0
 
-def init():
+def init( dom = None ):
   _.store(_POS_X,_CENTRE_X)
   _.store(_POS_Y,_CENTRE_Y)
   _.store(_ANGLE, 0)
   _.store(_COLOR,(0,0,0))
-  _.store(_PATH,_.Atlas.createHTML())
+  _.store(_TURTLE, tortoise.Tortoise(dom,"SVG"))
 
-def _round(value):
-  return int(math.floor(value + 0.5))
+def _turtle():
+  return _.recall(_TURTLE)
 
-def _push(motion):
-    path = _.recall(_PATH)
-    path.pushTag("path")
-    path.putAttribute("stroke", "rgb({}, {}, {})".format(*_.recall(_COLOR)))
-    path.putAttribute("stroke-width", "2")
-    path.putAttribute("fill", "none")
-    path.putAttribute('d', motion)
-    path.popTag()
+def up():
+  _turtle().up()
+
+def down():
+  _turtle().down()
 
 def forward(distance):
-  angle = _.recall(_ANGLE)
-  posx = _round(_.recall(_POS_X) + distance * math.sin(angle))
-  posy = _round(_.recall(_POS_Y) - distance * math.cos(angle))
-
-  _push("M {} {} L {} {}".format(_.recall('posx'), _.recall('posy'), posx, posy))
-
-  _.store('posx', posx)
-  _.store('posy', posy)
+  _turtle().forward( distance)
 
 def setColorRGB(r,g,b): # 0 to 255
-  _.store(_COLOR,(r,g,b))
+  _turtle().setColorRGB(r,g,b)
 
 def setColorHSL(h,s,l): # h: 0-360, s & l: 0-100 (%)
-  # _.store(_COLOR,tuple(_round(255*x) for x in colorsys.hls_to_rgb(h/360,l/100,s/100))) With Python 2, calculation return integer instaed of float…
-    _.store(_COLOR,tuple(_round(255*x) for x in colorsys.hls_to_rgb(h/360.0,l/100.0,s/100.0)))
+  _turtle().setColorHSL(h,s,l)
 
 def right(angle):
-  _.store(_ANGLE,math.radians((math.degrees(_.recall(_ANGLE)) + angle ) % 360))
+  _turtle().right(angle)
 
 def left(angle):
-  right(360 - angle)
+  _turtle().left(angle)
 
-def draw(dom):
-  dom.setLayout("SVG", _.recall(_PATH))
-  _.store(_PATH,_.Atlas.createHTML())
-  _.store(_POS_X,_CENTRE_X)
-  _.store(_POS_Y,_CENTRE_Y)
+def draw(dom = None):
+  _turtle().draw( dom )
 

@@ -14,16 +14,16 @@ You can also test the library directly in your web browser, with nothing to inst
 
 This *Python* module is part of a [larger project](https://q37.info/s/tpkx4cfk) that aims to provide a way to write modern examples or exercises for programming tutorials.
 
-The *tortoise* library currently provides following methods:
+The *tortoise* library currently provides following methods (coordinates and distances are defined by the *viewBox*):
 
-- `getAngle()`: returns the current angel,
-- `up()`: put the pen up,
+- `getAngle()`: returns the current angel, in degrees,
+- `up()`: puts the pen up,
 - `down()`: puts the pen down,
-- `setAutoDraw(value)`: the drawing is automatically rendered each `values` movements (`0` will disable the auto draw); call `draw()` to render remaining movements,
-- `setPosition(x,y)`: the turtle jumps to `x` and `y`, relatively of the center of the drawing area,
+- `setAutoDraw(value)`: the drawing is automatically rendered each `value` movements (`0` will disable the auto draw); call `draw()` to render remaining movements,
+- `setPosition(x,y)`: the turtle jumps to `x` and `y`,
 - `forward(distance)`: the tortoise moves by the specified `distance`,
 - `right(angle)`: the tortoise turns clockwise from `angle` degrees,
-- `right(angle)`: the tortoise turns *counter* clockwise from `angle` degrees,
+- `left(angle)`: the tortoise turns *counter* clockwise from `angle` degrees,
 - `setColorRGB(r,g,b)`: sets the color of the pen following the RGB color model,
 - `setColorHSL(h,s,l)`: sets the color of the pen following the HSL color model, (`h`: 0 - 360; `s`, `l`: 0 - 100%),
 - `draw()`; draws remaining movements.
