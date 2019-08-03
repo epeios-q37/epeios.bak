@@ -35,6 +35,7 @@ def _acConnect(core,dom,id):
   dom.setLayout("",_.readBody(_dir, core.i18n))
 
 def _acDraw(core,dom):
+  turtle.clear(dom)
   (polygons, segments) = dom.getContents(("polygons","segments")).values()
   _.recall(_FUNCTION)(polygons, segments)
   turtle.draw(dom)

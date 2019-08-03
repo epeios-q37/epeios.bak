@@ -36,6 +36,8 @@ For the turtle graphics, here are the currently available functions:
 
 English | Français
 -|-
+`up`| `hausse`
+`down`| `baisse`
 `forward` | `avance`
 `turnRight` | `tourneDroite`
 `turnLeft` | `tourneGauche`

@@ -31,28 +31,14 @@ import sys, os
 sys.path.append("./Tortoise.python.zip")
 sys.path.append("../Tortoise.python.zip")
 
-sys.path.append("./Tortoise.python.zip")
-sys.path.append("../Tortoise.python.zip")
-
 if ('EPEIOS_SRC' in os.environ):
   sys.path.append("/cygdrive/h/hg/epeios/other/libs/tortoise/pyh/tortoise")
 
 import tortoise
 
-_POS_X = "posx"
-_POS_Y = "posy"
-_ANGLE = "angle"
-_COLOR = "color"
 _TURTLE = "turtle"
 
-_CENTRE_X = 0
-_CENTRE_Y = 0
-
 def init( dom = None ):
-  _.store(_POS_X,_CENTRE_X)
-  _.store(_POS_Y,_CENTRE_Y)
-  _.store(_ANGLE, 0)
-  _.store(_COLOR,(0,0,0))
   _.store(_TURTLE, tortoise.Tortoise(dom,"SVG"))
 
 def _turtle():
@@ -82,3 +68,5 @@ def left(angle):
 def draw(dom = None):
   _turtle().draw( dom )
 
+def clear(dom = None):
+  _turtle().clear( dom )

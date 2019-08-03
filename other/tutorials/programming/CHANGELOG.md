@@ -2,7 +2,7 @@
 
 ## 2019-08-03
 
-- using the [*tortoise*](https://q37.info/s/q4ghchsr) module.
+- using the [*tortoise*](https://q37.info/s/q4ghchsr) module,
 
 ## 2019-07-24
 

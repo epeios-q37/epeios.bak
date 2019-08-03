@@ -26,10 +26,10 @@ SOFTWARE.
 import workshop._.turtle as turtle
 
 def hausse():
-  turtle.up();
+  turtle.up()
 
 def baisse():
-  turtle.down();
+  turtle.down()
 
 def avance(distance):
   turtle.forward(distance)
