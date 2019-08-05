@@ -26,6 +26,7 @@ SOFTWARE.
 import workshop._.c as workshop
 import workshop.fr._ as _
 from workshop.fr.display import *
+import C
 
 
 class _Core(_.Core):
@@ -40,5 +41,5 @@ class _Core(_.Core):
         _.Core.__init__(self, dom)
 
 
-def go(function):
-    workshop.main(function, lambda dom: _Core(dom), _.defaultTitle)
+def go():
+    workshop.main(C.maFonction, lambda dom: _Core(dom), _.defaultTitle)

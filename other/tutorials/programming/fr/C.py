@@ -9,6 +9,8 @@ def maFonction(nom):
     efface()
     affiche("Bonjour, " + nom + " !")
     affiche("Bonne journée, " + nom + " !")
+
+print(globals())
     
 
-go(maFonction)
+go()
