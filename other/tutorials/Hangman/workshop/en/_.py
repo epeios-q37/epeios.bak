@@ -1,5 +1,5 @@
 # coding: utf-8
-"""
+""" 
 MIT License
 
 Copyright (c) 2019 Claude SIMON (https://q37.info/s/rmnmqd49)
@@ -22,23 +22,51 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
+ 
+import workshop._._ as workshop
 
-import workshop._.c as workshop
-import workshop.fr._ as _
-from workshop.fr.display import *
+class _Core(workshop.Core):
+  i18n = {
+    "Restart": "Restart"
+  }
+
+P_FACE = workshop.F_FACE
+P_HEAD = workshop.F_HEAD
+P_BODY = workshop.F_BODY
+P_LEFT_ARM = workshop.F_LEFT_ARM
+P_RIGHT_ARM = workshop.F_RIGHT_ARM
+P_LEFT_LEG = workshop.F_LEFT_LEG
+P_RIGHT_LEG = workshop.F_RIGHT_LEG
+
+A_CONNECTION = workshop.A_CONNECT
+A_GUESS = workshop.A_SUBMIT
+A_RESTART = workshop.A_RESTART
+
+def redraw():
+  workshop.redraw()
+
+def drawFigure(part):
+  workshop.drawFigure(part)
+
+def go(callback, callbacks):
+  workshop.main(lambda dom: _Core(dom), callbacks, "Hangman game workshop", callback)
 
 
-class _Core(_.Core):
-    i18n = {
-        "NameIsMandatory": "Il faut saisir un nom !"
-    }
-    bodyI18n = {
-        "NameToDisplay": "Nom à afficher"
-    }
-
-    def __init__(self, dom):
-        _.Core.__init__(self, dom)
+def erase():
+  workshop.clear()
 
 
-def go(function):
-    workshop.main(function, lambda dom: _Core(dom), _.DEFAULT_TITLE)
+def display(text):
+  workshop.display(text)
+
+
+def eraseAndDisplay(text):
+  workshop.clearAndDisplay(text)
+
+
+def warn(text):
+  workshop.alert(text)
+
+
+def ask(text):
+  return workshop.confirm(text)

@@ -41,8 +41,5 @@ class _Core(_.Core):
 
 
 def go(function):
-    workshop.main(function, lambda dom: _Core(dom), _.defaultTitle)
+    workshop.main(function, lambda dom: _Core(dom), _.DEFAULT_TITLE)
 
-
-def go(function):
-    workshop.main(function, lambda dom: _Core(dom), _.defaultTitle)

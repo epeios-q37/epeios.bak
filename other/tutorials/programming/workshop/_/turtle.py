@@ -32,7 +32,7 @@ sys.path.append("./Tortoise.python.zip")
 sys.path.append("../Tortoise.python.zip")
 
 if ('EPEIOS_SRC' in os.environ):
-  sys.path.append("/cygdrive/h/hg/epeios/other/libs/tortoise/pyh/tortoise")
+  sys.path.append("/cygdrive/h/hg/epeios/other/libs/tortoise/PYH/tortoise")
 
 import tortoise
 

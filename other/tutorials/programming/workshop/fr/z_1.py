@@ -44,4 +44,4 @@ class _Core(_.Core):
 
 def go(function, handleError):
     workshop.main(function, lambda dom: _Core(
-        dom), _.defaultTitle, handleError)
+        dom), _.DEFAULT_TITLE, handleError)

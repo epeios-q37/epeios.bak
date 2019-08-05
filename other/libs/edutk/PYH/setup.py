@@ -1,5 +1,4 @@
-# coding: utf-8
-"""
+""" 
 MIT License
 
 Copyright (c) 2019 Claude SIMON (https://q37.info/s/rmnmqd49)
@@ -23,22 +22,36 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-import workshop._.c as workshop
-import workshop.fr._ as _
-from workshop.fr.display import *
+import setuptools
 
+version = "0.0.1"
 
-class _Core(_.Core):
-    i18n = {
-        "NameIsMandatory": "Il faut saisir un nom !"
-    }
-    bodyI18n = {
-        "NameToDisplay": "Nom à afficher"
-    }
+with open("README.md", "r") as fh:
+    long_description = fh.read()
 
-    def __init__(self, dom):
-        _.Core.__init__(self, dom)
-
-
-def go(function):
-    workshop.main(function, lambda dom: _Core(dom), _.DEFAULT_TITLE)
+setuptools.setup(
+    name="edutk",
+    version=version,
+    author="Claude SIMON",
+#    author_email="author@example.com",
+    description="Toolkit to make exercises for programming tutorials.",
+    keywords="education, tutorial, Atlas tookit",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
+    url="https://github.com/epeios-q37/edutk-python",
+    packages=setuptools.find_packages(),
+    install_requires=[
+        'atlastk',
+    ],
+    classifiers=[
+      "Environment :: Web Environment",
+      "Development Status :: 3 - Alpha",
+      "Intended Audience :: Education",
+      "Intended Audience :: Other Audience",
+      "License :: OSI Approved :: MIT License ",
+      "Operating System :: OS Independent",
+      "Programming Language :: Python :: 2",
+      "Programming Language :: Python :: 3",
+      "Topic :: Education"
+    ]
+)

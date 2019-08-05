@@ -30,4 +30,4 @@ class Core(_.Core):
     pass
 
 
-defaultTitle = _.titles["de"]
+DEFAULT_TITLE = "Programmierungs-Workshop"

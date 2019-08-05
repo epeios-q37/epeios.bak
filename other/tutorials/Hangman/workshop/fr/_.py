@@ -1,5 +1,5 @@
 # coding: utf-8
-"""
+""" 
 MIT License
 
 Copyright (c) 2019 Claude SIMON (https://q37.info/s/rmnmqd49)
@@ -22,23 +22,52 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
+ 
+import workshop._._ as workshop
 
-import workshop._.c as workshop
-import workshop.fr._ as _
-from workshop.fr.display import *
+class _Core(workshop.Core):
+  i18n = {
+    "Restart": "Recommencer"
+  }
+
+P_VISAGE = workshop.F_FACE
+P_TETE = workshop.F_HEAD
+P_CORPS = workshop.F_BODY
+P_BRAS_GAUCHE = workshop.F_LEFT_ARM
+P_BRAS_DROIT = workshop.F_RIGHT_ARM
+P_PIED_GAUCHE = workshop.F_LEFT_LEG
+P_PIED_DROIT = workshop.F_RIGHT_LEG
+
+A_CONNECTION = workshop.A_CONNECT
+A_PIOCHE = workshop.A_SUBMIT
+A_REDEMARRAGE = workshop.A_RESTART
+
+def redessine():
+  workshop.redraw()
+
+def dessinePendu(partie):
+  workshop.drawFigure(partie)
 
 
-class _Core(_.Core):
-    i18n = {
-        "NameIsMandatory": "Il faut saisir un nom !"
-    }
-    bodyI18n = {
-        "NameToDisplay": "Nom à afficher"
-    }
-
-    def __init__(self, dom):
-        _.Core.__init__(self, dom)
+def efface():
+  workshop.clear()
 
 
-def go(function):
-    workshop.main(function, lambda dom: _Core(dom), _.DEFAULT_TITLE)
+def affiche(text):
+  workshop.display(text)
+
+
+def effaceEtAffiche(text):
+  workshop.clearAndDisplay(text)
+
+
+def alerte(text):
+  workshop.alert(text)
+
+
+def demande(text):
+  return workshop.confirm(text)
+
+
+def go(callback, callbacks):
+  workshop.main(lambda dom: _Core(dom), callbacks, "Atelier du jeu du pendu", callback)

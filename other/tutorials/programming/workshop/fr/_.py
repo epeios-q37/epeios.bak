@@ -25,9 +25,7 @@ SOFTWARE.
 
 import workshop._._ as _
 
-
 class Core(_.Core):
     pass
 
-
-defaultTitle = _.titles["fr"]
+DEFAULT_TITLE = "Atelier de programmation"

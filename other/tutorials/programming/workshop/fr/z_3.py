@@ -51,4 +51,4 @@ def dessinePendu(partie):
   workshop.drawFigure(partie)
 
 def go(callback, callbacks):
-  workshop.main(lambda dom: _Core(dom), callbacks, _.defaultTitle, callback)
+  workshop.main(lambda dom: _Core(dom), callbacks, _.DEFAULT_TITLE, callback)

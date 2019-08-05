@@ -28,4 +28,4 @@ import workshop.en._ as _
 from workshop.en.turtle import *
 
 def go():
-  workshop.main(None, _.defaultTitle)
+  workshop.main(None, _.DEFAULT_TITLE)

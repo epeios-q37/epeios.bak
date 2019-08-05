@@ -30,4 +30,4 @@ def affiche(text):
   workshop.display(text)
 
 def main():
-  workshop.main(_.defaultTitle)
+  workshop.main(_.DEFAULT_TITLE)

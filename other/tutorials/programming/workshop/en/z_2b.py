@@ -35,4 +35,4 @@ class _Core:
     }
 
 def go(function):
-  workshop.main(_Core, function, _.defaultTitle)
+  workshop.main(_Core, function, _.DEFAULT_TITLE)
