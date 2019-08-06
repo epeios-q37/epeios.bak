@@ -25,6 +25,9 @@ SOFTWARE.
  
 import workshop._._ as _
 
+TRUE = True
+FALSE = False
+
 P_FACE = _.F_FACE
 P_HEAD = _.F_HEAD
 P_BODY = _.F_BODY
@@ -61,19 +64,10 @@ class Core(_.Core):
       "Restart": "Restart"
   }
   dictionnary = DICTIONARY
+  hanged = HANGED
 
+_.setAppTitle("Hangman game workshop")
 
-
-class Hangman:
-  def reset(self):
-    self.errorsAmount = 0
-    self.goodGuesses = []
-    self.secretWord = ""
-
-  def __init__(self):
-    self.reset()
-
-          
 
 def redraw():
   _.redraw()

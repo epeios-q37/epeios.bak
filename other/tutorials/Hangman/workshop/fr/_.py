@@ -25,6 +25,9 @@ SOFTWARE.
  
 import workshop._._ as _
 
+VRAI = True
+FAUX = False
+
 class Core(_.Core):
   i18n = {
     "Restart": "Recommencer"
@@ -68,14 +71,16 @@ DICTIONNAIRE = [
 PENDU = [P_TETE, P_CORPS, P_BRAS_GAUCHE,
          P_BRAS_DROIT, P_PIED_GAUCHE, P_PIED_DROIT]
 
-class Pendu:
-  def raz(self):
-    self.nbErreurs = 0
-    self.bonnesPioches = []
-    self.motSecret = ""
 
-  def __init__(self):
-    self.raz()
+class Core(_.Core):
+  i18n = {
+      "Restart": "Recommencer"
+  }
+  dictionnary = DICTIONNAIRE
+  hanged = PENDU
+
+
+_.setAppTitle("Ateleir jeu du pendu")
 
 
 

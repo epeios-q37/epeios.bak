@@ -52,6 +52,23 @@ F_RIGHT_ARM = "RightArm"
 F_LEFT_LEG = "LeftLeg"
 F_RIGHT_LEG = "RightLeg"
 
+
+def defSetAndGet_(name):
+  globals()["set" + name] = lambda value: _.store(name, value)
+  globals()["get" + name] = lambda: _.recall(name)
+
+defSetAndGet_("AppTitle")
+
+defSetAndGet_("ErrorsAmount")
+defSetAndGet_("GoodGuesses")
+defSetAndGet_("SecretWord")
+
+def resetHangman():
+  setErrorsAmount( 0 )
+  setGoodGuesses( "" )
+  setSecretWord( "" )
+
+
 def redraw():
   _.dom().setLayout("", _.readBody(folder, _.core().i18n))
 

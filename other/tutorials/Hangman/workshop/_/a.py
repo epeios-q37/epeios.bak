@@ -44,41 +44,65 @@ IS_LETTER_IN_WORD = "isLetterInWord"
 def _getWord(dictionnary):
   return dictionnary[randint(0, len(dictionnary)-1)]
 
-def _reset(dictionnary,hangman):
+
+def _displayMask(word, guesses, debug):
+  mask = ""
+  for letter in word:
+    if letter in guesses:
+      mask += letter
+    elif debug:
+      mask += letter.upper()
+    else:
+      mask += "_"
+
+  clearAndDisplay(mask)
+
+
+def _reset(dictionnary,debug):
   redraw()
-  hangman.reset()
-  hangman.secretWord = _getWord(dictionnary)
-  print(hangman.secretWord)
-  display(hangman.secretWord)
+  resetHangman()
+  setSecretWord( _getWord(dictionnary))
+  print(getSecretWord())
+  _displayMask(getSecretWord(),[],debug)
 
 
 def _acConnect(core, dom, id):
-  _reset(core.dictionnary, core.userObject)
+  _reset(core.dictionnary,True)
 
 
-def isLetterInWord_(word, letter):
+def updateHanged_(hanged,errorsAmount):
+  if errorsAmount:
+    if errorsAmount <= len(hanged):
+      drawFigure(hanged[errorsAmount-1])
+    else:
+      drawFigure(F_FACE)
+
+
+
+def isLetterInWord_(letter, word):
   return letter in word
 
-
-def _testUserSolution(dom, word, letter):
-  u = _.recall(_CALLBACKS)[IS_LETTER_IN_WORD](word, letter)
-  s = isLetterInWord_(word, letter)
-
-  print (word, letter, s, u, s == u)
-
+def _handleUserSolution(dom, hanged, letter, word):
+  if (_.recall(_CALLBACKS)[IS_LETTER_IN_WORD](letter,word)):
+    if (not letter in getGoodGuesses()):
+      setGoodGuesses(getGoodGuesses() + letter)
+      _displayMask(getSecretWord(),getGoodGuesses(),True)
+  else:
+    setErrorsAmount(getErrorsAmount() + 1)
+    updateHanged_(hanged,getErrorsAmount())
 
 def _acSubmit(core, dom, id):
-  _testUserSolution(dom,core.userObject.secretWord,id.lower())
+  _handleUserSolution(dom, core.hanged,id.lower(), getSecretWord())
 
 
 def _acRestart(core, dom):
-  _reset(core.dictionnary, core.userObject)
+  _reset(core.dictionnary,True)
 
 
-def main(callback, callbacks, title, userCallback):
+def main(callback, callbacks):
   _.store(_CALLBACKS, callbacks),
   _.main(folder, callback, {
     "": _acConnect,
     "Submit": _acSubmit,
     "Restart": _acRestart
-  }, title, userCallback)
+  },getAppTitle())

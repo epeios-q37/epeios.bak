@@ -24,10 +24,10 @@ SOFTWARE.
 """
  
 import workshop._.a as workshop
-from workshop.en._ import *
+from workshop.fr._ import *
 from workshop._.a import isLetterInWord_
 
 
 def go(globals):
-  workshop.main(lambda dom: Core(dom), {workshop.IS_LETTER_IN_WORD : globals["isLetterInWord"]})
+  workshop.main(lambda dom: Core(dom), {workshop.IS_LETTER_IN_WORD : globals["lettreEstDansMot"]})
 
