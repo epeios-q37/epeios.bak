@@ -2,33 +2,9 @@
 
 import sys
 sys.path.append(".")
-from workshop.fr._ import *
+from workshop.fr.Hangman import *
 
 from random import randint
-
-
-DICTIONNAIRE = [
-    "armoire",
-    "boucle",
-    "buisson",
-    "bureau",
-    "chaise",
-    "carton",
-    "couteau",
-    "fichier",
-    "garage",
-    "glace",
-    "journal",
-    "kiwi",
-    "lampe",
-    "liste",
-    "montagne",
-    "remise",
-    "sandale",
-    "taxi",
-    "vampire",
-    "volant",
-]
 
 
 class Pendu:
@@ -39,10 +15,6 @@ class Pendu:
 
     def __init__(self):
         self.raz()
-
-
-PENDU = [P_TETE, P_CORPS, P_BRAS_GAUCHE,
-         P_BRAS_DROIT, P_PIED_GAUCHE, P_PIED_DROIT]
 
 
 def obtenirMot():

@@ -23,50 +23,63 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
  
-import workshop._._ as workshop
+import workshop._._ as _
 
-class _Core(workshop.Core):
+class Core(_.Core):
   i18n = {
     "Restart": "Restart"
   }
 
-P_FACE = workshop.F_FACE
-P_HEAD = workshop.F_HEAD
-P_BODY = workshop.F_BODY
-P_LEFT_ARM = workshop.F_LEFT_ARM
-P_RIGHT_ARM = workshop.F_RIGHT_ARM
-P_LEFT_LEG = workshop.F_LEFT_LEG
-P_RIGHT_LEG = workshop.F_RIGHT_LEG
+P_FACE = _.F_FACE
+P_HEAD = _.F_HEAD
+P_BODY = _.F_BODY
+P_LEFT_ARM = _.F_LEFT_ARM
+P_RIGHT_ARM = _.F_RIGHT_ARM
+P_LEFT_LEG = _.F_LEFT_LEG
+P_RIGHT_LEG = _.F_RIGHT_LEG
 
-A_CONNECTION = workshop.A_CONNECT
-A_GUESS = workshop.A_SUBMIT
-A_RESTART = workshop.A_RESTART
+A_CONNECTION = _.A_CONNECT
+A_GUESS = _.A_SUBMIT
+A_RESTART = _.A_RESTART
+
+DICTIONARY = [
+    "accommodate", "afterthought", "allegiance", "aloft", "ancestor", "anticipation", "antics",
+    "apparel", "ascend", "beckon", "brink", "catastrophe", "coax", "compassion", "complexion", "content",
+    "courteous", "cringe", "derelict", "dignity", "distaste", "dormant", "elaborate", "endure", "enforce",
+    "exertion", "expanse", "extraordinary", "foliage", "foremost", "frank", "function", "futile", "gaze",
+    "glimmer", "glimpse", "grimace", "headstrong", "hesitate", "hoist", "immense", "imperceptibly",
+    "indication", "inscription", "instinctive", "intent", "interior", "jar", "keepsake", "knack",
+    "literacy", "lurch", "makeshift", "malicious", "massive", "meager", "melancholy", "merge", "mingle",
+    "minuscule", "momentary", "nape", "nimble", "obstinate", "opt", "overwhelming", "pact", "pandemonium",
+    "persuade", "phenomenal", "ponder", "quantity", "quaver", "quench", "radiant", "ravine", "recipient",
+    "resentful", "satisfactory", "sensitive", "sentiment", "shudder", "sickly", "sleek", "solemn", "soothe",
+    "stagger", "stern", "tantalize", "temptation", "transform", "unscrupulous", "vain", "vengeance",
+    "violate", "vital", "vivid", "wistful", "yield", "zest"
+]
+
+HANGED = [P_HEAD, P_BODY, P_LEFT_ARM,
+          P_RIGHT_ARM, P_LEFT_LEG, P_RIGHT_LEG]
+          
 
 def redraw():
-  workshop.redraw()
+  _.redraw()
 
 def drawFigure(part):
-  workshop.drawFigure(part)
-
-def go(callback, callbacks):
-  workshop.main(lambda dom: _Core(dom), callbacks, "Hangman game workshop", callback)
-
+  _.drawFigure(part)
 
 def erase():
-  workshop.clear()
-
+  _.clear()
 
 def display(text):
-  workshop.display(text)
-
+  _.display(text)
 
 def eraseAndDisplay(text):
-  workshop.clearAndDisplay(text)
+  _.clearAndDisplay(text)
 
 
 def warn(text):
-  workshop.alert(text)
+  _.alert(text)
 
 
 def ask(text):
-  return workshop.confirm(text)
+  return _.confirm(text)

@@ -22,60 +22,10 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
-
-import sys, os
-
-sys.path.append("./EduTK.python.zip")
-sys.path.append("../EduTK.python.zip")
-
-if ('EPEIOS_SRC' in os.environ):
-  sys.path.append("/cygdrive/h/hg/epeios/other/libs/edutk/PYH/edutk")
-
-import edutk as _
-from edutk import Core
-
-_.regularException = True
-
-folder = ""
-
-_OUTPUT = "output"
-
-A_CONNECT = 'connect'
-A_SUBMIT = 'submit'
-A_RESTART = 'restart'
-
-F_FACE = "Face"
-F_HEAD = "Head"
-F_BODY = "Body"
-F_LEFT_ARM = "LeftArm"
-F_RIGHT_ARM = "RightArm"
-F_LEFT_LEG = "LeftLeg"
-F_RIGHT_LEG = "RightLeg"
-
-def redraw():
-    _.dom().setLayout("", _.readBody(folder, _.core().i18n))
+ 
+import workshop._.Hangman as workshop
+from workshop.fr._ import *
 
 
-def drawFigure(part):
-    _.dom().removeClass(part, "hidden")
-
-
-def display(text):
-    output = _.Atlas.createHTML()
-    output.putTagAndValue("h1", text)
-    _.dom().appendLayout(_OUTPUT, output)
-
-
-def clearAndDisplay(text):
-    output = _.Atlas.createHTML()
-    output.putTagAndValue("h1", text)
-    _.dom().setLayout(_OUTPUT, output)
-
-
-def alert(text):
-    _.dom().alert(text)
-
-
-def confirm(text):
-    return _.dom().confirm(text)
-
+def go(callback, callbacks):
+  workshop.main(lambda dom: Core(dom), callbacks, "Atelier du jeu du pendu", callback)

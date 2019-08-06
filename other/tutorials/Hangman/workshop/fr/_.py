@@ -23,51 +23,75 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
  
-import workshop._._ as workshop
+import workshop._._ as _
 
-class _Core(workshop.Core):
+class Core(_.Core):
   i18n = {
     "Restart": "Recommencer"
   }
 
-P_VISAGE = workshop.F_FACE
-P_TETE = workshop.F_HEAD
-P_CORPS = workshop.F_BODY
-P_BRAS_GAUCHE = workshop.F_LEFT_ARM
-P_BRAS_DROIT = workshop.F_RIGHT_ARM
-P_PIED_GAUCHE = workshop.F_LEFT_LEG
-P_PIED_DROIT = workshop.F_RIGHT_LEG
+P_VISAGE = _.F_FACE
+P_TETE = _.F_HEAD
+P_CORPS = _.F_BODY
+P_BRAS_GAUCHE = _.F_LEFT_ARM
+P_BRAS_DROIT = _.F_RIGHT_ARM
+P_PIED_GAUCHE = _.F_LEFT_LEG
+P_PIED_DROIT = _.F_RIGHT_LEG
 
-A_CONNECTION = workshop.A_CONNECT
-A_PIOCHE = workshop.A_SUBMIT
-A_REDEMARRAGE = workshop.A_RESTART
+A_CONNECTION = _.A_CONNECT
+A_PIOCHE = _.A_SUBMIT
+A_REDEMARRAGE = _.A_RESTART
+
+DICTIONNAIRE = [
+    "armoire",
+    "boucle",
+    "buisson",
+    "bureau",
+    "chaise",
+    "carton",
+    "couteau",
+    "fichier",
+    "garage",
+    "glace",
+    "journal",
+    "kiwi",
+    "lampe",
+    "liste",
+    "montagne",
+    "remise",
+    "sandale",
+    "taxi",
+    "vampire",
+    "volant",
+]
+
+PENDU = [P_TETE, P_CORPS, P_BRAS_GAUCHE,
+         P_BRAS_DROIT, P_PIED_GAUCHE, P_PIED_DROIT]
+
 
 def redessine():
-  workshop.redraw()
+  _.redraw()
+
 
 def dessinePendu(partie):
-  workshop.drawFigure(partie)
+  _.drawFigure(partie)
 
 
 def efface():
-  workshop.clear()
+  _.clear()
 
 
 def affiche(text):
-  workshop.display(text)
+  _.display(text)
 
 
 def effaceEtAffiche(text):
-  workshop.clearAndDisplay(text)
+  _.clearAndDisplay(text)
 
 
 def alerte(text):
-  workshop.alert(text)
+  _.alert(text)
 
 
 def demande(text):
-  return workshop.confirm(text)
-
-
-def go(callback, callbacks):
-  workshop.main(lambda dom: _Core(dom), callbacks, "Atelier du jeu du pendu", callback)
+  return _.confirm(text)
