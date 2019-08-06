@@ -7,16 +7,6 @@ from workshop.fr.Hangman import *
 from random import randint
 
 
-class Pendu:
-    def raz(self):
-        self.nbErreurs = 0
-        self.bonnesPioches = []
-        self.motSecret = ""
-
-    def __init__(self):
-        self.raz()
-
-
 def obtenirMot():
     return DICTIONNAIRE[randint(0, len(DICTIONNAIRE)-1)]
 
@@ -85,7 +75,7 @@ def redemarrer(pendu):
     raz(pendu)
 
 
-go(Pendu, {
+go({
     A_CONNECTION: connection,
     A_PIOCHE: pioche,
     A_REDEMARRAGE: redemarrer})

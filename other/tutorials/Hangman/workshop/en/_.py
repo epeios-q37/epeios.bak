@@ -25,11 +25,6 @@ SOFTWARE.
  
 import workshop._._ as _
 
-class Core(_.Core):
-  i18n = {
-    "Restart": "Restart"
-  }
-
 P_FACE = _.F_FACE
 P_HEAD = _.F_HEAD
 P_BODY = _.F_BODY
@@ -43,22 +38,41 @@ A_GUESS = _.A_SUBMIT
 A_RESTART = _.A_RESTART
 
 DICTIONARY = [
-    "accommodate", "afterthought", "allegiance", "aloft", "ancestor", "anticipation", "antics",
-    "apparel", "ascend", "beckon", "brink", "catastrophe", "coax", "compassion", "complexion", "content",
-    "courteous", "cringe", "derelict", "dignity", "distaste", "dormant", "elaborate", "endure", "enforce",
-    "exertion", "expanse", "extraordinary", "foliage", "foremost", "frank", "function", "futile", "gaze",
-    "glimmer", "glimpse", "grimace", "headstrong", "hesitate", "hoist", "immense", "imperceptibly",
-    "indication", "inscription", "instinctive", "intent", "interior", "jar", "keepsake", "knack",
-    "literacy", "lurch", "makeshift", "malicious", "massive", "meager", "melancholy", "merge", "mingle",
-    "minuscule", "momentary", "nape", "nimble", "obstinate", "opt", "overwhelming", "pact", "pandemonium",
-    "persuade", "phenomenal", "ponder", "quantity", "quaver", "quench", "radiant", "ravine", "recipient",
-    "resentful", "satisfactory", "sensitive", "sentiment", "shudder", "sickly", "sleek", "solemn", "soothe",
-    "stagger", "stern", "tantalize", "temptation", "transform", "unscrupulous", "vain", "vengeance",
-    "violate", "vital", "vivid", "wistful", "yield", "zest"
+  "accommodate", "afterthought", "allegiance", "aloft", "ancestor", "anticipation", "antics",
+  "apparel", "ascend", "beckon", "brink", "catastrophe", "coax", "compassion", "complexion", "content",
+  "courteous", "cringe", "derelict", "dignity", "distaste", "dormant", "elaborate", "endure", "enforce",
+  "exertion", "expanse", "extraordinary", "foliage", "foremost", "frank", "function", "futile", "gaze",
+  "glimmer", "glimpse", "grimace", "headstrong", "hesitate", "hoist", "immense", "imperceptibly",
+  "indication", "inscription", "instinctive", "intent", "interior", "jar", "keepsake", "knack",
+  "literacy", "lurch", "makeshift", "malicious", "massive", "meager", "melancholy", "merge", "mingle",
+  "minuscule", "momentary", "nape", "nimble", "obstinate", "opt", "overwhelming", "pact", "pandemonium",
+  "persuade", "phenomenal", "ponder", "quantity", "quaver", "quench", "radiant", "ravine", "recipient",
+  "resentful", "satisfactory", "sensitive", "sentiment", "shudder", "sickly", "sleek", "solemn", "soothe",
+  "stagger", "stern", "tantalize", "temptation", "transform", "unscrupulous", "vain", "vengeance",
+  "violate", "vital", "vivid", "wistful", "yield", "zest"
 ]
 
 HANGED = [P_HEAD, P_BODY, P_LEFT_ARM,
           P_RIGHT_ARM, P_LEFT_LEG, P_RIGHT_LEG]
+
+
+class Core(_.Core):
+  i18n = {
+      "Restart": "Restart"
+  }
+  dictionnary = DICTIONARY
+
+
+
+class Hangman:
+  def reset(self):
+    self.errorsAmount = 0
+    self.goodGuesses = []
+    self.secretWord = ""
+
+  def __init__(self):
+    self.reset()
+
           
 
 def redraw():

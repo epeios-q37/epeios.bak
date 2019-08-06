@@ -27,6 +27,6 @@ import workshop._.Hangman as workshop
 from workshop.en._ import *
 
 
-def go(callback, callbacks):
-  workshop.main(lambda dom: Core(dom), callbacks, "Hangman game workshop", callback)
+def go(callbacks):
+  workshop.main(lambda dom: Core(dom), callbacks, "Hangman game workshop", Hangman)
 

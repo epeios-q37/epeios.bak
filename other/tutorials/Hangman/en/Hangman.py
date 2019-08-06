@@ -7,16 +7,6 @@ from workshop.en.Hangman import *
 from random import randint
 
 
-class Hangman:
-    def reset(self):
-        self.errorsAmount = 0
-        self.goodGuesses = []
-        self.secretWord = ""
-
-    def __init__(self):
-        self.reset()
-
-
 def getWord():
     return DICTIONARY[randint(0, len(DICTIONARY)-1)]
 
@@ -84,7 +74,7 @@ def restart(hangman):
     reset(hangman)
 
 
-go(Hangman, {
+go({
     A_CONNECTION: connection,
     A_GUESS: guess,
     A_RESTART: restart

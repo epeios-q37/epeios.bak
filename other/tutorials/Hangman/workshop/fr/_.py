@@ -43,30 +43,40 @@ A_PIOCHE = _.A_SUBMIT
 A_REDEMARRAGE = _.A_RESTART
 
 DICTIONNAIRE = [
-    "armoire",
-    "boucle",
-    "buisson",
-    "bureau",
-    "chaise",
-    "carton",
-    "couteau",
-    "fichier",
-    "garage",
-    "glace",
-    "journal",
-    "kiwi",
-    "lampe",
-    "liste",
-    "montagne",
-    "remise",
-    "sandale",
-    "taxi",
-    "vampire",
-    "volant",
+  "armoire",
+  "boucle",
+  "buisson",
+  "bureau",
+  "chaise",
+  "carton",
+  "couteau",
+  "fichier",
+  "garage",
+  "glace",
+  "journal",
+  "kiwi",
+  "lampe",
+  "liste",
+  "montagne",
+  "remise",
+  "sandale",
+  "taxi",
+  "vampire",
+  "volant",
 ]
 
 PENDU = [P_TETE, P_CORPS, P_BRAS_GAUCHE,
          P_BRAS_DROIT, P_PIED_GAUCHE, P_PIED_DROIT]
+
+class Pendu:
+  def raz(self):
+    self.nbErreurs = 0
+    self.bonnesPioches = []
+    self.motSecret = ""
+
+  def __init__(self):
+    self.raz()
+
 
 
 def redessine():

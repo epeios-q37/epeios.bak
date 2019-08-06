@@ -31,51 +31,54 @@ sys.path.append("../EduTK.python.zip")
 if ('EPEIOS_SRC' in os.environ):
   sys.path.append("/cygdrive/h/hg/epeios/other/libs/edutk/PYH/edutk")
 
+from workshop._._ import *
 import edutk as _
-from edutk import Core
 
-_.regularException = True
+from random import randint
 
-folder = ""
+_CALLBACKS = "callbacks"
 
-_OUTPUT = "output"
-
-A_CONNECT = 'connect'
-A_SUBMIT = 'submit'
-A_RESTART = 'restart'
-
-F_FACE = "Face"
-F_HEAD = "Head"
-F_BODY = "Body"
-F_LEFT_ARM = "LeftArm"
-F_RIGHT_ARM = "RightArm"
-F_LEFT_LEG = "LeftLeg"
-F_RIGHT_LEG = "RightLeg"
-
-def redraw():
-  _.dom().setLayout("", _.readBody(folder, _.core().i18n))
+IS_LETTER_IN_WORD = "isLetterInWord"
 
 
-def drawFigure(part):
-  _.dom().removeClass(part, "hidden")
+def _getWord(dictionnary):
+  return dictionnary[randint(0, len(dictionnary)-1)]
+
+def _reset(dictionnary,hangman):
+  redraw()
+  hangman.reset()
+  hangman.secretWord = _getWord(dictionnary)
+  print(hangman.secretWord)
+  display(hangman.secretWord)
 
 
-def display(text):
-  output = _.Atlas.createHTML()
-  output.putTagAndValue("h1", text)
-  _.dom().appendLayout(_OUTPUT, output)
+def _acConnect(core, dom, id):
+  _reset(core.dictionnary, core.userObject)
 
 
-def clearAndDisplay(text):
-  output = _.Atlas.createHTML()
-  output.putTagAndValue("h1", text)
-  _.dom().setLayout(_OUTPUT, output)
+def isLetterInWord_(word, letter):
+  return letter in word
 
 
-def alert(text):
-  _.dom().alert(text)
+def _testUserSolution(dom, word, letter):
+  u = _.recall(_CALLBACKS)[IS_LETTER_IN_WORD](word, letter)
+  s = isLetterInWord_(word, letter)
+
+  print (word, letter, s, u, s == u)
 
 
-def confirm(text):
-  return _.dom().confirm(text)
+def _acSubmit(core, dom, id):
+  _testUserSolution(dom,core.userObject.secretWord,id.lower())
 
+
+def _acRestart(core, dom):
+  _reset(core.dictionnary, core.userObject)
+
+
+def main(callback, callbacks, title, userCallback):
+  _.store(_CALLBACKS, callbacks),
+  _.main(folder, callback, {
+    "": _acConnect,
+    "Submit": _acSubmit,
+    "Restart": _acRestart
+  }, title, userCallback)
