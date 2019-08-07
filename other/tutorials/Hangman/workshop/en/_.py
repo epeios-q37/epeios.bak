@@ -54,6 +54,11 @@ DICTIONARY = [
 HANGED = [H_HEAD, H_BODY, H_LEFT_ARM,
           H_RIGHT_ARM, H_LEFT_LEG, H_RIGHT_LEG]
 
+FUNCTION_LABELS = {
+  _.F_IS_LETTER_IN_WORD: "isLetterInWord",
+  _.F_GET_MASK: "getMask",
+}
+
 
 class Core(_.Core):
   i18n = {
@@ -91,3 +96,4 @@ def warn(text):
 
 def ask(text):
   return _.confirm(text)
+

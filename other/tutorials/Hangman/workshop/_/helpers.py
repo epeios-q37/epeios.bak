@@ -77,9 +77,22 @@ def resetBase(dictionnary, dev, fGetMask = ufGetMask):
   displayMask(getSecretWord(), "", dev, fGetMask)
 
 
+def _setUserFunctions(ids, functions, labels):
+  links = {}
 
-def mainBase(callback, globals, userFunctions):
-  setUserFunctions(userFunctions)
+  for id in ids:
+    label = labels[id]
+
+    if not label in functions:
+      raise NameError("Missing '{}' function.".format(label) )
+
+    links[id] = functions[label]
+
+  setUserFunctions(links)
+
+
+def mainBase(callback, globals, ids, userFunctions, userFunctionLabels):
+  _setUserFunctions(ids, userFunctions, userFunctionLabels)
   _.main(_FOLDER, callback, {
      "": globals["_acConnect"],
     "Submit": globals["_acSubmit"],

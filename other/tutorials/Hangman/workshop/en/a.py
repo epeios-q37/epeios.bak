@@ -28,5 +28,5 @@ from workshop.en._ import *
 
 
 def go(globals):
-  workshop.main(lambda dom: Core(dom), {workshop.F_IS_LETTER_IN_WORD : globals["isLetterInWord"]})
+  workshop.main(lambda dom: Core(dom), globals, FUNCTION_LABELS)
 

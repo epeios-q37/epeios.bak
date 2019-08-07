@@ -60,5 +60,5 @@ def _acRestart(core, dom):
   _reset(core.dictionnary,True)
 
 
-def main(callback, userFunctions):
-  mainBase( callback, globals(), userFunctions)
+def main(callback, userFunctions, userFunctionLabels):
+  mainBase(callback, globals(), (F_IS_LETTER_IN_WORD,), userFunctions, userFunctionLabels)

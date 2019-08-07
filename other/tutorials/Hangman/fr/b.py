@@ -4,7 +4,7 @@ import sys
 sys.path.append(".")
 from workshop.fr.b import *
 
-def LettreEstDansMot(*args):
+def lettreEstDansMot(*args):
     return workshop.rfIsLetterInWord(*args)
 
 """
