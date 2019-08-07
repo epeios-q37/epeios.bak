@@ -51,8 +51,8 @@ DICTIONARY = [
   "violate", "vital", "vivid", "wistful", "yield", "zest"
 ]
 
-HANGED = [H_HEAD, H_BODY, H_LEFT_ARM,
-          H_RIGHT_ARM, H_LEFT_LEG, H_RIGHT_LEG]
+HANGED = (H_HEAD, H_BODY, H_LEFT_ARM,
+          H_RIGHT_ARM, H_LEFT_LEG, H_RIGHT_LEG)
 
 FUNCTION_LABELS = {
   _.F_IS_LETTER_IN_WORD: "isLetterInWord",

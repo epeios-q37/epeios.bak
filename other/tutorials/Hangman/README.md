@@ -2,7 +2,7 @@
 
 The `en` folder contains the English version of the tutorial, and the `fr`, the French one.
 
-If you want to adapt the tutorial for another language, you have to crate a sub-folder in the `workshop` folder, like the `en` or `fr` folder, pick the content of one of this folder, and adapt this content to the desired language.
+If you want to adapt the tutorial for another language, create a sub-folder in the `workshop` folder, like the `en` or `fr` folder, pick the content of one of this folder, and adapt this content to the desired language.
 
 The content of the `en` or `fr` folder in the root folder must **not** be provided to the students. Only the `workshop` folder.
 
@@ -37,9 +37,9 @@ def lettreEstDansMot(lettre, mot):
 go(globals())
 ```
 
-The exercise consist to implement the `isLetterInWord(…):` (*fr*: `lettreEstDansMot(…)`). To explain to students what they have to do, see the (`en`|`fr`)`/a.py` file.
+The exercise consists in implementing the `isLetterInWord(…):` (*fr*: `lettreEstDansMot(…)`). To explain to students what they have to do, and what they will need, see the (`en`|`fr`)`/a.py` file.
 
-Once this exercise completed, you tell the students to modify the `a` in `from workshop.en.a import *` (*fr*: `from workshop.fr.a import *`) to obtain `from workshop.en.b import *` (*fr*: `from workshop.fr.b import *`). You also tell the to add following function prototype:
+Once this exercise completed, you tell the students to replace the `a` in `from workshop.en.a import *` (*fr*: `from workshop.fr.a import *`) with `b` to obtain `from workshop.en.b import *` (*fr*: `from workshop.fr.b import *`). You also tell them to add following function prototype:
 
 English:
 
@@ -65,7 +65,7 @@ sys.path.append(".")
 from workshop.en.b import *
 
 def isLetterInWord(*args):
-    # What the student wrote in the previous exercise.
+# What the student wrote in the previous exercise.
 
 def getMask(word, guesses, dev):
 
@@ -82,9 +82,15 @@ sys.path.append(".")
 from workshop.fr.b import *
 
 def lettreEstDansMot(*args):
-    # What the student wrote in the previous exercise.
+# What the student wrote in the previous exercise.
 
 def obtenirMasque(mot, pioches, dev):
 
 go(globals())
 ```
+
+To know what is the task of the new function, and what it is needed for the implementation, you may also look at the (`en`/`fr`)`/b.py` file.
+
+And so on for the *c*, *d*, *e*… exercises.
+
+Between exercises, you will probably have to introduce the concept that will be useful for the new exercise.
