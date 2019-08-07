@@ -23,14 +23,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-H_FACE = "Face"
-H_HEAD = "Head"
-H_BODY = "Body"
-H_LEFT_ARM = "LeftArm"
-H_RIGHT_ARM = "RightArm"
-H_LEFT_LEG = "LeftLeg"
-H_RIGHT_LEG = "RightLeg"
+P_FACE = "Face"
+P_HEAD = "Head"
+P_TRUNK = "Trunk"
+P_LEFT_ARM = "LeftArm"
+P_RIGHT_ARM = "RightArm"
+P_LEFT_LEG = "LeftLeg"
+P_RIGHT_LEG = "RightLeg"
 
 F_IS_LETTER_IN_WORD = "IsLetterInWord"
 F_GET_MASK = "GetMask"
+F_UPDATE_BODY = "UpdateBody"
 

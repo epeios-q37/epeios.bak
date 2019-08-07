@@ -40,3 +40,10 @@ def rfGetMask(word, guesses, dev):
     mask += letter if letter in guesses else letter.upper() if dev else "_"
 
   return mask
+
+def rfUpdateBody(parts,errorsAmount):
+  if errorsAmount <= len(parts):
+    drawBodyPart(parts[errorsAmount-1])
+
+  if errorsAmount >= len(parts):
+    drawBodyPart(P_FACE)

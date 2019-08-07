@@ -28,7 +28,6 @@ sys.path.append("workshop/_")
 
 import educ as _
 from accessor import *
-from constants import *
 from ufunctions import *
 
 from random import randint
@@ -41,7 +40,7 @@ def redraw():
   _.dom().setLayout("", _.readBody(_FOLDER, _.core().i18n))
 
 
-def drawFigure(part):
+def drawBodyPart(part):
   _.dom().removeClass(part, "hidden")
 
 
@@ -109,10 +108,3 @@ def resetHangman():
 def getWord(dictionnary):
   return dictionnary[randint(0, len(dictionnary)-1)]
 
-
-def updateHanged(hanged, errorsAmount):
-  if errorsAmount:
-    if errorsAmount <= len(hanged):
-      drawFigure(hanged[errorsAmount-1])
-    else:
-      drawFigure(H_FACE)

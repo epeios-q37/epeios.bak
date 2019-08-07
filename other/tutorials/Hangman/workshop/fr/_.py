@@ -33,13 +33,13 @@ class Core(_.Core):
     "Restart": "Recommencer"
   }
 
-P_VISAGE = _.H_FACE
-P_TETE = _.H_HEAD
-P_CORPS = _.H_BODY
-P_BRAS_GAUCHE = _.H_LEFT_ARM
-P_BRAS_DROIT = _.H_RIGHT_ARM
-P_PIED_GAUCHE = _.H_LEFT_LEG
-P_PIED_DROIT = _.H_RIGHT_LEG
+P_VISAGE = _.P_FACE
+P_TETE = _.P_HEAD
+P_TRONC = _.P_TRUNK
+P_BRAS_GAUCHE = _.P_LEFT_ARM
+P_BRAS_DROIT = _.P_RIGHT_ARM
+P_PIED_GAUCHE = _.P_LEFT_LEG
+P_PIED_DROIT = _.P_RIGHT_LEG
 
 DICTIONNAIRE = [
   "armoire",
@@ -64,12 +64,19 @@ DICTIONNAIRE = [
   "volant",
 ]
 
-PENDU = (P_TETE, P_CORPS, P_BRAS_GAUCHE,
-         P_BRAS_DROIT, P_PIED_GAUCHE, P_PIED_DROIT)
+PARTIES_CORPS = (
+  P_TETE,
+  P_TRONC,
+  P_BRAS_GAUCHE,
+  P_BRAS_DROIT,
+  P_PIED_GAUCHE,
+  P_PIED_DROIT
+)
 
 FUNCTION_LABELS = {
     _.F_IS_LETTER_IN_WORD: "lettreEstDansMot",
     _.F_GET_MASK: "obtenirMasque",
+    _.F_UPDATE_BODY: "majCorps"
 }
 
 
@@ -78,10 +85,10 @@ class Core(_.Core):
       "Restart": "Recommencer"
   }
   dictionnary = DICTIONNAIRE
-  hanged = PENDU
+  bodyParts = PARTIES_CORPS
 
 
-_.setAppTitle("Ateleir jeu du pendu")
+_.setAppTitle("Atelier jeu du pendu")
 
 
 
@@ -89,8 +96,8 @@ def redessine():
   _.redraw()
 
 
-def dessinePendu(partie):
-  _.drawFigure(partie)
+def dessinePartieCorps(partie):
+  _.drawBodyPart(partie)
 
 
 def efface():

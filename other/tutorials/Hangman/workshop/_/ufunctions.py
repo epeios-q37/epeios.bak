@@ -36,4 +36,5 @@ def _defUserFunction(name):
 
 _defUserFunction(F_IS_LETTER_IN_WORD)
 _defUserFunction(F_GET_MASK)
+_defUserFunction(F_UPDATE_BODY)
 

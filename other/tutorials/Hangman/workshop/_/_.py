@@ -30,7 +30,7 @@ import educ as _
 from educ import Core
 
 from accessor import *
-from constants import *
+# from constants import *
 from functions import *
 from helpers import *
 

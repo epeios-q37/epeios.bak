@@ -28,13 +28,13 @@ import workshop._._ as _
 TRUE = True
 FALSE = False
 
-H_FACE = _.H_FACE
-H_HEAD = _.H_HEAD
-H_BODY = _.H_BODY
-H_LEFT_ARM = _.H_LEFT_ARM
-H_RIGHT_ARM = _.H_RIGHT_ARM
-H_LEFT_LEG = _.H_LEFT_LEG
-H_RIGHT_LEG = _.H_RIGHT_LEG
+P_FACE = _.P_FACE
+P_HEAD = _.P_HEAD
+P_TRUNK = _.P_TRUNK
+P_LEFT_ARM = _.P_LEFT_ARM
+P_RIGHT_ARM = _.P_RIGHT_ARM
+P_LEFT_LEG = _.P_LEFT_LEG
+P_RIGHT_LEG = _.P_RIGHT_LEG
 
 DICTIONARY = [
   "accommodate", "afterthought", "allegiance", "aloft", "ancestor", "anticipation", "antics",
@@ -51,12 +51,19 @@ DICTIONARY = [
   "violate", "vital", "vivid", "wistful", "yield", "zest"
 ]
 
-HANGED = (H_HEAD, H_BODY, H_LEFT_ARM,
-          H_RIGHT_ARM, H_LEFT_LEG, H_RIGHT_LEG)
+BODY_PARTS = (
+  P_HEAD,
+  P_TRUNK,
+  P_LEFT_ARM,
+  P_RIGHT_ARM,
+  P_LEFT_LEG,
+  P_RIGHT_LEG
+)
 
 FUNCTION_LABELS = {
   _.F_IS_LETTER_IN_WORD: "isLetterInWord",
   _.F_GET_MASK: "getMask",
+  _.F_UPDATE_BODY: "updateBody"
 }
 
 
@@ -65,7 +72,7 @@ class Core(_.Core):
       "Restart": "Restart"
   }
   dictionnary = DICTIONARY
-  hanged = HANGED
+  bodyParts = BODY_PARTS
 
 _.setAppTitle("Hangman game workshop")
 
@@ -74,8 +81,8 @@ def redraw():
   _.redraw()
 
 
-def drawFigure(part):
-  _.drawFigure(part)
+def drawBodyPart(part):
+  _.drawBodyPart(part)
 
 
 def erase():

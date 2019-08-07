@@ -23,16 +23,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-import sys, os
+import sys
+sys.path.append("workshop/_")
 
-sys.path.append("./EduTK.python.zip")
-sys.path.append("../EduTK.python.zip")
-
-if ('EPEIOS_SRC' in os.environ):
-  sys.path.append("/cygdrive/h/hg/epeios/other/libs/edutk/PYH/edutk")
+import educ as _
 
 from workshop._._ import *
-import edutk as _
+
 
 def _reset(dictionnary,dev):
   resetBase(dictionnary, dev)
@@ -42,18 +39,18 @@ def _acConnect(core, dom, id):
   _reset(core.dictionnary,True)
 
 
-def _Submit(dom, hanged, letter, word):
+def _Submit(dom, bodyParts, letter, word):
   if ufIsLetterInWord(letter, word):
     if (not letter in getGoodGuesses()):
       setGoodGuesses(getGoodGuesses() + letter)
-      displayMask(getSecretWord(), getGoodGuesses(), True)
+      displayMask(getSecretWord(), getGoodGuesses(), True, rfGetMask)
   else:
     setErrorsAmount(getErrorsAmount() + 1)
-    updateHanged(hanged, getErrorsAmount())
+    ufUpdateBody(bodyParts, getErrorsAmount())
 
 
 def _acSubmit(core, dom, id):
-  _Submit(dom, core.hanged, id.lower(), getSecretWord())
+  _Submit(dom, core.bodyParts, id.lower(), getSecretWord())
 
 
 def _acRestart(core, dom):
@@ -64,5 +61,6 @@ def main(callback, userFunctions, userFunctionLabels):
   mainBase(callback, globals(),
   (
     F_IS_LETTER_IN_WORD,
-    F_GET_MASK
+    F_GET_MASK,
+    F_UPDATE_BODY
   ), userFunctions, userFunctionLabels)
