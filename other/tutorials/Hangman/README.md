@@ -1,7 +1,9 @@
-# Modern exercises for a programming tutorial based on the [Hangman game](https://q37.info/s/gtdtk4hp)
+# Modern exercises for a programming tutorial, based on the [Hangman game](https://q37.info/s/gtdtk4hp)
+
+[![Hangman](https://q37.info/s/pnmjfw39)](https://q37.info/s/jtdqjsx7)
 
 - **This repository is (currently) a proof of concept,**
-- **It is not finished (contributions welcome)**,
+- **It is under development (contributions welcome)**,
 - **some exercises should perhaps be permutated and would probably be in the final version,**
 
 **but it is fully functional.**
@@ -53,7 +55,7 @@ def lettreEstDansMot(lettre, mot):
 go(globals())
 ```
 
-The exercise consists in implementing the `isLetterInWord(…)` (*fr*: `lettreEstDansMot(…)`) function. To explain to the students what the function must do, and what they will need for this, one can look to the (`en`|`fr`)`/a.py` file, which contains a description of the function, and also an example of code.
+The exercise consists in implementing the `isLetterInWord(…)` (*fr*: `lettreEstDansMot(…)`) function. To explain to the students what the function must do, and what they will need for this, one can look to the (`en`|`fr`)`/a.py` file, which contains a description of the function, and also an example of what the students have to fulfill the exercise.
 
 Once this exercise is completed, you tell the students to replace the `a` in `from workshop.en.a import *` (*fr*: `from workshop.fr.a import *`) with a `b` to obtain `from workshop.en.b import *` (*fr*: `from workshop.fr.b import *`). You also tell them to add following function prototype:
 
