@@ -23,10 +23,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
  
-import workshop._.A as workshop
+import workshop._.B as workshop
 from workshop.fr._ import *
 
 
 def go(globals):
-  workshop.main(lambda dom: Core(dom), {workshop.F_IS_LETTER_IN_WORD : globals["lettreEstDansMot"]})
+  workshop.main(lambda dom: Core(dom), {
+    workshop.F_IS_LETTER_IN_WORD : globals["LettreEstDansMot"],
+    workshop.F_GET_MASK: globals["obtenirMasque"],
+  })
 

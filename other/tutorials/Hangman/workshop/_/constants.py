@@ -22,11 +22,15 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
- 
-import workshop._.A as workshop
-from workshop.fr._ import *
 
+H_FACE = "Face"
+H_HEAD = "Head"
+H_BODY = "Body"
+H_LEFT_ARM = "LeftArm"
+H_RIGHT_ARM = "RightArm"
+H_LEFT_LEG = "LeftLeg"
+H_RIGHT_LEG = "RightLeg"
 
-def go(globals):
-  workshop.main(lambda dom: Core(dom), {workshop.F_IS_LETTER_IN_WORD : globals["lettreEstDansMot"]})
+F_IS_LETTER_IN_WORD = "IsLetterInWord"
+F_GET_MASK = "GetMask"
 

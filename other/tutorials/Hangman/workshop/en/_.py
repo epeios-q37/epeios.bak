@@ -28,17 +28,13 @@ import workshop._._ as _
 TRUE = True
 FALSE = False
 
-P_FACE = _.F_FACE
-P_HEAD = _.F_HEAD
-P_BODY = _.F_BODY
-P_LEFT_ARM = _.F_LEFT_ARM
-P_RIGHT_ARM = _.F_RIGHT_ARM
-P_LEFT_LEG = _.F_LEFT_LEG
-P_RIGHT_LEG = _.F_RIGHT_LEG
-
-A_CONNECTION = _.A_CONNECT
-A_GUESS = _.A_SUBMIT
-A_RESTART = _.A_RESTART
+H_FACE = _.H_FACE
+H_HEAD = _.H_HEAD
+H_BODY = _.H_BODY
+H_LEFT_ARM = _.H_LEFT_ARM
+H_RIGHT_ARM = _.H_RIGHT_ARM
+H_LEFT_LEG = _.H_LEFT_LEG
+H_RIGHT_LEG = _.H_RIGHT_LEG
 
 DICTIONARY = [
   "accommodate", "afterthought", "allegiance", "aloft", "ancestor", "anticipation", "antics",
@@ -55,8 +51,8 @@ DICTIONARY = [
   "violate", "vital", "vivid", "wistful", "yield", "zest"
 ]
 
-HANGED = [P_HEAD, P_BODY, P_LEFT_ARM,
-          P_RIGHT_ARM, P_LEFT_LEG, P_RIGHT_LEG]
+HANGED = [H_HEAD, H_BODY, H_LEFT_ARM,
+          H_RIGHT_ARM, H_LEFT_LEG, H_RIGHT_LEG]
 
 
 class Core(_.Core):
@@ -72,14 +68,18 @@ _.setAppTitle("Hangman game workshop")
 def redraw():
   _.redraw()
 
+
 def drawFigure(part):
   _.drawFigure(part)
+
 
 def erase():
   _.clear()
 
+
 def display(text):
   _.display(text)
+
 
 def eraseAndDisplay(text):
   _.clearAndDisplay(text)

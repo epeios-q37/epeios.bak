@@ -23,76 +23,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-import sys, os
+import sys
+sys.path.append("workshop/_")
 
-sys.path.append("./EduTK.python.zip")
-sys.path.append("../EduTK.python.zip")
+import educ as _
+from educ import Core
 
-if ('EPEIOS_SRC' in os.environ):
-  sys.path.append("/cygdrive/h/hg/epeios/other/libs/edutk/PYH/edutk")
+from accessor import *
+from constants import *
+from functions import *
+from helpers import *
 
-import edutk as _
-from edutk import Core
-
-_.regularException = True
-
-folder = ""
-
-_OUTPUT = "output"
-
-A_CONNECT = 'connect'
-A_SUBMIT = 'submit'
-A_RESTART = 'restart'
-
-F_FACE = "Face"
-F_HEAD = "Head"
-F_BODY = "Body"
-F_LEFT_ARM = "LeftArm"
-F_RIGHT_ARM = "RightArm"
-F_LEFT_LEG = "LeftLeg"
-F_RIGHT_LEG = "RightLeg"
-
-
-def defSetAndGet_(name):
-  globals()["set" + name] = lambda value: _.store(name, value)
-  globals()["get" + name] = lambda: _.recall(name)
-
-defSetAndGet_("AppTitle")
-
-defSetAndGet_("ErrorsAmount")
-defSetAndGet_("GoodGuesses")
-defSetAndGet_("SecretWord")
-
-def resetHangman():
-  setErrorsAmount( 0 )
-  setGoodGuesses( "" )
-  setSecretWord( "" )
-
-
-def redraw():
-  _.dom().setLayout("", _.readBody(folder, _.core().i18n))
-
-
-def drawFigure(part):
-  _.dom().removeClass(part, "hidden")
-
-
-def display(text):
-  output = _.Atlas.createHTML()
-  output.putTagAndValue("h1", text)
-  _.dom().appendLayout(_OUTPUT, output)
-
-
-def clearAndDisplay(text):
-  output = _.Atlas.createHTML()
-  output.putTagAndValue("h1", text)
-  _.dom().setLayout(_OUTPUT, output)
-
-
-def alert(text):
-  _.dom().alert(text)
-
-
-def confirm(text):
-  return _.dom().confirm(text)
 

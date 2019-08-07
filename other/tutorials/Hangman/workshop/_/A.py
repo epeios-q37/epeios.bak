@@ -22,11 +22,43 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
- 
-import workshop._.A as workshop
-from workshop.fr._ import *
+
+import sys, os
+
+sys.path.append("./EduTK.python.zip")
+sys.path.append("../EduTK.python.zip")
+
+if ('EPEIOS_SRC' in os.environ):
+  sys.path.append("/cygdrive/h/hg/epeios/other/libs/edutk/PYH/edutk")
+
+from workshop._._ import *
+import edutk as _
+
+def _reset(dictionnary,dev):
+  resetBase(dictionnary, dev, rfGetMask)
 
 
-def go(globals):
-  workshop.main(lambda dom: Core(dom), {workshop.F_IS_LETTER_IN_WORD : globals["lettreEstDansMot"]})
+def _acConnect(core, dom, id):
+  _reset(core.dictionnary,True)
 
+
+def _Submit(dom, hanged, letter, word):
+  if ufIsLetterInWord(letter,word):
+    if (not letter in getGoodGuesses()):
+      setGoodGuesses(getGoodGuesses() + letter)
+      displayMask(getSecretWord(), getGoodGuesses(), True, rfGetMask)
+  else:
+    setErrorsAmount(getErrorsAmount() + 1)
+    updateHanged(hanged,getErrorsAmount())
+
+
+def _acSubmit(core, dom, id):
+  _Submit(dom, core.hanged,id.lower(), getSecretWord())
+
+
+def _acRestart(core, dom):
+  _reset(core.dictionnary,True)
+
+
+def main(callback, userFunctions):
+  mainBase( callback, globals(), userFunctions)

@@ -22,11 +22,18 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
- 
-import workshop._.A as workshop
-from workshop.fr._ import *
 
+# User function declarations.
 
-def go(globals):
-  workshop.main(lambda dom: Core(dom), {workshop.F_IS_LETTER_IN_WORD : globals["lettreEstDansMot"]})
+import sys
+sys.path.append("workshop/_")
+
+from accessor import *
+from constants import *
+
+def _defUserFunction(name):
+  globals()["uf" + name] = lambda *args: getUserFunctions()[name](*args)
+
+_defUserFunction(F_IS_LETTER_IN_WORD)
+_defUserFunction(F_GET_MASK)
 

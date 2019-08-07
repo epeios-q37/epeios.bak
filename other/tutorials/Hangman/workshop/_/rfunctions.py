@@ -22,11 +22,21 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
- 
-import workshop._.A as workshop
-from workshop.fr._ import *
+
+# Reference implementation of user functions.
+
+import sys
+sys.path.append("workshop/_")
+
+from helpers import *
+
+def rfIsLetterInWord(letter, word):
+  return letter in word
 
 
-def go(globals):
-  workshop.main(lambda dom: Core(dom), {workshop.F_IS_LETTER_IN_WORD : globals["lettreEstDansMot"]})
+def rfGetMask(word, guesses, dev):
+  mask = ""
+  for letter in word:
+    mask += letter if letter in guesses else letter.upper() if dev else "_"
 
+  return mask

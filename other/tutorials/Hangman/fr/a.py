@@ -5,8 +5,9 @@ sys.path.append(".")
 from workshop.fr.a import *
 
 """
-La focntion doit retourner 'VRAI' lordue 'lettre' est contenu dans 'mot',
+La fonction doit retourner 'VRAI' lordue 'lettre' est contenu dans 'mot',
 'FAUX' sinon.
+'VRAI' -> 'True' et 'FAUX' -> 'False' si souhaité.
 """
 def lettreEstDansMot(lettre, mot):
     if lettre in mot:

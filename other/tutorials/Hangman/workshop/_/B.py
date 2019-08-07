@@ -34,75 +34,31 @@ if ('EPEIOS_SRC' in os.environ):
 from workshop._._ import *
 import edutk as _
 
-from random import randint
-
-_CALLBACKS = "callbacks"
-
-IS_LETTER_IN_WORD = "isLetterInWord"
-
-
-def _getWord(dictionnary):
-  return dictionnary[randint(0, len(dictionnary)-1)]
-
-
-def _displayMask(word, guesses, debug):
-  mask = ""
-  for letter in word:
-    if letter in guesses:
-      mask += letter
-    elif debug:
-      mask += letter.upper()
-    else:
-      mask += "_"
-
-  clearAndDisplay(mask)
-
-
-def _reset(dictionnary,debug):
-  redraw()
-  resetHangman()
-  setSecretWord( _getWord(dictionnary))
-  print(getSecretWord())
-  _displayMask(getSecretWord(),[],debug)
+def _reset(dictionnary,dev):
+  resetBase(dictionnary, dev)
 
 
 def _acConnect(core, dom, id):
   _reset(core.dictionnary,True)
 
 
-def updateHanged_(hanged,errorsAmount):
-  if errorsAmount:
-    if errorsAmount <= len(hanged):
-      drawFigure(hanged[errorsAmount-1])
-    else:
-      drawFigure(F_FACE)
-
-
-
-def isLetterInWord_(letter, word):
-  return letter in word
-
-def _handleUserSolution(dom, hanged, letter, word):
-  if (_.recall(_CALLBACKS)[IS_LETTER_IN_WORD](letter,word)):
+def _Submit(dom, hanged, letter, word):
+  if ufIsLetterInWord(letter, word):
     if (not letter in getGoodGuesses()):
       setGoodGuesses(getGoodGuesses() + letter)
-      _displayMask(getSecretWord(),getGoodGuesses(),True)
+      displayMask(getSecretWord(), getGoodGuesses(), True)
   else:
     setErrorsAmount(getErrorsAmount() + 1)
-    updateHanged_(hanged,getErrorsAmount())
+    updateHanged(hanged, getErrorsAmount())
+
 
 def _acSubmit(core, dom, id):
-  _handleUserSolution(dom, core.hanged,id.lower(), getSecretWord())
+  _Submit(dom, core.hanged, id.lower(), getSecretWord())
 
 
 def _acRestart(core, dom):
   _reset(core.dictionnary,True)
 
 
-def main(callback, callbacks):
-  _.store(_CALLBACKS, callbacks),
-  _.main(folder, callback, {
-    "": _acConnect,
-    "Submit": _acSubmit,
-    "Restart": _acRestart
-  },getAppTitle())
+def main(callback, userFunctions):
+  mainBase( callback, globals(), userFunctions)

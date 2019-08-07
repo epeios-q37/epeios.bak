@@ -22,11 +22,16 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
- 
-import workshop._.A as workshop
-from workshop.fr._ import *
 
+import sys, os
 
-def go(globals):
-  workshop.main(lambda dom: Core(dom), {workshop.F_IS_LETTER_IN_WORD : globals["lettreEstDansMot"]})
+sys.path.append("./EduTK.python.zip")
+sys.path.append("../EduTK.python.zip")
 
+if ('EPEIOS_SRC' in os.environ):
+  sys.path.append("/cygdrive/h/hg/epeios/other/libs/edutk/PYH/edutk")
+
+from edutk import *
+import edutk as _
+
+_.regularException = True
