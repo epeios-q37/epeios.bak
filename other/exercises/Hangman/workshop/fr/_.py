@@ -28,11 +28,6 @@ import workshop._._ as _
 VRAI = True
 FAUX = False
 
-class Core(_.Core):
-  i18n = {
-    "Restart": "Recommencer"
-  }
-
 P_VISAGE = _.P_FACE
 P_TETE = _.P_HEAD
 P_TRONC = _.P_TRUNK
@@ -89,8 +84,7 @@ class Core(_.Core):
   bodyParts = PARTIES_CORPS
 
 
-_.setAppTitle("Atelier jeu du pendu")
-
+_.setAppTitle("Atelier du jeu du pendu")
 
 
 def redessine():

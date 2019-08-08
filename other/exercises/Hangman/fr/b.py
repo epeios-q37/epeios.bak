@@ -10,7 +10,7 @@ def lettreEstDansMot(*args):
 """
 Doit retourner une chaîne de caractères contenant 'mot' (qui est en minuscule) où
 chaque lettre qui n'est pas contenue dans 'pioches' (également en minuscules)
-est remplaceé par le caractère '_'.
+est remplacée par le caractère '_'.
 """
 def obtenirMasque(mot, pioches):
     # dev = FAUX   # Décommenter pour tester.
