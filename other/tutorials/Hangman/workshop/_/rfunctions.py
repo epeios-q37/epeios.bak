@@ -34,10 +34,11 @@ def rfIsLetterInWord(letter, word):
   return letter in word
 
 
-def rfGetMask(word, guesses, dev):
+def rfGetMask(word, guesses):
   mask = ""
+  
   for letter in word:
-    mask += letter if letter in guesses else letter.upper() if dev else "_"
+    mask += letter if letter in guesses else "_"
 
   return mask
 

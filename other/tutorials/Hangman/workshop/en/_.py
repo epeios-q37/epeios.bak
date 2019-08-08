@@ -69,7 +69,8 @@ FUNCTION_LABELS = {
 
 class Core(_.Core):
   i18n = {
-      "Restart": "Restart"
+      _.S_RESTART: "Restart",
+      _.S_SECRET_WORD: "Secret word"
   }
   dictionnary = DICTIONARY
   bodyParts = BODY_PARTS

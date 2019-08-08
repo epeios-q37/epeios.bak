@@ -8,13 +8,11 @@ def lettreEstDansMot(*args):
     return workshop.rfIsLetterInWord(*args)
 
 """
-Doit retourner une chaîne de caractères contenant 'mot' (qui est en minuscule) où :
-- les lettres de 'mot' qui sont dans 'pioches' sont mises en minuscule,
-- les lettres qui ne sont PAS dans 'pioches', si 'dev' à :
-  - 'VRAI', sont laissées en majuscule,
-  - 'FAUX', sont remplacées par '_'.
+Doit retourner une chaîne de caractères contenant 'mot' (qui est en minuscule) où
+chaque lettre qui n'est pas contenu dans 'pioches' (également en minuscules)
+est remplacé par le caractère '_'.
 """
-def obtenirMasque(mot, pioches, dev):
+def obtenirMasque(mot, pioches):
     # dev = FAUX   # Décommenter pour tester.
 
     masque = ""
@@ -22,8 +20,6 @@ def obtenirMasque(mot, pioches, dev):
     for lettre in mot:
         if lettre in pioches:
             masque += lettre
-        elif dev:
-            masque += lettre.upper()
         else:
             masque += "_"
 

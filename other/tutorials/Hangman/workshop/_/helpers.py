@@ -32,7 +32,8 @@ from ufunctions import *
 
 from random import randint
 
-_OUTPUT = "output"
+_I_OUTPUT = "Output"
+_I_SECRET_WORD = "SecretWord"
 
 _FOLDER = ""
 
@@ -44,16 +45,18 @@ def drawBodyPart(part):
   _.dom().removeClass(part, "hidden")
 
 
-def display(text):
+def _createOutput(text)  :
   output = _.Atlas.createHTML()
   output.putTagAndValue("h1", text)
-  _.dom().appendLayout(_OUTPUT, output)
+  return output
+
+
+def display(text):
+  _.dom().appendLayout(_I_OUTPUT, _createOutput(text))
 
 
 def clearAndDisplay(text):
-  output = _.Atlas.createHTML()
-  output.putTagAndValue("h1", text)
-  _.dom().setLayout(_OUTPUT, output)
+  _.dom().setLayout(_I_OUTPUT, _createOutput(text))
 
 
 def alert(text):
@@ -64,16 +67,37 @@ def confirm(text):
   return _.dom().confirm(text)
 
 
-def displayMask(word, guesses, dev, fGetMask=ufGetMask):
-  clearAndDisplay(fGetMask(word,guesses,dev))
+def displayMask(word, guesses, fGetMask=ufGetMask):
+  clearAndDisplay(fGetMask(word,guesses))
+
+
+def showSecretWord():
+  _.dom().removeAttribute(_I_SECRET_WORD, "style")
 
 
 def resetBase(dictionnary, dev, fGetMask = ufGetMask):
+  secretWord = ""
+
+  if dev:
+    secretWord = _.dom().getContent(_I_SECRET_WORD).strip()[:15]
+
   redraw()
   resetHangman()
-  setSecretWord(getWord(dictionnary))
+
+  if dev:
+    _.dom().removeAttribute(_I_SECRET_WORD, "style")
+
+  if not secretWord:
+    secretWord = getWord(dictionnary)
+
+  setSecretWord(secretWord)
+
+  if dev:
+    _.dom().setContent(_I_SECRET_WORD, secretWord)
+
   print(getSecretWord())
-  displayMask(getSecretWord(), "", dev, fGetMask)
+  
+  displayMask(getSecretWord(), "", fGetMask)
 
 
 def _setUserFunctions(ids, functions, labels):

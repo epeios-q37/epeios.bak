@@ -38,14 +38,14 @@ def _reset(dictionnary,dev):
 
 
 def _acConnect(core, dom, id):
-  _reset(core.dictionnary,True)
-
+  redraw()
+  _reset(core.dictionnary, True)
 
 def _Submit(dom, bodyParts, letter, word):
   if ufIsLetterInWord(letter,word):
     if (not letter in getGoodGuesses()):
       setGoodGuesses(getGoodGuesses() + letter)
-      displayMask(getSecretWord(), getGoodGuesses(), True, rfGetMask)
+      displayMask(getSecretWord(), getGoodGuesses(), rfGetMask)
   else:
     setErrorsAmount(getErrorsAmount() + 1)
     rfUpdateBody(bodyParts, getErrorsAmount())

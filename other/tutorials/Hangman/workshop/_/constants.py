@@ -35,3 +35,5 @@ F_IS_LETTER_IN_WORD = "IsLetterInWord"
 F_GET_MASK = "GetMask"
 F_UPDATE_BODY = "UpdateBody"
 
+S_RESTART = "Restart"
+S_SECRET_WORD = "SecretWord"

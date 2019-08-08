@@ -62,13 +62,13 @@ Once this exercise is completed, you tell the students to replace the `a` in `fr
 English:
 
 ```python
-def getMask(word,guesses,dev)
+def getMask(word,guesses)
 ```
 
 French:
 
 ```python
-def obtenirMasque(mot,pioches,dev)
+def obtenirMasque(mot,pioches)
 ```
 
 This is how the new file looks like:
