@@ -34,4 +34,4 @@ if ('EPEIOS_SRC' in os.environ):
 from edutk import *
 import edutk as _
 
-_.regularException = True
+_.regularException = False
