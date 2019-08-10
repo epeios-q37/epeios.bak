@@ -101,17 +101,7 @@ def resetBase(dictionnary, dev, fGetMask = ufGetMask):
 
 
 def _setUserFunctions(ids, functions, labels):
-  links = {}
-
-  for id in ids:
-    label = labels[id]
-
-    if not label in functions:
-      raise NameError("Missing '{}' function.".format(label) )
-
-    links[id] = functions[label]
-
-  setUserFunctions(links)
+  return _.setUserFunctions(ids, functions, labels)
 
 
 def mainBase(callback, globals, ids, userFunctions, userFunctionLabels):

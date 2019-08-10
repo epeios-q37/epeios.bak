@@ -31,3 +31,7 @@ class Core(_.Core):
 
 
 DEFAULT_TITLE = "Programming workshop"
+
+FUNCTION_LABELS = {
+    _.F_MY_FUNCTION: "myFunction"
+}

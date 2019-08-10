@@ -10,6 +10,15 @@ from edutk import *
 
 import edutk
 
-# Uncomment for execptions behaving normally again
+# Uncomment for exceptions behaving normally again
 # instead of being displayed in a alert box.
 # edutk.regularException = True
+
+F_MY_FUNCTION = "MyFunction"
+
+defineUserFunction(globals(),F_MY_FUNCTION)
+
+
+def mainBase(folder, callback, callbacks, ids, globals, userFunctionLabels, title):
+  setUserFunctions(ids, globals, userFunctionLabels)
+  main(folder, callback, callbacks, title)

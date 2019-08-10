@@ -42,13 +42,20 @@ sys.path.append("../Atlas.python.zip")
 
 import atlastk as Atlas
 
-_headCommon = """
+_HEAD_COMMON = """
 <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAMFBMVEUEAvyEhsxERuS8urQsKuycnsRkYtzc2qwUFvRUVtysrrx0ctTs6qTMyrSUksQ0NuyciPBdAAABHklEQVR42mNgwAa8zlxjDd2A4POfOXPmzZkFCAH2M8fNzyALzDlzg2ENssCbMwkMOsgCa858YOjBKxBzRoHhD7LAHiBH5swCT9HQ6A9ggZ4zp7YCrV0DdM6pBpAAG5Blc2aBDZA68wCsZPuZU0BDH07xvHOmAGKKvgMP2NA/Zw7ADIYJXGDgLQeBBSCBFu0aoAPYQUadMQAJAE29zwAVWMCWpgB08ZnDQGsbGhpsgCqBQHNfzRkDEIPlzFmo0T5nzoMovjPHoAK8Zw5BnA5yDosDSAVYQOYMKIDZzkoDzagAsjhqzjRAfXTmzAQgi/vMQZA6pjtAvhEk0E+ATWRRm6YBZuScCUCNN5szH1D4TGdOoSrggtiNAH3vBBjwAQCglIrSZkf1MQAAAABJRU5ErkJggg==" />
 """
 
-_data = {}
 
-_data['global'] = {}
+_S_ROOT = "_storage"
+_S_GLOBAL = "global"
+_S_DOM = "dom"
+_S_CORE = "core"
+_S_USER_FUNCTIONS = "userFunctions"
+
+globals()[_S_ROOT] = {}
+
+globals()[_S_ROOT][_S_GLOBAL] = {}
 
 
 def _threadId():
@@ -56,11 +63,11 @@ def _threadId():
 
 
 def _store(set, key, value):
-  globals()['_data'][set][key] = value
+  globals()[_S_ROOT][set][key] = value
 
 
 def _recall(set, key):
-  return globals()['_data'][set][key]
+  return globals()[_S_ROOT][set][key]
 
 
 def store(key, value):
@@ -68,7 +75,7 @@ def store(key, value):
     _store(_threadId(), key, value)
   except KeyError:
     #    print('KE store ' + key)
-    _store('global', key, value)
+    _store(_S_GLOBAL, key, value)
 
 
 def recall(key):
@@ -76,15 +83,15 @@ def recall(key):
     return _recall(_threadId(), key)
   except KeyError:
     #    print('KE recall ' + key)
-    return _recall('global', key)
+    return _recall(_S_GLOBAL, key)
 
 
 def dom():
-  return recall('dom')
+  return recall(_S_DOM)
 
 
 def core():
-  return recall('core')
+  return recall(_S_CORE)
 
 
 _userCallback = None
@@ -92,9 +99,9 @@ _userCallback = None
 
 class Core:
   def __init__(self, dom):
-    globals()['_data'][_threadId()] = {}
-    store('dom', dom)
-    store('core', self)
+    globals()[_S_ROOT][_threadId()] = {}
+    store(_S_DOM, dom)
+    store(_S_CORE, self)
     self.userObject = _userCallback() if _userCallback else None
 
 
@@ -124,8 +131,26 @@ def readBody(path, i18n=None):
   return readHTML(path, "Body", i18n)
 
 
+def setUserFunctions(ids, functions, labels):
+  links = {}
+
+  for id in ids:
+    label = labels[id]
+
+    if not label in functions:
+      raise NameError("Missing '{}' function.".format(label))
+
+    links[id] = functions[label]
+
+  store(_S_USER_FUNCTIONS, links)
+
+
+def defineUserFunction(globals,name):
+  globals["uf" + name] = lambda *args: recall(_S_USER_FUNCTIONS)[name](*args)
+
+
 def _readHead(path, title, i18n=None):
-  return "<title>" + title + "</title>\n" + _headCommon + readHTML(path, "Head", i18n)
+  return "<title>" + title + "</title>\n" + _HEAD_COMMON + readHTML(path, "Head", i18n)
 
 
 # Should be the almost identical as in 'Atlas.py'

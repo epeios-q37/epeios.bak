@@ -34,7 +34,7 @@ def _acSubmit(c, dom):
     input=dom.getContent("input").strip()
 
     if (len(input)) != 0:
-        globals()['_function'](dom.getContent("input"))
+        _.ufMyFunction(dom.getContent("input"))
         dom.setContent( "input", "")
         dom.removeClass("output", "hidden")
     else:
@@ -43,10 +43,9 @@ def _acSubmit(c, dom):
         dom.focus("input")
 
 
-def main(function, callback, title):
-  globals()['_function']=function
-  _.main("c", callback,
-    {
-      "": _acConnect,
-      "Submit": _acSubmit,
-    }, title)
+def main(callback, globals, userFunctionLabels, title):
+  _.mainBase("c", callback,
+  {
+    "": _acConnect,
+    "Submit": _acSubmit,
+  }, (_.F_MY_FUNCTION,), globals, userFunctionLabels, title)

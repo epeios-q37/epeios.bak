@@ -10,4 +10,4 @@ def myFunction(name):
   display("Have a good day, " + name + "!")
 
 
-go(myFunction)
+go(globals())
