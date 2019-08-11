@@ -146,7 +146,7 @@ def setUserFunctions(ids, functions, labels):
 
 
 def defineUserFunction(globals,name):
-  globals["uf" + name] = lambda *args: recall(_S_USER_FUNCTIONS)[name](*args)
+  globals[name] = lambda *args: recall(_S_USER_FUNCTIONS)[name](*args)
 
 
 def _readHead(path, title, i18n=None):

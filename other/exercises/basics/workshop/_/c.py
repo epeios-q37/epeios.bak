@@ -25,9 +25,13 @@ SOFTWARE.
  
 import workshop._._ as _
 
+_FOLDER = "c"
+
 def _acConnect(c, dom):
-    dom.setLayout("", _.readBody("c", c.bodyI18n))
+    dom.setLayout("", _.readBody(_FOLDER, c.bodyI18n))
     dom.focus("input")
+
+
 
 
 def _acSubmit(c, dom):
@@ -44,7 +48,7 @@ def _acSubmit(c, dom):
 
 
 def main(callback, globals, userFunctionLabels, title):
-  _.mainBase("c", callback,
+  _.mainBase(_FOLDER, callback,
   {
     "": _acConnect,
     "Submit": _acSubmit,
