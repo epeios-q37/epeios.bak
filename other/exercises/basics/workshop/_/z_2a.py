@@ -27,15 +27,15 @@ import math
 import workshop._._ as _
 import workshop._.turtle as turtle
 
-_dir = "z_2a"
+_FOLDER = "z_2a"
 
 def _acConnect(dom,id):
-  dom.setLayout("",_.readBody(_dir))
+  dom.setLayout("",_.readBody(_FOLDER))
   turtle.draw(dom)
 
 def main(callback,title):
-  _.main(_dir, callback, {
+  _.mainBase(_FOLDER, callback, {
       "" : _acConnect,
-    }, title )
+    }, None, None, None, title )
 
 turtle.init()

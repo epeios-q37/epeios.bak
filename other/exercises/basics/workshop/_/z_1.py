@@ -25,10 +25,13 @@ SOFTWARE.
  
 import workshop._._ as _
 
-_dir = "z_1"
+class Core(_.Core):
+  pass
+
+_FOLDER = "z_1"
 
 def _acConnect(d,dom,id):
-  dom.setLayout("",_.readBody(_dir,d.bodyI18n))
+  dom.setLayout("",_.readBody(_FOLDER,d.bodyI18n))
   dom.focus("a")
 
 
@@ -48,7 +51,7 @@ def _test(value):
 
   return number
   
-def _acSubmit(d,dom,id):
+def _acSubmit(core,dom,id):
   [a,b,c,operator] = dom.getContents(['a','b','c','operator']).values()
 
   try:
@@ -57,23 +60,24 @@ def _acSubmit(d,dom,id):
     c = _test(c)
   except Exception as e:
     if _reportErrors:
-      dom.alert(d.i18n["BadValue"])
+      dom.alert(core.i18n["BadValue"])
     else:
       raise e
   else:
     if a == 0 and _reportErrors:
-      dom.alert(d.i18n["ACannotBe0"])
+      dom.alert(core.i18n["ACannotBe0"])
     else:
-      _function(a, b, c, operator)
+      _.ufMyFunction(a, b, c, operator)
       dom.disableElement("Hide")
 
   dom.focus('a')
 
 
-def main(function,callback,title,reportErrors):
-  globals()['_function'] = function
-  globals()['_reportErrors'] = reportErrors
-  _.main(_dir, callback,    {
+def main(globals,callback,userFunctionLabels,title):
+  global _reportErrors
+  _reportErrors = globals['reportErrors']
+
+  _.mainBase(_FOLDER, callback, {
       "" : _acConnect,
       "Submit": _acSubmit
-    }, title )
+  }, (_.F_MY_FUNCTION,), globals, userFunctionLabels, title)

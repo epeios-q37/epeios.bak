@@ -26,10 +26,6 @@ SOFTWARE.
 import workshop._._ as _
 
 
-class Core(_.Core):
-    pass
-
-
 DEFAULT_TITLE = "Programming workshop"
 
 FUNCTION_LABELS = {

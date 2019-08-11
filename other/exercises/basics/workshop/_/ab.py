@@ -36,7 +36,7 @@ def display(text):
   _.recall('html').putTagAndValue("h1", text)
 
 def main(title):
-    _.main("ab", None,
+    _.mainBase("ab", None, 
     {
       "" : _acConnect,
-    }, title )
+    }, None, None, None, title )

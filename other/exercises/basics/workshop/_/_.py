@@ -8,8 +8,7 @@ if ('EPEIOS_SRC' in os.environ):
 
 import edutk as _
 
-class Core(_.Core):
-  pass
+from edutk import Atlas, Core, dom, readBody, recall, store
 
 # Uncomment for exceptions behaving normally again
 # instead of being displayed in a alert box.
@@ -18,11 +17,12 @@ class Core(_.Core):
 F_MY_FUNCTION = "MyFunction"
 
 def _defineUserFunction(name):
-  _.defineUserFunction(globals(), "uf" + name)
+  _.defineUserFunction(globals(), "uf", name)
 
 _defineUserFunction(F_MY_FUNCTION)
 
 
 def mainBase(folder, callback, callbacks, ids, globals, userFunctionLabels, title):
-  _.setUserFunctions(ids, globals, userFunctionLabels)
+  if ids:
+    _.setUserFunctions(ids, globals, userFunctionLabels)
   _.main(folder, callback, callbacks, title)

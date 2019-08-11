@@ -32,8 +32,6 @@ def _acConnect(c, dom):
     dom.focus("input")
 
 
-
-
 def _acSubmit(c, dom):
     input=dom.getContent("input").strip()
 

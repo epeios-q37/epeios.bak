@@ -30,17 +30,17 @@ import workshop._.turtle as turtle
 _FOLDER = "z_2b"
 
 def _acConnect(core,dom,id):
-  dom.setLayout("",_.readBody(_dir, core.i18n))
+  dom.setLayout("",_.readBody(_FOLDER, core.i18n))
 
 def _acDraw(core,dom):
   turtle.clear(dom)
   (polygons, segments) = dom.getContents(("polygons","segments")).values()
-  _ufMyFunction(polygons, segments)
+  _.ufMyFunction(polygons, segments)
   turtle.draw(dom)
 
 
-def main(callback,globals,userFunctionLabels,title):
-  _.main(_FOLDER, callback, {
+def main(globals,callback, userFunctionLabels,title):
+  _.mainBase(_FOLDER, callback, {
       "" : _acConnect,
       "Draw" : _acDraw,
     }, (_.F_MY_FUNCTION,), globals, userFunctionLabels, title )

@@ -145,8 +145,8 @@ def setUserFunctions(ids, functions, labels):
   store(_S_USER_FUNCTIONS, links)
 
 
-def defineUserFunction(globals,name):
-  globals[name] = lambda *args: recall(_S_USER_FUNCTIONS)[name](*args)
+def defineUserFunction(globals,prefix,name):
+  globals[prefix + name] = lambda *args: recall(_S_USER_FUNCTIONS)[name](*args)
 
 
 def _readHead(path, title, i18n=None):

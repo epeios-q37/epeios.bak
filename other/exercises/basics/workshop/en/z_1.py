@@ -28,7 +28,7 @@ import workshop.en._ as _
 from workshop.en.display import *
 
 
-class _Core(_.Core):
+class _Core(workshop.Core):
     bodyI18n = {
         "Solve": "Solve",
         "Solution": "Solution"
@@ -39,9 +39,9 @@ class _Core(_.Core):
     }
 
     def __init__(self, dom):
-        _.Core.__init__(self, dom)
+        workshop.Core.__init__(self, dom)
 
 
-def go(function, handleError):
-    workshop.main(function, lambda dom: _Core(
-        dom), _.DEFAULT_TITLE, handleError)
+def go(globals):
+    workshop.main(globals, lambda dom: _Core(
+        dom), _.FUNCTION_LABELS,_.DEFAULT_TITLE)

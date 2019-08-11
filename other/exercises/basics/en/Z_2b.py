@@ -26,4 +26,4 @@ def myFunction(polygons, segments):
         turnLeft(polygonStep)
 
 
-go(myFunction)
+go(globals())
