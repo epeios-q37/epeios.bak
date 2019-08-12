@@ -10,10 +10,11 @@ La fonction doit retourner 'VRAI' lorsque 'lettre' est contenu dans 'mot',
 'VRAI' -> 'True' et 'FAUX' -> 'False' si souhaité.
 """
 def lettreEstDansMot(lettre, mot):
-    if lettre in mot:
-        return VRAI
-    else:
-        return FAUX
-
+    # Oui, il y a plus simple…
+    for i in range(0,len(mot)):
+        if mot[i] == lettre:
+            return True
+    
+    return False
 
 go(globals())

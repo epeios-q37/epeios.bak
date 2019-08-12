@@ -13,12 +13,10 @@ chaque lettre qui n'est pas contenue dans 'pioches' (également en minuscules)
 est remplacée par le caractère '_'.
 """
 def obtenirMasque(mot, pioches):
-    # dev = FAUX   # Décommenter pour tester.
-
     masque = ""
 
     for lettre in mot:
-        if lettre in pioches:
+        if lettreEstDansMot(lettre,pioches):
             masque += lettre
         else:
             masque += "_"

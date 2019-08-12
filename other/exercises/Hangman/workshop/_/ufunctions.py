@@ -33,8 +33,8 @@ import educ
 from accessor import *
 from constants import *
 
-def _definefUserFunction(name):
-  return educ.defineUserFunction(globals(), "uf" + name)
+def _defineUserFunction(name):
+  return educ.defineUserFunction(globals(), "uf", name)
 
 
 _defineUserFunction(F_IS_LETTER_IN_WORD)

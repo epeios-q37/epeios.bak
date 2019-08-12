@@ -9,9 +9,12 @@ from workshop.en.a import *
 # 'TRUE' -> 'True' and 'FALSE' -> 'False' at whish.
 """
 def isLetterInWord(letter,word):
-    if letter in word:
-        return TRUE
-    else:
-        return FALSE
+    # Yes, there is a simpler way…
+    for i in range(0, len(word)):
+        if word[i] == letter:
+            return True
+
+    return False
+
 
 go(globals())

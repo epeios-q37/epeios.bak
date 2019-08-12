@@ -13,12 +13,10 @@ where all letters which are not in in 'guesses' (also in lowercase)
 are replaced by the '_' character.
 """
 def getMask(word, guesses):
-    # dev = FALSE   # Uncomment for testing 
-
     mask = ""
 
     for letter in word:
-        if letter in guesses:
+        if isLetterInWord(letter,guesses):
             mask += letter
         else:
             mask += "_"
