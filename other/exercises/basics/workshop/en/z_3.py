@@ -27,7 +27,7 @@ import workshop._.z_3 as workshop
 import workshop.en._ as _
 from workshop.en.display import *
 
-class _Core(_.Core):
+class _Core(workshop.Core):
   i18n = {
     "Restart": "Restart"
   }
@@ -43,8 +43,10 @@ P_RIGHT_LEG = workshop.F_RIGHT_LEG
 def redraw():
   workshop.redraw()
 
+
 def drawFigure(part):
   workshop.drawFigure(part)
 
+
 def go(globals):
-  workshop.main(globals,lambda dom: _Core(dom), _.FUNCTION_LABELS, _.DEFAULT_TITLE)
+  workshop.main(globals,lambda dom:_Core(dom), _.FUNCTION_LABELS, _.DEFAULT_TITLE)

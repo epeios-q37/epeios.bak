@@ -18,6 +18,7 @@ F_MY_FUNCTION = "MyFunction"
 F_CONNECT = "Connect"
 F_SUBMIT = "Submit"
 F_RESTART = "Restart"
+F_HANGMAN = "Hangman"
 
 def _defineUserFunction(name):
   _.defineUserFunction(globals(), "uf", name)
@@ -26,9 +27,10 @@ _defineUserFunction(F_MY_FUNCTION)
 _defineUserFunction(F_CONNECT)
 _defineUserFunction(F_SUBMIT)
 _defineUserFunction(F_RESTART)
+_defineUserFunction(F_HANGMAN)
 
 
-def mainBase(folder, callback, callbacks, ids, globals, userFunctionLabels, title, userCallback):
+def mainBase(folder, callback, callbacks, ids, globals, userFunctionLabels, title):
   if ids:
     _.setUserFunctions(ids, globals, userFunctionLabels)
-  _.main(folder, callback, callbacks, title, userCallback)
+  _.main(folder, callback, callbacks, title)

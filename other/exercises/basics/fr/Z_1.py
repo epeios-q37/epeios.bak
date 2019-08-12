@@ -5,7 +5,7 @@ sys.path.append(".")
 from workshop.fr.z_1 import *
 
 
-traiteErreurs = True
+signalerErreurs = True
 """
 - si à 'True', vérification de la validité des valeurs en amont,
 - si à 'False', pas de vérifications; si valeur invalide, ce sont les exceptions Python qui sont affichées.
@@ -43,7 +43,7 @@ def resoudreInequationPremierDegre(a, b, ineg, c):
 
 
 def maFonction(a, b, c, operator):
-    # N'est utile que lorsque 'traiteErreur' est à 'False'.
+    # N'est utile que lorsque 'signalerErreurs' est à 'False'.
     if (a == 0):
         alerte("'a' doit être différent de 0 !")
         return
@@ -58,4 +58,4 @@ def maFonction(a, b, c, operator):
         affiche("x = " + resoudreInequationPremierDegre(a, b, operator, c))
 
 
-go(maFonction, traiteErreurs)
+go(globals())

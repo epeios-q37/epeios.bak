@@ -72,7 +72,7 @@ def raz(pendu):
     majMasque(pendu.motSecret, pendu.bonnesPioches)
 
 
-def connection(pendu):
+def connexion(pendu):
     raz(pendu)
 
 
@@ -113,7 +113,4 @@ def redemarrer(pendu):
     raz(pendu)
 
 
-go(Pendu, {
-    A_CONNECTION: connection,
-    A_PIOCHE: pioche,
-    A_REDEMARRAGE: redemarrer})
+go(globals())

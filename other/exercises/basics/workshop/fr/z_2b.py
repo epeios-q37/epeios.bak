@@ -34,5 +34,6 @@ class _Core:
       "Draw": "Afficher"
     }
 
-def go(function):
-  workshop.main(_Core, function, _.DEFAULT_TITLE)
+
+def go(globals):
+  workshop.main(globals, _Core, _.FUNCTION_LABELS, _.DEFAULT_TITLE)

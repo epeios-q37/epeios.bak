@@ -27,11 +27,11 @@ import workshop._._ as _
 
 from workshop._._ import Core
 
-_FOLDER = "z_3"
+class Core(_.Core):
+    def __init__(*args):
+        _.Core.__init__(*args,_.ufHangman())
 
-A_CONNECT = 'connect'
-A_SUBMIT = 'submit'
-A_RESTART = 'restart'
+_FOLDER = "z_3"
 
 F_FACE = "Face"
 F_HEAD = "Head"
@@ -69,4 +69,4 @@ def main(globals,callback, userFunctionLabels, title):
         "": _acConnect,
         "Submit": _acSubmit,
         "Restart": _acRestart
-    }, (_.F_CONNECT, _.F_SUBMIT, _.F_RESTART), globals, userFunctionLabels, title,globals["Hangman"])
+    }, (_.F_CONNECT, _.F_SUBMIT, _.F_RESTART, _.F_HANGMAN), globals, userFunctionLabels, title)

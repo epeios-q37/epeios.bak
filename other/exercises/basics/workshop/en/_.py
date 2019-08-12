@@ -33,5 +33,6 @@ FUNCTION_LABELS = {
     _.F_MY_FUNCTION: "myFunction",
     _.F_CONNECT: "connection",
     _.F_SUBMIT: "guess",
-    _.F_RESTART: "restart"
+    _.F_RESTART: "restart",
+    _.F_HANGMAN: "Hangman"
 }

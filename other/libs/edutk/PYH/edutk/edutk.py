@@ -50,7 +50,7 @@ _S_ROOT = "_storage"
 _S_GLOBAL = "global"
 _S_DOM = "dom"
 _S_CORE = "core"
-_S_USER_ITEMS = "userItems"
+_S_USER_FUNCTIONS = "userFunctions"
 
 globals()[_S_ROOT] = {}
 
@@ -93,15 +93,12 @@ def core():
   return recall(_S_CORE)
 
 
-_userCallback = None
-
-
 class Core:
-  def __init__(self, dom):
+  def __init__(self, dom, userObject=None):
     globals()[_S_ROOT][_threadId()] = {}
     store(_S_DOM, dom)
     store(_S_CORE, self)
-    self.userObject = _userCallback() if _userCallback else None
+    self.userObject = userObject
 
 
 def _read(path):
@@ -130,7 +127,7 @@ def readBody(path, i18n=None):
   return readHTML(path, "Body", i18n)
 
 
-def setUserItemss(ids, items, labels):
+def setUserFunctions(ids, functions, labels):
   links = {}
 
   for id in ids:
@@ -139,7 +136,7 @@ def setUserItemss(ids, items, labels):
     if not label in functions:
       raise NameError("Missing '{}' function.".format(label))
 
-    links[id] = items[label]
+    links[id] = functions[label]
 
   store(_S_USER_FUNCTIONS, links)
 
@@ -200,7 +197,6 @@ def _patchWithoutCoreObject(userCallbacks):
   return callbacks
 
 
-def main(path, callback, callbacks, title, userCallback=None):
-  globals()['_userCallback'] = userCallback
+def main(path, callback, callbacks, title):
   Atlas.launch(_patchWithCoreObject(callbacks) if callback else _patchWithoutCoreObject(
       callbacks), callback, _readHead(path, title))

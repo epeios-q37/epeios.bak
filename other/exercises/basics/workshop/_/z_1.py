@@ -73,9 +73,9 @@ def _acSubmit(core,dom,id):
   dom.focus('a')
 
 
-def main(globals,callback,userFunctionLabels,title):
+def main(globals,callback,userFunctionLabels,title,patchErrorVariableName):
   global _reportErrors
-  _reportErrors = globals['reportErrors']
+  _reportErrors = globals[patchErrorVariableName]
 
   _.mainBase(_FOLDER, callback, {
       "" : _acConnect,

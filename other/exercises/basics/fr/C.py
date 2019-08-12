@@ -11,4 +11,4 @@ def maFonction(nom):
     affiche("Bonne journée, " + nom + " !")
     
 
-go(maFonction)
+go(globals())

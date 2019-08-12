@@ -27,7 +27,8 @@ import workshop._.z_3 as workshop
 import workshop.fr._ as _
 from workshop.fr.display import *
 
-class _Core(_.Core):
+
+class _Core(workshop.Core):
   i18n = {
     "Restart": "Recommencer"
   }
@@ -40,15 +41,13 @@ P_BRAS_DROIT = workshop.F_RIGHT_ARM
 P_PIED_GAUCHE = workshop.F_LEFT_LEG
 P_PIED_DROIT = workshop.F_RIGHT_LEG
 
-A_CONNECTION = workshop.A_CONNECT
-A_PIOCHE = workshop.A_SUBMIT
-A_REDEMARRAGE = workshop.A_RESTART
-
 def redessine():
   workshop.redraw()
+
 
 def dessinePendu(partie):
   workshop.drawFigure(partie)
 
-def go(callback, callbacks):
-  workshop.main(lambda dom: _Core(dom), callbacks, _.DEFAULT_TITLE, callback)
+
+def go(globals):
+  workshop.main(globals, lambda dom: _Core(dom), _.FUNCTION_LABELS, _.DEFAULT_TITLE)

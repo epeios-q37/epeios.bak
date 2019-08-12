@@ -24,4 +24,4 @@ def maFonction(polygones, segments):
         tourneGauche(pasPolygone)
 
 
-go(maFonction)
+go(globals())
