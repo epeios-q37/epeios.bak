@@ -40,15 +40,11 @@ P_RIGHT_ARM = workshop.F_RIGHT_ARM
 P_LEFT_LEG = workshop.F_LEFT_LEG
 P_RIGHT_LEG = workshop.F_RIGHT_LEG
 
-A_CONNECTION = workshop.A_CONNECT
-A_GUESS = workshop.A_SUBMIT
-A_RESTART = workshop.A_RESTART
-
 def redraw():
   workshop.redraw()
 
 def drawFigure(part):
   workshop.drawFigure(part)
 
-def go(callback, callbacks):
-  workshop.main(lambda dom: _Core(dom), callbacks, _.DEFAULT_TITLE, callback)
+def go(globals):
+  workshop.main(globals,lambda dom: _Core(dom), _.FUNCTION_LABELS, _.DEFAULT_TITLE)

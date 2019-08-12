@@ -46,12 +46,11 @@ _HEAD_COMMON = """
 <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAMFBMVEUEAvyEhsxERuS8urQsKuycnsRkYtzc2qwUFvRUVtysrrx0ctTs6qTMyrSUksQ0NuyciPBdAAABHklEQVR42mNgwAa8zlxjDd2A4POfOXPmzZkFCAH2M8fNzyALzDlzg2ENssCbMwkMOsgCa858YOjBKxBzRoHhD7LAHiBH5swCT9HQ6A9ggZ4zp7YCrV0DdM6pBpAAG5Blc2aBDZA68wCsZPuZU0BDH07xvHOmAGKKvgMP2NA/Zw7ADIYJXGDgLQeBBSCBFu0aoAPYQUadMQAJAE29zwAVWMCWpgB08ZnDQGsbGhpsgCqBQHNfzRkDEIPlzFmo0T5nzoMovjPHoAK8Zw5BnA5yDosDSAVYQOYMKIDZzkoDzagAsjhqzjRAfXTmzAQgi/vMQZA6pjtAvhEk0E+ATWRRm6YBZuScCUCNN5szH1D4TGdOoSrggtiNAH3vBBjwAQCglIrSZkf1MQAAAABJRU5ErkJggg==" />
 """
 
-
 _S_ROOT = "_storage"
 _S_GLOBAL = "global"
 _S_DOM = "dom"
 _S_CORE = "core"
-_S_USER_FUNCTIONS = "userFunctions"
+_S_USER_ITEMS = "userItems"
 
 globals()[_S_ROOT] = {}
 
@@ -131,7 +130,7 @@ def readBody(path, i18n=None):
   return readHTML(path, "Body", i18n)
 
 
-def setUserFunctions(ids, functions, labels):
+def setUserItemss(ids, items, labels):
   links = {}
 
   for id in ids:
@@ -140,7 +139,7 @@ def setUserFunctions(ids, functions, labels):
     if not label in functions:
       raise NameError("Missing '{}' function.".format(label))
 
-    links[id] = functions[label]
+    links[id] = items[label]
 
   store(_S_USER_FUNCTIONS, links)
 

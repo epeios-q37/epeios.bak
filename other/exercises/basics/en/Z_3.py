@@ -103,8 +103,4 @@ def restart(hangman):
     reset(hangman)
 
 
-go(Hangman, {
-    A_CONNECTION: connection,
-    A_GUESS: guess,
-    A_RESTART: restart
-})
+go(globals())
