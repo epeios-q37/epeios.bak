@@ -25,11 +25,9 @@ SOFTWARE.
 
 import workshop._._ as _
 
-from workshop._._ import Core
-
 class Core(_.Core):
-    def __init__(*args):
-        _.Core.__init__(*args,_.ufHangman())
+    def __init__(self,dom):
+        _.Core.__init__(self,dom,_.ufHangman())
 
 _FOLDER = "z_3"
 

@@ -51,7 +51,7 @@ def myFunction(a, b, c, operator):
 
     erase()
     display("Solution of")
-    display("{} × x + {} {} {} :".format(a, b, operator, c))
+    display("{} × x + {} {} {}:".format(a, b, operator, c))
     if operator == '=':
         display("x = " + solveFirstDegreeEquation(a, b, c))
     else:
