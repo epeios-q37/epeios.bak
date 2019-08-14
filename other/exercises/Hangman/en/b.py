@@ -8,8 +8,8 @@ def isLetterInWord(*args):
     return workshop.rfIsLetterInWord(*args)
 
 """
-Must return a string containing 'word' (which is in lowercase)
-where all letters which are not in in 'guesses' (also in lowercase)
+Returns a string containing 'word' (which is in lowercase) where
+all letters which are not in in 'guesses' (also in lowercase)
 are replaced by the '_' character.
 """
 def getMask(word, guesses):

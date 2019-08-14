@@ -14,11 +14,10 @@ def getMask(*args):
 
 
 """
-'parts' is a tuple containing the different parts of the body
-to draw according to the amount of errors '(P_HEAD,P_TRUNK,P_LEFT_ARM…)'.
-'errorsAmount' is the amount of errors.
-This function must draw the part of the body corresponding
-to the amount of errors.
+- 'parts': tuple containing the different parts of the body
+  to draw according to the amount of errors '(P_HEAD,P_TRUNK,P_LEFT_ARM…)'.
+- 'errorsAmount': the amount of errors.
+Draws the part of the body corresponding to the amount of errors.
 When the last part of the body is drawn, the face ('P_FACE') must
 also be drawn.
 """

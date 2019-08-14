@@ -22,20 +22,11 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
+ 
+import workshop._.D as workshop
+from workshop.en._ import *
 
-P_FACE = "Face"
-P_HEAD = "Head"
-P_TRUNK = "Trunk"
-P_LEFT_ARM = "LeftArm"
-P_RIGHT_ARM = "RightArm"
-P_LEFT_LEG = "LeftLeg"
-P_RIGHT_LEG = "RightLeg"
 
-F_RESET = "Reset"
-F_IS_LETTER_IN_WORD = "IsLetterInWord"
-F_GET_MASK = "GetMask"
-F_UPDATE_BODY = "UpdateBody"
-F_HANDLE_GUESS = "HandleGuess"
+def go(globals):
+  workshop.main(lambda dom: Core(dom), globals, FUNCTION_LABELS)
 
-S_RESTART = "Restart"
-S_SECRET_WORD = "SecretWord"

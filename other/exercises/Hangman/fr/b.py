@@ -8,7 +8,7 @@ def lettreEstDansMot(*args):
     return workshop.rfIsLetterInWord(*args)
 
 """
-Doit retourner une chaîne de caractères contenant 'mot' (qui est en minuscule) où
+Retourner une chaîne de caractères contenant 'mot' (qui est en minuscule) où
 chaque lettre qui n'est pas contenue dans 'pioches' (également en minuscules)
 est remplacée par le caractère '_'.
 """

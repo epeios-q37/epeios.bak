@@ -67,7 +67,7 @@ def confirm(text):
   return _.dom().confirm(text)
 
 
-def displayMask(word, guesses, fGetMask=ufGetMask):
+def displayMask(word, guesses, fGetMask):
   clearAndDisplay(fGetMask(word,guesses))
 
 
@@ -75,20 +75,28 @@ def showSecretWord():
   _.dom().removeAttribute(_I_SECRET_WORD, "style")
 
 
-def resetBase(dictionnary, dev, fGetMask = ufGetMask):
+def _resetHangman():
+  setErrorsAmount(0)
+  setGoodGuesses("")
+  setSecretWord("")
+
+def _getWord(dictionnary):
+  return dictionnary[randint(0, len(dictionnary)-1)]
+
+def resetBase(dictionnary, dev, fGetMask):
   secretWord = ""
 
   if dev:
     secretWord = _.dom().getContent(_I_SECRET_WORD).strip()[:15]
 
   redraw()
-  resetHangman()
+  _resetHangman()
 
   if dev:
     _.dom().removeAttribute(_I_SECRET_WORD, "style")
 
   if not secretWord:
-    secretWord = getWord(dictionnary)
+    secretWord = _getWord(dictionnary)
 
   setSecretWord(secretWord)
 
@@ -111,14 +119,4 @@ def mainBase(callback, globals, ids, userFunctions, userFunctionLabels):
     "Submit": globals["_acSubmit"],
     "Restart": globals["_acRestart"]
     }, getAppTitle())
-
-
-def resetHangman():
-  setErrorsAmount( 0 )
-  setGoodGuesses( "" )
-  setSecretWord( "" )
-
-
-def getWord(dictionnary):
-  return dictionnary[randint(0, len(dictionnary)-1)]
 

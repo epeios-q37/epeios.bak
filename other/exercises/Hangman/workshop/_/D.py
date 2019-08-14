@@ -23,19 +23,39 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-P_FACE = "Face"
-P_HEAD = "Head"
-P_TRUNK = "Trunk"
-P_LEFT_ARM = "LeftArm"
-P_RIGHT_ARM = "RightArm"
-P_LEFT_LEG = "LeftLeg"
-P_RIGHT_LEG = "RightLeg"
+import sys
+sys.path.append("workshop/_")
 
-F_RESET = "Reset"
-F_IS_LETTER_IN_WORD = "IsLetterInWord"
-F_GET_MASK = "GetMask"
-F_UPDATE_BODY = "UpdateBody"
-F_HANDLE_GUESS = "HandleGuess"
+import educ as _
 
-S_RESTART = "Restart"
-S_SECRET_WORD = "SecretWord"
+from workshop._._ import *
+
+
+def _reset(dictionnary,dev):
+  ufReset()
+  resetBase(dictionnary, dev, rfGetMask)
+
+
+def _acConnect(core, dom, id):
+  redraw()
+  _reset(core.dictionnary,True)
+
+
+def _Submit(bodyParts, letter, word):
+  ufHandleGuess(letter, word, bodyParts)
+
+
+def _acSubmit(core, dom, id):
+  _Submit(core.bodyParts, id.lower(), getSecretWord())
+
+
+def _acRestart(core, dom):
+  _reset(core.dictionnary,True)
+
+
+def main(callback, userFunctions, userFunctionLabels):
+  mainBase(callback, globals(),
+  (
+    F_RESET,
+    F_HANDLE_GUESS,
+  ), userFunctions, userFunctionLabels)

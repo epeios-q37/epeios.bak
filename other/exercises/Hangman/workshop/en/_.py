@@ -61,9 +61,11 @@ BODY_PARTS = (
 )
 
 FUNCTION_LABELS = {
+  _.F_RESET: "reset",
   _.F_IS_LETTER_IN_WORD: "isLetterInWord",
   _.F_GET_MASK: "getMask",
-  _.F_UPDATE_BODY: "updateBody"
+  _.F_UPDATE_BODY: "updateBody",
+  _.F_HANDLE_GUESS: "handleGuess"
 }
 
 
