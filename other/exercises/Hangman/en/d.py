@@ -29,7 +29,7 @@ def pickWord(dictionary,suggestion):
   if suggestion:
     return suggestion
   else:
-    return dictionnary[randint(0, len(dictionnary)-1)]
+    return dictionary[randint(0, len(dictionary)-1)]
 
 
 go(globals())

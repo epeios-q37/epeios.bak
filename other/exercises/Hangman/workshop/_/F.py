@@ -23,42 +23,43 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-import sys, os
-
 import sys
 sys.path.append("workshop/_")
 
 import educ as _
-from educ import Core
 
 from workshop._._ import *
 
 
-def _reset():
-  resetBase(getDictionnary(), rfGetMask, rfPickWord)
+class Core(_.Core):
+  def __init__(self, dom):
+    _.Core.__init__(self,dom,ufHangman())
 
 
-def _acConnect():
-  redraw()
-  _reset()
+def _reset(hangman):
+  ufReset(hangman,getDictionnary())
 
-def _Submit(letter):
-  if ufIsLetterInWord(letter,getSecretWord()):
-    if (not letter in getGoodGuesses()):
-      setGoodGuesses(getGoodGuesses() + letter)
-      displayMask(getSecretWord(), getGoodGuesses(), rfGetMask)
-  else:
-    setErrorsAmount(getErrorsAmount() + 1)
-    rfUpdateBody(getBodyParts(), getErrorsAmount())
+
+def _acConnect(core):
+  _reset(core.userObject)
+
+
+def _Submit(hangman,letter):
+  ufHandleGuess(hangman,letter, getBodyParts())
 
 
 def _acSubmit(core, dom, id):
-  _Submit(id.lower())
+  _Submit(core.userObject, id.lower())
 
 
-def _acRestart():
-  _reset()
+def _acRestart(core):
+  _reset(core.userObject)
 
 
 def main(callback, userFunctions, userFunctionLabels):
-  mainBase(callback, globals(), (F_IS_LETTER_IN_WORD,), userFunctions, userFunctionLabels)
+  mainBase(callback, globals(),
+  (
+    F_RESET,
+    F_HANDLE_GUESS,
+    F_HANGMAN
+  ), userFunctions, userFunctionLabels)

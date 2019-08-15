@@ -41,9 +41,9 @@ def pickWord(*args):
 
 
 """
-Reinitialize les variables et l'affichage pour une nouvelle partie.
+Reinitialise les variables et l'affichage pour une nouvelle partie.
 """
-def raz(dictionnaire):
+def reinitialiser(dictionnaire):
   global motSecret, bonnesPioches, nbErreurs
 
   motSecret = pickWord(dictionnaire,"")
@@ -54,6 +54,7 @@ def raz(dictionnaire):
   effaceEtAffiche(getMask(motSecret,""))
 
 """
+N.B. : NON 'THREAD-SAFE' !!!
 - 'pioche': la lettre choisie par le joueur,
 - 'mot': le mot secret,
 - 'parties': (tuple) les différentes parties du corps.

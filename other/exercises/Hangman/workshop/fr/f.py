@@ -22,43 +22,11 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
-
-import sys, os
-
-import sys
-sys.path.append("workshop/_")
-
-import educ as _
-from educ import Core
-
-from workshop._._ import *
+ 
+import workshop._.F as workshop
+from workshop.fr._ import *
 
 
-def _reset():
-  resetBase(getDictionnary(), rfGetMask, rfPickWord)
+def go(globals):
+  workshop.main(lambda dom: workshop.Core(dom), globals, FUNCTION_LABELS)
 
-
-def _acConnect():
-  redraw()
-  _reset()
-
-def _Submit(letter):
-  if ufIsLetterInWord(letter,getSecretWord()):
-    if (not letter in getGoodGuesses()):
-      setGoodGuesses(getGoodGuesses() + letter)
-      displayMask(getSecretWord(), getGoodGuesses(), rfGetMask)
-  else:
-    setErrorsAmount(getErrorsAmount() + 1)
-    rfUpdateBody(getBodyParts(), getErrorsAmount())
-
-
-def _acSubmit(core, dom, id):
-  _Submit(id.lower())
-
-
-def _acRestart():
-  _reset()
-
-
-def main(callback, userFunctions, userFunctionLabels):
-  mainBase(callback, globals(), (F_IS_LETTER_IN_WORD,), userFunctions, userFunctionLabels)

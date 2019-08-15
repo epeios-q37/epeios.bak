@@ -27,28 +27,29 @@ import sys
 sys.path.append("workshop/_")
 
 import educ as _
+from educ import Core
 
 from workshop._._ import *
 
 
-def _reset(dictionnary):
-  ufReset(dictionnary)
+def _reset():
+  ufReset(getDictionnary())
 
 
-def _acConnect(core, dom, id):
-  _reset(core.dictionnary)
+def _acConnect():
+  _reset()
 
 
-def _Submit(bodyParts, letter):
-  ufHandleGuess(letter, bodyParts)
+def _Submit(letter):
+  ufHandleGuess(letter, getBodyParts())
 
 
 def _acSubmit(core, dom, id):
-  _Submit(core.bodyParts, id.lower())
+  _Submit(id.lower())
 
 
-def _acRestart(core, dom):
-  _reset(core.dictionnary)
+def _acRestart():
+  _reset()
 
 
 def main(callback, userFunctions, userFunctionLabels):

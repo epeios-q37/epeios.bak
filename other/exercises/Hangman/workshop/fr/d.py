@@ -23,10 +23,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
  
-import workshop._.E as workshop
+import workshop._.D as workshop
 from workshop.fr._ import *
 
 
 def go(globals):
-  workshop.main(lambda dom: Core(dom), globals, FUNCTION_LABELS)
+  workshop.main(lambda dom: workshop.Core(dom), globals, FUNCTION_LABELS)
 

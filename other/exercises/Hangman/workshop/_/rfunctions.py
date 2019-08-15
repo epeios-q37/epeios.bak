@@ -51,5 +51,5 @@ def rfUpdateBody(parts,errorsAmount):
   if errorsAmount >= len(parts):
     drawBodyPart(P_FACE)
 
-def rfPickWord(dictionnary,suggestion):
+def rfPickWord(dictionnary,suggestion=""):
   return suggestion if suggestion else dictionnary[randint(0, len(dictionnary)-1)]

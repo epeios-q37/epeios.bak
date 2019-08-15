@@ -36,7 +36,7 @@ P_RIGHT_ARM = _.P_RIGHT_ARM
 P_LEFT_LEG = _.P_LEFT_LEG
 P_RIGHT_LEG = _.P_RIGHT_LEG
 
-DICTIONARY = [
+DICTIONARY = (
   "accommodate", "afterthought", "allegiance", "aloft", "ancestor", "anticipation", "antics",
   "apparel", "ascend", "beckon", "brink", "catastrophe", "coax", "compassion", "complexion", "content",
   "courteous", "cringe", "derelict", "dignity", "distaste", "dormant", "elaborate", "endure", "enforce",
@@ -49,7 +49,7 @@ DICTIONARY = [
   "resentful", "satisfactory", "sensitive", "sentiment", "shudder", "sickly", "sleek", "solemn", "soothe",
   "stagger", "stern", "tantalize", "temptation", "transform", "unscrupulous", "vain", "vengeance",
   "violate", "vital", "vivid", "wistful", "yield", "zest"
-]
+)
 
 BODY_PARTS = (
   P_HEAD,
@@ -63,19 +63,19 @@ BODY_PARTS = (
 FUNCTION_LABELS = {
   _.F_GET_MASK: "getMask",
   _.F_HANDLE_GUESS: "handleGuess",
+  _.F_HANGMAN: "Hangman",
   _.F_IS_LETTER_IN_WORD: "isLetterInWord",
   _.F_PICK_WORD: "pickWord",
   _.F_RESET: "reset",
   _.F_UPDATE_BODY: "updateBody",
 }
 
-class Core(_.Core):
-  i18n = {
-      _.S_RESTART: "Restart",
-      _.S_SECRET_WORD: "Secret word"
-  }
-  dictionnary = DICTIONARY
-  bodyParts = BODY_PARTS
+_.setI18n({
+  _.S_RESTART: "Restart",
+  _.S_SECRET_WORD: "Secret word"
+})
+_.setDictionnary(DICTIONARY)
+_.setBodyParts(BODY_PARTS)
 
 _.setAppTitle("Hangman game workshop")
 

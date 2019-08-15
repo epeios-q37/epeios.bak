@@ -27,35 +27,36 @@ import sys
 sys.path.append("workshop/_")
 
 import educ as _
+from educ import Core
 
 from workshop._._ import *
 
 
-def _reset(dictionnary,dev):
-  resetBase(dictionnary, dev, ufGetMask, rfPickWord)
+def _reset():
+  resetBase(getDictionnary(), ufGetMask, rfPickWord)
 
 
-def _acConnect(core, dom, id):
+def _acConnect():
   redraw()
-  _reset(core.dictionnary,True)
+  _reset()
 
 
-def _Submit(dom, bodyParts, letter, word):
-  if ufIsLetterInWord(letter, word):
+def _Submit(letter):
+  if ufIsLetterInWord(letter, getSecretWord()):
     if (not letter in getGoodGuesses()):
       setGoodGuesses(getGoodGuesses() + letter)
       displayMask(getSecretWord(), getGoodGuesses(), ufGetMask)
   else:
     setErrorsAmount(getErrorsAmount() + 1)
-    rfUpdateBody(bodyParts, getErrorsAmount())
+    rfUpdateBody(getBodyParts(), getErrorsAmount())
 
 
 def _acSubmit(core, dom, id):
-  _Submit(dom, core.bodyParts, id.lower(), getSecretWord())
+  _Submit(id.lower())
 
 
-def _acRestart(core, dom):
-  _reset(core.dictionnary,True)
+def _acRestart():
+  _reset()
 
 
 def main(callback, userFunctions, userFunctionLabels):

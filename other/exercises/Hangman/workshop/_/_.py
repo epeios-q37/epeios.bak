@@ -27,7 +27,6 @@ import sys
 sys.path.append("workshop/_")
 
 import educ as _
-from educ import Core
 
 from accessor import *
 # from constants import *

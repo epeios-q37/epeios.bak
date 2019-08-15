@@ -37,12 +37,12 @@ def pickWord(*args):
 
 
 """
-Resets the variables and the display for a new round, and 
+Resets the variables and the display for a new round.
 """
 def reset(dictionary):
   global secretWord, goodGuesses, errorsAmount
 
-  secretWord = pickWord(dictionary,"")
+  secretWord = pickWord(dictionary)
   goodGuesses = ""
   errorsAmount = 0
   print(secretWord)
@@ -50,8 +50,8 @@ def reset(dictionary):
   eraseAndDisplay(getMask(secretWord,""))
 
 """
+N.B.: NOT THREAD-SAFE!!!
 - 'guess': the letter choosen by the player,
-- 'word': the secret word,
 - 'parts': the different part of the body to draw.
 If 'guess' in 'word', must update the mask, otherwise
 must update the drawing of the body.

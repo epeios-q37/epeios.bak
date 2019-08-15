@@ -37,7 +37,7 @@ _I_SECRET_WORD = "SecretWord"
 _FOLDER = ""
 
 def redraw():
-  _.dom().setLayout("", _.readBody(_FOLDER, _.core().i18n))
+  _.dom().setLayout("", _.readBody(_FOLDER, getI18n()))
 
 
 def drawBodyPart(part):
@@ -80,24 +80,18 @@ def _resetHangman():
   setSecretWord("")
 
 
-def resetBase(dictionnary, dev, fGetMask, fPickRandom):
-  secretWord = ""
+def resetBase(dictionnary, fGetMask, fPickRandom):
+  secretWord =  _.dom().getContent(_I_SECRET_WORD).strip()[:15]
 
-  if dev:
-    secretWord = _.dom().getContent(_I_SECRET_WORD).strip()[:15]
-
-    redraw()
+  redraw()
   _resetHangman()
 
   secretWord = fPickRandom(dictionnary, secretWord)
 
   setSecretWord(secretWord)
 
-  if dev:
-    _.dom().removeAttribute(_I_SECRET_WORD, "style")
-
-  if dev:
-    _.dom().setContent(_I_SECRET_WORD, secretWord)
+  _.dom().removeAttribute(_I_SECRET_WORD, "style")
+  _.dom().setContent(_I_SECRET_WORD, secretWord)
 
   print(getSecretWord())
   
