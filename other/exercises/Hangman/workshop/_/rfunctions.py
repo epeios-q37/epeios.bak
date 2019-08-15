@@ -30,6 +30,8 @@ sys.path.append("workshop/_")
 
 from helpers import *
 
+from random import randint
+
 def rfIsLetterInWord(letter, word):
   return letter in word
 
@@ -48,3 +50,6 @@ def rfUpdateBody(parts,errorsAmount):
 
   if errorsAmount >= len(parts):
     drawBodyPart(P_FACE)
+
+def rfPickWord(dictionnary,suggestion):
+  return suggestion if suggestion else dictionnary[randint(0, len(dictionnary)-1)]

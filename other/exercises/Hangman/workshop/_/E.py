@@ -31,36 +31,29 @@ import educ as _
 from workshop._._ import *
 
 
-def _reset(dictionnary,dev):
-  resetBase(dictionnary, dev, ufGetMask, rfPickWord)
+def _reset(dictionnary):
+  ufReset(dictionnary)
 
 
 def _acConnect(core, dom, id):
-  redraw()
-  _reset(core.dictionnary,True)
+  _reset(core.dictionnary)
 
 
-def _Submit(dom, bodyParts, letter, word):
-  if ufIsLetterInWord(letter, word):
-    if (not letter in getGoodGuesses()):
-      setGoodGuesses(getGoodGuesses() + letter)
-      displayMask(getSecretWord(), getGoodGuesses(), ufGetMask)
-  else:
-    setErrorsAmount(getErrorsAmount() + 1)
-    rfUpdateBody(bodyParts, getErrorsAmount())
+def _Submit(bodyParts, letter):
+  ufHandleGuess(letter, bodyParts)
 
 
 def _acSubmit(core, dom, id):
-  _Submit(dom, core.bodyParts, id.lower(), getSecretWord())
+  _Submit(core.bodyParts, id.lower())
 
 
 def _acRestart(core, dom):
-  _reset(core.dictionnary,True)
+  _reset(core.dictionnary)
 
 
 def main(callback, userFunctions, userFunctionLabels):
   mainBase(callback, globals(),
   (
-    F_IS_LETTER_IN_WORD,
-    F_GET_MASK
+    F_RESET,
+    F_HANDLE_GUESS,
   ), userFunctions, userFunctionLabels)

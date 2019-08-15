@@ -32,7 +32,7 @@ from workshop._._ import *
 
 
 def _reset(dictionnary,dev):
-  resetBase(dictionnary, dev)
+  resetBase(dictionnary, dev, ufGetMask, rfPickWord)
 
 
 def _acConnect(core, dom, id):
@@ -44,7 +44,7 @@ def _Submit(dom, bodyParts, letter, word):
   if ufIsLetterInWord(letter, word):
     if (not letter in getGoodGuesses()):
       setGoodGuesses(getGoodGuesses() + letter)
-      displayMask(getSecretWord(), getGoodGuesses(), rfGetMask)
+      displayMask(getSecretWord(), getGoodGuesses(), ufGetMask)
   else:
     setErrorsAmount(getErrorsAmount() + 1)
     ufUpdateBody(bodyParts, getErrorsAmount())

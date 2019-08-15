@@ -4,17 +4,9 @@ import sys
 sys.path.append(".")
 from workshop.en.d import *
 
-"""
-Some variables are now handled by the student. Names are free.
-Can be omitted, as 'reset(…)' will be call before thie variables
-will be used.
-"""
-goodGuesses = ""
-errorsAmount = 0
+# Don't forget.
+from random import randint
 
-"""
-NOTA: the three folowing functions are not called outside this file.
-"""
 def isLetterInWord(*args):
     return workshop.rfIsLetterInWord(*args)
 
@@ -27,30 +19,17 @@ def updateBody(*args):
   return workshop.rfUpdateBody(*args)
 
 """
-Must reset the variables for a new game.
+- 'dictionnary': tuple containing words to pick,
+- 'suggestion'; the content of the secrete word text box;
+  used only in 'dev' mode.
+Returns 'suggestion', if not empty, otherwise a random
+word from 'dictionary'.
 """
-def reset():
-  global goodGuesses, errorsAmount
-
-  goodGuesses = ""
-  errorsAmount = 0
-
-"""
-- 'guess': the letter choosen by the player,
-- 'word': the secret word,
-- 'parts': the different part of the body to draw.
-If 'guess' in 'word', must update the mask, otherwise
-must update the drawing of the body.
-"""
-def handleGuess(guess,word,parts):
-  global goodGuesses, errorsAmount
-
-  if isLetterInWord(guess, word): # Test is not mandatory
-    if not isLetterInWord(guess,goodGuesses):
-      goodGuesses += guess
-      eraseAndDisplay(getMask(word,goodGuesses))
+def pickWord(dictionary,suggestion):
+  if suggestion:
+    return suggestion
   else:
-    errorsAmount += 1
-    updateBody(parts, errorsAmount)
+    return dictionnary[randint(0, len(dictionnary)-1)]
+
 
 go(globals())

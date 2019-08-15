@@ -34,7 +34,7 @@ from workshop._._ import *
 
 
 def _reset(dictionnary,dev):
-  resetBase(dictionnary, dev, rfGetMask)
+  resetBase(dictionnary, dev, rfGetMask, rfPickWord)
 
 
 def _acConnect(core, dom, id):

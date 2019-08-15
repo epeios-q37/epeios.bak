@@ -69,11 +69,12 @@ PARTIES_CORPS = (
 )
 
 FUNCTION_LABELS = {
-    _.F_RESET: "raz",
-    _.F_IS_LETTER_IN_WORD: "lettreEstDansMot",
-    _.F_GET_MASK: "obtenirMasque",
-    _.F_UPDATE_BODY: "majCorps",
-    _.F_HANDLE_GUESS: "traiterPioche"
+  _.F_GET_MASK: "obtenirMasque",
+  _.F_HANDLE_GUESS: "traiterPioche",
+  _.F_IS_LETTER_IN_WORD: "lettreEstDansMot",
+  _.F_RESET: "raz",
+  _.F_UPDATE_BODY: "majCorps",
+  _.F_PICK_WORD: "choisirMot"
 }
 
 

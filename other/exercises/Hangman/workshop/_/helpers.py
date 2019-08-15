@@ -30,7 +30,6 @@ import educ as _
 from accessor import *
 from ufunctions import *
 
-from random import randint
 
 _I_OUTPUT = "Output"
 _I_SECRET_WORD = "SecretWord"
@@ -80,25 +79,22 @@ def _resetHangman():
   setGoodGuesses("")
   setSecretWord("")
 
-def _getWord(dictionnary):
-  return dictionnary[randint(0, len(dictionnary)-1)]
 
-def resetBase(dictionnary, dev, fGetMask):
+def resetBase(dictionnary, dev, fGetMask, fPickRandom):
   secretWord = ""
 
   if dev:
     secretWord = _.dom().getContent(_I_SECRET_WORD).strip()[:15]
 
-  redraw()
+    redraw()
   _resetHangman()
+
+  secretWord = fPickRandom(dictionnary, secretWord)
+
+  setSecretWord(secretWord)
 
   if dev:
     _.dom().removeAttribute(_I_SECRET_WORD, "style")
-
-  if not secretWord:
-    secretWord = _getWord(dictionnary)
-
-  setSecretWord(secretWord)
 
   if dev:
     _.dom().setContent(_I_SECRET_WORD, secretWord)
