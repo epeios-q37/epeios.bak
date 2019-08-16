@@ -81,7 +81,12 @@ FUNCTION_LABELS = {
 
 _.setI18n({
     _.S_RESTART: "Recommencer",
-    _.S_SECRET_WORD: "Mot secret"
+    _.S_SECRET_WORD: "Mot secret",
+    _.S_LETTER: "Pioche ",
+    _.S_EXPECTED: "Attendu ",
+    _.S_OBTAINED: "Obtenu ",
+    _.S_TRUE: "VRAI",
+    _.S_FALSE: "FAUX",
 })
 _.setDictionnary(DICTIONNAIRE)
 _.setBodyParts(PARTIES_CORPS)

@@ -9,6 +9,7 @@ from workshop.en.a import *
 # 'TRUE' -> 'True' and 'FALSE' -> 'False' at whish.
 """
 def isLetterInWord(letter,word):
+    # return True if ord(letter) % 2 == 0 else False # To test color.
     # Yes, there is a simpler way…
     for i in range(0, len(word)):
         if word[i] == letter:

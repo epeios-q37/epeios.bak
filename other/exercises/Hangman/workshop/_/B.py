@@ -36,8 +36,9 @@ def _reset():
   resetBase(getDictionnary(), ufGetMask, rfPickWord)
 
 
-def _acConnect():
+def _acConnect(core, dom):
   redraw()
+  dom.disableElement("ShowGallow")
   _reset()
 
 

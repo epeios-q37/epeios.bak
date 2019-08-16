@@ -40,4 +40,72 @@
         font-family: monospace;
         letter-spacing: 5px;
     }
+
+    #Report td {
+        font-style: oblique;
+    }
+
+    #Report span[class] {
+        font-weight:bolder;
+        font-family: monospace;
+        font-style: normal;
+    }
+
+    .gallow, #Output{
+        display: none;
+    }
+    
+    .obtained-true, .obtained-false {
+        background-color: lightpink;
+    }
+    
+    .expected-true, .obtained-true {
+        display: none;
+    }
+
+    .expected-false, .obtained-false {
+        display: initial;
+    }
+</style>
+<style id="ShowGallow">
+    .gallow {
+        display: table;
+    }
+</style>
+<style id="ShowMask">
+    #Output {
+        display: initial;
+    }
+</style>
+<style id="ExpectedTrue">
+    .expected-true {
+        display: initial;
+    }
+    .expected-false {
+        display: none;
+    }
+</style>
+<style id="ObtainedTrue">
+    .obtained-true {
+        display: initial;
+    }
+
+    .obtained-false {
+        display: none;
+    }
+</style>
+<style id="ObtainedRight">
+    .obtained-true, .obtained-false {
+        background-color: lightgreen;
+    }
+</style>
+<style id="ReportAnswersHidden">
+    .expected-true, .expected-false, .obtained-true, .obtained-false {
+        display: none;
+    }
+</style>
+<style id="ReportHidden">
+    #Report {
+        display: none;
+    }
 </style>

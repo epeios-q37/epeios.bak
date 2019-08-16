@@ -36,7 +36,7 @@ def _reset():
   resetBase(getDictionnary(), ufGetMask, rfPickWord)
 
 
-def _acConnect():
+def _acConnect(core, dom):
   redraw()
   _reset()
 

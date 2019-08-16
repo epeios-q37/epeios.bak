@@ -33,31 +33,45 @@ from educ import Core
 
 from workshop._._ import *
 
+_REPORT_ANSWERS_HIDDEN = "ReportAnswersHidden"
+
 
 def _reset():
   resetBase(getDictionnary(), rfGetMask, rfPickWord)
 
+def _append(list,item):
+  list.append(item)
 
-def _acConnect():
+
+def _acConnect(core,dom):
   redraw()
+  dom.disableElements({"ShowGallow", "ShowMask", "ReportHidden"})
   _reset()
+  
+def _Submit(dom,letter,i18n):
+  expected = rfIsLetterInWord(letter, getSecretWord())
+  obtained = ufIsLetterInWord(letter, getSecretWord())
 
-def _Submit(letter):
-  if ufIsLetterInWord(letter,getSecretWord()):
-    if (not letter in getGoodGuesses()):
-      setGoodGuesses(getGoodGuesses() + letter)
-      displayMask(getSecretWord(), getGoodGuesses(), rfGetMask)
-  else:
-    setErrorsAmount(getErrorsAmount() + 1)
-    rfUpdateBody(getBodyParts(), getErrorsAmount())
+  disabled = [_REPORT_ANSWERS_HIDDEN]
+  enabled = []
+
+  dom.setContent("Letter", letter.upper())
+
+  _append(enabled if expected else disabled, "ExpectedTrue")
+  _append(enabled if obtained else disabled, "ObtainedTrue")
+  _append(enabled if expected==obtained else disabled, "ObtainedRight")
+
+  dom.disableElements(disabled)
+  dom.enableElements(enabled)
 
 
 def _acSubmit(core, dom, id):
-  _Submit(id.lower())
+  _Submit(dom,id.lower(),getI18n())
 
 
-def _acRestart():
+def _acRestart(core, dom):
   _reset()
+  dom.enableElement(_REPORT_ANSWERS_HIDDEN)
 
 
 def main(callback, userFunctions, userFunctionLabels):

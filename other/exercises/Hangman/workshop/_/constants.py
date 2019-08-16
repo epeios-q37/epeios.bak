@@ -41,3 +41,8 @@ F_HANGMAN = "Hangman"   # Instancies a new user object.
 
 S_RESTART = "Restart"
 S_SECRET_WORD = "SecretWord"
+S_LETTER = "Letter"
+S_EXPECTED = "Expected"
+S_OBTAINED = "Obtained"
+S_TRUE = "True"
+S_FALSE = "False"
