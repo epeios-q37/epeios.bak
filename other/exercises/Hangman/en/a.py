@@ -4,18 +4,60 @@ import sys
 sys.path.append(".")
 from workshop.en.a import *
 
-"""
-# Returns 'TRUE' when 'letter' is in 'word', 'FALSE' otherwise.
-# 'TRUE' -> 'True' and 'FALSE' -> 'False' at whish.
-"""
-def isLetterInWord(letter,word):
-    # return True if ord(letter) % 2 == 0 else False # To test color.
-    # Yes, there is a simpler way…
-    for i in range(0, len(word)):
-        if word[i] == letter:
-            return True
+# Don't forget.
+from random import randint
 
-    return False
+DICTIONARY = (
+  "tree",
+  "house",
+  "chair"
+)
 
+
+"""
+The students will be asked to develop successively the
+version 0, 1 and finally 2 of the '_PickWord(…)' function.
+"""
+
+"""
+Returns a random word from 'DICTIONNARY'.
+"""
+def _pickWord0():
+  return DICTIONARY[randint(0, len(DICTIONARY)-1)]
+
+
+
+"""
+- 'suggestion'; the content of the secrete word text box;
+  used only in 'dev' mode.
+Returns 'suggestion', if not empty, otherwise a random
+word from 'DICTIONNARY'.
+"""
+def _pickWord1(suggestion):
+  if suggestion:
+    return suggestion
+  else:
+    return DICTIONARY[randint(0, len(DICTIONARY)-1)]
+
+
+
+"""
+- 'dictionnary': tuple containing words to pick,
+- 'suggestion'; the content of the secrete word text box;
+  used only in 'dev' mode.
+Returns 'suggestion', if not empty, otherwise a random
+word from 'dictionary'.
+NOTA: the 'DICTIONNARY' constant can naturally be removed.
+"""
+def _pickWord2(dictionary,suggestion):
+  if suggestion:
+    return suggestion
+  else:
+    return dictionary[randint(0, len(dictionary)-1)]
+
+
+VERSION = 2 # 0, 1 or 2.
+
+pickWord = globals()["_pickWord" + str(VERSION)]
 
 go(globals())

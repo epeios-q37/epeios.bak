@@ -19,6 +19,15 @@ Bien entendu, ce seront les versions francisées écrites par les étudiants lor
 précédents exercices qui seront utilisés (cette remarque vaut également pour les
 exercices suivants).
 """
+
+"""
+Le paramètre 'suggestion' peut être omis vu que le champ texte
+pour le mot secret n'est plus utilisé.
+"""
+def pickWord(*args):
+  return workshop.rfPickWord(*args)
+
+
 def isLetterInWord(*args):
     return workshop.rfIsLetterInWord(*args)
 
@@ -29,14 +38,6 @@ def getMask(*args):
 
 def updateBody(*args):
   return workshop.rfUpdateBody(*args)
-
-
-"""
-Le paramètre 'suggestion' peut être omis vu que le champ texte
-pour le mot secret n'est plus utilisé.
-"""
-def pickWord(*args):
-  return workshop.rfPickWord(*args)
 
 
 

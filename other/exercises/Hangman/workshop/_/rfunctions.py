@@ -32,6 +32,10 @@ from helpers import *
 
 from random import randint
 
+def rfPickWord(dictionary, suggestion):
+  return suggestion if suggestion else dictionary[randrange(len(dictionary))]
+
+
 def rfIsLetterInWord(letter, word):
   return letter in word
 

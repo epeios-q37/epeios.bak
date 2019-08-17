@@ -30,6 +30,8 @@ import educ as _
 from accessor import *
 from ufunctions import *
 
+import inspect
+
 
 _I_OUTPUT = "Output"
 _I_SECRET_WORD = "SecretWord"
@@ -45,6 +47,8 @@ def drawBodyPart(part):
 
 
 def _createOutput(text)  :
+  if not text.strip():
+    text = " "   # &nbsp; => c2a0
   output = _.Atlas.createHTML()
   output.putTagAndValue("h1", text)
   return output
@@ -79,23 +83,34 @@ def _resetHangman():
   setGoodGuesses("")
   setSecretWord("")
 
+def _pickRandom(dictionary, suggestion):
+  try:
+    return ufPickWord(dictionary,suggestion)
+  except TypeError:
+    try:
+      return ufPickWord(suggestion)
+    except TypeError:
+      return ufPickWord()
 
-def resetBase(dictionnary, fGetMask, fPickRandom):
-  secretWord =  _.dom().getContent(_I_SECRET_WORD).strip()[:15]
+
+def resetBase(dictionary, fGetMask = ufGetMask):
+  _.dom().disableElement("HideSecretWord")
+
+  secretWord = _.dom().getContent(_I_SECRET_WORD).strip()[:15]
 
   redraw()
   _resetHangman()
 
-  secretWord = fPickRandom(dictionnary, secretWord)
+  secretWord = _pickRandom(dictionary, secretWord)
 
   setSecretWord(secretWord)
 
-  _.dom().removeAttribute(_I_SECRET_WORD, "style")
   _.dom().setContent(_I_SECRET_WORD, secretWord)
 
   print(getSecretWord())
   
-  displayMask(getSecretWord(), "", fGetMask)
+  if fGetMask:
+    displayMask(getSecretWord(), "", fGetMask)
 
 
 def _setUserFunctions(ids, functions, labels):

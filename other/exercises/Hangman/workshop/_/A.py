@@ -23,8 +23,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-import sys, os
-
 import sys
 sys.path.append("workshop/_")
 
@@ -33,46 +31,28 @@ from educ import Core
 
 from workshop._._ import *
 
-_REPORT_ANSWERS_HIDDEN = "ReportAnswersHidden"
-
 
 def _reset():
-  resetBase(getDictionnary(), rfGetMask, rfPickWord)
-
-def _append(list,item):
-  list.append(item)
+  resetBase(getDictionnary(), None)
+  clearAndDisplay(getSecretWord())
 
 
 def _acConnect(core,dom):
   redraw()
-  dom.disableElements({"ShowGallow", "ShowMask", "ReportHidden"})
+  dom.disableElements({"ShowGallow", "ShowKeyboard"})
   _reset()
-  
-def _Submit(dom,letter,i18n):
-  expected = rfIsLetterInWord(letter, getSecretWord())
-  obtained = ufIsLetterInWord(letter, getSecretWord())
-
-  disabled = [_REPORT_ANSWERS_HIDDEN]
-  enabled = []
-
-  dom.setContent("Letter", letter.upper())
-
-  _append(enabled if expected else disabled, "ExpectedTrue")
-  _append(enabled if obtained else disabled, "ObtainedTrue")
-  _append(enabled if expected==obtained else disabled, "ObtainedRight")
-
-  dom.disableElements(disabled)
-  dom.enableElements(enabled)
 
 
 def _acSubmit(core, dom, id):
-  _Submit(dom,id.lower(),getI18n())
+  pass  # Not used.
 
 
-def _acRestart(core, dom):
+def _acRestart():
   _reset()
-  dom.enableElement(_REPORT_ANSWERS_HIDDEN)
 
 
 def main(callback, userFunctions, userFunctionLabels):
-  mainBase(callback, globals(), (F_IS_LETTER_IN_WORD,), userFunctions, userFunctionLabels)
+  mainBase(callback, globals(),
+  (
+    F_PICK_WORD,
+  ), userFunctions, userFunctionLabels)

@@ -33,11 +33,12 @@ from workshop._._ import *
 
 
 def _reset():
-  resetBase(getDictionnary(), ufGetMask, rfPickWord)
+  resetBase(getDictionnary())
 
 
 def _acConnect(core, dom):
   redraw()
+  dom.disableElement("ShowGallow")
   _reset()
 
 
@@ -48,21 +49,21 @@ def _Submit(letter):
       displayMask(getSecretWord(), getGoodGuesses(), ufGetMask)
   else:
     setErrorsAmount(getErrorsAmount() + 1)
-    ufUpdateBody(getBodyParts(), getErrorsAmount())
+    rfUpdateBody(getBodyParts(), getErrorsAmount())
 
 
 def _acSubmit(core, dom, id):
   _Submit(id.lower())
 
 
-def _acRestart(core, dom):
+def _acRestart():
   _reset()
 
 
 def main(callback, userFunctions, userFunctionLabels):
   mainBase(callback, globals(),
   (
+    F_PICK_WORD,
     F_IS_LETTER_IN_WORD,
-    F_GET_MASK,
-    F_UPDATE_BODY
+    F_GET_MASK
   ), userFunctions, userFunctionLabels)

@@ -85,8 +85,8 @@ _.setI18n({
     _.S_LETTER: "Pioche ",
     _.S_EXPECTED: "Attendu ",
     _.S_OBTAINED: "Obtenu ",
-    _.S_TRUE: "VRAI",
-    _.S_FALSE: "FAUX",
+    _.S_TRUE: "vrai",
+    _.S_FALSE: "faux",
 })
 _.setDictionnary(DICTIONNAIRE)
 _.setBodyParts(PARTIES_CORPS)

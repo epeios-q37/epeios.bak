@@ -4,23 +4,21 @@ import sys
 sys.path.append(".")
 from workshop.en.b import *
 
-def isLetterInWord(*args):
-    return workshop.rfIsLetterInWord(*args)
+def pickWord(*args):
+    return workshop.rfPickWord(*args)
 
 """
-Returns a string containing 'word' (which is in lowercase) where
-all letters which are not in in 'guesses' (also in lowercase)
-are replaced by the '_' character.
+# Returns 'TRUE' when 'letter' is in 'word', 'FALSE' otherwise.
+# 'TRUE' -> 'True' and 'FALSE' -> 'False' at whish.
 """
-def getMask(word, guesses):
-    mask = ""
+def isLetterInWord(letter,word):
+    return True if ord(letter) % 2 == 0 else False # To test color.
+    # Yes, there is a simpler way…
+    for i in range(0, len(word)):
+        if word[i] == letter:
+            return True
 
-    for letter in word:
-        if isLetterInWord(letter,guesses):
-            mask += letter
-        else:
-            mask += "_"
+    return False
 
-    return mask
 
 go(globals())

@@ -4,8 +4,9 @@ import sys
 sys.path.append(".")
 from workshop.fr.d import *
 
-# Ne pas oublier.
-from random import randint
+
+def choisirMot(*args):
+  return workshop.rfPickWord(*args)
 
 
 def lettreEstDansMot(*args):
@@ -15,24 +16,20 @@ def lettreEstDansMot(*args):
 def obtenirMasque(*args):
     return workshop.rfGetMask(*args)
 
-
-def majCorps(*args):
-  return workshop.rfUpdateBody(*args)
-
-
 """
-- 'dictionnaire': tuple contenant ds mots parmis
-  mesqueles choisir ;
-- 'suggestion'; le contenu du champ texte du mot secret ;
-  utilisé seulement en mode 'dev'.
-Retourne 'suggestion' si non vide, un mot choisi au hasard dans
-'dictionnaire' sinon.
+- 'parties' (tuple) contient les différentes parties du corps du pendu à
+  dessiner en fonction du nombre d'erreurs '(P_TETE,P_TRONC,P_BRAS_GAUCHE…)' ;
+- 'nbErreurs': nombre d'erreurs.
+Dessiner la partie du corps correspondant au nombre d'erreurs.
+Lorsque la dernière partie du corps est dessinée, le visage ('P_VISAGE') doit
+également être dessiné.
 """
-def choisirMot(dictionnaire,suggestion):
-  if suggestion:
-    return suggestion
-  else:
-    return dictionnaire[randint(0, len(dictionnaire)-1)]
+def majCorps(parties, nbErreurs):
+  if nbErreurs <= len(parties):
+    dessinePartieCorps(parties[nbErreurs-1])
+
+  if nbErreurs >= len(parties):
+    dessinePartieCorps(P_VISAGE)
 
 
 go(globals())

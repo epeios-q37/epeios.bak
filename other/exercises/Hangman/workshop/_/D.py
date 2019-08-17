@@ -33,7 +33,7 @@ from workshop._._ import *
 
 
 def _reset():
-  resetBase(getDictionnary(), ufGetMask,ufPickWord)
+  resetBase(getDictionnary())
 
 
 def _acConnect():
@@ -61,8 +61,8 @@ def _acRestart():
 def main(callback, userFunctions, userFunctionLabels):
   mainBase(callback, globals(),
   (
+    F_PICK_WORD,
     F_IS_LETTER_IN_WORD,
     F_GET_MASK,
     F_UPDATE_BODY,
-    F_PICK_WORD
   ), userFunctions, userFunctionLabels)

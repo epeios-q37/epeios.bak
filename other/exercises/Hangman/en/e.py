@@ -16,6 +16,15 @@ errorsAmount = 0
 """
 NOTA: the four folowing functions are not called outside this file.
 """
+
+"""
+The 'suggestion' parameter can be removed, as the
+secret word text box will be no more used.
+"""
+def pickWord(*args):
+  return workshop.rfPickWord(*args)
+
+
 def isLetterInWord(*args):
     return workshop.rfIsLetterInWord(*args)
 
@@ -26,14 +35,6 @@ def getMask(*args):
 
 def updateBody(*args):
   return workshop.rfUpdateBody(*args)
-
-
-"""
-The 'suggestion' parameter can be removed, as the
-secret word text bow will be no more used.
-"""
-def pickWord(*args):
-  return workshop.rfPickWord(*args)
 
 
 """

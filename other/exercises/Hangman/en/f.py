@@ -4,6 +4,11 @@ import sys
 sys.path.append(".")
 from workshop.en.f import *
 
+
+def pickWord(*args):
+  return workshop.rfPickWord(*args)
+
+
 def isLetterInWord(*args):
     return workshop.rfIsLetterInWord(*args)
 
@@ -14,10 +19,6 @@ def getMask(*args):
 
 def updateBody(*args):
   return workshop.rfUpdateBody(*args)
-
-
-def pickWord(*args):
-  return workshop.rfPickWord(*args)
 
 
 """

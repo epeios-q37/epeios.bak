@@ -76,8 +76,8 @@ _.setI18n({
   _.S_LETTER: "Guess",
   _.S_EXPECTED: "Expected",
   _.S_OBTAINED: "Gotten",
-  _.S_TRUE: "TRUE",
-  _.S_FALSE: "FALSE",
+  _.S_TRUE: "true",
+  _.S_FALSE: "false",
 })
 _.setDictionnary(DICTIONARY)
 _.setBodyParts(BODY_PARTS)

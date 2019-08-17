@@ -4,8 +4,10 @@ import sys
 sys.path.append(".")
 from workshop.en.d import *
 
-# Don't forget.
-from random import randint
+
+def pickWord(*args):
+    return workshop.rfPickWord(*args)
+
 
 def isLetterInWord(*args):
     return workshop.rfIsLetterInWord(*args)
@@ -15,21 +17,20 @@ def getMask(*args):
     return workshop.rfGetMask(*args)
 
 
-def updateBody(*args):
-  return workshop.rfUpdateBody(*args)
+"""
+- 'parts': tuple containing the different parts of the body
+  to draw according to the amount of errors '(P_HEAD,P_TRUNK,P_LEFT_ARM…)'.
+- 'errorsAmount': the amount of errors.
+Draws the part of the body corresponding to the amount of errors.
+When the last part of the body is drawn, the face ('P_FACE') must
+also be drawn.
+"""
+def updateBody(parts,errorsAmount):
+  if errorsAmount <= len(parts):
+    drawBodyPart(parts[errorsAmount-1])
 
-"""
-- 'dictionnary': tuple containing words to pick,
-- 'suggestion'; the content of the secrete word text box;
-  used only in 'dev' mode.
-Returns 'suggestion', if not empty, otherwise a random
-word from 'dictionary'.
-"""
-def pickWord(dictionary,suggestion):
-  if suggestion:
-    return suggestion
-  else:
-    return dictionary[randint(0, len(dictionary)-1)]
+  if errorsAmount >= len(parts):
+    drawBodyPart(P_FACE)
 
 
 go(globals())

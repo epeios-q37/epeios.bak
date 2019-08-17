@@ -51,12 +51,14 @@
         font-style: normal;
     }
 
-    .gallow, #Output{
+    .gallow, #Output, #Keyboard {
         display: none;
     }
     
     .obtained-true, .obtained-false {
         background-color: lightpink;
+        text-decoration-line: line-through;
+        text-decoration-style: wavy;
     }
     
     .expected-true, .obtained-true {
@@ -75,6 +77,16 @@
 <style id="ShowMask">
     #Output {
         display: initial;
+    }
+</style>
+<style id="ShowKeyboard">
+    #Keyboard {
+        display: initial;
+    }
+</style>
+<style id="HideSecretWord">
+    #SecretWord {
+        display: none;
     }
 </style>
 <style id="ExpectedTrue">
@@ -97,6 +109,7 @@
 <style id="ObtainedRight">
     .obtained-true, .obtained-false {
         background-color: lightgreen;
+        text-decoration: none;
     }
 </style>
 <style id="ReportAnswersHidden">

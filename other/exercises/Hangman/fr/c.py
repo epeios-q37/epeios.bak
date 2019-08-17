@@ -5,27 +5,27 @@ sys.path.append(".")
 from workshop.fr.c import *
 
 
+def choisirMot(*args):
+  return workshop.rfPickWord(*args)
+  
+
 def lettreEstDansMot(*args):
     return workshop.rfIsLetterInWord(*args)
 
-
-def obtenirMasque(*args):
-    return workshop.rfGetMask(*args)
-
 """
-- 'parties' (tuple) contient les différentes parties du corps du pendu à
-  dessiner en fonction du nombre d'erreurs '(P_TETE,P_TRONC,P_BRAS_GAUCHE…)' ;
-- 'nbErreurs': nombre d'erreurs.
-Dessiner la partie du corps correspondant au nombre d'erreurs.
-Lorsque la dernière partie du corps est dessinée, le visage ('P_VISAGE') doit
-également être dessiné.
+Retourner une chaîne de caractères contenant 'mot' (qui est en minuscule) où
+chaque lettre qui n'est pas contenue dans 'pioches' (également en minuscules)
+est remplacée par le caractère '_'.
 """
-def majCorps(parties, nbErreurs):
-  if nbErreurs <= len(parties):
-    dessinePartieCorps(parties[nbErreurs-1])
+def obtenirMasque(mot, pioches):
+    masque = ""
 
-  if nbErreurs >= len(parties):
-    dessinePartieCorps(P_VISAGE)
+    for lettre in mot:
+        if lettreEstDansMot(lettre,pioches):
+            masque += lettre
+        else:
+            masque += "_"
 
+    return masque
 
 go(globals())

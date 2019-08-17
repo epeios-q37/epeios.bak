@@ -31,10 +31,10 @@ P_RIGHT_ARM = "RightArm"
 P_LEFT_LEG = "LeftLeg"
 P_RIGHT_LEG = "RightLeg"
 
+F_PICK_WORD = "PickWord"
 F_IS_LETTER_IN_WORD = "IsLetterInWord"
 F_GET_MASK = "GetMask"
 F_UPDATE_BODY = "UpdateBody"
-F_PICK_WORD = "PickWord"
 F_RESET = "Reset"
 F_HANDLE_GUESS = "HandleGuess"
 F_HANGMAN = "Hangman"   # Instancies a new user object.
