@@ -55,7 +55,7 @@ def _choisirMot2(dictionnaire,suggestion):
     return dictionnaire[randint(0, len(dictionnaire)-1)]
 
 
-VERSION = 0 # 0, 1 ou 2.
+VERSION = 2 # 0, 1 ou 2.
 
 choisirMot = globals()["_choisirMot" + str(VERSION)]
 

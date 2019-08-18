@@ -38,6 +38,6 @@ def _defineUserFunction(name):
   return educ.defineUserFunction(globals(), "uf", name)
 
 
-for d in list(globals()):  # 'list(…) to avoid 'RuntimeError: dictionary changed size during iteration.
+for d in list(globals()):  # 'list(…)' to avoid 'RuntimeError: dictionary changed size during iteration'.
   if (d[:2]) == 'F_':
     _defineUserFunction(globals()[d])
