@@ -7,16 +7,14 @@ from workshop.fr.a import *
 # Ne pas oublier.
 from random import randint
 
-DICTIONNAIRE = (
-  "Arbre",
-  "Maison",
-  "Chaise"
-)
+DICTIONNAIRE = ("Arbre", "Maison", "Chaise")
 
 
 """
-Il sera demandé aux élèves de développer successivement les
-versions 0, 1 et enfin 2 de la fonction '_choisirMot(...)'.
+Il sera demandé aux élèves de développer les
+versions 0, 1 et/ou 2 de la fonction '_choisirMot(...)',
+selon que l'on veuille ou non aborder les 'tuples'
+('DICTIONNAIRE').
 """
 
 """
@@ -57,7 +55,7 @@ def _choisirMot2(dictionnaire,suggestion):
     return dictionnaire[randint(0, len(dictionnaire)-1)]
 
 
-VERSION = 2 # 0, 1 ou 2.
+VERSION = 0 # 0, 1 ou 2.
 
 choisirMot = globals()["_choisirMot" + str(VERSION)]
 

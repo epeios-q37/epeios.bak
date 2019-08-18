@@ -7,16 +7,14 @@ from workshop.en.a import *
 # Don't forget.
 from random import randint
 
-DICTIONARY = (
-  "tree",
-  "house",
-  "chair"
-)
+DICTIONARY = ("tree", "house", "chair")
 
 
 """
-The students will be asked to develop successively the
-version 0, 1 and finally 2 of the '_PickWord(…)' function.
+The students will be asked to develop the
+version 0, 1 and/or 2 of the '_PickWord(…)' function,
+wether or not one wants to introduce tuples
+('DICTIONARY').
 """
 
 """
