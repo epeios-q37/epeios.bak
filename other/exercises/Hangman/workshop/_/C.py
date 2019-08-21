@@ -33,12 +33,11 @@ from workshop._._ import *
 
 
 def _reset():
-  resetBase(getDictionnary())
+  resetBase(None, getDictionnary(), None)
 
 
 def _acConnect(core, dom):
-  redraw()
-  dom.disableElement("ShowGallow")
+  show("mk")
   _reset()
 
 

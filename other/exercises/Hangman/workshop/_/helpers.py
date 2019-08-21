@@ -42,6 +42,23 @@ def redraw():
   _.dom().setLayout("", _.readBody(_FOLDER, getI18n()))
 
 
+def _addItem(shortcut, items, label, ids):
+  if shortcut in items:
+    ids.append("Hide" + label)
+
+
+def show(items="mgk"):
+  ids = []
+  items = items.casefold()
+
+  _addItem("m", items, "Mask", ids)
+  _addItem("g", items, "Gallow", ids)
+  _addItem("r", items, "Report", ids)
+  _addItem("k", items, "Keyboard", ids)
+
+  redraw()
+  _.dom().disableElements(ids)
+
 def drawBodyPart(part):
   _.dom().removeClass(part, "hidden")
 
@@ -78,11 +95,6 @@ def showSecretWord():
   _.dom().removeAttribute(_I_SECRET_WORD, "style")
 
 
-def _resetHangman():
-  setErrorsAmount(0)
-  setGoodGuesses("")
-  setSecretWord("")
-
 def _pickRandom(dictionary, suggestion):
   try:
     return ufPickWord(dictionary,suggestion)
@@ -92,25 +104,33 @@ def _pickRandom(dictionary, suggestion):
     except TypeError:
       return ufPickWord()
 
+  
+def _reset(dictionary, suggestion):
+  setErrorsAmount(0)
+  setGoodGuesses("")
 
-def resetBase(dictionary, fGetMask = ufGetMask):
-  _.dom().disableElement("HideSecretWord")
-
-  secretWord = _.dom().getContent(_I_SECRET_WORD).strip()[:15]
-
-  redraw()
-  _resetHangman()
-
-  secretWord = _pickRandom(dictionary, secretWord)
-
+  secretWord = _pickRandom(dictionary, suggestion)
   setSecretWord(secretWord)
 
-  _.dom().setContent(_I_SECRET_WORD, secretWord)
+  return secretWord
 
-  print(getSecretWord())
-  
+
+def resetBase(userObject, dictionary, fReset=ufReset, fGetMask=ufGetMask):
+  suggestion = _.dom().getContent(_I_SECRET_WORD).strip()[:15]
+  redraw()
+  _.dom().disableElement("HideSecretWord")
+
+  if not fReset:
+    fReset = _reset
+  else:
+    fGetMask = None
+
+  secretWord = fReset(userObject, dictionary, suggestion) if userObject else fReset(dictionary, suggestion)
+
+  _.dom().setContent(_I_SECRET_WORD, secretWord )
+
   if fGetMask:
-    displayMask(getSecretWord(), "", fGetMask)
+    displayMask(secretWord, "", fGetMask)
 
 
 def _setUserFunctions(ids, functions, labels):

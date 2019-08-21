@@ -17,10 +17,6 @@ errorsAmount = 0
 NOTA: the four folowing functions are not called outside this file.
 """
 
-"""
-The 'suggestion' parameter can be removed, as the
-secret word text box will be no more used.
-"""
 def pickWord(*args):
   return workshop.rfPickWord(*args)
 
@@ -39,16 +35,18 @@ def updateBody(*args):
 
 """
 Resets the variables and the display for a new round.
+Returns the secret word.
 """
-def reset(dictionary):
+def reset(dictionary, suggestion):
   global secretWord, goodGuesses, errorsAmount
 
-  secretWord = pickWord(dictionary)
+  secretWord = pickWord(dictionary, suggestion)
   goodGuesses = ""
   errorsAmount = 0
   print(secretWord)
-  redraw()
   eraseAndDisplay(getMask(secretWord,""))
+
+  return secretWord
 
 """
 N.B.: NOT THREAD-SAFE!!!

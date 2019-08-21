@@ -15,6 +15,7 @@ def lettreEstDansMot(*args):
 
 def obtenirMasque(*args):
     return workshop.rfGetMask(*args)
+    
 
 """
 - 'parties' (tuple) contient les différentes parties du corps du pendu à

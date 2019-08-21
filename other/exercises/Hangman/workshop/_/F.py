@@ -37,10 +37,11 @@ class Core(_.Core):
 
 
 def _reset(hangman):
-  ufReset(hangman,getDictionnary())
+  resetBase(hangman, getDictionnary())
 
 
 def _acConnect(core):
+  show()
   _reset(core.userObject)
 
 

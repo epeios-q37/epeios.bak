@@ -22,8 +22,8 @@ def updateBody(*args):
 
 
 class Pendu:
-  def reinitialiser(self, dictionnaire):
-    self.motSecret = pickWord(dictionnaire)
+  def reinitialiser(self, dictionnaire,suggestion):
+    self.motSecret = pickWord(dictionnaire,suggestion)
     self.bonnesPioches = ""
     self.nbErreurs = 0
 
@@ -51,11 +51,14 @@ class Pendu:
 Pareil que pour le précédent objet,
 sauf que l'on utilise un objet.
 """
-def reinitialiser(pendu,dictionnaire):
-  pendu.reinitialiser(dictionnaire)
+def reinitialiser(pendu,dictionnaire,suggestion):
+  pendu.reinitialiser(dictionnaire,suggestion)
   print(pendu.motSecret)
   redessine()
   effaceEtAffiche(getMask(pendu.motSecret,""))
+
+  return pendu.motSecret
+  
 
 """
 Idem.

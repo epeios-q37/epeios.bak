@@ -20,10 +20,6 @@ précédents exercices qui seront utilisés (cette remarque vaut également pour
 exercices suivants).
 """
 
-"""
-Le paramètre 'suggestion' peut être omis vu que le champ texte
-pour le mot secret n'est plus utilisé.
-"""
 def pickWord(*args):
   return workshop.rfPickWord(*args)
 
@@ -43,16 +39,21 @@ def updateBody(*args):
 
 """
 Reinitialise les variables et l'affichage pour une nouvelle partie.
+Retourne le mot secret.
 """
-def reinitialiser(dictionnaire):
+def reinitialiser(dictionnaire, suggestion):
   global motSecret, bonnesPioches, nbErreurs
 
-  motSecret = pickWord(dictionnaire,"")
+  motSecret = pickWord(dictionnaire,suggestion)
   bonnesPioches = ""
   nbErreurs = 0
-  print(motSecret)
+  print(motSecret, suggestion)
   redessine()
   effaceEtAffiche(getMask(motSecret,""))
+
+  return motSecret
+
+  
 
 """
 N.B. : NON 'THREAD-SAFE' !!!

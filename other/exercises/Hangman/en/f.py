@@ -27,8 +27,8 @@ Class name must be 'Hangman',
 but variables and methos name are free.
 """
 class Hangman:
-  def reset(self,dictionary):
-    self.secretWord = pickWord(dictionary)
+  def reset(self,dictionary,suggestion):
+    self.secretWord = pickWord(dictionary,suggestion)
     self.goodGuesses = ""
     self.errorsAmount = 0
 
@@ -54,11 +54,12 @@ class Hangman:
 """
 Same as previous exercise, but this time we use an object. 
 """
-def reset(hangman,dictionary):
-  hangman.reset(dictionary)
+def reset(hangman,dictionary,suggestion):
+  hangman.reset(dictionary,suggestion)
   print(hangman.secretWord)
-  redraw()
   eraseAndDisplay(getMask(hangman.secretWord,""))
+
+  return hangman.secretWord
 
 """
 Idem.

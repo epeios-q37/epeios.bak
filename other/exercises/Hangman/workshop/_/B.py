@@ -37,7 +37,7 @@ _REPORT_ANSWERS_HIDDEN = "ReportAnswersHidden"
 
 
 def _reset():
-  resetBase(getDictionnary(), None)
+  resetBase(None, getDictionnary(), None, None)
 
 
 def _append(list,item):
@@ -45,8 +45,7 @@ def _append(list,item):
 
 
 def _acConnect(core,dom):
-  redraw()
-  dom.disableElements({"ShowGallow", "ShowMask", "ReportHidden"})
+  show("rk")
   _reset()
 
   

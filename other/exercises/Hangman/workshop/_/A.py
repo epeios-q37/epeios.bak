@@ -33,13 +33,12 @@ from workshop._._ import *
 
 
 def _reset():
-  resetBase(getDictionnary(), None)
+  resetBase(None, getDictionnary(), None, None)
   clearAndDisplay(getSecretWord())
 
 
 def _acConnect(core,dom):
-  redraw()
-  dom.disableElements({"ShowGallow", "ShowKeyboard"})
+  show("m")
   _reset()
 
 

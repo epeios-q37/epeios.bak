@@ -51,10 +51,6 @@
         font-style: normal;
     }
 
-    .gallow, #Output, #Keyboard {
-        display: none;
-    }
-    
     .obtained-true, .obtained-false {
         background-color: lightpink;
         text-decoration-line: line-through;
@@ -68,20 +64,29 @@
     .expected-false, .obtained-false {
         display: initial;
     }
-</style>
-<style id="ShowGallow">
+
     .gallow {
         display: table;
     }
 </style>
-<style id="ShowMask">
-    #Output {
-        display: initial;
+<style id="HideReport">
+    #Report {
+        display: none;
     }
 </style>
-<style id="ShowKeyboard">
+<style id="HideGallow">
+    .gallow {
+        display: none;
+    }
+</style>
+<style id="HideMask">
+    #Output {
+        display: none;
+    }
+</style>
+<style id="HideKeyboard">
     #Keyboard {
-        display: initial;
+        display: none;
     }
 </style>
 <style id="HideSecretWord">
@@ -114,11 +119,6 @@
 </style>
 <style id="ReportAnswersHidden">
     .expected-true, .expected-false, .obtained-true, .obtained-false {
-        display: none;
-    }
-</style>
-<style id="ReportHidden">
-    #Report {
         display: none;
     }
 </style>

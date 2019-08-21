@@ -33,11 +33,11 @@ from workshop._._ import *
 
 
 def _reset():
-  resetBase(getDictionnary())
+  resetBase(None, getDictionnary(), None)
 
 
 def _acConnect():
-  redraw()
+  show()
   _reset()
 
 
