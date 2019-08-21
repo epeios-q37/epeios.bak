@@ -50,7 +50,7 @@ _S_ROOT = "_storage"
 _S_GLOBAL = "global"
 _S_DOM = "dom"
 _S_CORE = "core"
-_S_USER_FUNCTIONS = "userFunctions"
+_S_USER_ITEMS = "userItems"
 
 globals()[_S_ROOT] = {}
 
@@ -61,28 +61,28 @@ def _threadId():
   return threading.currentThread().ident
 
 
-def _store(set, key, value):
-  globals()[_S_ROOT][set][key] = value
+def _store(set, key, value, g):
+  g[_S_ROOT][set][key] = value
 
 
-def _recall(set, key):
-  return globals()[_S_ROOT][set][key]
+def _recall(set, key, g):
+  return g[_S_ROOT][set][key]
 
 
-def store(key, value):
+def store(key, value, g = globals()):
   try:
-    _store(_threadId(), key, value)
+    _store(_threadId(), key, value,g)
   except KeyError:
     #    print('KE store ' + key)
-    _store(_S_GLOBAL, key, value)
+    _store(_S_GLOBAL, key, value, g)
 
 
-def recall(key):
+def recall(key,g=globals()):
   try:
-    return _recall(_threadId(), key)
+    return _recall(_threadId(), key, g)
   except KeyError:
     #    print('KE recall ' + key)
-    return _recall(_S_GLOBAL, key)
+    return _recall(_S_GLOBAL, key, g)
 
 
 def dom():
@@ -127,22 +127,22 @@ def readBody(path, i18n=None):
   return readHTML(path, "Body", i18n)
 
 
-def setUserFunctions(ids, functions, labels):
+def setUserItems(ids, items, labels):
   links = {}
 
   for id in ids:
     label = labels[id]
 
-    if not label in functions:
-      raise NameError("Missing '{}' function.".format(label))
+    if not label in items:
+      raise NameError("Missing '{}' item.".format(label))
 
-    links[id] = functions[label]
+    links[id] = items[label]
 
-  store(_S_USER_FUNCTIONS, links)
+  store(_S_USER_ITEMS, links)
 
 
-def defineUserFunction(globals,prefix,name):
-  globals[prefix + name] = lambda *args: recall(_S_USER_FUNCTIONS)[name](*args)
+def defineUserItem(g,prefix,name):
+  g[prefix + name] = lambda : recall(_S_USER_ITEMS,g)[name]
 
 
 def _readHead(path, title, i18n=None):

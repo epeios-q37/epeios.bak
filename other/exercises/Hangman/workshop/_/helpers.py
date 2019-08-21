@@ -97,12 +97,12 @@ def showSecretWord():
 
 def _pickRandom(dictionary, suggestion):
   try:
-    return ufPickWord(dictionary,suggestion)
+    return ufPickWord()(dictionary,suggestion)
   except TypeError:
     try:
-      return ufPickWord(suggestion)
+      return ufPickWord()(suggestion)
     except TypeError:
-      return ufPickWord()
+      return ufPickWord()()
 
   
 def _reset(dictionary, suggestion):
@@ -133,12 +133,12 @@ def resetBase(userObject, dictionary, fReset=ufReset, fGetMask=ufGetMask):
     displayMask(secretWord, "", fGetMask)
 
 
-def _setUserFunctions(ids, functions, labels):
-  return _.setUserFunctions(ids, functions, labels)
+def _setUserItems(ids, functions, labels):
+  return _.setUserItems(ids, functions, labels)
 
 
 def mainBase(callback, globals, ids, userFunctions, userFunctionLabels):
-  _setUserFunctions(ids, userFunctions, userFunctionLabels)
+  _setUserItems(ids, userFunctions, userFunctionLabels)
   _.main(_FOLDER, callback, {
      "": globals["_acConnect"],
     "Submit": globals["_acSubmit"],

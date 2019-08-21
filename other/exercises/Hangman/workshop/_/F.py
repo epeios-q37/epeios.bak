@@ -46,7 +46,7 @@ def _acConnect(core):
 
 
 def _Submit(hangman,letter):
-  ufHandleGuess(hangman,letter, getBodyParts())
+  ufHandleGuess()(hangman,letter, getBodyParts())
 
 
 def _acSubmit(core, dom, id):

@@ -51,7 +51,7 @@ def _acConnect(core,dom):
   
 def _Submit(dom,letter,i18n):
   expected = rfIsLetterInWord(letter, getSecretWord())
-  obtained = ufIsLetterInWord(letter, getSecretWord())
+  obtained = ufIsLetterInWord()(letter, getSecretWord())
 
   disabled = [_REPORT_ANSWERS_HIDDEN]
   enabled = []

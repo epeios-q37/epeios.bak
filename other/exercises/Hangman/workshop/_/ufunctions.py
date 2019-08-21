@@ -35,7 +35,7 @@ from constants import *
 
 
 def _defineUserFunction(name):
-  return educ.defineUserFunction(globals(), "uf", name)
+  return educ.defineUserItem(globals(), "uf", name)
 
 
 for d in list(globals()):  # 'list(…)' to avoid 'RuntimeError: dictionary changed size during iteration'.

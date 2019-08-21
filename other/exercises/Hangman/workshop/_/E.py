@@ -42,7 +42,7 @@ def _acConnect():
 
 
 def _Submit(letter):
-  ufHandleGuess(letter, getBodyParts())
+  ufHandleGuess()(letter, getBodyParts())
 
 
 def _acSubmit(core, dom, id):

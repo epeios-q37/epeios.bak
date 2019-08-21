@@ -42,10 +42,10 @@ def _acConnect(core, dom):
 
 
 def _Submit(letter):
-  if ufIsLetterInWord(letter, getSecretWord()):
+  if ufIsLetterInWord()(letter, getSecretWord()):
     if (not letter in getGoodGuesses()):
       setGoodGuesses(getGoodGuesses() + letter)
-      displayMask(getSecretWord(), getGoodGuesses(), ufGetMask)
+      displayMask(getSecretWord(), getGoodGuesses(), lambda: ufGetMask())
   else:
     setErrorsAmount(getErrorsAmount() + 1)
     rfUpdateBody(getBodyParts(), getErrorsAmount())

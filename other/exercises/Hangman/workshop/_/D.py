@@ -42,13 +42,13 @@ def _acConnect():
 
 
 def _Submit(letter):
-  if ufIsLetterInWord(letter, getSecretWord()):
+  if ufIsLetterInWord()(letter, getSecretWord()):
     if (not letter in getGoodGuesses()):
       setGoodGuesses(getGoodGuesses() + letter)
-      displayMask(getSecretWord(), getGoodGuesses(), ufGetMask)
+      displayMask(getSecretWord(), getGoodGuesses(), lambda : ufGetMask())
   else:
     setErrorsAmount(getErrorsAmount() + 1)
-    ufUpdateBody(getBodyParts(), getErrorsAmount())
+    ufUpdateBody()(getBodyParts(), getErrorsAmount())
 
 def _acSubmit(core, dom, id):
   _Submit(id.lower())
