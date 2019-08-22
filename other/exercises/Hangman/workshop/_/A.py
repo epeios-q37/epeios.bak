@@ -53,5 +53,5 @@ def _acRestart():
 def main(callback, userFunctions, userFunctionLabels):
   mainBase(callback, globals(),
   (
-    F_PICK_WORD,
+    UF_PICK_WORD,
   ), userFunctions, userFunctionLabels)

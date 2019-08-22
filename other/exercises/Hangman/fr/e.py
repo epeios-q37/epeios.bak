@@ -4,6 +4,8 @@ import sys
 sys.path.append(".")
 from workshop.fr.e import *
 
+MONTRER_MOT_SECRET = VRAI
+
 """
 Quelques variables vont être gèrées par l'élève. Leur nom est libre.
 Peut être omis, vu que 'raz(…)' va de être appelé avant utilisation

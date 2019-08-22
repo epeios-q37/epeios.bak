@@ -4,6 +4,8 @@ import sys
 sys.path.append(".")
 from workshop.en.e import *
 
+SHOW_SECRET_WORD = TRUE
+
 """
 Some variables are now handled by the student. Names are free.
 Can be omitted, as 'reset(…)' will be call before thie variables

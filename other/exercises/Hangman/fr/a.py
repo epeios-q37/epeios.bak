@@ -7,6 +7,8 @@ from workshop.fr.a import *
 # Ne pas oublier.
 from random import randint
 
+MONTRER_MOT_SECRET = VRAI
+
 DICTIONNAIRE = ("Arbre", "Maison", "Chaise")
 
 

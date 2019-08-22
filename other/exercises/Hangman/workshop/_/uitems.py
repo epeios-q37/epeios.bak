@@ -23,8 +23,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-# User function declarations.
-
 import sys
 sys.path.append("workshop/_")
 
@@ -34,10 +32,20 @@ from accessor import *
 from constants import *
 
 
+# User items definitions.
+
 def _defineUserFunction(name):
   return educ.defineUserItem(globals(), "uf", name)
 
 
-for d in list(globals()):  # 'list(…)' to avoid 'RuntimeError: dictionary changed size during iteration'.
-  if (d[:2]) == 'F_':
+def _defineUserVariable(name):
+  return educ.defineUserItem(globals(), "uv", name)
+
+
+# 'list(…)' to avoid 'RuntimeError: dictionary changed size during iteration'.
+for d in list(globals()):
+  prefix = d[:3]
+  if prefix == 'UF_':
     _defineUserFunction(globals()[d])
+  elif prefix == 'UV_':
+    _defineUserVariable(globals()[d])

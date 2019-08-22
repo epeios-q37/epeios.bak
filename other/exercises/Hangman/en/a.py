@@ -7,8 +7,9 @@ from workshop.en.a import *
 # Don't forget.
 from random import randint
 
-DICTIONARY = ("tree", "house", "chair")
+SHOW_SECRET_WORD = TRUE
 
+DICTIONARY = ("tree", "house", "chair")
 
 """
 The students will be asked to develop the

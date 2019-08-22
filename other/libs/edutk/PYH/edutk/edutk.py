@@ -42,6 +42,8 @@ sys.path.append("../Atlas.python.zip")
 
 import atlastk as Atlas
 
+_USER_ITEM_LINKS = {}
+
 _HEAD_COMMON = """
 <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAMFBMVEUEAvyEhsxERuS8urQsKuycnsRkYtzc2qwUFvRUVtysrrx0ctTs6qTMyrSUksQ0NuyciPBdAAABHklEQVR42mNgwAa8zlxjDd2A4POfOXPmzZkFCAH2M8fNzyALzDlzg2ENssCbMwkMOsgCa858YOjBKxBzRoHhD7LAHiBH5swCT9HQ6A9ggZ4zp7YCrV0DdM6pBpAAG5Blc2aBDZA68wCsZPuZU0BDH07xvHOmAGKKvgMP2NA/Zw7ADIYJXGDgLQeBBSCBFu0aoAPYQUadMQAJAE29zwAVWMCWpgB08ZnDQGsbGhpsgCqBQHNfzRkDEIPlzFmo0T5nzoMovjPHoAK8Zw5BnA5yDosDSAVYQOYMKIDZzkoDzagAsjhqzjRAfXTmzAQgi/vMQZA6pjtAvhEk0E+ATWRRm6YBZuScCUCNN5szH1D4TGdOoSrggtiNAH3vBBjwAQCglIrSZkf1MQAAAABJRU5ErkJggg==" />
 """
@@ -50,7 +52,6 @@ _S_ROOT = "_storage"
 _S_GLOBAL = "global"
 _S_DOM = "dom"
 _S_CORE = "core"
-_S_USER_ITEMS = "userItems"
 
 globals()[_S_ROOT] = {}
 
@@ -127,22 +128,29 @@ def readBody(path, i18n=None):
   return readHTML(path, "Body", i18n)
 
 
-def setUserItems(ids, items, labels):
-  links = {}
+def _assignUserItem(label, items, name):
+  if not name in items:
+    return False
 
-  for id in ids:
-    label = labels[id]
+  _USER_ITEM_LINKS[label] = items[name]
 
-    if not label in items:
-      raise NameError("Missing '{}' item.".format(label))
+  return True
 
-    links[id] = items[label]
 
-  store(_S_USER_ITEMS, links)
+def assignUserItem(label, items, names):
+  return _assignUserItem(label, items, names[label])
+
+
+def assignUserItems(labels, items, names):
+  for label in labels:
+    name = names[label]
+
+    if not _assignUserItem(label, items, name):
+      raise NameError("'{}' is missing!".format(name))
 
 
 def defineUserItem(globals,prefix,name):
-  globals[prefix + name] = lambda : recall(_S_USER_ITEMS)[name]
+  globals[prefix + name] = lambda : _USER_ITEM_LINKS[name]
 
 
 def _readHead(path, title, i18n=None):

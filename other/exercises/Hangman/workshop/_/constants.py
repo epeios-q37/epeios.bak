@@ -23,6 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
+# Body parts.
 P_FACE = "Face"
 P_HEAD = "Head"
 P_TRUNK = "Trunk"
@@ -31,14 +32,19 @@ P_RIGHT_ARM = "RightArm"
 P_LEFT_LEG = "LeftLeg"
 P_RIGHT_LEG = "RightLeg"
 
-F_PICK_WORD = "PickWord"
-F_IS_LETTER_IN_WORD = "IsLetterInWord"
-F_GET_MASK = "GetMask"
-F_UPDATE_BODY = "UpdateBody"
-F_RESET = "Reset"
-F_HANDLE_GUESS = "HandleGuess"
-F_HANGMAN = "Hangman"   # Instancies a new user object.
+# User functions.
+UF_PICK_WORD = "PickWord"
+UF_IS_LETTER_IN_WORD = "IsLetterInWord"
+UF_GET_MASK = "GetMask"
+UF_UPDATE_BODY = "UpdateBody"
+UF_RESET = "Reset"
+UF_HANDLE_GUESS = "HandleGuess"
+UF_HANGMAN = "Hangman"   # Instancies a new user object.
 
+# User variables.
+UV_SHOW_SECRET_WORD = "ShowSecretWord"
+
+# Label (key) of strings to translate.
 S_RESTART = "Restart"
 S_SECRET_WORD = "SecretWord"
 S_LETTER = "Letter"

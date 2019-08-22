@@ -77,6 +77,6 @@ def _acRestart(core, dom):
 
 def main(callback, userFunctions, userFunctionLabels):
   mainBase(callback, globals(), (
-    F_PICK_WORD,
-    F_IS_LETTER_IN_WORD,
+    UF_PICK_WORD,
+    UF_IS_LETTER_IN_WORD,
     ), userFunctions, userFunctionLabels)

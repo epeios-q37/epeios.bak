@@ -61,8 +61,8 @@ def _acRestart():
 def main(callback, userFunctions, userFunctionLabels):
   mainBase(callback, globals(),
   (
-    F_PICK_WORD,
-    F_IS_LETTER_IN_WORD,
-    F_GET_MASK,
-    F_UPDATE_BODY,
+    UF_PICK_WORD,
+    UF_IS_LETTER_IN_WORD,
+    UF_GET_MASK,
+    UF_UPDATE_BODY,
   ), userFunctions, userFunctionLabels)

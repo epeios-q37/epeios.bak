@@ -60,7 +60,7 @@ def _acRestart(core):
 def main(callback, userFunctions, userFunctionLabels):
   mainBase(callback, globals(),
   (
-    F_RESET,
-    F_HANDLE_GUESS,
-    F_HANGMAN
+    UF_RESET,
+    UF_HANDLE_GUESS,
+    UF_HANGMAN
   ), userFunctions, userFunctionLabels)

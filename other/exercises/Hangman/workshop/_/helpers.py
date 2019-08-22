@@ -28,7 +28,7 @@ sys.path.append("workshop/_")
 
 import educ as _
 from accessor import *
-from ufunctions import *
+from uitems import *
 
 import inspect
 
@@ -37,6 +37,8 @@ _I_OUTPUT = "Output"
 _I_SECRET_WORD = "SecretWord"
 
 _FOLDER = ""
+
+_SHOW_SECRET_WORD = False
 
 def redraw():
   _.dom().setLayout("", _.readBody(_FOLDER, getI18n()))
@@ -88,7 +90,7 @@ def confirm(text):
 
 
 def displayMask(word, guesses, fGetMask):
-  clearAndDisplay(fGetMask(word,guesses))
+  clearAndDisplay(fGetMask()(word,guesses))
 
 
 def showSecretWord():
@@ -116,9 +118,11 @@ def _reset(dictionary, suggestion):
 
 
 def resetBase(userObject, dictionary, fReset=ufReset, fGetMask=ufGetMask):
-  suggestion = _.dom().getContent(_I_SECRET_WORD).strip()[:15]
+  suggestion = _.dom().getContent(_I_SECRET_WORD).strip()[:15] if _SHOW_SECRET_WORD else ""
   redraw()
-  _.dom().disableElement("HideSecretWord")
+
+  if _SHOW_SECRET_WORD:
+    _.dom().disableElement("HideSecretWord")
 
   if not fReset:
     fReset = lambda : _reset
@@ -127,18 +131,22 @@ def resetBase(userObject, dictionary, fReset=ufReset, fGetMask=ufGetMask):
 
   secretWord = fReset()(userObject, dictionary, suggestion) if userObject else fReset()(dictionary, suggestion)
 
-  _.dom().setContent(_I_SECRET_WORD, secretWord )
+  if _SHOW_SECRET_WORD:
+    _.dom().setContent(_I_SECRET_WORD, secretWord)
 
   if fGetMask:
     displayMask(secretWord, "", fGetMask)
 
 
-def _setUserItems(ids, functions, labels):
-  return _.setUserItems(ids, functions, labels)
+def _assignUserFunctions(labels, functions, names):
+  return _.assignUserItems(labels, functions, names)
 
 
-def mainBase(callback, globals, ids, userFunctions, userFunctionLabels):
-  _setUserItems(ids, userFunctions, userFunctionLabels)
+def mainBase(callback, globals, labels, userItems, userItemsNames):
+  global _SHOW_SECRET_WORD
+  _assignUserFunctions(labels, userItems, userItemsNames)
+  if _.assignUserItem(UV_SHOW_SECRET_WORD, userItems, userItemsNames):
+    _SHOW_SECRET_WORD = uvShowSecretWord()
   _.main(_FOLDER, callback, {
      "": globals["_acConnect"],
     "Submit": globals["_acSubmit"],

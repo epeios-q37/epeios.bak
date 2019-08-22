@@ -60,14 +60,15 @@ BODY_PARTS = (
   P_RIGHT_LEG
 )
 
-FUNCTION_LABELS = {
-  _.F_GET_MASK: "getMask",
-  _.F_HANDLE_GUESS: "handleGuess",
-  _.F_HANGMAN: "Hangman",
-  _.F_IS_LETTER_IN_WORD: "isLetterInWord",
-  _.F_PICK_WORD: "pickWord",
-  _.F_RESET: "reset",
-  _.F_UPDATE_BODY: "updateBody",
+USER_ITEM_LABELS = {
+  _.UV_SHOW_SECRET_WORD: "SHOW_SECRET_WORD",
+  _.UF_GET_MASK: "getMask",
+  _.UF_HANDLE_GUESS: "handleGuess",
+  _.UF_HANGMAN: "Hangman",
+  _.UF_IS_LETTER_IN_WORD: "isLetterInWord",
+  _.UF_PICK_WORD: "pickWord",
+  _.UF_RESET: "reset",
+  _.UF_UPDATE_BODY: "updateBody",
 }
 
 _.setI18n({

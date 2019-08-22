@@ -4,6 +4,8 @@ import sys
 sys.path.append(".")
 from workshop.en.f import *
 
+SHOW_SECRET_WORD = TRUE
+
 
 def pickWord(*args):
   return workshop.rfPickWord(*args)
