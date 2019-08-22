@@ -121,11 +121,11 @@ def resetBase(userObject, dictionary, fReset=ufReset, fGetMask=ufGetMask):
   _.dom().disableElement("HideSecretWord")
 
   if not fReset:
-    fReset = _reset
+    fReset = lambda : _reset
   else:
     fGetMask = None
 
-  secretWord = fReset(userObject, dictionary, suggestion) if userObject else fReset(dictionary, suggestion)
+  secretWord = fReset()(userObject, dictionary, suggestion) if userObject else fReset()(dictionary, suggestion)
 
   _.dom().setContent(_I_SECRET_WORD, secretWord )
 

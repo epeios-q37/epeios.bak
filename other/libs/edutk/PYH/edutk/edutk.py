@@ -61,28 +61,28 @@ def _threadId():
   return threading.currentThread().ident
 
 
-def _store(set, key, value, g):
-  g[_S_ROOT][set][key] = value
+def _store(set, key, value):
+  globals()[_S_ROOT][set][key] = value
 
 
-def _recall(set, key, g):
-  return g[_S_ROOT][set][key]
+def _recall(set, key):
+  return globals()[_S_ROOT][set][key]
 
 
-def store(key, value, g = globals()):
+def store(key, value):
   try:
-    _store(_threadId(), key, value,g)
+    _store(_threadId(), key, value)
   except KeyError:
     #    print('KE store ' + key)
-    _store(_S_GLOBAL, key, value, g)
+    _store(_S_GLOBAL, key, value)
 
 
-def recall(key,g=globals()):
+def recall(key):
   try:
-    return _recall(_threadId(), key, g)
+    return _recall(_threadId(), key)
   except KeyError:
     #    print('KE recall ' + key)
-    return _recall(_S_GLOBAL, key, g)
+    return _recall(_S_GLOBAL, key)
 
 
 def dom():
@@ -141,8 +141,8 @@ def setUserItems(ids, items, labels):
   store(_S_USER_ITEMS, links)
 
 
-def defineUserItem(g,prefix,name):
-  g[prefix + name] = lambda : recall(_S_USER_ITEMS,g)[name]
+def defineUserItem(globals,prefix,name):
+  globals[prefix + name] = lambda : recall(_S_USER_ITEMS)[name]
 
 
 def _readHead(path, title, i18n=None):
