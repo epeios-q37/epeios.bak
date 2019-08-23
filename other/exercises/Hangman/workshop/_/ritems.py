@@ -57,3 +57,42 @@ def rfUpdateBody(parts,errorsAmount):
 
 def rfPickWord(dictionnary,suggestion=""):
   return suggestion if suggestion else dictionnary[randint(0, len(dictionnary)-1)]
+
+
+class rcHangman:
+  def reset(self, dictionary, suggestion):
+    self.secretWord = pickWord(dictionary, suggestion)
+    self.goodGuesses = ""
+    self.errorsAmount = 0
+
+  def __init__(self):
+    self.secretWord = ""
+    self.goodGuesses = ""
+    self.errorsAmount = 0
+
+  def handleAndTestGuess(self, guess):
+    if isLetterInWord(guess, self.secretWord):
+      if not isLetterInWord(guess, self.goodGuesses):
+        self.goodGuesses += guess
+      return TRUE
+    else:
+      self.errorsAmount += 1
+      return FALSE
+
+
+def rfReset(hangman, dictionary, suggestion):
+  hangman.reset(dictionary, suggestion)
+  print(hangman.secretWord)
+  eraseAndDisplay(getMask(hangman.secretWord, ""))
+
+  return hangman.secretWord
+
+def rfHandleGuess(hangman, guess, parts):
+  if hangman.handleAndTestGuess(guess):
+    eraseAndDisplay(getMask(hangman.secretWord, hangman.goodGuesses))
+  else:
+    updateBody(parts, hangman.errorsAmount)
+
+
+
+

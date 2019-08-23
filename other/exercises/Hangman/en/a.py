@@ -7,6 +7,11 @@ from workshop.en.a import *
 # Don't forget.
 from random import randint
 
+"""
+If missing or set to 'False', the text box displaying
+the secret word, and allowing to type its value, 
+will not be displayed (default mode).
+"""
 SHOW_SECRET_WORD = TRUE
 
 DICTIONARY = ("tree", "house", "chair")

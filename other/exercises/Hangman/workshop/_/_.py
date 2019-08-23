@@ -30,6 +30,6 @@ import educ as _
 
 from accessor import *
 # from constants import *
-from functions import *
+from items import *
 from helpers import *
 

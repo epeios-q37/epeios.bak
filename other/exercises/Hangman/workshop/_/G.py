@@ -26,32 +26,32 @@ SOFTWARE.
 import sys
 sys.path.append("workshop/_")
 
-import educ
+import educ as _
 
-from accessor import *
-from constants import *
-
-
-# User items definitions.
-
-def _defineUserFunction(name):
-  return educ.defineUserItem(globals(), "uf", name)
+from workshop._._ import *
 
 
-def _defineUserVariable(name):
-  return educ.defineUserItem(globals(), "uv", name)
+class Core(_.Core):
+  def __init__(self, dom):
+    _.Core.__init__(self,dom,rcHangman()())
 
 
-def _defineUserClass(name):
-  return educ.defineUserItem(globals(), "uc", name)
+def _acConnect(core):
+  ufAConnect()(core.userFunctionLabels)
 
 
-# 'list(…)' to avoid 'RuntimeError: dictionary changed size during iteration'.
-for d in list(globals()):
-  prefix = d[:3]
-  if prefix == 'UF_':
-    _defineUserFunction(globals()[d])
-  elif prefix == 'UV_':
-    _defineUserVariable(globals()[d])
-  elif prefix == 'UC_':
-    _defineUserClass(globals()[d])
+def _acSubmit(core, dom, id):
+  ufASubmit()(core.userObject, id.lower())
+
+
+def _acRestart(core):
+  ufARestart(core.userObject)
+
+
+def main(callback, userFunctions, userFunctionLabels):
+  mainBase(callback, globals(),
+  (
+    UF_ACONNECT,
+    UF_ASUBMIT,
+    UF_ARESTART,
+  ), userFunctions, userFunctionLabels)

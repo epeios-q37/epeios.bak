@@ -34,6 +34,8 @@ import sys
 sys.path.append(".")
 from workshop.en.a import *
 
+SHOW_SECRET_WORD = TRUE
+
 def pickWord(dictionary,suggestion):
 
 go(globals())
@@ -48,6 +50,8 @@ French version (note the `fr` in the `from workshop.fr.a import *` line):
 import sys
 sys.path.append(".")
 from workshop.fr.a import *
+
+MONTRER_MOT_SECRET = VRAI
 
 def choisirMot(dictionnaire,suggestion):
 

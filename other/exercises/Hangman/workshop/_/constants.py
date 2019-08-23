@@ -39,10 +39,15 @@ UF_GET_MASK = "GetMask"
 UF_UPDATE_BODY = "UpdateBody"
 UF_RESET = "Reset"
 UF_HANDLE_GUESS = "HandleGuess"
-UF_HANGMAN = "Hangman"   # Instancies a new user object.
+UF_ACONNECT = "EConnect"
+UF_ASUBMIT = "ESubmit"
+UF_ARESTART = "ERstart"
 
 # User variables.
 UV_SHOW_SECRET_WORD = "ShowSecretWord"
+
+# User classes
+UC_HANGMAN = "Hangman"
 
 # Label (key) of strings to translate.
 S_RESTART = "Restart"

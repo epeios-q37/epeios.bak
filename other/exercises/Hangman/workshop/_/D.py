@@ -49,6 +49,7 @@ def _Submit(letter):
   else:
     setErrorsAmount(getErrorsAmount() + 1)
     ufUpdateBody()(getBodyParts(), getErrorsAmount())
+    
 
 def _acSubmit(core, dom, id):
   _Submit(id.lower())

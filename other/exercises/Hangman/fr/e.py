@@ -18,7 +18,7 @@ nbErreurs = 0
 """
 NOTA: les quatres fonctions suivantes ne sont pas utilisées en-dehors de ce fichier.
 Bien entendu, ce seront les versions francisées écrites par les étudiants lors des
-précédents exercices qui seront utilisés (cette remarque vaut également pour les
+précédents exercices qui seront utilisées (cette remarque vaut également pour les
 exercices suivants).
 """
 

@@ -70,4 +70,7 @@ def traiterPioche(pendu,pioche,parties):
   else:
     updateBody(parties, pendu.nbErreurs)
 
+
+print(globals())
+
 go(globals())

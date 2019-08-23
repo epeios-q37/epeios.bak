@@ -22,36 +22,11 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
-
-import sys
-sys.path.append("workshop/_")
-
-import educ
-
-from accessor import *
-from constants import *
+ 
+import workshop._.G as workshop
+from workshop.en._ import *
 
 
-# User items definitions.
+def go(globals):
+  workshop.main(lambda dom: workshop.Core(dom), globals, USER_ITEM_LABELS)
 
-def _defineUserFunction(name):
-  return educ.defineUserItem(globals(), "uf", name)
-
-
-def _defineUserVariable(name):
-  return educ.defineUserItem(globals(), "uv", name)
-
-
-def _defineUserClass(name):
-  return educ.defineUserItem(globals(), "uc", name)
-
-
-# 'list(…)' to avoid 'RuntimeError: dictionary changed size during iteration'.
-for d in list(globals()):
-  prefix = d[:3]
-  if prefix == 'UF_':
-    _defineUserFunction(globals()[d])
-  elif prefix == 'UV_':
-    _defineUserVariable(globals()[d])
-  elif prefix == 'UC_':
-    _defineUserClass(globals()[d])

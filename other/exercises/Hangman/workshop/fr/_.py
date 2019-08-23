@@ -69,6 +69,7 @@ PARTIES_CORPS = (
 )
 
 USER_ITEM_LABELS = {
+  _.UC_HANGMAN: "Pendu",
   _.UV_SHOW_SECRET_WORD: "MONTRER_MOT_SECRET",
   _.UF_GET_MASK: "obtenirMasque",
   _.UF_HANDLE_GUESS: "traiterPioche",
@@ -76,7 +77,6 @@ USER_ITEM_LABELS = {
   _.UF_RESET: "reinitialiser",
   _.UF_UPDATE_BODY: "majCorps",
   _.UF_PICK_WORD: "choisirMot",
-  _.UF_HANGMAN: "Pendu",
 }
 
 
@@ -89,6 +89,7 @@ _.setI18n({
     _.S_TRUE: "vrai",
     _.S_FALSE: "faux",
 })
+
 _.setDictionnary(DICTIONNAIRE)
 _.setBodyParts(PARTIES_CORPS)
 

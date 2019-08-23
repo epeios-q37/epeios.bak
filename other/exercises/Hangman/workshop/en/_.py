@@ -61,10 +61,10 @@ BODY_PARTS = (
 )
 
 USER_ITEM_LABELS = {
+  _.UC_HANGMAN: "Hangman",
   _.UV_SHOW_SECRET_WORD: "SHOW_SECRET_WORD",
   _.UF_GET_MASK: "getMask",
   _.UF_HANDLE_GUESS: "handleGuess",
-  _.UF_HANGMAN: "Hangman",
   _.UF_IS_LETTER_IN_WORD: "isLetterInWord",
   _.UF_PICK_WORD: "pickWord",
   _.UF_RESET: "reset",

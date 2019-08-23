@@ -7,6 +7,12 @@ from workshop.fr.a import *
 # Ne pas oublier.
 from random import randint
 
+"""
+Si absent ou mis à 'False', le chap texte
+affichant le mot secret et permettant sa saisie
+ne sera pas affiché (mode par défaut).
+"""
+
 MONTRER_MOT_SECRET = VRAI
 
 DICTIONNAIRE = ("Arbre", "Maison", "Chaise")

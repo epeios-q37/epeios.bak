@@ -26,6 +26,6 @@ SOFTWARE.
 import sys
 sys.path.append("workshop/_")
 
-from rfunctions import *
+from ritems import *
 from uitems import *
 

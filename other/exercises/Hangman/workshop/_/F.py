@@ -33,7 +33,7 @@ from workshop._._ import *
 
 class Core(_.Core):
   def __init__(self, dom):
-    _.Core.__init__(self,dom,ufHangman())
+    _.Core.__init__(self,dom,ucHangman()())
 
 
 def _reset(hangman):
@@ -60,7 +60,7 @@ def _acRestart(core):
 def main(callback, userFunctions, userFunctionLabels):
   mainBase(callback, globals(),
   (
+    UC_HANGMAN,
     UF_RESET,
     UF_HANDLE_GUESS,
-    UF_HANGMAN
   ), userFunctions, userFunctionLabels)
