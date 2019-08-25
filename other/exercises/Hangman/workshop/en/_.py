@@ -110,7 +110,7 @@ def eraseAndDisplay(text):
   _.clearAndDisplay(text)
 
 
-def report(text):
+def notify(text):
   _.alert(text)
 
 

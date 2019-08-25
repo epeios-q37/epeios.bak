@@ -71,13 +71,15 @@ PARTIES_CORPS = (
 USER_ITEM_LABELS = {
   _.UC_HANGMAN: "Pendu",
   _.UV_SHOW_SECRET_WORD: "MONTRER_MOT_SECRET",
-  _.UF_GET_MASK: "obtenirMasque",
+  _.UF_GET_MASK: "determinerMasque",
   _.UF_HANDLE_GUESS: "traiterPioche",
   _.UF_IS_LETTER_IN_WORD: "lettreEstDansMot",
-  _.UF_RESET: "reinitialiser",
+  _.UF_RESET: "reinitialise",
   _.UF_UPDATE_BODY: "majCorps",
   _.UF_PICK_WORD: "choisirMot",
-}
+  _.UF_ACONNECT: "AConnexion",
+  _.UF_ASUBMIT: "APioche",
+  _.UF_ARESTART: "ARedemarrage"}
 
 
 _.setI18n({
@@ -90,36 +92,36 @@ _.setI18n({
     _.S_FALSE: "faux",
 })
 
-_.setDictionnary(DICTIONNAIRE)
+_.setDictionary(DICTIONNAIRE)
 _.setBodyParts(PARTIES_CORPS)
 
 
 _.setAppTitle("Atelier du jeu du pendu")
 
 
-def redessine():
+def redessiner():
   _.redraw()
 
 
-def dessinePartieCorps(partie):
+def dessinerPartieCorps(partie):
   _.drawBodyPart(partie)
 
 
-def efface():
+def effacer():
   _.clear()
 
 
-def affiche(text):
+def afficher(text):
   _.display(text)
 
 
-def effaceEtAffiche(text):
+def effacerEtAfficher(text):
   _.clearAndDisplay(text)
 
 
-def notifie(text):
+def notifier(text):
   _.alert(text)
 
 
-def demande(text):
+def demander(text):
   return _.confirm(text)

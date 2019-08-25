@@ -22,50 +22,11 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
-
-# Reference implementation of user functions.
-
-import sys
-sys.path.append("workshop/_")
-
-from helpers import *
-
-from random import randint
-
-def rfPickWord(dictionary, suggestion):
-  return suggestion if suggestion else dictionary[randrange(len(dictionary))]
+ 
+import workshop._.G as workshop
+from workshop.fr._ import *
 
 
-def rfIsLetterInWord(letter, word):
-  return letter in word
-
-
-def rfGetMask(word, guesses):
-  mask = ""
-  
-  for letter in word:
-    mask += letter if letter in guesses else "_"
-
-  return mask
-
-def rfUpdateBody(parts,errorsAmount):
-  if errorsAmount <= len(parts):
-    drawBodyPart(parts[errorsAmount-1])
-
-  if errorsAmount >= len(parts):
-    drawBodyPart(P_FACE)
-
-
-def rfPickWord(dictionnary,suggestion=""):
-  return suggestion if suggestion else dictionnary[randint(0, len(dictionnary)-1)]
-
-
-def rfHandleGuess(hangman, guess, parts):
-  if hangman.handleAndTestGuess(guess):
-    eraseAndDisplay(getMask(hangman.secretWord, hangman.goodGuesses))
-  else:
-    updateBody(parts, hangman.errorsAmount)
-
-
-
+def go(globals):
+  workshop.main(lambda dom: workshop.Core(dom), globals, USER_ITEM_LABELS)
 

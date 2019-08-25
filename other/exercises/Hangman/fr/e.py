@@ -43,15 +43,15 @@ def updateBody(*args):
 Reinitialise les variables et l'affichage pour une nouvelle partie.
 Retourne le mot secret.
 """
-def reinitialiser(dictionnaire, suggestion):
+def reinitialise(dictionnaire, suggestion):
   global motSecret, bonnesPioches, nbErreurs
 
   motSecret = pickWord(dictionnaire,suggestion)
   bonnesPioches = ""
   nbErreurs = 0
   print(motSecret, suggestion)
-  redessine()
-  effaceEtAffiche(getMask(motSecret,""))
+  redessiner()
+  effacerEtAfficher(getMask(motSecret,""))
 
   return motSecret
 
@@ -71,7 +71,7 @@ def traiterPioche(pioche,parties):
   if isLetterInWord(pioche, motSecret): # Test non obligatoire.
     if not isLetterInWord(pioche,bonnesPioches):
       bonnesPioches += pioche
-      effaceEtAffiche(getMask(motSecret, bonnesPioches))
+      effacerEtAfficher(getMask(motSecret, bonnesPioches))
   else:
     nbErreurs += 1
     updateBody(parties, nbErreurs)

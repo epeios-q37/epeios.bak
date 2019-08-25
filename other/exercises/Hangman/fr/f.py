@@ -66,7 +66,7 @@ Idem.
 """
 def traiterPioche(pendu,pioche,parties):
   if pendu.traiterEtTesterPioche(pioche):
-      effaceEtAffiche(getMask(pendu.motSecret, pendu.bonnesPioches))
+      effacerEtAfficher(getMask(pendu.motSecret, pendu.bonnesPioches))
   else:
     updateBody(parties, pendu.nbErreurs)
 

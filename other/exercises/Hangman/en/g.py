@@ -28,7 +28,7 @@ member from the 'Hangman' class.
 """
 Add the handling of the 'inProgress' variable.
 Only the 'reset(…)' and the '__init__(…)'
-are concerned.
+methods are concerned.
 """
 class Hangman:
   def reset(self, dictionary, suggestion):
@@ -58,16 +58,16 @@ Add the testing.
 """
 def getMaskAndTestIfHasWon(word, guesses):
   mask = ""
-  found = True
+  hasWon = True
 
   for letter in word:
     if isLetterInWord(letter, guesses):
       mask += letter
     else:
       mask += "_"
-      found = False
+      hasWon = False
 
-  return mask, found
+  return mask, hasWon
 
 """
 Add the testing.
@@ -84,17 +84,17 @@ def updateBodyAndTestIfHasLost(parts, errorsAmount):
 
 
 """
-Add the reportings.
+Add the notifications.
 """
 def handleGuess(hangman,guess,parts):
   if hangman.handleAndTestGuess(guess):
     mask,hasWon = getMaskAndTestIfHasWon(hangman.secretWord, hangman.goodGuesses)
     eraseAndDisplay(mask)
     if hasWon and hangman.inProgress:
-      report("You won! Congratulations!")
+      notify("You won! Congratulations!")
       hangman.inProgress = FALSE
   elif hangman.inProgress and updateBodyAndTestIfHasLost(parts, hangman.errorsAmount):
-    report("\nYou lose!\nErrors: {}; good guesses: {}.\n\nThe secret word was: '{}'.".format(hangman.errorsAmount, len(hangman.goodGuesses), hangman.secretWord))
+    notify("\nYou lose!\nErrors: {}; good guesses: {}.\n\nThe secret word was: '{}'.".format(hangman.errorsAmount, len(hangman.goodGuesses), hangman.secretWord))
     hangman.inProgress = FALSE
 
 
@@ -107,17 +107,17 @@ def AConnect(hangman,dictionary,suggestion):
 
 """
 Called on new guess.
-NOTA: the letter will be disabled on the keyboerd. 
+NOTA: the letter will be disabled on the keyboard. 
 """
 def ASubmit(hangman, guess, parts):
   handleGuess(hangman,guess,parts)
 
 """
-Called on a clink on the 'Restart' button.
+Called on a click on the 'Restart' button.
 """
 def ARestart(hangman, dictionary, suggestion):
   if hangman.inProgress:
-    report("Errors: {}; good guesses: {}.\n\nThe secret word was: '{}'.".format(
+    notify("\nErrors: {}; good guesses: {}.\n\nThe secret word was: '{}'.".format(
         hangman.errorsAmount, len(hangman.goodGuesses), hangman.secretWord))
 
   return reset(hangman, dictionary, suggestion)

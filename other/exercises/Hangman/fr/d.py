@@ -14,7 +14,7 @@ def lettreEstDansMot(*args):
     return workshop.rfIsLetterInWord(*args)
 
 
-def obtenirMasque(*args):
+def determinerMasque(*args):
     return workshop.rfGetMask(*args)
     
 
