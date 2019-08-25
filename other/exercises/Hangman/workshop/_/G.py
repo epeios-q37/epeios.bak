@@ -49,6 +49,8 @@ def _acConnect(core):
 
 def _acSubmit(core, dom, id):
   ufASubmit()(core.userObject, id.lower(),getBodyParts())
+  dom.addClass(id, "chosen")
+
 
 
 def _acRestart(core):

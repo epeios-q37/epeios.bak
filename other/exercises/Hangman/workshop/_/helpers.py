@@ -51,7 +51,7 @@ def _addItem(shortcut, items, label, ids):
 
 def show(items="mgk"):
   ids = []
-  items = items.casefold()
+  items = items.lower()
 
   _addItem("m", items, "Mask", ids)
   _addItem("g", items, "Gallow", ids)

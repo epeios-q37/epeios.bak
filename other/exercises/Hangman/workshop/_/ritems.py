@@ -48,41 +48,16 @@ def rfGetMask(word, guesses):
 
   return mask
 
-# The returned value is not useful for all exercises.
 def rfUpdateBody(parts,errorsAmount):
   if errorsAmount <= len(parts):
     drawBodyPart(parts[errorsAmount-1])
 
   if errorsAmount >= len(parts):
     drawBodyPart(P_FACE)
-    return True
-  else:
-    return False
 
 
 def rfPickWord(dictionnary,suggestion=""):
   return suggestion if suggestion else dictionnary[randint(0, len(dictionnary)-1)]
-
-
-class rcHangman:
-  def reset(self, dictionary, suggestion):
-    self.secretWord = rfPickWord(dictionary, suggestion)
-    self.goodGuesses = ""
-    self.errorsAmount = 0
-
-  def __init__(self):
-    self.secretWord = ""
-    self.goodGuesses = ""
-    self.errorsAmount = 0
-
-  def handleAndTestGuess(self, guess):
-    if rfIsLetterInWord(guess, self.secretWord):
-      if not rfIsLetterInWord(guess, self.goodGuesses):
-        self.goodGuesses += guess
-      return True
-    else:
-      self.errorsAmount += 1
-      return False
 
 
 def rfReset(hangman, dictionary, suggestion):

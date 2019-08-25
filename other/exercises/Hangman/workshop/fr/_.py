@@ -117,7 +117,7 @@ def effaceEtAffiche(text):
   _.clearAndDisplay(text)
 
 
-def alerte(text):
+def notifie(text):
   _.alert(text)
 
 
