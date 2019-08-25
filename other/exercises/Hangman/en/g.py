@@ -2,7 +2,7 @@
 
 import sys
 sys.path.append(".")
-from workshop.en.f import *
+from workshop.en.g import *
 
 SHOW_SECRET_WORD = TRUE
 
@@ -23,53 +23,36 @@ def updateBody(*args):
   return workshop.rfUpdateBody(*args)
 
 
-"""
-Let's introduce POO.
-Class name must be 'Hangman',
-but variables and methos name are free.
-"""
-class Hangman:
-  def reset(self,dictionary,suggestion):
-    self.secretWord = pickWord(dictionary,suggestion)
-    self.goodGuesses = ""
-    self.errorsAmount = 0
-
-  def __init__(self):
-    self.secretWord = ""
-    self.goodGuesses = ""
-    self.errorsAmount = 0
-
-  """
-  Updates the good guesses ot the amount of errors wether 'guess' is
-  good ot not. Returns TRUE if 'guess' is good, FALSE otherwise.
-  """
-  def handleAndTestGuess(self, guess):
-    if isLetterInWord(guess, self.secretWord):
-      if not isLetterInWord(guess, self.goodGuesses):
-        self.goodGuesses += guess
-      return TRUE
-    else:
-      self.errorsAmount += 1
-      return FALSE
+Hangman = workshop.rcHangman
 
 
-"""
-Same as previous exercise, but this time we use an object. 
-"""
 def reset(hangman,dictionary,suggestion):
-  hangman.reset(dictionary,suggestion)
-  print(hangman.secretWord)
-  eraseAndDisplay(getMask(hangman.secretWord,""))
+  return workshop.rfReset(hangman,dictionary,suggestion)
 
-  return hangman.secretWord
 
-"""
-Idem.
-"""
 def handleGuess(hangman,guess,parts):
   if hangman.handleAndTestGuess(guess):
-    eraseAndDisplay(getMask(hangman.secretWord,hangman.goodGuesses))
+    mask = getMask(hangman.secretWord, hangman.goodGuesses)
+    eraseAndDisplay(mask)
+
+    if not '_' in mask:
+      report("You won! Congratulations!")
   else:
-    updateBody(parts, hangman.errorsAmount)
+    if updateBody(parts, hangman.errorsAmount):
+      report("\nYou lose!\nErrors: {}; good guesses: {}.\n\nThe secret word was: '{}'.".format(hangman.errorsAmount, len(hangman.goodGuesses), hangman.secretWord))
+
+
+def AConnect(hangman,dictionary,suggestion):
+  return reset(hangman,dictionary,suggestion)
+
+
+def ASubmit(hangman,guess,parts):
+  handleGuess(hangman,guess,parts)
+
+
+def ARestart(hangman, dictionary, suggestion):
+  return reset(hangman, dictionary, suggestion)
+
+
 
 go(globals())

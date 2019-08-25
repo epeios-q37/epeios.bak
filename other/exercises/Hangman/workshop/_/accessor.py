@@ -35,7 +35,7 @@ def defSetAndGet_(name):
 # Internal use.
 defSetAndGet_("AppTitle")
 defSetAndGet_("I18n")
-defSetAndGet_("Dictionnary")
+defSetAndGet_("Dictionary")
 defSetAndGet_("BodyParts")
 
 # Variables for the application.

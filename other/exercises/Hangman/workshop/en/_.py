@@ -69,6 +69,9 @@ USER_ITEM_LABELS = {
   _.UF_PICK_WORD: "pickWord",
   _.UF_RESET: "reset",
   _.UF_UPDATE_BODY: "updateBody",
+  _.UF_ACONNECT: "AConnect",
+  _.UF_ASUBMIT: "ASubmit",
+  _.UF_ARESTART: "ARestart"
 }
 
 _.setI18n({
@@ -80,7 +83,8 @@ _.setI18n({
   _.S_TRUE: "true",
   _.S_FALSE: "false",
 })
-_.setDictionnary(DICTIONARY)
+
+_.setDictionary(DICTIONARY)
 _.setBodyParts(BODY_PARTS)
 
 _.setAppTitle("Hangman game workshop")
@@ -106,7 +110,7 @@ def eraseAndDisplay(text):
   _.clearAndDisplay(text)
 
 
-def warn(text):
+def report(text):
   _.alert(text)
 
 

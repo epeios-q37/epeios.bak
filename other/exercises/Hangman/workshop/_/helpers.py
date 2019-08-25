@@ -107,7 +107,7 @@ def _pickRandom(dictionary, suggestion):
       return ufPickWord()()
 
   
-def _reset(dictionary, suggestion):
+def mainBaseReset(dictionary, suggestion):
   setErrorsAmount(0)
   setGoodGuesses("")
 
@@ -116,26 +116,35 @@ def _reset(dictionary, suggestion):
 
   return secretWord
 
-
-def resetBase(userObject, dictionary, fReset=ufReset, fGetMask=ufGetMask):
+def preBaseReset():
   suggestion = _.dom().getContent(_I_SECRET_WORD).strip()[:15] if _SHOW_SECRET_WORD else ""
   redraw()
 
   if _SHOW_SECRET_WORD:
     _.dom().disableElement("HideSecretWord")
 
-  if not fReset:
-    fReset = lambda : _reset
-  else:
-    fGetMask = None
+  return suggestion
 
-  secretWord = fReset()(userObject, dictionary, suggestion) if userObject else fReset()(dictionary, suggestion)
 
+def postBaseReset(secretWord, fGetMask=ufGetMask):
   if _SHOW_SECRET_WORD:
     _.dom().setContent(_I_SECRET_WORD, secretWord)
 
   if fGetMask:
     displayMask(secretWord, "", fGetMask)
+
+
+def baseReset(userObject, dictionary, fReset=ufReset, fGetMask=ufGetMask):
+  suggestion = preBaseReset()
+
+  if not fReset:
+    fReset = lambda : mainBaseReset
+  else:
+    fGetMask = None
+
+  secretWord = fReset()(userObject, dictionary, suggestion) if userObject else fReset()(dictionary, suggestion)
+
+  postBaseReset(secretWord,fGetMask)
 
 
 def _assignUserFunctions(labels, functions, names):

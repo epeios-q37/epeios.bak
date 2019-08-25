@@ -39,9 +39,9 @@ UF_GET_MASK = "GetMask"
 UF_UPDATE_BODY = "UpdateBody"
 UF_RESET = "Reset"
 UF_HANDLE_GUESS = "HandleGuess"
-UF_ACONNECT = "EConnect"
-UF_ASUBMIT = "ESubmit"
-UF_ARESTART = "ERstart"
+UF_ACONNECT = "AConnect"
+UF_ASUBMIT = "ASubmit"
+UF_ARESTART = "ARestart"
 
 # User variables.
 UV_SHOW_SECRET_WORD = "ShowSecretWord"

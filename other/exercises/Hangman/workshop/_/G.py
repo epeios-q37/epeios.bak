@@ -33,24 +33,32 @@ from workshop._._ import *
 
 class Core(_.Core):
   def __init__(self, dom):
-    _.Core.__init__(self,dom,rcHangman()())
+    _.Core.__init__(self,dom,ucHangman()())
+
+
+def _reset(hangman, ufunction):
+  suggestion = preBaseReset()
+  secretWord = ufunction(hangman,getDictionary(),suggestion)
+  postBaseReset(secretWord,None)
 
 
 def _acConnect(core):
-  ufAConnect()(core.userFunctionLabels)
+  show()
+  _reset(core.userObject, ufAConnect())
 
 
 def _acSubmit(core, dom, id):
-  ufASubmit()(core.userObject, id.lower())
+  ufASubmit()(core.userObject, id.lower(),getBodyParts())
 
 
 def _acRestart(core):
-  ufARestart(core.userObject)
+  _reset(core.userObject, ufARestart())
 
 
 def main(callback, userFunctions, userFunctionLabels):
   mainBase(callback, globals(),
   (
+    UC_HANGMAN,
     UF_ACONNECT,
     UF_ASUBMIT,
     UF_ARESTART,
