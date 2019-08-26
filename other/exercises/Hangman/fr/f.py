@@ -49,14 +49,14 @@ class Pendu:
 
 
 """
-Pareil que pour le précédent objet,
+Pareil que pour le précédent exercice,
 sauf que l'on utilise un objet.
 """
 def reinitialiser(pendu,dictionnaire,suggestion):
   pendu.reinitialiser(dictionnaire,suggestion)
   print(pendu.motSecret)
-  redessine()
-  effaceEtAffiche(getMask(pendu.motSecret,""))
+  redessiner()
+  effacerEtAfficher(getMask(pendu.motSecret,""))
 
   return pendu.motSecret
   
@@ -69,8 +69,5 @@ def traiterPioche(pendu,pioche,parties):
       effacerEtAfficher(getMask(pendu.motSecret, pendu.bonnesPioches))
   else:
     updateBody(parties, pendu.nbErreurs)
-
-
-print(globals())
 
 go(globals())

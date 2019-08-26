@@ -37,7 +37,7 @@ _REPORT_ANSWERS_HIDDEN = "ReportAnswersHidden"
 
 
 def _reset():
-  baseReset(None, getDictionnary(), None, None)
+  baseReset(None, getDictionary(), None, None)
 
 
 def _append(list,item):

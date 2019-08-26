@@ -24,7 +24,7 @@ wether or not one wants to introduce tuples
 """
 
 """
-Returns a random word from 'DICTIONNARY'.
+Returns a random word from 'DICTIONARY'.
 """
 def _pickWord0():
   return DICTIONARY[randint(0, len(DICTIONARY)-1)]
@@ -35,7 +35,7 @@ def _pickWord0():
 - 'suggestion'; the content of the secrete word text box;
   used only in 'dev' mode.
 Returns 'suggestion', if not empty, otherwise a random
-word from 'DICTIONNARY'.
+word from 'DICTIONARY'.
 """
 def _pickWord1(suggestion):
   if suggestion:
@@ -46,12 +46,12 @@ def _pickWord1(suggestion):
 
 
 """
-- 'dictionnary': tuple containing words to pick,
+- 'dictionary': tuple containing words to pick,
 - 'suggestion'; the content of the secrete word text box;
   used only in 'dev' mode.
 Returns 'suggestion', if not empty, otherwise a random
 word from 'dictionary'.
-NOTA: the 'DICTIONNARY' constant can naturally be removed.
+NOTA: the 'DICTIONARY' constant can naturally be removed.
 """
 def _pickWord2(dictionary,suggestion):
   if suggestion:

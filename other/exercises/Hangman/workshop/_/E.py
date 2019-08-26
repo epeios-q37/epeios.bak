@@ -33,7 +33,7 @@ from workshop._._ import *
 
 
 def _reset():
-  baseReset(None, getDictionnary())
+  baseReset(None, getDictionary())
 
 
 def _acConnect():

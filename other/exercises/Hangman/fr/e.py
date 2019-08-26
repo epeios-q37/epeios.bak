@@ -43,13 +43,13 @@ def updateBody(*args):
 Reinitialise les variables et l'affichage pour une nouvelle partie.
 Retourne le mot secret.
 """
-def reinitialise(dictionnaire, suggestion):
+def reinitialiser(dictionnaire, suggestion):
   global motSecret, bonnesPioches, nbErreurs
 
   motSecret = pickWord(dictionnaire,suggestion)
   bonnesPioches = ""
   nbErreurs = 0
-  print(motSecret, suggestion)
+  print(motSecret)
   redessiner()
   effacerEtAfficher(getMask(motSecret,""))
 

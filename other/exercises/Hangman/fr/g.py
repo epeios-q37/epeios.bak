@@ -99,7 +99,7 @@ def traiterPioche(pendu, pioche, parties):
       notifier("Tu as gagné ! Félicitations !")
       pendu.enCours = FAUX
   elif pendu.enCours and majCorpsEtTesterSiDefaite(parties, pendu.nbErreurs):
-    notifier("\nPerdu !\nErreurs : {} ; bonnes pioches : {}\n\nLe mot à deviner était : '{}'.".format(pendu.nbErreurs, len(pendu.bonnesPioches),  pendu.motSecret))
+    notifier("\nPerdu !\nErreurs : {} ; bonnes pioches : {}.\n\nLe mot à deviner était : '{}'.".format(pendu.nbErreurs, len(pendu.bonnesPioches),  pendu.motSecret))
     pendu.enCours = FAUX
 
 
@@ -123,7 +123,7 @@ Appelé lors d'un redémarrage.
 """
 def ARedemarrage(pendu, dictionnaire, suggestion):
   if pendu.enCours:
-    notifier("\nErreurs : {} ; bonnes pioches : {}\n\nLe mot à deviner était : '{}'.".format(pendu.nbErreurs, len(pendu.bonnesPioches),  pendu.motSecret))
+    notifier("\nErreurs : {} ; bonnes pioches : {}.\n\nLe mot à deviner était : '{}'.".format(pendu.nbErreurs, len(pendu.bonnesPioches),  pendu.motSecret))
 
   return reinitialiser(pendu, dictionnaire, suggestion)
 

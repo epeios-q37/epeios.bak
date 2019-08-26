@@ -28,10 +28,10 @@ Lorsque la dernière partie du corps est dessinée, le visage ('P_VISAGE') doit
 """
 def majCorps(parties, nbErreurs):
   if nbErreurs <= len(parties):
-    dessinePartieCorps(parties[nbErreurs-1])
+    dessinerPartieCorps(parties[nbErreurs-1])
 
   if nbErreurs >= len(parties):
-    dessinePartieCorps(P_VISAGE)
+    dessinerPartieCorps(P_VISAGE)
 
 
 go(globals())

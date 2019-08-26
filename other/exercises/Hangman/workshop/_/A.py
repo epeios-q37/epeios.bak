@@ -33,7 +33,7 @@ from workshop._._ import *
 
 
 def _reset():
-  baseReset(None, getDictionnary(), None, None)
+  baseReset(None, getDictionary(), None, None)
   clearAndDisplay(getSecretWord())
 
 

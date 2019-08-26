@@ -56,8 +56,8 @@ def rfUpdateBody(parts,errorsAmount):
     drawBodyPart(P_FACE)
 
 
-def rfPickWord(dictionnary,suggestion=""):
-  return suggestion if suggestion else dictionnary[randint(0, len(dictionnary)-1)]
+def rfPickWord(dictionary,suggestion=""):
+  return suggestion if suggestion else dictionary[randint(0, len(dictionary)-1)]
 
 
 def rfHandleGuess(hangman, guess, parts):

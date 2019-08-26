@@ -15,10 +15,6 @@ def isLetterInWord(*args):
     return workshop.rfIsLetterInWord(*args)
 
 
-def reset(hangman, dictionary, suggestion):
-  return workshop.rfReset(hangman, dictionary, suggestion)
-
-
 """
 At first, don't handle the 'inProgress' variable
 member from the 'Hangman' class.
@@ -69,6 +65,7 @@ def getMaskAndTestIfHasWon(word, guesses):
 
   return mask, hasWon
 
+
 """
 Add the testing.
 """
@@ -96,6 +93,16 @@ def handleGuess(hangman,guess,parts):
   elif hangman.inProgress and updateBodyAndTestIfHasLost(parts, hangman.errorsAmount):
     notify("\nYou lose!\nErrors: {}; good guesses: {}.\n\nThe secret word was: '{}'.".format(hangman.errorsAmount, len(hangman.goodGuesses), hangman.secretWord))
     hangman.inProgress = FALSE
+
+"""
+Modify to use 'getMaskAndTestIfHasWon(…)'.
+"""
+def reset(hangman, dictionary, suggestion):
+  hangman.reset(dictionary, suggestion)
+  print(hangman.secretWord)
+  eraseAndDisplay(getMaskAndTestIfHasWon(hangman.secretWord, "")[0])
+
+  return hangman.secretWord
 
 
 """

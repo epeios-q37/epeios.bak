@@ -74,7 +74,7 @@ USER_ITEM_LABELS = {
   _.UF_GET_MASK: "determinerMasque",
   _.UF_HANDLE_GUESS: "traiterPioche",
   _.UF_IS_LETTER_IN_WORD: "lettreEstDansMot",
-  _.UF_RESET: "reinitialise",
+  _.UF_RESET: "reinitialiser",
   _.UF_UPDATE_BODY: "majCorps",
   _.UF_PICK_WORD: "choisirMot",
   _.UF_ACONNECT: "AConnexion",

@@ -37,7 +37,7 @@ class Core(_.Core):
 
 
 def _reset(hangman):
-  baseReset(hangman, getDictionnary())
+  baseReset(hangman, getDictionary())
 
 
 def _acConnect(core):
