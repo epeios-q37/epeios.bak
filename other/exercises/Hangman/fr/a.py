@@ -8,7 +8,7 @@ from workshop.fr.a import *
 from random import randint
 
 """
-Si absent ou mis à 'False', le chap texte
+Si absent ou mis à 'False', le champ texte
 affichant le mot secret et permettant sa saisie
 ne sera pas affiché (mode par défaut).
 """
