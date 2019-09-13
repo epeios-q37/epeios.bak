@@ -18,3 +18,11 @@ Cette section est pour la publication *web* (plus précisément, sur *Github*) d
 
 
   <file://h:/hg/epeios/notes.md>
+
+  ## *hg-git*
+
+  Aller à <https://bitbucket.org/durin42/hg-git/src/default/>, sélectionner un *tag* (à priori, le dernier), et vérifier dans le *Makefile* si la version de *mercurial* est  gérée. Changer de *tag* si nécessaire. Puis aller dans <https://bitbucket.org/durin42/hg-git/downloads/?tab=tags>, télécharger l'archive souhaitée, et remplacer le répertoire `~/hg/hg-extensions/hg-git` par celui contenu dans l'archive.
+
+  *Dulwich* peut être chargé à partir du gestionnaire de logiciel.
+
+  *NOTA* : il semblerait que le *pligin* soit disponible tel quel dans le gestionnaire de logiciels (*Mercurial-git*)…
