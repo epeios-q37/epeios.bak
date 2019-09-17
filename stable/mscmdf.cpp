@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define MSCMDF__COMPILATION
+#define MSCMDF_COMPILATION_
 
 #include "mscmdf.h"
 

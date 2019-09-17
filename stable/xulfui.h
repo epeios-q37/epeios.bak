@@ -19,8 +19,8 @@
 
 //	$Id: xulfui.h,v 1.25 2013/04/09 17:57:27 csimon Exp $
 
-#ifndef XULFUI__INC
-#define XULFUI__INC
+#ifndef XULFUI_INC_
+#define XULFUI_INC_
 
 #define XULFUI_NAME		"XULFUI"
 

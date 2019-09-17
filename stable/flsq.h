@@ -19,8 +19,8 @@
 
 // FiLe Storage
 
-#ifndef FLSQ__INC
-# define FLSQ__INC
+#ifndef FLSQ_INC_
+# define FLSQ_INC_
 
 # define FLSQ_NAME		"FLSQ"
 

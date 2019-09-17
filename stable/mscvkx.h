@@ -19,8 +19,8 @@
 
 //	$Id: mscvkx.h,v 1.1 2010/07/16 08:25:54 csimon Exp $
 
-#ifndef MSCVKX__INC
-#define MSCVKX__INC
+#ifndef MSCVKX_INC_
+#define MSCVKX_INC_
 
 #define MSCVKX_NAME		"MSCVKX"
 

@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define DTFNTV__COMPILATION
+#define DTFNTV_COMPILATION_
 
 #include "dtfntv.h"
 

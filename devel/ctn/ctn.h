@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef CTN__INC
-# define CTN__INC
+#ifndef CTN_INC_
+# define CTN_INC_
 
 # define CTN_NAME		"CTN"
 

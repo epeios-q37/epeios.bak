@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define CGIDAT__COMPILATION
+#define CGIDAT_COMPILATION_
 
 #include "cgidat.h"
 

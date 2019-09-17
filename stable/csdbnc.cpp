@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define CSDBNC__COMPILATION
+#define CSDBNC_COMPILATION_
 
 #include "csdbnc.h"
 

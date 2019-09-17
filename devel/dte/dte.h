@@ -19,8 +19,8 @@
 
 //D DaTE 
 
-#ifndef DTE__INC
-# define DTE__INC
+#ifndef DTE_INC_
+# define DTE_INC_
 
 # define DTE_NAME		"DTE"
 

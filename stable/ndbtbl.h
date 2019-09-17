@@ -19,8 +19,8 @@
 
 //	$Id: ndbtbl.h,v 1.25 2013/04/15 10:50:53 csimon Exp $
 
-#ifndef NDBTBL__INC
-#define NDBTBL__INC
+#ifndef NDBTBL_INC_
+#define NDBTBL_INC_
 
 #define NDBTBL_NAME		"NDBTBL"
 

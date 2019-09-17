@@ -19,8 +19,8 @@
 
 //	$Id: fblber.h,v 1.9 2013/04/15 10:50:49 csimon Exp $
 
-#ifndef FBLBER__INC
-#define FBLBER__INC
+#ifndef FBLBER_INC_
+#define FBLBER_INC_
 
 #define FBLBER_NAME		"FBLBER"
 

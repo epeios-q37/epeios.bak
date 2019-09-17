@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define STR__COMPILATION
+#define STR_COMPILATION_
 
 #include "str.h"
 

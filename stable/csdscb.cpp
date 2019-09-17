@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define CSDSCB__COMPILATION
+#define CSDSCB_COMPILATION_
 
 #include "csdscb.h"
 

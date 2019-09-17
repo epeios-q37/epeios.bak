@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef BOMHDL__INC
-#define BOMHDL__INC
+#ifndef BOMHDL_INC_
+#define BOMHDL_INC_
 
 #define BOMHDL_NAME		"BOMHDL"
 

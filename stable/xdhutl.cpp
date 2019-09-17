@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define XDHUTL__COMPILATION
+#define XDHUTL_COMPILATION_
 
 #include "xdhutl.h"
 

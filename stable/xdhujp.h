@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef XDHUJP__INC
-# define XDHUJP__INC
+#ifndef XDHUJP_INC_
+# define XDHUJP_INC_
 
 # define XDHUJP_NAME		"XDHUJP"
 

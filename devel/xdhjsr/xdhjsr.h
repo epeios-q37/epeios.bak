@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef XDHJSR__INC
-# define XDHJSR__INC
+#ifndef XDHJSR_INC_
+# define XDHJSR_INC_
 
 # define XDHJSR_NAME		"XDHJSR"
 

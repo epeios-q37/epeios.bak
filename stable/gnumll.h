@@ -19,8 +19,8 @@
 
 //	$Id: gnumll.h,v 1.11 2012/11/14 16:06:29 csimon Exp $
 
-#ifndef GNUMLL__INC
-#define GNUMLL__INC
+#ifndef GNUMLL_INC_
+#define GNUMLL_INC_
 
 #define GNUMLL_NAME		"GNUMLL"
 

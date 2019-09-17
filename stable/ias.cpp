@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define IAS__COMPILATION
+#define IAS_COMPILATION_
 
 #include "ias.h"
 

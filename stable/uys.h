@@ -19,8 +19,8 @@
 
 //D UnTyped Storage 
 
-#ifndef UYS__INC
-#define UYS__INC
+#ifndef UYS_INC_
+#define UYS_INC_
 
 #define UYS_NAME		"UYS"
 
@@ -37,7 +37,7 @@
 # include "sdr.h"
 # include "mns.h"
 # include "ags.h"
-# ifndef FLS__COMPILATION	// To avoid resursive inclusion.
+# ifndef FLS_COMPILATION_	// To avoid resursive inclusion.
 #  include "flsq.h"
 # endif
 

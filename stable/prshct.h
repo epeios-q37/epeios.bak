@@ -19,8 +19,8 @@
 
 //	$Id: prshct.h,v 1.4 2012/11/14 16:06:32 csimon Exp $
 
-#ifndef PRSHCT__INC
-#define PRSHCT__INC
+#ifndef PRSHCT_INC_
+#define PRSHCT_INC_
 
 #define PRSHCT_NAME		"PRSHCT"
 

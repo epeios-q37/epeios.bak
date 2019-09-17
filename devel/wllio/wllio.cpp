@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define WLLIO__COMPILATION
+#define WLLIO_COMPILATION_
 
 #include "wllio.h"
 

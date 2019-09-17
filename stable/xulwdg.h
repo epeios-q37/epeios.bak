@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef XULWDG__INC
-#define XULWDG__INC
+#ifndef XULWDG_INC_
+#define XULWDG_INC_
 
 #define XULWDG_NAME		"XULWDG"
 

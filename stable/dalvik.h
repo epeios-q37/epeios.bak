@@ -19,8 +19,8 @@
 
 //	$Id: dalvik.h,v 1.1 2012/12/04 16:04:27 csimon Exp $
 
-#ifndef DALVIK__INC
-#define DALVIK__INC
+#ifndef DALVIK_INC_
+#define DALVIK_INC_
 
 #define DALVIK_NAME		"DALVIK"
 

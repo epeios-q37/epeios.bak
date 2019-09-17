@@ -19,8 +19,8 @@
 
 //	$Id: xulfkl.h,v 1.17 2012/10/24 15:03:24 csimon Exp $
 
-#ifndef XULFKL__INC
-#define XULFKL__INC
+#ifndef XULFKL_INC_
+#define XULFKL_INC_
 
 #define XULFKL_NAME		"XULFKL"
 

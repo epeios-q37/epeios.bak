@@ -19,8 +19,8 @@
 
 // PrOXY BASE
 
-#ifndef PRXYBASE__INC
-# define PRXYBASE__INC
+#ifndef PRXYBASE_INC_
+# define PRXYBASE_INC_
 
 # define PRXYBASE_NAME		"PRXYBASE"
 

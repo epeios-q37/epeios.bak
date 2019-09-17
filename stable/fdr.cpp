@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define FDR__COMPILATION
+#define FDR_COMPILATION_
 
 #include "fdr.h"
 

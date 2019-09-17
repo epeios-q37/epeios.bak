@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define CSDMXC__COMPILATION
+#define CSDMXC_COMPILATION_
 
 #include "csdmxc.h"
 

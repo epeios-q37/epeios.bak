@@ -19,8 +19,8 @@
 
 // SoCLe MISCellaneous
 
-#ifndef SCLMISC__INC
-# define SCLMISC__INC
+#ifndef SCLMISC_INC_
+# define SCLMISC_INC_
 
 # define SCLMISC_NAME		"SCLMISC"
 

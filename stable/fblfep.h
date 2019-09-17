@@ -19,8 +19,8 @@
 
 //	$Id: xxx.h,v 1.9 2012/11/14 16:06:23 csimon Exp $
 
-#ifndef FBLFEP__INC
-#define FBLFEP__INC
+#ifndef FBLFEP_INC_
+#define FBLFEP_INC_
 
 #define FBLFEP_NAME		"FBLFEP"
 

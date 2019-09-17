@@ -19,8 +19,8 @@
 
 // QUEue 
 
-#ifndef QUE__INC
-# define QUE__INC
+#ifndef QUE_INC_
+# define QUE_INC_
 
 # define QUE_NAME		"QUE"
 
@@ -380,7 +380,7 @@ namespace que {
 
 	E_AUTO1( queue );
 
-# ifndef FLS__COMPILATION
+# ifndef FLS_COMPILATION_
 	using bch::rRH;
 
 	using bch::rHF;

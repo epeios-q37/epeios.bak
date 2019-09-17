@@ -19,8 +19,8 @@
 
 //	$Id: mthfrc.h,v 1.1 2010/07/15 10:58:18 csimon Exp $
 
-#ifndef MTHFRC__INC
-#define MTHFRC__INC
+#ifndef MTHFRC_INC_
+#define MTHFRC_INC_
 
 #define MTHFRC_NAME		"MTHFRC"
 

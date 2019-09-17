@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define MSCVKT__COMPILATION
+#define MSCVKT_COMPILATION_
 
 #include "mscvkt.h"
 

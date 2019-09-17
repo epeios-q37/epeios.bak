@@ -19,8 +19,8 @@
 
 //	$Id: xmldoc.h,v 1.3 2013/07/25 15:59:16 csimon Exp $
 
-#ifndef XMLDOC__INC
-#define XMLDOC__INC
+#ifndef XMLDOC_INC_
+#define XMLDOC_INC_
 
 #define XMLDOC_NAME		"XMLDOC"
 

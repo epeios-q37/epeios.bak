@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define DLBRRY__COMPILATION
+#define DLBRRY_COMPILATION_
 
 #include "dlbrry.h"
 

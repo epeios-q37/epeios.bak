@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define PLGNCORE__COMPILATION
+#define PLGNCORE_COMPILATION_
 
 #include "plgncore.h"
 

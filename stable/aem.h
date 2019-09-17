@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef AEM__INC
-# define AEM__INC
+#ifndef AEM_INC_
+# define AEM_INC_
 
 # define AEM_NAME		"AEM"
 

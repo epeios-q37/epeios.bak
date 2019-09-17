@@ -19,8 +19,8 @@
 
 //	$Id: xmlval.h,v 1.5 2010/07/14 14:54:31 csimon Exp $
 
-#ifndef XMLVAL__INC
-#define XMLVAL__INC
+#ifndef XMLVAL_INC_
+#define XMLVAL_INC_
 
 #define XMLVAL_NAME		"XMLVAL"
 

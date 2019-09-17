@@ -19,8 +19,8 @@
 
 // InDeX Binary TRee 
 
-#ifndef IDXBTR__INC
-# define IDXBTR__INC
+#ifndef IDXBTR_INC_
+# define IDXBTR_INC_
 
 # define IDXBTR_NAME		"IDXBTR"
 

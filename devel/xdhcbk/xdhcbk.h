@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef SKT__INC
-# define SKT__INC
+#ifndef SKT_INC_
+# define SKT_INC_
 
 # define SKT_NAME		"SKT"
 

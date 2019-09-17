@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef MTK__INC
-# define MTK__INC
+#ifndef MTK_INC_
+# define MTK_INC_
 
 # define MTK_NAME		"MTK"
 

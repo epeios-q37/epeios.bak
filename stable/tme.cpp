@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define TME__COMPILATION
+#define TME_COMPILATION_
 
 #include "tme.h"
 

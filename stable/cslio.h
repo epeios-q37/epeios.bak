@@ -19,8 +19,8 @@
 
 //	$Id: cslio.h,v 1.11 2012/11/14 16:06:26 csimon Exp $
 
-#ifndef CSLIO__INC
-#define CSLIO__INC
+#ifndef CSLIO_INC_
+#define CSLIO_INC_
 
 #define CSLIO_NAME		"CSLIO"
 

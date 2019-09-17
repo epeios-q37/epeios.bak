@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define CCH__COMPILATION
+#define CCH_COMPILATION_
 
 #include "cch.h"
 

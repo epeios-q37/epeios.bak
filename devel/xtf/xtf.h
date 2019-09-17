@@ -19,8 +19,8 @@
 
 // eXtended Text Flow. Text flow with extended features.
 
-#ifndef XTF__INC
-# define XTF__INC
+#ifndef XTF_INC_
+# define XTF_INC_
 
 # define XTF_NAME		"XTF"
 

@@ -18,8 +18,8 @@
 */
 
 
-#ifndef FBLBRD__INC
-# define FBLBRD__INC
+#ifndef FBLBRD_INC_
+# define FBLBRD_INC_
 
 # define FBLBRD_NAME		"FBLBRD"
 

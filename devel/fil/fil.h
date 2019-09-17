@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef FIL__INC
-# define FIL__INC
+#ifndef FIL_INC_
+# define FIL_INC_
 
 # define FIL_NAME		"FIL"
 

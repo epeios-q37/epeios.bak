@@ -19,8 +19,8 @@
 
 // Dynamic LiBRaRY 
 
-#ifndef DLBRRY__INC
-# define DLBRRY__INC
+#ifndef DLBRRY_INC_
+# define DLBRRY_INC_
 
 # define DLBRRY_NAME		"DLBRRY"
 

@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define IODEF__COMPILATION
+#define IODEF_COMPILATION_
 
 #include "iodef.h"
 

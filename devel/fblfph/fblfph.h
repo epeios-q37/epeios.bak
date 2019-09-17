@@ -19,8 +19,8 @@
 
 //D Frontend/Backend Layout Frontend Parameters Handling 
 
-#ifndef FBLFPH__INC
-# define FBLFPH__INC
+#ifndef FBLFPH_INC_
+# define FBLFPH_INC_
 
 # define FBLFPH_NAME		"FBLFPH"
 

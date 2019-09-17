@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef FLS__INC
-#define FLS__INC
+#ifndef FLS_INC_
+#define FLS_INC_
 
 #define FLS_NAME		"FLS"
 

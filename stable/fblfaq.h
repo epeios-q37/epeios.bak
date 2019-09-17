@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef FBLFAQ__INC
-#define FBLFAQ__INC
+#ifndef FBLFAQ_INC_
+#define FBLFAQ_INC_
 
 #define FBLFAQ_NAME		"FBLFAQ"
 

@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define SCLDALVIK__COMPILATION
+#define SCLDALVIK_COMPILATION_
 
 #include "scldalvik.h"
 

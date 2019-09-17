@@ -19,8 +19,8 @@
 
 //	$Id: ndbbsc.h,v 1.10 2013/04/15 10:50:52 csimon Exp $
 
-#ifndef NDBBSC__INC
-#define NDBBSC__INC
+#ifndef NDBBSC_INC_
+#define NDBBSC_INC_
 
 #define NDBBSC_NAME		"NDBBSC"
 

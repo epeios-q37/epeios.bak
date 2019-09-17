@@ -19,8 +19,8 @@
 
 // LiST ConTaiNer 
 
-#ifndef LSTCTN__INC
-# define LSTCTN__INC
+#ifndef LSTCTN_INC_
+# define LSTCTN_INC_
 
 # define LSTCTN_NAME		"LSTCTN"
 

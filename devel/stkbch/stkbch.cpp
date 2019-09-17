@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define STKBCH__COMPILATION
+#define STKBCH_COMPILATION_
 
 #include "stkbch.h"
 

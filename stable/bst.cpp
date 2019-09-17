@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define BST__COMPILATION
+#define BST_COMPILATION_
 
 #include "bst.h"
 

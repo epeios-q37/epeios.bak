@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define SDR__COMPILATION
+#define SDR_COMPILATION_
 
 #include "sdr.h"
 

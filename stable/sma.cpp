@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define SMA__COMPILATION
+#define SMA_COMPILATION_
 
 #include "sma.h"
 

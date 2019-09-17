@@ -19,8 +19,8 @@
 
 //	$Id: mmm2.h,v 1.40 2012/11/14 16:06:31 csimon Exp $
 
-#ifndef MMM2__INC
-#define MMM2__INC
+#ifndef MMM2_INC_
+#define MMM2_INC_
 
 #define MMM2_NAME		"MMM2"
 

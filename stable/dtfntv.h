@@ -19,8 +19,8 @@
 
 //	$Id: dtfntv.h,v 1.4 2012/11/14 16:06:26 csimon Exp $
 
-#ifndef DTFNTV__INC
-#define DTFNTV__INC
+#ifndef DTFNTV_INC_
+#define DTFNTV_INC_
 
 #define DTFNTV_NAME		"DTFNTV"
 

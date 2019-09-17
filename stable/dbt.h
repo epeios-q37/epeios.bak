@@ -19,8 +19,8 @@
 
 //	$Id: dbt.h,v 1.23 2013/04/13 16:21:15 csimon Exp $
 
-#ifndef DBT__INC
-#define DBT__INC
+#ifndef DBT_INC_
+#define DBT_INC_
 
 #define DBT_NAME		"DBT"
 

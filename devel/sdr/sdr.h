@@ -19,8 +19,8 @@
 
 // Storage DRiver 
 
-#ifndef SDR__INC
-# define SDR__INC
+#ifndef SDR_INC_
+# define SDR_INC_
 
 # define SDR_NAME		"SDR"
 

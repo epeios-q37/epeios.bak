@@ -19,8 +19,8 @@
 
 #error "Obsolete ! Use 'XDHUJS' instead !"
 
-#ifndef XDHUJT__INC
-# define XDHUJT__INC
+#ifndef XDHUJT_INC_
+# define XDHUJT_INC_
 
 # define XDHUJT_NAME		"XDHUJT"
 

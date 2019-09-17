@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define FBLBUR__COMPILATION
+#define FBLBUR_COMPILATION_
 
 #include "fblbur.h"
 

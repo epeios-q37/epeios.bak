@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef IOP__INC
-#define IOP__INC
+#ifndef IOP_INC_
+#define IOP_INC_
 
 #define IOP_NAME		"IOP"
 

@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef CSDBNS__INC
-# define CSDBNS__INC
+#ifndef CSDBNS_INC_
+# define CSDBNS_INC_
 
 # define CSDBNS_NAME		"CSDBNS"
 

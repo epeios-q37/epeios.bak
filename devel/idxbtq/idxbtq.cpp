@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define IDXBTQ__COMPILATION
+#define IDXBTQ_COMPILATION_
 
 #include "idxbtq.h"
 

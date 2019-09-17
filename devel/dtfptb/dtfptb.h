@@ -19,8 +19,8 @@
 
 //	$Id: dtfptb.h,v 1.25 2013/04/13 16:21:16 csimon Exp $
 
-#ifndef DTFPTB__INC
-#define DTFPTB__INC
+#ifndef DTFPTB_INC_
+#define DTFPTB_INC_
 
 #define DTFPTB_NAME		"DTFPTB"
 

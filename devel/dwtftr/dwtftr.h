@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef DWTFTR__INC
-# define DWTFTR__INC
+#ifndef DWTFTR_INC_
+# define DWTFTR_INC_
 
 # define DWTFTR_NAME		"DWTFTR"
 

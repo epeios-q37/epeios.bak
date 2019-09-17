@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define BTR__COMPILATION
+#define BTR_COMPILATION_
 
 #include "btr.h"
 

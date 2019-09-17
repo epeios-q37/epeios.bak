@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define QUE__COMPILATION
+#define QUE_COMPILATION_
 
 #include "que.h"
 

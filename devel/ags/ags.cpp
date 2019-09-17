@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define AGS__COMPILATION
+#define AGS_COMPILATION_
 
 #include "ags.h"
 

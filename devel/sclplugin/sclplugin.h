@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef SCLPLUGIN__INC
-# define SCLPLUGIN__INC
+#ifndef SCLPLUGIN_INC_
+# define SCLPLUGIN_INC_
 
 # define SCLPLUGIN_NAME		"SCLPLUGIN"
 

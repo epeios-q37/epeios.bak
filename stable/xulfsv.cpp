@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define XULFSV__COMPILATION
+#define XULFSV_COMPILATION_
 
 #include "xulfsv.h"
 

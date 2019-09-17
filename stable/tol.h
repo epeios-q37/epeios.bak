@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef TOL__INC
-# define TOL__INC
+#ifndef TOL_INC_
+# define TOL_INC_
 
 # define TOL_NAME		"TOL"
 

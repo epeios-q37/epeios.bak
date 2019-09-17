@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define FRDKRN__COMPILATION
+#define FRDKRN_COMPILATION_
 
 #include "frdkrn.h"
 

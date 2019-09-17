@@ -19,8 +19,8 @@
 
 //	$Id: xmlelm.h,v 1.2 2013/07/25 15:59:16 csimon Exp $
 
-#ifndef XMLELM__INC
-#define XMLELM__INC
+#ifndef XMLELM_INC_
+#define XMLELM_INC_
 
 #define XMLELM_NAME		"XMLELM"
 

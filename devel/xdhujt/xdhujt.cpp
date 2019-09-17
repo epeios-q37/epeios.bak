@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define XDHUJT__COMPILATION
+#define XDHUJT_COMPILATION_
 
 #include "xdhujt.h"
 

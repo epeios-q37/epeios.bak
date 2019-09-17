@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define FRDSSN__COMPILATION
+#define FRDSSN_COMPILATION_
 
 #include "frdssn.h"
 

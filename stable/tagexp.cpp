@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define TAGEXP__COMPILATION
+#define TAGEXP_COMPILATION_
 
 #include "tagexp.h"
 

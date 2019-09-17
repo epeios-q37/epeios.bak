@@ -19,8 +19,8 @@
 
 //	$Id: bst.h,v 1.5 2012/11/14 16:06:25 csimon Exp $
 
-#ifndef BST__INC
-#define BST__INC
+#ifndef BST_INC_
+#define BST_INC_
 
 #define BST_NAME		"BST"
 

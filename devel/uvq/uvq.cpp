@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define UVQ__COMPILATION
+#define UVQ_COMPILATION_
 
 // Note to developer : you have to add '<path_to_node>/deps/uv/include' as 'Additional Include Directory' in the 'devel' related project.
 #include <uv.h>

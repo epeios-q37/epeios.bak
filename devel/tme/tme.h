@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef TME__INC
-# define TME__INC
+#ifndef TME_INC_
+# define TME_INC_
 
 # define TME_NAME		"TME"
 

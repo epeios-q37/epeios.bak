@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef CPE__INC
-# define CPE__INC
+#ifndef CPE_INC_
+# define CPE_INC_
 
 # define CPE_NAME		"CPE"
 
@@ -35,8 +35,8 @@
 # define CPE_CL_MINGW	"MinGW"
 # define CPE_CL_MSC		"MSC"
 
-# define CPE_STRING__(x) #x
-# define CPE_STRING_(x) CPE_STRING__(x)
+# define CPE_STRING_SUB_(x) #x
+# define CPE_STRING_(x) CPE_STRING_SUB_(x)
 
 # if defined(__clang__)
 #  define CPE_C_CLANG

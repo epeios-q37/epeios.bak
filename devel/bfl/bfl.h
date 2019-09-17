@@ -19,8 +19,8 @@
 
 //	$Id: bfl.h,v 1.4 2012/11/14 16:06:24 csimon Exp $
 
-#ifndef BFL__INC
-#define BFL__INC
+#ifndef BFL_INC_
+#define BFL_INC_
 
 #define BFL_NAME		"BFL"
 

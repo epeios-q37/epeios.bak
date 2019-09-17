@@ -19,8 +19,8 @@
 
 //D Frontend/Backend Layout TYPes 
 
-#ifndef FBLTYP__INC
-# define FBLTYP__INC
+#ifndef FBLTYP_INC_
+# define FBLTYP_INC_
 
 # define FBLTYP_NAME		"FBLTYP"
 

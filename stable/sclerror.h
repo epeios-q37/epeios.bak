@@ -19,8 +19,8 @@
 
 //	$Id: sclerror.h,v 1.6 2013/07/18 19:46:25 csimon Exp $
 
-#ifndef SCLERROR__INC
-#define SCLERROR__INC
+#ifndef SCLERROR_INC_
+#define SCLERROR_INC_
 
 #define SCLERROR_NAME		"SCLERROR"
 

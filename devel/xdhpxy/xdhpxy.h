@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef XDHPXY__INC
-# define XDHPXY__INC
+#ifndef XDHPXY_INC_
+# define XDHPXY_INC_
 
 # define XDHPXY_NAME		"XDHPXY"
 

@@ -19,8 +19,8 @@
 
 //	$Id: dbsidx.h,v 1.63 2009/11/15 11:30:58 csimon Exp $
 
-#ifndef DBSIDX__INC
-#define DBSIDX__INC
+#ifndef DBSIDX_INC_
+#define DBSIDX_INC_
 
 #define DBSIDX_NAME		"DBSIDX"
 

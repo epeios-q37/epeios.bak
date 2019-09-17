@@ -19,8 +19,8 @@
 
 //	$Id: frdkrn.h,v 1.51 2013/06/18 09:36:03 csimon Exp $
 
-#ifndef FRDKRN__INC
-#define FRDKRN__INC
+#ifndef FRDKRN_INC_
+#define FRDKRN_INC_
 
 #define FRDKRN_NAME		"FRDKRN"
 

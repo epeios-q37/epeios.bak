@@ -19,8 +19,8 @@
 
 //	$Id: strng.h,v 1.7 2013/05/19 09:28:14 csimon Exp $
 
-#ifndef STRNG__INC
-#define STRNG__INC
+#ifndef STRNG_INC_
+#define STRNG_INC_
 
 #define STRNG_NAME		"STRNG"
 

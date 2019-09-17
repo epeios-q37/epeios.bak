@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define XML__COMPILATION
+#define XML_COMPILATION_
 
 #include "xml.h"
 

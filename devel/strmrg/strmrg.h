@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef STRMRG__INC
-# define STRMRG__INC
+#ifndef STRMRG_INC_
+# define STRMRG_INC_
 
 # define STRMRG_NAME		"STRMRG"
 

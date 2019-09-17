@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define NDBTBL__COMPILATION
+#define NDBTBL_COMPILATION_
 
 #include "ndbtbl.h"
 

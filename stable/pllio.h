@@ -19,8 +19,8 @@
 
 //	$Id: pllio.h,v 1.19 2013/04/06 14:50:46 csimon Exp $
 
-#ifndef PLLIO__INC
-#define PLLIO__INC
+#ifndef PLLIO_INC_
+#define PLLIO_INC_
 
 #define PLLIO_NAME		"PLLIO"
 

@@ -19,8 +19,8 @@
 
 // NaTiVe STRing
 
-#ifndef NTVSTR__INC
-# define NTVSTR__INC
+#ifndef NTVSTR_INC_
+# define NTVSTR_INC_
 
 # define NTVSTR_NAME		"NTVSTR"
 

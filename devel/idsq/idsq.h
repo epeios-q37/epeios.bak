@@ -19,8 +19,8 @@
 
 // ID Store
 
-#ifndef IDSQ__INC
-# define IDSQ__INC
+#ifndef IDSQ_INC_
+# define IDSQ_INC_
 
 # define IDSQ_NAME		"IDSQ"
 

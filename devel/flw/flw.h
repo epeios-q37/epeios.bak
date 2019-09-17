@@ -19,8 +19,8 @@
 
 // FLoW.
 
-#ifndef FLW__INC
-# define FLW__INC
+#ifndef FLW_INC_
+# define FLW_INC_
 
 # define FLW_NAME		"FLW"
 
@@ -126,11 +126,12 @@ namespace flw {
 		{
 			byte__ C = 0;
 
-			if ( _D().Read( 1, &C, fdr::bBlocking ) != 1 )
+			if ( _D().Read( 1, &C, fdr::bBlocking ) != 1 ) {
 				if ( IsError != NULL )
 					*IsError = true;
 				else
 					qRFwk();
+            }
 
 			return C;
 		}
@@ -294,7 +295,7 @@ namespace flw {
 	public:
 		void reset( bso::sBool P = true )
 		{
-			if ( Dummy != 0 )	
+			if ( Dummy != 0 )
 				qRFwk();	// 'Dummy' n'tant pas utilis, rien ne sert de modifier sa valeur.
 
 			_standalone_iflow__::reset( P );
@@ -381,7 +382,7 @@ namespace flw {
 			qRPN )
 		{
 			size__ Stayed = _Size - _Free;
-			
+
 			if ( Stayed != 0 ) {
 				if ( _DirectWrite( _Cache, Stayed, Stayed ) == Stayed ) {
 					_Free = _Size;
@@ -403,11 +404,11 @@ namespace flw {
 		{
 			if ( _Free < Amount )
 				Amount = _Free;
-				
+
 			memcpy( _Cache + _Size - _Free, Buffer, (size_t)Amount );
-			
+
 			_Free -= Amount;
-			
+
 			return Amount;
 		}
 		/* Put up to 'Amount' bytes from 'Buffer' directly or through the cache.
@@ -437,7 +438,7 @@ namespace flw {
 					return _D().Commit( Unlock, ErrHandling );
 				else
 					return true;
-			} 
+			}
 
 			return false;
 		}
@@ -493,7 +494,7 @@ namespace flw {
 		{
 			if ( Owner == tht::Undefined )
 				Owner = tht::GetTID();
-			
+
 			return _D().WTake( tht::GetTID() );
 		}
 		tht::sTID Owner( void ) const
@@ -651,7 +652,7 @@ namespace flw {
 		{
 			if ( Owner == tht::Undefined )
 				Owner = tht::GetTID();
-			
+
 			return tol::Same( iflow__::Take( Owner ), oflow__::Take( Owner ) );
 		}
 		tht::sTID Owner( void ) const

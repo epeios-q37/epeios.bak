@@ -19,8 +19,8 @@
 
 //	$Id: mscvkt.h,v 1.1 2010/07/16 08:25:54 csimon Exp $
 
-#ifndef MSCVKT__INC
-#define MSCVKT__INC
+#ifndef MSCVKT_INC_
+#define MSCVKT_INC_
 
 #define MSCVKT_NAME		"MSCVKT"
 

@@ -19,8 +19,8 @@
 
 // Hypertext Transfert Protocol 
 
-#ifndef HTP__INC
-# define HTP__INC
+#ifndef HTP_INC_
+# define HTP_INC_
 
 #define HTP_NAME		"HTP"
 

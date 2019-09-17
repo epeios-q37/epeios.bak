@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef DWTXCL__INC
-# define DWTXCL__INC
+#ifndef DWTXCL_INC_
+# define DWTXCL_INC_
 
 # define DWTXCL_NAME		"DWTXCL"
 

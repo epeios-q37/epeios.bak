@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define XDHCMN__COMPILATION
+#define XDHCMN_COMPILATION_
 
 #include "xdhcmn.h"
 

@@ -19,8 +19,8 @@
 
 //	$Id: epeios.h,v 1.15 2012/05/03 09:52:49 csimon Exp $
 
-#ifndef EPEIOS__INC
-#define EPEIOS__INC
+#ifndef EPEIOS_INC_
+#define EPEIOS_INC_
 
 #define EPEIOS_NAME		"EPEIOS"
 

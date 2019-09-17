@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define FBLFRP__COMPILATION
+#define FBLFRP_COMPILATION_
 
 #include "fblfrp.h"
 

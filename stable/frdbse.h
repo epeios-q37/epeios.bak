@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef FRDBSE__INC
-# define FRDBSE__INC
+#ifndef FRDBSE_INC_
+# define FRDBSE_INC_
 
 # define FRDBSE_NAME		"FRDBSE"
 

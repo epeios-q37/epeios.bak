@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define DBSBSC__COMPILATION
+#define DBSBSC_COMPILATION_
 
 #include "dbsbsc.h"
 

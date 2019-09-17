@@ -19,8 +19,8 @@
 
 // LiST
 
-#ifndef LST__INC
-# define LST__INC
+#ifndef LST_INC_
+# define LST_INC_
 
 # define LST_NAME		"LST"
 
@@ -314,7 +314,7 @@ namespace lst {
 #define E_LIST	E_LISTt( sdr::row__ )
 #define E_LIST_	E_LISTt_( sdr::row__ )
 
-#ifndef FLM__COMPILATION
+#ifndef FLM_COMPILATION_
 	using idsq::rRH;
 
 	using idsq::rHF;

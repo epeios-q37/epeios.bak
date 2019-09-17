@@ -19,8 +19,8 @@
 
 //	$Id: ndbidx.h,v 1.29 2013/04/15 10:50:53 csimon Exp $
 
-#ifndef NDBIDX__INC
-#define NDBIDX__INC
+#ifndef NDBIDX_INC_
+#define NDBIDX_INC_
 
 #define NDBIDX_NAME		"NDBIDX"
 

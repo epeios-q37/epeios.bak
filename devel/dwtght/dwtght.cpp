@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define DWTGHT__COMPILATION
+#define DWTGHT_COMPILATION_
 
 #include "dwtght.h"
 

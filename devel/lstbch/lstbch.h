@@ -19,8 +19,8 @@
 
 // LiST BunCH 
 
-#ifndef LSTBCH__INC
-# define LSTBCH__INC
+#ifndef LSTBCH_INC_
+# define LSTBCH_INC_
 
 # define LSTBCH_NAME		"LSTBCH"
 
@@ -188,7 +188,7 @@ namespace lstbch {
 
 	E_AUTO3( list_bunch )
 
-#ifndef FLS__COMPILATION
+#ifndef FLS_COMPILATION_
 
 	template <typename bunch, typename list> struct rH_
 	: public sHooks

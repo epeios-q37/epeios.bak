@@ -11,24 +11,27 @@
 		<xpp:set name="Credits" value="Epeios"/>
 		<xpp:set name="Type" value="Tool"/>
 	</xpp:bloc>
-	<xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
+	<xpp:set name="q37.project" env-var="Q37_PROJECT"/>
+	<xpp:expand value-of="q37.project"/>
 	<About>
 		<Program>xppq</Program>
 		<Software>XPPq</Software>
 		<UUID>4e0195ad-2b3d-4fc2-8b1f-73a59bd765fe</UUID>
 	</About>
-	<Modules>
-		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
-			<Modules Group="Core">
-				<xpp:expand select="Core"/>
+	<xpp:bloc marker="$">
+		<Modules>
+			<Modules Group="Epeios" Path="$EpeiosPath$/">
+				<Modules Group="Core">
+					<xpp:expand select="Core"/>
+				</Modules>
+				<Modules Group="SCL">
+					<xpp:expand select="SCL"/>
+				</Modules>
 			</Modules>
-			<Modules Group="SCL">
-				<xpp:expand select="SCL"/>
-			</Modules>
+			<Module>i18n</Module>
+			<Module>registry</Module>
 		</Modules>
-		<Module>i18n</Module>
-		<Module>registry</Module>
-	</Modules>
+	</xpp:bloc>
 	<SourceDirs>
 	</SourceDirs>
  <RTW>

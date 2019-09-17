@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define FBLTYP__COMPILATION
+#define FBLTYP_COMPILATION_
 
 #include "fbltyp.h"
 

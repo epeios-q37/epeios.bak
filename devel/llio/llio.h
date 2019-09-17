@@ -19,8 +19,8 @@
 
 // Low-Level Input/Output 
 
-#ifndef LLIO__INC
-#define LLIO__INC
+#ifndef LLIO_INC_
+#define LLIO_INC_
 
 #define LLIO_NAME		"LLIO"
 

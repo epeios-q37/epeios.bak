@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define STRMRG__COMPILATION
+#define STRMRG_COMPILATION_
 
 #include "strmrg.h"
 

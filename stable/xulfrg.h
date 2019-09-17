@@ -19,8 +19,8 @@
 
 //	$Id: xulfrg.h,v 1.12 2013/01/02 17:32:14 csimon Exp $
 
-#ifndef XULFRG__INC
-#define XULFRG__INC
+#ifndef XULFRG_INC_
+#define XULFRG_INC_
 
 #define XULFRG_NAME		"XULFRG"
 

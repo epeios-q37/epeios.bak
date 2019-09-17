@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define FRDFBC__COMPILATION
+#define FRDFBC_COMPILATION_
 
 #include "frdfbc.h"
 

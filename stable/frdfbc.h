@@ -19,8 +19,8 @@
 
 //	$Id: frdfbc.h,v 1.5 2012/11/14 16:06:29 csimon Exp $
 
-#ifndef FRDFBC__INC
-#define FRDFBC__INC
+#ifndef FRDFBC_INC_
+#define FRDFBC_INC_
 
 #define FRDFBC_NAME		"FRDFBC"
 

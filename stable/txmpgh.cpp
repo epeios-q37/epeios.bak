@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define TXMPGH__COMPILATION
+#define TXMPGH_COMPILATION_
 
 #include "txmpgh.h"
 

@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define THRSTR__COMPILATION
+#define THRSTR_COMPILATION_
 
 #include "thrstr.h"
 

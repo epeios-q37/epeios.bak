@@ -58,8 +58,8 @@ Description:
 /* end of 'entete.h' template file */
 /* begin of 'xxx.h' template file V2.6 */
 
-#ifndef SALJNI__INC
-#define SALJNI__INC
+#ifndef SALJNI_INC_
+#define SALJNI_INC_
 
 #define SALJNI_NAME		"SALJNI"
 

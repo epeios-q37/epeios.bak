@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define THT__COMPILATION
+#define THT_COMPILATION_
 
 #include "tht.h"
 

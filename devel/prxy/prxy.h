@@ -19,8 +19,8 @@
 
 // PRoXY
 
-#ifndef PRXY__INC
-# define PRXY__INC
+#ifndef PRXY_INC_
+# define PRXY_INC_
 
 # define PRXY_NAME		"PRXY"
 

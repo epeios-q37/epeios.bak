@@ -19,8 +19,8 @@
 
 // Flow DRiver
 
-#ifndef FDR__INC
-# define FDR__INC
+#ifndef FDR_INC_
+# define FDR_INC_
 
 # define FDR_NAME		"FDR"
 
@@ -200,7 +200,7 @@ namespace fdr {
 			}
 # else
 			Lock_( _Mutex );
-# endif		
+# endif
 		}
 		void Init( thread_safety__ ThreadSafety )
 		{
@@ -465,7 +465,7 @@ namespace fdr {
 			qRPN ) = 0;	// If 'Unlock' at true, returns true if unlocking succeed (i.e. was locked, and by the same thread), if 'ErrHandling' allows it.
 		virtual sTID FDRRTake( sTID Owner ) = 0;
 	public:
-		void reset( bso::bool__ P = true ) 
+		void reset( bso::bool__ P = true )
 		{
 			if ( P ) {
 				_flow_driver_base__::BaseTake( tht::Undefined );	// Prevent some unwanted error due to bad due to mutex owning.
@@ -521,11 +521,12 @@ namespace fdr {
 					Success = FDRDismiss( Unlock, ErrHandling );
 				qRR
 				qRT
-					if ( Unlock )
+					if ( Unlock ) {
 						if ( Success )
 							Success = this->Unlock( ErrHandling );
 						else
 							this->Unlock( err::hUserDefined );	// Ignore errors.
+					}
 				qRE
 				}
 
@@ -644,7 +645,7 @@ namespace fdr {
 			qRPN ) = 0;	// If 'Unlock' at true, returns true if unlocking succeed (i.e. was locked, and by the same thread), if 'ErrHandling' allows it.
 		virtual sTID FDRWTake( sTID Owner ) = 0;
 	public:
-		void reset( bso::bool__ P = true ) 
+		void reset( bso::bool__ P = true )
 		{
 			if ( P ) {
 				if ( CommitPending_ )
@@ -677,11 +678,12 @@ namespace fdr {
 				CommitPending_ = false;
 			qRR
 			qRT
-				if ( Unlock )
+				if ( Unlock ) {
 					if ( Success )
 						Success = this->Unlock( ErrHandling );
 					else
 						this->Unlock( err::hUserDefined );	// Errors are ignored.
+                }
 			qRE
 
 			}
@@ -725,7 +727,7 @@ namespace fdr {
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			if ( Dummy != 0 )	
+			if ( Dummy != 0 )
 				qRFwk();	// 'Dummy' n'tant pas utilis, rien ne sert de modifier sa valeur.
 
 			oflow_driver_base___::reset( P );
@@ -774,12 +776,12 @@ namespace fdr {
 namespace fdr {
 # if 1	// Deprecated.
 	typedef fdr::iflow_driver___<> rRFlow;
-	typedef fdr::oflow_driver___<> rWFlow; 
+	typedef fdr::oflow_driver___<> rWFlow;
 	typedef fdr::ioflow_driver___<> rRWFlow;
 # endif
 
 	typedef fdr::iflow_driver_base___ rRDriver;
-	typedef fdr::oflow_driver_base___ rWDriver; 
+	typedef fdr::oflow_driver_base___ rWDriver;
 	typedef fdr::ioflow_driver_base___ rRWDriver;
 
 	typedef fdr::iflow_driver___<> rRDressedDriver;
@@ -819,7 +821,7 @@ namespace fdr {
 		Purge_( Driver, Buffer, BufferSize );
 	}
 
-	// Template to copy/paste for a read driver. 
+	// Template to copy/paste for a read driver.
 	class rRDriver_
 	: public fdr::rRDressedDriver
 	{
@@ -848,7 +850,7 @@ namespace fdr {
 
 	extern rRDriver_ RDriver_;
 
-	// Template to copy/paste for a write driver. 
+	// Template to copy/paste for a write driver.
 	class rWDriver_
 	: public fdr::rWDressedDriver
 	{
@@ -877,7 +879,7 @@ namespace fdr {
 
 	extern rWDriver_  WDriver_;
 
-	// Template to copy/paste for a read/write driver. 
+	// Template to copy/paste for a read/write driver.
 	class rRWDriver_
 	: public fdr::rRWDressedDriver
 	{

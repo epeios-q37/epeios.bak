@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define CDGURL__COMPILATION
+#define CDGURL_COMPILATION_
 
 #include "cdgurl.h"
 

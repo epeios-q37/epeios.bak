@@ -58,8 +58,8 @@ Description:
 /* end of 'entete.h' template file */
 /* begin of 'xxx.h' template file V2.5 */
 
-#ifndef TXMHCH__INC
-#define TXMHCH__INC
+#ifndef TXMHCH_INC_
+#define TXMHCH_INC_
 
 #define TXMHCH_NAME		"TXMHCH"
 

@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define SCLDAEMON__COMPILATION
+#define SCLDAEMON_COMPILATION_
 
 #include "scldaemon.h"
 

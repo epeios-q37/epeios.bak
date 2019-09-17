@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define MSCVKP__COMPILATION
+#define MSCVKP_COMPILATION_
 
 #include "mscvkp.h"
 

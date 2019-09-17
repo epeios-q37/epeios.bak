@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define FNM__COMPILATION
+#define FNM_COMPILATION_
 
 #include "fnm.h"
 

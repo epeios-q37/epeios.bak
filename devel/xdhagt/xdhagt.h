@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef XDHAGT__INC
-# define XDHAGT__INC
+#ifndef XDHAGT_INC_
+# define XDHAGT_INC_
 
 # define XDHAGT_NAME		"XDHAGT"
 

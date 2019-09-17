@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define DWTCPR__COMPILATION
+#define DWTCPR_COMPILATION_
 
 #include "dwtcpr.h"
 

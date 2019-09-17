@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define CDGB64__COMPILATION
+#define CDGB64_COMPILATION_
 
 #include "cdgb64.h"
 

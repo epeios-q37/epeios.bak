@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define CSLIO__COMPILATION
+#define CSLIO_COMPILATION_
 
 #include "cslio.h"
 

@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define XULFTK__COMPILATION
+#define XULFTK_COMPILATION_
 
 #include "xulftk.h"
 

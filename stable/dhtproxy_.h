@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef DHTPROXY__INC
-# define DHTPROXY__INC
+#ifndef DHTPROXY_INC_
+# define DHTPROXY_INC_
 
 # define DHTPROXY_NAME		"DHTPROXY"
 

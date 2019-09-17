@@ -19,8 +19,8 @@
 
 //	$Id: ndbctt.h,v 1.15 2013/04/15 10:50:52 csimon Exp $
 
-#ifndef NDBCTT__INC
-#define NDBCTT__INC
+#ifndef NDBCTT_INC_
+#define NDBCTT_INC_
 
 #define NDBCTT_NAME		"NDBCTT"
 

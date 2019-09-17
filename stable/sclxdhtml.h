@@ -17,8 +17,8 @@ You should have received a copy of the GNU Affero General Public License
 along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef SCLXDHTML__INC
-# define SCLXDHTML__INC
+#ifndef SCLXDHTML_INC_
+# define SCLXDHTML_INC_
 
 # define SCLXDHTML_NAME		"SCLXDHTML"
 

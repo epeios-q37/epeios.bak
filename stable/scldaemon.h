@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef SCLDAEMON__INC
-# define SCLDAEMON__INC
+#ifndef SCLDAEMON_INC_
+# define SCLDAEMON_INC_
 
 # define SCLDAEMON_NAME		"SCLDAEMON"
 

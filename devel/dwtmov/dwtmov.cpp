@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define DWTMOV__COMPILATION
+#define DWTMOV_COMPILATION_
 
 #include "dwtmov.h"
 

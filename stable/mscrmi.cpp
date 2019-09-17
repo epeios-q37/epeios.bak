@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define MSCRMI__COMPILATION
+#define MSCRMI_COMPILATION_
 
 #include "mscrmi.h"
 

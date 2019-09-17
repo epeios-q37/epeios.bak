@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef CDGB64__INC
-#define CDGB64__INC
+#ifndef CDGB64_INC_
+#define CDGB64_INC_
 
 #define CDGB64_NAME		"CDGB64"
 

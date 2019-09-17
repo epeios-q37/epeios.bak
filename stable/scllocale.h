@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef SCLLOCALE__INC
-# define SCLLOCALE__INC
+#ifndef SCLLOCALE_INC_
+# define SCLLOCALE_INC_
 
 # define SCLLOCALE_NAME		"SCLLOCALE"
 

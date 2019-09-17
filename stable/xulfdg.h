@@ -19,8 +19,8 @@
 
 //	$Id: xulfdg.h,v 1.11 2013/06/11 10:32:26 csimon Exp $
 
-#ifndef XULFDG__INC
-#define XULFDG__INC
+#ifndef XULFDG_INC_
+#define XULFDG_INC_
 
 #define XULFDG_NAME		"XULFDG"
 

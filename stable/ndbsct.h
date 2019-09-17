@@ -19,8 +19,8 @@
 
 //	$Id: ndbsct.h,v 1.22 2013/04/11 19:36:51 csimon Exp $
 
-#ifndef NDBSCT__INC
-#define NDBSCT__INC
+#ifndef NDBSCT_INC_
+#define NDBSCT_INC_
 
 #define NDBSCT_NAME		"NDBSCT"
 

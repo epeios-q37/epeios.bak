@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define PRSHCT__COMPILATION
+#define PRSHCT_COMPILATION_
 #include "prshct.h"
 
 enum type {

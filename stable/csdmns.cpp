@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define CSDMNS__COMPILATION
+#define CSDMNS_COMPILATION_
 
 #include "csdmns.h"
 

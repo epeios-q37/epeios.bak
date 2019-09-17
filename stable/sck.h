@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef SCK__INC
-#define SCK__INC
+#ifndef SCK_INC_
+#define SCK_INC_
 
 #define SCK_NAME		"SCK"
 

@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define XMLBSC__COMPILATION
+#define XMLBSC_COMPILATION_
 
 #include "xmlbsc.h"
 

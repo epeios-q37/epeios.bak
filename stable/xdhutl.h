@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef XDHUTL__INC
-# define XDHUTL__INC
+#ifndef XDHUTL_INC_
+# define XDHUTL_INC_
 
 # define XDHUTL_NAME		"XDHUTL"
 

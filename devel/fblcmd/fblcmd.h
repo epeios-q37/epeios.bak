@@ -19,8 +19,8 @@
 
 // Frontend/Backend Layout CoMmanDs 
 
-#ifndef FBLCMD__INC
-# define FBLCMD__INC
+#ifndef FBLCMD_INC_
+# define FBLCMD_INC_
 
 # define FBLCMD_NAME		"FBLCMD"
 

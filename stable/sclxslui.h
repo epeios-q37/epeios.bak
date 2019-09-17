@@ -19,8 +19,8 @@
 
 //	$Id: xxx.h,v 1.9 2012/11/14 16:06:23 csimon Exp $
 
-#ifndef SCLXSLUI__INC
-#define SCLXSLUI__INC
+#ifndef SCLXSLUI_INC_
+#define SCLXSLUI_INC_
 
 #define SCLXSLUI_NAME		"SCLXSLUI"
 

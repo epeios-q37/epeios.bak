@@ -18,8 +18,8 @@
 */
 
 
-#ifndef MSCMDF__INC
-#define MSCMDF__INC
+#ifndef MSCMDF_INC_
+#define MSCMDF_INC_
 
 #define MSCMDF_NAME		"MSCMDF"
 

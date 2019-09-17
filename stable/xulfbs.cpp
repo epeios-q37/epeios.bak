@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define XULFBS__COMPILATION
+#define XULFBS_COMPILATION_
 
 #include "xulfbs.h"
 

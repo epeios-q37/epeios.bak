@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define STRNG__COMPILATION
+#define STRNG_COMPILATION_
 
 #include "strng.h"
 

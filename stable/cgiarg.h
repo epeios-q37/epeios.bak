@@ -19,8 +19,8 @@
 
 //	$Id: cgiarg.h,v 1.5 2013/05/15 14:40:36 csimon Exp $
 
-#ifndef CGIARG__INC
-#define CGIARG__INC
+#ifndef CGIARG_INC_
+#define CGIARG_INC_
 
 #define CGIARG_NAME		"CGIARG"
 

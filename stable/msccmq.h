@@ -19,8 +19,8 @@
 
 //	$Id: msccmq.h,v 1.1 2010/07/15 10:58:18 csimon Exp $
 
-#ifndef MSCCMQ__INC
-#define MSCCMQ__INC
+#ifndef MSCCMQ_INC_
+#define MSCCMQ_INC_
 
 #define MSCCMQ_NAME		"MSCCMQ"
 

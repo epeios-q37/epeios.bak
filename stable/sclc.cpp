@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define SCLC__COMPILATION
+#define SCLC_COMPILATION_
 
 #include "sclc.h"
 

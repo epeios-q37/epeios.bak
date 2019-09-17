@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define SET__COMPILATION
+#define SET_COMPILATION_
 
 #include "set.h"
 

@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define MSCMDM__COMPILATION
+#define MSCMDM_COMPILATION_
 
 #include "mscmdm.h"
 

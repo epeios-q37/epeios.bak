@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef MTHTMC__INC
-# define MTHTMC__INC
+#ifndef MTHTMC_INC_
+# define MTHTMC_INC_
 
 # define MTHTMC_NAME		"MTHTMC"
 

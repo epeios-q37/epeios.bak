@@ -19,8 +19,8 @@
 
 //	$Id: cch.h,v 1.28 2011/06/15 15:27:23 csimon Exp $
 
-#ifndef CCH__INC
-#define CCH__INC
+#ifndef CCH_INC_
+#define CCH_INC_
 
 #define CCH_NAME		"CCH"
 

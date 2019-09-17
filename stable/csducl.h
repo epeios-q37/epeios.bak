@@ -19,8 +19,8 @@
 
 // Client-Server Devices Universal CLient 
 
-#ifndef CSDUCL__INC
-# define CSDUCL__INC
+#ifndef CSDUCL_INC_
+# define CSDUCL_INC_
 
 # define CSDUCL_NAME		"CSDUCL"
 

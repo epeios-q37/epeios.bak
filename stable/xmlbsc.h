@@ -19,8 +19,8 @@
 
 //	$Id: xmlbsc.h,v 1.6 2013/07/25 15:59:15 csimon Exp $
 
-#ifndef XMLBSC__INC
-#define XMLBSC__INC
+#ifndef XMLBSC_INC_
+#define XMLBSC_INC_
 
 #define XMLBSC_NAME		"XMLBSC"
 

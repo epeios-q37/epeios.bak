@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef XDHCMN__INC
-# define XDHCMN__INC
+#ifndef XDHCMN_INC_
+# define XDHCMN_INC_
 
 # define XDHCMN_NAME		"XDHCMN"
 

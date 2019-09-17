@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define NDBSCT__COMPILATION
+#define NDBSCT_COMPILATION_
 
 #include "ndbsct.h"
 

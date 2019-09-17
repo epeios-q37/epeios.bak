@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define DWTFTR__COMPILATION
+#define DWTFTR_COMPILATION_
 
 #include "dwtftr.h"
 

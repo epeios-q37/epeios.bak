@@ -19,8 +19,8 @@
 
 //	$Id: xului.h,v 1.9 2010/10/26 14:59:53 csimon Exp $
 
-#ifndef XULUI__INC
-#define XULUI__INC
+#ifndef XULUI_INC_
+#define XULUI_INC_
 
 #define XULUI_NAME		"XULUI"
 

@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define JVABSE__COMPILATION
+#define JVABSE_COMPILATION_
 
 #include "jvabse.h"
 

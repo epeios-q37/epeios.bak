@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef XDHUPS__INC
-# define XDHUPS__INC
+#ifndef XDHUPS_INC_
+# define XDHUPS_INC_
 
 # define XDHUPS_NAME		"XDHUPS"
 

@@ -19,8 +19,8 @@
 
 // Frontend/Backend Layout CaSTs 
 
-#ifndef FBLCST__INC
-# define FBLCST__INC
+#ifndef FBLCST_INC_
+# define FBLCST_INC_
 
 # define FBLCST_NAME		"FBLCST"
 

@@ -19,8 +19,8 @@
 
 //	$Id: mllio.h,v 1.7 2012/12/04 15:28:51 csimon Exp $
 
-#ifndef MLLIO__INC
-#define MLLIO__INC
+#ifndef MLLIO_INC_
+#define MLLIO_INC_
 
 #define MLLIO_NAME		"MLLIO"
 

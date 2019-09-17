@@ -19,8 +19,8 @@
 
 // LoCKs 
 
-#ifndef LCK__INC
-# define LCK__INC
+#ifndef LCK_INC_
+# define LCK_INC_
 
 # define LCK_NAME		"LCK"
 

@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef SCLCGI__INC
-# define SCLCGI__INC
+#ifndef SCLCGI_INC_
+# define SCLCGI_INC_
 
 # define SCLCGI_NAME		"SCLCGI"
 

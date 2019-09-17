@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define MTX__COMPILATION
+#define MTX_COMPILATION_
 
 #include "mtx.h"
 

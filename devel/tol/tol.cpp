@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define TOL__COMPILATION
+#define TOL_COMPILATION_
 
 #include "tol.h"
 

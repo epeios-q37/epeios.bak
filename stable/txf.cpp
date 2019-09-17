@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define TXF__COMPILATION
+#define TXF_COMPILATION_
 
 #include "txf.h"
 

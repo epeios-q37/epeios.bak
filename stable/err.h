@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef ERR__INC
-# define ERR__INC
+#ifndef ERR_INC_
+# define ERR_INC_
 
 # define ERR_NAME		"ERR"
 
@@ -29,10 +29,10 @@
 // ERRor
 
 /*
-	NOTA : Quelque soit le mode dans lequel est compilé un exécutable (programme ou bibliothèque dynamique),
-	ce module est TOUJOURS compilé en mode 'thread safe', du fait que, même si un exécutable est 'mono-threading',
-	les bibliothèques dynamiques auxquelles il peut éventuellement recourir ('plugin', p. ex.) peuvent, elles,
-	être 'multi-threading', et comme elles partagent le même objet 'error' ...
+	NOTA : Quelque soit le mode dans lequel est compilï¿½ un exï¿½cutable (programme ou bibliothï¿½que dynamique),
+	ce module est TOUJOURS compilï¿½ en mode 'thread safe', du fait que, mï¿½me si un exï¿½cutable est 'mono-threading',
+	les bibliothï¿½ques dynamiques auxquelles il peut ï¿½ventuellement recourir ('plugin', p. ex.) peuvent, elles,
+	ï¿½tre 'multi-threading', et comme elles partagent le mï¿½me objet 'error' ...
 */
 
 # include <stdio.h>
@@ -49,7 +49,7 @@
 # include "cpe.h"
 # include "thtsub.h"
 
-// Prédéclaration.
+// Prï¿½dï¿½claration.
 namespace mtx {
 	struct _mutex__;
 }
@@ -59,10 +59,10 @@ namespace err {
 
 	enum handling__ {
 		hThrowException,	// Une erreur provoque une exception.
-		hUserDefined,		// Le traitement de l'erreur est à la charge de l'utilisateur.
+		hUserDefined,		// Le traitement de l'erreur est ï¿½ la charge de l'utilisateur.
 		h_amount,
 		h_Undefined,
-		h_Default = hThrowException	// Comportement par défaut.
+		h_Default = hThrowException	// Comportement par dï¿½faut.
 	};
 
 	enum type {
@@ -111,11 +111,11 @@ namespace err {
 		}
 		void Init( void );
 		void Set(
-			const char *File = NULL,
+			const char *File = nullptr,
 			int Line = 0,
 			err::type Type = t_Undefined );
 		void SetAndLaunch(
-			const char *File = NULL,
+			const char *File = nullptr,
 			int Line = 0,
 			err::type Type = t_Undefined );
 	};
@@ -184,13 +184,13 @@ namespace err {
 # else
 
 #  define qRH	bso::bool__ ERRNoError = true; {
-// précède les déclarations
+// prï¿½cï¿½de les dï¿½clarations
 #  define qRB	try {
-// précède les instructions proprement dites
+// prï¿½cï¿½de les instructions proprement dites
 #  define qRR		} catch ( err::err___ ) { ERRNoError = false; {
-// précède les instructions à effectuer lors d'une erreur
+// prï¿½cï¿½de les instructions ï¿½ effectuer lors d'une erreur
 #  define qRT		} }
-// précède les instructions à exécuter, erreur ou pas
+// prï¿½cï¿½de les instructions ï¿½ exï¿½cuter, erreur ou pas
 #  define ERRCommonEnd	}
 // boucle la partie de traitement d'erreur
 
@@ -228,7 +228,7 @@ namespace err {
 		err::type Type,
 		buffer__ &Buffer );
 
-# ifndef ERR__COMPILATION
+# ifndef ERR_COMPILATION_
 	inline const char *Message( buffer__ &Buffer )
 	{
 		return err::Message( ERRFile, ERRLine, ERRType, Buffer );
@@ -240,13 +240,13 @@ namespace err {
 # define ERRHit()	( ERRType != err::t_None )
 
 
-// Similaire à un simple 'return', mais dans une section surveillé ('qRB'...'qRR'; un simple 'return' poserait problème dans une telle section).
+// Similaire ï¿½ un simple 'return', mais dans une section surveillï¿½ ('qRB'...'qRR'; un simple 'return' poserait problï¿½me dans une telle section).
 # define qRReturn		ERRCommon( err::t_Return )
 
-// Interruption de l'action en cours. Utilisé avec un gestionnaire d'interface évennementielle, pour revenir rapîdement à la boucle d'attente.
+// Interruption de l'action en cours. Utilisï¿½ avec un gestionnaire d'interface ï¿½vennementielle, pour revenir rapï¿½dement ï¿½ la boucle d'attente.
 # define qRAbort()		ERRCommon( err::t_Abort )
 
-// Pour profiter du mécanisme de gestion d'erreur, sans qu'il n'y ai réellement une erreur dans le sens de cette bibliothèque.
+// Pour profiter du mï¿½canisme de gestion d'erreur, sans qu'il n'y ai rï¿½ellement une erreur dans le sens de cette bibliothï¿½que.
 # define qRFree()		ERRCommon( err::t_Free )
 }
 

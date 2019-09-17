@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define FBLCMD__COMPILATION
+#define FBLCMD_COMPILATION_
 
 #include "fblcmd.h"
 

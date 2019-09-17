@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define XMLDOC__COMPILATION
+#define XMLDOC_COMPILATION_
 
 #include "xmldoc.h"
 

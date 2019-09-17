@@ -19,8 +19,8 @@
 
 // STRing 
 
-#ifndef STR__INC
-# define STR__INC
+#ifndef STR_INC_
+# define STR_INC_
 
 # define STR_NAME		"STR"
 

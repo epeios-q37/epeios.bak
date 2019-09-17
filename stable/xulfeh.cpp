@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define XULFEH__COMPILATION
+#define XULFEH_COMPILATION_
 
 #include "xulfeh.h"
 

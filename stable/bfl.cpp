@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define BFL__COMPILATION
+#define BFL_COMPILATION_
 
 #include "bfl.h"
 

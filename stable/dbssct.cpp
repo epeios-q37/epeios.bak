@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define DBSSCT__COMPILATION
+#define DBSSCT_COMPILATION_
 
 #include "dbssct.h"
 

@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define CLNARG__COMPILATION
+#define CLNARG_COMPILATION_
 
 #include "clnarg.h"
 

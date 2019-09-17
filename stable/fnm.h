@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef FNM__INC
-# define FNM__INC
+#ifndef FNM_INC_
+# define FNM_INC_
 
 # define FNM_NAME		"FNM"
 

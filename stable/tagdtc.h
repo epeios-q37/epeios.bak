@@ -19,8 +19,8 @@
 
 //	$Id: tagdtc.h,v 1.11 2012/11/14 16:06:37 csimon Exp $
 
-#ifndef TAGDTC__INC
-#define TAGDTC__INC
+#ifndef TAGDTC_INC_
+#define TAGDTC_INC_
 
 #define TAGDTC_NAME		"TAGDTC"
 

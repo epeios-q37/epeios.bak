@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef DWTDCT__INC
-# define DWTDCT__INC
+#ifndef DWTDCT_INC_
+# define DWTDCT_INC_
 
 # define DWTDCT_NAME		"DWTDCT"
 

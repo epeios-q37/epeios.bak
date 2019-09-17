@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define TSF__COMPILATION
+#define TSF_COMPILATION_
 
 #include "tsf.h"
 

@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define MMM2__COMPILATION
+#define MMM2_COMPILATION_
 
 #include "mmm2.h"
 

@@ -30,7 +30,7 @@
 	See the 'saljni.h' file  for more details.
 */
 
-#define SALJNI__COMPILATION
+#define SALJNI_COMPILATION_
 
 #include "saljni.h"
 

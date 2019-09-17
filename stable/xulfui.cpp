@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define XULFUI__COMPILATION
+#define XULFUI_COMPILATION_
 
 #include "xulfui.h"
 

@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define TAGSBS__COMPILATION
+#define TAGSBS_COMPILATION_
 
 #include "tagsbs.h"
 

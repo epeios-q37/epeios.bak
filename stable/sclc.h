@@ -19,8 +19,8 @@
 
 // SoCLe C(LI)
 
-#ifndef SCLC__INC
-# define SCLC__INC
+#ifndef SCLC_INC_
+# define SCLC_INC_
 
 # define SCLC_NAME		"SCLC"
 

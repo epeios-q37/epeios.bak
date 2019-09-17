@@ -19,8 +19,8 @@
 
 //	$Id: xulfsv.h,v 1.1 2011/12/16 16:19:54 csimon Exp $
 
-#ifndef XULFSV__INC
-#define XULFSV__INC
+#ifndef XULFSV_INC_
+#define XULFSV_INC_
 
 #define XULFSV_NAME		"XULFSV"
 

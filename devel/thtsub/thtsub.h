@@ -19,8 +19,8 @@
 
 // THread Tool SUBmodule
 
-#ifndef THTSUB__INC
-# define THTSUB__INC
+#ifndef THTSUB_INC_
+# define THTSUB_INC_
 
 # define THTSUB_NAME		"THTSUB"
 

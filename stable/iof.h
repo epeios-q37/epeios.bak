@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef IOF__INC
-#define IOF__INC
+#ifndef IOF_INC_
+#define IOF_INC_
 
 #define IOF_NAME		"IOF"
 

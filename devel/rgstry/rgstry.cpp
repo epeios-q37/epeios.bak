@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define RGSTRY__COMPILATION
+#define RGSTRY_COMPILATION_
 
 #include "rgstry.h"
 

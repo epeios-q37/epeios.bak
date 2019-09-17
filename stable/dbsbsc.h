@@ -19,8 +19,8 @@
 
 //	$Id: dbsbsc.h,v 1.12 2012/08/22 15:56:46 csimon Exp $
 
-#ifndef DBSBSC__INC
-#define DBSBSC__INC
+#ifndef DBSBSC_INC_
+#define DBSBSC_INC_
 
 #define DBSBSC_NAME		"DBSBSC"
 

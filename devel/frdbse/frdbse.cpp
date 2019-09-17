@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define FRDBSE__COMPILATION
+#define FRDBSE_COMPILATION_
 
 #include "frdbse.h"
 

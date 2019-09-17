@@ -19,8 +19,8 @@
 
 // Client-Server Devices CoMmoN
 
-#ifndef CSDCMN__INC
-# define CSDCMN__INC
+#ifndef CSDCMN_INC_
+# define CSDCMN_INC_
 
 # define CSDCMN_NAME		"CSDCMN"
 

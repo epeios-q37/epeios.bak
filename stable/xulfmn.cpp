@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define XULFMN__COMPILATION
+#define XULFMN_COMPILATION_
 
 #include "xulfmn.h"
 

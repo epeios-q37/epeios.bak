@@ -19,8 +19,8 @@
 
 //	$Id: xxx.h,v 1.9 2012/11/14 16:06:23 csimon Exp $
 
-#ifndef FRDSSN__INC
-#define FRDSSN__INC
+#ifndef FRDSSN_INC_
+#define FRDSSN_INC_
 
 #define FRDSSN_NAME		"FRDSSN"
 

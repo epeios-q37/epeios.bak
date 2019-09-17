@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef CLNARG__INC
-# define CLNARG__INC
+#ifndef CLNARG_INC_
+# define CLNARG_INC_
 
 # define CLNARG_NAME		"CLNARG"
 

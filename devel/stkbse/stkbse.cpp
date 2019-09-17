@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define STKBSE__COMPILATION
+#define STKBSE_COMPILATION_
 
 #include "stkbse.h"
 

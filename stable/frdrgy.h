@@ -19,8 +19,8 @@
 
 //	$Id: frdrgy.h,v 1.38 2013/04/26 14:43:39 csimon Exp $
 
-#ifndef FRDRGY__INC
-#define FRDRGY__INC
+#ifndef FRDRGY_INC_
+#define FRDRGY_INC_
 
 #define FRDRGY_NAME		"FRDRGY"
 

@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define TXMTBL__COMPILATION
+#define TXMTBL_COMPILATION_
 
 #include "txmtbl.h"
 

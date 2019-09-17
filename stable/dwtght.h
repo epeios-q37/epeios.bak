@@ -19,8 +19,8 @@
 
 // Directory WaTcher GHosTs
 
-#ifndef DWTGHT__INC
-# define DWTGHT__INC
+#ifndef DWTGHT_INC_
+# define DWTGHT_INC_
 
 # define DWTGHT_NAME		"DWTGHT"
 

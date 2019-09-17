@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define LSTCRT__COMPILATION
+#define LSTCRT_COMPILATION_
 
 #include "lstcrt.h"
 

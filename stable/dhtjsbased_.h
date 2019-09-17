@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef DHTJSBASED__INC
-# define DHTJSBASED__INC
+#ifndef DHTJSBASED_INC_
+# define DHTJSBASED_INC_
 
 # define DHTJSBASED_NAME		"DHTJSBASED"
 

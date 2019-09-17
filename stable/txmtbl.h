@@ -19,8 +19,8 @@
 
 // TeXt Manager TaBLe. Table like text flow manager.
 
-#ifndef TXMTBL__INC
-# define TXMTBL__INC
+#ifndef TXMTBL_INC_
+# define TXMTBL_INC_
 
 # define TXMTBL_NAME		"TXMTBL"
 

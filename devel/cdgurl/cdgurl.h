@@ -20,8 +20,8 @@
 // CoDinG URL.
 // Based on http://www.geekhideout.com/urlcode.shtml.
 
-#ifndef CDGURL__INC
-# define CDGURL__INC
+#ifndef CDGURL_INC_
+# define CDGURL_INC_
 
 # define CDGURL_NAME		"CDGURL"
 

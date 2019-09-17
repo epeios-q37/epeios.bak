@@ -19,8 +19,8 @@
 
 // InDeX QUEue
 
-#ifndef IDXQUE__INC
-# define IDXQUE__INC
+#ifndef IDXQUE_INC_
+# define IDXQUE_INC_
 
 # define IDXQUE_NAME		"IDXQUE"
 

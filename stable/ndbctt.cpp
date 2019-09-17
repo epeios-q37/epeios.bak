@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define NDBCTT__COMPILATION
+#define NDBCTT_COMPILATION_
 
 #include "ndbctt.h"
 

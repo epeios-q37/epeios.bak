@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef CSDMNB__INC
-# define CSDMNB__INC
+#ifndef CSDMNB_INC_
+# define CSDMNB_INC_
 
 # define CSDMNB_NAME		"CSDMNB"
 

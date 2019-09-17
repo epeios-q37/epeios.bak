@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define FBLFAQ__COMPILATION
+#define FBLFAQ_COMPILATION_
 
 #include "fblfaq.h"
 

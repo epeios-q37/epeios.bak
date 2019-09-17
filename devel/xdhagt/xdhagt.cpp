@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define XDHAGT__COMPILATION
+#define XDHAGT_COMPILATION_
 
 #include "xdhagt.h"
 

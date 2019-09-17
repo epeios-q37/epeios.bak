@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define MTK__COMPILATION
+#define MTK_COMPILATION_
 
 # include "mtk.h"
 

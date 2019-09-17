@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef XDHUJS__INC
-# define XDHUJS__INC
+#ifndef XDHUJS_INC_
+# define XDHUJS_INC_
 
 # define XDHUJS_NAME		"XDHUJS"
 

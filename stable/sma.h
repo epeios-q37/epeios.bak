@@ -19,8 +19,8 @@
 
 //	$Id: sma.h,v 1.4 2012/11/14 16:06:36 csimon Exp $
 
-#ifndef SMA__INC
-#define SMA__INC
+#ifndef SMA_INC_
+#define SMA_INC_
 
 #define SMA_NAME		"SMA"
 

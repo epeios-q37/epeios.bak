@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define SCLXSLUI__COMPILATION
+#define SCLXSLUI_COMPILATION_
 
 #include "sclxslui.h"
 

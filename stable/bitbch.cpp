@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define BITBCH__COMPILATION
+#define BITBCH_COMPILATION_
 
 #include "bitbch.h"
 

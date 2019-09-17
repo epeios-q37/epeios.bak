@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef SCLRGSTRY__INC
-#define SCLRGSTRY__INC
+#ifndef SCLRGSTRY_INC_
+#define SCLRGSTRY_INC_
 
 #define SCLRGSTRY_NAME		"SCLRGSTRY"
 

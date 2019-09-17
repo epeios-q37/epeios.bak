@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define PLGN__COMPILATION
+#define PLGN_COMPILATION_
 
 #include "plgn.h"
 

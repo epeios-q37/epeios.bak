@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define BCH__COMPILATION
+#define BCH_COMPILATION_
 
 #include "bch.h"
 

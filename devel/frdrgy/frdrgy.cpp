@@ -21,7 +21,7 @@
 
 //	$Id: frdrgy.cpp,v 1.24 2013/04/26 14:43:39 csimon Exp $
 
-#define FRDRGY__COMPILATION
+#define FRDRGY_COMPILATION_
 
 #include "frdrgy.h"
 

@@ -19,8 +19,8 @@
 
 //	$Id: cgidat.h,v 1.4 2013/05/15 14:40:37 csimon Exp $
 
-#ifndef CGIDAT__INC
-#define CGIDAT__INC
+#ifndef CGIDAT_INC_
+#define CGIDAT_INC_
 
 #define CGIDAT_NAME		"CGIDAT"
 

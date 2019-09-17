@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define XDHUPS__COMPILATION
+#define XDHUPS_COMPILATION_
 
 #include "xdhups.h"
 

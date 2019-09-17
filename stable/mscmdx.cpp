@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define MSCMDX__COMPILATION
+#define MSCMDX_COMPILATION_
 
 #include "mscmdx.h"
 

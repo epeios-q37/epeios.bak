@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define DHTJSBASED__COMPILATION
+#define DHTJSBASED_COMPILATION_
 
 #include "dhtjsbased.h"
 

@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define CSDMXB__COMPILATION
+#define CSDMXB_COMPILATION_
 
 #include "csdmxb.h"
 

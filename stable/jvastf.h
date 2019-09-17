@@ -19,8 +19,8 @@
 
 //	$Id: jvastf.h,v 1.7 2013/04/09 17:57:32 csimon Exp $
 
-#ifndef JVASTF__INC
-#define JVASTF__INC
+#ifndef JVASTF_INC_
+#define JVASTF_INC_
 
 #define JVASTF_NAME		"JVASTF"
 

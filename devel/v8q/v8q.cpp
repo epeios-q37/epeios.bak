@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define V8Q__COMPILATION
+#define V8Q_COMPILATION_
 
 #include "v8q.h"
 

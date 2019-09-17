@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define CSDLEC__COMPILATION
+#define CSDLEC_COMPILATION_
 
 #include "csdlec.h"
 

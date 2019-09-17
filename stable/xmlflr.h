@@ -19,8 +19,8 @@
 
 //	$Id: xmlflr.h,v 1.2 2013/07/25 15:59:16 csimon Exp $
 
-#ifndef XMLFLR__INC
-#define XMLFLR__INC
+#ifndef XMLFLR_INC_
+#define XMLFLR_INC_
 
 #define XMLFLR_NAME		"XMLFLR"
 

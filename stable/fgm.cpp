@@ -31,7 +31,7 @@
 	See the 'fgm.h' file  for more details.
 */
 
-#define FGM__COMPILATION
+#define FGM_COMPILATION_
 
 #include "fgm.h"
 

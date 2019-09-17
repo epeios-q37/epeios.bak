@@ -19,8 +19,8 @@
 
 // FLow eXtension 
 
-#ifndef FLX__INC
-# define FLX__INC
+#ifndef FLX_INC_
+# define FLX_INC_
 
 # define FLX_NAME		"FLX"
 

@@ -19,8 +19,8 @@
 
 // MuSiC MiDi Device 
 
-#ifndef MSCMDD__INC
-# define MSCMDD__INC
+#ifndef MSCMDD_INC_
+# define MSCMDD_INC_
 
 # if defined( E_DEBUG ) && !defined( MSCMDD_NODBG )
 #  define MSCMDD_DBG

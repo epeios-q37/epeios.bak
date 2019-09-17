@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define XDHJST__COMPILATION
+#define XDHJST_COMPILATION_
 
 #include "xdhjst.h"
 

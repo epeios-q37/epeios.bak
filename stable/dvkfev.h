@@ -19,8 +19,8 @@
 
 //	$Id: dvkfev.h,v 1.1 2012/12/04 16:06:37 csimon Exp $
 
-#ifndef DVKFEV__INC
-#define DVKFEV__INC
+#ifndef DVKFEV_INC_
+#define DVKFEV_INC_
 
 #define DVKFEV_NAME		"DVKFEV"
 

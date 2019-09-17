@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define UYS__COMPILATION
+#define UYS_COMPILATION_
 
 #include "uys.h"
 

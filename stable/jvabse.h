@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef JVABSE__INC
-# define JVABSE__INC
+#ifndef JVABSE_INC_
+# define JVABSE_INC_
 
 # define JVABSE_NAME		"JVABSE"
 

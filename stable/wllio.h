@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef WLLIO__INC
-# define WLLIO__INC
+#ifndef WLLIO_INC_
+# define WLLIO_INC_
 
 # define WLLIO_NAME		"WLLIO"
 

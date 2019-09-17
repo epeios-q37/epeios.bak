@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define LST__COMPILATION
+#define LST_COMPILATION_
 
 #include "lst.h"
 

@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef BITBCH__INC
-# define BITBCH__INC
+#ifndef BITBCH_INC_
+# define BITBCH_INC_
 
 # define BITBCH_NAME		"BITBCH"
 

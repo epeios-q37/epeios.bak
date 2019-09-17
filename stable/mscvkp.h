@@ -19,8 +19,8 @@
 
 //	$Id: mscvkp.h,v 1.1 2010/07/16 08:25:54 csimon Exp $
 
-#ifndef MSCVKP__INC
-#define MSCVKP__INC
+#ifndef MSCVKP_INC_
+#define MSCVKP_INC_
 
 #define MSCVKP_NAME		"MSCVKP"
 

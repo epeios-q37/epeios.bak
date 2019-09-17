@@ -19,8 +19,8 @@
 
 // Directory WaTcher MOVings
 
-#ifndef DWTMOV__INC
-# define DWTMOV__INC
+#ifndef DWTMOV_INC_
+# define DWTMOV_INC_
 
 # define DWTMOV_NAME		"DWTMOV"
 

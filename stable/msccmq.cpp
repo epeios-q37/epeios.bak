@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define MSCCMQ__COMPILATION
+#define MSCCMQ_COMPILATION_
 
 #include "msccmq.h"
 

@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define CGIARG__COMPILATION
+#define CGIARG_COMPILATION_
 
 #include "cgiarg.h"
 

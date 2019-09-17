@@ -19,8 +19,8 @@
 
 //	$Id: xxx.h,v 1.9 2012/11/14 16:06:23 csimon Exp $
 
-#ifndef FRDFRD__INC
-#define FRDFRD__INC
+#ifndef FRDFRD_INC_
+#define FRDFRD_INC_
 
 #define FRDFRD_NAME		"FRDFRD"
 

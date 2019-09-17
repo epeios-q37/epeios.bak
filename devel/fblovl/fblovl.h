@@ -19,8 +19,8 @@
 
 //D Frontend/Backend Layout OVerLapping 
 
-#ifndef FBLOVL__INC
-# define FBLOVL__INC
+#ifndef FBLOVL_INC_
+# define FBLOVL_INC_
 
 #define FBLOVL_NAME		"FBLOVL"
 

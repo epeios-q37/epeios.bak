@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define DIR__COMPILATION
+#define DIR_COMPILATION_
 
 #include "dir.h"
 

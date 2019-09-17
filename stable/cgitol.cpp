@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define CGITOL__COMPILATION
+#define CGITOL_COMPILATION_
 
 #include "cgitol.h"
 

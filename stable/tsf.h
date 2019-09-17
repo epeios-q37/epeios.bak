@@ -19,8 +19,8 @@
 
 //	$Id: tsf.h,v 1.4 2012/11/14 16:06:38 csimon Exp $
 
-#ifndef TSF__INC
-#define TSF__INC
+#ifndef TSF_INC_
+#define TSF_INC_
 
 #define TSF_NAME		"TSF"
 

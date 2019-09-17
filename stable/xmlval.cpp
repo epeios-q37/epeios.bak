@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define XMLVAL__COMPILATION
+#define XMLVAL_COMPILATION_
 
 #include "xmlval.h"
 

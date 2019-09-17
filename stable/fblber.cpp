@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define FBLBER__COMPILATION
+#define FBLBER_COMPILATION_
 
 #include "fblber.h"
 

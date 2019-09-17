@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define UTF__COMPILATION
+#define UTF_COMPILATION_
 
 #include "utf.h"
 

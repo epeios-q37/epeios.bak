@@ -19,8 +19,8 @@
 
 //	$Id: tsrcpr.h,v 1.16 2012/11/14 16:06:38 csimon Exp $
 
-#ifndef TSRCPR__INC
-#define TSRCPR__INC
+#ifndef TSRCPR_INC_
+#define TSRCPR_INC_
 
 #define TSRCPR_NAME		"TSRCPR"
 

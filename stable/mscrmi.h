@@ -19,8 +19,8 @@
 
 //	$Id: mscrmi.h,v 1.15 2011/05/03 19:57:36 csimon Exp $
 
-#ifndef MSCRMI__INC
-#define MSCRMI__INC
+#ifndef MSCRMI_INC_
+#define MSCRMI_INC_
 
 #define MSCRMI_NAME		"MSCRMI"
 

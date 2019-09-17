@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define XDHDWS__COMPILATION
+#define XDHDWS_COMPILATION_
 
 #include "xdhdws.h"
 

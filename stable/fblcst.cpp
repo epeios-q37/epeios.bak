@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define FBLCST__COMPILATION
+#define FBLCST_COMPILATION_
 
 #include "fblcst.h"
 

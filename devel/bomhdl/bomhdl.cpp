@@ -18,7 +18,7 @@
 */
 
 
-#define BOMHDL__COMPILATION
+#define BOMHDL_COMPILATION_
 
 #include "bomhdl.h"
 /*$BEGIN$*/

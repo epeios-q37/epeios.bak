@@ -19,8 +19,8 @@
 
 // State Transition System Finite State Machine .
 
-#ifndef STSFSM__INC
-#define STSFSM__INC
+#ifndef STSFSM_INC_
+#define STSFSM_INC_
 
 #define STSFSM_NAME		"STSFSM"
 

@@ -19,8 +19,8 @@
 
 // Client-Server Devices Muxed Network Server
 
-#ifndef CSDMNS__INC
-# define CSDMNS__INC
+#ifndef CSDMNS_INC_
+# define CSDMNS_INC_
 
 # define CSDMNS_NAME		"CSDMNS"
 

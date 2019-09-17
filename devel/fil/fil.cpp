@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define FIL__COMPILATION
+#define FIL_COMPILATION_
 
 #include "fil.h"
 

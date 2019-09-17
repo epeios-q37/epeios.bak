@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define WINTOL__COMPILATION
+#define WINTOL_COMPILATION_
 
 #include "wintol.h"
 

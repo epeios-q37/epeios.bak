@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define NTVSTR__COMPILATION
+#define NTVSTR_COMPILATION_
 
 #include "ntvstr.h"
 

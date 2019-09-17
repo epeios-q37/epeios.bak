@@ -19,8 +19,8 @@
 
 //	$Id: sclgecko.h,v 1.9 2013/06/11 10:32:25 csimon Exp $
 
-#ifndef SCLGECKO__INC
-#define SCLGECKO__INC
+#ifndef SCLGECKO_INC_
+#define SCLGECKO_INC_
 
 #define SCLGECKO_NAME		"SCLGECKO"
 

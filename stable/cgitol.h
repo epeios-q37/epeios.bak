@@ -19,8 +19,8 @@
 
 //	$Id: cgitol.h,v 1.2 2013/07/25 15:59:14 csimon Exp $
 
-#ifndef CGITOL__INC
-#define CGITOL__INC
+#ifndef CGITOL_INC_
+#define CGITOL_INC_
 
 #define CGITOL_NAME		"CGITOL"
 

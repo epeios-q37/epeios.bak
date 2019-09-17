@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define TYS__COMPILATION
+#define TYS_COMPILATION_
 
 #include "tys.h"
 

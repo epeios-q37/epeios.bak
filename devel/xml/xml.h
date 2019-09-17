@@ -19,8 +19,8 @@
 
 // eXtensible Markup Language
 
-#ifndef XML__INC
-# define XML__INC
+#ifndef XML_INC_
+# define XML_INC_
 
 # define XML_NAME		"XML"
 

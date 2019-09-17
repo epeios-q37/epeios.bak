@@ -19,8 +19,8 @@
 
 // MuSiC MiDi Messages 
 
-#ifndef MSCMDM__INC
-# define MSCMDM__INC
+#ifndef MSCMDM_INC_
+# define MSCMDM_INC_
 
 
 # if defined( E_DEBUG ) && !defined( MSCMDM_NODBG )

@@ -19,8 +19,8 @@
 
 //	$Id: dbsdct.h,v 1.32 2012/11/14 16:06:26 csimon Exp $
 
-#ifndef DBSDCT__INC
-#define DBSDCT__INC
+#ifndef DBSDCT_INC_
+#define DBSDCT_INC_
 
 #define DBSDCT_NAME		"DBSDCT"
 

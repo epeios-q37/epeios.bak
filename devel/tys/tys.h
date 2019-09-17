@@ -19,8 +19,8 @@
 
 // TYped Storage 
 
-#ifndef TYS__INC
-# define TYS__INC
+#ifndef TYS_INC_
+# define TYS_INC_
 
 # define TYS_NAME		"TYS"
 
@@ -258,7 +258,7 @@ namespace tys {
 
 	E_AUTO2( storage )
 
-# ifndef FLM__COMPILATION
+# ifndef FLM_COMPILATION_
 	using uys::rRH;
 	using uys::rFH;
 	using uys::rHF;

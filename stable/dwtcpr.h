@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef DWTCPR__INC
-# define DWTCPR__INC
+#ifndef DWTCPR_INC_
+# define DWTCPR_INC_
 
 # define DWTCPR_NAME		"DWTCPR"
 

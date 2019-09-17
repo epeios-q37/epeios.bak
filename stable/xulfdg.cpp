@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define XULFDG__COMPILATION
+#define XULFDG_COMPILATION_
 
 #include "xulfdg.h"
 

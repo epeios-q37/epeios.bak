@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define DWTDCT__COMPILATION
+#define DWTDCT_COMPILATION_
 
 #include "dwtdct.h"
 

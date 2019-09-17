@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef CSDRCD__INC
-# define CSDRCD__INC
+#ifndef CSDRCD_INC_
+# define CSDRCD_INC_
 
 # define CSDRCD_NAME		"CSDRCD"
 

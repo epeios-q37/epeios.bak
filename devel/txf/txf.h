@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef TXF__INC
-#define TXF__INC
+#ifndef TXF_INC_
+#define TXF_INC_
 
 #define TXF_NAME		"TXF"
 

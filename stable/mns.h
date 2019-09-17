@@ -19,8 +19,8 @@
 
 //	$Id: mns.h,v 1.4 2013/04/05 16:33:40 csimon Exp $
 
-#ifndef MNS__INC
-#define MNS__INC
+#ifndef MNS_INC_
+#define MNS_INC_
 
 #define MNS_NAME		"MNS"
 

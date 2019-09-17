@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define DVKFEV__COMPILATION
+#define DVKFEV_COMPILATION_
 
 #include "dvkfev.h"
 

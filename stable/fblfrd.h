@@ -19,8 +19,8 @@
 
 // Frontend/Backend Layout FRrontenD 
 
-#ifndef FBLFRD__INC
-# define FBLFRD__INC
+#ifndef FBLFRD_INC_
+# define FBLFRD_INC_
 
 # define FBLFRD_NAME		"FBLFRD"
 

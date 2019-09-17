@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define BSO__COMPILATION
+#define BSO_COMPILATION_
 
 #include "bso.h"
 

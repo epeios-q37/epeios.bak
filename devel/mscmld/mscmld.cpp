@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define MSCMLD__COMPILATION
+#define MSCMLD_COMPILATION_
 
 #include "mscmld.h"
 

@@ -19,8 +19,8 @@
 
 // STacK ConTaiNer
 
-#ifndef STKCTN__INC
-# define STKCTN__INC
+#ifndef STKCTN_INC_
+# define STKCTN_INC_
 
 # define STKCTN_NAME		"STKCTN"
 

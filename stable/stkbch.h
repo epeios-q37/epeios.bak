@@ -19,8 +19,8 @@
 
 // STacK BunCH
 
-#ifndef STKBCH__INC
-# define STKBCH__INC
+#ifndef STKBCH_INC_
+# define STKBCH_INC_
 
 # define STKBCH_NAME		"STKBCH"
 

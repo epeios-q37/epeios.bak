@@ -19,8 +19,8 @@
 
 //	$Id: wintol.h,v 1.10 2013/04/11 19:36:54 csimon Exp $
 
-#ifndef WINTOL__INC
-#define WINTOL__INC
+#ifndef WINTOL_INC_
+#define WINTOL_INC_
 
 #define WINTOL_NAME		"WINTOL"
 

@@ -19,8 +19,8 @@
 
 //	$Id: mmm1.h,v 1.9 2012/11/14 16:06:31 csimon Exp $
 
-#ifndef MMM1__INC
-#define MMM1__INC
+#ifndef MMM1_INC_
+#define MMM1_INC_
 
 #define MMM1_NAME		"MMM1"
 
@@ -716,7 +716,7 @@ namespace mmm {
 		}
 	};
 
-#ifndef FLM__COMPILATION
+#ifndef FLM_COMPILATION_
 	typedef uym::untyped_memory_file_manager___	multimemory_file_manager___;
 
 	inline bso::bool__ Connect(

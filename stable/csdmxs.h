@@ -19,8 +19,8 @@
 
 // Client-Server Devices MuXing Server
 
-#ifndef CSDMXS__INC
-# define CSDMXS__INC
+#ifndef CSDMXS_INC_
+# define CSDMXS_INC_
 
 # define CSDMXS_NAME		"CSDMXS"
 

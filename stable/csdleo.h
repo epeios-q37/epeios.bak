@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef CSDLEO__INC
-# define CSDLEO__INC
+#ifndef CSDLEO_INC_
+# define CSDLEO_INC_
 
 # define CSDLEO_NAME		"CSDLEO"
 

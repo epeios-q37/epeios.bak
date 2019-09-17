@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define SCLLOCALE__COMPILATION
+#define SCLLOCALE_COMPILATION_
 
 #include "scllocale.h"
 

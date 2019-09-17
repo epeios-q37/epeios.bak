@@ -19,8 +19,8 @@
 
 //	$Id: dbsctt.h,v 1.20 2009/11/12 18:25:54 csimon Exp $
 
-#ifndef DBSCTT__INC
-#define DBSCTT__INC
+#ifndef DBSCTT_INC_
+#define DBSCTT_INC_
 
 #define DBSCTT_NAME		"DBSCTT"
 

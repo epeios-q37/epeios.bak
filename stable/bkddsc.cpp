@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define BKDDSC__COMPILATION
+#define BKDDSC_COMPILATION_
 
 #include "bkddsc.h"
 

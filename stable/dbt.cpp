@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define DBT__COMPILATION
+#define DBT_COMPILATION_
 
 #include "dbt.h"
 

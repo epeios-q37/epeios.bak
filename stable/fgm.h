@@ -58,8 +58,8 @@ Description:
 /* end of 'entete.h' template file */
 /* begin of 'xxx.h' template file V2.3 */
 
-#ifndef FGM__INC
-#define FGM__INC
+#ifndef FGM_INC_
+#define FGM_INC_
 
 #define FGM_NAME		"FGM"
 

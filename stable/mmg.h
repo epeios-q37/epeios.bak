@@ -19,8 +19,8 @@
 
 //	$Id: mmg.h,v 1.30 2013/04/11 19:36:50 csimon Exp $
 
-#ifndef MMG__INC
-#define MMG__INC
+#ifndef MMG_INC_
+#define MMG_INC_
 
 #define MMG_NAME		"MMG"
 

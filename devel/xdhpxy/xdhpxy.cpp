@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define XDHPXY__COMPILATION
+#define XDHPXY_COMPILATION_
 
 #include "xdhpxy.h"
 

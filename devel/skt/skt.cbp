@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="skt" />
+		<Option pch_mode="2" />
+		<Option compiler="clang" />
+		<Option virtualFolders="Docs/;Sources/;" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/skt" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="clang" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/skt" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="clang" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+			<Add directory="/home/csimon/epeios/stable" />
+		</Compiler>
+		<Unit filename="../CHANGELOG.md">
+			<Option virtualFolder="Docs/" />
+		</Unit>
+		<Unit filename="../TODO.md">
+			<Option virtualFolder="Docs/" />
+		</Unit>
+		<Unit filename="skt.cpp">
+			<Option virtualFolder="Sources/" />
+		</Unit>
+		<Unit filename="skt_test.cpp">
+			<Option virtualFolder="Sources/" />
+		</Unit>
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

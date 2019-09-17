@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define STSFSM__COMPILATION
+#define STSFSM_COMPILATION_
 
 #include "stsfsm.h"
 

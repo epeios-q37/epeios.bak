@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define CIO__COMPILATION
+#define CIO_COMPILATION_
 
 #include "cio.h"
 

@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef PLGNCORE__INC
-# define PLGNCORE__INC
+#ifndef PLGNCORE_INC_
+# define PLGNCORE_INC_
 
 # define PLGNCORE_NAME		"PLGNCORE"
 

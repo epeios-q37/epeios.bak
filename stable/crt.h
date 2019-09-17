@@ -19,8 +19,8 @@
 
 // CRaTe
 
-#ifndef CRT__INC
-# define CRT__INC
+#ifndef CRT_INC_
+# define CRT_INC_
 
 # define CRT_NAME		"CRT"
 

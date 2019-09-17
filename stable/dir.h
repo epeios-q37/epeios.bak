@@ -19,8 +19,8 @@
 
 // DIRectory
 
-#ifndef DIR__INC
-# define DIR__INC
+#ifndef DIR_INC_
+# define DIR_INC_
 
 # define DIR_NAME		"DIR"
 
@@ -72,10 +72,10 @@
 namespace dir {
 	enum state__ {
 		sOK,
-		sExists,		// Le répertoire existe déjà.
+		sExists,		// Le rï¿½pertoire existe dï¿½jï¿½.
 		sBadPath,		// Le chemin fournit n'est pas correct.
-		sInadequatePath,	// Un élment du chemin n'existe pas ou n'est pas un répertoire adapté (fichier, mauvais droits, ...).
-		sNotEmpty,		// Dans le cas d'une effacement, ke répertoire a effacé n'estr pas vide.
+		sInadequatePath,	// Un ï¿½lment du chemin n'existe pas ou n'est pas un rï¿½pertoire adaptï¿½ (fichier, mauvais droits, ...).
+		sNotEmpty,		// Dans le cas d'une effacement, ke rï¿½pertoire a effacï¿½ n'estr pas vide.
 		s_amount,
 		s_Undefined
 	};
@@ -90,7 +90,7 @@ namespace dir {
 # elif defined( DIR__POSIX )
 #  ifdef CPE_S_DARWIN
 #   define DIR__MAX_PATH	(MAXPATHLEN+1)
-#  else	// Ne fonctionne peur-être pas sur tous les sytèmes POSIX, mais du moins avec 'GNU/Linux' et 'Cygwin'.
+#  else	// Ne fonctionne peur-ï¿½tre pas sur tous les sytï¿½mes POSIX, mais du moins avec 'GNU/Linux' et 'Cygwin'.
 #   define DIR__MAX_PATH	(PATH_MAX+1)
 #  endif
 # else
@@ -115,13 +115,13 @@ namespace dir {
 		case -1 :	// La taille de 'Path' est insuffisante.
 			qRLmt();
 			break;
-		case 0:	// Succés.
+		case 0:	// Succï¿½s.
 			break;
 		default:
 			qRSys();
 			break;
 		}
-#  else	// Ne fonctionne peur-être pas sur tous les sytèmes POSIX, mais du moins avec 'GNU/Linux' et 'Cygwin'.
+#  else	// Ne fonctionne peur-ï¿½tre pas sur tous les sytï¿½mes POSIX, mais du moins avec 'GNU/Linux' et 'Cygwin'.
 		int Size = readlink( "/proc/self/exe", FileName, DIR__MAX_PATH );
 
 		if ( Size <= 0 )
@@ -188,7 +188,7 @@ namespace dir {
 			break;
 		}
 
-		return s_Undefined;	// Pour éviter un 'warning'.
+		return s_Undefined;	// Pour ï¿½viter un 'warning'.
 	}
 
 	inline state__ DropDir( const fnm::name___ &Dir )
@@ -211,7 +211,7 @@ namespace dir {
 			break;
 		}
 
-		return s_Undefined;	// Pour éviter un 'warning'.
+		return s_Undefined;	// Pour ï¿½viter un 'warning'.
 	}
 
 	inline state__ ChangeDir( const fnm::name___ &Dir )
@@ -234,7 +234,7 @@ namespace dir {
 			break;
 		}
 
-		return s_Undefined;	// Pour éviter un 'warning'.
+		return s_Undefined;	// Pour ï¿½viter un 'warning'.
 	}
 
 
@@ -276,7 +276,7 @@ namespace dir {
 # else
 #  error
 # endif
-	// Si retourne chaîne vide, plus de fichier; si retourne NULL, erreur.
+	// Si retourne chaï¿½ne vide, plus de fichier; si retourne NULL, erreur.
 	inline const fnm::name___ &GetFirstFile(
 		const fnm::name___ &Path,
 		handle___ &Handle )
@@ -306,7 +306,7 @@ namespace dir {
 			case ERROR_NO_MORE_FILES:
 			case ERROR_ACCESS_DENIED:
 			case ERROR_NOT_READY:	// Empty DVD drive, for example.
-				Handle.Path.Init( "" );	// Pour mettre la taille à 0 (ce qui signale l'absence de fichier, par opposition à 'Handle.Path' == 'NULL', qui signale une erreur).
+				Handle.Path.Init( "" );	// Pour mettre la taille ï¿½ 0 (ce qui signale l'absence de fichier, par opposition ï¿½ 'Handle.Path' == 'NULL', qui signale une erreur).
 				break;
 			default:
 				qRFwk();
@@ -328,7 +328,7 @@ namespace dir {
 
 		if ( ( ent = readdir(rep) ) == NULL )
 			if ( errno == 0 )
-				Handle.Path.Init( "" );	// Pour mettre la taille à 0 (ce qui signale l'absence de fichier, par opposition à 'Handle.Name' == 'NULL', qui signale une erreur).
+				Handle.Path.Init( "" );	// Pour mettre la taille ï¿½ 0 (ce qui signale l'absence de fichier, par opposition ï¿½ 'Handle.Name' == 'NULL', qui signale une erreur).
 			else
 				qRFwk();
 		else
@@ -339,7 +339,7 @@ namespace dir {
 		return Handle.Path;
 	}
 
-	// Si retourne chaîne vide, plus de fichier; si retourne NULL, erreur.
+	// Si retourne chaï¿½ne vide, plus de fichier; si retourne NULL, erreur.
 	inline const fnm::name___ &GetNextFile( handle___ &Handle )
 	{
 # ifdef DIR__WIN
@@ -353,7 +353,7 @@ namespace dir {
 
 		if ( !FindNextFileW( hSearch, &File ) )
 			if ( GetLastError() == ERROR_NO_MORE_FILES )
-				Handle.Path.Init( "" );	// Pour mettre la taille à 0 (ce qui signale l'absence de fichier, par opposition à 'Handle.Name' == 'NULL', qui signale une erreur).
+				Handle.Path.Init( "" );	// Pour mettre la taille ï¿½ 0 (ce qui signale l'absence de fichier, par opposition ï¿½ 'Handle.Name' == 'NULL', qui signale une erreur).
 			else
 				qRFwk();
 		else {
@@ -369,7 +369,7 @@ namespace dir {
     
 		if ( ( ent = readdir(rep) ) == NULL )
 			if ( errno == 0 )
-				Handle.Path.Init( "" );	// Pour mettre la taille à 0 (ce qui signale l'absence de fichier, par opposition à 'Handle.Name' == 'NULL', qui signale une erreur).
+				Handle.Path.Init( "" );	// Pour mettre la taille ï¿½ 0 (ce qui signale l'absence de fichier, par opposition ï¿½ 'Handle.Name' == 'NULL', qui signale une erreur).
 			else
 				qRFwk();
 		else

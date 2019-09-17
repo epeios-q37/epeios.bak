@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define SCLRGSTRY__COMPILATION
+#define SCLRGSTRY_COMPILATION_
 
 #include "sclrgstry.h"
 

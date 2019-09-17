@@ -19,8 +19,8 @@
 
 //	$Id: utf.h,v 1.4 2013/07/18 19:46:23 csimon Exp $
 
-#ifndef UTF__INC
-#define UTF__INC
+#ifndef UTF_INC_
+#define UTF_INC_
 
 #define UTF_NAME		"UTF"
 

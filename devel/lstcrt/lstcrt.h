@@ -19,8 +19,8 @@
 
 // LiST CRaTe
 
-#ifndef LSTCRT__INC
-# define LSTCRT__INC
+#ifndef LSTCRT_INC_
+# define LSTCRT_INC_
 
 # define LSTCRT_NAME		"LSTCRT"
 

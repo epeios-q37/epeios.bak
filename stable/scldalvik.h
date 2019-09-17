@@ -19,8 +19,8 @@
 
 //	$Id: scldalvik.h,v 1.3 2012/09/23 19:54:55 csimon Exp $
 
-#ifndef SCLDALVIK__INC
-#define SCLDALVIK__INC
+#ifndef SCLDALVIK_INC_
+#define SCLDALVIK_INC_
 
 #define SCLDALVIK_NAME		"SCLDALVIK"
 

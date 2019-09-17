@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define CSDMNB__COMPILATION
+#define CSDMNB_COMPILATION_
 
 #include "csdmnb.h"
 

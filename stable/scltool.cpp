@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define SCLTOOL__COMPILATION
+#define SCLTOOL_COMPILATION_
 
 #include "scltool.h"
 

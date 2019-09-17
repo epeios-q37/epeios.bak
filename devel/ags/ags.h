@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef AGS__INC
-# define AGS__INC
+#ifndef AGS_INC_
+# define AGS_INC_
 
 # define AGS_NAME		"AGS"
 
@@ -34,10 +34,10 @@
 # include "txf.h"
 // # include "uys.h"	// dport, parce 'ags.h' est inclus par 'uys.h'.
 
-# ifdef UYS__INC
+# ifdef UYS_INC_
 #  ifndef UYS__HEADER_HANDLED
 #   define AGS__HANDLE_PART_ONE
-#   undef AGS__INC
+#   undef AGS_INC_
 #  else
 #   define AGS__HANDLE_PART_TWO
 #  endif

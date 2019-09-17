@@ -19,8 +19,8 @@
 
 //D Console Input/Output 
 
-#ifndef CIO__INC
-# define CIO__INC
+#ifndef CIO_INC_
+# define CIO_INC_
 
 # define CIO_NAME		"CIO"
 

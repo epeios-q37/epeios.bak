@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define DWTBSC__COMPILATION
+#define DWTBSC_COMPILATION_
 
 #include "dwtbsc.h"
 

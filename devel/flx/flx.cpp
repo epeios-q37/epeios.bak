@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define FLX__COMPILATION
+#define FLX_COMPILATION_
 
 #include "flx.h"
 

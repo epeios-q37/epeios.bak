@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define STRCCT__COMPILATION
+#define STRCCT_COMPILATION_
 
 #include "strcct.h"
 

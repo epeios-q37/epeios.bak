@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define NODEQ__COMPILATION
+#define NODEQ_COMPILATION_
 
 #include "nodeq.h"
 

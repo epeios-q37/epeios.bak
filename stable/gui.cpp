@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define GUI__COMPILATION
+#define GUI_COMPILATION_
 
 #include "gui.h"
 

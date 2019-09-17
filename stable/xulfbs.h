@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef XULFBS__INC
-# define XULFBS__INC
+#ifndef XULFBS_INC_
+# define XULFBS_INC_
 
 # define XULFBS_NAME		"XULFBS"
 

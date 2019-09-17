@@ -19,8 +19,8 @@
 
 //	$Id: tagexp.h,v 1.16 2010/07/15 18:26:44 csimon Exp $
 
-#ifndef TAGEXP__INC
-#define TAGEXP__INC
+#ifndef TAGEXP_INC_
+#define TAGEXP_INC_
 
 #define TAGEXP_NAME		"TAGEXP"
 

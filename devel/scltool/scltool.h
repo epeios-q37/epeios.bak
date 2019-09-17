@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef SCLTOOL__INC
-# define SCLTOOL__INC
+#ifndef SCLTOOL_INC_
+# define SCLTOOL_INC_
 
 # define SCLTOOL_NAME		"SCLTOOL"
 

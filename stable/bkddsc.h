@@ -19,8 +19,8 @@
 
 //	$Id: bkddsc.h,v 1.2 2012/11/14 16:06:25 csimon Exp $
 
-#ifndef BKDDSC__INC
-#define BKDDSC__INC
+#ifndef BKDDSC_INC_
+#define BKDDSC_INC_
 
 #define BKDDSC_NAME		"BKDDSC"
 

@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define SCLCGI__COMPILATION
+#define SCLCGI_COMPILATION_
 
 #include "sclcgi.h"
 

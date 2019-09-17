@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define XPP__COMPILATION
+#define XPP_COMPILATION_
 
 #include "xpp.h"
 

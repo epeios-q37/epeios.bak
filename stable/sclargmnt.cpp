@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define SCLARGMNT__COMPILATION
+#define SCLARGMNT_COMPILATION_
 
 #include "sclargmnt.h"
 

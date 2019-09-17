@@ -31,7 +31,7 @@
 	See the 'txmhch.h' file  for more details.
 */
 
-#define TXMHCH__COMPILATION
+#define TXMHCH_COMPILATION_
 
 #include "txmhch.h"
 

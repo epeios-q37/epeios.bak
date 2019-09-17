@@ -19,8 +19,8 @@
 
 // Directory WaTcher BaSiCs
 
-#ifndef DWTBSC__INC
-# define DWTBSC__INC
+#ifndef DWTBSC_INC_
+# define DWTBSC_INC_
 
 # define DWTBSC_NAME		"DWTBSC"
 

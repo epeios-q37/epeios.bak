@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define LTF__COMPILATION
+#define LTF_COMPILATION_
 
 #include "ltf.h"
 

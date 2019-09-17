@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef DTFBSC__INC
-#define DTFBSC__INC
+#ifndef DTFBSC_INC_
+#define DTFBSC_INC_
 
 #define DTFBSC_NAME		"DTFBSC"
 

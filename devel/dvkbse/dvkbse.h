@@ -19,8 +19,8 @@
 
 //	$Id: dvkbse.h,v 1.1 2012/12/04 16:05:43 csimon Exp $
 
-#ifndef DVKBSE__INC
-#define DVKBSE__INC
+#ifndef DVKBSE_INC_
+#define DVKBSE_INC_
 
 #define DVKBSE_NAME		"DVKBSE"
 

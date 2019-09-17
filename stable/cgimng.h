@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef CGIMNG__INC
-# define CGIMNG__INC
+#ifndef CGIMNG_INC_
+# define CGIMNG_INC_
 
 # define CGIMNG_NAME		"CGIMNG"
 

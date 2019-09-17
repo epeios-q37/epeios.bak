@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef PLGN__INC
-# define PLGN__INC
+#ifndef PLGN_INC_
+# define PLGN_INC_
 
 # define PLGN_NAME		"PLGN"
 

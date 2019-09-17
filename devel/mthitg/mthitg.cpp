@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define MTHITG__COMPILATION
+#define MTHITG_COMPILATION_
 
 #include "mthitg.h"
 

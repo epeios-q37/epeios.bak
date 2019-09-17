@@ -19,8 +19,8 @@
 
 // THread Tools 
 
-#ifndef THT__INC
-# define THT__INC
+#ifndef THT_INC_
+# define THT_INC_
 
 # define THT_NAME		"THT"
 

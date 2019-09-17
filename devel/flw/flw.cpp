@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define FLW__COMPILATION
+#define FLW_COMPILATION_
 
 #include "flw.h"
 

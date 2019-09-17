@@ -19,8 +19,8 @@
 
 // Client-Server Base Network Client 
 
-#ifndef CSDBNC__INC
-# define CSDBNC__INC
+#ifndef CSDBNC_INC_
+# define CSDBNC_INC_
 
 # define CSDBNC_NAME		"CSDBNC"
 

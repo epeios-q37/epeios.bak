@@ -19,8 +19,8 @@
 
 //	$Id: xxx.h,v 1.9 2012/11/14 16:06:23 csimon Exp $
 
-#ifndef XULFEH__INC
-#define XULFEH__INC
+#ifndef XULFEH_INC_
+#define XULFEH_INC_
 
 #define XULFEH_NAME		"XULFEH"
 

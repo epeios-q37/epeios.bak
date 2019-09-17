@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define FRDFRD__COMPILATION
+#define FRDFRD_COMPILATION_
 
 #include "frdfrd.h"
 

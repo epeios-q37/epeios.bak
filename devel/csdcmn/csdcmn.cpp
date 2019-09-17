@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define CSDCMN__COMPILATION
+#define CSDCMN_COMPILATION_
 
 #include "csdcmn.h"
 

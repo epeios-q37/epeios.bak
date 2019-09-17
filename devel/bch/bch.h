@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef BCH__INC
-# define BCH__INC
+#ifndef BCH_INC_
+# define BCH_INC_
 
 # define BCH_NAME		"BCH"
 
@@ -35,8 +35,8 @@
 # include "dtfptb.h"
 # include "flsq.h"
 
-# ifndef IAS__INC
-#  undef BCH__INC
+# ifndef IAS_INC_
+#  undef BCH_INC_
 #  include "ias.h"
 # else
 
@@ -664,7 +664,7 @@ namespace bch {
 	#define E_BUNCH( Type )		E_BUNCHt( Type, sdr::row__ )
 	#define E_BUNCH_( Type )	E_BUNCHt_( Type, sdr::row__ )
 
-// #ifndef FLS__COMPILATION
+// #ifndef FLS_COMPILATION_
 
 	using tys::rRH;
 	using tys::rHF;

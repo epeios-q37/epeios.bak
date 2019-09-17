@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define LSTCTN__COMPILATION
+#define LSTCTN_COMPILATION_
 
 #include "lstctn.h"
 

@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define MMM0__COMPILATION
+#define MMM0_COMPILATION_
 
 #include "mmm0.h"
 

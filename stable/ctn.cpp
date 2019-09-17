@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define CTN__COMPILATION
+#define CTN_COMPILATION_
 
 #include "ctn.h"
 

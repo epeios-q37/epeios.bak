@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef SCLFRNTND__INC
-# define SCLFRNTND__INC
+#ifndef SCLFRNTND_INC_
+# define SCLFRNTND_INC_
 
 # define SCLFRNTND_NAME		"SCLFRNTND"
 

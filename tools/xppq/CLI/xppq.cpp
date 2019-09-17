@@ -39,6 +39,9 @@ using cio::CIn;
 
 SCLI_DEF( xppq, NAME_LC, NAME_MC );
 
+// #define VERSION "0.0.0"
+// #define COPYRIGHT_YEARS "1969"
+
 static void PrintHeader_( void )
 {
 	COut << NAME_MC " V" VERSION << " (" WEBSITE_URL ")" << txf::nl;
@@ -46,10 +49,12 @@ static void PrintHeader_( void )
 	COut << txf::pad << "Build : " __DATE__ " " __TIME__ << " (" << cpe::GetDescription() << ')' << txf::nl;
 }
 
+#if 0
 static void Test_( void )
 {
 	cio::COut << "Test" << txf::nl;
 }
+# endif
 
 E_CDEF( char *, DefaultNamespace, XPP__PREPROCESSOR_DEFAULT_NAMESPACE );
 

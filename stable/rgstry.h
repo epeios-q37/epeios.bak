@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef RGSTRY__INC
-#define RGSTRY__INC
+#ifndef RGSTRY_INC_
+#define RGSTRY_INC_
 
 #define RGSTRY_NAME		"RGSTRY"
 

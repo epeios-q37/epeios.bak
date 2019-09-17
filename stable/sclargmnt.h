@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef SCLARGMNT__INC
-# define SCLARGMNT__INC
+#ifndef SCLARGMNT_INC_
+# define SCLARGMNT_INC_
 
 # define SCLARGMNT_NAME		"SCLARGMNT"
 

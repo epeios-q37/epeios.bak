@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define GNUMLL__COMPILATION
+#define GNUMLL_COMPILATION_
 
 #include "gnumll.h"
 

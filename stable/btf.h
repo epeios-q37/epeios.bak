@@ -19,8 +19,8 @@
 
 //	$Id: btf.h,v 1.18 2013/04/15 10:50:47 csimon Exp $
 
-#ifndef BTF__INC
-#define BTF__INC
+#ifndef BTF_INC_
+#define BTF_INC_
 
 #define BTF_NAME		"BTF"
 

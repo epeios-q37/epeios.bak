@@ -19,8 +19,8 @@
 
 //	$Id: bts.h,v 1.11 2013/04/15 10:50:48 csimon Exp $
 
-#ifndef BTS__INC
-#define BTS__INC
+#ifndef BTS_INC_
+#define BTS_INC_
 
 #define BTS_NAME		"BTS"
 

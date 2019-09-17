@@ -19,8 +19,8 @@
 
 //D Frontend/Backend Layout Backend Remote Request
 
-#ifndef FBLBRR__INC
-# define FBLBRR__INC
+#ifndef FBLBRR_INC_
+# define FBLBRR_INC_
 
 # define FBLBRR_NAME		"FBLBRR"
 

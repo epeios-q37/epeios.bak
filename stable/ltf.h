@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef LTF__INC
-#define LTF__INC
+#ifndef LTF_INC_
+#define LTF_INC_
 
 #define LTF_NAME		"LTF"
 

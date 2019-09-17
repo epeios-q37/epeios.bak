@@ -19,8 +19,8 @@
 
 //	$Id: mscmdx.h,v 1.3 2012/09/07 16:18:22 csimon Exp $
 
-#ifndef MSCMDX__INC
-#define MSCMDX__INC
+#ifndef MSCMDX_INC_
+#define MSCMDX_INC_
 
 #define MSCMDX_NAME		"MSCMDX"
 

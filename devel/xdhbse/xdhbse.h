@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef XDHBSE__INC
-# define XDHBSE__INC
+#ifndef XDHBSE_INC_
+# define XDHBSE_INC_
 
 # define XDHBSE_NAME		"XDHBSE"
 

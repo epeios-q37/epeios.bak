@@ -19,8 +19,8 @@
 
 // InDeX Best of Tree and Queue
 
-#ifndef IDXBTQ__INC
-# define IDXBTQ__INC
+#ifndef IDXBTQ_INC_
+# define IDXBTQ_INC_
 
 #define IDXBTQ_NAME		"IDXBTQ"
 

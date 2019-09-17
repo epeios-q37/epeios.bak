@@ -18,8 +18,8 @@
 */
 
 
-#ifndef DBSTBL__INC
-#define DBSTBL__INC
+#ifndef DBSTBL_INC_
+#define DBSTBL_INC_
 
 #define DBSTBL_NAME		"DBSTBL"
 

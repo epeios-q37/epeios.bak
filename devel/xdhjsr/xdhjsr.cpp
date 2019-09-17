@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define XDHJSR__COMPILATION
+#define XDHJSR_COMPILATION_
 
 #include "xdhjsr.h"
 

@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define PRXYBASE__COMPILATION
+#define PRXYBASE_COMPILATION_
 
 #include "prxybase.h"
 

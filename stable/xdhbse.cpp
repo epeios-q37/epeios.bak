@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define XDHBSE__COMPILATION
+#define XDHBSE_COMPILATION_
 
 #include "xdhbse.h"
 

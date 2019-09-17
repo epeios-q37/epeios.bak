@@ -19,8 +19,8 @@
 
 // STacK BaSE
 
-#ifndef STKBSE__INC
-# define STKBSE__INC
+#ifndef STKBSE_INC_
+# define STKBSE_INC_
 
 # define STKBSE_NAME		"STKBSE"
 

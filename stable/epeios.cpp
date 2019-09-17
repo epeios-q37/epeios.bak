@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define EPEIOS__COMPILATION
+#define EPEIOS_COMPILATION_
 
 #include "epeios.h"
 

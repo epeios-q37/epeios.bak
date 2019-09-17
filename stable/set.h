@@ -19,8 +19,8 @@
 
 //	$Id: set.h,v 1.5 2012/11/14 16:06:36 csimon Exp $
 
-#ifndef SET__INC
-#define SET__INC
+#ifndef SET_INC_
+#define SET_INC_
 
 #define SET_NAME		"SET"
 

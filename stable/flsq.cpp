@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define FLS__COMPILATION
+#define FLS_COMPILATION_
 
 #include "flsq.h"
 

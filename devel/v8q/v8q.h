@@ -19,8 +19,8 @@ along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 
 // V8 (from the JAvaScript engine of same name)
 
-#ifndef V8Q__INC
-# define V8Q__INC
+#ifndef V8Q_INC_
+# define V8Q_INC_
 
 # define V8Q_NAME		"V8Q"
 

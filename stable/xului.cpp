@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define XULUI__COMPILATION
+#define XULUI_COMPILATION_
 
 #include "xului.h"
 

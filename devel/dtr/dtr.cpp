@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define DTR__COMPILATION
+#define DTR_COMPILATION_
 
 #include "dtr.h"
 

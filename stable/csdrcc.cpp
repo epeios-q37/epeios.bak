@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define CSDRCC__COMPILATION
+#define CSDRCC_COMPILATION_
 
 #include "csdrcc.h"
 

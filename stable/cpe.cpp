@@ -17,7 +17,12 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define CPE__COMPILATION
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-macros"
+
+#define CPE_COMPILATION_
+
+#pragma clang diagnostic pop
 
 #include "cpe.h"
 

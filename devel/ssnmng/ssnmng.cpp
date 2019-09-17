@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define SSNMNG__COMPILATION
+#define SSNMNG_COMPILATION_
 
 #include "ssnmng.h"
 

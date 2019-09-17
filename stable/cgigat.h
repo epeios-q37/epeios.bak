@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef CGIGAT__INC
-# define CGIGAT__INC
+#ifndef CGIGAT_INC_
+# define CGIGAT_INC_
 
 # define CGIGAT_NAME		"CGIGAT"
 

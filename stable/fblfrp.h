@@ -19,8 +19,8 @@
 
 // Frontend/Backend Layout Frontend Remote Parameters 
 
-#ifndef FBLFRP__INC
-# define FBLFRP__INC
+#ifndef FBLFRP_INC_
+# define FBLFRP_INC_
 
 # define FBLFRP_NAME		"FBLFRP"
 

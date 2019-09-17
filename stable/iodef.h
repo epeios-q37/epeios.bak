@@ -19,8 +19,8 @@
 
 //	$Id: iodef.h,v 1.5 2012/11/14 16:06:30 csimon Exp $
 
-#ifndef IODEF__INC
-#define IODEF__INC
+#ifndef IODEF_INC_
+#define IODEF_INC_
 
 #define IODEF_NAME		"IODEF"
 

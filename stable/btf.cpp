@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define BTF__COMPILATION
+#define BTF_COMPILATION_
 
 #include "btf.h"
 

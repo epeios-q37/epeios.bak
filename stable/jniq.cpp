@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define JNIQ__COMPILATION
+#define JNIQ_COMPILATION_
 
 #include "jniq.h"
 

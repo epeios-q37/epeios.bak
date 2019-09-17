@@ -19,8 +19,8 @@
 
 // EPeioS MiSC 
 
-#ifndef EPSMSC__INC
-#define EPSMSC__INC
+#ifndef EPSMSC_INC_
+#define EPSMSC_INC_
 
 #define EPSMSC_NAME		"EPSMSC"
 

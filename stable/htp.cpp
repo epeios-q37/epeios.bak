@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define HTP__COMPILATION
+#define HTP_COMPILATION_
 
 #include "htp.h"
 

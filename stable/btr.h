@@ -19,8 +19,8 @@
 
 // Binary Tree 
 
-#ifndef BTR__INC
-# define BTR__INC
+#ifndef BTR_INC_
+# define BTR_INC_
 
 # define BTR_NAME		"BTR"
 

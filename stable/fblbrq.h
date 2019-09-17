@@ -19,8 +19,8 @@
 
 // Frontend/Backend Layout Backend ReQuest 
 
-#ifndef FBLBRQ__INC
-# define FBLBRQ__INC
+#ifndef FBLBRQ_INC_
+# define FBLBRQ_INC_
 
 # define FBLBRQ_NAME		"FBLBRQ"
 

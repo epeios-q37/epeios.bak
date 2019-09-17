@@ -19,8 +19,8 @@
 
 //	$Id: mmisub.h,v 1.5 2012/11/14 16:06:31 csimon Exp $
 
-#ifndef MMISUB__INC
-#define MMISUB__INC
+#ifndef MMISUB_INC_
+#define MMISUB_INC_
 
 #define MMISUB_NAME		"MMISUB"
 

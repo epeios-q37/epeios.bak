@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef TAGSBS__INC
-# define TAGSBS__INC
+#ifndef TAGSBS_INC_
+# define TAGSBS_INC_
 
 # define TAGSBS_NAME		"TAGSBS"
 

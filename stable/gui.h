@@ -19,8 +19,8 @@
 
 //	$Id: gui.h,v 1.4 2012/11/14 16:06:29 csimon Exp $
 
-#ifndef GUI__INC
-#define GUI__INC
+#ifndef GUI_INC_
+#define GUI_INC_
 
 #define GUI_NAME		"GUI"
 

@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define CRPTGR__COMPILATION
+#define CRPTGR_COMPILATION_
 
 #include "crptgr.h"
 

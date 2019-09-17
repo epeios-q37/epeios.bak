@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef XDHDWS__INC
-# define XDHDWS__INC
+#ifndef XDHDWS_INC_
+# define XDHDWS_INC_
 
 # define XDHDWS_NAME		"XDHDWS"
 

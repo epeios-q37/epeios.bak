@@ -19,8 +19,8 @@
 
 // Client-Server Devices MuXing Client
 
-#ifndef CSDMXC__INC
-# define CSDMXC__INC
+#ifndef CSDMXC_INC_
+# define CSDMXC_INC_
 
 # define CSDMXC_NAME		"CSDMXC"
 

@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef XULFTK__INC
-# define XULFTK__INC
+#ifndef XULFTK_INC_
+# define XULFTK_INC_
 
 # define XULFTK_NAME		"XULFTK"
 

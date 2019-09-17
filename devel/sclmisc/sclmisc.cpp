@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define SCLMISC__COMPILATION
+#define SCLMISC_COMPILATION_
 
 #include "sclmisc.h"
 

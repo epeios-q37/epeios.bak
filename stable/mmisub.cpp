@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define MMISUB__COMPILATION
+#define MMISUB_COMPILATION_
 
 #include "mmisub.h"
 

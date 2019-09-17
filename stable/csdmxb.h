@@ -19,8 +19,8 @@
 
 // Client-Server Devices MuXing Base
 
-#ifndef CSDMXB__INC
-# define CSDMXB__INC
+#ifndef CSDMXB_INC_
+# define CSDMXB_INC_
 
 # define CSDMXB_NAME		"CSDMXB"
 

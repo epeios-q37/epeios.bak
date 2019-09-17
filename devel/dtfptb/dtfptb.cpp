@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define DTFPTB__COMPILATION
+#define DTFPTB_COMPILATION_
 
 #include "dtfptb.h"
 /*$BEGIN$*/
@@ -240,6 +240,7 @@ static void PutInt_(
 	Flow.Write( XInt.DSizeBuffer(), XInt.BufferSize() );
 }
 
+#if 0
 static void PutInt_(
 	const bso::xint__ &XInt,
 	fdr::rWDriver &Driver )
@@ -254,6 +255,7 @@ qRR;
 qRT;
 qRE;
 }
+#endif
 
 #define M( s )	Flow.Put( (flw::byte__)( Int >> ( s * 8 ) ) )
 
@@ -350,13 +352,14 @@ template <typename fd> static bso::sUBig TemplatedVGetUBig_(
 {
 	bso::byte__ DInt[BSO_DINT_SIZE_MAX];
 
-	if ( !GetInt_( FD, DInt ) )
+	if ( !GetInt_( FD, DInt ) ) {
 		if ( IsError == NULL )
 			qRFwk();
 		else {
 			*IsError = true;
 			return 0;
 		}
+    }
 
 	bso::sUBig Value = bso::ConvertToUBig( DInt );
 
@@ -390,13 +393,14 @@ template <typename fd> bso::sSBig TemplatedVGetSBig_(
 {
 	bso::byte__ DInt[BSO_DINT_SIZE_MAX];
 
-	if ( !GetInt_( FD, DInt ) )
+	if ( !GetInt_( FD, DInt ) ) {
 		if ( IsError == NULL )
 			qRFwk();
 		else {
 			*IsError = true;
 			return 0;
 		}
+	}
 
 	bso::sSBig Value = bso::ConvertToSBig( DInt );
 

@@ -19,8 +19,8 @@
 
 //	$Id: thrstr.h,v 1.4 2012/11/14 16:06:38 csimon Exp $
 
-#ifndef THRSTR__INC
-#define THRSTR__INC
+#ifndef THRSTR_INC_
+#define THRSTR_INC_
 
 #define THRSTR_NAME		"THRSTR"
 

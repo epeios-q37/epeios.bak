@@ -19,8 +19,8 @@
 
 //	$Id: txmpgh.h,v 1.9 2012/11/14 16:06:38 csimon Exp $
 
-#ifndef TXMPGH__INC
-#define TXMPGH__INC
+#ifndef TXMPGH_INC_
+#define TXMPGH_INC_
 
 #define TXMPGH_NAME		"TXMPGH"
 

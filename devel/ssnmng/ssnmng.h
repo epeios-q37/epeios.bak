@@ -19,8 +19,8 @@
 
 //	$Id: ssnmng.h,v 1.40 2013/05/15 14:40:37 csimon Exp $
 
-#ifndef SSNMNG__INC
-#define SSNMNG__INC
+#ifndef SSNMNG_INC_
+#define SSNMNG_INC_
 
 #define SSNMNG_NAME		"SSNMNG"
 

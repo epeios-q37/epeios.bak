@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define SCLBACKND__COMPILATION
+#define SCLBACKND_COMPILATION_
 
 #include "sclbacknd.h"
 

@@ -19,8 +19,8 @@
 
 //	$Id: crptgr.h,v 1.13 2013/04/19 19:28:00 csimon Exp $
 
-#ifndef CRPTGR__INC
-#define CRPTGR__INC
+#ifndef CRPTGR_INC_
+#define CRPTGR_INC_
 
 #define CRPTGR_NAME		"CRPTGR"
 

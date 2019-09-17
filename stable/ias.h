@@ -19,8 +19,8 @@
 
 //	$Id: ias.h,v 1.6 2013/04/15 10:50:51 csimon Exp $
 
-#ifndef IAS__INC
-#define IAS__INC
+#ifndef IAS_INC_
+#define IAS_INC_
 
 #define IAS_NAME		"IAS"
 
@@ -475,7 +475,7 @@ namespace ias {
 
 	E_AUTO( indexed_aggregated_storage )
 
-#ifndef FLS__COMPILATION
+#ifndef FLS_COMPILATION_
 
 	template <typename descriptors, typename storage> class hH_
 	: public sHooks

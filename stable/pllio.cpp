@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define PLLIO__COMPILATION
+#define PLLIO_COMPILATION_
 
 #include "pllio.h"
 

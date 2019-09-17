@@ -19,8 +19,8 @@
 
 // Dynamic TRee 
 
-#ifndef DTR__INC
-# define DTR__INC
+#ifndef DTR_INC_
+# define DTR_INC_
 
 # define DTR_NAME		"DTR"
 
