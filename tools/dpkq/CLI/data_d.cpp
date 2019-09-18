@@ -145,7 +145,7 @@ namespace {
 
 		void HandleRandom_(
 			const dRandomValue_ &Random,
-			xml::writer_ &Writer )
+			xml::rWriter &Writer )
 		{
 			Writer.PushTag( "Random" );
 			Writer.PutAttribute( "Name", Random.Name );
@@ -156,7 +156,7 @@ namespace {
 
 		void HandleRandoms_(
 			const dRandomValues_ &Randoms,
-			xml::writer_ &Writer )
+			xml::rWriter &Writer )
 		{
 			ctn::qCMITEMsl( dRandomValue_ ) Random;
 			sdr::row__ Row = qNIL;
@@ -182,7 +182,7 @@ namespace {
 		}
 		static void Display_(
 			const str::string_ &XML,
-			xml::writer_ &Writer )
+			xml::rWriter &Writer )
 		{
 			qRH
 				flx::E_STRING_IFLOW__ IFlow;
@@ -200,7 +200,7 @@ namespace {
 
 		void Display_(
 			const record_ &Record,
-			xml::writer_ &Writer )
+			xml::rWriter &Writer )
 		{
 			Display_( Record.Content, Writer );
 		}
@@ -209,7 +209,7 @@ namespace {
 			sRRow Row,
 			const records_ &Records,
 			str::string_ &Label,
-			xml::writer_ &Writer )
+			xml::rWriter &Writer )
 		{
 			ctn::qCITEMs( record_, sRRow ) Record;
 
@@ -222,7 +222,7 @@ namespace {
 
 		static void DisplayAll_(
 			const records_ &Records,
-			xml::writer_ &Writer )
+			xml::rWriter &Writer )
 		{
 			ctn::qCITEMs( record_, sRRow ) Record;
 			sRRow Row = Records.First();
@@ -274,7 +274,7 @@ namespace {
 			str::string_ &Label,
 			dpkctx::sBRow &BoxRow,
 			dpkctx::context_ &Context,
-			xml::writer_ &Writer )
+			xml::rWriter &Writer )
 		{
 		qRH
 			sRRow Row = qNIL;
@@ -341,7 +341,7 @@ namespace {
 			str::string_ &TableLabel,
 			dpkctx::sBRow &BoxRow,
 			dpkctx::context_ &Context,
-			xml::writer_ &Writer )
+			xml::rWriter &Writer )
 		{
 			Writer.PushTag( TableLabel = Table.Label );
 
@@ -364,7 +364,7 @@ namespace {
 			txf::text_oflow__ &Output )
 		{
 		qRH
-			xml::writer Writer;
+			xml::rWriter Writer;
 			ctn::qCITEMs( dpktbl::table_, dpktbl::trow__ ) Table;
 			wRandomValues_ Randoms;
 			str::string NS, URI;

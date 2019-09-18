@@ -18,20 +18,18 @@
 		<Software>XPPq</Software>
 		<UUID>4e0195ad-2b3d-4fc2-8b1f-73a59bd765fe</UUID>
 	</About>
-	<xpp:bloc>
-		<Modules xpp:marker="$">
-			<Modules Group="Epeios" Path="$EpeiosPath$/">
-				<Modules Group="Core">
-					<xpp:expand select="Core"/>
-				</Modules>
-				<Modules Group="SCL">
-					<xpp:expand select="SCL"/>
-				</Modules>
+	<Modules xpp:marker="$">
+		<Modules Group="Epeios" Path="$EpeiosPath$/">
+			<Modules Group="Core">
+				<xpp:expand select="Core"/>
 			</Modules>
-			<Module>i18n</Module>
-			<Module>registry</Module>
+			<Modules Group="SCL">
+				<xpp:expand select="SCL"/>
+			</Modules>
 		</Modules>
-	</xpp:bloc>
+		<Module>i18n</Module>
+		<Module>registry</Module>
+	</Modules>
 	<SourceDirs>
 	</SourceDirs>
  <RTW>

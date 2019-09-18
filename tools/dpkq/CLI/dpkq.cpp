@@ -37,6 +37,8 @@ using cio::CErr;
 using cio::COut;
 using cio::CIn;
 
+SCLI_DEF( dpkq, NAME_LC, NAME_MC );
+
 static void PrintHeader_( void )
 {
 	COut << NAME_MC " V" VERSION << " (" WEBSITE_URL ")" << txf::nl;
@@ -99,7 +101,6 @@ qRH
 	str::string OutputFilename;
 	str::string XSLFilename;
 	bso::uint__ SessionMaxDuration = 0;
-	bso::bool__ Error = false;
 	str::string Label, TableLabel;
 	sId Id = 0;
 	dpkctx::sBRow BoxRow = qNIL;
@@ -173,7 +174,7 @@ qRE
 #define C( name )\
 	else if ( Command == #name )\
 		name##_()
-		
+
 int scltool::SCLTOOLMain(
 	const str::string_ &Command,
 	const scltool::oddities__ &Oddities )
@@ -197,7 +198,7 @@ qRE
 	return ExitValue;
 }
 
-const char *sclmisc::SCLMISCTargetName = NAME_LC;
-const char *sclmisc::SCLMISCProductName = NAME_MC;
-
-
+const scli::sInfo &scltool::SCLTOOLInfo( void )
+{
+	return dpkq::Info;
+}

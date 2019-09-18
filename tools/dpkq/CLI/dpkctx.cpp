@@ -27,7 +27,7 @@ using namespace dpkctx;
 typedef bitbch::qBBUNCHd( sRRow ) dGrid;
 qW( Grid );
 
-#define COEFF	3	// 
+#define COEFF	3	//
 
 #define CONTEXT_TAG_NAME				"Context"
 #define CONTEXTE_TARGET_ATTRIBUTE_NAME	"target"
@@ -53,7 +53,7 @@ qW( Grid );
 
 void DumpRecords_(
 	const dRRows &Records,
-	xml::writer_ &Writer )
+	xml::rWriter &Writer )
 {
 	sdr::row__ Row = Records.First();
 
@@ -103,7 +103,7 @@ static sRRow RetrieveRecordId_( xml::parser___ &Parser )
 
 static void Dump_(
 	const dPool &Pool,
-	xml::writer_ &Writer )
+	xml::rWriter &Writer )
 {
 	Writer.PushTag( POOL_TAG_NAME );
 	Writer.PutAttribute( POOL_AMOUNT_ATTRIBUTE_NAME, Pool.Amount() );
@@ -117,10 +117,8 @@ static void Dump_(
 namespace {
 	void Dump_(
 		const dBox &Box,
-		xml::writer_ &Writer )
+		xml::rWriter &Writer )
 	{
-		sdr::sRow Row = Box.First();
-
 		Writer.PushTag( BOX_TAG_NAME );
 		Writer.PutAttribute( BOX_RECORDS_AMOUT_ATTRIBUTE, Box.Amount() );
 
@@ -131,7 +129,7 @@ namespace {
 
 	void Dump_(
 		const dBoxes &Boxes,
-		xml::writer_ &Writer )
+		xml::rWriter &Writer )
 	{
 		sBRow Row = Boxes.First();
 
@@ -151,7 +149,7 @@ namespace {
 
 void dpkctx::Dump(
 	const context_ &Context,
-	xml::writer_ &Writer )
+	xml::rWriter &Writer )
 {
 	Dump_( Context.Boxes, Writer );
 	Dump_( Context.Pool, Writer );
@@ -164,8 +162,6 @@ namespace {
 			dRRows &Records )
 		{
 			bso::bool__ Continue = true;
-			sdr::row__ Error = qNIL;
-			sRRow Row = qNIL;
 
 			while ( Continue ) {
 				switch ( Parser.Parse( xml::tfObvious ) ) {
@@ -348,6 +344,7 @@ static sRRow Pick_( const dGrid &Grid )
 	return Row;
 }
 
+#if 0
 static void Add_(
 	const dRRows &Source,
 	dRRows &Target )
@@ -364,6 +361,7 @@ static void Add_(
 		Row = Source.Next( Row );
 	}
 }
+#endif
 
 static inline bso::bool__ IsNewSession_(
 	time_t TimeStamp,
@@ -381,7 +379,7 @@ void dpkctx::context_::MoveToBox_(
 {
 	sdr::sRow Row = Records.First();
 
-	while ( Row != qNIL ) 
+	while ( Row != qNIL )
 	{
 		Box.Append( Records( Row ) );
 
@@ -542,6 +540,7 @@ namespace {
 		}
 	}
 
+#if 0
 	namespace {
 		void Remove_(
 			const dRRows &Rows,
@@ -593,7 +592,9 @@ namespace {
 
 		return Amount;
 	}
+#endif
 }
+
 
 /*
 sRRow dpkctx::context_::Pick(

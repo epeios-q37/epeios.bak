@@ -88,18 +88,17 @@ namespace {
 		xtf::extended_text_iflow__ XFlow;
 	qRB
 		if ( !fil::Exists( FileName ) ) {
+            if ( FFlow.Init( FileName ) != tol::rSuccess )
+                    sclmisc::ReportFileOpeningErrorAndAbort( FileName );
+
+            XFlow.Init( FFlow, utf::f_Default );
+
+            Parser.Init( XFlow, xml::eh_Default );
+
+            Retrieve_( Parser, NAME_LC, Context );
+		} else {
 			//		COut << "Unable to find context file '" << FileName << "'! It will be created at exit." << txf::nl;
-			qRReturn;
 		}
-
-		if ( FFlow.Init( FileName ) != tol::rSuccess )
-			sclmisc::ReportFileOpeningErrorAndAbort( FileName );
-
-		XFlow.Init( FFlow, utf::f_Default );
-
-		Parser.Init( XFlow, xml::eh_Default );
-
-		Retrieve_( Parser, NAME_LC, Context );
 	qRR
 	qRT
 	qRE
@@ -126,7 +125,7 @@ namespace {
 	namespace {
 		void DumpContext_(
 			const dpkctx::context_ &Context,
-			xml::writer_ &Writer )
+			xml::rWriter &Writer )
 		{
 			tol::buffer__ Buffer;
 
@@ -147,7 +146,7 @@ namespace {
 	qRH
 		flf::file_oflow___ FFlow;
 		txf::text_oflow__ TFlow;
-		xml::writer Writer;
+		xml::rWriter Writer;
 	qRB
 		if ( FFlow.Init( FileName ) != tol::rSuccess )
 			sclmisc::ReportFileOpeningErrorAndAbort( FileName );
@@ -156,7 +155,7 @@ namespace {
 
 		Writer.Init( TFlow, xml::oIndent, xml::eUTF_8 );
 
-		DumpContext_( Context, Writer ); 
+		DumpContext_( Context, Writer );
 	qRR
 	qRT
 	qRE

@@ -20,7 +20,9 @@
 #ifndef DPKQ_INC_
 # define DPKQ_INC_
 
-# define NAME_MC			"dpkq"
+# include "scli.h"
+
+# define NAME_MC			"DPKq"
 # define NAME_LC			"dpkq"
 # define NAME_UC			"DPKQ"
 # define WEBSITE_URL		"http://q37.info/computing/epeios/tools/dpkq/"
@@ -28,6 +30,8 @@
 # define AUTHOR_CONTACT		"http://q37.info/contact/"
 # define OWNER_NAME			"Claude SIMON"
 # define OWNER_CONTACT		"http://q37.info/contact/"
-# define COPYRIGHT			COPYRIGHT_YEARS " " OWNER_NAME " (" OWNER_CONTACT ")"	
+# define COPYRIGHT			COPYRIGHT_YEARS " " OWNER_NAME " (" OWNER_CONTACT ")"
+
+SCLI_DEC( dpkq )
 
 #endif

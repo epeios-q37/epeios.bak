@@ -55,8 +55,8 @@ namespace dpkctx {
 			sBRow Last;
 		} &S_;
 		dBoxes( s &S )
-		: S_( S ),
-		dBoxes_( S )
+		: dBoxes_( S ),
+		  S_( S )
 		{}
 		void reset( bso::sBool P = true )
 		{
@@ -94,8 +94,8 @@ namespace dpkctx {
 			time_t TimeStamp;
 		} &S_;
 		dPool( s &S )
-		: S_( S ),
-		  dPool_( S )
+		: dPool_( S ),
+		  S_( S )
 		{}
 		void reset( bso::sBool P = true )
 		{
@@ -172,14 +172,14 @@ namespace dpkctx {
 			bso::uint__ SessionDuration, // In minute; '0' for infinite.
 			sBRow &BoxRow );	// The row of the box containing the record (record probably moved to a new one).
 		void Demote( sRRow Record );	// If == 'qNIL', demotes the last picked record.
-		
+
 	};
 
 	E_AUTO( context );
 
 	void Dump(
 		const context_ &Context,
-		xml::writer_ &Writer );
+		xml::rWriter &Writer );
 
 	void Retrieve(
 		xml::parser___ &Parser,
