@@ -33,6 +33,7 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 			<Add directory="/home/csimon/epeios/stable" />
+			<Add directory="." />
 		</Compiler>
 		<Unit filename="../CHANGELOG.md">
 			<Option virtualFolder="Docs/" />

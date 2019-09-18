@@ -18,8 +18,8 @@
 		<Software>XPPq</Software>
 		<UUID>4e0195ad-2b3d-4fc2-8b1f-73a59bd765fe</UUID>
 	</About>
-	<xpp:bloc marker="$">
-		<Modules>
+	<xpp:bloc>
+		<Modules xpp:marker="$">
 			<Modules Group="Epeios" Path="$EpeiosPath$/">
 				<Modules Group="Core">
 					<xpp:expand select="Core"/>

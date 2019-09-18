@@ -56,7 +56,6 @@ using xml::token__;
 #define CDATA_TAG			"cdata"
 #define CYPHER_TAG			"cypher"
 #define ATTRIBUTE_ATTRIBUTE	"attribute"
-#define MARKER_ATTRIBUTE	"marker"
 
 static inline status__ Convert_( xml::status__ Status )
 {
@@ -181,11 +180,8 @@ void xpp::_qualified_preprocessor_directives___::Init( const str::string_ &Names
 	CypherTag.Init( NamespaceWithSeparator );
 	CypherTag.Append( CYPHER_TAG );
 
-	_AttributeAttribute.Init( NamespaceWithSeparator );
-	_AttributeAttribute.Append( ATTRIBUTE_ATTRIBUTE );
-
-	MarkerAttribute.Init( NamespaceWithSeparator );
-	MarkerAttribute.Append( MARKER_ATTRIBUTE );
+	AttributeAttribute.Init( NamespaceWithSeparator );
+	AttributeAttribute.Append( ATTRIBUTE_ATTRIBUTE );
 
 	XMLNS.Init( "xmlns:" );
 	XMLNS.Append( Namespace );
@@ -235,8 +231,7 @@ enum directive__ {
 	dCData,
 	dSet,
 	dCypher,
-	d_Attribute,
-	dMarker,
+	dAttribute,
 	d_amount,
 	d_Undefined
 };
@@ -265,10 +260,8 @@ static inline directive__ GetDirective_(
 			Directive = dSet;
 		else if ( Directives.CypherTag == Name )
 			Directive = dCypher;
-		else if ( Directives._AttributeAttribute == Name )
-			Directive = d_Attribute;
-		else if ( Directives.MarkerAttribute == Name )
-			Directive = dMarker;
+		else if ( Directives.AttributeAttribute == Name )
+			Directive = dAttribute;
 		else
 			Directive = dUnknown;
 	else
@@ -426,7 +419,7 @@ static status__ GetDefineNameAndContent_(
 	return sOK;
 }
 
-status__ xpp::_extended_parser___::_HandleDefineDirective( _extended_parser___ *&Parser )	// 'Parser' est mis  'NULL', ce qui est normal.
+status__ xpp::_extended_parser___::_HandleDefineDirective( _extended_parser___ *&Parser )	// 'Parser' est mis  'NULL', ce qui est normal. 
 {
 	status__ Status = s_Undefined;
 qRH
@@ -540,9 +533,9 @@ qRB
 	Content.Init();
 
 	MacroName.Init();
-	if ( Marker_() != 0 ) {
+	if ( SubstitutionMarker_() != 0 ) {
 		Callback.Init( _Variables, _Directory );
-		if ( !tagsbs::SubstituteLongTags( RawMacroName, Callback, MacroName, Marker_() ) ) {
+		if ( !tagsbs::SubstituteLongTags( RawMacroName, Callback, MacroName, SubstitutionMarker_() ) ) {
 			Status = sUnknownVariable;
 		}
 	} else
@@ -554,7 +547,7 @@ qRB
 		} else {
 			Parser = NewParser( _Repository, _Variables, _Directives );
 
-			Status = Parser->_InitWithContent( Content, FileName, Position, _Directory, _CypherKey, Preserve_, Marker_(), _Parser.GetFormat() );
+			Status = Parser->_InitWithContent( Content, FileName, Position, _Directory, _CypherKey, Preserve_, SubstitutionMarker_(), _Parser.GetFormat() );
 		}
 	}
 qRR
@@ -585,16 +578,16 @@ qRB
 	Parser = NewParser( _Repository, _Variables, _Directives );
 
 	Filename.Init();
-	if ( Marker_() != 0 ) {
+	if ( SubstitutionMarker_() != 0 ) {
 		Callback.Init( _Variables, _Directory );
-		if ( !tagsbs::SubstituteLongTags(RawFilename, Callback, Filename, Marker_() ) ) {
+		if ( !tagsbs::SubstituteLongTags(RawFilename, Callback, Filename, SubstitutionMarker_() ) ) {
 			Status = sUnknownVariable;
 		}
 	} else
 		Filename = RawFilename;
 
 	if ( Status == sOK )
-		Status = Parser->_InitWithFile( Filename, _Directory, _CypherKey, Preserve_, Marker_(), _Parser.GetFormat() );
+		Status = Parser->_InitWithFile( Filename, _Directory, _CypherKey, Preserve_, SubstitutionMarker_(), _Parser.GetFormat() );
 qRR
 	if ( Parser != NULL ) {
 		delete Parser;
@@ -633,7 +626,7 @@ qRB
 
 		Parser = NewParser( _Repository, _Variables, _Directives );
 
-		Status = Parser->_InitWithContent( Content, _LocalizedFileName, Position, _Directory, _CypherKey, Preserve_, Marker_(), _Parser.GetFormat() );
+		Status = Parser->_InitWithContent( Content, _LocalizedFileName, Position, _Directory, _CypherKey, Preserve_, SubstitutionMarker_(), _Parser.GetFormat() );
 	}
 	else
 		Status = sUnknownVariable;
@@ -756,7 +749,7 @@ static status__ GetSetNameAndValue_(
 	return Status;
 }
 
-status__ xpp::_extended_parser___::_HandleSetDirective( _extended_parser___ *&Parser )	// 'Parser' est mis  'NULL', ce qui est normal.
+status__ xpp::_extended_parser___::_HandleSetDirective( _extended_parser___ *&Parser )	// 'Parser' est mis  'NULL', ce qui est normal. 
 {
 	status__ Status = sOK;
 qRH
@@ -770,9 +763,9 @@ qRB
 
 	if ( (Status = GetSetNameAndValue_( _Parser, Name, RawValue )) == sOK ) {
 		Value.Init();
-		if ( Marker_() != 0 ) {
+		if ( SubstitutionMarker_() != 0 ) {
 			Callback.Init( _Variables, _Directory );
-			if ( !tagsbs::SubstituteLongTags( RawValue, Callback, Value, Marker_() ) ) {
+			if ( !tagsbs::SubstituteLongTags( RawValue, Callback, Value, SubstitutionMarker_() ) ) {
 				Status = sUnknownVariable;
 			}
 		} else
@@ -856,7 +849,7 @@ qRB
 				if ( (GetVariableValue_( Name, TrueValue )) && (ExpectedValue == TrueValue) ) {
 					Parser = NewParser( _Repository, _Variables, _Directives );
 
-					Status = Parser->_InitWithContent( Content, _LocalizedFileName, Position, _Directory, _CypherKey, Preserve_, Marker_(), _Parser.GetFormat() );
+					Status = Parser->_InitWithContent( Content, _LocalizedFileName, Position, _Directory, _CypherKey, Preserve_, SubstitutionMarker_(), _Parser.GetFormat() );
 				}
 			}
 		}
@@ -919,7 +912,7 @@ status__ xpp::_extended_parser___::_HandleCypherDecryption(
 {
 	Parser = NewParser( _Repository, _Variables, _Directives );
 
-	return Parser->_InitCypher( _Parser.Flow().UndelyingFlow(), _LocalizedFileName, Position(), _Directory, _CypherKey, Preserve_, Marker_(), _Parser.GetFormat() );
+	return Parser->_InitCypher( _Parser.Flow().UndelyingFlow(), _LocalizedFileName, Position(), _Directory, _CypherKey, Preserve_, SubstitutionMarker_(), _Parser.GetFormat() );
 }
 
 status__ xpp::_extended_parser___::_HandleCypherOverride(
@@ -935,7 +928,7 @@ status__ xpp::_extended_parser___::_HandleCypherOverride(
 		if ( PreservationLevel_ != 0 )
 			qRFwk();
 
-		return Parser->Init( _Parser.Flow(), _LocalizedFileName, _Directory, _CypherKey, Preserve_, Marker_() );
+		return Parser->Init( _Parser.Flow(), _LocalizedFileName, _Directory, _CypherKey, Preserve_, SubstitutionMarker_() );
 	}
 }
 
@@ -977,7 +970,7 @@ qRE
 }
 
 
-status__ xpp::_extended_parser___::HandlePreprocessorDirective_(
+status__ xpp::_extended_parser___::_HandlePreprocessorDirective(
 	int Directive,
 	_extended_parser___ *&Parser )
 {
@@ -1037,7 +1030,7 @@ static sdr::row__ ExtractAttributeName_(
 	return Row;
 }
 
-status__ xpp::_extended_parser___::HandleAttributeValueSubstitution_(
+status__ xpp::_extended_parser___::HandleAtributeValueSubstitution_(
 	const str::string_ &Source,
 	bso::char__ Marker,
 	str::string_ &Data )
@@ -1052,7 +1045,7 @@ status__ xpp::_extended_parser___::HandleAttributeValueSubstitution_(
 		return sOK;
 }
 
-status__ xpp::_extended_parser___::HandleAttributeDirective_(
+status__ xpp::_extended_parser___::_HandleAttributeDirective(
 	const str::string_ &Parameters,
 	_extended_parser___ *&Parser,
 	str::string_ &Data )
@@ -1085,27 +1078,6 @@ qRT
 qRE
 	return Status;
 }
-
-status__ xpp::_extended_parser___::HandleMarkerDirective_(
-	const str::string_ &RawMarker,
-	_extended_parser___ *&Parser )
-{
-	status__ Status = sOK;
-
-    if ( RawMarker.Amount() > 1 )
-        Status = sUnexpectedValue;
-    else  {
-        XMarkers_.Push( CurrentXMarker_ );
-
-        if ( RawMarker.Amount() == 0 )
-            CurrentXMarker_.Init();
-        else
-            CurrentXMarker_.Init( RawMarker( RawMarker.First() ) );
-    }
-
-	return Status;
-}
-
 
 status__ xpp::_extended_parser___::_InitWithFile(
 	const fnm::name___ &FileName,
@@ -1209,7 +1181,7 @@ static void StripHeadingSpaces_( str::string_ &Data )
 		Data.Remove( Data.First() );
 }
 
-#define CDATA_NESTING_MAX	BSO_UINT_MAX
+#define CDATA_NESTING_MAX	BSO_UINT_MAX	
 
 status__ xpp::_extended_parser___::Handle(
 	_extended_parser___ *&Parser,
@@ -1220,6 +1192,7 @@ status__ xpp::_extended_parser___::Handle(
 	xml::token__ PreviousToken = xml::t_Undefined;
 	bso::bool__ StripHeadingSpaces = false;
 	directive__ Directive = d_Undefined;
+	bso::bool__ SubstitutionMarkerHandled = false;
 
 	Parser = NULL;
 
@@ -1268,8 +1241,8 @@ status__ xpp::_extended_parser___::Handle(
 					}
 					break;
 				default:
-					Status = HandlePreprocessorDirective_( Directive, Parser );
-
+					Status = _HandlePreprocessorDirective( Directive, Parser );
+					
 					if ( Parser == NULL )
 						Continue = true;
 					break;
@@ -1284,11 +1257,11 @@ status__ xpp::_extended_parser___::Handle(
 				case dNone:
 					switch ( GetDirective_( _Parser.AttributeName(), _Directives, PreservationLevel_ ) ) {
 					case dNone:
-						if ( Marker_() != 0 ) {
+						if ( SubstitutionMarker_() != 0 ) {
 							_Parser.PurgeDumpData();
 							Data.Append (_Parser.AttributeName() );
 							Data.Append( "=\"") ;
-							Status = HandleAttributeValueSubstitution_( _Parser.Value(), Marker_(), Data );
+							Status = HandleAtributeValueSubstitution_( _Parser.Value(), SubstitutionMarker_(), Data );
 							Data.Append('"');
 						} else
 							Status = sOK;
@@ -1296,13 +1269,9 @@ status__ xpp::_extended_parser___::Handle(
 					case dUnknown:
 						Status = sUnknownDirective;
 						break;
-					case d_Attribute:
+					case dAttribute:
 						_Parser.PurgeDumpData();
-						Status = HandleAttributeDirective_( _Parser.Value(), Parser, Data );
-						break;
-					case dMarker:
-						_Parser.PurgeDumpData();
-						Status = HandleMarkerDirective_( _Parser.Value(), Parser );
+						Status = _HandleAttributeDirective( _Parser.Value(), Parser, Data );
 						break;
 					default:
 						Status = sUnknownDirective;
@@ -1310,7 +1279,7 @@ status__ xpp::_extended_parser___::Handle(
 					}
 					break;
 				case dBloc:
-					if ( _Parser.AttributeName() == BLOC_TAG_PRESERVE_ATTRIBUTE ) {
+					if ( _Parser.AttributeName() == BLOC_TAG_PRESERVE_ATTRIBUTE )
 						if ( PreservationLevel_ == 0 ) {
 							if ( _Parser.Value() == "yes" ) {
 								if ( Preserve_ )
@@ -1322,16 +1291,21 @@ status__ xpp::_extended_parser___::Handle(
 								Continue = true;
 						} else
 							Status = sOK;
-					} else if ( _Parser.AttributeName() == BLOC_TAG_MARKER_ATTRIBUTE ) {
-					    if ( PreservationLevel_ == 0 ) {
-                            status__ IntermediateStatus = HandleMarkerDirective_( _Parser.Value(), Parser );
+					else if ( _Parser.AttributeName() == BLOC_TAG_MARKER_ATTRIBUTE ) {
+						if ( PreservationLevel_ == 0 ) {
+							if ( _Parser.Value().Amount() > 1 )
+								Status = sUnexpectedValue;
+							else  {
+								if ( _Parser.Value().Amount() == 0 )
+									SubstitutionMarkers_.Push( 0 );
+								else
+									SubstitutionMarkers_.Push( _Parser.Value()( _Parser.Value().First() ) );
 
-                            if ( IntermediateStatus == sOK) {
-                                Continue = true;
-                            } else
-                                Status = IntermediateStatus;
-                        } else
-                            Status = sOK;
+								SubstitutionMarkerHandled = true;
+								Continue = true;
+							}
+						} else
+							Status = sOK;
 					} else
 						Status = sUnexpectedAttribute;
 					break;
@@ -1386,6 +1360,11 @@ status__ xpp::_extended_parser___::Handle(
 					Continue = true;
 				else
 					Status = sOK;
+
+				if ( !SubstitutionMarkerHandled )
+					SubstitutionMarkers_.Push( SubstitutionMarker_() );
+
+				SubstitutionMarkerHandled = false;
 				break;
 			case dExpand:
 				Status = sOK;
@@ -1394,7 +1373,6 @@ status__ xpp::_extended_parser___::Handle(
 				qRFwk();
 				break;
 			}
-			IncMarkerLevel_();
 			break;
 		case xml::tEndTag:
 			switch ( GetDirective_( _Parser.TagName(), _Directives, PreservationLevel_ ) ) {
@@ -1426,6 +1404,8 @@ status__ xpp::_extended_parser___::Handle(
 						break;
 					}
 				}
+
+				SubstitutionMarkers_.Pop();
 			case dCypher:
 				if ( _CDataNesting == 0 ) {
 					StripHeadingSpaces = StripHeadingSpaces_( PreviousToken, _Parser, _Directives.NamespaceWithSeparator );
@@ -1440,7 +1420,6 @@ status__ xpp::_extended_parser___::Handle(
 				qRFwk();
 				break;
 			}
-			DecMarkerLevel_();
 		break;
 		case xml::tValue:
 			Status = sOK;
@@ -1539,8 +1518,8 @@ sdr::size__ xpp::_preprocessing_iflow_driver___::FDRRead(
 				_Status = (xpp::status__)xml::sOK;
 			}
 
-		}
-
+		} 
+		
 		if ( _Status != sOK ) {
 #if 0
 			*Buffer = XTF_EOXC;	// Pour provoquer une erreur.
@@ -1717,7 +1696,7 @@ qRB
 		switch( Parser.Parse( xml::tfAll ) ) {
 		case xml::tProcessingInstruction:
 			Writer.GetFlow() << Parser.DumpData();
-
+			
 			if ( Writer.GetOutfit() == xml::oIndent )
 				Writer.GetFlow() << txf::nl;
 

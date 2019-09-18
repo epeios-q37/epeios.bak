@@ -8,6 +8,12 @@
 - [stdz]: modification to comply with current standards;
 - [trvl]: trivial modifications;
 
+## 2019-09-18:
+
+- XPP:
+	- new `xpp:marker` attribute, which allows to define the marker for variable substitution without having to put an extraneous `<xpp:bloc marker="…">…`.
+
+
 ## 2019-07-06
 
 - SCLXDHTML, XDHCMN, XDHDWS, XDHUJP, XDHUJR, XDHUJS:
@@ -700,7 +706,7 @@
 
 - FDR:
   - `Commit()`does no more return a boolean;
-  - The `Unlock` parameter of the `Dismiss(...)`/`Commit(...)` methods, when set to `false`, prevents the setting to `0` of the `Red_`/`Written_` variables, 
+  - The `Unlock` parameter of the `Dismiss(...)`/`Commit(...)` methods, when set to `false`, prevents the setting to `0` of the `Red_`/`Written_` variables,
 
 ## 2018-05-14
 
@@ -771,7 +777,7 @@
   - [adpt];
 - SCLZND:
   - [adpt];
- 
+
 ## 2018-04-16
 
 - SCLFRNTND:
@@ -842,7 +848,7 @@
   - securing padding of structure shared between two libraries;
 - SCLJRE:
   - workaround of a *Visual C++ 2017* bug in *Release* configuration;
-  
+
 ## 2018-02-27
 
 - SCLMISC:
@@ -1018,7 +1024,7 @@
   - Fixing bad variable type;
 - SCLXDHTML:
   - Fixing missing update due to previous modification;
-  
+
 ## 2017-12-28:
 - *shared*:
   - **$**: adding `Execute` function;
@@ -1188,7 +1194,7 @@
 ## 2017-12-03:
 - N4NJS:
   - Handling return value when calling a callback;
-  
+
 ## 2017-12-01:
 - N4NJS, NODEQ, SCLNJS:
   - Adding handling of generic object type;
@@ -1224,7 +1230,7 @@
 
 ## 2017-11-24:
 - SCLXDHTML, XDHDWS, XDHUJP:
-  - Introducing the possibility to put the content before handling widgets (*jQuery* related stuff) when setting the layout, or some widget (*jQTE*, for example) are not properly pre-filled. 
+  - Introducing the possibility to put the content before handling widgets (*jQuery* related stuff) when setting the layout, or some widget (*jQTE*, for example) are not properly pre-filled.
 
 ## 2017-11-21:
 - SCLFRNTND:
@@ -1365,7 +1371,7 @@
 
 ## 2017-08-08:
 - FLW:
-  - Initializing some variables, although not necessary, to fix some warnings issued when compiling a *node.js* *addon* on installation on a *POSIX* OS. 
+  - Initializing some variables, although not necessary, to fix some warnings issued when compiling a *node.js* *addon* on installation on a *POSIX* OS.
 
 ## 2017-08-06:
 - ERR:
@@ -2502,7 +2508,7 @@
 
 ## 2016-02-22
 * TXF:
-	- Adding 'Copy(..)' function.	
+	- Adding 'Copy(..)' function.
 - UYS:
 	- Optimization of copy between 2 'vUntypesStorage';
 
@@ -2545,7 +2551,7 @@
 ## 2016-01-27:
 - CSDRCC, CSDRCU, CSDUCL, SCLFRNTND:
 	- Adaptation to undelying modules modifications;
-- PLGN, PLGNCORE, SCLMISC, SCLPLUGIN 
+- PLGN, PLGNCORE, SCLMISC, SCLPLUGIN
 	- 'Identification' -> 'Label';
 	- Introducing 'Identifier', which is an UUID peculiar to each plugin;
 
@@ -2592,7 +2598,7 @@
 	- Fixing Clang complainings;
 - GLOBAL:
 	- Introducing new conventions;
-- PLGN:	
+- PLGN:
 	- Fixing 'rRetrievers::Plugin(...)' wrong deletion;
 
 ## 2016-01-19:
@@ -2698,7 +2704,7 @@
 ## 2015-12-08:
 - BSO, TOL:
 	- Conversion from string to number are now more complete;
-- IAS:	
+- IAS:
 	- Fixing CLang complainig;
 - RGSTRY:
 	- Adaptation to modifications in 'BSO';
@@ -2899,7 +2905,7 @@
 	- Prise en charge gestion 'iframe's
 
 ## 2015-09-21:
-- XDHCBK, XDHJSP, 
+- XDHCBK, XDHJSP,
 	- Handling iframes through document with an id;
 - XDHJSP:
 	- Removing '(XDHJSP)HandleExtensions(...)' and '(XDHJSP)HandleCastings(...)'. Corresponding actions now made
@@ -3158,7 +3164,7 @@
 	- timecode with separators are now handled correct;
 
 ## 2015-06-08:
-- GLOBAL: 
+- GLOBAL:
 	- Adaptaiton to changes in miscellaneous libraries;
 - AGS:
 	- 'A_STORAGE()' -> 'qAS(_)';
@@ -3246,7 +3252,7 @@
 ## 2015-05-01:
 - DHTPROXY:
 	- Removing useless 'proxy__::_ProxyCallback' and related members;
-- TOL 
+- TOL
 	- Adding 'Q37_(P|R)MDF';
 - XHTCLLBK:
 	- Using 'Q37_(P|R)MDF';
@@ -3533,7 +3539,7 @@
 		- 'affix' the 'basename' of a file without its extension;
 - NTVSTR:
 	- Adding method for int, to avoid to have to cast NULL (defined as '0') into '(const ntvstr::char__ *)'.
-		
+
 ## Notes
 
 [adpt]:#Adaptation
@@ -3541,7 +3547,7 @@
 [rvrt]:#Reverting
 [stdz]:#Standardization
 [trvl]:#Trivial
-  
+
 ### Adaptation
 
 Adaptation to changes in underlying modules.

@@ -187,8 +187,7 @@ namespace xpp {
 		str::string BlocTag;
 		str::string CDataTag;
 		str::string CypherTag;
-		str::string _AttributeAttribute;	//'<tag xpp:attribute="..." ...>'//
-		str::string MarkerAttribute;	//'<tag xpp:marker="..." ...>'//
+		str::string AttributeAttribute;	//'<tag xpp:attribute="..." ...>'//
 		str::string XMLNS;	// <... xmlns:xpp="..." ...> ('xpp' ou ce qui a �t� choisi par l'utilisateur ...).
 		void reset( bso::bool__ P = true )
 		{
@@ -200,9 +199,7 @@ namespace xpp {
 			IfeqTag.reset( P );
 			BlocTag.reset( P );
 			CDataTag.reset( P );
-			_AttributeAttribute.reset( P );
-			MarkerAttribute.reset( P );
-			MarkerAttribute.reset( P );
+			AttributeAttribute.reset( P );
 			XMLNS.reset( P );
 		}
 		_qualified_preprocessor_directives___( void )
@@ -425,29 +422,8 @@ namespace xpp {
 
 	typedef _variables	_variables_;
 
-	// Substitution marker handling.
-	typedef bso::sUInt sMarkerLevel_;
-	const sMarkerLevel_ MarkerLevelMax_ = bso::UIntMax;
-	typedef bso::sChar sMarker_;
-
-	struct sXMarker_ {
-        sMarkerLevel_ Level;
-        sMarker_ Marker;
-        void reset( bso::sBool = true )
-        {
-            Level = 0;
-            Marker = 0;
-        }
-        qCDTOR(sXMarker_);
-        void Init( sMarker_ Marker = 0 )
-        {
-            Level = 0;
-            this->Marker = Marker;
-        }
-	};
-
-	typedef bch::qBUNCHdl( sXMarker_ ) dXMarkers_;
-	qW( XMarkers_ );
+	typedef bch::E_BUNCH_( bso::char__ ) substitution_markers_;
+	E_AUTO( substitution_markers );
 
 	inline bso::sBool GetValue_(
 		const _variables &Variables,
@@ -484,9 +460,7 @@ namespace xpp {
 		bso::bool__ Preserve_;	// If at true, this means that the 'preserve' attribute in 'bloc' tag should be handled, NOT that we have to preserve
 											// the preprocessor directives (that is the goal of below parameter).
 		level__ PreservationLevel_;
-		// Substitution markers.
-		wXMarkers_ XMarkers_;
-		sXMarker_ CurrentXMarker_;
+		substitution_markers SubstitutionMarkers_;
 		bso::bool__ _IgnorePreprocessingInstruction;
 		bso::bool__ _AttributeDefinitionInProgress;
 		bso::uint__ _CDataNesting;
@@ -541,41 +515,22 @@ namespace xpp {
 			const str::string_ &CypherKey,
 			_extended_parser___ *&Parser );
 		status__ _HandleCypherDirective( _extended_parser___ *&Parser );
-		void IncMarkerLevel_( void ) {
-            if ( CurrentXMarker_.Level >= MarkerLevelMax_ )
-                qRLmt();
-
-            CurrentXMarker_.Level++;
-		}
-		void DecMarkerLevel_( void ) {
-            if ( CurrentXMarker_.Level )
-                CurrentXMarker_.Level--;
-            else
-                CurrentXMarker_ = XMarkers_.Pop();
-		}
-		sXMarker_ XMarker_( void ) const
+		bso::char__ SubstitutionMarker_( void ) const
 		{
-			if ( PreservationLevel_ != 0 )
-				return sXMarker_();
+			if ( ( PreservationLevel_ != 0 ) || ( SubstitutionMarkers_.Amount() == 0 ) )
+				return 0;
 			else
-				return CurrentXMarker_;
+				return SubstitutionMarkers_.Top();
 		}
-		sMarker_ Marker_( void ) const
-		{
-            return XMarker_().Marker;
-		}
-		status__ HandleAttributeValueSubstitution_(
+		status__ HandleAtributeValueSubstitution_(
 			const str::string_ &Source,
 			bso::char__ Marker,
 			str::string_ &Data );
-		status__ HandleAttributeDirective_(
+		status__ _HandleAttributeDirective(
 			const str::string_ &Parameters,
 			_extended_parser___ *&Parser,
 			str::string_ &Data );
-		status__ HandleMarkerDirective_(
-			const str::string_ &RawMarker,
-			_extended_parser___ *&Parser );
-		status__ HandlePreprocessorDirective_(
+		status__ _HandlePreprocessorDirective(
 			int Directive,
 			_extended_parser___ *&Parser );
 	public:
@@ -594,7 +549,7 @@ namespace xpp {
 			_CypherKey.reset( P );
 			Preserve_ = false;
 			PreservationLevel_ = 0;
-			tol::reset( P, XMarkers_, CurrentXMarker_ );
+			SubstitutionMarkers_.reset( P );
 			_Parser.reset( P );
 			_IgnorePreprocessingInstruction = false;
 			_AttributeDefinitionInProgress = false;
@@ -634,8 +589,8 @@ namespace xpp {
 			_CDataNesting = 0;
 			Preserve_= Preserve;
 			PreservationLevel_ = 0;
-			XMarkers_.Init();
-			CurrentXMarker_.Init();
+			SubstitutionMarkers_.Init();
+			SubstitutionMarkers_.Push( SubstitutionMarker );
 
 			return sOK;
 		}
@@ -714,7 +669,7 @@ namespace xpp {
 		{
 			reset();
 		}
-		criterions___(
+		criterions___( 
 			const fnm::name___ &Directory,
 			xml::sLevel Level = 0,
 			const str::string_ &CypherKey = str::string() ,
@@ -726,7 +681,7 @@ namespace xpp {
 
 			Init( Directory, Level, CypherKey, Namespace, Preserve, SubstitutionTag );
 		}
-		void Init(
+		void Init( 
 			const fnm::name___ &Directory,
 			xml::sLevel Level = 0,
 			const str::string_ &CypherKey = str::string(),
