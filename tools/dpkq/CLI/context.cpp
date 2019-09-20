@@ -87,7 +87,7 @@ namespace {
 		flf::file_iflow___ FFlow;
 		xtf::extended_text_iflow__ XFlow;
 	qRB
-		if ( !fil::Exists( FileName ) ) {
+		if ( fil::Exists( FileName ) ) {
             if ( FFlow.Init( FileName ) != tol::rSuccess )
                     sclmisc::ReportFileOpeningErrorAndAbort( FileName );
 
