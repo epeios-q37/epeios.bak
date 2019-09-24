@@ -43,12 +43,6 @@
 
 namespace i18n {
 	enum text__ {
-		tProcessCommandDescription,
-		tEncryptCommandDescription,
-		tNamespaceOptionDescription,
-		tNoIndentOptionDescription,
-		tSourceFileArgumentDescription,
-		tDestFileArgumentDescription,
 		tProcessingError,
 		tEncryptionError,
 		t_amount,
@@ -56,7 +50,7 @@ namespace i18n {
 	};
 
 // To adjust if above 'enum' is modified.
-# define LOCALE__TEXT_AMOUNT	8
+# define LOCALE__TEXT_AMOUNT	2
 
 	using scllocale::GetLocale;
 
@@ -66,19 +60,6 @@ namespace i18n {
 		text__ Text,
 		lcl::meaning_ *Meaning,	// '&Meaning' ne fonctionne pas avec 'va_arg'.
 		... );
-
-	STF( ProcessCommandDescription );
-	STF( EncryptCommandDescription );
-	STF( NoIndentOptionDescription );
-	STF( SourceFileArgumentDescription );
-	STF( DestFileArgumentDescription );
-
-	inline const lcl::meaning_ &GetNamespaceOptionDescriptionMeaning(
-		const char *DefaultNamespace,
-		lcl::meaning_ &Meaning )
-	{
-		return GetMeaning_( tNamespaceOptionDescription, &Meaning, DefaultNamespace );
-	}
 
 	inline const lcl::meaning_ &GetProcessingErrorMeaning(
 		const xpp::context___ &Context,

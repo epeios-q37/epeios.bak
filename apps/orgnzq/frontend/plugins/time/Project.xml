@@ -18,8 +18,8 @@
 		<UUID>adf4f565-0800-45c9-bb91-037ea95d461c</UUID>
 	</About>
 	<InstallPath>plugins/ogz/frontend/time/</InstallPath>
-	<Modules>
-		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
+	<Modules xpp:marker="$">
+		<Modules Group="Epeios" Path="$EpeiosPath$/">
 			<Modules Group="Core">
 				<xpp:expand select="Core"/>
 			</Modules>

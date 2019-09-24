@@ -17,8 +17,8 @@
 		<Software>xdhbrwq</Software>
 		<UUID>745b5fbb-030c-4ada-b516-bb3b246f711a</UUID>
 	</About>
-	<Modules>
-		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
+	<Modules xpp:marker="$">
+		<Modules Group="Epeios" Path="$EpeiosPath$/">
 			<Modules Group="Core">
 				<xpp:expand select="Core"/>
 				<Module>btr</Module>

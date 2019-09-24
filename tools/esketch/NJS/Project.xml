@@ -21,8 +21,8 @@
 	<RTW Description="Node.js addon template" Keywords="template">
   <Dir>esketch-node</Dir>
  </RTW>
- <Modules>
-		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
+ <Modules xpp:marker="$">
+		<Modules Group="Epeios" Path="$EpeiosPath$/">
 			<Modules Group="Core">
 				<xpp:expand select="Core"/>
 			</Modules>

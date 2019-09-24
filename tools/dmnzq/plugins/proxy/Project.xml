@@ -18,8 +18,8 @@
 		<UUID>48cdecce-27e7-4306-874b-6fd1b0ed655d</UUID>
 	</About>
 	<InstallPath>plugins/dmnzq/proxy/</InstallPath>
-	<Modules>
-		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
+	<Modules xpp:marker="$">
+		<Modules Group="Epeios" Path="$EpeiosPath$/">
 			<Modules Group="Core">
 				<xpp:expand select="Core"/>
 				<Module>prxy</Module>

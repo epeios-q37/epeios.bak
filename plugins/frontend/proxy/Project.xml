@@ -18,8 +18,8 @@
 		<UUID>e51c58a9-0f0b-408a-9580-e0b2714c8619</UUID>
 	</About>
 	<InstallPath>plugins/frontend/proxy/</InstallPath>
-	<Modules>
-		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
+	<Modules xpp:marker="$">
+		<Modules Group="Epeios" Path="$EpeiosPath$/">
 			<Modules Group="Core">
 				<xpp:expand select="Core"/>
 				<Module>fblovl</Module>

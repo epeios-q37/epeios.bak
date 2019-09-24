@@ -17,8 +17,8 @@
   <Software>mmuaqcli</Software>
   <UUID>64b22e6b-c01f-4bc0-a7b0-8989c6a24f26</UUID>
  </About>
- <Modules>
-  <Modules Group="Epeios" Path="h:/hg/epeios/stable/">
+ <Modules xpp:marker="$">
+  <Modules Group="Epeios" Path="$EpeiosPath$/">
    <Modules Group="Core">
     <xpp:expand select="Core"/>
    </Modules>

@@ -18,8 +18,8 @@
   <UUID>ac14c930-379c-40bd-a79a-63e8c72748db</UUID>
  </About>
  <InstallPath>plugins/mmuaq/backend/authentication/basic/</InstallPath>
- <Modules>
-  <Modules Group="Epeios" Path="h:/hg/epeios/stable/">
+ <Modules xpp:marker="$">
+  <Modules Group="Epeios" Path="$EpeiosPath$/">
    <Modules Group="Core">
     <xpp:expand select="Core"/>
     <Module>btr</Module>

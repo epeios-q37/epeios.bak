@@ -28,8 +28,8 @@
 	<RTW Description="Node.js addon to use 'XDHTML' module with web browsers." Keywords="XDHTML,web">
   <Dir>xdhwebq-node</Dir>
  </RTW>
- <Modules>
-		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
+ <Modules xpp:marker="$">
+		<Modules Group="Epeios" Path="$EpeiosPath$/">
 			<Modules Group="Core">
 				<xpp:expand select="Core"/>
 				<Module>btr</Module>

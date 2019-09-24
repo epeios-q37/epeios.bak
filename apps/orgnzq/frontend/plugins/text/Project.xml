@@ -18,8 +18,8 @@
 		<UUID>ea42259d-2d9d-454e-9f0e-fe45302613ea</UUID>
 	</About>
 	<InstallPath>plugins/ogz/frontend/text/</InstallPath>
-	<Modules>
-		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
+	<Modules xpp:marker="$">
+		<Modules Group="Epeios" Path="$EpeiosPath$/">
 			<Modules Group="Core">
 				<xpp:expand select="Core"/>
 			</Modules>

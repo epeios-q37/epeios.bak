@@ -17,8 +17,8 @@
   <Software>MMUAq</Software>
   <UUID>189de286-5b16-4d82-b398-595aaaa23053</UUID>
  </About>
- <Modules>
-  <Modules Group="Epeios" Path="h:/hg/epeios/stable/">
+ <Modules xpp:marker="$">
+  <Modules Group="Epeios" Path="$EpeiosPath$/">
    <Modules Group="Core">
     <xpp:expand select="Core"/>
     <Module>btr</Module>

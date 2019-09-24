@@ -20,11 +20,11 @@
 	<CI>
   <Dir>xppq-node</Dir>
  </CI>
- <Modules>
+ <Modules xpp:marker="$">
 		<Module>parser</Module>
 		<Module>stream</Module>
 		<Module>common</Module>
-		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
+		<Modules Group="Epeios" Path="$EpeiosPath$/">
 			<Modules Group="Core">
 				<xpp:expand select="Core"/>
     <Modules Group="SCL">

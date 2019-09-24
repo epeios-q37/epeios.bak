@@ -21,8 +21,8 @@
 	<RTW Description="Rational number calculator." Keywords="rational,calculator,calculus,calculation,calc,math,absolute,full,high,accuracy,precision">
   <Dir>rncq-node</Dir>
  </RTW>
- <Modules>
-		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
+ <Modules xpp:marker="$">
+		<Modules Group="Epeios" Path="$EpeiosPath$/">
 			<Modules Group="Core">
 				<xpp:expand select="Core"/>
     <Module>bomhdl</Module>

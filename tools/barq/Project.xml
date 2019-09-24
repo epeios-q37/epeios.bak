@@ -17,8 +17,8 @@
 		<Software>barq</Software>
 		<UUID>415e08c8-aab6-4ea0-9259-ae8e160a5800</UUID>
 	</About>
-	<Modules>
-		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
+	<Modules xpp:marker="$">
+		<Modules Group="Epeios" Path="$EpeiosPath$/">
 			<Modules Group="Core">
 				<xpp:expand select="Core"/>
 			</Modules>

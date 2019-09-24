@@ -16,8 +16,8 @@
   <Program>jreq</Program>
   <Software>JREq</Software>
  </About>
- <Modules>
-  <Modules Group="Epeios" Path="h:/hg/epeios/stable/">
+ <Modules xpp:marker="$">
+  <Modules Group="Epeios" Path="$EpeiosPath$/">
    <Modules Group="Core">
     <xpp:expand select="Core"/>
     <Module>dlbrry</Module>
@@ -32,8 +32,6 @@
    <Modules Group="SCL">
     <xpp:expand select="SCL"/>
    </Modules>
-  </Modules>
-  <Modules>
    <Module>registry</Module>
    <Module>wrapper</Module>
   </Modules>

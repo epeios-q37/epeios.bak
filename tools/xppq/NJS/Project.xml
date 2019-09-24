@@ -20,8 +20,8 @@
 	<RTW Description="XML parser and preprocessor" Keywords="XML,parser,preprocessor,xpp">
   <Dir>xppq-node</Dir>
  </RTW>
- <Modules>
-		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
+ <Modules xpp:marker="$">
+		<Modules Group="Epeios" Path="$EpeiosPath$/">
 			<Modules Group="Core">
 				<xpp:expand select="Core"/>
 			</Modules>

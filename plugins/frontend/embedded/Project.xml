@@ -18,8 +18,8 @@
 		<UUID>99ca6539-a9d5-4df2-b48e-52f6ba4c950b</UUID>
 	</About>
 	<InstallPath>plugins/frontend/embedded/</InstallPath>
-	<Modules>
-		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
+	<Modules xpp:marker="$">
+		<Modules Group="Epeios" Path="$EpeiosPath$/">
 			<Modules Group="Core">
 				<xpp:expand select="Core"/>
 				<Module>fblovl</Module>

@@ -17,8 +17,8 @@
 		<Software>orgnzq</Software>
 		<UUID>c8c33276-5e09-4f11-bd1b-3283b0ef0697</UUID>
 	</About>
-	<Modules>
-		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
+	<Modules xpp:marker="$">
+		<Modules Group="Epeios" Path="$EpeiosPath$/">
 			<Modules Group="Core">
 				<xpp:expand select="Core"/>
 				<Module>strmrg</Module>

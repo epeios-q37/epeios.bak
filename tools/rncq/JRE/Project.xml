@@ -16,8 +16,8 @@
   <Program>rncqjre</Program>
   <Software>RNCq</Software>
  </About>
- <Modules>
-  <Modules Group="Epeios" Path="h:/hg/epeios/stable/">
+ <Modules xpp:marker="$">
+  <Modules Group="Epeios" Path="$EpeiosPath$/">
    <Modules Group="Core">
     <xpp:expand select="Core"/>
     <Module>bomhdl</Module>

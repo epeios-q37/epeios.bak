@@ -17,8 +17,8 @@
 		<Software>fwtchrq</Software>
 		<UUID>8033dd6d-2114-4c77-ab6c-be19e50ad96e</UUID>
 	</About>
-	<Modules>
-		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
+	<Modules xpp:marker="$">
+		<Modules Group="Epeios" Path="$EpeiosPath$/">
 			<Modules Group="Core">
 				<xpp:expand select="Core"/>
 				<Module>btr</Module>

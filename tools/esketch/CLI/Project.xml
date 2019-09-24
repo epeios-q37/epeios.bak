@@ -18,8 +18,8 @@
 		<Software>eSketch</Software>
 		<UUID>effd756a-a901-46e8-939f-3f2a5e7986b0</UUID>
 	</About>
-	<Modules>
-		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
+	<Modules xpp:marker="$">
+		<Modules Group="Epeios" Path="$EpeiosPath$/">
 			<Modules Group="Core">
 				<xpp:expand select="Core"/>
 			</Modules>

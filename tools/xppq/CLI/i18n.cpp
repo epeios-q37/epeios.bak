@@ -41,17 +41,11 @@ using namespace i18n;
 
 const char *i18n::Label( text__ Text )
 {
-#if	LOCALE__TEXT_AMOUNT != 8
+#if	LOCALE__TEXT_AMOUNT != 2
 #	error "Amount of 'message__' entries changed ! Update !"
 #endif
 
 	switch( Text ) {
-	CASE( ProcessCommandDescription );
-	CASE( EncryptCommandDescription );
-	CASE( NamespaceOptionDescription );
-	CASE( NoIndentOptionDescription );
-	CASE( SourceFileArgumentDescription );
-	CASE( DestFileArgumentDescription );
 	CASE( ProcessingError );
 	CASE( EncryptionError );
 	default:
@@ -67,7 +61,7 @@ const lcl::meaning_ &i18n::GetMeaning_(
 	lcl::meaning_ *Meaning,
 	... )
 {
-#if	LOCALE__TEXT_AMOUNT != 8
+#if	LOCALE__TEXT_AMOUNT != 2
 #	error "Amount of 'message__' entries changed ! Update !"
 #endif
 qRH
@@ -79,15 +73,6 @@ qRB
 	Meaning->SetValue( Label( Text) );
 
 	switch ( Text ) {
-	case tProcessCommandDescription:
-	case tEncryptCommandDescription:
-	case tNamespaceOptionDescription:
-	case tNoIndentOptionDescription:
-		Meaning->AddTag( va_arg( Args, const char *) );
-		break;
-	case tSourceFileArgumentDescription:
-	case tDestFileArgumentDescription:
-		break;
 	case tProcessingError:
 		MeaningBuffer.Init();
 		xpp::GetMeaning( *va_arg( Args, const xpp::context___ *), MeaningBuffer );

@@ -18,8 +18,8 @@
 		<UUID>24913b17-c969-4327-866c-9639791acb5e</UUID>
 	</About>
 	<InstallPath>plugins/dmnzq/straight/</InstallPath>
-	<Modules>
-		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
+	<Modules xpp:marker="$">
+		<Modules Group="Epeios" Path="$EpeiosPath$/">
 			<Modules Group="Core">
 				<xpp:expand select="Core"/>
 				<Module>sck</Module>

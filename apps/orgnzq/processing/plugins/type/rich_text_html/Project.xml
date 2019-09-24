@@ -18,8 +18,8 @@
 		<UUID>bbef9eaa-17e4-4951-a686-815fd627a7f3</UUID>
 	</About>
 	<InstallPath>plugins/ogz/backend/type/rich_text_html/</InstallPath>
-	<Modules>
-		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
+	<Modules xpp:marker="$">
+		<Modules Group="Epeios" Path="$EpeiosPath$/">
 			<Modules Group="Core">
 				<xpp:expand select="Core"/>
 			</Modules>

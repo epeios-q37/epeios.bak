@@ -17,8 +17,8 @@
 		<Software>tmcq</Software>
 		<UUID>646d0129-91be-47b4-ace8-8c2f84e2affa</UUID>
 	</About>
-	<Modules>
-		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
+	<Modules xpp:marker="$">
+		<Modules Group="Epeios" Path="$EpeiosPath$/">
 			<Modules Group="Core">
 				<xpp:expand select="Core"/>
 				<Module>mthitg</Module>
