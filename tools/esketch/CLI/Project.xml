@@ -6,7 +6,7 @@
 			<xpp:bloc/>
 		</xpp:define>
 		<xpp:define name="CopyrightYears">
-			<xpp:bloc>2017</xpp:bloc>
+			<xpp:bloc>2019</xpp:bloc>
 		</xpp:define>
 		<xpp:set name="Credits" value="Epeios"/>
 		<xpp:set name="Type" value="Tool"/>
@@ -16,6 +16,7 @@
 	<About>
 		<Program>esketch</Program>
 		<Software>eSketch</Software>
+		<!-- Do not modify below value (used by the 'DVLSetTol' script)! -->
 		<UUID>effd756a-a901-46e8-939f-3f2a5e7986b0</UUID>
 	</About>
 	<Modules xpp:marker="$">
@@ -30,20 +31,7 @@
 		<Module>registry</Module>
 	</Modules>
 	<Files/>
- <RTW>
-  <Dir>esketch-cli</Dir>
- </RTW>
- <Packing>
-		<WikiFiles>
-			<File Dir="computing/epeios/tools/" WikiOddity="IsHome">esketch</File>
-			<File Dir="computing/epeios/tools/esketch/">Manual</File>
-			<File Dir="computing/epeios/">Compilation</File>
-			<File Dir="computing/epeios/tools/">Configuration</File>
-		</WikiFiles>
-	</Packing>
-	<SourceDirs>
-	</SourceDirs>
-	<PreprocessorDefinitions>
-		<PreprocessorDefinition>E_ST</PreprocessorDefinition>
-	</PreprocessorDefinitions>
+    <RTW>
+        <Dir>esketch-cli</Dir>
+    </RTW>
 </Project>

@@ -1,7 +1,7 @@
 /*
-	Copyright (C) 2018 by Claude SIMON (http://zeusw.org/epeios/contact.html).
+	Copyright (C) 2019 Claude SIMON (http://q37.info/contact/).
 
-	This file is part of 'eSketch'.
+	This file is part of the 'eSketch' tool.
 
     'eSketch' is free software: you can redistribute it and/or modify it
     under the terms of the GNU Affero General Public License as published
@@ -16,6 +16,7 @@
     You should have received a copy of the GNU Affero General Public License
     along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 
 # include "esketch.h"
 

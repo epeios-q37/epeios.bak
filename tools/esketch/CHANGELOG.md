@@ -1,5 +1,7 @@
 # *eSketch* changelog.
 
+*NOTA*: ce fichier n'est pas utilisé comme patron dans le script `DVLGenTol`.
+
 2017-10-13 :
 - *esketchnjs*:
   - Publication to synchronize *NPM* package with latest files.
