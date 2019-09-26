@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-// MuSiC MiDi Device 
+// MuSiC MiDi Device
 
 #ifndef MSCMDD_INC_
 # define MSCMDD_INC_
@@ -134,8 +134,8 @@ namespace mscmdd {
 	bso::bool__ GetMIDIOutDeviceName(
 		int Device,
 		str::string_ &Name );
-	
-	class midi_out___
+
+	class rOut
 	{
 	private:
 		snd_rawmidi_t    *_Handle;
@@ -145,19 +145,19 @@ namespace mscmdd {
 			if ( P )
 				if ( _Handle != NULL ) {
 					if ( snd_rawmidi_drain( _Handle ) < 0 )
-						ERRf();
+						qRLbr();
 
 					if ( snd_rawmidi_close( _Handle ) < 0 )
-						ERRf();
+						qRLbr();
 				}
 
 			_Handle = NULL;
 		}
-		midi_out___( void )
+		rOut( void )
 		{
 			reset( false );
 		}
-		~midi_out___( void )
+		~rOut( void )
 		{
 			reset();
 		}
@@ -168,28 +168,24 @@ namespace mscmdd {
 			bso::bool__ Success = false;
 		qRH
 			str::string Name;
-			STR_BUFFER___ SBuffer;
+			qCBUFFERr SBuffer;
 		qRB
 			Name.Init( );
-			
-			if ( !GetMIDIOutDeviceName( Device, Name ) )
-				qRReturn;
-			
-			if ( snd_rawmidi_open( NULL, &_Handle, Name.Convert( SBuffer ), 0 ) < 0 ) {
-				if ( ErrorHandling != err::hUserDefined )
-					ERRf();
-				else
-					qRReturn;
+
+			if ( GetMIDIOutDeviceName( Device, Name ) ) {
+                if ( snd_rawmidi_open( NULL, &_Handle, Name.Convert( SBuffer ), 0 ) < 0 ) {
+                    if ( ErrorHandling != err::hUserDefined )
+                        qRLbr();
+                } else
+                    Success = true;
 			}
-			
-			Success = true;
 		qRR
 		qRT
 		qRE
 			return Success;
 		}
 		fdr::size__ Write(
-			const fdr::datum__ *Buffer,
+			const fdr::sByte *Buffer,
 			fdr::size__ Maximum )
 		{
 			return snd_rawmidi_write( _Handle, Buffer, Maximum );
@@ -198,7 +194,7 @@ namespace mscmdd {
 		{
 			if ( _Handle != NULL )
 				if ( snd_rawmidi_drain( _Handle ) < 0 )
-					ERRf();
+					qRLbr();
 		}
 	};
 #	endif
@@ -216,10 +212,10 @@ namespace mscmdd {
 			return Out_.Write( Buffer, Maximum );
 		}
 		virtual bso::sBool FDRCommit(
-			bso::sBool,
-			qRPN ) override
+            bso::sBool,
+            qRPN ) override
 		{
-			return true;
+		    return true;
 		}
 		virtual tht::sTID FDRWTake( tht::sTID TID ) override
 		{
@@ -385,8 +381,8 @@ namespace mscmdd {
 	bso::bool__ GetMIDIInDeviceName(
 		int Device,
 		str::string_ &Name );
-	
-	class midi_in___
+
+	class rIn
 	{
 	private:
 		snd_rawmidi_t    *_Handle;
@@ -396,18 +392,18 @@ namespace mscmdd {
 			if ( P )
 				if ( _Handle != NULL ) {
 					if ( snd_rawmidi_drain( _Handle ) < 0 )
-						ERRf();
+						qRLbr();
 					if ( snd_rawmidi_close( _Handle ) < 0 )
-						ERRf();
+						qRLbr();
 				}
 
 			_Handle = NULL;
 		}
-		midi_in___( void )
+		rIn( void )
 		{
 			reset( false );
 		}
-		~midi_in___( void )
+		~rIn( void )
 		{
 			reset();
 		}
@@ -418,21 +414,17 @@ namespace mscmdd {
 			bso::bool__ Success = false;
 		qRH
 			str::string Name;
-			STR_BUFFER___ SBuffer;
+			qCBUFFERr SBuffer;
 		qRB
 			Name.Init( );
-			
-			if ( !GetMIDIInDeviceName( Device, Name ) )
-				qRReturn;
-			
-			if ( snd_rawmidi_open( &_Handle, NULL, Name.Convert( SBuffer ), 0 ) < 0 ) {
-				if ( ErrorHandling != err::hUserDefined )
-					ERRf();
-				else
-					qRReturn;
-			}
-			
-			Success = true;
+
+			if ( GetMIDIInDeviceName( Device, Name ) ) {
+                if ( snd_rawmidi_open( &_Handle, NULL, Name.Convert( SBuffer ), 0 ) < 0 ) {
+                    if ( ErrorHandling != err::hUserDefined )
+                        qRLbr();
+                }
+            } else
+                Success = true;
 		qRR
 		qRT
 		qRE
@@ -440,7 +432,7 @@ namespace mscmdd {
 		}
 		fdr::size__ Read(
 			fdr::size__ Maximum,
-			fdr::datum__ *Buffer )
+			fdr::sByte *Buffer )
 		{
 			return snd_rawmidi_read( _Handle, Buffer, Maximum );
 		}
@@ -448,7 +440,7 @@ namespace mscmdd {
 		{
 			if ( _Handle != NULL )
 				if ( snd_rawmidi_drain( _Handle ) < 0 )
-					ERRf();
+					qRLbr();
 		}
 		// 'Start', 'Stop': pour singer la version 'Windows'.
 		void Stop( void )
@@ -471,8 +463,8 @@ namespace mscmdd {
 			return _In.Read( Maximum, Buffer );
 		}
 		virtual bso::sBool FDRDismiss(
-			bso::sBool,
-			qRPN ) override
+            bso::sBool,
+            qRPN ) override
 		{
 			_In.Stop();
 
@@ -539,7 +531,7 @@ namespace mscmdd {
 		}
 	};
 
-	enum status__ 
+	enum status__
 	{
 		sOK,
 		sUnableToOpenMIDIInDevice,
@@ -566,11 +558,10 @@ namespace mscmdd {
 			return _In.Read( Maximum, Buffer );
 		}
 		virtual bso::sBool FDRDismiss(
-			bso::sBool,
-			qRPN ) override
+            bso::sBool,
+            qRPN ) override
 		{
 			_In.Stop();
-
 			return true;
 		}
 		virtual tht::sTID FDRRTake( tht::sTID TID ) override
@@ -585,10 +576,10 @@ namespace mscmdd {
 			return _Out.Write( Buffer, Maximum );
 		}
 		virtual bso::sBool FDRCommit(
-			bso::sBool,
-			qRPN ) override
+            bso::sBool,
+            qRPN ) override
 		{
-			return true;
+		    return true;
 		}
 		virtual tht::sTID FDRWTake( tht::sTID TID ) override
 		{

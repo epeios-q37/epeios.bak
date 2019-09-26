@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-// MuSiC MiDi Messages 
+// MuSiC MiDi Messages
 
 #ifndef MSCMDM_INC_
 # define MSCMDM_INC_
@@ -216,6 +216,9 @@ namespace mscmdm {
 		case etMeta:
 			MetaEvent = (eMetaEvent)Event;
 			break;
+        default:
+            qRFwk();
+            break;
 		}
 
 		return EventType;
@@ -334,7 +337,7 @@ namespace mscmdm {
 		return Parse( Callback, IFlow, xNone, Flags );
 	}
 #endif
-		
+
 
 	//f Put in 'EventHeader' the header of the event red in 'IFlow'. Return the size of the header. If '04, the error.
 	bso::bool__ GetEventHeader(
@@ -476,7 +479,7 @@ namespace mscmdm {
 		const events_ &Events,
 		eExtraneous Extraneous,
 		flw::oflow__ &OFlow );
-	
+
 # ifdef MSCMDM__DEVICES_AVAILABLE
 	inline void PutEvents(
 		const events_ &Events,

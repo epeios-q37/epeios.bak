@@ -8,7 +8,12 @@
 - [stdz]: modification to comply with current standards;
 - [trvl]: trivial modifications;
 
-## 2019-09-18:
+## 2019-09-26
+
+- MSCMDD:
+	- [adpt]
+
+## 2019-09-18
 
 - XPP:
 	- new `xpp:marker` attribute, which allows to define the marker for variable substitution without having to put an extraneous `<xpp:bloc marker="…">…`.
