@@ -84,6 +84,7 @@ void mscmdf::PutHeaderChunk(
 	Put_( DeltaTimeTicks, OFlow );
 }
 
+#if 0  // Obsolete ?
 static inline bso::bool__ HandleDeltaTimeTicks_(
 	flw::iflow__ &IFlow,
 	sDeltaTimeTicks &DeltaTimeTicks )
@@ -94,6 +95,7 @@ static inline bso::bool__ HandleDeltaTimeTicks_(
 
 	return ( Datum & 0x80 ) != 0;
 }
+#endif
 
 track_chunk_size__  mscmdf::GetTrackChunkSize(
 	flw::iflow__ &IFlow,

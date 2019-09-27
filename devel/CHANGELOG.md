@@ -8,6 +8,11 @@
 - [stdz]: modification to comply with current standards;
 - [trvl]: trivial modifications;
 
+## 2019-09-27
+
+- MSCMDF, MSCMDX:
+	- [adpt]
+
 ## 2019-09-26
 
 - MSCMDD:

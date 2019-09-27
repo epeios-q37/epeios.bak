@@ -17,21 +17,20 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
+// MuSiC MiDi File
 
 #ifndef MSCMDF_INC_
-#define MSCMDF_INC_
+# define MSCMDF_INC_
 
-#define MSCMDF_NAME		"MSCMDF"
+# define MSCMDF_NAME		"MSCMDF"
 
-#if defined( E_DEBUG ) && !defined( MSCMDF_NODBG )
-#define MSCMDF_DBG
-#endif
+# if defined( E_DEBUG ) && !defined( MSCMDF_NODBG )
+#  define MSCMDF_DBG
+# endif
 
-// MuSiC MiDi File 
-
-#include "err.h"
-#include "flw.h"
-#include "bso.h"
+# include "err.h"
+# include "flw.h"
+# include "bso.h"
 
 namespace mscmdf {
 
@@ -44,7 +43,7 @@ namespace mscmdf {
 	//t Type of the track-chunk amount.
 	typedef bso::u16__ sTrackChunkAmount;
 
-#define MSCMDF_TRACK_CHUNK_AMOUNT_MAX	BSO_USHORT_MAX
+#define MSCMDF_TRACK_CHUNK_AMOUNT_MAX	BSO_U16_MAX
 
 	//c A header chunk.
 	struct header_chunk__ {
