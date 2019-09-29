@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-//D MaTH InTeGer 
+//D MaTH InTeGer
 
 #ifndef MTHITG_INC_
 # define MTHITG_INC_
@@ -46,7 +46,7 @@
 namespace mthitg {
 	typedef bso::u16__	base__;
 	typedef bso::u16__	size__;
-	
+
 	class integer;
 	class integer_;
 
@@ -82,7 +82,7 @@ namespace mthitg {
 		integer_ &Result );
 
 	using bch::sHook;
-	
+
 	//c An integer.
 	class integer_ {
 	protected:
@@ -177,10 +177,10 @@ namespace mthitg {
 		{
 			S_.Size = I.S_.Size;
 			Core = I.Core;
-			
+
 			return *this;
 		}
-		void Init( flw::sRFlow &Flow );
+		void Init( flw::rRFlow &Flow );
 		void Init( const str::dString &Integer );
 		void Init( const integer_ &Integer )
 		{
@@ -223,9 +223,9 @@ namespace mthitg {
 
 			Init( (bso::u32__)Seed );
 		}
-		int operator !( void ) const	
+		operator bool( void ) const
 		{
-			return GetSize() == 0;
+			return GetSize() != 0;
 		}
 		size__ GetSize( void ) const
 		{
@@ -296,15 +296,15 @@ namespace mthitg {
 		{
 			PutSignFlag_( false );
 		}
-	};			
-		
+	};
+
 	inline bso::sign__ Compare(
 		const integer_ &Op1,
 		const integer_ &Op2 )
 	{
 		return Comp( Op1, Op2 );
 	}
-	
+
 	class integer
 	: public integer_
 	{
@@ -324,18 +324,18 @@ namespace mthitg {
 		: integer_( S_ )
 		{
 			reset( false );
-			
+
 			integer_::Init();
-			
+
 			integer_::operator =( I );
 		}
 		integer( const integer &I )
 		: integer_( S_ )
 		{
 			reset( false );
-			
+
 			integer_::Init();
-			
+
 			integer_::operator =( I );
 		}
 		integer( bso::s32__ Seed )
@@ -497,37 +497,37 @@ inline bso::bool__ operator ==(
 	const mthitg::integer_ &Op2 )
 {
 	return mthitg::Comp( Op1, Op2 ) == 0;
-}	
+}
 inline bso::bool__ operator !=(
 	const mthitg::integer_ &Op1,
 	const mthitg::integer_ &Op2 )
 {
 	return mthitg::Comp( Op1, Op2 ) != 0;
-}	
+}
 inline bso::bool__ operator >=(
 	const mthitg::integer_ &Op1,
 	const mthitg::integer_ &Op2 )
 {
 	return mthitg::Comp( Op1, Op2 ) >= 0;
-}	
+}
 inline bso::bool__ operator >(
 	const mthitg::integer_ &Op1,
 	const mthitg::integer_ &Op2 )
 {
 	return mthitg::Comp( Op1, Op2 ) > 0;
-}	
+}
 inline bso::bool__ operator <(
 	const mthitg::integer_ &Op1,
 	const mthitg::integer_ &Op2 )
 {
 	return mthitg::Comp( Op1, Op2 ) < 0;
-}	
+}
 inline bso::bool__ operator <=(
 	const mthitg::integer_ &Op1,
 	const mthitg::integer_ &Op2 )
 {
 	return mthitg::Comp( Op1, Op2 ) <= 0;
-}	
+}
 
 txf::text_oflow__ &operator <<(
 	txf::text_oflow__ &OFlow,

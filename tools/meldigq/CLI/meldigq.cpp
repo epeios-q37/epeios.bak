@@ -35,6 +35,15 @@
 #include "xpp.h"
 #include "fnm.h"
 #include "flf.h"
+#include "mtk.h"
+
+#ifdef CPE_S_WIN
+# include <conio.h>
+#elif defined( CPE_S_POSIX )
+# include <termios.h>
+#else
+# error "Unhandled operating system!"
+#endif // CPE_S_WIN
 
 using cio::CErr;
 using cio::COut;
@@ -227,13 +236,14 @@ sPitch GetPitch_(
 	return sPitch( GetOctave_( Absolute ), GetName_( Absolute, Key ), GetAccidental_( Absolute, Key ) );
 }
 
+#if 0
 static void Display_( const dMelody &Melody )
 {
 qRH;
-	xml::writer Writer;
+	xml::rWriter Writer;
 qRB;
 	Writer.Init( COut, xml::oIndent, xml::e_Default );
-	
+
 	WriteXML( Melody, Writer );
 
 	COut << txf::nl << txf::commit;
@@ -241,6 +251,7 @@ qRR;
 qRT;
 qRE;
 }
+#endif
 
 static bso::sU8 GetAbsolute_( const sPitch &Pitch )
 {
@@ -383,31 +394,29 @@ qRB;
 
 	Missing = sclmisc::OGetValue( registry::parameter::tempo::Unit, RawUnit );
 
-	if ( Missing )
-		qRReturn;
+	if ( !Missing ) {
+        Base = RawUnit.ToU8( &Error, str::b10, 9 );
 
-	Base = RawUnit.ToU8( &Error, str::b10, 9 );
+        if ( Error != qNIL ) {
+            if ( RawUnit( Error ) != '.' )
+                sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( registry::parameter::tempo::Unit );
 
-	if ( Error != qNIL ) {
-		if ( RawUnit( Error ) != '.' )
-			sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( registry::parameter::tempo::Unit );
+            Row = Error;
 
-		Row = Error;
+            while ( (Row != qNIL) && (RawUnit( Row ) == '.') ) {
+                Modifier++;
+                Row = RawUnit.Next( Row );
 
-		while ( (Row != qNIL) && (RawUnit( Row ) == '.') ) {
-			Modifier++;
-			Row = RawUnit.Next( Row );
+                if ( Modifier >= 4 )
+                    sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( registry::parameter::tempo::Unit );
 
-			if ( Modifier >= 4 )
-				sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( registry::parameter::tempo::Unit );
+                if ( Row != qNIL )
+                    sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( registry::parameter::tempo::Unit );
+            }
+        }
 
-			if ( Row != qNIL )
-				sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( registry::parameter::tempo::Unit );
-		}
+        Unit = sDuration ( Base, Modifier );
 	}
-
-	Unit = sDuration ( Base, Modifier );
-
 qRR;
 qRT;
 qRE;
@@ -427,7 +436,7 @@ bso::sU32 ComputeBase_( const sTempo &Tempo )
 	return 4 * ComputeTime_( Tempo.Unit, 4 * 60 * 1000 / Tempo.Value );
 }
 
-static void Print_( 
+static void Print_(
 	const sPitch &Pitch,
 	txf::text_oflow__ &Flow )
 {
@@ -796,7 +805,7 @@ static void Save_(
 qRH;
 	flf::file_oflow___ Flow;
 	txf::text_oflow__ TFlow;
-	xml::writer Writer;
+	xml::rWriter Writer;
 	str::wString Buffer;
 qRB;
 	if ( Flow.Init( FileName, err::hUserDefined ) != tol::rSuccess )
@@ -883,15 +892,33 @@ qRT;
 qRE;
 }
 
-#include "mtk.h"
-#include <conio.h>
+namespace {
+#ifdef CPE_S_WINDOWS
+    int getch_( void ) {
+        return _getch();
+    }
+#elif defined(CPE_S_POSIX)
+    int getch_(void)
+    {
+        struct termios oldattr, newattr;
+        int ch;
+        tcgetattr( STDIN_FILENO, &oldattr );
+        newattr = oldattr;
+        newattr.c_lflag &= ~( ICANON | ECHO );
+        tcsetattr( STDIN_FILENO, TCSANOW, &newattr );
+        ch = getchar();
+        tcsetattr( STDIN_FILENO, TCSANOW, &oldattr );
+        return ch;
+    }
+#endif
+}
 
 int get_code ( void )
 {
-  int ch = _getch();
+  int ch = getch_();
 
   if ( ch == 0 || ch == 224 )
-    ch = 256 + _getch();
+    ch = 256 + getch_();
 
   return ch;
 }
@@ -972,7 +999,7 @@ qRFB;
 		} else if ( C == '-' ) {
 			if ( Tempo.Value > 39 )
 				Tempo.Value -= 10;
-		} else if ( C == 'p' ) 
+		} else if ( C == 'p' )
 			Play_( Melody, Tempo, *Shared.OFlow );
 		else if ( C == 's' )
 			Save_( Melody );
@@ -1015,14 +1042,14 @@ qRT;
 	if ( Shared.Mutex != MTX_INVALID_HANDLER )
 		mtx::Delete( Shared.Mutex );
 
-	
+
 qRE;
 }
 
 void DisplayMidiOutDevices( void )
 {
 qRH;
-	mscmdd::wNames Names;	
+	mscmdd::wNames Names;
 	sdr::sRow Row = qNIL;
 	str::wString Buffer;
 qRB;
@@ -1056,7 +1083,7 @@ qRE;
 void DisplayMidiInDevices( void )
 {
 qRH;
-	mscmdd::wNames Names;	
+	mscmdd::wNames Names;
 	sdr::sRow Row = qNIL;
 	str::wString Buffer;
 qRB;

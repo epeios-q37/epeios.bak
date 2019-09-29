@@ -36,7 +36,7 @@
 
 namespace mscmld {
 
-	inline bso::u8__ Log2Abs_( bso::s8__ Value )
+	inline bso::u8__ Log2Abs_( bso::sU8 Value )
 	{
 		if ( Value < 0 )
 			Value = -Value;
@@ -579,7 +579,7 @@ namespace mscmld {
 		}
 	};
 
-	class dMelody 
+	class dMelody
 	: public dNotes
 	{
 	public:
@@ -589,9 +589,8 @@ namespace mscmld {
 			sAnacrousis Anacrousis;
 		} &S_;
 		dMelody( s &S )
-		: S_( S ),
-		  dNotes( S )
-		{}
+		: dNotes( S ),
+		  S_( S ) {}
 		void reset( bso::bool__ P = true )
 		{
 			dNotes::reset( P );
@@ -637,7 +636,7 @@ namespace mscmld {
 
 	write_status__ WriteXML(
 		const dMelody &Melody,
-		xml::writer_ &Writer );
+		xml::rWriter &Writer );
 
 	enum parse_status__ {
 		psOK,

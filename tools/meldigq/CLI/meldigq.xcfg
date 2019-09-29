@@ -7,7 +7,7 @@
 		<Parameters>
 			<Language>fr</Language>
 			<!-- Default command -->
-			<Command>Launch</Command>
+			<Command>Info</Command>
 			<Devices>
 				<In Policy="Name">EDIROL PC-50</In>
 				<Out Policy="Name">Microsoft GS Wavetable Synth</Out>

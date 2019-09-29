@@ -190,7 +190,7 @@ qRB
 	Base = 1;
 	Dot = 2;
 
-	while ( 1 ) {
+	while ( Continue ) {
 		Candidate.Init();
 
 		GetFraction_( Base, Dot, sTuplet(), Candidate );
@@ -205,7 +205,7 @@ qRB
 			case 0:
 				if ( Base == 7 ) {
 					Duration = sDuration();
-					qRReturn;
+					Continue = false;
 				} else {
 					Base++;
 					Dot = 2;
@@ -221,14 +221,14 @@ qRB
 			Buffer.Init();
 			Buffer = Fraction;
 			mthrtn::Sub( Buffer, Candidate, Fraction );
-			qRReturn;
+			Continue = false;
 			break;
 		case 1:
 			Duration = sDuration( Base, Dot, true );
 			Buffer.Init();
 			Buffer = Fraction;
 			mthrtn::Sub( Buffer, Candidate, Fraction );
-			qRReturn;
+			Continue = false;
 			break;
 		default:
 			qRFwk();
@@ -480,28 +480,27 @@ qRB
 #ifdef DEBUG
 	cio::cout << BarFraction << txf::tab << NoteFraction << txf::tab << txf::sync;
 #endif
-	if ( *Error )
-		qRReturn;
-
-	switch ( ( BarFraction - NoteFraction ).GetSign() ) {
-	case -1 :
-		*Error = true;
-		break;
-	case 0:
-		BarComplete = true;
-		break;
-	case 1:
-		Buffer.Init();
-		Buffer = BarFraction;
-		mthrtn::Sub( Buffer, NoteFraction, BarFraction );
-		break;
-	default:
-		qRFwk();
-		break;
-	}
+	if ( !*Error ) {
+        switch ( ( BarFraction - NoteFraction ).GetSign() ) {
+        case -1 :
+            *Error = true;
+            break;
+        case 0:
+            BarComplete = true;
+            break;
+        case 1:
+            Buffer.Init();
+            Buffer = BarFraction;
+            mthrtn::Sub( Buffer, NoteFraction, BarFraction );
+            break;
+        default:
+            qRFwk();
+            break;
+        }
 #ifdef DEBUG
-	cio::cout << BarFraction << txf::nl;
+        cio::cout << BarFraction << txf::nl;
 #endif
+	}
 
 qRR
 qRT
@@ -548,14 +547,13 @@ qRT
 qRE
 }
 
-bso::bool__ mscmld::dMelody::MarkAsAnacrousis( err::handling__ Handling )
+bso::bool__ mscmld::dMelody::MarkAsAnacrousis( qRPN )
 {
-	bso::bool__ Success = false;
+	bso::bool__ BarIsComplete = false;
 qRH
 	mthrtn::wRational Total, Remaining, Note;
 	bso::bool__ BarHandlingError = false;
 	sRow Row = qNIL;
-	bso::bool__ BarIsComplete = false;
 qRB
 	if ( IsEmpty() )
 		qRFwk();
@@ -566,42 +564,36 @@ qRB
 
 	Remaining.Init( Total );
 
-	while ( Row != qNIL ) {
-		if ( BarIsComplete )
-			if ( Handling == err::hThrowException )
-				qRFwk();
-			else
-				qRReturn;
+	while ( ( Row != qNIL ) && !BarIsComplete ) {
+        Note.Init();
+        GetFraction_( Get( Row ).Duration, Note );
 
-		Note.Init();
-		GetFraction_( Get( Row ).Duration, Note );
+        BarIsComplete = ::Adjust_( Remaining, Note, &BarHandlingError );
 
-		BarIsComplete = ::Adjust_( Remaining, Note, &BarHandlingError );
-
-		Row = Next( Row );
+        Row = Next( Row );
 	}
 
-	if ( !BarIsComplete ) {
+	if ( BarIsComplete ) {
+        if ( qRP == err::hThrowException )
+            qRFwk();
+	} else {
 		Note.Init();
 		Note = Total - Remaining;
 
 		Note.Simplify();
-	
+
 		Convert_( Note, S_.Anacrousis );
 	}
-
-	Success = true;
-
 qRR
 qRT
 qRE
-	return Success;
+	return !BarIsComplete;
 }
 
 static void WriteXML_(
 	const sPitch &Pitch,
 	const sPitch &PreviousPitch,
-	xml::writer_ &Writer )
+	xml::rWriter &Writer )
 {
 	bso::integer_buffer__ Buffer;
 
@@ -634,7 +626,7 @@ static void WriteXML_(
 
 static void WriteXMLDurationCoreAttributes_(
 	const sDuration &Duration,
-	xml::writer_ &Writer )
+	xml::rWriter &Writer )
 {
 	bso::integer_buffer__ Buffer;
 
@@ -647,7 +639,7 @@ static void WriteXMLDurationCoreAttributes_(
 static void WriteXML_(
 	const sDuration &Duration,
 	const sDuration &PreviousDuration,
-	xml::writer_ &Writer )
+	xml::rWriter &Writer )
 {
 	Writer.PushTag( DURATION_TAG );
 
@@ -667,7 +659,7 @@ static void WriteXML_(
 static void WriteXML_(
 	const sSignatureKey &Key,
 	const sSignatureKey &PreviousKey,
-	xml::writer_ &Writer )
+	xml::rWriter &Writer )
 {
 	ePitchName Name = pn_Undefined;
 	ePitchAccidental Accidental = pa_Undefined;
@@ -755,7 +747,7 @@ static void WriteXML_(
 static void WriteXML_(
 	const sSignatureTime &Time,
 	const sSignatureTime &PreviousTime,
-	xml::writer_ &Writer )
+	xml::rWriter &Writer )
 {
 	bso::integer_buffer__ Buffer;
 
@@ -780,7 +772,7 @@ static void WriteXML_(
 static void WriteXML_(
 	const sSignature &Signature,
 	const sSignature &PreviousSignature,
-	xml::writer_ &Writer )
+	xml::rWriter &Writer )
 {
 	Writer.PushTag( SIGNATURE_TAG );
 
@@ -798,7 +790,7 @@ static void WriteXML_(
 static void WriteXML_(
 	const sNote &Note,
 	const sNote &PreviousNote,
-	xml::writer_ &Writer )
+	xml::rWriter &Writer )
 {
 	if ( Note.Pitch.Name == pnRest )
 		Writer.PushTag( REST_TAG );
@@ -816,7 +808,7 @@ static void WriteXML_(
 
 write_status__ mscmld::WriteXML(
 	const dMelody &Melody,
-	xml::writer_ &Writer )
+	xml::rWriter &Writer )
 {
 	write_status__ Status = wsOK;
 qRH
@@ -826,8 +818,8 @@ qRH
 	bso::bool__ BarClosed = true;
 	bso::bool__ BarHandlingError = false;
 	bso::bool__ HandleAnacrousis = false;
-	xml::mark__ TupletControl;
-	xml::mark__ Mark = XML_UNDEFINED_MARK;
+	xml::sMark TupletControl;
+	xml::sMark Mark =xml::Undefined;
 	bso::bool__ WriteBar = false;
 	bso::bool__ WriteSignature = false;
 qRB
@@ -847,101 +839,102 @@ qRB
 		if ( !Melody( Row ).IsValid() )
 			qRFwk();
 
-		if ( Note.IsValid() )
-			if ( Note.Pitch.Name != pnRest )
+		if ( Note.IsValid() ) {
+			if ( Note.Pitch.Name != pnRest ) {
 				PreviousNote = Note;
-			else {
+			} else {
 				PreviousNote.Duration = Note.Duration;
 				PreviousNote.Signature = Note.Signature;
 			}
-
+		}
 
 		Note = Melody( Row );
 
 		if ( Note.Signature != PreviousNote.Signature ) {
-			if ( !BarClosed && ( PreviousNote.IsValid() ) ) {
+			if ( !BarClosed && ( PreviousNote.IsValid() ) )
 				Status = wsBarChekError;
-				qRReturn;
-			}
-			WriteSignature = true;
-		}
-		
-		if ( BarClosed ) {
-			if ( PreviousNote.IsValid() ) // Si ce n'est pas le cas, c'est que la premire note n'a pas encore t trait, et on vite ainsi une 'bar' avant elle.
-				WriteBar = true;
-
-			BarFraction.Init( Note.Signature.Time.Numerator(), Note.Signature.Time.Denominator() );
-
-			if ( HandleAnacrousis ) {
-				Buffer.Init( BarFraction );
-
-				if ( !Melody.Anacrousis().IsValid() )
-					qRFwk();
-
-				NoteFraction.Init( Melody.Anacrousis().Amount, 1 << ( Melody.Anacrousis().Base - 1 ) );
-				Adjust_( Buffer, NoteFraction, &BarHandlingError );
-				Adjust_( BarFraction, Buffer, &BarHandlingError );
-				HandleAnacrousis = false;
-			}
+			else
+                WriteSignature = true;
 		}
 
-		if ( Note.Duration.Tuplet.IsValid() ) {
-			if ( Note.Duration.Tuplet != PreviousNote.Duration.Tuplet ) {
-				if ( PreviousNote.Duration.Tuplet.IsValid() )
-					Writer.PopTag( TupletControl );
+		if ( Status == wsOK ) {
+            if ( BarClosed ) {
+                if ( PreviousNote.IsValid() ) // Si ce n'est pas le cas, c'est que la premire note n'a pas encore t trait, et on vite ainsi une 'bar' avant elle.
+                    WriteBar = true;
 
-				if ( WriteBar ){
-					Writer.PushTag( BAR_TAG );
-					Writer.PopTag();
-				}
+                BarFraction.Init( Note.Signature.Time.Numerator(), Note.Signature.Time.Denominator() );
 
-				if ( WriteSignature )
-					WriteXML_( Note.Signature, PreviousNote.Signature, Writer );
+                if ( HandleAnacrousis ) {
+                    Buffer.Init( BarFraction );
 
-				TupletControl = Writer.PushTag( TUPLET_TAG );
-				xml::PutAttribute( NUMERATOR_ATTRIBUTE, Note.Duration.Tuplet.Numerator, Writer );
-				xml::PutAttribute( DENOMINATOR_ATTRIBUTE, Note.Duration.Tuplet.Denominator, Writer );
-			}
-		} else if ( PreviousNote.Duration.Tuplet.IsValid() ) {
-			Writer.PopTag( TupletControl );
+                    if ( !Melody.Anacrousis().IsValid() )
+                        qRFwk();
 
-			if ( WriteBar ) {
-				Writer.PushTag( BAR_TAG );
-				Writer.PopTag();
-			}
+                    NoteFraction.Init( Melody.Anacrousis().Amount, 1 << ( Melody.Anacrousis().Base - 1 ) );
+                    Adjust_( Buffer, NoteFraction, &BarHandlingError );
+                    Adjust_( BarFraction, Buffer, &BarHandlingError );
+                    HandleAnacrousis = false;
+                }
+            }
 
-			if ( WriteSignature )
-				WriteXML_( Note.Signature, PreviousNote.Signature, Writer );
+            if ( Note.Duration.Tuplet.IsValid() ) {
+                if ( Note.Duration.Tuplet != PreviousNote.Duration.Tuplet ) {
+                    if ( PreviousNote.Duration.Tuplet.IsValid() )
+                        Writer.PopTag( TupletControl );
 
-		} else { 
-			if ( WriteBar ) {
-				Writer.PushTag( BAR_TAG );
-				Writer.PopTag();
-			}
+                    if ( WriteBar ){
+                        Writer.PushTag( BAR_TAG );
+                        Writer.PopTag();
+                    }
 
-			if ( WriteSignature )
-				WriteXML_( Note.Signature, PreviousNote.Signature, Writer );
-		}
+                    if ( WriteSignature )
+                        WriteXML_( Note.Signature, PreviousNote.Signature, Writer );
 
-		WriteBar = false;
-		WriteSignature = false;
+                    TupletControl = Writer.PushTag( TUPLET_TAG );
+                    xml::PutAttribute( NUMERATOR_ATTRIBUTE, Note.Duration.Tuplet.Numerator, Writer );
+                    xml::PutAttribute( DENOMINATOR_ATTRIBUTE, Note.Duration.Tuplet.Denominator, Writer );
+                }
+            } else if ( PreviousNote.Duration.Tuplet.IsValid() ) {
+                Writer.PopTag( TupletControl );
 
-		WriteXML_( Note, PreviousNote, Writer );
+                if ( WriteBar ) {
+                    Writer.PushTag( BAR_TAG );
+                    Writer.PopTag();
+                }
 
-		NoteFraction.Init();
+                if ( WriteSignature )
+                    WriteXML_( Note.Signature, PreviousNote.Signature, Writer );
 
-		GetFraction_( Note.Duration, NoteFraction );
+            } else {
+                if ( WriteBar ) {
+                    Writer.PushTag( BAR_TAG );
+                    Writer.PopTag();
+                }
 
-		BarClosed = Adjust_( BarFraction, NoteFraction, &BarHandlingError );
+                if ( WriteSignature )
+                    WriteXML_( Note.Signature, PreviousNote.Signature, Writer );
+            }
 
-		Row = Melody.Next( Row );
+            WriteBar = false;
+            WriteSignature = false;
+
+            WriteXML_( Note, PreviousNote, Writer );
+
+            NoteFraction.Init();
+
+            GetFraction_( Note.Duration, NoteFraction );
+
+            BarClosed = Adjust_( BarFraction, NoteFraction, &BarHandlingError );
+
+            Row = Melody.Next( Row );
+        }
+
+        if ( Note.Duration.Tuplet.IsValid() )
+            Writer.PopTag( TupletControl );
 	}
-
-	if ( Note.Duration.Tuplet.IsValid() )
-		Writer.PopTag( TupletControl );
 qRR
 qRT
-	if ( Mark != XML_UNDEFINED_MARK )
+	if ( Mark != xml::Undefined )
 		if ( Mark != Writer.GetMark() )
 			Writer.Rewind( Mark );
 qRE
@@ -972,18 +965,20 @@ static parse_status__ ParseKey_(
 {
 	parse_status__ Status = psOK;
 	bso::bool__ Continue = true;
-	
+
 	while ( Continue ) {
 		switch ( Parser.Parse( xml::tfObvious )  ){
 		case xml::tStartTag:
 			Status = psUnexpectedTag;
 			break;
 		case xml::tAttribute:
-			if ( Parser.AttributeName() == RAW_ATTRIBUTE )
-				if ( IsValid( Key ) )
+			if ( Parser.AttributeName() == RAW_ATTRIBUTE ) {
+				if ( IsValid( Key ) ) {
 					Status = psAlreadyDefined;
-				else
+				} else {
 					Status = GetKeyRaw_( Parser.Value(), Key );
+				}
+			}
 			break;
 		case xml::tValue:
 			Status = psUnexpectedValue;
@@ -1005,6 +1000,7 @@ static parse_status__ ParseKey_(
 	return Status;
 }
 
+#if 0    // Obsolete ?
 static parse_status__ GetU8(
 	const str::string_ &Value,
 	bso::u8__ &U8 )
@@ -1018,6 +1014,7 @@ static parse_status__ GetU8(
 
 	return psOK;
 }
+#endif
 
 static parse_status__ ParseTime_(
 	xml::parser___ &Parser,
@@ -1250,6 +1247,9 @@ static parse_status__ ParsePitch_(
 
 			Continue = false;
 			break;
+		default:
+            qRFwk();
+            break;
 		}
 
 		if ( Status != psOK )
@@ -1380,7 +1380,7 @@ static parse_status__ ParseDuration_(
 	return Status;
 }
 
-static parse_status__ ParseNote_( 
+static parse_status__ ParseNote_(
 	xml::parser___ &Parser,
 	const sSignature &Signature,
 	const sTuplet &Tuplet,
@@ -1538,7 +1538,7 @@ static bso::u8__ GetTupletDenominator_( const str::string_ &Value )
 	return Denominator;
 }
 
-static parse_status__ ParseTuplet_( 
+static parse_status__ ParseTuplet_(
 	xml::parser___ &Parser,
 	const sSignature &Signature,
 	dMelody &Melody )
@@ -1631,7 +1631,7 @@ static parse_status__ ParseTuplet_(
 static parse_status__ ParseAnacrousis_(
 	xml::parser___ &Parser,
 	const sSignature &Signature,
-	sAnacrousis &Anacrousis ) 
+	sAnacrousis &Anacrousis )
 {
 	parse_status__ Status = psOK;
 	bso::bool__ Continue = true;
@@ -1662,7 +1662,7 @@ static parse_status__ ParseAnacrousis_(
 
 				if ( ( Error != qNIL ) || ( Amount == 0 ) )
 					Status = psBadValue;
-			} else 
+			} else
 				Status = psUnexpectedAttribute;
 		case xml::tValue:
 			Status = psUnexpectedValue;
@@ -1673,12 +1673,11 @@ static parse_status__ ParseAnacrousis_(
 
 			if ( Base == AnacrousisUndefinedBase )
 				Status = psMissingAnacrousisBase;
-			else if ( Amount = 0 )
+			else if ( Amount == 0 )
 				Status = psMissingAnacrousisAmount;
 			else {
 				Anacrousis.Base = Base;
 				Anacrousis.Amount = Amount;
-
 			}
 
 
@@ -1699,7 +1698,7 @@ static parse_status__ ParseAnacrousis_(
 
 static parse_status__ Parse_(
 	xml::parser___ &Parser,
-	dMelody &Melody ) 
+	dMelody &Melody )
 {
 	parse_status__ Status = psOK;
 	bso::bool__ Continue = true;

@@ -84,7 +84,7 @@ namespace mthrtn {
 
 			operator =( R );
 		}
-		void Init( flw::sRFlow &Flow )
+		void Init( flw::rRFlow &Flow )
 		{
 			bso::sBool IsNegative = false;
 

@@ -38,10 +38,11 @@ namespace {
 	qRH
 		bso::u32__ Inf = 0UL, Sup = 0x10000UL, Rep = 0x10000UL >> 1;
 		integer Inter;
+		bso::sBool Continue = true;
 	qRB
 		Inter.Init( 0 );
 
-		for (;;) {
+		while ( Continue ) {
 			Mul_( Den, integer( Rep ), Inter );
 			if ( Comp( Num, Inter, true ) < 0 ) {	// 'Num' < 'Inter'.
 				Sup = Rep;
@@ -57,7 +58,7 @@ namespace {
 					Mul( Result, TenThousandHex, Result );
 					Add( Result, integer( Rep ), Result );
 					Remainder = Inter;
-					qRReturn;
+					Continue = false;
 				}
 			}
 		}
@@ -109,7 +110,7 @@ bso::sign__ mthitg::Comp(
 	}
 
 	return (int)( !IgnoreSign && Op1.GetSignFlag() ? -Res : Res );
-}		
+}
 
 integer_ &mthitg::Add_(
 	const integer_ &Op1,
@@ -174,7 +175,7 @@ qRT
 qRE
 	return Result;
 }
-	
+
 integer_ &mthitg::Sub_(
 	const integer_ &Op1,
 	const integer_ &Op2,
@@ -203,56 +204,55 @@ qRB
 
 	if ( MaxSize == 0 ) {
 		Result = Res;
-		qRReturn;
+	} else {
+        Res.Core.Allocate( MaxSize );
+
+        Res.PutSize_( MaxSize );
+
+        Limite = MinSize;
+
+        while ( Indice < Limite )
+        {
+            if ( Max->Core( Indice ) < ( Inter += Min->Core( Indice ) ) ) {
+                Res.Core.Store(
+                    ( (base__)( ( Max->Core( Indice ) | ( 1 << 16 ) )
+                        - ( Inter & 0xffff ) ) ),
+                    Indice );
+
+                Inter = 1;
+            } else {
+                Res.Core.Store( (base__)( Max->Core(Indice) - ( Inter & 0xffff ) ), Indice );
+
+                Inter = 0;
+            }
+
+            Indice++;
+        }
+
+        Limite = MaxSize;
+
+        while( Indice < Limite )
+        {
+            if ( Max->Core( Indice ) < Inter ) {
+                Res.Core.Store(
+                    ( (base__)( ( Max->Core( Indice ) | ( 1 << 16 ) )
+                        - ( Inter & 0xffff ) ) ),
+                        Indice );
+
+                Inter = 1;
+            } else {
+                Res.Core.Store( (base__)( Max->Core( Indice ) - ( Inter & 0xffff ) ), Indice );
+
+                Inter = 0;
+            }
+
+            Indice++;
+        }
+
+        Res.Adjust_();
+
+        Result = Res;
 	}
-
-	Res.Core.Allocate( MaxSize );
-
-	Res.PutSize_( MaxSize );
-
-	Limite = MinSize;
-
-	while ( Indice < Limite )
-	{
-		if ( Max->Core( Indice ) < ( Inter += Min->Core( Indice ) ) ) {
-			Res.Core.Store(
-				( (base__)( ( Max->Core( Indice ) | ( 1 << 16 ) )
-					- ( Inter & 0xffff ) ) ),
-				Indice );
-
-			Inter = 1;
-		} else {
-			Res.Core.Store( (base__)( Max->Core(Indice) - ( Inter & 0xffff ) ), Indice );
-
-			Inter = 0;
-		}
-
-		Indice++;
-	}
-
-	Limite = MaxSize;
-
-	while( Indice < Limite )
-	{
-		if ( Max->Core( Indice ) < Inter ) {
-			Res.Core.Store(
-				( (base__)( ( Max->Core( Indice ) | ( 1 << 16 ) )
-					- ( Inter & 0xffff ) ) ),
-					Indice );
-
-			Inter = 1;
-		} else {
-			Res.Core.Store( (base__)( Max->Core( Indice ) - ( Inter & 0xffff ) ), Indice );
-
-			Inter = 0;
-		}
-
-		Indice++;
-	}
-
-	Res.Adjust_();
-
-	Result = Res;
 qRR
 qRE
 qRT
@@ -368,7 +368,7 @@ qRE
 	return Quotient;
 }
 
-void mthitg::integer_::Init( flw::sRFlow &Flow )
+void mthitg::integer_::Init( flw::rRFlow &Flow )
 {
 	if ( Flow.EndOfFlow() )
 		return;
@@ -463,7 +463,7 @@ integer_ &mthitg::Mul(
 {
 	if ( Op1.GetSignFlag() == Op2.GetSignFlag() )
 		return Mul_( Op1, Op2, Result );
-	else 
+	else
 		return Negate_( Mul_( Op1, Op2, Result ) );
 }
 
@@ -520,35 +520,33 @@ qRB
 
 	if ( !B ) {
 		Result = A;
-		qRReturn;
 	} else if ( !A  ) {
 		Result = B;
-		qRReturn;
+	} else {
+        while ( A != B )  {
+            if ( A > B )  {
+                Mod( A, B, A );
+
+                if ( !A )
+                    A = B;
+            }
+            else {
+                Mod( B, A, B );
+
+                if ( !B )
+                    B = A;
+            }
+         }
+
+        Result = A;
 	}
-
-	while ( A != B )  {
-		if ( A > B )  {
-			Mod( A, B, A );
-
-			if ( !A )
-				A = B;
-		}
-		else {
-			Mod( B, A, B );
-
-			if ( !B )
-				B = A;
-		}
-	 }
-
-	Result = A;
 qRR
 qRT
 qRE
 }
 
 
-	
+
 void integer_::Adjust_( aem::mode__ Mode )
 {
 	size__ Size = GetSize();
@@ -590,10 +588,10 @@ integer Exp(
 
 	Res.Init();
 	Res = 1;
-	
+
 	while( Y-- )
 		Mul( Res, X, Res );
-		
+
 	return Res;
 }
 
@@ -654,23 +652,24 @@ qRH
 qRB
 	I.Init( Integer );
 
-	if ( !I ) {
-		Flow << 0UL;
-		qRReturn;
-	} else if ( I.GetSign() == -1 )	{
-		Flow << '-';
-		I.Negate();
-	}
+	if ( I ) {
+	    if ( I.GetSign() == -1 )	{
+            Flow << '-';
+            I.Negate();
+        }
 
-	String.Init();
+        String.Init();
 
-	while ( I.GetSign() != 0 ) {
-		R.Init();
-		Div( I, Ten, I, R );
-		String.InsertAt( R.GetU32() + '0', 0 );
-	}
+        while ( I.GetSign() != 0 ) {
+            R.Init();
+            Div( I, Ten, I, R );
+            String.InsertAt( R.GetU32() + '0', 0 );
+        }
 
-	Flow << String;
+        Flow << String;
+	} else {
+        Flow << 0UL;
+    }
 qRR
 qRT
 qRE

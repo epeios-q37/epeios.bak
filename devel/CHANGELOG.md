@@ -8,8 +8,14 @@
 - [stdz]: modification to comply with current standards;
 - [trvl]: trivial modifications;
 
-## 2019-09-27
+## 2019-09-29
 
+- MSCMLD:
+	- [adpt],
+	- [stdz],
+- MTHITG:
+	- [adpt],
+	- [stdz],
 - SCLMISC: introducing `rWFlowRack`,
 - XTF: [stdz],
 

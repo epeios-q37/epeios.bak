@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef MSCMLD_INC_
-# define MSCMLD_INC_
+#ifndef MSCMLD__INC
+# define MSCMLD__INC
 
 # define MSCMLD_NAME		"MSCMLD"
 
@@ -36,7 +36,7 @@
 
 namespace mscmld {
 
-	inline bso::u8__ Log2Abs_( bso::s8__ Value )
+	inline bso::u8__ Log2Abs_( bso::sU8 Value )
 	{
 		if ( Value < 0 )
 			Value = -Value;
@@ -346,8 +346,8 @@ namespace mscmld {
 
 	struct sSignatureTime {
 	private:
-		numerator__ _Numerator;	// Si < 0, le dï¿½nominateur (bien le dï¿½nominateur) n'est pas censï¿½ ï¿½tre affichï¿½.
-		denominator_power__ _DenominatorPower;	// Le dï¿½nominateur rï¿½el est ï¿½gal ï¿½ = 2 ^ abs('DenominatorPower').
+		numerator__ _Numerator;	// Si < 0, le dénominateur (bien le dénominateur) n'est pas censé être affiché.
+		denominator_power__ _DenominatorPower;	// Le dénominateur réel est égal à = 2 ^ abs('DenominatorPower').
 		void _Test( void ) const
 		{
 			if ( !IsValid() )
@@ -579,7 +579,7 @@ namespace mscmld {
 		}
 	};
 
-	class dMelody 
+	class dMelody
 	: public dNotes
 	{
 	public:
@@ -589,9 +589,8 @@ namespace mscmld {
 			sAnacrousis Anacrousis;
 		} &S_;
 		dMelody( s &S )
-		: S_( S ),
-		  dNotes( S )
-		{}
+		: dNotes( S ),
+		  S_( S ) {}
 		void reset( bso::bool__ P = true )
 		{
 			dNotes::reset( P );
@@ -618,7 +617,7 @@ namespace mscmld {
 			dNotes::Init();
 			S_.Anacrousis.Init();
 		}
-		bso::bool__ MarkAsAnacrousis( err::handling__ Handling = err::h_Default );	// Marque les notes dï¿½jï¿½ introduite en tant qu'anacrouse.
+		bso::bool__ MarkAsAnacrousis( err::handling__ Handling = err::h_Default );	// Marque les notes déjà introduite en tant qu'anacrouse.
 		qRODISCLOSEd( sAnacrousis, Anacrousis );
 	};
 
@@ -637,7 +636,7 @@ namespace mscmld {
 
 	write_status__ WriteXML(
 		const dMelody &Melody,
-		xml::writer_ &Writer );
+		xml::rWriter &Writer );
 
 	enum parse_status__ {
 		psOK,
@@ -670,7 +669,7 @@ namespace mscmld {
 	parse_status__ ParseXML(
 		xml::parser___ &Parser,
 		dMelody &Melody,
-		bso::bool__ WithRoot );	// Si ï¿½ 'true', la prochaine balise est 'Melody', sinon, on est ï¿½ l'intï¿½rieur de 'Melody'. Dans les deux cas, au rerour on est ï¿½ l'extï¿½rieur de la balise 'Melody'.
+		bso::bool__ WithRoot );	// Si à 'true', la prochaine balise est 'Melody', sinon, on est à l'intérieur de 'Melody'. Dans les deux cas, au rerour on est à l'extérieur de la balise 'Melody'.
 
 }
 
