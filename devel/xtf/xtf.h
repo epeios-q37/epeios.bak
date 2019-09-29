@@ -303,7 +303,7 @@ namespace xtf {
 		{
 			if ( _UTF.Size == 0 ) {
 /*				bso::size__ Size = _F().View( sizeof( _UTF.Data ), _UTF.Data );
-				
+
 				if ( Size == 0  ) {
 					_UTF.Size = 0;
 					return false;
@@ -343,7 +343,7 @@ namespace xtf {
 			_Flow = NULL;
 			_EOL = 0;
 			_Error = e_Undefined;
-			
+
 		}
 		E_CVDTOR( extended_text_iflow__ );
 		extended_text_iflow__(
@@ -464,13 +464,13 @@ namespace xtf {
 
 			if ( HandleNL && _EOL ) {
 
-				if ( ( ( _EOL == '\r' ) && ( C == '\n' ) ) 
+				if ( ( ( _EOL == '\r' ) && ( C == '\n' ) )
 					 || ( _EOL == '\n' && ( C == '\r' ) ) ) {
 
 						_EOL = 0;
 
 						_F().Skip( _UTF.Size );
-						
+
 						if ( !_PrefetchUTF( false ) )
 							qRFwk();
 
@@ -490,7 +490,7 @@ namespace xtf {
 			return View( &UTF, HandleNL );
 		}
 		bso::bool__ EndOfFlow( error__ *Error = NULL )	// Si erreur, 'ErrorMeaning' est initialis, sinon reste vide.
-		{ 
+		{
 			if ( _Error == e_NoError ) {
 				if ( _UTF.Size != 0 )
 					return false;
@@ -499,7 +499,7 @@ namespace xtf {
 					return true;
 
 				if ( !_PrefetchUTF( false ) ) {
-					_Error = eEncodingDiscrepancy; 
+					_Error = eEncodingDiscrepancy;
 
 					if ( Error != NULL )
 						*Error = _Error;
@@ -556,7 +556,7 @@ namespace xtf {
 /**************/
 
 namespace xtf {
-	typedef extended_text_iflow__ sIFlow;
+	typedef extended_text_iflow__ sRFlow;
 }
 
 

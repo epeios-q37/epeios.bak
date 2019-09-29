@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project xmlns:xpp="http://q37.info/ns/xpp/">
+	<xpp:bloc>
+		<!-- User definitions -->
+		<xpp:define name="Version">
+			<xpp:bloc/>
+		</xpp:define>
+		<xpp:define name="CopyrightYears">
+			<xpp:bloc>2019</xpp:bloc>
+		</xpp:define>
+		<xpp:set name="Credits" value="Epeios"/>
+		<xpp:set name="Type" value="Tool"/>
+	</xpp:bloc>
+	<xpp:set name="q37.project" env-var="Q37_PROJECT"/>
+	<xpp:expand value-of="q37.project"/>
+	<About>
+		<Program>midxq</Program>
+		<Software>MIDXq</Software>
+		<!-- Do not modify below value (used by the 'DVLSetTol' script)! -->
+		<UUID>393a385a-bbd3-4946-a214-b84ecce04554</UUID>
+	</About>
+	<Modules xpp:marker="$">
+		<Modules Group="Epeios" Path="$EpeiosPath$/">
+			<Modules Group="Core">
+				<xpp:expand select="Core"/>
+			</Modules>
+			<Modules Group="SCL">
+				<xpp:expand select="SCL"/>
+			</Modules>
+			<Modules Group="msc">
+			    <Module>mscmdf</Module>
+			    <Module>mscmdm</Module>
+			    <Module>mscmdx</Module>
+			</Modules>
+		</Modules>
+		<Module>registry</Module>
+		<Module>mid2x</Module>
+		<Module>x2mid</Module>
+	</Modules>
+	<Files/>
+    <RTW>
+        <Dir>midxq-cli</Dir>
+    </RTW>
+</Project>

@@ -127,7 +127,7 @@ qRH
 	str::string Translation;
 qRB
 	Translation.Init();
-	
+
 	if ( ( Exists = sclmisc::GetSCLBasePendingErrorTranslation( Translation ) ) )
 		sclerror::ResetPendingError();
 
@@ -674,7 +674,7 @@ namespace {
 			Meaning.Init();
 			Meaning.SetValue( "" );	// Will not be translated, as the locale file could not be red.
 			// Both tags below will replace the '%0' above.
-			Meaning.AddTag( "Unable to open locale file" );	
+			Meaning.AddTag( "Unable to open locale file" );
 			Meaning.AddTag( Info.Target() );
 			ReportAndAbort( Meaning );
 		}
@@ -1146,21 +1146,25 @@ sclrgstry::registry_ &sclmisc::GetRWRegistry( void )
 	return sclrgstry::GetRWCommonRegistry();
 }
 
-txf::text_oflow__ &sclmisc::text_oflow_rack___::Init( const fnm::name___ &FileName )
+flf::rWFlow &sclmisc::rWFlowRack::Init( const fnm::name___ &FileName )
 {
 	_FileName.Init( FileName );
 
-	if ( _FileName.IsEmpty() ) {
-		_BackedUp = false;
+    sclmisc::CreateBackupFile( _FileName );
+    _BackedUp = true;
+
+    if ( _Flow.Init( _FileName ) != tol::rSuccess )
+        sclmisc::ReportFileOpeningErrorAndAbort( _FileName );
+
+    return _Flow;
+}
+
+txf::text_oflow__ &sclmisc::text_oflow_rack___::Init( const fnm::name___ &FileName )
+{
+	if ( FileName.IsEmpty() ) {
 		return cio::COut;
 	} else {
-		sclmisc::CreateBackupFile( _FileName );
-		_BackedUp = true;
-
-		if ( _Flow.Init( _FileName ) != tol::rSuccess )
-			sclmisc::ReportFileOpeningErrorAndAbort( _FileName );
-
-		_TFlow.Init( _Flow );
+		_TFlow.Init( rWFlowRack::Init( FileName ) );
 
 		return _TFlow;
 	}
@@ -1256,7 +1260,7 @@ qRE
 
 #undef T
 
-void sclmisc::text_oflow_rack___::HandleError( void )
+void sclmisc::rWFlowRack::HandleError( void )
 {
 	if ( _BackedUp )
 		sclmisc::RecoverBackupFile( _FileName );
@@ -1365,7 +1369,7 @@ qRB
 
 	if ( ( Exists = GetPluginRelatedTags_( Target, Tags ) ) ) {
 		GetPluginFeatures_( Target, Tags, Filename, Configuration, Locale );
-	
+
 		sclmisc::MGetValue( rgstry::tentry___( sclrgstry::parameter::TargetedPlugin, Target ), Arguments );
 	} else if ( qRPT )
 		qRFwk();
@@ -1425,7 +1429,7 @@ namespace {
 		Tags.Append( str::wString( Target ) );
 		Tags.Append( Id );
 	}
-	
+
 	void GetPluginItemFeatures_(
 		const char *Target,
 		const str::string_ &Id,
@@ -1539,7 +1543,7 @@ qRT
 qRE
 }
 
-fdr::rWDriver &sclmisc::rODriverRack::Init( const fnm::name___ &FileName )
+fdr::rWDriver &sclmisc::rWDriverRack::Init( const fnm::name___ &FileName )
 {
 	Filename_.Init( FileName );
 
@@ -1557,14 +1561,14 @@ fdr::rWDriver &sclmisc::rODriverRack::Init( const fnm::name___ &FileName )
 	}
 }
 
-void sclmisc::rODriverRack::HandleError( void )
+void sclmisc::rWDriverRack::HandleError( void )
 {
 	if ( BackedUp_ )
 		sclmisc::RecoverBackupFile( Filename_ );
 }
 
 
-fdr::rRDriver &sclmisc::rIDriverRack::Init( const fnm::name___ &FileName )
+fdr::rRDriver &sclmisc::rRDriverRack::Init( const fnm::name___ &FileName )
 {
 	Filename_.Init( FileName );
 

@@ -195,7 +195,7 @@ namespace mtx {
 	inline handler___ Create( bso::bool__ Disabled = false )	// Si True, utilisation dans un contexte mono-thread.
 	{
 		handler___ Handler;
-		
+
 		if ( ( Handler = new _mutex__( Disabled ) ) == NULL )
 			qRAlc();
 
@@ -303,7 +303,7 @@ namespace mtx {
 		void Init( handler___ Handler )
 		{
 			_UnlockIfInitializedAndLocked();
-			
+
 			Handler_ = Handler;
 		}
 		void InitAndLock( handler___ Handler )

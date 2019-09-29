@@ -19,8 +19,8 @@
 
 // SoCLe MISCellaneous
 
-#ifndef SCLMISC_INC_
-# define SCLMISC_INC_
+#ifndef SCLMISC__INC
+# define SCLMISC__INC
 
 # define SCLMISC_NAME		"SCLMISC"
 
@@ -667,26 +667,44 @@ namespace sclmisc {
 			return Result;\
 		}
 
-	// To facilitate optional text output file handling. if no file name is given, then the standard output is given. Also creates a backup file, which can be restored.
-	class text_oflow_rack___
+    // !!! DON'T FORGET THE CALLING OF 'HandleError()' IN 'qRR'. !!!
+	// To facilitate the backup of an binary output file, which can be restored.
+	class rWFlowRack
 	{
 	private:
 		fnm::name___ _FileName;
-		bso::bool__ _BackedUp;
 		flf::file_oflow___ _Flow;
-		txf::text_oflow__ _TFlow;
+    protected:
+   		bso::bool__ _BackedUp;
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			_BackedUp = false;
 			_FileName.reset( P );
-			_TFlow.reset( P );
 			_Flow.reset( P );
 		}
-		E_CDTOR( text_oflow_rack___ );
+		E_CDTOR( rWFlowRack );
 		// !!! Don't forget the 'HandleError()' in 'qRR'. !!!
-		txf::text_oflow__ &Init( const fnm::name___ &FileName );
+		flf::rWFlow &Init( const fnm::name___ &FileName );
 		void HandleError( void );	// A appeler  partir de 'qRR'.
+	};
+
+    // !!! DON'T FORGET THE CALLING OF 'HandleError()' IN 'qRR'. !!!
+    // To facilitate the handling of the backup of a text output file.
+    // If 'FileName' is empty, returns the standard output.
+	class text_oflow_rack___
+	: public rWFlowRack
+	{
+	private:
+		txf::text_oflow__ _TFlow;
+	public:
+		void reset( bso::bool__ P = true )
+		{
+		    rWFlowRack::reset( P );
+			_TFlow.reset( P );
+		}
+		E_CDTOR( text_oflow_rack___ );
+		txf::text_oflow__ &Init( const fnm::name___ &FileName );
 		bso::sBool IsFile( void ) const
 		{
 			return _BackedUp;
@@ -789,10 +807,10 @@ namespace sclmisc {
 /***************/
 
 namespace sclmisc {
-	typedef text_oflow_rack___ rTextOFlowRack;
+	typedef text_oflow_rack___ rTextWFlowRack;
 
 	// To facilitate optional text output file handling. if no file name is given, then the standard output is given. Also creates a backup file, which can be restored.
-	class rODriverRack
+	class rWDriverRack
 	{
 	private:
 		fnm::name___ Filename_;
@@ -803,7 +821,7 @@ namespace sclmisc {
 		{
 			tol::reset( P, Driver_, Filename_, BackedUp_ );
 		}
-		E_CDTOR( rODriverRack );
+		qCDTOR( rWDriverRack );
 		// !!! Don't forget the 'HandleError()' in 'qRR'. !!!
 		fdr::rWDriver &Init( const fnm::name___ &FileName );
 		void HandleError( void );	// A appeler  partir de 'qRR'.
@@ -813,17 +831,17 @@ namespace sclmisc {
 		}
 	};
 
-	class rIDriverRack
+	class rRDriverRack
 	{
 	private:
 		fnm::name___ Filename_;
-		flf::rIDriver Driver_; 
+		flf::rIDriver Driver_;
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			tol::reset( P, Driver_, Filename_ );
 		}
-		E_CDTOR( rIDriverRack );
+		qCDTOR( rRDriverRack );
 		// !!! Don't forget the 'HandleError()' in 'qRR'. !!!
 		fdr::rRDriver &Init( const fnm::name___ &FileName );
 		void HandleError( void )	// To call from' qRR'.

@@ -13,26 +13,32 @@
 		</Definitions>
 		<Locale>
 			<xpp:expand select="TOL_Locale"/>
+			<!-- Commands -->
 			<Translations text="TestCommandDescription">
 				<Translation language="fr">Commande de test.</Translation>
 				<Translation language="en">Test command.</Translation>
 			</Translations>
+			<!-- Flags -->
 			<Translations text="TestFlagDescription">
 				<Translation language="fr">fanion de test.</Translation>
 				<Translation language="en">test flag.</Translation>
 			</Translations>
+			<!-- Option descriptions -->
 			<Translations text="TestOptionDescription">
 				<Translation language="fr">option de test.</Translation>
 				<Translation language="en">test option.</Translation>
 			</Translations>
+			<!-- Option labels -->
 			<Translations text="TestOptionLabel">
 				<Translation language="fr">option (fr)</Translation>
 				<Translation language="en">option (en)</Translation>
 			</Translations>
+			<!-- Argument descriptions -->
 			<Translations text="TestArgumentDescription">
 				<Translation language="fr">argument de test.</Translation>
 				<Translation language="en">test argument.</Translation>
 			</Translations>
+			<!-- Argument labels -->
 			<Translations text="TestArgumentLabel">
 				<Translation language="fr">argument (fr)</Translation>
 				<Translation language="en">argument (en)</Translation>

@@ -10,19 +10,23 @@
 
 ## 2019-09-27
 
-- MSCMDF, MSCMDX:
-	- [adpt]
+- SCLMISC: introducing `rWFlowRack`,
+- XTF: [stdz],
+
+## 2019-09-27
+
+- MSCMDF, MSCMDX: [adpt],
+- SXLMISC: [stdz],
 
 ## 2019-09-26
 
 - MSCMDD:
-	- [adpt]
+	- [adpt],
 
 ## 2019-09-18
 
 - XPP:
 	- new `xpp:marker` attribute, which allows to define the marker for variable substitution without having to put an extraneous `<xpp:bloc marker="…">…`.
-
 
 ## 2019-07-06
 
