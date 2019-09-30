@@ -648,8 +648,8 @@ namespace mscmdd {
 	typedef crt::qCRATEdl( dName ) dNames;
 	qW( Names );
 
-	bso::uint__ GetMidiInDeviceNames( dNames &Names );
-	bso::uint__ GetMidiOutDeviceNames( dNames &Names );
+	bso::sUInt GetMidiInDeviceNames( dNames &Names );
+	bso::sUInt GetMidiOutDeviceNames( dNames &Names );
 
 	qENUM( Way ) {
 		wIn,
@@ -658,7 +658,7 @@ namespace mscmdd {
 		w_Undefined
 	};
 
-	inline bso::uint__ GetMidiDeviceNames(
+	inline bso::sUInt GetMidiDeviceNames(
 		eWay Way,
 		dNames &Names )
 	{
@@ -676,9 +676,6 @@ namespace mscmdd {
 
 		return 0;	// Pour viter un 'warning'.
 	}
-
-
-
 }
 
 /*$END$*/

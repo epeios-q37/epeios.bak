@@ -22,13 +22,18 @@ Code à mettre dans le source pour <http://repl.it>.
 # coding: utf-8
 """
 To launch the application:
-- click on the green button (you may have to wait a little until the button is displayed),
-- open the URL displayed in the black console (above the '^^^^…' line) in a web browser.
+- click on the green button (you may have to wait
+  a little until the button is displayed),
+- open the URL displayed in the black console
+  (above the '^^^^…' line) in a web browser.
 
 You can also:
-- uncomment below 'os.environ["ATK"]="REPLit"' line,
+- uncomment below '#REPLit = True' line (remove
+  the leading '#' character),
 - click on the green button,
-- click on the then displayed QR code.
+- click on the then displayed QR code (if it
+  does not appear, check if above line is still
+  uncommented).
 
 For more details: http://q37.info/s/zbgfjtp9
 
@@ -36,16 +41,24 @@ Copyright (c) 2019 Claude SIMON (http://q37.info/s/rmnmqd49)
 MIT License
 """
 
+#REPLit = True
+
 import atlastk as Atlas
 import os
 
-# os.environ["ATK"]="REPLit"
+try:
+    if REPLit:
+        os.environ["ATK"]="REPLit"
+except:
+    pass
 
 def readAsset(path):
   return open(path).read()
 ```
 
-#### Ancienne version
+#### Anciennes versions
+
+##### Première variante
 
 ``` python
 # coding: utf-8
@@ -69,6 +82,35 @@ import atlastk as Atlas
 import os
 
 os.environ["ATK"]="REPLit" #
+
+def readAsset(path):
+  return open(path).read()
+```
+
+##### Seconde variante
+
+``` python
+# coding: utf-8
+"""
+To launch the application:
+- click on the green button (you may have to wait a little until the button is displayed),
+- open the URL displayed in the black console (above the '^^^^…' line) in a web browser.
+
+You can also:
+- uncomment below 'os.environ["ATK"]="REPLit"' line,
+- click on the green button,
+- click on the then displayed QR code.
+
+For more details: http://q37.info/s/zbgfjtp9
+
+Copyright (c) 2019 Claude SIMON (http://q37.info/s/rmnmqd49)
+MIT License
+"""
+
+import atlastk as Atlas
+import os
+
+# os.environ["ATK"]="REPLit"
 
 def readAsset(path):
   return open(path).read()

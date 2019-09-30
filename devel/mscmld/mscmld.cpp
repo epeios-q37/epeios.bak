@@ -854,7 +854,7 @@ qRB
 			if ( !BarClosed && ( PreviousNote.IsValid() ) )
 				Status = wsBarChekError;
 			else
-                WriteSignature = true;
+				WriteSignature = true;
 		}
 
 		if ( Status == wsOK ) {

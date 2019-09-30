@@ -8,6 +8,11 @@
 - [stdz]: modification to comply with current standards;
 - [trvl]: trivial modifications;
 
+## 2019-09-30
+
+- MSCMDD:
+    - fixing bad MIDI devices retrieving,
+
 ## 2019-09-29
 
 - MSCMLD:

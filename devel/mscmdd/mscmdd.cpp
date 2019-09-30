@@ -351,16 +351,23 @@ qRB
 					// NOTE: If there's only one subdevice, then the subdevice number is immaterial,
 					// and can be omitted when you specify the hardware name
 
-					Name.Init( "hw:" );
+					Name.Init( snd_rawmidi_info_get_subdevice_name( rawMidiInfo ) );
+					Name.Append( " (hw:" );
 					Name.Append( bso::Convert( (bso::sUInt)cardNum, Buffer ) );
 					Name.Append( ',' );
 					Name.Append( bso::Convert( (bso::sUInt)devNum, Buffer ) );
 					Name.Append( ',' );
 					Name.Append( bso::Convert( (bso::sUInt)i, Buffer ) );
+					Name.Append( ") " );
+					Name.Append(snd_rawmidi_info_get_id( rawMidiInfo ));
+					Name.Append( ", " );
+					Name.Append(snd_rawmidi_info_get_name( rawMidiInfo ));
+					Name.Append( ", " );
+					bso::bInteger Buffer;
+					Name.Append(bso::Convert(snd_rawmidi_info_get_device( rawMidiInfo ), Buffer));
+					Name.Append( ", " );
 
 					Names.Append( Name );
-
-					Names.Append( str::string( snd_rawmidi_info_get_subdevice_name( rawMidiInfo ) ) );
 
 					Count++;
 
@@ -447,15 +454,7 @@ qRR
 qRT
 qRE
 #elif defined( MSCMDD__ALSA )
-qRH
-	wNames Names;
-qRB
-	Names.Init();
-
 	Count = GetMIDIDevices_( Names, SND_RAWMIDI_STREAM_INPUT );
-qRR
-qRT
-qRE
 #endif
 	return Count;
 }
@@ -484,15 +483,7 @@ qRR
 qRT
 qRE
 #elif defined( MSCMDD__ALSA )
-qRH
-	wNames Names;
-qRB
-	Names.Init();
-
 	Count = GetMIDIDevices_( Names, SND_RAWMIDI_STREAM_OUTPUT );
-qRR
-qRT
-qRE
 #endif
 	return Count;
 }
