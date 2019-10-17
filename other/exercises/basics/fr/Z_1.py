@@ -51,7 +51,7 @@ def maFonction(a, b, c, operator):
 
     efface()
     affiche("Solution de")
-    affiche("{} × x + {} {} {} :".format(a, b, operator, c))
+    affiche("{:g} × x + {:g} {} {:g} :".format(a, b, operator, c))
     if operator == '=':
         affiche("x = " + resoudreEquationPremierDegre(a, b, c))
     else:
