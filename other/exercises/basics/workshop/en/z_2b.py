@@ -29,8 +29,8 @@ from workshop.en.turtle import *
 
 class _Core:
     i18n = {
-      "AmountOfPolygons": "Amount of polygons ",
-      "AmountOfSegments": "Amount of segments ",
+      "AmountOfPolygons": "Amount of polygons",
+      "AmountOfSegments": "Amount of segments",
       "Draw": "Draw"
     }
 

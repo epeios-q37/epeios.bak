@@ -18,7 +18,7 @@ You should have received a copy of the GNU Affero General Public License
 along with xdhwebq. If not, see <http://www.gnu.org/licenses/>.
  */
 
-$out = '
+$out = str_replace(array("\r", "\n", "\t"), '','
 	<!DOCTYPE html>
 		<html>
 			<head>
@@ -59,22 +59,22 @@ $out = '
 			<div>
 				<div style="display:table; margin: 5px auto auto auto;">
 					<hr/>
-					<span style="display: table; margin: 10px auto 5px auto;font-style: oblique;">For another instance, click or scan:</span>
+					<span style="display: table; margin: 10px auto 5px auto;">Another instance? Click or scan:</span>
 					<div style="display: flex; justify-content: space-around;">
  						<a href="#" target="_blank">
  						   <div id="qrcode"></div>
 						</a>
 					</div>
-					<span style="display: table; margin: auto;font-style: oblique;margin: 5px auto auto auto;">Generated with <a href="https://davidshimjs.github.io/qrcodejs/" target="_blank">qrcode.js</a></span>
-					<!--div style="display: table; margin: 15px auto 10px auto; border: 1px solid; padding: 10px;box-shadow: 5px 5px; text-align: center;">
-						<span style="text-shadow: 1px 1px;">
-							<span>Powered by the <span style="font-style: italic;">Atlas</span> toolkit (<a href="http://atlastk.org/" target="_blank">http://atlastk.org/</a>)</span>
-							<br/>
-							<span>⯈⯈⯈&nbsp;&nbsp;&nbsp;<a href="https://q37.info/s/sssznrb4" target="_blank">Live demonstrations</a>&nbsp;&nbsp;&nbsp;⯇⯇⯇</span>
-						</span>
-					 </div-->
+					<span style="display: table; margin: auto;font-style: oblique;margin: 5px auto auto auto; font-size: smaller;">
+						<span>(</span>
+						<a href="http://q37.info/s/3pktvrj7" target="_blank">QR code</a>
+						<span> generated with </span>
+						<a href="https://davidshimjs.github.io/qrcodejs/" target="_blank">qrcode.js</a>
+						<span>.)</span>
+					</span>
 				 </div>
 			</div>
 		</body>
-	</html>'
+	</html>')
+
 ?>
