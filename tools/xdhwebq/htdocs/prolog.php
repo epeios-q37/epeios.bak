@@ -16,7 +16,7 @@ Affero General Public License for more details.
 
 You should have received a copy of the GNU Affero General Public License
 along with xdhwebq. If not, see <http://www.gnu.org/licenses/>.
- */
+*/
 
 $out = str_replace(array("\r", "\n", "\t"), '','
 	<!DOCTYPE html>
@@ -65,13 +65,6 @@ $out = str_replace(array("\r", "\n", "\t"), '','
  						   <div id="qrcode"></div>
 						</a>
 					</div>
-					<span style="display: table; margin: auto;font-style: oblique;margin: 5px auto auto auto; font-size: smaller;">
-						<span>(</span>
-						<a href="http://q37.info/s/3pktvrj7" target="_blank">QR code</a>
-						<span> generated with </span>
-						<a href="https://davidshimjs.github.io/qrcodejs/" target="_blank">qrcode.js</a>
-						<span>.)</span>
-					</span>
 				 </div>
 			</div>
 		</body>
