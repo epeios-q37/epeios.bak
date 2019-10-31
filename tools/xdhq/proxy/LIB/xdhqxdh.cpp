@@ -169,7 +169,7 @@ qRR;
 qRT;
 qRE;
 }
- 
+
 namespace {
 	// As we do not need a backend, most of below items are only placeholders.
 	class sDummy_
@@ -1042,7 +1042,7 @@ namespace {
 
 			if ( Logging_.IP.Amount() != 0 )
 				Log << " (" << Logging_.IP << ")";
-			
+
 			Log << " : " <<  Message;
 		qRR;
 		qRT;
@@ -1263,7 +1263,6 @@ xdhcmn::cSession *sclxdhtml::SCLXDHTMLRetrieveCallback(
 {
 	rSession_ *Session = NULL;
 qRH;
-	bso::sBool Continue = true;
 qRB;
 	if ( ( Session = new rSession_ ) == NULL )
 		qRAlc();

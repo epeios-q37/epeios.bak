@@ -10,7 +10,7 @@
 
 ## 2019-10-31
 
-- FBLTYP, SCLXDHTML:
+- FBLTYP, SCLXDHTML, XDHUJP:
     -  fixing *Clang* warnings,
 - CSDLEC, CSDUCL:
 	- [adpt],

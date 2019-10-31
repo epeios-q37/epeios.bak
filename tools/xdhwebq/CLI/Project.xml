@@ -11,7 +11,8 @@
 		<xpp:set name="Credits" value="Epeios"/>
 		<xpp:set name="Type" value="Tool"/>
 	</xpp:bloc>
-	<xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
+	<xpp:set name="q37.project" env-var="Q37_PROJECT"/>
+	<xpp:expand value-of="q37.project"/>
 	<About>
 		<Program>xdhwebq</Program>
 		<Software>XDHWebQ</Software>

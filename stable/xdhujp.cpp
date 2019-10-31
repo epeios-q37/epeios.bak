@@ -536,6 +536,7 @@ static void InsertAfter_(
 }
 
 namespace{
+#if 0	    // Obsolete ?
 	namespace {
 		// TODO: to optimize.
 		void GetIds_(
@@ -604,7 +605,6 @@ namespace{
 	qRE;
 	}
 
-	
 	void MatchTagsWithIds_(
 		const xdhcmn::digest_ &Digest,
 		const str::dString &MergedTags,
@@ -624,6 +624,7 @@ namespace{
 	qRT;
 	qRE;
 	}
+#endif
 }
 
 static void GetValue_(
