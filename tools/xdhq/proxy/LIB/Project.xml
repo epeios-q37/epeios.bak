@@ -12,8 +12,9 @@
 	<xpp:set name="Credits" value="Epeios"/>
 	<xpp:set name="Type" value="XDHTML"/>
 	<xpp:set name="_UserFiles" value="yes"/>
-	<xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
-	<About>
+	<xpp:set name="q37.project" env-var="Q37_PROJECT"/>
+	<xpp:expand value-of="q37.project"/>
+    <About>
 		<!-- 'DVL' related commands tests below value to introduce some hacks !!!  -->
 		<Program>xdhqxdh</Program>
 		<Software>XDHq</Software>

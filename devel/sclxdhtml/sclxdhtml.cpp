@@ -39,12 +39,12 @@ rgstry::rEntry registry::definition::XSLFile( RGSTRY_TAGGING_ATTRIBUTE( "target"
 rgstry::rEntry registry::definition::HeadFile( "HeadFile", XMLFiles_ );
 
 namespace {
-	E_CDEF(char *, StraightBackendType_, "Straight" );
-	E_CDEF(char *, EmbeddedBackendType_, "Embedded" );
+//	E_CDEF(char *, StraightBackendType_, "Straight" );
+//	E_CDEF(char *, EmbeddedBackendType_, "Embedded" );
 	fHead HeadFunction_ = NULL;	// Function returning the user's HTML head section used by the Atlas toolkit.
 }
 
-static bso::bool__ IsInitialized_ = false;
+// static bso::bool__ IsInitialized_ = false;
 
 static const char *Launcher_ = NULL;
 
@@ -409,7 +409,7 @@ qRB
 		if ( sclerror::GetPendingErrorTranslation( Language, Message, err::hUserDefined ) ) {
 			sclerror::ResetPendingError();
 			Proxy.AlertU( Message, Language );
-		} 
+		}
 		break;
 	case err::t_Free:
 		Proxy.AlertB( "???" );
@@ -1105,7 +1105,7 @@ qRH;
 	str::string Parameters;
 qRB;
 	Parameters.Init();
-	
+
 	switch ( Type = GetType_( Proxy ) ) {
 	case btNone:
 		break;

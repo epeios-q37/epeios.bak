@@ -71,8 +71,8 @@ namespace csdlec {
 
 			_Row = _Read.Next( _Row, Maximum );
 
-/* Concernant GESBIB, si l'on enlve le bloc ci-dessous, le logiciel est susceptible de se planter lorsque l'on manipule
-une requte de manire trs intense (bombardage de 'push' 'join'). C'est comme si le 'Dismiss()' n'tait pas lanc correctement. */
+/* Concernant GESBIB, si l'on enlève le bloc ci-dessous, le logiciel est susceptible de se planter lorsque l'on manipule
+une requte de manire trés intense (bombardage de 'push' 'join'). C'est comme si le 'Dismiss()' n'tait pas lancé correctement. */
 // Dbut bloc.
 			if ( _Row == qNIL )
 				_Read.Init();
@@ -80,13 +80,17 @@ une requte de manire trs intense (bombardage de 'push' 'join'). C'est comme si l
 
 			return Maximum;
 		}
-		virtual void FDRDismiss( bso::sBool Unlock ) override
+		virtual bso::sBool FDRDismiss(
+            bso::sBool Unlock,
+            qRPN ) override
 		{
 #ifdef CSDEBD_DBG
 			if ( _Row != qNIL )
 				ERRu();
 #endif
 			_Read.Init();
+
+			return true;
 		}
 		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
 		{
@@ -100,8 +104,12 @@ une requte de manire trs intense (bombardage de 'push' 'join'). C'est comme si l
 
 			return Maximum;
 		}
-		virtual void FDRCommit( bso::sBool Unlock ) override
-		{}
+		virtual bso::sBool FDRCommit(
+            bso::sBool Unlock,
+            qRPN ) override
+		{
+            return true;
+		}
 		virtual fdr::sTID FDRWTake( fdr::sTID Owner ) override
 		{
 			return fdr::UndefinedTID;
@@ -128,7 +136,7 @@ une requte de manire trs intense (bombardage de 'push' 'join'). C'est comme si l
 		void Init( fdr::thread_safety__ ThreadSafety )
 		{
 			reset();
-			
+
 			fdr::ioflow_driver___<>::Init( ThreadSafety );
 		}
 	};
@@ -169,12 +177,16 @@ une requte de manire trs intense (bombardage de 'push' 'join'). C'est comme si l
 
 			return _passive_generic_driver___::FDRWrite( Buffer, Maximum );
 		}
-		virtual void FDRCommit( bso::sBool Unlock ) override
+		virtual bso::sBool FDRCommit(
+            bso::sBool Unlock,
+            qRPN ) override
 		{
 			if ( _DataAvailable )
 				_Callback->Process( RWDriver_, UP_ );
 
 			_DataAvailable = false;
+
+			return true;
 		}
 	public:
 		void reset( bso::bool__ P = true )
@@ -215,7 +227,7 @@ une requte de manire trs intense (bombardage de 'push' 'join'). C'est comme si l
 			_Create();
 		}
 	};
-	
+
 	class rDriver
 	: public _active_generic_driver___
 	{

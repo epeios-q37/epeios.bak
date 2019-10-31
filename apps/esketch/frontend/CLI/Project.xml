@@ -11,7 +11,8 @@
 		<xpp:set name="Credits" value="Epeios"/>
 		<xpp:set name="Type" value="CLI"/>
 	</xpp:bloc>
-	<xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
+	<xpp:set name="q37.project" env-var="Q37_PROJECT"/>
+	<xpp:expand value-of="q37.project"/>
 	<About>
 		<Program>esketchcli</Program>
 		<Software>esketchcli</Software>
@@ -22,25 +23,26 @@
 			<Modules Group="Core">
 				<xpp:expand select="Core"/>
 			</Modules>
-   <Modules Group="CSD">
-    <xpp:expand select="CSDF"/>
-   </Modules>
-   <Modules Group="FBL">
-    <xpp:expand select="FBLF"/>
-   </Modules>
-   <Modules Group="SCL">
+			<Modules Group="CSD">
+				<xpp:expand select="CSDF"/>
+			</Modules>
+			<Modules Group="FBL">
+				<xpp:expand select="FBLF"/>
+			</Modules>
+			<Modules Group="SCL">
 				<xpp:expand select="SCL"/>
 			</Modules>
 		</Modules>
-  <Modules Group="FRD" Path="../">
-   <Module>frdapi</Module>
-   <Module>frdfrntnd</Module>
-   <Module>frdrgstry</Module>
-  </Modules>
-  <Modules Group="SKT" Path="../../">
-   <Module>sktinf</Module>
-  </Modules>
-  <Module>registry</Module>
+		<Modules Group="FRD" Path="../">
+			<Module>frdapi</Module>
+			<Module>frdfrntnd</Module>
+			<Module>frdrgstry</Module>
+		</Modules>
+		<Modules Group="SKT" Path="../../">
+			<Module>sktinf</Module>
+			<Module>sktfbc</Module>
+		</Modules>
+		<Module>registry</Module>
 	</Modules>
  <Files>
   <File>../esketchfrd.xcfg</File>

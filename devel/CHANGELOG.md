@@ -8,6 +8,13 @@
 - [stdz]: modification to comply with current standards;
 - [trvl]: trivial modifications;
 
+## 2019-10-31
+
+- FBLTYP, SCLXDHTML:
+    -  fixing *Clang* warnings,
+- CSDLEC, CSDUCL:
+	- [adpt],
+
 ## 2019-09-30
 
 - MSCMDD:

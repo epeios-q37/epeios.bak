@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-// Client-Server Devices Universal CLient 
+// Client-Server Devices Universal CLient
 
 #ifndef CSDUCL_INC_
 # define CSDUCL_INC_
@@ -137,9 +137,11 @@ namespace csducl {
 		{
 			return _Get().ReadUpTo( Maximum, Buffer );
 		}
-		virtual void FDRDismiss( bso::sBool Unlock ) override
+		virtual bso::sBool FDRDismiss(
+            bso::sBool Unlock,
+            qRPN ) override
 		{
-			_Get().Dismiss( Unlock );
+			return _Get().Dismiss( Unlock, ErrHandling );
 		}
 		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
 		{
@@ -151,9 +153,11 @@ namespace csducl {
 		{
 			return _Get().WriteUpTo( Buffer, Maximum );
 		}
-		virtual void FDRCommit( bso::sBool Unlock ) override
+		virtual bso::sBool FDRCommit(
+            bso::sBool Unlock,
+            qRPN ) override
 		{
-			_Get().Commit( Unlock );
+			return _Get().Commit( Unlock, ErrHandling );
 		}
 		virtual fdr::sTID FDRWTake( fdr::sTID Owner ) override
 		{
