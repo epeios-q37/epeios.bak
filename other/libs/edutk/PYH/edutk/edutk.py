@@ -37,8 +37,8 @@ regularException = False
 if ('HOME' in os.environ) and (os.environ['HOME'] == '/home/runner'):
   os.environ["ATK"] = "REPLit"
 
-sys.path.append("./Atlas.python.zip")
-sys.path.append("../Atlas.python.zip")
+sys.path.append("./Atlas.zip")
+sys.path.append("../Atlas.zip")
 
 import atlastk as Atlas
 

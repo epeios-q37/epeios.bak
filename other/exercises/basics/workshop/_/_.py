@@ -1,10 +1,10 @@
 import sys, os
 
-sys.path.append("./EduTK.python.zip")
-sys.path.append("../EduTK.python.zip")
+sys.path.append("./EduTK.zip")
+sys.path.append("../EduTK.zip")
 
 if ('EPEIOS_SRC' in os.environ):
-  sys.path.append("/cygdrive/h/hg/epeios/other/libs/edutk/PYH/edutk")
+  sys.path.append(os.path.join(os.environ["HOME"],"epeios/other/libs/edutk/PYH/edutk"))
 
 import edutk as _
 
@@ -21,7 +21,7 @@ F_RESTART = "Restart"
 F_HANGMAN = "Hangman"
 
 def _defineUserFunction(name):
-  _.defineUserFunction(globals(), "uf", name)
+  _.defineUserItem(globals(), "uf", name)
 
 _defineUserFunction(F_MY_FUNCTION)
 _defineUserFunction(F_CONNECT)
@@ -32,5 +32,5 @@ _defineUserFunction(F_HANGMAN)
 
 def mainBase(folder, callback, callbacks, ids, globals, userFunctionLabels, title):
   if ids:
-    _.setUserFunctions(ids, globals, userFunctionLabels)
+    _.assignUserItems(ids, globals, userFunctionLabels)
   _.main(folder, callback, callbacks, title)

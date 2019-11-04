@@ -35,7 +35,7 @@ def _acConnect(core,dom,id):
 def _acDraw(core,dom):
   turtle.clear(dom)
   (polygons, segments) = dom.getContents(("polygons","segments")).values()
-  _.ufMyFunction(polygons, segments)
+  _.ufMyFunction()(polygons, segments)
   turtle.draw(dom)
 
 
