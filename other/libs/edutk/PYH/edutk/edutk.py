@@ -29,9 +29,9 @@ import sys
 import inspect
 import traceback
 
-# When set to true, execptions behave normally again
-# instead of being displayed in a alert box.
-regularException = False
+# When set to true, ('useRegularExceptions()'), exceptions behave normally again,
+# instead of being displayed in an alert box.
+_regularExceptions = False
 
 # Detecting 'Repl.it' environment.
 if ('HOME' in os.environ) and (os.environ['HOME'] == '/home/runner'):
@@ -116,16 +116,8 @@ def _translate(text, i18n):
   return text
 
 
-def read(fileName, i18n=None):
-  return _translate(_read(fileName), i18n)
-
-
-def readHTML(path, affix, i18n=None):
-  return read(os.path.join('workshop', 'assets', path, affix + ".html"), i18n)
-
-
-def readBody(path, i18n=None):
-  return readHTML(path, "Body", i18n)
+def read(path, i18n=None):
+  return _translate(_read(path), i18n)
 
 
 def _assignUserItem(label, items, name):
@@ -153,8 +145,8 @@ def defineUserItem(globals,prefix,name):
   globals[prefix + name] = lambda : _USER_ITEM_LINKS[name]
 
 
-def _readHead(path, title, i18n=None):
-  return "<title>" + title + "</title>\n" + _HEAD_COMMON + readHTML(path, "Head", i18n)
+def _getHead(path, title, i18n=None):
+  return "<title>" + title + "</title>\n" + _HEAD_COMMON + read(path, i18n)
 
 
 # Should be the almost identical as in 'Atlas.py'
@@ -180,7 +172,7 @@ def _call(func, userObject, dom, id, action):
 	try:
 		return func(*args)
 	except Exception as e:
-		if regularException:
+		if _regularExceptions:
 			raise e
 		else:
 			dom.alert("PYTHON EXCEPTION:\n\n" + traceback.format_exc())
@@ -204,7 +196,10 @@ def _patchWithoutCoreObject(userCallbacks):
 
   return callbacks
 
+def useRegularExceptions(value = True):
+    globals()["_regularExceptions"] = value;
 
-def main(path, callback, callbacks, title):
+
+def main(headPath, callback, callbacks, title):
   Atlas.launch(_patchWithCoreObject(callbacks) if callback else _patchWithoutCoreObject(
-      callbacks), callback, _readHead(path, title))
+      callbacks), callback, _getHead(headPath, title))

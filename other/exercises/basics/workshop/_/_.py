@@ -3,7 +3,7 @@ import sys, os
 sys.path.append("./EduTK.zip")
 sys.path.append("../EduTK.zip")
 
-if ('EPEIOS_SRC' in os.environ):
+if ('Q37_XPP' in os.environ):
   sys.path.append(os.path.join(os.environ["HOME"],"epeios/other/libs/edutk/PYH/edutk"))
 
 import edutk as _
