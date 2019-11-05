@@ -1,22 +1,21 @@
+#coding: utf-8
+
 import workshop.common as _
 
 class _Core(_._.Core):
-    i18n = {
-        _.L_NAME_IS_MANDATORY: "Il faut saisir un nom !"
-    }
-    bodyI18n = {
-        _.L_NAME_TO_DISPLAY: "Ton prénom"
-    }
+  i18n = {
+    _.label.MissingName: "Veuillez saisir un prénom !"
+  }
+  body_i18n = {
+    _.label.NameToDisplay: "Prénom"
+  }
 
-    def __init__(self, dom):
-        _.Core.__init__(self, dom)
+  def __init__(self, dom):
+    _.Core.__init__(self, dom)
 
 
-def efface():
-  _.clear()
-
-def affiche(text):
-  _.display(text)
+efface = _.clear
+affiche = _.display
 
 def go(globals):
-    _.main(lambda dom: _Core(dom), globals,  {_.F_HELLO: "afficheSalutations",}, "Atelier de programmation")
+  _.main(lambda dom: _Core(dom), globals,  {_.F_HELLO: "afficheSalutations"}, "Atelier de programmation")

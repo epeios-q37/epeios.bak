@@ -3,9 +3,9 @@
 from workshop.fr import *
 
 def afficheSalutations(nom):
-    efface()
-    affiche("Bonjour, " + nom + " !")
-    affiche("Bonne journée, " + nom + " !")
+  efface()
+  affiche("Bonjour, " + nom + " !")
+  affiche("Bonne journée, " + nom + " !")
     
 
 go(globals())

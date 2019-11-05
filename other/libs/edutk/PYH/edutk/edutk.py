@@ -145,6 +145,15 @@ def defineUserItem(globals,prefix,name):
   globals[prefix + name] = lambda : _USER_ITEM_LINKS[name]
 
 
+def setEnums(globals,name,values):
+  claz = type(name, (),{}) 
+
+  for value in values:
+    setattr(claz,value,value)
+
+  globals[name] = claz
+  
+
 def _getHead(path, title, i18n=None):
   return "<title>" + title + "</title>\n" + _HEAD_COMMON + read(path, i18n)
 
