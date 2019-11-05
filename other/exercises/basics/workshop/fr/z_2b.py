@@ -36,4 +36,4 @@ class _Core:
 
 
 def go(globals):
-  workshop.main(globals, _Core, _.FUNCTION_LABELS, _.DEFAULT_TITLE)
+  workshop.main(globals, _Core, _.LABELS, _.DEFAULT_TITLE)

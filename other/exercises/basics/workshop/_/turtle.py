@@ -31,8 +31,8 @@ import sys, os
 sys.path.append("./Tortoise.zip")
 sys.path.append("../Tortoise.zip")
 
-if ('EPEIOS_SRC' in os.environ):
-  sys.path.append("/cygdrive/h/hg/epeios/other/libs/tortoise/PYH/tortoise")
+if ('Q37_XPP' in os.environ):
+  sys.path.append(os.path.join(os.environ["HOME"],"epeios/other/libs/tortoise/PYH/tortoise"))
 
 import tortoise
 

@@ -31,7 +31,6 @@ def _acConnect(dom):
   dom.setLayout("",_.readBody("ab"))
   dom.setLayout("output", _.recall('html'))
 
-
 def display(text):
   _.recall('html').putTagAndValue("h1", text)
 

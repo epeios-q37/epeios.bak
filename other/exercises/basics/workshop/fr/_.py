@@ -29,10 +29,12 @@ from workshop._._ import Core
 
 DEFAULT_TITLE = "Atelier de programmation"
 
-FUNCTION_LABELS = {
-    _.F_MY_FUNCTION: "maFonction",
+LABELS = {
+    _.F_SALUTE: "afficheSalutations",
+    _.F_RESOLVE: "resoud",
+    _.F_DRAW: "dessine",
     _.F_CONNECT: "connexion",
     _.F_SUBMIT: "pioche",
     _.F_RESTART: "redemarrer",
-    _.F_HANGMAN: "Pendu"
+    _.C_HANGMAN: "Pendu"
 }

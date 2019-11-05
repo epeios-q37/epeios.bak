@@ -35,7 +35,7 @@ def _acConnect(core,dom,id):
 def _acDraw(core,dom):
   turtle.clear(dom)
   (polygons, segments) = dom.getContents(("polygons","segments")).values()
-  _.ufMyFunction()(polygons, segments)
+  _.ufDraw()(polygons, segments)
   turtle.draw(dom)
 
 
@@ -43,6 +43,6 @@ def main(globals,callback, userFunctionLabels,title):
   _.mainBase(_FOLDER, callback, {
       "" : _acConnect,
       "Draw" : _acDraw,
-    }, (_.F_MY_FUNCTION,), globals, userFunctionLabels, title )
+    }, (_.F_DRAW,), globals, userFunctionLabels, title )
 
 turtle.init()

@@ -42,7 +42,7 @@ def resoudreInequationPremierDegre(a, b, ineg, c):
             return "]" + sol + " ; " + "+∞["
 
 
-def maFonction(a, b, c, operator):
+def resoud(a, b, c, operator):
     # N'est utile que lorsque 'signalerErreurs' est à 'False'.
     if (a == 0):
         alerte("'a' doit être différent de 0 !")

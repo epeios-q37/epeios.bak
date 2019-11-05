@@ -28,10 +28,12 @@ import sys, os
 sys.path.append("./EduTK.zip")
 sys.path.append("../EduTK.zip")
 
-if ('EPEIOS_SRC' in os.environ):
-  sys.path.append("/cygdrive/h/hg/epeios/other/libs/edutk/PYH/edutk")
+if ('Q37_XPP' in os.environ):
+  sys.path.append(os.path.join(os.environ["HOME"],"epeios/other/libs/edutk/PYH/edutk"))
 
-from edutk import *
 import edutk as _
+from edutk import Atlas, Core, main, dom, store, recall, useRegularExceptions, defineUserItem, assignUserItems, assignUserItem
 
-_.regularException = 'EPEIOS_SRC' in os.environ
+def readBody(folder,i18n=None):
+  return _.read(os.path.join("workshop","assets",folder,"Body.html"), i18n)
+

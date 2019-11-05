@@ -7,7 +7,7 @@ from workshop.fr.z_2b import *
 
 import math
 
-def maFonction(polygones, segments):
+def dessine(polygones, segments):
     polygones = int(polygones)
     segments = int(segments)
     taille = 140 * math.sin(math.pi/segments)

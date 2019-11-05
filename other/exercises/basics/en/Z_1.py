@@ -42,7 +42,7 @@ def solveFirstDegreeInequation(a, b, ineg, c):
             return "]" + sol + " ; " + "+∞["
 
 
-def myFunction(a, b, c, operator):
+def solve(a, b, c, operator):
     # Only useful when 'reportErrors' at 'False'.
     if (a == 0):
         warn("'a' must be different from 0 !")

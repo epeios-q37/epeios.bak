@@ -67,7 +67,7 @@ def _acSubmit(core,dom,id):
     if a == 0 and _reportErrors:
       dom.alert(core.i18n["ACannotBe0"])
     else:
-      _.ufMyFunction(a, b, c, operator)
+      _.ufResolve()(a, b, c, operator)
       dom.disableElement("Hide")
 
   dom.focus('a')
@@ -80,4 +80,4 @@ def main(globals,callback,userFunctionLabels,title,patchErrorVariableName):
   _.mainBase(_FOLDER, callback, {
       "" : _acConnect,
       "Submit": _acSubmit
-  }, (_.F_MY_FUNCTION,), globals, userFunctionLabels, title)
+  }, (_.F_RESOLVE,), globals, userFunctionLabels, title)

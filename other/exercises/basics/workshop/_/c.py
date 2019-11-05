@@ -36,7 +36,7 @@ def _acSubmit(c, dom):
     input=dom.getContent("input").strip()
 
     if (len(input)) != 0:
-        _.ufMyFunction(dom.getContent("input"))
+        _.ufSalute()(dom.getContent("input"))
         dom.setContent( "input", "")
         dom.removeClass("output", "hidden")
     else:
@@ -50,4 +50,4 @@ def main(callback, globals, userFunctionLabels, title):
   {
     "": _acConnect,
     "Submit": _acSubmit,
-  }, (_.F_MY_FUNCTION,), globals, userFunctionLabels, title)
+  }, (_.F_SALUTE,), globals, userFunctionLabels, title)

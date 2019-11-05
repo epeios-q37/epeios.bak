@@ -5,7 +5,7 @@ sys.path.append(".")
 from workshop.fr.c import *
 
 
-def maFonction(nom):
+def afficheSalutations(nom):
     efface()
     affiche("Bonjour, " + nom + " !")
     affiche("Bonne journée, " + nom + " !")

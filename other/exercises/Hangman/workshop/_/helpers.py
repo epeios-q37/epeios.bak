@@ -23,15 +23,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-import sys
+import sys, os, inspect
 sys.path.append("workshop/_")
 
 import educ as _
 from accessor import *
 from uitems import *
-
-import inspect
-
 
 _I_OUTPUT = "Output"
 _I_SECRET_WORD = "SecretWord"
@@ -152,11 +149,14 @@ def _assignUserFunctions(labels, functions, names):
 
 
 def mainBase(callback, globals, labels, userItems, userItemsNames):
+# Uncomment for exceptions behaving normally again,
+# instead of being displayed in a alert box.
+  _.useRegularExceptions()
   global _SHOW_SECRET_WORD
   _assignUserFunctions(labels, userItems, userItemsNames)
   if _.assignUserItem(UV_SHOW_SECRET_WORD, userItems, userItemsNames):
     _SHOW_SECRET_WORD = uvShowSecretWord()
-  _.main(_FOLDER, callback, {
+  _.main(os.path.join("workshop", "assets", _FOLDER, "Head.html"), callback, {
      "": globals["_acConnect"],
     "Submit": globals["_acSubmit"],
     "Restart": globals["_acRestart"]

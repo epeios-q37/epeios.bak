@@ -27,7 +27,7 @@ import workshop._._ as _
 
 class Core(_.Core):
     def __init__(self,dom):
-        _.Core.__init__(self,dom,_.ufHangman())
+        _.Core.__init__(self,dom,_.ucHangman()())
 
 _FOLDER = "z_3"
 
@@ -41,17 +41,17 @@ F_RIGHT_LEG = "RightLeg"
 
 
 def _acConnect(core, dom, id):
-    _.ufConnect(core.userObject)
+    _.ufConnect()(core.userObject)
 
 
 def _acSubmit(core, dom, id):
     dom.addClass(id, "chosen")
 
-    _.ufSubmit(core.userObject, id.lower())
+    _.ufSubmit()(core.userObject, id.lower())
 
 
 def _acRestart(core, dom):
-    _.ufRestart(core.userObject)
+    _.ufRestart()(core.userObject)
 
 
 def redraw():
@@ -67,4 +67,4 @@ def main(globals,callback, userFunctionLabels, title):
         "": _acConnect,
         "Submit": _acSubmit,
         "Restart": _acRestart
-    }, (_.F_CONNECT, _.F_SUBMIT, _.F_RESTART, _.F_HANGMAN), globals, userFunctionLabels, title)
+    }, (_.F_CONNECT, _.F_SUBMIT, _.F_RESTART, _.C_HANGMAN), globals, userFunctionLabels, title)
