@@ -8,7 +8,7 @@ This project shows a new type of exercises for programming tutorials. It only co
 
 Each exercise consists to program a feature of the [Hangman game](https://q37.info/s/gtdtk4hp). With the last exercise, the game will be fully operational. The finished game can be see at this address: <https://q37.info/s/jtdqjsx7>.
 
-Nowadays, almost all young people have a smartphone, so they are used to graphical interfaces. They rarely, if ever, had to deal with a text console. For them, writing programs with a textual interface may be (falsely) considered outdated and, therefore, not very interesting.. This is why all the exercises provided by this project have a web interface, unlike the exercises usually provided with programming tutorials, which almost always have only a text-based interface. 
+Nowadays, almost all young people have a smartphone, so they are used to graphical interfaces. They rarely, if ever, had to deal with a text console. For them, writing programs with a textual interface may be (falsely) considered outdated and, therefore, not very interesting. This is why all the exercises provided by this project have a web interface, unlike the exercises usually provided with programming tutorials, which almost always have only a text-based interface. 
 
 When one of the exercises of this project is launched, a web browser will automatically be opened to give access to its interface, which you can see in the above picture. To make testing easier, there will also be a text box that displays the word to guess, and in which you can also enter the word to guess. Of course, this text box will not be available in the final version of the game.
 

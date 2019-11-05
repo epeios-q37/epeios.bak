@@ -1,3 +1,5 @@
+#coding: utf-8
+
 import workshop.common as _
 
 class _Core(_.Core):

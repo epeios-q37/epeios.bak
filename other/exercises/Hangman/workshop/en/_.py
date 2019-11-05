@@ -75,13 +75,15 @@ USER_ITEM_LABELS = {
 }
 
 _.setI18n({
-  _.S_RESTART: "Restart",
-  _.S_SECRET_WORD: "Secret word",
-  _.S_LETTER: "Guess",
-  _.S_EXPECTED: "Expected",
-  _.S_OBTAINED: "Gotten",
-  _.S_TRUE: "true",
-  _.S_FALSE: "false",
+  _.label.Restart: "Restart",
+  _.label.SecretWord: "Secret word",
+  _.label.Letter: "Guess",
+  _.label.Expected: "Expected",
+  _.label.Obtained: "Gotten",
+  # '_.label.True': syntax error!
+  _.label.__dict__["True"]:  "true",
+  # '_.label.False': syntax error!
+  _.label.__dict__["False"]: "false",
 })
 
 _.setDictionary(DICTIONARY)

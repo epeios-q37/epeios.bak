@@ -29,7 +29,8 @@ import sys
 import inspect
 import traceback
 
-# When set to true, ('useRegularExceptions()'), exceptions behave normally again,
+# When set to true, (with 'useRegularExceptions()'),
+# exceptions behave normally again,
 # instead of being displayed in an alert box.
 _regularExceptions = False
 
@@ -143,6 +144,11 @@ def assignUserItems(labels, items, names):
 
 def defineUserItem(globals,prefix,name):
   globals[prefix + name] = lambda : _USER_ITEM_LINKS[name]
+
+
+def defineUserItems(globals,prefix,names):
+  for name in names:
+    defineUserItem(globals,prefix, name)
 
 
 def setEnums(globals,name,values):

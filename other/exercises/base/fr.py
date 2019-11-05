@@ -6,6 +6,5 @@ def afficheSalutations(nom):
   efface()
   affiche("Bonjour, " + nom + " !")
   affiche("Bonne journée, " + nom + " !")
-    
 
 go(globals())

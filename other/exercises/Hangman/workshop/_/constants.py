@@ -49,11 +49,3 @@ UV_SHOW_SECRET_WORD = "ShowSecretWord"
 # User classes
 UC_HANGMAN = "Hangman"
 
-# Label (key) of strings to translate.
-S_RESTART = "Restart"
-S_SECRET_WORD = "SecretWord"
-S_LETTER = "Letter"
-S_EXPECTED = "Expected"
-S_OBTAINED = "Obtained"
-S_TRUE = "True"
-S_FALSE = "False"

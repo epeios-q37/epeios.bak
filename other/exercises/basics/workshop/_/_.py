@@ -18,15 +18,14 @@ F_SUBMIT = "Submit"
 F_RESTART = "Restart"
 C_HANGMAN = "Hangman"
 
-def _defineUserFunction(name):
-  _.defineUserItem(globals(), "uf", name)
+_.defineUserItems(globals(), "uf", (
+  F_SALUTE,
+  F_RESOLVE,
+  F_DRAW,
+  F_CONNECT,
+  F_SUBMIT,
+  F_RESTART))
 
-_defineUserFunction(F_SALUTE)
-_defineUserFunction(F_RESOLVE)
-_defineUserFunction(F_DRAW)
-_defineUserFunction(F_CONNECT)
-_defineUserFunction(F_SUBMIT)
-_defineUserFunction(F_RESTART)
 _.defineUserItem(globals(), "uc", C_HANGMAN)
 
 def readBody(folder,i18n=None):

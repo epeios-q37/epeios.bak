@@ -34,7 +34,7 @@ setuptools.setup(
     version=version,
     author="Claude SIMON",
 #    author_email="author@example.com",
-    description="Toolkit to make exercises for programming tutorials.",
+    description="Toolkit to make modern exercises for programming tutorials.",
     keywords="education, tutorial, Atlas tookit",
     long_description=long_description,
     long_description_content_type="text/markdown",

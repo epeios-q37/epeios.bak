@@ -1,3 +1,5 @@
+#coding: utf-8
+
 from workshop.en import *
 
 def displayGreetings(name):

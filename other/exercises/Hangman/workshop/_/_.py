@@ -33,3 +33,14 @@ from accessor import *
 from items import *
 from helpers import *
 
+_.setEnums(globals(),"label",(
+    "Restart",
+    "SecretWord",
+    "Letter",
+    "Expected",
+    "Obtained",
+    "True",
+    "False"
+))
+
+
