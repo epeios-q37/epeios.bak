@@ -7,9 +7,7 @@ from workshop.en.z_2b import *
 
 import math
 
-
-
-def myFunction(polygons, segments):
+def draw(polygons, segments):
     down()
     polygons = int(polygons)
     segments = int(segments)

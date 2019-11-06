@@ -17,6 +17,11 @@ _messages = {
         "fr": " introuvable !",
     }
 }
+    
+try:
+    input = raw_input
+except NameError:
+    pass
 
 def go(exercise=None):
     if not exercise:

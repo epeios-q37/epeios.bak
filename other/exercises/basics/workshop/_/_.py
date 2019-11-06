@@ -34,7 +34,7 @@ def readBody(folder,i18n=None):
 def mainBase(folder, callback, callbacks, ids, globals, userFunctionLabels, title):
 # Uncomment for exceptions behaving normally again,
 # instead of being displayed in a alert box.
-  _.useRegularExceptions()
+  #_.useRegularExceptions()
   if ids:
     _.assignUserItems(ids, globals, userFunctionLabels)
   _.main(os.path.join("workshop", "assets", folder, "Head.html"), callback, callbacks, title)

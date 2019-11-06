@@ -1,6 +1,6 @@
 #coding: utf-8
 
-import workshop.common as _
+import workshop.core as _
 
 class _Core(_._.Core):
   i18n = {

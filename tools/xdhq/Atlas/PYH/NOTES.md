@@ -148,7 +148,7 @@ Dans `RTW/atlas-python` :
 
 ### Test distant avec l'instance de test
 
-#### Publication
+#### Publication sur site de test
 
 Dans `RTW/atlas-python` :
 

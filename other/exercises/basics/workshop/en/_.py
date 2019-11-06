@@ -29,9 +29,10 @@ from workshop._._ import Core
 
 DEFAULT_TITLE = "Programming workshop"
 
-FUNCTION_LABELS = {
+LABELS = {
     _.F_SALUTE: "displayGreetings",
     _.F_RESOLVE: "solve",
+    _.F_DRAW: "draw",
     _.F_CONNECT: "connection",
     _.F_SUBMIT: "guess",
     _.F_RESTART: "restart",

@@ -49,4 +49,4 @@ def drawFigure(part):
 
 
 def go(globals):
-  workshop.main(globals,lambda dom:_Core(dom), _.FUNCTION_LABELS, _.DEFAULT_TITLE)
+  workshop.main(globals,lambda dom:_Core(dom), _.LABELS, _.DEFAULT_TITLE)

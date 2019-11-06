@@ -1,4 +1,4 @@
-# Modern exercises for programming tutorials, based on the [Hangman game](https://q37.info/s/gtdtk4hp).
+# Modern exercises for programming tutorials, featuring the [Hangman game](https://q37.info/s/gtdtk4hp).
 
 [![Hangman](https://q37.info/s/pnmjfw39)](https://q37.info/s/jtdqjsx7)
 
@@ -111,3 +111,7 @@ To tell the students what to do, the teachers will also look at the (`en`/`fr`)`
 And so on for the *c*, *d*, *e*… exercises.
 
 Once an exercise is completed, the teachers will probably have to introduce the concepts that will be relevant for the next exercise. For this purpose, another set of exercises is being developed and can be found here: <https://q37.info/s/tpkx4cfk>.
+
+To see other examples of exercises, go to <https://q37.info/s/cbms43s9>.
+
+This project is based on the [*Atlas* toolkit](https://atlastk.org). Other projects using this toolkit can be found here: <https://q37.info/s/sssznrb4>.

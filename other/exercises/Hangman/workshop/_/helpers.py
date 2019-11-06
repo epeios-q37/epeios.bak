@@ -151,7 +151,7 @@ def _assignUserFunctions(labels, functions, names):
 def mainBase(callback, globals, labels, userItems, userItemsNames):
 # Uncomment for exceptions behaving normally again,
 # instead of being displayed in a alert box.
-  _.useRegularExceptions()
+#  _.useRegularExceptions()
   global _SHOW_SECRET_WORD
   _assignUserFunctions(labels, userItems, userItemsNames)
   if _.assignUserItem(UV_SHOW_SECRET_WORD, userItems, userItemsNames):

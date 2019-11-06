@@ -41,5 +41,5 @@ class _Core(_.Core):
 
 
 def go(globals):
-    workshop.main(lambda dom: _Core(dom), globals, _.FUNCTION_LABELS, _.DEFAULT_TITLE)
+    workshop.main(lambda dom: _Core(dom), globals, _.LABELS, _.DEFAULT_TITLE)
 
