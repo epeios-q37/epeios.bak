@@ -31,9 +31,9 @@ except NameError:
 success = False
 
 while not success:
-    exercise = input("\n" + _messages["input"][lang].format(" (a,b,c,z_1,z_2a,z_2b,z_3)"))
+    exercise = input("\n" + _messages["input"][lang].format(" (a,b,c,d,e,f,g)"))
 
-    exerciseFilename = lang + "." + exercise[:1].upper() + exercise[1:].lower()
+    exerciseFilename = lang + "." + exercise.lower()
 
     if True:  # Simplifies debugging when set to False
         try:

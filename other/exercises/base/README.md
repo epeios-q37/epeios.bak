@@ -6,7 +6,7 @@ This project is for those who are interested in creating their own exercises. It
 
 Simply retrieve the repository (`git clone https://github.com/epeios-q37/base-exercise`), or get the corresponding *ZIP* file [here](https://q37.info/s/3ckksnck)), go, in a console, to the root directory, and launch `python main.py`.
 
-You also can run this project in a web browser, with nothing to install, thanks to [Repl.it](https://q37.info/s/mxmgq3qm). Go [here](https://q37.info/s/srnnb7hj), click on the `+ new repl` button, choose `Python` as language and give the address of this repository in the dedicated field. Then click on the green (`run`) button, and then on the then displayed [QR code](https://q37.info/s/3pktvrj7).
+You also can run this project in a web browser, with nothing to install, thanks to [Repl.it](https://q37.info/s/mxmgq3qm). Go [here](https://q37.info/s/srnnb7hj), click on the `+ new repl` button, choose `Python` as language and give the address of this repository in the dedicated field. Click on the green `run` button, and then click on (or scan) the then displayed [QR code](https://q37.info/s/3pktvrj7).
 
 Nowadays, almost all young people have a smartphone, so they are used to graphical interfaces. They rarely, if ever, had to deal with a text console. For them, writing programs with a textual interface may be (falsely) considered outdated and, therefore, not very interesting. This is why modern exercises should provide a web interface, unlike the exercises usually provided with programming tutorials, which almost always have only a text-based interface. 
 

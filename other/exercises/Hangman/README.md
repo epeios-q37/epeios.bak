@@ -1,10 +1,12 @@
 # Modern exercises for programming tutorials, featuring the [Hangman game](https://q37.info/s/gtdtk4hp).
 
+This project shows an example of modern exercises for programming tutorials. These exercises result in the programming of the [Hangman game](https://q37.info/s/gtdtk4hp), as shown below.
+
 [![Hangman](https://q37.info/s/pnmjfw39)](https://q37.info/s/jtdqjsx7)
 
-*NOTA*: You can test this project on [Repl.it](https://q37.info/s/mxmgq3qm). Go [here](https://q37.info/s/srnnb7hj), click on the `+ new repl` button, choose `Python` as language and give the address of this repository in the dedicated field. To launch an exercise, say, the `en/b.py` one, put `from en.b import *` in the `main.py` file, click on the green (`run`) button, and then on the then displayed [QR code](https://q37.info/s/3pktvrj7).
+Simply retrieve the repository (`git clone https://github.com/epeios-q37/hangman-exercises`, or get the corresponding *ZIP* file here: <https://q37.info/s/f7mt4s7n>), go, in a console, to the root directory, then launch `python main.py` (you can change the language of the exercises by modifying `main.py`). You can also specifically launch an exercise with `python (en|fr)/(a|b|…|f|g).py` (for example: `python fr/b.py`). You can (should) also use `python3` instead of `python`.
 
-This project shows a new type of exercises for programming tutorials. It only contains the exercises, not (yet?) a complete tutorial.
+Alternatively, you can also clone this repository on [*Repl.it*](https://q37.info/s/srnnb7hj), so you have nothing to install on your computer. Click on the `+ new repl` button, select *Python* as language, and put the address of this repository in the dedicated field. Click on the green `run` button, and then click on (or scan) the then displayed [QR code](https://q37.info/s/3pktvrj7).
 
 Each exercise consists to program a feature of the [Hangman game](https://q37.info/s/gtdtk4hp). With the last exercise, the game will be fully operational. The finished game can be see at this address: <https://q37.info/s/jtdqjsx7>.
 
@@ -25,8 +27,6 @@ English version:
 ```python
 # coding: utf-8
 
-import sys
-sys.path.append(".")
 from workshop.en.a import *
 
 SHOW_SECRET_WORD = TRUE
@@ -42,8 +42,6 @@ French version (note the `fr` in the `from workshop.fr.a import *` line):
 ```python
 # coding: utf-8
 
-import sys
-sys.path.append(".")
 from workshop.fr.a import *
 
 MONTRER_MOT_SECRET = VRAI
@@ -76,8 +74,6 @@ English:
 ```python
 # coding: utf-8
 
-import sys
-sys.path.append(".")
 from workshop.en.b import *
 
 def pickWord(dictionary,suggestion):
@@ -94,8 +90,6 @@ French:
 ```python
 # coding: utf-8
 
-import sys
-sys.path.append(".")
 from workshop.fr.b import *
 
 def choisirMot(dictionnaire,suggestion):

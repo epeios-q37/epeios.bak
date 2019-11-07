@@ -1,4 +1,5 @@
-# No dependencies ; all needed modules are in the repository ('Atlas.python.zip' and 'Tortoise.python.zip').
-# This file exists to force 'Repl.it' to use
-# - 'Atlas.python.zip' for 'atlastk ',
-# - 'Tortoise.python.zip' for 'tortoise ',
+# No dependencies ; all needed modules are in the repository
+# This file exists to force 'Repl.it' to use:
+# - 'Atlas.zip' for 'atlastk ',
+# - 'EduTK.zip' for 'edutk ',
+# - 'Tortoise.zip' for 'tortoise ',

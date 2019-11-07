@@ -1,10 +1,10 @@
 # Modern exercises for programming tutorials
 
-This project is about modern exercises or examples for programming tutorials. This exercises/examples have a graphical user interface instead of the usual textual interface, which are less and less used, or even known, by those who are mainly using smartphones.
+This project is about modern exercises for programming tutorials. This exercises have a graphical user interface instead of the usual textual interface, which are less and less used, or even known, by those who are mainly using smartphones.
 
-Simply retrieve the repository (`git clone https://github.com/epeios-q37/basics-exercises`, or get the corresponding *ZIP* file here: <https://q37.info/s/js7fm3vj>), go, in a console, to the root directory, then launch `python main.py` (you can change the language of the exercises by modifying `main.py`). You can also specifically launch an exercise with `python (en|fr)/(A|B|C|Z_(1|2(a|b)|3)).py` (for example: `python fr/B.py`). You can use `python3` instead of `python`.
+Simply retrieve the repository (`git clone https://github.com/epeios-q37/basics-exercises`, or get the corresponding *ZIP* file here: <https://q37.info/s/js7fm3vj>), go, in a console, to the root directory, then launch `python main.py` (you can change the language of the exercises by modifying `main.py`). You can also specifically launch an exercise with `python (en|fr)/(A|B|C|Z_(1|2(a|b)|3)).py` (for example: `python fr/B.py`). You can (should) use `python3` instead of `python`.
 
-Alternatively, you can also clone this repository on [*Repl.it*](https://q37.info/s/srnnb7hj), so you have nothing to install on your computer. Click on the `+ new repl` button, select *Python* as language, and put the address of this repository in the dedicated field.
+Alternatively, you can also clone this repository on [*Repl.it*](https://q37.info/s/srnnb7hj), so you have nothing to install on your computer. Click on the `+ new repl` button, select *Python* as language, and put the address of this repository in the dedicated field. Click on the green `run` button, and then click on (or scan) the then displayed [QR code](https://q37.info/s/3pktvrj7).
 
 The files found under the `en` and `fr` root directories are examples of what the students have to figure out.
 
