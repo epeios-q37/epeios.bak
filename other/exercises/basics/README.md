@@ -1,8 +1,8 @@
-# Modern exercises for programming tutorials
+# Some modern programming exercises
 
-This project is about modern exercises for programming tutorials. This exercises have a graphical user interface instead of the usual textual interface, which are less and less used, or even known, by those who are mainly using smartphones.
+This project shows how modern programming exercises should be made. This exercises have a graphical user interface instead of the usual textual interface, which are less and less used, or even known, by most of the people which are mainly using smartphones. For more about the rationale behind this project, see <https://q37.info/s/cbms43s9>.
 
-Simply retrieve the repository (`git clone https://github.com/epeios-q37/basics-exercises`, or get the corresponding *ZIP* file here: <https://q37.info/s/js7fm3vj>), go, in a console, to the root directory, then launch `python main.py` (you can change the language of the exercises by modifying `main.py`). You can also specifically launch an exercise with `python (en|fr)/(A|B|C|Z_(1|2(a|b)|3)).py` (for example: `python fr/B.py`). You can (should) use `python3` instead of `python`.
+Simply retrieve the repository (`git clone https://github.com/epeios-q37/basics-exercises`, or get the corresponding *ZIP* file here: <https://q37.info/s/js7fm3vj>), and, in a console, from to the root directory,  `python main.py` (you can change the language of the exercises by modifying `main.py`). You can also specifically launch an exercise with `python (en|fr)/(A|B|C|Z_(1|2(a|b)|3)).py` (for example: `python fr/B.py`). You can (should) use `python3` instead of `python`.
 
 Alternatively, you can also clone this repository on [*Repl.it*](https://q37.info/s/srnnb7hj), so you have nothing to install on your computer. Click on the `+ new repl` button, select *Python* as language, and put the address of this repository in the dedicated field. Click on the green `run` button, and then click on (or scan) the then displayed [QR code](https://q37.info/s/3pktvrj7).
 
@@ -52,6 +52,6 @@ English | Français
 `setColorRGB` | `fixeCouleurRVB`
 `setColorHSL` | `fixeCouleurTSL`
 
-To see other examples of exercises, go to <https://q37.info/s/cbms43s9>.
+---
 
 This project is based on the [*Atlas* toolkit](https://atlastk.org). Other projects using this toolkit can be found here: <https://q37.info/s/sssznrb4>.

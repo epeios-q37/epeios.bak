@@ -1,3 +1,3 @@
-# Changelog for the base exercise for programming tutorials
+# Changelog for the base programming exercise
 
 

@@ -1,4 +1,8 @@
-# CHANGELOG for the programming workshop
+# CHANGELOG for the basics programming exercises
+
+## 2019-11-08
+
+- adaptation to modifications in the *EduTK* toolkit,
 
 ## 2019-08-03
 

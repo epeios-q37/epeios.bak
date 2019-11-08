@@ -1,16 +1,14 @@
-# Modern exercises for programming tutorials, featuring the [Hangman game](https://q37.info/s/gtdtk4hp).
+# Modern programming exercises, featuring the [Hangman game](https://q37.info/s/gtdtk4hp).
 
-This project shows an example of modern exercises for programming tutorials. These exercises result in the programming of the [Hangman game](https://q37.info/s/gtdtk4hp), as shown below.
+This project shows an example of modern programming exercises, featuring the [Hangman game](https://q37.info/s/gtdtk4hp), as shown below. See <https://q37.info/s/cbms43s9> for the rationale behind this project.
 
 [![Hangman](https://q37.info/s/pnmjfw39)](https://q37.info/s/jtdqjsx7)
 
-Simply retrieve the repository (`git clone https://github.com/epeios-q37/hangman-exercises`, or get the corresponding *ZIP* file here: <https://q37.info/s/f7mt4s7n>), go, in a console, to the root directory, then launch `python main.py` (you can change the language of the exercises by modifying `main.py`). You can also specifically launch an exercise with `python (en|fr)/(a|b|…|f|g).py` (for example: `python fr/b.py`). You can (should) also use `python3` instead of `python`.
+Simply retrieve the repository (`git clone https://github.com/epeios-q37/hangman-exercises`, or get the corresponding *ZIP* file here: <https://q37.info/s/f7mt4s7n>), and, in a console, in the root directory, launch `python main.py` (you can change the language of the exercises by modifying `main.py`). You can also specifically launch an exercise with `python (en|fr)/(a|b|…|f|g).py` (for example: `python fr/b.py`). You can (should) also use `python3` instead of `python`.
 
 Alternatively, you can also clone this repository on [*Repl.it*](https://q37.info/s/srnnb7hj), so you have nothing to install on your computer. Click on the `+ new repl` button, select *Python* as language, and put the address of this repository in the dedicated field. Click on the green `run` button, and then click on (or scan) the then displayed [QR code](https://q37.info/s/3pktvrj7).
 
 Each exercise consists to program a feature of the [Hangman game](https://q37.info/s/gtdtk4hp). With the last exercise, the game will be fully operational. The finished game can be see at this address: <https://q37.info/s/jtdqjsx7>.
-
-Nowadays, almost all young people have a smartphone, so they are used to graphical interfaces. They rarely, if ever, had to deal with a text console. For them, writing programs with a textual interface may be (falsely) considered outdated and, therefore, not very interesting. This is why all the exercises provided by this project have a web interface, unlike the exercises usually provided with programming tutorials, which almost always have only a text-based interface. 
 
 When one of the exercises of this project is launched, a web browser will automatically be opened to give access to its interface, which you can see in the above picture. To make testing easier, there will also be a text box that displays the word to guess, and in which you can also enter the word to guess. Of course, this text box will not be available in the final version of the game.
 
@@ -106,6 +104,6 @@ And so on for the *c*, *d*, *e*… exercises.
 
 Once an exercise is completed, the teachers will probably have to introduce the concepts that will be relevant for the next exercise. For this purpose, another set of exercises is being developed and can be found here: <https://q37.info/s/tpkx4cfk>.
 
-To see other examples of exercises, go to <https://q37.info/s/cbms43s9>.
+---
 
 This project is based on the [*Atlas* toolkit](https://atlastk.org). Other projects using this toolkit can be found here: <https://q37.info/s/sssznrb4>.
