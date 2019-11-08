@@ -1,6 +1,6 @@
 # Tortoise: [turtle graphics](https://q37.info/s/3dwhcdfm) on the web
 
-[![Version 0.1.1](https://img.shields.io/static/v1.svg?&color=90b4ed&label=Version&message=0.1.1)](https://q37.info/s/q4ghchsr) [![Download stats](https://img.shields.io/pypi/dm/tortoise.svg)](https://pypistats.org/packages/tortoise) [![License](https://img.shields.io/pypi/l/atlastk.svg?style=plastic)](https://github.com/epeios-q37/tortoise-python/blob/master/LICENSE)
+[![Version 0.1.1](https://img.shields.io/static/v1.svg?&color=90b4ed&label=PyPi&message=0.1.1)](https://q37.info/s/k3c3fmvp) [![Download stats](https://img.shields.io/pypi/dm/tortoise.svg)](https://pypistats.org/packages/tortoise) [![License](https://img.shields.io/pypi/l/atlastk.svg?style=plastic)](https://github.com/epeios-q37/tortoise-python/blob/master/LICENSE)
 
 [![tortoise library example](https://q37.info/s/frgzbhq9)](http://q37.info/s/dj9b7ksf)
 

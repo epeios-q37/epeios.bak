@@ -129,6 +129,8 @@ def readAsset(path):
 
 ### Packaging
 
+**Attention** : vérifier que la version de *twine* (`pip3 show twine`) est >= 31.0, sinon mettre à jour (`pip3 install --upgrade wheel`), faute de quoi la description en *markdown* n'est pas affichée correctement (mettre à jour *twine* et/ou *setuptools* peut aussi être nécessaire.
+
 Dans `RTW/atlas-python` :
 
 `python3 setup.py sdist bdist_wheel`
@@ -148,7 +150,7 @@ Dans `RTW/atlas-python` :
 
 ### Test distant avec l'instance de test
 
-#### Publication sur site de test
+#### Publication sur <u>site de test</u>
 
 Dans `RTW/atlas-python` :
 
@@ -160,7 +162,7 @@ Dans `RTW/atlas-python` :
 - `python -m pipenv shell`
 - `python -m pip install --index-url https://test.pypi.org/simple/ --no-deps atlastk`
 
-### Publication en production
+### Publication <u>en production</u>
 
 Dans `RTW/atlas-python` :
 

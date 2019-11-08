@@ -166,31 +166,31 @@ def _getHead(path, title, i18n=None):
 
 # Should be the almost identical as in 'Atlas.py'
 def _call(func, userObject, dom, id, action):
-	amount = len(inspect.getargspec(func).args)
-	args = []
+  amount = len(inspect.getargspec(func).args)
+  args = []
 
-	if (not(userObject)):
-		amount += 1
+  if (not(userObject)):
+    amount += 1
 
-	if (amount == 4):
-		args.insert(0, action)
+  if (amount == 4):
+    args.insert(0, action)
 
-	if(amount >= 3):
-		args.insert(0, id)
+  if(amount >= 3):
+    args.insert(0, id)
 
-	if(amount >= 2):
-		args.insert(0, dom)
+  if(amount >= 2):
+    args.insert(0, dom)
 
-	if(userObject and (amount >= 1)):
-		args.insert(0, userObject)
+  if(userObject and (amount >= 1)):
+    args.insert(0, userObject)
 
-	try:
-		return func(*args)
-	except Exception as e:
-		if _regularExceptions:
-			raise e
-		else:
-			dom.alert("PYTHON EXCEPTION:\n\n" + traceback.format_exc())
+  try:
+    return func(*args)
+  except Exception as e:
+    if _regularExceptions:
+      raise e
+    else:
+      dom.alert("PYTHON EXCEPTION:\n\n" + traceback.format_exc())
 
 def _patchWithCoreObject(userCallbacks):
   callbacks = {}
