@@ -22,18 +22,16 @@ Code à mettre dans le source pour <http://repl.it>.
 # coding: utf-8
 """
 To launch the application:
-- click on the green button (you may have to wait
-  a little until the button is displayed),
-- open the URL displayed in the black console
-  (above the '^^^^…' line) in a web browser.
+- click on the green button,
+- open, in a web browser, the URL displayed
+  in the black console (above the '^^…^^' line).
 
 You can also:
+- click the 'fork' button, left to the green button,
 - uncomment below '#REPLit = True' line (remove
   the leading '#' character),
 - click on the green button,
-- click on the then displayed QR code (if it
-  does not appear, check if above line is still
-  uncommented).
+- click on the then displayed QR code.
 
 For more details: http://q37.info/s/zbgfjtp9
 
