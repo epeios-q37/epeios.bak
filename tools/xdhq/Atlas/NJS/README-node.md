@@ -1,6 +1,6 @@
 # *Node.js* version of the *Atlas* toolkit
 
-![For Node.js](http://q37.info/download/assets/Node.png "Node.js logo")
+![For Node.js](http://q37.info/download/assets/Node.png)
 
 [![Version 0.10.0](https://img.shields.io/static/v1.svg?&color=90b4ed&label=Version&message=0.10.0)](http://q37.info/s/gei0veus)
 
@@ -24,15 +24,14 @@ Before we dive into source code, let's begin with a live demonstration of the [*
 
 Here's how a [*Hello, World!*](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program) type program made with the *Atlas* toolkit looks like:
 
-![Little demonstration](http://q37.info/download/assets/Hello.gif "A basic example")
+![Little demonstration](http://q37.info/download/assets/Hello.gif "A basic exemple")
 
 - `git clone http://github.com/epeios-q37/atlas-node`
 - `cd atlas-node`
 - `npm install`
-- `node Hello/Hello.js`
+- `node Hello/main.js`
 
 You can also put below source code in a file and launch it after having installed the [*atlastk* package](http://q37.info/s/h3zjb39j) (`npm install atlastk`), or, with absolutely no installation, paste the below code [here](http://q37.info/s/nkcgqn7z), and open the displayed *URL* in a web browser.
-
 
 For a live demonstration: <http://q37.info/s/xzfks7fk>.
 
@@ -88,7 +87,7 @@ To launch an example:
 - launch `npm install` (this have only to be do once),
 - launch `node <Name>/main.js`,
 
-where `<Name>` is the name of the example (`15-puzzle`, `Blank`, `Chatroom`…).
+where `<Name>` is the name of the example (`15-puzzle`, `Blank`, `Chatroom`…). For example `node Hello/main.js`.
 
 The *Atlas* toolkit is also available for:
 

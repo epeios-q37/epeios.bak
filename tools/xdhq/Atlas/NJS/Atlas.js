@@ -32,15 +32,15 @@ var xdhelcqPath = "";
 var xdhelcqBin = "";
 var electronBin = "";
 
-if (process.env.EPEIOS_SRC) {
+if (process.env.Q37_EPEIOS) {
 	let epeiosToolsPath = "";
 	let binPath = "";
 	if (process.platform == 'win32') {
 		epeiosToolsPath = "h:/hg/epeios/tools/";
 		binPath = "h:/bin/";
 	} else {
-		epeiosToolsPath = "~/hg/epeios/tools/";
-		binPath = ~/bin/
+		epeiosToolsPath = path.join(process.env.Q37_EPEIOS,"tools/");
+		binPath = "/home/csimon/bin/"
 	}
 
 	xdhqId = epeiosToolsPath + "xdhq/wrappers/NJS/XDHq.js";
@@ -88,7 +88,7 @@ module.exports.guis = guis;
 var mode;
 var defaultGUI;
 
-if (xdhq.isDev()) {
+if (false && xdhq.isDev()) {    // Deactivated until native version active again.
 	mode = modes.PROD;
 	defaultGUI = guis.DESKTOP;
 } else {

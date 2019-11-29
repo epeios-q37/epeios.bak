@@ -33,18 +33,18 @@ const platform = shared.platform;
 const open = shared.open;
 
 function isDev() {
-	if (process.env.EPEIOS_SRC)
+	if (process.env.Q37_EPEIOS)
 		return true;
 	else
 		return false;
 }
 
 function getEpeiosPath() {
-	if (isDev) {
-		if (platform == platforms.WIN32) {
+	if (isDev()) {
+		if (platform === platforms.WIN32) {
             return "h:/hg/epeios/";
 		} else {
-            return "~/hg/epeios/";
+            return fs.realpathSync(process.env.Q37_EPEIOS);
 		}
 	} else
 		throw "Error !";
@@ -57,8 +57,9 @@ function getAssetDir() {
 	if (isDev()) {
 		let epeiosPath = getEpeiosPath();
 		return path.resolve(epeiosPath, "tools/xdhq/examples/common/", path.relative(path.resolve(epeiosPath, "tools/xdhq/examples/NJS/"), path.resolve(dir)));	// No final '/'.
-	} else
+	} else {
 		return path.resolve(dir);
+    }
 }
 
 function getAssetFileName(fileName) {
