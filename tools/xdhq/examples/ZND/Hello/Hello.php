@@ -21,7 +21,7 @@
 // This is the one-file version, which does not need the 'Head.html' and the 'Main.html' files.
 
 function getAtlas() {
- if (getenv("EPEIOS_SRC") === false) {
+ if (getenv("Q37_EPEIOS") === false) {
   $atlasPath = "phar://Atlas.phar/";
  } else {
   switch (strtoupper(substr(php_uname('s'), 0, 3))) {

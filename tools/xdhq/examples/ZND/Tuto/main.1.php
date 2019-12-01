@@ -19,7 +19,7 @@ along with XDHq If not, see <http://www.gnu.org/licenses/>.
  */
 
 function getAtlas() {
- if (getenv("EPEIOS_SRC") === false) {
+ if (getenv("Q37_EPEIOS") === false) {
   $zndq_path = realpath(dirname(__FILE__)) . '/';
  } else {
   switch (strtoupper(substr(php_uname('s'), 0, 3))) {

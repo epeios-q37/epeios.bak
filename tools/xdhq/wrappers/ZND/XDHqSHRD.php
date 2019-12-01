@@ -25,7 +25,7 @@ class XDHq_SHRD {
 	const RT_STRINGS = 2;
 
 	static function isDev() {
-		return getenv( "EPEIOS_SRC") !== false;
+		return getenv( "Q37_EPEIOS") !== false;
 	}
 
 	static function isWin() {
