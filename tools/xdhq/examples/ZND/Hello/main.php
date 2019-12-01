@@ -20,11 +20,9 @@
 
 function getAtlas() {
  if (getenv("Q37_EPEIOS") === false) {
-     echo("coucou");
-  $atlasPath = "phar://Atlas.phar/";
+    $atlasPath = "phar://Atlas.phar/";
  } else {
-    echo("kiki");
-    switch (strtoupper(substr(php_uname('s'), 0, 3))) {
+  switch (strtoupper(substr(php_uname('s'), 0, 3))) {
   case "WIN":
    $epeiosPath = "h:\\hg\\epeios\\";
    break;
@@ -41,8 +39,6 @@ function getAtlas() {
 
   $atlasPath = $epeiosPath . "tools/xdhq/Atlas/ZND/";
  }
-
- echo("\n" .$atlasPath. "\n");
 
  require $atlasPath . "Atlas.php";
 }
