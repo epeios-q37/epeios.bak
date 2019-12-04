@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef CSDLES_INC_
-# define CSDLES_INC_
+#ifndef CSDLES__INC
+# define CSDLES__INC
 
 # define CSDLES_NAME		"CSDLES"
 

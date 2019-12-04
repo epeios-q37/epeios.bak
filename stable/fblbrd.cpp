@@ -77,7 +77,7 @@ typedef int va_t__;
 typedef cast__ va_t__;
 #endif
 
-
+# if 0
 void fblbrd::description_::Init(
 	const char *Name,
 	cast__ Cast,
@@ -121,6 +121,7 @@ void fblbrd::description_::Init(
 #endif
 
 }
+#endif
 
 
 sdr::row__ fblbrd::descriptions_::Position( const description_ &Description ) const

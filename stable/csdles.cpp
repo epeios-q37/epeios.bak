@@ -45,8 +45,10 @@ DEF( CSDLEO_RETRIEVE_CALLBACK_FUNCTION_NAME, csdleo::retrieve_callback );
 # pragma clang diagnostic pop
 #endif
 
+#if 0
 static inline void DoNothing_( void )
 {}
+#endif
 
 csdleo::callback__ &CSDLEO_RETRIEVE_CALLBACK_FUNCTION_NAME( void )
 {

@@ -267,12 +267,25 @@ namespace fblbkd {
 			const void *Function )
 		{
 			sdr::row__ Row = Descriptions.Add( Name, Casts );
-			
+
 			if ( Functions.Append( Function ) != Row )
 				qRFwk();
-				
+
 			return Row;
-		}			
+		}
+        template <typename... t> sdr::row__ Add(
+			const char *Name,
+			const void *Function,
+            const t&... T )
+        {
+			sdr::row__ Row = Descriptions.Add( Name, T... );
+
+			if ( Functions.Append( Function ) != Row )
+				qRFwk();
+
+			return Row;
+        }
+#if 0
 		sdr::row__ Add(
 			const char *Name,
 			const void *Function,
@@ -280,12 +293,12 @@ namespace fblbkd {
 			va_list VL )
 		{
 			sdr::row__ Row = Descriptions.Add( Name, Cast, VL );
-			
+
 			if ( Functions.Append( Function ) != Row )
 				qRFwk();
-				
+
 			return Row;
-		}			
+		}
 		sdr::row__ Add(
 			const char *Name,
 			const void *Function,
@@ -303,6 +316,7 @@ namespace fblbkd {
 
 			return Row;
 		}
+#endif
 		friend class backend___;
 		friend class master_module;
 	};
@@ -423,12 +437,26 @@ namespace fblbkd {
 			const void *Function )
 		{
 			sdr::row__ Row = Descriptions.Add( Name, Casts );
-			
+
 			if ( Functions.Append( Function ) != Row )
 				qRFwk();
-				
+
 			return Row;
-		}			
+		}
+        template <typename... t> sdr::row__ Add(
+			const char *Name,
+			const void *Function,
+			cast__ Cast,
+            const t&... T )
+        {
+			sdr::row__ Row = Descriptions.Add( Name, Cast, T... );
+
+			if ( Functions.Append( Function ) != Row )
+				qRFwk();
+
+			return Row;
+        }
+#if 0
 		sdr::row__ Add(
 			const char *Name,
 			const void *Function,
@@ -436,12 +464,12 @@ namespace fblbkd {
 			va_list VL )
 		{
 			sdr::row__ Row = Descriptions.Add( Name, Cast, VL );
-			
+
 			if ( Functions.Append( Function ) != Row )
 				qRFwk();
-				
+
 			return Row;
-		}			
+		}
 		sdr::row__ Add(
 			const char *Name,
 			const void *UP,
@@ -459,6 +487,7 @@ namespace fblbkd {
 
 			return Row;
 		}
+#endif
 		friend class backend___;
 		friend class master_module;
 	};
@@ -504,7 +533,7 @@ namespace fblbkd {
 			log_functions__ &LogFunctions ) override
 		{
 			Traiter_( *(t *)rModule_::Object( Index ), Requete, &LogFunctions );
-		} 
+		}
 	public:
 		//f Initialization.
 		void Init( backend___ &Backend )
@@ -567,7 +596,7 @@ namespace fblbkd {
 			rModule_<t>::Init( Backend );
 		}
 	};
-	
+
 	//c A module with object stored in standard memory.
 	template <class t, class st> class standard_module
 	: public rModule_<t>,
@@ -712,7 +741,7 @@ namespace fblbkd {
 		{
 			link__ Lien;
 			object__ P;
-			
+
 			P = _listx::New();
 
 			if ( *P > FBLBKD_TYPE_MAX )
@@ -768,14 +797,14 @@ namespace fblbkd {
 			if ( IdType != FBLBKD_MASTER_TYPE )
 				return *Modules( *IdType );
 			else
-				return Master_;	// Not very happy about this conversion, 
+				return Master_;	// Not very happy about this conversion,
 		}
 		const rModule &Module_( type__ IdType ) const
 		{
 			if ( IdType != FBLBKD_MASTER_TYPE )
 				return *Modules( *IdType );
 			else
-				return Master_;	// Not very happy about this conversion, 
+				return Master_;	// Not very happy about this conversion,
 		}
 		// Retourne le module correspondant à 'IdObjet'.
 		rModule &Module_( object__ IdObjet )
@@ -841,7 +870,7 @@ namespace fblbkd {
 			str::string( BackendLabel ).Convert( _BackendLabel );
 
 			Buffer.Init( BackendInformations );
-			Buffer.Append( " Build " __DATE__ " " __TIME__ " - " ); 
+			Buffer.Append( " Build " __DATE__ " " __TIME__ " - " );
 			Buffer.Append( cpe::GetDescription() );
 			Buffer.Convert( _ExtendedBackendInformations );
 
@@ -945,6 +974,15 @@ namespace fblbkd {
 		{
 			return Master_.Add( Name, Casts, (void *)FP );
 		}
+        template <typename... t> sdr::row__ Add(
+			const char *Name,
+			function__ FP,
+			cast__ Cast,
+            const t&... T )
+        {
+			return Master_.Add( Name, (void *)FP, Cast, T... );
+        }
+#if 0
 		sdr::row__ Add(
 			const char *Name,
 			function__ FP,
@@ -970,23 +1008,24 @@ namespace fblbkd {
 
 			return Row;
 		}
+#endif
 		const char *GetBackendLabel( void ) const
 		{
 			return _BackendLabel;
 		}
-		const char *GetExtendedBackendInformations( void ) const 
+		const char *GetExtendedBackendInformations( void ) const
 		{
 			return _ExtendedBackendInformations;
 		}
-		const char *GetBackendCopyright( void ) const 
+		const char *GetBackendCopyright( void ) const
 		{
 			return _BackendCopyright;
 		}
-		const char *GetSoftwareInformations( void ) const 
+		const char *GetSoftwareInformations( void ) const
 		{
 			return _SoftwareInformations;
 		}
-		const char *GetAPIVersion( void ) const 
+		const char *GetAPIVersion( void ) const
 		{
 			return _APIVersion;
 		}
@@ -1009,7 +1048,7 @@ namespace fblbkd {
 		{
 			return _ClientOrigin;
 		}
-		const lcl::locale_ &Locale() const 
+		const lcl::locale_ &Locale() const
 		{
 			return *_Locale;
 		}
@@ -1025,13 +1064,13 @@ namespace fblbkd {
 }
 
 //d A ram module of an object of type 't'.
-# define FBLBKD_RAM_MODULE( t )	fblbkd::ram_module<t, t::s>	
+# define FBLBKD_RAM_MODULE( t )	fblbkd::ram_module<t, t::s>
 
 //d A standard module of an object of type 't'.
-# define FBLBKD_STANDARD_MODULE( t )	fblbkd::standard_module<t, t::s>	
+# define FBLBKD_STANDARD_MODULE( t )	fblbkd::standard_module<t, t::s>
 
 //d A shared module of an object od type 't'.
-# define FBLBKD_SHARED_MODULE( t )	fblbkd::shared_module<t, t::s>	
+# define FBLBKD_SHARED_MODULE( t )	fblbkd::shared_module<t, t::s>
 
 /***************/
 /***** NEW *****/

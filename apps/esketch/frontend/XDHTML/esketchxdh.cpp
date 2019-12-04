@@ -67,7 +67,7 @@ xdhcmn::cSession *sclxdhtml::SCLXDHTMLRetrieveCallback(
 	if ( Session == NULL )
 		qRGnr();
 
-	Session->Init( core::Kernel(), Language, UpstreamCallback, core::Core, esketchxdh::Info );
+	Session->Init( core::Kernel(), core::Core, esketchxdh::Info );
 
 	return Session;
 }

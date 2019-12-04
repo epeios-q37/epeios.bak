@@ -57,7 +57,7 @@ namespace scldaemon {
 		}
 	};
 
-	typedef csdscb::cProcessing cProcessing_; 
+	typedef csdscb::cProcessing cProcessing_;
 
 	class rCallback
 	: public cProcessing_
@@ -70,7 +70,9 @@ namespace scldaemon {
 		{
 			return SCLDAEMONPluginOverride( Id, Arguments, Timeout );
 		}
-		virtual void *CSDSCBPreProcess( const ntvstr::char__ *Origin ) override
+		virtual void *CSDSCBPreProcess(
+			fdr::rRWDriver *IODriver,
+            const ntvstr::char__ *Origin ) override
 		{
 			return SCLDAEMONNew( Origin );
 		}

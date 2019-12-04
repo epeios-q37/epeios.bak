@@ -8,6 +8,17 @@
 - [stdz]: modification to comply with current standards;
 - [trvl]: trivial modifications;
 
+## 2019-12-04:
+
+- CSDLES:
+    - [trvl],
+
+- FBLBRQ:
+    - Use of template variadics instead of *va_args* to avoid a *CLang* waning,
+
+- FBLBKD, FBLBRD, SCLBACKND, SCLDAEMON, SCLXDHTML, XDHCMN:
+	- [adpt],
+
 ## 2019-10-31
 
 - FBLTYP, SCLXDHTML, XDHUJP:

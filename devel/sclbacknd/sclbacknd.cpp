@@ -139,7 +139,7 @@ qRE
 }
 
 
-scldaemon::rCallback *scldaemon::SCLDAEMONGetCallback( 
+scldaemon::rCallback *scldaemon::SCLDAEMONGetCallback(
 	csdleo::context__ Context,
 	csdleo::mode__ CSDMode )
 {
@@ -178,7 +178,7 @@ namespace {
 		qRH
 			str::string Translation;
 			TOL_CBUFFER___ Buffer;
-			flw::sDressedWFlow<> Flow;
+			flw::rDressedWFlow<> Flow;
 		qRB
 			Flow.Init( ODriver );
 
@@ -201,11 +201,11 @@ namespace {
 	{
 	qRH
 		err::buffer__ ErrorBuffer;
-		const char *ErrMsg = NULL;
+//		const char *ErrMsg = NULL;
 		lcl::meaning Meaning;
 		str::wString Translation;
 		qCBUFFERr Buffer;
-		flw::sDressedWFlow<> Flow;
+		flw::rDressedWFlow<> Flow;
 	qRB
 		Flow.Init( ODriver );
 

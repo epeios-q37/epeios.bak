@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef FBLBKD_INC_
-# define FBLBKD_INC_
+#ifndef FBLBKD__INC
+# define FBLBKD__INC
 
 # define FBLBKD_NAME		"FBLBKD"
 
@@ -191,7 +191,7 @@ namespace fblbkd {
 		const char *Prefix_;
 		// Libelle du type de l'objet, du module.
 		const char *Name_;
-		// L'interface auquel le module est rattachï¿½.
+		// L'interface auquel le module est rattaché.
 		class backend___ *Backend_;
 	public:
 		//r The description of the request.
@@ -267,12 +267,25 @@ namespace fblbkd {
 			const void *Function )
 		{
 			sdr::row__ Row = Descriptions.Add( Name, Casts );
-			
+
 			if ( Functions.Append( Function ) != Row )
 				qRFwk();
-				
+
 			return Row;
-		}			
+		}
+        template <typename... t> sdr::row__ Add(
+			const char *Name,
+			const void *Function,
+            const t&... T )
+        {
+			sdr::row__ Row = Descriptions.Add( Name, T... );
+
+			if ( Functions.Append( Function ) != Row )
+				qRFwk();
+
+			return Row;
+        }
+#if 0
 		sdr::row__ Add(
 			const char *Name,
 			const void *Function,
@@ -280,12 +293,12 @@ namespace fblbkd {
 			va_list VL )
 		{
 			sdr::row__ Row = Descriptions.Add( Name, Cast, VL );
-			
+
 			if ( Functions.Append( Function ) != Row )
 				qRFwk();
-				
+
 			return Row;
-		}			
+		}
 		sdr::row__ Add(
 			const char *Name,
 			const void *Function,
@@ -303,6 +316,7 @@ namespace fblbkd {
 
 			return Row;
 		}
+#endif
 		friend class backend___;
 		friend class master_module;
 	};
@@ -318,7 +332,7 @@ namespace fblbkd {
 		virtual sIndex FBLBKDNew( void )
 		{
 			qRFwk();
-			return 0;	// Pour ï¿½viter un warning.
+			return 0;	// Pour éviter un warning.
 		}
 		//v To delete the object with index 'Index'.
 		virtual void FBLBKDDelete( sIndex Index )
@@ -329,13 +343,13 @@ namespace fblbkd {
 		virtual void *FBLBKDObject( sIndex Index ) const
 		{
 			qRFwk();
-			return NULL;	// Pour ï¿½viter un 'warning'
+			return NULL;	// Pour éviter un 'warning'
 		}
 #if 0
 		//v To get the raw messages.
 		virtual void FBLBKDGetRawMessages( messages_ &Messages ) = 0;
 #endif
-		// Fonction appelï¿½e pour traiter la requï¿½te 'Requete' pour l'objet d'index 'Index'.
+		// Fonction appelée pour traiter la requête 'Requete' pour l'objet d'index 'Index'.
 		virtual void Handle_(
 			sIndex Index,
 			rRequest &Requete,
@@ -423,12 +437,26 @@ namespace fblbkd {
 			const void *Function )
 		{
 			sdr::row__ Row = Descriptions.Add( Name, Casts );
-			
+
 			if ( Functions.Append( Function ) != Row )
 				qRFwk();
-				
+
 			return Row;
-		}			
+		}
+        template <typename... t> sdr::row__ Add(
+			const char *Name,
+			const void *Function,
+			cast__ Cast,
+            const t&... T )
+        {
+			sdr::row__ Row = Descriptions.Add( Name, Cast, T... );
+
+			if ( Functions.Append( Function ) != Row )
+				qRFwk();
+
+			return Row;
+        }
+#if 0
 		sdr::row__ Add(
 			const char *Name,
 			const void *Function,
@@ -436,12 +464,12 @@ namespace fblbkd {
 			va_list VL )
 		{
 			sdr::row__ Row = Descriptions.Add( Name, Cast, VL );
-			
+
 			if ( Functions.Append( Function ) != Row )
 				qRFwk();
-				
+
 			return Row;
-		}			
+		}
 		sdr::row__ Add(
 			const char *Name,
 			const void *UP,
@@ -459,6 +487,7 @@ namespace fblbkd {
 
 			return Row;
 		}
+#endif
 		friend class backend___;
 		friend class master_module;
 	};
@@ -504,7 +533,7 @@ namespace fblbkd {
 			log_functions__ &LogFunctions ) override
 		{
 			Traiter_( *(t *)rModule_::Object( Index ), Requete, &LogFunctions );
-		} 
+		}
 	public:
 		//f Initialization.
 		void Init( backend___ &Backend )
@@ -567,7 +596,7 @@ namespace fblbkd {
 			rModule_<t>::Init( Backend );
 		}
 	};
-	
+
 	//c A module with object stored in standard memory.
 	template <class t, class st> class standard_module
 	: public rModule_<t>,
@@ -662,7 +691,7 @@ namespace fblbkd {
 		}
 	};
 
-	// Module maï¿½tre, qui fait tout le boulot.
+	// Module maître, qui fait tout le boulot.
 	class rMasterModule
 	: public rModule
 	{
@@ -712,7 +741,7 @@ namespace fblbkd {
 		{
 			link__ Lien;
 			object__ P;
-			
+
 			P = _listx::New();
 
 			if ( *P > FBLBKD_TYPE_MAX )
@@ -755,29 +784,29 @@ namespace fblbkd {
 		TOL_CBUFFER___ _Language;
 		const lcl::locale_ *_Locale;
 		TOL_CBUFFER___ _BackendLabel;
-		// Informations ï¿½ propos du 'backend'.
+		// Informations à propos du 'backend'.
 		TOL_CBUFFER___ _ExtendedBackendInformations;
 		TOL_CBUFFER___ _BackendCopyright;
 		TOL_CBUFFER___ _SoftwareInformations;
 		str::wString
 			Key_,	// Key used for encrypting the codes.
 			Code_;	// Code to allow a blocking ping or a crash.
-		// Retourne le module correspondant ï¿½ 'IdType'.
+		// Retourne le module correspondant à 'IdType'.
 		rModule &Module_( type__ IdType )
 		{
 			if ( IdType != FBLBKD_MASTER_TYPE )
 				return *Modules( *IdType );
 			else
-				return Master_;	// Not very happy about this conversion, 
+				return Master_;	// Not very happy about this conversion,
 		}
 		const rModule &Module_( type__ IdType ) const
 		{
 			if ( IdType != FBLBKD_MASTER_TYPE )
 				return *Modules( *IdType );
 			else
-				return Master_;	// Not very happy about this conversion, 
+				return Master_;	// Not very happy about this conversion,
 		}
-		// Retourne le module correspondant ï¿½ 'IdObjet'.
+		// Retourne le module correspondant à 'IdObjet'.
 		rModule &Module_( object__ IdObjet )
 		{
 			return Module_( Type_( IdObjet ) );
@@ -786,12 +815,12 @@ namespace fblbkd {
 		{
 			return Module_( Type_( IdObjet ) );
 		}
-		// Retourne le type correpondant ï¿½ l'objet d'indetificateur 'IdObjet'.
+		// Retourne le type correpondant à l'objet d'indetificateur 'IdObjet'.
 		type__ Type_( object__ IdObjet ) const
 		{
 			return Links.Type( IdObjet );
 		}
-		// Retourne l'indexcorrespondant ï¿½ l'objet d'identificateur 'IdObjet'.
+		// Retourne l'indexcorrespondant à l'objet d'identificateur 'IdObjet'.
 		sIndex Index_( object__ IdObjet ) const
 		{
 			return Links.Index( IdObjet );
@@ -815,7 +844,7 @@ namespace fblbkd {
 			Code_.reset( P );
 		}
 		E_CVDTOR( backend___ );
-		// '[Backend|Publisher]Informations' ne sont PAS dupliquï¿½. Leur contenu de doit pas ï¿½tre modifiï¿½.
+		// '[Backend|Publisher]Informations' ne sont PAS dupliqué. Leur contenu de doit pas être modifié.
 		void Init(
 			fblovl::eMode Mode,
 			const char *APIVersion,
@@ -841,7 +870,7 @@ namespace fblbkd {
 			str::string( BackendLabel ).Convert( _BackendLabel );
 
 			Buffer.Init( BackendInformations );
-			Buffer.Append( " Build " __DATE__ " " __TIME__ " - " ); 
+			Buffer.Append( " Build " __DATE__ " " __TIME__ " - " );
 			Buffer.Append( cpe::GetDescription() );
 			Buffer.Convert( _ExtendedBackendInformations );
 
@@ -945,6 +974,15 @@ namespace fblbkd {
 		{
 			return Master_.Add( Name, Casts, (void *)FP );
 		}
+        template <typename... t> sdr::row__ Add(
+			const char *Name,
+			function__ FP,
+			cast__ Cast,
+            const t&... T )
+        {
+			return Master_.Add( Name, (void *)FP, Cast, T... );
+        }
+#if 0
 		sdr::row__ Add(
 			const char *Name,
 			function__ FP,
@@ -970,23 +1008,24 @@ namespace fblbkd {
 
 			return Row;
 		}
+#endif
 		const char *GetBackendLabel( void ) const
 		{
 			return _BackendLabel;
 		}
-		const char *GetExtendedBackendInformations( void ) const 
+		const char *GetExtendedBackendInformations( void ) const
 		{
 			return _ExtendedBackendInformations;
 		}
-		const char *GetBackendCopyright( void ) const 
+		const char *GetBackendCopyright( void ) const
 		{
 			return _BackendCopyright;
 		}
-		const char *GetSoftwareInformations( void ) const 
+		const char *GetSoftwareInformations( void ) const
 		{
 			return _SoftwareInformations;
 		}
-		const char *GetAPIVersion( void ) const 
+		const char *GetAPIVersion( void ) const
 		{
 			return _APIVersion;
 		}
@@ -1009,7 +1048,7 @@ namespace fblbkd {
 		{
 			return _ClientOrigin;
 		}
-		const lcl::locale_ &Locale() const 
+		const lcl::locale_ &Locale() const
 		{
 			return *_Locale;
 		}
@@ -1025,13 +1064,13 @@ namespace fblbkd {
 }
 
 //d A ram module of an object of type 't'.
-# define FBLBKD_RAM_MODULE( t )	fblbkd::ram_module<t, t::s>	
+# define FBLBKD_RAM_MODULE( t )	fblbkd::ram_module<t, t::s>
 
 //d A standard module of an object of type 't'.
-# define FBLBKD_STANDARD_MODULE( t )	fblbkd::standard_module<t, t::s>	
+# define FBLBKD_STANDARD_MODULE( t )	fblbkd::standard_module<t, t::s>
 
 //d A shared module of an object od type 't'.
-# define FBLBKD_SHARED_MODULE( t )	fblbkd::shared_module<t, t::s>	
+# define FBLBKD_SHARED_MODULE( t )	fblbkd::shared_module<t, t::s>
 
 /***************/
 /***** NEW *****/

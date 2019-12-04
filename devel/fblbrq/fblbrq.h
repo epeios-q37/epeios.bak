@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-// Frontend/Backend Layout Backend ReQuest 
+// Frontend/Backend Layout Backend ReQuest
 
 #ifndef FBLBRQ_INC_
 # define FBLBRQ_INC_
@@ -211,7 +211,7 @@ namespace fblbrq {
 		// At true if the request parsed.
 		bso::bool__ Parsed_;
 		// The input/output channel for the request.
-		flw::sDressedRWFlow<> Channel_;
+		flw::rDressedRWFlow<> Channel_;
 		bso::bool__ _DismissPending;	// Pour grer la prsence d'un flux dans les paramtres entrants.
 		bso::sBool Disconnect_;	// If at 'true', the client asked for disconnection.
 		const void *_Get(
@@ -254,7 +254,7 @@ namespace fblbrq {
 		{
 			if ( !Parsed_ ) {
 				Test_( cEnd );
-				
+
 				Parsed_ = true;
 
 				Channel_.Dismiss();
@@ -371,13 +371,13 @@ namespace fblbrq {
 
 			if ( !_DismissPending )
 				Channel_.Dismiss();
-				
+
 			if ( Casts_.Amount() != 0 ) /* If == 0, it means that the request was handled
 								   by handling DIRECTLY the underlying flows. */
 			{
 				if ( !Parsed_ )
 					Test_( cEnd );
-					
+
 				Channel_.Put( 0 );	// Empty explanation message.
 
 				_Push( true, Casts_, Channel_ );

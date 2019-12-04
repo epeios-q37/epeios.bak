@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef SCLBACKND_INC_
-# define SCLBACKND_INC_
+#ifndef SCLBACKND__INC
+# define SCLBACKND__INC
 
 # define SCLBACKND_NAME		"SCLBACKND"
 
@@ -48,7 +48,7 @@
 /*************************/
 
 namespace sclbacknd {
-	// Prï¿½dï¿½claration.
+	// Prédéclaration.
 	class fCallback;
 
 	typedef fblbkd::backend___	rBackend_;

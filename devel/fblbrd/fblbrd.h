@@ -27,13 +27,13 @@
 #  define FBLBRD_DBG
 # endif
 
-//D Frontend/Backend Layout Backend Request Description 
+//D Frontend/Backend Layout Backend Request Description
 
 # include <stdarg.h>
 
 #include "err.h"
 #include "flw.h"
-#include "ctn.h" 
+#include "ctn.h"
 
 #include "fblcst.h"
 #include "fbltyp.h"
@@ -49,17 +49,54 @@ namespace fblbrd {
 	//c The description of a request.
 	class description_
 	{
+	private:
+        void Fill_(
+            bso::sBool EndOfInParamsDetected,
+            cast__ *Entry,
+            cast__ Cast )
+        {
+            if ( !EndOfInParamsDetected ) {
+                *Entry = fblcst::cEnd;
+                Entry++;
+            }
+
+            *Entry = Cast;
+            Entry++;
+
+            if ( Cast != fblcst::cEnd ) {
+                *Entry = fblcst::cEnd;
+            }
+        }
+        template <typename... t> void Fill_(
+            bso::sBool EndOfInParamsDetected,
+            cast__ *Entry,
+            cast__ Cast,
+            const t&... T )
+         {
+            if ( Cast == fblcst::cEnd ) {
+                if ( EndOfInParamsDetected )
+                    qRFwk();
+
+                EndOfInParamsDetected = true;
+            }
+
+            *Entry = Cast;
+
+            Entry++;
+
+            Fill_( EndOfInParamsDetected, Entry, T...);
+        }
 	public:
-		//o Name of the command.
-		str::string_ Name;
-		/*o Parameters and return value types. Separated by 'cEnd'. The 'cEnd'
-		to signalize the end of the request must NOT be put. */
-		casts_ Casts;
 		struct s
 		{
 			str::string_::s Name;
 			casts_::s Casts;
 		} &S_;
+		//o Name of the command.
+		str::string_ Name;
+		/*o Parameters and return value types. Separated by 'cEnd'. The 'cEnd'
+		to signalize the end of the request must NOT be put. */
+		casts_ Casts;
 		description_( s &S )
 		: S_( S ),
 		  Name( S.Name ),
@@ -94,7 +131,20 @@ namespace fblbrd {
 		void Init(
 			const char *Name,
 			const cast__ *Casts );
-		void Init(
+        template <typename... t> void Init(
+			const char *Name,
+            cast__ Cast,
+            const t&... T )
+        {
+            bso::sBool EndOfInParamsDetected = false;
+            cast__ Casts[sizeof...(T)+3];   // '+2' in case of there are no out parameters,
+                                            // and the delimter of in params is missing.
+                                            // '+1' to store 'Cast'.
+            Fill_( EndOfInParamsDetected, Casts, Cast, T... );
+
+            Init( Name, Casts );
+        }
+/*		void Init(
 			const char *Name,
 			cast__ Cast,	// This parameter was added to avoid ambiguity with some other method.
 			va_list Casts );
@@ -111,12 +161,12 @@ namespace fblbrd {
 
 			va_end( VL );
 		}
-		//f Initialization with name 'Name'. The casts would be given using 'New()'.
+*/		//f Initialization with name 'Name'. The casts would be given using 'New()'.
 		void Init( const char *Name )
 		{
 			this->Name.Init();
 			Casts.Init();
-			
+
 			this->Name = Name;
 		}
 		//f Append 'Cast'.
@@ -172,10 +222,20 @@ namespace fblbrd {
 			description Description;
 
 			Description.Init( Name, Casts );
-			
+
 			return Add( Description );
 		}
-		sdr::row__ Add(
+        template <typename... t> sdr::row__ Add(
+			const char *Name,
+            const t&... T )
+         {
+			description Description;
+
+			Description.Init( Name, T... );
+
+			return Add( Description );
+         }
+/*		sdr::row__ Add(
 			const char *Name,
 			cast__ Cast,
 			va_list VL )
@@ -183,7 +243,7 @@ namespace fblbrd {
 			description Description;
 
 			Description.Init( Name, Cast, VL );
-			
+
 			return Add( Description );
 		}
 		sdr::row__ Add(
@@ -202,7 +262,8 @@ namespace fblbrd {
 
 			return Row;
 		}
-		/*f Return the position of the description 'Description'. */
+*/
+        /*f Return the position of the description 'Description'. */
 		sdr::row__ Position( const description_ &Description ) const;
 	};
 

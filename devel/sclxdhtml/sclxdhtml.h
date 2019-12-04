@@ -55,7 +55,7 @@ namespace sclxdhtml {
 			using namespace sclrgstry::definition;
 
 			extern rEntry XMLFilesHandling;
-			extern rEntry XSLFile;	// To style XML data tagged). 
+			extern rEntry XSLFile;	// To style XML data tagged).
 			extern rEntry HeadFile;	// For the head section of the HTML main page. One page only.
 		}
 	}
@@ -335,7 +335,8 @@ namespace sclxdhtml {
 			XSLFileHandling_ = xfh_Undefined;
 		}
 		qCDTOR( sProxy );
-		void Init( xdhcmn::cUpstream *Upstream,
+		void Init(
+            xdhcmn::cUpstream *Upstream,
 			const scli::sInfo &Info,
 			eXSLFileHandling XSLFileHandling )
 		{
@@ -703,11 +704,28 @@ namespace sclxdhtml {
 	  public frontend
 	{
 	private:
+		eXSLFileHandling XSLFileHandling_;
+		qCRMV( scli::sInfo, I_, Info_ );
+		qRMV( sclfrntnd::rKernel, K_, Kernel_ );
 		page Page_;	// Current page;
 		sReporting Reporting_;
 		eBackendVisibility BackendVisibility_;
 		qRMV( class rCore<rSession>, C_, Core_ );
 	protected:
+		bso::sBool XDHCMNInitialize(
+			xdhcmn::cUpstream *Callback,
+			const char *Language,
+			const str::dString &Token )	override // If empty, PROD session, else token used for the DEMO session.
+        {
+            if ( Token.Amount() )
+                qRFwk();    // Should never be maunched in 'DEMO' mode.
+
+			sProxy::Init( Callback, I_(), XSLFileHandling_ );
+			Reporting_.Init( *this, Language );
+			frontend::Init( K_(), Language, Reporting_ );
+
+			return true;
+        }
 		bso::bool__ XDHCMNLaunch(
 			const char *Id,
 			const char *Action ) override
@@ -719,6 +737,8 @@ namespace sclxdhtml {
 		{
 			instances::reset( P );
 			frontend::reset( P );
+			XSLFileHandling_ = xfh_Undefined;
+			tol::reset(P, Info_, Kernel_);
 			Page_ = UndefinedPage;
 			Reporting_.reset( P );
 			BackendVisibility_ = bv_Undefined;
@@ -728,15 +748,13 @@ namespace sclxdhtml {
 		qCVDTOR( rSession )
 		void Init(
 			sclfrntnd::rKernel &Kernel,
-			const char *Language,
-			xdhcmn::cUpstream *Callback,
 			class rCore<rSession> &Core,
 			const scli::sInfo &Info,
-			eXSLFileHandling XSLFileHandling= xfh_Default )
+			eXSLFileHandling XSLFileHandling = xfh_Default )
 		{
-			sProxy::Init( Callback, Info, XSLFileHandling );
-			Reporting_.Init( *this, Language );
-			frontend::Init( Kernel, Language, Reporting_ );
+            this->XSLFileHandling_ = XSLFileHandling;
+            Info_ = &Info;
+            Kernel_ = &Kernel;
 			Page_ = UndefinedPage;
 			// instances::Init( *this );	// Made on connection.
 			BackendVisibility_ = bvShow;	// By default, the backend part of the login page is shown.
@@ -1008,7 +1026,7 @@ namespace sclxdhtml {
 		static E_CDEF( char *, RemoteBackendId, "RemoteBackend" );
 		static E_CDEF( char *, ProxyfiedBackendId, "ProxyfiedBackend" );
 		static E_CDEF( char *, EmbeddedBackendId, "EmbeddedBackend" );
-		
+
 		const char *GetLabel( eBackendVisibility );
 
 		sclfrntnd::eLogin GetLayout(

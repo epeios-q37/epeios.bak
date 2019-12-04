@@ -92,7 +92,7 @@ void fblbkd::rModule::_Clean( void )
 
 		Row = Indexes.Next( Row );
 	}
-		
+
 }
 
 
@@ -135,9 +135,9 @@ qRH
 			str::string S;
 qRB
 			Request.Output().Put( 0 );	// No explanation message;
-		
+
 			LogFunctions.Log( "", "MASTER", str::string( "MASTER_COMMAND(Casts & languages)" ), false );
-			
+
 			// Casts.
 			do {
 				S.Init();
@@ -164,7 +164,7 @@ qRE
 
 			LogFunctions.Log( "", "MASTER", str::string( "MASTER_COMMAND(GetCommandCommand)" ), false );
 
-			
+
 			while ( ( P != qNIL ) && ( Descriptions( P ).Name != str::string( PrimaryCommandName ) ) )
 				P = Descriptions.Next( P );
 
@@ -244,10 +244,10 @@ qRB
 
 		Item.ID( Command );
 		Item.Value = Descriptions( P ).Name;
-		
+
 		if ( Item.Value( 0 ) != '_' )
 			Items.Append( Item );
-			
+
 		P = Descriptions.Next( P );
 	}
 qRR
@@ -675,7 +675,7 @@ qRH
 	char RemoteAPIVersion[10];
 	str::string Translation;
 	TOL_CBUFFER___ Buffer;
-	flw::sDressedRWFlow<> Flow;
+	flw::rDressedRWFlow<> Flow;
 qRB
 	Flow.Init( FrontendIODriver );
 
@@ -782,7 +782,7 @@ qRT
 qRE
 	return !Disconnect;
 }
-#if 0	
+#if 0
 	mdr::row__ untyped_module::Add(
 		const char *Name,
 		const void *UP,
@@ -795,21 +795,21 @@ qRE
 		bkdcst::cast Cast;
 	qRB
 		Description.Init( Name );
-		
+
 		va_start( L, UP );
 
 		while ( ( Cast = va_arg( L, bkdcst::cast ) ) != cEnd )
 			Description.Add( Cast );
-			
+
 		Description.Add( Cast );
-		
+
 		while( ( Cast = va_arg( L, bkdcst::cast ) ) != cEnd )
 			Description.Add( Cast );
-			
+
 		va_end( L );
-		
+
 		P = Descriptions.Add( Description );
-		
+
 		if ( UPs.Add( UP ) != P )
 			ERRc();
 	qRR
