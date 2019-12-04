@@ -19,8 +19,8 @@
 
 // MUA FoLDer
 
-#ifndef MUAFLD__INC
-# define MUAFLD__INC
+#ifndef MUAFLD_INC_
+# define MUAFLD_INC_
 
 # ifdef XXX_DBG
 #	define MUAFLD__DBG

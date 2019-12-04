@@ -19,8 +19,8 @@
 
 // $Id: trunk.h,v 1.6 2013/06/18 09:36:02 csimon Exp $
 
-#ifndef TRUNK__INC
-# define TRUNK__INC
+#ifndef TRUNK_INC_
+# define TRUNK_INC_
 
 
 # include "xulftk.h"

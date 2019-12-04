@@ -19,8 +19,8 @@
 
 // MUA INFormations.
 
-#ifndef MUAINF__INC
-# define MUAINF__INC
+#ifndef MUAINF_INC_
+# define MUAINF_INC_
 
 # define MUAINF_LC_AFFIX	"mmuaq"
 # define MUAINF_UC_AFFIX	"MMUAQ"

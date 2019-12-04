@@ -17,8 +17,8 @@
     along with 'xdhcefq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef RENDER__INC
-# define RENDER__INC
+#ifndef RENDER_INC_
+# define RENDER_INC_
 
 # include "misc.h"
 

@@ -17,8 +17,8 @@
     along with dpkq.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef DPKBSC__INC
-# define DPKBSC__INC
+#ifndef DPKBSC_INC_
+# define DPKBSC_INC_
 
 # include "bso.h"
 # include "tol.h"

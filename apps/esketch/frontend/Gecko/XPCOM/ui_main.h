@@ -19,8 +19,8 @@
 
 // $Id: ui_main.h,v 1.3 2013/04/09 17:57:21 csimon Exp $
 
-#ifndef UI_MAIN__INC
-# define UI_MAIN__INC
+#ifndef UI_MAIN_INC_
+# define UI_MAIN_INC_
 
 # include "xulfmn.h"
 # include "ui_base.h"

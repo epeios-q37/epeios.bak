@@ -19,8 +19,8 @@
 
 // OrGaniZer USeR
 
-#ifndef OGZUSR__INC
-# define OGZUSR__INC
+#ifndef OGZUSR_INC_
+# define OGZUSR_INC_
 
 # ifdef XXX_DBG
 #	define OGZUSR__DBG

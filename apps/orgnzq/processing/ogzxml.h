@@ -19,8 +19,8 @@
 
 // OrGaniZer XML
 
-#ifndef OGZXML__INC
-# define OGZXML__INC
+#ifndef OGZXML_INC_
+# define OGZXML_INC_
 
 # ifdef XXX_DBG
 #	define OGZXML__DBG

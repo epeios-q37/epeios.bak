@@ -19,8 +19,8 @@
 
 // MUA AGenT
 
-#ifndef MUAAGT__INC
-# define MUAAGT__INC
+#ifndef MUAAGT_INC_
+# define MUAAGT_INC_
 
 # ifdef XXX_DBG
 #	define MUAXMP__DBG

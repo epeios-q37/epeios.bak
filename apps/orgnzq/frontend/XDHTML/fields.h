@@ -17,8 +17,8 @@
     along with 'orgnzq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef FIELDS__INC
-# define FIELDS__INC
+#ifndef FIELDS_INC_
+# define FIELDS_INC_
 
 # include "base.h"
 

@@ -17,8 +17,8 @@
     along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef UI_MAIN__INC
-# define UI_MAIN__INC
+#ifndef UI_MAIN_INC_
+# define UI_MAIN_INC_
 
 # include "jni.h"
 # include "dalvik.h"

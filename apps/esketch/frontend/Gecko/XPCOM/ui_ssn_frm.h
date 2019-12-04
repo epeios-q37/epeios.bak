@@ -19,8 +19,8 @@
 
 // $Id: ui_ssn_frm.h,v 1.1 2012/12/04 15:28:45 csimon Exp $
 
-#ifndef UI_SSN_FRM__INC
-# define UI_SSN_FRM__INC
+#ifndef UI_SSN_FRM_INC_
+# define UI_SSN_FRM_INC_
 
 # include "xulfsf.h"
 # include "ui_base.h"

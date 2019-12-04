@@ -17,8 +17,8 @@
     along with 'MMUAq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef MAIL__INC
-# define MAIL__INC
+#ifndef MAIL_INC_
+# define MAIL_INC_
 
 # include "base.h"
 

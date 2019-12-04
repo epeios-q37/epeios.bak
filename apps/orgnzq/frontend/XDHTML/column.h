@@ -19,8 +19,8 @@
 
 // Column.
 
-#ifndef COLUMN__INC
-# define COLUMN__INC
+#ifndef COLUMN_INC_
+# define COLUMN_INC_
 
 # include "base.h"
 

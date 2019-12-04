@@ -19,8 +19,8 @@
 
 // OrGaniZer DaTaBase
 
-#ifndef OGZDTB__INC
-# define OGZDTB__INC
+#ifndef OGZDTB_INC_
+# define OGZDTB_INC_
 
 # ifdef XXX_DBG
 #	define OGZDTB__DBG

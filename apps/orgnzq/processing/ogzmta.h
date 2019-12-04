@@ -19,8 +19,8 @@
 
 // OrGaniZer MeTAdata
 
-#ifndef OGZMTA__INC
-# define OGZMTA__INC
+#ifndef OGZMTA_INC_
+# define OGZMTA_INC_
 
 # ifdef XXX_DBG
 #	define OGZMTA__DBG

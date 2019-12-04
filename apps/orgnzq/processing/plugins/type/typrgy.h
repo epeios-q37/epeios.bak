@@ -19,8 +19,8 @@
 
 // TYPe plugin ReGistrY
 
-#ifndef TYPRGY__INC
-# define TYPRGY__INC
+#ifndef TYPRGY_INC_
+# define TYPRGY_INC_
 
 # include "rgstry.h"
 

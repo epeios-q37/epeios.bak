@@ -19,8 +19,8 @@
 
 // $Id: ui.h,v 1.1 2012/12/04 15:28:45 csimon Exp $
 
-#ifndef UI__INC
-# define UI__INC
+#ifndef UI_INC_
+# define UI_INC_
 
 # include "xulfui.h"
 

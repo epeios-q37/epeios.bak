@@ -22,8 +22,8 @@
 // This is the place where to put common objects and functions.
 // (ex. : Gestion liste d'autorit dans 'Gesbib').
 
-#ifndef OGZFBC__INC
-# define OGZFBC__INC
+#ifndef OGZFBC_INC_
+# define OGZFBC_INC_
 
 # define OGZBFC_VERSION			"1"
 

@@ -17,8 +17,8 @@
     along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef UI_SSN_FRM__INC
-# define UI_SSN_FRM__INC
+#ifndef UI_SSN_FRM_INC_
+# define UI_SSN_FRM_INC_
 
 # include "ui_base.h"
 

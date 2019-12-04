@@ -17,8 +17,8 @@
     along with 'MMUAq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef FRDFRNTND__INC
-# define FRDFRNTND__INC
+#ifndef FRDFRNTND_INC_
+# define FRDFRNTND_INC_
 
 # include "muainf.h"
 # include "frdapi.h"

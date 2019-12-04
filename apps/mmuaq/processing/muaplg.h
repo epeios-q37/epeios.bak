@@ -19,8 +19,8 @@
 
 // MUA PLuGins
 
-#ifndef MUAPLG__INC
-# define MUAPLG__INC
+#ifndef MUAPLG_INC_
+# define MUAPLG_INC_
 
 # ifdef XXX_DBG
 #  define MUAPLG__DBG

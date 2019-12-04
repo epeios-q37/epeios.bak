@@ -17,8 +17,8 @@
     along with 'xdhcefq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef MISC__INC
-# define MISC__INC
+#ifndef MISC_INC_
+# define MISC_INC_
 
 # undef system	// Overidden by 'tol'. Not useful here.
 
@@ -134,7 +134,7 @@ namespace misc {
 
 	client_message__ GetClientMessage( const cef_string_t *Pattern );
 
-	enum render_message__ {	// Messages à destination du 'render'.
+	enum render_message__ {	// Messages ï¿½ destination du 'render'.
 		rmStart,
 		rmHandleSelectedFiles,	// Gestion des fichiers slectionns.
 //		rmHandleAction,

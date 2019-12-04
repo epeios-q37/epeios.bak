@@ -17,8 +17,8 @@
     along with 'orgnzq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef FRDCLLBCK__INC
-# define FRDCLLBCK__INC
+#ifndef FRDCLLBCK_INC_
+# define FRDCLLBCK_INC_
 
 # include "str.h"
 

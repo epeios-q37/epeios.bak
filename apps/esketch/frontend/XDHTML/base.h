@@ -17,8 +17,8 @@
     along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef BASE__INC
-# define BASE__INC
+#ifndef BASE_INC_
+# define BASE_INC_
 
 # include "esketchxdh.h"
 

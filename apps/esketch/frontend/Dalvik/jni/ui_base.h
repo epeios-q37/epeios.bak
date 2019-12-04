@@ -17,8 +17,8 @@
     along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef UI_BASE__INC
-# define UI_BASE__INC
+#ifndef UI_BASE_INC_
+# define UI_BASE_INC_
 
 # include "tol.h"
 

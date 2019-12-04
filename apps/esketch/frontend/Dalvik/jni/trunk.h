@@ -17,8 +17,8 @@
     along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef TRUNK__INC
-# define TRUNK__INC
+#ifndef TRUNK_INC_
+# define TRUNK_INC_
 
 # include "sktinf.h"
 

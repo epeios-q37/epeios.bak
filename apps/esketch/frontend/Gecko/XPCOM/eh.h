@@ -17,8 +17,8 @@
     along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef EH__INC
-# define EH__INC
+#ifndef EH_INC_
+# define EH_INC_
 
 # include "xulfeh.h"
 

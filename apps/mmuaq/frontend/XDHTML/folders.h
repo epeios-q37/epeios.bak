@@ -17,8 +17,8 @@
     along with 'MMUAq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef FOLDERS__INC
-# define FOLDERS__INC
+#ifndef FOLDERS_INC_
+# define FOLDERS_INC_
 
 # include "base.h"
 

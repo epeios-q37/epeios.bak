@@ -21,8 +21,8 @@
     along with 'xdhbrwq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef AGENT__INC
-# define AGENT__INC
+#ifndef AGENT_INC_
+# define AGENT_INC_
 
 # include "xdhups.h"
 

@@ -19,8 +19,8 @@
 
 // OrGaniZer CoLuMn
 
-#ifndef OGZCLM__INC
-# define OGZCLM__INC
+#ifndef OGZCLM_INC_
+# define OGZCLM_INC_
 
 # ifdef XXX_DBG
 #	define OGZCLM__DBG

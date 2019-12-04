@@ -17,8 +17,8 @@
     along with 'MMUAq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef POP3__INC
-# define POP3__INC
+#ifndef POP3_INC_
+# define POP3_INC_
 
 namespace pop3 {
 	void List( void );

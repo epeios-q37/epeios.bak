@@ -19,8 +19,8 @@
 
 // OrGaniZer EnTRies
 
-#ifndef OGZETR__INC
-# define OGZETR__INC
+#ifndef OGZETR_INC_
+# define OGZETR_INC_
 
 # ifdef XXX_DBG
 #	define OGZETR__DBG

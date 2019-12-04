@@ -17,8 +17,8 @@
     along with 'MMUAq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef AGENTS__INC
-# define AGENTS__INC
+#ifndef AGENTS_INC_
+# define AGENTS_INC_
 
 # include "base.h"
 

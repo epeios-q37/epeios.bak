@@ -17,8 +17,8 @@
     along with 'MMUAq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef FRDRGSTRY__INC
-# define FRDRGSTRY__INC
+#ifndef FRDRGSTRY_INC_
+# define FRDRGSTRY_INC_
 
 # include "sclrgstry.h"
 # include "sclfrntnd.h"

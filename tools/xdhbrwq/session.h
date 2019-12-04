@@ -21,8 +21,8 @@
     along with 'xdhbrwq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SESSION__INC
-# define SESSION__INC
+#ifndef SESSION_INC_
+# define SESSION_INC_
 
 # include "agent.h"
 

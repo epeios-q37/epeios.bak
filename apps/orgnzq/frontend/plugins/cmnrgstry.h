@@ -17,8 +17,8 @@
     along with 'orgnzq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CMNRGSTRY__INC
-# define CMNRGSTRY__INC
+#ifndef CMNRGSTRY_INC_
+# define CMNRGSTRY_INC_
 
 # include "sclrgstry.h"
 

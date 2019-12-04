@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef CSDLEO__INC
-# define CSDLEO__INC
+#ifndef CSDLEO_INC_
+# define CSDLEO_INC_
 
 # define CSDLEO_NAME		"CSDLEO"
 
@@ -42,7 +42,7 @@
 // # define CSDLEO_RELEASE_CALLBACK_FUNCTION_NAME		CSDLEOReleaseCallback
 
 /*
-NOTA : version de la classe 'shared_data__', à mettre à jour à chaque fois que cette dernière est modifiée.
+NOTA : version de la classe 'shared_data__', ï¿½ mettre ï¿½ jour ï¿½ chaque fois que cette derniï¿½re est modifiï¿½e.
 */
 
 # define CSDLEO_SHARED_DATA_VERSION_NUMBER	"8"
@@ -59,19 +59,19 @@ namespace csdleo {
 	};
 
 	enum context__ {
-		cIntrospection,	// Récupération de l'API.
+		cIntrospection,	// Rï¿½cupï¿½ration de l'API.
 		cRegular,		// fonctionnement normal
 		c_amount,
 		c_Undefined,
 	};
 
 #pragma pack( push, 1)
-	// NOTA : Si modifié, modifier 'CSDLEO_SHARED_DATA_VERSION' !
+	// NOTA : Si modifiï¿½, modifier 'CSDLEO_SHARED_DATA_VERSION' !
 	class data_control__
 	{
 	public:
-		const char *Version;	// Toujours en première position.
-		bso::uint__ Control;	// Une valeur relative au contenu de la structure, à des fins de test primaire de compatibilité.
+		const char *Version;	// Toujours en premiï¿½re position.
+		bso::uint__ Control;	// Une valeur relative au contenu de la structure, ï¿½ des fins de test primaire de compatibilitï¿½.
 		void reset( bso::bool__ = true )
 		{
 			Version = NULL;
@@ -89,13 +89,13 @@ namespace csdleo {
 		}
 	};
 
-	// NOTA : Si modifié, modifier 'CSDLEO_SHARED_DATA_VERSION' !
+	// NOTA : Si modifiï¿½, modifier 'CSDLEO_SHARED_DATA_VERSION' !
 	class data__ {
 	public:
 		context__ Context;
 		mode__ Mode;
 		const char *LibraryLocationAndName;
-		void *UP;				// A la discrétion de l'utilisateur.
+		void *UP;				// A la discrï¿½tion de l'utilisateur.
 		void reset( bso::bool__ = true )
 		{
 			Context = c_Undefined;
@@ -126,7 +126,7 @@ namespace csdleo {
 		}
 	};
 
-	// NOTA : Si modifié, modifier 'CSDLEO_SHARED_DATA_VERSION' !
+	// NOTA : Si modifiï¿½, modifier 'CSDLEO_SHARED_DATA_VERSION' !
 	class shared_data__
 	: public data_control__,
 	  public data__

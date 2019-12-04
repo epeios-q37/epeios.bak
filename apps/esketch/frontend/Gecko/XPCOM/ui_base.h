@@ -19,8 +19,8 @@
 
 // $Id: ui_base.h,v 1.1 2012/12/04 15:28:45 csimon Exp $
 
-#ifndef UI_BASE__INC
-# define UI_BASE__INC
+#ifndef UI_BASE_INC_
+# define UI_BASE_INC_
 
 # include "xulfbs.h"
 

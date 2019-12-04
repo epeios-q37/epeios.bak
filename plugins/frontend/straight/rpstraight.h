@@ -19,8 +19,8 @@
 
 // Exposed data from the remote plugin 'Straight'.
 
-#ifndef RPSTRAIGHT__INC
-# define RPSTRAIGHT__INC
+#ifndef RPSTRAIGHT_INC_
+# define RPSTRAIGHT_INC_
 
 # include "bso.h"
 # include "tol.h"

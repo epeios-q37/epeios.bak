@@ -17,8 +17,8 @@
     along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef WRPUNBOUND__INC
-# define WRPUNBOUND__INC
+#ifndef WRPUNBOUND_INC_
+# define WRPUNBOUND_INC_
 
 # include "sktbsc.h"
 

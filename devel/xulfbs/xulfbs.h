@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef XULFBS__INC
-# define XULFBS__INC
+#ifndef XULFBS_INC_
+# define XULFBS_INC_
 
 # define XULFBS_NAME		"XULFBS"
 
@@ -96,15 +96,15 @@ namespace xulfbs {
 	XULFBS__W( menu );
 	XULFBS__W( menuitem );
 	XULFBS__W( menulist );
-	// XULFBS__W( Page );	// Définit explicitement à cause de 'XULFBSRefresh(...)'.
+	// XULFBS__W( Page );	// Dï¿½finit explicitement ï¿½ cause de 'XULFBSRefresh(...)'.
 	XULFBS__W( radio );
 	XULFBS__W( radiogroup );
 	XULFBS__W( tabs );
 	XULFBS__W( tabpanels );
 	XULFBS__W( textbox );
-	// XULFBS__W( tree );	// Définit explicitement à cause de l'utilisation d'un 'trunk'.
+	// XULFBS__W( tree );	// Dï¿½finit explicitement ï¿½ cause de l'utilisation d'un 'trunk'.
 	XULFBS__W( widget );
-	// XULFBS__W( window );	// Définit explicitement à cause de 'XULWDGRefresh(...)'.
+	// XULFBS__W( window );	// Dï¿½finit explicitement ï¿½ cause de 'XULWDGRefresh(...)'.
 
 	class _wp_core__
 	{
@@ -339,7 +339,7 @@ namespace xulfbs {
 # define XULFBS_WIDGET( name )	using xulfbs::name##__;
 # define XULFBS_TWIDGET( trunk, name )	typedef xulfbs::_##name##__<trunk> name##__;
 
-/* Manque 'autocomplete_textbox__', car surchargé dans autre bibliothèque.*/
+/* Manque 'autocomplete_textbox__', car surchargï¿½ dans autre bibliothï¿½que.*/
 # define XULFBS_ALMOST_ALL_WIDGETS( trunk )\
 	XULFBS_WIDGET( box )\
 	XULFBS_WIDGET( button )\

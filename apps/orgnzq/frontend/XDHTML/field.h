@@ -18,8 +18,8 @@
 */
 
 // Field
-#ifndef FIELD__INC
-# define FIELD__INC
+#ifndef FIELD_INC_
+# define FIELD_INC_
 
 # include "base.h"
 

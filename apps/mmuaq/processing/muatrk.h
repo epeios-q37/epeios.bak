@@ -19,8 +19,8 @@
 
 // MUA TRacKer (keeps trace of the mails between agents)
 
-#ifndef MUATRK__INC
-# define MUATRK__INC
+#ifndef MUATRK_INC_
+# define MUATRK_INC_
 
 # ifdef XXX_DBG
 #	define MUATRK__DBG

@@ -17,8 +17,8 @@
     along with 'orgnzq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef REGISTRY__INC
-# define REGISTRY__INC
+#ifndef REGISTRY_INC_
+# define REGISTRY_INC_
 
 # include "ogzrgy.h"
 

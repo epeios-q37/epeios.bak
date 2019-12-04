@@ -19,8 +19,8 @@
 
 // OrGaniZer ReCorD
 
-#ifndef OGZRCD__INC
-# define OGZRCD__INC
+#ifndef OGZRCD_INC_
+# define OGZRCD_INC_
 
 # ifdef XXX_DBG
 #	define OGZRCD__DBG

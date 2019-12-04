@@ -17,8 +17,8 @@
     along with 'MMUAq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef IMAP__INC
-# define IMAP__INC
+#ifndef IMAP_INC_
+# define IMAP_INC_
 
 namespace imap {
 	// Low-level functions.

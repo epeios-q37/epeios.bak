@@ -5,8 +5,8 @@
 	This file was generated using eGetAPI 20140119 (Build Aug 19 2015 09:27:47 Win32-MSC-IA_32)
 */
 
-#ifndef XDHDQ__INC
-# define XDHDQ__INC
+#ifndef XDHDQ_INC_
+# define XDHDQ_INC_
 
 # define XDHDQ_TARGET "xdhdq"
 # define XDHDQ_API_VERSION "1"
@@ -191,4 +191,4 @@ namespace xdhdq {
 
 }
 
-#endif //#ifndef xdhdq__INC
+#endif //#ifndef xdhdq_INC_

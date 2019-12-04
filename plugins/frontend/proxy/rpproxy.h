@@ -19,8 +19,8 @@
 
 // Exposed data from the remote plugin 'Proxy'.
 
-#ifndef RPPROXY__INC
-# define RPPROXY__INC
+#ifndef RPPROXY_INC_
+# define RPPROXY_INC_
 
 # include "bso.h"
 # include "tol.h"

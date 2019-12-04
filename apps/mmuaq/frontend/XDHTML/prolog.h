@@ -17,8 +17,8 @@
     along with 'MMUAq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PROLOG__INC
-# define PROLOG__INC
+#ifndef PROLOG_INC_
+# define PROLOG_INC_
 
 # include "base.h"
 

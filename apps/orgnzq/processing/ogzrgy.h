@@ -19,8 +19,8 @@
 
 // OrGaniZer ReGistrY
 
-#ifndef OGZRGY__INC
-# define OGZRGY__INC
+#ifndef OGZRGY_INC_
+# define OGZRGY_INC_
 
 # ifdef XXX_DBG
 #	define OGZRGY__DBG

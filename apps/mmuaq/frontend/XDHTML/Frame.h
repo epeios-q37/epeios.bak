@@ -17,8 +17,8 @@
     along with 'MMUAq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef FRAME__INC
-# define FRAME__INC
+#ifndef FRAME_INC_
+# define FRAME_INC_
 
 # include "base.h"
 

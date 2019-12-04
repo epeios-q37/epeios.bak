@@ -17,8 +17,8 @@
     along with 'MMUAq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CONFIG__INC
-# define CONFIG__INC
+#ifndef CONFIG_INC_
+# define CONFIG_INC_
 
 # include "base.h"
 

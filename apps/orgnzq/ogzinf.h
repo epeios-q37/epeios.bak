@@ -19,8 +19,8 @@
 
 // eOrGaniZer INFormations.
 
-#ifndef OGZINF__INC
-# define OGZINF__INC
+#ifndef OGZINF_INC_
+# define OGZINF_INC_
 
 # define OGZINF_LC_AFFIX	"orgnzq"
 # define OGZINF_UC_AFFIX	"ORGNZQ"

@@ -17,8 +17,8 @@
     along with 'XDHDq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef MAIN__INC
-# define MAIN__INC
+#ifndef MAIN_INC_
+# define MAIN_INC_
 
 # include "base.h"
 

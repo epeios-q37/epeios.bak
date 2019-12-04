@@ -19,8 +19,8 @@
 
 // MUA Internet Mail Format (RFC 5322)
 
-#ifndef MUAIMF__INC
-# define MUAIMF__INC
+#ifndef MUAIMF_INC_
+# define MUAIMF_INC_
 
 # ifdef XXX_DBG
 #	define MUAIMF__DBG

@@ -17,8 +17,8 @@
     along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef UI__INC
-# define UI__INC
+#ifndef UI_INC_
+# define UI_INC_
 
 // # include "xulfui.h"
 

@@ -22,8 +22,8 @@
 // This is the place where to put common objects and functions.
 // (ex. : Gestion liste d'autorit dans 'Gesbib').
 
-#ifndef XDDFBC__INC
-# define XDDFBC__INC
+#ifndef XDDFBC_INC_
+# define XDDFBC_INC_
 
 # define XDDBFC_VERSION			"1"
 

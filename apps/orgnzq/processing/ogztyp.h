@@ -19,8 +19,8 @@
 
 // OrGaniZer field TYPe
 
-#ifndef OGZTYP__INC
-# define OGZTYP__INC
+#ifndef OGZTYP_INC_
+# define OGZTYP_INC_
 
 # ifdef XXX_DBG
 #	define OGZTYP__DBG

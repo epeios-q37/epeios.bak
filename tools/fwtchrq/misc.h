@@ -17,8 +17,8 @@
     along with fwtchrq.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef MISC__INC
-# define MISC__INC
+#ifndef MISC_INC_
+# define MISC_INC_
 
 # include "dwtftr.h"
 # include "dwtmov.h"
@@ -48,7 +48,7 @@ namespace misc {
 				 Path.Append('.');
 	}
 
-	// Test l'existence de 'Path' et signale son éventuelle absecnce.
+	// Test l'existence de 'Path' et signale son ï¿½ventuelle absecnce.
 	inline void TestPath( const str::string_ &Path )
 	{
 		if ( !fil::Exists( Path ) )

@@ -18,8 +18,8 @@
 */
 
 
-#ifndef MISC__INC
-# define MISC__INC
+#ifndef MISC_INC_
+# define MISC_INC_
 
 # include "ntvstr.h"
 

@@ -17,8 +17,8 @@
     along with dpkq.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef DPKRCD__INC
-# define DPKRCD__INC
+#ifndef DPKRCD_INC_
+# define DPKRCD_INC_
 
 # include "str.h"
 

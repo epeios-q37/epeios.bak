@@ -19,8 +19,8 @@
 
 // MUA BaSiCs
 
-#ifndef MUABSC__INC
-# define MUABSC__INC
+#ifndef MUABSC_INC_
+# define MUABSC_INC_
 
 # include "bch.h"
 # include "bso.h"

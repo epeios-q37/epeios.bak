@@ -17,8 +17,8 @@
     along with 'orgnzq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef FRDPLGN__INC
-# define FRDPLGN__INC
+#ifndef FRDPLGN_INC_
+# define FRDPLGN_INC_
 
 # include "frdcllbck.h"
 

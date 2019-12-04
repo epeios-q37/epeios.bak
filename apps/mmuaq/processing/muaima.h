@@ -19,8 +19,8 @@
 
 // MUA Internet Message Access protocol (IMAP 4rev1 - RFC 3501 & 5530).
 
-#ifndef MUAIMA__INC
-# define MUAIMA__INC
+#ifndef MUAIMA_INC_
+# define MUAIMA_INC_
 
 # ifdef XXX_DBG
 #	define MUAIMA__DBG

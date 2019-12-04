@@ -19,8 +19,8 @@
 
 // INSTanCes
 
-#ifndef INSTC__INC
-# define INSTC__INC
+#ifndef INSTC_INC_
+# define INSTC_INC_
 
 # include "frdfrntnd.h"
 

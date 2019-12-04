@@ -17,8 +17,8 @@
 	along with XPPq. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef I18N__INC
-# define I18N__INC
+#ifndef I18N_INC_
+# define I18N_INC_
 
 // # include "xxx.h"
 # include "scllocale.h"

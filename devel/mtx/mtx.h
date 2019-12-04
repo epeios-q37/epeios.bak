@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef MTX__INC
-# define MTX__INC
+#ifndef MTX_INC_
+# define MTX_INC_
 
 # define MTX_NAME		"MTX"
 

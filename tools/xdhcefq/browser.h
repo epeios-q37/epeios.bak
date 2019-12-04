@@ -19,8 +19,8 @@
 
 // AKA Client !
 
-#ifndef BROWSER__INC
-# define BROWSER__INC
+#ifndef BROWSER_INC_
+# define BROWSER_INC_
 
 # include "misc.h"
 

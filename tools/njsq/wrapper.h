@@ -17,8 +17,8 @@
     along with 'NJSq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef WRAPPER__INC
-# define WRAPPER__INC
+#ifndef WRAPPER_INC_
+# define WRAPPER_INC_
 
 # include "n4allw.h"
 # include "n4njs.h"

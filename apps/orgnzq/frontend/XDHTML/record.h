@@ -19,8 +19,8 @@
 
 // Record
 
-#ifndef RECORD__INC
-# define RECORD__INC
+#ifndef RECORD_INC_
+# define RECORD_INC_
 
 # include "base.h"
 

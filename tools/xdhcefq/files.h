@@ -17,8 +17,8 @@
     along with 'xdhcefq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef FILES__INC
-# define FILES__INC
+#ifndef FILES_INC_
+# define FILES_INC_
 
 # include "misc.h"
 

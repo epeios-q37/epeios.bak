@@ -5,8 +5,8 @@
 	This file was generated using barq 20161027 (Build Dec 21 2016 17:42:27 Win32;MSC 1800;IA-32)
 */
 
-#ifndef MMUAQ__INC
-# define MMUAQ__INC
+#ifndef MMUAQ_INC_
+# define MMUAQ_INC_
 
 # define MMUAQ_TARGET "mmuaq"
 # define MMUAQ_API_VERSION "1"
@@ -551,4 +551,4 @@ namespace mmuaq {
 
 }
 
-#endif //#ifndef mmuaq__INC
+#endif //#ifndef mmuaq_INC_

@@ -17,8 +17,8 @@
 	along with XDHWebQ. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef QUERY__INC
-# define QUERY__INC
+#ifndef QUERY_INC_
+# define QUERY_INC_
 
 # include "tol.h"
 # include "str.h"

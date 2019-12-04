@@ -5,8 +5,8 @@
 	This file was generated using barq 20171107 (Build Nov  7 2017 10:45:46 Win64;MSC 1911;AMD64)
 */
 
-#ifndef ESKETCH__INC
-# define ESKETCH__INC
+#ifndef ESKETCH_INC_
+# define ESKETCH_INC_
 
 # define ESKETCH_TARGET "esketch"
 # define ESKETCH_API_VERSION "1"
@@ -225,4 +225,4 @@ namespace esketch {
 
 }
 
-#endif //#ifndef esketch__INC
+#endif //#ifndef esketch_INC_

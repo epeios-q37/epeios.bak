@@ -17,8 +17,8 @@
     along with 'orgnzq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CMNPLGN__INC
-# define CMNPLGN__INC
+#ifndef CMNPLGN_INC_
+# define CMNPLGN_INC_
 
 # include "frdplgn.h"
 

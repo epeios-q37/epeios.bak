@@ -17,8 +17,8 @@
     along with 'orgnzq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CORE__INC
-# define CORE__INC
+#ifndef CORE_INC_
+# define CORE_INC_
 
 # include "global.h"
 # include "prolog.h"

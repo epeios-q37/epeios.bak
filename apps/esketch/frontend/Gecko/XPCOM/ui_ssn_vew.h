@@ -19,8 +19,8 @@
 
 // $Id: ui_ssn_vew.h,v 1.1 2012/12/04 15:28:45 csimon Exp $
 
-#ifndef UI_SSN_VEW__INC
-# define UI_SSN_VEW__INC
+#ifndef UI_SSN_VEW_INC_
+# define UI_SSN_VEW_INC_
 
 # include "xulfsv.h"
 # include "ui_base.h"

@@ -17,8 +17,8 @@
     along with 'MMUAq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef MAILS__INC
-# define MAILS__INC
+#ifndef MAILS_INC_
+# define MAILS_INC_
 
 # include "base.h"
 

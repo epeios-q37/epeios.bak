@@ -17,8 +17,8 @@
     along with 'MMUAq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef MISC__INC
-# define MISC__INC
+#ifndef MISC_INC_
+# define MISC_INC_
 
 # include "cio.h"
 # include "csdbnc.h"

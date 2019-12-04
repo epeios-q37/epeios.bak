@@ -18,8 +18,8 @@
 */
 
 
-#ifndef SESSION__INC
-# define SESSION__INC
+#ifndef SESSION_INC_
+# define SESSION_INC_
 
 # include "xdwrgstry.h"
 

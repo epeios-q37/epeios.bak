@@ -5,8 +5,8 @@
 	This file was generated using barq 20171107 (Build Nov  7 2017 10:45:46 Win64;MSC 1911;AMD64)
 */
 
-#ifndef ORGNZQ__INC
-# define ORGNZQ__INC
+#ifndef ORGNZQ_INC_
+# define ORGNZQ_INC_
 
 # define ORGNZQ_TARGET "orgnzq"
 # define ORGNZQ_API_VERSION "1"
@@ -765,4 +765,4 @@ namespace orgnzq {
 
 }
 
-#endif //#ifndef orgnzq__INC
+#endif //#ifndef orgnzq_INC_

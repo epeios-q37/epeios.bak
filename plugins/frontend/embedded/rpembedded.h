@@ -19,8 +19,8 @@
 
 // Exposed data from the remote plugin 'Straight'.
 
-#ifndef RPEMBEDDED__INC
-# define RPEMBEDDED__INC
+#ifndef RPEMBEDDED_INC_
+# define RPEMBEDDED_INC_
 
 # include "bso.h"
 # include "tol.h"

@@ -19,8 +19,8 @@
 
 // OrGaniZer eXaMPle
 
-#ifndef OGZXMP__INC
-# define OGZXMP__INC
+#ifndef OGZXMP_INC_
+# define OGZXMP_INC_
 
 # ifdef XXX_DBG
 #	define OGZXMP__DBG

@@ -22,8 +22,8 @@
 // This is the place where to put common objects and functions.
 // (ex. : Gestion liste d'autorit dans 'Gesbib').
 
-#ifndef MUAFBC__INC
-# define MUAFBC__INC
+#ifndef MUAFBC_INC_
+# define MUAFBC_INC_
 
 # define MUABFC_VERSION			"1"
 

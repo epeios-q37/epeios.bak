@@ -19,8 +19,8 @@
 
 // OrGaniZer FieLD
 
-#ifndef OGZFLD__INC
-# define OGZFLD__INC
+#ifndef OGZFLD_INC_
+# define OGZFLD_INC_
 
 # ifdef XXX_DBG
 #	define OGZFLD__DBG

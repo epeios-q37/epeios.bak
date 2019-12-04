@@ -17,8 +17,8 @@
     along with 'xdhdq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef GLOBAL__INC
-# define GLOBAL__INC
+#ifndef GLOBAL_INC_
+# define GLOBAL_INC_
 
 # include "base.h"
 

@@ -19,8 +19,8 @@
 
 // Template module./
 
-#ifndef RECORDS__INC
-# define RECORDS__INC
+#ifndef RECORDS_INC_
+# define RECORDS_INC_
 
 # include "base.h"
 

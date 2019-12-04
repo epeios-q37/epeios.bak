@@ -19,8 +19,8 @@
 
 // OrGaniZer MeTa Callback
 
-#ifndef OGZMTC__INC
-# define OGZMTC__INC
+#ifndef OGZMTC_INC_
+# define OGZMTC_INC_
 
 # ifdef XXX_DBG
 #	define OGZMTC__DBG

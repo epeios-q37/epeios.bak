@@ -19,8 +19,8 @@
 
 // XDhD INFormations.
 
-#ifndef XDDINF__INC
-# define XDDINF__INC
+#ifndef XDDINF_INC_
+# define XDDINF_INC_
 
 # define XDDINF_LC_AFFIX	"xdhdq"
 # define XDDINF_UC_AFFIX	"XDHDQ"

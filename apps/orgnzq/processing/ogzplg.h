@@ -19,8 +19,8 @@
 
 // OrGaniZer PLuGins
 
-#ifndef OGZPLG__INC
-# define OGZPLG__INC
+#ifndef OGZPLG_INC_
+# define OGZPLG_INC_
 
 # ifdef XXX_DBG
 #	define OGZPLG__DBG

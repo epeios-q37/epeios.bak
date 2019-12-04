@@ -21,8 +21,8 @@
 
 // Obsolete ???
 
-#ifndef INFOFRNT__INC
-# define INFOFRNT__INC
+#ifndef INFOFRNT_INC_
+# define INFOFRNT_INC_
 
 namespace infofrnt {
 }

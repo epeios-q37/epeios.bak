@@ -19,8 +19,8 @@
 
 // OrGaniZer Callback-Based Storage.
 
-#ifndef OGZCBS__INC
-# define OGZCBS__INC
+#ifndef OGZCBS_INC_
+# define OGZCBS_INC_
 
 # ifdef XXX_DBG
 #	define OGZCBS__DBG

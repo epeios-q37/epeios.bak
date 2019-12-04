@@ -17,8 +17,8 @@
     along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef WRPCOLUMN__INC
-# define WRPCOLUMN__INC
+#ifndef WRPCOLUMN_INC_
+# define WRPCOLUMN_INC_
 
 # include "ogzclm.h"
 

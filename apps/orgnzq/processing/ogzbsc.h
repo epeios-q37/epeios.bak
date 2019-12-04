@@ -19,8 +19,8 @@
 
 // OrGaniZer BaSiCs
 
-#ifndef OGZBSC__INC
-# define OGZBSC__INC
+#ifndef OGZBSC_INC_
+# define OGZBSC_INC_
 
 # include "bso.h"
 # include "err.h"

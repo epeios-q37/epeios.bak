@@ -17,8 +17,8 @@
     along with 'prxyq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef WATCHDOG__INC
-# define WATCHDOG__INC
+#ifndef WATCHDOG_INC_
+# define WATCHDOG_INC_
 
 namespace watchdog {
 	void Ping( void );

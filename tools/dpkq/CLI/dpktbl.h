@@ -17,8 +17,8 @@
     along with dpkq.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef DPKTBL__INC
-# define DPKTBL__INC
+#ifndef DPKTBL_INC_
+# define DPKTBL_INC_
 
 # include "dpkals.h"
 # include "dpkrcd.h"

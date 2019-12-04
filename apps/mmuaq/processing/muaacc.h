@@ -19,8 +19,8 @@
 
 // MUA ACCount
 
-#ifndef MUAACC__INC
-# define MUAACC__INC
+#ifndef MUAACC_INC_
+# define MUAACC_INC_
 
 # ifdef XXX_DBG
 #	define MUAXMP__DBG

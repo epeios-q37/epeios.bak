@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef CSDSCB__INC
-# define CSDSCB__INC
+#ifndef CSDSCB_INC_
+# define CSDSCB_INC_
 
 # define CSDSCB_NAME		"CSDSCB"
 

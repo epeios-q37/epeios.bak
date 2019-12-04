@@ -17,8 +17,8 @@
     along with 'MMUAq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef COMMON__INC
-# define COMMON__INC
+#ifndef COMMON_INC_
+# define COMMON_INC_
 
 # include "muaacc.h"
 # include "muabsc.h"

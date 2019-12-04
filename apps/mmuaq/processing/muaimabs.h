@@ -19,8 +19,8 @@
 
 // MUA IMA(P) BaSe
 
-#ifndef MUAIMABS__INC
-# define MUAIMABS__INC
+#ifndef MUAIMABS_INC_
+# define MUAIMABS_INC_
 
 # ifdef XXX_DBG
 #	define MUAXMP__DBG

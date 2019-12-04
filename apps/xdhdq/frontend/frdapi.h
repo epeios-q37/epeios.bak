@@ -5,8 +5,8 @@
 	This file was generated using barq 20171107 (Build Nov  7 2017 10:45:46 Win64;MSC 1911;AMD64)
 */
 
-#ifndef XDHDQ__INC
-# define XDHDQ__INC
+#ifndef XDHDQ_INC_
+# define XDHDQ_INC_
 
 # define XDHDQ_TARGET "xdhdq"
 # define XDHDQ_API_VERSION "1"
@@ -225,4 +225,4 @@ namespace xdhdq {
 
 }
 
-#endif //#ifndef xdhdq__INC
+#endif //#ifndef xdhdq_INC_

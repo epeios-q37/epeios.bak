@@ -17,8 +17,8 @@
     along with dmnzq.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef MISC__INC
-# define MISC__INC
+#ifndef MISC_INC_
+# define MISC_INC_
 
 # include "csdscb.h"
 

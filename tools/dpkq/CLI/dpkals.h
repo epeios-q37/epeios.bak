@@ -18,8 +18,8 @@
 */
 
 
-#ifndef DPKALS__INC
-# define DPKALS__INC
+#ifndef DPKALS_INC_
+# define DPKALS_INC_
 
 # include "str.h"
 

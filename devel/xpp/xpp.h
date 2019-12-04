@@ -17,8 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef XPP__INC
-# define XPP__INC
+#ifndef XPP_INC_
+# define XPP_INC_
 
 # define XPP_NAME		"XPP"
 

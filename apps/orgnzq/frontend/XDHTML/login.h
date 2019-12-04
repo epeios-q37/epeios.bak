@@ -17,8 +17,8 @@
     along with 'orgnzq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef LOGIN__INC
-# define LOGIN__INC
+#ifndef LOGIN_INC_
+# define LOGIN_INC_
 
 # include "base.h"
 

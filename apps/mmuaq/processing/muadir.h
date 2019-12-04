@@ -19,8 +19,8 @@
 
 // MUA DIRectory
 
-#ifndef MUADIR__INC
-# define MUADIR__INC
+#ifndef MUADIR_INC_
+# define MUADIR_INC_
 
 # ifdef XXX_DBG
 #	define MUADIR__DBG

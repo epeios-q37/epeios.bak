@@ -17,8 +17,8 @@
     along with fwtchrq.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef EXCLUSION__INC
-# define EXCLUSION__INC
+#ifndef EXCLUSION_INC_
+# define EXCLUSION_INC_
 
 # include "misc.h"
 

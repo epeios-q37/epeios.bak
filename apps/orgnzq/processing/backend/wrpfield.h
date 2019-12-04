@@ -17,8 +17,8 @@
     along with 'orgnzq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef WRPFIELD__INC
-# define WRPFIELD__INC
+#ifndef WRPFIELD_INC_
+# define WRPFIELD_INC_
 
 # include "common.h"
 

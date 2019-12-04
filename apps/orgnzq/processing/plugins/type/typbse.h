@@ -19,8 +19,8 @@
 
 // TYPe plugin BaSE
 
-#ifndef TYPBSE__INC
-# define TYPBSE__INC
+#ifndef TYPBSE_INC_
+# define TYPBSE_INC_
 
 # include "typrgy.h"
 

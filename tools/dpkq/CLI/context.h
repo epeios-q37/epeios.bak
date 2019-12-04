@@ -17,8 +17,8 @@
     along with dpkq.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef CONTEXT__INC
-# define CONTEXT__INC
+#ifndef CONTEXT_INC_
+# define CONTEXT_INC_
 
 # include "dpkctx.h"
 

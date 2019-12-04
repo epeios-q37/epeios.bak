@@ -17,8 +17,8 @@
     along with 'MMUAq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef WRPEXAMPLE__INC
-# define WRPEXAMPLE__INC
+#ifndef WRPEXAMPLE_INC_
+# define WRPEXAMPLE_INC_
 
 # include "muaxmp.h"
 

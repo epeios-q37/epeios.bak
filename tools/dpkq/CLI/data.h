@@ -19,8 +19,8 @@
 
 // DATA.
 
-#ifndef DATA__INC
-# define DATA__INC
+#ifndef DATA_INC_
+# define DATA_INC_
 
 # include "data_d.h"
 # include "data_r.h"

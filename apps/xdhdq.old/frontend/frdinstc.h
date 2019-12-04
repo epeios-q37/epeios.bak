@@ -19,8 +19,8 @@
 
 // FRontenD INSTanCes
 
-#ifndef FRDINSTC__INC
-# define FRDINSTC__INC
+#ifndef FRDINSTC_INC_
+# define FRDINSTC_INC_
 
 # include "frdfrntnd.h"
 

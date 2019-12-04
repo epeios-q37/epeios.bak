@@ -17,8 +17,8 @@
     along with dpkq.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef DPKCTX__INC
-# define DPKCTX__INC
+#ifndef DPKCTX_INC_
+# define DPKCTX_INC_
 
 # include "bch.h"
 # include "dpkbsc.h"
