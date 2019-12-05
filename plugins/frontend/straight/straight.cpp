@@ -126,14 +126,13 @@ public:
 			case plgn::rhDetailed:
 				Abstract->HostService = HostService;
 			case plgn::rhBasic:
-				qRReturn;
 				break;
 			default:
 				qRGnr();
 				break;
 			}
-		
-		Success = true;
+		else
+            Success = true;
 	qRR
 	qRT
 	qRE

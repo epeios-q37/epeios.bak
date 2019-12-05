@@ -16,8 +16,8 @@
 						<Backend Type="Predefined">Embedded</Backend>
 					</xpp:ifeq>
 					<xpp:ifeq select="packing" value="no">
-						<!--<Backend Type="Predefined">LocalHost</Backend>-->
-						<Backend Type="Predefined">Embedded</Backend>
+						<Backend Type="Predefined">LocalHost</Backend>
+						<!--Backend Type="Predefined">Embedded</Backend-->
 						<!--Backend Type="None"/-->
 					</xpp:ifeq>
 				</xpp:bloc>
@@ -72,7 +72,7 @@
 					<xpp:bloc>Embedded.xprj</xpp:bloc>
 				</Project>
 			</Projects>
-			<Backends Default="Embedded">
+			<Backends Default="Localhost">
 				<xpp:ifeq select="packing" value="yes">
 					<xpp:bloc>
 						<xpp:set name="PluginPath" value="./plugins/"/>
@@ -85,7 +85,7 @@
 						<xpp:set name="BackendPath" value="h:/bin/"/>
 					</xpp:bloc>
 				</xpp:ifeq>
-				<xpp:bloc marker="$">
+				<xpp:bloc marker="$">s
 					<Backend id="Embedded" Alias="EmbeddedPredefinedBackend" Plugin="Embedded">
 						<xpp:expand value-of="BackendPath"/>
 						<xpp:bloc>esketchbkd</xpp:bloc>
