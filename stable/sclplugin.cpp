@@ -41,9 +41,18 @@ namespace {
 
 #define DEF( name, function ) extern "C" FUNCTION_SPEC function name
 
+#ifdef CPE_C_CLANG
+# pragma clang diagnostic push
+# pragma clang diagnostic ignored "-Wreturn-type-c-linkage"
+#endif
+
 DEF( PLGNCORE_PLUGIN_LABEL_FUNCTION_NAME, plgncore::plugin_label );
 DEF( PLGNCORE_PLUGIN_IDENTIFIER_FUNCTION_NAME, plgncore::plugin_identifier );
 DEF( PLGNCORE_RETRIEVE_CALLBACK_FUNCTION_NAME, plgncore::retrieve_callback );
+
+#ifdef CPE_C_CLANG
+# pragma clang diagnostic pop
+#endif
 
 const char *PLGNCORE_PLUGIN_LABEL_FUNCTION_NAME( void )
 {

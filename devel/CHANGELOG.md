@@ -10,6 +10,12 @@
 
 ## 2019-12-04:
 
+- SCPLUGIN
+    - disabling *Clang* `return-type-c-linkage` warning,
+
+
+## 2019-12-04:
+
 - CSDLES:
     - [trvl],
 

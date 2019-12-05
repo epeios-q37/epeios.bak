@@ -91,12 +91,10 @@ public:
 		SCLRack.Init();
 		Data.Init( Context, BackendFilename, &SCLRack );
 
-		if ( !Core_.Init( BackendFilename, Data, qRPU ) )
-			qRReturn;
-
-		Success = true;
-
-		Connected_ = true;
+		if ( Core_.Init( BackendFilename, Data, qRPU ) ) {
+            Success = true;
+            Connected_ = true;
+        }
 	qRR
 	qRT
 	qRE
@@ -124,14 +122,13 @@ public:
 			case plgn::rhDetailed:
 				Abstract->BackendFilename = BackendFilename;
 			case plgn::rhBasic:
-				qRReturn;
 				break;
 			default:
 				qRGnr();
 				break;
 			}
-		
-		Success = true;
+		else
+            Success = true;
 	qRR
 	qRT
 	qRE
@@ -153,7 +150,7 @@ void sclplugin::SCLPLUGINPluginDetails( str::dString &Details )
 	Details.Append( ')' );
 }
 
-qGCTOR(straight)
+qGCTOR(embedded)
 {
 	if ( strcmp( rpembedded::Identifier, IDENTIFIER ) )
 		qRChk();
