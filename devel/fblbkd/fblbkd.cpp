@@ -724,7 +724,7 @@ bso::bool__ fblbkd::backend___::TestCompatibility( fdr::rRWDriver &FrontendIODri
 	bso::bool__ Success = false;
 qRH
 	str::string MessageLabel, URLLabel;
-	TOL_CBUFFER___ MessageLabelBuffer, URLLAbelBuffer;
+	TOL_CBUFFER___ MessageLabelBuffer, URLLabelBuffer;
 qRB
 	MessageLabel.Init( _BackendLabel );
 	MessageLabel.Append( "UpdateMessage" );
@@ -732,7 +732,7 @@ qRB
 	URLLabel.Init( _BackendLabel );
 	URLLabel.Append( "UpdateURL" );
 
-	Success = _TestCompatibility( FrontendIODriver, _APIVersion, MessageLabel.Convert( MessageLabelBuffer ), URLLabel.Convert( URLLAbelBuffer ) );
+	Success = _TestCompatibility( FrontendIODriver, _APIVersion, MessageLabel.Convert( MessageLabelBuffer ), URLLabel.Convert( URLLabelBuffer ) );
 qRR
 qRT
 qRE

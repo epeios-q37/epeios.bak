@@ -36,7 +36,7 @@ qRB
 
 	S_().DownstreamExecute( Script, Result );
 
-	if ( Buffer != NULL ) 
+	if ( Buffer != NULL )
 		Result.Convert( *Buffer );
 //	else if ( Result.Amount() != 0 )
 //		qRGnr();
@@ -86,7 +86,7 @@ static void Launch_(
 	mtk::gBlocker &Blocker )
 {
 qRFH;
-	shared_data__ &Data = *(shared_data__ *)UP; 
+	shared_data__ &Data = *(shared_data__ *)UP;
 qRFB;
 	rSession &Session = Data.Session();
 
@@ -170,7 +170,7 @@ qRE
 void session::rSession::DownstreamExecute(
 	const str::string_ &Script,
 	str::string_ &Result )
-{	
+{
 qRH
 qRB
 	_Lock( tGlobal );
@@ -246,7 +246,7 @@ static bso::sign__ Search_(
 
 row__ session::dSessions::New(
 	id__ &Id,
-	const str::string_ &Language,
+	const char *Language,
 	const str::dString &Token,	// If _not_ empty, DEMO.
 	xdhujp::sProxyCallback *&ProxyCallback)
 {
@@ -255,7 +255,6 @@ qRH
 	xdhcmn::cSession *SessionCallback = NULL;
 	rSession *Session = NULL;
 	timer__ Timer;
-	TOL_CBUFFER___ LanguageBuffer;
 qRB
 	Row = Sessions.New();
 
@@ -269,9 +268,7 @@ qRB
 	if ( ProxyCallback == NULL )
 		qRAlc();
 
-	Language.Convert( LanguageBuffer );
-
-	SessionCallback = _A().RetrieveCallback( LanguageBuffer, Token, ProxyCallback );
+	SessionCallback = _A().RetrieveCallback( Language, Token, ProxyCallback );
 
 	if ( SessionCallback != NULL ) {
 		Session->Init( *SessionCallback );

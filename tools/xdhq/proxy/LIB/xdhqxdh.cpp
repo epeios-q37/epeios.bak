@@ -1147,7 +1147,7 @@ namespace {
 	protected:
 		virtual bso::sBool XDHCMNInitialize(
 			xdhcmn::cUpstream *Callback,
-			const str::dString &Language,
+			const char *Language,
 			const str::dString &Token ) override
 		{
 			bso::sBool Success = false;

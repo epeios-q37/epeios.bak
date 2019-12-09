@@ -107,7 +107,7 @@ namespace session {
 	{
 	private:
 		mtx::handler___
-			_Global, 
+			_Global,
 			_Upstream,
 			_Downstream;
 		void _Create( mtx::handler___ &Handler )
@@ -268,7 +268,7 @@ namespace session {
 		}
 		bso::sBool Initialize(
 			xdhcmn::cUpstream *Callback,
-			const str::dString &Language,
+			const char *Language,
 			const str::dString &Token )	// If empty, PROD session, else token used for the DEMO session.
 		{
 			return Session_.Initialize(Callback, Language, Token);
@@ -406,7 +406,7 @@ namespace session {
 			Ids.Allocate( Size, aem::mFitted );
 			Index.Allocate( Size, aem::mFitted );
 			Timers.Allocate( Size, aem::mFitted );
-			
+
 		}
 	public:
 		struct s
@@ -487,12 +487,12 @@ namespace session {
 		//f Return the position of a mandatory new session.
 		row__ New(
 			id__ &Id,
-			const str::string_ &Language,
+			const char *Language,
 			const str::dString &Token,
 			xdhujp::sProxyCallback *&ProxyCallback );
 		row__ New(
 			str::string_ &Id,
-			const str::string_ &Language,
+			const char *Language,
 			const str::dString &Token,
 			xdhujp::sProxyCallback *&ProxyCallback )
 		{
@@ -575,7 +575,7 @@ namespace session {
 		{
 			return !IsAlive( Row );
 		}
-		//f Balance the index. 
+		//f Balance the index.
 		void Balance( void )
 		{
 			if ( S_.Root != qNIL )

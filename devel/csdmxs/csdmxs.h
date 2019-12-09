@@ -324,7 +324,7 @@ qRE
 				if ( OwnerShipTaken )
 					qRFwk();
 				Core_.Store( SUP, Id );
-#if 0
+#if 1
 				Action = Callback_->Process( IODriver, SUP );
 #else
 				Action = csdscb::aContinue;
@@ -397,7 +397,7 @@ qRE
 	};
 
 # if 0
-	// Pour l'utilisation en tant que service Windows, voir csdbns::server__'. 
+	// Pour l'utilisation en tant que service Windows, voir csdbns::server__'.
 	class server___
 	{
 	private:

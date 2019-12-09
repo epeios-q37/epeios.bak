@@ -76,7 +76,7 @@ namespace {
 			str::string_ &SessionId,	// If empty, contains new id when returning.
 			const str::string_ &Action,
 			const str::string_ &Response,
-			const str::string_ &Language,
+			const char *Language,
 			const query::dPairs &Pairs,
 			session::rSessions &RawSessions,
 			str::string_ &Script )
@@ -176,6 +176,7 @@ namespace {
 	qRH;
 		str::string SessionId, Target, CGI, Result, Language, Script;
 		bso::bool__ Continue = false;
+		qCBUFFERr Buffer;
 	qRB;
 		SessionId.Init();
 		Pairs.GetValue(str::string( "_session" ), SessionId );
@@ -193,7 +194,7 @@ namespace {
 		Pairs.GetValue(str::string( "_language" ), Language );
 
 		Script.Init();
-		Continue = Handle_( SessionId, Action, Result, Language, Pairs, Sessions, Script );
+		Continue = Handle_( SessionId, Action, Result, Language.Convert( Buffer ), Pairs, Sessions, Script );
 
 		if ( Script.Amount()  ) {
 			if ( CGI.Amount() ) {

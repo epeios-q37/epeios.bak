@@ -8,6 +8,13 @@
 - [stdz]: modification to comply with current standards;
 - [trvl]: trivial modifications;
 
+## 2019-12-09:
+
+- CSDMXS:
+    - a first processing is now launched immediately after preprocessing,
+- XDHUPS:
+    - [adpt],
+
 ## 2019-12-04:
 
 - SCPLUGIN
