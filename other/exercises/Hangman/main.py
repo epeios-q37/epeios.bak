@@ -6,7 +6,7 @@
 
 import sys, os
 
-# Default language; English.
+# Default language: English.
 # Replace below "en" by "fr" to switch to French.
 lang = "en"
 
@@ -30,8 +30,10 @@ except NameError:
 
 success = False
 
+print("\nYou can change the language by modifying the 'main.py' file.")
+
 while not success:
-    exercise = input("\n" + _messages["input"][lang].format(" (a,b,c,d,e,f,g)"))
+    exercise = input(_messages["input"][lang].format(" (a,b,c,d,e,f,g)"))
 
     exerciseFilename = lang + "." + exercise.lower()
 

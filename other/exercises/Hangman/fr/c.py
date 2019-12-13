@@ -6,6 +6,7 @@ from workshop.fr.c import *
 
 MONTRER_MOT_SECRET = VRAI
 
+
 def choisirMot(*args):
   return workshop.rfPickWord(*args)
   

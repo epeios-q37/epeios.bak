@@ -6,6 +6,13 @@ from workshop.fr.d import *
 
 MONTRER_MOT_SECRET = VRAI
 
+"""
+Á des fins de simplification, les fonctions développées par l'étudiant dans les
+précédents exercices font appels à des fonctions internes. Bien entendu, les
+étudiants utiliseront le code qu'ils ont écrits lors des précédents exercices.
+"""
+
+
 def choisirMot(*args):
   return workshop.rfPickWord(*args)
 

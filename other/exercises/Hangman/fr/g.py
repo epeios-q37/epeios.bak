@@ -15,14 +15,6 @@ def lettreEstDansMot(*args):
     return workshop.rfIsLetterInWord(*args)
 
 
-def reinitialiser(pendu, dictionnaire, suggestion):
-  pendu.reinitialiser(dictionnaire, suggestion)
-  print(pendu.motSecret)
-  redessiner()
-  effacerEtAfficher(workshop.rfGetMask(pendu.motSecret, ""))
-
-  return pendu.motSecret
-
 """
 En premier lieu, ne pas traiter la variable membre
 'enCours' de la class 'Pendu'.
@@ -101,6 +93,18 @@ def traiterPioche(pendu, pioche, parties):
   elif pendu.enCours and majCorpsEtTesterSiDefaite(parties, pendu.nbErreurs):
     notifier("\nPerdu !\nErreurs : {} ; bonnes pioches : {}.\n\nLe mot à deviner était : '{}'.".format(pendu.nbErreurs, len(pendu.bonnesPioches),  pendu.motSecret))
     pendu.enCours = FAUX
+
+
+"""
+Modifier pour utiliser 'determinerMasqueEtTesterSiVictoire(…)'.
+"""
+def reinitialiser(pendu, dictionnaire, suggestion):
+  pendu.reinitialiser(dictionnaire, suggestion)
+  print(pendu.motSecret)
+  effacerEtAfficher(determinerMasqueEtTesterSiVictoire(pendu.motSecret, "")[0])
+
+  return pendu.motSecret
+
 
 
 """

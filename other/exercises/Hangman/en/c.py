@@ -15,7 +15,7 @@ def isLetterInWord(*args):
     return workshop.rfIsLetterInWord(*args)
 
 """
-Returns a string containing 'word' (which is in lowercase) where
+Return a string containing 'word' (which is in lowercase) where
 all letters which are not in in 'guesses' (also in lowercase)
 are replaced by the '_' character.
 """

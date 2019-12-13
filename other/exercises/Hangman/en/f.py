@@ -24,9 +24,9 @@ def updateBody(*args):
 
 
 """
-Let's introduce POO.
+Let's introduce object-oriented programmation.
 Class name must be 'Hangman',
-but variables and methos name are free.
+but variables and methods name are free.
 """
 class Hangman:
   def reset(self,dictionary,suggestion):
@@ -40,8 +40,8 @@ class Hangman:
     self.errorsAmount = 0
 
   """
-  Updates the good guesses ot the amount of errors wether 'guess' is
-  good ot not. Returns TRUE if 'guess' is good, FALSE otherwise.
+  Update the good guesses ot the amount of errors wether 'guess' is
+  good ot not. Return TRUE if 'guess' is good, FALSE otherwise.
   """
   def handleAndTestGuess(self, guess):
     if isLetterInWord(guess, self.secretWord):

@@ -1,4 +1,2 @@
 # No dependencies; all needed modules are in the repository ('Atlas.zip' and 'EduTK.zip').
 # This file exists only to avoid 'Repl.it' to attempt to load them from 'Pypi'.
-# Create a 'Python' repl, and give the address of this repository in the corresponding field.
-

@@ -18,13 +18,13 @@ DICTIONARY = ("tree", "house", "chair")
 
 """
 The students will be asked to develop the
-version 0, 1 and/or 2 of the '_PickWord(…)' function,
+version 0, 1 and/or 2 of the '_pickWord(…)' function,
 wether or not one wants to introduce tuples
-('DICTIONARY').
+(use of 'DICTIONARY').
 """
 
 """
-Returns a random word from 'DICTIONARY'.
+Return a random word from 'DICTIONARY'.
 """
 def _pickWord0():
   return DICTIONARY[randint(0, len(DICTIONARY)-1)]
@@ -34,7 +34,7 @@ def _pickWord0():
 """
 - 'suggestion'; the content of the secrete word text box;
   used only in 'dev' mode.
-Returns 'suggestion', if not empty, otherwise a random
+Return 'suggestion', if not empty, otherwise a random
 word from 'DICTIONARY'.
 """
 def _pickWord1(suggestion):
@@ -49,7 +49,7 @@ def _pickWord1(suggestion):
 - 'dictionary': tuple containing words to pick,
 - 'suggestion'; the content of the secrete word text box;
   used only in 'dev' mode.
-Returns 'suggestion', if not empty, otherwise a random
+Return 'suggestion', if not empty, otherwise a random
 word from 'dictionary'.
 NOTA: the 'DICTIONARY' constant can naturally be removed.
 """

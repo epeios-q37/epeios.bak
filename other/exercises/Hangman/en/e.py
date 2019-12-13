@@ -8,7 +8,7 @@ SHOW_SECRET_WORD = TRUE
 
 """
 Some variables are now handled by the student. Names are free.
-Can be omitted, as 'reset(…)' will be call before thie variables
+Can be omitted, as 'reset(…)' will be call before the variables
 will be used.
 """
 secretWord = ""
@@ -36,8 +36,8 @@ def updateBody(*args):
 
 
 """
-Resets the variables and the display for a new round.
-Returns the secret word.
+Reset the variables and the display for a new round and
+return the secret word.
 """
 def reset(dictionary, suggestion):
   global secretWord, goodGuesses, errorsAmount
@@ -52,7 +52,11 @@ def reset(dictionary, suggestion):
 
 """
 N.B.: NOT THREAD-SAFE!!!
-- 'guess': the letter choosen by the player,
+Multiple instances can be launched to show
+why this is a problem.
+"""
+"""
+- 'guess': the letter chosen by the player,
 - 'parts': the different part of the body to draw.
 If 'guess' in 'word', must update the mask, otherwise
 must update the drawing of the body.

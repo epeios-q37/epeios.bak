@@ -6,7 +6,8 @@ from workshop.fr.f import *
 
 MONTRER_MOT_SECRET = VRAI
 
-def pickWord(*args):
+
+def choisirMot(*args):
   return workshop.rfPickWord(*args)
 
 
@@ -21,10 +22,14 @@ def getMask(*args):
 def updateBody(*args):
   return workshop.rfUpdateBody(*args)
 
-
+"""
+Allons-y avec la programmation orientée objet.
+Le nom de la classe doit être 'Pendu',
+mais le nom des variables et des méthodes est libre.
+"""
 class Pendu:
-  def reinitialiser(self, dictionnaire,suggestion):
-    self.motSecret = pickWord(dictionnaire,suggestion)
+    def reinitialiser(self, dictionnaire,suggestion):
+    self.motSecret = choisirMot(dictionnaire,suggestion)
     self.bonnesPioches = ""
     self.nbErreurs = 0
 
@@ -34,12 +39,12 @@ class Pendu:
     self.nbErreurs = 0
     
   """
-  Met à jour le nombre d'erreurs ou les bonnes pioches selon
-  que 'pioche' est correct.
-  Si 'pioche' est bon, retourne VRAI, sinon retourne FAUX.
+  Mettre à jour le nombre d'erreurs ou les bonnes pioches selon
+  que 'pioche' est correct ou non.
+  Si 'pioche' est bon, retourner VRAI, sinon retourner FAUX.
   """
   def traiterEtTesterPioche(self, pioche):
-    if isLetterInWord(pioche, self.motSecret):  # Test is not mandatory
+    if isLetterInWord(pioche, self.motSecret):
       if not isLetterInWord(pioche, self.bonnesPioches):
         self.bonnesPioches += pioche
       return VRAI

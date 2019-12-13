@@ -22,7 +22,7 @@ DICTIONNAIRE = ("Arbre", "Maison", "Chaise")
 Il sera demandé aux élèves de développer les
 versions 0, 1 et/ou 2 de la fonction '_choisirMot(...)',
 selon que l'on veuille ou non aborder les 'tuples'
-('DICTIONNAIRE').
+(utilisation de 'DICTIONNAIRE').
 """
 
 """
