@@ -30,6 +30,8 @@ except NameError:
 
 success = False
 
+print("\nYou can change the language by modifying the 'main.py' file.")
+
 while not success:
     exercise = input("\n" + _messages["input"][lang].format(" (a,b,c,z_1,z_2a,z_2b,z_3)"))
 
