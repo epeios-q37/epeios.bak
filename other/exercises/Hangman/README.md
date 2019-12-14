@@ -1,3 +1,9 @@
+<!--
+    For Repl.it users: click on the green 'run' button,
+    select an exercise, and click on (or scan) the then
+    displayed QR code.
+-->
+
 # Modern programming exercises, featuring the [Hangman game](https://q37.info/s/gtdtk4hp).
 
 [![Run on Repl.it](https://repl.it/badge/github/epeios-q37/hangman-exercises)](https://q37.info/s/z3whmbfz) [![License](https://img.shields.io/pypi/l/atlastk.svg?style=plastic)](https://github.com/epeios-q37/hangman-exercises/blob/master/LICENSE)

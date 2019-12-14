@@ -1,3 +1,9 @@
+<!--
+    For Repl.it users: click on the green 'run' button,
+    select an exercise, and click on (or scan) the then
+    displayed QR code.
+-->
+
 # A simple example of a modern programming exercise
 
 This project has for purpose to show, with a simple example, how to use the [*EduTK*](https://q37.info/s/xhgwkn7v) *Python* library to make a programming exercise. It features a somewhat improved version of the [*Hello, World!*](https://q37.info/s/k9hfpjbq) program.

@@ -1,6 +1,6 @@
 <!--
     For Repl.it users: click on the green 'run' button,
-    select an exercise, click on (or scan) the then
+    select an exercise, and click on (or scan) the then
     displayed QR code.
 -->
 
@@ -12,7 +12,7 @@ This project shows how modern programming exercises should be made. This exercis
 
 Simply retrieve the repository (`git clone https://github.com/epeios-q37/basics-exercises`, or get the corresponding *ZIP* file here: <https://q37.info/s/js7fm3vj>), and, in a console, from to the root directory,  `python main.py` (you can change the language of the exercises by modifying `main.py`). You can also specifically launch an exercise with `python (en|fr)/(A|B|C|Z_(1|2(a|b)|3)).py` (for example: `python fr/B.py`). You can (should) use `python3` instead of `python`.
 
-Alternatively, you can also use [*Repl.it*](https://q37.info/s/srnnb7hj), so you have nothing to install on your computer. Follow this [link](https://q37.info/s/brjzr9fv), click on the green `run` button, select an exercise, and then click on (or scan) the then displayed [QR code](https://q37.info/s/3pktvrj7). To choose another exercise, click on the green `restart` button.
+Alternatively, you can also use [*Repl.it*](https://q37.info/s/mxmgq3qm), so you have nothing to install on your computer. Follow this [link](https://q37.info/s/brjzr9fv), click on the green `run` button, select an exercise, and then click on (or scan) the then displayed [QR code](https://q37.info/s/3pktvrj7). To choose another exercise, click on the green `restart` button.
 
 The files found under the `en` and `fr` root directories are examples of what the students have to figure out.
 

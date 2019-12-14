@@ -1,6 +1,11 @@
+<!--
+    For Repl.it users: click on the green 'run' button,
+    and click on (or scan) the then displayed QR code.
+-->
+
 # Tortoise: [turtle graphics](https://q37.info/s/3dwhcdfm) on the web
 
-[![Version 0.1.1](https://img.shields.io/static/v1.svg?&color=90b4ed&label=PyPi&message=0.1.1)](https://q37.info/s/k3c3fmvp) [![Download stats](https://img.shields.io/pypi/dm/tortoise.svg)](https://pypistats.org/packages/tortoise) [![License](https://img.shields.io/pypi/l/atlastk.svg?style=plastic)](https://github.com/epeios-q37/tortoise-python/blob/master/LICENSE)
+[![Run on Repl.it](https://repl.it/badge/github/epeios-q37/tortoise-python)](https://q37.info/s/p3cvfxdx) [![Version 0.1.1](https://img.shields.io/static/v1.svg?&color=90b4ed&label=PyPi&message=0.1.1)](https://q37.info/s/k3c3fmvp) [![Download stats](https://img.shields.io/pypi/dm/tortoise.svg)](https://pypistats.org/packages/tortoise) [![License](https://img.shields.io/pypi/l/atlastk.svg?style=plastic)](https://github.com/epeios-q37/tortoise-python/blob/master/LICENSE)
 
 [![tortoise library example](https://q37.info/s/frgzbhq9)](http://q37.info/s/dj9b7ksf)
 
@@ -10,7 +15,7 @@ Cloning the repository (or retrieving the corresponding ZIP file) is sufficient 
 
 The module is also available on *Pypi*: <https://pypi.org/project/tortoise/>. Simply launch `pip install tortoise` to install it.
 
-You can also test the library directly in your web browser, with nothing to install: <http://q37.info/s/dj9b7ksf>.
+Alternatively, you can also use [*Repl.it*](https://q37.info/s/mxmgq3qm), so you have nothing to install on your computer. Follow this [link](https://q37.info/s/p3cvfxdx), click on the green `run` button, and then click on (or scan) the then displayed [QR code](https://q37.info/s/3pktvrj7).
 
 This *Python* module is part of a [larger project](https://q37.info/s/tpkx4cfk) that aims to provide a way to write modern examples or exercises for programming tutorials.
 

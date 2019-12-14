@@ -24,7 +24,7 @@ SOFTWARE.
 """
 
 import os, sys
-sys.path.append("./Atlas.python.zip")
+sys.path.append("./Atlas.zip")
 sys.path.append("./tortoise")
 
 # For using in Repl.it

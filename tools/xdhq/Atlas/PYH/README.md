@@ -1,3 +1,9 @@
+<!--
+    For Repl.it users: click on the green 'run' button,
+    select a demonstration, and click on (or scan) the then
+    displayed QR code.
+-->
+
 # *Python* version of the *Atlas* toolkit
 
 ![For Python](http://q37.info/download/assets/Python.png "Python logo")
