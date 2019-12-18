@@ -24,6 +24,7 @@ SOFTWARE.
 """
 
 import sys, os, inspect
+from random import randint
 sys.path.append("workshop/_")
 
 import educ as _
@@ -95,13 +96,16 @@ def showSecretWord():
 
 
 def _pickRandom(dictionary, suggestion):
+  word = ""
   try:
-    return ufPickWord()(dictionary,suggestion)
+    word = ufPickWord()(suggestion,dictionary[randint(0, len(dictionary)-1)])
   except TypeError:
     try:
-      return ufPickWord()(suggestion)
+      word = ufPickWord()(suggestion)
     except TypeError:
-      return ufPickWord()()
+      word =  ufPickWord()()
+
+  return word.lower()
 
   
 def mainBaseReset(dictionary, suggestion):
