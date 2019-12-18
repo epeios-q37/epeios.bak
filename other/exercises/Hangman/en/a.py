@@ -14,53 +14,67 @@ will not be displayed (default mode).
 """
 SHOW_SECRET_WORD = TRUE
 
+# To define only with version 4 of the '_pickWord()' function.
 DICTIONARY = ("tree", "house", "chair")
 
-"""
-The students will be asked to develop the
-version 0, 1 and/or 2 of the '_pickWord(…)' function,
-wether or not one wants to introduce tuples
-(use of 'DICTIONARY').
-"""
 
 """
-Return a random word from 'DICTIONARY'.
+Version 1:
+Returns a random word from 'DICTIONARY'.
 """
-def _pickWord0():
-  return DICTIONARY[randint(0, len(DICTIONARY)-1)]
-
+def _pickWord1():
+  return "foot"
 
 
 """
+Version 2:
 - 'suggestion'; the content of the secrete word text box;
   used only in 'dev' mode.
-Return 'suggestion', if not empty, otherwise a random
-word from 'DICTIONARY'.
+Return 'suggestion', if not empty, otherwise some word.
 """
-def _pickWord1(suggestion):
+def _pickWord2(suggestion):
+  if suggestion:
+    return suggestion
+  else:
+    return "arm"
+
+
+"""
+As next the exercise, one can choose to make them develop:
+- version 3 only, if you do not want to deal with tuples;
+- version 3, then version 4;
+- directly the version 4.
+"""
+
+
+"""
+Version 3:
+- 'randomWord': an random word,
+- 'suggestion'; the content of the secrete word text box;
+  used only in 'dev' mode.
+Return 'suggestion', if not empty, otherwise 'randomWord'.
+"""
+def _pickWord3(suggestion,randomWord):
+  if suggestion:
+    return suggestion
+  else:
+    return randomWord
+
+
+"""
+Version 4:
+- 'suggestion'; the content of the secrete word text box;
+  used only in 'dev' mode.
+Return 'suggestion', if not empty, otherwise a random word.
+"""
+def _pickWord4(suggestion):
   if suggestion:
     return suggestion
   else:
     return DICTIONARY[randint(0, len(DICTIONARY)-1)]
 
 
-
-"""
-- 'dictionary': tuple containing words to pick,
-- 'suggestion'; the content of the secrete word text box;
-  used only in 'dev' mode.
-Return 'suggestion', if not empty, otherwise a random
-word from 'dictionary'.
-NOTA: the 'DICTIONARY' constant can naturally be removed.
-"""
-def _pickWord2(dictionary,suggestion):
-  if suggestion:
-    return suggestion
-  else:
-    return dictionary[randint(0, len(dictionary)-1)]
-
-
-VERSION = 2 # 0, 1 or 2.
+VERSION = 4 # 1, 2, 3 or 2.
 
 pickWord = globals()["_pickWord" + str(VERSION)]
 
