@@ -38,7 +38,7 @@ from workshop.en.a import *
 
 SHOW_SECRET_WORD = TRUE
 
-def pickWord(dictionary,suggestion):
+def pickWord(suggestion):
 
 go(globals())
 ```
@@ -52,7 +52,7 @@ from workshop.fr.a import *
 
 MONTRER_MOT_SECRET = VRAI
 
-def choisirMot(dictionnaire,suggestion):
+def choisirMot(suggestion):
 
 go(globals())
 ```
