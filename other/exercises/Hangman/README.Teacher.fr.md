@@ -3,10 +3,12 @@
 Pre-requis.
 
 - Notions *Python* :
-  - Chaînes de caractères :
+  - chaînes de caractères :
     - tester si la chaîne est vide ou non.
-  - Variables (constantes) ;
-  - tuples (optionnels) ;
+  - variables (constantes) ;
+  - tuples :
+    - nombre d'éléments d'un tuple ;
+    - obtenir un élément à partir de son indice ;
   - commentaires avec '#' ;
   - booléens, avec `True`/`VRAI` et `False`/`Faux`.
 - notions web :

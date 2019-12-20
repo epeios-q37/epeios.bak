@@ -2,7 +2,7 @@
 
 Les exercices proposés ici vont consister à programmer le jeu du pendu, qui va ressemble à ça :
 
-![](./assets/Pendu.png)
+![](./assets/fr/Pendu.png)
 
 Pour que l'exercice fonctionne correctement, tous débuterons par `from workshop.fr.a import *`
 
@@ -59,7 +59,6 @@ Pour cet exercice, on va modifier le code existant de manière. Au lieu de retou
 
 Voici le pseudo-code de cette fonction :
 
-
 >  Si `suggestion` est vide  
 > &nbsp;&nbsp;Retourner un mot quelconque  
 > Sinon  
@@ -97,7 +96,6 @@ Avec cette version, lorsque le champs texte contient un mot, c'est toujours celu
 
 Cette version permet de retourner comme mot à deviner un mot choisi dans une liste de ton choix.
 
-
 ```python
 from workshop.fr.a import *
 
@@ -128,7 +126,9 @@ Le programme doit maintenant se comporter comme précédemment, sauf que le mot 
 
 Dans cette exercice, on va maintenant écrire la fonction qui va tester si la pioche de l'utilisateur, le caractère qu'il a choisit, est présent ou  non dans le mot à deviner.
 
-Pour cela on va reprendre le code écrit dans le précédent exercice, et on va opérer deux modifications. D'une part on va transformer la première ligne `from workshop.fr.a import *` en `from workshop.fr.b import *` (le `b` est remplacé par un `a`). D'autre part, on va rajouter la ligne `def lettreEstDansMot(lettre,mot):`
+Pour cela on va reprendre le code écrit dans le précédent exercice, et on va opérer deux modifications. D'une part on va transformer la première ligne `from workshop.fr.a import *` en `from workshop.fr.b import *` (le `a` est remplacé par un `b`). D'autre part, on va rajouter la ligne `def lettreEstDansMot(lettre,mot):`
+
+Le résultat va ressembler à ceci :
 
 ```python
 from workshop.fr.a import *
@@ -138,17 +138,12 @@ from workshop.fr.a import *
 def choisirMot(…):
     …
 
-# Du début du fichier jusqu'à ici, on reprend le code
-# du précedent exercice, à l'execption de la dernière ligne,
-# qui reste la dernière, et le 'a' de la première ligne
-# est transformé en 'b'.
-
 def lettreEstDansMot(lettre,mot):
 
 go(globals())
 ```
 
-L'objectif de cet exercice est d'écrire le contenu de la fonction `lettreEstDansMot`. Le paramètre `lettre` est la lettre choisie par m'utilisateur, et `mot` est le mot à deviner.
+L'objectif de cet exercice est d'écrire le contenu de la fonction `lettreEstDansMot`. Le paramètre `lettre` est la lettre choisie par l'utilisateur, et `mot` est le mot à deviner.
 
 Cette fonction doit retourner `VRAI` (ou `True`) si `lettre` est contenu dans `mot`, `FAUX` ou `False` dans le cas contraire.
 
@@ -159,9 +154,9 @@ Voici le pseudo-code correspondant :
 > Sinon  
 > &nbsp;&nbsp;Retourner `FAUX`
 
-orsque l'on lance le programme, voilà ce qui est affiché :
+Lorsque l'on lance le programme, voilà ce qui est affiché :
 
-![](./assets/Exo2.start.fr.png)
+![](./assets/fr/b/Start.png)
 
 Le mot affiché dans le champs texte ne sera probablement pas *buisson*.
 
@@ -169,25 +164,63 @@ Le mot affiché dans le champs texte ne sera probablement pas *buisson*.
 
 Si l'utilisateur clique sur une lettre qui est contenu dans le mot, voici ce qui devrait s'afficher.
 
-![](./assets/Exo2.true.correct.fr.png)
-
+![](./assets/fr/b/True.correct.png)
 
 Si la fonction ne retourne pas la bonne valeur, et doit donc être corrigée, alors ceci s'affiche :
 
-![](./assets/Exo2.true.bug.fr.png)
+![](./assets/fr/b/True.bug.png)
 
 Si l'utilisateur clique sur une lettre qui n'est **pas** contenu dans le mot, voici ce qui devrait s'afficher.
 
-![](./assets/Exo2.false.correct.fr.png)
+![](./assets/fr/b/False.correct.png)
 
 Si la fonction ne retourne pas la bonne valeur, et doit donc être corrigée, alors ceci s'affiche :
 
-![](./assets/Exo2.false.bug.fr.png)
+![](./assets/fr/b/False.bug.png)
 
-Vérifier avec plusieurs mots différents et toutes les lettres de ce mot que ce qui est affiché dans *Obtenu* soit toujours surligne en vert. Sinon, retenir le mot et la lettre qui pose problème, corriger la fonction, et vérifier si le résultat avec le même mot la même lettre est correct.
+Vérifier avec plusieurs mots différents et toutes les lettres de ce mot que ce qui est affiché dans *Obtenu* soit toujours surligné en vert. Sinon, retenir le mot et la lettre qui pose problème, corriger la fonction, et vérifier si le résultat avec le même mot la même lettre est correct.
 
 ## Exercice 3
 
+Dans cet exercice, on va programmer la construction masque, c'est-à-dire la chaîne de caractères contenant le mot à deviner dans lequel seules les lettres trouvées par l'utilisateur sont affichées.
+
+On va à nouveau reprendre le code précédent en remplaçant la première ligne `from workshop.fr.b import *` en `from workshop.fr.c import *` (le `b` est remplacé par un `a`). D'autre part, on va rajouter la ligne `def determinerMasque(mot,pioches):` :
+
+Voici à quoi va ressembler le nouveau code :
+
+```python
+from workshop.fr.c import *
+
 …
 
-Vérifier notamment avec des mots contenant plusieurs fois la même lettre.s
+def lettreEstDansMot(lettre,mot):
+    …
+    
+def determinerMasque(mot,pioches):
+
+go(globals())
+```
+
+L'exercice consiste à écrire le code de  la fonction `determinerMasque`, sachant que `mot` est le mot à deviner, et `pioches`, les lettres sélectionnées par l'utilisateur. Cette fonction doit retourner une chaîne de caractère qui contient `mot`, mais dans laquelle les lettres de `mot` qui ne sont **pas** contenu dans `pioches` sont replacées par le caractère `_`.  Cette fonction va utiliser la fonction `lettreEstDansMot`.
+
+Voici le pseudo-code correspondant :
+
+> Mettre une chaîne de caractères vide dans `masque` 
+> 
+> Pour `lettre` étant chaque lettre dans `mot`
+> 
+> &nbsp;&nbsp;Si `lettre` est dans `pioches`
+> 
+> &nbsp;&nbsp;&nbsp;&nbsp;Ajouter `lettre` à `masque`
+> 
+> &nbsp;&nbsp;Sinon
+> 
+> &nbsp;&nbsp;&nbsp;&nbsp;Ajouter le caractère **`_`** à `masque`
+> 
+> Retourner `masque`
+
+Et voici à quoi doit ressembler le programme une fois lancé (dans cet exemple, l'utiliateur a appuyé sur les lettres *g* et *a*):
+
+![](./assets/fr/c.png)
+
+Vérifier notamment avec des mots contenant plusieurs fois la même lettre, et vérifier également qu'il ne se passe rien lorsqu'on sélectionne une lettre qui n'est **pas** dans le mot à deviner.

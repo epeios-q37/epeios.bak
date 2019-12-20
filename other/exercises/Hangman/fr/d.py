@@ -33,11 +33,11 @@ Dessiner la partie du corps correspondant au nombre d'erreurs.
 Lorsque la dernière partie du corps est dessinée, le visage ('P_VISAGE') doit
 également être dessiné.
 """
-def majCorps(parties, nbErreurs):
+def majCorps(parties,nombreErreurs):
   if nbErreurs <= len(parties):
-    dessinerPartieCorps(parties[nbErreurs-1])
+    dessinerPartieCorps(parties[nombreErreurs-1])
 
-  if nbErreurs >= len(parties):
+  if nombreErreurs >= len(parties):
     dessinerPartieCorps(P_VISAGE)
 
 
