@@ -33,16 +33,22 @@ from workshop._._ import *
 
 
 def _reset():
-  baseReset(None, getDictionary())
+  baseReset(None, getDictionary(), None)
 
 
-def _acConnect():
-  show()
+def _acConnect(core, dom):
+  show("mk")
   _reset()
 
 
 def _Submit(letter):
-  ufHandleGuess()(letter, getBodyParts())
+  if ufIsLetterInWord()(letter, getSecretWord()):
+    if (not letter in getGoodGuesses()):
+      setGoodGuesses(getGoodGuesses() + letter)
+      displayMask(getSecretWord(), getGoodGuesses(), lambda: ufGetMask())
+  else:
+    setErrorsAmount(getErrorsAmount() + 1)
+    rfUpdateBody(getBodyParts(), getErrorsAmount())
 
 
 def _acSubmit(core, dom, id):
@@ -56,6 +62,7 @@ def _acRestart():
 def main(callback, userFunctions, userFunctionLabels):
   mainBase(callback, globals(),
   (
-    UF_RESET,
-    UF_HANDLE_GUESS,
+    UF_PICK_WORD,
+    UF_IS_LETTER_IN_WORD,
+    UF_GET_MASK
   ), userFunctions, userFunctionLabels)

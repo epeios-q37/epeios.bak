@@ -23,6 +23,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
+import sys, os
+
 import sys
 sys.path.append("workshop/_")
 
@@ -31,39 +33,50 @@ from educ import Core
 
 from workshop._._ import *
 
+_REPORT_ANSWERS_HIDDEN = "ReportAnswersHidden"
+
 
 def _reset():
-  baseReset(None, getDictionary(), None)
+  baseReset(None, getDictionary(), None, None)
 
 
-def _acConnect():
-  show()
+def _append(list,item):
+  list.append(item)
+
+
+def _acConnect(core,dom):
+  show("rk")
   _reset()
 
+  
+def _Submit(dom,letter,i18n):
+  expected = rfIsLetterInWord(letter, getSecretWord())
+  obtained = ufIsLetterInWord()(letter, getSecretWord())
 
-def _Submit(letter):
-  if ufIsLetterInWord()(letter, getSecretWord()):
-    if (not letter in getGoodGuesses()):
-      setGoodGuesses(getGoodGuesses() + letter)
-      displayMask(getSecretWord(), getGoodGuesses(), lambda : ufGetMask())
-  else:
-    setErrorsAmount(getErrorsAmount() + 1)
-    ufUpdateBody()(getBodyParts(), getErrorsAmount())
-    
+  disabled = [_REPORT_ANSWERS_HIDDEN]
+  enabled = []
+
+  dom.setContent("Letter", letter.upper())
+
+  _append(enabled if expected else disabled, "ExpectedTrue")
+  _append(enabled if obtained else disabled, "ObtainedTrue")
+  _append(enabled if expected==obtained else disabled, "ObtainedRight")
+
+  dom.disableElements(disabled)
+  dom.enableElements(enabled)
+
 
 def _acSubmit(core, dom, id):
-  _Submit(id.lower())
+  _Submit(dom,id.lower(),getI18n())
 
 
-def _acRestart():
+def _acRestart(core, dom):
   _reset()
+  dom.enableElement(_REPORT_ANSWERS_HIDDEN)
 
 
 def main(callback, userFunctions, userFunctionLabels):
-  mainBase(callback, globals(),
-  (
+  mainBase(callback, globals(), (
     UF_PICK_WORD,
     UF_IS_LETTER_IN_WORD,
-    UF_GET_MASK,
-    UF_UPDATE_BODY,
-  ), userFunctions, userFunctionLabels)
+    ), userFunctions, userFunctionLabels)

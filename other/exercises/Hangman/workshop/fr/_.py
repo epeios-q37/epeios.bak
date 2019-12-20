@@ -71,7 +71,7 @@ PARTIES_CORPS = (
 USER_ITEM_LABELS = {
   _.UC_HANGMAN: "Pendu",
   _.UV_SHOW_SECRET_WORD: "MONTRER_MOT_SECRET",
-  _.UF_GET_MASK: "determinerMasque",
+  _.UF_GET_MASK: "donnerMasque",
   _.UF_HANDLE_GUESS: "traiterPioche",
   _.UF_IS_LETTER_IN_WORD: "lettreEstDansMot",
   _.UF_RESET: "reinitialiser",

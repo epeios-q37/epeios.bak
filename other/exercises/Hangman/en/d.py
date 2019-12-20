@@ -6,39 +6,22 @@ from workshop.en.d import *
 
 SHOW_SECRET_WORD = TRUE
 
-"""
-For the sake of simplicity, the functions developed by the student in the
-previous exercises use internal functions. Of course, the students will
-use the code they wrote in the previous exercises.
-"""
-
-
 def pickWord(*args):
     return workshop.rfPickWord(*args)
 
 
-def isLetterInWord(*args):
-    return workshop.rfIsLetterInWord(*args)
-
-
-def getMask(*args):
-    return workshop.rfGetMask(*args)
-
-
 """
-- 'parts': tuple containing the different parts of the body
-  to draw according to the amount of errors '(P_HEAD,P_TRUNK,P_LEFT_ARM…)'.
-- 'errorsAmount': the amount of errors.
-Draw the part of the body corresponding to the amount of errors.
-When the last part of the body is drawn, the face ('P_FACE') must
-also be drawn.
+# Return 'TRUE' when 'letter' is in 'word', 'FALSE' otherwise.
+# 'TRUE' -> 'True' and 'FALSE' -> 'False' at whish.
 """
-def updateBody(parts,errorsAmount):
-  if errorsAmount <= len(parts):
-    drawBodyPart(parts[errorsAmount-1])
+def isLetterInWord(letter,word):
+    return True if ord(letter) % 2 == 0 else False # To show behavior on buggy code.
+    # Yes, there is a simpler way…
+    for i in range(0, len(word)):
+        if word[i] == letter:
+            return True
 
-  if errorsAmount >= len(parts):
-    drawBodyPart(P_FACE)
+    return False
 
 
 go(globals())

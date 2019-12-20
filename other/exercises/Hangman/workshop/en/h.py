@@ -22,8 +22,11 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
+ 
+import workshop._.H as workshop
+from workshop.en._ import *
 
-import sys
-sys.path.append("workshop/_")
 
-from A import *
+def go(globals):
+  workshop.main(lambda dom: workshop.Core(dom), globals, USER_ITEM_LABELS)
+

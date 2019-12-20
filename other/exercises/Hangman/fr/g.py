@@ -4,8 +4,20 @@ import sys
 sys.path.append(".")
 from workshop.fr.g import *
 
-# MONTRER_MOT_SECRET = VRAI
+MONTRER_MOT_SECRET = VRAI
 
+"""
+Quelques variables vont être gérées par l'élève. Leur nom est libre.
+Peut être omis, vu que 'raz(…)' va être appelé avant utilisation
+de ces variables.
+"""
+motSecret = ""
+bonnesPioches = ""
+nbErreurs = 0
+
+"""
+NOTA: les quatres fonctions suivantes ne sont pas utilisées en-dehors de ce fichier.
+"""
 
 def choisirMot(*args):
   return workshop.rfPickWord(*args)
@@ -15,120 +27,54 @@ def lettreEstDansMot(*args):
     return workshop.rfIsLetterInWord(*args)
 
 
-"""
-En premier lieu, ne pas traiter la variable membre
-'enCours' de la class 'Pendu'.
-"""
+def donnerMasque(*args):
+    return workshop.rfGetMask(*args)
 
-"""
-Ajouter le traitement de la variable 'enCours'.
-Ne concerne que les méthodes 'reinitialiser(…)'
-et '__init__(…)'.
-"""
-class Pendu:
-  def reinitialiser(self, dictionnaire,suggestion):
-    self.motSecret = choisirMot(dictionnaire,suggestion)
-    self.bonnesPioches = ""
-    self.nbErreurs = 0
-    self.enCours = VRAI
 
-  def __init__(self):
-    self.motSecret = ""
-    self.bonnesPioches = ""
-    self.nbErreurs = 0
-    self.enCours = FAUX
-    
-  def traiterEtTesterPioche(self, pioche):
-    if lettreEstDansMot(pioche, self.motSecret):  # Test is not mandatory
-      if not lettreEstDansMot(pioche, self.bonnesPioches):
-        self.bonnesPioches += pioche
-      return VRAI
-    else:
-      self.nbErreurs += 1
-      return FAUX
+def majCorps(*args):
+  return workshop.rfUpdateBody(*args)
 
 
 
 """
-Ajouter le test.
+Réinitialiser les variables et l'affichage pour une nouvelle partie et
+retourner le mot secret.
 """
-def determinerMasqueEtTesterSiVictoire(mot, pioches):
-  masque = ""
-  victoire = VRAI
+def reinitialiser(dictionnaire, suggestion):
+  global motSecret, bonnesPioches, nbErreurs
 
-  for lettre in mot:
-    if lettreEstDansMot(lettre, pioches):
-      masque += lettre
-    else:
-      masque += "_"
-      victoire = FAUX
+  motSecret = choisirMot(dictionnaire,suggestion)
+  bonnesPioches = ""
+  nbErreurs = 0
+  print(motSecret)
+  redessiner()
+  effacerEtAfficher(donnerMasque(motSecret,""))
 
-  return masque, victoire
+  return motSecret
 
+  
 
 """
-Ajouter le test.
+N.B. : NON 'THREAD-SAFE' !!!
+De multiples instances peuvent être lancées pour montrer
+en quoi cela pose problème.
 """
-def majCorpsEtTesterSiDefaite(parties, nbErreurs):
-  if nbErreurs <= len(parties):
-    dessinerPartieCorps(parties[nbErreurs-1])
+"""
+- 'pioche': la lettre choisie par le joueur,
+- 'mot': le mot secret,
+- 'parties': (tuple) les différentes parties du corps.
+Si 'pioche' est dans 'lettre', met à jour du masque,
+sinon met à jour du dessin du pendu. 
+"""
+def traiterPioche(pioche,parties):
+  global bonnesPioches, nbErreurs
 
-  if nbErreurs >= len(parties):
-    dessinerPartieCorps(P_VISAGE)
-    return VRAI
+  if lettreEstDansMot(pioche, motSecret): # Test non obligatoire.
+    if not lettreEstDansMot(pioche,bonnesPioches):
+      bonnesPioches += pioche
+      effacerEtAfficher(donnerMasque(motSecret, bonnesPioches))
   else:
-    return FAUX
-
-
-"""
-Ajouter le test.
-"""
-def traiterPioche(pendu, pioche, parties):
-  if pendu.traiterEtTesterPioche(pioche):
-    masque, victoire = determinerMasqueEtTesterSiVictoire(pendu.motSecret,pendu.bonnesPioches)
-    effacerEtAfficher(masque)
-    if victoire and pendu.enCours:
-      notifier("Tu as gagné ! Félicitations !")
-      pendu.enCours = FAUX
-  elif pendu.enCours and majCorpsEtTesterSiDefaite(parties, pendu.nbErreurs):
-    notifier("\nPerdu !\nErreurs : {} ; bonnes pioches : {}.\n\nLe mot à deviner était : '{}'.".format(pendu.nbErreurs, len(pendu.bonnesPioches),  pendu.motSecret))
-    pendu.enCours = FAUX
-
-
-"""
-Modifier pour utiliser 'determinerMasqueEtTesterSiVictoire(…)'.
-"""
-def reinitialiser(pendu, dictionnaire, suggestion):
-  pendu.reinitialiser(dictionnaire, suggestion)
-  print(pendu.motSecret)
-  effacerEtAfficher(determinerMasqueEtTesterSiVictoire(pendu.motSecret, "")[0])
-
-  return pendu.motSecret
-
-
-
-"""
-Appelé lors d'une nouvelle connexion.
-"""
-def AConnexion(pendu, dictionnaire, suggestion):
-  return reinitialiser(pendu, dictionnaire, suggestion)
-
-
-"""
-Appellé lors d'une nouvelle pioche.
-NOTA: La lettre piochée sera désactivée sur le clavier.
-"""
-def APioche(pendu, pioche, parties):
-  traiterPioche(pendu, pioche, parties)
-
-
-"""
-Appelé lors d'un redémarrage.
-"""
-def ARedemarrage(pendu, dictionnaire, suggestion):
-  if pendu.enCours:
-    notifier("\nErreurs : {} ; bonnes pioches : {}.\n\nLe mot à deviner était : '{}'.".format(pendu.nbErreurs, len(pendu.bonnesPioches),  pendu.motSecret))
-
-  return reinitialiser(pendu, dictionnaire, suggestion)
+    nbErreurs += 1
+    majCorps(parties, nbErreurs)
 
 go(globals())

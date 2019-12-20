@@ -1,0 +1,394 @@
+# Exercices de programmation du [jeu du pendu](https://fr.wikipedia.org/wiki/Le_Pendu_(jeu))
+
+Les exercices proposés ici vont consister à programmer le jeu du pendu, qui va ressemble à ça :
+
+![](assets/Pendu.png)
+
+Pour que l'exercice fonctionne correctement, tous débuterons par `from workshop.fr.a import *`
+
+Demander au professeur comment procéder pour le lancement de l'exercice.
+
+La variable `MONTRER_MOT_SECRET` est une variable de type booléen. Lorsqu'elle est mise à `VRAI` (ou `True`), alors le programme va afficher le mot à deviner. Lorsqu'elle est mise à `FAUX`, alors le mot secret ne sera pas affiché.
+
+Sans cette possibilité d'afficher le mot à deviner, il serait trés compliqué de tester le programme et de vérifier s'il fonctionne correctement. C'est pour cela que cette variable sera mis à `VRAI` tout au long du développement et de la mise au point du programme. Une fois que le programme sera au point, on la mettre à `FAUX`, pour que le mot à deviner ne soit plus affiché.
+
+## Exercice *a*
+
+### Objectifs
+
+Pour commencer, on va se familiariser avec l'édition d'un fichier source, le lancement et l'arrêt du programme correspondant à l'exercice. Le code à écrire va, de ce fait, être extrêmesment simple.
+
+Notions abordées :
+
+- Édition d'un fichier source ;
+- lancement d'un programme ;
+- arrêt d'un programme ;
+- création une chaîne de caractère ;
+- renvoie d'une valeur par une fonction.
+
+### Préparation
+
+Ouvrir le fichier `pendu.py`. Il devrait avoir le contenu suivant :
+
+```python
+from workshop.fr.a import *
+
+MONTRER_MOT_SECRET = VRAI
+
+def choisirMot():
+
+go(globals())
+```
+
+### Tâches
+
+Écrire le contenu de la fonction `choisirMot` pour qu'elle retourne une chaîne de caractères contenant un mot, toujours le même.
+
+### Pseudo-code
+
+> Retourner une chaîne de caractères contenant un mot.
+
+### Aperçu
+
+![](assets/a.png)
+
+### Tests
+
+Vérifier que, quelque soit le contenu du champs de saisie, les deux champs affichent toujours le mot retourné par la fonction `choisirMot` lorsque l'on clique sur le bouton `Recommencer`.
+
+## Exercice *b*
+
+### Objectifs
+
+Pour simplifier les tests, on va offrir la possibilité de définir le mot à deviner grâce au champs texte. C'est-à-dire que lorsqu'on va cliquer sur le bouton `Recommencer`, c'est le texte contenu dans champs qui va être utilisé comme mot secret.
+
+Notions abordées :
+
+- Paramètre de fonction ;
+- taille d'une chaîne de caractère ;
+- opérateurs de comparaison ;
+- instructions conditionnelles.
+
+### Préparation
+
+- Dans la première ligne, remplacer le `a` par un `b` ;
+- ajouter le paramètre `suggestion` dans la déclaration de la fonction `choisirMot`.
+
+```python
+from workshop.fr.b import *
+
+…
+
+def choisirMot(suggestion):
+    …
+
+go(globals())
+```
+
+`suggestion` contient le contenu du champs texte.
+
+### Tâches
+
+Écrire le contenu de la fonction `choisirMot` de telle manière à ce qu'elle retourne `suggestion` lorsque la chaîne de caractères qu'il contient n'est pas vide, ou un mot quelconque, toujours le même, lorsque `suggestion` contient une chaîne de caratères vide.
+
+### Pseudo-code
+
+>   Si `suggestion` est vide  
+> &nbsp;&nbsp;Retourner un mot quelconque  
+>  Sinon  
+> &nbsp;&nbsp;Retourner `suggestion`
+
+### Aperçu
+
+Le même que pour l'exercice précédent.
+
+### Tests
+
+- Lorsque l'on clique sur `Recommencer` alors que le champs texte est vide, c'est toujours le même mot qui doit être affiché dans les deux champs ;
+- lorsque l'on clique sur `Recommencer` alors que le champs de saisie n'est pas vide, alors c'est le contenu de ce champs qui doit être affiché dans les deux champs.
+
+## Exercice *c*
+
+### Objectifs
+
+Plutôt que de toujours retourner le même mot, on va retourner un mot au hasard passé comme paramètre.
+
+### Préparation
+
+- Dans la première ligne, remplacer le `b` par un `c` ;
+- ajouter le paramètre `motAuHasard` dans la déclaration de la fonction `choisirMot`.
+
+```python
+from workshop.fr.b import *
+
+…
+
+def choisirMot(suggestion,motAuHasard):
+    …
+
+go(globals())
+```
+
+### Tâches
+
+Modifier le code de la fonction `choisirMot` pour que, lorsque `suggestion` est vide, elle renvoie `motAuHasard` au lieu de toujours le même mot.
+
+### Pseudo-code
+
+> Si `suggestion` est vide  
+> &nbsp;&nbsp;Retourner `motAuHasard`  
+> Sinon  
+> &nbsp;&nbsp;Retourner `suggestion`
+
+### Aperçu
+
+Le même que pour l'exercice précédent.
+
+### Tests
+
+Les mêmes que pour l'exercice précédent, sauf que, lorsque le champs de saisie est vide, ce ne sera pas toujours le même mot qui sera affiché. Il se peut qu'un même mot soit affiché deux fois (ou plus) à la suite, mais c'est rare.
+
+## Exercice *d*
+
+### Objectifs
+
+Afficher le masque, c'est-à-dire le mot à deviner avec dissimulation des lettres qui n'ont pas encore encore été trouvées par le joueur.
+
+Notions abordées :
+
+- boucle *for* ;
+
+- fonction `range` ;
+
+- accés à un élément d'une chaîne de caractères par son indice.
+
+### Préparation
+
+- Dans la première ligne, remplacer le `c` par un `d` ;
+- ajouter `def lettreEstDansMot(lettre,mot):` avant la dernière instruction du fichier.
+
+```python
+from workshop.fr.d import *
+
+def choisirMot(suggestion):
+    …
+
+def lettreEstDansMot(lettre,mot):
+
+go(globals())
+```
+
+### Tâches
+
+Écrire le code de la fonction `lettreEstDansMot` pour qu'elle renvoie `VRAI` (ou `True`) lorsque la lettre `lettre` est contenu dans la chaîne de caratères `mot`, `FAUX` (ou `False`) dans le cas contraire.
+
+### Pseudo-code
+
+> Si `lettre` est contenu dans `mot`  
+> &nbsp;&nbsp;Retourner `VRAI`  
+> Sinon  
+> &nbsp;&nbsp;Retourner `FAUX`
+
+## Aperçu
+
+Lorsque l'on lance le programme, voilà ce qui est affiché :
+
+![](./assets/b/Start.png)
+
+Le mot affiché dans le champs texte ne sera probablement pas *buisson*.
+
+*Pioche* affichera la lettre sélectionné par l'utilisateur, *Attendu* affichera la valeur que la fonction `lettreEstDansMot` devrait retourner, et *Obtenu*, affichera ce qua la fonction `lettreEstDansMot` retourne effectivement.
+
+Si l'utilisateur clique sur une lettre qui est contenu dans le mot, voici ce qui devrait s'afficher.
+
+![](./assets/b/True.correct.png)
+
+Si la fonction ne retourne pas la bonne valeur, et doit donc être corrigée, alors ceci s'affiche :
+
+![](./assets/b/True.bug.png)
+
+Si l'utilisateur clique sur une lettre qui n'est **pas** contenu dans le mot, voici ce qui devrait s'afficher.
+
+![](./assets/b/False.correct.png)
+
+Si la fonction ne retourne pas la bonne valeur, et doit donc être corrigée, alors ceci s'affiche :
+
+![](./assets/b/False.bug.png)
+
+### Tests
+
+- Cliquer sur une lettre contenu dans le mot :
+  - *Pioche* doit afficher la lettre cliquée,
+  - *Attendu* doit afficher `vrai`,
+  - *Obtenu* doit afficher `vrai` surligné en vert ;
+- cliquer sur une lettre qui n'est **pas** contenu dans le mot :
+  - *Pioche* doit afficher la lettre cliquée,
+  - *Attendu* doit afficher `faux`,
+  - *Obtenu* doit afficher `faux` surligné en vert.
+
+Refaire les actions ci-dessus avec différentes lettre et différents mots. Si ce qui est affiché dans *Obtenu* est barré et surligné de rouge, alors le code de la fonction `lettreEstDansMot` est incorrect. Noter le mot et le lettre qui pose problème, corriger la fonction, et ressayer le mot et la lettre pour vérifier que le bug a été corrigé.
+
+## Exercice *e*
+
+### Notions abordées
+
+### Préparation
+
+```python
+from workshop.fr. import *
+
+
+go(globals())
+```
+
+### Énoncé
+
+### Pseudo-code
+
+## Aperçu
+
+![](assets/a.png)
+
+### Tests
+
+## Exercice *d*
+
+### Notions abordées
+
+### Préparation
+
+```python
+from workshop.fr. import *
+
+
+go(globals())
+```
+
+### Énoncé
+
+### Pseudo-code
+
+## Aperçu
+
+![](assets/a.png)
+
+### Tests
+
+-----
+
+## Exercice **
+
+### Notions abordées
+
+### Préparation
+
+```python
+from workshop.fr. import *
+
+
+go(globals())
+```
+
+### Énoncé
+
+### Pseudo-code
+
+## Aperçu
+
+![](assets/a.png)
+
+### Tests
+
+-----
+
+## Exercice *c*
+
+Dans cet exercice, on va programmer la construction masque, c'est-à-dire la chaîne de caractères contenant le mot à deviner dans lequel seules les lettres trouvées par l'utilisateur sont affichées.
+
+On va à nouveau reprendre le code précédent en remplaçant la première ligne `from workshop.fr.b import *` en `from workshop.fr.c import *` (le `b` est remplacé par un `a`). D'autre part, on va rajouter la ligne `def determinerMasque(mot,pioches):` :
+
+Voici à quoi va ressembler le nouveau code :
+
+```python
+from workshop.fr.c import *
+
+…
+
+def lettreEstDansMot(lettre,mot):
+    …
+    
+def determinerMasque(mot,pioches):
+
+go(globals())
+```
+
+L'exercice consiste à écrire le code de la fonction `determinerMasque`, sachant que `mot` est le mot à deviner, et `pioches`, les lettres sélectionnées par l'utilisateur. Cette fonction doit retourner une chaîne de caractère qui contient `mot`, mais dans laquelle les lettres de `mot` qui ne sont **pas** contenu dans `pioches` sont replacées par le caractère `_`.  Cette fonction va utiliser la fonction `lettreEstDansMot`.
+
+Voici le pseudo-code correspondant :
+
+> Mettre une chaîne de caractères vide dans `masque` 
+> 
+> Pour `lettre` étant chaque lettre dans `mot`
+> 
+> &nbsp;&nbsp;Si `lettre` est dans `pioches`
+> 
+> &nbsp;&nbsp;&nbsp;&nbsp;Ajouter `lettre` à `masque`
+> 
+> &nbsp;&nbsp;Sinon
+> 
+> &nbsp;&nbsp;&nbsp;&nbsp;Ajouter le caractère **`_`** à `masque`
+> 
+> Retourner `masque`
+
+Et voici à quoi doit ressembler le programme une fois lancé (dans cet exemple, l'utiliateur a choisi sur les lettres *g* et *a*):
+
+![](./assets/c.png)
+
+Vérifier notamment le fonctionnement du programme avec des mots contenant plusieurs fois la même lettre (comme dansl'exemple ci-dessus), et vérifier également qu'il ne se passe rien lorsqu'on sélectionne une lettre qui n'est **pas** dans le mot à deviner.
+
+## Exercice *d*
+
+Dans cette exercice, on va programmer le dessin du pendu. On va à nouveau garder le code déjà écrit, en modifier  la première ligne `from workshop.fr.c import *` pour la transformer en `from workshop.fr.d import *` (remplacer `c` par `d`), et ajouter la ligne `def majCorps(parties,nombreErreurs):`. Au final, on obtient donc ça :
+
+```python
+from workshop.fr.c import *
+
+…
+
+
+def determinerMasque(mot,pioches):
+    …
+
+
+def majCorps(nombreErreurs):
+
+go(globals())
+```
+
+L'exercice consiste à écrire le code de la fonction `majCorps`, qui va dessiner le pendu en fonction de la valeur de `nombreErreurs` , qui contient le nombre de fois où le joueur à choisi un caractère qui n'est pas conte dans le mot à deviner. Pour cela, on dispose de la fonction `dessinrPartieCorps` qui peut prendre une des valeurs suivantes :
+
+```py
+P_TETE          # pour dessiner la tête,
+P_TRONC         # pour dessiner le tronc,
+P_BRAS_GAUCHE   # pour dessiner le bras gauche,
+P_BRAS_DROIT    # pour dessiner le bras droit,
+P_PIED_GAUCHE   # pour dessiner le pied gauche,
+P_PIED_DROIT    # pour dessiner le pied droit,
+P_VISAGE        # pour dessiner la visage.
+```
+
+Pseudo-code.
+
+> Si `nombreErreurs` est égal à 1
+> 
+> &nbsp;&nbsp;Dessiner la tête
+> 
+> Sinon si `nombreErreurs` est égal à 2
+> 
+>    &nbsp;&nbsp;Dessiner le tronc
+> 
+> Sinon si `nombreErreur` est égal à 3
+> 
+>    &nbsp;&nbsp;Dessiner le bras gauche
+> 
+> et ainsi de suite pour dessiner le bras droit, pied gauche, le pied droit et enfin le visage.

@@ -30,3 +30,4 @@ from workshop.fr._ import *
 def go(globals):
   workshop.main(lambda dom: workshop.Core(dom), globals, USER_ITEM_LABELS)
 
+

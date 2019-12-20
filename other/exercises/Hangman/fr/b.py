@@ -4,24 +4,20 @@ import sys
 sys.path.append(".")
 from workshop.fr.b import *
 
+
 MONTRER_MOT_SECRET = VRAI
 
-def choisirMot(*args):
-  return workshop.rfPickWord(*args)
-
 
 """
-Retourner 'VRAI' lorsque 'lettre' est contenu dans 'mot',
-'FAUX' sinon.
-'VRAI' -> 'True' et 'FAUX' -> 'False' si souhaité.
+- 'suggestion'; le contenu du champ texte du mot secret ;
+  utilisé seulement en mode 'dev'.
+Retourne 'suggestion' si non vide, un mot quelconque sinon.
 """
-def lettreEstDansMot(lettre, mot):
-    return True if ord(lettre) % 2 == 0 else False  # Pour montrer le comportement avec du code bugué.
-    # Oui, il y a plus simple…
-    for i in range(0,len(mot)):
-        if mot[i] == lettre:
-            return True
-    
-    return False
+def choisirMot(suggestion):
+  if len(suggestion) != 0:
+    return suggestion
+  else:
+    return "bras"
+
 
 go(globals())
