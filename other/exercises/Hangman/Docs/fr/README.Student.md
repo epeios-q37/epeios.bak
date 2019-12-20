@@ -1,12 +1,10 @@
 # Exercices de programmation du [jeu du pendu](https://fr.wikipedia.org/wiki/Le_Pendu_(jeu))
 
-Les exercices proposés ici vont consister à programmer le jeu du pendu, qui va ressemble à ça :
+Les exercices proposés ici vont consister à programmer le jeu du pendu, qui va ressembler à ça :
 
 ![](assets/Pendu.png)
 
-Pour que l'exercice fonctionne correctement, tous débuterons par `from workshop.fr.a import *`
-
-Demander au professeur comment procéder pour le lancement de l'exercice.
+Le professeur vous indiquare comment procéder pour le lancement de l'exercice.
 
 La variable `MONTRER_MOT_SECRET` est une variable de type booléen. Lorsqu'elle est mise à `VRAI` (ou `True`), alors le programme va afficher le mot à deviner. Lorsqu'elle est mise à `FAUX`, alors le mot secret ne sera pas affiché.
 
@@ -85,17 +83,19 @@ def choisirMot(suggestion):
 go(globals())
 ```
 
-`suggestion` contient le contenu du champs texte.
-
 ### Tâches
 
-Écrire le contenu de la fonction `choisirMot` de telle manière à ce qu'elle retourne `suggestion` lorsque la chaîne de caractères qu'il contient n'est pas vide, ou un mot quelconque, toujours le même, lorsque `suggestion` contient une chaîne de caratères vide.
+Sachant que `suggestion` est une chaîne de caractères contenant ce qui a été saisi dans le champs de saisie, modifier le code de la fonction `choisirMot` pour que :
+
+- lorsque  `suggestion` est vide, elle retourne une chaîne de caractères contenant un mot quelconque, toujours la même ;
+
+- lorsque `suggestion` n'est pas vide, elle retourne `suggestion`.
 
 ### Pseudo-code
 
->   Si `suggestion` est vide  
-> &nbsp;&nbsp;Retourner un mot quelconque  
->  Sinon  
+> Si `suggestion` est vide  
+> &nbsp;&nbsp;Retourner un mot quelconque  
+> Sinon  
 > &nbsp;&nbsp;Retourner `suggestion`
 
 ### Aperçu
@@ -104,19 +104,19 @@ Le même que pour l'exercice précédent.
 
 ### Tests
 
-- Lorsque l'on clique sur `Recommencer` alors que le champs texte est vide, c'est toujours le même mot qui doit être affiché dans les deux champs ;
+- Lorsque l'on clique sur `Recommencer` alors que le champs de saisie est vide, c'est toujours le même mot qui doit être affiché dans les deux champs ;
 - lorsque l'on clique sur `Recommencer` alors que le champs de saisie n'est pas vide, alors c'est le contenu de ce champs qui doit être affiché dans les deux champs.
 
 ## Exercice *c*
 
 ### Objectifs
 
-Plutôt que de toujours retourner le même mot, on va retourner un mot au hasard passé comme paramètre.
+Plutôt que de toujours retourner le même mot lorsqeu le champs de saisie est vide,  on va retourner un mot au hasard fournit par le système.
 
 ### Préparation
 
 - Dans la première ligne, remplacer le `b` par un `c` ;
-- ajouter le paramètre `motAuHasard` dans la déclaration de la fonction `choisirMot`.
+- ajouter le paramètre `motAuHasard` dans la déclaration de la fonction `choisirMot`.s
 
 ```python
 from workshop.fr.b import *
@@ -131,7 +131,17 @@ go(globals())
 
 ### Tâches
 
-Modifier le code de la fonction `choisirMot` pour que, lorsque `suggestion` est vide, elle renvoie `motAuHasard` au lieu de toujours le même mot.
+Sachant que :
+
+- `suggestion` est le contenu du champs de saisie ;
+
+- `motAuHasard` est un mot choisi au hasard ;
+
+modifier la fonction `choisirMot` pour que :
+
+- lorsque `suggestion` est vide, elle retourne `motAuHasard` ;
+
+- lorsque `suggestion` n'est pas vide, elle retourne `suggestion`.
 
 ### Pseudo-code
 
@@ -180,7 +190,19 @@ go(globals())
 
 ### Tâches
 
-Écrire le code de la fonction `lettreEstDansMot` pour qu'elle renvoie `VRAI` (ou `True`) lorsque la lettre `lettre` est contenu dans la chaîne de caratères `mot`, `FAUX` (ou `False`) dans le cas contraire.
+
+
+Sachant que
+
+- `lettre` est la lettre chosie par le joueur ;
+
+- `mot` est le mot à deviner ;
+
+écrire le code de la fonction `lettreEstDansMot` pour que :
+
+- lorsque `lettre` est présent dans `mot`, elle retourne `VRAI` (ou `True`) ;
+
+- lorsque `lettre` n'est **pas** présent dans `mot`, elle retourne `FAUX` (ou `False`).
 
 ### Pseudo-code
 
