@@ -31,6 +31,7 @@ P_LEFT_ARM = "LeftArm"
 P_RIGHT_ARM = "RightArm"
 P_LEFT_LEG = "LeftLeg"
 P_RIGHT_LEG = "RightLeg"
+P_AMOUNT = 7
 
 # User functions.
 UF_PICK_WORD = "PickWord"

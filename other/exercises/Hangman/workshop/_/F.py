@@ -48,7 +48,12 @@ def _Submit(letter):
       displayMask(getSecretWord(), getGoodGuesses(), lambda : ufGetMask())
   else:
     setErrorsAmount(getErrorsAmount() + 1)
-    ufUpdateBody()(getBodyParts(), getErrorsAmount())
+
+    if getErrorsAmount() <= P_AMOUNT:
+      try:
+        ufUpdateBody()(getBodyParts(), getErrorsAmount())
+      except TypeError:
+        ufUpdateBody()(getErrorsAmount())
     
 
 def _acSubmit(core, dom, id):

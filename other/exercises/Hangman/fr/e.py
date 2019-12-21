@@ -19,7 +19,7 @@ Retourner une chaîne de caractères contenant 'mot' (qui est en minuscule) où
 chaque lettre qui n'est pas contenue dans 'pioches' (également en minuscules)
 est remplacée par le caractère '_'.
 """
-def donnerMasque(mot, pioches):
+def donnerMasque(mot,pioches):
     masque = ""
 
     for lettre in mot:
