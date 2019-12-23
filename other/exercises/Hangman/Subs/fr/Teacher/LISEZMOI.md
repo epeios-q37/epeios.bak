@@ -1,17 +1,44 @@
 
 # Exercices de programmation du jeu du pendu ; version professeur
 
-Ce jeu d'exercices a été conçu pour s'appuie 
+## Introduction
 
-Il n'est pas nécessaire de 
+De nos jour, la plupart des jeunes possèdent un smartphone. Pour les intéresser à la programmation, il faut des exercices qui s'utilisent comme les applications de leurs smartphones.
 
+C'est pourquoi ces exercices ont une véritable interface graphique, au lieu de l'habituelle interface texte. En outre, chaque exercice est accompagné d'un [code QR](https://fr.wikipedia.org/wiki/Code_QR) qui leur donne accès, de leurs propres smartphones, à ces exercices.
 
-- notions web :
-  - navigateur web,
-  - champs texte,
-  - bouton.
-- autres notions :
-  - pseudo-code.
+Ils prendront ainsi conscience que les smartphones ne servent pas uniquement à accèder à facebook, instagram, twitter…, mais qu'ils peuvent l'utiliser pour accèder à leurs propres applications.
+
+De plus, avec un minimum d'encouragement, ils seront tentés de revenir sur ces exercices en-dehors des heures de cours pour montrer leurs réalisations à leurs proches, en leur donnant accès à ces exercices sur leurs smartphones (ou n'importe quel dispositif équipé d'un navigateur web moderne connecté à internet) respectifs.
+
+Vous trouverez des détails 
+
+Ces exercices aboutissent à la programmation du jeu de pendu avec une interface graphique, sans qu'ils aient à manipuler directement cette interface. Chaque exercice s'appuient sur le précédent, et reproduisent les étapes habituellement suivies pour la réalisation d'un tel jeu.
+
+Ces exercices portent la programmation en générale, et non pas en *Python* en particulier. C'est pour cela que les solutions générales sont donnés avant les solutions propres à *Python*, et ils conviendra sans doute d'en 
+
+## Utilisation
+
+Le dépôt https://github.com/epeios-q37/hangman-fr est destinés aux élèves. https://github.com/epeios-q37/hangman-fr-teacher reprend le contenu de ce dépôt, en y ajoutant des informations utiles aux professeurs, notamment les solutions des exercices. De ce fait, ce dernier dépôt est réservé aux professeurs.
+
+Pour distribuer ces exercices aux élèves, vous pouvez directement utiliser le dépôt https://github.com/epeios-q37/hangman-fr. Si vous être familiarisé avec *GitHub*, vous pouvez utiliser les outils mis à disposition pour créer vos propre dépôts. Dans ce cas, ils vous suffit de remplacer `epeios-q37` par votre nom d'utilisateur sur *GitHub*, et `hangman-fr` par le nom que vous avez donné à votre dépôt.
+
+### Utilisation en local
+
+Pour une utilisation en local, sur un ordinateur équipe de *Python*, il suffit aux élèves de télécharger et désarchiver le fichier suivant : https://github.com/epeios-q37/hangman-fr/…. S'ils connaissent, ils peuvent aussi faire un `git clone https://github.com/epeios-q37/hangman-fr`. Les exercices consisteront à modifier le fichier `pendu.py` situé à la racine du dépôt.
+
+Pour le lancement, il suffira d'exécuter la commande `python3 pendu.py` dans une console, à partir de la racine du dépôt. S'ouvrira alors un navigateur web leur donnant accès à leur exercice. Le programme sera arrêté avec un *CTRL-C*.
+
+Ce dépôt contient, à la racine, un fichier PDF `LISEMOI.pdf` qui leur donnent les instructions pour chaque exercice.
+
+### Utilisation en ligne
+
+Pour une utilisation en ligne, en utilisant un navigateur web, sans rien avoir à installer, il suffit de suivre le lien suivant : https://repl.it/github/epeios-q37/hangman-fr.
+
+Comme ci-dessus, l'exercice consistera à modifier le fichier `pendu.py`. Pour lancer l'exercice, il suffira de clique sur le bouton vert `start`. Cela provoquera l'affichage d'un code QR que l'on cliquera (ou éventuellement scannera avec un smartphone) pour accèder à l'exercice.
+
+Pour revenir au code source, on fermera l'onglet (ou la fenêtre) qui s'est ouverte suite au clock sur le code QR. Pour relancer l'application, il suffira de cliquer sur le bouton vert (dont le libellé change en fonction du contexte).
+
 
 
 ---
@@ -26,11 +53,11 @@ Remarques à mettre en forme :
 
 ### Notions abordées
 
--   Édition d'un fichier source ;
--   lancement d'un programme ;
--   arrêt d'un programme ;
--   création une chaîne de caractère ;
--   renvoie d'une valeur par une fonction.
+- Édition d'un fichier source ;
+- lancement d'un programme ;
+- arrêt d'un programme ;
+- création une chaîne de caractères ;
+- renvoie d'une valeur par une fonction.
 
 ### Solution
 
@@ -45,7 +72,7 @@ def choisirMot():
 
 -   Paramètre de fonction ;
 -   instruction conditionnelle ;
--   taille d'une chaîne de caractère ;
+-   taille d'une chaîne de caractères ;
 -   booléens ;
 -   opérateur de comparaison ;
 -   instructions conditionnelles.
@@ -99,7 +126,7 @@ from random import randint
 
 …
 
-# Placer les mots de son choix..
+# Placer les mots de son choix.
 DICTIONNAIRE = ("arbre", "maison", "chaise")
 
 
@@ -119,7 +146,7 @@ def choisirMot(suggestion):
 - fonction `range` ;
 - indexation d'une chaîne de caractère.
 
-### Solution
+### Solutions
 
 ```python
 def lettreEstDansMot(lettre,mot):
@@ -173,7 +200,7 @@ else:
 proposer :
 
 ```python
-masque += lettreEstDansMot(lettre,pioches) ? lettre : "_"
+masque += lettre if lettreEstDansMot(lettre,pioches) else "_"
 ```
 
 ## Exercice *f*
