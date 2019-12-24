@@ -1,5 +1,7 @@
 # Exercices de programmation du jeu du pendu ; documentation professeur
 
+[![Run on Repl.it](https://repl.it/badge/github/epeios-q37/hangman-fr-teacher)](https://repl.it/github/epeios-q37/hangman-fr-teacher)
+
 ## Introduction
 
 De nos jour, la plupart des jeunes possèdent un smartphone. Il sera donc plus facile de les intéresser à la programmation avec des exercices qui s'utilisent comme les applications de leurs smartphones.

@@ -1,5 +1,7 @@
 # Exercices de programmation du jeu du pendu
 
+[![Run on Repl.it](https://repl.it/badge/github/epeios-q37/hangman-fr)](https://repl.it/github/epeios-q37/hangman-fr)
+
 Les exercices proposés ici vont consister à programmer un [jeu du pendu](https://fr.wikipedia.org/wiki/Le_Pendu_(jeu), qui va ressembler à ça :
 
 ![](assets/Pendu.png)

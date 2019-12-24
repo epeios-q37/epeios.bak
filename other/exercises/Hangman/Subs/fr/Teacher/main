@@ -1,0 +1,14 @@
+#!/bin/bash
+
+while :
+do
+  echo
+
+  echo -n -e "\nChoisissez l'exercice à lancer ('a'…'i'): "
+
+  read DEMO
+
+  export FILE=fr/$DEMO.py
+  
+  [ -f $FILE ] && python3 $FILE
+done

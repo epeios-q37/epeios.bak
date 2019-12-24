@@ -1,6 +1,7 @@
+
 <!--
 
-Pour les utilisasteurs de Repl.it : le lancement se fait en cliquant le bouton vert 'run' ci-dessus.
+Pour les utilisateurs de Repl.it : le lancement se fait en cliquant le bouton vert 'run' ci-dessus.
 
 -->
 
