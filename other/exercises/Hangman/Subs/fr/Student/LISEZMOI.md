@@ -6,19 +6,17 @@ Les exercices proposés ici vont consister à programmer un [jeu du pendu](https
 
 ![](assets/Pendu.png)
 
-Le professeur vous indiquera comment procéder pour le lancement de l'exercice.
+Le professeur vous indiquera comment procéder pour le lancement des divers exercices.
 
+Dans le code de tous les exercices, il y a une variable nommée `MONTRER_MOT_SECRET` ,  de type booléen. Lorsqu'elle est mise à `VRAI` (ou `True`), alors le programme va afficher le mot à deviner. Lorsqu'elle est mise à `FAUX`, alors ce mot ne sera pas affiché.
 
-
-Dans le code de tous les exercices, vous aurez une variable nommée `MONTRER_MOT_SECRET` , qui est de type booléen. Lorsqu'elle est mise à `VRAI` (ou `True`), alors le programme va afficher le mot à deviner. Lorsqu'elle est mise à `FAUX`, alors le mot secret ne sera pas affiché.
-
-Sans cette possibilité d'afficher le mot à deviner, il serait trés compliqué de tester le programme et de vérifier s'il fonctionne correctement. C'est pour cela que cette variable sera mis à `VRAI` tout au long du développement et de la mise au point du programme, et, une fois que le programme sera au point, on la mettre à `FAUX`, pour que le mot à deviner ne soit plus affiché.
+Sans cette possibilité d'afficher le mot à deviner, il serait trés compliqué de tester le jeu pour vérifier s'il fonctionne correctement. C'est pour cela que cette variable sera mise à `VRAI` tout au long du développement et de la mise au point du jeu, et, une fois qu'il sera au point, on la mettre à `FAUX`, pour que le mot à deviner ne soit plus affiché.
 
 ## Exercice *a*
 
 ### Objectif
 
-Se familiariser avec l'édition d'un fichier source, le lancement et l'arrêt du programme correspondant à l'exercice. 
+Se familiariser avec l'édition d'un fichier source, le lancement et l'arrêt du programme correspondant à un exercice. 
 
 ### Préparation
 
@@ -36,7 +34,7 @@ go(globals())
 
 ### Tâches
 
-Écrire le contenu de la fonction `choisirMot` pour qu'elle retourne une chaîne de caractères contenant un mot, toujours le même.
+Écrire le contenu de la fonction `choisirMot` pour qu'elle retourne une chaîne de caractères contenant un mot, toujours le même. 
 
 ### Pseudo-code
 
@@ -177,13 +175,11 @@ go(globals())
 Sachant que :
 
 - `lettre` est la lettre choisie par le joueur ;
-
 - `mot` est le mot à deviner ;
 
-- écrire le code de la fonction `lettreEstDansMot` pour que :
+écrire le code de la fonction `lettreEstDansMot` pour que :
 
 - lorsque `lettre` est présent dans `mot`, elle retourne `VRAI` (ou `True`) ;
-
 - lorsque `lettre` n'est **pas** présent dans `mot`, elle retourne `FAUX` (ou `False`).
 
 ### Pseudo-code
@@ -219,16 +215,16 @@ Si la fonction ne retourne pas la bonne valeur, et doit donc être corrigée, al
 
 ### Tests
 
-- Cliquer sur une lettre contenu dans le mot :
+- Cliquer sur une lettre contenue dans le mot :
   - *Pioche* doit afficher la lettre cliquée,
   - *Attendu* doit afficher `vrai`,
   - *Obtenu* doit afficher `vrai` surligné en vert ;
-- cliquer sur une lettre qui n'est **pas** contenu dans le mot :
+- cliquer sur une lettre qui n'est **pas** contenue dans le mot :
   - *Pioche* doit afficher la lettre cliquée,
   - *Attendu* doit afficher `faux`,
   - *Obtenu* doit afficher `faux` surligné en vert.
 
-Refaire les actions ci-dessus avec différentes lettre et différents mots. Si ce qui est affiché dans *Obtenu* est barré et surligné de rouge, alors le code de la fonction `lettreEstDansMot` est incorrect. Noter le mot et le lettre qui pose problème, corriger la fonction, et ressayer le mot et la lettre pour vérifier que le bug a été corrigé.
+Refaire les actions ci-dessus avec différentes lettres et différents mots. Si ce qui est affiché dans *Obtenu* est barré et surligné de rouge, alors le code de la fonction `lettreEstDansMot` est incorrect. Noter le mot et le lettre qui posent problème, corriger la fonction, et ressayer le mot et la lettre pour vérifier que le bug a été corrigé.
 
 ## Exercice *e*
 
@@ -279,7 +275,7 @@ Sachant que :
 ### Tests
 
 - Au lancement, le masque doit être constitué d'un nombre de `_` égal au nombre de caractères du mot à deviner ;
-- cliquer sur une lettre contenu dans le mot à deviner : toutes les occurrences de cette lettre apparaissant dans le mot à deviner doivent être dévoilées, en plus des lettres déjà dévoilées ;
+- cliquer sur une lettre contenue dans le mot à deviner : toutes les occurrences de cette lettre apparaissant dans le mot à deviner doivent être dévoilées, en plus des lettres déjà dévoilées ;
 - cliquer sur une lettre qui n'est **pas** contenue dans le mot à deviner : rien ne doit se passer ;
 - tester des mots contenant plusieurs fois la même lettre pour vérifier que toutes les occurrences d'une même lettre soient bien dévoilées.
 
@@ -287,7 +283,7 @@ Sachant que :
 
 ### Objectif
 
-Dessiner le corps du pendu en fonction du nombre d'erreurs, c'est-à-dire du nombre de lettres piochées par le joueur qui ne sont pas contenues dans le mot à deviner)
+Dessiner le corps du pendu en fonction du nombre d'erreurs, c'est-à-dire du nombre de lettres piochées par le joueur qui ne sont pas contenues dans le mot à deviner.
 
 ### Préparation
 
@@ -307,7 +303,7 @@ go(globals())
 
 ### Tâche
 
-Sachant que `nombreErreurs` est le nombre d'erreurs commises par le joueur, c'est-à-dire le nombre de lettres qu'il a choisi est qui ne sont pas contenus dans le mot à deviner; écrire le code de la fonction `majCorps` pour qu'elle dessine la partie du corps correspondant au nombre d'erreurs. Pour cela, on dispose de la fonction `dessinerPartieCorps` qui peut prendre, comme paramètre, une des valeurs suivantes :
+Sachant que `nombreErreurs` est le nombre d'erreurs commises par le joueur, c'est-à-dire le nombre de lettres qu'il a choisi est qui ne sont pas contenus dans le mot à deviner, écrire le code de la fonction `majCorps` pour qu'elle dessine la partie du corps correspondant au nombre d'erreurs. Pour cela, on dispose de la fonction `dessinerPartieCorps` qui peut prendre, comme paramètre, une des valeurs suivantes :
 
 ```python
 P_TETE          # pour dessiner la tête,
@@ -339,4 +335,4 @@ P_VISAGE        # pour dessiner la visage.
 ### Tests
 
 - Pour chaque lettre contenue dans le mot à deviner, vérifier que le programme se comporte comme dans l'exercice précédent ;
-- pour chaque lettre **non** contenue dans le mot à deviner, vérifier que le dessin du corps du pendu se complète peu à peu.
+- pour chaque lettre **non** contenue dans le mot à deviner, vérifier que le dessin  du pendu se complète peu à peu.
