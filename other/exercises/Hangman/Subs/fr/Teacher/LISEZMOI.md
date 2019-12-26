@@ -1,22 +1,20 @@
 # Exercices de programmation du jeu du pendu ; documentation professeur
 
-[![Run on Repl.it](https://repl.it/badge/github/epeios-q37/hangman-fr-teacher)](https://repl.it/github/epeios-q37/hangman-fr-teacher)
+[![Essai en ligne](https://img.shields.io/badge/essai-en_ligne-green.svg?labelColor=violet&style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHJvbGU9ImltZyIgdmlld0JveD0iMCAwIDI0IDI0Ij48dGl0bGU+cmVwbC5pdCBpY29uPC90aXRsZT48cGF0aCBkPSJNMTIuMjY1LjAwMmExMS45MTEgMTEuOTExIDAgMDAtMi40MzcuMjA0YzEzLjg3NiAxLjcwNCAxMC4yNyAxNy45NCAxLjcxNyAxNy44MTkgMCAwIDEyLjQ1MyAxLjYyNSAxMS42NzMtMTAuMjE1QTExLjkxMSAxMS45MTEgMCAwMDEyLjI2NS4wMDJ6TTguMjEzLjgyN2MtLjIuMDAyLS40MDIuMDA4LS42MS4wMTZBMTEuODU2IDExLjg1NiAwIDAwLjE0NiAxMy42MDhDMi45My0uNDIxIDE4LjgwNSA0LjEyMiAxNy45IDEyLjY4OGMwIDAgMi44NS0xMi4wMTQtOS42ODgtMTEuODYxem0xLjQ1NCA1LjAzNUM2LjAwMiA1Ljg4Ni42OTEgNy40NS44MTYgMTYuMzQ0YTEyLjAxMyAxMi4wMTMgMCAwMDIuODk3IDQuMzNjLjA1Mi4wNTEuMTA4LjEuMTYyLjE0OWExMi4wMiAxMi4wMiAwIDAwMS4xMzcuOTI2Yy4wNjEuMDQ0LjEyLjA5Mi4xODEuMTM1YTExLjkzIDExLjkzIDAgMDAxLjMxMi43NzljLjEzMi4wNjguMjY2LjEzLjQuMTkzYTExLjg1NCAxMS44NTQgMCAwMDEuMTk5LjQ4NmMuMS4wMzQuMTk1LjA3Ny4yOTcuMTA5YTExLjg3NCAxMS44NzQgMCAwMDEuNDkuMzUzYy4xNTMuMDI3LjMwNy4wNS40NjEuMDdhMTIuMDE2IDEyLjAxNiAwIDAwMS41NzguMTIzbC4wNi4wMDNjLjQgMCAuNzkyLS4wMjEgMS4xOC0uMDYtMTMuOTQ5LTMuMzI3LTguNjQ1LTE4LjkyNC0uMTE0LTE3LjY4IDAgMC0xLjQ2OS0uNDEtMy4zODktLjM5OHptMi40MzYgMi43NjJhMy4zNTUgMy4zNTUgMCAxMDMuMzU0IDMuMzU2IDMuMzU1IDMuMzU1IDAgMDAtMy4zNTQtMy4zNTZ6bS01Ljk1IDIuMTkyUzIuODIgMjMuMDkgMTYuMTcyIDIzLjE5NmExMS45NzggMTEuOTc4IDAgMDA3Ljc0My05Ljk5MmMuMDMzLS4zMTkuMDQzLS42NDQuMDUtLjk3LjAwMS0uMDg1LjAxMy0uMTY4LjAxMy0uMjU1IDAtLjM3MS0uMDIzLS43MzctLjA1Ni0xLjEtMy41MjcgMTMuODg3LTE5LjEzMiA4LjQ0OC0xNy43Ny0uMDYzeiIvPjwvc3ZnPg==)](https://repl.it/github/epeios-q37/hangman-fr-teacher)
 
 ## Introduction
 
-De nos jour, la plupart des jeunes possèdent un smartphone. Il sera donc plus facile de les intéresser à la programmation avec des exercices qui s'utilisent comme les applications de leurs smartphones.
+De nos jour, la plupart des jeunes possèdent un smartphone. Il est donc plus facile de les intéresser à la programmation avec des exercices qui s'utilisent comme les applications de leurs smartphones.
 
-C'est pourquoi les exercices présentés ici ont une véritable interface graphique, au lieu de l'habituelle interface texte. De plus, avec chaque exercice, un [code QR](https://fr.wikipedia.org/wiki/Code_QR)  qui permet d'y accèder à partir d'un smartphone est automatiquement affiché. Cela met en évidence, par l'exemple, qu'on peut utiliser ses propres applications sur son smartphone, et non pas seulement des applications comme facebook, instagram, twitter….
+C'est pourquoi les exercices présentés ici ont une véritable interface graphique, au lieu de l'habituelle et austère interface texte. De plus, avec chaque exercice, un [code QR](https://fr.wikipedia.org/wiki/Code_QR)  y donnant accès à partir d'un smartphone est automatiquement affiché. Cela met en évidence, par l'exemple, qu'on peut utiliser ses propres applications sur son smartphone, et non pas seulement des applications comme *Facebook*, *YouTube*, *Twitter*….
 
-En outre, ils peuvent également partager cet accés avec leurs proches, directement sur leurs smartphones (ou n'importe quel dispositif équipé d'un navigateur web moderne connecté à internet) respectifs. Avec un minimum d'encouragement de la part de ces derniers, 
-
-De plus, comme ils peuvent facilement en leur montrant qu'ils peuvent facielement on peut les encourager à montrer leur travail à leurs proches, en leur donnant accès à ces exercices sur leurs smartphones .
+En outre, ils peuvent également partager l'accès avec leurs proches, directement sur leurs smartphones (ou n'importe quel dispositif équipé d'un navigateur web moderne connecté à internet) respectifs. Avec un minimum d'encouragement de la part de ces derniers, 
 
 Vous trouverez plus de détails sur les caractéristiques de ce nouveau type d'exercices à cette adresse : https://q37.info/s/knf9hdwp.
 
-Ces exercices aboutissent à la programmation, en *Python* du jeu de pendu avec une interface graphique, sans avoir à manipuler directement cette interface. Chaque exercice s'appuie sur le précédent et l'ensemble reproduit les différentes étapes habituellement suivies pour la réalisation d'un tel jeu.
+Ces exercices aboutissent à la programmation, en *Python*, du [jeu du pendu](https://fr.wikipedia.org/wiki/Le_Pendu_(jeu) avec une interface graphique, sans avoir à manipuler directement cette interface. Chaque exercice s'appuie sur le précédent et l'ensemble reproduit les différentes étapes habituellement suivies pour la réalisation d'un tel jeu.
 
-Ces exercices portent sur la programmation en générale, et non pas sur la programmation en *Python*. C'est pour cela que les solutions générales sont données avant les solutions propres à *Python*, et il conviendra d'en expliquer la différence.
+Ces exercices portent sur la programmation en générale, et non pas sur la programmation en *Python*. C'est pour cela que les solutions générales seront données avant les solutions propres à *Python*.
 
 ## Utilisation
 
@@ -25,6 +23,8 @@ Le dépôt https://github.com/epeios-q37/hangman-fr est destinés aux élèves. 
 Pour distribuer ces exercices aux élèves, vous pouvez directement utiliser le dépôt https://github.com/epeios-q37/hangman-fr. Si vous êtes familiarisés avec *GitHub*, vous pouvez utiliser les outils mis à disposition pour créer votre propre dépôt. Dans ce cas, ils vous suffit de remplacer `epeios-q37` par votre nom d'utilisateur sur *GitHub*, et `hangman-fr` par le nom que vous avez donné à votre dépôt.
 
 Ls exercices ne sont pas conçus por être enchaînés directement, mais au fur et à mesure que les différentes notions informatiques auront été abordées par ailleurs. Vous pouvez tester ces exercices en allant à cette adresse : https://repl.it/github/epeios-q37/hangman-fr-teacher. Les fichiers contenus dans le répertoire `Student` sont ceux mis à disposition des étudiants.
+
+Il existe deux façon pour les élèves de 
 
 ### Utilisation en local
 
@@ -53,6 +53,7 @@ Les informations données ici viennent en complément de celles indiquées dans 
 - Édition d'un fichier source ;
 - lancement d'un programme ;
 - arrêt d'un programme ;
+- booléen,
 - création d'une chaîne de caractères ;
 - renvoie d'une valeur par une fonction.
 

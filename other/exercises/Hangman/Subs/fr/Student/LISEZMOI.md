@@ -1,22 +1,18 @@
 # Exercices de programmation du jeu du pendu
 
-[![Run on Repl.it](https://repl.it/badge/github/epeios-q37/hangman-fr)](https://repl.it/github/epeios-q37/hangman-fr)
+[![Essai en ligne](https://img.shields.io/badge/essai-en_ligne-green.svg?labelColor=violet&style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHJvbGU9ImltZyIgdmlld0JveD0iMCAwIDI0IDI0Ij48dGl0bGU+cmVwbC5pdCBpY29uPC90aXRsZT48cGF0aCBkPSJNMTIuMjY1LjAwMmExMS45MTEgMTEuOTExIDAgMDAtMi40MzcuMjA0YzEzLjg3NiAxLjcwNCAxMC4yNyAxNy45NCAxLjcxNyAxNy44MTkgMCAwIDEyLjQ1MyAxLjYyNSAxMS42NzMtMTAuMjE1QTExLjkxMSAxMS45MTEgMCAwMDEyLjI2NS4wMDJ6TTguMjEzLjgyN2MtLjIuMDAyLS40MDIuMDA4LS42MS4wMTZBMTEuODU2IDExLjg1NiAwIDAwLjE0NiAxMy42MDhDMi45My0uNDIxIDE4LjgwNSA0LjEyMiAxNy45IDEyLjY4OGMwIDAgMi44NS0xMi4wMTQtOS42ODgtMTEuODYxem0xLjQ1NCA1LjAzNUM2LjAwMiA1Ljg4Ni42OTEgNy40NS44MTYgMTYuMzQ0YTEyLjAxMyAxMi4wMTMgMCAwMDIuODk3IDQuMzNjLjA1Mi4wNTEuMTA4LjEuMTYyLjE0OWExMi4wMiAxMi4wMiAwIDAwMS4xMzcuOTI2Yy4wNjEuMDQ0LjEyLjA5Mi4xODEuMTM1YTExLjkzIDExLjkzIDAgMDAxLjMxMi43NzljLjEzMi4wNjguMjY2LjEzLjQuMTkzYTExLjg1NCAxMS44NTQgMCAwMDEuMTk5LjQ4NmMuMS4wMzQuMTk1LjA3Ny4yOTcuMTA5YTExLjg3NCAxMS44NzQgMCAwMDEuNDkuMzUzYy4xNTMuMDI3LjMwNy4wNS40NjEuMDdhMTIuMDE2IDEyLjAxNiAwIDAwMS41NzguMTIzbC4wNi4wMDNjLjQgMCAuNzkyLS4wMjEgMS4xOC0uMDYtMTMuOTQ5LTMuMzI3LTguNjQ1LTE4LjkyNC0uMTE0LTE3LjY4IDAgMC0xLjQ2OS0uNDEtMy4zODktLjM5OHptMi40MzYgMi43NjJhMy4zNTUgMy4zNTUgMCAxMDMuMzU0IDMuMzU2IDMuMzU1IDMuMzU1IDAgMDAtMy4zNTQtMy4zNTZ6bS01Ljk1IDIuMTkyUzIuODIgMjMuMDkgMTYuMTcyIDIzLjE5NmExMS45NzggMTEuOTc4IDAgMDA3Ljc0My05Ljk5MmMuMDMzLS4zMTkuMDQzLS42NDQuMDUtLjk3LjAwMS0uMDg1LjAxMy0uMTY4LjAxMy0uMjU1IDAtLjM3MS0uMDIzLS43MzctLjA1Ni0xLjEtMy41MjcgMTMuODg3LTE5LjEzMiA4LjQ0OC0xNy43Ny0uMDYzeiIvPjwvc3ZnPg==)](https://repl.it/github/epeios-q37/hangman-fr)
 
-Les exercices proposés ici vont consister à programmer un [jeu du pendu](https://fr.wikipedia.org/wiki/Le_Pendu_(jeu), qui va ressembler à ça :
+Le série d'exercices qui suit  permet de programmer une version du [jeu du pendu](https://fr.wikipedia.org/wiki/Le_Pendu_(jeu)) jouable sur smartphone, et qui ressemblera à ça :
 
 ![](assets/Pendu.png)
 
 Le professeur vous indiquera comment procéder pour le lancement des divers exercices.
 
-Dans le code de tous les exercices, il y a une variable nommée `MONTRER_MOT_SECRET` ,  de type booléen. Lorsqu'elle est mise à `VRAI` (ou `True`), alors le programme va afficher le mot à deviner. Lorsqu'elle est mise à `FAUX`, alors ce mot ne sera pas affiché.
-
-Sans cette possibilité d'afficher le mot à deviner, il serait trés compliqué de tester le jeu pour vérifier s'il fonctionne correctement. C'est pour cela que cette variable sera mise à `VRAI` tout au long du développement et de la mise au point du jeu, et, une fois qu'il sera au point, on la mettre à `FAUX`, pour que le mot à deviner ne soit plus affiché.
-
 ## Exercice *a*
 
-### Objectif
+### Objectifs
 
-Se familiariser avec l'édition d'un fichier source, le lancement et l'arrêt du programme correspondant à un exercice. 
+Se familiariser avec l'édition d'un fichier source, ainsi que le lancement et l'arrêt du jeu. 
 
 ### Préparation
 
@@ -32,13 +28,15 @@ def choisirMot():
 go(globals())
 ```
 
+La variable booléenne `MONTRER_MOT_SECRET` permet de configurer le jeu pour qu'il affiche le mot à deviner. Sans cette possibilité, il serait compliqué de tester le jeu pour vérifier s'il fonctionne correctement.  On donnera à cette variable la valeur`VRAI` (ou `True`) tout au long du développement et de la mise au point du jeu, et `FAUX` (ou `False`) une fois que le jeu sera au point, pour que le mot à deviner ne soit plus affiché.
+
 ### Tâches
 
-Écrire le contenu de la fonction `choisirMot` pour qu'elle retourne une chaîne de caractères contenant un mot, toujours le même. 
+Écrire le contenu de la fonction `choisirMot` pour qu'elle retourne toujours la même chaîne de caractères contenant un mot. 
 
 ### Pseudo-code
 
-> Retourner une chaîne de caractères contenant un mot.
+> Retourner un mot contenu dans une chaîne de caractères.
 
 ### Aperçu
 
@@ -46,13 +44,14 @@ go(globals())
 
 ### Tests
 
-Vérifier que, quelque soit le contenu du champs de saisie, les deux champs affichent toujours le mot retourné par la fonction `choisirMot` lorsque l'on clique sur le bouton `Recommencer`.
+- Cliquer sur le bouton `Recommencer` et vérifier que les deux champs affichent le mot retourné par la fonction `choisirMot` ;
+- changer le contenu du champs de saisie, cliquer sur le bouton `Recommencer`, et vérifier que les deux champs affiche le même mot que ci-dessus.
 
 ## Exercice *b*
 
 ### Objectifs
 
-Offrir la possibilité de définir le mot à deviner grâce au champs texte. C'est-à-dire que lorsqu'on va cliquer sur le bouton `Recommencer`, c'est le texte contenu dans le champs de saisie qui va être utilisé comme mot secret.
+Offrir la possibilité de définir le mot à deviner grâce au champs de saisie. C'est-à-dire que, lorsqu'on va cliquer sur le bouton `Recommencer`, c'est le texte contenu dans le champs de saisie qui va être utilisé comme mot à deviner, et donc affiché dans les deux champs.
 
 ### Préparation
 
@@ -72,10 +71,14 @@ go(globals())
 
 ### Tâches
 
-Sachant que `suggestion` est une chaîne de caractères contenant ce qui a été saisi dans le champs de saisie, modifier le code de la fonction `choisirMot` pour que :
+Sachant que :
 
-- lorsque  `suggestion` est vide, elle retourne une chaîne de caractères contenant un mot quelconque, toujours la même ;
-- lorsque `suggestion` n'est pas vide, elle retourne `suggestion`.
+- `suggestion` est une chaîne de caractères contenant ce qui a été saisi dans le champs de saisie  ;
+
+modifier le code de la fonction `choisirMot` pour que :
+
+- lorsque  `suggestion` est vide, elle retourne une chaîne de caractères contenant un mot quelconque, toujours le même (réutiliser le code écrit dans l'exercice précédent) ;
+- lorsque `suggestion` n'est **pas** vide, elle retourne `suggestion`.
 
 ### Pseudo-code
 
@@ -91,7 +94,7 @@ Le même que pour l'exercice précédent.
 ### Tests
 
 - Lorsque l'on clique sur `Recommencer` alors que le champs de saisie est vide, c'est toujours le même mot qui doit être affiché dans les deux champs ;
-- lorsque l'on clique sur `Recommencer` alors que le champs de saisie n'est pas vide, alors c'est le contenu de ce champs qui doit être affiché dans les deux champs.
+- lorsque l'on clique sur `Recommencer` alors que le champs de saisie n'est **pas** vide, alors c'est le contenu de ce champs qui doit être affiché dans les deux champs.
 
 ## Exercice *c*
 
@@ -105,7 +108,7 @@ Au lieu de toujours retourner le même mot lorsque le champs de saisie est vide,
 - ajouter le paramètre `motAuHasard` dans la déclaration de la fonction `choisirMot`.
 
 ```python
-from workshop.fr.b import *
+from workshop.fr.c import *
 
 …
 
@@ -125,7 +128,7 @@ Sachant que :
 modifier la fonction `choisirMot` pour que :
 
 - lorsque `suggestion` est vide, elle retourne `motAuHasard` ;
-- lorsque `suggestion` n'est pas vide, elle retourne `suggestion`.
+- lorsque `suggestion` n'est **pas** vide, elle retourne `suggestion`.
 
 ### Pseudo-code
 
@@ -146,13 +149,7 @@ Les mêmes que pour l'exercice précédent, sauf que, lorsque le champs de saisi
 
 ### Objectifs
 
-Détection de la présence d'une lettre dns un mot.
-
-Notions abordées :
-
-- boucle *for* ;
-- fonction `range` ;
-- accès à un élément d'une chaîne de caractères par son indice.
+Détecter la présence d'une lettre dans un mot.
 
 ### Préparation
 
@@ -162,7 +159,9 @@ Notions abordées :
 ```python
 from workshop.fr.d import *
 
-def choisirMot(suggestion):
+…
+
+def choisirMot(…):
     …
 
 def lettreEstDansMot(lettre,mot):
@@ -191,11 +190,13 @@ Sachant que :
 
 ### Aperçu
 
-Lorsque l'on lance le programme, voilà ce qui est affiché :
+Lorsque l'on lance le jeu, voilà ce qui est affiché :
 
 ![](./assets/b/Start.png)
 
-*Pioche* affichera la lettre sélectionné par l'utilisateur, *Attendu* affichera la valeur que la fonction `lettreEstDansMot` devrait retourner, et *Obtenu*, affichera ce qua la fonction `lettreEstDansMot` retourne effectivement.
+- *Pioche* affiche la lettre sélectionnée par l'utilisateur ;
+- *Attendu* affiche la valeur que la fonction `lettreEstDansMot` devrait retourner ;
+- *Obtenu* affiche ce que la fonction `lettreEstDansMot` retourne effectivement.
 
 Si l'utilisateur clique sur une lettre qui est contenue dans le mot, voici ce qui devrait s'afficher.
 
@@ -205,7 +206,7 @@ Si la fonction ne retourne pas la bonne valeur, et doit donc être corrigée, al
 
 ![](./assets/b/True.bug.png)
 
-Si l'utilisateur clique sur une lettre qui n'est **pas** contenue dans le mot, voici ce qui devrait s'afficher.
+Si l'utilisateur clique sur une lettre qui n'est **pas** contenue dans le mot, voici ce qui devrait s'afficher :
 
 ![](./assets/b/False.correct.png)
 
@@ -216,15 +217,20 @@ Si la fonction ne retourne pas la bonne valeur, et doit donc être corrigée, al
 ### Tests
 
 - Cliquer sur une lettre contenue dans le mot :
-  - *Pioche* doit afficher la lettre cliquée,
-  - *Attendu* doit afficher `vrai`,
+  
+  - *Pioche* doit afficher la lettre cliquée ;
+  - *Attendu* doit afficher `vrai` ;
   - *Obtenu* doit afficher `vrai` surligné en vert ;
+
 - cliquer sur une lettre qui n'est **pas** contenue dans le mot :
-  - *Pioche* doit afficher la lettre cliquée,
-  - *Attendu* doit afficher `faux`,
+  
+  - *Pioche* doit afficher la lettre cliquée ;
+  - *Attendu* doit afficher `faux` ;
   - *Obtenu* doit afficher `faux` surligné en vert.
 
-Refaire les actions ci-dessus avec différentes lettres et différents mots. Si ce qui est affiché dans *Obtenu* est barré et surligné de rouge, alors le code de la fonction `lettreEstDansMot` est incorrect. Noter le mot et le lettre qui posent problème, corriger la fonction, et ressayer le mot et la lettre pour vérifier que le bug a été corrigé.
+- refaire les actions ci-dessus avec différentes lettres et différents mots.
+
+Si ce qui est affiché dans *Obtenu* est barré et surligné de rouge, alors le code de la fonction `lettreEstDansMot` est incorrect. Noter le mot et le lettre qui posent problème, corriger la fonction, et ressayer le mot et la lettre pour vérifier que le bug a été corrigé.
 
 ## Exercice *e*
 
@@ -233,6 +239,9 @@ Refaire les actions ci-dessus avec différentes lettres et différents mots. Si 
 Affichage du masque, c'est-à-dire du mot à deviner avec dissimulation des lettres qui n'ont pas encore encore été trouvées par le joueur.
 
 ### Préparation
+
+- Dans la première ligne, remplacer le `d` par un `e` ;
+- ajouter `def donnerMasque(mot,pioches):` avant la dernière instruction du fichier.
 
 ```python
 from workshop.fr.e import *
@@ -274,8 +283,10 @@ Sachant que :
 
 ### Tests
 
-- Au lancement, le masque doit être constitué d'un nombre de `_` égal au nombre de caractères du mot à deviner ;
-- cliquer sur une lettre contenue dans le mot à deviner : toutes les occurrences de cette lettre apparaissant dans le mot à deviner doivent être dévoilées, en plus des lettres déjà dévoilées ;
+Sachant que le contenu du msque est affiché dans le cadre au-dessus du clavier  :
+
+- au lancement, le masque doit être constitué d'un nombre de `_` égal au nombre de caractères du mot à deviner ;
+- cliquer sur une lettre contenue dans le mot à deviner : toutes les occurrences de cette lettre contenus dans le mot à deviner doivent être dévoilées, en plus des lettres déjà dévoilées ;
 - cliquer sur une lettre qui n'est **pas** contenue dans le mot à deviner : rien ne doit se passer ;
 - tester des mots contenant plusieurs fois la même lettre pour vérifier que toutes les occurrences d'une même lettre soient bien dévoilées.
 
@@ -283,9 +294,12 @@ Sachant que :
 
 ### Objectif
 
-Dessiner le corps du pendu en fonction du nombre d'erreurs, c'est-à-dire du nombre de lettres piochées par le joueur qui ne sont pas contenues dans le mot à deviner.
+Dessiner le corps du pendu en fonction du nombre d'erreurs, c'est-à-dire du nombre de lettres choisies par le joueur qui ne sont pas contenues dans le mot à deviner.
 
 ### Préparation
+
+- Dans la première ligne, remplacer le `e` par un `f` ;
+- ajouter `def majCorps(nombreErreurs)` avant la dernière instruction du fichier.
 
 ```python
 from workshop.fr.f import *
@@ -297,13 +311,18 @@ def donnerMasque(mot,pioches):
 
 def majCorps(nombreErreurs):    
 
-
 go(globals())
 ```
 
 ### Tâche
 
-Sachant que `nombreErreurs` est le nombre d'erreurs commises par le joueur, c'est-à-dire le nombre de lettres qu'il a choisi est qui ne sont pas contenus dans le mot à deviner, écrire le code de la fonction `majCorps` pour qu'elle dessine la partie du corps correspondant au nombre d'erreurs. Pour cela, on dispose de la fonction `dessinerPartieCorps` qui peut prendre, comme paramètre, une des valeurs suivantes :
+Sachant que : 
+
+- `nombreErreurs` est le nombre d'erreurs commises par le joueur, c'est-à-dire le nombre de lettres qu'il a choisi est qui ne sont pas contenus dans le mot à deviner ;
+
+écrire le code de la fonction `majCorps` pour qu'elle dessine la partie du corps correspondant au nombre d'erreurs.
+
+Pour cette tâche, utiliser la fonction `dessinerPartieCorps` qui peut prendre, comme paramètre, une des valeurs suivantes :
 
 ```python
 P_TETE          # pour dessiner la tête,
@@ -315,7 +334,7 @@ P_PIED_DROIT    # pour dessiner le pied droit,
 P_VISAGE        # pour dessiner la visage.
 ```
 
-`maj` signifie *mise-à-jour*, car la fonction est appelée à chaque nouvelle erreur, cela veut dire que la valeur du paramètre `nombreErreurs` est incrémenté d'un apple à l'autre. Aussi ne va-t-on pas redessiné tous le corps, mais juste la partie correspondant au nombre d'erreurs.
+`maj` signifie *mise-à-jour*, car la fonction est appelée à chaque nouvelle erreur. Cela veut dire que la valeur du paramètre `nombreErreurs` est incrémenté d'un appel à l'autre. Aussi ne va-t-on pas redessiner tous le corps, mais juste la partie correspondant au nombre d'erreurs.
 
 ### Pseudo-code
 
@@ -334,5 +353,5 @@ P_VISAGE        # pour dessiner la visage.
 
 ### Tests
 
-- Pour chaque lettre contenue dans le mot à deviner, vérifier que le programme se comporte comme dans l'exercice précédent ;
-- pour chaque lettre **non** contenue dans le mot à deviner, vérifier que le dessin  du pendu se complète peu à peu.
+- Pour chaque lettre contenue dans le mot à deviner, vérifier que le jeu se comporte comme dans l'exercice précédent ;
+- pour chaque lettre **non** contenue dans le mot à deviner, vérifier que le dessin du pendu se complète peu à peu.
