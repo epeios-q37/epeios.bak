@@ -1,10 +1,19 @@
+Pour tester ces exercices dans *Repl.it* (un environnement de développement en ligne), cliquer sur le bouton ci-dessous.
 
-<!--
+[![Utiliser en ligne](https://q37.info/s/pcn9vgnj.svg)](https://repl.it/github/epeios-q37/hangman-fr-teacher)
 
-Pour les utilisateurs de Repl.it : le lancement se fait en cliquant le bouton vert 'run' ci-dessus.
+Les explications concernant ces exercices se trouvent à l'adresse https://q37.info/s/mmdnch9t.
 
--->
+---
 
-Voir le fichier `LISEZMOI.md`.
+Pour tester les exercices en utilisant *Repl.it*, cliquer sur le bouton vert, sélectionner un exercice, puis cliquer sur le code QR (qui peut également être scanner avec le smartphone) qui s'affiche.
 
-[![Essai en ligne](https://img.shields.io/badge/essai-en_ligne-green.svg?labelColor=violet&style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHJvbGU9ImltZyIgdmlld0JveD0iMCAwIDI0IDI0Ij48dGl0bGU+cmVwbC5pdCBpY29uPC90aXRsZT48cGF0aCBkPSJNMTIuMjY1LjAwMmExMS45MTEgMTEuOTExIDAgMDAtMi40MzcuMjA0YzEzLjg3NiAxLjcwNCAxMC4yNyAxNy45NCAxLjcxNyAxNy44MTkgMCAwIDEyLjQ1MyAxLjYyNSAxMS42NzMtMTAuMjE1QTExLjkxMSAxMS45MTEgMCAwMDEyLjI2NS4wMDJ6TTguMjEzLjgyN2MtLjIuMDAyLS40MDIuMDA4LS42MS4wMTZBMTEuODU2IDExLjg1NiAwIDAwLjE0NiAxMy42MDhDMi45My0uNDIxIDE4LjgwNSA0LjEyMiAxNy45IDEyLjY4OGMwIDAgMi44NS0xMi4wMTQtOS42ODgtMTEuODYxem0xLjQ1NCA1LjAzNUM2LjAwMiA1Ljg4Ni42OTEgNy40NS44MTYgMTYuMzQ0YTEyLjAxMyAxMi4wMTMgMCAwMDIuODk3IDQuMzNjLjA1Mi4wNTEuMTA4LjEuMTYyLjE0OWExMi4wMiAxMi4wMiAwIDAwMS4xMzcuOTI2Yy4wNjEuMDQ0LjEyLjA5Mi4xODEuMTM1YTExLjkzIDExLjkzIDAgMDAxLjMxMi43NzljLjEzMi4wNjguMjY2LjEzLjQuMTkzYTExLjg1NCAxMS44NTQgMCAwMDEuMTk5LjQ4NmMuMS4wMzQuMTk1LjA3Ny4yOTcuMTA5YTExLjg3NCAxMS44NzQgMCAwMDEuNDkuMzUzYy4xNTMuMDI3LjMwNy4wNS40NjEuMDdhMTIuMDE2IDEyLjAxNiAwIDAwMS41NzguMTIzbC4wNi4wMDNjLjQgMCAuNzkyLS4wMjEgMS4xOC0uMDYtMTMuOTQ5LTMuMzI3LTguNjQ1LTE4LjkyNC0uMTE0LTE3LjY4IDAgMC0xLjQ2OS0uNDEtMy4zODktLjM5OHptMi40MzYgMi43NjJhMy4zNTUgMy4zNTUgMCAxMDMuMzU0IDMuMzU2IDMuMzU1IDMuMzU1IDAgMDAtMy4zNTQtMy4zNTZ6bS01Ljk1IDIuMTkyUzIuODIgMjMuMDkgMTYuMTcyIDIzLjE5NmExMS45NzggMTEuOTc4IDAgMDA3Ljc0My05Ljk5MmMuMDMzLS4zMTkuMDQzLS42NDQuMDUtLjk3LjAwMS0uMDg1LjAxMy0uMTY4LjAxMy0uMjU1IDAtLjM3MS0uMDIzLS43MzctLjA1Ni0xLjEtMy41MjcgMTMuODg3LTE5LjEzMiA4LjQ0OC0xNy43Ny0uMDYzeiIvPjwvc3ZnPg==)](https://repl.it/github/epeios-q37/hangman-fr-teacher)
+Pour sélectionner un autre exercice, fermer l'onglet ou la fenêtre qui s'est ouverte lors du click sur le code QR, et cliquer à nouveau sur le bouton vert.
+
+---
+
+Pour tester ces exercices en local, lancer `python3 fr/<id>.py`dans une console à la racine du dépôt, où `<id>` est l'identifiant de l'exercice (ex. : `python3 fr/d.py`).
+
+Pour arrêter l'exercice, faire CTRL-C dans la console à partir de laquelle l'exercice a été lancé.
+
+---

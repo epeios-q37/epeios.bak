@@ -1,8 +1,6 @@
 # Exercices de programmation du jeu du pendu
 
-[![Essai en ligne](https://img.shields.io/badge/essai-en_ligne-green.svg?labelColor=violet&style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHJvbGU9ImltZyIgdmlld0JveD0iMCAwIDI0IDI0Ij48dGl0bGU+cmVwbC5pdCBpY29uPC90aXRsZT48cGF0aCBkPSJNMTIuMjY1LjAwMmExMS45MTEgMTEuOTExIDAgMDAtMi40MzcuMjA0YzEzLjg3NiAxLjcwNCAxMC4yNyAxNy45NCAxLjcxNyAxNy44MTkgMCAwIDEyLjQ1MyAxLjYyNSAxMS42NzMtMTAuMjE1QTExLjkxMSAxMS45MTEgMCAwMDEyLjI2NS4wMDJ6TTguMjEzLjgyN2MtLjIuMDAyLS40MDIuMDA4LS42MS4wMTZBMTEuODU2IDExLjg1NiAwIDAwLjE0NiAxMy42MDhDMi45My0uNDIxIDE4LjgwNSA0LjEyMiAxNy45IDEyLjY4OGMwIDAgMi44NS0xMi4wMTQtOS42ODgtMTEuODYxem0xLjQ1NCA1LjAzNUM2LjAwMiA1Ljg4Ni42OTEgNy40NS44MTYgMTYuMzQ0YTEyLjAxMyAxMi4wMTMgMCAwMDIuODk3IDQuMzNjLjA1Mi4wNTEuMTA4LjEuMTYyLjE0OWExMi4wMiAxMi4wMiAwIDAwMS4xMzcuOTI2Yy4wNjEuMDQ0LjEyLjA5Mi4xODEuMTM1YTExLjkzIDExLjkzIDAgMDAxLjMxMi43NzljLjEzMi4wNjguMjY2LjEzLjQuMTkzYTExLjg1NCAxMS44NTQgMCAwMDEuMTk5LjQ4NmMuMS4wMzQuMTk1LjA3Ny4yOTcuMTA5YTExLjg3NCAxMS44NzQgMCAwMDEuNDkuMzUzYy4xNTMuMDI3LjMwNy4wNS40NjEuMDdhMTIuMDE2IDEyLjAxNiAwIDAwMS41NzguMTIzbC4wNi4wMDNjLjQgMCAuNzkyLS4wMjEgMS4xOC0uMDYtMTMuOTQ5LTMuMzI3LTguNjQ1LTE4LjkyNC0uMTE0LTE3LjY4IDAgMC0xLjQ2OS0uNDEtMy4zODktLjM5OHptMi40MzYgMi43NjJhMy4zNTUgMy4zNTUgMCAxMDMuMzU0IDMuMzU2IDMuMzU1IDMuMzU1IDAgMDAtMy4zNTQtMy4zNTZ6bS01Ljk1IDIuMTkyUzIuODIgMjMuMDkgMTYuMTcyIDIzLjE5NmExMS45NzggMTEuOTc4IDAgMDA3Ljc0My05Ljk5MmMuMDMzLS4zMTkuMDQzLS42NDQuMDUtLjk3LjAwMS0uMDg1LjAxMy0uMTY4LjAxMy0uMjU1IDAtLjM3MS0uMDIzLS43MzctLjA1Ni0xLjEtMy41MjcgMTMuODg3LTE5LjEzMiA4LjQ0OC0xNy43Ny0uMDYzeiIvPjwvc3ZnPg==)](https://repl.it/github/epeios-q37/hangman-fr)
-
-Le série d'exercices qui suit  permet de programmer une version du [jeu du pendu](https://fr.wikipedia.org/wiki/Le_Pendu_(jeu)) jouable sur smartphone, et qui ressemblera à ça :
+Le série d'exercices qui suit permet de programmer une version du [jeu du pendu](https://fr.wikipedia.org/wiki/Le_Pendu_(jeu)) jouable sur smartphone, et qui ressemblera à ça :
 
 ![](assets/Pendu.png)
 
@@ -28,7 +26,7 @@ def choisirMot():
 go(globals())
 ```
 
-La variable booléenne `MONTRER_MOT_SECRET` permet de configurer le jeu pour qu'il affiche le mot à deviner. Sans cette possibilité, il serait compliqué de tester le jeu pour vérifier s'il fonctionne correctement.  On donnera à cette variable la valeur`VRAI` (ou `True`) tout au long du développement et de la mise au point du jeu, et `FAUX` (ou `False`) une fois que le jeu sera au point, pour que le mot à deviner ne soit plus affiché.
+La variable booléenne `MONTRER_MOT_SECRET` permet de configurer le jeu pour qu'il affiche le mot à deviner. Sans cette possibilité, il serait compliqué de tester le jeu pour vérifier s'il fonctionne correctement.  On donnera à cette variable la valeur `VRAI` (ou `True`) tout au long du développement et de la mise au point du jeu, et `FAUX` (ou `False`) une fois que le jeu sera au point, pour que le mot à deviner ne soit plus affiché.
 
 ### Tâches
 
