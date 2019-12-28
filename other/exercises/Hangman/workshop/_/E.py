@@ -48,9 +48,6 @@ def _Submit(letter):
       displayMask(getSecretWord(), getGoodGuesses(), lambda: ufGetMask())
   else:
     setErrorsAmount(getErrorsAmount() + 1)
-    try:
-      rfUpdateBody(getBodyParts(), getErrorsAmount())
-    
 
 
 def _acSubmit(core, dom, id):

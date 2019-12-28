@@ -33,7 +33,7 @@ success = False
 print("\nYou can change the language by modifying the 'main.py' file.")
 
 while not success:
-    exercise = input(_messages["input"][lang].format(" (a,b,c,d,e,f,g)"))
+    exercise = input(_messages["input"][lang].format(" (a,b…,i)"))
 
     exerciseFilename = lang + "." + exercise.lower()
 

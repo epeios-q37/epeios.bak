@@ -1,8 +1,10 @@
+# Exercices de programmation du jeu du pendu
+
+Les instructions pour réaliser ces exercices se trouvent à l'adresse https://q37.info/s/zmg4m3fx.
+
 Pour travailler sur ces exercices dans *Repl.it* (un environnement de développement en ligne), cliquer sur le bouton ci-dessous.
 
 [![Utiliser en ligne](https://q37.info/s/pcn9vgnj.svg)](https://repl.it/github/epeios-q37/hangman-fr)
-
-Les instructions pour réaliser ces exercices se trouvent à l'adresse https://q37.info/s/zmg4m3fx.
 
 Le code est à écrire dans le fichier `pendu.py`.
 

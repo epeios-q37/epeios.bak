@@ -1,99 +1,109 @@
-# Exercices de programmation du jeu du pendu ; documentation professeur
+# Exercices de programmation du jeu du pendu - documentation professeur
+
+[![Utiliser en ligne](https://q37.info/s/pcn9vgnj.svg)](https://repl.it/github/epeios-q37/hangman-fr-teacher)
 
 ## Accès rapide
 
-Cette section permet de retrouver rapidement les différents liens indiqués dans le reste du document.
+Cette section permet de retrouver rapidement les différents liens présents dans ce document.
 
-- Documents professeur :
+- Dépôt maître : <https://github.com/epeios-q37/hangman-exercises> ;
+- formulaire pour contacter l'auteur : <https://q37.info/s/ggq7x4w7> ;
+- documents professeur :
   - ce document : <https://q37.info/s/mmdnch9t>,
   - le dépôt *GitHub* contenant les solutions aux exercices : <https://github.com/epeios-q37/hangman-fr-teacher>,
-  - pour tester ces solutions en ligne : <https://repl.it/github/epeios-q37/hangman-fr-teacher> ;
+  - essayer ces solutions en ligne : <https://repl.it/github/epeios-q37/hangman-fr-teacher> ;
 - documents élèves :
   - le document contenant les instructions pour les élèves : <https://q37.info/s/zmg4m3fx>,
   - le dépôt *GitHub* contenant les fichiers destinés aux élèves : <https://github.com/epeios-q37/hangman-fr>,
-  - pour faire travailler les élèves sur ces exercices dans un environnement de développement en ligne : <https://repl.it/github/epeios-q37/hangman-fr>.
+  - pour travailler sur ces exercices dans un environnement de développement en ligne : <https://repl.it/github/epeios-q37/hangman-fr>.
 
 
-## Introduction
+## Présentation
 
-De nos jour, la plupart des jeunes possèdent un smartphone. Il est donc plus facile de les intéresser à la programmation avec des exercices qui s'utilisent comme les applications de leurs smartphones.
+De nos jour, la plupart des jeunes possèdent un smartphone. Il est donc plus facile de les intéresser à la programmation si les exercices se présentent comme les applications qu'ils utilisent sur leurs smartphones.
 
-C'est pourquoi les exercices présentés ici ont une véritable interface graphique, au lieu de l'habituelle et austère interface texte. De plus, avec chaque exercice, un [code QR](https://fr.wikipedia.org/wiki/Code_QR) permettant d'y avoir accès à partir d'un smartphone est affiché. Ainsi, ils verront que l'usage de leurs  smartphones n'est pas limité à des applications comme *Facebook*, *YouTube*, *Twitter*….
+C'est pourquoi les exercices proposés ici ont une véritable interface graphique, au lieu de l'habituelle et austère interface texte. De plus, avec chaque exercice, un [code QR](https://fr.wikipedia.org/wiki/Code_QR) y donnant accès à partir d'un smartphone est affiché. Ainsi, ils verront qu'ils peuvent utiliser leurs smartphones pour accèder à leurs propres applications, et non pas seulement à des applications comme *Facebook*, *YouTube*, *Twitter*….
 
-En outre, ils peuvent partager cet accès avec leurs proches, directement sur leurs smartphones (ou n'importe quel dispositif équipé d'un navigateur web moderne connecté à internet) respectifs. Ils recueilleront ainsi plus facilement des encouragements, les incitant à progresser.
+En outre, ils peuvent facilement partager cet accès avec leurs proches, directement sur leurs smartphones (ou n'importe quel dispositif équipé d'un navigateur web moderne connecté à internet) respectifs. Ces derniers auront ainsi plus d'occasion de les encourager, et les inciter ainsi à progresser.
 
-Vous trouverez plus de détails sur ce nouveau type d'exercices à cette l'adresse <https://q37.info/s/knf9hdwp>.
+Vous trouverez plus de détails sur ce type d'exercices à l'adresse <https://q37.info/s/knf9hdwp>.
 
-Ces exercices aboutissent à la programmation, en *Python*, du [jeu du pendu](https://fr.wikipedia.org/wiki/Le_Pendu_(jeu)) avec une interface graphique, sans avoir à manipuler directement cette interface. Chaque exercice s'appuie sur le précédent et l'ensemble reproduit les différentes étapes menant à l'élaboration d'un tel jeu.
+Les exercices présentés ici reproduisent les étapes menant à l'élaboration d'un programme, chaque exercice s'appuyant sur le précédent. Ils renforcent l'intérêt des élèves pour la programmation par une utilisation concrète des concepts abordés par les nombreux exercices de programmations que l'on trouve par ailleurs.
 
-Contrairement aux autres exercices de programmation, chaque exercice ne se concentre pas sur un concept, mais sur une fonctionnalité. L'assimilation des concepts informatiques est ainsi facilitée, car n'étant pas une fin en soi, mais seulement un moyen de parvenir au but, à savoir la programmation du jeu.
+Contrairement à la plupart des autres exercices de programmation, chaque exercice ne porte pas sur un concept informatique, mais sur l'élaboration d'une fonctionnalité du programme. L'assimilation des concepts en est ainsi facilitée, car n'étant pas une fin en soi, mais une étape dans la réalisation du programme.
 
-Ces exercices portent sur la programmation en générale, et non pas sur la programmation en *Python*. C'est pour cela que les solutions générales seront données avant les solutions propres à *Python*.
+Pour confèrer une dimension ludique à ces exercices, le programme en question est un jeu, le [jeu du pendu](https://fr.wikipedia.org/wiki/Le_Pendu_(jeu)).
+
+Bien que s'appuyant sur le langage *Python*, ces exercices portent sur la programmation en générale, et non pas sur la programmation en *Python*. C'est pour cela que les solutions générales seront données avant les solutions propres à *Python*.
 
 ## Utilisation
 
+Pour aborder ces exercices, seules des notions de base en développement *Python* sont nécessaires. Ils sont particulièrement indiqués pour une utilisation en complément et en parallèle des nombreux exercices de programmation traditionnels.
+
 Le dépôt https://github.com/epeios-q37/hangman-fr est destiné aux élèves. https://github.com/epeios-q37/hangman-fr-teacher reprend le contenu de ce dépôt, en y ajoutant des informations utiles aux professeurs, notamment les solutions des exercices. De ce fait, ce dernier dépôt est réservé aux professeurs.
 
-Pour distribuer ces exercices aux élèves, vous pouvez directement utiliser le dépôt https://github.com/epeios-q37/hangman-fr ou, si vous êtes familiarisés avec *GitHub*, en utiliser les outils mis à disposition pour créer votre propre dépôt. 
+Pour distribuer ces exercices aux élèves, vous pouvez directement utiliser le dépôt https://github.com/epeios-q37/hangman-fr ou, si vous êtes familiarisés avec *GitHub*, en utiliser les fonctionnalités pour créer votre propre version de ce dépôt. 
 
-Ls exercices ne sont pas destinés à être enchaînés directement, mais traités au fur et à mesure que les différentes notions informatiques nécessaires auront été abordées par ailleurs. Vous pouvez tester ces exercices en allant à cette adresse : https://repl.it/github/epeios-q37/hangman-fr-teacher. Les fichiers contenus dans le répertoire `Student` sont ceux mis à disposition des étudiants.
+Les solutions aux exercices présentées dans ce document peuvent être vue à l'œuvre en allant à l'adresse <https://repl.it/github/epeios-q37/hangman-fr-teacher>. Les fichiers contenus dans le répertoire `Student` sont ceux mis à disposition des étudiants.
 
-Il existe deux façon pour les élèves de travailler sur ces exercices. Soit en utilisant un ordinateur avec *Python* d'installé (utilisation en local), soit dans un navigateur web (utilisation en ligne). 
+Si vous avez des retours à faire concernant ces exercices, vous pouvez contacter l'auteur à l'adresse <https://q37.info/s/ggq7x4w7>, ou passer par le dépôt maître, d'où sont dérivés les deux dépôts présentés ici, à l'adresse <https://github.com/epeios-q37/hangman-exercises>.
+
+Il existe deux façons pour les élèves de travailler sur ces exercices. Soit en utilisant un ordinateur sur lequel est installé *Python* (utilisation en local), soit dans un navigateur web (utilisation en ligne).
 
 ### Utilisation en local
 
-Pour une utilisation en local, sur un ordinateur équipé de *Python*, il suffit aux élèves de télécharger et désarchiver le fichier suivant : https://github.com/epeios-q37/hangman-fr/…. Alternativement, s'ils possèdent les connaissances adéquates, ils peuvent aussi faire un `git clone https://github.com/epeios-q37/hangman-fr`.
+Pour une utilisation en local sur un ordinateur équipé de *Python*, il suffit aux élèves de télécharger et désarchiver le fichier suivant : <https://github.com/epeios-q37/hangman-fr/archive/master.zip>. Alternativement, s'ils possèdent les connaissances adéquates, ils peuvent aussi faire un `git clone https://github.com/epeios-q37/hangman-fr` à partir d'une console.
 
 Les exercices consistent à écrire du code dans le fichier `pendu.py` situé à la racine du dépôt. Pour le lancement, il suffira d'exécuter la commande `python3 pendu.py` dans une console, à partir de la racine du dépôt. S'ouvrira alors un navigateur web leur donnant accès à leur exercice. Le programme sera arrêté avec un *CTRL-C*.
 
-Ce dépôt contient, à la racine, un fichier `LISEZMOI.html` qui leur donnent les instructions pour chaque exercice.
+Ce dépôt contient, à la racine, un fichier `LISEZMOI.html` qui leur donne les instructions pour chaque exercice.
 
 ### Utilisation en ligne
 
-Pour une utilisation en ligne, en utilisant un navigateur web, sans rien avoir à installer, il suffit de suivre le lien suivant : https://repl.it/github/epeios-q37/hangman-fr. Cela ouvre ce dépôt dans *Repl.it*, un environnement de développement en ligne.
+Pour une utilisation en ligne en utilisant un navigateur web, sans rien avoir à installer, il suffit de suivre le lien suivant : https://repl.it/github/epeios-q37/hangman-fr. Cela ouvre une session dans *Repl.it*, un environnement de développement en ligne.
 
-Le fichier `LISEZMOI.html` leur donnant les instructions pour chaque exercice se situe à l'adresse  https://q37.info/s/zmg4m3fx. Il faut l'ouvrir via cette adresse, car *GitHub*, comme *Repl.it*, n'en afficheront que le code source.
+Le fichier `LISEZMOI.html` leur donnant les instructions pour chaque exercice se situe à l'adresse  https://q37.info/s/zmg4m3fx. Il faut l'ouvrir via cette adresse, car l"accès à ce fichier via *GitHub* ou *Repl.it* n'en affichera que le code source.
 
-En plus de ce lien, il faudra leur faire ouvrir, dans une fenêtre ou un autre onglet le lien suivant qui leur donnera accès au fichier `LISEZMOI.html` leur donnant les instructions pour chaque exercice : https://q37.info/s/zmg4m3fx.
-
-Comme ci-dessus, l'exercice consistera à écrire du code dans le fichier `pendu.py`. Pour lancer l'exercice, il suffira de cliquer sur le bouton vert `run`. Cela provoquera l'affichage d'un code QR que l'on cliquera (ou éventuellement scannera avec un smartphone) pour accèder à l'exercice.
+Comme ci-dessus, l'exercice consistera à écrire du code dans le fichier `pendu.py`. Pour lancer l'exercice, il suffira de cliquer sur le bouton vert. Cela provoquera l'affichage d'un code QR que l'on cliquera (ou éventuellement scannera avec un smartphone) pour accèder à l'interface de l'exercice.
 
 Pour revenir au code source, on fermera l'onglet (ou la fenêtre) qui s'est ouverte suite au click sur le code QR. Pour relancer l'application, il suffira de cliquer à nouveau sur le bouton vert (dont le libellé change en fonction du contexte).
 
-*Repl.it* ne nécessite pas la création d'un compte pour être utilisé. Néanmoins, un compte permet d'y stocker ses projets et de les retrouver d'ue session à l'autre. On peut aussi, sans compte, sauvegarder en local l'ensemble d'un projet.
+*Repl.it* ne nécessite pas la création d'un compte pour être utilisé. Néanmoins, ouvrir un compte permet d'y stocker ses projets et de les retrouver d'une session à l'autre. On peut aussi, sans compte, sauvegarder en local l'ensemble d'un projet.
 
 ## Les exercices
 
-Les informations données ici viennent en complément de celles indiquées dans le fichier `Student/LISEZMOI.(md|pdf)`.
+Les informations données ici viennent en complément de celles indiquées dans le fichier `Student/LISEZMOI.html`.
 
 ### Exercice *a*
 
-#### Notions abordées
+#### Particularités
 
 - Édition d'un fichier source ;
 - lancement d'un programme ;
 - arrêt d'un programme ;
-- booléen,
+- affectation d'un booléen ;
 - création d'une chaîne de caractères ;
-- renvoie d'une valeur par une fonction.
+- valeur de retour d'une fonction.
 
 #### Solution
 
 ```python
 def choisirMot():
-  return "pied"
+  return "arbre"
 ```
 
 ### Exercice *b*
 
-#### Notions abordées :
+#### Particularités
 
 - Paramètre de fonction ;
 - instruction conditionnelle ;
 - taille d'une chaîne de caractères ;
-- booléens ;
+- booléen :
+  - test,
+  - transtypage ;
 - opérateur de comparaison ;
-- instructions conditionnelles.
+- instruction conditionnelles.
 
 #### Solutions
 
@@ -102,16 +112,16 @@ def choisirMot(suggestion):
   if len(suggestion) != 0:
     return suggestion
   else:
-    return "bras"
+    return "arbre"
 ```
 
-Une fois que cette solution aura été trouvée, on pourra proposer de remplacer `if len(suggestion) != 0:` par `if len(suggestion):`, puis par `if suggestion:` en soulignant que c'est une propre à *Python* (et à certains autres langages).
+Une fois que cette solution aura été trouvée, on pourra proposer de remplacer `if len(suggestion) != 0:` par `if len(suggestion):`, puis par `if suggestion:` en soulignant que c'est propre à *Python* (et à certains autres langages).
 
 ### Exercice *c*
 
-La seconde solution est optionnelle, et pourra être abordée plus tard.
+La seconde solution est optionnelle, et on pourra y revenir plus tard.
 
-#### Notions abordées
+#### Particularités
 
 Pour la première version, aucune en particulier ; il s'agit juste d'une amélioration.
 
@@ -156,7 +166,7 @@ def choisirMot(suggestion):
 
 ### Exercice *d*
 
-#### Notions abordées
+#### Particularités
 
 - Boucle `for` ;
 - opérateur `in` ;
@@ -183,7 +193,7 @@ def lettreEstDansMot(lettre,mot):
 
 ### Exercice *e*
 
-#### Notions abordées
+#### Particularités
 
 - Affectation d'une valeur à une variable ;
 - concaténation de chaînes de caractères ;
@@ -223,9 +233,9 @@ masque += lettre if lettreEstDansMot(lettre,pioches) else "_"
 
 ### Exercice *f*
 
-#### Notions abordées
+#### Particularités
 
-Instructions conditionnelles multiples (équivalent du *case* *switch* d'autres langages).
+Instructions conditionnelles multiples (équivalent du *switch…* *case…* d'autres langages).
 
 #### Solutions
 
@@ -265,3 +275,7 @@ PARTIES_CORPS = (
 def majCorps(nombreErreurs):
   dessinerPartieCorps(PARTIES_CORPS[nombreErreurs-1])
 ```
+
+## Autres exercices
+
+La partie des notices professeurs et élèves concernant ces exercices sont en cours d'élaboration.

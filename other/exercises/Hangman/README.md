@@ -7,6 +7,8 @@
 
 # Modern programming exercises, featuring the [Hangman game](https://q37.info/s/gtdtk4hp).
 
+*To French-speaking teachers / pour les enseignants francophones* : la documentation en français pour une utilisation de ces exercices en cours de programmation : <https://q37.info/s/mmdnch9t>.
+
 [![Run on Repl.it](https://repl.it/badge/github/epeios-q37/hangman-exercises)](https://q37.info/s/z3whmbfz) [![License](https://img.shields.io/pypi/l/atlastk.svg?style=plastic)](https://github.com/epeios-q37/hangman-exercises/blob/master/LICENSE)
 
 This project shows an example of modern programming exercises, featuring the [Hangman game](https://q37.info/s/gtdtk4hp). See <https://q37.info/s/cbms43s9> for the rationale behind this project.

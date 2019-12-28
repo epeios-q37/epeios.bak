@@ -28,7 +28,7 @@ Le nom de la classe doit être 'Pendu',
 mais le nom des variables et des méthodes est libre.
 """
 class Pendu:
-    def reinitialiser(self, dictionnaire,suggestion):
+  def reinitialiser(self, dictionnaire,suggestion):
     self.motSecret = choisirMot(dictionnaire,suggestion)
     self.bonnesPioches = ""
     self.nbErreurs = 0

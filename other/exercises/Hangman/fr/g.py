@@ -24,11 +24,11 @@ def choisirMot(*args):
 
 
 def lettreEstDansMot(*args):
-    return workshop.rfIsLetterInWord(*args)
+  return workshop.rfIsLetterInWord(*args)
 
 
 def donnerMasque(*args):
-    return workshop.rfGetMask(*args)
+  return workshop.rfGetMask(*args)
 
 
 def majCorps(*args):

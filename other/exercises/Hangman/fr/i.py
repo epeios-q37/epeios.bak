@@ -4,7 +4,7 @@ import sys
 sys.path.append(".")
 from workshop.fr.i import *
 
-# MONTRER_MOT_SECRET = VRAI
+MONTRER_MOT_SECRET = VRAI
 
 
 def choisirMot(*args):
