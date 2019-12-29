@@ -285,7 +285,7 @@ Sachant que :
 
 ### Tests
 
-Sachant que le contenu du msque est affiché dans le cadre au-dessus du clavier  :
+Sachant que le contenu du masque est affiché dans le cadre au-dessus du clavier :
 
 - au lancement, le masque doit être constitué d'un nombre de `_` égal au nombre de caractères du mot à deviner ;
 - cliquer sur une lettre contenue dans le mot à deviner : toutes les occurrences de cette lettre contenus dans le mot à deviner doivent être dévoilées, en plus des lettres déjà dévoilées ;

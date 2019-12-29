@@ -74,6 +74,8 @@ Pour revenir au code source, on fermera l'onglet (ou la fenêtre) qui s'est ouve
 
 Les informations données ici viennent en complément de celles indiquées dans le fichier `Student/LISEZMOI.html`.
 
+**ATTENTION** : ne pas oublier de modifier la ligne `from workshop.fr.… import *` en fonction de l'exercice.
+
 ### Exercice *a*
 
 #### Particularités
