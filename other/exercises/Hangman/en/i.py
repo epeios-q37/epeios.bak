@@ -16,7 +16,7 @@ def isLetterInWord(*args):
 
 
 """
-At first,don't handle the 'inProgress' variable
+At first, do not handle the 'inProgress' variable
 member from the 'Hangman' class.
 """
 

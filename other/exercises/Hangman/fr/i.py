@@ -16,7 +16,7 @@ def lettreEstDansMot(*args):
 
 
 """
-En premier lieu,ne pas traiter la variable membre
+En premier lieu, ne pas traiter la variable membre
 'enCours' de la class 'Pendu'.
 """
 

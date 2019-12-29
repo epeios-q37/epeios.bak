@@ -117,7 +117,7 @@ def mainBaseReset(suggestion,randomWord):
   setErrorsAmount(0)
   setGoodGuesses("")
 
-  secretWord = _pickRandom(suggestion,randomWord)
+  secretWord = _pickWord(suggestion,randomWord)
   setSecretWord(secretWord)
 
   return secretWord
