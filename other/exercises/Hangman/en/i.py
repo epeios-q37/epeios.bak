@@ -16,7 +16,7 @@ def isLetterInWord(*args):
 
 
 """
-At first, don't handle the 'inProgress' variable
+At first,don't handle the 'inProgress' variable
 member from the 'Hangman' class.
 """
 
@@ -27,8 +27,8 @@ Only the 'reset(…)' and the '__init__(…)'
 methods are concerned.
 """
 class Hangman:
-  def reset(self, dictionary, suggestion):
-    self.secretWord = pickWord(dictionary, suggestion)
+  def reset(self,suggestion,randomWord):
+    self.secretWord = pickWord(suggestion,randomWord)
     self.goodGuesses = ""
     self.errorsAmount = 0
     self.inProgress = TRUE
@@ -39,9 +39,9 @@ class Hangman:
     self.errorsAmount = 0
     self.inProgress = FALSE
 
-  def handleAndTestGuess(self, guess):
-    if isLetterInWord(guess, self.secretWord):
-      if not isLetterInWord(guess, self.goodGuesses):
+  def handleAndTestGuess(self,guess):
+    if isLetterInWord(guess,self.secretWord):
+      if not isLetterInWord(guess,self.goodGuesses):
         self.goodGuesses += guess
       return TRUE
     else:
@@ -52,24 +52,24 @@ class Hangman:
 """
 Add the testing.
 """
-def getMaskAndTestIfHasWon(word, guesses):
+def getMaskAndTestIfHasWon(word,guesses):
   mask = ""
   hasWon = True
 
   for letter in word:
-    if isLetterInWord(letter, guesses):
+    if isLetterInWord(letter,guesses):
       mask += letter
     else:
       mask += "_"
       hasWon = False
 
-  return mask, hasWon
+  return mask,hasWon
 
 
 """
 Add the testing.
 """
-def updateBodyAndTestIfHasLost(parts, errorsAmount):
+def updateBodyAndTestIfHasLost(parts,errorsAmount):
   if errorsAmount <= len(parts):
     drawBodyPart(parts[errorsAmount-1])
 
@@ -85,22 +85,22 @@ Add the notifications.
 """
 def handleGuess(hangman,guess,parts):
   if hangman.handleAndTestGuess(guess):
-    mask,hasWon = getMaskAndTestIfHasWon(hangman.secretWord, hangman.goodGuesses)
+    mask,hasWon = getMaskAndTestIfHasWon(hangman.secretWord,hangman.goodGuesses)
     eraseAndDisplay(mask)
     if hasWon and hangman.inProgress:
       notify("You won! Congratulations!")
       hangman.inProgress = FALSE
-  elif hangman.inProgress and updateBodyAndTestIfHasLost(parts, hangman.errorsAmount):
-    notify("\nYou lose!\nErrors: {}; good guesses: {}.\n\nThe secret word was: '{}'.".format(hangman.errorsAmount, len(hangman.goodGuesses), hangman.secretWord))
+  elif hangman.inProgress and updateBodyAndTestIfHasLost(parts,hangman.errorsAmount):
+    notify("\nYou lose!\nErrors: {}; good guesses: {}.\n\nThe secret word was: '{}'.".format(hangman.errorsAmount,len(hangman.goodGuesses),hangman.secretWord))
     hangman.inProgress = FALSE
 
 """
 Modify to use 'getMaskAndTestIfHasWon(…)'.
 """
-def reset(hangman, dictionary, suggestion):
-  hangman.reset(dictionary, suggestion)
+def reset(hangman,suggestion,randomWord):
+  hangman.reset(suggestion,randomWord)
   print(hangman.secretWord)
-  eraseAndDisplay(getMaskAndTestIfHasWon(hangman.secretWord, "")[0])
+  eraseAndDisplay(getMaskAndTestIfHasWon(hangman.secretWord,"")[0])
 
   return hangman.secretWord
 
@@ -108,26 +108,26 @@ def reset(hangman, dictionary, suggestion):
 """
 Called on new connection. 
 """
-def AConnect(hangman,dictionary,suggestion):
-  return reset(hangman,dictionary,suggestion)
+def AConnect(hangman,suggestion,randomWord):
+  return reset(hangman,suggestion,randomWord)
 
 
 """
 Called on new guess.
 NOTA: the letter will be disabled on the keyboard. 
 """
-def ASubmit(hangman, guess, parts):
+def ASubmit(hangman,guess,parts):
   handleGuess(hangman,guess,parts)
 
 """
 Called on a click on the 'Restart' button.
 """
-def ARestart(hangman, dictionary, suggestion):
+def ARestart(hangman,suggestion,randomWord):
   if hangman.inProgress:
     notify("\nErrors: {}; good guesses: {}.\n\nThe secret word was: '{}'.".format(
-        hangman.errorsAmount, len(hangman.goodGuesses), hangman.secretWord))
+        hangman.errorsAmount,len(hangman.goodGuesses),hangman.secretWord))
 
-  return reset(hangman, dictionary, suggestion)
+  return reset(hangman,suggestion,randomWord)
 
 
 go(globals())

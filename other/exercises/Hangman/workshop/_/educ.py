@@ -23,7 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-import sys, os
+import sys,os
 
 sys.path.append("./EduTK.zip")
 sys.path.append("../EduTK.zip")
@@ -32,8 +32,8 @@ if ('Q37_XPP' in os.environ):
   sys.path.append(os.path.join(os.environ["HOME"],"epeios/other/libs/edutk/PYH/edutk"))
 
 import edutk as _
-from edutk import Atlas, Core, main, dom, store, recall, useRegularExceptions, defineUserItem, assignUserItems, assignUserItem, setEnums
+from edutk import Atlas,Core,main,dom,store,recall,useRegularExceptions,defineUserItem,assignUserItems,assignUserItem,setEnums
 
 def readBody(folder,i18n=None):
-  return _.read(os.path.join("workshop","assets",folder,"Body.html"), i18n)
+  return _.read(os.path.join("workshop","assets",folder,"Body.html"),i18n)
 

@@ -17,7 +17,7 @@ def pickWord(*args):
 def isLetterInWord(letter,word):
     return True if ord(letter) % 2 == 0 else False # To show behavior on buggy code.
     # Yes, there is a simpler way…
-    for i in range(0, len(word)):
+    for i in range(0,len(word)):
         if word[i] == letter:
             return True
 

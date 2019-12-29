@@ -6,7 +6,7 @@ Le série d'exercices qui suit permet de programmer une version du [jeu du pendu
 
 ![](assets/Pendu.png)
 
-Le professeur vous indiquera comment procéder pour le lancer les exercices.
+Le professeur vous indiquera comment procéder pour lancer les exercices.
 
 ## Exercice *a*
 
@@ -30,7 +30,7 @@ go(globals())
 
 La variable booléenne `MONTRER_MOT_SECRET` permet de configurer le jeu pour qu'il affiche le mot à deviner. Sans cette possibilité, il serait compliqué de tester le jeu pour vérifier s'il fonctionne correctement.  On donnera à cette variable la valeur `VRAI` (ou `True`) tout au long du développement et de la mise au point du jeu, et `FAUX` (ou `False`) une fois que le jeu sera au point, pour que le mot à deviner ne soit plus affiché.
 
-*Attention* : lancer l'exécution de ce fichier en l'état provoquera l'affichage d'un message d'erreur.
+*Nota* : lancer l'exécution de ce fichier en l'état provoquera l'affichage d'un message d'erreur.
 
 ### Tâches
 

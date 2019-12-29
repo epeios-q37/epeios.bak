@@ -23,7 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-import sys, os
+import sys,os
 
 import sys
 sys.path.append("workshop/_")
@@ -37,7 +37,7 @@ _REPORT_ANSWERS_HIDDEN = "ReportAnswersHidden"
 
 
 def _reset():
-  baseReset(None, getDictionary(), None, None)
+  baseReset(None,getRandomWord(),None,None)
 
 
 def _append(list,item):
@@ -50,33 +50,33 @@ def _acConnect(core,dom):
 
   
 def _Submit(dom,letter,i18n):
-  expected = rfIsLetterInWord(letter, getSecretWord())
-  obtained = ufIsLetterInWord()(letter, getSecretWord())
+  expected = rfIsLetterInWord(letter,getSecretWord())
+  obtained = ufIsLetterInWord()(letter,getSecretWord())
 
   disabled = [_REPORT_ANSWERS_HIDDEN]
   enabled = []
 
-  dom.setContent("Letter", letter.upper())
+  dom.setContent("Letter",letter.upper())
 
-  _append(enabled if expected else disabled, "ExpectedTrue")
-  _append(enabled if obtained else disabled, "ObtainedTrue")
-  _append(enabled if expected==obtained else disabled, "ObtainedRight")
+  _append(enabled if expected else disabled,"ExpectedTrue")
+  _append(enabled if obtained else disabled,"ObtainedTrue")
+  _append(enabled if expected==obtained else disabled,"ObtainedRight")
 
   dom.disableElements(disabled)
   dom.enableElements(enabled)
 
 
-def _acSubmit(core, dom, id):
+def _acSubmit(core,dom,id):
   _Submit(dom,id.lower(),getI18n())
 
 
-def _acRestart(core, dom):
+def _acRestart(core,dom):
   _reset()
   dom.enableElement(_REPORT_ANSWERS_HIDDEN)
 
 
-def main(callback, userFunctions, userFunctionLabels):
-  mainBase(callback, globals(), (
+def main(callback,userFunctions,userFunctionLabels):
+  mainBase(callback,globals(),(
     UF_PICK_WORD,
     UF_IS_LETTER_IN_WORD,
-    ), userFunctions, userFunctionLabels)
+    ),userFunctions,userFunctionLabels)

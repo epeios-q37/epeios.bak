@@ -36,19 +36,19 @@ P_RIGHT_ARM = _.P_RIGHT_ARM
 P_LEFT_LEG = _.P_LEFT_LEG
 P_RIGHT_LEG = _.P_RIGHT_LEG
 
-DICTIONARY = (
-  "accommodate", "afterthought", "allegiance", "aloft", "ancestor", "anticipation", "antics",
-  "apparel", "ascend", "beckon", "brink", "catastrophe", "coax", "compassion", "complexion", "content",
-  "courteous", "cringe", "derelict", "dignity", "distaste", "dormant", "elaborate", "endure", "enforce",
-  "exertion", "expanse", "extraordinary", "foliage", "foremost", "frank", "function", "futile", "gaze",
-  "glimmer", "glimpse", "grimace", "headstrong", "hesitate", "hoist", "immense", "imperceptibly",
-  "indication", "inscription", "instinctive", "intent", "interior", "jar", "keepsake", "knack",
-  "literacy", "lurch", "makeshift", "malicious", "massive", "meager", "melancholy", "merge", "mingle",
-  "minuscule", "momentary", "nape", "nimble", "obstinate", "opt", "overwhelming", "pact", "pandemonium",
-  "persuade", "phenomenal", "ponder", "quantity", "quaver", "quench", "radiant", "ravine", "recipient",
-  "resentful", "satisfactory", "sensitive", "sentiment", "shudder", "sickly", "sleek", "solemn", "soothe",
-  "stagger", "stern", "tantalize", "temptation", "transform", "unscrupulous", "vain", "vengeance",
-  "violate", "vital", "vivid", "wistful", "yield", "zest"
+WORDS = (
+  "accommodate","afterthought","allegiance","aloft","ancestor","anticipation","antics",
+  "apparel","ascend","beckon","brink","catastrophe","coax","compassion","complexion","content",
+  "courteous","cringe","derelict","dignity","distaste","dormant","elaborate","endure","enforce",
+  "exertion","expanse","extraordinary","foliage","foremost","frank","function","futile","gaze",
+  "glimmer","glimpse","grimace","headstrong","hesitate","hoist","immense","imperceptibly",
+  "indication","inscription","instinctive","intent","interior","jar","keepsake","knack",
+  "literacy","lurch","makeshift","malicious","massive","meager","melancholy","merge","mingle",
+  "minuscule","momentary","nape","nimble","obstinate","opt","overwhelming","pact","pandemonium",
+  "persuade","phenomenal","ponder","quantity","quaver","quench","radiant","ravine","recipient",
+  "resentful","satisfactory","sensitive","sentiment","shudder","sickly","sleek","solemn","soothe",
+  "stagger","stern","tantalize","temptation","transform","unscrupulous","vain","vengeance",
+  "violate","vital","vivid","wistful","yield","zest"
 )
 
 BODY_PARTS = (
@@ -86,7 +86,7 @@ _.setI18n({
   _.label.__dict__["False"]: "false",
 })
 
-_.setDictionary(DICTIONARY)
+_.setWords(WORDS)
 _.setBodyParts(BODY_PARTS)
 
 _.setAppTitle("Hangman game workshop")

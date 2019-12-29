@@ -29,8 +29,8 @@ Class name must be 'Hangman',
 but variables and methods name are free.
 """
 class Hangman:
-  def reset(self,dictionary,suggestion):
-    self.secretWord = pickWord(dictionary,suggestion)
+  def reset(self,suggestion,randomWord):
+    self.secretWord = pickWord(suggestion,randomWord)
     self.goodGuesses = ""
     self.errorsAmount = 0
 
@@ -43,9 +43,9 @@ class Hangman:
   Update the good guesses ot the amount of errors wether 'guess' is
   good ot not. Return TRUE if 'guess' is good, FALSE otherwise.
   """
-  def handleAndTestGuess(self, guess):
-    if isLetterInWord(guess, self.secretWord):
-      if not isLetterInWord(guess, self.goodGuesses):
+  def handleAndTestGuess(self,guess):
+    if isLetterInWord(guess,self.secretWord):
+      if not isLetterInWord(guess,self.goodGuesses):
         self.goodGuesses += guess
       return TRUE
     else:
@@ -56,8 +56,8 @@ class Hangman:
 """
 Same as previous exercise, but this time we use an object. 
 """
-def reset(hangman,dictionary,suggestion):
-  hangman.reset(dictionary,suggestion)
+def reset(hangman,suggestion,randomWord):
+  hangman.reset(suggestion,randomWord)
   print(hangman.secretWord)
   eraseAndDisplay(getMask(hangman.secretWord,""))
 
@@ -70,6 +70,6 @@ def handleGuess(hangman,guess,parts):
   if hangman.handleAndTestGuess(guess):
     eraseAndDisplay(getMask(hangman.secretWord,hangman.goodGuesses))
   else:
-    updateBody(parts, hangman.errorsAmount)
+    updateBody(parts,hangman.errorsAmount)
 
 go(globals())

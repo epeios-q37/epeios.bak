@@ -36,7 +36,7 @@ P_BRAS_DROIT = _.P_RIGHT_ARM
 P_PIED_GAUCHE = _.P_LEFT_LEG
 P_PIED_DROIT = _.P_RIGHT_LEG
 
-DICTIONNAIRE = [
+MOTS = [
   "armoire",
   "boucle",
   "buisson",
@@ -94,7 +94,7 @@ _.setI18n({
     _.label.__dict__["False"]: "faux",
 })
 
-_.setDictionary(DICTIONNAIRE)
+_.setWords(MOTS)
 _.setBodyParts(PARTIES_CORPS)
 
 

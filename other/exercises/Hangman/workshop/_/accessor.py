@@ -29,13 +29,13 @@ sys.path.append("workshop/_")
 import educ as _
 
 def defSetAndGet_(name):
-  globals()["set" + name] = lambda value: _.store(name, value)
+  globals()["set" + name] = lambda value: _.store(name,value)
   globals()["get" + name] = lambda: _.recall(name)
 
 # Internal use.
 defSetAndGet_("AppTitle")
 defSetAndGet_("I18n")
-defSetAndGet_("Dictionary")
+defSetAndGet_("Words")
 defSetAndGet_("BodyParts")
 
 # Variables for the application.

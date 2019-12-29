@@ -4,7 +4,7 @@
 # Copyright (c) 2019 Claude SIMON (https://q37.info/s/rmnmqd49)
 # See  'LICENSE' file.
 
-import sys, os
+import sys,os
 
 # Default language: English.
 # Replace below "en" by "fr" to switch to French.

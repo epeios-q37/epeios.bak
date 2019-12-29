@@ -40,10 +40,10 @@ def majCorps(*args):
 Réinitialiser les variables et l'affichage pour une nouvelle partie et
 retourner le mot secret.
 """
-def reinitialiser(dictionnaire, suggestion):
-  global motSecret, bonnesPioches, nbErreurs
+def reinitialiser(suggestion,motAuHasard):
+  global motSecret,bonnesPioches,nbErreurs
 
-  motSecret = choisirMot(dictionnaire,suggestion)
+  motSecret = choisirMot(suggestion,motAuHasard)
   bonnesPioches = ""
   nbErreurs = 0
   print(motSecret)
@@ -67,14 +67,14 @@ Si 'pioche' est dans 'lettre', met à jour du masque,
 sinon met à jour du dessin du pendu. 
 """
 def traiterPioche(pioche,parties):
-  global bonnesPioches, nbErreurs
+  global bonnesPioches,nbErreurs
 
-  if lettreEstDansMot(pioche, motSecret): # Test non obligatoire.
+  if lettreEstDansMot(pioche,motSecret): # Test non obligatoire.
     if not lettreEstDansMot(pioche,bonnesPioches):
       bonnesPioches += pioche
-      effacerEtAfficher(donnerMasque(motSecret, bonnesPioches))
+      effacerEtAfficher(donnerMasque(motSecret,bonnesPioches))
   else:
     nbErreurs += 1
-    majCorps(parties, nbErreurs)
+    majCorps(parties,nbErreurs)
 
 go(globals())

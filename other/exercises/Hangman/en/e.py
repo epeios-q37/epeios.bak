@@ -19,7 +19,7 @@ Return a string containing 'word' (which is in lowercase) where
 all letters which are not in in 'guesses' (also in lowercase)
 are replaced by the '_' character.
 """
-def getMask(word, guesses):
+def getMask(word,guesses):
     mask = ""
 
     for letter in word:

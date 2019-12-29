@@ -36,11 +36,11 @@ def rfPickWord(suggestion,randomWord):
   return suggestion if suggestion else randomWord
 
 
-def rfIsLetterInWord(letter, word):
+def rfIsLetterInWord(letter,word):
   return letter in word
 
 
-def rfGetMask(word, guesses):
+def rfGetMask(word,guesses):
   mask = ""
   
   for letter in word:
@@ -57,11 +57,11 @@ def rfUpdateBody(parts,errorsAmount):
     drawBodyPart(P_FACE)
 
 
-def rfHandleGuess(hangman, guess, parts):
+def rfHandleGuess(hangman,guess,parts):
   if hangman.handleAndTestGuess(guess):
-    eraseAndDisplay(getMask(hangman.secretWord, hangman.goodGuesses))
+    eraseAndDisplay(getMask(hangman.secretWord,hangman.goodGuesses))
   else:
-    updateBody(parts, hangman.errorsAmount)
+    updateBody(parts,hangman.errorsAmount)
 
 
 

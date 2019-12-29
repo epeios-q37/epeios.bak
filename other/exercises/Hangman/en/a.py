@@ -15,7 +15,7 @@ will not be displayed (default mode).
 SHOW_SECRET_WORD = TRUE
 
 # To define only with version 4 of the '_pickWord()' function.
-DICTIONARY = ("tree", "house", "chair")
+DICTIONARY = ("tree","house","chair")
 
 
 """
@@ -49,7 +49,7 @@ As next the exercise, one can choose to make them develop:
 
 """
 Version 3:
-- 'randomWord': an random word,
+- 'randomWord': a random word,
 - 'suggestion'; the content of the secrete word text box;
   used only in 'dev' mode.
 Return 'suggestion', if not empty, otherwise 'randomWord'.
@@ -71,10 +71,10 @@ def _pickWord4(suggestion):
   if suggestion:
     return suggestion
   else:
-    return DICTIONARY[randint(0, len(DICTIONARY)-1)]
+    return DICTIONARY[randint(0,len(DICTIONARY)-1)]
 
 
-VERSION = 4 # 1, 2, 3 or 2.
+VERSION = 4 # 1, 2, 3 or 4.
 
 pickWord = globals()["_pickWord" + str(VERSION)]
 

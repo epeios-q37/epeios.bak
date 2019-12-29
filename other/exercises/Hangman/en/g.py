@@ -39,10 +39,10 @@ def updateBody(*args):
 Reset the variables and the display for a new round and
 return the secret word.
 """
-def reset(dictionary, suggestion):
-  global secretWord, goodGuesses, errorsAmount
+def reset(suggestion,randomWord):
+  global secretWord,goodGuesses,errorsAmount
 
-  secretWord = pickWord(dictionary, suggestion)
+  secretWord = pickWord(suggestion,randomWord)
   goodGuesses = ""
   errorsAmount = 0
   print(secretWord)
@@ -62,14 +62,14 @@ If 'guess' in 'word', must update the mask, otherwise
 must update the drawing of the body.
 """
 def handleGuess(guess,parts):
-  global goodGuesses, errorsAmount
+  global goodGuesses,errorsAmount
 
-  if isLetterInWord(guess, secretWord): # Test is not mandatory
+  if isLetterInWord(guess,secretWord): # Test is not mandatory
     if not isLetterInWord(guess,goodGuesses):
       goodGuesses += guess
       eraseAndDisplay(getMask(secretWord,goodGuesses))
   else:
     errorsAmount += 1
-    updateBody(parts, errorsAmount)
+    updateBody(parts,errorsAmount)
 
 go(globals())

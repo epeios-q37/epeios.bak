@@ -33,7 +33,7 @@ from workshop._._ import *
 
 
 def _reset():
-  baseReset(None, getDictionary(), None, None)
+  baseReset(None,getRAndomWord(),None,None)
   clearAndDisplay(getSecretWord())
 
 
@@ -42,7 +42,7 @@ def _acConnect(core,dom):
   _reset()
 
 
-def _acSubmit(core, dom, id):
+def _acSubmit(core,dom,id):
   pass  # Not used.
 
 
@@ -50,8 +50,8 @@ def _acRestart():
   _reset()
 
 
-def main(callback, userFunctions, userFunctionLabels):
-  mainBase(callback, globals(),
+def main(callback,userFunctions,userFunctionLabels):
+  mainBase(callback,globals(),
   (
     UF_PICK_WORD,
-  ), userFunctions, userFunctionLabels)
+  ),userFunctions,userFunctionLabels)

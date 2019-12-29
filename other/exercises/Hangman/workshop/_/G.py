@@ -33,7 +33,7 @@ from workshop._._ import *
 
 
 def _reset():
-  baseReset(None, getDictionary())
+  baseReset(None,getRandomWord())
 
 
 def _acConnect():
@@ -42,10 +42,10 @@ def _acConnect():
 
 
 def _Submit(letter):
-  ufHandleGuess()(letter, getBodyParts())
+  ufHandleGuess()(letter,getBodyParts())
 
 
-def _acSubmit(core, dom, id):
+def _acSubmit(core,dom,id):
   _Submit(id.lower())
 
 
@@ -53,9 +53,9 @@ def _acRestart():
   _reset()
 
 
-def main(callback, userFunctions, userFunctionLabels):
-  mainBase(callback, globals(),
+def main(callback,userFunctions,userFunctionLabels):
+  mainBase(callback,globals(),
   (
     UF_RESET,
     UF_HANDLE_GUESS,
-  ), userFunctions, userFunctionLabels)
+  ),userFunctions,userFunctionLabels)

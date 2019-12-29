@@ -28,5 +28,5 @@ from workshop.en._ import *
 
 
 def go(globals):
-  workshop.main(lambda dom: workshop.Core(dom), globals, USER_ITEM_LABELS)
+  workshop.main(lambda dom: workshop.Core(dom),globals,USER_ITEM_LABELS)
 

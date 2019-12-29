@@ -35,18 +35,18 @@ from constants import *
 # User items definitions.
 
 def _defineUserFunction(name):
-  return educ.defineUserItem(globals(), "uf", name)
+  return educ.defineUserItem(globals(),"uf",name)
 
 
 def _defineUserVariable(name):
-  return educ.defineUserItem(globals(), "uv", name)
+  return educ.defineUserItem(globals(),"uv",name)
 
 
 def _defineUserClass(name):
-  return educ.defineUserItem(globals(), "uc", name)
+  return educ.defineUserItem(globals(),"uc",name)
 
 
-# 'list(…)' to avoid 'RuntimeError: dictionary changed size during iteration'.
+# 'list(…)' to avoid 'RuntimeError: tuple changed size during iteration'.
 for d in list(globals()):
   prefix = d[:3]
   if prefix == 'UF_':

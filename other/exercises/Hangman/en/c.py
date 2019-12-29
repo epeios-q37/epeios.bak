@@ -15,7 +15,7 @@ will not be displayed (default mode).
 SHOW_SECRET_WORD = TRUE
 
 # To define only with version 4 of the '_pickWord()' function.
-DICTIONARY = ("tree", "house", "chair")
+DICTIONARY = ("tree","house","chair")
 
 
 """
@@ -71,10 +71,10 @@ def _pickWord4(suggestion):
   if suggestion:
     return suggestion
   else:
-    return DICTIONARY[randint(0, len(DICTIONARY)-1)]
+    return DICTIONARY[randint(0,len(DICTIONARY)-1)]
 
 
-VERSION = 4 # 1, 2, 3 or 2.
+VERSION = 4 # 1, 2, 3 or 4.
 
 pickWord = globals()["_pickWord" + str(VERSION)]
 
