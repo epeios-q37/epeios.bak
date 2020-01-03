@@ -94,6 +94,7 @@ def handleGuess(hangman,guess):
     notify("\nYou lose!\nErrors: {}; good guesses: {}.\n\nThe secret word was: '{}'.".format(hangman.errorsAmount,len(hangman.goodGuesses),hangman.secretWord))
     hangman.inProgress = FALSE
 
+
 """
 Modify to use 'getMaskAndTestIfHasWon(…)'.
 """

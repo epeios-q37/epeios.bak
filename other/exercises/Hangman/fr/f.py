@@ -28,8 +28,6 @@ def donnerMasque(*args):
 """
 - 'nbErreurs': nombre d'erreurs.
 Dessiner la partie du corps correspondant au nombre d'erreurs.
-Lorsque la dernière partie du corps est dessinée, le visage ('P_VISAGE') doit
-également être dessiné.
 """
 def majCorps(nombreErreurs):
   if nombreErreurs == 1:

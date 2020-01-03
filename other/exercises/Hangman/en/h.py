@@ -50,6 +50,7 @@ def reset(suggestion,randomWord):
 
   return secretWord
 
+
 """
 N.B.: NOT THREAD-SAFE!!!
 Multiple instances can be launched to show
@@ -57,7 +58,6 @@ why this is a problem.
 """
 """
 - 'guess': the letter chosen by the player,
-- 'parts': the different part of the body to draw.
 If 'guess' in 'word', must update the mask, otherwise
 must update the drawing of the body.
 """

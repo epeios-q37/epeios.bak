@@ -26,18 +26,30 @@ def getMask(*args):
 
 
 """
-- 'parts': tuple containing the different parts of the body
-  to draw according to the amount of errors '(P_HEAD,P_TRUNK,P_LEFT_ARM…)'.
+Use of the alternative version (not mandatory).
+"P_FACE' is deliberately omitted (see next function).
+"""
+BODY_PARTS = (
+  P_HEAD,
+  P_TRUNK,
+  P_LEFT_ARM,
+  P_RIGHT_ARM,
+  P_LEFT_LEG,
+  P_RIGHT_LEG,
+#  P_FACE 
+)
+
+
+"""
 - 'errorsAmount': the amount of errors.
 Draw the part of the body corresponding to the amount of errors.
 When the last part of the body is drawn, the face ('P_FACE') must
 also be drawn.
 """
-def updateBody(parts,errorsAmount):
-  if errorsAmount <= len(parts):
-    drawBodyPart(parts[errorsAmount-1])
+def updateBody(errorsAmount):
+  drawBodyPart(BODY_PARTS[errorsAmount-1])
 
-  if errorsAmount >= len(parts):
+  if errorsAmount >= len(BODY_PARTS):
     drawBodyPart(P_FACE)
 
 

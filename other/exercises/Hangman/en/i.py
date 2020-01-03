@@ -63,6 +63,7 @@ def reset(hangman,suggestion,randomWord):
 
   return hangman.secretWord
 
+
 """
 Idem.
 """

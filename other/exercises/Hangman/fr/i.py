@@ -22,6 +22,7 @@ def donnerMasque(*args):
 def majCorps(*args):
   return workshop.rfUpdateBody(*args)
 
+
 """
 Allons-y avec la programmation orientée objet.
 Le nom de la classe doit être 'Pendu',
