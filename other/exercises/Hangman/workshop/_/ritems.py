@@ -49,7 +49,9 @@ def rfGetMask(word,guesses):
   return mask
 
 
-def rfUpdateBody(parts,errorsAmount):
+def rfUpdateBody(errorsAmount):
+  parts = getBodyParts()
+
   if errorsAmount <= len(parts):
     drawBodyPart(parts[errorsAmount-1])
 
@@ -57,11 +59,11 @@ def rfUpdateBody(parts,errorsAmount):
     drawBodyPart(P_FACE)
 
 
-def rfHandleGuess(hangman,guess,parts):
+def rfHandleGuess(hangman,guess):
   if hangman.handleAndTestGuess(guess):
     eraseAndDisplay(getMask(hangman.secretWord,hangman.goodGuesses))
   else:
-    updateBody(parts,hangman.errorsAmount)
+    updateBody(hangman.errorsAmount)
 
 
 

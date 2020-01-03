@@ -26,8 +26,6 @@ def donnerMasque(*args):
     
 
 """
-- 'parties' (tuple) contient les différentes parties du corps du pendu à
-  dessiner en fonction du nombre d'erreurs '(P_TETE,P_TRONC,P_BRAS_GAUCHE…)' ;
 - 'nbErreurs': nombre d'erreurs.
 Dessiner la partie du corps correspondant au nombre d'erreurs.
 Lorsque la dernière partie du corps est dessinée, le visage ('P_VISAGE') doit

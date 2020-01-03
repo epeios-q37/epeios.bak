@@ -36,31 +36,32 @@ class Core(_.Core):
     _.Core.__init__(self,dom,ucHangman()())
 
 
-def _reset(hangman):
-  baseReset(hangman,getRandomWord())
+def _reset(hangman,ufunction):
+  suggestion = preBaseReset()
+  secretWord = ufunction(hangman,suggestion,getRandomWord())
+  postBaseReset(secretWord,None)
 
 
 def _acConnect(core):
   show()
-  _reset(core.userObject)
-
-
-def _Submit(hangman,letter):
-  ufHandleGuess()(hangman,letter)
+  _reset(core.userObject,ufAConnect())
 
 
 def _acSubmit(core,dom,id):
-  _Submit(core.userObject,id.lower())
+  dom.addClass(id,"chosen")
+  ufASubmit()(core.userObject,id.lower())
+
 
 
 def _acRestart(core):
-  _reset(core.userObject)
+  _reset(core.userObject,ufARestart())
 
 
 def main(callback,userFunctions,userFunctionLabels):
   mainBase(callback,globals(),
   (
     UC_HANGMAN,
-    UF_RESET,
-    UF_HANDLE_GUESS,
+    UF_ACONNECT,
+    UF_ASUBMIT,
+    UF_ARESTART,
   ),userFunctions,userFunctionLabels)

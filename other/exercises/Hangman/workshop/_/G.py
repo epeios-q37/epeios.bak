@@ -26,36 +26,4 @@ SOFTWARE.
 import sys
 sys.path.append("workshop/_")
 
-import educ as _
-from educ import Core
-
-from workshop._._ import *
-
-
-def _reset():
-  baseReset(None,getRandomWord())
-
-
-def _acConnect():
-  show()
-  _reset()
-
-
-def _Submit(letter):
-  ufHandleGuess()(letter,getBodyParts())
-
-
-def _acSubmit(core,dom,id):
-  _Submit(id.lower())
-
-
-def _acRestart():
-  _reset()
-
-
-def main(callback,userFunctions,userFunctionLabels):
-  mainBase(callback,globals(),
-  (
-    UF_RESET,
-    UF_HANDLE_GUESS,
-  ),userFunctions,userFunctionLabels)
+from F import *

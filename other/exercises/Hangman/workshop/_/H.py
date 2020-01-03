@@ -27,40 +27,35 @@ import sys
 sys.path.append("workshop/_")
 
 import educ as _
+from educ import Core
 
 from workshop._._ import *
 
 
-class Core(_.Core):
-  def __init__(self,dom):
-    _.Core.__init__(self,dom,ucHangman()())
+def _reset():
+  baseReset(None,getRandomWord())
 
 
-def _reset(hangman):
-  baseReset(hangman,getRandomWord())
-
-
-def _acConnect(core):
+def _acConnect():
   show()
-  _reset(core.userObject)
+  _reset()
 
 
-def _Submit(hangman,letter):
-  ufHandleGuess()(hangman,letter,getBodyParts())
+def _Submit(letter):
+  ufHandleGuess()(letter)
 
 
 def _acSubmit(core,dom,id):
-  _Submit(core.userObject,id.lower())
+  _Submit(id.lower())
 
 
-def _acRestart(core):
-  _reset(core.userObject)
+def _acRestart():
+  _reset()
 
 
 def main(callback,userFunctions,userFunctionLabels):
   mainBase(callback,globals(),
   (
-    UC_HANGMAN,
     UF_RESET,
     UF_HANDLE_GUESS,
   ),userFunctions,userFunctionLabels)

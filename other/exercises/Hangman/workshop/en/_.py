@@ -35,6 +35,7 @@ P_LEFT_ARM = _.P_LEFT_ARM
 P_RIGHT_ARM = _.P_RIGHT_ARM
 P_LEFT_LEG = _.P_LEFT_LEG
 P_RIGHT_LEG = _.P_RIGHT_LEG
+P_AMOUNT = _.P_AMOUNT
 
 WORDS = (
   "accommodate","afterthought","allegiance","aloft","ancestor","anticipation","antics",

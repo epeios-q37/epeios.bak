@@ -22,45 +22,11 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
-
-import sys
-sys.path.append("workshop/_")
-
-import educ as _
-
-from workshop._._ import *
+ 
+import workshop._.J as workshop
+from workshop.en._ import *
 
 
-class Core(_.Core):
-  def __init__(self,dom):
-    _.Core.__init__(self,dom,ucHangman()())
+def go(globals):
+  workshop.main(lambda dom: workshop.Core(dom),globals,USER_ITEM_LABELS)
 
-
-def _reset(hangman):
-  baseReset(hangman,getRandomWord())
-
-
-def _acConnect(core):
-  show()
-  _reset(core.userObject)
-
-
-def _Submit(hangman,letter):
-  ufHandleGuess()(hangman,letter)
-
-
-def _acSubmit(core,dom,id):
-  _Submit(core.userObject,id.lower())
-
-
-def _acRestart(core):
-  _reset(core.userObject)
-
-
-def main(callback,userFunctions,userFunctionLabels):
-  mainBase(callback,globals(),
-  (
-    UC_HANGMAN,
-    UF_RESET,
-    UF_HANDLE_GUESS,
-  ),userFunctions,userFunctionLabels)

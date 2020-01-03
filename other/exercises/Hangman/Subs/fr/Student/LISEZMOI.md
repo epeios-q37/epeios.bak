@@ -359,3 +359,9 @@ P_VISAGE        # pour dessiner la visage.
 
 - Pour chaque lettre contenue dans le mot à deviner, vérifier que le jeu se comporte comme dans l'exercice précédent ;
 - pour chaque lettre **non** contenue dans le mot à deviner, vérifier que le dessin du pendu se complète peu à peu.
+
+## Exercice *g*
+
+### Pseudo-code
+
+> 
