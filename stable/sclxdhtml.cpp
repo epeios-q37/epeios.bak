@@ -456,13 +456,11 @@ namespace {
 			eXSLFileHandling Handling,
 			const sclrgstry::registry_ &Registry,
 			bso::sChar Marker,
-			str::dString &Result )
+			str::dString &XSL )
 		{
 		qRH;
-			str::wString XSL, RawXSL;
+			str::wString RawXSL;
 		qRB;
-			XSL.Init();
-
 			if ( Handling == xfhRegistry )
 				Handling = GetXMLFileHandlingFromRegistry_( Registry );
 

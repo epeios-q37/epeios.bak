@@ -1,21 +1,22 @@
-# Exercices de programmation du jeu du pendu - documentation professeur
+# Exercices de programmation du jeu du pendu - notice enseignant
 
-[![Utiliser en ligne](https://q37.info/s/pcn9vgnj.svg)](https://repl.it/github/epeios-q37/hangman-fr-teacher)
+[![Utiliser en ligne](https://q37.info/s/pcn9vgnj.svg)](https://q37.info/s/jnkcprq4)
 
 ## Accès rapide
 
-Cette section permet de retrouver rapidement les différents liens présents dans ce document.
+Cette section permet de retrouver rapidement les différents liens présents dans cette notice.
 
-- Dépôt maître : <https://github.com/epeios-q37/hangman-exercises> ;
-- formulaire pour contacter l'auteur : <https://q37.info/s/ggq7x4w7> ;
-- documents professeur :
+- Documents enseignant :
   - ce document : <https://q37.info/s/mmdnch9t>,
-  - le dépôt *GitHub* contenant les solutions aux exercices : <https://github.com/epeios-q37/hangman-fr-teacher>,
-  - essayer ces solutions en ligne : <https://repl.it/github/epeios-q37/hangman-fr-teacher> ;
+  - dépôt *GitHub* avec les solutions : <https://q37.info/s/g9fvwzgp>,
+  - essayer ces solutions en ligne: <https://q37.info/s/jnkcprq4> ;
 - documents élèves :
-  - le document contenant les instructions pour les élèves : <https://q37.info/s/zmg4m3fx>,
-  - le dépôt *GitHub* contenant les fichiers destinés aux élèves : <https://github.com/epeios-q37/hangman-fr>,
-  - pour travailler sur ces exercices dans un environnement de développement en ligne : <https://repl.it/github/epeios-q37/hangman-fr>.
+  - notice : <https://q37.info/s/zmg4m3fx>,
+  - dépôt *GitHub* : <https://q37.info/s/93pfmrkq>,
+  - ces exercices dans un environnement de développement en ligne : <https://q37.info/s/jzw7knww> ;
+- dépôt *GitHub* maître : <https://q37.info/s/7sxtcv7g> ;
+- formulaire pour contacter l'auteur : <https://q37.info/s/ggq7x4w7>.
+
 
 
 ## Présentation
@@ -36,15 +37,17 @@ Pour confèrer une dimension ludique à ces exercices, le programme en question 
 
 Bien que s'appuyant sur le langage *Python*, ces exercices portent sur la programmation en générale, et non pas sur la programmation en *Python*. C'est pour cela que les solutions générales seront données avant les solutions propres à *Python*.
 
+Si vous avez des questions/suggestions/remarques/… concernant ces exercices, vous pouvez contacter l'auteur via le formulaire de contact à l'adresse <https://q37.info/s/ggq7x4w7>, ou utiliser les système de suivi de *GitHub* du dépôt principal à l'adresse <https://github.com/epeios-q37/hangman-exercises>.
+
 ## Utilisation
 
 Pour aborder ces exercices, seules des notions de base en développement *Python* sont nécessaires. Ils sont particulièrement indiqués pour faire découvrir ou initier à la programmation.
 
-Le dépôt https://github.com/epeios-q37/hangman-fr est destiné aux élèves. https://github.com/epeios-q37/hangman-fr-teacher reprend le contenu de ce dépôt, en y ajoutant des informations utiles aux professeurs, notamment les solutions des exercices. De ce fait, ce dernier dépôt est réservé aux professeurs.
+Le dépôt https://github.com/epeios-q37/hangman-fr est destiné aux élèves. https://github.com/epeios-q37/hangman-fr-teacher reprend le contenu de ce dépôt, en y ajoutant des informations utiles aux enseignants, notamment les solutions des exercices. De ce fait, ce dernier dépôt est réservé aux enseignants.
 
 Pour distribuer ces exercices aux élèves, vous pouvez directement utiliser le dépôt https://github.com/epeios-q37/hangman-fr ou, si vous êtes familiarisés avec *GitHub*, en utiliser les fonctionnalités pour créer votre propre version de ce dépôt. 
 
-Les solutions aux exercices présentées dans ce document peuvent être vue à l'œuvre en allant à l'adresse <https://repl.it/github/epeios-q37/hangman-fr-teacher>. Les fichiers contenus dans le répertoire `Student` sont ceux mis à disposition des étudiants.
+Les solutions aux exercices présentées dans cette notice peuvent être vue à l'œuvre en allant à l'adresse <https://repl.it/github/epeios-q37/hangman-fr-teacher>. Les fichiers contenus dans le répertoire `Student` sont ceux mis à disposition des étudiants.
 
 Si vous avez des retours à faire concernant ces exercices, vous pouvez contacter l'auteur à l'adresse <https://q37.info/s/ggq7x4w7>, ou passer par le dépôt maître, d'où sont dérivés les deux dépôts présentés ici, à l'adresse <https://github.com/epeios-q37/hangman-exercises>.
 
@@ -280,4 +283,4 @@ def majCorps(nombreErreurs):
 
 ## Autres exercices
 
-La partie des notices professeurs et élèves concernant ces exercices sont en cours d'élaboration.
+La partie des notices enseignant et élèves concernant ces exercices sont en cours d'élaboration.

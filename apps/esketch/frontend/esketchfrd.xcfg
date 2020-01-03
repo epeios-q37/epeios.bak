@@ -6,7 +6,7 @@
 	<xpp:define name="Parameters">
 		<xpp:bloc>
 			<xpp:expand select="FRD_Parameters"/>
-			<Project Type="New"/>
+			<Project Type="Predefined"/>
 			<xpp:ifeq select="prod" value="yes">
 				<Backend Type="Predefined">LocalHost</Backend>
 			</xpp:ifeq>
@@ -85,7 +85,7 @@
 						<xpp:set name="BackendPath" value="h:/bin/"/>
 					</xpp:bloc>
 				</xpp:ifeq>
-				<xpp:bloc marker="$">s
+				<xpp:bloc marker="$">
 					<Backend id="Embedded" Alias="EmbeddedPredefinedBackend" Plugin="Embedded">
 						<xpp:expand value-of="BackendPath"/>
 						<xpp:bloc>esketchbkd</xpp:bloc>

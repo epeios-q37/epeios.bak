@@ -2,11 +2,13 @@
 
 ## Présentation
 
-Le série d'exercices qui suit permet de programmer une version du [jeu du pendu](https://fr.wikipedia.org/wiki/Le_Pendu_(jeu)) jouable sur smartphone, et qui ressemblera à ça :
+La série d'exercices qui suit permet de programmer une version du [jeu du pendu](https://fr.wikipedia.org/wiki/Le_Pendu_(jeu)) jouable sur smartphone, et qui ressemblera à ça :
 
 ![](assets/Pendu.png)
 
-Le professeur vous indiquera comment procéder pour lancer les exercices.
+Le professeur vous indiquera comment accèder aux exercices et les utiliser. Ce sera probablement en utilisant l'un des deux liens ci-dessous :
+- pour travailler sur les exercices dans un environnement de développement en ligne (session *Repl.it*) : <https://q37.info/s/jzw7knww> ;
+- pour travailler sur les exercices en utilisant l'interpréteur *Python* installé sur un ordinateur (fichier *ZIP*) : <https://q37.info/s/xht7cvwk>.
 
 ## Exercice *a*
 

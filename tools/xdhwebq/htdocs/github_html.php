@@ -23,7 +23,7 @@ rendered.
 The file must be one of the a repository from user 'epeios-q37'
 and given through the 'file' parameter. Example:
 test.php?file=hangman-fr/master/LISEZMOI.html
-/*
+*/
 
 echo file_get_contents("http://raw.githubusercontent.com/epeios-q37/" . $_GET['file'] );
 
