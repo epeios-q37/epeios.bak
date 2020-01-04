@@ -271,7 +271,7 @@ Sachant que :
 
 ### Pseudo-code
 
-> Mettre une chaîne de caractères vide dans `masque` 
+> Mettre une chaîne de caractères vide `masque` 
 > 
 > Pour `lettre` étant chaque lettre dans `mot`  
 > &nbsp;&nbsp;Si `lettre` est dans `pioches`  
@@ -364,4 +364,24 @@ P_VISAGE        # pour dessiner la visage.
 
 ### Pseudo-code
 
+> Dessiner la partie du corps correspondant à `nombreErreurs`
+>
+> Si `nombreErreur` supérieur au nombre d'erreurs autorisées  
+> &nbsp;&nbsp;Dessiner le visage
+
+## Exercice *h*
+
+### Pseudo-code
+
+#### `reinitialiser`
+
+> initialiser les variables globales (voir fonction suivante)
+>
+> effacer l'affichage et afficher le masque de départ
+>
+> retourner `suggestion` si pas vide sinon `motAuHasard`
+
+### `traiterPioche`
+
 > 
+

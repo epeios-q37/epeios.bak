@@ -31,19 +31,21 @@ et '__init__(…)'.
 """
 class Pendu:
   def reinitialiser(self,suggestion,motAuHasard):
-    self.motSecret = choisirMot(suggestion,motAuHasard)
+#    self.motSecret = choisirMot(suggestion,motAuHasard)
     self.bonnesPioches = ""
     self.nbErreurs = 0
     self.enCours = VRAI
 
+    return choisirMot(suggestion,motAuHasard)
+
   def __init__(self):
-    self.motSecret = ""
+ #   self.motSecret = ""
     self.bonnesPioches = ""
     self.nbErreurs = 0
     self.enCours = FAUX
     
-  def traiterEtTesterPioche(self,pioche):
-    if lettreEstDansMot(pioche,self.motSecret):  # Test is not mandatory
+  def traiterEtTesterPioche(self,pioche,motSecret):
+    if lettreEstDansMot(pioche,motSecret):
       if not lettreEstDansMot(pioche,self.bonnesPioches):
         self.bonnesPioches += pioche
       return VRAI
@@ -82,15 +84,15 @@ def majCorpsEtTesterSiDefaite(nbErreurs):
 """
 Ajouter le test.
 """
-def traiterPioche(pendu,pioche):
-  if pendu.traiterEtTesterPioche(pioche):
-    masque,victoire = donnerMasqueEtTesterSiVictoire(pendu.motSecret,pendu.bonnesPioches)
+def traiterPioche(pendu,pioche,motSecret):
+  if pendu.traiterEtTesterPioche(pioche,motSecret):
+    masque,victoire = donnerMasqueEtTesterSiVictoire(motSecret,pendu.bonnesPioches)
     effacerEtAfficher(masque)
     if victoire and pendu.enCours:
       notifier("Tu as gagné ! Félicitations !")
       pendu.enCours = FAUX
   elif pendu.enCours and majCorpsEtTesterSiDefaite(pendu.nbErreurs):
-    notifier("\nPerdu !\nErreurs : {} ; bonnes pioches : {}.\n\nLe mot à deviner était : '{}'.".format(pendu.nbErreurs,len(pendu.bonnesPioches),pendu.motSecret))
+    notifier("\nPerdu !\nErreurs : {} ; bonnes pioches : {}.\n\nLe mot à deviner était : '{}'.".format(pendu.nbErreurs,len(pendu.bonnesPioches),motSecret))
     pendu.enCours = FAUX
 
 
@@ -98,11 +100,11 @@ def traiterPioche(pendu,pioche):
 Modifier pour utiliser 'donnerMasqueEtTesterSiVictoire(…)'.
 """
 def reinitialiser(pendu,suggestion,motAuHasard):
-  pendu.reinitialiser(suggestion,motAuHasard)
-  print(pendu.motSecret)
-  effacerEtAfficher(donnerMasqueEtTesterSiVictoire(pendu.motSecret,"")[0])
+  motSecret = pendu.reinitialiser(suggestion,motAuHasard)
+  print(motSecret)
+  effacerEtAfficher(donnerMasqueEtTesterSiVictoire(motSecret,"")[0])
 
-  return pendu.motSecret
+  return motSecret
 
 
 
@@ -117,16 +119,16 @@ def AConnexion(pendu,suggestion,motAuHasard):
 Appellé lors d'une nouvelle pioche.
 NOTA: La lettre piochée sera désactivée sur le clavier.
 """
-def APioche(pendu,pioche):
-  traiterPioche(pendu,pioche)
+def APioche(pendu,pioche,motSecret):
+  traiterPioche(pendu,pioche,motSecret)
 
 
 """
 Appelé lors d'un redémarrage.
 """
-def ARedemarrage(pendu,suggestion,motAuHasard):
+def ARedemarrage(pendu,suggestion,motAuHasard,motSecret):
   if pendu.enCours:
-    notifier("\nErreurs : {} ; bonnes pioches : {}.\n\nLe mot à deviner était : '{}'.".format(pendu.nbErreurs,len(pendu.bonnesPioches),pendu.motSecret))
+    notifier("\nErreurs : {} ; bonnes pioches : {}.\n\nLe mot à deviner était : '{}'.".format(pendu.nbErreurs,len(pendu.bonnesPioches),motSecret))
 
   return reinitialiser(pendu,suggestion,motAuHasard)
 

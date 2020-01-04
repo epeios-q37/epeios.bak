@@ -11,7 +11,6 @@ Quelques variables vont être gérées par l'élève. Leur nom est libre.
 Peut être omis, vu que 'raz(…)' va être appelé avant utilisation
 de ces variables.
 """
-motSecret = ""
 bonnesPioches = ""
 nbErreurs = 0
 
@@ -41,19 +40,17 @@ Réinitialiser les variables et l'affichage pour une nouvelle partie et
 retourner le mot secret.
 """
 def reinitialiser(suggestion,motAuHasard):
-  global motSecret,bonnesPioches,nbErreurs
+  global bonnesPioches,nbErreurs
 
   motSecret = choisirMot(suggestion,motAuHasard)
   bonnesPioches = ""
   nbErreurs = 0
   print(motSecret)
-  redessiner()
   effacerEtAfficher(donnerMasque(motSecret,""))
 
   return motSecret
 
   
-
 """
 N.B. : NON 'THREAD-SAFE' !!!
 De multiples instances peuvent être lancées pour montrer
@@ -65,10 +62,10 @@ en quoi cela pose problème.
 Si 'pioche' est dans 'lettre', met à jour du masque,
 sinon met à jour du dessin du pendu. 
 """
-def traiterPioche(pioche):
+def traiterPioche(pioche,motSecret):
   global bonnesPioches,nbErreurs
 
-  if lettreEstDansMot(pioche,motSecret): # Test non obligatoire.
+  if lettreEstDansMot(pioche,motSecret):
     if not lettreEstDansMot(pioche,bonnesPioches):
       bonnesPioches += pioche
       effacerEtAfficher(donnerMasque(motSecret,bonnesPioches))

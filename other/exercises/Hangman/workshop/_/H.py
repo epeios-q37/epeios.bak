@@ -42,7 +42,10 @@ def _acConnect():
 
 
 def _Submit(letter):
-  ufHandleGuess()(letter)
+  try:
+    ufHandleGuess()(letter,getSecretWord())
+  except:
+    ufHandleGuess()(letter)
 
 
 def _acSubmit(core,dom,id):

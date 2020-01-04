@@ -38,7 +38,10 @@ class Core(_.Core):
 
 def _reset(hangman,ufunction):
   suggestion = preBaseReset()
-  secretWord = ufunction(hangman,suggestion,getRandomWord())
+  try:
+    secretWord = ufunction(hangman,suggestion,getRandomWord())
+  except TypeError:
+    secretWord = ufunction(hangman,suggestion,getRandomWord(),getSecretWord())
   postBaseReset(secretWord,None)
 
 
@@ -49,7 +52,11 @@ def _acConnect(core):
 
 def _acSubmit(core,dom,id):
   dom.addClass(id,"chosen")
-  ufASubmit()(core.userObject,id.lower())
+
+  try:
+    ufASubmit()(core.userObject,id.lower(),getSecretWord())
+  except TypeError:
+    ufASubmit()(core.userObject,id.lower())
 
 
 

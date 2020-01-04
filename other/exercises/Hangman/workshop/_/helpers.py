@@ -117,10 +117,7 @@ def mainBaseReset(suggestion,randomWord):
   setErrorsAmount(0)
   setGoodGuesses("")
 
-  secretWord = _pickWord(suggestion,randomWord)
-  setSecretWord(secretWord)
-
-  return secretWord
+  return _pickWord(suggestion,randomWord)
 
 def preBaseReset():
   suggestion = _.dom().getContent(_I_SECRET_WORD).strip()[:15] if _SHOW_SECRET_WORD else ""
@@ -133,6 +130,8 @@ def preBaseReset():
 
 
 def postBaseReset(secretWord,fGetMask=ufGetMask):
+  setSecretWord(secretWord)
+
   if _SHOW_SECRET_WORD:
     _.dom().setContent(_I_SECRET_WORD,secretWord)
 

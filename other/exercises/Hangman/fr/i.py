@@ -30,12 +30,13 @@ mais le nom des variables et des méthodes est libre.
 """
 class Pendu:
   def reinitialiser(self,suggestion,motAuHasard):
-    self.motSecret = choisirMot(suggestion,motAuHasard)
+#    self.motSecret = choisirMot(suggestion,motAuHasard)
     self.bonnesPioches = ""
     self.nbErreurs = 0
+    return choisirMot(suggestion,motAuHasard)
 
   def __init__(self):
-    self.motSecret = ""
+#    self.motSecret = ""
     self.bonnesPioches = ""
     self.nbErreurs = 0
     
@@ -44,8 +45,8 @@ class Pendu:
   que 'pioche' est correct ou non.
   Si 'pioche' est bon, retourner VRAI, sinon retourner FAUX.
   """
-  def traiterEtTesterPioche(self,pioche):
-    if isLetterInWord(pioche,self.motSecret):
+  def traiterEtTesterPioche(self,pioche,motSecret):
+    if isLetterInWord(pioche,motSecret):
       if not isLetterInWord(pioche,self.bonnesPioches):
         self.bonnesPioches += pioche
       return VRAI
@@ -59,20 +60,19 @@ Pareil que pour le précédent exercice,
 sauf que l'on utilise un objet.
 """
 def reinitialiser(pendu,suggestion,motAuHasard):
-  pendu.reinitialiser(suggestion,motAuHasard)
-  print(pendu.motSecret)
-  redessiner()
-  effacerEtAfficher(donnerMasque(pendu.motSecret,""))
+  motSecret = pendu.reinitialiser(suggestion,motAuHasard)
+  print(motSecret)
+  effacerEtAfficher(donnerMasque(motSecret,""))
 
-  return pendu.motSecret
+  return motSecret
   
 
 """
 Idem.
 """
-def traiterPioche(pendu,pioche):
-  if pendu.traiterEtTesterPioche(pioche):
-    effacerEtAfficher(donnerMasque(pendu.motSecret,pendu.bonnesPioches))
+def traiterPioche(pendu,pioche,motSecret):
+  if pendu.traiterEtTesterPioche(pioche,motSecret):
+    effacerEtAfficher(donnerMasque(motSecret,pendu.bonnesPioches))
   else:
     majCorps(pendu.nbErreurs)
 

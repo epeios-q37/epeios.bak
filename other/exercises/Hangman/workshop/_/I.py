@@ -46,7 +46,10 @@ def _acConnect(core):
 
 
 def _Submit(hangman,letter):
-  ufHandleGuess()(hangman,letter)
+  try:
+    ufHandleGuess()(hangman,letter,getSecretWord())
+  except TypeError:
+    ufHandleGuess()(hangman,letter)
 
 
 def _acSubmit(core,dom,id):
