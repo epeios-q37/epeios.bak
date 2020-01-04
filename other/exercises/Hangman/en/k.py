@@ -59,10 +59,10 @@ Same as previous exercise, but this time we use an object.
 def reset(hangman,suggestion,randomWord):
   hangman.reset(suggestion,randomWord)
   print(hangman.secretWord)
-  eraseAndDisplay(getMask(hangman.secretWord,""))
+  display(getMask(hangman.secretWord,""))
 
   if DISCLOSE_SECRET_WORD:
-    discloseSecretWord(hangman.secretWord,"")
+    discloseSecretWord(hangman.secretWord)
 
 
 """
@@ -70,7 +70,7 @@ Idem.
 """
 def handleGuess(hangman,guess):
   if hangman.handleAndTestGuess(guess):
-    eraseAndDisplay(getMask(hangman.secretWord,hangman.goodGuesses))
+    display(getMask(hangman.secretWord,hangman.goodGuesses))
   else:
     updateBody(hangman.errorsAmount)
 

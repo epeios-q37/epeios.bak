@@ -45,7 +45,7 @@ def majCorps(nombreErreurs):
   elif nombreErreurs == 7:
     partieCorps = P_VISAGE
 
-  if ( nombreErreurs):
+  if nombreErreurs:
     dessinerPartieCorps(partieCorps)
 
 go(globals())

@@ -47,7 +47,7 @@ def reset(suggestion,randomWord):
   goodGuesses = ""
   errorsAmount = 0
   print(secretWord)
-  eraseAndDisplay(getMask(secretWord,""))
+  display(getMask(secretWord,""))
 
   return secretWord
 
@@ -68,7 +68,7 @@ def handleGuess(guess,secretWord):
   if isLetterInWord(guess,secretWord): # Test is not mandatory
     if not isLetterInWord(guess,goodGuesses):
       goodGuesses += guess
-      eraseAndDisplay(getMask(secretWord,goodGuesses))
+      display(getMask(secretWord,goodGuesses))
   else:
     errorsAmount += 1
     updateBody(errorsAmount)

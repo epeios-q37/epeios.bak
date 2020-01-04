@@ -57,7 +57,7 @@ def reset(hangman,suggestion,randomWord):
   hangman.reset()
   secretWord = pickWord(suggestion,randomWord)
   print(secretWord)
-  eraseAndDisplay(getMask(secretWord,""))
+  display(getMask(secretWord,""))
 
   return secretWord
 
@@ -66,8 +66,8 @@ def reset(hangman,suggestion,randomWord):
 Idem.
 """
 def handleGuess(hangman,guess,secretWord):
-  if hangman.handleAndTestGuess(guess):
-    eraseAndDisplay(getMask(secretWord,hangman.goodGuesses))
+  if hangman.handleAndTestGuess(guess,secretWord):
+    display(getMask(secretWord,hangman.goodGuesses))
   else:
     updateBody(hangman.errorsAmount)
 

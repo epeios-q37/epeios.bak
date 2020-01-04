@@ -56,10 +56,10 @@ Pareil que pour le précédent exercice,
 sauf que l'on utilise un objet.
 """
 def raz(pendu,suggestion,motAuHasard):
-  pendu.raz(suggestion,motAuHasard)
+  pendu.raz()
   motSecret = choisirMot(suggestion,motAuHasard)
   print(motSecret)
-  effacerEtAfficher(donnerMasque(motSecret,""))
+  afficher(donnerMasque(motSecret,""))
 
   return motSecret
   
@@ -69,7 +69,7 @@ Idem.
 """
 def traiterPioche(pendu,pioche,motSecret):
   if pendu.traiterEtTesterPioche(pioche,motSecret):
-    effacerEtAfficher(donnerMasque(motSecret,pendu.bonnesPioches))
+    afficher(donnerMasque(motSecret,pendu.bonnesPioches))
   else:
     majCorps(pendu.nbErreurs)
 

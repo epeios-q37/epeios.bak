@@ -326,7 +326,7 @@ Sachant que :
 
 écrire le code de la fonction `majCorps` pour qu'elle dessine la partie du corps correspondant au nombre d'erreurs.
 
-Pour cette tâche, utiliser la fonction `dessinerPartieCorps` qui peut prendre, comme paramètre, une des valeurs suivantes :
+Pour cette tâche, utiliser la fonction `dessinerPartieCorps` qui prend, comme paramètre, une des valeurs suivantes :
 
 ```python
 P_TETE          # pour dessiner la tête,
@@ -338,7 +338,7 @@ P_PIED_DROIT    # pour dessiner le pied droit,
 P_VISAGE        # pour dessiner la visage.
 ```
 
-`maj` signifie *mise-à-jour*, car la fonction est appelée à chaque nouvelle erreur. Cela veut dire que la valeur du paramètre `nombreErreurs` est incrémenté d'un appel à l'autre. Aussi ne va-t-on pas redessiner tous le corps, mais juste la partie correspondant au nombre d'erreurs.
+`maj` signifie *mise-à-jour*, car la fonction est appelée à chaque nouvelle erreur. Cela veut dire que la valeur du paramètre `nombreErreurs` est incrémenté d'un appel à l'autre. Aussi ne va-t-on pas redessiner tout le corps, mais juste la partie correspondant au nombre d'erreurs.
 
 ### Pseudo-code
 
@@ -346,7 +346,7 @@ P_VISAGE        # pour dessiner la visage.
 > &nbsp;&nbsp;Dessiner la tête  
 > Sinon si `nombreErreurs` est égal à 2  
 > &nbsp;&nbsp;Dessiner le tronc  
-> Sinon si `nombreErreur` est égal à 3  
+> Sinon si `nombreErreurs` est égal à 3  
 > &nbsp;&nbsp;Dessiner le bras gauche  
 > 
 > *et ainsi de suite pour dessiner le bras droit, le pied gauche, le pied droit et enfin le visage.*
@@ -364,9 +364,70 @@ P_VISAGE        # pour dessiner la visage.
 
 ### Objectif
 
-Modifier le code de la fonction `majCorps` de façon à ce que le visage soit dessiné en même temps que le dernier membre, pour indiquer que la partie est perdue.
+Simplification de la fonction `majCorps`, grâce à l'utilisation d'un *tuple*.
 
-Utiliser la constante `P_AMOUNT` qui contient le nombre de parties du corps.
+### Préparation
+
+- Dans la première ligne, remplacer le `f` par un `g`.
+
+```python
+from workshop.fr.g import *
+
+…
+
+def majCorps(nombreErreurs):    
+    …
+
+go(globals())
+```
+
+
+### Tâches
+
+- Créer un *tuple* appelé `PARTIES_CORPS` contenant les constantes `P_…` listées dans l'exercice précédent, dans l'ordre dans lequel les parties du corps correspondantes doivent être dessinées ;
+- modifier la fonction `majCorps` pour qu'elle réalise la même tâche que dans l'exercice précédent, mais en utilisant le *tuple* ci-dessus.
+
+### Pseudo-code
+
+> Affecter à `PARTIES_CORPS` un *tuple* contenant les constantes `P_…`
+>
+> Dessiner la partie du corps stockée dans `PARTIES_CORPS` correspondant à `nombreErreurs`
+
+### Aperçu
+
+Le même que pour l'exercice précédent.
+
+### Test
+
+Les mêmes que pour l'exercice précédent.
+
+## Exercice *h*
+
+### Objectif
+
+Lorsque le dernier membre du corps du pendu est dessiné, le visage doit également être dessiné, pour indiquer que la partie est perdue.
+
+### Préparation
+
+- Dans la première ligne, remplacer le `g` par un `h`.
+
+```python
+from workshop.fr.h import *
+
+…
+
+def majCorps(nombreErreurs):    
+    …
+
+go(globals())
+```
+
+### Tâches
+
+- Retirer du *tuple* `PARTIES_CORPS` la constante `P_VISAGE` ;
+- modifier le code de la fonction `majCorps` pour dessiner explicitement le visage (utilisation de la constante `P_VISAGE`) lorsque la dernière partie du corps, tel que contenue dans `PARTIES_CORPS`, est dessinée.
+
+On pourra se servir de la taille du *tuple* pour détecter quand est dessinée la dernière partie du corps.
 
 ### Pseudo-code
 
@@ -382,20 +443,4 @@ Le même que pour l'exercice précédent.
 ### Tests
 
 Reprendre les tests de l'exercice précédent, et vérifier qu'au lieu d'être dessiné à part, le visage est dessiné en même temps que la dernière partie du corps.
-
-## Exercice *h*
-
-### Pseudo-code
-
-#### `raz`
-
-> initialiser les variables globales (voir fonction suivante)
->
-> effacer l'affichage et afficher le masque de départ
->
-> retourner `suggestion` si pas vide sinon `motAuHasard`
-
-### `traiterPioche`
-
-> 
 

@@ -49,7 +49,7 @@ def _Submit(letter):
   else:
     setErrorsAmount(getErrorsAmount() + 1)
 
-    if getErrorsAmount() <= P_AMOUNT:
+    if True or getErrorsAmount() <= P_AMOUNT: # Errors amount security disabled.
       try:
         ufUpdateBody()(getBodyParts(),getErrorsAmount())
       except TypeError:

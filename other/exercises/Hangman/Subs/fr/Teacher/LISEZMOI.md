@@ -238,7 +238,7 @@ masque += lettre if lettreEstDansMot(lettre,pioches) else "_"
 
 ### Exercice *f*
 
-#### Particularités
+#### Particularité
 
 Instructions conditionnelles multiples (équivalent du *switch…* *case…* d'autres langages).
 
@@ -264,7 +264,31 @@ def majCorps(nombreErreurs):
   dessinerPartieCorps(partieCorps)
 ```
 
-Autre solution :
+Pour éviter une erreur lorsque cette fonction est appelée avec un nombre d'erreur dépassant le maximum possible (i.e. le nombre de parties de corps disponibles), on testera ce nombre avant de dessiner. La constante `P_NOMBRE` contient le nombre de parties de corps disponibles.
+
+Ainsi, on pourra remplacer :
+
+```python
+  dessinerPartieCorps(partieCorps)
+```
+
+par :
+
+```python
+  if nombreErreurs <= P_NOMBRE:
+    dessinerPartieCorps(partieCorps)
+```
+
+
+### Exercice *g*
+
+#### Particularités
+
+- Création d'un *tuple* ;
+- récupération d'un membre d'un *tuple* par son index ;
+- récupération du nombre d'éléments d'un *tuple*.
+
+#### Solution
 
 ```python
 PARTIES_CORPS = (
@@ -281,11 +305,67 @@ def majCorps(nombreErreurs):
   dessinerPartieCorps(PARTIES_CORPS[nombreErreurs-1])
 ```
 
-## Exercice *g*
+Dans un second temps, pour éviter une erreur lors du dépassement du nombre d'erreurs autorisées, on remplacera :
 
-## Particularités
+```python
+def majCorps(nombreErreurs):
+  dessinerPartieCorps(PARTIES_CORPS[nombreErreurs-1])
+```
 
-Selon la solution retenue dans l'exercice précédent, on se basera sur la constante `P_NOMBRE` pour 
+par :
+
+```python
+
+def majCorps(nombreErreurs):
+  if nombreErreurs <= len(PARTIES_CORPS)
+    dessinerPartieCorps(PARTIES_CORPS[nombreErreurs-1])
+```
+
+Noter que, pour cet exercice, et les suivants, on peut stocker le résultat de `len(PARTIES_CORPS)` dans une constante juste aprés la définition de `PARTIES_CORPS`, et utiliser cette constante en lieu et place des appels à `len(PARTIES_CORPS)`.
+
+### Exercice *h*
+
+#### Particularités
+
+Rien de particulier ; il s'agit juste d'une amélioration.
+
+#### Solution
+
+Noter que, par rapport à la solution précédente, `PARTIES_CORPS` ne contient plus la constante `P_VISAGE`.
+
+On pourra faire remarquer que le test sur le nombre d'erreurs autorisés, bien qu'il soit réduit d'un, reste correct, du fait qu'il s'appuie sur le nombre d'éléments contenus dans `PARTIES_CORPS`.
+
+```python
+PARTIES_CORPS = (
+  P_TETE,
+  P_TRONC,
+  P_BRAS_GAUCHE,
+  P_BRAS_DROIT,
+  P_PIED_GAUCHE,
+  P_PIED_DROIT
+)
+
+def majCorps(nombreErreurs):
+  if nombreErreurs <= len(PARTIES_CORPS):
+    dessinerPartieCorps(PARTIES_CORPS[nombreErreurs-1])
+
+  if nombreErreurs >= len(PARTIES_CORPS):
+    dessinerPartieCorps(P_VISAGE)
+```
+
+Variante (le second test est imbriqué dans le premier):
+
+```python
+…
+
+def majCorps(nombreErreurs):
+  if nombreErreurs <= len(PARTIES_CORPS):
+    dessinerPartieCorps(PARTIES_CORPS[nombreErreurs-1])
+
+    if nombreErreurs == len(PARTIES_CORPS):
+      dessinerPartieCorps(P_VISAGE)
+```
+
 
 ## Autres exercices
 

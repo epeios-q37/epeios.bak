@@ -95,9 +95,7 @@ _.setAppTitle("Hangman game workshop")
 
 redraw = _.redraw
 drawBodyPart= _.drawBodyPart
-erase = _.clear
 display =  _.display
-eraseAndDisplay = _.clearAndDisplay
 discloseSecretWord = _.discloseSecretWord  
 notify =  _.alert
 ask = _.confirm

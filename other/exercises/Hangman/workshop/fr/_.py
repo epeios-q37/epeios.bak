@@ -104,9 +104,7 @@ _.setAppTitle("Atelier du jeu du pendu")
 
 redessiner = _.redraw
 dessinerPartieCorps = _.drawBodyPart
-effacer = _.clear
 afficher = _.display
-effacerEtAfficher = _.clearAndDisplay
 divulguerMotSecret =  _.discloseSecretWord
 notifier = _.alert
 demander = _.confirm

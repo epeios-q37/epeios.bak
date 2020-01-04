@@ -20,6 +20,5 @@ def pickWord(suggestion,randomWord):
   else:
     return randomWord
 
-lobals()["_pickWord" + str(VERSION)]
 
 go(globals())

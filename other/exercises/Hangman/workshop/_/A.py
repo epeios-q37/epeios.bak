@@ -34,7 +34,7 @@ from workshop._._ import *
 
 def _reset():
   baseReset(None,getRandomWord(),None,None)
-  clearAndDisplay(getSecretWord())
+  display(getSecretWord())
 
 
 def _acConnect(core,dom):

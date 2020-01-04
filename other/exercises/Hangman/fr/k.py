@@ -61,7 +61,7 @@ sauf que l'on utilise un objet.
 def raz(pendu,suggestion,motAuHasard):
   pendu.raz(suggestion,motAuHasard)
   print(pendu.motSecret)
-  effacerEtAfficher(donnerMasque(pendu.motSecret,""))
+  afficher(donnerMasque(pendu.motSecret,""))
 
   if DIVULGUER_MOT_SECRET:
     divulguerMotSecret( pendu.motSecret )
@@ -71,8 +71,8 @@ def raz(pendu,suggestion,motAuHasard):
 Idem.
 """
 def traiterPioche(pendu,pioche):
-  if pendu.traiterEtTesterPioche(pioche,pendu.motSecret):
-    effacerEtAfficher(donnerMasque(pendu.motSecret,pendu.bonnesPioches))
+  if pendu.traiterEtTesterPioche(pioche):
+    afficher(donnerMasque(pendu.motSecret,pendu.bonnesPioches))
   else:
     majCorps(pendu.nbErreurs)
 

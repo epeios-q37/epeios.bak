@@ -86,7 +86,7 @@ Add the notifications.
 def handleGuess(hangman,guess):
   if hangman.handleAndTestGuess(guess):
     mask,hasWon = getMaskAndTestIfHasWon(hangman.secretWord,hangman.goodGuesses)
-    eraseAndDisplay(mask)
+    display(mask)
     if hasWon and hangman.inProgress:
       notify("You won! Congratulations!")
       hangman.inProgress = FALSE
@@ -101,7 +101,7 @@ Modify to use 'getMaskAndTestIfHasWon(…)'.
 def reset(hangman,suggestion,randomWord):
   hangman.reset(suggestion,randomWord)
   print(hangman.secretWord)
-  eraseAndDisplay(getMaskAndTestIfHasWon(hangman.secretWord,"")[0])
+  display(getMaskAndTestIfHasWon(hangman.secretWord,"")[0])
 
   if DISCLOSE_SECRET_WORD:
     discloseSecretWord(hangman.secretWord)

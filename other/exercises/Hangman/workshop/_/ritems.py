@@ -61,7 +61,7 @@ def rfUpdateBody(errorsAmount):
 
 def rfHandleGuess(hangman,guess):
   if hangman.handleAndTestGuess(guess):
-    eraseAndDisplay(getMask(hangman.secretWord,hangman.goodGuesses))
+    display(getMask(hangman.secretWord,hangman.goodGuesses))
   else:
     updateBody(hangman.errorsAmount)
 

@@ -48,7 +48,7 @@ def raz(suggestion,motAuHasard):
   bonnesPioches = ""
   nbErreurs = 0
   print(motSecret)
-  effacerEtAfficher(donnerMasque(motSecret,""))
+  afficher(donnerMasque(motSecret,""))
 
   return motSecret
 
@@ -70,7 +70,7 @@ def traiterPioche(pioche,motSecret):
   if lettreEstDansMot(pioche,motSecret):
     if not lettreEstDansMot(pioche,bonnesPioches):
       bonnesPioches += pioche
-      effacerEtAfficher(donnerMasque(motSecret,bonnesPioches))
+      afficher(donnerMasque(motSecret,bonnesPioches))
   else:
     nbErreurs += 1
     majCorps(nbErreurs)

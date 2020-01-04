@@ -72,10 +72,6 @@ def _createOutput(text)  :
 
 
 def display(text):
-  _.dom().appendLayout(_I_OUTPUT,_createOutput(text))
-
-
-def clearAndDisplay(text):
   _.dom().setLayout(_I_OUTPUT,_createOutput(text))
 
 
@@ -88,7 +84,7 @@ def confirm(text):
 
 
 def displayMask(word,guesses,fGetMask):
-  clearAndDisplay(fGetMask()(word,guesses))
+  display(fGetMask()(word,guesses))
 
 
 def _showSecretWordTextBox():

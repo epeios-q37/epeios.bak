@@ -83,9 +83,9 @@ def majCorpsEtTesterSiDefaite(nbErreurs):
 Ajouter le test.
 """
 def traiterPioche(pendu,pioche):
-  if pendu.traiterEtTesterPioche(pioche,pendu.motSecret):
+  if pendu.traiterEtTesterPioche(pioche):
     masque,victoire = donnerMasqueEtTesterSiVictoire(pendu.motSecret,pendu.bonnesPioches)
-    effacerEtAfficher(masque)
+    afficher(masque)
     if victoire and pendu.enCours:
       notifier("Tu as gagné ! Félicitations !")
       pendu.enCours = FAUX
@@ -100,7 +100,7 @@ Modifier pour utiliser 'donnerMasqueEtTesterSiVictoire(…)'.
 def raz(pendu,suggestion,motAuHasard):
   pendu.raz(suggestion,motAuHasard)
   print(pendu.motSecret)
-  effacerEtAfficher(donnerMasqueEtTesterSiVictoire(pendu.motSecret,"")[0])
+  afficher(donnerMasqueEtTesterSiVictoire(pendu.motSecret,"")[0])
 
   if DIVULGUER_MOT_SECRET:
     divulguerMotSecret(pendu.motSecret)
