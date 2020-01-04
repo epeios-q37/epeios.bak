@@ -71,16 +71,16 @@ PARTIES_CORPS = (
 
 USER_ITEM_LABELS = {
   _.UC_HANGMAN: "Pendu",
-  _.UV_SHOW_SECRET_WORD: "MONTRER_MOT_SECRET",
+  _.UV_DISCLOSE_SECRET_WORD: "DIVULGUER_MOT_SECRET",
   _.UF_GET_MASK: "donnerMasque",
   _.UF_HANDLE_GUESS: "traiterPioche",
   _.UF_IS_LETTER_IN_WORD: "lettreEstDansMot",
-  _.UF_RESET: "reinitialiser",
+  _.UF_RESET: "raz",
   _.UF_UPDATE_BODY: "majCorps",
   _.UF_PICK_WORD: "choisirMot",
   _.UF_ACONNECT: "AConnexion",
   _.UF_ASUBMIT: "APioche",
-  _.UF_ARESTART: "ARedemarrage"}
+  _.UF_ARESTART: "ARelance"}
 
 
 _.setI18n({
@@ -102,29 +102,11 @@ _.setBodyParts(PARTIES_CORPS)
 _.setAppTitle("Atelier du jeu du pendu")
 
 
-def redessiner():
-  _.redraw()
-
-
-def dessinerPartieCorps(partie):
-  _.drawBodyPart(partie)
-
-
-def effacer():
-  _.clear()
-
-
-def afficher(text):
-  _.display(text)
-
-
-def effacerEtAfficher(text):
-  _.clearAndDisplay(text)
-
-
-def notifier(text):
-  _.alert(text)
-
-
-def demander(text):
-  return _.confirm(text)
+redessiner = _.redraw
+dessinerPartieCorps = _.drawBodyPart
+effacer = _.clear
+afficher = _.display
+effacerEtAfficher = _.clearAndDisplay
+divulguerMotSecret =  _.discloseSecretWord
+notifier = _.alert
+demander = _.confirm

@@ -4,11 +4,11 @@ import sys
 sys.path.append(".")
 from workshop.fr.h import *
 
-MONTRER_MOT_SECRET = VRAI
+DIVULGUER_MOT_SECRET = VRAI
 
 """
 Quelques variables vont être gérées par l'élève. Leur nom est libre.
-Peut être omis, vu que 'raz(…)' va être appelé avant utilisation
+Peut être omis, vu que 'renitialiser(…)' va être appelé avant utilisation
 de ces variables.
 """
 bonnesPioches = ""
@@ -39,7 +39,7 @@ def majCorps(*args):
 Réinitialiser les variables et l'affichage pour une nouvelle partie et
 retourner le mot secret.
 """
-def reinitialiser(suggestion,motAuHasard):
+def raz(suggestion,motAuHasard):
   global bonnesPioches,nbErreurs
 
   motSecret = choisirMot(suggestion,motAuHasard)

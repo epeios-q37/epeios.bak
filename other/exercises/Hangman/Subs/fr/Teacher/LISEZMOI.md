@@ -281,6 +281,12 @@ def majCorps(nombreErreurs):
   dessinerPartieCorps(PARTIES_CORPS[nombreErreurs-1])
 ```
 
+## Exercice *c*
+
+## Particularités
+
+Selon la solution retenue dans l'exercice précédent, on se basera sur la constante `P_NOMBRE` pour 
+
 ## Autres exercices
 
 La partie des notices enseignant et élèves concernant ces exercices sont en cours d'élaboration.

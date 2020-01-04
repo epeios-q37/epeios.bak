@@ -30,7 +30,7 @@ def choisirMot():
 go(globals())
 ```
 
-La variable booléenne `MONTRER_MOT_SECRET` permet de configurer le jeu pour qu'il affiche le mot à deviner. Sans cette possibilité, il serait compliqué de tester le jeu pour vérifier s'il fonctionne correctement.  On donnera à cette variable la valeur `VRAI` (ou `True`) tout au long du développement et de la mise au point du jeu, et `FAUX` (ou `False`) une fois que le jeu sera au point, pour que le mot à deviner ne soit plus affiché.
+La variable booléenne `DIVULGUER_MOT_SECRET` permet de configurer le jeu pour qu'il affiche le mot à deviner. Sans cette possibilité, il serait compliqué de tester le jeu pour vérifier s'il fonctionne correctement.  On donnera à cette variable la valeur `VRAI` (ou `True`) tout au long du développement et de la mise au point du jeu, et `FAUX` (ou `False`) une fois que le jeu sera au point, pour que le mot à deviner ne soit plus affiché.
 
 *Nota* : lancer l'exécution de ce fichier en l'état provoquera l'affichage d'un message d'erreur.
 
@@ -271,7 +271,7 @@ Sachant que :
 
 ### Pseudo-code
 
-> Mettre une chaîne de caractères vide `masque` 
+> Mettre une chaîne de caractères vide dans `masque` 
 > 
 > Pour `lettre` étant chaque lettre dans `mot`  
 > &nbsp;&nbsp;Si `lettre` est dans `pioches`  
@@ -362,6 +362,12 @@ P_VISAGE        # pour dessiner la visage.
 
 ## Exercice *g*
 
+### Objectif
+
+Modifier le code de la fonction `majCorps` de façon à ce que le visage soit dessiné en même temps que le dernier membre, pour indiquer que la partie est perdue.
+
+Utiliser la constante `P_AMOUNT` qui contient le nombre de parties du corps.
+
 ### Pseudo-code
 
 > Dessiner la partie du corps correspondant à `nombreErreurs`
@@ -369,11 +375,19 @@ P_VISAGE        # pour dessiner la visage.
 > Si `nombreErreur` supérieur au nombre d'erreurs autorisées  
 > &nbsp;&nbsp;Dessiner le visage
 
+### Aperçu
+
+Le même que pour l'exercice précédent.
+
+### Tests
+
+Reprendre les tests de l'exercice précédent, et vérifier qu'au lieu d'être dessiné à part, le visage est dessiné en même temps que la dernière partie du corps.
+
 ## Exercice *h*
 
 ### Pseudo-code
 
-#### `reinitialiser`
+#### `raz`
 
 > initialiser les variables globales (voir fonction suivante)
 >

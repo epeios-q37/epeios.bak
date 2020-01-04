@@ -4,7 +4,7 @@ import sys
 sys.path.append(".")
 from workshop.en.e import *
 
-SHOW_SECRET_WORD = TRUE
+DISCLOSE_SECRET_WORD = TRUE
 
 
 def pickWord(*args):

@@ -4,14 +4,13 @@ import sys
 sys.path.append(".")
 from workshop.en.h import *
 
-SHOW_SECRET_WORD = TRUE
+DISCLOSE_SECRET_WORD = TRUE
 
 """
 Some variables are now handled by the student. Names are free.
 Can be omitted, as 'reset(…)' will be call before the variables
 will be used.
 """
-secretWord = ""
 goodGuesses = ""
 errorsAmount = 0
 
@@ -40,7 +39,7 @@ Reset the variables and the display for a new round and
 return the secret word.
 """
 def reset(suggestion,randomWord):
-  global secretWord,goodGuesses,errorsAmount
+  global goodGuesses,errorsAmount
 
   secretWord = pickWord(suggestion,randomWord)
   goodGuesses = ""
@@ -61,7 +60,7 @@ why this is a problem.
 If 'guess' in 'word', must update the mask, otherwise
 must update the drawing of the body.
 """
-def handleGuess(guess):
+def handleGuess(guess,secretWord):
   global goodGuesses,errorsAmount
 
   if isLetterInWord(guess,secretWord): # Test is not mandatory

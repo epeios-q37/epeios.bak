@@ -4,7 +4,7 @@ import sys
 sys.path.append(".")
 from workshop.en.g import *
 
-SHOW_SECRET_WORD = TRUE
+DISCLOSE_SECRET_WORD = TRUE
 
 """
 For the sake of simplicity, the functions developed by the student in the

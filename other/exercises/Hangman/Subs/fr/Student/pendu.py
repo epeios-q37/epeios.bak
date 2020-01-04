@@ -1,6 +1,6 @@
 from workshop.fr.a import *
 
-MONTRER_MOT_SECRET = VRAI
+DIVULGUER_MOT_SECRET = VRAI
 
 def choisirMot():
 

@@ -4,7 +4,7 @@ import sys
 sys.path.append(".")
 from workshop.fr.g import *
 
-MONTRER_MOT_SECRET = VRAI
+DIVULGUER_MOT_SECRET = VRAI
 
 """
 Á des fins de simplification, les fonctions développées par l'étudiant dans les

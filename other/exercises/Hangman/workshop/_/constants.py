@@ -45,7 +45,7 @@ UF_ASUBMIT = "ASubmit"
 UF_ARESTART = "ARestart"
 
 # User variables.
-UV_SHOW_SECRET_WORD = "ShowSecretWord"
+UV_DISCLOSE_SECRET_WORD = "DiscloseSecretWord"
 
 # User classes
 UC_HANGMAN = "Hangman"

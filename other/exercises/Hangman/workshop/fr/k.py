@@ -22,55 +22,12 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
-
-import sys
-sys.path.append("workshop/_")
-
-import educ as _
-
-from workshop._._ import *
+ 
+import workshop._.K as workshop
+from workshop.fr._ import *
 
 
-class Core(_.Core):
-  def __init__(self,dom):
-    _.Core.__init__(self,dom,ucHangman()())
+def go(globals):
+  workshop.main(lambda dom: workshop.Core(dom),globals,USER_ITEM_LABELS)
 
 
-def _reset(hangman,ufunction):
-  suggestion = preBaseReset()
-
-  try:
-    secretWord = ufunction(hangman,suggestion,getRandomWord())
-  except TypeError:
-    secretWord = ufunction(hangman,suggestion,getRandomWord(),getSecretWord())
-    
-  postBaseReset(secretWord,None)
-
-
-def _acConnect(core):
-  show()
-  _reset(core.userObject,ufAConnect())
-
-
-def _acSubmit(core,dom,id):
-  dom.addClass(id,"chosen")
-
-  try:
-    ufASubmit()(core.userObject,id.lower(),getSecretWord())
-  except TypeError:
-    ufASubmit()(core.userObject,id.lower())
-
-
-
-def _acRestart(core):
-  _reset(core.userObject,ufARestart())
-
-
-def main(callback,userFunctions,userFunctionLabels):
-  mainBase(callback,globals(),
-  (
-    UC_HANGMAN,
-    UF_ACONNECT,
-    UF_ASUBMIT,
-    UF_ARESTART,
-  ),userFunctions,userFunctionLabels)

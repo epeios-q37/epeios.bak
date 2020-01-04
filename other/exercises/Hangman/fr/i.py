@@ -4,7 +4,7 @@ import sys
 sys.path.append(".")
 from workshop.fr.i import *
 
-MONTRER_MOT_SECRET = VRAI
+DIVULGUER_MOT_SECRET = VRAI
 
 
 def choisirMot(*args):
@@ -29,16 +29,12 @@ Le nom de la classe doit être 'Pendu',
 mais le nom des variables et des méthodes est libre.
 """
 class Pendu:
-  def reinitialiser(self,suggestion,motAuHasard):
-#    self.motSecret = choisirMot(suggestion,motAuHasard)
+  def raz(self):
     self.bonnesPioches = ""
     self.nbErreurs = 0
-    return choisirMot(suggestion,motAuHasard)
 
   def __init__(self):
-#    self.motSecret = ""
-    self.bonnesPioches = ""
-    self.nbErreurs = 0
+    self.raz()
     
   """
   Mettre à jour le nombre d'erreurs ou les bonnes pioches selon
@@ -59,8 +55,9 @@ class Pendu:
 Pareil que pour le précédent exercice,
 sauf que l'on utilise un objet.
 """
-def reinitialiser(pendu,suggestion,motAuHasard):
-  motSecret = pendu.reinitialiser(suggestion,motAuHasard)
+def raz(pendu,suggestion,motAuHasard):
+  pendu.raz(suggestion,motAuHasard)
+  motSecret = choisirMot(suggestion,motAuHasard)
   print(motSecret)
   effacerEtAfficher(donnerMasque(motSecret,""))
 
