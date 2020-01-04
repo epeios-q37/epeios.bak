@@ -26,8 +26,7 @@ def donnerMasque(*args):
     
 
 """
-Utilisation de la version alternative (pas obligatoire).
-'P_VISAGE' est volontairement occulté (voir fonction suivante).
+Version alternative utilisant un tuple.
 """
 PARTIES_CORPS = (
   P_TETE,
@@ -36,21 +35,16 @@ PARTIES_CORPS = (
   P_BRAS_DROIT,
   P_PIED_GAUCHE,
   P_PIED_DROIT,
-#  P_VISAGE
+  P_VISAGE
 )
 
 
 """
 - 'nbErreurs': nombre d'erreurs.
 Dessiner la partie du corps correspondant au nombre d'erreurs.
-Lorsque la dernière partie du corps est dessinée, le visage ('P_VISAGE') doit
-également être dessiné.
 """
 def majCorps(nombreErreurs):
   dessinerPartieCorps(PARTIES_CORPS[nombreErreurs-1])
-
-  if nombreErreurs >= len(PARTIES_CORPS):
-    dessinerPartieCorps(P_VISAGE)
 
 
 go(globals())

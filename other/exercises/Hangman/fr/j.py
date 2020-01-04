@@ -2,7 +2,7 @@
 
 import sys
 sys.path.append(".")
-from workshop.fr.i import *
+from workshop.fr.j import *
 
 DIVULGUER_MOT_SECRET = VRAI
 
@@ -29,23 +29,20 @@ Le nom de la classe doit être 'Pendu',
 mais le nom des variables et des méthodes est libre.
 """
 class Pendu:
-  def raz(self,suggestion,motAuHasard):
-    self.motSecret = choisirMot(suggestion,motAuHasard)
+  def raz(self):
     self.bonnesPioches = ""
     self.nbErreurs = 0
 
   def __init__(self):
-    self.motSecret = ""
-    self.bonnesPioches = ""
-    self.nbErreurs = 0
+    self.raz()
     
   """
   Mettre à jour le nombre d'erreurs ou les bonnes pioches selon
   que 'pioche' est correct ou non.
   Si 'pioche' est bon, retourner VRAI, sinon retourner FAUX.
   """
-  def traiterEtTesterPioche(self,pioche):
-    if isLetterInWord(pioche,self.motSecret):
+  def traiterEtTesterPioche(self,pioche,motSecret):
+    if isLetterInWord(pioche,motSecret):
       if not isLetterInWord(pioche,self.bonnesPioches):
         self.bonnesPioches += pioche
       return VRAI
@@ -60,19 +57,19 @@ sauf que l'on utilise un objet.
 """
 def raz(pendu,suggestion,motAuHasard):
   pendu.raz(suggestion,motAuHasard)
-  print(pendu.motSecret)
-  effacerEtAfficher(donnerMasque(pendu.motSecret,""))
+  motSecret = choisirMot(suggestion,motAuHasard)
+  print(motSecret)
+  effacerEtAfficher(donnerMasque(motSecret,""))
 
-  if DIVULGUER_MOT_SECRET:
-    divulguerMotSecret( pendu.motSecret )
+  return motSecret
   
 
 """
 Idem.
 """
-def traiterPioche(pendu,pioche):
-  if pendu.traiterEtTesterPioche(pioche,pendu.motSecret):
-    effacerEtAfficher(donnerMasque(pendu.motSecret,pendu.bonnesPioches))
+def traiterPioche(pendu,pioche,motSecret):
+  if pendu.traiterEtTesterPioche(pioche,motSecret):
+    effacerEtAfficher(donnerMasque(motSecret,pendu.bonnesPioches))
   else:
     majCorps(pendu.nbErreurs)
 

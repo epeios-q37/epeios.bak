@@ -4,7 +4,7 @@ while :
 do
   echo
 
-  echo -n -e "\nChoisissez l'exercice à lancer ('a'…'k'): "
+  echo -n -e "\nChoisissez l'exercice à lancer ('a'…'l'): "
 
   read DEMO
 

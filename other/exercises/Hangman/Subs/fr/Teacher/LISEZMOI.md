@@ -281,7 +281,7 @@ def majCorps(nombreErreurs):
   dessinerPartieCorps(PARTIES_CORPS[nombreErreurs-1])
 ```
 
-## Exercice *c*
+## Exercice *g*
 
 ## Particularités
 

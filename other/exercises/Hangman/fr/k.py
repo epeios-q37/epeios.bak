@@ -2,7 +2,7 @@
 
 import sys
 sys.path.append(".")
-from workshop.fr.j import *
+from workshop.fr.k import *
 
 DIVULGUER_MOT_SECRET = VRAI
 
@@ -11,8 +11,12 @@ def choisirMot(*args):
   return workshop.rfPickWord(*args)
 
 
-def lettreEstDansMot(*args):
+def isLetterInWord(*args):
     return workshop.rfIsLetterInWord(*args)
+
+
+def donnerMasque(*args):
+    return workshop.rfGetMask(*args)
 
 
 def majCorps(*args):
@@ -20,31 +24,29 @@ def majCorps(*args):
 
 
 """
-En premier lieu, ne pas traiter la variable membre
-'enCours' de la class 'Pendu'.
-"""
-
-"""
-Ajouter le traitement de la variable 'enCours'.
-Ne concerne que les méthodes 'raz(…)'
-et '__init__(…)'.
+Allons-y avec la programmation orientée objet.
+Le nom de la classe doit être 'Pendu',
+mais le nom des variables et des méthodes est libre.
 """
 class Pendu:
   def raz(self,suggestion,motAuHasard):
     self.motSecret = choisirMot(suggestion,motAuHasard)
     self.bonnesPioches = ""
     self.nbErreurs = 0
-    self.enCours = VRAI
 
   def __init__(self):
     self.motSecret = ""
     self.bonnesPioches = ""
     self.nbErreurs = 0
-    self.enCours = FAUX
     
+  """
+  Mettre à jour le nombre d'erreurs ou les bonnes pioches selon
+  que 'pioche' est correct ou non.
+  Si 'pioche' est bon, retourner VRAI, sinon retourner FAUX.
+  """
   def traiterEtTesterPioche(self,pioche):
-    if lettreEstDansMot(pioche,self.motSecret):
-      if not lettreEstDansMot(pioche,self.bonnesPioches):
+    if isLetterInWord(pioche,self.motSecret):
+      if not isLetterInWord(pioche,self.bonnesPioches):
         self.bonnesPioches += pioche
       return VRAI
     else:
@@ -52,83 +54,26 @@ class Pendu:
       return FAUX
 
 
-
 """
-Ajouter le test.
-"""
-def donnerMasqueEtTesterSiVictoire(mot,pioches):
-  masque = ""
-  victoire = VRAI
-
-  for lettre in mot:
-    if lettreEstDansMot(lettre,pioches):
-      masque += lettre
-    else:
-      masque += "_"
-      victoire = FAUX
-
-  return masque,victoire
-
-
-"""
-Ajouter le test.
-"""
-def majCorpsEtTesterSiDefaite(nbErreurs):
-  majCorps(nbErreurs)
-
-  return nbErreurs >= ( P_NOMBRE - 1 )
-
-
-"""
-Ajouter le test.
-"""
-def traiterPioche(pendu,pioche):
-  if pendu.traiterEtTesterPioche(pioche,pendu.motSecret):
-    masque,victoire = donnerMasqueEtTesterSiVictoire(pendu.motSecret,pendu.bonnesPioches)
-    effacerEtAfficher(masque)
-    if victoire and pendu.enCours:
-      notifier("Tu as gagné ! Félicitations !")
-      pendu.enCours = FAUX
-  elif pendu.enCours and majCorpsEtTesterSiDefaite(pendu.nbErreurs):
-    notifier("\nPerdu !\nErreurs : {} ; bonnes pioches : {}.\n\nLe mot à deviner était : '{}'.".format(pendu.nbErreurs,len(pendu.bonnesPioches),pendu.motSecret))
-    pendu.enCours = FAUX
-
-
-"""
-Modifier pour utiliser 'donnerMasqueEtTesterSiVictoire(…)'.
+Pareil que pour le précédent exercice,
+sauf que l'on utilise un objet.
 """
 def raz(pendu,suggestion,motAuHasard):
   pendu.raz(suggestion,motAuHasard)
   print(pendu.motSecret)
-  effacerEtAfficher(donnerMasqueEtTesterSiVictoire(pendu.motSecret,"")[0])
+  effacerEtAfficher(donnerMasque(pendu.motSecret,""))
 
   if DIVULGUER_MOT_SECRET:
-    divulguerMotSecret(pendu.motSecret)
-
-
-
-"""
-Appelé lors d'une nouvelle connexion.
-"""
-def AConnexion(pendu,suggestion,motAuHasard):
-  return raz(pendu,suggestion,motAuHasard)
-
+    divulguerMotSecret( pendu.motSecret )
+  
 
 """
-Appellé lors d'une nouvelle pioche.
-NOTA: La lettre piochée sera désactivée sur le clavier.
+Idem.
 """
-def APioche(pendu,pioche):
-  traiterPioche(pendu,pioche)
-
-
-"""
-Appelé lorsqu'une nouvelle partie est relancée.
-"""
-def ARelance(pendu,suggestion,motAuHasard):
-  if pendu.enCours:
-    notifier("\nErreurs : {} ; bonnes pioches : {}.\n\nLe mot à deviner était : '{}'.".format(pendu.nbErreurs,len(pendu.bonnesPioches),pendu.motSecret))
-
-  raz(pendu,suggestion,motAuHasard)
+def traiterPioche(pendu,pioche):
+  if pendu.traiterEtTesterPioche(pioche,pendu.motSecret):
+    effacerEtAfficher(donnerMasque(pendu.motSecret,pendu.bonnesPioches))
+  else:
+    majCorps(pendu.nbErreurs)
 
 go(globals())

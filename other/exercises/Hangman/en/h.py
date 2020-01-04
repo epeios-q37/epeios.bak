@@ -6,20 +6,9 @@ from workshop.en.h import *
 
 DISCLOSE_SECRET_WORD = TRUE
 
-"""
-Some variables are now handled by the student. Names are free.
-Can be omitted, as 'reset(…)' will be call before the variables
-will be used.
-"""
-goodGuesses = ""
-errorsAmount = 0
-
-"""
-NOTA: the four folowing functions are not called outside this file.
-"""
 
 def pickWord(*args):
-  return workshop.rfPickWord(*args)
+    return workshop.rfPickWord(*args)
 
 
 def isLetterInWord(*args):
@@ -30,45 +19,31 @@ def getMask(*args):
     return workshop.rfGetMask(*args)
 
 
-def updateBody(*args):
-  return workshop.rfUpdateBody(*args)
+"""
+"P_FACE' is deliberately omitted (see next function).
+"""
+BODY_PARTS = (
+  P_HEAD,
+  P_TRUNK,
+  P_LEFT_ARM,
+  P_RIGHT_ARM,
+  P_LEFT_LEG,
+  P_RIGHT_LEG,
+#  P_FACE 
+)
 
 
 """
-Reset the variables and the display for a new round and
-return the secret word.
+- 'errorsAmount': the amount of errors.
+Draw the part of the body corresponding to the amount of errors.
+When the last part of the body is drawn, the face ('P_FACE') must
+also be drawn.
 """
-def reset(suggestion,randomWord):
-  global goodGuesses,errorsAmount
+def updateBody(errorsAmount):
+  drawBodyPart(BODY_PARTS[errorsAmount-1])
 
-  secretWord = pickWord(suggestion,randomWord)
-  goodGuesses = ""
-  errorsAmount = 0
-  print(secretWord)
-  eraseAndDisplay(getMask(secretWord,""))
+  if errorsAmount >= len(BODY_PARTS):
+    drawBodyPart(P_FACE)
 
-  return secretWord
-
-
-"""
-N.B.: NOT THREAD-SAFE!!!
-Multiple instances can be launched to show
-why this is a problem.
-"""
-"""
-- 'guess': the letter chosen by the player,
-If 'guess' in 'word', must update the mask, otherwise
-must update the drawing of the body.
-"""
-def handleGuess(guess,secretWord):
-  global goodGuesses,errorsAmount
-
-  if isLetterInWord(guess,secretWord): # Test is not mandatory
-    if not isLetterInWord(guess,goodGuesses):
-      goodGuesses += guess
-      eraseAndDisplay(getMask(secretWord,goodGuesses))
-  else:
-    errorsAmount += 1
-    updateBody(errorsAmount)
 
 go(globals())

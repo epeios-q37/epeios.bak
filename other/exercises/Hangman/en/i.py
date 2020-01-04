@@ -6,6 +6,19 @@ from workshop.en.i import *
 
 DISCLOSE_SECRET_WORD = TRUE
 
+"""
+Some variables are now handled by the student. Names are free.
+Can be omitted, as 'reset(…)' will be call before the variables
+will be used.
+"""
+goodGuesses = ""
+errorsAmount = 0
+
+
+"""
+NOTA: the four folowing functions are not called outside this file.
+"""
+
 
 def pickWord(*args):
   return workshop.rfPickWord(*args)
@@ -24,38 +37,15 @@ def updateBody(*args):
 
 
 """
-Let's introduce object-oriented programmation.
-Class name must be 'Hangman',
-but variables and methods name are free.
+Reset the variables and the display for a new round and
+return the secret word.
 """
-class Hangman:
-  def reset(self):
-    self.goodGuesses = ""
-    self.errorsAmount = 0
+def reset(suggestion,randomWord):
+  global goodGuesses,errorsAmount
 
-  def __init__(self):
-    self.reset()
-
-  """
-  Update the good guesses ot the amount of errors wether 'guess' is
-  good ot not. Return TRUE if 'guess' is good, FALSE otherwise.
-  """
-  def handleAndTestGuess(self,guess,secretWord):
-    if isLetterInWord(guess,secretWord):
-      if not isLetterInWord(guess,self.goodGuesses):
-        self.goodGuesses += guess
-      return TRUE
-    else:
-      self.errorsAmount += 1
-      return FALSE
-
-
-"""
-Same as previous exercise, but this time we use an object. 
-"""
-def reset(hangman,suggestion,randomWord):
-  hangman.reset()
   secretWord = pickWord(suggestion,randomWord)
+  goodGuesses = ""
+  errorsAmount = 0
   print(secretWord)
   eraseAndDisplay(getMask(secretWord,""))
 
@@ -63,12 +53,24 @@ def reset(hangman,suggestion,randomWord):
 
 
 """
-Idem.
+N.B.: NOT THREAD-SAFE!!!
+Multiple instances can be launched to show
+why this is a problem.
 """
-def handleGuess(hangman,guess,secretWord):
-  if hangman.handleAndTestGuess(guess):
-    eraseAndDisplay(getMask(secretWord,hangman.goodGuesses))
+"""
+- 'guess': the letter chosen by the player,
+If 'guess' in 'word', must update the mask, otherwise
+must update the drawing of the body.
+"""
+def handleGuess(guess,secretWord):
+  global goodGuesses,errorsAmount
+
+  if isLetterInWord(guess,secretWord): # Test is not mandatory
+    if not isLetterInWord(guess,goodGuesses):
+      goodGuesses += guess
+      eraseAndDisplay(getMask(secretWord,goodGuesses))
   else:
-    updateBody(hangman.errorsAmount)
+    errorsAmount += 1
+    updateBody(errorsAmount)
 
 go(globals())
