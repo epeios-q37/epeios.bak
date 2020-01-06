@@ -8,6 +8,10 @@ DISCLOSE_SECRET_WORD = TRUE
 
 """
 Some variables are now handled by the student. Names are free.
+"""
+
+
+"""
 Can be omitted, as 'reset(…)' will be call before the variables
 will be used.
 """

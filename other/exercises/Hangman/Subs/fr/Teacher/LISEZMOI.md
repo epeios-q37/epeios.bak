@@ -75,7 +75,7 @@ Pour revenir au code source, on fermera l'onglet (ou la fenêtre) qui s'est ouve
 
 ## Les exercices
 
-Les informations données ici viennent en complément de celles indiquées dans le fichier `Student/LISEZMOI.html`.
+Les informations données ici viennent en complément de celles indiquées dans le fichier `Student/LISEZMOI.html`, qui est la notice destinée aux étudiants.
 
 **ATTENTION** : ne pas oublier de modifier la ligne `from workshop.fr.… import *` en fonction de l'exercice.
 
@@ -97,6 +97,10 @@ def choisirMot():
   return "arbre"
 ```
 
+#### Remarques
+
+Veiller à ce que le rôle l'indentation soit bien comprise par les étudiants ; insisté que, bien que l'indentation joue un rôle particulier en *Python*, son utilisation est indispensable avec n'importe quel langage pour une bonne compréhension du code.
+
 ### Exercice *b*
 
 #### Particularités
@@ -110,7 +114,7 @@ def choisirMot():
 - opérateur de comparaison ;
 - instruction conditionnelles.
 
-#### Solutions
+#### Solution
 
 ```python
 def choisirMot(suggestion):
@@ -120,11 +124,11 @@ def choisirMot(suggestion):
     return "arbre"
 ```
 
-Une fois que cette solution aura été trouvée, on pourra proposer de remplacer `if len(suggestion) != 0:` par `if len(suggestion):`, puis par `if suggestion:` en soulignant que c'est propre à *Python* (et à certains autres langages).
+#### Remarque
+
+Une fois que la solution ci-dessus trouvée, on pourra proposer de remplacer `if len(suggestion) != 0:` par `if len(suggestion):`, puis par `if suggestion:`, en soulignant que c'est propre à *Python* (et à certains autres langages).
 
 ### Exercice *c*
-
-La seconde solution est optionnelle, et on pourra y revenir plus tard.
 
 #### Particularités
 
@@ -151,7 +155,7 @@ def choisirMot(suggestion,motAuHasard):
     return motAuHasard
 ```
 
-seconde version :
+Seconde version :
 
 ```python
 from random import randint
@@ -168,6 +172,10 @@ def choisirMot(suggestion):
   else:
     return DICTIONNAIRE[randint(0, len(DICTIONNAIRE)-1)]
 ```
+
+#### Remarque
+
+La seconde solution est optionnelle. On pourra y revenir plus tard, une fois les *tuple* abordés. Dans ce cas, ne pas oublier de remettre `from workshop.fr.c import *`…
 
 ### Exercice *d*
 
@@ -189,6 +197,8 @@ def lettreEstDansMot(lettre,mot):
     return False
 ```
 
+#### Remarque
+
 Une fois cette solution trouvée, on pourra proposer la solution suivante, en soulignant qu'elle est propre à *Python* (et certains autres langages).
 
 ```python
@@ -204,7 +214,7 @@ def lettreEstDansMot(lettre,mot):
 - concaténation de chaînes de caractères ;
 - éventuellement instruction conditionnelle ternaire.
 
-#### Solutions
+#### Solution
 
 ```python
 def donnerMasque(mot,pioches):
@@ -218,6 +228,8 @@ def donnerMasque(mot,pioches):
 
     return masque
 ```
+
+#### Remarque
 
 Une fois cette solution trouvée, on pourra proposer de remplacer `masque = masque + …` par `masque += …`.
 
@@ -242,7 +254,7 @@ masque += lettre if lettreEstDansMot(lettre,pioches) else "_"
 
 Instructions conditionnelles multiples (équivalent du *switch…* *case…* d'autres langages).
 
-#### Solutions
+#### Solution
 
 ```python
 def majCorps(nombreErreurs):
@@ -263,6 +275,8 @@ def majCorps(nombreErreurs):
 
   dessinerPartieCorps(partieCorps)
 ```
+
+#### Remarque
 
 Pour éviter une erreur lorsque cette fonction est appelée avec un nombre d'erreur dépassant le maximum possible (i.e. le nombre de parties de corps disponibles), on testera ce nombre avant de dessiner. La constante `P_NOMBRE` contient le nombre de parties de corps disponibles.
 
@@ -304,6 +318,8 @@ PARTIES_CORPS = (
 def majCorps(nombreErreurs):
   dessinerPartieCorps(PARTIES_CORPS[nombreErreurs-1])
 ```
+
+#### Remarques
 
 Dans un second temps, pour éviter une erreur lors du dépassement du nombre d'erreurs autorisées, on remplacera :
 
@@ -353,7 +369,9 @@ def majCorps(nombreErreurs):
     dessinerPartieCorps(P_VISAGE)
 ```
 
-Variante (le second test est imbriqué dans le premier):
+#### Remarque
+
+On peut également considéré la variante (le second test est imbriqué dans le premier) :
 
 ```python
 …
@@ -366,7 +384,65 @@ def majCorps(nombreErreurs):
       dessinerPartieCorps(P_VISAGE)
 ```
 
+Cela permet, dans certains cas, d'éviter un test inutile. Cependant, ce cas se présentant rarement, l'intérêt est limité.
+
+### Exercice *i*
+
+#### Particularités
+
+- Distinction variables globales/locales ;
+- distinction entre une variable contenant une chaîne de caractères, et une variable contenant un entier ;
+- problématique [*thread-safety*](https://fr.wikipedia.org/wiki/Thread_safety).
+
+#### Solution
+
+```python
+bonnesPioches = ""
+nbErreurs = 0
+
+def raz(suggestion,motAuHasard):
+  global bonnesPioches,nbErreurs
+
+  bonnesPioches = ""
+  nbErreurs = 0
+
+  motSecret = choisirMot(suggestion,motAuHasard)
+
+  afficher(donnerMasque(motSecret,""))
+
+  return motSecret
+
+
+def traiterPioche(pioche,motSecret):
+  global bonnesPioches,nbErreurs
+
+  if lettreEstDansMot(pioche,motSecret):
+    if not lettreEstDansMot(pioche,bonnesPioches):
+      bonnesPioches += pioche
+      afficher(donnerMasque(motSecret,bonnesPioches))
+  else:
+    nbErreurs += 1
+    majCorps(nbErreurs)
+```
+
+#### Remarques
+
+Les deux premières lignes sont inutiles, la fonction `raz(…)` étant appelée avant toute utilisation d'une des deux variables. Cependant, c'est une bonne pratique pour la clarté du code (permet de repérer rapidement les variables globales).
+
+Veiller à ce que les élèves ne soient pas bloqués par l'absence de la ligne `global bonnesPioches,nbErreurs` dans les deux fonctions.
+
+Dans un premier temps, le test `if not lettreEstDansMot(pioche,bonnesPioches):` pourra être omis.
+
+Le paramètre `motAuHasard` de la fonction `raz(…)` ne sera peut-être pas utilisé ; cela dépendra de la manière dont la fonction `motAuHasard(…)`  aura été codée dans les précédents exercices.
+
+En lançant deux ou plusieurs instances simultanées, du fait que les variables `bonnesPioches` et `nbErreurs` sont communes à toutes les instances, il sera facile de montrer que les actions effectuées dans une instance influent les autres, notamment :
+
+- des lettres piochées disparaissent ou apparaissent de manière inopinée ;
+- le pendu est dessiné d'une manière inconsistante.
+
+À noter que ces problèmes de *thread-safety* ne sont **pas** présents dans les exercices précedents, car les variables `bonnesPioches` et `nbErreurs` sont gérés par le système en tenant compte de cette problématique.
+
 
 ## Autres exercices
 
-La partie des notices enseignant et élèves concernant ces exercices sont en cours d'élaboration.
+La partie des notices enseignant et élèves concernant ces exercices sont en cours d'élaboration, et devraient être disponibles d'ici une semaine ou deux.

@@ -49,13 +49,13 @@ La variable booléenne `DIVULGUER_MOT_SECRET` permet de configurer le jeu pour q
 ### Tests
 
 - Cliquer sur le bouton `Recommencer` et vérifier que les deux champs affichent le mot retourné par la fonction `choisirMot` ;
-- changer le contenu du champs de saisie, cliquer sur le bouton `Recommencer`, et vérifier que les deux champs affiche le même mot que ci-dessus.
+- changer le contenu du champ de saisie, cliquer sur le bouton `Recommencer`, et vérifier que les deux champs affiche le même mot que ci-dessus.
 
 ## Exercice *b*
 
 ### Objectifs
 
-Offrir la possibilité de définir le mot à deviner grâce au champs de saisie. C'est-à-dire que, lorsqu'on va cliquer sur le bouton `Recommencer`, c'est le texte contenu dans le champs de saisie qui va être utilisé comme mot à deviner, et donc affiché dans les deux champs.
+Offrir la possibilité de définir le mot à deviner grâce au champ de saisie. C'est-à-dire que, lorsqu'on va cliquer sur le bouton `Recommencer`, c'est le texte contenu dans le champ de saisie qui va être utilisé comme mot à deviner, et donc affiché dans les deux champs.
 
 ### Préparation
 
@@ -77,7 +77,7 @@ go(globals())
 
 Sachant que :
 
-- `suggestion` est une chaîne de caractères contenant ce qui a été saisi dans le champs de saisie  ;
+- `suggestion` est une chaîne de caractères contenant ce qui a été saisi dans le champ de saisie  ;
 
 modifier le code de la fonction `choisirMot` pour que :
 
@@ -97,14 +97,14 @@ Le même que pour l'exercice précédent.
 
 ### Tests
 
-- Lorsque l'on clique sur `Recommencer` alors que le champs de saisie est vide, c'est toujours le même mot qui doit être affiché dans les deux champs ;
-- lorsque l'on clique sur `Recommencer` alors que le champs de saisie n'est **pas** vide, alors c'est le contenu de ce champs qui doit être affiché dans les deux champs.
+- Lorsque l'on clique sur `Recommencer` alors que le champ de saisie est vide, c'est toujours le même mot qui doit être affiché dans les deux champs ;
+- lorsque l'on clique sur `Recommencer` alors que le champ de saisie n'est **pas** vide, alors c'est le contenu de ce champ qui doit être affiché dans les deux champs.
 
 ## Exercice *c*
 
 ### Objectifs
 
-Au lieu de toujours retourner le même mot lorsque le champs de saisie est vide,  on va retourner un mot au hasard fournit par le système.
+Au lieu de toujours retourner le même mot lorsque le champ de saisie est vide, on va retourner un mot au hasard fournit par le système.
 
 ### Préparation
 
@@ -126,7 +126,7 @@ go(globals())
 
 Sachant que :
 
-- `suggestion` est le contenu du champs de saisie ;
+- `suggestion` est le contenu du champ de saisie ;
 - `motAuHasard` est un mot choisi au hasard ;
 
 modifier la fonction `choisirMot` pour que :
@@ -147,7 +147,7 @@ Le même que pour l'exercice précédent.
 
 ### Tests
 
-Les mêmes que pour l'exercice précédent, sauf que, lorsque le champs de saisie est vide, ce ne sera pas toujours le même mot qui sera affiché. Il se peut qu'un même mot soit affiché deux fois (ou plus) à la suite, mais c'est rare.
+Les mêmes que pour l'exercice précédent, sauf que, lorsque le champ de saisie est vide, ce ne sera pas toujours le même mot qui sera affiché. Il se peut qu'un même mot soit affiché deux fois (ou plus) à la suite, mais c'est rare.
 
 ## Exercice *d*
 
@@ -443,4 +443,116 @@ Le même que pour l'exercice précédent.
 ### Tests
 
 Reprendre les tests de l'exercice précédent, et vérifier qu'au lieu d'être dessiné à part, le visage est dessiné en même temps que la dernière partie du corps.
+
+## Exercice *i*
+
+### Objectifs
+
+Gérer la lettre sélectionnée par le joueur, de manière à mettre à jour, soit le masque, soit le dessin du pendu en fonction de la présence ou de l'absence dans le mot secret de la lettre sélectionnée (piochée) par le joueur.
+
+### Préparation
+
+- Dans la première ligne, remplacer le `g` par un `h` ;
+- ajouter les lignes suivantes avant la dernière instruction du fichier :
+  - `bonnesPioches = ""`,
+  - `nbErreurs = 0`,
+  - `def raz(suggestion,motAuHasard):`,
+  - `def traiterPioche(pioche,motSecret):`.
+  
+```python
+from workshop.fr.h import *
+
+…
+
+
+def majCorps(nombreErreurs):    
+    …
+
+
+bonnesPioches = ""
+nbErreurs = 0
+
+
+def raz(suggestion,motAuHasard):
+
+
+def traiterPioche(pioche,motSecret):
+
+
+go(globals())
+```
+
+### Tâches
+
+- `bonnesPioches` est une **chaîne de caractères** globale qui contiendra les lettres sélectionnées par le joueur et qui sont contenues dans le mot secret ;
+- `nbErreurs` est un **entier** global qui contiendra le nombre de lettres sélectionnées par le joueurs et qui ne sont **pas** contenues dans le mot secret.
+
+#### Fonction `raz`
+
+Sachant que :
+- `suggestion` est le contenu du champ de saisie ;
+- `motAuHasard` est un mot choisi au hasard ;
+- cette fonction est appelée :
+  - à chaque nouvelle instance du jeu,
+  - à chaque fois que le joueur clique sur le bouton `Recommencer` pour recommencer une nouvelle partie,
+
+écrire le code de cette fonction pour :
+- réinitialiser les deux variables globales `bonnesPioches` et `nbErreurs` ;
+- stocker dans `motSecret` un nouveau mot secret, en utilisant l'une des fonctions développées précédemment ;
+- afficher le masque correspondant au mot stocké dans `motSecret` :
+  - en utilisant l'une des fonctions développées précédemment pour déterminer le masque,
+  - en utilisant la fonction `afficher` pour afficher le masque (lui passer en paramètre le masque en question) ;
+- retourner `motSecret`.
+
+Contrairement à `bonnesPioches` et `nbErreurs`, qui sont des variable **globales**, `motSecret` devra être une variable **locale**.
+
+Le dessin du pendu est effacé automatiquement lorsque l'on clique sur `Recommencer`.
+
+#### Fonction `traiterPioche`
+
+Sachant que :
+- `pioche` contient la lettre sélectionnée par le joueur ;
+- `motSecret` contient le mot à deviner tel que retourné par la fonction `raz(…)` ci-dessus ;
+
+écrire le code de cette fonctions pour :
+- si `pioche` est contenu dans `motSecret` :
+  - ajouter `pioche` dans la la variable globale `bonnePioches`,
+  - afficher le nouveau masque correspondant,
+- si `pioche` n'est **pas** contenu dans `motSecret` :
+  - incrémenter la variable globale `nbErreurs`,
+  - mettre à jour le dessin du pendu.
+
+Il faudra, bien entendu, utiliser les fonctions développées dans les précedents exercices.
+
+### Pseudo-code
+
+#### Fonction `raz`
+
+> Initialiser variables globales
+>
+> Choisir un nouveau mot à deviner
+> 
+> Afficher le masque correspondant à ce nouveau mot à deviner
+> 
+> Retourner ce nouveau mot à deviner
+
+#### Fonction `traiterPioche`
+
+> Si `pioche` est contenu dans `motSecret`  
+> &nbsp;&nbsp;Ajouter `pioche` à `bonnePioches`  
+> &nbsp;&nbsp;Afficher le nouveau masque  
+> Sinon  
+> &nbsp;&nbsp;Incrémenter `nbErreurs`  
+> &nbsp;&nbsp;Complèter le dessin du pendu
+
+### Aperçu
+
+Identique à celui de l'exercice précédent.
+
+### Tests
+
+Identiques à ceux de l'exercice précédent.
+
+
+
 
