@@ -206,9 +206,11 @@ function getLayoutHTML(xml, xsl) {
 }
 
 function prependLayout(id, xml, xsl) {
+/*    
 	element = getElement(id);
-
 	element.innerHTML = getLayoutHTML(xml, xsl) + element.innerHTML;
+*/
+    getElement(id).insertAdjacentHTML("afterbegin", getLayoutHTML(xml, xsl));
 }
 
 function setLayout(id, xml, xsl) {
@@ -216,9 +218,11 @@ function setLayout(id, xml, xsl) {
 }
 
 function appendLayout(id, xml, xsl) {
+/*
 	element = getElement(id);
-
 	element.innerHTML = element.innerHTML + getLayoutHTML(xml, xsl);
+*/
+    getElement(id).insertAdjacentHTML("beforeend", getLayoutHTML(xml, xsl));
 }
 
 function handleBooleanAttribute(element, name, flag) {
