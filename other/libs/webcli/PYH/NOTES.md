@@ -1,2 +1,2 @@
-# Notes concernant le module *Python* *edutk*
+# Notes concernant le module *Python* *webcli*
 

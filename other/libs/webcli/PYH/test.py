@@ -35,8 +35,9 @@ from webcli import *
 
 print("Hello!" )
 print("Hello,", input("What's your name? "), "!")
-print("Lest's play…","…REVERSI!!!",sep="\n")
-
+print("Lest's play",end="…")
+time.sleep(2)
+print(" REVERSI!","You play the cross (X)!",sep="\n\n")
 
 import random
 import itertools

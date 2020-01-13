@@ -35,22 +35,28 @@ head = """
  .vcenter-out, .hcenter { display: table; height: 100%; margin: auto;}
  .vcenter-in {display: table-cell; vertical-align: middle;}
  .hidden {display: none;}
+ input[type="text"] {border: none;}
+ input[type="text"]:disabled {background-color: transparent; color: inherit;}
 </style>
 """
 
 body = """
 <div class="vcenter-out">
 	<div class="vcenter-in">
-		<fieldset style="font-family: monospace;" id="Output"/>
+		<fieldset style="font-family: monospace;" id="Output" data-xdh-onevent="Focus"/>
 	</div>
 </div>
 """
 
 _print = ""
+_printBuffer = ""
 _printRead = threading.Lock()
 _printRead.acquire()
 _printWrite = threading.Lock()
 _printWrite.acquire()
+
+_flush = threading.Lock()
+_autoFlush = True
 
 _input = ""
 _inputRead = threading.Lock()
@@ -58,37 +64,52 @@ _inputRead.acquire()
 _inputWrite = threading.Lock()
 _inputWrite.acquire()
 
-def handleNewLines_(text):
+def handleSpecialChars_(text):
 	return text.replace('\n', "<br/>").replace(" ","&nbsp;")
 
+def flush_():
+	global _print, _printBuffer, _printRead, _printWrite
+	if _printBuffer:
+		_flush.acquire()
+		_printWrite.acquire()
+		_print = _printBuffer
+		_printBuffer = ""
+		_printRead.release()
+		_flush.release()
+
+def addToBuffer_(text):
+	global _printBuffer
+
+	text= str(text)
+
+	_printBuffer += handleSpecialChars_(html.escape(text))
+
+
+
 def print(*args, sep=" ", end="\n"):
-	global _print, _printRead, _printWrite
+	global _printBuffer, _printRead, _printWrite
 
 	first = True
-	text = ""
-
-	sep = handleNewLines_(sep)
 
 	for arg in args:
 		if first:
 			first = False
 		else:
-			text += sep
+			addToBuffer_(sep)
 
-		text += handleNewLines_(html.escape(arg))
+		addToBuffer_(arg)
 
-	text += handleNewLines_(end)
-
-	_printWrite.acquire()
-	_print = text
-	_printRead.release()
+	addToBuffer_(end)
 
 
 def input(prompt=""):
-	global _print, _printRead,_printWrite, _input, _inputRead,_inputWrite
+	global _print, _printRead,_printWrite, _input, _inputRead,_inputWrite, _autoFlush
+
+	_autoFlush = False
 
 	if prompt:
 		print(prompt,end="")
+		flush_()
 
 	result = ""
 	_printWrite.acquire()
@@ -104,15 +125,17 @@ def scrollToBottom_(dom):
 	dom.execute("window.scrollTo(0,document.getElementById('Output').scrollHeight);")
 
 def loop_(dom):
-	global _print, _printRead,_printWrite, _input, _inputRead,_inputWrite
+	global _print, _printRead,_printWrite, _input, _inputRead,_inputWrite,_autoFlush
 	cont = True
+	
+	_autoFlush = True
+
 	while cont:
 		_printRead.acquire()
 
 		if _print:
 			dom.appendLayout("Output", "<span>" + _print + "</span>")
-			if '<br/>' in _print:
-				scrollToBottom_(dom)
+			scrollToBottom_(dom)
 			_print = ""
 		else:
 			cont = False
@@ -135,21 +158,38 @@ def acSubmit(dom, id):
 	_inputWrite.acquire()
 	_input = dom.getContent("Input")
 	dom.disableElement("Input")
+	dom.removeAttribute("Input","data-xdh-onevent")
 	dom.removeAttribute("Input","id")
 	_inputRead.release()
 	loop_(dom)
 
+def acFocus(dom):
+	dom.focus("Input")
 
 callbacks = {
 	"": acConnect,
 	"Submit": acSubmit,
+	"Focus": acFocus,
 }
 
-class Loop (threading.Thread):
+class Atlas_(threading.Thread):
 	def __init__(self):
 		threading.Thread.__init__(self)
 
 	def run(self):
 		Atlas.launch(callbacks, None, head, "Blank")
 
-Loop().start()		
+Atlas_().start()
+
+class Flush_(threading.Thread):
+	def __init__(self):
+		threading.Thread.__init__(self)
+
+	def run(self):
+		while True:
+			time.sleep(.1)
+			if _autoFlush:
+				flush_()
+
+
+Flush_().start()
