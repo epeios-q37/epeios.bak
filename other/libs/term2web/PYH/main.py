@@ -2,7 +2,8 @@
 """
 MIT License
 
-Copyright (c) 2019 Claude SIMON (https://q37.info/s/rmnmqd49)
+Copyright (c) 2017 Hajime Nakagami<nakagami@gmail.com>
+Copyright (c) 2020 Claude SIMON (https://q37.info/s/rmnmqd49)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -23,21 +24,34 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-import sys,os
+import sys,os,time
 
-sys.path.append("./webcli.zip")
-sys.path.append("../webcli.zip")
+sys.path.append("./term2web")
 
 if ('Q37_XPP' in os.environ):
-  sys.path.append(os.path.join(os.environ["HOME"],"epeios/other/libs/webcli/PYH/webcli"))
+  sys.path.append(os.path.join(os.environ["HOME"],"epeios/other/libs/term2web/PYH/term2web"))
 
-from webcli import *
 
-print("Hello!" )
-print("Hello,", input("What's your name? "), "!")
-print("Lest's play",end="…")
-time.sleep(2)
+"""
+********************************************
+    If you comment following line out
+    by putting a # on the beginning,
+    the builtin 'input(…)' and 'print(…)'
+    will be used again.
+    Try it to see the difference.
+********************************************
+"""
+from term2web import *
+
+print("Hello!")
+print("Nice to meet you, ", input("What's your name? "), "!", sep="")
+time.sleep(1.5)
+print("Let's play",end="…")
+time.sleep(1.5)
 print(" REVERSI!","You play the cross (X)!",sep="\n\n")
+
+# Below code comes from:
+# https://gist.github.com/nakagami/7a7d799bd4bd4ad8fcea96135c4af179
 
 import random
 import itertools

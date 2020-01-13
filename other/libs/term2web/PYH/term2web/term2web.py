@@ -2,7 +2,7 @@
 """
 MIT License
 
-Copyright (c) 2019 Claude SIMON (https://q37.info/s/rmnmqd49)
+Copyright (c) 2020 Claude SIMON (https://q37.info/s/rmnmqd49)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -25,10 +25,17 @@ SOFTWARE.
 
 import os, sys, threading, time, html
 
+# Detecting 'Repl.it' environment.
+if ('HOME' in os.environ) and (os.environ['HOME'] == '/home/runner'):
+  os.environ["ATK"] = "REPLit"
+
+sys.path.append("./Atlas.zip")
+sys.path.append("../Atlas.zip")
+
 import atlastk as Atlas
 
 head = """
-<title>builtins overload</title>
+<title>'term2web' for Python</title>
 <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAMFBMVEUEAvyEhsxERuS8urQsKuycnsRkYtzc2qwUFvRUVtysrrx0ctTs6qTMyrSUksQ0NuyciPBdAAABHklEQVR42mNgwAa8zlxjDd2A4POfOXPmzZkFCAH2M8fNzyALzDlzg2ENssCbMwkMOsgCa858YOjBKxBzRoHhD7LAHiBH5swCT9HQ6A9ggZ4zp7YCrV0DdM6pBpAAG5Blc2aBDZA68wCsZPuZU0BDH07xvHOmAGKKvgMP2NA/Zw7ADIYJXGDgLQeBBSCBFu0aoAPYQUadMQAJAE29zwAVWMCWpgB08ZnDQGsbGhpsgCqBQHNfzRkDEIPlzFmo0T5nzoMovjPHoAK8Zw5BnA5yDosDSAVYQOYMKIDZzkoDzagAsjhqzjRAfXTmzAQgi/vMQZA6pjtAvhEk0E+ATWRRm6YBZuScCUCNN5szH1D4TGdOoSrggtiNAH3vBBjwAQCglIrSZkf1MQAAAABJRU5ErkJggg==" />
 <style type="text/css">
  html, body {height: 100%; padding: 0; margin: 0; width: 100%;}
@@ -43,7 +50,7 @@ head = """
 body = """
 <div class="vcenter-out">
 	<div class="vcenter-in">
-		<fieldset style="font-family: monospace;" id="Output" data-xdh-onevent="Focus"/>
+		<fieldset style="font-family: monospace; font-size: larger;" id="Output" data-xdh-onevent="Focus"/>
 	</div>
 </div>
 """
@@ -141,7 +148,7 @@ def loop_(dom):
 			cont = False
 		_printWrite.release()
 
-	dom.appendLayout("Output","<span><input type='text' id='Input' data-xdh-onevent='Submit' size='10' maxlength='10'/><br/></span>")
+	dom.appendLayout("Output","<span><input type='text' id='Input' data-xdh-onevent='Submit'/><br/></span>")
 	scrollToBottom_(dom)
 	dom.focus("Input")
 

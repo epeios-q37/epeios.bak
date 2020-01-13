@@ -1,7 +1,7 @@
 """ 
 MIT License
 
-Copyright (c) 2019 Claude SIMON (https://q37.info/s/rmnmqd49)
+Copyright (c) 2020 Claude SIMON (https://q37.info/s/rmnmqd49)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -30,22 +30,24 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="webcli",
+    name="term2web",
     version=version,
     author="Claude SIMON",
 #    author_email="author@example.com",
     description="Toolkit which overloads 'print(…)' and 'input()' to redirect them to a web page.",
-    keywords="cli, web",
+    keywords="cli, web, term, terminal, text",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/epeios-q37/webcli",
+    url="https://github.com/epeios-q37/term2web",
     packages=setuptools.find_packages(),
     install_requires=[
         'atlastk',
     ],
     classifiers=[
-      "Development Status :: 4 - Beta",
+      "Development Status :: 3 - Alpha",
+      "Environment :: Console",
       "Environment :: Web Environment",
+      "Intended Audience :: Developers",
       "License :: OSI Approved :: MIT License ",
       "Operating System :: OS Independent",
       "Programming Language :: Python :: 3",
