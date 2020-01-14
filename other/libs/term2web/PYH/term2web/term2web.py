@@ -131,6 +131,9 @@ def input(prompt=""):
 def scrollToBottom_(dom):
 	dom.execute("window.scrollTo(0,document.getElementById('Output').scrollHeight);")
 
+def getStyle_():
+	return ""
+
 def loop_(dom):
 	global _print, _printRead,_printWrite, _input, _inputRead,_inputWrite,_autoFlush
 	cont = True
@@ -141,7 +144,7 @@ def loop_(dom):
 		_printRead.acquire()
 
 		if _print:
-			dom.appendLayout("Output", "<span>" + _print + "</span>")
+			dom.appendLayout("Output", "<span + style='" + getStyle_() + "'>" + _print + "</span>")
 			scrollToBottom_(dom)
 			_print = ""
 		else:
