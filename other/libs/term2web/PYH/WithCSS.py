@@ -40,28 +40,28 @@ p = builtins.print
 
 props = {}
 
-def print_props(props):
+def print_and_set_props(props,value = None):
     reset_style()
 
     print()
 
-    for prop in props:
-        print( prop + ": " + props[prop])
-        globals()["props"][prop] = props[prop]
+    if value:
+        print( props + ": " + value)
+        globals()["props"][props] = value
+    else:
+        for prop in props:
+            print( prop + ": " + props[prop])
+            globals()["props"][prop] = props[prop]
 
     set_style(globals()["props"])
 
 
-def show(props):
+def show(*args):
     set_style(globals()["props"])
 
-    print_props(props)
+    print_and_set_props(*args)
 
     print("Lorem ipsum dolor sit amet…")
-
-    p(1)
-    time.sleep(.75)
-    p(2)
 
 
 show({
@@ -86,11 +86,20 @@ show({
 })
 
 show({
-     "font-style": "italic",
+    "font-style": "italic",
     "font-size": "larger"
 })
 
 
 show({
     "font-weight": "bold",
+    "word-spacing": "15px",
+    "text-transform": "capitalize"
+})
+
+show("letter-spacing", "-2px")
+
+show({
+    "outline-style": "dashed",
+    "outline-color": "green"
 })

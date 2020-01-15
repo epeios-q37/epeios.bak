@@ -45,9 +45,9 @@ from term2web import *
 
 print("Hello!")
 print("Nice to meet you, ", input("What's your name? "), "!", sep="")
-time.sleep(1.5)
+time.sleep(1.25)
 print("Let's play",end="…")
-time.sleep(1.5)
+time.sleep(1.25)
 print(" REVERSI!","You play the cross (X)!",sep="\n\n")
 
 # Below code comes from:
@@ -259,5 +259,4 @@ def start_game():
         print('You lose!')
 
 
-if __name__ == "__main__":
-  start_game()
+start_game()

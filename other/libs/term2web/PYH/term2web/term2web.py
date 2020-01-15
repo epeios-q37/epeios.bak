@@ -99,14 +99,17 @@ def reset_style():
 
 	
 
-def set_style(props):
+def set_style(props, value = None):
 	global _props, _printBuffer
 
-	for prop in props:
-		_props[prop] = props[prop]
+	if value:
+		_props[props] = value
+	else:
+		for prop in props:
+			_props[prop] = props[prop]
 
-	_printBuffer += closingTag_()
-	_printBuffer += openingTag_()
+		_printBuffer += closingTag_()
+		_printBuffer += openingTag_()
 	
 
 
@@ -233,7 +236,9 @@ class Atlas_(threading.Thread):
 	def run(self):
 		Atlas.launch(callbacks, None, head, "Blank")
 
-Atlas_().start()
+_atlasThread = Atlas_()
+# _atlasThread.daemon = True
+_atlasThread.start()
 
 class Flush_(threading.Thread):
 	def __init__(self):
@@ -245,5 +250,6 @@ class Flush_(threading.Thread):
 			if _autoFlush:
 				flush_()
 
-
-Flush_().start()
+_flushThread = Flush_()
+# _flushThread.daemon = True
+_flushThread.start()
