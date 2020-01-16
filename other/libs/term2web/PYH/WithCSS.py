@@ -2,7 +2,6 @@
 """
 MIT License
 
-Copyright (c) 2017 Hajime Nakagami<nakagami@gmail.com>
 Copyright (c) 2020 Claude SIMON (https://q37.info/s/rmnmqd49)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,7 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-import sys,os,time
+import sys,os
 
 sys.path.append("./term2web")
 
@@ -38,28 +37,28 @@ import builtins
 
 p = builtins.print
 
-props = {}
+properties = {}
 
-def print_and_set_props(props,value = None):
-    reset_style()
+def print_and_set_properties(nameOrProperties,value = None):
+    global properties
+
+    reset_properties()
 
     print()
 
     if value:
-        print( props + ": " + value)
-        globals()["props"][props] = value
+        print( nameOrProperties + ": " + value)
+        properties[nameOrProperties] = value
     else:
-        for prop in props:
-            print( prop + ": " + props[prop])
-            globals()["props"][prop] = props[prop]
+        for name in nameOrProperties:
+            print( name + ": " + nameOrProperties[name])
+            properties[name] = nameOrProperties[name]
 
-    set_style(globals()["props"])
+    set_properties(properties)
 
 
 def show(*args):
-    set_style(globals()["props"])
-
-    print_and_set_props(*args)
+    print_and_set_properties(*args)
 
     print("Lorem ipsum dolor sit amet…")
 
@@ -103,3 +102,5 @@ show({
     "outline-style": "dashed",
     "outline-color": "green"
 })
+
+sys.exit(0)
