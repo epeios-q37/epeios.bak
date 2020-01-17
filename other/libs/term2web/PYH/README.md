@@ -39,7 +39,7 @@ set_properties({
 
 The `Basic.py` program is an example with calls to `print(…)` and `input(…)`, but without CSS formatting.
 
-The `WithCSS.py` program is an exemple of various CSS formatting.
+The `WithCSS.py` shows how CSS is ued to format displayed text.
 
 
 ---
