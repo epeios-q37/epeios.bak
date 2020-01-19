@@ -4,11 +4,11 @@
 
  Cette bibliothèque peut être utilisée pour familiariser les débutants avec l'environnement de développement d'exercices comme celui se trouvant à l'adresse https://q37.info/s/g9fvwzgp.
 
- Avec cette bibliothèque, les fonctions `print(…)` et `input(…)` s'utilisent comme d'habitude. Il est ainsi facile de la mettre en œuvre dans des programmes s'exécutant habituellement dans un terminal pour que ce programme s'exécute dans une page web.
+ Avec cette bibliothèque, les fonctions `print(…)` et `input(…)` s'utilisent comme d'habitude. Il est ainsi facile de la mettre en œuvre dans les programmes s'exécutant habituellement dans un terminal pour qu'ils s'exécutent dans une page web.
 
  Dans un second temps, on pourra utiliser les fonctions suivantes pour améliorer la présentation, est initier par la même occasion au CSS.
 
-`set_property(name,value)` applique la propriété CSS de nom `name` et de valeur `value`.
+On a ainsi `set_property(name,value)` qui permet d'appliquer la propriété CSS de nom `name` et de valeur `value`.
 
 Exemple:
 
@@ -16,7 +16,7 @@ Exemple:
 set_property("font-style": "italic")
 ```
 
-`set_properties(properties)` applique les propriétés CSS stockées dans `properties`, qui est un dictionnaire dont les clefs sont les noms des propriétés, et les valeurs les valeurs de ces propriétés.
+Avec `set_properties(properties)`, on applique les propriétés CSS stockées dans `properties`, qui est un dictionnaire dont les clefs sont les noms des propriétés, et les valeurs les valeurs de ces propriétés.
 
 Exemple:
 
@@ -28,7 +28,7 @@ set_properties({
 })
 ```
 
-`reset_properties()` supprime toutes les propriétés appliquées avec les précédentes fonctions.
+Et enfin, `reset_properties()` supprime toutes les propriétés appliquées avec les précédentes fonctions.
 
 Une démonstration en ligne est disponible à l'adresse <https://q37.info/s/kjjcfcp3>. On y trouve `Basic.py`, qui est une exemple d'utilisation de `print(…)` et `input(…)`, sans formatage CSS, et `WithCSS.py`, qui montre comment on applique des propriétés CSS et le résultat.
 
