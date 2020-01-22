@@ -196,7 +196,7 @@ Sachant que :
 
 Lorsque l'on lance le jeu, voilà ce qui est affiché :
 
-![](./assets/b/Start.png)
+![](assets/b/Start.png)
 
 - *Pioche* affiche la lettre sélectionnée par l'utilisateur ;
 - *Attendu* affiche la valeur que la fonction `lettreEstDansMot` devrait retourner ;
@@ -204,19 +204,19 @@ Lorsque l'on lance le jeu, voilà ce qui est affiché :
 
 Si l'utilisateur clique sur une lettre qui est contenue dans le mot, voici ce qui devrait s'afficher.
 
-![](./assets/b/True.correct.png)
+![](assets/b/True.correct.png)
 
 Si la fonction ne retourne pas la bonne valeur, et doit donc être corrigée, alors ceci s'affiche :
 
-![](./assets/b/True.bug.png)
+![](assets/b/True.bug.png)
 
 Si l'utilisateur clique sur une lettre qui n'est **pas** contenue dans le mot, voici ce qui devrait s'afficher :
 
-![](./assets/b/False.correct.png)
+![](assets/b/False.correct.png)
 
 Si la fonction ne retourne pas la bonne valeur, et doit donc être corrigée, alors ceci s'affiche :
 
-![](./assets/b/False.bug.png)
+![](assets/b/False.bug.png)
 
 ### Tests
 
@@ -452,7 +452,7 @@ Gérer la lettre sélectionnée par le joueur, de manière à mettre à jour, so
 
 ### Préparation
 
-- Dans la première ligne, remplacer le `g` par un `h` ;
+- Dans la première ligne, remplacer le `h` par un `i` ;
 - ajouter les lignes suivantes avant la dernière instruction du fichier :
   - `bonnesPioches = ""`,
   - `nbErreurs = 0`,
@@ -460,7 +460,7 @@ Gérer la lettre sélectionnée par le joueur, de manière à mettre à jour, so
   - `def traiterPioche(pioche,motSecret):`.
   
 ```python
-from workshop.fr.h import *
+from workshop.fr.i import *
 
 …
 
@@ -552,6 +552,100 @@ Identique à celui de l'exercice précédent.
 ### Tests
 
 Identiques à ceux de l'exercice précédent.
+
+<!--
+
+## Exercice *j*
+
+### Objectifs
+
+Comme vous avez pu le constater, la manière dont est codé l'exercice precédent ne permet  pas de jouer à ce jeu à plusieurs simultanément. L'objectif de cet exercice est de remédier à cela, grâce à la programmation objet.
+
+### Préparation
+
+- Dans la première ligne, remplacer le `h` par un `i` ;
+- supprimer la déclaration des variables `bonnesPioches` et `nbErreurs` ;
+- là où il y avait la déclaration de ces variables, placer le code suivant :
+```python
+class Pendu:
+  def raz(self):
+    self.bonnesPioches = ""
+    self.nbErreurs = 0
+
+  def __init__(self):
+    self.raz()
+    
+  def traiterEtTesterPioche(self,pioche,motSecret):
+```
+- dans les fonctions `raz(…)` et `traiterPioches(…)`
+  - enlever la ligne `global bonnesPioches, nbErreurs`,
+  - ajouter le paramètre `pendu` en première position dans leurs déclarations respectives.
+
+```python
+from workshop.fr.h import *
+
+…
+
+
+def majCorps(nombreErreurs):    
+    …
+
+# Les déclarations des variables 'bonnesPioches' et 'nbErreurs'
+# qui étaient positionnées ici doivent être supprimées.
+
+class Pendu:
+  def raz(self):
+    self.bonnesPioches = ""
+    self.nbErreurs = 0
+
+  def __init__(self):
+    self.raz()
+    
+  def traiterEtTesterPioche(self,pioche,motSecret):
+
+
+def raz(pendu,suggestion,motAuHasard):
+# La ligne 'global bonnesPioches, nbErreurs' présente ici doit être supprimée.
+# Le reste du code doit être conservé.
+    …
+  
+
+def traiterPioche(pendu,pioche,motSecret):
+# La ligne 'global bonnesPioches, nbErreurs' présente ici doit être supprimée.
+# Le reste du code doit être conservé.
+    …
+
+go(globals())    
+```
+
+### Tâches
+
+Au lieu d'être globale à tout le programme, les variables `bonnesPioches` et `nbErreurs` sont maintenant rattachées à une classe appelée `Pendu`.
+Une instance de cette classe est crée pour chaque joueur, et est accessible via le paramètre `pendu` passé aux fonctions `raz(…)` et `traiterPioche(…)`.
+Pour accèder aux membre de cette instance, on utilisera l'écriture `pendu.…`. Ainsi, `pendu.nbErreurs` donne accès à la variable `nbErreurs` de la classe `Pendu`, et `pendu.raz()` appellera la méthode `raz` de cette même classe.
+Dans le cas de méthodes, le premier paramètre, nommé par convention `self`, est l'instance à partir de laquelle cette fonction a été appelée. Ainsi, en appelant `pendu.raz()`, le paramètre `self` de la méthode `raz` référence la même instance de la classe `Pendu` que la variable `pendu`.
+
+#### `Pendu.traiterEtTesterPioche`
+
+Sachant que :
+
+- `pendu` est l'instance de la classe `Pendu` ;
+- `pioche` contient la lettre sélectionnée par le joueur ;
+- `motSecret` étant le mot à deviner
+
+écrire le code de la méthode `Pendu.traiterEtTesterPioche` :
+
+- pour qu'elle remplisse les même fonctionnalités que la fonction `traiterPioche(…)` de l'exercice précedent, mais en utilisant les variables `bonnesPioches` et `nbErreurs` de l'instance `pendu` de la classe `Pendu`  passé en paramètre, et non plus les varialbles globales de même nom ;
+- retourne :
+  - `VRAI` lorsque `pioche` est présent dans `motSecret`,
+  - `FAUX` lorsque `pioche` n'est **pas ** présent dans `motSecret`.
+
+- À partir du code de la fonction `traiterPioche(…)` écrit lors du précédent exercice, écrire le code de la méthode `traiterEtTesterPioche()`
+
+-->
+
+
+
 
 
 

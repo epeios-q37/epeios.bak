@@ -440,8 +440,72 @@ En lançant deux ou plusieurs instances simultanées, du fait que les variables 
 - des lettres piochées disparaissent ou apparaissent de manière inopinée ;
 - le pendu est dessiné d'une manière inconsistante.
 
-À noter que ces problèmes de *thread-safety* ne sont **pas** présents dans les exercices précedents, car les variables `bonnesPioches` et `nbErreurs` sont gérés par le système en tenant compte de cette problématique.
+À noter que ces problèmes de *thread-safety* ne sont **pas** présents dans les exercices précedents, car les variables `bonnesPioches` et `nbErreurs` sont directement gérées par des bibliothèques logicielles qui tiennent compte de cette problématique.
 
+
+### Exercice *j*
+
+#### Particularités
+
+
+Programmation orientée objet :
+
+- Classe ;
+- fonction membre (méthode) ;
+- variable membre ;
+- constructeur.
+
+#### Solution
+
+```python
+class Pendu:
+  def raz(self):
+    self.bonnesPioches = ""
+    self.nbErreurs = 0
+
+  def __init__(self):
+    self.raz()
+    
+  def traiterEtTesterPioche(self,pioche,motSecret):
+    if isLetterInWord(pioche,motSecret):
+      if not isLetterInWord(pioche,self.bonnesPioches):
+        self.bonnesPioches += pioche
+      return VRAI
+    else:
+      self.nbErreurs += 1
+      return FAUX
+
+
+def raz(pendu,suggestion,motAuHasard):
+  pendu.raz()
+  motSecret = choisirMot(suggestion,motAuHasard)
+  print(motSecret)
+  afficher(donnerMasque(motSecret,""))
+
+  return motSecret
+  
+
+def traiterPioche(pendu,pioche,motSecret):
+  if pendu.traiterEtTesterPioche(pioche,motSecret):
+    afficher(donnerMasque(motSecret,pendu.bonnesPioches))
+  else:
+    majCorps(pendu.nbErreurs)
+```
+
+#### Remarques
+
+On peut signaler que `monInstance.maFonction(…)` est équivalent à `maFonction(monInstance,…)`.
+
+### Exercice *X*
+
+#### Particularités
+
+#### Solution
+
+```python
+```
+
+#### Remarques
 
 ## Autres exercices
 

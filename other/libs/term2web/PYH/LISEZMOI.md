@@ -13,7 +13,7 @@ On a ainsi `set_property(name,value)` qui permet d'appliquer la propriété CSS 
 Exemple:
 
 ```python
-set_property("font-style": "italic")
+set_property("font-style", "italic")
 ```
 
 Avec `set_properties(properties)`, on applique les propriétés CSS stockées dans `properties`, qui est un dictionnaire dont les clefs sont les noms des propriétés, et les valeurs les valeurs de ces propriétés.

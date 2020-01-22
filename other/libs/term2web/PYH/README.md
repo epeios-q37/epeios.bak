@@ -24,7 +24,7 @@ There are three other functions available.
 Example:
 
 ```python
-set_property("font-style": "italic")
+set_property("font-style", "italic")
 ```
 
 `set_properties(properties)` applies the CSS properties stored in `properties` which is a dictionary whose keys are property names, and values the corresponding property values.
@@ -33,7 +33,7 @@ Example:
 
 ```python
 set_properties({
-    "text-decoration-line": "line-through"
+    "text-decoration-line": "line-through",
     "text-decoration-style": "wavy",
     "text-decoration-color": "red"
 })
