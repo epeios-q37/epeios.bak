@@ -490,6 +490,7 @@ go(globals())
 #### Fonction `raz`
 
 Sachant que :
+
 - `suggestion` est le contenu du champ de saisie ;
 - `motAuHasard` est un mot choisi au hasard ;
 - cette fonction est appelée :
@@ -497,6 +498,7 @@ Sachant que :
   - à chaque fois que le joueur clique sur le bouton `Recommencer` pour recommencer une nouvelle partie,
 
 écrire le code de cette fonction pour :
+
 - réinitialiser les deux variables globales `bonnesPioches` et `nbErreurs` ;
 - stocker dans `motSecret` un nouveau mot secret, en utilisant l'une des fonctions développées précédemment ;
 - afficher le masque correspondant au mot stocké dans `motSecret` :
@@ -552,8 +554,6 @@ Identique à celui de l'exercice précédent.
 ### Tests
 
 Identiques à ceux de l'exercice précédent.
-
-<!--
 
 ## Exercice *j*
 
@@ -620,33 +620,84 @@ go(globals())
 
 ### Tâches
 
-Au lieu d'être globale à tout le programme, les variables `bonnesPioches` et `nbErreurs` sont maintenant rattachées à une classe appelée `Pendu`.
-Une instance de cette classe est crée pour chaque joueur, et est accessible via le paramètre `pendu` passé aux fonctions `raz(…)` et `traiterPioche(…)`.
-Pour accèder aux membre de cette instance, on utilisera l'écriture `pendu.…`. Ainsi, `pendu.nbErreurs` donne accès à la variable `nbErreurs` de la classe `Pendu`, et `pendu.raz()` appellera la méthode `raz` de cette même classe.
+Au lieu d'être globales à tout le programme, les variables `bonnesPioches` et `nbErreurs` sont maintenant rattachées à une classe appelée `Pendu`. Une instance de cette classe est crée pour chaque joueur, et est accessible via le paramètre `pendu` passé aux fonctions `raz(…)` et `traiterPioche(…)`.
+
+Pour accèder aux membre de cette instance, on utilisera l'écriture `pendu.<variable ou méthode>`. Ainsi, `pendu.nbErreurs` donne accès à la variable `nbErreurs` de la classe `Pendu`, et `pendu.raz()` appellera la méthode `raz` de cette même classe.
+
 Dans le cas de méthodes, le premier paramètre, nommé par convention `self`, est l'instance à partir de laquelle cette fonction a été appelée. Ainsi, en appelant `pendu.raz()`, le paramètre `self` de la méthode `raz` référence la même instance de la classe `Pendu` que la variable `pendu`.
 
-#### `Pendu.traiterEtTesterPioche`
+#### Méthode `Pendu.traiterEtTesterPioche`
 
 Sachant que :
 
-- `pendu` est l'instance de la classe `Pendu` ;
+- `self` est l'instance de la classe `Pendu` ;
 - `pioche` contient la lettre sélectionnée par le joueur ;
-- `motSecret` étant le mot à deviner
+- `motSecret` étant le mot à deviner ;
 
-écrire le code de la méthode `Pendu.traiterEtTesterPioche` :
+écrire le code de la méthode `Pendu.traiterEtTesterPioche` pour qu'elle :
 
-- pour qu'elle remplisse les même fonctionnalités que la fonction `traiterPioche(…)` de l'exercice précedent, mais en utilisant les variables `bonnesPioches` et `nbErreurs` de l'instance `pendu` de la classe `Pendu`  passé en paramètre, et non plus les varialbles globales de même nom ;
+- remplisse les même fonctionnalités que la fonction `traiterPioche(…)` de l'exercice précedent, mais en utilisant le paramètre `self` pour accèder aux variables `bonnesPioches` et `nbErreurs` de la classe `Pendu` (`self.bonnesPioches` et `self.nbErreurs`) ;
 - retourne :
   - `VRAI` lorsque `pioche` est présent dans `motSecret`,
-  - `FAUX` lorsque `pioche` n'est **pas ** présent dans `motSecret`.
+  - `FAUX` lorsque `pioche` n'est **pas** présent dans `motSecret`.
 
-- À partir du code de la fonction `traiterPioche(…)` écrit lors du précédent exercice, écrire le code de la méthode `traiterEtTesterPioche()`
+#### Fonction `raz`
 
--->
+Sachant que :
+
+- `pendu` est une instance de la classe `Pendu` ;
+- `suggestion` est le contenu du champ de saisie ;
+- `motAuHasard` est un mot choisi au hasard ;
+- cette fonction est appelée dans les mêmes conditions que la fonction homonyme de l'exercice précédent ;
+
+écrire le code de la fonction `raz` de manière à ce qu'elle remplisse les même fonctionnalités que dans l'exercice précédent, en utilisant la méthode `Pendu.raz` pour réinitialiser les variables.
+
+#### Fonction `traiterPioche`
+
+Sachant que :
+
+- `pendu` est une instance de la classe `Pendu` ;
+- `pioche` contient la lettre sélectionnée par le joueur ;
+- `motSecret` contient le mot à deviner tel que retourné par la fonction `raz(…)` ci-dessus ;
+
+écrire le code de la fonction `traiterPioche` de manière à ce qu'elle remplisse les même fonctionnalités que dans l'exercice précédent, en utilisant la méthode `Pendu.traiterEtTesterPioche` développée précédemment.
+
+### Pseudo-code
+
+#### Méthode `Pendu.traiterEtTesterPioche`
+
+> Si `pioche` est contenu dans `motSecret`  
+> &nbsp;&nbsp;Ajouter `pioche` à `bonnePioches`  
+> &nbsp;&nbsp;Retourner `VRAI`  
+> Sinon  
+> &nbsp;&nbsp;Incrémenter `nbErreurs`  
+> &nbsp;&nbsp;Retourner `FAUX`
 
 
+#### Fonction `raz`
 
 
+> Réinitialiser `pendu`
+>
+> Choisir un nouveau mot à deviner
+>
+>  Afficher le masque correspondant à ce nouveau mot à deviner
+>
+>  Retourner ce nouveau mot à deviner
 
 
+#### Fonction `traiterPioche`
+
+> Si `pendu.traiterEtTesterPioche(pioche,motSecret)` retourne `VRAI`  
+> &nbsp;&nbsp;Afficher le nouveau masque  
+> Sinon  
+> &nbsp;&nbsp;Complèter le dessin du pendu
+
+#### Aperçu
+
+Identique à celui de l'exercice précedent.
+
+#### Tests
+
+Identiques à ceux de l'exercice précédent, en vérifiant 
 
