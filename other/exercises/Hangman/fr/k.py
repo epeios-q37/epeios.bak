@@ -11,7 +11,7 @@ def choisirMot(*args):
   return workshop.rfPickWord(*args)
 
 
-def isLetterInWord(*args):
+def lettreEstDansMot(*args):
     return workshop.rfIsLetterInWord(*args)
 
 
@@ -38,8 +38,8 @@ class Pendu:
     self.nbErreurs = 0
     
   def traiterEtTesterPioche(self,pioche):
-    if isLetterInWord(pioche,self.motSecret):
-      if not isLetterInWord(pioche,self.bonnesPioches):
+    if lettreEstDansMot(pioche,self.motSecret):
+      if not lettreEstDansMot(pioche,self.bonnesPioches):
         self.bonnesPioches += pioche
       return VRAI
     else:

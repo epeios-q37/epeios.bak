@@ -15,7 +15,22 @@ def isLetterInWord(*args):
     return workshop.rfIsLetterInWord(*args)
 
 
-def updateBody(*args):
+"""
+Previously named 'getMask'.
+Add the testing.
+"""
+def getMaskAndTestIfHasWon(word,guesses):
+  mask = ""
+  hasWon = True
+
+  for letter in word:
+    if isLetterInWord(letter,guesses):
+      mask += letter
+    else:
+      mask += "_"
+      hasWon = False
+
+  return mask,hasWondef updateBody(*args):
   return workshop.rfUpdateBody(*args)    
 
 
@@ -51,23 +66,6 @@ class Hangman:
     else:
       self.errorsAmount += 1
       return FALSE
-
-
-"""
-Add the testing.
-"""
-def getMaskAndTestIfHasWon(word,guesses):
-  mask = ""
-  hasWon = True
-
-  for letter in word:
-    if isLetterInWord(letter,guesses):
-      mask += letter
-    else:
-      mask += "_"
-      hasWon = False
-
-  return mask,hasWon
 
 
 """

@@ -15,13 +15,31 @@ def lettreEstDansMot(*args):
     return workshop.rfIsLetterInWord(*args)
 
 
+"""
+Anciennement nommée 'donnerMasque'
+Ajouter le test.
+"""
+def donnerMasqueEtTesterSiVictoire(mot,pioches):
+  masque = ""
+  victoire = VRAI
+
+  for lettre in mot:
+    if lettreEstDansMot(lettre,pioches):
+      masque += lettre
+    else:
+      masque += "_"
+      victoire = FAUX
+
+  return masque,victoire    
+
+
 def majCorps(*args):
   return workshop.rfUpdateBody(*args)
 
 
 """
 En premier lieu, ne pas traiter la variable membre
-'enCours' de la class 'Pendu'.
+'enCours' de la classe 'Pendu'.
 """
 
 """
@@ -51,23 +69,6 @@ class Pendu:
       self.nbErreurs += 1
       return FAUX
 
-
-
-"""
-Ajouter le test.
-"""
-def donnerMasqueEtTesterSiVictoire(mot,pioches):
-  masque = ""
-  victoire = VRAI
-
-  for lettre in mot:
-    if lettreEstDansMot(lettre,pioches):
-      masque += lettre
-    else:
-      masque += "_"
-      victoire = FAUX
-
-  return masque,victoire
 
 
 """

@@ -715,7 +715,6 @@ Prendre en charge la gestion du mot à deviner ainsi que sa divulgation ou non e
 - retirer le paramètre `motSecret` de la fonction `traiterPioche`.
 
 ```python
-
 from workshop.fr.k import *
 
 …
@@ -822,16 +821,58 @@ Identique à l'exercice précédent, sauf dans le cas où `DIVULGUER_MOT_SECRET`
 
 #### Tests
 
-Identiques à ceux de l'exercice précedent, en vérifiant que le chanps texte à gauche du bouton `Recommencer` n'est pas affiché lorsque `DIVULGUER_MOT_SECRET` est à `FAUX`.
+Identiques à ceux de l'exercice précedent, en vérifiant que le champ texte à gauche du bouton `Recommencer` n'est pas affiché lorsque `DIVULGUER_MOT_SECRET` est à `FAUX`.
 
 ## Exercice *l*
 
 ### Objectifs
 
-Gérer les fins de partie, en notifiant au joueur qu'il a gagné ou perdu, ainsi qu'afficher le nombre d'erreurs et les bonnes pioches lorsque le joueur interrompt une partie en cours pour en commencer une nouvelle.
+Gérer les fins de partie, afin de notifier au joueur qu'il a gagné ou perdu, ainsi qu'afficher le nombre d'erreurs et les bonnes pioches lorsque le joueur interrompt une partie en cours pour en commencer une nouvelle.
 
 ### Préparation
 
 - Dans la méthode `Pendu.raz`, ajouter la ligne `self.enCours = VRAI` ;
 - dans le constructeur `Pendu.__init__`, ajouter la ligne `self.enCours = FAUX` ;
 
+```python
+from workshop.fr.k import *
+
+…
+
+
+def lettreEstDansMot(lettre,mot)
+  …
+
+
+# Fonction 'donnerMasque' renommée en `donnerMasqueEtTesterSiVictoire`
+def donnerMasqueEtTesterSiVictoire(mot,pioches)
+  …
+
+
+def majCorps(*args):
+  …
+
+
+class Pendu:
+  def raz(self,suggestion,motAuHasard):
+    …
+
+  def __init__(self):
+    self.motSecret = ""
+    self.bonnesPioches = ""
+    self.nbErreurs = 0
+    
+  def traiterEtTesterPioche(self,pioche):
+    …
+
+
+def raz(pendu,suggestion,motAuHasard):
+  …
+  
+
+def traiterPioche(pendu,pioche):
+  …
+
+
+go(globals())
+```
