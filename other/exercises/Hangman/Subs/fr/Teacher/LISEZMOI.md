@@ -453,7 +453,8 @@ Programmation orientée objet :
 - Classe ;
 - fonction membre (méthode) ;
 - variable membre ;
-- constructeur.
+- constructeur ;
+- utilisation de la *POO* pour gérer le *thread-safety*.
 
 #### Solution
 
@@ -496,9 +497,13 @@ def traiterPioche(pendu,pioche,motSecret):
 
 On peut signaler que `monInstance.maFonction(…)` est équivalent à `maFonction(monInstance,…)`.
 
-### Exercice *X*
+### Exercice *k*
 
 #### Particularités
+
+- Utilisation d'une variable globale comme constante ;
+- type booléen ;
+- manipulation d'une instance de classe.
 
 #### Solution
 
@@ -507,6 +512,18 @@ On peut signaler que `monInstance.maFonction(…)` est équivalent à `maFonctio
 
 #### Remarques
 
-## Autres exercices
+### Exercice *l*
 
-La partie des notices enseignant et élèves concernant ces exercices sont en cours d'élaboration, et devraient être disponibles d'ici une semaine ou deux.
+#### Particularités
+
+- Renvoi de plusieurs valeurs par une fonction ;
+- construction d'une chaîne de caractères avec le contenu de variables ;
+- récupération des valeurs retournées par une fonction.
+
+#### Remarques
+
+#### Solution
+
+```python
+```
+

@@ -1025,17 +1025,41 @@ Identique à celui de l'exercice précédent.
 #### Fonction `traiterPioche`
 
 > Si `pioche` est contenu dans `motSecret`  
-> &nbsp;&nbsp;Ajouter `pioche` à `bonnePioches`  
-> &nbsp;&nbsp;Afficher le nouveau masque  
+> &nbsp;&nbsp;Afficher nouveau masque  
+> &nbsp;&nbsp;Si partie en cours et victoire  
+> &nbsp;&nbsp;&nbsp;&nbsp;Notifier victoire  
 > Sinon  
-> &nbsp;&nbsp;Incrémenter `nombreErreurs`  
-> &nbsp;&nbsp;Complèter le dessin du pendu
+> &nbsp;&nbsp;Complèter le dessin du pendu  
+> &nbsp;&nbsp;Si partie en cours et défaite  
+> &nbsp;&nbsp;&nbsp;&nbsp;Notifier défaite et afficher informations sur la partie
 
 #### Fonction `AConnexion`
 
+> Lancer une partie
+
 #### Fonction `APioche`
 
+> Lancer le traitement de la lettre choisie par le joueur
+
 #### Fonction `ARelance`
+
+> Si partie en cours  
+> &nbsp;&nbsp;Afficher informations sur la partie
+>
+> Lancer une nouvelle partie
+
+### Aperçu
+
+Identique à celui de l'exercice précédent
+
+### Test
+
+Identiques à celui de l'exercice précédents.
+
+Vérifier que la détection d'une victoire et d'une défaite est correctement réalisée, et que les notifications sont correctes.
+
+Vérifier qu'un click sur le bouton `Recommencer` entraîne une notification avec les informations sur la partie en cours, ainsi que le lancement d'une nouvelle partie.
+
 
 
 
