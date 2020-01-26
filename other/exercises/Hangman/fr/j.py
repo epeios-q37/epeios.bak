@@ -31,7 +31,7 @@ mais le nom des variables et des méthodes est libre.
 class Pendu:
   def raz(self):
     self.bonnesPioches = ""
-    self.nbErreurs = 0
+    self.nombreErreurs = 0
 
   def __init__(self):
     self.raz()
@@ -47,7 +47,7 @@ class Pendu:
         self.bonnesPioches += pioche
       return VRAI
     else:
-      self.nbErreurs += 1
+      self.nombreErreurs += 1
       return FAUX
 
 
@@ -71,6 +71,6 @@ def traiterPioche(pendu,pioche,motSecret):
   if pendu.traiterEtTesterPioche(pioche,motSecret):
     afficher(donnerMasque(motSecret,pendu.bonnesPioches))
   else:
-    majCorps(pendu.nbErreurs)
+    majCorps(pendu.nombreErreurs)
 
 go(globals())

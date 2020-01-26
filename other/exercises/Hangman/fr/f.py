@@ -26,7 +26,7 @@ def donnerMasque(*args):
     
 
 """
-- 'nbErreurs': nombre d'erreurs.
+- 'nombreErreurs': nombre d'erreurs.
 Dessiner la partie du corps correspondant au nombre d'erreurs.
 """
 def majCorps(nombreErreurs):

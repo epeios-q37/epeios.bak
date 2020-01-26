@@ -34,7 +34,7 @@ PARTIES_CORPS = (
 
 
 """
-- 'nbErreurs': nombre d'erreurs.
+- 'nombreErreurs': nombre d'erreurs.
 Dessiner la partie du corps correspondant au nombre d'erreurs.
 Lorsque la dernière partie du corps est dessinée, le visage ('P_VISAGE') doit
 également être dessiné.

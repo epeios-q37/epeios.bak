@@ -31,7 +31,16 @@ def getMaskAndTestIfHasWon(word,guesses):
       hasWon = False
 
   return mask,hasWondef updateBody(*args):
-  return workshop.rfUpdateBody(*args)    
+
+
+"""
+Add the testing.
+"""
+def updateBodyAndTestIfHasLost(errorsAmount):
+  workshop.rfUpdateBody(*args)    
+
+  return errorsAmount >= (P_AMOUNT - 1)
+
 
 
 """
@@ -68,14 +77,17 @@ class Hangman:
       return FALSE
 
 
-"""
-Add the testing.
-"""
-def updateBodyAndTestIfHasLost(errorsAmount):
-  updateBody(errorsAmount)
 
-  return errorsAmount >= (P_AMOUNT - 1)
+"""
+Modify to use 'getMaskAndTestIfHasWon(…)'.
+"""
+def reset(hangman,suggestion,randomWord):
+  hangman.reset(suggestion,randomWord)
+  print(hangman.secretWord)
+  display(getMaskAndTestIfHasWon(hangman.secretWord,"")[0])
 
+  if DISCLOSE_SECRET_WORD:
+    discloseSecretWord(hangman.secretWord)
 
 
 """
@@ -91,18 +103,6 @@ def handleGuess(hangman,guess):
   elif hangman.inProgress and updateBodyAndTestIfHasLost(hangman.errorsAmount):
     notify("\nYou lose!\nErrors: {}; good guesses: {}.\n\nThe secret word was: '{}'.".format(hangman.errorsAmount,len(hangman.goodGuesses),hangman.secretWord))
     hangman.inProgress = FALSE
-
-
-"""
-Modify to use 'getMaskAndTestIfHasWon(…)'.
-"""
-def reset(hangman,suggestion,randomWord):
-  hangman.reset(suggestion,randomWord)
-  print(hangman.secretWord)
-  display(getMaskAndTestIfHasWon(hangman.secretWord,"")[0])
-
-  if DISCLOSE_SECRET_WORD:
-    discloseSecretWord(hangman.secretWord)
 
 
 """

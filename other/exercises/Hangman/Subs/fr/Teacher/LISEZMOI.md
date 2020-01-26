@@ -398,13 +398,13 @@ Cela permet, dans certains cas, d'éviter un test inutile. Cependant, ce cas se 
 
 ```python
 bonnesPioches = ""
-nbErreurs = 0
+nombreErreurs = 0
 
 def raz(suggestion,motAuHasard):
-  global bonnesPioches,nbErreurs
+  global bonnesPioches,nombreErreurs
 
   bonnesPioches = ""
-  nbErreurs = 0
+  nombreErreurs = 0
 
   motSecret = choisirMot(suggestion,motAuHasard)
 
@@ -414,33 +414,33 @@ def raz(suggestion,motAuHasard):
 
 
 def traiterPioche(pioche,motSecret):
-  global bonnesPioches,nbErreurs
+  global bonnesPioches,nombreErreurs
 
   if lettreEstDansMot(pioche,motSecret):
     if not lettreEstDansMot(pioche,bonnesPioches):
       bonnesPioches += pioche
       afficher(donnerMasque(motSecret,bonnesPioches))
   else:
-    nbErreurs += 1
-    majCorps(nbErreurs)
+    nombreErreurs += 1
+    majCorps(nombreErreurs)
 ```
 
 #### Remarques
 
 Les deux premières lignes sont inutiles, la fonction `raz(…)` étant appelée avant toute utilisation d'une des deux variables. Cependant, c'est une bonne pratique pour la clarté du code (permet de repérer rapidement les variables globales).
 
-Veiller à ce que les élèves ne soient pas bloqués par l'absence de la ligne `global bonnesPioches,nbErreurs` dans les deux fonctions.
+Veiller à ce que les élèves ne soient pas bloqués par l'absence de la ligne `global bonnesPioches,nombreErreurs` dans les deux fonctions.
 
 Dans un premier temps, le test `if not lettreEstDansMot(pioche,bonnesPioches):` pourra être omis.
 
 Le paramètre `motAuHasard` de la fonction `raz(…)` ne sera peut-être pas utilisé ; cela dépendra de la manière dont la fonction `motAuHasard(…)`  aura été codée dans les précédents exercices.
 
-En lançant deux ou plusieurs instances simultanées, du fait que les variables `bonnesPioches` et `nbErreurs` sont communes à toutes les instances, il sera facile de montrer que les actions effectuées dans une instance influent les autres, notamment :
+En lançant deux ou plusieurs instances simultanées, du fait que les variables `bonnesPioches` et `nombreErreurs` sont communes à toutes les instances, il sera facile de montrer que les actions effectuées dans une instance influent les autres, notamment :
 
 - des lettres piochées disparaissent ou apparaissent de manière inopinée ;
 - le pendu est dessiné d'une manière inconsistante.
 
-À noter que ces problèmes de *thread-safety* ne sont **pas** présents dans les exercices précedents, car les variables `bonnesPioches` et `nbErreurs` sont directement gérées par des bibliothèques logicielles qui tiennent compte de cette problématique.
+À noter que ces problèmes de *thread-safety* ne sont **pas** présents dans les exercices précedents, car les variables `bonnesPioches` et `nombreErreurs` sont directement gérées par des bibliothèques logicielles qui tiennent compte de cette problématique.
 
 
 ### Exercice *j*
@@ -461,7 +461,7 @@ Programmation orientée objet :
 class Pendu:
   def raz(self):
     self.bonnesPioches = ""
-    self.nbErreurs = 0
+    self.nombreErreurs = 0
 
   def __init__(self):
     self.raz()
@@ -472,7 +472,7 @@ class Pendu:
         self.bonnesPioches += pioche
       return VRAI
     else:
-      self.nbErreurs += 1
+      self.nombreErreurs += 1
       return FAUX
 
 
@@ -489,7 +489,7 @@ def traiterPioche(pendu,pioche,motSecret):
   if pendu.traiterEtTesterPioche(pioche,motSecret):
     afficher(donnerMasque(motSecret,pendu.bonnesPioches))
   else:
-    majCorps(pendu.nbErreurs)
+    majCorps(pendu.nombreErreurs)
 ```
 
 #### Remarques

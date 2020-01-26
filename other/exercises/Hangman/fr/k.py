@@ -30,12 +30,12 @@ class Pendu:
   def raz(self,suggestion,motAuHasard):
     self.motSecret = choisirMot(suggestion,motAuHasard)
     self.bonnesPioches = ""
-    self.nbErreurs = 0
+    self.nombreErreurs = 0
 
   def __init__(self):
     self.motSecret = ""
     self.bonnesPioches = ""
-    self.nbErreurs = 0
+    self.nombreErreurs = 0
     
   def traiterEtTesterPioche(self,pioche):
     if lettreEstDansMot(pioche,self.motSecret):
@@ -43,7 +43,7 @@ class Pendu:
         self.bonnesPioches += pioche
       return VRAI
     else:
-      self.nbErreurs += 1
+      self.nombreErreurs += 1
       return FAUX
 
 
@@ -64,6 +64,6 @@ def traiterPioche(pendu,pioche):
   if pendu.traiterEtTesterPioche(pioche):
     afficher(donnerMasque(pendu.motSecret,pendu.bonnesPioches))
   else:
-    majCorps(pendu.nbErreurs)
+    majCorps(pendu.nombreErreurs)
 
 go(globals())

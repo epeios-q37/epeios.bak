@@ -16,7 +16,7 @@ Peut être omis, vu que 'raz(…)' va être appelé avant utilisation
 de ces variables.
 """
 bonnesPioches = ""
-nbErreurs = 0
+nombreErreurs = 0
 
 
 """
@@ -46,11 +46,11 @@ Réinitialiser les variables et l'affichage pour une nouvelle partie et
 retourner le mot secret.
 """
 def raz(suggestion,motAuHasard):
-  global bonnesPioches,nbErreurs
+  global bonnesPioches,nombreErreurs
 
   motSecret = choisirMot(suggestion,motAuHasard)
   bonnesPioches = ""
-  nbErreurs = 0
+  nombreErreurs = 0
   print(motSecret)
   afficher(donnerMasque(motSecret,""))
 
@@ -69,14 +69,14 @@ Si 'pioche' est dans 'lettre', met à jour du masque,
 sinon met à jour du dessin du pendu. 
 """
 def traiterPioche(pioche,motSecret):
-  global bonnesPioches,nbErreurs
+  global bonnesPioches,nombreErreurs
 
   if lettreEstDansMot(pioche,motSecret):
     if not lettreEstDansMot(pioche,bonnesPioches):
       bonnesPioches += pioche
       afficher(donnerMasque(motSecret,bonnesPioches))
   else:
-    nbErreurs += 1
-    majCorps(nbErreurs)
+    nombreErreurs += 1
+    majCorps(nombreErreurs)
 
 go(globals())

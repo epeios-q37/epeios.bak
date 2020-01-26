@@ -267,7 +267,7 @@ Sachant que :
 - `mot` est une chaîne de caractères contenant le mot à deviner ;
 - `pioches` étant une chaîne de caractère contenant les lettres choisies par le joueur ;
 
-écrire le code de la fonction `donnerMasque` pour qu'elle retourne `mot`, mais dont les lettres qui ne sont pas contenus dans `pioches` sont remplacées par le caractère `_`.
+écrire le code de la fonction `donnerMasque` pour qu'elle retourne `mot`, mais dont les lettres qui ne sont pas contenues dans `pioches` sont remplacées par le caractère `_`.
 
 ### Pseudo-code
 
@@ -290,7 +290,7 @@ Sachant que :
 Sachant que le contenu du masque est affiché dans le cadre au-dessus du clavier :
 
 - au lancement, le masque doit être constitué d'un nombre de `_` égal au nombre de caractères du mot à deviner ;
-- cliquer sur une lettre contenue dans le mot à deviner : toutes les occurrences de cette lettre contenus dans le mot à deviner doivent être dévoilées, en plus des lettres déjà dévoilées ;
+- cliquer sur une lettre contenue dans le mot à deviner : toutes les occurrences de cette lettre contenues dans le mot à deviner doivent être dévoilées, en plus des lettres déjà dévoilées ;
 - cliquer sur une lettre qui n'est **pas** contenue dans le mot à deviner : rien ne doit se passer ;
 - tester des mots contenant plusieurs fois la même lettre pour vérifier que toutes les occurrences d'une même lettre soient bien dévoilées.
 
@@ -322,7 +322,7 @@ go(globals())
 
 Sachant que : 
 
-- `nombreErreurs` est le nombre d'erreurs commises par le joueur, c'est-à-dire le nombre de lettres qu'il a choisi est qui ne sont pas contenus dans le mot à deviner ;
+- `nombreErreurs` est le nombre d'erreurs commises par le joueur, c'est-à-dire le nombre de lettres qu'il a choisi est qui ne sont pas contenues dans le mot à deviner ;
 
 écrire le code de la fonction `majCorps` pour qu'elle dessine la partie du corps correspondant au nombre d'erreurs.
 
@@ -455,7 +455,7 @@ Gérer la lettre sélectionnée par le joueur, de manière à mettre à jour, so
 - Dans la première ligne, remplacer le `h` par un `i` ;
 - ajouter les lignes suivantes avant la dernière instruction du fichier :
   - `bonnesPioches = ""`,
-  - `nbErreurs = 0`,
+  - `nombreErreurs = 0`,
   - `def raz(suggestion,motAuHasard):`,
   - `def traiterPioche(pioche,motSecret):`.
   
@@ -470,7 +470,7 @@ def majCorps(nombreErreurs):
 
 
 bonnesPioches = ""
-nbErreurs = 0
+nombreErreurs = 0
 
 
 def raz(suggestion,motAuHasard):
@@ -485,7 +485,7 @@ go(globals())
 ### Tâches
 
 - `bonnesPioches` est une **chaîne de caractères** globale qui contiendra les lettres sélectionnées par le joueur et qui sont contenues dans le mot secret ;
-- `nbErreurs` est un **entier** global qui contiendra le nombre de lettres sélectionnées par le joueurs et qui ne sont **pas** contenues dans le mot secret.
+- `nombreErreurs` est un **entier** global qui contiendra le nombre de lettres sélectionnées par le joueurs et qui ne sont **pas** contenues dans le mot secret.
 
 #### Fonction `raz`
 
@@ -499,14 +499,14 @@ Sachant que :
 
 écrire le code de cette fonction pour :
 
-- réinitialiser les deux variables globales `bonnesPioches` et `nbErreurs` ;
+- réinitialiser les deux variables globales `bonnesPioches` et `nombreErreurs` ;
 - stocker dans `motSecret` un nouveau mot secret, en utilisant l'une des fonctions développées précédemment ;
 - afficher le masque correspondant au mot stocké dans `motSecret` :
   - en utilisant l'une des fonctions développées précédemment pour déterminer le masque,
   - en utilisant la fonction `afficher` pour afficher le masque (lui passer en paramètre le masque en question) ;
 - retourner `motSecret`.
 
-Contrairement à `bonnesPioches` et `nbErreurs`, qui sont des variable **globales**, `motSecret` devra être une variable **locale**.
+Contrairement à `bonnesPioches` et `nombreErreurs`, qui sont des variable **globales**, `motSecret` devra être une variable **locale**.
 
 Le dessin du pendu est effacé automatiquement lorsque l'on clique sur `Recommencer`.
 
@@ -521,7 +521,7 @@ Sachant que :
   - ajouter `pioche` dans la la variable globale `bonnePioches`,
   - afficher le nouveau masque correspondant,
 - si `pioche` n'est **pas** contenu dans `motSecret` :
-  - incrémenter la variable globale `nbErreurs`,
+  - incrémenter la variable globale `nombreErreurs`,
   - mettre à jour le dessin du pendu.
 
 Il faudra, bien entendu, utiliser les fonctions développées dans les précedents exercices.
@@ -544,7 +544,7 @@ Il faudra, bien entendu, utiliser les fonctions développées dans les préceden
 > &nbsp;&nbsp;Ajouter `pioche` à `bonnePioches`  
 > &nbsp;&nbsp;Afficher le nouveau masque  
 > Sinon  
-> &nbsp;&nbsp;Incrémenter `nbErreurs`  
+> &nbsp;&nbsp;Incrémenter `nombreErreurs`  
 > &nbsp;&nbsp;Complèter le dessin du pendu
 
 ### Aperçu
@@ -564,13 +564,13 @@ Comme vous avez pu le constater, la manière dont est codé l'exercice precéden
 ### Préparation
 
 - Dans la première ligne, remplacer le `i` par un `j` ;
-- supprimer la déclaration des variables `bonnesPioches` et `nbErreurs` ;
+- supprimer la déclaration des variables `bonnesPioches` et `nombreErreurs` ;
 - là où il y avait la déclaration de ces variables, placer le code suivant :
 ```python
 class Pendu:
   def raz(self):
     self.bonnesPioches = ""
-    self.nbErreurs = 0
+    self.nombreErreurs = 0
 
   def __init__(self):
     self.raz()
@@ -578,7 +578,7 @@ class Pendu:
   def traiterEtTesterPioche(self,pioche,motSecret):
 ```
 - dans les fonctions `raz(…)` et `traiterPioches(…)`
-  - enlever la ligne `global bonnesPioches, nbErreurs`,
+  - enlever la ligne `global bonnesPioches, nombreErreurs`,
   - ajouter le paramètre `pendu` en première position dans leurs déclarations respectives.
 
 ```python
@@ -590,13 +590,13 @@ from workshop.fr.h import *
 def majCorps(nombreErreurs):    
     …
 
-# Les déclarations des variables 'bonnesPioches' et 'nbErreurs'
+# Les déclarations des variables 'bonnesPioches' et 'nombreErreurs'
 # qui étaient positionnées ici doivent être supprimées.
 
 class Pendu:
   def raz(self):
     self.bonnesPioches = ""
-    self.nbErreurs = 0
+    self.nombreErreurs = 0
 
   def __init__(self):
     self.raz()
@@ -605,13 +605,13 @@ class Pendu:
 
 
 def raz(pendu,suggestion,motAuHasard):
-# La ligne 'global bonnesPioches, nbErreurs' présente ici doit être supprimée.
+# La ligne 'global bonnesPioches, nombreErreurs' présente ici doit être supprimée.
 # Le reste du code doit être conservé.
     …
   
 
 def traiterPioche(pendu,pioche,motSecret):
-# La ligne 'global bonnesPioches, nbErreurs' présente ici doit être supprimée.
+# La ligne 'global bonnesPioches, nombreErreurs' présente ici doit être supprimée.
 # Le reste du code doit être conservé.
     …
 
@@ -620,9 +620,9 @@ go(globals())
 
 ### Tâches
 
-Au lieu d'être globales à tout le programme, les variables `bonnesPioches` et `nbErreurs` sont maintenant rattachées à une classe appelée `Pendu`. Une instance de cette classe est crée pour chaque joueur, et est accessible via le paramètre `pendu` passé aux fonctions `raz(…)` et `traiterPioche(…)`.
+Au lieu d'être globales à tout le programme, les variables `bonnesPioches` et `nombreErreurs` sont maintenant rattachées à une classe appelée `Pendu`. Une instance de cette classe est crée pour chaque joueur, et est accessible via le paramètre `pendu` passé aux fonctions `raz(…)` et `traiterPioche(…)`.
 
-Pour accèder aux membre de cette instance, on utilisera l'écriture `pendu.<variable ou méthode>`. Ainsi, `pendu.nbErreurs` donne accès à la variable `nbErreurs` de la classe `Pendu`, et `pendu.raz()` appellera la méthode `raz` de cette même classe.
+Pour accèder aux membre de cette instance, on utilisera l'écriture `pendu.<variable ou méthode>`. Ainsi, `pendu.nombreErreurs` donne accès à la variable `nombreErreurs` de la classe `Pendu`, et `pendu.raz()` appellera la méthode `raz` de cette même classe.
 
 Dans le cas de méthodes, le premier paramètre, nommé par convention `self`, est l'instance à partir de laquelle cette fonction a été appelée. Ainsi, en appelant `pendu.raz()`, le paramètre `self` de la méthode `raz` référence la même instance de la classe `Pendu` que la variable `pendu`.
 
@@ -636,7 +636,7 @@ Sachant que :
 
 écrire le code de la méthode `Pendu.traiterEtTesterPioche` pour qu'elle :
 
-- remplisse les même fonctionnalités que la fonction `traiterPioche(…)` de l'exercice précedent, mais en utilisant le paramètre `self` pour accèder aux variables `bonnesPioches` et `nbErreurs` de la classe `Pendu` (`self.bonnesPioches` et `self.nbErreurs`) ;
+- remplisse les même fonctionnalités que la fonction `traiterPioche(…)` de l'exercice précedent, mais en utilisant le paramètre `self` pour accèder aux variables `bonnesPioches` et `nombreErreurs` de la classe `Pendu` (`self.bonnesPioches` et `self.nombreErreurs`) ;
 - retourne :
   - `VRAI` lorsque `pioche` est présent dans `motSecret`,
   - `FAUX` lorsque `pioche` n'est **pas** présent dans `motSecret`.
@@ -670,7 +670,7 @@ Sachant que :
 > &nbsp;&nbsp;Ajouter `pioche` à `bonnePioches`  
 > &nbsp;&nbsp;Retourner `VRAI`  
 > Sinon  
-> &nbsp;&nbsp;Incrémenter `nbErreurs`  
+> &nbsp;&nbsp;Incrémenter `nombreErreurs`  
 > &nbsp;&nbsp;Retourner `FAUX`
 
 
@@ -731,7 +731,7 @@ class Pendu:
   def __init__(self):
     self.motSecret = ""
     self.bonnesPioches = ""
-    self.nbErreurs = 0
+    self.nombreErreurs = 0
     
   def traiterEtTesterPioche(self,pioche):
     …
@@ -794,7 +794,7 @@ modifier le code de la fonction `traiterPioche` en conséquence.
 
 > Affecter à `pendu.motSecret` un nouveau mot à deviner
 > 
-> Réinitialiser les variables membres `Pendu.bonnesPioches` et `Pendu.nbErreurs`
+> Réinitialiser les variables membres `Pendu.bonnesPioches` et `Pendu.nombreErreurs`
 
 
 #### Fonction `raz`
@@ -831,8 +831,14 @@ Gérer les fins de partie, afin de notifier au joueur qu'il a gagné ou perdu, a
 
 ### Préparation
 
-- Dans la méthode `Pendu.raz`, ajouter la ligne `self.enCours = VRAI` ;
+- Renommer `donnerMasque` en `donnerMasqueEtTesterSiVictoire` ;
+- renommer `majCorps` en `majCorpsEtTesterSiDefaite` ;
+- dans la méthode `Pendu.raz`, ajouter la ligne `self.enCours = VRAI` ;
 - dans le constructeur `Pendu.__init__`, ajouter la ligne `self.enCours = FAUX` ;
+- ajouter les déclaration suivantes avant la dernière instruction (`go(globals())`) du fichier :
+  - `def AConnexion(pendu,suggestion,motAuHasard):`,
+  - `def APioche(pendu,pioche):`,
+  - `def ARelance(pendu,suggestion,motAuHasard):`.
 
 ```python
 from workshop.fr.k import *
@@ -844,13 +850,14 @@ def lettreEstDansMot(lettre,mot)
   …
 
 
-# Fonction 'donnerMasque' renommée en `donnerMasqueEtTesterSiVictoire`
+# Fonction 'donnerMasque' renommée en `donnerMasqueEtTesterSiVictoire`.
 def donnerMasqueEtTesterSiVictoire(mot,pioches)
   …
 
-
-def majCorps(*args):
+# Fonction 'majCorps' renommée en 'majCorpsEtTesterSiDefaite'
+def majCorpsEtTesterSiDefaite(nombreErreurs):
   …
+  self.enCours = VRAI
 
 
 class Pendu:
@@ -858,9 +865,8 @@ class Pendu:
     …
 
   def __init__(self):
-    self.motSecret = ""
-    self.bonnesPioches = ""
-    self.nbErreurs = 0
+    …
+    self.enCours = FAUX
     
   def traiterEtTesterPioche(self,pioche):
     …
@@ -874,5 +880,163 @@ def traiterPioche(pendu,pioche):
   …
 
 
+def AConnexion(pendu,suggestion,motAuHasard):
+
+
+def APioche(pendu,pioche):
+
+
+def ARelance(pendu,suggestion,motAuHasard):
+
+
 go(globals())
 ```
+
+### Tâches
+
+#### Fonction `donnerMasqueEtTesterSiVictoire`
+
+Sachant que :
+
+-   `mot` est une chaîne de caractères contenant le mot à deviner ;
+-   `pioches` étant une chaîne de caractère contenant les lettres choisies par le joueur ;
+
+modifier le code de la fonction `donnerMasqueEtTesterSiVictoire` (précédemment nommée `donnerMasque`) pour qu'elle retourne, en plus du masque, la valeur `VRAI` si le joueur a trouvé toutes les lettres (`pioches` contient toutes les lettres contenues dans `mot`), la valeur `FAUX` dans le cas contraire.
+
+#### Fonction `majCorpsEtTesterSiDefaite`
+
+Sachant que :
+
+- `nombreErreurs` est le nombre d'erreurs commises par le joueur, c'est-à-dire le nombre de lettres qu'il a choisi est qui ne sont pas contenues dans le mot à deviner ;
+
+modifier le code de la fonction `majCorpsEtTesterSiDefaite` (précédemment nommée `majCorps`) pour que, en plus de mettre à jour le dessin du corps du pendu, elle retourne la valeur `VRAI` si le dessin du pendu est complet, `FAUX` dans le cas contraire.
+
+Rappel : la variable globale `P_NOMBRE` contient le nombre de parties dont est constitué le dessin du corps du pendu.
+
+#### Fonction `raz`
+
+Sachant que :
+
+- la fonction `donnerMasque` a été renommée en `donnerMasqueEtTesterSiVictoire` ;
+- que cette fonction, en plus de retourner le masque, retourne également un booléen (dont on peut ignorer la valeur) ;
+
+modifier le code de la fonction `raz` de manière à tenir compte de ces deux modifications.
+
+#### Fonction `traiterPioche`
+
+Sachant que :
+
+- concernant la fonction `donnerMasqueEtTesterSiVictoire` :
+  - celle-ci remplace la fonction précédemment nommée `donnerMasque`,
+  - qu'en plus de retourner le masque, elle retourne également un booléen à `VRAI` si pa partie est gagnée par le jourus, à `FAUX` sinon;
+- concernant la fonction `majCorpsEtTesterSiDefaite` :
+  - celle-ci remplace la fonction précédemment nommée `majCorps`,
+  - elle retourne un booléen à `VRAI` lorsque le joueur a perdu la partie, à `FAUX` sinon ;
+  
+  modifier le code de la fonction `traiterPioche` pour, qu'elle notifie le joueur dés qu'il a gagner ou perdu. Dans le cas où le jouer a perdu la partie, il faudra également lui notifier le nombre d'erreurs qu'il a commis (nombre de lettre piochées ne se trouvant dans le mot à deviner), le nombre de bonnes pioches (nombre de lettre piochées se trouvant dans le mot à deviner), ainsi que le mot à deviner.
+
+  Pour ce faire, il existe un fonction `notifier(…)` qui affiche une boite de dialogue contenant la chaîne de caractère passée en paramètre à cette fonction.
+
+#### Fonction `AConnexion`
+
+Sachant que :
+
+- `pendu` est une instance de la classe `Pendu` ;
+- `suggestion` est le contenu du champ de saisie ;
+- `motAuHasard` est un mot choisi au hasard ;
+- cette fonction est appelée à chaque fois qu'un nouveau joueur se connecte ;
+
+écrire le code de la fonction `AConnexion` de manière à initialiser :
+
+- l'instance `pendu` de la classe `Pendu` ;
+- le masque ;
+- le dessin du pendu.
+
+On utilisera bien entendu le fonctions développées précédemment.
+
+#### Fonction `APioche`
+
+Sachant que :
+
+- `pendu` est une instance de la classe `Pendu` ;
+- `pioche` contient la lettre sélectionnée par le joueur ;
+- cette fonction est appelée à chaque fois que le joueur sélectionne une nouvelle lettre ;
+
+écrire le code de la fonction `APioche` de manière à mettre à jour :
+
+- l'instance `pendu` de la classe `Pendu` ;
+- le masque ;
+- le dessin du pendu.
+
+On utilisera bien entendu le fonctions développées précédemment.
+
+#### Fonction `ARelance`
+
+Sachant que :
+
+- `pendu` est une instance de la classe `Pendu` ;
+- `suggestion` est le contenu du champ de saisie ;
+- `motAuHasard` est un mot choisi au hasard ;
+- cette fonction est appelée à chaque fois que le joueur clique sur le bouton `Recommencer` ;
+
+écrire le code de la fonction `ARelance` de manière à :
+
+- notifier au joueur (on utilisera la fonction `notifier(…)` évoquée plus haut):
+  - le nombre d'erreurs,
+  - le nombre de bonnes pioches,
+  - le mot à deviner ;
+- initialiser pour une nouvelle partie :
+  - l'instance `pendu` de la classe `Pendu` ;
+  - le masque ;
+  - le dessin du pendu.
+
+On utilisera bien entendu le fonctions développées précédemment.
+
+### Pseudo-code
+
+####  Fonction `donnerMasqueEtTesterSiVictoire`
+
+> Mettre une chaîne de caractères vide dans `masque`  
+> Mettre la valeur `VRAI` dans`victoire`
+>
+> Pour `lettre` étant chaque lettre dans `mot`  
+> &nbsp;&nbsp;Si `lettre` est dans `pioches`  
+> &nbsp;&nbsp;&nbsp;&nbsp;Ajouter `lettre` à `masque`  
+> &nbsp;&nbsp;Sinon  
+> &nbsp;&nbsp;&nbsp;&nbsp;Ajouter le caractère **`_`** à `masque`  
+> &nbsp;&nbsp;&nbsp;&nbsp;Mettre `victoire` à `FAUX`
+>
+> Retourner `masque` et `victoire`
+
+#### Fonction `majCorpsEtTesterSiDefaite`
+
+Identique à celui de la fonction `majCorps` avec, en plus :
+
+> 
+> Si `nombreErreurs` >= `P_NOMBRE`  
+> &nbsp;&nbsp;Retourner `VRAI`  
+> Sinon  
+> &nbsp;&nbsp;Retourner `FAUX`
+
+#### Fonction `raz`
+
+Identique à celui de l'exercice précédent.
+
+#### Fonction `traiterPioche`
+
+> Si `pioche` est contenu dans `motSecret`  
+> &nbsp;&nbsp;Ajouter `pioche` à `bonnePioches`  
+> &nbsp;&nbsp;Afficher le nouveau masque  
+> Sinon  
+> &nbsp;&nbsp;Incrémenter `nombreErreurs`  
+> &nbsp;&nbsp;Complèter le dessin du pendu
+
+#### Fonction `AConnexion`
+
+#### Fonction `APioche`
+
+#### Fonction `ARelance`
+
+
+
+

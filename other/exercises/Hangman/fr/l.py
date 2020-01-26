@@ -12,7 +12,7 @@ def choisirMot(*args):
 
 
 def lettreEstDansMot(*args):
-    return workshop.rfIsLetterInWord(*args)
+  return workshop.rfIsLetterInWord(*args)
 
 
 """
@@ -33,8 +33,14 @@ def donnerMasqueEtTesterSiVictoire(mot,pioches):
   return masque,victoire    
 
 
-def majCorps(*args):
-  return workshop.rfUpdateBody(*args)
+"""
+Ajouter le test.
+"""
+def majCorpsEtTesterSiDefaite(nombreErreurs):
+  workshop.rfUpdateBody(*args)
+
+  return nombreErreurs >= ( P_NOMBRE - 1 )
+
 
 
 """
@@ -51,13 +57,13 @@ class Pendu:
   def raz(self,suggestion,motAuHasard):
     self.motSecret = choisirMot(suggestion,motAuHasard)
     self.bonnesPioches = ""
-    self.nbErreurs = 0
+    self.nombreErreurs = 0
     self.enCours = VRAI
 
   def __init__(self):
     self.motSecret = ""
     self.bonnesPioches = ""
-    self.nbErreurs = 0
+    self.nombreErreurs = 0
     self.enCours = FAUX
     
   def traiterEtTesterPioche(self,pioche):
@@ -66,33 +72,11 @@ class Pendu:
         self.bonnesPioches += pioche
       return VRAI
     else:
-      self.nbErreurs += 1
+      self.nombreErreurs += 1
       return FAUX
 
 
 
-"""
-Ajouter le test.
-"""
-def majCorpsEtTesterSiDefaite(nbErreurs):
-  majCorps(nbErreurs)
-
-  return nbErreurs >= ( P_NOMBRE - 1 )
-
-
-"""
-Ajouter le test.
-"""
-def traiterPioche(pendu,pioche):
-  if pendu.traiterEtTesterPioche(pioche):
-    masque,victoire = donnerMasqueEtTesterSiVictoire(pendu.motSecret,pendu.bonnesPioches)
-    afficher(masque)
-    if victoire and pendu.enCours:
-      notifier("Tu as gagné ! Félicitations !")
-      pendu.enCours = FAUX
-  elif pendu.enCours and majCorpsEtTesterSiDefaite(pendu.nbErreurs):
-    notifier("\nPerdu !\nErreurs : {} ; bonnes pioches : {}.\n\nLe mot à deviner était : '{}'.".format(pendu.nbErreurs,len(pendu.bonnesPioches),pendu.motSecret))
-    pendu.enCours = FAUX
 
 
 """
@@ -106,6 +90,19 @@ def raz(pendu,suggestion,motAuHasard):
   if DIVULGUER_MOT_SECRET:
     divulguerMotSecret(pendu.motSecret)
 
+"""
+Ajouter le test.
+"""
+def traiterPioche(pendu,pioche):
+  if pendu.traiterEtTesterPioche(pioche):
+    masque,victoire = donnerMasqueEtTesterSiVictoire(pendu.motSecret,pendu.bonnesPioches)
+    afficher(masque)
+    if victoire and pendu.enCours:
+      notifier("Tu as gagné ! Félicitations !")
+      pendu.enCours = FAUX
+  elif pendu.enCours and majCorpsEtTesterSiDefaite(pendu.nombreErreurs):
+    notifier("\nPerdu !\nErreurs : {} ; bonnes pioches : {}.\n\nLe mot à deviner était : '{}'.".format(pendu.nombreErreurs,len(pendu.bonnesPioches),pendu.motSecret))
+    pendu.enCours = FAUX
 
 
 """
@@ -128,7 +125,7 @@ Appelé lorsqu'une nouvelle partie est relancée.
 """
 def ARelance(pendu,suggestion,motAuHasard):
   if pendu.enCours:
-    notifier("\nErreurs : {} ; bonnes pioches : {}.\n\nLe mot à deviner était : '{}'.".format(pendu.nbErreurs,len(pendu.bonnesPioches),pendu.motSecret))
+    notifier("\nErreurs : {} ; bonnes pioches : {}.\n\nLe mot à deviner était : '{}'.".format(pendu.nombreErreurs,len(pendu.bonnesPioches),pendu.motSecret))
 
   raz(pendu,suggestion,motAuHasard)
 
