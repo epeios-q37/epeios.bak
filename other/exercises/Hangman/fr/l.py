@@ -37,7 +37,7 @@ def donnerMasqueEtTesterSiVictoire(mot,pioches):
 Ajouter le test.
 """
 def majCorpsEtTesterSiDefaite(nombreErreurs):
-  workshop.rfUpdateBody(*args)
+  workshop.rfUpdateBody(nombreErreurs)
 
   return nombreErreurs >= ( P_NOMBRE - 1 )
 

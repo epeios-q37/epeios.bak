@@ -30,14 +30,14 @@ def getMaskAndTestIfHasWon(word,guesses):
       mask += "_"
       hasWon = False
 
-  return mask,hasWondef updateBody(*args):
+  return mask,hasWondef
 
 
 """
 Add the testing.
 """
 def updateBodyAndTestIfHasLost(errorsAmount):
-  workshop.rfUpdateBody(*args)    
+  workshop.rfUpdateBody(errorsAmount)    
 
   return errorsAmount >= (P_AMOUNT - 1)
 

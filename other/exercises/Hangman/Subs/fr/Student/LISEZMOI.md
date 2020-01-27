@@ -705,7 +705,7 @@ Identiques à ceux de l'exercice précédent, en vérifiant que cela fonctionne 
 
 ### Objectifs
 
-Prendre en charge la gestion du mot à deviner ainsi que sa divulgation ou non en fonction de la valeur de la variable globale `DIVULGUER_MOT_SECRET`.
+Prendre en charge la gestion du mot à deviner ainsi que sa (non-)divulgation en fonction de la valeur de la variable globale `DIVULGUER_MOT_SECRET`.
 
 ### Préparation
 
@@ -758,7 +758,7 @@ Sachant que :
 - `suggestion` est le contenu du champ de saisie ;
 - `motAuHasard` est un mot choisi au hasard ;
 
-Modifier la méthode `Pendu.raz`, en s'inspirant de la **fonction** `raz`, pour stocker, dans la variable membre `Pendu.motSecret`, un nouveau mot à deviner.
+modifier la méthode `Pendu.raz`, en s'inspirant de la **fonction** `raz`, pour stocker, dans la variable membre `Pendu.motSecret`, un nouveau mot à deviner.
 
 #### Fonction `raz`
 
@@ -768,12 +768,12 @@ Sachant que :
 - `suggestion` est le contenu du champ de saisie ;
 - `motAuHasard` est un mot choisi au hasard ;
 
-adapter la **fonction** `raz` pour prendre en compte les modifications de la **méthode** `Pendu.raz`, la gestion du mot à deviner ayant été déléguée à la classe `Pendu`.
+adapter la **fonction** `raz` pour prendre en compte les modifications de la **méthode** `Pendu.raz`, la gestion du mot à deviner ayant été déléguée à cette méthode de la classe `Pendu`.
 
-Sachant qu'il existe une fonction `divulguerMotSecret(…)` qui affiche, à des des fins de test, la chaîne de caractère passée en paramètre, modifier la fonction `raz` de manière à afficher ou non le mot secret en fonction de la valeur de la variable globale `DIVULGUER_MOT_SECRET`.
+Sachant qu'il existe une fonction `divulguerMotSecret(…)` qui affiche, afin de facilité les tests, la chaîne de caractère passée en paramètre, modifier la fonction `raz` de manière à afficher ou non le mot secret en fonction de la valeur de la variable globale `DIVULGUER_MOT_SECRET`.
 
 Sachant que l'on gère maintenant le mao à deviner `motSecret`, il n'est **plus** utile :
-- d'utiliser une variable locale `motSecret` dans la fonction `raz` ;
+- d'utiliser une variable locale `motSecret` ;
 - de retourner le mot à deviner.
 
 #### Fonction `traiterPioche`
@@ -817,7 +817,7 @@ modifier le code de la fonction `traiterPioche` en conséquence.
 
 #### Aperçu
 
-Identique à l'exercice précédent, sauf dans le cas où `DIVULGUER_MOT_SECRET` est à `FAUX`, auquel cas le champ texte à gauche du bouton `Recommencer` n'est pas affiché.
+Identique à l'exercice précédent, sauf dans le cas où `DIVULGUER_MOT_SECRET` est à `FAUX`, auquel cas le champ texte à gauche du bouton `Recommencer` ne doit pas s'afficher.
 
 #### Tests
 
@@ -854,7 +854,7 @@ def lettreEstDansMot(lettre,mot)
 def donnerMasqueEtTesterSiVictoire(mot,pioches)
   …
 
-# Fonction 'majCorps' renommée en 'majCorpsEtTesterSiDefaite'
+# Fonction 'majCorps' renommée en 'majCorpsEtTesterSiDefaite'.
 def majCorpsEtTesterSiDefaite(nombreErreurs):
   …
   self.enCours = VRAI
@@ -928,14 +928,14 @@ Sachant que :
 
 - concernant la fonction `donnerMasqueEtTesterSiVictoire` :
   - celle-ci remplace la fonction précédemment nommée `donnerMasque`,
-  - qu'en plus de retourner le masque, elle retourne également un booléen à `VRAI` si pa partie est gagnée par le jourus, à `FAUX` sinon;
+  - qu'en plus de retourner le masque, elle retourne également un booléen à `VRAI` si la partie est gagnée par le joueur, à `FAUX` sinon;
 - concernant la fonction `majCorpsEtTesterSiDefaite` :
   - celle-ci remplace la fonction précédemment nommée `majCorps`,
   - elle retourne un booléen à `VRAI` lorsque le joueur a perdu la partie, à `FAUX` sinon ;
   
-  modifier le code de la fonction `traiterPioche` pour, qu'elle notifie le joueur dés qu'il a gagner ou perdu. Dans le cas où le jouer a perdu la partie, il faudra également lui notifier le nombre d'erreurs qu'il a commis (nombre de lettre piochées ne se trouvant dans le mot à deviner), le nombre de bonnes pioches (nombre de lettre piochées se trouvant dans le mot à deviner), ainsi que le mot à deviner.
+  modifier le code de la fonction `traiterPioche` pour qu'elle notifie le joueur dés qu'il a gagné ou perdu. Dans le cas où le jouer a perdu la partie, il faudra également lui notifier le nombre d'erreurs qu'il a commis (nombre de lettres piochées ne se trouvant dans le mot à deviner), le nombre de bonnes pioches (nombre de lettres piochées se trouvant dans le mot à deviner), ainsi que le mot à deviner.
 
-  Pour ce faire, il existe un fonction `notifier(…)` qui affiche une boite de dialogue contenant la chaîne de caractère passée en paramètre à cette fonction.
+  Pour ce faire, il existe un fonction `notifier(…)` qui affiche une boite de dialogue contenant la chaîne de caractères passée en paramètre à cette fonction.
 
 #### Fonction `AConnexion`
 
@@ -1052,15 +1052,10 @@ Identique à celui de l'exercice précédent.
 
 Identique à celui de l'exercice précédent
 
-### Test
+### Tests
 
 Identiques à celui de l'exercice précédents.
 
 Vérifier que la détection d'une victoire et d'une défaite est correctement réalisée, et que les notifications sont correctes.
 
 Vérifier qu'un click sur le bouton `Recommencer` entraîne une notification avec les informations sur la partie en cours, ainsi que le lancement d'une nouvelle partie.
-
-
-
-
-
