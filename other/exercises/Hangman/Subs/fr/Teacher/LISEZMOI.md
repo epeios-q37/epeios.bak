@@ -512,12 +512,12 @@ class Pendu:
   def raz(self,suggestion,motAuHasard):
     self.motSecret = choisirMot(suggestion,motAuHasard)
     self.bonnesPioches = ""
-    self.nbErreurs = 0
+    self.nombreErreurs = 0
 
   def __init__(self):
     self.motSecret = ""
     self.bonnesPioches = ""
-    self.nbErreurs = 0
+    self.nombreErreurs = 0
     
   def traiterEtTesterPioche(self,pioche):
     if isLetterInWord(pioche,self.motSecret):
@@ -525,7 +525,7 @@ class Pendu:
         self.bonnesPioches += pioche
       return VRAI
     else:
-      self.nbErreurs += 1
+      self.nombreErreurs += 1
       return FAUX
 
 
@@ -542,7 +542,7 @@ def traiterPioche(pendu,pioche):
   if pendu.traiterEtTesterPioche(pioche):
     afficher(donnerMasque(pendu.motSecret,pendu.bonnesPioches))
   else:
-    majCorps(pendu.nbErreurs)
+    majCorps(pendu.nombreErreurs)
 ```
 
 #### Remarques
@@ -587,13 +587,13 @@ class Pendu:
   def raz(self,suggestion,motAuHasard):
     self.motSecret = choisirMot(suggestion,motAuHasard)
     self.bonnesPioches = ""
-    self.nbErreurs = 0
+    self.nombreErreurs = 0
     self.enCours = VRAI
 
   def __init__(self):
     self.motSecret = ""
     self.bonnesPioches = ""
-    self.nbErreurs = 0
+    self.nombreErreurs = 0
     self.enCours = FAUX
     
   def traiterEtTesterPioche(self,pioche):
@@ -602,7 +602,7 @@ class Pendu:
         self.bonnesPioches += pioche
       return VRAI
     else:
-      self.nbErreurs += 1
+      self.nombreErreurs += 1
       return FAUX
 
 
@@ -620,10 +620,10 @@ def donnerMasqueEtTesterSiVictoire(mot,pioches):
   return masque,victoire
 
 
-def majCorpsEtTesterSiDefaite(nbErreurs):
-  majCorps(nbErreurs)
+def majCorpsEtTesterSiDefaite(nombreErreurs):
+  majCorps(nombreErreurs)
 
-  return nbErreurs >= ( P_NOMBRE - 1 )
+  return nombreErreurs >= ( P_NOMBRE - 1 )
 
 
 def traiterPioche(pendu,pioche):
@@ -633,8 +633,9 @@ def traiterPioche(pendu,pioche):
     if victoire and pendu.enCours:
       notifier("Tu as gagné ! Félicitations !")
       pendu.enCours = FAUX
-  elif pendu.enCours and majCorpsEtTesterSiDefaite(pendu.nbErreurs):
-    notifier("\nPerdu !\nErreurs : {} ; bonnes pioches : {}.\n\nLe mot à deviner était : '{}'.".format(pendu.nbErreurs,len(pendu.bonnesPioches),pendu.motSecret))
+  elif pendu.enCours and majCorpsEtTesterSiDefaite(pendu.nombreErreurs):
+    notifier("\nPerdu !\nErreurs : {} ; bonnes pioches : {}.\n\nLe mot à deviner était : '{}'."
+             .format(pendu.nombreErreurs,len(pendu.bonnesPioches),pendu.motSecret))
     pendu.enCours = FAUX
 
 
@@ -657,7 +658,8 @@ def APioche(pendu,pioche):
 
 def ARelance(pendu,suggestion,motAuHasard):
   if pendu.enCours:
-    notifier("\nErreurs : {} ; bonnes pioches : {}.\n\nLe mot à deviner était : '{}'.".format(pendu.nbErreurs,len(pendu.bonnesPioches),pendu.motSecret))
+    notifier("\nErreurs : {} ; bonnes pioches : {}.\n\nLe mot à deviner était : '{}'."
+             .format(pendu.nombreErreurs,len(pendu.bonnesPioches),pendu.motSecret))
 
   raz(pendu,suggestion,motAuHasard)
 ```

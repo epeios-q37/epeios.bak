@@ -30,7 +30,7 @@ def getMaskAndTestIfHasWon(word,guesses):
       mask += "_"
       hasWon = False
 
-  return mask,hasWondef
+  return mask,hasWon
 
 
 """

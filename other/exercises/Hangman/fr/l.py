@@ -101,7 +101,8 @@ def traiterPioche(pendu,pioche):
       notifier("Tu as gagné ! Félicitations !")
       pendu.enCours = FAUX
   elif pendu.enCours and majCorpsEtTesterSiDefaite(pendu.nombreErreurs):
-    notifier("\nPerdu !\nErreurs : {} ; bonnes pioches : {}.\n\nLe mot à deviner était : '{}'.".format(pendu.nombreErreurs,len(pendu.bonnesPioches),pendu.motSecret))
+    notifier("\nPerdu !\nErreurs : {} ; bonnes pioches : {}.\n\nLe mot à deviner était : '{}'."
+             .format(pendu.nombreErreurs,len(pendu.bonnesPioches),pendu.motSecret))
     pendu.enCours = FAUX
 
 
@@ -125,7 +126,8 @@ Appelé lorsqu'une nouvelle partie est relancée.
 """
 def ARelance(pendu,suggestion,motAuHasard):
   if pendu.enCours:
-    notifier("\nErreurs : {} ; bonnes pioches : {}.\n\nLe mot à deviner était : '{}'.".format(pendu.nombreErreurs,len(pendu.bonnesPioches),pendu.motSecret))
+    notifier("\nErreurs : {} ; bonnes pioches : {}.\n\nLe mot à deviner était : '{}'."
+             .format(pendu.nombreErreurs,len(pendu.bonnesPioches),pendu.motSecret))
 
   raz(pendu,suggestion,motAuHasard)
 
