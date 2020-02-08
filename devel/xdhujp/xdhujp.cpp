@@ -1160,6 +1160,28 @@ void xdhujp::sProxyCallback::XDHCMNProcess(
 #endif
 
 namespace {
+    void ExecuteAndGetDigest_(
+        cJS &JSCallback,
+        const char *ScriptName,
+        const str::dStrings &Values,
+        xdhcmn::digest_ &Digest )
+	{
+	qRH
+        str::wString RawDigest;
+	qRB
+        RawDigest.Init();
+
+        Execute(JSCallback, ScriptName, Values, RawDigest);
+
+        Digest.Init();
+        xdhcmn::Split( RawDigest, Digest );
+	qRR
+	qRE
+	qRT
+	}
+}
+
+namespace {
     namespace {
         static void Append_(
             const str::string_ &Item,
@@ -1210,7 +1232,7 @@ namespace {
             str::strings Ids;
             xdhutl::event_abstracts Abstracts;
             str::string IdsTag, EventsTag;
-            str::wStrings Parameters;
+            str::wStrings Arguments;
         qRB
             Ids.Init();
             Abstracts.Init();
@@ -1221,11 +1243,11 @@ namespace {
                 EventsTag.Init();
                 HandleEvents_( Ids, Abstracts, IdsTag, EventsTag );
 
-                Parameters.Init();
-                Parameters.Append(IdsTag);
-                Parameters.Append(EventsTag);
+                Arguments.Init();
+                Arguments.Append(IdsTag);
+                Arguments.Append(EventsTag);
 
-                Execute( Callback, "SetEventHandlers_1", Parameters);
+                Execute( Callback, "SetEventHandlers_1", Arguments);
             }
         qRR
         qRT
@@ -1234,22 +1256,113 @@ namespace {
     }
 
     void HandleLayout_(
-    cJS &JSCallback,
-    const char *ScriptName,
-	const str::dStrings &Values )
+        cJS &JSCallback,
+        const char *ScriptName,
+        const str::dStrings &Values )
 	{
 	qRH
-        str::wString RawEventsDigest;
         xdhcmn::digest EventsDigest;
 	qRB
-        RawEventsDigest.Init();
-
-        Execute(JSCallback, ScriptName, Values, RawEventsDigest);
-
         EventsDigest.Init();
-        xdhcmn::Split( RawEventsDigest, EventsDigest );
+
+        ExecuteAndGetDigest_(JSCallback, ScriptName, Values, EventsDigest);
 
         HandleEvents_(JSCallback, EventsDigest);
+	qRR
+	qRE
+	qRT
+	}
+}
+
+namespace {
+    namespace {
+        void HandleWidgets_(
+            const str::strings_ &Ids,
+            const str::strings_ &Types,
+            const str::strings_ &ParametersSets,
+            str::string_ &IdsTag,
+            str::string_ &TypesTag,
+            str::string_ &ParametersSetsTag )
+        {
+            sdr::row__ Row = qNIL;
+
+            if ( Ids.Amount() != Types.Amount() )
+                qRFwk();
+
+            if ( Ids.Amount() != ParametersSets.Amount() )
+                qRFwk();
+
+            Row = Ids.First();
+
+            IdsTag.Append( "[ " );
+            TypesTag.Append( "[ ");
+            ParametersSetsTag.Append( "[ ");
+
+            while ( Row != qNIL ) {
+                Append_( Ids( Row ), IdsTag );
+                Append_( Types( Row ), TypesTag );
+                Append_( ParametersSets( Row ), ParametersSetsTag );
+
+                Row = Ids.Next( Row );
+
+                if ( Row != qNIL ) {
+                    IdsTag.Append( ", " );
+                    TypesTag.Append( ", " );
+                    ParametersSetsTag.Append( ", " );
+                }
+            }
+
+            IdsTag.Append( " ]" );
+            TypesTag.Append( " ]");
+            ParametersSetsTag.Append( " ]");
+        }
+
+
+        void HandleWidgets_(
+            cJS &Callback,
+            const xdhcmn::digest_ &Descriptions )
+        {
+        qRH
+            str::strings Ids, Types, ParametersSets, Arguments;
+            str::string IdsTag, TypesTag, ParametersSetsTag;
+        qRB
+            Ids.Init();
+            Types.Init();
+            ParametersSets.Init();
+            xdhutl::ExtractWidgetsTypesAndParametersSets( Descriptions, Ids, Types, ParametersSets );
+
+            if ( Ids.Amount() != 0 ) {
+                IdsTag.Init();
+                TypesTag.Init();
+                ParametersSetsTag.Init();
+                HandleWidgets_( Ids, Types, ParametersSets, IdsTag, TypesTag, ParametersSetsTag );
+
+                Arguments.Init();
+                Arguments.Append(IdsTag);
+                Arguments.Append(TypesTag);
+                Arguments.Append(ParametersSetsTag);
+
+                Execute( Callback, "InstantiateWidgets_1", Arguments );
+            }
+        qRR
+        qRT
+        qRE
+        }
+    }
+
+    void HandleWidgets_(
+        cJS &JSCallback,
+        const char *ScriptName,
+        const str::dStrings &Values )
+	{
+	qRH
+        xdhcmn::digest WidgetsDigest;
+	qRB
+        WidgetsDigest.Init();
+
+        ExecuteAndGetDigest_(JSCallback, ScriptName, Values, WidgetsDigest);
+
+        HandleWidgets_(JSCallback, WidgetsDigest);
 	qRR
 	qRE
 	qRT
@@ -1263,6 +1376,8 @@ void xdhujp::sProxyCallback::XDHCMNProcess(
 	{
         if ( !strcmp(ScriptName, "HandleLayout_1") )
             HandleLayout_(C_(), ScriptName, Values );
+        else if ( !strcmp(ScriptName, "DressWidgets_1") )
+            HandleWidgets_(C_(), ScriptName, Values );
         else
             Execute(C_(), ScriptName, Values, ReturnValue);
 	}

@@ -143,7 +143,7 @@ def drawing4(tortoise):
 
 def call(tortoise, dom, id):
     dom.disableElements(ids)
-    tortoise.setAutoDraw(autoDraw)
+#    tortoise.setAutoDraw(autoDraw)
     tortoise.clear()
     globals()["drawing" + str(id)](tortoise)
     tortoise.draw()

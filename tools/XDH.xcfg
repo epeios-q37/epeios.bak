@@ -12,27 +12,38 @@
 			<!-- All scripts enclosed in following block are of intenal use.-->
 			<xpp:bloc>
 				<Script name="SetEventHandlers_1" Arguments="#Ids,#Events">
-					<![CDATA[
+					<xpp:cdata>
 						setEventHandlers( %#Ids%, %#Events% );
-					]]>
+					</xpp:cdata>
+				</Script>
+				<Script name="InstantiateWidgets_1" Arguments="#Ids,#Types,#ParametersSets">
+					<![CDATA[ {
+						instantiateWidgets( %#Ids%, %#Types%, %#ParametersSets% );
+					} ]]>
 				</Script>
 			</xpp:bloc>
-			<Script name="Alert_1" Arguments="Message">
-				<xpp:cdata>
-					alert("%Message%");
-				</xpp:cdata>
-			</Script>
-			<Script name="Confirm_1" Arguments="Message">
-				<xpp:cdata>
-					if ( window.confirm("%Message%") )
-						"true";
-					else
-						"false";
-				</xpp:cdata>
-			</Script>
-            <Script name="HandleLayout_1" Arguments="Variant,Id,XML,XSL">
-                <![CDATA[
-					{
+			<!-- All scripts enclosed in following block are public.-->
+			<xpp:bloc>
+				<Script name="Execute_1" Arguments="#Script">
+					<![CDATA[ {
+						%#Script%
+					} ]]>
+				</Script>
+				<Script name="Alert_1" Arguments="Message">
+					<![CDATA[ {
+						alert("%Message%");
+					} ]]>
+				</Script>
+				<Script name="Confirm_1" Arguments="Message">
+					<![CDATA[ {
+						if ( window.confirm("%Message%") )
+							"true";
+						else
+							"false";
+					} ]]>
+				</Script>
+				<Script name="HandleLayout_1" Arguments="Variant,Id,XML,XSL">
+					<![CDATA[ {
 						let xml = "%XML%";
 						let xsl = "%XSL%";
 						let id = "%Id%";
@@ -51,29 +62,96 @@
 
 						var digests = fetchEventHandlers( id );
 						digests;
-					}
-				]]>
-            </Script>
-			<Script name="GetContents_1" Arguments="#Ids">
-				<xpp:cdata>
-					getContents(%#Ids%);
-				</xpp:cdata>
-			</Script>
-			<Script name="SetContents_1" Arguments="#Ids,#Contents">
-				<xpp:cdata>
-					setContents( %#Ids%, %#Contents% );
-				</xpp:cdata>
-			</Script>
-            <Script name="Parent_1" Arguments="Id">
-				<![CDATA[
-					getOrGenerateId( getElement( "%Id% ).parentElement );
-				]]>
-            </Script>
-			<Script name="Focus_1" Arguments="Id">
-				<xpp:cdata>
-					getElement( "%Id%" ).focus();
-				</xpp:cdata>
-			</Script>
+					} ]]>
+				</Script>
+				<Script name="GetContents_1" Arguments="#Ids">
+					<![CDATA[ {
+						getContents(%#Ids%);
+					} ]]>
+				</Script>
+				<Script name="SetContents_1" Arguments="#Ids,#Contents">
+					<![CDATA[ {
+						setContents( %#Ids%, %#Contents% );
+					} ]]>
+				</Script>
+				<Script name="SetTimeout_1" Arguments="Delay,Action">
+					<![CDATA[ {
+						setTimeout( (digest) => launchEvent(digest), %Delay%, "|TIMEOUT|timeout||((%Action%))" );
+					} ]]>
+				</Script>
+				<Script name="HandleClasses_1" Arguments="Variant,#Ids,#Classes">
+					<![CDATA[ {
+						console.log("%Variant%");
+						switch ( "%Variant%" ) {
+						case 'Add':
+							addClasses(%#Ids%, %#Classes%);
+							break;
+						case 'Remove':
+							removeClasses(%#Ids%, %#Classes%);
+							break;
+						case 'Toggle':
+							console.log("Yo", %#Ids%, %#Classes%);
+							toggleClasses(%#Ids%, %#Classes%);
+							break;
+						}
+					} ]]>
+				</Script>
+				<Script name="EnableElements_1" Arguments="#Ids">
+					<![CDATA[ {
+						enableElements( %#Ids% );
+					} ]]>
+				</Script>
+				<Script name="DisableElements_1" Arguments="#Ids">
+					<![CDATA[ {
+						disableElements( %#Ids% );
+					} ]]>
+				</Script>
+				<Script name="SetAttribute_1" Arguments="Id,Name,Value">
+					<![CDATA[ {
+						getElement( "%Id%" ).setAttribute("%Name%", "%Value%");
+					} ]]>
+				</Script>
+				<Script name="GetAttribute_1" Arguments="Id,Name">
+					<![CDATA[ {
+						getElement( "%Id%" ).getAttribute("%Name%");
+					} ]]>
+				</Script>
+				<Script name="RemoveAttribute_1" Arguments="Id,Name">
+					<![CDATA[ {
+						getElement( "%Id%" ).removeAttribute( "%Name%" );
+					} ]]>
+				</Script>
+				<Script name="SetProperty_1" Arguments="Id,#Name,#Value">
+					<![CDATA[ {
+						getElement( "%Id%" ).%#Name% = %#Value%;
+					} ]]>
+				</Script>
+				<Script name="GetProperty_1" Arguments="Id,#Name">
+					<![CDATA[ {
+						getElement( "%Id%" ).%#Name%;
+					} ]]>
+				</Script>
+				<Script name="Parent_1" Arguments="Id">
+					<![CDATA[ {
+						getOrGenerateId( getElement( "%Id% ).parentElement );
+					} ]]>
+				</Script>
+				<Script name="Focus_1" Arguments="Id">
+					<![CDATA[ {
+						getElement( "%Id%" ).focus();
+					} ]]>
+				</Script>
+				<Script name="DressWidgets_1" Arguments="Id">
+					<![CDATA[ {
+						fetchWidgets( "%Id%" );
+					} ]]>
+				</Script>
+				<Script name="" Arguments="">
+					<![CDATA[ {
+
+					} ]]>
+				</Script>
+			</xpp:bloc>
         </Scripts>
 		<OldScripts>
 			<Parent>

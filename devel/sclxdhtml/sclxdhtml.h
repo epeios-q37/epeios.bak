@@ -64,9 +64,9 @@ namespace sclxdhtml {
 
 	const char *GetLauncher( void );
 
-	using xdhdws::fHead;
+	typedef void( *fHead )(void *UP, str::dString &Head);
 
-    using xdhdws::SetHeadFunction;
+	void SetHeadFunction( fHead HeadFunction );
 
 	template <typename session> class cAction {
 	protected:

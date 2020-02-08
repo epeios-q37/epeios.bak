@@ -585,10 +585,10 @@ namespace {
 					ReportNoError_( Flow );
 					break;
 				case csdcmn::UndefinedVersion:
-					ReportError_( "Unknown protocol !!!", Flow );
+					ReportError_( "Incompatible protocol! Please update your software.", Flow );
 					break;
 				default:
-					ReportError_( "Unknown protocol version !!!", Flow );
+					ReportError_( "Unknown protocol version!", Flow );
 					break;
 				}
 

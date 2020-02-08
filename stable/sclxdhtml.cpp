@@ -44,6 +44,13 @@ namespace {
 	fHead HeadFunction_ = NULL;	// Function returning the user's HTML head section used by the Atlas toolkit.
 }
 
+void sclxdhtml::SetHeadFunction( fHead HeadFunction )
+{
+	if ( HeadFunction_ != NULL )
+		qRFwk();
+
+	HeadFunction_ = HeadFunction;
+}
 // static bso::bool__ IsInitialized_ = false;
 
 static const char *Launcher_ = NULL;

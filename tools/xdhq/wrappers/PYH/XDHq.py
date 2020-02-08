@@ -98,7 +98,7 @@ class DOM:
 		return self._dom.getAction()
 
 	def execute(self,script):
-		return self._dom.call("Execute_1" ,_STRING, 1, script, 0)
+		return self._dom.call("Execute_1" ,_STRING, script)
 
 	def flush(self):	# Returns when all the pending command were executed.
 		self.execute("''")
@@ -158,7 +158,7 @@ class DOM:
 		self.setContents({id: content})
 
 	def setTimeout(self,delay,action ):
-		self._dom.call( "SetTimeout_1", _VOID, 2, str( delay ), action, 0 )
+		self._dom.call( "SetTimeout_1", _VOID, str( delay ), action )
 
 	"""
 	# Following 4 methods will either be removed or redesigned.
@@ -185,21 +185,21 @@ class DOM:
 	"""
 
 	def dressWidgets(self,id):
-		return self._dom.call( "DressWidgets_1", _VOID, 1, id, 0 )
+		return self._dom.call( "DressWidgets_1", _VOID, id )
 
-	def _handleClasses(self, command, idsAndClasses):
+	def _handleClasses(self, variant, idsAndClasses):
 		[ids, classes] = _split(idsAndClasses)
 
-		self._dom.call(command, _VOID, 0, 2, ids, classes)
+		self._dom.call("HandleClasses_1", _VOID, variant, ids, classes)
 
 	def addClasses(self, idsAndClasses):
-		self._handleClasses("AddClasses_1", idsAndClasses)
+		self._handleClasses("Add", idsAndClasses)
 
 	def removeClasses(self, idsAndClasses):
-		self._handleClasses("RemoveClasses_1", idsAndClasses)
+		self._handleClasses("Remove", idsAndClasses)
 
 	def toggleClasses(self, idsAndClasses):
-		self._handleClasses("ToggleClasses_1", idsAndClasses)
+		self._handleClasses("Toggle", idsAndClasses)
 
 	def addClass(self, id, clas ):
 		self.addClasses({id: clas})
@@ -211,31 +211,31 @@ class DOM:
 		self.toggleClasses({id: clas})
 
 	def enableElements(self,ids):
-		self._dom.call("EnableElements_1", _VOID, 0, 1, ids )
+		self._dom.call("EnableElements_1", _VOID, ids )
 
 	def enableElement(self, id):
 		self.enableElements([id] )
 
 	def disableElements(self, ids):
-		self._dom.call("DisableElements_1", _VOID, 0, 1, ids )
+		self._dom.call("DisableElements_1", _VOID, ids )
 
 	def disableElement(self, id):
 		self.disableElements([id])
 
 	def setAttribute(self, id, name, value ):
-		self._dom.call("SetAttribute_1", _VOID, 3, id, name, str(value), 0 )
+		self._dom.call("SetAttribute_1", _VOID, id, name, str(value) )
 
 	def getAttribute(self, id, name):
-		return self._dom.call("GetAttribute_1", _STRING, 2, id, name, 0 )
+		return self._dom.call("GetAttribute_1", _STRING, id, name )
 
 	def removeAttribute(self, id, name ):
-		self._dom.call("RemoveAttribute_1", _VOID, 2, id, name, 0 )
+		self._dom.call("RemoveAttribute_1", _VOID, id, name )
 
 	def setProperty(self, id, name, value ):
-		self._dom.call("SetProperty_1", _VOID, 3, id, name, value, 0 )
+		self._dom.call("SetProperty_1", _VOID, id, name, value )
 
 	def getProperty(self, id, name ):
-		return self._dom.call("GetProperty_1", _STRING, 2, id, name, 0 )
+		return self._dom.call("GetProperty_1", _STRING, id, name )
 
 	def focus(self, id):
 		self._dom.call("Focus_1", _VOID, id)

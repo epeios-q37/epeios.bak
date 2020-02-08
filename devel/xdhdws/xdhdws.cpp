@@ -23,14 +23,3 @@
 
 using namespace xdhdws;
 
-namespace {
-	fHead HeadFunction_ = NULL;	// Function returning the user's HTML head section used by the Atlas toolkit.
-}
-
-void xdhdws::SetHeadFunction( fHead HeadFunction )
-{
-	if ( HeadFunction_ != NULL )
-		qRFwk();
-
-	HeadFunction_ = HeadFunction;
-}

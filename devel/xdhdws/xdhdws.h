@@ -40,10 +40,6 @@ namespace xdhdws {
 	using xdhcmn::nstring___;
 	using xdhcmn::rNString;
 
-	typedef void( *fHead )(void *UP, str::dString &Head);
-
-	void SetHeadFunction( fHead HeadFunction );
-
 	class sProxy
 	{
 	private:

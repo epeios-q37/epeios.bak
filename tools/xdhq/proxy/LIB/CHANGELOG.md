@@ -1,5 +1,10 @@
 # *XDHq* *CHANGELOG*
 
+## 2020-02-08
+
+- changing both protocol **labels** (no backward compatibility),
+- functions are no more hard-coded, but retrieved from registry,
+
 ## 2019-07-06
 
 - adding new layout related functionalities,

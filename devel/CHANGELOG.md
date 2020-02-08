@@ -10,8 +10,6 @@
 
 ## 2020-02-07:
 
-- SCLXDHTML:
-  - moving head related features to XDHDWS,
 - TAGSBS:
   - introducing `GetLongTags(…)`,
 - XDHCMN, XDHDWS, XDHUJP, XDHUJS:

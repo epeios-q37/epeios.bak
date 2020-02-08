@@ -34,11 +34,11 @@ using namespace dmopool;
 #include "mtk.h"
 #include "sclmisc.h"
 #include "str.h"
-#include "xdhdws.h"
+#include "sclxdhtml.h"
 
 
 namespace {
-	static qCDEF( char *, ProtocolId_, "877c913f-62df-40a1-bf5d-4bb5e66a6dd9" );
+	static qCDEF( char *, ProtocolId_, "0fac593d-d65f-4cc1-84f5-3159c23c616b" );
 
 	namespace registry_ {
 		namespace parameter {
@@ -355,11 +355,11 @@ namespace {
 			Flow.Commit();
 			break;
 		case csdcmn::UndefinedVersion:
-			Put_( "Unknown demo protocol !!!", Flow );
+			Put_( "Incompatible FaaS protocol! Please update your software.", Flow );
 			Flow.Commit();
 			qRGnr();
 		default:
-			Put_( "Unknown demo version !!!", Flow );
+			Put_( "Unknown FaaS protocol version!", Flow );
 			Flow.Commit();
 			qRGnr();
 			break;
@@ -589,7 +589,7 @@ qGCTOR( dmopool )
 	Tokens_.Init();
 	Heads_.Init();
 	Backends_.Init();
-	xdhdws::SetHeadFunction( GetHead_ );
+	sclxdhtml::SetHeadFunction( GetHead_ );
 }
 
 qGDTOR( dmopool )

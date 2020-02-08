@@ -109,9 +109,9 @@ def _REPLit(url):
     httpd = HTTPServer(server_address, _REPLit_class)
     httpd.handle_request()
 
-_demoProtocolLabel = "877c913f-62df-40a1-bf5d-4bb5e66a6dd9"
+_demoProtocolLabel = "0fac593d-d65f-4cc1-84f5-3159c23c616b"
 _demoProtocolVersion = "0"
-_mainProtocolLabel = "6e010737-31d8-4be3-9195-c5b5b2a9d5d9"
+_mainProtocolLabel = "8d2b7b52-6681-48d6-8974-6e0127a4ca7e"
 _mainProtocolVersion = "0"
 
 _writeLock = threading.Lock()

@@ -384,6 +384,8 @@ function getValue(elementOrId)	// Returns the value of element of id 'id'.
 {
 	var element = getElement(elementOrId);
 	var tagName = element.tagName;
+	var escape = true
+	var value = ""
 
 //	console.log("VALUE:", element.textContent);
 
@@ -392,33 +394,39 @@ function getValue(elementOrId)	// Returns the value of element of id 'id'.
 			switch (element.getAttribute("type")) {
 				case "checkbox":
 				case "radio":
-					return element.checked;
+					value =  element.checked;
+					escape = false;
 					break;
 				default:
-					return element.value;
+					value =  element.value;
 					break;
 			}
 			break;
 		case "TEXTAREA":
-			return element.value;
+			value =  element.value;
 			break;
 		case "SELECT":
 			if (element.selectedIndex == -1)
-				return "";
+				value =  "";
 			else
-				return element.options[element.selectedIndex].value;
+				value =  element.options[element.selectedIndex].value;
 			break;
 		case "OPTION":
-			return element.value;
+			value =  element.value;
 			break;
 		case "text":	// SVG
 		case "tspan":	// SVG
-			return element.textContent;
+			value =  element.textContent;
 			break;
 		default:
-			return element.getAttribute(valueAttributeName);
+			value =  element.getAttribute(valueAttributeName);
 			break;
 	}
+
+	if ( escape )
+		return value.replace(/\\/g,'\\\\').replace(/"/g,'\\"');
+	else
+		return value;
 }
 
 function getContents(ids) {
@@ -426,7 +434,7 @@ function getContents(ids) {
 	var contents = "";
 
 	while(i--) {
-		contents = '"' + getValue(ids[i]).replace(/\\/g,'\\\\').replace(/"/g,'\\"') + '",' + contents;
+		contents = '"' + getValue(ids[i]) + '",' + contents;
 	}
 
 	return contents;
