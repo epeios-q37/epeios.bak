@@ -20,13 +20,13 @@
 #ifndef REGISTRY_INC_
 # define REGISTRY_INC_
 
-# include "sclxdhtml.h"
+# include "sclrgstry.h"
 
 namespace registry {
 	using sclrgstry::rEntry;
 
 	namespace parameter {
-		using namespace sclxdhtml::registry::parameter;
+		using namespace sclrgstry::parameter;
 
 		extern rEntry
 			HostService,
@@ -34,7 +34,7 @@ namespace registry {
 	}
 
 	namespace definition {
-		using namespace sclxdhtml::registry::definition;
+		using namespace sclrgstry::definition;
 	}
 }
 

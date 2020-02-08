@@ -33,48 +33,42 @@ using xdhutl::nstring___;
 using xdhutl::rNString;
 using xdhutl::nchar__;
 using xdhutl::sNChar;
-using xdhujs::script_name__;
 
-static const char *Execute_(
+void xdhujp::Execute(
 	cJS  &Callback,
-	script_name__ ScriptName,
-	TOL_CBUFFER___ *Buffer,
-	va_list List )
+	const char *ScriptName,
+	const str::dStrings &Values,
+	str::dString &ReturnValue )
 {
-	const char *Result = NULL;
 qRH
 	str::string Script;
 qRB
 	Script.Init();
-	GetScript( ScriptName, Script, List );
+	xdhujs::GetScript( ScriptName, Values, Script );
 
-	Result = Callback.Execute( Script, Buffer );
+	Callback.Execute( Script, ReturnValue );
 qRR
 qRT
 qRE
-	return Result;
 }
 
-const char *xdhujp::Execute(
+void xdhujp::Execute(
 	cJS  &Callback,
-	script_name__ ScriptName,
-	TOL_CBUFFER___ *Buffer,
-	... )
+	const char *ScriptName,
+	const str::dStrings &Values )
 {
-	const char *Result = NULL;
 qRH
-	va_list List;
+	str::string DummyReturnValue;
 qRB
-	va_start( List, Buffer );
-
-	Result = Execute_( Callback, ScriptName, Buffer, List );
+	DummyReturnValue.Init();
+	Execute( Callback, ScriptName, Values, DummyReturnValue );
 qRR
 qRT
-	va_end( List );
 qRE
-	return Result;
 }
 
+// Deprecated
+#if 0
 static void AlertConfirm_(
 	cJS &Callback,
 	script_name__ ScriptName,
@@ -1163,4 +1157,112 @@ void xdhujp::sProxyCallback::XDHCMNProcess(
 		break;
 	}
 }
+#endif
 
+namespace {
+    namespace {
+        static void Append_(
+            const str::string_ &Item,
+            str::string_ &Tag )
+        {
+            Tag.Append('"');
+            Tag.Append( Item );
+            Tag.Append('"');
+        }
+
+        static void HandleEvents_(
+            const str::strings_ &Ids,
+            const xdhutl::event_abstracts_ &Abstracts,
+            str::string_ &IdsTag,
+            str::string_ &EventsTag )
+        {
+            sdr::row__ Row = qNIL;
+
+            if ( Ids.Amount() != Abstracts.Amount() )
+                qRFwk();
+
+            Row = Ids.First();
+
+            IdsTag.Append( "[ " );
+            EventsTag.Append( "[ ");
+
+            while ( Row != qNIL ) {
+                Append_( Ids( Row ), IdsTag );
+                Append_( Abstracts( Row ).Event, EventsTag );
+
+                Row = Ids.Next( Row );
+
+                if ( Row != qNIL ) {
+                    IdsTag.Append( ", " );
+                    EventsTag.Append( ", " );
+                }
+            }
+
+            IdsTag.Append( " ]" );
+            EventsTag.Append( " ]");
+        }
+
+        void HandleEvents_(
+            cJS &Callback,
+            const xdhcmn::digest_ &Descriptions )
+        {
+        qRH
+            str::strings Ids;
+            xdhutl::event_abstracts Abstracts;
+            str::string IdsTag, EventsTag;
+            str::wStrings Parameters;
+        qRB
+            Ids.Init();
+            Abstracts.Init();
+            xdhutl::FillEventAbstracts( Descriptions, Ids, Abstracts );
+
+            if ( Ids.Amount() != 0 ) {
+                IdsTag.Init();
+                EventsTag.Init();
+                HandleEvents_( Ids, Abstracts, IdsTag, EventsTag );
+
+                Parameters.Init();
+                Parameters.Append(IdsTag);
+                Parameters.Append(EventsTag);
+
+                Execute( Callback, "SetEventHandlers_1", Parameters);
+            }
+        qRR
+        qRT
+        qRE
+        }
+    }
+
+    void HandleLayout_(
+    cJS &JSCallback,
+    const char *ScriptName,
+	const str::dStrings &Values )
+	{
+	qRH
+        str::wString RawEventsDigest;
+        xdhcmn::digest EventsDigest;
+	qRB
+        RawEventsDigest.Init();
+
+        Execute(JSCallback, ScriptName, Values, RawEventsDigest);
+
+        EventsDigest.Init();
+        xdhcmn::Split( RawEventsDigest, EventsDigest );
+
+        HandleEvents_(JSCallback, EventsDigest);
+	qRR
+	qRE
+	qRT
+	}
+}
+
+void xdhujp::sProxyCallback::XDHCMNProcess(
+	const char *ScriptName,
+	const str::dStrings &Values,
+	str::dString &ReturnValue )
+	{
+        if ( !strcmp(ScriptName, "HandleLayout_1") )
+            HandleLayout_(C_(), ScriptName, Values );
+        else
+            Execute(C_(), ScriptName, Values, ReturnValue);
+	}

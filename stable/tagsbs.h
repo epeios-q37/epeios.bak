@@ -31,7 +31,6 @@
 # include "err.h"
 # include "flw.h"
 # include "str.h"
-# include "stsfsm.h"
 # include "sdr.h"
 
 /**************/
@@ -143,9 +142,21 @@ namespace tagsbs {
 		const str::strings_ &Values,
 		char TagMarker = DefaultTagMarker );
 
+    void GetLongTags(
+        flw::rRFlow &Flow,
+        str::dStrings &Tags,
+		bso::sChar TagMarker = DefaultTagMarker );
+
+    void GetLongTags(
+        const str::dString &String,
+        str::dStrings &Tags,
+		bso::sChar TagMarker = DefaultTagMarker );
+
 	class long_tags_callback__
 	{
 	protected:
+        // Return false for unexpected tag. Aborts then
+        // the substitution and reports failre to caller.
 		virtual bso::bool__ TAGSBSGetTagValue(
 			const str::string_ &Tag,
 			str::string_ &Value ) = 0;
@@ -315,6 +326,8 @@ namespace tagsbs {
 namespace tagsbs {
 	typedef tvalues_ dTaggedValues;
 	qW( TaggedValues );
+	typedef indice__ sIndice;
+	typedef long_tags_callback__ cLongTagCallback;
 }
 
 #endif

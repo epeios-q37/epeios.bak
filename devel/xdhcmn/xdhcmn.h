@@ -60,7 +60,8 @@ namespace xdhcmn {
 		m_Undefined
 	};
 
-	qENUM( Function ) {		// Parameters :
+	// Deprecated
+	qENUM( Function_ ) {		// Parameters :
 		fExecute,			// Script
 		fLog,				// Message,
 		fAlert,				// XML, XSL, Title.
@@ -108,31 +109,24 @@ namespace xdhcmn {
 		f_Undefined
 	};
 
-	const char *GetLabel( eFunction Function );
+	const char *GetLabel( eFunction_ Function );
+
+
 	class cUpstream
 	{
 	protected:
 		virtual void XDHCMNProcess(
-			eFunction Function,
-			TOL_CBUFFER___ *Result,
-			va_list List ) = 0;
+			const char *ScriptName,
+			const str::dStrings &Values,
+			str::dString &ReturnValue ) = 0;
 	public:
 		qCALLBACK( Upstream );
 		void Process(
-			eFunction Function,
-			TOL_CBUFFER___ *Result,
-			...	)
+			const char *ScriptName,
+			const str::dStrings &Values,
+			str::dString &ReturnValue )
 		{
-		qRH
-			va_list List;
-		qRB
-			va_start( List, Result );
-
-			XDHCMNProcess( Function, Result, List );
-		qRR
-		qRT
-			va_end( List );
-		qRE
+            return XDHCMNProcess(ScriptName, Values, ReturnValue );
 		}
 	};
 

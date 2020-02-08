@@ -421,6 +421,17 @@ function getValue(elementOrId)	// Returns the value of element of id 'id'.
 	}
 }
 
+function getContents(ids) {
+	var i = ids.length;
+	var contents = "";
+
+	while(i--) {
+		contents = '"' + getValue(ids[i]).replace(/\\/g,'\\\\').replace(/"/g,'\\"') + '",' + contents;
+	}
+
+	return contents;
+}
+
 function setValue(id, value) {
 	var element = document.getElementById(id);
 	var tagName = element.tagName;

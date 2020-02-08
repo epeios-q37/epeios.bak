@@ -27,22 +27,9 @@ using namespace session;
 
 inline void session::sJS::XDHUJPExecute(
 	const str::string_ &Script,
-	TOL_CBUFFER___ *Buffer )
+	str::dString &ReturnValue )
 {
-qRH
-	str::string Result;
-qRB
-	Result.Init();
-
-	S_().DownstreamExecute( Script, Result );
-
-	if ( Buffer != NULL )
-		Result.Convert( *Buffer );
-//	else if ( Result.Amount() != 0 )
-//		qRGnr();
-qRR
-qRT
-qRE
+	S_().DownstreamExecute( Script, ReturnValue );
 }
 
 static void Launch_(

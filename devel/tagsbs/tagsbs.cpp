@@ -21,6 +21,7 @@
 
 #include "tagsbs.h"
 
+#include "stsfsm.h"
 #include "uys.h"
 #include "flx.h"
 
@@ -47,7 +48,7 @@ qRB
 	Values.Init();
 
 	Tag.Init();
-	Tag.Append( TagMarker);
+	Tag.Append(TagMarker);
 	Tag.Append('0' );
 
 	while ( Counter <= Limit ) {
@@ -101,7 +102,7 @@ qRH
 	str::string Result;
 qRB
 	Result.Init();
-	
+
 	Row = SubstituteShortTag( String, Indice, Value, Result, TagMarker );
 
 	String = Result;
@@ -170,7 +171,7 @@ qRH
 	str::string Result;
 qRB
 	Result.Init();
-	
+
 	Row = SubstituteLongTag( String, Tag, Value, Result, TagMarker );
 
 	String = Result;
@@ -232,7 +233,7 @@ qRH
 	str::string Tag, Value, MergedValues;
 	bso::char__ C = 0;
 qRB
-	MergedValues.Init();	
+	MergedValues.Init();
 	MergeValues_( Callback, MergedValues );
 
 	while ( !IFlow.EndOfFlow() ) {
@@ -305,7 +306,7 @@ qRH
 	str::string Result;
 qRB
 	Result.Init();
-	
+
 	Row = SubstituteShortTags( String, Callback, Result, TagMarker );
 
 	String = Result;
@@ -387,7 +388,7 @@ qRH
 	str::string Result;
 qRB
 	Result.Init();
-	
+
 	Row = SubstituteShortTags( String, Values, Result, TagMarker );
 
 	String = Result;
@@ -397,6 +398,74 @@ qRE
 	return Row;
 }
 
+namespace {
+    class rGetTagsCallback_
+    : public cLongTagCallback
+    {
+    protected:
+  		virtual bso::bool__ TAGSBSGetTagValue(
+			const str::string_ &Tag,
+			str::string_ &Value ) override
+			{
+                if ( str::Search(Tag,Tags) == qNIL)
+                    Tags.Append(Tag);
+
+                return true;
+			}
+    public:
+        str::wStrings Tags;
+        void reset( bso::sBool P = true )
+        {
+            Tags.reset(P);
+        }
+        qCVDTOR( rGetTagsCallback_);
+        void Init(void)
+        {
+            Tags.Init();
+        }
+    };
+}
+
+void tagsbs::GetLongTags(
+    flw::rRFlow &Flow,
+    str::dStrings &Tags,
+    bso::sChar TagMarker )
+{
+qRH
+    rGetTagsCallback_ Callback;
+    sdr::sRow Row = qNIL;
+qRB
+    Callback.Init();
+
+    SubstituteLongTags(Flow, Callback, flx::VoidWFlow, TagMarker);
+
+    Row = Callback.Tags.First();
+
+    while ( Row != qNIL ) {
+        Tags.Append(Callback.Tags(Row));
+
+        Row = Callback.Tags.Next(Row);
+    }
+qRR
+qRE
+qRT
+}
+
+void tagsbs::GetLongTags(
+    const str::dString &String,
+    str::dStrings &Tags,
+    bso::sChar TagMarker )
+{
+qRH
+    flx::sStringRFlow Flow;
+qRB
+    Flow.Init( String);
+
+    GetLongTags(Flow,Tags,TagMarker);
+qRR
+qRE
+qRT
+}
 
 static bso::bool__ GetTag_(
 	flw::iflow__ &Flow,
@@ -494,7 +563,7 @@ qRH
 	str::string Result;
 qRB
 	Result.Init();
-	
+
 	Row = SubstituteLongTags( String, Callback, Result, TagMarker );
 
 	String = Result;
@@ -636,7 +705,7 @@ qRH
 	str::string Result;
 qRB
 	Result.Init();
-	
+
 	Row = SubstituteLongTags( String, Tags, Values, Result, TagMarker );
 
 	String = Result;

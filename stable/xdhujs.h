@@ -40,7 +40,8 @@ namespace xdhujs {
 	using xdhcmn::nchar__;
 	using xdhcmn::nstring___;
 
-	E_ENUM(script_name) {
+    // Deprecated.
+	E_ENUM(script_name_) {
 		snExecute,
 		snLayoutPrepender,
 		snLayoutSetter,
@@ -89,18 +90,14 @@ namespace xdhujs {
 	};
 
 	const str::string_ &GetTaggedScript(
-		script_name__ ScriptName,
-		str::string_ &Script );
+		const char *Name,
+		str::dString &Script );
 
 	void GetScript(
-		script_name__ ScriptName,
-		str::string_ &Script,
-		va_list List );
+		const char *Name,
+		const str::dStrings &Values,
+		str::dString &Script );
 
-	const str::string_ &GetScript(
-		script_name__ ScriptName,
-		str::string_ *Script,	// Was '&Script', but should not work due 'va_start(...)' restrictions concerning references (but it worked under MSVC).
-		... );
 	/*
 	inline void DialogAlert(
 		const nstring___ &XML,

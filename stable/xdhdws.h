@@ -33,10 +33,16 @@
 # include "err.h"
 # include "tol.h"
 
+# define XDHDWS_DEFAULT_SUFFIX  "xdh"
+
 namespace xdhdws {
 	using xdhcmn::nchar__;
 	using xdhcmn::nstring___;
 	using xdhcmn::rNString;
+
+	typedef void( *fHead )(void *UP, str::dString &Head);
+
+	void SetHeadFunction( fHead HeadFunction );
 
 	class sProxy
 	{
@@ -58,6 +64,28 @@ namespace xdhdws {
 
 			Callback_ = Callback;
 		}
+		void Process(
+            const char *ScriptName,
+            const str::dStrings &Values,
+            str::dString &ReturnValue )
+        {
+            return C_().Process(ScriptName, Values, ReturnValue );
+        }
+        void Process(
+            const str::dString &ScriptName,
+            const str::dStrings &Values,
+            str::dString &ReturnValue )
+        {
+        qRH
+            qCBUFFERr Buffer;
+        qRB
+            Process(ScriptName.Convert(Buffer),Values,ReturnValue);
+        qRR
+        qRE
+        qRT
+        }
+// Deprecated
+# if 0
 		const char *Execute(
 			const nstring___ &Script,
 			TOL_CBUFFER___ &Buffer )
@@ -493,6 +521,7 @@ namespace xdhdws {
 
 			return Buffer;
 		}
+# endif
 	};
 }
 

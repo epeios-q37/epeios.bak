@@ -199,7 +199,7 @@ namespace session {
 	protected:
 		virtual void XDHUJPExecute(
 			const str::string_ &Script,
-			TOL_CBUFFER___ *Buffer ) override;
+			str::dString &ReturnValue ) override;
 		virtual void XDHUJPGetWidgetAttributeName( TOL_CBUFFER___ &Buffer ) override
 		{
 			sclmisc::MGetValue( xdwrgstry::custom_item::attribute_name::Widget, Buffer);

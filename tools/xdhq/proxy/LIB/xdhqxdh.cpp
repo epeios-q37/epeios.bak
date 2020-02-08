@@ -32,6 +32,7 @@
 #include "csdbns.h"
 
 #include "sclmisc.h"
+#include "sclxdhtml.h"
 
 SCLI_DEF( xdhqxdh, PROGRAM_NAME, SOFTWARE_NAME );
 
@@ -47,7 +48,8 @@ namespace {
 
 	stsfsm::wAutomat CommandAutomat_;
 
-	qENUM( Command_ )
+	// Deprecated.
+	qENUM( _Command_ )
 	{
 		cStandBy_1,	// Send as command to report that there is no more command to handle.
 		cExecute_1,
@@ -90,7 +92,7 @@ namespace {
 
 	#define C( name ) case c##name : return #name ; break
 
-	const char *GetLabel_( eCommand_ Command )
+	const char *GetLabel_( e_Command_ Command )
 	{
 		switch ( Command ) {
 			case cStandBy_1:
@@ -143,10 +145,10 @@ namespace {
 	void FillCommandAutomat_( void )
 	{
 		CommandAutomat_.Init();
-		stsfsm::Fill<eCommand_>( CommandAutomat_, c_amount, GetLabel_ );
+		stsfsm::Fill<e_Command_>( CommandAutomat_, c_amount, GetLabel_ );
 	}
 
-	eCommand_ GetCommand_( flw::iflow__ &Flow )
+	e_Command_ GetCommand_( flw::iflow__ &Flow )
 	{
 		return stsfsm::GetId( Flow, CommandAutomat_, c_Undefined, c_amount );
 	}
@@ -212,22 +214,46 @@ namespace {
 		d_Undefined
 	};
 
+	namespace {
+		void Execute_(
+            const str::dString &Script,
+            xdhdws::sProxy &Proxy,
+            str::dString &ReturnValue )
+        {
+        qRH;
+            str::wStrings Values;
+        qRB;
+            Values.Init();
+            Values.Append(Script);
+
+            Proxy.Process( "Execute_1", Values, ReturnValue );
+        qRR;
+        qRT;
+        qRE;
+        }
+    }
+
 	void Execute_(
 		flw::rRWFlow &Flow,
 		xdhdws::sProxy &Proxy )
 	{
 	qRH;
 		str::wString Script;
-		qCBUFFERr Buffer;
+		str::wStrings Values;
+		str::wString Result;
 	qRB;
 		Script.Init();
 		prtcl::Get( Flow, Script );
 
 		Flow.Dismiss();
 
-		Proxy.Execute( Script, Buffer );
+		Values.Init();
+		Values.Append(Script);
 
-		prtcl::Put( Buffer(), Flow );
+        Result.Init();
+        Execute_(Script, Proxy, Result );
+
+		prtcl::Put( Result, Flow );
 
 		Flow.Commit();
 	qRR;
@@ -241,7 +267,7 @@ namespace {
 	{
 	qRH;
 		str::wString Message, Script;
-		qCBUFFERr Buffer;
+		str::wString ReturnValue;
 	qRB;
 		Message.Init();
 		prtcl::Get( Flow, Message );
@@ -252,7 +278,11 @@ namespace {
 		xdhcmn::Escape( Message, Script, '"' );
 		Script.Append( "\");'';");
 
-		Proxy.Execute( Script, Buffer );
+        ReturnValue.Init();
+		Execute_( Script, Proxy, ReturnValue );
+
+		if (ReturnValue.Amount())
+            qRGnr();
 
 /*
 	Despite the fact that this primitive does not need a return value,
@@ -276,7 +306,7 @@ namespace {
 	{
 	qRH;
 		str::wString Message, Script;
-		qCBUFFERr Buffer;
+		str::wString ReturnValue;
 	qRB;
 		Message.Init();
 		prtcl::Get( Flow, Message );
@@ -287,700 +317,12 @@ namespace {
 		xdhcmn::Escape( Message, Script, '"' );
 		Script.Append( "\") ) 'true'; else 'false';");
 
-		Proxy.Execute( Script, Buffer );
+        ReturnValue.Init();
+		Execute_( Script, Proxy, ReturnValue );
 
-		prtcl::Put( Buffer(), Flow );
-
-		Flow.Commit();
-	qRR;
-	qRT;
-	qRE;
-	}
-
-	namespace {
-		void EscapeNULChars_(
-			const str::dString &Source,
-			str::dString &Target )
-		{
-			sdr::sRow Row = Source.First();
-			bso::sChar C = 0;
-
-			while ( Row != qNIL ) {
-				C = Source( Row );
-
-				if ( C == 0 )
-					Target.Append( "\\x00" );
-				else
-					Target.Append( C );
-
-				Row = Source.Next( Row );
-			}
-		}
-	}
-
-	void HandleLayout_(
-		flw::rRFlow &Flow,
-		xdhdws::sProxy &Proxy,
-		void (xdhdws::sProxy::* Method)(
-			const ntvstr::rString &,
-			const ntvstr::rString &L,
-			const ntvstr::rString &) )
-	{
-	qRH;
-		str::wString Id, RawXML, EscapedXML, XSL;
-	qRB;
-		tol::Init( Id, RawXML, XSL );
-
-		prtcl::Get( Flow, Id );
-		prtcl::Get( Flow, RawXML );
-		prtcl::Get( Flow, XSL );
-
-		Flow.Dismiss();
-
-		if ( RawXML.Amount() == 0 )
-			qRGnr();
-		else if ( RawXML( RawXML.First() ) == '<' )
-			(Proxy.*Method)( Id, RawXML, XSL );
-		else {
-			EscapedXML.Init();
-
-			EscapeNULChars_( RawXML, EscapedXML );
-
-			(Proxy.*Method)( Id, EscapedXML, XSL );
-		}
-	qRR;
-	qRT;
-	qRE;
-	}
-
-	void PrependLayout_(
-		flw::rRFlow &Flow,
-		xdhdws::sProxy &Proxy)
-	{
-		HandleLayout_(Flow, Proxy, &xdhdws::sProxy::PrependLayout);
-	}
-
-	void SetLayout_(
-		flw::rRFlow &Flow,
-		xdhdws::sProxy &Proxy)
-	{
-		HandleLayout_(Flow, Proxy, &xdhdws::sProxy::SetLayout);
-	}
-
-	void AppendLayout_(
-		flw::rRFlow &Flow,
-		xdhdws::sProxy &Proxy)
-	{
-		HandleLayout_(Flow, Proxy, &xdhdws::sProxy::AppendLayout);
-	}
-
-	namespace {
-		void GetContents_(
-			const str::dStrings &Ids,
-			xdhdws::sProxy &Proxy,
-			str::dStrings &Contents )
-		{
-		qRH;
-			str::wString Content;
-			sdr::sRow Row = qNIL;
-		qRB;
-			Row = Ids.First();
-
-			while ( Row != qNIL ) {
-				Content.Init();
-				Proxy.GetValue( Ids( Row ), Content );
-
-				Contents.Append( Content );
-
-				Row = Ids.Next( Row );
-			}
-		qRR;
-		qRT;
-		qRE;
-		}
-	}
-
-	void GetContents_(
-		flw::rRWFlow &Flow,
-		xdhdws::sProxy &Proxy )
-	{
-	qRH;
-		str::wStrings Ids, Contents;
-	qRB;
-		Ids.Init();
-		prtcl::Get( Flow, Ids );
-
-		Flow.Dismiss();
-
-		Contents.Init();
-		GetContents_( Ids, Proxy, Contents );
-
-		prtcl::Put( Contents, Flow );
+		prtcl::Put( ReturnValue, Flow );
 
 		Flow.Commit();
-	qRR;
-	qRT;
-	qRE;
-	}
-
-	void SetContents_(
-		flw::rRFlow &Flow,
-		xdhdws::sProxy &Proxy )
-	{
-	qRH;
-		str::wStrings Ids, Contents;
-		str::wString MergedIds, MergedContents;
-	qRB;
-		tol::Init( Ids, Contents );
-		prtcl::Get( Flow, Ids );
-		prtcl::Get( Flow, Contents );
-
-		Flow.Dismiss();
-
-		tol::Init( MergedIds, MergedContents );
-
-		xdhcmn::FlatMerge( Ids, MergedIds, true );
-		xdhcmn::FlatMerge( Contents, MergedContents, true );
-
-		Proxy.SetContents( MergedIds, MergedContents );
-	qRR;
-	qRT;
-	qRE;
-	}
-
-	void SetTimeout_(
-		flw::rRFlow &Flow,
-		xdhdws::sProxy &Proxy )
-	{
-	qRH;
-		str::wString Delay, Action;
-	qRB;
-		tol::Init( Delay, Action );
-		prtcl::Get( Flow, Delay );
-		prtcl::Get( Flow, Action );
-
-		Flow.Dismiss();
-
-		Proxy.SetTimeout( Delay, Action );
-	qRR;
-	qRT;
-	qRE;
-	}
-
-	void Parent_(
-		flw::rRWFlow &Flow,
-		xdhdws::sProxy &Proxy )
-	{
-	qRH;
-		str::wString Id;
-		qCBUFFERr Parent;
-	qRB;
-		tol::Init( Id );
-		prtcl::Get( Flow, Id );
-
-		Flow.Dismiss();
-
-		Proxy.Parent( Id, Parent );
-
-		prtcl::Put( Parent(), Flow );
-
-		Flow.Commit();
-	qRR;
-	qRT;
-	qRE;
-	}
-
-	void FirstChild_(
-		flw::rRWFlow &Flow,
-		xdhdws::sProxy &Proxy )
-	{
-	qRH;
-		str::wString Id;
-		qCBUFFERr Child;
-	qRB;
-		tol::Init( Id );
-		prtcl::Get( Flow, Id );
-
-		Flow.Dismiss();
-
-		Proxy.FirstChild( Id, Child );
-
-		prtcl::Put( Child(), Flow );
-
-		Flow.Commit();
-	qRR;
-	qRT;
-	qRE;
-	}
-
-	void LastChild_(
-		flw::rRWFlow &Flow,
-		xdhdws::sProxy &Proxy )
-	{
-	qRH;
-		str::wString Id;
-		qCBUFFERr Child;
-	qRB;
-		tol::Init( Id );
-		prtcl::Get( Flow, Id );
-
-		Flow.Dismiss();
-
-		Proxy.LastChild( Id, Child );
-
-		prtcl::Put( Child(), Flow );
-
-		Flow.Commit();
-	qRR;
-	qRT;
-	qRE;
-	}
-
-	void PreviousSibling_(
-		flw::rRWFlow &Flow,
-		xdhdws::sProxy &Proxy )
-	{
-	qRH;
-		str::wString Id;
-		qCBUFFERr Sibling;
-	qRB;
-		tol::Init( Id );
-		prtcl::Get( Flow, Id );
-
-		Flow.Dismiss();
-
-		Proxy.PreviousSibling( Id, Sibling );
-
-		prtcl::Put( Sibling(), Flow );
-
-		Flow.Commit();
-	qRR;
-	qRT;
-	qRE;
-	}
-
-	void NextSibling_(
-		flw::rRWFlow &Flow,
-		xdhdws::sProxy &Proxy )
-	{
-	qRH;
-		str::wString Id;
-		qCBUFFERr Sibling;
-	qRB;
-		tol::Init( Id );
-		prtcl::Get( Flow, Id );
-
-		Flow.Dismiss();
-
-		Proxy.NextSibling( Id, Sibling );
-
-		prtcl::Put( Sibling(), Flow );
-
-		Flow.Commit();
-	qRR;
-	qRT;
-	qRE;
-	}
-
-	void CreateElement_(
-		flw::rRWFlow &Flow,
-		xdhdws::sProxy &Proxy )
-	{
-	qRH;
-		str::wString Name, SuggestedId;
-		qCBUFFERr Id;
-	qRB;
-		tol::Init( Name, SuggestedId );
-
-		prtcl::Get( Flow, Name );
-		prtcl::Get( Flow, SuggestedId );
-
-		Flow.Dismiss();
-
-		Proxy.CreateElement( Name, SuggestedId, Id );	// If 'SuggestedId' is empty, 'Id' will contain a computer generated one, otherwise it will contain 'SuggestedId'.
-
-		prtcl::Put( Id(), Flow );
-
-		Flow.Commit();
-	qRR;
-	qRT;
-	qRE;
-	}
-
-	void InsertChild_(
-		flw::rRFlow &Flow,
-		xdhdws::sProxy &Proxy )
-	{
-	qRH;
-		str::wString Child, Id;
-	qRB;
-		tol::Init( Child, Id );
-
-		prtcl::Get( Flow, Child );
-		prtcl::Get( Flow, Id );
-
-		Flow.Dismiss();
-
-		Proxy.InsertChild( Child, Id );
-	qRR;
-	qRT;
-	qRE;
-	}
-
-	void AppendChild_(
-		flw::rRFlow &Flow,
-		xdhdws::sProxy &Proxy )
-	{
-	qRH;
-		str::wString Child, Id;
-	qRB;
-		tol::Init( Child, Id );
-
-		prtcl::Get( Flow, Child );
-		prtcl::Get( Flow, Id );
-
-		Flow.Dismiss();
-
-		Proxy.AppendChild( Child, Id );
-	qRR;
-	qRT;
-	qRE;
-	}
-
-	void InsertBefore_(
-		flw::rRFlow &Flow,
-		xdhdws::sProxy &Proxy )
-	{
-	qRH;
-		str::wString Sibling, Id;
-	qRB;
-		tol::Init( Sibling, Id );
-
-		prtcl::Get( Flow, Sibling );
-		prtcl::Get( Flow, Id );
-
-		Flow.Dismiss();
-
-		Proxy.InsertBefore( Sibling, Id );
-	qRR;
-	qRT;
-	qRE;
-	}
-
-	void InsertAfter_(
-		flw::rRFlow &Flow,
-		xdhdws::sProxy &Proxy )
-	{
-	qRH;
-		str::wString Sibling, Id;
-	qRB;
-		tol::Init( Sibling, Id );
-
-		prtcl::Get( Flow, Sibling );
-		prtcl::Get( Flow, Id );
-
-		Flow.Dismiss();
-
-		Proxy.InsertAfter( Sibling, Id );
-	qRR;
-	qRT;
-	qRE;
-	}
-
-	void InsertCSSRule_(
-		flw::rRFlow &Flow,
-		xdhdws::sProxy &Proxy)
-	{
-	qRH;
-		str::wString Id, Rule, Index;
-	qRB;
-		tol::Init(Id, Rule, Index);
-
-		prtcl::Get(Flow, Id);
-		prtcl::Get(Flow, Rule);
-		prtcl::Get(Flow, Index);
-
-		Flow.Dismiss();
-
-		Proxy.InsertCSSRule(Id, Rule, Index);
-	qRR;
-	qRT;
-	qRE;
-	}
-
-	void AppendCSSRule_(
-		flw::rRWFlow &Flow,
-		xdhdws::sProxy &Proxy)
-	{
-	qRH;
-		str::wString Id, Rule;
-		qCBUFFERr Index;
-	qRB;
-		tol::Init(Id, Rule);
-
-		prtcl::Get(Flow, Id);
-		prtcl::Get(Flow, Rule);
-
-		Flow.Dismiss();
-
-		Proxy.AppendCSSRule(Id, Rule, Index);
-
-		prtcl::Put(Index(), Flow);
-
-		Flow.Commit();
-	qRR;
-	qRT;
-	qRE;
-	}
-
-	void RemoveCSSRule_(
-		flw::rRFlow &Flow,
-		xdhdws::sProxy &Proxy)
-	{
-	qRH;
-		str::wString Id, Index;
-	qRB;
-		tol::Init(Id, Index);
-
-		prtcl::Get(Flow, Id);
-		prtcl::Get(Flow, Index);
-
-		Flow.Dismiss();
-
-		Proxy.RemoveCSSRule(Id, Index);
-	qRR;
-	qRT;
-	qRE;
-	}
-
-	void DressWidgets_(
-		flw::rRFlow &Flow,
-		xdhdws::sProxy &Proxy )
-	{
-	qRH;
-		str::wString Id;
-	qRB;
-		Id.Init();
-		prtcl::Get( Flow, Id );
-
-		Flow.Dismiss();
-
-		Proxy.DressWidgets( Id );
-	qRR;
-	qRT;
-	qRE;
-	}
-
-	namespace {
-		void HandleClasses_(
-			flw::rRFlow &Flow,
-			void (xdhdws::sProxy::* Method)(
-				const xdhdws::rNString &Ids,
-				const xdhdws::rNString &Classes),
-			xdhdws::sProxy &Proxy )
-		{
-		qRH;
-			str::wStrings Ids, Classes;
-			str::wString MergedIds, MergedClasses;
-		qRB;
-			tol::Init( Ids, Classes );
-
-			prtcl::Get( Flow, Ids );
-			prtcl::Get( Flow, Classes );
-
-			Flow.Dismiss();
-
-			tol::Init( MergedIds, MergedClasses );
-			xdhcmn::FlatMerge( Ids, MergedIds, true );
-			xdhcmn::FlatMerge( Classes, MergedClasses, true );
-
-			(Proxy.*Method)( MergedIds, MergedClasses );
-		qRR;
-		qRT;
-		qRE;
-		}
-	}
-
-	void AddClasses_(
-		flw::rRFlow &Flow,
-		xdhdws::sProxy &Proxy )
-	{
-		HandleClasses_( Flow, &xdhdws::sProxy::AddClasses, Proxy );
-	}
-
-	void RemoveClasses_(
-		flw::rRFlow &Flow,
-		xdhdws::sProxy &Proxy )
-	{
-		HandleClasses_( Flow, &xdhdws::sProxy::RemoveClasses, Proxy );
-	}
-
-	void ToggleClasses_(
-		flw::rRFlow &Flow,
-		xdhdws::sProxy &Proxy )
-	{
-		HandleClasses_( Flow, &xdhdws::sProxy::ToggleClasses, Proxy );
-	}
-
-	namespace {
-		void HandleElements_(
-			flw::rRFlow &Flow,
-			void (xdhdws::sProxy::* Method)( const xdhdws::rNString &Ids ),
-			xdhdws::sProxy &Proxy )
-		{
-		qRH;
-			str::wStrings Ids;
-			str::wString MergedIds;
-		qRB;
-			tol::Init( Ids );
-
-			prtcl::Get( Flow, Ids );
-
-			Flow.Dismiss();
-
-			tol::Init( MergedIds );
-			xdhcmn::FlatMerge( Ids, MergedIds, true );
-
-			(Proxy.*Method)( MergedIds );
-		qRR;
-		qRT;
-		qRE;
-		}
-	}
-
-	void EnableElements_(
-		flw::rRFlow &Flow,
-		xdhdws::sProxy &Proxy )
-	{
-		HandleElements_( Flow, &xdhdws::sProxy::EnableElements, Proxy );
-	}
-
-	void DisableElements_(
-		flw::rRFlow &Flow,
-		xdhdws::sProxy &Proxy )
-	{
-		HandleElements_( Flow, &xdhdws::sProxy::DisableElements, Proxy );
-	}
-
-	void SetAttribute_(
-		flw::rRFlow &Flow,
-		xdhdws::sProxy &Proxy )
-	{
-	qRH;
-		str::wString Id, Name, Value;
-	qRB;
-		tol::Init( Id, Name, Value );
-		prtcl::Get( Flow, Id );
-		prtcl::Get( Flow, Name );
-		prtcl::Get( Flow, Value );
-
-		Flow.Dismiss();
-
-		Proxy.SetAttribute( Id, Name, Value );
-	qRR;
-	qRT;
-	qRE;
-	}
-
-	void GetAttribute_(
-		flw::rRWFlow &Flow,
-		xdhdws::sProxy &Proxy )
-	{
-	qRH;
-		str::wString Id, Name, Value;
-	qRB;
-		tol::Init( Id, Name );
-		prtcl::Get( Flow, Id );
-		prtcl::Get( Flow, Name );
-
-		Flow.Dismiss();
-
-		Value.Init();
-		Proxy.GetAttribute( Id, Name, Value );
-
-		prtcl::Put( Value, Flow );
-		Flow.Commit();
-	qRR;
-	qRT;
-	qRE;
-	}
-
-	void RemoveAttribute_(
-		flw::rRFlow &Flow,
-		xdhdws::sProxy &Proxy )
-	{
-	qRH;
-		str::wString Id, Name;
-	qRB;
-		tol::Init( Id, Name );
-		prtcl::Get( Flow, Id );
-		prtcl::Get( Flow, Name );
-
-		Flow.Dismiss();
-
-		Proxy.RemoveAttribute( Id, Name );
-	qRR;
-	qRT;
-	qRE;
-	}
-
-	void SetProperty_(
-		flw::rRFlow &Flow,
-		xdhdws::sProxy &Proxy )
-	{
-	qRH;
-		str::wString Id, Name, Value;
-	qRB;
-		tol::Init( Id, Name, Value );
-		prtcl::Get( Flow, Id );
-		prtcl::Get( Flow, Name );
-		prtcl::Get( Flow, Value );
-
-		Flow.Dismiss();
-
-		Proxy.SetProperty( Id, Name, Value );
-	qRR;
-	qRT;
-	qRE;
-	}
-
-	void GetProperty_(
-		flw::rRWFlow &Flow,
-		xdhdws::sProxy &Proxy )
-	{
-	qRH;
-		str::wString Id, Name, Value;
-	qRB;
-		tol::Init( Id, Name );
-		prtcl::Get( Flow, Id );
-		prtcl::Get( Flow, Name );
-
-		Flow.Dismiss();
-
-		Value.Init();
-		Proxy.GetProperty( Id, Name, Value );
-
-		prtcl::Put( Value, Flow );
-
-		Flow.Commit();
-	qRR;
-	qRT;
-	qRE;
-	}
-
-	void Focus_(
-		flw::rRFlow &Flow,
-		xdhdws::sProxy &Proxy )
-	{
-	qRH;
-		str::wString Id;
-	qRB;
-		tol::Init( Id );
-		prtcl::Get( Flow, Id );
-
-		Flow.Dismiss();
-
-		Proxy.Focus( Id );
 	qRR;
 	qRT;
 	qRE;
@@ -992,6 +334,64 @@ namespace {
 		m_amount,
 		m_Undefined
 	};
+
+	qENUM( Type_ ) {
+        tVoid,
+        tString,
+        tStrings,
+        t_amount,
+        t_Undefined
+	};
+
+	eType_ GetType_( flw::rRFlow &Flow ) {
+        bso::sU8 Type;
+        prtcl::Get(Flow, Type );
+
+        if ( Type >= t_amount )
+            qRGnr();
+
+        return (eType_)Type;
+	}
+
+	void GetParameters_(
+        flw::rRFlow &Flow,
+        str::wStrings &Parameters )
+    {
+    qRH
+        str::wString Value;
+        str::wStrings Values;
+        bso::sBool Continue = true;
+    qRB
+        while ( Continue ) {
+            switch( GetType_( Flow ) ) {
+            case tVoid:
+                Continue = false;
+                break;
+            case tString:
+                Value.Init();
+                prtcl::Get(Flow, Value );
+
+                Parameters.Append( Value );
+                break;
+            case tStrings:
+                Values.Init();
+                prtcl::Get(Flow, Values);
+
+                Value.Init();
+                xdhcmn::FlatMerge(Values, Value, true );
+
+                Parameters.Append(Value);
+
+                break;
+            default:
+                qRGnr();
+                break;
+            }
+        }
+    qRR
+    qRE
+    qRT
+    }
 
 	class rSession_
 	: public xdhcmn::cSession,
@@ -1074,7 +474,9 @@ namespace {
 		qRH;
 			bso::sBool Continue = true;
 			flw::rDressedRWFlow<> Flow;
-			eCommand_ Command = c_Undefined;
+			str::wString ScriptName, ReturnValue;
+			str::wStrings Parameters, SplitedReturnValue;;
+			eType_ ReturnType = t_Undefined;
 		qRB;
 			Flow.Init( D_() );
 
@@ -1089,55 +491,48 @@ namespace {
 		break
 
 			while ( Continue ) {
-				Command = GetCommand_( Flow );
+                ScriptName.Init();
+				prtcl::Get(Flow,ScriptName);
 
-				Log_( str::wString( GetLabel_( Command ) ) );
+				Log_( ScriptName );
 
-				switch ( Command ) {
-				case cStandBy_1:
+				if ( ScriptName == "StandBy_1") {
 					Return = true;
 					Continue = false;
 					Flow.Dismiss();
-					break;
-				H( Execute );
-				H( Alert );
-				H( Confirm );
-				H( PrependLayout);
-				H( SetLayout);
-				H( AppendLayout);
-				H( GetContents );
-				H( SetContents );
-				H( SetTimeout );
-				H( Parent );
-				H( FirstChild );
-				H( LastChild );
-				H( PreviousSibling );
-				H( NextSibling );
-				H( CreateElement );
-				H( InsertChild );
-				H( AppendChild );
-				H( InsertBefore );
-				H( InsertAfter );
-				H( InsertCSSRule);
-				H( AppendCSSRule);
-				H( RemoveCSSRule);
-				H( DressWidgets );
-				H( AddClasses );
-				H( RemoveClasses );
-				H( ToggleClasses );
-				H( EnableElements );
-				H( DisableElements );
-				H( SetAttribute );
-				H( GetAttribute );
-				H( RemoveAttribute );
-				H( SetProperty );
-				H( GetProperty );
-				H( Focus );
-				default:
-					qRGnr();
-					break;
-				}
-			}
+				} else {
+                    ReturnType = GetType_( Flow );
+
+                    Parameters.Init();
+                    GetParameters_(Flow, Parameters);
+
+                    Flow.Dismiss();
+
+                    ReturnValue.Init();
+                    Process( ScriptName, Parameters, ReturnValue );
+
+                    switch ( ReturnType ) {
+                    case tVoid:
+                        break;
+                    case tString:
+                    case tStrings:
+                        if ( ReturnType == tString)
+                            prtcl::Put(ReturnValue, Flow);
+                        else {
+                            SplitedReturnValue.Init();
+                            xdhcmn::FlatSplit(ReturnValue,SplitedReturnValue);
+
+                            prtcl::Put(SplitedReturnValue, Flow);
+                        }
+
+                        Flow.Commit();
+                        break;
+                    default:
+                        qRGnr();
+                        break;
+                    }
+                }
+            }
 #undef H
 		qRR;
 		qRT;

@@ -34,7 +34,7 @@ using namespace xdhcmn;
 	break
 
 
-const char *xdhcmn::GetLabel( eFunction Function )
+const char *xdhcmn::GetLabel( eFunction_ Function )
 {
 	switch ( Function ) {
 	C( Execute );
@@ -218,7 +218,7 @@ qRH;
 	str::wString Item;
 qRB;
 	Item.Init();
-	
+
 	while ( !Flow.EndOfFlow() ) {
 		Char = Flow.Get();
 
@@ -273,6 +273,7 @@ qRB;
 				if ( !Quoted )
 					qRFwk();
 				Escaped = true;
+				break;
 			default:
 				if ( !Quoted )
 					qRFwk();

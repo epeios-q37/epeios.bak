@@ -61,14 +61,6 @@ const char *sclxdhtml::GetLauncher( void )
 	return Launcher_;
 }
 
-void sclxdhtml::SetHeadFunction( fHead HeadFunction )
-{
-	if ( HeadFunction_ != NULL )
-		qRFwk();
-
-	HeadFunction_ = HeadFunction;
-}
-
 #ifdef CPE_S_WIN
 # define FUNCTION_SPEC __declspec(dllexport)
 #else
@@ -251,6 +243,7 @@ namespace {
 	}
 }
 
+#if 0
 void sclxdhtml::sProxy::Alert_(
 	const ntvstr::string___ &XML,
 	const ntvstr::string___ &XSL,
@@ -268,6 +261,7 @@ qRR
 qRT
 qRE
 }
+#endif // 0
 
 void sclxdhtml::sProxy::Alert_(
 	const ntvstr::string___ &Message,
@@ -339,6 +333,7 @@ void sclxdhtml::sProxy::AlertU(
 	Alert_( Message, NULL, Language );
 }
 
+#if 0
 bso::bool__ sclxdhtml::sProxy::Confirm_(
 	const ntvstr::string___ &XML,
 	const ntvstr::string___ &XSL,
@@ -358,6 +353,7 @@ qRT
 qRE
 	return Confirmation;
 }
+#endif
 
 bso::bool__ sclxdhtml::sProxy::Confirm_(
 	const ntvstr::string___ &Message,
@@ -524,7 +520,8 @@ void sclxdhtml::sProxy::PrependLayout_(
 	const str::dString &XML,
 	bso::char__ Marker)
 {
-	HandleLayout_(Id, XSLFilename, Target, XSLFileHandling_, Registry, XML, Core_, &xdhdws::sProxy::PrependLayout, Marker);
+    qRLmt();
+//	HandleLayout_(Id, XSLFilename, Target, XSLFileHandling_, Registry, XML, Core_, &xdhdws::sProxy::PrependLayout, Marker);
 }
 
 void sclxdhtml::sProxy::SetLayout_(
@@ -535,7 +532,8 @@ void sclxdhtml::sProxy::SetLayout_(
 	const str::dString &XML,
 	bso::char__ Marker)
 {
-	HandleLayout_(Id, XSLFilename, Target, XSLFileHandling_, Registry, XML, Core_, &xdhdws::sProxy::SetLayout, Marker);
+    qRLmt();
+//	HandleLayout_(Id, XSLFilename, Target, XSLFileHandling_, Registry, XML, Core_, &xdhdws::sProxy::SetLayout, Marker);
 }
 
 void sclxdhtml::sProxy::AppendLayout_(
@@ -546,9 +544,11 @@ void sclxdhtml::sProxy::AppendLayout_(
 	const str::dString &XML,
 	bso::char__ Marker )
 {
-	HandleLayout_(Id, XSLFilename, Target, XSLFileHandling_, Registry, XML, Core_, &xdhdws::sProxy::AppendLayout, Marker);
+    qRLmt();
+//	HandleLayout_(Id, XSLFilename, Target, XSLFileHandling_, Registry, XML, Core_, &xdhdws::sProxy::AppendLayout, Marker);
 }
 
+#if 0
 void sclxdhtml::sProxy::SetContents(
 	const str::dStrings &Ids,
 	const str::dStrings &Contents )
@@ -570,6 +570,7 @@ qRR;
 qRT;
 qRE;
 }
+#endif
 
 void sclxdhtml::sProxy::SetContent(
 	const str::dString &Id,
@@ -593,7 +594,8 @@ void sclxdhtml::sProxy::SetTimeout(
 	const ntvstr::rString &Delay,
 	const ntvstr::rString &Action )
 {
-	Core_.SetTimeout( Delay, Action );
+    qRLmt();
+//	Core_.SetTimeout( Delay, Action );
 }
 /*
 void sclxdhtml::sProxy::InsertCSSRule(
@@ -665,7 +667,8 @@ void sclxdhtml::sProxy::AddClasses(
 	const str::dStrings &Ids,
 	const str::dStrings& Classes )
 {
-	HandleClasses_( Ids, Classes, &xdhdws::sProxy::AddClasses, Core_ );
+    qRLmt();
+//	HandleClasses_( Ids, Classes, &xdhdws::sProxy::AddClasses, Core_ );
 }
 
 void sclxdhtml::sProxy::AddClass(
@@ -679,7 +682,8 @@ void sclxdhtml::sProxy::RemoveClasses(
 	const str::dStrings &Ids,
 	const str::dStrings& Classes )
 {
-	HandleClasses_( Ids, Classes, &xdhdws::sProxy::RemoveClasses, Core_ );
+    qRLmt();
+//	HandleClasses_( Ids, Classes, &xdhdws::sProxy::RemoveClasses, Core_ );
 }
 
 void sclxdhtml::sProxy::RemoveClass(
@@ -693,7 +697,8 @@ void sclxdhtml::sProxy::ToggleClasses(
 	const str::dStrings &Ids,
 	const str::dStrings& Classes )
 {
-	HandleClasses_( Ids, Classes, &xdhdws::sProxy::ToggleClasses, Core_ );
+    qRLmt();
+//	HandleClasses_( Ids, Classes, &xdhdws::sProxy::ToggleClasses, Core_ );
 }
 
 void sclxdhtml::sProxy::ToggleClass(
@@ -741,7 +746,8 @@ namespace {
 
 void sclxdhtml::sProxy::EnableElements( const str::dStrings &Ids )
 {
-	HandleElements_( Ids, &xdhdws::sProxy::EnableElements, Core_ );
+    qRLmt();
+//	HandleElements_( Ids, &xdhdws::sProxy::EnableElements, Core_ );
 }
 
 void sclxdhtml::sProxy::EnableElement(	const str::dString &Id )
@@ -751,7 +757,8 @@ void sclxdhtml::sProxy::EnableElement(	const str::dString &Id )
 
 void sclxdhtml::sProxy::DisableElements( const str::dStrings &Ids )
 {
-	HandleElements_( Ids, &xdhdws::sProxy::DisableElements, Core_ );
+    qRLmt();
+//	HandleElements_( Ids, &xdhdws::sProxy::DisableElements, Core_ );
 }
 
 void sclxdhtml::sProxy::DisableElement( const str::dString &Id )

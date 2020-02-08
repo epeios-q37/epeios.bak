@@ -8,7 +8,58 @@
 				<Result>data-xdh-result</Result>
 			</AttributeNames>
 		</CustomItems>
-		<Scripts>
+        <Scripts>
+			<Script name="SetEventHandlers_1" Arguments="#Ids,#Events">
+				<![CDATA[
+					setEventHandlers( %#Ids%, %#Events% );
+				]]>
+			</Script>
+			<Script name="Alert_1" Arguments="Message">
+				<xpp:cdata>
+					alert("%Message%");
+				</xpp:cdata>
+			</Script>
+            <Script name="HandleLayout_1" Arguments="Variant,Id,XML,XSL">
+                <![CDATA[
+					{
+						let xml = "%XML%";
+						let xsl = "%XSL%";
+						let id = "%Id%";
+						
+						switch ( "%Variant%" ) {
+						case 'Prepend':
+							prependLayout(id, xml, xsl);
+							break;
+						case 'Set':
+							setLayout(id, xml, xsl);
+							break;
+						case 'Append':
+							appendLayout(id, xml, xsl);
+							break;
+						}
+
+						var digests = fetchEventHandlers( id );
+						digests;
+					}
+				]]>
+            </Script>
+			<Script name="GetContents_1" Arguments="#Ids">
+				<xpp:cdata>
+					getContents(%#Ids%);
+				</xpp:cdata>
+			</Script>
+            <Script name="Parent_1" Arguments="Id">
+				<![CDATA[
+					getOrGenerateId( getElement( "%Id% ).parentElement );
+				]]>
+            </Script>
+			<Script name="Focus_1" Arguments="Id">
+				<xpp:cdata>
+					getElement( "%Id%" ).focus();
+				</xpp:cdata>
+			</Script>
+        </Scripts>
+		<OldScripts>
 			<Parent>
 				<![CDATA[
 					getOrGenerateId( getElement( "%Id% ).parentElement );
@@ -377,6 +428,6 @@
 						]]>
 				</Disable>
 			</Elements>
-		</Scripts>
+		</OldScripts>
 	</Definitions>
 </xpp:bloc>

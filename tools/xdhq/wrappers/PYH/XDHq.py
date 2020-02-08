@@ -104,47 +104,47 @@ class DOM:
 		self.execute("''")
 
 	def alert(self,message):
-		self._dom.call( "Alert_1", _STRING, 1, message, 0 )
+		self._dom.call( "Alert_1", _STRING, message )
 		# For the return value being 'STRING' instead of 'VOID',
 		# see the 'alert' primitive in 'XDHqXDH'.
 
 	def confirm(self,message):
 		return self._dom.call( "Confirm_1", _STRING, 1, message, 0 ) == "true"
 
-	def _handleLayout(self, command, id, xml, xsl):
+	def _handleLayout(self, variant, id, xml, xsl):
 		#	If 'xslFilename' is empty, 'xml' contents HTML.
 		# 	If 'xml' is HTML and uses the compressed form, if it has a root tag, only the children will be used.
-		self._dom.call(command, _VOID, 3, id, xml if isinstance(xml,str) else xml.toString(), xsl, 0)
+		self._dom.call("HandleLayout_1", _VOID, variant, id, xml if isinstance(xml,str) else xml.toString(), xsl)
 
 	def prependLayout(self,id,html):
-		self._handleLayout("PrependLayout_1",id,html,"")
+		self._handleLayout("Prepend",id,html,"")
 
 	def setLayout(self,id,html):
-		self._handleLayout("SetLayout_1",id,html,"")
+		self._handleLayout("Set",id,html,"")
 
 	def appendLayout(self,id,html):
-		self._handleLayout("AppendLayout_1",id,html,"")
+		self._handleLayout("Append",id,html,"")
 
-	def _handleLayoutXSL(self, command, id, xml, xsl):
+	def _handleLayoutXSL(self, variant, id, xml, xsl):
 		global _dir
 		xslURL = xsl
 
 		if True:	# Testing if 'PROD' or 'DEMO' mode when available.
 			xslURL = "data:text/xml;charset=utf-8," + _encode( _readXSLAsset( xsl, _dir ) )
 
-		self._handleLayout(command, id, xml, xslURL )
+		self._handleLayout(variant, id, xml, xslURL )
 
 	def prependLayoutXSL(self, id, xml, xsl):
-		self._handleLayoutXSL("PrependLayout_1",id,xml,xsl)
+		self._handleLayoutXSL("Prepend",id,xml,xsl)
 
 	def setLayoutXSL(self, id, xml, xsl):
-		self._handleLayoutXSL("SetLayout_1",id,xml,xsl)
+		self._handleLayoutXSL("Set",id,xml,xsl)
 
 	def appendLayoutXSL(self, id, xml, xsl):
-		self._handleLayoutXSL("AppendLayout_1",id,xml,xsl)
+		self._handleLayoutXSL("Append",id,xml,xsl)
 
 	def getContents(self, ids):
-		return _unsplit(ids,self._dom.call("GetContents_1",_STRINGS, 0, 1, ids))
+		return _unsplit(ids,self._dom.call("GetContents_1",_STRINGS, ids))
 
 	def getContent( self, id):
 		return self.getContents([id])[id]
@@ -238,7 +238,7 @@ class DOM:
 		return self._dom.call("GetProperty_1", _STRING, 2, id, name, 0 )
 
 	def focus(self, id):
-		self._dom.call("Focus_1", _VOID,1, id, 0)
+		self._dom.call("Focus_1", _VOID, id)
 
 def launch(callback, userCallback, callbacks, headContent, dir):
 	global _dir

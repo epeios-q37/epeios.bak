@@ -34,6 +34,7 @@ using namespace dmopool;
 #include "mtk.h"
 #include "sclmisc.h"
 #include "str.h"
+#include "xdhdws.h"
 
 
 namespace {
@@ -588,7 +589,7 @@ qGCTOR( dmopool )
 	Tokens_.Init();
 	Heads_.Init();
 	Backends_.Init();
-	sclxdhtml::SetHeadFunction( GetHead_ );
+	xdhdws::SetHeadFunction( GetHead_ );
 }
 
 qGDTOR( dmopool )

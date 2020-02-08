@@ -361,7 +361,7 @@ class DOM_DEMO:
 		else:
 			_writeLock.acquire()
 			writeByte(self.instance.getId())
-			writeStringNUL("StandBy_1")
+			writeString("StandBy_1")
 			_writeLock.release()
 
 		self.wait()
@@ -374,27 +374,22 @@ class DOM_DEMO:
 		return [action,id]
 
 	def call(self, command, type, *args):
-		i=0
-
 		_writeLock.acquire()
 		writeByte(self.instance.getId())
-		writeStringNUL(command )
+		writeString(command)
 
-		amount = args[i]
-		i += 1
+		writeByte(type)
 
-		while amount:
-			writeString(args[i])
-			i += 1
-			amount -= 1
+		for arg in args:
+			if isinstance(arg,str):
+				writeByte(XDHqSHRD.RT_STRING)
+				writeString(arg)
+			else:
+				writeByte(XDHqSHRD.RT_STRINGS)
+				writeStrings(arg)
 
-		amount = args[i]
-		i += 1
+		writeByte(XDHqSHRD.RT_VOID)	# To report end of argument list.
 
-		while amount:
-			writeStrings(args[i])
-			i += 1
-			amount -= 1
 		_writeLock.release()
 
 		if type == XDHqSHRD.RT_STRING:

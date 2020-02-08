@@ -8,6 +8,15 @@
 - [stdz]: modification to comply with current standards;
 - [trvl]: trivial modifications;
 
+## 2020-02-07:
+
+- SCLXDHTML:
+  - moving head related features to XDHDWS,
+- TAGSBS:
+  - introducing `GetLongTags(…)`,
+- XDHCMN, XDHDWS, XDHUJP, XDHUJS:
+  - script are no more hardcoded, but retrieved from registry (both argument declaration and definition),
+
 ## 2020-01-03:
 
 - SCLXDHTML:
@@ -28,15 +37,15 @@
 ## 2019-12-04:
 
 - CSDLES:
-
+  
   - [trvl],
 
 - FBLBRQ:
-
+  
   - Use of template variadics instead of *va_args* to avoid a *CLang* waning,
 
 - FBLBKD, FBLBRD, SCLBACKND, SCLDAEMON, SCLXDHTML, XDHCMN:
-
+  
   - [adpt],
 
 ## 2019-10-31
@@ -80,7 +89,7 @@
 ## 2019-07-06
 
 - SCLXDHTML, XDHCMN, XDHDWS, XDHUJP, XDHUJR, XDHUJS:
-  - adding new layout related functionnalities,
+  - adding new layout related functionalities,
 
 ## 2019-06-20
 
@@ -93,17 +102,17 @@
 ## 2019-06-04
 
 - SCK:
-  - removing an exception throwing when deconnexion on writing, because it breaks the upstream error handling,
+  - removing an exception throwing when connection on writing, because it breaks the upstream error handling,
 
 ## 2019-06-01
 
 - XDHDWS, XDHUJ(P|S):
-  - adding the *id* parameter to CSS rules related functionnalities,
+  - adding the *id* parameter to CSS rules related functionalities,
 
 ## 2019-05-31
 
 - XDH(CMN|DWS), XDHUJ(P|R|S):
-  - reactivating CSS rules related functionnalities,
+  - reactivating CSS rules related functionalities,
 
 ## 2019-03-26
 
@@ -538,11 +547,11 @@
 ## 2018-09-21
 
 - SCLRGSTRY:
-
+  
   - fixing a bug introduced by previous modifications;
 
 - SCLXDHTML:
-
+  
   - introducing `sProxy::AlertB(...)`, calling the JS original `alert(...)`;
   - an error is now correctly reported when occurring at a early time;
 
@@ -578,15 +587,15 @@
 ## 2018-09-13
 
 - SCLMISC:
-
+  
   - [adpt]
 
 - SCLRGSTRY:
-
+  
   - [trvl];
 
 - SCLXDHTML:
-
+  
   - adding `rSession::HeadUp(...)`;
   - *XSL* files are now referred with the more generic *XML* term, to cover the use of locale (*XLCL* affix) and *XHTML* files;
 
@@ -2785,9 +2794,9 @@
 ## 2016-03-09:
 
 - Global:
-
+  
   - Simplification;
-
+    
     ;
     ;
     ;
@@ -2824,11 +2833,11 @@
 ## 2016-02-21:
 
 - GLOBAL:
-
+  
   - misc;
-
+  
   - Huge rewriting of the 'hook's and 'file hooks';
-
+    
           ;
           ;
           ;

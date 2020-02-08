@@ -39,25 +39,27 @@ namespace xdhujp {
 	protected:
 		virtual void XDHUJPExecute(
 			const str::string_ &Script,
-			TOL_CBUFFER___ *Buffer ) = 0;
+			str::dString &ReturnValue ) = 0;
 		virtual void XDHUJPGetWidgetAttributeName( TOL_CBUFFER___ &Buffer ) = 0;
 		virtual void XDHUJPGetResultAttributeName( TOL_CBUFFER___ &Buffer ) = 0;
 	public:
 		qCALLBACK( JS )
-		const char *Execute(
+		void Execute(
 			const str::string_ &Script,
-			TOL_CBUFFER___ *Buffer )
+			str::dString &ReturnValue )
 		{
-			XDHUJPExecute( Script, Buffer );
-
-			if ( Buffer != NULL )
-				return *Buffer;
-			else
-				return NULL;
+            XDHUJPExecute( Script, ReturnValue );
 		}
 		void Execute( const str::string_ &Script )
 		{
-			Execute( Script,  NULL );
+		qRH
+            str::wString Dummy;
+        qRB
+            Dummy.Init();
+			Execute( Script, Dummy );
+        qRR
+        qRE
+        qRT
 		}
 		const char *GetWidgetAttributeName( TOL_CBUFFER___ &Buffer )
 		{
@@ -73,11 +75,16 @@ namespace xdhujp {
 		}
 	};
 
-	const char *Execute(
+	void Execute(
 		cJS &Callback,
-		xdhujs::script_name__ Script,
-		TOL_CBUFFER___ *Buffer,
-		... );
+		const char *ScriptName,
+		const str::dStrings &Values,
+		str::dString &ReturnValue );
+
+	void Execute(
+		cJS &Callback,
+		const char *ScriptName,
+		const str::dStrings &Values );
 
 	typedef xdhcmn::cUpstream cProxy_;
 
@@ -88,9 +95,9 @@ namespace xdhujp {
 		Q37_MRMDF( cJS, C_, Callback_ );
 	protected:
 		virtual void XDHCMNProcess(
-			xdhcmn::eFunction Function,
-			TOL_CBUFFER___ *Result,
-			va_list List ) override; 
+			const char *ScriptName,
+			const str::dStrings &Values,
+			str::dString &ReturnValue ) override;
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -103,7 +110,7 @@ namespace xdhujp {
 		}
 	};
 
-	
+
 
 }
 

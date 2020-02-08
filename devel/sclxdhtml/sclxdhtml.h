@@ -38,7 +38,7 @@ along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 # include "crt.h"
 # include "err.h"
 
-# define SCLXDHTML_DEFAULT_SUFFIX "xdh"
+# define SCLXDHTML_DEFAULT_SUFFIX XDHDWS_DEFAULT_SUFFIX
 
 namespace sclxdhtml {
 
@@ -64,9 +64,9 @@ namespace sclxdhtml {
 
 	const char *GetLauncher( void );
 
-	typedef void( *fHead )(void *UP, str::dString &Head);
+	using xdhdws::fHead;
 
-	void SetHeadFunction( fHead HeadFunction );
+    using xdhdws::SetHeadFunction;
 
 	template <typename session> class cAction {
 	protected:
@@ -272,7 +272,11 @@ namespace sclxdhtml {
 			const ntvstr::string___ &XML,
 			const ntvstr::string___ &XSL,
 			const ntvstr::string___ &Title,
-			const char *Language );
+			const char *Language )
+			{
+                qRLmt();
+                // Reactivae in '.cpp'.
+			}
 		void Alert_(
 			const ntvstr::string___ &Message,
 			const char *MessageLanguage,	// If != 'NULL', 'Message' is translated, otherwise it is displayed as is.
@@ -281,7 +285,12 @@ namespace sclxdhtml {
 			const ntvstr::string___ &XML,
 			const ntvstr::string___ &XSL,
 			const ntvstr::string___ &Title,
-			const char *Language );
+			const char *Language )
+			{
+                qRLmt();
+                // Reactivate in '.cpp'.
+                return false;
+			}
 		bso::sBool Confirm_(
 			const ntvstr::string___ &Message,
 			const char *MessageLanguage,	// If != 'NULL', 'Message' is translated, otherwise it is displayed as is.
@@ -328,6 +337,20 @@ namespace sclxdhtml {
 		qRT;
 		qRE;
 		}
+		void Fill_(
+            str::dStrings &Values,
+            const str::dString &Value )
+        {
+            Values.Append(Value);
+        }
+        template <class... Args> void Fill_(
+            str::dStrings &Values,
+            const str::dString &Value,
+            const Args &...args )
+        {
+            Fill_(Values, Value);
+            Fill_(Values, args...);
+        }
 	public:
 		void reset( bso::sBool P = true )
 		{
@@ -348,30 +371,33 @@ namespace sclxdhtml {
 		{
 			return I_();
 		}
-		const char *Execute(
-			const xdhcmn::rNString &Script,
-			qCBUFFERr &Result )
-		{
-			return Core_.Execute( Script, Result );
-		}
-		const str::dString &Execute(
-			const xdhcmn::rNString &Script,
+		template <class ...Args> void Process(
+            const char *ScriptName,
+            str::dString &Result,
+            const Args &...args )
+        {
+        qRH
+            str::wStrings Values;
+        qRB
+            Values.Init();
+            Fill_(Values, args...);
+            Core_.Process(ScriptName, Values, Result);
+        qRR
+        qRE
+        qRT
+        }
+		void Execute(
+			const str::dString &Script,
 			str::dString &Result )
 		{
-		qRH;
-			qCBUFFERr Buffer;
-		qRB;
-			Result.Append( Core_.Execute( Script, Buffer ) );
-		qRR;
-		qRT;
-		qRE;
-			return Result;
+            Process("Execute_1", Result, Script);
 		}
-		void Execute( const xdhcmn::rNString &Script )
+		void Execute( const str::dString &Script )
 		{
 		qRH;
-			qCBUFFERr Dummy;
+			str::wString Dummy;
 		qRB;
+            Dummy.Init();
 			Execute( Script, Dummy );
 		qRR;
 		qRT;
@@ -379,7 +405,7 @@ namespace sclxdhtml {
 		}
 		void Log( const ntvstr::rString &Message )
 		{
-			Core_.Log( Message );
+            qRLmt();
 		}
 		// The basic alert, without use of 'JQuery' based widget.
 		void AlertB( const ntvstr::string___ & Message );
@@ -413,61 +439,71 @@ namespace sclxdhtml {
 			const xdhcmn::rNString &Name,
 			const xdhcmn::rNString &Value )
 		{
-			Core_.SetAttribute( Id, Name, Value );
+            qRLmt();
 		}
 		const char *GetAttribute(
 			const xdhcmn::rNString &Id,
 			const xdhcmn::rNString &Name,
 			qCBUFFERr &Value )
 		{
-			return Core_.GetAttribute( Id, Name, Value );
+			qRLmt();
+			return Value();
 		}
 		const str::dString &GetAttribute(
 			const xdhcmn::rNString &Id,
 			const xdhcmn::rNString &Name,
 			str::dString &Value )
 		{
-			return Core_.GetAttribute( Id, Name, Value );
+            qRLmt();
+            return Value;
 		}
 		void RemoveAttribute(
 			const xdhcmn::rNString &Id,
 			const xdhcmn::rNString &Name )
 		{
-			Core_.RemoveAttribute( Id, Name );
+            qRLmt();
 		}
 		void SetValue(
 			const ntvstr::rString &Id,
 			const ntvstr::rString &Value )
 		{
-			Core_.SetValue( Id, Value );
+            qRLmt();
 		}
 		const str::dString &GetValue(
 			const ntvstr::rString &Id,
 			str::dString &Value )
 		{
-			return Core_.GetValue( Id, Value );
+            qRLmt();
+            return Value;
 		}
 		const char *GetValue(
 			const ntvstr::rString &Id,
 			qCBUFFERr &Value )
 		{
-			return Core_.GetValue( Id, Value );
+            qRLmt();
+            return Value;
 		}
 		const str::dString &GetResult(
 			const ntvstr::rString &Id,
 			str::dString &Result )
 		{
-			return Core_.GetResult( Id, Result );
+            qRLmt();
+            return Result;
 		}
 		const char *GetResult(
 			const ntvstr::rString &Id,
 			qCBUFFERr &Result )
 		{
-			return Core_.GetResult( Id, Result );
+            qRLmt();
+            return Result;
 		}
 		void SetContents(
 			const str::dStrings &Ids,
-			const str::dStrings &Contents );
+			const str::dStrings &Contents )
+        {
+            qRLmt();
+            // Reactivate in '.cpp'.
+        }
 		void SetContent(
 			const str::dString &Id,
 			const str::dString &Content );
@@ -478,55 +514,60 @@ namespace sclxdhtml {
 			const ntvstr::rString &Id,
 			qCBUFFERr &Value )
 		{
-			return Core_.Parent( Id, Value );
+            qRLmt();
+            return Value;
 		}
 		const char *FirstChild(
 			const ntvstr::rString &Id,
 			qCBUFFERr &Value )
 		{
-			return Core_.FirstChild( Id, Value );
+            qRLmt();
+            return Value;
 		}
 		const char *LastChild(
 			const ntvstr::rString &Id,
 			qCBUFFERr &Value )
 		{
-			return Core_.LastChild( Id, Value );
+            qRLmt();
+            return Value();
 		}
 		const char *PreviousSibling(
 			const ntvstr::rString &Id,
 			qCBUFFERr &Value )
 		{
-			return Core_.PreviousSibling( Id, Value );
+            qRLmt();
+            return Value;
 		}
 		const char *NextSibling(
 			const ntvstr::rString &Id,
 			qCBUFFERr &Value )
 		{
-			return Core_.NextSibling( Id, Value );
+            qRLmt();
+            return Value;
 		}
 		void InsertChild(
 			const ntvstr::rString &Child,
 			const ntvstr::rString &Id )
 		{
-			return Core_.InsertChild( Child, Id );
+            qRLmt();
 		}
 		void AppendChild(
 			const ntvstr::rString &Child,
 			const ntvstr::rString &Id )
 		{
-			return Core_.AppendChild( Child, Id );
+            qRLmt();
 		}
 		void InsertBefore(
 			const ntvstr::rString &Sibling,
 			const ntvstr::rString &Id )
 		{
-			return Core_.InsertBefore( Sibling, Id );
+            qRLmt();
 		}
 		void InsertAfter(
 			const ntvstr::rString &Sibling,
 			const ntvstr::rString &Id )
 		{
-			return Core_.InsertAfter( Sibling, Id );
+            qRLmt();
 		}
 		/*
 		void InsertCSSRule(
@@ -585,13 +626,14 @@ namespace sclxdhtml {
 		}
 		void DressWidgets( const ntvstr::rString &Id )
 		{
-			Core_.DressWidgets( Id );
+            qRLmt();
 		}
 		const char *Dummy(
 			const ntvstr::rString &Id,
 			qCBUFFERr &Value )
 		{
-			return Core_.Dummy( Id, Value );
+            qRLmt();
+            return Value;
 		}
 	};
 
@@ -979,7 +1021,8 @@ namespace sclxdhtml {
 		const xdhcmn::nstring___ &Ids,
 		const xdhcmn::nstring___ &Contents )
 	{
-		Proxy.SetContents( Ids, Contents );
+        qRLmt();
+//		Proxy.SetContents( Ids, Contents );
 	}
 
 	const scli::sInfo &SCLXDHTMLInfo( void );	// To define by user.

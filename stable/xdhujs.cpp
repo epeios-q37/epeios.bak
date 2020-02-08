@@ -29,234 +29,198 @@
 
 using namespace xdhujs;
 
-#define C( name, entry )\
-	case sn##name:\
-		sclmisc::MGetValue( xdhujr::script::entry, Buffer );\
-		break
+namespace {
+    namespace {
+        namespace {
+            rgstry::rEntry Scripts_("Scripts", sclrgstry::Definitions);
+        }
+        rgstry::rEntry LooseScript_("Script", Scripts_);
+    }
+
+    rgstry::rEntry TaggedScript_(RGSTRY_TAGGING_ATTRIBUTE("name"), LooseScript_ );
+    rgstry::rEntry TaggedScriptArguments_("@Arguments", TaggedScript_ );
+}
+
 
 const str::string_ &xdhujs::GetTaggedScript(
-	script_name__ Script,
+	const char *Name,
 	str::string_ &Buffer )
 {
-	switch ( Script ) {
-	case snExecute:
-		Buffer = "%Value_%";	// The script to execute is given as is.
-		break;
-	C( Log, Log );
-	C( DialogAlert, dialog::Alert );
-	C( DialogConfirm, dialog::Confirm );
-	C( LayoutPrepender, layout::Prepend);
-	C( LayoutSetter, layout::Set);
-	C( LayoutAppender, layout::Append);
-	C( PropertySetter, property::Setter );
-	C( PropertyGetter, property::Getter );
-	C( AttributeSetter, attribute::Setter );
-	C( AttributeGetter, attribute::Getter );
-	C( AttributeRemover, attribute::Remover );
-	C( WidgetValueRetriever, widget::ValueRetriever );
-	C( ValueSetter, value::Setter );
-	C( ValueGetter, value::Getter );
-	C( WidgetFocuser, widget::Focuser );
-	C( WidgetSelector, widget::Selector );
-	C( WidgetFetcher, widget::Fetcher );
-	C( Focuser, Focuser );
-	C( Selector, Selector );
-	C( EventHandlersSetter, setter::EventHandlers );
-	C( ContentsSetter, setter::Contents );
-	C( TimeoutSetter, setter::Timeout );
-	C( Parent, Parent );
-	C( FirstChild, child::First );
-	C( LastChild, child::Last );
-	C( PreviousSibling, sibling::Previous );
-	C( NextSibling, sibling::Next );
-	C( CreateElement, CreateElement );
-	C( InsertChild, child::Insert );
-	C( AppendChild, child::Append );
-	C( InsertBefore, insert::Before );
-	C( InsertAfter, insert::After );
-	C( WidgetsInstantiator, WidgetsInstantiator );
-	C( CSSRuleInserter, css_rule::Insert );
-	C( CSSRuleAppender, css_rule::Append );
-	C( CSSRuleRemover, css_rule::Remove );
-	C( ClassesAdder, classes::Add );
-	C( ClassesRemover, classes::Remove );
-	C( ClassesToggler, classes::Toggle );
-	C( ElementsEnabler, elements::Enable );
-	C( ElementsDisabler, elements::Disable );
-	C( Dummy, Dummy );
-	default:
-		qRFwk();
-		break;
-	}
+    sclmisc::MGetValue(rgstry::rTEntry(TaggedScript_, Name), Buffer);
 
-	return Buffer;
+    return Buffer;
 }
 
 namespace {
+    namespace {
+        void AppendRawTag_(
+            const str::dString &Name,
+            const str::dString &Value,
+            str::strings_ &Names,
+            str::strings_ &Values )
+        {
+            Names.Append( Name );
+            Values.Append( Value );
+        }
+
+        void AppendEscapedTag_(
+            const str::dString &Name,
+            const str::dString &Value,
+            str::strings_ &Names,
+            str::strings_ &Values )
+        {
+        qRH
+            str::string EscapedValue;
+        qRB
+            Names.Append( str::string( Name ) );
+            EscapedValue.Init();
+            xdhcmn::Escape( Value, EscapedValue, '"' );
+            Values.Append( EscapedValue );
+        qRR
+        qRT
+        qRE
+        }
+    }
+
 	void AppendTag_(
-		const char *Name,
-		const nstring___ &Value,
+        const str::dString &Name,
+        const str::dString &Value,
 		str::strings_ &Names,
 		str::strings_ &Values )
 	{
+        if ( !Name.Amount() )
+            qRFwk();
+
+        if ( Name(Name.First()) == '#')
+            AppendRawTag_(Name, Value, Names, Values );
+        else
+            AppendEscapedTag_(Name, Value, Names, Values );
+	}
+
+	namespace {
+        namespace {
+            void Split_(
+                flw::rRFlow &Flow,
+                str::dStrings &Splitted )
+            {
+            qRH
+                str::wString Item;
+                bso::sChar C = 0;
+            qRB
+                Item.Init();
+
+                while ( !Flow.EndOfFlow() ) {
+                    C = Flow.Get();
+
+                    if ( C == ',') {
+                        if ( Item.Amount()) {
+                            Splitted.Append(Item);
+                            Item.Init();
+                        }
+                    } else
+                        Item.Append(C);
+                }
+
+                if ( Item.Amount() )
+                    Splitted.Append(Item);
+            qRR
+            qRE
+            qRT
+            }
+        }
+        void Split_(
+            const str::dString &Merged,
+            str::dStrings &Splitted )
+        {
+            flx::sStringRFlow Flow;
+
+            Flow.Init(Merged);
+
+            Split_(Flow, Splitted);
+        }
+	}
+
+
+	void SubstituteArguments_(
+		const str::string_ &Tagged,	// Script with tags. When returning, tags are substitued.
+		const str::dStrings &Arguments,
+		const str::dStrings &Values,
+		str::dString &Substituted )
+	{
 	qRH
-		str::string NameForRawValue;
-		str::string EscapedValue;
-		TOL_CBUFFER___ Buffer;
+		str::strings Tags, TagValues;
+		sdr::sRow Row = qNIL;
 	qRB
-		Names.Append( str::string( Name ) );
-		EscapedValue.Init();
-		xdhcmn::Escape( str::string( Value.UTF8( Buffer ) ), EscapedValue, '"' );
-		Values.Append( EscapedValue );
+        if ( Arguments.Amount() != Values.Amount())
+            qRFwk();
 
-		NameForRawValue.Init( Name );
-		NameForRawValue.Append( '_' );
+		Tags.Init();
+		TagValues.Init();
 
-		Names.Append( NameForRawValue );
-		Values.Append( str::string( Value.UTF8( Buffer ) ) );
+		Row = Arguments.First();
+
+		while ( Row != qNIL ) {
+			AppendTag_(Arguments(Row), Values(Row), Tags, TagValues);
+
+			Row = Arguments.Next(Row);
+		}
+
+		tagsbs::SubstituteLongTags( Tagged, Tags, TagValues, Substituted );
 	qRR
 	qRT
 	qRE
 	}
 
-	void SubstituteTags_(
-		str::string_ &Script,	// Script with tags. When returning, tags are substitued.
-		va_list ValueList,
-		... )	// The list of the tag name, as 'const char *', with 'NULL' as end marker.
+	void GetScriptArguments_(
+        const char *Name,
+        str::dStrings &Splitted)
 	{
 	qRH
-		str::strings Names, Values;
-		va_list NameList;
-		const bso::char__ *Name = NULL;
+        str::wString Merged;
 	qRB
-		Names.Init();
-		Values.Init();
+        Merged.Init();
 
-		va_start( NameList, ValueList );
+        sclmisc::MGetValue(rgstry::rTEntry(TaggedScriptArguments_, Name), Merged);
 
-		Name = va_arg( NameList, const bso::char__ * );
-
-		while ( Name != NULL ) {
-			AppendTag_( Name, va_arg( ValueList, const nchar__ * ), Names, Values );
-
-			Name = va_arg( NameList, const bso::char__ * );
-		}
-
-		tagsbs::SubstituteLongTags( Script, Names, Values );
+        Split_(Merged, Splitted);
 	qRR
-	qRT
-		va_end( NameList );
 	qRE
+	qRT
 	}
 }
 
-#define D( name )\
-	E_CDEF( char *, name##_, #name )
-
-D( Message );
-D( Id );
-D( Name );
-D( Child );
-D( Sibling );
-D( Value );
-D( Method );
-D( Delay );
-D( Action );
-D( XML );
-D( XSL );
-D( Title );
-D( CloseText );
-D( Cast );
-D( Ids );
-D( Events );
-D( Casts );
-D( Contents );
-D( Types );
-D( ParametersSets );
-D( Rule );
-D( Index );
-D( Classes );
-
-#define S( name, ... )\
-	case sn##name:\
-	SubstituteTags_( TaggedScript, List, __VA_ARGS__ );\
-	break\
-
 void xdhujs::GetScript(
-	script_name__ ScriptName,
-	str::string_ &Script,
-	va_list List )
+	const char *Name,
+	const str::dStrings &Values,
+	str::string_ &Script)
 {
 qRH
 	str::string TaggedScript;
+	str::wStrings Arguments;
 qRB
 	TaggedScript.Init();
-	GetTaggedScript( ScriptName, TaggedScript );
+	GetTaggedScript( Name, TaggedScript );
 
-	switch ( ScriptName ) {
-	S( Execute, Value_, NULL );
-	S( Log, Message_, NULL );
-	S( DialogAlert, XML_, XSL_, Title_, CloseText_, NULL );
-	S( DialogConfirm, XML_, XSL_, Title_, CloseText_, NULL );
-	S( AttributeSetter, Id_, Name_, Value_, NULL  );
-	S( AttributeGetter, Id_, Name_, NULL  );
-	S( AttributeRemover, Id_, Name_, NULL  );
-	S( PropertySetter, Id_, Name_, Value_, NULL );
-	S( PropertyGetter, Id_, Name_, NULL );
-	S( LayoutPrepender, Id_, XML_, XSL_, NULL);
-	S( LayoutSetter, Id_, XML_, XSL_, NULL);
-	S( LayoutAppender, Id_, XML_, XSL_, NULL);
-	S( ValueSetter, Id_, Value_, NULL );
-	S( ValueGetter, Id_, NULL );
-	S( WidgetValueRetriever, Id_, Method_, NULL );
-	S( WidgetFocuser, Id_, Method_, NULL );
-	S( WidgetSelector, Id_, Method_, NULL );
-	S( WidgetFetcher, Id_, NULL );
-	S( Focuser, Id_, NULL );
-	S( Selector, Id_, NULL );
-	S( EventHandlersSetter, Ids_, Events_, NULL );
-	S( ContentsSetter, Ids_, Contents_, NULL );
-	S( TimeoutSetter, Delay_, Action_, NULL );
-	S( Parent, Id_, NULL );
-	S( FirstChild, Id_, NULL );
-	S( LastChild, Id_, NULL );
-	S( PreviousSibling, NULL );
-	S( NextSibling, NULL );
-	S( CreateElement, Name_, Id_, NULL );
-	S( InsertChild, Child_, Id_, NULL );
-	S( AppendChild, Child_, Id_, NULL );
-	S( InsertBefore, Sibling_, Id_, NULL );
-	S( InsertAfter, Sibling_, Id_, NULL );
-	S( WidgetsInstantiator, Ids_, Types_, ParametersSets_, NULL );
-	S( CSSRuleInserter, Id_, Rule_, Index_, NULL );
-	S( CSSRuleAppender, Id_, Rule_, NULL );
-	S( CSSRuleRemover, Id_, Index_, NULL );
-	S( ClassesAdder, Ids_, Classes_, NULL );
-	S( ClassesRemover, Ids_, Classes_, NULL );
-	S( ClassesToggler, Ids_, Classes_, NULL );
-	S( ElementsEnabler, Ids_, NULL );
-	S( ElementsDisabler, Ids_, NULL );
-	default:
-		qRFwk();
-		break;
-	}
+	Arguments.Init();
+	GetScriptArguments_(Name, Arguments);
 
-	Script.Append( TaggedScript );
+	SubstituteArguments_(TaggedScript, Arguments, Values, Script);
 qRR
 qRT
 qRE
 }
 
+/*
 const str::string_ &xdhujs::GetScript(
-	script_name__ ScriptName,
-	str::string_ *Buffer,
-	... )
+	const str::dString &Name,
+	const str::dStrings &Values,
+	str::string_ *Buffer )
 {
 qRH
 	va_list List;
 qRB
 	va_start( List, Buffer );
-	
+
 	GetScript( ScriptName, *Buffer, List );
 qRR
 qRT
@@ -264,4 +228,4 @@ qRT
 qRE
 	return *Buffer;
 }
-
+*/
