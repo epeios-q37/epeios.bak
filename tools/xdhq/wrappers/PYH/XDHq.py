@@ -109,7 +109,7 @@ class DOM:
 		# see the 'alert' primitive in 'XDHqXDH'.
 
 	def confirm(self,message):
-		return self._dom.call( "Confirm_1", _STRING, 1, message, 0 ) == "true"
+		return self._dom.call( "Confirm_1", _STRING, message ) == "true"
 
 	def _handleLayout(self, variant, id, xml, xsl):
 		#	If 'xslFilename' is empty, 'xml' contents HTML.
@@ -152,7 +152,7 @@ class DOM:
 	def setContents(self,idsAndContents):
 		[ids,contents] = _split(idsAndContents)
 
-		self._dom.call("SetContents_1", _VOID, 0, 2, ids, contents)
+		self._dom.call("SetContents_1", _VOID, ids, contents)
 
 	def setContent(self, id, content):
 		self.setContents({id: content})

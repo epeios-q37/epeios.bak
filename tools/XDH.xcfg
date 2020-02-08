@@ -9,14 +9,25 @@
 			</AttributeNames>
 		</CustomItems>
         <Scripts>
-			<Script name="SetEventHandlers_1" Arguments="#Ids,#Events">
-				<![CDATA[
-					setEventHandlers( %#Ids%, %#Events% );
-				]]>
-			</Script>
+			<!-- All scripts enclosed in following block are of intenal use.-->
+			<xpp:bloc>
+				<Script name="SetEventHandlers_1" Arguments="#Ids,#Events">
+					<![CDATA[
+						setEventHandlers( %#Ids%, %#Events% );
+					]]>
+				</Script>
+			</xpp:bloc>
 			<Script name="Alert_1" Arguments="Message">
 				<xpp:cdata>
 					alert("%Message%");
+				</xpp:cdata>
+			</Script>
+			<Script name="Confirm_1" Arguments="Message">
+				<xpp:cdata>
+					if ( window.confirm("%Message%") )
+						"true";
+					else
+						"false";
 				</xpp:cdata>
 			</Script>
             <Script name="HandleLayout_1" Arguments="Variant,Id,XML,XSL">
@@ -46,6 +57,11 @@
 			<Script name="GetContents_1" Arguments="#Ids">
 				<xpp:cdata>
 					getContents(%#Ids%);
+				</xpp:cdata>
+			</Script>
+			<Script name="SetContents_1" Arguments="#Ids,#Contents">
+				<xpp:cdata>
+					setContents( %#Ids%, %#Contents% );
 				</xpp:cdata>
 			</Script>
             <Script name="Parent_1" Arguments="Id">
