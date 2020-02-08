@@ -83,10 +83,10 @@ const net = require('net');
 const types = shared.types;
 const open = shared.open;
 
-const mainProtocolLabel = "6e010737-31d8-4be3-9195-c5b5b2a9d5d9";
+const mainProtocolLabel = "8d2b7b52-6681-48d6-8974-6e0127a4ca7e";
 const mainProtocolVersion = "0";
 
-const demoProtocolLabel = "877c913f-62df-40a1-bf5d-4bb5e66a6dd9";
+const demoProtocolLabel = "0fac593d-d65f-4cc1-84f5-3159c23c616b";
 const demoProtocolVersion = "0";
 
 function byteLength(str) {
@@ -152,8 +152,12 @@ function convertSize(size) {
 	return result;
 }
 
+function sizeEmbeddedString(string) {
+    return Buffer.concat([convertSize(byteLength(string)), Buffer.from(string, 'utf8')]);
+}
+
 function addString(data, string) {
-	return Buffer.concat([data, convertSize(byteLength(string)), Buffer.from(string, 'utf8')]);
+	return Buffer.concat([data, sizeEmbeddedString(string)]);
 }
 
 function addStrings(data, strings) {
@@ -214,7 +218,7 @@ if (token !== "" )
 	token = "&" + token;
 
 function standBy(socket, instance) {
-	socket.write(Buffer.concat([Buffer.alloc(1, instance._xdh.id), Buffer.from("StandBy_1\x00")]));
+  	socket.write(addString(Buffer.alloc(1, instance._xdh.id), "StandBy_1"));
 }
 
 function isTokenEmpty() {
@@ -343,7 +347,7 @@ function ignition(socket, createCallback, callbacks) {
 		throw getString(query, offset)[0];	// Displays error message.
 
 	if (wPort !== ":0") {
-		let completeURL = "https://" + wAddr + wPort + "/" + cgi + ".php?_token=" + token;
+		let completeURL = "http://" + wAddr + wPort + "/" + cgi + ".php?_token=" + token;
 
 		console.log(completeURL);
 		console.log(new Array(completeURL.length + 1).join('^'));
@@ -409,57 +413,34 @@ function launch(createCallback, callbacks, head) {
 	setTimeout(() => pseudoServer(createCallback, callbacks, head), 0);
 }
 
-function add(data, argument) {
-	if (typeof argument === "string")
-		return addString(data, argument);
-	else if (typeof argument === "object")
-		return addStrings(data, argument);
-	else
+function addTagged(data, argument) {
+	if (typeof argument === "string") {
+		return addString(Buffer.concat([data,Buffer.alloc(1,types.STRING)]), argument);
+    } else if (typeof argument === "object") {
+		return addStrings(Buffer.concat([data,Buffer.alloc(1,types.STRINGS)]), argument);
+    } else
 		throw "Unexpected argument type: " + typeof argument;
 }
 
 function call(instance, command, type) {
 	let i = 3;
-	let data = Buffer.concat([Buffer.alloc(1, instance._xdh.id), Buffer.from(command + '\x00')]);
-	let amount = arguments[i++];
+	let data = Buffer.alloc(1, instance._xdh.id);
+	let amount = arguments.length-1;
+    
+    data = Buffer.concat([addString(data,command), Buffer.alloc(1, type)])
 
 //	console.log( Date.now(), " Command: ", command, instance._xdh.id);
 
 	instance._xdh.type = type;
 
-	while (amount--)
-		data = add(data, arguments[i++]);
-
-	amount = arguments[i++];
-
-	while (amount--)
-		data = add(data, arguments[i++]);
+	while (i < amount)
+		data = addTagged(data, arguments[i++]);
+    
+    data = Buffer.concat([data, Buffer.alloc(1, types.VOID)]) // To report end of argument list.
 
 	instance._xdh.callback = arguments[i++];
 
 	instance._xdh.socket.write(data);
-}
-
-
-// Old
-function call_(dom, command, type) {
-	var i = 3;
-	var data = Buffer.from(command + '\x00');
-	var amount = arguments[i++];
-
-	dom._xdhType = type;
-
-	while (amount--)
-		data = add(data, arguments[i++]);
-
-	amount = arguments[i++];
-
-	while (amount--)
-		data = add(data, arguments[i++]);
-
-	dom._xdhCallback = arguments[i++];
-
-	dom._xdhSocket.write(data);
 }
 
 module.exports.launch = launch;

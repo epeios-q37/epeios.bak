@@ -12,9 +12,9 @@
 			<!-- All scripts enclosed in following block are of intenal use.-->
 			<xpp:bloc>
 				<Script name="SetEventHandlers_1" Arguments="#Ids,#Events">
-					<xpp:cdata>
+					<![CDATA[ {
 						setEventHandlers( %#Ids%, %#Events% );
-					</xpp:cdata>
+					} ]]>
 				</Script>
 				<Script name="InstantiateWidgets_1" Arguments="#Ids,#Types,#ParametersSets">
 					<![CDATA[ {

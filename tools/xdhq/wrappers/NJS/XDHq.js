@@ -140,50 +140,50 @@ function launch(callback, tagsAndCallbacks, head, mode) {
 
 class XDH {
 	execute(script, callback) {
-		call(this, "Execute_1", types.STRING, 1, script, 0, callback);
+		call(this, "Execute_1", types.STRING, script, callback);
 	}
 	alert(message, callback) {
-        call(this, "Alert_1", types.STRING, 1, message, 0, callback);
+        call(this, "Alert_1", types.STRING, message, callback);
         // For the return value being 'STRING' instead of 'VOID',
         // see the 'alert' primitive in 'XDHqXDH'.
 	}
 	confirm(message, callback) {
-		call(this, "Confirm_1", types.STRING, 1, message, 0, (answer) => callback(answer === "true"));
+		call(this, "Confirm_1", types.STRING, message, (answer) => callback(answer === "true"));
 	}
-	handleLayout_(command, id, xml, xsl, callback) {
+	handleLayout_(variant, id, xml, xsl, callback) {
 		if (typeof xml !== "string")
 			xml = xml.toString();
 
-		call(this, command, types.VOID, 3, id, xml, xsl, 0, callback);
+		call(this, "HandleLayout_1", types.VOID, variant, id, xml, xsl, callback);
 	}
 	prependLayout(id, html, callback) {
-		this.handleLayout_("PrependLayout_1", id, html, "", callback);
+		this.handleLayout_("Prepend", id, html, "", callback);
 	}
 	setLayout(id, html, callback) {
-		this.handleLayout_("SetLayout_1", id, html, "", callback);
+		this.handleLayout_("Set", id, html, "", callback);
 	}
 	appendLayout(id, html, callback) {
-		this.handleLayout_("AppendLayout_1", id, html, "", callback);
+		this.handleLayout_("Append", id, html, "", callback);
 	}
-	handleLayoutXSL_(command, id, xml, xslFilename, callback) {
+	handleLayoutXSL_(variant, id, xml, xslFilename, callback) {
 		let xslURL = xslFilename;
 
 		if (this._xdh.isDEMO)
 			xslURL = "data:text/xml;charset=utf-8," + encodeURIComponent(readXSLAsset(xslFilename));
 
-		this.handleLayout_(command, id, xml, xslURL, callback);
+		this.handleLayout_(variant, id, xml, xslURL, callback);
 	}
 	prependLayoutXSL(id, xml, xsl, callback) {
-		this.handleLayoutXSL_("PrependLayout_1", id, xml, xsl, callback);
+		this.handleLayoutXSL_("Prepend", id, xml, xsl, callback);
 	}
 	setLayoutXSL(id, xml, xsl, callback) {
-		this.handleLayoutXSL_("SetLayout_1", id, xml, xsl, callback);
+		this.handleLayoutXSL_("Set", id, xml, xsl, callback);
 	}
 	appendLayoutXSL(id, xml, xsl, callback) {
-		this.handleLayoutXSL_("AppendLayout_1", id, xml, xsl, callback);
+		this.handleLayoutXSL_("Append", id, xml, xsl, callback);
 	}
 	getContents(ids, callback) {
-		call(this, "GetContents_1", types.STRINGS, 0, 1, ids,
+		call(this, "GetContents_1", types.STRINGS, ids,
 			(contents) => callback(unsplit(ids, contents))
 		);
 	}
@@ -196,14 +196,14 @@ class XDH {
 
 		split(idsAndContents, ids, contents);
 
-		call(this, "SetContents_1", types.VOID, 0, 2, ids, contents, callback);
+		call(this, "SetContents_1", types.VOID, ids, contents, callback);
 	}
 	setContent(id, content, callback) {
 		return this.setContents(merge(id, content), callback);
 	}
 	setTimeout( delay, action, callback )
 	{
-		call(this, "SetTimeout_1", types.VOID, 2, delay.toString(), action, 0, callback);
+		call(this, "SetTimeout_1", types.VOID, delay.toString(), action, callback);
 	}
 /*
 	createElement_(name, id, callback ) {
@@ -220,63 +220,63 @@ class XDH {
 	}
 */
 	dressWidgets(id, callback) {
-		call(this, "DressWidgets_1", types.VOID, 1, id, 0, callback);
+		call(this, "DressWidgets_1", types.VOID, id, callback);
 	}
-	handleClasses(idsAndClasses, command, callback) {
+	handleClasses(idsAndClasses, variant, callback) {
 		var ids = [];
 		var classes = [];
 
 		split(idsAndClasses, ids, classes);
 
-		call(this, command, types.VOID, 0, 2, ids, classes, callback);
+		call(this, "HandleClasses_1", types.VOID, variant, ids, classes, callback);
 	}
 	addClasses(idsAndClasses, callback) {
-		this.handleClasses(idsAndClasses, "AddClasses_1", callback);
+		this.handleClasses(idsAndClasses, "Add", callback);
 	}
 	addClass(id, clas, callback) {
 		this.addClasses(merge(id, clas), callback);
 	}
 	removeClasses(idsAndClasses, callback) {
-		this.handleClasses(idsAndClasses, "RemoveClasses_1", callback);
+		this.handleClasses(idsAndClasses, "Remove", callback);
 	}
 	removeClass(id, clas, callback) {
 		this.removeClasses(merge(id, clas), callback);
 	}
 	toggleClasses(idsAndClasses, callback) {
-		this.handleClasses(idsAndClasses, "ToggleClasses_1", callback);
+		this.handleClasses(idsAndClasses, "Toggle", callback);
 	}
 	toggleClass(id, clas, callback) {
 		this.toggleClasses(merge(id, clas), callback);
 	}
 	enableElements(ids, callback) {
-		call(this, "EnableElements_1", types.VOID, 0, 1, ids, callback);
+		call(this, "EnableElements_1", types.VOID, ids, callback);
 	}
 	enableElement(id, callback) {
 		this.enableElements([id], callback);
 	}
 	disableElements(ids, callback) {
-		call(this, "DisableElements_1", types.VOID, 0, 1, ids, callback);
+		call(this, "DisableElements_1", types.VOID, ids, callback);
 	}
 	disableElement(id, callback) {
 		this.disableElements([id], callback);
 	}
 	setAttribute(id, name, value, callback) {
-		call(this, "SetAttribute_1", types.VOID, 3, id, name, value, 0, callback);
+		call(this, "SetAttribute_1", types.VOID, id, name, value, callback);
 	}
 	getAttribute(id, name, callback) {
-		return call(this, "GetAttribute_1", types.STRING, 2, id, name, 0, callback);
+		return call(this, "GetAttribute_1", types.STRING, id, name, callback);
 	}
 	removeAttribute(id, name, callback) {
-		call(this, "RemoveAttribute_1", types.VOID, 2, id, name, 0, callback);
+		call(this, "RemoveAttribute_1", types.VOID, id, name, callback);
 	}
 	setProperty(id, name, value, callback) {
-		call(this, "SetProperty_1", types.VOID, 3, id, name, value, 0, callback);
+		call(this, "SetProperty_1", types.VOID, id, name, value, callback);
 	}
 	getProperty(id, name, callback) {
-		return call(this, "GetProperty_1", types.STRING, 2, id, name, 0, callback);
+		return call(this, "GetProperty_1", types.STRING, id, name, callback);
 	}
 	focus(id, callback) {
-		call(this, "Focus_1", types.VOID, 1, id, 0, callback);
+		call(this, "Focus_1", types.VOID, id, callback);
 	}
 }
 
