@@ -8,12 +8,17 @@
 - [stdz]: modification to comply with current standards;
 - [trvl]: trivial modifications;
 
+## 2020-02-09:
+	
+- XDHUTL:
+  -  removing unused widget related functions,
+
 ## 2020-02-07:
 
 - TAGSBS:
-  - introducing `GetLongTags(…)`,
+   - introducing `GetLongTags(…)`,
 - XDHCMN, XDHDWS, XDHUJP, XDHUJS:
-  - script are no more hardcoded, but retrieved from registry (both argument declaration and definition),
+   - script are no more hardcoded, but retrieved from registry (both argument declaration and definition),
 
 ## 2020-01-03:
 

@@ -16,9 +16,9 @@
 						setEventHandlers( %#Ids%, %#Events% );
 					} ]]>
 				</Script>
-				<Script name="InstantiateWidgets_1" Arguments="#Ids,#Types,#ParametersSets">
+				<Script name="InstantiateWidgets_1" Arguments="#Ids,#Types,#ParametersSets,#ContentRetrievingMethods,#FocusingMethods,#SelectionMethods">
 					<![CDATA[ {
-						instantiateWidgets( %#Ids%, %#Types%, %#ParametersSets% );
+						instantiateWidgets( %#Ids%, %#Types%, %#ParametersSets%, %#ContentRetrievingMethods%, %#FocusingMethods%, %#SelectionMethods% );
 					} ]]>
 				</Script>
 			</xpp:bloc>
@@ -61,7 +61,7 @@
 						}
 
 						var digests = fetchEventHandlers( id );
-						digests;
+						digests;  // Not returned to user. Given after processing to 'SetEnventHandlers_1' script.
 					} ]]>
 				</Script>
 				<Script name="GetContents_1" Arguments="#Ids">
@@ -143,7 +143,8 @@
 				</Script>
 				<Script name="DressWidgets_1" Arguments="Id">
 					<![CDATA[ {
-						fetchWidgets( "%Id%" );
+						digest = fetchWidgets( "%Id%" );
+                        digest;  // Not returned to user. Given after processing to 'InstantiateWidgets_1' script.
 					} ]]>
 				</Script>
 				<Script name="" Arguments="">

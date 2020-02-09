@@ -20,6 +20,7 @@
 const onEventAttributeName = "data-xdh-onevent";
 const onEventsAttributeName = "data-xdh-onevents";
 const widgetAttributeName = "data-xdh-widget";
+const widgetContentRetrievingMethodAttribute = "data-xdh-widget-content-retrieving-method"
 const valueAttributeName = "data-xdh-value";
 const styleId = "XDHStyle";
 
@@ -380,6 +381,10 @@ function fetchWidgets(id) {
 	return digests;
 }
 
+function escapeQuotes(string) {
+    return string.replace(/\\/g,'\\\\').replace(/"/g,'\\"');
+}
+
 function getValue(elementOrId)	// Returns the value of element of id 'id'.
 {
 	var element = getElement(elementOrId);
@@ -424,7 +429,7 @@ function getValue(elementOrId)	// Returns the value of element of id 'id'.
 	}
 
 	if ( escape )
-		return value.replace(/\\/g,'\\\\').replace(/"/g,'\\"');
+		return escapeQuotes(value);
 	else
 		return value;
 }
@@ -434,7 +439,12 @@ function getContents(ids) {
 	var contents = "";
 
 	while(i--) {
-		contents = '"' + getValue(ids[i]) + '",' + contents;
+        let element = getElement(ids[i]);
+        
+        if (element.hasAttribute(widgetContentRetrievingMethodAttribute))
+            contents = '"' + escapeQuotes(eval(element.getAttribute(widgetContentRetrievingMethodAttribute))) + '",' + contents;
+        else
+            contents = '"' + getValue(element) + '",' + contents;
 	}
 
 	return contents;
@@ -469,12 +479,17 @@ function setEventHandlers(ids, events) {
 	}
 }
 
-function instantiateWidget(id, type, parameters) {
-	var script = 'jQuery( document.getElementById( "' + id + '") ).' + type + '(' + parameters + ');';
+function instantiateWidget(id, type, parameters, contentRetrievingMethod, focusingMethod, selectionMethod) {
+    // 'focusingMethod' and 'selectionMethod' are currently not handled.
+    
+    if ( contentRetrievingMethod !== "" )
+        getElement(id).setAttribute(widgetContentRetrievingMethodAttribute,'jQuery( document.getElementById( "' + id + '") ).' + contentRetrievingMethod);
+    
+	var script = 'jQuery( document.getElementById( "' + id + '") ).' + type + '(' + parameters + ');'
 	return script;
 }
 
-function instantiateWidgets(ids, types, parametersSets) {
+function instantiateWidgets(ids, types, parametersSets, contentRetrievingMethods, focusingMethods, selectionMethods) {
 	var i = ids.length;
 	var script = "";
 
@@ -485,7 +500,7 @@ function instantiateWidgets(ids, types, parametersSets) {
 		throw "Inconsistency";
 
 	while (i--) {
-		script += instantiateWidget(ids[i], types[i], parametersSets[i]);
+		script += instantiateWidget(ids[i], types[i], parametersSets[i], contentRetrievingMethods[i], focusingMethods[i], selectionMethods[i]);
 	}
 
 	eval(script);

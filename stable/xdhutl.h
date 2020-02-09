@@ -220,55 +220,39 @@ namespace xdhutl {
 		event_abstract_ &Abstract );	// If false, no digest found because the event is a key-related event but not with recognized key sequence.
 
 	void ExtractWidgetFeatures(
-		const xdhcmn::digest_ &Description,
+		const xdhcmn::digest_ &Digest,
 		str::string_ &Type,
 		str::string_ &Parameters,
 		str::string_ &ContentRetrievingMethod,
 		str::string_ &FocusingMethod,
 		str::dString &SelectionMethod );
 
-	void ExtractWidgetFeatures(
-		const str::string_ &Description,
+	void ExtractWidgetFeaturesAndId(
+		const xdhcmn::digest_ &XDigest,
+		str::dString &Id,
 		str::string_ &Type,
 		str::string_ &Parameters,
 		str::string_ &ContentRetrievingMethod,
 		str::string_ &FocusingMethod,
 		str::dString &SelectionMethod );
 
-	void ExtractWidgetTypeAndParameters(
-		const xdhcmn::digest_ &Description,
-		str::string_ &Type,
-		str::string_ &Parameters );
-
-	void ExtractWidgetContentRetrievingMethod(
-		const xdhcmn::digest_ &Description,
-		str::string_ &Method );
-
-	void ExtractWidgetContentRetrievingMethod(
-		const str::string_ &Description,
-		str::string_ &Method );
-
-	void ExtractWidgetFocusingMethod(
-		const xdhcmn::digest_ &Description,
-		str::string_ &Method );
-
-	void ExtractWidgetFocusingMethod(
-		const str::string_ &Description,
-		str::string_ &Method );
-
-	void ExtractWidgetSelectionMethod(
-		const xdhcmn::digest_ &Description,
-		str::string_ &Method );
-
-	void ExtractWidgetSelectionMethod(
-		const str::string_ &Description,
-		str::string_ &Method );
-
-	void ExtractWidgetsTypesAndParametersSets(
-		const xdhcmn::digest_ &Descriptions,
-		str::strings_ &Ids,
+	void ExtractWidgetsFeaturesAndIds(
+		const xdhcmn::digest_ &XDigests,
+		str::dStrings &Ids,
 		str::strings_ &Types,
-		str::strings_ &ParametersSets );
+		str::strings_ &ParametersSet,
+		str::strings_ &ContentRetrievingMethods,
+		str::strings_ &FocusingMethods,
+		str::dStrings &SelectionMethods );
+
+	void ExtractWidgetsFeaturesAndIds(
+		const str::dString &XDigests,
+		str::dStrings &Ids,
+		str::strings_ &Types,
+		str::strings_ &ParametersSet,
+		str::strings_ &ContentRetrievingMethods,
+		str::strings_ &FocusingMethods,
+		str::dStrings &SelectionMethods );
 
 	void GetTags(
 		const xdhcmn::digest_ &Digest,

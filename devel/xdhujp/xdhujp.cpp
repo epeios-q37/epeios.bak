@@ -1280,9 +1280,15 @@ namespace {
             const str::strings_ &Ids,
             const str::strings_ &Types,
             const str::strings_ &ParametersSets,
-            str::string_ &IdsTag,
-            str::string_ &TypesTag,
-            str::string_ &ParametersSetsTag )
+            const str::dStrings &ContentRetrievingMethods,
+            const str::dStrings &FocusingMethods,
+            const str::dStrings &SelectionMethods,
+            str::string_ &FlatIds,
+            str::string_ &FlatTypes,
+            str::string_ &FlatParametersSets,
+            str::dString &FlatContentRetrievingMethods,
+            str::dString &FlatFocusingMethods,
+            str::dString &FlatSelectionMethods )
         {
             sdr::row__ Row = qNIL;
 
@@ -1292,55 +1298,75 @@ namespace {
             if ( Ids.Amount() != ParametersSets.Amount() )
                 qRFwk();
 
+            if ( Ids.Amount() != ContentRetrievingMethods.Amount() )
+                qRFwk();
+
+            if ( Ids.Amount() != FocusingMethods.Amount() )
+                qRFwk();
+
+            if ( Ids.Amount() != SelectionMethods.Amount() )
+                qRFwk();
+
             Row = Ids.First();
 
-            IdsTag.Append( "[ " );
-            TypesTag.Append( "[ ");
-            ParametersSetsTag.Append( "[ ");
+            FlatIds.Append("[ ");
+            FlatTypes.Append("[ ");
+            FlatParametersSets.Append("[ ");
+            FlatContentRetrievingMethods.Append("[ ");
+            FlatFocusingMethods.Append("[ ");
+            FlatSelectionMethods.Append("[ ");
 
             while ( Row != qNIL ) {
-                Append_( Ids( Row ), IdsTag );
-                Append_( Types( Row ), TypesTag );
-                Append_( ParametersSets( Row ), ParametersSetsTag );
+                Append_( Ids( Row ), FlatIds );
+                Append_( Types( Row ), FlatTypes );
+                Append_( ParametersSets( Row ), FlatParametersSets );
+                Append_( ContentRetrievingMethods( Row ), FlatContentRetrievingMethods );
+                Append_( FocusingMethods( Row ), FlatFocusingMethods );
+                Append_( SelectionMethods( Row ), FlatSelectionMethods );
 
                 Row = Ids.Next( Row );
 
                 if ( Row != qNIL ) {
-                    IdsTag.Append( ", " );
-                    TypesTag.Append( ", " );
-                    ParametersSetsTag.Append( ", " );
+                    FlatIds.Append( ", " );
+                    FlatTypes.Append( ", " );
+                    FlatParametersSets.Append( ", " );
+                    FlatContentRetrievingMethods.Append(", ");
+                    FlatFocusingMethods.Append(", ");
+                    FlatSelectionMethods.Append(", ");
                 }
             }
 
-            IdsTag.Append( " ]" );
-            TypesTag.Append( " ]");
-            ParametersSetsTag.Append( " ]");
+            FlatIds.Append( " ]" );
+            FlatTypes.Append( " ]");
+            FlatParametersSets.Append( " ]");
+            FlatContentRetrievingMethods.Append(" ]");
+            FlatFocusingMethods.Append(" ]");
+            FlatSelectionMethods.Append(" ]");
         }
 
 
         void HandleWidgets_(
             cJS &Callback,
-            const xdhcmn::digest_ &Descriptions )
+            const xdhcmn::digest_ &Digest )
         {
         qRH
-            str::strings Ids, Types, ParametersSets, Arguments;
-            str::string IdsTag, TypesTag, ParametersSetsTag;
+            str::strings Ids, Types, ParametersSets, ContentRetrievingMethods, FocusingMethods, SelectionMethods, Arguments;
+            str::string FlatIds, FlatTypes, FlatParametersSets, FlatContentRetrievingMethods, FlatFocusingMethods, FlatSelectionMethods;
         qRB
-            Ids.Init();
-            Types.Init();
-            ParametersSets.Init();
-            xdhutl::ExtractWidgetsTypesAndParametersSets( Descriptions, Ids, Types, ParametersSets );
+            tol::Init(Ids, Types, ParametersSets, ContentRetrievingMethods, FocusingMethods, SelectionMethods);
+            xdhutl::ExtractWidgetsFeaturesAndIds( Digest, Ids, Types, ParametersSets, ContentRetrievingMethods, FocusingMethods, SelectionMethods );
 
             if ( Ids.Amount() != 0 ) {
-                IdsTag.Init();
-                TypesTag.Init();
-                ParametersSetsTag.Init();
-                HandleWidgets_( Ids, Types, ParametersSets, IdsTag, TypesTag, ParametersSetsTag );
+                tol::Init(FlatIds, FlatTypes, FlatParametersSets, FlatContentRetrievingMethods, FlatFocusingMethods, FlatSelectionMethods);
+                HandleWidgets_( Ids, Types, ParametersSets, ContentRetrievingMethods, FocusingMethods, SelectionMethods, FlatIds, FlatTypes, FlatParametersSets, FlatContentRetrievingMethods, FlatFocusingMethods, FlatSelectionMethods );
 
                 Arguments.Init();
-                Arguments.Append(IdsTag);
-                Arguments.Append(TypesTag);
-                Arguments.Append(ParametersSetsTag);
+                Arguments.Append(FlatIds);
+                Arguments.Append(FlatTypes);
+                Arguments.Append(FlatParametersSets);
+                Arguments.Append(FlatContentRetrievingMethods);
+                Arguments.Append(FlatFocusingMethods);
+                Arguments.Append(FlatSelectionMethods);
 
                 Execute( Callback, "InstantiateWidgets_1", Arguments );
             }
