@@ -54,7 +54,7 @@ module XDHq
 
 	def XDHq::getAssetPath(dir)
 		if XDHqSHRD::isDev?()
-			return File.join("/cygdrive/h/hg/epeios/tools/xdhq/examples/common/", dir)
+			return File.join("/home/csimon/epeios/tools/xdhq/examples/common/", dir)
 		else
 			return File.join(Dir.pwd,dir)
 		end
@@ -90,59 +90,59 @@ module XDHq
 		end
 
 		def execute(script)
-			return call("Execute_1" ,$STRING, 1, script, 0)
+			return call("Execute_1" ,$STRING, script)
 		end
 	
 		def alert(message)
-			call( "Alert_1", $STRING, 1, message, 0 )
+			call( "Alert_1", $STRING, message)
 		# For the return value being 'STRING' instead of 'VOID',
 		# see the 'alert' primitive in 'XDHqXDH'.
 		end
 
 		def confirm?(message)
-			return call("Confirm_1", $STRING, 1, message, 0) == "true"
+			return call("Confirm_1", $STRING, message) == "true"
 		end
 
-		private def handleLayout(command, id, xml, xslFilename = "")
-			call(command, $VOID, 3, id, if xml.is_a?( String ) then xml else xml.toString() end, xslFilename, 0)
+		private def handleLayout(variant, id, xml, xslFilename = "")
+			call("HandleLayout_1", $VOID, variant, id, if xml.is_a?( String ) then xml else xml.toString() end, xslFilename)
 		end
 
 		def prependLayout(id, html)
-			handleLayout("PrependLayout_1", id, html)
+			handleLayout("Prepend", id, html)
 		end
 
 		def setLayout(id, html)
-			handleLayout("SetLayout_1", id, html)
+			handleLayout("Set", id, html)
 		end
 
 		def appendLayout(id, html)
-			handleLayout("AppendLayout_1", id, html)
+			handleLayout("Append", id, html)
 		end
 
-		private def handleLayoutXSL(command, id, xml, xsl)
+		private def handleLayoutXSL(variant, id, xml, xsl)
 			xslURL = xsl
 
 			if true	# Testing if 'PROD' or 'DEMO' mode when available.
 				xslURL = "data:text/xml;charset=utf-8," + URI::encode(XDHq::readAsset( xsl, $dir ))
 			end
 
-			handleLayout(command, id, xml, xslURL )
+			handleLayout(variant, id, xml, xslURL )
 		end
 
 		def prependLayoutXSL(id, xml, xsl)
-			handleLayoutXSL("PrependLayout_1", id, xml, xsl)
+			handleLayoutXSL("Prepend", id, xml, xsl)
 		end
 
 		def setLayoutXSL(id, xml, xsl)
-			handleLayoutXSL("SetLayout_1", id, xml, xsl)
+			handleLayoutXSL("Set", id, xml, xsl)
 		end
 
 		def appendLayoutXSL(id, xml, xsl)
-			handleLayoutXSL("AppendLayout_1", id, xml, xsl)
+			handleLayoutXSL("Append", id, xml, xsl)
 		end
 	
 		def getContents(ids)
-			return unsplit(ids, call("GetContents_1", $STRINGS, 0, 1, ids))
+			return unsplit(ids, call("GetContents_1", $STRINGS, ids))
 		end
 
 		def getContent(id)
@@ -151,7 +151,7 @@ module XDHq
 
 		def setContents(idsAndContents)
 			ids, contents = split(idsAndContents)
-			call("SetContents_1", $VOID, 0, 2, ids, contents)
+			call("SetContents_1", $VOID, ids, contents)
 		end
 
 		def setContent(id, content)
@@ -159,7 +159,7 @@ module XDHq
 		end
 
 		def setTimeout(delay,action )
-			call( "SetTimeout_1", $VOID, 2, delay.to_s(), action, 0 )
+			call( "SetTimeout_1", $VOID, delay.to_s(), action )
 		end
 
 =begin	
@@ -173,25 +173,25 @@ module XDHq
 =end	
 
 		def dressWidgets(id)
-			return call( "DressWidgets_1", $VOID, 1, id, 0 )
+			return call( "DressWidgets_1", $VOID, id )
 		end
 	
-		private def handleClasses(command, idsAndClasses)
+		private def handleClasses(variant, idsAndClasses)
 			ids, classes = split(idsAndClasses)
 	
-			call(command, $VOID, 0, 2, ids, classes)
+			call("HandleClasses_1", $VOID, variant, ids, classes)
 		end
 	
 		def addClasses(idsAndClasses)
-			handleClasses("AddClasses_1", idsAndClasses)
+			handleClasses("Add", idsAndClasses)
 		end
 	
 		def removeClasses(idsAndClasses)
-			handleClasses("RemoveClasses_1", idsAndClasses)
+			handleClasses("Remove", idsAndClasses)
 		end
 	
 		def toggleClasses(idsAndClasses)
-			handleClasses("ToggleClasses_1", idsAndClasses)
+			handleClasses("Toggle", idsAndClasses)
 		end
 	
 		def addClass(id, clas)
@@ -207,7 +207,7 @@ module XDHq
 		end
 	
 		def enableElements(ids)
-			call("EnableElements_1", $VOID, 0, 1, ids)
+			call("EnableElements_1", $VOID, ids)
 		end
 	
 		def enableElement(id)
@@ -215,7 +215,7 @@ module XDHq
 		end
 	
 		def disableElements(ids)
-			call("DisableElements_1", $VOID, 0, 1, ids)
+			call("DisableElements_1", $VOID, ids)
 		end
 	
 		def disableElement(id)
@@ -223,27 +223,27 @@ module XDHq
 		end
 	
 		def setAttribute(id, name, value )
-			call("SetAttribute_1", $VOID, 3, id, name, value, 0 )
+			call("SetAttribute_1", $VOID, id, name, value )
 		end
 	
 		def getAttribute(id, name)
-			return call("GetAttribute_1", $STRING, 2, id, name, 0 )
+			return call("GetAttribute_1", $STRING, id, name )
 		end
 	
 		def removeAttribute(id, name )
-			call("RemoveAttribute_1", $VOID, 2, id, name, 0 )
+			call("RemoveAttribute_1", $VOID, id, name )
 		end
 	
 		def setProperty(id, name, value )
-			call("SetProperty_1", $VOID, 3, id, name, value, 0 )
+			call("SetProperty_1", $VOID, id, name, value )
 		end
 	
 		def getProperty(id, name )
-			return call("GetProperty_1", _STRING, 2, id, name, 0 )
+			return call("GetProperty_1", _STRING, id, name )
 		end
 
 		def focus(id)
-			call("Focus_1", $VOID, 1, id, 0)
+			call("Focus_1", $VOID, id )
 		end
 	end
 

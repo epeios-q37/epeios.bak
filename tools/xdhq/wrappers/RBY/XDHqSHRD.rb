@@ -34,6 +34,6 @@ module XDHqSHRD
 	end
 
 	def XDHqSHRD::isDev?()
-		return ENV.include?("EPEIOS_SRC")
+		return ENV.include?("Q37_EPEIOS")
 	end
 end

@@ -61,9 +61,9 @@ module XDHqDEMO
         puts "#{caller_infos[0]} - #{caller_infos[1]}"  
     end
 
-    @demoProtocolLabel = "877c913f-62df-40a1-bf5d-4bb5e66a6dd9"
+    @demoProtocolLabel = "0fac593d-d65f-4cc1-84f5-3159c23c616b"
     @demoProtocolVersion = "0"
-    @mainProtocolLabel = "6e010737-31d8-4be3-9195-c5b5b2a9d5d9"
+    @mainProtocolLabel = "8d2b7b52-6681-48d6-8974-6e0127a4ca7e"
     @mainProtocolVersion = "0"
 
     @pAddr = "atlastk.org"
@@ -320,7 +320,7 @@ module XDHqDEMO
             else
                 XDHqDEMO::lockOutputMutex() # '@outputMutex.synchronize {...}' does not work as '@outputMutex' is not the good one.
                 XDHqDEMO::writeByte(@instance.getId())
-                XDHqDEMO::writeStringNUL("StandBy_1")
+                XDHqDEMO::writeString("StandBy_1")
                 XDHqDEMO::unlockOutputMutex()
             end
             wait()
@@ -334,28 +334,27 @@ module XDHqDEMO
         end
         def call(command, type, *args)
             i = 0
+            amount = args.length
             
             XDHqDEMO::lockOutputMutex() # '@outputMutex.synchronize {...}' does not work as '@outputMutex' is not the good one.
             XDHqDEMO::writeByte(@instance.getId())
-            XDHqDEMO::writeStringNUL(command)
-
-            amount = args[i]
-            i += 1
+            XDHqDEMO::writeString(command)
+            XDHqDEMO::writeByte(type)
 
             while amount != 0    # For Ruby, 0 == true
-                XDHqDEMO::writeString(args[i])
+                if args[i].is_a?( String )
+                    XDHqDEMO::writeByte(XDHqSHRD::STRING)
+                    XDHqDEMO::writeString(args[i])
+                else
+                    XDHqDEMO::writeByte(XDHqSHRD::STRINGS)
+                    XDHqDEMO::writeStrings(args[i])
+                end
+
                 i += 1
                 amount -= 1
             end
 
-            amount = args[i]
-            i += 1
-
-            while amount != 0    # For Ruby, 0 == true
-                XDHqDEMO::writeStrings(args[i])
-                i += 1
-                amount -= 1
-            end
+            XDHqDEMO::writeByte(XDHqSHRD::VOID)
 
             XDHqDEMO::unlockOutputMutex()
 
