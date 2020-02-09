@@ -64,13 +64,13 @@ sub getAction {
 }
 
 sub execute {
-        return shift->{dom}->call("Execute_1", XDHq::SHRD::RT_STRING, 1, shift, 0);
+        return shift->{dom}->call("Execute_1", XDHq::SHRD::RT_STRING, shift);
 }
 
 sub alert {
     my ($self, $message) = @_;
 
-    $self->{dom}->call("Alert_1", XDHq::SHRD::RT_STRING, 1, $message, 0);
+    $self->{dom}->call("Alert_1", XDHq::SHRD::RT_STRING, $message);
 
     # For the return value being 'RT_STRING' instead of 'TR_VOID',
 	# see the 'alert' primitive in 'XDHqXDH'.
@@ -79,29 +79,29 @@ sub alert {
 sub confirm {
     my ($self, $message) = @_;
 
-    return $self->{dom}->call("Confirm_1", XDHq::SHRD::RT_STRING, 1, $message, 0) eq "true";
+    return $self->{dom}->call("Confirm_1", XDHq::SHRD::RT_STRING, $message) eq "true";
 }
 
 sub _handleLayout {
-    my ($self, $command, $id, $xml, $xslFilename) = @_;
+    my ($self, $variant, $id, $xml, $xslFilename) = @_;
 
-    $self->{dom}->call($command, XDHq::SHRD::RT_VOID, 3, $id, ref $xml eq "XDHq::XML" ? $xml->toString() : $xml, $xslFilename, 0);
+    $self->{dom}->call("HandleLayout_1", XDHq::SHRD::RT_VOID, $variant, $id, ref $xml eq "XDHq::XML" ? $xml->toString() : $xml, $xslFilename);
 }
 
 sub prependLayout {
-    shift->_handleLayout("PrependLayout_1", shift, shift, "");
+    shift->_handleLayout("Prepend", shift, shift, "");
 }
 
 sub setLayout {
-    shift->_handleLayout("SetLayout_1", shift, shift, "");
+    shift->_handleLayout("Set", shift, shift, "");
 }
 
 sub appendLayout {
-    shift->_handleLayout("AppendLayout_1", shift, shift, "");
+    shift->_handleLayout("Append", shift, shift, "");
 }
 
 sub _handleLayoutXSL {
-    my ($self, $command, $id, $xml, $xsl) = @_;
+    my ($self, $variant, $id, $xml, $xsl) = @_;
 
     if( XDHq::SHRD::TRUE) { # Replaced with a DEMO/PROD test when available.
         $xsl =~ s/([^-A-Za-z0-9_.!~*'() ])/sprintf("%%%02X", ord($1))/eg;
@@ -109,26 +109,26 @@ sub _handleLayoutXSL {
         $xsl = "data:text/xml;charset=utf-8," . $xsl;
     }
 
-    $self->_handleLayout( $command, $id, $xml, $xsl);
+    $self->_handleLayout( $variant, $id, $xml, $xsl);
 }
 
 sub prependLayoutXSL {
-    shift->_handleLayoutXSL("PrependLayout_1", shift, shift, shift);
+    shift->_handleLayoutXSL("Prepend", shift, shift, shift);
 }
 
 sub setLayoutXSL {
-    shift->_handleLayoutXSL("SetLayout_1", shift, shift, shift);
+    shift->_handleLayoutXSL("Set", shift, shift, shift);
 }
 
 sub appendLayoutXSL {
-    shift->_handleLayoutXSL("AppendLayout_1", shift, shift, shift);
+    shift->_handleLayoutXSL("Append", shift, shift, shift);
 }
 
 
 sub getContents {
     my ($self, $ids) = @_;
 
-    my @result = $self->{dom}->call("GetContents_1", XDHq::SHRD::RT_STRINGS, 0, 1, $ids);
+    my @result = $self->{dom}->call("GetContents_1", XDHq::SHRD::RT_STRINGS, $ids);
 
     return _unsplit($ids, \@result); # To modify to avoid the use of the @result variable.
 }
@@ -146,7 +146,7 @@ sub setContents {
 
     my ($ids, $contents) = _split(shift);
 
-    $self->{dom}->call("SetContents_1", XDHq::SHRD::RT_VOID, 0, 2, $ids, $contents);
+    $self->{dom}->call("SetContents_1", XDHq::SHRD::RT_VOID, $ids, $contents);
 }
 
 sub setContent {
@@ -154,7 +154,7 @@ sub setContent {
 }
 
 sub setTimeout {
-    shift->{dom}->call("SetTimeout_1", XDHq::SHRD::RT_VOID, 2, shift, shift, 0);
+    shift->{dom}->call("SetTimeout_1", XDHq::SHRD::RT_VOID, shift, shift);
 }
 
 =pod
@@ -168,23 +168,23 @@ sub insertChild {
 =cut
 
 sub dressWidgets {
-     shift->{dom}->call( "DressWidgets_1", XDHq::SHRD::RT_VOID, 1, shift, 0 )   ;
+     shift->{dom}->call( "DressWidgets_1", XDHq::SHRD::RT_VOID, shift )   ;
 }
 
 sub _handleClasses {
-    shift->{dom}->call(shift, XDHq::SHRD::RT_VOID, 0, 2, _split(shift));
+    shift->{dom}->call("HandleClasses_1", XDHq::SHRD::RT_VOID, shift, _split(shift));
 }
 
 sub addClasses {
-    shift->_handleClasses("AddClasses_1", shift );
+    shift->_handleClasses("Add", shift );
 }
 
 sub removeClasses {
-    shift->_handleClasses("RemoveClasses_1", shift);
+    shift->_handleClasses("Remove", shift);
 }
 
 sub toggleClasses {
-    shift->_handleClasses("ToggleClasses_1", shift);
+    shift->_handleClasses("Toggle", shift);
 }
 
 sub addClass {
@@ -200,7 +200,7 @@ sub toggleClass {
 }
 
 sub enableElements {
-    shift->{dom}->call("EnableElements_1", XDHq::SHRD::RT_VOID, 0, 1, shift);
+    shift->{dom}->call("EnableElements_1", XDHq::SHRD::RT_VOID, shift);
 }
 
 sub enableElement {
@@ -208,7 +208,7 @@ sub enableElement {
 }
 
 sub disableElements {
-    shift->{dom}->call("DisableElements_1", XDHq::SHRD::RT_VOID, 0, 1, shift);
+    shift->{dom}->call("DisableElements_1", XDHq::SHRD::RT_VOID, shift);
 }
 
 sub disableElement {
@@ -216,27 +216,27 @@ sub disableElement {
 }
 
 sub setAttribute {
-    shift->{dom}->call("SetAttribute_1", XDHq::SHRD::RT_VOID, 3, shift, shift, shift, 0 )
+    shift->{dom}->call("SetAttribute_1", XDHq::SHRD::RT_VOID, shift, shift, shift )
 }
 
 sub getAttribute {
-    return shift->{dom}->call("GetAttribute_1", XDHq::SHRD::RT_STRING, 2, shift, shift, 0 )
+    return shift->{dom}->call("GetAttribute_1", XDHq::SHRD::RT_STRING, shift, shift )
 }
 
 sub removeAttribute {
-    return shift->{dom}->call("RemoveAttribute_1", XDHq::SHRD::RT_VOID, 2, shift, shift, 0 )
+    return shift->{dom}->call("RemoveAttribute_1", XDHq::SHRD::RT_VOID, shift, shift )
 }
 
 sub setProperty {
-    shift->{dom}->call("SetProperty_1", XDHq::SHRD::RT_VOID, 3, shift, shift, shift, 0 )
+    shift->{dom}->call("SetProperty_1", XDHq::SHRD::RT_VOID, shift, shift, shift )
 }
 
 sub getProperty {
-    return shift->{dom}->call("GetProperty_1", XDHq::SHRD::RT_STRING, 2, shift, shift, 0 )
+    return shift->{dom}->call("GetProperty_1", XDHq::SHRD::RT_STRING, shift, shift )
 }
 
 sub focus {
-    shift->{dom}->call("Focus_1", XDHq::SHRD::RT_VOID, 1, shift, 0);
+    shift->{dom}->call("Focus_1", XDHq::SHRD::RT_VOID, shift);
 }
 
 return XDHq::SHRD::TRUE;

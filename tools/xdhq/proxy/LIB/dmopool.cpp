@@ -355,11 +355,11 @@ namespace {
 			Flow.Commit();
 			break;
 		case csdcmn::UndefinedVersion:
-			Put_( "Incompatible FaaS protocol! Please update your software.", Flow );
+			Put_( "\nIncompatible FaaS protocol! Please update your software.\n", Flow );
 			Flow.Commit();
 			qRGnr();
 		default:
-			Put_( "Unknown FaaS protocol version!", Flow );
+			Put_( "\nUnknown FaaS protocol version!\n", Flow );
 			Flow.Commit();
 			qRGnr();
 			break;

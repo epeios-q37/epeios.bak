@@ -38,7 +38,7 @@ sub _put {
     $xml->putAttribute("id", $id);
 
     foreach my $key (keys %{$note}) {
-        $xml->setTagAndValue($key,$note->{$key});
+        $xml->putTagAndValue($key,$note->{$key});
     }
 
     $xml->popTag();

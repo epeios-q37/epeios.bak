@@ -32,7 +32,7 @@ use Cwd;
 
 sub _getAssetPath {
     if (XDHq::SHRD::isDev() ) {
-        return "/cygdrive/h/hg/epeios/tools/xdhq/examples/common/" . shift;
+        return "/home/csimon/epeios/tools/xdhq/examples/common/" . shift;
     } else {
         return getcwd . '/' . shift;
     }

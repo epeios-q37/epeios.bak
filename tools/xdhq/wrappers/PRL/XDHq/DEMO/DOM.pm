@@ -61,7 +61,7 @@ sub getAction {
         {# Also a lock scope.
         lock($XDHq::DEMO::SHRD::writeLock);
         XDHq::DEMO::SHRD::writeByte($self->{instance}->{id});
-        XDHq::DEMO::SHRD::writeStringNUL("StandBy_1");
+        XDHq::DEMO::SHRD::writeString("StandBy_1");
         }
     }
 
@@ -84,21 +84,20 @@ sub call {
         lock($XDHq::DEMO::SHRD::writeLock);
 
         XDHq::DEMO::SHRD::writeByte($self->{instance}->{id});
-        XDHq::DEMO::SHRD::writeStringNUL($command);
+        XDHq::DEMO::SHRD::writeString($command);
+        XDHq::DEMO::SHRD::writeByte($type);
    
-        my $amount = shift;
-
-        while($amount) {
-            XDHq::DEMO::SHRD::writeString(shift);
-            $amount--;
+        foreach $arg (@_) {
+            if ( ref($arg) eq "ARRAY" ) {
+                XDHq::DEMO::SHRD::writeByte(XDHq::SHRD::RT_STRINGS);
+                XDHq::DEMO::SHRD::writeStrings($arg);
+            } else {
+                XDHq::DEMO::SHRD::writeByte(XDHq::SHRD::RT_STRING);
+                XDHq::DEMO::SHRD::writeString($arg);
+            }
         }
 
-        $amount = shift;
-
-        while($amount) {
-            XDHq::DEMO::SHRD::writeStrings(shift);
-            $amount--;
-        }
+        XDHq::DEMO::SHRD::writeByte(XDHq::SHRD::RT_VOID);
     }
 
     if ($type eq XDHq::SHRD::RT_STRING) {
