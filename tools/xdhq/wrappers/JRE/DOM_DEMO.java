@@ -235,7 +235,9 @@ public class DOM_DEMO extends DOM_SHRD {
 
 			if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
 				Desktop.getDesktop().browse(new URI(url));
-			}
+			} else if (Runtime.getRuntime().exec(new String[] { "which", "xdg-open" }).getInputStream().read() != -1) {
+                Runtime.getRuntime().exec(new String[] { "xdg-open", url });	// For KDE based Linux distros.
+            }
 		}
 	}
 

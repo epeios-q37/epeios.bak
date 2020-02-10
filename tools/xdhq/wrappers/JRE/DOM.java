@@ -58,16 +58,16 @@ public class DOM {
 		DOM.getAction(event);
 	}
 
-	public String execute(String script) {
-		return (String) DOM.call("Execute_1", Type.STRING, a(script));
-	}
-
 	static private ARG a( String string ) {
 		return new ARG(string );
 	}
 
 	static private ARG a( String[] strings ) {
 		return new ARG(strings);
+	}
+
+	public String execute(String script) {
+		return (String) DOM.call("Execute_1", Type.STRING, a(script));
 	}
 
 	public void alert(String message) {
