@@ -24,6 +24,7 @@
 			</DemoNotification>
 		</Parameters>
 		<Definitions>
+			<URL>http://%Address%%Service%/xdh.php?_token=%Token%</URL>
 			<Plugins target="Token">
 				<xpp:define name="TokenPluginsDir">
 					<xpp:bloc>

@@ -265,6 +265,7 @@ def _ignition():
 
 	writeString( _token)
 	writeString(_headContent)
+	writeString(_wAddr);
 
 	_writeLock.release()
 
@@ -275,6 +276,7 @@ def _ignition():
 
 	if ( _wPort != ":0" ):
 		url = "http://" + _wAddr + _wPort + "/" + _cgi + ".php?_token=" + _token
+		url = getString()
 
 		print(url)
 		print("".rjust(len(url),'^'))

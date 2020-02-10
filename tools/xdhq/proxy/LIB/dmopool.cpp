@@ -369,6 +369,37 @@ namespace {
 	qRE;
 	}
 
+	const str::dString &BuildURL_(
+        const str::dString &Address,
+        const str::dString &RawService,
+        const str::dString &Token,
+        str::dString &URL )
+    {
+    qRH
+        str::wString TaggedURL, Service;
+        tagsbs::tvalues Tags;
+    qRB
+        TaggedURL.Init();
+        sclmisc::MGetValue(registry::definition::URL, TaggedURL);
+
+        if ( RawService.Amount()) {
+            Service.Init(":");
+            Service.Append(RawService);
+        } else
+            Service.Init();
+
+        Tags.Init();
+
+        Tags.Append("Address", Address, "Service", Service, "Token", Token);
+
+        if ( !tagsbs::SubstituteLongTags(TaggedURL, Tags, URL) )
+            qRFwk();
+    qRR
+    qRE
+    qRT
+        return URL;
+    }
+
 	rBackend_ *CreateBackend_(
 		fdr::rRWDriver &Driver,
 		const str::dString &IP )
@@ -376,7 +407,7 @@ namespace {
 		rBackend_ *Backend = NULL;
 	qRH;
 		flw::rDressedRWFlow<> Flow;
-		str::wString Token, Head, ErrorMessageLabel, ErrorMessage;
+		str::wString Token, Head, Address, ErrorMessageLabel, ErrorMessage, URL;
 		plugins::eStatus Status = plugins::s_Undefined;
 	qRB;
 		Flow.Init( Driver );
@@ -386,8 +417,9 @@ namespace {
 
 		switch ( Status = token_::GetPlugin().Handle( Token ) ) {
 		case plugins::sOK:
-			Head.Init();
-			Get_( Flow, Head );
+			tol::Init(Head, Address);
+			Get_(Flow, Head);
+			Get_(Flow, Address);    // Address to which the toolkit has connected.
 
 			if ( (Backend = Create_( Driver, IP, Token, Head )) == NULL ) {
 				ErrorMessage.Init();
@@ -408,6 +440,10 @@ namespace {
 
 		if ( Backend == NULL )
 			Put_( ErrorMessage, Flow );
+        else {
+            URL.Init();
+            Put_(BuildURL_(Address,str::wString(),Token,URL), Flow);
+        }
 	qRR;
 		if ( Backend != NULL )
 			delete Backend;

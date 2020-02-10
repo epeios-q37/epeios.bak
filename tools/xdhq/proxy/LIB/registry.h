@@ -35,6 +35,8 @@ namespace registry {
 
 	namespace definition {
 		using namespace sclrgstry::definition;
+
+		extern rEntry URL;
 	}
 }
 
