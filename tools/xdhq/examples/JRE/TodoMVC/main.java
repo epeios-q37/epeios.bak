@@ -40,15 +40,8 @@ class TodoMVC extends Atlas {
 	private int index = -1;
 	private List<Todo> todos;
 
-	private static String readAsset_(String path) {
-		String dir;
-
-		if (System.getenv("EPEIOS_SRC") == null)
-			dir = ".";
-		else
-			dir = "TodoMVC";
-
-		return readAsset(path, dir);
+	static private String readAsset_( String path )  {
+		return readAsset( path, "TodoMVC" );
 	}
 
 	private int itemsLeft() {
@@ -293,11 +286,6 @@ class TodoMVC extends Atlas {
 	public static void main(String[] args) throws Exception {
 		String dir;
 
-		if (System.getenv("EPEIOS_SRC") == null)
-			dir = ".";
-		else
-			dir = "TodoMVC";
-
-		launch(() -> new TodoMVC(), readAsset_("HeadDEMO.html"), dir, GUI.DEFAULT, args);
+		launch(() -> new TodoMVC(), readAsset_("HeadDEMO.html"), "TodoMVC", GUI.DEFAULT, args);
 	}
 }

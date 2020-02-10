@@ -39,15 +39,8 @@ class Notes extends Atlas {
 	private String viewModeElements[] = { "Pattern", "CreateButton", "DescriptionToggling", "ViewNotes" };
 	private List<Note> notes;
 
-	private static String readAsset_( String path ) {
-		String dir;
-
-		if (System.getenv("EPEIOS_SRC") == null)
-			dir = ".";
-		else
-			dir = "notes";
-
-		return readAsset( path, dir );
+	static private String readAsset_( String path )  {
+		return readAsset( path, "Notes" );
 	}
 
 	private void push(Note note, int index, XML xml) {
@@ -188,11 +181,6 @@ class Notes extends Atlas {
 	public static void main(String args[]) throws Exception {
 		String dir;
 
-		if (System.getenv("EPEIOS_SRC") == null)
-			dir = ".";
-		else
-			dir = "notes";
-
-		launch(() -> new Notes(),readAsset_("Head.html"), dir, GUI.DEFAULT, args);
+		launch(() -> new Notes(),readAsset_("Head.html"), "Notes", GUI.DEFAULT, args);
 	}
 }

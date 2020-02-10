@@ -40,15 +40,8 @@ class Chatroom extends Atlas {
 	private String pseudo ="";
 	private int lastMessage;
 
-	static private String readAsset_(String path) {
-		String dir;
-
-		if (System.getenv("EPEIOS_SRC") == null)
-			dir = ".";
-		else
-			dir = "chatroom";
-
-		return readAsset( path, dir );
+	static private String readAsset_( String path )  {
+		return readAsset( path, "Chatroom" );
 	}
 
 	private XML buildXML_() {
@@ -172,6 +165,6 @@ class Chatroom extends Atlas {
 	}
 
 	public static void main(String[] args) throws Exception {
-		launch(() -> new Chatroom(),readAsset_("Head.html"), "chatroom", GUI.DEFAULT, args);
+		launch(() -> new Chatroom(),readAsset_("Head.html"), "Chatroom", GUI.DEFAULT, args);
 	}
 }

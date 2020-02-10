@@ -118,7 +118,7 @@ public abstract class Atlas implements Runnable {
 
 	private static final MODE getDefaultMODE() {
 		if ( isDev() )
-			return MODE.PROD;
+			return MODE.DEMO;
 		else
 			return MODE.DEMO;
 	}

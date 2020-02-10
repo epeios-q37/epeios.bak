@@ -39,11 +39,11 @@ public class XDH extends info.q37.jreq.JRE {
 		  return result;
 	}
 	public static boolean isDev() {
-		return System.getenv("EPEIOS_SRC") != null;
+		return System.getenv("Q37_EPEIOS") != null;
 	}
 	private static String getAssetPath_( String dir ) {
 		if ( isDev() )
-			return "h:/hg/epeios/tools/xdhq/examples/common/" + dir + "/";
+			return "/home/csimon/epeios/tools/xdhq/examples/common/" + dir + "/";
 		else
 			return "./";
 	}
