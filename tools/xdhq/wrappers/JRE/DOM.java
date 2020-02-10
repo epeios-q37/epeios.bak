@@ -23,11 +23,10 @@ import java.util.*;
 
 import info.q37.xdhq.dom.DOM_SHRD.Type;
 import info.q37.xdhq.MODE;
+import info.q37.xdhq.ARG;
 
 public class DOM {
 	private info.q37.xdhq.dom.DOM_SHRD DOM;
-	private static String[] empty = {};
-	private static String[][] emptys = {};
 
 	private String[][] split(Map<String, String> idsAndClasses) {
 		return new String[][] { idsAndClasses.keySet().toArray(new String[0]),
@@ -60,58 +59,66 @@ public class DOM {
 	}
 
 	public String execute(String script) {
-		return (String) DOM.call("Execute_1", Type.STRING, new String[] { script }, emptys);
+		return (String) DOM.call("Execute_1", Type.STRING, a(script));
+	}
+
+	static private ARG a( String string ) {
+		return new ARG(string );
+	}
+
+	static private ARG a( String[] strings ) {
+		return new ARG(strings);
 	}
 
 	public void alert(String message) {
-		DOM.call("Alert_1", Type.STRING, new String[] { message }, emptys);
+		DOM.call("Alert_1", Type.STRING, a(message));
 		// For the return value being 'STRING' instead of 'VOID',
 		// see the 'alert' primitive in 'XDHqXDH'.
 	}
 
 	public boolean confirm(String message) {
-		return "true".equals(DOM.call("Confirm_1", Type.STRING, new String[] { message }, emptys));
+		return "true".equals(DOM.call("Confirm_1", Type.STRING, a(message)));
 	}
 
-	private <XML> void handleLayout_(String command, String id, XML xml, String xslFilename) {
-		DOM.call(command, Type.VOID, new String[] { id, xml.toString(), xslFilename }, emptys);
+	private <XML> void handleLayout_(String variant, String id, XML xml, String xslFilename) {
+		DOM.call("HandleLayout_1", Type.VOID, a(variant), a(id), a(xml.toString()), a(xslFilename));
 	}
 
 	public <XML> void prependLayout(String id, XML html) {
-		handleLayout_( "PrependLayout_1", id, html, "");
+		handleLayout_( "Prepend", id, html, "");
 	}
 
 	public <XML> void setLayout(String id, XML html) {
-		handleLayout_( "SetLayout_1",id, html, "");
+		handleLayout_( "Set",id, html, "");
 	}
 
 	public <XML> void appendLayout(String id, XML html) {
-		handleLayout_( "AppendLayout_1",id, html, "");
+		handleLayout_( "Append",id, html, "");
 	}
 	   	 
-	private <XML> void handleLayoutXSL_(String command, String id, XML xml, String xslFilename) {
+	private <XML> void handleLayoutXSL_(String variant, String id, XML xml, String xslFilename) {
 		String xslURL = xslFilename;
 
 		if ( info.q37.xdhq.XDH.isDEMO() )
 			xslURL = new String( "data:text/xml;base64," + java.util.Base64.getEncoder().encodeToString( info.q37.xdhq.XDH.readAsset( xslFilename, info.q37.xdhq.XDH.getDir() ).getBytes() ) );
 		
-		handleLayout_(command, id, xml, xslURL);
+		handleLayout_(variant, id, xml, xslURL);
 	}
 
 	public <XML> void prependLayoutXSL(String id, XML xml, String xslFilename) {
-		handleLayoutXSL_( "PrependLayout_1",id, xml, xslFilename);
+		handleLayoutXSL_( "Prepend",id, xml, xslFilename);
 	}
 
 	public <XML> void setLayoutXSL(String id, XML xml, String xslFilename) {
-		handleLayoutXSL_( "SetLayout_1",id, xml, xslFilename);
+		handleLayoutXSL_( "Set",id, xml, xslFilename);
 	}
 
 	public <XML> void appendLayoutXSL(String id, XML xml, String xslFilename) {
-		handleLayoutXSL_( "AppendLayout_1",id, xml, xslFilename);
+		handleLayoutXSL_( "Append",id, xml, xslFilename);
 	}
 	   	 
 	public String[] getContents(String[] ids) {
-		return (String[]) DOM.call("GetContents_1", Type.STRINGS, empty, new String[][] { ids });
+		return (String[]) DOM.call("GetContents_1", Type.STRINGS, a(ids));
 	}
 
 	public String getContent(String id) {
@@ -119,7 +126,8 @@ public class DOM {
 	}
 
 	public final void setContents(Map<String, String> idsAndContents) {
-		DOM.call("SetContents_1", Type.VOID, empty, split(idsAndContents));
+		String[][] splittedIdsAndContents = split(idsAndContents);
+		DOM.call("SetContents_1", Type.VOID, a(splittedIdsAndContents[0]), a(splittedIdsAndContents[1]));
 	}
 
 	public final void setContent(final String id, final String content) {
@@ -131,7 +139,7 @@ public class DOM {
 	}
 
 	public final void setTimeout(int delay, String action) {
-		DOM.call("SetTimeout_1", Type.VOID, new String[] { Integer.toString(delay), action }, emptys);
+		DOM.call("SetTimeout_1", Type.VOID, a(Integer.toString(delay)), a(action));
 	}
 /*
 	public final String createElement( String name, String id ) {
@@ -147,17 +155,17 @@ public class DOM {
 	}
 */
 	public void dressWidgets(String id) {
-		DOM.call("DressWidgets_1", Type.VOID, new String[] { id }, emptys);
+		DOM.call("DressWidgets_1", Type.VOID, a(id));
 	}
 
-	private void handleClasses(String command, Map<String, String> idsAndClasses) {
+	private void handleClasses(String variant, Map<String, String> idsAndClasses) {
 		String splittedIdsAndClasses[][] = split(idsAndClasses);
 
-		DOM.call(command, Type.VOID, empty, splittedIdsAndClasses);
+		DOM.call("HandleClasses_1", Type.VOID, a(variant), a(splittedIdsAndClasses[0]),a(splittedIdsAndClasses[1]));
 	}
 
-	private void handleClass(String command, final String id, final String clas) {
-		handleClasses(command, new HashMap<String, String>() {
+	private void handleClass(String variant, final String id, final String clas) {
+		handleClasses(variant, new HashMap<String, String>() {
 			{
 				put(id, clas);
 			}
@@ -165,31 +173,31 @@ public class DOM {
 	}
 
 	public void addClasses(Map<String, String> idsAndClasses) {
-		handleClasses("AddClasses_1", idsAndClasses);
+		handleClasses("Add", idsAndClasses);
 	}
 
 	public void addClass(String id, String clas) {
-		handleClass("AddClasses_1", id, clas);
+		handleClass("Add", id, clas);
 	}
 
 	public void removeClasses(Map<String, String> idsAndClasses) {
-		handleClasses("RemoveClasses_1", idsAndClasses);
+		handleClasses("Remove", idsAndClasses);
 	}
 
 	public void removeClass(String id, String clas) {
-		handleClass("RemoveClasses_1", id, clas);
+		handleClass("Remove", id, clas);
 	}
 
 	public void toggleClasses(Map<String, String> idsAndClasses) {
-		handleClasses("ToggleClasses_1", idsAndClasses);
+		handleClasses("Toggle", idsAndClasses);
 	}
 
 	public void toggleClass(String id, String clas) {
-		handleClass("ToggleClasses_1", id, clas);
+		handleClass("Toggle", id, clas);
 	}
 
 	public void enableElements(String[] ids) {
-		DOM.call("EnableElements_1", Type.VOID, empty, new String[][] { ids });
+		DOM.call("EnableElements_1", Type.VOID, a(ids));
 	}
 
 	public void enableElement(String id) {
@@ -197,7 +205,7 @@ public class DOM {
 	}
 
 	public void disableElements(String[] ids) {
-		DOM.call("DisableElements_1", Type.VOID, empty, new String[][] { ids });
+		DOM.call("DisableElements_1", Type.VOID, a(ids));
 	}
 
 	public void disableElement(String id) {
@@ -205,26 +213,26 @@ public class DOM {
 	}
 
 	public void setAttribute(String id, String name, String value) {
-		DOM.call("SetAttribute_1", Type.VOID, new String[] { id, name, value }, emptys);
+		DOM.call("SetAttribute_1", Type.VOID, a(id), a(name), a(value));
 	}
 
 	public String getAttribute(String id, String name) {
-		return (String) DOM.call("GetAttribute_1", Type.STRING, new String[] { id, name }, emptys);
+		return (String) DOM.call("GetAttribute_1", Type.STRING, a(id), a(name));
 	}
 
 	public void removeAttribute(String id, String name) {
-		DOM.call("RemoveAttribute_1", Type.VOID, new String[] { id, name }, emptys);
+		DOM.call("RemoveAttribute_1", Type.VOID, a(id), a(name));
 	}
 
 	public void setProperty(String id, String name, String value) {
-		DOM.call("SetProperty_1", Type.VOID, new String[] { id, name, value }, emptys);
+		DOM.call("SetProperty_1", Type.VOID, a(id), a(name), a(value));
 	}
 
 	public String getProperty(String id, String name) {
-		return (String) DOM.call("GetPoperty_1", Type.STRING, new String[] { id, name }, emptys);
+		return (String) DOM.call("GetPoperty_1", Type.STRING, a(id), a(name));
 	}
 
 	public void focus(String id) {
-		DOM.call("Focus_1", Type.VOID, new String[] { id }, emptys);
+		DOM.call("Focus_1", Type.VOID, a(id));
 	}
 }

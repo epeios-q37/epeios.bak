@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2017 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 2018 Claude SIMON (http://q37.info/contact/).
 
 	This file is part of XDHq.
 
@@ -17,21 +17,22 @@
 	along with XDHq. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package info.q37.xdhq.dom;
+package info.q37.xdhq;
 
-public abstract class DOM_SHRD {
-	public enum Type {
-		VOID( 0 ), STRING( 1 ), STRINGS( 2 ), UNDEFINED( 3 );
-	    private int value;
-	    private Type(int value) {
-			this.value = value;
-		}
-	    public byte getValue() {
-			return (byte)value;
-		}
-	};
+import info.q37.xdhq.dom.DOM_SHRD.Type;
 
-	public abstract void getAction(Event event);
+public class ARG {
+	public Type type;
+	public String string;
+	public String[] strings;
 
-	public abstract Object call(String command, Type type, info.q37.xdhq.ARG ...args);
+	public ARG( String string ) {
+		this.type = Type.STRING;
+		this.string = string;
+	}
+
+	public ARG( String[] strings ) {
+		this.type = Type.STRINGS;
+		this.strings = strings;
+	}
 }

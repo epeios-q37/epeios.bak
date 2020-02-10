@@ -37,7 +37,7 @@ public class DOM_PROD extends DOM_SHRD {
 		XDH_PROD.call(4, core, event);
 	}
 
-	@Override public Object call(String command, Type type, String[] strings, String[][] xstrings )  {
-		return XDH_PROD.call( 5, core, command, type.getValue(), strings, xstrings );
+	@Override public Object call(String command, Type type, info.q37.xdhq.ARG ...args )  {
+		return XDH_PROD.call( 5, core, command, type.getValue(), args );
 	}
 }

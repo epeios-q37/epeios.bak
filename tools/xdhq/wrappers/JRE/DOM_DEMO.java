@@ -37,9 +37,9 @@ public class DOM_DEMO extends DOM_SHRD {
 	// Both object are to block the switcher.
 	static private Lock lock_ = new ReentrantLock();
 	static private Condition condition_ = lock_.newCondition();;
-	static private String demoProtocolLabel = "877c913f-62df-40a1-bf5d-4bb5e66a6dd9";
+	static private String demoProtocolLabel = "0fac593d-d65f-4cc1-84f5-3159c23c616b";
 	static private String demoProtocolVersion = "0";
-	static private String mainProtocolLabel = "6e010737-31d8-4be3-9195-c5b5b2a9d5d9";
+	static private String mainProtocolLabel = "8d2b7b52-6681-48d6-8974-6e0127a4ca7e";
 	static private String mainProtocolVersion = "0";
 
 	private byte id_;
@@ -334,8 +334,7 @@ public class DOM_DEMO extends DOM_SHRD {
 			if (!firstLaunch_) {
 				synchronized( output_ ) {
 					writeByte_(id_ );
-					output_.write(new String("StandBy_1").getBytes());
-					output_.write(0);
+					writeString_("StandBy_1");
 					output_.flush();
 				}
 			} else
@@ -366,32 +365,28 @@ public class DOM_DEMO extends DOM_SHRD {
 	}
 
 	@Override
-	public Object call(String command, Type type, String[] strings, String[][] xstrings) {
+	public Object call(String command, Type type, info.q37.xdhq.ARG ...args) {
 		Object object = null;
 
 		try {
 			synchronized( output_ ) {
-				int size = strings.length;
-				int i = 0;
-
 				writeByte_( id_ );
-				output_.write(new String(command).getBytes());
-				output_.write(0);
+				writeString_(command);
+				writeByte_(type.getValue());
 
-				while (i < size) {
-					writeString_(strings[i++]);
+				for (int i = 0; i < args.length; i++) {
+					writeByte_(args[i].type.getValue());
+					if ( args[i].type == Type.STRING) {
+						writeString_(args[i].string);
+					} else {
+						writeStrings_(args[i].strings);
+					}
 				}
 
-				size = xstrings.length;
-				i = 0;
-
-				while (i < size) {
-					writeStrings_(xstrings[i++]);
-				}
+				writeByte_(Type.VOID.getValue());
 
 				output_.flush();
 			}
-
 
 			switch (type) {
 			case VOID:
