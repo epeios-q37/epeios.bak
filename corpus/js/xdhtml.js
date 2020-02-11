@@ -14,13 +14,14 @@
 	Affero General Public License for more details.
 
 	You should have received a copy of the GNU Affero General Public License
-	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
+// 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
 const onEventAttributeName = "data-xdh-onevent";
 const onEventsAttributeName = "data-xdh-onevents";
 const widgetAttributeName = "data-xdh-widget";
-const widgetContentRetrievingMethodAttribute = "data-xdh-widget-content-retrieving-method"
+ // Method to retrieve widget content, but also if present, then the widget is already handled.
+const widgetContentRetrievingMethodAttribute = "data-xdh-widget-content-retrieving-method";
 const valueAttributeName = "data-xdh-value";
 const styleId = "XDHStyle";
 
@@ -434,15 +435,26 @@ function getValue(elementOrId)	// Returns the value of element of id 'id'.
 		return value;
 }
 
+function getWidgetRetrievingMethod( elementOrId ) {
+    element = getElement( elementOrId );
+    
+    if (element.hasAttribute(widgetContentRetrievingMethodAttribute))
+        return element.getAttribute(widgetContentRetrievingMethodAttribute);
+    else
+        return "";
+    
+}
+
 function getContents(ids) {
 	var i = ids.length;
 	var contents = "";
 
 	while(i--) {
         let element = getElement(ids[i]);
+        let widgetRetrievingMethod = getWidgetRetrievingMethod(element);
         
-        if (element.hasAttribute(widgetContentRetrievingMethodAttribute))
-            contents = '"' + escapeQuotes(eval(element.getAttribute(widgetContentRetrievingMethodAttribute))) + '",' + contents;
+        if ( widgetRetrievingMethod !== "" )
+            contents = '"' + escapeQuotes(eval(widgetRetrievingMethod)) + '",' + contents;
         else
             contents = '"' + getValue(element) + '",' + contents;
 	}
@@ -482,11 +494,14 @@ function setEventHandlers(ids, events) {
 function instantiateWidget(id, type, parameters, contentRetrievingMethod, focusingMethod, selectionMethod) {
     // 'focusingMethod' and 'selectionMethod' are currently not handled.
     
-    if ( contentRetrievingMethod !== "" )
-        getElement(id).setAttribute(widgetContentRetrievingMethodAttribute,'jQuery( document.getElementById( "' + id + '") ).' + contentRetrievingMethod);
+    element = getElement(id);
     
-	var script = 'jQuery( document.getElementById( "' + id + '") ).' + type + '(' + parameters + ');'
-	return script;
+    if ( !element.hasAttribute(widgetContentRetrievingMethodAttribute)) {
+        element.setAttribute(widgetContentRetrievingMethodAttribute,'jQuery( document.getElementById( "' + id + '") ).' + contentRetrievingMethod);
+        
+        return 'jQuery( document.getElementById( "' + id + '") ).' + type + '(' + parameters + ');'
+    } else
+        return "";
 }
 
 function instantiateWidgets(ids, types, parametersSets, contentRetrievingMethods, focusingMethods, selectionMethods) {

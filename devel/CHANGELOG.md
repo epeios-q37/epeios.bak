@@ -8,6 +8,11 @@
 - [stdz]: modification to comply with current standards;
 - [trvl]: trivial modifications;
 
+## 2020-02-11:
+
+- XDHUJP:
+   - events and widgets are now both handled automatically on a `'HandleLayout_1` calling,
+
 ## 2020-02-09:
 	
 - XDHUTL:

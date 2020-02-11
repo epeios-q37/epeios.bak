@@ -237,7 +237,13 @@ def _init():
 
 	_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	print("Connection to '" + str(pAddr) + ":" + str(pPort) + "'...")
-	_socket.connect((pAddr,pPort))
+	try:
+		_socket.connect((pAddr,pPort))
+	except:
+		exit("Unable to connect to'" + str(pAddr) + ":" + str(pPort) + "'!")
+	else:
+		print("Connected to '" + str(pAddr) + ":" + str(pPort) + "'.")
+		
 
 def _demoHandshake():
 	global _writeLock

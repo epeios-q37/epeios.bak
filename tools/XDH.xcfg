@@ -60,8 +60,8 @@
 							break;
 						}
 
-						var digests = fetchEventHandlers( id );
-						digests;  // Not returned to user. Given after processing to 'SetEnventHandlers_1' script.
+						var digests = "(" + fetchEventHandlers(id) + ")|(" + fetchWidgets(id) + ")";
+						digests;  // Not returned to user. Splitted and given after processing to 'SetEnventHandlers_1' and  InstantiateWidgets_1' above internal scripts.
 					} ]]>
 				</Script>
 				<Script name="GetContents_1" Arguments="#Ids">
@@ -139,12 +139,6 @@
 				<Script name="Focus_1" Arguments="Id">
 					<![CDATA[ {
 						getElement( "%Id%" ).focus();
-					} ]]>
-				</Script>
-				<Script name="DressWidgets_1" Arguments="Id">
-					<![CDATA[ {
-						digest = fetchWidgets( "%Id%" );
-                        digest;  // Not returned to user. Given after processing to 'InstantiateWidgets_1' script.
 					} ]]>
 				</Script>
 				<Script name="" Arguments="">

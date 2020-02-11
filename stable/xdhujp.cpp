@@ -1254,24 +1254,6 @@ namespace {
         qRE
         }
     }
-
-    void HandleLayout_(
-        cJS &JSCallback,
-        const char *ScriptName,
-        const str::dStrings &Values )
-	{
-	qRH
-        xdhcmn::digest EventsDigest;
-	qRB
-        EventsDigest.Init();
-
-        ExecuteAndGetDigest_(JSCallback, ScriptName, Values, EventsDigest);
-
-        HandleEvents_(JSCallback, EventsDigest);
-	qRR
-	qRE
-	qRT
-	}
 }
 
 namespace {
@@ -1376,19 +1358,28 @@ namespace {
         }
     }
 
-    void HandleWidgets_(
+    void HandleLayout_(
         cJS &JSCallback,
         const char *ScriptName,
         const str::dStrings &Values )
 	{
 	qRH
-        xdhcmn::digest WidgetsDigest;
+        xdhcmn::digest Digests, EventsDigest, WidgetsDigets;
+        xdhcmn::retriever__ Retriever;
 	qRB
-        WidgetsDigest.Init();
+        Digests.Init();
 
-        ExecuteAndGetDigest_(JSCallback, ScriptName, Values, WidgetsDigest);
+        ExecuteAndGetDigest_(JSCallback, ScriptName, Values, Digests);
 
-        HandleWidgets_(JSCallback, WidgetsDigest);
+        Retriever.Init(Digests);
+
+        tol::Init(EventsDigest, WidgetsDigets);
+
+        Retriever.GetTable(EventsDigest);
+        Retriever.GetTable(WidgetsDigets);
+
+        HandleEvents_(JSCallback, EventsDigest);
+        HandleWidgets_( JSCallback, WidgetsDigets);
 	qRR
 	qRE
 	qRT
@@ -1402,8 +1393,6 @@ void xdhujp::sProxyCallback::XDHCMNProcess(
 	{
         if ( !strcmp(ScriptName, "HandleLayout_1") )
             HandleLayout_(C_(), ScriptName, Values );
-        else if ( !strcmp(ScriptName, "DressWidgets_1") )
-            HandleWidgets_(C_(), ScriptName, Values );
         else
             Execute(C_(), ScriptName, Values, ReturnValue);
 	}
