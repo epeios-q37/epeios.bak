@@ -347,7 +347,8 @@ function ignition(socket, createCallback, callbacks) {
 		throw getString(query, offset)[0];	// Displays error message.
 
 	if (wPort !== ":0") {
-		let completeURL = "http://" + wAddr + wPort + "/" + cgi + ".php?_token=" + token;
+//		let completeURL = "http://" + wAddr + wPort + "/" + cgi + ".php?_token=" + token;
+		let completeURL = getString(query, offset)[0];
 
 		console.log(completeURL);
 		console.log(new Array(completeURL.length + 1).join('^'));
@@ -388,6 +389,7 @@ function demoHandshake(socket, createCallback, callbacks, head) {
 		head = "";
 
 	socket.write(handleString(head));
+	socket.write(handleString(wAddr));
 }
 
 function pseudoServer(createCallback, callbacks, head) {

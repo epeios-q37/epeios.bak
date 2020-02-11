@@ -229,6 +229,7 @@ module XDHqDEMO
         @outputMutex.synchronize {
             writeString(@token)
             writeString(@headContent)
+            writeString(@wAddr)
         }
 
         @token = getString()
@@ -238,7 +239,8 @@ module XDHqDEMO
         end
 
         if $wPort != ":0"
-            url = "http://#{@wAddr}#{@wPort}/#{@cgi}.php?_token=#{@token}"
+#            url = "http://#{@wAddr}#{@wPort}/#{@cgi}.php?_token=#{@token}"
+            url = getString()
 
             puts(url)
             puts("".rjust(url.length,'^'))

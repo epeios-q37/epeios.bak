@@ -137,6 +137,7 @@ sub _demoHandshake {
 sub _ignition {
     XDHq::DEMO::SHRD::writeString($token);
     XDHq::DEMO::SHRD::writeString($main::headContent);
+    XDHq::DEMO::SHRD::writeString($wAddr);
 
     $token = XDHq::DEMO::SHRD::getString();
 
@@ -145,7 +146,8 @@ sub _ignition {
     }
 
     if (not($wPort eq ":0")) {
-        my $url = "http://${wAddr}${wPort}/${cgi}.php?_token=${token}";
+#        my $url = "http://${wAddr}${wPort}/${cgi}.php?_token=${token}";
+        my $url = XDHq::DEMO::SHRD::getString();
 
         CORE::say($url);
         CORE::say("^" x length($url));

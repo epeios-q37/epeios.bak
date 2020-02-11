@@ -212,8 +212,8 @@ public class DOM_DEMO extends DOM_SHRD {
 
 	private static void ignition_() throws Exception {
 		writeString_(token);
-
 		writeString_(info.q37.xdhq.XDH_DEMO.headContent);
+		writeString_(wAddr);
 		
 		output_.flush();
 
@@ -223,9 +223,10 @@ public class DOM_DEMO extends DOM_SHRD {
 			System.out.println( getString_() );
 			System.exit(1);
 		}
-
+		
 		if ( !":0".equals(wPort)) {
-			String url = "http://" + wAddr + wPort + "/" + cgi + ".php?_token=" + token;
+//			String url = "http://" + wAddr + wPort + "/" + cgi + ".php?_token=" + token;
+			String url = getString_();
 
 			System.out.println(url);
 			char[] filler = new char[url.length()];
