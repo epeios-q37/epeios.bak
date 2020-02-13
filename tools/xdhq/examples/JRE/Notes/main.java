@@ -99,7 +99,6 @@ class Notes extends Atlas {
 		dom.setLayout("Edit." + id, readAsset_( "Note.html") );
 		dom.setContents( new HashMap<String,String> () {{ put( "Title", note.title); put("Description", note.description); }} );
 		dom.disableElements(viewModeElements);
-		dom.dressWidgets("Notes");
 		dom.focus("Title");
 	}
 

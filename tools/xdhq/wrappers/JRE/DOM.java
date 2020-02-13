@@ -154,9 +154,6 @@ public class DOM {
 		DOM.call( "InsertChild_1", Type.VOID, new String[]{ child, id }, emptys );
 	}
 */
-	public void dressWidgets(String id) {
-		DOM.call("DressWidgets_1", Type.VOID, a(id));
-	}
 
 	private void handleClasses(String variant, Map<String, String> idsAndClasses) {
 		String splittedIdsAndClasses[][] = split(idsAndClasses);
