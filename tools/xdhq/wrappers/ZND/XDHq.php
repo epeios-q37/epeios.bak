@@ -185,9 +185,6 @@ class XDHqDOM extends Threaded {
 		self::call_( "InsertChild_1", XDHq::RT_NONE, 2, $child, $id, 0 );
 	}
 */
-	function dressWidgets( string $id ) {
-		return self::call_( "DressWidgets_1", XDHq::RT_NONE, 1, $id, 0 );
-	}
 	private function handleClasses( $command, array $idsAndClasses ) {
 		$ids = [];
 		$classes = [];

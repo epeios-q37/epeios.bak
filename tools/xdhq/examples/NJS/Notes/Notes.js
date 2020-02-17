@@ -161,8 +161,7 @@ function edit(dom, id) {
 			},
 			() => dom.disableElements(
 				viewModeElements,
-				() => dom.dressWidgets("Notes",
-					() => dom.focus("Title")
+				() => dom.focus("Title")
 				)
 			)
 		)

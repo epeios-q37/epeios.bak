@@ -172,10 +172,6 @@ module XDHq
 		end
 =end	
 
-		def dressWidgets(id)
-			return call( "DressWidgets_1", $VOID, id )
-		end
-	
 		private def handleClasses(variant, idsAndClasses)
 			ids, classes = split(idsAndClasses)
 	

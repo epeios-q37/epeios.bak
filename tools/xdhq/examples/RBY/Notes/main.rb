@@ -121,7 +121,6 @@ class Notes
 		dom.setLayout("Edit." + index, readAsset( "Note.html") )
 		dom.setContents({ "Title" => note['title'], "Description" => note['description'] })
 		dom.disableElements($viewModeElements)
-		dom.dressWidgets("Notes")
 		dom.focus("Title")
 	end	
 

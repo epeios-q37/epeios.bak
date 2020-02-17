@@ -219,9 +219,6 @@ class XDH {
 		call(this, "InsertChild_1", types.VOID, 2, child, id, 0, callback);
 	}
 */
-	dressWidgets(id, callback) {
-		call(this, "DressWidgets_1", types.VOID, id, callback);
-	}
 	handleClasses(idsAndClasses, variant, callback) {
 		var ids = [];
 		var classes = [];

@@ -143,7 +143,6 @@ def handleButtonVisibility(dom):
 def acConnect(dom):
     global contacts, state
     dom.setLayout("", readAsset("Main.html"))
-    dom.dressWidgets("")
     display(dom, contacts)
     state = State.DISPLAY
     handleButtonVisibility(dom)

@@ -128,7 +128,6 @@ class Notes extends Threaded {
     "Description" => $this->notes[$this->id]['description'],
    ]);
   $dom->disableElements(getViewModeElements());
-  $dom->dressWidgets("Notes");
  }
 
  function view($dom) {

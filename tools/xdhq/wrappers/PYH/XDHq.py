@@ -184,9 +184,6 @@ class DOM:
 		self._dom.call("RemoveCSSRule_1", _VOID, 2, id, str(index), 0)
 	"""
 
-	def dressWidgets(self,id):
-		return self._dom.call( "DressWidgets_1", _VOID, id )
-
 	def _handleClasses(self, variant, idsAndClasses):
 		[ids, classes] = _split(idsAndClasses)
 

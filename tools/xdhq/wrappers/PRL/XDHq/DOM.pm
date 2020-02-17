@@ -167,10 +167,6 @@ sub insertChild {
 }
 =cut
 
-sub dressWidgets {
-     shift->{dom}->call( "DressWidgets_1", XDHq::SHRD::RT_VOID, shift )   ;
-}
-
 sub _handleClasses {
     shift->{dom}->call("HandleClasses_1", XDHq::SHRD::RT_VOID, shift, _split(shift));
 }

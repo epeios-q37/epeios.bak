@@ -164,7 +164,7 @@ function displayList( xdh ) {
 	
 	tree.popTag();
 	
-	xdh.setLayout( "Rentals", tree, "Rentals.xsl", () => { xdh.dressWidgets( "Rentals", () => handleMapsCast( xdh ) ); } );
+	xdh.setLayout( "Rentals", tree, "Rentals.xsl", () => { handleMapsCast( xdh ); } );
 }
 
 function displayRecord( xdh, id ) {
