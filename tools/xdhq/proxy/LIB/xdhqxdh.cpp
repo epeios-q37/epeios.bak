@@ -515,16 +515,14 @@ namespace {
                     case tVoid:
                         break;
                     case tString:
+                        prtcl::Put(ReturnValue, Flow);
+                        Flow.Commit();
+                        break;
                     case tStrings:
-                        if ( ReturnType == tString)
-                            prtcl::Put(ReturnValue, Flow);
-                        else {
-                            SplitedReturnValue.Init();
-                            xdhcmn::FlatSplit(ReturnValue,SplitedReturnValue);
+                        SplitedReturnValue.Init();
+                        xdhcmn::FlatSplit(ReturnValue,SplitedReturnValue);
 
-                            prtcl::Put(SplitedReturnValue, Flow);
-                        }
-
+                        prtcl::Put(SplitedReturnValue, Flow);
                         Flow.Commit();
                         break;
                     default:

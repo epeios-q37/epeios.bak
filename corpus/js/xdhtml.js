@@ -382,15 +382,10 @@ function fetchWidgets(id) {
 	return digests;
 }
 
-function escapeQuotes(string) {
-    return string.replace(/\\/g,'\\\\').replace(/"/g,'\\"');
-}
-
 function getValue(elementOrId)	// Returns the value of element of id 'id'.
 {
 	var element = getElement(elementOrId);
 	var tagName = element.tagName;
-	var escape = true
 	var value = ""
 
 //	console.log("VALUE:", element.textContent);
@@ -401,7 +396,6 @@ function getValue(elementOrId)	// Returns the value of element of id 'id'.
 				case "checkbox":
 				case "radio":
 					value =  element.checked;
-					escape = false;
 					break;
 				default:
 					value =  element.value;
@@ -429,10 +423,7 @@ function getValue(elementOrId)	// Returns the value of element of id 'id'.
 			break;
 	}
 
-	if ( escape )
-		return escapeQuotes(value);
-	else
-		return value;
+	return value;
 }
 
 function getWidgetRetrievingMethod( elementOrId ) {
@@ -445,6 +436,19 @@ function getWidgetRetrievingMethod( elementOrId ) {
     
 }
 
+function escapeQuotes(string) {
+	return string.toString().replace(/\\/g,'\\\\').replace(/"/g,'\\"');
+	// 'toString()' as 'string' could, for example, be a boolean.
+}
+
+function prependToFlatStrings(string, strings) {
+	return '"' + escapeQuotes(string) + (strings ? '",' + strings : '"');
+}
+
+function appendToFlatStrings(string, strings) {
+	return (strings ? strings + ',"' : '"' ) + escapeQuotes(string) + '"';
+}
+
 function getContents(ids) {
 	var i = ids.length;
 	var contents = "";
@@ -454,9 +458,9 @@ function getContents(ids) {
         let widgetRetrievingMethod = getWidgetRetrievingMethod(element);
         
         if ( widgetRetrievingMethod !== "" )
-            contents = '"' + escapeQuotes(eval(widgetRetrievingMethod)) + '",' + contents;
+            contents = prependToFlatStrings(eval(widgetRetrievingMethod), contents);
         else
-            contents = '"' + getValue(element) + '",' + contents;
+            contents = prependToFlatStrings(getValue(element), contents);
 	}
 
 	return contents;
