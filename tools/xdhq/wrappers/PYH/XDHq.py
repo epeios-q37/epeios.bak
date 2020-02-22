@@ -24,7 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-import XDHqDEMO, XDHqSHRD, XDHqXML
+import XDHqFaaS, XDHqSHRD, XDHqXML
 
 import os, sys
 from collections import OrderedDict
@@ -100,7 +100,7 @@ def _readXSLAsset(path, dir):
 
 class DOM:
 	def __init__(self,instance):
-		self._dom = XDHqDEMO.DOM_DEMO(instance)
+		self._dom = XDHqFaaS.DOM_FaaS(instance)
 
 	def get_action(self):
 		return self._dom.getAction()
@@ -145,7 +145,7 @@ class DOM:
 		global _dir
 		xslURL = xsl
 
-		if True:	# Testing if 'PROD' or 'DEMO' mode when available.
+		if True:	# Testing if 'PROD' or 'FaaS' mode when available.
 			xslURL = "data:text/xml;charset=utf-8," + _encode( _readXSLAsset( xsl, _dir ) )
 
 		self._handleLayout(variant, id, xml, xslURL )
@@ -302,4 +302,4 @@ class DOM:
 def launch(callback, userCallback, callbacks, headContent, dir):
 	global _dir
 	_dir = dir
-	XDHqDEMO.launch(callback, userCallback,callbacks,headContent)
+	XDHqFaaS.launch(callback, userCallback,callbacks,headContent)

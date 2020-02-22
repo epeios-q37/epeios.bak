@@ -28,28 +28,28 @@ import inspect, os, socket, sys, threading
 
 if sys.version_info[0] == 2:
 	from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer	# For 'repl.it'.
-	import XDHqDEMO2
-	l = XDHqDEMO2.l
-	_writeByte = XDHqDEMO2.writeByte
-	_writeSize = XDHqDEMO2.writeSize
-	_writeString = XDHqDEMO2.writeString
-	_writeStringNUL = XDHqDEMO2.writeStringNUL
-	_getByte = XDHqDEMO2.getByte
-	_getSize = XDHqDEMO2.getSize
-	_getString = XDHqDEMO2.getString
+	import XDHqFaaS2
+	l = XDHqFaaS2.l
+	_writeByte = XDHqFaaS2.writeByte
+	_writeSize = XDHqFaaS2.writeSize
+	_writeString = XDHqFaaS2.writeString
+	_writeStringNUL = XDHqFaaS2.writeStringNUL
+	_getByte = XDHqFaaS2.getByte
+	_getSize = XDHqFaaS2.getSize
+	_getString = XDHqFaaS2.getString
 	def _REPLit_convert(str):
 		return str
 elif sys.version_info[0] == 3:
 	from http.server import BaseHTTPRequestHandler, HTTPServer	# For 'repl.it'.
-	import XDHqDEMO3
-	l = XDHqDEMO3.l
-	_writeByte = XDHqDEMO3.writeByte
-	_writeSize = XDHqDEMO3.writeSize
-	_writeString = XDHqDEMO3.writeString
-	_writeStringNUL = XDHqDEMO3.writeStringNUL
-	_getByte = XDHqDEMO3.getByte
-	_getSize = XDHqDEMO3.getSize
-	_getString = XDHqDEMO3.getString
+	import XDHqFaaS3
+	l = XDHqFaaS3.l
+	_writeByte = XDHqFaaS3.writeByte
+	_writeSize = XDHqFaaS3.writeSize
+	_writeString = XDHqFaaS3.writeString
+	_writeStringNUL = XDHqFaaS3.writeStringNUL
+	_getByte = XDHqFaaS3.getByte
+	_getSize = XDHqFaaS3.getSize
+	_getString = XDHqFaaS3.getString
 	def _REPLit_convert(str):
 		return bytes(str,"utf-8")
 else:
@@ -353,7 +353,7 @@ def launch(callback, userCallback,callbacks,headContent):
 
 	_serve(callback, userCallback, callbacks)
 
-class DOM_DEMO:
+class DOM_FaaS:
 	_firstLaunch = True
 
 	def __init__(self, instance):

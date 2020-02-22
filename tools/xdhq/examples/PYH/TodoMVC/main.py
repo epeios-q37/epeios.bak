@@ -200,4 +200,4 @@ callbacks = {
 	"Cancel": ac_cancel,
 }
 
-Atlas.launch(callbacks, TodoMVC, read_asset("HeadDEMO.html"), "TodoMVC")
+Atlas.launch(callbacks, TodoMVC, read_asset("HeadFaaS.html"), "TodoMVC")
