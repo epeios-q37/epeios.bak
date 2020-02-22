@@ -332,9 +332,9 @@ function main() {
  $type = null;
 
  if (XDHq::isDev()) {
-  Atlas::launch('myNew', readAsset("HeadDEMO.html"), null, "TodoMVC");
+  Atlas::launch('myNew', readAsset("HeadFaaS.html"), null, "TodoMVC");
  } else {
-  Atlas::launch('myNew', readAsset("HeadDEMO.html"), null, ".");
+  Atlas::launch('myNew', readAsset("HeadFaaS.html"), null, ".");
  }
 }
 

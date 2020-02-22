@@ -18,7 +18,7 @@ You should have received a copy of the GNU Affero General Public License
 along with XDHq.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-class XDHqDEMO {
+class XDHqFaaS {
 	function getEnv_($name, $value = "") {
 		if (getenv($name) !== false) {
 			return trim(getenv($name));
@@ -28,7 +28,7 @@ class XDHqDEMO {
 	}
 }
 
-class XDHqDEMO_Shared extends Threaded {
+class XDHqFaaS_Shared extends Threaded {
 	public $socket;
 	public $instances = [];
 	function writeByte($datum) {
@@ -117,20 +117,20 @@ class XDHqDEMO_Shared extends Threaded {
 }
 
 global $xdhq_shared_;
-$xdhq_shared_ = new XDHqDEMO_Shared();
+$xdhq_shared_ = new XDHqFaaS_Shared();
 
-class XDHqDEMO_Daemon extends Threaded {
+class XDHqFaaS_Daemon extends Threaded {
 	private static $pAddr = "atlastk.org";
 	private static $pPort = 53800;
 	private static $wAddr = "";
 	private static $wPort = "";
 	private static $cgi = "xdh";
-	private static $demoProtocolLabel = "877c913f-62df-40a1-bf5d-4bb5e66a6dd9";
-	private static $demoProtocolVersion = "0";
+	private static $FaaSProtocolLabel = "877c913f-62df-40a1-bf5d-4bb5e66a6dd9";
+	private static $FaaSProtocolVersion = "0";
 	private static $mainProtocolLabel = "6e010737-31d8-4be3-9195-c5b5b2a9d5d9";
 	private static $mainProtocolVersion = "0";
 	private static $token = "";
-    function __construct(XDHqDEMO_Shared $shared) {
+    function __construct(XDHqFaaS_Shared $shared) {
         $this->shared = $shared;
     }
 	private static function isTokenEmpty_() {
@@ -138,7 +138,7 @@ class XDHqDEMO_Daemon extends Threaded {
 	}
 	// All write function returns data and do not write directly to socket.
 	public function init_() {
-		switch (XDHqDEMO::getEnv_("ATK")) {
+		switch (XDHqFaaS::getEnv_("ATK")) {
 		case 'DEV':
 			self::$pAddr = "localhost";
 			self::$wPort = "8080";
@@ -154,10 +154,10 @@ class XDHqDEMO_Daemon extends Threaded {
 			die("Bad 'ATK' environment variable value : should be 'DEV' or 'TEST' !");
 		}
 
-		self::$pAddr = XDHqDEMO::getEnv_("ATK_PADDR", self::$pAddr);
-		self::$pPort = intval(XDHqDEMO::getEnv_("ATK_PPORT", strval(self::$pPort)));
-		self::$wAddr = XDHqDEMO::getEnv_("ATK_WADDR", self::$wAddr);
-		self::$wPort = XDHqDEMO::getEnv_("ATK_WPORT", self::$wPort);
+		self::$pAddr = XDHqFaaS::getEnv_("ATK_PADDR", self::$pAddr);
+		self::$pPort = intval(XDHqFaaS::getEnv_("ATK_PPORT", strval(self::$pPort)));
+		self::$wAddr = XDHqFaaS::getEnv_("ATK_WADDR", self::$wAddr);
+		self::$wPort = XDHqFaaS::getEnv_("ATK_WPORT", self::$wPort);
 
 		if ( empty(self::$wAddr)) {
 			self::$wAddr = self::$pAddr;
@@ -169,7 +169,7 @@ class XDHqDEMO_Daemon extends Threaded {
 
 
 		if (self::isTokenEmpty_()) {
-			$token = XDHqDEMO::getEnv_("ATK_TOKEN");
+			$token = XDHqFaaS::getEnv_("ATK_TOKEN");
 
 			if (!empty($token)) {
 				self::$token = "&" . $token;
@@ -183,8 +183,8 @@ class XDHqDEMO_Daemon extends Threaded {
 			die("$errstr ($errno)\n");
 		}
 	}
-	private function demoHandshake_() {
-		$this->shared->writeTU( $this->shared->writeString(self::$demoProtocolLabel) . $this->shared->writeString(self::$demoProtocolVersion));
+	private function FaaSHandshake_() {
+		$this->shared->writeTU( $this->shared->writeString(self::$FaaSProtocolLabel) . $this->shared->writeString(self::$FaaSProtocolVersion));
 
 		$errorMessage = $this->shared->getString();
 
@@ -199,7 +199,7 @@ class XDHqDEMO_Daemon extends Threaded {
 		}
 	}
 	private function ignition_() {
-		$this->shared->writeTU($this->shared->writeString(self::$token) . $this->shared->writeString(XDHq_DEMO::$headContent));
+		$this->shared->writeTU($this->shared->writeString(self::$token) . $this->shared->writeString(XDHq_FaaS::$headContent));
 
 		self::$token = $this->shared->getString();
 
@@ -226,7 +226,7 @@ class XDHqDEMO_Daemon extends Threaded {
 					die(  "Instance of id  '" . $id . "' exists but should not !");
 
 				$this->shared->instances[$id] = call_user_func((array)$callback, $userCallback);
-				$this->shared->instances[$id]->dom->setDEMOStuff( $this, $id );
+				$this->shared->instances[$id]->dom->setFaaSStuff( $this, $id );
 				$this->shared->write( $this->shared->writeByte( $id ) . $this->shared->writeString( self::$mainProtocolLabel ) . $this->shared->writeString( self::$mainProtocolVersion ), $this );
 				$this->shared->instances[$id]->start();
 			} else if ( !key_exists( $id, (array)$this->shared->instances ) ) {
@@ -256,14 +256,14 @@ class XDHqDEMO_Daemon extends Threaded {
 	}
 	public function launch(callable $callback, callable $userCallback) {
 		self::init_();
-		self::demoHandshake_();
+		self::FaaSHandshake_();
 		self::ignition_();
 
 		$this->serve_( $callback, $userCallback );
 	}
 }
 
-class XDHqDOM_DEMO extends Threaded {
+class XDHqDOM_FaaS extends Threaded {
 	function __construct () {
 		$this->firstLaunch = true;
 	}
@@ -343,12 +343,12 @@ class XDHqDOM_DEMO extends Threaded {
     }
 }
 
-class XDHq_DEMO extends XDHq_SHRD {
+class XDHq_FaaS extends XDHq_SHRD {
     static $headContent;
     public static function launch(callable $callback, callable $userCallback, string $headContent) {
 		global $xdhq_shared_;
         self::$headContent = $headContent;
-		$daemon = new XDHqDEMO_Daemon($xdhq_shared_);
+		$daemon = new XDHqFaaS_Daemon($xdhq_shared_);
 		$daemon->launch( $callback, $userCallback );
     }
 }

@@ -54,7 +54,7 @@ sub new {
 
     bless $self, $class;
     
-    $self->{dom} = XDHq::DEMO::DOM->new(shift);
+    $self->{dom} = XDHq::Faas::DOM->new(shift);
 
     return $self;
 }
@@ -103,7 +103,7 @@ sub appendLayout {
 sub _handleLayoutXSL {
     my ($self, $variant, $id, $xml, $xsl) = @_;
 
-    if( XDHq::SHRD::TRUE) { # Replaced with a DEMO/PROD test when available.
+    if( XDHq::SHRD::TRUE) { # Replaced with a Faas/PROD test when available.
         $xsl =~ s/([^-A-Za-z0-9_.!~*'() ])/sprintf("%%%02X", ord($1))/eg;
 #        $xsl =~ tr/ /+/;
         $xsl = "data:text/xml;charset=utf-8," . $xsl;

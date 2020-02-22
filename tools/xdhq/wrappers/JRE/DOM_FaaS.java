@@ -25,7 +25,7 @@ import java.util.*;
 import java.util.concurrent.locks.*;
 import java.awt.Desktop;
 
-public class DOM_DEMO extends DOM_SHRD {
+public class DOM_FaaS extends DOM_SHRD {
 	static private String pAddr = "atlastk.org";
 	static private int pPort = 53800;
 	static private String wAddr = "";
@@ -37,8 +37,8 @@ public class DOM_DEMO extends DOM_SHRD {
 	// Both object are to block the switcher.
 	static private Lock lock_ = new ReentrantLock();
 	static private Condition condition_ = lock_.newCondition();;
-	static private String demoProtocolLabel = "0fac593d-d65f-4cc1-84f5-3159c23c616b";
-	static private String demoProtocolVersion = "0";
+	static private String FaaSProtocolLabel = "0fac593d-d65f-4cc1-84f5-3159c23c616b";
+	static private String FaaSProtocolVersion = "0";
 	static private String mainProtocolLabel = "8d2b7b52-6681-48d6-8974-6e0127a4ca7e";
 	static private String mainProtocolVersion = "0";
 
@@ -92,7 +92,7 @@ public class DOM_DEMO extends DOM_SHRD {
 			String token = getEnv_("ATK_TOKEN");
 
 			if ( !"".equals( token ))
-				DOM_DEMO.token = "&" + token; 
+				DOM_FaaS.token = "&" + token; 
 		}
 
 		pAddr = getEnv_( "ATK_PADDR", pAddr );
@@ -189,11 +189,11 @@ public class DOM_DEMO extends DOM_SHRD {
 		return strings;
 	}
 
-	private static void demoHandshake_() throws Exception {
+	private static void FaaSHandshake_() throws Exception {
 		String error, notification;
 
-		writeString_( demoProtocolLabel );
-		writeString_( demoProtocolVersion );
+		writeString_( FaaSProtocolLabel );
+		writeString_( FaaSProtocolVersion );
 
 		output_.flush();
 
@@ -212,7 +212,7 @@ public class DOM_DEMO extends DOM_SHRD {
 
 	private static void ignition_() throws Exception {
 		writeString_(token);
-		writeString_(info.q37.xdhq.XDH_DEMO.headContent);
+		writeString_(info.q37.xdhq.XDH_FaaS.headContent);
 		writeString_(wAddr);
 		
 		output_.flush();
@@ -320,7 +320,7 @@ public class DOM_DEMO extends DOM_SHRD {
 				System.exit(1);
 			}
 
-			demoHandshake_();
+			FaaSHandshake_();
 
 			ignition_();
 

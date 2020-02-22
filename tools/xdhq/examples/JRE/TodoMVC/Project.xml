@@ -12,14 +12,14 @@
 			<Software>TodoMVC</Software>
 		</About>
 		<xpp:set name="Credits" value="Epeios"/>
-		<xpp:set name="Type" value="AtlasDemoJava"/>
+		<xpp:set name="Type" value="AtlasFaaSJava"/>
 	</xpp:bloc>
 	<xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
 	<About>
 		<UUID>44bc74ae-8734-4394-b372-562f42886a98</UUID>
 	</About>
 	<!-- NO SPACE in 'Keywords' attribute !!! ("a,b,c", NOT "a, b, c")-->
-	<RTW Description="'TodoMVC' application for 'Java' with 'Atlas'." Keywords="Demo,Atlas,TodoMVC,Java,JRE">
+	<RTW Description="'TodoMVC' application for 'Java' with 'Atlas'." Keywords="FaaS,Atlas,TodoMVC,Java,JRE">
 		<Dir>todomvc-java</Dir>
 	</RTW>
 	<!-- Although a 'Java' app., there is a 'NodeJS' section because 'npm' is currently used as package manager. -->

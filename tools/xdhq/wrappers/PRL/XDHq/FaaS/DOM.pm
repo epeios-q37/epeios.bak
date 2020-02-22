@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 =cut
 
-package XDHq::DEMO::DOM;
+package XDHq::Faas::DOM;
 
 use XDHq::SHRD;
 use warnings;
@@ -44,12 +44,12 @@ sub new {
 sub wait {
     my $self = shift;
 
-    XDHq::DEMO::Instance::wait($self->{instance});
+    XDHq::Faas::Instance::wait($self->{instance});
 }
 
 sub signal {
-    lock($XDHq::DEMO::SHRD::globalCondition);
-    cond_signal($XDHq::DEMO::SHRD::globalCondition);
+    lock($XDHq::Faas::SHRD::globalCondition);
+    cond_signal($XDHq::Faas::SHRD::globalCondition);
 }
 
 sub getAction {
@@ -59,16 +59,16 @@ sub getAction {
         $self->{firstLaunch} = XDHq::SHRD::FALSE;
     } else { 
         {# Also a lock scope.
-        lock($XDHq::DEMO::SHRD::writeLock);
-        XDHq::DEMO::SHRD::writeByte($self->{instance}->{id});
-        XDHq::DEMO::SHRD::writeString("StandBy_1");
+        lock($XDHq::Faas::SHRD::writeLock);
+        XDHq::Faas::SHRD::writeByte($self->{instance}->{id});
+        XDHq::Faas::SHRD::writeString("StandBy_1");
         }
     }
 
     $self->wait();
 
-    my $id = XDHq::DEMO::SHRD::getString();
-    my $action = XDHq::DEMO::SHRD::getString();
+    my $id = XDHq::Faas::SHRD::getString();
+    my $action = XDHq::Faas::SHRD::getString();
 
     $self->signal();
 
@@ -81,33 +81,33 @@ sub call {
     my $type = shift;
 
     {   # Lock scope;
-        lock($XDHq::DEMO::SHRD::writeLock);
+        lock($XDHq::Faas::SHRD::writeLock);
 
-        XDHq::DEMO::SHRD::writeByte($self->{instance}->{id});
-        XDHq::DEMO::SHRD::writeString($command);
-        XDHq::DEMO::SHRD::writeByte($type);
+        XDHq::Faas::SHRD::writeByte($self->{instance}->{id});
+        XDHq::Faas::SHRD::writeString($command);
+        XDHq::Faas::SHRD::writeByte($type);
    
         foreach $arg (@_) {
             if ( ref($arg) eq "ARRAY" ) {
-                XDHq::DEMO::SHRD::writeByte(XDHq::SHRD::RT_STRINGS);
-                XDHq::DEMO::SHRD::writeStrings($arg);
+                XDHq::Faas::SHRD::writeByte(XDHq::SHRD::RT_STRINGS);
+                XDHq::Faas::SHRD::writeStrings($arg);
             } else {
-                XDHq::DEMO::SHRD::writeByte(XDHq::SHRD::RT_STRING);
-                XDHq::DEMO::SHRD::writeString($arg);
+                XDHq::Faas::SHRD::writeByte(XDHq::SHRD::RT_STRING);
+                XDHq::Faas::SHRD::writeString($arg);
             }
         }
 
-        XDHq::DEMO::SHRD::writeByte(XDHq::SHRD::RT_VOID);
+        XDHq::Faas::SHRD::writeByte(XDHq::SHRD::RT_VOID);
     }
 
     if ($type eq XDHq::SHRD::RT_STRING) {
         $self->wait();
-        my $result = XDHq::DEMO::SHRD::getString();
+        my $result = XDHq::Faas::SHRD::getString();
         $self->signal();
         return $result;
     } elsif ($type eq XDHq::SHRD::RT_STRINGS) {
         $self->wait();
-        my @result = XDHq::DEMO::SHRD::getStrings();
+        my @result = XDHq::Faas::SHRD::getStrings();
         $self->signal();
         return @result;
     } elsif (not ($type eq XDHq::SHRD::RT_VOID)) {

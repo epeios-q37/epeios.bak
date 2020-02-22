@@ -24,18 +24,18 @@ SOFTWARE.
 
 use strict; use warnings;
 
-package XDHq::DEMO;
+package XDHq::Faas;
 
 use XDHq::SHRD;
-use XDHq::DEMO::SHRD;
-use XDHq::DEMO::Instance;
+use XDHq::Faas::SHRD;
+use XDHq::Faas::Instance;
 use IO::Socket::INET;
 use threads;
 use threads::shared;
 use strict;
 
-my $demoProtocolLabel = "0fac593d-d65f-4cc1-84f5-3159c23c616b";
-my $demoProtocolVersion = "0";
+my $FaasProtocolLabel = "0fac593d-d65f-4cc1-84f5-3159c23c616b";
+my $FaasProtocolVersion = "0";
 my $mainProtocolLabel = "8d2b7b52-6681-48d6-8974-6e0127a4ca7e";
 my $mainProtocolVersion = "0";
 
@@ -108,26 +108,26 @@ sub _init {
     $| = 1;
 
     # create a connecting socket
-    $XDHq::DEMO::SHRD::socket = new IO::Socket::INET (
+    $XDHq::Faas::SHRD::socket = new IO::Socket::INET (
         PeerHost => $pAddr,
         PeerPort => $pPort,
         Proto => 'tcp',
     );
 
-    die("Error on connection to '${pAddr}:${pPort}': $! !!!\n") unless $XDHq::DEMO::SHRD::socket;
+    die("Error on connection to '${pAddr}:${pPort}': $! !!!\n") unless $XDHq::Faas::SHRD::socket;
 }
 
 sub _demoHandshake {
-    XDHq::DEMO::SHRD::writeString($demoProtocolLabel);
-    XDHq::DEMO::SHRD::writeString($demoProtocolVersion);
+    XDHq::Faas::SHRD::writeString($FaasProtocolLabel);
+    XDHq::Faas::SHRD::writeString($FaasProtocolVersion);
 
-    my $error = XDHq::DEMO::SHRD::getString();
+    my $error = XDHq::Faas::SHRD::getString();
 
     if ( $error ne "") {
         die($error);
     }
 
-    my $notification = XDHq::DEMO::SHRD::getString();
+    my $notification = XDHq::Faas::SHRD::getString();
 
     if ( $notification ne "") {
         CORE::say($notification);
@@ -135,19 +135,19 @@ sub _demoHandshake {
 }
 
 sub _ignition {
-    XDHq::DEMO::SHRD::writeString($token);
-    XDHq::DEMO::SHRD::writeString($main::headContent);
-    XDHq::DEMO::SHRD::writeString($wAddr);
+    XDHq::Faas::SHRD::writeString($token);
+    XDHq::Faas::SHRD::writeString($main::headContent);
+    XDHq::Faas::SHRD::writeString($wAddr);
 
-    $token = XDHq::DEMO::SHRD::getString();
+    $token = XDHq::Faas::SHRD::getString();
 
     if ( $token eq "") {
-        die(XDHq::DEMO::SHRD::getString());
+        die(XDHq::Faas::SHRD::getString());
     }
 
     if (not($wPort eq ":0")) {
 #        my $url = "http://${wAddr}${wPort}/${cgi}.php?_token=${token}";
-        my $url = XDHq::DEMO::SHRD::getString();
+        my $url = XDHq::Faas::SHRD::getString();
 
         CORE::say($url);
         CORE::say("^" x length($url));
@@ -160,48 +160,48 @@ sub _serve {
     my ($callback, $userCallback, $callbacks) = @_;
 
     while(XDHq::SHRD::TRUE) {
-        my $id = XDHq::DEMO::SHRD::getByte();
+        my $id = XDHq::Faas::SHRD::getByte();
 
         if ( $id eq 255) {   # Value reporting a new front-end.
-            $id = XDHq::DEMO::SHRD::getByte();    # The id of the new front-end.
+            $id = XDHq::Faas::SHRD::getByte();    # The id of the new front-end.
 
             if( $instances{$id} ) {
                 die("Instance of id '${id}' exists but should not !")
             }
 
-            my $instance : shared = XDHq::DEMO::Instance::new();
+            my $instance : shared = XDHq::Faas::Instance::new();
 
-            XDHq::DEMO::Instance::set($instance, $callback->($userCallback, $callbacks, $instance),$id);
+            XDHq::Faas::Instance::set($instance, $callback->($userCallback, $callbacks, $instance),$id);
 
             $instances{$id}=$instance;
 
             {   # Locking scope.
-                lock($XDHq::DEMO::SHRD::writeLock);
-                XDHq::DEMO::SHRD::writeByte($id);
-                XDHq::DEMO::SHRD::writeString($mainProtocolLabel);
-                XDHq::DEMO::SHRD::writeString($mainProtocolVersion);
+                lock($XDHq::Faas::SHRD::writeLock);
+                XDHq::Faas::SHRD::writeByte($id);
+                XDHq::Faas::SHRD::writeString($mainProtocolLabel);
+                XDHq::Faas::SHRD::writeString($mainProtocolVersion);
             }
         } elsif ( not($instances{$id})) {
             die("Unknown instance of id '${id}'!")
-        } elsif (not(XDHq::DEMO::Instance::testAndSetHandshake($instances{$id}))) {
-            my $error = XDHq::DEMO::SHRD::getString();
+        } elsif (not(XDHq::Faas::Instance::testAndSetHandshake($instances{$id}))) {
+            my $error = XDHq::Faas::SHRD::getString();
 
             if ($error) {
                 die($error);
             }
 
-            XDHq::DEMO::SHRD::getString();    # Language. Not handled yet.
+            XDHq::Faas::SHRD::getString();    # Language. Not handled yet.
 
             {   # Lock scope;
-                lock($XDHq::DEMO::SHRD::writeLock);
-                XDHq::DEMO::SHRD::writeByte($id);
-                XDHq::DEMO::SHRD::writeString("PRL");
+                lock($XDHq::Faas::SHRD::writeLock);
+                XDHq::Faas::SHRD::writeByte($id);
+                XDHq::Faas::SHRD::writeString("PRL");
             }
         } else {
-            XDHq::DEMO::Instance::signal($instances{$id});
+            XDHq::Faas::Instance::signal($instances{$id});
 
-            lock($XDHq::DEMO::SHRD::globalCondition);
-            cond_wait($XDHq::DEMO::SHRD::globalCondition);
+            lock($XDHq::Faas::SHRD::globalCondition);
+            cond_wait($XDHq::Faas::SHRD::globalCondition);
         }
     }
 }

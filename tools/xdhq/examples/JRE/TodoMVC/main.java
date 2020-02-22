@@ -286,6 +286,6 @@ class TodoMVC extends Atlas {
 	public static void main(String[] args) throws Exception {
 		String dir;
 
-		launch(() -> new TodoMVC(), readAsset_("HeadDEMO.html"), "TodoMVC", GUI.DEFAULT, args);
+		launch(() -> new TodoMVC(), readAsset_("HeadFaaS.html"), "TodoMVC", GUI.DEFAULT, args);
 	}
 }

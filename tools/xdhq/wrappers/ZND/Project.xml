@@ -46,7 +46,7 @@
 		<SourceDir>../..</SourceDir>
 	</SourceDirs>
 	<Files>
-		<File>XDHqDEMO.php</File>
+		<File>XDHqFaaS.php</File>
 		<File>XDHqPROD.php</File>
 		<File>XDHqSHRD.php</File>
 		<File>XDHqXML.php</File>
@@ -98,7 +98,7 @@
 				<Files Group="TodoMVC">
 					<File Path="TodoMVC/">main.php</File>
 					<Files Path="../common/TodoMVC/">
-						<File>headDEMO.html</File>
+						<File>headFaaS.html</File>
 						<File>headPROD.html</File>
 						<File>Main.html</File>
 						<File>Todos.xsl</File>

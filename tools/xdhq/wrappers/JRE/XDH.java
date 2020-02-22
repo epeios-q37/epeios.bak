@@ -58,8 +58,8 @@ public class XDH extends info.q37.jreq.JRE {
 		dir_ = dir;
 
 		switch ( mode ) {
-		case DEMO:
-			XDH_DEMO.launch(headContent,callback );
+		case FAAS:
+			XDH_FaaS.launch(headContent,callback );
 			break;
 		case PROD:
 			XDH_PROD.launch();
@@ -71,8 +71,8 @@ public class XDH extends info.q37.jreq.JRE {
 	static public MODE getMode() {
 		return mode_;
 	}
-	static public boolean isDEMO() {
-		return getMode() == MODE.DEMO;
+	static public boolean isFaaS() {
+		return getMode() == MODE.FAAS;
 	}
 	static public String getDir() {
 		return dir_;

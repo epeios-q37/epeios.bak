@@ -18,7 +18,7 @@
 =end
 
 module XDHq
-	require 'XDHqDEMO'
+	require 'XDHqFaaS'
 	require 'uri'
 
 	$dir = ""
@@ -70,7 +70,7 @@ module XDHq
 
 	class DOM
 		def initialize(id)
-			@dom = XDHqDEMO::DOM.new(id)
+			@dom = XDHqFaaS::DOM.new(id)
 		end
 
 		private def unsplit(*args)
@@ -122,7 +122,7 @@ module XDHq
 		private def handleLayoutXSL(variant, id, xml, xsl)
 			xslURL = xsl
 
-			if true	# Testing if 'PROD' or 'DEMO' mode when available.
+			if true	# Testing if 'PROD' or 'FaaS' mode when available.
 				xslURL = "data:text/xml;charset=utf-8," + URI::encode(XDHq::readAsset( xsl, $dir ))
 			end
 
@@ -245,7 +245,7 @@ module XDHq
 
 	def XDHq::launch(callback,userCallback,callbacks,headContent, dir)
 		$dir = dir
-		XDHqDEMO.launch(callback, userCallback, callbacks, headContent)
+		XDHqFaaS.launch(callback, userCallback, callbacks, headContent)
 	end
 
 end

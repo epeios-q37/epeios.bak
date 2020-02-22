@@ -12,14 +12,14 @@
 			<Software>Chatroom</Software>
 		</About>
 		<xpp:set name="Credits" value="Epeios"/>
-		<xpp:set name="Type" value="AtlasDemoJava"/>
+		<xpp:set name="Type" value="AtlasFaaSJava"/>
 	</xpp:bloc>
 	<xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
 	<About>
 		<UUID>4fe57c17-3229-40eb-a50a-858effbb65ec</UUID>
 	</About>
 	<!-- NO SPACE in 'Keywords' attribute !!! ("a,b,c", NOT "a, b, c")-->
-	<RTW Description="A basic chatroom application for 'Java' with 'Atlas'." Keywords="Demo,Atlas,chat,chatroom,Java,JRE">
+	<RTW Description="A basic chatroom application for 'Java' with 'Atlas'." Keywords="FaaS,Atlas,chat,chatroom,Java,JRE">
 		<Dir>chatroom-java</Dir>
 	</RTW>
 </Project>

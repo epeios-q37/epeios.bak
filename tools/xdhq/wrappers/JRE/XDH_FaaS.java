@@ -19,10 +19,10 @@
 
 package info.q37.xdhq;
 
-public class XDH_DEMO extends XDH_SHRD {
+public class XDH_FaaS extends XDH_SHRD {
 	static public String headContent;
 	static public void launch(String headContent, info.q37.xdhq.XDH_SHRD.Callback callback ) {
-		XDH_DEMO.headContent = headContent;
-		info.q37.xdhq.dom.DOM_DEMO.launch(callback);
+		XDH_FaaS.headContent = headContent;
+		info.q37.xdhq.dom.DOM_FaaS.launch(callback);
 	}
 }

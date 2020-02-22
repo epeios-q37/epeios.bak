@@ -18,7 +18,7 @@
 	along with XDHq.  If not, see <http://www.gnu.org/licenses/>.
 */
 require 'XDHqSHRD.php';
-require 'XDHqDEMO.php';
+require 'XDHqFaaS.php';
 require 'XDHqXML.php';
 
 if ( false && XDHq_SHRD::isDev() )
@@ -27,7 +27,7 @@ if ( false && XDHq_SHRD::isDev() )
 
 class XDHq extends XDHq_SHRD{
 	const MODE_PROD = 0;
-	const MODE_DEMO = 1;
+	const MODE_FAAS = 1;
 	const MODE_UNDEFINED = 2;
 	private static $mode_ = self::MODE_UNDEFINED;
 	static $dir;
@@ -53,8 +53,8 @@ class XDHq extends XDHq_SHRD{
 		case self::MODE_PROD:
 			XDHq_PROD::launch();
 			break;
-		case self::MODE_DEMO:
-			XDHq_DEMO::launch($callback, $userCallback, $headContent );
+		case self::MODE_FAAS:
+			XDHq_FaaS::launch($callback, $userCallback, $headContent );
 			break;
 		default:
 			throw new Exception( "Unknown mode !!!");
@@ -64,8 +64,8 @@ class XDHq extends XDHq_SHRD{
 	static function getMode() {
 		return self::$mode_;
 	}
-	static function isDEMO() {
-		return self::getMode() == self::MODE_DEMO;
+	static function isFaaS() {
+		return self::getMode() == self::MODE_FaaS;
 	}
 }
 
@@ -95,8 +95,8 @@ class XDHqDOM extends Threaded {
 		case XDHq::MODE_PROD:
 			$this->dom_ = new XDHqDOM_PROD;
 			break;
-		case XDHq::MODE_DEMO:
-			$this->dom_ = new XDHqDOM_DEMO;
+		case XDHq::MODE_FaaS:
+			$this->dom_ = new XDHqDOM_FaaS;
 			break;
 		default:
 			die( "Unknown mode !!!");
@@ -104,7 +104,7 @@ class XDHqDOM extends Threaded {
 
 		$this->parent = $parent;
 	}
-	function setDEMOStuff( Threaded $thread, $id )
+	function setFaaSStuff( Threaded $thread, $id )
 	{
 		$this->dom_->daemonThread = $thread;
 		$this->dom_->shared = $thread->shared;
@@ -143,7 +143,7 @@ class XDHqDOM extends Threaded {
 	private function handleLayoutXSL_(string $command, string  $id, $xml, string $xsl ) {
 		$xslURL = $xsl;
 
-		if ( XDHq::isDEMO() )
+		if ( XDHq::isFaaS() )
 			$xslURL = "data:text/xml;charset=utf-8," . rawurlencode( XDHq::readAsset( $xsl, XDHq::$dir ) );
 			
 		self::handleLayout_( $command, $id, $xml, $xslURL );

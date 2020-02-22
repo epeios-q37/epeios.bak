@@ -36,8 +36,8 @@ public class DOM {
 	public DOM(MODE mode) {
 		try {
 			switch (mode) {
-			case DEMO:
-				DOM = new info.q37.xdhq.dom.DOM_DEMO();
+			case FAAS:
+				DOM = new info.q37.xdhq.dom.DOM_FaaS();
 				break;
 			case PROD:
 				DOM = new info.q37.xdhq.dom.DOM_PROD();
@@ -99,7 +99,7 @@ public class DOM {
 	private <XML> void handleLayoutXSL_(String variant, String id, XML xml, String xslFilename) {
 		String xslURL = xslFilename;
 
-		if ( info.q37.xdhq.XDH.isDEMO() )
+		if ( info.q37.xdhq.XDH.isFaaS() )
 			xslURL = new String( "data:text/xml;base64," + java.util.Base64.getEncoder().encodeToString( info.q37.xdhq.XDH.readAsset( xslFilename, info.q37.xdhq.XDH.getDir() ).getBytes() ) );
 		
 		handleLayout_(variant, id, xml, xslURL);

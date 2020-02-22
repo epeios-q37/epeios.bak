@@ -25,8 +25,8 @@ SOFTWARE.
 package XDHq;
 
 use XDHq::SHRD;
-use XDHq::DEMO;
-use XDHq::DEMO::DOM;
+use XDHq::Faas;
+use XDHq::Faas::DOM;
 
 use Cwd;
 
@@ -53,7 +53,7 @@ sub readAsset {
 sub launch {
     my ($callback,$userCallback,$callbacks,$headContent,$dir) = @_;
 
-    XDHq::DEMO::launch($callback,$userCallback,$callbacks,$headContent);
+    XDHq::Faas::launch($callback,$userCallback,$callbacks,$headContent);
 }
 
 return XDHq::SHRD::TRUE;

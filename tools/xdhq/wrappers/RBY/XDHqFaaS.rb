@@ -17,7 +17,7 @@
 	along with XDHq If not, see <http://www.gnu.org/licenses/>.
 =end
 
-module XDHqDEMO
+module XDHqFaaS
     require 'XDHqSHRD'
 
     require 'socket'
@@ -61,8 +61,8 @@ module XDHqDEMO
         puts "#{caller_infos[0]} - #{caller_infos[1]}"  
     end
 
-    @demoProtocolLabel = "0fac593d-d65f-4cc1-84f5-3159c23c616b"
-    @demoProtocolVersion = "0"
+    @FaaSProtocolLabel = "0fac593d-d65f-4cc1-84f5-3159c23c616b"
+    @FaaSProtocolVersion = "0"
     @mainProtocolLabel = "8d2b7b52-6681-48d6-8974-6e0127a4ca7e"
     @mainProtocolVersion = "0"
 
@@ -207,10 +207,10 @@ module XDHqDEMO
 
         return strings
     end
-    def self.demoHandshake
+    def self.FaaSHandshake
         @outputMutex.synchronize {
-            writeString(@demoProtocolLabel)
-            writeString(@demoProtocolVersion)
+            writeString(@FaaSProtocolLabel)
+            writeString(@FaaSProtocolVersion)
         }
 
         error = getString()
@@ -292,13 +292,13 @@ module XDHqDEMO
             end
         end
     end
-    def XDHqDEMO::launch(callback,userCallback,callbacks,headContent)
+    def XDHqFaaS::launch(callback,userCallback,callbacks,headContent)
         Thread::abort_on_exception = true
         @headContent = headContent
 
         @socket = TCPSocket.new(@pAddr, @pPort)
 
-        self.demoHandshake()
+        self.FaaSHandshake()
 
         self.ignition()
 
@@ -314,21 +314,21 @@ module XDHqDEMO
             @instance.wait()
         end
         def signal()
-            XDHqDEMO::signal()
+            XDHqFaaS::signal()
         end
         def getAction()
             if @firstLaunch
                 @firstLaunch = false
             else
-                XDHqDEMO::lockOutputMutex() # '@outputMutex.synchronize {...}' does not work as '@outputMutex' is not the good one.
-                XDHqDEMO::writeByte(@instance.getId())
-                XDHqDEMO::writeString("StandBy_1")
-                XDHqDEMO::unlockOutputMutex()
+                XDHqFaaS::lockOutputMutex() # '@outputMutex.synchronize {...}' does not work as '@outputMutex' is not the good one.
+                XDHqFaaS::writeByte(@instance.getId())
+                XDHqFaaS::writeString("StandBy_1")
+                XDHqFaaS::unlockOutputMutex()
             end
             wait()
 
-            id = XDHqDEMO::getString()
-            action = XDHqDEMO::getString()
+            id = XDHqFaaS::getString()
+            action = XDHqFaaS::getString()
 
             signal()
 
@@ -338,38 +338,38 @@ module XDHqDEMO
             i = 0
             amount = args.length
             
-            XDHqDEMO::lockOutputMutex() # '@outputMutex.synchronize {...}' does not work as '@outputMutex' is not the good one.
-            XDHqDEMO::writeByte(@instance.getId())
-            XDHqDEMO::writeString(command)
-            XDHqDEMO::writeByte(type)
+            XDHqFaaS::lockOutputMutex() # '@outputMutex.synchronize {...}' does not work as '@outputMutex' is not the good one.
+            XDHqFaaS::writeByte(@instance.getId())
+            XDHqFaaS::writeString(command)
+            XDHqFaaS::writeByte(type)
 
             while amount != 0    # For Ruby, 0 == true
                 if args[i].is_a?( String )
-                    XDHqDEMO::writeByte(XDHqSHRD::STRING)
-                    XDHqDEMO::writeString(args[i])
+                    XDHqFaaS::writeByte(XDHqSHRD::STRING)
+                    XDHqFaaS::writeString(args[i])
                 else
-                    XDHqDEMO::writeByte(XDHqSHRD::STRINGS)
-                    XDHqDEMO::writeStrings(args[i])
+                    XDHqFaaS::writeByte(XDHqSHRD::STRINGS)
+                    XDHqFaaS::writeStrings(args[i])
                 end
 
                 i += 1
                 amount -= 1
             end
 
-            XDHqDEMO::writeByte(XDHqSHRD::VOID)
+            XDHqFaaS::writeByte(XDHqSHRD::VOID)
 
-            XDHqDEMO::unlockOutputMutex()
+            XDHqFaaS::unlockOutputMutex()
 
             case type
             when XDHqSHRD::VOID
             when XDHqSHRD::STRING
                 wait()
-                string = XDHqDEMO::getString()
+                string = XDHqFaaS::getString()
                 signal()
                 return string
             when XDHqSHRD::STRINGS
                 wait()
-                strings = XDHqDEMO::getStrings()
+                strings = XDHqFaaS::getStrings()
                 signal()
                 return strings
             else

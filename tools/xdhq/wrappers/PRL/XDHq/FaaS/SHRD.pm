@@ -22,18 +22,18 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 =cut
 
-package XDHq::DEMO::SHRD;
+package XDHq::Faas::SHRD;
 
 use threads;
 use threads::shared;
 
-$XDHq::DEMO::SHRD::socket;
+$XDHq::Faas::SHRD::socket;
 
-$XDHq::DEMO::SHRD::writeLock;
-share ($XDHq::DEMO::SHRD::writeLock);
+$XDHq::Faas::SHRD::writeLock;
+share ($XDHq::Faas::SHRD::writeLock);
 
-$XDHq::DEMO::SHRD::globalCondition;
-share($XDHq::DEMO::SHRD::globalCondition);
+$XDHq::Faas::SHRD::globalCondition;
+share($XDHq::Faas::SHRD::globalCondition);
 
 sub writeByte {
     $socket->send(chr(shift));
