@@ -95,7 +95,7 @@ class Atlas extends Thread {
         if (XDHq::isDev()) {
             return XDHq::MODE_PROD;
         } else {
-            return XDHq::MODE_DEMO;
+            return XDHq::MODE_FAAS;
         }
 
     }
@@ -142,7 +142,7 @@ class Atlas extends Thread {
                     break;
                 case 'W':
                     $gui = self::GUI_NONE; // The httpd server is launched externally.
-                    $mode = XDHq::MODE_DEMO;
+                    $mode = XDHq::MODE_FAAS;
                     break;
                 default:
                     die("Unknown GUI !");

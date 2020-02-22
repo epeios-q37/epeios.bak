@@ -118,9 +118,9 @@ public abstract class Atlas implements Runnable {
 
 	private static final MODE getDefaultMODE() {
 		if ( isDev() )
-			return MODE.FaaS;
+			return MODE.FAAS;
 		else
-			return MODE.FaaS;
+			return MODE.FAAS;
 	}
 
 	private static void launch(info.q37.xdhq.XDH_SHRD.Callback callback, String headContent, String dir, GUI gui, String arg) {
@@ -135,7 +135,7 @@ public abstract class Atlas implements Runnable {
 				} else if ( arg.equals( "d" ) || arg.equals( "desktop" ) ) {
 					gui = GUI.DESKTOP;
 				} else if ( arg.equals( "W" ) ) {
-					mode = MODE.FaaS;
+					mode = MODE.FAAS;
 					gui = GUI.NONE;	// The httpd server is launched externally.
 				} else if ( arg.equals( "w") || arg.equals( "web" ) ) {
 					gui = GUI.WEB;
