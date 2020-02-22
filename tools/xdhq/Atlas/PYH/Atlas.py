@@ -26,7 +26,7 @@ import XDHq
 from threading import Thread
 import threading
 import inspect
-from XDHq import readAsset
+from XDHq import readAsset, read_asset
 
 import signal, sys
 
@@ -35,11 +35,18 @@ def signal_handler(sig, frame):
 
 signal.signal(signal.SIGINT, signal_handler)
 
-def createXML(rootTag):
-	return XDHq.XML(rootTag)
 
-def createHTML(rootTag=""):	# If 'rootTag' is empty, there will be no root tag in the tree.
-	return XDHq.XML(rootTag)
+def create_XML(root_tag):
+	return XDHq.XML(root_tag)
+
+createXML = create_XML	
+
+
+def create_HTML(root_tag=""):	# If 'root_tag' is empty, there will be no root tag in the tree.
+	return XDHq.XML(root_tag)
+
+createHTML = create_HTML
+
 
 def _call(func, userObject, dom, id, action):
 	amount = len(inspect.getargspec(func).args)

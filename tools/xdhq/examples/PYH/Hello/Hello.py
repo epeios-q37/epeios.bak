@@ -47,23 +47,23 @@ body = """
 </div>
 """
 
-def acConnect(dom):
-	dom.setLayout("", body )
+def ac_connect(dom):
+	dom.set_layout("", body )
 	dom.focus( "input")
 
-def acSubmit(dom):
-	dom.alert("Hello, " + dom.getContent("input") + "!")
+def ac_submit(dom):
+	dom.alert("Hello, " + dom.get_content("input") + "!")
 	dom.focus( "input")
 
-def acClear(dom):
+def ac_clear(dom):
 	if ( dom.confirm("Are you sure?" ) ):
-		dom.setContent("input", "" )
+		dom.set_content("input", "" )
 	dom.focus( "input")
 
 callbacks = {
-	"": acConnect,
-	"Submit": acSubmit,
-	"Clear": acClear,
+	"": ac_connect,
+	"Submit": ac_submit,
+	"Clear": ac_clear,
 }
 
 Atlas.launch(callbacks, None, head)

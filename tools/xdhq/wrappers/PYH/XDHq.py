@@ -48,6 +48,7 @@ _STRING = XDHqSHRD.RT_STRING
 _STRINGS = XDHqSHRD.RT_STRINGS
 XML = XDHqXML.XML
 
+
 def _split(keysAndValues):
 	keys = []
 	values = []
@@ -57,6 +58,7 @@ def _split(keysAndValues):
 		values.append(str(keysAndValues[key]))
 
 	return [keys,values]
+
 
 def _unsplit(keys,values):
 	i = 0
@@ -72,17 +74,23 @@ def _unsplit(keys,values):
 
 	return keysAndValues
 
+
 def _getAssetPath(dir):
 	if XDHqSHRD.isDev():
 		return os.path.join(os.environ["Q37_EPEIOS"],"tools/xdhq/examples/common/", dir )
 	else:
 		return os.path.abspath(os.path.dirname(sys.argv[0]))
 
+
 def _getAssetFilename(path, dir):
 	return os.path.join(_getAssetPath(dir), path )
 
-def readAsset(path, dir=""):
+
+def read_asset(path, dir=""):
 	return open(_getAssetFilename(path, dir)).read()
+
+readAsset = read_asset
+
 
 def _readXSLAsset(path, dir):
 	if (path.lstrip()[0]=='<'):
@@ -94,8 +102,10 @@ class DOM:
 	def __init__(self,instance):
 		self._dom = XDHqDEMO.DOM_DEMO(instance)
 
-	def getAction(self):
+	def get_action(self):
 		return self._dom.getAction()
+
+	getAction = get_action
 
 	def execute(self,script):
 		return self._dom.call("Execute_1" ,_STRING, script)
@@ -116,14 +126,20 @@ class DOM:
 		# 	If 'xml' is HTML and uses the compressed form, if it has a root tag, only the children will be used.
 		self._dom.call("HandleLayout_1", _VOID, variant, id, xml if isinstance(xml,str) else xml.toString(), xsl)
 
-	def prependLayout(self,id,html):
+	def prepend_layout(self,id,html):
 		self._handleLayout("Prepend",id,html,"")
 
-	def setLayout(self,id,html):
+	prependLayout = prepend_layout
+
+	def set_layout(self,id,html):
 		self._handleLayout("Set",id,html,"")
 
-	def appendLayout(self,id,html):
+	setLayout = set_layout
+
+	def append_layout(self,id,html):
 		self._handleLayout("Append",id,html,"")
+
+	appendLayout = append_layout
 
 	def _handleLayoutXSL(self, variant, id, xml, xsl):
 		global _dir
@@ -134,31 +150,47 @@ class DOM:
 
 		self._handleLayout(variant, id, xml, xslURL )
 
-	def prependLayoutXSL(self, id, xml, xsl):
+	def prepend_layout_XSL(self, id, xml, xsl):
 		self._handleLayoutXSL("Prepend",id,xml,xsl)
 
-	def setLayoutXSL(self, id, xml, xsl):
+	prependLayoutXSL = prepend_layout_XSL
+
+	def set_layout_XSL(self, id, xml, xsl):
 		self._handleLayoutXSL("Set",id,xml,xsl)
 
-	def appendLayoutXSL(self, id, xml, xsl):
+	setLayoutXSL = set_layout_XSL
+
+	def append_layout_XSL(self, id, xml, xsl):
 		self._handleLayoutXSL("Append",id,xml,xsl)
 
-	def getContents(self, ids):
+	appendLayoutXSL = append_layout_XSL
+
+	def get_contents(self, ids):
 		return _unsplit(ids,self._dom.call("GetContents_1",_STRINGS, ids))
 
-	def getContent( self, id):
+	getContents = get_contents
+
+	def get_content( self, id):
 		return self.getContents([id])[id]
 
-	def setContents(self,idsAndContents):
-		[ids,contents] = _split(idsAndContents)
+	getContent = get_content
+
+	def set_contents(self,ids_and_contents):
+		[ids,contents] = _split(ids_and_contents)
 
 		self._dom.call("SetContents_1", _VOID, ids, contents)
 
-	def setContent(self, id, content):
-		self.setContents({id: content})
+	set_contents = set_contents
 
-	def setTimeout(self,delay,action ):
+	def set_content(self, id, content):
+		self.set_contents({id: content})
+
+	set_content = set_content
+
+	def set_timeout(self,delay,action ):
 		self._dom.call( "SetTimeout_1", _VOID, str( delay ), action )
+
+	setTimeout = set_timeout
 
 	"""
 	# Following 4 methods will either be removed or redesigned.
@@ -189,50 +221,80 @@ class DOM:
 
 		self._dom.call("HandleClasses_1", _VOID, variant, ids, classes)
 
-	def addClasses(self, idsAndClasses):
-		self._handleClasses("Add", idsAndClasses)
+	def add_classes(self, ids_and_classes):
+		self._handleClasses("Add", ids_and_classes)
 
-	def removeClasses(self, idsAndClasses):
-		self._handleClasses("Remove", idsAndClasses)
+	addClasses = add_classes
 
-	def toggleClasses(self, idsAndClasses):
-		self._handleClasses("Toggle", idsAndClasses)
+	def remove_classes(self, ids_and_classes):
+		self._handleClasses("Remove", ids_and_classes)
 
-	def addClass(self, id, clas ):
+	removeClasses = remove_classes		
+
+	def toggle_classes(self, ids_and_classes):
+		self._handleClasses("Toggle", ids_and_classes)
+
+	toggleClasses = toggle_classes
+
+	def add_class(self, id, clas ):
 		self.addClasses({id: clas})
 
-	def removeClass(self, id, clas ):
-		self.removeClasses({id: clas})
+	addClass = add_class
 
-	def toggleClass(self, id, clas ):
+	def remove_class(self, id, class_ ):
+		self.removeClasses({id: class_})
+
+	removeClass	= remove_class
+
+	def toggle_class(self, id, clas ):
 		self.toggleClasses({id: clas})
 
-	def enableElements(self,ids):
+	toggleClass = toggle_class
+
+	def enable_elements(self,ids):
 		self._dom.call("EnableElements_1", _VOID, ids )
 
-	def enableElement(self, id):
+	enableElements = enable_elements		
+
+	def enable_element(self, id):
 		self.enableElements([id] )
 
-	def disableElements(self, ids):
+	enableElement = enable_element		
+
+	def disable_elements(self, ids):
 		self._dom.call("DisableElements_1", _VOID, ids )
 
-	def disableElement(self, id):
+	disableElements = disable_elements		
+
+	def disable_element(self, id):
 		self.disableElements([id])
 
-	def setAttribute(self, id, name, value ):
+	disableElement = disable_element
+
+	def set_attribute(self, id, name, value ):
 		self._dom.call("SetAttribute_1", _VOID, id, name, str(value) )
 
-	def getAttribute(self, id, name):
+	setAttribute = set_attribute		
+
+	def get_attribute(self, id, name):
 		return self._dom.call("GetAttribute_1", _STRING, id, name )
 
-	def removeAttribute(self, id, name ):
+	getAttribute = get_attribute		
+
+	def remove_attribute(self, id, name ):
 		self._dom.call("RemoveAttribute_1", _VOID, id, name )
 
-	def setProperty(self, id, name, value ):
+	removeAttribute = remove_attribute
+
+	def set_property(self, id, name, value ):
 		self._dom.call("SetProperty_1", _VOID, id, name, value )
 
-	def getProperty(self, id, name ):
+	setProperty = set_property		
+
+	def get_property(self, id, name ):
 		return self._dom.call("GetProperty_1", _STRING, id, name )
+
+	getProperty = get_property		
 
 	def focus(self, id):
 		self._dom.call("Focus_1", _VOID, id)

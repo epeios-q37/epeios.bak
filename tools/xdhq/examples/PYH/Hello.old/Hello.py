@@ -30,15 +30,15 @@ sys.path.append("../atlastk")
 import atlastk as Atlas
 
 def acConnect(self, dom):
-	dom.setLayout("", body )
+	dom.set_layout("", body )
 	dom.focus( "input")
 
 callbacks = {
 		"": acConnect,
 		"Typing": lambda self, dom, id:
-			dom.setContent("name", dom.getContent(id)),
+			dom.set_content("name", dom.get_content(id)),
 		"Clear": lambda self, dom:
-			dom.setContents( {  "input": "", "name": ""} )
+			dom.set_contents( {  "input": "", "name": ""} )
 			if dom.confirm( "Are you sure ?" ) else None
 	}
 		

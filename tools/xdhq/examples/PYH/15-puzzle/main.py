@@ -34,8 +34,8 @@ class Puzzle:
     pass
 
 
-def readAsset(path):
-    return Atlas.readAsset(path, "15-puzzle")
+def read_asset(path):
+    return Atlas.read_asset(path, "15-puzzle")
 
 
 def fill(puzzle, dom):
@@ -52,17 +52,17 @@ def fill(puzzle, dom):
         else:
             puzzle.blank = i
 
-    dom.setContents(contents)
-    dom.toggleClass(puzzle.blank, "hidden")
+    dom.set_contents(contents)
+    dom.toggle_class(puzzle.blank, "hidden")
 
 
 def swap(puzzle, dom, source):
-    dom.setContents({
-        "t"+str(puzzle.blank): dom.getContent("t"+str(source)),
+    dom.set_contents({
+        "t"+str(puzzle.blank): dom.get_content("t"+str(source)),
         "t"+str(source): ""
     })
 
-    dom.toggleClasses({
+    dom.toggle_classes({
         puzzle.blank: "hidden",
         source: "hidden"
     })
@@ -70,64 +70,64 @@ def swap(puzzle, dom, source):
     puzzle.blank = source
 
 
-def convertX(pos):
+def convert_x(pos):
     return pos % 4
 
 
-def convertY(pos):
+def convert_y(pos):
     return pos >> 2  # pos / 4
 
 
 def convert(pos):
-    return convertX(pos), convertY(pos)
+    return convert_x(pos), convert_y(pos)
 
 
-def drawSquare(board, x, y):
-    board.pushTag("use")
-    board.putAttribute("id", y * 4 + x)
-    board.putAttribute("data-xdh-onevent", "Swap")
-    board.putAttribute("x", x * 100 + 24)
-    board.putAttribute("y", y * 100 + 24)
-    board.putAttribute("href", "#stone")
-    board.popTag()
+def draw_square(board, x, y):
+    board.push_tag("use")
+    board.put_attribute("id", y * 4 + x)
+    board.put_attribute("data-xdh-onevent", "Swap")
+    board.put_attribute("x", x * 100 + 24)
+    board.put_attribute("y", y * 100 + 24)
+    board.put_attribute("href", "#stone")
+    board.pop_tag()
 
 
-def drawGrid(dom):
-    board = Atlas.createHTML("g")
+def draw_grid(dom):
+    board = Atlas.create_HTML("g")
     for x in range(0, 4):
         for y in range(0, 4):
-            drawSquare(board, x, y)
-    dom.setLayout("Stones", board)
+            draw_square(board, x, y)
+    dom.set_layout("Stones", board)
 
 
-def setText(texts, x, y):
-    texts.pushTag("tspan")
-    texts.putAttribute("id", "t" + str(y * 4 + x))
-    texts.putAttribute("x", x * 100 + 72)
-    texts.putAttribute("y", y * 100 + 90)
-    texts.popTag()
+def set_text(texts, x, y):
+    texts.push_tag("tspan")
+    texts.put_attribute("id", "t" + str(y * 4 + x))
+    texts.put_attribute("x", x * 100 + 72)
+    texts.put_attribute("y", y * 100 + 90)
+    texts.pop_tag()
 
 
-def setTexts(dom):
-    texts = Atlas.createHTML("text")
+def set_texts(dom):
+    texts = Atlas.create_HTML("text")
     for x in range(0, 4):
         for y in range(0, 4):
-            setText(texts, x, y)
-    dom.setLayout("Texts", texts)
+            set_text(texts, x, y)
+    dom.set_layout("Texts", texts)
 
 
 def scramble(puzzle, dom):
-    drawGrid(dom)
-    setTexts(dom)
+    draw_grid(dom)
+    set_texts(dom)
     fill(puzzle, dom)
 
 
-def acConnect(self, dom):
-    dom.setLayout("", readAsset("Main.html"))
+def ac_connect(self, dom):
+    dom.set_layout("", read_asset("Main.html"))
     scramble(self, dom)
 
 
-def acSwap(self, dom, id):
+def ac_swap(self, dom, id):
     ix, iy = convert(int(id))
     bx, by = convert(self.blank)
 
@@ -135,18 +135,18 @@ def acSwap(self, dom, id):
         delta = 4 if by < iy else -4
         while(by != iy):
             swap(self, dom, self.blank+delta)
-            by = convertY(self.blank)
+            by = convert_y(self.blank)
     elif (iy == by):
         delta = 1 if bx < ix else -1
         while(bx != ix):
             swap(self, dom, self.blank+delta)
-            bx = convertX(self.blank)
+            bx = convert_x(self.blank)
 
 
 callbacks = {
-    "": acConnect,
-    "Swap": acSwap,
+    "": ac_connect,
+    "Swap": ac_swap,
     "Scramble": lambda self, dom, id: scramble(self, dom)
 }
 
-Atlas.launch(callbacks, Puzzle, readAsset("Head.html"), "15-puzzle")
+Atlas.launch(callbacks, Puzzle, read_asset("Head.html"), "15-puzzle")

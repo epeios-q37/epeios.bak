@@ -69,18 +69,18 @@ contacts = [
 
 current = None
 
-def readAsset(path):
-    return Atlas.readAsset(path, "Contacts")
+def read_asset(path):
+    return Atlas.read_asset(path, "Contacts")
 
 
 def displayContact(dom, contact):
     global state
-    dom.setContents(contact)
+    dom.set_contents(contact)
 
     if (state == State.EDIT):
-        dom.enableElement("Contact")
+        dom.enable_element("Contact")
     elif (state == State.DISPLAY):
-        dom.disableElement("Contact")
+        dom.disable_element("Contact")
     else:
         raise Exception("Unknown state!")
 
@@ -92,22 +92,22 @@ def displayContacts(dom, contacts):
 
     for i in range(len(contacts)):
         contact = contacts[i]
-        html.pushTag("tr")
-        html.putAttribute("id", i)
-        html.putAttribute("data-xdh-onevent", "Select")
+        html.push_tag("tr")
+        html.put_attribute("id", i)
+        html.put_attribute("data-xdh-onevent", "Select")
         for key in contact:
             if (key == 'Note'):
                 id = "Note." + str(i)
-                html.pushTag("td")
-                html.putAttribute("id", id)
+                html.push_tag("td")
+                html.put_attribute("id", id)
                 notes[id] = contact[key]
             else:
-                html.putTagAndValue("td", contact[key])
-        html.popTag()
+                html.put_tag_and_value("td", contact[key])
+        html.pop_tag()
 
-    dom.setLayout("Content", html)
+    dom.set_layout("Content", html)
 
-    dom.setContents(notes)
+    dom.set_contents(notes)
 
 
 def display(dom, contacts):
@@ -115,9 +115,9 @@ def display(dom, contacts):
 
     if (len(contacts)):
         displayContacts(dom, contacts)
-        dom.removeClass("Contacts", "hidden")
+        dom.remove_class("Contacts", "hidden")
     else:
-        dom.addClass("Contacts", "hidden")
+        dom.add_class("Contacts", "hidden")
 
     if (current):
         displayContact(dom, contacts[current])
@@ -127,22 +127,22 @@ def handleButtonVisibility(dom):
     global state, current
 
     if state == State.DISPLAY:
-        dom.addClass("EditionButtons", "hidden")
-        dom.disableElement("HideConsultation")
+        dom.add_class("EditionButtons", "hidden")
+        dom.disable_element("HideConsultation")
         if current is None:
-            dom.enableElement("HideConsultationAndSelection")
+            dom.enable_element("HideConsultationAndSelection")
         else:
-            dom.disableElement("HideConsultationAndSelection")
+            dom.disable_element("HideConsultationAndSelection")
     elif State == State.EDIT:
-        dom.removeClass("EditionButtons", "hidden")
-        dom.enableElements(("HideConsultation", "HideConsultationAndSelection"))
+        dom.remove_class("EditionButtons", "hidden")
+        dom.enable_elements(("HideConsultation", "HideConsultationAndSelection"))
     else:
         raise Exception("Unknown state!")
 
 
 def acConnect(dom):
     global contacts, state
-    dom.setLayout("", readAsset("Main.html"))
+    dom.set_layout("", read_asset("Main.html"))
     display(dom, contacts)
     state = State.DISPLAY
     handleButtonVisibility(dom)
@@ -167,7 +167,7 @@ def acEdit(dom):
 
 def acSubmit(dom):
     global contacts
-    [name, address, phone, note] = dom.getContents(
+    [name, address, phone, note] = dom.get_contents(
         ["Name.edit", "Address.edit", "Phone.edit", "Note.edit"]).values()
 
     name = name.strip()
@@ -195,4 +195,4 @@ callbacks = {
     "Submit": acSubmit,
 }
 
-Atlas.launch(callbacks, None, readAsset("Head.html"), "Contact")
+Atlas.launch(callbacks, None, read_asset("Head.html"), "Contact")
