@@ -310,12 +310,13 @@ function patchATag(node) {
 	}
 }
 
-function fetchEventHandlers(id) {
+function fetchEventHandlersAndWidgest(id) {
 	var root = getElement(id);
 	var node = root;	// Handling root, due to 'About'/'Refresh' corresponding action handling.
 	var cont = true;
 	var candidate;
-	var digests = "";
+	var eventDigests = "";
+    var widgetDigests = ""
 
 	if (node.firstChild === null)
 		cont = false;
@@ -323,10 +324,14 @@ function fetchEventHandlers(id) {
 	while (cont) {
 		if (node.nodeType === Node.ELEMENT_NODE) {
 			if (node.hasAttribute(onEventAttributeName))
-				digests += "(" + getOrGenerateId(node) + "|" + getPatchedNodeName( node ) + "|((" + node.getAttribute(onEventAttributeName) + ")))|";
+				eventDigests += "(" + getOrGenerateId(node) + "|" + getPatchedNodeName( node ) + "|((" + node.getAttribute(onEventAttributeName) + ")))|";
 
 			if (node.hasAttribute(onEventsAttributeName))
-				digests += "(" + getOrGenerateId(node) + "|" + getPatchedNodeName(node) + "|(" + node.getAttribute(onEventsAttributeName) + "))|";
+				eventDigests += "(" + getOrGenerateId(node) + "|" + getPatchedNodeName(node) + "|(" + node.getAttribute(onEventsAttributeName) + "))|";
+          
+            if (node.hasAttribute(widgetAttributeName))
+				widgetDigests += "(" + getOrGenerateId(node) + "|(" + node.getAttribute(widgetAttributeName) + "))|";
+
 
 			if (node.nodeName === "A")
 				patchATag(node);
@@ -348,7 +353,7 @@ function fetchEventHandlers(id) {
 	if (typeof convertTrees === 'function')
 		convertTrees();	// from 'mktree'.
 
-	return digests;
+	return "(" + eventDigests + ")|(" + widgetDigests + ")";
 }
 
 function fetchWidgets(id) {

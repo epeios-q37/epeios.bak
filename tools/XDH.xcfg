@@ -60,7 +60,7 @@
 							break;
 						}
 
-						var digests = "(" + fetchEventHandlers(id) + ")|(" + fetchWidgets(id) + ")";
+						var digests = fetchEventHandlersAndWidgest(id);
 						digests;  // Not returned to user. Splitted and given after processing to 'SetEnventHandlers_1' and  InstantiateWidgets_1' above internal scripts.
 					} ]]>
 				</Script>
