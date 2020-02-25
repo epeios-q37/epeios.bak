@@ -50,7 +50,7 @@
 				<xpp:expand select="XDH"/>
 			</Modules>
 		</Modules>
-		<Module>dmopool</Module>
+		<Module>faaspool</Module>
 		<Module>registry</Module>
 		<Module Path="../../">prtcl</Module>
 		<Modules Path="../" Group="Shared">
@@ -62,8 +62,11 @@
 		<SourceDir>../..</SourceDir>
 	</SourceDirs>
 	<Files>
-		<File>README.md</File>
-		<File>CHANGELOG.md</File>
+        <Files RTW=".">
+            <File>README.md</File>
+            <File>Makefile</File>
+            <File>CHANGELOG.md</File>
+        </Files>
 		<File>NOTES.md</File>
 		<File>XDHq.js</File>
 	</Files>
@@ -72,9 +75,7 @@
 			<Script Name="install">node-pre-gyp install --fallback-to-build</Script>
 	 </Scripts>
 	</NodeJS>
-	<RTW Description="'XDHTML' proxy" Keywords="XDHTML,proxy">
-		<Dir>xdhq</Dir>
-	</RTW>
+    <RTW Description="'XDHTML' proxy" Keywords="XDHTML,proxy" Folder="xdhq"/>
 	<PreprocessorDefinitions>
 	</PreprocessorDefinitions>
 </Project>

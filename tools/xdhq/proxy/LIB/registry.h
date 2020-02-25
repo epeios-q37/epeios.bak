@@ -30,7 +30,7 @@ namespace registry {
 
 		extern rEntry
 			HostService,
-			DemoService;
+			FaaSService;
 	}
 
 	namespace definition {

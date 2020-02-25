@@ -1,5 +1,9 @@
 # *XDHWebQ* *CHANGELOG*
 
+## 2020-02-25
+
+- simplification of JS scripts handling,
+
 ## 2019-07-06
 
 - adding new layout related functionalities,

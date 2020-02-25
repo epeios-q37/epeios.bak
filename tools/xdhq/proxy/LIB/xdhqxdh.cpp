@@ -19,7 +19,7 @@
 
 #include "xdhqxdh.h"
 
-#include "dmopool.h"
+#include "faaspool.h"
 #include "registry.h"
 
 #include "prtcl.h"
@@ -165,7 +165,7 @@ qRB;
 	if ( sclmisc::OGetValue( ::registry::parameter::HostService, HostService ) )
 		Core_.Init( HostService.Convert( Buffer ), 0, sck::NoTimeout );
 
-	dmopool::Initialize();
+	faaspool::Initialize();
 	LogDriver_.Init( cio::COut );
 qRR;
 qRT;
@@ -399,7 +399,7 @@ namespace {
 	{
 	private:
 		eMode_ Mode_;
-		dmopool::rRWDriver DemoDriver_;
+		faaspool::rRWDriver DemoDriver_;
 		csdmnc::rRWDriver ProdDriver_;
 		struct {
 			sId_ Id;
@@ -561,7 +561,7 @@ namespace {
 
 				DemoDriver_.Init();
 
-				if ( dmopool::GetConnection( Token, Logging_.IP, DemoDriver_.GetShared() ) ) {
+				if ( faaspool::GetConnection( Token, Logging_.IP, DemoDriver_.GetShared() ) ) {
 					Mode_ = mDemo;
 					Success = true;
 				}

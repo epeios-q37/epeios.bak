@@ -17,9 +17,9 @@
     along with 'XDHq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-# include "dmopool.h"
+# include "faaspool.h"
 
-using namespace dmopool;
+using namespace faaspool;
 
 #include "prtcl.h"
 
@@ -42,7 +42,7 @@ namespace {
 
 	namespace registry_ {
 		namespace parameter {
-			sclrgstry::rEntry Notification( "DemoNotification", sclrgstry::Parameters );
+			sclrgstry::rEntry Notification( "FaaSNotification", sclrgstry::Parameters );
 		}
 	}
 
@@ -562,12 +562,12 @@ namespace {
 	}
 }
 
-void dmopool::Initialize( void )
+void faaspool::Initialize( void )
 {
 qRH;
 	csdbns::sService Service = csdbns::Undefined;
 qRB;
-	if ( (Service = sclmisc::OGetU16( registry::parameter::DemoService, csdbns::Undefined ) ) != csdbns::Undefined ) {
+	if ( (Service = sclmisc::OGetU16( registry::parameter::FaaSService, csdbns::Undefined ) ) != csdbns::Undefined ) {
 		Listener_.Init( Service );
 
 		mtk::RawLaunch( ListeningRoutine_, NULL );
@@ -577,7 +577,7 @@ qRT;
 qRE;
 }
 
-bso::sBool dmopool::GetConnection(
+bso::sBool faaspool::GetConnection(
 	const str::dString &Token,
 	str::dString &IP,
 	rShared &Shared )
@@ -619,7 +619,7 @@ namespace {
 }
 
 
-qGCTOR( dmopool )
+qGCTOR( faaspool )
 {
 	MutexHandler_ = mtx::Create();
 	Tokens_.Init();
@@ -628,7 +628,7 @@ qGCTOR( dmopool )
 	sclxdhtml::SetHeadFunction( GetHead_ );
 }
 
-qGDTOR( dmopool )
+qGDTOR( faaspool )
 {
 	if ( MutexHandler_ != mtx::Undefined )
 		mtx::Delete( MutexHandler_, true );

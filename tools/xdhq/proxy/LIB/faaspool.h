@@ -22,17 +22,17 @@
 	Both will exist together until switching from old to new one is achieved.
 */
 
-// DeMO POOL
-// Handles the pool of connexion needed by the DEMO mode.
+// FAAS (FaaS) POOL
+// Handles the pool of connexion needed by the FaaS mode.
 
-#ifndef DMOPOOL_INC_
-# define DMOPOOL_INC_
+#ifndef FAASPOOL_INC_
+# define FAASPOOL_INC_
 
 # include "prtcl.h"
 
 # include "sck.h"
 
-namespace dmopool {
+namespace faaspool {
 	void Initialize();
 
 	// If modified, modify also the 'Undefined' definition.
