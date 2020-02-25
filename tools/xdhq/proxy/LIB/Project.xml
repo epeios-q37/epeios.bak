@@ -73,7 +73,7 @@
 	<NodeJS>
 		<Scripts>
 			<Script Name="install">node-pre-gyp install --fallback-to-build</Script>
-	 </Scripts>
+        </Scripts>
 	</NodeJS>
     <RTW Description="'XDHTML' proxy" Keywords="XDHTML,proxy" Folder="xdhq"/>
 	<PreprocessorDefinitions>

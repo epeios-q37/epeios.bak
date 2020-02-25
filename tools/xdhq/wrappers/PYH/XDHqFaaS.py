@@ -198,8 +198,8 @@ def getStrings():
 
 def _init():
 	global _token, _socket, _wAddr, _wPort, _cgi
-	pAddr = "atlastk.org"
-	pPort = 53800
+	pAddr = "faas1.q37.info"
+	pPort = 53700
 	_wAddr = ""
 	_wPort = ""
 	_cgi = "xdh"

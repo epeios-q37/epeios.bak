@@ -42,7 +42,15 @@ namespace {
 
 	namespace registry_ {
 		namespace parameter {
-			sclrgstry::rEntry Notification( "FaaSNotification", sclrgstry::Parameters );
+		}
+
+		namespace definition {
+            namespace {
+                sclrgstry::rEntry FaaS_("FaaS", sclrgstry::Definitions);
+            }
+
+			sclrgstry::rEntry Notification( "Notification", FaaS_ );
+			sclrgstry::rEntry URL( "URL", FaaS_ );
 		}
 	}
 
@@ -333,7 +341,7 @@ namespace {
 		Notification.Init( Message );
 
 		if ( Notification.IsEmpty() )
-			sclmisc::OGetValue( registry_::parameter::Notification, Notification );
+			sclmisc::OGetValue( registry_::definition::Notification, Notification );
 
 		prtcl::Put( Notification, Flow );
 	qRR;
@@ -380,7 +388,7 @@ namespace {
         tagsbs::tvalues Tags;
     qRB
         TaggedURL.Init();
-        sclmisc::MGetValue(registry::definition::URL, TaggedURL);
+        sclmisc::MGetValue(registry_::definition::URL, TaggedURL);
 
         if ( RawService.Amount()) {
             Service.Init(":");
@@ -567,7 +575,7 @@ void faaspool::Initialize( void )
 qRH;
 	csdbns::sService Service = csdbns::Undefined;
 qRB;
-	if ( (Service = sclmisc::OGetU16( registry::parameter::FaaSService, csdbns::Undefined ) ) != csdbns::Undefined ) {
+	if ( (Service = sclmisc::OGetU16( registry::parameter::faas::Service, csdbns::Undefined ) ) != csdbns::Undefined ) {
 		Listener_.Init( Service );
 
 		mtk::RawLaunch( ListeningRoutine_, NULL );

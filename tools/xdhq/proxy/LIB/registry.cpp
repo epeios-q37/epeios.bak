@@ -22,6 +22,6 @@
 using sclrgstry::rEntry;
 
 rEntry registry::parameter::HostService( "HostService", sclrgstry::Parameters );
-rEntry registry::parameter::FaaSService( "FaaSService", sclrgstry::Parameters );
-rEntry registry::definition::URL( "URL", sclrgstry::Definitions );
+rEntry registry::parameter::FaaS( "FaaS", sclrgstry::Parameters );
+rEntry registry::parameter::faas::Service( "Service", registry::parameter::FaaS );
 

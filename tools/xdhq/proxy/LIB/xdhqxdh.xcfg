@@ -6,25 +6,29 @@
 		<Parameters>
 			<Language>en</Language>
 			<Command>Test</Command>
-			<HostService>localhost:53752</HostService>
-			<!-- Listening service (port) for the FaaS mode. If empty or == '0', FaaS behavior not launched. -->
-			<FaaSService>53800</FaaSService>
+			<HostService>localhost:53700</HostService>
+			<FaaS>
+                <!-- Listening service (port) for the FaaS mode. If empty or == '0', FaaS behavior not launched. -->
+                <Service>53700</Service>
+            </FaaS>
 			<!-- Default command -->
 			<Plugins>
 				<!--Plugin target="Token" Id="Forbidden"/-->
 			</Plugins>
-			<FaaSNotification>
-				<xpp:cdata>
+		</Parameters>
+		<Definitions>
+            <FaaS>
+                <URL>http://%Address%%Service%/xdh.php?_token=%Token%</URL>
+                <Notification>
+                    <xpp:cdata>
 ****************************************************************************
      Your application is connected to the free public server. Welcome!
      THIS SERVICE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
      EXPRESS OR IMPLIED. THE USE OF THIS SERVICE IS AT YOUR OWN RISK.
 ****************************************************************************
-				</xpp:cdata>
-			</FaaSNotification>
-		</Parameters>
-		<Definitions>
-			<URL>http://%Address%%Service%/xdh.php?_token=%Token%</URL>
+                    </xpp:cdata>
+                </Notification>
+            </FaaS>
 			<Plugins target="Token">
 				<xpp:define name="TokenPluginsDir">
 					<xpp:bloc>

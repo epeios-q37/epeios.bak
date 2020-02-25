@@ -329,7 +329,7 @@ namespace {
 	}
 
 	qENUM( Mode_ ) {
-		mDemo,	// Demo mode, direct connexion (not muxed) through the easy to install component.
+		mFaaS,	// FaaS mode, direct connexion (not muxed) through the easy to install component.
 		mProd,	// Production mode, muxed connexion through the native component.
 		m_amount,
 		m_Undefined
@@ -399,7 +399,7 @@ namespace {
 	{
 	private:
 		eMode_ Mode_;
-		faaspool::rRWDriver DemoDriver_;
+		faaspool::rRWDriver FaaSDriver_;
 		csdmnc::rRWDriver ProdDriver_;
 		struct {
 			sId_ Id;
@@ -408,8 +408,8 @@ namespace {
 		fdr::rRWDriver &D_( void )
 		{
 			switch ( Mode_ ) {
-			case mDemo:
-				return DemoDriver_;
+			case mFaaS:
+				return FaaSDriver_;
 				break;
 			case mProd:
 				return ProdDriver_;
@@ -559,10 +559,10 @@ namespace {
 			} else {
 				LogMessage.Append( Token );
 
-				DemoDriver_.Init();
+				FaaSDriver_.Init();
 
-				if ( faaspool::GetConnection( Token, Logging_.IP, DemoDriver_.GetShared() ) ) {
-					Mode_ = mDemo;
+				if ( faaspool::GetConnection( Token, Logging_.IP, FaaSDriver_.GetShared() ) ) {
+					Mode_ = mFaaS;
 					Success = true;
 				}
 			}
@@ -621,7 +621,7 @@ namespace {
 	public:
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, DemoDriver_, ProdDriver_ );
+			tol::reset( P, FaaSDriver_, ProdDriver_ );
 			Mode_ = m_Undefined;
 			xdhdws::sProxy::reset( P );
 			Logging_.Id = UndefinedId_;
@@ -630,7 +630,7 @@ namespace {
 		qCVDTOR( rSession_ )
 		bso::sBool Init( void )
 		{
-			tol::reset( DemoDriver_, ProdDriver_ );
+			tol::reset( FaaSDriver_, ProdDriver_ );
 			Mode_ = m_Undefined;
 
 			Logging_.IP.Init();

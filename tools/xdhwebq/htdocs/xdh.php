@@ -21,7 +21,7 @@ along with xdhwebq. If not, see <http://www.gnu.org/licenses/>.
 error_reporting(E_ALL);
 
 $host = "localhost";
-$service = 53741;
+$service = 53710;
 
 function send($query) {
  /* creates a TCP/IP socket. */

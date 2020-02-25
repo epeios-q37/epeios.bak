@@ -62,7 +62,7 @@ XDHqWrapper::init();
 
 class XDHq_PROD extends XDHq_SHRD {
 	static function launch() {
-		XDHqWrapper::_call( 1, "53752");
+		XDHqWrapper::_call( 1, "53700");
 	}
 }
 

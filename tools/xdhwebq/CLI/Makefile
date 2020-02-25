@@ -392,7 +392,7 @@ ifndef Q37_EPEIOS
 	src += :src:src/epeios
 	out = ./
 else
-	src += :$(Q37_EPEIOS)/stable
+	src += :$(Q37_EPEIOS)
 	out = $(dest)
 endif
 
