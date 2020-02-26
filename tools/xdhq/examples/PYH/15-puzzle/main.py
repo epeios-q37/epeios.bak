@@ -30,6 +30,7 @@ sys.path.append("../atlastk")
 
 import atlastk as Atlas
 
+
 class Puzzle:
     pass
 
@@ -127,9 +128,12 @@ def ac_connect(self, dom):
     scramble(self, dom)
 
 
-def ac_swap(self, dom, id):
-    ix, iy = convert(int(id))
-    bx, by = convert(self.blank)
+def ac_swap_old(self, dom, id):
+    new = int(id)
+    current = self.blank
+
+    ix, iy = convert(new)
+    bx, by = convert(current)
 
     if (ix == bx):
         delta = 4 if by < iy else -4
@@ -143,10 +147,57 @@ def ac_swap(self, dom, id):
             bx = convert_x(self.blank)
 
 
+def build(sourceIds,targetIds,sourceIdsAndContents, blank):
+
+    targetIdsAndContents = {}
+
+    for i in range(len(sourceIds)):
+        targetIdsAndContents[targetIds[i]] = sourceIdsAndContents[sourceIds[i]]
+        
+    targetIdsAndContents["t" + blank] = ""
+        
+    return targetIdsAndContents
+
+
+def ac_swap(self, dom, id):
+    target = int(id)
+    source = self.blank
+    sourceIds = []
+    targetIds = []
+
+    ix, iy = convert(target)
+    bx, by = convert(source)
+
+    if (ix == bx):
+        delta = 4 if by < iy else -4
+        while(by != iy):
+            targetIds.append("t"+str(source))
+            source += delta
+            sourceIds.append("t"+str(source))
+            by = convert_y(source)
+    elif (iy == by):
+        delta = 1 if bx < ix else -1
+        while(bx != ix):
+            targetIds.append("t"+str(source))
+            source += delta
+            sourceIds.append("t"+str(source))
+            bx = convert_x(source)
+
+    dom.set_contents(build(sourceIds, targetIds, dom.get_contents(sourceIds), id))
+
+    dom.toggle_classes({
+        self.blank: "hidden",
+        target: "hidden"
+    })
+
+    self.blank = target
+
+
 callbacks = {
     "": ac_connect,
     "Swap": ac_swap,
     "Scramble": lambda self, dom, id: scramble(self, dom)
 }
+
 
 Atlas.launch(callbacks, Puzzle, read_asset("Head.html"), "15-puzzle")
