@@ -26,9 +26,9 @@ $out = str_replace(array("\r", "\n", "\t"), '','
 			<!-- BEGIN -->
 			<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 			<meta http-equiv="Cache-Control" content="no-cache"/>
-			<script src="xdh/xdhtml.js"></script>
-			<script src="xdh/xdhwebq.js"></script>
-			<script src="xdh/qrcode.min.js"></script>
+			<script src="faas/xdhtml.js"></script>
+			<script src="faas/xdhwebq.js"></script>
+			<script src="faas/qrcode.min.js"></script>
 			<style id="XDHStyle"></style>'
 . $head . '
 			<script>handleQuery("'
