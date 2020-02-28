@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project xmlns:xpp="http://q37.info/ns/xpp/">
+	<xpp:bloc>
+		<!-- User definitions -->
+		<xpp:define name="Version">
+			<xpp:bloc/>
+		</xpp:define>
+		<xpp:define name="CopyrightYears">
+			<xpp:bloc>2019</xpp:bloc>
+		</xpp:define>
+		<xpp:set name="Credits" value="Epeios"/>
+		<xpp:set name="Type" value="Tool"/>
+	</xpp:bloc>
+	<xpp:set name="q37.project" env-var="Q37_PROJECT"/>
+	<xpp:expand value-of="q37.project"/>
+	<About>
+		<Program>wsq</Program>
+		<Software>WSq</Software>
+		<!-- Do not modify below value (used by the 'DVLSetTol' script)! -->
+		<UUID>883bf800-2f86-4e34-9e46-a610642b8d58</UUID>
+	</About>
+	<Modules xpp:marker="$">
+		<Modules Group="Epeios" Path="$EpeiosPath$/">
+			<Modules Group="Core">
+				<xpp:expand select="Core"/>
+				<Module>sck</Module>
+			</Modules>
+			<Modules Group="SCL">
+				<xpp:expand select="SCL"/>
+			</Modules>
+			<Modules Group="CSD">
+				<Module>csdbns</Module>
+				<Module>csdscb</Module>
+			</Modules>
+		</Modules>
+		<Module>registry</Module>
+	</Modules>
+	<Files/>
+    <RTW>
+        <Dir>wsq-cli</Dir>
+    </RTW>
+</Project>
