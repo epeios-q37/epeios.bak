@@ -35,49 +35,33 @@ bso::bool__  xtf::extended_text_iflow__::_GetCell(
 	str::string_ *Cell,
 	flw::byte__ Separator )
 {
-	bso::bool__ Cont = true;
 	flw::byte__ C = 0;
-	error__ Error = e_NoError;
 	utf__ UTF;
 
-	if ( !EndOfFlow( Error ) ) {
-		UTF.Init();
-		C = Get( UTF );
+	if ( EndOfFlow() )
+        qRFwk();
 
-		if ( C == Separator )
-			Cont = false;
-		else if ( (C == '\r') || (C == '\n') ) {
-			if ( _EOL != 0 )
-				Cont = false;
-			else if ( !EndOfFlow( Error ) ) {
-				UTF.Init();
-				C = Get( UTF );
-			} else
-				Cont = false;
-		}
+    UTF.Init();
+    C = Get( UTF );
 
-		while( Cont ) {
+    if ( ( C != Separator ) &&  ( C != '\r' ) && ( C != '\n') ) {
+        while( true ) {
+            if ( C == Separator )
+                break;
+            else if ( _Position.Column == 0 )
+                break;
+            else if ( Cell != NULL )
+                Cell->Append( (const bso::char__ *)UTF.Data, UTF.Size );
 
-			if ( C == Separator )
-				Cont = false;
-			else if ( _Position.Column == 0 )
-				Cont = false;
-			else if ( Cell != NULL )
-				Cell->Append( (const bso::char__ *)UTF.Data, UTF.Size );
+            if ( EndOfFlow() )
+                break;
 
-			if ( Cont && EndOfFlow( Error ) )
-				Cont = false;
+            UTF.Init();
+            C = Get( UTF );
+        }
+    }
 
-			if ( Cont == true )	 {
-				UTF.Init();
-				C = Get( UTF );
-			}
-		}
-	}
-
-	if ( EndOfFlow( Error ) )
-		return false;
-	else if ( Separator == 0 )
+	if ( Separator == 0 )
 		return true;
 	else
 		return ( C == Separator );

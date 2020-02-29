@@ -8,22 +8,29 @@
 - [stdz]: modification to comply with current standards;
 - [trvl]: trivial modifications;
 
+## 2020-02-29:
+
+- XML:
+  - [adpt],
+- XTF:
+  - improving new line (`\r` and/or `\n`) handling,
+
 ## 2020-02-11:
 
 - XDHUJP:
-   - events and widgets are now both handled automatically on a `'HandleLayout_1` calling,
+  - events and widgets are now both handled automatically on a `'HandleLayout_1` calling,
 
 ## 2020-02-09:
-	
+
 - XDHUTL:
-  -  removing unused widget related functions,
+  - removing unused widget related functions,
 
 ## 2020-02-07:
 
 - TAGSBS:
-   - introducing `GetLongTags(…)`,
+  - introducing `GetLongTags(…)`,
 - XDHCMN, XDHDWS, XDHUJP, XDHUJS:
-   - script are no more hardcoded, but retrieved from registry (both argument declaration and definition),
+  - script are no more hardcoded, but retrieved from registry (both argument declaration and definition),
 
 ## 2020-01-03:
 

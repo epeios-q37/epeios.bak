@@ -157,7 +157,7 @@ static status__ GetComment_(
 			Flow.Get( UTF );
 			Content.Append( (bso::char__ *)UTF.Data, UTF.Size );
 		}
-		
+
 		if ( Flow.EndOfFlow() )
 			return sUnexpectedEOF;
 
@@ -284,7 +284,7 @@ static sdr::size__ GetId_(
 	return Size;
 }
 
-static inline sdr::size__ GetName_( 
+static inline sdr::size__ GetName_(
 	_flow___ &Flow,
 	str::string_ &Name )
 {
@@ -480,7 +480,7 @@ inline status__ GetAttributeValue_(
 	char Delimiter,
 	entities_handling__ EntitiesHandling,
 	str::string_ &Value )
-{	
+{
 	bso::bool__ Dummy;
 
 	return GetValue_( Flow, Delimiter, EntitiesHandling, Value, Dummy );
@@ -756,7 +756,7 @@ qRB
 					_Tags.Top( _TagName );
 
 					_Token = tEndTag;
-	
+
 					if ( ( 1 << _Token ) & TokenToReport )
 						Continue = false;
 				} else {
@@ -962,7 +962,7 @@ qRB
 			case t_Undefined:
 				if ( _Flow.View() != '<' ) {
 					_Value.Init();
-					
+
 					HANDLE( GetTagValue_( _Flow, _Value, _EntitiesHandling, OnlySpaces ) );
 
 					if ( !OnlySpaces ) {
@@ -1309,7 +1309,7 @@ void xml::rWriter::PutRawAttribute(
 	F_() << ' ' << Name << '=' << GetAttributeDelimiter_( Delimiter );
 
 	flx::Copy( Flow, RF_() );
-		
+
 	F_() << GetAttributeDelimiter_( Delimiter );
 
 	Commit_();
@@ -1382,11 +1382,11 @@ void xml::rWriter::PutCData( flw::rRFlow &Flow )
 		F_() << '>';
 		TagNameInProgress_ = false;
 	}
-	
+
 	F_() << "<![CDATA[";
 
 	flw::Copy( Flow, RF_() );
-		
+
 	F_() << "]]>";
 
 	Commit_();
@@ -1449,7 +1449,7 @@ bso::sBool xml::rWriter::Put( rParser &Parser )
 		switch( Parser.Parse( xml::tfAll & ~xml::tfStartTagClosed ) ) {
 		case xml::tProcessingInstruction:
 			GetFlow() << Parser.DumpData();
-			
+
 			if ( GetOutfit() == xml::oIndent )
 				GetFlow() << txf::nl;
 

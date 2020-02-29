@@ -197,8 +197,6 @@ namespace xtf {
 		flw::iflow__ *_Flow;
 		// Position du prochain caractre.
 		pos__ _Position;
-		// '0' if no EOL char encountered, or the value of the EOL char ('\r' or '\n').
-		bso::char__ _EOL;
 		feeder__ _Feeder;
 		utf::utf__<feeder__> _UTFHandler;
 		utf__ _UTF;
@@ -341,9 +339,7 @@ namespace xtf {
 			_Position.reset( P );
 			_Position.Line = _Position.Column = 1;
 			_Flow = NULL;
-			_EOL = 0;
 			_Error = e_Undefined;
-
 		}
 		E_CVDTOR( extended_text_iflow__ );
 		extended_text_iflow__(
@@ -363,7 +359,6 @@ namespace xtf {
 		{
 			_Position.Init( Position );
 			_Flow = NULL;
-			_EOL = 0;
 			_Flow = &IFlow;
 			_Error = e_NoError;
 
@@ -393,35 +388,18 @@ namespace xtf {
 
 			flw::byte__ C = _UTF.Data[0];
 
-			if ( _EOL == 0 ) {
-				if ( ( C == '\n' ) || ( C == '\r' ) ) {
-					_EOL = (flw::byte__)C;
-					_NewLineAdjust();
-				} else {
-					_NewCharAdjust();
-				}
-			} else if ( _EOL == '\r' ) {
-				if ( C == '\n' ) {
-					_EOL = 0;
-				} else if ( C == '\r' ) {
-					_EOL = (flw::byte__)C;
-					_NewLineAdjust();
-				} else {
-					_EOL = 0;
-					_NewCharAdjust();
-				}
-			} else if ( _EOL == '\n' ) {
-				if ( C == '\r' ) {
-					_EOL = 0;
-				} else if ( C == '\n' ) {
-					_EOL = (flw::byte__)C;
-					_NewLineAdjust();
-				} else {
-					_EOL = 0;
-					_NewCharAdjust();
-				}
-			} else
-				qRFwk();
+			if (C == '\n') {
+				_NewLineAdjust();
+
+				if ( !_F().EndOfFlow() && (_F().View() == '\r') )
+                    _F().Skip();
+			} else if (C == '\r') {
+				_NewLineAdjust();
+
+				if ( !_F().EndOfFlow() && (_F().View() == '\n') )
+                    _F().Skip();
+            } else
+                _NewCharAdjust();
 
 			return C;
 		}
@@ -453,44 +431,24 @@ namespace xtf {
 			_GetLine( NULL );
 		}
 		//f Return the next character in the flow, but let it in the flow.
-		flw::byte__ View(
-			utf__ *UTF = NULL,
-			bso::bool__ HandleNL = false )
+		flw::byte__ View( utf__ *UTF = NULL )
 		{
 			if ( !_PrefetchUTF( false ) )
 				qRFwk();
 
 			flw::byte__ C = _UTF.Data[0];
 
-			if ( HandleNL && _EOL ) {
-
-				if ( ( ( _EOL == '\r' ) && ( C == '\n' ) )
-					 || ( _EOL == '\n' && ( C == '\r' ) ) ) {
-
-						_EOL = 0;
-
-						_F().Skip( _UTF.Size );
-
-						if ( !_PrefetchUTF( false ) )
-							qRFwk();
-
-						C = _UTF.Data[0];
-				}
-			}
-
 			if ( UTF != NULL )
 				*UTF = _UTF;
 
 			return C;
 		}
-		flw::byte__ View(
-			utf__ &UTF,
-			bso::bool__ HandleNL = false )
+		flw::byte__ View( utf__ &UTF )
 		{
-			return View( &UTF, HandleNL );
+			return View( &UTF );
 		}
-		bso::bool__ EndOfFlow( error__ *Error = NULL )	// Si erreur, 'ErrorMeaning' est initialis, sinon reste vide.
-		{
+		bso::bool__ EndOfFlow( error__ *Error = NULL )	// If returning 'true' and there is an error and 'Error' != NULL,
+		{                                               // 'Error' contains then the error.s
 			if ( _Error == e_NoError ) {
 				if ( _UTF.Size != 0 )
 					return false;
