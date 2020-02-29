@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-// SHA-1
+// 
 
 #ifndef SHA1_INC_
 # define SHA1_INC_
