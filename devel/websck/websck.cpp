@@ -147,6 +147,53 @@ namespace {
     }
 }
 
+bso::sSize websck::rRDriver::GetLength( flw::rRFlow &Flow )
+{
+    bso::sSize Length = ( Flow.Get() & 0x7f );
+
+    switch ( Length ) {
+    case 127:
+        Length = Flow.Get();
+        Length = Length << 8 | Flow.Get();
+        Length = Length << 8 | Flow.Get();
+        Length = Length << 8 | Flow.Get();
+        Length = Length << 8 | Flow.Get();
+        Length = Length << 8 | Flow.Get();
+        Length = Length << 8 | Flow.Get();
+        Length = Length << 8 | Flow.Get();
+        break;
+    case 126:
+        Length = Flow.Get();
+        Length = Length << 8 | Flow.Get();
+        break;
+    default:
+        break;
+    }
+
+    return Length;
+}
+
+fdr::size__ websck::rRDriver::FDRRead(
+    fdr::size__ Maximum,
+    fdr::byte__ *Buffer )
+{
+    bso::sSize Amount = 0;
+
+    if ( Length_ == 0 ) {
+        Flow_.Skip();
+        Length_ = GetLength( Flow_ );
+        Flow_.Read(sizeof(Mask_), &Mask_);
+        MaskCounter_ = 0;
+    }
+
+    while ( Length_ && ( Amount < Maximum ) ) {
+        Buffer[Amount++] = Flow_.Get() ^ ((bso::sByte *)&Mask_)[MaskCounter_++%4];
+        Length_--;
+    }
+
+    return Amount;
+}
+
 void websck::Handshake(
     fdr::rRWDriver &Driver,
     dFields &Fields )

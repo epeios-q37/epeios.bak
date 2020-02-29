@@ -58,7 +58,7 @@ namespace websck {
 
             return *this;
         }
-		void plug( qASd *AS )
+        void plug( qASd *AS )
 		{
             Label.plug( AS );
 			Value.plug( AS );
@@ -90,52 +90,11 @@ namespace websck {
         bso::sSize Length_;
         bso::sU32 Mask_;
         bso::sU8 MaskCounter_;
-        bso::sSize GetLength( flw::rRFlow &Flow )
-        {
-            bso::sSize Length = ( Flow.Get() & 0x7f );
-
-            switch ( Length ) {
-            case 127:
-                Length = Flow.Get();
-                Length = Length << 8 | Flow.Get();
-                Length = Length << 8 | Flow.Get();
-                Length = Length << 8 | Flow.Get();
-                Length = Length << 8 | Flow.Get();
-                Length = Length << 8 | Flow.Get();
-                Length = Length << 8 | Flow.Get();
-                Length = Length << 8 | Flow.Get();
-                break;
-            case 126:
-                Length = Flow.Get();
-                Length = Length << 8 | Flow.Get();
-                break;
-            default:
-                break;
-            }
-
-            return Length;
-        }
-    protected:
+        bso::sSize GetLength( flw::rRFlow &Flow );
+     protected:
     	virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
-			fdr::byte__ *Buffer ) override
-		{
-            bso::sSize Amount = 0;
-
-            if ( Length_ == 0 ) {
-                Flow_.Skip();
-                Length_ = GetLength( Flow_ );
-                Flow_.Read(sizeof(Mask_), &Mask_);
-                MaskCounter_ = 0;
-            }
-
-            while ( Length_ && ( Amount < Maximum ) ) {
-                Buffer[Amount++] = Flow_.Get() ^ ((bso::sByte *)&Mask_)[MaskCounter_++%4];
-                Length_--;
-            }
-
-			return Amount;
-		}
+			fdr::byte__ *Buffer ) override;
 		virtual bso::sBool FDRDismiss(
 			bso::sBool Unlock,
 			qRPN ) override
