@@ -25,6 +25,7 @@
 				<xpp:expand select="Core"/>
 				<Module>sck</Module>
 				<Module>sha1</Module>
+				<Module>websck</Module>
 			</Modules>
 			<Modules Group="SCL">
 				<xpp:expand select="SCL"/>
