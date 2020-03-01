@@ -10,7 +10,7 @@
 
 ## 2020-02-29:
 
-- CDGB64, CIO, CRPTGR, FLX, XML:
+- CDGB64, CIO, CRPTGR, CSDMXC, FLX, LOGQ, LTF, XML:
     - [adpt],
 - FLW:
     - [stdz],

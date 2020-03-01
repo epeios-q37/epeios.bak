@@ -31,7 +31,7 @@
 #define LTF_DBG
 #endif
 
-//D Line Text Flow. 
+//D Line Text Flow.
 
 #include "err.h"
 #include "fdr.h"
@@ -64,7 +64,7 @@ namespace ltf {
 			const fdr::byte__ *Buffer,
 			fdr::size__ Maximum ) override
 		{
-			bso::sBool Overflow = false; 
+			bso::sBool Overflow = false;
 
 			if ( ( _Amount + Maximum ) > _Size ) {
 				Overflow = true;
@@ -98,7 +98,7 @@ namespace ltf {
 		}
 		virtual fdr::sTID FDRWTake( fdr::sTID Owner ) override
 		{
-			return _TF().Flow().ODriver().WTake( Owner );
+			return _TF().Flow().WDriver().WTake( Owner );
 		}
 	public:
 		void reset( bso::bool__ P = true )
@@ -125,7 +125,7 @@ namespace ltf {
 			_TFlow = &TFlow;
 
 			_oflow_driver___::Init( ThreadSafety );
-			
+
 			_Data = Data;
 
 			_Size = (bso::u8__)Size;

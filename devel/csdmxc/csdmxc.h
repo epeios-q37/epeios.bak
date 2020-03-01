@@ -243,7 +243,7 @@ qRE
 			Ping_.Mutex = CSDMXC_NO_MUTEX;
 		}
 		qCVDTOR( rCore );
-		bso::bool__ Init( 
+		bso::bool__ Init(
 			cCallback &Callback,
 			bso::uint__ PingDelay = 0,
 			cLog *LogCallback = NULL )
@@ -255,7 +255,7 @@ qRE
 
 			MainMutex_ = _Create();
 			Log_.Mutex = _Create();
-			Log_.Callback = LogCallback;                
+			Log_.Callback = LogCallback;
 
 			UPs.Init();
 
@@ -392,12 +392,12 @@ qRE
 		qRH;
 			bso::sBool Unlocked = false;
 		qRB;
-			Unlocked = !Flow_.IDriver().IsLocked();	/* Below operation will lock the read driver,
+			Unlocked = !Flow_.RDriver().IsLocked();	/* Below operation will lock the read driver,
 													so we have to unlock it when it was now already locked,
 													so another thread will be able to take the ownership. */
 			Flow_.Commit( Unlock );
 
-		
+
 			if ( Id_ == CSDMXB_UNDEFINED ) {
 				Id_ = GetId( Flow_ );
 				Return = true;
@@ -410,7 +410,7 @@ qRE
 		qRR;
 		qRT;
 			if ( Unlocked )
-				Flow_.IDriver().Unlock( err::h_Default );
+				Flow_.RDriver().Unlock( err::h_Default );
 		qRE;
 			return Return;
 		}

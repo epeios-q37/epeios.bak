@@ -37,7 +37,7 @@
 namespace logq {
 
 	typedef fdr::oflow_driver_base___ rFDRiver_;
-	
+
 	template <int size = LOGQ_DEFAULT_SIZE> class rFDriver
 	: public rFDRiver_
 	{
@@ -131,7 +131,7 @@ namespace logq {
 		}
 		virtual fdr::sTID FDRWTake( fdr::sTID Owner ) override
 		{
-			return LTFlow_.Flow().ODriver().WTake( Owner );
+			return LTFlow_.Flow().WDriver().WTake( Owner );
 		}
 	public:
 		void reset( bso::sBool P = true )
