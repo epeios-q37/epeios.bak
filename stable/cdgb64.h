@@ -31,7 +31,7 @@
 #endif
 
 
-//D CoDinG Base 64 
+//D CoDinG Base 64
 
 #include "err.h"
 #include "flw.h"
@@ -101,7 +101,7 @@ namespace cdgb64 {
 		eFlavor Flavor_;
 		fdr::byte__ _Cache[3];
 		bso::u8__ _Amount;
-		flw::oflow__ *_Flow;	
+		flw::oflow__ *_Flow;
 	protected:
 		virtual fdr::size__ FDRWrite(
 			const fdr::byte__ *Buffer,
@@ -208,7 +208,7 @@ namespace cdgb64 {
 		}
 		virtual fdr::sTID FDRWTake( fdr::sTID Owner ) override
 		{
-			return _Flow->ODriver().WTake( Owner );
+			return _Flow->WDriver().WTake( Owner );
 		}
 	public:
 		void reset( bso::bool__ P = true )
@@ -319,7 +319,7 @@ namespace cdgb64 {
 		}
 		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
 		{
-			return F_().IDriver().RTake( Owner );
+			return F_().RDriver().RTake( Owner );
 		}
 	public:
 		void reset( bso::sBool P = true )
@@ -329,7 +329,7 @@ namespace cdgb64 {
 		}
 		qCVDTOR( rSkippingIFlowDriver_ );
 		void Init(
-			flw::rRFlow &Flow, 
+			flw::rRFlow &Flow,
 			fdr::eThreadSafety ThreadSafety )
 		{
 			rIFlowDriver_::Init( ThreadSafety );
@@ -453,7 +453,7 @@ namespace cdgb64 {
 				_Size = 0;
 			}
 
-			return 3 * ( Amount >> 2 ) + ( ( Amount & 3 ) > 1 ? ( Amount & 3 ) - 1 : 0 ); 
+			return 3 * ( Amount >> 2 ) + ( ( Amount & 3 ) > 1 ? ( Amount & 3 ) - 1 : 0 );
 		}
 		virtual bso::sBool FDRDismiss(
 			bso::sBool Unlock,

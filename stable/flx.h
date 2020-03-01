@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-// FLow eXtension 
+// FLow eXtension
 
 #ifndef FLX_INC_
 # define FLX_INC_
@@ -123,7 +123,7 @@ namespace flx {
 			{
 				if ( Maximum > Taille_ )
 					Maximum = Taille_;
-		
+
 				memcpy( Buffer, Tampon_, (size_t)Maximum );
 
 				Tampon_ += Maximum;
@@ -323,7 +323,7 @@ namespace flx {
 	//c A bunch as input flow.driver.
 	template < typename bunch_, typename so__, int cache_size> class bunch_iflow_driver___
 	: public _idriver___<cache_size>
-	{ 
+	{
 	protected:
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
@@ -396,7 +396,7 @@ namespace flx {
 	//c A bunch as input flow.driver.
 	template < typename bunch_, typename so__,int  CacheSize> class bunch_iflow__
 	: public flw::standalone_iflow__<>
-	{ 
+	{
 	private:
 		bunch_iflow_driver___<bunch_, so__, CacheSize> _Driver;
 	public:
@@ -805,7 +805,7 @@ namespace flx {
 		{
 			return _Driver != NULL;
 		}
-	};	
+	};
 
 	// 'driver' qui relaye un autre 'driver'.
 	class relay_iflow_driver___
@@ -922,7 +922,7 @@ namespace flx {
 		}
 		virtual fdr::sTID FDRWTake( fdr::sTID Owner ) override
 		{
-			return _Flow->ODriver().WTake( Owner );
+			return _Flow->WDriver().WTake( Owner );
 		}
 	public:
 		void reset( bso::bool__ P = true )
@@ -960,7 +960,7 @@ namespace flx {
 
 	enum dismiss_handling__ {
 		dhPropagate,	// 'Dismiss()' est propag au flux embarqu.
-		dhHold,		// 'Dismiss()' n'est PAS propag au flux embarqu. 
+		dhHold,		// 'Dismiss()' n'est PAS propag au flux embarqu.
 		dh_amount,
 		dh_Undefined,
 		dh_Default = dhPropagate
@@ -1037,7 +1037,7 @@ namespace flx {
 		}
 		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
 		{
-			return _Flow->IDriver().RTake( Owner );
+			return _Flow->RDriver().RTake( Owner );
 		}
 	public:
 		void reset( bso::bool__ P = true )
@@ -1071,7 +1071,7 @@ namespace flx {
 		{
 			return _Flow != NULL;
 		}
-	};	
+	};
 
 	template <typename flow, typename sflow, typename driver, typename handling> class _size_embbeded_flow___
 	: public sflow
@@ -1106,7 +1106,7 @@ namespace flx {
 	: public fdr::ioflow_driver___<>
 	{
 	private:
-		mtx::mutex_handler__ 
+		mtx::mutex_handler__
 			_Read,
 			_Write;
 		const fdr::byte__ *_Buffer;
@@ -1237,12 +1237,12 @@ namespace flx {
 		{
 			_IO.reset( P );
 
-			if ( P ) 
+			if ( P )
 				if ( _Descriptor != cslio::UndefinedDescriptor )
 					_PClose( _Descriptor );
 
 			_Descriptor = cslio::UndefinedDescriptor;
-				
+
 		}
 		E_CVDTOR( _exec_driver___ );
 		bso::bool__ Init(
@@ -1308,7 +1308,7 @@ namespace flx {
 		{
 			_idriver___::reset( P );
 			_exec_driver___::reset( P );
-				
+
 		}
 		E_CVDTOR( exec_iflow_driver___ );
 		bso::bool__ Init(
@@ -1520,7 +1520,7 @@ namespace flx {
 		}
 		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
 		{
-			return Flow_.IDriver().RTake( Owner );
+			return Flow_.RDriver().RTake( Owner );
 		}
 	public:
 		void reset( bso::sBool P = true )
@@ -1864,7 +1864,7 @@ namespace flx {
 				Blocker_.Wait();
 				Locker_.Lock();
 
-				if ( Amount_ != 0 )	
+				if ( Amount_ != 0 )
 					Amount = Read_( Buffer, Amount );
 				else // There will be no more data.
 					Amount = 0;
@@ -1888,7 +1888,7 @@ namespace flx {
 		qRT
 		qRE
 			return Completed;
-		} 
+		}
 	};
 
 	typedef fdr::rRDressedDriver rIDriver_;

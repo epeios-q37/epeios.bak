@@ -10,6 +10,13 @@
 
 ## 2020-02-29:
 
+- CDGB64, CIO, CRPTGR, FLX, XML:
+    - [adpt],
+- FLW:
+    - [stdz],
+
+## 2020-02-29:
+
 - XML:
   - [adpt],
 - XTF:
@@ -52,15 +59,15 @@
 ## 2019-12-04:
 
 - CSDLES:
-  
+
   - [trvl],
 
 - FBLBRQ:
-  
+
   - Use of template variadics instead of *va_args* to avoid a *CLang* waning,
 
 - FBLBKD, FBLBRD, SCLBACKND, SCLDAEMON, SCLXDHTML, XDHCMN:
-  
+
   - [adpt],
 
 ## 2019-10-31
@@ -562,11 +569,11 @@
 ## 2018-09-21
 
 - SCLRGSTRY:
-  
+
   - fixing a bug introduced by previous modifications;
 
 - SCLXDHTML:
-  
+
   - introducing `sProxy::AlertB(...)`, calling the JS original `alert(...)`;
   - an error is now correctly reported when occurring at a early time;
 
@@ -602,15 +609,15 @@
 ## 2018-09-13
 
 - SCLMISC:
-  
+
   - [adpt]
 
 - SCLRGSTRY:
-  
+
   - [trvl];
 
 - SCLXDHTML:
-  
+
   - adding `rSession::HeadUp(...)`;
   - *XSL* files are now referred with the more generic *XML* term, to cover the use of locale (*XLCL* affix) and *XHTML* files;
 
@@ -2809,9 +2816,9 @@
 ## 2016-03-09:
 
 - Global:
-  
+
   - Simplification;
-    
+
     ;
     ;
     ;
@@ -2848,11 +2855,11 @@
 ## 2016-02-21:
 
 - GLOBAL:
-  
+
   - misc;
-  
+
   - Huge rewriting of the 'hook's and 'file hooks';
-    
+
           ;
           ;
           ;

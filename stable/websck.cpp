@@ -105,6 +105,7 @@ namespace {
     "Upgrade: websocket" NL\
     "Connection: Upgrade" NL\
     "Sec-WebSocket-Accept: "
+
 namespace {
     namespace {
         void ComputeResponseKey_(
@@ -146,6 +147,40 @@ namespace {
     qRE
     }
 }
+
+void websck::Handshake(
+    fdr::rRWDriver &Driver,
+    dFields &Fields )
+{
+qRH
+    flw::rDressedRWFlow<> Flow;
+    xtf::sRFlow TFlow;
+    str::wString Key;
+qRB
+    Flow.Init(Driver);
+    TFlow.Init(Flow, utf::f_Guess);
+
+    Key.Init();
+    GetHeader_(TFlow, Fields, Key);
+
+    SendResponse_(Key,Flow);
+qRR
+qRT
+qRE
+}
+
+void websck::Handshake(fdr::rRWDriver &Driver)
+{
+qRH
+    wFields Fields;
+qRB
+    Fields.Init();
+    Handshake(Driver, Fields);
+qRR
+qRT
+qRE
+}
+
 
 bso::sSize websck::rRDriver::GetLength( flw::rRFlow &Flow )
 {
@@ -194,37 +229,32 @@ fdr::size__ websck::rRDriver::FDRRead(
     return Amount;
 }
 
-void websck::Handshake(
-    fdr::rRWDriver &Driver,
-    dFields &Fields )
+void websck::rWDriver::SendSize_(
+    bso::sU64 Size,
+    bso::sU8 Pos )
 {
-qRH
-    flw::rDressedRWFlow<> Flow;
-    xtf::sRFlow TFlow;
-    str::wString Key;
-qRB
-    Flow.Init(Driver);
-    TFlow.Init(Flow, utf::f_Guess);
-
-    Key.Init();
-    GetHeader_(TFlow, Fields, Key);
-
-    SendResponse_(Key,Flow);
-qRR
-qRT
-qRE
+    Pos *= 8;
+    Flow_.Put(( Size >> Pos ) & 0xff);
 }
 
-void websck::Handshake(fdr::rRWDriver &Driver)
+void websck::rWDriver::SendSize_(bso::sU64 Size)
 {
-qRH
-    wFields Fields;
-qRB
-    Fields.Init();
-    Handshake(Driver, Fields);
-qRR
-qRT
-qRE
+    if ( Size < 126 )
+        SendSize_(Size, 0);
+    else if ( Size <= 655535 ) {
+        Flow_.Put(126);
+        SendSize_(Size, 1);
+        SendSize_(Size, 0);
+    } else {
+        Flow_.Put(127);
+        SendSize_(Size, 7);
+        SendSize_(Size, 6);
+        SendSize_(Size, 5);
+        SendSize_(Size, 4);
+        SendSize_(Size, 3);
+        SendSize_(Size, 2);
+        SendSize_(Size, 1);
+        SendSize_(Size, 0);
+    }
 }
-
 

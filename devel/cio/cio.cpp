@@ -156,7 +156,7 @@ void cio::Initialize( target__ Target )
 		break;
 	}
 
-	_Current.Init( CInF.IDriver(), COutF.ODriver(), CErrF.ODriver() );
+	_Current.Init( CInF.RDriver(), COutF.WDriver(), CErrF.WDriver() );
 
 	cio::CIn.Init( CInF );
 	cio::COut.Init( COutF );

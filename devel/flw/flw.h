@@ -163,7 +163,7 @@ namespace flw {
 
 			_Driver->SetAutoDismissOnEOF( Value );
 		}
-		fdr::iflow_driver_base___ &IDriver( void ) const
+		fdr::iflow_driver_base___ &RDriver( void ) const
 		{
 			return _D();
 		}
@@ -501,7 +501,7 @@ namespace flw {
 		{
 			return _D().Owner();
 		}
-		fdr::oflow_driver_base___ &ODriver( void ) const
+		fdr::oflow_driver_base___ &WDriver( void ) const
 		{
 			return _D();
 		}
