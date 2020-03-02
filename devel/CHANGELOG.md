@@ -8,6 +8,12 @@
 - [stdz]: modification to comply with current standards;
 - [trvl]: trivial modifications;
 
+## 202-03-02:
+
+- XDHUJP:
+
+    - `sProxyCallback` -> `sUpstream`,
+
 ## 2020-02-29:
 
 - CDGB64, CIO, CRPTGR, CSDMXC, FLX, LOGQ, LTF, XML:

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configurations xmlns:xpp="http://q37.info/ns/xpp/" >
+	<Configuration target="xdhwebq">
+		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
+		<xpp:expand value-of="q37.xpp"/>
+  <xpp:expand href="../../../TOL.xcfg"/>
+		<xpp:expand href="../../XDH.xcfg"/>
+		<Parameters>
+			<Language>fr</Language>
+			<Command>Process</Command>
+			<Service>53710</Service>
+		</Parameters>
+		<Definitions>
+		</Definitions>
+		<Locale>
+			<xpp:expand select="TOL_Locale"/>
+			<Translations text="ProcessCommandDescription">
+				<Translation language="fr">Lancement de la CGI.</Translation>
+				<Translation language="en">CGI launching.</Translation>
+			</Translations>
+			<Translations text="ModuleFilenameArgumentDescription">
+				<Translation language="fr">Nom et chemin de la bibliothèque dynamique correspondant au module XDHTML.</Translation>
+				<Translation language="en"> Name and path of the dynamic library corresponding to the XDHTML module.</Translation>
+			</Translations>
+			<Translations text="ModuleFilenameArgumentLabel">
+				<Translation language="fr">module</Translation>
+				<Translation language="en">module</Translation>
+			</Translations>
+			<Translations text="ServiceArgumentDescription">
+				<Translation language="fr">Port en écoute ('53741' si absent).</Translation>
+				<Translation language="en">Port to listen to ('53741' if missing).</Translation>
+			</Translations>
+			<Translations text="ServiceArgumentLabel">
+				<Translation language="fr">service</Translation>
+				<Translation language="en">service</Translation>
+			</Translations>
+		</Locale>
+		<Arguments>
+			<xpp:expand select="TOL_Arguments"/>
+			<Argument id="ProcessCommand" Description="ProcessCommandDescription" long="process" Value="Process" Usage=" %ModuleFilenameArgument% [%ServiceArgument%]"/>
+			<Argument id="ModuleFilenameArgument" Description="ModuleFilenameArgumentDescription" Path="ModuleFilename" Label="ModuleFilenameArgumentLabel"/>
+			<Argument id="ServiceArgument" Description="ServiceArgumentDescription" Path="Service" Label="ServiceArgumentLabel"/>
+			<Layouts>
+				<Layout command="Process">
+					<Link index="0" Target="ModuleFilenameArgument"/>
+					<Link index="1" Target="ServiceArgument"/>
+				</Layout>
+			</Layouts>
+		</Arguments>
+	</Configuration>
+</Configurations>

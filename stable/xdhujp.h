@@ -86,10 +86,11 @@ namespace xdhujp {
 		const char *ScriptName,
 		const str::dStrings &Values );
 
-	typedef xdhcmn::cUpstream cProxy_;
+	typedef xdhcmn::cUpstream cUpstream_;
 
-	class sProxyCallback
-	: public cProxy_
+	// Was 'sProxyCallback'.
+	class sUpstream
+	: public cUpstream_
 	{
 	private:
 		Q37_MRMDF( cJS, C_, Callback_ );
@@ -103,7 +104,7 @@ namespace xdhujp {
 		{
 			tol::reset( P, Callback_ );
 		}
-		E_CVDTOR( sProxyCallback );
+		E_CVDTOR( sUpstream );
 		void Init( cJS &Callback )
 		{
 			Callback_ = &Callback;

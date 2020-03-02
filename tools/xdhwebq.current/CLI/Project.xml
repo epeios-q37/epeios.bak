@@ -48,9 +48,9 @@
 			</Modules>
 		</Modules>
 		<Modules Group="XDHWebQ" Path="../">
-			<!--Module>misc</Module>
+			<Module>misc</Module>
 			<Module>query</Module>
-			<Module>session</Module-->
+			<Module>session</Module>
 			<Module>xdwmain</Module>
 			<Module>xdwrgstry</Module>
 		</Modules>

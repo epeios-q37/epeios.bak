@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Locale target="xdhwebq" xmlns:xpp="http://q37.info/ns/xpp/" >
+	<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
+	<xpp:expand value-of="q37.xpp"/>
+	<xpp:expand select="epeios.xlcl"/>
+	<Translations text="ProgramDescription">
+		<Translation language="fr">Utilitaire ('CGI') de lancement d'un module XDHTML en tant qu'application web.</Translation>
+		<Translation language="en">Tool (CGI) lauching a XDHTML module as web app.</Translation>
+	</Translations>
+	<!--
+	<Translations text="">
+		<Translation language="fr"></Translation>
+		<Translation language="en"></Translation>
+	</Translations>
+	-->
+</Locale>

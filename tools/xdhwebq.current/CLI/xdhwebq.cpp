@@ -19,12 +19,14 @@
 
 #include "xdhwebq.h"
 
+#include "query.h"
+#include "session.h"
+#include "xdwmain.h"
+
 #include "registry.h"
 
 #include "scltool.h"
 #include "sclerror.h"
-
-#include "xdwmain.h"
 
 #include "csdbns.h"
 #include "err.h"
@@ -53,11 +55,12 @@ namespace {
 	namespace {
 		typedef csdbns::cProcessing cProcessing_;
 
-		class sProcessing
+		class sProcessingCallback
 		: public cProcessing_
 		{
 		private:
 			qRMV( xdwmain::rAgent, A_, Agent_ );
+			qRMV( session::rSessions, S_, Sessions_ );
 		protected:
 			void *CSDSCBPreProcess(
 				fdr::rRWDriver *RWDriver,
@@ -70,15 +73,27 @@ namespace {
 				void *UP ) override
 			{
 			qRH
-                xdwmain::rSession Session;
-                str::wString Langage, Token;
-                xdwmain::sJS JS;
-                xdhujp::sUpstream Upstream;
-                qCBUFFERr Buffer;
+				query::wPairs Pairs;
+				str::string Token, Response;
+				TOL_CBUFFER___ Buffer;
+				flw::rDressedRWFlow<> Flow;
 			qRB
-                JS.Init(Session);
-                Upstream.Init(JS);
-                Session.Init(*A_().RetrieveCallback(Langage.Convert(Buffer), Token, &Upstream));
+				Flow.Init( *IODriver );
+				Pairs.Init();
+				Pairs.FillWith( Flow );
+
+				Response.Init();
+
+				if ( Pairs.Exists( str::wString( "_head" ) ) ) {
+					Token.Init();
+					Pairs.GetValue( str::wString( "_token" ), Token );
+
+					A_().Head( &Token, Response );
+				}  else
+					xdwmain::Handle( Pairs, S_(), Response );
+
+				Flow.Write(Response.Convert(Buffer), Response.Amount() );
+				Flow.Commit();
 			qRR
 			qRT
 			qRE
@@ -92,11 +107,15 @@ namespace {
 			void reset( bso::bool__ P = true )
 			{
 				Agent_ = NULL;
+				Sessions_ = NULL;
 			}
-			E_CVDTOR( sProcessing );
-			void Init( xdwmain::rAgent &Agent )
+			E_CVDTOR( sProcessingCallback );
+			void Init(
+				xdwmain::rAgent &Agent,
+				session::rSessions &Sessions )
 			{
 				Agent_ = &Agent;
+				Sessions_ = &Sessions;
 			}
 		};
 
@@ -106,13 +125,15 @@ namespace {
 	{
 	qRH
 		xdwmain::rAgent Agent;
+		session::wSessions SessionsUnprotected;
+		session::rSessions Sessions;
 		str::wString Identification, ModuleFilename;
 		TOL_CBUFFER___ IdentificationBuffer;
 		csdbns::server___ Server;
-		sProcessing Callback;
+		sProcessingCallback Callback;
 		qCBUFFERr Buffer;
 	qRB
-		Identification.Init( NAME_LC " V" VERSION " Build " __DATE__ " " __TIME__ " - " );
+		Identification.Init( NAME_LC " V" VERSION " Build " __DATE__ " " __TIME__ " - " );	
 		Identification.Append( cpe::GetDescription() );
 
 		ModuleFilename.Init();
@@ -120,7 +141,11 @@ namespace {
 
 		Agent.Init( xdhcmn::mMultiUser, ModuleFilename, dlbrry::n_Default, Identification.Convert( Buffer ) );
 
-		Callback.Init( Agent );
+		SessionsUnprotected.Init( 0, 0, Agent );
+
+		Sessions.Init( SessionsUnprotected );
+
+		Callback.Init( Agent, Sessions );
 
 		Server.Init( sclmisc::MGetU16( registry::parameter::Service ), Callback );
 		Server.Process( NULL );

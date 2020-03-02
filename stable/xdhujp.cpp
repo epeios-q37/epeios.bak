@@ -1386,7 +1386,7 @@ namespace {
 	}
 }
 
-void xdhujp::sProxyCallback::XDHCMNProcess(
+void xdhujp::sUpstream::XDHCMNProcess(
 	const char *ScriptName,
 	const str::dStrings &Values,
 	str::dString &ReturnValue )
