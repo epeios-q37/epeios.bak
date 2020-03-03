@@ -42,7 +42,7 @@ bso::bool__  xtf::extended_text_iflow__::_GetCell(
         qRFwk();
 
     UTF.Init();
-    C = Get( UTF );
+    C = Get( UTF, false );
 
     if ( ( C != Separator ) &&  ( C != '\r' ) && ( C != '\n') ) {
         while( true ) {
@@ -57,7 +57,7 @@ bso::bool__  xtf::extended_text_iflow__::_GetCell(
                 break;
 
             UTF.Init();
-            C = Get( UTF );
+            C = Get( UTF, false );
         }
     }
 

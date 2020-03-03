@@ -27,7 +27,9 @@
 				<Module>idxbtr</Module>
 				<Module>idxque</Module>
 				<Module>sck</Module>
+				<Module>sha1</Module>
 				<Module>strmrg</Module>
+				<Module>websck</Module>
 			</Modules>
 			<Modules Group="CSD">
 				<Module>csdbns</Module>

@@ -74,11 +74,14 @@ namespace websck {
 	typedef crt::qCRATEdl( dField ) dFields;
 	qW( Fields );
 
-    void Handshake(
+	// If false, then the client doesn't send a standard WebSocket header.
+	// 'Fields' does nevertheless contain the fields of the header.
+    bso::sBool Handshake(
         fdr::rRWDriver &RWDriver,
         dFields &Fields );
 
-    void Handshake(fdr::rRWDriver &RWDriver);
+	// If false, then the client doesn't send a standard WebSocket header.
+    bso::sBool Handshake(fdr::rRWDriver &RWDriver);
 
     typedef fdr::rRDressedDriver rRDriver_;
 

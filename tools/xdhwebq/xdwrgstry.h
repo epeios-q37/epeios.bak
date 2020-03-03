@@ -32,10 +32,6 @@ namespace xdwrgstry {
 	namespace parameter {
 		using namespace sclrgstry::parameter;
 
-		namespace script {
-			extern rEntry Fallback;
-		}
-
 	    extern rEntry ModuleFilename;
 	}
 

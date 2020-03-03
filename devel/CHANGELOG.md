@@ -8,11 +8,24 @@
 - [stdz]: modification to comply with current standards;
 - [trvl]: trivial modifications;
 
-## 202-03-02:
+## 2020-03-03
+
+- SCLXDHTML:
+    - [adpt],
+- WEBSCK:
+    - detection of non websocket header,
+- XDHCMN:
+    - cleaning,
+    - `…[Retrieve|Release]Callback` -> `…[Retrieve|Release]Session`,
+- XDHUPS:
+    - [adpt],
+- XFL
+    - fixing dual NL ('\r\n') issue,
+
+## 2020-03-02:
 
 - XDHUJP:
-
-    - `sProxyCallback` -> `sUpstream`,
+   - `sProxyCallback` -> `sUpstream`,
 
 ## 2020-02-29:
 

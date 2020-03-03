@@ -648,7 +648,7 @@ namespace {
 	};
 }
 
-xdhcmn::cSession *sclxdhtml::SCLXDHTMLRetrieveCallback(
+xdhcmn::cSession *sclxdhtml::SCLXDHTMLRetrieveSession(
 	const char *Language,
 	xdhcmn::eMode Mode,
 	const str::dString &Token,
@@ -685,12 +685,12 @@ const scli::sInfo &sclxdhtml::SCLXDHTMLInfo( void )
 	return xdhqxdh::Info;
 }
 
-void sclxdhtml::SCLXDHTMLReleaseCallback( xdhcmn::cSession *Callback )
+void sclxdhtml::SCLXDHTMLReleaseSession( xdhcmn::cSession *Session )
 {
-	if ( Callback == NULL )
+	if ( Session == NULL )
 		qRGnr();
 
-	delete Callback;
+	delete Session;
 }
 
 qGCTOR( xdhqxdh )

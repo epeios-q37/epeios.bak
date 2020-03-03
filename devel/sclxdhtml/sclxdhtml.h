@@ -1028,14 +1028,14 @@ namespace sclxdhtml {
 	const scli::sInfo &SCLXDHTMLInfo( void );	// To define by user.
 	void SCLXDHTMLInitialization( xdhcmn::eMode Mode );	// To define by user.
 
-	xdhcmn::cSession *SCLXDHTMLRetrieveCallback(	// To define by user.
+	xdhcmn::cSession *SCLXDHTMLRetrieveSession(	// To define by user.
 		const char *Language,
 		xdhcmn::eMode Mode,
 		const str::dString &Token,	// If not empty, DEMO mode with connexion identified by 'Token',
 									// otherwise PROD mode, with host/service retrieved from registry.
 		xdhcmn::cUpstream *UpstreamCallback );
 
-	void SCLXDHTMLReleaseCallback( xdhcmn::cSession *Callback );	// To define by user.
+	void SCLXDHTMLReleaseSession( xdhcmn::cSession *Session );	// To define by user.
 
 	namespace prolog {
 		static E_CDEF( char *, BorderId, "Border" );

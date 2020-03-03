@@ -69,35 +69,46 @@ namespace xdwmain {
 	class rSession
 	{
 	private:
-		sJS _JSCallback;
+        qRMV(rAgent, A_, Agent_);
+		sJS JS_;
+        xdhujp::sUpstream Upstream_;
+        xdhcmn::cSession *SessionCallback_;
 		xdhups::sSession Session_;
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_JSCallback.reset( P );
-			Session_.reset( P );
+            if ( P ) {
+                if ( Agent_ != NULL)
+                    if ( SessionCallback_ != NULL )
+                        A_().ReleaseSession( SessionCallback_ );
+            }
+
+            Agent_ = NULL;
+            SessionCallback_ = NULL;
+            tol::reset(P, JS_, Session_, Upstream_ );
 		}
 		E_CDTOR( rSession );
-		void Init( xdhcmn::cSession &SessionCallback )
-		{
-			_JSCallback.Init( *this );
-			Session_.Init( &SessionCallback );
+		bso::sBool Init(
+            rAgent &Agent,
+            const char *Language,
+			const str::dString &Token )	// If empty, FaaS session, else token used for the DEMO session.
+ 		{
+            reset();
+
+            Agent_ = &Agent;
+
+			JS_.Init(*this);
+			Upstream_.Init(JS_);
+			SessionCallback_ = A_().RetrieveSession(Language, Token, &Upstream_);
+			Session_.Init(SessionCallback_);
+			return Session_.Initialize(&Upstream_, Language, Token);
 		}
-		bso::sBool Initialize(
-			xdhcmn::cUpstream *Callback,
-			const char *Language,
-			const str::dString &Token )	// If empty, PROD session, else token used for the DEMO session.
-		{
-			return Session_.Initialize(Callback, Language, Token);
-		}
-		cJS_ &JSCallback( void )
-		{
-			return _JSCallback;
-		}
-		xdhcmn::cSession *SessionCallback( void ) const
-		{
-			return Session_.Callback();
-		}
+		bso::sBool Launch(
+            const char *Id,
+            const char *Action )
+            {
+                return Session_.Launch(Id, Action );
+            }
 	};
 }
 

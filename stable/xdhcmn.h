@@ -60,58 +60,6 @@ namespace xdhcmn {
 		m_Undefined
 	};
 
-	// Deprecated
-	qENUM( Function_ ) {		// Parameters :
-		fExecute,			// Script
-		fLog,				// Message,
-		fAlert,				// XML, XSL, Title.
-		fConfirm,			// XML, XSL, Title.
-		fSetContents,		// Ids, Contents.
-		fSetTimeout,		// Id, Delay, Action.
-/**/
-		fPrependLayout,			// Id, XML, XSL; if XSL is empty, XML is pure HTML.
-		fSetLayout,			// Id, XML, XSL; if XSL is empty, XML is pure HTML.
-		fAppendLayout,			// Id, XML, XSL; if XSL is empty, XML is pure HTML.
-/**/
-/**/
-		fDummy,				// Dummy entry, which helps creating new entries.
-		fParent,			// Id,
-		fFirstChild,		// Id,
-		fLastChild,			// Id,
-		fPreviousSibling,	// Id,
-		fNextSibling,		// Id,
-		fCreateElement,		// Name, Id.
-		fInsertChild,		// Child, Id.
-		fAppendChild,		// Child, Id.
-		fInsertBefore,		// Sibling, Id,
-		fInsertAfter,		// Sibling, Id,
-/**/
-		fDressWidgets,		// Id.
-		fInsertCSSRule,		// Rule, Index.
-		fAppendCSSRule,		// Rule.
-		fRemoveCSSRule,		// Index.
-		fAddClasses,		// Ids, Classes.
-		fRemoveClasses,		// Ids, Classes.
-		fToggleClasses,		// Ids, Classes.
-		fEnableElements,	// Ids.
-		fDisableElements,	// Ids.
-		fSetProperty,		// Id, Name, Value.
-		fGetProperty,		// Id, Name.
-		fSetAttribute,		// Id, Name, Value.
-		fGetAttribute,		// Id, Name.
-		fRemoveAttribute,	// Id, Name.
-		fSetValue,			// Id, Value.
-		fGetValue,			// Id.
-		fGetResult,			// Id.
-		fFocus,				// Id.
-		fSelect,			// Id.
-		f_amount,
-		f_Undefined
-	};
-
-	const char *GetLabel( eFunction_ Function );
-
-
 	class cUpstream
 	{
 	protected:
@@ -207,12 +155,12 @@ namespace xdhcmn {
 	protected:
 		virtual void XDHCMNInitialize( const shared_data__ &Data ) = 0;
 		virtual void XDHCMNBaseLanguage( TOL_CBUFFER___ &Buffer ) = 0;
-		virtual cSession *XDHCMNRetrieveCallback(
+		virtual cSession *XDHCMNRetrieveSession(
 			const char *Language,
 			const str::dString &Token,	// If not empty, DEMO mode with connexion identified by 'Token',
 										// otherwise PROD mode, with host/service retrieved from registry.
 			cUpstream *Upstream ) = 0;
-		virtual void XDHCMNReleaseCallback( cSession *Session ) = 0;
+		virtual void XDHCMNReleaseSession( cSession *Session ) = 0;
 		virtual const scli::sInfo &XDHCMNGetInfo( void ) = 0;
 		virtual void XDHCMNGetHead(
 			void *UP,
@@ -229,17 +177,17 @@ namespace xdhcmn {
 
 			return Buffer;
 		}
-		cSession *RetrieveCallback(
+		cSession *RetrieveSession(
 			const char *Language,
 			const str::dString &Token,	// If not empty, DEMO mode with connexion identified by 'Token',
 										// otherwise PROD mode, with host/service retrieved from registry.
 			cUpstream *Upstream )
 		{
-			return XDHCMNRetrieveCallback( Language, Token, Upstream );
+			return XDHCMNRetrieveSession( Language, Token, Upstream );
 		}
-		void ReleaseCallback( cSession *Session )
+		void ReleaseSession( cSession *Session )
 		{
-			return XDHCMNReleaseCallback( Session );
+			return XDHCMNReleaseSession( Session );
 		}
 		const scli::sInfo &GetInfo( void )
 		{

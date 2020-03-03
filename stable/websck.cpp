@@ -30,7 +30,7 @@ using namespace websck;
 
 namespace {
     namespace {
-        void GetField_(
+        bso::sBool GetField_(
             flw::rRFlow &Flow,
             dField &Field,
             str::dString &Key)
@@ -49,32 +49,38 @@ namespace {
             while ( !Flow.EndOfFlow() )
                 Field.Value.Append( Flow.Get());
 
-            if ( Field.Label == "Sec-WebSocket-Key" )
+            if ( Field.Label == "Sec-WebSocket-Key" ) {
                 Key = Field.Value;
+                return true;
+            } else
+                return false;
         }
 
-        void GetField_(
+        bso::sBool GetField_(
             const str::dString &Line,
             dField &Field,
             str::dString &Key )
         {
+            bso::sBool ContainsKey = false;
         qRH
             flx::sStringRFlow Flow;
         qRB
             Flow.Init(Line);
 
-            GetField_(Flow, Field, Key);
+            ContainsKey = GetField_(Flow, Field, Key);
         qRR
         qRT
         qRE
+            return ContainsKey;
         }
     }
 
-    void GetHeader_(
+    bso::sBool GetHeader_(
         xtf::sRFlow &Flow,
         dFields &Fields,
         str::dString &Key )
     {
+        bso::sBool ContainsKey = false;
     qRH
         str::wString Line;
         wField Field;
@@ -89,12 +95,13 @@ namespace {
                 break;
 
             Field.Init();
-            GetField_(Line, Field, Key);
+            ContainsKey |= GetField_(Line, Field, Key);
             Fields.Append(Field);
         }
     qRR
     qRT
     qRE
+        return ContainsKey;
     }
 }
 
@@ -148,10 +155,11 @@ namespace {
     }
 }
 
-void websck::Handshake(
+bso::sBool websck::Handshake(
     fdr::rRWDriver &Driver,
     dFields &Fields )
 {
+    bso::sBool IsWebSocketHeader = false;
 qRH
     flw::rDressedRWFlow<> Flow;
     xtf::sRFlow TFlow;
@@ -161,24 +169,26 @@ qRB
     TFlow.Init(Flow, utf::f_Guess);
 
     Key.Init();
-    GetHeader_(TFlow, Fields, Key);
-
-    SendResponse_(Key,Flow);
+    if ( ( IsWebSocketHeader = GetHeader_(TFlow, Fields, Key) ) )
+        SendResponse_(Key,Flow);
 qRR
 qRT
 qRE
+    return IsWebSocketHeader;
 }
 
-void websck::Handshake(fdr::rRWDriver &Driver)
+bso::sBool websck::Handshake(fdr::rRWDriver &Driver)
 {
+    bso::sBool IsWebSocketHeader = false;
 qRH
     wFields Fields;
 qRB
     Fields.Init();
-    Handshake(Driver, Fields);
+    IsWebSocketHeader = Handshake(Driver, Fields);
 qRR
 qRT
 qRE
+    return IsWebSocketHeader;
 }
 
 

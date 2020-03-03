@@ -28,62 +28,6 @@
 
 using namespace xdhcmn;
 
-#define C( name )\
-	case f##name:\
-	return #name;\
-	break
-
-
-const char *xdhcmn::GetLabel( eFunction_ Function )
-{
-	switch ( Function ) {
-	C( Execute );
-	C( Log );
-	C( Alert );
-	C( Confirm );
-	C( DressWidgets );
-	C( SetContents );
-	C( SetTimeout );
-	C( PrependLayout );
-	C( SetLayout );
-	C( AppendLayout );
-	C( InsertCSSRule );
-	C( AppendCSSRule );
-	C( RemoveCSSRule );
-	C( Parent );
-	C( FirstChild );
-	C( LastChild );
-	C( PreviousSibling );
-	C( NextSibling );
-	C( CreateElement );
-	C( InsertChild );
-	C( AppendChild );
-	C( InsertBefore );
-	C( InsertAfter );
-	C( AddClasses );
-	C( RemoveClasses );
-	C( ToggleClasses );
-	C( EnableElements );
-	C( DisableElements );
-	C( SetProperty );
-	C( GetProperty );
-	C( SetAttribute );
-	C( GetAttribute );
-	C( RemoveAttribute );
-	C( GetResult );
-	C( SetValue );
-	C( GetValue );
-	C( Focus );
-	C( Select );
-	C( Dummy );
-	default:
-		qRFwk();
-		break;
-	}
-
-	return NULL;	// To avoid a warning.
-}
-
 void xdhcmn::Escape(
     const str::string_ &Source,
     str::string_ &Target,
@@ -153,7 +97,7 @@ void xdhcmn::Escape(
     }
 }
 
-const str::dString &xdhcmn:: Escape(
+const str::dString &xdhcmn::Escape(
 	str::string_ &String,
 	bso::char__ Delimiter,	// Should be '\'', '"' or 0. If 0, escapes '\'' and '\"', otherwise escapes 'Delimiter'.
 	bso::char__ EscapeChar )

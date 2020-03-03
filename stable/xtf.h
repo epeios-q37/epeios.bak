@@ -195,6 +195,7 @@ namespace xtf {
 	private:
 		// L'entree de base.
 		flw::iflow__ *_Flow;
+		bso::sBool NLWasRegular_;   // Means that a dual NL wa encountered and that the first one was handled as a regular character (no line incrementation).
 		// Position du prochain caractre.
 		pos__ _Position;
 		feeder__ _Feeder;
@@ -336,6 +337,7 @@ namespace xtf {
 	public:
 		void reset( bool P = true )
 		{
+            NLWasRegular_ = false;
 			_Position.reset( P );
 			_Position.Line = _Position.Column = 1;
 			_Flow = NULL;
@@ -357,6 +359,7 @@ namespace xtf {
 			utf::format__ Format,
 			pos__ Position = pos__( 1, 0 ) )
 		{
+            NLWasRegular_ = false;
 			_Position.Init( Position );
 			_Flow = NULL;
 			_Flow = &IFlow;
@@ -374,7 +377,9 @@ namespace xtf {
 			return BOM;
 		}
 		//f Extract and return next character in flow.
-		flw::byte__ Get( utf__ *UTF = NULL )
+		flw::byte__ Get(
+            utf__ *UTF = NULL,
+            bso::sBool KeepDualNL = true )
 		{
 			if ( !_PrefetchUTF( true ) )
 				qRFwk();
@@ -389,23 +394,37 @@ namespace xtf {
 			flw::byte__ C = _UTF.Data[0];
 
 			if (C == '\n') {
-				_NewLineAdjust();
-
-				if ( !_F().EndOfFlow() && (_F().View() == '\r') )
-                    _F().Skip();
+                if ( NLWasRegular_ )
+                    _NewLineAdjust();
+                else if ( !_F().EndOfFlow() && (_F().View() == '\r') ) {
+                    if ( KeepDualNL ) {
+                        NLWasRegular_ = true;
+                    } else {
+                        _F().Skip();
+                        _NewLineAdjust();
+                    }
+                }
 			} else if (C == '\r') {
-				_NewLineAdjust();
-
-				if ( !_F().EndOfFlow() && (_F().View() == '\n') )
-                    _F().Skip();
+                if ( NLWasRegular_ )
+                    _NewLineAdjust();
+                else if ( !_F().EndOfFlow() && (_F().View() == '\n') ) {
+                    if ( KeepDualNL ) {
+                        NLWasRegular_ = true;
+                    } else {
+                        _F().Skip();
+                        _NewLineAdjust();
+                    }
+                }
             } else
                 _NewCharAdjust();
 
 			return C;
 		}
-		flw::byte__ Get( utf__ &UTF )
+		flw::byte__ Get(
+            utf__ &UTF,
+            bso::sBool KeepDualNL = true )
 		{
-			return Get( &UTF );
+			return Get( &UTF, KeepDualNL );
 		}
 		//f NOTA : if '.Line' == 0; a '\n' or a '\r' was unget()'.
 		const pos__ &Position( void ) const

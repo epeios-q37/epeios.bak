@@ -109,16 +109,16 @@ namespace {
 
 			strcpy( Buffer, Language );
 		}
-		virtual xdhcmn::cSession *XDHCMNRetrieveCallback(
+		virtual xdhcmn::cSession *XDHCMNRetrieveSession(
 			const char *Language,
 			const str::dString &Token,
 			xdhcmn::cUpstream *UpstreamCallback ) override
 		{
-			return SCLXDHTMLRetrieveCallback( Language, Mode_, Token, UpstreamCallback );
+			return SCLXDHTMLRetrieveSession( Language, Mode_, Token, UpstreamCallback );
 		}
-		virtual void XDHCMNReleaseCallback( xdhcmn::cSession *Callback ) override
+		virtual void XDHCMNReleaseSession( xdhcmn::cSession *Session ) override
 		{
-			return SCLXDHTMLReleaseCallback( Callback );
+			return SCLXDHTMLReleaseSession( Session );
 		}
 		const scli::sInfo &XDHCMNGetInfo( void ) override
 		{

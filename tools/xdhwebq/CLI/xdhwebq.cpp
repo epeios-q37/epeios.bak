@@ -33,6 +33,7 @@
 #include "xpp.h"
 #include "fnm.h"
 #include "flf.h"
+#include "websck.h"
 
 using cio::CErr;
 using cio::COut;
@@ -53,32 +54,73 @@ namespace {
 	namespace {
 		typedef csdbns::cProcessing cProcessing_;
 
+		qENUM( State_ ) {
+            sProlog,
+            sRegular,
+            s_amount,
+            s_Undefined
+		};
+
 		class sProcessing
 		: public cProcessing_
 		{
 		private:
 			qRMV( xdwmain::rAgent, A_, Agent_ );
+			eState_ State_;
+			str::wString Token_;
 		protected:
 			void *CSDSCBPreProcess(
-				fdr::rRWDriver *RWDriver,
+				fdr::rRWDriver *Driver,
 				const ntvstr::char__ *Origin ) override
 			{
+			qRH
+                flw::rDressedRWFlow<> Flow;
+                websck::wFields Fields;
+			qRB
+			/*
+                Fields.Init();
+
+                if ( websck::Handshake(*Driver, Fields) ) {
+                    State_ = sRegular;
+                } else if ( ( Fields.Amount() == 1 )
+                            && ( Fields(Fields.First()).Label == "XDH" )
+                            && ( Fields(Fields.First()).Value == "InProgress" ) ) {
+                    State_ = sProlog;
+                } else {
+                    State_ = s_Undefined;
+                }
+                */
+			qRR
+			qRT
+			qRE
 				return NULL;
 			}
 			csdscb::action__ CSDSCBProcess(
-				fdr::rRWDriver *IODriver,
+				fdr::rRWDriver *Driver,
 				void *UP ) override
 			{
 			qRH
                 xdwmain::rSession Session;
-                str::wString Langage, Token;
-                xdwmain::sJS JS;
-                xdhujp::sUpstream Upstream;
+                str::wString Langage, Head;
                 qCBUFFERr Buffer;
+                flw::rDressedRWFlow<> Flow;
 			qRB
-                JS.Init(Session);
-                Upstream.Init(JS);
-                Session.Init(*A_().RetrieveCallback(Langage.Convert(Buffer), Token, &Upstream));
+                Flow.Init(*Driver);
+
+                switch ( State_ ) {
+                case sProlog:
+                    Head.Init();
+                    A_().Head(&Token_, Head);
+                    Flow.Write(Head.Convert(Buffer), Head.Amount());
+                    Flow.Commit();
+                    break;
+                case sRegular:
+                     Session.Init(A_(), Langage.Convert(Buffer), Token_);
+                     qRVct();
+                     break;
+                default:
+                    break;
+                }
 			qRR
 			qRT
 			qRE
@@ -92,11 +134,15 @@ namespace {
 			void reset( bso::bool__ P = true )
 			{
 				Agent_ = NULL;
+				State_ = s_Undefined;
+				Token_.reset(P);
 			}
 			E_CVDTOR( sProcessing );
 			void Init( xdwmain::rAgent &Agent )
 			{
 				Agent_ = &Agent;
+				State_ = s_Undefined;
+				Token_.Init();
 			}
 		};
 
