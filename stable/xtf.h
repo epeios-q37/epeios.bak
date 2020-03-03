@@ -387,34 +387,38 @@ namespace xtf {
 			if ( UTF != NULL )
 				*UTF = _UTF;
 
-//			_F().Skip( _UTF.Size );
-
 			_UTF.Init();
 
 			flw::byte__ C = _UTF.Data[0];
 
 			if (C == '\n') {
-                if ( NLWasRegular_ )
+                if ( NLWasRegular_ ) {
                     _NewLineAdjust();
-                else if ( !_F().EndOfFlow() && (_F().View() == '\r') ) {
+                    NLWasRegular_ = false;
+                } else if ( !_F().EndOfFlow() && (_F().View() == '\r') ) {
                     if ( KeepDualNL ) {
                         NLWasRegular_ = true;
+                        _NewCharAdjust();
                     } else {
                         _F().Skip();
                         _NewLineAdjust();
                     }
-                }
+                } else
+                    _NewLineAdjust();
 			} else if (C == '\r') {
-                if ( NLWasRegular_ )
+                if ( NLWasRegular_ ) {
                     _NewLineAdjust();
-                else if ( !_F().EndOfFlow() && (_F().View() == '\n') ) {
+                    NLWasRegular_ = false;
+                } else if ( !_F().EndOfFlow() && (_F().View() == '\n') ) {
                     if ( KeepDualNL ) {
                         NLWasRegular_ = true;
+                        _NewCharAdjust();
                     } else {
                         _F().Skip();
                         _NewLineAdjust();
                     }
-                }
+                } else
+                    _NewLineAdjust();
             } else
                 _NewCharAdjust();
 
