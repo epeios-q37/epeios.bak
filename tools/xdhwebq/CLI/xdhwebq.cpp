@@ -61,57 +61,82 @@ namespace {
             s_Undefined
 		};
 
+		struct rData {
+			eState_ State;
+			str::wString Token;
+			void reset( bso::sBool P = true )
+			{
+                State = s_Undefined;
+                Token.reset( P );
+			}
+			qCDTOR(rData);
+			void Init(void)
+			{
+                State = s_Undefined;
+                Token.Init();
+			}
+		};
+
 		class sProcessing
 		: public cProcessing_
 		{
 		private:
 			qRMV( xdwmain::rAgent, A_, Agent_ );
-			eState_ State_;
-			str::wString Token_;
 		protected:
 			void *CSDSCBPreProcess(
 				fdr::rRWDriver *Driver,
 				const ntvstr::char__ *Origin ) override
 			{
+                rData *Data = NULL;
 			qRH
-                flw::rDressedRWFlow<> Flow;
                 websck::wHeader Header;
 			qRB
-                Fields.Init();
+                if ( ( Data = new rData ) == NULL )
+                    qRAlc();
 
-                if ( websck::Handshake(*Driver, Fields) ) {
-                    State_ = sRegular;
+                Data->Init();
+
+                Header.Init();
+
+
+                if ( websck::Handshake(*Driver, Header) ) {
+                    Data->State = sRegular;
                 } else if ( Header.FirstLine == "FaaS Prolog" ) {
-                    State_ = sProlog;
+                    if ( websck::GetValue(str::wString("Token"), Header, Data->Token ) )
+                        Data->State = sProlog;
                 } else {
-                    State_ = s_Undefined;
+                    Data->State = s_Undefined;
                 }
 			qRR
 			qRT
 			qRE
-				return NULL;
+				return Data;
 			}
 			csdscb::action__ CSDSCBProcess(
 				fdr::rRWDriver *Driver,
 				void *UP ) override
 			{
+                rData &Data = *(rData *)UP;
 			qRH
                 xdwmain::rSession Session;
                 str::wString Langage, Head;
                 qCBUFFERr Buffer;
                 flw::rDressedRWFlow<> Flow;
 			qRB
+                if ( UP == NULL )
+                    qRGnr();
+
                 Flow.Init(*Driver);
 
-                switch ( State_ ) {
+                switch ( Data.State ) {
                 case sProlog:
                     Head.Init();
-                    A_().Head(&Token_, Head);
+                    A_().Head(&Data.Token, Head);
                     Flow.Write(Head.Convert(Buffer), Head.Amount());
                     Flow.Commit();
                     break;
                 case sRegular:
-                     Session.Init(A_(), Langage.Convert(Buffer), Token_);
+                     Session.Init(A_(), Langage.Convert(Buffer), Data.Token);
                      qRVct();
                      break;
                 default:
@@ -125,21 +150,21 @@ namespace {
 			}
 			virtual bso::sBool CSDSCBPostProcess( void *UP ) override
 			{
+                if ( UP == NULL )
+                    qRGnr();
+
+                delete (rData *)UP;
 				return true;
 			}
 		public:
 			void reset( bso::bool__ P = true )
 			{
 				Agent_ = NULL;
-				State_ = s_Undefined;
-				Token_.reset(P);
 			}
 			E_CVDTOR( sProcessing );
 			void Init( xdwmain::rAgent &Agent )
 			{
 				Agent_ = &Agent;
-				State_ = s_Undefined;
-				Token_.Init();
 			}
 		};
 

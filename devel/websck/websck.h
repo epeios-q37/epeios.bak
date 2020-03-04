@@ -74,6 +74,24 @@ namespace websck {
 	typedef crt::qCRATEdl( dField ) dFields;
 	qW( Fields );
 
+	sdr::sRow Search(
+        const str::dString &Label,
+        const dFields &Fields);
+
+    inline bso::sBool GetValue(
+        const str::dString &Label,
+        const dFields &Fields,
+        str::dString &Value)
+    {
+        sdr::sRow Row = Search(Label, Fields);
+
+        if ( Row != qNIL ) {
+            Value.Append(Fields(Row).Value);
+            return true;
+        } else
+            return false;
+    }
+
 	class dHeader
 	{
 	public:
@@ -106,6 +124,22 @@ namespace websck {
 	};
 
 	qW(Header);
+
+	inline sdr::sRow Search(
+        const str::dString &Label,
+        const dHeader &Header)
+    {
+        return Search(Label, Header.Fields);
+    }
+
+    inline bso::sBool GetValue(
+        const str::dString &Label,
+        const dHeader &Header,
+        str::dString &Value)
+    {
+        return GetValue(Label, Header.Fields, Value);
+    }
+
 
 	// If false, then the client doesn't send a standard WebSocket header.
 	// 'Fields' does nevertheless contain the fields of the header.

@@ -155,6 +155,18 @@ namespace {
     }
 }
 
+sdr::sRow websck::Search(
+    const str::dString &Label,
+    const dFields &Fields)
+{
+    sdr::sRow Row = Fields.First();
+
+    while ( ( Row != qNIL ) && ( Fields(Row).Label != Label ) )
+        Row = Fields.Next(Row);
+
+    return Row;
+}
+
 bso::sBool websck::Handshake(
     fdr::rRWDriver &Driver,
     dHeader &Header)

@@ -10,7 +10,7 @@
 
 ## 2020-03-04:
 - WEBSCK:
-    - introducing header instead to replace fields,
+    - introducing header to replace fields (which is included in header),
 
 ## 2020-03-03
 
