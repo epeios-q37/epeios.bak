@@ -75,21 +75,17 @@ namespace {
 			{
 			qRH
                 flw::rDressedRWFlow<> Flow;
-                websck::wFields Fields;
+                websck::wHeader Header;
 			qRB
-			/*
                 Fields.Init();
 
                 if ( websck::Handshake(*Driver, Fields) ) {
                     State_ = sRegular;
-                } else if ( ( Fields.Amount() == 1 )
-                            && ( Fields(Fields.First()).Label == "XDH" )
-                            && ( Fields(Fields.First()).Value == "InProgress" ) ) {
+                } else if ( Header.FirstLine == "FaaS Prolog" ) {
                     State_ = sProlog;
                 } else {
                     State_ = s_Undefined;
                 }
-                */
 			qRR
 			qRT
 			qRE
@@ -119,6 +115,7 @@ namespace {
                      qRVct();
                      break;
                 default:
+                    qRGnr();
                     break;
                 }
 			qRR

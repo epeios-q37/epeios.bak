@@ -8,6 +8,10 @@
 - [stdz]: modification to comply with current standards;
 - [trvl]: trivial modifications;
 
+## 2020-03-04:
+- WEBSCK:
+    - introducing header instead to replace fields,
+
 ## 2020-03-03
 
 - SCLXDHTML:
@@ -20,7 +24,7 @@
 - XDHUPS:
     - [adpt],
 - XFL
-    - fixing dual NL ('\r\n') issue,
+    - fixing dual NL (`\r\n`) issue,
 
 ## 2020-03-02:
 

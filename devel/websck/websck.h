@@ -74,11 +74,44 @@ namespace websck {
 	typedef crt::qCRATEdl( dField ) dFields;
 	qW( Fields );
 
+	class dHeader
+	{
+	public:
+        struct s {
+            str::dString::s FirstLine;
+            dFields::s Fields;
+        };
+        str::dString FirstLine;
+        dFields Fields;
+        dHeader(s &S)
+        : FirstLine(S.FirstLine),
+          Fields(S.Fields)
+        {}
+        void reset(bso::sBool P = true)
+        {
+            tol::reset(P, FirstLine, Fields);
+        }
+        dHeader &operator =(const dHeader &H)
+        {
+            FirstLine = H.FirstLine;
+            Fields = H.Fields;
+
+            return *this;
+        }
+        qDTOR(dHeader);
+        void Init(void)
+        {
+            tol::Init(FirstLine, Fields);
+        }
+	};
+
+	qW(Header);
+
 	// If false, then the client doesn't send a standard WebSocket header.
 	// 'Fields' does nevertheless contain the fields of the header.
     bso::sBool Handshake(
         fdr::rRWDriver &RWDriver,
-        dFields &Fields );
+        dHeader &Header);
 
 	// If false, then the client doesn't send a standard WebSocket header.
     bso::sBool Handshake(fdr::rRWDriver &RWDriver);

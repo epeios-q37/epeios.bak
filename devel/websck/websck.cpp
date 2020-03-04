@@ -77,7 +77,7 @@ namespace {
 
     bso::sBool GetHeader_(
         xtf::sRFlow &Flow,
-        dFields &Fields,
+        dHeader &Header,
         str::dString &Key )
     {
         bso::sBool ContainsKey = false;
@@ -85,7 +85,7 @@ namespace {
         str::wString Line;
         wField Field;
     qRB
-        Flow.SkipLine();
+        Flow.GetLine(Header.FirstLine);
 
         while (true) {
             Line.Init();
@@ -96,7 +96,7 @@ namespace {
 
             Field.Init();
             ContainsKey |= GetField_(Line, Field, Key);
-            Fields.Append(Field);
+            Header.Fields.Append(Field);
         }
     qRR
     qRT
@@ -157,7 +157,7 @@ namespace {
 
 bso::sBool websck::Handshake(
     fdr::rRWDriver &Driver,
-    dFields &Fields )
+    dHeader &Header)
 {
     bso::sBool IsWebSocketHeader = false;
 qRH
@@ -169,7 +169,7 @@ qRB
     TFlow.Init(Flow, utf::f_Guess);
 
     Key.Init();
-    if ( ( IsWebSocketHeader = GetHeader_(TFlow, Fields, Key) ) )
+    if ( ( IsWebSocketHeader = GetHeader_(TFlow, Header, Key) ) )
         SendResponse_(Key,Flow);
 qRR
 qRT
@@ -181,10 +181,10 @@ bso::sBool websck::Handshake(fdr::rRWDriver &Driver)
 {
     bso::sBool IsWebSocketHeader = false;
 qRH
-    wFields Fields;
+    wHeader Header;
 qRB
-    Fields.Init();
-    IsWebSocketHeader = Handshake(Driver, Fields);
+    Header.Init();
+    IsWebSocketHeader = Handshake(Driver, Header);
 qRR
 qRT
 qRE
