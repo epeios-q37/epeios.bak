@@ -27,6 +27,7 @@
 #include "xdwmain.h"
 
 #include "csdbns.h"
+#include "csdcmn.h"
 #include "err.h"
 #include "cio.h"
 #include "epsmsc.h"
@@ -90,6 +91,7 @@ namespace {
                 rData *Data = NULL;
 			qRH
                 websck::wHeader Header;
+                flw::rDressedRFlow<> Flow;
 			qRB
                 if ( ( Data = new rData ) == NULL )
                     qRAlc();
@@ -98,10 +100,11 @@ namespace {
 
                 Header.Init();
 
-
                 if ( websck::Handshake(*Driver, Header) ) {
+                    Flow.Init(*Driver);
+                    csdcmn::Get(Flow,Data->Token);
                     Data->State = sRegular;
-                } else if ( Header.FirstLine == "FaaS Prolog" ) {
+                } else if ( Header.FirstLine == "XDH web prolog" ) {
                     if ( websck::GetValue(str::wString("Token"), Header, Data->Token ) )
                         Data->State = sProlog;
                 } else {

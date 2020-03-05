@@ -296,7 +296,7 @@ def _ignition():
 		else:
 			XDHqSHRD.open(url)
 
-def _serve(callback, userCallback, callbacks ):
+def _serve(callback,userCallback,callbacks ):
 	global _writeLock, _globalCondition
 	while True:
 
@@ -351,7 +351,7 @@ def launch(callback, userCallback,callbacks,headContent):
 
 	_ignition()
 
-	_serve(callback, userCallback, callbacks)
+	_serve(callback,userCallback,callbacks)
 
 class DOM_FaaS:
 	_firstLaunch = True

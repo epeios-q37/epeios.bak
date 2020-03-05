@@ -302,4 +302,4 @@ class DOM:
 def launch(callback, userCallback, callbacks, headContent, dir):
 	global _dir
 	_dir = dir
-	XDHqFaaS.launch(callback, userCallback,callbacks,headContent)
+	XDHqFaaS.launch(callback,userCallback,callbacks,headContent)

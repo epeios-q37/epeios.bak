@@ -31,7 +31,7 @@ var drag = false;
 function getElement(elementOrId) {
 	if (typeof elementOrId === "string")
 		if (elementOrId === "")
-			return document.body.firstElementChild.nextElementSibling;
+			return document.body.firstElementChild;
 		else
 			return document.getElementById(elementOrId);
 	else if (elementOrId === document.body)	// To avoid defacement.
