@@ -37,6 +37,7 @@ namespace xdwmain {
 	{
 	private:
 		Q37_MRMDF( rSession, S_, Session_ );
+		qRMV(flw::rRWFlow, F_, Flow_);
 	protected:
 		virtual void XDHUJPExecute(
 			const str::string_ &Script,
@@ -57,11 +58,15 @@ namespace xdwmain {
 		void reset( bso::bool__ P = true )
 		{
 			Session_ = NULL;
+			Flow_ = NULL;
 		}
 		E_CVDTOR( sJS );
-		void Init( rSession &Session )
+		void Init(
+            rSession &Session,
+            flw::rRWFlow &Flow )
 		{
 			Session_ = &Session;
+			Flow_ = &Flow;
 		}
 	};
 
@@ -90,6 +95,7 @@ namespace xdwmain {
 		E_CDTOR( rSession );
 		bso::sBool Init(
             rAgent &Agent,
+            flw::rRWFlow &Flow,
             const char *Language,
 			const str::dString &Token )	// If empty, FaaS session, else token used for the DEMO session.
  		{
@@ -97,7 +103,7 @@ namespace xdwmain {
 
             Agent_ = &Agent;
 
-			JS_.Init(*this);
+			JS_.Init(*this, Flow);
 			Upstream_.Init(JS_);
 			SessionCallback_ = A_().RetrieveSession(Language, Token, &Upstream_);
 			Session_.Init(SessionCallback_);

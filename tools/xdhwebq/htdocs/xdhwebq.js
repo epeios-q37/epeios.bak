@@ -106,4 +106,11 @@ function connect(token) {
 		socket.send(token)
 	}
 
+    socket.onmessage = function(event) {
+		let result = eval(event.data);
+		console.log(event.data);
+		
+		if (typeof result !== "undefined" && typeof result !== "object")	// 'typeof xdh_result !== "object"' == 'xdh_result != null' !!!!
+			socket.send(result);
+    };
 }

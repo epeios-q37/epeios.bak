@@ -108,9 +108,11 @@ namespace {
                 xdwmain::rSession Session;
             qRB
                 Flow.Init(Driver, websck::mWithTerminator);
-                Session.Init(Agent, "", Data.Token);
-                Session.Launch("","");
-                qRVct();
+                Session.Init(Agent, Flow, "", Data.Token);
+
+                while ( true ) {
+                    Session.Launch("","");
+                }
             qRR
             qRT
             qRE

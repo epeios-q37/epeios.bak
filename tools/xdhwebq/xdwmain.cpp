@@ -19,9 +19,19 @@
 
 #include "xdwmain.h"
 
+#include "websck.h"
+
 inline void xdwmain::sJS::XDHUJPExecute(
 	const str::string_ &Script,
 	str::dString &ReturnValue )
 {
-    qRVct();
+qRH
+    qCBUFFERr Buffer;
+qRB
+    F_().Write( Script.Convert(Buffer), Script.Amount());
+    F_().Commit();
+    websck::GetMessage(F_(), ReturnValue);
+qRR
+qRT
+qRE
 }
