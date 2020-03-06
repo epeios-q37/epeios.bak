@@ -10,6 +10,10 @@
 
 ## 2020-03-04:
 - WEBSCK:
+    - adding message detection,
+
+## 2020-03-04:
+- WEBSCK:
     - introducing header to replace fields (which is included in header),
 
 ## 2020-03-03
