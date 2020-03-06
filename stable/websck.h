@@ -150,52 +150,115 @@ namespace websck {
 	// If false, then the client doesn't send a standard WebSocket header.
     bso::sBool Handshake(fdr::rRWDriver &RWDriver);
 
-    typedef fdr::rRDressedDriver rRDriver_;
+    qCDEF(bso::sChar, EOSChar_, 0xff);
 
-    class rRDriver
-    : public rRDriver_
+    qENUM(Mode) {
+        // No addtional character is inserted.
+        mWithoutTerminator,
+        // An invalid character UTF-8 character is inserted at end of message.
+        // To use with 'GetMessage(…)'.
+        mWithTerminator,
+        m_amount,
+        m_Undefined
+    };
+
+    class rRDriverBase_
     {
     private:
         flw::rDressedRFlow<> Flow_;
         bso::sSize Length_;
         bso::sU32 Mask_;
         bso::sU8 MaskCounter_;
+        eMode Mode_;
+        // When 'Mode' == 'ùWithTerminator', report that the end of string character
+        // could not be returned ans is pending.
+        bso::sBool EOSPending_;
         bso::sSize GetLength( flw::rRFlow &Flow );
      protected:
-    	virtual fdr::size__ FDRRead(
+    	fdr::size__ Read_(
 			fdr::size__ Maximum,
-			fdr::byte__ *Buffer ) override;
-		virtual bso::sBool FDRDismiss(
+			fdr::byte__ *Buffer );
+		bso::sBool Dismiss_(
 			bso::sBool Unlock,
-			qRPN ) override
+			qRPN )
 		{
 			return Flow_.Dismiss( Unlock, ErrHandling );
 		}
-		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
+		fdr::sTID Take_( fdr::sTID Owner )
 		{
 			return Flow_.RDriver().RTake( Owner );
 		}
     public:
         void reset( bso::sBool P = true )
         {
-            rRDriver_::reset(P);
             Flow_.reset(P);
             Length_ = 0;
             Mask_ = 0;
             MaskCounter_ = 0;
+            Mode_ = m_Undefined;
+            EOSPending_ = false;
         }
-        qCVDTOR(rRDriver);
+        qCVDTOR(rRDriverBase_);
         void Init(
-            fdr::rRDriver &Driver,  // Before calling this funciton, 'Driver' must have be called with 'Handshke(…)'
-            fdr::thread_safety__ ThreadSafety )
+            fdr::rRDriver &Driver,  // Before calling this function, 'Driver' must have be called with 'Handshke(…)'
+            eMode Mode )
         {
-            rRDriver_::Init(ThreadSafety);
             Flow_.Init(Driver);
             Length_ = 0;
             Mask_ = 0;
             MaskCounter_ = 0;
+            Mode_ = Mode;
+            EOSPending_ = false;
         }
     };
+
+
+    typedef fdr::rRDressedDriver rRDriver_;
+
+    class rRDriver
+    : public rRDriverBase_,
+      public rRDriver_
+    {
+    private:
+     protected:
+    	virtual fdr::size__ FDRRead(
+			fdr::size__ Maximum,
+			fdr::byte__ *Buffer ) override
+        {
+            return rRDriverBase_::Read_(Maximum, Buffer );
+        }
+		virtual bso::sBool FDRDismiss(
+			bso::sBool Unlock,
+			qRPN ) override
+        {
+            return rRDriverBase_::Dismiss_(Unlock, qRP);
+        }
+		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
+		{
+            return rRDriverBase_::Take_(Owner);
+		}
+    public:
+        void reset( bso::sBool P = true )
+        {
+            rRDriverBase_::reset(P);
+            rRDriver_::reset(P);
+        }
+        qCVDTOR(rRDriver);
+        void Init(
+            fdr::rRDriver &Driver,  // Before calling this function, 'Driver' must have be called with 'Handshke(…)'
+            eMode Mode,
+            fdr::thread_safety__ ThreadSafety )
+        {
+            rRDriverBase_::Init(Driver, Mode);
+            rRDriver_::Init(ThreadSafety);
+        }
+    };
+
+    // Returns a message from a flow inirialized with above
+    // driver initialized with the 'mWithTerminator' mode.
+    void GetMessage(
+        flw::rRFlow &Flow,
+        str::dString &Message );
 
 	typedef flw::rDressedRFlow<> rRFlow_;
 
@@ -211,20 +274,20 @@ namespace websck {
 			Driver_.reset( P );
 		}
 		qCDTOR( rRFlow );
-		void Init( fdr::rRDriver &Driver )  // Before calling this function, 'Driver' must have be called with 'Handshke(…)'
+		void Init(
+            fdr::rRDriver &Driver,  // Before calling this function, 'Driver' must have be called with 'Handshake(…)'
+            eMode Mode )
 		{
-			Driver_.Init( Driver, fdr::ts_Default );
+			Driver_.Init( Driver, Mode, fdr::ts_Default );
 			rRFlow_::Init( Driver_  );
 		}
 	};
 
 	typedef fdr::rWDressedDriver rWDriver_;
 
-	class rWDriver
-	: public rWDriver_
+	class rWDriverBase_
 	{
 	private:
-
         flw::rDressedWFlow<> Flow_;
         bso::sBool InProgress_;
         void SendSize_(
@@ -232,9 +295,9 @@ namespace websck {
             bso::sU8 Pos );
         void SendSize_(bso::sU64 Size);
 	protected:
-		virtual fdr::size__ FDRWrite(
+		fdr::size__ Write_(
 			const fdr::byte__ *Buffer,
-			fdr::size__ Maximum ) override
+			fdr::size__ Maximum )
 		{
             if ( InProgress_ )
                 Flow_.Put(0);   // 'FIN' bit clear and opcode 'continuation'.
@@ -249,9 +312,9 @@ namespace websck {
 
             return Maximum;
 		}
-		virtual bso::sBool FDRCommit(
+		bso::sBool Commit_(
 			bso::sBool Unlock,
-			qRPN ) override
+			qRPN )
 		{
             if ( InProgress_ ) {
                 Flow_.Put(0x80);   // 'FIN' bit set and OpCode 'continuation'.
@@ -261,25 +324,59 @@ namespace websck {
 
 			return Flow_.Commit( Unlock, ErrHandling );
 		}
-		virtual fdr::sTID FDRWTake( fdr::sTID Owner ) override
+		fdr::sTID Take_( fdr::sTID Owner )
 		{
 			 return Flow_.WDriver().WTake( Owner );
 		}
     public:
         void reset( bso::sBool P = true )
         {
-            rWDriver_::reset(P);
             Flow_.reset(P);
             InProgress_ = false;
+        }
+        qCVDTOR(rWDriverBase_);
+        void Init( fdr::rWDriver &Driver )  // Before calling this funciton, 'Driver' must have be called with 'Handshke(…)'
+        {
+            Flow_.Init(Driver);
+            InProgress_ = false;
+        }
+    };
+
+	class rWDriver
+	: public rWDriverBase_,
+	  public rWDriver_
+	{
+	private:
+	protected:
+		virtual fdr::size__ FDRWrite(
+			const fdr::byte__ *Buffer,
+			fdr::size__ Maximum ) override
+		{
+            return rWDriverBase_::Write_(Buffer, Maximum);
+		}
+		virtual bso::sBool FDRCommit(
+			bso::sBool Unlock,
+			qRPN ) override
+		{
+            return rWDriverBase_::Commit_(Unlock, qRP);
+		}
+		virtual fdr::sTID FDRWTake( fdr::sTID Owner ) override
+		{
+            return rWDriverBase_::Take_(Owner);
+		}
+    public:
+        void reset( bso::sBool P = true )
+        {
+            rWDriverBase_::reset(P);
+            rWDriver_::reset(P);
         }
         qCVDTOR(rWDriver);
         void Init(
             fdr::rWDriver &Driver,  // Before calling this funciton, 'Driver' must have be called with 'Handshke(…)'
             fdr::thread_safety__ ThreadSafety )
         {
+            rWDriverBase_::Init(Driver);
             rWDriver_::Init(ThreadSafety);
-            Flow_.Init(Driver);
-            InProgress_ = false;
         }
     };
 
@@ -303,6 +400,89 @@ namespace websck {
 			rWFlow_::Init( Driver_  );
 		}
 	};
+
+	typedef fdr::rRWDressedDriver rDriver_;
+
+	class rDriver
+	: public rRDriverBase_,
+	  public rWDriverBase_,
+	  public rDriver_
+    {
+    protected:
+    	virtual fdr::size__ FDRRead(
+			fdr::size__ Maximum,
+			fdr::byte__ *Buffer ) override
+        {
+            return rRDriverBase_::Read_(Maximum, Buffer );
+        }
+		virtual bso::sBool FDRDismiss(
+			bso::sBool Unlock,
+			qRPN ) override
+        {
+            return rRDriverBase_::Dismiss_(Unlock, qRP);
+        }
+		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
+		{
+            return rRDriverBase_::Take_(Owner);
+		}
+		virtual fdr::size__ FDRWrite(
+			const fdr::byte__ *Buffer,
+			fdr::size__ Maximum ) override
+		{
+            return rWDriverBase_::Write_(Buffer, Maximum);
+		}
+		virtual bso::sBool FDRCommit(
+			bso::sBool Unlock,
+			qRPN ) override
+		{
+            return rWDriverBase_::Commit_(Unlock, qRP);
+		}
+		virtual fdr::sTID FDRWTake( fdr::sTID Owner ) override
+		{
+            return rWDriverBase_::Take_(Owner);
+		}
+    public:
+        void reset( bso::sBool P = true )
+        {
+            rRDriverBase_::reset(P);
+            rWDriverBase_::reset(P);
+            rDriver_::reset(P);
+        }
+        qCVDTOR(rDriver);
+        void Init(
+            fdr::rRWDriver &Driver,  // Before calling this function, 'Driver' must have be called with 'Handshake(…)'
+            eMode Mode,
+            fdr::thread_safety__ ThreadSafety )
+        {
+            rRDriverBase_::Init(Driver, Mode);
+            rWDriverBase_::Init(Driver);
+            rDriver_::Init(ThreadSafety);
+        }
+    };
+
+	typedef flw::rDressedRWFlow<> rFlow_;
+
+	class rFlow
+	: public rFlow_
+	{
+	private:
+		rDriver Driver_;
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			rFlow_::reset( P );
+			Driver_.reset( P );
+		}
+		qCDTOR( rFlow );
+		void Init(
+            fdr::rRWDriver &Driver,  // Before calling this function, 'Driver' must have be called with 'Handshke(…)'
+            eMode Mode )
+		{
+			Driver_.Init( Driver, Mode, fdr::ts_Default );
+			rFlow_::Init( Driver_  );
+		}
+	};
+
 }
 
 #endif

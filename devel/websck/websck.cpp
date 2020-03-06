@@ -204,7 +204,7 @@ qRE
 }
 
 
-bso::sSize websck::rRDriver::GetLength( flw::rRFlow &Flow )
+bso::sSize websck::rRDriverBase_::GetLength( flw::rRFlow &Flow )
 {
     bso::sSize Length = ( Flow.Get() & 0x7f );
 
@@ -230,13 +230,18 @@ bso::sSize websck::rRDriver::GetLength( flw::rRFlow &Flow )
     return Length;
 }
 
-fdr::size__ websck::rRDriver::FDRRead(
+fdr::size__ websck::rRDriverBase_::Read_(
     fdr::size__ Maximum,
     fdr::byte__ *Buffer )
 {
     bso::sSize Amount = 0;
 
     if ( Length_ == 0 ) {
+        if ( EOSPending_ ) {
+            Buffer[Amount++] = EOSChar_;
+            EOSPending_ = false;
+        }
+
         Flow_.Skip();
         Length_ = GetLength( Flow_ );
         Flow_.Read(sizeof(Mask_), &Mask_);
@@ -248,10 +253,28 @@ fdr::size__ websck::rRDriver::FDRRead(
         Length_--;
     }
 
+    if ( ( Length_ == 0 ) && ( Mode_ == mWithTerminator ) ) {
+        if ( Amount < Maximum )
+            Buffer[Amount++] = EOSChar_;
+        else
+            EOSPending_ = true;
+    }
+
     return Amount;
 }
 
-void websck::rWDriver::SendSize_(
+void websck::GetMessage(
+    flw::rRFlow &Flow,
+    str::dString &Message )
+{
+    bso::sChar C = 0;
+
+    while ( ( C = Flow.Get() ) != EOSChar_ )
+        Message.Append(C);
+}
+
+
+void websck::rWDriverBase_::SendSize_(
     bso::sU64 Size,
     bso::sU8 Pos )
 {
@@ -259,7 +282,7 @@ void websck::rWDriver::SendSize_(
     Flow_.Put(( Size >> Pos ) & 0xff);
 }
 
-void websck::rWDriver::SendSize_(bso::sU64 Size)
+void websck::rWDriverBase_::SendSize_(bso::sU64 Size)
 {
     if ( Size < 126 )
         SendSize_(Size, 0);

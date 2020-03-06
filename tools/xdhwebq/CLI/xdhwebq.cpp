@@ -78,6 +78,45 @@ namespace {
 			}
 		};
 
+		namespace {
+            void HandleProlog_(
+                xdwmain::rAgent &Agent,
+                fdr::rRWDriver &Driver,
+                rData &Data )
+            {
+            qRH
+                qCBUFFERr Buffer;
+                flw::rDressedRWFlow<> Flow;
+                str::wString Head;
+            qRB
+                Flow.Init(Driver);
+                Head.Init();
+                Agent.Head(&Data.Token, Head);
+                Flow.Write(Head.Convert(Buffer), Head.Amount());
+                Flow.Commit();
+            qRR
+            qRT
+            qRE
+            }
+            void HandleRegular_(
+                xdwmain::rAgent &Agent,
+                fdr::rRWDriver &Driver,
+                rData &Data )
+            {
+            qRH
+                websck::rFlow Flow;
+                xdwmain::rSession Session;
+            qRB
+                Flow.Init(Driver, websck::mWithTerminator);
+                Session.Init(Agent, "", Data.Token);
+                Session.Launch("","");
+                qRVct();
+            qRR
+            qRT
+            qRE
+            }
+		}
+
 		class sProcessing
 		: public cProcessing_
 		{
@@ -91,7 +130,8 @@ namespace {
                 rData *Data = NULL;
 			qRH
                 websck::wHeader Header;
-                flw::rDressedRFlow<> Flow;
+                websck::rRFlow Flow;
+                xdwmain::rSession Session;
 			qRB
                 if ( ( Data = new rData ) == NULL )
                     qRAlc();
@@ -101,8 +141,8 @@ namespace {
                 Header.Init();
 
                 if ( websck::Handshake(*Driver, Header) ) {
-                    Flow.Init(*Driver);
-                    csdcmn::Get(Flow,Data->Token);
+                    Flow.Init(*Driver, websck::mWithTerminator);
+                    websck::GetMessage(Flow, Data->Token);
                     Data->State = sRegular;
                 } else if ( Header.FirstLine == "XDH web prolog" ) {
                     if ( websck::GetValue(str::wString("Token"), Header, Data->Token ) )
@@ -119,36 +159,25 @@ namespace {
 				fdr::rRWDriver *Driver,
 				void *UP ) override
 			{
-                rData &Data = *(rData *)UP;
-			qRH
-                xdwmain::rSession Session;
-                str::wString Langage, Head;
-                qCBUFFERr Buffer;
-                flw::rDressedRWFlow<> Flow;
-			qRB
+
                 if ( UP == NULL )
                     qRGnr();
 
-                Flow.Init(*Driver);
+                rData &Data = *(rData *)UP;
+
 
                 switch ( Data.State ) {
                 case sProlog:
-                    Head.Init();
-                    A_().Head(&Data.Token, Head);
-                    Flow.Write(Head.Convert(Buffer), Head.Amount());
-                    Flow.Commit();
+                    HandleProlog_(A_(), *Driver, Data);
                     break;
                 case sRegular:
-                     Session.Init(A_(), Langage.Convert(Buffer), Data.Token);
-                     qRVct();
-                     break;
+                    HandleRegular_(A_(), *Driver, Data);
+                    break;
                 default:
                     qRGnr();
                     break;
                 }
-			qRR
-			qRT
-			qRE
+
 				return csdscb::aStop;
 			}
 			virtual bso::sBool CSDSCBPostProcess( void *UP ) override

@@ -103,25 +103,26 @@ namespace {
             void *UP ) override
         {
         qRH
-            websck::rRFlow RFlow;
-            websck::rWFlow WFlow;
+            websck::rFlow Flow;
+            str::wString Message;
         qRB
-            RFlow.Init(*Driver );
-            WFlow.Init(*Driver);
+            Flow.Init(*Driver, websck::mWithTerminator );
 
-            WFlow.Write("coucou", 6);
-            WFlow.Write("youpou", 6);
-            WFlow.Commit();
+            Flow.Write("coucou", 6);
+            Flow.Write("youpou", 6);
+            Flow.Commit();
 
-            WFlow.Write("youhou", 6);
-            WFlow.Commit();
+            Flow.Write("youhou", 6);
+            Flow.Commit();
 
-            WFlow.Write(TEXT, sizeof(TEXT)-1);
-            WFlow.Commit();
+            Flow.Write(TEXT, sizeof(TEXT)-1);
+            Flow.Commit();
 
 
             while( true ) {
-                cio::COut << RFlow.Get() << txf::commit;
+                Message.Init();
+                websck::GetMessage(Flow, Message);
+                cio::COut << Message << txf::nl << txf::commit;
             }
 
         qRR
