@@ -378,7 +378,7 @@ namespace flw {
 		// its value is not changed. Returns false if the content of the cache
 		// could not be written.
 		bso::sBool DumpCache_(
-			bso::sBool *WasEmpty,
+			bso::sBool *WasEmpty,   // May be obsolete!
 			qRPN )
 		{
 			size__ Stayed = _Size - _Free;
@@ -434,11 +434,11 @@ namespace flw {
 			bso::sBool WasEmpty = false;
 
 			if ( DumpCache_( &WasEmpty, ErrHandling ) ) {
-				if ( !WasEmpty )
+//				if ( !WasEmpty )
 					return _D().Commit( Unlock, ErrHandling );
-				else
+/*				else
 					return true;
-			}
+*/			}
 
 			return false;
 		}

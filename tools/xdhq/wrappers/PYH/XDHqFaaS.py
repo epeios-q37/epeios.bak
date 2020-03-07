@@ -293,8 +293,8 @@ def _ignition():
 #			print("IF IT STILL DOES NOT WORK AFTER FORKING, RELOAD THE COMPLETE PAGE!")
 			print( "If the program does not work properly, see http://q37.info/s/zbgfjtp9.\n")
 			_REPLit(url)
-#		else:
-#			XDHqSHRD.open(url)
+		else:
+			XDHqSHRD.open(url)
 
 def _serve(callback,userCallback,callbacks ):
 	global _writeLock, _globalCondition
