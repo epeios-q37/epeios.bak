@@ -35,6 +35,7 @@
 #include "fnm.h"
 #include "flf.h"
 #include "websck.h"
+#include "xdhutl.h"
 
 using cio::CErr;
 using cio::COut;
@@ -98,20 +99,53 @@ namespace {
             qRT
             qRE
             }
+
+            namespace {
+                void Handle_(
+                    const str::dString &Digest,
+                    xdwmain::rSession &Session )
+                {
+                qRH;
+                    str::string Id;
+                    xdhutl::event_abstract Abstract;
+                    qCBUFFERr IdBuffer, ActionBuffer;
+                qRB;
+                    Id.Init();
+                    Abstract.Init();
+                    if ( xdhutl::FetchEventAbstract(Digest, Id, Abstract) ) {
+                        if ( xdhutl::IsPredefined( Abstract.Action() ) )
+                            qRVct();
+                        else if ( Abstract.Action() == xdhutl::a_User )
+                            Session.Launch(Id.Convert(IdBuffer), Abstract.UserAction.Convert(ActionBuffer));
+                        else
+                            qRGnr();
+                    }
+                qRR;
+                qRT;
+                qRE;
+                }
+            }
+
             void HandleRegular_(
                 xdwmain::rAgent &Agent,
                 fdr::rRWDriver &Driver,
                 rData &Data )
             {
             qRH
-                websck::rFlow Flow;
+                websck::rRFlow Flow;
                 xdwmain::rSession Session;
+                str::wString Digest;
             qRB
                 Flow.Init(Driver, websck::mWithTerminator);
-                Session.Init(Agent, Flow, "", Data.Token);
+                Session.Init(Agent, Driver, "", Data.Token);
+
+                Session.Launch("","");
 
                 while ( true ) {
-                    Session.Launch("","");
+                    Digest.Init();
+                    websck::GetMessage(Flow,Digest);
+                    Flow.Dismiss();
+                    Handle_(Digest, Session);
                 }
             qRR
             qRT
@@ -133,7 +167,6 @@ namespace {
 			qRH
                 websck::wHeader Header;
                 websck::rRFlow Flow;
-                xdwmain::rSession Session;
 			qRB
                 if ( ( Data = new rData ) == NULL )
                     qRAlc();

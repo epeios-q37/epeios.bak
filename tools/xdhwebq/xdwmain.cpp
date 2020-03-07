@@ -28,9 +28,10 @@ inline void xdwmain::sJS::XDHUJPExecute(
 qRH
     qCBUFFERr Buffer;
 qRB
-    F_().Write( Script.Convert(Buffer), Script.Amount());
-    F_().Commit();
-    websck::GetMessage(F_(), ReturnValue);
+    Flow_.Write( Script.Convert(Buffer), Script.Amount());
+    Flow_.Commit();
+    websck::GetMessage(Flow_, ReturnValue);
+    Flow_.Dismiss();
 qRR
 qRT
 qRE

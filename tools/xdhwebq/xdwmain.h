@@ -24,6 +24,7 @@
 
 # include "xdhujp.h"
 # include "xdhups.h"
+# include "websck.h"
 
 namespace xdwmain {
     class rSession; // Predeclaration.
@@ -37,7 +38,7 @@ namespace xdwmain {
 	{
 	private:
 		Q37_MRMDF( rSession, S_, Session_ );
-		qRMV(flw::rRWFlow, F_, Flow_);
+		websck::rFlow Flow_;
 	protected:
 		virtual void XDHUJPExecute(
 			const str::string_ &Script,
@@ -58,15 +59,15 @@ namespace xdwmain {
 		void reset( bso::bool__ P = true )
 		{
 			Session_ = NULL;
-			Flow_ = NULL;
+			Flow_.reset(P);
 		}
 		E_CVDTOR( sJS );
 		void Init(
             rSession &Session,
-            flw::rRWFlow &Flow )
+            fdr::rRWDriver &Driver )
 		{
 			Session_ = &Session;
-			Flow_ = &Flow;
+			Flow_.Init(Driver, websck::mWithTerminator);
 		}
 	};
 
@@ -95,7 +96,7 @@ namespace xdwmain {
 		E_CDTOR( rSession );
 		bso::sBool Init(
             rAgent &Agent,
-            flw::rRWFlow &Flow,
+            fdr::rRWDriver &Driver,
             const char *Language,
 			const str::dString &Token )	// If empty, FaaS session, else token used for the DEMO session.
  		{
@@ -103,7 +104,7 @@ namespace xdwmain {
 
             Agent_ = &Agent;
 
-			JS_.Init(*this, Flow);
+			JS_.Init(*this, Driver);
 			Upstream_.Init(JS_);
 			SessionCallback_ = A_().RetrieveSession(Language, Token, &Upstream_);
 			Session_.Init(SessionCallback_);

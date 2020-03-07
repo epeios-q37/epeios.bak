@@ -49,7 +49,7 @@
 				</Modules>
 			</Modules>
 		</Modules>
-		<Modules Group="XDHWebQ" Path="../">
+		<Modules Group="XDH" Path="../">
 			<!--Module>misc</Module>
 			<Module>query</Module>
 			<Module>session</Module-->

@@ -42,7 +42,7 @@ function t( s )
 	log( s + " : " + String( d.getTime() - before ) );
 }
 		
-function handleQuery( query ) {
+function handle_Query( query ) {
 
 //	log( "Q : " + query );
     var xmlhttp;
@@ -82,22 +82,13 @@ function handleQuery( query ) {
 	xmlhttp.send();
 }
 
+var socket;
+
 function launchEvent( digest )
 {
-	query = buildQuery() + "_action=_HandleEvent&digest=" + encodeURIComponent( digest );
-
-	if (queryInProgress) {
-		if (query !== queryQueue[queryQueue.length - 1])
-			queryQueue.push(query);
-	}  else {
-		queryInProgress = true;
-		handleQuery(query);
-	}
-
-	return true;
+	socket.send(digest);
 }
 
-var socket;
 
 function connect(token) {
 	socket = new WebSocket("ws://localhost/xdh/");
@@ -110,7 +101,9 @@ function connect(token) {
 		let result = eval(event.data);
 		console.log(event.data);
 		
-		if (typeof result !== "undefined" && typeof result !== "object")	// 'typeof xdh_result !== "object"' == 'xdh_result != null' !!!!
-			socket.send(result);
+		if (typeof result === "undefined" || typeof result === "object")	// 'typeof xdh_result !== "object"' == 'xdh_result != null' !!!!
+			result = "";
+
+		socket.send(result);
     };
 }
