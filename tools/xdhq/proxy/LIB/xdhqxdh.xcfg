@@ -18,8 +18,9 @@
 		</Parameters>
 		<Definitions>
             <FaaS>
-                <URL>http://%Address%%Service%/faas.php?_token=%Token%</URL>
-                <Notification>
+              <!--URL>http://%Address%%Service%/faas.php?_token=%Token%</URL-->
+              <URL>http://192.168.0.10/faas.php?_token=%Token%</URL>
+              <Notification>
                     <xpp:cdata>
 ****************************************************************************
      Your application is connected to the free public server. Welcome!
