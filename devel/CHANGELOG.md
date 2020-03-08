@@ -10,6 +10,10 @@
 
 ## 2020-03-08:
 
+- SCLXDHTML, XDHCMN, XDHUPS:
+    - [adpt],
+- XDHDWS:
+    - fixing `invalid pointer` bug,
 - WEBSCK:
     - better handling of *EOF*,
 

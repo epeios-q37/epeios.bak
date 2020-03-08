@@ -47,18 +47,14 @@ namespace xdhdws {
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			if ( P )
-				if ( Callback_ != NULL )
-					delete( Callback_ );
-
 			Callback_ = NULL;
 		}
 		E_CVDTOR( sProxy );
-		void Init( xdhcmn::cUpstream *Callback )	// 'Callback' is destroyed by a 'delete' when this object is destroyed.
+		void Init( xdhcmn::cUpstream &Callback )
 		{
 			reset();
 
-			Callback_ = Callback;
+			Callback_ = &Callback;
 		}
 		void Process(
             const char *ScriptName,

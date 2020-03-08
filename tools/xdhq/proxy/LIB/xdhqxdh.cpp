@@ -539,7 +539,7 @@ namespace {
 		}
 	protected:
 		virtual bso::sBool XDHCMNInitialize(
-			xdhcmn::cUpstream *Callback,
+			xdhcmn::cUpstream &Callback,
 			const char *Language,
 			const str::dString &Token ) override
 		{

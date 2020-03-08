@@ -359,7 +359,7 @@ namespace sclxdhtml {
 		}
 		qCDTOR( sProxy );
 		void Init(
-            xdhcmn::cUpstream *Upstream,
+            xdhcmn::cUpstream &Upstream,
 			const scli::sInfo &Info,
 			eXSLFileHandling XSLFileHandling )
 		{

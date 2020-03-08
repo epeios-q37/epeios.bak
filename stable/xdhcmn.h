@@ -82,7 +82,7 @@ namespace xdhcmn {
 	{
 	protected:
 		virtual bso::sBool XDHCMNInitialize(
-			cUpstream *Callback,
+			cUpstream &Callback,
 			const char *Language,
 			const str::dString &Token ) = 0;	// If empty, PROD session, else token used for the DEMO session.
 		virtual bso::bool__ XDHCMNLaunch(
@@ -91,7 +91,7 @@ namespace xdhcmn {
 	public:
 		qCALLBACK( Session );
 		bso::sBool Initialize(
-			cUpstream *Callback,
+			cUpstream &Callback,
 			const char *Language,
 			const str::dString &Token )	// If empty, PROD session, else token used for the DEMO session.
 		{

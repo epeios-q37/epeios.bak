@@ -108,7 +108,7 @@ namespace xdwmain {
 			Upstream_.Init(JS_);
 			SessionCallback_ = A_().RetrieveSession(Language, Token, &Upstream_);
 			Session_.Init(SessionCallback_);
-			return Session_.Initialize(&Upstream_, Language, Token);
+			return Session_.Initialize(Upstream_, Language, Token);
 		}
 		bso::sBool Launch(
             const char *Id,
