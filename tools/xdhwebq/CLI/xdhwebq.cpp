@@ -143,7 +143,8 @@ namespace {
 
                 while ( true ) {
                     Digest.Init();
-                    websck::GetMessage(Flow,Digest);
+                    if ( !websck::GetMessage(Flow,Digest) )
+                        break;
                     Flow.Dismiss();
                     Handle_(Digest, Session);
                 }

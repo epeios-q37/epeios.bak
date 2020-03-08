@@ -254,9 +254,10 @@ namespace websck {
         }
     };
 
-    // Returns a message from a flow inirialized with above
-    // driver initialized with the 'mWithTerminator' mode.
-    void GetMessage(
+    // Retrieve a message from a flow initialized with above
+    // driver in 'mWithTerminator' mode.
+    // Returns 'false' when an EOF was encountered.
+    bso::sBool GetMessage(
         flw::rRFlow &Flow,
         str::dString &Message );
 

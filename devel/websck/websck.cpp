@@ -235,6 +235,7 @@ fdr::size__ websck::rRDriverBase_::Read_(
     fdr::byte__ *Buffer )
 {
     bso::sSize Amount = 0;
+    bso::sBool EndOfConnection = false;
 
     if ( Length_ == 0 ) {
         if ( EOSPending_ ) {
@@ -242,10 +243,15 @@ fdr::size__ websck::rRDriverBase_::Read_(
             EOSPending_ = false;
         }
 
-        Flow_.Skip();
+        EndOfConnection = Flow_.Get() & 0x8;
         Length_ = GetLength( Flow_ );
         Flow_.Read(sizeof(Mask_), &Mask_);
-        MaskCounter_ = 0;
+
+        if ( EndOfConnection ) {
+            Flow_.Skip(Length_);
+            return 0;
+        } else
+            MaskCounter_ = 0;
     }
 
     while ( Length_ && ( Amount < Maximum ) ) {
@@ -263,14 +269,16 @@ fdr::size__ websck::rRDriverBase_::Read_(
     return Amount;
 }
 
-void websck::GetMessage(
+bso::sBool websck::GetMessage(
     flw::rRFlow &Flow,
     str::dString &Message )
 {
     bso::sChar C = 0;
 
-    while ( ( C = Flow.Get() ) != EOSChar_ )
+    while ( !Flow.EndOfFlow() && ( ( C = Flow.Get() ) != EOSChar_ ) )
         Message.Append(C);
+
+    return C == EOSChar_;
 }
 
 

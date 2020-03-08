@@ -8,11 +8,18 @@
 - [stdz]: modification to comply with current standards;
 - [trvl]: trivial modifications;
 
+## 2020-03-08:
+
+- WEBSCK:
+    - better handling of *EOF*,
+
 ## 2020-03-07
+
 - FLW:
     - deprecating buggy functionnality,
 
 ## 2020-03-04:
+
 - WEBSCK:
     - adding message detection,
 
