@@ -91,7 +91,7 @@ function launchEvent( digest )
 
 
 function connect(token) {
-	socket = new WebSocket("ws://localhost/xdh/");
+	socket = new WebSocket("ws://" + window.location.hostname + "/xdh/");
 
     socket.onopen = function(e) {
 		socket.send(token)

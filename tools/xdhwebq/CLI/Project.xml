@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <Project xmlns:xpp="http://q37.info/ns/xpp/">
 	<xpp:bloc>
 		<!-- User definitions -->
@@ -80,7 +80,7 @@
             <File RTW="">repl_it.php</File>
             <File RTW="">runkit.php</File>
             <File RTW="">runkit-off.php</File>
-            <File>xdh.php</File>
+            <File>faas.php</File>
             <File>prolog.php</File>
             <File>qrcode(.min).js.LICENSE</File>
             <File>qrcode.min.js</File>
