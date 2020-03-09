@@ -91,7 +91,7 @@ function launchEvent( digest )
 
 
 function connect(token) {
-	socket = new WebSocket("ws://" + window.location.hostname + "/xdh/");
+	socket = new WebSocket((window.location.protocol === "http:" ? "ws" : "wss" ) + "://" + window.location.hostname + "/xdh/");
 
     socket.onopen = function(e) {
 		socket.send(token)
@@ -105,5 +105,10 @@ function connect(token) {
 			result = "";
 
 		socket.send(result);
-    };
+	};
+	
+    socket.onclose = function(event){
+        if (confirm("Disconnected!\nPress OK to reload the application."))
+            location.reload(true);
+    }	
 }
