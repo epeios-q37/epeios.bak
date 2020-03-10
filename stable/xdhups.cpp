@@ -60,3 +60,18 @@ qRE
 	return Success;
 }
 
+bso::sBool xdhups::rAgent::IsValid(void *UP)
+{
+    bso::sBool ReturnValue = false;
+qRH
+    str::wString DummmyHead;
+qRB
+    DummmyHead.Init();
+
+    ReturnValue = GetHead(UP, DummmyHead);
+qRR
+qRT
+qRE
+    return ReturnValue;
+}
+

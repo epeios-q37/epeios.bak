@@ -64,7 +64,7 @@ namespace sclxdhtml {
 
 	const char *GetLauncher( void );
 
-	typedef void( *fHead )(void *UP, str::dString &Head);
+	typedef bso::sBool ( *fHead )(void *UP, str::dString &Head);
 
 	void SetHeadFunction( fHead HeadFunction );
 

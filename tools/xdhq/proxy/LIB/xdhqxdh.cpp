@@ -448,7 +448,7 @@ namespace {
 		qRT;
 		qRE;
 		}
-		void ReportError_(
+		void ReportErrorToBackend_(
 			const char *Message,
 			flw::rWFlow &Flow )
 		{
@@ -462,9 +462,36 @@ namespace {
 				qRGnr();
 			}
 		}
-		void ReportNoError_( flw::rWFlow &Flow )
+		void ReportNoErrorToBackend_( flw::rWFlow &Flow )
 		{
-			ReportError_( NULL, Flow );
+			ReportErrorToBackend_( NULL, Flow );
+		}
+		void ReportToFrontend_(const str::dString &HTML)
+		{
+            str::wStrings Values;
+            str::wString ReturnValue;
+
+            Values.Init();
+            Values.Append(str::wString("Set"));
+            Values.Append(str::wString(""));
+            Values.Append(HTML);
+            Values.Append(str::wString(""));
+
+            ReturnValue.Init();
+            Process("HandleLayout_1", Values, ReturnValue);
+
+		}
+		void ReportErrorToFrontend_(const str::dString &Message)
+		{
+            str::wStrings Values;
+            str::wString ReturnValue;
+
+            Values.Init();
+            Values.Append(Message);
+
+            ReturnValue.Init();
+            Process("Alert_1", Values, ReturnValue);
+
 		}
 		bso::bool__ Launch_(
 			const char *Id,
@@ -533,6 +560,7 @@ namespace {
             }
 #undef H
 		qRR;
+            ReportErrorToFrontend_( str::wString("Connection to backend lost!"));
 		qRT;
 		qRE;
 			return Return;
@@ -577,16 +605,16 @@ namespace {
 
 				switch ( Version ) {
 				case 0:
-					ReportNoError_( Flow );
+					ReportNoErrorToBackend_( Flow );
 					break;
 				case 1:
-					ReportNoError_( Flow );
+					ReportNoErrorToBackend_( Flow );
 					break;
 				case csdcmn::UndefinedVersion:
-					ReportError_( "\nIncompatible protocol! Please update your software.\n", Flow );
+					ReportErrorToBackend_( "\nIncompatible protocol! Please update your software.\n", Flow );
 					break;
 				default:
-					ReportError_( "\nUnknown protocol version!\n", Flow );
+					ReportErrorToBackend_( "\nUnknown protocol version!\n", Flow );
 					break;
 				}
 

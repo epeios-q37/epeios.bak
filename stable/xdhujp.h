@@ -111,8 +111,11 @@ namespace xdhujp {
 		}
 	};
 
-
-
+    // Fill the main page with the content of 'HTML'.
+    // Used to report an errro.
+    void SetMainPage(
+    	cJS  &Callback,
+        const str::dString &HTML);
 }
 
 #endif

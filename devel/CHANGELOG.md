@@ -8,6 +8,13 @@
 - [stdz]: modification to comply with current standards;
 - [trvl]: trivial modifications;
 
+## 2020-03-10:
+
+- SCLXDHTML, XDHUPS:
+    - [adpt],
+- XDHCMN, XDHUJP:
+    - changes so an inexisting session can be detected and handled.
+
 ## 2020-03-08:
 
 - SCLXDHTML, XDHCMN, XDHUPS:

@@ -64,11 +64,11 @@ $out = str_replace(array("\r", "\n", "\t"), '','
 					<div style="display: table; padding: 10px;">
 						<hr/>
 						<div style="display: table; padding: 10px;">
-						<div style="display: table; margin: auto; border: 1px solid; padding: 10px; box-shadow: 5px 5px; text-align: center;">
-							<span style="text-shadow: 1px 1px;">
-								<span>Powered by the <a href="http://atlastk.org/" target="_blank"><span style="font-style: italic;">Atlas</span> toolkit</a></span>
-							</span>
-						</div>
+							<div style="display: table; margin: auto; border: 1px solid; padding: 10px; box-shadow: 5px 5px; text-align: center;">
+								<span style="text-shadow: 1px 1px;">
+									<span>Powered by the <a href="http://atlastk.org/" target="_blank"><span style="font-style: italic;">Atlas</span> toolkit</a></span>
+								</span>
+							</div>
 						</div>
 					</div>
 				</div>

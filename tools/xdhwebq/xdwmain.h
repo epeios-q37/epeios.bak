@@ -113,9 +113,13 @@ namespace xdwmain {
 		bso::sBool Launch(
             const char *Id,
             const char *Action )
-            {
-                return Session_.Launch(Id, Action );
-            }
+        {
+            return Session_.Launch(Id, Action );
+        }
+        void SetMainPage(const str::dString &HTML)
+        {
+            xdhujp::SetMainPage(JS_, HTML);
+        }
 	};
 }
 

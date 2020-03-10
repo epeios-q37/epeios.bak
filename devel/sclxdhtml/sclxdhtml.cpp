@@ -124,13 +124,16 @@ namespace {
 		{
 			return SCLXDHTMLInfo();
 		}
-		void XDHCMNGetHead(
+		bso::sBool XDHCMNGetHead(
 			void *UP,
-			str::dString &Head ) override
+			str::dString &Head,
+			qRPN ) override
 		{
 			if ( !sclmisc::LoadXMLAndTranslateTags( registry::definition::HeadFile, sclrgstry::GetCommonRegistry(), Head, sclrgstry::nOptional, 1, DefaultMarker ) )
 				if ( HeadFunction_ != NULL )
-					HeadFunction_( UP, Head );
+					return HeadFunction_( UP, Head );
+
+            return true;
 		}
 	public:
 		void reset( bso::bool__ P = true )
@@ -191,7 +194,7 @@ namespace {
 	qRE
 	}
 
-	void TanslateAndPutInXML_(
+	void TranslateAndPutInXML_(
 		const str::string_  &RawMessage,
 		const char *Language,
 		str::string_ &XML )
@@ -241,7 +244,7 @@ namespace {
 		if ( Language == NULL )
 			PutInXML_( Message.UTF8( Buffer ), XML );
 		else
-			TanslateAndPutInXML_( Message.UTF8( Buffer ), Language, XML );
+			TranslateAndPutInXML_( Message.UTF8( Buffer ), Language, XML );
 
 		EncodeXML_( str::wString( AlertBaseXSL_ ), XSL );
 	qRR

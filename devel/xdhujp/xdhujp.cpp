@@ -34,6 +34,10 @@ using xdhutl::rNString;
 using xdhutl::nchar__;
 using xdhutl::sNChar;
 
+namespace {
+    qCDEF(char *, HandleLayoutScriptName_, "HandleLayout_1");
+}
+
 void xdhujp::Execute(
 	cJS  &Callback,
 	const char *ScriptName,
@@ -1390,9 +1394,34 @@ void xdhujp::sUpstream::XDHCMNProcess(
 	const char *ScriptName,
 	const str::dStrings &Values,
 	str::dString &ReturnValue )
-	{
-        if ( !strcmp(ScriptName, "HandleLayout_1") )
-            HandleLayout_(C_(), ScriptName, Values );
-        else
-            Execute(C_(), ScriptName, Values, ReturnValue);
-	}
+{
+    if ( !strcmp(ScriptName, HandleLayoutScriptName_) )
+        HandleLayout_(C_(), ScriptName, Values );
+    else
+        Execute(C_(), ScriptName, Values, ReturnValue);
+}
+
+void xdhujp::SetMainPage(
+    cJS  &Callback,
+    const str::dString &HTML)
+{
+qRH
+    str::wStrings Values;
+    str::wString Script, ReturnValue;
+qRB
+    Values.Init();
+    Values.Append(str::wString("Set"));
+    Values.Append(str::wString(""));
+    Values.Append(HTML);
+    Values.Append(str::wString(""));
+
+    Script.Init();
+	xdhujs::GetScript( HandleLayoutScriptName_, Values, Script );
+
+	ReturnValue.Init(),
+	Callback.Execute( Script, ReturnValue );
+qRR
+qRT
+qRE
+}
+

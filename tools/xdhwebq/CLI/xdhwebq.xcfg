@@ -11,6 +11,20 @@
 			<Service>53710</Service>
 		</Parameters>
 		<Definitions>
+            <ErrorHead>
+                <xpp:cdata>
+<title>Error: no application!</title>
+                </xpp:cdata>
+            </ErrorHead>
+            <ErrorBody>
+                <xpp:cdata>
+<div style="display: table; margin: auto; border: 1px solid; padding: 10px; text-align: center;">
+	<span style="color: red;">
+        <span>Unknown token, or the application corresponding to given token does no more exists.</span>
+	</span>
+</div>
+               </xpp:cdata>
+            </ErrorBody>
 		</Definitions>
 		<Locale>
 			<xpp:expand select="TOL_Locale"/>

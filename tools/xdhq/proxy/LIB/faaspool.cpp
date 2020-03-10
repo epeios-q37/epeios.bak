@@ -178,32 +178,34 @@ namespace {
 		return Backend;
 	}
 
-	const str::dString &TUGetHead_(
+	bso::sBool TUGetHead_(
 		const str::dString &Token,
 		str::dString &Head )
 	{
 		sBRow Row = TUGetBackendRow_( Token );
 
-		if ( Row != qNIL )
+		if ( Row != qNIL ) {
 			Heads_.Recall( Row, Head );
-
-		return Head;
+			return true;
+        } else
+            return false;
 	}
 
-	const str::dString &TSGetHead_(
+	bso::sBool TSGetHead_(
 		const str::dString &Token,
 		str::dString &Head )
 	{
+        bso::sBool Found = false;
 	qRH;
 		mtx::rMutex Mutex;
 	qRB;
 		Mutex.InitAndLock( MutexHandler_ );
 
-		TUGetHead_( Token, Head );
+		Found = TUGetHead_( Token, Head );
 	qRR;
 	qRT;
 	qRE;
-		return Head;
+		return Found;
 	}
 
 	void Remove_( sBRow Row )
@@ -618,11 +620,11 @@ qRE;
 }
 
 namespace {
-	void GetHead_(
+	bso::sBool GetHead_(
 		void *UP,
 		str::dString &Head )
 	{
-		TSGetHead_( *(const str::wString *)UP, Head );	// 'UP' contains the token.
+		return TSGetHead_( *(const str::wString *)UP, Head );	// 'UP' contains the token.
 	}
 }
 

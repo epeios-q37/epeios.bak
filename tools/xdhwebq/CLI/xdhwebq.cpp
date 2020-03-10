@@ -92,7 +92,8 @@ namespace {
             qRB
                 Flow.Init(Driver);
                 Head.Init();
-                Agent.Head(&Data.Token, Head);
+                if ( !Agent.GetHead(&Data.Token, Head) )
+                    sclmisc::MGetValue(registry::definition::ErrorHead, Head);
                 Flow.Write(Head.Convert(Buffer), Head.Amount());
                 Flow.Commit();
             qRR
@@ -134,12 +135,18 @@ namespace {
             qRH
                 websck::rRFlow Flow;
                 xdwmain::rSession Session;
-                str::wString Digest;
+                str::wString Digest, HTML;
             qRB
                 Flow.Init(Driver, websck::mWithTerminator);
                 Session.Init(Agent, Driver, "", Data.Token);
 
-                Session.Launch("","");
+                if ( Agent.IsValid(&Data.Token) )
+                    Session.Launch("","");
+                else {
+                    HTML.Init();
+                    sclmisc::MGetValue(registry::definition::ErrorBody, HTML);
+                    Session.SetMainPage(HTML);
+                }
 
                 while ( true ) {
                     Digest.Init();

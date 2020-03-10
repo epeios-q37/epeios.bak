@@ -162,9 +162,14 @@ namespace xdhcmn {
 			cUpstream *Upstream ) = 0;
 		virtual void XDHCMNReleaseSession( cSession *Session ) = 0;
 		virtual const scli::sInfo &XDHCMNGetInfo( void ) = 0;
-		virtual void XDHCMNGetHead(
+		// The returned value is only for 'FaaS' mode. In other mode, retuns always 'true',
+		// or false when on eror and 'qRP' set accordingly.
+		// In 'FaaS' mode, returns true when a application for the given toekn (stored in 'UP')
+		// exists, false otherwise.
+		virtual bso::sBool XDHCMNGetHead(
 			void *UP,
-			str::dString &Head ) = 0;
+			str::dString &Head,
+			qRPD ) = 0;
 	public:
 		qCALLBACK( Downstream )
 		void Initialize( const shared_data__ &Data )
@@ -193,13 +198,11 @@ namespace xdhcmn {
 		{
 			return XDHCMNGetInfo();
 		}
-		const str::dString &GetHead(
+		const bso::sBool GetHead(
 			void *UP,
 			str::dString &Head )
 		{
-			XDHCMNGetHead( UP, Head );
-
-			return Head;
+			return XDHCMNGetHead(UP, Head);
 		}
 	};
 

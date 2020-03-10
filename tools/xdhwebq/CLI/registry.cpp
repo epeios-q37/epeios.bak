@@ -25,3 +25,5 @@ using namespace registry;
 rEntry registry::parameter::ModuleFilename( "ModuleFilename", sclrgstry::Parameters );
 rEntry registry::parameter::Service( "Service", sclrgstry::Parameters );
 
+rEntry registry::definition::ErrorHead("ErrorHead", sclrgstry::Definitions);
+rEntry registry::definition::ErrorBody("ErrorBody", sclrgstry::Definitions);

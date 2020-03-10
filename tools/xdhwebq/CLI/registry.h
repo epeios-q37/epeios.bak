@@ -35,6 +35,10 @@ namespace registry {
 
 	namespace definition {
 		using namespace sclrgstry::definition;
+
+		extern rEntry
+            ErrorHead,  // HTMl head used for inexisting token.
+            ErrorBody;  // HTML body used for inexisting token.
 	}
 }
 
