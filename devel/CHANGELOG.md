@@ -14,6 +14,8 @@
     - [adpt],
 - XDHCMN, XDHUJP:
     - changes so an inexisting session can be detected and handled.
+- global xdhtml related féetures:
+    - the script building is now handled downstream and no more upstream,
 
 ## 2020-03-08:
 

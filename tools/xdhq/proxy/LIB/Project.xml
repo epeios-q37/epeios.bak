@@ -48,6 +48,7 @@
 			</Modules>
 			<Modules Group="XDHTML">
 				<xpp:expand select="XDH"/>
+                <Module>xdhutl</Module>
 			</Modules>
 		</Modules>
 		<Module>faaspool</Module>

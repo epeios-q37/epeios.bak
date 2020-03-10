@@ -42,17 +42,9 @@
 				<Module>xdhcmn</Module>
 				<Module>xdhups</Module>
 				<Module>xdhutl</Module>
-				<Modules Group="JS">
-					<Module>xdhujp</Module>
-					<Module>xdhujr</Module>
-					<Module>xdhujs</Module>
-				</Modules>
 			</Modules>
 		</Modules>
-		<Modules Group="XDH" Path="../">
-			<!--Module>misc</Module>
-			<Module>query</Module>
-			<Module>session</Module-->
+		<Modules Group="XDW" Path="../">
 			<Module>xdwmain</Module>
 			<Module>xdwrgstry</Module>
 		</Modules>

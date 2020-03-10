@@ -3,6 +3,7 @@
 	<Configuration target="xdhqxdh">
 		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
 		<xpp:expand value-of="q37.xpp"/>
+		<xpp:expand href="../../../XDH.xcfg"/>
 		<Parameters>
 			<Language>en</Language>
 			<Command>Test</Command>

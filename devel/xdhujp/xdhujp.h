@@ -28,6 +28,8 @@
 
 // X(SL)/DH(TML) Upstream Javascript-related Proxy
 
+# error "Deprecated!"
+
 # include "xdhujs.h"
 
 # include "str.h"

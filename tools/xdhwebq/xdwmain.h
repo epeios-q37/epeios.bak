@@ -22,7 +22,6 @@
 
 # include "xdwrgstry.h"
 
-# include "xdhujp.h"
 # include "xdhups.h"
 # include "websck.h"
 
@@ -31,42 +30,25 @@ namespace xdwmain {
 
     using xdhups::rAgent;
 
-    typedef xdhujp::cJS cJS_;
+    typedef xdhcmn::cUpstream cUpstream_;
 
-	class sJS
-	: public cJS_
+	class sUpstream
+	: public cUpstream_
 	{
 	private:
-		Q37_MRMDF( rSession, S_, Session_ );
 		websck::rFlow Flow_;
 	protected:
-		virtual void XDHUJPExecute(
+		virtual void XDHCMNProcess(
 			const str::string_ &Script,
 			str::dString &ReturnValue ) override;
-		virtual void XDHUJPGetWidgetAttributeName( TOL_CBUFFER___ &Buffer ) override
-		{
-			sclmisc::MGetValue( xdwrgstry::custom_item::attribute_name::Widget, Buffer);
-		}
-		virtual void XDHUJPGetResultAttributeName( TOL_CBUFFER___ &Buffer ) override
-		{
-			sclmisc::MGetValue( xdwrgstry::custom_item::attribute_name::Result, Buffer );
-		}
-		/*
-		virtual void XDHJSPHandleExtensions( const xdhcbk::nstring___ &Id ) override;
-		virtual void XDHJSPHandleCastings( const xdhcbk::nstring___ &Id ) override;
-		*/
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			Session_ = NULL;
 			Flow_.reset(P);
 		}
-		E_CVDTOR( sJS );
-		void Init(
-            rSession &Session,
-            fdr::rRWDriver &Driver )
+		E_CVDTOR( sUpstream );
+		void Init( fdr::rRWDriver &Driver )
 		{
-			Session_ = &Session;
 			Flow_.Init(Driver, websck::mWithTerminator);
 		}
 	};
@@ -76,8 +58,7 @@ namespace xdwmain {
 	{
 	private:
         qRMV(rAgent, A_, Agent_);
-		sJS JS_;
-        xdhujp::sUpstream Upstream_;
+        sUpstream Upstream_;
         xdhcmn::cSession *SessionCallback_;
 		xdhups::sSession Session_;
 	public:
@@ -91,7 +72,7 @@ namespace xdwmain {
 
             Agent_ = NULL;
             SessionCallback_ = NULL;
-            tol::reset(P, JS_, Session_, Upstream_ );
+            tol::reset(P, Session_, Upstream_ );
 		}
 		E_CDTOR( rSession );
 		bso::sBool Init(
@@ -104,8 +85,7 @@ namespace xdwmain {
 
             Agent_ = &Agent;
 
-			JS_.Init(*this, Driver);
-			Upstream_.Init(JS_);
+			Upstream_.Init(Driver);
 			SessionCallback_ = A_().RetrieveSession(Language, Token, &Upstream_);
 			Session_.Init(SessionCallback_);
 			return Session_.Initialize(Upstream_, Language, Token);

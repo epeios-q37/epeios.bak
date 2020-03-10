@@ -64,17 +64,15 @@ namespace xdhcmn {
 	{
 	protected:
 		virtual void XDHCMNProcess(
-			const char *ScriptName,
-			const str::dStrings &Values,
+			const str::dString &Script,
 			str::dString &ReturnValue ) = 0;
 	public:
 		qCALLBACK( Upstream );
 		void Process(
-			const char *ScriptName,
-			const str::dStrings &Values,
+			const str::dString &Script,
 			str::dString &ReturnValue )
 		{
-            return XDHCMNProcess(ScriptName, Values, ReturnValue );
+            return XDHCMNProcess(Script, ReturnValue );
 		}
 	};
 

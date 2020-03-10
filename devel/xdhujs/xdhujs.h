@@ -28,6 +28,8 @@
 
 // X(SL)/DH(TML) Upstream Javascript Scripter.
 
+# error "Deprecated!"
+
 # include "err.h"
 
 # include "xdhcmn.h"

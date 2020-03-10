@@ -21,7 +21,7 @@
 
 #include "websck.h"
 
-void xdwmain::sJS::XDHUJPExecute(
+void xdwmain::sUpstream::XDHCMNProcess(
 	const str::string_ &Script,
 	str::dString &ReturnValue )
 {
