@@ -16,9 +16,9 @@
 <title>Error: no application!</title>
                 </xpp:cdata>
             </ErrorHead>
-            <!-- Script javascript lancé lorsque le token est inconnu. Sert à afficher un message d'erreur. -->
+            <!-- Script JS lancé lorsque le token est inconnu. Sert à afficher un message d'erreur. -->
             <ErrorScript>
-                <!-- Si le massage est modifié, modifier la FAQ en conséquence ! -->
+                <!-- Si le message est modifié, modifier la FAQ en conséquence ! -->
                 <![CDATA[
 let html = `
 <div style="display: table; margin: auto; padding: 10px; text-align: center;">

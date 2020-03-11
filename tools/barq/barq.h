@@ -18,21 +18,21 @@
 */
 
 
-#ifndef ESKETCH_INC_
-# define ESKETCH_INC_
+#ifndef BARQ_INC_
+# define BARQ_INC_
 
 # include "scli.h"
 
-# define NAME_MC			"eSketch"
-# define NAME_UC			"ESKETCH"
-# define NAME_LC			"esketch"
-# define WEBSITE_URL		"http://q37.info/tools/esketch/"
+# define NAME_MC			"BARq"
+# define NAME_LC			"barq"
+# define NAME_UC			"BARQ"
+# define WEBSITE_URL		"http://q37.info/"
 # define AUTHOR_NAME		"Claude SIMON"
 # define AUTHOR_CONTACT		"http://q37.info/contact/"
 # define OWNER_NAME			"Claude SIMON"
 # define OWNER_CONTACT		"http://q37.info/contact/"
 # define COPYRIGHT			COPYRIGHT_YEARS " " OWNER_NAME " (" OWNER_CONTACT ")"
 
-SCLI_DEC( esketch )
+SCLI_DEC( barq )
 
 #endif

@@ -10,6 +10,10 @@
 
 ## 2020-03-11:
 
+- CSDUCL:
+    - [adpt],
+- FBLFAQ:
+    - [trvl],
 - WEBSCK:
     - adding variants of message related functions,
 - XDHCMN:

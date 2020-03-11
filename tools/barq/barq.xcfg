@@ -11,12 +11,18 @@
 		</Parameters>
 		<Definitions>
 			<Plugins>
-    <Plugin id="Embedded">
-     <xpp:expand value-of="PlgPath"/>
-     <xpp:bloc>frontend/embedded/embedded</xpp:bloc>
-    </Plugin>
-				<Plugin id="Straight">h:/bin/plugins/frontend/straight/straight</Plugin>
-				<Plugin id="Proxy">h:/bin/plugins/frontend/proxy/proxy</Plugin>
+                <Plugin id="Embedded">
+                     <xpp:expand value-of="PlgPath"/>
+                     <xpp:bloc>frontend/embedded/embedded</xpp:bloc>
+                </Plugin>
+				<Plugin id="Straight">
+                     <xpp:expand value-of="PlgPath"/>
+                     <xpp:bloc>frontend/straight/straight</xpp:bloc>
+                </Plugin>
+				<Plugin id="Proxy">
+                     <xpp:expand value-of="PlgPath"/>
+                     <xpp:bloc>frontend/proxy/proxy</xpp:bloc>
+                </Plugin>
 			</Plugins>
 		</Definitions>
 		<Locale>

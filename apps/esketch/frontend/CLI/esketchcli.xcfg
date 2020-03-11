@@ -1,30 +1,30 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Configurations xmlns:xpp="http://q37.info/ns/xpp/" >
-	<Configuration target="esketchcli">
-		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
-		<xpp:expand value-of="q37.xpp"/>
-  <xpp:expand href="../esketchfrd.xcfg"/>
-  <xpp:expand href="../../../../TOL.xcfg"/>
+    <Configuration target="esketchcli">
+        <xpp:set name="q37.xpp" env-var="Q37_XPP"/>
+        <xpp:expand value-of="q37.xpp"/>
+        <xpp:expand href="../esketchfrd.xcfg"/>
+        <xpp:expand href="../../../../TOL.xcfg"/>
 		<Parameters>
-   <xpp:expand select="Parameters"/>
-   <Language>fr</Language>
-   <!-- Default command -->
-   <Command>Usage</Command>
-  </Parameters>
+           <xpp:expand select="Parameters"/>
+           <Language>fr</Language>
+           <!-- Default command -->
+           <Command>Usage</Command>
+        </Parameters>
 		<Definitions>
-   <xpp:expand select="Definitions"/>
-  </Definitions>
+            <xpp:expand select="Definitions"/>
+        </Definitions>
 		<Locale>
 			<xpp:expand select="TOL_Locale"/>
-   <Translations text="TestCommandDescription">
-    <Translation language="fr">Commande de test.</Translation>
-    <Translation language="en">Test command.</Translation>
-   </Translations>
-   <Translations text="AboutBackendCommandDescription">
-    <Translation language="fr">Affiche des informations à propos du moteur de traitement.</Translation>
-    <Translation language="en">Displays infomation about the backend.</Translation>
-   </Translations>
-   <Translations text="TestFlagDescription">
+            <Translations text="TestCommandDescription">
+                <Translation language="fr">Commande de test.</Translation>
+                <Translation language="en">Test command.</Translation>
+            </Translations>
+            <Translations text="AboutBackendCommandDescription">
+                <Translation language="fr">Affiche des informations à propos du moteur de traitement.</Translation>
+                <Translation language="en">Displays infomation about the backend.</Translation>
+            </Translations>
+            <Translations text="TestFlagDescription">
 				<Translation language="fr">fanion de test.</Translation>
 				<Translation language="en">test flag.</Translation>
 			</Translations>
@@ -48,7 +48,7 @@
 		<Arguments>
 			<xpp:expand select="TOL_Arguments"/>
 			<!-- Commandes : pas de 'Path' (vaut 'Parameters/Command'), ni de 'Value'. -->
-   <Argument id="AboutBackendCommand" Description="AboutBackendCommandDescription" long="about-backend" Value="AboutBackend" Usage=""/>
+            <Argument id="AboutBackendCommand" Description="AboutBackendCommandDescription" long="about-backend" Value="AboutBackend" Usage=""/>
    <!--Argument id="TestCommand" Description="TestCommandDescription" long="test" short="t" Value="Test" Usage="%TestFlag% %TestOption% %TestArgument%"/-->
    <!-- Fanaux : 'Path', mais pas de 'Value'. -->
    <!--Argument id="TestFlag" Description="TestFlagDescription" long="flag" short="f" Path="Flag" Value="TestFlag"/>

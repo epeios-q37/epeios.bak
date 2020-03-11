@@ -46,10 +46,10 @@ namespace fblfaq {
 
 	typedef fblfrd::xitem16		type_item;
 	typedef fblfrd::xitem16_	type_item_;
-	
+
 	typedef fblfrd::xitem16s	types_items;
 	typedef fblfrd::xitem16s_	types_items_;
-	
+
 	class command_
 	{
 	public:
@@ -98,15 +98,15 @@ namespace fblfaq {
 	class type_
 	{
 	public:
-		str::string_ Name;
-		str::string_ Prefix;
-		commands_ Commands;
 		struct s {
 			str::string_::s Prefix;
 			str::string_::s Name;
 			commands_::s Commands;
 			type_id__ ID;
 		} &S_;
+		str::string_ Prefix;
+		str::string_ Name;
+		commands_ Commands;
 		type_( s &S )
 		: S_( S),
 		  Prefix( S.Prefix ),

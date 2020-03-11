@@ -19,6 +19,8 @@
 
 // Backend A(PI) Retriever.
 
+#include "barq.h"
+
 #include "registry.h"
 
 #include "scltool.h"
@@ -40,17 +42,14 @@ using cio::CIn;
 
 using namespace fblfaq;
 
-using xml::writer_;
+using xml::rWriter;
 
-# define NAME_MC			"barq"
-# define NAME_LC			"barq"
-# define NAME_UC			"BARQ"
-# define WEBSITE_URL		"http://q37.info/"
-# define AUTHOR_NAME		"Claude SIMON"
-# define AUTHOR_CONTACT		"http://q37.info/contact/"
-# define OWNER_NAME			"Claude SIMON"
-# define OWNER_CONTACT		"http://q37.info/contact/"
-# define COPYRIGHT			COPYRIGHT_YEARS " " OWNER_NAME " (" OWNER_CONTACT ")"	
+SCLI_DEF( barq, NAME_LC, NAME_MC );
+
+const scli::sInfo &scltool::SCLTOOLInfo( void )
+{
+	return barq::Info;
+}
 
 namespace {
 	void PrintHeader_( void )
@@ -243,7 +242,7 @@ static inline const char *GetTypeName(
 static void Generate_(
 	const fblcst::cast__ &Cast,
 	bso::u8__ ID,	// Id of the parameter, NOT of the type.
-	writer_ &Writer,
+	rWriter &Writer,
 	bso::bool__ IsLast )
 {
 qRH
@@ -300,12 +299,12 @@ static inline bso::bool__ IsLast_(
 
 static void Generate_(
 	const parameters_ &Parameters,
-	writer_ &Writer )
+	rWriter &Writer )
 {
 	sdr::row__ P = Parameters.First();
 	fblcst::cast__ Cast;
 	bso::u8__ ID = 1;
-	
+
 	if ( ( Cast = (fblcst::cast__)*Parameters( P ) ) == fblcst::cEnd )
 		Writer.PushTag( "Out" );
 	else {
@@ -313,12 +312,12 @@ static void Generate_(
 		Generate_( Cast, ID, Writer, IsLast_( Parameters, P ) );
 		ID++;
 	}
-		
+
 	P = Parameters.Next( P );
-		
+
 	while( P != qNIL ) {
 		if ( ( Cast = (fblcst::cast__)*Parameters( P ) ) == fblcst::cEnd ) {
-			
+
 			if ( Parameters.Next( P ) != qNIL ) {
 				ID = 1;
 				Writer.PopTag();
@@ -328,76 +327,76 @@ static void Generate_(
 			Generate_( Cast, ID, Writer, IsLast_( Parameters, P ) );
 			ID++;
 		}
-	
+
 		P = Parameters.Next( P );
 	}
-	
+
 	Writer.PopTag();
 }
 
 static void Generate_(
 	const parameters_ &Parameters,
-	writer_ &Writer,
+	rWriter &Writer,
 	sdr::size__ &Position )
 {
 	Writer.PushTag( "Parameters" );
 
 	Writer.PutAttribute( "Amount", Parameters.Amount() );		// Don't forget ; there is the 'end of input parameters' cast.
-	
+
 	Writer.PutAttribute( "Position", Position );
 
 	Position += Parameters.Amount();
 
 	if ( Parameters.Amount() > 1 )
 		Generate_( Parameters, Writer );
-	
+
 	Writer.PopTag();
 }
 
 static const char *Convert_( unsigned long V )
 {
 	static char Buffer[20];
-	
+
 	sprintf( Buffer, "%lu",  V );
-	
+
 	return Buffer;
 }
 
 static void Generate_(
 	const command_ &Command,
-	writer_ &Writer,
+	rWriter &Writer,
 	sdr::size__ &Position )
 {
 	Writer.PushTag( "Command" );
-	
+
 	Writer.PutValue( Command.Identification.Value, "Name" );
 	Writer.PutValue( Convert_( *Command.Identification.ID() ), "ID" );
-	
+
 	Generate_( Command.Parameters, Writer, Position );
-	
+
 	Writer.PopTag();
 }
 
 static void Generate_(
 	const commands_ &Commands,
-	writer_ &Writer )
+	rWriter &Writer )
 {
 qRH
 	sdr::row__ P;
 	sdr::size__ Position = 0;
 qRB
 	Writer.PushTag( "Commands" );
-	
+
 	Writer.PutAttribute( "Amount", Commands.Amount() );
 	P = Commands.First();
-	
+
 	while( P != qNIL ) {
 		Generate_( Commands( P ), Writer, Position );
 		P = Commands.Next( P );
 	}
 
 //	Commands.Flush();
-	
+
 	Writer.PopTag();
 qRR
 qRT
@@ -433,7 +432,7 @@ qRB
 				if ( P != qNIL )
 					P = Buffer.Next(  P );
 			}
-	
+
 			Buffer = Temp;
 		}
 qRR
@@ -443,7 +442,7 @@ qRE
 
 static void Generate_(
 	const type_ &Type,
-	writer_ &Writer )
+	rWriter &Writer )
 {
 qRH
 	str::string Buffer;
@@ -489,18 +488,18 @@ qRE
 static void Generate_(
 	const type_ &Type,
 	bso::bool__ IsMaster,
-	writer_ &Writer )
+	rWriter &Writer )
 {
 	Writer.PushTag( "Type" );
 	if ( IsMaster )
 		Writer.PutAttribute( "Object", "Master" );
-	
+
 	Writer.PutValue( Convert_( *Type.ID() ), "ID" );
 	Generate_( Type, Writer );
-	
+
 	if ( Type.Commands.Amount() != 0 )
 		Generate_( Type.Commands, Writer );
-	
+
 	Writer.PopTag();
 }
 
@@ -569,7 +568,7 @@ qRH
 	plgn::rRetriever<fblovl::cDriver> Retriever;
 	csdrcc::rDriver *Driver = NULL;
 	str::wString PluginFilename;
-	flw::sDressedIOFlow<> Flow;
+	flw::rDressedRWFlow<> Flow;
 	fblfrd::universal_frontend___ Frontend;
 	sFrontend_ Dummy;
 	fblfrd::incompatibility_informations DummyIncompatibilityInformations;
@@ -604,10 +603,10 @@ qRB
 	}
 
 	GetDescription( Frontend, Types );
-	
+
 	Frontend.About( ProtocolVersion, TargetLabel, APIVersion, ExtendedBackendInformations, BackendCopyright, SoftwareInformations );
 qRR
-	if ( ERRFailure() ) { 
+	if ( ERRFailure() ) {
 		Meaning.Init();
 
 		Meaning.SetValue( "UnableToCommunicateWithBackendError" );
@@ -629,19 +628,19 @@ qRE
 static void Generate_(
 	const types_ &Types,
 	sdr::row__ MasterRow,
-	writer_ &Writer )
+	rWriter &Writer )
 {
 	sdr::row__ P;
 
 	Writer.PushTag( "Types" );
-	
+
 	P = Types.First();
-	
+
 	while( P != qNIL ) {
 		Generate_( Types( P ), ( P == MasterRow ), Writer );
 		P = Types.Next( P );
 	}
-	
+
 	Writer.PopTag();
 }
 
@@ -649,7 +648,7 @@ static void GenerateMisc_(
 	const str::string_ &BackendInformations,
 	const str::string_ &BackendCopyright,
 	const str::string_ &SoftwareInformations,
-	writer_ &Writer )
+	rWriter &Writer )
 {
 qRH
 	str::string Build;
@@ -701,12 +700,12 @@ static void Generate_(
 	txf::text_oflow__ &Flow )
 {
 qRH
-	xml::writer Writer;
+	xml::rWriter Writer;
 	tol::buffer__ Buffer;
 	str::string Temp;
 qRB
 	Writer.Init( Flow, xml::oIndent, xml::e_Default );
-	
+
 	Flow << "<!--                    DON'T MODIFY !!! !" << txf::nl;
 	Flow << txf::pad << "This document was generated the " << tol::DateAndTime( Buffer ) << txf::nl;
 	Flow << txf::pad << "using " NAME_MC " V" VERSION << " (" WEBSITE_URL ")" << txf::nl;
@@ -722,7 +721,7 @@ qRB
 	Writer.PutAttribute( "ProtocolVersion", ProtocolVersion );
 	Writer.PutAttribute( "APIVersion", APIVersion );
 
-	GenerateMisc_( BackendInformations, BackendCopyright, SoftwareInformations, Writer );	
+	GenerateMisc_( BackendInformations, BackendCopyright, SoftwareInformations, Writer );
 	Generate_( Types, MasterRow, Writer );
 
 	Writer.PopTag();
@@ -736,10 +735,10 @@ static sdr::row__ FindMasterType_( const types_ &Types )
 	sdr::row__ P = qNIL;
 
 	P = Types.First();
-	
+
 	while( ( P != qNIL ) && ( Types( P ).ID() != FBLFRD_MASTER_TYPE ) )
 		P = Types.Next( P );
-		
+
 	if ( P == qNIL )
 		qRGnr();
 
@@ -754,7 +753,7 @@ qRH
 	str::string BackendInformations, BackendCopyright, SoftwareInformations;
 	sdr::row__ MasterRow = qNIL;
 	str::wString Arguments, OutputFilename;
-	sclmisc::rTextOFlowRack TOFlowRack;
+	sclmisc::rTextWFlowRack TWFlowRack;
 qRB
 	Types.Init();
 
@@ -782,17 +781,17 @@ qRB
 	sclmisc::OGetValue( registry::parameter::OutputFilename, OutputFilename );
 
 	GetBackendData_( Command, Arguments, Types, ProtocolVersion, TargetLabel, APIVersion, BackendInformations, BackendCopyright, SoftwareInformations );
-	
+
 	MasterRow = FindMasterType_( Types );
 
-	txf::sOFlow &Flow = TOFlowRack.Init( OutputFilename );
+	txf::sWFlow &Flow = TWFlowRack.Init( OutputFilename );
 
-	if ( TOFlowRack.IsFile() )
+	if ( TWFlowRack.IsFile() )
 		COut << "Backend : " << BackendInformations << " (" << SoftwareInformations << ')' << txf::nl << txf::commit;
 
 	Generate_( Types, MasterRow, ProtocolVersion, TargetLabel, APIVersion, BackendInformations, BackendCopyright, SoftwareInformations, Flow );
 qRR
-	TOFlowRack.HandleError();
+	TWFlowRack.HandleError();
 qRT
 qRE
 }
@@ -817,7 +816,3 @@ qRT
 qRE
 	return ExitValue;
 }
-
-const char *sclmisc::SCLMISCTargetName = NAME_LC;
-const char *sclmisc::SCLMISCProductName = NAME_MC;
-

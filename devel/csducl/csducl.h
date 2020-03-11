@@ -145,7 +145,7 @@ namespace csducl {
 		}
 		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
 		{
-			return _Get().IDriver().RTake( Owner );
+			return _Get().RDriver().RTake( Owner );
 		}
 		virtual fdr::size__ FDRWrite(
 			const fdr::byte__ *Buffer,
@@ -161,7 +161,7 @@ namespace csducl {
 		}
 		virtual fdr::sTID FDRWTake( fdr::sTID Owner ) override
 		{
-			return _Get().ODriver().WTake( Owner );
+			return _Get().WDriver().WTake( Owner );
 		}
 	public:
 		void reset( bso::bool__ P = true )
