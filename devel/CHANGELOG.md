@@ -14,6 +14,9 @@
     - [adpt],
 - FBLFAQ:
     - [trvl],
+- SCLXDHTML:
+    - [adpt],
+    - [trvl],
 - WEBSCK:
     - adding variants of message related functions,
 - XDHCMN:

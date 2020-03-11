@@ -53,7 +53,7 @@ qRT
 qRE
 }
 
-xdhcmn::cSession *sclxdhtml::SCLXDHTMLRetrieveCallback(
+xdhcmn::cSession *sclxdhtml::SCLXDHTMLRetrieveSession(
 	const char *Language,
 	xdhcmn::eMode Mode,
 	const str::dString &Token,
@@ -72,7 +72,7 @@ xdhcmn::cSession *sclxdhtml::SCLXDHTMLRetrieveCallback(
 	return Session;
 }
 
-void sclxdhtml::SCLXDHTMLReleaseCallback( xdhcmn::cSession *Callback )
+void sclxdhtml::SCLXDHTMLReleaseSession( xdhcmn::cSession *Callback )
 {
 	if ( Callback == NULL )
 		qRGnr();

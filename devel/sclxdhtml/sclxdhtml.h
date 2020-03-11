@@ -403,6 +403,16 @@ namespace sclxdhtml {
 		qRT;
 		qRE;
 		}
+		void Execute(
+			const char *Script,
+			str::dString &Result )
+		{
+            return Execute(str::wString(Script), Result);
+		}
+		void Execute(const char *Script)
+		{
+            return Execute(str::wString(Script));
+		}
 		void Log( const ntvstr::rString &Message )
 		{
             qRLmt();
@@ -755,7 +765,7 @@ namespace sclxdhtml {
 		qRMV( class rCore<rSession>, C_, Core_ );
 	protected:
 		bso::sBool XDHCMNInitialize(
-			xdhcmn::cUpstream *Callback,
+			xdhcmn::cUpstream &Callback,
 			const char *Language,
 			const str::dString &Token )	override // If empty, PROD session, else token used for the DEMO session.
         {

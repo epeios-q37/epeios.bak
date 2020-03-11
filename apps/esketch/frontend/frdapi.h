@@ -1,12 +1,12 @@
 /* DON'T MODIFY : computer-generated file ! */
 /*
-	API from : esketchbkd V20171029 Build Nov  7 2017 10:27:31 - Win64;MSC 1911;AMD64
+	API from : esketchbkd V20200307 Build Mar 11 2020 14:49:17 - GNU/Linux;Clang 6.0.0;AMD64
 
-	This file was generated using barq 20171107 (Build Nov  7 2017 10:45:46 Win64;MSC 1911;AMD64)
+	This file was generated using BARq 20200307 (Build Mar 11 2020 10:02:33 GNU/Linux;Clang 6.0.0;AMD64)
 */
 
-#ifndef ESKETCH_INC_
-# define ESKETCH_INC_
+#ifndef ESKETCH__INC
+# define ESKETCH__INC
 
 # define ESKETCH_TARGET "esketch"
 # define ESKETCH_API_VERSION "1"
@@ -225,4 +225,4 @@ namespace esketch {
 
 }
 
-#endif //#ifndef esketch_INC_
+#endif //#ifndef esketch__INC
