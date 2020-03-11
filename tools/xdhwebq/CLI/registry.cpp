@@ -26,4 +26,4 @@ rEntry registry::parameter::ModuleFilename( "ModuleFilename", sclrgstry::Paramet
 rEntry registry::parameter::Service( "Service", sclrgstry::Parameters );
 
 rEntry registry::definition::ErrorHead("ErrorHead", sclrgstry::Definitions);
-rEntry registry::definition::ErrorBody("ErrorBody", sclrgstry::Definitions);
+rEntry registry::definition::ErrorScript("ErrorScript", sclrgstry::Definitions);

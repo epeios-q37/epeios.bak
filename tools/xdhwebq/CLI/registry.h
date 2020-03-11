@@ -37,8 +37,8 @@ namespace registry {
 		using namespace sclrgstry::definition;
 
 		extern rEntry
-            ErrorHead,  // HTMl head used for inexisting token.
-            ErrorBody;  // HTML body used for inexisting token.
+            ErrorHead,  // HTML head used for inexisting token.
+            ErrorScript;  // JS script launched on inexisting token.
 	}
 }
 

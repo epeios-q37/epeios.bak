@@ -23,14 +23,19 @@
 
 void xdwmain::sUpstream::XDHCMNProcess(
 	const str::string_ &Script,
-	str::dString &ReturnValue )
+	str::dString *ReturnedValue )
 {
 qRH
     qCBUFFERr Buffer;
 qRB
     Flow_.Write( Script.Convert(Buffer), Script.Amount());
     Flow_.Commit();
-    websck::GetMessage(Flow_, ReturnValue);
+
+    if ( ReturnedValue != NULL)
+        websck::GetMessage(Flow_, *ReturnedValue);
+    else
+        websck::SkipMessage(Flow_);
+
     Flow_.Dismiss();
 qRR
 qRT

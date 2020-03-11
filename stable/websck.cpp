@@ -271,16 +271,37 @@ fdr::size__ websck::rRDriverBase_::Read_(
 
 bso::sBool websck::GetMessage(
     flw::rRFlow &Flow,
-    str::dString &Message )
+    flw::rWFlow &Message )
 {
     bso::sChar C = 0;
 
     while ( !Flow.EndOfFlow() && ( ( C = Flow.Get() ) != EOSChar_ ) )
-        Message.Append(C);
+        Message.Put(C);
 
     return C == EOSChar_;
 }
 
+bso::sBool websck::GetMessage(
+    flw::rRFlow &Flow,
+    str::dString &Message )
+{
+    bso::sBool ReturnValue = false;
+qRH
+    flx::rStringWFlow MessageFlow;
+qRB
+    MessageFlow.Init(Message);
+
+    ReturnValue = GetMessage(Flow, MessageFlow);
+qRR
+qRE
+qRT
+    return ReturnValue;
+}
+
+bso::sBool websck::SkipMessage(flw::rRFlow &Flow)
+{
+    return GetMessage(Flow, flx::VoidWFlow);
+}
 
 void websck::rWDriverBase_::SendSize_(
     bso::sU64 Size,

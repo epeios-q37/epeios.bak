@@ -37,7 +37,7 @@ function send($query) {
  $result = socket_connect($socket, gethostbyname($host), $service);
 
  if ($result === false) {
-  echo "socket_connect() fails : ($result) " . socket_strerror(socket_last_error($socket)) . "\n";
+  echo "Unable to connect to " . gethostbyname($host) . ":" . $service . "!\n";
   return;
  }
 

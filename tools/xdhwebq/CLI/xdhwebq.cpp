@@ -135,7 +135,7 @@ namespace {
             qRH
                 websck::rRFlow Flow;
                 xdwmain::rSession Session;
-                str::wString Digest, HTML;
+                str::wString Digest, Script;
             qRB
                 Flow.Init(Driver, websck::mWithTerminator);
                 Session.Init(Agent, Driver, "", Data.Token);
@@ -143,9 +143,9 @@ namespace {
                 if ( Agent.IsValid(&Data.Token) )
                     Session.Launch("","");
                 else {
-                    HTML.Init();
-                    sclmisc::MGetValue(registry::definition::ErrorBody, HTML);
-                    Session.SetMainPage(HTML);
+                    Script.Init();
+                    sclmisc::MGetValue(registry::definition::ErrorScript, Script);
+                    Session.Execute(Script);
                 }
 
                 while ( true ) {

@@ -8,6 +8,13 @@
 - [stdz]: modification to comply with current standards;
 - [trvl]: trivial modifications;
 
+## 2020-03-11:
+
+- WEBSCK:
+    - adding variants of message related functions,
+- XDHCMN:
+    - `cUpstream::XDHCMNProcess(…)` does no more always return the script's return value,
+
 ## 2020-03-10:
 
 - SCLXDHTML, XDHUPS:

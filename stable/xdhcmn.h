@@ -63,16 +63,22 @@ namespace xdhcmn {
 	class cUpstream
 	{
 	protected:
+        // The value returned by the script has to be stored
+        // in 'ReturnedValue', unless it is equal to 'NULL'.
 		virtual void XDHCMNProcess(
 			const str::dString &Script,
-			str::dString &ReturnValue ) = 0;
+			str::dString *ReturnedValue ) = 0;
 	public:
 		qCALLBACK( Upstream );
 		void Process(
 			const str::dString &Script,
 			str::dString &ReturnValue )
 		{
-            return XDHCMNProcess(Script, ReturnValue );
+            return XDHCMNProcess(Script, &ReturnValue );
+		}
+		void Process(const str::dString &Script)
+		{
+            return XDHCMNProcess(Script, NULL );
 		}
 	};
 

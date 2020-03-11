@@ -40,7 +40,7 @@ namespace xdwmain {
 	protected:
 		virtual void XDHCMNProcess(
 			const str::string_ &Script,
-			str::dString &ReturnValue ) override;
+			str::dString *ReturnedValue ) override;
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -96,9 +96,15 @@ namespace xdwmain {
         {
             return Session_.Launch(Id, Action );
         }
-        void SetMainPage(const str::dString &HTML)
+        void Execute(
+            const str::dString &Script,
+            str::dString &ReturnedValue)
         {
-            xdhujp::SetMainPage(JS_, HTML);
+            Upstream_.Process(Script, ReturnedValue);
+        }
+        void Execute(const str::dString &Script)
+        {
+            Upstream_.Process(Script);
         }
 	};
 }
