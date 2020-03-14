@@ -240,7 +240,7 @@ def _init():
 	try:
 		_socket.connect((pAddr,pPort))
 	except:
-		exit("Unable to connect to'" + str(pAddr) + ":" + str(pPort) + "'!")
+		exit("Unable to connect to '" + str(pAddr) + ":" + str(pPort) + "'!")
 	else:
 		print("Connected to '" + str(pAddr) + ":" + str(pPort) + "'.")
 		

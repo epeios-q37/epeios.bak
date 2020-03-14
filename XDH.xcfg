@@ -9,7 +9,7 @@
 			</AttributeNames>
 		</CustomItems>
         <Scripts>
-			<!-- All scripts enclosed in following block are of intenal use.-->
+			<!-- All scripts enclosed in following block are of internal use.-->
 			<xpp:bloc>
 				<Script name="SetEventHandlers_1" Arguments="#Ids,#Events">
 					<![CDATA[ {

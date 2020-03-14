@@ -174,7 +174,7 @@ bso::bool__ core::sActionHelper::SCLXOnBeforeAction(
 {
 	if ( !Session.IsConnected() ) {
 		if ( !core::OnNotConnectedAllowedActions.Search( Action ) ) {
-			Session.AlertT( "ActionNeedsBackend" );
+			Session.AlertT( str::wString("ActionNeedsBackend" ));
 			return false;
 		} else
 			return true;

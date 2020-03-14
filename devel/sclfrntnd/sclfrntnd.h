@@ -39,7 +39,7 @@
 # include "flw.h"
 # include "xml.h"
 
-// NOTA : 'SCLF_' is used in place of 'SCLFRNTND_' for macro. 
+// NOTA : 'SCLF_' is used in place of 'SCLFRNTND_' for macro.
 
 /***************/
 /***** OLD *****/
@@ -217,7 +217,7 @@ namespace sclfrntnd {
 			rKernel &Kernel,
 			const char *Language,
 			fblfrd::cFrontend &FrontendCallback,
-			fblfrd::reporting_callback__ &ReportingCallback );
+			fblfrd::cReporting &ReportingCallback );
 		void Ping( void );
 		void Crash( void );
 		bso::bool__ Connect(
@@ -409,7 +409,7 @@ namespace sclfrntnd {
 			break;
 		}
 	}
-	
+
 	template <typename ... args> inline void Dump_(
 		xml::rWriter &Writer,
 		eKind Kind,
@@ -483,7 +483,7 @@ namespace sclfrntnd {
 			Row = I1S.Next( Row );
 		}
 	}
-	
+
 	template <typename ids> inline void Dump(
 		const dI1S<ids> &I1S,
 		const char *ItemsLabel,
@@ -598,17 +598,13 @@ namespace sclfrntnd {
 	protected:
 		virtual void FBLFRDReport(
 			fblovl::reply__ Reply,
-			const char *Message ) override;
+			const str::dString &Message ) override;
 	public:
 		void reset( bso::bool__ P = true )
-		{
-			cReporting::reset( P );
-		}
+		{}
 		E_CVDTOR( sReportingCallback );
 		void Init( void)
-		{
-			cReporting::Init();
-		}
+		{}
 	};
 
 	const str::dString &About(

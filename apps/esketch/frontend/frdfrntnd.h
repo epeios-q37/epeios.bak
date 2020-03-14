@@ -66,7 +66,7 @@ namespace frdfrntnd {
 		void Init(
 			rKernel &Kernel,
 			const char *Language,
-			fblfrd::reporting_callback__ &ReportingCallback )
+			fblfrd::cReporting &ReportingCallback )
 		{
 			rFrontend_::Init( Kernel, Language, *this, ReportingCallback );
 		}
@@ -86,7 +86,7 @@ namespace frdfrntnd {
 		esketch::rSKTMyObject Object_;
 	public:
 		void reset( bso::bool__ P = true )
-		{	
+		{
 			Object_.reset( P );
 		}
 		E_CVDTOR( rMyObject );

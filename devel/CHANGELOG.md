@@ -8,6 +8,20 @@
 - [stdz]: modification to comply with current standards;
 - [trvl]: trivial modifications;
 
+## 2020-03-13:
+
+- FBLFRD:
+  - [stdz],
+- SCLFRNTND;
+  - [adpt],
+- TOL:
+  - adding macro `qCDEFS(…)`,
+- XDHCMN:
+  - removing references to no more used *NTVSTR* module,
+- XDHUTL, XDHDWS:
+  - [adpt]
+
+
 ## 2020-03-11:
 
 - CSDUCL:
@@ -28,7 +42,7 @@
     - [adpt],
 - XDHCMN, XDHUJP:
     - changes so an inexisting session can be detected and handled.
-- global xdhtml related féetures:
+- global xdhtml related features:
     - the script building is now handled downstream and no more upstream,
 
 ## 2020-03-08:
@@ -43,7 +57,7 @@
 ## 2020-03-07
 
 - FLW:
-    - deprecating buggy functionnality,
+    - deprecating buggy functionality,
 
 ## 2020-03-04:
 
@@ -318,7 +332,7 @@
   - introducing the possibility for a read driver to have no cache ; useful for relaying driver,
   - [rvrt] above modifications:
     - need at least a cache of one byte (handling of EOF),
-    - a cache with only one byte fixes issue encounterd with relaying driver,
+    - a cache with only one byte fixes issue encountered with relaying driver,
 
 ## 2019-02-11
 

@@ -33,6 +33,7 @@
 			</Modules>
 			<Modules Group="CSD">
 				<Module>csdbns</Module>
+				<Module>csdcmn</Module>
 				<Module>csdscb</Module>
 			</Modules>
 			<Modules Group="SCL">

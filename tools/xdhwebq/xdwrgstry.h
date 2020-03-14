@@ -22,12 +22,8 @@
 
 # include "sclrgstry.h"
 
-# include "xdhujr.h"
-
 namespace xdwrgstry {
 	using namespace sclrgstry;
-
-	using namespace xdhujr;
 
 	namespace parameter {
 		using namespace sclrgstry::parameter;

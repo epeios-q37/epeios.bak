@@ -26,24 +26,6 @@ using namespace xdhutl;
 namespace {
 	stsfsm::automat ActionAutomat_;
 
-	template <typename type> inline type GetId_(
-		const nstring___ &Pattern,
-		const stsfsm::automat_ &Automat,
-		type UndefinedValue,
-		bso::uint__ Amount )
-	{
-		type Id = UndefinedValue;
-	qRH
-		str::string Buffer;
-	qRB
-		Buffer.Init();
-		Id = stsfsm::GetId( Pattern.UTF8( Buffer ), Automat, UndefinedValue, Amount );
-	qRR
-	qRT
-	qRE
-		return Id;
-	}
-
 	static void InitAndFillActionAutomat_( void )
 	{
 		ActionAutomat_.Init(),
@@ -72,9 +54,9 @@ const char *xdhutl::GetLabel( action__ Action )
 	return NULL;	// To avoid a 'warning'.
 }
 
-action__ xdhutl::GetAction( const nstring___ &Pattern )
+action__ xdhutl::GetAction( const str::dString &Pattern )
 {
-	return GetId_( Pattern, ActionAutomat_, a_Undefined, a_amount );
+	return stsfsm::GetId( Pattern, ActionAutomat_, a_Undefined, a_amount );
 }
 
 namespace {

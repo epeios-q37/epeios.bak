@@ -33,11 +33,6 @@
 # include "err.h"
 
 namespace xdhutl {
-	using xdhcmn::nchar__;
-	using xdhcmn::sNChar;
-	using xdhcmn::nstring___;
-	using xdhcmn::rNString;
-
 	E_ENUM( action ) {
 		aOpenFile,
 		aOpenFiles,
@@ -49,7 +44,7 @@ namespace xdhutl {
 
 	const char *GetLabel( action__ Action );
 
-	action__ GetAction( const nstring___ &Pattern );
+	action__ GetAction( const str::dString &Pattern );
 
 	inline bso::bool__ IsPredefined( action__ Action )
 	{

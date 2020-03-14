@@ -31,15 +31,15 @@ namespace frame {
 	};
 
 	void SetLayout(
-		const char * Id,
+		const str::dString &Id,
 		core::rSession & Session );
 
 	void SetCasting(
-		const char *Id,
+		const str::dString &Id,
 		core::rSession &Session );
 
 	void Display(
-		const char *Id,
+		const str::dString &Id,
 		core::rSession &Session );
 }
 

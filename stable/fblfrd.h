@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-// Frontend/Backend Layout FRrontenD 
+// Frontend/Backend Layout FRrontenD
 
 #ifndef FBLFRD_INC_
 # define FBLFRD_INC_
@@ -101,25 +101,17 @@ namespace fblfrd {
 		typedef fbltyp::id16__ command__;
 		typedef fbltyp::id16__ type__;
 
-	class reporting_callback__
+	class cReporting
 	{
 	protected:
 		virtual void FBLFRDReport(
 			fblovl::reply__ Reply,
-			const char *Message ) = 0;
+			const str::dString &Message ) = 0;
 	public:
-		void reset ( bso::bool__ = true )
-		{
-			// Standardisation.
-		}
-		E_CDTOR( reporting_callback__ )
-		void Init( void )
-		{
-			// Standardisation.
-		}
+		qCALLBACK(Reporting)
 		void Report(
 			fblovl::reply__ Reply,
-			const char *Message )
+			const str::dString &Message )
 		{
 			FBLFRDReport( Reply, Message );
 		}
@@ -148,7 +140,7 @@ namespace fblfrd {
 		{
 			reset();
 		}
-		void Init( 
+		void Init(
 			const char *BackendLabel,
 			const char *APIVersion )
 		{
@@ -161,7 +153,7 @@ namespace fblfrd {
 	{
 	public:
 		struct s {
-			str::string_::s 
+			str::string_::s
 				Message,
 				URL;
 		};
@@ -221,7 +213,7 @@ namespace fblfrd {
 		qRMV( flw::ioflow__, C_, Channel_ );
 		qRMV( cFrontend, F_, FrontendCallback_ )
 		qRMV( fblfph::callbacks__, P_, ParametersCallback_ );
-		reporting_callback__ *_ReportingCallback;
+		cReporting *_ReportingCallback;
 		flw::iflow__ *_FlowInParameter;	// Contient, s'il y en a un,  le pointeur sur le 'Flow' en paramtre d'entre.
 		bso::bool__ _FlowOutParameter;	// Signale s'il y a un paramtre flow dans les paramtres de sortie.
 		bso::bool__ _DismissPending;
@@ -283,7 +275,7 @@ namespace fblfrd {
 		}
 		void _ReportError(
 			fblovl::reply__ Reply,
-			const char *Message )
+			const str::dString &Message )
 		{
 			if ( _ReportingCallback == NULL )
 				qRFwk();
@@ -370,7 +362,7 @@ namespace fblfrd {
 				if ( Channel_ != NULL )
 					Disconnect();
 			}
-				
+
 			ParametersCallback_ = NULL;
 			FrontendCallback_ = NULL;
 			_ReportingCallback = NULL;
@@ -385,7 +377,7 @@ namespace fblfrd {
 		void Init(
 			const str::dString &CodeKey,
 			cFrontend &FrontendCallback,
-			reporting_callback__ &ReportingCallback )
+			cReporting &ReportingCallback )
 		{
 
 			if ( Channel_ != NULL )
@@ -445,7 +437,7 @@ namespace fblfrd {
 			EndOfInParameters();
 
 			Handle();
-			
+
 			Channel_ = NULL;
 
 			ParametersCallback_ = NULL;
@@ -555,7 +547,7 @@ namespace fblfrd {
 			}
 
 			if ( Reply != rOK )
-				_ReportError( Reply, Message_ );
+				_ReportError( Reply, str::wString(Message_));
 		}
 		void DismissFlow( void )	// To call only when the flow as a out parameter was entirely red ('EndOfFlow()' retuns 'true').
 		{
@@ -767,29 +759,29 @@ namespace fblfrd {
 
 			Handle();
 		}
-   //f Return the current language. 	 
-		const string_ &GetLanguage( string_ &Language ) 	 
-        { 	 
-			Internal_( fblcmd::cGetLanguage ); 	 
+   //f Return the current language.
+		const string_ &GetLanguage( string_ &Language )
+        {
+			Internal_( fblcmd::cGetLanguage );
 
-			EndOfInParameters(); 	 
+			EndOfInParameters();
 
-			StringOut( Language ); 	 
+			StringOut( Language );
 
-			Handle(); 
+			Handle();
 
 			return Language;
-        } 	 
-         //f Set language to language of id 'Language'; 	 
-		void SetLanguage( const string_ &Language ) 	 
-		{ 	 
-			Internal_( fblcmd::cSetLanguage ); 	 
+        }
+         //f Set language to language of id 'Language';
+		void SetLanguage( const string_ &Language )
+		{
+			Internal_( fblcmd::cSetLanguage );
 
-			StringIn( Language ); 	 
+			StringIn( Language );
 
-			EndOfInParameters(); 	 
+			EndOfInParameters();
 
-			Handle(); 	 
+			Handle();
 		}
   		//f Put in 'Parameters' parameters of command 'Command' from object type 'Type'.
 		void GetParameters(
@@ -891,7 +883,6 @@ namespace fblfrd {
 /*************/
 
 namespace fblfrd {
-	typedef reporting_callback__ cReporting;
 	typedef compatibility_informations__ sCompatibilityInformations;
 
 	typedef incompatibility_informations_ dIncompatibilityInformations;

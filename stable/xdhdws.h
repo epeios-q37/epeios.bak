@@ -36,10 +36,6 @@
 # define XDHDWS_DEFAULT_SUFFIX  "xdh"
 
 namespace xdhdws {
-	using xdhcmn::nchar__;
-	using xdhcmn::nstring___;
-	using xdhcmn::rNString;
-
 	class sProxy
 	{
 	private:

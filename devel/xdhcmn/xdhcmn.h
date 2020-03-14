@@ -30,7 +30,6 @@
 
 # include "err.h"
 # include "flw.h"
-# include "ntvstr.h"
 # include "strmrg.h"
 # include "sclmisc.h"
 
@@ -43,11 +42,6 @@
 # define XDHCMN_RETRIEVE_FUNCTION_NAME		XDHCMNRetrieve
 
 namespace xdhcmn {
-	// NOTA : not used by this module, but by other 'upstream' and 'downtream' 'XDH...' modules.
-	typedef ntvstr::char__ nchar__;
-	typedef ntvstr::sChar sNChar;
-	typedef ntvstr::string___ nstring___;
-	typedef ntvstr::rString rNString;
 	qMIMICs( bso::sU16, sIndex );	// For the 'CSS' rules.
 
 	static E_CDEF( char *, CloseActionLabel, "Q37Close" );

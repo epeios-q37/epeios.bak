@@ -21,10 +21,10 @@ This header file contains then the API to access to the backend to which 'barq' 
 		<xsl:text>)&nl;*/&nl;&nl;</xsl:text>
 		<xsl:text>#ifndef </xsl:text>
 		<xsl:value-of select="/API/@TargetUppercased"/>
-		<xsl:text>__INC&nl;</xsl:text>
+		<xsl:text>_INC_&nl;</xsl:text>
 		<xsl:text># define </xsl:text>
 		<xsl:value-of select="/API/@TargetUppercased"/>
-		<xsl:text>__INC&nl;</xsl:text>
+		<xsl:text>_INC_&nl;</xsl:text>
 		<xsl:text>&nl;</xsl:text>
 		<xsl:text># define </xsl:text>
 		<xsl:value-of select="/API/@TargetUppercased"/>
@@ -39,14 +39,14 @@ This header file contains then the API to access to the backend to which 'barq' 
 		<xsl:apply-templates select="API"/>
 		<xsl:text>#endif //#ifndef </xsl:text>
 		<xsl:value-of select="/API/@target"/>
-	  <xsl:text>__INC&nl;</xsl:text>
+	  <xsl:text>_INC_&nl;</xsl:text>
 	</xsl:template>
 	<xsl:template match="API">
 	  <xsl:text>&nl;# include "fblfrd.h"&nl;</xsl:text>
 	  <xsl:text># include "cpe.h"&nl;</xsl:text>
 	  <xsl:text>&nl;</xsl:text>
 	  <xsl:text>namespace </xsl:text>
-		<xsl:value-of select="/API/@target"/>
+		<xsl:value-of select="/API/@TargetUppercased"/>
 		<xsl:text> {&nl;</xsl:text>
 		<xsl:text>&nl;</xsl:text>
 		<xsl:text>&tab;namespace {&nl;</xsl:text>

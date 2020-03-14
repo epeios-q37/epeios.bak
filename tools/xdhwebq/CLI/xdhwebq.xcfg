@@ -4,10 +4,16 @@
 		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
 		<xpp:expand value-of="q37.xpp"/>
         <xpp:expand href="../../../TOL.xcfg"/>
+        <!-- Macro également utilisée dans la xetcion (Loacle' -->
+        <xpp:define name="Service">
+            <xpp:bloc>53710</xpp:bloc>
+        </xpp:define>
 		<Parameters>
 			<Language>fr</Language>
 			<Command>Process</Command>
-			<Service>53710</Service>
+			<Service>
+                <xpp:expand select="Service"/>
+			</Service>
 		</Parameters>
 		<Definitions>
             <!-- Section 'head' utilisée lorsque le token est inconnu. -->
@@ -20,14 +26,13 @@
             <ErrorScript>
                 <!-- Si le message est modifié, modifier la FAQ en conséquence ! -->
                 <![CDATA[
-let html = `
+document.body.innerHTML = `
 <div style="display: table; margin: auto; padding: 10px; text-align: center;">
-    <span style="color: red; font-size: larger;">Unknown token, or the application corresponding to given token does no more exist.</span>
+    <span style="color: red; font-size: larger;">Unknown token, or corresponding application does no more exist!</span>
     <p/>
     <span>See <a href="http://atlastk.org/faq">http://atlastk.org/faq.</a></span>
 </div>
 `;
-document.body.innerHTML=html;
                 ]]>
             </ErrorScript>
 		</Definitions>
@@ -46,8 +51,16 @@ document.body.innerHTML=html;
 				<Translation language="en">module</Translation>
 			</Translations>
 			<Translations text="ServiceArgumentDescription">
-				<Translation language="fr">Port en écoute ('53741' si absent).</Translation>
-				<Translation language="en">Port to listen to ('53741' if missing).</Translation>
+				<Translation language="fr">
+                    <xpp:bloc>Port en écoute ('</xpp:bloc>
+                    <xpp:expand select="Service"/>
+                    <xpp:bloc>' si absent).</xpp:bloc>
+                </Translation>
+				<Translation language="en">
+                    <xpp:bloc>Port to listen to ('</xpp:bloc>
+                    <xpp:expand select="Service"/>
+                    <xpp:bloc>' if missing).</xpp:bloc>
+                </Translation>
 			</Translations>
 			<Translations text="ServiceArgumentLabel">
 				<Translation language="fr">service</Translation>

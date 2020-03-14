@@ -231,33 +231,24 @@ namespace {
 </xsl:stylesheet>";
 
 	inline void SetXMLAndXSL_(
-		const ntvstr::string___ &Message,
+		const str::dString &Message,
 		const char *Language,
 		str::string_ &XML,
 		str::string_ &XSL )
 	{
-	qRH
-		str::string Buffer;
-	qRB
-		Buffer.Init();
-
 		if ( Language == NULL )
-			PutInXML_( Message.UTF8( Buffer ), XML );
+			PutInXML_( Message, XML );
 		else
-			TranslateAndPutInXML_( Message.UTF8( Buffer ), Language, XML );
+			TranslateAndPutInXML_( Message, Language, XML );
 
 		EncodeXML_( str::wString( AlertBaseXSL_ ), XSL );
-	qRR
-	qRT
-	qRE
 	}
 }
 
-#if 0
 void sclxdhtml::sProxy::Alert_(
-	const ntvstr::string___ &XML,
-	const ntvstr::string___ &XSL,
-	const ntvstr::string___ &Title,
+	const str::dString &XML,
+	const str::dString &XSL,
+	const str::dString &Title,
 	const char *Language )
 {
 qRH
@@ -271,10 +262,9 @@ qRR
 qRT
 qRE
 }
-#endif // 0
 
 void sclxdhtml::sProxy::Alert_(
-	const ntvstr::string___ &Message,
+	const str::dString &Message,
 	const char *MessageLanguage,	// If != 'NULL', 'Message' is translated, otherwise it is displayed as is.
 	const char *CloseTextLanguage )
 {
@@ -286,21 +276,20 @@ qRB
 
 	SetXMLAndXSL_( Message, MessageLanguage, XML, XSL );
 
-	Alert_(XML, XSL, ntvstr::string___(), CloseTextLanguage );
+	Alert_(XML, XSL, str::wString(), CloseTextLanguage );
 qRR
 qRT
 qRE
 }
 
-void sclxdhtml::sProxy::AlertB( const ntvstr::string___ & RawMessage )
+void sclxdhtml::sProxy::AlertB( const str::dString & RawMessage )
 {
 qRH;
-	str::wString Script, Buffer;
+	str::wString Script;
 qRB;
 	Script.Init( "alert('" );
 
-	Buffer.Init();
-	xdhcmn::Escape( RawMessage.UTF8( Buffer ), Script, '\'' );
+	xdhcmn::Escape( RawMessage, Script, '\'' );
 
 	Script.Append( "');" );
 
@@ -311,17 +300,16 @@ qRE;
 }
 
 void sclxdhtml::sProxy::Alert(
-	const ntvstr::string___ &XML,
-	const ntvstr::string___ &XSL,
-	const ntvstr::string___ &Title,
+	const str::dString &XML,
+	const str::dString &XSL,
+	const str::dString &Title,
 	const char *Language )
 {
 qRH;
 	str::wString EncodedXSL;
-	str::string Buffer;
 qRB;
-	tol::Init( EncodedXSL, Buffer );
-	EncodeXML_( XSL.UTF8( Buffer ), EncodedXSL );
+	tol::Init( EncodedXSL);
+	EncodeXML_( XSL, EncodedXSL );
 
 	Alert_( XML, EncodedXSL, Title, Language );
 qRR;
@@ -330,14 +318,14 @@ qRE;
 }
 
 void sclxdhtml::sProxy::AlertT(
-	const ntvstr::string___ &RawMessage,
+	const str::dString &RawMessage,
 	const char *Language )
 {
 	Alert_( RawMessage, Language, Language );
 }
 
 void sclxdhtml::sProxy::AlertU(
-	const ntvstr::string___ &Message,
+	const str::dString &Message,
 	const char *Language )
 {
 	Alert_( Message, NULL, Language );
@@ -345,9 +333,9 @@ void sclxdhtml::sProxy::AlertU(
 
 #if 0
 bso::bool__ sclxdhtml::sProxy::Confirm_(
-	const ntvstr::string___ &XML,
-	const ntvstr::string___ &XSL,
-	const ntvstr::string___ &Title,
+	const str::dString &XML,
+	const str::dString &XSL,
+	const str::dString &Title,
 	const char *Language )
 {
 	bso::bool__ Confirmation = false;
@@ -366,7 +354,7 @@ qRE
 #endif
 
 bso::bool__ sclxdhtml::sProxy::Confirm_(
-	const ntvstr::string___ &Message,
+	const str::dString &Message,
 	const char *MessageLanguage,	// If != 'NULL', 'Message' is translates, otherwise it is displayed as is.
 	const char *CloseTextLanguage )
 {
@@ -379,7 +367,7 @@ qRB
 
 	SetXMLAndXSL_( Message, MessageLanguage, XML, XSL );
 
-	Confirmation = Confirm_( XML, XSL, ntvstr::string___(), CloseTextLanguage );
+	Confirmation = Confirm_( XML, XSL, str::wString(), CloseTextLanguage );
 qRR
 qRT
 qRE
@@ -388,14 +376,14 @@ qRE
 
 
 bso::bool__ sclxdhtml::sProxy::ConfirmT(
-	const ntvstr::string___ &RawMessage,
+	const str::dString &RawMessage,
 	const char *Language )
 {
 	return Confirm_( RawMessage, Language, Language );
 }
 
 bso::bool__ sclxdhtml::sProxy::ConfirmU(
-	const ntvstr::string___ &Message,
+	const str::dString &Message,
 	const char *Language )
 {
 	return Confirm_( Message,  NULL, Language );
@@ -418,10 +406,10 @@ qRB
 		}
 		break;
 	case err::t_Free:
-		Proxy.AlertB( "???" );
+		Proxy.AlertB( str::wString("???") );
 		break;
 	default:
-		Proxy.AlertB( err::Message( ErrBuffer ) );
+		Proxy.AlertB( str::wString(err::Message( ErrBuffer )) );
 		break;
 	}
 
@@ -432,131 +420,89 @@ qRE
 }
 
 namespace {
-	namespace {
-		eXSLFileHandling GetXMLFileHandlingFromRegistry_(const sclrgstry::dRegistry &Registry)
-		{
-			eXSLFileHandling Result = xfh_Undefined;
-			qRH;
-			str::wString Handling;
-			qRB;
-			Handling.Init();
+    eXSLFileHandling GetXMLFileHandlingFromRegistry_(const sclrgstry::dRegistry &Registry)
+    {
+        eXSLFileHandling Result = xfh_Undefined;
+    qRH;
+        str::wString Handling;
+    qRB;
+        Handling.Init();
 
-			if (!sclrgstry::OGetValue(Registry, registry::definition::XMLFilesHandling, Handling))
-				Handling.Append("Content");	// Default value.
+        if (!sclrgstry::OGetValue(Registry, registry::definition::XMLFilesHandling, Handling))
+            Handling.Append("Content");	// Default value.
 
-			if (Handling == "Content")
-				Result = xfhContent;
-			else if (Handling == "Name")
-				Result = xfhName;
-			else
-				sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort(registry::definition::XMLFilesHandling);
-			qRR;
-			qRT;
-			qRE;
-			return Result;
-		}
+        if (Handling == "Content")
+            Result = xfhContent;
+        else if (Handling == "Name")
+            Result = xfhName;
+        else
+            sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort(registry::definition::XMLFilesHandling);
+    qRR;
+    qRT;
+    qRE;
+        return Result;
+    }
 
-		void handleXSL_(
-			const rgstry::rEntry &XSLFilename,
-			const char *Target,
-			eXSLFileHandling Handling,
-			const sclrgstry::registry_ &Registry,
-			bso::sChar Marker,
-			str::dString &XSL )
-		{
-		qRH;
-			str::wString RawXSL;
-		qRB;
-			if ( Handling == xfhRegistry )
-				Handling = GetXMLFileHandlingFromRegistry_( Registry );
+    void HandleXSL_(
+        const rgstry::rEntry &XSLFilename,
+        const char *Target,
+        eXSLFileHandling Handling,
+        const sclrgstry::registry_ &Registry,
+        bso::sChar Marker,
+        str::dString &XSL )
+    {
+    qRH;
+        str::wString RawXSL;
+    qRB;
+        if ( Handling == xfhRegistry )
+            Handling = GetXMLFileHandlingFromRegistry_( Registry );
 
-			switch ( Handling ) {
-			case xfhContent:
-				// The content of the XSL file is transmitted (global XDHTML behavior).
-				RawXSL.Init();
-				sclxdhtml::LoadXSLAndTranslateTags( rgstry::tentry___( XSLFilename, Target ), Registry, RawXSL, Marker );
-				XSL.Append( "data:text/xml;charset=utf-8," );
-				cdgurl::Encode( RawXSL, XSL );
-				break;
-			case xfhName:
-				// The _name_ of the XSL file is transmitted (Atlas toolkit behavior).
-				// NOTA: the Atlas toolkit does NOT use this function. It uses a underlying function which have this behavior.
-				XSL.Append( Target );
-				XSL.Append( ".xsl" );
-				break;
-			default:
-				qRFwk();
-				break;
-			}
-		qRR;
-		qRT;
-		qRE;
-		}
-	}
-
-	void HandleLayout_(
-		const xdhdws::nstring___ &Id,
-		const rgstry::rEntry &XSLFilename,
-		const char *Target,
-		eXSLFileHandling Handling,
-		const sclrgstry::registry_ &Registry,
-		const str::dString &XML,
-		xdhdws::sProxy &Proxy,
-		void (xdhdws::sProxy::* Method)(
-			const xdhdws::rNString &,
-			const xdhdws::rNString &XML,
-			const xdhdws::rNString &XSL),
-		bso::char__ Marker)
-	{
-	qRH;
-		str::wString XSL;
-	qRB;
-		XSL.Init();
-
-		handleXSL_(XSLFilename, Target, Handling, Registry, Marker, XSL);
-
-		(Proxy.*Method)(Id, XML, XSL);
-	qRR;
-	qRT;
-	qRE;
-	}
+        switch ( Handling ) {
+        case xfhContent:
+            // The content of the XSL file is transmitted (global XDHTML behavior).
+            RawXSL.Init();
+            sclxdhtml::LoadXSLAndTranslateTags( rgstry::tentry___( XSLFilename, Target ), Registry, RawXSL, Marker );
+            XSL.Append( "data:text/xml;charset=utf-8," );
+            cdgurl::Encode( RawXSL, XSL );
+            break;
+        case xfhName:
+            // The _name_ of the XSL file is transmitted (Atlas toolkit behavior).
+            // NOTA: the Atlas toolkit does NOT use this function. It uses a underlying function which have this behavior.
+            XSL.Append( Target );
+            XSL.Append( ".xsl" );
+            break;
+        default:
+            qRFwk();
+            break;
+        }
+    qRR;
+    qRT;
+    qRE;
+    }
 }
 
-void sclxdhtml::sProxy::PrependLayout_(
-	const xdhdws::nstring___ &Id,
+void sclxdhtml::sProxy::HandleLayout_(
+    const char *Variant,
+	const str::dString &Id,
 	const rgstry::rEntry &XSLFilename,
 	const char *Target,
 	const sclrgstry::registry_ &Registry,
 	const str::dString &XML,
 	bso::char__ Marker)
 {
-    qRLmt();
-//	HandleLayout_(Id, XSLFilename, Target, XSLFileHandling_, Registry, XML, Core_, &xdhdws::sProxy::PrependLayout, Marker);
+qRH;
+    str::wString XSL;
+qRB;
+    XSL.Init();
+
+    HandleXSL_(XSLFilename, Target, XSLFileHandling_, Registry, Marker, XSL);
+
+    ProcessWithoutResult("HandleLayout_1", Variant, Id, XML, XSL);
+qRR;
+qRT;
+qRE;
 }
 
-void sclxdhtml::sProxy::SetLayout_(
-	const xdhdws::nstring___ &Id,
-	const rgstry::rEntry &XSLFilename,
-	const char *Target,
-	const sclrgstry::registry_ &Registry,
-	const str::dString &XML,
-	bso::char__ Marker)
-{
-    qRLmt();
-//	HandleLayout_(Id, XSLFilename, Target, XSLFileHandling_, Registry, XML, Core_, &xdhdws::sProxy::SetLayout, Marker);
-}
-
-void sclxdhtml::sProxy::AppendLayout_(
-	const xdhdws::nstring___ &Id,
-	const rgstry::rEntry &XSLFilename,
-	const char *Target,
-	const sclrgstry::registry_ &Registry,
-	const str::dString &XML,
-	bso::char__ Marker )
-{
-    qRLmt();
-//	HandleLayout_(Id, XSLFilename, Target, XSLFileHandling_, Registry, XML, Core_, &xdhdws::sProxy::AppendLayout, Marker);
-}
 
 #if 0
 void sclxdhtml::sProxy::SetContents(
@@ -601,8 +547,8 @@ qRE;
 }
 
 void sclxdhtml::sProxy::SetTimeout(
-	const ntvstr::rString &Delay,
-	const ntvstr::rString &Action )
+	const str::dString &Delay,
+	const str::dString &Action )
 {
     qRLmt();
 //	Core_.SetTimeout( Delay, Action );
@@ -630,8 +576,8 @@ namespace {
 		const str::dStrings &Ids,
 		const str::dStrings &Classes,
 		void (xdhdws::sProxy::* Method)(
-			const xdhcmn::rNString &Ids,
-			const xdhcmn::rNString &Classes ),
+			const str::dString &Ids,
+			const str::dString &Classes ),
 		xdhdws::sProxy &Proxy )
 	{
 	qRH;
@@ -721,7 +667,7 @@ void sclxdhtml::sProxy::ToggleClass(
 namespace {
 	void HandleElements_(
 		const str::dStrings &Ids,
-		void (xdhdws::sProxy::* Method)( const xdhcmn::rNString &Ids ),
+		void (xdhdws::sProxy::* Method)( const str::dString &Ids ),
 		xdhdws::sProxy &Proxy )
 	{
 	qRH;
@@ -823,16 +769,16 @@ void sclxdhtml::prolog::HandleProjectTypeSwitching( sProxy & Proxy )
 
 void sclxdhtml::prolog::DisplaySelectedProjectFilename(
 	sProxy &Proxy,
-	const char *Id )
+	const str::dString &Id )
 {
 qRH
-	TOL_CBUFFER___ Buffer;
-	str::string FileName;
+	str::wString Buffer;
+	str::wString FileName;
 	xdhcmn::digest Args;
 	xdhcmn::retriever__ Retriever;
 qRB
-	Args.Init();
-	xdhcmn::Split( str::string( Proxy.GetResult( Id, Buffer ) ), Args );
+	tol::Init(Args, Buffer);
+	xdhcmn::Split( Proxy.GetResult( Id, Buffer ), Args );
 
 	Retriever.Init( Args );
 
@@ -1151,15 +1097,15 @@ qRE;
 
 void sclxdhtml::login::DisplaySelectedEmbeddedBackendFilename(
 	sProxy &Proxy,
-	const char *Id )
+	const str::dString &Id )
 {
 qRH
-	TOL_CBUFFER___ Buffer;
+	str::wString Buffer;
 	str::string FileName;
 	xdhcmn::digest Args;
 	xdhcmn::retriever__ Retriever;
 qRB
-	Args.Init();
+	tol::Init(Args, Buffer);
 	xdhcmn::Split( str::string( Proxy.GetResult( Id, Buffer ) ), Args );
 
 	Retriever.Init( Args );

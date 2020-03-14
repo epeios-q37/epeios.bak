@@ -21,4 +21,4 @@
 
 using namespace xdwrgstry;
 
-entry___ xdwrgstry::parameter::ModuleFilename( "ModuleFilename", sclrgstry::Parameters );
+rEntry xdwrgstry::parameter::ModuleFilename( "ModuleFilename", sclrgstry::Parameters );

@@ -415,11 +415,12 @@ public:\
 	qCRM( type, method, variable )
 
 # define qCDEF( type, name, value ) const type name = value
+# define qCDEFS(name, value) qCDEF(str::wString, name, value)
 
 # define qFLAG( name, value )	qCDEF( bso::sFlag, f##name, 2 << ( value ) )
 
 /* Transforms n arguments in 1.
-Useful when a macro argument contains one or more coma. 
+Useful when a macro argument contains one or more coma.
 ex. : 'qCOVER2( a, b )' -> 'a, b' */
 # define qCOVER2(a, b)					a, b
 # define qCOVER3(a, b, c)				a, b, c
@@ -553,7 +554,7 @@ namespace tol{
 						qRAlc();
 
 					return false;
-				} else 
+				} else
 					_Pointer = (t *)P;
 
 				_Extent = Size;
@@ -590,7 +591,7 @@ namespace tol{
 		void Forget( void )	// Evite que le ponteur sous-jacent soit effac  la destruction de l'objet.
 		{
 			reset( false );
-			
+
 		}
 		t *Malloc(
 			bso::size__ Amount,
@@ -631,7 +632,7 @@ namespace tol{
 		}
 		rBuffer &operator =( const rBuffer & )
 		{
-			qRFwk(); 
+			qRFwk();
 
 			return *this;
 		}
@@ -700,7 +701,7 @@ namespace tol {
 /****** Old version ******/
 /*************************/
 
-# define E_ENUM( name )	enum name##__ : bso::enum__ 
+# define E_ENUM( name )	enum name##__ : bso::enum__
 
 namespace ntvstr {
 	class string___;
@@ -839,7 +840,7 @@ namespace tol
 	{
 	private:
 		type Value_;
-		flavor_ F_( void ) const 
+		flavor_ F_( void ) const
 		{
 			if ( Value_ >= Undefined )
 				qRFwk();
@@ -1392,7 +1393,7 @@ namespace tol {
 	typedef bso::u32__ coeff__;
 # define TOL_COEFF_MAX	BSO_U32_MAX
 
-// Horloge de prcision. N'est utile que pour comparer 2 
+// Horloge de prcision. N'est utile que pour comparer 2
 # ifdef TOL__WIN
 	E_TRMIMIC__( LARGE_INTEGER, tick__ );
 	extern LARGE_INTEGER	_TickFrequence;
@@ -1533,28 +1534,28 @@ namespace tol {
 #  error "Unhandled platform !"
 # endif
 
-	inline diff__ SecDiff( 
+	inline diff__ SecDiff(
 		tick__ Op1,
 		tick__ Op2 )
 	{
 		return _Diff( Op1, Op2, 1 );
 	}
 
-	inline diff__ MilliSecDiff( 
+	inline diff__ MilliSecDiff(
 		tick__ Op1,
 		tick__ Op2 )
 	{
 		return _Diff( Op1, Op2, 1000 );
 	}
 
-	inline diff__ MicroSecDiff( 
+	inline diff__ MicroSecDiff(
 		tick__ Op1,
 		tick__ Op2 )
 	{
 		return _Diff( Op1, Op2, 1000000 );
 	}
 
-	inline diff__ NanoSecDiff( 
+	inline diff__ NanoSecDiff(
 		tick__ Op1,
 		tick__ Op2 )
 	{
@@ -1581,7 +1582,7 @@ namespace tol {
 	inline unsigned int InitializeRandomGenerator( void )
 	{
 		unsigned int Seed = (unsigned int)time( NULL );
-	
+
 		srand( Seed );
 
 		return Seed;
@@ -1711,7 +1712,7 @@ namespace tol {
 	{\
 		return Object Exists( P );\
 	}
-	
+
 /* Lorsque 'Object' contient une virgule, on ne peut utiliser E_XNAVt(...), mme en utilisant E_COVER2(...)
 car 'E_XNAVt(...)' fait elle-mme appel  une macro. Aussi faudra-t'il explicitement appel 'E_NAVt(...)' et cette macro-ci
 pour parvenir au mme rsultat que 'E_XNAVt(...)'. */

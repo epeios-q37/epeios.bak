@@ -20,6 +20,8 @@
 #ifndef XDHUJR_INC_
 # define XDHUJR_INC_
 
+# error "Deprecated!"
+
 # define XDHUJR_NAME		"XDHUJR"
 
 # if defined( E_DEBUG ) && !defined( XDHUJR_NODBG )

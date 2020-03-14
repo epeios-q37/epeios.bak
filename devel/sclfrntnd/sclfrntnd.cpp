@@ -117,7 +117,7 @@ void sclfrntnd::GetFrontendPluginFilename(
 
 
 #define C( name )	case l##name : return #name; break
- 
+
 const char *sclfrntnd::GetLabel( eLogin Login )
 {
 	switch ( Login ) {
@@ -129,22 +129,22 @@ const char *sclfrntnd::GetLabel( eLogin Login )
 		qRFwk();
 		break;
 	}
- 
+
 	return NULL;	// To avoid a warning.
 }
- 
+
 #undef C
- 
+
 namespace {
 	stsfsm::wAutomat LoginAutomat_;
- 
+
 	void FillLoginAutomat_( void )
 	{
 		LoginAutomat_.Init();
 		stsfsm::Fill<eLogin>( LoginAutomat_, l_amount, GetLabel );
 	}
 }
- 
+
 eLogin sclfrntnd::GetLogin( const str::dString &Pattern )
 {
 	return stsfsm::GetId( Pattern, LoginAutomat_, l_Undefined, l_amount );
@@ -217,7 +217,7 @@ qRE
 
 void sclfrntnd::sReportingCallback::FBLFRDReport(
 	fblovl::reply__ Reply,
-	const char *Message )
+	const str::dString &Message )
 {
 qRH
 	str::wString Translation;
@@ -242,7 +242,7 @@ qRE
 }
 
 #define C( name )	case bst##name : return #name; break
- 
+
 const char *sclfrntnd::GetLabel( eBackendSetupType Type )
 {
 	switch ( Type ) {
@@ -252,22 +252,22 @@ const char *sclfrntnd::GetLabel( eBackendSetupType Type )
 		qRFwk();
 		break;
 	}
- 
+
 	return NULL;	// To avoid a warning.
 }
- 
+
 #undef C
- 
+
 namespace {
 	stsfsm::wAutomat BackendSetupTypeAutomat_;
- 
+
 	void FillBackendSetupTypeAutomat_( void )
 	{
 		BackendSetupTypeAutomat_.Init();
 		stsfsm::Fill<eBackendSetupType>( BackendSetupTypeAutomat_, bst_amount, GetLabel );
 	}
 }
- 
+
 eBackendSetupType sclfrntnd::GetBackendSetupType( const str::dString &Pattern )
 {
 	return stsfsm::GetId( Pattern, BackendSetupTypeAutomat_, bst_Undefined, bst_amount );
@@ -415,7 +415,7 @@ void sclfrntnd::rFrontend::Init(
 	rKernel &Kernel,
 	const char *Language,
 	fblfrd::cFrontend &FrontendCallback,
-	fblfrd::reporting_callback__ &ReportingCallback )
+	fblfrd::cReporting &ReportingCallback )
 {
 qRH
 	str::wString Key;
@@ -681,7 +681,7 @@ qRE
 }
 
 #define C( name )	case ph##name : return #name; break
- 
+
 const char *sclfrntnd::GetLabel( eProjectHandling Handling )
 {
 	switch ( Handling ) {
@@ -693,22 +693,22 @@ const char *sclfrntnd::GetLabel( eProjectHandling Handling )
 		qRFwk();
 		break;
 	}
- 
+
 	return NULL;	// To avoid a warning.
 }
- 
+
 #undef C
- 
+
 namespace {
 	stsfsm::wAutomat ProjectHandlingAutomat_;
- 
+
 	void FillProjectHandlingAutomat_( void )
 	{
 		ProjectHandlingAutomat_.Init();
 		stsfsm::Fill<eProjectHandling>( ProjectHandlingAutomat_, ph_amount, GetLabel );
 	}
 }
- 
+
 eProjectHandling sclfrntnd::GetProjectHandling( const str::dString &Pattern )
 {
 	return stsfsm::GetId( Pattern, ProjectHandlingAutomat_, ph_Undefined, ph_amount );
