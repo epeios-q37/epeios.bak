@@ -20,21 +20,19 @@
 #ifndef REGISTRY_INC_
 # define REGISTRY_INC_
 
-# include "sclrgstry.h"
+# include "xdwrgstry.h"
 
 namespace registry {
-	using namespace sclrgstry;
+	using xdwrgstry::rEntry;
 
 	namespace parameter {
-		using namespace sclrgstry::parameter;
+		using namespace xdwrgstry::parameter;
 
-		extern rEntry
-			ModuleFilename,
-			Service;
+		extern rEntry Service;
 	}
 
 	namespace definition {
-		using namespace sclrgstry::definition;
+		using namespace xdwrgstry::definition;
 
 		extern rEntry
             ErrorHead,  // HTML head used for inexisting token.

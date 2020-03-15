@@ -60,6 +60,6 @@ void frame::Display(
 
 AC( Template )
 {
-	Session.AlertT( "Template" );
+	Session.AlertT( "Template", "TemplateTitle" );
 }
 

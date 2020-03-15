@@ -268,6 +268,63 @@ namespace sclxdhtml {
 		xdhdws::sProxy Core_;
 		qRMV( const scli::sInfo, I_, Info_ );
 		eXSLFileHandling XSLFileHandling_;
+		void Fill_(
+            str::dStrings &Values,
+            const str::dString &Value )
+        {
+            Values.Append(Value);
+        }
+		void Fill_(
+            str::dStrings &Values,
+            const str::wString &Value ) // This variant with 'str::wStrind' is needed for the variadics to work.
+        {
+            Values.Append(Value);
+        }
+		void Fill_(
+            str::dStrings &Values,
+            const char *Value )
+        {
+            Values.Append(str::wString(Value));
+        }
+		void Fill_(
+            str::dStrings &Values,
+            const str::dStrings &SplittedValues );
+        template <class s,class... Args> void Fill_(
+            str::dStrings &Values,
+            const s &Value,
+            const Args &...args )
+        {
+            Fill_(Values, Value);
+            Fill_(Values, args...);
+        }
+		template <class ...Args> void ProcessWithResult_(
+            const char *ScriptName,
+            str::dString &Result,
+            const Args &...args )
+        {
+        qRH
+            str::wStrings Values;
+        qRB
+            Values.Init();
+            Fill_(Values, args...);
+            Core_.Process(ScriptName, Values, Result);
+        qRR
+        qRE
+        qRT
+        }
+		template <class ...Args> void ProcessWithoutResult_(
+            const char *ScriptName,
+            const Args &...args )
+        {
+        qRH
+            str::wString Result;
+        qRB
+            Result.Init();
+            ProcessWithResult_(ScriptName, Result, args...);
+        qRR
+        qRE
+        qRT
+        }
 		void Alert_(
 			const str::dString &XML,
 			const str::dString &XSL,
@@ -275,6 +332,7 @@ namespace sclxdhtml {
 			const char *Language );
 		void Alert_(
 			const str::dString &Message,
+			const str::dString &Title,
 			const char *MessageLanguage,	// If != 'NULL', 'Message' is translated, otherwise it is displayed as is.
 			const char *CloseTextLanguage );
 		bso::bool__ Confirm_(
@@ -331,6 +389,13 @@ namespace sclxdhtml {
 		qRT;
 		qRE;
 		}
+		void HandleClasses_(
+            const char *Variant,
+            const str::dStrings &Ids,
+            const str::dStrings &Classes)
+        {
+            ProcessWithoutResult_("HandleClasses_1", Variant, Ids, Classes);
+        }
 	protected:
 		template <typename chars> void PrependLayout_(
 			const chars &Id,
@@ -392,32 +457,6 @@ namespace sclxdhtml {
 		{
             return HandleLayout_<session,rack,chars>("Append", Id, Target, Registry, Get, Session, Marker);
 		}
-		void Fill_(
-            str::dStrings &Values,
-            const str::dString &Value )
-        {
-            Values.Append(Value);
-        }
-		void Fill_(
-            str::dStrings &Values,
-            const str::wString &Value ) // This variant with 'str::wStrind' is needed for the variadics to work.
-        {
-            Values.Append(Value);
-        }
-		void Fill_(
-            str::dStrings &Values,
-            const char *Value )
-        {
-            Values.Append(str::wString(Value));
-        }
-        template <class s,class... Args> void Fill_(
-            str::dStrings &Values,
-            const s &Value,
-            const Args &...args )
-        {
-            Fill_(Values, Value);
-            Fill_(Values, args...);
-        }
 	public:
 		void reset( bso::sBool P = true )
 		{
@@ -438,43 +477,15 @@ namespace sclxdhtml {
 		{
 			return I_();
 		}
-		template <class ...Args> void ProcessWithResult(
-            const char *ScriptName,
-            str::dString &Result,
-            const Args &...args )
-        {
-        qRH
-            str::wStrings Values;
-        qRB
-            Values.Init();
-            Fill_(Values, args...);
-            Core_.Process(ScriptName, Values, Result);
-        qRR
-        qRE
-        qRT
-        }
-		template <class ...Args> void ProcessWithoutResult(
-            const char *ScriptName,
-            const Args &...args )
-        {
-        qRH
-            str::wString Result;
-        qRB
-            Result.Init();
-            ProcessWithResult(ScriptName, Result, args...);
-        qRR
-        qRE
-        qRT
-        }
 		void Execute(
 			const str::dString &Script,
 			str::dString &Result )
 		{
-            ProcessWithResult("Execute_1", Result, Script);
+            ProcessWithResult_("Execute_1", Result, Script);
 		}
 		void Execute( const str::dString &Script )
 		{
-            ProcessWithoutResult("Execute_1", Script);
+            ProcessWithoutResult_("Execute_1", Script);
 		}
 		void Execute(
 			const char *Script,
@@ -499,9 +510,11 @@ namespace sclxdhtml {
 			const char *Language );
 		void AlertT(
 			const str::dString &RawMessage,
+			const str::dString &RawTitle,
 			const char *Language );	// Translates 'Message'.
 		void AlertU(
 			const str::dString &Message,
+			const str::dString &Title,
 			const char *Language );	// Displays 'Message' as is. 'Language' is used for the closing text message.
 		bso::bool__ Confirm(
 			const str::dString &XML,
@@ -528,7 +541,7 @@ namespace sclxdhtml {
 			const t &Name,
 			const u &Value )
 		{
-            ProcessWithoutResult("SetAttribute_1", Id, Name, Value);
+            ProcessWithoutResult_("SetAttribute_1", Id, Name, Value);
 		}
 		const char *GetAttribute(
 			const str::dString &Id,
@@ -562,7 +575,7 @@ namespace sclxdhtml {
 			const t &Id,
 			str::dString &Value )
 		{
-            ProcessWithResult("GetValue_1", Value, Id);
+            ProcessWithResult_("GetValue_1", Value, Id);
             return Value;
 		}
 		const char *GetValue(
@@ -667,7 +680,10 @@ namespace sclxdhtml {
 		*/
 		void AddClasses(
 			const str::dStrings &Ids,
-			const str::dStrings &Classes );
+			const str::dStrings &Classes )
+        {
+            return HandleClasses_("Add", Ids, Classes);
+        }
 		void AddClass(
 			const str::dString &Id,
 			const str::dString &Class );
@@ -685,7 +701,10 @@ namespace sclxdhtml {
 		}
 		void RemoveClasses(
 			const str::dStrings &Ids,
-			const str::dStrings &Classes );
+			const str::dStrings &Classes )
+        {
+            return HandleClasses_("Remove", Ids, Classes);
+        }
 		void RemoveClass(
 			const str::dString &Id,
 			const str::dString &Class );
@@ -750,10 +769,10 @@ namespace sclxdhtml {
 			const str::dString &Message ) override
 		{
 			if ( Reply == fblovl::rDisconnected )
-				P_().AlertT( str::wString("SCLXHTML_Disconnected"), L_() );
+				P_().AlertT( str::wString("SCLXHTML_Disconnected"), str::wString(), L_() );
 			else {
 				//				sclmisc::ReportAndAbort( Message );
-				P_().AlertU( Message, L_() );
+				P_().AlertU( Message, str::wString(), L_() );
 				qRAbort();
 			}
 		}
@@ -949,13 +968,17 @@ namespace sclxdhtml {
 		{
 			AlertU( str::wString(Message));
 		}
-		void AlertT( const str::dString &RawMessage )	// Translates 'RawMessage'.
+		void AlertT(
+            const str::dString &RawMessage,
+            const str::dString &RawTitle)	// Translates 'RawMessage'.
 		{
-			sProxy::AlertT( RawMessage, Language() );
+			sProxy::AlertT( RawMessage, RawTitle, Language() );
 		}
-		void AlertT( const char *RawMessage )	// Translates 'RawMessage'.
+		void AlertT(
+            const char *RawMessage,
+            const char *RawTitle)	// Translates 'RawMessage'.
 		{
-			AlertT(str::wString(RawMessage));
+			AlertT(str::wString(RawMessage),str::wString(RawTitle));
 		}
 		void Alert(
 			const str::dString &XML,

@@ -109,9 +109,9 @@ AC( ConnectedTesting )
 AC( UnconnectedTesting )
 {
 	if ( Session.IsConnected() )
-		Session.AlertT( "ConnectedTestMessage" );
+		Session.AlertT("ConnectedTestMessage", "TestMessageTitle");
 	else
-		Session.AlertT( "UnconnectedTestMessage" );
+		Session.AlertT("UnconnectedTestMessage", "TestMessageTitle");
 }
 
 

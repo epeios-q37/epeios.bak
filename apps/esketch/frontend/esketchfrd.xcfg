@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp" >
+<xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
 	<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
 	<xpp:expand value-of="q37.xpp"/>
-	<xpp:expand href="../../FRD.xcfg"/>
+	<xpp:expand href="../../XDH.xcfg"/>
 	<xpp:define name="Parameters">
 		<xpp:bloc>
-			<xpp:expand select="FRD_Parameters"/>
+			<xpp:expand select="XDH_Parameters"/>
 			<Project Type="Predefined"/>
 			<xpp:ifeq select="prod" value="yes">
 				<Backend Type="Predefined">LocalHost</Backend>
@@ -30,15 +30,15 @@
 			</xpp:ifeq>
 			<xpp:ifeq select="packing" value="yes">
 				<Login Mode="Full">
-					<UserID></UserID>
-					<Password></Password>
+					<UserID/>
+					<Password/>
 				</Login>
 			</xpp:ifeq>
 		</xpp:bloc>
 	</xpp:define>
 	<xpp:define name="Definitions">
 		<xpp:bloc>
-			<xpp:expand select="FRD_Definitions"/>
+			<xpp:expand select="XDH_Definitions"/>
 			<xpp:define name="BinRootDir">
 				<xpp:bloc>
 					<xpp:ifeq select="env" value="windows">
@@ -97,7 +97,7 @@
 	</xpp:define>
 	<xpp:define name="Locale">
 		<xpp:bloc>
-			<xpp:expand select="FRD_Locale"/>
+			<xpp:expand select="XDH_Locale"/>
 			<Translations text="NoBackendProject">
 				<Translation language="fr">sans moteur de traitement</Translation>
 				<Translation language="en">without backend</Translation>

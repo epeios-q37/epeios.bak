@@ -1,11 +1,42 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!-- For the XDHTML-based interfaces (based on 'SCLXDHTML'). -->
 <xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
+  <xpp:expand href="../XDHScripts.xcfg"/>
 	<xpp:define name="XDH_Parameters">
 		<xpp:bloc/>
 	</xpp:define>
 	<xpp:define name="XDH_Definitions">
-		<xpp:bloc/>
+		<xpp:bloc>
+			<Scripts>
+				<Script name="PrettyAlert_1" Arguments="XML,XSL,Title,CloseText">
+        			<![CDATA[
+{
+	dia = document.createElement( "span" );
+	dia.innerHTML = transformToHTML( "%XML%", "%XSL%" );
+	jQuery(dia).dialog({modal: true},{title: "%Title%"},{width: "auto"} ,{closeText: "%CloseText%"});
+}
+    				]]>
+				</Script>
+				<xpp:expand select="XDHScripts"/>
+			</Scripts>
+			<FrontendPlugins>
+				<xpp:define name="PlgPath">
+					<xpp:expand value-of="PlgPath"/>
+				</xpp:define>
+				<Plugin id="Straight">
+					<xpp:expand select="PlgPath"/>
+					<xpp:bloc>frontend/straight/straight</xpp:bloc>
+				</Plugin>
+				<Plugin id="Proxy">
+					<xpp:expand select="PlgPath"/>
+					<xpp:bloc>frontend/proxy/proxy</xpp:bloc>
+				</Plugin>
+				<Plugin id="Embedded">
+					<xpp:expand select="PlgPath"/>
+					<xpp:bloc>frontend/embedded/embedded</xpp:bloc>
+				</Plugin>
+			</FrontendPlugins>
+		</xpp:bloc>
 	</xpp:define>
 	<xpp:define name="XDH_Locale">
 		<xpp:bloc>

@@ -22,6 +22,7 @@
 #include "sclxdhtml.h"
 
 #include "cdgurl.h"
+#include "xdhcmn.h"
 
 using namespace sclxdhtml;
 
@@ -245,7 +246,24 @@ namespace {
 	}
 }
 
-#if 0
+void sclxdhtml::sProxy::Fill_(
+    str::dStrings &Values,
+    const str::dStrings &SplittedValues)
+{
+qRH
+    str::wString MergedValues;
+qRB
+    MergedValues.Init();
+
+    xdhcmn::FlatMerge(SplittedValues, MergedValues, true);
+
+    Values.Append(MergedValues);
+qRR
+qRT
+qRE
+}
+
+
 void sclxdhtml::sProxy::Alert_(
 	const str::dString &XML,
 	const str::dString &XSL,
@@ -258,27 +276,33 @@ qRB
 	CloseText.Init();
 	scllocale::GetTranslation( SCLXDHTML_NAME "_CloseText", Language, CloseText );
 
-	Core_.Alert( XML, XSL, Title, CloseText );
+	ProcessWithoutResult_("PrettyAlert_1", XML, XSL, Title, CloseText );
 qRR
 qRT
 qRE
 }
-#endif // 0
 
 void sclxdhtml::sProxy::Alert_(
-	const str::dString &Message,
+	const str::dString &RawMessage,
+	const str::dString &RawTitle,
 	const char *MessageLanguage,	// If != 'NULL', 'Message' is translated, otherwise it is displayed as is.
 	const char *CloseTextLanguage )
 {
 qRH
 	str::string XML, XSL;
+	str::wString Title;
 qRB
-	XML.Init();
-	XSL.Init();
+	tol::Init(XML, XSL);
+	SetXMLAndXSL_( RawMessage, MessageLanguage, XML, XSL );
 
-	SetXMLAndXSL_( Message, MessageLanguage, XML, XSL );
+	Title.Init();
 
-	Alert_(XML, XSL, str::wString(), CloseTextLanguage );
+	if ( ( MessageLanguage != NULL ) && RawTitle.Amount() )
+        scllocale::GetTranslation(RawTitle, MessageLanguage, Title);
+    else
+        Title = RawTitle;
+
+	Alert_(XML, XSL, Title, CloseTextLanguage );
 qRR
 qRT
 qRE
@@ -321,16 +345,18 @@ qRE;
 
 void sclxdhtml::sProxy::AlertT(
 	const str::dString &RawMessage,
+	const str::dString &RawTitle,
 	const char *Language )
 {
-	Alert_( RawMessage, Language, Language );
+	Alert_( RawMessage, RawTitle, Language, Language );
 }
 
 void sclxdhtml::sProxy::AlertU(
 	const str::dString &Message,
+	const str::dString &Title,
 	const char *Language )
 {
-	Alert_( Message, NULL, Language );
+	Alert_( Message, Title, NULL, Language );
 }
 
 #if 0
@@ -404,7 +430,7 @@ qRB
 		Message.Init();
 		if ( sclerror::GetPendingErrorTranslation( Language, Message, err::hUserDefined ) ) {
 			sclerror::ResetPendingError();
-			Proxy.AlertU( Message, Language );
+			Proxy.AlertU( Message, str::wString(), Language );
 		}
 		break;
 	case err::t_Free:
@@ -499,7 +525,7 @@ qRB;
 
     HandleXSL_(XSLFilename, Target, XSLFileHandling_, Registry, Marker, XSL);
 
-    ProcessWithoutResult("HandleLayout_1", Variant, Id, XML, XSL);
+    ProcessWithoutResult_("HandleLayout_1", Variant, Id, XML, XSL);
 qRR;
 qRT;
 qRE;
@@ -621,27 +647,11 @@ namespace {
 	}
 }
 
-void sclxdhtml::sProxy::AddClasses(
-	const str::dStrings &Ids,
-	const str::dStrings& Classes )
-{
-    qRLmt();
-//	HandleClasses_( Ids, Classes, &xdhdws::sProxy::AddClasses, Core_ );
-}
-
 void sclxdhtml::sProxy::AddClass(
 	const str::dString &Id,
 	const str::dString &Class )
 {
 	HandleClass_( Id, Class, &sProxy::AddClasses, *this );
-}
-
-void sclxdhtml::sProxy::RemoveClasses(
-	const str::dStrings &Ids,
-	const str::dStrings& Classes )
-{
-    qRLmt();
-//	HandleClasses_( Ids, Classes, &xdhdws::sProxy::RemoveClasses, Core_ );
 }
 
 void sclxdhtml::sProxy::RemoveClass(
