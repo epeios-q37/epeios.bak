@@ -66,7 +66,7 @@ void main::Display( core::rSession &Session )
 	Session.SwitchTo( base::pMain );
 }
 
-#define AC( name ) BASE_AC( main, name )
+#define A( name ) BASE_ADef( main, name )
 
 namespace {
 	void Submission_(
@@ -86,27 +86,27 @@ namespace {
 	}
 }
 
-AC( Submission )
+A( Submission )
 {
 	Submission_( Id, Session );
 }
 
-AC( ShowTestButton )
+A( ShowTestButton )
 {
 	Session.RemoveClass( "TestButton", "hide" );
 }
 
-AC( HideTestButton )
+A( HideTestButton )
 {
 	Session.AddClass( "TestButton", "hide" );
 }
 
-AC( ConnectedTesting )
+A( ConnectedTesting )
 {
 	Session.User.TestMessage();
 }
 
-AC( UnconnectedTesting )
+A( UnconnectedTesting )
 {
 	if ( Session.IsConnected() )
 		Session.AlertT("ConnectedTestMessage", "TestMessageTitle");

@@ -57,19 +57,19 @@ void prolog::Display( core::rSession &Session )
 	sclxdhtml::prolog::HandleProjectTypeSwitching( Session );
 }
 
-#define AC( name ) BASE_AC( prolog, name )
+#define A( name ) BASE_ADef( prolog, name )
 
-AC( SwitchProjectType )
+A( SwitchProjectType )
 {
 	sclxdhtml::prolog::HandleProjectTypeSwitching( Session );
 }
 
-AC( DisplayProjectFilename )
+A( DisplayProjectFilename )
 {
 	sclxdhtml::prolog::DisplaySelectedProjectFilename( Session, Id );
 }
 
-AC( LoadProject )
+A( LoadProject )
 {
 	sclxdhtml::prolog::LoadProject( Session );
 

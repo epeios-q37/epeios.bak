@@ -23,15 +23,15 @@
 # include "base.h"
 
 namespace global {
-	BASE_ACD( OnNewSession );
-	BASE_ACD( About );
-	BASE_ACD( Test );
+	BASE_AD( OnNewSession );
+	BASE_AD( About );
+	BASE_AD( Test );
 
 	inline void Register( void )
 	{
-		BASE_ACR( OnNewSession );
-		BASE_ACR( About );
-		BASE_ACR( Test );
+		BASE_AR( OnNewSession );
+		BASE_AR( About );
+		BASE_AR( Test );
 	}
 }
 

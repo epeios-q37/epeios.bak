@@ -82,15 +82,11 @@ namespace {
 	class sDownstream
 	: public cDownstream_
 	{
-	private:
-		xdhcmn::eMode Mode_;
 	protected:
 		virtual void XDHCMNInitialize( const xdhcmn::shared_data__ &Data ) override
 		{
 			if ( Launcher_ != NULL )
 				qRFwk();
-
-			Mode_ = Data.Mode();
 
 			if ( Launcher_ == NULL ) {
 				Launcher_ = Data.LauncherIdentification();
@@ -110,12 +106,9 @@ namespace {
 
 			strcpy( Buffer, Language );
 		}
-		virtual xdhcmn::cSession *XDHCMNRetrieveSession(
-			const char *Language,
-			const str::dString &Token,
-			xdhcmn::cUpstream *UpstreamCallback ) override
+		virtual xdhcmn::cSession *XDHCMNRetrieveSession(void) override
 		{
-			return SCLXDHTMLRetrieveSession( Language, Mode_, Token, UpstreamCallback );
+			return SCLXDHTMLRetrieveSession();
 		}
 		virtual void XDHCMNReleaseSession( xdhcmn::cSession *Session ) override
 		{
@@ -138,14 +131,10 @@ namespace {
 		}
 	public:
 		void reset( bso::bool__ P = true )
-		{
-			Mode_ = xdhcmn::m_Undefined;
-		}
+		{}
 		E_CVDTOR( sDownstream );
 		void Init( void )
-		{
-			Mode_ = xdhcmn::m_Undefined;
-		}
+		{}
 	};
 }
 

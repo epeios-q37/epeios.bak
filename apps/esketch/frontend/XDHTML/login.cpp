@@ -55,19 +55,19 @@ void login::Display( core::rSession &Session )
 	Session.SwitchTo( base::pLogin );
 }
 
-#define AC( name ) BASE_AC( login, name )
+#define A( name ) BASE_ADef( login, name )
 
-AC( SwitchBackendType )
+A( SwitchBackendType )
 {
 	sclxdhtml::login::HandleBackendTypeSwitching( Session );
 }
 
-AC( DisplayEmbeddedBackendFilename )
+A( DisplayEmbeddedBackendFilename )
 {
 	sclxdhtml::login::DisplaySelectedEmbeddedBackendFilename( Session, Id );
 }
 
-AC( Connect )
+A( Connect )
 {
 qRH
 	fblfrd::incompatibility_informations IncompatibilityInformations;
@@ -90,7 +90,7 @@ qRE
 qRT
 }
 
-AC( Dismiss )
+A( Dismiss )
 {
 	prolog::Display( Session );
 }

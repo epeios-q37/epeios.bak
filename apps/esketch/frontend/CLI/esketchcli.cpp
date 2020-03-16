@@ -57,8 +57,7 @@ namespace {
 			void Connect_( void )
 			{
 			qRH
-				fblfrd::incompatibility_informations IncompatibilityInformations;
-				sclfrntnd::rFeatures Features;
+				fblfrd::wIncompatibilityInformations IncompatibilityInformations;
 			qRB
 				IncompatibilityInformations.Init();
 				if ( !Frontend.Connect( fblfrd::compatibility_informations__( SKTINF_LC, ESKETCH_API_VERSION ), IncompatibilityInformations ) )

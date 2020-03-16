@@ -61,7 +61,7 @@ namespace {
 	};
 }
 
-BASE_ACD( OnNewSession_ );
+BASE_AD( OnNewSession_ );
 
 void core::rCore::Init( xdhcmn::eMode Mode )
 {

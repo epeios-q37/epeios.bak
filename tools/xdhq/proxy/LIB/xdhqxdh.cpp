@@ -676,11 +676,7 @@ namespace {
 	};
 }
 
-xdhcmn::cSession *sclxdhtml::SCLXDHTMLRetrieveSession(
-	const char *Language,
-	xdhcmn::eMode Mode,
-	const str::dString &Token,
-	xdhcmn::cUpstream *UpstreamCallback )
+xdhcmn::cSession *sclxdhtml::SCLXDHTMLRetrieveSession(void)
 {
 	rSession_ *Session = NULL;
 qRH;

@@ -130,7 +130,7 @@ namespace {
             void HandleRegular_(
                 xdwmain::rAgent &Agent,
                 fdr::rRWDriver &Driver,
-                rData &Data )
+                rData &Data)
             {
             qRH
                 websck::rRFlow Flow;

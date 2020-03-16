@@ -3,7 +3,7 @@
 	<Configuration target="xdhwebq">
 		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
 		<xpp:expand value-of="q37.xpp"/>
-        <xpp:expand href="../../../TOL.xcfg"/>
+        <xpp:expand href="../../../CLI.xcfg"/>
         <!-- Macro également utilisée dans la xetcion (Loacle' -->
         <xpp:define name="Service">
             <xpp:bloc>53710</xpp:bloc>
@@ -37,7 +37,7 @@ document.body.innerHTML = `
             </ErrorScript>
 		</Definitions>
 		<Locale>
-			<xpp:expand select="TOL_Locale"/>
+			<xpp:expand select="CLI_Locale"/>
 			<Translations text="ProcessCommandDescription">
 				<Translation language="fr">Lancement de la CGI.</Translation>
 				<Translation language="en">CGI launching.</Translation>
@@ -68,7 +68,7 @@ document.body.innerHTML = `
 			</Translations>
 		</Locale>
 		<Arguments>
-			<xpp:expand select="TOL_Arguments"/>
+			<xpp:expand select="CLI_Arguments"/>
 			<Argument id="ProcessCommand" Description="ProcessCommandDescription" long="process" Value="Process" Usage=" %ModuleFilenameArgument% [%ServiceArgument%]"/>
 			<Argument id="ModuleFilenameArgument" Description="ModuleFilenameArgumentDescription" Path="ModuleFilename" Label="ModuleFilenameArgumentLabel"/>
 			<Argument id="ServiceArgument" Description="ServiceArgumentDescription" Path="Service" Label="ServiceArgumentLabel"/>

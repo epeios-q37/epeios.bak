@@ -3,7 +3,7 @@
 	<Configuration target="xppq">
 		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
 		<xpp:expand value-of="q37.xpp"/>
-		<xpp:expand href="../../../TOL.xcfg"/>
+		<xpp:expand href="../../../CLI.xcfg"/>
 		<Parameters>
 			<Language>en</Language>
 			<Command>Process</Command>
@@ -12,7 +12,7 @@
 		<Definitions>
 		</Definitions>
 		<Locale>
-			<xpp:expand select="TOL_Locale"/>
+			<xpp:expand select="CLI_Locale"/>
 			<!-- Commands -->
 			<Translations text="ProcessCommandDescription">
 				<Translation language="fr">Traite le flux XML.</Translation>
@@ -59,7 +59,7 @@
 			</Translations>
 		</Locale>
 		<Arguments>
-			<xpp:expand select="TOL_Arguments"/>
+			<xpp:expand select="CLI_Arguments"/>
 			<!-- Commandes : 'Value', mais pas de 'Path' (vaut alors 'Parameters/Command'). -->
 			<Argument id="ProcessCommand" Description="ProcessCommandDescription" long="process" Value="Process" Usage="[%NamespaceOption%] [%NoIndentationFlag%] [%PreserveFlag%] [%InputArgument% [%OutputArgument%]]"/>
 			<Argument id="EncryptCommand" Description="EncryptCommandDescription" long="encrypt" Value="Encrypt" Usage="[%NamespaceOption%] [%NoIndentationFlag%] [%PreserveFlag%] [%InputArgument% [%OutputArgument%]]"/>

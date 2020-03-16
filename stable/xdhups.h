@@ -92,12 +92,9 @@ namespace xdhups {
 			const str::string_ &ModuleFileName,
 			dlbrry::eNormalization Normalization,	// Usually 'dlbrry::n_Default', except when used for 'Node.js' (set to 'dlbrry::nExtOnly').
 			const char *Identification );
-		cSession_ *RetrieveSession(
-			const char *Language,
-			const str::dString &Token,	// If empty, PROD, otherwise DEMO.
-			xdhcmn::cUpstream *Callback )
+		cSession_ *RetrieveSession(void)
 		{
-			return C_().RetrieveSession( Language, Token, Callback );
+			return C_().RetrieveSession();
 		}
 		const char *BaseLanguage( TOL_CBUFFER___ &Buffer ) const
 		{

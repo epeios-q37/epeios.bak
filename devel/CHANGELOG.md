@@ -8,6 +8,13 @@
 - [stdz]: modification to comply with current standards;
 - [trvl]: trivial modifications;
 
+## 2020-03-16:
+
+- XDHCMN:
+    - some cleaning,
+- SCLXDHTML, XDHUPS:
+    - [adpt],
+
 ## 2020-03-13:
 
 - FBLFRD:

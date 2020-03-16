@@ -110,7 +110,7 @@ namespace xdhcmn {
 	private:
 		const char *_Version;	// Toujours en premire position.
 		bso::uint__ _Control;	// Une valeur relative au contenu de la structure,  des fins de test primaire de compatibilit.
-		eMode _Mode;
+		eMode Mode_;
 		const char *_LauncherIdentification;
 		const char *_Localization;
 		sclmisc::sRack SCLRack_;
@@ -119,7 +119,7 @@ namespace xdhcmn {
 		{
 			_Version = NULL;
 			_Control = 0;
-			_Mode = m_Undefined;
+			Mode_ = m_Undefined;
 			_LauncherIdentification = NULL;
 			_Localization = NULL;
 			SCLRack_.reset( P );
@@ -132,7 +132,7 @@ namespace xdhcmn {
 		{
 			_Version = XDHCMN_SHARED_DATA_VERSION;
 			_Control = ControlComputing();
-			_Mode = Mode;
+			Mode_ = Mode;
 			_LauncherIdentification = LauncherIdentification;
 			_Localization = Localization;
 			SCLRack_.Init();
@@ -144,7 +144,7 @@ namespace xdhcmn {
 		qRWDISCLOSEs( sclmisc::sRack, SCLRack );
 		Q37_PMDF( const char, LauncherIdentification, _LauncherIdentification );
 		Q37_PMDF( const char, Localization, _Localization );
-		E_RODISCLOSE__( eMode, Mode );
+		qRODISCLOSEs( eMode, Mode );
 	};
 #pragma pack( pop )
 
@@ -153,11 +153,7 @@ namespace xdhcmn {
 	protected:
 		virtual void XDHCMNInitialize( const shared_data__ &Data ) = 0;
 		virtual void XDHCMNBaseLanguage( TOL_CBUFFER___ &Buffer ) = 0;
-		virtual cSession *XDHCMNRetrieveSession(
-			const char *Language,
-			const str::dString &Token,	// If not empty, DEMO mode with connexion identified by 'Token',
-										// otherwise PROD mode, with host/service retrieved from registry.
-			cUpstream *Upstream ) = 0;
+		virtual cSession *XDHCMNRetrieveSession(void) = 0;
 		virtual void XDHCMNReleaseSession( cSession *Session ) = 0;
 		virtual const scli::sInfo &XDHCMNGetInfo( void ) = 0;
 		// The returned value is only for 'FaaS' mode. In other mode, retuns always 'true',
@@ -180,13 +176,9 @@ namespace xdhcmn {
 
 			return Buffer;
 		}
-		cSession *RetrieveSession(
-			const char *Language,
-			const str::dString &Token,	// If not empty, DEMO mode with connexion identified by 'Token',
-										// otherwise PROD mode, with host/service retrieved from registry.
-			cUpstream *Upstream )
+		cSession *RetrieveSession(void)
 		{
-			return XDHCMNRetrieveSession( Language, Token, Upstream );
+			return XDHCMNRetrieveSession();
 		}
 		void ReleaseSession( cSession *Session )
 		{

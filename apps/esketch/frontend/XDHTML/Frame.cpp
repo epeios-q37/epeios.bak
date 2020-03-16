@@ -56,9 +56,9 @@ void frame::Display(
 	SetCasting( Id, Session );
 }
 
-#define AC( name ) BASE_AC( frame, name )
+#define A( name ) BASE_ADef( frame, name )
 
-AC( Template )
+A( Template )
 {
 	Session.AlertT( "Template", "TemplateTitle" );
 }

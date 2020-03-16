@@ -23,16 +23,16 @@
 # include "base.h"
 
 namespace login {
-	BASE_ACD( SwitchBackendType );
-	BASE_ACD( DisplayEmbeddedBackendFilename );
-	BASE_ACD( Connect );
-	BASE_ACD( Dismiss );
+	BASE_AD( SwitchBackendType );
+	BASE_AD( DisplayEmbeddedBackendFilename );
+	BASE_AD( Connect );
+	BASE_AD( Dismiss );
 
 	inline void Register( void ) {
-		BASE_ACR( SwitchBackendType );
-		BASE_ACR( DisplayEmbeddedBackendFilename );
-		BASE_ACR( Connect );
-		BASE_ACR( Dismiss );
+		BASE_AR( SwitchBackendType );
+		BASE_AR( DisplayEmbeddedBackendFilename );
+		BASE_AR( Connect );
+		BASE_AR( Dismiss );
 	}
 
 	void SetLayout( core::rSession &Session );

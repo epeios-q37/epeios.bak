@@ -32,14 +32,14 @@
 
 /***** Macros dealing with actions ****/
 // Declaration.
-# define BASE_ACD( name ) SCLX_ACD( core::rSession, name )
+# define BASE_AD( name ) SCLX_ADec( core::rSession, name )
 
 // Registering.
-# define BASE_ACR( name )\
+# define BASE_AR( name )\
 	base::Register( s##name::Name, name );
 
 // Definition.
-# define BASE_AC( owner, name ) SCLX_AC( core::rSession, owner, name )
+# define BASE_ADef( owner, name ) SCLX_ADef( core::rSession, owner, name )
 
 /**********/
 

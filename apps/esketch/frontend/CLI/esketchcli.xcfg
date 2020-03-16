@@ -4,18 +4,21 @@
         <xpp:set name="q37.xpp" env-var="Q37_XPP"/>
         <xpp:expand value-of="q37.xpp"/>
         <xpp:expand href="../esketchfrd.xcfg"/>
-        <xpp:expand href="../../../../TOL.xcfg"/>
+        <xpp:expand href="../../../FRD.xcfg"/>
+        <xpp:expand href="../../../../CLI.xcfg"/>
 		<Parameters>
            <xpp:expand select="Parameters"/>
+           <xpp:expand select="FRD_Parameters"/>
            <Language>fr</Language>
            <!-- Default command -->
            <Command>Usage</Command>
         </Parameters>
 		<Definitions>
             <xpp:expand select="Definitions"/>
+            <xpp:expand select="FRD_Definitions"/>
         </Definitions>
 		<Locale>
-			<xpp:expand select="TOL_Locale"/>
+			<xpp:expand select="CLI_Locale"/>
             <Translations text="TestCommandDescription">
                 <Translation language="fr">Commande de test.</Translation>
                 <Translation language="en">Test command.</Translation>
@@ -46,7 +49,7 @@
 			</Translations>
 		</Locale>
 		<Arguments>
-			<xpp:expand select="TOL_Arguments"/>
+			<xpp:expand select="CLI_Arguments"/>
 			<!-- Commandes : pas de 'Path' (vaut 'Parameters/Command'), ni de 'Value'. -->
             <Argument id="AboutBackendCommand" Description="AboutBackendCommandDescription" long="about-backend" Value="AboutBackend" Usage=""/>
    <!--Argument id="TestCommand" Description="TestCommandDescription" long="test" short="t" Value="Test" Usage="%TestFlag% %TestOption% %TestArgument%"/-->

@@ -79,14 +79,14 @@ namespace xdwmain {
             rAgent &Agent,
             fdr::rRWDriver &Driver,
             const char *Language,
-			const str::dString &Token )	// If empty, FaaS session, else token used for the DEMO session.
+			const str::dString &Token )	// If empty, FaaS session, else token used for the FaaS session.
  		{
             reset();
 
             Agent_ = &Agent;
 
 			Upstream_.Init(Driver);
-			SessionCallback_ = A_().RetrieveSession(Language, Token, &Upstream_);
+			SessionCallback_ = A_().RetrieveSession();
 			Session_.Init(SessionCallback_);
 			return Session_.Initialize(Upstream_, Language, Token);
 		}

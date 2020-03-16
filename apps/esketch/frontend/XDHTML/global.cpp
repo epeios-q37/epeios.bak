@@ -27,9 +27,9 @@
 
 qCDEF(char *, XSLAffix_, "Global" );
 
-#define AC( name ) BASE_AC( global, name )
+#define A( name ) BASE_ADef( global, name )
 
-AC( OnNewSession )
+A( OnNewSession )
 {
 	switch ( Mode ) {
 	case xdhcmn::mMonoUser:
@@ -61,7 +61,7 @@ AC( OnNewSession )
 	}
 }
 
-AC( About )
+A( About )
 {
 qRH
 	str::string XSL;
@@ -86,7 +86,7 @@ qRT
 qRE
 }
 
-AC( Test )
+A( Test )
 {
 qRH
 	str::string Message;

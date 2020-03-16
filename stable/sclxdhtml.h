@@ -95,7 +95,7 @@ namespace sclxdhtml {
 		xfh_Default = xfhRegistry,
 	};
 
-# define SCLX_ACD( session, name )\
+# define SCLX_ADec( session, name )\
 	extern class s##name\
 	: public sclxdhtml::cAction<session>\
 	{\
@@ -108,7 +108,7 @@ namespace sclxdhtml {
 		static const char *Name;\
 	} name
 
-# define SCLX_AC( session, owner, name )\
+# define SCLX_ADef( session, owner, name )\
 	owner::s##name owner::name;\
 	const char *owner::s##name::Name = #name;\
 	void owner::s##name::SCLXLaunch(\
@@ -876,7 +876,7 @@ namespace sclxdhtml {
 		bso::sBool XDHCMNInitialize(
 			xdhcmn::cUpstream &Callback,
 			const char *Language,
-			const str::dString &Token )	override // If empty, PROD session, else token used for the DEMO session.
+			const str::dString &Token)	override // If empty, PROD session, else token used for the DEMO session.
         {
             if ( Token.Amount() )
                 qRFwk();    // Should never be maunched in 'DEMO' mode.
@@ -1163,12 +1163,7 @@ namespace sclxdhtml {
 	const scli::sInfo &SCLXDHTMLInfo( void );	// To define by user.
 	void SCLXDHTMLInitialization( xdhcmn::eMode Mode );	// To define by user.
 
-	xdhcmn::cSession *SCLXDHTMLRetrieveSession(	// To define by user.
-		const char *Language,
-		xdhcmn::eMode Mode,
-		const str::dString &Token,	// If not empty, DEMO mode with connexion identified by 'Token',
-									// otherwise PROD mode, with host/service retrieved from registry.
-		xdhcmn::cUpstream *UpstreamCallback );
+	xdhcmn::cSession *SCLXDHTMLRetrieveSession(void);	// To define by user.
 
 	void SCLXDHTMLReleaseSession( xdhcmn::cSession *Session );	// To define by user.
 

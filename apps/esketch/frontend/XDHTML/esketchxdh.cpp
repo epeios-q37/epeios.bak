@@ -53,21 +53,16 @@ qRT
 qRE
 }
 
-xdhcmn::cSession *sclxdhtml::SCLXDHTMLRetrieveSession(
-	const char *Language,
-	xdhcmn::eMode Mode,
-	const str::dString &Token,
-	xdhcmn::cUpstream *UpstreamCallback )
+xdhcmn::cSession *sclxdhtml::SCLXDHTMLRetrieveSession(void)
 {
-	if ( Token.Amount() != 0 )
-		qRGnr();
-
-	core::rSession *Session = new core::rSession;
+    core::rSession *Session = new core::rSession;
 
 	if ( Session == NULL )
 		qRGnr();
 
 	Session->Init( core::Kernel(), core::Core, esketchxdh::Info );
+
+//	Session->Connect();
 
 	return Session;
 }

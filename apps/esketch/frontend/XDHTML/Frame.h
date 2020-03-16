@@ -23,11 +23,11 @@
 # include "base.h"
 
 namespace frame {
-	BASE_ACD( Template );
+	BASE_AD( Template );
 
 	inline void Register( void )
 	{
-		BASE_ACR( Template );
+		BASE_AR( Template );
 	};
 
 	void SetLayout(
