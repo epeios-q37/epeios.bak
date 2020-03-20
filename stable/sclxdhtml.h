@@ -832,7 +832,7 @@ namespace sclxdhtml {
 		qRMV( sclfrntnd::rKernel, K_, Kernel_ );
 		page Page_;	// Current page;
 		sReporting Reporting_;
-		eBackendVisibility _BackendVisibility_;
+		eBackendVisibility BackendVisibility_;
 		qRMV( class rCore<rSession>, C_, Core_ );
 	protected:
 		bso::sBool XDHCMNInitialize(
@@ -864,7 +864,7 @@ namespace sclxdhtml {
 			tol::reset(P, Info_, Kernel_);
 			Page_ = UndefinedPage;
 			Reporting_.reset( P );
-			_BackendVisibility_ = bv_Undefined;
+			BackendVisibility_ = bv_Undefined;
 			sProxy::reset();
 			Core_ = NULL;
 		}
@@ -880,7 +880,7 @@ namespace sclxdhtml {
             Kernel_ = &Kernel;
 			Page_ = UndefinedPage;
 			// instances::Init( *this );	// Made on connection.
-			_BackendVisibility_ = bvShow;	// By default, the backend part of the login page is shown.
+			BackendVisibility_ = bvShow;	// By default, the backend part of the login page is shown.
 			Core_ = &Core;
 		}
 		bso::bool__ Connect(
@@ -974,7 +974,7 @@ namespace sclxdhtml {
 		{
 			return sProxy::Confirm( XML, XSL, Title, Language() );
 		}
-		qRWDISCLOSEr( eBackendVisibility, _BackendVisibility );
+		qRWDISCLOSEr( eBackendVisibility, BackendVisibility );
 		qRODISCLOSEr( page, Page );
 		template <typename chars> void SetElementLayout(
 			const chars &Id,

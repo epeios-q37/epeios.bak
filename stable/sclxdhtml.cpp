@@ -565,69 +565,6 @@ void sclxdhtml::sProxy::SetTimeout(
     qRLmt();
 //	Core_.SetTimeout( Delay, Action );
 }
-/*
-void sclxdhtml::sProxy::InsertCSSRule(
-	const str::dString &Rule,
-	xdhcmn::sIndex Index )
-{
-	return Core_.InsertCSSRule( Rule, Index );
-}
-
-xdhcmn::sIndex sclxdhtml::sProxy::AppendCSSRule( const str::dString &Rule )
-{
-	return Core_.AppendCSSRule( Rule );
-}
-
-void sclxdhtml::sProxy::RemoveCSSRule( xdhcmn::sIndex Index )
-{
-	Core_.RemoveCSSRule( Index );
-}
-*/
-namespace {
-	void HandleClasses_(
-		const str::dStrings &Ids,
-		const str::dStrings &Classes,
-		void (xdhdws::sProxy::* Method)(
-			const str::dString &Ids,
-			const str::dString &Classes ),
-		xdhdws::sProxy &Proxy )
-	{
-	qRH;
-		str::wString MergedIds, MergedClasses;
-	qRB;
-		MergedIds.Init();
-		xdhcmn::FlatMerge( Ids, MergedIds, true );	// Passed as is to a JS script, hence 'true'.
-
-		MergedClasses.Init();
-		xdhcmn::FlatMerge( Classes, MergedClasses, true );	// Passed as is to a JS script, hence 'true'.
-
-		(Proxy.*Method)( MergedIds, MergedClasses );
-	qRR;
-	qRT;
-	qRE;
-	}
-
-	void HandleClass_(
-		const str::dString &Id,
-		const str::dString &Class,
-		void (sProxy::*Method)(
-			const str::dStrings &Ids,
-			const str::dStrings &Classes ),
-		sProxy &Proxy )
-	{
-	qRH;
-		str::wStrings Ids, Classes;
-	qRB;
-		Ids.Init(Id);
-
-		Classes.Init(Class);
-
-		(Proxy.*Method)( Ids, Classes );
-	qRR;
-	qRT;
-	qRE;
-	}
-}
 
 namespace {
 	void HandleElements_(

@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-//D UnTyped Storage 
+//D UnTyped Storage
 
 #ifndef UYS_INC_
 #define UYS_INC_
@@ -77,7 +77,8 @@ namespace uys {
 		{
 			if ( P ) {
 				if ( _Internal ) {
-					delete _Driver;
+                    if ( _Driver != NULL)
+                        delete _Driver;
 					_Internal = false;
 					_Driver = NULL;
 				}
@@ -261,7 +262,7 @@ namespace uys {
 		}
 		void plug( ags::aggregated_storage_ *AS )
 		{
-			// 'AS' == 'NULL' is for flushing (mainly operated by the 'ctn' module. 
+			// 'AS' == 'NULL' is for flushing (mainly operated by the 'ctn' module.
 			if ( AS != NULL ) {
 				_AggregatedStorageDriver.Init( *AS );
 				plug_( _AggregatedStorageDriver );
@@ -494,7 +495,7 @@ namespace uys {
 			fnm::BuildPath( Path, Basename, ".q37", Filename );
 		}
 	};
-		
+
 	qENUM( State_ )
 	{	// Statut de l'opration de connection.
 		sExists,		// le fichier rattach existe.
@@ -526,7 +527,7 @@ namespace uys {
 			Driver_.reset( P );
 		}
 		qCVDTOR( rFH );
-		eState Init( 
+		eState Init(
 			const rHF &Filenames,
 			mode__ Mode,
 			behavior__ Behavior,
@@ -649,7 +650,7 @@ namespace uys {
 			sdr::size__ Amount,
 			sdr::byte__ *Buffer ) const
 		{
-			memcpy( Buffer, m::Data_ + Position, Amount ); 
+			memcpy( Buffer, m::Data_ + Position, Amount );
 		}
 		//f Write to 'Position' 'Amount' bytes from 'Buffer'.
 		void Store(
@@ -657,7 +658,7 @@ namespace uys {
 			sdr::size__ Amount,
 			sdr::row_t__ Position )
 		{
-			memcpy( m::Data_ + Position, Buffer, Amount ); 
+			memcpy( m::Data_ + Position, Buffer, Amount );
 		}
 		//f Return byte at 'Position'.
 		sdr::byte__ Get( sdr::row_t__ Position ) const
@@ -684,7 +685,7 @@ namespace uys {
 			sdr::row_t__ Position = 0,
 			sdr::row_t__ Offset = 0 )
 		{
-			memmove( m::Data_ + Offset, Source.m::Data_ + Position, Quantity ); 
+			memmove( m::Data_ + Offset, Source.m::Data_ + Position, Quantity );
 		}
 		/*f Store to 'Offset' 'Quantity' bytes at 'Position' from 'Source'. */
 		void Store(

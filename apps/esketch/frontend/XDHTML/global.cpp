@@ -41,7 +41,7 @@ A( OnNewSession )
 			::login::Display( Session );
 			break;
 		case sclfrntnd::phLogin:
-			Session.Set_BackendVisibility( sclxdhtml::bvHide );
+			Session.SetBackendVisibility( sclxdhtml::bvHide );
 			::login::Display( Session );
 			break;
 		case sclfrntnd::phRun:
@@ -53,7 +53,7 @@ A( OnNewSession )
 		}
 		break;
 	case xdhcmn::mMultiUser:
-        Session.Set_BackendVisibility(sclxdhtml::bvHide);
+        Session.SetBackendVisibility(sclxdhtml::bvHide);
         ::login::Display( Session );
 		break;
 	default:

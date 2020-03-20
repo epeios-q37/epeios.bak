@@ -12,6 +12,8 @@
 
 - STR
     - adding facilities to `wStrings`,
+- UYS:
+    - [trvl],
 
 ## 2020-03-16:
 
