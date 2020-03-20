@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-// STRing 
+// STRing
 
 #ifndef STR_INC_
 # define STR_INC_
@@ -36,21 +36,6 @@
 # include "cpe.h"
 # include "ctn.h"
 # include "crt.h"
-
-/*************************/
-/****** New version ******/
-/*************************/
-
-namespace str {
-	class string_;
-	class string;
-
-	typedef string_ dString;
-	typedef string wString;
-
-	typedef ctn::E_MCONTAINER_( str::dString ) dStrings;
-	typedef ctn::E_MCONTAINER( str::dString ) wStrings;
-}
 
 /*************************/
 /****** Old version ******/
@@ -660,10 +645,49 @@ namespace str {
 		return ctn::Search<row, string_>( String, Strings, First );
 	}
 
-	inline sdr::sRow NewAndInit( str::dStrings &Strings )
+	inline sdr::sRow NewAndInit( str::strings_ &Strings )
 	{
 		return crt::NewAndInit( Strings );
 	}
+}
+
+/*************************/
+/****** New version ******/
+/*************************/
+
+namespace str {
+	typedef string_ dString;
+	typedef string wString;
+
+	typedef ctn::E_MCONTAINER_( str::dString ) dStrings;
+	typedef ctn::E_MCONTAINER( str::dString ) wStrings_;
+
+	class wStrings
+	: public wStrings_
+	{
+	public:
+        using wStrings_::wStrings_;
+        using wStrings_::Init;
+        void Init( const str::dString &String)
+        {
+            Init();
+            Append(String);
+        }
+        void Init( const bso::sChar *String)
+        {
+            Init( wString(String));
+        }
+        wStrings(const dString &String)
+        : wStrings_()
+        {
+            Init(String);
+        }
+        wStrings(const char *String)
+        : wStrings_()
+        {
+            Init(String);
+        }
+    };
 }
 
 #define qSTRING( name )\

@@ -57,6 +57,9 @@ function send($query) {
 $token = $_REQUEST["_token"];
 $head = send("XDH web prolog\r\nToken: " . $token . "\r\n\r\n");
 
+if (empty($token))
+    $additional = ' style="display: none;"';
+
 require 'prolog.php';
 
 echo $out;

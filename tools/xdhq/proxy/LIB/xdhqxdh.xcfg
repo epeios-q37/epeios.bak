@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Configurations xmlns:xpp="http://q37.info/ns/xpp/" >
+	<xpp:expand href="../../../../XDHScripts.xcfg"/>
 	<Configuration target="xdhqxdh">
 		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
 		<xpp:expand value-of="q37.xpp"/>
-		<xpp:expand href="../../../XDH.xcfg"/>
 		<Parameters>
 			<Language>en</Language>
 			<Command>Test</Command>
@@ -55,6 +55,9 @@
 					</Locale>
 				</Plugin>
 			</Plugins>
+			<Scripts>
+                <xpp:expand select="XDHScripts"/>
+            </Scripts>
 		</Definitions>
 		<Locale>
 			<Translations text="TestCommandDescription">

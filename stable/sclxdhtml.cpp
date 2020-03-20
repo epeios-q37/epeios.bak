@@ -520,47 +520,42 @@ qRT;
 qRE;
 }
 
-
-#if 0
-void sclxdhtml::sProxy::SetContents(
+void sclxdhtml::sProxy::GetContents(
 	const str::dStrings &Ids,
-	const str::dStrings &Contents )
+	str::dStrings &Contents)
 {
 qRH;
-	str::wString MergedIds, MergedContents;
+	str::wString MergedContents;
 qRB;
-	if ( Ids.Amount() != Contents.Amount() )
-		qRGnr();
+    MergedContents.Init();
 
-	MergedIds.Init();
-	xdhcmn::FlatMerge( Ids, MergedIds, true );	// Used as is in an JS script, hence last argument at 'true'.
+    ProcessWithResult_("GetContents_1", MergedContents, Ids);
 
-	MergedContents.Init();
-	xdhcmn::FlatMerge( Contents, MergedContents, true );	// Used as is in an JS script, hence last argument at 'true'.
-
-	Core_.SetContents(  MergedIds, MergedContents );
+    xdhcmn::FlatSplit(MergedContents, Contents);
 qRR;
 qRT;
 qRE;
 }
-#endif
 
-void sclxdhtml::sProxy::SetContent(
+const str::dString &sclxdhtml::sProxy::GetContent(
 	const str::dString &Id,
-	const str::dString &Content )
+	str::dString &Content)
 {
 qRH;
-	str::wStrings Ids, Contents;
+	str::wStrings Contents;
 qRB;
-	tol::Init( Ids, Contents );
+    Contents.Init();
 
-	Ids.Append( Id );
-	Contents.Append( Content );
+    GetContents(str::wStrings(Id), Contents);
 
-	SetContents( Ids, Contents );
+    if ( Contents.Amount() != 1 )
+        qRFwk();
+
+    Content = Contents(Contents.First());
 qRR;
 qRT;
 qRE;
+    return Content;
 }
 
 void sclxdhtml::sProxy::SetTimeout(
@@ -623,46 +618,15 @@ namespace {
 	qRH;
 		str::wStrings Ids, Classes;
 	qRB;
-		Ids.Init();
-		Ids.Append( Id );
+		Ids.Init(Id);
 
-		Classes.Init();
-		Classes.Append( Class );
+		Classes.Init(Class);
 
 		(Proxy.*Method)( Ids, Classes );
 	qRR;
 	qRT;
 	qRE;
 	}
-}
-
-void sclxdhtml::sProxy::AddClass(
-	const str::dString &Id,
-	const str::dString &Class )
-{
-	HandleClass_( Id, Class, &sProxy::AddClasses, *this );
-}
-
-void sclxdhtml::sProxy::RemoveClass(
-	const str::dString &Id,
-	const str::dString &Class )
-{
-	HandleClass_( Id, Class, &sProxy::RemoveClasses, *this );
-}
-
-void sclxdhtml::sProxy::ToggleClasses(
-	const str::dStrings &Ids,
-	const str::dStrings& Classes )
-{
-    qRLmt();
-//	HandleClasses_( Ids, Classes, &xdhdws::sProxy::ToggleClasses, Core_ );
-}
-
-void sclxdhtml::sProxy::ToggleClass(
-	const str::dString &Id,
-	const str::dString &Class )
-{
-	HandleClass_( Id, Class, &sProxy::ToggleClasses, *this );
 }
 
 namespace {
@@ -737,7 +701,7 @@ qRH
 	str::string Value;
 qRB
 	Value.Init();
-	ProjectType = sclmisc::GetProjectType( Proxy.GetValue( prolog::ProjectTypeId, Value ) );
+	ProjectType = sclmisc::GetProjectType( Proxy.GetContent( prolog::ProjectTypeId, Value ) );
 qRR
 qRT
 qRE
@@ -779,7 +743,7 @@ qRH
 	xdhcmn::retriever__ Retriever;
 qRB
 	tol::Init(Args, Buffer);
-	xdhcmn::Split( Proxy.GetResult( Id, Buffer ), Args );
+	xdhcmn::Split( Proxy.GetContent( Id, Buffer ), Args );
 
 	Retriever.Init( Args );
 
@@ -789,7 +753,7 @@ qRB
 		Retriever.GetString( FileName );
 
 	if ( FileName.Amount() != 0 )
-		Proxy.SetValue( RemoteProjectId, FileName );
+		Proxy.SetContent( RemoteProjectId, FileName );
 qRR
 qRT
 qRE
@@ -801,19 +765,21 @@ sclmisc::eProjectType sclxdhtml::prolog::GetProjectFeatures(
 {
 	sclmisc::eProjectType Type = sclmisc::pt_Undefined;
 qRH
-	TOL_CBUFFER___ Buffer;
+	str::wString Buffer;
 qRB
+    Buffer.Init();
+
 	switch ( Type = GetProjectType_( Proxy ) ) {
 	case sclmisc::ptNew:
 		break;
 	case sclmisc::ptRemote:
-		Feature.Append( Proxy.GetValue( RemoteProjectId, Buffer ) );
+		Feature.Append( Proxy.GetContent( RemoteProjectId, Buffer ) );
 		break;
 	case sclmisc::ptEmbedded:
 		qRVct();	// Not implemented yet.
 		break;
 	case sclmisc::ptPredefined:
-		Feature.Append( Proxy.GetValue( PredefinedProjectId, Buffer ) );
+		Feature.Append( Proxy.GetContent( PredefinedProjectId, Buffer ) );
 		break;
 	default:
 		qRFwk();
@@ -868,7 +834,7 @@ namespace {
 		sProxy &Proxy,
 		str::dString &Type )
 	{
-		return Proxy.GetValue( login::BackendTypeId, Type );
+		return Proxy.GetContent( login::BackendTypeId, Type );
 	}
 
 	qENUM( BackendType_ )
@@ -1063,26 +1029,26 @@ void sclxdhtml::login::GetBackendFeatures(
 {
 qRH;
 	eBackendType_ Type = bt_Undefined;
-	TOL_CBUFFER___ Buffer;
+	str::wString Buffer;
 	str::string Parameters;
 qRB;
-	Parameters.Init();
+    tol::Init(Parameters, Buffer);
 
 	switch ( Type = GetType_( Proxy ) ) {
 	case btNone:
 		break;
 	case btPredefined:
-		Parameters.Append( Proxy.GetValue( PredefinedBackendId, Buffer ) );
+		Parameters.Append( Proxy.GetContent( PredefinedBackendId, Buffer ) );
 		break;
 	case btEmbedded:
-		Parameters.Append( Proxy.GetValue( EmbeddedBackendId, Buffer ) );
+		Parameters.Append( Proxy.GetContent( EmbeddedBackendId, Buffer ) );
 		break;
 	case btStraight:
-		Parameters.Append( Proxy.GetValue( RemoteBackendId, Buffer ) );
+		Parameters.Append( Proxy.GetContent( RemoteBackendId, Buffer ) );
 		straight_::Normalize( Parameters );
 		break;
 	case btProxy:
-		Parameters.Append( Proxy.GetValue( ProxyfiedBackendId, Buffer ) );
+		Parameters.Append( Proxy.GetContent( ProxyfiedBackendId, Buffer ) );
 		proxy_::Normalize( Parameters );
 		break;
 	default:
@@ -1107,7 +1073,7 @@ qRH
 	xdhcmn::retriever__ Retriever;
 qRB
 	tol::Init(Args, Buffer);
-	xdhcmn::Split( str::string( Proxy.GetResult( Id, Buffer ) ), Args );
+	xdhcmn::Split( str::string( Proxy.GetContent( Id, Buffer ) ), Args );
 
 	Retriever.Init( Args );
 
@@ -1117,7 +1083,7 @@ qRB
 		Retriever.GetString( FileName );
 
 	if ( FileName.Amount() != 0 )
-		Proxy.SetValue( EmbeddedBackendId, FileName );
+		Proxy.SetContent( EmbeddedBackendId, FileName );
 qRR
 qRT
 qRE

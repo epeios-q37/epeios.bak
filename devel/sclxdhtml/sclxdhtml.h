@@ -139,8 +139,8 @@ namespace sclxdhtml {
 		stsfsm::automat_ Automat;
 		action_callbacks_<session> Callbacks;
 		action_handler_( s &S )
-			: Automat( S.Automat ),
-			Callbacks( S.Callbacks )
+        : Automat( S.Automat ),
+          Callbacks( S.Callbacks )
 		{}
 		void reset( bso::bool__ P = true )
 		{
@@ -565,50 +565,30 @@ namespace sclxdhtml {
 		{
             qRLmt();
 		}
-		void SetValue(
-			const str::dString &Id,
-			const str::dString &Value )
-		{
-            qRLmt();
-		}
-		template <typename t> const str::dString &GetValue(
-			const t &Id,
-			str::dString &Value )
-		{
-            ProcessWithResult_("GetValue_1", Value, Id);
-            return Value;
-		}
-		const char *GetValue(
-			const str::dString &Id,
-			qCBUFFERr &Value )
-		{
-            qRLmt();
-            return Value;
-		}
-		const str::dString &GetResult(
-			const str::dString &Id,
-			str::dString &Result )
-		{
-            qRLmt();
-            return Result;
-		}
-		const char *GetResult(
-			const str::dString &Id,
-			qCBUFFERr &Result )
-		{
-            qRLmt();
-            return Result;
-		}
 		void SetContents(
 			const str::dStrings &Ids,
 			const str::dStrings &Contents )
         {
-            qRLmt();
-            // Reactivate in '.cpp'.
+            ProcessWithoutResult_("SetContents_1", Ids, Contents);
         }
-		void SetContent(
-			const str::dString &Id,
-			const str::dString &Content );
+		template <typename c1, typename c2> void SetContent(
+			const c1 &Id,
+			const c2 &Content )
+        {
+            return SetContents(str::wStrings(Id),str::wStrings(Content));
+        }
+        void GetContents(
+            const str::dStrings &Ids,
+            str::dStrings &Contents );
+        const str::dString &GetContent(
+            const str::dString &Id,
+            str::dString &Content );
+        const str::dString &GetContent(
+            const char *Id,
+            str::dString &Content )
+        {
+            return GetContent(str::wString(Id), Content);
+        }
 		void SetTimeout(
 			const str::dString &Delay,
 			const str::dString &Action );
@@ -684,54 +664,36 @@ namespace sclxdhtml {
         {
             return HandleClasses_("Add", Ids, Classes);
         }
-		void AddClass(
-			const str::dString &Id,
-			const str::dString &Class );
-		void AddClass(
-			const str::dString &Id,
-			const char *Class )
-		{
-			AddClass(Id, str::wString( Class ));
-		}
-		void AddClass(
-			const char *Id,
-			const char *Class )
-		{
-			AddClass( str::wString( Id ), str::wString( Class ) );
-		}
+		template <typename c1, typename c2> void AddClass(
+			const c1 &Id,
+			const c2 &Class )
+        {
+            return AddClasses(str::wStrings(Id), str::wStrings(Class));
+        }
 		void RemoveClasses(
 			const str::dStrings &Ids,
 			const str::dStrings &Classes )
         {
             return HandleClasses_("Remove", Ids, Classes);
         }
-		void RemoveClass(
-			const str::dString &Id,
-			const str::dString &Class );
-		void RemoveClass(
-			const str::dString &Id,
-			const char *Class )
-		{
-			RemoveClass(Id, str::wString( Class ));
-		}
-		void RemoveClass(
-			const char *Id,
-			const char *Class )
-		{
-			RemoveClass( str::wString( Id ), str::wString( Class ) );
-		}
+		template <typename c1, typename c2> void RemoveClass(
+			const c1 &Id,
+			const c2 &Class )
+        {
+            return RemoveClasses(str::wStrings(Id), str::wStrings(Class));
+        }
 		void ToggleClasses(
-			const str::dStrings &Idss,
-			const str::dStrings &Classes );
-		void ToggleClass(
-			const str::dString &Id,
-			const str::dString &Class );
-		void ToggleClass(
-			const char *Id,
-			const char *Class )
-		{
-			ToggleClass( str::wString( Id ), str::wString( Class ) );
-		}
+			const str::dStrings &Ids,
+			const str::dStrings &Classes )
+        {
+            return HandleClasses_("Toggle", Ids, Classes);
+        }
+		template <typename c1, typename c2> void ToggleClass(
+			const c1 &Id,
+			const c2 &Class )
+        {
+            return ToggleClasses(str::wStrings(Id), str::wStrings(Class));
+        }
 		void EnableElements( const str::dStrings &Ids );
 		void EnableElement( const str::dString &Id );
 		void EnableElement( const char *Id )
@@ -1149,15 +1111,6 @@ namespace sclxdhtml {
 		bso::char__ Marker = DefaultMarker )
 	{
 		return sclmisc::LoadXMLAndTranslateTags( FileName, Registry, Content, 0, Marker );
-	}
-
-	inline void SetContents_(
-		xdhdws::sProxy &Proxy,
-		const str::dString &Ids,
-		const str::dString &Contents )
-	{
-        qRLmt();
-//		Proxy.SetContents( Ids, Contents );
 	}
 
 	const scli::sInfo &SCLXDHTMLInfo( void );	// To define by user.

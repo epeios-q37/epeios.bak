@@ -8,6 +8,11 @@
 - [stdz]: modification to comply with current standards;
 - [trvl]: trivial modifications;
 
+## 2020-03-20:
+
+- STR
+    - adding facilities to `wStrings`,
+
 ## 2020-03-16:
 
 - XDHCMN:

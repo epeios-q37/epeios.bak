@@ -77,7 +77,7 @@ namespace {
 		str::wString Content;
 	qRB;
 		Content.Init();
-		Session.GetValue( "Pattern", Content );
+		Session.GetContent( "Pattern", Content );
 		Session.User.ToUpper( Content );
 		Session.SetContent( "Pattern", Content );
 	qRR;

@@ -3,7 +3,7 @@
 	<Configuration target="dpkq">
 		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
 		<xpp:expand value-of="q37.xpp"/>
-		<xpp:expand href="../../../TOL.xcfg"/>
+		<xpp:expand href="../../../CLI.xcfg"/>
 		<Parameters>
 			<Language>en</Language>
 			<!-- Default command -->
@@ -22,7 +22,7 @@
 			</Projects>
 		</Definitions>
 		<Locale>
-			<xpp:expand select="TOL_Locale"/>
+			<xpp:expand select="CLI_Locale"/>
 			<!--Commands-->
    <Translations text="ProcessCommandDescription">
     <Translation language="fr">Traite les données.</Translation>
@@ -69,7 +69,7 @@
    </Translations>
   </Locale>
 		<Arguments>
-			<xpp:expand select="TOL_Arguments"/>
+			<xpp:expand select="CLI_Arguments"/>
 			<!-- Commands -->
    <Argument id="ProcessCommand" Description="ProcessCommandDescription" long="process" short="p" Value="Process" Usage="[%NamespaceOption%] %ProjectFilenameArgument% [%ProcessIdArgument%]"/>
    <Argument id="DemoteCommand" Description="DemoteCommandDescription" long="demote" short="d" Value="Demote" Usage="[%NamespaceOption%] %ProjectFilenameArgument% [%DemoteIdArgument%]"/>

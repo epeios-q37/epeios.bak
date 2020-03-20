@@ -52,7 +52,7 @@ $out = str_replace(array("\r", "\n", "\t"), '','
 				<input type="hidden" id="LoginUserID" value="' . $UserID . '"/>
 				<input type="hidden" id="LoginPassword" value="' . $Password . '"/>
 			</div>
-			<div>
+			<div' . $additional . '>
 				<div style="display:table; margin: 5px auto auto auto;">
 					<hr/>
 					<span style="display: table; margin: 10px auto 5px auto;">Click or scan for another instance:</span>
