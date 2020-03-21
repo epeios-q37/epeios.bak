@@ -26,7 +26,7 @@
 #define SCK_DBG
 #endif
 
-//D SoCKet 
+//D SoCKet
 
 #include "err.h"
 #include "cpe.h"
@@ -48,7 +48,7 @@
 #	define SCK_SOCKET_ERROR			SOCKET_ERROR
 #	define SCK_ECONNRESET			WSAECONNRESET
 #	define SCK_EWOULDBLOCK			WSAEWOULDBLOCK
-#	define SCK_EAGAIN				WSAEWOULDBLOCK	// Pas de 'WSAEAGAIN', mais mettre a simplifie certaines lignes.
+#	define SCK_EAGAIN				WSAEWOULDBLOCK	// No'WSAEAGAIN', but this entry allows some simplification.
 #	define SCK_EINTR				WSAEINTR
 #	define SCK_ENOTSOCK				WSAENOTSOCK
 #elif defined( SCK__POSIX )
@@ -261,7 +261,7 @@ namespace sck {
 			fdr::size__ Maximum,
 			fdr::byte__ *Buffer ) override
 		{
-			if ( ( Maximum = sck::Read( _Socket, ( Maximum ), Buffer, _Timeout ) ) == SCK_DISCONNECTED )
+			if ( ( Maximum = sck::Read( _Socket, ( Maximum ), Buffer, _Timeout ) ) == (fdr::sSize)SCK_DISCONNECTED )
 				Maximum = 0;
 			else
 				_Touch();
@@ -285,7 +285,7 @@ namespace sck {
 			if ( _Error )
 				qRFwk();
 
-			if ( ( Maximum = sck::Write( _Socket, Buffer, Maximum, _Timeout ) ) == SCK_DISCONNECTED ) {
+			if ( ( Maximum = sck::Write( _Socket, Buffer, Maximum, _Timeout ) ) == (fdr::sSize)SCK_DISCONNECTED ) {
 				_Socket = SCK_INVALID_SOCKET;
 				_Error = true;
 				Maximum = 0;
@@ -338,7 +338,7 @@ namespace sck {
 			duration__ Timeout = NoTimeout )	// En secondes.
 		{
 			reset();
-		
+
 			_ioflow_driver___::Init( ThreadSafety );
 
 			_Socket = Socket;

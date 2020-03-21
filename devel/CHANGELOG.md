@@ -7,6 +7,12 @@
 - [rvrt]: reverting modifications;
 - [stdz]: modification to comply with current standards;
 - [trvl]: trivial modifications;
+- [warn]: fixing compiler warning messages;
+
+### 2020-03-21
+
+- SCK, SCLXDHTML:
+    - [wrn],
 
 ## 2020-03-20:
 
@@ -4111,6 +4117,7 @@
 [rvrt]:#Reverting
 [stdz]:#Standardization
 [trvl]:#Trivial
+[warn]:#Warning
 
 ### Adaptation
 
@@ -4131,3 +4138,7 @@ Modification to comply with current standards.
 ### Trivial
 
 Trivial modifications.
+
+### Warning
+
+Fixing warning message issued by compilers.

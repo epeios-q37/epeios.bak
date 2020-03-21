@@ -45,7 +45,7 @@ flw::size__ sck::Read(
 	duration__ Timeout )
 {
 	fd_set fds;
-	int Result;
+	ssize_t Result;
 
 	FD_ZERO( &fds );
 	FD_SET( Socket, &fds );
@@ -172,4 +172,4 @@ Q37_GCTOR( sck )
 #ifdef SCK__IGNORE_SIGPIPE
 	signal( SIGPIPE, SIG_IGN );
 #endif
-}	
+}

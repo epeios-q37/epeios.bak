@@ -286,12 +286,12 @@ qRB
 
 	Title.Init();
 
-	if ( ( MessageLanguage != NULL ) && RawTitle.Amount() )
+    if ( ( MessageLanguage != NULL ) && RawTitle.Amount() )
         scllocale::GetTranslation(RawTitle, MessageLanguage, Title);
     else
         Title = RawTitle;
 
-	Alert_(XML, XSL, Title, CloseTextLanguage );
+    Alert_(XML, XSL, Title, CloseTextLanguage );
 qRR
 qRT
 qRE
