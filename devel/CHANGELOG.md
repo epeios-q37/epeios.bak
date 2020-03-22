@@ -9,10 +9,16 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+### 2020-03-22
+
+- STR:
+    - fixing bug to missing wrapped string contructor (`string::string(const string &)` in addition of `string::string(const string_ &)`),
+
+
 ### 2020-03-21
 
 - SCK, SCLXDHTML:
-    - [wrn],
+    - [warn],
 
 ## 2020-03-20:
 

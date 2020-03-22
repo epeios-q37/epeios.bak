@@ -496,6 +496,14 @@ namespace str {
 			string_::Init();
 			string_::operator =( String );
 		}
+		string( const string &String )
+		: string_( static_ )
+		{
+			reset( false );
+
+			string_::Init();
+			string_::operator =( String );
+		}
 		~string( void )
 		{
 			reset( true );
@@ -659,8 +667,21 @@ namespace str {
 	typedef string_ dString;
 	typedef string wString;
 
-	typedef ctn::E_MCONTAINER_( str::dString ) dStrings;
-	typedef ctn::E_MCONTAINER( str::dString ) wStrings_;
+	class dStrings_
+	: public strings_
+	{
+	public:
+        using strings_::strings_;
+        using strings_::Append;
+        sdr::sRow Append(const char *String)
+        {
+            return strings_::Append(wString(String));
+        }
+	};
+
+	typedef strings_ dStrings;
+
+	qW(Strings_);
 
 	class wStrings
 	: public wStrings_
@@ -675,7 +696,8 @@ namespace str {
         }
         void Init( const bso::sChar *String)
         {
-            Init( wString(String));
+            Init();
+            Append(String);
         }
         wStrings(const dString &String)
         : wStrings_()

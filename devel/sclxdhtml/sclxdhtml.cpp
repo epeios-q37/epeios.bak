@@ -839,7 +839,7 @@ namespace {
 		return Type;
 	}
 
-#define A( name )	Ids.Append( str::wString( login::name##BackendId ) )
+#define A( name )	Ids.Append(login::name##BackendId)
 
 	void SetIds_( str::dStrings &Ids )
 	{
@@ -853,10 +853,10 @@ namespace {
 
 	void SetClasses_( str::dStrings &Classes )
 	{
-		Classes.Append( str::wString( "hide" ) );
-		Classes.Append( str::wString( "hide" ) );
-		Classes.Append( str::wString( "hide" ) );
-		Classes.Append( str::wString( "hide" ) );
+		Classes.Append("hide");
+		Classes.Append("hide");
+		Classes.Append("hide");
+		Classes.Append("hide");
 	}
 
 	void HideAll_( sProxy &Proxy )
