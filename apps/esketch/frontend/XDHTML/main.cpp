@@ -78,8 +78,13 @@ namespace {
 	qRB;
 		Content.Init();
 		Session.GetContent( "Pattern", Content );
-		Session.User.ToUpper( Content );
-		Session.SetContent( "Pattern", Content );
+
+		if ( Content.IsBlank() )
+            Session.AlertT("EmptyPattern", NULL);
+        else {
+            Session.User.ToUpper( Content );
+            Session.SetContent( "Pattern", Content );
+        }
 	qRR;
 	qRT;
 	qRE;

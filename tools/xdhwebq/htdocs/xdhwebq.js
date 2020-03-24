@@ -42,51 +42,17 @@ function t( s )
 	log( s + " : " + String( d.getTime() - before ) );
 }
 		
-function handle_Query( query ) {
-
-//	log( "Q : " + query );
-    var xmlhttp;
-
-	if (window.XMLHttpRequest) {	// code for IE7+, Firefox, Chrome, Opera, Safari
-		xmlhttp = new XMLHttpRequest();
-	} else {	// code for IE6, IE5
-		xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-	}
-	
-    xmlhttp.onreadystatechange = function () {
-        if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-            let query = "";
-
-//          log("R : " + xmlhttp.responseText);
-            let xdh_result = eval(xmlhttp.responseText);
-
-            if (query) {
-                if (typeof xdh_result !== "undefined" && typeof xdh_result !== "object")	// 'typeof xdh_result !== "object"' == 'xdh_result != null' !!!!
-                    query += "&_result=" + encodeURIComponent(xdh_result);
-                handleQuery(buildQuery() + query);
-            } else if (queryQueue.length)
-                handleQuery(queryQueue.shift());
-            else
-                queryInProgress = false;
-
-        }
-    };
-
-	if ( before === 0 ) {
-		d = new Date();
-		before = d.getTime();
-	}
-
-	xmlhttp.open("GET", query);
-
-	xmlhttp.send();
-}
-
 var socket;
 
 function launchEvent( digest )
 {
-	socket.send(digest);
+	if ( queryInProgress ) {
+		if (digest !== queryQueue[queryQueue.length - 1])
+			queryQueue.push(digest);
+	} else {
+		queryInProgress = true;
+		socket.send(digest);
+	}
 }
 
 
@@ -98,16 +64,21 @@ function connect(token) {
 	}
 
     socket.onmessage = function(event) {
-		let result = eval(event.data);
-		console.log(event.data);
-		
-		if (typeof result === "undefined" || typeof result === "object")	// 'typeof xdh_result !== "object"' == 'xdh_result != null' !!!!
-			result = "";
+		if ( event.data !== "StandBy" ) {
+			let result = eval(event.data);
+			console.log(event.data);
+			
+			if ( ( typeof result === "undefined" ) || ( typeof result === "object" ) )	// 'typeof xdh_result !== "object"' == 'xdh_result != null' !!!!
+				Result = "";
 
-		socket.send(result);
+			socket.send(result);
+		} else if (queryQueue.length) {
+			socket.send(queryQueue.shift());
+		} else
+			queryInProgress = false;
 	};
 	
-    socket.onclose = function(event){
+    socket.onclose = function(event) {
         if (confirm("Disconnected!\nPress OK to reload the application."))
             location.reload(true);
     }	

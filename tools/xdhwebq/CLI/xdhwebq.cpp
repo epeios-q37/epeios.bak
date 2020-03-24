@@ -133,7 +133,7 @@ namespace {
                 rData &Data)
             {
             qRH
-                websck::rRFlow Flow;
+                websck::rFlow Flow;
                 xdwmain::rSession Session;
                 str::wString Digest, Script;
             qRB
@@ -154,6 +154,8 @@ namespace {
                         break;
                     Flow.Dismiss();
                     Handle_(Digest, Session);
+                    Flow.Write("StandBy", 7);
+                    Flow.Commit();
                 }
             qRR
             qRT

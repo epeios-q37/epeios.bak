@@ -183,7 +183,7 @@ namespace str {
 			Truncate(AmountOfTailChars(Model));
 		}
 		//f Remove characters 'Model' both beginning and ending the string.
-		void StripChars( char Model )
+		void StripChars(char Model = ' ')
 		{
 			StripLeadingChars( Model );
 			StripTailingChars( Model );
