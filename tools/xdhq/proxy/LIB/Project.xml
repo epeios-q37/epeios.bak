@@ -48,11 +48,11 @@
 			</Modules>
 			<Modules Group="XDHTML">
 				<xpp:expand select="XDH"/>
-                <Module>xdhutl</Module>
 			</Modules>
 		</Modules>
 		<Module>faaspool</Module>
 		<Module>registry</Module>
+        <Module>session</Module>
 		<Module Path="../../">prtcl</Module>
 		<Modules Path="../" Group="Shared">
 			<Module>plugins</Module>

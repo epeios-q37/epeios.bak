@@ -66,10 +66,10 @@ function connect(token) {
     socket.onmessage = function(event) {
 		if ( event.data !== "StandBy" ) {
 			let result = eval(event.data);
-			console.log(event.data);
+//			console.log(event.data);
 			
 			if ( ( typeof result === "undefined" ) || ( typeof result === "object" ) )	// 'typeof xdh_result !== "object"' == 'xdh_result != null' !!!!
-				Result = "";
+				result = "";
 
 			socket.send(result);
 		} else if (queryQueue.length) {
