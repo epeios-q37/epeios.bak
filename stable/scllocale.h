@@ -38,23 +38,23 @@ namespace scllocale {
 	class rRack {
 	public:
 		lcl::locale Locale;
-		lcl::level__ SoftwareLevel;
-		lcl::level__ ConfigurationLevel;
-		lcl::level__ ProjectLevel;
+		lcl::layer__ SoftwareLayer;
+		lcl::layer__ ConfigurationLayer;
+		lcl::layer__ ProjectLayer;
 		void reset( bso::sBool P = true )
 		{
 			Locale.reset( P );
-			SoftwareLevel = LCL_UNDEFINED_LEVEL;
-			ConfigurationLevel = LCL_UNDEFINED_LEVEL;
-			ProjectLevel = LCL_UNDEFINED_LEVEL;
+			SoftwareLayer = LCL_UNDEFINED_LAYER;
+			ConfigurationLayer = LCL_UNDEFINED_LAYER;
+			ProjectLayer = LCL_UNDEFINED_LAYER;
 		}
 		qCDTOR( rRack );
 		void Init( void )
 		{
 			Locale.Init();
-			SoftwareLevel = Locale.CreateEmbedded( rgstry::name( "Software" ) );
-			ConfigurationLevel = Locale.CreateEmbedded( rgstry::name( "Configuration" ) );
-			ProjectLevel = Locale.CreateEmbedded( rgstry::name( "Project" ) );
+			SoftwareLayer = Locale.CreateEmbedded( rgstry::name( "Software" ) );
+			ConfigurationLayer = Locale.CreateEmbedded( rgstry::name( "Configuration" ) );
+			ProjectLayer = Locale.CreateEmbedded( rgstry::name( "Project" ) );
 		}
 	};
 

@@ -79,7 +79,7 @@ qRH
 	str::string Language;
 qRB
 	Language.Init();
-	if ( sclrgstry::BGetValue( GetRegistry(), sclrgstry::parameter::Language, Language ) )
+	if ( sclrgstry::OGetValue( GetRegistry(), sclrgstry::parameter::Language, Language ) )
 		SetBaseLanguage( Language );
 qRR
 qRT
@@ -262,7 +262,7 @@ static void LoadLocale_(
 }
 
 static void LoadLocale_(
-	rgstry::level__ Level,
+	rgstry::layer__ Layer,
 	scllocale::target__ Target,
 	utf::format__ Format )
 {
@@ -272,7 +272,7 @@ qRH
 qRB
 	SubLocales.Init();
 
-	sclrgstry::GetCommonRegistry().GetValues( Level, sclrgstry::Locale, SubLocales );
+	sclrgstry::GetCommonRegistry().GetValues( Layer, sclrgstry::Locale, SubLocales );
 
 	MergedLocale.Init();
 	MergedLocale.Append("<Locale>");
@@ -290,7 +290,7 @@ qRE
 
 namespace {
 	bso::sBool GetLocale_(
-		rgstry::level__ Level,
+		rgstry::layer__ Layer,
 		str::dString &Locale )
 	{
 		bso::sBool Found = false;
@@ -300,14 +300,14 @@ namespace {
 		txf::text_oflow__ TFlow;
 		xml::rWriter Writer;
 	qRB
-		Row = GetRegistry().Search( Level, sclrgstry::Locale );
+		Row = GetRegistry().Search( Layer, sclrgstry::Locale );
 
 		if ( Row != qNIL ) {
 			Flow.Init( Locale );
 			TFlow.Init( Flow );
 			Writer.Init( TFlow, xml::lCompact, xml::e_Default );
 
-			GetRegistry().Dump( Level, Row, true, Writer );
+			GetRegistry().Dump( Layer, Row, true, Writer );
 
 			Found = true;
 		}
@@ -318,7 +318,7 @@ namespace {
 	}
 
 	bso::sBool LoadLocale_(
-		rgstry::level__ Level,
+		rgstry::layer__ Layer,
 		scllocale::target__ Target )
 	{
 		bso::sBool Found = false;
@@ -328,7 +328,7 @@ namespace {
 	qRB
 		Locale.Init();
 
-		Found = GetLocale_( Level, Locale );
+		Found = GetLocale_( Layer, Locale );
 
 		if ( Found )
 			scllocale::Insert( Target, "", Locale, rgstry::rthIgnore );
@@ -411,13 +411,13 @@ namespace {
 
 	void LoadAppData_(
 		const fnm::rName &Filename,
-		sclrgstry::eLevel Level )
+		sclrgstry::eLayer Layer )
 	{
 	qRH
 		flf::rIFlow Flow;
 	qRB
 		Flow.Init( Filename );
-		sclrgstry::Load( Level, Flow, "", "" );
+		sclrgstry::Load( Layer, Flow, "", "" );
 	qRR
 	qRT
 	qRE
@@ -440,7 +440,7 @@ namespace {
 	// Common registry locked upstream.
 	void UnconditionalStoreAppData_(
 		const fnm::rName &Filename,
-		sclrgstry::eLevel Level )
+		sclrgstry::eLayer Layer )
 	{
 	qRH
 		flf::rOFlow Flow;
@@ -456,7 +456,7 @@ namespace {
 
 		Writer.PutAttribute( "Timestamp", tol::DateAndTime( Buffer ) );
 
-		GetRegistry().Dump( Level, qNIL, false, Writer  );
+		GetRegistry().Dump( Layer, qNIL, false, Writer  );
 
 		Writer.PopTag();
 	qRR
@@ -466,16 +466,16 @@ namespace {
 
 	void StoreAppData_(
 		const fnm::rName &Filename,
-		sclrgstry::eLevel Level )
+		sclrgstry::eLayer Layer )
 	{
 	qRH
 		flf::rOFlow Flow;
 		txf::sWFlow TFlow;
 		xml::rWriter Writer;
 	qRB
-		if ( !GetRegistry().IsEmpty( Level ) ) {
-			if ( !fil::Exists(Filename) || ( fil::GetLastModificationTime(Filename) <= GetRegistry().TimeStamp( Level ) ) )
-				UnconditionalStoreAppData_( Filename, Level );	// Accesses to common registry too, so no unlock.
+		if ( !GetRegistry().IsEmpty( Layer ) ) {
+			if ( !fil::Exists(Filename) || ( fil::GetLastModificationTime(Filename) <= GetRegistry().TimeStamp( Layer ) ) )
+				UnconditionalStoreAppData_( Filename, Layer );	// Accesses to common registry too, so no unlock.
 		} else if ( fil::Exists( Filename ) ) {
 			fil::Remove( Filename );
 		}
@@ -569,7 +569,7 @@ qRB
 
 		RefreshBaseLanguage();
 
-		LoadLocale_( sclrgstry::GetRawLevel( sclrgstry::lMain ), scllocale::tConfiguration );
+		LoadLocale_( sclrgstry::GetRawLayer( sclrgstry::lMain ), scllocale::tConfiguration );
 	}
 
 	LoadAppData_( Info );
@@ -854,7 +854,7 @@ void sclmisc::LoadProject(
 {
 	sclrgstry::LoadProject( Flow, Info.Target(), Directory, Id );
 
-	LoadLocale_( sclrgstry::GetRawLevel( sclrgstry::lProject ), scllocale::tProject );
+	LoadLocale_( sclrgstry::GetRawLayer( sclrgstry::lProject ), scllocale::tProject );
 }
 
 void sclmisc::LoadProject(
@@ -864,7 +864,7 @@ void sclmisc::LoadProject(
 {
 	sclrgstry::LoadProject( FileName, Info.Target(), Id );
 
-	LoadLocale_( sclrgstry::GetRawLevel( sclrgstry::lProject ), scllocale::tProject );
+	LoadLocale_( sclrgstry::GetRawLayer( sclrgstry::lProject ), scllocale::tProject );
 }
 
 static void LoadProject_(
@@ -1041,9 +1041,9 @@ static bso::sBool Load_(
 	const sclrgstry::registry_ &Registry,
 	str::string_ &Content,
 	str::string_ &FileName,
-	sclrgstry::eNeedness Needness )
+	qRPN )
 {
-	if ( sclrgstry::BGetValue( Registry, Entry, Needness, Content ) ) {
+	if ( sclrgstry::BGetValue( Registry, Entry,Content, qRP ) ) {
 		Load( FileName, Content );
 		return true;
 	} else
@@ -1053,8 +1053,8 @@ static bso::sBool Load_(
 bso::sBool sclmisc::Load(
 	const rgstry::tentry__ &Entry,
 	const sclrgstry::registry_ &Registry,
-	sclrgstry::eNeedness Needness,
-	str::string_ &Content )
+	str::string_ &Content,
+	qRPN )
 {
 	bso::sBool Result = false;
 qRH
@@ -1062,7 +1062,7 @@ qRH
 qRB
 	FileName.Init();
 
-	Load_( Entry, Registry, Content, FileName, Needness );
+	Load_( Entry, Registry, Content, FileName, qRP );
 qRR
 qRT
 qRE
@@ -1073,14 +1073,14 @@ bso::sBool sclmisc::LoadAndTranslateTags(
 	const rgstry::tentry__ &FileName,
 	const sclrgstry::registry_ &Registry,
 	str::string_ &Content,
-	sclrgstry::eNeedness Needness,
-	char Marker )
+	char Marker,
+	qRPN )
 {
 	bso::sBool Found = false;
 qRH
 	TOL_CBUFFER___ Buffer;
 qRB
-	if ( ( Found = Load( FileName, Registry, Needness, Content ) ) )
+	if ( ( Found = Load( FileName, Registry, Content, qRP ) ) )
 		scllocale::TranslateTags( Content, sclrgstry::GetLanguage( Registry, Buffer ), Marker );
 qRR
 qRT
@@ -1092,7 +1092,7 @@ void sclmisc::LoadXMLAndTranslateTags(
 	const fnm::rName &Filename,
 	const char *Language,
 	str::string_ &Content,
-	xml::sLevel Level,
+	xml::sLevel StartLevel,
 	char Marker )
 {
 qRH;
@@ -1105,7 +1105,7 @@ qRB;
 	fnm::GetLocation( Filename, FileNameLocation );
 
 	Untranslated.Init();
-	xpp::Process( Unprocessed, xml::oIndent, Untranslated, xpp::criterions___( FileNameLocation, Level ) );
+	xpp::Process( Unprocessed, xml::oIndent, Untranslated, xpp::criterions___( FileNameLocation, StartLevel ) );
 
 	scllocale::TranslateTags( Untranslated, Language, Content, Marker );
 qRR;
@@ -1117,9 +1117,9 @@ bso::sBool sclmisc::LoadXMLAndTranslateTags(
 	const rgstry::tentry__ &FilenameEntry,
 	const sclrgstry::registry_ &Registry,
 	str::string_ &Content,
-	sclrgstry::eNeedness Needness,
-	xml::sLevel Level,
-	char Marker )
+	xml::sLevel StartLevel,
+	char Marker,
+	qRPN )
 {
 	bso::sBool Found = false;
 qRH;
@@ -1128,8 +1128,8 @@ qRH;
 qRB;
 	Filename.Init();
 
-	if ( ( Found = sclrgstry::BGetValue( Registry, FilenameEntry, Needness, Filename ) ) )
-		LoadXMLAndTranslateTags( Filename, sclrgstry::GetLanguage( Registry, Buffer ), Content, Level, Marker );
+	if ( ( Found = sclrgstry::BGetValue( Registry, FilenameEntry, Filename, qRP ) ) )
+		LoadXMLAndTranslateTags( Filename, sclrgstry::GetLanguage( Registry, Buffer ), Content, StartLevel, Marker );
 qRR;
 qRT;
 qRE;
@@ -1173,11 +1173,11 @@ txf::text_oflow__ &sclmisc::text_oflow_rack___::Init( const fnm::name___ &FileNa
 namespace {
 	// Common registry locked upstream.
 	void DumpRegistry_(
-		sclrgstry::eLevel Level,
+		sclrgstry::eLayer Layer,
 		txf::text_oflow__ &Flow	)
 	{
-		Flow << txf::tab << "----- " << sclrgstry::GetLabel( Level ) << " registry -----" << txf::nl;
-		sclmisc::GetRegistry().Dump( sclmisc::GetRegistryRawLevel( Level ), qNIL, true, xml::oIndent, xml::e_Default, Flow );
+		Flow << txf::tab << "----- " << sclrgstry::GetLabel( Layer ) << " registry -----" << txf::nl;
+		sclmisc::GetRegistry().Dump( sclmisc::GetRegistryRawLayer( Layer ), qNIL, true, xml::oIndent, xml::e_Default, Flow );
 	}
 }
 
@@ -1299,16 +1299,16 @@ static void GetPluginFeature_(
 	rgstry::entry__ &Entry )
 {
 qRH
-	rgstry::level__ Level = rgstry::UndefinedLevel;
+	rgstry::layer__ Layer = rgstry::UndefinedLayer;
 	rgstry::hLock Lock;
 qRB
-	Entry.Root = GetRegistry().Search( Path, Level );
+	Entry.Root = GetRegistry().Search( Path, Layer );
 
 	if ( Entry.Root == qNIL )
 		qRFwk();
 
-	Entry.Registry = &GetRegistry().GetRegistry( Level, Lock );
-	Entry.Locker = GetRegistry().GetLocker( Level );
+	Entry.Registry = &GetRegistry().GetRegistry( Layer, Lock );
+	Entry.Locker = GetRegistry().GetLocker( Layer );
 qRR
 qRT
 qRE

@@ -140,7 +140,7 @@ class option_
 : public flag_
 {
 public:
-	struct s 
+	struct s
 	: public flag_::s
 	{
 		str::string_::s Value;
@@ -274,7 +274,7 @@ qRT
 qRE
 }
 
-void FillShort_( 
+void FillShort_(
 	const char *Arg,
 	flags_ &Flags,
 	options_ &Options )
@@ -349,7 +349,7 @@ qRE
 }
 
 
-static void FillLong_( 
+static void FillLong_(
 	const char *Arg,
 	flags_ &Flags,
 	options_ &Options )
@@ -662,7 +662,7 @@ static const str::string_ &GetPath_(
 
 		if ( Path.Amount() != 0  )
 			if ( Path(Path.First()) != '/' )
-				Path.InsertAt( ParametersTag_ );	
+				Path.InsertAt( ParametersTag_ );
 	} else {
 		Path.Append( ParametersTag_ );
 		Path.Append( Id, Id.Next(Id.First() ) );
@@ -688,7 +688,7 @@ namespace {
 		sclmisc::rLocker_ Locker;
 	qRB
 		Locker.Init();
-		sclmisc::GetRWRegistry().SetValue( sclrgstry::GetRawLevel( sclrgstry::lArguments ), Path, Value, Error );
+		sclmisc::GetRWRegistry().SetValue( sclrgstry::GetRawLayer( sclrgstry::lArguments ), Path, Value, Error );
 	qRR
 	qRT
 	qRE
@@ -703,7 +703,7 @@ namespace {
 		sclmisc::rLocker_ Locker;
 	qRB
 		Locker.Init();
-		sclmisc::GetRWRegistry().AddValue( sclrgstry::GetRawLevel( sclrgstry::lArguments ), Path, Value, Error );
+		sclmisc::GetRWRegistry().AddValue( sclrgstry::GetRawLayer( sclrgstry::lArguments ), Path, Value, Error );
 	qRR
 	qRT
 	qRE
@@ -1332,7 +1332,7 @@ qRH
 qRB
 	Value.Init();
 	GetValue_( Id, Value );
-	
+
 	Command.Init();
 	GetCommand_( Command );
 
@@ -1530,7 +1530,7 @@ static void IdentifyArguments_(
 			qRFwk();
 			break;
 		}
-		
+
 //		cio::COut << txf::pad;
 
 		Row = Ids.Next( Row );
@@ -1548,8 +1548,8 @@ qRH
 	sclmisc::rLocker_ Locker;
 qRB
 	EntryPath.Init();
-	Locker.Init();	
-	sclmisc::GetRWRegistry().Delete( Command_.GetPath( EntryPath ), sclrgstry::GetRawLevel( sclrgstry::lArguments ) );	// Pour pouvoir rcuprer la valeur correspondant  ce 'Path' tel qu'ventuellement dfini dans le fichier de configuration.
+	Locker.Init();
+	sclmisc::GetRWRegistry().Delete( Command_.GetPath( EntryPath ), sclrgstry::GetRawLayer( sclrgstry::lArguments ) );	// Pour pouvoir rcuprer la valeur correspondant  ce 'Path' tel qu'ventuellement dfini dans le fichier de configuration.
 	Locker.Unlock();
 
 	Ids.Init();

@@ -218,7 +218,7 @@ namespace sclmisc {
 	// Counter-part of 'Initialize'.
 	void Quit( const scli::sInfo &Info );
 
-	// Store the content of the 'lasting' registry level as application data.
+	// Store the content of the 'lasting' registry layer as application data.
 	void StoreLastingRegistry( const scli::sInfo &Info );
 
 	// Deletes the file which contains the lasting registry.
@@ -287,8 +287,8 @@ namespace sclmisc {
 	bso::sBool Load(
 		const rgstry::tentry__ &FileName,
 		const sclrgstry::registry_ &Registry,
-		sclrgstry::eNeedness Needness,
-		str::string_ &Content );
+		str::string_ &Content,
+		qRPD );
 /*
 	void Load(
 		const rgstry::tentry__ &FileName,
@@ -303,43 +303,69 @@ namespace sclmisc {
 		const rgstry::tentry__ &FileName,
 		const sclrgstry::registry_ &Registry,
 		str::string_ &Content,
-		sclrgstry::eNeedness Needness,
-		char Marker = scllocale::DefaultMarker );
+		char Marker,
+		qRPN );
 
 	inline void LoadAndTranslateTags(
 		const rgstry::tentry__ &Filename,
 		const sclrgstry::registry_ &Registry,
 		str::string_ &Content,
-		char Marker = scllocale::DefaultMarker )
+		char Marker = scllocale::DefaultMarker)
 	{
-		if ( !LoadAndTranslateTags( Filename, Registry, Content, sclrgstry::nMandatory, Marker ) )
-			qRFwk();
+		LoadAndTranslateTags(Filename, Registry, Content, Marker, err::h_Default);
+	}
+
+	inline void LoadAndTranslateTags(
+		const rgstry::tentry__ &Filename,
+		const sclrgstry::registry_ &Registry,
+		str::string_ &Content,
+		qRPN)
+	{
+		LoadAndTranslateTags(Filename, Registry, Content, scllocale::DefaultMarker, qRP);
 	}
 
 	void LoadXMLAndTranslateTags(
 		const fnm::rName &Filename,
 		const char *Language,
 		str::string_ &Content,
-		xml::sLevel Level,
-		char Marker = scllocale::DefaultMarker );
+		xml::sLevel StartLevel,
+		char Marker);
+
+	inline void LoadXMLAndTranslateTags(
+		const fnm::rName &Filename,
+		const char *Language,
+		str::string_ &Content,
+		xml::sLevel StartLevel)
+    {
+        return LoadXMLAndTranslateTags(Filename, Language, Content, StartLevel, scllocale::DefaultMarker);
+    }
 
 	bso::sBool LoadXMLAndTranslateTags(
 		const rgstry::tentry__ &FileName,
 		const sclrgstry::registry_ &Registry,
 		str::string_ &Content,
-		sclrgstry::eNeedness Needness,
-		xml::sLevel Level,
-		char Marker = scllocale::DefaultMarker );
+		xml::sLevel StartLevel,
+		char Marker,
+		qRPN );
 
 	inline void LoadXMLAndTranslateTags(
 		const rgstry::tentry__ &FileName,
 		const sclrgstry::registry_ &Registry,
 		str::string_ &Content,
-		xml::sLevel Level,
-		char Marker = scllocale::DefaultMarker )
+		xml::sLevel StartLevel,
+		char Marker = scllocale::DefaultMarker)
 	{
-		if ( !LoadXMLAndTranslateTags( FileName, Registry, Content, sclrgstry::nMandatory, Level, Marker ) )
-			qRFwk();
+		LoadXMLAndTranslateTags(FileName, Registry, Content, StartLevel, Marker, err::h_Default);
+	}
+
+	inline bso::sBool LoadXMLAndTranslateTags(
+		const rgstry::tentry__ &FileName,
+		const sclrgstry::registry_ &Registry,
+		str::string_ &Content,
+		xml::sLevel StartLevel,
+		qRPN )
+	{
+		return LoadXMLAndTranslateTags(FileName, Registry, Content, StartLevel, scllocale::DefaultMarker, qRP);
 	}
 
 	sclrgstry::registry_ &GetRWRegistry( void );
@@ -362,9 +388,9 @@ namespace sclmisc {
 		}
 	};
 
-	inline rgstry::level__ GetRegistryRawLevel( sclrgstry::eLevel Level )
+	inline rgstry::layer__ GetRegistryRawLayer( sclrgstry::eLayer Layer )
 	{
-		return sclrgstry::GetRawLevel( Level );
+		return sclrgstry::GetRawLayer( Layer );
 	}
 
 	inline void FillSetupRegistry( const str::string_ &Id )
@@ -373,7 +399,7 @@ namespace sclmisc {
 		rLocker_ Locker;
 	qRB
 		Locker.Init();
-		sclrgstry::FillWithSetupOfId( GetRWRegistry(), GetRawLevel( sclrgstry::lSetup ), Id );
+		sclrgstry::FillWithSetupOfId( GetRWRegistry(), GetRawLayer( sclrgstry::lSetup ), Id );
 	qRR
 	qRT
 	qRE
@@ -385,7 +411,7 @@ namespace sclmisc {
 		rLocker_ Locker;
 	qRB
 		Locker.Init();
-		sclrgstry::FillWithGivenSetup( GetRWRegistry(), GetRawLevel( sclrgstry::lSetup ) );
+		sclrgstry::FillWithGivenSetup( GetRWRegistry(), GetRawLayer( sclrgstry::lSetup ) );
 	qRR
 	qRT
 	qRE
@@ -511,9 +537,10 @@ namespace sclmisc {
 
 	inline bso::bool__ BGetValue(
 		const rgstry::tentry__ &Entry,
-		str::string_ &Value )
+		str::string_ &Value,
+		qRPD )
 	{
-		return sclrgstry::BGetValue( GetRegistry(), Entry, Value );
+		return sclrgstry::BGetValue( GetRegistry(), Entry, Value, qRP );
 	}
 
 	inline bso::bool__ GetValues(

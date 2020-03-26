@@ -36,14 +36,14 @@ E_CDEF( char *, sclrgstry::ParametersTag, "Parameters" );
 
 #define REGISTRY_FILE_EXTENSION ".xcfg"
 
-static rgstry::multi_level_registry Registry_;
+static rgstry::multi_layer_registry Registry_;
 
-static rgstry::level__ MainLevel_ = rgstry::UndefinedLevel;
-static rgstry::level__ LastingLevel_ = rgstry::UndefinedLevel;	// Application data.
-static rgstry::level__ ProjectLevel_ = rgstry::UndefinedLevel;
-static rgstry::level__ SetupLevel_ = rgstry::UndefinedLevel;
-static rgstry::level__ ArgumentsLevel_ = rgstry::UndefinedLevel;
-static rgstry::level__ RuntimeLevel_ = rgstry::UndefinedLevel;	// Temporary registry.
+static rgstry::layer__ MainLayer_ = rgstry::UndefinedLayer;
+static rgstry::layer__ LastingLayer_ = rgstry::UndefinedLayer;	// Application data.
+static rgstry::layer__ ProjectLayer_ = rgstry::UndefinedLayer;
+static rgstry::layer__ SetupLayer_ = rgstry::UndefinedLayer;
+static rgstry::layer__ ArgumentsLayer_ = rgstry::UndefinedLayer;
+static rgstry::layer__ RuntimeLayer_ = rgstry::UndefinedLayer;	// Temporary registry.
 
 rgstry::entry___ sclrgstry::Parameters( ParametersTag );
 rgstry::entry___ sclrgstry::Definitions( "Definitions" );
@@ -59,7 +59,7 @@ rgstry::entry___ sclrgstry::parameter::Language( "Language", Parameters );
 	rgstry::entry___ ProjectAction_("@Action", ProjectFeature_ );
 	rgstry::entry___ PredefinedProjects_( "PredefinedProjects", sclrgstry::Definitions );
 	rgstry::entry___ DefaultPredefinedProject_( "@Default", PredefinedProjects_ );
-	rgstry::entry___ FreePredefinedProject_( "PredefinedProject", PredefinedProjects_ ); 
+	rgstry::entry___ FreePredefinedProject_( "PredefinedProject", PredefinedProjects_ );
 	rgstry::entry___ PredefinedProjectId_( "@id", FreePredefinedProject_ );
 	rgstry::entry___ PredefinedProject_( RGSTRY_TAGGING_ATTRIBUTE( "id" ), FreePredefinedProject_);
 	rgstry::entry___ PredefinedProjectAlias_( "@Alias", PredefinedProject_ );
@@ -74,7 +74,7 @@ namespace definition_ {
 }
 
 rgstry::entry___ sclrgstry::definition::DefaultProjectId( "@Default", definition_::Projects_ );
-rgstry::entry___ sclrgstry::definition::Project( "Project", definition_::Projects_ ); 
+rgstry::entry___ sclrgstry::definition::Project( "Project", definition_::Projects_ );
 rgstry::entry___ sclrgstry::definition::project::Id( "@id", Project );
 rgstry::entry___ sclrgstry::definition::TaggedProject( RGSTRY_TAGGING_ATTRIBUTE( "id" ), definition::Project );
 
@@ -165,10 +165,10 @@ tht::rLocker &sclrgstry::GetCommonRegistryLocker( void )
 }
 
 #define C( name )	case l##name : return #name; break
- 
-const char *sclrgstry::GetLabel( eLevel Level )
+
+const char *sclrgstry::GetLabel( eLayer Layer )
 {
-	switch ( Level ) {
+	switch ( Layer ) {
 	C( Main );
 	C( Lasting );
 	C( Project );
@@ -179,20 +179,20 @@ const char *sclrgstry::GetLabel( eLevel Level )
 		qRFwk();
 		break;
 	}
- 
+
 	return NULL;	// To avoid a warning.
 }
- 
+
 #undef C
 
 #define C( name )\
 case l##name:\
-	return name##Level_;\
+	return name##Layer_;\
 	break
 
-rgstry::level__ sclrgstry::GetRawLevel( eLevel Level )
+rgstry::layer__ sclrgstry::GetRawLayer( eLayer Layer )
 {
-	switch ( Level ) {
+	switch ( Layer ) {
 	C( Main );
 	C( Lasting );
 	C( Project );
@@ -204,7 +204,7 @@ rgstry::level__ sclrgstry::GetRawLevel( eLevel Level )
 		break;
 	}
 
-	return rgstry::UndefinedLevel;	// To avoid a warning.
+	return rgstry::UndefinedLayer;	// To avoid a warning.
 }
 
 #undef C
@@ -223,13 +223,13 @@ const char *sclrgstry::GetLanguage(
 
 #if 0
 static bso::sBool FillRegistry_(
-	eLevel Level,
+	eLayer Layer,
 	xtf::extended_text_iflow__ &Flow,
 	const fnm::name___&Directory,
 	const char *RootPath,
 	rgstry::context___ &Context )
 {
-	return Registry_.Fill( Level, Flow, xpp::criterions___( Directory ), RootPath, Context );
+	return Registry_.Fill( Layer, Flow, xpp::criterions___( Directory ), RootPath, Context );
 }
 #endif
 
@@ -245,25 +245,25 @@ qRT
 qRE
 }
 
-void sclrgstry::Erase( eLevel Level )
+void sclrgstry::Erase( eLayer Layer )
 {
-	Registry_.Erase( GetRawLevel( Level ) );
+	Registry_.Erase( GetRawLayer( Layer ) );
 }
 
-void sclrgstry::Reset( eLevel Level )
+void sclrgstry::Reset( eLayer Layer )
 {
-	Registry_.Erase( GetRawLevel( Level ) );
+	Registry_.Erase( GetRawLayer( Layer ) );
 
-	Registry_.Set( GetRawLevel( Level ) );
+	Registry_.Set( GetRawLayer( Layer ) );
 }
 
 void sclrgstry::Reset(
-	eLevel Level,
+	eLayer Layer,
 	const rgstry::entry__ &Entry )
 {
-	Registry_.Erase( GetRawLevel( Level ) );
+	Registry_.Erase( GetRawLayer( Layer ) );
 
-	Registry_.Set( GetRawLevel( Level ), Entry );
+	Registry_.Set( GetRawLayer( Layer ), Entry );
 }
 
 namespace {
@@ -293,15 +293,15 @@ namespace {
 
 	void ReportParsingErrorAndAbort_(
 		xtf::extended_text_iflow__ &,
-		eLevel Level,
+		eLayer Layer,
 		const rgstry::context___ &Context )
 	{
-		ReportParsingErrorAndAbort_( str::wString( GetLabel( Level ) ), Context );
+		ReportParsingErrorAndAbort_( str::wString( GetLabel( Layer ) ), Context );
 	}
 
 	void ReportParsingErrorAndAbort_(
 		const fnm::rName &Filename,
-		eLevel,
+		eLayer,
 		const rgstry::context___ &Context )
 	{
 	qRH
@@ -315,7 +315,7 @@ namespace {
 	}
 
 	template <typename source> static void Load_(
-		eLevel Level,
+		eLayer Layer,
 		source &Source,
 		const char *RootPath,
 		const fnm::name___ &Directory )
@@ -323,11 +323,11 @@ namespace {
 	qRH
 		rgstry::context___ Context;
 	qRB
-		Erase( Level );
+		Erase( Layer );
 
 		Context.Init();
-		if ( !Registry_.Fill( Level, Source, xpp::criterions___( Directory ), RootPath, Context ) )
-			ReportParsingErrorAndAbort_( Source, Level, Context );
+		if ( !Registry_.Fill( Layer, Source, xpp::criterions___( Directory ), RootPath, Context ) )
+			ReportParsingErrorAndAbort_( Source, Layer, Context );
 	qRR
 	qRT
 	qRE
@@ -335,16 +335,16 @@ namespace {
 }
 
 void sclrgstry::Load(
-	eLevel Level,
+	eLayer Layer,
 	xtf::extended_text_iflow__ &Flow,
 	const fnm::name___ &Directory,
 	const char *RootPath )
 {
-	Load_(Level, Flow, RootPath, Directory );
+	Load_(Layer, Flow, RootPath, Directory );
 }
 
 void sclrgstry::Load(
-	eLevel Level,
+	eLayer Layer,
 	flw::rRFlow &Flow,
 	const fnm::name___ &Directory,
 	const char *RootPath )
@@ -354,7 +354,7 @@ qRH
 qRB
 	XFlow.Init( Flow, utf::f_Default );
 
-	Load_(Level, XFlow, RootPath, Directory );
+	Load_(Layer, XFlow, RootPath, Directory );
 qRR
 qRT
 qRE
@@ -377,7 +377,7 @@ namespace {
 
 		Load_( lProject, Source, Path.Convert( Buffer ), Dir );
 
-		Registry_.GetValue( ProjectLevel_, rgstry::entry___( "@Id" ), Id );
+		Registry_.GetValue( ProjectLayer_, rgstry::entry___( "@Id" ), Id );
 	qRR
 	qRT
 	qRE
@@ -417,7 +417,7 @@ qRH
 	flx::E_STRING_OFLOW___ OFlow;
 	txf::text_oflow__ TFlow;
 	rgstry::row__ Row = qNIL;
-	rgstry::level__ Level = rgstry::UndefinedLevel;
+	rgstry::layer__ Layer = rgstry::UndefinedLayer;
 	str::string SetupPath;
 qRB
 	if ( SetupId.Amount() != 0  ) {
@@ -428,10 +428,10 @@ qRB
 		OFlow.Init( Content );
 		TFlow.Init( OFlow );
 
-		Row = Registry_.Search( SetupPath, Level );
+		Row = Registry_.Search( SetupPath, Layer );
 
 		if ( Row != qNIL )
-			Registry_.Dump( Level, Row, false, xml::oCompact, xml::e_None, TFlow );
+			Registry_.Dump( Layer, Row, false, xml::oCompact, xml::e_None, TFlow );
 	}
 qRR
 qRT
@@ -441,7 +441,7 @@ qRE
 
 void sclrgstry::FillWithSetupOfId(
 	registry_ &Registry,
-	rgstry::level__ Level,
+	rgstry::layer__ Layer,
 	const str::string_ &Id )
 {
 qRH
@@ -465,11 +465,11 @@ qRB
 	sclrgstry::Parameters.GetPath( Setup );
 	Setup.Append( "></_>" );
 
-	Registry.Erase( Level );
+	Registry.Erase( Layer );
 
 	IFlow.Init( Setup );
 	XFlow.Init( IFlow, utf::f_Default );
-	Registry.Fill( Level, XFlow, xpp::criterions___( fnm::name___() ), NULL );
+	Registry.Fill( Layer, XFlow, xpp::criterions___( fnm::name___() ), NULL );
 qRR
 qRT
 qRE
@@ -477,7 +477,7 @@ qRE
 
 void sclrgstry::FillWithGivenSetup(
 	registry_ &Registry,
-	rgstry::level__ Level )
+	rgstry::layer__ Layer )
 {
 qRH
 	str::string Id;
@@ -485,7 +485,7 @@ qRB
 	Id.Init();
 
 	if ( OGetValue( Registry_, Setup_, Id ) )
-		FillWithSetupOfId( Registry, Level, Id );
+		FillWithSetupOfId( Registry, Layer, Id );
 qRR
 qRT
 qRE
@@ -499,7 +499,7 @@ void sclrgstry::ReportIfNoSetupId( void )
 
 void sclrgstry::FillWithContent(
 	registry_ &Registry,
-	rgstry::level__ Level,
+	rgstry::layer__ Layer,
 	const str::dString &BinPath,
 	const str::string_ &RawContent )
 {
@@ -515,38 +515,14 @@ qRB
 	Content.Append( RawContent );
 	Content.Append( "</_>" );
 
-	Registry.Erase( Level );
+	Registry.Erase( Layer );
 
 	IFlow.Init( Content );
 	XFlow.Init( IFlow, utf::f_Default );
-	Registry.Fill( Level, XFlow, xpp::criterions___( BinPath ), NULL );
+	Registry.Fill( Layer, XFlow, xpp::criterions___( BinPath ), NULL );
 qRR
 qRT
 qRE
-}
-
-bso::bool__ sclrgstry::BGetValue(
-	const registry_ &Registry,
-	const rgstry::tentry__ &Entry,
-	eNeedness Needness,
-	str::string_ &Value )
-{
-	bso::sBool Return = false;
-
-	switch ( Needness ) {
-	case nMandatory:
-		MGetValue( Registry, Entry, Value );
-		Return = true;
-		break;
-	case nOptional:
-		Return =  OGetValue( Registry, Entry, Value );
-		break;
-	default:
-		qRFwk();
-		break;
-	}
-
-	return Return;
 }
 
 void sclrgstry::AddValue(
@@ -623,7 +599,7 @@ const str::string_ &sclrgstry::MGetValue(
 	const rgstry::tentry__ &Entry,
 	str::string_ &Value )
 {
-	if ( !BGetValue( Registry, Entry, Value ) )
+	if ( !BGetValue( Registry, Entry, Value, qRPU ) )
 		sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( Entry );
 
 	return Value;
@@ -671,7 +647,8 @@ qRE
 bso::bool__ sclrgstry::BGetBoolean(
 	const registry_ &Registry,
 	const rgstry::tentry__ &Entry,
-	bso::bool__ DefaultValue )
+	bso::bool__ DefaultValue,
+	qRPN )
 {
 	bso::bool__ &Result = DefaultValue;
 qRH
@@ -679,7 +656,7 @@ qRH
 qRB
 	Value.Init();
 
-	if ( BGetValue( Registry, Entry, Value ) ) {
+	if ( BGetValue( Registry, Entry, Value, qRP ) ) {
 		switch ( GetBoolean_( Value ) ) {
 		case tol::xbFalse:
 			Result = false;
@@ -736,7 +713,8 @@ template <typename t> static bso::bool__ GetUnsignedNumber_(
 	const registry_ &Registry,
 	const rgstry::tentry__ &Entry,
 	t Limit,
-	t &Value )
+	t &Value,
+	qRPN )
 {
 	bso::bool__ Present = false;
 qRH
@@ -745,7 +723,7 @@ qRH
 qRB
 	RawValue.Init();
 
-	if ( ( Present = BGetValue( Registry, Entry, RawValue ) ) ) {
+	if ( ( Present = BGetValue(Registry, Entry, RawValue, qRP) ) ) {
 		RawValue.ToNumber( Value, Limit, &Error );
 
 		if ( Error != qNIL )
@@ -762,7 +740,8 @@ template <typename t> static bso::bool__ GetSignedNumber_(
 	const rgstry::tentry__ &Entry,
 	t LowerLimit,
 	t UpperLimit,
-	t &Value )
+	t &Value,
+	qRPN )
 {
 	bso::bool__ Present = false;
 qRH
@@ -771,7 +750,7 @@ qRH
 qRB
 	RawValue.Init();
 
-	if ( ( Present = BGetValue( Registry, Entry, RawValue ) ) ) {
+	if ( ( Present = BGetValue(Registry, Entry, RawValue, qRP) ) ) {
 		RawValue.ToNumber( Value, UpperLimit, LowerLimit, &Error );
 
 		if ( Error != qNIL )
@@ -791,7 +770,7 @@ type sclrgstry::MGet##name(\
 {\
 	type Value;\
 	\
-	if ( !GetUnsignedNumber_( Registry, Entry, Limit, Value ) )\
+	if ( !GetUnsignedNumber_(Registry, Entry, Limit, Value, qRPU) )\
 		sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( Entry );\
 	\
 	return Value;\
@@ -804,7 +783,7 @@ type sclrgstry::OGet##name(\
 {\
 	type Value;\
 	\
-	if ( !GetUnsignedNumber_( Registry, Entry, Limit, Value ) )\
+	if ( !GetUnsignedNumber_(Registry, Entry, Limit, Value, qRPU) )\
 		Value = DefaultValue;\
 	\
 	return Value;\
@@ -828,7 +807,7 @@ type sclrgstry::MGet##name(\
 {\
 	type Value;\
 	\
-	if ( !GetSignedNumber_( Registry, Entry, Min, Max, Value ) )\
+	if ( !GetSignedNumber_( Registry, Entry, Min, Max, Value, qRPU ) )\
 		sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( Entry );\
 	\
 	return Value;\
@@ -842,7 +821,7 @@ type sclrgstry::OGet##name(\
 {\
 	type Value;\
 	\
-	if ( !GetSignedNumber_( Registry, Entry, Min, Max, Value ) )\
+	if ( !GetSignedNumber_( Registry, Entry, Min, Max, Value, qRPU ) )\
 		Value = DefaultValue;\
 	\
 	return Value;\
@@ -864,10 +843,10 @@ Q37_GCTOR( sclrgstry )
 	LastingRegistryLockerCallback_.Init();
 
 	// 3 firsts not as 'embedded', due to the fact that plugins use the registry of the main program.
-	MainLevel_ = Registry_.Create();
-	LastingLevel_ = Registry_.CreateEmbedded( LastingRegistryLockerCallback_ );
-	ProjectLevel_ = Registry_.Create();
-	SetupLevel_ = Registry_.Create();
-	ArgumentsLevel_ = Registry_.CreateEmbedded();
-	RuntimeLevel_ = Registry_.CreateEmbedded();
+	MainLayer_ = Registry_.Create();
+	LastingLayer_ = Registry_.CreateEmbedded( LastingRegistryLockerCallback_ );
+	ProjectLayer_ = Registry_.Create();
+	SetupLayer_ = Registry_.Create();
+	ArgumentsLayer_ = Registry_.CreateEmbedded();
+	RuntimeLayer_ = Registry_.CreateEmbedded();
 }

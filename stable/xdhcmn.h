@@ -156,12 +156,11 @@ namespace xdhcmn {
 		virtual cSession *XDHCMNRetrieveSession(void) = 0;
 		virtual void XDHCMNReleaseSession( cSession *Session ) = 0;
 		virtual const scli::sInfo &XDHCMNGetInfo( void ) = 0;
-		// The returned value is only for 'FaaS' mode. In other mode, retuns always 'true',
-		// or false when on eror and 'qRP' set accordingly.
-		// In 'FaaS' mode, returns true when a application for the given toekn (stored in 'UP')
-		// exists, false otherwise.
+		// The returned value is only for 'FaaS' mode. In other mode, must always return 'true',
+		// or false on error accordingly with 'qRP'.
+		// In 'FaaS' mode, returns true when a application for the given 'Token' exists, false otherwise.
 		virtual bso::sBool XDHCMNGetHead(
-			void *UP,
+			const str::dString &Token,  // Always empty when NOT in FaaS mode.
 			str::dString &Head,
 			qRPD ) = 0;
 	public:
@@ -189,10 +188,10 @@ namespace xdhcmn {
 			return XDHCMNGetInfo();
 		}
 		const bso::sBool GetHead(
-			void *UP,
-			str::dString &Head )
+			const str::dString &Token,
+			str::dString &Head)
 		{
-			return XDHCMNGetHead(UP, Head);
+			return XDHCMNGetHead(Token, Head);
 		}
 	};
 

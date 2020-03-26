@@ -136,8 +136,8 @@
 
 namespace fbltyp {
 	//t Value.
-	typedef str::string_ value_;
-	typedef str::string value;
+	typedef str::dString value_;
+	typedef str::wString value;
 
 	template <class id> class _item_
 	{
@@ -197,8 +197,8 @@ namespace fbltyp {
 	};
 
 	//f Values.
-	typedef ctn::E_MCONTAINER_( value_ ) values_;
-	E_AUTO( values )
+	typedef str::dStrings values_;
+	typedef str::wStrings values;
 
 	template <class id> class _extended_item_
 	{

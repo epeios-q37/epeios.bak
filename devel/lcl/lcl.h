@@ -35,7 +35,7 @@
 # define LCL_TAG_MARKER_C	'%'
 # define LCL_TAG_MARKER_S	"%"
 
-# define LCL_UNDEFINED_LEVEL	RGSTRY_UNDEFINED_LEVEL
+# define LCL_UNDEFINED_LAYER	RGSTRY_UNDEFINED_LAYER
 
 /*************/
 /**** OLD ****/
@@ -44,7 +44,7 @@
 namespace lcl {
 	using rgstry::status__;
 	using rgstry::context___;
-	using rgstry::level__;
+	using rgstry::layer__;
 	using str::strings_;
 	using str::strings;
 
@@ -273,7 +273,7 @@ namespace lcl {
 	E_AUTO( meaning )
 
 	namespace {
-		typedef rgstry::multi_level_registry_ _registry_;
+		typedef rgstry::multi_layer_registry_ _registry_;
 	}
 
 	class locale_

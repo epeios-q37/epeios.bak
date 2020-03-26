@@ -118,12 +118,12 @@ namespace xdhups {
 			return Info;
 		}
 		bso::sBool GetHead(
-			void *UP,
-			str::dString &Head )
+			const str::dString &Token,
+			str::dString &Head)
 		{
-			return C_().GetHead( UP, Head );
+			return C_().GetHead(Token, Head);
 		}
-		bso::sBool IsValid(void *UP);
+		bso::sBool IsValid(const str::dString &Token);
 	};
 }
 

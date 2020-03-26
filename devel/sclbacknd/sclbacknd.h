@@ -54,7 +54,7 @@ namespace sclbacknd {
 	typedef fblbkd::backend___	rBackend_;
 	typedef scldaemon::cDaemon cDaemon_;
 
-	struct rBackend 
+	struct rBackend
 	: public rBackend_,
 	  public cDaemon_
 	{
@@ -62,8 +62,8 @@ namespace sclbacknd {
 		bso::sBool CompatibilityTested_;
 		fblbkd::text_log_functions__<> _RequestLogFunctions;
 		flx::void_odriver___ _VoidFlowDriver;
-		rgstry::multi_level_registry _Registry;
-		rgstry::level__ _RegistrySetupLevel;
+		rgstry::multi_layer_registry _Registry;
+		rgstry::layer__ _RegistrySetupLayer;
 	protected:
 		void *FBLBKDUserPointer( void ) override
 		{
@@ -79,7 +79,7 @@ namespace sclbacknd {
 			_RequestLogFunctions.reset( P );
 			_VoidFlowDriver.reset( P );
 			_Registry.reset( P );
-			_RegistrySetupLevel = rgstry::UndefinedLevel;
+			_RegistrySetupLayer = rgstry::UndefinedLayer;
 		}
 		E_CVDTOR( rBackend );
 		void Init(
@@ -94,25 +94,25 @@ namespace sclbacknd {
 		{
 			return SCLBACKNDStuff();
 		}
-		const rgstry::multi_level_registry_ &Registry( void ) const
+		const rgstry::multi_layer_registry_ &Registry( void ) const
 		{
 			return _Registry;
 		}
-		rgstry::multi_level_registry_ &Registry( void )
+		rgstry::multi_layer_registry_ &Registry( void )
 		{
 			return _Registry;
 		}
-		rgstry::level__ GetRegistrySetupLevel( void ) const
+		rgstry::layer__ GetRegistrySetupLayer( void ) const
 		{
-			return _RegistrySetupLevel;
+			return _RegistrySetupLayer;
 		}
 		void FillSetupRegistryFollowingId( const str::string_ &SetupId )
 		{
-			sclrgstry::FillWithSetupOfId( _Registry, _RegistrySetupLevel, SetupId );
+			sclrgstry::FillWithSetupOfId( _Registry, _RegistrySetupLayer, SetupId );
 		}
 		void FillSetupRegistryWithContent( const str::string_ &Content )
 		{
-			sclrgstry::FillWithContent( _Registry, _RegistrySetupLevel, sclmisc::GetBinPath(), Content );
+			sclrgstry::FillWithContent( _Registry, _RegistrySetupLayer, sclmisc::GetBinPath(), Content );
 		}
 	};
 

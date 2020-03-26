@@ -679,7 +679,7 @@ namespace str {
         }
 	};
 
-	typedef strings_ dStrings;
+	typedef dStrings_ dStrings;
 
 	qW(Strings_);
 

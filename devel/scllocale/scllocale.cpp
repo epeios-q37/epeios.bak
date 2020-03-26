@@ -33,7 +33,7 @@ using namespace scllocale;
 namespace {
 	rRack *RackPointer_ = NULL;
 
-	using lcl::level__;
+	using lcl::layer__;
 
 	rRack &Rack_( void )
 	{
@@ -106,24 +106,24 @@ qRT
 qRE
 }
 */
-static level__ GetLevel_( target__ Target )
+static layer__ GetLayer_( target__ Target )
 {
 	switch ( Target ) {
 	case tMain:
-		return Rack_().SoftwareLevel;
+		return Rack_().SoftwareLayer;
 		break;
 	case tConfiguration:
-		return Rack_().ConfigurationLevel;
+		return Rack_().ConfigurationLayer;
 		break;
 	case tProject:
-		return Rack_().ProjectLevel;
+		return Rack_().ProjectLayer;
 		break;
 	default:
 		qRFwk();
 		break;
 	}
 
-	return rgstry::UndefinedLevel;	// Pour &viter une 'warning'.
+	return rgstry::UndefinedLayer;	// Pour &viter une 'warning'.
 }
 
 void scllocale::Dump(
@@ -131,18 +131,18 @@ void scllocale::Dump(
 	bso::bool__ RootToo,
 	xml::rWriter &Writer )
 {
-	Locale_().Dump( GetLevel_( Target ), qNIL, RootToo, Writer );
+	Locale_().Dump( GetLayer_( Target ), qNIL, RootToo, Writer );
 }
 
 
 void scllocale::Erase( target__ Target )
 {
-	Locale_().Erase( GetLevel_( Target ) );
+	Locale_().Erase( GetLayer_( Target ) );
 }
 
 namespace {
 	void Load_(
-		level__ Level,
+		layer__ Layer,
 		xtf::extended_text_iflow__ &Flow,
 		const fnm::name___ &Directory,
 		const char *ErrorLabel )
@@ -151,7 +151,7 @@ namespace {
 		rgstry::context___ Context;
 	qRB
 		Context.Init();
-		if ( !Locale_().Insert( Level, Flow, xpp::criterions___( Directory ), rgstry::rthIgnore, Context ) )
+		if ( !Locale_().Insert( Layer, Flow, xpp::criterions___( Directory ), rgstry::rthIgnore, Context ) )
 			sclmisc::ReportParsingErrorAndAbort( ErrorLabel, Context );
 	qRR
 	qRT
@@ -163,11 +163,11 @@ void scllocale::Set(
 	target__ Target,
 	const rgstry::entry__ &Entry )
 {
-	rgstry::level__ Level = GetLevel_( Target );
+	rgstry::layer__ Layer = GetLayer_( Target );
 
-	Locale_().Erase( Level );
+	Locale_().Erase( Layer );
 
-	Locale_().Set( Level, Entry );
+	Locale_().Set( Layer, Entry );
 }
 */
 void scllocale::Load(
@@ -192,7 +192,7 @@ void scllocale::Load(
 		break;
 	}
 
-	return Load_( GetLevel_( Target ), Flow, Directory, ErrorLabel );
+	return Load_( GetLayer_( Target ), Flow, Directory, ErrorLabel );
 }
 
 void scllocale::Fill(
@@ -206,7 +206,7 @@ qRH
 qRB
 	Flow.Init( XML );
 	XFlow.Init( Flow, utf::f_Default );
-	if ( !Locale_().Fill( GetLevel_( Target ), XFlow, xpp::criterions___( Directory ), NULL ) )
+	if ( !Locale_().Fill( GetLayer_( Target ), XFlow, xpp::criterions___( Directory ), NULL ) )
 		qRFwk();
 qRR
 qRT
@@ -225,7 +225,7 @@ qRH
 qRB
 	Flow.Init( XML );
 	XFlow.Init( Flow, utf::f_Default );
-	if ( !Locale_().Insert( GetLevel_( Target ), XFlow, xpp::criterions___( Directory ), RootTagHandling  ) )
+	if ( !Locale_().Insert( GetLayer_( Target ), XFlow, xpp::criterions___( Directory ), RootTagHandling  ) )
 		qRFwk();
 qRR
 qRT
@@ -514,8 +514,8 @@ Q37_GCTOR( scllocale )
 {
 	Locale_.Init();
 
-	SoftwareLevel_ = Locale_.CreateEmbedded( rgstry::name( "Software" ) );
-	ConfigurationLevel_ = Locale_.CreateEmbedded( rgstry::name( "Configuration" ) );
-	ProjectLevel_ = Locale_.CreateEmbedded( rgstry::name( "Project" ) );
+	SoftwareLayer_ = Locale_.CreateEmbedded( rgstry::name( "Software" ) );
+	ConfigurationLayer_ = Locale_.CreateEmbedded( rgstry::name( "Configuration" ) );
+	ProjectLayer_ = Locale_.CreateEmbedded( rgstry::name( "Project" ) );
 }
 */

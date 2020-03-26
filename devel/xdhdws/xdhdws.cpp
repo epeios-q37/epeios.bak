@@ -430,8 +430,8 @@ namespace {
                 xdhcmn::cUpstream &Callback )
             {
             qRH
-                str::strings Ids, Types, ParametersSets, ContentRetrievingMethods, FocusingMethods, SelectionMethods, Arguments;
-                str::string FlatIds, FlatTypes, FlatParametersSets, FlatContentRetrievingMethods, FlatFocusingMethods, FlatSelectionMethods;
+                str::wStrings Ids, Types, ParametersSets, ContentRetrievingMethods, FocusingMethods, SelectionMethods, Arguments;
+                str::wString FlatIds, FlatTypes, FlatParametersSets, FlatContentRetrievingMethods, FlatFocusingMethods, FlatSelectionMethods;
             qRB
                 tol::Init(Ids, Types, ParametersSets, ContentRetrievingMethods, FocusingMethods, SelectionMethods);
                 xdhutl::ExtractWidgetsFeaturesAndIds( Digest, Ids, Types, ParametersSets, ContentRetrievingMethods, FocusingMethods, SelectionMethods );

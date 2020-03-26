@@ -29,6 +29,7 @@
 				<Module>logq</Module>
 				<Module>ltf</Module>
 				<Module>sck</Module>
+				<Module>strmrg</Module>
 			</Modules>
 			<Modules Group="CSD">
 				<xpp:expand select="CSDF"/>

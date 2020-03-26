@@ -423,7 +423,7 @@ qRB
 	// _Flow.Init(...);	// Made on connection.
 	_Registry.Init();
 	_Registry.Push( sclmisc::GetRegistry() );
-	_RegistryLevel = _Registry.CreateEmbedded( rgstry::name( "Session" ) );
+	_RegistryLayer = _Registry.CreateEmbedded( rgstry::name( "Session" ) );
 
 	if ( (Language != NULL) && *Language )
 		sclrgstry::SetValue( _Registry, str::string( Language ), rgstry::tentry___( sclrgstry::parameter::Language ) );

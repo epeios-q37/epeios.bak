@@ -199,8 +199,8 @@ namespace sclfrntnd {
 		qRMV( rKernel, K_, Kernel_ );
 		fblfrd::universal_frontend___ Frontend_;
 		rIOFlow_ Flow_;
-		rgstry::multi_level_registry _Registry;
-		rgstry::level__ _RegistryLevel;
+		rgstry::multi_layer_registry _Registry;
+		rgstry::layer__ _RegistryLayer;
 		mutable TOL_CBUFFER___ _Language;
 	public:
 		void reset( bso::bool__ P = true )
@@ -208,7 +208,7 @@ namespace sclfrntnd {
 			Frontend_.reset( P );
 			Flow_.reset( P );
 			_Registry.reset( P );
-			_RegistryLevel = rgstry::UndefinedLevel;
+			_RegistryLayer = rgstry::UndefinedLayer;
 			_Language.reset();
 			Kernel_ = NULL;
 		}
@@ -238,7 +238,7 @@ namespace sclfrntnd {
 			return Frontend_.About( ProtocolVersion, BackendLabel, APIVersion, Backend, BackendCopyright, Software );
 		}
 		void Disconnect( void );
-		const rgstry::multi_level_registry_ &Registry( void ) const
+		const rgstry::multi_layer_registry_ &Registry( void ) const
 		{
 			return _Registry;
 		}

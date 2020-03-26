@@ -233,7 +233,7 @@ namespace faaspool {
 		rShared &Shared );
 
 	bso::sBool GetHead(
-		void *UP,
+		const str::dString &Token,
 		str::dString &Head );
 }
 

@@ -618,10 +618,10 @@ qRE;
 }
 
 bso::sBool faaspool::GetHead(
-    void *UP,
+    const str::dString &Token,
     str::dString &Head )
 {
-    return TSGetHead_( *(const str::wString *)UP, Head );	// 'UP' contains the token.
+    return TSGetHead_(Token,Head);	// 'UP' contains the token.
 }
 
 qGCTOR( faaspool )

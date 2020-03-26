@@ -130,7 +130,7 @@ qRB
 	_RequestLogFunctions.Init( _VoidFlowDriver );
 	_Registry.Init();
 	_Registry.Push( sclmisc::GetRegistry() );
-	_RegistrySetupLevel = _Registry.Create();
+	_RegistrySetupLayer = _Registry.Create();
 
 	AppendFunctions_( *this );
 qRR

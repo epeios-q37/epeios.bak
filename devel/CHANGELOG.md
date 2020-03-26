@@ -9,6 +9,34 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+### 2020-03-26
+
+- FBLTYP:
+    - [adpt],
+- LCL:
+    - [adpt],
+- RGSTRY:
+    - *level* -> *layer*,
+- SCLARGMNT:
+    - [adpt],
+- SCLBACKND:
+    - [adpt],
+- SCLFRNTND:
+    - [adpt],
+- SCLLOCALE:
+    - [adpt],
+- SCLMISC:
+    - [adpt],
+- SCLRGSTRY:
+    - removing 'eNeedness' ; using error handling instead,
+    - adding 'l_Highest',
+- STR:
+    - fixing `dStrings::Append(…)` issue,
+- XDHUTL:
+    - [adpt],
+- XDHDWS:
+    - [adpt],
+
 ### 2020-03-22
 
 - STR:

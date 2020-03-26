@@ -92,7 +92,7 @@ namespace {
             qRB
                 Flow.Init(Driver);
                 Head.Init();
-                if ( !Agent.GetHead(&Data.Token, Head) )
+                if ( !Agent.GetHead(Data.Token, Head) )
                     sclmisc::MGetValue(registry::definition::ErrorHead, Head);
                 Flow.Write(Head.Convert(Buffer), Head.Amount());
                 Flow.Commit();
@@ -140,7 +140,7 @@ namespace {
                 Flow.Init(Driver, websck::mWithTerminator);
                 Session.Init(Agent, Driver, "", Data.Token);
 
-                if ( Agent.IsValid(&Data.Token) )
+                if ( Agent.IsValid(Data.Token) )
                     Session.Launch("","");
                 else {
                     Script.Init();

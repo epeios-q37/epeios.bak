@@ -491,7 +491,7 @@ namespace rgstry {
 	};
 
 	// Nature du n�ud.
-	enum nature__ 
+	enum nature__
 	{
 		nTag,
 		nAttribute,
@@ -763,7 +763,7 @@ namespace rgstry {
 		{
 			return _CreateWithFlush( nTag, Name, value(), Row );
 		}
-		row__ _Add( 
+		row__ _Add(
 			nature__ Nature,
 			const name_ &Name,
 			const value_ &Value,
@@ -1080,7 +1080,7 @@ namespace rgstry {
 		{
 			return _SearchTag( Name, Row );
 		}
-		row__ SearchAttribute( 
+		row__ SearchAttribute(
 			const name_ &Name,
 			row__ Row ) const
 		{
@@ -1352,7 +1352,7 @@ namespace rgstry {
 		return Root;
 	}
 
-# if 1	// D�pr�ci�, destin� � dispara�tre. Utiliser 'multi_level_registry_'.
+# if 1	// D�pr�ci�, destin� � dispara�tre. Utiliser 'multi_leyer_registry_'.
 	class overloaded_registry___
 	{
 	public:
@@ -1544,9 +1544,9 @@ namespace rgstry {
 		}
 	};
 # endif
-	E_ROW( level__ );
-#	define RGSTRY_UNDEFINED_LEVEL	qNIL
-	E_CDEF( level__, UndefinedLevel, qNIL );
+	E_ROW( layer__ );
+#	define RGSTRY_UNDEFINED_LAYER	qNIL
+	E_CDEF( layer__, UndefinedLayer, qNIL );
 
 	class cLocker
 	{
@@ -1664,49 +1664,49 @@ namespace rgstry {
 		bso::bool__ RootToo,
 		xml::rWriter &Writer );
 
-	typedef stkbch::qBSTACKd( entry__, level__ ) _entries_;
-	typedef stkbch::qBSTACKd( time_t, level__ ) _timestamps_;
+	typedef stkbch::qBSTACKd( entry__, layer__ ) _entries_;
+	typedef stkbch::qBSTACKd( time_t, layer__ ) _timestamps_;
 
 	// Registre multi-niveau
-	class multi_level_registry_
+	class multi_layer_registry_
 	{
 	private:
-		void _Touch( level__ Level )
+		void _Touch( layer__ Layer )
 		{
-			TimeStamps.Store( time( NULL ), Level );
+			TimeStamps.Store( time( NULL ), Layer );
 		}
-		level__ _RawCreateLevel( void )
+		layer__ _RawCreateLayer( void )
 		{
-			level__ Level = TimeStamps.Push( 0 );
+			layer__ Layer = TimeStamps.Push( 0 );
 
-			if ( Entries.Push( entry__() ) != Level )
+			if ( Entries.Push( entry__() ) != Layer )
 				qRFwk();
 
-			_Touch( Level );
+			_Touch( Layer );
 
-			return Level;
+			return Layer;
 		}
-		level__ _RawPushLevel( const entry__ &Entry )
+		layer__ _RawPushLayer( const entry__ &Entry )
 		{
-			level__ Level = RGSTRY_UNDEFINED_LEVEL;
+			layer__ Layer = RGSTRY_UNDEFINED_LAYER;
 
-			Entries.Store( Entry, Level = _RawCreateLevel() );
+			Entries.Store( Entry, Layer = _RawCreateLayer() );
 
-			return Level;
+			return Layer;
 		}
-		const entry__ _GetEntry( level__ Level ) const
+		const entry__ _GetEntry( layer__ Layer ) const
 		{
-			return Entries( Level );
+			return Entries( Layer );
 		}
-		bso::bool__ IsInitialized_( level__ Level ) const
+		bso::bool__ IsInitialized_( layer__ Layer ) const
 		{
-			return _GetEntry( Level ).IsInitialized();
+			return _GetEntry( Layer ).IsInitialized();
 		}
 		const registry_ &_GetRegistry(
-			level__ Level,
+			layer__ Layer,
 			hLock &Lock ) const
 		{
-			entry__ Entry = _GetEntry( Level );
+			entry__ Entry = _GetEntry( Layer );
 
 			Lock.Set( Entry.Locker );
 			Entry.Lock();
@@ -1718,10 +1718,10 @@ namespace rgstry {
 			}
 		}
 		registry_ &_GetRegistry(
-			level__ Level,
+			layer__ Layer,
 			hLock &Lock )
 		{
-			entry__ Entry = _GetEntry( Level );
+			entry__ Entry = _GetEntry( Layer );
 
 			if ( Entry.Registry != NULL )
 				qRFwk();
@@ -1731,13 +1731,13 @@ namespace rgstry {
 
 			return EmbeddedRegistry;
 		}
-		row__ _GetRoot( level__ Level ) const
+		row__ _GetRoot( layer__ Layer ) const
 		{
-			return _GetEntry( Level ).Root;
+			return _GetEntry( Layer ).Root;
 		}
-		cLocker *_GetLocker( level__ Level ) const
+		cLocker *_GetLocker( layer__ Layer ) const
 		{
-			return _GetEntry( Level ).Locker;
+			return _GetEntry( Layer ).Locker;
 		}
 	public:
 		struct s {
@@ -1748,7 +1748,7 @@ namespace rgstry {
 		registry_ EmbeddedRegistry;
 		_entries_ Entries;
 		_timestamps_ TimeStamps;
-		multi_level_registry_( s &S )
+		multi_layer_registry_( s &S )
 		: EmbeddedRegistry( S.EmbeddedRegistry ),
 		  Entries( S.Entries ),
 		  TimeStamps( S.TimeStamps )
@@ -1765,7 +1765,7 @@ namespace rgstry {
 			Entries.plug( AS );
 			TimeStamps.plug( AS );
 		}
-		multi_level_registry_ &operator =( const multi_level_registry_ &MLR )
+		multi_layer_registry_ &operator =( const multi_layer_registry_ &MLR )
 		{
 			EmbeddedRegistry = MLR.EmbeddedRegistry;
 			Entries = MLR.Entries;
@@ -1779,115 +1779,115 @@ namespace rgstry {
 			Entries.Init();
 			TimeStamps.Init();
 		}
-		E_NAVt( Entries., level__ );
+		E_NAVt( Entries., layer__ );
 		const registry_ &GetRegistry(
-			level__ Level,
+			layer__ Layer,
 			hLock &Lock ) const
 		{
-			if ( !IsInitialized_( Level ) )
-				qRFwk();
-	
-			return _GetRegistry( Level, Lock );
-		}
-		registry_ &GetRegistry(
-			level__ Level,
-			hLock &Lock )
-		{
-			if ( !IsInitialized_( Level ) )
+			if ( !IsInitialized_( Layer ) )
 				qRFwk();
 
-			return _GetRegistry( Level, Lock );
+			return _GetRegistry( Layer, Lock );
 		}
-		bso::bool__ IsEmpty( level__ Level ) const
+		registry_ &GetRegistry(
+			layer__ Layer,
+			hLock &Lock )
+		{
+			if ( !IsInitialized_( Layer ) )
+				qRFwk();
+
+			return _GetRegistry( Layer, Lock );
+		}
+		bso::bool__ IsEmpty( layer__ Layer ) const
 		{
 			bso::sBool Result = false;
 		qRH
 			hLock Lock;
 		qRB
-			if ( !IsInitialized_( Level ) )
+			if ( !IsInitialized_( Layer ) )
 				qRFwk();
 
-			Result = !GetRegistry( Level, Lock ).HasChildren( GetRoot( Level ) );
+			Result = !GetRegistry( Layer, Lock ).HasChildren( GetRoot( Layer ) );
 		qRR
 		qRT
 		qRE
 			return Result;
 		}
-		row__ GetRoot( level__ Level ) const
+		row__ GetRoot( layer__ Layer ) const
 		{
-			return _GetRoot( Level );
+			return _GetRoot( Layer );
 		}
-		cLocker *GetLocker( level__ Level ) const
+		cLocker *GetLocker( layer__ Layer ) const
 		{
-			return _GetLocker( Level );
+			return _GetLocker( Layer );
 		}
-		level__ Create( const entry__ &Entry = entry__() )
+		layer__ Create( const entry__ &Entry = entry__() )
 		{
-			return _RawPushLevel( Entry );
+			return _RawPushLayer( Entry );
 		}
 		void SetRoot(
-			level__ Level,
+			layer__ Layer,
 			row__ Root )
 		{
-			entry__ Entry = Entries( Level );
+			entry__ Entry = Entries( Layer );
 
 			Entry.Root = Root;
 
-			Entries.Store( Entry, Level );
+			Entries.Store( Entry, Layer );
 		}
 		void Set(
-			level__ Level,
+			layer__ Layer,
 			const entry__ Entry )
 		{
-			if ( IsInitialized_( Level ) )
+			if ( IsInitialized_( Layer ) )
 				qRFwk();
 
-			Entries.Store( Entry, Level );
+			Entries.Store( Entry, Layer );
 		}
-		void Set( level__ Level )
+		void Set( layer__ Layer )
 		{
-			Set( Level, entry__( EmbeddedRegistry.CreateRegistry( name() ) ) );
+			Set( Layer, entry__( EmbeddedRegistry.CreateRegistry( name() ) ) );
 		}
-		level__ Push( const entry__ &Entry )
+		layer__ Push( const entry__ &Entry )
 		{
-			return _RawPushLevel( Entry );
+			return _RawPushLayer( Entry );
 		}
-		level__ CreateEmbedded( const name_ &Name = name() )
+		layer__ CreateEmbedded( const name_ &Name = name() )
 		{
-			return _RawPushLevel( entry__( EmbeddedRegistry.CreateRegistry( Name ) ) );
+			return _RawPushLayer( entry__( EmbeddedRegistry.CreateRegistry( Name ) ) );
 		}
-		level__ CreateEmbedded(
+		layer__ CreateEmbedded(
 			cLocker &Locker,
 			const name_ &Name = name() )
 		{
-			return _RawPushLevel( entry__( Locker, EmbeddedRegistry.CreateRegistry( Name ) ) );
+			return _RawPushLayer( entry__( Locker, EmbeddedRegistry.CreateRegistry( Name ) ) );
 		}
 		void Push(
-			const multi_level_registry_ &Registry,
-			level__ Level )
+			const multi_layer_registry_ &Registry,
+			layer__ Layer )
 		{
 		qRH
 			hLock Lock;
 		qRB
-			Push( entry__( Registry.GetRoot( Level ), Registry.GetRegistry( Level, Lock ) ) );
+			Push( entry__( Registry.GetRoot( Layer ), Registry.GetRegistry( Layer, Lock ) ) );
 		qRR
 		qRT
 		qRE
 		}
-		void Push( const multi_level_registry_ &Registry )
+		void Push( const multi_layer_registry_ &Registry )
 		{
-			level__ Level = Registry.First();
+			layer__ Layer = Registry.First();
 
-			while ( Level != UndefinedLevel ) {
-				if ( Registry.IsInitialized_( Level ) )
-					Push( Registry, Level );
+			while ( Layer != UndefinedLayer ) {
+				if ( Registry.IsInitialized_( Layer ) )
+					Push( Registry, Layer );
 
-				Level = Registry.Next( Level );
+				Layer = Registry.Next( Layer );
 			}
 		}
-		void Erase( level__ Level )
+		void Erase( layer__ Layer )
 		{
-			entry__ Entry = Entries( Level );
+			entry__ Entry = Entries( Layer );
 
 			if ( Entry.IsInitialized() ) {
 
@@ -1896,12 +1896,12 @@ namespace rgstry {
 
 				Entry.Init();
 
-				Entries.Store( Entry, Level );
+				Entries.Store( Entry, Layer );
 			}
 		}
-		level__ Pop( void )
+		layer__ Pop( void )
 		{
-			level__ Level = Entries.Last();
+			layer__ Layer = Entries.Last();
 
 			if ( Entries.Top().Registry == NULL )
 				EmbeddedRegistry.Delete( Entries.Top().Root );
@@ -1909,27 +1909,27 @@ namespace rgstry {
 			Entries.Pop();
 			TimeStamps.Pop();
 
-			return Level;
+			return Layer;
 		}
-		level__ TopLevel( void ) const
+		layer__ TopLayer( void ) const
 		{
 			return Entries.Last();
 		}
 		void Create(
-			level__ Level,
-			const str::string_ &Path, 
+			layer__ Layer,
+			const str::string_ &Path,
 			bso::bool__ Reuse )
 		{
 		qRH
 			hLock Lock;
 		qRB
-			_GetRegistry( Level, Lock ).Create( Path, _GetRoot( Level ), Reuse );
+			_GetRegistry( Layer, Lock ).Create( Path, _GetRoot( Layer ), Reuse );
 		qRR
 		qRT
 		qRE
 		}
 		const value_ &GetValue(
-			level__ Level,
+			layer__ Layer,
 			const path_ &Path,
 			value_ &Value,
 			bso::bool__ *Missing ) const	// Nota : ne met 'Missing' � 'true' que lorsque 'Path' n'existe pas. Si 'Missing' est � 'true', aucune action n'est r�alis�e.
@@ -1937,17 +1937,17 @@ namespace rgstry {
 		qRH
 			hLock Lock;
 		qRB
-			if ( !IsInitialized_( Level ) )
+			if ( !IsInitialized_( Layer ) )
 				*Missing = true;
 			else
-				_GetRegistry( Level, Lock ).GetValue( Path, _GetRoot( Level ), Value, Missing );
+				_GetRegistry( Layer, Lock ).GetValue( Path, _GetRoot( Layer ), Value, Missing );
 		qRR
 		qRT
 		qRE
 			return Value;
 		}
 		const value_ &GetValue(
-			level__ Level,
+			layer__ Layer,
 			const str::string_ &PathString,
 			value_ &Value,
 			bso::bool__ *Missing,
@@ -1956,10 +1956,10 @@ namespace rgstry {
 		qRH
 			hLock Lock;
 		qRB
-			if ( !IsInitialized_( Level ) )
+			if ( !IsInitialized_( Layer ) )
 				*Missing = true;
 			else
-				_GetRegistry( Level, Lock ).GetValue( PathString, _GetRoot( Level ), Value, Missing, PathErrorRow );
+				_GetRegistry( Layer, Lock ).GetValue( PathString, _GetRoot( Layer ), Value, Missing, PathErrorRow );
 		qRR
 		qRT
 		qRE
@@ -1971,7 +1971,7 @@ namespace rgstry {
 			bso::bool__ *Missing,
 			sdr::row__ *PathErrorRow = NULL  ) const;	// Nota : ne met 'Missing' � 'true' que lorsque 'Path' n'existe pas. Si 'Missing' est � 'true', aucune action n'est r�alis�e.
 		bso::bool__ GetValue(
-			level__ Level,
+			layer__ Layer,
 			const path_ &Path,
 			value_ &Value ) const
 		{
@@ -1979,22 +1979,22 @@ namespace rgstry {
 		qRH
 			hLock Lock;
 		qRB
-			if ( IsInitialized_( Level ) )
-				Result = _GetRegistry( Level, Lock ).GetValue( Path, _GetRoot( Level ), Value );
+			if ( IsInitialized_( Layer ) )
+				Result = _GetRegistry( Layer, Lock ).GetValue( Path, _GetRoot( Layer ), Value );
 		qRR
 		qRT
 		qRE
 			return Result;
 		}
 		bso::bool__ GetValue(
-			level__ Level,
+			layer__ Layer,
 			const str::string_ &PathString,
 			value_ &Value,
 			sdr::row__ *PathErrorRow = NULL ) const
 		{
 			bso::bool__ Missing = false;
 
-			GetValue( Level, PathString, Value, &Missing, PathErrorRow );
+			GetValue( Layer, PathString, Value, &Missing, PathErrorRow );
 
 			return !Missing;
 		}
@@ -2013,11 +2013,11 @@ namespace rgstry {
 			const tentry__ &Entry,
 			str::string_ &Value ) const;
 		bso::bool__ GetValue(
-			level__ Level,
+			layer__ Layer,
 			const tentry__ &Entry,
 			str::string_ &Value ) const;
 		bso::bool__ GetValues(
-			level__ Level,
+			layer__ Layer,
 			const path_ &Path,
 			values_ &Values ) const
 		{
@@ -2025,15 +2025,15 @@ namespace rgstry {
 		qRH
 			hLock Lock;
 		qRB
-			if ( IsInitialized_( Level ) )
-				Result = _GetRegistry( Level, Lock ).GetValues( Path, _GetRoot( Level ), Values );
+			if ( IsInitialized_( Layer ) )
+				Result = _GetRegistry( Layer, Lock ).GetValues( Path, _GetRoot( Layer ), Values );
 		qRR
 		qRT
 		qRE
 			return Result;
 		}
 		bso::bool__ GetValues(
-			level__ Level,
+			layer__ Layer,
 			const str::string_ &PathString,
 			values_ &Values,
 			sdr::row__ *PathErrorRow = NULL ) const
@@ -2042,8 +2042,8 @@ namespace rgstry {
 		qRH
 			hLock Lock;
 		qRB
-			if ( IsInitialized_( Level ) )
-				Result = _GetRegistry( Level, Lock ).GetValues( PathString, _GetRoot( Level ), Values, PathErrorRow );
+			if ( IsInitialized_( Layer ) )
+				Result = _GetRegistry( Layer, Lock ).GetValues( PathString, _GetRoot( Layer ), Values, PathErrorRow );
 		qRR
 		qRT
 		qRE
@@ -2064,11 +2064,11 @@ namespace rgstry {
 			const tentry__ &Entry,
 			values_ &Values ) const;
 		bso::bool__ GetValues(
-			level__ Level,
+			layer__ Layer,
 			const tentry__ &Entry,
 			values_ &Values ) const;
 		void SetValue(
-			level__ Level,
+			layer__ Layer,
 			const str::string_ &PathString,
 			const value_ &Value,
 			sdr::row__ *PathErrorRow = NULL )
@@ -2076,18 +2076,18 @@ namespace rgstry {
 		qRH
 			hLock Lock;
 		qRB
-			if ( !IsInitialized_( Level ) )
+			if ( !IsInitialized_( Layer ) )
 				qRFwk();
 
-			_GetRegistry( Level, Lock ).SetValue( PathString, Value, _GetRoot( Level ), PathErrorRow );
+			_GetRegistry( Layer, Lock ).SetValue( PathString, Value, _GetRoot( Layer ), PathErrorRow );
 
-			_Touch( Level );
+			_Touch( Layer );
 		qRR
 		qRT
 		qRE
 		}
 		void AddValue(
-			level__ Level,
+			layer__ Layer,
 			const str::string_ &PathString,
 			const value_ &Value,
 			sdr::row__ *PathErrorRow = NULL )
@@ -2095,12 +2095,12 @@ namespace rgstry {
 		qRH
 			hLock Lock;
 		qRB
-			if ( !IsInitialized_( Level ) )
+			if ( !IsInitialized_( Layer ) )
 				qRFwk();
 
-			_GetRegistry( Level, Lock ).AddValue( PathString, Value, _GetRoot( Level ), PathErrorRow );
+			_GetRegistry( Layer, Lock ).AddValue( PathString, Value, _GetRoot( Layer ), PathErrorRow );
 
-			_Touch( Level );
+			_Touch( Layer );
 		qRR
 		qRT
 		qRE
@@ -2134,14 +2134,14 @@ namespace rgstry {
 #endif
 		bso::bool__ Delete(
 			const path_ &Path,
-			level__ Level )
+			layer__ Layer )
 		{
 			bso::sBool Result = false;
 		qRH
 			hLock Lock;
 		qRB
-			if ( IsInitialized_( Level ) && _GetRegistry( Level, Lock ).Delete( Path, _GetRoot( Level ) ) ) {
-				_Touch( Level );
+			if ( IsInitialized_( Layer ) && _GetRegistry( Layer, Lock ).Delete( Path, _GetRoot( Layer ) ) ) {
+				_Touch( Layer );
 				Result = true;
 			}
 		qRR
@@ -2149,17 +2149,17 @@ namespace rgstry {
 		qRE
 			return Result;
 		}
-		bso::bool__ Delete( 
+		bso::bool__ Delete(
 			const str::string_ &PathString,
-			level__ Level,
+			layer__ Layer,
 			sdr::row__ *PathErrorRow = NULL )	// Retourne 'false' si 'PathString' a d�j� la valeur 'Value', 'true' sinon.
 		{
 			bso::sBool Result = false;
 		qRH
 			hLock Lock;
 		qRB
-			if ( IsInitialized_( Level ) && _GetRegistry( Level, Lock ).Delete( PathString, _GetRoot( Level ), PathErrorRow ) ) {
-				_Touch( Level );
+			if ( IsInitialized_( Layer ) && _GetRegistry( Layer, Lock ).Delete( PathString, _GetRoot( Layer ), PathErrorRow ) ) {
+				_Touch( Layer );
 				Result = true;
 			}
 		qRR
@@ -2167,12 +2167,12 @@ namespace rgstry {
 		qRE
 			return Result;
 		}
-		bso::bool__ Delete( 
+		bso::bool__ Delete(
 			const char *PathString,
-			level__ Level,
+			layer__ Layer,
 			sdr::row__ *PathErrorRow = NULL )	// Retourne 'false' si 'PathString' a d�j� la valeur 'Value', 'true' sinon.
 		{
-			return Delete( str::string( PathString ), Level, PathErrorRow );
+			return Delete( str::string( PathString ), Layer, PathErrorRow );
 		}
 		bso::bool__ Delete(
 			const str::string_ &PathString,
@@ -2185,30 +2185,30 @@ namespace rgstry {
 		}
 		bso::bool__ MoveTo(
 			const str::string_ &Path,
-			level__ Level );
+			layer__ Layer );
 		bso::bool__ MoveTo(
 			const char *Path,
-			level__ Level )
+			layer__ Layer )
 		{
-			return MoveTo( str::string( Path ), Level );
+			return MoveTo( str::string( Path ), Layer );
 		}
 		row__ Search(
-			level__ Level,
+			layer__ Layer,
 			const path_ &Path ) const
 		{
 			row__ Result = qNIL;
 		qRH
 			hLock Lock;
 		qRB
-			if ( IsInitialized_( Level ) )
-				Result = _GetRegistry( Level, Lock ).Search( Path, _GetRoot( Level ) );
+			if ( IsInitialized_( Layer ) )
+				Result = _GetRegistry( Layer, Lock ).Search( Path, _GetRoot( Layer ) );
 		qRR
 		qRT
 		qRE
 			return Result;
 		}
 		row__ Search(
-			level__ Level,
+			layer__ Layer,
 			const str::string_ &PathString,
 			sdr::row__ *PathErrorRow = NULL ) const
 		{
@@ -2216,50 +2216,50 @@ namespace rgstry {
 		qRH
 			hLock Lock;
 		qRB
-			if ( IsInitialized_( Level ) )
-				Result = _GetRegistry( Level, Lock ).Search( PathString, _GetRoot( Level ), PathErrorRow );
+			if ( IsInitialized_( Layer ) )
+				Result = _GetRegistry( Layer, Lock ).Search( PathString, _GetRoot( Layer ), PathErrorRow );
 		qRR
 		qRT
 		qRE
 			return Result;
 		}
 		row__ Search(
-			level__ Level,
+			layer__ Layer,
 			const tentry__ &Entry ) const;
 		row__ Search(
 			const str::string_ &PathString,
-			level__ &Level,	// Valeur retourn�e != 'qNIL', contient le 'level' de la registry contenant l'entr�e.
+			layer__ &Layer,	// Valeur retourn�e != 'qNIL', contient le 'layer' de la registry contenant l'entr�e.
 			sdr::row__ *PathErrorRow = NULL ) const;
 		row__ Search(
 			const tentry__ &Entry,
-			level__ &Level ) const;	// Valeur retourn�e != 'qNIL', contient le 'level' de la registry contenant l'entr�e.
+			layer__ &Layer ) const;	// Valeur retourn�e != 'qNIL', contient le 'layer' de la registry contenant l'entr�e.
 		bso::bool__ Exists(
-			level__ Level,
+			layer__ Layer,
 			const path_ &Path ) const
 		{
-			return Search( Level, Path ) != qNIL;
+			return Search( Layer, Path ) != qNIL;
 		}
 		bso::bool__ Exists(
-			level__ Level,
+			layer__ Layer,
 			const str::string_ &PathString,
 			sdr::row__ *PathErrorRow = NULL ) const
 		{
-			return Search( Level, PathString, PathErrorRow ) != qNIL;
+			return Search( Layer, PathString, PathErrorRow ) != qNIL;
 		}
 		bso::bool__ Exists(
 			const str::string_ &PathString,
 			sdr::row__ *PathErrorRow = NULL ) const
 		{
-			level__ Dummy = qNIL;
+			layer__ Dummy = qNIL;
 			return Search( PathString, Dummy, PathErrorRow ) != qNIL;
 		}
 		bso::bool__ Exists(	const tentry__ &Entry ) const
 		{
-			level__ Dummy = qNIL;
+			layer__ Dummy = qNIL;
 			return Search( Entry, Dummy ) != qNIL;
 		}
 		template <typename source> bso::sBool Fill(
-			level__ Level,
+			layer__ Layer,
 			source &Source,
 			const xpp::criterions___ &Criterions,
 			const char *RootPath,
@@ -2270,13 +2270,13 @@ namespace rgstry {
 			hLock Lock;
 			row__ Root = qNIL;
 		qRB
-			if ( _GetRoot( Level ) != qNIL )
+			if ( _GetRoot( Layer ) != qNIL )
 				qRFwk();
-			
-			if ( ( Root = rgstry::Fill( Source, Criterions, RootPath, _GetRegistry( Level, Lock ), Context ) ) != qNIL ) {
-				Entries.Store( entry__( Root ), Level );
 
-				_Touch( Level );
+			if ( ( Root = rgstry::Fill( Source, Criterions, RootPath, _GetRegistry( Layer, Lock ), Context ) ) != qNIL ) {
+				Entries.Store( entry__( Root ), Layer );
+
+				_Touch( Layer );
 
 				Result = true;
 			}
@@ -2286,7 +2286,7 @@ namespace rgstry {
 			return Result;
 		}
 		template <typename source> bso::sBool Fill(
-			level__ Level,
+			layer__ Layer,
 			source &Source,
 			const xpp::criterions___ &Criterions,
 			const char *RootPath )
@@ -2296,13 +2296,13 @@ namespace rgstry {
 			hLock Lock;
 			row__ Root = qNIL;
 		qRB
-			if ( _GetRoot( Level ) != qNIL )
+			if ( _GetRoot( Layer ) != qNIL )
 				qRFwk();
-			
-			if ( ( Root = rgstry::Fill( Source, Criterions, RootPath, _GetRegistry( Level, Lock ) ) ) != qNIL ) {
-				Entries.Store( entry__( Root ), Level );
 
-				_Touch( Level );
+			if ( ( Root = rgstry::Fill( Source, Criterions, RootPath, _GetRegistry( Layer, Lock ) ) ) != qNIL ) {
+				Entries.Store( entry__( Root ), Layer );
+
+				_Touch( Layer );
 
 				Result = true;
 			}
@@ -2312,7 +2312,7 @@ namespace rgstry {
 			return Result;
 		}
 		template <typename source> bso::sBool Insert(
-			level__ Level,
+			layer__ Layer,
 			source &Source,
 			const xpp::criterions___ &Criterions,
 			eRootTagHandling RootTagHandling,
@@ -2322,8 +2322,8 @@ namespace rgstry {
 		qRH
 			hLock Lock;
 		qRB
-			if ( rgstry::Insert( Source, Criterions, _GetRoot( Level ), RootTagHandling, _GetRegistry( Level, Lock ), Context ) ) {
-				_Touch( Level );
+			if ( rgstry::Insert( Source, Criterions, _GetRoot( Layer ), RootTagHandling, _GetRegistry( Layer, Lock ), Context ) ) {
+				_Touch( Layer );
 
 				Result = true;
 			} else {
@@ -2335,7 +2335,7 @@ namespace rgstry {
 			return Result;
 		}
 		template <typename source> bso::sBool Insert(
-			level__ Level,
+			layer__ Layer,
 			source &Source,
 			const xpp::criterions___ &Criterions,
 			eRootTagHandling RootTagHandling )
@@ -2344,8 +2344,8 @@ namespace rgstry {
 		qRH
 			hLock Lock;
 		qRB
-			if ( rgstry::Insert( Source, Criterions, _GetRoot( Level ), RootTagHandling, _GetRegistry( Level, Lock ) ) ) {
-				_Touch( Level );
+			if ( rgstry::Insert( Source, Criterions, _GetRoot( Layer ), RootTagHandling, _GetRegistry( Layer, Lock ) ) ) {
+				_Touch( Layer );
 
 				Result = true;
 			}
@@ -2363,9 +2363,9 @@ namespace rgstry {
 		qRH
 			hLock Lock;
 		qRB
-			level__ Level = rgstry::UndefinedLevel;
+			layer__ Layer = rgstry::UndefinedLayer;
 
-			Entry.Root = Search( TaggedEntry, Level );
+			Entry.Root = Search( TaggedEntry, Layer );
 
 			if ( Entry.Root == qNIL ) {
 				if ( ErrHandling == err::hUserDefined )
@@ -2374,8 +2374,8 @@ namespace rgstry {
 					qRFwk();
 			}
 
-			Entry.Registry = &GetRegistry( Level, Lock );
-			Entry.Locker = _GetLocker( Level );
+			Entry.Registry = &GetRegistry( Layer, Lock );
+			Entry.Locker = _GetLocker( Layer );
 
 			Result = true;
 		qRR
@@ -2384,7 +2384,7 @@ namespace rgstry {
 			return Result;
 		}
 		sdr::size__ Dump(
-			level__ Level,
+			layer__ Layer,
 			row__ Node,	// Si == 'qNIL', on part de la racine.
 			bso::bool__ NodeToo,
 			xml::rWriter &Writer ) const
@@ -2393,15 +2393,15 @@ namespace rgstry {
 		qRH
 			hLock Lock;
 		qRB
-			if ( IsInitialized_( Level ) )
-				Result = _GetRegistry( Level, Lock ).Dump( Node == qNIL ? _GetRoot( Level ) : Node, NodeToo, Writer );
+			if ( IsInitialized_( Layer ) )
+				Result = _GetRegistry( Layer, Lock ).Dump( Node == qNIL ? _GetRoot( Layer ) : Node, NodeToo, Writer );
 		qRR
 		qRT
 		qRE
 			return Result;
 		}
 		sdr::size__ Dump(
-			level__ Level,
+			layer__ Layer,
 			row__ Node,	// Si == 'qNIL', on part de la racine.
 			bso::bool__ NodeToo,
 			xml::outfit__ Outfit,
@@ -2412,20 +2412,20 @@ namespace rgstry {
 		qRH
 			hLock Lock;
 		qRB
-			if ( IsInitialized_( Level ) )
-				Result = _GetRegistry( Level, Lock ).Dump( Node == qNIL ? _GetRoot( Level ) : Node, NodeToo, Outfit, Encoding, TFlow );
+			if ( IsInitialized_( Layer ) )
+				Result = _GetRegistry( Layer, Lock ).Dump( Node == qNIL ? _GetRoot( Layer ) : Node, NodeToo, Outfit, Encoding, TFlow );
 		qRR
 		qRT
 		qRE
 			return Result;
 		}
-		time_t TimeStamp( level__ Level ) const
+		time_t TimeStamp( layer__ Layer ) const
 		{
-			return TimeStamps( Level );
+			return TimeStamps( Layer );
 		}
 	};
 
-	E_AUTO( multi_level_registry )
+	E_AUTO( multi_layer_registry )
 
 	inline str::uint__ _GetUnsigned(
 		const str::string_ &RawValue,

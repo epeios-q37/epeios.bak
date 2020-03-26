@@ -597,8 +597,8 @@ namespace  {
 
 void xdhutl::GetTags(
 	const xdhcmn::digest_ &Digest,
-	str::strings_ &Ids,
-	str::strings_ &TagsSet )
+	str::dStrings &Ids,
+	str::dStrings &TagsSet )
 {
 qRH
 	xdhcmn::retriever__ Retriever;

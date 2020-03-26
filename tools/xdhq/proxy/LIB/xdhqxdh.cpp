@@ -146,11 +146,11 @@ namespace {
 			return xdhqxdh::Info;
 		}
 		bso::sBool XDHCMNGetHead(
-			void *UP,
+			const str::dString &Token,
 			str::dString &Head,
 			qRPN ) override
 		{
-            return faaspool::GetHead(UP, Head);
+            return faaspool::GetHead(Token, Head);
 		}
 	public:
 		void reset( bso::bool__ P = true )

@@ -39,21 +39,6 @@ rgstry::rEntry registry::definition::XMLFilesHandling( "@Handling", XMLFiles_ );
 rgstry::rEntry registry::definition::XSLFile( RGSTRY_TAGGING_ATTRIBUTE( "target" ), UntaggedXSLFile_ );
 rgstry::rEntry registry::definition::HeadFile( "HeadFile", XMLFiles_ );
 
-namespace {
-//	E_CDEF(char *, StraightBackendType_, "Straight" );
-//	E_CDEF(char *, EmbeddedBackendType_, "Embedded" );
-	fHead HeadFunction_ = NULL;	// Function returning the user's HTML head section used by the Atlas toolkit.
-}
-
-void sclxdhtml::SetHeadFunction( fHead HeadFunction )
-{
-	if ( HeadFunction_ != NULL )
-		qRFwk();
-
-	HeadFunction_ = HeadFunction;
-}
-// static bso::bool__ IsInitialized_ = false;
-
 static const char *Launcher_ = NULL;
 
 const sclrgstry::registry_ &sclxdhtml::GetRegistry( void )
@@ -119,15 +104,16 @@ namespace {
 			return SCLXDHTMLInfo();
 		}
 		bso::sBool XDHCMNGetHead(
-			void *UP,
+			const str::dString &Token,
 			str::dString &Head,
 			qRPN ) override
 		{
-			if ( !sclmisc::LoadXMLAndTranslateTags( registry::definition::HeadFile, sclrgstry::GetCommonRegistry(), Head, sclrgstry::nOptional, 1, DefaultMarker ) )
-				if ( HeadFunction_ != NULL )
-					return HeadFunction_( UP, Head );
+            if ( Token.Amount())
+                qRFwk();
 
-            return true;
+			sclmisc::LoadXMLAndTranslateTags( registry::definition::HeadFile, sclrgstry::GetCommonRegistry(), Head, 1, DefaultMarker);
+
+			return true;
 		}
 	public:
 		void reset( bso::bool__ P = true )
@@ -566,42 +552,6 @@ void sclxdhtml::sProxy::SetTimeout(
 //	Core_.SetTimeout( Delay, Action );
 }
 
-namespace {
-	void HandleElements_(
-		const str::dStrings &Ids,
-		void (xdhdws::sProxy::* Method)( const str::dString &Ids ),
-		xdhdws::sProxy &Proxy )
-	{
-	qRH;
-		str::wString MergedIds;
-	qRB;
-		MergedIds.Init();
-		xdhcmn::FlatMerge( Ids, MergedIds, true );	// Passed as is to a JS script, hence 'true'.
-
-		(Proxy.*Method)( MergedIds );
-	qRR;
-	qRT;
-	qRE;
-	}
-
-	void HandleElement_(
-		const str::dString &Id,
-		void (sProxy::*Method)( const str::dStrings &Ids ),
-		sProxy &Proxy )
-	{
-	qRH;
-		str::wStrings Ids;
-	qRB;
-		Ids.Init();
-		Ids.Append( Id );
-
-		(Proxy.*Method)( Ids );
-	qRR;
-	qRT;
-	qRE;
-	}
-}
-
 void sclxdhtml::sProxy::EnableElements( const str::dStrings &Ids )
 {
     qRLmt();
@@ -610,7 +560,8 @@ void sclxdhtml::sProxy::EnableElements( const str::dStrings &Ids )
 
 void sclxdhtml::sProxy::EnableElement(	const str::dString &Id )
 {
-	HandleElement_( Id, &sProxy::EnableElements, *this );
+    qRLmt();
+//	HandleElement_( Id, &sProxy::EnableElements, *this );
 }
 
 void sclxdhtml::sProxy::DisableElements( const str::dStrings &Ids )
@@ -621,7 +572,8 @@ void sclxdhtml::sProxy::DisableElements( const str::dStrings &Ids )
 
 void sclxdhtml::sProxy::DisableElement( const str::dString &Id )
 {
-	HandleElement_( Id, &sProxy::DisableElements, *this );
+    qRLmt();
+//	HandleElement_( Id, &sProxy::DisableElements, *this );
 }
 
 void sclxdhtml::prolog::GetLayout(

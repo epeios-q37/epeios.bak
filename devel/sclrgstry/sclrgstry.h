@@ -43,18 +43,9 @@ namespace sclrgstry {
 	using rgstry::tags;
 	using rgstry::rEntry;
 
-	typedef rgstry::multi_level_registry_ registry_;
+	typedef rgstry::multi_layer_registry_ registry_;
 
 	extern const char *ParametersTag;
-
-	// For the 'BGetValue(...)' function.
-	qENUM( Needness )
-	{
-		nMandatory,	// Error if the entry is not present.
-		nOptional,	// Returns true if the entry is present, false otherwise.
-		n_amount,
-		n_Undefined,
-	};
 
 #if 0
 	registry_ &GetRegistry( void );
@@ -65,7 +56,7 @@ namespace sclrgstry {
 
 	tht::rLocker &GetCommonRegistryLocker( void );
 
-	qENUM( Level ) {
+	qENUM( Layer ) {
 		lMain,
 		lLasting,	// Lasting data set by application.
 		lProject,
@@ -73,12 +64,14 @@ namespace sclrgstry {
 		lArguments,
 		lRuntime,	// Data set by application, but which are lost when quitting (contrary of the data of 'Lasting', which are persistent.
 		l_amount,
+		l_Highest = lRuntime,
+		l_Default = l_Highest,
 		l_Undefined
 	};
 
-	const char *GetLabel( eLevel Level );
+	const char *GetLabel( eLayer Layer );
 
-	rgstry::level__ GetRawLevel( eLevel Level );
+	rgstry::layer__ GetRawLayer( eLayer Layer );
 
 	extern rgstry::entry___ Parameters;
 	extern rgstry::entry___ Definitions;
@@ -159,28 +152,28 @@ namespace sclrgstry {
 		Path.Append( "\"]" );
 	}
 
-	void Erase( eLevel Level );
+	void Erase( eLayer Layer );
 
-	void Reset( eLevel Level );
+	void Reset( eLayer Layer );
 
 	void Reset(
-		eLevel Level,
+		eLayer Layer,
 		const rgstry::entry__ &Entry );
 
 	void Load(
-		eLevel Level,
+		eLayer Layer,
 		xtf::extended_text_iflow__ &Flow,
 		const fnm::name___ &Directory,
 		const char *RootPath );
 
 	void Load(
-		eLevel Level,
+		eLayer Layer,
 		flw::rRFlow &Flow,
 		const fnm::name___ &Directory,
 		const char *RootPath );
 
 	void Load(
-		eLevel Level,
+		eLayer Layer,
 		const fnm::name___ &Filename,
 		const char *Target,
 		str::string_ &Id );
@@ -198,32 +191,32 @@ namespace sclrgstry {
 
 	void FillWithSetupOfId(
 		registry_ &Registry,
-		rgstry::level__ Level,
+		rgstry::layer__ layer,
 		const str::string_ &Id );
 
 	void FillWithGivenSetup(
 		registry_ &Registry,
-		rgstry::level__ Level );	// Fill the indicated setup if one is given.
+		rgstry::layer__ Layer );	// Fill the indicated setup if one is given.
 
 	void ReportIfNoSetupId( void );
 
 	void FillWithContent(
 		registry_ &Registry,
-		rgstry::level__ Level,
+		rgstry::layer__ Layer,
 		const str::dString &BinPath,
 		const str::string_ &Content );
-	
+
 # if 0
 	void FillRegistryWithSetup(
 		registry_ &Registry,
-		level__ Level,	// 'level' de le 'setup registry'.
+		layer__ Layer,	// 'Layer' de le 'setup registry'.
 		const str::string_ &SetupId );	// Remplit la section 'Parameters' de la 'registry' avec le contenu du 'Setup' d'identifiant 'SetupId'.
 
 	inline void FillRegistryWithSetup(
 		registry_ &Registry,
-		level__ Level )	// Remplit la section 'Parameters' de la 'registry' avec le contenu du 'Setup' par dÃ©faut ('Parameters/@DefaultSetup').
+		layer__ Layer )	// Remplit la section 'Parameters' de la 'registry' avec le contenu du 'Setup' par dÃ©faut ('Parameters/@DefaultSetup').
 	{
-		FillRegistryWithSetup( Registry, Level, str::string() );
+		FillRegistryWithSetup( Registry, Layer, str::string() );
 	}
 # endif
 
@@ -251,20 +244,6 @@ namespace sclrgstry {
 		const str::string_ &Value,
 		sdr::row__ *Error = NULL );
 
-	bso::bool__ BGetValue(
-		const registry_ &Registry,
-		const rgstry::tentry__ &Entry,
-		eNeedness Needness,
-		str::string_ &Value );
-
-	inline 	bso::bool__ BGetValue(
-		const registry_ &Registry,
-		const rgstry::tentry__ &Entry,
-		str::string_ &Value )
-	{
-		return BGetValue( Registry, Entry, nOptional, Value );
-	}
-
 	bso::bool__ GetValues(
 		const registry_ &Registry,
 		const rgstry::tentry__ &Entry,
@@ -290,10 +269,35 @@ namespace sclrgstry {
 		const rgstry::tentry__ &Entry,
 		TOL_CBUFFER___ &Buffer );
 
-	bso::bool__ BGetBoolean(
+	inline bso::bool__ BGetValue(
 		const registry_ &Registry,
 		const rgstry::tentry__ &Entry,
-		bso::bool__ DefaultValue = false );
+		str::string_ &Value,
+		qRPN )
+    {
+        if ( !OGetValue(Registry, Entry, Value)) {
+            if ( qRPT )
+                qRFwk();
+            else
+                return false;
+        }
+
+        return true;
+    }
+
+    bso::bool__ BGetBoolean(
+		const registry_ &Registry,
+		const rgstry::tentry__ &Entry,
+		bso::bool__ DefaultValue,
+		qRPD );
+
+    inline bso::bool__ OGetBoolean(
+		const registry_ &Registry,
+		const rgstry::tentry__ &Entry,
+		bso::bool__ DefaultValue = false )
+    {
+        return BGetBoolean(Registry, Entry, DefaultValue, qRPU);
+    }
 
 	bso::bool__ MGetBoolean(
 		const registry_ &Registry,

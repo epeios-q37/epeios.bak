@@ -60,7 +60,7 @@ qRE
 	return Success;
 }
 
-bso::sBool xdhups::rAgent::IsValid(void *UP)
+bso::sBool xdhups::rAgent::IsValid(const str::dString &Token)
 {
     bso::sBool ReturnValue = false;
 qRH
@@ -68,7 +68,7 @@ qRH
 qRB
     DummmyHead.Init();
 
-    ReturnValue = GetHead(UP, DummmyHead);
+    ReturnValue = GetHead(Token, DummmyHead);
 qRR
 qRT
 qRE
