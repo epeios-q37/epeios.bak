@@ -34,8 +34,6 @@ using namespace faaspool;
 #include "mtk.h"
 #include "sclmisc.h"
 #include "str.h"
-#include "sclxdhtml.h"
-
 
 namespace {
 	static qCDEF( char *, ProtocolId_, "0fac593d-d65f-4cc1-84f5-3159c23c616b" );
@@ -619,15 +617,12 @@ qRE;
 	return Backend != NULL;
 }
 
-namespace {
-	bso::sBool GetHead_(
-		void *UP,
-		str::dString &Head )
-	{
-		return TSGetHead_( *(const str::wString *)UP, Head );	// 'UP' contains the token.
-	}
+bso::sBool faaspool::GetHead(
+    void *UP,
+    str::dString &Head )
+{
+    return TSGetHead_( *(const str::wString *)UP, Head );	// 'UP' contains the token.
 }
-
 
 qGCTOR( faaspool )
 {
@@ -635,7 +630,7 @@ qGCTOR( faaspool )
 	Tokens_.Init();
 	Heads_.Init();
 	Backends_.Init();
-	sclxdhtml::SetHeadFunction( GetHead_ );
+
 }
 
 qGDTOR( faaspool )

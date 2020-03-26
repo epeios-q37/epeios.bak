@@ -36,222 +36,156 @@
 
 SCLI_DEF( xdhqxdh, PROGRAM_NAME, SOFTWARE_NAME );
 
+using namespace xdhqxdh;
+
+static const char *Launcher_ = NULL;
+
+#ifdef CPE_S_WIN
+# define FUNCTION_SPEC __declspec(dllexport)
+#else
+# define FUNCTION_SPEC
+#endif
+
+// Bien que dfinit dans un '.cpp', et propre  ce '.cpp', VC++ se mlange les pinceaux avec le 'callback__' dfinit dans 'scllocale.cpp', d'o le 'namespace'.
 namespace {
-	// As we do not need a backend, most of below items are only placeholders.
-	class sDummy_
-	{
-	public:
-		void reset( bso::sBool = true )
-		{
-			// Standardization.
-		}
-		qCVDTOR( sDummy_ );
-		void Init( void )
-		{
-			// Standardization.
-		}
-	};
-
-
-	class rFrontend_
-	: public sclfrntnd::rFrontend,
-	  public fblfrd::cFrontend
-	{
-	protected:
-		virtual void FBLFRDOnConnection( void ) override {}
-		virtual void FBLFRDOnDisconnection( void ) override {}
-	public:
-		void reset( bso::sBool = true )
-		{
-			// Standardization.
-		}
-		qCVDTOR( rFrontend_ );
-		void Init( void )
-		{
-			// Standardization.
-		}
-	};
-
-	qENUM( Dummy )
-	{
-		dAmount,
-		d_Undefined
-	};
-
-	namespace {
-		void Execute_(
-            const str::dString &Script,
-            xdhdws::sProxy &Proxy,
-            str::dString &ReturnValue )
+    namespace {
+        void Initialization_( xdhcmn::eMode Mode )
         {
         qRH;
-            str::wStrings Values;
+            qCBUFFERr Buffer;
+            str::wString HostService;
         qRB;
-            Values.Init();
-            Values.Append(Script);
+            HostService.Init();
 
-            Proxy.Process( "Execute_1", Values, ReturnValue );
+            if ( sclmisc::OGetValue( registry::parameter::HostService, HostService ) )
+                session::Core.Init( HostService.Convert( Buffer ), 0, sck::NoTimeout );
+
+            faaspool::Initialize();
+            session::LogDriver.Init( cio::COut );
         qRR;
         qRT;
         qRE;
         }
+
+        xdhcmn::cSession *RetrieveSession_(void)
+        {
+            session::rSession *Session = NULL;
+        qRH;
+        qRB;
+            if ( ( Session = new session::rSession ) == NULL )
+                qRAlc();
+
+            if ( !Session->Init() ) {
+                delete Session;
+                Session = NULL;
+            }
+
+            // WARNING ! In 'MultiUser' mode, 'UpstreamCallback' is not correctly set yet!
+        /*	if ( Mode == xdhcmn::mMonoUser ) {
+                Session->Launch( "", "" );
+            }
+        */
+        qRR;
+            if ( Session != NULL )
+                delete Session;
+
+            Session = NULL;
+        qRT;
+        qRE;
+            return Session;
+        }
+
+        void ReleaseSession_( xdhcmn::cSession *Session )
+        {
+            if ( Session == NULL )
+                qRGnr();
+
+            delete Session;
+        }
     }
 
-	void Execute_(
-		flw::rRWFlow &Flow,
-		xdhdws::sProxy &Proxy )
+	typedef xdhcmn::cDownstream cDownstream_;
+
+	class sDownstream
+	: public cDownstream_
 	{
-	qRH;
-		str::wString Script;
-		str::wStrings Values;
-		str::wString Result;
-	qRB;
-		Script.Init();
-		prtcl::Get( Flow, Script );
+	protected:
+		virtual void XDHCMNInitialize( const xdhcmn::shared_data__ &Data ) override
+		{
+			if ( Launcher_ != NULL )
+				qRFwk();
 
-		Flow.Dismiss();
+			if ( Launcher_ == NULL ) {
+				Launcher_ = Data.LauncherIdentification();
+				sclmisc::Initialize( Data.SCLRack(), Data.Localization(), xdhqxdh::Info );
 
-		Values.Init();
-		Values.Append(Script);
+				Initialization_( Data.Mode() );
+			}
+		}
+		virtual void XDHCMNBaseLanguage( TOL_CBUFFER___ &Buffer ) override
+		{
+			const char *Language = sclmisc::GetBaseLanguage();
 
-        Result.Init();
-        Execute_(Script, Proxy, Result );
+			if ( Language == NULL )
+				qRFwk();
 
-		prtcl::Put( Result, Flow );
+			Buffer.Malloc(strlen( Language) + 1 );
 
-		Flow.Commit();
-	qRR;
-	qRT;
-	qRE;
-	}
-
-	void Alert_(
-		flw::rRWFlow &Flow,
-		xdhdws::sProxy &Proxy )
-	{
-	qRH;
-		str::wString Message, Script;
-		str::wString ReturnValue;
-	qRB;
-		Message.Init();
-		prtcl::Get( Flow, Message );
-
-		Flow.Dismiss();
-
-		Script.Init( "window.alert(\"");
-		xdhcmn::Escape( Message, Script, '"' );
-		Script.Append( "\");'';");
-
-        ReturnValue.Init();
-		Execute_( Script, Proxy, ReturnValue );
-
-		if (ReturnValue.Amount())
-            qRGnr();
-
-/*
-	Despite the fact that this primitive does not need a return value,
-	an empty string is returned in order for the back-end to wait
-	that this primitive is achieved before launching another primitive.
-	Without this, all other threads of the same back-end will be blocked
-	until this primitive will return.
-*/
-
-		prtcl::Put( "", Flow );
-
-		Flow.Commit();
-	qRR;
-	qRT;
-	qRE;
-	}
-
-	void Confirm_(
-		flw::rRWFlow &Flow,
-		xdhdws::sProxy &Proxy )
-	{
-	qRH;
-		str::wString Message, Script;
-		str::wString ReturnValue;
-	qRB;
-		Message.Init();
-		prtcl::Get( Flow, Message );
-
-		Flow.Dismiss();
-
-		Script.Init( "if ( window.confirm(\"");
-		xdhcmn::Escape( Message, Script, '"' );
-		Script.Append( "\") ) 'true'; else 'false';");
-
-        ReturnValue.Init();
-		Execute_( Script, Proxy, ReturnValue );
-
-		prtcl::Put( ReturnValue, Flow );
-
-		Flow.Commit();
-	qRR;
-	qRT;
-	qRE;
-	}
+			strcpy( Buffer, Language );
+		}
+		virtual xdhcmn::cSession *XDHCMNRetrieveSession(void) override
+		{
+			return RetrieveSession_();
+		}
+		virtual void XDHCMNReleaseSession( xdhcmn::cSession *Session ) override
+		{
+			return ReleaseSession_( Session );
+		}
+		const scli::sInfo &XDHCMNGetInfo( void ) override
+		{
+			return xdhqxdh::Info;
+		}
+		bso::sBool XDHCMNGetHead(
+			void *UP,
+			str::dString &Head,
+			qRPN ) override
+		{
+            return faaspool::GetHead(UP, Head);
+		}
+	public:
+		void reset( bso::bool__ P = true )
+		{}
+		E_CVDTOR( sDownstream );
+		void Init( void )
+		{}
+	};
 }
 
-void sclxdhtml::SCLXDHTMLInitialization( xdhcmn::eMode Mode )
+static inline void DoNothing_( void )
+{}
+
+#define DEF( name, function ) extern "C" FUNCTION_SPEC function name
+
+DEF( XDHCMN_RETRIEVE_FUNCTION_NAME, xdhcmn::retrieve );
+
+xdhcmn::cDownstream *XDHCMNRetrieve( void )
 {
-qRH;
-	qCBUFFERr Buffer;
-	str::wString HostService;
-qRB;
-	HostService.Init();
+	sDownstream *Callback = NULL;
+qRFH
+qRFB
+	Callback = new sDownstream;
 
-	if ( sclmisc::OGetValue( ::registry::parameter::HostService, HostService ) )
-		session::Core.Init( HostService.Convert( Buffer ), 0, sck::NoTimeout );
-
-	faaspool::Initialize();
-	session::LogDriver.Init( cio::COut );
-qRR;
-qRT;
-qRE;
-}
-
-xdhcmn::cSession *sclxdhtml::SCLXDHTMLRetrieveSession(void)
-{
-	session::rSession *Session = NULL;
-qRH;
-qRB;
-	if ( ( Session = new session::rSession ) == NULL )
+	if ( Callback == NULL )
 		qRAlc();
 
-	if ( !Session->Init() ) {
-		delete Session;
-		Session = NULL;
-	}
+	Callback->Init();
+qRFR
+	if ( Callback != NULL )
+		delete Callback;
 
-	// WARNING ! In 'MultiUser' mode, 'UpstreamCallback' is not correctly set yet!
-/*	if ( Mode == xdhcmn::mMonoUser ) {
-		Session->Launch( "", "" );
-	}
-*/
-qRR;
-	if ( Session != NULL )
-		delete Session;
-
-	Session = NULL;
-qRT;
-qRE;
-	return Session;
+	Callback = NULL;
+qRFT
+qRFE(DoNothing_())
+	return Callback;
 }
 
-const scli::sInfo &sclxdhtml::SCLXDHTMLInfo( void )
-{
-	return xdhqxdh::Info;
-}
-
-void sclxdhtml::SCLXDHTMLReleaseSession( xdhcmn::cSession *Session )
-{
-	if ( Session == NULL )
-		qRGnr();
-
-	delete Session;
-}
-
-qGCTOR( xdhqxdh )
-{
-}

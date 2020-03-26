@@ -10,7 +10,7 @@
 		</xpp:define>
 	</xpp:bloc>
 	<xpp:set name="Credits" value="Epeios"/>
-	<xpp:set name="Type" value="XDHTML"/>
+	<xpp:set name="Type" value="XDH4All"/>
 	<xpp:set name="_UserFiles" value="yes"/>
 	<xpp:set name="q37.project" env-var="Q37_PROJECT"/>
 	<xpp:expand value-of="q37.project"/>
@@ -53,9 +53,9 @@
 		<Module>faaspool</Module>
 		<Module>registry</Module>
         <Module>session</Module>
-		<Module Path="../../">prtcl</Module>
 		<Modules Path="../" Group="Shared">
 			<Module>plugins</Module>
+            <Module Path="../">prtcl</Module>
 		</Modules>
 	</Modules>
 	<SourceDirs>

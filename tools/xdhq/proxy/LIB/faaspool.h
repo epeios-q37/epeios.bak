@@ -231,6 +231,10 @@ namespace faaspool {
 		const str::dString &Token,
 		str::dString &IP,
 		rShared &Shared );
+
+	bso::sBool GetHead(
+		void *UP,
+		str::dString &Head );
 }
 
 #endif
