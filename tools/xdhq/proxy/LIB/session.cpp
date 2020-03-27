@@ -48,7 +48,6 @@ qRH
     str::wStrings Values;
 qRB
     Values.Init("Set");
-    Values.Append("Set");
     Values.Append("");
     Values.Append(HTML);
     Values.Append("");

@@ -68,10 +68,8 @@ function connect(token) {
 			let result = eval(event.data);
 //			console.log(event.data);
 			
-			if ( ( typeof result === "undefined" ) || ( typeof result === "object" ) )	// 'typeof xdh_result !== "object"' == 'xdh_result != null' !!!!
-				result = "";
-
-			socket.send(result);
+			if ( ( typeof result !== "undefined" ) && ( typeof result !== "object" ) )	// 'typeof xdh_result !== "object"' == 'xdh_result != null' !!!!
+				socket.send(result);
 		} else if (queryQueue.length) {
 			socket.send(queryQueue.shift());
 		} else

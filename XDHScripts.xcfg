@@ -32,6 +32,7 @@
         <![CDATA[
 {
   alert("%Message%");
+  ""; // Must return a value, or one will not wait the dismissing of the dialog box.  
 }
         ]]>
       </Script>
@@ -88,6 +89,7 @@
         <![CDATA[
 {
   setTimeout( (digest) => launchEvent(digest), %Delay%, "|TIMEOUT|timeout||((%Action%))" );
+  undefined; // 'setTimeout' returns a value which is discarded as not being awaited.
 }
         ]]>
       </Script>

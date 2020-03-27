@@ -33,8 +33,6 @@ qRB
 
     if ( ReturnedValue != NULL)
         websck::GetMessage(Flow_, *ReturnedValue);
-    else
-        websck::SkipMessage(Flow_);
 
     Flow_.Dismiss();
 qRR
