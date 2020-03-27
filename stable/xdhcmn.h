@@ -66,13 +66,9 @@ namespace xdhcmn {
 		qCALLBACK( Upstream );
 		void Process(
 			const str::dString &Script,
-			str::dString &ReturnValue )
+			str::dString *ReturnValue = NULL)
 		{
-            return XDHCMNProcess(Script, &ReturnValue );
-		}
-		void Process(const str::dString &Script)
-		{
-            return XDHCMNProcess(Script, NULL );
+            return XDHCMNProcess(Script, ReturnValue);
 		}
 	};
 

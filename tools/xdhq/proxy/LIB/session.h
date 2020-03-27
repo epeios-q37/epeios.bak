@@ -99,33 +99,8 @@ namespace session {
 		{
 			ReportErrorToBackend_( NULL, Flow );
 		}
-		void ReportToFrontend_(const str::dString &HTML)
-		{
-            str::wStrings Values;
-            str::wString ReturnValue;
-
-            Values.Init();
-            Values.Append(str::wString("Set"));
-            Values.Append(str::wString(""));
-            Values.Append(HTML);
-            Values.Append(str::wString(""));
-
-            ReturnValue.Init();
-            Process("HandleLayout_1", Values, ReturnValue);
-
-		}
-		void ReportErrorToFrontend_(const str::dString &Message)
-		{
-            str::wStrings Values;
-            str::wString ReturnValue;
-
-            Values.Init();
-            Values.Append(Message);
-
-            ReturnValue.Init();
-            Process("Alert_1", Values, ReturnValue);
-
-		}
+		void ReportToFrontend_(const str::dString &HTML);
+		void ReportErrorToFrontend_(const str::dString &Message);
 		bso::bool__ Launch_(
 			const char *Id,
 			const char *Action );

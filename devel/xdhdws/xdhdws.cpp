@@ -222,7 +222,7 @@ namespace {
             const type &ScriptName,
             const str::dStrings &Values,
             xdhcmn::cUpstream &Callback,
-            str::dString &ReturnValue )
+            str::dString *ReturnValue = NULL)
         {
         qRH
             str::wString Script;
@@ -232,22 +232,6 @@ namespace {
             GetScript_(ScriptName, Values, Script);
 
             Callback.Process(Script, ReturnValue );
-        qRR
-        qRT
-        qRE
-        }
-
-        template <typename type> void BaseProcess_(
-            const type &ScriptName,
-            const str::dStrings &Values,
-            xdhcmn::cUpstream &Callback )
-        {
-        qRH
-            str::wString ReturnValue;
-        qRB
-            ReturnValue.Init();
-
-            BaseProcess_(ScriptName, Values, Callback, ReturnValue);
         qRR
         qRT
         qRE
@@ -267,7 +251,7 @@ namespace {
             qRB
                 RawDigest.Init();
 
-                BaseProcess_(ScriptName, Values, Callback, RawDigest);
+                BaseProcess_(ScriptName, Values, Callback, &RawDigest);
 
                 Digest.Init();
                 xdhcmn::Split( RawDigest, Digest );
@@ -448,7 +432,7 @@ namespace {
                     Arguments.Append(FlatFocusingMethods);
                     Arguments.Append(FlatSelectionMethods);
 
-                    BaseProcess_( "InstantiateWidgets_1", Arguments, Callback );
+                    BaseProcess_("InstantiateWidgets_1", Arguments, Callback);
                 }
             qRR
             qRT
@@ -508,19 +492,19 @@ namespace {
         const type &ScriptName,
         const str::dStrings &Values,
         xdhcmn::cUpstream &Callback,
-        str::dString &ReturnValue )
+        str::dString *ReturnValue)
     {
         if ( IsEqual_(ScriptName, HandleLayoutScriptName_) )
             HandleLayout_(HandleLayoutScriptName_, Values, Callback);
         else
-            BaseProcess_(ScriptName, Values, Callback, ReturnValue );
+            BaseProcess_(ScriptName, Values, Callback, ReturnValue);
     }
 }
 
 void xdhdws::sProxy::Process(
     const char *ScriptName,
     const str::dStrings &Values,
-    str::dString &ReturnValue )
+    str::dString *ReturnValue )
 {
     return Process_(ScriptName, Values, C_(), ReturnValue);
 }
@@ -529,7 +513,7 @@ void xdhdws::sProxy::Process(
 void xdhdws::sProxy::Process(
     const str::dString &ScriptName,
     const str::dStrings &Values,
-    str::dString &ReturnValue )
+    str::dString *ReturnValue )
 {
     return Process_(ScriptName, Values, C_(), ReturnValue);
 }

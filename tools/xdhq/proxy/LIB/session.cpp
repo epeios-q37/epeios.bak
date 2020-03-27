@@ -42,6 +42,36 @@ qRT;
 qRE;
 }
 
+void session::rSession::ReportToFrontend_(const str::dString &HTML)
+{
+qRH
+    str::wStrings Values;
+qRB
+    Values.Init("Set");
+    Values.Append("Set");
+    Values.Append("");
+    Values.Append(HTML);
+    Values.Append("");
+
+    Process("HandleLayout_1", Values);
+qRR
+qRT
+qRE
+}
+
+void session::rSession::ReportErrorToFrontend_(const str::dString &Message)
+{
+qRH
+    str::wStrings Values;
+qRB
+    Values.Init(Message);
+
+    Process("Alert_1", Values);
+qRR
+qRT
+qRE
+}
+
 namespace {
 	qENUM( Type_ ) {
         tVoid,
@@ -144,8 +174,12 @@ break
 
             Flow.Dismiss();
 
-            ReturnValue.Init();
-            Process( ScriptName, Parameters, ReturnValue );
+            if ( ReturnType == tVoid ) {
+                Process(ScriptName, Parameters);
+            } else {
+                ReturnValue.Init();
+                Process(ScriptName, Parameters, ReturnValue);
+            }
 
             switch ( ReturnType ) {
             case tVoid:
@@ -157,7 +191,6 @@ break
             case tStrings:
                 SplitedReturnValue.Init();
                 xdhcmn::FlatSplit(ReturnValue,SplitedReturnValue);
-
                 prtcl::Put(SplitedReturnValue, Flow);
                 Flow.Commit();
                 break;

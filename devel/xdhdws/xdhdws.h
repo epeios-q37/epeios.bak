@@ -55,11 +55,18 @@ namespace xdhdws {
 		void Process(
             const char *ScriptName,
             const str::dStrings &Values,
-            str::dString &ReturnValue );
+            str::dString *ReturnValue = NULL);
 		void Process(
             const str::dString &ScriptName,
             const str::dStrings &Values,
-            str::dString &ReturnValue );
+            str::dString *ReturnValue = NULL);
+		template <typename string> void Process(
+            const string &ScriptName,
+            const str::dStrings &Values,
+            str::dString &ReturnValue)
+        {
+            return Process(ScriptName,Values,&ReturnValue);
+        }
 	};
 }
 

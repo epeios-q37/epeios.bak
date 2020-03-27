@@ -32,7 +32,6 @@
 #include "csdbns.h"
 
 #include "sclmisc.h"
-#include "sclxdhtml.h"
 
 SCLI_DEF( xdhqxdh, PROGRAM_NAME, SOFTWARE_NAME );
 

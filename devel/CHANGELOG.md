@@ -11,6 +11,13 @@
 
 ### 2020-03-26
 
+- XDHCMN:
+    - Simplification,
+- SCLXDHTML, XDHDWS:
+    [adpt],
+
+### 2020-03-26
+
 - FBLTYP:
     - [adpt],
 - LCL:

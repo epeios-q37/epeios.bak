@@ -100,7 +100,7 @@ namespace xdwmain {
             const str::dString &Script,
             str::dString &ReturnedValue)
         {
-            Upstream_.Process(Script, ReturnedValue);
+            Upstream_.Process(Script, &ReturnedValue);
         }
         void Execute(const str::dString &Script)
         {

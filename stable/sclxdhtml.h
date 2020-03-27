@@ -293,9 +293,9 @@ namespace sclxdhtml {
             Fill_(Values, Value);
             Fill_(Values, args...);
         }
-		template <class ...Args> void ProcessWithResult_(
+		template <class ...Args> void Process_(
             const char *ScriptName,
-            str::dString &Result,
+            str::dString *Result,
             const Args &...args )
         {
         qRH
@@ -304,19 +304,6 @@ namespace sclxdhtml {
             Values.Init();
             Fill_(Values, args...);
             Core_.Process(ScriptName, Values, Result);
-        qRR
-        qRE
-        qRT
-        }
-		template <class ...Args> void ProcessWithoutResult_(
-            const char *ScriptName,
-            const Args &...args )
-        {
-        qRH
-            str::wString Result;
-        qRB
-            Result.Init();
-            ProcessWithResult_(ScriptName, Result, args...);
         qRR
         qRE
         qRT
@@ -390,7 +377,7 @@ namespace sclxdhtml {
             const str::dStrings &Ids,
             const str::dStrings &Classes)
         {
-            ProcessWithoutResult_("HandleClasses_1", Variant, Ids, Classes);
+            Process_("HandleClasses_1", NULL, Variant, Ids, Classes);
         }
 	protected:
 		template <typename chars> void PrependLayout_(
@@ -477,11 +464,11 @@ namespace sclxdhtml {
 			const str::dString &Script,
 			str::dString &Result )
 		{
-            ProcessWithResult_("Execute_1", Result, Script);
+            Process_("Execute_1", &Result, Script);
 		}
 		void Execute( const str::dString &Script )
 		{
-            ProcessWithoutResult_("Execute_1", Script);
+            Process_("Execute_1", NULL, Script);
 		}
 		void Execute(
 			const char *Script,
@@ -537,7 +524,7 @@ namespace sclxdhtml {
 			const t &Name,
 			const u &Value )
 		{
-            ProcessWithoutResult_("SetAttribute_1", Id, Name, Value);
+            Process_("SetAttribute_1", NULL, Id, Name, Value);
 		}
 		const char *GetAttribute(
 			const str::dString &Id,
@@ -565,7 +552,7 @@ namespace sclxdhtml {
 			const str::dStrings &Ids,
 			const str::dStrings &Contents )
         {
-            ProcessWithoutResult_("SetContents_1", Ids, Contents);
+            Process_("SetContents_1", NULL, Ids, Contents);
         }
 		template <typename c1, typename c2> void SetContent(
 			const c1 &Id,

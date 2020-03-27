@@ -251,7 +251,7 @@ qRB
 	CloseText.Init();
 	scllocale::GetTranslation( SCLXDHTML_NAME "_CloseText", Language, CloseText );
 
-	ProcessWithoutResult_("PrettyAlert_1", XML, XSL, Title, CloseText );
+	Process_("PrettyAlert_1", NULL, XML, XSL, Title, CloseText );
 qRR
 qRT
 qRE
@@ -500,7 +500,7 @@ qRB;
 
     HandleXSL_(XSLFilename, Target, XSLFileHandling_, Registry, Marker, XSL);
 
-    ProcessWithoutResult_("HandleLayout_1", Variant, Id, XML, XSL);
+    Process_("HandleLayout_1", NULL, Variant, Id, XML, XSL);
 qRR;
 qRT;
 qRE;
@@ -515,7 +515,7 @@ qRH;
 qRB;
     MergedContents.Init();
 
-    ProcessWithResult_("GetContents_1", MergedContents, Ids);
+    Process_("GetContents_1", &MergedContents, Ids);
 
     xdhcmn::FlatSplit(MergedContents, Contents);
 qRR;
