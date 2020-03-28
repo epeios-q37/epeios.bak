@@ -503,15 +503,20 @@ static void Generate_(
 	Writer.PopTag();
 }
 
-class dummy_reporting_callbacks__
-: public fblfrd::reporting_callback__
+class sDummyReporting
+: public fblfrd::cReporting
 {
 protected:
 	void FBLFRDReport(
 		fblovl::reply__ Reply,
-		const char *Message )
-	{
-	}
+		const str::dString &Message ) override
+	{}
+public:
+	void reset(bso::sBool = true)
+	{}
+	qCVDTOR(sDummyReporting);
+	void Init(void)
+	{}
 };
 
 namespace {
@@ -573,7 +578,7 @@ qRH
 	sFrontend_ Dummy;
 	fblfrd::incompatibility_informations DummyIncompatibilityInformations;
 	fblfrd::compatibility_informations__ DummyCompatibilityInformations;
-	dummy_reporting_callbacks__ DummyReportingFunctions;
+	sDummyReporting DummyReportingFunctions;
 	lcl::meaning Meaning;
 qRB
 	PluginFilename.Init();

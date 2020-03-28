@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project xmlns:xpp="http://q37.info/ns/xpp/">
+	<xpp:bloc>
+		<!-- User definitions -->
+		<xpp:define name="Version">
+			<xpp:bloc/>
+		</xpp:define>
+		<xpp:define name="CopyrightYears">
+			<xpp:bloc>2019</xpp:bloc>
+		</xpp:define>
+		<xpp:set name="Credits" value="Epeios"/>
+		<xpp:set name="Type" value="Tool"/>
+	</xpp:bloc>
+	<xpp:set name="q37.project" env-var="Q37_PROJECT"/>
+	<xpp:expand value-of="q37.project"/>
+	<About>
+		<Program>faasq</Program>
+		<Software>FaaSq</Software>
+		<!-- Do not modify below value (used by the 'DVLSetTol' script)! -->
+		<UUID>5bbd86e7-97af-42f2-938d-8738f52fc275</UUID>
+	</About>
+	<Modules xpp:marker="$">
+		<Modules Group="Epeios" Path="$EpeiosPath$/">
+			<Modules Group="Core">
+				<xpp:expand select="Core"/>
+				<Module>sck</Module>
+			</Modules>
+			<Modules Group="CSD">
+                <Module>csdbnc</Module>
+                <Module>csdcmn</Module>
+			</Modules>
+			<Modules Group="XDH">
+                <Module>xdhups</Module>
+			</Modules>
+			<Modules Group="SCL">
+				<xpp:expand select="SCL"/>
+			</Modules>
+		</Modules>
+		<Module>registry</Module>
+	</Modules>
+	<Files/>
+    <RTW>
+        <Dir>faasq-cli</Dir>
+    </RTW>
+</Project>
