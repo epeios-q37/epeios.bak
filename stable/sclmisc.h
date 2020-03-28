@@ -538,7 +538,7 @@ namespace sclmisc {
 	inline bso::bool__ BGetValue(
 		const rgstry::tentry__ &Entry,
 		str::string_ &Value,
-		qRPD )
+		qRPN )
 	{
 		return sclrgstry::BGetValue( GetRegistry(), Entry, Value, qRP );
 	}
@@ -580,9 +580,10 @@ namespace sclmisc {
 
 	inline bso::bool__ BGetBoolean(
 		const rgstry::tentry__ &Entry,
-		bso::bool__ DefaultValue = false )
+		bso::bool__ DefaultValue,
+		qRPN)
 	{
-		return sclrgstry::BGetBoolean( GetRegistry(), Entry, DefaultValue );
+		return sclrgstry::BGetBoolean(GetRegistry(), Entry, DefaultValue,qRP);
 	}
 
 	inline bso::bool__ MGetBoolean( const rgstry::tentry___ &Entry )

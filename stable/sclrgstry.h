@@ -289,7 +289,7 @@ namespace sclrgstry {
 		const registry_ &Registry,
 		const rgstry::tentry__ &Entry,
 		bso::bool__ DefaultValue,
-		qRPD );
+		qRPN );
 
     inline bso::bool__ OGetBoolean(
 		const registry_ &Registry,

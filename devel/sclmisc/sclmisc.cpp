@@ -779,7 +779,7 @@ namespace {
 	qRB
 		Registries.Init();
 
-		if ( sclmisc::BGetValue( sclrgstry::parameter::debug::DumpRegistries, Registries ) )
+		if ( sclmisc::BGetValue(sclrgstry::parameter::debug::DumpRegistries, Registries,qRPU) )
 			sclmisc::DumpRegistries( Registries, cio::COut );
 	qRR
 	qRT
@@ -793,7 +793,7 @@ namespace {
 	qRB
 		Locales.Init();
 
-		if ( sclmisc::BGetValue( sclrgstry::parameter::debug::DumpLocales, Locales ) )
+		if ( sclmisc::BGetValue(sclrgstry::parameter::debug::DumpLocales, Locales, qRPU) )
 			sclmisc::DumpLocales( Locales, cio::COut );
 	qRR
 	qRT

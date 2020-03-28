@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- For CLI based software (based on 'SCLTOOL'). -->
+<!-- For CLI based software (based on 'SCLTOOL' (and/or 'SCLC ?))). -->
+<!--
+Used for both tools ('epeios/tools') and
+cli interfaces of applications ('epeios/apps/…/frontend/CLI')
+-->
 <xpp:bloc xmlns:xpp="http://q37.info/ns/xpp/">
 	<xpp:define name="CLI_Arguments">
 		<xpp:bloc>

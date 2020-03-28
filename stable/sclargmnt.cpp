@@ -882,12 +882,12 @@ qRB
 		Tags.Append( str::string( bso::Convert( *Index, Buffer ) ) );
 
 		Id.Init();
-		if ( !BGetValue(rgstry::tentry__(IndexTaggedArgumentLinkTarget_, Tags), Id) ) {
+		if ( !BGetValue(rgstry::tentry__(IndexTaggedArgumentLinkTarget_, Tags), Id, qRPU) ) {
 			Tags.Init();
 			Tags.Append( Command );
 			Tags.Append( str::string() );
 			AdditionalArg = true;
-			if ( !BGetValue(rgstry::tentry__(IndexTaggedArgumentLinkTarget_, Tags), Id) ) {
+			if ( !BGetValue(rgstry::tentry__(IndexTaggedArgumentLinkTarget_, Tags), Id, qRPU) ) {
 				sclmisc::ReportAndAbort( SCLARGMNT_NAME "_BadAmountOfArguments" );
 			}
 		}

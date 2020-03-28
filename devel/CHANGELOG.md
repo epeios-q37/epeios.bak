@@ -9,6 +9,11 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+### 2020-03-28
+
+- SCLARGMNT, SCLMISC, SCLRGSTRY:
+    - fixing inconsistencies and rsulting bugs,
+
 ### 2020-03-26
 
 - XDHCMN:
