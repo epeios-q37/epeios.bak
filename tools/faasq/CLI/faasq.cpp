@@ -67,8 +67,9 @@ namespace {
             sclmisc::MGetValue(registry::parameter::HostService, HostService);
 
             sclc::Display("TryToConnectTo", cio::COut, HostService);
+            cio::COut.Commit();
 
-            if (!Proxy.Init(HostService.Convert(Buffer), SCK__DEFAULT_TIMEOUT, err::h_Default))
+            if (!Proxy.Init(HostService.Convert(Buffer), SCK__DEFAULT_TIMEOUT, qRPU))
                 sclc::ReportAndAbort("UnableToConnectTo", HostService);
 
             sclc::Display("ConnectedTo", cio::COut, HostService);
@@ -148,6 +149,7 @@ namespace {
                 csdcmn::Put("", Proxy);
                 csdcmn::Put(Head, Proxy);
                 csdcmn::Put("faas1.q37.info", Proxy);
+//                csdcmn::Put("localhost", Proxy);
                 Proxy.Commit();
 
                 Token.Init();
@@ -179,35 +181,79 @@ namespace {
                 qCDEF( char *, MainProtocolLabel_, "8d2b7b52-6681-48d6-8974-6e0127a4ca7e" );
                 qCDEF(bso::sU8, MainProtocolVersion_, 0);
 
+                typedef xdhcmn::cUpstream cUpstream_;
+
+                class sUpstream_
+                : public cUpstream_
+                {
+                private:
+                    flw::rRWFlow *Proxy_;
+                    sId_ Id_;
+                protected:
+                    virtual void XDHCMNProcess(
+                        const str::string_ &Script,
+                        str::dString *ReturnedValue ) override
+                        {
+                            csdcmn::Put(Id_, *Proxy_);
+                            csdcmn::Put("Execute_1", *Proxy_);
+
+                            csdcmn::Put(ReturnedValue == NULL ? 0 : 1, *Proxy_);
+
+                            csdcmn::Put(1,*Proxy_);
+                            csdcmn::Put(Script, *Proxy_);
+                            csdcmn::Put(0, *Proxy_);
+
+                            Proxy_->Commit();
+
+                            if ( ReturnedValue != NULL)
+                                csdcmn::Get(*Proxy_, *ReturnedValue);
+
+                            Proxy_->Dismiss();
+
+
+                        }
+                public:
+                    void reset( bso::bool__ P = true )
+                    {
+                        Proxy_ = NULL;
+                        Id_ = UndefinedId_;
+                    }
+                    E_CVDTOR( sUpstream_ );
+                    void Init(
+                        flw::rRWFlow &Proxy,
+                        sId_ Id )
+                    {
+                        Proxy_ = &Proxy;
+                        this->Id_ = Id;
+                    }
+                };
+
                 class sSession_
                 {
                 public:
-                    xdhcmn::cSession *Session;
+                    xdhups::sSession Session;
+                    sUpstream_ Upstream;
                     sId_ Id;
                     bso::sBool Handshaked;
                     void reset(bso::sBool P = true)
                     {
                         Id = UndefinedId_;
-                        Session = NULL;
+                        Session.reset(P);
                         Handshaked = false;
-                    }
-                    sSession_(
-                        sId_ Id,
-                        xdhcmn::cSession *Session)
-                    : sSession_()
-                    {
-                        Init(Id, Session);
                     }
                     qCDTOR(sSession_);
                     void Init(
                         sId_ Id,
-                        xdhcmn::cSession *Session)
+                        xdhcmn::cSession *Session,
+                        flw::rRWFlow &Proxy)
                     {
                         this->Id = Id;
-                        this->Session = Session;
+                        this->Session.Init(Session);
+                        Upstream.Init(Proxy, Id);
+                        this->Session.Initialize(Upstream,"",str::wString(""));
                         Handshaked = false;
                     }
-                };
+                 };
 
                 typedef lstbch::qBUNCHd(sSession_,sRow_) dSessions_;
                 qW(Sessions_);
@@ -237,22 +283,29 @@ namespace {
                 wSessions_ Sessions;
                 bso::sU8 Id = 0;
                 sRow_ Row = qNIL;
-                str::wString Message;
+                str::wString Message, EId, Action;
+                qCBUFFERr EIdBuffer, ActionBuffer;
+                sSession_ Session;
             qRB
                 tol::Init(Ids, Sessions);
 
                 while(true) {
                     if ( csdcmn::Get(Proxy, Id) == UndefinedId_) {
                         if ( Search_(csdcmn::Get(Proxy, Id), Ids) != qNIL )
-                            sclc::ReportAndAbort("IdSholdNotExists", Id);
+                            sclc::ReportAndAbort("IdShouldNotExists", Id);
 
                         Proxy.Dismiss();
 
                         Row = Ids.Append(Id);
 
-                        if ( Sessions.Append(sSession_(Id,Agent.RetrieveSession())) != Row )
+                        Session.Init(Id,Agent.RetrieveSession(), Proxy);
+
+                        if ( Sessions.Append(Session) != Row )
                             qRGnr();
 
+                        Session.reset(false);
+
+                        csdcmn::Put(Id, Proxy);
                         csdcmn::SendProtocol(MainProtocolLabel_, MainProtocolVersion_, Proxy);
 
                         Proxy.Commit();
@@ -260,7 +313,9 @@ namespace {
                         if ( ( Row = Search_(Id, Ids) ) == qNIL )
                             qRGnr();
 
-                        if ( !Sessions(Row).Handshaked) {
+                        Session = Sessions(Row);
+
+                        if ( !Session.Handshaked) {
                             Message.Init();
 
                             csdcmn::Get(Proxy, Message);
@@ -275,8 +330,17 @@ namespace {
                             csdcmn::Put(Id, Proxy);
                             csdcmn::Put("XDH", Proxy);
                             Proxy.Commit();
-                        } else
-                            qRLmt();
+
+                            Session.Handshaked = true;
+                            Sessions.Store(Session, Row);
+                        } else {
+                            tol::Init(EId, Action);
+
+                            csdcmn::Get(Proxy, EId);
+                            csdcmn::Get(Proxy, Action);
+
+                            Session.Session.Launch(EId.Convert(EIdBuffer), Action.Convert(ActionBuffer));
+                        }
                     }
 
                 }
