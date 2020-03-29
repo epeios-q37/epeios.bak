@@ -148,8 +148,8 @@ namespace {
 
                 csdcmn::Put("", Proxy);
                 csdcmn::Put(Head, Proxy);
-                csdcmn::Put("faas1.q37.info", Proxy);
-//                csdcmn::Put("localhost", Proxy);
+//                csdcmn::Put("faas1.q37.info", Proxy);
+                csdcmn::Put("localhost", Proxy);
                 Proxy.Commit();
 
                 Token.Init();
@@ -193,25 +193,23 @@ namespace {
                     virtual void XDHCMNProcess(
                         const str::string_ &Script,
                         str::dString *ReturnedValue ) override
-                        {
-                            csdcmn::Put(Id_, *Proxy_);
-                            csdcmn::Put("Execute_1", *Proxy_);
+                    {
+                        csdcmn::Put(Id_, *Proxy_);
+                        csdcmn::Put("Execute_1", *Proxy_);
 
-                            csdcmn::Put(ReturnedValue == NULL ? 0 : 1, *Proxy_);
+                        csdcmn::Put(ReturnedValue == NULL ? 0 : 1, *Proxy_);
 
-                            csdcmn::Put(1,*Proxy_);
-                            csdcmn::Put(Script, *Proxy_);
-                            csdcmn::Put(0, *Proxy_);
+                        csdcmn::Put(1,*Proxy_);
+                        csdcmn::Put(Script, *Proxy_);
+                        csdcmn::Put(0, *Proxy_);
 
-                            Proxy_->Commit();
+                        Proxy_->Commit();
 
-                            if ( ReturnedValue != NULL)
-                                csdcmn::Get(*Proxy_, *ReturnedValue);
+                        if ( ReturnedValue != NULL)
+                            csdcmn::Get(*Proxy_, *ReturnedValue);
 
-                            Proxy_->Dismiss();
-
-
-                        }
+                        Proxy_->Dismiss();
+                    }
                 public:
                     void reset( bso::bool__ P = true )
                     {

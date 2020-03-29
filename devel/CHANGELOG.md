@@ -9,6 +9,11 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+### 2020-03-29
+
+- BSO:
+    - fixing bug with negative numbers;
+
 ### 2020-03-28
 
 - SCLARGMNT, SCLMISC, SCLRGSTRY:

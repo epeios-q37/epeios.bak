@@ -602,7 +602,9 @@ namespace bso {
 		sSBig SBig,
 		xint__ &XInt )
 	{
-		return _ConvertToDInt( ( SBig < 0 ? 1 : 0 ) | ( SBig << ( sizeof( SBig ) * 8 - 1 ) ), XInt );
+        sign__ Sign = SBig;
+
+		return _ConvertToDInt( ( Sign < 0 ? 1 : 0 ) | ( (Sign < 0 ? -SBig : SBig ) << 1 ), XInt );
 	}
 
 # ifndef BSO__64
@@ -670,7 +672,7 @@ namespace bso {
 		sBig Big = ConvertToBig( DInt, Length );
 		sign__ Sign = ( Big & 1 ? -1 : 1 );
 
-		Big >>= sizeof( Big ) * 8 - 1;
+		Big >>= 1;
 
 		switch ( Sign ) {
 		case 1:
@@ -704,6 +706,8 @@ namespace bso {
 /*************/
 
 namespace bso {
+    typedef sign__ sSign;
+
 	typedef uint__ sUInt;
 	typedef sint__ sSInt;
 
