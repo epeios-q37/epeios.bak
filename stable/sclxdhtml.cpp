@@ -249,9 +249,10 @@ qRH
 	str::string CloseText;
 qRB
 	CloseText.Init();
-	scllocale::GetTranslation( SCLXDHTML_NAME "_CloseText", Language, CloseText );
+//	scllocale::GetTranslation( SCLXDHTML_NAME "_CloseText", Language, CloseText );
 
-	Process_("PrettyAlert_1", NULL, XML, XSL, Title, CloseText );
+//	Process_("PrettyAlert_1", NULL, XML, XSL, Title, CloseText );
+    Process_("Alert_1", &CloseText, XML);
 qRR
 qRT
 qRE

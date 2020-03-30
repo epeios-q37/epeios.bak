@@ -21,6 +21,7 @@
 #include "faasq.h"
 
 #include "registry.h"
+#include "session.h"
 
 #include "sclc.h"
 #include "scltool.h"
@@ -57,7 +58,7 @@ namespace {
 	}
 
 	namespace {
-        void Initialize_(csdbnc::rRWFlow &Proxy)
+        void Initialize_(csdbnc::rRWDriver &Proxy)
         {
         qRH
             str::wString HostService;
@@ -86,11 +87,14 @@ namespace {
             qCDEF(bso::sU8, FaaSProtocolVersion_, 0);
         }
 
-        void HandShake_(flw::rRWFlow &Proxy)
+        void HandShake_(fdr::rRWDriver &ProxyDriver)
         {
         qRH
+            flw::rDressedRWFlow<> Proxy;
             str::wString Message;
         qRB
+            Proxy.Init(ProxyDriver);
+
             csdcmn::SendProtocol(FaaSProtocolLabel_, FaaSProtocolVersion_, Proxy);
             Proxy.Commit();
 
@@ -104,7 +108,6 @@ namespace {
             csdcmn::Get(Proxy, Message);
 
             cio::COut << Message << txf::nl << txf::commit;
-
         qRR
         qRT
         qRE
@@ -136,19 +139,22 @@ namespace {
 
         namespace {
             void Ignition_(
-                flw::rRWFlow &Proxy,
+                fdr::rRWDriver &ProxyDriver,
                 xdhups::rAgent &Agent)
             {
             qRH
+                flw::rDressedRWFlow<> Proxy;
                 str::wString Head, Token, Message, URL;
             qRB
-               Head.Init();
-               if ( !Agent.GetHead(str::wString(""),Head) )
+                Proxy.Init(ProxyDriver);
+
+                Head.Init();
+                if ( !Agent.GetHead(str::wString(""),Head) )
                     qRGnr();
 
                 csdcmn::Put("", Proxy);
                 csdcmn::Put(Head, Proxy);
-//                csdcmn::Put("faas1.q37.info", Proxy);
+                //                csdcmn::Put("faas1.q37.info", Proxy);
                 csdcmn::Put("localhost", Proxy);
                 Proxy.Commit();
 
@@ -173,130 +179,40 @@ namespace {
         }
 
         namespace {
-            namespace {
-                typedef bso::sU8 sId_;
-                qCDEF(sId_, UndefinedId_, 255);
-                qROW(Row_);
+            using namespace session;
 
+            namespace {
                 qCDEF( char *, MainProtocolLabel_, "8d2b7b52-6681-48d6-8974-6e0127a4ca7e" );
                 qCDEF(bso::sU8, MainProtocolVersion_, 0);
-
-                typedef xdhcmn::cUpstream cUpstream_;
-
-                class sUpstream_
-                : public cUpstream_
-                {
-                private:
-                    flw::rRWFlow *Proxy_;
-                    sId_ Id_;
-                protected:
-                    virtual void XDHCMNProcess(
-                        const str::string_ &Script,
-                        str::dString *ReturnedValue ) override
-                    {
-                        csdcmn::Put(Id_, *Proxy_);
-                        csdcmn::Put("Execute_1", *Proxy_);
-
-                        csdcmn::Put(ReturnedValue == NULL ? 0 : 1, *Proxy_);
-
-                        csdcmn::Put(1,*Proxy_);
-                        csdcmn::Put(Script, *Proxy_);
-                        csdcmn::Put(0, *Proxy_);
-
-                        Proxy_->Commit();
-
-                        if ( ReturnedValue != NULL)
-                            csdcmn::Get(*Proxy_, *ReturnedValue);
-
-                        Proxy_->Dismiss();
-                    }
-                public:
-                    void reset( bso::bool__ P = true )
-                    {
-                        Proxy_ = NULL;
-                        Id_ = UndefinedId_;
-                    }
-                    E_CVDTOR( sUpstream_ );
-                    void Init(
-                        flw::rRWFlow &Proxy,
-                        sId_ Id )
-                    {
-                        Proxy_ = &Proxy;
-                        this->Id_ = Id;
-                    }
-                };
-
-                class sSession_
-                {
-                public:
-                    xdhups::sSession Session;
-                    sUpstream_ Upstream;
-                    sId_ Id;
-                    bso::sBool Handshaked;
-                    void reset(bso::sBool P = true)
-                    {
-                        Id = UndefinedId_;
-                        Session.reset(P);
-                        Handshaked = false;
-                    }
-                    qCDTOR(sSession_);
-                    void Init(
-                        sId_ Id,
-                        xdhcmn::cSession *Session,
-                        flw::rRWFlow &Proxy)
-                    {
-                        this->Id = Id;
-                        this->Session.Init(Session);
-                        Upstream.Init(Proxy, Id);
-                        this->Session.Initialize(Upstream,"",str::wString(""));
-                        Handshaked = false;
-                    }
-                 };
-
-                typedef lstbch::qBUNCHd(sSession_,sRow_) dSessions_;
-                qW(Sessions_);
-
-                typedef lstbch::qBUNCHd(sId_, sRow_) dIds_;
-                qW(Ids_);
-
-                sRow_ Search_(
-                    sId_ Id,
-                    const dIds_ &Ids)
-                {
-                    sRow_ Row = Ids.First();
-
-                    while ( ( Row != qNIL ) && ( Ids(Row) != Id) )
-                        Row = Ids.Next(Row);
-
-                    return Row;
-                }
             }
 
             void Handle_(
-                flw::rRWFlow &Proxy,
+                fdr::rRWDriver &ProxyDriver,
                 xdhups::rAgent &Agent)
             {
             qRH
-                wIds_ Ids;
-                wSessions_ Sessions;
-                bso::sU8 Id = 0;
-                sRow_ Row = qNIL;
+                wIds Ids;
+                wSessions Sessions;
+                sId Id = 0;
+                sRow Row = qNIL;
                 str::wString Message, EId, Action;
                 qCBUFFERr EIdBuffer, ActionBuffer;
-                sSession_ Session;
+                sSession Session;
+                flw::rDressedRWFlow<> Proxy;
             qRB
                 tol::Init(Ids, Sessions);
+                Proxy.Init(ProxyDriver);
 
                 while(true) {
-                    if ( csdcmn::Get(Proxy, Id) == UndefinedId_) {
-                        if ( Search_(csdcmn::Get(Proxy, Id), Ids) != qNIL )
+                    if ( csdcmn::Get(Proxy, Id) == UndefinedId) {
+                        if ( Search(csdcmn::Get(Proxy, Id), Ids) != qNIL )
                             sclc::ReportAndAbort("IdShouldNotExists", Id);
 
                         Proxy.Dismiss();
 
                         Row = Ids.Append(Id);
 
-                        Session.Init(Id,Agent.RetrieveSession(), Proxy);
+                        Session.Init(Id,Agent.RetrieveSession(), ProxyDriver);
 
                         if ( Sessions.Append(Session) != Row )
                             qRGnr();
@@ -308,7 +224,7 @@ namespace {
 
                         Proxy.Commit();
                     } else {
-                        if ( ( Row = Search_(Id, Ids) ) == qNIL )
+                        if ( ( Row = Search(Id, Ids) ) == qNIL )
                             qRGnr();
 
                         Session = Sessions(Row);
@@ -321,7 +237,7 @@ namespace {
                             if ( Message.Amount())
                                 sclc::ReportAndAbort(Message);
 
-                            csdcmn::Get(Proxy, Message);    // Language; not ahndled yet.
+                            csdcmn::Get(Proxy, Message);    // Language; not handled yet.
 
                             Proxy.Dismiss();
 
@@ -337,7 +253,10 @@ namespace {
                             csdcmn::Get(Proxy, EId);
                             csdcmn::Get(Proxy, Action);
 
-                            Session.Session.Launch(EId.Convert(EIdBuffer), Action.Convert(ActionBuffer));
+                            Session.Launch(EId, Action);
+                            csdcmn::Put(Id, Proxy);
+                            csdcmn::Put("StandBy_1", Proxy);
+                            Proxy.Commit();
                         }
                     }
 
@@ -348,14 +267,14 @@ namespace {
             }
         }
 
-        void Process_(flw::rRWFlow &Proxy)
+        void Process_(fdr::rRWDriver &ProxyDriver)
         {
         qRH
             xdhups::rAgent Agent;
         qRB
             Initialize_(Agent);
-            Ignition_(Proxy, Agent);
-            Handle_(Proxy, Agent);
+            Ignition_(ProxyDriver, Agent);
+            Handle_(ProxyDriver, Agent);
         qRR
         qRT
         qRE
@@ -365,7 +284,7 @@ namespace {
 	void Process_( void )
 	{
 	qRH;
-		csdbnc::rRWFlow Proxy;
+		csdbnc::rRWDriver Proxy;
 	qRB;
         Initialize_(Proxy);
         HandShake_(Proxy);

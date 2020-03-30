@@ -80,7 +80,7 @@ namespace {
 		Session.GetContent( "Pattern", Content );
 
 		if ( Content.IsBlank() )
-            Session.AlertT("EmptyPattern", NULL);
+            Session.ConfirmT("EmptyPattern");
         else {
             Session.User.ToUpper( Content );
             Session.SetContent( "Pattern", Content );

@@ -37,6 +37,7 @@
 			</Modules>
 		</Modules>
 		<Module>registry</Module>
+		<Module>session</Module>
 	</Modules>
 	<Files/>
     <RTW>
