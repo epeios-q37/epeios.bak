@@ -28,35 +28,51 @@ void session::sUpstream_::XDHCMNProcess(
     const str::string_ &Script,
     str::dString *ReturnedValue )
 {
-    csdcmn::Put(Id_, Proxy_);
-    csdcmn::Put("Execute_1", Proxy_);
+    flw::rRWFlow &Proxy = P_();
 
-    csdcmn::Put((bso::sU8)(ReturnedValue == NULL ? 0 : 1), Proxy_);
-    csdcmn::Put((bso::sU8)1,Proxy_);
-    csdcmn::Put(Script, Proxy_);
-    csdcmn::Put((bso::sU8)0, Proxy_);
+    csdcmn::Put(Id_, Proxy);
+    csdcmn::Put("Execute_1", Proxy);
 
-    Proxy_.Commit();
+    csdcmn::Put((bso::sU8)(ReturnedValue == NULL ? 0 : 1), Proxy);
+    csdcmn::Put((bso::sU8)1,Proxy);
+    csdcmn::Put(Script, Proxy);
+    csdcmn::Put((bso::sU8)0, Proxy);
+
+    Proxy.Commit();
 
     if ( ReturnedValue != NULL) {
-        sId Id = 0;
+        B_().WaitSelf();
 
-        if ( csdcmn::Get(Proxy_, Id) != Id_ )
-            qRGnr();
+        csdcmn::Get(Proxy, *ReturnedValue);
+        Proxy.Dismiss();
 
-        csdcmn::Get(Proxy_, *ReturnedValue);
-        Proxy_.Dismiss();
+        B_().UnblockGlobal();
     }
 }
 
-void session::sSession::Launch(
-    const str::dString &Id,
-    const str::dString &Action )
+void session::rSession::Launch(void)
 {
 qRH
+    str::wString Id, Action;
     qCBUFFERr IdBuffer, ActionBuffer;
 qRB
-    Session_.Launch(Id.Convert(IdBuffer), Action.Convert(ActionBuffer));
+    while ( true ) {
+        Blockers_.WaitSelf();
+
+        tol::Init(Id, Action);
+
+        csdcmn::Get(Proxy_, Id);
+        csdcmn::Get(Proxy_, Action);
+
+        Proxy_.Dismiss();
+        Blockers_.UnblockGlobal();
+
+        Session_.Launch(Id.Convert(IdBuffer), Action.Convert(ActionBuffer));
+
+        csdcmn::Put(Id_, Proxy_);
+        csdcmn::Put("StandBy_1", Proxy_);
+        Proxy_.Commit();
+    }
 qRR
 qRT
 qRE
@@ -73,3 +89,5 @@ sRow session::Search(
 
     return Row;
 }
+
+

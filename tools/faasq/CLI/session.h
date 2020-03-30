@@ -30,11 +30,42 @@ namespace session {
 
     typedef xdhcmn::cUpstream cUpstream_;
 
+    class rBlockers_
+    {
+    private:
+        qRMV(tht::rBlocker, G_, Global_);
+        tht::rBlocker Self_;
+    public:
+        void reset(bso::sBool P = true)
+        {
+            tol::reset(P,Global_, Self_);
+        }
+        qCDTOR(rBlockers_);
+        void Init(tht::rBlocker &Global)
+        {
+            Global_ = &Global;
+            Self_.Init();
+        }
+        void WaitSelf(void)
+        {
+            Self_.Wait();
+        }
+        void UnblockSelf(void)
+        {
+            Self_.Unblock();
+        }
+        void UnblockGlobal(void)
+        {
+            G_().Unblock();
+        }
+    };
+
     class sUpstream_
     : public cUpstream_
     {
     private:
-        flw::rDressedRWFlow<> Proxy_;
+        qRMV(rBlockers_, B_, Blockers_);
+        qRMV(flw::rRWFlow,P_, Proxy_);
         sId Id_;
     protected:
         virtual void XDHCMNProcess(
@@ -43,50 +74,63 @@ namespace session {
      public:
         void reset( bso::bool__ P = true )
         {
-            Proxy_.reset(P);
+            Blockers_ = NULL;
+            Proxy_ = NULL;
             Id_ = UndefinedId;
         }
         E_CVDTOR( sUpstream_ );
         void Init(
-            fdr::rRWDriver &ProxyDriver,
-            sId Id )
+            flw::rRWFlow &Proxy,
+            sId Id,
+            rBlockers_ &Blockers)
         {
-            Proxy_.Init(ProxyDriver);
+            Blockers_ = &Blockers;
+            Proxy_ = &Proxy;
             Id_ = Id;
         }
     };
 
-    class sSession
+    class rSession
     {
     private:
+        flw::rDressedRWFlow<> Proxy_;
         sUpstream_ Upstream_;
         xdhups::sSession Session_;
+        rBlockers_ Blockers_;
+        sId Id_;
     public:
         bso::sBool Handshaked;
         void reset(bso::sBool P = true)
         {
-            tol::reset(P, Upstream_, Session_);
+            tol::reset(P, Proxy_, Upstream_, Session_, Blockers_);
             Handshaked = false;
+            Id_ = UndefinedId;
         }
-        qCDTOR(sSession);
+        qCDTOR(rSession);
         void Init(
             sId Id,
             xdhcmn::cSession *Session,
-            fdr::rRWDriver &ProxyDriver)
+            fdr::rRWDriver &ProxyDriver,
+            tht::rBlocker &Global)
         {
+            Proxy_.Init(ProxyDriver);
             Session_.Init(Session);
-            Upstream_.Init(ProxyDriver, Id);
+            Upstream_.Init(Proxy_, Id, Blockers_);
             Session_.Initialize(Upstream_,"",str::wString(""));
             Handshaked = false;
+            Blockers_.Init(Global);
+            Id_ = Id;
         }
-        void Launch(
-            const str::dString &Id,
-            const str::dString &Action );
+        void Launch( void );
+        void Unblock()
+        {
+            Blockers_.UnblockSelf();
+        }
     };
 
     qROW(Row);
 
-    typedef lstbch::qBUNCHd(sSession,sRow) dSessions;
+    typedef lstbch::qBUNCHd(rSession *,sRow) dSessions;
     qW(Sessions);
 
     typedef lstbch::qBUNCHd(sId,sRow) dIds;
@@ -94,7 +138,7 @@ namespace session {
 
     sRow Search(
         sId Id,
-        const dIds &Ids)    ;
+        const dIds &Ids);
 }
 
 #endif

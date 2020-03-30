@@ -32,6 +32,7 @@
 #include "csdbnc.h"
 #include "csdcmn.h"
 #include "epsmsc.h"
+#include "mtk.h"
 #include "xpp.h"
 #include "fnm.h"
 #include "flf.h"
@@ -186,6 +187,19 @@ namespace {
                 qCDEF(bso::sU8, MainProtocolVersion_, 0);
             }
 
+            namespace {
+                void Routine_(
+                    void *UP,
+                    mtk::gBlocker &Blocker)
+                {
+                    rSession &Session = *(rSession *)UP;
+
+                    Blocker.Release();
+
+                    Session.Launch();
+                }
+            }
+
             void Handle_(
                 fdr::rRWDriver &ProxyDriver,
                 xdhups::rAgent &Agent)
@@ -197,11 +211,14 @@ namespace {
                 sRow Row = qNIL;
                 str::wString Message, EId, Action;
                 qCBUFFERr EIdBuffer, ActionBuffer;
-                sSession Session;
+                rSession *Session = NULL;
                 flw::rDressedRWFlow<> Proxy;
+                tht::rBlocker Blocker;
             qRB
                 tol::Init(Ids, Sessions);
                 Proxy.Init(ProxyDriver);
+
+                Blocker.Init();
 
                 while(true) {
                     if ( csdcmn::Get(Proxy, Id) == UndefinedId) {
@@ -212,12 +229,13 @@ namespace {
 
                         Row = Ids.Append(Id);
 
-                        Session.Init(Id,Agent.RetrieveSession(), ProxyDriver);
+                        if ( ( Session = new rSession() ) == NULL )
+                            qRAlc();
+
+                        Session->Init(Id,Agent.RetrieveSession(), ProxyDriver, Blocker);
 
                         if ( Sessions.Append(Session) != Row )
                             qRGnr();
-
-                        Session.reset(false);
 
                         csdcmn::Put(Id, Proxy);
                         csdcmn::SendProtocol(MainProtocolLabel_, MainProtocolVersion_, Proxy);
@@ -229,7 +247,7 @@ namespace {
 
                         Session = Sessions(Row);
 
-                        if ( !Session.Handshaked) {
+                        if ( !Session->Handshaked) {
                             Message.Init();
 
                             csdcmn::Get(Proxy, Message);
@@ -245,18 +263,13 @@ namespace {
                             csdcmn::Put("XDH", Proxy);
                             Proxy.Commit();
 
-                            Session.Handshaked = true;
-                            Sessions.Store(Session, Row);
+                            Session->Handshaked = true;
+
+                            mtk::LaunchAndKill(Routine_, Session);
                         } else {
-                            tol::Init(EId, Action);
-
-                            csdcmn::Get(Proxy, EId);
-                            csdcmn::Get(Proxy, Action);
-
-                            Session.Launch(EId, Action);
-                            csdcmn::Put(Id, Proxy);
-                            csdcmn::Put("StandBy_1", Proxy);
-                            Proxy.Commit();
+                            Proxy.Dismiss();
+                            Session->Unblock();
+                            Blocker.Wait();
                         }
                     }
 
