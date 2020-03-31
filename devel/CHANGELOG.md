@@ -9,6 +9,11 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+### 2020-02-31
+
+- SCLRGSTRY:
+    - adding `Setups/@Default` as defining default setup id, in addition of `Parameters/@Setup`,
+
 ### 2020-03-29
 
 - BSO:

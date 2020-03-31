@@ -29,14 +29,20 @@ namespace registry {
 	namespace parameter {
 		using namespace sclrgstry::parameter;
 
-		extern rEntry
-            HostService,
-            ModuleFilename;
+		namespace proxy {
+            extern rEntry
+                Host,
+                Service;
+        }
+
+         extern rEntry ModuleFilename;
 	}
 
 	namespace definition {
 		using namespace sclrgstry::definition;
 	}
+
+	const str::dString &GetWebHost(str::dString &Host);
 }
 
 #endif

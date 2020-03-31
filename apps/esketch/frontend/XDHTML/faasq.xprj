@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Projects xmlns:xpp="http://q37.info/ns/xpp">
+	<Project target="faasq">
+		<Parameters>
+			<ModuleFilename>/home/csimon/bin/esketchxdh</ModuleFilename>
+        </Parameters>
+	</Project>
+</Projects>
+

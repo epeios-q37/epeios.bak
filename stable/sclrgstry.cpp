@@ -108,7 +108,8 @@ rgstry::entry___ sclrgstry::definition::plugin::Filename( "Filename", ::definiti
 rgstry::entry___ sclrgstry::definition::plugin::Configuration( "Configuration", ::definition::Plugin_ );
 rgstry::entry___ sclrgstry::definition::plugin::Locale( "Locale", ::definition::Plugin_ );
 
-static rgstry::entry___ Setup_( "@Setup", sclrgstry::Parameters );
+static rgstry::entry___ ParametersSetupId_( "@Setup", sclrgstry::Parameters );
+static rgstry::entry___ DefaultSetupId_("Setups/@Default");
 
 namespace {
 	tht::rLocker GlobalLocker_;
@@ -484,17 +485,17 @@ qRH
 qRB
 	Id.Init();
 
-	if ( OGetValue( Registry_, Setup_, Id ) )
+	if ( OGetValue(Registry_, ParametersSetupId_, Id) || OGetValue(Registry_, DefaultSetupId_, Id) )
 		FillWithSetupOfId( Registry, Layer, Id );
 qRR
 qRT
 qRE
 }
 
-void sclrgstry::ReportIfNoSetupId( void )
+void sclrgstry::ReportIfNoParametersSetupId( void )
 {
-	if ( !Registry_.Exists( Setup_  ) )
-		ReportBadOrNoValueForEntryErrorAndAbort( Setup_ );
+	if ( !Registry_.Exists(ParametersSetupId_) )
+		ReportBadOrNoValueForEntryErrorAndAbort(ParametersSetupId_);
 }
 
 void sclrgstry::FillWithContent(

@@ -3,7 +3,7 @@
 	<Configuration target="dmnzq">
 		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
 		<xpp:expand value-of="q37.xpp"/>
-		<xpp:expand href="../../../TOL.xcfg"/>
+		<xpp:expand href="../../../CLI.xcfg"/>
 		<Parameters>
 			<Language>en</Language>
 			<Command>Process</Command>
@@ -51,7 +51,7 @@
 			</Plugins>
 		</Definitions>
 		<Locale>
-			<xpp:expand select="TOL_Locale"/>
+			<xpp:expand select="CLI_Locale"/>
 			<Translations text="ProcessCommandDescription">
 				<Translation language="fr">Lance le daemon correspondant au projet donné.</Translation>
 				<Translation language="en">Launch the daemon corresponding to the given project.</Translation>
@@ -71,7 +71,7 @@
 			</Translations>
 		</Locale>
 		<Arguments>
-			<xpp:expand select="TOL_Arguments"/>
+			<xpp:expand select="CLI_Arguments"/>
 			<Argument id="ProcessCommand" Description="ProcessCommandDescription" long="process" short="p" Value="Process" Usage="%ProjectFilenameArgument%"/>
 			<Argument id="AboutPluginCommand" Description="AboutPluginCommandDescription" long="about-plugin" Value="AboutPlugin" Usage="%ProjectFilenameArgument%"/>
 			<Argument id="ProjectFilenameArgument" Description="ProjectFilenameArgumentDescription" Label="ProjectFilenameArgumentLabel" Path="Project[Type=&quot;Remote&quot;]"/>

@@ -3,23 +3,39 @@
 	<Configuration target="faasq">
 		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
 		<xpp:expand value-of="q37.xpp"/>
-  <xpp:expand href="../../../CLI.xcfg"/>
+        <xpp:expand href="../../../CLI.xcfg"/>
+        <Setups Default="faas1">
+            <Setup id="faas1">
+                <Proxy>
+                    <Host>faas1.q37.info</Host>
+                </Proxy>
+            </Setup>
+            <Setup id="faas2">
+                <Proxy>
+                    <Host>faas2.q37.info</Host>
+                </Proxy>
+            </Setup>
+            <Setup id="localhost">
+                <Proxy>
+                    <Host>localhost</Host>
+                </Proxy>
+            </Setup>
+        </Setups>
 		<Parameters>
 			<Language>fr</Language>
 			<Command>Process</Command>
-			<!-- Default command -->
-			<!--HostService>faas1:53700</HostService-->
-			<HostService>localhost:53700</HostService>
-			<ModuleFilename>/home/csimon/bin/esketchxdh</ModuleFilename>
+			<Proxy>
+                <Service>53700</Service>
+			</Proxy>
 		</Parameters>
 		<Definitions>
 		</Definitions>
 		<Locale>
 			<xpp:expand select="CLI_Locale"/>
 			<!-- Commands -->
-			<Translations text="TestCommandDescription">
-				<Translation language="fr">Commande de test.</Translation>
-				<Translation language="en">Test command.</Translation>
+			<Translations text="ProcessCommandDescription">
+				<Translation language="fr">Lance le frontend.</Translation>
+				<Translation language="en">Launch the frontend.</Translation>
 			</Translations>
 			<!-- Flags -->
 			<Translations text="TestFlagDescription">
@@ -27,40 +43,42 @@
 				<Translation language="en">test flag.</Translation>
 			</Translations>
 			<!-- Option descriptions -->
-			<Translations text="TestOptionDescription">
-				<Translation language="fr">option de test.</Translation>
-				<Translation language="en">test option.</Translation>
+			<Translations text="SetupOptionDescription">
+				<Translation language="fr">Identifiant de setup.</Translation>
+				<Translation language="en">Setup id.</Translation>
 			</Translations>
 			<!-- Option labels -->
-			<Translations text="TestOptionLabel">
-				<Translation language="fr">option (fr)</Translation>
-				<Translation language="en">option (en)</Translation>
+			<Translations text="SetupOptionLabel">
+				<Translation language="fr">setup</Translation>
+				<Translation language="en">setup</Translation>
 			</Translations>
 			<!-- Argument descriptions -->
-			<Translations text="TestArgumentDescription">
-				<Translation language="fr">argument de test.</Translation>
-				<Translation language="en">test argument.</Translation>
+			<Translations text="ProjectArgumentDescription">
+				<Translation language="fr">Nom du fichier projet.</Translation>
+				<Translation language="en">Name of the project file</Translation>
 			</Translations>
 			<!-- Argument labels -->
-			<Translations text="TestArgumentLabel">
-				<Translation language="fr">argument (fr)</Translation>
-				<Translation language="en">argument (en)</Translation>
+			<Translations text="ProjectArgumentLabel">
+				<Translation language="fr">projet</Translation>
+				<Translation language="en">project</Translation>
 			</Translations>
 		</Locale>
 		<Arguments>
 			<xpp:expand select="CLI_Arguments"/>
 			<!-- Commandes : pas de 'Path' (vaut 'Parameters/Command'), ni de 'Value'. -->
-			<Argument id="TestCommand" Description="TestCommandDescription" long="test" short="t" Value="Test" Usage="%TestFlag% %TestOption% %TestArgument%"/>
+			<Argument id="ProcessCommand" Description="ProcessCommandDescription" long="process" short="p" Value="Process" Usage="%SetupOption% %ProjectArgument%"/>
 			<!-- Fanaux : 'Path', mais pas de 'Value'. -->
+			<!--
 			<Argument id="TestFlag" Description="TestFlagDescription" long="flag" short="f" Path="Flag" Value="TestFlag"/>
+			-->
 			<!-- Options : 'Path' ET 'Value'. -->
-			<Argument id="TestOption" Description="TestOptionDescription" long="option" short="o" Path="Option" Label="TestOptionLabel"/>
+			<Argument id="SetupOption" Description="SetupOptionDescription" long="setup" short="s" Path="@Setup" Label="SetupOptionLabel"/>
 			<!-- Arguments libres : 'Path' mais PAS de 'Value' (ni de 'short', ni de 'long'). -->
-			<Argument id="TestArgument" Description="TestArgumentDescription" Path="Test" Label="TestArgumentLabel"/>
+			<Argument id="ProjectArgument" Description="ProjectArgumentDescription" Path='Project[Type="Remote"]' Label="ProjectArgumentLabel"/>
 			<!-- Affectations des arguments libres-->
 			<Layouts>
 				<Layout command="Process">
-					<Link index="0" Target="TestArgument"/>
+					<Link index="0" Target="ProjectArgument"/>
 				</Layout>
 			</Layouts>
 		</Arguments>

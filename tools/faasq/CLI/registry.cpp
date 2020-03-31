@@ -20,8 +20,21 @@
 
 #include "registry.h"
 
+#include "sclmisc.h"
+
 using namespace registry;
 
-rEntry registry::parameter::HostService( "HostService", sclrgstry::Parameters );
+namespace {
+    rEntry Proxy_("Proxy", sclrgstry::Parameters);
+}
+
+rEntry registry::parameter::proxy::Host( "Host", Proxy_);
+rEntry registry::parameter::proxy::Service( "Service", Proxy_ );
+
 rEntry registry::parameter::ModuleFilename( "ModuleFilename", sclrgstry::Parameters );
+
+const str::dString &registry::GetWebHost(str::dString &Host)
+{
+    return sclmisc::MGetValue(parameter::proxy::Host, Host);
+}
 

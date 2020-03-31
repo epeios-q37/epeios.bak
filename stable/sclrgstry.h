@@ -198,7 +198,7 @@ namespace sclrgstry {
 		registry_ &Registry,
 		rgstry::layer__ Layer );	// Fill the indicated setup if one is given.
 
-	void ReportIfNoSetupId( void );
+	void ReportIfNoParametersSetupId( void );
 
 	void FillWithContent(
 		registry_ &Registry,

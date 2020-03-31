@@ -69,6 +69,8 @@ qRB
 
         Session_.Launch(Id.Convert(IdBuffer), Action.Convert(ActionBuffer));
 
+        // 'Id_' is the session id and must not be condused with the local variable 'Id',
+        // which is the id of the DOM element on which there was 'Action' was applied.
         csdcmn::Put(Id_, Proxy_);
         csdcmn::Put("StandBy_1", Proxy_);
         Proxy_.Commit();

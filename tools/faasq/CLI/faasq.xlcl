@@ -4,8 +4,20 @@
 	<xpp:expand value-of="q37.xpp"/>
 	<xpp:expand select="epeios.xlcl"/>
 	<Translations text="ProgramDescription">
-		<Translation language="fr">Mettre ici la description du programme en français !</Translation>
-		<Translation language="en">Put here the english description of the program !</Translation>
+		<Translation language="fr">Connecte un frontend XDHTML à la version FaaS du toolkit Atlas.</Translation>
+		<Translation language="en">Connect an XDHTML frontend to the FaaS version of the Atlas toolkit.</Translation>
+	</Translations>
+	<Translations text="ConnectingTo">
+		<Translation language="fr">Connection à '%1:%2'…</Translation>
+		<Translation language="en">Connecting to '%1:%2'…</Translation>
+	</Translations>
+	<Translations text="ConnectedTo">
+		<Translation language="fr">Connecté à '%1:%2'.</Translation>
+		<Translation language="en">Connected to '%1:%2'.</Translation>
+	</Translations>
+	<Translations text="UnableToConnectTo">
+		<Translation language="fr">Échec connection à '%1:%2' !</Translation>
+		<Translation language="en">Unable to connect to '%1:%2'!</Translation>
 	</Translations>
 	<!--
 	<Translations text="">

@@ -62,19 +62,20 @@ namespace {
         void Initialize_(csdbnc::rRWDriver &Proxy)
         {
         qRH
-            str::wString HostService;
-            qCBUFFERr Buffer;
+            str::wString Host, Service;
+            qCBUFFERr HostBuffer, ServiceBuffer;
         qRB
-            HostService.Init();
-            sclmisc::MGetValue(registry::parameter::HostService, HostService);
+            tol::Init(Host, Service);
+            sclmisc::MGetValue(registry::parameter::proxy::Host, Host);
+            sclmisc::MGetValue(registry::parameter::proxy::Service, Service);
 
-            sclc::Display("TryToConnectTo", cio::COut, HostService);
+            sclc::Display("ConnectingTo", cio::COut, Host, Service);
             cio::COut.Commit();
 
-            if (!Proxy.Init(HostService.Convert(Buffer), SCK__DEFAULT_TIMEOUT, qRPU))
-                sclc::ReportAndAbort("UnableToConnectTo", HostService);
+            if (!Proxy.Init(Host.Convert(HostBuffer), Service.Convert(ServiceBuffer), SCK__DEFAULT_TIMEOUT, qRPU))
+                sclc::ReportAndAbort("UnableToConnectTo", Host, Service);
 
-            sclc::Display("ConnectedTo", cio::COut, HostService);
+            sclc::Display("ConnectedTo", cio::COut, Host, Service);
             cio::COut.Commit();
         qRR
         qRT
@@ -145,7 +146,7 @@ namespace {
             {
             qRH
                 flw::rDressedRWFlow<> Proxy;
-                str::wString Head, Token, Message, URL;
+                str::wString Head, Host, Token, Message, URL;
             qRB
                 Proxy.Init(ProxyDriver);
 
@@ -155,8 +156,8 @@ namespace {
 
                 csdcmn::Put("", Proxy);
                 csdcmn::Put(Head, Proxy);
-                //                csdcmn::Put("faas1.q37.info", Proxy);
-                csdcmn::Put("localhost", Proxy);
+                Host.Init();
+                csdcmn::Put(registry::GetWebHost(Host), Proxy);
                 Proxy.Commit();
 
                 Token.Init();
