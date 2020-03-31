@@ -699,12 +699,15 @@ namespace str {
             Init();
             Append(String);
         }
-        wStrings(const dString &String)
-        : wStrings_()
-        {
-            Init(String);
-        }
-        wStrings(const char *String)
+		wStrings(void) // Needed by 'Windows'.
+		: wStrings_()
+		{}
+		wStrings(const dString &String)
+			: wStrings_()
+		{
+			Init(String);
+		}
+		wStrings(const char *String)
         : wStrings_()
         {
             Init(String);

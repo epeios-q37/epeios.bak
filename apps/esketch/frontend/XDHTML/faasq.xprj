@@ -2,7 +2,7 @@
 <Projects xmlns:xpp="http://q37.info/ns/xpp">
 	<Project target="faasq">
 		<Parameters>
-			<ModuleFilename>/home/csimon/bin/esketchxdh</ModuleFilename>
+			<ModuleFilename>esketchxdh</ModuleFilename>
         </Parameters>
 	</Project>
 </Projects>

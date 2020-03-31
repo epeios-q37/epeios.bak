@@ -34,6 +34,11 @@ using namespace sck;
 
 #ifdef CPE_S_WIN
 bool sck::Ready_ = false;
+// 'ssize_t' does not exist in Windows.
+// It is used as return type for 'select' and 'recv' 
+// under POSIX, so we use the type returned by same
+// functions under windows.
+typedef int ssize_t;
 #else
 bool sck::Ready_ = true;
 #endif

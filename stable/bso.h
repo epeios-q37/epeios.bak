@@ -349,7 +349,7 @@ namespace bso {
 	private:
 		s8__ Sign_;
 	public:
-		sign__( sint__ Sign = 0 )
+		template <typename t=int> sign__( t Sign = 0 )
 		{
 			Sign_ = (s8__)( Sign ? ( Sign > 0 ? 1 : -1 ) : 0 );
 		}

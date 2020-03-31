@@ -11,9 +11,14 @@
 
 ### 2020-02-31
 
+- BSO:
+  - fixing 32 bits issue,
+- SCK:
+  - fixing missing `ssize_t` type issue under *Windows*,
 - SCLRGSTRY:
     - adding `Setups/@Default` as defining default setup id, in addition of `Parameters/@Setup`,
-
+- STR:
+    - fixing missing default constructor issue under *Windows*,
 ### 2020-03-29
 
 - BSO:
