@@ -21,7 +21,6 @@
 
 #include "core.h"
 #include "registry.h"
-#include "sclfrntnd.h"
 
 namespace{
 	qCDEF( char *, XSLAffix_, "Main" );

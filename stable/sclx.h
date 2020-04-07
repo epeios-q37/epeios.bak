@@ -1,58 +1,57 @@
 /*
-Copyright (C) 1999 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 1999 Claude SIMON (http://q37.info/contact/).
 
-This file is part of the Epeios framework.
+	This file is part of the Epeios framework.
 
-The Epeios framework is free software: you can redistribute it and/or
-modify it under the terms of the GNU Affero General Public License as
-published by the Free Software Foundation, either version 3 of the
-License, or (at your option) any later version.
+	The Epeios framework is free software: you can redistribute it and/or
+	modify it under the terms of the GNU Affero General Public License as
+	published by the Free Software Foundation, either version 3 of the
+	License, or (at your option) any later version.
 
-The Epeios framework is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-Affero General Public License for more details.
+	The Epeios framework is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+	Affero General Public License for more details.
 
-You should have received a copy of the GNU Affero General Public License
-along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
+	You should have received a copy of the GNU Affero General Public License
+	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef SCLXDHTML_INC_
-# define SCLXDHTML_INC_
+// SoCLe X(DHTML)
 
-# define SCLXDHTML_NAME		"SCLXDHTML"
+#ifndef SCLX_INC_
+# define SCLX_INC_
 
-# if defined( E_DEBUG ) && !defined( SCLXDHTML_NODBG )
-#  define SCLXDHTML_DBG
+# define SCLX_NAME		"SCLX"
+
+# if defined( E_DEBUG ) && !defined( SCLX_NODBG )
+#  define SCLX_DBG
 # endif
 
-// SoCLe X(SL)/DH(TML)
+# include "sclf.h"
+# include "sclr.h"
 
+# include "err.h"
+# include "fblfrd.h"
+# include "rgstry.h"
+# include "tol.h"
+# include "xdhcmn.h"
 # include "xdhdws.h"
 
-# include "sclfrntnd.h"
+# define SCLX_DEFAULT_SUFFIX XDHDWS_DEFAULT_SUFFIX
 
-# include "sclrgstry.h"
-# include "sclmisc.h"
-
-# include "crt.h"
-# include "err.h"
-
-# define SCLXDHTML_DEFAULT_SUFFIX XDHDWS_DEFAULT_SUFFIX
-
-namespace sclxdhtml {
-
+namespace sclx {
 	qCDEF( char, DefaultMarker, '#' );
 
 	namespace registry {
 		using rgstry::rEntry;
 
 		namespace parameter {
-			using namespace sclrgstry::parameter;
+			using namespace sclr::parameter;
 		}
 
 		namespace definition {
-			using namespace sclrgstry::definition;
+			using namespace sclr::definition;
 
 			extern rEntry XMLFilesHandling;
 			extern rEntry XSLFile;	// To style XML data tagged.
@@ -60,7 +59,7 @@ namespace sclxdhtml {
 		}
 	}
 
-	const sclrgstry::registry_ &GetRegistry( void );
+	const sclr::registry_ &GetRegistry( void );
 
 	const char *GetLauncher( void );
 
@@ -93,7 +92,7 @@ namespace sclxdhtml {
 
 # define SCLX_ADec( session, name )\
 	extern class s##name\
-	: public sclxdhtml::cAction<session>\
+	: public sclx::cAction<session>\
 	{\
 	protected:\
 		virtual void SCLXLaunch(\
@@ -337,7 +336,7 @@ namespace sclxdhtml {
 			const str::dString &Id,
 			const rgstry::rEntry &XSLFilename,
 			const char *Target,
-			const sclrgstry::registry_ &Registry,
+			const sclr::registry_ &Registry,
 			const str::dString &XML,
 			bso::char__ Marker);
 		void HandleLayout_(
@@ -345,7 +344,7 @@ namespace sclxdhtml {
 			const char *Id,
 			const rgstry::rEntry &XSLFilename,
 			const char *Target,
-			const sclrgstry::registry_ &Registry,
+			const sclr::registry_ &Registry,
 			const str::dString &XML,
 			bso::char__ Marker)
         {
@@ -355,7 +354,7 @@ namespace sclxdhtml {
             const char *Variant,
 			const chars &Id,
 			const char *Target,
-			const sclrgstry::registry_ &Registry,
+			const sclr::registry_ &Registry,
 			void( *Get )(session &Session, xml::rWriter &Writer),
 			session &Session,
 			bso::char__ Marker = DefaultMarker )
@@ -384,7 +383,7 @@ namespace sclxdhtml {
 			const chars &Id,
 			const rgstry::rEntry &XSLFilename,
 			const char *Target,
-			const sclrgstry::registry_ &Registry,
+			const sclr::registry_ &Registry,
 			const str::dString &XML,
 			bso::char__ Marker)
         {
@@ -394,7 +393,7 @@ namespace sclxdhtml {
 			const chars &Id,
 			const rgstry::rEntry &XSLFilename,
 			const char *Target,
-			const sclrgstry::registry_ &Registry,
+			const sclr::registry_ &Registry,
 			const str::dString &XML,
 			bso::char__ Marker)
         {
@@ -404,7 +403,7 @@ namespace sclxdhtml {
 			const chars &Id,
 			const rgstry::rEntry &XSLFilename,
 			const char *Target,
-			const sclrgstry::registry_ &Registry,
+			const sclr::registry_ &Registry,
 			const str::dString &XML,
 			bso::char__ Marker)
         {
@@ -413,7 +412,7 @@ namespace sclxdhtml {
 		template <typename session, typename rack, typename chars> void PrependLayout_(
 			const chars &Id,
 			const char *Target,
-			const sclrgstry::registry_ &Registry,
+			const sclr::registry_ &Registry,
 			void( *Get )(session &Session, xml::rWriter &Writer),
 			session &Session,
 			bso::char__ Marker = DefaultMarker )
@@ -423,7 +422,7 @@ namespace sclxdhtml {
 		template <typename session, typename rack, typename chars> void SetLayout_(
 			const chars &Id,
 			const char *Target,
-			const sclrgstry::registry_ &Registry,
+			const sclr::registry_ &Registry,
 			void( *Get )(session &Session, xml::rWriter &Writer),
 			session &Session,
 			bso::char__ Marker = DefaultMarker )
@@ -433,7 +432,7 @@ namespace sclxdhtml {
 		template <typename session, typename rack, typename chars> void AppendLayout_(
 			const chars &Id,
 			const char *Target,
-			const sclrgstry::registry_ &Registry,
+			const sclr::registry_ &Registry,
 			void( *Get )(session &Session, xml::rWriter &Writer),
 			session &Session,
 			bso::char__ Marker = DefaultMarker )
@@ -812,7 +811,7 @@ namespace sclxdhtml {
 	private:
 		eXSLFileHandling XSLFileHandling_;
 		qCRMV( scli::sInfo, I_, Info_ );
-		qRMV( sclfrntnd::rKernel, K_, Kernel_ );
+		qRMV( sclf::rKernel, K_, Kernel_ );
 		page Page_;	// Current page;
 		sReporting Reporting_;
 		eBackendVisibility BackendVisibility_;
@@ -853,7 +852,7 @@ namespace sclxdhtml {
 		}
 		qCVDTOR( rSession )
 		void Init(
-			sclfrntnd::rKernel &Kernel,
+			sclf::rKernel &Kernel,
 			class rCore<rSession> &Core,
 			const scli::sInfo &Info,
 			eXSLFileHandling XSLFileHandling = xfh_Default )
@@ -899,7 +898,7 @@ namespace sclxdhtml {
 			const char *Message,
 			str::string_ &Translation )
 		{
-			return scllocale::GetTranslation( Message, Language(), Translation );
+			return scll::GetTranslation( Message, Language(), Translation );
 		}
 		bso::sBool GetHead( str::dString &Content )
 		{
@@ -963,7 +962,7 @@ namespace sclxdhtml {
 			const chars &Id,
 			const char *Target,
 			void( *Get )( rSession &Session, xml::rWriter &Writer ),
-			const sclrgstry::dRegistry &Registry )
+			const sclr::dRegistry &Registry )
 		{
 			sProxy::SetLayout_<rSession, rRack<rSession,dump>,chars>( Id, Target, Registry, Get, *this );
 		}
@@ -977,7 +976,7 @@ namespace sclxdhtml {
 		inline void SetDocumentLayout(
 			const char *Target,
 			void( *Get )( rSession &Session, xml::rWriter &Writer ),
-			const sclrgstry::dRegistry &Registry )
+			const sclr::dRegistry &Registry )
 		{
 //			sProxy::HeadUp_( frontend::Registry(), DefaultMarker );
 			SetElementLayout( "", Target, Get, Registry );
@@ -1089,19 +1088,19 @@ namespace sclxdhtml {
 
 	inline void LoadXSLAndTranslateTags(
 		const rgstry::tentry__ &FileName,
-		const sclrgstry::registry_ &Registry,
+		const sclr::registry_ &Registry,
 		str::string_ &Content,
 		bso::char__ Marker = DefaultMarker )
 	{
-		return sclmisc::LoadXMLAndTranslateTags( FileName, Registry, Content, 0, Marker );
+		return sclm::LoadXMLAndTranslateTags( FileName, Registry, Content, 0, Marker );
 	}
 
-	const scli::sInfo &SCLXDHTMLInfo( void );	// To define by user.
-	void SCLXDHTMLInitialization( xdhcmn::eMode Mode );	// To define by user.
+	const scli::sInfo &SCLXInfo( void );	// To define by user.
+	void SCLXInitialization( xdhcmn::eMode Mode );	// To define by user.
 
-	xdhcmn::cSession *SCLXDHTMLRetrieveSession(void);	// To define by user.
+	xdhcmn::cSession *SCLXRetrieveSession(void);	// To define by user.
 
-	void SCLXDHTMLReleaseSession( xdhcmn::cSession *Session );	// To define by user.
+	void SCLXReleaseSession( xdhcmn::cSession *Session );	// To define by user.
 
 	namespace prolog {
 		static qCDEFS(BorderId, "Border" );
@@ -1112,7 +1111,7 @@ namespace sclxdhtml {
 		static qCDEFS(RemoteProjectId, "RemoteProject" );
 
 		void GetLayout(
-			sclfrntnd::rFrontend &Frontend,
+			sclf::rFrontend &Frontend,
 			xml::rWriter &Writer );
 
 		void HandleProjectTypeSwitching( sProxy &Proxy );
@@ -1128,7 +1127,7 @@ namespace sclxdhtml {
             return DisplaySelectedProjectFilename(Proxy, str::wString(Id));
         }
 
-		sclmisc::eProjectType GetProjectFeatures(
+		sclm::eProjectType GetProjectFeatures(
 			sProxy &Proxy,
 			str::string_ &Feature );
 
@@ -1145,15 +1144,15 @@ namespace sclxdhtml {
 
 		const char *GetLabel( eBackendVisibility );
 
-		sclfrntnd::eLogin GetLayout(
-			sclfrntnd::rFrontend &Frontend,
+		sclf::eLogin GetLayout(
+			sclf::rFrontend &Frontend,
 			xml::rWriter &Writer );
 
 		void HandleBackendTypeSwitching( sProxy &Proxy );
 
 		void GetBackendFeatures(
 			sProxy &Proxy,
-			sclfrntnd::rFeatures &Features );
+			sclf::rFeatures &Features );
 
 		void DisplaySelectedEmbeddedBackendFilename(
 			sProxy &Proxy,
@@ -1166,7 +1165,6 @@ namespace sclxdhtml {
             return DisplaySelectedEmbeddedBackendFilename(Proxy, str::wString(Id));
         }
 	}
-
 }
 
 #endif

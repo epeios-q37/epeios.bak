@@ -31,7 +31,7 @@
 # include "err.h"
 # include "flw.h"
 # include "strmrg.h"
-# include "sclmisc.h"
+# include "sclm.h"
 
 # include <stdarg.h>
 
@@ -109,7 +109,7 @@ namespace xdhcmn {
 		eMode Mode_;
 		const char *_LauncherIdentification;
 		const char *_Localization;
-		sclmisc::sRack SCLRack_;
+		sclm::sRack SCLRack_;
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -137,7 +137,7 @@ namespace xdhcmn {
 		{
 			return sizeof( shared_data__ );
 		}
-		qRWDISCLOSEs( sclmisc::sRack, SCLRack );
+		qRWDISCLOSEs( sclm::sRack, SCLRack );
 		Q37_PMDF( const char, LauncherIdentification, _LauncherIdentification );
 		Q37_PMDF( const char, Localization, _Localization );
 		qRODISCLOSEs( eMode, Mode );

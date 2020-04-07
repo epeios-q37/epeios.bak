@@ -18,6 +18,10 @@
     - [adpt],
 - PLGNCORE:
     - [adpt],
+- XDHCMN:
+    - [adpt],
+- XDHDWS:
+    - [adpt],
 
 ### 2020-02-31
 

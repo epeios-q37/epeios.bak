@@ -25,21 +25,21 @@
 #include "prolog.h"
 #include "registry.h"
 
-#include "sclrgstry.h"
-#include "scllocale.h"
-#include "sclfrntnd.h"
+#include "sclr.h"
+#include "scll.h"
+#include "sclf.h"
 
 using namespace core;
 
 core::rCore core::Core;
 
-sclxdhtml::rActionHelper core::OnNotConnectedAllowedActions;
+sclx::rActionHelper core::OnNotConnectedAllowedActions;
 
 namespace {
-	sclfrntnd::rKernel Kernel_;
+	sclf::rKernel Kernel_;
 }
 
-sclfrntnd::rKernel &core::Kernel( void )
+sclf::rKernel &core::Kernel( void )
 {
 	return Kernel_;
 }
@@ -66,7 +66,7 @@ BASE_AD( OnNewSession_ );
 void core::rCore::Init( xdhcmn::eMode Mode )
 {
 	ActionHelperCallback_.Init();
-	sclxdhtml::rCore<rSession>::Init( Mode, global::OnNewSession, ActionHelperCallback_ );
+	sclx::rCore<rSession>::Init( Mode, global::OnNewSession, ActionHelperCallback_ );
 	Register_();
 }
 
@@ -93,7 +93,7 @@ void core::sDump::Common(
 #define V( value, tag )	Writer.PutValue( value, #tag );
 
 static void About_(
-	sclfrntnd::rFrontend &Frontend,
+	sclf::rFrontend &Frontend,
 	xml::rWriter &Writer )
 {
 qRH
@@ -125,7 +125,7 @@ qRH
 	str::string Build;
 qRB
 
-	V( sclxdhtml::GetLauncher(), Launcher );
+	V( sclx::GetLauncher(), Launcher );
 
 	Writer.PushTag("Software" )	;
 	Writer.PutValue( SOFTWARE_NAME, "Name" );

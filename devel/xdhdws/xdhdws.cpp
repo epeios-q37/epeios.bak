@@ -30,7 +30,7 @@ namespace {
         namespace {
             namespace {
                 namespace {
-                    rgstry::rEntry Scripts_("Scripts", sclrgstry::Definitions);
+                    rgstry::rEntry Scripts_("Scripts", sclr::Definitions);
                 }
                 rgstry::rEntry LooseScript_("Script", Scripts_);
             }
@@ -44,7 +44,7 @@ namespace {
                     const type &Name,
                     str::string_ &Buffer )
                 {
-                    sclmisc::MGetValue(rgstry::rTEntry(TaggedScript_, Name), Buffer);
+                    sclm::MGetValue(rgstry::rTEntry(TaggedScript_, Name), Buffer);
 
                     return Buffer;
                 }
@@ -108,7 +108,7 @@ namespace {
                 qRB
                     Merged.Init();
 
-                    sclmisc::MGetValue(rgstry::rTEntry(TaggedScriptArguments_, Name), Merged);
+                    sclm::MGetValue(rgstry::rTEntry(TaggedScriptArguments_, Name), Merged);
 
                     Split_(Merged, Splitted);
                 qRR

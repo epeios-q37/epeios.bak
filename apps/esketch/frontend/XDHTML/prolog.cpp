@@ -25,8 +25,6 @@
 
 #include "xdhdws.h"
 
-#include "sclfrntnd.h"
-
 namespace {
 	qCDEF( char *, XMLAffix_, "Prolog" );
 
@@ -35,7 +33,7 @@ namespace {
 			core::rSession &Session,
 			xml::rWriter &Writer )
 		{
-			sclxdhtml::prolog::GetLayout( Session, Writer );
+			sclx::prolog::GetLayout( Session, Writer );
 		}
 	}
 }
@@ -54,24 +52,24 @@ void prolog::Display( core::rSession &Session )
 	Session.Execute( "var s = document.createElement('script'); s.setAttribute('src','https://code.jquery.com/ui/1.12.1/jquery-ui.js');document.head.appendChild(s);" );
 */
 	Session.SwitchTo( base::pProlog );
-	sclxdhtml::prolog::HandleProjectTypeSwitching( Session );
+	sclx::prolog::HandleProjectTypeSwitching( Session );
 }
 
 #define A( name ) BASE_ADef( prolog, name )
 
 A( SwitchProjectType )
 {
-	sclxdhtml::prolog::HandleProjectTypeSwitching( Session );
+	sclx::prolog::HandleProjectTypeSwitching( Session );
 }
 
 A( DisplayProjectFilename )
 {
-	sclxdhtml::prolog::DisplaySelectedProjectFilename( Session, Id );
+	sclx::prolog::DisplaySelectedProjectFilename( Session, Id );
 }
 
 A( LoadProject )
 {
-	sclxdhtml::prolog::LoadProject( Session );
+	sclx::prolog::LoadProject( Session );
 
 	login::Display( Session );
 }

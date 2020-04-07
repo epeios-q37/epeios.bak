@@ -26,8 +26,6 @@
 
 #include "xdhdws.h"
 
-#include "sclfrntnd.h"
-
 namespace {
 	qCDEF( char *, XSLAffix_, "Login" );
 
@@ -36,7 +34,7 @@ namespace {
 			core::rSession &Session,
 			xml::rWriter &Writer )
 		{
-			sclxdhtml::login::GetLayout( Session, Writer );
+			sclx::login::GetLayout( Session, Writer );
 		}
 	}
 }
@@ -50,7 +48,7 @@ void login::Display( core::rSession &Session )
 {
 	SetLayout( Session );
 
-	sclxdhtml::login::HandleBackendTypeSwitching( Session );
+	sclx::login::HandleBackendTypeSwitching( Session );
 
 	Session.SwitchTo( base::pLogin );
 }
@@ -59,23 +57,23 @@ void login::Display( core::rSession &Session )
 
 A( SwitchBackendType )
 {
-	sclxdhtml::login::HandleBackendTypeSwitching( Session );
+	sclx::login::HandleBackendTypeSwitching( Session );
 }
 
 A( DisplayEmbeddedBackendFilename )
 {
-	sclxdhtml::login::DisplaySelectedEmbeddedBackendFilename( Session, Id );
+	sclx::login::DisplaySelectedEmbeddedBackendFilename( Session, Id );
 }
 
 A( Connect )
 {
 qRH
 	fblfrd::incompatibility_informations IncompatibilityInformations;
-	sclfrntnd::rFeatures Features;
+	sclf::rFeatures Features;
 qRB
 	if ( Mode == xdhcmn::mMonoUser ) {
 		Features.Init();
-		sclxdhtml::login::GetBackendFeatures( Session, Features );
+		sclx::login::GetBackendFeatures( Session, Features );
 		core::Kernel().Init( Features, plgn::EmptyAbstracts );
 	}
 

@@ -22,7 +22,7 @@
 
 # include "esketchxdh.h"
 
-# include "sclxdhtml.h"
+# include "sclx.h"
 
 # include "sktfbc.h"
 
@@ -57,13 +57,13 @@ namespace base {
 namespace core {
 	class rInstances;
 	class sDump;
-	typedef sclxdhtml::rSession<rInstances, frdfrntnd::rFrontend, base::ePage, base::p_Undefined, sDump> rSession;
+	typedef sclx::rSession<rInstances, frdfrntnd::rFrontend, base::ePage, base::p_Undefined, sDump> rSession;
 }
 
 namespace base {
 	extern const char *Name;
 
-	typedef sclxdhtml::cAction<core::rSession> cAction;
+	typedef sclx::cAction<core::rSession> cAction;
 
 	void Register(
 		const char *Name,

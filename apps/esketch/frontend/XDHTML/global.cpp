@@ -33,18 +33,18 @@ A( OnNewSession )
 {
 	switch ( Mode ) {
 	case xdhcmn::mMonoUser:
-		switch ( sclfrntnd::HandleProject( esketchxdh::Info ) ) {
-		case sclfrntnd::phNone:
+		switch ( sclf::HandleProject( esketchxdh::Info ) ) {
+		case sclf::phNone:
 			::prolog::Display( Session );
 			break;
-		case sclfrntnd::phLoad:
+		case sclf::phLoad:
 			::login::Display( Session );
 			break;
-		case sclfrntnd::phLogin:
-			Session.SetBackendVisibility( sclxdhtml::bvHide );
+		case sclf::phLogin:
+			Session.SetBackendVisibility( sclx::bvHide );
 			::login::Display( Session );
 			break;
-		case sclfrntnd::phRun:
+		case sclf::phRun:
 			::main::Display( Session );
 			break;
 		default:
@@ -53,7 +53,7 @@ A( OnNewSession )
 		}
 		break;
 	case xdhcmn::mMultiUser:
-        Session.SetBackendVisibility(sclxdhtml::bvHide);
+        Session.SetBackendVisibility(sclx::bvHide);
         ::login::Display( Session );
 		break;
 	default:
@@ -66,7 +66,7 @@ A( About )
 {
 qRH
 	str::string XSL;
-	sclxdhtml::rRack<core::rSession,core::sDump> Rack;
+	sclx::rRack<core::rSession,core::sDump> Rack;
 	str::string AboutTranslation;
 qRB
 	Rack.Init( XSLAffix_, Session, esketchxdh::Info );
@@ -76,10 +76,10 @@ qRB
 	Rack().PopTag();
 
 	XSL.Init();
-	sclxdhtml::LoadXSLAndTranslateTags( rgstry::tentry___( registry::definition::XSLFile, "About" ), sclxdhtml::GetRegistry(), XSL );	// Potentially outside session, so we use the global registry...
+	sclx::LoadXSLAndTranslateTags( rgstry::tentry___( registry::definition::XSLFile, "About" ), sclx::GetRegistry(), XSL );	// Potentially outside session, so we use the global registry...
 
 	AboutTranslation.Init();
-	scllocale::GetTranslation("About...", Session.Language(), AboutTranslation );
+	scll::GetTranslation("About...", Session.Language(), AboutTranslation );
 
 	Session.Alert( Rack.Target(), XSL, AboutTranslation );
 qRR

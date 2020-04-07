@@ -19,8 +19,8 @@
 
 #include "esketchxdh.h"
 
-#include "sclxdhtml.h"
-#include "sclmisc.h"
+#include "sclx.h"
+#include "sclm.h"
 
 #include "frdrgstry.h"
 
@@ -31,21 +31,21 @@
 
 SCLI_DEF( esketchxdh, NAME, SKTINF_MC );
 
-const scli::sInfo &sclxdhtml::SCLXDHTMLInfo( void )
+const scli::sInfo &sclx::SCLXInfo( void )
 {
 	return esketchxdh::Info;
 }
 
-void sclxdhtml::SCLXDHTMLInitialization( xdhcmn::eMode Mode )
+void sclx::SCLXInitialization( xdhcmn::eMode Mode )
 {
 qRH
-	sclfrntnd::rFeatures Features;
+	sclf::rFeatures Features;
 qRB
 	core::Core.Init( Mode );
 
 	if ( Mode == xdhcmn::mMultiUser ) {
 		Features.Init();
-		sclfrntnd::GuessBackendFeatures( Features );
+		sclf::GuessBackendFeatures( Features );
 		core::Kernel().Init( Features, plgn::EmptyAbstracts );
 	}
 qRR
@@ -53,7 +53,7 @@ qRT
 qRE
 }
 
-xdhcmn::cSession *sclxdhtml::SCLXDHTMLRetrieveSession(void)
+xdhcmn::cSession *sclx::SCLXRetrieveSession(void)
 {
     core::rSession *Session = new core::rSession;
 
@@ -67,7 +67,7 @@ xdhcmn::cSession *sclxdhtml::SCLXDHTMLRetrieveSession(void)
 	return Session;
 }
 
-void sclxdhtml::SCLXDHTMLReleaseSession( xdhcmn::cSession *Callback )
+void sclx::SCLXReleaseSession( xdhcmn::cSession *Callback )
 {
 	if ( Callback == NULL )
 		qRGnr();

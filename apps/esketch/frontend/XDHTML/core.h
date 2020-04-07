@@ -23,10 +23,10 @@
 # include "base.h"
 # include "instc.h"
 
-# include "sclxdhtml.h"
+# include "sclx.h"
 
 namespace core {
-	extern sclxdhtml::rActionHelper OnNotConnectedAllowedActions;
+	extern sclx::rActionHelper OnNotConnectedAllowedActions;
 
 	class rInstances
 	{
@@ -50,10 +50,10 @@ namespace core {
 			xml::rWriter &Writer );
 	};
 
-	typedef sclxdhtml::rSession < rInstances, frdfrntnd::rFrontend, base::ePage, base::p_Undefined, sDump > rSession;
+	typedef sclx::rSession < rInstances, frdfrntnd::rFrontend, base::ePage, base::p_Undefined, sDump > rSession;
 
 	class sActionHelper
-	: public sclxdhtml::cActionHelper<core::rSession>
+	: public sclx::cActionHelper<core::rSession>
 	{
 	protected:
 		virtual bso::bool__ SCLXOnBeforeAction(
@@ -65,7 +65,7 @@ namespace core {
 	};
 
 	class rCore
-	: public sclxdhtml::rCore<rSession>
+	: public sclx::rCore<rSession>
 	{
 	private:
 		sActionHelper ActionHelperCallback_;
@@ -80,13 +80,13 @@ namespace core {
 
 	extern rCore Core;
 
-	typedef sclxdhtml::cAction<rSession> cAction;
+	typedef sclx::cAction<rSession> cAction;
 
 	void Register(
 		const char *Name,
 		cAction &Callback );
 
-	sclfrntnd::rKernel &Kernel( void );
+	sclf::rKernel &Kernel( void );
 
 	void About(
 		rSession &Session,
