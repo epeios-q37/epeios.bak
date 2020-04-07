@@ -17,30 +17,15 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define SCLBACKND_COMPILATION_
+#define SCLB_COMPILATION_
 
-#include "sclbacknd.h"
+#include "sclb.h"
 
-#include "sclmisc.h"
-#include "scllocale.h"
-#include "sclerror.h"
-#include "scldaemon.h"
-
-#include  "lcl.h"
-#include "cio.h"
-
-#include "csdleo.h"
-#include "csdles.h"
-
-// #include "fblbur.h"
-
-#include "fnm.h"
-
-using namespace sclbacknd;
+using namespace sclb;
 
 namespace {
-	sclrgstry::rEntry
-		Watchdog_( "Watchdog", sclrgstry::Parameters ),
+	sclr::rEntry
+		Watchdog_( "Watchdog", sclr::Parameters ),
 		Code_( "Code", Watchdog_ ),
 		Key_( "Key", Watchdog_ );
 }
@@ -54,7 +39,7 @@ DEC( LoadSetupOfId, 1 )
 {
 qRH
 qRB
-	sclbacknd::rBackend &Backend = *(sclbacknd::rBackend *)BaseBackend.UP();
+	sclb::rBackend &Backend = *(sclb::rBackend *)BaseBackend.UP();
 
 	Backend.FillSetupRegistryFollowingId( Request.StringIn() );
 qRR
@@ -67,16 +52,16 @@ DEC( LoadSetupContent, 1 )
 qRH
 	str::wString Content;
 qRB
-	sclbacknd::rBackend &Backend = *(sclbacknd::rBackend *)BaseBackend.UP();
+	sclb::rBackend &Backend = *(sclb::rBackend *)BaseBackend.UP();
 
 	const str::string_ &RawContent = Request.StringIn();
 
 	Content.Init( "<" );
-	sclrgstry::Parameters.GetPath( Content );
+	sclr::Parameters.GetPath( Content );
 	Content.Append( '>' );
 	Content.Append( RawContent  );
 	Content.Append( "</" );
-	sclrgstry::Parameters.GetPath( Content );
+	sclr::Parameters.GetPath( Content );
 	Content.Append( '>' );
 
 
@@ -105,7 +90,7 @@ namespace {
 
 
 
-void sclbacknd::backend___::Init(
+void sclb::backend___::Init(
 	fblovl::eMode Mode,
 	const char *APIVersion,
 	const ntvstr::char__ *ClientOrigin,
@@ -120,16 +105,16 @@ qRB
 	CompatibilityTested_ = false;
 
 	Code.Init();
-	sclmisc::OGetValue( ::Code_, Code );
+	sclm::OGetValue( ::Code_, Code );
 
 	Key.Init();
-	sclmisc::OGetValue( ::Key_, Key );
+	sclm::OGetValue( ::Key_, Key );
 
-	rBackend_::Init( Mode, APIVersion, ClientOrigin, BackendLabel, scllocale::GetLocale(), BackendInformations, BackendCopyright, SoftwareInformations, Code, Key );
+	rBackend_::Init( Mode, APIVersion, ClientOrigin, BackendLabel, scll::GetLocale(), BackendInformations, BackendCopyright, SoftwareInformations, Code, Key );
 	_VoidFlowDriver.Init( fdr::tsDisabled, flx::aAllowed );
 	_RequestLogFunctions.Init( _VoidFlowDriver );
 	_Registry.Init();
-	_Registry.Push( sclmisc::GetRegistry() );
+	_Registry.Push( sclm::GetRegistry() );
 	_RegistrySetupLayer = _Registry.Create();
 
 	AppendFunctions_( *this );
@@ -139,11 +124,11 @@ qRE
 }
 
 
-scldaemon::rCallback *scldaemon::SCLDAEMONGetCallback(
+scld::rCallback *scld::SCLDGetCallback(
 	csdleo::context__ Context,
 	csdleo::mode__ CSDMode )
 {
-	sclbacknd::callback__ *Callback = NULL;
+	sclb::callback__ *Callback = NULL;
 qRH
 	fblovl::eMode FBLMode = fblovl::m_Undefined;
 qRB
@@ -159,7 +144,7 @@ qRB
 		break;
 	}
 
-	Callback = SCLBACKNDGetCallback( Context, FBLMode );
+	Callback = SCLBGetCallback( Context, FBLMode );
 qRR
 	if ( Callback != NULL )
 		delete Callback;
@@ -183,9 +168,9 @@ namespace {
 			Flow.Init( ODriver );
 
 			Translation.Init();
-			sclerror::GetPendingErrorTranslation( Language, Translation );
+			scle::GetPendingErrorTranslation( Language, Translation );
 
-			sclerror::ResetPendingError();
+			scle::ResetPendingError();
 
 			fblbrq::Report( fblovl::rRequestError, Translation.Convert( Buffer ), Flow );
 
@@ -211,11 +196,11 @@ namespace {
 
 		Meaning.Init();
 
-		Meaning.SetValue( SCLBACKND_NAME "_BackendError" );
+		Meaning.SetValue( SCLB_NAME "_BackendError" );
 		Meaning.AddTag( err::Message( ErrorBuffer ) );
 
 		Translation.Init();
-		scllocale::GetTranslation( Meaning, Language, Translation );
+		scll::GetTranslation( Meaning, Language, Translation );
 
 		fblbrq::Report( fblovl::rSoftwareError, Translation.Convert( Buffer ), Flow );
 
@@ -226,7 +211,7 @@ namespace {
 	}
 }
 
-bso::sBool sclbacknd::backend___::SCLDAEMONProcess( fdr::rRWDriver *IODriver )
+bso::sBool sclb::backend___::SCLDProcess( fdr::rRWDriver *IODriver )
 {
 	bso::bool__ Continue = true;
 qRH

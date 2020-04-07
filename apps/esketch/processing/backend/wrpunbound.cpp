@@ -24,7 +24,7 @@
 #include "dir.h"
 #include "fnm.h"
 
-#include "sclmisc.h"
+#include "sclm.h"
 
 using namespace wrpunbound;
 

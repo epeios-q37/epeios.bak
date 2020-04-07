@@ -19,8 +19,8 @@
 
 #include "esketchbkd.h"
 
-#include "sclbacknd.h"
-#include "sclmisc.h"
+#include "sclb.h"
+#include "sclm.h"
 
 #include "registry.h"
 #include "sktfbc.h"
@@ -32,9 +32,9 @@
 #include "wrpunbound.h"
 #include "wrpexample.h"
 
-typedef sclbacknd::rCallback rCallback_;
+typedef sclb::rCallback rCallback_;
 
-typedef sclbacknd::rBackend	rBackend_;
+typedef sclb::rBackend	rBackend_;
 
 SCLI_DEF( esketchbkd, BACKEND_NAME, SKTINF_MC );
 
@@ -45,7 +45,7 @@ private:
 	FBLBKD_RAM_MODULE( wrpexample::wMyObject ) MyObject_;
 	common::rStuff Stuff_;
 protected:
-	void *SCLBACKNDStuff( void ) override
+	void *SCLBStuff( void ) override
 	{
 		return &Stuff_;
 	}
@@ -84,7 +84,7 @@ class rCallback
 : public rCallback_
 {
 protected:
-	virtual rBackend *SCLBACKNDNew( 
+	virtual rBackend *SCLBNew(
 		fblovl::eMode Mode,
 		const ntvstr:: char__ *Origin ) override
 	{
@@ -116,12 +116,12 @@ public:
 	}
 };
 
-const scli::sInfo &scldaemon::SCLDAEMONInfo( void )
+const scli::sInfo &scld::SCLDInfo( void )
 {
 	return esketchbkd::Info;
 }
 
-rCallback_ *sclbacknd::SCLBACKNDGetCallback(
+rCallback_ *sclb::SCLBGetCallback(
 	csdleo::context__ Context,
 	fblovl::eMode Mode )
 {

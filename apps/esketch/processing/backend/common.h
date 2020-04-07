@@ -24,7 +24,7 @@
 
 # include "fblbkd.h"
 
-#include "sclbacknd.h"
+#include "sclb.h"
 
 namespace common {
 
@@ -46,7 +46,7 @@ namespace common {
 }
 
 // '##' needed by 'clang++'/'g++'.
-# define REPORT( message, ... ) sclmisc::ReportAndAbort( message##_, ##__VA_ARGS__  )
+# define REPORT( message, ... ) sclm::ReportAndAbort( message##_, ##__VA_ARGS__  )
 
 # define BACKEND_ ( *(sclbacknd::rBackend *)BaseBackend.UP() )
 # define STUFF_ ( *(common::rStuff *)BACKEND_.Stuff() )
@@ -54,7 +54,7 @@ namespace common {
 // 'h' suffix : to put in error header  (between 'qRH' and 'qRB').
 // 'b' suffix : to put in error body  (just after and 'qRB').
 
-#define BACKENDb sclbacknd::rBackend &Backend = BACKEND_
+#define BACKENDb sclb::rBackend &Backend = BACKEND_
 
 #define STUFFb common::rStuff &Stuff = STUFF_
 

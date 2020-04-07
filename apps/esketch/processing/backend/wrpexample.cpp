@@ -26,7 +26,7 @@
 
 #include "common.h"
 
-#include "sclmisc.h"
+#include "sclm.h"
 
 using namespace wrpexample;
 

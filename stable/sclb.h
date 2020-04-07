@@ -17,42 +17,30 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef SCLBACKND_INC_
-# define SCLBACKND_INC_
+// SoCLe Backend
 
-# define SCLBACKND_NAME		"SCLBACKND"
+#ifndef SCLB_INC_
+# define SCLB_INC_
 
-# if defined( E_DEBUG ) && !defined( SCLBACKND_NODBG )
-#  define SCLBACKND_DBG
+# define SCLB_NAME		"SCLB"
+
+# if defined( E_DEBUG ) && !defined( SCLB_NODBG )
+#  define SCLB_DBG
 # endif
 
-// SoCLe BACKEND
+# include "scld.h"
+# include "sclm.h"
+# include "sclr.h"
 
 # include "err.h"
-# include "flw.h"
-
-# include "csdscb.h"
-
 # include "fblbkd.h"
-// # include "fblbur.h"
 
-# include "lcl.h"
-
-# include "scldaemon.h"
-# include "scllocale.h"
-# include "sclerror.h"
-# include "sclmisc.h"
-
-/*************************/
-/****** New version ******/
-/*************************/
-
-namespace sclbacknd {
+namespace sclb {
 	// Pr�d�claration.
 	class fCallback;
 
 	typedef fblbkd::backend___	rBackend_;
-	typedef scldaemon::cDaemon cDaemon_;
+	typedef scld::cDaemon cDaemon_;
 
 	struct rBackend
 	: public rBackend_,
@@ -69,8 +57,8 @@ namespace sclbacknd {
 		{
 			return this;
 		}
-		bso::bool__ SCLDAEMONProcess( fdr::rRWDriver *IODriver ) override;
-		virtual void *SCLBACKNDStuff( void ) = 0;
+		bso::bool__ SCLDProcess( fdr::rRWDriver *IODriver ) override;
+		virtual void *SCLBStuff( void ) = 0;
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -92,7 +80,7 @@ namespace sclbacknd {
 			const char *SoftwareInformations );
 		void *Stuff( void )
 		{
-			return SCLBACKNDStuff();
+			return SCLBStuff();
 		}
 		const rgstry::multi_layer_registry_ &Registry( void ) const
 		{
@@ -108,15 +96,15 @@ namespace sclbacknd {
 		}
 		void FillSetupRegistryFollowingId( const str::string_ &SetupId )
 		{
-			sclrgstry::FillWithSetupOfId( _Registry, _RegistrySetupLayer, SetupId );
+			sclr::FillWithSetupOfId( _Registry, _RegistrySetupLayer, SetupId );
 		}
 		void FillSetupRegistryWithContent( const str::string_ &Content )
 		{
-			sclrgstry::FillWithContent( _Registry, _RegistrySetupLayer, sclmisc::GetBinPath(), Content );
+			sclr::FillWithContent( _Registry, _RegistrySetupLayer, sclm::GetBinPath(), Content );
 		}
 	};
 
-	typedef scldaemon::rCallback rCallback_;
+	typedef scld::rCallback rCallback_;
 
 	class rCallback
 	: public rCallback_
@@ -124,25 +112,25 @@ namespace sclbacknd {
 	private:
 		fblovl::eMode _Mode;
 	protected:
-		virtual bso::sBool SCLDAEMONPluginOverride(
+		virtual bso::sBool SCLDPluginOverride(
 			str::dString &Id,
 			str::dString &Arguments,
 			csdscb::sTimeout &Timeout ) override
 		{
-			return SCLBACKNDPluginOverride( Id, Arguments, Timeout  );
+			return SCLBPluginOverride( Id, Arguments, Timeout  );
 		}
-		virtual scldaemon::cDaemon *SCLDAEMONNew( const ntvstr::char__ *Origin ) override
+		virtual scld::cDaemon *SCLDNew( const ntvstr::char__ *Origin ) override
 		{
-			return SCLBACKNDNew( _Mode, Origin );
+			return SCLBNew( _Mode, Origin );
 		}
-		virtual bso::sBool SCLBACKNDPluginOverride(
+		virtual bso::sBool SCLBPluginOverride(
 			str::dString &Id,
 			str::dString &Arguments,
 			csdscb::sTimeout &Timeout )
 		{
 			return false;
 		}
-		virtual rBackend *SCLBACKNDNew(
+		virtual rBackend *SCLBNew(
 			fblovl::eMode Mode,
 			const ntvstr::char__ *Origin ) = 0;
 	public:
@@ -181,7 +169,7 @@ namespace sclbacknd {
 /****** Old version ******/
 /*************************/
 
-namespace sclbacknd {
+namespace sclb {
 
 	typedef rBackend backend___;
 
@@ -190,9 +178,10 @@ namespace sclbacknd {
 	/* See 'SCLDAEMONGetCallback(...)' for more details.
 	The difference is that all 'registry' stuff are already
 	initialized. */
-	callback__ *SCLBACKNDGetCallback(
+	callback__ *SCLBGetCallback(
 		csdleo::context__ Context,
 		fblovl::eMode Mode );	// To overload.
+
 }
 
 #endif
