@@ -10,5 +10,5 @@
 	<xpp:expand href="sclr.xlcl"/>
 	<xpp:expand href="sclt.xlcl"/>
 	<xpp:expand href="sclx.xlcl"/>
-	<xpp:expand href="sclplugin.xlcl"/>
+	<xpp:expand href="sclp.xlcl"/>
 </xpp:bloc>

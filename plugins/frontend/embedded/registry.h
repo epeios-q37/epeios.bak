@@ -20,11 +20,11 @@
 #ifndef REGISTRY_INC_
 # define REGISTRY_INC_
 
-# include "sclrgstry.h"
+# include "sclr.h"
 
 namespace registry {
 	namespace parameter {
-		using namespace sclrgstry::parameter;
+		using namespace sclr::parameter;
 
 		extern rgstry::entry___ BackendFilename;
 		extern rgstry::entry___ Context;

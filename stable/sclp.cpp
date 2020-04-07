@@ -17,17 +17,14 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define SCLPLUGIN_COMPILATION_
+#define SCLP_COMPILATION_
 
-#include "sclplugin.h"
+#include "sclp.h"
 
-#include "sclmisc.h"
-#include "sclargmnt.h"
+#include "scla.h"
+#include "sclm.h"
 
-using namespace sclplugin;
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
+using namespace sclp;
 
 #ifdef CPE_S_WIN
 # define FUNCTION_SPEC __declspec(dllexport)
@@ -56,7 +53,7 @@ DEF( PLGNCORE_RETRIEVE_CALLBACK_FUNCTION_NAME, plgncore::retrieve_callback );
 
 const char *PLGNCORE_PLUGIN_LABEL_FUNCTION_NAME( void )
 {
-	return sclplugin::SCLPLUGINPluginLabel();
+	return sclp::SCLPPluginLabel();
 }
 
 const char *PLGNCORE_PLUGIN_IDENTIFIER_FUNCTION_NAME( void )
@@ -87,7 +84,7 @@ namespace {
 	}
 }
 
-void sclplugin::callback__::PLGNCOREInitialize(
+void sclp::callback__::PLGNCOREInitialize(
 	const plgncore::sData *Data,
 	const rgstry::entry__ &Configuration )
 {
@@ -95,22 +92,22 @@ qRH
 qRB
 	PreInitialize_( Data );
 
-	if ( !sclmisc::IsInitialized() )
-		sclmisc::Initialize( *Data->SCLRack, Configuration );
+	if ( !sclm::IsInitialized() )
+		sclm::Initialize( *Data->SCLRack, Configuration );
 	else // Same plugin loaded several times from same executable ; data is common,
 		// so the 'Arguments' registry from the previous loading is erased.
-		sclrgstry::Reset( sclrgstry::lArguments );
+		sclr::Reset( sclr::lArguments );
 
 	if ( Data->Arguments->Amount() != 0 )
-		sclargmnt::FillRegistry( *Data->Arguments, sclargmnt::faIsArgument, sclargmnt::uaReport );
+		scla::FillRegistry( *Data->Arguments, scla::faIsArgument, scla::uaReport );
 
-	sclmisc::DumpRegistriesAndOrLocalesIfRequired();
+	sclm::DumpRegistriesAndOrLocalesIfRequired();
 qRR
 qRT
 qRE
 }
 
-void sclplugin::callback__::PLGNCOREInitialize(
+void sclp::callback__::PLGNCOREInitialize(
 	const plgncore::sData *Data,
 	const fnm::name___ &Directory )
 {
@@ -118,41 +115,41 @@ qRH
 qRB
 	PreInitialize_( Data );
 
-	if ( !sclmisc::IsInitialized() )
-		sclmisc::Initialize( *Data->SCLRack, Directory, SCLPLUGINInfo() );
+	if ( !sclm::IsInitialized() )
+		sclm::Initialize( *Data->SCLRack, Directory, SCLPInfo() );
 	else // Same plugin loaded several times from same executable ; data is common,
 		// so the 'Arguments' registry from the previous loading is erased.
-		sclrgstry::Reset( sclrgstry::lArguments );
+		sclr::Reset( sclr::lArguments );
 
 	if ( Data->Arguments->Amount() != 0 )
-		sclargmnt::FillRegistry( *Data->Arguments, sclargmnt::faIsArgument, sclargmnt::uaReport );
+		scla::FillRegistry( *Data->Arguments, scla::faIsArgument, scla::uaReport );
 
-	sclmisc::DumpRegistriesAndOrLocalesIfRequired();
+	sclm::DumpRegistriesAndOrLocalesIfRequired();
 qRR
 qRT
 qRE
 }
 
-void *sclplugin::callback__::PLGNCORERetrievePlugin( plgncore::sAbstract *Abstract )
+void *sclp::callback__::PLGNCORERetrievePlugin( plgncore::sAbstract *Abstract )
 {
-	return sclplugin::SCLPLUGINRetrievePlugin( Abstract );
+	return sclp::SCLPRetrievePlugin( Abstract );
 }
 
-bso::sBool sclplugin::callback__::PLGNCOREReleasePlugin( void *Plugin )
+bso::sBool sclp::callback__::PLGNCOREReleasePlugin( void *Plugin )
 {
-	bso::sBool Result = sclplugin::SCLPLUGINReleasePlugin( Plugin );
+	bso::sBool Result = sclp::SCLPReleasePlugin( Plugin );
 
-	sclmisc::Quit( SCLPLUGINInfo() );
+	sclm::Quit( SCLPInfo() );
 
 	return Result;
 }
 
-const char *sclplugin::callback__::PLGNCOREPluginIdentifier( void )
+const char *sclp::callback__::PLGNCOREPluginIdentifier( void )
 {
 	return Identifier_;
 }
 
-const char *sclplugin::callback__::PLGNCOREPluginDetails( void )
+const char *sclp::callback__::PLGNCOREPluginDetails( void )
 {
 	return Details_;
 }
@@ -163,11 +160,11 @@ qRH
 	str::string Buffer;
 qRB
 	Buffer.Init();
-	SCLPLUGINPluginIdentifier( Buffer );
+	SCLPPluginIdentifier( Buffer );
 	Buffer.Convert( Identifier_ );
 
 	Buffer.Init();
-	SCLPLUGINPluginDetails( Buffer );
+	SCLPPluginDetails( Buffer );
 	Buffer.Convert( Details_ );
 qRR
 qRT

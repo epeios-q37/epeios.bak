@@ -25,16 +25,16 @@
 
 #include "rpembedded.h"
 
-#include "sclmisc.h"
-#include "sclplugin.h"
-#include "sclmisc.h"
+#include "sclm.h"
+#include "sclp.h"
+#include "sclm.h"
 
 #include "fblovl.h"
 #include "csdlec.h"
 
 SCLI_DEF( embedded, NAME_LC, NAME_MC );
 
-const scli::sInfo &sclplugin::SCLPLUGINInfo( void )
+const scli::sInfo &sclp::SCLPInfo( void )
 {
 	return embedded::Info;
 }
@@ -86,7 +86,7 @@ public:
 		bso::sBool Success = false;
 	qRH
 		csdlec::library_data__ Data;
-		sclmisc::sRack SCLRack;
+		sclm::sRack SCLRack;
 	qRB
 		SCLRack.Init();
 		Data.Init( Context, BackendFilename, &SCLRack );
@@ -100,7 +100,7 @@ public:
 	qRE
 		return Success;
 	}
-	bso::sBool SCLPLUGINInitialize( plgncore::sAbstract *BaseAbstract )
+	bso::sBool SCLPInitialize( plgncore::sAbstract *BaseAbstract )
 	{
 		bso::sBool Success = false;
 	qRH
@@ -112,12 +112,12 @@ public:
 
 		BackendFilename.Init();
 
-		sclmisc::MGetValue( registry::parameter::BackendFilename, BackendFilename );
+		sclm::MGetValue( registry::parameter::BackendFilename, BackendFilename );
 
 		if ( !Init( BackendFilename.Convert(Buffer), csdleo::cRegular ) )
 			switch ( plgn::ErrorReporting( Abstract ) ) {
 			case plgn::rhInternally:
-				sclmisc::ReportAndAbort( "UnableToLoad", BackendFilename );
+				sclm::ReportAndAbort( "UnableToLoad", BackendFilename );
 				break;
 			case plgn::rhDetailed:
 				Abstract->BackendFilename = BackendFilename;
@@ -136,14 +136,14 @@ public:
 	}
 };
 
-SCLPLUGIN_DEF( rPlugin );
+SCLP_DEF( rPlugin );
 
-void sclplugin::SCLPLUGINPluginIdentifier( str::dString &Identifier )
+void sclp::SCLPPluginIdentifier( str::dString &Identifier )
 {
 	Identifier.Append( IDENTIFIER );
 }
 
-void sclplugin::SCLPLUGINPluginDetails( str::dString &Details )
+void sclp::SCLPPluginDetails( str::dString &Details )
 {
 	Details.Append( PLUGIN_NAME " V" VERSION " - Build " __DATE__ " " __TIME__ " (" );
 	Details.Append( cpe::GetDescription() );

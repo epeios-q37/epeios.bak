@@ -21,5 +21,5 @@
 
 using namespace registry;
 
-rgstry::entry___ registry::parameter::BackendFilename("BackendFilename", sclrgstry::Parameters );
-rgstry::entry___ registry::parameter::Context("Context", sclrgstry::Parameters );
+rgstry::entry___ registry::parameter::BackendFilename("BackendFilename", sclr::Parameters );
+rgstry::entry___ registry::parameter::Context("Context", sclr::Parameters );

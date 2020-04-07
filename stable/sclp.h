@@ -17,24 +17,23 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef SCLPLUGIN_INC_
-# define SCLPLUGIN_INC_
+// SoCLe Plugin
 
-# define SCLPLUGIN_NAME		"SCLPLUGIN"
+#ifndef SCLP_INC_
+# define SCLP_INC_
 
-# if defined( E_DEBUG ) && !defined( SCLPLUGIN_NODBG )
-#  define SCLPLUGIN_DBG
+# define SCLP_NAME		"SCLP"
+
+# if defined( E_DEBUG ) && !defined( SCLP_NODBG )
+#  define SCLP_DBG
 # endif
 
-// SoCLe PLUGIN
-
-# include "plgncore.h"
-
-# include "err.h"
-# include "flw.h"
 # include "scli.h"
 
-namespace sclplugin {
+# include "err.h"
+# include "plgncore.h"
+
+namespace sclp {
 	typedef plgncore::callback__ _callback__;
 
 	class callback__
@@ -64,25 +63,25 @@ namespace sclplugin {
 	};
 
 	// Functions to overload.
-	void SCLPLUGINPluginIdentifier( str::dString &Identifier );
-	void SCLPLUGINPluginDetails( str::dString &Details );
-	void SCLPLUGINPluginParameters( str::dStrings &Parameters );
-	const scli::sInfo &SCLPLUGINInfo( void );	// To define by user.
+	void SCLPPluginIdentifier( str::dString &Identifier );
+	void SCLPPluginDetails( str::dString &Details );
+	void SCLPPluginParameters( str::dStrings &Parameters );
+	const scli::sInfo &SCLPInfo( void );	// To define by user.
 	// The following ones are defined by below macro.
-	const char *SCLPLUGINPluginLabel( void );
-	void *SCLPLUGINRetrievePlugin( plgncore::sAbstract *Abstract );
-	bso::sBool SCLPLUGINReleasePlugin( void * );
+	const char *SCLPPluginLabel( void );
+	void *SCLPRetrievePlugin( plgncore::sAbstract *Abstract );
+	bso::sBool SCLPReleasePlugin( void * );
 }
 
 // NOTA : needed parameters are generally retrieved from the registry,
 // which is automatically filled by this module.
-# define SCLPLUGIN_DEF( plugin )\
-	const char *sclplugin::SCLPLUGINPluginLabel( void )\
+# define SCLP_DEF( plugin )\
+	const char *sclp::SCLPPluginLabel( void )\
 	{\
 		return plugin::Label();\
 	}\
 \
-	void *sclplugin::SCLPLUGINRetrievePlugin( plgncore::sAbstract *Abstract )\
+	void *sclp::SCLPRetrievePlugin( plgncore::sAbstract *Abstract )\
 	{\
 		plugin *Plugin = NULL;\
 	qRH\
@@ -92,7 +91,7 @@ namespace sclplugin {
 		if ( Plugin == NULL )\
 			qRAlc();\
 		\
-		if ( !Plugin->SCLPLUGINInitialize( Abstract ) ) {\
+		if ( !Plugin->SCLPInitialize( Abstract ) ) {\
 			delete Plugin;\
 			Plugin = NULL;\
 		}\
@@ -106,7 +105,7 @@ namespace sclplugin {
 		return Plugin;\
 	}\
 \
-	bso::sBool sclplugin::SCLPLUGINReleasePlugin( void *Plugin )\
+	bso::sBool sclp::SCLPReleasePlugin( void *Plugin )\
 	{\
 		bso::sBool Success = false;\
 	qRH\

@@ -2,7 +2,7 @@
 <!-- $Id: scltool.xlcl,v 1.2 2013/07/18 19:46:20 csimon Exp $ -->
 <xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
   <!--
-	<Translations text="SCLTOOL_">
+	<Translations text="SCLT_">
 		<Translation language="fr"></Translation>
 		<Translation language="en"></Translation>
 	</Translations>

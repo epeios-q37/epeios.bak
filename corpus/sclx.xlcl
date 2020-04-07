@@ -1,20 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!-- $Id: sclmisc.xlcl,v 1.3 2013/07/18 19:46:20 csimon Exp $ -->
 <xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
-	<Translations text="SCLXDHTML_CloseText">
+	<Translations text="SCLX_CloseText">
 		<Translation language="fr">Fermer</Translation>
 		<Translation language="en">Close</Translation>
 	</Translations>
-	<Translations text="SCLXDHTML_NoBackendDeclaration">
+	<Translations text="SCLX_NoBackendDeclaration">
 		<Translation language="fr">Déclaration de moteur de traitement absente.</Translation>
 		<Translation language="en">No backend dclaration.</Translation>
 	</Translations>
-	<Translations text="SCLXHTML_Disconnected">
+	<Translations text="SCLX_Disconnected">
 		<Translation language="fr">Perte de la connection au 'backend' !</Translation>
 		<Translation language="en">Connexion to backend lost !</Translation>
 	</Translations>
 	<!--
-	<Translations text="SCLXHTML_">
+	<Translations text="SCLX_">
 		<Translation language="fr"></Translation>
 		<Translation language="en"></Translation>
 	</Translations>

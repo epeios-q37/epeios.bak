@@ -5,11 +5,11 @@
 		<Translation language="fr">Erreur lors du chargement de la 'locale' : %1.</Translation>
 		<Translation language="en">Error during loading of the locale : %1.</Translation>
 	</Translations>
-  <Translations message="SCLL__ConfigurationLocaleParsingError">
+  <Translations message="SCLL_ConfigurationLocaleParsingError">
     <Translation language="fr">Erreur lors du chargement de la 'locale' du fichier de configuration : %1.</Translation>
     <Translation language="en">Error during loading of the configuration file locale : %1.</Translation>
   </Translations>
-  <Translations message="SCLL__ProjectLocaleParsingError">
+  <Translations message="SCLL_ProjectLocaleParsingError">
     <Translation language="fr">Erreur lors du chargement de la 'locale' du projet : %1.</Translation>
     <Translation language="en">Error during loading of the project locale : %1.</Translation>
   </Translations>

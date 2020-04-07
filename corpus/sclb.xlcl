@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!-- $Id: sclbacknd.xlcl,v 1.3 2013/07/18 19:46:20 csimon Exp $ -->
 <xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
-	<Translations text="SCLBACKND_BackendError">
+	<Translations text="SCLB_BackendError">
 		<Translation language="fr">Erreur 'backend' : %1</Translation>
 		<Translation language="en">Backend error : %1</Translation>
 	</Translations>
 	<!--
-	<Translations text="SCLBACKND_">
+	<Translations text="SCLB_">
 		<Translation language="fr"></Translation>
 		<Translation language="en"></Translation>
 	</Translations>

@@ -1,17 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!-- $Id: scldaemon.xlcl,v 1.2 2013/07/18 19:46:20 csimon Exp $ -->
 <xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
-	<Translations text="SCLDAEMON_ModuleClosing">
+	<Translations text="SCLD_ModuleClosing">
 		<Translation language="fr">Veuillez patientez : module en cours de fermeture...</Translation>
 		<Translation language="en">Please wait : closing module ...</Translation>
 	</Translations>
-  <Translations text="SCLDAEMON_ModuleClosed">
+  <Translations text="SCLD_ModuleClosed">
     <Translation language="fr">Module fermé.</Translation>
     <Translation language="en">Module closed.</Translation>
   </Translations>
 
   <!--
-	<Translations text="SCLDAEMON_">
+	<Translations text="SCLD_">
 		<Translation language="fr"></Translation>
 		<Translation language="en"></Translation>
 	</Translations>
