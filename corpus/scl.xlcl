@@ -3,7 +3,7 @@
 <xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
 	<xpp:expand href="scla.xlcl"/>
 	<xpp:expand href="sclbacknd.xlcl"/>
-	<xpp:expand href="scldaemon.xlcl"/>
+	<xpp:expand href="scld.xlcl"/>
 	<xpp:expand href="sclfrntnd.xlcl"/>
 	<xpp:expand href="scll.xlcl"/>
 	<xpp:expand href="sclm.xlcl"/>

@@ -17,21 +17,22 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define SCLERROR_COMPILATION_
+#define SCLE_COMPILATION_
 
-#include "sclerror.h"
+#include "scle.h"
 
-using namespace sclerror;
+#include "scll.h"
 
+using namespace scle;
 
 static inline void Lock_( void )
 {
-	mtx::Lock( SCLERRORError->Mutex );
+	mtx::Lock( SCLEError->Mutex );
 }
 
 static inline void Unlock_( void )
 {
-	mtx::Unlock( SCLERRORError->Mutex );
+	mtx::Unlock( SCLEError->Mutex );
 }
 
 static inline row__  Search_( void )
@@ -40,7 +41,7 @@ static inline row__  Search_( void )
 
 	Lock_();
 
-	Row = SCLERRORError->TIds.Search( tht::GetTID() );
+	Row = SCLEError->TIds.Search( tht::GetTID() );
 
 	Unlock_();
 
@@ -54,11 +55,11 @@ static inline row__  SearchOrCreate_( void )
 	if ( Row == qNIL ) {
 		Lock_();
 
-		Row = SCLERRORError->TIds.Add( tht::GetTID() );
+		Row = SCLEError->TIds.Add( tht::GetTID() );
 
-		SCLERRORError->Meanings.Allocate( SCLERRORError->TIds.Extent() );
-		SCLERRORError->Meanings( Row ).Init();
-		SCLERRORError->Meanings.Flush();
+		SCLEError->Meanings.Allocate( SCLEError->TIds.Extent() );
+		SCLEError->Meanings( Row ).Init();
+		SCLEError->Meanings.Flush();
 
 		Unlock_();
 	}
@@ -72,14 +73,14 @@ static inline bso::bool__ IsMeaningEmpty_( row__ Row )
 
 	Lock_();
 
-	IsEmpty = SCLERRORError->Meanings(Row).IsEmpty();
+	IsEmpty = SCLEError->Meanings(Row).IsEmpty();
 
 	Unlock_();
 
 	return IsEmpty;
 }
 
-bso::bool__ sclerror::IsErrorPending( void )
+bso::bool__ scle::IsErrorPending( void )
 {
 	row__ Row = Search_();
 
@@ -89,7 +90,7 @@ bso::bool__ sclerror::IsErrorPending( void )
 		return !IsMeaningEmpty_( Row );
 }
 
-const lcl::meaning_ &sclerror::GetMeaning( lcl::meaning_ &Meaning )
+const lcl::meaning_ &scle::GetMeaning( lcl::meaning_ &Meaning )
 {
 	if ( !IsErrorPending() )
 		qRFwk();
@@ -98,28 +99,28 @@ const lcl::meaning_ &sclerror::GetMeaning( lcl::meaning_ &Meaning )
 
 	Lock_();
 
-	Meaning = SCLERRORError->Meanings( Row );
+	Meaning = SCLEError->Meanings( Row );
 
 	Unlock_();
 
 	return Meaning;
 }
 
-void sclerror::ResetPendingError( void )
+void scle::ResetPendingError( void )
 {
 	row__ Row = SearchOrCreate_();
 
 	Lock_();
 
-	SCLERRORError->Meanings( Row ).Init();
-	SCLERRORError->Meanings.Flush();
+	SCLEError->Meanings( Row ).Init();
+	SCLEError->Meanings.Flush();
 
-	SCLERRORError->TIds.Delete( Row );
+	SCLEError->TIds.Delete( Row );
 
 	Unlock_();
 }
 
-void sclerror::SetMeaning( const lcl::meaning_ &Meaning )
+void scle::SetMeaning( const lcl::meaning_ &Meaning )
 {
 	if ( IsErrorPending() )
 		qRFwk();
@@ -131,14 +132,14 @@ void sclerror::SetMeaning( const lcl::meaning_ &Meaning )
 
 	Lock_();
 
-	SCLERRORError->Meanings( Row ) = Meaning;
+	SCLEError->Meanings( Row ) = Meaning;
 
-	SCLERRORError->Meanings.Flush();
+	SCLEError->Meanings.Flush();
 
 	Unlock_();
 }
 
-bso::bool__ sclerror::GetPendingErrorTranslation(
+bso::bool__ scle::GetPendingErrorTranslation(
 	const char *Language,
 	str::string_ &Translation,
 	err::handling__ ErrHandling )

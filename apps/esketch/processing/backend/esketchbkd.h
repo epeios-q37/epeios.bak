@@ -22,10 +22,10 @@
 
 # include "sktinf.h"
 
-# include "sclmisc.h"
+# include "scli.h"
 
 # define BACKEND_NAME	SKTINF_LC	"bkd"
-# define COPYRIGHT		COPYRIGHT_YEARS " " SKTINF_OWNER_NAME " (" SKTINF_OWNER_CONTACT ")"	
+# define COPYRIGHT		COPYRIGHT_YEARS " " SKTINF_OWNER_NAME " (" SKTINF_OWNER_CONTACT ")"
 # define API_VERSION	"1"
 
 SCLI_DEC( esketchbkd );

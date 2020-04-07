@@ -17,47 +17,25 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-//	$Id: sclerror.h,v 1.6 2013/07/18 19:46:25 csimon Exp $
+// SoCLe Error
 
-#ifndef SCLERROR_INC_
-#define SCLERROR_INC_
+#ifndef SCLE_INC_
+# define SCLE_INC_
 
-#define SCLERROR_NAME		"SCLERROR"
+# define SCLE_NAME		"SCLE"
 
-#define	SCLERROR_VERSION	"$Revision: 1.6 $"
+# if defined( E_DEBUG ) && !defined( SCLE_NODBG )
+#  define SCLE_DBG
+# endif
 
-#define SCLERROR_OWNER		"Claude SIMON"
-
-#if defined( E_DEBUG ) && !defined( SCLERROR_NODBG )
-#define SCLERROR_DBG
-#endif
-
-/* Begin of automatic documentation generation part. */
-
-//V $Revision: 1.6 $
-//C Claude SIMON (csimon at zeusw dot org)
-//R $Date: 2013/07/18 19:46:25 $
-
-/* End of automatic documentation generation part. */
-
-/* Addendum to the automatic documentation generation part. */
-//D SoCLe ERROR
-/* End addendum to automatic documentation generation part. */
-
-/*$BEGIN$*/
-
+# include "ctn.h"
 # include "err.h"
-# include "flw.h"
 # include "lcl.h"
-# include "cio.h"
-# include "cpe.h"
-# include "mtx.h"
+# include "lstbch.h"
+# include "sdr.h"
 # include "tht.h"
 
-#include "scll.h"
-
-namespace sclerror {
-
+namespace scle {
 	typedef tht::thread_id__ tid__;
 
 	E_ROW( row__ );
@@ -92,7 +70,7 @@ namespace sclerror {
 	};
 
 	// A surcharger.
-	extern rError *SCLERRORError;
+	extern rError *SCLEError;
 
 	const lcl::meaning_ &GetMeaning( lcl::meaning_ &Meaning );
 
@@ -106,7 +84,7 @@ namespace sclerror {
 		const char *Language,
 		str::string_ &Translation,
 		err::handling__ ErrHandling = err::h_Default );
+
 }
 
-/*$END$*/
 #endif

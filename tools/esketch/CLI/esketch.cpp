@@ -24,7 +24,6 @@
 
 #include "sclm.h"
 #include "sclt.h"
-#include "sclerror.h"
 
 #include "err.h"
 #include "cio.h"

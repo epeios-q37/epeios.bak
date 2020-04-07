@@ -22,7 +22,7 @@
 #include "sclt.h"
 
 #include "scla.h"
-#include "sclerror.h"
+#include "scle.h"
 #include "scll.h"
 #include "sclm.h"
 
@@ -34,7 +34,7 @@ using cio::COut;
 using scll::GetLocale;
 
 static err::err___ qRRor_;
-static sclerror::rError SCLError_;
+static scle::rError SCLError_;
 
 bso::bool__ sclt::IgnoreUnknownArguments = false;
 

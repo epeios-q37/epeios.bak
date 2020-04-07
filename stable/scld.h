@@ -17,43 +17,42 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef SCLDAEMON_INC_
-# define SCLDAEMON_INC_
+// SoCLe Daemon
 
-# define SCLDAEMON_NAME		"SCLDAEMON"
+#ifndef SCLD_INC_
+# define SCLD_INC_
 
-# if defined( E_DEBUG ) && !defined( SCLDAEMON_NODBG )
-#  define SCLDAEMON_DBG
+# define SCLD_NAME		"SCLD"
+
+# if defined( E_DEBUG ) && !defined( SCLD_NODBG )
+#  define SCLD_DBG
 # endif
 
-// SoCLe DAEMON
+# include "scli.h"
 
-# include "err.h"
-# include "flw.h"
-
+# include "bso.h"
 # include "csdleo.h"
 # include "csdscb.h"
+# include "err.h"
+# include "fdr.h"
 
-# include "scli.h"
-# include "sclrgstry.h"
-
-# ifndef SCLDAEMON_DISABLE_ERROR_DETECTION
+# ifndef SCLD_DISABLE_ERROR_DETECTION
 #  ifdef E_DEBUG
-#   define SCLDAEMON__ERROR_DETECTION_ENABLED
+#   define SCLD_ERROR_DETECTION_ENABLED_
 #  endif
 # endif
 
-namespace scldaemon {
+namespace scld {
 	class cDaemon
 	{
 	protected:
-		virtual bso::bool__ SCLDAEMONProcess( fdr::rRWDriver *IODriver ) = 0;
+		virtual bso::bool__ SCLDProcess( fdr::rRWDriver *IODriver ) = 0;
 		// Post processing is made by the destructor.
 	public:
 		qCALLBACK( Daemon)
 		bso::bool__ Process( fdr::rRWDriver *IODriver )
 		{
-			return SCLDAEMONProcess( IODriver );
+			return SCLDProcess( IODriver );
 		}
 	};
 
@@ -68,13 +67,13 @@ namespace scldaemon {
 			str::dString &Arguments,
 			csdscb::sTimeout &Timeout ) override
 		{
-			return SCLDAEMONPluginOverride( Id, Arguments, Timeout );
+			return SCLDPluginOverride( Id, Arguments, Timeout );
 		}
 		virtual void *CSDSCBPreProcess(
 			fdr::rRWDriver *IODriver,
             const ntvstr::char__ *Origin ) override
 		{
-			return SCLDAEMONNew( Origin );
+			return SCLDNew( Origin );
 		}
 		virtual csdscb::action__ CSDSCBProcess(
 			fdr::rRWDriver *IODriver,
@@ -94,7 +93,7 @@ namespace scldaemon {
 			delete (cDaemon*)UP;
 		qRR
 # ifndef CPE_S_POSIX
-#  ifdef SCLDAEMON__ERROR_DETECTION_ENABLED
+#  ifdef SCLD_ERROR_DETECTION_ENABLED_
 			strcpy( NULL, "There should no be errors, but, if one occurs, this line should facilitate the debugging." );
 #  endif
 # endif
@@ -104,14 +103,14 @@ namespace scldaemon {
 			return true;
 		}
 	protected:
-		virtual bso::sBool SCLDAEMONPluginOverride(
+		virtual bso::sBool SCLDPluginOverride(
 			str::dString &Id,
 			str::dString &Arguments,
 			csdscb::sTimeout &Timeout )
 		{
 			return false;
 		}
-		virtual cDaemon *SCLDAEMONNew( const ntvstr::char__ *Origin ) = 0;
+		virtual cDaemon *SCLDNew( const ntvstr::char__ *Origin ) = 0;
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -123,12 +122,12 @@ namespace scldaemon {
 	};
 
 	// To define by user.
-	const scli::sInfo &SCLDAEMONInfo( void );
+	const scli::sInfo &SCLDInfo( void );
 
 	/* Called once, when the library is loaded. All the 'registry' stuff is already initialized.
 	The same returned callback is used to handle each connection (one callback for all connections,
 	and NOT a callback per connection). */
-	rCallback *SCLDAEMONGetCallback(
+	rCallback *SCLDGetCallback(
 		csdleo::context__ Context,
 		csdleo::mode__ Mode );	// To overload !
 }

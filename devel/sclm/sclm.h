@@ -28,12 +28,13 @@
 #  define SCLM_DBG
 # endif
 
-# include "sclerror.h"
+# include "scle.h"
 # include "scli.h"
 # include "scll.h"
 # include "sclr.h"
 
 # include "bso.h"
+# include "cio.h"
 # include "err.h"
 # include "plgn.h"
 # include "str.h"
@@ -68,7 +69,7 @@ namespace sclm {
 		str::string_ &Translation,
 		err::handling__ ErrHandling = err::h_Default )
 	{
-		return sclerror::GetPendingErrorTranslation( GetBaseLanguage(), Translation, ErrHandling );
+		return scle::GetPendingErrorTranslation( GetBaseLanguage(), Translation, ErrHandling );
 	}
 
 	bso::sBool DisplaySCLBasePendingError( txf::sWFlow &Flow = cio::CErr );
@@ -155,7 +156,7 @@ namespace sclm {
 		}
 	public:
 		err::err___ *qRRor;
-		sclerror::rError *SCLError;
+		scle::rError *SCLError;
 		const cio::set__ *CIO;
 		scll::rRack *Locale;
 		void reset( bso::sBool = true )
@@ -171,13 +172,13 @@ namespace sclm {
 			Test_();
 
 			this->qRRor = err::qRRor;
-			this->SCLError = sclerror::SCLERRORError;
+			this->SCLError = scle::SCLEError;
 			this->CIO = &cio::GetCurrentSet();
 			this->Locale = &scll::GetRack();
 		}
 		void Init(
 			err::err___ &qRRor,
-			sclerror::rError &SCLError,
+			scle::rError &SCLError,
 			const cio::set__ &CIO,
 			scll::rRack &Locale )
 		{

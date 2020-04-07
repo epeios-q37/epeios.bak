@@ -749,7 +749,7 @@ qRB
 			Name.Append( Flag.Name );
 			Meaning.AddTag( Name );
 
-			sclerror::SetMeaning( Meaning );
+			scle::SetMeaning( Meaning );
 			qRAbort();
 		}
 	}
@@ -768,7 +768,7 @@ qRB
 			Meaning.Init();
 			Meaning.SetValue( SCLA_NAME "_NoValueForFlag" );
 			Meaning.AddTag( Flag.Name );
-			sclerror::SetMeaning( Meaning );
+			scle::SetMeaning( Meaning );
 			qRAbort();
 		}
 
@@ -778,7 +778,7 @@ qRB
 			Meaning.Init();
 			Meaning.SetValue( SCLA_NAME "_BadPathForFlag" );
 			Meaning.AddTag( Flag.Name );
-			sclerror::SetMeaning( Meaning );
+			scle::SetMeaning( Meaning );
 			qRAbort();
 		}
 	}
@@ -825,7 +825,7 @@ qRB
 			Name.Append( Option.Name );
 			Meaning.AddTag( Name );
 
-			sclerror::SetMeaning( Meaning );
+			scle::SetMeaning( Meaning );
 			qRAbort();
 		}
 	}
@@ -838,7 +838,7 @@ qRB
 			Meaning.Init();
 			Meaning.SetValue( SCLA_NAME "_NoPathForOption" );
 			Meaning.AddTag( Option.Name );
-			sclerror::SetMeaning( Meaning );
+			scle::SetMeaning( Meaning );
 			qRAbort();
 		}
 
@@ -848,7 +848,7 @@ qRB
 			Meaning.Init();
 			Meaning.SetValue( SCLA_NAME "_BadPathForOption" );
 			Meaning.AddTag( Option.Name );
-			sclerror::SetMeaning( Meaning );
+			scle::SetMeaning( Meaning );
 			qRAbort();
 		}
 	}

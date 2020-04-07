@@ -17,22 +17,15 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define SCLDAEMON_COMPILATION_
+#define SCLD_COMPILATION_
 
-#include "scldaemon.h"
+#include "scld.h"
 
-using namespace scldaemon;
+#include "sclm.h"
 
-#include "sclmisc.h"
-#include "scllocale.h"
-#include "sclerror.h"
-
-#include "lcl.h"
-
-#include "csdleo.h"
 #include "csdles.h"
 
-#include "fnm.h"
+using namespace scld;
 
 namespace {
 	bso::bool__ IsInitialized_ = false;
@@ -55,13 +48,13 @@ namespace {
 
 			if ( IsInitialized_ )
 				qRFwk();
-		
+
 			if ( true )	{
 
 				// Does not work when placed in 'global_cdtor'.
 				Directory.Init();
 				fnm::GetLocation( Data->LibraryLocationAndName, Directory );
-				sclmisc::Initialize( *(sclmisc::sRack *)Data->UP, Directory.UTF8( Buffer ), SCLDAEMONInfo() );
+				sclm::Initialize( *(sclm::sRack *)Data->UP, Directory.UTF8( Buffer ), SCLDInfo() );
 				IsInitialized_ = true;
 			}
 		qRR
@@ -72,7 +65,7 @@ namespace {
 			csdleo::context__ Context,
 			csdleo::mode__ Mode )  override
 		{
-			return SCLDAEMONGetCallback( Context, Mode );
+			return SCLDGetCallback( Context, Mode );
 		}
 	} _Callback;
 }

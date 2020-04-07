@@ -36,11 +36,11 @@ const str::dString &sclm::GetBinPath( void )
 	return BinPath_;
 }
 
-sclerror::rError *sclerror::SCLERRORError = NULL;
+scle::rError *scle::SCLEError = NULL;
 
 bso::bool__ sclm::IsInitialized( void )
 {
-	return sclerror::SCLERRORError != NULL;
+	return scle::SCLEError != NULL;
 }
 
 static TOL_CBUFFER___ BaseLanguage_;	// De base, le language d'admnistration (lu  partir du fichier de configuration), pouvant devenir language utiliateur selon le contexte.
@@ -105,7 +105,7 @@ void sclm::ErrFinal( void )
 		qRR
 		qRT
 		qRE
-	} else if ( sclerror::IsErrorPending() )
+	} else if ( scle::IsErrorPending() )
 		DisplaySCLBasePendingError( cio::CErr );
 	else
 		ERRRst();
@@ -120,7 +120,7 @@ qRB
 	Translation.Init();
 
 	if ( ( Exists = sclm::GetSCLBasePendingErrorTranslation( Translation ) ) )
-		sclerror::ResetPendingError();
+		scle::ResetPendingError();
 
 	Flow << txf::nl << Translation << txf::nl  << txf::commit;
 qRR
@@ -131,7 +131,7 @@ qRE
 
 void sclm::ReportAndAbort_( const lcl::meaning_ &Meaning )
 {
-	sclerror::SetMeaning( Meaning );
+	scle::SetMeaning( Meaning );
 	qRAbort();
 }
 
@@ -175,7 +175,7 @@ qRE
 static void Initialize_( const sRack &Rack )
 {
 	err::qRRor = Rack.qRRor;
-	sclerror::SCLERRORError = Rack.SCLError;
+	scle::SCLEError = Rack.SCLError;
 
 	cio::target__ Target = cio::GetTarget( *Rack.CIO );
 
