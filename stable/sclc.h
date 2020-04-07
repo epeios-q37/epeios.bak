@@ -28,7 +28,7 @@
 #  define SCLC_DBG
 # endif
 
-# include "sclmisc.h"
+# include "sclm.h"
 
 # include "err.h"
 
@@ -43,7 +43,7 @@ namespace sclc {
 	qRB
 		Translation.Init();
 
-		Flow << scllocale::GetTranslation( Source, sclmisc::GetBaseLanguage(), Translation, Tags... ) << txf::nl;
+		Flow << scll::GetTranslation( Source, sclm::GetBaseLanguage(), Translation, Tags... ) << txf::nl;
 	qRR
 	qRT
 	qRE
@@ -53,7 +53,7 @@ namespace sclc {
 		const source &Source,
 		const tags &... Tags )
 	{
-		sclmisc::ReportAndAbort( Source, Tags... );
+		sclm::ReportAndAbort( Source, Tags... );
 	}
 }
 

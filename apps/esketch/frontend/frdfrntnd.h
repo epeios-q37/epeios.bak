@@ -24,15 +24,15 @@
 
 # include "frdrgstry.h"
 
-# include "sclfrntnd.h"
+# include "sclf.h"
 
 # include "csducl.h"
 # include "xml.h"
 
 
 namespace frdfrntnd {
-	using sclfrntnd::rKernel;
-	typedef sclfrntnd::rFrontend rFrontend_;
+	using sclf::rKernel;
+	typedef sclf::rFrontend rFrontend_;
 	typedef fblfrd::cFrontend cFrontend_;
 
 	using fbltyp::dString;

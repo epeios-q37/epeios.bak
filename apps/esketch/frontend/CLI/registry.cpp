@@ -21,4 +21,4 @@
 
 using namespace registry;
 
-rEntry registry::parameter::Pattern("Pattern", sclrgstry::Parameters );
+rEntry registry::parameter::Pattern("Pattern", sclr::Parameters );

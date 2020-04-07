@@ -23,8 +23,8 @@
 
 #include "frdfrntnd.h"
 
-#include "scltool.h"
-#include "sclerror.h"
+#include "sclt.h"
+#include "scle.h"
 
 #include "err.h"
 #include "cio.h"
@@ -53,7 +53,7 @@ namespace {
 		class rRack_ {
 		private:
 			frdfrntnd::rKernel Kernel_;
-			sclfrntnd::sReportingCallback ReportingCallback_;
+			sclf::sReportingCallback ReportingCallback_;
 			void Connect_( void )
 			{
 			qRH
@@ -78,14 +78,14 @@ namespace {
 			void Init( void )
 			{
 			qRH
-				sclfrntnd::rFeatures Features;
+				sclf::rFeatures Features;
 			qRB
 				Features.Init();
-				sclfrntnd::GuessBackendFeatures( Features );
+				sclf::GuessBackendFeatures( Features );
 
 				Kernel_.Init( Features, plgn::EmptyAbstracts );
 				ReportingCallback_.Init();
-				Frontend.Init( Kernel_, sclmisc::GetBaseLanguage(), ReportingCallback_ );
+				Frontend.Init( Kernel_, sclm::GetBaseLanguage(), ReportingCallback_ );
 				Connect_();
 				Object.Init( Frontend );
 			qRR
@@ -142,7 +142,7 @@ namespace {
 		Rack.Init();
 
 		Pattern.Init();
-		sclmisc::MGetValue( registry::parameter::Pattern, Pattern );
+		sclm::MGetValue( registry::parameter::Pattern, Pattern );
 		Rack.Object.ToUpper( Pattern );
 
 		cio::COut << Pattern << txf::nl;
@@ -156,14 +156,14 @@ namespace {
 	else if ( Command == #name )\
 		name##_()
 
-const scli::sInfo &scltool::SCLTOOLInfo( void )
+const scli::sInfo &sclt::SCLTInfo( void )
 {
 	return esketchcli::Info;
 }
 
-int scltool::SCLTOOLMain(
+int sclt::SCLTMain(
 	const str::dString &Command,
-	const scltool::fOddities &Oddities )
+	const sclt::fOddities &Oddities )
 {
 	int ExitValue = EXIT_FAILURE;
 qRH

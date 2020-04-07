@@ -20,21 +20,21 @@
 #ifndef FRDRGSTRY_INC_
 # define FRDRGSTRY_INC_
 
-# include "sclrgstry.h"
-# include "sclfrntnd.h"
+# include "sclr.h"
+# include "sclf.h"
 
 namespace frdrgstry {
-	using sclrgstry::dRegistry;
-	using sclrgstry::wRegistry;
+	using sclr::dRegistry;
+	using sclr::wRegistry;
 
 	using rgstry::rEntry;
 
 	namespace parameter {
-		using namespace sclfrntnd::registry::parameter;
+		using namespace sclf::registry::parameter;
 	}
 
 	namespace definition {
-		using namespace sclfrntnd::registry::definition;
+		using namespace sclf::registry::definition;
 	}
 }
 

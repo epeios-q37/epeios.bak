@@ -17,41 +17,31 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef SCLFRNTND_INC_
-# define SCLFRNTND_INC_
+// SoCLe Frontend
 
-# define SCLFRNTND_NAME		"SCLFRNTND"
+#ifndef SCLF_INC_
+# define SCLF_INC_
 
-# if defined( E_DEBUG ) && !defined( SCLFRNTND_NODBG )
-#  define SCLFRNTND_DBG
+# define SCLF_NAME		"SCLF"
+
+# if defined( E_DEBUG ) && !defined( SCLF_NODBG )
+#  define SCLF_DBG
 # endif
 
-// SoCLe FRoNTeND
-
-# include "sclrgstry.h"
-# include "sclmisc.h"
-
-# include "fblfrd.h"
-
-# include "plgn.h"
+# include "sclm.h"
+# include "sclr.h"
 
 # include "err.h"
-# include "flw.h"
-# include "xml.h"
+# include "fblfrd.h"
+# include "plgn.h"
+# include "rgstry.h"
 
-// NOTA : 'SCLF_' is used in place of 'SCLFRNTND_' for macro.
-
-/***************/
-/***** OLD *****/
-/***************/
-
-namespace sclfrntnd {
-
+namespace sclf {
 	namespace registry {
 		using rgstry::rEntry;
 
 		namespace parameter {
-			using namespace sclrgstry::parameter;
+			using namespace sclr::parameter;
 
 			extern rEntry Login;
 
@@ -63,7 +53,7 @@ namespace sclfrntnd {
 		}
 
 		namespace definition {
-			using namespace sclrgstry::definition;
+			using namespace sclr::definition;
 		}
 	}
 
@@ -244,7 +234,7 @@ namespace sclfrntnd {
 		}
 		const char *Language( void ) const
 		{
-			return sclrgstry::MGetValue( _Registry, rgstry::tentry___( sclrgstry::parameter::Language ), _Language );
+			return sclr::MGetValue( _Registry, rgstry::tentry___( sclr::parameter::Language ), _Language );
 		}
 		void DismissFlow( void )
 		{
@@ -256,7 +246,7 @@ namespace sclfrntnd {
 		}
 	};
 
-	using sclmisc::LoadProject;
+	using sclm::LoadProject;
 
 	void GetProjectsFeatures(
 		const char *Language,
@@ -329,7 +319,7 @@ namespace sclfrntnd {
 	SCLF_I( ns, name, id );\
 \
 	namespace ns {\
-		typedef sclfrntnd::dI1S<d##name##s> dI1S;\
+		typedef sclf::dI1S<d##name##s> dI1S;\
 		qW( I1S );\
 	}\
 	typedef ns::dI1S d##name##sI1S;\
@@ -378,7 +368,7 @@ namespace sclfrntnd {
 
 # define SCLF_I2S( name, id  )\
 	namespace ns {\
-		typedef sclfrntnd::dI1S<d##name##s> dI2S;\
+		typedef sclf::dI1S<d##name##s> dI2S;\
 		qW( I2S );\
 	}\
 	typedef ns::dI2S d##name##sI2S;\
@@ -471,7 +461,7 @@ namespace sclfrntnd {
 	{
 		sdr::row__ Row = I1S.First();
 
-		xml::PutAttribute( sclfrntnd::AmountAttribute, I1S.Amount(), Writer );
+		xml::PutAttribute( sclf::AmountAttribute, I1S.Amount(), Writer );
 
 		while ( Row != qNIL ) {
 			Writer.PushTag( ItemLabel );
@@ -507,7 +497,7 @@ namespace sclfrntnd {
 	{
 		sdr::row__ Row = I1S.First();
 
-		xml::PutAttribute( sclfrntnd::AmountAttribute, I1S.Amount(), Writer );
+		xml::PutAttribute( sclf::AmountAttribute, I1S.Amount(), Writer );
 
 		while ( Row != qNIL ) {
 			Writer.PushTag( ItemLabel );
@@ -540,7 +530,7 @@ namespace sclfrntnd {
 
 	// Root tag is handled by user, so he/she cans put his/her own attributes. 'Amount' attribute is addded.
 	template <typename ids> inline void DumpWithLabelAttribute(
-		const sclfrntnd::dI1S<ids> &I1S,
+		const sclf::dI1S<ids> &I1S,
 		const char *ItemLabel,
 		xml::rWriter &Writer )
 	{
@@ -548,7 +538,7 @@ namespace sclfrntnd {
 	}
 
 	template <typename ids> inline void DumpWithLabelAttribute(
-		const sclfrntnd::dI1S<ids> &I1S,
+		const sclf::dI1S<ids> &I1S,
 		const char *ItemsLabel,
 		const char *ItemLabel,
 		xml::rWriter &Writer )
@@ -561,7 +551,7 @@ namespace sclfrntnd {
 /***** NEW *****/
 /***************/
 
-namespace sclfrntnd {
+namespace sclf {
 
 	// Login-related bevaviour.
 	qENUM( Login ) {
