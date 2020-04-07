@@ -17,24 +17,24 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define SCLARGMNT_COMPILATION_
+#define SCLA_COMPILATION_
 
-#include "sclargmnt.h"
+#include "scla.h"
 
-#include "sclmisc.h"
+#include "sclm.h"
 
-using namespace sclargmnt;
+using namespace scla;
 
-using namespace sclmisc;
+using namespace sclm;
 using scli::sInfo;
 
 E_CDEF(bso::char__, ExplicitOptionMarker_, '#' );	// Marker of an option where the path is explicitly given.
 
 str::string ParametersTag_;	// See tail.
 
-static rgstry::entry___ Command_( "Command", sclrgstry::Parameters );
+static rgstry::entry___ Command_( "Command", sclr::Parameters );
 
-static rgstry::entry___ &Arguments_ = sclrgstry::Arguments;
+static rgstry::entry___ &Arguments_ = sclr::Arguments;
 #define ARGUMENT_TAG "Argument"
 #define ARGUMENT_ID_ATTRIBUTE "id"
 static rgstry::entry___ ArgumentId_( ARGUMENT_TAG "/@" ARGUMENT_ID_ATTRIBUTE, Arguments_ );
@@ -215,9 +215,9 @@ qRH
 	lcl::meaning Meaning;
 qRB
 	Meaning.Init();
-	Meaning.SetValue( SCLARGMNT_NAME "_BadArgument" );
+	Meaning.SetValue( SCLA_NAME "_BadArgument" );
 	Meaning.AddTag( Arg );
-	sclmisc::ReportAndAbort( Meaning );
+	sclm::ReportAndAbort( Meaning );
 qRR
 qRT
 qRE
@@ -538,7 +538,7 @@ qRB
 	Label.Init();
 	GetLabel_( Id, Label );
 
-	sclmisc::GetBaseTranslation( Label.Convert( Buffer ),Translation );
+	sclm::GetBaseTranslation( Label.Convert( Buffer ),Translation );
 qRR
 qRT
 qRE
@@ -556,7 +556,7 @@ qRB
 	Description.Init();
 	GetDescription_( Id, Description );
 
-	sclmisc::GetBaseTranslation( Description.Convert( Buffer ),Translation );
+	sclm::GetBaseTranslation( Description.Convert( Buffer ),Translation );
 qRR
 qRT
 qRE
@@ -685,10 +685,10 @@ namespace {
 		sdr::sRow *Error = NULL )
 	{
 	qRH
-		sclmisc::rLocker_ Locker;
+		sclm::rLocker_ Locker;
 	qRB
 		Locker.Init();
-		sclmisc::GetRWRegistry().SetValue( sclrgstry::GetRawLayer( sclrgstry::lArguments ), Path, Value, Error );
+		sclm::GetRWRegistry().SetValue( sclr::GetRawLayer( sclr::lArguments ), Path, Value, Error );
 	qRR
 	qRT
 	qRE
@@ -700,10 +700,10 @@ namespace {
 		sdr::sRow *Error = NULL )
 	{
 	qRH
-		sclmisc::rLocker_ Locker;
+		sclm::rLocker_ Locker;
 	qRB
 		Locker.Init();
-		sclmisc::GetRWRegistry().AddValue( sclrgstry::GetRawLayer( sclrgstry::lArguments ), Path, Value, Error );
+		sclm::GetRWRegistry().AddValue( sclr::GetRawLayer( sclr::lArguments ), Path, Value, Error );
 	qRR
 	qRT
 	qRE
@@ -732,7 +732,7 @@ qRB
 			Skip = true;
 		else {
 			Meaning.Init();
-			Meaning.SetValue( SCLARGMNT_NAME "_UnknownFlag" );
+			Meaning.SetValue( SCLA_NAME "_UnknownFlag" );
 
 			Name.Init();
 			switch ( Flag.Stamp() ) {
@@ -766,7 +766,7 @@ qRB
 
 		if ( Value.Amount() == 0 ) {
 			Meaning.Init();
-			Meaning.SetValue( SCLARGMNT_NAME "_NoValueForFlag" );
+			Meaning.SetValue( SCLA_NAME "_NoValueForFlag" );
 			Meaning.AddTag( Flag.Name );
 			sclerror::SetMeaning( Meaning );
 			qRAbort();
@@ -776,7 +776,7 @@ qRB
 
 		if ( Error != qNIL ) {
 			Meaning.Init();
-			Meaning.SetValue( SCLARGMNT_NAME "_BadPathForFlag" );
+			Meaning.SetValue( SCLA_NAME "_BadPathForFlag" );
 			Meaning.AddTag( Flag.Name );
 			sclerror::SetMeaning( Meaning );
 			qRAbort();
@@ -808,7 +808,7 @@ qRB
 			Skip = true;
 		else {
 			Meaning.Init();
-			Meaning.SetValue( SCLARGMNT_NAME "_UnknownOption" );
+			Meaning.SetValue( SCLA_NAME "_UnknownOption" );
 
 			Name.Init();
 			switch ( Option.Stamp() ) {
@@ -836,7 +836,7 @@ qRB
 
 		if ( Path.Amount() == 0 ) {
 			Meaning.Init();
-			Meaning.SetValue( SCLARGMNT_NAME "_NoPathForOption" );
+			Meaning.SetValue( SCLA_NAME "_NoPathForOption" );
 			Meaning.AddTag( Option.Name );
 			sclerror::SetMeaning( Meaning );
 			qRAbort();
@@ -846,7 +846,7 @@ qRB
 
 		if ( Error != qNIL ) {
 			Meaning.Init();
-			Meaning.SetValue( SCLARGMNT_NAME "_BadPathForOption" );
+			Meaning.SetValue( SCLA_NAME "_BadPathForOption" );
 			Meaning.AddTag( Option.Name );
 			sclerror::SetMeaning( Meaning );
 			qRAbort();
@@ -888,7 +888,7 @@ qRB
 			Tags.Append( str::string() );
 			AdditionalArg = true;
 			if ( !BGetValue(rgstry::tentry__(IndexTaggedArgumentLinkTarget_, Tags), Id, qRPU) ) {
-				sclmisc::ReportAndAbort( SCLARGMNT_NAME "_BadAmountOfArguments" );
+				sclm::ReportAndAbort( SCLA_NAME "_BadAmountOfArguments" );
 			}
 		}
 
@@ -900,7 +900,7 @@ qRB
 		GetPath_( Id, Path );
 
 		if ( Path.Amount() == 0 )
-			sclmisc::ReportAndAbort( SCLARGMNT_NAME "_NoPathForArgument", Id );
+			sclm::ReportAndAbort( SCLA_NAME "_NoPathForArgument", Id );
 
 		if ( AdditionalArg )
 			AddValue_( Path, Argument, &Error );
@@ -908,7 +908,7 @@ qRB
 			SetValue_( Path, Argument, &Error );
 
 		if (Error != qNIL)
-			sclmisc::ReportAndAbort( SCLARGMNT_NAME "_BadPathForArgument", Id );
+			sclm::ReportAndAbort( SCLA_NAME "_BadPathForArgument", Id );
 	}
 qRR
 qRT
@@ -1133,7 +1133,7 @@ static void DumpInRegistry_(
 	DumpInRegistry_<arguments_>( ARGUMENT_FREES, Free );
 }
 
-void sclargmnt::FillRegistry(
+void scla::FillRegistry(
 	const str::strings_&Arguments,
 	first_argument__ FirstArgument,
 	unknown_arguments__ UnknownArguments )
@@ -1170,7 +1170,7 @@ namespace {
 		qRH
 			str::string Argument;
 			bso::bool__ Escape = false, Quoted = false;
-			bso::char__ C = 0;
+			bso::sChar C = 0;  // 0 if not quoted, or the used quote char (' or ").
 		qRB
 			Argument.Init();
 
@@ -1190,13 +1190,13 @@ namespace {
 					if ( C == '"' )
 						Argument.Append( '"' );
 					else if ( Quoted )
-						sclmisc::ReportAndAbort( SCLARGMNT_NAME "_BadArguments" );
+						sclm::ReportAndAbort( SCLA_NAME "_BadArguments" );
 					else if ( C == ' ' )
 						Argument.Append( ' ' );
 					else if ( C == '"' )
 						Argument.Append( '"' );
 					else
-						sclmisc::ReportAndAbort( SCLARGMNT_NAME "_BadArguments" );
+						sclm::ReportAndAbort( SCLA_NAME "_BadArguments" );
 
 					Escape = false;
 				} else if ( C == '"' ) {
@@ -1214,7 +1214,7 @@ namespace {
 			}
 
 			if ( Escape || Quoted )
-				sclmisc::ReportAndAbort( SCLARGMNT_NAME "_BadArguments" );
+				sclm::ReportAndAbort( SCLA_NAME "_BadArguments" );
 
 			if ( Argument.Amount() != 0 )
 				Splitted.Append( Argument );
@@ -1240,7 +1240,7 @@ namespace {
 	}
 }
 
-void sclargmnt::FillRegistry(
+void scla::FillRegistry(
 	const str::dString &Arguments,
 	first_argument__ FirstArgument,
 	unknown_arguments__ UnknownArguments )
@@ -1258,7 +1258,7 @@ qRE
 qRT
 }
 
-const str::string_ &sclargmnt::GetCommand( str::string_ &Command )
+const str::string_ &scla::GetCommand( str::string_ &Command )
 {
 	return MGetValue( Command_, Command );
 }
@@ -1537,7 +1537,7 @@ static void IdentifyArguments_(
 	}
 }
 
-void sclargmnt::PrintUsage(
+void scla::PrintUsage(
 	const sInfo &Info,
 	txf::text_oflow__ &Flow )
 {
@@ -1545,11 +1545,11 @@ qRH
 	str::strings Ids, Commands, Flags, Options, Frees;
 	str::string  ProgramDescription;
 	str::string EntryPath;
-	sclmisc::rLocker_ Locker;
+	sclm::rLocker_ Locker;
 qRB
 	EntryPath.Init();
 	Locker.Init();
-	sclmisc::GetRWRegistry().Delete( Command_.GetPath( EntryPath ), sclrgstry::GetRawLayer( sclrgstry::lArguments ) );	// Pour pouvoir rcuprer la valeur correspondant  ce 'Path' tel qu'ventuellement dfini dans le fichier de configuration.
+	sclm::GetRWRegistry().Delete( Command_.GetPath( EntryPath ), sclr::GetRawLayer( sclr::lArguments ) );	// Pour pouvoir rcuprer la valeur correspondant  ce 'Path' tel qu'ventuellement dfini dans le fichier de configuration.
 	Locker.Unlock();
 
 	Ids.Init();
@@ -1562,7 +1562,7 @@ qRB
 	IdentifyArguments_( Ids, Commands, Flags, Options, Frees );
 
 	ProgramDescription.Init();
-	Flow << sclmisc::GetBaseTranslation( "ProgramDescription", ProgramDescription ) << txf::nl << txf::nl;
+	Flow << sclm::GetBaseTranslation( "ProgramDescription", ProgramDescription ) << txf::nl << txf::nl;
 
 	PrintUsage_( tCommand, Commands, Info );
 
@@ -1598,7 +1598,7 @@ namespace {
 }
 
 
-void sclargmnt::Normalize(
+void scla::Normalize(
 	const str::dString &Raw,
 	str::dString &Normalized )
 {
@@ -1614,8 +1614,8 @@ qRE
 }
 
 
-Q37_GCTOR( sclargmnt )
+Q37_GCTOR( scla )
 {
-	ParametersTag_.Init( sclrgstry::ParametersTag );
+	ParametersTag_.Init( sclr::ParametersTag );
 	ParametersTag_.Append('/' );
 }

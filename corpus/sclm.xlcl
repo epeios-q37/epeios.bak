@@ -1,32 +1,32 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!-- $Id: sclmisc.xlcl,v 1.3 2013/07/18 19:46:20 csimon Exp $ -->
 <xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
-	<Translations text="SCLMISC_UnableToOpenConfigurationFile">
-		<Translation language="fr">Impossible d'ouvrir le fichier de configuration pour '%1'.</Translation>
-		<Translation language="en">Unable to open configuration file for '%1'.</Translation>
-	</Translations>
-  <Translations text="SCLMISC_ConfigurationLocaleParsingError">
+   <Translations text="SCLM_UnableToOpenConfigurationFile">
+    <Translation language="fr">Impossible d'ouvrir le fichier de configuration pour '%1'.</Translation>
+    <Translation language="en">Unable to open configuration file for '%1'.</Translation>
+  </Translations>
+  <Translations text="SCLM_ConfigurationLocaleParsingError">
     <Translation language="fr">Erreur durant l'analyse de la locale du fichier de configuration : %1</Translation>
     <Translation language="en">Configuration locale parsing error : %1</Translation>
   </Translations>
-  <Translations message="SCLMISC_UnableToOpenFile">
+  <Translations message="SCLM_UnableToOpenFile">
     <Translation language="fr">Echec de l'ouverture du fichier '%1'</Translation>
     <Translation language="en">Unable to open file '%1'</Translation>
   </Translations>
-	<Translations text="SCLMISC_EmptyPredefinedProjectId">
+	<Translations text="SCLM_EmptyPredefinedProjectId">
 		<Translation language="fr">Identifiant de projet prédéfini vide.</Translation>
 		<Translation language="en">Empty predefined project id.</Translation>
 	</Translations>
-	<Translations text="SCLMISC_NoOrBadProjectFileNameInPredefinedProject">
+	<Translations text="SCLM_NoOrBadProjectFileNameInPredefinedProject">
 		<Translation language="fr">Pas de, ou mauvais nom de fichier projet défini dans le project prédefini d'identifiant '%1'.</Translation>
 		<Translation language="en">No or bad project file name defined in predefined project of id '%1'.</Translation>
 	</Translations>
-	<Translations text="SCLMISC_NoProjectFileSelected">
+	<Translations text="SCLM_NoProjectFileSelected">
 		<Translation language="fr">Fichier de projet non spécifié.</Translation>
 		<Translation language="en">No specified project file.</Translation>
 	</Translations>
 	<!--
-	<Translations text="SCLMISC_">
+	<Translations text="SCLM_">
 		<Translation language="fr"></Translation>
 		<Translation language="en"></Translation>
 	</Translations>

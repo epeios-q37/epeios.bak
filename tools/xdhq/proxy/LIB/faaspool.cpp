@@ -291,32 +291,34 @@ namespace {
 	namespace token_ {
 		plgn::rRetriever<plugins::cToken> PluginRetriever_;
 
-		class sToken_
-		: public plugins::cToken
-		{
-		protected:
-			plugins::eStatus PLUGINSHandle(
-				const str::dString &Raw,
-				str::dString &Normalized ) override
-			{
-				tol::bUUID UUID;
+		namespace {
+            class sToken_
+            : public plugins::cToken
+            {
+            protected:
+                plugins::eStatus PLUGINSHandle(
+                    const str::dString &Raw,
+                    str::dString &Normalized ) override
+                {
+                    tol::bUUID UUID;
 
-				Normalized = Raw;
+                    Normalized = Raw;
 
-				if ( Raw.Amount() == 0 )
-					Normalized.Append( tol::UUIDGen( UUID ) );
-				else if ( (Raw.Amount() > 1) && (Raw( 0 ) == '&') )
-					Normalized.Remove( Normalized.First() );
-				else
-					return plugins::sBad;
+                    if ( Raw.Amount() == 0 )
+                        Normalized.Append( tol::UUIDGen( UUID ) );
+                    else if ( (Raw.Amount() > 1) && (Raw( 0 ) == '&') )
+                        Normalized.Remove( Normalized.First() );
+                    else
+                        return plugins::sBad;
 
-				return plugins::sOK;
-			}
-		public:
-			void reset(bso::sBool = true ) {}
-			qCVDTOR( sToken_ );
-			void Init( void ) {}
-		} DefaultHandler_;
+                    return plugins::sOK;
+                }
+            public:
+                void reset(bso::sBool = true ) {}
+                qCVDTOR( sToken_ );
+                void Init( void ) {}
+            } DefaultHandler_;
+        }
 
 		plugins::cToken &GetPlugin( void )
 		{
@@ -523,7 +525,7 @@ namespace {
 		Handshake_( Driver );
 
 		if ( ( Backend = CreateBackend_( Driver, IP ) ) != NULL )
-			HandleSwitching_( Driver, Backend->Shareds, Backend->Switch );	// Don't return until disconnection or error.
+			HandleSwitching_( Driver, Backend->Shareds, Backend->Switch );	// Doesn't return until disconnection or error.
 	qRR;
 	qRT;
 		if ( Backend != NULL ) {

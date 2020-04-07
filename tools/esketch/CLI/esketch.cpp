@@ -22,7 +22,8 @@
 
 #include "registry.h"
 
-#include "scltool.h"
+#include "sclm.h"
+#include "sclt.h"
 #include "sclerror.h"
 
 #include "err.h"
@@ -38,7 +39,7 @@ using cio::CIn;
 
 SCLI_DEF( esketch, NAME_LC, NAME_MC );
 
-const scli::sInfo &scltool::SCLTOOLInfo( void )
+const scli::sInfo &sclt::SCLTInfo( void )
 {
 	return esketch::Info;
 }
@@ -57,7 +58,7 @@ namespace {
 		str::wString Test;
 	qRB;
 		Test.Init();
-		sclmisc::OGetValue( registry::parameter::Test, Test );
+		sclm::OGetValue( registry::parameter::Test, Test );
 		cio::COut << "Test :'" << Test << "'" << txf::nl;
 	qRR;
 	qRT;
@@ -69,9 +70,9 @@ namespace {
 	else if ( Command == #name )\
 		name##_()
 
-int scltool::SCLTOOLMain(
+int sclt::SCLTMain(
 	const str::dString &Command,
-	const scltool::fOddities &Oddities )
+	const sclt::fOddities &Oddities )
 {
 	int ExitValue = EXIT_FAILURE;
 qRH;

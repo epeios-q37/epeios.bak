@@ -153,7 +153,7 @@ qRB
 	if ( PendingErrorAvailable ) {
 		Meaning.Init();
 		Translation.Init();
-		scllocale::GetTranslation( GetMeaning( Meaning ), Language, Translation );
+		scll::GetTranslation( GetMeaning( Meaning ), Language, Translation );
 	} else if ( ErrHandling != err::hUserDefined )
 		qRFwk();
 qRR

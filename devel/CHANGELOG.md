@@ -9,6 +9,16 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+### 2020-03-07
+
+- SCLxxx… -> SCLx,
+- EPSMSC:
+    - [adpt],
+- PLGN:
+    - [adpt],
+- PLGNCORE:
+    - [adpt],
+
 ### 2020-02-31
 
 - BSO:
@@ -19,6 +29,7 @@
     - adding `Setups/@Default` as defining default setup id, in addition of `Parameters/@Setup`,
 - STR:
     - fixing missing default constructor issue under *Windows*,
+
 ### 2020-03-29
 
 - BSO:

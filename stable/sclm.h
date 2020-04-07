@@ -15,36 +15,30 @@
 
 	You should have received a copy of the GNU Affero General Public License
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
-	*/
+*/
 
-// SoCLe MISCellaneous
+// SOcLe Misc.
 
-#ifndef SCLMISC_INC_
-# define SCLMISC_INC_
+#ifndef SCLM_INC_
+# define SCLM_INC_
 
-# define SCLMISC_NAME		"SCLMISC"
+# define SCLM_NAME		"SCLM"
 
-# if defined( E_DEBUG ) && !defined( SCLMISC_NODBG )
-#  define SCLMISC_DBG
+# if defined( E_DEBUG ) && !defined( SCLM_NODBG )
+#  define SCLM_DBG
 # endif
 
-# include "err.h"
-# include "flw.h"
-# include "utf.h"
-# include "rgstry.h"
-# include "scllocale.h"
 # include "sclerror.h"
 # include "scli.h"
-# include "sclrgstry.h"
+# include "scll.h"
+# include "sclr.h"
 
+# include "bso.h"
+# include "err.h"
 # include "plgn.h"
+# include "str.h"
 
-/***************/
-/***** OLD *****/
-/***************/
-
-namespace sclmisc {
-
+namespace sclm {
 	bso::bool__ IsInitialized( void );
 
 	const str::dString &GetBinPath( void );
@@ -59,7 +53,7 @@ namespace sclmisc {
 		const source &Source,
 		str::dString &Translation )
 	{
-		return scllocale::GetTranslation( Source, GetBaseLanguage(), Translation );
+		return scll::GetTranslation( Source, GetBaseLanguage(), Translation );
 	}
 
 	template <typename source, typename ... tags> inline const str::string_ &GetBaseTranslation(
@@ -67,7 +61,7 @@ namespace sclmisc {
 		str::dString &Translation,
 		const tags &... Tags )
 	{
-		return scllocale::GetTranslation( Source, GetBaseLanguage(), Translation, Tags... );
+		return scll::GetTranslation( Source, GetBaseLanguage(), Translation, Tags... );
 	}
 
 	inline bso::bool__ GetSCLBasePendingErrorTranslation(
@@ -163,7 +157,7 @@ namespace sclmisc {
 		err::err___ *qRRor;
 		sclerror::rError *SCLError;
 		const cio::set__ *CIO;
-		scllocale::rRack *Locale;
+		scll::rRack *Locale;
 		void reset( bso::sBool = true )
 		{
 			qRRor = NULL;
@@ -179,13 +173,13 @@ namespace sclmisc {
 			this->qRRor = err::qRRor;
 			this->SCLError = sclerror::SCLERRORError;
 			this->CIO = &cio::GetCurrentSet();
-			this->Locale = &scllocale::GetRack();
+			this->Locale = &scll::GetRack();
 		}
 		void Init(
 			err::err___ &qRRor,
 			sclerror::rError &SCLError,
 			const cio::set__ &CIO,
-			scllocale::rRack &Locale )
+			scll::rRack &Locale )
 		{
 			Test_();
 
@@ -282,46 +276,37 @@ namespace sclmisc {
 		const fnm::name___ &FileName,
 		const char *Language,
 		str::string_ &Content,
-		char Marker = scllocale::DefaultMarker );
+		char Marker = scll::DefaultMarker );
 
 	bso::sBool Load(
 		const rgstry::tentry__ &FileName,
-		const sclrgstry::registry_ &Registry,
+		const sclr::registry_ &Registry,
 		str::string_ &Content,
 		qRPD );
-/*
-	void Load(
-		const rgstry::tentry__ &FileName,
-		const sclrgstry::registry_ &Registry,
-		str::string_ &Content )
-	{
-		if ( !Load( FileName, Registry, sclrgstry::nMandatory, Content ) )
-			qRGnr();
-	}
-*/
+
 	bso::sBool LoadAndTranslateTags(
 		const rgstry::tentry__ &FileName,
-		const sclrgstry::registry_ &Registry,
+		const sclr::registry_ &Registry,
 		str::string_ &Content,
 		char Marker,
 		qRPN );
 
 	inline void LoadAndTranslateTags(
 		const rgstry::tentry__ &Filename,
-		const sclrgstry::registry_ &Registry,
+		const sclr::registry_ &Registry,
 		str::string_ &Content,
-		char Marker = scllocale::DefaultMarker)
+		char Marker = scll::DefaultMarker)
 	{
 		LoadAndTranslateTags(Filename, Registry, Content, Marker, err::h_Default);
 	}
 
 	inline void LoadAndTranslateTags(
 		const rgstry::tentry__ &Filename,
-		const sclrgstry::registry_ &Registry,
+		const sclr::registry_ &Registry,
 		str::string_ &Content,
 		qRPN)
 	{
-		LoadAndTranslateTags(Filename, Registry, Content, scllocale::DefaultMarker, qRP);
+		LoadAndTranslateTags(Filename, Registry, Content, scll::DefaultMarker, qRP);
 	}
 
 	void LoadXMLAndTranslateTags(
@@ -337,12 +322,12 @@ namespace sclmisc {
 		str::string_ &Content,
 		xml::sLevel StartLevel)
     {
-        return LoadXMLAndTranslateTags(Filename, Language, Content, StartLevel, scllocale::DefaultMarker);
+        return LoadXMLAndTranslateTags(Filename, Language, Content, StartLevel, scll::DefaultMarker);
     }
 
 	bso::sBool LoadXMLAndTranslateTags(
 		const rgstry::tentry__ &FileName,
-		const sclrgstry::registry_ &Registry,
+		const sclr::registry_ &Registry,
 		str::string_ &Content,
 		xml::sLevel StartLevel,
 		char Marker,
@@ -350,26 +335,26 @@ namespace sclmisc {
 
 	inline void LoadXMLAndTranslateTags(
 		const rgstry::tentry__ &FileName,
-		const sclrgstry::registry_ &Registry,
+		const sclr::registry_ &Registry,
 		str::string_ &Content,
 		xml::sLevel StartLevel,
-		char Marker = scllocale::DefaultMarker)
+		char Marker = scll::DefaultMarker)
 	{
 		LoadXMLAndTranslateTags(FileName, Registry, Content, StartLevel, Marker, err::h_Default);
 	}
 
 	inline bso::sBool LoadXMLAndTranslateTags(
 		const rgstry::tentry__ &FileName,
-		const sclrgstry::registry_ &Registry,
+		const sclr::registry_ &Registry,
 		str::string_ &Content,
 		xml::sLevel StartLevel,
 		qRPN )
 	{
-		return LoadXMLAndTranslateTags(FileName, Registry, Content, StartLevel, scllocale::DefaultMarker, qRP);
+		return LoadXMLAndTranslateTags(FileName, Registry, Content, StartLevel, scll::DefaultMarker, qRP);
 	}
 
-	sclrgstry::registry_ &GetRWRegistry( void );
-	const sclrgstry::registry_ &GetRegistry( void );
+	sclr::registry_ &GetRWRegistry( void );
+	const sclr::registry_ &GetRegistry( void );
 
 	typedef tht::rLockerHandler LockerHandler_;
 
@@ -384,13 +369,13 @@ namespace sclmisc {
 		qCDTOR( rLocker_ );
 		void Init( void )
 		{
-			LockerHandler_::Init( sclrgstry::GetCommonRegistryLocker() );
+			LockerHandler_::Init( sclr::GetCommonRegistryLocker() );
 		}
 	};
 
-	inline rgstry::layer__ GetRegistryRawLayer( sclrgstry::eLayer Layer )
+	inline rgstry::layer__ GetRegistryRawLayer( sclr::eLayer Layer )
 	{
-		return sclrgstry::GetRawLayer( Layer );
+		return sclr::GetRawLayer( Layer );
 	}
 
 	inline void FillSetupRegistry( const str::string_ &Id )
@@ -399,7 +384,7 @@ namespace sclmisc {
 		rLocker_ Locker;
 	qRB
 		Locker.Init();
-		sclrgstry::FillWithSetupOfId( GetRWRegistry(), GetRawLayer( sclrgstry::lSetup ), Id );
+		sclr::FillWithSetupOfId( GetRWRegistry(), GetRawLayer( sclr::lSetup ), Id );
 	qRR
 	qRT
 	qRE
@@ -411,7 +396,7 @@ namespace sclmisc {
 		rLocker_ Locker;
 	qRB
 		Locker.Init();
-		sclrgstry::FillWithGivenSetup( GetRWRegistry(), GetRawLayer( sclrgstry::lSetup ) );
+		sclr::FillWithGivenSetup( GetRWRegistry(), GetRawLayer( sclr::lSetup ) );
 	qRR
 	qRT
 	qRE
@@ -425,7 +410,7 @@ namespace sclmisc {
 		rLocker_ Locker;
 	qRB
 		Locker.Init();
-		sclrgstry::AddValue( GetRWRegistry(), Value, Entry );
+		sclr::AddValue( GetRWRegistry(), Value, Entry );
 	qRR
 	qRT
 	qRE
@@ -440,7 +425,7 @@ namespace sclmisc {
 		rLocker_ Locker;
 	qRB
 		Locker.Init();
-		sclrgstry::AddValue( GetRWRegistry(), Path, Value, Error );
+		sclr::AddValue( GetRWRegistry(), Path, Value, Error );
 	qRR
 	qRT
 	qRE
@@ -455,7 +440,7 @@ namespace sclmisc {
 		rLocker_ Locker;
 	qRB
 		Locker.Init();
-		GetRWRegistry().AddValue( sclrgstry::lLasting, Path, Value, Error );
+		GetRWRegistry().AddValue( sclr::lLasting, Path, Value, Error );
 	qRR
 	qRT
 	qRE
@@ -484,7 +469,7 @@ namespace sclmisc {
 		rLocker_ Locker;
 	qRB
 		Locker.Init();
-		sclrgstry::SetValue( GetRWRegistry(), Value, Entry );
+		sclr::SetValue( GetRWRegistry(), Value, Entry );
 	qRR
 	qRT
 	qRE
@@ -499,7 +484,7 @@ namespace sclmisc {
 		rLocker_ Locker;
 	qRB
 		Locker.Init();
-		sclrgstry::SetValue( GetRWRegistry(), Path, Value, Error );
+		sclr::SetValue( GetRWRegistry(), Path, Value, Error );
 	qRR
 	qRT
 	qRE
@@ -514,7 +499,7 @@ namespace sclmisc {
 		rLocker_ Locker;
 	qRB
 		Locker.Init();
-		GetRWRegistry().SetValue( sclrgstry::lLasting, Path, Value, Error );
+		GetRWRegistry().SetValue( sclr::lLasting, Path, Value, Error );
 	qRR
 	qRT
 	qRE
@@ -540,42 +525,42 @@ namespace sclmisc {
 		str::string_ &Value,
 		qRPN )
 	{
-		return sclrgstry::BGetValue( GetRegistry(), Entry, Value, qRP );
+		return sclr::BGetValue( GetRegistry(), Entry, Value, qRP );
 	}
 
 	inline bso::bool__ GetValues(
 		const rgstry::tentry__ &Entry,
 		str::strings_ &Values )
 	{
-		return sclrgstry::GetValues( GetRegistry(), Entry, Values );
+		return sclr::GetValues( GetRegistry(), Entry, Values );
 	}
 
 	inline bso::bool__ OGetValue(
 		const rgstry::tentry__ &Entry,
 		str::string_ &Value )
 	{
-		return sclrgstry::OGetValue( GetRegistry(), Entry, Value );
+		return sclr::OGetValue( GetRegistry(), Entry, Value );
 	}
 
 	inline const char *OGetValue(
 		const rgstry::tentry__ &Entry,
 		TOL_CBUFFER___ &Buffer )	// Returns NULL when entry missing.
 	{
-		return sclrgstry::OGetValue( GetRegistry(), Entry, Buffer );
+		return sclr::OGetValue( GetRegistry(), Entry, Buffer );
 	}
 
 	inline const str::string_ &MGetValue(
 		const rgstry::tentry__ &Entry,
 		str::string_ &Value )
 	{
-		return sclrgstry::MGetValue( GetRegistry(), Entry, Value );
+		return sclr::MGetValue( GetRegistry(), Entry, Value );
 	}
 
 	inline const char *MGetValue(
 		const rgstry::tentry__ &Entry,
 		TOL_CBUFFER___ &Buffer )
 	{
-		return sclrgstry::MGetValue( GetRegistry(), Entry, Buffer );
+		return sclr::MGetValue( GetRegistry(), Entry, Buffer );
 	}
 
 	inline bso::bool__ BGetBoolean(
@@ -583,44 +568,44 @@ namespace sclmisc {
 		bso::bool__ DefaultValue,
 		qRPN)
 	{
-		return sclrgstry::BGetBoolean(GetRegistry(), Entry, DefaultValue,qRP);
+		return sclr::BGetBoolean(GetRegistry(), Entry, DefaultValue,qRP);
 	}
 
 	inline bso::bool__ MGetBoolean( const rgstry::tentry___ &Entry )
 	{
-		return sclrgstry::MGetBoolean( GetRegistry(), Entry );
+		return sclr::MGetBoolean( GetRegistry(), Entry );
 	}
 
-# define SCLMISC__UN( type, name, limit )\
+# define SCLM_UN_( type, name, limit )\
 	inline type MGet##name(\
 		const rgstry::tentry__ &Entry,\
 		type Limit = limit )\
 		{\
-			return sclrgstry::MGet##name( GetRegistry(), Entry, Limit );\
+			return sclr::MGet##name( GetRegistry(), Entry, Limit );\
 		}\
 	inline type OGet##name(\
 		const rgstry::tentry__ &Entry,\
 		type DefaultValue,\
 		type Limit = limit )\
 		{\
-			return sclrgstry::OGet##name( GetRegistry(), Entry, DefaultValue, Limit );\
+			return sclr::OGet##name( GetRegistry(), Entry, DefaultValue, Limit );\
 		}
 
-		SCLMISC__UN( bso::uint__, UInt, BSO_UINT_MAX )
+		SCLM_UN_( bso::uint__, UInt, BSO_UINT_MAX )
 # ifdef BSO__64BITS_ENABLED
-		SCLRGSTRY__UN( bso::u64__, U64, BSO_U64_MAX )
+		SCLM_UN_( bso::u64__, U64, BSO_U64_MAX )
 # endif
-		SCLMISC__UN( bso::u32__, U32, BSO_U32_MAX )
-		SCLMISC__UN( bso::u16__, U16, BSO_U16_MAX )
-		SCLMISC__UN( bso::u8__, U8, BSO_U8_MAX )
+		SCLM_UN_( bso::u32__, U32, BSO_U32_MAX )
+		SCLM_UN_( bso::u16__, U16, BSO_U16_MAX )
+		SCLM_UN_( bso::u8__, U8, BSO_U8_MAX )
 
-# define SCLMISC__SN( type, name, min, max )\
+# define SCLM_SN_( type, name, min, max )\
 	inline type MGet##name(\
 		const rgstry::tentry__ &Entry,\
 		type Min = min,\
 		type Max = max )\
 		{\
-			return sclrgstry::MGet##name( GetRegistry(), Entry, Min, Max );\
+			return sclr::MGet##name( GetRegistry(), Entry, Min, Max );\
 		}\
 	inline type OGet##name(\
 		const rgstry::tentry__ &Entry,\
@@ -628,27 +613,27 @@ namespace sclmisc {
 		type Min = min,\
 		type Max = max )\
 		{\
-			return sclrgstry::OGet##name( GetRegistry(), Entry, DefaultValue, Min, Max );\
+			return sclr::OGet##name( GetRegistry(), Entry, DefaultValue, Min, Max );\
 		}
 
-		SCLMISC__SN( bso::sint__, SInt, BSO_SINT_MIN, BSO_SINT_MAX )
+		SCLM_SN_( bso::sint__, SInt, BSO_SINT_MIN, BSO_SINT_MAX )
 # ifdef BSO__64BITS_ENABLED
-		SCLRGSTRY__SN( bso::s64__, S64, BSO_S64, BSO_S64_MAX )
+		SCLM_SN_( bso::s64__, S64, BSO_S64, BSO_S64_MAX )
 #endif
-		SCLMISC__SN( bso::s32__, S32, BSO_S32_MIN, BSO_S32_MAX )
-		SCLMISC__SN( bso::s16__, S16, BSO_S16_MIN, BSO_S16_MAX )
-		SCLMISC__SN( bso::s8__, S8, BSO_S8_MIN, BSO_S8_MAX )
+		SCLM_SN_( bso::s32__, S32, BSO_S32_MIN, BSO_S32_MAX )
+		SCLM_SN_( bso::s16__, S16, BSO_S16_MIN, BSO_S16_MAX )
+		SCLM_SN_( bso::s8__, S8, BSO_S8_MIN, BSO_S8_MAX )
 
 		// To define function retrieving mandatory registry value.
-# define SCLMISC_MV( name, entry )\
+# define SCLM_MV( name, entry )\
 	inline const char *name(\
 		TOL_CBUFFER___ &Buffer )\
 		{\
 		qRH\
-			sclmisc::rRegistryLocker Locker;\
+			sclm::rRegistryLocker Locker;\
 		qRB\
 			Locker.Init();\
-			Result = sclmisc::MGetValue( entry, Buffer );\
+			Result = sclm::MGetValue( entry, Buffer );\
 		qRR\
 		qRT\
 		qRE\
@@ -657,10 +642,10 @@ namespace sclmisc {
 	inline const str::string_ &name( str::string_ &Value )\
 		{\
 		qRH\
-			sclmisc::rRegistryLocker Locker;\
+			sclm::rRegistryLocker Locker;\
 		qRB\
 			Locker.Init();\
-			result = sclmisc::MGetValue( entry, Value );\
+			result = sclm::MGetValue( entry, Value );\
 		qRR\
 		qRT\
 		qRE\
@@ -668,14 +653,14 @@ namespace sclmisc {
 		}
 
 		// To define function retrieving optional registry value.
-# define SCLMISC_OV( name, entry )\
+# define SCLM_OV( name, entry )\
 	inline const char *name( TOL_CBUFFER___ &Buffer )\
 		{\
 		qRH\
-			sclmisc::rRegistryLocker Locker;\
+			sclm::rRegistryLocker Locker;\
 		qRB\
 			Locker.Init();\
-			Result = sclmisc::OGetValue( entry, Buffer );\
+			Result = sclm::OGetValue( entry, Buffer );\
 		qRR\
 		qRT\
 		qRE\
@@ -685,10 +670,10 @@ namespace sclmisc {
 		{\
 			bso::sBool Result= false;\
 		qRH\
-			sclmisc::rRegistryLocker Locker;\
+			sclm::rRegistryLocker Locker;\
 		qRB\
 			Locker.Init();\
-			Result = sclmisc::OGetValue( entry, Value );\
+			Result = sclm::OGetValue( entry, Value );\
 		qRR\
 		qRT\
 		qRE\
@@ -834,7 +819,7 @@ namespace sclmisc {
 /***** NEW *****/
 /***************/
 
-namespace sclmisc {
+namespace sclm {
 	typedef text_oflow_rack___ rTextWFlowRack;
 
 	// To facilitate optional text output file handling. if no file name is given, then the standard output is given. Also creates a backup file, which can be restored.
@@ -884,6 +869,5 @@ namespace sclmisc {
 
 	void ExitOnSignal( void );
 }
-
 
 #endif

@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!-- $Id: scl.xlcl,v 1.6 2013/07/18 19:46:20 csimon Exp $ -->
 <xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
-	<xpp:expand href="sclargmnt.xlcl"/>
+	<xpp:expand href="scla.xlcl"/>
 	<xpp:expand href="sclbacknd.xlcl"/>
 	<xpp:expand href="scldaemon.xlcl"/>
 	<xpp:expand href="sclfrntnd.xlcl"/>
-	<xpp:expand href="scllocale.xlcl"/>
-	<xpp:expand href="sclmisc.xlcl"/>
-	<xpp:expand href="sclrgstry.xlcl"/>
-	<xpp:expand href="scltool.xlcl"/>
+	<xpp:expand href="scll.xlcl"/>
+	<xpp:expand href="sclm.xlcl"/>
+	<xpp:expand href="sclr.xlcl"/>
+	<xpp:expand href="sclt.xlcl"/>
 	<xpp:expand href="sclxdhtml.xlcl"/>
 	<xpp:expand href="sclplugin.xlcl"/>
 </xpp:bloc>

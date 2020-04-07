@@ -23,8 +23,8 @@
 
 using namespace plgn;
 
-#include "sclmisc.h"
-#include "sclargmnt.h"
+#include "sclm.h"
+#include "scla.h"
 
 namespace {
 	class sDummyAbstract_
@@ -39,7 +39,7 @@ namespace {
 
 }
 
-sAbstract *plgn::NonNullAbstractPointer = &DummyAbstract_;	
+sAbstract *plgn::NonNullAbstractPointer = &DummyAbstract_;
 wAbstracts plgn::EmptyAbstracts;
 
 namespace {
@@ -76,12 +76,12 @@ namespace {
 		plgncore::retrieve_callback *Function = NULL;
 
 		if ( !Library.Init( PluginPath, err::hUserDefined ) )
-			sclmisc::ReportAndAbort( PLGN_NAME "_UnableToLoadLibrary", PluginPath );
+			sclm::ReportAndAbort( PLGN_NAME "_UnableToLoadLibrary", PluginPath );
 
 		Function = dlbrry::GetFunction<plgncore::retrieve_callback *>( E_STRING( PLGNCORE_RETRIEVE_CALLBACK_FUNCTION_NAME ), Library );
 
 		if ( Function == NULL )
-			sclmisc::ReportAndAbort( PLGN_NAME "_BadLibrary", PluginPath );
+			sclm::ReportAndAbort( PLGN_NAME "_BadLibrary", PluginPath );
 
 		return &Function();
 	}
@@ -101,7 +101,7 @@ void plgn::rLooseRetriever::SubInitialize_(
 			qRFwk();
 
 	if ( !_IsCompatible( Label, Identifier, Library_ ) )
-		sclmisc::ReportAndAbort( PLGN_NAME "_LibraryNotCompatible", PluginPath );
+		sclm::ReportAndAbort( PLGN_NAME "_LibraryNotCompatible", PluginPath );
 }
 
 namespace {
@@ -134,7 +134,7 @@ sdr::sRow plgn::rLooseRetriever::Initialize(
 	sdr::sRow Row = qNIL;
 qRH
 	plgncore::sData Data;
-	sclmisc::sRack SCLRack;
+	sclm::sRack SCLRack;
 	sAbstract *Abstract = NULL;
 	str::wString NormalizedArguments;
 qRB
@@ -143,7 +143,7 @@ qRB
 	SCLRack.Init();
 
 	NormalizedArguments.Init();
-	sclargmnt::Normalize( RawArguments, NormalizedArguments );
+	scla::Normalize( RawArguments, NormalizedArguments );
 
 	Data.Init( SCLRack, NormalizedArguments );
 
@@ -169,7 +169,7 @@ sdr::sRow plgn::rLooseRetriever::Initialize(
 	sdr::sRow Row = qNIL;
 qRH
 	plgncore::sData Data;
-	sclmisc::sRack SCLRack;
+	sclm::sRack SCLRack;
 	fnm::name___ Location;
 	sAbstract *Abstract = NULL;
 	str::wString NormalizedArguments;
@@ -182,7 +182,7 @@ qRB
 	SCLRack.Init();
 
 	NormalizedArguments.Init();
-	sclargmnt::Normalize( RawArguments, NormalizedArguments );
+	scla::Normalize( RawArguments, NormalizedArguments );
 
 	Data.Init( SCLRack, NormalizedArguments );
 

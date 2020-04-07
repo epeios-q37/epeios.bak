@@ -17,22 +17,15 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define SCLRGSTRY_COMPILATION_
+#define SCLR_COMPILATION_
 
-#include "sclrgstry.h"
+#include "sclr.h"
 
-#include "cio.h"
-#include "lcl.h"
-#include "dir.h"
-#include "fnm.h"
-#include "tagsbs.h"
+#include "sclm.h"
 
-#include "sclerror.h"
-#include "sclmisc.h"
+using namespace sclr;
 
-using namespace sclrgstry;
-
-E_CDEF( char *, sclrgstry::ParametersTag, "Parameters" );
+E_CDEF( char *, sclr::ParametersTag, "Parameters" );
 
 #define REGISTRY_FILE_EXTENSION ".xcfg"
 
@@ -45,70 +38,58 @@ static rgstry::layer__ SetupLayer_ = rgstry::UndefinedLayer;
 static rgstry::layer__ ArgumentsLayer_ = rgstry::UndefinedLayer;
 static rgstry::layer__ RuntimeLayer_ = rgstry::UndefinedLayer;	// Temporary registry.
 
-rgstry::entry___ sclrgstry::Parameters( ParametersTag );
-rgstry::entry___ sclrgstry::Definitions( "Definitions" );
-rgstry::entry___ sclrgstry::Locale( "Locale" );
-rgstry::entry___ sclrgstry::Arguments( "Arguments" );
-rgstry::entry___ sclrgstry::Debug( "Debug", Parameters );
+rgstry::entry___ sclr::Parameters( ParametersTag );
+rgstry::entry___ sclr::Definitions( "Definitions" );
+rgstry::entry___ sclr::Locale( "Locale" );
+rgstry::entry___ sclr::Arguments( "Arguments" );
+rgstry::entry___ sclr::Debug( "Debug", Parameters );
 
-rgstry::entry___ sclrgstry::parameter::Language( "Language", Parameters );
+rgstry::entry___ sclr::parameter::Language( "Language", Parameters );
 
-# if 0
-	rgstry::entry___ ProjectFeature_( "Project", sclrgstry::Parameters );
-	rgstry::entry___ ProjectType_( "@Type", ProjectFeature_ );
-	rgstry::entry___ ProjectAction_("@Action", ProjectFeature_ );
-	rgstry::entry___ PredefinedProjects_( "PredefinedProjects", sclrgstry::Definitions );
-	rgstry::entry___ DefaultPredefinedProject_( "@Default", PredefinedProjects_ );
-	rgstry::entry___ FreePredefinedProject_( "PredefinedProject", PredefinedProjects_ );
-	rgstry::entry___ PredefinedProjectId_( "@id", FreePredefinedProject_ );
-	rgstry::entry___ PredefinedProject_( RGSTRY_TAGGING_ATTRIBUTE( "id" ), FreePredefinedProject_);
-	rgstry::entry___ PredefinedProjectAlias_( "@Alias", PredefinedProject_ );
-# endif
-
-rgstry::entry___ sclrgstry::parameter::Project("Project", Parameters );
-rgstry::entry___ sclrgstry::parameter::project::Type( "@Type", parameter::Project );
-rgstry::entry___ sclrgstry::parameter::project::Feature( parameter::Project );
+rgstry::entry___ sclr::parameter::Project("Project", Parameters );
+rgstry::entry___ sclr::parameter::project::Type( "@Type", parameter::Project );
+rgstry::entry___ sclr::parameter::project::Feature( parameter::Project );
 
 namespace definition_ {
-	rgstry::entry___ Projects_( "Projects", sclrgstry::Definitions );
+	rgstry::entry___ Projects_( "Projects", sclr::Definitions );
 }
 
-rgstry::entry___ sclrgstry::definition::DefaultProjectId( "@Default", definition_::Projects_ );
-rgstry::entry___ sclrgstry::definition::Project( "Project", definition_::Projects_ );
-rgstry::entry___ sclrgstry::definition::project::Id( "@id", Project );
-rgstry::entry___ sclrgstry::definition::TaggedProject( RGSTRY_TAGGING_ATTRIBUTE( "id" ), definition::Project );
+rgstry::entry___ sclr::definition::DefaultProjectId( "@Default", definition_::Projects_ );
+rgstry::entry___ sclr::definition::Project( "Project", definition_::Projects_ );
+rgstry::entry___ sclr::definition::project::Id( "@id", Project );
+rgstry::entry___ sclr::definition::TaggedProject( RGSTRY_TAGGING_ATTRIBUTE( "id" ), definition::Project );
 
 
 namespace parameter_ {
-	rgstry::entry___ Plugins_( "Plugins", sclrgstry::Parameters );
+	rgstry::entry___ Plugins_( "Plugins", sclr::Parameters );
 }
 
-rgstry::entry___ sclrgstry::parameter::TargetedPlugin( RGSTRY_TAGGED_ENTRY( "Plugin", "target" ), parameter_::Plugins_ );
-rgstry::entry___ sclrgstry::parameter::targeted_plugin::Id( "@Id", ::parameter::TargetedPlugin );
+rgstry::entry___ sclr::parameter::TargetedPlugin( RGSTRY_TAGGED_ENTRY( "Plugin", "target" ), parameter_::Plugins_ );
+rgstry::entry___ sclr::parameter::targeted_plugin::Id( "@Id", ::parameter::TargetedPlugin );
 
 namespace parameter_ {
 	rgstry::entry___ TargetedPluginsSet_( RGSTRY_TAGGED_ENTRY( "Set", "target" ), parameter_::Plugins_ );
 }
 
-rgstry::entry___ sclrgstry::parameter::LoosePluginItem( "Plugin", parameter_::TargetedPluginsSet_ );
+rgstry::entry___ sclr::parameter::LoosePluginItem( "Plugin", parameter_::TargetedPluginsSet_ );
 
-rgstry::entry___ sclrgstry::parameter::loose_plugin_item::Id( "@Id", parameter::LoosePluginItem );
+rgstry::entry___ sclr::parameter::loose_plugin_item::Id( "@Id", parameter::LoosePluginItem );
 
-rgstry::entry___ sclrgstry::parameter::PluginItem( RGSTRY_TAGGING_ATTRIBUTE( "Id" ), parameter::LoosePluginItem );
+rgstry::entry___ sclr::parameter::PluginItem( RGSTRY_TAGGING_ATTRIBUTE( "Id" ), parameter::LoosePluginItem );
 
-rgstry::entry___ sclrgstry::parameter::debug::DumpRegistries( "DumpRegistries", Debug );
-rgstry::entry___ sclrgstry::parameter::debug::DumpLocales( "DumpLocales", Debug );
+rgstry::entry___ sclr::parameter::debug::DumpRegistries( "DumpRegistries", Debug );
+rgstry::entry___ sclr::parameter::debug::DumpLocales( "DumpLocales", Debug );
 
 namespace definition {
-	static rgstry::entry___ Plugins_( RGSTRY_TAGGED_ENTRY( "Plugins", "target" ), sclrgstry::Definitions );
+	static rgstry::entry___ Plugins_( RGSTRY_TAGGED_ENTRY( "Plugins", "target" ), sclr::Definitions );
 	static rgstry::entry___ Plugin_( RGSTRY_TAGGED_ENTRY( "Plugin", "id" ), Plugins_ );
 }
 
-rgstry::entry___ sclrgstry::definition::plugin::Filename( "Filename", ::definition::Plugin_ );
-rgstry::entry___ sclrgstry::definition::plugin::Configuration( "Configuration", ::definition::Plugin_ );
-rgstry::entry___ sclrgstry::definition::plugin::Locale( "Locale", ::definition::Plugin_ );
+rgstry::entry___ sclr::definition::plugin::Filename( "Filename", ::definition::Plugin_ );
+rgstry::entry___ sclr::definition::plugin::Configuration( "Configuration", ::definition::Plugin_ );
+rgstry::entry___ sclr::definition::plugin::Locale( "Locale", ::definition::Plugin_ );
 
-static rgstry::entry___ ParametersSetupId_( "@Setup", sclrgstry::Parameters );
+static rgstry::entry___ ParametersSetupId_( "@Setup", sclr::Parameters );
 static rgstry::entry___ DefaultSetupId_("Setups/@Default");
 
 namespace {
@@ -144,7 +125,7 @@ namespace {
 	} LastingRegistryLockerCallback_;
 }
 
-registry_ &sclrgstry::GetRWCommonRegistry( void )
+registry_ &sclr::GetRWCommonRegistry( void )
 {
 	if ( !GlobalLocker_.IsLocked() )
 		qRFwk();
@@ -152,7 +133,7 @@ registry_ &sclrgstry::GetRWCommonRegistry( void )
 	return Registry_;
 }
 
-const registry_ &sclrgstry::GetCommonRegistry( void )
+const registry_ &sclr::GetCommonRegistry( void )
 {
 	if ( GlobalLocker_.IsLocked() )
 		qRFwk();
@@ -160,14 +141,14 @@ const registry_ &sclrgstry::GetCommonRegistry( void )
 	return Registry_;
 }
 
-tht::rLocker &sclrgstry::GetCommonRegistryLocker( void )
+tht::rLocker &sclr::GetCommonRegistryLocker( void )
 {
 	return GlobalLocker_;
 }
 
 #define C( name )	case l##name : return #name; break
 
-const char *sclrgstry::GetLabel( eLayer Layer )
+const char *sclr::GetLabel( eLayer Layer )
 {
 	switch ( Layer ) {
 	C( Main );
@@ -191,7 +172,7 @@ case l##name:\
 	return name##Layer_;\
 	break
 
-rgstry::layer__ sclrgstry::GetRawLayer( eLayer Layer )
+rgstry::layer__ sclr::GetRawLayer( eLayer Layer )
 {
 	switch ( Layer ) {
 	C( Main );
@@ -210,14 +191,14 @@ rgstry::layer__ sclrgstry::GetRawLayer( eLayer Layer )
 
 #undef C
 
-const char *sclrgstry::GetLanguage(
+const char *sclr::GetLanguage(
 	const registry_ &Registry,
 	TOL_CBUFFER___ &Buffer )
 {
-	sclrgstry::OGetValue( Registry, parameter::Language, Buffer );
+	sclr::OGetValue( Registry, parameter::Language, Buffer );
 
 	if ( Buffer == NULL )
-		return sclmisc::GetBaseLanguage();
+		return sclm::GetBaseLanguage();
 	else
 		return Buffer;
 }
@@ -234,31 +215,31 @@ static bso::sBool FillRegistry_(
 }
 #endif
 
-void sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( const rgstry::tentry__ &Entry )
+void sclr::ReportBadOrNoValueForEntryErrorAndAbort( const rgstry::tentry__ &Entry )
 {
 qRH
 	str::string Path;
 qRB
 	Path.Init();
-	sclmisc::ReportAndAbort( SCLRGSTRY_NAME "_BadOrNoValueForEntry", Entry.GetPath( Path ) );
+	sclm::ReportAndAbort( SCLR_NAME "_BadOrNoValueForEntry", Entry.GetPath( Path ) );
 qRR
 qRT
 qRE
 }
 
-void sclrgstry::Erase( eLayer Layer )
+void sclr::Erase( eLayer Layer )
 {
 	Registry_.Erase( GetRawLayer( Layer ) );
 }
 
-void sclrgstry::Reset( eLayer Layer )
+void sclr::Reset( eLayer Layer )
 {
 	Registry_.Erase( GetRawLayer( Layer ) );
 
 	Registry_.Set( GetRawLayer( Layer ) );
 }
 
-void sclrgstry::Reset(
+void sclr::Reset(
 	eLayer Layer,
 	const rgstry::entry__ &Entry )
 {
@@ -277,7 +258,7 @@ namespace {
 		lcl::meaning MeaningBuffer;
 	qRB
 		Meaning.Init();
-		Meaning.SetValue( SCLRGSTRY_NAME "_ParsingError" );
+		Meaning.SetValue( SCLR_NAME "_ParsingError" );
 
 		Meaning.AddTag( Source );
 
@@ -286,7 +267,7 @@ namespace {
 
 		Meaning.AddTag( MeaningBuffer );
 
-		sclmisc::ReportAndAbort( Meaning );
+		sclm::ReportAndAbort( Meaning );
 	qRR
 	qRT
 	qRE
@@ -335,7 +316,7 @@ namespace {
 	}
 }
 
-void sclrgstry::Load(
+void sclr::Load(
 	eLayer Layer,
 	xtf::extended_text_iflow__ &Flow,
 	const fnm::name___ &Directory,
@@ -344,7 +325,7 @@ void sclrgstry::Load(
 	Load_(Layer, Flow, RootPath, Directory );
 }
 
-void sclrgstry::Load(
+void sclr::Load(
 	eLayer Layer,
 	flw::rRFlow &Flow,
 	const fnm::name___ &Directory,
@@ -385,7 +366,7 @@ namespace {
 	}
 }
 
-void sclrgstry::LoadProject(
+void sclr::LoadProject(
 	flw::iflow__ &Flow,
 	const char *Target,
 	const fnm::name___ &Directory,
@@ -402,7 +383,7 @@ qRT
 qRE
 }
 
-void sclrgstry::LoadProject(
+void sclr::LoadProject(
 	const fnm::name___ &Filename,
 	const char *Target,
 	str::string_ &Id )
@@ -440,7 +421,7 @@ qRE
 	return Content;
 }
 
-void sclrgstry::FillWithSetupOfId(
+void sclr::FillWithSetupOfId(
 	registry_ &Registry,
 	rgstry::layer__ Layer,
 	const str::string_ &Id )
@@ -457,13 +438,13 @@ qRB
 	Setup.Init();
 
 	Setup.Append("<_><" );
-	sclrgstry::Parameters.GetPath( Setup );
+	sclr::Parameters.GetPath( Setup );
 	Setup.Append('>' );
 
 	GetSelectedSetupContent_( Id, Setup );
 
 	Setup.Append( "</" );
-	sclrgstry::Parameters.GetPath( Setup );
+	sclr::Parameters.GetPath( Setup );
 	Setup.Append( "></_>" );
 
 	Registry.Erase( Layer );
@@ -476,7 +457,7 @@ qRT
 qRE
 }
 
-void sclrgstry::FillWithGivenSetup(
+void sclr::FillWithGivenSetup(
 	registry_ &Registry,
 	rgstry::layer__ Layer )
 {
@@ -492,13 +473,13 @@ qRT
 qRE
 }
 
-void sclrgstry::ReportIfNoParametersSetupId( void )
+void sclr::ReportIfNoParametersSetupId( void )
 {
 	if ( !Registry_.Exists(ParametersSetupId_) )
 		ReportBadOrNoValueForEntryErrorAndAbort(ParametersSetupId_);
 }
 
-void sclrgstry::FillWithContent(
+void sclr::FillWithContent(
 	registry_ &Registry,
 	rgstry::layer__ Layer,
 	const str::dString &BinPath,
@@ -526,7 +507,7 @@ qRT
 qRE
 }
 
-void sclrgstry::AddValue(
+void sclr::AddValue(
 	registry_ &Registry,
 	const str::string_ &Value,
 	const rgstry::tentry__ &Entry )
@@ -534,7 +515,7 @@ void sclrgstry::AddValue(
 	Registry.AddValue( Entry, Value );
 }
 
-void sclrgstry::AddValue(
+void sclr::AddValue(
 	registry_ &Registry,
 	const str::string_ &Path,
 	const str::string_ &Value,
@@ -543,7 +524,7 @@ void sclrgstry::AddValue(
 	Registry.AddValue( Path, Value, Error );
 }
 
-void sclrgstry::SetValue(
+void sclr::SetValue(
 	registry_ &Registry,
 	const str::string_ &Value,
 	const rgstry::tentry__ &Entry )
@@ -551,7 +532,7 @@ void sclrgstry::SetValue(
 	Registry.SetValue( Entry, Value );
 }
 
-void sclrgstry::SetValue(
+void sclr::SetValue(
 	registry_ &Registry,
 	const str::string_ &Path,
 	const str::string_ &Value,
@@ -560,7 +541,7 @@ void sclrgstry::SetValue(
 	Registry.SetValue( Path, Value, Error );
 }
 
-bso::bool__ sclrgstry::GetValues(
+bso::bool__ sclr::GetValues(
 	const registry_ &Registry,
 	const rgstry::tentry__ &Entry,
 	str::strings_ &Values )
@@ -568,7 +549,7 @@ bso::bool__ sclrgstry::GetValues(
 	return Registry.GetValues( Entry, Values );
 }
 
-bso:: bool__ sclrgstry::OGetValue(
+bso:: bool__ sclr::OGetValue(
 	const registry_ &Registry,
 	const rgstry::tentry__ &Entry,
 	str::string_ &Value )
@@ -576,7 +557,7 @@ bso:: bool__ sclrgstry::OGetValue(
 	return Registry.GetValue( Entry, Value );
 }
 
-const char *sclrgstry::OGetValue(
+const char *sclr::OGetValue(
 	const registry_ &Registry,
 	const rgstry::tentry__ &Entry,
 	TOL_CBUFFER___ &Buffer )
@@ -595,18 +576,18 @@ qRE
 	return ReturnedValue;
 }
 
-const str::string_ &sclrgstry::MGetValue(
+const str::string_ &sclr::MGetValue(
 	const registry_ &Registry,
 	const rgstry::tentry__ &Entry,
 	str::string_ &Value )
 {
 	if ( !BGetValue( Registry, Entry, Value, qRPU ) )
-		sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( Entry );
+		sclr::ReportBadOrNoValueForEntryErrorAndAbort( Entry );
 
 	return Value;
 }
 
-const char *sclrgstry::MGetValue(
+const char *sclr::MGetValue(
 	const registry_ &Registry,
 	const rgstry::tentry__ &Entry,
 	TOL_CBUFFER___ &Buffer )
@@ -645,7 +626,7 @@ qRE
 	return Boolean;
 }
 
-bso::bool__ sclrgstry::BGetBoolean(
+bso::bool__ sclr::BGetBoolean(
 	const registry_ &Registry,
 	const rgstry::tentry__ &Entry,
 	bso::bool__ DefaultValue,
@@ -666,7 +647,7 @@ qRB
 			Result = true;
 			break;
 		case tol::xb_Undefined:
-			sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( Entry );
+			sclr::ReportBadOrNoValueForEntryErrorAndAbort( Entry );
 			break;
 		default:
 			qRFwk();
@@ -679,7 +660,7 @@ qRE
 	return Result;
 }
 
-bso::bool__ sclrgstry::MGetBoolean(
+bso::bool__ sclr::MGetBoolean(
 	const registry_ &Registry,
 	const rgstry::tentry___ &Entry )
 {
@@ -697,7 +678,7 @@ qRB
 		Result = true;
 		break;
 	case tol::xb_Undefined:
-		sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( Entry );
+		sclr::ReportBadOrNoValueForEntryErrorAndAbort( Entry );
 		break;
 	default:
 		qRFwk();
@@ -728,7 +709,7 @@ qRB
 		RawValue.ToNumber( Value, Limit, &Error );
 
 		if ( Error != qNIL )
-			sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( Entry );
+			sclr::ReportBadOrNoValueForEntryErrorAndAbort( Entry );
 	}
 qRR
 qRT
@@ -755,7 +736,7 @@ qRB
 		RawValue.ToNumber( Value, UpperLimit, LowerLimit, &Error );
 
 		if ( Error != qNIL )
-			sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( Entry );
+			sclr::ReportBadOrNoValueForEntryErrorAndAbort( Entry );
 	}
 qRR
 qRT
@@ -764,7 +745,7 @@ qRE
 }
 
 #define UN( name, type )\
-type sclrgstry::MGet##name(\
+type sclr::MGet##name(\
 	const registry_ &Registry,\
 	const rgstry::tentry__ &Entry,\
 	type Limit  )\
@@ -772,11 +753,11 @@ type sclrgstry::MGet##name(\
 	type Value;\
 	\
 	if ( !GetUnsignedNumber_(Registry, Entry, Limit, Value, qRPU) )\
-		sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( Entry );\
+		sclr::ReportBadOrNoValueForEntryErrorAndAbort( Entry );\
 	\
 	return Value;\
 }\
-type sclrgstry::OGet##name(\
+type sclr::OGet##name(\
 	const registry_ &Registry,\
 	const rgstry::tentry__ &Entry,\
 	type DefaultValue,\
@@ -800,7 +781,7 @@ UN( U16, bso::u16__ )
 UN( U8, bso::u8__ )
 
 #define SN( name, type )\
-type sclrgstry::MGet##name(\
+type sclr::MGet##name(\
 	const registry_ &Registry,\
 	const rgstry::tentry__ &Entry,\
 	type Min,\
@@ -809,11 +790,11 @@ type sclrgstry::MGet##name(\
 	type Value;\
 	\
 	if ( !GetSignedNumber_( Registry, Entry, Min, Max, Value, qRPU ) )\
-		sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( Entry );\
+		sclr::ReportBadOrNoValueForEntryErrorAndAbort( Entry );\
 	\
 	return Value;\
 }\
-type sclrgstry::OGet##name(\
+type sclr::OGet##name(\
 	const registry_ &Registry,\
 	const rgstry::tentry__ &Entry,\
 	type DefaultValue,\
@@ -836,7 +817,7 @@ SN( S32, bso::s32__ )
 SN( S16, bso::s16__ )
 SN( S8, bso::s8__ )
 
-Q37_GCTOR( sclrgstry )
+Q37_GCTOR( sclr )
 {
 	Registry_.Init();
 	GlobalLocker_.Init();

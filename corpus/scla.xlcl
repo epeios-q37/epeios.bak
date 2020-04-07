@@ -1,60 +1,60 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!-- $Id: scltool.xlcl,v 1.2 2013/07/18 19:46:20 csimon Exp $ -->
 <xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
-	<Translations text="SCLARGMNT_BadArgument">
+	<Translations text="SCLA_BadArgument">
 		<Translation language="fr">'%1' : argument incorrect.</Translation>
 		<Translation language="en">'%1' : bad argument.</Translation>
 	</Translations>
-	<Translations message="SCLARGMNT_BadArguments">
+	<Translations message="SCLA_BadArguments">
 		<Translation language="fr">Arguments incorrects.</Translation>
 		<Translation language="en">Bad arguments.</Translation>
 	</Translations>
-	<Translations text="SCLARGMNT_UnknownFlag">
+	<Translations text="SCLA_UnknownFlag">
 		<Translation language="fr">'%1' inconnu.</Translation>
 		<Translation language="en">'%1' unknown.</Translation>
 	</Translations>
-	<Translations text="SCLARGMNT_NoValueForFlag">
+	<Translations text="SCLA_NoValueForFlag">
 		<Translation language="fr">Pas de valeur pour le fanion '%1' ('%1=&lt;valeur&gt;' si c'est une option).</Translation>
 		<Translation language="en">No value for '%1' flag ('%1=&lt;valeur&gt;' as an option).</Translation>
 	</Translations>
-	<Translations text="SCLARGMNT_BadPathForFlag">
+	<Translations text="SCLA_BadPathForFlag">
 		<Translation language="fr">Mauvais chemin pour le fanion '%1'.</Translation>
 		<Translation language="en">Bad path for '%1' flag.</Translation>
 	</Translations>
-	<Translations text="SCLARGMNT_UnknownOption">
+	<Translations text="SCLA_UnknownOption">
 		<Translation language="fr">Option '%1' inconnue.</Translation>
 		<Translation language="en">Unknown '%1' option.</Translation>
 	</Translations>
-	<Translations text="SCLARGMNT_NoPathForOption">
+	<Translations text="SCLA_NoPathForOption">
 		<Translation language="fr">Pas de chemin pour l'option '%1'.</Translation>
 		<Translation language="en">No path for '%1' option.</Translation>
 	</Translations>
-	<Translations text="SCLARGMNT_BadPathForOption">
+	<Translations text="SCLA_BadPathForOption">
 		<Translation language="fr">Mauvais chemin pour l'option '%1'.</Translation>
 		<Translation language="en">Bad path for '%1' option.</Translation>
 	</Translations>
-	<Translations text="SCLARGMNT_BadAmountOfArguments">
+	<Translations text="SCLA_BadAmountOfArguments">
 		<Translation language="fr">Nombre d'arguments incorrects.</Translation>
 		<Translation language="en">Bad amount of arguments.</Translation>
 	</Translations>
-	<Translations text="SCLARGMNT_BadCommand">
+	<Translations text="SCLA_BadCommand">
 		<Translation language="fr">'%1' : bad command.</Translation>
 		<Translation language="en">'%1' : bad command.</Translation>
 	</Translations>
-	<Translations text="SCLARGMNT_NoPathForFlag">
+	<Translations text="SCLA_NoPathForFlag">
 		<Translation language="fr">Pas de chemin pour le fanion '%1'.</Translation>
 		<Translation language="en">No path for '%1' flag.</Translation>
 	</Translations>
-	<Translations text="SCLARGMNT_NoPathForArgument">
+	<Translations text="SCLA_NoPathForArgument">
 		<Translation language="fr">Pas de chemin pour l'argument '%1'.</Translation>
 		<Translation language="en">No path for '%1' argument.</Translation>
 	</Translations>
-	<Translations text="SCLARGMNT_BadPathForArgument">
+	<Translations text="SCLA_BadPathForArgument">
 		<Translation language="fr">Mauvais chemin pour l'argument '%1'.</Translation>
 		<Translation language="en">Bad path for '%1' argument.</Translation>
 	</Translations>
 	<!--
-	<Translations text="SCLARGMNT_">
+	<Translations text="SCLA_">
 		<Translation language="fr"></Translation>
 		<Translation language="en"></Translation>
 	</Translations>

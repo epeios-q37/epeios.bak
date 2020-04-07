@@ -21,8 +21,6 @@
 
 #include "epsmsc.h"
 
-#include "sclmisc.h"
-
 using namespace epsmsc;
 using namespace txf;
 
@@ -30,7 +28,7 @@ void epsmsc::PrintLicense(
 	const char *Name,
 	txf::text_oflow__ &Flow )
 {
-	Flow 
+	Flow
 	<< pad << Name << " is free software: you can redistribute it and/or modify" << nl
 	<< pad << "it under the terms of the GNU Affero General Public License as" << nl
 	<< pad << "published by the Free Software Foundation, either version 3 of" << nl

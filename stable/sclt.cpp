@@ -17,31 +17,29 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define SCLTOOL_COMPILATION_
+#define SCLT_COMPILATION_
 
-#include "scltool.h"
+#include "sclt.h"
+
+#include "scla.h"
+#include "sclerror.h"
+#include "scll.h"
+#include "sclm.h"
 
 #include "cio.h"
-#include "tagsbs.h"
 
-#include "sclrgstry.h"
-#include "scllocale.h"
-#include "sclmisc.h"
-#include "sclerror.h"
-#include "sclargmnt.h"
-
-using namespace scltool;
+using namespace sclt;
 
 using cio::COut;
-using scllocale::GetLocale;
+using scll::GetLocale;
 
 static err::err___ qRRor_;
 static sclerror::rError SCLError_;
 
-bso::bool__ scltool::IgnoreUnknownArguments = false;
+bso::bool__ sclt::IgnoreUnknownArguments = false;
 
 namespace {
-	scllocale::rRack Locale_;
+	scll::rRack Locale_;
 };
 
 namespace {
@@ -60,7 +58,7 @@ namespace {
 		while ( i < argc )
 			Arguments.Append( str::string( ntvstr::string___( argv[i++] ).UTF8( SBuffer ) ) );
 
-		sclargmnt::FillRegistry( Arguments, sclargmnt::faIsCommand, IgnoreUnknownArguments ? sclargmnt::uaIgnore : sclargmnt::uaReport );
+		scla::FillRegistry( Arguments, scla::faIsCommand, IgnoreUnknownArguments ? scla::uaIgnore : scla::uaReport );
 	qRR
 	qRT
 	qRE
@@ -74,37 +72,37 @@ static int main_(
 	int ExitValue = EXIT_SUCCESS;
 qRH
 	str::string Command;
-	sclmisc::sRack Rack;
+	sclm::sRack Rack;
 	const scli::sInfo *Info = NULL;
 qRB
-	Info = &SCLTOOLInfo();
+	Info = &SCLTInfo();
 
 	if ( Info == NULL )
 		qRFwk();
 
 	Rack.Init( qRRor_, SCLError_, CIO, Locale_);
 
-	sclmisc::Initialize( Rack, (const char *)NULL, *Info );
+	sclm::Initialize( Rack, (const char *)NULL, *Info );
 
 	FillRegistry_( Oddities.argc, Oddities.argv, IgnoreUnknownArguments );
 
-	sclmisc::LoadProject( *Info );
+	sclm::LoadProject( *Info );
 
-	sclmisc::FillSetupRegistry();
+	sclm::FillSetupRegistry();
 
-	sclmisc::RefreshBaseLanguage();
+	sclm::RefreshBaseLanguage();
 
 	Command.Init();
 
-	if ( sclargmnt::GetCommand( Command ) == "Usage" )
-		sclargmnt::PrintUsage( *Info, cio::COut );
+	if ( scla::GetCommand( Command ) == "Usage" )
+		scla::PrintUsage( *Info, cio::COut );
 	else
-		ExitValue = SCLTOOLMain( Command, Oddities );
+		ExitValue = SCLTMain( Command, Oddities );
 qRR
 	if ( ERRType >= err::t_amount ) {
 		switch ( ERRType ) {
 		case err::t_Abort:
-			if ( sclmisc::DisplaySCLBasePendingError() )
+			if ( sclm::DisplaySCLBasePendingError() )
 				ExitValue = EXIT_FAILURE;
 			ERRRst();
 			break;
@@ -133,10 +131,10 @@ qRT
 	cio::CErr.Commit();
 	cio::CIn.Dismiss();
 
-	sclmisc::DumpRegistriesAndOrLocalesIfRequired();
+	sclm::DumpRegistriesAndOrLocalesIfRequired();
 
 	if ( Info != NULL )
-		sclmisc::Quit( *Info );
+		sclm::Quit( *Info );
 qRE
 	return ExitValue;
 }
@@ -177,8 +175,8 @@ qRFB
 
 	ExitValue = main_( Oddities, cio::GetSet( cio::t_Default ) );
 qRFR
-qRFT	
-qRFE( sclmisc::ErrFinal() )
+qRFT
+qRFE( sclm::ErrFinal() )
 	return ExitValue;
 }
 
@@ -229,10 +227,10 @@ qRFT
 
 # if 0	/// Fait planter 'CEF'.
 	if ( SOut.Amount() )
-		MessageBoxW( NULL, ntvstr::string___( SOut ).Internal(), ntvstr::string___( sclmisc::SCLMISCTargetName ).Internal(), MB_OK );
+		MessageBoxW( NULL, ntvstr::string___( SOut ).Internal(), ntvstr::string___( sclm::SCLMTargetName ).Internal(), MB_OK );
 
 	if ( SErr.Amount() )
-		MessageBoxW( NULL, ntvstr::string___( SErr ).Internal(), ntvstr::string___( sclmisc::SCLMISCTargetName ).Internal(), MB_OK | MB_TASKMODAL );
+		MessageBoxW( NULL, ntvstr::string___( SErr ).Internal(), ntvstr::string___( sclm::SCLMTargetName ).Internal(), MB_OK | MB_TASKMODAL );
 # else
 	if ( SOut.Amount() || SErr.Amount() )
 	{
@@ -245,7 +243,7 @@ qRFT
 			std::wcout << (wchar_t *)ntvstr::string___( SErr ).Internal() << std::endl;
 	}
 # endif
-qRFE( sclmisc::ErrFinal() )
+qRFE( sclm::ErrFinal() )
 	return ExitValue;
 }
 
@@ -263,17 +261,18 @@ qRFB
 
 	ExitValue = main_( Oddities, cio::GetSet( cio::t_Default ) );
 qRFR
-qRFT	
-qRFE( sclmisc::ErrFinal() )
+qRFT
+qRFE( sclm::ErrFinal() )
 	return ExitValue;
 }
 #endif
 
-Q37_GCTOR( scltool )
+Q37_GCTOR( sclt )
 {
-	sclmisc::ExitOnSignal();
+	sclm::ExitOnSignal();
 	qRRor_.Init();
 	SCLError_.Init();
 
 	Locale_.Init();
 }
+

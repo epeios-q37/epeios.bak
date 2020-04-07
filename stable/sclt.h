@@ -17,31 +17,23 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef SCLTOOL_INC_
-# define SCLTOOL_INC_
+// SoCLe Tools
 
-# define SCLTOOL_NAME		"SCLTOOL"
+#ifndef SCLT_INC_
+# define SCLT_INC_
 
-# if defined( E_DEBUG ) && !defined( SCLTOOL_NODBG )
-#  define SCLTOOL_DBG
+# define SCLT_NAME		"SCLT"
+
+# if defined( E_DEBUG ) && !defined( SCLT_NODBG )
+#  define SCLT_DBG
 # endif
 
-// SoCLe TOOL
+# include "scli.h"
 
 # include "err.h"
-# include "flw.h"
-# include "lcl.h"
+# include "ntvstr.h"
 
-# include "sclmisc.h"
-# include "scllocale.h"
-# include "sclerror.h"
-# include "sclrgstry.h"
-
-/*************************/
-/****** New version ******/
-/*************************/
-
-namespace scltool {
+namespace sclt {
 	struct fOddities {
 # ifdef CPE_S_WIN
 		HINSTANCE hInstance;
@@ -58,27 +50,17 @@ namespace scltool {
 
 
 /*************************/
-/****** Olf version ******/
+/****** Old version ******/
 /*************************/
 
-namespace scltool {
-
-# if 0	// Obsolete ?
-	enum command {
-		cHelp,
-		cVersion,
-		cLicense,
-		c_amount
-	};
-# endif
-
+namespace sclt {
 	typedef fOddities oddities__;
 
 	// To define by user.
-	const scli::sInfo &SCLTOOLInfo( void );
+	const scli::sInfo &SCLTInfo( void );
 
 	// To define by user.
-	int SCLTOOLMain(
+	int SCLTMain(
 		const str::string_ &Command,
 		const oddities__ &Oddities );
 

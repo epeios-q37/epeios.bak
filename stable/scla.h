@@ -17,24 +17,25 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef SCLARGMNT_INC_
-# define SCLARGMNT_INC_
+// SoCLe Argument
 
-# define SCLARGMNT_NAME		"SCLARGMNT"
+#ifndef SCLA_INC_
+# define SCLA_INC_
 
-# if defined( E_DEBUG ) && !defined( SCLARGMNT_NODBG )
-#  define SCLARGMNT_DBG
+# define SCLA_NAME		"SCLA"
+
+# if defined( E_DEBUG ) && !defined( SCLA_NODBG )
+#  define SCLA_DBG
 # endif
-
-// SoCLe ARGuMeNTs
 
 # include "scli.h"
 
 # include "err.h"
-# include "txf.h"
 # include "str.h"
+# include "tol.h"
+# include "txf.h"
 
-namespace sclargmnt {
+namespace scla {
 	E_ENUM( first_argument ) {
 		faIsCommand,	// The first argument is the command (when arguments come from the CLI).
 		faIsArgument,	// The first argument is really a argument (when arguments come from another source).

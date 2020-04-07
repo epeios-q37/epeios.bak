@@ -140,7 +140,7 @@ qRH;
     bso::sBool Continue = true;
     flw::rDressedRWFlow<> Flow;
     str::wString ScriptName, ReturnValue;
-    str::wStrings Parameters, SplitedReturnValue;;
+    str::wStrings Parameters, SplitedReturnValue;
     eType_ ReturnType = t_Undefined;
 qRB;
     Flow.Init( D_() );

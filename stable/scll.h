@@ -17,24 +17,21 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef SCLLOCALE_INC_
-# define SCLLOCALE_INC_
+// SoCLe Locale
 
-# define SCLLOCALE_NAME		"SCLLOCALE"
+#ifndef SCLL_INC_
+# define SCLL_INC_
 
-# if defined( E_DEBUG ) && !defined( SCLLOCALE_NODBG )
-#  define SCLLOCALE_DBG
+# define SCLL_NAME		"SCLL"
+
+# if defined( E_DEBUG ) && !defined( SCLL_NODBG )
+#  define SCLL_DBG
 # endif
 
-// SoCLe LOCALE
-
 # include "err.h"
-# include "flw.h"
-# include "str.h"
 # include "lcl.h"
 
-namespace scllocale {
-
+namespace scll {
 	class rRack {
 	public:
 		lcl::locale Locale;
@@ -174,6 +171,7 @@ namespace scllocale {
 		const char *Language,
 		str::string_ &Out,
 		char Marker = DefaultMarker );
+
 }
 
 #endif

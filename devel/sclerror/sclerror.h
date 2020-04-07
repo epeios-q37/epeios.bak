@@ -41,7 +41,7 @@
 /* End of automatic documentation generation part. */
 
 /* Addendum to the automatic documentation generation part. */
-//D SoCLe ERROR 
+//D SoCLe ERROR
 /* End addendum to automatic documentation generation part. */
 
 /*$BEGIN$*/
@@ -54,7 +54,7 @@
 # include "mtx.h"
 # include "tht.h"
 
-#include "scllocale.h"
+#include "scll.h"
 
 namespace sclerror {
 

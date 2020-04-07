@@ -17,27 +17,21 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef SCLRGSTRY_INC_
-#define SCLRGSTRY_INC_
+// SoCLe Registry
 
-#define SCLRGSTRY_NAME		"SCLRGSTRY"
+#ifndef SCLR_INC_
+# define SCLR_INC_
 
-#if defined( E_DEBUG ) && !defined( SCLRGSTRY_NODBG )
-#define SCLRGSTRY_DBG
-#endif
+# define SCLR_NAME		"SCLR"
 
-// SoCLe ReGiSTRY
+# if defined( E_DEBUG ) && !defined( SCLR_NODBG )
+#  define SCLR_DBG
+# endif
 
 # include "err.h"
-# include "xtf.h"
-
 # include "rgstry.h"
 
-/***************/
-/***** OLD *****/
-/***************/
-
-namespace sclrgstry {
+namespace sclr {
 
 	using rgstry::tags_;
 	using rgstry::tags;
@@ -303,7 +297,7 @@ namespace sclrgstry {
 		const registry_ &Registry,
 		const rgstry::tentry___ &Entry );
 
-# define SCLRGSTRY__UN( type, name, limit )\
+# define SCLR_UN_( type, name, limit )\
 	type MGet##name(\
 		const registry_ &Registry,\
 		const rgstry::tentry__ &Entry,\
@@ -314,15 +308,15 @@ namespace sclrgstry {
 		type DefaultValue,\
 		type Limit = limit );
 
-	SCLRGSTRY__UN( bso::uint__, UInt, BSO_UINT_MAX )
+	SCLR_UN_( bso::uint__, UInt, BSO_UINT_MAX )
 # ifdef BSO__64BITS_ENABLED
-		SCLRGSTRY__UN( bso::u64__, U64, BSO_U64_MAX )
+		SCLRG_UN_( bso::u64__, U64, BSO_U64_MAX )
 # endif
-	SCLRGSTRY__UN( bso::u32__, U32, BSO_U32_MAX )
-	SCLRGSTRY__UN( bso::u16__, U16, BSO_U16_MAX )
-	SCLRGSTRY__UN( bso::u8__, U8, BSO_U8_MAX )
+	SCLR_UN_( bso::u32__, U32, BSO_U32_MAX )
+	SCLR_UN_( bso::u16__, U16, BSO_U16_MAX )
+	SCLR_UN_( bso::u8__, U8, BSO_U8_MAX )
 
-# define SCLRGSTRY__SN( type, name, min, max )\
+# define SCLR_SN_( type, name, min, max )\
 	type MGet##name(\
 		const registry_ &Registry,\
 		const rgstry::tentry__ &Entry,\
@@ -335,16 +329,16 @@ namespace sclrgstry {
 		type Min = min,\
 		type Max = max );
 
-	SCLRGSTRY__SN( bso::sint__, SInt, BSO_SINT_MIN, BSO_SINT_MAX )
+	SCLR_SN_( bso::sint__, SInt, BSO_SINT_MIN, BSO_SINT_MAX )
 # ifdef BSO__64BITS_ENABLED
-	SCLRGSTRY__SN( bso::s64__, S64, BSO_S64, BSO_S64_MAX )
+	SCLR_SN_( bso::s64__, S64, BSO_S64, BSO_S64_MAX )
 #endif
-	SCLRGSTRY__SN( bso::s32__, S32, BSO_S32_MIN, BSO_S32_MAX )
-	SCLRGSTRY__SN( bso::s16__, S16, BSO_S16_MIN, BSO_S16_MAX )
-	SCLRGSTRY__SN( bso::s8__, S8, BSO_S8_MIN, BSO_S8_MAX )
+	SCLR_SN_( bso::s32__, S32, BSO_S32_MIN, BSO_S32_MAX )
+	SCLR_SN_( bso::s16__, S16, BSO_S16_MIN, BSO_S16_MAX )
+	SCLR_SN_( bso::s8__, S8, BSO_S8_MIN, BSO_S8_MAX )
 
 		// To define function retrieving mandatory registry value.
-# define SCLRGSTRY_MV( name, entry )\
+# define SCLR_MV( name, entry )\
 		const registry_ &Registry,\
 		inline const char *name(\
 		TOL_CBUFFER___ &Buffer )\
@@ -359,7 +353,7 @@ namespace sclrgstry {
 	}
 
 		// To define function retrieving optional registry value.
-# define SCLRGSTRY_OV( name, entry )\
+# define SCLR_OV( name, entry )\
 	inline const char *name(\
 		const registry_ &Registry,\
 		TOL_CBUFFER___ &Buffer,\
@@ -380,11 +374,10 @@ namespace sclrgstry {
 /***** NEW *****/
 /***************/
 
-namespace sclrgstry {
+namespace sclr {
 	typedef registry_ dRegistry;
 	qW( Registry );
 
-	typedef rgstry::entry___ rEntry;
-}
+	typedef rgstry::entry___ rEntry;}
 
 #endif

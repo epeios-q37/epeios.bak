@@ -41,7 +41,7 @@
 # define PLGNCORE_PLUGIN_IDENTIFIER_FUNCTION_NAME		PluginIdentifier
 # define PLGNCORE_RETRIEVE_CALLBACK_FUNCTION_NAME		RetrieveCallback
 
-namespace sclmisc {
+namespace sclm {
 	struct sRack;
 }
 
@@ -53,7 +53,7 @@ namespace plgncore {
 	public:
 		const char *Version;	// Toujours en premire position.
 		bso::size__ ControlValue;
-		sclmisc::sRack *SCLRack;
+		sclm::sRack *SCLRack;
 		const str::string_ *Arguments;
 		void *UP;				// User pointer.
 		void reset( bso::bool__ P = true )
@@ -65,14 +65,14 @@ namespace plgncore {
 		}
 		E_CDTOR( sData );
 		sData(
-			sclmisc::sRack &Rack,
+			sclm::sRack &Rack,
 			const str::string_ &Arguments,
 			void *UP = NULL )
 		{
 			Init( Rack, Arguments, UP );
 		}
 		void Init(
-			sclmisc::sRack &SCLRack,
+			sclm::sRack &SCLRack,
 			const str::string_ &Arguments,
 			void *UP = NULL )
 		{

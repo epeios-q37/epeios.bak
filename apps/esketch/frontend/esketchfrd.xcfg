@@ -84,7 +84,7 @@
 				</xpp:ifeq>
 				<xpp:bloc marker="$">
 					<Backend id="Embedded" Alias="EmbeddedPredefinedBackend" Plugin="Embedded">
-						<!--xpp:expand value-of="BackendPath"/-->
+						<xpp:expand value-of="BackendPath"/>
 						<xpp:bloc>esketchbkd</xpp:bloc>
 					</Backend>
 					<Backend id="LocalHost" Alias="LocalPredefinedBackend" Plugin="Straight">localhost:53700</Backend>

@@ -108,7 +108,7 @@ namespace plgn {
 			const char *Label,
 			const char *Identifier,
 			const rgstry::tentry__ &Configuration,
-			const rgstry::multi_level_registry_ &Registry,
+			const rgstry::multi_layer_registry_ &Registry,
 			const str::string_ &Arguments,
 			const dAbstracts &Abstracts )
 		{
@@ -243,7 +243,7 @@ namespace plgn {
 			const ntvstr::string___ &PluginPath,
 			const char *Identifier,
 			const rgstry::tentry__ &Configuration,
-			const rgstry::multi_level_registry_ &Registry,
+			const rgstry::multi_layer_registry_ &Registry,
 			const str::string_ &Arguments,
 			const dAbstracts &Abstracts )
 		{
