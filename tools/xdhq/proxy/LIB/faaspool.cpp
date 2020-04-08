@@ -32,7 +32,7 @@ using namespace faaspool;
 #include "lstbch.h"
 #include "lstcrt.h"
 #include "mtk.h"
-#include "sclmisc.h"
+#include "sclm.h"
 #include "str.h"
 
 namespace {
@@ -44,15 +44,15 @@ namespace {
 
 		namespace definition {
             namespace {
-                sclrgstry::rEntry FaaS_("FaaS", sclrgstry::Definitions);
+                sclr::rEntry FaaS_("FaaS", sclr::Definitions);
             }
 
-			sclrgstry::rEntry Notification( "Notification", FaaS_ );
-			sclrgstry::rEntry URL( "URL", FaaS_ );
+			sclr::rEntry Notification( "Notification", FaaS_ );
+			sclr::rEntry URL( "URL", FaaS_ );
 		}
 	}
 
-	qROW( FRow );	// FrontenrdRow.
+	qROW( FRow );	// Frontend 'Row'.
 
 	typedef lstbch::qLBUNCHd( rShared *, sFRow ) dShareds_;
 	qW( Shareds_ );
@@ -324,7 +324,7 @@ namespace {
 		{
 			PluginRetriever_.Init();
 
-			if ( sclmisc::Plug( plugins::TokenPluginTarget, NULL, PluginRetriever_, qRPU ) )
+			if ( sclm::Plug( plugins::TokenPluginTarget, NULL, PluginRetriever_, qRPU ) )
 				return PluginRetriever_.Plugin();
 			else {
 				DefaultHandler_.Init();
@@ -343,7 +343,7 @@ namespace {
 		Notification.Init( Message );
 
 		if ( Notification.IsEmpty() )
-			sclmisc::OGetValue( registry_::definition::Notification, Notification );
+			sclm::OGetValue( registry_::definition::Notification, Notification );
 
 		prtcl::Put( Notification, Flow );
 	qRR;
@@ -390,7 +390,7 @@ namespace {
         tagsbs::tvalues Tags;
     qRB
         TaggedURL.Init();
-        sclmisc::MGetValue(registry_::definition::URL, TaggedURL);
+        sclm::MGetValue(registry_::definition::URL, TaggedURL);
 
         if ( RawService.Amount()) {
             Service.Init(":");
@@ -433,7 +433,7 @@ namespace {
 
 			if ( (Backend = Create_( Driver, IP, Token, Head )) == NULL ) {
 				ErrorMessage.Init();
-				sclmisc::GetBaseTranslation( "TokenAlreadyInUse", ErrorMessage, Token );
+				sclm::GetBaseTranslation( "TokenAlreadyInUse", ErrorMessage, Token );
 				Token.Init();	// To report backned that there is an error.
 			}
 			break;
@@ -442,7 +442,7 @@ namespace {
 			ErrorMessageLabel.Init( "PLUGINS_" );
 			ErrorMessageLabel.Append( plugins::GetLabel( Status ) );
 			ErrorMessage.Init();
-			sclmisc::GetBaseTranslation( ErrorMessageLabel, ErrorMessage );
+			sclm::GetBaseTranslation( ErrorMessageLabel, ErrorMessage );
 			break;
 		}
 
@@ -553,7 +553,7 @@ namespace {
 		NewConnexion_( Data, Blocker );
 	qRFR;
 	qRFT;
-	qRFE( sclmisc::ErrFinal() );
+	qRFE( sclm::ErrFinal() );
 	}
 
 	void ListeningRoutine_( void * )
@@ -568,7 +568,7 @@ namespace {
 		}
 	qRFR;
 	qRFT;
-	qRFE( sclmisc::ErrFinal() );
+	qRFE( sclm::ErrFinal() );
 	}
 }
 
@@ -577,7 +577,7 @@ void faaspool::Initialize( void )
 qRH;
 	csdbns::sService Service = csdbns::Undefined;
 qRB;
-	if ( (Service = sclmisc::OGetU16( registry::parameter::faas::Service, csdbns::Undefined ) ) != csdbns::Undefined ) {
+	if ( (Service = sclm::OGetU16( registry::parameter::faas::Service, csdbns::Undefined ) ) != csdbns::Undefined ) {
 		Listener_.Init( Service );
 
 		mtk::RawLaunch( ListeningRoutine_, NULL );

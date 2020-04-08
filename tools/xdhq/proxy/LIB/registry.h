@@ -20,13 +20,13 @@
 #ifndef REGISTRY_INC_
 # define REGISTRY_INC_
 
-# include "sclrgstry.h"
+# include "sclr.h"
 
 namespace registry {
-	using sclrgstry::rEntry;
+	using sclr::rEntry;
 
 	namespace parameter {
-		using namespace sclrgstry::parameter;
+		using namespace sclr::parameter;
 
 		extern rEntry HostService;
 
@@ -38,7 +38,7 @@ namespace registry {
 	}
 
 	namespace definition {
-		using namespace sclrgstry::definition;
+		using namespace sclr::definition;
 	}
 }
 

@@ -22,7 +22,7 @@
 
 using namespace registry;
 
-rEntry registry::parameter::Service( "Service", sclrgstry::Parameters );
+rEntry registry::parameter::Service( "Service", sclr::Parameters );
 
-rEntry registry::definition::ErrorHead("ErrorHead", sclrgstry::Definitions);
-rEntry registry::definition::ErrorScript("ErrorScript", sclrgstry::Definitions);
+rEntry registry::definition::ErrorHead("ErrorHead", sclr::Definitions);
+rEntry registry::definition::ErrorScript("ErrorScript", sclr::Definitions);

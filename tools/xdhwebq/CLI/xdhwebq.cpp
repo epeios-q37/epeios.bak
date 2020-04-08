@@ -21,8 +21,8 @@
 
 #include "registry.h"
 
-#include "scltool.h"
-#include "sclerror.h"
+#include "sclt.h"
+#include "scle.h"
 
 #include "xdwmain.h"
 
@@ -93,7 +93,7 @@ namespace {
                 Flow.Init(Driver);
                 Head.Init();
                 if ( !Agent.GetHead(Data.Token, Head) )
-                    sclmisc::MGetValue(registry::definition::ErrorHead, Head);
+                    sclm::MGetValue(registry::definition::ErrorHead, Head);
                 Flow.Write(Head.Convert(Buffer), Head.Amount());
                 Flow.Commit();
             qRR
@@ -144,7 +144,7 @@ namespace {
                     Session.Launch("","");
                 else {
                     Script.Init();
-                    sclmisc::MGetValue(registry::definition::ErrorScript, Script);
+                    sclm::MGetValue(registry::definition::ErrorScript, Script);
                     Session.Execute(Script);
                 }
 
@@ -261,13 +261,13 @@ namespace {
 		Identification.Append( cpe::GetDescription() );
 
 		ModuleFilename.Init();
-		sclmisc::MGetValue( registry::parameter::ModuleFilename, ModuleFilename );
+		sclm::MGetValue( registry::parameter::ModuleFilename, ModuleFilename );
 
 		Agent.Init( xdhcmn::mMultiUser, ModuleFilename, dlbrry::n_Default, Identification.Convert( Buffer ) );
 
 		Callback.Init( Agent );
 
-		Server.Init( sclmisc::MGetU16( registry::parameter::Service ), Callback );
+		Server.Init( sclm::MGetU16( registry::parameter::Service ), Callback );
 		Server.Process( NULL );
 	qRR
 	qRT
@@ -275,7 +275,7 @@ namespace {
 	}
 }
 
-const scli::sInfo &scltool::SCLTOOLInfo( void )
+const scli::sInfo &sclt::SCLTInfo( void )
 {
 	return xdhwebq::Info;
 }
@@ -284,9 +284,9 @@ const scli::sInfo &scltool::SCLTOOLInfo( void )
 	else if ( Command == #name )\
 		name##_()
 
-int scltool::SCLTOOLMain(
+int sclt::SCLTMain(
 	const str::dString &Command,
-	const scltool::fOddities &Oddities )
+	const sclt::fOddities &Oddities )
 {
 	int ExitValue = EXIT_FAILURE;
 qRH

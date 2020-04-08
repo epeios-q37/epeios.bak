@@ -22,5 +22,5 @@
 
 using namespace registry;
 
-rEntry registry::parameter::Test( "Test", sclrgstry::Parameters );
+rEntry registry::parameter::Test( "Test", sclr::Parameters );
 

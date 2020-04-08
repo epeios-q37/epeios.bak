@@ -31,7 +31,7 @@
 #include "csdcmn.h"
 #include "csdbns.h"
 
-#include "sclmisc.h"
+#include "sclm.h"
 
 SCLI_DEF( xdhqxdh, PROGRAM_NAME, SOFTWARE_NAME );
 
@@ -56,7 +56,7 @@ namespace {
         qRB;
             HostService.Init();
 
-            if ( sclmisc::OGetValue( registry::parameter::HostService, HostService ) )
+            if ( sclm::OGetValue( registry::parameter::HostService, HostService ) )
                 session::Core.Init( HostService.Convert( Buffer ), 0, sck::NoTimeout );
 
             faaspool::Initialize();
@@ -116,14 +116,14 @@ namespace {
 
 			if ( Launcher_ == NULL ) {
 				Launcher_ = Data.LauncherIdentification();
-				sclmisc::Initialize( Data.SCLRack(), Data.Localization(), xdhqxdh::Info );
+				sclm::Initialize( Data.SCLRack(), Data.Localization(), xdhqxdh::Info );
 
 				Initialization_( Data.Mode() );
 			}
 		}
 		virtual void XDHCMNBaseLanguage( TOL_CBUFFER___ &Buffer ) override
 		{
-			const char *Language = sclmisc::GetBaseLanguage();
+			const char *Language = sclm::GetBaseLanguage();
 
 			if ( Language == NULL )
 				qRFwk();

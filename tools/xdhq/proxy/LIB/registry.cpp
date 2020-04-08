@@ -19,9 +19,9 @@
 
 #include "registry.h"
 
-using sclrgstry::rEntry;
+using sclr::rEntry;
 
-rEntry registry::parameter::HostService( "HostService", sclrgstry::Parameters );
-rEntry registry::parameter::FaaS( "FaaS", sclrgstry::Parameters );
+rEntry registry::parameter::HostService( "HostService", sclr::Parameters );
+rEntry registry::parameter::FaaS( "FaaS", sclr::Parameters );
 rEntry registry::parameter::faas::Service( "Service", registry::parameter::FaaS );
 
