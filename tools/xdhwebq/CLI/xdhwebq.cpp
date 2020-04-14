@@ -34,6 +34,7 @@
 #include "xpp.h"
 #include "fnm.h"
 #include "flf.h"
+#include "mtk.h"
 #include "websck.h"
 #include "xdhutl.h"
 
@@ -86,7 +87,7 @@ namespace {
                 rData &Data )
             {
             qRH
-                qCBUFFERr Buffer;
+                qCBUFFERh Buffer;
                 flw::rDressedRWFlow<> Flow;
                 str::wString Head;
             qRB
@@ -102,43 +103,138 @@ namespace {
             }
 
             namespace {
-                void Handle_(
+                class rCapsule_ {
+                private:
+                    tht::rBlocker
+                        Reading_,  // Blocks action reading; to wait until current action be completed.
+                        Handling_;  // Blocks action handling; to wait until an action is available.
+                    str::wString Id_, Action_;
+                public:
+                    void reset(bso::sBool P = true)
+                    {
+                        tol::reset(P, Reading_, Handling_, Id_, Action_);
+                    }
+                    qCDTOR(rCapsule_);
+                    void Init(void)
+                    {
+                        Reading_.Init();
+                        tol::Init(Handling_, Id_, Action_);
+                    }
+                    void WaitForActionCompletion(void)
+                    {
+                        Reading_.Wait();
+                    }
+                    void ReportActionCompleted(void)
+                    {
+                        Reading_.Unblock();
+                    }
+                    void Send(
+                        const str::dString &Id,
+                        const str::dString &Action)
+                    {
+                        Id_ = Id;
+                        Action_ = Action;
+
+                        Handling_.Unblock();
+                    }
+                    void Get(
+                        qCBUFFERh &Id,
+                        qCBUFFERh &Action )
+                    {
+                        Handling_.Wait();
+
+                        Id_.Convert(Id);
+                        Action_.Convert(Action);
+                    }
+
+                };
+
+                bso::sBool Handle_(
                     const str::dString &Digest,
-                    xdwmain::rSession &Session )
+                    rCapsule_ &Capsule)
                 {
+                    bso::sBool ActionInProgress = false;
                 qRH;
                     str::string Id;
                     xdhutl::event_abstract Abstract;
-                    qCBUFFERr IdBuffer, ActionBuffer;
                 qRB;
                     Id.Init();
                     Abstract.Init();
                     if ( xdhutl::FetchEventAbstract(Digest, Id, Abstract) ) {
                         if ( xdhutl::IsPredefined( Abstract.Action() ) )
                             qRVct();
-                        else if ( Abstract.Action() == xdhutl::a_User )
-                            Session.Launch(Id.Convert(IdBuffer), Abstract.UserAction.Convert(ActionBuffer));
-                        else
+                        else if ( Abstract.Action() == xdhutl::a_User ) {
+                            Capsule.Send(Id, Abstract.UserAction);
+                            ActionInProgress = true;
+                        } else
                             qRGnr();
                     }
                 qRR;
                 qRT;
                 qRE;
+                    return ActionInProgress;
                 }
+
+                struct sShared_ {
+                public:
+                    rCapsule_ *Capsule;
+                    fdr::rRDriver *Driver;
+                    void reset(bso::sBool P = true)
+                    {
+                        tol::reset(P, Capsule, Driver);
+                    }
+                    qCDTOR(sShared_);
+                    void Init(void)
+                    {
+                        Capsule = NULL;
+                        Driver = NULL;
+                    }
+                };
+
+                void Routine_(
+                    void *UP,
+                    mtk::gBlocker &Blocker)
+                    {
+                    qRH
+                        sShared_ &Shared = *(sShared_ *)UP;
+                        rCapsule_ &Capsule = *Shared.Capsule;
+                        flw::rDressedRFlow<> Flow;
+                        str::wString Digest;
+                    qRB
+                        Flow.Init(*Shared.Driver);
+
+                        Blocker.Release();
+
+                        while(true) {
+                            Digest.Init();
+                            if ( !websck::GetMessage(Flow,Digest) )
+                                break;
+                            Flow.Dismiss();
+                            if ( Handle_(Digest, Capsule) )
+                                Capsule.WaitForActionCompletion();
+                    }
+
+                    qRR
+                    qRT
+                    qRE
+                    }
             }
 
             void HandleRegular_(
                 xdwmain::rAgent &Agent,
-                fdr::rRWDriver &Driver,
+                fdr::rRWDriver &RawDriver,
                 rData &Data)
             {
             qRH
-                websck::rFlow Flow;
+                websck::rDriver Driver;
+                flw::rDressedWFlow<> Flow;
                 xdwmain::rSession Session;
-                str::wString Digest, Script;
+                str::wString Script;
+                rCapsule_ Capsule;
+                sShared_ Shared;
+                qCBUFFERh Id, Action;
             qRB
-                Flow.Init(Driver, websck::mWithTerminator);
-                Session.Init(Agent, Driver, "", Data.Token);
+                Session.Init(Agent, RawDriver, "", Data.Token);
 
                 if ( Agent.IsValid(Data.Token) )
                     Session.Launch("","");
@@ -148,14 +244,24 @@ namespace {
                     Session.Execute(Script);
                 }
 
+
+                Driver.Init(RawDriver, websck::mWithTerminator, fdr::ts_Default);
+                Flow.Init(Driver);
+
+                Capsule.Init();
+
+                Shared.Init();
+                Shared.Capsule = &Capsule;
+                Shared.Driver = &Driver;
+
+                mtk::Launch(Routine_, &Shared);
+
                 while ( true ) {
-                    Digest.Init();
-                    if ( !websck::GetMessage(Flow,Digest) )
-                        break;
-                    Flow.Dismiss();
-                    Handle_(Digest, Session);
+                    Capsule.Get(Id, Action);
+                    Session.Launch(Id, Action);
                     Flow.Write("StandBy", 7);
                     Flow.Commit();
+                    Capsule.ReportActionCompleted();
                 }
             qRR
             qRT
@@ -255,7 +361,7 @@ namespace {
 		TOL_CBUFFER___ IdentificationBuffer;
 		csdbns::server___ Server;
 		sProcessing Callback;
-		qCBUFFERr Buffer;
+		qCBUFFERh Buffer;
 	qRB
 		Identification.Init( NAME_LC " V" VERSION " Build " __DATE__ " " __TIME__ " - " );
 		Identification.Append( cpe::GetDescription() );

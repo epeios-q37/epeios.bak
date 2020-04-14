@@ -141,7 +141,7 @@ namespace {
     {
     qRH
         str::wString ResponseKey;
-        qCBUFFERr Buffer;
+        qCBUFFERh Buffer;
     qRB
         ResponseKey.Init();
         ComputeResponseKey_(Key, ResponseKey);

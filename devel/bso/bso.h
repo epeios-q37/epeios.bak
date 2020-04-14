@@ -74,14 +74,14 @@ namespace bso {
 
 	typedef sU8 tEnum;
 
-	struct bGlobal_ {
+	struct pGlobal_ {
 		char Datum[BSO_CONVERSION_SIZE_MAX+1];	// + 1 for the NUL chracter.
 	};
 
-	typedef bGlobal_ bInteger;
-	typedef bInteger bInt;
+	typedef pGlobal_ pInteger;
+	typedef pInteger pInt;
 
-	typedef bGlobal_ bFloat;
+	typedef pGlobal_ pFloat;
 }
 
 /*************************/
@@ -185,7 +185,7 @@ namespace bso {
 
 	typedef void *pointer__;
 
-	typedef bGlobal_ buffer__;
+	typedef pGlobal_ buffer__;
 
 	/*
 	typedef buffer__ pointer_buffer__;
@@ -537,13 +537,13 @@ namespace bso {
 #  error
 # endif
 
-	typedef u64__ sBig;
-	typedef u64__ sUBig;
-	typedef s64__ sSBig;
+	typedef u64__ sHuge;
+	typedef u64__ sUHuge;
+	typedef s64__ sSHuge;
 
-# define BSO_BIG_MAX BSO_U64_MAX
+# define BSO_HUGE_MAX BSO_U64_MAX
 
-# define BSO_DINT_SIZE_MAX ( ( ( 8 * sizeof( bso::sBig ) ) / 7 ) + 1 )
+# define BSO_DINT_SIZE_MAX ( ( ( 8 * sizeof( bso::sHuge ) ) / 7 ) + 1 )
 
 	typedef byte__ dint__[BSO_DINT_SIZE_MAX];
 
@@ -551,8 +551,8 @@ namespace bso {
 # define SDRM__LENGTH_MAX BSO_UBYTE_MAX
 
 	const struct xint__ &_ConvertToDInt(
-		sBig Big,
-		struct xint__ &XInt );	//Avec '_', pour �viter des probl�mes d'ambigu�t� ('int__' <=> 'uint__').
+		sHuge Huge,
+		struct xint__ &XInt );
 
 	struct xint__ {
 	private:
@@ -587,24 +587,24 @@ namespace bso {
 			reset();
 		}
 		friend const struct xint__ &_ConvertToDInt(
-			sBig Big,
+			sHuge Huge,
 			struct xint__ &XInt );
 	};
 
 	inline const xint__ &ConvertToDInt(
-		sUBig UBig,
+		sUHuge UHuge,
 		xint__ &XInt )
 	{
-		return _ConvertToDInt( UBig, XInt );
+		return _ConvertToDInt( UHuge, XInt );
 	}
 
 	inline const xint__ &ConvertToDInt(
-		sSBig SBig,
+		sSHuge SHuge,
 		xint__ &XInt )
 	{
-        sign__ Sign = SBig;
+        sign__ Sign = SHuge;
 
-		return _ConvertToDInt( ( Sign < 0 ? 1 : 0 ) | ( (Sign < 0 ? -SBig : SBig ) << 1 ), XInt );
+		return _ConvertToDInt( ( Sign < 0 ? 1 : 0 ) | ( (Sign < 0 ? -SHuge : SHuge ) << 1 ), XInt );
 	}
 
 # ifndef BSO__64
@@ -612,11 +612,11 @@ namespace bso {
 		int__ Int,
 		xint__ &XInt )
 	{
-		return ConvertToDInt( (sUBig)Int, XInt );
+		return ConvertToDInt( (sUHuge)Int, XInt );
 	}
 # endif
 
-	sBig ConvertToBig(
+	sHuge ConvertToHuge(
 		const byte__ *DInt,
 		size__ *Length = NULL );
 
@@ -624,65 +624,65 @@ namespace bso {
 		const byte__ *DInt,
 		size__ *Length = NULL )
 	{
-		sBig Big = ConvertToBig( DInt, Length );
+		sHuge Huge = ConvertToHuge( DInt, Length );
 
-		if ( Big > BSO_INT_MAX )
+		if ( Huge > BSO_INT_MAX )
 			qRFwk();
 
-		return (int__)Big;
+		return (int__)Huge;
 	}
 
-	inline sBig ConvertToBig(
+	inline sHuge ConvertToHuge(
 		const byte__ *DInt,
 		size__ &Length )
 	{
-		return ConvertToBig( DInt, &Length );
+		return ConvertToHuge( DInt, &Length );
 	}
 
 	inline int__ ConvertToInt(
 		const byte__ *DInt,
 		size__ &Length )
 	{
-		sBig Big = ConvertToBig( DInt, Length );
+		sHuge Huge = ConvertToHuge( DInt, Length );
 
-		if ( Big > BSO_INT_MAX )
+		if ( Huge > BSO_INT_MAX )
 			qRFwk();
 
-		return (int__)Big;
+		return (int__)Huge;
 	}
 
-	inline sUBig ConvertToUBig(
+	inline sUHuge ConvertToUHuge(
 		const byte__ *DInt,
 		size__ *Length = NULL )
 	{
-		return ConvertToBig( DInt, Length );
+		return ConvertToHuge( DInt, Length );
 	}
 
-	inline sUBig ConvertToUBig(
+	inline sUHuge ConvertToUHuge(
 		const byte__ *DInt,
 		size__ &Length  )
 	{
-		return ConvertToUBig( DInt, &Length );
+		return ConvertToUHuge( DInt, &Length );
 	}
 
-	inline sSBig ConvertToSBig(
+	inline sSHuge ConvertToSHuge(
 		const byte__ *DInt,
 		size__ *Length = NULL )
 	{
-		sBig Big = ConvertToBig( DInt, Length );
-		sign__ Sign = ( Big & 1 ? -1 : 1 );
+		sHuge Huge = ConvertToHuge( DInt, Length );
+		sign__ Sign = ( Huge & 1 ? -1 : 1 );
 
-		Big >>= 1;
+		Huge >>= 1;
 
 		switch ( Sign ) {
 		case 1:
-			return Big;
+			return Huge;
 			break;
 		case 0:
 			qRFwk();
 			break;
 		case -1:
-			return -(sSBig)Big;
+			return -(sSHuge)Huge;
 			break;
 		default:
 			qRFwk();
@@ -692,11 +692,11 @@ namespace bso {
 		return 0;	// Pour �viter un 'warning'.
 	}
 
-	inline sSBig ConvertToSBig(
+	inline sSHuge ConvertToSHuge(
 		const byte__ *DInt,
 		size__ &Length )
 	{
-		return ConvertToSBig( DInt, &Length );
+		return ConvertToSHuge( DInt, &Length );
 	}
 
 }

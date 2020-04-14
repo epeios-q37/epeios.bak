@@ -26,7 +26,7 @@ void xdwmain::sUpstream::XDHCMNProcess(
 	str::dString *ReturnedValue )
 {
 qRH
-    qCBUFFERr Buffer;
+    qCBUFFERh Buffer;
 qRB
     Flow_.Write( Script.Convert(Buffer), Script.Amount());
     Flow_.Commit();

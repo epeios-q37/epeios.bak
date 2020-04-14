@@ -9,7 +9,17 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
-### 2020-03-07
+## 2020-04-14:
+
+- BSO:
+    - `[…]Big` -> `[…]Huge`,
+    - use of the new `p` (placeholder helper) prefix instead of the old `b` (buffer helper) one,
+- CSDCMN, DTFPTB, FBLTYP, LCL, SCLX, WEBSCK:
+    - [adpt],
+- TOL:
+    - use of the new `p` (placeholder helper) prefix/suffix instead of the old `b` (buffer helper) one,
+
+## 2020-03-07:
 
 - SCLxxx… -> SCLx,
 - EPSMSC:
@@ -23,7 +33,7 @@
 - XDHDWS:
     - [adpt],
 
-### 2020-02-31
+### 2020-02-31:
 
 - BSO:
   - fixing 32 bits issue,
@@ -34,24 +44,24 @@
 - STR:
     - fixing missing default constructor issue under *Windows*,
 
-### 2020-03-29
+### 2020-03-29:
 
 - BSO:
     - fixing bug with negative numbers;
 
-### 2020-03-28
+### 2020-03-28:
 
 - SCLARGMNT, SCLMISC, SCLRGSTRY:
     - fixing inconsistencies and rsulting bugs,
 
-### 2020-03-26
+### 2020-03-26:
 
 - XDHCMN:
     - Simplification,
 - SCLXDHTML, XDHDWS:
     [adpt],
 
-### 2020-03-26
+### 2020-03-26:
 
 - FBLTYP:
     - [adpt],
@@ -79,13 +89,13 @@
 - XDHDWS:
     - [adpt],
 
-### 2020-03-22
+### 2020-03-22:
 
 - STR:
     - fixing bug to missing wrapped string contructor (`string::string(const string &)` in addition of `string::string(const string_ &)`),
 
 
-### 2020-03-21
+### 2020-03-21:
 
 - SCK, SCLXDHTML:
     - [warn],

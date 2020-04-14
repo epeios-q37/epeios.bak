@@ -30,7 +30,7 @@ void csdcmn::SendProtocol(
 	sVersion Version,
 	flw::oflow__ &Flow )
 {
-	bso::bInt Buffer;
+	bso::pInteger Buffer;
 
 	if ( Version == UndefinedVersion )
 		qRFwk();

@@ -26,20 +26,20 @@
 using namespace bso;
 
 const xint__ &bso::_ConvertToDInt(
-	sUBig Big,
+	sUHuge Huge,
 	xint__ &XInt )
 {
 	length__ Position = BSO_DINT_SIZE_MAX - 1;
 
-	XInt._Int[Position] = Big & 0x7f;
-	Big >>= 7;
+	XInt._Int[Position] = Huge & 0x7f;
+	Huge >>= 7;
 
-	while ( Big != 0 ) {
+	while ( Huge != 0 ) {
 		if ( Position-- == 0 )
 			qRFwk();
 
-		XInt._Int[Position] = ( Big & 0x7f ) | 0x80; 
-		Big >>= 7;
+		XInt._Int[Position] = ( Huge & 0x7f ) | 0x80;
+		Huge >>= 7;
 	}
 
 	XInt._Length = BSO_DINT_SIZE_MAX - Position;
@@ -47,26 +47,26 @@ const xint__ &bso::_ConvertToDInt(
 	return XInt;
 }
 
-#define LIMIT ( BSO_BIG_MAX >> 7 )
+#define LIMIT ( BSO_HUGE_MAX >> 7 )
 
-sBig bso::ConvertToBig(
+sHuge bso::ConvertToHuge(
 	const byte__ *DInt,
 	size__ *Length )
 {
 	length__ Position = 0;
-	sBig Big = 0;
+	sHuge Huge = 0;
 
 	do {
-		if ( Big > LIMIT )
+		if ( Huge > LIMIT )
 			qRFwk();
 
-		Big = ( Big << 7 ) + ( DInt[Position] & 0x7f );
+		Huge = ( Huge << 7 ) + ( DInt[Position] & 0x7f );
 	} while ( DInt[Position++] & 0x80 );
 
 	if ( Length != NULL )
 		*Length = Position;
 
-	return Big;
+	return Huge;
 }
 
 Q37_GCTOR( bso )

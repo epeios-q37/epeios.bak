@@ -241,7 +241,7 @@ namespace lcl {
 		}
 		template <typename i> void AddTag( i I )
 		{
-			bso::bInteger Buffer;
+			bso::pInteger Buffer;
 
 			AddTag( bso::Convert( I, Buffer ) );
 		}

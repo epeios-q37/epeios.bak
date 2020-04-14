@@ -537,7 +537,7 @@ namespace tol{
 	typedef bDateAndTime bDate;
 	typedef bDateAndTime bTime;
 
-	template <typename t> class rBuffer // Dynamic buffer of objects of type 't'. Its size never shrinks, so it can(t be used to know the true amount of objects it contains.
+	template <typename t> class hBuffer // Dynamic buffer of objects of type 't'. Its size never shrinks, so it can(t be used to know the true amount of objects it contains.
 	{
 	private:
 		t *_Pointer;
@@ -576,14 +576,7 @@ namespace tol{
 			_Pointer = NULL;
 			_Extent = 0;
 		}
-		rBuffer( void )
-		{
-			reset( false );
-		}
-		~rBuffer( void )
-		{
-			reset();
-		}
+		qCDTOR(hBuffer)
 		void Init( void )
 		{
 			qRFwk();	// C'est un 'buffer' ; pas d'initailisation.
@@ -630,7 +623,7 @@ namespace tol{
 		{
 			return _Pointer;
 		}
-		rBuffer &operator =( const rBuffer & )
+		hBuffer &operator =( const hBuffer & )
 		{
 			qRFwk();
 
@@ -643,8 +636,8 @@ namespace tol{
 	};
 }
 
-# define qBUFFERr( t )	tol::rBuffer<t>
-# define qCBUFFERr		qBUFFERr( bso::char__ )
+# define qBUFFERh( t )	tol::hBuffer<t>
+# define qCBUFFERh		qBUFFERh( bso::char__ )
 
 namespace tol {
 	// A basic object 't' becomes a normal object.
@@ -1891,7 +1884,7 @@ namespace tol {
 		des mthodes virtuelles.
 	*/
 
-# define buffer___	rBuffer
+# define buffer___	hBuffer
 
 # define E_BUFFER___( t )	buffer___<t>
 # define TOL_CBUFFER___ tol::E_BUFFER___( bso::char__ )

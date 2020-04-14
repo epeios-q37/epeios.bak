@@ -345,9 +345,9 @@ qRE;
 	return Int;
 }
 
-template <typename fd> static bso::sUBig TemplatedVGetUBig_(
+template <typename fd> static bso::sUHuge TemplatedVGetUHuge_(
 	fd &FD,
-	bso::sUBig Max,
+	bso::sUHuge Max,
 	bso::sBool *IsError )
 {
 	bso::byte__ DInt[BSO_DINT_SIZE_MAX];
@@ -361,7 +361,7 @@ template <typename fd> static bso::sUBig TemplatedVGetUBig_(
 		}
     }
 
-	bso::sUBig Value = bso::ConvertToUBig( DInt );
+	bso::sUHuge Value = bso::ConvertToUHuge( DInt );
 
 	if ( Value > Max )
 		qRFwk();
@@ -369,26 +369,26 @@ template <typename fd> static bso::sUBig TemplatedVGetUBig_(
 	return Value;
 }
 
-bso::sUBig dtfptb::VGetUBig_(
+bso::sUHuge dtfptb::VGetUHuge_(
 	flw::iflow__ &Flow,
-	bso::sUBig Max,
+	bso::sUHuge Max,
 	bso::sBool *IsError )
 {
-	return TemplatedVGetUBig_( Flow, Max, IsError );
+	return TemplatedVGetUHuge_( Flow, Max, IsError );
 }
 
-bso::sUBig dtfptb::VGetUBig_(
+bso::sUHuge dtfptb::VGetUHuge_(
 	fdr::rRDriver &Driver,
-	bso::sUBig Max,
+	bso::sUHuge Max,
 	bso::sBool *IsError )
 {
-	return TemplatedVGetUBig_( Driver, Max, IsError );
+	return TemplatedVGetUHuge_( Driver, Max, IsError );
 }
 
-template <typename fd> bso::sSBig TemplatedVGetSBig_(
+template <typename fd> bso::sSHuge TemplatedVGetSHuge_(
 	fd &FD,
-	bso::sSBig Min,
-	bso::sSBig Max,
+	bso::sSHuge Min,
+	bso::sSHuge Max,
 	bso::sBool *IsError )
 {
 	bso::byte__ DInt[BSO_DINT_SIZE_MAX];
@@ -402,7 +402,7 @@ template <typename fd> bso::sSBig TemplatedVGetSBig_(
 		}
 	}
 
-	bso::sSBig Value = bso::ConvertToSBig( DInt );
+	bso::sSHuge Value = bso::ConvertToSHuge( DInt );
 
 	if ( Value < Min )
 		qRFwk();
@@ -413,54 +413,54 @@ template <typename fd> bso::sSBig TemplatedVGetSBig_(
 	return Value;
 }
 
-bso::sSBig dtfptb::VGetSBig_(
+bso::sSHuge dtfptb::VGetSHuge_(
 	flw::iflow__ &Flow,
-	bso::sSBig Min,
-	bso::sSBig Max,
+	bso::sSHuge Min,
+	bso::sSHuge Max,
 	bso::sBool *IsError )
 {
-	return TemplatedVGetSBig_( Flow, Min, Max, IsError );
+	return TemplatedVGetSHuge_( Flow, Min, Max, IsError );
 }
 
-bso::sSBig dtfptb::VGetSBig_(
+bso::sSHuge dtfptb::VGetSHuge_(
 	fdr::rRDriver &Driver,
-	bso::sSBig Min,
-	bso::sSBig Max,
+	bso::sSHuge Min,
+	bso::sSHuge Max,
 	bso::sBool *IsError )
 {
-	return TemplatedVGetSBig_( Driver, Min, Max, IsError );
+	return TemplatedVGetSHuge_( Driver, Min, Max, IsError );
 }
 
-template <typename fd> static void VPutUBig_(
-	bso::sUBig UBig,
+template <typename fd> static void VPutUHuge_(
+	bso::sUHuge UHuge,
 	fd &FD )
 {
 	bso::xint__ XInt;
 
-	PutInt_( bso::ConvertToDInt( UBig, XInt ), FD );
+	PutInt_( bso::ConvertToDInt( UHuge, XInt ), FD );
 }
 
-void dtfptb::_VPutUBig(
-	bso::sUBig UBig,
+void dtfptb::_VPutUHuge(
+	bso::sUHuge UHuge,
 	flw::oflow__ &Flow )
 {
-	VPutUBig_( UBig, Flow );
+	VPutUHuge_( UHuge, Flow );
 }
 
-template <typename fd> void VPutSBig_(
-	bso::sSBig SBig,
+template <typename fd> void VPutSHuge_(
+	bso::sSHuge SHuge,
 	fd &FD )
 {
 	bso::xint__ XInt;
 
-	PutInt_( bso::ConvertToDInt( SBig, XInt ), FD );
+	PutInt_( bso::ConvertToDInt( SHuge, XInt ), FD );
 }
 
-void dtfptb::_VPutSBig(
-	bso::sSBig SBig,
+void dtfptb::_VPutSHuge(
+	bso::sSHuge SHuge,
 	flw::oflow__ &Flow )
 {
-	VPutSBig_( SBig, Flow );
+	VPutSHuge_( SHuge, Flow );
 }
 
 Q37_GCTOR( dtfptb )

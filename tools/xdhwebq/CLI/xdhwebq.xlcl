@@ -4,8 +4,8 @@
 	<xpp:expand value-of="q37.xpp"/>
 	<xpp:expand select="epeios.xlcl"/>
 	<Translations text="ProgramDescription">
-		<Translation language="fr">Utilitaire ('CGI') de lancement d'un module XDHTML en tant qu'application web.</Translation>
-		<Translation language="en">Tool (CGI) lauching a XDHTML module as web app.</Translation>
+		<Translation language="fr">Utilitaire de lancement d'un module XDHTML en tant qu'application web.</Translation>
+		<Translation language="en">Tool launching an XDHTML module as web application.</Translation>
 	</Translations>
 	<!--
 	<Translations text="">

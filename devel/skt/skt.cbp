@@ -5,7 +5,7 @@
 		<Option title="skt" />
 		<Option pch_mode="2" />
 		<Option compiler="clang" />
-		<Option virtualFolders="Docs/;Sources/;" />
+		<Option virtualFolders="Docs/;Sources/" />
 		<Build>
 			<Target title="Debug">
 				<Option output="bin/Debug/skt" prefix_auto="1" extension_auto="1" />
@@ -44,12 +44,12 @@
 		<Unit filename="skt.cpp">
 			<Option virtualFolder="Sources/" />
 		</Unit>
+		<Unit filename="skt.h">
+			<Option virtualFolder="Headers/" />
+		</Unit>
 		<Unit filename="skt_test.cpp">
 			<Option virtualFolder="Sources/" />
 		</Unit>
-		<Extensions>
-			<code_completion />
-			<debugger />
-		</Extensions>
+		<Extensions />
 	</Project>
 </CodeBlocks_project_file>

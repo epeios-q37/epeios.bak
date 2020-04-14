@@ -118,34 +118,34 @@ namespace dtfptb {
 	}
 # endif
 
-	bso::sUBig VGetUBig_(
+	bso::sUHuge VGetUHuge_(
 		flw::iflow__ &Flow,
-		bso::sUBig Max,
+		bso::sUHuge Max,
 		bso::sBool *IsError );
 
-	bso::sUBig VGetUBig_(
+	bso::sUHuge VGetUHuge_(
 		fdr::rRDriver &Driver,
-		bso::sUBig Max,
+		bso::sUHuge Max,
 		bso::sBool *IsError );
 
-	bso::sSBig VGetSBig_(
+	bso::sSHuge VGetSHuge_(
 		flw::iflow__ &Flow,
-		bso::sSBig Min,
-		bso::sSBig Max,
+		bso::sSHuge Min,
+		bso::sSHuge Max,
 		bso::sBool *IsError );
 
-	bso::sSBig VGetSBig_(
+	bso::sSHuge VGetSHuge_(
 		fdr::rRDriver &Driver,
-		bso::sSBig Min,
-		bso::sSBig Max,
+		bso::sSHuge Min,
+		bso::sSHuge Max,
 		bso::sBool *IsError );
 
-	void _VPutUBig(
-		bso::sUBig UBig,
+	void _VPutUHuge(
+		bso::sUHuge UHuge,
 		flw::oflow__ &Flow );
 
-	void _VPutSBig(
-		bso::sSBig SBig,
+	void _VPutSHuge(
+		bso::sSHuge SHuge,
 		flw::oflow__ &Flow );
 
 # ifdef CPE_S_DARWIN
@@ -153,14 +153,14 @@ namespace dtfptb {
 		flw::iflow__ &Flow,
 		bso::size__ &Size )
 	{
-		return Size = _VGetUBig( Flow, BSO_SIZE_MAX );
+		return Size = _VGetUHuge( Flow, BSO_SIZE_MAX );
 	}
 
 	inline void VPut(
 		bso::size__ Size,
 		flw::oflow__ &Flow )
 	{
-		_VPutUBig( Size, Flow );
+		_VPutUHuge( Size, Flow );
 	}
 # endif
 
@@ -170,40 +170,40 @@ namespace dtfptb {
 		bso::u##bitness##__ &Int,\
 		bso::sBool *IsError = NULL)\
 	{\
-		return Int = (bso::u##bitness##__)VGetUBig_( Flow, umax, IsError );\
+		return Int = (bso::u##bitness##__)VGetUHuge_( Flow, umax, IsError );\
 	}\
 	inline bso::u##bitness##__ VGet(\
 		fdr::rRDriver &Driver,\
 		bso::u##bitness##__ &Int,\
 		bso::sBool *IsError = NULL)\
 	{\
-		return Int = (bso::u##bitness##__)VGetUBig_( Driver, umax, IsError );\
+		return Int = (bso::u##bitness##__)VGetUHuge_( Driver, umax, IsError );\
 	}\
 	inline bso::s##bitness##__ VGet(\
 		flw::rRFlow &Flow,\
 		bso::s##bitness##__ &Int,\
 		bso::sBool *IsError = NULL)\
 	{\
-		return Int = (bso::s##bitness##__)VGetSBig_( Flow, smin, smax, IsError );\
+		return Int = (bso::s##bitness##__)VGetSHuge_( Flow, smin, smax, IsError );\
 	}\
 	inline bso::s##bitness##__ VGet(\
 		fdr::rRDriver &Driver,\
 		bso::s##bitness##__ &Int,\
 		bso::sBool *IsError = NULL)\
 	{\
-		return Int = (bso::s##bitness##__)VGetSBig_( Driver, smin, smax, IsError );\
+		return Int = (bso::s##bitness##__)VGetSHuge_( Driver, smin, smax, IsError );\
 	}\
 	inline void VPut(\
 		bso::u##bitness##__ Int,\
 		flw::rWFlow &Flow )\
 	{\
-		_VPutUBig( Int, Flow );\
+		_VPutUHuge( Int, Flow );\
 	}\
 	inline void VPut(\
 		bso::s##bitness##__ Int,\
 		flw::rWFlow &Flow )\
 	{\
-		_VPutSBig( Int, Flow );\
+		_VPutSHuge( Int, Flow );\
 	}\
 
 DTFPTB__M( 32, BSO_U32_MAX, BSO_S32_MIN, BSO_S32_MAX )

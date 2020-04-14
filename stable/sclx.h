@@ -528,7 +528,7 @@ namespace sclx {
 		const char *GetAttribute(
 			const str::dString &Id,
 			const str::dString &Name,
-			qCBUFFERr &Value )
+			qCBUFFERh &Value )
 		{
 			qRLmt();
 			return Value();
@@ -576,35 +576,35 @@ namespace sclx {
 			const str::dString &Action );
 		const char *Parent(
 			const str::dString &Id,
-			qCBUFFERr &Value )
+			qCBUFFERh &Value )
 		{
             qRLmt();
             return Value;
 		}
 		const char *FirstChild(
 			const str::dString &Id,
-			qCBUFFERr &Value )
+			qCBUFFERh &Value )
 		{
             qRLmt();
             return Value;
 		}
 		const char *LastChild(
 			const str::dString &Id,
-			qCBUFFERr &Value )
+			qCBUFFERh &Value )
 		{
             qRLmt();
             return Value();
 		}
 		const char *PreviousSibling(
 			const str::dString &Id,
-			qCBUFFERr &Value )
+			qCBUFFERh &Value )
 		{
             qRLmt();
             return Value;
 		}
 		const char *NextSibling(
 			const str::dString &Id,
-			qCBUFFERr &Value )
+			qCBUFFERh &Value )
 		{
             qRLmt();
             return Value;
@@ -694,7 +694,7 @@ namespace sclx {
 		}
 		const char *Dummy(
 			const str::dString &Id,
-			qCBUFFERr &Value )
+			qCBUFFERh &Value )
 		{
             qRLmt();
             return Value;
@@ -933,7 +933,7 @@ namespace sclx {
 		}
 		template <typename i> void Alert( i I )
 		{
-			bso::bInt Buffer;
+			bso::pInt Buffer;
 
 			AlertU( bso::Convert( I, Buffer ) );
 		}
