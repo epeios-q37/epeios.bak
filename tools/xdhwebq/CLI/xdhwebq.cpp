@@ -103,68 +103,223 @@ namespace {
             }
 
             namespace {
-                class rCapsule_ {
+                qENUM(Task_) {
+                    tNone,      // No task.
+                    tAction,    // Handle action.
+                    tClose,      // Close session.
+                    t_amount,
+                    t_Undefined
+                };
+
+                class rTask_ {
                 private:
-                    tht::rBlocker
-                        Reading_,  // Blocks action reading; to wait until current action be completed.
-                        Handling_;  // Blocks action handling; to wait until an action is available.
+                    tht::rLocker Locker_;
+                    eTask_ Task_;
                     str::wString Id_, Action_;
-                public:
-                    void reset(bso::sBool P = true)
+                    void Lock_(void)
                     {
-                        tol::reset(P, Reading_, Handling_, Id_, Action_);
+                        Locker_.Lock();
                     }
-                    qCDTOR(rCapsule_);
-                    void Init(void)
+                    void Unlock_(void)
                     {
-                        Reading_.Init();
-                        tol::Init(Handling_, Id_, Action_);
+                        Locker_.Unlock();
                     }
-                    void WaitForActionCompletion(void)
-                    {
-                        Reading_.Wait();
-                    }
-                    void ReportActionCompleted(void)
-                    {
-                        Reading_.Unblock();
-                    }
-                    void Send(
+                    eTask_ Set_(
+                        eTask_ Task,
                         const str::dString &Id,
                         const str::dString &Action)
                     {
+                        eTask_ PreviousTask = t_Undefined;
+
+                        if ( Task >= t_amount )
+                            qRGnr();
+
+                        Lock_();
+
+                        Task_ = Task;
+
                         Id_ = Id;
                         Action_ = Action;
 
-                        Handling_.Unblock();
+                        Unlock_();
+
+                        return PreviousTask;
                     }
-                    void Get(
+                    eTask_ Set_(eTask_ Task)
+                    {
+                        return Set_(Task, str::Empty, str::Empty);
+                    }
+                public:
+                    void reset(bso::sBool P = true)
+                    {
+                        Task_ = t_Undefined;
+                        tol::reset(P, Locker_, Id_, Action_);
+                    }
+                    qCDTOR(rTask_);
+                    void Init(void)
+                    {
+                        Task_ = t_Undefined;
+                        tol::Init(Locker_, Id_, Action_);
+                    }
+                    eTask_ SetNOP(void)
+                    {
+                        return Set_(tNone);
+                    }
+                    eTask_ SetClose(void)
+                    {
+                        return Set_(tClose);
+                    }
+                    eTask_ Set(
+                        const str::dString &Id,
+                        const str::dString &Action)
+                    {
+                        if ( Id.Amount() ==  0)
+                            qRGnr();
+
+                        if ( Action.Amount() == 0 )
+                            qRGnr();
+
+                        return Set_(tAction, Id, Action);
+                    }
+                    eTask_ Set(const str::dString &Id)
+                    {
+                        if ( Id.Amount() == 0 )
+                            qRGnr();
+
+                        return Set_(tAction, Id, str::Empty);
+                    }
+                    eTask_ Get(
                         qCBUFFERh &Id,
                         qCBUFFERh &Action )
                     {
+                        eTask_ Task = t_Undefined;
+
+                        Lock_();
+
+                        Task = Task_;
+
+                        if ( Task == tAction) {
+                            Id_.Convert(Id);
+                            Action_.Convert(Action);
+                        }
+
+                        Task_ = t_Undefined;
+                        tol::Init(Id_, Action_);
+
+                        Unlock_();
+
+                        return Task;
+                    }
+                    bso::sBool IsPending(void) const
+                    {
+                        return Task_ != t_Undefined;    // Expected to be atomic.
+                    }
+                };
+
+                qENUM(Actor_) {
+                    aRegular,
+                    aSpecial,
+                    a_amount,
+                    a_Undefined
+                };
+
+                class rCapsule_ {
+                private:
+                    eActor_ Actor_;
+                    tht::rBlocker
+                        Reading_,  // Blocks action reading; to wait until current action be completed.
+                        Handling_;  // Blocks action handling; to wait until an action is available.
+                    rTask_
+                        Regular_,    // Regular task issued by client.
+                        Special_;    // Special task directly issued by the front end.
+                public:
+                    void reset(bso::sBool P = true)
+                    {
+                        Actor_ = a_Undefined;
+                        tol::reset(P, Reading_, Handling_, Regular_, Special_);
+                     }
+                    qCDTOR(rCapsule_);
+                    void Init(void)
+                    {
+                        Actor_ = a_Undefined;
+                        tol::Init(Reading_, Handling_, Regular_, Special_);
+                     }
+                    void SetRegularNOP(void)
+                    {
+                        if ( Regular_.SetNOP() != t_Undefined )
+                            qRGnr();
+
+                        Handling_.Unblock();
+                        Reading_.Wait();
+                    }
+                    void SetRegular(
+                        const str::dString &Id,
+                        const str::dString &Action)
+                    {
+                        if ( Regular_.Set(Id, Action) != t_Undefined )
+                            qRGnr();
+
+                        Handling_.Unblock();
+                        Reading_.Wait();
+                    }
+                    bso::sBool SetSpecial(const str::dString &Id)
+                    {
+                        if ( Special_.Set(Id) == t_Undefined ) {
+                            Handling_.Unblock();
+                            return true;
+                        } else
+                            return false;
+                    }
+                    eTask_ Get(
+                        qCBUFFERh &Id,
+                        qCBUFFERh &Action )
+                    {
+                        eTask_ Task = t_Undefined;
+
                         Handling_.Wait();
 
-                        Id_.Convert(Id);
-                        Action_.Convert(Action);
-                    }
+                        Task = Special_.Get(Id, Action);
 
+                        if ( Task == t_Undefined ) {
+                            Task = Regular_.Get(Id, Action);
+
+                            if ( Task == t_Undefined )
+                                qRGnr();
+                            else
+                                 Actor_ = aRegular;
+                        } else
+                            Actor_ = aSpecial;
+
+                        return Task;
+                    }
+                    bso::sBool HasPending(void)
+                    {
+                        if ( Actor_ == aRegular)
+                            Reading_.Unblock();
+
+                        Actor_ = a_Undefined;
+
+                        return Special_.IsPending() || Regular_.IsPending();
+                    }
                 };
+
 
                 bso::sBool Handle_(
                     const str::dString &Digest,
-                    rCapsule_ &Capsule)
+                    str::dString &Id,
+                    str::dString &Action)
                 {
                     bso::sBool ActionInProgress = false;
                 qRH;
-                    str::string Id;
-                    xdhutl::event_abstract Abstract;
+                    xdhutl::wEventAbstract Abstract;
                 qRB;
-                    Id.Init();
                     Abstract.Init();
                     if ( xdhutl::FetchEventAbstract(Digest, Id, Abstract) ) {
                         if ( xdhutl::IsPredefined( Abstract.Action() ) )
                             qRVct();
                         else if ( Abstract.Action() == xdhutl::a_User ) {
-                            Capsule.Send(Id, Abstract.UserAction);
+                            // 'Id' is already set.
+                            Action = Abstract.UserAction;
                             ActionInProgress = true;
                         } else
                             qRGnr();
@@ -199,7 +354,7 @@ namespace {
                         sShared_ &Shared = *(sShared_ *)UP;
                         rCapsule_ &Capsule = *Shared.Capsule;
                         flw::rDressedRFlow<> Flow;
-                        str::wString Digest;
+                        str::wString Digest, Id, Action;
                     qRB
                         Flow.Init(*Shared.Driver);
 
@@ -210,9 +365,14 @@ namespace {
                             if ( !websck::GetMessage(Flow,Digest) )
                                 break;
                             Flow.Dismiss();
-                            if ( Handle_(Digest, Capsule) )
-                                Capsule.WaitForActionCompletion();
-                    }
+
+                            tol::Init(Id, Action);
+
+                            if ( Handle_(Digest, Id, Action) )
+                                Capsule.SetRegular(Id, Action);
+                            else
+                                Capsule.SetRegularNOP();
+                        }
 
                     qRR
                     qRT
@@ -257,11 +417,24 @@ namespace {
                 mtk::Launch(Routine_, &Shared);
 
                 while ( true ) {
-                    Capsule.Get(Id, Action);
-                    Session.Launch(Id, Action);
-                    Flow.Write("StandBy", 7);
-                    Flow.Commit();
-                    Capsule.ReportActionCompleted();
+                    switch( Capsule.Get(Id, Action) ) {
+                    case tNone:
+                        break;
+                    case tAction:
+                        Session.Launch(Id, Action);
+                        break;
+                    case tClose:
+                        qRVct();
+                        break;
+                    default:
+                        qRGnr();
+                        break;
+                    }
+
+                    if ( !Capsule.HasPending() ) {
+                        Flow.Write("StandBy", 7);
+                        Flow.Commit();
+                    }
                 }
             qRR
             qRT

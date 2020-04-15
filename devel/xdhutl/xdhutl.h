@@ -260,4 +260,16 @@ namespace xdhutl {
 		str::dStrings &Tags );
 }
 
+/*******/
+/* NEW */
+/*******/
+
+namespace xdhutl {
+    typedef event_abstract_ dEventAbstract;
+    qW(EventAbstract);
+
+    typedef event_abstracts_ dEventAbstracts;
+    qW(EventAbstracts);
+}
+
 #endif

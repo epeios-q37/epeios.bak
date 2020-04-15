@@ -119,7 +119,7 @@ flw::iflow__ &str::operator >>(
 
 	return IStream;
 }
-	
+
 
 txf::text_oflow__ &str::operator <<(
 	txf::text_oflow__ &OStream,
@@ -420,7 +420,7 @@ template <typename sint, typename uint> sint GenericSignedConversion_(
 		if ( String.Next( Begin ) == qNIL ) {
 			*ErrP = *Begin + 1;
 			return 0;
-		} else 
+		} else
 			return -(sint)GenericUnsignedConversion_<uint>( String, String.Next( Begin ), ErrP, Base, -NegativeLimit );
 	else if ( String.Get( Begin ) == '+' )
 		if ( String.Next( Begin ) == qNIL ) {
@@ -429,9 +429,9 @@ template <typename sint, typename uint> sint GenericSignedConversion_(
 			else
 				qRFwk();
 			return 0;
-		} else 
+		} else
 			return (sint)GenericUnsignedConversion_( String, String.Next( Begin ), ErrP, Base, PositiveLimit );
-	else 
+	else
 		return (sint)GenericUnsignedConversion_( String, Begin, ErrP, Base, PositiveLimit );
 }
 
@@ -525,3 +525,11 @@ bso::lfloat__ string_::ToLF(
 	else
 		return Result;
 }
+
+namespace {
+    string Empty_ = wString();
+}
+
+const string_ &str::Empty = Empty_;
+
+

@@ -9,6 +9,11 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2020-04-15:
+
+- STR:
+    - adding `Empty`;
+
 ## 2020-04-14:
 
 - BSO:
@@ -18,6 +23,8 @@
     - [adpt],
 - TOL:
     - use of the new `p` (placeholder helper) prefix/suffix instead of the old `b` (buffer helper) one,
+- XDHUTL:
+    - [stdz],
 
 ## 2020-03-07:
 

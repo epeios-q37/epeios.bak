@@ -713,6 +713,8 @@ namespace str {
             Init(String);
         }
     };
+
+    extern const string_ &Empty;   // An empty string.
 }
 
 #define qSTRING( name )\
