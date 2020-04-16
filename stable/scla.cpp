@@ -487,7 +487,7 @@ const str::string_ &GetIdTagged_(
 	str::string_ &Value )
 {
 qRH
-	str::strings Tags;
+	str::wStrings Tags;
 qRB
 	Tags.Init();
 	Tags.Append( Id );
@@ -864,7 +864,7 @@ static void FillRegistry_(
 {
 qRH
 	str::string Id;
-	str::strings Tags;
+	str::wStrings Tags;
 	str::string Command;
 	str::string Path;
 	sdr::row__ Error = qNIL;
@@ -1542,7 +1542,7 @@ void scla::PrintUsage(
 	txf::text_oflow__ &Flow )
 {
 qRH
-	str::strings Ids, Commands, Flags, Options, Frees;
+	str::wStrings Ids, Commands, Flags, Options, Frees;
 	str::string  ProgramDescription;
 	str::string EntryPath;
 	sclm::rLocker_ Locker;

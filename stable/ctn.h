@@ -248,7 +248,7 @@ namespace ctn {
 
 			Dynamics.Copy( O.Dynamics, Size );
 			Statics.Allocate( Size );
-			Statics.Store( O.Statics, Size ); 
+			Statics.Store( O.Statics, Size );
 
 			// Peu importe la valeur de retour, l'allocation des objets sous-jacent a dj t trait...
 			amount_extent_manager_<r>::Handle( Size, aem::mFitted );
@@ -429,7 +429,7 @@ namespace ctn {
 
 				Get( Row ) = Object;
 			}
-			
+
 		}
 		void Flush( void ) const
 		{
@@ -528,7 +528,7 @@ namespace ctn {
 			Dynamics_.reset( P );
 		}
 		qCDTOR( rFH );
-		uys::eState Init( 
+		uys::eState Init(
 			const rHF &Filenames,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
@@ -778,7 +778,7 @@ namespace ctn {
 		void reset( bso::bool__ P = true )
 		{
 			item_base_volatile__< t, mono_static__<typename_ t::s>, r >::reset( P );
-				
+
 			Objet_.reset( false );
 
 			Objet_.plug( item_base_volatile__< t, mono_static__< typename_ t::s >, r >::Pilote_ );
@@ -788,7 +788,7 @@ namespace ctn {
 		{
 			reset( false );
 		}
-		// Remplace la fonction d'initialisation. 
+		// Remplace la fonction d'initialisation.
 		volatile_mono_item( basic_container_< t, mono_static__< typename t::s >, r > &Conteneur )
 		: Objet_( item_base_volatile__< t, mono_static__< typename t::s >, r >::ctn_S_ )
 		{

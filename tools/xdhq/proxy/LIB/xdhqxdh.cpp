@@ -51,7 +51,7 @@ namespace {
         void Initialization_( xdhcmn::eMode Mode )
         {
         qRH;
-            qCBUFFERr Buffer;
+            qCBUFFERh Buffer;
             str::wString HostService;
         qRB;
             HostService.Init();

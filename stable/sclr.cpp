@@ -544,7 +544,7 @@ void sclr::SetValue(
 bso::bool__ sclr::GetValues(
 	const registry_ &Registry,
 	const rgstry::tentry__ &Entry,
-	str::strings_ &Values )
+	str::dStrings &Values )
 {
 	return Registry.GetValues( Entry, Values );
 }

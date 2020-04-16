@@ -67,16 +67,19 @@ namespace {
 		struct rData {
 			eState_ State;
 			str::wString Token;
+			xdwmain::sRow Row;
 			void reset( bso::sBool P = true )
 			{
                 State = s_Undefined;
                 Token.reset( P );
+                Row = qNIL;
 			}
 			qCDTOR(rData);
 			void Init(void)
 			{
                 State = s_Undefined;
                 Token.Init();
+                Row = qNIL;
 			}
 		};
 
@@ -395,6 +398,7 @@ namespace {
                 qCBUFFERh Id, Action;
             qRB
                 Session.Init(Agent, RawDriver, "", Data.Token);
+                Data.Row = xdwmain::Add(RawDriver, Data.Token);
 
                 if ( Agent.IsValid(Data.Token) )
                     Session.Launch("","");
@@ -403,7 +407,6 @@ namespace {
                     sclm::MGetValue(registry::definition::ErrorScript, Script);
                     Session.Execute(Script);
                 }
-
 
                 Driver.Init(RawDriver, websck::mWithTerminator, fdr::ts_Default);
                 Flow.Init(Driver);
@@ -509,7 +512,13 @@ namespace {
                 if ( UP == NULL )
                     qRGnr();
 
-                delete (rData *)UP;
+                rData *Data = (rData *)UP;
+
+                if ( Data->Row != qNIL )
+                    xdwmain::Remove(Data->Row, Data->Token);
+
+                delete Data;
+
 				return true;
 			}
 		public:

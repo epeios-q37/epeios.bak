@@ -51,7 +51,7 @@ namespace csdmnc {
 	: public cCallback_
 	{
 	private:
-		qCBUFFERr HostService_;
+		qCBUFFERh HostService_;
 		sck::duration__ Timeout_;
 		rDriver_ *DriverAsPointer_( void *UP )
 		{
@@ -110,7 +110,7 @@ namespace csdmnc {
 	typedef csdmxc::rCore rCore_;
 
 	using csdmxc::cLog;
-	
+
 	class rCore
 	: public rCore_
 	{

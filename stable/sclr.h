@@ -241,7 +241,7 @@ namespace sclr {
 	bso::bool__ GetValues(
 		const registry_ &Registry,
 		const rgstry::tentry__ &Entry,
-		str::strings_ &Values );
+		str::dStrings &Values );
 
 	bso::bool__ OGetValue(
 		const registry_ &Registry,

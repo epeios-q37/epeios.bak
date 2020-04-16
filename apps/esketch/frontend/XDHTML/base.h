@@ -54,8 +54,12 @@ namespace base {
 	};
 }
 
+namespace instc {
+    class rInstances;
+}
+
 namespace core {
-	class rInstances;
+	using instc::rInstances;
 	class sDump;
 	typedef sclx::rSession<rInstances, frdfrntnd::rFrontend, base::ePage, base::p_Undefined, sDump> rSession;
 }

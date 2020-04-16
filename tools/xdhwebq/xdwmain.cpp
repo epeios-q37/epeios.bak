@@ -21,7 +21,11 @@
 
 #include "websck.h"
 
-void xdwmain::sUpstream::XDHCMNProcess(
+#include "lstcrt.h"
+
+using namespace xdwmain;
+
+void xdwmain::rUpstream::XDHCMNProcess(
 	const str::string_ &Script,
 	str::dString *ReturnedValue )
 {
@@ -35,6 +39,26 @@ qRB
         websck::GetMessage(Flow_, *ReturnedValue);
 
     Flow_.Dismiss();
+qRR
+qRT
+qRE
+}
+
+namespace {
+    typedef lstbch::qLBUNCHd(fdr::rWDriver *, sRow) dDrivers_;
+    qW(Drivers_);
+
+    lstcrt::qLCRATEw(dDrivers_, sRow) rDriversSets_;
+
+    str::wTStrings<sRow> Tokens_;
+}
+
+void xdwmain::rUpstream::XDHCMNBroadcast(const str::dString &Id)
+{
+qRH
+    wDrivers_ Drivers;
+qRB
+    Drivers.Init();
 qRR
 qRT
 qRE

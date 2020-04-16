@@ -72,8 +72,8 @@ namespace lcl {
 
 namespace rgstry {
 
-	typedef str::string		_term;
-	typedef str::string_	_term_;
+	typedef str::wString	_term;
+	typedef str::dString	_term_;
 
 	typedef _term_			name_;
 	typedef _term			name;
@@ -162,7 +162,7 @@ namespace rgstry {
 		const str::string_ &PathString,
 		path_ &Path );
 
-	typedef ctn::E_MCONTAINER_( value_ )	values_;
+	typedef str::dStrings values_;
 	E_AUTO( values )
 
 	E_ROW( row__ );

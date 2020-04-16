@@ -70,16 +70,6 @@ void core::rCore::Init( xdhcmn::eMode Mode )
 	Register_();
 }
 
-void core::rInstances::Init( frdfrntnd::rFrontend &Frontend )
-{
-qRH
-qRB
-	User.Init( Frontend );
-qRR
-qRT
-qRE
-}
-
 void core::sDump::Corpus(
 	core::rInstances &Session,
 	xml::rWriter &Writer )

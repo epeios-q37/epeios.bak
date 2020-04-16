@@ -531,7 +531,7 @@ namespace sclm {
 
 	inline bso::bool__ GetValues(
 		const rgstry::tentry__ &Entry,
-		str::strings_ &Values )
+		str::dStrings &Values )
 	{
 		return sclr::GetValues( GetRegistry(), Entry, Values );
 	}

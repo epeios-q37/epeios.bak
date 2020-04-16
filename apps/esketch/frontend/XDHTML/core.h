@@ -28,17 +28,7 @@
 namespace core {
 	extern sclx::rActionHelper OnNotConnectedAllowedActions;
 
-	class rInstances
-	{
-	public:
-		instc::rUser User;
-		void reset( bso::bool__ P = true )
-		{
-			User.reset( P );
-		}
-		E_CVDTOR( rInstances );
-		void Init( frdfrntnd::rFrontend &Frontend );
-	};
+	using instc::rInstances;
 
 	class sDump {
 	public:

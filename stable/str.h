@@ -536,8 +536,10 @@ namespace str {
 		}
 	};
 
-	typedef ctn::E_MCONTAINER_( str::string_ ) strings_;
-	E_AUTO( strings );
+	template <typename row> E_TTCLONE_( ctn::E_MCONTAINERt_( str::string_, row ), tstrings_ );
+
+	typedef tstrings_<sdr::sRow> strings_;
+	E_AUTO(strings)
 
 	inline bso::bool__ operator ==(
 		const str::string_ &Op1,
@@ -591,9 +593,9 @@ namespace str {
 		string_ &String,
 		bso::bool__ dontHandleAccent = false );
 
-	template <typename t> inline void Append(
+	template <typename t, typename row> inline void Append(
 		t Value,
-		str::strings_ &Values )
+		str::tstrings_<row> &Values )
 	{
 		bso::buffer__ Buffer;
 
@@ -653,7 +655,7 @@ namespace str {
 		return ctn::Search<row, string_>( String, Strings, First );
 	}
 
-	inline sdr::sRow NewAndInit( str::strings_ &Strings )
+	template <typename row> inline sdr::sRow NewAndInit( str::tstrings_<row> &Strings )
 	{
 		return crt::NewAndInit( Strings );
 	}
@@ -667,52 +669,57 @@ namespace str {
 	typedef string_ dString;
 	typedef string wString;
 
-	class dStrings_
-	: public strings_
+	template <typename row> class dTStrings_
+	: public tstrings_<row>
 	{
 	public:
-        using strings_::strings_;
-        using strings_::Append;
+        using tstrings_<row>::tstrings_;
+        using tstrings_<row>::Append;
         sdr::sRow Append(const char *String)
         {
-            return strings_::Append(wString(String));
+            return tstrings_<row>::Append(wString(String));
         }
 	};
 
-	typedef dStrings_ dStrings;
+//	template <typename row> qTCLONE(dTStrings_<row>, dTStrings);
 
-	qW(Strings_);
+    typedef dTStrings_<sdr::sRow> dStrings;
 
-	class wStrings
-	: public wStrings_
+	qW1(TStrings_);
+
+	template <typename row> class wTStrings
+	: public wTStrings_<row>
 	{
 	public:
-        using wStrings_::wStrings_;
-        using wStrings_::Init;
+        using wTStrings_<row>::wTStrings_;
+        using wTStrings_<row>::Init;
         void Init( const str::dString &String)
         {
             Init();
-            Append(String);
+            wTStrings_<row>::Append(String);
         }
         void Init( const bso::sChar *String)
         {
             Init();
-            Append(String);
+            wTStrings_<row>::Append(String);
         }
-		wStrings(void) // Needed by 'Windows'.
-		: wStrings_()
+		wTStrings(void) // Needed by 'Windows'.
+		: wTStrings_<row>()
 		{}
-		wStrings(const dString &String)
-			: wStrings_()
+		wTStrings(const dString &String)
+        : wTStrings_<row>()
 		{
 			Init(String);
 		}
-		wStrings(const char *String)
-        : wStrings_()
+		wTStrings(const char *String)
+        : wTStrings_<row>()
         {
             Init(String);
         }
     };
+
+    typedef wTStrings<sdr::sRow> wStrings;
+
 
     extern const string_ &Empty;   // An empty string.
 }
@@ -726,7 +733,5 @@ namespace str {
 	typedef crt::qMCRATEw( str::dString, row ) w##name
 
 #define qSTRINGSl( name ) qSTRINGS( name, sdr::sRow )
-
-
 
 #endif

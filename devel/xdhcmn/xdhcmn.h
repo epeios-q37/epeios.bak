@@ -62,6 +62,8 @@ namespace xdhcmn {
 		virtual void XDHCMNProcess(
 			const str::dString &Script,
 			str::dString *ReturnedValue ) = 0;
+        // Broadcast 'Id' (which can't be empty) to all clients.
+        virtual void XDHCMNBroadcast(const str::dString &Id) = 0;
 	public:
 		qCALLBACK( Upstream );
 		void Process(
@@ -69,6 +71,10 @@ namespace xdhcmn {
 			str::dString *ReturnValue = NULL)
 		{
             return XDHCMNProcess(Script, ReturnValue);
+		}
+		void Braodcast(const str::dString &Id)
+		{
+		    return XDHCMNBroadcast(Id);
 		}
 	};
 
@@ -78,7 +84,7 @@ namespace xdhcmn {
 		virtual bso::sBool XDHCMNInitialize(
 			cUpstream &Callback,
 			const char *Language,
-			const str::dString &Token ) = 0;	// If empty, PROD session, else token used for the DEMO session.
+			const str::dString &Token) = 0;	// If empty, PROD session, else token used for the FaaS session.
 		virtual bso::bool__ XDHCMNLaunch(
 			const char *Id,
 			const char *Action ) = 0;
@@ -87,9 +93,9 @@ namespace xdhcmn {
 		bso::sBool Initialize(
 			cUpstream &Callback,
 			const char *Language,
-			const str::dString &Token )	// If empty, PROD session, else token used for the DEMO session.
+			const str::dString &Token)	// If empty, PROD session, else token used for the FaaS session.
 		{
-			return XDHCMNInitialize( Callback, Language, Token );
+			return XDHCMNInitialize(Callback, Language, Token);
 		}
 		bso::bool__ Launch(
 			const char *Id,

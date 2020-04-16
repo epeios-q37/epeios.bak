@@ -32,33 +32,48 @@ namespace xdwmain {
 
     typedef xdhcmn::cUpstream cUpstream_;
 
-	class sUpstream
+    qROW( Row );
+
+    sRow Add(
+        fdr::rWDriver &Driver,
+        const str::dString &Token);
+
+    void Remove(
+        sRow Row,
+        const str::dString &Token);
+
+	class rUpstream
 	: public cUpstream_
 	{
 	private:
+		str::wString Token_;
 		websck::rFlow Flow_;
 	protected:
 		virtual void XDHCMNProcess(
 			const str::string_ &Script,
 			str::dString *ReturnedValue ) override;
+        virtual void XDHCMNBroadcast(const str::dString &Id) override;
 	public:
 		void reset( bso::bool__ P = true )
 		{
+		    tol::reset(Token_, Flow_);
 			Flow_.reset(P);
 		}
-		E_CVDTOR( sUpstream );
-		void Init( fdr::rRWDriver &Driver )
+		E_CVDTOR( rUpstream );
+		void Init_(
+             fdr::rRWDriver &Driver,
+             const str::dString &Token)
 		{
+		    Token_.Init(Token);
 			Flow_.Init(Driver, websck::mWithTerminator);
 		}
 	};
-
 
 	class rSession
 	{
 	private:
         qRMV(rAgent, A_, Agent_);
-        sUpstream Upstream_;
+        rUpstream Upstream_;
         xdhcmn::cSession *SessionCallback_;
 		xdhups::sSession Session_;
 	public:
@@ -85,7 +100,7 @@ namespace xdwmain {
 
             Agent_ = &Agent;
 
-			Upstream_.Init(Driver);
+			Upstream_.Init_(Driver, Token);
 			SessionCallback_ = A_().RetrieveSession();
 			Session_.Init(SessionCallback_);
 			return Session_.Initialize(Upstream_, Language, Token);

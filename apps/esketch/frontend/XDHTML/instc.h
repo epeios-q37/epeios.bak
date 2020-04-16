@@ -25,7 +25,6 @@
 # include "frdfrntnd.h"
 
 namespace instc {
-
 	using namespace frdfrntnd;
 
 	using fbltyp::dString;
@@ -37,7 +36,7 @@ namespace instc {
 		rMyObject MyObject_;
 	public:
 		void reset( bso::bool__ P = true )
-		{	
+		{
 			MyObject_.reset( P );
 		}
 		E_CVDTOR( rUser );
@@ -53,6 +52,24 @@ namespace instc {
 		void TestMessage( void )
 		{
 			MyObject_.TestMessage();
+		}
+	};
+
+	// There can also be a instance for the administration, for example.
+
+
+	class rInstances
+	{
+	public:
+		instc::rUser User;
+		void reset( bso::bool__ P = true )
+		{
+			User.reset( P );
+		}
+		E_CVDTOR( rInstances );
+		void Init( frdfrntnd::rFrontend &Frontend )
+		{
+		    User.Init(Frontend);
 		}
 	};
 }

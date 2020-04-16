@@ -112,6 +112,7 @@ namespace session {
 		virtual bso::bool__ XDHCMNLaunch(
 			const char *Id,
 			const char *Action ) override;
+        virtual void XDHCMNBroadcast(const str::dString &Id) override;
 	public:
 		void reset( bso::sBool P = true )
 		{
@@ -122,7 +123,7 @@ namespace session {
 			Logging_.IP.reset( P );
 		}
 		qCVDTOR( rSession )
-		bso::sBool Init( void )
+		bso::sBool Init( void *)
 		{
 			tol::reset( FaaSDriver_, ProdDriver_ );
 			_Mode_ = m_Undefined;

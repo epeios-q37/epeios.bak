@@ -9,8 +9,18 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2020-04-16:
+
+- LCL, RGSTRY, SCLA, SCLM, SCLR:
+    - [adpt],
+- STR:
+    - introducing templated strings,
+
+
 ## 2020-04-15:
 
+- CSDMNC:
+    - [adpt],
 - STR:
     - adding `Empty`;
 

@@ -45,8 +45,8 @@ namespace lcl {
 	using rgstry::status__;
 	using rgstry::context___;
 	using rgstry::layer__;
-	using str::strings_;
-	using str::strings;
+	typedef str::dStrings strings_;
+    typedef str::wStrings strings;
 
 	E_ROW( vrow__ );	// 'value row'.
 	E_ROW( brow__ );	// 'basic row'.
