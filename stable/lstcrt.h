@@ -48,5 +48,17 @@ namespace lstcrt {
 # define qLCRATEdl( type )		qLCRATEd( type, sdr::sRow )
 # define qLCRATEwl( type )		qLCRATEw( type, sdr::sRow )
 
+# define qLXMCRATEd( type, row )	qLXMCONTAINERd( type, row )
+# define qLXMCRATEw( type, row ) qLXMCONTAINERw( type, row )
+
+# define qLXMCRATEdl( type )		qLXMCRATEd( type, sdr::sRow )
+# define qLXMCRATEwl( type )		qLXMCRATEw( type, sdr::sRow )
+
+# define qLXCRATEd( type, row )  qLXCONTAINERd( type, row )
+# define qLXCRATEw( type, row )	qLXCONTAINERw( type, row )
+
+# define qLXCRATEdl( type )		qLXCRATEd( type, sdr::sRow )
+# define qLXCRATEwl( type )		qLXCRATEw( type, sdr::sRow )
+
 
 #endif

@@ -9,6 +9,10 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2020-04-17:
+- LSTCTN, LSTCRT:
+    - adding extended related macros,
+
 ## 2020-04-16:
 
 - LCL, RGSTRY, SCLA, SCLM, SCLR:

@@ -48,18 +48,73 @@ namespace {
     typedef lstbch::qLBUNCHd(fdr::rWDriver *, sRow) dDrivers_;
     qW(Drivers_);
 
-    lstcrt::qLCRATEw(dDrivers_, sRow) rDriversSets_;
+    lstcrt::qLXCRATEwl(dDrivers_) TokenizedDrivers_;
+    wDrivers_ UntokenizedDrivers_;
 
-    str::wTStrings<sRow> Tokens_;
+    str::wStrings Tokens_;
+
+    dDrivers_ *GetDrivers_(const str::dString &Token)
+    {
+        if ( Token.Amount() == 0 )
+            return &UntokenizedDrivers_;
+        else {
+            sdr::sRow Row = str::Search(Token, Tokens_);
+
+            if ( Row == qNIL ) {
+                Row = Tokens_.Append(Token);
+
+                if ( TokenizedDrivers_.New() != Row )
+                    qRGnr();
+            }
+
+            if ( Row != qNIL )
+                return &TokenizedDrivers_(Row);
+        }
+
+        return NULL;
+    }
+}
+
+sRow xdwmain::Add(
+        fdr::rWDriver &Driver,
+        const str::dString &Token)
+{
+    dDrivers_ *Drivers = GetDrivers_(Token);
+
+    if ( Drivers != NULL )
+        return Drivers->Add(&Driver);
+    else
+        qRGnr();
+
+    return qNIL;
+}
+
+void xdwmain::Remove(
+    sRow Row,
+    const str::dString &Token)
+{
+    dDrivers_ *Drivers = GetDrivers_(Token);
+
+    if ( Drivers != NULL )
+        Drivers->Delete(Row);
 }
 
 void xdwmain::rUpstream::XDHCMNBroadcast(const str::dString &Id)
 {
 qRH
-    wDrivers_ Drivers;
+    wDrivers_ *Drivers;
 qRB
     Drivers.Init();
+
+
 qRR
 qRT
 qRE
+}
+
+
+
+qGCTOR(xdwmain)
+{
+
 }

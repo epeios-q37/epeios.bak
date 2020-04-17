@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-// LiST ConTaiNer 
+// LiST ConTaiNer
 
 #ifndef LSTCTN_INC_
 # define LSTCTN_INC_
@@ -53,6 +53,18 @@
 # define qLCONTAINERdl( type ) qLCONTAINERd( type, sdr::sRow )
 # define qLCONTAINERwl( type ) qLCONTAINERw( type, sdr::sRow )
 
+# define qLXMCONTAINERd( type, row ) E_LXMCONTAINERt_( type, row )
+# define qLXMCONTAINERw( type, row ) E_LXMCONTAINERt( type, row )
+
+# define qLXMCONTAINERdl( type ) qLXMCONTAINERd( type, sdr::sRow )
+# define qLXMCONTAINERwl( type ) qLXMCONTAINERw( type, sdr::sRow )
+
+# define qLXCONTAINERd( type, row ) E_LXCONTAINERt_( type, row )
+# define qLXCONTAINERw( type, row ) E_LXCONTAINERt( type, row )
+
+# define qLXCONTAINERdl( type ) qLXCONTAINERd( type, sdr::sRow )
+# define qLXCONTAINERwl( type ) qLXCONTAINERw( type, sdr::sRow )
+
 /*************************/
 /****** Old version ******/
 /*************************/
@@ -79,7 +91,7 @@ namespace lstctn {
 		  public container::s
 		{};
 		list_container_( s &S )
-		: list_<row, row_t>( S ), 
+		: list_<row, row_t>( S ),
 		  container( S )
 		{}
 		void reset( bso::bool__ P = true )
