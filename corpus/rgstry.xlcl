@@ -18,9 +18,9 @@
 		<Translation language="en">Unable to find root path</Translation>
 	</Translations>
 	<!--
-	<Translations message="RGSTRY_UnableToFindRootPath">
-		<Translation language="fr">Impossible de trouver le chemin de la racine</Translation>
-		<Translation language="en">Unable to find root path</Translation>
+	<Translations message="RGSTRY_">
+		<Translation language="fr"></Translation>
+		<Translation language="en"></Translation>
 	</Translations>
 	-->
 </xpp:bloc>

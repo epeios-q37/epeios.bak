@@ -1,14 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!-- $Id: sclrgstry.xlcl,v 1.6 2013/07/18 19:46:20 csimon Exp $ -->
 <xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
-	<Translations message="SCLRG_BadOrNoValueForEntry">
+	<Translations message="SCLR_BadOrNoValueForEntry">
 		<Translation language="fr">Valeur absente ou incorrecte pour l'entrée '%1'.</Translation>
 		<Translation language="en">Bad or no value for entry '%1'.</Translation>
 	</Translations>
-  <Translations message="SCLRG_ParsingError">
+  <Translations message="SCLR_ParsingError">
     <Translation language="fr">Erreur dans '%1' : %2.</Translation>
     <Translation language="en">Error in '%1' : %2.</Translation>
   </Translations>
+	<Translations message="SCLR_UnableToOpenFile">
+		<Translation language="fr">%2.</Translation>
+		<Translation language="en">%2.</Translation>
+	</Translations>
   <!--
 	<Translations message="SCLR_">
 		<Translation language="fr"></Translation>

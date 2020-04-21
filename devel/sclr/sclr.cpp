@@ -249,8 +249,9 @@ void sclr::Reset(
 }
 
 namespace {
-	void ReportParsingErrorAndAbort_(
+	void ReportErrorAndAbort_(
 		const str::dString &Source,
+		const bso::sChar *Label,
 		const rgstry::context___ &Context )
 	{
 	qRH
@@ -258,7 +259,7 @@ namespace {
 		lcl::meaning MeaningBuffer;
 	qRB
 		Meaning.Init();
-		Meaning.SetValue( SCLR_NAME "_ParsingError" );
+		Meaning.SetValue( Label );
 
 		Meaning.AddTag( Source );
 
@@ -273,15 +274,22 @@ namespace {
 	qRE
 	}
 
-	void ReportParsingErrorAndAbort_(
+	void ReportErrorAndAbort_(
+		const str::dString &Source,
+		const rgstry::context___ &Context )
+	{
+		ReportErrorAndAbort_( Source, ( Context.Status == rgstry::sUnableToOpenFile ? SCLR_NAME "_UnableToOpenFile" : SCLR_NAME "_ParsingError" ), Context );
+	}
+
+	void ReportErrorAndAbort_(
 		xtf::extended_text_iflow__ &,
 		eLayer Layer,
 		const rgstry::context___ &Context )
 	{
-		ReportParsingErrorAndAbort_( str::wString( GetLabel( Layer ) ), Context );
+		ReportErrorAndAbort_( str::wString( GetLabel( Layer ) ), Context );
 	}
 
-	void ReportParsingErrorAndAbort_(
+	void ReportErrorAndAbort_(
 		const fnm::rName &Filename,
 		eLayer,
 		const rgstry::context___ &Context )
@@ -290,7 +298,7 @@ namespace {
 		str::wString Buffer;
 	qRB
 		Buffer.Init();
-		ReportParsingErrorAndAbort_( Filename.UTF8( Buffer ), Context );
+		ReportErrorAndAbort_( Filename.UTF8( Buffer ), Context );
 	qRR
 	qRE
 	qRT
@@ -309,7 +317,7 @@ namespace {
 
 		Context.Init();
 		if ( !Registry_.Fill( Layer, Source, xpp::criterions___( Directory ), RootPath, Context ) )
-			ReportParsingErrorAndAbort_( Source, Layer, Context );
+			ReportErrorAndAbort_( Source, Layer, Context );
 	qRR
 	qRT
 	qRE

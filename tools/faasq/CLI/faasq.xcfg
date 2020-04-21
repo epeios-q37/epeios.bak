@@ -74,7 +74,7 @@
 			<!-- Options : 'Path' ET 'Value'. -->
 			<Argument id="SetupOption" Description="SetupOptionDescription" long="setup" short="s" Path="@Setup" Label="SetupOptionLabel"/>
 			<!-- Arguments libres : 'Path' mais PAS de 'Value' (ni de 'short', ni de 'long'). -->
-			<Argument id="ProjectArgument" Description="ProjectArgumentDescription" Path="Project[Type='Remote']" Label="ProjectArgumentLabel"/>
+			<Argument id="ProjectArgument" Description="ProjectArgumentDescription" Path="Project[Type=&quot;Remote&quot;]" Label="ProjectArgumentLabel"/>
 			<!-- Affectations des arguments libres-->
 			<Layouts>
 				<Layout command="Process">

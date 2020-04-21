@@ -9,6 +9,11 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2020-04-21:
+
+- SCLR:
+    - fixing cumbersome error message when failing to open a file (`Error in '<filename>': Unable to open '<filename>'.` -> `Unable to open '<filename>'.`),
+
 ## 2020-04-17:
 - LSTCTN, LSTCRT:
     - adding extended related macros,
