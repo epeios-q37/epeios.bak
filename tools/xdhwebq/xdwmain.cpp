@@ -44,14 +44,50 @@ qRT
 qRE
 }
 
+#if 0
 namespace {
-    typedef lstbch::qLBUNCHd(fdr::rWDriver *, sRow) dDrivers_;
-    qW(Drivers_);
+    typedef sRow sDRow_; // Driver row.
 
-    lstcrt::qLXCRATEwl(dDrivers_) TokenizedDrivers_;
-    wDrivers_ UntokenizedDrivers_;
+    typedef lstbch::qBUNCHdl(sDRow_) dDRows_;
+    qW(DRows_);
 
-    str::wStrings Tokens_;
+    qROW(TRow_);    // Token row.
+
+    qENUM(State_) {
+        sAlive,
+        sDead,
+        s_amount,
+        s_Undefined
+    };
+
+    struct rXDriver_
+    {
+    private:
+        qRMV(fdr::rWDriver, D_, Driver_);
+    public:
+        eState_ State;
+        tht::rLocker Locker;
+        void reset(bso::sBool P = true)
+        {
+            Driver_ =  NULL;
+            State_ = s_Undefined;
+            Locker.reset(P);
+        }
+        qCDTOR(rXDriver_);
+        void Init(fdr::rRWDriver &Driver)
+        {
+            Driver_ = &Driver;
+            State_ = sAlive;
+            Locker.Init();
+        }
+    };
+
+    typedef lstbch::qBUNCHd(sDRow_, sTRow_) dDRows_;
+    qW(DRows_);
+
+    lstbch::qLBUNCHd(rXDriver *, sDRow_) XDrivers_;
+
+    str::wTStrings<dTRow_> Tokens_;
 
     dDrivers_ *GetDrivers_(const str::dString &Token)
     {
@@ -98,20 +134,18 @@ void xdwmain::Remove(
     if ( Drivers != NULL )
         Drivers->Delete(Row);
 }
-
+#endif
+/*
 void xdwmain::rUpstream::XDHCMNBroadcast(const str::dString &Id)
 {
 qRH
-    wDrivers_ *Drivers;
 qRB
-    Drivers.Init();
-
-
+    qRVct();
 qRR
 qRT
 qRE
 }
-
+*/
 
 
 qGCTOR(xdwmain)

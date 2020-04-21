@@ -67,19 +67,19 @@ namespace {
 		struct rData {
 			eState_ State;
 			str::wString Token;
-			xdwmain::sRow Row;
+//			xdwmain::sRow Row;
 			void reset( bso::sBool P = true )
 			{
                 State = s_Undefined;
                 Token.reset( P );
-                Row = qNIL;
+//                Row = qNIL;
 			}
 			qCDTOR(rData);
 			void Init(void)
 			{
                 State = s_Undefined;
                 Token.Init();
-                Row = qNIL;
+//                Row = qNIL;
 			}
 		};
 
@@ -398,7 +398,7 @@ namespace {
                 qCBUFFERh Id, Action;
             qRB
                 Session.Init(Agent, RawDriver, "", Data.Token);
-                Data.Row = xdwmain::Add(RawDriver, Data.Token);
+//                Data.Row = xdwmain::Add(RawDriver, Data.Token);
 
                 if ( Agent.IsValid(Data.Token) )
                     Session.Launch("","");
@@ -514,9 +514,10 @@ namespace {
 
                 rData *Data = (rData *)UP;
 
+#if 0
                 if ( Data->Row != qNIL )
                     xdwmain::Remove(Data->Row, Data->Token);
-
+#endif
                 delete Data;
 
 				return true;

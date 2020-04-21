@@ -54,7 +54,7 @@ void session::rSession::Launch(void)
 {
 qRH
     str::wString Id, Action;
-    qCBUFFERr IdBuffer, ActionBuffer;
+    qCBUFFERh IdBuffer, ActionBuffer;
 qRB
     while ( true ) {
         Blockers_.WaitSelf();

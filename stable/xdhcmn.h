@@ -63,7 +63,7 @@ namespace xdhcmn {
 			const str::dString &Script,
 			str::dString *ReturnedValue ) = 0;
         // Broadcast 'Id' (which can't be empty) to all clients.
-        virtual void XDHCMNBroadcast(const str::dString &Id) = 0;
+//        virtual void XDHCMNBroadcast(const str::dString &Id) = 0;
 	public:
 		qCALLBACK( Upstream );
 		void Process(
@@ -72,11 +72,11 @@ namespace xdhcmn {
 		{
             return XDHCMNProcess(Script, ReturnValue);
 		}
-		void Braodcast(const str::dString &Id)
+/*		void Braodcast(const str::dString &Id)
 		{
 		    return XDHCMNBroadcast(Id);
 		}
-	};
+	*/};
 
 	class cSession
 	{

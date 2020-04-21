@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-// Hypertext Transfert Protocol 
+// Hypertext Transfert Protocol
 
 #ifndef HTP_INC_
 # define HTP_INC_
@@ -216,7 +216,7 @@ namespace htp {
 			Size_ -= Size;
 
 			if ( Size_ == 0 )
-				F_().Skip( 2 );	// To remve the NL.
+				F_().Skip( 2 );	// To remove the NL.
 
 			return Size;
 		}
@@ -298,7 +298,7 @@ namespace htp {
 
 	eMethod GetMethod( const str::dString &Pattern );
 
-	void Send( 
+	void Send(
 		eMethod Method,
 		const str::string_ &URL,
 		const dFields &Fields,

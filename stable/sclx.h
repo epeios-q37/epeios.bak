@@ -837,7 +837,7 @@ namespace sclx {
 		{
 			return C_().Launch( *this, Id, Action );
 		}
-		void XDHCMNBroadcast(const str::dString &Id) override;
+//		void XDHCMNBroadcast(const str::dString &Id) override;
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -856,7 +856,6 @@ namespace sclx {
 			sclf::rKernel &Kernel,
 			class rCore<rSession> &Core,
 			const scli::sInfo &Info,
-			const bso::sBool,
 			eXSLFileHandling XSLFileHandling = xfh_Default )
 		{
             this->XSLFileHandling_ = XSLFileHandling;

@@ -24,8 +24,8 @@
 #include "session.h"
 
 #include "sclc.h"
-#include "scltool.h"
-#include "sclerror.h"
+#include "sclt.h"
+#include "scle.h"
 
 #include "err.h"
 #include "cio.h"
@@ -45,7 +45,7 @@ using cio::CIn;
 
 SCLI_DEF( faasq, NAME_LC, NAME_MC );
 
-const scli::sInfo &scltool::SCLTOOLInfo( void )
+const scli::sInfo &sclt::SCLTInfo( void )
 {
 	return faasq::Info;
 }
@@ -63,11 +63,11 @@ namespace {
         {
         qRH
             str::wString Host, Service;
-            qCBUFFERr HostBuffer, ServiceBuffer;
+            qCBUFFERh HostBuffer, ServiceBuffer;
         qRB
             tol::Init(Host, Service);
-            sclmisc::MGetValue(registry::parameter::proxy::Host, Host);
-            sclmisc::MGetValue(registry::parameter::proxy::Service, Service);
+            sclm::MGetValue(registry::parameter::proxy::Host, Host);
+            sclm::MGetValue(registry::parameter::proxy::Service, Service);
 
             sclc::Display("ConnectingTo", cio::COut, Host, Service);
             cio::COut.Commit();
@@ -123,13 +123,13 @@ namespace {
                 {
                 qRH
                     str::wString Identification, ModuleFilename;
-                    qCBUFFERr Buffer;
+                    qCBUFFERh Buffer;
                 qRB
                     Identification.Init( NAME_LC " V" VERSION " Build " __DATE__ " " __TIME__ " - " );
                     Identification.Append( cpe::GetDescription() );
 
                     ModuleFilename.Init();
-                    sclmisc::MGetValue( registry::parameter::ModuleFilename, ModuleFilename );
+                    sclm::MGetValue( registry::parameter::ModuleFilename, ModuleFilename );
 
                     Agent.Init( xdhcmn::mMultiUser, ModuleFilename, dlbrry::n_Default, Identification.Convert( Buffer ) );
                 qRR
@@ -211,7 +211,7 @@ namespace {
                 sId Id = 0;
                 sRow Row = qNIL;
                 str::wString Message, EId, Action;
-                qCBUFFERr EIdBuffer, ActionBuffer;
+                qCBUFFERh EIdBuffer, ActionBuffer;
                 rSession *Session = NULL;
                 flw::rDressedRWFlow<> Proxy;
                 tht::rBlocker Blocker;
@@ -313,9 +313,9 @@ namespace {
 	else if ( Command == #name )\
 		name##_()
 
-int scltool::SCLTOOLMain(
+int sclt::SCLTMain(
 	const str::dString &Command,
-	const scltool::fOddities &Oddities )
+	const sclt::fOddities &Oddities )
 {
 	int ExitValue = EXIT_FAILURE;
 qRH;

@@ -74,7 +74,7 @@ namespace {
             if ( ( Session = new session::rSession ) == NULL )
                 qRAlc();
 
-            if ( !Session->Init() ) {
+            if ( !Session->Init()) {
                 delete Session;
                 Session = NULL;
             }

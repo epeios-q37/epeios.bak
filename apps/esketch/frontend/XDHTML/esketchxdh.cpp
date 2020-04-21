@@ -60,7 +60,7 @@ xdhcmn::cSession *sclx::SCLXRetrieveSession(void)
 	if ( Session == NULL )
 		qRGnr();
 
-	Session->Init( core::Kernel(), core::Core, esketchxdh::Info );
+	Session->Init(core::Kernel(), core::Core, esketchxdh::Info);
 
 //	Session->Connect();
 

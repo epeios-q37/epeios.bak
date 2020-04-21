@@ -32,6 +32,8 @@ namespace xdwmain {
 
     typedef xdhcmn::cUpstream cUpstream_;
 
+
+# if 0
     qROW( Row );
 
     sRow Add(
@@ -41,6 +43,7 @@ namespace xdwmain {
     void Remove(
         sRow Row,
         const str::dString &Token);
+# endif
 
 	class rUpstream
 	: public cUpstream_
@@ -52,7 +55,7 @@ namespace xdwmain {
 		virtual void XDHCMNProcess(
 			const str::string_ &Script,
 			str::dString *ReturnedValue ) override;
-        virtual void XDHCMNBroadcast(const str::dString &Id) override;
+//        virtual void XDHCMNBroadcast(const str::dString &Id) override;
 	public:
 		void reset( bso::bool__ P = true )
 		{
