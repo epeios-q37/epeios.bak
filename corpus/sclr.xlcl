@@ -1,22 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!-- $Id: sclrgstry.xlcl,v 1.6 2013/07/18 19:46:20 csimon Exp $ -->
 <xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
-	<Translations message="SCLR_BadOrNoValueForEntry">
-		<Translation language="fr">Valeur absente ou incorrecte pour l'entrée '%1'.</Translation>
-		<Translation language="en">Bad or no value for entry '%1'.</Translation>
-	</Translations>
-  <Translations message="SCLR_ParsingError">
-    <Translation language="fr">Erreur dans '%1' : %2.</Translation>
-    <Translation language="en">Error in '%1' : %2.</Translation>
-  </Translations>
-	<Translations message="SCLR_UnableToOpenFile">
-		<Translation language="fr">%2.</Translation>
-		<Translation language="en">%2.</Translation>
-	</Translations>
-  <!--
-	<Translations message="SCLR_">
-		<Translation language="fr"></Translation>
-		<Translation language="en"></Translation>
-	</Translations>
-	-->
+    <Translations message="SCLR_BadOrNoValueForEntry">
+        <Translation language="fr">Valeur absente ou incorrecte pour l'entrée '%1'.</Translation>
+        <Translation language="en">Bad or no value for entry '%1'.</Translation>
+    </Translations>
+    <Translations message="SCLR_ParsingError">
+        <Translation language="fr">Erreur dans '%1' : %2.</Translation>
+        <Translation language="en">Error in '%1': %2.</Translation>
+    </Translations>
+    <Translations message="SCLR_UnableToOpenFile">
+        <Translation language="fr">Impossible d'ouvrir le fichier '%1'.</Translation>
+        <Translation language="en">Unable to open file '%1'.</Translation>
+    </Translations>
+    <!--
+    <Translations message="SCLR_">
+        <Translation language="fr"></Translation>
+        <Translation language="en"></Translation>
+    </Translations>
+    -->
 </xpp:bloc>

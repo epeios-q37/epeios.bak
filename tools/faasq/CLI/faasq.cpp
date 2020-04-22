@@ -173,7 +173,7 @@ namespace {
                 URL.Init();
                 csdcmn::Get(Proxy, URL);
 
-                cio::COut << Head << txf::nl << URL << txf::nl << txf::commit;
+                cio::COut << URL << txf::nl << txf::commit;
             qRR
             qRT
             qRE

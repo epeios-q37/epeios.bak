@@ -155,8 +155,8 @@ namespace xdhcmn {
 	protected:
 		virtual void XDHCMNInitialize( const shared_data__ &Data ) = 0;
 		virtual void XDHCMNBaseLanguage( TOL_CBUFFER___ &Buffer ) = 0;
-		virtual cSession *XDHCMNRetrieveSession(void) = 0;
-		virtual void XDHCMNReleaseSession( cSession *Session ) = 0;
+		virtual cSession *XDHCMNFetchSessionCallback(void) = 0;
+		virtual void XDHCMNDismissSessionCallback( cSession *Callback ) = 0;
 		virtual const scli::sInfo &XDHCMNGetInfo( void ) = 0;
 		// The returned value is only for 'FaaS' mode. In other mode, must always return 'true',
 		// or false on error accordingly with 'qRP'.
@@ -177,13 +177,13 @@ namespace xdhcmn {
 
 			return Buffer;
 		}
-		cSession *RetrieveSession(void)
+		cSession *FetchSessionCallback(void)
 		{
-			return XDHCMNRetrieveSession();
+			return XDHCMNFetchSessionCallback();
 		}
-		void ReleaseSession( cSession *Session )
+		void DismissSessionCallback( cSession *Callback )
 		{
-			return XDHCMNReleaseSession( Session );
+			return XDHCMNDismissSessionCallback( Callback );
 		}
 		const scli::sInfo &GetInfo( void )
 		{

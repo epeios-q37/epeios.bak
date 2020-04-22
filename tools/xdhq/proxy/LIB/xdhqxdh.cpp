@@ -66,40 +66,40 @@ namespace {
         qRE;
         }
 
-        xdhcmn::cSession *RetrieveSession_(void)
+        xdhcmn::cSession *FetchCallback_(void)
         {
-            session::rSession *Session = NULL;
+            session::rSession *Callback = NULL;
         qRH;
         qRB;
-            if ( ( Session = new session::rSession ) == NULL )
+            if ( ( Callback = new session::rSession ) == NULL )
                 qRAlc();
 
-            if ( !Session->Init()) {
-                delete Session;
-                Session = NULL;
+            if ( !Callback->Init()) {
+                delete Callback;
+                Callback = NULL;
             }
 
             // WARNING ! In 'MultiUser' mode, 'UpstreamCallback' is not correctly set yet!
         /*	if ( Mode == xdhcmn::mMonoUser ) {
-                Session->Launch( "", "" );
+                Callback->Launch( "", "" );
             }
         */
         qRR;
-            if ( Session != NULL )
-                delete Session;
+            if ( Callback != NULL )
+                delete Callback;
 
-            Session = NULL;
+            Callback = NULL;
         qRT;
         qRE;
-            return Session;
+            return Callback;
         }
 
-        void ReleaseSession_( xdhcmn::cSession *Session )
+        void DismissCallback_( xdhcmn::cSession *Callback )
         {
-            if ( Session == NULL )
+            if ( Callback == NULL )
                 qRGnr();
 
-            delete Session;
+            delete Callback;
         }
     }
 
@@ -132,13 +132,13 @@ namespace {
 
 			strcpy( Buffer, Language );
 		}
-		virtual xdhcmn::cSession *XDHCMNRetrieveSession(void) override
+		virtual xdhcmn::cSession *XDHCMNFetchSessionCallback(void) override
 		{
-			return RetrieveSession_();
+			return FetchCallback_();
 		}
-		virtual void XDHCMNReleaseSession( xdhcmn::cSession *Session ) override
+		virtual void XDHCMNDismissSessionCallback(xdhcmn::cSession *Callback) override
 		{
-			return ReleaseSession_( Session );
+			return DismissCallback_(Callback);
 		}
 		const scli::sInfo &XDHCMNGetInfo( void ) override
 		{

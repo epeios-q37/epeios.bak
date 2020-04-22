@@ -396,8 +396,14 @@ namespace {
                 rCapsule_ Capsule;
                 sShared_ Shared;
                 qCBUFFERh Id, Action;
+                xdhcmn::cSession *Callback = NULL;
             qRB
-                Session.Init(Agent, RawDriver, "", Data.Token);
+                Callback = Agent.FetchSessionCallback();
+
+                if ( Callback == NULL )
+                    qRGnr();
+
+                Session.Init(Callback, RawDriver, "", Data.Token);
 //                Data.Row = xdwmain::Add(RawDriver, Data.Token);
 
                 if ( Agent.IsValid(Data.Token) )
@@ -441,6 +447,8 @@ namespace {
                 }
             qRR
             qRT
+                if ( Callback != NULL )
+                    Agent.DismissSessionCallback(Callback);
             qRE
             }
 		}

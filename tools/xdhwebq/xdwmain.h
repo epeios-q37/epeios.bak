@@ -32,7 +32,6 @@ namespace xdwmain {
 
     typedef xdhcmn::cUpstream cUpstream_;
 
-
 # if 0
     qROW( Row );
 
@@ -75,37 +74,22 @@ namespace xdwmain {
 	class rSession
 	{
 	private:
-        qRMV(rAgent, A_, Agent_);
         rUpstream Upstream_;
-        xdhcmn::cSession *SessionCallback_;
 		xdhups::sSession Session_;
 	public:
 		void reset( bso::bool__ P = true )
 		{
-            if ( P ) {
-                if ( Agent_ != NULL)
-                    if ( SessionCallback_ != NULL )
-                        A_().ReleaseSession( SessionCallback_ );
-            }
-
-            Agent_ = NULL;
-            SessionCallback_ = NULL;
-            tol::reset(P, Session_, Upstream_ );
+            tol::reset(P, Upstream_, Session_);
 		}
 		E_CDTOR( rSession );
 		bso::sBool Init(
-            rAgent &Agent,
+            xdhcmn::cSession *Callback,
             fdr::rRWDriver &Driver,
             const char *Language,
 			const str::dString &Token )	// If empty, FaaS session, else token used for the FaaS session.
  		{
-            reset();
-
-            Agent_ = &Agent;
-
 			Upstream_.Init_(Driver, Token);
-			SessionCallback_ = A_().RetrieveSession();
-			Session_.Init(SessionCallback_);
+			Session_.Init(Callback);
 			return Session_.Initialize(Upstream_, Language, Token);
 		}
 		bso::sBool Launch(

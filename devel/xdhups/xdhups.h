@@ -92,17 +92,17 @@ namespace xdhups {
 			const str::string_ &ModuleFileName,
 			dlbrry::eNormalization Normalization,	// Usually 'dlbrry::n_Default', except when used for 'Node.js' (set to 'dlbrry::nExtOnly').
 			const char *Identification );
-		cSession_ *RetrieveSession(void)
+		cSession_ *FetchSessionCallback(void)
 		{
-			return C_().RetrieveSession();
+			return C_().FetchSessionCallback();
 		}
 		const char *BaseLanguage( TOL_CBUFFER___ &Buffer ) const
 		{
 			return C_().BaseLanguage( Buffer );
 		}
-		void ReleaseSession( cSession_ *Session )
+		void DismissSessionCallback( cSession_ *Callback )
 		{
-			return C_().ReleaseSession( Session );
+			return C_().DismissSessionCallback(Callback);
 		}
 		const str::dString &Info( str::dString &Info )
 		{
