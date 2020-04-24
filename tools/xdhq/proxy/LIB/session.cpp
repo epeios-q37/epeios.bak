@@ -271,7 +271,7 @@ qRFB;
         Logging_.Id = Ids_.New();
         Log_( LogMessage );
 
-        xdhdws::sProxy::Init( Callback );	// Has to be last, otherwise if an error occurs, 'Callback' will be freed twice!
+        xdhdws::sProxy::Init( Callback );	// Has to be last, otherwise, if an error occurs, 'Callback' will be freed twice!
     }
 qRR;
 qRT;
