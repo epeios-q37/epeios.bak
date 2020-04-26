@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-// LoCKs 
+// LoCKs
 
 #ifndef LCK_INC_
 # define LCK_INC_
@@ -47,7 +47,7 @@ namespace lck {
 
 	//d Maximum amount of concurrent read.
 	#define LCK_MAX_CONCURRENT_READ	BSO_U8_MAX
-	
+
 	class lock___
 	{
 	public:
@@ -103,7 +103,7 @@ namespace lck {
 
 			mtx::Lock( ReadCounterProtection );	// Wait until read counter available,
 												// and avoid other to access them.
-	
+
 			while ( ReadCounter == LCK_MAX_CONCURRENT_READ ) { // While there is too more reading pending.
 				mtx::Unlock( ReadCounterProtection );	// Release the read counter.
 				mtx::Lock( OverflowProtection );	// Wait until there is lesser reading pending.
@@ -328,7 +328,7 @@ namespace lck {
 			_Lock();
 
 			if ( _Access.Locked ) {
-				if ( _Access.ReadWrite ) 
+				if ( _Access.ReadWrite )
 					ReleaseReadWrite();
 				else
 					ReleaseReadOnly();
@@ -479,6 +479,8 @@ namespace lck {
 	template <typename object> E_TTCLONE__( control___<object>, rTutor );
 	template <typename object> E_TTCLONE__( read_write_access___<object>, rReadWriteAccess );
 	template <typename object> E_TTCLONE__( read_only_access___<object>, rReadOnlyAccess );
+	template <typename object> E_TTCLONE__( read_write_access___<object>, rExclusiveAccess );
+	template <typename object> E_TTCLONE__( read_only_access___<object>, rSharedAccess );
 }
 
 #endif

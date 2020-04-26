@@ -9,6 +9,11 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2020-04-26:
+
+- LCK:
+    - adding `r[Exclusive|Shared]Access`,
+
 ## 2020-04-21:
 
 - SCLR:
