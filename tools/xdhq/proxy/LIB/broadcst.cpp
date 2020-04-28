@@ -46,25 +46,46 @@ namespace {
     private:
         qRMV(fdr::rWDriver, D_, Driver_);
         tht::rLocker Locker_;
+        void Lock_(void)
+        {
+            Locker_.Lock();
+        }
+        void Unlock_(void)
+        {
+            Locker_.Unlock();
+        }
+        sTRow_ TRow_;
     public:
         eState_ State;
-        sTRow_ Row;
         void reset(bso::sBool P = true)
         {
             Driver_ =  NULL;
             State = s_Undefined;
             Locker_.reset(P);
-            Row = qNIL;
+            TRow_ = qNIL;
         }
         qCDTOR(rXDriver_);
         void Init(
             fdr::rWDriver &Driver,
-            sTRow_ Row)
+            sTRow_ TRow)
         {
             Driver_ = &Driver;
             State = sAlive;
             Locker_.Init();
-            this->Row = Row;
+            TRow_ = TRow;
+        }
+        sTRow_ Deactivate(void)
+        {
+        qRH
+        qRB
+            Lock_();
+
+            State = sDead;
+        qRR
+        qRT
+            Unlock_();
+        qRE
+            return TRow_;
         }
     };
 
@@ -72,22 +93,57 @@ namespace {
     rXDrivers_ UnprotectedXDrivers_;
     lck::rTutor<rXDrivers_> XDrivers_;
 
+    sDRow_ Store_(rXDriver_ *XDriver)
+    {
+        sDRow_ DRow = qNIL;
+    qRH
+        lck::rExclusiveAccess<rXDrivers_> XDrivers;
+    qRB
+        XDrivers.Init(XDrivers_);
+
+        DRow = XDrivers().Add(XDriver);
+    qRR
+    qRT
+    qRE
+        return DRow;
+    }
+
+    // Also returns its token row.
+    sTRow_ Deactivate_(sDRow_ DRow)
+    {
+        sTRow_ TRow = qNIL;
+    qRH
+        lck::rExclusiveAccess<rXDrivers_> XDrivers;
+    qRB
+        XDrivers.Init(XDrivers_);
+
+        rXDriver_ &XDriver = *XDrivers()(DRow);
+
+        XDrivers.Release();
+
+        TRow = XDriver.Deactivate();
+    qRR
+    qRT
+    qRE
+        return TRow;
+    }
+
     class rXDRows_
     {
     private:
         wDRows_ UnprotectedDRows_;
     public:
         str::wString Token;
-        lck::rTutor<dDRows_> Tutor;
+        lck::rTutor<dDRows_> DRows;
         void reset(bso::sBool P = true)
         {
-            tol::reset(P, UnprotectedDRows_, Token, Tutor);
+            tol::reset(P, UnprotectedDRows_, Token, DRows);
         }
         qCDTOR(rXDRows_);
         void Init(const str::dString &Token)
         {
             UnprotectedDRows_.Init();
-            Tutor.Init(UnprotectedDRows_);
+            DRows.Init(UnprotectedDRows_);
             this->Token.Init(Token);
         }
     };
@@ -101,17 +157,17 @@ namespace {
     sTRow_ Search_(
         const str::dString &Token,
         const rXDRowsSets_ &XDRowsSets)
-        {
-            sTRow_ TRow = XDRowsSets.First();
+    {
+        sTRow_ TRow = XDRowsSets.First();
 
-            while( XDRowsSets(TRow)->Token != Token )
-                TRow = XDRowsSets.Next(TRow);
+        while( XDRowsSets(TRow)->Token != Token )
+            TRow = XDRowsSets.Next(TRow);
 
-            if ( TRow == qNIL )
-                qRGnr();
+        if ( TRow == qNIL )
+            qRGnr();
 
-            return TRow;
-        }
+        return TRow;
+    }
 
     sTRow_ Search_(const str::dString &Token)
     {
@@ -128,7 +184,7 @@ namespace {
         return TRow;
     }
 
-    rXDRows_ &FetchDRows_(sTRow_ TRow)
+    rXDRows_ &FetchXDRows_(sTRow_ TRow)
     {
         if ( TRow == qNIL )
             return UntokenizedXDRows_;
@@ -147,11 +203,6 @@ namespace {
             return *XDRows;
         }
     }
-
-    rXDRows_ &FetchDRows_(const str::dString &Token)
-    {
-        return FetchDRows_(Token.Amount() == 0 ? qNIL : Search_(Token));
-    }
 }
 
 sRow broadcst::Add(
@@ -160,82 +211,53 @@ sRow broadcst::Add(
 {
     sDRow_ DRow = qNIL;
 qRH
-    lck::rExclusiveAccess<wDRows_> DRows;
+    sTRow_ TRow = qNIL;
+    rXDriver_ *XDriver = NULL;
+    lck::rExclusiveAccess<dDRows_> DRows;
 qRB
+    TRow = Search_(Token);
+
+    if ( TRow == qNIL )
+        qRGnr();
+
     XDriver = new rXDriver_;
 
     if ( XDriver == NULL )
         qRGnr();
 
-    DRows.Init();
-
-    TRow = FetchDRows_(Token, DRows);
-    Locked = true;
-
     XDriver->Init(Driver, TRow);
 
-    DLocker_.Lock();
-    DLocked = true;
-    DRow = XDrivers_.Add(XDriver);
-    DLocker_.Unlock();
+    rXDRows_ &XDRows = FetchXDRows_(TRow);
 
+    DRows.Init(XDRows.DRows);
 
-
-    DRows.Add(DRow);
-
-    ReleaseDRows_(TRow, DRows);
-    Locked = false;
+    DRows().Add(DRow = Store_(XDriver));
 qRR
     if ( XDriver != NULL )
         delete XDriver;
 qRT
-    if ( Locked )
-        ReleaseDRows_(TRow);
 qRE
     return DRow;
 }
 
-void broadcst::Remove(sRow Row)
+void broadcst::Remove(sRow DRow)
 {
 qRH
-    wDRows_ DRows;
-    rXDriver_ *XDriver = NULL;
+    lck::rExclusiveAccess<dDRows_> DRows;
     sTRow_ TRow = qNIL;
-    bso::sBool DLocked = false, TLocked = false;
 qRB
-    XDriver = XDrivers_(Row);
+    TRow = Deactivate_(DRow);
 
-    XDriver->Lock();
-    DLocked = true;
+    rXDRows_ &XDRows = FetchXDRows_(TRow);
 
-    XDriver->State = sDead;
-    TRow = XDriver->Row;
+    DRows.Init(XDRows.DRows);
 
-    XDriver->Unlock();
-    DLocked = false;
 
-    DRows.Init();
-    FetchDRows_(TRow, Rows);
-    TLocked = true;
 
-    Rows.Remove(Row);
 
-    ReleaseDRows_(TRow, DRows);
-    TLock = false;
-
-    DRows_.Remove(Row);
 qRR
-    if ( XDriver != NULL )
-        delete XDriver;
 qRT
-    if ( DLock )
-        if ( XDriver != NULL )
-            XDriver->Unlock();
-
-    if ( TLock )
-        ReleaseDRows_(TRow);
 qRE
-    return Row;
 }
 #endif
 /*
