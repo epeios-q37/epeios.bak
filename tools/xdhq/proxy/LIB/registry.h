@@ -39,6 +39,8 @@ namespace registry {
 
 	namespace definition {
 		using namespace sclr::definition;
+
+		extern rEntry BroadcastScript;
 	}
 }
 

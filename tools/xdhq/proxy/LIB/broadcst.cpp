@@ -19,7 +19,6 @@
 
 #include "broadcst.h"
 
-#include "lck.h"
 #include "lstbch.h"
 #include "lstcrt.h"
 #include "str.h"
@@ -27,6 +26,25 @@
 using namespace broadcst;
 
 namespace {
+    typedef mtx::rHandler rMutex_;
+    typedef mtx::rMutex hGuardian_;
+
+    qCDEF(rMutex_, UndefinedMutex_, mtx::Undefined);
+
+    void Hire_(
+        hGuardian_ &Guardian,
+        rMutex_ &Mutex )
+    {
+        Guardian.Init(Mutex);
+
+        Guardian.Lock();
+    }
+
+    void Dismiss_(hGuardian_ &Guardian)
+    {
+        Guardian.Unlock();
+    }
+
     typedef sRow sDRow_; // Driver row.
 
     typedef lstbch::qLBUNCHdl(sDRow_) dDRows_;
@@ -45,67 +63,100 @@ namespace {
     {
     private:
         qRMV(fdr::rWDriver, D_, Driver_);
-        tht::rLocker Locker_;
-        void Lock_(void)
-        {
-            Locker_.Lock();
-        }
-        void Unlock_(void)
-        {
-            Locker_.Unlock();
-        }
+        rMutex_ Mutex_;
         sTRow_ TRow_;
+        eState_ State_;
     public:
-        eState_ State;
         void reset(bso::sBool P = true)
         {
+            if ( P )
+                if ( Mutex_ != UndefinedMutex_ )
+                    Mutex_ = mtx::Create();
+
             Driver_ =  NULL;
-            State = s_Undefined;
-            Locker_.reset(P);
             TRow_ = qNIL;
+            State_ = s_Undefined;
         }
         qCDTOR(rXDriver_);
         void Init(
             fdr::rWDriver &Driver,
             sTRow_ TRow)
         {
-            Driver_ = &Driver;
-            State = sAlive;
-            Locker_.Init();
-            TRow_ = TRow;
-        }
-        sTRow_ Deactivate(void)
-        {
-        qRH
-        qRB
-            Lock_();
+            if ( Mutex_ != UndefinedMutex_ )
+                mtx::Delete(Mutex_);
 
-            State = sDead;
-        qRR
-        qRT
-            Unlock_();
-        qRE
+            Driver_ = &Driver;
+            Mutex_ = mtx::Create();
+            TRow_ = TRow;
+            State_ = sAlive;
+        }
+        sTRow_ Deactivate(hGuardian_ &Guardian)
+        {
+            Hire_(Guardian, Mutex_);
+
+            State_ = sDead;
+
             return TRow_;
+        }
+        void Send(
+            const bso::sChar *Script,
+            hGuardian_ &Guardian)
+        {
+            Hire_(Guardian, Mutex_);
+
+            if ( State_ == sAlive )
+            {
+            qRH
+                flw::rDressedWFlow<> Flow;
+                qCBUFFERh Buffer;
+            qRB
+                Flow.Init(D_());
+
+                flw::PutString(Script, Flow);
+
+                Flow.Commit();
+            qRR
+            qRT
+            qRE
+            }
         }
     };
 
     typedef lstbch::qLBUNCHw(rXDriver_ *, sDRow_) rXDrivers_;
     rXDrivers_ UnprotectedXDrivers_;
-    lck::rTutor<rXDrivers_> XDrivers_;
+    rMutex_ XDriversMutex_ = UndefinedMutex_;
+
+    rXDrivers_ &GetXDrivers_(hGuardian_ &Guardian)
+    {
+        Hire_(Guardian, XDriversMutex_);
+
+        return UnprotectedXDrivers_;
+    }
 
     sDRow_ Store_(rXDriver_ *XDriver)
     {
         sDRow_ DRow = qNIL;
     qRH
-        lck::rExclusiveAccess<rXDrivers_> XDrivers;
+        hGuardian_ Guardian;
     qRB
-        XDrivers.Init(XDrivers_);
-
-        DRow = XDrivers().Add(XDriver);
+        DRow = GetXDrivers_(Guardian).Add(XDriver);
     qRR
     qRT
     qRE
         return DRow;
+    }
+
+    rXDriver_ &FetchXDriver_(sDRow_ DRow)
+    {
+        rXDriver_ *XDriver = NULL;
+    qRH
+        hGuardian_ Guardian;
+    qRB
+        XDriver = GetXDrivers_(Guardian)(DRow);
+    qRR
+    qRT
+    qRE
+        return *XDriver;
     }
 
     // Also returns its token row.
@@ -113,15 +164,13 @@ namespace {
     {
         sTRow_ TRow = qNIL;
     qRH
-        lck::rExclusiveAccess<rXDrivers_> XDrivers;
+        hGuardian_ Guardian;
     qRB
-        XDrivers.Init(XDrivers_);
+        rXDriver_ &XDriver = *GetXDrivers_(Guardian)(DRow);
 
-        rXDriver_ &XDriver = *XDrivers()(DRow);
+        Dismiss_(Guardian);
 
-        XDrivers.Release();
-
-        TRow = XDriver.Deactivate();
+        TRow = XDriver.Deactivate(Guardian);
     qRR
     qRT
     qRE
@@ -132,25 +181,49 @@ namespace {
     {
     private:
         wDRows_ UnprotectedDRows_;
+        rMutex_ Mutex_;
     public:
         str::wString Token;
-        lck::rTutor<dDRows_> DRows;
         void reset(bso::sBool P = true)
         {
-            tol::reset(P, UnprotectedDRows_, Token, DRows);
+            if ( P )
+                if ( Mutex_ != UndefinedMutex_)
+                    mtx::Delete(Mutex_);
+
+            tol::reset(P, UnprotectedDRows_, Token);
+
+            Mutex_ = UndefinedMutex_;
         }
         qCDTOR(rXDRows_);
         void Init(const str::dString &Token)
         {
             UnprotectedDRows_.Init();
-            DRows.Init(UnprotectedDRows_);
+
+            if ( Mutex_ != UndefinedMutex_ )
+                mtx::Delete(UndefinedMutex_);
+
+            Mutex_ = mtx::Create();
+
             this->Token.Init(Token);
+        }
+        wDRows_ &GetDRows(hGuardian_ &Guardian)
+        {
+            Hire_(Guardian, Mutex_);
+
+            return UnprotectedDRows_;
         }
     };
 
     typedef lstbch::qLBUNCHw(rXDRows_ *, sTRow_) rXDRowsSets_;
     rXDRowsSets_ UnprotectedXDRowsSets_;
-    lck::rTutor<rXDRowsSets_> XDRowsSets_;
+    rMutex_ XDRowsSetMutex_ = UndefinedMutex_;
+
+    rXDRowsSets_ &GetXDRowsSets_(hGuardian_ &Guardian)
+    {
+        Hire_(Guardian, XDRowsSetMutex_);
+
+        return UnprotectedXDRowsSets_;
+    }
 
     rXDRows_ UntokenizedXDRows_;
 
@@ -173,11 +246,9 @@ namespace {
     {
         sTRow_ TRow = qNIL;
     qRH
-        lck::rExclusiveAccess<rXDRowsSets_> XDRowsSets;
+        hGuardian_ Guardian;
     qRB
-        XDRowsSets.Init(XDRowsSets_);
-
-        TRow = Search_(Token, XDRowsSets());
+        TRow = Search_(Token, GetXDRowsSets_(Guardian));
     qRR
     qRT
     qRE
@@ -192,11 +263,9 @@ namespace {
         {
             rXDRows_ *XDRows = NULL;
         qRH
-            lck::rExclusiveAccess<rXDRowsSets_> XDRowsSets;
+            hGuardian_ Guardian;
         qRB
-            XDRowsSets.Init(XDRowsSets_);
-
-            XDRows = XDRowsSets()(TRow);
+            XDRows = GetXDRowsSets_(Guardian)(TRow);
         qRR
         qRT
         qRE
@@ -213,7 +282,7 @@ sRow broadcst::Add(
 qRH
     sTRow_ TRow = qNIL;
     rXDriver_ *XDriver = NULL;
-    lck::rExclusiveAccess<dDRows_> DRows;
+    hGuardian_ Guardian;
 qRB
     TRow = Search_(Token);
 
@@ -229,9 +298,7 @@ qRB
 
     rXDRows_ &XDRows = FetchXDRows_(TRow);
 
-    DRows.Init(XDRows.DRows);
-
-    DRows().Add(DRow = Store_(XDriver));
+    XDRows.GetDRows(Guardian).Add(DRow = Store_(XDriver));
 qRR
     if ( XDriver != NULL )
         delete XDriver;
@@ -240,26 +307,111 @@ qRE
     return DRow;
 }
 
+namespace {
+    namespace {
+        namespace {
+            void GetScript_(
+                const str::dString &Message,
+                str::dString &Script)
+        {
+        qRH
+            str::dString RawScript;
+        qRB
+            RawScript.Init();
+            sclm::MGetValue(registry::definition::BroadcastScript);
+
+            tagsbs::SubstituteLongTag(RawString, Message, Script);
+        qRR
+        qRT
+        qRE
+        }
+
+        struct sData_
+
+        void Routine
+
+        void Broadcast_(
+            const str::dString &Message,
+            rXDriver_ &XDriver )
+        {
+        qRH
+            str::dString RawScript, Script;
+        qRB
+            RawScript.Init();
+            sclm::MGetValue(registry::definition::BroadcastScript);
+
+            tagsbs::SubstituteLongTag(RawString, Message, Script);
+        qRR
+        qRT
+        qRE
+        }
+        {
+        }
+    }
+
+    void Broadcast_(
+        const str::dString &Message,
+        const dDRows_ &DRows)
+    {
+        sdr::sRow Row = DRows.First();
+
+        while ( Row != qNIL ) {
+            Broadcast_(Message, FetchXDriver_(DRows(Row)));
+            Row = DRows.Next(Row);
+        }
+    }
+}
+
+void broadcst::Broadcast(
+    const str::dString &Message,
+    const str::dString &Token)
+{
+qRH
+    sTRow_ TRow = qNIL;
+    hGuardian_ Guardian;
+qRB
+    TRow = Search_(Token);
+
+    Broadcast_( Message, FetchXDRows_(TRow).GetDRows(Guardian) );
+qRR
+qRT
+qRE
+
+}
+
+namespace {
+    void Remove_(
+        sDRow_ DRow,
+        dDRows_ &DRows)
+    {
+        sdr::sRow Row = DRows.First();
+
+        while ( Row != qNIL ) {
+            if ( DRows(Row) == DRow )
+                break;
+            Row = DRows.Next(Row);
+        }
+
+        if ( Row == qNIL )
+            qRGnr();
+
+        DRows.Delete(Row);
+    }
+}
+
 void broadcst::Remove(sRow DRow)
 {
 qRH
-    lck::rExclusiveAccess<dDRows_> DRows;
     sTRow_ TRow = qNIL;
+    hGuardian_ Guardian;
 qRB
     TRow = Deactivate_(DRow);
 
-    rXDRows_ &XDRows = FetchXDRows_(TRow);
-
-    DRows.Init(XDRows.DRows);
-
-
-
-
+    Remove_( DRow, FetchXDRows_(TRow).GetDRows(Guardian) );
 qRR
 qRT
 qRE
 }
-#endif
 /*
 void xdwmain::rUpstream::XDHCMNBroadcast(const str::dString &Id)
 {
@@ -273,7 +425,20 @@ qRE
 */
 
 
-qGCTOR(broddcast)
+qGCTOR(broadcst)
 {
+    UnprotectedXDrivers_.Init();
+    XDriversMutex_ = mtx::Create();
 
+    UnprotectedXDRowsSets_.Init();
+    XDRowsSetMutex_ = mtx::Create();
+}
+
+qGDTOR(broadcst)
+{
+    if ( XDriversMutex_ != UndefinedMutex_ )
+        mtx::Delete(XDriversMutex_);
+
+    if ( XDRowsSetMutex_ != UndefinedMutex_ )
+        mtx::Delete(XDRowsSetMutex_);
 }
