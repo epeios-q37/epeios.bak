@@ -1,32 +1,31 @@
 /*
-	Copyright (C) 2017 Claude SIMON (http://zeusw.org/epeios/contact.html).
+	Copyright (C) 1999 Claude SIMON (http://q37.info/contact/).
 
-	This file is part of 'XDHq' software.
+	This file is part of the Epeios framework.
 
-    'XDHq' is free software: you can redistribute it and/or modify it
-    under the terms of the GNU Affero General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+	The Epeios framework is free software: you can redistribute it and/or
+	modify it under the terms of the GNU Affero General Public License as
+	published by the Free Software Foundation, either version 3 of the
+	License, or (at your option) any later version.
 
-    'XDHq' is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+	The Epeios framework is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+	Affero General Public License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
-    along with 'XDHq'.  If not, see <http://www.gnu.org/licenses/>.
+	You should have received a copy of the GNU Affero General Public License
+	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#include "broadcst.h"
+#define XDHBRD_COMPILATION_
 
-#include "registry.h"
+#include "xdhbrd.h"
 
-#include "lstbch.h"
-#include "lstcrt.h"
-#include "sclm.h"
-#include "str.h"
+#include "err.h"
+#include "mtk.h"
+#include "rgstry.h"
 
-using namespace broadcst;
+using namespace xdhbrd;
 
 namespace {
     qCDEF(rMutex_, UndefinedMutex_, mtx::Undefined);
@@ -49,7 +48,7 @@ namespace {
     qW(CRows_);
 }
 
-void broadcst::rXCallback::reset(bso::sBool P)
+void xdhbrd::rXCallback::reset(bso::sBool P)
 {
     if ( P )
         if ( Mutex_ != UndefinedMutex_ )
@@ -60,7 +59,7 @@ void broadcst::rXCallback::reset(bso::sBool P)
     State_ = s_Undefined;
 }
 
-void broadcst::rXCallback::Init(
+void xdhbrd::rXCallback::Init(
     xdhcmn::cUpstream &Callback,
     sTRow_ TRow)
 {
@@ -73,7 +72,7 @@ void broadcst::rXCallback::Init(
     State_ = sAlive;
 }
 
-sTRow_ broadcst::rXCallback::Deactivate(hGuardian_ &Guardian)
+sTRow_ xdhbrd::rXCallback::Deactivate(hGuardian_ &Guardian)
 {
     Hire_(Guardian, Mutex_);
 
@@ -82,7 +81,7 @@ sTRow_ broadcst::rXCallback::Deactivate(hGuardian_ &Guardian)
     return TRow_;
 }
 
-void broadcst::rXCallback::Send(
+void xdhbrd::rXCallback::Send(
     const str::dString &Script,
     hGuardian_ &Guardian)
 {
@@ -245,7 +244,7 @@ namespace {
     }
 }
 
-sRow broadcst::InitAndAdd(
+sRow xdhbrd::InitAndAdd(
         xdhcmn::cUpstream &Callback,
         rXCallback &XCallback,
         const str::dString &Token)
@@ -271,58 +270,60 @@ qRE
 
 namespace {
     namespace {
-        void GetScript_(
-            const str::dString &Message,
-            str::dString &Script)
-        {
-        qRH
-            str::wString RawScript;
-        qRB
-            RawScript.Init();
-            sclm::MGetValue(registry::definition::BroadcastScript, RawScript);
+        struct sData_ {
+        public:
+            rXCallback *XCallback;
+            const str::dString *Script;
+        };
 
-            tagsbs::SubstituteLongTag(RawScript, Message, Script);
+        void Routine_(
+            void *UP,
+            mtk::gBlocker &Blocker)
+        {
+            sData_ &Data = *(sData_ *)UP;
+            rXCallback &XCallback = *Data.XCallback;
+        qRH
+            str::wString Script;
+            hGuardian_ Guardian;
+        qRB
+            Script.Init(*Data.Script);
+
+            Blocker.Release();
+
+            XCallback.Send(Script, Guardian);
         qRR
         qRT
         qRE
         }
 
-        struct sData_
-        {
-        public:
-            const str::wString Script;
-
-        };
-
         void Broadcast_(
-            const str::dString &Message,
+            const str::dString &Script,
             rXCallback &XCallback )
         {
-        qRH
+            sData_ Data;
 
-        qRB
+            Data.XCallback = &XCallback;
+            Data.Script = &Script;
 
-        qRR
-        qRT
-        qRE
+            mtk::Launch(Routine_, &Data);
         }
     }
 
     void Broadcast_(
-        const str::dString &Message,
+        const str::dString &Script,
         const dCRows_ &CRows)
     {
         sdr::sRow Row = CRows.First();
 
         while ( Row != qNIL ) {
-            Broadcast_(Message, FetchXCallback_(CRows(Row)));
+            Broadcast_(Script, FetchXCallback_(CRows(Row)));
             Row = CRows.Next(Row);
         }
     }
 }
 
-void broadcst::Broadcast(
-    const str::dString &Message,
+void xdhbrd::Broadcast(
+    const str::dString &Script,
     const str::dString &Token)
 {
 qRH
@@ -331,7 +332,7 @@ qRH
 qRB
     TRow = Search_(Token);
 
-    Broadcast_(Message, FetchXCRows_(TRow).GetCRows(Guardian));
+    Broadcast_(Script, FetchXCRows_(TRow).GetCRows(Guardian));
 qRR
 qRT
 qRE
@@ -358,7 +359,7 @@ namespace {
     }
 }
 
-void broadcst::Remove(sRow CRow)
+void xdhbrd::Remove(sRow CRow)
 {
 qRH
     sTRow_ TRow = qNIL;

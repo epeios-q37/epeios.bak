@@ -1,30 +1,38 @@
 /*
-	Copyright (C) 2017 Claude SIMON (http://zeusw.org/epeios/contact.html).
+	Copyright (C) 1999 Claude SIMON (http://q37.info/contact/).
 
-	This file is part of 'XDHq' software.
+	This file is part of the Epeios framework.
 
-    'XDHq' is free software: you can redistribute it and/or modify it
-    under the terms of the GNU Affero General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+	The Epeios framework is free software: you can redistribute it and/or
+	modify it under the terms of the GNU Affero General Public License as
+	published by the Free Software Foundation, either version 3 of the
+	License, or (at your option) any later version.
 
-    'XDHq' is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+	The Epeios framework is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+	Affero General Public License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
-    along with 'XDHq'.  If not, see <http://www.gnu.org/licenses/>.
+	You should have received a copy of the GNU Affero General Public License
+	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef BROADCST_INC_
-# define BROADCST_INC_
+// SKeTch
+
+#ifndef XDHBRD_INC_
+# define XDHBRD_INC_
+
+# define XDHBRD_NAME		"XDHBRD"
+
+# if defined( E_DEBUG ) && !defined( XDHBRD_NODBG )
+#  define XDHBRD_DBG
+# endif
 
 # include "fdr.h"
 # include "sdr.h"
 # include "xdhcmn.h"
 
-namespace broadcst {
+namespace xdhbrd {
     qROW(CRow_);    // Callback row.
     qROW(TRow_); // Token row.
 
@@ -65,7 +73,7 @@ namespace broadcst {
         const str::dString &Token);
 
     void Broadcast(
-        const str::dString &Message,
+        const str::dString &Script,
         const str::dString &Token);
 
     void Remove(sRow Row);

@@ -18,6 +18,13 @@
 }
         ]]>
       </Script>
+    <Script name="BroadcastMessage_1" Arguments="Message">
+		        <![CDATA[
+{
+ launchEvent('%Message%|BROADCAST|broadcast||((""))');
+}
+		        ]]>
+        </Script>      
     </xpp:bloc>
     <!-- All scripts enclosed in following block are public. -->
     <xpp:bloc>
@@ -128,7 +135,6 @@
         <![CDATA[
 {
   getElement( "%Id%" ).setAttribute("%Name%", "%Value%");
-  undefined;
 }
         ]]>
       </Script>

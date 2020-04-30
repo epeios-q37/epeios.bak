@@ -20,7 +20,6 @@
 #ifndef SESSION_INC_
 # define SESSION_INC_
 
-# include "broadcst.h"
 # include "faaspool.h"
 
 # include "csdmnc.h"
@@ -51,8 +50,6 @@ namespace session {
 		eMode_ _Mode_;
 		faaspool::rRWDriver FaaSDriver_;
 		csdmnc::rRWDriver ProdDriver_;
-		broadcst::rXCallback XCallback_;
-		broadcst::sRow CallbackRow_;
 		struct {
 			sId_ Id;
 			str::wString IP;
@@ -118,12 +115,7 @@ namespace session {
 	public:
 		void reset( bso::sBool P = true )
 		{
-		    if ( P )
-                if ( CallbackRow_ != qNIL )
-                    broadcst::Remove(CallbackRow_);
-
-			tol::reset(P, FaaSDriver_, ProdDriver_, XCallback_);
-			CallbackRow_ = qNIL;
+			tol::reset(P, FaaSDriver_, ProdDriver_);
 			_Mode_ = m_Undefined;
 			xdhdws::sProxy::reset( P );
 			Logging_.Id = UndefinedId_;
@@ -137,9 +129,7 @@ namespace session {
 
 			Logging_.IP.Init();
 
-			CallbackRow_ = qNIL;
-
-			XCallback_.reset();  // Will be initialized later.
+			// 'xdhdws::sProxy' Will be initialized later.
 
 			return true;
 		}

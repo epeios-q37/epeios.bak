@@ -446,7 +446,7 @@ namespace {
             xdhcmn::cUpstream &Callback )
         {
         qRH
-            xdhcmn::digest Digests, EventsDigest, WidgetsDigets;
+            xdhcmn::digest Digests, EventsDigest, WidgetsDigest;
             xdhcmn::retriever__ Retriever;
         qRB
             Digests.Init();
@@ -455,13 +455,13 @@ namespace {
 
             Retriever.Init(Digests);
 
-            tol::Init(EventsDigest, WidgetsDigets);
+            tol::Init(EventsDigest, WidgetsDigest);
 
             Retriever.GetTable(EventsDigest);
-            Retriever.GetTable(WidgetsDigets);
+            Retriever.GetTable(WidgetsDigest);
 
             HandleEvents_(EventsDigest, Callback);
-            HandleWidgets_(WidgetsDigets, Callback);
+            HandleWidgets_(WidgetsDigest, Callback);
         qRR
         qRE
         qRT
@@ -509,7 +509,6 @@ void xdhdws::sProxy::Process(
     return Process_(ScriptName, Values, C_(), ReturnValue);
 }
 
-
 void xdhdws::sProxy::Process(
     const str::dString &ScriptName,
     const str::dStrings &Values,
@@ -518,3 +517,18 @@ void xdhdws::sProxy::Process(
     return Process_(ScriptName, Values, C_(), ReturnValue);
 }
 
+void xdhdws::sProxy::Brodcast(const str::dString &Message)
+{
+qRH
+    str::wStrings Arguments;
+qRB
+    Arguments.Init(Message);
+
+    Process("BroadcastMessage_1", Arguments);
+qRR
+qRT
+qRE
+}
+{
+
+}

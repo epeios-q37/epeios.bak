@@ -4,10 +4,18 @@
 
 - [adpt]: adaptation to changes in underlying modules;
 - [cont]: continuation of previous modifications;
+- [crtn]: creation;
 - [rvrt]: reverting modifications;
 - [stdz]: modification to comply with current standards;
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
+
+## 2020-04-30:
+
+- XDHCRT:
+    - [crtn],
+- XDHDWS:
+    - use of XDHRD,
 
 ## 2020-04-26:
 
@@ -4231,6 +4239,7 @@
 
 [adpt]:#Adaptation
 [cont]:#Continuation
+[crtn]:#Creation
 [rvrt]:#Reverting
 [stdz]:#Standardization
 [trvl]:#Trivial
@@ -4240,9 +4249,13 @@
 
 Adaptation to changes in underlying modules.
 
-### Continuation,
+### Continuation
 
 Continuation of the modifications.
+
+### Creation
+
+Creation of the library.
 
 ### Reverting
 

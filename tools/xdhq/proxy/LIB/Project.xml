@@ -51,7 +51,6 @@
 				<xpp:expand select="XDH"/>
 			</Modules>
 		</Modules>
-		<Module>broadcst</Module>
 		<Module>faaspool</Module>
 		<Module>registry</Module>
         <Module>session</Module>

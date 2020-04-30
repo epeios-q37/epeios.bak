@@ -18,14 +18,6 @@
 			</Plugins>
 		</Parameters>
 		<Definitions>
-		    <BroadcastScript>
-		        <![CDATA[
-{
-    launchEvent('%Message%|BROADCAST|broadcast||((""))');
-    Undefined;
-}
-		        ]]>
-		    </BroadcastScript>
             <FaaS>
               <URL>http://%Address%%Service%/xdh.php?_token=%Token%</URL>
               <Notification>
