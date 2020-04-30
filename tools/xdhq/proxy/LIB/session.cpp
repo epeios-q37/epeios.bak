@@ -271,6 +271,8 @@ qRFB;
         Logging_.Id = Ids_.New();
         Log_( LogMessage );
 
+        broadcst::InitAndAdd(Callback, XCallback_, Token);
+
         xdhdws::sProxy::Init( Callback );	// Has to be last, otherwise, if an error occurs, 'Callback' will be freed twice!
     }
 qRR;
