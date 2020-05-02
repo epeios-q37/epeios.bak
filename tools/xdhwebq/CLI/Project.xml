@@ -46,7 +46,7 @@
 			</Modules>
 		</Modules>
 		<Modules Group="XDW" Path="../">
-			<Module>xdwmain</Module>
+			<Module>xdwsessn</Module>
 			<Module>xdwrgstry</Module>
 		</Modules>
 		<Module>registry</Module>

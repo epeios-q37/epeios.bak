@@ -67,6 +67,8 @@ namespace xdhbrd {
             hGuardian_ &Guardian);
     };
 
+    void Create(const str::dString &Token);
+
     sRow InitAndAdd(
         xdhcmn::cUpstream &Callback,
         rXCallback &XCallback,

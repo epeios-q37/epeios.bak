@@ -95,6 +95,7 @@ namespace session {
     private:
         flw::rDressedRWFlow<> Proxy_;
         sUpstream_ Upstream_;
+        qRMV(xdhups::rAgent, A_, Agent_);
         xdhups::sSession Session_;
         rBlockers_ Blockers_;
         sId Id_;
@@ -102,21 +103,30 @@ namespace session {
         bso::sBool Handshaked;
         void reset(bso::sBool P = true)
         {
-            tol::reset(P, Proxy_, Upstream_, Session_, Blockers_);
+            if ( P ) {
+                A_().DismissSessionCallback(Session_.Callback());
+            }
+
+            tol::reset(P, Proxy_, Upstream_, Agent_, Session_, Blockers_);
             Handshaked = false;
             Id_ = UndefinedId;
         }
         qCDTOR(rSession);
         void Init(
             sId Id,
-            xdhcmn::cSession *Session,
+            xdhups::rAgent &Agent,
             fdr::rRWDriver &ProxyDriver,
             tht::rBlocker &Global)
         {
+            if ( Session_.Callback() != NULL )
+                A_().DismissSessionCallback(Session_.Callback());
+
+            Agent_= &Agent;
+
             Proxy_.Init(ProxyDriver);
-            Session_.Init(Session);
+            Session_.Init(A_().FetchSessionCallback());
             Upstream_.Init(Proxy_, Id, Blockers_);
-            Session_.Initialize(Upstream_,"",str::wString(""));
+            Session_.Initialize(Upstream_, "", str::Empty);
             Handshaked = false;
             Blockers_.Init(Global);
             Id_ = Id;

@@ -233,7 +233,7 @@ namespace {
                         if ( ( Session = new rSession() ) == NULL )
                             qRAlc();
 
-                        Session->Init(Id,Agent.RetrieveSession(), ProxyDriver, Blocker);
+                        Session->Init(Id, Agent, ProxyDriver, Blocker);
 
                         if ( Sessions.Append(Session) != Row )
                             qRGnr();

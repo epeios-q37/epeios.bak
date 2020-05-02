@@ -24,7 +24,7 @@
 #include "sclt.h"
 #include "scle.h"
 
-#include "xdwmain.h"
+#include "xdwsessn.h"
 
 #include "csdbns.h"
 #include "csdcmn.h"
@@ -85,7 +85,7 @@ namespace {
 
 		namespace {
             void HandleProlog_(
-                xdwmain::rAgent &Agent,
+                xdhups::rAgent &Agent,
                 fdr::rRWDriver &Driver,
                 rData &Data )
             {
@@ -138,7 +138,7 @@ namespace {
 
                 void Handle_(
                     const str::dString &Digest,
-                    xdwmain::rSession &Session )
+                    xdwsessn::rSession &Session )
                 {
                 qRH;
                     str::string Id, Action;
@@ -155,13 +155,13 @@ namespace {
             }
 
             void HandleRegular_(
-                xdwmain::rAgent &Agent,
+                xdhups::rAgent &Agent,
                 fdr::rRWDriver &Driver,
                 rData &Data)
             {
             qRH
                 websck::rFlow Flow;
-                xdwmain::rSession Session;
+                xdwsessn::rSession Session;
                 str::wString Digest, Script;
                 xdhcmn::cSession *Callback = NULL;
             qRB
@@ -202,7 +202,7 @@ namespace {
 		: public cProcessing_
 		{
 		private:
-			qRMV( xdwmain::rAgent, A_, Agent_ );
+			qRMV( xdhups::rAgent, A_, Agent_ );
 		protected:
 			void *CSDSCBPreProcess(
 				fdr::rRWDriver *Driver,
@@ -281,7 +281,7 @@ namespace {
 				Agent_ = NULL;
 			}
 			E_CVDTOR( sProcessing );
-			void Init( xdwmain::rAgent &Agent )
+			void Init( xdhups::rAgent &Agent )
 			{
 				Agent_ = &Agent;
 			}
@@ -292,7 +292,7 @@ namespace {
 	void Process_( void )
 	{
 	qRH
-		xdwmain::rAgent Agent;
+		xdhups::rAgent Agent;
 		str::wString Identification, ModuleFilename;
 		TOL_CBUFFER___ IdentificationBuffer;
 		csdbns::server___ Server;

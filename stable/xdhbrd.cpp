@@ -196,7 +196,8 @@ namespace {
 
     sTRow_ Search_(
         const str::dString &Token,
-        const rXCRowsSets_ &XCRowsSets)
+        const rXCRowsSets_ &XCRowsSets,
+        bso::sBool ReturnNotFound)
     {
         sTRow_ TRow = XCRowsSets.First();
 
@@ -204,7 +205,7 @@ namespace {
             while( ( TRow != qNIL ) && XCRowsSets(TRow)->Token != Token )
                 TRow = XCRowsSets.Next(TRow);
 
-            if ( TRow == qNIL )
+            if ( ( TRow == qNIL ) && !ReturnNotFound )
                 qRGnr();
         } else if ( TRow != qNIL )
             qRGnr();
@@ -218,7 +219,7 @@ namespace {
     qRH
         hGuardian_ Guardian;
     qRB
-        TRow = Search_(Token, GetXCRowsSets_(Guardian));
+        TRow = Search_(Token, GetXCRowsSets_(Guardian), false);
     qRR
     qRT
     qRE
@@ -242,6 +243,32 @@ namespace {
             return *XCRows;
         }
     }
+}
+
+void xdhbrd::Create(const str::dString &Token)
+{
+qRH
+    rXCRows_ *XCRows = NULL;
+    hGuardian_ Guardian;
+qRB
+    XCRows = new rXCRows_;
+
+    if ( XCRows == NULL )
+        qRAlc();
+
+    XCRows->Init(Token);
+
+    rXCRowsSets_ &Sets = GetXCRowsSets_(Guardian);
+
+    if ( Search_(Token, Sets, true) != qNIL )
+        qRGnr();
+
+    Sets.Add(XCRows);
+qRR
+    if ( XCRows != NULL )
+        delete XCRows;
+qRT
+qRE
 }
 
 sRow xdhbrd::InitAndAdd(

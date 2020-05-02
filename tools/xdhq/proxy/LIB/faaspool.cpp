@@ -34,6 +34,7 @@ using namespace faaspool;
 #include "mtk.h"
 #include "sclm.h"
 #include "str.h"
+#include "xdhbrd.h"
 
 namespace {
 	static qCDEF( char *, ProtocolId_, "0fac593d-d65f-4cc1-84f5-3159c23c616b" );
@@ -425,7 +426,7 @@ namespace {
 		Token.Init();
 		Get_( Flow, Token );
 
-		switch ( Status = token_::GetPlugin().Handle( Token ) ) {
+		switch ( Status = token_::GetPlugin().Handle(Token) ) {
 		case plugins::sOK:
 			tol::Init(Head, Address);
 			Get_(Flow, Head);
@@ -434,7 +435,7 @@ namespace {
 			if ( (Backend = Create_( Driver, IP, Token, Head )) == NULL ) {
 				ErrorMessage.Init();
 				sclm::GetBaseTranslation( "TokenAlreadyInUse", ErrorMessage, Token );
-				Token.Init();	// To report backned that there is an error.
+				Token.Init();	// To report backend that there is an error.
 			}
 			break;
 		default:
@@ -453,6 +454,7 @@ namespace {
         else {
             URL.Init();
             Put_(BuildURL_(Address,str::wString(),Token,URL), Flow);
+            xdhbrd::Create(Token);
         }
 	qRR;
 		if ( Backend != NULL )

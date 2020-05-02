@@ -17,34 +17,20 @@
     along with XDHWebQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef XDWMAIN_INC_
-# define XDWMAIN_INC_
+#ifndef XDWSESSN_INC_
+# define XDWSESSN_INC_
 
 # include "xdwrgstry.h"
 
 # include "xdhups.h"
 # include "websck.h"
 
-namespace xdwmain {
+namespace xdwsessn {
     class rSession; // Predeclaration.
-
-    using xdhups::rAgent;
 
     typedef xdhcmn::cUpstream cUpstream_;
 
-# if 0
-    qROW( Row );
-
-    sRow Add(
-        fdr::rWDriver &Driver,
-        const str::dString &Token);
-
-    void Remove(
-        sRow Row,
-        const str::dString &Token);
-# endif
-
-	class rUpstream
+	class rUpstream_
 	: public cUpstream_
 	{
 	private:
@@ -61,7 +47,7 @@ namespace xdwmain {
 		    tol::reset(Token_, Flow_);
 			Flow_.reset(P);
 		}
-		E_CVDTOR( rUpstream );
+		E_CVDTOR( rUpstream_ );
 		void Init_(
              fdr::rRWDriver &Driver,
              const str::dString &Token)
@@ -74,7 +60,7 @@ namespace xdwmain {
 	class rSession
 	{
 	private:
-        rUpstream Upstream_;
+        rUpstream_ Upstream_;
 		xdhups::sSession Session_;
 	public:
 		void reset( bso::bool__ P = true )
