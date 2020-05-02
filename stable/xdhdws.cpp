@@ -446,7 +446,7 @@ namespace {
             xdhcmn::cUpstream &Callback )
         {
         qRH
-            xdhcmn::digest Digests, EventsDigest, WidgetsDigets;
+            xdhcmn::digest Digests, EventsDigest, WidgetsDigest;
             xdhcmn::retriever__ Retriever;
         qRB
             Digests.Init();
@@ -455,13 +455,13 @@ namespace {
 
             Retriever.Init(Digests);
 
-            tol::Init(EventsDigest, WidgetsDigets);
+            tol::Init(EventsDigest, WidgetsDigest);
 
             Retriever.GetTable(EventsDigest);
-            Retriever.GetTable(WidgetsDigets);
+            Retriever.GetTable(WidgetsDigest);
 
             HandleEvents_(EventsDigest, Callback);
-            HandleWidgets_(WidgetsDigets, Callback);
+            HandleWidgets_(WidgetsDigest, Callback);
         qRR
         qRE
         qRT
@@ -509,7 +509,6 @@ void xdhdws::sProxy::Process(
     return Process_(ScriptName, Values, C_(), ReturnValue);
 }
 
-
 void xdhdws::sProxy::Process(
     const str::dString &ScriptName,
     const str::dStrings &Values,
@@ -518,3 +517,23 @@ void xdhdws::sProxy::Process(
     return Process_(ScriptName, Values, C_(), ReturnValue);
 }
 
+void xdhdws::sProxy::BroadcastAction(
+    const str::dString &Action,
+    const str::dString &Id,
+    const str::dString &Token)
+{
+qRH
+    str::wStrings Arguments;
+    str::wString Script;
+qRB
+    Arguments.Init(Action);
+    Arguments.Append(Id);
+
+    Script.Init();
+    GetScript_("BroadcastAction_1", Arguments, Script);
+
+    xdhbrd::Broadcast(Script,Token);
+qRR
+qRT
+qRE
+}

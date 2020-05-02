@@ -10,6 +10,12 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+
+## 2020-05-01:
+
+- SCLB, SCLX:
+    [adpt],
+
 ## 2020-04-30:
 
 - XDHCRT:

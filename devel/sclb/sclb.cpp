@@ -189,7 +189,7 @@ namespace {
 //		const char *ErrMsg = NULL;
 		lcl::meaning Meaning;
 		str::wString Translation;
-		qCBUFFERr Buffer;
+		qCBUFFERh Buffer;
 		flw::rDressedWFlow<> Flow;
 	qRB
 		Flow.Init( ODriver );

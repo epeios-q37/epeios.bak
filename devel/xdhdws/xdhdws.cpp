@@ -517,18 +517,23 @@ void xdhdws::sProxy::Process(
     return Process_(ScriptName, Values, C_(), ReturnValue);
 }
 
-void xdhdws::sProxy::Brodcast(const str::dString &Message)
+void xdhdws::sProxy::BroadcastAction(
+    const str::dString &Action,
+    const str::dString &Id,
+    const str::dString &Token)
 {
 qRH
     str::wStrings Arguments;
+    str::wString Script;
 qRB
-    Arguments.Init(Message);
+    Arguments.Init(Action);
+    Arguments.Append(Id);
 
-    Process("BroadcastMessage_1", Arguments);
+    Script.Init();
+    GetScript_("BroadcastAction_1", Arguments, Script);
+
+    xdhbrd::Broadcast(Script,Token);
 qRR
 qRT
 qRE
-}
-{
-
 }

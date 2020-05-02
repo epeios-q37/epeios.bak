@@ -34,9 +34,7 @@ namespace {
         hGuardian_ &Guardian,
         rMutex_ &Mutex )
     {
-        Guardian.Init(Mutex);
-
-        Guardian.Lock();
+        Guardian.InitAndLock(Mutex);
     }
 
     void Dismiss_(hGuardian_ &Guardian)
@@ -187,6 +185,7 @@ namespace {
     typedef lstbch::qLBUNCHw(rXCRows_ *, sTRow_) rXCRowsSets_;
     rXCRowsSets_ UnprotectedXCRowsSets_;
     rMutex_ XCRowsSetMutex_ = UndefinedMutex_;
+    rXCRows_ UntokenizedXCRows_;
 
     rXCRowsSets_ &GetXCRowsSets_(hGuardian_ &Guardian)
     {
@@ -195,18 +194,19 @@ namespace {
         return UnprotectedXCRowsSets_;
     }
 
-    rXCRows_ UntokenizedXCRows_;
-
     sTRow_ Search_(
         const str::dString &Token,
         const rXCRowsSets_ &XCRowsSets)
     {
         sTRow_ TRow = XCRowsSets.First();
 
-        while( XCRowsSets(TRow)->Token != Token )
-            TRow = XCRowsSets.Next(TRow);
+        if ( Token.Amount() ) {
+            while( ( TRow != qNIL ) && XCRowsSets(TRow)->Token != Token )
+                TRow = XCRowsSets.Next(TRow);
 
-        if ( TRow == qNIL )
+            if ( TRow == qNIL )
+                qRGnr();
+        } else if ( TRow != qNIL )
             qRGnr();
 
         return TRow;
@@ -255,9 +255,6 @@ qRH
     hGuardian_ Guardian;
 qRB
     TRow = Search_(Token);
-
-    if ( TRow == qNIL )
-        qRGnr();
 
     XCallback.Init(Callback, TRow);
 
@@ -372,18 +369,6 @@ qRR
 qRT
 qRE
 }
-/*
-void xdwmain::rUpstream::XDHCMNBroadcast(const str::dString &Id)
-{
-qRH
-qRB
-    qRVct();
-qRR
-qRT
-qRE
-}
-*/
-
 
 qGCTOR(broadcst)
 {
@@ -392,6 +377,8 @@ qGCTOR(broadcst)
 
     UnprotectedXCRowsSets_.Init();
     XCRowsSetMutex_ = mtx::Create();
+
+    UntokenizedXCRows_.Init(str::Empty);
 }
 
 qGDTOR(broadcst)

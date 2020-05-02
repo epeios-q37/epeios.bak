@@ -23,19 +23,21 @@
 # include "base.h"
 
 namespace main {
-	BASE_AD( Submission );
-	BASE_AD( ShowTestButton );
-	BASE_AD( HideTestButton );
-	BASE_AD( ConnectedTesting );
-	BASE_AD( UnconnectedTesting );
+	BASE_AD(Submission);
+	BASE_AD(BroadcastTest);
+	BASE_AD(ShowTestButton);
+	BASE_AD(HideTestButton);
+	BASE_AD(ConnectedTesting);
+	BASE_AD(UnconnectedTesting);
 
 	inline void Register( void  )
 	{
-		BASE_AR( Submission );
-		BASE_AR( ShowTestButton );
-		BASE_AR( HideTestButton );
-		BASE_AR( ConnectedTesting );
-		BASE_AR( UnconnectedTesting );
+		BASE_AR(Submission);
+		BASE_AR(BroadcastTest);
+		BASE_AR(ShowTestButton);
+		BASE_AR(HideTestButton);
+		BASE_AR(ConnectedTesting);
+		BASE_AR(UnconnectedTesting);
 	};
 
 	void SetLayout( core::rSession &Session );

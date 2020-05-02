@@ -78,7 +78,10 @@ namespace xdhdws {
         {
             return Process(ScriptName,Values,&ReturnValue);
         }
-        void Brodcast(const str::dString &Message);
+        void BroadcastAction(
+            const str::dString &Action,
+            const str::dString &Id,
+            const str::dString &Token);
 	};
 }
 

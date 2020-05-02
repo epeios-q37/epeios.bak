@@ -84,6 +84,8 @@ namespace {
             Session.User.ToUpper( Content );
             Session.SetContent( "Pattern", Content );
         }
+
+        Session.BroadcastAction("BroadcastTest", "toto");
 	qRR;
 	qRT;
 	qRE;
@@ -93,6 +95,11 @@ namespace {
 A( Submission )
 {
 	Submission_( Id, Session );
+}
+
+A( BroadcastTest )
+{
+	Session.AlertB(str::wString(Id));
 }
 
 A( ShowTestButton )

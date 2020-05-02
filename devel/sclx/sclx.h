@@ -451,7 +451,7 @@ namespace sclx {
 			const scli::sInfo &Info,
 			eXSLFileHandling XSLFileHandling )
 		{
-			Core_.Init( Upstream );
+			Core_.Init(Upstream, str::Empty);
 			Info_ = &Info;
 			XSLFileHandling_ = XSLFileHandling;
 		}
@@ -478,6 +478,12 @@ namespace sclx {
 		void Execute(const char *Script)
 		{
             return Execute(str::wString(Script));
+		}
+		void BroadcastAction(
+            const char *Action,
+            const char *Id = "")
+		{
+		    Core_.BroadcastAction(str::wString(Action), str::wString(Id), str::Empty);
 		}
 		void Log( const str::dString &Message )
 		{

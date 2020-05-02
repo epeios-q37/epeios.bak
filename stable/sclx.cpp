@@ -90,11 +90,11 @@ namespace {
 
 			strcpy( Buffer, Language );
 		}
-		virtual xdhcmn::cSession *XDHCMNRetrieveSession(void) override
+		virtual xdhcmn::cSession *XDHCMNFetchSessionCallback(void) override
 		{
 			return SCLXRetrieveSession();
 		}
-		virtual void XDHCMNReleaseSession( xdhcmn::cSession *Session ) override
+		virtual void XDHCMNDismissSessionCallback(xdhcmn::cSession *Session) override
 		{
 			return SCLXReleaseSession( Session );
 		}

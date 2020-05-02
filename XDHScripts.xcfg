@@ -18,14 +18,14 @@
 }
         ]]>
       </Script>
-    <Script name="BroadcastMessage_1" Arguments="Message">
+    </xpp:bloc>
+      <Script name="BroadcastAction_1" Arguments="Action,Id">
 		        <![CDATA[
 {
- launchEvent('%Message%|BROADCAST|broadcast||((""))');
+ launchEvent('%Id%|BROADCAST|broadcast||((broadcast|%Action%))');
 }
 		        ]]>
-        </Script>      
-    </xpp:bloc>
+      </Script>      
     <!-- All scripts enclosed in following block are public. -->
     <xpp:bloc>
       <Script name="Execute_1" Arguments="#Script">

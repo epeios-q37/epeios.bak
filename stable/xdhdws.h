@@ -78,6 +78,10 @@ namespace xdhdws {
         {
             return Process(ScriptName,Values,&ReturnValue);
         }
+        void BroadcastAction(
+            const str::dString &Action,
+            const str::dString &Id,
+            const str::dString &Token);
 	};
 }
 
