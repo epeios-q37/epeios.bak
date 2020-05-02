@@ -481,7 +481,7 @@ namespace sclx {
 		}
 		void BroadcastAction(
             const char *Action,
-            const char *Id = "")
+            const char *Id)
 		{
 		    Core_.BroadcastAction(str::wString(Action), str::wString(Id), str::Empty);
 		}
