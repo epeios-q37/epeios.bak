@@ -31,14 +31,17 @@ void xdwsessn::rUpstream_::XDHCMNProcess(
 {
 qRH
     qCBUFFERh Buffer;
+    websck::rFlow Flow;
 qRB
-    Flow_.Write( Script.Convert(Buffer), Script.Amount());
-    Flow_.Commit();
+    Flow.Init(D_(), websck::mWithTerminator);
+
+    Flow.Write( Script.Convert(Buffer), Script.Amount());
+    Flow.Commit();
 
     if ( ReturnedValue != NULL)
-        websck::GetMessage(Flow_, *ReturnedValue);
+        websck::GetMessage(Flow, *ReturnedValue);
 
-    Flow_.Dismiss();
+    Flow.Dismiss();
 qRR
 qRT
 qRE

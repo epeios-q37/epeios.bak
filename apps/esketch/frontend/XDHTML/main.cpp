@@ -67,6 +67,8 @@ void main::Display( core::rSession &Session )
 
 #define A( name ) BASE_ADef( main, name )
 
+str::wString Common_;
+
 namespace {
 	void Submission_(
 		const char *Id,
@@ -83,9 +85,9 @@ namespace {
         else {
             Session.User.ToUpper( Content );
             Session.SetContent( "Pattern", Content );
+            Common_.Init(Content);
+            Session.BroadcastAction("BroadcastTest", "toto");
         }
-
-        Session.BroadcastAction("BroadcastTest", "toto");
 	qRR;
 	qRT;
 	qRE;
@@ -99,7 +101,12 @@ A( Submission )
 
 A( BroadcastTest )
 {
-	Session.AlertB(str::wString(Id));
+    str::wString Output;
+
+    Output.Init();
+
+    Session.SetContent("Output", Common_);
+//	Session.AlertB(str::wString(Id));
 }
 
 A( ShowTestButton )

@@ -28,10 +28,15 @@ void session::sUpstream_::XDHCMNProcess(
     const str::string_ &Script,
     str::dString *ReturnedValue )
 {
-    flw::rRWFlow &Proxy = P_();
+qRH
+    flw::rDressedRWFlow<> Proxy;
+qRB
+    Proxy.Init(P_());
 
     csdcmn::Put(Id_, Proxy);
     csdcmn::Put("Execute_1", Proxy);
+
+    cio::COut << ">>>>>>>" << txf::tab << "'" << Script <<"'" << txf::tab << (int)Id_ << txf::nl << txf::commit;
 
     csdcmn::Put((bso::sU8)(ReturnedValue == NULL ? 0 : 1), Proxy);
     csdcmn::Put((bso::sU8)1,Proxy);
@@ -48,6 +53,9 @@ void session::sUpstream_::XDHCMNProcess(
 
         B_().UnblockGlobal();
     }
+qRR
+qRT
+qRE
 }
 
 void session::rSession::Launch(void)

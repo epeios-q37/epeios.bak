@@ -35,7 +35,7 @@ namespace xdwsessn {
 	{
 	private:
 		str::wString Token_;
-		websck::rFlow Flow_;
+		qRMV(fdr::rRWDriver, D_, Driver_);
 	protected:
 		virtual void XDHCMNProcess(
 			const str::string_ &Script,
@@ -44,16 +44,15 @@ namespace xdwsessn {
 	public:
 		void reset( bso::bool__ P = true )
 		{
-		    tol::reset(Token_, Flow_);
-			Flow_.reset(P);
+		    tol::reset(P, Token_, Driver_);
 		}
 		E_CVDTOR( rUpstream_ );
-		void Init_(
+		void Init(
              fdr::rRWDriver &Driver,
              const str::dString &Token)
 		{
 		    Token_.Init(Token);
-			Flow_.Init(Driver, websck::mWithTerminator);
+			Driver_ = &Driver;
 		}
 	};
 
@@ -74,7 +73,7 @@ namespace xdwsessn {
             const char *Language,
 			const str::dString &Token )	// If empty, FaaS session, else token used for the FaaS session.
  		{
-			Upstream_.Init_(Driver, Token);
+			Upstream_.Init(Driver, Token);
 			Session_.Init(Callback);
 			return Session_.Initialize(Upstream_, Language, Token);
 		}

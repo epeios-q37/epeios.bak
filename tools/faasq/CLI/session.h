@@ -65,7 +65,7 @@ namespace session {
     {
     private:
         qRMV(rBlockers_, B_, Blockers_);
-        qRMV(flw::rRWFlow,P_, Proxy_);
+        qRMV(fdr::rRWDriver, P_, Proxy_);
         sId Id_;
     protected:
         virtual void XDHCMNProcess(
@@ -80,7 +80,7 @@ namespace session {
         }
         E_CVDTOR( sUpstream_ );
         void Init(
-            flw::rRWFlow &Proxy,
+            fdr::rRWDriver &Proxy,
             sId Id,
             rBlockers_ &Blockers)
         {
@@ -125,7 +125,7 @@ namespace session {
 
             Proxy_.Init(ProxyDriver);
             Session_.Init(A_().FetchSessionCallback());
-            Upstream_.Init(Proxy_, Id, Blockers_);
+            Upstream_.Init(ProxyDriver, Id, Blockers_);
             Session_.Initialize(Upstream_, "", str::Empty);
             Handshaked = false;
             Blockers_.Init(Global);

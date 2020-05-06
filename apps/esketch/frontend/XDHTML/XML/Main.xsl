@@ -17,8 +17,9 @@
 							<button data-xdh-onevent="ConnectedTesting" id="TestButton" title="#mainDisplayTestMessage#">#mainTest#</button>
 						</div>
 						<!-- 'data-xdh-content' empty because we don't rely on it (there is only one), but must be present. -->
-						<input id="Pattern" type="text" size="50" data-xdh-onevent="Submission"/>
+						<input id="Pattern" type="text" size="50" data-xdh-onevent="Submission" value="Essai"/>
 						<button title="#mainConvert#" data-xdh-onevent="Submission">#mainOK#</button>
+						<fieldset id="Output"/>
 						<div>
 							<button data-xdh-onevent="UnconnectedTesting" title="#mainDisplayUnconnectedMessage#">#mainUnconnectedTest#</button>
 						</div>

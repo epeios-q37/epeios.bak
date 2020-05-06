@@ -49,6 +49,7 @@ function launchEvent( digest )
 	if ( queryInProgress ) {
 		if (digest !== queryQueue[queryQueue.length - 1])
 			queryQueue.push(digest);
+			console.log("Queued: ", digest);
 	} else {
 		queryInProgress = true;
 		socket.send(digest);
@@ -65,12 +66,14 @@ function connect(token) {
 
     socket.onmessage = function(event) {
 		if ( event.data !== "StandBy" ) {
+			console.log("Executed:", event.data);
 			let result = eval(event.data);
 //			console.log(event.data);
 			
-			if ( ( typeof result !== "undefined" ) && ( typeof result !== "object" ) )	// 'typeof xdh_result !== "object"' == 'xdh_result != null' !!!!
+			if ( ( typeof result !== "undefined" ) && ( typeof result !== "object" ) )	// 'typeof result !== "object"' == 'result != null' !!!!
 				socket.send(result);
 		} else if (queryQueue.length) {
+			console.log("Unqueued:", queryQueue[0]);
 			socket.send(queryQueue.shift());
 		} else
 			queryInProgress = false;
