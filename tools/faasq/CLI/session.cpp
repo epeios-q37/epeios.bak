@@ -24,12 +24,15 @@
 
 using namespace session;
 
+#define LOG cio::COut << __LOC__ << tol::DateAndTime(DT) << txf::nl << txf::commit;
+
 void session::sUpstream_::XDHCMNProcess(
     const str::string_ &Script,
     str::dString *ReturnedValue )
 {
 qRH
     flw::rDressedRWFlow<> Proxy;
+    tol::bDateAndTime DT;
 qRB
     Proxy.Init(P_());
 
@@ -43,16 +46,26 @@ qRB
     csdcmn::Put(Script, Proxy);
     csdcmn::Put((bso::sU8)0, Proxy);
 
+    LOG;
+
     Proxy.Commit();
 
+    LOG;
+
+
     if ( ReturnedValue != NULL) {
+        LOG;
         B_().WaitSelf();
+        LOG;
 
         csdcmn::Get(Proxy, *ReturnedValue);
         Proxy.Dismiss();
 
         B_().UnblockGlobal();
     }
+
+    LOG;
+
 qRR
 qRT
 qRE

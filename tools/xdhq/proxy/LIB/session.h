@@ -28,10 +28,6 @@
 # include "xdhdws.h"
 
 namespace session {
-
-	qMIMICs( bso::sU32, sId_ );
-	qCDEF(sId_, UndefinedId_, bso::U32Max);
-
 	extern csdmnc::rCore Core;
 	extern logq::rFDriver<> LogDriver;
 
@@ -50,10 +46,7 @@ namespace session {
 		eMode_ _Mode_;
 		faaspool::rRWDriver FaaSDriver_;
 		csdmnc::rRWDriver ProdDriver_;
-		struct {
-			sId_ Id;
-			str::wString IP;
-		} Logging_;
+		tht::rBlocker Blocker_;
 		fdr::rRWDriver &D_( void )
 		{
 			switch ( _Mode_ ) {
@@ -80,7 +73,6 @@ namespace session {
 #endif
 
 		}
-		void Log_( const str::dString &Message );
 		void ReportErrorToBackend_(
 			const char *Message,
 			flw::rWFlow &Flow )
@@ -99,8 +91,6 @@ namespace session {
 		{
 			ReportErrorToBackend_( NULL, Flow );
 		}
-		void ReportToFrontend_(const str::dString &HTML);
-		void ReportErrorToFrontend_(const str::dString &Message);
 		bso::bool__ Launch_(
 			const char *Id,
 			const char *Action );
@@ -115,19 +105,16 @@ namespace session {
 	public:
 		void reset( bso::sBool P = true )
 		{
-			tol::reset(P, FaaSDriver_, ProdDriver_);
+			tol::reset(P, Blocker_, FaaSDriver_, ProdDriver_);
 			_Mode_ = m_Undefined;
 			xdhdws::sProxy::reset( P );
-			Logging_.Id = UndefinedId_;
-			Logging_.IP.reset( P );
 		}
 		qCVDTOR( rSession )
 		bso::sBool Init(void)
 		{
-			tol::reset( FaaSDriver_, ProdDriver_ );
+			tol::reset(Blocker_, FaaSDriver_, ProdDriver_);
+			Blocker_.Init();
 			_Mode_ = m_Undefined;
-
-			Logging_.IP.Init();
 
 			// 'xdhdws::sProxy' Will be initialized later.
 

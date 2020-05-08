@@ -7,7 +7,7 @@
 	<xsl:template match="Layout">
 		<span class="vcenter-out">
 			<span class="vcenter-in">
-				<span data-xdh-onevent="mouseleave|HideTestButton">
+				<span data-xdh-onevent_="mouseleave|HideTestButton">
 					<fieldset title="#mainUCConverter#">
 						<legend>#mainConverter#</legend>
 						<div data-xdh-onevent="ShowTestButton">

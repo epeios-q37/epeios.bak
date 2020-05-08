@@ -47,10 +47,12 @@ var socket;
 function launchEvent( digest )
 {
 	if ( queryInProgress ) {
-		if (digest !== queryQueue[queryQueue.length - 1])
-			queryQueue.push(digest);
+		if (digest !== queryQueue[queryQueue.length - 1]) {
 			console.log("Queued: ", digest);
+			queryQueue.push(digest);
+		}
 	} else {
+		console.log("Sent: ", digest);
 		queryInProgress = true;
 		socket.send(digest);
 	}
@@ -75,8 +77,10 @@ function connect(token) {
 		} else if (queryQueue.length) {
 			console.log("Unqueued:", queryQueue[0]);
 			socket.send(queryQueue.shift());
-		} else
+		} else {
+			console.log("Standby !");
 			queryInProgress = false;
+		}
 	};
 	
     socket.onclose = function(event) {

@@ -19,56 +19,51 @@
 
 #include "session.h"
 
+#include "mtk.h"
+
 using namespace session;
 
 csdmnc::rCore session::Core;
 logq::rFDriver<> session::LogDriver;
 
-void session::rSession::Log_( const str::dString &Message )
-{
-qRH;
-    logq::rLogRack<> Log;
-qRB;
-    Log.Init( LogDriver );
-
-    Log << *Logging_.Id;
-
-    if ( Logging_.IP.Amount() != 0 )
-        Log << " (" << Logging_.IP << ")";
-
-    Log << " : " <<  Message;
-qRR;
-qRT;
-qRE;
+namespace {
+	qMIMICs( bso::sU32, sId_ );
+	qCDEF(sId_, UndefinedId_, bso::U32Max);
 }
 
-void session::rSession::ReportToFrontend_(const str::dString &HTML)
-{
-qRH
-    str::wStrings Values;
-qRB
-    Values.Init("Set");
-    Values.Append("");
-    Values.Append(HTML);
-    Values.Append("");
+namespace {
+    void ReportToFrontend_(
+        xdhdws::sProxy &Proxy,
+        const str::dString &HTML)
+    {
+    qRH
+        str::wStrings Values;
+    qRB
+        Values.Init("Set");
+        Values.Append("");
+        Values.Append(HTML);
+        Values.Append("");
 
-    Process("HandleLayout_1", Values);
-qRR
-qRT
-qRE
-}
+        Proxy.Process("HandleLayout_1", Values);
+    qRR
+    qRT
+    qRE
+    }
 
-void session::rSession::ReportErrorToFrontend_(const str::dString &Message)
-{
-qRH
-    str::wStrings Values;
-qRB
-    Values.Init(Message);
+    void ReportErrorToFrontend_(
+        xdhdws::sProxy &Proxy,
+        const str::dString &Message)
+    {
+    qRH
+        str::wStrings Values;
+    qRB
+        Values.Init(Message);
 
-    Process("Alert_1", Values);
-qRR
-qRT
-qRE
+        Proxy.Process("Alert_1", Values);
+    qRR
+    qRT
+    qRE
+    }
 }
 
 namespace {
@@ -131,17 +126,16 @@ namespace {
     }
 }
 
+#define LOG cio::COut << __LOC__ << tol::DateAndTime(DT) << txf::nl << txf::commit;
+
 bso::bool__ session::rSession::Launch_(
     const char *Id,
     const char *Action )
 {
     bso::sBool Return = false;
 qRH;
-    bso::sBool Continue = true;
-    flw::rDressedRWFlow<> Flow;
-    str::wString ScriptName, ReturnValue;
-    str::wStrings Parameters, SplitedReturnValue;
-    eType_ ReturnType = t_Undefined;
+   flw::rDressedWFlow<> Flow;
+    tol::bDateAndTime DT;
 qRB;
     Flow.Init( D_() );
 
@@ -149,59 +143,9 @@ qRB;
     prtcl::Put( Action, Flow );
     Flow.Commit();
 
-
-# define H( name )\
-case c##name##_1:\
-::name##_( Flow, *this );\
-break
-
-    while ( Continue ) {
-        ScriptName.Init();
-        prtcl::Get(Flow,ScriptName);
-
-        Log_( ScriptName );
-
-        if ( ScriptName == "StandBy_1") {
-            Return = true;
-            Continue = false;
-            Flow.Dismiss();
-        } else {
-            ReturnType = GetType_( Flow );
-
-            Parameters.Init();
-            GetParameters_(Flow, Parameters);
-
-            Flow.Dismiss();
-
-            if ( ReturnType == tVoid ) {
-                Process(ScriptName, Parameters);
-            } else {
-                ReturnValue.Init();
-                Process(ScriptName, Parameters, ReturnValue);
-            }
-
-            switch ( ReturnType ) {
-            case tVoid:
-                break;
-            case tString:
-                prtcl::Put(ReturnValue, Flow);
-                Flow.Commit();
-                break;
-            case tStrings:
-                SplitedReturnValue.Init();
-                xdhcmn::FlatSplit(ReturnValue,SplitedReturnValue);
-                prtcl::Put(SplitedReturnValue, Flow);
-                Flow.Commit();
-                break;
-            default:
-                qRGnr();
-                break;
-            }
-        }
-    }
-#undef H
+    Blocker_.Wait();
 qRR;
-    ReportErrorToFrontend_( str::wString("Connection to backend lost!"));
+    ReportErrorToFrontend_(*this, str::wString("Connection to backend lost!"));
 qRT;
 qRE;
     return Return;
@@ -209,6 +153,126 @@ qRE;
 
 namespace {
 	idsq::wIdStore <sId_> Ids_;
+}
+
+namespace {
+    struct sData {
+        fdr::rRWDriver *Driver;
+        xdhdws::sProxy *Proxy;
+        sId_ Id;
+        const str::dString *IP;
+        tht::rBlocker *Blocker;
+    };
+
+    namespace {
+        namespace {
+            void Log_(
+                sId_ Id,
+                const str::dString &IP,
+                const str::dString &Message )
+            {
+            qRH;
+                logq::rLogRack<> Log;
+            qRB;
+                Log.Init( LogDriver );
+
+                Log << *Id;
+
+                if ( IP.Amount() != 0 )
+                    Log << " (" << IP << ")";
+
+                Log << " : " <<  Message;
+            qRR;
+            qRT;
+            qRE;
+            }
+        }
+
+        void Routine_(
+            void *UP,
+            mtk::gBlocker &DataBlocker)
+        {
+            sData &Data = *(sData *)UP;
+            xdhdws::sProxy &Proxy = *Data.Proxy;
+        qRH;
+            sId_ Id = UndefinedId_;
+            flw::rDressedRWFlow<> Flow;
+            str::wString IP, ScriptName, ReturnValue;
+            str::wStrings Parameters, SplitedReturnValue;
+            eType_ ReturnType = t_Undefined;
+            tol::bDateAndTime DT;
+        qRB;
+            fdr::rRWDriver &Driver = *Data.Driver;
+            Id = Data.Id;
+            IP.Init(*Data.IP);
+            tht::rBlocker &Blocker = *Data.Blocker;
+
+            DataBlocker.Release();
+
+            Flow.Init( Driver );
+
+            while ( true ) {
+                ScriptName.Init();
+
+                LOG;
+
+                prtcl::Get(Flow,ScriptName);
+
+                LOG;
+
+                Log_( Id, IP, ScriptName );
+
+                if ( ScriptName == "StandBy_1") {
+                    LOG;
+                    Flow.Dismiss();
+                    Blocker.Unblock();
+                    LOG;
+                } else {
+                    ReturnType = GetType_( Flow );
+
+                    Parameters.Init();
+                    GetParameters_(Flow, Parameters);
+
+                    cio::COut << Parameters(Parameters.First()) << txf::nl << txf::commit;
+
+                    Flow.Dismiss();
+
+                    if ( ReturnType == tVoid ) {
+                        Proxy.Process(ScriptName, Parameters);
+                    } else {
+                        ReturnValue.Init();
+                        Proxy.Process(ScriptName, Parameters, ReturnValue);
+                    }
+
+                    LOG;
+
+                    switch ( ReturnType ) {
+                    case tVoid:
+                        break;
+                    case tString:
+                        prtcl::Put(ReturnValue, Flow);
+                        Flow.Commit();
+                        break;
+                    case tStrings:
+                        SplitedReturnValue.Init();
+                        xdhcmn::FlatSplit(ReturnValue,SplitedReturnValue);
+                        prtcl::Put(SplitedReturnValue, Flow);
+                        Flow.Commit();
+                        break;
+                    default:
+                        qRGnr();
+                        break;
+                    }
+
+                    LOG;
+                }
+            }
+        qRR;
+            ReportErrorToFrontend_(Proxy, str::wString("Connection to backend lost!"));
+        qRT;
+        qRE;
+        }
+    }
 }
 
 bso::sBool session::rSession::XDHCMNInitialize(
@@ -220,9 +284,11 @@ bso::sBool session::rSession::XDHCMNInitialize(
 qRFH;
     flw::rDressedRWFlow<> Flow;
     csdcmn::sVersion Version = csdcmn::UndefinedVersion;
-    str::wString LogMessage;
+    str::wString LogMessage, IP;
+    sId_ Id = UndefinedId_;
+    sData Data;
 qRFB;
-    LogMessage.Init();
+    tol::Init(LogMessage, IP);
 
     if ( Token.Amount() == 0 ) {
         ProdDriver_.Init( Core, fdr::ts_Default );
@@ -234,7 +300,7 @@ qRFB;
 
         FaaSDriver_.Init();
 
-        if ( faaspool::GetConnection( Token, Logging_.IP, FaaSDriver_.GetShared() ) ) {
+        if ( faaspool::GetConnection( Token, IP, FaaSDriver_.GetShared() ) ) {
             _Mode_ = mFaaS;
             Success = true;
         }
@@ -268,8 +334,16 @@ qRFB;
 
         csdcmn::Get( Flow, LogMessage );
 
-        Logging_.Id = Ids_.New();
-        Log_( LogMessage );
+        Id = Ids_.New();
+        Log_(Id, IP, LogMessage);
+
+        Data.Driver = &D_();
+        Data.Proxy = this;
+        Data.IP = &IP;
+        Data.Id = Id;
+        Data.Blocker = &Blocker_;
+
+        mtk::Launch(Routine_, &Data);
 
         xdhdws::sProxy::Init(Callback, Token);	// Has to be last, otherwise, if an error occurs, 'Callback' will be freed twice!
     }
