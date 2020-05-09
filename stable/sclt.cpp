@@ -262,7 +262,7 @@ qRFB
 	ExitValue = main_( Oddities, cio::GetSet( cio::t_Default ) );
 qRFR
 qRFT
-qRFE( sclm::ErrFinal() )
+qRFE(sclm::ErrorDefaultHandling())
 	return ExitValue;
 }
 #endif

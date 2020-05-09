@@ -10,6 +10,18 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2020-05-09:
+
+- CSDBNS, CSDMXC:
+    - [adpt],
+- MTK:
+    - introducing an user defined error default handling,
+- SCLM:
+    - `ErrFinal()` -> `ErrorDefaultHandling()`,
+    - setting the default error handling of the *MTK* module,
+- SCLT:
+    - [adpt],
+
 
 ## 2020-05-01:
 

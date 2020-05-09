@@ -126,7 +126,7 @@ namespace {
     }
 }
 
-#define LOG cio::COut << __LOC__ << tol::DateAndTime(DT) << txf::nl << txf::commit;
+// #define LOG cio::COut << __LOC__ << tol::DateAndTime(DT) << txf::nl << txf::commit;
 
 bso::bool__ session::rSession::Launch_(
     const char *Id,
@@ -135,7 +135,6 @@ bso::bool__ session::rSession::Launch_(
     bso::sBool Return = false;
 qRH;
    flw::rDressedWFlow<> Flow;
-    tol::bDateAndTime DT;
 qRB;
     Flow.Init( D_() );
 
@@ -200,7 +199,6 @@ namespace {
             str::wString IP, ScriptName, ReturnValue;
             str::wStrings Parameters, SplitedReturnValue;
             eType_ ReturnType = t_Undefined;
-            tol::bDateAndTime DT;
         qRB;
             fdr::rRWDriver &Driver = *Data.Driver;
             Id = Data.Id;
@@ -213,27 +211,20 @@ namespace {
 
             while ( true ) {
                 ScriptName.Init();
-
-                LOG;
-
                 prtcl::Get(Flow,ScriptName);
-
-                LOG;
 
                 Log_( Id, IP, ScriptName );
 
                 if ( ScriptName == "StandBy_1") {
-                    LOG;
                     Flow.Dismiss();
                     Blocker.Unblock();
-                    LOG;
                 } else {
                     ReturnType = GetType_( Flow );
 
                     Parameters.Init();
                     GetParameters_(Flow, Parameters);
 
-                    cio::COut << Parameters(Parameters.First()) << txf::nl << txf::commit;
+//                    cio::COut << Parameters(Parameters.First()) << txf::nl << txf::commit;
 
                     Flow.Dismiss();
 
@@ -243,8 +234,6 @@ namespace {
                         ReturnValue.Init();
                         Proxy.Process(ScriptName, Parameters, ReturnValue);
                     }
-
-                    LOG;
 
                     switch ( ReturnType ) {
                     case tVoid:
@@ -263,8 +252,6 @@ namespace {
                         qRGnr();
                         break;
                     }
-
-                    LOG;
                 }
             }
         qRR;
@@ -363,7 +350,7 @@ qRFB;
     Return = Launch_( Id, Action );
 qRFR;
 qRFT;
-qRFE(sclm::ErrFinal());
+qRFE(sclm::ErrorDefaultHandling());
     return Return;
 }
 

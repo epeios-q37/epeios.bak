@@ -24,7 +24,7 @@
 
 using namespace session;
 
-#define LOG cio::COut << __LOC__ << tol::DateAndTime(DT) << txf::nl << txf::commit;
+// #define LOG cio::COut << __LOC__ << tol::DateAndTime(DT) << txf::nl << txf::commit;
 
 void session::sUpstream_::XDHCMNProcess(
     const str::string_ &Script,
@@ -32,40 +32,30 @@ void session::sUpstream_::XDHCMNProcess(
 {
 qRH
     flw::rDressedRWFlow<> Proxy;
-    tol::bDateAndTime DT;
 qRB
     Proxy.Init(P_());
 
     csdcmn::Put(Id_, Proxy);
     csdcmn::Put("Execute_1", Proxy);
 
-    cio::COut << ">>>>>>>" << txf::tab << "'" << Script <<"'" << txf::tab << (int)Id_ << txf::nl << txf::commit;
+//    cio::COut << ">>>>>>>" << txf::tab << "'" << Script <<"'" << txf::tab << (int)Id_ << txf::nl << txf::commit;
 
     csdcmn::Put((bso::sU8)(ReturnedValue == NULL ? 0 : 1), Proxy);
     csdcmn::Put((bso::sU8)1,Proxy);
     csdcmn::Put(Script, Proxy);
     csdcmn::Put((bso::sU8)0, Proxy);
 
-    LOG;
 
     Proxy.Commit();
 
-    LOG;
-
-
     if ( ReturnedValue != NULL) {
-        LOG;
         B_().WaitSelf();
-        LOG;
 
         csdcmn::Get(Proxy, *ReturnedValue);
         Proxy.Dismiss();
 
         B_().UnblockGlobal();
     }
-
-    LOG;
-
 qRR
 qRT
 qRE

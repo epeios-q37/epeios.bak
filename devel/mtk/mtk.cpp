@@ -75,10 +75,10 @@ qRB
 	S.Init( TS.SD );
 
 	S.Lock();	// Unlocked by 'ThreadFunction'.
-	
+
 	if ( ( ID = spawn_thread( ThreadFunction_, NULL, suggest_thread_priority(), &TS ) ) < B_OK )
 		qRSys();
-		
+
 	if ( resume_thread( ID ) != B_OK )
 		qRSys();
 
@@ -122,7 +122,7 @@ qRB
 	TS.R = Routine;
 	TS.UP = UP;
 	TS.MH = mtx::Create();
-	
+
 	mtx::Lock( TS.MH );	// Unlocked by 'ThreadFunction'.
 
 	switch ( pthread_create( &TID, NULL, ThreadFunction_, &TS ) ) {
@@ -151,7 +151,8 @@ qRE
 
 void mtk::RawLaunchAndKill(
 	mtk__routine Routine,
-	void *UP )
+	void *UP,
+	bso::sBool) // See function declaration about this parameter.
 {
 qRH
 qRB
@@ -183,7 +184,7 @@ namespace {
 		bso::uint__ Amount;
 		routine__ Routine;
 	} Common;
-	
+
 	void Create_( void )
 	{
 	qRH
@@ -211,7 +212,7 @@ namespace {
 
 		if ( Common.Store != MTX_INVALID_HANDLER )
 			mtx::Delete( Common.Store );
-			
+
 		if ( Common.Exclusion != MTX_INVALID_HANDLER )
 			mtx::Delete( Common.Exclusion );
 	qRT
@@ -232,82 +233,80 @@ namespace {
 
 			mtx::Lock( Common.Store );
 
-			mtx::Lock( Common.Data );		
+			mtx::Lock( Common.Data );
 		}
-		
+
 		mtx::Delete( Common.Data, true );
 		mtx::Delete( Common.Thread, true );
 		mtx::Delete( Common.Store, true );
 		mtx::Delete( Common.Exclusion, true );
 	}
-	
-	// Les 'ERR...' macros, bien que fonctionnelemy inutiles, facilite le dbogage.
-	// Les exceptions devraient avoir t traites en aval.
-	void Launcher_( void * )
+
+	void Launcher_(void *)
 	{
-	qRH
+    qRFH
 		void *RUP;
 		mtk::routine__ Routine;
-	qRB
+    qRFB
 		mtx::Lock( Common.Data );	// To ensure that data are available.
-	
+
 		do {
 			RUP = Common.UP;
 			Routine = Common.Routine;
-			
+
 			mtx::Unlock( Common.Data );	// I have what I need.
-			
+
 			mtx::Unlock( Common.Store );// Calling function can continue.
-			
+
 			Routine( RUP );	// Launching user function.
-			
+
 			mtx::Lock( Common.Data );	// To ensure that nobody else is accessing data.
-			
+
 			if ( Common.Amount == BSO_UINT_MAX )
 				qRLmt();
-				
+
 			Common.Amount++;// One more thread available.
-			
+
 			mtx::Unlock( Common.Data );	// I'm finished with the data.
-			
+
 			mtx::Lock( Common.Thread );	// Waiting for new work.
-			
+
 			mtx::Lock( Common.Data );	// To ensure that nobody else is accessing data.
-			
+
 			Common.Amount--;// One less thread available.
-			
+
 		} while ( Common.Continue );
-		
+
 		mtx::Unlock( Common.Data );
-		
+
 		mtx::Unlock( Common.Store );
-		
-	qRR
-	qRT
-	qRE
+    qRFR
+    qRFT
+    qRFE(mtk::MTKErrorHandling())
 	}
 }
 
 void mtk::RawLaunchAndKeep(
 	routine__ Routine,
-	void *UP )
+	void *UP,
+	bso::sBool)
 {
 	mtx::Lock( Common.Exclusion );
 
 	mtx::Lock( Common.Data );
-	
+
 	Common.Routine = Routine;
 	Common.UP = UP;
-	
+
 	if ( Common.Amount == 0 )
-		mtk::RawLaunchAndKill( Launcher_, NULL );
+		mtk::RawLaunchAndKill(Launcher_, NULL, true);
 	else
 		mtx::Unlock( Common.Thread );
-		
+
 	mtx::Unlock( Common.Data );
-	
+
 	mtx::Lock( Common.Store );
-	
+
 	mtx::Unlock( Common.Exclusion );
 }
 
@@ -335,19 +334,23 @@ namespace {
 
 	void Routine_( void *UP )
 	{
+    qRFH
 		sData_ &Data = *(sData_ *)UP;
 		gBlocker_ Blocker;
-
+    qRFB
 		Blocker.Init( *Data.Blocker );
 
 		Data.Routine( Data.UP, Blocker );
 
 		// 'Blocker.Blocker_' is no more valid here !!!
+    qRFR
+    qRFT
+    qRFE(mtk::MTKErrorHandling())
 	}
 
 	void Launch_(
 		sXRoutine Routine,
-		void(* Launch)( routine__, void *),
+		void(* Launch)( routine__, void *,bso::sBool),
 		void *UP )
 	{
 	qRH
@@ -359,7 +362,7 @@ namespace {
 		Data.Routine = Routine;
 		Data.UP = UP;
 
-		Launch( Routine_, &Data );
+		Launch(Routine_, &Data, true);
 
 		Blocker.Wait();
 	qRR
@@ -398,7 +401,7 @@ static void WaitAndExit_( void *UP )
 
 void mtk::ForceExit( unsigned long Seconds )
 {
-	RawLaunch( WaitAndExit_, (void *)(intptr_t)Seconds );
+	RawLaunch(WaitAndExit_, (void *)(intptr_t)Seconds,true);
 }
 
 Q37_GCTOR( mtk )

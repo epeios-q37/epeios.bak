@@ -54,7 +54,7 @@ bso::bool__ csdbns::listener___::Init(
 #if defined( CPE_S_POSIX )
 	int Val = ~0;
 
-	if ( setsockopt( Socket_, SOL_SOCKET, SO_REUSEADDR, &Val, sizeof( Val ) ) != 
+	if ( setsockopt( Socket_, SOL_SOCKET, SO_REUSEADDR, &Val, sizeof( Val ) ) !=
 0 )
 		qRSys();
 #endif
@@ -68,7 +68,7 @@ bso::bool__ csdbns::listener___::Init(
 
 	if ( listen( Socket_, Amount ) )
 		qRSys();
-		
+
 	return true;
 }
 
@@ -392,7 +392,7 @@ qRB
 		Continue = false;
 
 	while ( Continue ) {
-		mtk::RawLaunch( Traiter_, &Data );
+		mtk::RawLaunch(Traiter_, &Data, true);
 
 //		SCKClose( Socket );	// Only needed when using processes.
 

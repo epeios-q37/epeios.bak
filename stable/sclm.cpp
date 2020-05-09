@@ -22,6 +22,7 @@
 #include "sclm.h"
 
 #include "dir.h"
+#include "mtk.h"
 
 using namespace sclm;
 
@@ -77,7 +78,7 @@ qRT
 qRE
 }
 
-void sclm::ErrFinal( void )
+void sclm::ErrorDefaultHandling(void)
 {
 	if ( ERRType != err::t_Abort ) {
 		err::buffer__ Buffer;
@@ -1489,6 +1490,8 @@ void sclm::ExitOnSignal( void )
 	signal( SIGABRT, signal_ );
 	signal( SIGINT, signal_ );	// Documentations about this signal not very clear, but this handles Ctrl-C.
 }
+
+void (* mtk::MTKErrorHandling)(void) = sclm::ErrorDefaultHandling;
 
 Q37_GCTOR( sclm )
 {

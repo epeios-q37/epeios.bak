@@ -81,38 +81,47 @@ typedef void (* mtk__routine)(void *);
 # endif
 
 namespace mtk {
+    // Called on final error handling, before quitting the thread.
+    // NOT called with 'Raw!launchAndKill' (hence the reminder).
+    extern void (* MTKErrorHandling)(void); // To override by user.
+
 	typedef void (* routine__)(void *);
-	
+
 	/*f Launch a new thread executing 'Routine', with 'UP' as user pointer.
 	Thread is killed when returning from 'Routine'. */
 	void RawLaunchAndKill(
 		routine__ Routine,
-		void *UP );
-		
+		void *UP,
+		bso::sBool Reminder );  // Useless parameter, only as reminder
+                                // that there is no default final error handling
+                                // for thread launched with this function.
+
 	/*f Launch a new thread executing 'Routine', with 'UP' as user pointer.
 	Thread is NOI killed when returning from 'Routine', and reused if available
 	at next call of this function. */
 	void RawLaunchAndKeep(
 		routine__ Routine,
-		void *UP );
+		void *UP,
+		bso::sBool = true);    // To be like 'RawLaunchAndKill(…)'; makes some thins easier.
 
 
 	//f Launch a new thread executing 'Routine', with 'UP' as user pointer.
 	inline void RawLaunch(
 		routine__ Routine,
-		void *UP )
+		void *UP,
+		bso::sBool) // Same as for `RawLaunchAndKill(…)`.
 	{
 #ifdef MTK__KILL
-		RawLaunchAndKill( Routine, UP );
+		RawLaunchAndKill(Routine, UP, true);
 #elif defined( MTK__KEEP )
-		RawLaunchAndKeep( Routine, UP );
+		RawLaunchAndKeep(Routine, UP, true );
 #else
 #	error "None of 'MTK_KEEP' or 'MTK_KILL' are defined."
 #endif
 	}
 
 	/*f Force the program to exit after 'Seconds' second.
-	Usefull to force a server to exit to obtain the profiling file. */
+	Useful to force a server to exit to obtain the profiling file. */
 	void ForceExit( unsigned long Seconds );
 
 	using tht::thread_id__;

@@ -12,6 +12,7 @@
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 	Affero General Public License for more details.
+	Affero General Public License for more details.
 
 	You should have received a copy of the GNU Affero General Public License
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
@@ -75,7 +76,7 @@ namespace sclm {
 	bso::sBool DisplaySCLBasePendingError( txf::sWFlow &Flow = cio::CErr );
 
 	// To use as 'action' parameter for the 'qRFE(...)' macro to display the file/line of an error.
-	void ErrFinal( void );
+	void ErrorDefaultHandling(void);
 
 	// Simplifies the use of below variadics.
 	void ReportAndAbort_( const lcl::meaning_ &Meaning );

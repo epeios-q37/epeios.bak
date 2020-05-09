@@ -81,7 +81,7 @@ void csdmxc::rCore::Ping( void )
 	Lock_( MainMutex_ );
 
 	stkbch::sRow Row = UPs.First();
-	
+
 	while ( Row != qNIL )
 	{
 		::Ping_( UPs( Row ), Ping_.Delay, C_() );
@@ -120,7 +120,7 @@ void csdmxc::rCore::KeepAlive_( time_t Delay )
 	if ( Delay <= CSDMXC_PING_DELAY )
 		qRFwk();
 
-	mtk::RawLaunch( ::KeepAlive_, this );
+	mtk::RawLaunch(::KeepAlive_, this, true);
 #else
 	if ( Delay != 0 )
 		qRFwk();
@@ -134,7 +134,7 @@ qRH
 qRB
 	while ( UPs.Amount() != 0 )
 	{
-		Flow.Init( C_().ExtractDriver( UPs.Top() ) );	
+		Flow.Init( C_().ExtractDriver( UPs.Top() ) );
 		PutId( CSDMXB_CLOSE, Flow );
 		Flow.Commit();
 		C_().Release( UPs.Pop() );

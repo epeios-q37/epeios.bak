@@ -555,7 +555,7 @@ namespace {
 		NewConnexion_( Data, Blocker );
 	qRFR;
 	qRFT;
-	qRFE( sclm::ErrFinal() );
+	qRFE(sclm::ErrorDefaultHandling());
 	}
 
 	void ListeningRoutine_( void * )
@@ -566,11 +566,11 @@ namespace {
 		while ( true ) {
 			Data.Socket = Listener_.GetConnection( Data.IP );
 
-			mtk::Launch( NewConnexionRoutine_, Data );
+			mtk::Launch(NewConnexionRoutine_, Data);
 		}
 	qRFR;
 	qRFT;
-	qRFE( sclm::ErrFinal() );
+	qRFE(sclm::ErrorDefaultHandling());
 	}
 }
 
@@ -582,7 +582,7 @@ qRB;
 	if ( (Service = sclm::OGetU16( registry::parameter::faas::Service, csdbns::Undefined ) ) != csdbns::Undefined ) {
 		Listener_.Init( Service );
 
-		mtk::RawLaunch( ListeningRoutine_, NULL );
+		mtk::RawLaunch(ListeningRoutine_, NULL, true);
 	}
 qRR;
 qRT;
