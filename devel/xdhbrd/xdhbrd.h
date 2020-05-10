@@ -33,10 +33,8 @@
 # include "xdhcmn.h"
 
 namespace xdhbrd {
-    qROW(CRow_);    // Callback row.
+    using xdhcmn::sRow;
     qROW(TRow_); // Token row.
-
-    typedef sCRow_ sRow;    // For user.
 
     qENUM(State_) {
         sAlive,

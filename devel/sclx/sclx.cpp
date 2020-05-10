@@ -248,10 +248,9 @@ qRH
 	str::string CloseText;
 qRB
 	CloseText.Init();
-//	scll::GetTranslation( SCLX_NAME "_CloseText", Language, CloseText );
+	scll::GetTranslation( SCLX_NAME "_CloseText", Language, CloseText );
 
-//	Process_("PrettyAlert_1", NULL, XML, XSL, Title, CloseText );
-    Process_("Alert_1", &CloseText, XML);
+	Process_("PrettyAlert_1", NULL, XML, XSL, Title, CloseText );
 qRR
 qRT
 qRE
@@ -261,7 +260,7 @@ void sclx::sProxy::Alert_(
 	const str::dString &RawMessage,
 	const str::dString &RawTitle,
 	const char *MessageLanguage,	// If != 'NULL', 'Message' is translated, otherwise it is displayed as is.
-	const char *CloseTextLanguage )
+	const char *CloseTextLanguage ) // Apart, because 'RawMessage' and 'RawTitle' can be already translated.
 {
 qRH
 	str::string XML, XSL;
@@ -286,15 +285,11 @@ qRE
 void sclx::sProxy::AlertB( const str::dString & RawMessage )
 {
 qRH;
-	str::wString Script;
+	str::wString Dummy;
 qRB;
-	Script.Init( "alert('" );
+    Dummy.Init();
 
-	xdhcmn::Escape( RawMessage, Script, '\'' );
-
-	Script.Append( "');" );
-
-	Execute( Script );
+	Process_("Alert_1", &Dummy, RawMessage);    // Wait an unused return value to wait the dismissing of the dialog box.
 qRR;
 qRT;
 qRE;

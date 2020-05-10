@@ -28,7 +28,7 @@
 
 // X(SL) DH(TML) DowNStream
 
-# include "xdhbrd.h"
+# include "xdhcmn.h"
 
 # include "err.h"
 # include "tol.h"
@@ -40,18 +40,16 @@ namespace xdhdws {
 	{
 	private:
 		Q37_MRMDF( xdhcmn::cUpstream, C_, Callback_ );
-        xdhbrd::rXCallback XCallback_;
-		xdhbrd::sRow CallbackRow_;
+		xdhcmn::sRow Row_;
     public:
 		void reset( bso::bool__ P = true )
 		{
 		    if ( P )
-                if ( CallbackRow_ != qNIL )
-                    xdhbrd::Remove(CallbackRow_);
+                if ( Row_ != qNIL )
+                    C_().BroadcastRemove(Row_);
 
-            XCallback_.reset(P);
             Callback_ = NULL;
-            CallbackRow_ = qNIL;
+            Row_ = qNIL;
 		}
 		E_CVDTOR( sProxy );
 		void Init(
@@ -61,7 +59,7 @@ namespace xdhdws {
 			reset();
 
 			Callback_ = &Callback;
-			CallbackRow_ = xdhbrd::InitAndAdd(Callback, XCallback_, Token);
+			Row_ = C_().BroadcastInit(Token);
 		}
 		void Process(
             const char *ScriptName,

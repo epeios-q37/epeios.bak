@@ -42,6 +42,8 @@
 # define XDHCMN_RETRIEVE_FUNCTION_NAME		XDHCMNRetrieve
 
 namespace xdhcmn {
+    qROW(Row); // Callback row.
+
 	qMIMICs( bso::sU16, sIndex );	// For the 'CSS' rules.
 
 	static E_CDEF( char *, CloseActionLabel, "Q37Close" );
@@ -63,7 +65,11 @@ namespace xdhcmn {
 			const str::dString &Script,
 			str::dString *ReturnedValue ) = 0;
         // Broadcast 'Id' (which can't be empty) to all clients.
-//        virtual void XDHCMNBroadcast(const str::dString &Id) = 0;
+        virtual sRow XDHCMNBroadcastInit(const str::dString &Token) = 0;
+        virtual void XDHCMNBroadcast(
+            const str::dString &Script,
+            const str::dString &Token) = 0;
+        virtual void XDHCMNBroadcastRemove(sRow Row) = 0;
 	public:
 		qCALLBACK( Upstream );
 		void Process(
@@ -72,11 +78,21 @@ namespace xdhcmn {
 		{
             return XDHCMNProcess(Script, ReturnValue);
 		}
-/*		void Braodcast(const str::dString &Id)
-		{
-		    return XDHCMNBroadcast(Id);
-		}
-	*/};
+        void Broadcast(
+            const str::dString &Script,
+            const str::dString &Token)
+        {
+            return XDHCMNBroadcast(Script, Token);
+        }
+        sRow BroadcastInit(const str::dString &Token)
+        {
+            return XDHCMNBroadcastInit(Token);
+        }
+        void BroadcastRemove(sRow Row)
+        {
+            return XDHCMNBroadcastRemove(Row);
+        }
+	};
 
 	class cSession
 	{

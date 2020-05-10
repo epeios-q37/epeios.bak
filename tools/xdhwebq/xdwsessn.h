@@ -22,6 +22,8 @@
 
 # include "xdwrgstry.h"
 
+# include "xdhbrd.h"
+
 # include "xdhups.h"
 # include "websck.h"
 
@@ -36,11 +38,22 @@ namespace xdwsessn {
 	private:
 		str::wString Token_;
 		qRMV(fdr::rRWDriver, D_, Driver_);
+        xdhbrd::rXCallback XCallback_;
 	protected:
 		virtual void XDHCMNProcess(
 			const str::string_ &Script,
 			str::dString *ReturnedValue ) override;
-//        virtual void XDHCMNBroadcast(const str::dString &Id) override;
+        virtual xdhcmn::sRow XDHCMNBroadcastInit(const str::dString &Token) override
+        {
+            return xdhbrd::InitAndAdd(*this, XCallback_, Token);
+        }
+        virtual void XDHCMNBroadcast(
+            const str::dString &Script,
+            const str::dString &Token) override;
+        virtual void XDHCMNBroadcastRemove(xdhcmn::sRow Row) override
+        {
+            xdhbrd::Remove(Row);
+        }
 	public:
 		void reset( bso::bool__ P = true )
 		{

@@ -28,6 +28,8 @@
 using namespace xdhbrd;
 
 namespace {
+    typedef sRow sCRow_;
+
     qCDEF(rMutex_, UndefinedMutex_, mtx::Undefined);
 
     void Hire_(

@@ -532,7 +532,7 @@ qRB
     Script.Init();
     GetScript_("BroadcastAction_1", Arguments, Script);
 
-    xdhbrd::Broadcast(Script,Token);
+    C_().Broadcast(Script, Token);
 qRR
 qRT
 qRE

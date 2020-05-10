@@ -126,10 +126,14 @@ A( ConnectedTesting )
 
 A( UnconnectedTesting )
 {
+    Session.AlertB(str::wString("Alerte de base !"));
+
+#if 0
 	if ( Session.IsConnected() )
 		Session.AlertT("ConnectedTestMessage", "TestMessageTitle");
 	else
 		Session.AlertT("UnconnectedTestMessage", "TestMessageTitle");
+#endif
 }
 
 

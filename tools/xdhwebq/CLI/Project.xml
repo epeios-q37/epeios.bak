@@ -40,6 +40,7 @@
 				<xpp:expand select="SCL"/>
 			</Modules>
 			<Modules Group="XDH">
+				<Module>xdhbrd</Module>
 				<Module>xdhcmn</Module>
 				<Module>xdhups</Module>
 				<Module>xdhutl</Module>
