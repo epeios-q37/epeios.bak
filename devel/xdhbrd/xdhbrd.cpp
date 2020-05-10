@@ -54,6 +54,7 @@ void xdhbrd::rXCallback::reset(bso::sBool P)
         if ( Mutex_ != UndefinedMutex_ )
             Mutex_ = mtx::Create();
 
+    Mutex_ = UndefinedMutex_;
     Callback_ =  NULL;
     TRow_ = qNIL;
     State_ = s_Undefined;
@@ -247,8 +248,9 @@ namespace {
     }
 }
 
-void xdhbrd::Create(const str::dString &Token)
+sTRow_ xdhbrd::Create(const str::dString &Token)
 {
+    sTRow_ TRow = qNIL;
 qRH
     rXCRows_ *XCRows = NULL;
     hGuardian_ Guardian;
@@ -265,12 +267,13 @@ qRB
     if ( Search_(Token, Sets, true) != qNIL )
         qRGnr();
 
-    Sets.Add(XCRows);
+    TRow = Sets.Add(XCRows);
 qRR
     if ( XCRows != NULL )
         delete XCRows;
 qRT
 qRE
+    return TRow;
 }
 
 sRow xdhbrd::InitAndAdd(

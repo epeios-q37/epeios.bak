@@ -57,7 +57,7 @@ namespace xdwsessn {
 	public:
 		void reset( bso::bool__ P = true )
 		{
-		    tol::reset(P, Token_, Driver_);
+		    tol::reset(P, Token_, Driver_, XCallback_);
 		}
 		E_CVDTOR( rUpstream_ );
 		void Init(
@@ -66,6 +66,7 @@ namespace xdwsessn {
 		{
 		    Token_.Init(Token);
 			Driver_ = &Driver;
+			// XCallback_.Init(*this, xdhbrd::Create(Token));   // 'XCallback_" will be initialized later.
 		}
 	};
 
