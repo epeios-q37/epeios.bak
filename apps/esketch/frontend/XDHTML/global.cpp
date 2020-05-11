@@ -32,7 +32,7 @@ qCDEF(char *, XSLAffix_, "Global" );
 A( OnNewSession )
 {
 	switch ( Mode ) {
-	case xdhcmn::mMonoUser:
+	case xdhcdc::mMonoUser:
 		switch ( sclf::HandleProject( esketchxdh::Info ) ) {
 		case sclf::phNone:
 			::prolog::Display( Session );
@@ -52,7 +52,7 @@ A( OnNewSession )
 			break;
 		}
 		break;
-	case xdhcmn::mMultiUser:
+	case xdhcdc::mMultiUser:
         Session.SetBackendVisibility(sclx::bvHide);
         ::login::Display( Session );
 		break;

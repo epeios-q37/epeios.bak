@@ -63,7 +63,7 @@ namespace {
 
 BASE_AD( OnNewSession_ );
 
-void core::rCore::Init( xdhcmn::eMode Mode )
+void core::rCore::Init( xdhcdc::eMode Mode )
 {
 	ActionHelperCallback_.Init();
 	sclx::rCore<rSession>::Init( Mode, global::OnNewSession, ActionHelperCallback_ );

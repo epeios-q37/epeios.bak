@@ -221,7 +221,7 @@ namespace {
         template <typename type> void BaseProcess_(
             const type &ScriptName,
             const str::dStrings &Values,
-            xdhcmn::cUpstream &Callback,
+            xdhcuc::cSingle &Callback,
             str::dString *ReturnValue = NULL)
         {
         qRH
@@ -243,7 +243,7 @@ namespace {
             void ExecuteAndGetDigest_(
                 const char *ScriptName,
                 const str::dStrings &Values,
-                xdhcmn::cUpstream &Callback,
+                xdhcuc::cSingle &Callback,
                 xdhcmn::digest_ &Digest )
             {
             qRH
@@ -309,7 +309,7 @@ namespace {
 
             void HandleEvents_(
                 const xdhcmn::digest_ &Descriptions,
-                xdhcmn::cUpstream &Callback )
+                xdhcuc::cSingle &Callback )
             {
             qRH
                 str::strings Ids;
@@ -411,7 +411,7 @@ namespace {
 
             void HandleWidgets_(
                 const xdhcmn::digest_ &Digest,
-                xdhcmn::cUpstream &Callback )
+                xdhcuc::cSingle &Callback )
             {
             qRH
                 str::wStrings Ids, Types, ParametersSets, ContentRetrievingMethods, FocusingMethods, SelectionMethods, Arguments;
@@ -443,7 +443,7 @@ namespace {
         void HandleLayout_(
             const char *ScriptName,
             const str::dStrings &Values,
-            xdhcmn::cUpstream &Callback )
+            xdhcuc::cSingle &Callback )
         {
         qRH
             xdhcmn::digest Digests, EventsDigest, WidgetsDigest;
@@ -491,7 +491,7 @@ namespace {
     template <typename type> void Process_(
         const type &ScriptName,
         const str::dStrings &Values,
-        xdhcmn::cUpstream &Callback,
+        xdhcuc::cSingle &Callback,
         str::dString *ReturnValue)
     {
         if ( IsEqual_(ScriptName, HandleLayoutScriptName_) )

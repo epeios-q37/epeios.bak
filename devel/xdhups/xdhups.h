@@ -28,7 +28,7 @@
 
 // X(SL)/DH(TML) UPStream
 
-# include "xdhcmn.h"
+# include "xdhcdc.h"
 
 # include "err.h"
 # include "dlbrry.h"
@@ -37,30 +37,30 @@ namespace xdhups {
 	typedef ntvstr::char__ nchar__;
 	typedef ntvstr::string___ nstring___;
 
-	typedef xdhcmn::cSession cSession_;
+	typedef xdhcdc::cSingle cDownstream_;
 
 	class sSession
 	{
 	private:
-		Q37_MRMDF( cSession_, C_, Callback_ );
+		Q37_MRMDF( cDownstream_, C_, Callback_ );
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			Callback_ = NULL;
 		}
 		E_CVDTOR( sSession );
-		void Init( cSession_ *Callback )
+		void Init( cDownstream_ *Callback )
 		{
 			reset();
 
 			Callback_ = Callback;
 		}
-		cSession_ *Callback( void ) const
+		cDownstream_ *Callback( void ) const
 		{
 			return Callback_;
 		}
 		bso::sBool Initialize(
-			xdhcmn::cUpstream &Callback,
+			xdhcuc::cSingle &Callback,
 			const char *Language,
 			const str::dString &Token )	// If empty, PROD session, else token used for the DEMO session.
 		{
@@ -78,7 +78,7 @@ namespace xdhups {
     {
     private:
 		dlbrry::dynamic_library___ Library_;
-		Q37_MRMDF( xdhcmn::cDownstream, C_, Callback_ );
+		Q37_MRMDF( xdhcdc::cGlobal, C_, Callback_ );
 		TOL_CBUFFER___ Buffer_;
     public:
         void reset( bso::bool__ P = true )
@@ -88,21 +88,21 @@ namespace xdhups {
         }
         E_CDTOR( rAgent );
 		bso::bool__ Init(
-			xdhcmn::eMode Mode,
+			xdhcdc::eMode Mode,
 			const str::string_ &ModuleFileName,
 			dlbrry::eNormalization Normalization,	// Usually 'dlbrry::n_Default', except when used for 'Node.js' (set to 'dlbrry::nExtOnly').
 			const char *Identification );
-		cSession_ *FetchSessionCallback(void)
+		cDownstream_ *FetchCallback(void)
 		{
-			return C_().FetchSessionCallback();
+			return C_().FetchCallback();
 		}
 		const char *BaseLanguage( TOL_CBUFFER___ &Buffer ) const
 		{
 			return C_().BaseLanguage( Buffer );
 		}
-		void DismissSessionCallback( cSession_ *Callback )
+		void DismissCallback( cDownstream_ *Callback )
 		{
-			return C_().DismissSessionCallback(Callback);
+			return C_().DismissCallback(Callback);
 		}
 		const str::dString &Info( str::dString &Info )
 		{

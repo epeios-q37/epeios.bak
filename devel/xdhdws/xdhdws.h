@@ -28,7 +28,7 @@
 
 // X(SL) DH(TML) DowNStream
 
-# include "xdhcmn.h"
+# include "xdhcuc.h"
 
 # include "err.h"
 # include "tol.h"
@@ -39,8 +39,8 @@ namespace xdhdws {
 	class sProxy
 	{
 	private:
-		Q37_MRMDF( xdhcmn::cUpstream, C_, Callback_ );
-		xdhcmn::sRow Row_;
+		Q37_MRMDF( xdhcuc::cSingle, C_, Callback_ );
+		xdhcuc::sRow Row_;
     public:
 		void reset( bso::bool__ P = true )
 		{
@@ -53,7 +53,7 @@ namespace xdhdws {
 		}
 		E_CVDTOR( sProxy );
 		void Init(
-            xdhcmn::cUpstream &Callback,
+            xdhcuc::cSingle &Callback,
             const str::dString &Token)
 		{
 			reset();

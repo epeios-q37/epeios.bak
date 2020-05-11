@@ -25,7 +25,7 @@
 
 using namespace xdwsessn;
 
-void xdwsessn::rUpstream_::XDHCMNProcess(
+void xdwsessn::rUpstream_::XDHCUCProcess(
 	const str::string_ &Script,
 	str::dString *ReturnedValue )
 {

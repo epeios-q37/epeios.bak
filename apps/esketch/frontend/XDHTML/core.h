@@ -65,7 +65,7 @@ namespace core {
 			ActionHelperCallback_.reset( P );
 		}
 		E_CDTOR( rCore );
-		void Init( xdhcmn::eMode Mode );
+		void Init( xdhcdc::eMode Mode );
 	};
 
 	extern rCore Core;

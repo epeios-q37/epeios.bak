@@ -30,10 +30,10 @@
 
 # include "fdr.h"
 # include "sdr.h"
-# include "xdhcmn.h"
+# include "xdhcuc.h"
 
 namespace xdhbrd {
-    using xdhcmn::sRow;
+    using xdhcuc::sRow;
     qROW(TRow_); // Token row.
 
     qENUM(State_) {
@@ -49,7 +49,7 @@ namespace xdhbrd {
     struct rXCallback
     {
     private:
-        qRMV(xdhcmn::cUpstream, C_, Callback_);
+        qRMV(xdhcuc::cSingle, C_, Callback_);
         rMutex_ Mutex_;
         sTRow_ TRow_;
         eState_ State_;
@@ -57,7 +57,7 @@ namespace xdhbrd {
         void reset(bso::sBool P = true);
         qCDTOR(rXCallback);
         void Init(
-            xdhcmn::cUpstream &Callback,
+            xdhcuc::cSingle &Callback,
             sTRow_ TRow);
         sTRow_ Deactivate(hGuardian_ &Guardian);
         void Send(
@@ -68,7 +68,7 @@ namespace xdhbrd {
     sTRow_ Create(const str::dString &Token);
 
     sRow InitAndAdd(
-        xdhcmn::cUpstream &Callback,
+        xdhcuc::cSingle &Callback,
         rXCallback &XCallback,
         const str::dString &Token);
 

@@ -41,7 +41,9 @@
 			</Modules>
 			<Modules Group="XDH">
 				<Module>xdhbrd</Module>
+				<Module>xdhcdc</Module>
 				<Module>xdhcmn</Module>
+				<Module>xdhcuc</Module>
 				<Module>xdhups</Module>
 				<Module>xdhutl</Module>
 			</Modules>

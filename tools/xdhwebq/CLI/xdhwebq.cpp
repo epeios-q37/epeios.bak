@@ -163,9 +163,9 @@ namespace {
                 websck::rFlow Flow;
                 xdwsessn::rSession Session;
                 str::wString Digest, Script;
-                xdhcmn::cSession *Callback = NULL;
+                xdhcdc::cSingle *Callback = NULL;
             qRB
-                Callback = Agent.FetchSessionCallback();
+                Callback = Agent.FetchCallback();
 
                 if ( Callback == NULL )
                     qRGnr();
@@ -193,7 +193,7 @@ namespace {
             qRR
             qRT
                 if ( Callback != NULL )
-                    Agent.DismissSessionCallback(Callback);
+                    Agent.DismissCallback(Callback);
             qRE
             }
 		}
@@ -305,7 +305,7 @@ namespace {
 		ModuleFilename.Init();
 		sclm::MGetValue( registry::parameter::ModuleFilename, ModuleFilename );
 
-		Agent.Init( xdhcmn::mMultiUser, ModuleFilename, dlbrry::n_Default, Identification.Convert( Buffer ) );
+		Agent.Init( xdhcdc::mMultiUser, ModuleFilename, dlbrry::n_Default, Identification.Convert( Buffer ) );
 
 		Callback.Init( Agent );
 

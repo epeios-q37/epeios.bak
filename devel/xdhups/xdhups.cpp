@@ -23,17 +23,17 @@
 
 using namespace xdhups;
 
-extern "C" typedef xdhcmn::retrieve retrieve;
+extern "C" typedef xdhcdc::retrieve retrieve;
 
 bso::bool__ xdhups::rAgent::Init(
-	xdhcmn::eMode Mode,
+	xdhcdc::eMode Mode,
 	const str::string_ &ModuleFileName,
 	dlbrry::eNormalization Normalization,
 	const char *Identification )
 {
 	bso::bool__ Success = false;
 qRH
-	xdhcmn::shared_data__ Data;
+	xdhcdc::sData Data;
 	fnm::name___ Location;
 	TOL_CBUFFER___ Buffer;
 qRB

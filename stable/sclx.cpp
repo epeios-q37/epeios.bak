@@ -61,13 +61,13 @@ const char *sclx::GetLauncher( void )
 
 // Bien que dfinit dans un '.cpp', et propre  ce '.cpp', VC++ se mlange les pinceaux avec le 'callback__' dfinit dans 'scll.cpp', d'o le 'namespace'.
 namespace {
-	typedef xdhcmn::cDownstream cDownstream_;
+	typedef xdhcdc::cGlobal cDownstream_;
 
 	class sDownstream
 	: public cDownstream_
 	{
 	protected:
-		virtual void XDHCMNInitialize( const xdhcmn::shared_data__ &Data ) override
+		virtual void XDHCDCInitialize( const xdhcdc::sData &Data ) override
 		{
 			if ( Launcher_ != NULL )
 				qRFwk();
@@ -79,7 +79,7 @@ namespace {
 				SCLXInitialization( Data.Mode() );
 			}
 		}
-		virtual void XDHCMNBaseLanguage( TOL_CBUFFER___ &Buffer ) override
+		virtual void XDHCDCBaseLanguage( TOL_CBUFFER___ &Buffer ) override
 		{
 			const char *Language = sclm::GetBaseLanguage();
 
@@ -90,19 +90,19 @@ namespace {
 
 			strcpy( Buffer, Language );
 		}
-		virtual xdhcmn::cSession *XDHCMNFetchSessionCallback(void) override
+		virtual xdhcdc::cSingle *XDHCDCFetchCallback(void) override
 		{
-			return SCLXRetrieveSession();
+			return SCLXFetchCallback();
 		}
-		virtual void XDHCMNDismissSessionCallback(xdhcmn::cSession *Session) override
+		virtual void XDHCDCDismissCallback(xdhcdc::cSingle *Callback) override
 		{
-			return SCLXReleaseSession( Session );
+			return SCLXDismissCallback(Callback);
 		}
-		const scli::sInfo &XDHCMNGetInfo( void ) override
+		const scli::sInfo &XDHCDCGetInfo( void ) override
 		{
 			return SCLXInfo();
 		}
-		bso::sBool XDHCMNGetHead(
+		bso::sBool XDHCDCGetHead(
 			const str::dString &Token,
 			str::dString &Head,
 			qRPN ) override
@@ -128,9 +128,9 @@ static inline void DoNothing_( void )
 
 #define DEF( name, function ) extern "C" FUNCTION_SPEC function name
 
-DEF( XDHCMN_RETRIEVE_FUNCTION_NAME, xdhcmn::retrieve );
+DEF( XDHCDC_RETRIEVE_FUNCTION_NAME, xdhcdc::retrieve );
 
-xdhcmn::cDownstream *XDHCMNRetrieve( void )
+xdhcdc::cGlobal *XDHCDCRetrieve( void )
 {
 	sDownstream *Callback = NULL;
 qRFH

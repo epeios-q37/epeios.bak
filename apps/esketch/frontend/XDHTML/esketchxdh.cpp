@@ -36,14 +36,14 @@ const scli::sInfo &sclx::SCLXInfo( void )
 	return esketchxdh::Info;
 }
 
-void sclx::SCLXInitialization( xdhcmn::eMode Mode )
+void sclx::SCLXInitialization( xdhcdc::eMode Mode )
 {
 qRH
 	sclf::rFeatures Features;
 qRB
 	core::Core.Init( Mode );
 
-	if ( Mode == xdhcmn::mMultiUser ) {
+	if ( Mode == xdhcdc::mMultiUser ) {
 		Features.Init();
 		sclf::GuessBackendFeatures( Features );
 		core::Kernel().Init( Features, plgn::EmptyAbstracts );
@@ -53,7 +53,7 @@ qRT
 qRE
 }
 
-xdhcmn::cSession *sclx::SCLXRetrieveSession(void)
+xdhcdc::cSingle *sclx::SCLXFetchCallback(void)
 {
     core::rSession *Session = new core::rSession;
 
@@ -67,7 +67,7 @@ xdhcmn::cSession *sclx::SCLXRetrieveSession(void)
 	return Session;
 }
 
-void sclx::SCLXReleaseSession( xdhcmn::cSession *Callback )
+void sclx::SCLXDismissCallback( xdhcdc::cSingle *Callback )
 {
 	if ( Callback == NULL )
 		qRGnr();

@@ -30,7 +30,7 @@
 namespace xdwsessn {
     class rSession; // Predeclaration.
 
-    typedef xdhcmn::cUpstream cUpstream_;
+    typedef xdhcuc::cSingle cUpstream_;
 
 	class rUpstream_
 	: public cUpstream_
@@ -40,20 +40,20 @@ namespace xdwsessn {
 		qRMV(fdr::rRWDriver, D_, Driver_);
         xdhbrd::rXCallback XCallback_;
 	protected:
-		virtual void XDHCMNProcess(
+		virtual void XDHCUCProcess(
 			const str::string_ &Script,
 			str::dString *ReturnedValue ) override;
-        virtual xdhcmn::sRow XDHCMNBroadcastInit(const str::dString &Token) override
+        virtual xdhcuc::sRow XDHCUCBroadcastInit(const str::dString &Token) override
         {
             return xdhbrd::InitAndAdd(*this, XCallback_, Token);
         }
-        virtual void XDHCMNBroadcast(
+        virtual void XDHCUCBroadcast(
             const str::dString &Script,
             const str::dString &Token) override
         {
             xdhbrd::Broadcast(Script, Token);
         }
-        virtual void XDHCMNBroadcastRemove(xdhcmn::sRow Row) override
+        virtual void XDHCUCBroadcastRemove(xdhcuc::sRow Row) override
         {
             xdhbrd::Remove(Row);
         }
@@ -85,7 +85,7 @@ namespace xdwsessn {
 		}
 		E_CDTOR( rSession );
 		bso::sBool Init(
-            xdhcmn::cSession *Callback,
+            xdhcdc::cSingle *Callback,
             fdr::rRWDriver &Driver,
             const char *Language,
 			const str::dString &Token )	// If empty, FaaS session, else token used for the FaaS session.

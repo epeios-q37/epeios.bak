@@ -35,6 +35,7 @@
 # include "fblfrd.h"
 # include "rgstry.h"
 # include "tol.h"
+# include "xdhcdc.h"
 # include "xdhcmn.h"
 # include "xdhdws.h"
 
@@ -68,13 +69,13 @@ namespace sclx {
 		virtual void SCLXLaunch(
 			session &Session,
 			const char *Id,
-			xdhcmn::eMode Mode ) = 0;
+			xdhcdc::eMode Mode ) = 0;
 	public:
 		qCALLBACK( Action );
 		void Launch(
 			session &Session,
 			const char *Id,
-			xdhcmn::eMode Mode )
+			xdhcdc::eMode Mode )
 		{
 			return SCLXLaunch( Session, Id, Mode );
 		}
@@ -98,7 +99,7 @@ namespace sclx {
 		virtual void SCLXLaunch(\
 			session &Session,\
 			const char *Id,\
-			xdhcmn::eMode Mode ) override;\
+			xdhcdc::eMode Mode ) override;\
 	public:\
 		static const char *Name;\
 	} name
@@ -109,7 +110,7 @@ namespace sclx {
 	void owner::s##name::SCLXLaunch(\
 		session &Session,\
 		const char *Id,\
-		xdhcmn::eMode Mode )
+		xdhcdc::eMode Mode )
 
 	E_ROW( crow__ );	// callback row;
 
@@ -169,7 +170,7 @@ namespace sclx {
 			session &Session,
 			const char *Id,
 			const char *Action,
-			xdhcmn::eMode Mode )
+			xdhcdc::eMode Mode )
 		{
 			cAction<session> *Callback = _Get( str::string( Action ) );
 
@@ -255,7 +256,7 @@ namespace sclx {
 
 	typedef fblfrd::cReporting cReporting_;
 
-	typedef xdhcmn::cSession cSession_;
+	typedef xdhcdc::cSingle cDownstream_;
 
 	class sProxy
 	{
@@ -447,11 +448,11 @@ namespace sclx {
 		}
 		qCDTOR( sProxy );
 		void Init(
-            xdhcmn::cUpstream &Upstream,
+            xdhcuc::cSingle &Callback,
 			const scli::sInfo &Info,
 			eXSLFileHandling XSLFileHandling )
 		{
-			Core_.Init(Upstream, str::Empty);
+			Core_.Init(Callback, str::Empty);
 			Info_ = &Info;
 			XSLFileHandling_ = XSLFileHandling;
 		}
@@ -809,7 +810,7 @@ namespace sclx {
 
 	// User put in 'instances' all his own objects, instantiating all with a 'new' (by overloading 'SCLXHTMLNew(...)'), a 'delete' will be made automatically when unloading the library.
 	template <typename instances, typename frontend, typename page, page UndefinedPage, typename dump> class rSession
-	: public cSession_,
+	: public cDownstream_,
 	  public sProxy,
 	  public instances,
 	  public frontend
@@ -823,8 +824,8 @@ namespace sclx {
 		eBackendVisibility BackendVisibility_;
 		qRMV( class rCore<rSession>, C_, Core_ );
 	protected:
-		bso::sBool XDHCMNInitialize(
-			xdhcmn::cUpstream &Callback,
+		bso::sBool XDHCDCInitialize(
+			xdhcuc::cSingle &Callback,
 			const char *Language,
 			const str::dString &Token)	override // If empty, PROD session, else token used for the DEMO session.
         {
@@ -837,7 +838,7 @@ namespace sclx {
 
 			return true;
         }
-		bso::bool__ XDHCMNLaunch(
+		bso::bool__ XDHCDCLaunch(
 			const char *Id,
 			const char *Action ) override
 		{
@@ -1017,7 +1018,7 @@ namespace sclx {
 	template <typename session> class rCore {
 	private:
 		action_handler<session> _Handler;
-		xdhcmn::eMode Mode_;
+		xdhcdc::eMode Mode_;
 		Q37_MRMDF( cActionHelper<session>, _AH, _ActionHelperCallback );
 		qPMV( const char, ONS_, OnNewSession_ );	// Name of the action to call on new session.
 		bso::bool__ _OnBeforeAction(
@@ -1039,13 +1040,13 @@ namespace sclx {
 		void reset( bso::bool__ P = true )
 		{
 			_Handler.reset( P );
-			Mode_ = xdhcmn::m_Undefined;
+			Mode_ = xdhcdc::m_Undefined;
 			_ActionHelperCallback = NULL;
 			OnNewSession_ = NULL;
 		}
 		E_CVDTOR( rCore )
 		template <typename action> void Init(
-			xdhcmn::eMode Mode,
+			xdhcdc::eMode Mode,
 			const action &OnNewSession,
 			cActionHelper<session> &ActionHelperCallback )
 		{
@@ -1103,11 +1104,11 @@ namespace sclx {
 	}
 
 	const scli::sInfo &SCLXInfo( void );	// To define by user.
-	void SCLXInitialization( xdhcmn::eMode Mode );	// To define by user.
+	void SCLXInitialization( xdhcdc::eMode Mode );	// To define by user.
 
-	xdhcmn::cSession *SCLXRetrieveSession(void);	// To define by user.
+	xdhcdc::cSingle *SCLXFetchCallback(void);	// To define by user.
 
-	void SCLXReleaseSession( xdhcmn::cSession *Session );	// To define by user.
+	void SCLXDismissCallback( xdhcdc::cSingle *Callback );	// To define by user.
 
 	namespace prolog {
 		static qCDEFS(BorderId, "Border" );

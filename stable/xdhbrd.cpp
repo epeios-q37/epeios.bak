@@ -61,7 +61,7 @@ void xdhbrd::rXCallback::reset(bso::sBool P)
 }
 
 void xdhbrd::rXCallback::Init(
-    xdhcmn::cUpstream &Callback,
+    xdhcuc::cSingle &Callback,
     sTRow_ TRow)
 {
     if ( Mutex_ != UndefinedMutex_ )
@@ -277,7 +277,7 @@ qRE
 }
 
 sRow xdhbrd::InitAndAdd(
-        xdhcmn::cUpstream &Callback,
+        xdhcuc::cSingle &Callback,
         rXCallback &XCallback,
         const str::dString &Token)
 {
