@@ -49,7 +49,10 @@ namespace xdwsessn {
         }
         virtual void XDHCMNBroadcast(
             const str::dString &Script,
-            const str::dString &Token) override;
+            const str::dString &Token) override
+        {
+            xdhbrd::Broadcast(Script, Token);
+        }
         virtual void XDHCMNBroadcastRemove(xdhcmn::sRow Row) override
         {
             xdhbrd::Remove(Row);

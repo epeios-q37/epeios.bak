@@ -10,6 +10,11 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2020-05-11:
+
+- SCLM:
+    - project type is now 'Remote' by default,
+
 ## 2020-05-09:
 
 - CSDBNS, CSDMXC:

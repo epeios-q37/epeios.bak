@@ -224,8 +224,6 @@ namespace {
                     Parameters.Init();
                     GetParameters_(Flow, Parameters);
 
-//                    cio::COut << Parameters(Parameters.First()) << txf::nl << txf::commit;
-
                     Flow.Dismiss();
 
                     if ( ReturnType == tVoid ) {

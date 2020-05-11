@@ -22,7 +22,6 @@
 #include "websck.h"
 
 #include "lstcrt.h"
-#include "xdhbrd.h"
 
 using namespace xdwsessn;
 
@@ -46,11 +45,4 @@ qRB
 qRR
 qRT
 qRE
-}
-
-void xdwsessn::rUpstream_::XDHCMNBroadcast(
-    const str::dString &Script,
-    const str::dString &Token)
-{
-    xdhbrd::Broadcast(Script, Token);
 }

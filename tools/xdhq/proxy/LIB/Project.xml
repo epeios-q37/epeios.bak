@@ -72,6 +72,17 @@
 		<File>NOTES.md</File>
 		<File>XDHq.js</File>
 	</Files>
+	<Misc>
+	    <CB>
+	        <Arguments>
+	            <xpp:cdata>
+                    <Option parameters='--#Project[Type=\"Remote\"]=Testing.xprj' />
+                    <Option host_application="/media/csimon/H/bin/xdhwebq" />
+                    <Option run_host_application_in_terminal="1" />
+	            </xpp:cdata>
+	        </Arguments>
+	    </CB>
+	</Misc>
 	<NodeJS>
 		<Scripts>
 			<Script Name="install">node-pre-gyp install --fallback-to-build</Script>

@@ -92,4 +92,14 @@
 	<PreprocessorDefinitions>
 		<PreprocessorDefinition>E_ST</PreprocessorDefinition>
 	</PreprocessorDefinitions>
-</Project>
+	<Misc>
+	    <CB>
+	        <Arguments>
+	            <xpp:cdata>
+                    <Option parameters='--#Project=Testing.xprj' />
+                    <!--Option host_application="/media/csimon/H/bin/xdhwebq" /-->
+                    <Option run_host_application_in_terminal="1" />
+	            </xpp:cdata>
+	        </Arguments>
+	    </CB>
+	</Misc></Project>

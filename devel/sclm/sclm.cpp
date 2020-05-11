@@ -833,9 +833,10 @@ qRB
 
 	if ( Feature.Amount() != 0 ) {
 		RawType.Init();
-		MGetValue( sclr::parameter::project::Type, RawType );
-
-		Type = GetProjectType( RawType );
+		if ( OGetValue( sclr::parameter::project::Type, RawType ) )
+            Type = GetProjectType( RawType );
+        else
+            Type = ptRemote;
 
 		if ( Type == pt_Undefined )
 			sclm::ReportAndAbort(SCLM_NAME "_BadProjectType" );

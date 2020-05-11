@@ -289,7 +289,7 @@ qRH;
 qRB;
     Dummy.Init();
 
-	Process_("Alert_1", &Dummy, RawMessage);    // Wait an unused return value to wait the dismissing of the dialog box.
+	Process_("Alert_1", &Dummy, RawMessage);    // Get an unused return value to wait the dismissing of the dialog box.
 qRR;
 qRT;
 qRE;

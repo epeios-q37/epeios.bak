@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Projects>
+ <Project target="faasq">
+    <Parameters>
+    </Parameters>
+ </Project>
+ <Project target="xdhwebq">
+    <Parameters>
+        <ModuleFilename>/home/csimon/bin/esketchxdh</ModuleFilename>
+    </Parameters>
+ </Project>
+</Projects>

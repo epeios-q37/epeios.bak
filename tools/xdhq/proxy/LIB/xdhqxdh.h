@@ -20,7 +20,6 @@
 #ifndef XDHQXDH_INC_
 # define XDHQXDH_INC_
 
-# include "xdhdws.h"
 # include "scli.h"
 
 # define PROGRAM_NAME		"xdhq"	XDHDWS_DEFAULT_SUFFIX
