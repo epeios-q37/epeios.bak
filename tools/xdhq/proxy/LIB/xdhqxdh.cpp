@@ -48,7 +48,7 @@ static const char *Launcher_ = NULL;
 // Bien que dfinit dans un '.cpp', et propre  ce '.cpp', VC++ se mlange les pinceaux avec le 'callback__' dfinit dans 'scllocale.cpp', d'o le 'namespace'.
 namespace {
     namespace {
-        void Initialization_( xdhcmn::eMode Mode )
+        void Initialization_( xdhcdc::eMode Mode )
         {
         qRH;
             qCBUFFERh Buffer;
@@ -66,7 +66,7 @@ namespace {
         qRE;
         }
 
-        xdhcmn::cSession *FetchCallback_(void)
+        xdhcdc::cSingle *FetchCallback_(void)
         {
             session::rSession *Callback = NULL;
         qRH;
@@ -94,7 +94,7 @@ namespace {
             return Callback;
         }
 
-        void DismissCallback_( xdhcmn::cSession *Callback )
+        void DismissCallback_( xdhcdc::cSingle *Callback )
         {
             if ( Callback == NULL )
                 qRGnr();
@@ -103,13 +103,15 @@ namespace {
         }
     }
 
-	typedef xdhcmn::cDownstream cDownstream_;
+	typedef xdhcdc::cGlobal cDownstream_;
 
 	class sDownstream
 	: public cDownstream_
 	{
 	protected:
-		virtual void XDHCMNInitialize( const xdhcmn::shared_data__ &Data ) override
+		virtual void XDHCDCInitialize(
+            const xdhcdc::sData &Data,
+            xdhcuc::cGlobal &Callback) override
 		{
 			if ( Launcher_ != NULL )
 				qRFwk();
@@ -119,9 +121,10 @@ namespace {
 				sclm::Initialize( Data.SCLRack(), Data.Localization(), xdhqxdh::Info );
 
 				Initialization_( Data.Mode() );
+				faaspool::SetCallback(Callback);
 			}
 		}
-		virtual void XDHCMNBaseLanguage( TOL_CBUFFER___ &Buffer ) override
+		virtual void XDHCDCBaseLanguage( TOL_CBUFFER___ &Buffer ) override
 		{
 			const char *Language = sclm::GetBaseLanguage();
 
@@ -132,19 +135,19 @@ namespace {
 
 			strcpy( Buffer, Language );
 		}
-		virtual xdhcmn::cSession *XDHCMNFetchSessionCallback(void) override
+		virtual xdhcdc::cSingle *XDHCDCFetchCallback(void) override
 		{
 			return FetchCallback_();
 		}
-		virtual void XDHCMNDismissSessionCallback(xdhcmn::cSession *Callback) override
+		virtual void XDHCDCDismissCallback(xdhcdc::cSingle *Callback) override
 		{
 			return DismissCallback_(Callback);
 		}
-		const scli::sInfo &XDHCMNGetInfo( void ) override
+		const scli::sInfo &XDHCDCGetInfo( void ) override
 		{
 			return xdhqxdh::Info;
 		}
-		bso::sBool XDHCMNGetHead(
+		bso::sBool XDHCDCGetHead(
 			const str::dString &Token,
 			str::dString &Head,
 			qRPN ) override
@@ -165,9 +168,9 @@ static inline void DoNothing_( void )
 
 #define DEF( name, function ) extern "C" FUNCTION_SPEC function name
 
-DEF( XDHCMN_RETRIEVE_FUNCTION_NAME, xdhcmn::retrieve );
+DEF( XDHCDC_RETRIEVE_FUNCTION_NAME, xdhcdc::retrieve );
 
-xdhcmn::cDownstream *XDHCMNRetrieve( void )
+xdhcdc::cGlobal *XDHCDCRetrieve( void )
 {
 	sDownstream *Callback = NULL;
 qRFH

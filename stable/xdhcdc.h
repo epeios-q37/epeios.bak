@@ -123,7 +123,9 @@ namespace xdhcdc {
 	class cGlobal
 	{
 	protected:
-		virtual void XDHCDCInitialize( const sData &Data ) = 0;
+		virtual void XDHCDCInitialize(
+            const sData &Data,
+            xdhcuc::cGlobal &Callback) = 0;
 		virtual void XDHCDCBaseLanguage( TOL_CBUFFER___ &Buffer ) = 0;
 		virtual cSingle *XDHCDCFetchCallback(void) = 0;
 		virtual void XDHCDCDismissCallback( cSingle *Callback ) = 0;
@@ -137,9 +139,11 @@ namespace xdhcdc {
 			qRPD ) = 0;
 	public:
 		qCALLBACK( Global )
-		void Initialize( const sData &Data )
+		void Initialize(
+            const sData &Data,
+            xdhcuc::cGlobal &Callback)
 		{
-			return XDHCDCInitialize( Data );
+			return XDHCDCInitialize(Data, Callback);
 		}
 		const char *BaseLanguage( TOL_CBUFFER___ &Buffer )
 		{

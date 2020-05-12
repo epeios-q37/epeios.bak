@@ -33,8 +33,8 @@
 # include "xdhcuc.h"
 
 namespace xdhbrd {
-    qROW(CRow_);
-    qROW(TRow_); // Token row.
+    qROW(CRow_); // Callback row.
+    typedef xdhcuc::sRow sTRow_; // Token row.
 
     qENUM(State_) {
         sAlive,
@@ -69,6 +69,8 @@ namespace xdhbrd {
     };
 
     sTRow_ Create(const str::dString &Token);
+
+    void Remove(sTRow_ TRow);
 
     void Broadcast(
         const str::dString &Script,

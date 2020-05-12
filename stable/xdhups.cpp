@@ -26,6 +26,7 @@ using namespace xdhups;
 extern "C" typedef xdhcdc::retrieve retrieve;
 
 bso::bool__ xdhups::rAgent::Init(
+    xdhcuc::cGlobal &Upstream,
 	xdhcdc::eMode Mode,
 	const str::string_ &ModuleFileName,
 	dlbrry::eNormalization Normalization,
@@ -50,7 +51,7 @@ qRB
 		if ( Callback_ == NULL )
 			qRFwk();
 
-		Callback_->Initialize( Data );
+		Callback_->Initialize(Data, Upstream);
 
 		Success = true;
 	}

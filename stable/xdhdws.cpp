@@ -532,7 +532,7 @@ qRB
     Script.Init();
     GetScript_("BroadcastAction_1", Arguments, Script);
 
-    C_().Broadcast(Script, Token);
+    Broadcast(Script, Token);
 qRR
 qRT
 qRE

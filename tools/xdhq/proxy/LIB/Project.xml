@@ -76,8 +76,8 @@
 	    <CB>
 	        <Arguments>
 	            <xpp:cdata>
-                    <Option parameters='--#Project[Type=\"Remote\"]=Testing.xprj' />
-                    <Option host_application="/media/csimon/H/bin/xdhwebq" />
+                    <Option parameters='--#Project=Testing.xprj' />
+                    <Option host_application="xdhwebq" />
                     <Option run_host_application_in_terminal="1" />
 	            </xpp:cdata>
 	        </Arguments>

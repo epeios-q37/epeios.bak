@@ -18,7 +18,7 @@
 }
         ]]>
       </Script>
-    </xpp:bloc>
+      <!-- This script does not perform the brodcast, but is the one which is broadcasted. -->
       <Script name="BroadcastAction_1" Arguments="Action,Id">
 		        <![CDATA[
 {
@@ -26,6 +26,7 @@
 }
 		        ]]>
       </Script>      
+    </xpp:bloc>
     <!-- All scripts enclosed in following block are public. -->
     <xpp:bloc>
       <Script name="Execute_1" Arguments="#Script">

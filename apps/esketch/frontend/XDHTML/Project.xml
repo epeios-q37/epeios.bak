@@ -88,7 +88,18 @@
 		<File>../esketchfrd.xcfg</File>
 		<File>../esketchfrd.xlcl</File>
 	</Files>
-	<RTW Description="eSketch" Keywords="keyword1,keyword2">
+	<Misc>
+	    <CB>
+	        <Arguments>
+	            <xpp:cdata>
+                    <Option parameters='--#Project=Testing.xprj' />
+                    <Option host_application="faasq" />
+                    <Option run_host_application_in_terminal="1" />
+	            </xpp:cdata>
+	        </Arguments>
+	    </CB>
+	</Misc>
+    <RTW Description="eSketch" Keywords="keyword1,keyword2">
 		<Dir>esketchxdh</Dir>
 	</RTW>
 	<Packing>

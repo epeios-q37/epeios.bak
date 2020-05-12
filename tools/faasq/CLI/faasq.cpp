@@ -119,6 +119,27 @@ namespace {
     namespace {
         namespace {
             namespace {
+                namespace {
+                    typedef xdhcuc::cGlobal cUpstream_;
+
+                    // Must exist, but not used.
+                    class sUpstream_
+                    : public cUpstream_
+                    {
+                    protected:
+                        virtual xdhcuc::sRow XDHCUCCreate(const str::dString &) override
+                        {
+                            qRGnr();
+
+                            return qNIL;    // To avoid a warning.
+                        }
+                        virtual void XDHCUCRemove(xdhcuc::sRow Row) override
+                        {
+                            qRGnr();
+                        }
+                    } Upstream_;
+                }
+
                 void Initialize_(xdhups::rAgent &Agent)
                 {
                 qRH
@@ -131,7 +152,7 @@ namespace {
                     ModuleFilename.Init();
                     sclm::MGetValue( registry::parameter::ModuleFilename, ModuleFilename );
 
-                    Agent.Init( xdhcmn::mMultiUser, ModuleFilename, dlbrry::n_Default, Identification.Convert( Buffer ) );
+                    Agent.Init(Upstream_,  xdhcdc::mMultiUser, ModuleFilename, dlbrry::n_Default, Identification.Convert( Buffer ) );
                 qRR
                 qRT
                 qRE

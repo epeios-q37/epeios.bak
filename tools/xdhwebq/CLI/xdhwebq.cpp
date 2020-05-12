@@ -289,6 +289,32 @@ namespace {
 
 	}
 
+	namespace {
+	    namespace {
+	        typedef xdhcuc::cGlobal cUpstream_;
+
+	        class sUpstream_
+	        : public cUpstream_
+	        {
+            protected:
+                virtual xdhcuc::sRow XDHCUCCreate(const str::dString &Token) override
+                {
+                    return xdhbrd::Create(Token);
+                }
+                virtual void XDHCUCRemove(xdhcuc::sRow Row) override
+                {
+                    return xdhbrd::Remove(Row);
+                }
+            public:
+                void reset(bso::sBool = true)
+                {}
+                qCVDTOR(sUpstream_)
+                void Init(void)
+                {}
+	        };
+	    }
+	}
+
 	void Process_( void )
 	{
 	qRH
@@ -297,6 +323,7 @@ namespace {
 		TOL_CBUFFER___ IdentificationBuffer;
 		csdbns::server___ Server;
 		sProcessing Callback;
+		sUpstream_ Upstream_;
 		qCBUFFERh Buffer;
 	qRB
 		Identification.Init( NAME_LC " V" VERSION " Build " __DATE__ " " __TIME__ " - " );
@@ -305,7 +332,9 @@ namespace {
 		ModuleFilename.Init();
 		sclm::MGetValue( registry::parameter::ModuleFilename, ModuleFilename );
 
-		Agent.Init( xdhcdc::mMultiUser, ModuleFilename, dlbrry::n_Default, Identification.Convert( Buffer ) );
+		Upstream_.Init();
+
+		Agent.Init(Upstream_, xdhcdc::mMultiUser, ModuleFilename, dlbrry::n_Default, Identification.Convert( Buffer ));
 
 		Callback.Init( Agent );
 

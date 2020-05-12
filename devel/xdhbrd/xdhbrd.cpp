@@ -134,7 +134,7 @@ namespace {
         sTRow_ TRow = XCRowsSets.First();
 
         if ( Token.Amount() ) {
-            while( ( TRow != qNIL ) && XCRowsSets(TRow)->Token != Token )
+            while( ( TRow != qNIL ) && ( XCRowsSets(TRow)->Token != Token ) )
                 TRow = XCRowsSets.Next(TRow);
 
             if ( ( TRow == qNIL ) && !ReturnNotFound )
@@ -299,6 +299,27 @@ qRR
 qRT
 qRE
     return TRow;
+}
+
+void xdhbrd::Remove(sTRow_ TRow)
+{
+qRH
+    rXCRows_ *XCRows = NULL;
+    hGuardian_ Guardian;
+qRB
+    rXCRowsSets_ &Sets = GetXCRowsSets_(Guardian);
+
+    XCRows = Sets(TRow);
+
+    Sets.Remove(TRow);
+
+    if ( XCRows == NULL )
+        qRGnr();
+
+    delete XCRows;
+qRR
+qRT
+qRE
 }
 
 namespace {

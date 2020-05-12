@@ -32,7 +32,7 @@
 # include "str.h"
 
 namespace xdhcuc {
-    qROW(Row); // Callback row.
+    qROW(Row); // Token row.
 
 	class cSingle
 	{
@@ -58,6 +58,23 @@ namespace xdhcuc {
             const str::dString &Token)
         {
             return XDHCUCBroadcast(Script, Token);
+        }
+	};
+
+	class cGlobal
+	{
+    protected:
+        virtual sRow XDHCUCCreate(const str::dString &Token) = 0;
+        virtual void XDHCUCRemove(sRow Row) = 0;
+    public:
+        qCALLBACK(Global);
+        sRow Create(const str::dString &Token)
+        {
+            return XDHCUCCreate(Token);
+        }
+        void Remove(sRow Row)
+        {
+            return XDHCUCRemove(Row);
         }
 	};
 }

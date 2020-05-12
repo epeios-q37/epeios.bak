@@ -88,6 +88,7 @@ namespace xdhups {
         }
         E_CDTOR( rAgent );
 		bso::bool__ Init(
+            xdhcuc::cGlobal &Upstream,
 			xdhcdc::eMode Mode,
 			const str::string_ &ModuleFileName,
 			dlbrry::eNormalization Normalization,	// Usually 'dlbrry::n_Default', except when used for 'Node.js' (set to 'dlbrry::nExtOnly').

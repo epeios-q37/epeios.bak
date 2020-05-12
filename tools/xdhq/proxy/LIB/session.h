@@ -24,6 +24,7 @@
 
 # include "csdmnc.h"
 # include "logq.h"
+# include "xdhcdc.h"
 # include "xdhcmn.h"
 # include "xdhdws.h"
 
@@ -39,7 +40,7 @@ namespace session {
 	};
 
 	class rSession
-	: public xdhcmn::cSession,
+	: public xdhcdc::cSingle,
 	  public xdhdws::sProxy
 	{
 	private:
@@ -95,11 +96,11 @@ namespace session {
 			const char *Id,
 			const char *Action );
 	protected:
-		virtual bso::sBool XDHCMNInitialize(
-			xdhcmn::cUpstream &Callback,
+		virtual bso::sBool XDHCDCInitialize(
+			xdhcuc::cSingle &Callback,
 			const char *Language,
 			const str::dString &Token ) override;
-		virtual bso::bool__ XDHCMNLaunch(
+		virtual bso::bool__ XDHCDCLaunch(
 			const char *Id,
 			const char *Action ) override;
 	public:

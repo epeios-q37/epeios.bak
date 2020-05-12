@@ -30,9 +30,13 @@
 
 # include "prtcl.h"
 
+# include "xdhcuc.h"
+
 # include "sck.h"
 
 namespace faaspool {
+    void SetCallback(xdhcuc::cGlobal &Callback);
+
 	void Initialize();
 
 	// If modified, modify also the 'Undefined' definition.

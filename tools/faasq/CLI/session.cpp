@@ -26,7 +26,7 @@ using namespace session;
 
 // #define LOG cio::COut << __LOC__ << tol::DateAndTime(DT) << txf::nl << txf::commit;
 
-void session::sUpstream_::XDHCMNProcess(
+void session::sUpstream_::XDHCUCProcess(
     const str::string_ &Script,
     str::dString *ReturnedValue )
 {
@@ -56,6 +56,31 @@ qRB
 
         B_().UnblockGlobal();
     }
+qRR
+qRT
+qRE
+}
+
+void session::sUpstream_::XDHCUCBroadcast(
+    const str::dString &Script,
+    const str::dString &Token)
+{
+qRH
+    flw::rDressedRWFlow<> Proxy;
+qRB
+    if ( Token.Amount() )
+        qRGnr();    // See below.
+
+    Proxy.Init(P_());
+
+    csdcmn::Put(Id_, Proxy);
+    csdcmn::Put("Broadcast_1", Proxy);
+    csdcmn::Put(Script, Proxy);
+
+
+//    csdcmn::Put(Token, Proxy);    // 'Token', when relevant (FaaS mode) is only handled by the 'xdhqxdh' tool.
+
+    Proxy.Commit();
 qRR
 qRT
 qRE

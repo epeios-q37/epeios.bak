@@ -67,7 +67,9 @@ namespace {
 	: public cDownstream_
 	{
 	protected:
-		virtual void XDHCDCInitialize( const xdhcdc::sData &Data ) override
+		virtual void XDHCDCInitialize(
+            const xdhcdc::sData &Data,
+            xdhcuc::cGlobal &) override // The second parameter is only useful for the 'xdhqxdh' tool.
 		{
 			if ( Launcher_ != NULL )
 				qRFwk();

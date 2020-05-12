@@ -34,7 +34,23 @@ using namespace faaspool;
 #include "mtk.h"
 #include "sclm.h"
 #include "str.h"
-#include "xdhbrd.h"
+
+namespace {
+    xdhcuc::cGlobal *Callback_ = NULL;
+
+    xdhcuc::cGlobal &C_(void)
+    {
+        if ( Callback_ == NULL )
+            qRGnr();
+
+        return *Callback_;
+    }
+}
+
+void faaspool::SetCallback(xdhcuc::cGlobal &Callback)
+{
+    ::Callback_ = &Callback;
+}
 
 namespace {
 	static qCDEF( char *, ProtocolId_, "0fac593d-d65f-4cc1-84f5-3159c23c616b" );
@@ -73,6 +89,7 @@ namespace {
 				Row = Shareds.Next( Row );
 			}
 		}
+		xdhcuc::sRow TRow_; // Token row?
 	public:
 		sBRow Row;
 		fdr::rRWDriver *Driver;
@@ -87,9 +104,13 @@ namespace {
 				if ( Access != mtx::Undefined )
 					mtx::Delete( Access, true );
 
+                if ( TRow_ != qNIL )
+                    C_().Remove(TRow_);
+
 				InvalidAll_();
 			}
 
+			TRow_ = qNIL;
 			Row = qNIL;
 			Driver = NULL;
 			Shareds.reset( P );
@@ -101,12 +122,14 @@ namespace {
 		qCDTOR( rBackend_ );
 		void Init(
 			sBRow Row,
+			xdhcuc::sRow TRow,
 			fdr::rRWDriver &Driver,
 			const str::dString &IP )
 		{
 			reset();
 
 			this->Row = Row;
+			TRow_ = TRow;
 			this->Driver = &Driver;
 			Shareds.Init();
 			Access = mtx::Create();
@@ -252,7 +275,7 @@ namespace {
 			if ( (Backend = new rBackend_) == NULL )
 				qRAlc();
 
-			Backend->Init( Row, Driver, IP );
+			Backend->Init( Row, C_().Create(Token), Driver, IP );
 
 			Tokens_.Store( Token, Row );
 
@@ -454,7 +477,6 @@ namespace {
         else {
             URL.Init();
             Put_(BuildURL_(Address,str::wString(),Token,URL), Flow);
-            xdhbrd::Create(Token);
         }
 	qRR;
 		if ( Backend != NULL )
@@ -628,16 +650,15 @@ bso::sBool faaspool::GetHead(
     return TSGetHead_(Token,Head);	// 'UP' contains the token.
 }
 
-qGCTOR( faaspool )
+qGCTOR(faaspool)
 {
 	MutexHandler_ = mtx::Create();
 	Tokens_.Init();
 	Heads_.Init();
 	Backends_.Init();
-
 }
 
-qGDTOR( faaspool )
+qGDTOR(faaspool)
 {
 	if ( MutexHandler_ != mtx::Undefined )
 		mtx::Delete( MutexHandler_, true );

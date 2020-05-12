@@ -159,7 +159,9 @@ namespace {
         fdr::rRWDriver *Driver;
         xdhdws::sProxy *Proxy;
         sId_ Id;
-        const str::dString *IP;
+        const str::dString
+            *IP,
+            *Token;
         tht::rBlocker *Blocker;
     };
 
@@ -187,6 +189,29 @@ namespace {
             }
         }
 
+        namespace {
+            void Broadcast_(
+                flw::rRFlow &Flow,
+                xdhdws::sProxy &Proxy,
+                const str::dString &Token)
+            {
+            qRH
+                str::wString Script;
+            qRB
+                Script.Init();
+
+                prtcl::Get(Flow, Script);
+
+                Flow.Dismiss();
+
+                Proxy.Broadcast(Script, Token);
+            qRR
+            qRT
+            qRE
+            }
+
+        }
+
         void Routine_(
             void *UP,
             mtk::gBlocker &DataBlocker)
@@ -196,13 +221,14 @@ namespace {
         qRH;
             sId_ Id = UndefinedId_;
             flw::rDressedRWFlow<> Flow;
-            str::wString IP, ScriptName, ReturnValue;
+            str::wString IP, Token, ScriptName, ReturnValue;
             str::wStrings Parameters, SplitedReturnValue;
             eType_ ReturnType = t_Undefined;
         qRB;
             fdr::rRWDriver &Driver = *Data.Driver;
             Id = Data.Id;
             IP.Init(*Data.IP);
+            Token.Init(*Data.Token);
             tht::rBlocker &Blocker = *Data.Blocker;
 
             DataBlocker.Release();
@@ -218,6 +244,8 @@ namespace {
                 if ( ScriptName == "StandBy_1") {
                     Flow.Dismiss();
                     Blocker.Unblock();
+                } else if ( ScriptName=="Broadcast_1" ) {
+                    Broadcast_(Flow, Proxy, Token);
                 } else {
                     ReturnType = GetType_( Flow );
 
@@ -260,8 +288,8 @@ namespace {
     }
 }
 
-bso::sBool session::rSession::XDHCMNInitialize(
-    xdhcmn::cUpstream &Callback,
+bso::sBool session::rSession::XDHCDCInitialize(
+    xdhcuc::cSingle &Callback,
     const char *Language,
     const str::dString &Token )
 {
@@ -325,6 +353,7 @@ qRFB;
         Data.Driver = &D_();
         Data.Proxy = this;
         Data.IP = &IP;
+        Data.Token = &Token;
         Data.Id = Id;
         Data.Blocker = &Blocker_;
 
@@ -338,7 +367,7 @@ qRE;
     return Success;
 }
 
-bso::bool__ session::rSession::XDHCMNLaunch(
+bso::bool__ session::rSession::XDHCDCLaunch(
     const char *Id,
     const char *Action )
 {

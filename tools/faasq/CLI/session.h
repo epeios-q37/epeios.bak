@@ -28,7 +28,7 @@ namespace session {
     typedef bso::sU8 sId;
     qCDEF(sId, UndefinedId, 255);
 
-    typedef xdhcmn::cUpstream cUpstream_;
+    typedef xdhcuc::cSingle cUpstream_;
 
     class rBlockers_
     {
@@ -68,9 +68,12 @@ namespace session {
         qRMV(fdr::rRWDriver, P_, Proxy_);
         sId Id_;
     protected:
-        virtual void XDHCMNProcess(
+        virtual void XDHCUCProcess(
             const str::string_ &Script,
-            str::dString *ReturnedValue ) override;
+            str::dString *ReturnedValue) override;
+        virtual void XDHCUCBroadcast(
+            const str::dString &Script,
+            const str::dString &Token) override;
      public:
         void reset( bso::bool__ P = true )
         {
@@ -104,7 +107,7 @@ namespace session {
         void reset(bso::sBool P = true)
         {
             if ( P ) {
-                A_().DismissSessionCallback(Session_.Callback());
+                A_().DismissCallback(Session_.Callback());
             }
 
             tol::reset(P, Proxy_, Upstream_, Agent_, Session_, Blockers_);
@@ -119,12 +122,12 @@ namespace session {
             tht::rBlocker &Global)
         {
             if ( Session_.Callback() != NULL )
-                A_().DismissSessionCallback(Session_.Callback());
+                A_().DismissCallback(Session_.Callback());
 
             Agent_= &Agent;
 
             Proxy_.Init(ProxyDriver);
-            Session_.Init(A_().FetchSessionCallback());
+            Session_.Init(A_().FetchCallback());
             Upstream_.Init(ProxyDriver, Id, Blockers_);
             Session_.Initialize(Upstream_, "", str::Empty);
             Handshaked = false;
