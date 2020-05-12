@@ -40,16 +40,10 @@ namespace xdhdws {
 	{
 	private:
 		Q37_MRMDF( xdhcuc::cSingle, C_, Callback_ );
-		xdhcuc::sRow Row_;
     public:
 		void reset( bso::bool__ P = true )
 		{
-		    if ( P )
-                if ( Row_ != qNIL )
-                    C_().BroadcastRemove(Row_);
-
             Callback_ = NULL;
-            Row_ = qNIL;
 		}
 		E_CVDTOR( sProxy );
 		void Init(
@@ -59,7 +53,6 @@ namespace xdhdws {
 			reset();
 
 			Callback_ = &Callback;
-			Row_ = C_().BroadcastInit(Token);
 		}
 		void Process(
             const char *ScriptName,

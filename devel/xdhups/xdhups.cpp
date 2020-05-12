@@ -42,7 +42,7 @@ qRB
 
 	Library_.Init( ModuleFileName, Normalization );
 
-	retrieve *Retrieve = dlbrry::GetFunction<retrieve *>( E_STRING( XDHCMN_RETRIEVE_FUNCTION_NAME ), Library_ );
+	retrieve *Retrieve = dlbrry::GetFunction<retrieve *>( E_STRING( XDHCDC_RETRIEVE_FUNCTION_NAME ), Library_ );
 
 	if ( Retrieve != NULL ) {
 		Callback_ = Retrieve();

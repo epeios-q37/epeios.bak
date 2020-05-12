@@ -33,7 +33,7 @@
 # include "xdhcuc.h"
 
 namespace xdhbrd {
-    using xdhcuc::sRow;
+    qROW(CRow_);
     qROW(TRow_); // Token row.
 
     qENUM(State_) {
@@ -52,14 +52,17 @@ namespace xdhbrd {
         qRMV(xdhcuc::cSingle, C_, Callback_);
         rMutex_ Mutex_;
         sTRow_ TRow_;
+        sCRow_ CRow_;
         eState_ State_;
+        void Add_(const str::dString &Token);
+        void Deactivate_(hGuardian_ &Guardian);
+        void Remove_(void);
     public:
         void reset(bso::sBool P = true);
         qCDTOR(rXCallback);
         void Init(
             xdhcuc::cSingle &Callback,
-            sTRow_ TRow);
-        sTRow_ Deactivate(hGuardian_ &Guardian);
+            const str::dString &Token);
         void Send(
             const str::dString &Script,
             hGuardian_ &Guardian);
@@ -67,16 +70,9 @@ namespace xdhbrd {
 
     sTRow_ Create(const str::dString &Token);
 
-    sRow InitAndAdd(
-        xdhcuc::cSingle &Callback,
-        rXCallback &XCallback,
-        const str::dString &Token);
-
     void Broadcast(
         const str::dString &Script,
         const str::dString &Token);
-
-    void Remove(sRow Row);
 }
 
 #endif

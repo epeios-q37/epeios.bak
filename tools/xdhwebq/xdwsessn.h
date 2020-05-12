@@ -36,40 +36,26 @@ namespace xdwsessn {
 	: public cUpstream_
 	{
 	private:
-		str::wString Token_;
 		qRMV(fdr::rRWDriver, D_, Driver_);
-        xdhbrd::rXCallback XCallback_;
 	protected:
 		virtual void XDHCUCProcess(
 			const str::string_ &Script,
 			str::dString *ReturnedValue ) override;
-        virtual xdhcuc::sRow XDHCUCBroadcastInit(const str::dString &Token) override
-        {
-            return xdhbrd::InitAndAdd(*this, XCallback_, Token);
-        }
         virtual void XDHCUCBroadcast(
             const str::dString &Script,
             const str::dString &Token) override
         {
             xdhbrd::Broadcast(Script, Token);
         }
-        virtual void XDHCUCBroadcastRemove(xdhcuc::sRow Row) override
-        {
-            xdhbrd::Remove(Row);
-        }
 	public:
 		void reset( bso::bool__ P = true )
 		{
-		    tol::reset(P, Token_, Driver_, XCallback_);
+		    tol::reset(P, Driver_);
 		}
 		E_CVDTOR( rUpstream_ );
-		void Init(
-             fdr::rRWDriver &Driver,
-             const str::dString &Token)
+		void Init(fdr::rRWDriver &Driver)
 		{
-		    Token_.Init(Token);
 			Driver_ = &Driver;
-			// XCallback_.Init(*this, xdhbrd::Create(Token));   // 'XCallback_" will be initialized later.
 		}
 	};
 
@@ -77,11 +63,12 @@ namespace xdwsessn {
 	{
 	private:
         rUpstream_ Upstream_;
+        xdhbrd::rXCallback XCallback_;
 		xdhups::sSession Session_;
-	public:
+    public:
 		void reset( bso::bool__ P = true )
 		{
-            tol::reset(P, Upstream_, Session_);
+            tol::reset(P, Upstream_, XCallback_, Session_);
 		}
 		E_CDTOR( rSession );
 		bso::sBool Init(
@@ -90,7 +77,8 @@ namespace xdwsessn {
             const char *Language,
 			const str::dString &Token )	// If empty, FaaS session, else token used for the FaaS session.
  		{
-			Upstream_.Init(Driver, Token);
+			Upstream_.Init(Driver);
+			XCallback_.Init(Upstream_, Token);
 			Session_.Init(Callback);
 			return Session_.Initialize(Upstream_, Language, Token);
 		}

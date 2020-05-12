@@ -28,8 +28,6 @@
 using namespace xdhbrd;
 
 namespace {
-    typedef sRow sCRow_;
-
     qCDEF(rMutex_, UndefinedMutex_, mtx::Undefined);
 
     void Hire_(
@@ -39,60 +37,9 @@ namespace {
         Guardian.InitAndLock(Mutex);
     }
 
-    void Dismiss_(hGuardian_ &Guardian)
-    {
-        Guardian.Unlock();
-    }
-
     typedef lstbch::qLBUNCHdl(sCRow_) dCRows_;
     qW(CRows_);
-}
 
-void xdhbrd::rXCallback::reset(bso::sBool P)
-{
-    if ( P )
-        if ( Mutex_ != UndefinedMutex_ )
-            Mutex_ = mtx::Create();
-
-    Mutex_ = UndefinedMutex_;
-    Callback_ =  NULL;
-    TRow_ = qNIL;
-    State_ = s_Undefined;
-}
-
-void xdhbrd::rXCallback::Init(
-    xdhcuc::cSingle &Callback,
-    sTRow_ TRow)
-{
-    if ( Mutex_ != UndefinedMutex_ )
-        mtx::Delete(Mutex_);
-
-    Callback_ = &Callback;
-    Mutex_ = mtx::Create();
-    TRow_ = TRow;
-    State_ = sAlive;
-}
-
-sTRow_ xdhbrd::rXCallback::Deactivate(hGuardian_ &Guardian)
-{
-    Hire_(Guardian, Mutex_);
-
-    State_ = sDead;
-
-    return TRow_;
-}
-
-void xdhbrd::rXCallback::Send(
-    const str::dString &Script,
-    hGuardian_ &Guardian)
-{
-    Hire_(Guardian, Mutex_);
-
-    if ( State_ == sAlive )
-        C_().Process(Script);
-}
-
-namespace {
     typedef lstbch::qLBUNCHw(rXCallback *, sCRow_) rXCallbacks_;
     rXCallbacks_ UnprotectedXCallbacks_;
     rMutex_ XCallbacksMutex_ = UndefinedMutex_;
@@ -128,24 +75,6 @@ namespace {
     qRT
     qRE
         return *XCallback;
-    }
-
-    // Also returns its token row.
-    sTRow_ Deactivate_(sCRow_ CRow)
-    {
-        sTRow_ TRow = qNIL;
-    qRH
-        hGuardian_ Guardian;
-    qRB
-        rXCallback &XCallback = *GetXCallbacks_(Guardian)(CRow);
-
-        Dismiss_(Guardian);
-
-        TRow = XCallback.Deactivate(Guardian);
-    qRR
-    qRT
-    qRE
-        return TRow;
     }
 
     class rXCRows_
@@ -248,6 +177,102 @@ namespace {
     }
 }
 
+namespace {
+    void Remove_(
+        sCRow_ CRow,
+        dCRows_ &CRows)
+    {
+        sdr::sRow Row = CRows.First();
+
+        while ( Row != qNIL ) {
+            if ( CRows(Row) == CRow )
+                break;
+            Row = CRows.Next(Row);
+        }
+
+        if ( Row == qNIL )
+            qRGnr();
+
+        CRows.Delete(Row);
+    }
+}
+
+void xdhbrd::rXCallback::Remove_(void)
+{
+qRH
+    hGuardian_ Guardian;
+qRB
+    Deactivate_(Guardian);
+
+    ::Remove_(CRow_, FetchXCRows_(TRow_).GetCRows(Guardian));
+qRR
+qRT
+qRE
+}
+
+void xdhbrd::rXCallback::reset(bso::sBool P)
+{
+    if ( P ) {
+        if ( Mutex_ != UndefinedMutex_ )
+            mtx::Delete(Mutex_);
+
+        if ( CRow_ != qNIL )
+            Remove_();
+    }
+
+    Mutex_ = UndefinedMutex_;
+    Callback_ =  NULL;
+    TRow_ = qNIL;
+    CRow_ = qNIL;
+    State_ = s_Undefined;
+}
+
+void xdhbrd::rXCallback::Deactivate_(hGuardian_ &Guardian)
+{
+    Hire_(Guardian, Mutex_);
+
+    State_ = sDead;
+}
+
+void xdhbrd::rXCallback::Add_(const str::dString &Token)
+{
+qRH
+    hGuardian_ Guardian;
+qRB
+    TRow_ = Search_(Token);
+    FetchXCRows_(TRow_).GetCRows(Guardian).Add(CRow_ = Store_(*this));
+qRR
+qRE
+qRT
+}
+
+void xdhbrd::rXCallback::Init(
+    xdhcuc::cSingle &Callback,
+    const str::dString &Token)
+{
+    if ( Mutex_ != UndefinedMutex_ )
+        mtx::Delete(Mutex_);
+
+    if ( CRow_ != qNIL )
+        Remove_();
+
+    Callback_ = &Callback;
+    Mutex_ = mtx::Create();
+    State_ = sAlive;
+
+    Add_(Token);
+}
+
+void xdhbrd::rXCallback::Send(
+    const str::dString &Script,
+    hGuardian_ &Guardian)
+{
+    Hire_(Guardian, Mutex_);
+
+    if ( State_ == sAlive )
+        C_().Process(Script);
+}
+
 sTRow_ xdhbrd::Create(const str::dString &Token)
 {
     sTRow_ TRow = qNIL;
@@ -274,27 +299,6 @@ qRR
 qRT
 qRE
     return TRow;
-}
-
-sRow xdhbrd::InitAndAdd(
-        xdhcuc::cSingle &Callback,
-        rXCallback &XCallback,
-        const str::dString &Token)
-{
-    sCRow_ CRow = qNIL;
-qRH
-    sTRow_ TRow = qNIL;
-    hGuardian_ Guardian;
-qRB
-    TRow = Search_(Token);
-
-    XCallback.Init(Callback, TRow);
-
-    FetchXCRows_(TRow).GetCRows(Guardian).Add(CRow = Store_(XCallback));
-qRR
-qRT
-qRE
-    return CRow;
 }
 
 namespace {
@@ -365,44 +369,9 @@ qRB
 qRR
 qRT
 qRE
-
 }
 
-namespace {
-    void Remove_(
-        sCRow_ CRow,
-        dCRows_ &CRows)
-    {
-        sdr::sRow Row = CRows.First();
-
-        while ( Row != qNIL ) {
-            if ( CRows(Row) == CRow )
-                break;
-            Row = CRows.Next(Row);
-        }
-
-        if ( Row == qNIL )
-            qRGnr();
-
-        CRows.Delete(Row);
-    }
-}
-
-void xdhbrd::Remove(sRow CRow)
-{
-qRH
-    sTRow_ TRow = qNIL;
-    hGuardian_ Guardian;
-qRB
-    TRow = Deactivate_(CRow);
-
-    Remove_(CRow, FetchXCRows_(TRow).GetCRows(Guardian));
-qRR
-qRT
-qRE
-}
-
-qGCTOR(broadcst)
+qGCTOR(xdhbrd)
 {
     UnprotectedXCallbacks_.Init();
     XCallbacksMutex_ = mtx::Create();
@@ -413,7 +382,7 @@ qGCTOR(broadcst)
     UntokenizedXCRows_.Init(str::Empty);
 }
 
-qGDTOR(broadcst)
+qGDTOR(xdhbrd)
 {
     if ( XCallbacksMutex_ != UndefinedMutex_ )
         mtx::Delete(XCallbacksMutex_);

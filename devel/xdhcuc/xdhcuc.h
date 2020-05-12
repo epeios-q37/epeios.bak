@@ -42,12 +42,9 @@ namespace xdhcuc {
 		virtual void XDHCUCProcess(
 			const str::dString &Script,
 			str::dString *ReturnedValue ) = 0;
-        // Broadcast 'Id' (which can't be empty) to all clients.
-        virtual sRow XDHCUCBroadcastInit(const str::dString &Token) = 0;
         virtual void XDHCUCBroadcast(
             const str::dString &Script,
             const str::dString &Token) = 0;
-        virtual void XDHCUCBroadcastRemove(sRow Row) = 0;
 	public:
 		qCALLBACK( Single );
 		void Process(
@@ -61,14 +58,6 @@ namespace xdhcuc {
             const str::dString &Token)
         {
             return XDHCUCBroadcast(Script, Token);
-        }
-        sRow BroadcastInit(const str::dString &Token)
-        {
-            return XDHCUCBroadcastInit(Token);
-        }
-        void BroadcastRemove(sRow Row)
-        {
-            return XDHCUCBroadcastRemove(Row);
         }
 	};
 }
