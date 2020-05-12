@@ -187,10 +187,8 @@ class DOM:
 
 	set_content = set_content
 
-	def set_timeout(self,delay,action ):
-		self._dom.call( "SetTimeout_1", _VOID, str( delay ), action )
-
-	setTimeout = set_timeout
+	def broadcast_action(self, action, id = ""):
+		self._dom.call( "BroadcastAction_1", _VOID, action, id )
 
 	"""
 	# Following 4 methods will either be removed or redesigned.

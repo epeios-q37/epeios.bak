@@ -10,7 +10,7 @@
  </Project>
  <Project target="xdhwebq">
     <Parameters>
-        <ModuleFilename>/home/csimon/bin/esketchxdh</ModuleFilename>
+        <xpp:expand select="Module"/>
     </Parameters>
  </Project>
 </Projects>

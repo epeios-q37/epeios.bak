@@ -105,7 +105,6 @@ class Chatroom:
 def ac_connect(chatroom, dom):
 	dom.set_layout("", read_asset("Main.html"))
 	dom.focus("Pseudo")
-	dom.set_timeout(1000, "Update")
 	chatroom.display_messages(dom)
 	
 def ac_submit_pseudo(chatroom, dom):
@@ -135,10 +134,10 @@ def ac_submit_message(chatroom, dom):
 	dom.focus("Message")
 	chatroom.add_message(chatroom.pseudo, message)
 	chatroom.display_messages(dom)
+	dom.broadcast_action("Update")
 
 def ac_update(chatroom, dom):
 	chatroom.display_messages(dom)
-	dom.set_timeout(1000, "Update")
 
 callbacks = {
 		"": ac_connect,

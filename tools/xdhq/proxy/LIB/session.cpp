@@ -210,6 +210,44 @@ namespace {
             qRE
             }
 
+            void BroadcastAction_(
+                flw::rRFlow &Flow,
+                xdhdws::sProxy &Proxy,
+                const str::dString &Token)
+            {
+            qRH
+                str::wString Action, Id;
+            qRB
+                tol::Init(Action, Id);
+
+                if ( GetType_(Flow )!= tVoid )
+                    qRGnr();
+
+
+                if ( GetType_(Flow) != tString )
+                    qRGnr();
+
+                prtcl::Get(Flow, Action);
+
+
+                if ( GetType_(Flow) != tString )
+                    qRGnr();
+
+                prtcl::Get(Flow, Id);
+
+
+                if ( GetType_(Flow) != tVoid )
+                    qRGnr();
+
+
+                Flow.Dismiss();
+
+                Proxy.BroadcastAction(Action, Id, Token);
+            qRR
+            qRT
+            qRE
+            }
+
         }
 
         void Routine_(
@@ -244,8 +282,10 @@ namespace {
                 if ( ScriptName == "StandBy_1") {
                     Flow.Dismiss();
                     Blocker.Unblock();
-                } else if ( ScriptName=="Broadcast_1" ) {
+                } else if ( ScriptName == "Broadcast_1" ) { // Issued by XDH front-ends (Epeios XDH-based front-ends).
                     Broadcast_(Flow, Proxy, Token);
+                } else if ( ScriptName == "BroadcastAction_1" ) { // Issued by Atlas toolkit front-ends (Python, Java, Node.js…).
+                    BroadcastAction_(Flow, Proxy, Token);
                 } else {
                     ReturnType = GetType_( Flow );
 

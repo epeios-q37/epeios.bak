@@ -93,14 +93,15 @@
 }
         ]]>
       </Script>
-      <Script name="SetTimeout_1" Arguments="Delay,Action">
+      <!-- Use broadcasting instead! -->
+      <!--Script name="SetTimeout_1" Arguments="Delay,Action">
         <![CDATA[
 {
   setTimeout( (digest) => launchEvent(digest), %Delay%, "|TIMEOUT|timeout||((%Action%))" );
   undefined; // 'setTimeout' returns a value which is discarded as not being awaited.
 }
         ]]>
-      </Script>
+      </Script-->
       <Script name="HandleClasses_1" Arguments="Variant,#Ids,#Classes">
         <![CDATA[
 {
