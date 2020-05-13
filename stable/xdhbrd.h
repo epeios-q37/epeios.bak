@@ -54,13 +54,17 @@ namespace xdhbrd {
         sTRow_ TRow_;
         sCRow_ CRow_;
         eState_ State_;
-        void Add_(const str::dString &Token);
+        // Returns 'false' if 'Token' does not exist and 'ReturnNotFound' at 'true'.
+        bso::sBool Add_(
+            const str::dString &Token,
+            bso::sBool ReturnNotFound);
         void Deactivate_(hGuardian_ &Guardian);
         void Remove_(void);
     public:
         void reset(bso::sBool P = true);
         qCDTOR(rXCallback);
-        void Init(
+        // Returns 'false' if 'Token' does nor exist.
+        bso::sBool Init(
             xdhcuc::cSingle &Callback,
             const str::dString &Token);
         void Send(

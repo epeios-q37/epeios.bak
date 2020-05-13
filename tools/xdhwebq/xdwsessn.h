@@ -78,9 +78,8 @@ namespace xdwsessn {
 			const str::dString &Token )	// If empty, FaaS session, else token used for the FaaS session.
  		{
 			Upstream_.Init(Driver);
-			XCallback_.Init(Upstream_, Token);
 			Session_.Init(Callback);
-			return Session_.Initialize(Upstream_, Language, Token);
+			return XCallback_.Init(Upstream_, Token) && Session_.Initialize(Upstream_, Language, Token);
 		}
 		bso::sBool Launch(
             const char *Id,

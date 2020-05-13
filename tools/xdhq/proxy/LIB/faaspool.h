@@ -67,20 +67,20 @@ namespace faaspool {
 	public:
 		sId Id;
 		fdr::rRWDriver *Driver;
-		tht::rBlocker Read;	// Handled (created/destroyed) upstream.
+		tht::rBlocker Read_;	// Handled (created/destroyed) upstream.
 		tht::rBlocker *Switch;
 		void reset( bso::sBool P = true )
 		{
 			Id = Undefined;
 			Driver = NULL;
-			Read.reset( P );
+			Read_.reset( P );
 			Switch = NULL;
 		}
 		void Init( void )
 		{
 			reset();
 
-			Read.Init();
+			Read_.Init();
 		}
 		qCDTOR( rShared );
 		bso::sBool IsValid( void ) const
@@ -210,7 +210,7 @@ namespace faaspool {
 		{
 			fdr::rRWDressedDriver::reset( P );
 			Consumed_ = 0;
-			Shared_.IsValid();
+			Shared_.reset(P);
 			IdSent_ = false;
 		}
 		qCVDTOR( rRWDriver );

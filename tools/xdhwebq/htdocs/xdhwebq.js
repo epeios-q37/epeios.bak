@@ -24,6 +24,7 @@ var target = "";
 
 var queryInProgress = false;
 var queryQueue = [];
+var reportClosing = true;
 
 function log( message )
 {
@@ -84,7 +85,8 @@ function connect(token) {
 	};
 	
     socket.onclose = function(event) {
-        if (confirm("Disconnected!\nPress OK to reload the application."))
-            location.reload(true);
+		if ( reportClosing )
+			if (confirm("Disconnected!\nPress OK to reload the application."))
+				location.reload(true);
     }	
 }

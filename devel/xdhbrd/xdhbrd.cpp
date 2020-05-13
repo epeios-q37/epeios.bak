@@ -145,13 +145,15 @@ namespace {
         return TRow;
     }
 
-    sTRow_ Search_(const str::dString &Token)
+    sTRow_ Search_(
+        const str::dString &Token,
+        bso::sBool ReturnNotFound)
     {
         sTRow_ TRow = qNIL;
     qRH
         hGuardian_ Guardian;
     qRB
-        TRow = Search_(Token, GetXCRowsSets_(Guardian), false);
+        TRow = Search_(Token, GetXCRowsSets_(Guardian), ReturnNotFound);
     qRR
     qRT
     qRE
@@ -234,19 +236,22 @@ void xdhbrd::rXCallback::Deactivate_(hGuardian_ &Guardian)
     State_ = sDead;
 }
 
-void xdhbrd::rXCallback::Add_(const str::dString &Token)
+bso::sBool xdhbrd::rXCallback::Add_(
+    const str::dString &Token,
+    bso::sBool ReturnNotFound)
 {
 qRH
     hGuardian_ Guardian;
 qRB
-    TRow_ = Search_(Token);
-    FetchXCRows_(TRow_).GetCRows(Guardian).Add(CRow_ = Store_(*this));
+    if ( ( TRow_ = Search_(Token, ReturnNotFound) ) != qNIL )
+        FetchXCRows_(TRow_).GetCRows(Guardian).Add(CRow_ = Store_(*this));
 qRR
 qRE
 qRT
+    return TRow_ != qNIL;
 }
 
-void xdhbrd::rXCallback::Init(
+bso::sBool xdhbrd::rXCallback::Init(
     xdhcuc::cSingle &Callback,
     const str::dString &Token)
 {
@@ -260,7 +265,7 @@ void xdhbrd::rXCallback::Init(
     Mutex_ = mtx::Create();
     State_ = sAlive;
 
-    Add_(Token);
+    return Add_(Token, true);
 }
 
 void xdhbrd::rXCallback::Send(
@@ -384,7 +389,7 @@ qRH
     sTRow_ TRow = qNIL;
     hGuardian_ Guardian;
 qRB
-    TRow = Search_(Token);
+    TRow = Search_(Token, false);
 
     Broadcast_(Script, FetchXCRows_(TRow).GetCRows(Guardian));
 qRR

@@ -173,22 +173,22 @@ namespace {
                 Flow.Init(Driver, websck::mWithTerminator);
                 Session.Init(Callback, Driver, "", Data.Token);
 
-                if ( Agent.IsValid(Data.Token) )
-                    Session.Launch("","");
-                else {
+                if ( !Agent.IsValid(Data.Token) ) {
                     Script.Init();
                     sclm::MGetValue(registry::definition::ErrorScript, Script);
                     Session.Execute(Script);
-                }
+                } else {
+                    Session.Launch("","");
 
-                while ( true ) {
-                    Digest.Init();
-                    if ( !websck::GetMessage(Flow,Digest) )
-                        break;
-                    Flow.Dismiss();
-                    Handle_(Digest, Session);
-                    Flow.Write("StandBy", 7);
-                    Flow.Commit();
+                    while ( true ) {
+                        Digest.Init();
+                        if ( !websck::GetMessage(Flow,Digest) )
+                            break;
+                        Flow.Dismiss();
+                        Handle_(Digest, Session);
+                        Flow.Write("StandBy", 7);
+                        Flow.Commit();
+                    }
                 }
             qRR
             qRT

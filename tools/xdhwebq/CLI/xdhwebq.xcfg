@@ -28,11 +28,12 @@
                 <![CDATA[
 document.body.innerHTML = `
 <div style="display: table; margin: auto; padding: 10px; text-align: center;">
-    <span style="color: red; font-size: larger;">Unknown token, or corresponding application does no more exist!</span>
+    <span style="color: red; font-size: larger;">Unknown token, or corresponding application is no more running!</span>
     <p/>
     <span>See <a href="http://atlastk.org/faq">http://atlastk.org/faq.</a></span>
 </div>
-`;
+` + document.body.innerHTML;
+reportClosing = false;
                 ]]>
             </ErrorScript>
 		</Definitions>

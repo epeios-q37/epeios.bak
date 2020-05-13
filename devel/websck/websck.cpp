@@ -293,8 +293,8 @@ qRB
 
     ReturnValue = GetMessage(Flow, MessageFlow);
 qRR
-qRE
 qRT
+qRE
     return ReturnValue;
 }
 
