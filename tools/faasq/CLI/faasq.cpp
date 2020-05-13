@@ -85,7 +85,7 @@ namespace {
 
 	namespace {
         namespace {
-            qCDEF( char *, FaaSProtocolLabel_, "0fac593d-d65f-4cc1-84f5-3159c23c616b" );
+            qCDEF( char *, FaaSProtocolLabel_, "7b4b6bea-2432-4584-950b-e595c9e391e1" );
             qCDEF(bso::sU8, FaaSProtocolVersion_, 0);
         }
 

@@ -77,6 +77,18 @@ namespace dtfptb {
 		_length__ Length,
 		flw::oflow__ &Flow );
 
+	void FPutInt_(
+		bso::int__ Int,
+		_length__ Length,
+		fdr::rWDriver &Driver );
+
+	template <typename i, typename fd> inline void FPut(
+		i Int,
+		fd &FD )
+	{
+		FPutInt_( Int, sizeof( Int ), FD );
+	}
+
 	bso::int__ FGetInt_(
 		flw::iflow__ &Flow,
 		_length__ Length,
@@ -86,13 +98,6 @@ namespace dtfptb {
 		fdr::rRDriver &Driver,
 		_length__ Length,
 		bso::sBool *IsError );
-
-	template <typename i> inline void FPut(
-		i Int,
-		flw::rWFlow &Flow )
-	{
-		FPutInt_( Int, sizeof( Int ), Flow );
-	}
 
 	template <typename i, typename fd> inline i FGet(
 		fd &FD,
@@ -140,13 +145,21 @@ namespace dtfptb {
 		bso::sSHuge Max,
 		bso::sBool *IsError );
 
-	void _VPutUHuge(
+	void VPutUHuge_(
 		bso::sUHuge UHuge,
 		flw::oflow__ &Flow );
 
-	void _VPutSHuge(
+	void VPutUHuge_(
+		bso::sUHuge UHuge,
+		fdr::rWDriver &Driver );
+
+	void VPutSHuge_(
 		bso::sSHuge SHuge,
 		flw::oflow__ &Flow );
+
+	void VPutSHuge_(
+		bso::sSHuge SHuge,
+		fdr::rWDriver &Driver );
 
 # ifdef CPE_S_DARWIN
 	inline bso::size__ VGet(
@@ -197,13 +210,25 @@ namespace dtfptb {
 		bso::u##bitness##__ Int,\
 		flw::rWFlow &Flow )\
 	{\
-		_VPutUHuge( Int, Flow );\
+		VPutUHuge_( Int, Flow );\
+	}\
+	inline void VPut(\
+		bso::u##bitness##__ Int,\
+		fdr::rWDriver &Driver )\
+	{\
+		VPutUHuge_( Int, Driver );\
 	}\
 	inline void VPut(\
 		bso::s##bitness##__ Int,\
 		flw::rWFlow &Flow )\
 	{\
-		_VPutSHuge( Int, Flow );\
+		VPutSHuge_( Int, Flow );\
+	}\
+	inline void VPut(\
+		bso::s##bitness##__ Int,\
+		fdr::rWDriver &Driver )\
+	{\
+		VPutSHuge_( Int, Driver );\
 	}\
 
 DTFPTB__M( 32, BSO_U32_MAX, BSO_S32_MIN, BSO_S32_MAX )

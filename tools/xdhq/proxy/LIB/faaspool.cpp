@@ -53,7 +53,7 @@ void faaspool::SetCallback(xdhcuc::cGlobal &Callback)
 }
 
 namespace {
-	static qCDEF( char *, ProtocolId_, "0fac593d-d65f-4cc1-84f5-3159c23c616b" );
+	static qCDEF( char *, ProtocolId_, "7b4b6bea-2432-4584-950b-e595c9e391e1" );
 
 	namespace registry_ {
 		namespace parameter {

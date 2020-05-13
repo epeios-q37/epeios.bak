@@ -25,8 +25,8 @@
 # include "xdhups.h"
 
 namespace session {
-    typedef bso::sU8 sId;
-    qCDEF(sId, UndefinedId, 255);
+	typedef bso::sS16 sId;
+	qCDEF( sId, UndefinedId, -1 );
 
     typedef xdhcuc::cSingle cUpstream_;
 

@@ -543,6 +543,10 @@ namespace flw {
 			else
 				return true;
 		}
+		void DumpCache(void)
+		{
+		    DumpCache_(NULL, err::h_Default);
+		}
 		//f Return the amount of data written since last 'Synchronize()'.
 		size__ AmountWritten( void ) const
 		{

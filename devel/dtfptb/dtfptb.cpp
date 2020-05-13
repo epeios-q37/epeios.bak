@@ -169,6 +169,8 @@ qRB;
 	Flow.Init( Driver );
 
 	Value = OldGetSize( Flow );
+
+	Flow.reset(false); // To avoid a 'Dismiss(…)'.
 qRR;
 qRT;
 qRE;
@@ -227,6 +229,8 @@ qRB;
 	Flow.Init( Driver );
 
 	Success = GetInt_( Flow, DInt );
+
+	Flow.reset(false);  // To avoid the 'Dismiss(…)'.
 qRR;
 qRT;
 qRE;
@@ -240,7 +244,6 @@ static void PutInt_(
 	Flow.Write( XInt.DSizeBuffer(), XInt.BufferSize() );
 }
 
-#if 0
 static void PutInt_(
 	const bso::xint__ &XInt,
 	fdr::rWDriver &Driver )
@@ -250,12 +253,15 @@ qRH;
 qRB;
 	Flow.Init( Driver );
 
-	PutInt_( XInt, Flow );
+	PutInt_(XInt, Flow);
+
+	Flow.DumpCache();
+
+	Flow.reset(false);  // To avoid the 'Commit(…)'.
 qRR;
 qRT;
 qRE;
 }
-#endif
 
 #define M( s )	Flow.Put( (flw::byte__)( Int >> ( s * 8 ) ) )
 
@@ -289,6 +295,26 @@ void dtfptb::FPutInt_(
 }
 
 #undef M
+
+void dtfptb::FPutInt_(
+    bso::int__ Int,
+	_length__ Length,
+	fdr::rWDriver &Driver )
+{
+qRH;
+	flw::rDressedWFlow<> Flow;
+qRB;
+	Flow.Init( Driver );
+
+	FPutInt_(Int, Length, Flow);
+
+	Flow.DumpCache();
+
+	Flow.reset(false);  // To avoid the 'Commit(…)'.
+qRR;
+qRT;
+qRE;
+}
 
 #define M( s )	Int += (bso::int__)( Flow.Get( IsError ) ) << ( s * 8 )
 
@@ -339,6 +365,8 @@ qRB;
 	Flow.Init( Driver );
 
 	Int = FGetInt_( Flow, Length, IsError );
+
+	Flow.reset(false);  // To avoid the 'Dismiss()'.
 qRR;
 qRT;
 qRE;
@@ -440,11 +468,18 @@ template <typename fd> static void VPutUHuge_(
 	PutInt_( bso::ConvertToDInt( UHuge, XInt ), FD );
 }
 
-void dtfptb::_VPutUHuge(
+void dtfptb::VPutUHuge_(
+	bso::sUHuge UHuge,
+	fdr::rWDriver &Driver )
+{
+	::VPutUHuge_( UHuge, Driver );
+}
+
+void dtfptb::VPutUHuge_(
 	bso::sUHuge UHuge,
 	flw::oflow__ &Flow )
 {
-	VPutUHuge_( UHuge, Flow );
+	::VPutUHuge_( UHuge, Flow );
 }
 
 template <typename fd> void VPutSHuge_(
@@ -456,11 +491,18 @@ template <typename fd> void VPutSHuge_(
 	PutInt_( bso::ConvertToDInt( SHuge, XInt ), FD );
 }
 
-void dtfptb::_VPutSHuge(
+void dtfptb::VPutSHuge_(
+	bso::sSHuge SHuge,
+	fdr::rWDriver &Driver)
+{
+	::VPutSHuge_( SHuge, Driver );
+}
+
+void dtfptb::VPutSHuge_(
 	bso::sSHuge SHuge,
 	flw::oflow__ &Flow )
 {
-	VPutSHuge_( SHuge, Flow );
+	::VPutSHuge_( SHuge, Flow );
 }
 
 Q37_GCTOR( dtfptb )

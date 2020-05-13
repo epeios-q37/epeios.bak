@@ -30,12 +30,10 @@ if sys.version_info[0] == 2:
 	from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer	# For 'repl.it'.
 	import XDHqFaaS2
 	l = XDHqFaaS2.l
-	_writeByte = XDHqFaaS2.writeByte
-	_writeSize = XDHqFaaS2.writeSize
+	_writeUInt = XDHqFaaS2.writeUInt
 	_writeString = XDHqFaaS2.writeString
 	_writeStringNUL = XDHqFaaS2.writeStringNUL
-	_getByte = XDHqFaaS2.getByte
-	_getSize = XDHqFaaS2.getSize
+	_readUInt = XDHqFaaS2.readUInt
 	_getString = XDHqFaaS2.getString
 	def _REPLit_convert(str):
 		return str
@@ -43,12 +41,10 @@ elif sys.version_info[0] == 3:
 	from http.server import BaseHTTPRequestHandler, HTTPServer	# For 'repl.it'.
 	import XDHqFaaS3
 	l = XDHqFaaS3.l
-	_writeByte = XDHqFaaS3.writeByte
-	_writeSize = XDHqFaaS3.writeSize
+	_writeUInt = XDHqFaaS3.writeUInt
 	_writeString = XDHqFaaS3.writeString
 	_writeStringNUL = XDHqFaaS3.writeStringNUL
-	_getByte = XDHqFaaS3.getByte
-	_getSize = XDHqFaaS3.getSize
+	_readUInt = XDHqFaaS3.readUInt
 	_getString = XDHqFaaS3.getString
 	def _REPLit_convert(str):
 		return bytes(str,"utf-8")
@@ -109,7 +105,7 @@ def _REPLit(url):
     httpd = HTTPServer(server_address, _REPLit_class)
     httpd.handle_request()
 
-_FaaSProtocolLabel = "0fac593d-d65f-4cc1-84f5-3159c23c616b"
+_FaaSProtocolLabel = "7b4b6bea-2432-4584-950b-e595c9e391e1"
 _FaaSProtocolVersion = "0"
 _mainProtocolLabel = "8d2b7b52-6681-48d6-8974-6e0127a4ca7e"
 _mainProtocolVersion = "0"
@@ -152,20 +148,19 @@ def getEnv( name, value= "" ):
 	else:
 		return value.strip()
 
-def writeByte(byte):
+def writeUInt(value):
 	global _socket
-	_writeByte( _socket, byte )
+	_writeUInt( _socket, value )
 
-def writeSize(size):
-	global _socket
-	_writeSize( _socket, size )
+def writeSInt(value):
+	writeUInt( ( value << 1 ) | ( 1 if value < 0 else 0 ) )
 
 def writeString(string):
 	global _socket
 	_writeString(_socket, string)
 
 def writeStrings(strings):
-	writeSize(len(strings))
+	writeUInt(len(strings))
 
 	for string in strings:
 		writeString(string)
@@ -174,20 +169,20 @@ def writeStringNUL(string):
 	global _socket
 	_writeStringNUL(_socket, string)
 
-def getByte():
+def readUInt():
 	global _socket
-	return _getByte( _socket)
+	return _readUInt( _socket)
 
-def getSize():
-	global _socket
-	return _getSize( _socket)
+def readSInt():
+	value = readUInt()
+	return -( value >> 1 ) if ( value & 1 ) else ( value >> 1 )
 
 def getString():
 	global _socket
 	return _getString(_socket)
 
 def getStrings():
-	amount = getSize()
+	amount = readUInt()
 	strings = []
 
 	while amount:
@@ -302,10 +297,10 @@ def _serve(callback,userCallback,callbacks ):
 
 #		l()
 
-		id = getByte()
+		id = readSInt()
 		
-		if id == 255:    # Value reporting a new front-end.
-			id = getByte()  # The id of the new front-end.
+		if id == -1:    # Value reporting a new front-end.
+			id = readSInt()  # The id of the new front-end.
 
 			if id in _instances:
 				sys.exit("Instance of id '" + id + "' exists but should not !")
@@ -315,7 +310,7 @@ def _serve(callback,userCallback,callbacks ):
 			_instances[id] = instance
 
 			_writeLock.acquire()
-			writeByte(id)
+			writeSInt(id)
 			writeString(_mainProtocolLabel)
 			writeString(_mainProtocolVersion)
 			_writeLock.release()
@@ -331,7 +326,7 @@ def _serve(callback,userCallback,callbacks ):
 			getString()	# Language. Not handled yet.
 
 			_writeLock.acquire()
-			writeByte(id)
+			writeSInt(id)
 			writeString("PYH")
 			_writeLock.release()
 		else:
@@ -368,7 +363,7 @@ class DOM_FaaS:
 			self._firstLaunch = False
 		else:
 			_writeLock.acquire()
-			writeByte(self.instance.getId())
+			writeSInt(self.instance.getId())
 			writeString("StandBy_1")
 			_writeLock.release()
 
@@ -383,20 +378,20 @@ class DOM_FaaS:
 
 	def call(self, command, type, *args):
 		_writeLock.acquire()
-		writeByte(self.instance.getId())
+		writeSInt(self.instance.getId())
 		writeString(command)
 
-		writeByte(type)
+		writeUInt(type)
 
 		for arg in args:
 			if isinstance(arg,str):
-				writeByte(XDHqSHRD.RT_STRING)
+				writeUInt(XDHqSHRD.RT_STRING)
 				writeString(arg)
 			else:
-				writeByte(XDHqSHRD.RT_STRINGS)
+				writeUInt(XDHqSHRD.RT_STRINGS)
 				writeStrings(arg)
 
-		writeByte(XDHqSHRD.RT_VOID)	# To report end of argument list.
+		writeUInt(XDHqSHRD.RT_VOID)	# To report end of argument list.
 
 		_writeLock.release()
 

@@ -40,16 +40,15 @@ namespace faaspool {
 	void Initialize();
 
 	// If modified, modify also the 'Undefined' definition.
-	typedef bso::sU8 sId;
+	typedef bso::sS16 sId;
+	qCDEF( sId, Undefined, -1 );
+	qCDEF( sId, Max, bso::S8Max );
 
-	qCDEF( sId, Undefined, bso::U8Max );
-	qCDEF( sId, Max, Undefined - 1 );
-
-	inline void PutId(
+	template <typename fd>  inline void PutId(
 		sId Id,
-		flw::rWFlow &Flow )
+		fd &FD )
 	{
-		dtfptb::FPut( Id, Flow );
+		dtfptb::VPut( Id, FD );
 	}
 
 	template <typename fd> inline sId GetId(
@@ -58,7 +57,7 @@ namespace faaspool {
 	{
 		sId Id = Undefined;
 
-		return dtfptb::FGet( FD, Id, IsError );
+		return dtfptb::VGet( FD, Id, IsError );
 	}
 
 	// Shared between upstream and downstream.
@@ -67,20 +66,20 @@ namespace faaspool {
 	public:
 		sId Id;
 		fdr::rRWDriver *Driver;
-		tht::rBlocker Read_;	// Handled (created/destroyed) upstream.
+		tht::rBlocker Read;
 		tht::rBlocker *Switch;
 		void reset( bso::sBool P = true )
 		{
 			Id = Undefined;
 			Driver = NULL;
-			Read_.reset( P );
+			Read.reset( P );
 			Switch = NULL;
 		}
 		void Init( void )
 		{
 			reset();
 
-			Read_.Init();
+			Read.Init();
 		}
 		qCDTOR( rShared );
 		bso::sBool IsValid( void ) const
@@ -159,33 +158,17 @@ namespace faaspool {
 			const fdr::byte__ *Buffer,
 			fdr::size__ Maximum ) override
 		{
-		qRH;
-			fdr::sByte *NewBuffer = NULL;
-		qRB;
-			if ( !IdSent_ ) {	// To optimize.
-				if ( ( NewBuffer = (fdr::sByte *)malloc( Maximum + 1 ) ) == NULL )
-						qRAlc();
+			if ( !IdSent_ ) {
+                PutId(Shared_.Id, *Shared_.Driver);
 
-				NewBuffer[0] = Shared_.Id;
-				memcpy( NewBuffer + 1, Buffer, Maximum );
-
-				Buffer = NewBuffer;
-				Maximum++;
 				IdSent_ = true;
 			}
 
 			if ( Shared_.IsValid() ) {
 				Maximum = Shared_.Driver->Write( Buffer, Maximum );
-
-				if ( Maximum > 0 )
-					Maximum--;
 			} else
 				Maximum = 0;
-		qRR;
-		qRT;
-			if ( NewBuffer != NULL )
-				free( NewBuffer );
-		qRE;
+
 			return Maximum;
 		}
 		virtual bso::sBool FDRCommit(
