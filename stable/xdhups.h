@@ -124,7 +124,8 @@ namespace xdhups {
 		{
 			return C_().GetHead(Token, Head);
 		}
-		bso::sBool IsValid(const str::dString &Token);
+		// Deprecated.
+		bso::sBool _IsValid(const str::dString &Token);
 	};
 }
 

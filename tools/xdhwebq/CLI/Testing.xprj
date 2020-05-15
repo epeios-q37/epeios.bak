@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Projects>
+<Projects xmlns ="http://q37.info/xcfg" xmlns:xpp="https://q37.info/ns/xpp">
+  <xpp:define name="Module">
+    <ModuleFilename>/home/csimon/bin/esketchxdh</ModuleFilename>
+  </xpp:define>
  <Project target="faasq">
     <Parameters>
+      <xpp:expand select="Module"/>
     </Parameters>
  </Project>
  <Project target="xdhwebq">
     <Parameters>
-        <ModuleFilename>/home/csimon/bin/esketchxdh</ModuleFilename>
+      <xpp:expand select="Module"/>
     </Parameters>
  </Project>
 </Projects>

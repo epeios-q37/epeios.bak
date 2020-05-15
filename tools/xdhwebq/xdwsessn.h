@@ -3,18 +3,18 @@
 
 	This file is part of XDHWebQ.
 
-    XDHWebQ is free software: you can redistribute it and/or modify it
-    under the terms of the GNU Affero General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+	XDHWebQ is free software: you can redistribute it and/or modify it
+	under the terms of the GNU Affero General Public License as published
+	by the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
 
-    XDHWebQ is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+	XDHWebQ is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
-    along with XDHWebQ.  If not, see <http://www.gnu.org/licenses/>.
+	You should have received a copy of the GNU Affero General Public License
+	along with XDHWebQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #ifndef XDWSESSN_INC_
@@ -28,9 +28,9 @@
 # include "websck.h"
 
 namespace xdwsessn {
-    class rSession; // Predeclaration.
+	class rSession; // Predeclaration.
 
-    typedef xdhcuc::cSingle cUpstream_;
+	typedef xdhcuc::cSingle cUpstream_;
 
 	class rUpstream_
 	: public cUpstream_
@@ -41,16 +41,16 @@ namespace xdwsessn {
 		virtual void XDHCUCProcess(
 			const str::string_ &Script,
 			str::dString *ReturnedValue ) override;
-        virtual void XDHCUCBroadcast(
-            const str::dString &Script,
-            const str::dString &Token) override
-        {
-            xdhbrd::Broadcast(Script, Token);
-        }
+		virtual void XDHCUCBroadcast(
+			const str::dString &Script,
+			const str::dString &Token) override
+		{
+			xdhbrd::Broadcast(Script, Token);
+		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
-		    tol::reset(P, Driver_);
+			tol::reset(P, Driver_);
 		}
 		E_CVDTOR( rUpstream_ );
 		void Init(fdr::rRWDriver &Driver)
@@ -62,41 +62,41 @@ namespace xdwsessn {
 	class rSession
 	{
 	private:
-        rUpstream_ Upstream_;
-        xdhbrd::rXCallback XCallback_;
+		rUpstream_ Upstream_;
+		xdhbrd::rXCallback XCallback_;
 		xdhups::sSession Session_;
-    public:
+	public:
 		void reset( bso::bool__ P = true )
 		{
-            tol::reset(P, Upstream_, XCallback_, Session_);
+			tol::reset(P, Upstream_, XCallback_, Session_);
 		}
 		E_CDTOR( rSession );
 		bso::sBool Init(
-            xdhcdc::cSingle *Callback,
-            fdr::rRWDriver &Driver,
-            const char *Language,
+			xdhcdc::cSingle *Callback,
+			fdr::rRWDriver &Driver,
+			const char *Language,
 			const str::dString &Token )	// If empty, FaaS session, else token used for the FaaS session.
- 		{
+		{
 			Upstream_.Init(Driver);
 			Session_.Init(Callback);
 			return XCallback_.Init(Upstream_, Token) && Session_.Initialize(Upstream_, Language, Token);
 		}
 		bso::sBool Launch(
-            const char *Id,
-            const char *Action )
-        {
-            return Session_.Launch(Id, Action );
-        }
-        void Execute(
-            const str::dString &Script,
-            str::dString &ReturnedValue)
-        {
-            Upstream_.Process(Script, &ReturnedValue);
-        }
-        void Execute(const str::dString &Script)
-        {
-            Upstream_.Process(Script);
-        }
+			const char *Id,
+			const char *Action )
+		{
+			return Session_.Launch(Id, Action );
+		}
+		void Execute(
+			const str::dString &Script,
+			str::dString &ReturnedValue)
+		{
+			Upstream_.Process(Script, &ReturnedValue);
+		}
+		void Execute(const str::dString &Script)
+		{
+			Upstream_.Process(Script);
+		}
 	};
 }
 

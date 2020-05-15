@@ -215,11 +215,11 @@ qRE
 void xdhbrd::rXCallback::reset(bso::sBool P)
 {
     if ( P ) {
-        if ( Mutex_ != UndefinedMutex_ )
-            mtx::Delete(Mutex_);
-
         if ( CRow_ != qNIL )
             Remove_();
+
+        if ( Mutex_ != UndefinedMutex_ )
+            mtx::Delete(Mutex_);
     }
 
     Mutex_ = UndefinedMutex_;
@@ -240,15 +240,24 @@ bso::sBool xdhbrd::rXCallback::Add_(
     const str::dString &Token,
     bso::sBool ReturnNotFound)
 {
+    bso::sBool Success = true;
 qRH
     hGuardian_ Guardian;
 qRB
-    if ( ( TRow_ = Search_(Token, ReturnNotFound) ) != qNIL )
+    if ( ( TRow_ = Search_(Token, ReturnNotFound) ) == qNIL ) {
+        if ( Token.Amount() == 0 ) {
+            if ( GetXCRowsSets_(Guardian).Amount() != 0 )
+                qRGnr();
+        } else
+            Success = false;
+    }
+
+    if ( Success )
         FetchXCRows_(TRow_).GetCRows(Guardian).Add(CRow_ = Store_(*this));
 qRR
 qRE
 qRT
-    return TRow_ != qNIL;
+    return Success;
 }
 
 bso::sBool xdhbrd::rXCallback::Init(
