@@ -25,8 +25,11 @@
 # include "xdhups.h"
 
 namespace session {
+	// Copied from 'faaspool.h'.
 	typedef bso::sS16 sId;
 	qCDEF( sId, UndefinedId, -1 );
+	qCDEF( sId, CreationId, -2 );
+	qCDEF( sId, ClosingId, -3 );
 
     typedef xdhcuc::cSingle cUpstream_;
 
@@ -101,7 +104,7 @@ namespace session {
         qRMV(xdhups::rAgent, A_, Agent_);
         xdhups::sSession Session_;
         rBlockers_ Blockers_;
-        sId Id_;
+        sId _Id_;
     public:
         bso::sBool Handshaked;
         void reset(bso::sBool P = true)
@@ -112,7 +115,7 @@ namespace session {
 
             tol::reset(P, Proxy_, Upstream_, Agent_, Session_, Blockers_);
             Handshaked = false;
-            Id_ = UndefinedId;
+            _Id_ = UndefinedId;
         }
         qCDTOR(rSession);
         void Init(
@@ -132,7 +135,7 @@ namespace session {
             Session_.Initialize(Upstream_, "", str::Empty);
             Handshaked = false;
             Blockers_.Init(Global);
-            Id_ = Id;
+            _Id_ = Id;
         }
         void Launch( void );
         void Unblock()

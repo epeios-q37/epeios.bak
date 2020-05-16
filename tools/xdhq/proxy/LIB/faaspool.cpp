@@ -84,7 +84,7 @@ namespace {
 			sFRow Row = Shareds.First();
 
 			while ( Row != qNIL ) {
-				Shareds( Row )->Id = Undefined;
+				Shareds( Row )->Id = UndefinedId;
 
 				Row = Shareds.Next( Row );
 			}
@@ -495,13 +495,13 @@ namespace {
 	{
 	qRH;
 		flw::rDressedRFlow<> Flow;
-		sId Id = Undefined;
+		sId Id = UndefinedId;
 		bso::sBool IsError = false;
 	qRB;
 		Flow.Init( Driver );
 
 		while ( true ) {
-			Id = Undefined;
+			Id = UndefinedId;
 
 			Id = GetId( Flow, &IsError );
 
@@ -509,7 +509,7 @@ namespace {
 				break;
 
 			if ( !Shareds.Exists( Id ) ) {
-				Id = Undefined;
+				Id = UndefinedId;
 				qRGnr();
 			}
 
@@ -631,7 +631,7 @@ qRB;
 		if ( Backend->Set( Shared ) ) {
 			Flow.Init( *Backend->Driver );
 			IP.Append( Backend->IP );
-			PutId( Undefined, Flow );	// To signal to the back-end a new connection.
+			PutId( CreationId, Flow );	// To signal to the back-end a new connection.
 			PutId( Shared.Id, Flow );	// The id of the new front-end.
 			Flow.Commit();
 		}  else

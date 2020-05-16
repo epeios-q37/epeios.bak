@@ -44,13 +44,13 @@ namespace session {
 	  public xdhdws::sProxy
 	{
 	private:
-		eMode_ _Mode_;
+		eMode_ Mode_;
 		faaspool::rRWDriver FaaSDriver_;
 		csdmnc::rRWDriver ProdDriver_;
 		tht::rBlocker Blocker_;
 		fdr::rRWDriver &D_( void )
 		{
-			switch ( _Mode_ ) {
+			switch ( Mode_ ) {
 			case mFaaS:
 				return FaaSDriver_;
 				break;
@@ -106,8 +106,14 @@ namespace session {
 	public:
 		void reset( bso::sBool P = true )
 		{
+			if ( P ) {
+				if ( Mode_ != m_Undefined ) {
+					Launch_("Quit_1", "");	// To tell the backend to close the corresponding session.
+				}
+			}
+
 			tol::reset(P, Blocker_, FaaSDriver_, ProdDriver_);
-			_Mode_ = m_Undefined;
+			Mode_ = m_Undefined;
 			xdhdws::sProxy::reset( P );
 		}
 		qCVDTOR( rSession )
@@ -115,7 +121,7 @@ namespace session {
 		{
 			tol::reset(Blocker_, FaaSDriver_, ProdDriver_);
 			Blocker_.Init();
-			_Mode_ = m_Undefined;
+			Mode_ = m_Undefined;
 
 			// 'xdhdws::sProxy' Will be initialized later.
 

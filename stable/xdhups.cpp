@@ -26,7 +26,7 @@ using namespace xdhups;
 extern "C" typedef xdhcdc::retrieve retrieve;
 
 bso::bool__ xdhups::rAgent::Init(
-    xdhcuc::cGlobal &Upstream,
+	xdhcuc::cGlobal &Upstream,
 	xdhcdc::eMode Mode,
 	const str::string_ &ModuleFileName,
 	dlbrry::eNormalization Normalization,
@@ -63,16 +63,16 @@ qRE
 
 bso::sBool xdhups::rAgent::_IsValid(const str::dString &Token)
 {
-    bso::sBool ReturnValue = false;
+	bso::sBool ReturnValue = false;
 qRH
-    str::wString DummmyHead;
+	str::wString DummmyHead;
 qRB
-    DummmyHead.Init();
+	DummmyHead.Init();
 
-    ReturnValue = GetHead(Token, DummmyHead);
+	ReturnValue = GetHead(Token, DummmyHead);
 qRR
 qRT
 qRE
-    return ReturnValue;
+	return ReturnValue;
 }
 

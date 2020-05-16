@@ -59,261 +59,284 @@ namespace {
 	}
 
 	namespace {
-        void Initialize_(csdbnc::rRWDriver &Proxy)
-        {
-        qRH
-            str::wString Host, Service;
-            qCBUFFERh HostBuffer, ServiceBuffer;
-        qRB
-            tol::Init(Host, Service);
-            sclm::MGetValue(registry::parameter::proxy::Host, Host);
-            sclm::MGetValue(registry::parameter::proxy::Service, Service);
+		void Initialize_(csdbnc::rRWDriver &Proxy)
+		{
+		qRH
+			str::wString Host, Service;
+			qCBUFFERh HostBuffer, ServiceBuffer;
+		qRB
+			tol::Init(Host, Service);
+			sclm::MGetValue(registry::parameter::proxy::Host, Host);
+			sclm::MGetValue(registry::parameter::proxy::Service, Service);
 
-            sclc::Display("ConnectingTo", cio::COut, Host, Service);
-            cio::COut.Commit();
+			sclc::Display("ConnectingTo", cio::COut, Host, Service);
+			cio::COut.Commit();
 
-            if (!Proxy.Init(Host.Convert(HostBuffer), Service.Convert(ServiceBuffer), SCK__DEFAULT_TIMEOUT, qRPU))
-                sclc::ReportAndAbort("UnableToConnectTo", Host, Service);
+			if (!Proxy.Init(Host.Convert(HostBuffer), Service.Convert(ServiceBuffer), SCK__DEFAULT_TIMEOUT, qRPU))
+				sclc::ReportAndAbort("UnableToConnectTo", Host, Service);
 
-            sclc::Display("ConnectedTo", cio::COut, Host, Service);
-            cio::COut.Commit();
-        qRR
-        qRT
-        qRE
-        }
+			sclc::Display("ConnectedTo", cio::COut, Host, Service);
+			cio::COut.Commit();
+		qRR
+		qRT
+		qRE
+		}
 	}
 
 	namespace {
-        namespace {
-            qCDEF( char *, FaaSProtocolLabel_, "7b4b6bea-2432-4584-950b-e595c9e391e1" );
-            qCDEF(bso::sU8, FaaSProtocolVersion_, 0);
-        }
+		namespace {
+			qCDEF( char *, FaaSProtocolLabel_, "7b4b6bea-2432-4584-950b-e595c9e391e1" );
+			qCDEF(bso::sU8, FaaSProtocolVersion_, 0);
+		}
 
-        void HandShake_(fdr::rRWDriver &ProxyDriver)
-        {
-        qRH
-            flw::rDressedRWFlow<> Proxy;
-            str::wString Message;
-        qRB
-            Proxy.Init(ProxyDriver);
+		void HandShake_(fdr::rRWDriver &ProxyDriver)
+		{
+		qRH
+			flw::rDressedRWFlow<> Proxy;
+			str::wString Message;
+		qRB
+			Proxy.Init(ProxyDriver);
 
-            csdcmn::SendProtocol(FaaSProtocolLabel_, FaaSProtocolVersion_, Proxy);
-            Proxy.Commit();
+			csdcmn::SendProtocol(FaaSProtocolLabel_, FaaSProtocolVersion_, Proxy);
+			Proxy.Commit();
 
-            Message.Init();
-            csdcmn::Get(Proxy, Message);
+			Message.Init();
+			csdcmn::Get(Proxy, Message);
 
-            if ( Message.Amount() )
-                sclc::ReportAndAbort(Message);
+			if ( Message.Amount() )
+				sclc::ReportAndAbort(Message);
 
-            Message.Init();
-            csdcmn::Get(Proxy, Message);
+			Message.Init();
+			csdcmn::Get(Proxy, Message);
 
-            cio::COut << Message << txf::nl << txf::commit;
-        qRR
-        qRT
-        qRE
-        }
-    }
+			cio::COut << Message << txf::nl << txf::commit;
+		qRR
+		qRT
+		qRE
+		}
+	}
 
-    namespace {
-        namespace {
-            namespace {
-                namespace {
-                    typedef xdhcuc::cGlobal cUpstream_;
+	namespace {
+		namespace {
+			namespace {
+				namespace {
+					typedef xdhcuc::cGlobal cUpstream_;
 
-                    // Must exist, but not used.
-                    class sUpstream_
-                    : public cUpstream_
-                    {
-                    protected:
-                        virtual xdhcuc::sRow XDHCUCCreate(const str::dString &) override
-                        {
-                            qRGnr();
+					// Must exist, but not used.
+					class sUpstream_
+						: public cUpstream_
+					{
+					protected:
+						virtual xdhcuc::sRow XDHCUCCreate(const str::dString &) override
+						{
+							qRGnr();
 
-                            return qNIL;    // To avoid a warning.
-                        }
-                        virtual void XDHCUCRemove(xdhcuc::sRow Row) override
-                        {
-                            qRGnr();
-                        }
-                    } Upstream_;
-                }
+							return qNIL;    // To avoid a warning.
+						}
+						virtual void XDHCUCRemove(xdhcuc::sRow Row) override
+						{
+							qRGnr();
+						}
+					} Upstream_;
+				}
 
-                void Initialize_(xdhups::rAgent &Agent)
-                {
-                qRH
-                    str::wString Identification, ModuleFilename;
-                    qCBUFFERh Buffer;
-                qRB
-                    Identification.Init( NAME_LC " V" VERSION " Build " __DATE__ " " __TIME__ " - " );
-                    Identification.Append( cpe::GetDescription() );
+				void Initialize_(xdhups::rAgent &Agent)
+				{
+				qRH
+					str::wString Identification, ModuleFilename;
+					qCBUFFERh Buffer;
+				qRB
+					Identification.Init( NAME_LC " V" VERSION " Build " __DATE__ " " __TIME__ " - " );
+					Identification.Append( cpe::GetDescription() );
 
-                    ModuleFilename.Init();
-                    sclm::MGetValue( registry::parameter::ModuleFilename, ModuleFilename );
+					ModuleFilename.Init();
+					sclm::MGetValue( registry::parameter::ModuleFilename, ModuleFilename );
 
-                    Agent.Init(Upstream_,  xdhcdc::mMultiUser, ModuleFilename, dlbrry::n_Default, Identification.Convert( Buffer ) );
-                qRR
-                qRT
-                qRE
-                }
-            }
-        }
+					Agent.Init(Upstream_,  xdhcdc::mMultiUser, ModuleFilename, dlbrry::n_Default, Identification.Convert( Buffer ) );
+				qRR
+				qRT
+				qRE
+				}
+			}
+		}
 
-        namespace {
-            void Ignition_(
-                fdr::rRWDriver &ProxyDriver,
-                xdhups::rAgent &Agent)
-            {
-            qRH
-                flw::rDressedRWFlow<> Proxy;
-                str::wString Head, Host, Token, Message, URL;
-            qRB
-                Proxy.Init(ProxyDriver);
+		namespace {
+			void Ignition_(
+				fdr::rRWDriver &ProxyDriver,
+				xdhups::rAgent &Agent)
+			{
+			qRH
+				flw::rDressedRWFlow<> Proxy;
+				str::wString Head, Host, Token, Message, URL;
+			qRB
+				Proxy.Init(ProxyDriver);
 
-                Head.Init();
-                if ( !Agent.GetHead(str::wString(""),Head) )
-                    qRGnr();
+				Head.Init();
+				if ( !Agent.GetHead(str::wString(""),Head) )
+					qRGnr();
 
-                csdcmn::Put("", Proxy);
-                csdcmn::Put(Head, Proxy);
-                Host.Init();
-                csdcmn::Put(registry::GetWebHost(Host), Proxy);
-                Proxy.Commit();
+				csdcmn::Put("", Proxy);
+				csdcmn::Put(Head, Proxy);
+				Host.Init();
+				csdcmn::Put(registry::GetWebHost(Host), Proxy);
+				Proxy.Commit();
 
-                Token.Init();
+				Token.Init();
 
-                csdcmn::Get(Proxy, Token);
+				csdcmn::Get(Proxy, Token);
 
-                if ( !Token.Amount() ) {
-                    Message.Init();
-                    csdcmn::Get(Proxy, Message);
-                    sclc::ReportAndAbort(Message);
-                }
+				if ( !Token.Amount() ) {
+					Message.Init();
+					csdcmn::Get(Proxy, Message);
+					sclc::ReportAndAbort(Message);
+				}
 
-                URL.Init();
-                csdcmn::Get(Proxy, URL);
+				URL.Init();
+				csdcmn::Get(Proxy, URL);
 
-                cio::COut << URL << txf::nl << txf::commit;
-            qRR
-            qRT
-            qRE
-            }
-        }
+				cio::COut << URL << txf::nl << txf::commit;
+			qRR
+			qRT
+			qRE
+			}
+		}
 
-        namespace {
-            using namespace session;
+		namespace {
+			using namespace session;
 
-            namespace {
-                qCDEF( char *, MainProtocolLabel_, "8d2b7b52-6681-48d6-8974-6e0127a4ca7e" );
-                qCDEF(bso::sU8, MainProtocolVersion_, 0);
-            }
+			namespace {
+				qCDEF( char *, MainProtocolLabel_, "8d2b7b52-6681-48d6-8974-6e0127a4ca7e" );
+				qCDEF(bso::sU8, MainProtocolVersion_, 0);
+			}
 
-            namespace {
-                void Routine_(
-                    void *UP,
-                    mtk::gBlocker &Blocker)
-                {
-                    rSession &Session = *(rSession *)UP;
+			namespace {
+				void Routine_(
+					void *UP,
+					mtk::gBlocker &Blocker)
+				{
+					rSession &Session = *(rSession *)UP;
 
-                    Blocker.Release();
+					Blocker.Release();
 
-                    Session.Launch();
-                }
-            }
+					Session.Launch();
+				}
+			}
 
-            void Handle_(
-                fdr::rRWDriver &ProxyDriver,
-                xdhups::rAgent &Agent)
-            {
-            qRH
-                wIds Ids;
-                wSessions Sessions;
-                sId Id = 0;
-                sRow Row = qNIL;
-                str::wString Message, EId, Action;
-                qCBUFFERh EIdBuffer, ActionBuffer;
-                rSession *Session = NULL;
-                flw::rDressedRWFlow<> Proxy;
-                tht::rBlocker Blocker;
-            qRB
-                tol::Init(Ids, Sessions);
-                Proxy.Init(ProxyDriver);
+			void Handle_(
+				fdr::rRWDriver &ProxyDriver,
+				xdhups::rAgent &Agent)
+			{
+			qRH
+				wIds Ids;
+				wSessions Sessions;
+				sId Id = UndefinedId;
+				sRow Row = qNIL;
+				str::wString Message, EId, Action;
+				qCBUFFERh EIdBuffer, ActionBuffer;
+				rSession *Session = NULL;
+				flw::rDressedRWFlow<> Proxy;
+				tht::rBlocker Blocker;
+			qRB
+				tol::Init(Ids, Sessions);
+				Proxy.Init(ProxyDriver);
 
-                Blocker.Init();
+				Blocker.Init();
 
-                while(true) {
-                    if ( csdcmn::Get(Proxy, Id) == UndefinedId) {
-                        if ( Search(csdcmn::Get(Proxy, Id), Ids) != qNIL )
-                            sclc::ReportAndAbort("IdShouldNotExists", Id);
+				while ( true ) {
+					switch ( csdcmn::Get(Proxy, Id) ) {
+					case UndefinedId:
+						qRFwk();
+						break;
+					case CreationId:
+						if ( Search(csdcmn::Get(Proxy, Id), Ids) != qNIL )
+							sclc::ReportAndAbort("IdShouldNotExists", Id);
 
-                        Proxy.Dismiss();
+						Proxy.Dismiss();
 
-                        Row = Ids.Append(Id);
+						Row = Ids.Append(Id);
 
-                        if ( ( Session = new rSession() ) == NULL )
-                            qRAlc();
+						if ( ( Session = new rSession() ) == NULL )
+							qRAlc();
 
-                        Session->Init(Id, Agent, ProxyDriver, Blocker);
+						Session->Init(Id, Agent, ProxyDriver, Blocker);
 
-                        if ( Sessions.Append(Session) != Row )
-                            qRGnr();
+						if ( Sessions.Append(Session) != Row )
+							qRGnr();
 
-                        csdcmn::Put(Id, Proxy);
-                        csdcmn::SendProtocol(MainProtocolLabel_, MainProtocolVersion_, Proxy);
+						csdcmn::Put(Id, Proxy);
+						csdcmn::SendProtocol(MainProtocolLabel_, MainProtocolVersion_, Proxy);
 
-                        Proxy.Commit();
-                    } else {
-                        if ( ( Row = Search(Id, Ids) ) == qNIL )
-                            qRGnr();
+						Proxy.Commit();
+						break;
+					case ClosingId:
+						if ( Search(csdcmn::Get(Proxy, Id), Ids) != qNIL )
+							qRGnr();
 
-                        Session = Sessions(Row);
+						Proxy.Dismiss();
 
-                        if ( !Session->Handshaked) {
-                            Message.Init();
+						Session = Sessions(Row);
 
-                            csdcmn::Get(Proxy, Message);
+						if ( Session == NULL )
+							qRGnr();
 
-                            if ( Message.Amount())
-                                sclc::ReportAndAbort(Message);
+						delete Session;
 
-                            csdcmn::Get(Proxy, Message);    // Language; not handled yet.
+						Ids.Remove(Row);
+						break;
+					default:
+						if ( ( Row = Search(Id, Ids) ) == qNIL )
+							qRGnr();
 
-                            Proxy.Dismiss();
+						Session = Sessions(Row);
 
-                            csdcmn::Put(Id, Proxy);
-                            csdcmn::Put("XDH", Proxy);
-                            Proxy.Commit();
+						if ( Session == NULL )
+							qRGnr();
 
-                            Session->Handshaked = true;
+						if ( !Session->Handshaked) {
+							Message.Init();
 
-                            mtk::LaunchAndKill(Routine_, Session);
-                        } else {
-                            Proxy.Dismiss();
-                            Session->Unblock();
-                            Blocker.Wait();
-                        }
-                    }
+							csdcmn::Get(Proxy, Message);
 
-                }
-            qRR
-            qRT
-            qRE
-            }
-        }
+							if ( Message.Amount())
+								sclc::ReportAndAbort(Message);
 
-        void Process_(fdr::rRWDriver &ProxyDriver)
-        {
-        qRH
-            xdhups::rAgent Agent;
-        qRB
-            Initialize_(Agent);
-            Ignition_(ProxyDriver, Agent);
-            Handle_(ProxyDriver, Agent);
-        qRR
-        qRT
-        qRE
-        }
+							csdcmn::Get(Proxy, Message);    // Language; not handled yet.
+
+							Proxy.Dismiss();
+
+							csdcmn::Put(Id, Proxy);
+							csdcmn::Put("XDH", Proxy);
+							Proxy.Commit();
+
+							Session->Handshaked = true;
+
+							mtk::LaunchAndKill(Routine_, Session);
+						} else {
+							Proxy.Dismiss();
+							Session->Unblock();
+							Blocker.Wait();
+						}
+						break;
+					}
+				}
+			qRR
+			qRT
+			qRE
+			}
+		}
+
+		void Process_(fdr::rRWDriver &ProxyDriver)
+		{
+		qRH
+			xdhups::rAgent Agent;
+		qRB
+			Initialize_(Agent);
+			Ignition_(ProxyDriver, Agent);
+			Handle_(ProxyDriver, Agent);
+		qRR
+		qRT
+		qRE
+		}
 	}
 
 	void Process_( void )
@@ -321,9 +344,9 @@ namespace {
 	qRH;
 		csdbnc::rRWDriver Proxy;
 	qRB;
-        Initialize_(Proxy);
-        HandShake_(Proxy);
-        Process_(Proxy);
+		Initialize_(Proxy);
+		HandShake_(Proxy);
+		Process_(Proxy);
 	qRR;
 	qRT;
 	qRE;

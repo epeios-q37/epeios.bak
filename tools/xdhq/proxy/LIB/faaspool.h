@@ -35,14 +35,15 @@
 # include "sck.h"
 
 namespace faaspool {
-    void SetCallback(xdhcuc::cGlobal &Callback);
+	void SetCallback(xdhcuc::cGlobal &Callback);
 
 	void Initialize();
 
-	// If modified, modify also the 'Undefined' definition.
 	typedef bso::sS16 sId;
-	qCDEF( sId, Undefined, -1 );
 	qCDEF( sId, Max, bso::S8Max );
+	qCDEF( sId, UndefinedId, -1 );
+	qCDEF( sId, CreationId, -2 );
+	qCDEF( sId, ClosingId, -3 );
 
 	template <typename fd>  inline void PutId(
 		sId Id,
@@ -55,7 +56,7 @@ namespace faaspool {
 		fd &FD,
 		bso::sBool *IsError )
 	{
-		sId Id = Undefined;
+		sId Id = UndefinedId;
 
 		return dtfptb::VGet( FD, Id, IsError );
 	}
@@ -70,7 +71,7 @@ namespace faaspool {
 		tht::rBlocker *Switch;
 		void reset( bso::sBool P = true )
 		{
-			Id = Undefined;
+			Id = UndefinedId;
 			Driver = NULL;
 			Read.reset( P );
 			Switch = NULL;
@@ -84,7 +85,7 @@ namespace faaspool {
 		qCDTOR( rShared );
 		bso::sBool IsValid( void ) const
 		{
-			return Id != Undefined;
+			return Id != UndefinedId;
 		}
 	};
 

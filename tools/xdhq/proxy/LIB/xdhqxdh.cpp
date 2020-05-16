@@ -3,18 +3,18 @@
 
 	This file is part of 'XDHq' software.
 
-    'XDHq' is free software: you can redistribute it and/or modify it
-    under the terms of the GNU Affero General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+	'XDHq' is free software: you can redistribute it and/or modify it
+	under the terms of the GNU Affero General Public License as published
+	by the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
 
-    'XDHq' is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+	'XDHq' is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
-    along with 'XDHq'.  If not, see <http://www.gnu.org/licenses/>.
+	You should have received a copy of the GNU Affero General Public License
+	along with 'XDHq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "xdhqxdh.h"
@@ -47,61 +47,61 @@ static const char *Launcher_ = NULL;
 
 // Bien que dfinit dans un '.cpp', et propre  ce '.cpp', VC++ se mlange les pinceaux avec le 'callback__' dfinit dans 'scllocale.cpp', d'o le 'namespace'.
 namespace {
-    namespace {
-        void Initialization_( xdhcdc::eMode Mode )
-        {
-        qRH;
-            qCBUFFERh Buffer;
-            str::wString HostService;
-        qRB;
-            HostService.Init();
+	namespace {
+		void Initialization_( xdhcdc::eMode Mode )
+		{
+		qRH;
+			qCBUFFERh Buffer;
+			str::wString HostService;
+		qRB;
+			HostService.Init();
 
-            if ( sclm::OGetValue( registry::parameter::HostService, HostService ) )
-                session::Core.Init( HostService.Convert( Buffer ), 0, sck::NoTimeout );
+			if ( sclm::OGetValue( registry::parameter::HostService, HostService ) )
+				session::Core.Init( HostService.Convert( Buffer ), 0, sck::NoTimeout );
 
-            faaspool::Initialize();
-            session::LogDriver.Init( cio::COut );
-        qRR;
-        qRT;
-        qRE;
-        }
+			faaspool::Initialize();
+			session::LogDriver.Init( cio::COut );
+		qRR;
+		qRT;
+		qRE;
+		}
 
-        xdhcdc::cSingle *FetchCallback_(void)
-        {
-            session::rSession *Callback = NULL;
-        qRH;
-        qRB;
-            if ( ( Callback = new session::rSession ) == NULL )
-                qRAlc();
+		xdhcdc::cSingle *FetchCallback_(void)
+		{
+			session::rSession *Callback = NULL;
+		qRH;
+		qRB;
+			if ( ( Callback = new session::rSession ) == NULL )
+				qRAlc();
 
-            if ( !Callback->Init()) {
-                delete Callback;
-                Callback = NULL;
-            }
+			if ( !Callback->Init()) {
+				delete Callback;
+				Callback = NULL;
+			}
 
-            // WARNING ! In 'MultiUser' mode, 'UpstreamCallback' is not correctly set yet!
-        /*	if ( Mode == xdhcmn::mMonoUser ) {
-                Callback->Launch( "", "" );
-            }
-        */
-        qRR;
-            if ( Callback != NULL )
-                delete Callback;
+			// WARNING ! In 'MultiUser' mode, 'UpstreamCallback' is not correctly set yet!
+			/*	if ( Mode == xdhcmn::mMonoUser ) {
+			        Callback->Launch( "", "" );
+			    }
+			*/
+		qRR;
+			if ( Callback != NULL )
+				delete Callback;
 
-            Callback = NULL;
-        qRT;
-        qRE;
-            return Callback;
-        }
+			Callback = NULL;
+		qRT;
+		qRE;
+			return Callback;
+		}
 
-        void DismissCallback_( xdhcdc::cSingle *Callback )
-        {
-            if ( Callback == NULL )
-                qRGnr();
+		void DismissCallback_( xdhcdc::cSingle *Callback )
+		{
+			if ( Callback == NULL )
+				qRGnr();
 
-            delete Callback;
-        }
-    }
+			delete Callback;
+		}
+	}
 
 	typedef xdhcdc::cGlobal cDownstream_;
 
@@ -110,8 +110,8 @@ namespace {
 	{
 	protected:
 		virtual void XDHCDCInitialize(
-            const xdhcdc::sData &Data,
-            xdhcuc::cGlobal &Callback) override
+			const xdhcdc::sData &Data,
+			xdhcuc::cGlobal &Callback) override
 		{
 			if ( Launcher_ != NULL )
 				qRFwk();
@@ -152,7 +152,7 @@ namespace {
 			str::dString &Head,
 			qRPN ) override
 		{
-            return faaspool::GetHead(Token, Head);
+			return faaspool::GetHead(Token, Head);
 		}
 	public:
 		void reset( bso::bool__ P = true )

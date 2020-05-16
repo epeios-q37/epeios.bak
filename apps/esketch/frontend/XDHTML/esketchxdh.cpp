@@ -55,7 +55,7 @@ qRE
 
 xdhcdc::cSingle *sclx::SCLXFetchCallback(void)
 {
-    core::rSession *Session = new core::rSession;
+	core::rSession *Session = new core::rSession;
 
 	if ( Session == NULL )
 		qRGnr();

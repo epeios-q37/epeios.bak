@@ -68,8 +68,8 @@ namespace {
 	{
 	protected:
 		virtual void XDHCDCInitialize(
-            const xdhcdc::sData &Data,
-            xdhcuc::cGlobal &) override // The second parameter is only useful for the 'xdhqxdh' tool.
+			const xdhcdc::sData &Data,
+			xdhcuc::cGlobal &) override // The second parameter is only useful for the 'xdhqxdh' tool.
 		{
 			if ( Launcher_ != NULL )
 				qRFwk();
@@ -109,8 +109,8 @@ namespace {
 			str::dString &Head,
 			qRPN ) override
 		{
-            if ( Token.Amount())
-                qRFwk();
+			if ( Token.Amount())
+				qRFwk();
 
 			sclm::LoadXMLAndTranslateTags( registry::definition::HeadFile, sclr::GetCommonRegistry(), Head, 1, DefaultMarker);
 
@@ -135,21 +135,21 @@ DEF( XDHCDC_RETRIEVE_FUNCTION_NAME, xdhcdc::retrieve );
 xdhcdc::cGlobal *XDHCDCRetrieve( void )
 {
 	sDownstream *Callback = NULL;
-qRFH
-qRFB
+	qRFH
+	qRFB
 	Callback = new sDownstream;
 
 	if ( Callback == NULL )
 		qRAlc();
 
 	Callback->Init();
-qRFR
+	qRFR
 	if ( Callback != NULL )
 		delete Callback;
 
 	Callback = NULL;
-qRFT
-qRFE(DoNothing_())
+	qRFT
+	qRFE(DoNothing_())
 	return Callback;
 }
 
@@ -161,7 +161,7 @@ namespace {
 	qRH
 		flx::E_STRING_TOFLOW___ STOFlow;
 		xml::rWriter Writer;
-	qRB
+		qRB
 		STOFlow.Init( XML );
 		Writer.Init( STOFlow, xml::oCompact, xml::e_Default );
 
@@ -179,7 +179,7 @@ namespace {
 	qRH
 		str::string Message;
 		TOL_CBUFFER___ Buffer;
-	qRB
+		qRB
 		Message.Init();
 		scll::GetTranslation( RawMessage.Convert( Buffer ), Language, Message );
 
@@ -223,17 +223,17 @@ namespace {
 }
 
 void sclx::sProxy::Fill_(
-    str::dStrings &Values,
-    const str::dStrings &SplittedValues)
+	str::dStrings &Values,
+	const str::dStrings &SplittedValues)
 {
 qRH
-    str::wString MergedValues;
-qRB
-    MergedValues.Init();
+	str::wString MergedValues;
+	qRB
+	MergedValues.Init();
 
-    xdhcmn::FlatMerge(SplittedValues, MergedValues, true);
+	xdhcmn::FlatMerge(SplittedValues, MergedValues, true);
 
-    Values.Append(MergedValues);
+	Values.Append(MergedValues);
 qRR
 qRT
 qRE
@@ -248,7 +248,7 @@ void sclx::sProxy::Alert_(
 {
 qRH
 	str::string CloseText;
-qRB
+	qRB
 	CloseText.Init();
 	scll::GetTranslation( SCLX_NAME "_CloseText", Language, CloseText );
 
@@ -267,18 +267,18 @@ void sclx::sProxy::Alert_(
 qRH
 	str::string XML, XSL;
 	str::wString Title;
-qRB
+	qRB
 	tol::Init(XML, XSL);
 	SetXMLAndXSL_( RawMessage, MessageLanguage, XML, XSL );
 
 	Title.Init();
 
-    if ( ( MessageLanguage != NULL ) && RawTitle.Amount() )
-        scll::GetTranslation(RawTitle, MessageLanguage, Title);
-    else
-        Title = RawTitle;
+	if ( ( MessageLanguage != NULL ) && RawTitle.Amount() )
+		scll::GetTranslation(RawTitle, MessageLanguage, Title);
+	else
+		Title = RawTitle;
 
-    Alert_(XML, XSL, Title, CloseTextLanguage );
+	Alert_(XML, XSL, Title, CloseTextLanguage );
 qRR
 qRT
 qRE
@@ -288,8 +288,8 @@ void sclx::sProxy::AlertB( const str::dString & RawMessage )
 {
 qRH;
 	str::wString Dummy;
-qRB;
-    Dummy.Init();
+	qRB;
+	Dummy.Init();
 
 	Process_("Alert_1", &Dummy, RawMessage);    // Get an unused return value to wait the dismissing of the dialog box.
 qRR;
@@ -305,7 +305,7 @@ void sclx::sProxy::Alert(
 {
 qRH;
 	str::wString EncodedXSL;
-qRB;
+	qRB;
 	tol::Init( EncodedXSL);
 	EncodeXML_( XSL, EncodedXSL );
 
@@ -341,7 +341,7 @@ bso::bool__ sclx::sProxy::Confirm_(
 	bso::bool__ Confirmation = false;
 qRH
 	str::string CloseText;
-qRB
+	qRB
 	CloseText.Init();
 	scll::GetTranslation( SCLX_NAME "_CloseText", Language, CloseText );
 
@@ -361,7 +361,7 @@ bso::bool__ sclx::sProxy::Confirm_(
 	bso::bool__ Confirmation = false;
 qRH
 	str::string XML, XSL;
-qRB
+	qRB
 	XML.Init();
 	XSL.Init();
 
@@ -396,7 +396,7 @@ void sclx::HandleError(
 qRH
 	str::string Message;
 	err::buffer__ ErrBuffer;
-qRB
+	qRB
 	switch ( ERRType ) {
 	case err::t_Abort:
 		Message.Init();
@@ -420,69 +420,69 @@ qRE
 }
 
 namespace {
-    eXSLFileHandling GetXMLFileHandlingFromRegistry_(const sclr::dRegistry &Registry)
-    {
-        eXSLFileHandling Result = xfh_Undefined;
-    qRH;
-        str::wString Handling;
-    qRB;
-        Handling.Init();
+	eXSLFileHandling GetXMLFileHandlingFromRegistry_(const sclr::dRegistry &Registry)
+	{
+		eXSLFileHandling Result = xfh_Undefined;
+	qRH;
+		str::wString Handling;
+		qRB;
+		Handling.Init();
 
-        if (!sclr::OGetValue(Registry, registry::definition::XMLFilesHandling, Handling))
-            Handling.Append("Content");	// Default value.
+		if (!sclr::OGetValue(Registry, registry::definition::XMLFilesHandling, Handling))
+			Handling.Append("Content");	// Default value.
 
-        if (Handling == "Content")
-            Result = xfhContent;
-        else if (Handling == "Name")
-            Result = xfhName;
-        else
-            sclr::ReportBadOrNoValueForEntryErrorAndAbort(registry::definition::XMLFilesHandling);
-    qRR;
-    qRT;
-    qRE;
-        return Result;
-    }
+		if (Handling == "Content")
+			Result = xfhContent;
+		else if (Handling == "Name")
+			Result = xfhName;
+		else
+			sclr::ReportBadOrNoValueForEntryErrorAndAbort(registry::definition::XMLFilesHandling);
+	qRR;
+	qRT;
+	qRE;
+		return Result;
+	}
 
-    void HandleXSL_(
-        const rgstry::rEntry &XSLFilename,
-        const char *Target,
-        eXSLFileHandling Handling,
-        const sclr::registry_ &Registry,
-        bso::sChar Marker,
-        str::dString &XSL )
-    {
-    qRH;
-        str::wString RawXSL;
-    qRB;
-        if ( Handling == xfhRegistry )
-            Handling = GetXMLFileHandlingFromRegistry_( Registry );
+	void HandleXSL_(
+		const rgstry::rEntry &XSLFilename,
+		const char *Target,
+		eXSLFileHandling Handling,
+		const sclr::registry_ &Registry,
+		bso::sChar Marker,
+		str::dString &XSL )
+	{
+	qRH;
+		str::wString RawXSL;
+		qRB;
+		if ( Handling == xfhRegistry )
+			Handling = GetXMLFileHandlingFromRegistry_( Registry );
 
-        switch ( Handling ) {
-        case xfhContent:
-            // The content of the XSL file is transmitted (global XDHTML behavior).
-            RawXSL.Init();
-            sclx::LoadXSLAndTranslateTags( rgstry::tentry___( XSLFilename, Target ), Registry, RawXSL, Marker );
-            XSL.Append( "data:text/xml;charset=utf-8," );
-            cdgurl::Encode( RawXSL, XSL );
-            break;
-        case xfhName:
-            // The _name_ of the XSL file is transmitted (Atlas toolkit behavior).
-            // NOTA: the Atlas toolkit does NOT use this function. It uses a underlying function which have this behavior.
-            XSL.Append( Target );
-            XSL.Append( ".xsl" );
-            break;
-        default:
-            qRFwk();
-            break;
-        }
-    qRR;
-    qRT;
-    qRE;
-    }
+		switch ( Handling ) {
+		case xfhContent:
+			// The content of the XSL file is transmitted (global XDHTML behavior).
+			RawXSL.Init();
+			sclx::LoadXSLAndTranslateTags( rgstry::tentry___( XSLFilename, Target ), Registry, RawXSL, Marker );
+			XSL.Append( "data:text/xml;charset=utf-8," );
+			cdgurl::Encode( RawXSL, XSL );
+			break;
+		case xfhName:
+			// The _name_ of the XSL file is transmitted (Atlas toolkit behavior).
+			// NOTA: the Atlas toolkit does NOT use this function. It uses a underlying function which have this behavior.
+			XSL.Append( Target );
+			XSL.Append( ".xsl" );
+			break;
+		default:
+			qRFwk();
+			break;
+		}
+	qRR;
+	qRT;
+	qRE;
+	}
 }
 
 void sclx::sProxy::HandleLayout_(
-    const char *Variant,
+	const char *Variant,
 	const str::dString &Id,
 	const rgstry::rEntry &XSLFilename,
 	const char *Target,
@@ -491,13 +491,13 @@ void sclx::sProxy::HandleLayout_(
 	bso::char__ Marker)
 {
 qRH;
-    str::wString XSL;
-qRB;
-    XSL.Init();
+	str::wString XSL;
+	qRB;
+	XSL.Init();
 
-    HandleXSL_(XSLFilename, Target, XSLFileHandling_, Registry, Marker, XSL);
+	HandleXSL_(XSLFilename, Target, XSLFileHandling_, Registry, Marker, XSL);
 
-    Process_("HandleLayout_1", NULL, Variant, Id, XML, XSL);
+	Process_("HandleLayout_1", NULL, Variant, Id, XML, XSL);
 qRR;
 qRT;
 qRE;
@@ -509,12 +509,12 @@ void sclx::sProxy::GetContents(
 {
 qRH;
 	str::wString MergedContents;
-qRB;
-    MergedContents.Init();
+	qRB;
+	MergedContents.Init();
 
-    Process_("GetContents_1", &MergedContents, Ids);
+	Process_("GetContents_1", &MergedContents, Ids);
 
-    xdhcmn::FlatSplit(MergedContents, Contents);
+	xdhcmn::FlatSplit(MergedContents, Contents);
 qRR;
 qRT;
 qRE;
@@ -526,50 +526,50 @@ const str::dString &sclx::sProxy::GetContent(
 {
 qRH;
 	str::wStrings Contents;
-qRB;
-    Contents.Init();
+	qRB;
+	Contents.Init();
 
-    GetContents(str::wStrings(Id), Contents);
+	GetContents(str::wStrings(Id), Contents);
 
-    if ( Contents.Amount() != 1 )
-        qRFwk();
+	if ( Contents.Amount() != 1 )
+		qRFwk();
 
-    Content = Contents(Contents.First());
+	Content = Contents(Contents.First());
 qRR;
 qRT;
 qRE;
-    return Content;
+	return Content;
 }
 
 void sclx::sProxy::SetTimeout(
 	const str::dString &Delay,
 	const str::dString &Action )
 {
-    qRLmt();
+	qRLmt();
 //	Core_.SetTimeout( Delay, Action );
 }
 
 void sclx::sProxy::EnableElements( const str::dStrings &Ids )
 {
-    qRLmt();
+	qRLmt();
 //	HandleElements_( Ids, &xdhdws::sProxy::EnableElements, Core_ );
 }
 
 void sclx::sProxy::EnableElement(	const str::dString &Id )
 {
-    qRLmt();
+	qRLmt();
 //	HandleElement_( Id, &sProxy::EnableElements, *this );
 }
 
 void sclx::sProxy::DisableElements( const str::dStrings &Ids )
 {
-    qRLmt();
+	qRLmt();
 //	HandleElements_( Ids, &xdhdws::sProxy::DisableElements, Core_ );
 }
 
 void sclx::sProxy::DisableElement( const str::dString &Id )
 {
-    qRLmt();
+	qRLmt();
 //	HandleElement_( Id, &sProxy::DisableElements, *this );
 }
 
@@ -585,7 +585,7 @@ static sclm::eProjectType GetProjectType_( sProxy &Proxy )
 	sclm::eProjectType ProjectType = sclm::pt_Undefined;
 qRH
 	str::string Value;
-qRB
+	qRB
 	Value.Init();
 	ProjectType = sclm::GetProjectType( Proxy.GetContent( prolog::ProjectTypeId, Value ) );
 qRR
@@ -627,7 +627,7 @@ qRH
 	str::wString FileName;
 	xdhcmn::digest Args;
 	xdhcmn::retriever__ Retriever;
-qRB
+	qRB
 	tol::Init(Args, Buffer);
 	xdhcmn::Split( Proxy.GetContent( Id, Buffer ), Args );
 
@@ -652,8 +652,8 @@ sclm::eProjectType sclx::prolog::GetProjectFeatures(
 	sclm::eProjectType Type = sclm::pt_Undefined;
 qRH
 	str::wString Buffer;
-qRB
-    Buffer.Init();
+	qRB
+	Buffer.Init();
 
 	switch ( Type = GetProjectType_( Proxy ) ) {
 	case sclm::ptNew:
@@ -681,7 +681,7 @@ void sclx::prolog::LoadProject( sProxy &Proxy )
 {
 qRH
 	str::string ProjectFeature;
-qRB
+	qRB
 	ProjectFeature.Init();
 	sclf::LoadProject( prolog::GetProjectFeatures( Proxy, ProjectFeature ), ProjectFeature, Proxy.Info() );
 qRR
@@ -694,8 +694,8 @@ qRE
 const char *sclx::login::GetLabel( eBackendVisibility Visibility )
 {
 	switch ( Visibility ) {
-	C( Show );
-	C( Hide );
+		C( Show );
+		C( Hide );
 	default:
 		qRFwk();
 		break;
@@ -749,9 +749,9 @@ namespace {
 		case btPredefined:
 			return sclf::PredefinedBackendType;
 			break;
-		C( Embedded );
-		C( Straight );
-		C( Proxy );
+			C( Embedded );
+			C( Straight );
+			C( Proxy );
 		default:
 			qRFwk();
 			break;
@@ -778,7 +778,7 @@ namespace {
 		eBackendType_ Type = bt_Undefined;
 	qRH;
 		str::wString Pattern;
-	qRB;
+		qRB;
 		Pattern.Init();
 
 		Type = GetType_( GetType_( Proxy, Pattern ) );
@@ -812,7 +812,7 @@ namespace {
 	{
 	qRH;
 		str::wStrings Ids, Classes;
-	qRB;
+		qRB;
 		tol::Init( Ids, Classes );
 
 		SetIds_( Ids );
@@ -878,7 +878,7 @@ namespace straight_ {
 	{
 	qRH
 		str::wString Port;
-	qRB
+		qRB
 		Port.Init();
 		sclm::OGetValue( DefaultPort_, Port );
 
@@ -898,7 +898,7 @@ namespace proxy_ {
 	{
 	qRH
 		str::wString Port;
-	qRB
+		qRB
 		Port.Init();
 		sclm::OGetValue( DefaultPort_, Port );
 
@@ -917,8 +917,8 @@ qRH;
 	eBackendType_ Type = bt_Undefined;
 	str::wString Buffer;
 	str::string Parameters;
-qRB;
-    tol::Init(Parameters, Buffer);
+	qRB;
+	tol::Init(Parameters, Buffer);
 
 	switch ( Type = GetType_( Proxy ) ) {
 	case btNone:
@@ -957,7 +957,7 @@ qRH
 	str::string FileName;
 	xdhcmn::digest Args;
 	xdhcmn::retriever__ Retriever;
-qRB
+	qRB
 	tol::Init(Args, Buffer);
 	xdhcmn::Split( str::string( Proxy.GetContent( Id, Buffer ) ), Args );
 

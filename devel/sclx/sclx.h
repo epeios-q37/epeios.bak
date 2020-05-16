@@ -64,7 +64,8 @@ namespace sclx {
 
 	const char *GetLauncher( void );
 
-	template <typename session> class cAction {
+	template <typename session> class cAction
+	{
 	protected:
 		virtual void SCLXLaunch(
 			session &Session,
@@ -82,7 +83,8 @@ namespace sclx {
 	};
 
 	// How the XSL file are handled.
-	qENUM( XSLFileHandling ) {
+	qENUM( XSLFileHandling )
+	{
 		xfhName,		// The name of the XSL file is sent (Atlas toolkit behavior).
 		xfhContent,		// The content of the XSL file is sent.
 		xfhRegistry,	// One of above depending of the content of the registry.
@@ -116,7 +118,8 @@ namespace sclx {
 
 	template <typename session> E_TTCLONE_( bch::E_BUNCHt_( cAction<session> *, crow__ ), action_callbacks_ );
 
-	template <typename session> class action_handler_ {
+	template <typename session> class action_handler_
+	{
 	private:
 		cAction<session> *_Get( const str::string_ &Action ) const
 		{
@@ -135,8 +138,8 @@ namespace sclx {
 		stsfsm::automat_ Automat;
 		action_callbacks_<session> Callbacks;
 		action_handler_( s &S )
-        : Automat( S.Automat ),
-          Callbacks( S.Callbacks )
+		: Automat( S.Automat ),
+			Callbacks( S.Callbacks )
 		{}
 		void reset( bso::bool__ P = true )
 		{
@@ -183,7 +186,8 @@ namespace sclx {
 
 	E_AUTO1( action_handler );
 
-	template <typename session> class cActionHelper {
+	template <typename session> class cActionHelper
+	{
 	protected:
 		virtual bso::bool__ SCLXOnBeforeAction(
 			session &Session,
@@ -218,7 +222,8 @@ namespace sclx {
 		}
 	};
 
-	class rActionHelper {
+	class rActionHelper
+	{
 	private:
 		stsfsm::wAutomat Automat_;
 	public:
@@ -265,49 +270,49 @@ namespace sclx {
 		qRMV( const scli::sInfo, I_, Info_ );
 		eXSLFileHandling XSLFileHandling_;
 		void Fill_(
-            str::dStrings &Values,
-            const str::dString &Value )
-        {
-            Values.Append(Value);
-        }
+			str::dStrings &Values,
+			const str::dString &Value )
+		{
+			Values.Append(Value);
+		}
 		void Fill_(
-            str::dStrings &Values,
-            const str::wString &Value ) // This variant with 'str::wStrind' is needed for the variadics to work.
-        {
-            Values.Append(Value);
-        }
+			str::dStrings &Values,
+			const str::wString &Value ) // This variant with 'str::wStrind' is needed for the variadics to work.
+		{
+			Values.Append(Value);
+		}
 		void Fill_(
-            str::dStrings &Values,
-            const char *Value )
-        {
-            Values.Append(str::wString(Value));
-        }
+			str::dStrings &Values,
+			const char *Value )
+		{
+			Values.Append(str::wString(Value));
+		}
 		void Fill_(
-            str::dStrings &Values,
-            const str::dStrings &SplittedValues );
-        template <class s,class... Args> void Fill_(
-            str::dStrings &Values,
-            const s &Value,
-            const Args &...args )
-        {
-            Fill_(Values, Value);
-            Fill_(Values, args...);
-        }
+			str::dStrings &Values,
+			const str::dStrings &SplittedValues );
+		template <class s,class... Args> void Fill_(
+			str::dStrings &Values,
+			const s &Value,
+			const Args &...args )
+		{
+			Fill_(Values, Value);
+			Fill_(Values, args...);
+		}
 		template <class ...Args> void Process_(
-            const char *ScriptName,
-            str::dString *Result,
-            const Args &...args )
-        {
-        qRH
-            str::wStrings Values;
-        qRB
-            Values.Init();
-            Fill_(Values, args...);
-            Core_.Process(ScriptName, Values, Result);
-        qRR
-        qRE
-        qRT
-        }
+			const char *ScriptName,
+			str::dString *Result,
+			const Args &...args )
+		{
+			qRH
+			str::wStrings Values;
+			qRB
+			Values.Init();
+			Fill_(Values, args...);
+			Core_.Process(ScriptName, Values, Result);
+			qRR
+			qRE
+			qRT
+		}
 		void Alert_(
 			const str::dString &XML,
 			const str::dString &XSL,
@@ -323,17 +328,17 @@ namespace sclx {
 			const str::dString &XSL,
 			const str::dString &Title,
 			const char *Language )
-			{
-                qRLmt();
-                // Reactivate in '.cpp'.
-                return false;
-			}
+		{
+			qRLmt();
+			// Reactivate in '.cpp'.
+			return false;
+		}
 		bso::sBool Confirm_(
 			const str::dString &Message,
 			const char *MessageLanguage,	// If != 'NULL', 'Message' is translated, otherwise it is displayed as is.
 			const char *CloseTextLanguage );
 		void HandleLayout_(
-            const char *Variant,
+			const char *Variant,
 			const str::dString &Id,
 			const rgstry::rEntry &XSLFilename,
 			const char *Target,
@@ -341,18 +346,18 @@ namespace sclx {
 			const str::dString &XML,
 			bso::char__ Marker);
 		void HandleLayout_(
-            const char *Variant,
+			const char *Variant,
 			const char *Id,
 			const rgstry::rEntry &XSLFilename,
 			const char *Target,
 			const sclr::registry_ &Registry,
 			const str::dString &XML,
 			bso::char__ Marker)
-        {
-            return HandleLayout_(Variant, str::wString(Id), XSLFilename, Target, Registry, XML, Marker);
-        }
+		{
+			return HandleLayout_(Variant, str::wString(Id), XSLFilename, Target, Registry, XML, Marker);
+		}
 		template <typename session, typename rack, typename chars> void HandleLayout_(
-            const char *Variant,
+			const char *Variant,
 			const chars &Id,
 			const char *Target,
 			const sclr::registry_ &Registry,
@@ -360,25 +365,25 @@ namespace sclx {
 			session &Session,
 			bso::char__ Marker = DefaultMarker )
 		{
-		qRH;
+			qRH;
 			rack Rack;
-		qRB;
+			qRB;
 			Rack.Init( Target, Session, I_() );
 
 			Get( Session, Rack() );
 
 			HandleLayout_( Variant, Id, registry::definition::XSLFile, Target, Registry, Rack.Target(), Marker );
-		qRR;
-		qRT;
-		qRE;
+			qRR;
+			qRT;
+			qRE;
 		}
 		void HandleClasses_(
-            const char *Variant,
-            const str::dStrings &Ids,
-            const str::dStrings &Classes)
-        {
-            Process_("HandleClasses_1", NULL, Variant, Ids, Classes);
-        }
+			const char *Variant,
+			const str::dStrings &Ids,
+			const str::dStrings &Classes)
+		{
+			Process_("HandleClasses_1", NULL, Variant, Ids, Classes);
+		}
 	protected:
 		template <typename chars> void PrependLayout_(
 			const chars &Id,
@@ -387,9 +392,9 @@ namespace sclx {
 			const sclr::registry_ &Registry,
 			const str::dString &XML,
 			bso::char__ Marker)
-        {
-            return HandleLayout_("Prepend", Id, XSLFilename, Target, Registry, XML, Marker);
-        }
+		{
+			return HandleLayout_("Prepend", Id, XSLFilename, Target, Registry, XML, Marker);
+		}
 		template <typename chars> void SetLayout_(
 			const chars &Id,
 			const rgstry::rEntry &XSLFilename,
@@ -397,9 +402,9 @@ namespace sclx {
 			const sclr::registry_ &Registry,
 			const str::dString &XML,
 			bso::char__ Marker)
-        {
-            return HandleLayout_("Set", Id, XSLFilename, Target, Registry, XML, Marker);
-        }
+		{
+			return HandleLayout_("Set", Id, XSLFilename, Target, Registry, XML, Marker);
+		}
 		template <typename chars> void AppendLayout_(
 			const chars &Id,
 			const rgstry::rEntry &XSLFilename,
@@ -407,9 +412,9 @@ namespace sclx {
 			const sclr::registry_ &Registry,
 			const str::dString &XML,
 			bso::char__ Marker)
-        {
-            return HandleLayout_("Append", Id, XSLFilename, Target, Registry, XML, Marker);
-        }
+		{
+			return HandleLayout_("Append", Id, XSLFilename, Target, Registry, XML, Marker);
+		}
 		template <typename session, typename rack, typename chars> void PrependLayout_(
 			const chars &Id,
 			const char *Target,
@@ -418,7 +423,7 @@ namespace sclx {
 			session &Session,
 			bso::char__ Marker = DefaultMarker )
 		{
-            return HandleLayout_<session,rack,chars>("Prepend", Id, Target, Registry, Get, Session, Marker);
+			return HandleLayout_<session,rack,chars>("Prepend", Id, Target, Registry, Get, Session, Marker);
 		}
 		template <typename session, typename rack, typename chars> void SetLayout_(
 			const chars &Id,
@@ -428,7 +433,7 @@ namespace sclx {
 			session &Session,
 			bso::char__ Marker = DefaultMarker )
 		{
-            return HandleLayout_<session,rack,chars>("Set", Id, Target, Registry, Get, Session, Marker);
+			return HandleLayout_<session,rack,chars>("Set", Id, Target, Registry, Get, Session, Marker);
 		}
 		template <typename session, typename rack, typename chars> void AppendLayout_(
 			const chars &Id,
@@ -438,7 +443,7 @@ namespace sclx {
 			session &Session,
 			bso::char__ Marker = DefaultMarker )
 		{
-            return HandleLayout_<session,rack,chars>("Append", Id, Target, Registry, Get, Session, Marker);
+			return HandleLayout_<session,rack,chars>("Append", Id, Target, Registry, Get, Session, Marker);
 		}
 	public:
 		void reset( bso::sBool P = true )
@@ -448,7 +453,7 @@ namespace sclx {
 		}
 		qCDTOR( sProxy );
 		void Init(
-            xdhcuc::cSingle &Callback,
+			xdhcuc::cSingle &Callback,
 			const scli::sInfo &Info,
 			eXSLFileHandling XSLFileHandling )
 		{
@@ -464,31 +469,31 @@ namespace sclx {
 			const str::dString &Script,
 			str::dString &Result )
 		{
-            Process_("Execute_1", &Result, Script);
+			Process_("Execute_1", &Result, Script);
 		}
 		void Execute( const str::dString &Script )
 		{
-            Process_("Execute_1", NULL, Script);
+			Process_("Execute_1", NULL, Script);
 		}
 		void Execute(
 			const char *Script,
 			str::dString &Result )
 		{
-            return Execute(str::wString(Script), Result);
+			return Execute(str::wString(Script), Result);
 		}
 		void Execute(const char *Script)
 		{
-            return Execute(str::wString(Script));
+			return Execute(str::wString(Script));
 		}
 		void BroadcastAction(
-            const char *Action,
-            const char *Id)
+			const char *Action,
+			const char *Id)
 		{
-		    Core_.BroadcastAction(str::wString(Action), str::wString(Id), str::Empty);
+			Core_.BroadcastAction(str::wString(Action), str::wString(Id), str::Empty);
 		}
 		void Log( const str::dString &Message )
 		{
-            qRLmt();
+			qRLmt();
 		}
 		// The basic alert, without use of 'JQuery' based widget.
 		void AlertB( const str::dString & Message );
@@ -519,10 +524,10 @@ namespace sclx {
 		bso::bool__ ConfirmT(
 			const char *RawMessage,
 			const char *Language )
-        {
-            return ConfirmT(str::wString(RawMessage), Language);
-        }
-        bso::bool__ ConfirmU(
+		{
+			return ConfirmT(str::wString(RawMessage), Language);
+		}
+		bso::bool__ ConfirmU(
 			const str::dString &Message,
 			const char *Language );	// Displays 'Message' as is. 'Language' is used for the closing text message.
 		template <typename s, typename t, typename u> void SetAttribute(
@@ -530,7 +535,7 @@ namespace sclx {
 			const t &Name,
 			const u &Value )
 		{
-            Process_("SetAttribute_1", NULL, Id, Name, Value);
+			Process_("SetAttribute_1", NULL, Id, Name, Value);
 		}
 		const char *GetAttribute(
 			const str::dString &Id,
@@ -545,39 +550,39 @@ namespace sclx {
 			const str::dString &Name,
 			str::dString &Value )
 		{
-            qRLmt();
-            return Value;
+			qRLmt();
+			return Value;
 		}
 		void RemoveAttribute(
 			const str::dString &Id,
 			const str::dString &Name )
 		{
-            qRLmt();
+			qRLmt();
 		}
 		void SetContents(
 			const str::dStrings &Ids,
 			const str::dStrings &Contents )
-        {
-            Process_("SetContents_1", NULL, Ids, Contents);
-        }
+		{
+			Process_("SetContents_1", NULL, Ids, Contents);
+		}
 		template <typename c1, typename c2> void SetContent(
 			const c1 &Id,
 			const c2 &Content )
-        {
-            return SetContents(str::wStrings(Id),str::wStrings(Content));
-        }
-        void GetContents(
-            const str::dStrings &Ids,
-            str::dStrings &Contents );
-        const str::dString &GetContent(
-            const str::dString &Id,
-            str::dString &Content );
-        const str::dString &GetContent(
-            const char *Id,
-            str::dString &Content )
-        {
-            return GetContent(str::wString(Id), Content);
-        }
+		{
+			return SetContents(str::wStrings(Id),str::wStrings(Content));
+		}
+		void GetContents(
+			const str::dStrings &Ids,
+			str::dStrings &Contents );
+		const str::dString &GetContent(
+			const str::dString &Id,
+			str::dString &Content );
+		const str::dString &GetContent(
+			const char *Id,
+			str::dString &Content )
+		{
+			return GetContent(str::wString(Id), Content);
+		}
 		void SetTimeout(
 			const str::dString &Delay,
 			const str::dString &Action );
@@ -585,60 +590,60 @@ namespace sclx {
 			const str::dString &Id,
 			qCBUFFERh &Value )
 		{
-            qRLmt();
-            return Value;
+			qRLmt();
+			return Value;
 		}
 		const char *FirstChild(
 			const str::dString &Id,
 			qCBUFFERh &Value )
 		{
-            qRLmt();
-            return Value;
+			qRLmt();
+			return Value;
 		}
 		const char *LastChild(
 			const str::dString &Id,
 			qCBUFFERh &Value )
 		{
-            qRLmt();
-            return Value();
+			qRLmt();
+			return Value();
 		}
 		const char *PreviousSibling(
 			const str::dString &Id,
 			qCBUFFERh &Value )
 		{
-            qRLmt();
-            return Value;
+			qRLmt();
+			return Value;
 		}
 		const char *NextSibling(
 			const str::dString &Id,
 			qCBUFFERh &Value )
 		{
-            qRLmt();
-            return Value;
+			qRLmt();
+			return Value;
 		}
 		void InsertChild(
 			const str::dString &Child,
 			const str::dString &Id )
 		{
-            qRLmt();
+			qRLmt();
 		}
 		void AppendChild(
 			const str::dString &Child,
 			const str::dString &Id )
 		{
-            qRLmt();
+			qRLmt();
 		}
 		void InsertBefore(
 			const str::dString &Sibling,
 			const str::dString &Id )
 		{
-            qRLmt();
+			qRLmt();
 		}
 		void InsertAfter(
 			const str::dString &Sibling,
 			const str::dString &Id )
 		{
-            qRLmt();
+			qRLmt();
 		}
 		/*
 		void InsertCSSRule(
@@ -650,39 +655,39 @@ namespace sclx {
 		void AddClasses(
 			const str::dStrings &Ids,
 			const str::dStrings &Classes )
-        {
-            return HandleClasses_("Add", Ids, Classes);
-        }
+		{
+			return HandleClasses_("Add", Ids, Classes);
+		}
 		template <typename c1, typename c2> void AddClass(
 			const c1 &Id,
 			const c2 &Class )
-        {
-            return AddClasses(str::wStrings(Id), str::wStrings(Class));
-        }
+		{
+			return AddClasses(str::wStrings(Id), str::wStrings(Class));
+		}
 		void RemoveClasses(
 			const str::dStrings &Ids,
 			const str::dStrings &Classes )
-        {
-            return HandleClasses_("Remove", Ids, Classes);
-        }
+		{
+			return HandleClasses_("Remove", Ids, Classes);
+		}
 		template <typename c1, typename c2> void RemoveClass(
 			const c1 &Id,
 			const c2 &Class )
-        {
-            return RemoveClasses(str::wStrings(Id), str::wStrings(Class));
-        }
+		{
+			return RemoveClasses(str::wStrings(Id), str::wStrings(Class));
+		}
 		void ToggleClasses(
 			const str::dStrings &Ids,
 			const str::dStrings &Classes )
-        {
-            return HandleClasses_("Toggle", Ids, Classes);
-        }
+		{
+			return HandleClasses_("Toggle", Ids, Classes);
+		}
 		template <typename c1, typename c2> void ToggleClass(
 			const c1 &Id,
 			const c2 &Class )
-        {
-            return ToggleClasses(str::wStrings(Id), str::wStrings(Class));
-        }
+		{
+			return ToggleClasses(str::wStrings(Id), str::wStrings(Class));
+		}
 		void EnableElements( const str::dStrings &Ids );
 		void EnableElement( const str::dString &Id );
 		void EnableElement( const char *Id )
@@ -697,14 +702,14 @@ namespace sclx {
 		}
 		void DressWidgets( const str::dString &Id )
 		{
-            qRLmt();
+			qRLmt();
 		}
 		const char *Dummy(
 			const str::dString &Id,
 			qCBUFFERh &Value )
 		{
-            qRLmt();
-            return Value;
+			qRLmt();
+			return Value;
 		}
 	};
 
@@ -811,9 +816,9 @@ namespace sclx {
 	// User put in 'instances' all his own objects, instantiating all with a 'new' (by overloading 'SCLXHTMLNew(...)'), a 'delete' will be made automatically when unloading the library.
 	template <typename instances, typename frontend, typename page, page UndefinedPage, typename dump> class rSession
 	: public cDownstream_,
-	  public sProxy,
-	  public instances,
-	  public frontend
+		public sProxy,
+		public instances,
+		public frontend
 	{
 	private:
 		eXSLFileHandling XSLFileHandling_;
@@ -828,16 +833,16 @@ namespace sclx {
 			xdhcuc::cSingle &Callback,
 			const char *Language,
 			const str::dString &Token)	override // If empty, PROD session, else token used for the DEMO session.
-        {
-            if ( Token.Amount() )
-                qRFwk();    // Should never be maunched in 'DEMO' mode.
+		{
+			if ( Token.Amount() )
+				qRFwk();    // Should never be maunched in 'DEMO' mode.
 
 			sProxy::Init( Callback, I_(), XSLFileHandling_ );
 			Reporting_.Init( *this, Language );
 			frontend::Init( K_(), Language, Reporting_ );
 
 			return true;
-        }
+		}
 		bso::bool__ XDHCDCLaunch(
 			const char *Id,
 			const char *Action ) override
@@ -865,9 +870,9 @@ namespace sclx {
 			const scli::sInfo &Info,
 			eXSLFileHandling XSLFileHandling = xfh_Default )
 		{
-            this->XSLFileHandling_ = XSLFileHandling;
-            Info_ = &Info;
-            Kernel_ = &Kernel;
+			this->XSLFileHandling_ = XSLFileHandling;
+			Info_ = &Info;
+			Kernel_ = &Kernel;
 			Page_ = UndefinedPage;
 			// instances::Init( *this );	// Made on connection.
 			BackendVisibility_ = bvShow;	// By default, the backend part of the login page is shown.
@@ -921,14 +926,14 @@ namespace sclx {
 			AlertU( str::wString(Message));
 		}
 		void AlertT(
-            const str::dString &RawMessage,
-            const str::dString &RawTitle)	// Translates 'RawMessage'.
+			const str::dString &RawMessage,
+			const str::dString &RawTitle)	// Translates 'RawMessage'.
 		{
 			sProxy::AlertT( RawMessage, RawTitle, Language() );
 		}
 		void AlertT(
-            const char *RawMessage,
-            const char *RawTitle)	// Translates 'RawMessage'.
+			const char *RawMessage,
+			const char *RawTitle)	// Translates 'RawMessage'.
 		{
 			AlertT(str::wString(RawMessage),str::wString(RawTitle));
 		}
@@ -1015,7 +1020,8 @@ namespace sclx {
 		}
 	};
 
-	template <typename session> class rCore {
+	template <typename session> class rCore
+	{
 	private:
 		action_handler<session> _Handler;
 		xdhcdc::eMode Mode_;
@@ -1067,15 +1073,15 @@ namespace sclx {
 			const char *Action )
 		{
 			bso::bool__ Success = true;
-		qRH;
+			qRH;
 			TOL_CBUFFER___ Buffer;
-		qRB;
+			qRB;
 			if ( ( Action == NULL ) || ( *Action == 0 ) ) {
 				Session.SetAttribute( "", "data-xdh-onevents", "(keypress|About|SC+a)(keypress|Q37Refresh|SC+r)" );
 				Action = ONS_();
 			}
 
-			 if ( !strcmp( Action, xdhcmn::RefreshActionLabel ) ) {
+			if ( !strcmp( Action, xdhcmn::RefreshActionLabel ) ) {
 				_OnRefresh( Session );
 			} else if ( _OnBeforeAction( Session, Id, Action ) ) {
 				if ( !strcmp( Action, xdhcmn::CloseActionLabel ) )
@@ -1083,10 +1089,10 @@ namespace sclx {
 				else
 					_Handler.Launch( Session, Id, Action, Mode_ );
 			}
-		qRR;
+			qRR;
 			HandleError( Session, Session.Language() );
-		qRT;
-		qRE;
+			qRT;
+			qRE;
 			return Success;
 		}
 	};
@@ -1131,9 +1137,9 @@ namespace sclx {
 		inline void DisplaySelectedProjectFilename(
 			sProxy &Proxy,
 			const char *Id )
-        {
-            return DisplaySelectedProjectFilename(Proxy, str::wString(Id));
-        }
+		{
+			return DisplaySelectedProjectFilename(Proxy, str::wString(Id));
+		}
 
 		sclm::eProjectType GetProjectFeatures(
 			sProxy &Proxy,
@@ -1169,9 +1175,9 @@ namespace sclx {
 		inline void DisplaySelectedEmbeddedBackendFilename(
 			sProxy &Proxy,
 			const char *Id )
-        {
-            return DisplaySelectedEmbeddedBackendFilename(Proxy, str::wString(Id));
-        }
+		{
+			return DisplaySelectedEmbeddedBackendFilename(Proxy, str::wString(Id));
+		}
 	}
 }
 

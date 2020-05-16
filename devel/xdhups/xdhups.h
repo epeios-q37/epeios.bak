@@ -74,21 +74,21 @@ namespace xdhups {
 		}
 	};
 
-    class rAgent
-    {
-    private:
+	class rAgent
+	{
+	private:
 		dlbrry::dynamic_library___ Library_;
 		Q37_MRMDF( xdhcdc::cGlobal, C_, Callback_ );
 		TOL_CBUFFER___ Buffer_;
-    public:
-        void reset( bso::bool__ P = true )
-        {
+	public:
+		void reset( bso::bool__ P = true )
+		{
 			Library_.reset( P );
 			Callback_ = NULL;
-        }
-        E_CDTOR( rAgent );
+		}
+		E_CDTOR( rAgent );
 		bso::bool__ Init(
-            xdhcuc::cGlobal &Upstream,
+			xdhcuc::cGlobal &Upstream,
 			xdhcdc::eMode Mode,
 			const str::string_ &ModuleFileName,
 			dlbrry::eNormalization Normalization,	// Usually 'dlbrry::n_Default', except when used for 'Node.js' (set to 'dlbrry::nExtOnly').
