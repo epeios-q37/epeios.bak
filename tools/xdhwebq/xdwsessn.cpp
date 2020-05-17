@@ -29,10 +29,10 @@ void xdwsessn::rUpstream_::XDHCUCProcess(
 	const str::string_ &Script,
 	str::dString *ReturnedValue )
 {
-qRH
+qRFH
     qCBUFFERh Buffer;
     websck::rFlow Flow;
-qRB
+qRFB
     Flow.Init(D_(), websck::mWithTerminator);
 
     Flow.Write( Script.Convert(Buffer), Script.Amount());
@@ -42,7 +42,7 @@ qRB
         websck::GetMessage(Flow, *ReturnedValue);
 
     Flow.Dismiss();
-qRR
-qRT
-qRE
+qRFR
+qRFT
+qRFE(sclm::ErrorDefaultHandling())
 }

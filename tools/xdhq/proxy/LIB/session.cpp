@@ -428,3 +428,7 @@ qRFE(sclm::ErrorDefaultHandling());
 	return Return;
 }
 
+qGCTOR(session) {
+	Ids_.Init();
+}
+

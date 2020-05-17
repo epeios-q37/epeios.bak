@@ -10,6 +10,11 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2020-05-17:
+
+- FDR:
+  - fixing mutex ownong issues on `reset(…)`,
+
 ## 2020-05-11:
 
 - SCLM:

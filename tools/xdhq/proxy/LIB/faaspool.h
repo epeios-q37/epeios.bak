@@ -189,9 +189,27 @@ namespace faaspool {
 		{
 			return Shared_.Driver->WTake( Owner );
 		}
+		void Release_(void)
+		{
+		qRH
+		qRB
+			PutId(ClosingId, *Shared_.Driver);
+			PutId(Shared_.Id, *Shared_.Driver);
+			Shared_.Driver->Commit(true, err::h_Default);
+		qRR
+			ERRRst();
+		qRT
+		qRE
+		}
 	public:
 		void reset( bso::sBool P = true )
 		{
+			if ( P ) {
+				if ( Shared_.IsValid() ) {
+					Release_();
+				}
+			}
+
 			fdr::rRWDressedDriver::reset( P );
 			Consumed_ = 0;
 			Shared_.reset(P);

@@ -263,6 +263,8 @@ namespace {
 						if ( Sessions.Append(Session) != Row )
 							qRGnr();
 
+						Session = NULL;
+
 						csdcmn::Put(Id, Proxy);
 						csdcmn::SendProtocol(MainProtocolLabel_, MainProtocolVersion_, Proxy);
 
@@ -280,6 +282,8 @@ namespace {
 							qRGnr();
 
 						delete Session;
+
+						Session = NULL;
 
 						Ids.Remove(Row);
 						break;
