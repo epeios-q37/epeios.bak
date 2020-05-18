@@ -54,7 +54,7 @@
 }
         ]]>
       </Script>
-      <!-- This script name (and only this one) and paameters are hadcoded in the 'XDHUJP' library ! -->
+      <!-- This script name (and only this one) and parameters are hadcoded in the 'XDHUJP' library ! -->
       <Script name="HandleLayout_1" Arguments="Variant,Id,XML,XSL">
         <![CDATA[
 {

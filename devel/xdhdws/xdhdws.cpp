@@ -344,7 +344,7 @@ namespace {
 					Arguments.Append(IdsTag);
 					Arguments.Append(EventsTag);
 
-					BaseProcess_( ss_::InstantiateWidgets, Arguments, Callback);
+					BaseProcess_( ss_::SetEventHandlers, Arguments, Callback);
 				}
 			qRR
 			qRT

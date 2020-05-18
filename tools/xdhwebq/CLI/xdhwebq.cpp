@@ -160,7 +160,7 @@ namespace {
 			namespace ss_ {
 				namespace standby {
 					qCDEF(char *, Label, "%StandBy");
-					qCDEF(bso::sSize, Size, 7);
+					qCDEF(bso::sSize, Size, 8);
 				}
 			}
 
