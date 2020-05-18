@@ -271,7 +271,7 @@ namespace {
 						Proxy.Commit();
 						break;
 					case ClosingId:
-						if ( Search(csdcmn::Get(Proxy, Id), Ids) != qNIL )
+						if ( ( Row = Search(csdcmn::Get(Proxy, Id), Ids) ) == qNIL )
 							qRGnr();
 
 						Proxy.Dismiss();
@@ -285,7 +285,9 @@ namespace {
 
 						Session = NULL;
 
+						Sessions.Remove(Row);
 						Ids.Remove(Row);
+
 						break;
 					default:
 						if ( ( Row = Search(Id, Ids) ) == qNIL )

@@ -10,6 +10,11 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2020-05-18:
+
+- DTFPTB:
+  - fixing failed error detection issue,
+
 ## 2020-05-17:
 
 - FDR:

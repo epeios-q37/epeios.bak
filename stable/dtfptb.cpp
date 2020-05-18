@@ -206,16 +206,14 @@ static bso::sBool GetInt_(
 	bso::u8__ Counter = 0;
 	bso::sBool IsError = false;
 
-	while ( (Counter < BSO_DINT_SIZE_MAX) && ((DInt[Counter] = Flow.Get( &IsError )) & 0x80) ) {
-		if ( IsError )
-			return false;
+	while ( ( Counter < BSO_DINT_SIZE_MAX ) && ( ( DInt[Counter] = Flow.Get( &IsError ) ) & 0x80 ) && !IsError ) {
 		Counter++;
 	}
 
 	if ( Counter >= BSO_DINT_SIZE_MAX )
 		qRFwk();
 
-	return true;
+	return !IsError;
 }
 
 bso::sBool GetInt_(

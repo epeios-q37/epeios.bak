@@ -503,10 +503,13 @@ namespace {
 		while ( true ) {
 			Id = UndefinedId;
 
+			if ( Flow.EndOfFlow() )
+				break;
+
 			Id = GetId( Flow, &IsError );
 
 			if ( IsError )
-				break;
+				qRGnr();
 
 			if ( !Shareds.Exists( Id ) ) {
 				Id = UndefinedId;

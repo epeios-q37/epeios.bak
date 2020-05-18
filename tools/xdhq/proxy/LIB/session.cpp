@@ -152,8 +152,46 @@ qRE;
 	return Return;
 }
 
-namespace {
-	idsq::wIdStore <sId_> Ids_;
+namespace IdStore_ {
+	namespace {
+		idsq::wIdStore <sId_> Ids_;
+		mtx::rHandler Mutex_ = mtx::Undefined;
+	}
+
+	void Init(void)
+	{
+		if ( Mutex_ != mtx::Undefined )
+			mtx::Delete(Mutex_);
+
+		Mutex_ = mtx::Create();
+		Ids_.Init();
+	}
+
+	sId_ Fetch(void)
+	{
+		sId_ Id = UndefinedId_;
+	qRH
+	qRB
+		mtx::Lock(Mutex_);
+		Id = Ids_.New();
+	qRR
+	qRT
+		mtx::Unlock(Mutex_);
+	qRE
+		return Id;
+	}
+
+	void Release(sId_ Id)
+	{
+	qRH
+	qRB
+		mtx::Lock(Mutex_);
+		Ids_.Release(Id);
+	qRR
+	qRT
+		mtx::Unlock(Mutex_);
+	qRE
+	}
 }
 
 namespace {
@@ -289,7 +327,7 @@ namespace {
 				} else if ( ScriptName == "BroadcastAction_1" ) { // Issued by Atlas toolkit front-ends (Python, Java, Node.js…).
 					BroadcastAction_(Flow, Proxy, Token);
 				} else if ( ScriptName == "Quit_1" ) { // Issued by Atlas toolkit front-ends (Python, Java, Node.js…).
-					Ids_.Release(Id);
+					IdStore_::Release(Id);
 					Flow.Dismiss();
 					Blocker.Unblock();
 					break;
@@ -394,7 +432,7 @@ qRB;
 
 		csdcmn::Get( Flow, LogMessage );
 
-		Id = Ids_.New();
+		Id = IdStore_::Fetch();
 		Log_(Id, IP, LogMessage);
 
 		Data.Driver = &D_();
@@ -429,6 +467,6 @@ qRFE(sclm::ErrorDefaultHandling());
 }
 
 qGCTOR(session) {
-	Ids_.Init();
+	IdStore_::Init();
 }
 
