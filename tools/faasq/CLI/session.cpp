@@ -26,6 +26,21 @@ using namespace session;
 
 // #define LOG cio::COut << __LOC__ << tol::DateAndTime(DT) << txf::nl << txf::commit;
 
+// Special script name, which are converted to a script
+// but intercepted by the ATK proxy ('xdhqxdh') to
+// launch a special action.
+namespace ssn_ { // Special Script Name
+	qCDEF(char *, StandBy, "#StandBy_1");
+	qCDEF(char *, Broadcast, "#Broadcast_1");
+	qCDEF(char *, Quit, "#Quit_1");
+}
+
+// Special action labels which are intercepted,
+// to do special actions.
+namespace sal_ { // Special Action Label,
+	qCDEF(char *, Quit, "$Quit_1");
+}
+
 void session::sUpstream_::XDHCUCProcess(
 	const str::string_ &Script,
 	str::dString *ReturnedValue )
@@ -74,11 +89,10 @@ qRB
 	Proxy.Init(P_());
 
 	csdcmn::Put(Id_, Proxy);
-	csdcmn::Put("Broadcast_1", Proxy);
+	csdcmn::Put(ssn_::Broadcast, Proxy);
 	csdcmn::Put(Script, Proxy);
 
-
-//    csdcmn::Put(Token, Proxy);    // 'Token', when relevant (FaaS mode) is only handled by the 'xdhqxdh' tool.
+//    csdcmn::Put(Token, Proxy);    // 'Token', when relevant (FaaS mode), is only handled by the 'xdhqxdh' tool.
 
 	Proxy.Commit();
 qRR
@@ -105,7 +119,7 @@ qRB
 		Blockers_.UnblockGlobal();
 
 		if ( Action.Amount() == 0 ) {
-			if ( Id == "Quit_1" )
+			if ( Id == sal_::Quit )
 				Exit = true;
 			else if ( Id.Amount() != 0 )	// On connection.
 				qRGnr();
@@ -119,9 +133,9 @@ qRB
 		csdcmn::Put(_Id_, Proxy_);
 
 		if ( Exit )
-			csdcmn::Put("Quit_1", Proxy_);
+			csdcmn::Put(ssn_::Quit, Proxy_);
 		else
-			csdcmn::Put("StandBy_1", Proxy_);
+			csdcmn::Put(ssn_::StandBy, Proxy_);
 
 		Proxy_.Commit();
 	}

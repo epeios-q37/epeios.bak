@@ -155,6 +155,15 @@ namespace {
 				}
 			}
 
+			// Special scripts, which are not executed by the client,
+			// but intercepted to launch a special action.
+			namespace ss_ {
+				namespace standby {
+					qCDEF(char *, Label, "%StandBy");
+					qCDEF(bso::sSize, Size, 7);
+				}
+			}
+
 			void HandleRegular_(
 				xdhups::rAgent &Agent,
 				fdr::rRWDriver &Driver,
@@ -186,7 +195,7 @@ namespace {
 							break;
 						Flow.Dismiss();
 						Handle_(Digest, Session);
-						Flow.Write("StandBy", 7);
+						Flow.Write(ss_::standby::Label, ss_::standby::Size);
 						Flow.Commit();
 					}
 				}

@@ -23,6 +23,12 @@
 
 using namespace session;
 
+// Special action labels intercepted by 'faasq' or the Atlas toolkit,
+// to do special actions.
+namespace sal_ { // Special Action Label,
+	qCDEF(char *, Quit, "$Quit_1");
+}
+
 csdmnc::rCore session::Core;
 logq::rFDriver<> session::LogDriver;
 
@@ -152,7 +158,13 @@ qRE;
 	return Return;
 }
 
-namespace IdStore_ {
+void session::rSession::CloseBackendSession_(void)
+{
+	if ( Mode_ != m_Undefined )
+		Launch_(sal_::Quit, "");	// To tell the backend to close the corresponding session.
+}
+
+namespace id_store_ {
 	namespace {
 		idsq::wIdStore <sId_> Ids_;
 		mtx::rHandler Mutex_ = mtx::Undefined;
@@ -287,6 +299,17 @@ namespace {
 			qRT
 			qRE
 			}
+		}
+
+		// Special script name, with no no correspondence in 'XDHScripts.xcfg'
+		namespace ssn_ {	// Special Script Name
+			// Following labels indicates what issues the name:
+			// - FaaS: Epeios C++ XDH frontend launched with 'faasq' ('esketchwdh', for example).
+			// - ATK: XDH component using the Atlas toolkit, written in Java, Node.js, Python…,
+			qCDEF(char *, StandBy, "#StandBy_1");	// FaaS and ATK.
+			qCDEF(char *, Broadcast, "#Broadcast_1");	// FaaS.
+			qCDEF(char *, BroadcastAction, "#BroadcastAction_1"); // ATK.
+			qCDEF(char *, Quit, "#Quit_1"); // FaaS and ATK.
 
 		}
 
@@ -319,15 +342,15 @@ namespace {
 
 				Log_( Id, IP, ScriptName );
 
-				if ( ScriptName == "StandBy_1") {
+				if ( ScriptName == ssn_::StandBy ) {
 					Flow.Dismiss();
 					Blocker.Unblock();
-				} else if ( ScriptName == "Broadcast_1" ) { // Issued by XDH front-ends (Epeios XDH-based front-ends).
+				} else if ( ScriptName == ssn_::Broadcast ) {
 					Broadcast_(Flow, Proxy, Token);
-				} else if ( ScriptName == "BroadcastAction_1" ) { // Issued by Atlas toolkit front-ends (Python, Java, Node.js…).
+				} else if ( ScriptName == ssn_::BroadcastAction ) {
 					BroadcastAction_(Flow, Proxy, Token);
-				} else if ( ScriptName == "Quit_1" ) { // Issued by Atlas toolkit front-ends (Python, Java, Node.js…).
-					IdStore_::Release(Id);
+				} else if ( ScriptName == ssn_::Quit ) {
+					id_store_::Release(Id);
 					Flow.Dismiss();
 					Blocker.Unblock();
 					break;
@@ -432,7 +455,7 @@ qRB;
 
 		csdcmn::Get( Flow, LogMessage );
 
-		Id = IdStore_::Fetch();
+		Id = id_store_::Fetch();
 		Log_(Id, IP, LogMessage);
 
 		Data.Driver = &D_();
@@ -467,6 +490,6 @@ qRFE(sclm::ErrorDefaultHandling());
 }
 
 qGCTOR(session) {
-	IdStore_::Init();
+	id_store_::Init();
 }
 

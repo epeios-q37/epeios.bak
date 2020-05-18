@@ -4,14 +4,14 @@
   <xpp:bloc>
     <!-- All scripts enclosed in following block are of internal use. -->
     <xpp:bloc>
-      <Script name="SetEventHandlers_1" Arguments="#Ids,#Events">
+      <Script name="@SetEventHandlers_1" Arguments="#Ids,#Events">
         <![CDATA[
 {
   setEventHandlers( %#Ids%, %#Events% );
 }
         ]]>
       </Script>
-      <Script name="InstantiateWidgets_1" Arguments="#Ids,#Types,#ParametersSets,#ContentRetrievingMethods,#FocusingMethods,#SelectionMethods">
+      <Script name="@InstantiateWidgets_1" Arguments="#Ids,#Types,#ParametersSets,#ContentRetrievingMethods,#FocusingMethods,#SelectionMethods">
         <![CDATA[
 {
   instantiateWidgets( %#Ids%, %#Types%, %#ParametersSets%, %#ContentRetrievingMethods%, %#FocusingMethods%, %#SelectionMethods% );
@@ -19,7 +19,7 @@
         ]]>
       </Script>
       <!-- This script does not perform the brodcast, but is the one which is broadcasted. -->
-      <Script name="BroadcastAction_1" Arguments="Action,Id">
+      <Script name="@BroadcastAction_1" Arguments="Action,Id">
 		        <![CDATA[
 {
  launchEvent('%Id%|BROADCAST|broadcast||((broadcast|%Action%))');

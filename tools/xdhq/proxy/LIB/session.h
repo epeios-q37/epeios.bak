@@ -95,6 +95,7 @@ namespace session {
 		bso::bool__ Launch_(
 			const char *Id,
 			const char *Action );
+		void CloseBackendSession_(void);
 	protected:
 		virtual bso::sBool XDHCDCInitialize(
 			xdhcuc::cSingle &Callback,
@@ -107,9 +108,7 @@ namespace session {
 		void reset( bso::sBool P = true )
 		{
 			if ( P ) {
-				if ( Mode_ != m_Undefined ) {
-					Launch_("Quit_1", "");	// To tell the backend to close the corresponding session.
-				}
+				CloseBackendSession_();
 			}
 
 			tol::reset(P, Blocker_, FaaSDriver_, ProdDriver_);

@@ -25,6 +25,20 @@
 
 using namespace xdhdws;
 
+// Special scripts, for internal use,
+// which are not directly launched by the user.
+namespace ss_ {	// Special Script
+	qCDEF(char *, SetEventHandlers, "@SetEventHandlers_1");
+	qCDEF(char *, InstantiateWidgets, "@InstantiateWidgets_1" );
+	qCDEF(char *, BroadcastAction, "@BroadcastAction_1");
+}
+
+// Name of scripts, called by the user, which are 'patched',
+// i.e. some special additional actions are made.
+namespace psn_ {	// Patched Script Name
+	qCDEF(char *, HandleLayout, "HandleLayout_1");
+}
+
 namespace {
 	namespace {
 		namespace {
@@ -330,7 +344,7 @@ namespace {
 					Arguments.Append(IdsTag);
 					Arguments.Append(EventsTag);
 
-					BaseProcess_( "SetEventHandlers_1", Arguments, Callback);
+					BaseProcess_( ss_::InstantiateWidgets, Arguments, Callback);
 				}
 			qRR
 			qRT
@@ -432,7 +446,7 @@ namespace {
 					Arguments.Append(FlatFocusingMethods);
 					Arguments.Append(FlatSelectionMethods);
 
-					BaseProcess_("InstantiateWidgets_1", Arguments, Callback);
+					BaseProcess_(ss_::InstantiateWidgets, Arguments, Callback);
 				}
 			qRR
 			qRT
@@ -469,10 +483,6 @@ namespace {
 	}
 
 	namespace {
-		qCDEF(char *, HandleLayoutScriptName_, "HandleLayout_1");
-	}
-
-	namespace {
 		inline bso::sBool IsEqual_(
 			const char *Op1,
 			const char *Op2 )
@@ -494,8 +504,8 @@ namespace {
 		xdhcuc::cSingle &Callback,
 		str::dString *ReturnValue)
 	{
-		if ( IsEqual_(ScriptName, HandleLayoutScriptName_) )
-			HandleLayout_(HandleLayoutScriptName_, Values, Callback);
+		if ( IsEqual_(ScriptName, psn_::HandleLayout) )
+			HandleLayout_(psn_::HandleLayout, Values, Callback);
 		else
 			BaseProcess_(ScriptName, Values, Callback, ReturnValue);
 	}
@@ -530,7 +540,7 @@ qRB
 	Arguments.Append(Id);
 
 	Script.Init();
-	GetScript_("BroadcastAction_1", Arguments, Script);
+	GetScript_(ss_::BroadcastAction, Arguments, Script);
 
 	Broadcast(Script, Token);
 qRR

@@ -68,7 +68,7 @@ function connect(token) {
 	}
 
     socket.onmessage = function(event) {
-		if ( event.data !== "StandBy" ) {
+		if ( event.data !== "%StandBy" ) {
 			console.log("Executed:", event.data);
 			let result = eval(event.data);
 //			console.log(event.data);
