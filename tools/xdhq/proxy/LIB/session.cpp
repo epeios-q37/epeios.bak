@@ -23,9 +23,10 @@
 
 using namespace session;
 
-// Special action labels intercepted by 'faasq' or the Atlas toolkit,
+// An empty aciton with such an id
+// is intercepted by 'faasq' or the Atlas toolkit,
 // to do special actions.
-namespace sal_ { // Special Action Label,
+namespace eai_ { // Special Action Label,
 	qCDEF(char *, Quit, "$Quit_1");
 }
 
@@ -161,7 +162,7 @@ qRE;
 void session::rSession::CloseBackendSession_(void)
 {
 	if ( Mode_ != m_Undefined )
-		Launch_(sal_::Quit, "");	// To tell the backend to close the corresponding session.
+		Launch_(eai_::Quit, "");	// To tell the backend to close the corresponding session.
 }
 
 namespace id_store_ {
@@ -301,14 +302,14 @@ namespace {
 			}
 		}
 
-		// Special script name, with no no correspondence in 'XDHScripts.xcfg'
+		// Special script name, with no no correspondence in 'XDHScripts.xcfg'.
 		namespace ssn_ {	// Special Script Name
 			// Following labels indicates what issues the name:
 			// - FaaS: Epeios C++ XDH frontend launched with 'faasq' ('esketchwdh', for example).
 			// - ATK: XDH component using the Atlas toolkit, written in Java, Node.js, Python…,
-			qCDEF(char *, StandBy, "#StandBy_1");	// FaaS and ATK.
-			qCDEF(char *, Broadcast, "#Broadcast_1");	// FaaS.
-			qCDEF(char *, BroadcastAction, "#BroadcastAction_1"); // ATK.
+			qCDEF(char *, StandBy, "#StandBy_1");	// FaaS and ATK; no more script pending.
+			qCDEF(char *, Broadcast, "#Broadcast_1");	// FaaS; brodcast a script.
+			qCDEF(char *, BroadcastAction, "#BroadcastAction_1"); // ATK; broadcast an action.
 			qCDEF(char *, Quit, "#Quit_1"); // FaaS and ATK.
 
 		}

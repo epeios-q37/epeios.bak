@@ -83,6 +83,14 @@ def worker(userCallback,dom,callbacks):
 	
 	while True:
 		[action,id] = dom.getAction()
+
+		if ( action == "" ):
+			if ( id == "$Quit_1" ):
+				dom.sendQuit()
+				break;
+			elif ( id != "" ):
+				sys.exit("Unknown special action id")
+
 		if action=="" or not "_PreProcess" in callbacks or _call(callbacks["_PreProcess"],userObject, dom, id, action):
 			if _call(callbacks[action], userObject, dom, id, action ) and "_PostProcess" in callbacks:
 				_call(callbacks["_PostProcess"],userObject, dom, id, action)

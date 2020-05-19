@@ -26,18 +26,19 @@ using namespace session;
 
 // #define LOG cio::COut << __LOC__ << tol::DateAndTime(DT) << txf::nl << txf::commit;
 
-// Special script name, which are converted to a script
-// but intercepted by the ATK proxy ('xdhqxdh') to
-// launch a special action.
+// Special script name, which are NOT converted to a script,
+// but intercepted by the ATK proxy ('xdhqxdh'),
+// to launch a special action.
 namespace ssn_ { // Special Script Name
 	qCDEF(char *, StandBy, "#StandBy_1");
 	qCDEF(char *, Broadcast, "#Broadcast_1");
 	qCDEF(char *, Quit, "#Quit_1");
 }
 
-// Special action labels which are intercepted,
+// Empty (special) action ids.
+// An empty action with this label is intercepted,
 // to do special actions.
-namespace sal_ { // Special Action Label,
+namespace eai_ { // Special Action Id,
 	qCDEF(char *, Quit, "$Quit_1");
 }
 
@@ -119,7 +120,7 @@ qRB
 		Blockers_.UnblockGlobal();
 
 		if ( Action.Amount() == 0 ) {
-			if ( Id == sal_::Quit )
+			if ( Id == eai_::Quit )
 				Exit = true;
 			else if ( Id.Amount() != 0 )	// On connection.
 				qRGnr();

@@ -299,7 +299,9 @@ def _serve(callback,userCallback,callbacks ):
 
 		id = readSInt()
 		
-		if id == -1:    # Value reporting a new front-end.
+		if id == -1:	# Should never happen. 
+			sys.exit("Received undefined id!")
+		if id == -2:    # Value reporting a new front-end.
 			id = readSInt()  # The id of the new front-end.
 
 			if id in _instances:
@@ -314,7 +316,11 @@ def _serve(callback,userCallback,callbacks ):
 			writeString(_mainProtocolLabel)
 			writeString(_mainProtocolVersion)
 			_writeLock.release()
-
+		elif id == -3:	# Value instructing that a session is closed.
+			id = readSInt();
+			if not id in _instances:
+				sys.exit("Instance of id '" + str(id) + "' not available for destruction!")
+			del _instances[id]	# Seemingly destroy the object and remove the entry too.
 		elif not id in _instances:
 			sys.exit("Unknown instance of id '" + str(id) + "'!")
 		elif not _instances[id].IsHandshakeDone():
@@ -353,19 +359,29 @@ class DOM_FaaS:
 
 	def __init__(self, instance):
 		self.instance = instance
+
 	def wait(self):
 		self.instance.wait()
+		
 	def signal(self):
 		with _globalCondition:
 			_globalCondition.notify()
+
+	def _sendSpecialAction(self, action):
+		_writeLock.acquire()
+		writeSInt(self.instance.getId())
+		writeString(action)
+		_writeLock.release()
+
+	# Internal use.
+	def sendQuit(self):
+		self._sendSpecialAction("#Quit_1")
+
 	def getAction(self):
 		if self._firstLaunch:
 			self._firstLaunch = False
 		else:
-			_writeLock.acquire()
-			writeSInt(self.instance.getId())
-			writeString("StandBy_1")
-			_writeLock.release()
+			self._sendSpecialAction("#StandBy_1")
 
 		self.wait()
 

@@ -102,6 +102,10 @@ class DOM:
 	def __init__(self,instance):
 		self._dom = XDHqFaaS.DOM_FaaS(instance)
 
+	# Internal use.
+	def sendQuit(self):
+		self._dom.sendQuit()
+
 	def get_action(self):
 		return self._dom.getAction()
 
@@ -188,7 +192,7 @@ class DOM:
 	set_content = set_content
 
 	def broadcast_action(self, action, id = ""):
-		self._dom.call( "BroadcastAction_1", _VOID, action, id )
+		self._dom.call( "#BroadcastAction_1", _VOID, action, id )
 
 	"""
 	# Following 4 methods will either be removed or redesigned.
