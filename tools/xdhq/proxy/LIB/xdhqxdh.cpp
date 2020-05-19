@@ -45,7 +45,6 @@ static const char *Launcher_ = NULL;
 # define FUNCTION_SPEC
 #endif
 
-// Bien que dfinit dans un '.cpp', et propre  ce '.cpp', VC++ se mlange les pinceaux avec le 'callback__' dfinit dans 'scllocale.cpp', d'o le 'namespace'.
 namespace {
 	namespace {
 		void Initialization_( xdhcdc::eMode Mode )
@@ -53,11 +52,21 @@ namespace {
 		qRH;
 			qCBUFFERh Buffer;
 			str::wString HostService;
+			str::wString Translation;
 		qRB;
 			HostService.Init();
 
-			if ( sclm::OGetValue( registry::parameter::HostService, HostService ) )
-				session::Core.Init( HostService.Convert( Buffer ), 0, sck::NoTimeout );
+			if ( sclm::OGetValue( registry::parameter::HostService, HostService ) && HostService.Amount() ) {
+				Translation.Init();
+				sclm::GetBaseTranslation("ConnectingTo", Translation, HostService);
+				cio::COut << Translation << txf::commit << txf::nl;
+				if ( session::Core.Init( HostService.Convert( Buffer ), 0, sck::NoTimeout ) ) {
+					Translation.Init();
+					sclm::GetBaseTranslation("ConnectedTo", Translation, HostService);
+					cio::COut << Translation << txf::commit << txf::nl;
+				} else
+					sclm::ReportAndAbort("UnableToConnectTo", HostService);
+			}
 
 			faaspool::Initialize();
 			session::LogDriver.Init( cio::COut );

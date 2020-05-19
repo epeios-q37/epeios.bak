@@ -4,12 +4,12 @@
 		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
 		<xpp:expand value-of="q37.xpp"/>
         <xpp:expand href="../../../CLI.xcfg"/>
-        <!-- Macro également utilisée dans la xetcion (Loacle' -->
+        <!-- Macro également utilisée dans la section 'Locale'' -->
         <xpp:define name="Service">
             <xpp:bloc>53710</xpp:bloc>
         </xpp:define>
 		<Parameters>
-			<Language>fr</Language>
+			<Language>en</Language>
 			<Command>Process</Command>
 			<Service>
                 <xpp:expand select="Service"/>

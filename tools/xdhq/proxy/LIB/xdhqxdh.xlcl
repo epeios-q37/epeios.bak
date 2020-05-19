@@ -15,6 +15,18 @@
 		<Translation language="fr">Jeton '%1' déjà en cours d'utilisation !</Translation>
 		<Translation language="en">Token '%1' already in use !</Translation>
 	</Translations>
+	<Translations text="ConnectingTo">
+		<Translation language="fr">Connection à '%1'…</Translation>
+		<Translation language="en">Connection to '%1'…</Translation>
+	</Translations>
+	<Translations text="ConnectedTo">
+		<Translation language="fr">Connecté à '%1'.</Translation>
+		<Translation language="en">Connected to '%1.…</Translation>
+	</Translations>
+	<Translations text="UnableToConnectTo">
+		<Translation language="fr">Échec connection à '%1'!</Translation>
+		<Translation language="en">Unable to connect to '%1'!'</Translation>
+	</Translations>
 	<!--
 	<Translations text="">
 		<Translation language="fr"></Translation>

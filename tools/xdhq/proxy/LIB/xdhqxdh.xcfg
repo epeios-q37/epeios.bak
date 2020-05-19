@@ -7,11 +7,12 @@
 		<Parameters>
 			<Language>en</Language>
 			<Command>Test</Command>
-			<HostService>localhost:53700</HostService>
+			<!-- If present and not empty, connection to frontend at given host/Service -->
+			<!--HostService>localhost:53700</HostService-->
 			<FaaS>
-                <!-- Listening service (port) for the FaaS mode. If empty or == '0', FaaS behavior not launched. -->
-                <Service>53700</Service>
-            </FaaS>
+					<!-- Listening service (port) for the FaaS mode. If empty or == '0', FaaS behavior NOT launched. -->
+					<Service>53700</Service>
+			</FaaS>
 			<!-- Default command -->
 			<Plugins>
 				<!--Plugin target="Token" Id="Forbidden"/-->
