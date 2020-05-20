@@ -40,45 +40,45 @@ namespace xdhdws {
 	{
 	private:
 		Q37_MRMDF( xdhcuc::cSingle, C_, Callback_ );
-    public:
+	public:
 		void reset( bso::bool__ P = true )
 		{
-            Callback_ = NULL;
+			Callback_ = NULL;
 		}
 		E_CVDTOR( sProxy );
 		void Init(
-            xdhcuc::cSingle &Callback,
-            const str::dString &Token)
+			xdhcuc::cSingle &Callback,
+			const str::dString &Token)
 		{
 			reset();
 
 			Callback_ = &Callback;
 		}
 		void Process(
-            const char *ScriptName,
-            const str::dStrings &Values,
-            str::dString *ReturnValue = NULL);
+			const char *ScriptName,
+			const str::dStrings &Values,
+			str::dString *ReturnValue = NULL);
 		void Process(
-            const str::dString &ScriptName,
-            const str::dStrings &Values,
-            str::dString *ReturnValue = NULL);
+			const str::dString &ScriptName,
+			const str::dStrings &Values,
+			str::dString *ReturnValue = NULL);
 		template <typename string> void Process(
-            const string &ScriptName,
-            const str::dStrings &Values,
-            str::dString &ReturnValue)
-        {
-            return Process(ScriptName,Values,&ReturnValue);
-        }
-        void Broadcast(
-            const str::dString &Script,
-            const str::dString &Token)
-        {
-            return C_().Broadcast(Script, Token);
-        }
-        void BroadcastAction(
-            const str::dString &Action,
-            const str::dString &Id,
-            const str::dString &Token);
+			const string &ScriptName,
+			const str::dStrings &Values,
+			str::dString &ReturnValue)
+		{
+			return Process(ScriptName,Values,&ReturnValue);
+		}
+		void Broadcast(
+			const str::dString &Script,
+			const str::dString &Token)
+		{
+			return C_().Broadcast(Script, Token);
+		}
+		void BroadcastAction(
+			const str::dString &Action,
+			const str::dString &Id,
+			const str::dString &Token);
 	};
 }
 
