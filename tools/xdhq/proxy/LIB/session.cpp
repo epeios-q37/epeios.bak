@@ -34,11 +34,6 @@ csdmnc::rCore session::Core;
 logq::rFDriver<> session::LogDriver;
 
 namespace {
-	qMIMICs( bso::sU32, sId_ );	// Assigned per session.
-	qCDEF(sId_, UndefinedId_, bso::U32Max);
-}
-
-namespace {
 	void ReportToFrontend_(
 		xdhdws::sProxy &Proxy,
 		const str::dString &HTML)
@@ -137,263 +132,74 @@ namespace {
 
 // #define LOG cio::COut << __LOC__ << tol::DateAndTime(DT) << txf::nl << txf::commit;
 
-bso::bool__ session::rSession::Launch_(
-	const char *Id,
-	const char *Action )
-{
-	bso::sBool Return = false;
-qRH;
-	flw::rDressedWFlow<> Flow;
-qRB;
-	Flow.Init( D_() );
-
-	prtcl::Put( Id, Flow );
-	prtcl::Put( Action, Flow );
-	Flow.Commit();
-
-	Blocker_.Wait();
-qRR;
-	ReportErrorToFrontend_(*this, str::wString("Connection to backend lost!"));
-qRT;
-qRE;
-	return Return;
-}
-
 void session::rSession::CloseBackendSession_(void)
 {
 	if ( Mode_ != m_Undefined )
 		Launch_(eai_::Quit, "");	// To tell the backend to close the corresponding session.
 }
 
-namespace id_store_ {
-	namespace {
-		idsq::wIdStore <sId_> Ids_;
-		mtx::rHandler Mutex_ = mtx::Undefined;
-	}
-
-	void Init(void)
-	{
-		if ( Mutex_ != mtx::Undefined )
-			mtx::Delete(Mutex_);
-
-		Mutex_ = mtx::Create();
-		Ids_.Init();
-	}
-
-	sId_ Fetch(void)
-	{
-		sId_ Id = UndefinedId_;
-	qRH
-	qRB
-		mtx::Lock(Mutex_);
-		Id = Ids_.New();
-	qRR
-	qRT
-		mtx::Unlock(Mutex_);
-	qRE
-		return Id;
-	}
-
-	void Release(sId_ Id)
-	{
-	qRH
-	qRB
-		mtx::Lock(Mutex_);
-		Ids_.Release(Id);
-	qRR
-	qRT
-		mtx::Unlock(Mutex_);
-	qRE
-	}
-}
-
 namespace {
-	struct sData {
-		fdr::rRWDriver *Driver;
-		xdhdws::sProxy *Proxy;
-		sId_ Id;
-		const str::dString
-		*IP,
-		*Token;
-		tht::rBlocker *Blocker;
-	};
-
-	namespace {
+	namespace id_store_ {
 		namespace {
-			void Log_(
-				sId_ Id,
-				const str::dString &IP,
-				const str::dString &Message )
-			{
-			qRH;
-				logq::rLogRack<> Log;
-			qRB;
-				Log.Init( LogDriver );
-
-				Log << *Id;
-
-				if ( IP.Amount() != 0 )
-					Log << " (" << IP << ")";
-
-				Log << " : " <<  Message;
-			qRR;
-			qRT;
-			qRE;
-			}
+			idsq::wIdStore <sId_> Ids_;
+			mtx::rHandler Mutex_ = mtx::Undefined;
 		}
 
-		namespace {
-			void Broadcast_(
-				flw::rRFlow &Flow,
-				xdhdws::sProxy &Proxy,
-				const str::dString &Token)
-			{
-			qRH
-				str::wString Script;
-			qRB
-				Script.Init();
-
-				prtcl::Get(Flow, Script);
-
-				Flow.Dismiss();
-
-				Proxy.Broadcast(Script, Token);
-			qRR
-			qRT
-			qRE
-			}
-
-			void BroadcastAction_(
-				flw::rRFlow &Flow,
-				xdhdws::sProxy &Proxy,
-				const str::dString &Token)
-			{
-			qRH
-				str::wString Action, Id;
-			qRB
-				tol::Init(Action, Id);
-
-				if ( GetType_(Flow )!= tVoid )
-					qRGnr();
-
-
-				if ( GetType_(Flow) != tString )
-					qRGnr();
-
-				prtcl::Get(Flow, Action);
-
-
-				if ( GetType_(Flow) != tString )
-					qRGnr();
-
-				prtcl::Get(Flow, Id);
-
-
-				if ( GetType_(Flow) != tVoid )
-					qRGnr();
-
-
-				Flow.Dismiss();
-
-				Proxy.BroadcastAction(Action, Id, Token);
-			qRR
-			qRT
-			qRE
-			}
-		}
-
-		// Special script name, with no no correspondence in 'XDHScripts.xcfg'.
-		namespace ssn_ {	// Special Script Name
-			// Following labels indicates what issues the name:
-			// - FaaS: Epeios C++ XDH frontend launched with 'faasq' ('esketchwdh', for example).
-			// - ATK: XDH component using the Atlas toolkit, written in Java, Node.js, Python…,
-			qCDEF(char *, StandBy, "#StandBy_1");	// FaaS and ATK; no more script pending.
-			qCDEF(char *, Broadcast, "#Broadcast_1");	// FaaS; brodcast a script.
-			qCDEF(char *, BroadcastAction, "#BroadcastAction_1"); // ATK; broadcast an action.
-			qCDEF(char *, Quit, "#Quit_1"); // FaaS and ATK.
-
-		}
-
-		void Routine_(
-			void *UP,
-			mtk::gBlocker &DataBlocker)
+		void Init(void)
 		{
-			sData &Data = *(sData *)UP;
-			xdhdws::sProxy &Proxy = *Data.Proxy;
-		qRH;
-			sId_ Id = UndefinedId_;
-			flw::rDressedRWFlow<> Flow;
-			str::wString IP, Token, ScriptName, ReturnValue;
-			str::wStrings Parameters, SplitedReturnValue;
-			eType_ ReturnType = t_Undefined;
-		qRB;
-			fdr::rRWDriver &Driver = *Data.Driver;
-			Id = Data.Id;
-			IP.Init(*Data.IP);
-			Token.Init(*Data.Token);
-			tht::rBlocker &Blocker = *Data.Blocker;
+			if ( Mutex_ != mtx::Undefined )
+				mtx::Delete(Mutex_);
 
-			DataBlocker.Release();
-
-			Flow.Init( Driver );
-
-			while ( true ) {
-				ScriptName.Init();
-				prtcl::Get(Flow,ScriptName);
-
-				Log_( Id, IP, ScriptName );
-
-				if ( ScriptName == ssn_::StandBy ) {
-					Flow.Dismiss();
-					Blocker.Unblock();
-				} else if ( ScriptName == ssn_::Broadcast ) {
-					Broadcast_(Flow, Proxy, Token);
-				} else if ( ScriptName == ssn_::BroadcastAction ) {
-					BroadcastAction_(Flow, Proxy, Token);
-				} else if ( ScriptName == ssn_::Quit ) {
-					id_store_::Release(Id);
-					Flow.Dismiss();
-					Blocker.Unblock();
-					break;
-				} else {
-					ReturnType = GetType_( Flow );
-
-					Parameters.Init();
-					GetParameters_(Flow, Parameters);
-
-					Flow.Dismiss();
-
-					if ( ReturnType == tVoid ) {
-						Proxy.Process(ScriptName, Parameters);
-					} else {
-						ReturnValue.Init();
-						Proxy.Process(ScriptName, Parameters, ReturnValue);
-					}
-
-					switch ( ReturnType ) {
-					case tVoid:
-						break;
-					case tString:
-						prtcl::Put(ReturnValue, Flow);
-						Flow.Commit();
-						break;
-					case tStrings:
-						SplitedReturnValue.Init();
-						xdhcmn::FlatSplit(ReturnValue,SplitedReturnValue);
-						prtcl::Put(SplitedReturnValue, Flow);
-						Flow.Commit();
-						break;
-					default:
-						qRGnr();
-						break;
-					}
-				}
-			}
-		qRR;
-			ReportErrorToFrontend_(Proxy, str::wString("Connection to backend lost!"));
-		qRT;
-		qRE;
+			Mutex_ = mtx::Create();
+			Ids_.Init();
 		}
+
+		sId_ Fetch(void)
+		{
+			sId_ Id = UndefinedId_;
+		qRH
+		qRB
+			mtx::Lock(Mutex_);
+			Id = Ids_.New();
+		qRR
+		qRT
+			mtx::Unlock(Mutex_);
+		qRE
+			return Id;
+		}
+
+		void Release(sId_ Id)
+		{
+		qRH
+		qRB
+			mtx::Lock(Mutex_);
+			Ids_.Release(Id);
+		qRR
+		qRT
+			mtx::Unlock(Mutex_);
+		qRE
+		}
+	}
+
+	void Log_(
+		sId_ Id,
+		const str::dString &IP,
+		const str::dString &Message )
+	{
+	qRH;
+		logq::rLogRack<> Log;
+	qRB;
+		Log.Init( LogDriver );
+
+		Log << *Id;
+
+		if ( IP.Amount() != 0 )
+			Log << " (" << IP << ")";
+
+		Log << " : " <<  Message;
+	qRR;
+	qRT;
+	qRE;
 	}
 }
 
@@ -406,11 +212,9 @@ bso::sBool session::rSession::XDHCDCInitialize(
 qRH;
 	flw::rDressedRWFlow<> Flow;
 	csdcmn::sVersion Version = csdcmn::UndefinedVersion;
-	str::wString LogMessage, IP;
-	sId_ Id = UndefinedId_;
-	sData Data;
+	str::wString LogMessage;
 qRB;
-	tol::Init(LogMessage, IP);
+	tol::Init(LogMessage);
 
 	if ( Token.Amount() == 0 ) {
 		ProdDriver_.Init( Core, fdr::ts_Default );
@@ -422,7 +226,7 @@ qRB;
 
 		FaaSDriver_.Init();
 
-		if ( faaspool::GetConnection( Token, IP, FaaSDriver_.GetShared() ) ) {
+		if ( faaspool::GetConnection( Token, IP_, FaaSDriver_.GetShared() ) ) {
 			Mode_ = mFaaS;
 			Success = true;
 		}
@@ -456,17 +260,9 @@ qRB;
 
 		csdcmn::Get( Flow, LogMessage );
 
-		Id = id_store_::Fetch();
-		Log_(Id, IP, LogMessage);
-
-		Data.Driver = &D_();
-		Data.Proxy = this;
-		Data.IP = &IP;
-		Data.Token = &Token;
-		Data.Id = Id;
-		Data.Blocker = &Blocker_;
-
-		mtk::Launch(Routine_, &Data);
+		Id_ = id_store_::Fetch();
+		Token_ = Token;
+		Log_(Id_, IP_, LogMessage);
 
 		xdhdws::sProxy::Init(Callback, Token);	// Has to be last, otherwise, if an error occurs, 'Callback' will be freed twice!
 	}
@@ -474,6 +270,147 @@ qRR;
 qRT;
 qRE;
 	return Success;
+}
+
+void session::rSession::Broadcast_(flw::rRFlow &Flow)
+{
+qRH
+	str::wString Script;
+qRB
+	Script.Init();
+
+	prtcl::Get(Flow, Script);
+
+	Flow.Dismiss();
+
+	Broadcast(Script, Token_);
+qRR
+qRT
+qRE
+}
+
+void session::rSession::BroadcastAction_(flw::rRFlow &Flow)
+{
+qRH
+	str::wString Action, Id;
+qRB
+	tol::Init(Action, Id);
+
+	if ( GetType_(Flow )!= tVoid )
+		qRGnr();
+
+
+	if ( GetType_(Flow) != tString )
+		qRGnr();
+
+	prtcl::Get(Flow, Action);
+
+
+	if ( GetType_(Flow) != tString )
+		qRGnr();
+
+	prtcl::Get(Flow, Id);
+
+
+	if ( GetType_(Flow) != tVoid )
+		qRGnr();
+
+
+	Flow.Dismiss();
+
+	BroadcastAction(Action, Id, Token_);
+qRR
+qRT
+qRE
+}
+
+namespace {
+	// Special script name, with no no correspondence in 'XDHScripts.xcfg'.
+	namespace ssn_ {	// Special Script Name
+		// Following labels indicates what issues the name:
+		// - FaaS: Epeios C++ XDH frontend launched with 'faasq' ('esketchwdh', for example).
+		// - ATK: XDH component using the Atlas toolkit, written in Java, Node.js, Python…,
+		qCDEF(char *, StandBy, "#StandBy_1");	// FaaS and ATK; no more script pending.
+		qCDEF(char *, Broadcast, "#Broadcast_1");	// FaaS; brodcast a script.
+		qCDEF(char *, BroadcastAction, "#BroadcastAction_1"); // ATK; broadcast an action.
+		qCDEF(char *, Quit, "#Quit_1"); // FaaS and ATK.
+	}
+}
+
+bso::bool__ session::rSession::Launch_(
+	const char *Id,
+	const char *Action )
+{
+	bso::sBool Return = false;
+qRH;
+	flw::rDressedRWFlow<> Flow;
+	bso::sBool Continue = true;
+	str::wString ScriptName, ReturnValue;
+	eType_ ReturnType = t_Undefined;
+	str::wStrings Parameters, SplitedReturnValue;
+qRB;
+	Flow.Init( D_() );
+
+	prtcl::Put( Id, Flow );
+	prtcl::Put( Action, Flow );
+	Flow.Commit();
+
+	while ( Continue ) {
+		ScriptName.Init();
+		prtcl::Get(Flow, ScriptName);
+
+		Log_( Id_, IP_, ScriptName );
+
+		if ( ScriptName == ssn_::StandBy ) {
+			Flow.Dismiss();
+			Continue = false;
+		} else if ( ScriptName == ssn_::Broadcast ) {
+			Broadcast_(Flow);
+		} else if ( ScriptName == ssn_::BroadcastAction ) {
+			BroadcastAction_(Flow);
+		} else if ( ScriptName == ssn_::Quit ) {
+			id_store_::Release(Id_);
+			Flow.Dismiss();
+			Continue = false;
+		} else {
+			ReturnType = GetType_( Flow );
+
+			Parameters.Init();
+			GetParameters_(Flow, Parameters);
+
+			Flow.Dismiss();
+
+			if ( ReturnType == tVoid ) {
+				Process(ScriptName, Parameters);
+			} else {
+				ReturnValue.Init();
+				Process(ScriptName, Parameters, ReturnValue);
+			}
+
+			switch ( ReturnType ) {
+			case tVoid:
+				break;
+			case tString:
+				prtcl::Put(ReturnValue, Flow);
+				Flow.Commit();
+				break;
+			case tStrings:
+				SplitedReturnValue.Init();
+				xdhcmn::FlatSplit(ReturnValue,SplitedReturnValue);
+				prtcl::Put(SplitedReturnValue, Flow);
+				Flow.Commit();
+				break;
+			default:
+				qRGnr();
+				break;
+			}
+		}
+	}
+qRR;
+	ReportErrorToFrontend_(*this, str::wString("Connection to backend lost!"));
+qRT;
+qRE;
+	return Return;
 }
 
 bso::bool__ session::rSession::XDHCDCLaunch(
