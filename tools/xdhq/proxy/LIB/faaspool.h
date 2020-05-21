@@ -61,6 +61,28 @@ namespace faaspool {
 		return dtfptb::VGet( FD, Id, IsError );
 	}
 
+	class cGuard
+	{
+	protected:
+		virtual bso::sBool XDXBegin(void) = 0;
+		virtual void XDXEnd(void) = 0;
+		virtual void XDXRelease(void) = 0;
+	public:
+		qCALLBACK(Guard);
+		bso::sBool Begin(void)
+		{
+			return XDXBegin();
+		}
+		void End(void)
+		{
+			return XDXEnd();
+		}
+		void Release(void)
+		{
+			return XDXRelease();
+		}
+	};
+
 	// Shared between upstream and downstream.
 	struct rShared
 	{
@@ -88,6 +110,12 @@ namespace faaspool {
 			return Id != UndefinedId;
 		}
 	};
+
+	bso::sBool GetConnection_(
+		const str::dString &Token,
+		str::dString &IP,
+		rShared &Shared,
+		cGuard *&Guard );
 
 	class rRWDriver
 	: public fdr::rRWDressedDriver
@@ -216,7 +244,11 @@ namespace faaspool {
 			IdSent_ = false;
 		}
 		qCVDTOR( rRWDriver );
-		void Init( fdr::eThreadSafety ThreadSafety = fdr::ts_Default )
+		bso::sBool Init(
+			const str::dString &Token,
+			str::dString &IP,
+			cGuard *&Guard,
+			fdr::eThreadSafety ThreadSafety = fdr::ts_Default )
 		{
 			fdr::rRWDressedDriver::Init( ThreadSafety );
 
@@ -225,6 +257,8 @@ namespace faaspool {
 			Shared_.Init();
 
 			IdSent_ = false;
+
+			return GetConnection_(Token, IP, Shared_, Guard);
 		}
 		rShared &GetShared( void )
 		{
@@ -232,11 +266,6 @@ namespace faaspool {
 		}
 
 	};
-
-	bso::sBool GetConnection(
-		const str::dString &Token,
-		str::dString &IP,
-		rShared &Shared );
 
 	bso::sBool GetHead(
 		const str::dString &Token,

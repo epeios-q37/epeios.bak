@@ -137,10 +137,11 @@ namespace {
 					}
 				}
 
-				void Handle_(
+				bso::sBool Handle_(
 					const str::dString &Digest,
 					xdwsessn::rSession &Session )
 				{
+					bso::sBool Cont = true;
 				qRH;
 					str::string Id, Action;
 					qCBUFFERh IdBuffer, ActionBuffer;
@@ -148,10 +149,11 @@ namespace {
 					tol::Init(Id, Action);
 
 					if ( Extract_(Digest, Id, Action) )
-						Session.Launch(Id.Convert(IdBuffer), Action.Convert(ActionBuffer));
+						Cont = Session.Launch(Id.Convert(IdBuffer), Action.Convert(ActionBuffer));
 				qRR;
 				qRT;
 				qRE;
+					return Cont;
 				}
 			}
 
@@ -194,7 +196,8 @@ namespace {
 						if ( !websck::GetMessage(Flow,Digest) )
 							break;
 						Flow.Dismiss();
-						Handle_(Digest, Session);
+						if ( !Handle_(Digest, Session) )
+							break;
 						Flow.Write(ss_::standby::Label, ss_::standby::Size);
 						Flow.Commit();
 					}

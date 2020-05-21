@@ -203,6 +203,21 @@ namespace {
 	}
 }
 
+namespace {
+	// For self-hosted mode.
+	class sDummyGuard_
+	: public faaspool::cGuard
+	{
+	protected:
+		virtual bso::sBool XDXBegin(void) override
+		{
+			return true;
+		};
+		virtual void XDXEnd(void) override {};
+		virtual void XDXRelease(void) override {};
+	} DummyGuard_;
+}
+
 bso::sBool session::rSession::XDHCDCInitialize(
 	xdhcuc::cSingle &Callback,
 	const char *Language,
@@ -218,15 +233,14 @@ qRB;
 
 	if ( Token.Amount() == 0 ) {
 		ProdDriver_.Init( Core, fdr::ts_Default );
+		Guard_ = &DummyGuard_;
 		Mode_ = mProd;
 		Success = true;
 		LogMessage.Append( "PROD" );
 	} else {
 		LogMessage.Append( Token );
 
-		FaaSDriver_.Init();
-
-		if ( faaspool::GetConnection( Token, IP_, FaaSDriver_.GetShared() ) ) {
+		if ( FaaSDriver_.Init(Token, IP_, Guard_) ) {
 			Mode_ = mFaaS;
 			Success = true;
 		}
@@ -341,10 +355,9 @@ bso::bool__ session::rSession::Launch_(
 	const char *Id,
 	const char *Action )
 {
-	bso::sBool Return = false;
+	bso::sBool Cont = true;
 qRH;
 	flw::rDressedRWFlow<> Flow;
-	bso::sBool Continue = true;
 	str::wString ScriptName, ReturnValue;
 	eType_ ReturnType = t_Undefined;
 	str::wStrings Parameters, SplitedReturnValue;
@@ -355,7 +368,7 @@ qRB;
 	prtcl::Put( Action, Flow );
 	Flow.Commit();
 
-	while ( Continue ) {
+	while ( true ) {
 		ScriptName.Init();
 		prtcl::Get(Flow, ScriptName);
 
@@ -363,7 +376,7 @@ qRB;
 
 		if ( ScriptName == ssn_::StandBy ) {
 			Flow.Dismiss();
-			Continue = false;
+			break;
 		} else if ( ScriptName == ssn_::Broadcast ) {
 			Broadcast_(Flow);
 		} else if ( ScriptName == ssn_::BroadcastAction ) {
@@ -371,7 +384,8 @@ qRB;
 		} else if ( ScriptName == ssn_::Quit ) {
 			id_store_::Release(Id_);
 			Flow.Dismiss();
-			Continue = false;
+			Cont = false;
+			break;
 		} else {
 			ReturnType = GetType_( Flow );
 
@@ -410,21 +424,25 @@ qRR;
 	ReportErrorToFrontend_(*this, str::wString("Connection to backend lost!"));
 qRT;
 qRE;
-	return Return;
+	return Cont;
 }
 
 bso::bool__ session::rSession::XDHCDCLaunch(
 	const char *Id,
 	const char *Action )
 {
-	bso::sBool Return = false;
+	bso::sBool Cont = false;
 qRFH;
 qRFB;
-	Return = Launch_( Id, Action );
+	if ( G_().Begin() )
+		if ( !( Cont = Launch_( Id, Action ) ) )
+			G_().Release();
 qRFR;
+	G_().Release();
 qRFT;
+	G_().End();
 qRFE(sclm::ErrorDefaultHandling());
-	return Return;
+	return Cont;
 }
 
 qGCTOR(session) {

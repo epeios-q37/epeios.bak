@@ -47,6 +47,7 @@ namespace session {
 	  public xdhdws::sProxy
 	{
 	private:
+		qRMV(faaspool::cGuard, G_, Guard_);
 		eMode_ Mode_;
 		faaspool::rRWDriver FaaSDriver_;
 		csdmnc::rRWDriver ProdDriver_;
@@ -118,6 +119,7 @@ namespace session {
 			}
 
 			tol::reset(P, FaaSDriver_, ProdDriver_, IP_, Token_);
+			Guard_ = NULL;
 			Id_ = UndefinedId_;
 			Mode_ = m_Undefined;
 			xdhdws::sProxy::reset( P );
