@@ -41,13 +41,13 @@ namespace session {
 
 	qMIMICs( bso::sU32, sId_ );	// Assigned per session.
 	qCDEF(sId_, UndefinedId_, bso::U32Max);
+	void Release_(sId_ Id);
 
 	class rSession
 	: public xdhcdc::cSingle,
 	  public xdhdws::sProxy
 	{
 	private:
-		qRMV(faaspool::cGuard, G_, Guard_);
 		eMode_ Mode_;
 		faaspool::rRWDriver FaaSDriver_;
 		csdmnc::rRWDriver ProdDriver_;
@@ -102,7 +102,6 @@ namespace session {
 		bso::bool__ Launch_(
 			const char *Id,
 			const char *Action );
-		void CloseBackendSession_(void);
 	protected:
 		virtual bso::sBool XDHCDCInitialize(
 			xdhcuc::cSingle &Callback,
@@ -115,11 +114,11 @@ namespace session {
 		void reset( bso::sBool P = true )
 		{
 			if ( P ) {
-				CloseBackendSession_();
+				if ( Id_ != UndefinedId_)
+					Release_(Id_);
 			}
 
 			tol::reset(P, FaaSDriver_, ProdDriver_, IP_, Token_);
-			Guard_ = NULL;
 			Id_ = UndefinedId_;
 			Mode_ = m_Undefined;
 			xdhdws::sProxy::reset( P );

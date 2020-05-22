@@ -23,13 +23,6 @@
 
 using namespace session;
 
-// An empty aciton with such an id
-// is intercepted by 'faasq' or the Atlas toolkit,
-// to do special actions.
-namespace eai_ { // Special Action Label,
-	qCDEF(char *, Quit, "$Quit_1");
-}
-
 csdmnc::rCore session::Core;
 logq::rFDriver<> session::LogDriver;
 
@@ -132,12 +125,6 @@ namespace {
 
 // #define LOG cio::COut << __LOC__ << tol::DateAndTime(DT) << txf::nl << txf::commit;
 
-void session::rSession::CloseBackendSession_(void)
-{
-	if ( Mode_ != m_Undefined )
-		Launch_(eai_::Quit, "");	// To tell the backend to close the corresponding session.
-}
-
 namespace {
 	namespace id_store_ {
 		namespace {
@@ -158,12 +145,12 @@ namespace {
 		{
 			sId_ Id = UndefinedId_;
 		qRH
+			mtx::rMutex Mutex;
 		qRB
-			mtx::Lock(Mutex_);
+			Mutex.InitAndLock(Mutex_);
 			Id = Ids_.New();
 		qRR
 		qRT
-			mtx::Unlock(Mutex_);
 		qRE
 			return Id;
 		}
@@ -171,16 +158,26 @@ namespace {
 		void Release(sId_ Id)
 		{
 		qRH
+			mtx::rMutex Mutex;
 		qRB
-			mtx::Lock(Mutex_);
+			if ( Id == UndefinedId_ )
+				qRGnr();
+
+			Mutex.InitAndLock(Mutex_);
 			Ids_.Release(Id);
 		qRR
 		qRT
-			mtx::Unlock(Mutex_);
 		qRE
 		}
 	}
+}
 
+void session::Release_(sId_ Id)
+{
+	id_store_::Release(Id);
+}
+
+namespace {
 	void Log_(
 		sId_ Id,
 		const str::dString &IP,
@@ -203,21 +200,6 @@ namespace {
 	}
 }
 
-namespace {
-	// For self-hosted mode.
-	class sDummyGuard_
-	: public faaspool::cGuard
-	{
-	protected:
-		virtual bso::sBool XDXBegin(void) override
-		{
-			return true;
-		};
-		virtual void XDXEnd(void) override {};
-		virtual void XDXRelease(void) override {};
-	} DummyGuard_;
-}
-
 bso::sBool session::rSession::XDHCDCInitialize(
 	xdhcuc::cSingle &Callback,
 	const char *Language,
@@ -233,14 +215,13 @@ qRB;
 
 	if ( Token.Amount() == 0 ) {
 		ProdDriver_.Init( Core, fdr::ts_Default );
-		Guard_ = &DummyGuard_;
 		Mode_ = mProd;
 		Success = true;
 		LogMessage.Append( "PROD" );
 	} else {
 		LogMessage.Append( Token );
 
-		if ( FaaSDriver_.Init(Token, IP_, Guard_) ) {
+		if ( FaaSDriver_.Init(Token, IP_) ) {
 			Mode_ = mFaaS;
 			Success = true;
 		}
@@ -382,7 +363,6 @@ qRB;
 		} else if ( ScriptName == ssn_::BroadcastAction ) {
 			BroadcastAction_(Flow);
 		} else if ( ScriptName == ssn_::Quit ) {
-			id_store_::Release(Id_);
 			Flow.Dismiss();
 			Cont = false;
 			break;
@@ -434,13 +414,9 @@ bso::bool__ session::rSession::XDHCDCLaunch(
 	bso::sBool Cont = false;
 qRFH;
 qRFB;
-	if ( G_().Begin() )
-		if ( !( Cont = Launch_( Id, Action ) ) )
-			G_().Release();
+		Cont = Launch_( Id, Action );
 qRFR;
-	G_().Release();
 qRFT;
-	G_().End();
 qRFE(sclm::ErrorDefaultHandling());
 	return Cont;
 }

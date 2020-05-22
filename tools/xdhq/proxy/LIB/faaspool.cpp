@@ -69,119 +69,21 @@ namespace {
 		}
 	}
 
-	qROW( FRow );	// Frontend 'Row'.
+	qROW( FRow_ );	// Frontend 'Row'.
 
-	typedef lstbch::qLBUNCHd( rShared *, sFRow ) dShareds_;
+	typedef lstbch::qLBUNCHd( rShared *, sFRow_ ) dShareds_;
 	qW( Shareds_ );
 
-	qROW( BRow );	// Back-end Row.
+	qROW( BRow_ );	// Back-end Row.
+}
 
-	namespace {
-		class sGuard_
-		: public faaspool::cGuard
-		{
-		private:
-			mtx::rHandler Mutex_;
-			bso::sBool IsActive_;
-			bso::sU16 Amount_;
-			tht::rBlocker Blocker_;
-		protected:
-			virtual bso::sBool XDXBegin(void) override
-			{
-				bso::sBool IsActive = false;
-			qRH
-				mtx::rMutex Mutex;
-			qRB
-				Mutex.InitAndLock(Mutex_);
-
-				if ( IsActive_ ) {
-					IsActive = true;
-
-					if ( Amount_ == 0 )
-						Blocker_.Wait();	// Does not block, as prefetching was not enabled at initialization.
-					else if ( Amount_ >= bso::U16Max )
-						qRGnr();
-
-					Amount_++;
-				}
-			qRR
-			qRT
-			qRE
-				return IsActive;
-			}
-			virtual void XDXEnd(void) override
-			{
-			qRH
-				mtx::rMutex Mutex;
-			qRB
-				Mutex.InitAndLock(Mutex_);
-
-				if ( !IsActive_ )
-					qRGnr();
-
-				if ( Amount_ == 1 )
-					Blocker_.Unblock();
-				else if ( Amount_ == 0 )
-					qRGnr();
-
-				Amount_--;
-			qRR
-			qRT
-			qRE
-			}
-			virtual void XDXRelease(void) override {}
-		public:
-			void reset(bso::sBool P = true)
-			{
-				if ( P ) {
-					if ( Mutex_ != mtx::Undefined )
-						mtx::Delete(Mutex_);
-				}
-
-				tol::reset(P, Blocker_);
-
-				Mutex_ = mtx::Undefined;
-				IsActive_ = false;
-				Amount_ = 0;
-			}
-			qCVDTOR(sGuard_);
-			void Init(void)
-			{
-				if ( Mutex_ != mtx::Undefined )
-					mtx::Delete(Mutex_);
-
-				Mutex_ = mtx::Create();
-
-				IsActive_ = true;
-				Amount_ = 0;
-				Blocker_.Init(true);
-			}
-			void Wait(void)
-			{
-			qRH
-				mtx::rMutex Mutex;
-			qRB
-				Mutex.InitAndLock(Mutex_);
-
-				IsActive_ = false;
-
-				if ( Amount_ != 0 ) {
-					Mutex.Unlock();
-					Blocker_.Wait();
-				}
-			qRR
-			qRT
-			qRE
-			}
-		};
-	}
-
+namespace faaspool {
 	class rBackend_
 	{
 	private:
 		void InvalidAll_( void )
 		{
-			sFRow Row = Shareds.First();
+			sFRow_ Row = Shareds.First();
 
 			while ( Row != qNIL ) {
 				Shareds( Row )->Id = UndefinedId;
@@ -191,14 +93,13 @@ namespace {
 		}
 		xdhcuc::sRow TRow_; // Token row?
 	public:
-		sBRow Row;
+		sBRow_ Row;
 		fdr::rRWDriver *Driver;
 		wShareds_ Shareds;
 		mtx::rHandler Access;
 		tht::rBlocker Switch;
 		bso::sBool GiveUp;
 		str::wString IP;
-		sGuard_ Guard;
 		void reset( bso::sBool P = true )
 		{
 			if ( P ) {
@@ -217,12 +118,12 @@ namespace {
 			Shareds.reset( P );
 			Access = mtx::Undefined;
 			Switch.reset( P );
-			tol::reset( P, IP, Guard );
+			tol::reset(P, IP);
 			GiveUp = false;	// If at 'true', the client is deemed to be disconnected.
 		}
 		qCDTOR( rBackend_ );
 		void Init(
-			sBRow Row,
+			sBRow_ Row,
 			xdhcuc::sRow TRow,
 			fdr::rRWDriver &Driver,
 			const str::dString &IP )
@@ -237,46 +138,51 @@ namespace {
 			Switch.Init();
 			this->IP.Init( IP );
 			GiveUp = false;
-			Guard.Init();
 		}
-		bso::sBool Set(
-			rShared &Shared,
-			cGuard *&Guard)
+		bso::sBool Set(rShared &Shared)
 		{
-			sFRow Row = Shareds.New();
+			sFRow_ Row = qNIL;
+		qRH
+		qRB
+			Row = Shareds.New();
 
-			if ( *Row < Max ) {
-				Shareds.Store( &Shared, Row );
+			if ( *Row > Max )
+				qRGnr();
 
-				Shared.Id = (sId)*Row;
-				Shared.Driver = Driver;
-				Shared.Switch = &Switch;
+			Shareds.Store( &Shared, Row );
 
-				if ( Guard != NULL )
-					qRGnr();
+			Shared.Id = (sId)*Row;
+			Shared.Driver = Driver;
+			Shared.Switch = &Switch;
+		qRR
+			if ( Row != qNIL )
+				Shareds.Remove(Row);
 
-				Guard = &this->Guard;
-
-				return true;
-			} else
-				return false;
+			Row = qNIL;
+		qRT
+		qRE
+			return Row != qNIL;
+		}
+		void Release(sId)
+		{
+			qRVct();
 		}
 	};
 
 	mtx::rHandler MutexHandler_ = mtx::Undefined;
-	lstcrt::qLMCRATEw( str::dString, sBRow ) Tokens_;
-	lstcrt::qLMCRATEw( str::dString, sBRow ) Heads_;
-	lstbch::qLBUNCHw( rBackend_ *, sBRow ) Backends_;
+	lstcrt::qLMCRATEw( str::dString, sBRow_ ) Tokens_;
+	lstcrt::qLMCRATEw( str::dString, sBRow_ ) Heads_;
+	lstbch::qLBUNCHw( rBackend_ *, sBRow_ ) Backends_;
 	csdbns::rListener Listener_;
 
 	// NOTA : TU : Thread Unsafe ; TS : Thread Safe.
 
-	sBRow TUGetBackendRow_( const str::dString &Token )
+	sBRow_ TUGetBackendRow_( const str::dString &Token )
 	{
 		if ( !mtx::IsLocked( MutexHandler_ ) )
 			qRGnr();
 
-		sBRow Row = Tokens_.First();
+		sBRow_ Row = Tokens_.First();
 
 		while ( (Row != qNIL) && ( Tokens_( Row ) != Token) )
 			Row = Tokens_.Next( Row );
@@ -286,7 +192,7 @@ namespace {
 
 	rBackend_ *TUGetBackend_( const str::dString &Token )
 	{
-		sBRow Row = TUGetBackendRow_( Token );
+		sBRow_ Row = TUGetBackendRow_( Token );
 
 		if ( Row != qNIL )
 			return Backends_( Row );
@@ -313,7 +219,7 @@ namespace {
 		const str::dString &Token,
 		str::dString &Head )
 	{
-		sBRow Row = TUGetBackendRow_( Token );
+		sBRow_ Row = TUGetBackendRow_( Token );
 
 		if ( Row != qNIL ) {
 			Heads_.Recall( Row, Head );
@@ -339,7 +245,7 @@ namespace {
 		return Found;
 	}
 
-	void Remove_( sBRow Row )
+	void Remove_(sBRow_ Row)
 	{
 	qRH;
 		mtx::rMutex Mutex;
@@ -366,7 +272,7 @@ namespace {
 		rBackend_ *Backend = NULL;
 	qRH;
 		mtx::rMutex Mutex;
-		sBRow Row = qNIL;
+		sBRow_ Row = qNIL;
 	qRB;
 		Mutex.InitAndLock( MutexHandler_) ;
 
@@ -399,7 +305,9 @@ namespace {
 	qRE;
 		return Backend;
 	}
+}
 
+namespace {
 	void Get_(
 		flw::rRFlow &Flow,
 		str::dString &String )
@@ -600,7 +508,6 @@ namespace {
 	void HandleSwitching_(
 		fdr::rRWDriver &Driver,
 		const dShareds_ &Shareds,
-		sGuard_ &Guard,
 		tht::rBlocker &Blocker )
 	{
 	qRH;
@@ -632,7 +539,6 @@ namespace {
 		}
 	qRR;
 	qRT;
-		Guard.Wait();
 	qRE;
 	}
 
@@ -663,7 +569,7 @@ namespace {
 		Handshake_( Driver );
 
 		if ( ( Backend = CreateBackend_( Driver, IP ) ) != NULL )
-			HandleSwitching_( Driver, Backend->Shareds, Backend->Guard, Backend->Switch );	// Doesn't return until disconnection or error.
+			HandleSwitching_( Driver, Backend->Shareds, Backend->Switch );	// Doesn't return until disconnection or error.
 	qRR;
 	qRT;
 		if ( Backend != NULL ) {
@@ -729,13 +635,15 @@ bso::sBool faaspool::GetConnection_(
 	const str::dString &Token,
 	str::dString &IP,
 	rShared &Shared,
-	cGuard *&Guard)
+	rBackend_ *&Backend)
 {
-	rBackend_ *Backend = NULL;
 qRH;
 	mtx::rMutex Mutex;
 	flw::rDressedWFlow<> Flow;
 qRB;
+	if ( Backend != NULL)
+		qRGnr();
+
 	Backend = TSGetBackend_( Token );
 
 	if ( Backend != NULL ) {
@@ -743,7 +651,7 @@ qRB;
 
 		Mutex.Lock();
 
-		if ( Backend->Set(Shared, Guard) ) {
+		if ( Backend->Set(Shared) ) {
 			Flow.Init( *Backend->Driver );
 			IP.Append( Backend->IP );
 			PutId( CreationId, Flow );	// To signal to the back-end a new connection.
@@ -756,6 +664,20 @@ qRR;
 qRT;
 qRE;
 	return Backend != NULL;
+}
+
+void faaspool::rRWDriver::Release_(void)
+{
+qRH
+qRB
+	B_().Release(Shared_.Id);
+	PutId(ClosingId, *Shared_.Driver);
+	PutId(Shared_.Id, *Shared_.Driver);
+	Shared_.Driver->Commit(true, err::h_Default);
+qRR
+	ERRRst();
+qRT
+qRE
 }
 
 bso::sBool faaspool::GetHead(
@@ -778,7 +700,7 @@ qGDTOR(faaspool)
 	if ( MutexHandler_ != mtx::Undefined )
 		mtx::Delete( MutexHandler_, true );
 
-	sBRow Row = Backends_.First();
+	sBRow_ Row = Backends_.First();
 
 	while ( Row != qNIL ) {
 		delete Backends_( Row );

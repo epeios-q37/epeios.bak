@@ -61,28 +61,6 @@ namespace faaspool {
 		return dtfptb::VGet( FD, Id, IsError );
 	}
 
-	class cGuard
-	{
-	protected:
-		virtual bso::sBool XDXBegin(void) = 0;
-		virtual void XDXEnd(void) = 0;
-		virtual void XDXRelease(void) = 0;
-	public:
-		qCALLBACK(Guard);
-		bso::sBool Begin(void)
-		{
-			return XDXBegin();
-		}
-		void End(void)
-		{
-			return XDXEnd();
-		}
-		void Release(void)
-		{
-			return XDXRelease();
-		}
-	};
-
 	// Shared between upstream and downstream.
 	struct rShared
 	{
@@ -111,16 +89,19 @@ namespace faaspool {
 		}
 	};
 
+	class rBackend_;
+
 	bso::sBool GetConnection_(
 		const str::dString &Token,
 		str::dString &IP,
 		rShared &Shared,
-		cGuard *&Guard );
+		rBackend_ *&Backend);
 
 	class rRWDriver
 	: public fdr::rRWDressedDriver
 	{
 	private:
+		qRMV(rBackend_, B_, Backend_);
 		bso::sSize Consumed_;
 		bso::sBool IdSent_;
 		rShared Shared_;
@@ -139,6 +120,7 @@ namespace faaspool {
 
 			return Amount != 0;
 		}
+		void Release_(void);
 	protected:
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
@@ -217,18 +199,6 @@ namespace faaspool {
 		{
 			return Shared_.Driver->WTake( Owner );
 		}
-		void Release_(void)
-		{
-		qRH
-		qRB
-			PutId(ClosingId, *Shared_.Driver);
-			PutId(Shared_.Id, *Shared_.Driver);
-			Shared_.Driver->Commit(true, err::h_Default);
-		qRR
-			ERRRst();
-		qRT
-		qRE
-		}
 	public:
 		void reset( bso::sBool P = true )
 		{
@@ -239,6 +209,7 @@ namespace faaspool {
 			}
 
 			fdr::rRWDressedDriver::reset( P );
+			Backend_ = NULL;
 			Consumed_ = 0;
 			Shared_.reset(P);
 			IdSent_ = false;
@@ -247,7 +218,6 @@ namespace faaspool {
 		bso::sBool Init(
 			const str::dString &Token,
 			str::dString &IP,
-			cGuard *&Guard,
 			fdr::eThreadSafety ThreadSafety = fdr::ts_Default )
 		{
 			fdr::rRWDressedDriver::Init( ThreadSafety );
@@ -258,13 +228,12 @@ namespace faaspool {
 
 			IdSent_ = false;
 
-			return GetConnection_(Token, IP, Shared_, Guard);
+			return GetConnection_(Token, IP, Shared_, Backend_);
 		}
 		rShared &GetShared( void )
 		{
 			return Shared_;
 		}
-
 	};
 
 	bso::sBool GetHead(

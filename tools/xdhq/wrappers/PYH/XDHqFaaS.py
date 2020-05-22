@@ -300,7 +300,7 @@ def _serve(callback,userCallback,callbacks ):
 		id = readSInt()
 		
 		if id == -1:	# Should never happen. 
-			sys.exit("Received undefined id!")
+			sys.exit("Received unexpected undefined command id!")
 		if id == -2:    # Value reporting a new front-end.
 			id = readSInt()  # The id of the new front-end.
 
