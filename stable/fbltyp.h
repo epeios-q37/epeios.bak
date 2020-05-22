@@ -329,7 +329,7 @@ namespace fbltyp {
 	typedef uint_t__ uint__;
 	FBLTYP_S( uint )
 
-	typedef bso::sHuge sbig_t__;
+	typedef bso::sSHuge sbig_t__;
 	typedef sbig_t__ sbig__;
 	FBLTYP_S( sbig )
 
