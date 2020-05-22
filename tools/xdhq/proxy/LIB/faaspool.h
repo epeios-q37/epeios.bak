@@ -105,6 +105,25 @@ namespace faaspool {
 		bso::sSize Consumed_;
 		bso::sBool IdSent_;
 		rShared Shared_;
+		bso::sBool IsValid_(void)
+		{
+			return (Backend_ != NULL) && Shared_.IsValid();
+		}
+		fdr::rRWDriver &D_(void)
+		{
+			// NOTA: The underlying drive is valid as long as the backend exists,
+			// hence it does not really matter if the driver becomes invalid after
+			// Calling this function.
+			if ( !IsValid_())
+				qRGnr();
+
+			return *Shared_.Driver;
+		}
+		// A reading leaves the data in the underlying driver,
+		// otherwise we could read data which are not for us,
+		// and therfor will not be available for the real recipient.
+		// This function consumes the data in the underlying driver
+		// which were really for us.
 		bso::sBool Consume_( bso::sSize Amount )
 		{
 			if ( Amount < Consumed_ )
@@ -115,7 +134,7 @@ namespace faaspool {
 			Consumed_ += Amount;
 
 			if ( Amount )
-				if ( Shared_.Driver->Read( Amount, NULL, fdr::bBlocking ) != Amount )
+				if ( D_().Read( Amount, NULL, fdr::bBlocking ) != Amount )
 					qRGnr();
 
 			return Amount != 0;
@@ -126,34 +145,25 @@ namespace faaspool {
 			fdr::size__ Maximum,
 			fdr::byte__ *Buffer ) override
 		{
-			if ( !Shared_.IsValid() )
-				return 0;
-
 			if ( !Consume_( fdr::rRWDressedDriver::AmountRed() ) ) {
 				Shared_.Read.Wait();
 
-				if ( !Shared_.IsValid() )
-					return 0;
-
-				Shared_.Driver->RTake();
+				D_().RTake();
 			}
 
-			return Shared_.Driver->Read( Maximum, Buffer, fdr::bKeepNonBlocking );
+			return D_().Read( Maximum, Buffer, fdr::bKeepNonBlocking );
 		}
 		virtual bso::sBool FDRDismiss(
 			bso::sBool Unlock,
 			qRPN ) override
 		{
-			if ( !Shared_.IsValid() )
-				return true;
-
 			Consume_( fdr::rRWDressedDriver::AmountRed() );
 
 			fdr::rRWDressedDriver::EmptyCache();
 
 			Consumed_ = 0;
 
-			if ( Shared_.Driver->Dismiss( Unlock, ErrHandling ) ) {
+			if ( D_().Dismiss( Unlock, ErrHandling ) ) {
 
 				Shared_.Switch->Unblock();
 
@@ -163,33 +173,25 @@ namespace faaspool {
 		}
 		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
 		{
-			return Shared_.Driver->RTake( Owner );
+			return D_().RTake( Owner );
 		}
 		virtual fdr::size__ FDRWrite(
 			const fdr::byte__ *Buffer,
 			fdr::size__ Maximum ) override
 		{
 			if ( !IdSent_ ) {
-				PutId(Shared_.Id, *Shared_.Driver);
+				PutId(Shared_.Id, D_());
 
 				IdSent_ = true;
 			}
 
-			if ( Shared_.IsValid() ) {
-				Maximum = Shared_.Driver->Write( Buffer, Maximum );
-			} else
-				Maximum = 0;
-
-			return Maximum;
+			return D_().Write( Buffer, Maximum );
 		}
 		virtual bso::sBool FDRCommit(
 			bso::sBool Unlock,
 			qRPN ) override
 		{
-			if ( !Shared_.IsValid() )
-				return true;
-
-			if ( Shared_.Driver->Commit( Unlock, ErrHandling ) ) {
+			if ( D_().Commit( Unlock, ErrHandling ) ) {
 				IdSent_ = false;
 				return true;
 			} else
@@ -197,13 +199,13 @@ namespace faaspool {
 		}
 		virtual fdr::sTID FDRWTake( fdr::sTID Owner ) override
 		{
-			return Shared_.Driver->WTake( Owner );
+			return D_().WTake( Owner );
 		}
 	public:
 		void reset( bso::sBool P = true )
 		{
 			if ( P ) {
-				if ( Shared_.IsValid() ) {
+				if ( IsValid_() ) {
 					Release_();
 				}
 			}

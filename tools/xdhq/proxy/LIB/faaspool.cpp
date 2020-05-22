@@ -81,6 +81,12 @@ namespace faaspool {
 	class rBackend_
 	{
 	private:
+		// Protects access to 'Shareds' and 'PendingDismiss_';
+		mtx::rHandler Mutex_;
+		bso::sBool PendingDismiss_;
+		// Prevents destruction of 'Driver_' until no more client use it.
+		tht::rBlocker Blocker_;
+		xdhcuc::sRow TRow_; // Token row.
 		void InvalidAll_( void )
 		{
 			sFRow_ Row = Shareds.First();
@@ -91,7 +97,6 @@ namespace faaspool {
 				Row = Shareds.Next( Row );
 			}
 		}
-		xdhcuc::sRow TRow_; // Token row?
 	public:
 		sBRow_ Row;
 		fdr::rRWDriver *Driver;
@@ -103,15 +108,21 @@ namespace faaspool {
 		void reset( bso::sBool P = true )
 		{
 			if ( P ) {
+				if ( Mutex_ != mtx::Undefined)
+					mtx::Delete(Mutex_);
+
 				if ( Access != mtx::Undefined )
 					mtx::Delete( Access, true );
 
-                if ( TRow_ != qNIL )
-                    C_().Remove(TRow_);
+				if ( TRow_ != qNIL )
+						C_().Remove(TRow_);
 
 				InvalidAll_();
 			}
 
+			Mutex_ = mtx::Undefined;
+			PendingDismiss_ = false;
+			Blocker_.reset(P);
 			TRow_ = qNIL;
 			Row = qNIL;
 			Driver = NULL;
@@ -130,6 +141,9 @@ namespace faaspool {
 		{
 			reset();
 
+			Mutex_ = mtx::Create();
+			PendingDismiss_ = false;
+			Blocker_.Init();
 			this->Row = Row;
 			TRow_ = TRow;
 			this->Driver = &Driver;
@@ -163,9 +177,37 @@ namespace faaspool {
 		qRE
 			return Row != qNIL;
 		}
-		void Release(sId)
+		void Release(sId Id)
 		{
-			qRVct();
+		qRH
+			mtx::rMutex Mutex;
+		qRB
+			Mutex.InitAndLock(Mutex_);
+
+			Shareds.Remove((sFRow_)Id);
+
+			if (PendingDismiss_)
+				if ( Shareds.Amount() == 0)
+					Blocker_.Unblock();
+		qRR
+		qRT
+		qRE
+		}
+		void WaitUntilNoMoreClient(void)
+		{
+		qRH
+			mtx::rMutex Mutex;
+		qRB
+			Mutex.InitAndLock(Mutex_);
+
+			if ( Shareds.Amount() ) {
+				PendingDismiss_ = true;
+				Mutex.Unlock();
+				Blocker_.Wait();
+			}
+		qRR
+		qRT
+		qRE
 		}
 	};
 
@@ -573,6 +615,7 @@ namespace {
 	qRR;
 	qRT;
 		if ( Backend != NULL ) {
+			Backend->WaitUntilNoMoreClient();
 			Remove_( Backend->Row );
 			delete Backend;
 
@@ -670,13 +713,17 @@ void faaspool::rRWDriver::Release_(void)
 {
 qRH
 qRB
-	B_().Release(Shared_.Id);
-	PutId(ClosingId, *Shared_.Driver);
-	PutId(Shared_.Id, *Shared_.Driver);
-	Shared_.Driver->Commit(true, err::h_Default);
+	fdr::rWDriver &Driver = D_();
+
+	PutId(ClosingId, Driver);
+	PutId(Shared_.Id, Driver);
+	Driver.Commit(true, err::h_Default);
 qRR
 	ERRRst();
 qRT
+	B_().Release(Shared_.Id);
+	Shared_.Id = UndefinedId;
+	Backend_ = NULL;
 qRE
 }
 

@@ -343,10 +343,10 @@ qRH;
 	eType_ ReturnType = t_Undefined;
 	str::wStrings Parameters, SplitedReturnValue;
 qRB;
-	Flow.Init( D_() );
+	Flow.Init(D_());
 
-	prtcl::Put( Id, Flow );
-	prtcl::Put( Action, Flow );
+	prtcl::Put(Id, Flow);
+	prtcl::Put(Action, Flow);
 	Flow.Commit();
 
 	while ( true ) {
@@ -414,7 +414,7 @@ bso::bool__ session::rSession::XDHCDCLaunch(
 	bso::sBool Cont = false;
 qRFH;
 qRFB;
-		Cont = Launch_( Id, Action );
+	Cont = Launch_( Id, Action );
 qRFR;
 qRFT;
 qRFE(sclm::ErrorDefaultHandling());
