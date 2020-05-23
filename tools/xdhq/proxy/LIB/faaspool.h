@@ -97,6 +97,17 @@ namespace faaspool {
 		rShared &Shared,
 		rBackend_ *&Backend);
 
+	class cGuard
+	{
+	protected:
+		virtual void XDXReportBackendLost(void) = 0;
+	public:
+		void ReportBackendLost(void)
+		{
+			return XDXReportBackendLost();
+		}
+	};
+
 	class rRWDriver
 	: public fdr::rRWDressedDriver
 	{

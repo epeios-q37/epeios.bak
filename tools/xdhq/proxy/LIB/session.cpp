@@ -416,6 +416,7 @@ qRFH;
 qRFB;
 	Cont = Launch_( Id, Action );
 qRFR;
+	Broadcast(str::wString("%Quit"), Token_);
 qRFT;
 qRFE(sclm::ErrorDefaultHandling());
 	return Cont;

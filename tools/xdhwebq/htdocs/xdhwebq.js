@@ -69,12 +69,16 @@ function connect(token) {
 
     socket.onmessage = function(event) {
 		if ( event.data !== "%StandBy" ) {
-			console.log("Executed:", event.data);
-			let result = eval(event.data);
-//			console.log(event.data);
-			
-			if ( ( typeof result !== "undefined" ) && ( typeof result !== "object" ) )	// 'typeof result !== "object"' == 'result != null' !!!!
-				socket.send(result);
+			if ( event.data === "%Quit" ) {
+				socket.close();
+			} else {
+				log("Executed:", event.data);
+				let result = eval(event.data);
+	//			console.log(event.data);
+				
+				if ( ( typeof result !== "undefined" ) && ( typeof result !== "object" ) )	// 'typeof result !== "object"' == 'result != null' !!!!
+					socket.send(result);
+			}
 		} else if (queryQueue.length) {
 			console.log("Unqueued:", queryQueue[0]);
 			socket.send(queryQueue.shift());
