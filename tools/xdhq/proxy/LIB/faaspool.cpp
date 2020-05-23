@@ -23,9 +23,9 @@ using namespace faaspool;
 
 #include "prtcl.h"
 
-#include "plugins.h"
-
 #include "registry.h"
+
+#include "plugins.h"
 
 #include "csdbns.h"
 #include "flx.h"
@@ -34,23 +34,6 @@ using namespace faaspool;
 #include "mtk.h"
 #include "sclm.h"
 #include "str.h"
-
-namespace {
-    xdhcuc::cGlobal *Callback_ = NULL;
-
-    xdhcuc::cGlobal &C_(void)
-    {
-        if ( Callback_ == NULL )
-            qRGnr();
-
-        return *Callback_;
-    }
-}
-
-void faaspool::SetCallback(xdhcuc::cGlobal &Callback)
-{
-    ::Callback_ = &Callback;
-}
 
 namespace {
 	static qCDEF( char *, ProtocolId_, "7b4b6bea-2432-4584-950b-e595c9e391e1" );
@@ -86,7 +69,6 @@ namespace faaspool {
 		bso::sBool PendingDismiss_;
 		// Prevents destruction of 'Driver_' until no more client use it.
 		tht::rBlocker Blocker_;
-		xdhcuc::sRow TRow_; // Token row.
 		void InvalidAll_( void )
 		{
 			sFRow_ Row = Shareds.First();
@@ -98,7 +80,8 @@ namespace faaspool {
 			}
 		}
 	public:
-		sBRow_ Row;
+		sBRow_ Row;	// Backend row.
+		xdhcuc::sRow TRow; // Token row.	// Can be 'qNIL' in self-hosted mode (no/empty token).
 		fdr::rRWDriver *Driver;
 		wShareds_ Shareds;
 		mtx::rHandler Access;
@@ -114,8 +97,8 @@ namespace faaspool {
 				if ( Access != mtx::Undefined )
 					mtx::Delete( Access, true );
 
-				if ( TRow_ != qNIL )
-						C_().Remove(TRow_);
+				if ( TRow != qNIL )
+						common::GetCallback().Remove(TRow);
 
 				InvalidAll_();
 			}
@@ -123,7 +106,7 @@ namespace faaspool {
 			Mutex_ = mtx::Undefined;
 			PendingDismiss_ = false;
 			Blocker_.reset(P);
-			TRow_ = qNIL;
+			TRow = qNIL;
 			Row = qNIL;
 			Driver = NULL;
 			Shareds.reset( P );
@@ -145,7 +128,7 @@ namespace faaspool {
 			PendingDismiss_ = false;
 			Blocker_.Init();
 			this->Row = Row;
-			TRow_ = TRow;
+			this->TRow = TRow;
 			this->Driver = &Driver;
 			Shareds.Init();
 			Access = mtx::Create();
@@ -198,6 +181,7 @@ namespace faaspool {
 		qRH
 			mtx::rMutex Mutex;
 		qRB
+			common::GetCallback().Broadcast(str::wString("%Quit"), TRow);
 			Mutex.InitAndLock(Mutex_);
 
 			if ( Shareds.Amount() ) {
@@ -332,7 +316,7 @@ namespace faaspool {
 			if ( (Backend = new rBackend_) == NULL )
 				qRAlc();
 
-			Backend->Init( Row, C_().Create(Token), Driver, IP );
+			Backend->Init( Row, common::GetCallback().Create(Token), Driver, IP );
 
 			Tokens_.Store( Token, Row );
 
@@ -674,12 +658,13 @@ qRT;
 qRE;
 }
 
-bso::sBool faaspool::GetConnection_(
+common::sTRow faaspool::GetConnection_(
 	const str::dString &Token,
 	str::dString &IP,
 	rShared &Shared,
 	rBackend_ *&Backend)
 {
+	common::sTRow Row = qNIL;
 qRH;
 	mtx::rMutex Mutex;
 	flw::rDressedWFlow<> Flow;
@@ -695,6 +680,7 @@ qRB;
 		Mutex.Lock();
 
 		if ( Backend->Set(Shared) ) {
+			Row = Backend->TRow;
 			Flow.Init( *Backend->Driver );
 			IP.Append( Backend->IP );
 			PutId( CreationId, Flow );	// To signal to the back-end a new connection.
@@ -706,7 +692,7 @@ qRB;
 qRR;
 qRT;
 qRE;
-	return Backend != NULL;
+	return Row;	// 'qNIL' report an error, as in 'FaaS' mode, the token can not be empty.
 }
 
 void faaspool::rRWDriver::Release_(void)

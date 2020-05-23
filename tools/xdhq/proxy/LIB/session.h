@@ -52,6 +52,7 @@ namespace session {
 		faaspool::rRWDriver FaaSDriver_;
 		csdmnc::rRWDriver ProdDriver_;
 		str::wString IP_, Token_;
+		common::sTRow TRow_;	// Token row.
 		sId_ Id_;
 		fdr::rRWDriver &D_( void )
 		{
@@ -119,6 +120,7 @@ namespace session {
 			}
 
 			tol::reset(P, FaaSDriver_, ProdDriver_, IP_, Token_);
+			TRow_ = qNIL;
 			Id_ = UndefinedId_;
 			Mode_ = m_Undefined;
 			xdhdws::sProxy::reset( P );
@@ -128,6 +130,7 @@ namespace session {
 		{
 			tol::reset(FaaSDriver_, ProdDriver_);
 			tol::Init(IP_, Token_ );
+			TRow_ = qNIL;
 			Id_ = UndefinedId_;
 			Mode_ = m_Undefined;
 

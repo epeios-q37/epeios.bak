@@ -32,50 +32,52 @@
 # include "str.h"
 
 namespace xdhcuc {
-    qROW(Row); // Token row.
+	qROW(Row); // Token row.
 
 	class cSingle
 	{
 	protected:
-        // The value returned by the script has to be stored
-        // in 'ReturnedValue', unless it is equal to 'NULL'.
+		// The value returned by the script has to be stored
+		// in 'ReturnedValue', unless it is equal to 'NULL'.
 		virtual void XDHCUCProcess(
 			const str::dString &Script,
 			str::dString *ReturnedValue ) = 0;
-        virtual void XDHCUCBroadcast(
-            const str::dString &Script,
-            const str::dString &Token) = 0;
+
 	public:
 		qCALLBACK( Single );
 		void Process(
 			const str::dString &Script,
 			str::dString *ReturnValue = NULL)
 		{
-            return XDHCUCProcess(Script, ReturnValue);
+			return XDHCUCProcess(Script, ReturnValue);
 		}
-        void Broadcast(
-            const str::dString &Script,
-            const str::dString &Token)
-        {
-            return XDHCUCBroadcast(Script, Token);
-        }
+
 	};
 
 	class cGlobal
 	{
-    protected:
-        virtual sRow XDHCUCCreate(const str::dString &Token) = 0;
-        virtual void XDHCUCRemove(sRow Row) = 0;
-    public:
-        qCALLBACK(Global);
-        sRow Create(const str::dString &Token)
-        {
-            return XDHCUCCreate(Token);
-        }
-        void Remove(sRow Row)
-        {
-            return XDHCUCRemove(Row);
-        }
+	protected:
+		virtual sRow XDHCUCCreate(const str::dString &Token) = 0;
+		virtual void XDHCUCBroadcast(
+			const str::dString &Script,
+			const sRow Row) = 0;
+		virtual void XDHCUCRemove(sRow Row) = 0;
+	public:
+		qCALLBACK(Global);
+		sRow Create(const str::dString &Token)
+		{
+			return XDHCUCCreate(Token);
+		}
+		void Broadcast(
+			const str::dString &Script,
+			sRow Row)
+		{
+			return XDHCUCBroadcast(Script, Row);
+		}
+		void Remove(sRow Row)
+		{
+			return XDHCUCRemove(Row);
+		}
 	};
 }
 

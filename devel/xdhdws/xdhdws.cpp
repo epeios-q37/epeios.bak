@@ -527,10 +527,11 @@ void xdhdws::sProxy::Process(
 	return Process_(ScriptName, Values, C_(), ReturnValue);
 }
 
-void xdhdws::sProxy::BroadcastAction(
+void xdhdws::BroadcastAction(
+	xdhcuc::cGlobal &Callback,
 	const str::dString &Action,
 	const str::dString &Id,
-	const str::dString &Token)
+	xdhcuc::sRow TRow)
 {
 qRH
 	str::wStrings Arguments;
@@ -542,7 +543,7 @@ qRB
 	Script.Init();
 	GetScript_(ss_::BroadcastAction, Arguments, Script);
 
-	Broadcast(Script, Token);
+	Callback.Broadcast(Script, TRow);
 qRR
 qRT
 qRE

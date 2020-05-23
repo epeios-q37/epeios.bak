@@ -391,15 +391,12 @@ namespace {
 }
 
 void xdhbrd::Broadcast(
-    const str::dString &Script,
-    const str::dString &Token)
+   const str::dString &Script,
+   sTRow_ TRow)
 {
 qRH
-    sTRow_ TRow = qNIL;
     hGuardian_ Guardian;
 qRB
-    TRow = Search_(Token, false);
-
     Broadcast_(Script, FetchXCRows_(TRow).GetCRows(Guardian));
 qRR
 qRT

@@ -68,19 +68,16 @@ namespace {
 		struct rData {
 			eState_ State;
 			str::wString Token;
-//			xdwmain::sRow Row;
 			void reset( bso::sBool P = true )
 			{
 				State = s_Undefined;
 				Token.reset( P );
-//                Row = qNIL;
 			}
 			qCDTOR(rData);
 			void Init(void)
 			{
 				State = s_Undefined;
 				Token.Init();
-//                Row = qNIL;
 			}
 		};
 
@@ -166,15 +163,50 @@ namespace {
 				}
 			}
 
+			namespace {
+				void HandleRegular_(
+					xdhups::rAgent &Agent,
+					fdr::rRWDriver &Driver,
+					xdhcdc::cSingle &Callback,
+					const str::dString &Token)
+				{
+				qRH
+					websck::rFlow Flow;
+					xdwsessn::rSession Session;
+					str::wString Digest, Script;
+				qRB
+					Flow.Init(Driver, websck::mWithTerminator);
+
+					if ( !Session.Init(Callback, Driver, "", Token) ) {
+						Script.Init();
+						sclm::MGetValue(registry::definition::ErrorScript, Script);
+						Session.Execute(Script);
+					} else {
+						Session.Launch("","");
+
+						while ( true ) {
+							Digest.Init();
+							if ( !websck::GetMessage(Flow,Digest) )
+								break;
+							Flow.Dismiss();
+							if ( !Handle_(Digest, Session) )
+								break;
+							Flow.Write(ss_::standby::Label, ss_::standby::Size);
+							Flow.Commit();
+						}
+					}
+				qRR
+				qRT
+				qRE
+				}
+			}
+
 			void HandleRegular_(
 				xdhups::rAgent &Agent,
 				fdr::rRWDriver &Driver,
 				rData &Data)
 			{
 			qRH
-				websck::rFlow Flow;
-				xdwsessn::rSession Session;
-				str::wString Digest, Script;
 				xdhcdc::cSingle *Callback = NULL;
 			qRB
 				Callback = Agent.FetchCallback();
@@ -182,26 +214,7 @@ namespace {
 				if ( Callback == NULL )
 					qRGnr();
 
-				Flow.Init(Driver, websck::mWithTerminator);
-
-				if ( !Session.Init(Callback, Driver, "", Data.Token) ) {
-					Script.Init();
-					sclm::MGetValue(registry::definition::ErrorScript, Script);
-					Session.Execute(Script);
-				} else {
-					Session.Launch("","");
-
-					while ( true ) {
-						Digest.Init();
-						if ( !websck::GetMessage(Flow,Digest) )
-							break;
-						Flow.Dismiss();
-						if ( !Handle_(Digest, Session) )
-							break;
-						Flow.Write(ss_::standby::Label, ss_::standby::Size);
-						Flow.Commit();
-					}
-				}
+				HandleRegular_(Agent, Driver, *Callback, Data.Token);
 			qRR
 			qRT
 				if ( Callback != NULL )
@@ -211,92 +224,92 @@ namespace {
 		}
 
 		class sProcessing
-			: public cProcessing_
+		: public cProcessing_
 		{
-			private:
-				qRMV( xdhups::rAgent, A_, Agent_ );
-			protected:
-				void *CSDSCBPreProcess(
-					fdr::rRWDriver *Driver,
-					const ntvstr::char__ *Origin ) override
-				{
-					rData *Data = NULL;
-				qRH
-					websck::wHeader Header;
-					websck::rRFlow Flow;
-				qRB
-					if ( ( Data = new rData ) == NULL )
-						qRAlc();
+		private:
+			qRMV( xdhups::rAgent, A_, Agent_ );
+		protected:
+			void *CSDSCBPreProcess(
+				fdr::rRWDriver *Driver,
+				const ntvstr::char__ *Origin ) override
+			{
+				rData *Data = NULL;
+			qRH
+				websck::wHeader Header;
+				websck::rRFlow Flow;
+			qRB
+				if ( ( Data = new rData ) == NULL )
+					qRAlc();
 
-					Data->Init();
+				Data->Init();
 
-					Header.Init();
+				Header.Init();
 
-					if ( websck::Handshake(*Driver, Header) ) {
-						Flow.Init(*Driver, websck::mWithTerminator);
-						websck::GetMessage(Flow, Data->Token);
-						Data->State = sRegular;
-					} else if ( Header.FirstLine == "XDH web prolog" ) {
-						if ( websck::GetValue(str::wString("Token"), Header, Data->Token ) )
-							Data->State = sProlog;
-					} else {
-						Data->State = s_Undefined;
-					}
-				qRR
-				qRT
-				qRE
-					return Data;
+				if ( websck::Handshake(*Driver, Header) ) {
+					Flow.Init(*Driver, websck::mWithTerminator);
+					websck::GetMessage(Flow, Data->Token);
+					Data->State = sRegular;
+				} else if ( Header.FirstLine == "XDH web prolog" ) {
+					if ( websck::GetValue(str::wString("Token"), Header, Data->Token ) )
+						Data->State = sProlog;
+				} else {
+					Data->State = s_Undefined;
 				}
-				csdscb::action__ CSDSCBProcess(
-					fdr::rRWDriver *Driver,
-					void *UP ) override
-				{
+			qRR
+			qRT
+			qRE
+				return Data;
+			}
+			csdscb::action__ CSDSCBProcess(
+				fdr::rRWDriver *Driver,
+				void *UP ) override
+			{
 
-					if ( UP == NULL )
-						qRGnr();
+				if ( UP == NULL )
+					qRGnr();
 
-					rData &Data = *(rData *)UP;
+				rData &Data = *(rData *)UP;
 
 
-					switch ( Data.State ) {
-						case sProlog:
-							HandleProlog_(A_(), *Driver, Data);
-							break;
-						case sRegular:
-							HandleRegular_(A_(), *Driver, Data);
-							break;
-						default:
-							qRGnr();
-							break;
-					}
-
-					return csdscb::aStop;
+				switch ( Data.State ) {
+				case sProlog:
+					HandleProlog_(A_(), *Driver, Data);
+					break;
+				case sRegular:
+					HandleRegular_(A_(), *Driver, Data);
+					break;
+				default:
+					qRGnr();
+					break;
 				}
-				virtual bso::sBool CSDSCBPostProcess( void *UP ) override
-				{
-					if ( UP == NULL )
-						qRGnr();
 
-					rData *Data = (rData *)UP;
+				return csdscb::aStop;
+			}
+			virtual bso::sBool CSDSCBPostProcess( void *UP ) override
+			{
+				if ( UP == NULL )
+					qRGnr();
+
+				rData *Data = (rData *)UP;
 
 #if 0
-					if ( Data->Row != qNIL )
-						xdwmain::Remove(Data->Row, Data->Token);
+				if ( Data->Row != qNIL )
+					xdwmain::Remove(Data->Row, Data->Token);
 #endif
-					delete Data;
+				delete Data;
 
-					return true;
-				}
-			public:
-				void reset( bso::bool__ P = true )
-				{
-					Agent_ = NULL;
-				}
-				E_CVDTOR( sProcessing );
-				void Init( xdhups::rAgent &Agent )
-				{
-					Agent_ = &Agent;
-				}
+				return true;
+			}
+		public:
+			void reset( bso::bool__ P = true )
+			{
+				Agent_ = NULL;
+			}
+			E_CVDTOR( sProcessing );
+			void Init( xdhups::rAgent &Agent )
+			{
+				Agent_ = &Agent;
+			}
 		};
 
 	}
@@ -306,23 +319,29 @@ namespace {
 			typedef xdhcuc::cGlobal cUpstream_;
 
 			class sUpstream_
-				: public cUpstream_
+			: public cUpstream_
 			{
-				protected:
-					virtual xdhcuc::sRow XDHCUCCreate(const str::dString &Token) override
-					{
-						return xdhbrd::Create(Token);
-					}
-					virtual void XDHCUCRemove(xdhcuc::sRow Row) override
-					{
-						return xdhbrd::Remove(Row);
-					}
-				public:
-					void reset(bso::sBool = true)
-					{}
-					qCVDTOR(sUpstream_)
-					void Init(void)
-					{}
+			protected:
+				virtual xdhcuc::sRow XDHCUCCreate(const str::dString &Token) override
+				{
+					return xdhbrd::Create(Token);
+				}
+				virtual void XDHCUCRemove(xdhcuc::sRow Row) override
+				{
+					return xdhbrd::Remove(Row);
+				}
+				virtual void XDHCUCBroadcast(
+					const str::dString &Script,
+					xdhcuc::sRow Row) override
+				{
+					xdhbrd::Broadcast(Script, Row);
+				}
+			public:
+				void reset(bso::sBool = true)
+				{}
+				qCVDTOR(sUpstream_)
+				void Init(void)
+				{}
 			};
 		}
 	}

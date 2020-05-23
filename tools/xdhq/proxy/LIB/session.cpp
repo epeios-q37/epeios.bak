@@ -19,6 +19,8 @@
 
 #include "session.h"
 
+#include "common.h"
+
 #include "mtk.h"
 
 using namespace session;
@@ -221,7 +223,7 @@ qRB;
 	} else {
 		LogMessage.Append( Token );
 
-		if ( FaaSDriver_.Init(Token, IP_) ) {
+		if ( ( TRow_ = FaaSDriver_.Init(Token, IP_) ) != qNIL ) {
 			Mode_ = mFaaS;
 			Success = true;
 		}
@@ -278,7 +280,7 @@ qRB
 
 	Flow.Dismiss();
 
-	Broadcast(Script, Token_);
+	common::GetCallback().Broadcast(Script, TRow_);
 qRR
 qRT
 qRE
@@ -313,7 +315,7 @@ qRB
 
 	Flow.Dismiss();
 
-	BroadcastAction(Action, Id, Token_);
+	xdhdws::BroadcastAction(common::GetCallback(), Action, Id, TRow_);
 qRR
 qRT
 qRE
@@ -416,7 +418,6 @@ qRFH;
 qRFB;
 	Cont = Launch_( Id, Action );
 qRFR;
-	Broadcast(str::wString("%Quit"), Token_);
 qRFT;
 qRFE(sclm::ErrorDefaultHandling());
 	return Cont;

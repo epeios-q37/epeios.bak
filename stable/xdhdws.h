@@ -69,17 +69,15 @@ namespace xdhdws {
 		{
 			return Process(ScriptName,Values,&ReturnValue);
 		}
-		void Broadcast(
-			const str::dString &Script,
-			const str::dString &Token)
-		{
-			return C_().Broadcast(Script, Token);
-		}
-		void BroadcastAction(
-			const str::dString &Action,
-			const str::dString &Id,
-			const str::dString &Token);
+
 	};
+
+
+	void BroadcastAction(
+		xdhcuc::cGlobal &Callback,
+		const str::dString &Action,
+		const str::dString &Id,
+		xdhcuc::sRow TRow);	// Token row.
 }
 
 #endif

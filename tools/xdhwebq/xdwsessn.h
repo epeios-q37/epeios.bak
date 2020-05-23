@@ -41,12 +41,6 @@ namespace xdwsessn {
 		virtual void XDHCUCProcess(
 			const str::string_ &Script,
 			str::dString *ReturnedValue ) override;
-		virtual void XDHCUCBroadcast(
-			const str::dString &Script,
-			const str::dString &Token) override
-		{
-			xdhbrd::Broadcast(Script, Token);
-		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -72,10 +66,10 @@ namespace xdwsessn {
 		}
 		E_CDTOR( rSession );
 		bso::sBool Init(
-			xdhcdc::cSingle *Callback,
+			xdhcdc::cSingle &Callback,
 			fdr::rRWDriver &Driver,
 			const char *Language,
-			const str::dString &Token )	// If empty, FaaS session, else token used for the FaaS session.
+			const str::dString &Token)	// If empty, FaaS session, else token used for the FaaS session.
 		{
 			Upstream_.Init(Driver);
 			Session_.Init(Callback);

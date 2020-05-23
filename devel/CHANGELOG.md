@@ -10,6 +10,18 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2020-05-23:
+
+- XDHCUC:
+  - moving `[XDHCUC]Brodcast(…)` frol `cSingle` to `cGlobal`,
+- XDHDWS:
+  - [adpt],
+
+## 2020-05-22:
+
+- DTFPTB:
+  - fixing body redclaration issue in 32 bits,
+
 ## 2020-05-18:
 
 - DTFPTB:

@@ -78,7 +78,7 @@ namespace xdhbrd {
 
     void Broadcast(
         const str::dString &Script,
-        const str::dString &Token);
+        sTRow_ TRow);
 }
 
 #endif

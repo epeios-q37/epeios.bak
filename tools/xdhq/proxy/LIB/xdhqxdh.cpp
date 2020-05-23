@@ -19,6 +19,7 @@
 
 #include "xdhqxdh.h"
 
+#include "common.h"
 #include "registry.h"
 #include "session.h"
 
@@ -130,7 +131,7 @@ namespace {
 				sclm::Initialize( Data.SCLRack(), Data.Localization(), xdhqxdh::Info );
 
 				Initialization_( Data.Mode() );
-				faaspool::SetCallback(Callback);
+				common::SetCallback(Callback);
 			}
 		}
 		virtual void XDHCDCBaseLanguage( TOL_CBUFFER___ &Buffer ) override

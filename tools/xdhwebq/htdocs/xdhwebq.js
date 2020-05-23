@@ -70,6 +70,9 @@ function connect(token) {
     socket.onmessage = function(event) {
 		if ( event.data !== "%StandBy" ) {
 			if ( event.data === "%Quit" ) {
+				log("Quitting !");
+				reportClosing = false;
+				alert("Connection to backend lost!");
 				socket.close();
 			} else {
 				log("Executed:", event.data);

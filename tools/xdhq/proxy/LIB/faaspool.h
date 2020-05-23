@@ -28,6 +28,8 @@
 #ifndef FAASPOOL_INC_
 # define FAASPOOL_INC_
 
+# include "common.h"
+
 # include "prtcl.h"
 
 # include "xdhcuc.h"
@@ -35,8 +37,6 @@
 # include "sck.h"
 
 namespace faaspool {
-	void SetCallback(xdhcuc::cGlobal &Callback);
-
 	void Initialize();
 
 	typedef bso::sS16 sId;
@@ -91,7 +91,7 @@ namespace faaspool {
 
 	class rBackend_;
 
-	bso::sBool GetConnection_(
+	common::sTRow GetConnection_(
 		const str::dString &Token,
 		str::dString &IP,
 		rShared &Shared,
@@ -228,7 +228,7 @@ namespace faaspool {
 			IdSent_ = false;
 		}
 		qCVDTOR( rRWDriver );
-		bso::sBool Init(
+		common::sTRow Init(
 			const str::dString &Token,
 			str::dString &IP,
 			fdr::eThreadSafety ThreadSafety = fdr::ts_Default )

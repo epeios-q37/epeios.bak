@@ -49,22 +49,22 @@ namespace xdhups {
 			Callback_ = NULL;
 		}
 		E_CVDTOR( sSession );
-		void Init( cDownstream_ *Callback )
+		void Init( cDownstream_ &Callback )
 		{
 			reset();
 
-			Callback_ = Callback;
+			Callback_ = &Callback;
 		}
-		cDownstream_ *Callback( void ) const
+		cDownstream_ &Callback( void ) const
 		{
-			return Callback_;
+			return C_();
 		}
 		bso::sBool Initialize(
 			xdhcuc::cSingle &Callback,
 			const char *Language,
-			const str::dString &Token )	// If empty, PROD session, else token used for the DEMO session.
+			const str::dString &Token)	// If empty, PROD session, else token used for the DEMO session.
 		{
-			return C_().Initialize( Callback, Language, Token );
+			return C_().Initialize(Callback, Language, Token);
 		}
 		bso::bool__ Launch(
 			const char *Id,
