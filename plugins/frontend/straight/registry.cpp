@@ -21,6 +21,6 @@
 
 using namespace registry;
 
-rgstry::entry___ registry::parameter::HostService("HostService", sclrgstry::Parameters );
-rgstry::entry___ registry::parameter::Timeout("Timeout", sclrgstry::Parameters );
-rgstry::entry___ registry::parameter::PingDelay("PingDelay", sclrgstry::Parameters );
+rgstry::entry___ registry::parameter::HostService("HostService", sclr::Parameters );
+rgstry::entry___ registry::parameter::Timeout("Timeout", sclr::Parameters );
+rgstry::entry___ registry::parameter::PingDelay("PingDelay", sclr::Parameters );

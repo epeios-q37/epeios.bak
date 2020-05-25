@@ -84,10 +84,12 @@ def worker(userCallback,dom,callbacks):
 	while True:
 		[action,id] = dom.getAction()
 
+		print("coucoyu")
+
 		if ( action == "" ):
 			if ( id == "$Quit_1" ):
-				dom.sendQuit()
-				break;
+				print("Quitting a thread !!!")
+				break
 			elif ( id != "" ):
 				sys.exit("Unknown special action id")
 

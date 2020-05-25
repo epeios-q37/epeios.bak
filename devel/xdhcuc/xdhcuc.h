@@ -53,8 +53,7 @@ namespace xdhcuc {
 			extern const char
 				*StandBy,// FaaS and ATK; no more script pending.
 				*Broadcast,// FaaS; broadcast a script.
-				*BroadcastAction, // ATK; broadcast an action.
-				*Quit; // FaaS and ATK.
+				*BroadcastAction; // ATK; broadcast an action.
 		}
 	}
 

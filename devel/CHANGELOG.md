@@ -10,6 +10,11 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2020-05-25:
+
+- BSO:
+  - the encoded value for a signed number with only the first bit at 1 is no more lost,
+
 ## 2020-05-23:
 
 - XDHCUC:

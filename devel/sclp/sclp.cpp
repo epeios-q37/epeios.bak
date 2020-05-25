@@ -33,7 +33,7 @@ using namespace sclp;
 # endif
 
 namespace {
-	qCBUFFERr Identifier_, Details_;
+	qCBUFFERh Identifier_, Details_;
 }
 
 #define DEF( name, function ) extern "C" FUNCTION_SPEC function name

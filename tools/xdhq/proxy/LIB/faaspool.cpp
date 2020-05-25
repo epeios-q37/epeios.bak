@@ -87,7 +87,10 @@ namespace faaspool {
 		mtx::rHandler Access;
 		tht::rBlocker Switch;
 		bso::sBool GiveUp;
-		str::wString IP;
+		str::wString
+			IP,
+			Token,
+			Head;
 		void reset( bso::sBool P = true )
 		{
 			if ( P ) {
@@ -112,15 +115,17 @@ namespace faaspool {
 			Shareds.reset( P );
 			Access = mtx::Undefined;
 			Switch.reset( P );
-			tol::reset(P, IP);
+			tol::reset(P, IP, Token, Head);
 			GiveUp = false;	// If at 'true', the client is deemed to be disconnected.
 		}
 		qCDTOR( rBackend_ );
-		void Init(
+		void _Init(
 			sBRow_ Row,
 			sRow TRow,
 			fdr::rRWDriver &Driver,
-			const str::dString &IP )
+			const str::dString &IP,
+			const str::dString &Token,
+			const str::dString &Head)
 		{
 			reset();
 
@@ -134,6 +139,8 @@ namespace faaspool {
 			Access = mtx::Create();
 			Switch.Init();
 			this->IP.Init( IP );
+			this->Token.Init(Token);
+			this->Head.Init(Head);
 			GiveUp = false;
 		}
 		bso::sBool Set(rShared &Shared)
@@ -196,8 +203,6 @@ namespace faaspool {
 	};
 
 	mtx::rHandler MutexHandler_ = mtx::Undefined;
-	lstcrt::qLMCRATEw( str::dString, sBRow_ ) Tokens_;
-	lstcrt::qLMCRATEw( str::dString, sBRow_ ) Heads_;
 	lstbch::qLBUNCHw( rBackend_ *, sBRow_ ) Backends_;
 	csdbns::rListener Listener_;
 
@@ -208,15 +213,15 @@ namespace faaspool {
 		if ( !mtx::IsLocked( MutexHandler_ ) )
 			qRGnr();
 
-		sBRow_ Row = Tokens_.First();
+		sBRow_ Row = Backends_.First();
 
-		while ( (Row != qNIL) && ( Tokens_( Row ) != Token) )
-			Row = Tokens_.Next( Row );
+		while ( (Row != qNIL) && ( Backends_( Row )->Token != Token) )
+			Row = Backends_.Next( Row );
 
 		return Row;
 	}
 
-	rBackend_ *TUGetBackend_( const str::dString &Token )
+	rBackend_ *_TUGetBackend_( const str::dString &Token )
 	{
 		sBRow_ Row = TUGetBackendRow_( Token );
 
@@ -234,7 +239,7 @@ namespace faaspool {
 	qRB;
 		Mutex.InitAndLock( MutexHandler_ );
 
-		Backend = TUGetBackend_( Token );
+		Backend = _TUGetBackend_( Token );
 	qRR;
 	qRT;
 	qRE;
@@ -248,10 +253,10 @@ namespace faaspool {
 		sBRow_ Row = TUGetBackendRow_( Token );
 
 		if ( Row != qNIL ) {
-			Heads_.Recall( Row, Head );
+			Head = Backends_(Row)->Head;
 			return true;
-        } else
-            return false;
+     } else
+			return false;
 	}
 
 	bso::sBool TSGetHead_(
@@ -278,12 +283,10 @@ namespace faaspool {
 	qRB;
 		Mutex.Init( MutexHandler_ );
 
-		if ( !Backends_.Exists( Row ) || !Tokens_.Exists( Row ) || !Heads_.Exists( Row ) )
+		if ( !Backends_.Exists( Row ) )
 			qRGnr();
 
 		Backends_.Remove( Row );
-		Tokens_.Remove( Row );
-		Heads_.Remove( Row );
 	qRR;
 	qRT;
 	qRE;
@@ -305,24 +308,14 @@ namespace faaspool {
 		Row = TUGetBackendRow_( Token );
 
 		if ( Row == qNIL ) {
-			Row = Tokens_.New();
-
-			if ( Row != Backends_.New() )
-				qRGnr();
-
-			if ( Row != Heads_.New() )
-				qRGnr();
+			Row = Backends_.New();
 
 			if ( (Backend = new rBackend_) == NULL )
 				qRAlc();
 
-			Backend->Init( Row, common::GetCallback().Create(Token), Driver, IP );
-
-			Tokens_.Store( Token, Row );
+			Backend->_Init(Row, common::GetCallback().Create(Token), Driver, IP, Token, Head);
 
 			Backends_.Store( Backend, Row );
-
-			Heads_.Store( Head, Row );
 		}
 	qRR;
 		if ( Backend != NULL )
@@ -698,12 +691,18 @@ qRE;
 void faaspool::rRWDriver::Release_(void)
 {
 qRH
+	flw::rDressedWFlow<> Flow;
 qRB
-	fdr::rWDriver &Driver = D_();
+	Flow.Init(D_());
 
-	PutId(ClosingId, Driver);
-	PutId(Shared_.Id, Driver);
-	Driver.Commit(true, err::h_Default);
+	PutId(Shared_.Id, Flow);
+	csdcmn::Put("$Quit_1", Flow);
+	csdcmn::Put("", Flow);	// To instruct to quit the session thread.
+
+	PutId(ClosingId, Flow);
+	PutId(Shared_.Id, Flow);	// To instruct to delete all the data related to this section.
+
+	Flow.reset();	// Commits and frees the underlying driver, or the below 'Release' will block.
 qRR
 	ERRRst();
 qRT
@@ -723,8 +722,6 @@ bso::sBool faaspool::GetHead(
 qGCTOR(faaspool)
 {
 	MutexHandler_ = mtx::Create();
-	Tokens_.Init();
-	Heads_.Init();
 	Backends_.Init();
 }
 

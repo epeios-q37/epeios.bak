@@ -357,10 +357,6 @@ qRB;
 			Broadcast_(Flow);
 		} else if ( ScriptName == ssn_::BroadcastAction ) {
 			BroadcastAction_(Flow);
-		} else if ( ScriptName == ssn_::Quit ) {
-			Flow.Dismiss();
-			Cont = false;
-			break;
 		} else {
 			ReturnType = GetType_( Flow );
 
@@ -396,7 +392,7 @@ qRB;
 		}
 	}
 qRR;
-	ReportErrorToFrontend_(*this, str::wString("Connection to backend lost!"));
+	ReportErrorToFrontend_(*this, str::wString("Connection to backend lost!!!"));
 qRT;
 qRE;
 	return Cont;

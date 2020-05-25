@@ -102,10 +102,6 @@ class DOM:
 	def __init__(self,instance):
 		self._dom = XDHqFaaS.DOM_FaaS(instance)
 
-	# Internal use.
-	def sendQuit(self):
-		self._dom.sendQuit()
-
 	def get_action(self):
 		return self._dom.getAction()
 
@@ -118,6 +114,7 @@ class DOM:
 		self.execute("''")
 
 	def alert(self,message):
+		os._exit(1)
 		self._dom.call( "Alert_1", _STRING, message )
 		# For the return value being 'STRING' instead of 'VOID',
 		# see the 'alert' primitive in 'XDHqXDH'.

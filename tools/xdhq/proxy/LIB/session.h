@@ -106,7 +106,7 @@ namespace session {
 		void BroadcastAction_(flw::rRFlow &Flow);
 		bso::bool__ Launch_(
 			const char *Id,
-			const char *Action );
+			const char *Action);
 	protected:
 		virtual bso::sBool XDHCDCInitialize(
 			xdhcuc::cSingle &Callback,

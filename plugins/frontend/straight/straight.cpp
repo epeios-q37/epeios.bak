@@ -25,9 +25,8 @@
 
 #include "rpstraight.h"
 
-#include "sclmisc.h"
-#include "sclplugin.h"
-#include "sclmisc.h"
+#include "sclm.h"
+#include "sclp.h"
 
 #include "fblovl.h"
 
@@ -37,7 +36,7 @@
 
 SCLI_DEF( straight, NAME_LC, NAME_MC );
 
-const scli::sInfo &sclplugin::SCLPLUGINInfo( void )
+const scli::sInfo &sclp::SCLPInfo( void )
 {
 	return straight::Info;
 }
@@ -100,7 +99,7 @@ public:
 
 		return true;
 	}
-	bso::sBool SCLPLUGINInitialize( plgncore::sAbstract *BaseAbstract )
+	bso::sBool SCLPInitialize( plgncore::sAbstract *BaseAbstract )
 	{
 		bso::sBool Success = false;
 	qRH
@@ -114,14 +113,14 @@ public:
 
 		HostService.Init();
 
-		sclmisc::MGetValue( registry::parameter::HostService, HostService );
-		PingDelay = sclmisc::OGetUInt( registry::parameter::PingDelay, 0 );
-		Timeout = sclmisc::OGetU16( registry::parameter::Timeout, sck::NoTimeout );
+		sclm::MGetValue( registry::parameter::HostService, HostService );
+		PingDelay = sclm::OGetUInt( registry::parameter::PingDelay, 0 );
+		Timeout = sclm::OGetU16( registry::parameter::Timeout, sck::NoTimeout );
 
 		if ( !Init( HostService.Convert(Buffer), PingDelay, Timeout ) )
 			switch ( plgn::ErrorReporting( Abstract ) ) {
 			case plgn::rhInternally:
-				sclmisc::ReportAndAbort( "UnableToConnectTo", HostService );
+				sclm::ReportAndAbort( "UnableToConnectTo", HostService );
 				break;
 			case plgn::rhDetailed:
 				Abstract->HostService = HostService;
@@ -140,14 +139,14 @@ public:
 	}
 };
 
-SCLPLUGIN_DEF( rPlugin );
+SCLP_DEF( rPlugin );
 
-void sclplugin::SCLPLUGINPluginIdentifier( str::dString &Identifier )
+void sclp::SCLPPluginIdentifier( str::dString &Identifier )
 {
 	Identifier.Append( IDENTIFIER );
 }
 
-void sclplugin::SCLPLUGINPluginDetails( str::dString &Details )
+void sclp::SCLPPluginDetails( str::dString &Details )
 {
 	Details.Append( PLUGIN_NAME " V" VERSION " - Build " __DATE__ " " __TIME__ " (" );
 	Details.Append( cpe::GetDescription() );

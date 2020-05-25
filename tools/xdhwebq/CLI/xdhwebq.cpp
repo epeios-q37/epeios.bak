@@ -185,9 +185,7 @@ namespace {
 						Script.Init();
 						sclm::MGetValue(registry::definition::ErrorScript, Script);
 						Session.Execute(Script);
-					} else {
-						Session.Launch("","");
-
+					} else if ( Session.Launch("","") ) {
 						while ( true ) {
 							Digest.Init();
 							if ( !websck::GetMessage(Flow,Digest) )

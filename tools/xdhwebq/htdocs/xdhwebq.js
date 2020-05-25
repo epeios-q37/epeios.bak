@@ -72,8 +72,8 @@ function connect(token) {
 			if ( event.data === "%Quit" ) {	// Only used in 'FaaS' mode, when quitting a backend.
 				log("Quitting !");
 				reportClosing = false;
-				alert("Connection to backend lost!");
 				socket.close();
+				alert("Connection to backend lost!");
 			} else {
 				log("Executed:", event.data);
 				let result = eval(event.data);

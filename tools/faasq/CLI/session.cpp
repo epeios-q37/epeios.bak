@@ -30,9 +30,7 @@ using namespace session;
 // but intercepted by the ATK proxy ('xdhqxdh'),
 // to launch a special action.
 namespace ssn_ { // Special Script Name
-	qCDEF(char *, StandBy, "#StandBy_1");
-	qCDEF(char *, Broadcast, "#Broadcast_1");
-	qCDEF(char *, Quit, "#Quit_1");
+	using namespace faas_::ssn;
 }
 
 // Empty (special) action ids.
@@ -102,19 +100,17 @@ qRB
 				qRGnr();
 		}
 
-		if ( !Exit )
+		if ( !Exit ) {
 			Session_.Launch(Id.Convert(IdBuffer), Action.Convert(ActionBuffer));
 
 		// 'Id_' is the session id and must not be confused with the local variable 'Id',
 		// which is the id of the DOM element on which there was 'Action' was applied.
-		csdcmn::Put(Id_, Proxy_);
+			csdcmn::Put(Id_, Proxy_);
 
-		if ( Exit )
-			csdcmn::Put(ssn_::Quit, Proxy_);
-		else
 			csdcmn::Put(ssn_::StandBy, Proxy_);
 
-		Proxy_.Commit();
+			Proxy_.Commit();
+		}
 	}
 qRR
 qRT

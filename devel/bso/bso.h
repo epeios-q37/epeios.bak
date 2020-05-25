@@ -602,9 +602,9 @@ namespace bso {
 		sSHuge SHuge,
 		xint__ &XInt )
 	{
-        sign__ Sign = SHuge;
+    sign__ Sign = SHuge;
 
-		return _ConvertToDInt( ( Sign < 0 ? 1 : 0 ) | ( (Sign < 0 ? -SHuge : SHuge ) << 1 ), XInt );
+		return _ConvertToDInt( ( Sign < 0 ? 1 : 0 ) | ( (Sign < 0 ? -SHuge - 1: SHuge ) << 1 ), XInt );
 	}
 
 # ifndef BSO__64
@@ -682,7 +682,7 @@ namespace bso {
 			qRFwk();
 			break;
 		case -1:
-			return -(sSHuge)Huge;
+			return -(sSHuge)(Huge + 1);
 			break;
 		default:
 			qRFwk();

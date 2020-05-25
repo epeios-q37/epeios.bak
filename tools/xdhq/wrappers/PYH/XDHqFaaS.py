@@ -153,7 +153,7 @@ def writeUInt(value):
 	_writeUInt( _socket, value )
 
 def writeSInt(value):
-	writeUInt( ( value << 1 ) | ( 1 if value < 0 else 0 ) )
+	writeUInt( ( ( -value - 1 ) << 1 ) | 1 if value < 0 else value << 1 )
 
 def writeString(string):
 	global _socket
@@ -175,7 +175,7 @@ def readUInt():
 
 def readSInt():
 	value = readUInt()
-	return -( value >> 1 ) if ( value & 1 ) else ( value >> 1 )
+	return -( ( value >> 1 ) + 1 ) if ( value & 1 ) else value >> 1
 
 def getString():
 	global _socket
@@ -372,10 +372,6 @@ class DOM_FaaS:
 		writeSInt(self.instance.getId())
 		writeString(action)
 		_writeLock.release()
-
-	# Internal use.
-	def sendQuit(self):
-		self._sendSpecialAction("#Quit_1")
 
 	def getAction(self):
 		if self._firstLaunch:

@@ -38,8 +38,5 @@ void common::SetCallback(xdhcuc::cGlobal &Callback)
 
 xdhcuc::cGlobal &common::GetCallback(void)
 {
-	if ( Callback_ == NULL )
-		qRGnr();
-
-	return *Callback_;
+	return C_();
 }
