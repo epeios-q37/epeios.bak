@@ -53,6 +53,27 @@ const char *sclx::GetLauncher( void )
 	return Launcher_;
 }
 
+namespace {
+	xdhcuc::cGlobal *Upstream_ = NULL;
+
+	xdhcuc::cGlobal &GetUpstream_(void)
+	{
+		if ( Upstream_ == NULL )
+			qRFwk();
+
+		return *Upstream_;
+	}
+}
+
+void sclx::BroadcastAction_(
+	faas::sId FaasId,
+	const char *Action,
+	const char *Id)
+{
+	xdhdws::BroadcastAction(GetUpstream_(), Action, Id, qNIL, FaasId);
+}
+
+
 #ifdef CPE_S_WIN
 # define FUNCTION_SPEC __declspec(dllexport)
 #else
@@ -69,17 +90,20 @@ namespace {
 	protected:
 		virtual void XDHCDCInitialize(
 			const xdhcdc::sData &Data,
-			xdhcuc::cGlobal &) override // The second parameter is only useful for the 'xdhqxdh' tool.
+			xdhcuc::cGlobal &Upstream) override
 		{
+			if ( Upstream_ != NULL )
+				qRFwk();
+
+			Upstream_ = &Upstream;
+
 			if ( Launcher_ != NULL )
 				qRFwk();
 
-			if ( Launcher_ == NULL ) {
-				Launcher_ = Data.LauncherIdentification();
-				sclm::Initialize( Data.SCLRack(), Data.Localization(), SCLXInfo() );
+			Launcher_ = Data.LauncherIdentification();
+			sclm::Initialize( Data.SCLRack(), Data.Localization(), SCLXInfo() );
 
-				SCLXInitialization( Data.Mode() );
-			}
+			SCLXInitialization( Data.Mode() );
 		}
 		virtual void XDHCDCBaseLanguage( TOL_CBUFFER___ &Buffer ) override
 		{
@@ -92,9 +116,9 @@ namespace {
 
 			strcpy( Buffer, Language );
 		}
-		virtual xdhcdc::cSingle *XDHCDCFetchCallback(void) override
+		virtual xdhcdc::cSingle *XDHCDCFetchCallback(faas::sId Id) override
 		{
-			return SCLXFetchCallback();
+			return SCLXFetchCallback(Id);
 		}
 		virtual void XDHCDCDismissCallback(xdhcdc::cSingle *Callback) override
 		{
@@ -135,21 +159,21 @@ DEF( XDHCDC_RETRIEVE_FUNCTION_NAME, xdhcdc::retrieve );
 xdhcdc::cGlobal *XDHCDCRetrieve( void )
 {
 	sDownstream *Callback = NULL;
-	qRFH
-	qRFB
+qRFH
+qRFB
 	Callback = new sDownstream;
 
 	if ( Callback == NULL )
 		qRAlc();
 
 	Callback->Init();
-	qRFR
+qRFR
 	if ( Callback != NULL )
 		delete Callback;
 
 	Callback = NULL;
-	qRFT
-	qRFE(DoNothing_())
+qRFT
+qRFE(DoNothing_())
 	return Callback;
 }
 
@@ -288,7 +312,7 @@ void sclx::sProxy::AlertB( const str::dString & RawMessage )
 {
 qRH;
 	str::wString Dummy;
-	qRB;
+qRB;
 	Dummy.Init();
 
 	Process_("Alert_1", &Dummy, RawMessage);    // Get an unused return value to wait the dismissing of the dialog box.

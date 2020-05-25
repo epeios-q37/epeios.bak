@@ -36,6 +36,10 @@
 # define XDHDWS_DEFAULT_SUFFIX  "xdh"
 
 namespace xdhdws {
+	namespace faas {
+		using namespace xdhcuc::faas;
+	}
+
 	class sProxy
 	{
 	private:
@@ -72,12 +76,19 @@ namespace xdhdws {
 
 	};
 
+	void BroadcastAction(
+		xdhcuc::cGlobal &Callback,
+		const char *Action,
+		const char *Id,
+		faas::sRow FaasRow,
+		faas::sId FaasId);
 
 	void BroadcastAction(
 		xdhcuc::cGlobal &Callback,
 		const str::dString &Action,
 		const str::dString &Id,
-		xdhcuc::sRow TRow);	// Token row.
+		faas::sRow FaasRow,
+		faas::sId FaasId);
 }
 
 #endif

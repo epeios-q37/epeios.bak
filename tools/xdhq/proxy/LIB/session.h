@@ -29,6 +29,10 @@
 # include "xdhdws.h"
 
 namespace session {
+	namespace faas_ {
+		using namespace common::faas;
+	}
+
 	extern csdmnc::rCore Core;
 	extern logq::rFDriver<> LogDriver;
 
@@ -52,7 +56,7 @@ namespace session {
 		faaspool::rRWDriver FaaSDriver_;
 		csdmnc::rRWDriver ProdDriver_;
 		str::wString IP_, Token_;
-		common::sTRow TRow_;	// Token row.
+		faas_::sRow TRow_;	// Token row.
 		sId_ Id_;
 		fdr::rRWDriver &D_( void )
 		{

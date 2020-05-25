@@ -280,7 +280,7 @@ qRB
 
 	Flow.Dismiss();
 
-	common::GetCallback().Broadcast(Script, TRow_);
+	common::GetCallback().Broadcast(Script, TRow_, faas_::UndefinedId);
 qRR
 qRT
 qRE
@@ -315,22 +315,15 @@ qRB
 
 	Flow.Dismiss();
 
-	xdhdws::BroadcastAction(common::GetCallback(), Action, Id, TRow_);
+	xdhdws::BroadcastAction(common::GetCallback(), Action, Id, TRow_, faas_::UndefinedId);
 qRR
 qRT
 qRE
 }
 
 namespace {
-	// Special script name, with no no correspondence in 'XDHScripts.xcfg'.
 	namespace ssn_ {	// Special Script Name
-		// Following labels indicates what issues the name:
-		// - FaaS: Epeios C++ XDH frontend launched with 'faasq' ('esketchwdh', for example).
-		// - ATK: XDH component using the Atlas toolkit, written in Java, Node.js, Python…,
-		qCDEF(char *, StandBy, "#StandBy_1");	// FaaS and ATK; no more script pending.
-		qCDEF(char *, Broadcast, "#Broadcast_1");	// FaaS; brodcast a script.
-		qCDEF(char *, BroadcastAction, "#BroadcastAction_1"); // ATK; broadcast an action.
-		qCDEF(char *, Quit, "#Quit_1"); // FaaS and ATK.
+		using namespace faas_::ssn;
 	}
 }
 

@@ -23,3 +23,9 @@
 
 using namespace xdhcuc;
 
+qCDEF(char *, xdhcuc::faas::ssn::StandBy, "#StandBy_1");	// FaaS and ATK; no more script pending.
+qCDEF(char *, xdhcuc::faas::ssn::Broadcast, "#Broadcast_1");	// FaaS; broadcast a script.
+qCDEF(char *, xdhcuc::faas::ssn::BroadcastAction, "#BroadcastAction_1"); // ATK; broadcast an action.
+qCDEF(char *, xdhcuc::faas::ssn::Quit, "#Quit_1"); // FaaS and ATK.
+
+

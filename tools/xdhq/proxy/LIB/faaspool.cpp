@@ -81,7 +81,7 @@ namespace faaspool {
 		}
 	public:
 		sBRow_ Row;	// Backend row.
-		xdhcuc::sRow TRow; // Token row.	// Can be 'qNIL' in self-hosted mode (no/empty token).
+		sRow TRow; // Token row.	// Can be 'qNIL' in self-hosted mode (no/empty token).
 		fdr::rRWDriver *Driver;
 		wShareds_ Shareds;
 		mtx::rHandler Access;
@@ -118,7 +118,7 @@ namespace faaspool {
 		qCDTOR( rBackend_ );
 		void Init(
 			sBRow_ Row,
-			xdhcuc::sRow TRow,
+			sRow TRow,
 			fdr::rRWDriver &Driver,
 			const str::dString &IP )
 		{
@@ -143,7 +143,7 @@ namespace faaspool {
 		qRB
 			Row = Shareds.New();
 
-			if ( *Row > Max )
+			if ( *Row > MaxId )
 				qRGnr();
 
 			Shareds.Store( &Shared, Row );
@@ -181,7 +181,7 @@ namespace faaspool {
 		qRH
 			mtx::rMutex Mutex;
 		qRB
-			common::GetCallback().Broadcast(str::wString("%Quit"), TRow);
+			common::GetCallback().Broadcast(str::wString("%Quit"), TRow, UndefinedId);
 			Mutex.InitAndLock(Mutex_);
 
 			if ( Shareds.Amount() ) {
@@ -658,13 +658,13 @@ qRT;
 qRE;
 }
 
-common::sTRow faaspool::GetConnection_(
+sRow faaspool::GetConnection_(
 	const str::dString &Token,
 	str::dString &IP,
 	rShared &Shared,
 	rBackend_ *&Backend)
 {
-	common::sTRow Row = qNIL;
+	sRow Row = qNIL;
 qRH;
 	mtx::rMutex Mutex;
 	flw::rDressedWFlow<> Flow;

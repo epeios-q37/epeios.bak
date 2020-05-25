@@ -117,30 +117,15 @@ namespace {
 	}
 
 	namespace {
+		namespace faas_ {
+			using namespace xdhups::faas;
+		}
+
 		namespace {
 			namespace {
-				namespace {
-					typedef xdhcuc::cGlobal cUpstream_;
-
-					// Must exist, but not used.
-					class sUpstream_
-						: public cUpstream_
-					{
-					protected:
-						virtual xdhcuc::sRow XDHCUCCreate(const str::dString &) override
-						{
-							qRGnr();
-
-							return qNIL;    // To avoid a warning.
-						}
-						virtual void XDHCUCRemove(xdhcuc::sRow Row) override
-						{
-							qRGnr();
-						}
-					} Upstream_;
-				}
-
-				void Initialize_(xdhups::rAgent &Agent)
+				void Initialize_(
+						xdhcuc::cGlobal &Upstream,
+						xdhups::rAgent &Agent)
 				{
 				qRH
 					str::wString Identification, ModuleFilename;
@@ -152,7 +137,7 @@ namespace {
 					ModuleFilename.Init();
 					sclm::MGetValue( registry::parameter::ModuleFilename, ModuleFilename );
 
-					Agent.Init(Upstream_,  xdhcdc::mMultiUser, ModuleFilename, dlbrry::n_Default, Identification.Convert( Buffer ) );
+					Agent.Init(Upstream, xdhcdc::mMultiUser, ModuleFilename, dlbrry::n_Default, Identification.Convert( Buffer ) );
 				qRR
 				qRT
 				qRE
@@ -229,7 +214,7 @@ namespace {
 			qRH
 				wIds Ids;
 				wSessions Sessions;
-				sId Id = UndefinedId;
+				faas_::sId Id = faas_::UndefinedId;
 				sRow Row = qNIL;
 				str::wString Message, EId, Action;
 				qCBUFFERh EIdBuffer, ActionBuffer;
@@ -244,10 +229,10 @@ namespace {
 
 				while ( true ) {
 					switch ( csdcmn::Get(Proxy, Id) ) {
-					case UndefinedId:
+					case faas_::UndefinedId:
 						qRFwk();
 						break;
-					case CreationId:
+					case faas_::CreationId:
 						if ( Search(csdcmn::Get(Proxy, Id), Ids) != qNIL )
 							sclc::ReportAndAbort("IdShouldNotExists", Id);
 
@@ -270,7 +255,7 @@ namespace {
 
 						Proxy.Commit();
 						break;
-					case ClosingId:
+					case faas_::ClosingId:
 						if ( ( Row = Search(csdcmn::Get(Proxy, Id), Ids) ) == qNIL )
 							qRGnr();
 
@@ -331,12 +316,75 @@ namespace {
 			}
 		}
 
+		namespace {
+			typedef xdhcuc::cGlobal cUpstream_;
+
+			class sUpstream_
+			: public cUpstream_
+			{
+			private:
+				qRMV(fdr::rWDriver, P_, Proxy_);
+			protected:
+				virtual faas_::sRow XDHCUCCreate(const str::dString &) override
+				{
+					qRGnr();
+
+					return qNIL;    // To avoid a warning.
+				}
+				virtual void XDHCUCBroadcast(
+					const str::dString &Script,
+					const faas_::sRow Row,
+					faas_::sId Id) override
+					{
+					qRH
+						flw::rDressedWFlow<> Proxy;
+					qRB
+						if ( Row != qNIL )
+							qRGnr();    // See below.
+
+						if ( ( Id < faas_::MinId ) || ( Id >faas_::MaxId ) )
+							qRGnr();
+
+						Proxy.Init(P_());
+
+						csdcmn::Put(Id, Proxy);
+						csdcmn::Put(faas_::ssn::Broadcast, Proxy);
+						csdcmn::Put(Script, Proxy);
+
+					//    csdcmn::Put(Token, Proxy);    // 'Token', when relevant (FaaS mode), is only handled by the 'xdhqxdh' tool.
+
+						Proxy.Commit();
+					qRR
+					qRT
+					qRE
+				}
+				virtual void XDHCUCRemove(faas_::sRow) override
+				{
+					qRGnr();
+				}
+			public:
+				void reset(bso::sBool = true)
+				{
+					Proxy_ = NULL;
+				}
+				qCVDTOR(sUpstream_);
+				void Init(fdr::rWDriver &ProxyDriver)
+				{
+					Proxy_ = &ProxyDriver;
+				}
+			};
+		}
+
+
 		void Process_(fdr::rRWDriver &ProxyDriver)
 		{
 		qRH
 			xdhups::rAgent Agent;
+			sUpstream_ Upstream;
 		qRB
-			Initialize_(Agent);
+			Upstream.Init(ProxyDriver);
+			Initialize_(Upstream, Agent);
+
 			Ignition_(ProxyDriver, Agent);
 			Handle_(ProxyDriver, Agent);
 		qRR

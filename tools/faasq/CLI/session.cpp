@@ -77,30 +77,6 @@ qRT
 qRE
 }
 
-void session::sUpstream_::XDHCUCBroadcast(
-	const str::dString &Script,
-	const str::dString &Token)
-{
-qRH
-	flw::rDressedRWFlow<> Proxy;
-qRB
-	if ( Token.Amount() )
-		qRGnr();    // See below.
-
-	Proxy.Init(P_());
-
-	csdcmn::Put(Id_, Proxy);
-	csdcmn::Put(ssn_::Broadcast, Proxy);
-	csdcmn::Put(Script, Proxy);
-
-//    csdcmn::Put(Token, Proxy);    // 'Token', when relevant (FaaS mode), is only handled by the 'xdhqxdh' tool.
-
-	Proxy.Commit();
-qRR
-qRT
-qRE
-}
-
 void session::rSession::Launch(void)
 {
 qRH
@@ -131,7 +107,7 @@ qRB
 
 		// 'Id_' is the session id and must not be confused with the local variable 'Id',
 		// which is the id of the DOM element on which there was 'Action' was applied.
-		csdcmn::Put(_Id_, Proxy_);
+		csdcmn::Put(Id_, Proxy_);
 
 		if ( Exit )
 			csdcmn::Put(ssn_::Quit, Proxy_);
@@ -146,7 +122,7 @@ qRE
 }
 
 sRow session::Search(
-	sId Id,
+	faas_::sId Id,
 	const dIds &Ids)
 {
 	sRow Row = Ids.First();

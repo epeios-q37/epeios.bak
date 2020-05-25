@@ -32,18 +32,12 @@
 
 # include "prtcl.h"
 
-# include "xdhcuc.h"
-
 # include "sck.h"
 
 namespace faaspool {
-	void Initialize();
+	using namespace common::faas;
 
-	typedef bso::sS16 sId;
-	qCDEF( sId, Max, bso::S8Max );
-	qCDEF( sId, UndefinedId, -1 );
-	qCDEF( sId, CreationId, -2 );
-	qCDEF( sId, ClosingId, -3 );
+	void Initialize();
 
 	template <typename fd>  inline void PutId(
 		sId Id,
@@ -91,7 +85,7 @@ namespace faaspool {
 
 	class rBackend_;
 
-	common::sTRow GetConnection_(
+	sRow GetConnection_(
 		const str::dString &Token,
 		str::dString &IP,
 		rShared &Shared,
@@ -228,7 +222,7 @@ namespace faaspool {
 			IdSent_ = false;
 		}
 		qCVDTOR( rRWDriver );
-		common::sTRow Init(
+		sRow Init(
 			const str::dString &Token,
 			str::dString &IP,
 			fdr::eThreadSafety ThreadSafety = fdr::ts_Default )

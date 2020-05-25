@@ -69,7 +69,7 @@ function connect(token) {
 
     socket.onmessage = function(event) {
 		if ( event.data !== "%StandBy" ) {
-			if ( event.data === "%Quit" ) {
+			if ( event.data === "%Quit" ) {	// Only used in 'FaaS' mode, when quitting a backend.
 				log("Quitting !");
 				reportClosing = false;
 				alert("Connection to backend lost!");

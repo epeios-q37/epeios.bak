@@ -41,14 +41,19 @@
 # define XDHCDC_RETRIEVE_FUNCTION_NAME	XDHCDCRetrieve
 
 namespace xdhcdc {
-   	qENUM( Mode ) {
+	namespace faas {
+		using namespace xdhcuc::faas;
+	}
+
+	qENUM( Mode )
+	{
 		mMonoUser,	// One use only. The content of the project (i.e. which backend type to use) is defined by the user.
 		mMultiUser,	// Several users. The project (which defines the backend to use) is predefined in the configuration file.
 		m_amount,
 		m_Undefined
 	};
 
-   	class cSingle
+	class cSingle
 	{
 	protected:
 		virtual bso::sBool XDHCDCInitialize(
@@ -124,10 +129,10 @@ namespace xdhcdc {
 	{
 	protected:
 		virtual void XDHCDCInitialize(
-            const sData &Data,
-            xdhcuc::cGlobal &Callback) = 0;
+			const sData &Data,
+			xdhcuc::cGlobal &Callback) = 0;
 		virtual void XDHCDCBaseLanguage( TOL_CBUFFER___ &Buffer ) = 0;
-		virtual cSingle *XDHCDCFetchCallback(void) = 0;
+		virtual cSingle *XDHCDCFetchCallback(faas::sId Id) = 0;	// Store 'Id', as it will requested by the 'XDHCUC' module.
 		virtual void XDHCDCDismissCallback( cSingle *Callback ) = 0;
 		virtual const scli::sInfo &XDHCDCGetInfo( void ) = 0;
 		// The returned value is only for 'FaaS' mode. In other mode, must always return 'true',
@@ -140,8 +145,8 @@ namespace xdhcdc {
 	public:
 		qCALLBACK( Global )
 		void Initialize(
-            const sData &Data,
-            xdhcuc::cGlobal &Callback)
+			const sData &Data,
+			xdhcuc::cGlobal &Callback)
 		{
 			return XDHCDCInitialize(Data, Callback);
 		}
@@ -151,9 +156,9 @@ namespace xdhcdc {
 
 			return Buffer;
 		}
-		cSingle *FetchCallback(void)
+		cSingle *FetchCallback(faas::sId Id)
 		{
-			return XDHCDCFetchCallback();
+			return XDHCDCFetchCallback(Id);
 		}
 		void DismissCallback( cSingle *Callback )
 		{

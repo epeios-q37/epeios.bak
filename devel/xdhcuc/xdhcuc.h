@@ -32,7 +32,31 @@
 # include "str.h"
 
 namespace xdhcuc {
-	qROW(Row); // Token row.
+
+	// Declarations used in FaaS context.
+	// Enclosed in a namespace to  ease its
+	namespace faas {
+		qROW(Row); // Token row.
+
+		typedef bso::sS16 sId;	// For the multiplexing between the FaaS proxy and the backend.
+		qCDEF( sId, MaxId, bso::S8Max );
+		qCDEF( sId, MinId, 0 );	// Values this value are action codes.
+		qCDEF( sId, UndefinedId, -1 );
+		qCDEF( sId, CreationId, -2 );
+		qCDEF( sId, ClosingId, -3 );
+
+			// Special script name, with no no correspondence in 'XDHScripts.xcfg'.
+		namespace ssn {	// Special Script Name
+			// Following labels indicates what issues the name:
+			// - FaaS: Epeios C++ XDH frontend launched with 'faasq' ('esketchwdh', for example).
+			// - ATK: XDH component using the Atlas toolkit, written in Java, Node.js, Python…,
+			extern const char
+				*StandBy,// FaaS and ATK; no more script pending.
+				*Broadcast,// FaaS; broadcast a script.
+				*BroadcastAction, // ATK; broadcast an action.
+				*Quit; // FaaS and ATK.
+		}
+	}
 
 	class cSingle
 	{
@@ -57,24 +81,26 @@ namespace xdhcuc {
 	class cGlobal
 	{
 	protected:
-		virtual sRow XDHCUCCreate(const str::dString &Token) = 0;
+		virtual faas::sRow XDHCUCCreate(const str::dString &Token) = 0;
 		virtual void XDHCUCBroadcast(
 			const str::dString &Script,
-			const sRow Row) = 0;
-		virtual void XDHCUCRemove(sRow Row) = 0;
+			faas::sRow Row,
+			faas::sId Id) = 0;
+		virtual void XDHCUCRemove(faas::sRow Row) = 0;
 	public:
 		qCALLBACK(Global);
-		sRow Create(const str::dString &Token)
+		faas::sRow Create(const str::dString &Token)
 		{
 			return XDHCUCCreate(Token);
 		}
 		void Broadcast(
 			const str::dString &Script,
-			sRow Row)
+			faas::sRow Row,
+			faas::sId Id)
 		{
-			return XDHCUCBroadcast(Script, Row);
+			return XDHCUCBroadcast(Script, Row, Id);
 		}
-		void Remove(sRow Row)
+		void Remove(faas::sRow Row)
 		{
 			return XDHCUCRemove(Row);
 		}

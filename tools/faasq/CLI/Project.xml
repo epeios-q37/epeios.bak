@@ -26,11 +26,12 @@
 				<Module>sck</Module>
 			</Modules>
 			<Modules Group="CSD">
-                <Module>csdbnc</Module>
-                <Module>csdcmn</Module>
+				<Module>csdbnc</Module>
+				<Module>csdcmn</Module>
 			</Modules>
 			<Modules Group="XDH">
-                <Module>xdhups</Module>
+				<Module>xdhcuc</Module>
+				<Module>xdhups</Module>
 			</Modules>
 			<Modules Group="SCL">
 				<xpp:expand select="SCL"/>
@@ -39,7 +40,17 @@
 		<Module>registry</Module>
 		<Module>session</Module>
 	</Modules>
-	<Files/>
+	<Misc>
+		<CB>
+			<Arguments>
+				<xpp:cdata>
+					<Option parameters='--#Project=Testing.xprj' />
+					<Option host_application="xdhwebq" />
+					<Option run_host_application_in_terminal="1" />
+				</xpp:cdata>
+			</Arguments>
+		</CB>
+	</Misc>	<Files/>
     <RTW>
         <Dir>faasq-cli</Dir>
     </RTW>

@@ -23,7 +23,9 @@
 # include "xdhcuc.h"
 
 namespace common {
-	typedef xdhcuc::sRow sTRow;	// Token row.
+	namespace faas {
+		using namespace xdhcuc::faas;
+	}
 
 	void SetCallback(xdhcuc::cGlobal &Callback);
 

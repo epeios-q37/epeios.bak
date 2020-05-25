@@ -53,6 +53,10 @@ namespace {
 	}
 }
 
+namespace faas_ {
+	using namespace xdhcuc::faas;
+}
+
 namespace {
 	namespace {
 		typedef csdbns::cProcessing cProcessing_;
@@ -209,7 +213,7 @@ namespace {
 			qRH
 				xdhcdc::cSingle *Callback = NULL;
 			qRB
-				Callback = Agent.FetchCallback();
+				Callback = Agent.FetchCallback(faas_::UndefinedId);
 
 				if ( Callback == NULL )
 					qRGnr();
@@ -306,7 +310,7 @@ namespace {
 				Agent_ = NULL;
 			}
 			E_CVDTOR( sProcessing );
-			void Init( xdhups::rAgent &Agent )
+			void Init(xdhups::rAgent &Agent)
 			{
 				Agent_ = &Agent;
 			}
@@ -322,17 +326,18 @@ namespace {
 			: public cUpstream_
 			{
 			protected:
-				virtual xdhcuc::sRow XDHCUCCreate(const str::dString &Token) override
+				virtual faas_::sRow XDHCUCCreate(const str::dString &Token) override
 				{
 					return xdhbrd::Create(Token);
 				}
-				virtual void XDHCUCRemove(xdhcuc::sRow Row) override
+				virtual void XDHCUCRemove(faas_::sRow Row) override
 				{
 					return xdhbrd::Remove(Row);
 				}
 				virtual void XDHCUCBroadcast(
 					const str::dString &Script,
-					xdhcuc::sRow Row) override
+					faas_::sRow Row,
+					faas_::sId) override	// 'Id' is of no use in this context.
 				{
 					xdhbrd::Broadcast(Script, Row);
 				}

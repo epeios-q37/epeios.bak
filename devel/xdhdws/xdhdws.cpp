@@ -527,24 +527,63 @@ void xdhdws::sProxy::Process(
 	return Process_(ScriptName, Values, C_(), ReturnValue);
 }
 
+namespace {
+	namespace {
+		template <typename action, typename id> const str::dString &GetBroadcastActionScript_(
+			const action &Action,
+			const id &Id,
+			str::dString &Script)
+		{
+		qRH
+			str::wStrings Arguments;
+		qRB
+			Arguments.Init(Action);
+			Arguments.Append(Id);
+
+			GetScript_(ss_::BroadcastAction, Arguments, Script);
+		qRR
+		qRT
+		qRE
+			return Script;
+		}
+	}
+
+	template <typename action, typename id> void BroadcastAction_(
+		xdhcuc::cGlobal &Callback,
+		const action &Action,
+		const id &Id,
+		faas::sRow FaasRow,
+		faas::sId FaasId)
+	{
+	qRH
+		str::wString Script;
+	qRB
+		Script.Init();
+		GetBroadcastActionScript_(Action, Id, Script);
+
+		Callback.Broadcast(Script, FaasRow, FaasId);
+	qRR
+	qRT
+	qRE
+	}
+}
+
+void xdhdws::BroadcastAction(
+	xdhcuc::cGlobal &Callback,
+	const char *Action,
+	const char *Id,
+	faas::sRow FaasRow,
+	faas::sId FaasId)
+{
+	BroadcastAction_(Callback, Action, Id, FaasRow, FaasId);
+}
+
 void xdhdws::BroadcastAction(
 	xdhcuc::cGlobal &Callback,
 	const str::dString &Action,
 	const str::dString &Id,
-	xdhcuc::sRow TRow)
+	faas::sRow FaasRow,
+	faas::sId FaasId)
 {
-qRH
-	str::wStrings Arguments;
-	str::wString Script;
-qRB
-	Arguments.Init(Action);
-	Arguments.Append(Id);
-
-	Script.Init();
-	GetScript_(ss_::BroadcastAction, Arguments, Script);
-
-	Callback.Broadcast(Script, TRow);
-qRR
-qRT
-qRE
+	BroadcastAction_(Callback, Action, Id, FaasRow, FaasId);
 }

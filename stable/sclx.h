@@ -19,6 +19,12 @@
 
 // SoCLe X(DHTML)
 
+/*
+NOTA: In this library, the token string is ALWAYS empty and the token row
+is ALWAYS equal to 'qNIL'. Token related data are only useful in 'FaS' mode,
+and mainly handled by the 'xdhqxdh' and 'faasq' utilities.
+*/
+
 #ifndef SCLX_INC_
 # define SCLX_INC_
 
@@ -42,6 +48,9 @@
 # define SCLX_DEFAULT_SUFFIX XDHDWS_DEFAULT_SUFFIX
 
 namespace sclx {
+	namespace faas {
+		using namespace xdhdws::faas;
+	}
 	qCDEF( char, DefaultMarker, '#' );
 
 	namespace registry {
@@ -303,15 +312,15 @@ namespace sclx {
 			str::dString *Result,
 			const Args &...args )
 		{
-			qRH
+		qRH
 			str::wStrings Values;
-			qRB
+		qRB
 			Values.Init();
 			Fill_(Values, args...);
 			Core_.Process(ScriptName, Values, Result);
-			qRR
-			qRE
-			qRT
+		qRR
+		qRE
+		qRT
 		}
 		void Alert_(
 			const str::dString &XML,
@@ -365,17 +374,17 @@ namespace sclx {
 			session &Session,
 			bso::char__ Marker = DefaultMarker )
 		{
-			qRH;
+		qRH;
 			rack Rack;
-			qRB;
+		qRB;
 			Rack.Init( Target, Session, I_() );
 
 			Get( Session, Rack() );
 
 			HandleLayout_( Variant, Id, registry::definition::XSLFile, Target, Registry, Rack.Target(), Marker );
-			qRR;
-			qRT;
-			qRE;
+		qRR;
+		qRT;
+		qRE;
 		}
 		void HandleClasses_(
 			const char *Variant,
@@ -484,12 +493,6 @@ namespace sclx {
 		void Execute(const char *Script)
 		{
 			return Execute(str::wString(Script));
-		}
-		void BroadcastAction(
-			const char *Action,
-			const char *Id)
-		{
-			Core_.BroadcastAction(str::wString(Action), str::wString(Id), str::Empty);
 		}
 		void Log( const str::dString &Message )
 		{
@@ -811,6 +814,11 @@ namespace sclx {
 		}
 	};
 
+		void BroadcastAction_(
+			faas::sId FaasId,
+			const char *Action,
+			const char *Id);
+
 	template <typename session> class rCore;
 
 	// User put in 'instances' all his own objects, instantiating all with a 'new' (by overloading 'SCLXHTMLNew(...)'), a 'delete' will be made automatically when unloading the library.
@@ -828,6 +836,7 @@ namespace sclx {
 		sReporting Reporting_;
 		eBackendVisibility BackendVisibility_;
 		qRMV( class rCore<rSession>, C_, Core_ );
+		faas::sId Id_;
 	protected:
 		bso::sBool XDHCDCInitialize(
 			xdhcuc::cSingle &Callback,
@@ -862,12 +871,14 @@ namespace sclx {
 			BackendVisibility_ = bv_Undefined;
 			sProxy::reset();
 			Core_ = NULL;
+			Id_ = faas::UndefinedId;
 		}
 		qCVDTOR( rSession )
 		void Init(
 			sclf::rKernel &Kernel,
 			class rCore<rSession> &Core,
 			const scli::sInfo &Info,
+			faas::sId Id,
 			eXSLFileHandling XSLFileHandling = xfh_Default )
 		{
 			this->XSLFileHandling_ = XSLFileHandling;
@@ -877,6 +888,7 @@ namespace sclx {
 			// instances::Init( *this );	// Made on connection.
 			BackendVisibility_ = bvShow;	// By default, the backend part of the login page is shown.
 			Core_ = &Core;
+			Id_ = Id;
 		}
 		bso::bool__ Connect(
 			const fblfrd::compatibility_informations__ &CompatibilityInformations,
@@ -968,6 +980,12 @@ namespace sclx {
 			const str::dString &Title )
 		{
 			return sProxy::Confirm( XML, XSL, Title, Language() );
+		}
+		void BroadcastAction(
+			const char *Action,
+			const char *Id)
+		{
+			BroadcastAction_(Id_, Action, Id);
 		}
 		qRWDISCLOSEr( eBackendVisibility, BackendVisibility );
 		qRODISCLOSEr( page, Page );
@@ -1073,9 +1091,9 @@ namespace sclx {
 			const char *Action )
 		{
 			bso::bool__ Success = true;
-			qRH;
+		qRH;
 			TOL_CBUFFER___ Buffer;
-			qRB;
+		qRB;
 			if ( ( Action == NULL ) || ( *Action == 0 ) ) {
 				Session.SetAttribute( "", "data-xdh-onevents", "(keypress|About|SC+a)(keypress|Q37Refresh|SC+r)" );
 				Action = ONS_();
@@ -1089,16 +1107,13 @@ namespace sclx {
 				else
 					_Handler.Launch( Session, Id, Action, Mode_ );
 			}
-			qRR;
+		qRR;
 			HandleError( Session, Session.Language() );
-			qRT;
-			qRE;
+		qRT;
+		qRE;
 			return Success;
 		}
 	};
-
-
-	/*********************************/
 
 	inline void LoadXSLAndTranslateTags(
 		const rgstry::tentry__ &FileName,
@@ -1112,7 +1127,7 @@ namespace sclx {
 	const scli::sInfo &SCLXInfo( void );	// To define by user.
 	void SCLXInitialization( xdhcdc::eMode Mode );	// To define by user.
 
-	xdhcdc::cSingle *SCLXFetchCallback(void);	// To define by user.
+	xdhcdc::cSingle *SCLXFetchCallback(faas::sId Id);	// To define by user.
 
 	void SCLXDismissCallback( xdhcdc::cSingle *Callback );	// To define by user.
 
