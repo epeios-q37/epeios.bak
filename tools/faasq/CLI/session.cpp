@@ -26,13 +26,6 @@ using namespace session;
 
 // #define LOG cio::COut << __LOC__ << tol::DateAndTime(DT) << txf::nl << txf::commit;
 
-// Empty (special) action ids.
-// An empty action with this label is intercepted,
-// to do special actions.
-namespace eai_ { // Special Action Id,
-	qCDEF(char *, Quit, "$Quit_1");
-}
-
 void session::sUpstream_::XDHCUCProcess(
 	const str::string_ &Script,
 	str::dString *ReturnedValue )
@@ -78,6 +71,11 @@ qRB
 	while ( !Exit ) {
 		Blockers_.WaitSelf();
 
+		if ( Quit ) {
+			Blockers_.UnblockGlobal();
+			break;
+		}
+
 		tol::Init(Id, Action);
 
 		csdcmn::Get(Proxy_, Id);
@@ -86,24 +84,15 @@ qRB
 		Proxy_.Dismiss();
 		Blockers_.UnblockGlobal();
 
-		if ( Action.Amount() == 0 ) {
-			if ( Id == eai_::Quit )
-				Exit = true;
-			else if ( Id.Amount() != 0 )	// On connection.
-				qRGnr();
-		}
+		Session_.Launch(Id.Convert(IdBuffer), Action.Convert(ActionBuffer));
 
-		if ( !Exit ) {
-			Session_.Launch(Id.Convert(IdBuffer), Action.Convert(ActionBuffer));
+	// 'Id_' is the session id and must not be confused with the local variable 'Id',
+	// which is the id of the DOM element on which there was 'Action' was applied.
+		csdcmn::Put(Id_, Proxy_);
 
-		// 'Id_' is the session id and must not be confused with the local variable 'Id',
-		// which is the id of the DOM element on which there was 'Action' was applied.
-			csdcmn::Put(Id_, Proxy_);
+		csdcmn::Put(faas_::StandByScriptName, Proxy_);
 
-			csdcmn::Put(faas_::StandByScriptName, Proxy_);
-
-			Proxy_.Commit();
-		}
+		Proxy_.Commit();
 	}
 qRR
 qRT

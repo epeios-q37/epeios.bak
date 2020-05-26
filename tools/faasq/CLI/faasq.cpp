@@ -266,6 +266,10 @@ namespace {
 						if ( Session == NULL )
 							qRGnr();
 
+						Session->Quit = true;
+						Session->Unblock();
+						Blocker.Wait();
+
 						delete Session;
 
 						Session = NULL;

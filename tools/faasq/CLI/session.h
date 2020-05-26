@@ -103,6 +103,7 @@ namespace session {
 		faas_::sId Id_;
 	public:
 		bso::sBool Handshaked;
+		bso::sBool Quit;
 		void reset(bso::sBool P = true)
 		{
 			if ( P ) {
@@ -112,6 +113,7 @@ namespace session {
 
 			tol::reset(P, Proxy_, Upstream_, Agent_, Callback_, Session_, Blockers_);
 			Handshaked = false;
+			Quit = false;
 			Id_ = faas_::UndefinedId;
 		}
 		qCDTOR(rSession);
@@ -132,6 +134,7 @@ namespace session {
 			Upstream_.Init(ProxyDriver, Id, Blockers_);
 			Session_.Initialize(Upstream_, "", str::Empty);
 			Handshaked = false;
+			Quit = false;
 			Blockers_.Init(Global);
 			Id_ = Id;
 		}

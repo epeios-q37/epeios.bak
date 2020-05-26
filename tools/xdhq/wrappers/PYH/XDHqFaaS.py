@@ -121,6 +121,7 @@ class Instance:
 	def __init__(self):
 		self.condVar = threading.Condition()
 		self.handshakeDone = False
+		self.quit = False;
 	def set(self,thread,id):
 		self.thread = thread
 		self.id = id
@@ -327,6 +328,10 @@ def _serve(callback,userCallback,callbacks ):
 			id = readSInt();
 			if not id in _instances:
 				sys.exit("Instance of id '" + str(id) + "' not available for destruction!")
+			_instances[id].quit = True
+			_instances[id].signal();
+			with _globalCondition:
+				_globalCondition.wait()
 			del _instances[id]	# Seemingly destroy the object and remove the entry too.
 		elif not id in _instances:
 			sys.exit("Unknown instance of id '" + str(id) + "'!")
@@ -388,8 +393,12 @@ class DOM_FaaS:
 
 		self.wait()
 
-		id = getString()
-		action = getString()
+		if self.instance.quit:
+			id = "$Quit_1"
+			action = ""
+		else:
+			id = getString()
+			action = getString()
 
 		self.signal()
 

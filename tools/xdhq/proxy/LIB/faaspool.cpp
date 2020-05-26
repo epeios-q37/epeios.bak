@@ -763,12 +763,8 @@ qRH
 qRB
 	Flow.Init(D_());
 
-	PutId(Shared_.Id, Flow);
-	csdcmn::Put("$Quit_1", Flow);
-	csdcmn::Put("", Flow);	// To instruct to quit the session thread.
-
 	PutId(upstream::ClosingId, Flow);
-	PutId(Shared_.Id, Flow);	// To instruct to delete all the data related to this section.
+	PutId(Shared_.Id, Flow);
 
 	Flow.reset();	// Commits and frees the underlying driver, or the below 'Release' will block.
 qRR
