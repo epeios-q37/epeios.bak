@@ -232,7 +232,7 @@ namespace {
 					case faas_::UndefinedId:
 						qRFwk();
 						break;
-					case faas_::master::CreationId:
+					case faas_::upstream::CreationId:
 						if ( Search(csdcmn::Get(Proxy, Id), Ids) != qNIL )
 							sclc::ReportAndAbort("IdShouldNotExists", Id);
 
@@ -255,7 +255,7 @@ namespace {
 
 						Proxy.Commit();
 						break;
-					case faas_::master::ClosingId:
+					case faas_::upstream::ClosingId:
 						if ( ( Row = Search(csdcmn::Get(Proxy, Id), Ids) ) == qNIL )
 							qRGnr();
 
@@ -343,7 +343,7 @@ namespace {
 
 						Proxy.Init(P_());
 
-						csdcmn::Put(faas_::slave::BroadcastScriptId, Proxy);
+						csdcmn::Put(faas_::downstream::BroadcastScriptId, Proxy);
 						csdcmn::Put(Script, Proxy);
 
 					//    csdcmn::Put(TRow, Proxy);    // 'TRow', when relevant (FaaS mode), is only handled by the 'xdhqxdh' tool.

@@ -23,4 +23,4 @@
 
 using namespace xdhcuc;
 
-qCDEF(char *, xdhcuc::faas::StandByScriptName, "#StandBy_1");
+

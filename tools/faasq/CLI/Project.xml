@@ -31,6 +31,7 @@
 			</Modules>
 			<Modules Group="XDH">
 				<Module>xdhcuc</Module>
+				<Module>xdhcmn</Module>
 				<Module>xdhups</Module>
 			</Modules>
 			<Modules Group="SCL">
@@ -45,7 +46,6 @@
 			<Arguments>
 				<xpp:cdata>
 					<Option parameters='--#Project=Testing.xprj' />
-					<Option host_application="xdhwebq" />
 					<Option run_host_application_in_terminal="1" />
 				</xpp:cdata>
 			</Arguments>

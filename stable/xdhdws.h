@@ -37,7 +37,7 @@
 
 namespace xdhdws {
 	namespace faas {
-		using namespace xdhcuc::faas;
+		using namespace xdhcmn::faas;
 	}
 
 	class sProxy

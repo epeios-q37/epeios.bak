@@ -593,10 +593,10 @@ namespace {
 			case UndefinedId:	// Should never happen.
 				qRGnr();
 				break;
-			case slave::BroadcastScriptId:
+			case downstream::BroadcastScriptId:
 				BroadcastScript_(Flow, TRow);
 				break;
-			case slave::BroadcastActionId:
+			case downstream::BroadcastActionId:
 				BroadcastAction_(Flow, TRow);
 				break;
 			default:
@@ -731,7 +731,7 @@ qRB;
 			Row = Backend->TRow;
 			Flow.Init( *Backend->Driver );
 			IP.Append( Backend->IP );
-			PutId( master::CreationId, Flow );	// To signal to the back-end a new connection.
+			PutId( upstream::CreationId, Flow );	// To signal to the back-end a new connection.
 			PutId( Shared.Id, Flow );	// The id of the new front-end.
 			Flow.Commit();
 		}  else
@@ -754,7 +754,7 @@ qRB
 	csdcmn::Put("$Quit_1", Flow);
 	csdcmn::Put("", Flow);	// To instruct to quit the session thread.
 
-	PutId(master::ClosingId, Flow);
+	PutId(upstream::ClosingId, Flow);
 	PutId(Shared_.Id, Flow);	// To instruct to delete all the data related to this section.
 
 	Flow.reset();	// Commits and frees the underlying driver, or the below 'Release' will block.

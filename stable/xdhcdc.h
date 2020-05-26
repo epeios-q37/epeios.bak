@@ -42,7 +42,7 @@
 
 namespace xdhcdc {
 	namespace faas {
-		using namespace xdhcuc::faas;
+		using namespace xdhcmn::faas;
 	}
 
 	qENUM( Mode )

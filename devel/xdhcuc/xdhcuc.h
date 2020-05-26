@@ -28,35 +28,12 @@
 #  define XDHCUC_DBG
 # endif
 
+# include "xdhcmn.h"
+
 # include "err.h"
 # include "str.h"
 
 namespace xdhcuc {
-
-	// Declarations used in FaaS context.
-	// Enclosed in a namespace to  ease its
-	namespace faas {
-		qROW(Row); // Token row.
-
-		typedef bso::sS16 sId;	// For the multiplexing between the FaaS proxy and the backend.
-		qCDEF( sId, MaxId, bso::S8Max );
-		qCDEF( sId, MinId, 0 );	// Values this value are action codes.
-		qCDEF( sId, UndefinedId, -1 );
-
-		namespace master {
-			qCDEF( sId, CreationId, -2 );
-			qCDEF( sId, ClosingId, -3 );
-		}
-
-		namespace slave {
-			qCDEF( sId, BroadcastScriptId, -2 );
-			qCDEF( sId, BroadcastActionId, -3 );
-		}
-		// Script name with no correspondence in 'XDHScripts.xcfg'.
-		// Is intercepted to do a special action.
-		extern const char *StandByScriptName;
-	}
-
 	class cSingle
 	{
 	protected:
@@ -77,27 +54,31 @@ namespace xdhcuc {
 
 	};
 
+	namespace faas_ {
+		using namespace xdhcmn::faas;
+	}
+
 	class cGlobal
 	{
 	protected:
-		virtual faas::sRow XDHCUCCreate(const str::dString &Token) = 0;
+		virtual faas_::sRow XDHCUCCreate(const str::dString &Token) = 0;
 		virtual void XDHCUCBroadcast(
 			const str::dString &Script,
-			faas::sRow Row) = 0;
-		virtual void XDHCUCRemove(faas::sRow Row) = 0;
+			faas_::sRow Row) = 0;
+		virtual void XDHCUCRemove(faas_::sRow Row) = 0;
 	public:
 		qCALLBACK(Global);
-		faas::sRow Create(const str::dString &Token)
+		faas_::sRow Create(const str::dString &Token)
 		{
 			return XDHCUCCreate(Token);
 		}
 		void Broadcast(
 			const str::dString &Script,
-			faas::sRow Row)
+			faas_::sRow Row)
 		{
 			return XDHCUCBroadcast(Script, Row);
 		}
-		void Remove(faas::sRow Row)
+		void Remove(faas_::sRow Row)
 		{
 			return XDHCUCRemove(Row);
 		}

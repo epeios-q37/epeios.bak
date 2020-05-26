@@ -36,6 +36,30 @@
 # include <stdarg.h>
 
 namespace xdhcmn {
+	// Declarations used in FaaS context.
+	// Enclosed in a namespace to ease its inclusion.
+	namespace faas {
+		qROW(Row); // Token row.
+
+		typedef bso::sS16 sId;	// For the multiplexing between the FaaS proxy and the backend.
+		qCDEF( sId, MaxId, bso::S8Max );
+		qCDEF( sId, MinId, 0 );	// Values this value are action codes.
+		qCDEF( sId, UndefinedId, -1 );
+
+		namespace upstream {
+			qCDEF( sId, CreationId, -2 );
+			qCDEF( sId, ClosingId, -3 );
+		}
+
+		namespace downstream {
+			qCDEF( sId, BroadcastScriptId, -2 );
+			qCDEF( sId, BroadcastActionId, -3 );
+		}
+		// Script name with no correspondence in 'XDHScripts.xcfg'.
+		// Is intercepted to do a special action.
+		extern const char *StandByScriptName;
+	}
+
 	qMIMICs( bso::sU16, sIndex );	// For the 'CSS' rules.
 
 	static E_CDEF( char *, CloseActionLabel, "Q37Close" );

@@ -24,7 +24,7 @@
 
 namespace common {
 	namespace faas {
-		using namespace xdhcuc::faas;
+		using namespace xdhcmn::faas;
 	}
 
 	void SetCallback(xdhcuc::cGlobal &Callback);

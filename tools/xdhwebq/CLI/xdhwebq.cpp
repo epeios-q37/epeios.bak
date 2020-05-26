@@ -54,7 +54,7 @@ namespace {
 }
 
 namespace faas_ {
-	using namespace xdhcuc::faas;
+	using namespace xdhcmn::faas;
 }
 
 namespace {
