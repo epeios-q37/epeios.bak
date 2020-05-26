@@ -116,7 +116,6 @@ class DOM:
 		self.execute("''")
 
 	def alert(self,message):
-		os._exit(1)
 		self._dom.call( "Alert_1", _STRING, message )
 		# For the return value being 'STRING' instead of 'VOID',
 		# see the 'alert' primitive in 'XDHqXDH'.
