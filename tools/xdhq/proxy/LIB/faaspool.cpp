@@ -565,6 +565,19 @@ namespace {
 		}
 	}
 
+	namespace {
+		void Unblock_(const dShareds_ &Shareds)
+		{
+			sFRow_ Row = Shareds.First();
+
+			while ( Row != qNIL ) {
+				Shareds(Row)->UnblockAndQuit();
+
+				Row = Shareds.Next(Row);
+			}
+		}
+	}
+
 	void HandleSwitching_(
 		fdr::rRWDriver &Driver,
 		sRow TRow,
@@ -605,7 +618,7 @@ namespace {
 					qRGnr();
 				}
 
-				Shareds( Id )->Read.Unblock();
+				Shareds( Id )->UnblockReading();
 
 				Blocker.Wait();	// Waits until all data in flow red.
 				break;
@@ -613,6 +626,7 @@ namespace {
 		}
 	qRR;
 	qRT;
+		Unblock_(Shareds);
 	qRE;
 	}
 

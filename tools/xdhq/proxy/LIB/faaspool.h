@@ -56,25 +56,96 @@ namespace faaspool {
 	// Shared between upstream and downstream.
 	struct rShared
 	{
+	private:
+			mtx::rMutex Mutex_;	// To protect below 2 members.
+			bso::sBool Quit_;	// Set by the switcher to force closing.
+			bso::sBool Pending_;	// Set by the session when blocked for reading.
+			tht::rBlocker Read_;
 	public:
 		sId Id;
 		fdr::rRWDriver *Driver;
-		tht::rBlocker Read;
 		tht::rBlocker *Switch;
 		void reset( bso::sBool P = true )
 		{
+			if ( P ) {
+				if (Mutex_ != mtx::Undefined)
+					mtx::Delete(Mutex_);
+			}
+
+			Mutex_ = mtx::Undefined;
+			Quit_ = false;
+			Pending_ = false;
+			Read_.reset( P );
 			Id = UndefinedId;
 			Driver = NULL;
-			Read.reset( P );
 			Switch = NULL;
 		}
 		void Init( void )
 		{
 			reset();
 
-			Read.Init();
+			Mutex_ = mtx::Create();
+
+			Read_.Init();
 		}
 		qCDTOR( rShared );
+		bso::sBool WaitForRead(void)
+		{
+			bso::sBool Return = true;
+		qRH
+			mtx::rHandle Mutex;
+		qRB
+			Mutex.InitAndLock(Mutex_);
+
+			if ( Quit_) {
+				Return = false;
+			} else {
+				Pending_ = true;
+				Mutex.Unlock();
+				Read_.Wait();
+				Mutex.Lock();
+				Return = !Quit_;
+			}
+		qRR
+		qRT
+		qRE
+			return Return;
+		}
+		void UnblockReading(void)
+		{
+		qRH
+			mtx::rHandle Mutex;
+		qRB
+			Mutex.InitAndLock(Mutex_);
+
+			if ( Quit_ )
+				qRGnr();
+
+			Pending_ = false;
+
+			Read_.Unblock();
+		qRR
+		qRT
+		qRE
+		}
+		void UnblockAndQuit(void)
+		{
+		qRH
+			mtx::rHandle Mutex;
+		qRB
+			Mutex.InitAndLock(Mutex_);
+
+			if ( Quit_ )
+				qRGnr();
+
+			Quit_ = true;
+
+			if ( Pending_ )
+				Read_.Unblock();
+		qRR
+		qRT
+		qRE
+		}
 		bso::sBool IsValid( void ) const
 		{
 			return Id != UndefinedId;
@@ -149,7 +220,8 @@ namespace faaspool {
 			fdr::byte__ *Buffer ) override
 		{
 			if ( !Consume_( fdr::rRWDressedDriver::AmountRed() ) ) {
-				Shared_.Read.Wait();
+				if ( !Shared_.WaitForRead() )	// The underlying backend does no more exist.
+					return 0;	// EOF.
 
 				D_().RTake();
 			}
