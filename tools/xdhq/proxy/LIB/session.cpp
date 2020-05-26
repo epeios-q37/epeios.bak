@@ -269,64 +269,6 @@ qRE;
 	return Success;
 }
 
-void session::rSession::Broadcast_(flw::rRFlow &Flow)
-{
-qRH
-	str::wString Script;
-qRB
-	Script.Init();
-
-	prtcl::Get(Flow, Script);
-
-	Flow.Dismiss();
-
-	common::GetCallback().Broadcast(Script, TRow_, faas_::UndefinedId);
-qRR
-qRT
-qRE
-}
-
-void session::rSession::BroadcastAction_(flw::rRFlow &Flow)
-{
-qRH
-	str::wString Action, Id;
-qRB
-	tol::Init(Action, Id);
-
-	if ( GetType_(Flow )!= tVoid )
-		qRGnr();
-
-
-	if ( GetType_(Flow) != tString )
-		qRGnr();
-
-	prtcl::Get(Flow, Action);
-
-
-	if ( GetType_(Flow) != tString )
-		qRGnr();
-
-	prtcl::Get(Flow, Id);
-
-
-	if ( GetType_(Flow) != tVoid )
-		qRGnr();
-
-
-	Flow.Dismiss();
-
-	xdhdws::BroadcastAction(common::GetCallback(), Action, Id, TRow_, faas_::UndefinedId);
-qRR
-qRT
-qRE
-}
-
-namespace {
-	namespace ssn_ {	// Special Script Name
-		using namespace faas_::ssn;
-	}
-}
-
 bso::bool__ session::rSession::Launch_(
 	const char *Id,
 	const char *Action )
@@ -350,13 +292,9 @@ qRB;
 
 		Log_( Id_, IP_, ScriptName );
 
-		if ( ScriptName == ssn_::StandBy ) {
+		if ( ScriptName == faas_::StandByScriptName ) {
 			Flow.Dismiss();
 			break;
-		} else if ( ScriptName == ssn_::Broadcast ) {
-			Broadcast_(Flow);
-		} else if ( ScriptName == ssn_::BroadcastAction ) {
-			BroadcastAction_(Flow);
 		} else {
 			ReturnType = GetType_( Flow );
 

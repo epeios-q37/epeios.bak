@@ -21,11 +21,10 @@
 
 using namespace faaspool;
 
-#include "prtcl.h"
-
 #include "registry.h"
 
 #include "plugins.h"
+#include "prtcl.h"
 
 #include "csdbns.h"
 #include "flx.h"
@@ -34,6 +33,7 @@ using namespace faaspool;
 #include "mtk.h"
 #include "sclm.h"
 #include "str.h"
+#include "xdhdws.h"
 
 namespace {
 	static qCDEF( char *, ProtocolId_, "7b4b6bea-2432-4584-950b-e595c9e391e1" );
@@ -119,7 +119,7 @@ namespace faaspool {
 			GiveUp = false;	// If at 'true', the client is deemed to be disconnected.
 		}
 		qCDTOR( rBackend_ );
-		void _Init(
+		void Init(
 			sBRow_ Row,
 			sRow TRow,
 			fdr::rRWDriver &Driver,
@@ -188,7 +188,7 @@ namespace faaspool {
 		qRH
 			mtx::rMutex Mutex;
 		qRB
-			common::GetCallback().Broadcast(str::wString("%Quit"), TRow, UndefinedId);
+			common::GetCallback().Broadcast(str::wString("%Quit"), TRow);
 			Mutex.InitAndLock(Mutex_);
 
 			if ( Shareds.Amount() ) {
@@ -313,7 +313,7 @@ namespace faaspool {
 			if ( (Backend = new rBackend_) == NULL )
 				qRAlc();
 
-			Backend->_Init(Row, common::GetCallback().Create(Token), Driver, IP, Token, Head);
+			Backend->Init(Row, common::GetCallback().Create(Token), Driver, IP, Token, Head);
 
 			Backends_.Store( Backend, Row );
 		}
@@ -352,33 +352,33 @@ namespace {
 		plgn::rRetriever<plugins::cToken> PluginRetriever_;
 
 		namespace {
-            class sToken_
-            : public plugins::cToken
-            {
-            protected:
-                plugins::eStatus PLUGINSHandle(
-                    const str::dString &Raw,
-                    str::dString &Normalized ) override
-                {
-                    tol::bUUID UUID;
+			class sToken_
+			: public plugins::cToken
+			{
+			protected:
+				plugins::eStatus PLUGINSHandle(
+					const str::dString &Raw,
+					str::dString &Normalized ) override
+				{
+					tol::bUUID UUID;
 
-                    Normalized = Raw;
+					Normalized = Raw;
 
-                    if ( Raw.Amount() == 0 )
-                        Normalized.Append( tol::UUIDGen( UUID ) );
-                    else if ( (Raw.Amount() > 1) && (Raw( 0 ) == '&') )
-                        Normalized.Remove( Normalized.First() );
-                    else
-                        return plugins::sBad;
+					if ( Raw.Amount() == 0 )
+						Normalized.Append( tol::UUIDGen( UUID ) );
+					else if ( (Raw.Amount() > 1) && (Raw( 0 ) == '&') )
+						Normalized.Remove( Normalized.First() );
+					else
+						return plugins::sBad;
 
-                    return plugins::sOK;
-                }
-            public:
-                void reset(bso::sBool = true ) {}
-                qCVDTOR( sToken_ );
-                void Init( void ) {}
-            } DefaultHandler_;
-        }
+					return plugins::sOK;
+				}
+			public:
+				void reset(bso::sBool = true ) {}
+				qCVDTOR( sToken_ );
+				void Init( void ) {}
+			} DefaultHandler_;
+		}
 
 		plugins::cToken &GetPlugin( void )
 		{
@@ -524,8 +524,50 @@ namespace {
 		return Backend;
 	}
 
+	namespace {
+		void BroadcastScript_(
+			flw::rRFlow &Flow,
+			sRow TRow)
+		{
+		qRH
+			str::wString Script;
+		qRB
+			Script.Init();
+
+			prtcl::Get(Flow, Script);
+
+			Flow.Dismiss();
+
+			common::GetCallback().Broadcast(Script, TRow);
+		qRR
+		qRT
+		qRE
+		}
+
+		void BroadcastAction_(
+			flw::rRFlow &Flow,
+			sRow TRow)
+		{
+		qRH
+			str::wString Action, Id;
+		qRB
+			tol::Init(Action, Id);
+
+			prtcl::Get(Flow, Action);
+			prtcl::Get(Flow, Id);
+
+			Flow.Dismiss();
+
+			xdhdws::BroadcastAction(common::GetCallback(), Action, Id, TRow);
+		qRR
+		qRT
+		qRE
+		}
+	}
+
 	void HandleSwitching_(
 		fdr::rRWDriver &Driver,
+		sRow TRow,
 		const dShareds_ &Shareds,
 		tht::rBlocker &Blocker )
 	{
@@ -547,14 +589,27 @@ namespace {
 			if ( IsError )
 				qRGnr();
 
-			if ( !Shareds.Exists( Id ) ) {
-				Id = UndefinedId;
+			switch( Id ) {
+			case UndefinedId:	// Should never happen.
 				qRGnr();
+				break;
+			case slave::BroadcastScriptId:
+				BroadcastScript_(Flow, TRow);
+				break;
+			case slave::BroadcastActionId:
+				BroadcastAction_(Flow, TRow);
+				break;
+			default:
+				if ( !Shareds.Exists( Id ) ) {
+					Id = UndefinedId;
+					qRGnr();
+				}
+
+				Shareds( Id )->Read.Unblock();
+
+				Blocker.Wait();	// Waits until all data in flow red.
+				break;
 			}
-
-			Shareds( Id )->Read.Unblock();
-
-			Blocker.Wait();	// Waits until all data in flow red.
 		}
 	qRR;
 	qRT;
@@ -588,7 +643,7 @@ namespace {
 		Handshake_( Driver );
 
 		if ( ( Backend = CreateBackend_( Driver, IP ) ) != NULL )
-			HandleSwitching_( Driver, Backend->Shareds, Backend->Switch );	// Doesn't return until disconnection or error.
+			HandleSwitching_( Driver, Backend->TRow, Backend->Shareds, Backend->Switch );	// Doesn't return until disconnection or error.
 	qRR;
 	qRT;
 		if ( Backend != NULL ) {
@@ -676,7 +731,7 @@ qRB;
 			Row = Backend->TRow;
 			Flow.Init( *Backend->Driver );
 			IP.Append( Backend->IP );
-			PutId( CreationId, Flow );	// To signal to the back-end a new connection.
+			PutId( master::CreationId, Flow );	// To signal to the back-end a new connection.
 			PutId( Shared.Id, Flow );	// The id of the new front-end.
 			Flow.Commit();
 		}  else
@@ -699,7 +754,7 @@ qRB
 	csdcmn::Put("$Quit_1", Flow);
 	csdcmn::Put("", Flow);	// To instruct to quit the session thread.
 
-	PutId(ClosingId, Flow);
+	PutId(master::ClosingId, Flow);
 	PutId(Shared_.Id, Flow);	// To instruct to delete all the data related to this section.
 
 	Flow.reset();	// Commits and frees the underlying driver, or the below 'Release' will block.

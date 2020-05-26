@@ -134,7 +134,7 @@ def ac_submit_message(chatroom, dom):
 	dom.focus("Message")
 	chatroom.add_message(chatroom.pseudo, message)
 	chatroom.display_messages(dom)
-	dom.broadcast_action("Update")
+	Atlas.broadcast_action("Update")
 
 def ac_update(chatroom, dom):
 	chatroom.display_messages(dom)

@@ -26,13 +26,6 @@ using namespace session;
 
 // #define LOG cio::COut << __LOC__ << tol::DateAndTime(DT) << txf::nl << txf::commit;
 
-// Special script name, which are NOT converted to a script,
-// but intercepted by the ATK proxy ('xdhqxdh'),
-// to launch a special action.
-namespace ssn_ { // Special Script Name
-	using namespace faas_::ssn;
-}
-
 // Empty (special) action ids.
 // An empty action with this label is intercepted,
 // to do special actions.
@@ -107,7 +100,7 @@ qRB
 		// which is the id of the DOM element on which there was 'Action' was applied.
 			csdcmn::Put(Id_, Proxy_);
 
-			csdcmn::Put(ssn_::StandBy, Proxy_);
+			csdcmn::Put(faas_::StandByScriptName, Proxy_);
 
 			Proxy_.Commit();
 		}

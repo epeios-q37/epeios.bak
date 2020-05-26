@@ -23,8 +23,6 @@
 #include "registry.h"
 #include "session.h"
 
-#include "prtcl.h"
-
 #include "logq.h"
 #include "idsq.h"
 

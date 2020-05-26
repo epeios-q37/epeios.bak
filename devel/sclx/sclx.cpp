@@ -65,12 +65,11 @@ namespace {
 	}
 }
 
-void sclx::BroadcastAction_(
-	faas::sId FaasId,
+void sclx::BroadcastAction(
 	const char *Action,
 	const char *Id)
 {
-	xdhdws::BroadcastAction(GetUpstream_(), Action, Id, qNIL, FaasId);
+	xdhdws::BroadcastAction(GetUpstream_(), Action, Id, qNIL);
 }
 
 

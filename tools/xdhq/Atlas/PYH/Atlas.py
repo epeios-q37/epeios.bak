@@ -47,6 +47,8 @@ def create_HTML(root_tag=""):	# If 'root_tag' is empty, there will be no root ta
 
 createHTML = create_HTML
 
+broadcast_action = XDHq.broadcastAction
+
 
 def _call(func, userObject, dom, id, action):
 	amount = len(inspect.getargspec(func).args)
@@ -83,8 +85,6 @@ def worker(userCallback,dom,callbacks):
 	
 	while True:
 		[action,id] = dom.getAction()
-
-		print("coucoyu")
 
 		if ( action == "" ):
 			if ( id == "$Quit_1" ):

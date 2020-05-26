@@ -814,8 +814,7 @@ namespace sclx {
 		}
 	};
 
-		void BroadcastAction_(
-			faas::sId FaasId,
+		void BroadcastAction(
 			const char *Action,
 			const char *Id);
 
@@ -858,7 +857,6 @@ namespace sclx {
 		{
 			return C_().Launch( *this, Id, Action );
 		}
-//		void XDHCMNBroadcast(const str::dString &Id) override;
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -980,12 +978,6 @@ namespace sclx {
 			const str::dString &Title )
 		{
 			return sProxy::Confirm( XML, XSL, Title, Language() );
-		}
-		void BroadcastAction(
-			const char *Action,
-			const char *Id)
-		{
-			BroadcastAction_(Id_, Action, Id);
 		}
 		qRWDISCLOSEr( eBackendVisibility, BackendVisibility );
 		qRODISCLOSEr( page, Page );

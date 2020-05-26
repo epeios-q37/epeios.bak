@@ -232,7 +232,7 @@ namespace {
 					case faas_::UndefinedId:
 						qRFwk();
 						break;
-					case faas_::CreationId:
+					case faas_::master::CreationId:
 						if ( Search(csdcmn::Get(Proxy, Id), Ids) != qNIL )
 							sclc::ReportAndAbort("IdShouldNotExists", Id);
 
@@ -255,7 +255,7 @@ namespace {
 
 						Proxy.Commit();
 						break;
-					case faas_::ClosingId:
+					case faas_::master::ClosingId:
 						if ( ( Row = Search(csdcmn::Get(Proxy, Id), Ids) ) == qNIL )
 							qRGnr();
 
@@ -333,25 +333,20 @@ namespace {
 				}
 				virtual void XDHCUCBroadcast(
 					const str::dString &Script,
-					const faas_::sRow Row,
-					faas_::sId Id) override
+					const faas_::sRow TRow) override
 					{
 					qRH
 						flw::rDressedWFlow<> Proxy;
 					qRB
-						if ( Row != qNIL )
+						if ( TRow != qNIL )
 							qRGnr();    // See below.
-
-						if ( ( Id < faas_::MinId ) || ( Id >faas_::MaxId ) )
-							qRGnr();
 
 						Proxy.Init(P_());
 
-						csdcmn::Put(Id, Proxy);
-						csdcmn::Put(faas_::ssn::Broadcast, Proxy);
+						csdcmn::Put(faas_::slave::BroadcastScriptId, Proxy);
 						csdcmn::Put(Script, Proxy);
 
-					//    csdcmn::Put(Token, Proxy);    // 'Token', when relevant (FaaS mode), is only handled by the 'xdhqxdh' tool.
+					//    csdcmn::Put(TRow, Proxy);    // 'TRow', when relevant (FaaS mode), is only handled by the 'xdhqxdh' tool.
 
 						Proxy.Commit();
 					qRR

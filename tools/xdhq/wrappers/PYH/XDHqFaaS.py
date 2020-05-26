@@ -191,6 +191,13 @@ def getStrings():
 
 	return strings
 
+def broadcastAction(action,id=""):
+	_writeLock.acquire()
+	writeSInt(-3)
+	writeString(action)
+	writeString(id)
+	_writeLock.release()
+
 def _init():
 	global _token, _socket, _wAddr, _wPort, _cgi
 	pAddr = "faas1.q37.info"

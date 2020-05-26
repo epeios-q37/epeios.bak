@@ -42,19 +42,19 @@ namespace xdhcuc {
 		qCDEF( sId, MaxId, bso::S8Max );
 		qCDEF( sId, MinId, 0 );	// Values this value are action codes.
 		qCDEF( sId, UndefinedId, -1 );
-		qCDEF( sId, CreationId, -2 );
-		qCDEF( sId, ClosingId, -3 );
 
-			// Special script name, with no no correspondence in 'XDHScripts.xcfg'.
-		namespace ssn {	// Special Script Name
-			// Following labels indicates what issues the name:
-			// - FaaS: Epeios C++ XDH frontend launched with 'faasq' ('esketchwdh', for example).
-			// - ATK: XDH component using the Atlas toolkit, written in Java, Node.js, Python…,
-			extern const char
-				*StandBy,// FaaS and ATK; no more script pending.
-				*Broadcast,// FaaS; broadcast a script.
-				*BroadcastAction; // ATK; broadcast an action.
+		namespace master {
+			qCDEF( sId, CreationId, -2 );
+			qCDEF( sId, ClosingId, -3 );
 		}
+
+		namespace slave {
+			qCDEF( sId, BroadcastScriptId, -2 );
+			qCDEF( sId, BroadcastActionId, -3 );
+		}
+		// Script name with no correspondence in 'XDHScripts.xcfg'.
+		// Is intercepted to do a special action.
+		extern const char *StandByScriptName;
 	}
 
 	class cSingle
@@ -83,8 +83,7 @@ namespace xdhcuc {
 		virtual faas::sRow XDHCUCCreate(const str::dString &Token) = 0;
 		virtual void XDHCUCBroadcast(
 			const str::dString &Script,
-			faas::sRow Row,
-			faas::sId Id) = 0;
+			faas::sRow Row) = 0;
 		virtual void XDHCUCRemove(faas::sRow Row) = 0;
 	public:
 		qCALLBACK(Global);
@@ -94,10 +93,9 @@ namespace xdhcuc {
 		}
 		void Broadcast(
 			const str::dString &Script,
-			faas::sRow Row,
-			faas::sId Id)
+			faas::sRow Row)
 		{
-			return XDHCUCBroadcast(Script, Row, Id);
+			return XDHCUCBroadcast(Script, Row);
 		}
 		void Remove(faas::sRow Row)
 		{

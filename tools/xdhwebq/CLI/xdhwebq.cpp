@@ -334,8 +334,7 @@ namespace {
 				}
 				virtual void XDHCUCBroadcast(
 					const str::dString &Script,
-					faas_::sRow Row,
-					faas_::sId) override	// 'Id' is of no use in this context.
+					faas_::sRow Row) override
 				{
 					xdhbrd::Broadcast(Script, Row);
 				}

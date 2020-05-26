@@ -22,6 +22,8 @@
 
 # include "faaspool.h"
 
+# include "prtcl.h"
+
 # include "csdmnc.h"
 # include "logq.h"
 # include "xdhcdc.h"

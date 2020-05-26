@@ -30,8 +30,6 @@
 
 # include "common.h"
 
-# include "prtcl.h"
-
 # include "sck.h"
 
 namespace faaspool {

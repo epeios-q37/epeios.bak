@@ -91,6 +91,8 @@ def read_asset(path, dir=""):
 
 readAsset = read_asset
 
+broadcastAction = XDHqFaaS.broadcastAction
+
 
 def _readXSLAsset(path, dir):
 	if (path.lstrip()[0]=='<'):
@@ -114,7 +116,7 @@ class DOM:
 		self.execute("''")
 
 	def alert(self,message):
-		os._exit(1)
+#		os._exit(1)
 		self._dom.call( "Alert_1", _STRING, message )
 		# For the return value being 'STRING' instead of 'VOID',
 		# see the 'alert' primitive in 'XDHqXDH'.
@@ -188,8 +190,10 @@ class DOM:
 
 	set_content = set_content
 
+	"""
 	def broadcast_action(self, action, id = ""):
 		self._dom.call( "#BroadcastAction_1", _VOID, action, id )
+	"""
 
 	"""
 	# Following 4 methods will either be removed or redesigned.
