@@ -131,7 +131,7 @@ namespace {
 	namespace id_store_ {
 		namespace {
 			idsq::wIdStore <sId_> Ids_;
-			mtx::rHandler Mutex_ = mtx::Undefined;
+			mtx::rMutex Mutex_ = mtx::Undefined;
 		}
 
 		void Init(void)
@@ -147,7 +147,7 @@ namespace {
 		{
 			sId_ Id = UndefinedId_;
 		qRH
-			mtx::rMutex Mutex;
+			mtx::rHandle Mutex;
 		qRB
 			Mutex.InitAndLock(Mutex_);
 			Id = Ids_.New();
@@ -160,7 +160,7 @@ namespace {
 		void Release(sId_ Id)
 		{
 		qRH
-			mtx::rMutex Mutex;
+			mtx::rHandle Mutex;
 		qRB
 			if ( Id == UndefinedId_ )
 				qRGnr();

@@ -337,8 +337,8 @@ namespace mtx {
 /***************/
 
 namespace mtx {
-	typedef mutex___ rMutex;
-	typedef handler___ rHandler;
+	typedef handler___ rMutex;	// The mutex itself; was 'rHandle'.
+	typedef mutex___ rHandle;	// To handle the mutex; wax 'rMutex'.
 }
 
 #endif

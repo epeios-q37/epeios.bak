@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-// THread Tools 
+// THread Tools
 
 #ifndef THT_INC_
 # define THT_INC_
@@ -49,7 +49,7 @@
 #  include <stdlib.h>
 #  include <signal.h>
 # else
-#  error 
+#  error
 # endif
 
 # define THT_UNDEFINED_THREAD_ID	0	// Totaly arbitrary ; should correspond to the system thread, so should never be returned by 'GetTID()'.
@@ -106,7 +106,7 @@ namespace tht {
 	class rCore_
 	{
 	private:
-		mtx::rHandler Mutex_;
+		mtx::rMutex Mutex_;
 		void Release_( void )
 		{
 			if ( Mutex_ != mtx::Undefined )
@@ -174,7 +174,7 @@ namespace tht {
 
 	typedef bso::sUInt sCounter_;
 	qCDEF( sCounter_, CounterMax_, bso::UIntMax );
-	
+
 	// Ensure that a ressource is only accessed by one thread at a time.
 	// All consecutive locking from same thread does not lock again.
 	// Unlocking is only effective after be called as much as being locked.
@@ -277,15 +277,15 @@ namespace tht {
 		// Block a thread until another unblocks it.
 	class rBlocker {
 	private:
-		mtx::rHandler
+		mtx::rMutex
 			Local_,	// To protect access to below mutex.
 			Main_;	// Main mutex.
-		void ReleaseMutex_( mtx::rHandler &Handler )
+		void ReleaseMutex_( mtx::rMutex &Mutex )
 		{
-			if ( Handler != mtx::Undefined )
-				mtx::Delete( Handler, true );
+			if ( Mutex != mtx::Undefined )
+				mtx::Delete( Mutex, true );
 
-			Handler = mtx::Undefined;
+			Mutex = mtx::Undefined;
 		}
 		void ReleaseMutexes_( void )
 		{
@@ -322,15 +322,15 @@ namespace tht {
 		void Wait( void )
 		{
 		qRH
-			mtx::rMutex Mutex;
+			mtx::rHandle Mutex;
 		qRB
 			Mutex.InitAndLock( Local_ );
 
-			if ( mtx::TryToLock( Main_ ) ) 
+			if ( mtx::TryToLock( Main_ ) )
 				mtx::Unlock( Main_ );
 			else
 				Mutex.Unlock();
-				
+
 			mtx::Lock( Main_ );
 		qRR
 		qRT
@@ -362,11 +362,11 @@ namespace tht {
 	class rReadWrite
 	{
 	private:
-		mtx::rHandler Write_, Read_;
-		void Delete_( mtx::rHandler Handler )
+		mtx::rMutex Write_, Read_;
+		void Delete_( mtx::rMutex Mutex )
 		{
-			if ( Handler != mtx::Undefined )
-				mtx::Delete( Handler, true );
+			if ( Mutex != mtx::Undefined )
+				mtx::Delete( Mutex, true );
 		}
 	public:
 		void reset( bso::sBool P = true )
@@ -424,7 +424,7 @@ namespace tht {
 			return true;
 		}
 	};
-	
+
 }
 
 #endif

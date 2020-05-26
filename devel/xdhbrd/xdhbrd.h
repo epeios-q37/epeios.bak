@@ -34,7 +34,7 @@
 
 namespace xdhbrd {
     qROW(CRow_); // Callback row.
-    typedef xdhcuc::faas::sRow sTRow_; // Token row.
+    typedef xdhcmn::faas::sRow sTRow_; // Token row.
 
     qENUM(State_) {
         sAlive,
@@ -43,8 +43,8 @@ namespace xdhbrd {
         s_Undefined
     };
 
-    typedef mtx::rHandler rMutex_;
-    typedef mtx::rMutex hGuardian_;
+    typedef mtx::rMutex rMutex_;
+    typedef mtx::rHandle hGuardian_;
 
     struct rXCallback
     {

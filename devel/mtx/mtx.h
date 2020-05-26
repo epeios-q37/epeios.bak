@@ -195,7 +195,7 @@ namespace mtx {
 	inline handler___ Create( bso::bool__ Disabled = false )	// Si True, utilisation dans un contexte mono-thread.
 	{
 		handler___ Handler;
-		
+
 		if ( ( Handler = new _mutex__( Disabled ) ) == NULL )
 			qRAlc();
 
@@ -303,7 +303,7 @@ namespace mtx {
 		void Init( handler___ Handler )
 		{
 			_UnlockIfInitializedAndLocked();
-			
+
 			Handler_ = Handler;
 		}
 		void InitAndLock( handler___ Handler )
@@ -337,8 +337,8 @@ namespace mtx {
 /***************/
 
 namespace mtx {
-	typedef mutex___ rMutex;
-	typedef handler___ rHandler;
+	typedef handler___ rMutex;	// The mutex itself; was 'rHandle'.
+	typedef mutex___ rHandle;	// To handle the mutex; wax 'rMutex'.
 }
 
 #endif

@@ -65,7 +65,7 @@ namespace faaspool {
 	{
 	private:
 		// Protects access to 'Shareds' and 'PendingDismiss_';
-		mtx::rHandler Mutex_;
+		mtx::rMutex Mutex_;
 		bso::sBool PendingDismiss_;
 		// Prevents destruction of 'Driver_' until no more client use it.
 		tht::rBlocker Blocker_;
@@ -84,7 +84,7 @@ namespace faaspool {
 		sRow TRow; // Token row.	// Can be 'qNIL' in self-hosted mode (no/empty token).
 		fdr::rRWDriver *Driver;
 		wShareds_ Shareds;
-		mtx::rHandler Access;
+		mtx::rMutex Access;
 		tht::rBlocker Switch;
 		bso::sBool GiveUp;
 		str::wString
@@ -170,7 +170,7 @@ namespace faaspool {
 		void Release(sId Id)
 		{
 		qRH
-			mtx::rMutex Mutex;
+			mtx::rHandle Mutex;
 		qRB
 			Mutex.InitAndLock(Mutex_);
 
@@ -186,7 +186,7 @@ namespace faaspool {
 		void WaitUntilNoMoreClient(void)
 		{
 		qRH
-			mtx::rMutex Mutex;
+			mtx::rHandle Mutex;
 		qRB
 			common::GetCallback().Broadcast(str::wString("%Quit"), TRow);
 			Mutex.InitAndLock(Mutex_);
@@ -202,7 +202,7 @@ namespace faaspool {
 		}
 	};
 
-	mtx::rHandler MutexHandler_ = mtx::Undefined;
+	mtx::rMutex Mutex_ = mtx::Undefined;
 	lstbch::qLBUNCHw( rBackend_ *, sBRow_ ) Backends_;
 	csdbns::rListener Listener_;
 
@@ -210,7 +210,7 @@ namespace faaspool {
 
 	sBRow_ TUGetBackendRow_( const str::dString &Token )
 	{
-		if ( !mtx::IsLocked( MutexHandler_ ) )
+		if ( !mtx::IsLocked( Mutex_ ) )
 			qRGnr();
 
 		sBRow_ Row = Backends_.First();
@@ -235,9 +235,9 @@ namespace faaspool {
 	{
 		rBackend_ *Backend = NULL;
 	qRH;
-		mtx::rMutex Mutex;
+		mtx::rHandle Mutex;
 	qRB;
-		Mutex.InitAndLock( MutexHandler_ );
+		Mutex.InitAndLock( Mutex_ );
 
 		Backend = _TUGetBackend_( Token );
 	qRR;
@@ -265,9 +265,9 @@ namespace faaspool {
 	{
         bso::sBool Found = false;
 	qRH;
-		mtx::rMutex Mutex;
+		mtx::rHandle Mutex;
 	qRB;
-		Mutex.InitAndLock( MutexHandler_ );
+		Mutex.InitAndLock( Mutex_ );
 
 		Found = TUGetHead_( Token, Head );
 	qRR;
@@ -279,9 +279,9 @@ namespace faaspool {
 	void Remove_(sBRow_ Row)
 	{
 	qRH;
-		mtx::rMutex Mutex;
+		mtx::rHandle Mutex;
 	qRB;
-		Mutex.Init( MutexHandler_ );
+		Mutex.Init( Mutex_ );
 
 		if ( !Backends_.Exists( Row ) )
 			qRGnr();
@@ -300,10 +300,10 @@ namespace faaspool {
 	{
 		rBackend_ *Backend = NULL;
 	qRH;
-		mtx::rMutex Mutex;
+		mtx::rHandle Mutex;
 		sBRow_ Row = qNIL;
 	qRB;
-		Mutex.InitAndLock( MutexHandler_) ;
+		Mutex.InitAndLock( Mutex_) ;
 
 		Row = TUGetBackendRow_( Token );
 
@@ -440,35 +440,35 @@ namespace {
 	}
 
 	const str::dString &BuildURL_(
-        const str::dString &Address,
-        const str::dString &RawService,
-        const str::dString &Token,
-        str::dString &URL )
-    {
-    qRH
-        str::wString TaggedURL, Service;
-        tagsbs::tvalues Tags;
-    qRB
-        TaggedURL.Init();
-        sclm::MGetValue(registry_::definition::URL, TaggedURL);
+		const str::dString &Address,
+		const str::dString &RawService,
+		const str::dString &Token,
+		str::dString &URL )
+	{
+	qRH
+		str::wString TaggedURL, Service;
+		tagsbs::tvalues Tags;
+	qRB
+		TaggedURL.Init();
+		sclm::MGetValue(registry_::definition::URL, TaggedURL);
 
-        if ( RawService.Amount()) {
-            Service.Init(":");
-            Service.Append(RawService);
-        } else
-            Service.Init();
+		if ( RawService.Amount()) {
+			Service.Init(":");
+			Service.Append(RawService);
+		} else
+			Service.Init();
 
-        Tags.Init();
+		Tags.Init();
 
-        Tags.Append("Address", Address, "Service", Service, "Token", Token);
+		Tags.Append("Address", Address, "Service", Service, "Token", Token);
 
-        if ( !tagsbs::SubstituteLongTags(TaggedURL, Tags, URL) )
-            qRFwk();
-    qRR
-    qRE
-    qRT
-        return URL;
-    }
+		if ( !tagsbs::SubstituteLongTags(TaggedURL, Tags, URL) )
+			qRFwk();
+	qRR
+	qRE
+	qRT
+		return URL;
+	}
 
 	rBackend_ *CreateBackend_(
 		fdr::rRWDriver &Driver,
@@ -629,7 +629,6 @@ namespace {
 	qRH;
 		sck::sSocket Socket = sck::Undefined;
 		str::wString IP;
-		mtx::rMutex Mutex;
 		sck::rRWDriver Driver;
 		rBackend_ *Backend = NULL;
 	qRB;
@@ -714,7 +713,7 @@ sRow faaspool::GetConnection_(
 {
 	sRow Row = qNIL;
 qRH;
-	mtx::rMutex Mutex;
+	mtx::rHandle Mutex;
 	flw::rDressedWFlow<> Flow;
 qRB;
 	if ( Backend != NULL)
@@ -776,14 +775,14 @@ bso::sBool faaspool::GetHead(
 
 qGCTOR(faaspool)
 {
-	MutexHandler_ = mtx::Create();
+	Mutex_ = mtx::Create();
 	Backends_.Init();
 }
 
 qGDTOR(faaspool)
 {
-	if ( MutexHandler_ != mtx::Undefined )
-		mtx::Delete( MutexHandler_, true );
+	if ( Mutex_ != mtx::Undefined )
+		mtx::Delete( Mutex_, true );
 
 	sBRow_ Row = Backends_.First();
 

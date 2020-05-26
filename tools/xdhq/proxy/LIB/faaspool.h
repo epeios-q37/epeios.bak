@@ -124,7 +124,7 @@ namespace faaspool {
 		}
 		// A reading leaves the data in the underlying driver,
 		// otherwise we could read data which are not for us,
-		// and therfor will not be available for the real recipient.
+		// and therefor will not be available for the real recipient.
 		// This function consumes the data in the underlying driver
 		// which were really for us.
 		bso::sBool Consume_( bso::sSize Amount )
@@ -167,7 +167,6 @@ namespace faaspool {
 			Consumed_ = 0;
 
 			if ( D_().Dismiss( Unlock, ErrHandling ) ) {
-
 				Shared_.Switch->Unblock();
 
 				return true;

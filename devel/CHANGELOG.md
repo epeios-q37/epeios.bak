@@ -10,6 +10,12 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2020-05-26:
+
+- MTX:
+  - `rHandler` -> `rMutex`, `rMutex` -> `rHandle`,
+- THT: [adpt],
+
 ## 2020-05-25:
 
 - BSO:

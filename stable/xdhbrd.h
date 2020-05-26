@@ -43,8 +43,8 @@ namespace xdhbrd {
         s_Undefined
     };
 
-    typedef mtx::rHandler rMutex_;
-    typedef mtx::rMutex hGuardian_;
+    typedef mtx::rMutex rMutex_;
+    typedef mtx::rHandle hGuardian_;
 
     struct rXCallback
     {
