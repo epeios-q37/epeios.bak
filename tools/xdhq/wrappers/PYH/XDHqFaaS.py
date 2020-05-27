@@ -139,6 +139,8 @@ class Instance:
 	def signal(self):
 		with self.condVar:
 			self.condVar.notify()
+	def isQuitting(self):
+		return self.quit;
 
 def isTokenEmpty():
 	return not _token or _token[0] == "&"
@@ -371,6 +373,7 @@ class DOM_FaaS:
 
 	def __init__(self, instance):
 		self.instance = instance
+		self.is_quitting = self.instance.isQuitting
 
 	def wait(self):
 		self.instance.wait()
@@ -393,12 +396,7 @@ class DOM_FaaS:
 
 		self.wait()
 
-		if self.instance.quit:
-			id = "$Quit_1"
-			action = ""
-		else:
-			id = getString()
-			action = getString()
+		[id,action]=["",""] if self.is_quitting() else [getString(),getString()] 
 
 		self.signal()
 

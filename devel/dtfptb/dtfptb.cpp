@@ -378,14 +378,14 @@ template <typename fd> static bso::sUHuge TemplatedVGetUHuge_(
 {
 	bso::byte__ DInt[BSO_DINT_SIZE_MAX];
 
-	if ( !GetInt_( FD, DInt ) ) {
+	if ( !GetInt_( FD, DInt ) )	{
 		if ( IsError == NULL )
 			qRFwk();
 		else {
 			*IsError = true;
 			return 0;
 		}
-    }
+	}
 
 	bso::sUHuge Value = bso::ConvertToUHuge( DInt );
 

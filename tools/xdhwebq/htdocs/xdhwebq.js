@@ -24,7 +24,7 @@ var target = "";
 
 var queryInProgress = false;
 var queryQueue = [];
-var reportClosing = true;
+var backendLost = false;
 
 function log( message )
 {
@@ -71,9 +71,8 @@ function connect(token) {
 		if ( event.data !== "%StandBy" ) {
 			if ( event.data === "%Quit" ) {	// Only used in 'FaaS' mode, when quitting a backend.
 				log("Quitting !");
-				reportClosing = false;
-				socket.close();
-				alert("Connection to backend lost!");
+				backendLost = true;
+				socket.close();	// Launches 'onclose' event.
 			} else {
 				log("Executed:", event.data);
 				let result = eval(event.data);
@@ -92,8 +91,9 @@ function connect(token) {
 	};
 	
     socket.onclose = function(event) {
-		if ( reportClosing )
-			if (confirm("Disconnected!\nPress OK to reload the application."))
-				location.reload(true);
+		if ( backendLost )
+			alert("Connection to backend lost!");
+		else if (confirm("Disconnected!\nPress OK to reload the application."))
+			location.reload(true);
     }	
 }
