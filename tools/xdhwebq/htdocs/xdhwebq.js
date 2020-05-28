@@ -25,6 +25,8 @@ var target = "";
 var queryInProgress = false;
 var queryQueue = [];
 var backendLost = false;
+var reportClosing = true;	// Set to 'false' int the scrip' defined in the
+							// 'ErrorScript' definition entry in the 'xdhwebq.xcfg'  file. 
 
 function log( message )
 {
@@ -91,9 +93,10 @@ function connect(token) {
 	};
 	
     socket.onclose = function(event) {
-		if ( backendLost )
-			alert("Connection to backend lost!");
-		else if (confirm("Disconnected!\nPress OK to reload the application."))
-			location.reload(true);
+		if ( reportClosing )
+			if ( backendLost )
+				alert("Connection to backend lost!");
+			else if (confirm("Disconnected!\nPress OK to reload the application."))
+				location.reload(true);
     }	
 }

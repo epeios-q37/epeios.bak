@@ -698,12 +698,17 @@ namespace fdr {
 			const byte__ *Buffer,
 			size__ Maximum )
 		{
+		qRH
+		qRB
 			Lock(true);
 			CommitPending_ = true;
 			Maximum = FDRWrite( Buffer, Maximum );
 
 			Written_ += Maximum;
-
+		qRR
+			CommitPending_ = false;	// To prevent a new faulty write attempt on commit.
+		qRT
+		qRE
 			return Maximum;
 		}
 		sTID WTake( sTID Owner = tht::Undefined )

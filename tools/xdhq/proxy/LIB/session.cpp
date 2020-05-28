@@ -330,7 +330,7 @@ qRB;
 		}
 	}
 qRR;
-	ReportErrorToFrontend_(*this, str::wString("Connection to backend lost!!!"));
+	// ReportErrorToFrontend_(*this, str::wString("Connection to backend lost!!!"));
 qRT;
 qRE;
 	return Cont;
