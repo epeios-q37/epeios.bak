@@ -69,7 +69,7 @@ namespace session {
 		qRMV(fdr::rRWDriver, P_, Proxy_);
 		faas_::sId Id_;
 	protected:
-		virtual void XDHCUCProcess(
+		virtual bso::sBool XDHCUCProcess(
 			const str::string_ &Script,
 			str::dString *ReturnedValue) override;
 	public:

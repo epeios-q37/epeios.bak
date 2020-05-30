@@ -39,13 +39,14 @@ namespace xdhcuc {
 	protected:
 		// The value returned by the script has to be stored
 		// in 'ReturnedValue', unless it is equal to 'NULL'.
-		virtual void XDHCUCProcess(
+		// Returns 'false' when error (mainly lost connection to client).
+		virtual bso::sBool XDHCUCProcess(
 			const str::dString &Script,
 			str::dString *ReturnedValue ) = 0;
 
 	public:
 		qCALLBACK( Single );
-		void Process(
+		bso::sBool Process(
 			const str::dString &Script,
 			str::dString *ReturnValue = NULL)
 		{

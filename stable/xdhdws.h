@@ -58,15 +58,15 @@ namespace xdhdws {
 
 			Callback_ = &Callback;
 		}
-		void Process(
+		bso::sBool Process(
 			const char *ScriptName,
 			const str::dStrings &Values,
 			str::dString *ReturnValue = NULL);
-		void Process(
+		bso::sBool Process(
 			const str::dString &ScriptName,
 			const str::dStrings &Values,
 			str::dString *ReturnValue = NULL);
-		template <typename string> void Process(
+		template <typename string> bso::sBool Process(
 			const string &ScriptName,
 			const str::dStrings &Values,
 			str::dString &ReturnValue)

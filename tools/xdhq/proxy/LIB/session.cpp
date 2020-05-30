@@ -41,7 +41,8 @@ namespace {
 		Values.Append(HTML);
 		Values.Append("");
 
-		Proxy.Process("HandleLayout_1", Values);
+		if ( !Proxy.Process("HandleLayout_1", Values) )
+			qRGnr();
 	qRR
 	qRT
 	qRE
@@ -56,7 +57,8 @@ namespace {
 	qRB
 		Values.Init(Message);
 
-		Proxy.Process("Alert_1", Values);
+		if ( !Proxy.Process("Alert_1", Values) )
+			qRGnr();
 	qRR
 	qRT
 	qRE
@@ -304,10 +306,16 @@ qRB;
 			Flow.Dismiss();
 
 			if ( ReturnType == tVoid ) {
-				Process(ScriptName, Parameters);
+				if ( !Process(ScriptName, Parameters) ) {
+					Cont = false;
+					break;
+				}
 			} else {
 				ReturnValue.Init();
-				Process(ScriptName, Parameters, ReturnValue);
+				if ( !Process(ScriptName, Parameters, ReturnValue) ) {
+					Cont = false;
+					break;
+				}
 			}
 
 			switch ( ReturnType ) {

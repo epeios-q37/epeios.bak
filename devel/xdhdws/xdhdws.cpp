@@ -232,12 +232,13 @@ namespace {
 			}
 		}
 
-		template <typename type> void BaseProcess_(
+		template <typename type> bso::sBool BaseProcess_(
 			const type &ScriptName,
 			const str::dStrings &Values,
 			xdhcuc::cSingle &Callback,
 			str::dString *ReturnValue = NULL)
 		{
+			bso::sBool Success = false;
 		qRH
 			str::wString Script;
 		qRB
@@ -245,33 +246,36 @@ namespace {
 
 			GetScript_(ScriptName, Values, Script);
 
-			Callback.Process(Script, ReturnValue );
+			Success = Callback.Process(Script, ReturnValue );
 		qRR
 		qRT
 		qRE
+			return Success;
 		}
 	}
 
 	namespace {
 		namespace {
-			void ExecuteAndGetDigest_(
+			bso::sBool ExecuteAndGetDigest_(
 				const char *ScriptName,
 				const str::dStrings &Values,
 				xdhcuc::cSingle &Callback,
 				xdhcmn::digest_ &Digest )
 			{
+				bso::sBool Success = false;
 			qRH
 				str::wString RawDigest;
 			qRB
 				RawDigest.Init();
 
-				BaseProcess_(ScriptName, Values, Callback, &RawDigest);
-
-				Digest.Init();
-				xdhcmn::Split( RawDigest, Digest );
+				if ( ( Success = BaseProcess_(ScriptName, Values, Callback, &RawDigest) ) ) {
+					Digest.Init();
+					xdhcmn::Split( RawDigest, Digest );
+				}
 			qRR
 			qRE
 			qRT
+				return Success;
 			}
 		}
 
@@ -321,10 +325,11 @@ namespace {
 				}
 			}
 
-			void HandleEvents_(
+			bso::sBool HandleEvents_(
 				const xdhcmn::digest_ &Descriptions,
 				xdhcuc::cSingle &Callback )
 			{
+				bso::sBool Success = true;
 			qRH
 				str::strings Ids;
 				xdhutl::event_abstracts Abstracts;
@@ -344,11 +349,12 @@ namespace {
 					Arguments.Append(IdsTag);
 					Arguments.Append(EventsTag);
 
-					BaseProcess_( ss_::SetEventHandlers, Arguments, Callback);
+					Success = BaseProcess_( ss_::SetEventHandlers, Arguments, Callback);
 				}
 			qRR
 			qRT
 			qRE
+				return Success;
 			}
 		}
 
@@ -423,10 +429,11 @@ namespace {
 				}
 			}
 
-			void HandleWidgets_(
+			bso::sBool HandleWidgets_(
 				const xdhcmn::digest_ &Digest,
 				xdhcuc::cSingle &Callback )
 			{
+				bso::sBool Success = true;
 			qRH
 				str::wStrings Ids, Types, ParametersSets, ContentRetrievingMethods, FocusingMethods, SelectionMethods, Arguments;
 				str::wString FlatIds, FlatTypes, FlatParametersSets, FlatContentRetrievingMethods, FlatFocusingMethods, FlatSelectionMethods;
@@ -446,39 +453,42 @@ namespace {
 					Arguments.Append(FlatFocusingMethods);
 					Arguments.Append(FlatSelectionMethods);
 
-					BaseProcess_(ss_::InstantiateWidgets, Arguments, Callback);
+					Success = BaseProcess_(ss_::InstantiateWidgets, Arguments, Callback);
 				}
 			qRR
 			qRT
 			qRE
+				return Success;
 			}
 		}
 
-		void HandleLayout_(
+		bso::sBool HandleLayout_(
 			const char *ScriptName,
 			const str::dStrings &Values,
 			xdhcuc::cSingle &Callback )
 		{
+			bso::sBool Success = false;
 		qRH
 			xdhcmn::digest Digests, EventsDigest, WidgetsDigest;
 			xdhcmn::retriever__ Retriever;
 		qRB
 			Digests.Init();
 
-			ExecuteAndGetDigest_(ScriptName, Values, Callback, Digests);
+			if ( ( Success = ExecuteAndGetDigest_(ScriptName, Values, Callback, Digests) ) ) {
+				Retriever.Init(Digests);
 
-			Retriever.Init(Digests);
+				tol::Init(EventsDigest, WidgetsDigest);
 
-			tol::Init(EventsDigest, WidgetsDigest);
+				Retriever.GetTable(EventsDigest);
+				Retriever.GetTable(WidgetsDigest);
 
-			Retriever.GetTable(EventsDigest);
-			Retriever.GetTable(WidgetsDigest);
-
-			HandleEvents_(EventsDigest, Callback);
-			HandleWidgets_(WidgetsDigest, Callback);
+				if ( ( Success = HandleEvents_(EventsDigest, Callback) ) )
+					Success = HandleWidgets_(WidgetsDigest, Callback);
+			}
 		qRR
 		qRE
 		qRT
+			return Success;
 		}
 	}
 
@@ -498,20 +508,20 @@ namespace {
 		}
 	}
 
-	template <typename type> void Process_(
+	template <typename type> bso::sBool Process_(
 		const type &ScriptName,
 		const str::dStrings &Values,
 		xdhcuc::cSingle &Callback,
 		str::dString *ReturnValue)
 	{
 		if ( IsEqual_(ScriptName, psn_::HandleLayout) )
-			HandleLayout_(psn_::HandleLayout, Values, Callback);
+			return HandleLayout_(psn_::HandleLayout, Values, Callback);
 		else
-			BaseProcess_(ScriptName, Values, Callback, ReturnValue);
+			return BaseProcess_(ScriptName, Values, Callback, ReturnValue);
 	}
 }
 
-void xdhdws::sProxy::Process(
+bso::sBool xdhdws::sProxy::Process(
 	const char *ScriptName,
 	const str::dStrings &Values,
 	str::dString *ReturnValue )
@@ -519,7 +529,7 @@ void xdhdws::sProxy::Process(
 	return Process_(ScriptName, Values, C_(), ReturnValue);
 }
 
-void xdhdws::sProxy::Process(
+bso::sBool xdhdws::sProxy::Process(
 	const str::dString &ScriptName,
 	const str::dStrings &Values,
 	str::dString *ReturnValue )

@@ -277,14 +277,16 @@ bso::sBool xdhbrd::rXCallback::Init(
     return Add_(Token, true);
 }
 
-void xdhbrd::rXCallback::Send(
+bso::sBool xdhbrd::rXCallback::_Send(
     const str::dString &Script,
     hGuardian_ &Guardian)
 {
     Hire_(Guardian, Mutex_);
 
     if ( State_ == sAlive )
-        C_().Process(Script);
+        return C_().Process(Script);
+    else
+        return false;
 }
 
 sTRow_ xdhbrd::Create(const str::dString &Token)
@@ -358,7 +360,7 @@ namespace {
 
             Blocker.Release();
 
-            XCallback.Send(Script, Guardian);
+            XCallback._Send(Script, Guardian);
         qRR
         qRT
         qRE

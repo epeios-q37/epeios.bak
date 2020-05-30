@@ -26,10 +26,11 @@ using namespace session;
 
 // #define LOG cio::COut << __LOC__ << tol::DateAndTime(DT) << txf::nl << txf::commit;
 
-void session::sUpstream_::XDHCUCProcess(
+bso::sBool session::sUpstream_::XDHCUCProcess(
 	const str::string_ &Script,
 	str::dString *ReturnedValue )
 {
+	bso::sBool Success = true;
 qRH
 	flw::rDressedRWFlow<> Proxy;
 qRB
@@ -45,7 +46,6 @@ qRB
 	csdcmn::Put(Script, Proxy);
 	csdcmn::Put((bso::sU8)0, Proxy);
 
-
 	Proxy.Commit();
 
 	if ( ReturnedValue != NULL) {
@@ -57,8 +57,11 @@ qRB
 		B_().UnblockGlobal();
 	}
 qRR
+	Success = false;
+	ERRRst();
 qRT
 qRE
+	return Success;
 }
 
 void session::rSession::Launch(void)

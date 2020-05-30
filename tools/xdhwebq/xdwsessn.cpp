@@ -25,24 +25,28 @@
 
 using namespace xdwsessn;
 
-void xdwsessn::rUpstream_::XDHCUCProcess(
+bso::sBool xdwsessn::rUpstream_::XDHCUCProcess(
 	const str::string_ &Script,
 	str::dString *ReturnedValue )
 {
+	bso::sBool Success = true;
 qRFH
-    qCBUFFERh Buffer;
-    websck::rFlow Flow;
+	qCBUFFERh Buffer;
+	websck::rFlow Flow;
 qRFB
-    Flow.Init(D_(), websck::mWithTerminator);
+	Flow.Init(D_(), websck::mWithTerminator);
 
-    Flow.Write( Script.Convert(Buffer), Script.Amount());
-    Flow.Commit();
+	Flow.Write( Script.Convert(Buffer), Script.Amount());
+	Flow.Commit();
 
-    if ( ReturnedValue != NULL)
-        websck::GetMessage(Flow, *ReturnedValue);
+	if ( ReturnedValue != NULL)
+		websck::GetMessage(Flow, *ReturnedValue);
 
-    Flow.Dismiss();
+	Flow.Dismiss();
 qRFR
+	Success = false;
+	ERRRst();
 qRFT
 qRFE(sclm::ErrorDefaultHandling())
+	return Success;
 }

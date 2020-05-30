@@ -82,7 +82,7 @@ namespace faaspool {
 	public:
 		sBRow_ Row;	// Backend row.
 		sRow TRow; // Token row.	// Can be 'qNIL' in self-hosted mode (no/empty token).
-		fdr::rRWDriver *Driver;
+		fdr::rRWDriver *Driver;	// Is also set to NULL when the backend is no more present.
 		wShareds_ Shareds;
 		mtx::rMutex Access;
 		tht::rBlocker Switch;
@@ -195,6 +195,7 @@ namespace faaspool {
 				PendingDismiss_ = true;
 				Mutex.Unlock();
 				Blocker_.Wait();
+				Mutex.Lock();	// Otherwise 'Mutex_' could be destroyed before above 'Release' unlocks it.
 			}
 		qRR
 		qRT
@@ -221,12 +222,15 @@ namespace faaspool {
 		return Row;
 	}
 
-	rBackend_ *_TUGetBackend_( const str::dString &Token )
+	rBackend_ *TUGetBackend_( const str::dString &Token )
 	{
 		sBRow_ Row = TUGetBackendRow_( Token );
 
 		if ( Row != qNIL )
-			return Backends_( Row );
+			if ( Backends_ (Row)->Driver != NULL )
+				return Backends_(Row);
+			else
+				return NULL;
 		else
 			return NULL;
 	}
@@ -239,7 +243,7 @@ namespace faaspool {
 	qRB;
 		Mutex.InitAndLock( Mutex_ );
 
-		Backend = _TUGetBackend_( Token );
+		Backend = TUGetBackend_( Token );
 	qRR;
 	qRT;
 	qRE;
@@ -660,6 +664,7 @@ namespace {
 	qRR;
 	qRT;
 		if ( Backend != NULL ) {
+			Backend->Driver = NULL;	// TThis signal that the backend is no more present.
 			Backend->WaitUntilNoMoreClient();
 			Remove_( Backend->Row );
 			delete Backend;

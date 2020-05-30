@@ -38,7 +38,7 @@ namespace xdwsessn {
 	private:
 		qRMV(fdr::rRWDriver, D_, Driver_);
 	protected:
-		virtual void XDHCUCProcess(
+		virtual bso::sBool XDHCUCProcess(
 			const str::string_ &Script,
 			str::dString *ReturnedValue ) override;
 	public:
@@ -81,15 +81,15 @@ namespace xdwsessn {
 		{
 			return Session_.Launch(Id, Action );
 		}
-		void Execute(
+		bso::sBool Execute(
 			const str::dString &Script,
 			str::dString &ReturnedValue)
 		{
-			Upstream_.Process(Script, &ReturnedValue);
+			return Upstream_.Process(Script, &ReturnedValue);
 		}
-		void Execute(const str::dString &Script)
+		bso::sBool _Execute(const str::dString &Script)
 		{
-			Upstream_.Process(Script);
+			return Upstream_.Process(Script);
 		}
 	};
 }
