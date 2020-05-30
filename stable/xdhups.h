@@ -62,7 +62,7 @@ namespace xdhups {
 		bso::sBool Initialize(
 			xdhcuc::cSingle &Callback,
 			const char *Language,
-			const str::dString &Token)	// If empty, PROD session, else token used for the DEMO session.
+			const str::dString &Token)	// If empty, SlfH session, else token used for the FaaS session.
 		{
 			return C_().Initialize(Callback, Language, Token);
 		}

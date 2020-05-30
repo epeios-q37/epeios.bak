@@ -67,7 +67,7 @@ namespace xdhbrd {
         bso::sBool Init(
             xdhcuc::cSingle &Callback,
             const str::dString &Token);
-        bso::sBool _Send(
+        bso::sBool Send(
             const str::dString &Script,
             hGuardian_ &Guardian);
     };

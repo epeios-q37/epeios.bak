@@ -148,7 +148,7 @@ class DOM:
 		global _dir
 		xslURL = xsl
 
-		if True:	# Testing if 'PROD' or 'FaaS' mode when available.
+		if True:	# Testing if 'SlfH' or 'FaaS' mode when available.
 			xslURL = "data:text/xml;charset=utf-8," + _encode( _readXSLAsset( xsl, _dir ) )
 
 		self._handleLayout(variant, id, xml, xslURL )

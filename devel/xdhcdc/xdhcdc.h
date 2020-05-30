@@ -42,7 +42,7 @@
 
 namespace xdhcdc {
 	namespace faas {
-		using namespace xdhcuc::faas;
+		using namespace xdhcmn::faas;
 	}
 
 	qENUM( Mode )
@@ -59,7 +59,7 @@ namespace xdhcdc {
 		virtual bso::sBool XDHCDCInitialize(
 			xdhcuc::cSingle &Callback,
 			const char *Language,
-			const str::dString &Token) = 0;	// If empty, PROD session, else token used for the FaaS session.
+			const str::dString &Token) = 0;	// If empty, SlfH session, else token used for the FaaS session.
 		virtual bso::bool__ XDHCDCLaunch(
 			const char *Id,
 			const char *Action ) = 0;
@@ -68,7 +68,7 @@ namespace xdhcdc {
 		bso::sBool Initialize(
 			xdhcuc::cSingle &Callback,
 			const char *Language,
-			const str::dString &Token)	// If empty, PROD session, else token used for the FaaS session.
+			const str::dString &Token)	// If empty, SlfH session, else token used for the FaaS session.
 		{
 			return XDHCDCInitialize(Callback, Language, Token);
 		}

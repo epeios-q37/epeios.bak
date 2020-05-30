@@ -840,10 +840,10 @@ namespace sclx {
 		bso::sBool XDHCDCInitialize(
 			xdhcuc::cSingle &Callback,
 			const char *Language,
-			const str::dString &Token)	override // If empty, PROD session, else token used for the DEMO session.
+			const str::dString &Token)	override // If empty, SlfH session, else token used for the FaaS session.
 		{
 			if ( Token.Amount() )
-				qRFwk();    // Should never be maunched in 'DEMO' mode.
+				qRFwk();    // Should never be launched in 'FaaS' mode.
 
 			sProxy::Init( Callback, I_(), XSLFileHandling_ );
 			Reporting_.Init( *this, Language );

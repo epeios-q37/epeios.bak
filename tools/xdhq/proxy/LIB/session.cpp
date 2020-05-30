@@ -218,10 +218,10 @@ qRB;
 	tol::Init(LogMessage);
 
 	if ( Token.Amount() == 0 ) {
-		ProdDriver_.Init( Core, fdr::ts_Default );
-		Mode_ = mProd;
+		SlfHDriver_.Init( Core, fdr::ts_Default );
+		Mode_ = mSlfH;
 		Success = true;
-		LogMessage.Append( "PROD" );
+		LogMessage.Append( "SlfH" );
 	} else {
 		LogMessage.Append( Token );
 

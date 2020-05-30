@@ -39,8 +39,8 @@ namespace session {
 	extern logq::rFDriver<> LogDriver;
 
 	qENUM( Mode_ ) {
-		mFaaS,	// FaaS mode, direct connexion (not muxed) through the easy to install component.
-		mProd,	// Production mode, muxed connexion through the native component.
+		mFaaS,	// FaaS mode, direct connection (not muxed) to the easy to install toolkit.
+		mSlfH,	// Self-hosting mode, muxed connection through the native component.
 		m_amount,
 		m_Undefined
 	};
@@ -56,7 +56,7 @@ namespace session {
 	private:
 		eMode_ Mode_;
 		faaspool::rRWDriver FaaSDriver_;
-		csdmnc::rRWDriver ProdDriver_;
+		csdmnc::rRWDriver SlfHDriver_;
 		str::wString IP_, Token_;
 		faas_::sRow TRow_;	// Token row.
 		sId_ Id_;
@@ -66,8 +66,8 @@ namespace session {
 			case mFaaS:
 				return FaaSDriver_;
 				break;
-			case mProd:
-				return ProdDriver_;
+			case mSlfH:
+				return SlfHDriver_;
 				break;
 			default:
 				qRGnr();
@@ -125,7 +125,7 @@ namespace session {
 					Release_(Id_);
 			}
 
-			tol::reset(P, FaaSDriver_, ProdDriver_, IP_, Token_);
+			tol::reset(P, FaaSDriver_, SlfHDriver_, IP_, Token_);
 			TRow_ = qNIL;
 			Id_ = UndefinedId_;
 			Mode_ = m_Undefined;
@@ -134,7 +134,7 @@ namespace session {
 		qCVDTOR( rSession )
 		bso::sBool Init(void)
 		{
-			tol::reset(FaaSDriver_, ProdDriver_);
+			tol::reset(FaaSDriver_, SlfHDriver_);
 			tol::Init(IP_, Token_ );
 			TRow_ = qNIL;
 			Id_ = UndefinedId_;

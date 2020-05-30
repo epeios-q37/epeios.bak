@@ -277,7 +277,7 @@ bso::sBool xdhbrd::rXCallback::Init(
     return Add_(Token, true);
 }
 
-bso::sBool xdhbrd::rXCallback::_Send(
+bso::sBool xdhbrd::rXCallback::Send(
     const str::dString &Script,
     hGuardian_ &Guardian)
 {
@@ -360,7 +360,7 @@ namespace {
 
             Blocker.Release();
 
-            XCallback._Send(Script, Guardian);
+            XCallback.Send(Script, Guardian);
         qRR
         qRT
         qRE

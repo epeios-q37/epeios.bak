@@ -62,7 +62,7 @@ namespace xdhups {
 		bso::sBool Initialize(
 			xdhcuc::cSingle &Callback,
 			const char *Language,
-			const str::dString &Token)	// If empty, PROD session, else token used for the DEMO session.
+			const str::dString &Token)	// If empty, SlfH session, else token used for the FaaS session.
 		{
 			return C_().Initialize(Callback, Language, Token);
 		}
@@ -93,11 +93,9 @@ namespace xdhups {
 			const str::string_ &ModuleFileName,
 			dlbrry::eNormalization Normalization,	// Usually 'dlbrry::n_Default', except when used for 'Node.js' (set to 'dlbrry::nExtOnly').
 			const char *Identification );
-		cDownstream_ *FetchCallback(
-			xdhcuc::cGlobal &Upstream,
-			faas::sId Id)
+		cDownstream_ *FetchCallback(faas::sId Id)
 		{
-			return C_().FetchCallback(Upstream, Id);
+			return C_().FetchCallback(Id);
 		}
 		const char *BaseLanguage( TOL_CBUFFER___ &Buffer ) const
 		{

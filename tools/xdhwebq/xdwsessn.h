@@ -87,7 +87,7 @@ namespace xdwsessn {
 		{
 			return Upstream_.Process(Script, &ReturnedValue);
 		}
-		bso::sBool _Execute(const str::dString &Script)
+		bso::sBool Execute(const str::dString &Script)
 		{
 			return Upstream_.Process(Script);
 		}

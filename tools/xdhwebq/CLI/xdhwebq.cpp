@@ -184,7 +184,7 @@ namespace {
 					if ( !Session.Init(Callback, Driver, "", Token) ) {
 						Script.Init();
 						sclm::MGetValue(registry::definition::ErrorScript, Script);
-						Session._Execute(Script);
+						Session.Execute(Script);
 					} else if ( Session.Launch("","") ) {
 						while ( true ) {
 							Digest.Init();

@@ -250,7 +250,7 @@ def _init():
 		print("Connected to '" + str(pAddr) + ":" + str(pPort) + "'.")
 		
 
-def _demoHandshake():
+def _faasHandshake():
 	global _writeLock
 
 	_writeLock.acquire()
@@ -362,7 +362,7 @@ def launch(callback, userCallback,callbacks,headContent):
 
 	_init()
 
-	_demoHandshake()
+	_faasHandshake()
 
 	_ignition()
 
