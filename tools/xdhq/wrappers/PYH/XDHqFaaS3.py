@@ -43,9 +43,6 @@ def writeString(socket, string):
 	writeUInt(socket, len(bString))
 	socket.send(bString)
 
-def writeStringNUL(socket, string):
-	socket.send(bytes(string + "\0", "utf-8"))
-
 def _readByte(socket):
 	return ord(socket.recv(1))
 

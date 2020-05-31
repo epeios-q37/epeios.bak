@@ -25,10 +25,9 @@ SOFTWARE.
 "use strict";
 
 var pAddr = "atlastk.org";
-var pPort = 53800;
+var pPort = 53700;
 var wAddr = "";
 var wPort = "";
-var cgi = "xdh";
 var instances = {};
 
 function REPLit(url) {
@@ -56,7 +55,6 @@ case 'DEV':
     console.log("\tDEV mode !");
 	break;
 case 'TEST':
-	cgi = "xdh_";
     console.log("\tTEST mode !");
 	break;
 case '':case 'REPLit':
@@ -86,14 +84,14 @@ const open = shared.open;
 const mainProtocolLabel = "8d2b7b52-6681-48d6-8974-6e0127a4ca7e";
 const mainProtocolVersion = "0";
 
-const demoProtocolLabel = "0fac593d-d65f-4cc1-84f5-3159c23c616b";
-const demoProtocolVersion = "0";
+const faasProtocolLabel = "7b4b6bea-2432-4584-950b-e595c9e391e1";
+const faasProtocolVersion = "0";
 
 function byteLength(str) {
 	// returns the byte length of an utf8 string
-	var s = str.length;
-	for (var i = str.length - 1; i >= 0; i--) {
-		var code = str.charCodeAt(i);
+	let s = str.length;
+	for (let i = str.length - 1; i >= 0; i--) {
+		let code = str.charCodeAt(i);
 		if (code > 0x7f && code <= 0x7ff) s++;
 		else if (code > 0x7ff && code <= 0xffff) s += 2;
 		if (code >= 0xDC00 && code <= 0xDFFF) i--; //trail surrogate
@@ -101,59 +99,114 @@ function byteLength(str) {
 	return s;
 }
 
-function getByte(query, offset) {
-	return [query[offset], offset + 1];
+class Proxy {
+	get_() {
+		let buffer;
+		let data = Buffer.alloc(0);
+	
+		while (null !== (buffer = this.socket_.read()))
+			data = Buffer.concat([data, buffer]);
+	
+		if (data.length === 0)
+			throw "Connection lost!";
+	
+		console.log("G: ", data.length);
+
+		return data;
+	}
+	
+	constructor(socket) {
+		this.socket_ = socket;
+		this.size_ = 0;
+	}
+
+	get(size) {
+		let data = Buffer.alloc(0);
+
+		console.log("S: ", size)
+
+		while ( size > 0 ) {
+			if ( this.size_ === 0 ) {
+				this.data_ = this.get_();
+				this.size_ = this.data_.length;
+			}
+
+			if ( this.size_ > size )  {
+				data = Buffer.concat([data,this.data_.subarray(0, size)]);
+				this.data_ = this.data_.subarray(size);
+				this.size_ -= size;
+				size = 0;
+			} else {
+				data = Buffer.concat([data,this.data_.subarray(0, this.size_)]);
+				size -= this.size_;
+				this.size_ = 0;
+			}
+		}
+
+		return data;
+	}
+
+	write(data) {
+		this.socket_.write(data);
+	}
+
+	socket() {
+		return this.socket_;
+	}
 }
 
-function getSize(query, offset) {
-	var byte = query[offset++];
-	var size = byte & 0x7f;
+function readUInt(proxy) {
+	let byte = proxy.get(1)[0];
+	let value = byte & 0x7f;
 
 	while (byte & 0x80) {
-		byte = query[offset++];
+		byte = proxy.get(1)[0];
 
-		size = (size << 7) + (byte & 0x7f);
+		value = (value << 7) + (byte & 0x7f);
 	}
 
-	return [size, offset];
+	return value;
 }
 
-function getString(query, offset) {
-	var size = 0;
-	[size, offset] = getSize(query, offset);
+function readSInt(proxy) {
+	let value = readUInt(proxy);
 
-	return [query.toString("utf-8", offset, offset + size), offset + size];
+	return value & 1 ? -( ( value >> 1 ) + 1 ) : value >> 1;
 }
 
-function getStrings(query, offset) {
-	var size = 0;
-	var strings = new Array();
-	var string = "";
+function getString(proxy) {
+	return proxy.get(readUInt(proxy)).toString("utf-8");
+}
 
-	[size, offset] = getSize(query, offset);
+function getStrings(proxy) {
+	let amount = readUInt(proxy);
+	let strings = new Array();
 
-	while (size--) {
-		[string, offset] = getString(query, offset);
-		strings.push(string);
+	while (amount--) {
+		strings.push(getString(proxy));
 	}
 
-	return [strings, offset];
+	return strings;
 }
 
-function convertSize(size) {
-	var result = Buffer.alloc(1, size & 0x7f);
-	size >>= 7;
+function convertUInt(value) {
+	let result = Buffer.alloc(1, value & 0x7f);
+	value >>= 7;
 
-	while (size !== 0) {
-		result = Buffer.concat([Buffer.alloc(1, (size & 0x7f) | 0x80), result]);
-		size >>= 7;
+	while (value !== 0) {
+		result = Buffer.concat([Buffer.alloc(1, (value & 0x7f) | 0x80), result]);
+		value >>= 7;
 	}
 
 	return result;
 }
 
+function convertSInt(value) {
+	return convertUInt(value < 0 ? ( ( -value - 1 ) << 1 ) | 1 : value << 1);
+}
+
 function sizeEmbeddedString(string) {
-    return Buffer.concat([convertSize(byteLength(string)), Buffer.from(string, 'utf8')]);
+    return Buffer.concat([convertUInt(byteLength(string)), Buffer.from(string, 'utf8')]);
 }
 
 function addString(data, string) {
@@ -161,8 +214,8 @@ function addString(data, string) {
 }
 
 function addStrings(data, strings) {
-	var i = 0;
-	data = Buffer.concat([data, convertSize(strings.length)]);
+	let i = 0;
+	data = Buffer.concat([data, convertUInt(strings.length)]);
 
 	while (i < strings.length)
 		data = addString(data, strings[i++]);
@@ -171,24 +224,14 @@ function addStrings(data, strings) {
 }
 
 function handleString(string) {
-	var data = new Buffer(0);
+	let data = new Buffer(0);
 
 	data = addString(data, string);
 
 	return data;
 }
 
-function getQuery(socket) {
-	var buffer;
-	var query = Buffer.alloc(0);
-
-	while ((buffer = socket.read()))
-		query = Buffer.concat([query, buffer]);
-
-	return query;
-}
-
-function getResponse(query, offset, type) {
+function getResponse(proxy, type) {
 	switch (type) {
 		case types.UNDEFINED:
 			throw "This function should not be called with UNDEFINED type !!!";
@@ -197,10 +240,10 @@ function getResponse(query, offset, type) {
 			throw "The VOID type should be handled upstream !!!";
 			break;
 		case types.STRING:
-			return getString(query, offset)[0];
+			return getString(proxy);
 			break;
 		case types.STRINGS:
-			return getStrings(query, offset)[0];
+			return getStrings(proxy);
 			break;
 		default:
 			throw "Unknown response type !!!";
@@ -212,13 +255,13 @@ function getToken() {
 	return getEnv("ATK_TOKEN");
 }
 
-var token = getToken();
+let token = getToken();
 
 if (token !== "" )
 	token = "&" + token;
 
-function standBy(socket, instance) {
-  	socket.write(addString(Buffer.alloc(1, instance._xdh.id), "StandBy_1"));
+function standBy(proxy, instance) {
+  	proxy.write(addString(convertSInt(instance._xdh.id), "#StandBy_1"));
 }
 
 function isTokenEmpty() {
@@ -226,26 +269,31 @@ function isTokenEmpty() {
 }
 
 function createInstance(id, socket, createCallback) {
-	var instance = createCallback();
+	let instance = createCallback();
 
 	instance._xdh = new Object;
 
 	instance._xdh.id = id;
 	instance._xdh.socket = socket;
-	instance._xdh.isDEMO = true;
+	instance._xdh.isFAAS = true;
 	instance._xdh.type = types.UNDEFINED;
 	instance._xdh.handshakeDone = false;
 
 	return instance;
 }
 
-function instanceHandshake(instance, query, offset) {
-	let errorMessage = "";
+function instanceHandshake(instance, proxy) {
+	console.log("4");
 
-	[errorMessage, offset] = getString(query, offset);
+	let errorMessage = getString(proxy);
+	console.log("5");
 
 	if (errorMessage !== "")
 		throw (errorMessage);
+
+	console.log("6");
+
+	getString(proxy);
 
 	instance._xdh.handshakeDone = true;
 }
@@ -263,14 +311,16 @@ function callCallback_(callback, instance, id, action) {
 	}
 }
 
-function handleInstance(instance, callbacks, socket, query, offset) {
+function handleInstance(instance, callbacks, proxy) {
 	let cont = true;
 
 	if (instance._xdh.type === types.UNDEFINED) {
 		let id, action;
 
-		[id, offset] = getString(query, offset);
-		[action, offset] = getString(query, offset);
+		id = getString(proxy);
+		action = getString(proxy);
+
+		console.log(action, id);
 
 		if ((action === "") || !("_PreProcess" in callbacks) || callCallback_(callbacks("_Preprocess", instance, id, action)))
 			if (callCallback_(callbacks[action], instance, id, action) && ("_PreProcess" in callbacks))
@@ -278,7 +328,7 @@ function handleInstance(instance, callbacks, socket, query, offset) {
 
 		if (instance._xdh.type === types.UNDEFINED) {
 			cont = false;
-			standBy(socket, instance);
+			standBy(proxy, instance);
 		} else
 			cont = instance._xdh.type === types.VOID;
 	}
@@ -290,65 +340,70 @@ function handleInstance(instance, callbacks, socket, query, offset) {
 			if (type === types.VOID)
 				instance._xdh.callback();
 			else
-				instance._xdh.callback(getResponse(query, offset, type));
+				instance._xdh.callback(getResponse(proxy, type));
 
 			if (instance._xdh.type === types.UNDEFINED) {
 				cont = false;
-				standBy(socket, instance);
+				standBy(proxy, instance);
 			} else if (instance._xdh.type !== types.VOID)
 				cont = false;
 		} else {
 			if (instance._xdh.type !== types.VOID)
-				getResponse(query, offset, instance._xdh.type);
+				getResponse(proxy, instance._xdh.type);
 
 			instance._xdh.type = types.UNDEFINED;
 			cont = false;
-			standBy(socket, instance);
+			standBy(proxy, instance);
 		}
 	}
 }
 
-function serve(socket, createCallback, callbacks) {
-	let offset = 0;
-	let query = getQuery(socket);
+function serve(proxy, createCallback, callbacks) {
 	let id = 0;
-	
-	[id, offset] = getByte(query, offset);
 
-	if (id === 255) {	// Value corresponding a new front-end.
-		[id, offset] = getByte(query, offset);	// Id of the new front-end.
+	console.log("Serve");
+	
+	id = readSInt(proxy);
+
+	console.log("Id: ", id);
+
+	if (id === -1)	// Should nerver happen.
+		throw "Received unexpected undefined command id!";
+	else if (id === -2) {  //# Value reporting a new front-end.
+		id = readSInt(proxy)  // The id of the new front-end.
 
 		if (id in instances)
 			throw "Instance of id  '" + id + "' exists but should not !";
 
-		instances[id] = createInstance(id, socket, createCallback);
-		socket.write(addString(addString(Buffer.alloc(1, id), mainProtocolLabel), mainProtocolVersion));
-	} else {
-		if ( !(id in instances ) )
-			throw "Unknown instance of id '" + id + "'!";
+		instances[id] = createInstance(id, proxy.socket(), createCallback);
+		proxy.write(addString(addString(convertSInt(id), mainProtocolLabel), mainProtocolVersion));
+	} else if (id == -3) {	// Instructs to close a session.
+		id = readSInt(proxy)  // The id of the session to close.
 
-		if (!instances[id]._xdh.handshakeDone) {
-			instanceHandshake(instances[id], query, offset);
-			socket.write(addString(Buffer.alloc(1, id), "NJS"));
-		} else
-			handleInstance(instances[id], callbacks, socket, query, offset);
-	}
+		if ( !(id in instances ) )
+			throw "Instance of id '" + id + "' not available for destruction!";
+
+		delete instances[id];
+	} else if ( !(id in instances ) )
+		throw "Unknown instance of id '" + id + "'!";
+	else  if (!instances[id]._xdh.handshakeDone) {
+		console.log("1");
+		instanceHandshake(instances[id], proxy);
+		console.log("2");
+		proxy.write(addString(convertSInt(id), "NJS"));
+		console.log("3");
+	} else
+		handleInstance(instances[id], callbacks, proxy);
 }
 
-function ignition(socket, createCallback, callbacks) {
-	let offset = 0;
-	let query = getQuery(socket);
-
-	socket.on('readable', () => serve(socket, createCallback, callbacks));
-
-	[token, offset] = getString(query, offset);
+function ignition(proxy, createCallback, callbacks) {
+	token = getString(proxy);
 
 	if (isTokenEmpty())
-		throw getString(query, offset)[0];	// Displays error message.
+		throw getString(proxy);	// Displays error message.
 
 	if (wPort !== ":0") {
-//		let completeURL = "http://" + wAddr + wPort + "/" + cgi + ".php?_token=" + token;
-		let completeURL = getString(query, offset)[0];
+		let completeURL = getString(proxy);
 
 		console.log(completeURL);
 		console.log(new Array(completeURL.length + 1).join('^'));
@@ -363,53 +418,57 @@ function ignition(socket, createCallback, callbacks) {
 		} else
 			open(completeURL);
 	}
+
+	proxy.socket().on('readable', () => serve(proxy, createCallback, callbacks));
 }
 
-function demoHandshake(socket, createCallback, callbacks, head) {
-	let offset = 0;
+function faasHandshake(proxy, createCallback, callbacks, head) {
 	let error = "";
 	let notification = "";
-	let query = getQuery(socket);
 
-	socket.once('readable', () => ignition(socket, createCallback, callbacks));
-
-	[error, offset] = getString(query, offset);
+	error = getString(proxy);
 
 	if (error !== "")
 		throw error;
 
-	[notification, offset] = getString(query, offset);
+	notification = getString(proxy);
+
+	proxy.socket().once('readable', () => ignition(proxy, createCallback, callbacks));
 
 	if (notification !== "")
 		console.log(notification);
 
-	socket.write(handleString(token));
+	proxy.write(handleString(token));
 
 	if (head === undefined)
 		head = "";
 
-	socket.write(handleString(head));
-	socket.write(handleString(wAddr));
+	proxy.write(handleString(head));
+	proxy.write(handleString(wAddr));
 }
 
 function pseudoServer(createCallback, callbacks, head) {
-	var socket = new net.Socket();
+	let socket = new net.Socket();
 
 	socket.on('error', (err) => {
-		throw "Error on connection to '" + pAddr + ":" + pPort + "' !!!";
+		throw "Unable to connect to '" + pAddr + ":" + pPort + "' !!!";
 	});
 
-	socket.connect(pPort, pAddr, () => {
-		socket.write(handleString(demoProtocolLabel));
-		socket.write(handleString(demoProtocolVersion));
+	console.log("Connecting to '" + pAddr + ":" + pPort + "'…");
 
-		socket.once('readable', () => demoHandshake(socket, createCallback, callbacks, head));
+	socket.connect(pPort, pAddr, () => {
+		console.log("Connected to '" + pAddr + ":" + pPort + "'.")
+		socket.once('readable', () => faasHandshake(new Proxy(socket), createCallback, callbacks, head));
+		
+		socket.write(handleString(faasProtocolLabel));
+		socket.write(handleString(faasProtocolVersion));
+
 	});
 }
 
 function launch(createCallback, callbacks, head) {
 	if (process.env.EPEIOS_SRC) {
-		console.log("DEMO mode !");
+		console.log("FAAS mode !");
 	}
 
 	setTimeout(() => pseudoServer(createCallback, callbacks, head), 0);
@@ -417,19 +476,19 @@ function launch(createCallback, callbacks, head) {
 
 function addTagged(data, argument) {
 	if (typeof argument === "string") {
-		return addString(Buffer.concat([data,Buffer.alloc(1,types.STRING)]), argument);
+		return addString(Buffer.concat([data,convertUInt(types.STRING)]), argument);
     } else if (typeof argument === "object") {
-		return addStrings(Buffer.concat([data,Buffer.alloc(1,types.STRINGS)]), argument);
+		return addStrings(Buffer.concat([data,convertUInt(types.STRINGS)]), argument);
     } else
 		throw "Unexpected argument type: " + typeof argument;
 }
 
 function call(instance, command, type) {
 	let i = 3;
-	let data = Buffer.alloc(1, instance._xdh.id);
+	let data = convertSInt(instance._xdh.id);
 	let amount = arguments.length-1;
     
-    data = Buffer.concat([addString(data,command), Buffer.alloc(1, type)])
+    data = Buffer.concat([addString(data,command),convertUInt(type)])
 
 //	console.log( Date.now(), " Command: ", command, instance._xdh.id);
 
@@ -438,7 +497,7 @@ function call(instance, command, type) {
 	while (i < amount)
 		data = addTagged(data, arguments[i++]);
     
-    data = Buffer.concat([data, Buffer.alloc(1, types.VOID)]) // To report end of argument list.
+    data = Buffer.concat([data, convertUInt(types.VOID)]) // To report end of argument list.
 
 	instance._xdh.callback = arguments[i++];
 

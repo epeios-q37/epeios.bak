@@ -25,20 +25,22 @@
 
 using namespace cio;
 
-static target__ Target_ = t_Undefined;
+namespace {
+	eType Type_ = t_Undefined;
 
-static flx::void_idriver___ _VInDriver;
-static flx::void_odriver___ _VOutDriver;
-static flx::void_odriver___ _VErrDriver;
+	flx::void_idriver___ _VInDriver;
+	flx::void_odriver___ _VOutDriver;
+	flx::void_odriver___ _VErrDriver;
 
-static iof::io_iflow_driver___ _SInDriver;
-static iof::io_oflow_driver___ _SOutDriver;
-static iof::io_oflow_driver___ _SErrDriver;
+	iof::io_iflow_driver___ _SInDriver;
+	iof::io_oflow_driver___ _SOutDriver;
+	iof::io_oflow_driver___ _SErrDriver;
 
-static set__
-	_Current,
-	_Console( _SInDriver, _SOutDriver, _SErrDriver ),
-	_Void( _VInDriver, _VOutDriver, _VErrDriver );
+	set__
+		_Current,
+		_Console( _SInDriver, _SOutDriver, _SErrDriver, tTerminal ),
+		_Void( _VInDriver, _VOutDriver, _VErrDriver, tVoid );
+}
 
 cif__ cio::CInF;
 cof___ cio::COutF, cio::CErrF;
@@ -97,10 +99,10 @@ static void InitializeConsole_( void )
 	_SErrDriver.Init( CErrDescriptor, fdr::ts_Default );
 }
 
-const set__ &cio::GetSet( target__ Target )
+const set__ &cio::GetSet( eType Type )
 {
-	switch ( Target ) {
-	case tConsole:
+	switch ( Type ) {
+	case tTerminal:
 		return GetConsoleSet();
 		break;
 	case tVoid:
@@ -117,20 +119,10 @@ const set__ &cio::GetSet( target__ Target )
 	return GetVoidSet();	// To avoid a warning.
 }
 
-target__ cio::GetTarget( const set__ &Set )
+void cio::Initialize( eType Type )
 {
-	if ( &Set == &GetConsoleSet() )
-		return tConsole;
-	else if ( &Set == &GetVoidSet() )
-		return tVoid;
-	else
-		return tUser;
-}
-
-void cio::Initialize( target__ Target )
-{
-	switch ( Target ) {
-	case tConsole:
+	switch ( Type ) {
+	case tTerminal:
 		CInF.Init( _SInDriver );
 		COutF.Init( _SOutDriver );
 		CErrF.Init( _SErrDriver );
@@ -156,13 +148,13 @@ void cio::Initialize( target__ Target )
 		break;
 	}
 
-	_Current.Init( CInF.RDriver(), COutF.WDriver(), CErrF.WDriver() );
+	_Current.Init( CInF.RDriver(), COutF.WDriver(), CErrF.WDriver(), Type );
 
 	cio::CIn.Init( CInF );
 	cio::COut.Init( COutF );
 	cio::CErr.Init( CErrF );
 
-	::Target_ = Target;
+	::Type_ = Type;
 }
 
 void cio::Initialize( const set__ &Set )
@@ -171,12 +163,12 @@ void cio::Initialize( const set__ &Set )
 	COutF.Init( Set.Out() );
 	CErrF.Init( Set.Err() );
 
-	Initialize( tUser );
+	Initialize( Set.Type() );
 }
 
-target__ cio::Target( void )
+eType cio::Type( void )
 {
-	return ::Target_;
+	return ::Type_;
 }
 
 fdr::rRDriver &cio::GetInDriver( void )

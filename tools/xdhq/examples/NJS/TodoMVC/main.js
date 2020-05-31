@@ -327,11 +327,11 @@ function main() {
 	let head = "";
 
 	switch (atlas.mode) {
-		case atlas.modes.PROD:
-			head = "HeadPROD.html";
+		case atlas.modes.SLFH:
+			head = "HeadSlfH.html";
 			break;
-		case atlas.modes.DEMO:
-			head = "HeadDEMO.html";
+		case atlas.modes.FAAS:
+			head = "HeadFaaS.html";
 			break;
 		default:
 			throw "Unknown mode !!!";

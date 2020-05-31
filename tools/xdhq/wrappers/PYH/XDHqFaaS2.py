@@ -42,9 +42,6 @@ def writeString(socket, string):
 	writeUInt(socket, len(string))
 	socket.send(string)
 
-def writeStringNUL(socket, string):
-	socket.send(string + "\0")
-
 def _readByte(socket):
 	return ord(socket.recv(1))
 

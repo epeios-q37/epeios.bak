@@ -32,6 +32,9 @@ var xdhelcqPath = "";
 var xdhelcqBin = "";
 var electronBin = "";
 
+const process = require("process");
+// process.on('uncaughtException', (err) => {console.log(err);process.exit()})
+
 if (process.env.Q37_EPEIOS) {
 	let epeiosToolsPath = "";
 	let binPath = "";
@@ -73,7 +76,7 @@ function launchDesktop(dir,prod) {
 			process.exit(code)
 		});
 	} else
-		throw "DEMO mode not available with desktop interface !!!";
+		throw "FaaS mode not available with desktop interface !!!";
 }
 
 const guis = {
@@ -92,13 +95,13 @@ if (false && xdhq.isDev()) {    // Deactivated until native version active again
 	mode = modes.PROD;
 	defaultGUI = guis.DESKTOP;
 } else {
-	mode = modes.DEMO;
+	mode = modes.FAAS;
 	defaultGUI = guis.NONE;
 }
 
 if (process.argv.length > 2)
 	if ( process.argv[2] === "W" )
-		mode = modes.DEMO;
+		mode = modes.FAAS;
 	else
 		mode = modes.PROD;
 		

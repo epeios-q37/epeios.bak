@@ -32,7 +32,6 @@ if sys.version_info[0] == 2:
 	l = XDHqFaaS2.l
 	_writeUInt = XDHqFaaS2.writeUInt
 	_writeString = XDHqFaaS2.writeString
-	_writeStringNUL = XDHqFaaS2.writeStringNUL
 	_readUInt = XDHqFaaS2.readUInt
 	_getString = XDHqFaaS2.getString
 	def _REPLit_convert(str):
@@ -43,7 +42,6 @@ elif sys.version_info[0] == 3:
 	l = XDHqFaaS3.l
 	_writeUInt = XDHqFaaS3.writeUInt
 	_writeString = XDHqFaaS3.writeString
-	_writeStringNUL = XDHqFaaS3.writeStringNUL
 	_readUInt = XDHqFaaS3.readUInt
 	_getString = XDHqFaaS3.getString
 	def _REPLit_convert(str):
@@ -167,10 +165,6 @@ def writeStrings(strings):
 
 	for string in strings:
 		writeString(string)
-
-def writeStringNUL(string):
-	global _socket
-	_writeStringNUL(_socket, string)
 
 def readUInt():
 	global _socket

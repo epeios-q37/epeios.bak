@@ -84,8 +84,8 @@ function readXSLAsset(xslContentOrFilename) {
 }
 
 const modes = {
-	DEMO: 0,
-	PROD: 1
+	FAAS: 0,
+	SFLH: 1
 };
 
 // {'a': b, 'c': d, 'e': f} -> ['a','c','e'] [b,d,f]
@@ -123,11 +123,11 @@ var call;
 
 function launch(callback, tagsAndCallbacks, head, mode) {
 	switch (mode) {
-		case modes.DEMO:
-			xdhq = require('./XDHqDEMO.js');
+		case modes.FAAS:
+			xdhq = require('./XDHqFAAS.js');
 			break;
-		case modes.PROD:
-			xdhq = require('./XDHqPROD.js');
+		case modes.SLFH:
+			xdhq = require('./XDHqSLFH.js');
 			break;
 		default:
 			throw "Unknown mode !!!";
@@ -168,7 +168,7 @@ class XDH {
 	handleLayoutXSL_(variant, id, xml, xslFilename, callback) {
 		let xslURL = xslFilename;
 
-		if (this._xdh.isDEMO)
+		if (this._xdh.isFAAS)
 			xslURL = "data:text/xml;charset=utf-8," + encodeURIComponent(readXSLAsset(xslFilename));
 
 		this.handleLayout_(variant, id, xml, xslURL, callback);

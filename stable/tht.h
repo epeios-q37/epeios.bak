@@ -336,6 +336,20 @@ namespace tht {
 		qRT
 		qRE
 		}
+		bso::sBool IsBlocked(void)
+		{
+			bso::sBool Blocked = false;
+		qRH
+			mtx::rHandle Mutex;
+		qRB
+			Mutex.InitAndLock( Local_ );
+
+			Blocked = mtx::IsLocked(Main_);
+		qRR
+		qRT
+		qRE
+			return Blocked;
+		}
 		void Unblock( void )
 		{
 		qRH

@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-//D Console Input/Output 
+//D Console Input/Output
 
 #ifndef CIO_INC_
 # define CIO_INC_
@@ -48,9 +48,21 @@ namespace cio {
 		}
 	}
 
+	qENUM( Type )
+	{
+		tTerminal,	// Read from/write to a terminal (mainly standard input/output).
+		tVoid,		// No reading available, and write is lost (useful for windows services).
+		tUser,		// Read from/write to user defined services ('C(Out|In|Err)Driver' have to be initialized).
+		tCurrent = tUser,
+		t_amount,
+		t_Undefined,
+		t_Default = tTerminal
+	};
+
 	class set__
 	{
 	private:
+		eType Type_;
 		fdr::iflow_driver_base___ *_In;
 		fdr::oflow_driver_base___
 			*_Out,
@@ -58,6 +70,7 @@ namespace cio {
 	public:
 		void reset( bso::bool__ = true )
 		{
+			Type_ = t_Undefined;
 			_In = NULL;
 			_Out = NULL;
 			_Err = NULL;
@@ -66,20 +79,27 @@ namespace cio {
 		set__(
 			fdr::iflow_driver_base___ &In,
 			fdr::oflow_driver_base___ &Out,
-			fdr::oflow_driver_base___ &Err )
+			fdr::oflow_driver_base___ &Err,
+			eType Type )
 		{
 			reset( false );
 
-			Init( In, Out, Err );
+			Init( In, Out, Err, Type );
 		}
 		void Init(
 			fdr::iflow_driver_base___ &In,
 			fdr::oflow_driver_base___ &Out,
-			fdr::oflow_driver_base___ &Err )
+			fdr::oflow_driver_base___ &Err,
+			eType Type )
 		{
 			_In = &In;
 			_Out = &Out;
 			_Err = &Err;
+			Type_ = Type;
+		}
+		eType Type(void) const
+		{
+			return Type_;
 		}
 		fdr::iflow_driver_base___ &In( void ) const
 		{
@@ -156,31 +176,17 @@ namespace cio {
 	extern txf::text_iflow__ CIn;
 	extern txf::text_oflow__ COut, CErr;
 
-	enum target__
-	{
-		tConsole,	// Lecture/criture de/dans la console.
-		tVoid,		// Lecture/criture de/dans rien (utile pour les service Windows).
-		tUser,		// Lecture/criture de/dans des dispositifs fournis par l'utilisateur (qui doit initialiser 'C(Out|In|Err)Driver').
-		tCurrent = tUser,
-		t_amount,
-		t_Undefined,
-		t_Default = tConsole
-	};
+	const set__ &GetSet(eType Type);
 
-	const set__ &GetSet( target__ Target );
+		void Initialize( eType Type );
 
-	target__ GetTarget( const set__ &Set );
+	void Initialize( const set__ &Set );
 
-	void Initialize( target__ Target );
-
-	void Initialize(
-		const set__ &Set );
-
-	target__ Target( void );
+	eType Type( void );
 
 	inline bso::bool__ IsInitialized( void )
 	{
-		return Target() != t_Undefined;
+		return Type() != t_Undefined;
 	}
 
 	fdr::rRDriver &GetInDriver( void );

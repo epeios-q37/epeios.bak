@@ -307,14 +307,14 @@ static void ErrFinal_( void )
 		qRH
 		qRB
 			if ( cio::IsInitialized() ) {
-				if ( cio::Target() == cio::tConsole ) {
+				if ( cio::Type() == cio::tTerminal ) {
 					cio::COut << txf::commit;
 					cio::CErr << txf::nl << txf::tab;
 				}
 
 				cio::CErr << "{ " << Message << " }";
 
-				if ( cio::Target() == cio::tConsole )
+				if ( cio::Type() == cio::tTerminal )
 					cio::CErr << txf::nl;
 
 				cio::CErr << txf::commit;

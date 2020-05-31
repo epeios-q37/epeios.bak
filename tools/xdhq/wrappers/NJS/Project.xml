@@ -48,8 +48,8 @@
 		<SourceDir>../..</SourceDir>
 	</SourceDirs>
 	<Files>
-		<File>XDHqDEMO.js</File>
-		<File>XDHqPROD.js</File>
+		<File>XDHqSLFH.js</File>
+		<File>XDHqFAAS.js</File>
 		<File>XDHqSHRD.js</File>
 		<File>XDHqXML.js</File>
 		<!--File Pack="No">XDHq.js</File-->
@@ -133,8 +133,8 @@
 						<File>TodoMVC.js</File>
 					</Files>
 					<Files Path="../common/TodoMVC/">
-						<File>HeadDEMO.html</File>
-						<File>HeadPROD.html</File>
+						<File>HeadFAAS.html</File>
+						<File>HeadSLFH.html</File>
 						<File>Main.html</File>
 						<File>Todos.xsl</File>
 					</Files>
@@ -146,7 +146,7 @@
 		<PreprocessorDefinition>E_ST</PreprocessorDefinition>
 	</PreprocessorDefinitions>
 	<!--
-	The default installation does NOT install the native code (Atlas toolkit DEMO mode),
+	The default installation does NOT install the native code (Atlas toolkit FaaS mode),
 	hence the packaging scripts explicitly skip all the native-related stuffs.
 	-->
 	<RTW Description="'XDHTML' wrapper." Keywords="XDHTML">

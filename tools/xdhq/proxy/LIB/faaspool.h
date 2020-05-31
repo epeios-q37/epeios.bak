@@ -70,6 +70,15 @@ namespace faaspool {
 			if ( P ) {
 				if (Mutex_ != mtx::Undefined)
 					mtx::Delete(Mutex_);
+
+				if ( Switch != NULL ) {
+					if ( !Read_.IsBlocked() ) {
+							if ( Switch->IsBlocked() )
+								Switch->Unblock();
+							else
+								qRGnr();
+					}
+				}
 			}
 
 			Mutex_ = mtx::Undefined;

@@ -90,14 +90,14 @@ void sclm::ErrorDefaultHandling(void)
 		qRH
 		qRB
 			if ( cio::IsInitialized() ) {
-				if ( cio::Target() == cio::tConsole ) {
+				if ( cio::Type() == cio::tTerminal ) {
 					cio::COut << txf::commit;
 					cio::CErr << txf::nl << txf::tab;
 				}
 
 				cio::CErr << "{ " << Message << " }";
 
-				if ( cio::Target() == cio::tConsole )
+				if ( cio::Type() == cio::tTerminal )
 					cio::CErr << txf::nl;
 
 				cio::CErr << txf::commit;
@@ -178,10 +178,8 @@ static void Initialize_( const sRack &Rack )
 	err::qRRor = Rack.qRRor;
 	scle::SCLEError = Rack.SCLError;
 
-	cio::target__ Target = cio::GetTarget( *Rack.CIO );
-
-	if ( Target != cio::tUser )
-		cio::Initialize( Target );
+	if ( Rack.CIO->Type() == cio::tVoid )
+		cio::Initialize( cio::tVoid );
 	else
 		cio::Initialize( *Rack.CIO );
 

@@ -660,11 +660,12 @@ namespace {
 		Handshake_( Driver );
 
 		if ( ( Backend = CreateBackend_( Driver, IP ) ) != NULL )
-			HandleSwitching_( Driver, Backend->TRow, Backend->Shareds, Backend->Switch );	// Doesn't return until disconnection or error.
+			HandleSwitching_( Driver, Backend->TRow, Backend->Shareds, Backend->Switch );	// Does not return until disconnection or error.
 	qRR;
+		sclm::ErrorDefaultHandling();	// Also resets the error, otherwise the `WaitUntilNoMoreClient()` will lead to a deadlock on next error.
 	qRT;
 		if ( Backend != NULL ) {
-			Backend->Driver = NULL;	// TThis signal that the backend is no more present.
+			Backend->Driver = NULL;	// This signals that the backend is no more present.
 			Backend->WaitUntilNoMoreClient();
 			Remove_( Backend->Row );
 			delete Backend;
