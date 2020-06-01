@@ -186,23 +186,37 @@ var length = 0;
 var buffer = Buffer.alloc(0);
 var string = "";
 var amount = 0;
-var strings = "";
+var strings = [];
+var id = "";	// Buffers the action related id.
+var cont = true;
+
+/********/
+/* DATA */
+/********/
 
 const d = {
-	UINT: 'a',
-	SINT: 'b',
-	LENGTH: 'c',
-	CONTENT: 'd',
-	STRING: 'e',
-	AMOUNT: 'f',
-	SUBSTRING: 'g',
-	STRINGS: 'h'
+	UINT: -1,
+	SINT: -2,
+	LENGTH: -3,
+	CONTENT: -4,
+	STRING: -5,
+	AMOUNT: -6,
+	SUBSTRING: -7,
+	STRINGS: -8
 }
 
 function push(op) {
 	stack.push(op);
 
 	switch ( op ) {
+	case d.STRINGS:
+		strings = [];
+		push(d.AMOUNT);
+		break;
+	case d.AMOUNT:
+		amount = 0;
+		push(d.UINT);
+		break;
 	case d.STRING:
 		buffer = Buffer.alloc(0);
 		push(d.LENGTH);
@@ -211,6 +225,9 @@ function push(op) {
 		length = 0;
 		push(d.UINT);
 		break;
+	case d.SINT:
+		sInt = 0;
+		push(d.UINT);
 	case d.UINT:
 		uInt = 0;
 		break;
@@ -237,10 +254,11 @@ function handleUInt(feeder) {
 }
 
 function handleContent(feeder) {
-	if ( feeder.isEmpty() )
+	if ( length === 0 )
+		return false;
+	else if ( feeder.isEmpty() )
 		return true;
-
-	if ( length !== 0 )
+	else
 		buffer = Buffer.concat([buffer,feeder.get(length-buffer.length)]);
 
 	return length !== buffer.length;
@@ -249,13 +267,21 @@ function handleContent(feeder) {
 function handleData(feeder) {
 	switch( top() ) {
 	case d.UINT:	// a, loop.
-		if ( !handleUInt(feeder) )
+		if ( !handleUInt(feeder) ) {
 			pop();
+			console.log("uInt: ", uInt);
+		}
+		break;
+	case d.SINT:
+		sInt = uInt & 1 ? -( ( uInt >> 1 ) + 1 ) : uInt >> 1;
+		pop();
+		console.log("sInt: ", sInt);
 		break;
 	case d.LENGTH:	// c.
 		length = uInt;
 		pop();
 		push(d.CONTENT);
+		console.log("length: ", length);
 		break;
 	case d.CONTENT:	// d, loop.
 		if ( !handleContent(feeder) )
@@ -265,7 +291,22 @@ function handleData(feeder) {
 		string = buffer.toString("utf-8");
 		pop();
 		break;
+	case d.AMOUNT:
+		pop();
+		amount = uInt;
+		push(d.STRING);
+		break;
+	case d.STRINGS:
+		strings.push(string);
+
+		if ( strings.length < amount)
+			push(d.STRINGS);
+		else
+			pop();
+		break;
 	default:
+		if ( top() < 0 )
+			throw "Unknown data operation";
 		return false;
 		break;
 	}
@@ -273,13 +314,268 @@ function handleData(feeder) {
 	return true;
 }
 
-var cont = true;
+/*********/
+/* SERVE */
+/*********/
+
+var instance = undefined;
+
+const s = {
+	SERVE: 300,
+	COMMAND: 301,
+	CREATION: 302,
+	CLOSING: 303,
+	HANDSHAKE: 304,
+	ERROR: 305,
+	LANGUAGE: 306,
+	LAUNCH: 307,
+	ID: 308,
+	ACTION: 309,
+	RESPONSE: 310,
+}
+
+function handleCommand(command) {
+	let IsCommand = true;
+
+	console.log(command);
+
+	switch (command) {
+	case -1:
+		throw "Received unexpected undefined command id!";
+		break;
+	case -2:
+		push(s.CREATION);
+		push(d.SINT);
+		break;
+	case -3:
+		push(s.CLOSING);
+		push(d.SINT);
+		break;
+	default:
+		if (command < 0 )
+			throw "Unknown command of id '" + command + "'!";
+		else
+			IsCommand = false;
+		break;
+	}
+
+	return IsCommand;
+}
+
+function handleCreation(id, socket, createCallback) {
+	if (id in instances)
+		throw "Instance of id  '" + id + "' exists but should not !";
+
+	let instance = createCallback();
+
+	instance._xdh = new Object;
+
+	instance._xdh.id = id;
+	instance._xdh.socket = socket;
+	instance._xdh.isFAAS = true;
+	instance._xdh.type = types.UNDEFINED;
+	instance._xdh.handshakeDone = false;	
+
+	instances[id] = instance;
+
+	socket.write(addString(addString(convertSInt(id), mainProtocolLabel), mainProtocolVersion));
+}
+
+function handleClosing(id) {
+	if ( !(id in instances ) )
+		throw "Instance of id '" + id + "' not available for destruction!";
+
+	delete instances[id];	
+}
+
+function callCallback(callback, instance, id, action) {
+	switch (callback.length) {
+	case 0:
+		return callback();
+	case 1:
+		return callback(instance);
+	case 2:
+		return callback(instance, id);
+	default:
+		return callback(instance, id, action);
+	}
+}
+
+function standBy(socket, instance) {
+	console.log(">>>>> Standby");
+	socket.write(addString(convertSInt(instance._xdh.id), "#StandBy_1"));
+}
+
+function handleLaunch(socket, id, action, callbacks) {
+	if ( instance === undefined)
+		throw "No instance set!";
+
+	if ((action === "") || !("_PreProcess" in callbacks) || callCallback(callbacks("_Preprocess", instance, id, action)))
+		if (callCallback(callbacks[action], instance, id, action) && ("_PreProcess" in callbacks))
+			callCallback(callbacks("_Postprocess", instance, id, action));
+
+	if (instance._xdh.type === types.UNDEFINED)
+		standBy(socket, instance);
+}
+
+function setResponse(type) {
+	push(s.RESPONSE);
+
+	switch( type ) {
+	case types.STRING:
+		push(d.STRING);
+		break;
+	case types.STRINGS:
+		push(d.STRINGS);
+		break;
+	default:
+		throw "Bad response type!";
+		break;
+	}	
+}
+
+function handleResponse (socket) {
+	if ( instance === undefined)
+		throw "No instance set!";
+
+	if (instance._xdh.callback !== undefined) {
+		let type = instance._xdh.type;
+
+		if (type === types.VOID) {
+			instance._xdh.callback();
+
+			if (instance._xdh.type === types.UNDEFINED)
+				standBy(socket, instance);
+		} else
+			setResponse(type);
+	} else {
+		if (instance._xdh.type !== types.VOID)
+			setResponse(proxy, instance._xdh.type);
+
+		instance._xdh.type = types.UNDEFINED;
+		standBy(socket, instance);
+	}
+}
+
+function serve(feeder, socket, createCallback, callbacks) {
+	while ( !feeder.isEmpty() || cont ) {
+		cont = false;
+
+		console.log(stack)
+		
+		switch (top()) {
+		case s.SERVE:
+			push(s.COMMAND);
+			push(d.SINT);
+			break;
+		case s.COMMAND:
+			pop();
+			if ( !handleCommand(sInt) ) {	// Makes the required 'push(…)'.
+				let id = sInt;
+
+				if ( !(id in instances ) )
+					throw "Unknown instance of id '" + id + "'!";
+
+				instance = instances[id];
+
+				if (!instances[id]._xdh.handshakeDone) {
+					push(s.HANDSHAKE);
+					push(s.ERROR)
+					push(d.STRING);
+				} else if ( instance._xdh.type === types.UNDEFINED) {
+					push(s.LAUNCH);
+					push(s.ID);
+					push(d.STRING);
+				} else {
+					handleResponse(socket);
+				}
+			}
+			break;
+		case s.CREATION:
+			pop();
+			handleCreation(sInt, socket, createCallback);
+			break;
+		case s.CLOSING:
+			pop();
+			handleClosing(sInt);
+			break;
+		case s.HANDSHAKE:
+			instance._xdh.handshakeDone = true;
+			socket.write(addString(convertSInt(instance._xdh.id), "NJS"));
+			pop();
+			break;	
+		case s.ERROR:
+			if ( string !== "" )
+				throw string;
+			
+			pop();
+			push(s.LANGUAGE);
+			push(d.STRING);
+			break;
+		case s.LANGUAGE:
+			// Currently not handled.
+			pop();
+			break;
+		case s.LAUNCH:
+			pop();
+			console.log(">>>>> Action:", string, id);
+			handleLaunch(socket, id, string, callbacks);
+			break;
+		case s.ID:
+			pop();
+			id = string;
+			push(s.ACTION);
+			push(d.STRING);
+			break;
+		case s.ACTION:
+			pop();
+			cont = true;
+			break;
+		case s.RESPONSE:
+			pop();
+
+			let type = instance._xdh.type;
+			let callback = instance._xdh.callback;
+			instance._xdh.type = types.UNDEFINED;
+
+			if ( callback !== undefined) {
+				switch ( type ) {
+				case types.UNDEFINED:
+					throw "Undefined type not allowed here!";
+					break;
+				case types.VOID:
+					callback();
+					break;
+				case types.STRING:
+					callback(string);
+					break;
+				case types.STRINGS:
+					callback(strings);
+					break;
+				default:
+					throw "Unknown type of value '" + type + "'!";
+					break;
+				}
+			} else
+				standBy(socket, instance);
+			break;
+		default:
+			if ( !handleData(feeder) )
+				throw "Unknown serve operation!"
+			break;
+		}
+	}
+}
+
+/************/
+/* IGNITION */
+/************/
 
 const i = {
-	IGNITION: '1',
-	TOKEN: '2',
-	ERROR: '3',
-	URL: '4'
+	IGNITION: 201,
+	TOKEN: 202,
+	ERROR: 203,
+	URL: 204
 }
 
 function handleURL(url) {
@@ -301,10 +597,12 @@ function ignition(feeder) {
 	while ( !feeder.isEmpty() || cont ) {
 		cont = false;
 		switch( top() ) {
-		case i.IGNITION:	// 4, out.
+		case i.IGNITION:
+			pop();
+			push(s.SERVE);
 			return false;
 			break;
-		case i.TOKEN:	// '5', out.
+		case i.TOKEN:
 			token = string;
 
 			pop();
@@ -316,10 +614,10 @@ function ignition(feeder) {
 				push(d.STRING);
 			}
 			break;
-		case i.ERROR:	// 9, out.
+		case i.ERROR:
 			throw string;
 			break;
-		case i.URL:	// 7, out.
+		case i.URL:
 			pop();
 			handleURL(string);
 			break;
@@ -333,10 +631,14 @@ function ignition(feeder) {
 	return true;
 }
 
+/*************/
+/* HANDSHAKE */
+/*************/
+
 const h = {
-	HANDSHAKE: '1',
-	ERROR: '2',
-	NOTIFICATION: '3',
+	HANDSHAKE: 101,
+	ERROR: 102,
+	NOTIFICATION: 103,
 }
 
 function handleNotification(socket, notification, head) {
@@ -357,14 +659,14 @@ function handshake(feeder, socket, head) {
 	while ( !feeder.isEmpty() || cont ) {
 		cont = false;
 		switch( top() ) {
-		case h.HANDSHAKE:	// 1.
+		case h.HANDSHAKE:
 			pop();
 			push(i.IGNITION);
 			push(i.TOKEN);
 			push(d.STRING);
 			return false;
 			break;
-		case h.ERROR:	// 2.
+		case h.ERROR:
 			if ( string.length )
 				throw string;
 
@@ -372,7 +674,7 @@ function handshake(feeder, socket, head) {
 			push(h.NOTIFICATION);
 			push(d.STRING);
 			break;
-		case h.NOTIFICATION:	// 3.
+		case h.NOTIFICATION:
 			if ( !handleNotification(socket, string, head) )
 				pop();
 			break;
@@ -386,31 +688,38 @@ function handshake(feeder, socket, head) {
 	return true;
 }
 
-const s = {
-	HANDSHAKE: '1',
-	IGNITION: '2',
-	SERVE: '3',
+const p = {
+	HANDSHAKE: 1,
+	IGNITION: 2,
+	SERVE: 3,
 }
 
-var step = s.HANDSHAKE;
+var phase = p.HANDSHAKE;
 
 function onRead(data, socket, createCallback, callbacks, head) {
+
+	console.log(">>>>> DATA:", data.length);
+
 	let feeder = new Feeder(data);
 
-	while ( !feeder.isEmpty() )
-		switch ( step ) {
-		case s.HANDSHAKE:
+	while ( !feeder.isEmpty() ) {
+		switch ( phase ) {
+		case p.HANDSHAKE:
 			if ( !handshake(feeder, socket, head) )
-				step = s.IGNITION;
+				phase = p.IGNITION;
 			break;
-		case s.IGNITION:
+		case p.IGNITION:
 			if ( !ignition(feeder) )
-				step = s.SERVE;
+				phase = p.SERVE;
 			break;
-		case s.SERVE:
-			throw "SERVE";
+		case p.SERVE:
+			serve(feeder, socket, createCallback, callbacks);
+			break;
+		default:
+			throw "Unknown phase of value '" + step + "'!";
 			break;
 		}
+	}
 }
 
 function launch(createCallback, callbacks, head) {
@@ -434,5 +743,45 @@ function launch(createCallback, callbacks, head) {
 	});	
 }
 
+function addTagged(data, argument) {
+	if (typeof argument === "string") {
+		return addString(Buffer.concat([data,convertUInt(types.STRING)]), argument);
+    } else if (typeof argument === "object") {
+		return addStrings(Buffer.concat([data,convertUInt(types.STRINGS)]), argument);
+    } else
+		throw "Unexpected argument type: " + typeof argument;
+}
+
+function call(instance, command, type) {
+	console.log(">>>>> Call command:", instance._xdh.id, command);
+
+	let i = 3;
+	let data = convertSInt(instance._xdh.id);
+	let amount = arguments.length-1;
+    
+    data = Buffer.concat([addString(data,command),convertUInt(type)])
+
+//	console.log( Date.now(), " Command: ", command, instance._xdh.id);
+
+	instance._xdh.type = type;
+
+	while (i < amount)
+		data = addTagged(data, arguments[i++]);
+    
+    data = Buffer.concat([data, convertUInt(types.VOID)]) // To report end of argument list.
+
+	instance._xdh.callback = arguments[i++];
+
+	instance._xdh.socket.write(data);
+
+	console.log("Yo");
+
+	if ( type === types.VOID ) {
+		push(s.RESPONSE);
+		cont = true;
+	}
+}
+
 module.exports.launch = launch;
+module.exports.call = call;
 
