@@ -87,6 +87,16 @@ const mainProtocolVersion = "0";
 const faasProtocolLabel = "7b4b6bea-2432-4584-950b-e595c9e391e1";
 const faasProtocolVersion = "0";
 
+var token = getEnv("ATK_TOKEN");
+
+if (token !== "" )
+	token = "&" + token;
+
+
+function isTokenEmpty() {
+	return ( token === "" ) || ( token.charAt( 0 ) === '&' );
+}	
+
 function byteLength(str) {
 	// returns the byte length of an utf8 string
 	let s = str.length;
@@ -97,96 +107,6 @@ function byteLength(str) {
 		if (code >= 0xDC00 && code <= 0xDFFF) i--; //trail surrogate
 	}
 	return s;
-}
-
-class Proxy {
-	get_() {
-		let buffer;
-		let data = Buffer.alloc(0);
-	
-		while (null !== (buffer = this.socket_.read()))
-			data = Buffer.concat([data, buffer]);
-	
-		if (data.length === 0)
-			throw "Connection lost!";
-	
-		console.log("G: ", data.length);
-
-		return data;
-	}
-	
-	constructor(socket) {
-		this.socket_ = socket;
-		this.size_ = 0;
-	}
-
-	get(size) {
-		let data = Buffer.alloc(0);
-
-		console.log("S: ", size)
-
-		while ( size > 0 ) {
-			if ( this.size_ === 0 ) {
-				this.data_ = this.get_();
-				this.size_ = this.data_.length;
-			}
-
-			if ( this.size_ > size )  {
-				data = Buffer.concat([data,this.data_.subarray(0, size)]);
-				this.data_ = this.data_.subarray(size);
-				this.size_ -= size;
-				size = 0;
-			} else {
-				data = Buffer.concat([data,this.data_.subarray(0, this.size_)]);
-				size -= this.size_;
-				this.size_ = 0;
-			}
-		}
-
-		return data;
-	}
-
-	write(data) {
-		this.socket_.write(data);
-	}
-
-	socket() {
-		return this.socket_;
-	}
-}
-
-function readUInt(proxy) {
-	let byte = proxy.get(1)[0];
-	let value = byte & 0x7f;
-
-	while (byte & 0x80) {
-		byte = proxy.get(1)[0];
-
-		value = (value << 7) + (byte & 0x7f);
-	}
-
-	return value;
-}
-
-function readSInt(proxy) {
-	let value = readUInt(proxy);
-
-	return value & 1 ? -( ( value >> 1 ) + 1 ) : value >> 1;
-}
-
-function getString(proxy) {
-	return proxy.get(readUInt(proxy)).toString("utf-8");
-}
-
-function getStrings(proxy) {
-	let amount = readUInt(proxy);
-	let strings = new Array();
-
-	while (amount--) {
-		strings.push(getString(proxy));
-	}
-
-	return strings;
 }
 
 function convertUInt(value) {
@@ -231,223 +151,212 @@ function handleString(string) {
 	return data;
 }
 
-function getResponse(proxy, type) {
-	switch (type) {
-		case types.UNDEFINED:
-			throw "This function should not be called with UNDEFINED type !!!";
-			break;
-		case types.VOID:
-			throw "The VOID type should be handled upstream !!!";
-			break;
-		case types.STRING:
-			return getString(proxy);
-			break;
-		case types.STRINGS:
-			return getStrings(proxy);
-			break;
-		default:
-			throw "Unknown response type !!!";
-			break;
+class Feeder {
+	constructor(data) {
+		this.data_ = data;
+	}
+	isEmpty() {
+		return this.data_.length === 0;
+	}
+	get(size) {
+		if ( this.data_.length === 0 )
+			throw "No data available!";
+
+		if ( size > this.data_.length)
+			size = this.data_.length;
+
+		if ( size === 0 )
+			throw "'size' can not be 0!"
+
+		let data = this.data_.subarray(0,size);
+
+		this.data_ = this.data_.subarray(size);
+
+		console.log("G: ", data);
+
+		return data;
 	}
 }
 
-function getToken() {
-	return getEnv("ATK_TOKEN");
+const op = {
+	// Action.
+	HANDSHAKE: '1',
+	HANDSHAKE_ERROR: '2',
+	NOTIFICATION: '3',
+	IGNITION: '4',
+	TOKEN: '5',
+	IGNITION_ERROR: '6',
+	URL: '7',
+	// Data.
+	UINT: 'a',
+	SINT: 'b',
+	LENGTH: 'c',
+	CONTENT: 'd',
+	STRING: 'e',
+	AMOUNT: 'f',
+	SUBSTRING: 'g',
+	STRINGS: 'h'
 }
 
-let token = getToken();
+var stack = new Array();
+var uInt = 0;
+var sInt = 0;
+var length = 0;
+var buffer = Buffer.alloc(0);
+var string = "";
+var amount = 0;
+var strings = "";
+var cont = true;
 
-if (token !== "" )
-	token = "&" + token;
+function push(operation) {
+	stack.push(operation);
 
-function standBy(proxy, instance) {
-  	proxy.write(addString(convertSInt(instance._xdh.id), "#StandBy_1"));
-}
-
-function isTokenEmpty() {
-	return ( token === "" ) || ( token.charAt( 0 ) === '&' );
-}
-
-function createInstance(id, socket, createCallback) {
-	let instance = createCallback();
-
-	instance._xdh = new Object;
-
-	instance._xdh.id = id;
-	instance._xdh.socket = socket;
-	instance._xdh.isFAAS = true;
-	instance._xdh.type = types.UNDEFINED;
-	instance._xdh.handshakeDone = false;
-
-	return instance;
-}
-
-function instanceHandshake(instance, proxy) {
-	console.log("4");
-
-	let errorMessage = getString(proxy);
-	console.log("5");
-
-	if (errorMessage !== "")
-		throw (errorMessage);
-
-	console.log("6");
-
-	getString(proxy);
-
-	instance._xdh.handshakeDone = true;
-}
-
-function callCallback_(callback, instance, id, action) {
-	switch (callback.length) {
-		case 0:
-			return callback();
-		case 1:
-			return callback(instance);
-		case 2:
-			return callback(instance, id);
-		default:
-			return callback(instance, id, action);
+	switch ( operation ) {
+	case op.STRING:
+		buffer = Buffer.alloc(0);
+		push(op.LENGTH);
+		break;
+	case op.LENGTH:
+		length = 0;
+		push(op.UINT);
+		break;
+	case op.UINT:
+		uInt = 0;
+		break;
 	}
 }
 
-function handleInstance(instance, callbacks, proxy) {
-	let cont = true;
-
-	if (instance._xdh.type === types.UNDEFINED) {
-		let id, action;
-
-		id = getString(proxy);
-		action = getString(proxy);
-
-		console.log(action, id);
-
-		if ((action === "") || !("_PreProcess" in callbacks) || callCallback_(callbacks("_Preprocess", instance, id, action)))
-			if (callCallback_(callbacks[action], instance, id, action) && ("_PreProcess" in callbacks))
-				callCallback_(callbacks("_Postprocess", instance, id, action));
-
-		if (instance._xdh.type === types.UNDEFINED) {
-			cont = false;
-			standBy(proxy, instance);
-		} else
-			cont = instance._xdh.type === types.VOID;
-	}
-
-	while (cont) {	// Pending callbacks are handled as long as they don't have a return value.
-		if (instance._xdh.callback !== undefined) {
-			let type = instance._xdh.type;
-			instance._xdh.type = types.UNDEFINED;
-			if (type === types.VOID)
-				instance._xdh.callback();
-			else
-				instance._xdh.callback(getResponse(proxy, type));
-
-			if (instance._xdh.type === types.UNDEFINED) {
-				cont = false;
-				standBy(proxy, instance);
-			} else if (instance._xdh.type !== types.VOID)
-				cont = false;
-		} else {
-			if (instance._xdh.type !== types.VOID)
-				getResponse(proxy, instance._xdh.type);
-
-			instance._xdh.type = types.UNDEFINED;
-			cont = false;
-			standBy(proxy, instance);
-		}
-	}
+function pop() {
+	cont = true;
+	return stack.pop();
 }
 
-function serve(proxy, createCallback, callbacks) {
-	let id = 0;
-
-	console.log("Serve");
-	
-	id = readSInt(proxy);
-
-	console.log("Id: ", id);
-
-	if (id === -1)	// Should nerver happen.
-		throw "Received unexpected undefined command id!";
-	else if (id === -2) {  //# Value reporting a new front-end.
-		id = readSInt(proxy)  // The id of the new front-end.
-
-		if (id in instances)
-			throw "Instance of id  '" + id + "' exists but should not !";
-
-		instances[id] = createInstance(id, proxy.socket(), createCallback);
-		proxy.write(addString(addString(convertSInt(id), mainProtocolLabel), mainProtocolVersion));
-	} else if (id == -3) {	// Instructs to close a session.
-		id = readSInt(proxy)  // The id of the session to close.
-
-		if ( !(id in instances ) )
-			throw "Instance of id '" + id + "' not available for destruction!";
-
-		delete instances[id];
-	} else if ( !(id in instances ) )
-		throw "Unknown instance of id '" + id + "'!";
-	else  if (!instances[id]._xdh.handshakeDone) {
-		console.log("1");
-		instanceHandshake(instances[id], proxy);
-		console.log("2");
-		proxy.write(addString(convertSInt(id), "NJS"));
-		console.log("3");
-	} else
-		handleInstance(instances[id], callbacks, proxy);
+function top() {
+	return stack[stack.length - 1];
 }
 
-function ignition(proxy, createCallback, callbacks) {
-	token = getString(proxy);
+function handleUInt(feeder) {
+	if ( feeder.isEmpty() )
+		return true;
 
-	if (isTokenEmpty())
-		throw getString(proxy);	// Displays error message.
+	let byte = feeder.get(1)[0];
+	uInt = (uInt << 7 ) + (byte & 0x7f);
 
-	if (wPort !== ":0") {
-		let completeURL = getString(proxy);
-
-		console.log(completeURL);
-		console.log(new Array(completeURL.length + 1).join('^'));
-		console.log("Open above URL in a web browser. Enjoy!\n");
-
-		if (getEnv("ATK") === "REPLit") {
-			REPLit(completeURL);
-//			console.log("\nIF THE PROGRAM DOES NOT WORK PROPERLY, PLEASE SEE http://q37.info/s/zbgfjtp9");
-			console.log("IF THE PROGRAM DOES NOT WORK PROPERLY, YOU PROBABLY FORGOT TO FORK!");
-			console.log("See http://q37.info/s/zbgfjtp9 for more details.");
-
-		} else
-			open(completeURL);
-	}
-
-	proxy.socket().on('readable', () => serve(proxy, createCallback, callbacks));
+	return byte & 0x80;
 }
 
-function faasHandshake(proxy, createCallback, callbacks, head) {
-	let error = "";
-	let notification = "";
+function handleContent(feeder) {
+	if ( feeder.isEmpty() )
+		return true;
 
-	error = getString(proxy);
+	if ( length !== 0 )
+		buffer = Buffer.concat([buffer,feeder.get(length-buffer.length)]);
 
-	if (error !== "")
-		throw error;
+	return length !== buffer.length;
+}
 
-	notification = getString(proxy);
-
-	proxy.socket().once('readable', () => ignition(proxy, createCallback, callbacks));
-
-	if (notification !== "")
+function handleNotification(socket, notification, head) {
+	if ( notification !== "" )
 		console.log(notification);
 
-	proxy.write(handleString(token));
+	socket.write(handleString(token));
 
 	if (head === undefined)
 		head = "";
 
-	proxy.write(handleString(head));
-	proxy.write(handleString(wAddr));
+	socket.write(handleString(head));
+	socket.write(handleString(wAddr));
 }
 
-function pseudoServer(createCallback, callbacks, head) {
+function handleURL(url) {
+	console.log(url);
+	console.log(new Array(url.length + 1).join('^'));
+	console.log("Open above URL in a web browser. Enjoy!\n");
+
+	if (getEnv("ATK") === "REPLit") {
+		REPLit(url);
+//			console.log("\nIF THE PROGRAM DOES NOT WORK PROPERLY, PLEASE SEE http://q37.info/s/zbgfjtp9");
+		console.log("IF THE PROGRAM DOES NOT WORK PROPERLY, YOU PROBABLY FORGOT TO FORK!");
+		console.log("See http://q37.info/s/zbgfjtp9 for more details.");
+
+	} else
+		open(url);	
+}
+
+
+function handle(feeder, socket, createCallbacks, callbacks, head) {
+	while ( !feeder.isEmpty() || cont ) {
+		cont = false;
+		switch( top() ) {
+		case op.HANDSHAKE:	// 1, out.
+			pop();
+			push(op.IGNITION);
+			push(op.TOKEN);
+			push(op.STRING);
+			break;
+		case op.IGNITION:	// 4, out.
+			throw "Ignition ended";
+			break;
+		case op.HANDSHAKE_ERROR:	// 2, out.
+			if ( string.length )
+				throw string;
+
+			pop();
+			push(op.NOTIFICATION);
+			push(op.STRING);
+			break;
+		case op.NOTIFICATION:	// 3, out.
+			if ( !handleNotification(socket, string, head) )
+				pop();
+			break;
+		case op.TOKEN:	// '5', out.
+			token = string;
+
+			pop();
+
+			if ( isTokenEmpty() )
+				push(op.IGNITION_ERROR);
+			else {
+				push(op.URL);
+				push(op.STRING);
+			}
+			break;
+		case op.IGNITION_ERROR:	// 9, out.
+			throw string;
+			break;
+		case op.URL:	// 7, out.
+			pop();
+			handleURL(string);
+			break;
+		// Data handling.
+		case op.STRING:	// e, out.
+			string = buffer.toString("utf-8");
+			pop();
+			break;
+		case op.LENGTH:	// c, out.
+			length = uInt;
+			pop();
+			push(op.CONTENT);
+			break;
+		case op.UINT:	// a, Loop.
+			if ( !handleUInt(feeder) )
+				pop();
+			break;
+		case op.CONTENT:	// d, loop.
+			if ( !handleContent(feeder) )
+				pop();
+			break;
+		}
+	}
+}
+
+function onRead(data, socket, createCallback, callbacks, head) {
+	let feeder = new Feeder(data);
+
+	handle(feeder, socket, createCallback, callbacks, head);
+}
+
+function launch(createCallback, callbacks, head) {
 	let socket = new net.Socket();
 
 	socket.on('error', (err) => {
@@ -458,51 +367,15 @@ function pseudoServer(createCallback, callbacks, head) {
 
 	socket.connect(pPort, pAddr, () => {
 		console.log("Connected to '" + pAddr + ":" + pPort + "'.")
-		socket.once('readable', () => faasHandshake(new Proxy(socket), createCallback, callbacks, head));
+		push(op.HANDSHAKE);
+		push(op.HANDSHAKE_ERROR);
+		push(op.STRING);
+		socket.on('data', (data) => onRead(data, socket, createCallback, callbacks, head));
 		
 		socket.write(handleString(faasProtocolLabel));
 		socket.write(handleString(faasProtocolVersion));
-
-	});
-}
-
-function launch(createCallback, callbacks, head) {
-	if (process.env.EPEIOS_SRC) {
-		console.log("FAAS mode !");
-	}
-
-	setTimeout(() => pseudoServer(createCallback, callbacks, head), 0);
-}
-
-function addTagged(data, argument) {
-	if (typeof argument === "string") {
-		return addString(Buffer.concat([data,convertUInt(types.STRING)]), argument);
-    } else if (typeof argument === "object") {
-		return addStrings(Buffer.concat([data,convertUInt(types.STRINGS)]), argument);
-    } else
-		throw "Unexpected argument type: " + typeof argument;
-}
-
-function call(instance, command, type) {
-	let i = 3;
-	let data = convertSInt(instance._xdh.id);
-	let amount = arguments.length-1;
-    
-    data = Buffer.concat([addString(data,command),convertUInt(type)])
-
-//	console.log( Date.now(), " Command: ", command, instance._xdh.id);
-
-	instance._xdh.type = type;
-
-	while (i < amount)
-		data = addTagged(data, arguments[i++]);
-    
-    data = Buffer.concat([data, convertUInt(types.VOID)]) // To report end of argument list.
-
-	instance._xdh.callback = arguments[i++];
-
-	instance._xdh.socket.write(data);
+	});	
 }
 
 module.exports.launch = launch;
-module.exports.call = call;
+
