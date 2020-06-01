@@ -172,22 +172,23 @@ class Feeder {
 
 		this.data_ = this.data_.subarray(size);
 
-		console.log("G: ", data);
+//		console.log("G: ", data);
 
 		return data;
 	}
 }
 
-const op = {
-	// Action.
-	HANDSHAKE: '1',
-	HANDSHAKE_ERROR: '2',
-	NOTIFICATION: '3',
-	IGNITION: '4',
-	TOKEN: '5',
-	IGNITION_ERROR: '6',
-	URL: '7',
-	// Data.
+var stack = new Array();
+
+var uInt = 0;
+var sInt = 0;
+var length = 0;
+var buffer = Buffer.alloc(0);
+var string = "";
+var amount = 0;
+var strings = "";
+
+const d = {
 	UINT: 'a',
 	SINT: 'b',
 	LENGTH: 'c',
@@ -198,29 +199,19 @@ const op = {
 	STRINGS: 'h'
 }
 
-var stack = new Array();
-var uInt = 0;
-var sInt = 0;
-var length = 0;
-var buffer = Buffer.alloc(0);
-var string = "";
-var amount = 0;
-var strings = "";
-var cont = true;
+function push(op) {
+	stack.push(op);
 
-function push(operation) {
-	stack.push(operation);
-
-	switch ( operation ) {
-	case op.STRING:
+	switch ( op ) {
+	case d.STRING:
 		buffer = Buffer.alloc(0);
-		push(op.LENGTH);
+		push(d.LENGTH);
 		break;
-	case op.LENGTH:
+	case d.LENGTH:
 		length = 0;
-		push(op.UINT);
+		push(d.UINT);
 		break;
-	case op.UINT:
+	case d.UINT:
 		uInt = 0;
 		break;
 	}
@@ -255,17 +246,40 @@ function handleContent(feeder) {
 	return length !== buffer.length;
 }
 
-function handleNotification(socket, notification, head) {
-	if ( notification !== "" )
-		console.log(notification);
+function handleData(feeder) {
+	switch( top() ) {
+	case d.UINT:	// a, loop.
+		if ( !handleUInt(feeder) )
+			pop();
+		break;
+	case d.LENGTH:	// c.
+		length = uInt;
+		pop();
+		push(d.CONTENT);
+		break;
+	case d.CONTENT:	// d, loop.
+		if ( !handleContent(feeder) )
+			pop();
+		break;
+	case d.STRING:	// e.
+		string = buffer.toString("utf-8");
+		pop();
+		break;
+	default:
+		return false;
+		break;
+	}
 
-	socket.write(handleString(token));
+	return true;
+}
 
-	if (head === undefined)
-		head = "";
+var cont = true;
 
-	socket.write(handleString(head));
-	socket.write(handleString(wAddr));
+const i = {
+	IGNITION: '1',
+	TOKEN: '2',
+	ERROR: '3',
+	URL: '4'
 }
 
 function handleURL(url) {
@@ -283,77 +297,120 @@ function handleURL(url) {
 		open(url);	
 }
 
-
-function handle(feeder, socket, createCallbacks, callbacks, head) {
+function ignition(feeder) {
 	while ( !feeder.isEmpty() || cont ) {
 		cont = false;
 		switch( top() ) {
-		case op.HANDSHAKE:	// 1, out.
-			pop();
-			push(op.IGNITION);
-			push(op.TOKEN);
-			push(op.STRING);
+		case i.IGNITION:	// 4, out.
+			return false;
 			break;
-		case op.IGNITION:	// 4, out.
-			throw "Ignition ended";
-			break;
-		case op.HANDSHAKE_ERROR:	// 2, out.
-			if ( string.length )
-				throw string;
-
-			pop();
-			push(op.NOTIFICATION);
-			push(op.STRING);
-			break;
-		case op.NOTIFICATION:	// 3, out.
-			if ( !handleNotification(socket, string, head) )
-				pop();
-			break;
-		case op.TOKEN:	// '5', out.
+		case i.TOKEN:	// '5', out.
 			token = string;
 
 			pop();
 
 			if ( isTokenEmpty() )
-				push(op.IGNITION_ERROR);
+				push(i.ERROR);
 			else {
-				push(op.URL);
-				push(op.STRING);
+				push(i.URL);
+				push(d.STRING);
 			}
 			break;
-		case op.IGNITION_ERROR:	// 9, out.
+		case i.ERROR:	// 9, out.
 			throw string;
 			break;
-		case op.URL:	// 7, out.
+		case i.URL:	// 7, out.
 			pop();
 			handleURL(string);
 			break;
-		// Data handling.
-		case op.STRING:	// e, out.
-			string = buffer.toString("utf-8");
-			pop();
-			break;
-		case op.LENGTH:	// c, out.
-			length = uInt;
-			pop();
-			push(op.CONTENT);
-			break;
-		case op.UINT:	// a, Loop.
-			if ( !handleUInt(feeder) )
-				pop();
-			break;
-		case op.CONTENT:	// d, loop.
-			if ( !handleContent(feeder) )
-				pop();
+		default:
+			if ( !handleData(feeder) )
+				throw "Unknown ignition operation!"
 			break;
 		}
 	}
+
+	return true;
 }
+
+const h = {
+	HANDSHAKE: '1',
+	ERROR: '2',
+	NOTIFICATION: '3',
+}
+
+function handleNotification(socket, notification, head) {
+	if ( notification !== "" )
+		console.log(notification);
+
+	socket.write(handleString(token));
+
+	if (head === undefined)
+		head = "";
+
+	socket.write(handleString(head));
+	socket.write(handleString(wAddr));
+}
+
+
+function handshake(feeder, socket, head) {
+	while ( !feeder.isEmpty() || cont ) {
+		cont = false;
+		switch( top() ) {
+		case h.HANDSHAKE:	// 1.
+			pop();
+			push(i.IGNITION);
+			push(i.TOKEN);
+			push(d.STRING);
+			return false;
+			break;
+		case h.ERROR:	// 2.
+			if ( string.length )
+				throw string;
+
+			pop();
+			push(h.NOTIFICATION);
+			push(d.STRING);
+			break;
+		case h.NOTIFICATION:	// 3.
+			if ( !handleNotification(socket, string, head) )
+				pop();
+			break;
+		default:
+			if ( !handleData(feeder) )
+				throw "Unknown handshake operation!";
+			break;
+		}
+	}
+
+	return true;
+}
+
+const s = {
+	HANDSHAKE: '1',
+	IGNITION: '2',
+	SERVE: '3',
+}
+
+var step = s.HANDSHAKE;
 
 function onRead(data, socket, createCallback, callbacks, head) {
 	let feeder = new Feeder(data);
 
-	handle(feeder, socket, createCallback, callbacks, head);
+	while ( !feeder.isEmpty() )
+		switch ( step ) {
+		case s.HANDSHAKE:
+			if ( !handshake(feeder, socket, head) )
+				step = s.IGNITION;
+			break;
+		case s.IGNITION:
+			if ( !ignition(feeder) )
+				step = s.SERVE;
+			break;
+		case s.SERVE:
+			throw "SERVE";
+			break;
+		}
 }
 
 function launch(createCallback, callbacks, head) {
@@ -367,9 +424,9 @@ function launch(createCallback, callbacks, head) {
 
 	socket.connect(pPort, pAddr, () => {
 		console.log("Connected to '" + pAddr + ":" + pPort + "'.")
-		push(op.HANDSHAKE);
-		push(op.HANDSHAKE_ERROR);
-		push(op.STRING);
+		push(h.HANDSHAKE);
+		push(h.ERROR);
+		push(d.STRING);
 		socket.on('data', (data) => onRead(data, socket, createCallback, callbacks, head));
 		
 		socket.write(handleString(faasProtocolLabel));
