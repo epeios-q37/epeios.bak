@@ -89,11 +89,7 @@ function newSession() {
 
 function acConnect(dom, id) {
 	dom.setLayout("", readAsset("Main.html"),
-		() => dom.focus("Pseudo",
-			() => dom.setTimeout(1000, "Update",
-				() => displayMessages(dom)
-			)
-		)
+		() => dom.focus("Pseudo", () => displayMessages(dom))
 	);
 }
 
@@ -159,18 +155,12 @@ function acSubmitMessage(dom, id) {
 	);
 }
 
-function acUpdate(dom, id) {
-	dom.setTimeout(1000, "Update",
-		() => displayMessages(dom)
-	);
-}
-
 function main() {
 	const callbacks = {
 		"": acConnect,
 		"SubmitPseudo": acSubmitPseudo,
 		"SubmitMessage": acSubmitMessage,
-		"Update": acUpdate
+		"Update": () => displayMessages(dom)
 	};
 
 	atlas.launch(newSession, callbacks, readAsset( "Head.html") );

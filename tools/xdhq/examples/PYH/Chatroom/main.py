@@ -143,7 +143,7 @@ callbacks = {
 		"": ac_connect,
 		"SubmitPseudo": ac_submit_pseudo,
 		"SubmitMessage": ac_submit_message,
-		"Update": ac_update,
+		"Update": (dom) => hatroom.display_messages(dom))
 	}
 		
 Atlas.launch(callbacks, Chatroom, read_asset("Head.html"), "Chatroom")

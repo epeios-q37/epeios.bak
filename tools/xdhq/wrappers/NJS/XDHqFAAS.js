@@ -172,8 +172,6 @@ class Feeder {
 
 		this.data_ = this.data_.subarray(size);
 
-//		console.log("G: ", data);
-
 		return data;
 	}
 }
@@ -269,19 +267,19 @@ function handleData(feeder) {
 	case d.UINT:	// a, loop.
 		if ( !handleUInt(feeder) ) {
 			pop();
-			console.log("uInt: ", uInt);
+			// console.log("uInt: ", uInt);
 		}
 		break;
 	case d.SINT:
 		sInt = uInt & 1 ? -( ( uInt >> 1 ) + 1 ) : uInt >> 1;
 		pop();
-		console.log("sInt: ", sInt);
+		// console.log("sInt: ", sInt);
 		break;
 	case d.LENGTH:	// c.
 		length = uInt;
 		pop();
 		push(d.CONTENT);
-		console.log("length: ", length);
+		// console.log("length: ", length);
 		break;
 	case d.CONTENT:	// d, loop.
 		if ( !handleContent(feeder) )
@@ -298,9 +296,10 @@ function handleData(feeder) {
 		break;
 	case d.STRINGS:
 		strings.push(string);
+		// console.log("S:", amount, strings);
 
 		if ( strings.length < amount)
-			push(d.STRINGS);
+			push(d.STRING);
 		else
 			pop();
 		break;
@@ -337,7 +336,7 @@ const s = {
 function handleCommand(command) {
 	let IsCommand = true;
 
-	console.log(command);
+	// console.log(command);
 
 	switch (command) {
 	case -1:
@@ -362,6 +361,15 @@ function handleCommand(command) {
 	return IsCommand;
 }
 
+function fillXDH(xdh, id, socket) {
+	xdh.id = id;
+	xdh.socket = socket;
+	xdh.isFAAS = true;
+	xdh.type = types.UNDEFINED;
+	xdh.handshakeDone = false;
+	xdh.queued = [];
+}
+
 function handleCreation(id, socket, createCallback) {
 	if (id in instances)
 		throw "Instance of id  '" + id + "' exists but should not !";
@@ -370,11 +378,7 @@ function handleCreation(id, socket, createCallback) {
 
 	instance._xdh = new Object;
 
-	instance._xdh.id = id;
-	instance._xdh.socket = socket;
-	instance._xdh.isFAAS = true;
-	instance._xdh.type = types.UNDEFINED;
-	instance._xdh.handshakeDone = false;	
+	fillXDH(instance._xdh, id, socket);
 
 	instances[id] = instance;
 
@@ -401,21 +405,21 @@ function callCallback(callback, instance, id, action) {
 	}
 }
 
-function standBy(socket, instance) {
-	console.log(">>>>> Standby");
+function standBy(socket, instance, s) {
+	// console.log(">>>>> Standby", s);
 	socket.write(addString(convertSInt(instance._xdh.id), "#StandBy_1"));
 }
 
-function handleLaunch(socket, id, action, callbacks) {
+function handleLaunch(socket, id, action, actionCallbacks) {
 	if ( instance === undefined)
 		throw "No instance set!";
 
-	if ((action === "") || !("_PreProcess" in callbacks) || callCallback(callbacks("_Preprocess", instance, id, action)))
-		if (callCallback(callbacks[action], instance, id, action) && ("_PreProcess" in callbacks))
-			callCallback(callbacks("_Postprocess", instance, id, action));
+	if ((action === "") || !("_PreProcess" in actionCallbacks) || callCallback(actionCallbacks["_Preprocess"], instance, id, action))
+		if (callCallback(actionCallbacks[action], instance, id, action) && ("_PreProcess" in actionCallbacks))
+			callCallback(actionCallbacks["_Postprocess"], instance, id, action);
 
-	if (instance._xdh.type === types.UNDEFINED)
-		standBy(socket, instance);
+	if (instance._xdh.queued.length === 0)
+		standBy(socket, instance, 418);
 }
 
 function setResponse(type) {
@@ -434,34 +438,11 @@ function setResponse(type) {
 	}	
 }
 
-function handleResponse (socket) {
-	if ( instance === undefined)
-		throw "No instance set!";
-
-	if (instance._xdh.callback !== undefined) {
-		let type = instance._xdh.type;
-
-		if (type === types.VOID) {
-			instance._xdh.callback();
-
-			if (instance._xdh.type === types.UNDEFINED)
-				standBy(socket, instance);
-		} else
-			setResponse(type);
-	} else {
-		if (instance._xdh.type !== types.VOID)
-			setResponse(proxy, instance._xdh.type);
-
-		instance._xdh.type = types.UNDEFINED;
-		standBy(socket, instance);
-	}
-}
-
-function serve(feeder, socket, createCallback, callbacks) {
+function serve(feeder, socket, createCallback, actionCallbacks) {
 	while ( !feeder.isEmpty() || cont ) {
 		cont = false;
 
-		console.log(stack)
+		// console.log(stack)
 		
 		switch (top()) {
 		case s.SERVE:
@@ -478,16 +459,16 @@ function serve(feeder, socket, createCallback, callbacks) {
 
 				instance = instances[id];
 
-				if (!instances[id]._xdh.handshakeDone) {
+				if (!instance._xdh.handshakeDone) {
 					push(s.HANDSHAKE);
 					push(s.ERROR)
 					push(d.STRING);
-				} else if ( instance._xdh.type === types.UNDEFINED) {
+				} else if ( instance._xdh.queued.length === 0) {
 					push(s.LAUNCH);
 					push(s.ID);
 					push(d.STRING);
 				} else {
-					handleResponse(socket);
+					setResponse(instance._xdh.queued[0].type);
 				}
 			}
 			break;
@@ -518,8 +499,8 @@ function serve(feeder, socket, createCallback, callbacks) {
 			break;
 		case s.LAUNCH:
 			pop();
-			console.log(">>>>> Action:", string, id);
-			handleLaunch(socket, id, string, callbacks);
+			// console.log(">>>>> Action:", string, id);
+			handleLaunch(socket, id, string, actionCallbacks);
 			break;
 		case s.ID:
 			pop();
@@ -534,9 +515,9 @@ function serve(feeder, socket, createCallback, callbacks) {
 		case s.RESPONSE:
 			pop();
 
-			let type = instance._xdh.type;
-			let callback = instance._xdh.callback;
-			instance._xdh.type = types.UNDEFINED;
+			let pending = instance._xdh.queued.shift();
+			let type = pending.type;
+			let callback = pending.callback;
 
 			if ( callback !== undefined) {
 				switch ( type ) {
@@ -550,14 +531,18 @@ function serve(feeder, socket, createCallback, callbacks) {
 					callback(string);
 					break;
 				case types.STRINGS:
+					// console.log("Strings: ", strings);
 					callback(strings);
 					break;
 				default:
 					throw "Unknown type of value '" + type + "'!";
 					break;
 				}
+
+				if (instance._xdh.queued.length === 0)
+					standBy(socket, instance, 552);
 			} else
-				standBy(socket, instance);
+				standBy(socket, instance, 554);
 			break;
 		default:
 			if ( !handleData(feeder) )
@@ -696,9 +681,9 @@ const p = {
 
 var phase = p.HANDSHAKE;
 
-function onRead(data, socket, createCallback, callbacks, head) {
+function onRead(data, socket, createCallback, actionCallbacks, head) {
 
-	console.log(">>>>> DATA:", data.length);
+	// console.log(">>>>> DATA:", data.length);
 
 	let feeder = new Feeder(data);
 
@@ -713,7 +698,7 @@ function onRead(data, socket, createCallback, callbacks, head) {
 				phase = p.SERVE;
 			break;
 		case p.SERVE:
-			serve(feeder, socket, createCallback, callbacks);
+			serve(feeder, socket, createCallback, actionCallbacks);
 			break;
 		default:
 			throw "Unknown phase of value '" + step + "'!";
@@ -722,7 +707,7 @@ function onRead(data, socket, createCallback, callbacks, head) {
 	}
 }
 
-function launch(createCallback, callbacks, head) {
+function launch(createCallback, actionCallbacks, head) {
 	let socket = new net.Socket();
 
 	socket.on('error', (err) => {
@@ -736,7 +721,7 @@ function launch(createCallback, callbacks, head) {
 		push(h.HANDSHAKE);
 		push(h.ERROR);
 		push(d.STRING);
-		socket.on('data', (data) => onRead(data, socket, createCallback, callbacks, head));
+		socket.on('data', (data) => onRead(data, socket, createCallback, actionCallbacks, head));
 		
 		socket.write(handleString(faasProtocolLabel));
 		socket.write(handleString(faasProtocolVersion));
@@ -753,7 +738,7 @@ function addTagged(data, argument) {
 }
 
 function call(instance, command, type) {
-	console.log(">>>>> Call command:", instance._xdh.id, command);
+	// console.log(">>>>> Call command:", instance._xdh.id, command);
 
 	let i = 3;
 	let data = convertSInt(instance._xdh.id);
@@ -763,23 +748,27 @@ function call(instance, command, type) {
 
 //	console.log( Date.now(), " Command: ", command, instance._xdh.id);
 
-	instance._xdh.type = type;
-
 	while (i < amount)
 		data = addTagged(data, arguments[i++]);
     
-    data = Buffer.concat([data, convertUInt(types.VOID)]) // To report end of argument list.
-
-	instance._xdh.callback = arguments[i++];
+	data = Buffer.concat([data, convertUInt(types.VOID)]) // To report end of argument list.
 
 	instance._xdh.socket.write(data);
 
-	console.log("Yo");
+	let callback = arguments[i++]
+	
+	if ( type === types.VOID) {
+		if ( callback !== undefined )
+			callback();
+	} else if ( type !== types.UNDEFINED ) {
+		let pending = new Object();
 
-	if ( type === types.VOID ) {
-		push(s.RESPONSE);
-		cont = true;
-	}
+		pending.type = type;
+		pending.callback = callback;
+
+		instance._xdh.queued.push(pending);
+	} else
+		throw "'UNDEFINED' type not allowed here!"
 }
 
 module.exports.launch = launch;
