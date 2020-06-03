@@ -71,7 +71,7 @@ namespace faaspool {
 				if (Mutex_ != mtx::Undefined)
 					mtx::Delete(Mutex_);
 
-				if ( Switch != NULL ) {
+				if ( Switch != NULL ) {	// At 'NULL' when destruction occurs after backend becomes unavailable.
 					if ( !Read_.IsBlocked() ) {
 							if ( Switch->IsBlocked() )
 								Switch->Unblock();
@@ -148,6 +148,7 @@ namespace faaspool {
 				qRGnr();
 
 			Quit_ = true;
+			Switch = NULL;
 
 			if ( Pending_ )
 				Read_.Unblock();
