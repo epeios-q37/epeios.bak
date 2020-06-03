@@ -285,7 +285,7 @@ namespace faaspool {
 	qRH;
 		mtx::rHandle Mutex;
 	qRB;
-		Mutex.Init( Mutex_ );
+		Mutex.InitAndLock( Mutex_ );
 
 		if ( !Backends_.Exists( Row ) )
 			qRGnr();
@@ -742,9 +742,7 @@ qRB;
 	Backend = TSGetBackend_( Token );
 
 	if ( Backend != NULL ) {
-		Mutex.Init( Backend->Access );
-
-		Mutex.Lock();
+		Mutex.InitAndLock( Backend->Access );
 
 		if ( Backend->Set(Shared) ) {
 			Row = Backend->TRow;

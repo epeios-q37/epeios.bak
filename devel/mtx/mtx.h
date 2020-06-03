@@ -66,7 +66,6 @@ namespace mtx {
 		s_Undefined
 	};
 
-	// NOTA: 'lock_guard' is not always used in case of the use of the 'setjmp' version of the error (ERR) library.
 	typedef struct _mutex__ {
 	private:
 		std::mutex Mutex_;
@@ -89,7 +88,7 @@ namespace mtx {
 #ifdef MTX__CONTROL
 		void Release( void )
 		{
-			std::lock_guard<decltype(Mutex_)> Lock( Mutex_ );
+			ststd::unique_lock<decltype(Mutex_)> Lock( Mutex_ );
 
 			State_ = sReleased;
 		}
@@ -300,16 +299,20 @@ namespace mtx {
 
 		}
 		E_CDTOR( mutex___ );
-		void Init( handler___ Handler )
+		void Init(
+			handler___ Handler,
+			bso::sBool Lock )
 		{
 			_UnlockIfInitializedAndLocked();
 
 			Handler_ = Handler;
+
+			if ( Lock )
+				this->Lock();
 		}
 		void InitAndLock( handler___ Handler )
 		{
-			Init( Handler );
-			Lock();
+			Init( Handler, true );
 		}
 		bso::bool__ TryToLock( tol::sDelay TimeOut = 0 )	// Returns 'true' if lock successful, or return false after timeout.
 		{

@@ -29,6 +29,7 @@ var pPort = 53700;
 var wAddr = "";
 var wPort = "";
 var instances = {};
+var socket = undefined;
 
 function REPLit(url) {
 	require('http').createServer(function (req, res) {
@@ -361,16 +362,15 @@ function handleCommand(command) {
 	return IsCommand;
 }
 
-function fillXDH(xdh, id, socket) {
+function fillXDH(xdh, id) {
 	xdh.id = id;
-	xdh.socket = socket;
 	xdh.isFAAS = true;
 	xdh.type = types.UNDEFINED;
 	xdh.handshakeDone = false;
 	xdh.queued = [];
 }
 
-function handleCreation(id, socket, createCallback) {
+function handleCreation(id, createCallback) {
 	if (id in instances)
 		throw "Instance of id  '" + id + "' exists but should not !";
 
@@ -378,7 +378,7 @@ function handleCreation(id, socket, createCallback) {
 
 	instance._xdh = new Object;
 
-	fillXDH(instance._xdh, id, socket);
+	fillXDH(instance._xdh, id);
 
 	instances[id] = instance;
 
@@ -405,12 +405,11 @@ function callCallback(callback, instance, id, action) {
 	}
 }
 
-function standBy(socket, instance, s) {
-	// console.log(">>>>> Standby", s);
+function standBy(instance) {
 	socket.write(addString(convertSInt(instance._xdh.id), "#StandBy_1"));
 }
 
-function handleLaunch(socket, id, action, actionCallbacks) {
+function handleLaunch(id, action, actionCallbacks) {
 	if ( instance === undefined)
 		throw "No instance set!";
 
@@ -419,7 +418,7 @@ function handleLaunch(socket, id, action, actionCallbacks) {
 			callCallback(actionCallbacks["_Postprocess"], instance, id, action);
 
 	if (instance._xdh.queued.length === 0)
-		standBy(socket, instance, 418);
+		standBy(instance, 418);
 }
 
 function setResponse(type) {
@@ -438,7 +437,7 @@ function setResponse(type) {
 	}	
 }
 
-function serve(feeder, socket, createCallback, actionCallbacks) {
+function serve(feeder, createCallback, actionCallbacks) {
 	while ( !feeder.isEmpty() || cont ) {
 		cont = false;
 
@@ -474,7 +473,7 @@ function serve(feeder, socket, createCallback, actionCallbacks) {
 			break;
 		case s.CREATION:
 			pop();
-			handleCreation(sInt, socket, createCallback);
+			handleCreation(sInt, createCallback);
 			break;
 		case s.CLOSING:
 			pop();
@@ -500,7 +499,7 @@ function serve(feeder, socket, createCallback, actionCallbacks) {
 		case s.LAUNCH:
 			pop();
 			// console.log(">>>>> Action:", string, id);
-			handleLaunch(socket, id, string, actionCallbacks);
+			handleLaunch(id, string, actionCallbacks);
 			break;
 		case s.ID:
 			pop();
@@ -540,9 +539,9 @@ function serve(feeder, socket, createCallback, actionCallbacks) {
 				}
 
 				if (instance._xdh.queued.length === 0)
-					standBy(socket, instance, 552);
+					standBy(instance);
 			} else
-				standBy(socket, instance, 554);
+				standBy(instance);
 			break;
 		default:
 			if ( !handleData(feeder) )
@@ -626,7 +625,7 @@ const h = {
 	NOTIFICATION: 103,
 }
 
-function handleNotification(socket, notification, head) {
+function handleNotification(notification, head) {
 	if ( notification !== "" )
 		console.log(notification);
 
@@ -640,7 +639,7 @@ function handleNotification(socket, notification, head) {
 }
 
 
-function handshake(feeder, socket, head) {
+function handshake(feeder, head) {
 	while ( !feeder.isEmpty() || cont ) {
 		cont = false;
 		switch( top() ) {
@@ -660,7 +659,7 @@ function handshake(feeder, socket, head) {
 			push(d.STRING);
 			break;
 		case h.NOTIFICATION:
-			if ( !handleNotification(socket, string, head) )
+			if ( !handleNotification(string, head) )
 				pop();
 			break;
 		default:
@@ -681,7 +680,7 @@ const p = {
 
 var phase = p.HANDSHAKE;
 
-function onRead(data, socket, createCallback, actionCallbacks, head) {
+function onRead(data, createCallback, actionCallbacks, head) {
 
 	// console.log(">>>>> DATA:", data.length);
 
@@ -690,7 +689,7 @@ function onRead(data, socket, createCallback, actionCallbacks, head) {
 	while ( !feeder.isEmpty() ) {
 		switch ( phase ) {
 		case p.HANDSHAKE:
-			if ( !handshake(feeder, socket, head) )
+			if ( !handshake(feeder, head) )
 				phase = p.IGNITION;
 			break;
 		case p.IGNITION:
@@ -698,7 +697,7 @@ function onRead(data, socket, createCallback, actionCallbacks, head) {
 				phase = p.SERVE;
 			break;
 		case p.SERVE:
-			serve(feeder, socket, createCallback, actionCallbacks);
+			serve(feeder, createCallback, actionCallbacks);
 			break;
 		default:
 			throw "Unknown phase of value '" + step + "'!";
@@ -708,7 +707,7 @@ function onRead(data, socket, createCallback, actionCallbacks, head) {
 }
 
 function launch(createCallback, actionCallbacks, head) {
-	let socket = new net.Socket();
+	socket = new net.Socket();
 
 	socket.on('error', (err) => {
 		throw "Unable to connect to '" + pAddr + ":" + pPort + "' !!!";
@@ -721,7 +720,7 @@ function launch(createCallback, actionCallbacks, head) {
 		push(h.HANDSHAKE);
 		push(h.ERROR);
 		push(d.STRING);
-		socket.on('data', (data) => onRead(data, socket, createCallback, actionCallbacks, head));
+		socket.on('data', (data) => onRead(data, createCallback, actionCallbacks, head));
 		
 		socket.write(handleString(faasProtocolLabel));
 		socket.write(handleString(faasProtocolVersion));
@@ -753,7 +752,7 @@ function call(instance, command, type) {
     
 	data = Buffer.concat([data, convertUInt(types.VOID)]) // To report end of argument list.
 
-	instance._xdh.socket.write(data);
+	socket.write(data);
 
 	let callback = arguments[i++]
 	
@@ -771,6 +770,14 @@ function call(instance, command, type) {
 		throw "'UNDEFINED' type not allowed here!"
 }
 
+function broadcastAction(action, id) {
+	if ( ( action === undefined ) || ( action === "" ) )
+		throw "There must be an non-empty action parameter for tha broadcastAction function!";
+
+	socket.write(addString(addString(convertSInt(-3), action), id === undefined ? "" : id ));
+}
+
 module.exports.launch = launch;
 module.exports.call = call;
+module.exports.broadcastAction = broadcastAction;
 

@@ -136,14 +136,11 @@ def ac_submit_message(chatroom, dom):
 	chatroom.display_messages(dom)
 	Atlas.broadcast_action("Update")
 
-def ac_update(chatroom, dom):
-	chatroom.display_messages(dom)
-
 callbacks = {
 		"": ac_connect,
 		"SubmitPseudo": ac_submit_pseudo,
 		"SubmitMessage": ac_submit_message,
-		"Update": (dom) => hatroom.display_messages(dom))
+		"Update": lambda chatroom, dom: chatroom.display_messages(dom),
 	}
 		
 Atlas.launch(callbacks, Chatroom, read_asset("Head.html"), "Chatroom")

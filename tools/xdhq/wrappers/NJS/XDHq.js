@@ -201,10 +201,6 @@ class XDH {
 	setContent(id, content, callback) {
 		return this.setContents(merge(id, content), callback);
 	}
-	setTimeout( delay, action, callback )
-	{
-		call(this, "SetTimeout_1", types.VOID, delay.toString(), action, callback);
-	}
 /*
 	createElement_(name, id, callback ) {
         call(this, "CreateElement_1", types.STRING, 2, name, id, 0, callback);
@@ -293,3 +289,4 @@ module.exports.getAssetDir = getAssetDir;
 module.exports.getAssetFileName = getAssetFileName;
 module.exports.readAsset = readAsset;
 module.exports.open = open;
+module.exports.broadcastAction = (action, id) => xdhq.broadcastAction(action, id);

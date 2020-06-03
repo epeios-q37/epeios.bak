@@ -89,7 +89,9 @@ function newSession() {
 
 function acConnect(dom, id) {
 	dom.setLayout("", readAsset("Main.html"),
-		() => dom.focus("Pseudo", () => displayMessages(dom))
+		() => dom.focus("Pseudo",
+			() => displayMessages(dom)
+		)
 	);
 }
 
@@ -147,6 +149,7 @@ function acSubmitMessage(dom, id) {
 								"content": result
 							});
 							displayMessages(dom);
+							atlas.broadcastAction("Update");
 						}
 					}
 				)
@@ -160,7 +163,7 @@ function main() {
 		"": acConnect,
 		"SubmitPseudo": acSubmitPseudo,
 		"SubmitMessage": acSubmitMessage,
-		"Update": () => displayMessages(dom)
+		"Update": (dom) => displayMessages(dom)
 	};
 
 	atlas.launch(newSession, callbacks, readAsset( "Head.html") );
