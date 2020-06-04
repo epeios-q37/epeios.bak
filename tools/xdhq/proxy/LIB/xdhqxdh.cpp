@@ -23,10 +23,8 @@
 #include "registry.h"
 #include "session.h"
 
-#include "logq.h"
 #include "idsq.h"
 
-#include "csdmnc.h"
 #include "csdcmn.h"
 #include "csdbns.h"
 
@@ -59,7 +57,7 @@ namespace {
 				Translation.Init();
 				sclm::GetBaseTranslation("ConnectingTo", Translation, HostService);
 				cio::COut << Translation << txf::commit << txf::nl;
-				if ( session::Core.Init( HostService.Convert( Buffer ), 0, sck::NoTimeout ) ) {
+				if ( common::Core.Init( HostService.Convert( Buffer ), 0, sck::NoTimeout ) ) {
 					Translation.Init();
 					sclm::GetBaseTranslation("ConnectedTo", Translation, HostService);
 					cio::COut << Translation << txf::commit << txf::nl;
@@ -68,7 +66,7 @@ namespace {
 			}
 
 			faaspool::Initialize();
-			session::LogDriver.Init( cio::COut );
+			common::LogDriver.Init( cio::COut );
 		qRR;
 		qRT;
 		qRE;

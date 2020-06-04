@@ -37,8 +37,9 @@ public abstract class Atlas implements Runnable {
 		for (;;) {
 			dom.getAction(event);
 
-			if (dom.isQuitting() ) {
-				System.out.println("Quitting thread!");
+			if (dom.isQuitting() ) {	// MUST be called after 'getAction()…',
+										// or the library will hang!
+				// System.out.println("Quitting thread!");
 				break;
 			}
 
@@ -195,6 +196,10 @@ public abstract class Atlas implements Runnable {
 	}
 
 	public static void broadcastAction(String action, String id ) {
-			info.q37.xdhq.XDH.broadcastAction(action, id);
+		info.q37.xdhq.XDH.broadcastAction(action, id);
+	}
+
+	public static void broadcastAction(String action) {
+		broadcastAction(action, "");
 	}
 };

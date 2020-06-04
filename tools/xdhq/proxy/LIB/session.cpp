@@ -25,9 +25,6 @@
 
 using namespace session;
 
-csdmnc::rCore session::Core;
-logq::rFDriver<> session::LogDriver;
-
 namespace {
 	void ReportToFrontend_(
 		xdhdws::sProxy &Proxy,
@@ -176,21 +173,16 @@ namespace {
 	}
 }
 
-void session::Release_(sId_ Id)
-{
-	id_store_::Release(Id);
-}
-
 namespace {
-	void Log_(
+	template <typename string> void Log_(
 		sId_ Id,
 		const str::dString &IP,
-		const str::dString &Message )
+		const string &Message )
 	{
 	qRH;
 		logq::rLogRack<> Log;
 	qRB;
-		Log.Init( LogDriver );
+		Log.Init( common::LogDriver );
 
 		Log << *Id;
 
@@ -202,6 +194,14 @@ namespace {
 	qRT;
 	qRE;
 	}
+}
+
+void session::Release_(
+	sId_ Id,
+	const str::dString &IP )
+{
+	Log_(Id, IP, "RELEASED");
+	id_store_::Release(Id);
 }
 
 bso::sBool session::rSession::XDHCDCInitialize(
@@ -218,7 +218,7 @@ qRB;
 	tol::Init(LogMessage);
 
 	if ( Token.Amount() == 0 ) {
-		SlfHDriver_.Init( Core, fdr::ts_Default );
+		SlfHDriver_.Init( common::Core, fdr::ts_Default );
 		Mode_ = mSlfH;
 		Success = true;
 		LogMessage.Append( "SlfH" );

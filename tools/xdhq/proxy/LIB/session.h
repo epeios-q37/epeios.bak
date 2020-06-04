@@ -24,8 +24,6 @@
 
 # include "prtcl.h"
 
-# include "csdmnc.h"
-# include "logq.h"
 # include "xdhcdc.h"
 # include "xdhcmn.h"
 # include "xdhdws.h"
@@ -34,9 +32,6 @@ namespace session {
 	namespace faas_ {
 		using namespace common::faas;
 	}
-
-	extern csdmnc::rCore Core;
-	extern logq::rFDriver<> LogDriver;
 
 	qENUM( Mode_ ) {
 		mFaaS,	// FaaS mode, direct connection (not muxed) to the easy to install toolkit.
@@ -47,7 +42,9 @@ namespace session {
 
 	qMIMICs( bso::sU32, sId_ );	// Assigned per session.
 	qCDEF(sId_, UndefinedId_, bso::U32Max);
-	void Release_(sId_ Id);
+	void Release_(
+		sId_ Id,
+		const str::dString &IP);
 
 	class rSession
 	: public xdhcdc::cSingle,
@@ -122,7 +119,7 @@ namespace session {
 		{
 			if ( P ) {
 				if ( Id_ != UndefinedId_)
-					Release_(Id_);
+					Release_(Id_, IP_);
 			}
 
 			tol::reset(P, FaaSDriver_, SlfHDriver_, IP_, Token_);

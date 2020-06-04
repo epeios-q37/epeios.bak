@@ -85,8 +85,8 @@ def worker(userCallback,dom,callbacks):
 	while True:
 		[action,id] = dom.getAction()
 
-		if dom.is_quitting():
-			print("Quitting thread !")
+		if dom.isQuitting():
+			# print("Quitting thread !")
 			break
 
 		if action=="" or not "_PreProcess" in callbacks or _call(callbacks["_PreProcess"],userObject, dom, id, action):

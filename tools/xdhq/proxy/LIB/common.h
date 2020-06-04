@@ -22,10 +22,16 @@
 
 # include "xdhcuc.h"
 
+# include "csdmnc.h"
+# include "logq.h"
+
 namespace common {
 	namespace faas {
 		using namespace xdhcmn::faas;
 	}
+
+	extern csdmnc::rCore Core;
+	extern logq::rFDriver<> LogDriver;
 
 	void SetCallback(xdhcuc::cGlobal &Callback);
 

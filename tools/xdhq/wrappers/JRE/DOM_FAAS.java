@@ -36,7 +36,7 @@ public class DOM_FAAS extends DOM_SHRD {
 	static private OutputStream output_;
 	// Both object are to block the switcher.
 	static private Lock lock_ = new ReentrantLock();
-	static private Condition condition_ = lock_.newCondition();;
+	static private Condition condition_ = lock_.newCondition();
 	static private String FaaSProtocolLabel = "7b4b6bea-2432-4584-950b-e595c9e391e1";
 	static private String FaaSProtocolVersion = "0";
 	static private String mainProtocolLabel = "8d2b7b52-6681-48d6-8974-6e0127a4ca7e";
@@ -400,13 +400,25 @@ public class DOM_FAAS extends DOM_SHRD {
 
 			instance.lock.unlock();
 
-			lock_.lock();
-			condition_.signal();
-			lock_.unlock();
-
+			// Some unlocking is done by below 'isQuitting(…)' method,
+			// which MUST be called or the library will hang! 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override public boolean isQuitting() {
+		boolean answer = instances_.get(id_).quit; 
+
+		// Below three line were in 'getAction()', but
+		// in case of 'quit' being at 'true', there was
+		// a risk that 'instances_.get(id_)' were already
+		// destroyed, hence an error on above line.
+		lock_.lock();
+		condition_.signal();
+		lock_.unlock();
+
+		return answer;
 	}
 
 	@Override
@@ -465,10 +477,6 @@ public class DOM_FAAS extends DOM_SHRD {
 		}
 
 		return object;
-	}
-
-	@Override public boolean isQuitting() {
-		return instances_.get(id_).quit;
 	}
 
 	public void setId( Integer id ) {

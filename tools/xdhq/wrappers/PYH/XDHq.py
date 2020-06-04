@@ -103,12 +103,14 @@ def _readXSLAsset(path, dir):
 class DOM:
 	def __init__(self,instance):
 		self._dom = XDHqFaaS.DOM_FaaS(instance)
-		self.is_quitting = self._dom.is_quitting
 
 	def get_action(self):
 		return self._dom.getAction()
 
 	getAction = get_action
+
+	def isQuitting(self):
+		return self._dom.isQuitting();
 
 	def execute(self,script):
 		return self._dom.call("Execute_1" ,_STRING, script)

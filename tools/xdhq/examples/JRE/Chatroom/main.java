@@ -136,7 +136,7 @@ class Chatroom extends Atlas {
 		dom.focus("Message");
 		addMessage_(pseudo, message);
 		displayMessages_(dom);
-		broadcastAction("Update", "");
+		broadcastAction("Update");
 	}
 
 	private void update_(DOM dom, String id) {

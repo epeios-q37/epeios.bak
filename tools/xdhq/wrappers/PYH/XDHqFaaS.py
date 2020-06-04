@@ -367,7 +367,6 @@ class DOM_FaaS:
 
 	def __init__(self, instance):
 		self.instance = instance
-		self.is_quitting = self.instance.isQuitting
 
 	def wait(self):
 		self.instance.wait()
@@ -390,11 +389,21 @@ class DOM_FaaS:
 
 		self.wait()
 
-		[id,action]=["",""] if self.is_quitting() else [getString(),getString()] 
+		[id,action]=["",""] if self.instance.quit else [getString(),getString()]
 
-		self.signal()
+		# The below 'is_quitting()' method MUST be called, or the library will hang. 
 
 		return [action,id]
+
+	def isQuitting(self):
+		answer = self.instance.isQuitting()
+
+		# Below line were in 'getAction()', but, in case of quitting,
+		# 'self.instance' could always be destroyed here.
+		self.signal()
+
+		return answer;
+
 
 	def call(self, command, type, *args):
 		_writeLock.acquire()

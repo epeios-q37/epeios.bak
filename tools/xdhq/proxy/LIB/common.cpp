@@ -19,6 +19,11 @@
 
 #include "common.h"
 
+using namespace common;
+
+csdmnc::rCore common::Core;
+logq::rFDriver<> common::LogDriver;
+
 namespace {
 	xdhcuc::cGlobal *Callback_ = NULL;
 
