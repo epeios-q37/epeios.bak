@@ -42,7 +42,7 @@ class Blank extends Atlas {
 		}
 	}
 
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) {
 		String dir;
 
 		launch(() -> new Blank(), readAsset_("Head.html"), "Blank", GUI.DEFAULT, args);

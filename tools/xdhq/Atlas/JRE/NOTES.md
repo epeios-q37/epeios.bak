@@ -10,6 +10,8 @@ Pour les autres *OSes*, cela semble être `:` (double-point).
 - Pour afficher le fichier et le ligne courante : `System.out.println(Thread.currentThread().getStackTrace()[1]);`
 - Code pour le *catch* : `System.out.println(e.getStackTrace());` 
 
+<u>**ATTENTION**</u>  : lorsqu'on utilise `-cp` ou `-classpath`, `$CLASSPATH` est ignoré ; en mode développement, il faut simplement donner la classe (exemple  : `java Hello`).
+
 ## Compilation
 
 Script pour *recompiler* l'ensemble des sources *JAVA* (*attention*: les répertoires `classes` respectifs **doivent** exister !) :
@@ -23,7 +25,7 @@ Nom du script : `ATKJRECompile`.
 `pushd /cygdrive/h/temp;rm -rf classes;mkdir classes;cp -R h:/hg/epeios/tools/jreq/classes/* classes/;cp -R h:/hg/epeios/tools/xdhq/wrappers/JRE/classes/* classes;cp -R h:/hg/epeios/tools/xdhq/Atlas/JRE/classes/* classes;popd;jar cvf Atlas.jar -C h:/temp/classes/ .` 
 
 Nom du script : `ATKJREPack`. Lance également la compilation.
-  
+
 ## Lancement
 
 ### *Cygwin*
@@ -39,4 +41,6 @@ Pour contourner ce problème, lancer avec de la manière suivante :
 
 ## `CLASSPATH` pour le développement
 
-`.;h:/hg/epeios/tools/jreq/classes/;h:/hg/epeios/tools/xdhq/wrappers/JRE/classes/;h:/hg/epeios/tools/xdhq/Atlas/JRE/classes/`
+- *Windows*  : `.;h:/hg/epeios/tools/jreq/classes/;h:/hg/epeios/tools/xdhq/wrappers/JRE/classes/;h:/hg/epeios/tools/xdhq/Atlas/JRE/classes/`  ;
+
+- *POSIX*  : `.:/home/csimon/epeios/tools/jreq/classes/:/home/csimon/epeios/tools/xdhq/wrappers/JRE/classes/:/home/csimon/epeios/tools/xdhq/Atlas/JRE/classes/`.

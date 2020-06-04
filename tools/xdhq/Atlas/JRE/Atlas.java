@@ -37,6 +37,11 @@ public abstract class Atlas implements Runnable {
 		for (;;) {
 			dom.getAction(event);
 
+			if (dom.isQuitting() ) {
+				System.out.println("Quitting thread!");
+				break;
+			}
+
 			handle(event.action, event.id );
 		}
 	}
@@ -111,7 +116,7 @@ public abstract class Atlas implements Runnable {
 
 	private static final GUI getDefaultGUI() {
 		if ( isDev() )
-			return GUI.DESKTOP;
+			return GUI.NONE;
 		else
 			return GUI.WEB;
 	}
@@ -187,5 +192,9 @@ public abstract class Atlas implements Runnable {
 
 	public static void launch(info.q37.xdhq.XDH_SHRD.Callback callback) {
 		launch(callback, "");
+	}
+
+	public static void broadcastAction(String action, String id ) {
+			info.q37.xdhq.XDH.broadcastAction(action, id);
 	}
 };

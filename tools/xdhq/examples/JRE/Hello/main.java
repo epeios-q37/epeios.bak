@@ -46,7 +46,7 @@ class Hello extends Atlas {
 		dom.focus( "input");
 	}
 
-	public static void main( String[] args) throws Exception {
+	public static void main( String[] args) {
 		launch(()->new Hello(),readAsset_( "Head.html" ), "Hello", GUI.DEFAULT, args );
 	}
 }

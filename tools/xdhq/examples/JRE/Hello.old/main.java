@@ -45,7 +45,7 @@ class Hello extends Atlas {
 			throw new RuntimeException( "Unknown action '" + action + "' !!!");
 		}
 	}
-	public static void main( String[] args) throws Exception {
+	public static void main( String[] args) {
 		launch(()->new Hello(),readAsset_( "Head.html" ), "Hello", GUI.DEFAULT, args );
 	}
 }

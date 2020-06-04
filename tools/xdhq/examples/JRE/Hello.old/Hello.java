@@ -59,7 +59,7 @@ class Hello extends Atlas {
 			throw new RuntimeException( "Unknown action '" + action + "' !!!");
 		}
 	}
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) {
 		String head = 
 			"<title>\"Hello, World !\" example</title>" +
 			"<style type=\"text/css\">" +

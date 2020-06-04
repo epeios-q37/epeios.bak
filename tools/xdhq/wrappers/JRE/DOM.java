@@ -37,10 +37,10 @@ public class DOM {
 		try {
 			switch (mode) {
 			case FAAS:
-				DOM = new info.q37.xdhq.dom.DOM_FaaS();
+				DOM = new info.q37.xdhq.dom.DOM_FAAS();
 				break;
-			case PROD:
-				DOM = new info.q37.xdhq.dom.DOM_PROD();
+			case SLFH:
+				DOM = new info.q37.xdhq.dom.DOM_SLFH();
 				break;
 			default:
 				throw new RuntimeException("Unknown mode !!!");
@@ -52,6 +52,10 @@ public class DOM {
 
 	public info.q37.xdhq.dom.DOM_SHRD getDOM() {
 		return DOM;
+	}
+
+	public boolean isQuitting() {
+		return DOM.isQuitting();
 	}
 
 	public void getAction(info.q37.xdhq.dom.Event event) {
@@ -138,9 +142,6 @@ public class DOM {
 		});
 	}
 
-	public final void setTimeout(int delay, String action) {
-		DOM.call("SetTimeout_1", Type.VOID, a(Integer.toString(delay)), a(action));
-	}
 /*
 	public final String createElement( String name, String id ) {
 		return (String)DOM.call( "CreateElement_1", Type.STRING, new String[]{name, id }, emptys );

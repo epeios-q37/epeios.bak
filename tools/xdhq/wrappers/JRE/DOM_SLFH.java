@@ -17,19 +17,33 @@
 	along with XDHq. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package info.q37.xdhq;
+package info.q37.xdhq.dom;
 
-import info.q37.jreq.JRE;
+import info.q37.xdhq.XDH_SLFH;
+import info.q37.xdhq.dom.DOM_SHRD;
 
-public class XDH_PROD extends XDH_SHRD {
-	static private long launcher;
-	static {
-		launcher = JRE.register( "xdhq" );
+public class DOM_SLFH extends DOM_SHRD {
+	private Object core;
+
+	public DOM_SLFH() {
+		core = XDH_SLFH.call(2);
 	}
-	static public Object call(int index, Object... objects) {
-		return JRE.call( launcher, index, objects );
+
+	public void finalize() {
+		XDH_SLFH.call(3, core);
 	}
-	static public void launch() {
-		JRE.call( launcher, 1, "53700" );
+
+	@Override public void getAction(Event event) {
+		XDH_SLFH.call(4, core, event);
+	}
+
+	@Override public Object call(String command, Type type, info.q37.xdhq.ARG ...args )  {
+		return XDH_SLFH.call( 5, core, command, type.getValue(), args );
+	}
+
+	@Override public boolean isQuitting() {
+		System.out.println("Function in 'DOM_SLFH.java' to implement!!!");
+		System.exit(-1);
+		return false;
 	}
 }

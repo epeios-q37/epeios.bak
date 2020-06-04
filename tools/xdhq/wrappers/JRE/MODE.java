@@ -20,5 +20,5 @@
 package info.q37.xdhq;
 
 public enum MODE {
-	FAAS, PROD, UNDEFINED
+	FAAS, SLFH, UNDEFINED
 };

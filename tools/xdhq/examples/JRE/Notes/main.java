@@ -177,7 +177,7 @@ class Notes extends Atlas {
 			System.exit(1);
 		}
 	}
-	public static void main(String args[]) throws Exception {
+	public static void main(String args[]) {
 		String dir;
 
 		launch(() -> new Notes(),readAsset_("Head.html"), "Notes", GUI.DEFAULT, args);

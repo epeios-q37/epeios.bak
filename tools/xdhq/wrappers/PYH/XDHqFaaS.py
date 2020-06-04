@@ -188,13 +188,6 @@ def getStrings():
 
 	return strings
 
-def broadcastAction(action,id=""):
-	_writeLock.acquire()
-	writeSInt(-3)
-	writeString(action)
-	writeString(id)
-	_writeLock.release()
-
 def _init():
 	global _token, _socket, _wAddr, _wPort, _cgi
 	pAddr = "faas1.q37.info"
@@ -305,8 +298,8 @@ def _serve(callback,userCallback,callbacks ):
 		
 		if id == -1:	# Should never happen. 
 			sys.exit("Received unexpected undefined command id!")
-		if id == -2:    # Value reporting a new front-end.
-			id = readSInt()  # The id of the new front-end.
+		if id == -2:    # Value reporting a new session.
+			id = readSInt()  # The id of the new session.
 
 			if id in _instances:
 				sys.exit("Instance of id '" + id + "' exists but should not !")
@@ -361,6 +354,13 @@ def launch(callback, userCallback,callbacks,headContent):
 	_ignition()
 
 	_serve(callback,userCallback,callbacks)
+
+def broadcastAction(action,id=""):
+	_writeLock.acquire()
+	writeSInt(-3)
+	writeString(action)
+	writeString(id)
+	_writeLock.release()	
 
 class DOM_FaaS:
 	_firstLaunch = True

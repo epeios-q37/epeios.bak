@@ -19,7 +19,7 @@
 
 package info.q37.xdhq;
 
-import info.q37.xdhq.XDH_PROD;
+import info.q37.xdhq.XDH_SLFH;
 import info.q37.xdhq.MODE;
 
 import java.nio.file.*;
@@ -59,11 +59,22 @@ public class XDH extends info.q37.jreq.JRE {
 
 		switch ( mode ) {
 		case FAAS:
-			XDH_FaaS.launch(headContent,callback );
+			XDH_FAAS.launch(headContent,callback );
 			break;
-		case PROD:
-			XDH_PROD.launch();
+		case SLFH:
+			XDH_SLFH.launch();
 			break;
+		default:
+			throw new RuntimeException( "Unknown mode !!!");
+		}
+	}
+	static public void broadcastAction(String action, String id) {
+		switch ( getMode() ) {
+		case FAAS:
+			XDH_FAAS.broadcastAction(action, id);
+			break;
+		case SLFH:
+			throw new RuntimeException( "To implement !!!");
 		default:
 			throw new RuntimeException( "Unknown mode !!!");
 		}

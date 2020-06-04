@@ -83,7 +83,6 @@ class Chatroom extends Atlas {
 	private void connect_(DOM dom, String id) {
 		dom.setLayout("", readAsset_("Main.html"));
 		dom.focus("Pseudo");
-		dom.setTimeout(1000, "Update");
 		displayMessages_(dom);
 	}
 
@@ -137,11 +136,11 @@ class Chatroom extends Atlas {
 		dom.focus("Message");
 		addMessage_(pseudo, message);
 		displayMessages_(dom);
+		broadcastAction("Update", "");
 	}
 
 	private void update_(DOM dom, String id) {
 		displayMessages_(dom);
-		dom.setTimeout(1000, "Update");
 	}
 
 	@Override
@@ -164,7 +163,7 @@ class Chatroom extends Atlas {
 		}
 	}
 
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) {
 		launch(() -> new Chatroom(),readAsset_("Head.html"), "Chatroom", GUI.DEFAULT, args);
 	}
 }

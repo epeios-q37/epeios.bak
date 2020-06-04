@@ -25,9 +25,9 @@ import java.util.*;
 import java.util.concurrent.locks.*;
 import java.awt.Desktop;
 
-public class DOM_FaaS extends DOM_SHRD {
+public class DOM_FAAS extends DOM_SHRD {
 	static private String pAddr = "atlastk.org";
-	static private int pPort = 53800;
+	static private int pPort = 53700;
 	static private String wAddr = "";
 	static private String wPort = "";
 	static private String cgi = "xdh";
@@ -37,16 +37,17 @@ public class DOM_FaaS extends DOM_SHRD {
 	// Both object are to block the switcher.
 	static private Lock lock_ = new ReentrantLock();
 	static private Condition condition_ = lock_.newCondition();;
-	static private String FaaSProtocolLabel = "0fac593d-d65f-4cc1-84f5-3159c23c616b";
+	static private String FaaSProtocolLabel = "7b4b6bea-2432-4584-950b-e595c9e391e1";
 	static private String FaaSProtocolVersion = "0";
 	static private String mainProtocolLabel = "8d2b7b52-6681-48d6-8974-6e0127a4ca7e";
 	static private String mainProtocolVersion = "0";
 
-	private byte id_;
+	private int id_;
 	private boolean firstLaunch_ =  true;
 
 	static class Instance_ {
 		private boolean handshakeDone = false;
+		private boolean quit = false;
 		Lock lock = new ReentrantLock();
 		Condition condition = lock.newCondition();
 		Object userObject;	// Just to avoid that the GC destroys the object.
@@ -55,7 +56,7 @@ public class DOM_FaaS extends DOM_SHRD {
 		}
 	}
 
-	static private Map<Byte, Instance_> instances_ = new HashMap<Byte, Instance_>();
+	static private Map<Integer, Instance_> instances_ = new HashMap<Integer, Instance_>();
 
 	static private String getEnv_(String name, String value) {
 		String env = System.getenv(name);
@@ -92,7 +93,7 @@ public class DOM_FaaS extends DOM_SHRD {
 			String token = getEnv_("ATK_TOKEN");
 
 			if ( !"".equals( token ))
-				DOM_FaaS.token = "&" + token; 
+				DOM_FAAS.token = "&" + token; 
 		}
 
 		pAddr = getEnv_( "ATK_PADDR", pAddr );
@@ -111,35 +112,40 @@ public class DOM_FaaS extends DOM_SHRD {
 		output_.write( data );
 	}
 
-	private static void writeSize_(int size) throws Exception {
+	private static void writeUInt_(int value) throws Exception {
 		byte data[] = new byte[8];
 		int i = 7;
 
-		data[i] = (byte) (size & 0x7F);
-		size >>= 7;
+		data[i] = (byte) (value & 0x7F);
+		value >>= 7;
 
-		while (size != 0) {
-			data[--i] = (byte) (size | 0x80);
-			size >>= 7;
+		while (value != 0) {
+			data[--i] = (byte) (value | 0x80);
+			value >>= 7;
 		}
 
 		output_.write(data, i, 8 - i);
 	}
 
+	private static void writeSInt_(int value) throws Exception {
+		writeUInt_( value < 0 ? ( ( -value - 1 ) << 1 ) | 1 : value << 1 );
+	}
+
+
 	private static void writeString_(String string) throws Exception {
 		byte bytes[] = string.getBytes();
 
-		writeSize_(bytes.length);
+		writeUInt_(bytes.length);
 		output_.write(bytes);
 	}
 
 	private static void writeStrings_(String[] strings) throws Exception {
-		int size = strings.length;
+		int amount = strings.length;
 		int i = 0;
 
-		writeSize_(size);
+		writeUInt_(amount);
 
-		while (i < size) {
+		while (i < amount) {
 			writeString_(strings[i++]);
 		}
 	}
@@ -153,22 +159,28 @@ public class DOM_FaaS extends DOM_SHRD {
 		return (byte)data;
 	}
 
-	private static int getSize_() throws Exception {
+	private static int getUInt_() throws Exception {
 		int datum = input_.read();
-		int size = datum & 0x7f;
+		int value = datum & 0x7f;
 
 		while ((datum & 0x80) != 0) {
 			datum = input_.read();
 
-			size = (size << 7) + (datum & 0x7f);
+			value = (value << 7) + (datum & 0x7f);
 		}
 
-		return size;
+		return value;
+	}
+
+	private static int getSInt_() throws Exception {
+		int value = getUInt_();
+
+		return ( value & 1 ) != 0? -( ( value >> 1 ) + 1 ) : value >> 1;
 	}
 
 	private static String getString_() throws Exception {
 		String string = "";
-		int size = getSize_();
+		int size = getUInt_();
 
 		while (size-- != 0) {
 			string += (char) input_.read();
@@ -178,12 +190,12 @@ public class DOM_FaaS extends DOM_SHRD {
 	}
 
 	private static String[] getStrings_() throws Exception {
-		int size = getSize_();
+		int amount = getUInt_();
 		int i = 0;
 
-		String[] strings = new String[size];
+		String[] strings = new String[amount];
 
-		while (i < size)
+		while (i < amount)
 			strings[i++] = getString_();
 
 		return strings;
@@ -200,8 +212,7 @@ public class DOM_FaaS extends DOM_SHRD {
 		error = getString_();
 
 		if ( !error.isEmpty()) {
-			System.out.println(error);
-			System.exit(1);
+			throw new RuntimeException(error);
 		}
 
 		notification = getString_();
@@ -212,7 +223,7 @@ public class DOM_FaaS extends DOM_SHRD {
 
 	private static void ignition_() throws Exception {
 		writeString_(token);
-		writeString_(info.q37.xdhq.XDH_FaaS.headContent);
+		writeString_(info.q37.xdhq.XDH_FAAS.headContent);
 		writeString_(wAddr);
 		
 		output_.flush();
@@ -220,8 +231,7 @@ public class DOM_FaaS extends DOM_SHRD {
 		token = getString_();
 
 		if (isTokenEmpty_()) {
-			System.out.println( getString_() );
-			System.exit(1);
+			throw new RuntimeException( getString_() );
 		}
 		
 		if ( !":0".equals(wPort)) {
@@ -245,10 +255,12 @@ public class DOM_FaaS extends DOM_SHRD {
 	 private static void serve_(info.q37.xdhq.XDH_SHRD.Callback callback) {
 		try {
 			for (;;) {
-				byte id = getByte_();
+				int id = getSInt_();
 
-				if ( id == -1 ) {	// Value reporting a new front-end.
-					id = getByte_();	// The id of the new front-end.
+				if ( id == -1 ) // Should not happen.
+					throw new Exception("Received unexpected undefined command id!");
+				else if ( id == -2 ) {	// New session.
+					id = getSInt_();	// The id of the new session.
 
 					if ( instances_.containsKey( id )) {
 						throw new Exception( "Instance of id  '" + id + "' exists but should not !" );
@@ -263,32 +275,47 @@ public class DOM_FaaS extends DOM_SHRD {
 
 						Object object2 = object1.getClass().getMethod( "getDOM", (Class [])null).invoke( object1 );
 					
-						object2.getClass().getMethod( "setId", new Class[]{Byte.class}).invoke( object2, id );
+						object2.getClass().getMethod( "setId", new Class[]{Integer.class}).invoke( object2, id );
 					}
 
 					synchronized( output_) {
-						writeByte_( id );
+						writeSInt_( id );
 						writeString_( mainProtocolLabel );
 						writeString_( mainProtocolVersion );
 						output_.flush();
 					}
+				} else if ( id == -3 ) {	// Close session
+					id = getSInt_();
+
+					if ( !instances_.containsKey( id ) )
+						throw new Exception("Instance of id '" + id + "' not available for destruction!");
+
+					instances_.get(id).quit = true;
+
+					instances_.get(id).lock.lock();
+					instances_.get(id).condition.signal();
+					instances_.get(id).lock.unlock();
+
+					lock_.lock();
+					condition_.await();
+					lock_.unlock();
+
+					instances_.remove(id);
 				} else if ( !instances_.containsKey( id ) ) {
-						System.out.println( "Unknown instance of id '" + id + "'!" );
-						System.exit( -1 );
+						throw new Exception( "Unknown instance of id '" + id + "'!" );
 				} else if ( !instances_.get(id).handshakeDone ) {
 						String error;
 
 						error = getString_();
 
 						if ( !error.isEmpty() ) {
-							System.out.println( error );
-							System.exit( -1 );
+							throw new Exception( error );
 						}
 					
 						getString_();	// Language. Ignored yet.
 
 						synchronized( output_) {
-							writeByte_( id );
+							writeSInt_( id );
 							writeString_("JRE");
 							output_.flush();
 						}
@@ -331,13 +358,27 @@ public class DOM_FaaS extends DOM_SHRD {
 		}
 	}
 
+	static public void broadcastAction(String action, String id)
+	{
+		try {
+			synchronized( output_ ) {
+				writeSInt_(-3);
+				writeString_(action);
+				writeString_(id);
+				output_.flush();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	@Override
 	public void getAction(Event event) {
 		try {
 			if (!firstLaunch_) {
 				synchronized( output_ ) {
-					writeByte_(id_ );
-					writeString_("StandBy_1");
+					writeSInt_(id_ );
+					writeString_("#StandBy_1");
 					output_.flush();
 				}
 			} else
@@ -352,9 +393,10 @@ public class DOM_FaaS extends DOM_SHRD {
 			instance.lock.lock();
 			instance.condition.await();
 
-			event.id = getString_();
-
-			event.action = getString_();
+			if ( !instance.quit ) {
+				event.id = getString_();
+				event.action = getString_();
+			}
 
 			instance.lock.unlock();
 
@@ -373,12 +415,12 @@ public class DOM_FaaS extends DOM_SHRD {
 
 		try {
 			synchronized( output_ ) {
-				writeByte_( id_ );
+				writeSInt_( id_ );
 				writeString_(command);
-				writeByte_(type.getValue());
+				writeUInt_(type.getValue());
 
 				for (int i = 0; i < args.length; i++) {
-					writeByte_(args[i].type.getValue());
+					writeUInt_(args[i].type.getValue());
 					if ( args[i].type == Type.STRING) {
 						writeString_(args[i].string);
 					} else {
@@ -386,7 +428,7 @@ public class DOM_FaaS extends DOM_SHRD {
 					}
 				}
 
-				writeByte_(Type.VOID.getValue());
+				writeUInt_(Type.VOID.getValue());
 
 				output_.flush();
 			}
@@ -425,7 +467,11 @@ public class DOM_FaaS extends DOM_SHRD {
 		return object;
 	}
 
-	public void setId( Byte id ) {
+	@Override public boolean isQuitting() {
+		return instances_.get(id_).quit;
+	}
+
+	public void setId( Integer id ) {
 		id_ = id;
 	}
 }

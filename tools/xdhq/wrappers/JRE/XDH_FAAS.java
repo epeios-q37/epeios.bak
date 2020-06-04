@@ -17,27 +17,15 @@
 	along with XDHq. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package info.q37.xdhq.dom;
+package info.q37.xdhq;
 
-import info.q37.xdhq.XDH_PROD;
-import info.q37.xdhq.dom.DOM_SHRD;
-
-public class DOM_PROD extends DOM_SHRD {
-	private Object core;
-
-	public DOM_PROD() {
-		core = XDH_PROD.call(2);
+public class XDH_FAAS extends XDH_SHRD {
+	static public String headContent;
+	static public void launch(String headContent, info.q37.xdhq.XDH_SHRD.Callback callback ) {
+		XDH_FAAS.headContent = headContent;
+		info.q37.xdhq.dom.DOM_FAAS.launch(callback);
 	}
-
-	public void finalize() {
-		XDH_PROD.call(3, core);
-	}
-
-	@Override public void getAction(Event event) {
-		XDH_PROD.call(4, core, event);
-	}
-
-	@Override public Object call(String command, Type type, info.q37.xdhq.ARG ...args )  {
-		return XDH_PROD.call( 5, core, command, type.getValue(), args );
+	static public void broadcastAction(String action, String id) {
+		info.q37.xdhq.dom.DOM_FAAS.broadcastAction(action, id);
 	}
 }

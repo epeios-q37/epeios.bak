@@ -146,7 +146,7 @@ class TodoMVC extends Atlas {
 		}
 	}
 
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) {
 		String dir;
 
 		if (System.getenv("EPEIOS_SRC") == null)

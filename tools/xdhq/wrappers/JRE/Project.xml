@@ -90,7 +90,7 @@
 					<File Path="TodoMVC/">main.java</File>
 					<Files Path="../common/TodoMVC/">
 						<File>headFaaS.html</File>
-						<File>headPROD.html</File>
+						<File>headSLfH.html</File>
 						<File>Main.html</File>
 						<File>Todos.xsl</File>
 					</Files>
@@ -116,15 +116,15 @@
 			<File Pack="No">MODE.java</File>
 			<File Pack="No">XML.java</File>
 			<Files Group="DOM">
-				<File Pack="No">DOM_FaaS.java</File>
-				<File Pack="No">DOM_PROD.java</File>
+				<File Pack="No">DOM_FAAS.java</File>
+				<File Pack="No">DOM_SLFH.java</File>
 				<File Pack="No">DOM_SHRD.java</File>
 			</Files>
 			<File Pack="No">Event.java</File>
 			<File Pack="No">XDH.java</File>
 			<Files Group="XDH">
-				<File Pack="No">XDH_FaaS.java</File>
-				<File Pack="No">XDH_PROD.java</File>
+				<File Pack="No">XDH_FAAS.java</File>
+				<File Pack="No">XDH_SLFH.java</File>
 				<File Pack="No">XDH_SHRD.java</File>
 			</Files>
 		</Files>
