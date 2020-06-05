@@ -25,7 +25,7 @@ SOFTWARE.
 # Althought it bares some similarities with a class definition,
 # this file does NOT define a class, due to its sharing between several threads.
 
-package XDHq::Faas::Instance;
+package XDHq::FAAS::Instance;
 
 use XDHq::SHRD;
 use warnings;

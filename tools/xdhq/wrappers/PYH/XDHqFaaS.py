@@ -137,8 +137,6 @@ class Instance:
 	def signal(self):
 		with self.condVar:
 			self.condVar.notify()
-	def isQuitting(self):
-		return self.quit;
 
 def isTokenEmpty():
 	return not _token or _token[0] == "&"
@@ -237,7 +235,7 @@ def _init():
 		print("Connected to '" + str(pAddr) + ":" + str(pPort) + "'.")
 		
 
-def _faasHandshake():
+def _handshake():
 	global _writeLock
 
 	_writeLock.acquire()
@@ -349,7 +347,7 @@ def launch(callback, userCallback,callbacks,headContent):
 
 	_init()
 
-	_faasHandshake()
+	_handshake()
 
 	_ignition()
 
@@ -396,7 +394,7 @@ class DOM_FaaS:
 		return [action,id]
 
 	def isQuitting(self):
-		answer = self.instance.isQuitting()
+		answer = self.instance.quit
 
 		# Below line were in 'getAction()', but, in case of quitting,
 		# 'self.instance' could always be destroyed here.

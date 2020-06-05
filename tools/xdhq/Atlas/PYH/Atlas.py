@@ -86,12 +86,13 @@ def worker(userCallback,dom,callbacks):
 		[action,id] = dom.getAction()
 
 		if dom.isQuitting():
-			# print("Quitting thread !")
 			break
 
 		if action=="" or not "_PreProcess" in callbacks or _call(callbacks["_PreProcess"],userObject, dom, id, action):
 			if _call(callbacks[action], userObject, dom, id, action ) and "_PostProcess" in callbacks:
 				_call(callbacks["_PostProcess"],userObject, dom, id, action)
+
+	# print("Quitting thread !")
 
 def callback(userCallback,callbacks,instance):
 	thread = threading.Thread(target=worker, args=(userCallback, XDHq.DOM(instance), callbacks))

@@ -474,6 +474,25 @@ namespace {
 		return URL;
 	}
 
+namespace {
+	template <typename string> void Log_(
+		const str::dString &Token,
+		const string &Message )
+	{
+	qRH;
+		logq::rLogRack<> Log;
+	qRB;
+		Log.Init( common::LogDriver );
+
+		Log << "FaaS (" << Token << ")";
+
+		Log << " : " <<  Message;
+	qRR;
+	qRT;
+	qRE;
+	}
+}
+
 	rBackend_ *CreateBackend_(
 		fdr::rRWDriver &Driver,
 		const str::dString &IP )
@@ -510,14 +529,15 @@ namespace {
 			break;
 		}
 
-		Put_( Token, Flow );
+		Put_( Token, Flow );	// An empty token reports an error, which description is send below.
 
 		if ( Backend == NULL )
 			Put_( ErrorMessage, Flow );
-        else {
-            URL.Init();
-            Put_(BuildURL_(Address,str::wString(),Token,URL), Flow);
-        }
+		else {
+			URL.Init();
+			Put_(BuildURL_(Address, str::Empty, Token, URL), Flow);
+			Log_(Token, "Creation" );
+		}
 	qRR;
 		if ( Backend != NULL )
 			delete Backend;
@@ -665,6 +685,7 @@ namespace {
 		sclm::ErrorDefaultHandling();	// Also resets the error, otherwise the `WaitUntilNoMoreClient()` will lead to a deadlock on next error.
 	qRT;
 		if ( Backend != NULL ) {
+				Log_(Backend->Token, "Destruction");
 			Backend->Driver = NULL;	// This signals that the backend is no more present.
 			Backend->WaitUntilNoMoreClient();
 			Remove_( Backend->Row );

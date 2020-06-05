@@ -54,7 +54,7 @@ sub new {
 
     bless $self, $class;
     
-    $self->{dom} = XDHq::Faas::DOM->new(shift);
+    $self->{dom} = XDHq::FAAS::DOM->new(shift);
 
     return $self;
 }
@@ -63,8 +63,12 @@ sub getAction {
     return shift->{dom}->getAction();
 }
 
+sub isQuitting {
+    return shift->{dom}->isQuitting();
+}
+
 sub execute {
-        return shift->{dom}->call("Execute_1", XDHq::SHRD::RT_STRING, shift);
+    return shift->{dom}->call("Execute_1", XDHq::SHRD::RT_STRING, shift);
 }
 
 sub alert {
@@ -103,7 +107,7 @@ sub appendLayout {
 sub _handleLayoutXSL {
     my ($self, $variant, $id, $xml, $xsl) = @_;
 
-    if( XDHq::SHRD::TRUE) { # Replaced with a Faas/PROD test when available.
+    if( XDHq::SHRD::TRUE) { # Replaced with a FAAS/SLFH test when available.
         $xsl =~ s/([^-A-Za-z0-9_.!~*'() ])/sprintf("%%%02X", ord($1))/eg;
 #        $xsl =~ tr/ /+/;
         $xsl = "data:text/xml;charset=utf-8," . $xsl;
@@ -151,10 +155,6 @@ sub setContents {
 
 sub setContent {
     shift->setContents({shift() => shift});
-}
-
-sub setTimeout {
-    shift->{dom}->call("SetTimeout_1", XDHq::SHRD::RT_VOID, shift, shift);
 }
 
 =pod

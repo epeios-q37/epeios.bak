@@ -58,12 +58,18 @@ sub _worker {
     while (XDHq::SHRD::TRUE) {
         my ($action, $id) = $dom->getAction();
 
+        if ( $dom->isQuitting() ) {
+            last;
+        }
+
         if (($action eq "" ) or not $callbacks->{"_PreProcess"} or $callbacks->{"_PreProcess"}->($userObject,$dom, $id)) {
             if ( $callbacks->{$action}->($userObject,$dom, $id) and $callbacks->{"_PostProcess"} ) {
                 $callbacks->{"_PostProcess"}->($userObject,$dom, $id);
             }
         }
     }
+
+    CORE::say("Quitting thread!");
 }
 
 sub _callback {
@@ -77,5 +83,17 @@ sub launch {
 
     XDHq::launch(\&_callback,$userCallback,$callbacks,$headContent,$dir);
 }
+
+sub broadcastAction {
+    my $action = shift // "";
+    my $id = shift // "";
+
+    if ( $action eq "" ) {
+        die("There must be a non-empty 'action' parameter when calling 'broadcastAction(…)'!")
+    }
+
+    XDHq::broadcastAction($action, $id);
+}
+
 
 return XDHq::SHRD::TRUE;

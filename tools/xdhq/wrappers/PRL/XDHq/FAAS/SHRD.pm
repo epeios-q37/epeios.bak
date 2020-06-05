@@ -22,56 +22,54 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 =cut
 
-package XDHq::Faas::SHRD;
+package XDHq::FAAS::SHRD;
 
 use threads;
 use threads::shared;
 
-$XDHq::Faas::SHRD::socket;
+$XDHq::FAAS::SHRD::socket;
 
-$XDHq::Faas::SHRD::writeLock;
-share ($XDHq::Faas::SHRD::writeLock);
+$XDHq::FAAS::SHRD::writeLock;
+share ($XDHq::FAAS::SHRD::writeLock);
 
-$XDHq::Faas::SHRD::globalCondition;
-share($XDHq::Faas::SHRD::globalCondition);
+$XDHq::FAAS::SHRD::globalCondition;
+share($XDHq::FAAS::SHRD::globalCondition);
 
-sub writeByte {
-    $socket->send(chr(shift));
-}
+sub writeUInt {
+    my $value = shift;
 
-sub writeSize {
-    my $size = shift;
+    my $result = chr($value & 0x7f);
+    $value >>= 7;
 
-    my $result = chr($size & 0x7f);
-    $size >>= 7;
-
-    while ( $size ne 0) {
-        $result =chr(($size & 0x7f) | 0x80) . $result;
-        $size >>=7;
+    while ( $value ne 0) {
+        $result =chr(($value & 0x7f) | 0x80) . $result;
+        $value >>=7;
     }
 
     $socket->send($result);
 }
 
+sub writeSInt {
+    my $value = shift;
+
+    writeUInt( $value < 0 ? ( ( -$value - 1 ) << 1 ) | 1 : $value << 1 );
+}
+
 sub writeString {
     my $string = shift;
 
-    writeSize(length($string));
+    writeUInt(length($string));
     $socket->send($string);
 }
 
 sub writeStrings {
     my $strings = shift;
 
-    writeSize(scalar @{$strings});
+    writeUInt(scalar @{$strings});
 
     foreach my $string (@{$strings}) {
         writeString($string);
     }
-}
-
-sub writeStringNUL {
-    $socket->send(shift . "\0");
 }
 
 sub getByte {
@@ -81,20 +79,26 @@ sub getByte {
     return ord($byte);
 }
 
-sub getSize {
+sub getUInt {
     my $byte = getByte();
-    my $size = $byte & 0x7f;
+    my $value = $byte & 0x7f;
 
     while ($byte & 0x80) {
         $byte = getByte();
-        $size = ($size << 7) + ($byte & 0x7f);
+        $value = ($value << 7) + ($value & 0x7f);
     }
 
-    return $size;
+    return $value;
+}
+
+sub getSInt {
+    my $value = getUInt();
+
+    return $value & 1 ? -( ( $value >> 1 ) + 1 ) : $value >> 1;
 }
 
 sub getString {
-    my $size = getSize();
+    my $size = getUInt();
 
     if ($size) {
         my $string;
@@ -108,7 +112,7 @@ sub getString {
 }
 
 sub getStrings {
-    my $size = getSize();
+    my $size = getUInt();
     my @strings;
 
     while ($size--) {

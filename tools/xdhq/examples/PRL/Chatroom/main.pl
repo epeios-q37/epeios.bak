@@ -36,7 +36,6 @@ sub acConnect {
 
     $dom->setLayout("", Shared::readAsset("Main.html"));
     $dom->focus("Pseudo");
-    $dom->setTimeout(1000, "Update");
 
     $chatroom->displayMessages($dom);
 }
@@ -74,13 +73,13 @@ sub acSubmitMessage {
 	$dom->focus("Message");
 	$chatroom->addMessage($message);
 	$chatroom->displayMessages($dom);
+    Atlas::broadcastAction("Update");
 }
 
 sub acUpdate {
     my ($chatroom, $dom) = @_;
 
     $chatroom->displayMessages( $dom );
-    $dom->setTimeout(1000, "Update");
 }
 
 my %callbacks = (
