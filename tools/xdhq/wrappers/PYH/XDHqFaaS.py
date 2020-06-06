@@ -397,7 +397,7 @@ class DOM_FaaS:
 		answer = self.instance.quit
 
 		# Below line were in 'getAction()', but, in case of quitting,
-		# 'self.instance' could always be destroyed here.
+		# 'self.instance' could already be destroyed here.
 		self.signal()
 
 		return answer;

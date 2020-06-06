@@ -97,7 +97,6 @@ def acConnect( chatroom, dom, id)
 	dom.setLayout("", readAsset("Main.html"))
 	dom.focus("Pseudo")
 	chatroom.displayMessages(dom)
-	dom.setTimeout(1000, "Update")
 end
 
 def acSubmitPseudo(chatroom, dom, id)
@@ -127,11 +126,11 @@ def acSubmitMessage(chatroom, dom, id)
 	dom.focus("Message")
 	chatroom.addMessage(message)
 	chatroom.displayMessages(dom)
+	Atlas.broadcastAction("Update");
 end
 
 def acUpdate(chatroom, dom, id)
 	chatroom.displayMessages(dom)
-	dom.setTimeout(1000, "Update")
 end
 
 callbacks = {

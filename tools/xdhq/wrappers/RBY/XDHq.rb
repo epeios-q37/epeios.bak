@@ -8,7 +8,7 @@
 	published by the Free Software Foundation, either version 3 of the
 	License, or (at your option) any later version.
 
-	XDHq is distributed in the hope that it will be useful,
+	fXDHq is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 	Affero General Public License for more details.
@@ -18,7 +18,7 @@
 =end
 
 module XDHq
-	require 'XDHqFaaS'
+	require 'XDHqFAAS'
 	require 'uri'
 
 	$dir = ""
@@ -70,7 +70,7 @@ module XDHq
 
 	class DOM
 		def initialize(id)
-			@dom = XDHqFaaS::DOM.new(id)
+			@dom = XDHqFAAS::DOM.new(id)
 		end
 
 		private def unsplit(*args)
@@ -85,8 +85,12 @@ module XDHq
 			return @dom.call(command,type,*args)
 		end
 
-		def getAction()
+		def getAction
 			return @dom.getAction()
+		end
+
+		def isQuitting?
+			return @dom.isQuitting?
 		end
 
 		def execute(script)
@@ -122,7 +126,7 @@ module XDHq
 		private def handleLayoutXSL(variant, id, xml, xsl)
 			xslURL = xsl
 
-			if true	# Testing if 'PROD' or 'FaaS' mode when available.
+			if true	# Testing if 'SlfH' or 'FaaS' mode when available.
 				xslURL = "data:text/xml;charset=utf-8," + URI::encode(XDHq::readAsset( xsl, $dir ))
 			end
 
@@ -156,10 +160,6 @@ module XDHq
 
 		def setContent(id, content)
 			setContents({id => content})
-		end
-
-		def setTimeout(delay,action )
-			call( "SetTimeout_1", $VOID, delay.to_s(), action )
 		end
 
 =begin	
@@ -245,7 +245,10 @@ module XDHq
 
 	def XDHq::launch(callback,userCallback,callbacks,headContent, dir)
 		$dir = dir
-		XDHqFaaS.launch(callback, userCallback, callbacks, headContent)
+		XDHqFAAS.launch(callback, userCallback, callbacks, headContent)
 	end
 
+	def XDHq::broadcastAction(action,id)
+		XDHqFAAS.broadcastAction(action,id)
+	end
 end

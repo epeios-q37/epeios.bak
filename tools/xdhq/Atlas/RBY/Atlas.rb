@@ -55,8 +55,14 @@ module Atlas
 		while true
 			action, id = dom.getAction()
 
+			if dom.isQuitting?
+				break
+			end
+
 			self.call_(callbacks[action], userObject, dom, id, action)
 		end
+
+		# puts "Quitting thread!"
 	end
 
 	def self.cb(userObject, callbacks,instance)
@@ -71,6 +77,10 @@ module Atlas
 			$threads << thread
 		end
 =end
+	end
+
+	def Atlas::broadcastAction(action, id="")
+		XDHq.broadcastAction(action, id)
 	end
 
 	def Atlas::readAsset(path, dir="")
