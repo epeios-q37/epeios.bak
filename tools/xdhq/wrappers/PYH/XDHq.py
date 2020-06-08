@@ -112,11 +112,20 @@ class DOM:
 	def isQuitting(self):
 		return self._dom.isQuitting();
 
-	def execute(self,script):
+	def _execute(self, script, type):
+		return self._dom.call("Execute_1" ,type, script)
+
+	def execute_void(self,script):
+		return self._dom.call("Execute_1" ,_VOID, script)
+
+	def execute_string(self,script):
 		return self._dom.call("Execute_1" ,_STRING, script)
 
-	def flush(self):	# Returns when all the pending command were executed.
-		self.execute("''")
+	def execute_strings(self,script):
+		return self._dom.call("Execute_1" ,_STRINGS, script)
+
+	def flush(self):	# Returns when all the pending commands were executed.
+		self.execute_string("''")
 
 	def alert(self,message):
 		self._dom.call( "Alert_1", _STRING, message )
@@ -191,11 +200,6 @@ class DOM:
 		self.set_contents({id: content})
 
 	set_content = set_content
-
-	"""
-	def broadcast_action(self, action, id = ""):
-		self._dom.call( "#BroadcastAction_1", _VOID, action, id )
-	"""
 
 	"""
 	# Following 4 methods will either be removed or redesigned.

@@ -139,8 +139,17 @@ function launch(callback, tagsAndCallbacks, head, mode) {
 }
 
 class XDH {
-	execute(script, callback) {
-		call(this, "Execute_1", types.STRING, script, callback);
+	execute_(type, script, callback) {
+		call(this, "Execute_1", type, script, callback);
+	}
+	executeVoid(script, callback) {
+		this.execute_(types.VOID, script, callback);
+	}
+	executeString(script, callback) {
+		this.execute_(types.STRING, script, callback);
+	}
+	executeStrings(script, callback) {
+		this.execute_(types.STRINGS, script, callback);
 	}
 	alert(message, callback) {
         call(this, "Alert_1", types.STRING, message, callback);

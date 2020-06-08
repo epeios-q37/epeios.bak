@@ -1,12 +1,12 @@
- # Notice de la bibliothèque *term2web* (<https://q37.info/s/dh9gpjft>)
+# Notice de la bibliothèque *term2web* (<https://q37.info/s/dh9gpjft>)
 
- *term2web* est une bibliothèque *Python* qui redirige les fonctions `print(…)` et `input(…)` sur une page web. De ce fait, on peut mettre en forme le texte affiché par ces fonctions en utilisant des [propriétés CSS](https://fr.wikipedia.org/wiki/Feuilles_de_style_en_cascade).
+*term2web* est une bibliothèque *Python* qui redirige les fonctions `print(…)` et `input(…)` sur une page web. De ce fait, on peut mettre en forme le texte affiché par ces fonctions en utilisant des [propriétés CSS](https://fr.wikipedia.org/wiki/Feuilles_de_style_en_cascade).
 
- Cette bibliothèque peut être utilisée pour familiariser les débutants avec l'environnement de développement d'exercices comme celui se trouvant à l'adresse https://q37.info/s/g9fvwzgp.
+Cette bibliothèque peut être utilisée pour familiariser les débutants avec l'environnement de développement d'exercices comme celui se trouvant à l'adresse https://q37.info/s/g9fvwzgp.
 
- Avec cette bibliothèque, les fonctions `print(…)` et `input(…)` s'utilisent comme d'habitude. Il est ainsi facile de la mettre en œuvre dans les programmes s'exécutant habituellement dans un terminal pour qu'ils s'exécutent dans une page web.
+Avec cette bibliothèque, les fonctions `print(…)` et `input(…)` s'utilisent comme d'habitude. Il est ainsi facile de la mettre en œuvre dans les programmes s'exécutant habituellement dans un terminal pour qu'ils s'exécutent dans une page web.
 
- Dans un second temps, on pourra utiliser les fonctions suivantes pour améliorer la présentation, est initier par la même occasion au CSS.
+Dans un second temps, on pourra utiliser les fonctions suivantes pour améliorer la présentation, est initier par la même occasion au CSS.
 
 On a ainsi `set_property(name,value)` qui permet d'appliquer la propriété CSS de nom `name` et de valeur `value`.
 

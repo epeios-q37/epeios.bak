@@ -70,8 +70,16 @@ public class DOM {
 		return new ARG(strings);
 	}
 
-	public String execute(String script) {
+	public void executeVoid(String script) {
+		DOM.call("Execute_1", Type.VOID, a(script));
+	}
+
+	public String executeString(String script) {
 		return (String) DOM.call("Execute_1", Type.STRING, a(script));
+	}
+
+	public String[] executeStrings(String script) {
+		return (String []) DOM.call("Execute_1", Type.STRINGS, a(script));
 	}
 
 	public void alert(String message) {

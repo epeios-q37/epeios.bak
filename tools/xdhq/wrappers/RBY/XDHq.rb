@@ -8,7 +8,7 @@
 	published by the Free Software Foundation, either version 3 of the
 	License, or (at your option) any later version.
 
-	fXDHq is distributed in the hope that it will be useful,
+	XDHq is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 	Affero General Public License for more details.
@@ -93,8 +93,20 @@ module XDHq
 			return @dom.isQuitting?
 		end
 
-		def execute(script)
-			return call("Execute_1" ,$STRING, script)
+		private def execute(type, script)
+			return call("Execute_1" ,type, script)
+		end
+
+		def executeVoid(script)
+			execute($VOID, script)
+		end
+	
+		def executeString(script)
+			return execute($STRING, script)
+		end
+	
+		def executeStrings(script)
+			return execute($STRINGS, script)
 		end
 	
 		def alert(message)

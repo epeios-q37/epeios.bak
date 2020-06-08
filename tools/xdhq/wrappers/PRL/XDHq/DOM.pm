@@ -67,8 +67,20 @@ sub isQuitting {
     return shift->{dom}->isQuitting();
 }
 
-sub execute {
-    return shift->{dom}->call("Execute_1", XDHq::SHRD::RT_STRING, shift);
+sub _execute {
+    return shift->{dom}->call("Execute_1", shift, shift);
+}
+
+sub executeVoid {
+    shift->_execute(XDHq::SHRD::RT_VOID, shift);
+}
+
+sub executeString {
+    return shift->_execute(XDHq::SHRD::RT_STRING, shift);
+}
+
+sub executeStrings {
+    return shift->_execute(XDHq::SHRD::RT_STRINGS, shift);
 }
 
 sub alert {
