@@ -1,25 +1,46 @@
 # *Java* version of the *Atlas* toolkit
 
-![For Java](http://q37.info/download/assets/Java.png "Java logo")
+![For Java](https://q37.info/download/assets/Java.png "Java logo")
 
-[![Version 0.10.0](https://img.shields.io/static/v1.svg?&color=90b4ed&label=Version&message=0.10.0)](http://q37.info/s/gei0veus)
+[![Run on Repl.it](https://repl.it/badge/github/epeios-q37/atlas-java)](https://q37.info/s/3vwk3h3n) [![Version 0.11.0](https://img.shields.io/static/v1.svg?&color=90b4ed&label=Version&message=0.11.0)](http://q37.info/s/gei0veus)
 
-A fast and easy way to add a graphical user interface to your *Java* programs.
+*NOTA*: this toolkit is also available for:
+- *Node.js*: <http://github.com/epeios-q37/atlas-node>,
+- *Perl*: <http://github.com/epeios-q37/atlas-perl>,
+- *Python*: <http://github.com/epeios-q37/atlas-python>,
+- *Ruby*: <http://github.com/epeios-q37/atlas-ruby>.
 
-With the *Atlas* toolkit, you obtain hybrid programs. Like desktop applications, the same code can handle both [front and back ends](http://q37.info/s/px7hhztd), and, like web applications, the programs will be reachable from all over the internet.
+---
+
+With the *Atlas* toolkit, it has never been easier to write a modern web application ([*Single-page application*](https://q37.info/s/7sbmxd3j)):
+- no *Javascript* to write: only *HTML* and *Java*,
+- no [web server](https://q37.info/s/n3hpwsht) (*Apache*, *Nginx*…) to install: only the toolkit,
+- no remote server to host your application: only your computer;
+- no port to open on your internet box: a simple internet connection is enough for your application to be accessible from the entire internet,
+
+and all this with only a library of about 30 Kb.
+
+The Atlas toolkit is also the fastest and easiest way to add a [graphical user interface](https://q37.info/s/hw9n3pjs) to all your programs.
+
+## Live demonstrations
+
+Before diving into an example of source code, you can take a look on some live demonstrations, like this *Atlas* toolkit version of the [*TodoMVC*](http://todomvc.com/) application:
+
+![TodoMVC](https://q37.info/download/TodoMVC.gif "The TodoMVC application made with the Atlas toolkit")
+
+To see all the live demonstrations, simply go [here](https://q37.info/s/3vwk3h3n), click on the green `run` button, select the demonstration you want to see, and then click (or scan with your smartphone) the then displayed [QR code](https://q37.info/s/3pktvrj7).
+
 
 ## *Hello, World!*
 
-Here's how a [*Hello, World!*](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program) type program made with the *Atlas* toolkit looks like:
+Here's how a [*Hello, World!*](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program) program made with the *Atlas* toolkit looks like:
 
-![Little demonstration](http://q37.info/download/assets/Hello.gif "A basic example")
+![Little demonstration](https://q37.info/download/assets/Hello.gif "A basic example")
 
 - `git clone http://github.com/epeios-q37/atlas-java`
 - `cd atlas-java/Hello`
-- *Windows*: `java -cp .;../Atlas.jar Hello`
-- other platforms: `java -cp .:../Atlas.jar Hello`
-
-For a live demonstration: <http://q37.info/runkit/Hello>.
+- on *Windows*: `java -cp .;../Atlas.jar Hello`
+- on other platforms: `java -cp .:../Atlas.jar Hello`
 
 Source code:
 
@@ -27,6 +48,8 @@ Source code:
 import info.q37.atlas.*;
 
 class Hello extends Atlas {
+ // For the sake of simplification, the following HTML content has been
+ // embedded in the source code, but it can be easily stored in a file. 
  private static String body =
   "<div style=\"display: table; margin: 50px auto auto auto;\">" +
   " <fieldset>" +
@@ -42,7 +65,7 @@ class Hello extends Atlas {
  @Override
  public void handle(String action, String id)
  {
-  switch( action) {
+  switch(action) {
   case "": // Action label corresponding to a new session.
    dom.setLayout("", body);
    break;
@@ -58,19 +81,13 @@ class Hello extends Atlas {
   dom.focus("input");
  }
 
- public static void main(String[] args) {
+ public static void main(String[] args
+ {
   launch(() -> new Hello());
  }
 }
 ```
 
-## *TodoMVC*
-
-And here's how the *Atlas* toolkit version of the [*TodoMVC*](http://todomvc.com/) application looks like: 
-
-![TodoMVC](http://q37.info/download/TodoMVC.gif "The TodoMVC application made with the Atlas toolkit")
-
-For a live demonstration: <http://q37.info/runkit/TodoMVC>.
 
 ## Content of the repository
 
@@ -86,13 +103,5 @@ To run an example, go inside its directory (`Blank`, `Chatroom`…) and launch:
 - under other platforms : `java -cp .:../Atlas.jar <Name>` (with colon as *classpath* separator).
 
 where `<Name>` is the name of the example (`Blank`, `Chatroom`…).
-
-The *Atlas* toolkit is also available for:
-
-- *Node.js*: <http://github.com/epeios-q37/atlas-node>
-- *Perl*: <http://github.com/epeios-q37/atlas-perl>
-- *PHP*: <http://github.com/epeios-q37/atlas-php>
-- *Python*: <http://github.com/epeios-q37/atlas-python>
-- *Ruby*: <http://github.com/epeios-q37/atlas-ruby>
 
 For more information about the *Atlas* toolkit: <http://atlastk.org/>.

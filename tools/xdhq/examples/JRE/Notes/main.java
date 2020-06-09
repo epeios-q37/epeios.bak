@@ -139,7 +139,7 @@ class Notes extends Atlas {
 	}
 
 	public Notes() {
-		System.out.println("Connection detected...");
+		// System.out.println("Connection detected...");
 		notes = new ArrayList<Note>();
 
 		// First must be empty as it used as buffer for the new notes.

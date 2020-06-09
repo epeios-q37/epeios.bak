@@ -24,7 +24,7 @@ SOFTWARE.
 
 "use strict";
 
-var pAddr = "atlastk.org";
+var pAddr = "faas1.q37.info";
 var pPort = 53700;
 var wAddr = "";
 var wPort = "";

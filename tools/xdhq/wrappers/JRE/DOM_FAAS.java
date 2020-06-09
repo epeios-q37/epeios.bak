@@ -26,7 +26,7 @@ import java.util.concurrent.locks.*;
 import java.awt.Desktop;
 
 public class DOM_FAAS extends DOM_SHRD {
-	static private String pAddr = "atlastk.org";
+	static private String pAddr = "faas1.q37.info";
 	static private int pPort = 53700;
 	static private String wAddr = "";
 	static private String wPort = "";
@@ -71,6 +71,10 @@ public class DOM_FAAS extends DOM_SHRD {
 		return getEnv_(name, "");
 	}
 
+	static private boolean isREPLit_() {
+		return "REPLit".equals(getEnv_("ATK"));
+	}
+
 	static private boolean isTokenEmpty_() {
 		return "".equals(token) || (token.charAt(0) == '&');
 	}
@@ -85,6 +89,8 @@ public class DOM_FAAS extends DOM_SHRD {
 		} else if ("TEST".equals(atk)) {
 			cgi = "xdh_";
 			System.out.println("\tTEST mode !");
+		} else if ("REPLit".equals(atk)) {
+			// Nothing to do.
 		} else if (!"".equals(atk)) {
 			throw new java.lang.RuntimeException("Bad 'ATK' environment variable value : should be 'DEV' or 'TEST' !");
 		}
@@ -244,7 +250,13 @@ public class DOM_FAAS extends DOM_SHRD {
 			System.out.println(filler);
 			System.out.println("Open above URL in a web browser. Enjoy!");
 
-			if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+			if ( isREPLit_() ) {
+				String script =
+					"require('http').createServer(function (req, res)" + 
+					"{res.end(\"<html><body><iframe style=\\\"border-style: none; width: 100%;height: 100%\\\" " + 
+					"src=\\\"https://atlastk.org/repl_it.php?url=" + url + "\\\"</iframe></body></html>\");}).listen(8080);";
+				Runtime.getRuntime().exec(new String[] { "/usr/bin/node", "-e", script });
+			} else if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
 				Desktop.getDesktop().browse(new URI(url));
 			} else if (Runtime.getRuntime().exec(new String[] { "which", "xdg-open" }).getInputStream().read() != -1) {
                 Runtime.getRuntime().exec(new String[] { "xdg-open", url });	// For KDE based Linux distros.

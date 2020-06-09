@@ -39,8 +39,8 @@ my $FaaSProtocolVersion = "0";
 my $mainProtocolLabel = "8d2b7b52-6681-48d6-8974-6e0127a4ca7e";
 my $mainProtocolVersion = "0";
 
-my $pAddr = "atlastk.org";
-my $pPort = 53800;
+my $pAddr = "faas1.q37.info";
+my $pPort = 53700;
 my $wAddr = "";
 my $wPort = "";
 my $cgi = "xdh";
