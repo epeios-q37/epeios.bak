@@ -69,7 +69,7 @@ sub _worker {
         }
     }
 
-    CORE::say("Quitting thread!");
+   # CORE::say("Quitting thread!");
 }
 
 sub _callback {

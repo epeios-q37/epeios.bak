@@ -68,9 +68,9 @@ module XDHqFAAS
 		puts "#{caller_infos[0]} - #{caller_infos[1]}"  
 	end
 
-	@FaaSProtocolLabel = "7b4b6bea-2432-4584-950b-e595c9e391e1"
+	@FaaSProtocolLabel = "9efcf0d1-92a4-4e88-86bf-38ce18ca2894"
 	@FaaSProtocolVersion = "0"
-	@mainProtocolLabel = "8d2b7b52-6681-48d6-8974-6e0127a4ca7e"
+	@mainProtocolLabel = "bf077e9f-baca-48a1-bd3f-bf5181a78666"
 	@mainProtocolVersion = "0"
 
 	@pAddr = "faas1.q37.info"
@@ -102,17 +102,13 @@ module XDHqFAAS
 	end
 
 	def XDHq::getEnv(name, value = "")
-		env = ENV[name]
-
-		if env
-			return env.strip()
-		else
-			return value.strip()
-		end
+		return XDHqSHRD::getEnv(name, value);
 	end
+
 	def self.tokenEmpty?()
 		return @token.empty?() || @token[0] == "&"
 	end
+	
 	def self.init
 		token = ""
 
@@ -242,6 +238,7 @@ module XDHqFAAS
 			writeString(@token)
 			writeString(@headContent)
 			writeString(@wAddr)
+			writeString("RBY")
 		}
 
 		@token = getString()
@@ -307,11 +304,6 @@ module XDHqFAAS
 				end
 
 				getString() # Language. Currently ignored.
-
-				@outputMutex.synchronize {
-					writeSInt(id)
-					writeString("RBY")
-				}
 			else
 				@instances[id].signal()
 				

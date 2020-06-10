@@ -103,9 +103,9 @@ def _REPLit(url):
     httpd = HTTPServer(server_address, _REPLit_class)
     httpd.handle_request()
 
-_FaaSProtocolLabel = "7b4b6bea-2432-4584-950b-e595c9e391e1"
+_FaaSProtocolLabel = "9efcf0d1-92a4-4e88-86bf-38ce18ca2894"
 _FaaSProtocolVersion = "0"
-_mainProtocolLabel = "8d2b7b52-6681-48d6-8974-6e0127a4ca7e"
+_mainProtocolLabel = "bf077e9f-baca-48a1-bd3f-bf5181a78666"
 _mainProtocolVersion = "0"
 
 _writeLock = threading.Lock()
@@ -203,9 +203,7 @@ def _init():
 	elif atk == "TEST":
 		_cgi = "xdh_"
 		print("\tTEST mode!")
-	elif atk == "REPLit":
-		pass
-	elif atk:
+	elif atk and ( atk != "REPLit" ):
 		sys.exit("Bad 'ATK' environment variable value : should be 'DEV' or 'TEST' !")
 
 	pAddr = getEnv("ATK_PADDR", pAddr)
@@ -262,6 +260,7 @@ def _ignition():
 	writeString( _token)
 	writeString(_headContent)
 	writeString(_wAddr);
+	writeString("PYH")
 
 	_writeLock.release()
 
@@ -329,11 +328,6 @@ def _serve(callback,userCallback,callbacks ):
 				sys.exit(error)
 
 			getString()	# Language. Not handled yet.
-
-			_writeLock.acquire()
-			writeSInt(id)
-			writeString("PYH")
-			_writeLock.release()
 		else:
 			_instances[id].signal()
 

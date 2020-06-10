@@ -34,9 +34,9 @@ use threads;
 use threads::shared;
 use strict;
 
-my $FaaSProtocolLabel = "7b4b6bea-2432-4584-950b-e595c9e391e1";
+my $FaaSProtocolLabel = "9efcf0d1-92a4-4e88-86bf-38ce18ca2894";
 my $FaaSProtocolVersion = "0";
-my $mainProtocolLabel = "8d2b7b52-6681-48d6-8974-6e0127a4ca7e";
+my $mainProtocolLabel = "bf077e9f-baca-48a1-bd3f-bf5181a78666";
 my $mainProtocolVersion = "0";
 
 my $pAddr = "faas1.q37.info";
@@ -79,7 +79,7 @@ sub _init {
         CORE::say("\tDEV mode!");
     } elsif ($atk eq "TEST") {
         $cgi = "xdh_";
-    } else  {
+    } elsif ($atk ne "REPLit") {
         die("Bad 'ATK' environment variable value : should be 'DEV' or 'TEST' !");
     }
 
@@ -144,6 +144,7 @@ sub _ignition {
     XDHq::FAAS::SHRD::writeString($token);
     XDHq::FAAS::SHRD::writeString($main::headContent);
     XDHq::FAAS::SHRD::writeString($wAddr);
+    XDHq::FAAS::SHRD::writeString("PRL");    
 
     $token = XDHq::FAAS::SHRD::getString();
 
@@ -158,7 +159,13 @@ sub _ignition {
         CORE::say($url);
         CORE::say("^" x length($url));
         CORE::say("Open above URL in a web browser. Enjoy!\n");
-        XDHq::SHRD::open($url);
+
+        if ( XDHq::SHRD::isREPLit() ) {
+            system("node", "-e",
+            'require("http").createServer(function (req, res){res.end("<html><body><iframe style=\"border-style: none; width: 100%;height: 100%\" src=\"https://atlastk.org/repl_it.php?url=' . $url . '\"></iframe></body></html>");process.exit();}).listen(8080)');
+        } else {
+            XDHq::SHRD::open($url);
+        }
     }
 }
 
@@ -214,12 +221,6 @@ sub _serve {
             }
 
             XDHq::FAAS::SHRD::getString();    # Language. Not handled yet.
-
-            {   # Lock scope;
-                lock($XDHq::FAAS::SHRD::writeLock);
-                XDHq::FAAS::SHRD::writeSInt($id);
-                XDHq::FAAS::SHRD::writeString("PRL");
-            }
         } else {
             XDHq::FAAS::Instance::signal($instances{$id});
 

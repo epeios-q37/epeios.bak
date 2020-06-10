@@ -36,4 +36,14 @@ module XDHqSHRD
 	def XDHqSHRD::isDev?()
 		return ENV.include?("Q37_EPEIOS")
 	end
+
+	def XDHqSHRD::getEnv(name, value = "")
+		env = ENV[name]
+
+		if env
+			return env.strip()
+		else
+			return value.strip()
+		end
+	end	
 end

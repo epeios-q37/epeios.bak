@@ -36,7 +36,7 @@ using namespace faaspool;
 #include "xdhdws.h"
 
 namespace {
-	static qCDEF( char *, ProtocolId_, "7b4b6bea-2432-4584-950b-e595c9e391e1" );
+	static qCDEF( char *, ProtocolId_, "9efcf0d1-92a4-4e88-86bf-38ce18ca2894" );
 
 	namespace registry_ {
 		namespace parameter {
@@ -484,9 +484,7 @@ namespace {
 	qRB;
 		Log.Init( common::LogDriver );
 
-		Log << "FaaS (" << Token << ")";
-
-		Log << " : " <<  Message;
+		Log << Token << ": " <<  Message;
 	qRR;
 	qRT;
 	qRE;
@@ -500,7 +498,7 @@ namespace {
 		rBackend_ *Backend = NULL;
 	qRH;
 		flw::rDressedRWFlow<> Flow;
-		str::wString Token, Head, Address, ErrorMessageLabel, ErrorMessage, URL;
+		str::wString Token, Head, Address, Misc, ErrorMessageLabel, ErrorMessage, URL;
 		plugins::eStatus Status = plugins::s_Undefined;
 	qRB;
 		Flow.Init( Driver );
@@ -510,9 +508,10 @@ namespace {
 
 		switch ( Status = token_::GetPlugin().Handle(Token) ) {
 		case plugins::sOK:
-			tol::Init(Head, Address);
+			tol::Init(Head, Address, Misc);
 			Get_(Flow, Head);
 			Get_(Flow, Address);    // Address to which the toolkit has connected.
+			Get_(Flow, Misc);
 
 			if ( (Backend = Create_( Driver, IP, Token, Head )) == NULL ) {
 				ErrorMessage.Init();
@@ -536,7 +535,7 @@ namespace {
 		else {
 			URL.Init();
 			Put_(BuildURL_(Address, str::Empty, Token, URL), Flow);
-			Log_(Token, "Creation" );
+			Log_(Token, Misc );
 		}
 	qRR;
 		if ( Backend != NULL )
@@ -685,7 +684,7 @@ namespace {
 		sclm::ErrorDefaultHandling();	// Also resets the error, otherwise the `WaitUntilNoMoreClient()` will lead to a deadlock on next error.
 	qRT;
 		if ( Backend != NULL ) {
-				Log_(Backend->Token, "Destruction");
+				Log_(Backend->Token, "Quitting");
 			Backend->Driver = NULL;	// This signals that the backend is no more present.
 			Backend->WaitUntilNoMoreClient();
 			Remove_( Backend->Row );

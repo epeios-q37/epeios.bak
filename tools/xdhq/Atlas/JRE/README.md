@@ -12,7 +12,7 @@
 
 ---
 
-With the *Atlas* toolkit, it has never been easier to write a modern web application ([*Single-page application*](https://q37.info/s/7sbmxd3j)):
+With the *Atlas* toolkit, it has never been easier to write modern web interfaces for ([*Single-page applications*](https://q37.info/s/7sbmxd3j)):
 - no *Javascript* to write: only *HTML* and *Java*,
 - no [web server](https://q37.info/s/n3hpwsht) (*Apache*, *Nginx*…) to install: only the toolkit,
 - no remote server to host your application: only your computer;

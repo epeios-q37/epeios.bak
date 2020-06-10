@@ -22,8 +22,9 @@
 
 #include "registry.h"
 
-#include "scltool.h"
-#include "sclerror.h"
+#include "sclt.h"
+#include "scle.h"
+#include "sclm.h"
 
 #include "err.h"
 #include "cio.h"
@@ -39,7 +40,7 @@ using cio::CIn;
 
 SCLI_DEF( trial, NAME_LC, NAME_MC );
 
-const scli::sInfo &scltool::SCLTOOLInfo( void )
+const scli::sInfo &sclt::SCLTInfo( void )
 {
 	return trial::Info;
 }
@@ -88,12 +89,69 @@ namespace {
 	qRB
         Buffer.Init();
 
-        t1::Write(sclmisc::MGetS16(registry::parameter::t1::Value), Buffer);
+        t1::Write(sclm::MGetS16(registry::parameter::t1::Value), Buffer);
 
         cio::COut << t1::Read(Buffer) << txf::nl << txf::commit;
     qRR
     qRT
     qRE
+	}
+
+	namespace t2 {
+		class child {
+		protected:
+			char c_;
+		public:
+			child(char c) {
+				c_ = c;
+				cio::COut << ">> Child Ctor: " << c_ << txf::nl << txf::commit;
+			}
+			virtual ~child() {
+				cio::COut << ">> Child Dtor: " << c_ << txf::nl << txf::commit;
+			}
+		};
+
+		class parent
+		: public child
+		{
+		public:
+			parent(char c)
+			: child(c)
+			{
+				cio::COut << ">> Parent Ctor: " << c_ << txf::nl << txf::commit;
+			}
+			~parent() {
+				cio::COut << ">> Parent Dtor: " << c_ << txf::nl << txf::commit;
+			}
+		};
+
+		void DoNothing(const child &){}
+
+		const child &Convert(const child &C)
+		{
+			return C;
+		}
+	}
+
+	#define M(e)\
+		cio::COut << txf::nl << #e << txf::nl << txf::commit;\
+		DoNothing(true ? e)
+
+	void T2_(void) {
+		t2::parent A('A'), B('B');
+
+		M(A : B);
+		M( Convert(A) : B );
+		M( Convert(A) : Convert(B) );
+		M( A : t2::parent('C'));
+		M( Convert(A) : t2::parent('D'));
+		M( t2::parent('E') : A );
+		M( t2::parent('F') : Convert(A));
+		M( Convert(A) : Convert(t2::parent('G')));
+		M( Convert(t2::parent('H')) : A );
+		M( Convert(t2::parent('I')) : Convert(A));
+
+		cio::COut << txf::nl << "End" << txf::nl << txf::commit;
 	}
 }
 
@@ -101,9 +159,9 @@ namespace {
 	else if ( Command == #name )\
 		name##_()
 
-int scltool::SCLTOOLMain(
+int sclt::SCLTMain(
 	const str::dString &Command,
-	const scltool::fOddities &Oddities )
+	const sclt::fOddities &Oddities )
 {
 	int ExitValue = EXIT_FAILURE;
 qRH;
@@ -113,6 +171,7 @@ qRB;
 	else if ( Command == "License" )
 		epsmsc::PrintLicense( NAME_MC );
 	C( T1 );
+	C( T2 );
 	else
 		qRGnr();
 

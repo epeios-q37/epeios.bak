@@ -37,9 +37,9 @@ public class DOM_FAAS extends DOM_SHRD {
 	// Both object are to block the switcher.
 	static private Lock lock_ = new ReentrantLock();
 	static private Condition condition_ = lock_.newCondition();
-	static private String FaaSProtocolLabel = "7b4b6bea-2432-4584-950b-e595c9e391e1";
+	static private String FaaSProtocolLabel = "9efcf0d1-92a4-4e88-86bf-38ce18ca2894";
 	static private String FaaSProtocolVersion = "0";
-	static private String mainProtocolLabel = "8d2b7b52-6681-48d6-8974-6e0127a4ca7e";
+	static private String mainProtocolLabel = "bf077e9f-baca-48a1-bd3f-bf5181a78666";
 	static private String mainProtocolVersion = "0";
 
 	private int id_;
@@ -89,9 +89,7 @@ public class DOM_FAAS extends DOM_SHRD {
 		} else if ("TEST".equals(atk)) {
 			cgi = "xdh_";
 			System.out.println("\tTEST mode !");
-		} else if ("REPLit".equals(atk)) {
-			// Nothing to do.
-		} else if (!"".equals(atk)) {
+		} else if (!atk.isEmpty() && !"REPLit".equals(atk)) {
 			throw new java.lang.RuntimeException("Bad 'ATK' environment variable value : should be 'DEV' or 'TEST' !");
 		}
 
@@ -231,6 +229,7 @@ public class DOM_FAAS extends DOM_SHRD {
 		writeString_(token);
 		writeString_(info.q37.xdhq.XDH_FAAS.headContent);
 		writeString_(wAddr);
+		writeString_("JRE");
 		
 		output_.flush();
 
@@ -325,12 +324,6 @@ public class DOM_FAAS extends DOM_SHRD {
 						}
 					
 						getString_();	// Language. Ignored yet.
-
-						synchronized( output_) {
-							writeSInt_( id );
-							writeString_("JRE");
-							output_.flush();
-						}
 
 						instances_.get(id).handshakeDone = true;
 				} else {

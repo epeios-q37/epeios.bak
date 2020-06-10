@@ -45,6 +45,10 @@ sub isDev {
     return defined($ENV{"Q37_EPEIOS"});
 }
 
+sub isREPLit {
+    return ( exists $ENV{"ATK"} ) && ($ENV{"ATK"} eq "REPLit");
+}
+
 sub open {
     my $os = $Config{osname};
     my $opener;

@@ -23,7 +23,7 @@
 using namespace registry;
 
 namespace {
-    rEntry T1_("T1", sclrgstry::Parameters);
+    rEntry T1_("T1", sclr::Parameters);
 }
 
 rEntry registry::parameter::t1::Value( "Value", T1_ );

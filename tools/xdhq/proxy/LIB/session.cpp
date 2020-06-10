@@ -204,6 +204,10 @@ void session::Release_(
 	id_store_::Release(Id);
 }
 
+namespace {
+	str::wString SelfHostingLabel_("SlfH");
+}
+
 bso::sBool session::rSession::XDHCDCInitialize(
 	xdhcuc::cSingle &Callback,
 	const char *Language,
@@ -213,25 +217,17 @@ bso::sBool session::rSession::XDHCDCInitialize(
 qRH;
 	flw::rDressedRWFlow<> Flow;
 	csdcmn::sVersion Version = csdcmn::UndefinedVersion;
-	str::wString LogMessage;
 qRB;
-	tol::Init(LogMessage);
-
 	if ( Token.Amount() == 0 ) {
 		SlfHDriver_.Init( common::Core, fdr::ts_Default );
 		Mode_ = mSlfH;
 		Success = true;
-		LogMessage.Append( "SlfH" );
 	} else {
-		LogMessage.Append( Token );
-
 		if ( ( TRow_ = FaaSDriver_.Init(Token, IP_) ) != qNIL ) {
 			Mode_ = mFaaS;
 			Success = true;
 		}
 	}
-
-	LogMessage.Append( " - " );
 
 	if ( Success ) {
 		Flow.Init( D_() );
@@ -257,11 +253,14 @@ qRB;
 		prtcl::Put( "", Flow );
 		Flow.Commit();
 
-		csdcmn::Get( Flow, LogMessage );
-
 		Id_ = id_store_::Fetch();
 		Token_ = Token;
-		Log_(Id_, IP_, LogMessage);
+
+#if 0
+		Log_(Id_, IP_, Token.Amount() ? Token : str::wString("SlfH"));	// This one calls wrongly the destructor of 'Token'.
+#else
+		Log_(Id_, IP_, Token.Amount() ? Token : SelfHostingLabel_);	// Avoids above problem, and also string creation.
+#endif
 
 		xdhdws::sProxy::Init(Callback, Token);	// Has to be last, otherwise, if an error occurs, 'Callback' will be freed twice!
 	}

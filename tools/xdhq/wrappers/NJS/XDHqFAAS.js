@@ -82,10 +82,10 @@ const net = require('net');
 const types = shared.types;
 const open = shared.open;
 
-const mainProtocolLabel = "8d2b7b52-6681-48d6-8974-6e0127a4ca7e";
+const mainProtocolLabel = "bf077e9f-baca-48a1-bd3f-bf5181a78666";
 const mainProtocolVersion = "0";
 
-const faasProtocolLabel = "7b4b6bea-2432-4584-950b-e595c9e391e1";
+const faasProtocolLabel = "9efcf0d1-92a4-4e88-86bf-38ce18ca2894";
 const faasProtocolVersion = "0";
 
 var token = getEnv("ATK_TOKEN");
@@ -481,7 +481,6 @@ function serve(feeder, createCallback, actionCallbacks) {
 			break;
 		case s.HANDSHAKE:
 			instance._xdh.handshakeDone = true;
-			socket.write(addString(convertSInt(instance._xdh.id), "NJS"));
 			pop();
 			break;	
 		case s.ERROR:
@@ -634,8 +633,7 @@ function handleNotification(notification, head) {
 	if (head === undefined)
 		head = "";
 
-	socket.write(handleString(head));
-	socket.write(handleString(wAddr));
+	socket.write(addString(addString(handleString(head),wAddr),"NJS"));
 }
 
 
@@ -722,8 +720,7 @@ function launch(createCallback, actionCallbacks, head) {
 		push(d.STRING);
 		socket.on('data', (data) => onRead(data, createCallback, actionCallbacks, head));
 		
-		socket.write(handleString(faasProtocolLabel));
-		socket.write(handleString(faasProtocolVersion));
+		socket.write(addString(handleString(faasProtocolLabel),faasProtocolVersion));
 	});	
 }
 
