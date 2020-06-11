@@ -9,7 +9,7 @@ ord() {
   LC_CTYPE=C printf '%d' "'$1"
 }
 
-DEMOS=(Blank Hello Chatroom Notes)
+DEMOS=(Blank Hello Chatroom Notes TodoMVC)
 
 export DEMOS_AMOUNT=${#DEMOS[@]}
 
@@ -30,5 +30,5 @@ do
 
   export FILE=${DEMOS[$(($(ord $DEMO) - 97))]}
 
-  [ -f $FILE/main.pl ] && CONT=false && perl $FILE/main.pl
+  [ -f $FILE/main.rb ] && CONT=false && ruby -IAtlas $FILE/main.rb
 done

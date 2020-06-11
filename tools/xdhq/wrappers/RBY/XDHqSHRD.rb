@@ -45,5 +45,9 @@ module XDHqSHRD
 		else
 			return value.strip()
 		end
-	end	
+	end
+	
+	def XDHqSHRD::isREPLit?()
+		return getEnv("ATK") == "REPLit"
+	end
 end

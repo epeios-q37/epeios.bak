@@ -86,6 +86,12 @@ module XDHqFAAS
 	@headContent = ""
 	@token = ""
 
+	@REPLit = 
+	<<~HEREDOC
+	node -e "require('http').createServer(function (req, res)
+	{res.end(\\"<html><body><iframe style='border-style: none; width: 100%%;height: 100%%' src='https://atlastk.org/repl_it.php?url=%s'></iframe></body></html>\\");process.exit();}).listen(8080)"
+	HEREDOC
+
 	def self.lockOutputMutex()
 		@outputMutex.lock();
 	end
@@ -120,6 +126,8 @@ module XDHqFAAS
 			puts("\tDEV mode !")
 		when "TEST"
 			@cgi = "xdh_"
+		when "REPLit"
+			# Just to filter out this case.
 		else
 			abort("Bad 'ATK' environment variable value : should be 'DEV' or 'TEST' !")
 		end
@@ -254,7 +262,11 @@ module XDHqFAAS
 			puts(url)
 			puts("".rjust(url.length,'^'))
 			puts("Open above URL in a web browser. Enjoy!\n")
-			XDHqSHRD::open(url)
+			if (XDHqSHRD::isREPLit?())
+				system(@REPLit % [url])
+			else
+				XDHqSHRD::open(url)
+			end
 		end
 	end
 	def self.serve(callback, userCallback,callbacks)
