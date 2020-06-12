@@ -2,7 +2,11 @@
 
 ![For Java](https://q37.info/download/assets/Java.png "Java logo")
 
-[![Run on Repl.it](https://repl.it/badge/github/epeios-q37/atlas-java)](https://q37.info/s/3vwk3h3n) [![Version 0.11.0](https://img.shields.io/static/v1.svg?&color=90b4ed&label=Version&message=0.11.0)](http://q37.info/s/gei0veus)
+[![Run on Repl.it](https://repl.it/badge/github/epeios-q37/atlas-java)](https://q37.info/s/3vwk3h3n)
+[![Version 0.11](https://img.shields.io/static/v1.svg?&color=90b4ed&label=Version&message=0.11)](http://github.com/epeios-q37/atlas-java/)
+[![Stars](https://img.shields.io/github/stars/epeios-q37/atlas-java.svg?style=social)](https://github.com/epeios-q37/atlas-java/stargazers)
+[![license: MIT](https://img.shields.io/github/license/epeios-q37/atlas-java?color=yellow)](https://github.com/epeios-q37/atlas-java/blob/master/LICENSE)
+[![Homepage](https://img.shields.io/static/v1?label=homepage&message=atlastk.org&color=ff69b4)](https://atlastk.org)
 
 *NOTA*: this toolkit is also available for:
 - *Node.js*: <http://github.com/epeios-q37/atlas-node>,
@@ -34,11 +38,11 @@ To see all the live demonstrations, simply go [here](https://q37.info/s/3vwk3h3n
 
 ## *Hello, World!*
 
-Here's how a [*Hello, World!*](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program) program made with the *Atlas* toolkit looks like:
+Here's how the [*Hello, World!*](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program) program made with the *Atlas* toolkit looks like:
 
 ![Little demonstration](https://q37.info/download/assets/Hello.gif "A basic example")
 
-This example is part of the live demonstrations above, but you can launch it on your computer
+This example is part of the live demonstrations above, but you can launch it on your computer:
 
 - `git clone https://github.com/epeios-q37/atlas-java`
 - `cd atlas-java/Hello`
@@ -51,8 +55,7 @@ Source code:
 import info.q37.atlas.*;
 
 class Hello extends Atlas {
- // For the sake of simplification, the following HTML content has been
- // embedded in the source code, but it can be easily stored in a file. 
+
  private static String body =
   "<div style=\"display: table; margin: 50px auto auto auto;\">" +
   " <fieldset>" +

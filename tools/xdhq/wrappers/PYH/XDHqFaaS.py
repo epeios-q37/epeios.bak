@@ -270,7 +270,6 @@ def _ignition():
 		sys.exit(getString())
 
 	if ( _wPort != ":0" ):
-		url = "http://" + _wAddr + _wPort + "/" + _cgi + ".php?_token=" + _token
 		url = getString()
 
 		print(url)

@@ -33,7 +33,6 @@ var socket = undefined;
 
 function REPLit(url) {
 	require('http').createServer(function (req, res) {
-//		res.end("<html><body><iframe style=\"border-style: none; width: 100%;height: 100%\" src=\"" + url + "\"</iframe></body></html>");
 		res.end("<html><body><iframe style=\"border-style: none; width: 100%;height: 100%\" src=\"https://atlastk.org/repl_it.php?url=" + url + "\"</iframe></body></html>");
 	}).listen(8080);
 }

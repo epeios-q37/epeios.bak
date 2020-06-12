@@ -9,7 +9,11 @@
 
 ![For Node.js](https://q37.info/download/assets/Node.png)
 
-[![Run on Repl.it](https://repl.it/badge/github/epeios-q37/atlas-node)](https://q37.info/s/st7gccd4) [![Version 0.11](https://img.shields.io/static/v1.svg?&color=90b4ed&label=Version&message=0.11)](https://q37.info/s/gei0veus) [![Stars](https://img.shields.io/github/stars/epeios-q37/atlas-node.svg?style=social)](https://github.com/epeios-q37/atlas-node)[![license: MIT](https://img.shields.io/github/license/epeios-q37/atlas-node)](https://github.com/epeios-q37/atlas-node/blob/master/LICENSE) [![Documentation](https://img.shields.io/static/v1?label=support&message=atlastk.org&color=yellow)](https://atlastk.org)
+[![Run on Repl.it](https://repl.it/badge/github/epeios-q37/atlas-node)](https://q37.info/s/st7gccd4)
+[![Version 0.11](https://img.shields.io/static/v1.svg?&color=90b4ed&label=Version&message=0.11)](http://github.com/epeios-q37/atlas-node/)
+[![Stars](https://img.shields.io/github/stars/epeios-q37/atlas-node.svg?style=social)](https://github.com/epeios-q37/atlas-node/stargazers)
+[![license: MIT](https://img.shields.io/github/license/epeios-q37/atlas-node?color=yellow)](https://github.com/epeios-q37/atlas-node/blob/master/LICENSE)
+[![Homepage](https://img.shields.io/static/v1?label=homepage&message=atlastk.org&color=ff69b4)](https://atlastk.org)
 
 [![NPM badge of the Atlas toolkit](https://nodei.co/npm/atlastk.png)](https://npmjs.com/atlastk/ "NPM package of the Atlas toolkit")
 
@@ -26,7 +30,7 @@ With the [*Atlas* toolkit](http://atlastk.org/), it has never been easier to cre
 - no [front and back end architecture](https://q37.info/s/px7hhztd) to bother with,
 - no [web server](https://q37.info/s/n3hpwsht) (*Apache*, *Nginx*…) to install,
 
-and all this only with the help of a library of about 13 KB.
+and all this only with the help of a library of about 15 KB.
 
 With the *Atlas* toolkit, your applications will be accessible from the entire internet on laptops, smartphones, tablets…, and this without having to deploy them on a remote server or to open an incoming port on your internet box. All you need is a local computer with a simple internet connection. 
 
@@ -42,27 +46,26 @@ Before diving into source code, you can take a look on some live demonstrations 
 
 ![TodoMVC](https://q37.info/download/TodoMVC.gif "The TodoMVC application made with the Atlas toolkit")
 
-To see all this live demonstrations, simply go [here](https://q37.info/s/st7gccd4), click on the green `run` button, select the demonstration you want to see, and then click (or scan with your smartphone) the then displayed [QR code](https://q37.info/s/3pktvrj7).
+To see all the live demonstrations, simply go [here](https://q37.info/s/st7gccd4), click on the green `run` button, select the demonstration you want to see, and then click (or scan with your smartphone) the then displayed [QR code](https://q37.info/s/3pktvrj7).
 
 ## *Hello, World!*
 
-Here's how a [*Hello, World!*](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program) type program made with the *Atlas* toolkit looks like:
+Here's how the [*Hello, World!*](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program) program made with the *Atlas* toolkit looks like:
 
-![Little demonstration](https://q37.info/download/assets/Hello.gif "A basic exemple")
+![Little demonstration](https://q37.info/download/assets/Hello.gif "A basic example")
+
+This example is part of the live demonstrations above, but you can launch it on your computer:
 
 - `git clone https://github.com/epeios-q37/atlas-node`
 - `cd atlas-node`
 - `npm install`
 - `node Hello/main.js`
 
-You can also put below source code in a file and launch it after having installed the [*atlastk* package](https://q37.info/s/h3zjb39j) (`npm install atlastk`), or, with absolutely no installation, paste the below code [here](https://q37.info/s/nkcgqn7z), and open the displayed *URL* in a web browser.
-
 Source code:
 
 ```javascript
 const atlas = require( 'atlastk' );
- // For the sake of simplification, the following HTML content has been
- // embedded in the source code, but it can be easily stored in a file. 
+
 const body = `
 <div style="display: table; margin: 50px auto auto auto;">
  <fieldset>

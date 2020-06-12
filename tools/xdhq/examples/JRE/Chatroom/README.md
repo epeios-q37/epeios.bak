@@ -18,7 +18,4 @@ To install and run this application on your computer:
 *NOTA*: you may have to give the full path for the *Java* compiler (`javac`), and may be for the *JVM* (`java`), if they are not in the [*PATH*](https://en.wikipedia.org/wiki/PATH_(variable)).
 
 
-There is also a version for:
-
-  * *Node.js*: <http://github.com/epeios-q37/chatroom-node>,
-  * *PHP*: <http://github.com/epeios-q37/chatroom-php>.
+There is also a version for *Node.js*: <http://github.com/epeios-q37/chatroom-node>.

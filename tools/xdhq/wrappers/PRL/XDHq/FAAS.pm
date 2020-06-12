@@ -153,7 +153,6 @@ sub _ignition {
     }
 
     if (not($wPort eq ":0")) {
-#        my $url = "http://${wAddr}${wPort}/${cgi}.php?_token=${token}";
         my $url = XDHq::FAAS::SHRD::getString();
 
         CORE::say($url);

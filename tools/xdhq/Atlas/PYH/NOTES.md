@@ -127,7 +127,7 @@ def readAsset(path):
 
 ### Packaging
 
-**Attention** : vérifier que la version de *twine* (`pip3 show twine`) est >= 31.0, sinon mettre à jour (`pip3 install --upgrade wheel`), faute de quoi la description en *markdown* n'est pas affichée correctement (mettre à jour *twine* et/ou *setuptools* peut aussi être nécessaire.
+**Attention** : vérifier que la version de *wheel* (`pip3 show wheel`) est >= 31.0, sinon mettre à jour (`pip3 install --user --upgrade wheel`), faute de quoi la description en *markdown* n'est pas affichée correctement (mettre à jour *twine* et/ou *setuptools* peut aussi être nécessaire).
 
 Dans `RTW/atlas-python` :
 
