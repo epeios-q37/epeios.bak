@@ -21,7 +21,7 @@ La version du wrapper binaire (*C++*) du *toolkit* *Atlas* n'est plus actuelleme
 ### Test
 
 Dans `RTW/atlas-node`
-- `npm pack Atlas/` ;
+- `npm pack atlastk/` ;
 - remplacer l'entrée `Dependencies/atlastk` dans `package.json` par `atlastk-…-.tgz` ;
 - `unset Q37_EPEIOS` ;
 - `node Hello/Hello.js` doit échouer ! ;
@@ -29,7 +29,7 @@ Dans `RTW/atlas-node`
 - `node Hello/Hello.js` doit fonctionner.
 
 ### Publication
-- `npm install Atlas/`.
+- `npm publish atlastk/`.
 
 
 ## Publication sur *GitHub*
@@ -37,7 +37,7 @@ Dans `RTW/atlas-node`
 ### Test
 
 - `DVLRTW` ;
-- `créer un *REPL* bash sur *REPLit* ;
+- créer un *REPL* bash sur *REPLit* ;
 - copier tout le contenu de `RTW/atlas-node`(ne pas oublier `.replit`) dans le *REPL* ;
 - tester.
 
