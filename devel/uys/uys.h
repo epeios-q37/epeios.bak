@@ -104,6 +104,11 @@ namespace uys {
 
 			_Driver = &Driver;
 		}
+		_storage_driver__(const _storage_driver__ &)
+		{
+			qRFbd();	// See https://linuxfr.org/forums/programmation-c/posts/bizarrerie-operateur-ternaire
+
+		}
 		// Initialization.
 		void Init( void )
 		{

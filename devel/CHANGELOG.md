@@ -10,6 +10,11 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2020-06-13:
+
+- UYS:
+  - adding a copying constructor which generates an error (`qRFbd()`) to avoid a ternary operator issue,
+
 ## 2020-05-31:
 
 - CIO:

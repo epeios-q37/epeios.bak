@@ -476,6 +476,7 @@ namespace {
 
 namespace {
 	template <typename string> void Log_(
+		const str::dString &IP,
 		const str::dString &Token,
 		const string &Message )
 	{
@@ -484,7 +485,7 @@ namespace {
 	qRB;
 		Log.Init( common::LogDriver );
 
-		Log << Token << ": " <<  Message;
+		Log << Token << " (" << IP << "): " <<  Message;
 	qRR;
 	qRT;
 	qRE;
@@ -535,7 +536,7 @@ namespace {
 		else {
 			URL.Init();
 			Put_(BuildURL_(Address, str::Empty, Token, URL), Flow);
-			Log_(Token, Misc );
+			Log_(IP, Token, Misc );
 		}
 	qRR;
 		if ( Backend != NULL )
@@ -684,7 +685,7 @@ namespace {
 		sclm::ErrorDefaultHandling();	// Also resets the error, otherwise the `WaitUntilNoMoreClient()` will lead to a deadlock on next error.
 	qRT;
 		if ( Backend != NULL ) {
-				Log_(Backend->Token, "Quitting");
+				Log_(IP, Backend->Token, "Quitting");
 			Backend->Driver = NULL;	// This signals that the backend is no more present.
 			Backend->WaitUntilNoMoreClient();
 			Remove_( Backend->Row );
