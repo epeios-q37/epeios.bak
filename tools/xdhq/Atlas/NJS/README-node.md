@@ -1,10 +1,3 @@
-
-<!--
-    For Repl.it users: click on the green 'run' button,
-    select a demonstration, and click on (or scan) the then
-    displayed QR code.
--->
-
 # *Node.js* version of the *Atlas* toolkit
 
 ![For Node.js](https://q37.info/download/assets/Node.png)
@@ -26,17 +19,17 @@
 ---
 
 With the [*Atlas* toolkit](http://atlastk.org/), it has never been easier to create your own modern web application ([*SPA*](https://q37.info/s/7sbmxd3j)):
-- no frontend *Javascript* to write; only *HTML* and *Node.js*,
+- no front-end *Javascript* to write; only *HTML* and *Node.js*,
 - no [front and back end architecture](https://q37.info/s/px7hhztd) to bother with,
 - no [web server](https://q37.info/s/n3hpwsht) (*Apache*, *Nginx*…) to install,
 
-and all this only with the help of a library of about 15 KB.
+and all this only with the help of a library of about 40 KB.
 
 With the *Atlas* toolkit, your applications will be accessible from the entire internet on laptops, smartphones, tablets…, and this without having to deploy them on a remote server or to open an incoming port on your internet box. All you need is a local computer with a simple internet connection. 
 
 The *Atlas* toolkit is also the fastest and easiest way to add a [graphical user interface](https://q37.info/s/hw9n3pjs) to all your programs.
 
-If you want to use the *Atlas* toolkit without installing the examples, simply install the [*atlastk* package from *NPM*](https://q37.info/s/h3zjb39j) (`npm install atlastk`). This package has only one internal dependency, with no other dependencies.
+If you want to use the *Atlas* toolkit without installing the examples, simply install the [*atlastk* package from *NPM*](https://q37.info/s/h3zjb39j) (`npm install atlastk`), which has no other dependencies.
 
 You can also use the *Atlas* toolkit on [*Repl.it*](https://q37.info/s/mxmgq3qm), an [online IDE](https://q37.info/s/zzkzbdw7), so you have nothing to install, as you will see in the next section.
 

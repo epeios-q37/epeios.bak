@@ -164,7 +164,6 @@ function edit(dom, id) {
 				() => dom.focus("Title")
 				)
 			)
-		)
 	);
 }
 

@@ -123,7 +123,9 @@ def readAsset(path):
 
 **Effacer, si nécessaire, la variable d'environnement `PYTHONPATH` (`unset PYTHONPATH`).**
 
-**Mettre à jour le numéro de version dans `setup.py` !**
+**Mettre à jour, dans `setup.py`** :
+- le numéro de version ;
+- éventuellement la description.
 
 ### Packaging
 

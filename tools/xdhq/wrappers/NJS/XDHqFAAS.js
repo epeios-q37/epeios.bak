@@ -567,10 +567,6 @@ function handleURL(url) {
 
 	if (getEnv("ATK") === "REPLit") {
 		REPLit(url);
-//			console.log("\nIF THE PROGRAM DOES NOT WORK PROPERLY, PLEASE SEE http://q37.info/s/zbgfjtp9");
-		console.log("IF THE PROGRAM DOES NOT WORK PROPERLY, YOU PROBABLY FORGOT TO FORK!");
-		console.log("See http://q37.info/s/zbgfjtp9 for more details.");
-
 	} else
 		open(url);	
 }

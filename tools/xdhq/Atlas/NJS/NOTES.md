@@ -1,5 +1,60 @@
 # Developers/maintainers notes about the *Atlas* toolkit binding for *Node.js*
 
+
+La publication d'une nouvelle version du *toolkit* *Atlas* pour *Node.js* consiste en deux procédures :
+- publication du paquet *NPM*,
+- publication sur *GitHub*.
+
+Ces deux procédures vont êtres détaillées ci-dessus.
+
+**La première procédure (publication sur *NPM*) est indispensable à la seconde !**
+
+La version du wrapper binaire (*C++*) du *toolkit* *Atlas* n'est plus actuellement maintenue et donc publiée.
+
+## Publication sur *NPM*
+
+### Préparation
+
+- Mettre à jour le numéro de version dans le fichier `Atlas/package.json` ;
+- `DVLRTW` ;
+
+### Test
+
+Dans `RTW/atlas-node`
+- `npm pack Atlas/` ;
+- remplacer l'entrée `Dependencies/atlastk` dans `package.json` par `atlastk-…-.tgz` ;
+- `unset Q37_EPEIOS` ;
+- `node Hello/Hello.js` doit échouer ! ;
+- `npm install` ;
+- `node Hello/Hello.js` doit fonctionner.
+
+### Publication
+- `npm install Atlas/`.
+
+
+## Publication sur *GitHub*
+
+### Test
+
+- `DVLRTW` ;
+- `créer un *REPL* bash sur *REPLit* ;
+- copier tout le contenu de `RTW/atlas-node`(ne pas oublier `.replit`) dans le *REPL* ;
+- tester.
+
+### Publication
+
+Dans `RTW/atlas-node` :
+- `DVLRTW` ;
+- `RTWUpdate` ;
+- `git gui` et contrôler,
+- `RTWCommit`.
+
+---
+
+**Above this line are the old publication procedures.**
+
+---
+
 ## New packaging
 
 - *xdhq-node* (paquet *NPM*: *xdhq*):

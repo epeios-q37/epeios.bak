@@ -53,7 +53,7 @@ if (process.env.Q37_EPEIOS) {
 	xdhelcqBin = path.join(binPath, "xdhqxdh");
 	electronBin = xdhelcqPath + "node_modules/electron/dist/electron";
 } else {
-	xdhqId = "xdhq";
+	xdhqId = "./XDHq.js";
 	/*
 	xdhwebqId = "xdhwebq";
 	xdhelcqPath = path.dirname(require.resolve("xdhelcq"));
