@@ -34,7 +34,7 @@ setuptools.setup(
     version=version,
     author="Claude SIMON",
 #    author_email="author@example.com",
-    description="Web technologies for all your apps.",
+    description="The easiest way to use web technologies in your apps.",
     keywords="GUI, web",
     long_description=long_description,
     long_description_content_type="text/markdown",
