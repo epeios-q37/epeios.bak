@@ -1,3 +1,10 @@
+<!--
+
+       NO MORE IN USE!
+       GENERATED FROM '../README_template.md'.
+
+-->
+
 # *Ruby* version of the *Atlas* toolkit
 
 ![For Ruby](https://q37.info/download/assets/Ruby.png "Ruby logo")

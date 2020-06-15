@@ -1,0 +1,32 @@
+# ATTENTION: prendre garde à ce que ce soit bien des tabulations qui sont utilisés comme séparateur !
+
+VERSION		0.11
+
+BADGES		&
+
+# Long mixed-case target
+LMCT		Perl
+
+# Short mixed-case target
+SMCT		Perl
+
+# Short lower-case target
+SLCT		perl
+
+# Front-end JavaScript Label
+FJSL		*JavaScript*
+
+# GitHub Replit shortcut suffix
+GRSS		h3h34zgq
+
+# 'Hello, World!' launch commands.
+HELLO_LC	%HELLO_LC.md
+
+# PREAMBLE
+PREAMBLE	&
+
+# 'Hello, World!' source code.
+HELLO_SC	%HELLO_SC.md
+
+# Footer
+FOOTER		%FOOTER.md
