@@ -651,10 +651,7 @@ qRB
 	if ( Tags.Amount() != Values.Amount() )
 		qRFwk();
 
-	if ( Tags.Amount() != Values.Amount() )
-		qRFwk();
-
-	if ( Tags.Amount() == 0 ) {
+	if ( Tags.Amount() != 0 ) {
 		Callback.Init( Values );
 
 		FillAutomat_( Tags, Callback.Automat );

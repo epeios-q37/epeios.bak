@@ -1,3 +1,10 @@
+<!--
+
+NO MORE IN USE !!!
+BUILT FROM ../README_template.md
+
+-->
+
 # *Python* version of the *Atlas* toolkit
 
 ![For Python](https://q37.info/download/assets/Python.png "Python logo")

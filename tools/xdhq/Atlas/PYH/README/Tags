@@ -1,0 +1,32 @@
+# ATTENTION: prendre garde à ce que ce soit bien des tabulations qui sont utilisés comme séparateur !
+
+VERSION		0.11
+
+BADGES		[![Version](https://img.shields.io/pypi/v/atlastk?style=for-the-badge&color=90b4ed&label=PyPi)![Download stats](https://img.shields.io/pypi/dm/atlastk.svg?style=for-the-badge)](http://q37.info/s/9srmskcm)
+
+# Long mixed-case target
+LMCT		Python
+
+# Short mixed-case target
+SMCT		Python
+
+# Short lower-case target
+SLCT		python
+
+# Front-end JavaScript Label
+FJSL		*JavaScript*
+
+# GitHub Replit shortcut suffix
+GRSS		vwpsw73v
+
+# 'Hello, World!' launch commands.
+HELLO_LC	%HELLO_LC.md
+
+# PREAMBLE
+PREAMBLE	%PREAMBLE.md
+
+# 'Hello, World!' source code.
+HELLO_SC	%HELLO_SC.md
+
+# Footer
+FOOTER	%FOOTER.md

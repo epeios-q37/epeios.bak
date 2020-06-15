@@ -1,0 +1,2 @@
+- `git clone http://github.com/epeios-q37/atlas-python`
+- `python atlas-python/examples/Hello/`

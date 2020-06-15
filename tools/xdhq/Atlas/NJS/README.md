@@ -1,3 +1,11 @@
+<!--
+
+    NO MORE USED!
+    BUILD FROM README_Template.md
+
+-->
+
+
 # *Node.js* version of the *Atlas* toolkit
 
 ![For Node.js](https://q37.info/download/assets/Node.png)
