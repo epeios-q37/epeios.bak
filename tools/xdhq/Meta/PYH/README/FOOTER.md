@@ -1,3 +1,7 @@
+The *Atlas* toolkit is particularly well suited for educational purposes, to write modern programming exercises, i.e. with a true graphical interface instead of the usual outdated textual one. More about this can be found [here](https://q37.info/s/cbms43s9).
+
+There is also a stub to for this library at address <https://q37.info/s/zzcn3wnx>.
+
 ## Content of the repository
 
 The `atlastk` directory contains the *Python* source code of the *Atlas* toolkit, which is the directory you have to reference in `PYTHONPATH` in order to use the *Atlas* toolkit in your own program, unless you have installed the [*atlastk* package](http://q37.info/s/9srmskcm) with `pip install atlastk`.
@@ -17,7 +21,7 @@ In the `examples` directory, you will found following examples:
 
 Other examples are detailed in the next section.
 
-Except for the *ErgoJr*, *GPIO* and *RGB* applications, which are detailed in the next section, to run an example, launch, from within the repository, `python main.py`, and select the example you want to run. You can also directly launch `python examples/<Name>/` (don't forget the final `/`), where `<Name>` is the name of the example (`Blank`, `Chatroom`…).
+Except for the *ErgoJr*, *GPIO* and *RGB* applications, which are detailed in the next section, to run an example, launch, from within the repository, `python main.py`, and select the example you want to run. You can also directly launch, from within the `examples` directory, `python <Name>/` (don't forget the final `/`), where `<Name>` is the name of the example (`Blank`, `Chatroom`…).
 
 The *Stars* application is an example where the *Atlas* *toolkit* is used to control a [*Pygame*](https://en.wikipedia.org/wiki/Pygame) based application. Of course, *Pygame* needs to be installed.
 
@@ -29,7 +33,7 @@ The *GPIO* and *RGB* applications are designed to be used on a *Raspberry Pi* or
 
 For the *Raspberry Pi*, the `RPi.GPIO` *Python* module have to be installed (this is probably already the case).
 
-For the *ODROID-C2*, The *Python* version of *WiringPi* must be installed, and the application has to be launched, from within the repository, with `sudo` (`sudo python examples/GPIO/` or `sudo python examples/RGB/`).
+For the *ODROID-C2*, The *Python* version of *WiringPi* must be installed, and the application has to be launched, from within the `examples` directory, with `sudo` (`sudo python GPIO/` or `sudo python RGB/`).
 
 The *ErgoJr* application is experimental and to control a *Poppy* *Ergo Jr* robot.
 

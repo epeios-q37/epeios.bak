@@ -1,3 +1,0 @@
-- `git clone https://github.com/epeios-q37/atlas-ruby`
-- `cd atlas-ruby`
-- `ruby -IAtlas Hello/Hello.rb`

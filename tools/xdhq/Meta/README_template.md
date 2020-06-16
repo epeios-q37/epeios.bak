@@ -11,19 +11,18 @@
 @BADGES@
 
 
-*NOTA*: this toolkit is available for:
-
-- *Java*: <http://github.com/epeios-q37/atlas-java>
-- *Node.js*: <http://github.com/epeios-q37/atlas-node>
-- *Perl*: <http://github.com/epeios-q37/atlas-perl>
-- *Python*: <http://github.com/epeios-q37/atlas-python>
-- *Ruby*: <http://github.com/epeios-q37/atlas-ruby>
+> *This toolkit is available for:*
+> - *Java*: <http://github.com/epeios-q37/atlas-java>
+> - *Node.js*: <http://github.com/epeios-q37/atlas-node>
+> - *Perl*: <http://github.com/epeios-q37/atlas-perl>
+> - *Python*: <http://github.com/epeios-q37/atlas-python>
+> - *Ruby*: <http://github.com/epeios-q37/atlas-ruby>
 
 @PREAMBLE@
 
 ---
 
-## *Hello, World!*
+## Straight to the point: the [*Hello, World!*](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program) program
 
 ### Source code
 
@@ -47,7 +46,7 @@ To see some examples, like the following [*TodoMVC*](http://todomvc.com/) applic
 
 [![TodoMVC](https://q37.info/download/TodoMVC.gif "The TodoMVC application made with the Atlas toolkit")](https://q37.info/s/@GRSS@)
 
-## What do you want to do today?
+## Your turn
 
 If you want to:
 
@@ -65,12 +64,8 @@ With the [*Atlas* toolkit](http://atlastk.org/), writing modern web applications
 - no need to deploy your application on a remote server,
 - no incoming port to open on your internet box.
 
-The *Atlas* toolkit is written in pure *@LMCT@* (compatible with version 2 and 3), with no native code and no dependencies, allowing the *Atlas* toolkit to be used on all environments where *@LMCT@* is available. 
+The *Atlas* toolkit is written in pure *@LMCT@*, with no native code and no dependencies, allowing the *Atlas* toolkit to be used on all environments where *@LMCT@* is available. 
 
 Simply by running them on a local computer with a simple internet connexion, applications using the *Atlas* toolkit will be accessible from the entire internet on laptops, smartphones, tablets…
-
-The *Atlas* toolkit is particularly well suited for educational purposes, to write modern programming exercises, i.e. with a true graphical interface instead of the usual outdated textual one. More about this can be found [here](https://q37.info/s/cbms43s9).
-
-There is also a stub to for this library at address <https://q37.info/s/zzcn3wnx>.
 
 @FOOTER@

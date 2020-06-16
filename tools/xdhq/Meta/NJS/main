@@ -9,13 +9,11 @@ ord() {
   LC_CTYPE=C printf '%d' "'$1"
 }
 
-DEMOS=(Blank Hello Chatroom Notes TodoMVC)
+DEMOS=(Blank Hello Chatroom 15-puzzle Notes TodoMVC)
 
 export DEMOS_AMOUNT=${#DEMOS[@]}
 
-CONT=true
-
-while [ "$CONT" == "true" ]
+while :
 do
   echo
 
@@ -24,11 +22,11 @@ do
     printf "%s: %s\n" "$(chr $((97 + $i )))" "${DEMOS[$i]}"  
   done
 
-  echo -n -e "\nChoose exemple to launch ('a'…'$(chr $((96 + $DEMOS_AMOUNT)))'): "
+  echo -n -e "\nChoose example to launch ('a'…'$(chr $((96 + $DEMOS_AMOUNT)))'): "
 
   read DEMO
 
-  export FILE=${DEMOS[$(($(ord $DEMO) - 97))]}
+  export FILE=${DEMOS[$(($(ord $DEMO) - 97))]}/main.js
 
-  [ -f $FILE/main.rb ] && CONT=false && ruby -IAtlas $FILE/main.rb
+  [ -f examples/$FILE ] && node examples/$FILE
 done
