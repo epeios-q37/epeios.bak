@@ -34,17 +34,21 @@
 
 ### Try it yourself now
 
-See the below online demonstrations section, or launch:
-
-@HELLO_LC@
-
-## Online demonstrations
+#### Online, with nothing to install
 
 Thanks to [Replit](https://q37.info/s/mxmgq3qm), an [online IDE](https://q37.info/s/zzkzbdw7), you can write and run programs using the *Atlas* toolkit directly in your web browser, without having to install *@LMCT@* on your computer.
 
-To see some examples, like the following [*TodoMVC*](http://todomvc.com/) application or the above [*Hello, World!*](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program) program, simply go [here](https://q37.info/s/@GRSS@), click on the green `run` button, select the demonstration you want to see, and then click (or scan with your smartphone) the then displayed [QR code](https://q37.info/s/3pktvrj7).
+To see some examples, like the following [*TodoMVC*](http://todomvc.com/) application or the above [*Hello, World!*](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program) program, simply:
+-  go [here](https://q37.info/s/@GRSS@) (or click on the [![Run on Repl.it](https://repl.it/badge/github/epeios-q37/atlas-@SLCT@)](https://q37.info/s/@GRSS@) badge at the top of this page),
+-  click on the green `run` button,
+-  select the demonstration you want to see,
+-  click (or scan with your smartphone) the then displayed [QR code](https://q37.info/s/3pktvrj7).
 
 [![TodoMVC](https://q37.info/download/TodoMVC.gif "The TodoMVC application made with the Atlas toolkit")](https://q37.info/s/@GRSS@)
+
+#### With *@LMCT@* on your computer
+
+@HELLO_LC@
 
 ## Your turn
 
