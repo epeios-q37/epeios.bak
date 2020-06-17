@@ -21,8 +21,9 @@
 
 #include "registry.h"
 
-#include "scltool.h"
-#include "sclerror.h"
+#include "scle.h"
+#include "sclm.h"
+#include "sclt.h"
 
 #include "err.h"
 #include "cio.h"
@@ -94,7 +95,7 @@ namespace {
 				Is = Flow.Get() == ' ';
 			} else if ( DigitFound ) {
 				char C = Flow.Get();
-				
+
 				if ( !isdigit( C ) ) {
 					if ( C == '.' )
 						SpaceAwaited = true;
@@ -173,7 +174,7 @@ namespace {
 		txf::sWFlow &WFlow )
 	{
 	qRH;
-		xtf::sIFlow Flow;
+		xtf::sRFlow Flow;
 		str::wString Line;
 		wSlide Slide;
 		bso::sBool Continue = true;
@@ -242,16 +243,16 @@ namespace {
 	qRB;
 		if ( Source != NULL ) {
 			if ( SFlow.Init( Source, err::hUserDefined ) != tol::rSuccess )
-				sclmisc::ReportFileOpeningErrorAndAbort( Source );
+				sclm::ReportFileOpeningErrorAndAbort( Source );
 		}
 
 		if ( Target != NULL ) {
-			sclmisc::CreateBackupFile( Target );
+			sclm::CreateBackupFile( Target );
 
 			BackedUp = true;
 
 			if ( TFDriver.Init( Target, err::hUserDefined ) != tol::rSuccess )
-				sclmisc::ReportFileOpeningErrorAndAbort( Target );
+				sclm::ReportFileOpeningErrorAndAbort( Target );
 
 			TTFlow.Init( TFDriver );
 		}
@@ -263,7 +264,7 @@ namespace {
 	qRR;
 		if ( BackedUp ) {
 			tol::reset( TFDriver, TTFlow );
-			sclmisc::RecoverBackupFile( Target );
+			sclm::RecoverBackupFile( Target );
 		}
 	qRT;
 	qRE;
@@ -273,13 +274,13 @@ namespace {
 	{
 	qRH;
 		str::wString Input, Output;
-		qCBUFFERr InputBuffer, OutputBuffer;
+		qCBUFFERh InputBuffer, OutputBuffer;
 	qRB;
 		tol::Init( Input );
-		sclmisc::OGetValue( registry::parameter::Input, Input );
+		sclm::OGetValue( registry::parameter::Input, Input );
 
 		tol::Init( Output );
-		sclmisc::OGetValue( registry::parameter::Output, Output );
+		sclm::OGetValue( registry::parameter::Output, Output );
 
 		Process_(
 			Input.Amount() != 0 ? Input.Convert( InputBuffer ) : NULL,
@@ -290,7 +291,7 @@ namespace {
 	}
 }
 
-const scli::sInfo &scltool::SCLTOOLInfo( void )
+const scli::sInfo &sclt::SCLTInfo( void )
 {
 	return mppq::Info;
 }
@@ -299,9 +300,9 @@ const scli::sInfo &scltool::SCLTOOLInfo( void )
 	else if ( Command == #name )\
 		name##_()
 
-int scltool::SCLTOOLMain(
+int sclt::SCLTMain(
 	const str::dString &Command,
-	const scltool::fOddities &Oddities )
+	const sclt::fOddities &Oddities )
 {
 	int ExitValue = EXIT_FAILURE;
 qRH

@@ -6,12 +6,12 @@
 [![Version @VERSION@](https://img.shields.io/static/v1.svg?&color=90b4ed&label=Version&message=@VERSION@)](http://github.com/epeios-q37/atlas-@SLCT@/)
 [![Stars](https://img.shields.io/github/stars/epeios-q37/atlas-@SLCT@.svg?style=social)](https://github.com/epeios-q37/atlas-@SLCT@/stargazers)
 [![license: MIT](https://img.shields.io/github/license/epeios-q37/atlas-@SLCT@?color=yellow)](https://github.com/epeios-q37/atlas-@SLCT@/blob/master/LICENSE)
-[![Homepage](https://img.shields.io/static/v1?label=homepage&message=atlastk.org&color=ff69b4)](https://atlastk.org)
+[![Documentation](https://img.shields.io/static/v1?label=documentation&message=atlastk.org&color=ff69b4)](https://atlastk.org)
 
 @BADGES@
 
 
-> *This toolkit is available for:*
+> The [*Atlas* toolkit](https://atlastk.org) is available for:
 > - *Java*: <http://github.com/epeios-q37/atlas-java>
 > - *Node.js*: <http://github.com/epeios-q37/atlas-node>
 > - *Perl*: <http://github.com/epeios-q37/atlas-perl>

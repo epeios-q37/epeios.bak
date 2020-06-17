@@ -3,7 +3,7 @@
 	<Configuration target="mppq">
 		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
 		<xpp:expand value-of="q37.xpp"/>
-  <xpp:expand href="../../../TOL.xcfg"/>
+		<xpp:expand href="../../../CLI.xcfg"/>
 		<Parameters>
 			<Language>en</Language>
 			<!-- Default command -->
@@ -12,7 +12,7 @@
 		<Definitions>
 		</Definitions>
 		<Locale>
-			<xpp:expand select="TOL_Locale"/>
+			<xpp:expand select="CLI_Locale"/>
 			<Translations text="ProcessCommandDescription">
 				<Translation language="fr">Traite le markdown.</Translation>
 				<Translation language="en">Process the markdown.</Translation>
@@ -35,7 +35,7 @@
 			</Translations>
 		</Locale>
 		<Arguments>
-			<xpp:expand select="TOL_Arguments"/>
+			<xpp:expand select="CLI_Arguments"/>
 			<Argument id="Process" Description="ProcessCommandDescription" long="process" short="p" Value="Process" Usage="[%InputArgument% [%OutputArgument%]]"/>
 			<Argument id="InputArgument" Description="InputArgumentDescription" Path="Input" Label="InputArgumentLabel"/>
 			<Argument id="OutputArgument" Description="OutputArgumentDescription" Path="Output" Label="OutputArgumentLabel"/>

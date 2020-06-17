@@ -32,7 +32,12 @@ namespace registry {
 		extern rEntry
 			Tags,
 			Input,
-			Output;
+			Output,
+			Delimiter,
+			CommentMarker,
+			TextMarker,
+			FileMarker,
+			;
 	}
 
 	namespace definition {
