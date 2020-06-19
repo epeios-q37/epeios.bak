@@ -17,7 +17,6 @@ body = """
 <div style="display: table; margin: 50px auto auto auto;">
  <fieldset>
    <button data-xdh-onevent="Submit">Click me!</button>
-  </div>
  </fieldset>
 </div>
 """
