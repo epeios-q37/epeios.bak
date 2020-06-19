@@ -4,9 +4,8 @@
 # Si installé avec 'pip install term2web',
 # les deux lignes suivanes peuvent être retirée.
 import sys, os
-sys.path.append("./Atlas.zip")
+# sys.path.append("./Atlas.zip")
 
-import os
 import atlastk as Atlas
 
 head = "<title>" + os.path.splitext(__file__)[0] + " - Atlas toolkit</title>"
