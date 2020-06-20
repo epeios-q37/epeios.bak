@@ -24,6 +24,8 @@ def prettify(body):
 
 # End of header.
 
+# Montrer également le ''size="…"'
+
 body = """
 <p>Veuillez choisir un dinosaure :</p>
 <select id="dinosaure" data-xdh-onevent="Select">
@@ -37,12 +39,17 @@ body = """
         <option value="saltasaurus">Saltasaurus</option>
         <option value="apatosaurus">Apatosaurus</option>
     </optgroup>
+    <optgroup id="autres" label="Autres"/>
 </select>
 <fieldset>
   <span>Élément sélectionné : </span><span id="Output"/>
 </fieldset>
 <div>
   <button data-xdh-onevent="Submit">Envoyer</button>
+</div>
+<div>
+  <input id="input" data-xdh-onevent="Add"/>
+  <button data-xdh-onevent="Add">Ajouter</button>
 </div>
 """
 
@@ -55,10 +62,27 @@ def ac_select(dom,id):
 def ac_submit(dom):
   dom.alert(dom.get_content("dinosaure"))
 
+def embed(other):
+  html = Atlas.create_HTML()
+
+  html.push_tag("option")
+  html.put_value(other)
+#  html.pop_tag()
+
+  return html
+
+def ac_add(dom):
+#  dom.prepend_layout("autres", "<option>" + dom.getContent("input") + "</option>")
+  dom.prepend_layout("autres", embed(dom.getContent("input")))
+  dom.set_content("input", "")
+  dom.focus("input")
+
+
 callbacks = {
 	"": ac_connect,
   "Select": ac_select,
-  "Submit": ac_submit
+  "Submit": ac_submit,
+  "Add": ac_add
 }
 
 Atlas.launch(callbacks, None, head)
