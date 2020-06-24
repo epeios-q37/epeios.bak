@@ -34,7 +34,8 @@ body = """
 <label for="pirogue">Pirogue</label><br>
 
 <fieldset>
-  <span>Dernier élément cliqué : </span><span id="Output"/>
+  <span>Dernier élément cliqué : </span>
+  <output id="Output"/>
 </fieldset>
 <div>
   <button data-xdh-onevent="Submit">Envoyer</button>

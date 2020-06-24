@@ -1,6 +1,6 @@
 # *@LMCT@* version of the *Atlas* toolkit
 
-![For @LMCT@](https://q37.info/download/assets/@SMCT@.png "@LMCT@ logo")
+<!--![For @LMCT@](https://q37.info/download/assets/@SMCT@.png "@LMCT@ logo")-->
 
 [![Run on Repl.it](https://repl.it/badge/github/epeios-q37/atlas-@SLCT@)](https://q37.info/s/@GRSS@)
 [![Version @VERSION@](https://img.shields.io/static/v1.svg?&color=90b4ed&label=Version&message=@VERSION@)](http://github.com/epeios-q37/atlas-@SLCT@/)
@@ -12,11 +12,13 @@
 
 
 > The [*Atlas* toolkit](https://atlastk.org) is available for:
-> - *Java*: <http://github.com/epeios-q37/atlas-java>
-> - *Node.js*: <http://github.com/epeios-q37/atlas-node>
-> - *Perl*: <http://github.com/epeios-q37/atlas-perl>
-> - *Python*: <http://github.com/epeios-q37/atlas-python>
-> - *Ruby*: <http://github.com/epeios-q37/atlas-ruby>
+> langage | repository address| popularity 
+> -|-|-
+> *Java* |<http://github.com/epeios-q37/atlas-java> |[![Stars](https://img.shields.io/github/stars/epeios-q37/atlas-java.svg?style=social)](https://github.com/epeios-q37/atlas-java/stargazers)
+> *Node.js* | <http://github.com/epeios-q37/atlas-node> | [![Stars](https://img.shields.io/github/stars/epeios-q37/atlas-node.svg?style=social)](https://github.com/epeios-q37/atlas-node/stargazers)
+> *Perl* |<http://github.com/epeios-q37/atlas-perl>|  [![Stars](https://img.shields.io/github/stars/epeios-q37/atlas-perl.svg?style=social)](https://github.com/epeios-q37/atlas-perl/stargazers)
+> *Python* | <http://github.com/epeios-q37/atlas-python> | [![Stars](https://img.shields.io/github/stars/epeios-q37/atlas-python.svg?style=social)](https://github.com/epeios-q37/atlas-python/stargazers)
+> *Ruby* | <http://github.com/epeios-q37/atlas-ruby> | [![Stars](https://img.shields.io/github/stars/epeios-q37/atlas-ruby.svg?style=social)](https://github.com/epeios-q37/atlas-ruby/stargazers)
 
 @PREAMBLE@
 

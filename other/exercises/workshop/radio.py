@@ -36,7 +36,8 @@ body = """
   <label for="courrier">Courrier</label>
 </div>
 <fieldset>
-  <span>Élément sélectionné : </span><span id="Output"/>
+  <span>Élément sélectionné : </span>
+  <output id="Output"/>
 </fieldset>
 <div>
   <button data-xdh-onevent="Submit">Envoyer</button>

@@ -37,7 +37,7 @@ function genQRCode(url) {
 	</head>
 	<body onload="genQRCode('%url%')">
 		<div style="display:table; margin: 10px auto 5px auto;">
-			<span style="display: table; margin: 15px auto 10px auto;font-style: oblique;font-size: large;font-weight: bold;">Click or scan this QR code:</span>
+			<span style="display: table; margin: 15px auto 10px auto;font-style: oblique;font-size: large;font-weight: bold;">Click or scan this QR code<br/><center>to open your application:</center></span>
 			<div style="display: flex; justify-content: space-around;">
 				<a target="_blank" href="%url%" alt="%url%">
  					<div id="qrcode"></div>

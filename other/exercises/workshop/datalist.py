@@ -26,7 +26,7 @@ def prettify(body):
 body = """
 <div>
   <span>Parfum sélectionné :</span>
-  <span id="output"/>
+  <output id="output"/>
 </div>
 <div>
   <label for="parfum">Indiquez un parfum :</label>

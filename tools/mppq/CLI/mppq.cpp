@@ -53,7 +53,7 @@ namespace {
 	void PrintSlideSeparator_( txf::sWFlow &Flow )
 	{
 		// 'Marp' slide separator.
-		Flow << txf::nl << "---" << txf::nl;
+		Flow << "---" << txf::nl;
 	}
 
 	void Display_(
@@ -167,6 +167,7 @@ namespace {
 		}
 
 		Display_( qNIL, Slide, Flow, false );
+		Flow.Commit();
 	}
 
 	void Process_(
@@ -192,7 +193,7 @@ namespace {
 				Line.Init();
 				Flow.GetLine( Line );
 
-				if ( ( Line.Amount() != 0 ) || IsCode ) {
+				if ( true)  {
 					if (Line.Search(str::wString("---")) == Line.AmountOfLeadChars()) {
 						Handle_( Slide, WFlow );
 

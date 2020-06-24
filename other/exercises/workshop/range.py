@@ -23,16 +23,13 @@ def prettify(body):
 # End of header.
 
 body = """
-<div>
-  <label for="volume">Volume</label>
-  <input type="range" id="volume" min="0" max="10" data-xdh-onevent="Slide">
-
-  <meter id="fuel"
-       min="0" max="10"
-       low="5" high="8" optimum="4"
-       value="5" step="2">
-	</meter>
-</div>
+<label for="volume">Volume</label>
+<input type="range" id="volume" min="0" max="10" data-xdh-onevent="Slide">
+<meter id="fuel"
+  min="0" max="10"
+  low="5" high="8" optimum="4"
+  value="5" step="2">
+</meter>
 """
 
 def ac_connect(dom):

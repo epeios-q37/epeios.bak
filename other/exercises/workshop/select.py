@@ -34,7 +34,7 @@ body = """
         <option value="vélociraptor">Vélociraptor</option>
         <option value="deinonychus">Deinonychus</option>
     </optgroup>
-    <optgroup label="Sauropodes">
+    <optgroup label="Sauropodes"
         <option value="diplodocus">Diplodocus</option>
         <option value="saltasaurus">Saltasaurus</option>
         <option value="apatosaurus">Apatosaurus</option>
@@ -42,7 +42,8 @@ body = """
     <optgroup id="autres" label="Autres"/>
 </select>
 <fieldset>
-  <span>Élément sélectionné : </span><span id="Output"/>
+  <label for="Output">Élément sélectionné : </label>
+  <output id="Output"/>
 </fieldset>
 <div>
   <button data-xdh-onevent="Submit">Envoyer</button>
@@ -50,6 +51,10 @@ body = """
 <div>
   <input id="input" data-xdh-onevent="Add"/>
   <button data-xdh-onevent="Add">Ajouter</button>
+  <label>
+    <input type="checkbox" data-xdh-onevent="Toggle"/>
+    <span><b>Désactiver</b></span>
+  </label>
 </div>
 """
 
@@ -77,12 +82,15 @@ def ac_add(dom):
   dom.set_content("input", "")
   dom.focus("input")
 
+def ac_toggle(dom, id):
+  dom.disable_element("autres") if dom.getContent(id) == 'true' else dom.enable_element("autres")
 
 callbacks = {
 	"": ac_connect,
   "Select": ac_select,
   "Submit": ac_submit,
-  "Add": ac_add
+  "Add": ac_add,
+  "Toggle": ac_toggle
 }
 
 Atlas.launch(callbacks, None, head)
