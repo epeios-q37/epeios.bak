@@ -6,7 +6,6 @@
 import sys, os
 sys.path.append("./Atlas.zip")
 
-import os
 import atlastk as Atlas
 
 head = """
