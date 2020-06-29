@@ -93,8 +93,8 @@ namespace mtk {
 		routine__ Routine,
 		void *UP,
 		bso::sBool Reminder );  // Useless parameter, only as reminder
-                                // that there is no default final error handling
-                                // for thread launched with this function.
+                            // that there is no default final error handling
+                            // for thread launched with this function.
 
 	/*f Launch a new thread executing 'Routine', with 'UP' as user pointer.
 	Thread is NOI killed when returning from 'Routine', and reused if available
@@ -102,7 +102,17 @@ namespace mtk {
 	void RawLaunchAndKeep(
 		routine__ Routine,
 		void *UP,
-		bso::sBool = true);    // To be like 'RawLaunchAndKill(…)'; makes some thins easier.
+		bso::sBool = true);    // To be like 'RawLaunchAndKill(…)'; makes some things easier.
+
+	/* Launch in the same thread, does return only when 'Routine' returns.
+	Useful for testing */
+	inline void RawSyncLaunch(
+		routine__ Routine,
+		void *UP,
+		bso::sBool = true)    // To be like 'RawLaunchAndKill(…)'; makes some things easier.
+	{
+		Routine(UP);
+	}
 
 
 	//f Launch a new thread executing 'Routine', with 'UP' as user pointer.
@@ -145,7 +155,10 @@ namespace mtk {
 		{
 			B_().Unblock();
 		}
-		friend class gBlocker_;
+		tht::rBlocker &Blocker(void)
+		{
+			return B_();
+		}
 	};
 
 	// 'Blocker' protects data in 'UP' from being deleted before it 'Release()' method will be called.
@@ -171,6 +184,12 @@ namespace mtk {
 #	error "None of 'MTK_KEEP' or 'MTK_KILL' are defined."
 #endif
 	}
+
+	/* Launch in the same thread, does return only when 'Routine' returns.
+	Useful for testing */
+	void SyncLaunch(
+		sXRoutine Routine,
+		void *UP );
 
 	template <typename type> struct sData_
 	{

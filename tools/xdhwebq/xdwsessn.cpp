@@ -27,6 +27,7 @@ using namespace xdwsessn;
 
 bso::sBool xdwsessn::rUpstream_::XDHCUCProcess(
 	const str::string_ &Script,
+	tht::rBlocker *Blocker,
 	str::dString *ReturnedValue )
 {
 	bso::sBool Success = true;
@@ -39,8 +40,12 @@ qRFB
 	Flow.Write( Script.Convert(Buffer), Script.Amount());
 	Flow.Commit();
 
-	if ( ReturnedValue != NULL)
+	if ( ReturnedValue != NULL) {
+		if ( Blocker != NULL)
+			Blocker->Unblock();
 		websck::GetMessage(Flow, *ReturnedValue);
+	} else if ( Blocker != NULL )
+		qRGnr();
 
 	Flow.Dismiss();
 qRFR

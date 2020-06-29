@@ -10,6 +10,16 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2020-06-29:
+
+- MTK:
+  - adding `gBlocker::Blocker()`,
+  - addinv *Sync* related functions,
+- XDHCUC:
+  - adding `Blocker` parameter to `cSingle::[XSHCUC]Process(…)`,
+- XDHDWS:
+  - fixing issue with the *arora*, which does not answer with the *layout* *XSL* related primitive, blocking all other client,
+
 ## 2020-06-13:
 
 - UYS:

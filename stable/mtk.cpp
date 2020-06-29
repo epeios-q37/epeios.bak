@@ -334,18 +334,18 @@ namespace {
 
 	void Routine_( void *UP )
 	{
-    qRFH
+	qRFH
 		sData_ &Data = *(sData_ *)UP;
 		gBlocker_ Blocker;
-    qRFB
+   qRFB
 		Blocker.Init( *Data.Blocker );
 
 		Data.Routine( Data.UP, Blocker );
 
 		// 'Blocker.Blocker_' is no more valid here !!!
-    qRFR
-    qRFT
-    qRFE(mtk::MTKErrorHandling())
+	qRFR
+  qRFT
+  qRFE(mtk::MTKErrorHandling())
 	}
 
 	void Launch_(
@@ -369,7 +369,6 @@ namespace {
 	qRT
 	qRE
 	}
-
 }
 
 void mtk::LaunchAndKill(
@@ -384,6 +383,13 @@ void mtk::LaunchAndKeep(
 	void *UP )
 {
 	Launch_( Routine, mtk::RawLaunchAndKeep, UP );
+}
+
+void mtk::SyncLaunch(
+	sXRoutine Routine,
+	void *UP )
+{
+	Launch_( Routine, mtk::RawSyncLaunch, UP );
 }
 
 # if 0	// Obsolete  ?

@@ -23,6 +23,8 @@
 
 #include "xdhutl.h"
 
+#include "mtk.h"
+
 using namespace xdhdws;
 
 // Special scripts, for internal use,
@@ -236,6 +238,7 @@ namespace {
 			const type &ScriptName,
 			const str::dStrings &Values,
 			xdhcuc::cSingle &Callback,
+			tht::rBlocker *Blocker = NULL,
 			str::dString *ReturnValue = NULL)
 		{
 			bso::sBool Success = false;
@@ -246,7 +249,7 @@ namespace {
 
 			GetScript_(ScriptName, Values, Script);
 
-			Success = Callback.Process(Script, ReturnValue );
+			Success = Callback.Process(Script, Blocker, ReturnValue );
 		qRR
 		qRT
 		qRE
@@ -260,7 +263,8 @@ namespace {
 				const char *ScriptName,
 				const str::dStrings &Values,
 				xdhcuc::cSingle &Callback,
-				xdhcmn::digest_ &Digest )
+				xdhcmn::digest_ &Digest,
+				tht::rBlocker &Blocker )
 			{
 				bso::sBool Success = false;
 			qRH
@@ -268,7 +272,7 @@ namespace {
 			qRB
 				RawDigest.Init();
 
-				if ( ( Success = BaseProcess_(ScriptName, Values, Callback, &RawDigest) ) ) {
+				if ( ( Success = BaseProcess_(ScriptName, Values, Callback, &Blocker, &RawDigest) ) ) {
 					Digest.Init();
 					xdhcmn::Split( RawDigest, Digest );
 				}
@@ -465,7 +469,8 @@ namespace {
 		bso::sBool HandleLayout_(
 			const char *ScriptName,
 			const str::dStrings &Values,
-			xdhcuc::cSingle &Callback )
+			xdhcuc::cSingle &Callback,
+			tht::rBlocker &Blocker )
 		{
 			bso::sBool Success = false;
 		qRH
@@ -474,7 +479,7 @@ namespace {
 		qRB
 			Digests.Init();
 
-			if ( ( Success = ExecuteAndGetDigest_(ScriptName, Values, Callback, Digests) ) ) {
+			if ( ( Success = ExecuteAndGetDigest_(ScriptName, Values, Callback, Digests, Blocker) ) ) {
 				Retriever.Init(Digests);
 
 				tol::Init(EventsDigest, WidgetsDigest);
@@ -490,6 +495,43 @@ namespace {
 		qRT
 			return Success;
 		}
+
+		namespace {
+			struct sShared_ {
+				const char *ScriptName;
+				const str::dStrings *Values;
+				xdhcuc::cSingle *Callback;
+			};
+		}
+
+		void HandleLayoutRoutine_(
+			void *UP,
+			mtk::gBlocker &Blocker )
+		{
+				sShared_ &Shared = *(sShared_ *)UP;
+
+				HandleLayout_(Shared.ScriptName, *Shared.Values, *Shared.Callback, Blocker.Blocker() );
+		}
+
+		bso::sBool HandleLayout_(
+			const char *ScriptName,
+			const str::dStrings &Values,
+			xdhcuc::cSingle &Callback )
+		{
+			sShared_ Shared;
+
+			Shared.ScriptName = ScriptName;
+			Shared.Values = &Values;
+			Shared.Callback = &Callback;
+
+			if ( true )
+				mtk::Launch(HandleLayoutRoutine_, &Shared);
+			else
+				mtk::SyncLaunch(HandleLayoutRoutine_, &Shared);	// In this case, with the 'arora' browser, dealing with XSL will blocks all the clients.
+
+			return true;
+		}
+
 	}
 
 	namespace {
@@ -517,7 +559,7 @@ namespace {
 		if ( IsEqual_(ScriptName, psn_::HandleLayout) )
 			return HandleLayout_(psn_::HandleLayout, Values, Callback);
 		else
-			return BaseProcess_(ScriptName, Values, Callback, ReturnValue);
+			return BaseProcess_(ScriptName, Values, Callback, NULL, ReturnValue);
 	}
 }
 
