@@ -529,6 +529,10 @@ namespace {
 			else
 				mtk::SyncLaunch(HandleLayoutRoutine_, &Shared);	// In this case, with the 'arora' browser, dealing with XSL will blocks all the clients.
 
+			/* The 'HandleLayout' primitive awaits a value from client, which is NOT sent to the backend. Hence, the backend send the next script
+			immediately after the 'HandleLayout'. If the client does not answer, it blocks all the other clients. To avoid this, the answer on a
+			'HandleLayout' is red and handled asynchronously. This issue occurs with the 'arora' web browser. */
+
 			return true;
 		}
 

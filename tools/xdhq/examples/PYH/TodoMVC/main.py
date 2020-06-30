@@ -38,7 +38,7 @@ class TodoMVC:
 		self.index = -1
 		self.todos = []
 
-		if True:	# Set to 'True' for testing purpose.
+		if False:	# Set to 'True' for testing purpose.
 			self.todos.append({"label": "Todo 1", "completed": False })
 			self.todos.append({"label": "Todo 2", "completed": True })
 

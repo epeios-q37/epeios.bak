@@ -1,5 +1,9 @@
 # *XDHq* *CHANGELOG*
 
+## 2020-06-29
+
+- fixing issue with the *arora* web browser which does not return an answer on the layout related primitives dealing with *XSL*, hence blocking all other clients (the outdated *arora* browser **still** can not handle the *XSL* related layout primitive but does no more, at least, block other clients),
+
 ## 2020-02-08
 
 - changing both protocol **labels** (no backward compatibility),
