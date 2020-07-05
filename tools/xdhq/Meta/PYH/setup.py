@@ -24,7 +24,7 @@ SOFTWARE.
 
 import setuptools
 
-version = "0.11"
+version = "0.11.1"
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
@@ -34,7 +34,7 @@ setuptools.setup(
     version=version,
     author="Claude SIMON",
 #    author_email="author@example.com",
-    description="The easiest way to use web technologies in your apps.",
+    description="The handy yet powerful GUI toolkit.",
     keywords="GUI, web",
     long_description=long_description,
     long_description_content_type="text/markdown",

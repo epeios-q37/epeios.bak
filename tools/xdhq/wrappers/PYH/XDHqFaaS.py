@@ -194,7 +194,7 @@ def _init():
 	_wPort = ""
 	_cgi = "xdh"
 
-	atk = getEnv("ATK")
+	atk = getEnv("ATK").upper()
 
 	if atk == "DEV":
 		pAddr = "localhost"
@@ -203,7 +203,7 @@ def _init():
 	elif atk == "TEST":
 		_cgi = "xdh_"
 		print("\tTEST mode!")
-	elif atk and ( atk != "REPLit" ):
+	elif atk and ( atk != "REPLIT" ) and (atk != 'NONE'):
 		sys.exit("Bad 'ATK' environment variable value : should be 'DEV' or 'TEST' !")
 
 	pAddr = getEnv("ATK_PADDR", pAddr)
@@ -275,13 +275,16 @@ def _ignition():
 		print(url)
 		print("".rjust(len(url),'^'))
 		print("Open above URL in a web browser. Enjoy!\n")
-		if ( getEnv("ATK") == "REPLit"):
+
+		atk = getEnv("ATK").upper()
+
+		if atk == "REPLIT":
 #			print("IF THE PROGRAM DOES NOT WORK PROPERLY, PLEASE SEE http://q37.info/s/zbgfjtp9")
 #			print("IF THE PROGRAM DOES NOT WORK PROPERLY, YOU PROBABLY FORGOT TO FORK!")
 #			print("IF IT STILL DOES NOT WORK AFTER FORKING, RELOAD THE COMPLETE PAGE!")
 			print( "If the program does not work properly, see http://q37.info/s/zbgfjtp9.\n")
 			_REPLit(url)
-		else:
+		elif atk != 'NONE':
 			XDHqSHRD.open(url)
 
 def _serve(callback,userCallback,callbacks ):

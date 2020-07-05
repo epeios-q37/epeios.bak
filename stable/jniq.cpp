@@ -66,7 +66,7 @@ qRE
 const char *jniq::Convert(
 	JNIEnv *Env,
 	jstring JString,
-	qCBUFFERr &Buffer )
+	qCBUFFERh &Buffer )
 {
 qRH
 	str::string String;

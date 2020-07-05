@@ -25,8 +25,8 @@
 #include "jrebse.h"
 #include "n4jre.h"
 
-#include "sclargmnt.h"
-#include "sclmisc.h"
+#include "scla.h"
+#include "sclm.h"
 
 #include "epsmsc.h"
 #include "iof.h"
@@ -73,7 +73,7 @@ namespace {
 		jstring JString;
 	qRH
 		str::wString Info;
-		qCBUFFERr Buffer;
+		qCBUFFERh Buffer;
 	qRB
 		Info.Init();
 		GetInfo_( Env->GetVersion(), Info );
@@ -95,16 +95,16 @@ extern "C" JNIEXPORT jstring JNICALL Java_info_q37_jreq_Wrapper_wrapperInfo(
 
 namespace {
 	err::err___ Error_;
-	sclerror::rError SCLError_;
-	scllocale::rRack Locale_;
-	sclmisc::sRack Rack_;
+	scle::rError SCLError_;
+	scll::rRack Locale_;
+	sclm::sRack Rack_;
 
 	void ERRFinal_( JNIEnv *Env )
 	{
 	qRH
 		str::wString Message;
 		err::buffer__ RBuffer;
-		qCBUFFERr CBuffer;
+		qCBUFFERh CBuffer;
 	qRB
 		Message.Init();
 
@@ -112,8 +112,8 @@ namespace {
 			Message.Append( err::Message( RBuffer ) );
 
 			ERRRst();	// To avoid relaunching of current error by objects of the 'FLW' library.
-		} else if ( sclerror::IsErrorPending() )
-			sclmisc::GetSCLBasePendingErrorTranslation( Message );
+		} else if ( scle::IsErrorPending() )
+			sclm::GetSCLBasePendingErrorTranslation( Message );
 
 		Env->ThrowNew( Env->FindClass( "java/lang/Exception" ), Message.Convert( CBuffer ) );
 	qRR
@@ -131,12 +131,12 @@ extern "C" JNIEXPORT jstring JNICALL Java_info_q37_jreq_Wrapper_componentInfo(
 	jstring JString;
 qRFH
 	str::wString Info;
-	qCBUFFERr Buffer;
+	qCBUFFERh Buffer;
 qRFB
 	Info.Init();
 
 	if ( !GetLauncher_( Launcher ).GetInfo( Info ) )
-		sclmisc::GetBaseTranslation( "NoRegisteredComponent", Info );
+		sclm::GetBaseTranslation( "NoRegisteredComponent", Info );
 
 	JString = Env->NewStringUTF( Info.Convert( Buffer ) );
 qRFR
@@ -162,7 +162,7 @@ qRFB
 
 //	cio::COut << ">>>>>>>>> " << Location << txf::nl << txf::commit;
 
-	sclmisc::Initialize( Rack_, Location, jreq::Info );
+	sclm::Initialize( Rack_, Location, jreq::Info );
 
 	jniq::SetGlobalEnv( Env );
 qRFR
@@ -209,10 +209,10 @@ qRFB;
 	Arguments.Init();
 	jniq::Convert( Env, RawArguments, Arguments );
 
-	sclargmnt::FillRegistry( Arguments, sclargmnt::faIsArgument, sclargmnt::uaReport );
+	scla::FillRegistry( Arguments, scla::faIsArgument, scla::uaReport );
 
 	ComponentFilename.Init();
-	sclmisc::MGetValue( registry::parameter::ComponentFilename, ComponentFilename );
+	sclm::MGetValue( registry::parameter::ComponentFilename, ComponentFilename );
 
 	Shared_.NewObject = wrapper::NewObject;
 	Shared_.NewObjectArray = wrapper::NewObjectArray;
@@ -238,7 +238,7 @@ qRFE( ERRFinal_( Env ) )
 extern "C" JNIEXPORT jobject JNICALL Java_info_q37_jreq_Wrapper_call(
 	JNIEnv *Env,
 	jclass,
-	jlong Launcher, 
+	jlong Launcher,
 	jint Index,
 	jobjectArray Args )
 {

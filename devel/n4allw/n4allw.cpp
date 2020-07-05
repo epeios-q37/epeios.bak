@@ -26,9 +26,9 @@ using namespace n4allw;
 namespace {
 	namespace {
 		err::err___ qRRor_;
-		sclerror::rError SCLError_;
-		scllocale::rRack Locale_;
-		sclmisc::sRack Rack_;
+		scle::rError SCLError_;
+		scll::rRack Locale_;
+		sclm::sRack Rack_;
 	}
 
 	typedef n4all::cRegistrar cRegistrar_;
@@ -70,7 +70,7 @@ bso::bool__ n4allw::rLauncher::Register_(
 	const fnm::rName &ComponentFilename,
 	dlbrry::eNormalization Normalization,
 	n4all::cRegistrar &Registrar,
-	sclmisc::sRack &Rack,
+	sclm::sRack &Rack,
 	void *UP,
 	bso::sBool SkipComponentUnloading )
 {
@@ -95,15 +95,14 @@ qRB
 
 	fRegister_ *Register = dlbrry::GetFunction<fRegister_ *>( E_STRING( N4ALL_REGISTER_FUNCTION_NAME ), Library_ );
 
-	if ( Register == NULL )
-		qRReturn;
+	if ( Register != NULL ) {
+		if ( Launcher_ != NULL )
+			qRGnr();
 
-	if ( Launcher_ != NULL )
-		qRGnr();
+		Launcher_ = Register( &Registrar, &Data );
 
-	Launcher_ = Register( &Registrar, &Data );
-
-	Success = true;
+		Success = true;
+	}
 qRR
 qRT
 qRE
@@ -113,7 +112,7 @@ qRE
 bso::sBool n4allw::rLauncher::Init(
 	const fnm::rName &ComponentFilename,
 	dlbrry::eNormalization Normalization,
-	sclmisc::sRack &Rack,
+	sclm::sRack &Rack,
 	void *UP,
 	bso::sBool SkipComponentUnloading,
 	qRPN )

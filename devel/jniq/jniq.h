@@ -57,7 +57,7 @@ namespace jniq {
 	const char *Convert(
 		JNIEnv *Env,
 		jstring JString,
-		qCBUFFERr &Buffer );
+		qCBUFFERh &Buffer );
 
 	inline jclass FindClass(
 		JNIEnv *Env,

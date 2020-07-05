@@ -613,6 +613,7 @@ namespace {
 	qRH
 		str::wString Script;
 	qRB
+		tht::Suspend(1000);
 		Script.Init();
 		GetBroadcastActionScript_(Action, Id, Script);
 

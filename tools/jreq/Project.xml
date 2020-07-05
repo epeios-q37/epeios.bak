@@ -11,7 +11,8 @@
    <xpp:bloc>2017</xpp:bloc>
   </xpp:define>
  </xpp:bloc>
- <xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
+	<xpp:set name="q37.project" env-var="Q37_PROJECT"/>
+	<xpp:expand value-of="q37.project"/>
  <About>
   <Program>jreq</Program>
   <Software>JREq</Software>

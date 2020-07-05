@@ -2,7 +2,7 @@
 
 Concerne le code *Python* <u>et</u> natif.
 
-## Exemple de description en anglais:
+## Exemple de description en anglais (obsolete):
 
 > Lightweight and dependency-free module to easily add a GUI to Python programs. Requires only basic knowledge of web technologies (no JavaScript knowledge required). CLI and GUI can easily coexist in the same program, so the user can choose the interface s/he wants to use.
 
@@ -32,6 +32,8 @@ En créant, dans le répertoire de l'application, un fichier `__main__.py` conte
 Dans `RTW/atlas-python` :
 
 `python3 setup.py sdist bdist_wheel`
+
+**ATTENTION** : effacer auparavant le répertoire `examples` et le fichier `main.py` !!!
 
 ### Test local
 

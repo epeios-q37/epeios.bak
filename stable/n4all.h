@@ -32,7 +32,7 @@
 # endif
 
 # include "err.h"
-# include "sclmisc.h"
+# include "sclm.h"
 # include "tol.h"
 
 # define N4ALL_REGISTER_FUNCTION_NAME		N4ALLRegister
@@ -110,7 +110,7 @@ namespace n4all {
 	public:
 		const char *Version;	// Always first.
 		bso::size__ ControlValue;
-		sclmisc::sRack *SCLRack;
+		sclm::sRack *SCLRack;
 		const fnm::rName *Location;
 		const fnm::rName *Arguments;
 		void *UP;				// User pointer.
@@ -124,7 +124,7 @@ namespace n4all {
 		}
 		E_CDTOR( sData );
 		sData(
-			sclmisc::sRack &Rack,
+			sclm::sRack &Rack,
 			const fnm::rName &Location,
 			const fnm::rName &Arguments,
 			void *UP = NULL )
@@ -132,7 +132,7 @@ namespace n4all {
 			Init( Rack, Location, Arguments, UP );
 		}
 		void Init(
-			sclmisc::sRack &SCLRack,
+			sclm::sRack &SCLRack,
 			const fnm::rName &Location,
 			const fnm::rName &Arguments,
 			void *UP = NULL )

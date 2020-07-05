@@ -169,7 +169,7 @@ namespace n4jre {
 		void Init( const str::dString &String )
 		{
 		qRH
-			qCBUFFERr Buffer;
+			qCBUFFERh Buffer;
 		qRB
 			Init( String.Convert( Buffer ), hCopy );
 		qRR

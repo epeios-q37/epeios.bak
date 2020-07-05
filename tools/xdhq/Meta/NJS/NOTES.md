@@ -16,7 +16,7 @@ La version du wrapper binaire (*C++*) du *toolkit* *Atlas* n'est plus actuelleme
 ### Préparation
 
 - Mettre à jour le numéro de version dans le fichier `Atlas/package.json` ;
-- `DVLRTW` ;
+- `ATKNJSRTW` ;
 
 ### Test
 
@@ -36,7 +36,7 @@ Dans `RTW/atlas-node`
 
 ### Test
 
-- `DVLRTW` ;
+- `ATKNJSRTW` ;
 - créer un *REPL* bash sur *REPLit* ;
 - copier tout le contenu de `RTW/atlas-node`(ne pas oublier `.replit`) dans le *REPL* ;
 - tester.
@@ -44,7 +44,7 @@ Dans `RTW/atlas-node`
 ### Publication
 
 Dans `RTW/atlas-node` :
-- `DVLRTW` ;
+- `ATKNJSRTW` ;
 - `RTWUpdate` ;
 - `git gui` et contrôler,
 - `RTWCommit`.
