@@ -26,16 +26,16 @@ class XPPqData {
 		value;
 };
 
-class XPPqWrapper extends JREq {
+class XPPqWrapper extends JRE {
 	static private long launcher;
 	static {
-		launcher = JREq.register( "xppq" );
+		launcher = JRE.register( "xppq" );
 	}
 	static protected Object call(int index, Object... objects) {
-		return JREq.call( launcher, index, objects );
+		return JRE.call( launcher, index, objects );
 	}
 	static public String componentInfo(){
-		return JREq.componentInfo( launcher );
+		return JRE.componentInfo( launcher );
 	}
 	static public String returnArgument( String argument )
 	{
@@ -231,6 +231,7 @@ class XPPqTest {
 
 	public static void main ( String[] args ) throws Exception
 	{
+	XPPq.Init();
  	System.out.println( XPPq.wrapperInfo() );
  	System.out.println( XPPq.componentInfo() );
  	displayBytecodeBuildTimestamp();

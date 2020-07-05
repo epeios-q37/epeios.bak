@@ -21,9 +21,9 @@
 
 #include "scljre.h"
 
-#include "sclerror.h"
-#include "scllocale.h"
-#include "sclmisc.h"
+#include "scle.h"
+#include "scll.h"
+#include "sclm.h"
 
 #include "str.h"
 
@@ -164,7 +164,7 @@ void scljre::Throw(
 	const str::dString &Message )
 {
 qRH
-	qCBUFFERr Buffer;
+	qCBUFFERh Buffer;
 qRB
 	Throw( Env, Message.Convert( Buffer ) );
 qRR

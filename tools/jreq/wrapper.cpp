@@ -198,7 +198,7 @@ namespace {
 		jobject &Object )
 	{
 	qRH
-		qCBUFFERr Buffer;
+		qCBUFFERh Buffer;
 	qRB
 		const str::dString &String = *( const str::dString * )RawString;
 
@@ -541,7 +541,7 @@ qRB
 
 //	n4allw::GetLauncher().Launch( n4allw::GetFunction( Index ), Caller );
 
-	if ( sclerror::IsErrorPending() )
+	if ( scle::IsErrorPending() )
 		qRAbort();	// To force the handling of a pending error.
 
 	Return = Caller.GetReturnedValue();

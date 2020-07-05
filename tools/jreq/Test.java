@@ -24,6 +24,7 @@ public class Test {
 	}
 
 	public static void main(String[] args) throws Exception {
+		info.q37.jreq.JRE.Init();
 		System.out.println(info.q37.jreq.JRE.wrapperInfo());
 		displayCompilationTime();
 	}

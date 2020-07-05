@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2007-2017 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 2007 Claude SIMON (http://q37.info/contact/).
 
 	This file is part of JREq.
 
@@ -17,7 +17,7 @@
 	along with JREq. If not, see <http://www.gnu.org/licenses/>.
 */
 
-// COMPILE WITH OPTION '-d .' : 'javac -d . *.java'.
+// COMPILE WITH OPTION '-d .' : 'javac -d classes *.java'.
 
 package info.q37.jreq;
 
@@ -37,7 +37,7 @@ class Wrapper {
 	static protected String getLocation() {
 		String osName = System.getProperty("os.name").toLowerCase();
 
-		if (System.getenv("EPEIOS_SRC") == null) {
+		if (System.getenv("Q37_EPEIOS") == null) {
 			return "./";
 		} else if (osName.contains("windows"))
 			return "h:/bin/";
@@ -49,10 +49,11 @@ class Wrapper {
 
 	}
 
-	static void Init() {
+	static public void Init() {
 		if ( !loaded ) {
 		String location = getLocation();
 
+		// Don't forget the '-Djava.library.path="…"' parameter to 'java'. 
 		System.loadLibrary("jreq");
 
 		init(location);

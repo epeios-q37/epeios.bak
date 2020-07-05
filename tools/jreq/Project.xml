@@ -33,9 +33,9 @@
    <Modules Group="SCL">
     <xpp:expand select="SCL"/>
    </Modules>
+  </Modules>
    <Module>registry</Module>
    <Module>wrapper</Module>
-  </Modules>
  </Modules>
  <Files>
   <File>README.md</File>

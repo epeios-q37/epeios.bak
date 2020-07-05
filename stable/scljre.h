@@ -505,7 +505,7 @@ namespace scljre {
 		sEnv *Env,
 		const str::dStrings &Strings );
 
-	// To ease the handling of user object. 
+	// To ease the handling of user object.
 	template <typename t> inline sJObject ConvertUO(
 		sEnv *Env,
 		const t* UO )
@@ -589,8 +589,12 @@ namespace scljre {
 		virtual fdr::sSize FDRRead(
 			fdr::sSize Maximum,
 			fdr::sByte *Buffer ) override;
-		virtual void FDRDismiss( bso::sBool Unlock ) override
-		{}
+		virtual bso::sBool FDRDismiss(
+			bso::sBool Unlock,
+			qRPN ) override
+		{
+			return true;
+		}
 		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
 		{
 			return Owner;

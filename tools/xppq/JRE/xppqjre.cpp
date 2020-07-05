@@ -19,7 +19,7 @@
 
 #include "xppqjre.h"
 
-#include "sclmisc.h"
+#include "sclm.h"
 #include "scljre.h"
 
 #include "iof.h"
@@ -40,8 +40,8 @@ namespace parsing_ {
 		{
 		private:
 			rInputStreamRDriver Stream_;
-			flw::sDressedRFlow<> IFlow_;
-			xtf::sIFlow XFlow_;
+			flw::rDressedRFlow<> IFlow_;
+			xtf::sRFlow XFlow_;
 			xml::rParser Parser_;
 		public:
 			void reset( bso::sBool P = true )
@@ -82,7 +82,7 @@ namespace parsing_ {
 			delete Stream;
 	qRT
 	qRE
-		return Long( (scljre::sJLong)Parser );
+		return Long( Env, (scljre::sJLong)Parser );
 	}
 
 	SCLJRE_F( Delete )
@@ -101,6 +101,7 @@ namespace parsing_ {
 
 	namespace {
 		void Init_(
+			sEnv *Env,
 			scljre::java::lang::rString &String,
 			const str::dString &Content )
 		{
@@ -112,13 +113,14 @@ namespace parsing_ {
 
 			Array.Init( Content );
 
-			String.Init( Array, CharsetName );
+			String.Init( Env, Array, CharsetName );
 		qRR
 		qRT
 		qRE
 		}
 
 		void Set_(
+			sEnv *Env,
 			const char *Name,
 			const str::dString &Value,
 			scljre::rObject &Data )
@@ -126,7 +128,7 @@ namespace parsing_ {
 		qRH
 			scljre::java::lang::rString String;
 		qRB
-			Init_( String, Value );
+			Init_( Env, String, Value );
 			Data.Set( Name, "Ljava/lang/String;", String() );
 		qRR
 		qRT
@@ -156,14 +158,14 @@ namespace parsing_ {
 			Locale.Init();
 			Error.Init();
 			Locale.GetTranslation( Meaning, "", Error );
-			Throw( Error );
+			Throw( Env, Error );
 			break;
 		case xml::t_Processed:
 			break;
 		default:
-			Set_( "tagName", Parser().TagName(), Data );
-			Set_( "attributeName", Parser().AttributeName(), Data );
-			Set_( "value", Parser().Value(), Data );
+			Set_( Env, "tagName", Parser().TagName(), Data );
+			Set_( Env, "attributeName", Parser().AttributeName(), Data );
+			Set_( Env, "value", Parser().Value(), Data );
 			break;
 		}
 
@@ -194,7 +196,7 @@ namespace parsing_ {
 	qRR
 	qRT
 	qRE
-		return Integer( Token );
+		return Integer( Env, Token );
 	}
 
 }
@@ -205,7 +207,7 @@ namespace processing_ {
 		{
 		private:
 			scljre::rInputStreamRDriver Input_;
-			flw::sDressedRFlow<> Flow_;
+			flw::rDressedRFlow<> Flow_;
 			xtf::extended_text_iflow__ XFlow_;
 			xpp::preprocessing_iflow___ PFlow_;
 		public:
@@ -243,7 +245,7 @@ namespace processing_ {
 			delete Processor;
 	qRT
 	qRE
-		return scljre::Long( (scljre::sJLong)Processor );
+		return scljre::Long( Env, (scljre::sJLong)Processor );
 	}
 
 	SCLJRE_F( Delete )
@@ -282,21 +284,23 @@ namespace processing_ {
 			xpp::GetMeaning(Processor(), Meaning );
 			Locale.Init();
 			Translation.Init();
-			sclmisc::GetBaseTranslation( Meaning, Translation );
-			scljre::Throw( Translation );
+			sclm::GetBaseTranslation( Meaning, Translation );
+			scljre::Throw( Env, Translation );
 		}
 	qRR
 	qRT
 	qRE
-		return Integer( Char );
+		return Integer( Env, Char );
 	}
 }
 
-void scljre::SCLJRERegister( sRegistrar &Registrar )
+const scli::sInfo &scljre::SCLJRERegister( sRegistrar &Registrar )
 {
+	static scli::sInfo Info(NAME_LC, NAME_MC, "q37.info");
+
 	Registrar.Register( parsing_::New, parsing_::Delete, parsing_::Parse );
 	Registrar.Register( processing_::New, processing_::Delete,  processing_::Read );
+
+	return Info;
 }
 
-const char *sclmisc::SCLMISCTargetName = NAME_LC;
-const char *sclmisc::SCLMISCProductName = NAME_MC;
