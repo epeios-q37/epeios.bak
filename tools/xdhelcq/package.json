@@ -15,7 +15,7 @@
     "host": "https://github.com"
   },
   "dependencies": {
-    "electron": "^1.8.8",
+    "electron": "^9.1.0",
     "node-pre-gyp": "0.6.x"
   },
   "devDependencies": {
