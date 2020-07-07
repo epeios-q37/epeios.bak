@@ -1114,7 +1114,8 @@ Utile pour afficher le numro de ligne dans un #pragma message (...). */
 // Utilisation :
 // #pragma message(__LOC__ " : Message")
 
-
+// Checkpoint.
+# define CPq	cio::COut << __FILE__ "(" E_STRING(__LINE__) ")" << txf::nl << txf::commit
 
 
 # define E_AUTO_( Name )	\

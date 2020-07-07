@@ -122,7 +122,7 @@ class XPPqParser {
 	
 	public int parse( XPPqData data )
 	{
-		System.out.println( data.tagName.getClass().getName() );
+//		System.out.println( data.tagName.getClass().getName() );
 		return xppq.parse( data  );
 	}
 	

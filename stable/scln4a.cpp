@@ -1,4 +1,4 @@
-/*::Def
+/*
 	Copyright (C) 1999 Claude SIMON (http://q37.info/contact/).
 
 	This file is part of the Epeios framework.

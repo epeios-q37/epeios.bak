@@ -34,31 +34,31 @@ class Wrapper {
 
 	static private boolean loaded = false;
 
-	static protected String getLocation() {
+	static protected java.nio.file.Path getLocation() {
 		String osName = System.getProperty("os.name").toLowerCase();
 
 		if (System.getenv("Q37_EPEIOS") == null) {
-			return "./";
+			return java.nio.file.Paths.get("");
 		} else if (osName.contains("windows"))
-			return "h:/bin/";
+			return java.nio.file.Paths.get("h:/bin/");
 		else if (osName.contains("mac")) {
-			return "/Users/csimon/bin/";
+			return java.nio.file.Paths.get("/Users/csimon/bin/");
 		} else {
-			return "/home/csimon/bin/";
+			return java.nio.file.Paths.get("/home/csimon/bin/");
 		}
-
 	}
 
 	static public void Init() {
 		if ( !loaded ) {
-		String location = getLocation();
+			java.nio.file.Path location = getLocation().toAbsolutePath();
 
-		// Don't forget the '-Djava.library.path="…"' parameter to 'java'. 
-		System.loadLibrary("jreq");
+			// Don't forget the '-Djava.library.path="…"' parameter to 'java'. 
+		//	System.loadLibrary("jreq");
+			System.load(java.nio.file.Paths.get(location.toString(), "libjreq.so").toString());
 
-		init(location);
+			init(location.toString());
 
-		loaded = true;
+			loaded = true;
 		}
 	}
 }
@@ -66,6 +66,6 @@ class Wrapper {
 public class JRE extends Wrapper {
 	static public long register( String componentName ) {
 		Wrapper.Init();
-		return Wrapper.register( getLocation() + componentName + "jre" );
+		return Wrapper.register( java.nio.file.Paths.get(getLocation().toString(), componentName).toString() + "jre" );
 	}
 }

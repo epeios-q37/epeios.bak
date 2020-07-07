@@ -160,7 +160,7 @@ qRFB
 	jniq::Convert( Env, RawLocation, Location);
 	// TODO : Find a way to fill 'Location' with the path of the binary.
 
-	cio::COut << ">>>>>>>>> " << Location << txf::nl << txf::commit;
+//	cio::COut << ">>>>>>>>> " << Location << txf::nl << txf::commit;
 
 	sclm::Initialize( Rack_, Location, jreq::Info );
 
@@ -180,7 +180,7 @@ n4jre::fFree n4jre::N4JREFree = free;
 namespace {
 	inline void Delete_( n4jre::cObject *Object )
 	{
-		delete Object;
+		::delete Object;
 	}
 	inline void Throw_(
 		n4jre::sEnv *RawEnv,

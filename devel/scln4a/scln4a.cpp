@@ -44,11 +44,11 @@ qRFB
 	if ( Info == NULL )
 		qRFwk();
 
-	sclmisc::Initialize( *Data->SCLRack, *Data->Location, *Info );
+	sclm::Initialize( *Data->SCLRack, *Data->Location, *Info );
 qRFR
 	if ( Launcher != NULL )
 		delete Launcher;
 qRFT
-qRFE( sclmisc::ErrFinal() )
+qRFE( sclm::ErrorDefaultHandling() )
 	return Launcher;
 }

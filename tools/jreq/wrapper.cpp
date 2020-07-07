@@ -366,8 +366,9 @@ namespace {
 		void reset( bso::sBool P = true )
 		{
 			if ( P ) {
-				if ( Object_ != NULL )
-					Env_->DeleteGlobalRef( Object_ );
+				if ( Object_ != NULL ) {
+					Env_->DeleteLocalRef( Object_ );
+				}
 			}
 
 			Env_ = NULL;
@@ -467,8 +468,8 @@ qRH
 	jvalue *Args = NULL;
 	jclass Class = NULL;
 	JNIEnv *Env = NULL;
-	qRB
-		Env = (JNIEnv *)RawEnv;
+qRB
+	Env = (JNIEnv *)RawEnv;
 	Class = jniq::FindClass( Env, ClassName );
 
 	Args = Fill_( Env, ArgC, ArgV );
@@ -478,17 +479,18 @@ qRH
 	if ( Object == NULL )
 		qRAlc();
 
-	if ( ( ClassName == NULL ) || ( *ClassName == 0 ) )
+	if ( ( ClassName == NULL ) || ( *ClassName == 0 ) ) {
 		Object->Init( Env, NULL );
-	else
+	} else {
 		Object->Init( Env, Env->NewObjectA( Class, jniq::GetMethodID( Env, Class, "<init>", Signature ), Args ) );
+	}
 qRR
 	if ( Object != NULL )
-		delete Object;
+		::delete Object;
 qRT
 	if ( Args != NULL ) {
 		RetrieveAndFree_( Env, ArgC, ArgV, Args );
-		delete Args;
+		::delete Args;
 	}
 qRE
 	return Object;
