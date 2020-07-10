@@ -176,7 +176,7 @@ qRFB
 	ExitValue = main_( Oddities, cio::GetSet( cio::t_Default ) );
 qRFR
 qRFT
-qRFE( sclm::ErrFinal() )
+qRFE( sclm::ErrorDefaultHandling() )
 	return ExitValue;
 }
 
@@ -209,7 +209,7 @@ qRFB
 
 	FIn.Init( fdr::ts_Default, flx::a_Default );
 
-	CIO.Init( FIn, FOut, FErr );
+	CIO.Init( FIn, FOut, FErr, cio::t_Default );
 
 	ExitValue = main_( Oddities, CIO );
 qRFR
@@ -243,7 +243,7 @@ qRFT
 			std::wcout << (wchar_t *)ntvstr::string___( SErr ).Internal() << std::endl;
 	}
 # endif
-qRFE( sclm::ErrFinal() )
+qRFE( sclm::ErrorDefaultHandling() )
 	return ExitValue;
 }
 
