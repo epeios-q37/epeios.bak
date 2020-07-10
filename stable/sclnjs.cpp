@@ -281,7 +281,7 @@ bso::sBool sclnjs::rRStream::Push( const str::dString &SBuffer )
 {
 	bso::sBool Result = false;
 qRH
-	qCBUFFERr Buffer;
+	qCBUFFERh Buffer;
 qRB
 	Result = Push( (void *)SBuffer.Convert( Buffer ), SBuffer.Amount() );
 qRR

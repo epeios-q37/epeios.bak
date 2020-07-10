@@ -29,7 +29,7 @@
 #  define NJS_DBG
 # endif
 
-# include "sclmisc.h"
+# include "sclm.h"
 
 # include "err.h"
 # include "tol.h"
@@ -109,7 +109,7 @@ namespace njs {
 	public:
 		const char *Version;	// Always first.
 		bso::size__ ControlValue;
-		sclmisc::sRack *SCLRack;
+		sclm::sRack *SCLRack;
 		const fnm::rName *Location;
 		const fnm::rName *Arguments;
 		void *UP;				// User pointer.
@@ -123,7 +123,7 @@ namespace njs {
 		}
 		E_CDTOR( sData );
 		sData(
-			sclmisc::sRack &Rack,
+			sclm::sRack &Rack,
 			const fnm::rName &Location,
 			const fnm::rName &Arguments,
 			void *UP = NULL )
@@ -131,7 +131,7 @@ namespace njs {
 			Init( Rack, Location, Arguments, UP );
 		}
 		void Init(
-			sclmisc::sRack &SCLRack,
+			sclm::sRack &SCLRack,
 			const fnm::rName &Location,
 			const fnm::rName &Arguments,
 			void *UP = NULL )

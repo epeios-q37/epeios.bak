@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2019 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 2000 Claude SIMON (http://q37.info/contact/).
 
 	This file is part of the 'RVLq' tool.
 
