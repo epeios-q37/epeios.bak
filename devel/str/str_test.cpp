@@ -39,6 +39,15 @@ qRT
 qRE
 }
 
+void test( const str::dStrings &S1)
+{
+	str::wStrings S2;
+
+//	S2.Init( S1 );
+
+	S2 = S1;
+}
+
 namespace {
 	void ErrFinal_( void )
 	{

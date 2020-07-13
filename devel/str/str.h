@@ -693,6 +693,7 @@ namespace str {
 	public:
         using wTStrings_<row>::wTStrings_;
         using wTStrings_<row>::Init;
+        using wTStrings_<row>::operator =;
         void Init( const str::dString &String)
         {
             Init();
