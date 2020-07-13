@@ -23,7 +23,7 @@
 #include "registry.h"
 #include "stream.h"
 
-#include "sclmisc.h"
+#include "sclm.h"
 #include "scln4a.h"
 
 void sclnjs::SCLNJSInfo( txf::sWFlow &Flow )
@@ -42,7 +42,7 @@ namespace {
 		Caller.GetArgument( Input );
 
 		Text.Init();
-		sclmisc::GetBaseTranslation( "Argument", Text, Input );
+		sclm::GetBaseTranslation( "Argument", Text, Input );
 
 		Caller.SetReturnValue( Text );
 	qRR
@@ -51,13 +51,13 @@ namespace {
 	}
 }
 
-void sclnjs::SCLNJSRegister( sclnjs::sRegistrar &Registrar )
+const scli::sInfo &sclnjs::SCLNJSRegister( sclnjs::sRegistrar &Registrar )
 {
+	static scli::sInfo Info(NAME_LC, NAME_MC, "q37.info");
+
 	Registrar.Register( ReturnArgument_ );
 	Registrar.Register( parser::OnData, parser::OnEnd, parser::Parse );
 	Registrar.Register( stream::OnData, stream::OnEnd, stream::Read, stream::Set );
-}
 
-const char *sclmisc::SCLMISCTargetName = NAME_LC;
-const char *sclmisc::SCLMISCProductName = NAME_MC;
-// const char *scln4a::SCLN4AProductVersion = VERSION;
+	return Info;
+}

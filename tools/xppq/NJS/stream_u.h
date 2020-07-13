@@ -20,7 +20,7 @@
 // STREAM Upstream.
 // Reading of data to preprocess.
 
-#ifndef STREAM__U_INC_
+#ifndef STREAM_U_INC_
 # define STREAM_U_INC_
 
 # include "sclnjs.h"

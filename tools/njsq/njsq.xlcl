@@ -1,16 +1,17 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<Locale target="njsq" xmlns:xpp="http://q37.info/ns/xpp/" >
-	<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
-	<xpp:expand value-of="q37.xpp"/>
-	<xpp:expand select="epeios.xlcl"/>
-	<Translations text="ProgramDescription">
-		<Translation language="fr">'wrapper' pour composant ('addon') Node.js.</Translation>
-		<Translation language="en">Node.js component (addon) wrapper.</Translation>
-	</Translations>
-	 	<Translations text="NoRegisteredComponent">
-   <Translation language="fr">(pas de composant enregistré)</Translation>
-   <Translation language="en">(no registered component)</Translation>
-  </Translations><!--
+<Locale target="njsq" 
+  xmlns:xpp="http://q37.info/ns/xpp/">
+  <xpp:set name="q37.xpp" env-var="Q37_XPP"/>
+  <xpp:expand value-of="q37.xpp"/>
+  <xpp:expand select="epeios.xlcl"/>
+  <Translations text="ProgramDescription">
+    <Translation language="fr">'wrapper' pour composant ('addon') Node.js.</Translation>
+    <Translation language="en">Node.js component (addon) wrapper.</Translation>
+  </Translations>
+  <Translations text="NoRegisteredComponent">
+    <Translation language="fr">(pas de composant enregistré)</Translation>
+    <Translation language="en">(no registered component)</Translation>
+  </Translations>  <!--
 	<Translations text="">
 		<Translation language="fr"></Translation>
 		<Translation language="en"></Translation>

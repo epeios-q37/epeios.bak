@@ -59,7 +59,7 @@ namespace {
 			lcl::wMeaning Meaning;
 			lcl::locale Locale;
 		qRB
-			Parser.Flow().UndelyingFlow().IDriver().ITake( tht::GetTID() );	// Between calls, the thread is not the same.
+			Parser.Flow().UndelyingFlow().RDriver().RTake( tht::GetTID() );	// Between calls, the thread is not the same.
 
 			Content.Init();
 
@@ -68,7 +68,7 @@ namespace {
 				Meaning.Init();
 				xml::GetMeaning( Parser.GetStatus(), Parser.Flow().Position(), Meaning );
 				Locale.Init();
-				sclmisc::GetBaseTranslation( Meaning, Content.Error );
+				sclm::GetBaseTranslation( Meaning, Content.Error );
 				break;
 			default:
 				Content.Tag = Parser.TagName();
@@ -84,8 +84,8 @@ namespace {
 
 	class rRack_ {
 	private:
-		flw::sDressedRFlow<> IFlow_;
-		xtf::sIFlow XFlow_;
+		flw::rDressedRFlow<> IFlow_;
+		xtf::sRFlow XFlow_;
 		xml::rParser Parser_;
 		rContent_ Content_;
 		qRMV( sclnjs::rCallback, C_, Callback_ );
@@ -133,12 +133,12 @@ namespace {
 		{
 			if ( Content_.Token == xml::t_Error ) {
 				C_().VoidLaunch( 0, Content_.Tag, Content_.Attribute, Content_.Error );
-				XFlow_.UndelyingFlow().IDriver().ITake( tht::GetTID() );
+				XFlow_.UndelyingFlow().RDriver().RTake( tht::GetTID() );
 				XFlow_.Dismiss();	// To avoid locker owner problem on destruction.
 				return true;
 			} else if ( Content_.Token == xml::t_Processed ) {
 				C_().VoidLaunch( 1, Content_.Tag, Content_.Attribute, Content_.Value );
-				XFlow_.UndelyingFlow().IDriver().ITake( tht::GetTID() );
+				XFlow_.UndelyingFlow().RDriver().RTake( tht::GetTID() );
 				XFlow_.Dismiss();	// To avoid locker owner problem on destruction.
 				return true;
 			} else {
@@ -258,7 +258,7 @@ qRB
 
 #if 1
 //	Source.OnReadable( OnReadable_ );
-// The 'readable' event is implemented in the JS file. 
+// The 'readable' event is implemented in the JS file.
 # else // Doesn't always work. Sometimes, 'onend' event is not launched...
 	Source.OnData( OnData_ );
 	Source.OnEnd( OnEnd_ );

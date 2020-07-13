@@ -27,18 +27,18 @@ var componentPath = null;
 var componentFilename = null;
 var path = require("path");
 
-if (process.env.EPEIOS_SRC) {
+if (process.env.Q37_EPEIOS) {
     if (process.platform == 'win32')
         componentPath = 'h:/bin/';
     else
-        componentPath = '~/bin/';
+        componentPath = '/home/csimon/bin/';
     njsq = require(componentPath + 'njsq.node');
 } else {
     njsq = require('njsq');
     componentPath = __dirname;
 }
 
-componentFilename = path.join(componentPath, affix + "njs").replace(/\\/g, "\\\\").replace(/'/g, "\\'").replace(/ /g, "\\ ");
+componentFilename = path.join(componentPath, "lib" + affix + "njs").replace(/\\/g, "\\\\").replace(/'/g, "\\'").replace(/ /g, "\\ ");
 const xppq = njsq._register(componentFilename);
 // End of generic part.
 

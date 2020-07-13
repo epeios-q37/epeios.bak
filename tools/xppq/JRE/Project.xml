@@ -1,36 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project xmlns:xpp="http://q37.info/ns/xpp/" >
- <xpp:bloc>
-  <!-- User definitions -->
-  <xpp:define name="Version">
-   <xpp:bloc>20150620</xpp:bloc>
-  </xpp:define>
-  <xpp:set name="Credits" value="Epeios"/>
-  <xpp:set name="Type" value="JREComponent"/>
-  <xpp:define name="CopyrightYears">
-   <xpp:bloc>2007-2017</xpp:bloc>
-  </xpp:define>
- </xpp:bloc>
-	<xpp:set name="q37.project" env-var="Q37_PROJECT"/>
-	<xpp:expand value-of="q37.project"/>
- <About>
-  <Program>xppqjre</Program>
-  <Software>xppq</Software>
- </About>
- <Modules xpp:marker="$">
-  <Modules Group="Epeios" Path="$EpeiosPath$/">
-   <Modules Group="Core">
-    <xpp:expand select="Core"/>
+<Project xmlns:xpp="http://q37.info/ns/xpp/">
+  <xpp:bloc>
+    <!-- User definitions -->
+    <xpp:define name="Version">
+      <xpp:bloc>20150620</xpp:bloc>
+    </xpp:define>
+    <xpp:set name="Credits" value="Epeios"/>
+    <xpp:set name="Type" value="JREComponent"/>
+    <xpp:define name="CopyrightYears">
+      <xpp:bloc>2007-2017</xpp:bloc>
+    </xpp:define>
+  </xpp:bloc>
+  <xpp:set name="q37.project" env-var="Q37_PROJECT"/>
+  <xpp:expand value-of="q37.project"/>
+  <About>
+    <Program>xppqjre</Program>
+    <Software>xppq</Software>
+  </About>
+  <Modules xpp:marker="$">
+    <Modules Group="Epeios" Path="$EpeiosPath$/">
+      <Modules Group="Core">
+        <xpp:expand select="Core"/>
+      </Modules>
+      <Modules Group="SCL">
+        <xpp:expand select="SCL"/>
+      </Modules>
     </Modules>
-   <Modules Group="SCL">
-    <xpp:expand select="SCL"/>
-   </Modules>
   </Modules>
- </Modules>
- <Files>
-  <File>demo.xml</File>
- </Files>
-	<RTW Description="XML parser and preprocessor" Keywords="XML,parser,preprocessor,xpp">
-		<Dir>xppq-java</Dir>
- </RTW>
+  <Files>
+    <File>demo.xml</File>
+  </Files>
+  <RTW Description="XML parser and preprocessor" Keywords="XML,parser,preprocessor,xpp">
+    <Dir>xppq-java</Dir>
+  </RTW>
 </Project>

@@ -1,33 +1,33 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Configurations xmlns:xpp="http://q37.info/ns/xpp">
-	<Configuration target="jreq">
-		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
-		<xpp:expand value-of="q37.xpp"/>
-  <xpp:expand href="../../CLI.xcfg"/>
-  <Parameters>
-			<Language>en</Language>
-   <Command>Launch</Command>
-  </Parameters>
-		<Definitions>
-		</Definitions>
-		<Locale>
-		</Locale>
-		<Arguments>
-   <xpp:expand select="CLI_Arguments"/>
-   <!-- Commandes : pas de 'Path' (vaut 'Parameters/Command'), ni de 'Value'. -->
-   <Argument id="LaunchCommand" Description="LaunchCommandDescription" long="launch" short="l" Value="Launch" Usage="%TestFlag% %TestOption% %TestArgument%"/>
-   <!-- Fanaux : 'Path', mais pas de 'Value'. -->
-   <Argument id="TestFlag" Description="TestFlagDescription" long="flag" short="f" Path="Flag" Value="TestFlag"/>
-   <!-- Options : 'Path' ET 'Value'. -->
-   <Argument id="TestOption" Description="TestOptionDescription" long="option" short="o" Path="Option" Label="TestOptionLabel"/>
-   <!-- Arguments libres : 'Path' mais PAS de 'Value' (ni de 'short', ni de 'long'). -->
-   <Argument id="ComponentArgument" Description="ComponentArgumentDescription" Path="ComponentFilename" Label="ComponentArgumentLabel"/>
-   <!-- Affectations des arguments libres-->
-   <Layouts>
-    <Layout command="Launch">
-     <Link index="0" Target="ComponentArgument"/>
-    </Layout>
-   </Layouts>
-  </Arguments>
-	</Configuration>
+  <Configuration target="jreq">
+    <xpp:set name="q37.xpp" env-var="Q37_XPP"/>
+    <xpp:expand value-of="q37.xpp"/>
+    <xpp:expand href="../../CLI.xcfg"/>
+    <Parameters>
+      <Language>en</Language>
+      <Command>Launch</Command>
+    </Parameters>
+    <Definitions>
+    </Definitions>
+    <Locale>
+    </Locale>
+    <Arguments>
+      <xpp:expand select="CLI_Arguments"/>
+      <!-- Commandes : pas de 'Path' (vaut 'Parameters/Command'), ni de 'Value'. -->
+      <Argument id="LaunchCommand" Description="LaunchCommandDescription" long="launch" short="l" Value="Launch" Usage="%TestFlag% %TestOption% %TestArgument%"/>
+      <!-- Fanaux : 'Path', mais pas de 'Value'. -->
+      <Argument id="TestFlag" Description="TestFlagDescription" long="flag" short="f" Path="Flag" Value="TestFlag"/>
+      <!-- Options : 'Path' ET 'Value'. -->
+      <Argument id="TestOption" Description="TestOptionDescription" long="option" short="o" Path="Option" Label="TestOptionLabel"/>
+      <!-- Arguments libres : 'Path' mais PAS de 'Value' (ni de 'short', ni de 'long'). -->
+      <Argument id="ComponentArgument" Description="ComponentArgumentDescription" Path="ComponentFilename" Label="ComponentArgumentLabel"/>
+      <!-- Affectations des arguments libres-->
+      <Layouts>
+        <Layout command="Launch">
+          <Link index="0" Target="ComponentArgument"/>
+        </Layout>
+      </Layouts>
+    </Arguments>
+  </Configuration>
 </Configurations>

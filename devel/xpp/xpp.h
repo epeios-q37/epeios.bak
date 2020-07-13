@@ -993,7 +993,7 @@ namespace xpp {
 /*************/
 
 namespace xpp {
-	typedef preprocessing_iflow___ rIFlow;
+	typedef preprocessing_iflow___ rRFlow;
 	typedef criterions___ rCriterions;
 }
 

@@ -1,49 +1,50 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Project xmlns:xpp="http://zeusw.org/epeios/xpp">
-	<xpp:bloc>
-		<!-- User definitions -->
-		<xpp:define name="Version">
-			<xpp:bloc/>
-		</xpp:define>
-		<xpp:define name="CopyrightYears">
-			<xpp:bloc>2007-2017</xpp:bloc>
-		</xpp:define>
-		<xpp:set name="Credits" value="Epeios"/>
-		<xpp:set name="Type" value="NJSComponent"/>
-	</xpp:bloc>
-	<xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
-	<About>
-		<Program>xppqnjs</Program>
-		<Software>XPPq</Software>
-		<UUID>d6a723cb-e88f-4f2f-b429-3adc207f1d62</UUID>
-	</About>
-	<RTW Description="XML parser and preprocessor" Keywords="XML,parser,preprocessor,xpp">
-  <Dir>xppq-node</Dir>
- </RTW>
- <Modules xpp:marker="$">
-		<Modules Group="Epeios" Path="$EpeiosPath$/">
-			<Modules Group="Core">
-				<xpp:expand select="Core"/>
-			</Modules>
-   <Modules Group="SCL">
-    <xpp:expand select="SCL"/>
-   </Modules>
+  <xpp:bloc>
+    <!-- User definitions -->
+    <xpp:define name="Version">
+      <xpp:bloc/>
+    </xpp:define>
+    <xpp:define name="CopyrightYears">
+      <xpp:bloc>2007-2017</xpp:bloc>
+    </xpp:define>
+    <xpp:set name="Credits" value="Epeios"/>
+    <xpp:set name="Type" value="NJSComponent"/>
+  </xpp:bloc>
+  <xpp:set name="q37.project" env-var="Q37_PROJECT"/>
+  <xpp:expand value-of="q37.project"/>
+  <About>
+    <Program>xppqnjs</Program>
+    <Software>XPPq</Software>
+    <UUID>d6a723cb-e88f-4f2f-b429-3adc207f1d62</UUID>
+  </About>
+  <RTW Description="XML parser and preprocessor" Keywords="XML,parser,preprocessor,xpp">
+    <Dir>xppq-node</Dir>
+  </RTW>
+  <Modules xpp:marker="$">
+    <Modules Group="Epeios" Path="$EpeiosPath$/">
+      <Modules Group="Core">
+        <xpp:expand select="Core"/>
+      </Modules>
+      <Modules Group="SCL">
+        <xpp:expand select="SCL"/>
+      </Modules>
+    </Modules>
+    <Module>common</Module>
+    <Module>parser</Module>
+    <Module>stream</Module>
+    <Modules Group="Stream">
+      <Module>stream_d</Module>
+      <Module>stream_s</Module>
+      <Module>stream_u</Module>
+    </Modules>
+    <Module>registry</Module>
   </Modules>
-  <Module>common</Module>
-  <Module>parser</Module>
-  <Module>stream</Module>
-  <Modules Group="Stream">
-   <Module>stream_d</Module>
-   <Module>stream_s</Module>
-   <Module>stream_u</Module>
-  </Modules>
-  <Module>registry</Module>
- </Modules>
-	<SourceDirs>
-	</SourceDirs>
-	<Files>
- </Files>
-	<PreprocessorDefinitions>
-		<PreprocessorDefinition>E_ST</PreprocessorDefinition>
-	</PreprocessorDefinitions>
+  <SourceDirs>
+  </SourceDirs>
+  <Files>
+  </Files>
+  <PreprocessorDefinitions>
+    <PreprocessorDefinition>E_ST</PreprocessorDefinition>
+  </PreprocessorDefinitions>
 </Project>

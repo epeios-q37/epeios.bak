@@ -40,9 +40,9 @@ namespace stream_s {
 		str::wString Buffer_;
 		tht::rBlocker Blocker_;
 		flx::sIRelay Relay_;
-		flw::sDressedRFlow<> Flow_;
-		xtf::sIFlow XFlow_;
-		xpp::rIFlow Preprocessor_;
+		flw::rDressedRFlow<> Flow_;
+		xtf::sRFlow XFlow_;
+		xpp::rRFlow Preprocessor_;
 	protected:
 		void Read( void )
 		{
@@ -55,7 +55,7 @@ namespace stream_s {
 				Preprocessor_.Init( XFlow_, xpp::rCriterions( "" ) );
 			}
 
-			Blocker_.Wait( true );	// Waits until '_read()' is called.
+			Blocker_.Wait();	// Waits until '_read()' is called.
 
 			SFlow.Init( Buffer_ );
 
@@ -105,7 +105,7 @@ namespace stream_s {
 		}
 		void Unblock( void )
 		{
-			Blocker_.Unblock( true );
+			Blocker_.Unblock();
 		}
 	};
 
