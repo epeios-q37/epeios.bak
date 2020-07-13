@@ -39,6 +39,6 @@ Pour utiliser cette bibliothèque, on pourra, au choix :
 - faire la même chose, mais en désarchivant le fichier *ZIP* suivant, qui contient le dépôt ci-dessus : <https://q37.info/s/pkcp7qxh> ;
 - faire la même chose, en allant à l'adresse suivante, qui donne accès au dépôt ci-dessus dans un environnement de développement en ligne : <https://q37.info/s/7jqrdgnx>.
 
-Contrairement aux autres programmes basés sur le *toolkit* *Atlas*, il n'est pas possible de lancer deux instances simultanées d'un même programme utilisant *term2web*. C'est volontaire, pour ne pas rendre la mise en œuvre de cette bibliothèque plus complexe, puisqu'elle est principalement destinée à être utilisée par des débutants.
+Contrairement aux autres programmes basés sur le *toolkit* *Atlas*, il n'est pas possible de lancer deux instances simultanées d'un même programme utilisant *term2web*. C'est volontaire, pour ne pas rendre la mise en œuvre de cette bibliothèque plus complexe.
  
 Si vous avez des suggestions/remarques/commentaires au sujet de cette bibliothèque, n'hésitez pas à en faire part à l'auteur via le formulaire à l'adresse https://q37.info/s/ggq7x4w7.
