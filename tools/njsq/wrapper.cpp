@@ -22,7 +22,7 @@
 #include "n4allw.h"
 #include "n4njs.h"
 #include "nodeq.h"
-#include "sclerror.h"
+#include "scle.h"
 #include "v8q.h"
 
 using namespace wrapper;
@@ -338,7 +338,7 @@ namespace {
 						const str::dString *Value )
 					{
 					qRH
-						 qCBUFFERr Buffer;
+						 qCBUFFERh Buffer;
 					qRB
 						Argv = v8q::ToString( Value->Convert( Buffer ) );
 					qRR
@@ -358,7 +358,7 @@ namespace {
 						const str::dStrings *Value )
 					{
 					qRH;
-						qCBUFFERr Buffer;
+						qCBUFFERh Buffer;
 						sdr::sRow Row = qNIL;
 					qRB;
 						if ( Value->Amount() > bso::U32Max )
@@ -700,7 +700,7 @@ qRB
 
 //	n4allw::GetLauncher().Launch( n4allw::GetFunction( Index->Uint32Value() ), Caller );
 
-	if ( sclerror::IsErrorPending() )
+	if ( scle::IsErrorPending() )
 		qRAbort();	// To force the handling of a pending error.
 qRR
 qRT

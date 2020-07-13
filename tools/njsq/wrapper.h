@@ -35,7 +35,7 @@ namespace wrapper {
 	public:
 		bso::sBool Register(
 			const fnm::rName &ComponentFilename,
-			sclmisc::sRack &Rack,
+			sclm::sRack &Rack,
 			n4njs::gShared &Shared,
 			qRPD )
 		{

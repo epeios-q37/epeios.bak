@@ -24,8 +24,8 @@
 
 #include "nodeq.h"
 
-#include "sclerror.h"
-#include "sclargmnt.h"
+#include "scle.h"
+#include "scla.h"
 
 #include "dir.h"
 #include "err.h"
@@ -55,8 +55,8 @@ namespace {
 			Message.Append( err::Message( Buffer ) );
 
 			ERRRst();	// To avoid relaunching of current error by objects of the 'FLW' library.
-		} else if ( sclerror::IsErrorPending() )
-			sclmisc::GetSCLBasePendingErrorTranslation( Message );
+		} else if ( scle::IsErrorPending() )
+			sclm::GetSCLBasePendingErrorTranslation( Message );
 
 		if ( Isolate != NULL )
 			Isolate->ThrowException( v8::Exception::Error( v8q::ToString( Message ) ) );
@@ -126,7 +126,7 @@ namespace {
 		Info.Init();
 
 		if ( !GetLauncher_( Args ).GetInfo( Info ) )
-			sclmisc::GetBaseTranslation( "NoRegisteredComponent", Info );
+			sclm::GetBaseTranslation( "NoRegisteredComponent", Info );
 
 		String.Init( Info );
 
@@ -231,9 +231,9 @@ qRE
 
 namespace {
 	err::err___ qRRor_;
-	sclerror::rError SCLError_;
-	scllocale::rRack Locale_;
-	sclmisc::sRack Rack_;
+	scle::rError SCLError_;
+	scll::rRack Locale_;
+	sclm::sRack Rack_;
 }
 
 namespace {
@@ -259,10 +259,10 @@ namespace {
 		Arguments.Init();
 		RawArguments.Get( Arguments );
 
-		sclargmnt::FillRegistry( Arguments, sclargmnt::faIsArgument, sclargmnt::uaReport );
+		scla::FillRegistry( Arguments, scla::faIsArgument, scla::uaReport );
 
 		ComponentFilename.Init();
-		sclmisc::MGetValue( registry::parameter::ComponentFilename, ComponentFilename );
+		sclm::MGetValue( registry::parameter::ComponentFilename, ComponentFilename );
 
 		Shared_.Async = Async_;
 
@@ -316,7 +316,7 @@ qRFB
 	Location.Init();
 	GetAddonLocation_( Module, Location );
 
-	sclmisc::Initialize( Rack_, Location, njsq::Info );
+	sclm::Initialize( Rack_, Location, njsq::Info );
 
 	/*
 	node::AtExit( OnExit_, NULL );

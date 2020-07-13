@@ -107,7 +107,7 @@ namespace v8q {
 	{
 		v8::Local<v8::String> Result;
 	qRH
-		qCBUFFERr Buffer;
+		qCBUFFERh Buffer;
 	qRB
 		Result = ToString( String.Convert( Buffer ) );
 	qRR
