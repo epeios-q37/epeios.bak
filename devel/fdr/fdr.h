@@ -572,6 +572,8 @@ namespace fdr {
 				break;
 			case bKeepBlocking:
 				_CompleteCache( Wanted );
+				// Below comment is taken into account by some compiler, and avoid a 'fall through' warning.
+				// fall through
 			case bKeepNonBlocking:
 				if ( Buffer == NULL )	// Does not make sense in this case.
 					qRFwk();

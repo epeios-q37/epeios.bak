@@ -417,11 +417,15 @@ static unsigned char HandleEntity_( _flow___ &Flow )
 				return ENTITY_ERROR_VALUE;
 
 			State = ehsQUO;
+		// Below comment is taken into account by some compiler, and avoid a 'fall through' warning.
+		// fall through
 		case ehsQUO:
 			if ( Flow.Get() != 't' )
 				return ENTITY_ERROR_VALUE;
 
 			State = ehsQUOT;
+		// Below comment is taken into account by some compiler, and avoid a 'fall through' warning.
+		// fall through
 		case ehsQUOT:
 			if ( Flow.Get() != ';' )
 				return ENTITY_ERROR_VALUE;
@@ -646,6 +650,8 @@ qRB
 		case cTagExpected:
 			if ( _Flow.Get() != '<' )
 				RETURN( sUnexpectedCharacter )
+		// Below comment is taken into account by some compiler, and avoid a 'fall through' warning.
+		// fall through
 		case cTagConfirmed:
 			HANDLE( SkipSpaces_( _Flow ) );
 

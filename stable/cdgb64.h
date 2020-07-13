@@ -391,6 +391,8 @@ namespace cdgb64 {
 			break;
 		case 2:
 			Target[2] = 'A';
+			// Below comment is taken into account by some compiler, and avoid a 'fall through' warning.
+			// fall through
 		case 3:
 			Target[3] = 'A';
 			break;

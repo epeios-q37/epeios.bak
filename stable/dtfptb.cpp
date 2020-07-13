@@ -278,11 +278,17 @@ void dtfptb::FPutInt_(
 #else
 		qRFwk();
 #endif
+	// Below comment is taken into account by some compiler, and avoid a 'fall through' warning.
+	// fall through
 	case 4:
 		M( 3 );
 		M( 2 );
+		// Below comment is taken into account by some compiler, and avoid a 'fall through' warning.
+		// fall through
 	case 2:
 		M( 1 );
+		// Below comment is taken into account by some compiler, and avoid a 'fall through' warning.
+		// fall through
 	case 1:
 		M( 0 );
 		break;
@@ -333,11 +339,17 @@ bso::int__ dtfptb::FGetInt_(
 #else
 		qRFwk();
 #endif
+		// Below comment is taken into account by some compiler, and avoid a 'fall through' warning.
+		// fall through
 	case 4:
 		M( 3 );
 		M( 2 );
+		// Below comment is taken into account by some compiler, and avoid a 'fall through' warning.
+		// fall through
 	case 2:
 		M( 1 );
+		// Below comment is taken into account by some compiler, and avoid a 'fall through' warning.
+		// fall through
 	case 1:
 		M( 0 );
 		break;

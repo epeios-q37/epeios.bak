@@ -78,6 +78,8 @@ qRB
 	case sRootPathError:
 		if ( Context.PathErrorRow != qNIL )
 			qRFwk();
+		// Below comment is taken into account by some compiler, and avoid a 'fall through' warning.
+		// fall through
 	case sUnableToFindRootPath:
 		Meaning.SetValue( GetLabel( Context.Status ) );
 		break;
@@ -99,7 +101,7 @@ row__ rgstry::registry_::_Search(
 	bNode Buffer;
 
 	Buffer.Init( Nodes );
-	
+
 	if ( Row == qNIL )
 		Row = NodeRows.First();
 	else
@@ -125,7 +127,7 @@ row__ rgstry::registry_::_Search(
 	bNode Buffer;
 
 	Buffer.Init( Nodes );
-	
+
 	Row = _Search( Name, NodeRows, Cursor );
 
 	while ( ( Row != qNIL ) && ( Buffer( Row ).Nature() != Nature ) )
@@ -438,7 +440,7 @@ qRE
 
 row__ rgstry::registry_::Create(
 	const path_ &Path,
-	row__ Row, 
+	row__ Row,
 	bso::bool__ Reuse )
 {
 	bso::bool__ Continue = true;
@@ -615,7 +617,7 @@ qRB
 
 	if ( RootToo )
 		_DumpNode( Root, Writer );
-	
+
 	Row = Children.First();
 
 	while ( Row != qNIL ) {
@@ -1112,7 +1114,7 @@ qRB
 	if ( BuildPath_( PathString, Path, PathErrorRow ) )
 		if ( Local.Registry != NULL )
 			Exists = Local.Registry->Exists( Path, Local.Root );
-	
+
 	Exists = Exists || Global.Registry->Exists( Path, Global.Root );
 qRR
 qRT
@@ -1759,7 +1761,7 @@ static void HandleTag_(
 			} else if ( *Source == 0 )
 				qRFwk();
 
-		} 
+		}
 
 		Target.Append( *Source++ );
 	}

@@ -1426,6 +1426,8 @@ status__ xpp::_extended_parser___::Handle(
 						break;
 					}
 				}
+			// Below comment is taken into account by some compiler, and avoid a 'fall through' warning.
+			// fall through
 			case dCypher:
 				if ( _CDataNesting == 0 ) {
 					StripHeadingSpaces = StripHeadingSpaces_( PreviousToken, _Parser, _Directives.NamespaceWithSeparator );

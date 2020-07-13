@@ -157,12 +157,12 @@ namespace ags {
 
 	/*
 	NOTA :
-	- Par 'Size', on entend : 
+	- Par 'Size', on entend :
 		- pour les fragments occups ('used'), la taille disponible pour les donnes, et non pas la taille totale occupe par le fragment,
 		- pour les fragments libres ('free'), la taille totale du fragment.
 	- Un descripteur ('descriptor__') pointe sur le dbut des donnes. Les mtadonnes sont situes juste avant. Seuls les fragment occups ('used') ont un descripteur.
 	- Une 'Value' est une donne brute, sans ajustement, telle que stocke.
-	*/		
+	*/
 
 
 	enum status__ {
@@ -191,7 +191,7 @@ namespace ags {
 
 	enum flag_position__ {
 		/*
-		Statut du fragment : 
+		Statut du fragment :
 			- 0 : libre ('free'),
 			- 1 : occup ('used').
 		*/
@@ -356,7 +356,7 @@ namespace ags {
 
 		Flow << ')';
 
-		if ( PredecessorStatus( Header ) != PStatus ) 
+		if ( PredecessorStatus( Header ) != PStatus )
 		{
 			Flow << txf::commit;
 			qRFwk();
@@ -625,7 +625,7 @@ namespace ags {
 	{
 	private:
 		header__ _Header;
-		void _SubInit( 
+		void _SubInit(
 			status__ Status,
 			status__ PredecessorStatus )
 		{
@@ -733,7 +733,7 @@ namespace ags {
 NOTA : Le code de cette fonction part du principe que la taille d'un 'header__' est de 1 octet.
 Si ce n'est plus le cas, alors il faut modifier cette fonction.
 */
-#  error 
+#  error
 # endif
 		if ( *Pointer & fSizeType ) {
 			Header = (header__)*Pointer;
@@ -982,6 +982,8 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 			default:
 				// On crit '0' pour que le marqueur prcdent le dbut du 'long size' soit positionn (8me bit  0).
 				_Write( (const sdr::byte__ *)"\x0", Row + XHeader.FragmentSize() - XHeader.DSizeBufferLength() - 1, 1 );
+				// Below comment is taken into account by some compiler, and avoid a 'fall through' warning.
+				// fall through
 			case 3:
 				// Si l'on saute directement ici, le 8me bit de l'octet prcdent le dbut du 'long size' est  0 parce qu'il s'agit du dernier octet d'un entier dynamique.
 			case 2:
@@ -1089,8 +1091,8 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 
 			if ( Row != qNIL ) {
 				Descriptor = _SetUsedFragmentUsingFreeFragment( Row, XSize, ( Row == 0 ? _TailFragmentStatus() : sUsed ), All );	// Le cas o l'on utilise l'intgralit du 'TailFragment' (auquel cas '_TaileFragmentStatus()'
-																																	// va changer de valeur) sera trait ci-dessous, grce  la valeur de 'All'.		
-			} else { 
+																																	// va changer de valeur) sera trait ci-dessous, grce  la valeur de 'All'.
+			} else {
 				if ( ( Row = _GetTailFreeFragment() ) == qNIL )
 					Row = _Size();
 				Descriptor = _AllocateAndSetUsedFragmentAtTail( XSize, sUsed, All );
@@ -1301,7 +1303,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 			Flow << Row << ' ';
 
 			_GetMetaData( Row, Header, Size, XHeaderLength );
-				
+
 			_Get( Row, Header );
 
 			Display( Header, PStatus, Flow );
@@ -1368,7 +1370,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 				Storage.Init();
 
 				if ( Row == qNIL )
-					Row = _Size(); 
+					Row = _Size();
 
 				Storage.Allocate( Size );
 
@@ -1386,7 +1388,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 		}
 		void Free( descriptor__ Descriptor )
 		{
-			if ( Descriptor != qNIL ) 
+			if ( Descriptor != qNIL )
 				return _Free( Descriptor );
 		}
 		descriptor__ Reallocate(
