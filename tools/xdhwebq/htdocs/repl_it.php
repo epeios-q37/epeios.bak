@@ -37,11 +37,13 @@ function genQRCode(url) {
 	</head>
 	<body onload="genQRCode('%url%')">
 		<div style="display:table; margin: 10px auto 5px auto;">
-			<span style="display: table; margin: 15px auto 10px auto;font-style: oblique;font-size: large;font-weight: bold;">Click or scan this QR code<br/><center>to open your application:</center></span>
+			  <span style="display: table; margin: 15px auto 10px auto;font-style: oblique;font-size: large;font-weight: bold; text-align: center;">You can now access your<br/>application by clicking or<br/>scanning this QR code</span>
 			<div style="display: flex; justify-content: space-around;">
-				<a target="_blank" href="%url%" alt="%url%">
- 					<div id="qrcode"></div>
-				</a>
+				<fieldset style="display: block; margin-left: auto; margin-right: auto; border-radius: 15px; border-style: none; padding: 10px; box-shadow: 1px 1px 12px #555;">
+					<a target="_blank" href="%url%" alt="%url%">
+						<div id="qrcode"></div>
+					</a>
+				</fieldset>
 			</div>
 			<!--
 			<span style="display: table; margin: 15px auto auto auto;font-style: oblique;font-size: large;font-weight: bold;">If it does not work, fork and/or restart!</center></span></span>

@@ -22,7 +22,7 @@
 
 "use strict"
 
-var id = 4;   // Default test id.
+var id = 1;   // Default test id.
 
 var inputs = {
     STRING: 0,
@@ -31,18 +31,18 @@ var inputs = {
 
 const input = inputs.STRING;
 
-const xml = '\
-<?xml version="1.0" encoding="UTF-8"?>\n\
-<SomeTag xmlns:xpp="http://q37.info/ns/xpp/" AnAttribute="SomeAttributeValue">\n\
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue (in a string)</SomeOtherTag>\n\
- <xpp:define name="SomeMacro">\n\
-  <xpp:bloc>Some macro content !</xpp:bloc>\n\
- </xpp:define>\n\
- <YetAnotherTag YetAnotherAttribute="YetAnotherAttributeValue">\n\
-  <xpp:expand select="SomeMacro"/>\n\
- </YetAnotherTag>\n\
-</SomeTag>\
-';
+const xml = `
+<?xml version="1.0" encoding="UTF-8"?>
+<SomeTag xmlns:xpp="http://q37.info/ns/xpp/" AnAttribute="SomeAttributeValue">
+ <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue (in a string)</SomeOtherTag>
+ <xpp:define name="SomeMacro">
+  <xpp:bloc>Some macro content !</xpp:bloc>
+ </xpp:define>
+ <YetAnotherTag YetAnotherAttribute="YetAnotherAttributeValue">
+  <xpp:expand select="SomeMacro"/>
+ </YetAnotherTag>
+</SomeTag>
+`;
 
 const fs = require('fs');
 const stream = require('stream');
@@ -141,18 +141,22 @@ function test( id ) {
         getStream().pipe(process.stdout);
         break;
     case 1:
+        console.log("Basic piping.\n");
+        xppq.basic(getStream());
+        break;
+    case 2:
         console.log("Piping the preprocessing stream.\n");
         new xppq.Stream(getStream()).on('error', (err) => console.error('\n>>> ERROR : ' + err + '\n')).pipe(process.stdout);
         break;
-    case 2:
+    case 3:
         console.log("Using the preprocessing stream with a callback, which transforms to lower case.\n");
         new xppq.Stream(getStream()).on('data', (chunk) => write(chunk.toString().toLowerCase())).on('error', (err) => console.error('\n>>> ERROR : ' + err + '\n')).on('end', () => console.log(out));
         break;
-    case 3:
+    case 4:
         console.log("XML parsing WITHOUT preprocessing.\n");
         xppq.parse(getStream(), callback);
         break;
-    case 4:
+    case 5:
         console.log("XML parsing WITH preprocessing.\n");
         xppq.parse(new xppq.Stream(getStream()).on('error', (err) => console.error('>>> ERROR : ' + err)), callback);
         break;

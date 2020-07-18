@@ -101,7 +101,7 @@ namespace {
 					delete Callback_;
 			}
 
-			tol::reset( P, IFlow_, XFlow_, Parser_, Content_, Callback_, Relay_, First_, Error );
+			tol::reset( P, IFlow_, XFlow_, OFlow, Parser_, Content_, Callback_, Relay_, First_, Error );
 		}
 		qCVDTOR( rRack_ );
 		void Init( sclnjs::rCallback *Callback )

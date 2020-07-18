@@ -103,5 +103,6 @@ var tokens = {
 module.exports.componentInfo = () => njsq._componentInfo(xppq);
 module.exports.wrapperInfo = () => njsq._wrapperInfo();
 module.exports.Stream = Stream;
+module.exports.basic = (stream) => { overload(modes.READABLE, stream, 8, 9) };
 module.exports.parse = (stream, callback) => { overload(modes.READABLE, stream, 1, 2); njsq._call(xppq, 3, stream, callback) };
 module.exports.tokens = tokens;
