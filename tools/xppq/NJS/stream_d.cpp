@@ -34,9 +34,7 @@ qRB
 
 	Caller.GetArgument( This );
 
-	rRack &Rack = *(rRack *)( This.Get( stream_s::Id ) );
-
-	Rack.Unblock();	// Reports than 'push()' operations can be made.
+	This.Get<rRack>(stream_s::Id).Unblock();	// Reports than 'push()' operations can be made.
 qRR
 qRE
 qRT

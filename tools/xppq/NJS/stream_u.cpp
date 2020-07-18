@@ -34,9 +34,7 @@ qRB
 	tol::Init( This, Chunk );
 	Caller.GetArgument( This, Chunk );
 
-	rRack &Rack = *(rRack *)This.Get( stream_s::Id );
-
-	Rack << Chunk;
+	This.Get<rRack>(stream_s::Id) << Chunk;
 qRR
 qRT
 qRE
@@ -50,9 +48,7 @@ qRB
 	tol::Init( This );
 	Caller.GetArgument( This );
 
-	rRack &Rack = *(rRack *)This.Get( stream_s::Id );
-
-	Rack.Commit();
+	This.Get<rRack>(stream_s::Id).Commit();
 qRR
 qRT
 qRE

@@ -141,22 +141,22 @@ function test( id ) {
         getStream().pipe(process.stdout);
         break;
     case 1:
-        console.log("Basic piping.\n");
+        console.log("Console.\n");
         xppq.basic(getStream());
         break;
-    case 2:
+    case 4:
         console.log("Piping the preprocessing stream.\n");
         new xppq.Stream(getStream()).on('error', (err) => console.error('\n>>> ERROR : ' + err + '\n')).pipe(process.stdout);
         break;
-    case 3:
+    case 5:
         console.log("Using the preprocessing stream with a callback, which transforms to lower case.\n");
         new xppq.Stream(getStream()).on('data', (chunk) => write(chunk.toString().toLowerCase())).on('error', (err) => console.error('\n>>> ERROR : ' + err + '\n')).on('end', () => console.log(out));
         break;
-    case 4:
+    case 6:
         console.log("XML parsing WITHOUT preprocessing.\n");
         xppq.parse(getStream(), callback);
         break;
-    case 5:
+    case 7:
         console.log("XML parsing WITH preprocessing.\n");
         xppq.parse(new xppq.Stream(getStream()).on('error', (err) => console.error('>>> ERROR : ' + err)), callback);
         break;

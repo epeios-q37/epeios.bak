@@ -276,7 +276,6 @@ qRE
 	return Launcher;
 }
 
-
 bso::sBool sclnjs::rRStream::Push( const str::dString &SBuffer )
 {
 	bso::sBool Result = false;
@@ -284,6 +283,21 @@ qRH
 	qCBUFFERh Buffer;
 qRB
 	Result = Push( (void *)SBuffer.Convert( Buffer ), SBuffer.Amount() );
+qRR
+qRT
+qRE
+	return Result;
+}
+
+bso::sBool sclnjs::rRStream::Push( const rBuffer &Buffer)
+{
+	bso::sBool Result = false;
+qRH
+	str::wString SBuffer;
+qRB
+	SBuffer.Init();
+	Buffer.ToString(SBuffer);
+	Result = Push(SBuffer);
 qRR
 qRT
 qRE

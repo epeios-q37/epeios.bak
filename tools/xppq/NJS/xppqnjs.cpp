@@ -52,7 +52,7 @@ namespace {
 }
 
 namespace console_ {
-	SCLNJS_F( OnData_ )
+	SCLNJS_F( OnData )
 	{
 	qRH
 		sclnjs::rRStream This;
@@ -67,7 +67,7 @@ namespace console_ {
 	qRE
 	}
 
-	SCLNJS_F( OnEnd_ )
+	SCLNJS_F( OnEnd )
 	{
 	qRH
 		sclnjs::rRStream This;
@@ -82,6 +82,63 @@ namespace console_ {
 	}
 }
 
+namespace stream_ {
+	namespace {
+		qCDEF(char *, Id_, "_q37QStream");
+	}
+
+	SCLNJS_F( OnData )
+	{
+	qRH
+		sclnjs::rRStream This;
+		sclnjs::rBuffer Chunk;
+	qRB
+		tol::Init( This, Chunk );
+		Caller.GetArgument( This, Chunk );
+
+		This.Get<sclnjs::rRStream>(Id_).Push(Chunk);
+	qRR
+	qRT
+	qRE
+	}
+
+	SCLNJS_F( OnEnd )
+	{
+	qRH
+		sclnjs::rRStream This;
+	qRB
+		tol::Init( This );
+		Caller.GetArgument( This );
+
+		This.Get<sclnjs::rRStream>(Id_).Push();
+	qRR
+	qRT
+	qRE
+	}
+
+	SCLNJS_F( Set )
+	{
+	qRH
+		sclnjs::rRStream Source, *This = NULL;
+	qRB
+		This = new sclnjs::rRStream;
+
+		if ( This == NULL )
+			qRAlc();
+
+		tol::Init( Source, *This );
+
+		Caller.GetArgument( Source, *This );
+
+		Source.Set(Id_, This);
+	qRR
+		if ( This != NULL )
+			delete This;
+	qRT
+	qRE
+	}
+}
+
 const scli::sInfo &sclnjs::SCLNJSRegister( sclnjs::sRegistrar &Registrar )
 {
 	static scli::sInfo Info(NAME_LC, NAME_MC, "q37.info");
@@ -90,6 +147,7 @@ const scli::sInfo &sclnjs::SCLNJSRegister( sclnjs::sRegistrar &Registrar )
 	Registrar.Register( parser::OnData, parser::OnEnd, parser::Parse );
 	Registrar.Register( stream::OnData, stream::OnEnd, stream::Read, stream::Set );
 	Registrar.Register( console_::OnData, console_::OnEnd );
+	Registrar.Register( stream_::OnData, stream_::OnEnd, stream_::Set );
 
 	return Info;
 }

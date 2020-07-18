@@ -209,9 +209,7 @@ qRB
 	tol::Init( This, Chunk );
 	Caller.GetArgument( This, Chunk );
 
-	rRack_ &Rack = *(rRack_ *)This.Get( Id_ );
-
-	Rack.OFlow << Chunk;
+	This.Get<rRack_>( Id_ ).OFlow << Chunk;
 qRR
 qRT
 qRE
@@ -225,9 +223,7 @@ qRB
 	tol::Init( This );
 	Caller.GetArgument( This );
 
-	rRack_ &Rack = *(rRack_ *)This.Get( Id_ );
-
-	Rack.OFlow.Commit();
+	This.Get<rRack_>( Id_ ).OFlow.Commit();
 qRR
 qRT
 qRE

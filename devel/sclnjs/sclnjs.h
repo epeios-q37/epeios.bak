@@ -112,15 +112,14 @@ namespace sclnjs {
 		{
 			return C_().Set( Key, Value );
 		}
-		void *Get( const char *Key )
+		template <typename object> object &Get( const char *Key )
 		{
-			return C_().Get( Key );
+			return *(object *)C_().Get( Key );
 		}
 		void EmitError( const str::dString &Message )
 		{
 			return C_().EmitError( Message );
 		}
-
 	};
 
 	typedef rBase_<int, n4njs::cInt32> rInt32;
@@ -209,7 +208,7 @@ namespace sclnjs {
 	class rBuffer
 	: public rBuffer_ {
 	public:
-		void ToString( str::dString &String )
+		void ToString( str::dString &String ) const
 		{
 			return C_().ToString( String );
 		}
@@ -230,7 +229,13 @@ namespace sclnjs {
 		{
 			return C_().Push( Buffer, Size );
 		}
+		// To report EOF.
+		bso::sBool Push(void)
+		{
+			return Push(NULL, 0);
+		}
 		bso::sBool Push( const str::dString &Buffer );
+		bso::sBool Push( const rBuffer &Buffer );
 		void End( void )
 		{
 			return C_().End();
