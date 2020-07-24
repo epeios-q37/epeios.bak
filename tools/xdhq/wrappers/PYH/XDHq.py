@@ -59,7 +59,6 @@ def _split(keysAndValues):
 
 	return [keys,values]
 
-
 def _unsplit(keys,values):
 	i = 0
 	# With 'OrderedDict', the order of the items is keeped under Python 2.
@@ -74,7 +73,6 @@ def _unsplit(keys,values):
 
 	return keysAndValues
 
-
 def _getAssetPath(dir):
 	if XDHqSHRD.isDev():
 		return os.path.join(os.environ["Q37_EPEIOS"],"tools/xdhq/examples/common/", dir )
@@ -82,12 +80,12 @@ def _getAssetPath(dir):
 		return os.path.abspath(os.path.dirname(sys.argv[0]))
 
 
-def _getAssetFilename(path, dir):
+def get_asset_filename(path, dir):
 	return os.path.join(_getAssetPath(dir), path )
 
 
 def read_asset(path, dir=""):
-	return open(_getAssetFilename(path, dir)).read()
+	return open(get_asset_filename(path, dir)).read()
 
 readAsset = read_asset
 

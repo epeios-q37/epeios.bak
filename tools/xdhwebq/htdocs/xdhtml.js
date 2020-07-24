@@ -28,14 +28,44 @@ const styleId = "XDHStyle";
 var counter = 0;
 var drag = false;
 
+function getFrameDocument(frameId, doc) {
+	let ifrm = doc.getElementById(frameId);
+
+	return ifrm.contentDocument ? ifrm.contentDocument : ifrm.contentWindow.document;
+}
+
+function getDocument(id) {
+	let iframes = id.split('@');
+
+	if ( iframes.length === 1 )
+		return document;
+	else {
+		let doc = document;
+		let i = iframes.length - 1;
+
+		while (i >= 1) { 
+			doc = getFrameDocument(iframes[i], doc);
+			i--;
+		} 
+	
+		return doc;
+	}
+}
+
 function getElement(elementOrId) {
-	if (typeof elementOrId === "string")
-		if (elementOrId === "")
-			return document.body.firstElementChild;
+	if (typeof elementOrId === "string") {
+		let doc = getDocument(elementOrId);
+		let id = elementOrId.split('@')[0];
+
+		if (id === "")
+			if ( doc === document )
+				return doc.body.firstElementChild;
+			else
+				return doc.body;
 		else
-			return document.getElementById(elementOrId);
-	else if (elementOrId === document.body)	// To avoid defacement.
-		return getElement("");
+			return doc.getElementById(id);
+	} else if (elementOrId === document.body)
+		return getElement("");	// To avoid defacement.
 	else
 		return elementOrId;
 }
@@ -208,10 +238,6 @@ function getLayoutHTML(xml, xsl) {
 }
 
 function prependLayout(id, xml, xsl) {
-/*    
-	element = getElement(id);
-	element.innerHTML = getLayoutHTML(xml, xsl) + element.innerHTML;
-*/
     getElement(id).insertAdjacentHTML("afterbegin", getLayoutHTML(xml, xsl));
 }
 
@@ -220,10 +246,6 @@ function setLayout(id, xml, xsl) {
 }
 
 function appendLayout(id, xml, xsl) {
-/*
-	element = getElement(id);
-	element.innerHTML = element.innerHTML + getLayoutHTML(xml, xsl);
-*/
     getElement(id).insertAdjacentHTML("beforeend", getLayoutHTML(xml, xsl));
 }
 
@@ -263,8 +285,8 @@ function patchATags(node)  // Patches the 'A' tags, so it does open in another b
 	}
 }
 
-function setContent(doc, id, content) {
-	var element = doc.getElementById(id);
+function setContent(idOrElement, content) {
+	var element = getElement(idOrElement);
 
 	if (element !== null) {
 		var tagName = element.tagName;
@@ -290,13 +312,13 @@ function setContent(doc, id, content) {
 }
 
 function setContents(ids, contents) {
-	var i = ids.length;
+	let i = ids.length;
 
 	if (ids.length !== contents.length)
 		throw "Inconsistency";
 
 	while (i--) {
-		setContent(document, ids[i], contents[i]);
+		setContent(getElement(ids[i]), contents[i]);
 	}
 }
 
@@ -472,7 +494,7 @@ function getContents(ids) {
 }
 
 function setValue(id, value) {
-	var element = document.getElementById(id);
+	var element = getElement(id);
 	var tagName = element.tagName;
 
 	switch (tagName) {
@@ -489,14 +511,13 @@ function setValue(id, value) {
 }
 
 function setEventHandlers(ids, events) {
-	var i = ids.length;
+	let i = ids.length;
 
 	if (ids.length !== events.length)
 		throw "Inconsistency !";
 
 	while (i--) {
-		document.getElementById(ids[i]).addEventListener(events[i], handleEvent, false);
-		//		jQuery( document.getElementById( ids[i] ) ).on( "select_node.jstree", function (e, data) {  alert( "toto" );} );
+		getElement(ids[i]).addEventListener(events[i], handleEvent, false);
 	}
 }
 
@@ -506,9 +527,9 @@ function instantiateWidget(id, type, parameters, contentRetrievingMethod, focusi
     element = getElement(id);
     
     if ( !element.hasAttribute(widgetContentRetrievingMethodAttribute)) {
-        element.setAttribute(widgetContentRetrievingMethodAttribute,'jQuery( document.getElementById( "' + id + '") ).' + contentRetrievingMethod);
+        element.setAttribute(widgetContentRetrievingMethodAttribute,'jQuery( getElement( "' + id + '") ).' + contentRetrievingMethod);
         
-        return 'jQuery( document.getElementById( "' + id + '") ).' + type + '(' + parameters + ');'
+        return 'jQuery( getElement( "' + id + '") ).' + type + '(' + parameters + ');'
     } else
         return "";
 }
@@ -645,7 +666,7 @@ function getCSSRules(id) {
 	if (id === "")
 		id = styleId;
 
-	return document.getElementById(id).sheet;
+	return getElement(id).sheet;
 }
 
 function insertCSSRule(id, rule, index) {
@@ -680,32 +701,32 @@ function handleClasses(ids, classes, method) {
 }
 
 function addClasses(ids, classes) {
-	handleClasses(ids, classes, (id, clas) => document.getElementById(id).classList.add(clas));
+	handleClasses(ids, classes, (id, clas) => getElement(id).classList.add(clas));
 }
 
 function removeClasses(ids, classes) {
-	handleClasses(ids, classes, (id, clas) => document.getElementById(id).classList.remove(clas));
+	handleClasses(ids, classes, (id, clas) => getElement(id).classList.remove(clas));
 }
 
 function toggleClasses(ids, classes) {
-	handleClasses(ids, classes, (id, clas) => document.getElementById(id).classList.toggle(clas));
+	handleClasses(ids, classes, (id, clas) => getElement(id).classList.toggle(clas));
 }
 
 function enableElements(ids) {
-	var i = 0;
+	let i = 0;
 
 	while (i < ids.length) {
-		document.getElementById(ids[i]).disabled = false;
+		getElement(ids[i]).disabled = false;
 
 		i++;
 	}
 }
 
 function disableElements(ids) {
-	var i = 0;
+	let i = 0;
 
 	while (i < ids.length) {
-		document.getElementById(ids[i]).disabled = true;
+		getElement(ids[i]).disabled = true;
 
 		i++;
 	}

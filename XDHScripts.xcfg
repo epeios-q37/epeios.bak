@@ -171,7 +171,7 @@
       <Script name="Parent_1" Arguments="Id">
         <![CDATA[
 {
-  getOrGenerateId( getElement( "%Id% ).parentElement );
+  getOrGenerateId( getElement( "%Id%" ).parentElement );
 }
         ]]>
       </Script>

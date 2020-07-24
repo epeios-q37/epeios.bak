@@ -26,7 +26,7 @@ import XDHq
 from threading import Thread
 import threading
 import inspect
-from XDHq import readAsset, read_asset
+from XDHq import readAsset, read_asset, get_asset_filename
 
 import signal, sys
 
