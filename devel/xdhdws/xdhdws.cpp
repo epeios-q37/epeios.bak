@@ -510,7 +510,8 @@ namespace {
 		{
 				sShared_ &Shared = *(sShared_ *)UP;
 
-				HandleLayout_(Shared.ScriptName, *Shared.Values, *Shared.Callback, Blocker.Blocker() );
+				if ( !HandleLayout_(Shared.ScriptName, *Shared.Values, *Shared.Callback, Blocker.Blocker() ) )
+					qRGnr();
 		}
 
 		bso::sBool HandleLayout_(
@@ -524,8 +525,8 @@ namespace {
 			Shared.Values = &Values;
 			Shared.Callback = &Callback;
 
-			if ( true )
-				mtk::Launch(HandleLayoutRoutine_, &Shared);
+			if ( false )
+				mtk::Launch(HandleLayoutRoutine_, &Shared);	// Conflicts with broadcasting.
 			else
 				mtk::SyncLaunch(HandleLayoutRoutine_, &Shared);	// In this case, with the 'arora' browser, dealing with XSL will blocks all the clients.
 

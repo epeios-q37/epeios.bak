@@ -17,6 +17,8 @@
   - modifying returned values by same function,
 - ERR:
   - introducing *unexpected* error,
+- XDHDWS:
+  - a failure on layout handling now thows an error,
 
 ## 2020-06-29:
 

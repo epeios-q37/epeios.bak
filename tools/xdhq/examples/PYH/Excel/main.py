@@ -29,7 +29,7 @@ sys.path.append("./atlastk")
 sys.path.append("../atlastk")
 
 import atlastk as Atlas
-import openpyxl
+import openpyxl, time
 
 view_mode_elements = ["Pattern", "CreateButton", "DescriptionToggling", "ViewNotes"]
 
@@ -41,7 +41,7 @@ def read_asset(path):
 
 def reading(dom):
 	dom.set_content('output', 'Opening workbook...')
-	wb = openpyxl.load_workbook(get_asset_filename('censuspopdata.xlsx'))
+	wb = openpyxl.load_workbook(get_asset_filename('censuspopdata__.xlsx'))
 
 	sheet = wb['Population by Census Tract']
 
@@ -51,11 +51,17 @@ def reading(dom):
 
 	dom.set_content('output', 'Reading rows...')
 	for row in range(2, sheet.max_row+1):
-		if not (row % 1500 ):
+		if not (row % 150 ):
 			dom.set_content('output', 'Reading rows {}/{}'.format(row, sheet.max_row))
-			dom.append_layout('Body@frame', tbody)
+			print(row)
+			dom.set_layout('Body@frame', tbody)
+			return
+		#	time.sleep(2)
+			print("1")
 			dom.execute_void("getElement('@frame').scrollTo(0,getElement('@frame').scrollHeight);undefined;")
+			print("2")
 		#	dom.flush()
+			print("3")
 			tbody = Atlas.create_HTML()
 
 		tbody.push_tag("tr")

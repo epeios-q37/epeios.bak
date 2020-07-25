@@ -106,7 +106,7 @@ def _REPLit(url):
 _FaaSProtocolLabel = "9efcf0d1-92a4-4e88-86bf-38ce18ca2894"
 _FaaSProtocolVersion = "0"
 _mainProtocolLabel = "bf077e9f-baca-48a1-bd3f-bf5181a78666"
-_mainProtocolVersion = "1"
+_mainProtocolVersion = "0"
 
 _writeLock = threading.Lock()
 _globalCondition = threading.Condition()

@@ -64,7 +64,7 @@ qRB
 
 		if ( Error != qNIL )
 			Version = BadProtocol;
-		else if ( Version >= LastVersion )
+		else if ( Version > LastVersion )
 			Version = UnknownVersion;
 	}
 qRR

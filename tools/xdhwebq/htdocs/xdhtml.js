@@ -148,7 +148,7 @@ function convert(xml) {
 	let name = "";
 	let value = "";
 	let length = xml.length;
-
+	
 	[name, offset] = getNULString(xml, offset);	// Currently ignored.
 
 	[name, offset] = getString(xml, offset);
@@ -246,7 +246,9 @@ function setLayout(id, xml, xsl) {
 }
 
 function appendLayout(id, xml, xsl) {
+	log("Yo");
     getElement(id).insertAdjacentHTML("beforeend", getLayoutHTML(xml, xsl));
+	log("Yeah");
 }
 
 function handleBooleanAttribute(element, name, flag) {
@@ -338,7 +340,7 @@ function fetchEventHandlersAndWidgest(id) {
 	var cont = true;
 	var candidate;
 	var eventDigests = "";
-    var widgetDigests = ""
+    var widgetDigests = "";
 
 	if (node.firstChild === null)
 		cont = false;

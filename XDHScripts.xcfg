@@ -61,6 +61,8 @@
   let xml = "%XML%";
   let xsl = "%XSL%";
   let id = "%Id%";
+  
+  log("xml: " + xml);
 
   switch ( "%Variant%" ) {
   case 'Prepend':
