@@ -37,9 +37,12 @@
 # include "dtfptb.h"
 
 namespace csdcmn {
-	typedef bso::uint__ sVersion;
+	typedef bso::sU8 sVersion;
 
-	qCDEF( sVersion, UndefinedVersion, BSO_UINT_MAX );
+	qCDEF(sVersion, UnknownVersion, bso::U8Max );
+	qCDEF(sVersion, BadProtocol, UnknownVersion - 1);
+	// If above modified, adjust below!
+	qCDEF(sVersion, VersionMax, BadProtocol - 1);
 
 	void SendProtocol(
 		const char *Id,
@@ -48,6 +51,7 @@ namespace csdcmn {
 
 	sVersion GetProtocolVersion(
 		const char *Id,
+		sVersion LastVersion,	// To avoid, when updating protocol id, to accept version from previous protocol.
 		flw::iflow__ &Flow );	// If 'UndefinedVersion' is returned, then the protocol is not the good one, or the content of the flow is not valid.
 
 	// Facilities.
@@ -57,7 +61,7 @@ namespace csdcmn {
 		str::dString &String )
 	{
 		bso::sSize Size = 0;
-		
+
 		dtfptb::VGet( Flow, Size );
 
 		while ( Size-- )

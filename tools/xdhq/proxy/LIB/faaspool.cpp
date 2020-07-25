@@ -36,7 +36,8 @@ using namespace faaspool;
 #include "xdhdws.h"
 
 namespace {
-	static qCDEF( char *, ProtocolId_, "9efcf0d1-92a4-4e88-86bf-38ce18ca2894" );
+	qCDEF( char *, ProtocolId_, "9efcf0d1-92a4-4e88-86bf-38ce18ca2894" );
+	qCDEF(csdcmn::sVersion, LastVersion_, 0);
 
 	namespace registry_ {
 		namespace parameter {
@@ -422,20 +423,22 @@ namespace {
 	qRB;
 		Flow.Init( Driver );
 
-		switch ( csdcmn::GetProtocolVersion( ProtocolId_, Flow ) ) {
-		case 0:
+		switch ( csdcmn::GetProtocolVersion( ProtocolId_, LastVersion_, Flow ) ) {
+		case LastVersion_:
 			Put_( "", Flow );
 			Notify_( NULL, Flow );
 			Flow.Commit();
 			break;
-		case csdcmn::UndefinedVersion:
-			Put_( "\nIncompatible FaaS protocol! Please update your software.\n", Flow );
-			Flow.Commit();
-			qRGnr();
-		default:
+		case csdcmn::UnknownVersion:
 			Put_( "\nUnknown FaaS protocol version!\n", Flow );
 			Flow.Commit();
 			qRGnr();
+		case csdcmn::BadProtocol:
+			Put_( "\nUnknown FaaS protocol!\n", Flow );
+			Flow.Commit();
+			qRGnr();
+		default:
+			qRUnx();
 			break;
 		}
 	qRR;

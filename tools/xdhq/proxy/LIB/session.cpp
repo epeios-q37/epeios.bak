@@ -216,7 +216,7 @@ bso::sBool session::rSession::XDHCDCInitialize(
 	bso::sBool Success = false;
 qRH;
 	flw::rDressedRWFlow<> Flow;
-	csdcmn::sVersion Version = csdcmn::UndefinedVersion;
+	csdcmn::sVersion Version = csdcmn::UnknownVersion;
 qRB;
 	if ( Token.Amount() == 0 ) {
 		SlfHDriver_.Init( common::Core, fdr::ts_Default );
@@ -232,21 +232,21 @@ qRB;
 	if ( Success ) {
 		Flow.Init( D_() );
 
-		Version = csdcmn::GetProtocolVersion( prtcl::ProtocolId, Flow );
+		Version = csdcmn::GetProtocolVersion( prtcl::ProtocolId, prtcl::ProtocolLastVersion, Flow );
 		Flow.Dismiss();
 
 		switch ( Version ) {
-		case 0:
+		case prtcl::ProtocolLastVersion:
 			ReportNoErrorToBackend_( Flow );
 			break;
-		case 1:
-			ReportNoErrorToBackend_( Flow );
+		case csdcmn::UnknownVersion:
+			ReportErrorToBackend_( "\nUnknown protocol version!\n", Flow );
 			break;
-		case csdcmn::UndefinedVersion:
-			ReportErrorToBackend_( "\nIncompatible protocol! Please update your software.\n", Flow );
+		case csdcmn::BadProtocol:
+			ReportErrorToBackend_( "\nUnknown protocol!\n", Flow );
 			break;
 		default:
-			ReportErrorToBackend_( "\nUnknown protocol version!\n", Flow );
+			qRUnx();
 			break;
 		}
 

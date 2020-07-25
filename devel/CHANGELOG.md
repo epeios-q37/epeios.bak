@@ -10,6 +10,14 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2020-07-25:
+
+- CSDCMN:
+  - introducing `LastVersion` to `GetProtocolVersion`, to avoid older protocol versions being accepted for new protocol,
+  - modifying returned values by same function,
+- ERR:
+  - introducing *unexpected* error,
+
 ## 2020-06-29:
 
 - MTK:

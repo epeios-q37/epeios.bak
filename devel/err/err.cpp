@@ -117,6 +117,9 @@ const char *err::Message(
 	case err::tChecker:
 		strcat( Buffer, "CHK" );
 		break;
+	case err::tUnexpected:
+		strcat( Buffer, "UNX" );
+		break;
 	case t_Free:
 		strcat( Buffer, "Free" );
 		break;

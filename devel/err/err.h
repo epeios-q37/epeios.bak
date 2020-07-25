@@ -67,17 +67,18 @@ namespace err {
 
 	enum type {
 		tAllocation,	// (qRAlc) Allocation failure.
-		tSystem,		// (qRSys) System failure : a C/C++ standard or system function failed but should not, or returned a incoherent value.
-		tVacant,		// (qRVct) Call to a vacant function (mainly because it is not implemneted yet).
+		tSystem,		// (qRSys) System failure : a C/C++ standard or system function failed but should not, or returned an incoherent value.
+		tVacant,		// (qRVct) Call to a vacant function (mainly because it is not implemented yet).
 		tLimitation,	// (qRLmt) Limitation overflow.
 		tFramework,		// (qRFwk) Misuse of the framework. should not be used outside the framework. Use 'tGeneric' instead.
 		tForbidden,		// (qRFbd) Call to a forbidden function.
 		tLibrary,		// (qRLbr) A C/C++ standard or system library returns an error.
 		tChecker,		// (qRChk) A checking fails.
+		tUnexpected,	// A library or module has an unexpected behavior.
 		tGeneric,		// (qRGnr) Generic error. Like 'tFramework', but not in the framework.
 		t_amount,
 		t_None,			// No error.
-		t_Free,			// (ERRFree) Not really an error. Allows the use or ther error mechanism.
+		t_Free,			// (ERRFree) Not really an error. Allows the use or the error mechanism.
 		t_Abort,		// Make the handling of 'ERRAbort()' easier.
 		t_Undefined
 	};
@@ -136,6 +137,7 @@ namespace err {
 # define qRFbd()	ERRCommon( err::tForbidden )
 # define qRLbr()	ERRCommon( err::tLibrary )
 # define qRChk()	ERRCommon( err::tChecker )
+# define qRUnx()	ERRCommon( err::tUnexpected )
 # define qRGnr()	ERRCommon( err::tGeneric )
 
 

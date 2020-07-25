@@ -32,7 +32,7 @@ void csdcmn::SendProtocol(
 {
 	bso::pInteger Buffer;
 
-	if ( Version == UndefinedVersion )
+	if ( Version > VersionMax )
 		qRFwk();
 
 	Put( Label, Flow );
@@ -42,15 +42,19 @@ void csdcmn::SendProtocol(
 
 sVersion csdcmn::GetProtocolVersion(
 	const char *Label,
+	sVersion LastVersion,
 	flw::iflow__ &Flow )
 {
-	sVersion Version = UndefinedVersion;
+	sVersion Version = BadProtocol;
 qRH
 	str::wString Incoming;
 	sdr::sRow Error = qNIL;
 qRB
 	Incoming.Init();
 	csdcmn::Get( Flow, Incoming );	// 'csdcmn::' should not be necessary, but VC++ is confused.
+
+	if ( LastVersion > VersionMax )
+		qRFwk();
 
 	if ( Incoming == Label ) {
 		Incoming.Init();
@@ -59,7 +63,9 @@ qRB
 		Incoming.ToNumber( Version, &Error );
 
 		if ( Error != qNIL )
-			Version = UndefinedVersion;
+			Version = BadProtocol;
+		else if ( Version >= LastVersion )
+			Version = UnknownVersion;
 	}
 qRR
 qRT
