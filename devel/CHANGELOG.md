@@ -10,6 +10,11 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2020-07-26:
+
+- WEBSCK:
+  - fixing size handling bug,
+
 ## 2020-07-25:
 
 - CSDCMN:

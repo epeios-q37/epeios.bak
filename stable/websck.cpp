@@ -315,7 +315,7 @@ void websck::rWDriverBase_::SendSize_(bso::sU64 Size)
 {
     if ( Size < 126 )
         SendSize_(Size, 0);
-    else if ( Size <= 655535 ) {
+    else if ( Size <= 65535 ) {
         Flow_.Put(126);
         SendSize_(Size, 1);
         SendSize_(Size, 0);

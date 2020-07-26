@@ -49,41 +49,8 @@ def reading(dom):
 
 	tbody = Atlas.create_HTML()
 
-	dom.set_content('output', 'Reading rows...')
-	for row in range(2, sheet.max_row+1):
-		if not (row % 150 ):
-			dom.set_content('output', 'Reading rows {}/{}'.format(row, sheet.max_row))
-			print(row)
-			dom.set_layout('Body@frame', tbody)
-			return
-		#	time.sleep(2)
-			print("1")
-			dom.execute_void("getElement('@frame').scrollTo(0,getElement('@frame').scrollHeight);undefined;")
-			print("2")
-		#	dom.flush()
-			print("3")
-			tbody = Atlas.create_HTML()
-
-		tbody.push_tag("tr")
-		# Each row in the spreadsheet has data for one census tract.
-		tbody.put_tag_and_value('td',row-1)
-		state  = sheet['B' + str(row)].value
-		tbody.put_tag_and_value('td', state)
-		county = sheet['C' + str(row)].value
-		tbody.put_tag_and_value('td', county)
-		pop    = sheet['D' + str(row)].value
-		tbody.put_tag_and_value('td', pop)
-		tbody.pop_tag()
-
-	dom.set_content('output', 'Reading rows {}/{}'.format(sheet.max_row, sheet.max_row))
-	dom.append_layout('Body@frame', tbody)
-	dom.execute_void("getElement('@frame').scrollTo(0,getElement('@frame').scrollHeight);")
-
-
-def ac_connect(dom):
-	dom.set_layout("", read_asset("Main.html"))
 	dom.set_layout("@frame", """					<table>
-						<thead>
+						<thead style="position: sticky; top: 0px; background-color: aliceblue;">
 							<tr>
 								<th>Id</th>
 								<th>State</th>
@@ -95,6 +62,31 @@ def ac_connect(dom):
 						</tbody>
 					</table>
 					""")
+	dom.set_content('output', 'Reading rows...')
+
+	limit = sheet.max_row	# This takes time, so it is stored.
+
+	for row in range(2, sheet.max_row + 1):
+		tbody.push_tag("tr")
+		# Each row in the spreadsheet has data for one census tract.
+		tbody.put_tag_and_value('td',row-1)
+		state  = sheet['B' + str(row)].value
+		tbody.put_tag_and_value('td', state)
+		county = sheet['C' + str(row)].value
+		tbody.put_tag_and_value('td', county)
+		pop    = sheet['D' + str(row)].value
+		tbody.put_tag_and_value('td', pop)
+		tbody.pop_tag()
+
+		if not (row % 2500 ) or ( row == limit):
+			dom.append_layout('Body@frame', tbody)
+			dom.execute_void("getElement('@frame').scrollTo(0,getElement('@frame').scrollHeight);undefined;")
+			dom.flush()
+			dom.set_content('output', 'Reading rows {}/{}'.format(row-1, limit-1))
+			tbody = Atlas.create_HTML()
+
+def ac_connect(dom):
+	dom.set_layout("", read_asset("Main.html"))
 	
 	reading(dom)
 

@@ -37,7 +37,13 @@ qRFH
 qRFB
 	Flow.Init(D_(), websck::mWithTerminator);
 
+# if 0
 	Flow.Write( Script.Convert(Buffer), Script.Amount());
+# else	// Facilitates debugging.
+	Script.Convert(Buffer);
+
+	Flow.Write( Buffer, Script.Amount());
+# endif
 	Flow.Commit();
 
 	if ( ReturnedValue != NULL) {
