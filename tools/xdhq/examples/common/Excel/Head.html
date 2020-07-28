@@ -5,4 +5,39 @@
  .vcenter-out, .hcenter { display: table; height: 100%; margin: auto;}
  .vcenter-in {display: table-cell; vertical-align: middle;}
  .hidden {display: none;}
+
+/* fonctionnel */
+input {
+  display: none;
+}
+input ~ ul {
+ display: none;
+}
+input:checked ~ ul {
+ display: block;
+}
+input ~ .fa-angle-double-down {
+  display: none;
+}
+input:checked ~ .fa-angle-double-right {
+  display: none;
+}
+input:checked ~ .fa-angle-double-down {
+  display: inline;
+}
+
+/* habillage */
+li {
+  display: block;
+  font-family: 'Arial';
+  font-size: 15px;
+  padding: 0.2em;
+  border: 1px solid transparent;
+}
+li:hover {
+  border: 1px solid grey;
+  border-radius: 3px;
+  background-color: lightgrey;
+} 
 </style>
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">

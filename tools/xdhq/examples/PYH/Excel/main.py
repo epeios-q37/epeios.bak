@@ -31,6 +31,21 @@ sys.path.append("../atlastk")
 import atlastk as Atlas
 import openpyxl, time
 
+tableFrame = """
+<table>
+	<thead style="position: sticky; top: 0px; background-color: aliceblue;">
+		<tr>
+			<th>Id</th>
+			<th>State</th>
+			<th>County</th>
+			<th>Pop</th>
+		</tr>
+	</thead>
+	<tbody id="Body"/>
+	</tbody>
+</table>
+"""
+
 view_mode_elements = ["Pattern", "CreateButton", "DescriptionToggling", "ViewNotes"]
 
 def get_asset_filename(path):
@@ -40,50 +55,81 @@ def read_asset(path):
 	return Atlas.read_asset(path, "Excel")
 
 def reading(dom):
+	currentState = ""
+	currentCounty = ""
+	cumulPop = 0
+
 	dom.set_content('output', 'Opening workbook...')
-	wb = openpyxl.load_workbook(get_asset_filename('censuspopdata__.xlsx'))
+	wb = openpyxl.load_workbook(get_asset_filename('censuspopdata.xlsx'))
 
 	sheet = wb['Population by Census Tract']
 
-	countyData = {}
+	table = Atlas.create_HTML()
+	tree = Atlas.create_HTML("ul")
 
-	tbody = Atlas.create_HTML()
-
-	dom.set_layout("@frame", """					<table>
-						<thead style="position: sticky; top: 0px; background-color: aliceblue;">
-							<tr>
-								<th>Id</th>
-								<th>State</th>
-								<th>County</th>
-								<th>Pop</th>
-							</tr>
-						</thead>
-						<tbody id="Body"/>
-						</tbody>
-					</table>
-					""")
+	dom.set_layout("@frame", tableFrame)
 	dom.set_content('output', 'Reading rows...')
 
 	limit = sheet.max_row	# This takes time, so it is stored.
 
 	for row in range(2, sheet.max_row + 1):
-		tbody.push_tag("tr")
+		table.push_tag("tr")
 		# Each row in the spreadsheet has data for one census tract.
-		tbody.put_tag_and_value('td',row-1)
+		table.put_tag_and_value('td',row-1)
 		state  = sheet['B' + str(row)].value
-		tbody.put_tag_and_value('td', state)
+		table.put_tag_and_value('td', state)
 		county = sheet['C' + str(row)].value
-		tbody.put_tag_and_value('td', county)
+		table.put_tag_and_value('td', county)
 		pop    = sheet['D' + str(row)].value
-		tbody.put_tag_and_value('td', pop)
-		tbody.pop_tag()
+		table.put_tag_and_value('td', pop)
+		table.pop_tag()
+
+		if ( state != currentState) or ( county != currentCounty ):
+			if county != currentCounty:
+				if currentState != '':
+					tree.put_tag_and_value("li", "{}: {}".format(currentCounty, cumulPop))
+				currentCounty = county
+				cumulPop = pop
+			else:
+				cumulPop += pop
+			
+			if state != currentState:
+				if currentState != "":
+					tree.pop_tag()
+					tree.pop_tag()
+
+				tree.push_tag("li")
+				tree.push_tag("input")
+				tree.put_attribute("type", "checkbox")
+				tree.put_attribute("id", row)
+				tree.pop_tag()
+				tree.push_tag("i")
+				tree.put_attribute("class","fa fa-angle-double-right")				
+				tree.put_value(" ")
+				tree.pop_tag()
+				tree.push_tag("i")
+				tree.put_attribute("class","fa fa-angle-double-down")				
+				tree.put_value(" ")
+				tree.pop_tag()
+				tree.push_tag("label")
+				tree.put_attribute("for", row)
+				tree.put_value(state)
+				tree.pop_tag()
+				tree.push_tag("ul")
+
+				currentState = state
 
 		if not (row % 2500 ) or ( row == limit):
-			dom.append_layout('Body@frame', tbody)
+			dom.append_layout('Body@frame', table)
 			dom.execute_void("getElement('@frame').scrollTo(0,getElement('@frame').scrollHeight);undefined;")
 			dom.flush()
 			dom.set_content('output', 'Reading rows {}/{}'.format(row-1, limit-1))
-			tbody = Atlas.create_HTML()
+			table = Atlas.create_HTML()
+
+	print("coucou")
+	print(tree.to_string())
+	dom.set_layout("tree", tree)
+	
 
 def ac_connect(dom):
 	dom.set_layout("", read_asset("Main.html"))
