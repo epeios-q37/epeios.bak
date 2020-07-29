@@ -52,47 +52,66 @@ def get_asset_filename(path):
 def read_asset(path):
 	return Atlas.read_asset(path, "Excel")
 
-class Tree:
-	def __init__(self):
-		self.county = ""
-		self.state = ""
-		self.pop = 0
-		self.tracts = 0
-		self.tree = Atlas.create_HTML("ul")
+def reading(dom):
+	countyData = {}
+	prevCounty = ""
 
-	def _handleCounty(self,county):
-		tree = self.tree
+	dom.set_content('output', 'Opening workbook...')
+	wb = openpyxl.load_workbook(get_asset_filename('censuspopdata.xlsx'))
 
-		if self.state != '':
-			tree.push_tag("tr")
-			tree.put_attribute("id","{}.{}".format(self.state,self.county))
-			tree.put_attribute("data-xdh-onevent","View")
-			tree.put_tag_and_value("td",self.county)
-			tree.put_tag_and_value("td",self.pop)
-			tree.put_tag_and_value("td",self.tracts)
-			tree.pop_tag()
-		self.county = county
+	sheet = wb['Population by Census Tract']
 
-	def _handleState(self,state):
-		tree = self.tree
+	table = Atlas.create_HTML()
 
-		if self.state != "":
-			tree.pop_tag()	# </table>
-			tree.pop_tag()	# </tbody>
-			tree.pop_tag()	# </li>
+	dom.set_layout("table", tableFrame)
+	dom.set_content('output', 'Reading rows...')
 
+	limit = sheet.max_row	# This takes time, so it is stored.
+
+	for row in range(2, sheet.max_row + 1):
+		state  = sheet['B' + str(row)].value
+		county = sheet['C' + str(row)].value
+		pop    = sheet['D' + str(row)].value
+
+		countyData.setdefault(state, {})
+		countyData[state].setdefault(county, {'tracts': 0, 'pop': 0})
+		countyData[state][county]['tracts'] += 1
+		countyData[state][county]['pop'] += pop
+
+		table.push_tag("tr")
+		if prevCounty != county:
+			table.put_attribute("id", "Table.{}.{}".format(state,county))
+			prevCounty = county
+		# Each row in the spreadsheet has data for one census tract.
+		table.put_tag_and_value('td',row-1)
+		table.put_tag_and_value('td', state)
+		table.put_tag_and_value('td', county)
+		table.put_tag_and_value('td', pop)
+		table.pop_tag()
+
+		if not (row % 2500 ) or ( row == limit):
+			dom.append_layout('Body', table)
+			dom.execute_void("getElement('table').scrollTo(0,getElement('table').scrollHeight);")
+			dom.flush()
+			dom.set_content('output', 'Reading rows {}/{}'.format(row-1, limit-1))
+			table = Atlas.create_HTML()
+
+	dom.set_content('output', 'Building tree...')
+	
+	tree = Atlas.create_HTML("ul")
+	for state in countyData:
 		tree.push_tag("li")
 		tree.push_tag("input")
 		tree.put_attribute("type", "checkbox")
 		tree.put_attribute("id", state)
 		tree.pop_tag()
-		tree.push_tag("i")
-		tree.put_attribute("class","fa fa-angle-double-right")				
-		tree.put_value(" ")
+		tree.push_tag("span")
+		tree.put_attribute("class","tree fold")				
+		tree.put_value("⊖")
 		tree.pop_tag()
-		tree.push_tag("i")
-		tree.put_attribute("class","fa fa-angle-double-down")				
-		tree.put_value(" ")
+		tree.push_tag("span")
+		tree.put_attribute("class","tree unfold")				
+		tree.put_value("⊕")
 		tree.pop_tag()
 		tree.push_tag("label")
 		tree.put_attribute("for", state)
@@ -106,71 +125,27 @@ class Tree:
 		tree.put_tag_and_value("th", "Tracts")
 		tree.pop_tag()
 		tree.pop_tag()
-		tree.push_tag("tbody")
+		tree.push_tag("tbody")			
 
-		self.state = state
+		for county in countyData[state]:
+			tree.push_tag("tr")
+			tree.put_attribute("id","{}.{}".format(state,county))
+			tree.put_attribute("data-xdh-onevent","View")
+			tree.put_tag_and_value("td",county)
+			tree.put_tag_and_value("td",countyData[state][county]['pop'])
+			tree.put_tag_and_value("td",countyData[state][county]['tracts'])
+			tree.pop_tag()			
 
+		tree.pop_tag()	# </table>
+		tree.pop_tag()	# </tbody>
+		tree.pop_tag()	# </li>
 
-	def handle(self,state,county,pop):
-		if ( county != self.county):
-			self._handleCounty(county)
-			self.pop = pop
-			self.tracts = 1
-		else:
-			self.pop += pop
-			self.tracts += 1
-			
-		if ( state != self.state):
-			self._handleState(state)
-
-	def content(self):
-		return self.tree.to_string()
-
-def reading(dom):
-	prevCounty = ""
-	dom.set_content('output', 'Opening workbook...')
-	wb = openpyxl.load_workbook(get_asset_filename('censuspopdata__.xlsx'))
-
-	sheet = wb['Population by Census Tract']
-
-	table = Atlas.create_HTML()
-	tree = Tree()
-
-	dom.set_layout("@frame", tableFrame)
-	dom.set_content('output', 'Reading rows...')
-
-	limit = sheet.max_row	# This takes time, so it is stored.
-
-	for row in range(2, sheet.max_row + 1):
-		state  = sheet['B' + str(row)].value
-		county = sheet['C' + str(row)].value
-		pop    = sheet['D' + str(row)].value
-		table.push_tag("tr")
-		if prevCounty != county:
-			table.put_attribute("id", "{}.{}".format(state,county))
-			prevCounty = county
-		# Each row in the spreadsheet has data for one census tract.
-		table.put_tag_and_value('td',row-1)
-		table.put_tag_and_value('td', state)
-		table.put_tag_and_value('td', county)
-		table.put_tag_and_value('td', pop)
-		table.pop_tag()
-
-		tree.handle(state,county,pop)
-
-		if not (row % 2500 ) or ( row == limit):
-			dom.append_layout('Body@frame', table)
-			dom.execute_void("getElement('@frame').scrollTo(0,getElement('@frame').scrollHeight);")
-			dom.flush()
-			dom.set_content('output', 'Reading rows {}/{}'.format(row-1, limit-1))
-			table = Atlas.create_HTML()
-
-	dom.set_content('output', 'Displaying tree...')
-	dom.set_layout("tree", tree.content())
+	dom.set_layout("tree", tree)
+	dom.set_content('output', 'Done')
 	
 
 def ac_view(dom,id):
-	dom.execute_void("getElement('{}@frame').scrollIntoView({{behavior: 'smooth', block: 'center'}});".format(id))
+	dom.execute_void("getElement('Table.{}').scrollIntoView({{behavior: 'smooth', block: 'center'}});".format(id))
 
 
 def ac_connect(dom):
