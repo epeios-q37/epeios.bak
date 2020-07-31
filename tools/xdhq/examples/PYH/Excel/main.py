@@ -57,7 +57,7 @@ def reading(dom):
 	prevCounty = ""
 
 	dom.set_content('output', 'Opening workbook...')
-	wb = openpyxl.load_workbook(get_asset_filename('censuspopdata.xlsx'))
+	wb = openpyxl.load_workbook(get_asset_filename('censuspopdata__.xlsx'))
 
 	sheet = wb['Population by Census Tract']
 
@@ -91,7 +91,9 @@ def reading(dom):
 
 		if not (row % 2500 ) or ( row == limit):
 			dom.append_layout('Body', table)
-			dom.execute_void("getElement('table').scrollTo(0,getElement('table').scrollHeight);")
+#			dom.execute_void("getElement('table').scrollTo(0,getElement('table').scrollHeight);")
+			dom.execute_void("getElement('Body').lastChild.scrollIntoView({behavior: 'smooth', block: 'center'});")
+
 			dom.flush()
 			dom.set_content('output', 'Reading rows {}/{}'.format(row-1, limit-1))
 			table = Atlas.create_HTML()
