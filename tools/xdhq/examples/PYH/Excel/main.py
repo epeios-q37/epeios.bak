@@ -33,12 +33,12 @@ import openpyxl, time
 
 tableFrame = """
 <table>
-	<thead style="position: sticky; top: 0px; background-color: aliceblue;">
+	<thead>
 		<tr>
-			<th>Id</th>
-			<th>State</th>
-			<th>County</th>
-			<th>Pop</th>
+			<th class="sticky">Id</th>
+			<th class="sticky">State</th>
+			<th class="sticky">County</th>
+			<th class="sticky">Pop</th>
 		</tr>
 	</thead>
 	<tbody id="Body"/>
@@ -107,12 +107,14 @@ def reading(dom):
 		tree.put_attribute("type", "checkbox")
 		tree.put_attribute("id", state)
 		tree.pop_tag()
-		tree.push_tag("span")
+		tree.push_tag("label")
 		tree.put_attribute("class","tree fold")				
+		tree.put_attribute("for", state)
 		tree.put_value("⊖")
 		tree.pop_tag()
-		tree.push_tag("span")
+		tree.push_tag("label")
 		tree.put_attribute("class","tree unfold")				
+		tree.put_attribute("for", state)
 		tree.put_value("⊕")
 		tree.pop_tag()
 		tree.push_tag("label")
