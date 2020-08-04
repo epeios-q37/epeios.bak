@@ -22,7 +22,8 @@ const onEventsAttributeName = "data-xdh-onevents";
 const widgetAttributeName = "data-xdh-widget";
  // Method to retrieve widget content, but also if present, then the widget is already handled.
 const widgetContentRetrievingMethodAttribute = "data-xdh-widget-content-retrieving-method";
-const valueAttributeName = "data-xdh-value";
+const contentAttributeName = "data-xdh-content";
+const oldContentAttributeName = "data-xdh-value";	// For compatibility with previous version.
 const styleId = "XDHStyle";
 
 var counter = 0;
@@ -417,48 +418,47 @@ function fetchWidgets(id) {
 	return digests;
 }
 
-function getValue(elementOrId)	// Returns the value of element of id 'id'.
+function getContent(elementOrId)	// Returns the content of element of id 'id'.
 {
 	var element = getElement(elementOrId);
 	var tagName = element.tagName;
-	var value = ""
-
-//	console.log("VALUE:", element.textContent);
+	var content = ""
 
 	switch (tagName) {
 		case "INPUT":
 			switch (element.getAttribute("type")) {
 				case "checkbox":
 				case "radio":
-					value =  element.checked;
+					content =  element.checked;
 					break;
 				default:
-					value =  element.value;
+					content =  element.value;
 					break;
 			}
 			break;
 		case "TEXTAREA":
-			value =  element.value;
+			content =  element.value;
 			break;
 		case "SELECT":
 			if (element.selectedIndex == -1)
-				value =  "";
+				content =  "";
 			else
-				value =  element.options[element.selectedIndex].value;
+				content =  element.options[element.selectedIndex].value;
 			break;
 		case "OPTION":
-			value =  element.value;
+			content =  element.value;
 			break;
 		case "text":	// SVG
 		case "tspan":	// SVG
-			value =  element.textContent;
+			content =  element.textContent;
 			break;
 		default:
-			value =  element.getAttribute(valueAttributeName);
+			content = element.hasAttribute(contentAttributeName) ? element.getAttribute(contentAttributeName) :
+				( element.hasAttribute(oldContentAttributeName) ? element.getAttribute(oldContentAttributeName) : "" );
 			break;
 	}
 
-	return value;
+	return content;
 }
 
 function getWidgetRetrievingMethod( elementOrId ) {
@@ -495,7 +495,7 @@ function getContents(ids) {
         if ( widgetRetrievingMethod !== "" )
             contents = prependToFlatStrings(eval(widgetRetrievingMethod), contents);
         else
-            contents = prependToFlatStrings(getValue(element), contents);
+            contents = prependToFlatStrings(getContent(element), contents);
 	}
 
 	return contents;

@@ -41,12 +41,20 @@ tableItem = """
 """
 
 statesItem = """
-<div data-xdh-value="{State}" data-xdh-onevent="View" style="cursor: default;">{State}</div>
+<div data-xdh-content="{State}" title="Pop: {Pop}, tracts: {Tracts}" data-xdh-onevent="View" style="cursor: default;">{State}</div>
 """
 
 countiesItem = """
-<tr data-xdh-onevent="View" data-xdh-value="{State}.{County}" style="cursor: default;">
+<tr data-xdh-onevent="View" data-xdh-content="{State}.{County}" style="cursor: default;">
 	<td>{County}</td>
+	<td>{Pop}</td>
+	<td>{Tracts}</td>
+</tr>
+"""
+
+stateInCountiesItem = """
+<tr id=\"{State}\" class="state">
+	<td><span style=\"font-style: oblique\">State</span>: {State}</td>
 	<td>{Pop}</td>
 	<td>{Tracts}</td>
 </tr>
@@ -62,6 +70,8 @@ def read_asset(path):
 
 def reading(dom):
 	global countyData
+
+	countyData= {}
 
 	prevCounty = ""
 
@@ -82,10 +92,12 @@ def reading(dom):
 
 		state, county, pop = row
 
-		countyData.setdefault(state, {})
-		countyData[state].setdefault(county, {'tracts': 0, 'pop': 0})
-		countyData[state][county]['tracts'] += 1
-		countyData[state][county]['pop'] += pop
+		countyData.setdefault(state, {'tracts': 0, 'pop': 0, 'counties': {}})
+		countyData[state]['tracts'] += 1
+		countyData[state]['pop'] += pop
+		countyData[state]['counties'].setdefault(county, {'tracts': 0, 'pop': 0})
+		countyData[state]['counties'][county]['tracts'] += 1
+		countyData[state]['counties'][county]['pop'] += pop
 
 		attribute = ""
 		
@@ -102,22 +114,23 @@ def reading(dom):
 			dom.set_content('output', 'Reading rows {}/{}'.format(index,limit))
 			tableLayout = ""
 
-	dom.set_content('output', 'Building tree...')
+	dom.set_content('output', 'Calculating...')
 	
 	statesLayout = ""
 	countiesLayout = ""
 
 	for state, stateData in countyData.items():
-		statesLayout += statesItem.format(State=state)
+		statesLayout += statesItem.format(State=state,Pop=stateData['pop'],Tracts=stateData['tracts'])
 
-		countiesLayout += "<tr id=\"{State}\" style=\"background-color: lightgrey;\"><td colspan=\"3\"><span style=\"font-style: oblique\">State</span>: {State}</td></tr>".format(State=state)
+		countiesLayout += stateInCountiesItem.format(State=state,Pop=stateData['pop'],Tracts=stateData['tracts'])
 
-		for county, data in stateData.items():
+		for county, data in stateData['counties'].items():
 			countiesLayout += countiesItem.format(State=state,County=county,Pop=data['pop'],Tracts=data['tracts'])
 
 	dom.set_layout("states", statesLayout)
 	dom.set_layout("counties", countiesLayout)
 	dom.set_content('output', 'Done')
+	dom.add_class("output", "hidden")
 	
 def ac_connect(dom):
 	dom.set_layout("", read_asset("Main.html"))

@@ -74,7 +74,7 @@
      </a>
      <h3>
       <a class="ember-view" data-xdh-onevent="DisplayRecord" style="cursor: pointer;">
-       <xsl:attribute name="data-xdh-value">
+       <xsl:attribute name="data-xdh-content">
         <xsl:value-of select="@id"/>
        </xsl:attribute>
        <xsl:value-of select="title"/>
