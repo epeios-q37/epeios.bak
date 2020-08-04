@@ -5,11 +5,34 @@
 				<p>
 					<output id='output'></output>
 				</p>
-				<fieldset id="table" class="frame">
+				<fieldset id="table" class="frame" style="height: 300px; width: 420px;">
+					<table>
+						<thead>
+							<tr>
+								<th class="sticky">Id</th>
+								<th class="sticky">State</th>
+								<th class="sticky">County</th>
+								<th class="sticky">Pop</th>
+							</tr>
+						</thead>
+						<tbody id="Body" />
+						</tbody>
+					</table>
 				</fieldset>
-				<br/>
-				<fieldset id="tree" class="frame">
-				</fieldset>
+				<br />
+				<div style="display: flex; flex-direction: row; justify-content:space-between">
+					<fieldset class="frame" style="width:60px; height: 300px;" id="states"></fieldset>
+					<fieldset class="frame" style="width:350px; height: 300px;">
+						<table>
+							<thead>
+								<th class="sticky">County</th>
+								<th class="sticky">Pop</th>
+								<th class="sticky">Tracts</th>
+							</thead>
+							<tbody id="counties">
+							</tbody>
+						</table>
+					</fieldset>
 			</fieldset>
 		</span>
 	</div>

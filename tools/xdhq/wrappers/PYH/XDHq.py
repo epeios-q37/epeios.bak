@@ -192,12 +192,12 @@ class DOM:
 
 		self._dom.call("SetContents_1", _VOID, ids, contents)
 
-	set_contents = set_contents
+	setContents = set_contents
 
 	def set_content(self, id, content):
 		self.set_contents({id: content})
 
-	set_content = set_content
+	setContent = set_content
 
 	"""
 	# Following 4 methods will either be removed or redesigned.

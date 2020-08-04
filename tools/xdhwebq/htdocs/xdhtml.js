@@ -246,9 +246,7 @@ function setLayout(id, xml, xsl) {
 }
 
 function appendLayout(id, xml, xsl) {
-	log("Yo");
     getElement(id).insertAdjacentHTML("beforeend", getLayoutHTML(xml, xsl));
-	log("Yeah");
 }
 
 function handleBooleanAttribute(element, name, flag) {
@@ -295,7 +293,15 @@ function setContent(idOrElement, content) {
 
 		switch (tagName) {
 			case "INPUT":
-				element.value = content;
+				switch (element.getAttribute("type")) {
+					case "checkbox":
+					case "radio":
+						element.checked = content.toLowerCase().trim() === 'true';
+						break;
+					default:
+						element.value = content;
+						break;
+				}
 				break;
 			case "SPAN":
 				element.innerHTML = content;
@@ -493,23 +499,6 @@ function getContents(ids) {
 	}
 
 	return contents;
-}
-
-function setValue(id, value) {
-	var element = getElement(id);
-	var tagName = element.tagName;
-
-	switch (tagName) {
-		case "INPUT":
-			element.value = value;
-			break;
-		case "TEXTAREA":
-			element.innerHTML = value;
-			break;
-		default:
-			throw tagName + ": value setting not handled !";
-			break;
-	}
 }
 
 function setEventHandlers(ids, events) {
