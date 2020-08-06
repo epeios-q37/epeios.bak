@@ -170,13 +170,6 @@
 }
         ]]>
       </Script>
-      <Script name="Parent_1" Arguments="Id">
-        <![CDATA[
-{
-  getOrGenerateId( getElement( "%Id%" ).parentElement );
-}
-        ]]>
-      </Script>
       <Script name="Focus_1" Arguments="Id">
         <![CDATA[
 {
@@ -184,7 +177,56 @@
 }
         ]]>
       </Script>
-      <Script name="" Arguments="">
+      <Script name="Parent_1" Arguments="Id">
+        <![CDATA[
+{
+  getOrGenerateId( getElement( "%Id%" ).parentElement );
+}
+        ]]>
+      </Script>
+      <Script name="FirstChild_1" Arguments="Id">
+        <![CDATA[
+{
+  getOrGenerateId(getElement("%Id%").firstElementChild);
+}
+        ]]>
+      </Script>
+      <Script name="LastChild_1" Arguments="Id">
+        <![CDATA[
+{
+  getOrGenerateId(getElement("%Id%").lastElementChild);
+}
+        ]]>
+      </Script>
+      <Script name="PreviousSibling_1" Arguments="Id">
+        <![CDATA[
+{
+  getOrGenerateId(getElement("%Id%").previousElementSibling);
+}
+        ]]>
+      </Script>
+      <Script name="NextSibling_1" Arguments="Id">
+        <![CDATA[
+{
+  getOrGenerateId(getElement("%Id%").nextElementSibling);
+}
+        ]]>
+      </Script>
+      <Script name="ScrollTo_1" Arguments="Id">
+        <![CDATA[
+{
+  getElement("%Id%").scrollIntoView({behavior: 'smooth', block: 'center'});
+}
+        ]]>
+      </Script>
+      <Script name="Flush_1" Arguments="">
+        <![CDATA[
+{
+  ""; // To wait that all pending commands were executed.
+}
+        ]]>
+      </Script>
+       <Script name="" Arguments="">
         <![CDATA[
 {
 

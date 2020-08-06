@@ -109,7 +109,7 @@ def reading(dom):
 
 		if not ( index % 2500 ) or ( index == limit ):
 			dom.append_layout('Body', tableLayout)
-			dom.execute_void("getElement('Body').lastChild.previousSibling.scrollIntoView({behavior: 'smooth', block: 'center'});")
+			dom.scroll_to(dom.last_child('Body'))
 			dom.flush()
 			dom.set_content('output', 'Reading rows {}/{}'.format(index,limit))
 			tableLayout = ""
@@ -137,7 +137,7 @@ def ac_connect(dom):
 	reading(dom)
 
 def ac_view(dom,id):
-	dom.execute_void("getElement('{}').scrollIntoView({{behavior: 'smooth', block: 'center'}});".format(dom.get_content(id)))
+	dom.scroll_to(dom.get_content(id))
 
 callbacks = {
 	"": ac_connect,

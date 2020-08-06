@@ -123,7 +123,7 @@ class DOM:
 		return self._dom.call("Execute_1" ,_STRINGS, script)
 
 	def flush(self):	# Returns when all the pending commands were executed.
-		self.execute_string("''")
+		self._dom.call("Flush_1",_STRING)
 
 	def alert(self,message):
 		self._dom.call( "Alert_1", _STRING, message )
@@ -305,6 +305,24 @@ class DOM:
 
 	def focus(self, id):
 		self._dom.call("Focus_1", _VOID, id)
+
+	def parent(self,id):
+		return self._dom.call("Parent_1",_STRING,id)
+
+	def first_child(self,id):
+		return self._dom.call("FirstChild_1",_STRING,id)
+
+	def last_child(self,id):
+		return self._dom.call("LastChild_1",_STRING,id)
+
+	def previous_sibling(self,id):
+		return self._dom.call("PreviousSibling_1",_STRING,id)
+
+	def next_sibling(self,id):
+		return self._dom.call("NextSibling_1",_STRING,id)
+
+	def scroll_to(self,id):
+		self._dom.call("ScrollTo_1",_VOID,id)
 
 def launch(callback, userCallback, callbacks, headContent, dir):
 	global _dir
