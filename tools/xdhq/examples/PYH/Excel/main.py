@@ -41,7 +41,7 @@ tableItem = """
 """
 
 statesItem = """
-<div data-xdh-content="{State}" title="Pop: {Pop}, tracts: {Tracts}" data-xdh-onevent="View" style="cursor: default;">{State}</div>
+<div data-xdh-content="{State}" data-xdh-onevent="View" style="cursor: default;">{State}</div>
 """
 
 countiesItem = """
@@ -105,11 +105,11 @@ def reading(dom):
 			attribute = " id=\"{}.{}\"".format(state,county)
 			prevCounty = county
 			
-		tableLayout += tableItem.format(attribute,index,state,county,pop)
+		tableLayout += tableItem.format(attribute,index+1,state,county,pop)
 
 		if not ( index % 2500 ) or ( index == limit ):
-			dom.append_layout('Body', tableLayout)
-			dom.scroll_to(dom.last_child('Body'))
+			dom.append_layout('table', tableLayout)
+			dom.scroll_to(dom.last_child('table'))
 			dom.flush()
 			dom.set_content('output', 'Reading rows {}/{}'.format(index,limit))
 			tableLayout = ""
@@ -120,7 +120,7 @@ def reading(dom):
 	countiesLayout = ""
 
 	for state, stateData in countyData.items():
-		statesLayout += statesItem.format(State=state,Pop=stateData['pop'],Tracts=stateData['tracts'])
+		statesLayout += statesItem.format(State=state)
 
 		countiesLayout += stateInCountiesItem.format(State=state,Pop=stateData['pop'],Tracts=stateData['tracts'])
 
