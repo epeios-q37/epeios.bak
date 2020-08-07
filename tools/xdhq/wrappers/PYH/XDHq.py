@@ -25,6 +25,7 @@ SOFTWARE.
 """
 
 import XDHqFaaS, XDHqSHRD, XDHqXML
+from XDHqFaaS import launch
 
 import os, sys
 from collections import OrderedDict
@@ -40,8 +41,6 @@ elif sys.version_info[0] == 3:
 else:
 	print("Unhandled python version!")
 	os._exit(1)
-
-_dir = ""
 
 _VOID = XDHqSHRD.RT_VOID
 _STRING = XDHqSHRD.RT_STRING
@@ -73,30 +72,25 @@ def _unsplit(keys,values):
 
 	return keysAndValues
 
-def _getAssetPath(dir):
-	if XDHqSHRD.isDev():
-		return os.path.join(os.environ["Q37_EPEIOS"],"tools/xdhq/examples/common/", dir )
-	else:
-		return os.path.abspath(os.path.dirname(sys.argv[0]))
+def _getAssetPath():
+	if not XDHqSHRD.isDev():
+		throw("Should only be called in DEV context!!!")
+
+	return os.path.join(os.path.realpath(os.path.join(os.environ["Q37_EPEIOS"],"tools/xdhq/examples/common/")),os.path.relpath(os.getcwd(),os.path.realpath(os.path.join(os.environ["Q37_EPEIOS"],"tools/xdhq/examples/PYH/"))))
 
 
-def get_asset_filename(path, dir):
-	return os.path.join(_getAssetPath(dir), path )
+def get_asset_filename(path):
+	return os.path.join(_getAssetPath(), path )
 
-
-def read_asset(path, dir=""):
-	return open(get_asset_filename(path, dir)).read()
-
-readAsset = read_asset
 
 broadcastAction = XDHqFaaS.broadcastAction
 
 
-def _readXSLAsset(path, dir):
+def _readXSLAsset(path):
 	if (path.lstrip()[0]=='<'):
 		return path.lstrip()
 	else:
-		return readAsset(path, dir)
+		return  open(get_asset_filename(path)).read()
 
 class DOM:
 	def __init__(self,instance):
@@ -154,11 +148,10 @@ class DOM:
 	appendLayout = append_layout
 
 	def _handleLayoutXSL(self, variant, id, xml, xsl):
-		global _dir
 		xslURL = xsl
 
 		if True:	# Testing if 'SlfH' or 'FaaS' mode when available.
-			xslURL = "data:text/xml;charset=utf-8," + _encode( _readXSLAsset( xsl, _dir ) )
+			xslURL = "data:text/xml;charset=utf-8," + _encode(_readXSLAsset(xsl))
 
 		self._handleLayout(variant, id, xml, xslURL )
 
@@ -323,8 +316,3 @@ class DOM:
 
 	def scroll_to(self,id):
 		self._dom.call("ScrollTo_1",_VOID,id)
-
-def launch(callback, userCallback, callbacks, headContent, dir):
-	global _dir
-	_dir = dir
-	XDHqFaaS.launch(callback,userCallback,callbacks,headContent)

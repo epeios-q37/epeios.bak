@@ -38,10 +38,6 @@ sys.path.append("../atlastk")
 import atlastk as Atlas
 
 
-def read_asset(path):
-    return Atlas.read_asset(path, "ReversiIMG")
-
-
 EMPTY = 0
 BLACK = -1
 WHITE = 1
@@ -216,7 +212,7 @@ def drawBoard(reversi, dom, prefetch=False):
 def acConnect(reversi, dom):
     reversi.player = BLACK
     reversi.weight_matrix = WEIGHT_MATRIX
-    dom.set_layout("", read_asset("Main.html"))
+    dom.set_layout("", open("Main.html").read())
     drawBoard(reversi, dom)
     dom.alert("Welcome to this Reversi (aka Othello) game made with the Atlas toolkit.\n\nYou play against the computer with the black pieces.")
 
@@ -259,4 +255,4 @@ callbacks = {
     "New": acNew
 }
 
-Atlas.launch(callbacks, Reversi, read_asset("Head.html"), "ReversiIMG")
+Atlas.launch(callbacks, Reversi, open("Head.html").read())

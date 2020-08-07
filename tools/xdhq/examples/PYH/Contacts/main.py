@@ -69,10 +69,6 @@ contacts = [
 
 current = None
 
-def read_asset(path):
-    return Atlas.read_asset(path, "Contacts")
-
-
 def displayContact(dom, contact):
     global state
     dom.set_contents(contact)
@@ -142,7 +138,7 @@ def handleButtonVisibility(dom):
 
 def acConnect(dom):
     global contacts, state
-    dom.set_layout("", read_asset("Main.html"))
+    dom.set_layout("", open("Main.html").read())
     display(dom, contacts)
     state = State.DISPLAY
     handleButtonVisibility(dom)
@@ -195,4 +191,4 @@ callbacks = {
     "Submit": acSubmit,
 }
 
-Atlas.launch(callbacks, None, read_asset("Head.html"), "Contact")
+Atlas.launch(callbacks, None, open("Head.html").read())

@@ -33,9 +33,6 @@ rPin = None
 gPin = None
 bPin = None
 
-def read_asset(path):
-	return Atlas.read_asset(path, "RGB")
-
 class RGB:
 	def __init__(self):
 		pass
@@ -46,7 +43,7 @@ def set(dom, id, value):
 
 def acConnect(RGB,dom):
 	global rPin, gPin, bPin
-	dom.set_layout("", read_asset( "Main.html") )
+	dom.set_layout("", open( "Main.html").read() )
 	set( dom, "Red", rPin)
 	set( dom, "Green", gPin)
 	set( dom, "Blue", bPin)
@@ -107,4 +104,4 @@ callbacks = {
 
 GPIOq.setup()
 
-Atlas.launch(callbacks, RGB, read_asset("Head.html"), "RGB")
+Atlas.launch(callbacks, RGB,open("Head.html").read())

@@ -8,20 +8,26 @@ The `atlastk` directory contains the *Python* source code of the *Atlas* toolkit
 
 In the `examples` directory, you will found following examples:
 
-- *Blank*: very basic example,
-- *Hello*: ["*Hello, World!*"](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program),
-- *Chatroom*: multi-user chatroom,
-- *ReversiTXT*: [*Reversi game*](http://q37.info/s/zz3dzmf7) with `X` and `O` for token,
-- *Notes*: note taking program,
-- *TodoMVC*: [*TodoMVC*](http://todomvc.com/),
-- *Hangman*: [Hangman game](http://q37.info/s/gtdtk4hp),
-- *15-puzzle*: [*15-puzzle* game](https://q37.info/s/jn9zg3bn),
-- *ReversiIMG*: [*Reversi game*](http://q37.info/s/zz3dzmf7) with more evolved graphics,
-- *ReversiXSL*: [*Reversi game*](http://q37.info/s/zz3dzmf7) using *XSL*.
+- `Blank`: very basic example,
+- `Hello`: ["*Hello, World!*"](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program),
+- `Chatroom`: multi-user chatroom,
+- `ReversiTXT`: [*Reversi game*](http://q37.info/s/zz3dzmf7) with `X` and `O` for token,
+- `Notes`: note taking program,
+- `TodoMVC`: [*TodoMVC*](http://todomvc.com/),
+- `Hangman`: [Hangman game](http://q37.info/s/gtdtk4hp),
+- `15-puzzle`: [*15-puzzle* game](https://q37.info/s/jn9zg3bn),
+- `ReversiIMG`: [*Reversi game*](http://q37.info/s/zz3dzmf7) with more evolved graphics,
+- `ReversiXSL`: [*Reversi game*](http://q37.info/s/zz3dzmf7) using *XSL*.
 
 Other examples are detailed in the next section.
 
-Except for the *ErgoJr*, *GPIO* and *RGB* applications, which are detailed in the next section, to run an example, launch, from within the repository, `python main.py`, and select the example you want to run. You can also directly launch, from within the `examples` directory, `python <Name>/` (don't forget the final `/`), where `<Name>` is the name of the example (`Blank`, `Chatroom`…).
+Except for the *ErgoJr*, *GPIO* and *RGB* applications, which are detailed in the next section, to run an example, launch, from within the repository, `python main.py`, and select the example you want to run.  
+You can also directly launch, from the root directory of the repository:
+
+- `cd examples/<Name>`
+- `python main.py`
+
+where `<Name>` is the name of the example (`Blank`, `Chatroom`…).
 
 The *Stars* application is an example where the *Atlas* *toolkit* is used to control a [*Pygame*](https://en.wikipedia.org/wiki/Pygame) based application. Of course, *Pygame* needs to be installed.
 
@@ -33,7 +39,7 @@ The *GPIO* and *RGB* applications are designed to be used on a *Raspberry Pi* or
 
 For the *Raspberry Pi*, the `RPi.GPIO` *Python* module have to be installed (this is probably already the case).
 
-For the *ODROID-C2*, The *Python* version of *WiringPi* must be installed, and the application has to be launched, from within the `examples` directory, with `sudo` (`sudo python GPIO/` or `sudo python RGB/`).
+For the *ODROID-C2*, The *Python* version of *WiringPi* must be installed, and the application has to be launched, from within the `examples/GPIO` or `examples/RGB` directory, depending which program you want to launch, with `sudo` (`sudo python main.py`).
 
 The *ErgoJr* application is experimental and to control a *Poppy* *Ergo Jr* robot.
 

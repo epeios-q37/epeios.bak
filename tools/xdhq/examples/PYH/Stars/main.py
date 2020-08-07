@@ -91,11 +91,8 @@ def move_stars(stars):
             vel[0] = vel[0] * 1.05
             vel[1] = vel[1] * 1.05
 
-def read_asset(path):
-	return Atlas.read_asset(path, "Stars")
-
 def acConnect(,dom):
-	dom.set_layout("", read_asset("Main.html"))
+	dom.set_layout("", open("Main.html").read())
 
 pos = WINCENTER
 
@@ -154,7 +151,7 @@ callbacks = {
 }
 
 def atlas():
-    Atlas.launch(callbacks, None, read_asset("Head.html"), "Stars")
+    Atlas.launch(callbacks, None, open("Head.html").read())
 
 def main():
     global pos;

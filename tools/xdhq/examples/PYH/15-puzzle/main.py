@@ -35,10 +35,6 @@ class Puzzle:
     pass
 
 
-def read_asset(path):
-    return Atlas.read_asset(path, "15-puzzle")
-
-
 def fill(puzzle, dom):
     numbers = []
     contents = {}
@@ -124,7 +120,7 @@ def scramble(puzzle, dom):
 
 
 def ac_connect(self, dom):
-    dom.set_layout("", read_asset("Main.html"))
+    dom.set_layout("", open("Main.html").read())
     scramble(self, dom)
 
 
@@ -200,4 +196,4 @@ callbacks = {
 }
 
 
-Atlas.launch(callbacks, Puzzle, read_asset("Head.html"), "15-puzzle")
+Atlas.launch(callbacks, Puzzle, open("Head.html").read())

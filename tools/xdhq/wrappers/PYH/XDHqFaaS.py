@@ -36,7 +36,7 @@ if sys.version_info[0] == 2:
 	_getString = XDHqFaaS2.getString
 	def _REPLit_convert(str):
 		return str
-elif sys.version_info[0] == 3:
+else:
 	from http.server import BaseHTTPRequestHandler, HTTPServer	# For 'repl.it'.
 	import XDHqFaaS3
 	l = XDHqFaaS3.l
@@ -46,9 +46,6 @@ elif sys.version_info[0] == 3:
 	_getString = XDHqFaaS3.getString
 	def _REPLit_convert(str):
 		return bytes(str,"utf-8")
-else:
-	print("Unhandled python version!")
-	os._exit(1)
 
 def _REPLHTML1(url):
 	return "<html><body><iframe style=\"border-style: none; width: 100%;height: 100%\" src=\"" + url + "\"</iframe></body></html>"

@@ -32,9 +32,6 @@ import atlastk as Atlas
 
 view_mode_elements = ["Pattern", "CreateButton", "DescriptionToggling", "ViewNotes"]
 
-def read_asset(path):
-	return Atlas.read_asset(path, "Notes")
-
 def put(note, id, xml ):
 	xml.push_tag("Note")
 	xml.put_attribute("id", id)
@@ -97,7 +94,7 @@ class Notes:
 		self.index = -1
 
 def ac_connect(notes, dom):
-		dom.set_layout("", read_asset( "Main.html") )
+		dom.set_layout("", open( "Main.html").read() )
 		notes.display_list(dom)
 
 def ac_toggle_descriptions(notes, dom, id):
@@ -113,7 +110,7 @@ def ac_edit(notes, dom, id):
 	notes.index = int(index)
 	note = notes.notes[notes.index]
 
-	dom.set_layout("Edit." + index, read_asset( "Note.html") )
+	dom.set_layout("Edit." + index, open( "Note.html").read() )
 	dom.set_contents({ "Title": note['title'], "Description": note['description'] })
 	dom.disable_elements(view_mode_elements)
 	dom.focus("Title")
@@ -164,4 +161,4 @@ callbacks = {
 	"Cancel": ac_cancel,
 }
 
-Atlas.launch(callbacks, Notes, read_asset("Head.html"), "Notes")
+Atlas.launch(callbacks, Notes, open("Head.html").read())

@@ -62,9 +62,6 @@ stateInCountiesItem = """
 
 countyData = {}
 
-def read_asset_(path):
-	return Atlas.read_asset(path, "Excel")
-
 def reading(dom):
 	global countyData
 

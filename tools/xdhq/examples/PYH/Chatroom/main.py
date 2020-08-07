@@ -33,9 +33,6 @@ messages = []
 pseudos = []
 lock = threading.Lock()
 
-def read_asset(path):
-	return Atlas.read_asset(path, "Chatroom")
-
 class Chatroom:
 	def __init__(self):
 		self.last_message = 0
@@ -103,7 +100,7 @@ class Chatroom:
 			lock.release()
 
 def ac_connect(chatroom, dom):
-	dom.set_layout("", read_asset("Main.html"))
+	dom.set_layout("", open("Main.html").read())
 	dom.focus("Pseudo")
 	chatroom.display_messages(dom)
 	
@@ -143,4 +140,4 @@ callbacks = {
 		"Update": lambda chatroom, dom: chatroom.display_messages(dom),
 	}
 		
-Atlas.launch(callbacks, Chatroom, read_asset("Head.html"), "Chatroom")
+Atlas.launch(callbacks, Chatroom, read_open("Head.html").read())
