@@ -22,13 +22,22 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  """
 
-import XDHq
+import XDHq, XDHqSHRD
 from threading import Thread
 import threading
 import inspect
 from XDHq import readAsset, read_asset, get_asset_filename
 
-import signal, sys
+import signal, sys, os, __main__, builtins
+
+# Overriding some functions for the Dev environment.
+if XDHqSHRD.isDev():
+	if "openpyxl" in sys.modules :
+		defaultXLFunction = sys.modules['openpyxl'].load_workbook
+		sys.modules['openpyxl'].load_workbook = lambda filename, **kwargs: defaultXLFunction(get_asset_filename(filename,os.path.dirname(__main__.__file__)), **kwargs)
+	
+	defaultBuiltinsFunction = builtins.open
+	builtins.open = lambda filename, **kwargs: defaultBuiltinsFunction(get_asset_filename(filename,os.path.dirname(__main__.__file__)), **kwargs)
 
 def signal_handler(sig, frame):
   sys.exit(0)

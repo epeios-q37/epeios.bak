@@ -28,8 +28,8 @@ import os, sys
 sys.path.append("./atlastk")
 sys.path.append("../atlastk")
 
-import atlastk as Atlas
 import openpyxl
+import atlastk as Atlas
 
 tableItem = """
 <tr{}>
@@ -62,10 +62,7 @@ stateInCountiesItem = """
 
 countyData = {}
 
-def get_asset_filename(path):
-	return Atlas.get_asset_filename(path, "Excel")
-
-def read_asset(path):
+def read_asset_(path):
 	return Atlas.read_asset(path, "Excel")
 
 def reading(dom):
@@ -76,7 +73,7 @@ def reading(dom):
 	prevCounty = ""
 
 	dom.set_content('output', 'Opening workbook...')
-	wb = openpyxl.load_workbook(get_asset_filename('censuspopdata__.xlsx'),read_only=True)
+	wb = openpyxl.load_workbook('censuspopdata__.xlsx',read_only=True)
 
 	sheet = wb['Population by Census Tract']
 
@@ -133,7 +130,7 @@ def reading(dom):
 	dom.add_class("output", "hidden")
 	
 def ac_connect(dom):
-	dom.set_layout("", read_asset("Main.html"))
+	dom.set_layout("", open("Main.html").read())
 	reading(dom)
 
 def ac_view(dom,id):
@@ -144,4 +141,4 @@ callbacks = {
 	"View": ac_view,
 }
 
-Atlas.launch(callbacks, None, read_asset("Head.html"), "Excel")
+Atlas.launch(callbacks, None, open("Head.html").read())
