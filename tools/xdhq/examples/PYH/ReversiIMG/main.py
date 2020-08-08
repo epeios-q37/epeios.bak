@@ -26,17 +26,12 @@ SOFTWARE.
 # This is the adaptation of the program found on:
 # https://gist.github.com/nakagami/7a7d799bd4bd4ad8fcea96135c4af179
 
-import os
-import sys
-import random
-import itertools
-import time
+import os, sys, random, itertools, time
 
-sys.path.append("./atlastk")
-sys.path.append("../atlastk")
+os.chdir(os.path.dirname(os.path.realpath(__file__)))
+sys.path.append("../../atlastk")
 
 import atlastk as Atlas
-
 
 EMPTY = 0
 BLACK = -1

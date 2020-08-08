@@ -22,15 +22,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-import sys
+import os, sys
 from random import *
 
-sys.path.append("./atlastk")
-sys.path.append("../atlastk")
+os.chdir(os.path.dirname(os.path.realpath(__file__)))
+sys.path.append("../../atlastk")
 
 import atlastk as Atlas
 
-
+# Althought empty, must exist, as it will be filled later.
 class Puzzle:
     pass
 

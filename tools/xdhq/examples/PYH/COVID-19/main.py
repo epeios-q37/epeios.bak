@@ -119,5 +119,5 @@ callbacks = {
 	"Redraw": lambda dom : draw(dom)
 }
 
-Atlas.launch(callbacks, None, HEAD, "SVG")
+Atlas.launch(callbacks, None, HEAD)
         

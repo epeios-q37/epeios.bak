@@ -25,9 +25,12 @@ SOFTWARE.
 
 import os, sys
 
-sys.path.append("./atlastk")
-sys.path.append("../atlastk")
+os.chdir(os.path.dirname(os.path.realpath(__file__)))
+sys.path.append("../../atlastk")
 
+# Note to the dev: 'openpyxl' must be imported before 'atlastk',
+# as the 'load_workbook' function from 'openpyxl' is overloaded.
+# Applies only in DEV context.
 import openpyxl
 import atlastk as Atlas
 

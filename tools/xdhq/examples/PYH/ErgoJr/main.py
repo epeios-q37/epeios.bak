@@ -24,10 +24,10 @@ SOFTWARE.
 
 # To control a Poppy Ergo Jr
 
-import time, sys
+import os, time, sys
 
-sys.path.append("./atlastk")
-sys.path.append("../atlastk")
+os.chdir(os.path.dirname(os.path.realpath(__file__)))
+sys.path.append("../../atlastk")
 
 import atlastk as Atlas
 
@@ -90,4 +90,4 @@ callbacks = {
 		"Reset": acReset,
 	}
 	
-Atlas.launch(callbacks, Poppy, read_open("Head.html").read())
+Atlas.launch(callbacks, Poppy, open("Head.html").read())

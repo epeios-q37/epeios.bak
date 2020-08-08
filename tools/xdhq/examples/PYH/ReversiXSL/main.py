@@ -28,14 +28,10 @@ SOFTWARE.
 
 # Demonstrates the use of XSL.
 
-import os
-import sys
-import random
-import itertools
-import time
+import os, sys, random, itertools, time
 
-sys.path.append("./atlastk")
-sys.path.append("../atlastk")
+os.chdir(os.path.dirname(os.path.realpath(__file__)))
+sys.path.append("../../atlastk")
 
 import atlastk as Atlas
 
