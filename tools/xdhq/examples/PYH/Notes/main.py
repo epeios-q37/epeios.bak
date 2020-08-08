@@ -138,7 +138,7 @@ def ac_submit(notes, dom):
 		dom.alert("Title can not be empty!")
 		dom.focus("Title")
 
-def ac_cancel( notes, dom):
+def ac_cancel(notes, dom):
 	note = notes.notes[notes.index]
 
 	result = dom.get_contents(["Title", "Description"])

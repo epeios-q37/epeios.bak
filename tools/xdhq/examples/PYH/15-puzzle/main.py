@@ -124,25 +124,6 @@ def ac_connect(self, dom):
     scramble(self, dom)
 
 
-def ac_swap_old(self, dom, id):
-    new = int(id)
-    current = self.blank
-
-    ix, iy = convert(new)
-    bx, by = convert(current)
-
-    if (ix == bx):
-        delta = 4 if by < iy else -4
-        while(by != iy):
-            swap(self, dom, self.blank+delta)
-            by = convert_y(self.blank)
-    elif (iy == by):
-        delta = 1 if bx < ix else -1
-        while(bx != ix):
-            swap(self, dom, self.blank+delta)
-            bx = convert_x(self.blank)
-
-
 def build(sourceIds,targetIds,sourceIdsAndContents, blank):
 
     targetIdsAndContents = {}
