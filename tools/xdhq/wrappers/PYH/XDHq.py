@@ -90,7 +90,7 @@ def _readXSLAsset(path):
 	if (path.lstrip()[0]=='<'):
 		return path.lstrip()
 	else:
-		return  open(get_asset_filename(path)).read()
+		return open(get_asset_filename(path) if XDHqSHRD.isDev() else path).read()
 
 class DOM:
 	def __init__(self,instance):
