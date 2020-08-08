@@ -76,7 +76,7 @@ def _getAssetPath():
 	if not XDHqSHRD.isDev():
 		throw("Should only be called in DEV context!!!")
 
-	return os.path.join(os.path.realpath(os.path.join(os.environ["Q37_EPEIOS"],"tools/xdhq/examples/common/")),os.path.relpath(os.getcwd(),os.path.realpath(os.path.join(os.environ["Q37_EPEIOS"],"tools/xdhq/examples/PYH/"))))
+	return os.path.join(os.path.realpath(os.path.join(os.environ["Q37_EPEIOS"].replace('h:','/cygdrive/h'),"tools/xdhq/examples/common/")),os.path.relpath(os.getcwd(),os.path.realpath(os.path.join(os.environ["Q37_EPEIOS"].replace('h:','/cygdrive/h'),"tools/xdhq/examples/PYH/"))))
 
 
 def get_asset_filename(path):
