@@ -87,6 +87,10 @@ public class DOM {
 		return (String []) DOM.call("Execute_1", Type.STRINGS, a(script));
 	}
 
+	public void flush() {
+		DOM.call("Flush_1", Type.STRING);
+	}
+
 	public void alert(String message) {
 		DOM.call("Alert_1", Type.STRING, a(message));
 		// For the return value being 'STRING' instead of 'VOID',
@@ -245,5 +249,29 @@ public class DOM {
 
 	public void focus(String id) {
 		DOM.call("Focus_1", Type.VOID, a(id));
+	}
+
+	public String parent(String id) {
+		return (String) DOM.call("Parent_1", Type.STRING, a(id));
+	}
+
+	public String firstChild(String id) {
+		return (String) DOM.call("FirstChild_1", Type.STRING, a(id));
+	}
+
+	public String lastChild(String id) {
+		return (String) DOM.call("LastChild_1", Type.STRING, a(id));
+	}
+
+	public String previousSibling(String id) {
+		return (String) DOM.call("PreviousSibling_1", Type.STRING, a(id));
+	}
+
+	public String nextSibling(String id) {
+		return (String) DOM.call("NextSibling_1", Type.STRING, a(id));
+	}
+
+	public void scrollTo(String id) {
+		DOM.call("ScrollTo_1", Type.VOID, a(id));
 	}
 }

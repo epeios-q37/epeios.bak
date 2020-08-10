@@ -113,6 +113,10 @@ module XDHq
 		def executeStrings(script)
 			return execute($STRINGS, script)
 		end
+
+		def flush(id)
+			call("Flush_1", $STRING, id)
+		end
 	
 		def alert(message)
 			call( "Alert_1", $STRING, message)
@@ -257,6 +261,30 @@ module XDHq
 
 		def focus(id)
 			call("Focus_1", $VOID, id )
+		end
+
+		def parent(id)
+			return call("Parent_1", $STRING, id)
+		end
+
+		def firstChild(id)
+			return call("FirstChild_1", $STRING, id)
+		end
+
+		def lastChild(id)
+			return call("LastChild_1", $STRING, id)
+		end
+
+		def previousSibling(id)
+			return call("PreviousSibling_1", $STRING, id)
+		end
+
+		def nextSibling(id)
+			return call("NextSibling_1", $STRING, id)
+		end
+
+		def scrollTo(id)
+			call("ScrollTo_1", $VOID, id)
 		end
 	end
 

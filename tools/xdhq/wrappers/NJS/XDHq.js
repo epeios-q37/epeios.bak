@@ -151,6 +151,9 @@ class XDH {
 	executeStrings(script, callback) {
 		this.execute_(types.STRINGS, script, callback);
 	}
+	flush(id, callback) {
+		call(this, "Flush_1", types.STRING, id, callback);
+	}
 	alert(message, callback) {
         call(this, "Alert_1", types.STRING, message, callback);
         // For the return value being 'STRING' instead of 'VOID',
@@ -279,6 +282,24 @@ class XDH {
 	}
 	focus(id, callback) {
 		call(this, "Focus_1", types.VOID, id, callback);
+	}
+	parent(id, callback) {
+		return call(this, "Parent_1", types.STRING, id, callback);
+	}
+	firstChild(id, callback) {
+		return call(this, "FirstChild_1", types.STRING, id, callback);
+	}
+	lastChild(id, callback) {
+		return call(this, "LastChild_1", types.STRING, id, callback);
+	}
+	previousSibling(id, callback) {
+		return call(this, "PreviousSibling_1", types.STRING, id, callback);
+	}
+	nextSibling(id, callback) {
+		return call(this, "NextSibling_1", types.STRING, id, callback);
+	}
+	scrollTo(id, callback) {
+		call(this, "ScrollTo_1", types.VOID, id, callback);
 	}
 }
 

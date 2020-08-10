@@ -83,6 +83,10 @@ sub executeStrings {
     return shift->_execute(XDHq::SHRD::RT_STRINGS, shift);
 }
 
+sub flush {
+    shift->{dom}->call("Flush_1", XDHq::SHRD::RT_STRING, shift);
+}
+
 sub alert {
     my ($self, $message) = @_;
 
@@ -245,6 +249,30 @@ sub getProperty {
 
 sub focus {
     shift->{dom}->call("Focus_1", XDHq::SHRD::RT_VOID, shift);
+}
+
+sub parent {
+    return shift->{dom}->call("Parent_1", XDHq::SHRD::RT_STRING, shift);
+}
+
+sub firstChild {
+    return shift->{dom}->call("FirstChild_1", XDHq::SHRD::RT_STRING, shift);
+}
+
+sub lastChild {
+    return shift->{dom}->call("LastChild_1", XDHq::SHRD::RT_STRING, shift);
+}
+
+sub previousSibling {
+    return shift->{dom}->call("PreviousSibling_1", XDHq::SHRD::RT_STRING, shift);
+}
+
+sub nextSibling {
+    return shift->{dom}->call("NextSibling_1", XDHq::SHRD::RT_STRING, shift);
+}
+
+sub scrollTo {
+    shift->{dom}->call("ScrollTo_1", XDHq::SHRD::RT_VOID, shift);
 }
 
 return XDHq::SHRD::TRUE;
