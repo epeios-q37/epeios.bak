@@ -19,7 +19,7 @@
 						</tbody>
 					</table>
 				</fieldset>
-				<div style="background-color: bisque; text-align: center;">Items in frames below are clickable.</div>				
+				<div style="background-color: bisque; text-align: center;">Items in frames below are clickable.</div>
 				<div style="display: flex; flex-direction: row; justify-content: space-between;">
 					<fieldset class="frame" style="width:60px; height: 300px;" id="states"></fieldset>
 					<fieldset class="frame" style="width:350px; height: 300px;">
@@ -33,6 +33,16 @@
 							</tbody>
 						</table>
 					</fieldset>
+				</div>
+				<br />
+				<div class="hcenter">
+					<select id="set" size="2" title="Select the data set">
+						<option value="censuspopdata_extract.xlsx" selected>Extract (fast, for testing)</option>
+						<option value="censuspopdata_full.xlsx">Full (slower)</option>
+					</select>
+					<br />
+					<button class="hcenter" data-xdh-onevent="Refresh">Refresh</button>
+				</div>
 			</fieldset>
 		</span>
 	</div>

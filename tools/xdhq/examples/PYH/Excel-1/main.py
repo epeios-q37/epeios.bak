@@ -68,12 +68,20 @@ countyData = {}
 def reading(dom):
 	global countyData
 
-	countyData= {}
+	countyData = {}
 
+	dom.set_contents({
+		"output": "Initialization…",
+		"table": "",
+		"counties": "",
+		"states": ""
+	})
+
+	dom.remove_class("output", "hidden")
 	prevCounty = ""
 
 	dom.set_content('output', 'Opening workbook...')
-	wb = openpyxl.load_workbook('censuspopdata__.xlsx',read_only=True)
+	wb = openpyxl.load_workbook(dom.get_content("set"),read_only=True)
 
 	sheet = wb['Population by Census Tract']
 
@@ -139,6 +147,7 @@ def ac_view(dom,id):
 callbacks = {
 	"": ac_connect,
 	"View": ac_view,
+	"Refresh": lambda dom : reading(dom)
 }
 
 Atlas.launch(callbacks, None, open("Head.html").read())
