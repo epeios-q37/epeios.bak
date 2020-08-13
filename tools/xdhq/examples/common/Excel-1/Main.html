@@ -5,11 +5,12 @@
 				<p>
 					<output id='output'></output>
 				</p>
-				<fieldset class="frame" style="height: 300px; width: 420px;">
+				<fieldset class="frame" style="height: 300px;">
 					<table>
 						<thead>
 							<tr>
 								<th class="sticky">Line</th>
+								<th class="sticky">Tract</th>
 								<th class="sticky">State</th>
 								<th class="sticky">County</th>
 								<th class="sticky">Pop</th>
@@ -20,9 +21,18 @@
 					</table>
 				</fieldset>
 				<div style="background-color: bisque; text-align: center;">Items in frames below are clickable.</div>
-				<div style="display: flex; flex-direction: row; justify-content: space-between;">
-					<fieldset class="frame" style="width:60px; height: 300px;" id="states"></fieldset>
-					<fieldset class="frame" style="width:350px; height: 300px;">
+				<div style="display: flex; flex-direction: row; justify-content: space-evenly; height: 300px">
+					<fieldset class="frame">
+						<table>
+							<thead>
+								<th class="sticky">State</th>
+								<th class="sticky">Pop</th>
+							</thead>
+							<tbody id="states">
+							</tbody>
+						</table>
+					</fieldset>
+					<fieldset class="frame">
 						<table>
 							<thead>
 								<th class="sticky">County</th>

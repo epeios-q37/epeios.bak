@@ -40,11 +40,15 @@ tableItem = """
 	<td>{}</td>
 	<td>{}</td>
 	<td>{}</td>
+	<td>{}</td>
 </tr>
 """
 
 statesItem = """
-<div data-xdh-content="{State}" data-xdh-onevent="View" style="cursor: default;">{State}</div>
+<tr data-xdh-content="{State}" data-xdh-onevent="View" style="cursor: default;" title="Pop: {Pop}, tracts: {Tracts}">
+	<td>{State}</td>
+	<td>{Pop}</td>
+</tr>
 """
 
 countiesItem = """
@@ -92,10 +96,10 @@ def reading(dom):
 	index = 0
 	tableLayout = ""
 
-	for row in sheet.iter_rows(min_row=2, min_col=2,values_only=True):
+	for row in sheet.iter_rows(min_row=2,values_only=True):
 		index += 1
 
-		state, county, pop = row
+		tract, state, county, pop = row
 
 		countyData.setdefault(state, {'tracts': 0, 'pop': 0, 'counties': {}})
 		countyData[state]['tracts'] += 1
@@ -110,7 +114,7 @@ def reading(dom):
 			attribute = " id=\"{}.{}\"".format(state,county)
 			prevCounty = county
 			
-		tableLayout += tableItem.format(attribute,index+1,state,county,pop)
+		tableLayout += tableItem.format(attribute,index+1,tract,state,county,pop)
 
 		if not ( index % 2500 ) or ( index == limit ):
 			dom.append_layout('table', tableLayout)
@@ -125,11 +129,12 @@ def reading(dom):
 	countiesLayout = ""
 
 	for state, stateData in countyData.items():
-		statesLayout += statesItem.format(State=state)
+		tracts, pop, counties = stateData.values()
+		statesLayout += statesItem.format(State=state,Pop=pop,Tracts=tracts)
 
-		countiesLayout += stateInCountiesItem.format(State=state,Pop=stateData['pop'],Tracts=stateData['tracts'])
+		countiesLayout += stateInCountiesItem.format(State=state,Pop=pop,Tracts=tracts)
 
-		for county, data in stateData['counties'].items():
+		for county, data in counties.items():
 			countiesLayout += countiesItem.format(State=state,County=county,Pop=data['pop'],Tracts=data['tracts'])
 
 	dom.set_layout("states", statesLayout)
