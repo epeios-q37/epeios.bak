@@ -51,13 +51,13 @@ source = ""
 target = []
 unsortedCounts = {}
 sortedCounts = {}
+expanded = True
+workbook = None
 
 def count(dom):
 	global unsortedCounts
 
-	wb = openpyxl.load_workbook("produceSales.xlsx", read_only=True)
-
-	sheet = wb['Sheet']
+	sheet = workbook['Sheet']
 
 	dom.set_content('output', 'Reading rows...')
 
@@ -112,7 +112,12 @@ def launch(dom):
 	source = ""
 
 def ac_connect(dom):
+	global workbook
+
 	dom.set_layout("", open("Main.html").read())
+	workbook = openpyxl.load_workbook("produceSales.xlsx")
+	workbook.save("coucouroucoucou.xlsx")
+
 	launch(dom)
 
 def ac_checkbox_click(dom,id):
@@ -137,22 +142,44 @@ def ac_radio_click(dom,id):
 
 	dom.disable_element("checkbox.{}".format(source))
 
-def ac_apply(dom):
+def collapse(dom):
 	toHide = {}
 	
 	for produce in unsortedCounts:
-		if not produce in target:
-			toHide[produce] = "hidden"
+		if (not produce in target) and (produce != source):
+			toHide["tr.{}".format(produce)] = "hidden"
 
 	dom.add_classes(toHide)
-	dom.enable_element("HideCheckbox")
-	dom.disable_element("HideRadio")
+
+def expand(dom):
+	elements = {}
+	
+	for produce in unsortedCounts:
+		elements["tr.{}".format(produce)] = "hidden"
+
+	dom.remove_classes(elements)
+
+def ac_collapse_expand(dom):
+	global expanded
+
+	expanded = not expanded
+
+	if expanded:
+		expand(dom)
+	else:
+		collapse(dom)
+
+def ac_apply(dom):
+	global workbook
+
+	workbook.save("test.xlsx")
 	
 callbacks = {
 	"": ac_connect,
 	"Refresh": lambda dom: launch(dom),
 	"CheckboxClick": ac_checkbox_click,
 	"RadioClick": ac_radio_click,
+	"CollapseExpand": ac_collapse_expand,
 	"Apply": ac_apply
 }
 
