@@ -22,9 +22,10 @@ const onEventsAttributeName = "data-xdh-onevents";
 const widgetAttributeName = "data-xdh-widget";
  // Method to retrieve widget content, but also if present, then the widget is already handled.
 const widgetContentRetrievingMethodAttribute = "data-xdh-widget-content-retrieving-method";
-const contentAttributeName = "data-xdh-content";
+const contentAttributeName = "data-xdh-content";	// Deprecated.
 const oldContentAttributeName = "data-xdh-value";	// For compatibility with previous version.
 const styleId = "XDHStyle";
+const markAttributeName = "data-xdh-mark"
 
 var counter = 0;
 var drag = false;
@@ -226,7 +227,9 @@ function removeChildren(elementOrId) {
 }
 
 function getLayoutHTML(xml, xsl) {
-	if (xml.trim().substring(0, 1) !== "<")
+	if ( xml.trim() === "" )
+		return xml;
+	else if (xml.trim().substring(0, 1) !== "<")
 		xml = convert(xml);
 
 	if (xsl === "") {
@@ -320,7 +323,42 @@ function setContent(idOrElement, content) {
 	}
 }
 
-function setContents(ids, contents) {
+function setValue(idOrElement, value) {
+	var element = getElement(idOrElement);
+
+	if (element !== null) {
+		var tagName = element.tagName;
+
+		switch (tagName) {
+			case "INPUT":
+				switch (element.getAttribute("type")) {
+					case "checkbox":
+					case "radio":
+						element.checked = value.toLowerCase().trim() === 'true';
+						break;
+					default:
+						element.value = value;
+						break;
+				}
+				break;
+			case "TEXTAREA":
+				element.value = value;
+				break;
+			default:
+				element.innerHTML = value;
+				// throw tagName + ": content setting not handled !";
+				break;
+		}
+
+		patchATags(element);
+	}
+}
+
+function setMark(idOrElement,mark) {
+	getElement(idOrElement).setAttribute(markAttributeName, mark);
+}
+
+function setContents(ids, contents) {	// Deprecated!
 	let i = ids.length;
 
 	if (ids.length !== contents.length)
@@ -328,6 +366,28 @@ function setContents(ids, contents) {
 
 	while (i--) {
 		setContent(getElement(ids[i]), contents[i]);
+	}
+}
+
+function setValues(ids, values) {
+	let i = ids.length;
+
+	if (ids.length !== values.length)
+		throw "Inconsistency";
+
+	while (i--) {
+		setValue(ids[i], values[i]);
+	}
+}
+
+function setMarks(ids, marks) {
+	let i = ids.length;
+
+	if (ids.length !== marks.length)
+		throw "Inconsistency";
+
+	while (i--) {
+		setMark(ids[i], marks[i]);
 	}
 }
 
@@ -418,7 +478,7 @@ function fetchWidgets(id) {
 	return digests;
 }
 
-function getContent(elementOrId)	// Returns the content of element of id 'id'.
+function getContent(elementOrId)	// Deprecated!
 {
 	var element = getElement(elementOrId);
 	var tagName = element.tagName;
@@ -461,6 +521,61 @@ function getContent(elementOrId)	// Returns the content of element of id 'id'.
 	return content;
 }
 
+function getValue(elementOrId)	// Returns the value of element of id 'id'.
+{
+	var element = getElement(elementOrId);
+	var tagName = element.tagName;
+	var value = ""
+
+	switch (tagName) {
+		case "INPUT":
+			switch (element.getAttribute("type")) {
+				case "checkbox":
+				case "radio":
+					value =  element.checked;
+					break;
+				default:
+					value =  element.value;
+					break;
+			}
+			break;
+		case "TEXTAREA":
+			value =  element.value;
+			break;
+		case "SELECT":
+			if (element.selectedIndex == -1)
+				value =  "";
+			else
+				value =  element.options[element.selectedIndex].value;
+			break;
+		case "OPTION":
+			value =  element.value;
+			break;
+		case "text":	// SVG
+		case "tspan":	// SVG
+			value =  element.textContent;
+			break;
+		default:
+			content = element.innerHTML;
+			break;
+	}
+
+	return content;
+}
+
+function getMark(idOrElement) {
+	var element = getElement(idOrElement);
+	mark = "";
+	
+	while ( (element !== null) && !element.hasAttribute(markAttributeName))
+		element = element.parentNode;
+	
+	if ( element !== null )
+		mark = element.getAttribute(markAttributeName);
+	
+	return mark;
+}
+
 function getWidgetRetrievingMethod( elementOrId ) {
     element = getElement( elementOrId );
     
@@ -484,7 +599,7 @@ function appendToFlatStrings(string, strings) {
 	return (strings ? strings + ',"' : '"' ) + escapeQuotes(string) + '"';
 }
 
-function getContents(ids) {
+function getContents(ids) {	// Deprecated!
 	var i = ids.length;
 	var contents = "";
 
@@ -499,6 +614,33 @@ function getContents(ids) {
 	}
 
 	return contents;
+}
+
+function getValues(ids) {
+	var i = ids.length;
+	var values = "";
+
+	while(i--) {
+        let element = getElement(ids[i]);
+        let widgetRetrievingMethod = getWidgetRetrievingMethod(element);
+        
+        if ( widgetRetrievingMethod !== "" )
+            contents = prependToFlatStrings(eval(widgetRetrievingMethod), values);
+        else
+            contents = prependToFlatStrings(getValue(element), values);
+	}
+
+	return values;
+}
+
+function getMarks(ids) {
+	var i = ids.length;
+	var marks = "";
+
+	while(i--)
+		marks = prependToFlatStrings(getMark(getElement(ids[i])), marks);
+
+	return marks;
 }
 
 function setEventHandlers(ids, events) {

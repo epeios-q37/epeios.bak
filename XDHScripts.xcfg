@@ -95,6 +95,34 @@
 }
         ]]>
       </Script>
+      <Script name="GetValues_1" Arguments="#Ids">
+        <![CDATA[
+{
+  getValues(%#Ids%);
+}
+        ]]>
+      </Script>
+      <Script name="SetValues_1" Arguments="#Ids,#Values">
+        <![CDATA[
+{
+  setValues( %#Ids%, %#Values% );
+}
+        ]]>
+      </Script>
+      <Script name="GetMarks_1" Arguments="#Ids">
+        <![CDATA[
+{
+  getMarks(%#Ids%);
+}
+        ]]>
+      </Script>
+      <Script name="SetMarks_1" Arguments="#Ids,#Marks">
+        <![CDATA[
+{
+  setMarks( %#Ids%, %#Marks% );
+}
+        ]]>
+      </Script>
       <!-- Use broadcasting instead! -->
       <!--Script name="SetTimeout_1" Arguments="Delay,Action">
         <![CDATA[

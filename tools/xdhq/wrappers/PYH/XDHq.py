@@ -170,27 +170,55 @@ class DOM:
 
 	appendLayoutXSL = append_layout_XSL
 
-	def get_contents(self, ids):
+	def get_contents(self, ids):	# Deprecated!
 		return _unsplit(ids,self._dom.call("GetContents_1",_STRINGS, ids))
 
-	getContents = get_contents
+	getContents = get_contents	# Deprecated!
 
-	def get_content( self, id):
+	def get_content( self, id):	# Deprecated!
 		return self.getContents([id])[id]
 
-	getContent = get_content
+	getContent = get_content	# Deprecated!
 
-	def set_contents(self,ids_and_contents):
+	def get_values(self, ids):
+		return _unsplit(ids,self._dom.call("GetValues_1",_STRINGS, ids))
+
+	def get_value( self, id):
+		return self.get_values([id])[id]
+
+	def get_marks(self, ids):
+		return _unsplit(ids,self._dom.call("GetMarks_1",_STRINGS, ids))
+
+	def get_mark( self, id):
+		return self.get_marks([id])[id]
+
+	def set_contents(self,ids_and_contents):	# Deprecated!
 		[ids,contents] = _split(ids_and_contents)
 
 		self._dom.call("SetContents_1", _VOID, ids, contents)
 
-	setContents = set_contents
+	setContents = set_contents	# Deprecated!
 
-	def set_content(self, id, content):
+	def set_content(self, id, content):	# Deprecated!
 		self.set_contents({id: content})
 
-	setContent = set_content
+	setContent = set_content	# Deprecated!
+
+	def set_values(self,ids_and_values):
+		[ids,values] = _split(ids_and_values)
+
+		self._dom.call("SetValues_1", _VOID, ids, values)
+
+	def set_value(self, id, value):
+		self.set_values({id: value})
+
+	def set_marks(self,ids_and_marks):
+		[ids,marks] = _split(ids_and_marks)
+
+		self._dom.call("SetMarks_1", _VOID, ids, marks)
+
+	def set_mark(self, id, mark):
+		self.set_marks({id: mark})
 
 	"""
 	# Following 4 methods will either be removed or redesigned.

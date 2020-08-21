@@ -137,12 +137,6 @@ def ac_connect(dom):
 	dom.set_layout("", open("Main.html").read())
 	reading(dom)
 
-def ac_view(dom,id):
-	dom.set_contents({
-		"Produce": id,
-		"Price": updates.PRICE_UPDATES[id]
-	})
-
 def ac_apply(dom):
 	modifications = update_workbook(dom)
 	display_modifications(dom,modifications)
