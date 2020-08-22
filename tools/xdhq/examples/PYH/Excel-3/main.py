@@ -116,7 +116,6 @@ def ac_connect(dom):
 
 	dom.set_layout("", open("Main.html").read())
 	workbook = openpyxl.load_workbook("produceSales.xlsx")
-	workbook.save("coucouroucoucou.xlsx")
 
 	launch(dom)
 
@@ -172,7 +171,7 @@ def ac_collapse_expand(dom):
 def ac_apply(dom):
 	global workbook
 
-	workbook.save("test.xlsx")
+	workbook.save("Result.xlsx")
 	
 callbacks = {
 	"": ac_connect,

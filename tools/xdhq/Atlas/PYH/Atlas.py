@@ -41,7 +41,7 @@ if XDHqSHRD.isDev():
 		sys.modules['openpyxl'].load_workbook = lambda filename, **kwargs: defaultXLFunction(XDHq.get_asset_filename(filename), **kwargs)
 	
 	defaultBuiltinsFunction = builtins.open
-	builtins.open = lambda filename, **kwargs: defaultBuiltinsFunction(XDHq.get_asset_filename(filename), **kwargs)
+	builtins.open = lambda filename, *args, **kwargs: defaultBuiltinsFunction(XDHq.get_asset_filename(filename), *args, **kwargs)
 
 def signal_handler(sig, frame):
   sys.exit(0)
