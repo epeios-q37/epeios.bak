@@ -31,7 +31,7 @@ sys.path.append("../../atlastk")
 # Note to the dev: 'openpyxl' must be imported before 'atlastk',
 # as the 'load_workbook' function from 'openpyxl' is overloaded.
 # Applies only in DEV context.
-import openpyxl
+import openpyxl, random
 import atlastk as Atlas
 
 item = """
@@ -53,6 +53,69 @@ unsortedCounts = {}
 sortedCounts = {}
 expanded = True
 workbook = None
+
+errors = {
+    'Apples': ['apples', 'Aples', 'apels'],
+    'Apricots': ['apricots', 'Appriccots', 'Apricot', 'Aspricot', 'appricots'],
+    'Asparagus': ['asparagus', 'Aspparagus', 'asparragus', 'Aspragus'],
+    'Avocados': ['Avacados', 'avocados'],
+    'Bananas': ['bananas', 'Banananas'],
+    'Beets': ['beets', 'Bets', 'bets'],
+    'Bok choy': ['Bock choy', 'Boc Choy', 'Bocchoy', 'Bauk choy'],
+    'Brussels sprouts': ['Brussels prouts', 'Brussel sprouts', 'Brusel sprouts'],
+    'Butternut squash': ['Butenut squash', 'Butternut Squash', 'butternut squash'],
+    'Carrots': ['carrots', 'Carots'],
+    'Celery': ['celry', 'Celry', 'celery'],
+    'Cherries': [],
+    'Coconuts': ['Coconut', 'coconuts'],
+    'Corn': ['Korn'],
+    'Cucumber': ['Cumcumber', 'Cucuber', 'cucumber'],
+    'Daikon': [],
+    'Eggplant': ['Eggpalnt', 'eggplant'],
+    'Fava beans': ['Faya beans'],
+    'Garlic': ['garlic', 'Gralic'],
+    'Ginger': [],
+    'Grapefruit': [],
+    'Grapes': [],
+    'Green beans': ['Grenn beans'],
+    'Green cabbage': ['Green cabage', 'green cabage'],
+    'Green peppers': [],
+    'Kale': [],
+    'Lemon': [],
+    'Lettuce': ['Letuce'],
+    'Lime': [],
+    'Okra': ['Ocra'],
+    'Orange': [],
+    'Papaya': ['Papya', 'papya'],
+    'Parsnips': ['PArsnip'],
+    'Potatoes': ['Poatatoes', 'Patatos'],
+    'Red onion': [],
+    'Spinach': ['Spinac'],
+    'Strawberries': ['Stawberies'],
+    'Tomatoes': ['Tomatos'],
+    'Watermelon': [],
+    'Yellow peppers': ['Yellow pepers', 'Yelow peppers']
+}
+
+def scramble():
+	global workbook
+
+	sheet = workbook['Sheet']	
+
+	index = 0
+
+	for row in sheet.iter_rows(min_row=2, min_col=1,max_col=1,values_only=True):
+		index += 1
+
+		if random.randrange(50) == 0:
+			produce = row[0]
+
+			if produce in errors:
+				amount = len(errors[produce])
+
+				if amount:
+					sheet.cell(index+1,1).value = errors[produce][random.randrange(amount)]
+
 
 def count(dom):
 	global unsortedCounts
@@ -95,7 +158,7 @@ def display(dom):
 	dom.set_layout("counts",layout)
 
 def launch(dom):
-	global target, source
+	global target, source, expanded
 	dom.set_layout("counts","")
 	dom.set_content("output", "Initialization…")
 	dom.remove_class("output", "hidden")
@@ -110,12 +173,15 @@ def launch(dom):
 	dom.add_class("output", "hidden")
 	target = []
 	source = ""
+	expanded = True
 
 def ac_connect(dom):
 	global workbook
 
 	dom.set_layout("", open("Main.html").read())
 	workbook = openpyxl.load_workbook("produceSales.xlsx")
+
+	scramble()
 
 	launch(dom)
 
@@ -171,7 +237,22 @@ def ac_collapse_expand(dom):
 def ac_apply(dom):
 	global workbook
 
-	workbook.save("Result.xlsx")
+	sheet = workbook['Sheet']
+
+	index = 0
+
+	limit = sheet.max_row - 1	# This takes time, so it is stored.
+
+	for row in sheet.iter_rows(min_row=2, min_col=1,max_col=1,values_only=True):
+		index += 1
+
+		if row[0] in target:
+			sheet.cell(index+1,1).value = source
+
+		if not ( index % 2000 ) or ( index == limit ):
+			dom.set_content('output', 'Reading rows {}/{}'.format(index,limit))
+
+	launch(dom)
 	
 callbacks = {
 	"": ac_connect,
