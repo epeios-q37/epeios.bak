@@ -120,7 +120,7 @@ class DOM:
 		self._dom.call("Flush_1",_STRING)
 
 	def alert(self,message):
-		self._dom.call( "Alert_1", _STRING, message )
+		self._dom.call( "Alert_1", _STRING, str(message) )
 		# For the return value being 'STRING' instead of 'VOID',
 		# see the 'alert' primitive in 'XDHqXDH'.
 

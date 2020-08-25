@@ -34,13 +34,20 @@ sys.path.append("../../atlastk")
 import openpyxl, random
 import atlastk as Atlas
 
-item = """
+targetLayout = """
 <tr id="tr.{Produce}" data-xdh-mark="{Produce}">
 	<td>{Produce}</td>
 	<td>{Count}</td>
 	<td class="checkbox">
 		<input id="checkbox.{Produce}" type="checkbox" data-xdh-onevent="CheckboxClick"/>
 	</td>
+</tr>
+"""
+
+sourceLayout = """
+<tr id="tr.{Produce}" data-xdh-mark="{Produce}">
+	<td>{Produce}</td>
+	<td>{Count}</td>
 	<td class="radio">
 		<input id="radio.{Produce}" type="radio" name="radio" data-xdh-onevent="RadioClick"/>
 	</td>
@@ -117,9 +124,7 @@ def scramble():
 					sheet.cell(index+1,1).value = errors[produce][random.randrange(amount)]
 
 
-def count(dom):
-	global unsortedCounts
-
+def fill(dom):
 	sheet = workbook['Sheet']
 
 	dom.set_content('output', 'Reading rows...')
@@ -128,45 +133,48 @@ def count(dom):
 
 	index = 0	
 
-	unsortedCounts = {}
+	items = {}
 
 	for row in sheet.iter_rows(min_row=2, min_col=1,max_col=1,values_only=True):
 		index += 1
 
 		produce = row[0]
 
-		unsortedCounts.setdefault(produce, 0)
-		unsortedCounts[produce] += 1
+		items.setdefault(produce, 0)
+		items[produce] += 1
 
 		if not ( index % 2000 ) or ( index == limit ):
 			dom.set_content('output', 'Reading rows {}/{}'.format(index,limit))
 
-def sort():
-	global sortedCounts
+	limit = index / len(items)
 
-	sortedCounts = {}
-
-	for count in sorted(unsortedCounts.items(), key = lambda item: item[1]):
-		sortedCounts[count[0]]=count[1]
-
-def display(dom):
 	layout = ""
 
-	for produce,count in sortedCounts.items():
-		layout += item.format(Id=produce,Mark=produce,Produce=produce,Count=count)
+	for item in sorted(items.items(), key = lambda item: item[1]):
+		if item[1] > limit:
+			break;
 
-	dom.set_layout("counts",layout)
+		layout += targetLayout.format(Produce = item[0], Count = item[1])
+
+	dom.prepend_layout("counts",layout)
+
+	layout = ""
+
+	for item in sorted(items.items(), key = lambda item: item[0]):
+		if item[1] >= limit:
+			layout += sourceLayout.format(Produce = item[0], Count = item[1])
+
+	dom.append_layout("counts",layout)
 
 def launch(dom):
 	global target, source, expanded
-	dom.set_layout("counts","")
+#	dom.set_layout("targets","")
+#	dom.set_layout("sources","")
 	dom.set_content("output", "Initialization…")
 	dom.remove_class("output", "hidden")
 	dom.set_content('output', 'Sorting…')
-	count(dom)
-	sort()
+	fill(dom)
 	dom.set_content('output', 'Displaying…')
-	display(dom)
 	dom.disable_element("HideCheckbox")
 	dom.disable_element("HideRadio")
 	dom.set_content("output", "Done")
