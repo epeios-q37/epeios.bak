@@ -34,8 +34,8 @@ sys.path.append("../../atlastk")
 import openpyxl, random
 import atlastk as Atlas
 
-targetLayout = """
-<tr id="tr.{Produce}" data-xdh-mark="{Produce}">
+targetTemplate = """
+<tr id="tr.{Produce}" class="unselected" data-xdh-mark="{Produce}">
 	<td>{Produce}</td>
 	<td>{Count}</td>
 	<td class="checkbox">
@@ -44,8 +44,8 @@ targetLayout = """
 </tr>
 """
 
-sourceLayout = """
-<tr id="tr.{Produce}" data-xdh-mark="{Produce}">
+sourceTemplate = """
+<tr id="tr.{Produce}" class="unselected" data-xdh-mark="{Produce}">
 	<td>{Produce}</td>
 	<td>{Count}</td>
 	<td class="radio">
@@ -54,10 +54,8 @@ sourceLayout = """
 </tr>
 """
 
-source = ""
-target = []
-unsortedCounts = {}
-sortedCounts = {}
+sourceLabel = ""
+targetLabels = []
 expanded = True
 workbook = None
 
@@ -81,12 +79,12 @@ errors = {
     'Eggplant': ['Eggpalnt', 'eggplant'],
     'Fava beans': ['Faya beans'],
     'Garlic': ['garlic', 'Gralic'],
-    'Ginger': [],
-    'Grapefruit': [],
+    'Ginger': ["Gingre"],
+    'Grapefruit': ["Grape fruit"],
     'Grapes': [],
     'Green beans': ['Grenn beans'],
     'Green cabbage': ['Green cabage', 'green cabage'],
-    'Green peppers': [],
+    'Green peppers': ["Green poppers"],
     'Kale': [],
     'Lemon': [],
     'Lettuce': ['Letuce'],
@@ -109,128 +107,100 @@ def scramble():
 
 	sheet = workbook['Sheet']	
 
-	index = 0
-
-	for row in sheet.iter_rows(min_row=2, min_col=1,max_col=1,values_only=True):
-		index += 1
-
-		if random.randrange(50) == 0:
-			produce = row[0]
+	for row in sheet.iter_rows(min_row=2, min_col=1,max_col=1):
+		if random.randrange(200) == 0:
+			produce = row[0].value
 
 			if produce in errors:
 				amount = len(errors[produce])
 
 				if amount:
-					sheet.cell(index+1,1).value = errors[produce][random.randrange(amount)]
-
+					row[0].value = errors[produce][random.randrange(amount)]
 
 def fill(dom):
+	global workbook
+
 	sheet = workbook['Sheet']
-
-	dom.set_content('output', 'Reading rows...')
-
-	limit = sheet.max_row - 1	# This takes time, so it is stored.
-
-	index = 0	
 
 	items = {}
 
 	for row in sheet.iter_rows(min_row=2, min_col=1,max_col=1,values_only=True):
-		index += 1
-
 		produce = row[0]
 
 		items.setdefault(produce, 0)
 		items[produce] += 1
 
-		if not ( index % 2000 ) or ( index == limit ):
-			dom.set_content('output', 'Reading rows {}/{}'.format(index,limit))
-
-	limit = index / len(items)
+	limit = (sheet.max_row - 1) / len(items)
 
 	layout = ""
 
 	for item in sorted(items.items(), key = lambda item: item[1]):
-		if item[1] > limit:
+		produce, count = item
+
+		if count > limit:
 			break;
 
-		layout += targetLayout.format(Produce = item[0], Count = item[1])
+		layout += targetTemplate.format(Produce = produce, Count = count)
 
-	dom.prepend_layout("counts",layout)
+	dom.after("targets",layout)
 
 	layout = ""
 
 	for item in sorted(items.items(), key = lambda item: item[0]):
-		if item[1] >= limit:
-			layout += sourceLayout.format(Produce = item[0], Count = item[1])
+		produce, count = item
+		
+		if count >= limit:
+			layout += sourceTemplate.format(Produce = produce, Count = count)
 
-	dom.append_layout("counts",layout)
+	dom.after("sources",layout)
 
 def launch(dom):
-	global target, source, expanded
-#	dom.set_layout("targets","")
-#	dom.set_layout("sources","")
-	dom.set_content("output", "Initialization…")
-	dom.remove_class("output", "hidden")
-	dom.set_content('output', 'Sorting…')
+	global targetLabels, sourceLabel, expanded
 	fill(dom)
-	dom.set_content('output', 'Displaying…')
-	dom.disable_element("HideCheckbox")
-	dom.disable_element("HideRadio")
-	dom.set_content("output", "Done")
-	dom.add_class("output", "hidden")
-	target = []
-	source = ""
+	targetLabels = []
+	sourceLabel = ""
 	expanded = True
+	dom.disable_element("HideUnselected")
 
 def ac_connect(dom):
 	global workbook
 
-	dom.set_layout("", open("Main.html").read())
+	dom.inner("", open("Main.html").read())
+
+	dom.set_content("output", "Opening workbook (may take some time)…")
+	dom.remove_class("output", "hidden")
 	workbook = openpyxl.load_workbook("produceSales.xlsx")
 
+	dom.set_content("output", "Scrambling…")
 	scramble()
 
+	dom.set_content("output", "Displaying…")
 	launch(dom)
 
+	dom.set_content("output", "Done.")
+	dom.add_class("output", "hidden")
+
 def ac_checkbox_click(dom,id):
-	global target
+	global targetLabels
 
 	mark = dom.get_mark(id)
 
-	if mark in target:
-		target.remove(mark)
-		dom.enable_element("radio.{}".format(mark))
+	if mark in targetLabels:
+		targetLabels.remove(mark)
 	else:
-		target.append(mark)
-		dom.disable_element("radio.{}".format(mark))
+		targetLabels.append(mark)
+
+	dom.toggle_class("tr.{}".format(mark),"unselected")
 
 def ac_radio_click(dom,id):
-	global source
+	global sourceLabel
 
-	if source != "":
-		dom.enable_element("checkbox.{}".format(source))
+	if sourceLabel:
+		dom.toggle_class("tr.{}".format(source),"unselected")
 
-	source = dom.get_mark(id)
+	sourceLabel = dom.get_mark(id)
 
-	dom.disable_element("checkbox.{}".format(source))
-
-def collapse(dom):
-	toHide = {}
-	
-	for produce in unsortedCounts:
-		if (not produce in target) and (produce != source):
-			toHide["tr.{}".format(produce)] = "hidden"
-
-	dom.add_classes(toHide)
-
-def expand(dom):
-	elements = {}
-	
-	for produce in unsortedCounts:
-		elements["tr.{}".format(produce)] = "hidden"
-
-	dom.remove_classes(elements)
+	dom.toggle_class("tr.{}".format(sourceLabel),"unselected")
 
 def ac_collapse_expand(dom):
 	global expanded
@@ -238,35 +208,27 @@ def ac_collapse_expand(dom):
 	expanded = not expanded
 
 	if expanded:
-		expand(dom)
+		dom.disable_element("HideUnselected")
 	else:
-		collapse(dom)
+		dom.enable_element("HideUnselected")
 
 def ac_apply(dom):
 	global workbook
 
 	sheet = workbook['Sheet']
 
-	index = 0
+	for row in sheet.iter_rows(min_row=2, min_col=1,max_col=1):
+		if row[0].value in targetLabels:
+			row[0].value = sourceLabel
 
-	limit = sheet.max_row - 1	# This takes time, so it is stored.
-
-	for row in sheet.iter_rows(min_row=2, min_col=1,max_col=1,values_only=True):
-		index += 1
-
-		if row[0] in target:
-			sheet.cell(index+1,1).value = source
-
-		if not ( index % 2000 ) or ( index == limit ):
-			dom.set_content('output', 'Reading rows {}/{}'.format(index,limit))
-
+	dom.inner("", open("Main.html").read())
 	launch(dom)
 	
 callbacks = {
 	"": ac_connect,
-	"Refresh": lambda dom: launch(dom),
 	"CheckboxClick": ac_checkbox_click,
 	"RadioClick": ac_radio_click,
+	"Jump": lambda dom: dom.scroll_to("sources"),
 	"CollapseExpand": ac_collapse_expand,
 	"Apply": ac_apply
 }

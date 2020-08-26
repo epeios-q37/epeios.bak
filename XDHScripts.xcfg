@@ -58,25 +58,30 @@
       <Script name="HandleLayout_1" Arguments="Variant,Id,XML,XSL">
         <![CDATA[
 {
-  let xml = "%XML%";
+  let xml = "%XML%";	// 'XML4 is HTML if 'XSL' is empty.
   let xsl = "%XSL%";
   let id = "%Id%";
   
   log("xml: " + xml);
-
+  
   switch ( "%Variant%" ) {
-  case 'Prepend':
+  case 'Prepend':	// Deprecated
     prependLayout(id, xml, xsl);
     break;
-  case 'Set':
+  case 'Set':	// Deprecated
     setLayout(id, xml, xsl);
     break;
-  case 'Append':
+  case 'Append':	// Deprecated
     appendLayout(id, xml, xsl);
     break;
+  default:
+	if ( "%Variant%" === 'inner' )
+		getElement(id).innerHTML = getLayoutHTML(xml, xsl);
+	else
+		getElement(id).insertAdjacentHTML("%Variant%", getLayoutHTML(xml, xsl));
   }
 
-  var digests = fetchEventHandlersAndWidgest(id);
+  var digests = fetchEventHandlersAndWidgest(getElement(id).parentElement);
   digests;  // Not returned to user. Splitted and given after processing to 'SetEnventHandlers_1' and  InstantiateWidgets_1' above internal scripts.
 }
         ]]>

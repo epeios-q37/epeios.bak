@@ -132,22 +132,22 @@ class DOM:
 		# 	If 'xml' is HTML and uses the compressed form, if it has a root tag, only the children will be used.
 		self._dom.call("HandleLayout_1", _VOID, variant, id, xml if isinstance(xml,str) else xml.toString(), xsl)
 
-	def prepend_layout(self,id,html):
+	def prepend_layout(self,id,html):	# Deprecated!
 		self._handleLayout("Prepend",id,html,"")
 
-	prependLayout = prepend_layout
+	prependLayout = prepend_layout	# Deprecated!
 
-	def set_layout(self,id,html):
+	def set_layout(self,id,html):	# Deprecated!
 		self._handleLayout("Set",id,html,"")
 
-	setLayout = set_layout
+	setLayout = set_layout	# Deprecated!
 
-	def append_layout(self,id,html):
+	def append_layout(self,id,html):	# Deprecated!
 		self._handleLayout("Append",id,html,"")
 
-	appendLayout = append_layout
+	appendLayout = append_layout	# Deprecated!
 
-	def _handleLayoutXSL(self, variant, id, xml, xsl):
+	def _handleLayoutXSL(self, variant, id, xml, xsl):	# Deprecated!
 		xslURL = xsl
 
 		if True:	# Testing if 'SlfH' or 'FaaS' mode when available.
@@ -155,20 +155,41 @@ class DOM:
 
 		self._handleLayout(variant, id, xml, xslURL )
 
-	def prepend_layout_XSL(self, id, xml, xsl):
+	def prepend_layout_XSL(self, id, xml, xsl):	# Deprecated!
 		self._handleLayoutXSL("Prepend",id,xml,xsl)
 
-	prependLayoutXSL = prepend_layout_XSL
+	prependLayoutXSL = prepend_layout_XSL	# Deprecated!
 
-	def set_layout_XSL(self, id, xml, xsl):
+	def set_layout_XSL(self, id, xml, xsl):	# Deprecated!
 		self._handleLayoutXSL("Set",id,xml,xsl)
 
-	setLayoutXSL = set_layout_XSL
+	setLayoutXSL = set_layout_XSL	# Deprecated!
 
-	def append_layout_XSL(self, id, xml, xsl):
+	def append_layout_XSL(self, id, xml, xsl):	# Deprecated!
 		self._handleLayoutXSL("Append",id,xml,xsl)
 
-	appendLayoutXSL = append_layout_XSL
+	appendLayoutXSL = append_layout_XSL	# Deprecated!
+
+	def _layout(self, variant, id, xml, xsl):
+		if xsl:
+			xsl = "data:text/xml;charset=utf-8," + _encode(_readXSLAsset(xsl))
+
+		self._dom.call("HandleLayout_1", _VOID, variant, id, xml if isinstance(xml,str) else xml.toString(), xsl)
+
+	def before(self,id,xml,xsl=""):
+		self._layout("beforebegin",id,xml,xsl)
+
+	def begin(self,id,xml,xsl=""):
+		self._layout("afterbegin",id,xml,xsl)
+
+	def inner(self,id,xml,xsl=""):
+		self._layout("inner",id,xml,xsl)
+
+	def end(self,id,xml,xsl=""):
+		self._layout("beforeend",id,xml,xsl)
+
+	def after(self,id,xml,xsl=""):
+		self._layout("afterend",id,xml,xsl)
 
 	def get_contents(self, ids):	# Deprecated!
 		return _unsplit(ids,self._dom.call("GetContents_1",_STRINGS, ids))
