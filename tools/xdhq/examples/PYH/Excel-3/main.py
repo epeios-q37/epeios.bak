@@ -31,26 +31,27 @@ sys.path.append("../../atlastk")
 # Note to the dev: 'openpyxl' must be imported before 'atlastk',
 # as the 'load_workbook' function from 'openpyxl' is overloaded.
 # Applies only in DEV context.
-import openpyxl, random
+import openpyxl
 import atlastk as Atlas
+import scrambler
 
 targetTemplate = """
 <tr id="tr.{Produce}" class="unselected" data-xdh-mark="{Produce}">
-	<td>{Produce}</td>
-	<td>{Count}</td>
 	<td class="checkbox">
 		<input id="checkbox.{Produce}" type="checkbox" data-xdh-onevent="CheckboxClick"/>
 	</td>
+	<td>{Produce}</td>
+	<td>{Count}</td>
 </tr>
 """
 
 sourceTemplate = """
 <tr id="tr.{Produce}" class="unselected" data-xdh-mark="{Produce}">
-	<td>{Produce}</td>
-	<td>{Count}</td>
 	<td class="radio">
 		<input id="radio.{Produce}" type="radio" name="radio" data-xdh-onevent="RadioClick"/>
 	</td>
+	<td>{Produce}</td>
+	<td>{Count}</td>
 </tr>
 """
 
@@ -59,69 +60,8 @@ targetLabels = []
 expanded = True
 workbook = None
 
-errors = {
-    'Apples': ['apples', 'Aples', 'apels'],
-    'Apricots': ['apricots', 'Appriccots', 'Apricot', 'Aspricot', 'appricots'],
-    'Asparagus': ['asparagus', 'Aspparagus', 'asparragus', 'Aspragus'],
-    'Avocados': ['Avacados', 'avocados'],
-    'Bananas': ['bananas', 'Banananas'],
-    'Beets': ['beets', 'Bets', 'bets'],
-    'Bok choy': ['Bock choy', 'Boc Choy', 'Bocchoy', 'Bauk choy'],
-    'Brussels sprouts': ['Brussels prouts', 'Brussel sprouts', 'Brusel sprouts'],
-    'Butternut squash': ['Butenut squash', 'Butternut Squash', 'butternut squash'],
-    'Carrots': ['carrots', 'Carots'],
-    'Celery': ['celry', 'Celry', 'celery'],
-    'Cherries': [],
-    'Coconuts': ['Coconut', 'coconuts'],
-    'Corn': ['Korn'],
-    'Cucumber': ['Cumcumber', 'Cucuber', 'cucumber'],
-    'Daikon': [],
-    'Eggplant': ['Eggpalnt', 'eggplant'],
-    'Fava beans': ['Faya beans'],
-    'Garlic': ['garlic', 'Gralic'],
-    'Ginger': ["Gingre"],
-    'Grapefruit': ["Grape fruit"],
-    'Grapes': [],
-    'Green beans': ['Grenn beans'],
-    'Green cabbage': ['Green cabage', 'green cabage'],
-    'Green peppers': ["Green poppers"],
-    'Kale': [],
-    'Lemon': [],
-    'Lettuce': ['Letuce'],
-    'Lime': [],
-    'Okra': ['Ocra'],
-    'Orange': [],
-    'Papaya': ['Papya', 'papya'],
-    'Parsnips': ['PArsnip'],
-    'Potatoes': ['Poatatoes', 'Patatos'],
-    'Red onion': [],
-    'Spinach': ['Spinac'],
-    'Strawberries': ['Stawberies'],
-    'Tomatoes': ['Tomatos'],
-    'Watermelon': [],
-    'Yellow peppers': ['Yellow pepers', 'Yelow peppers']
-}
-
-def scramble():
-	global workbook
-
-	sheet = workbook['Sheet']	
-
-	for row in sheet.iter_rows(min_row=2, min_col=1,max_col=1):
-		if random.randrange(200) == 0:
-			produce = row[0].value
-
-			if produce in errors:
-				amount = len(errors[produce])
-
-				if amount:
-					row[0].value = errors[produce][random.randrange(amount)]
-
-def fill(dom):
-	global workbook
-
+def load(workbook):
 	sheet = workbook['Sheet']
-
 	items = {}
 
 	for row in sheet.iter_rows(min_row=2, min_col=1,max_col=1,values_only=True):
@@ -130,8 +70,9 @@ def fill(dom):
 		items.setdefault(produce, 0)
 		items[produce] += 1
 
-	limit = (sheet.max_row - 1) / len(items)
+	return items, (sheet.max_row - 1) / len(items)
 
+def targets_layout(items,limit):
 	layout = ""
 
 	for item in sorted(items.items(), key = lambda item: item[1]):
@@ -142,8 +83,9 @@ def fill(dom):
 
 		layout += targetTemplate.format(Produce = produce, Count = count)
 
-	dom.after("targets",layout)
+	return layout
 
+def sources_layout(items,limit):
 	layout = ""
 
 	for item in sorted(items.items(), key = lambda item: item[0]):
@@ -152,10 +94,17 @@ def fill(dom):
 		if count >= limit:
 			layout += sourceTemplate.format(Produce = produce, Count = count)
 
-	dom.after("sources",layout)
+	return layout
 
-def launch(dom):
+def fill(dom):
+	items, limit = load(workbook)
+
+	dom.after("targets",targets_layout(items,limit))
+	dom.after("sources",sources_layout(items,limit))
+
+def display(dom):
 	global targetLabels, sourceLabel, expanded
+
 	fill(dom)
 	targetLabels = []
 	sourceLabel = ""
@@ -169,13 +118,14 @@ def ac_connect(dom):
 
 	dom.set_content("output", "Opening workbook (may take some time)…")
 	dom.remove_class("output", "hidden")
+
 	workbook = openpyxl.load_workbook("produceSales.xlsx")
 
 	dom.set_content("output", "Scrambling…")
-	scramble()
+	scrambler.scramble(workbook)
 
 	dom.set_content("output", "Displaying…")
-	launch(dom)
+	display(dom)
 
 	dom.set_content("output", "Done.")
 	dom.add_class("output", "hidden")
@@ -196,7 +146,7 @@ def ac_radio_click(dom,id):
 	global sourceLabel
 
 	if sourceLabel:
-		dom.toggle_class("tr.{}".format(source),"unselected")
+		dom.toggle_class("tr.{}".format(sourceLabel),"unselected")
 
 	sourceLabel = dom.get_mark(id)
 
@@ -222,7 +172,8 @@ def ac_apply(dom):
 			row[0].value = sourceLabel
 
 	dom.inner("", open("Main.html").read())
-	launch(dom)
+	
+	display(dom)
 	
 callbacks = {
 	"": ac_connect,
