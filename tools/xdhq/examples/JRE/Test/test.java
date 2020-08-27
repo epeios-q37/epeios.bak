@@ -33,7 +33,7 @@ class Test extends Atlas {
 	@Override
 	public void handle(String action, String id ) {
 		if ( action.equals( "" ) ) {
-			dom.setLayout("",readAsset_( "Main.html") );
+			dom.inner("",readAsset_( "Main.html") );
 			dom.scrollTo(dom.lastChild("Main"));
 			dom.toggleClasses( new HashMap<String,String>()
 			{{

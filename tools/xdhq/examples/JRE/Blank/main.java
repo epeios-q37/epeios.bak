@@ -32,7 +32,7 @@ class Blank extends Atlas {
 	@Override
 	public void handle(String action, String id ) {
 		if ( action.equals( "" ) ) {
-			dom.setLayout("",readAsset_( "Main.html") );
+			dom.inner("",readAsset_( "Main.html") );
 			dom.addClass("Input", "hidden");
 		} else if ( action.equals( "Submit" ) ) {
 			dom.setContent("Pattern", dom.getContent("Pattern").toUpperCase());

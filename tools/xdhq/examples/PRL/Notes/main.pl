@@ -34,7 +34,7 @@ use Notes;
 sub acConnect {
     my ($notes, $dom) = @_;
 
-    $dom->setLayout("", Shared::readAsset("Main.html"));
+    $dom->inner("", Shared::readAsset("Main.html"));
     $notes->displayList($dom);
 }
 
@@ -60,7 +60,7 @@ sub acEdit {
 
     my %note = %{$notes->{notes}[$notes->{idx}]};
 
-    $dom->setLayout("Edit.$idx", Shared::readAsset("Note.html"));
+    $dom->inner("Edit.$idx", Shared::readAsset("Note.html"));
     $dom->setContents({Title => $note{title}, Description => $note{description}});
     $dom->disableElements(\@Shared::viewModeElements);
     $dom->focus("Title");

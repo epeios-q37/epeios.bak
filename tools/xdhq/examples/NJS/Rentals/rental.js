@@ -164,7 +164,7 @@ function displayList( xdh ) {
 	
 	tree.popTag();
 	
-	xdh.setLayout( "Rentals", tree, "Rentals.xsl", () => { handleMapsCast( xdh ); } );
+	xdh.inner( "Rentals", tree, "Rentals.xsl", () => { handleMapsCast( xdh ); } );
 }
 
 function displayRecord( xdh, id ) {
@@ -176,14 +176,14 @@ function displayRecord( xdh, id ) {
 	push(rentals[id],id,tree);
 	tree.popTag();
 	
-	xdh.setLayout( "Rentals", tree, "Rentals.xsl" );
+	xdh.inner( "Rentals", tree, "Rentals.xsl" );
 }
 
 function acConnect( xdh, id ) {
 	LOG();
 	var tree = new xdhq.LayoutTree();
 	
-	xdh.setLayout( "", tree, "Main.xsl", () => { displayList( xdh ); });
+	xdh.inner( "", tree, "Main.xsl", () => { displayList( xdh ); });
 }
 
 function handleImage( xdh, result ) {

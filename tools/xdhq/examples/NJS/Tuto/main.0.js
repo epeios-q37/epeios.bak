@@ -59,7 +59,7 @@ function newSession() {
 }
 
 function acConnect(dom, id) {
-	dom.setLayout("", new Tree(), "Main.0.xsl");
+	dom.inner("", new Tree(), "Main.0.xsl");
 }
 
 function main() {

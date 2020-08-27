@@ -34,7 +34,7 @@ sub readAsset {
 sub acConnect {
     my ($blank, $dom) = @_;
 
-    $dom->setLayout("", readAsset("Main.html"));
+    $dom->inner("", readAsset("Main.html"));
     $dom->addClass("Input", "hidden");
 }
 

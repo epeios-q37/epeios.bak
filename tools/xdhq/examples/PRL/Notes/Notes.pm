@@ -102,7 +102,7 @@ sub displayList {
         }
     }
 
-    $dom->setLayoutXSL("Notes", $xml, Shared::readAsset("Notes.xsl"));
+    $dom->inner("Notes", $xml, Shared::readAsset("Notes.xsl"));
     $dom->setContents(\%contents);
     $dom->enableElements(\@Shared::viewModeElements);
 }

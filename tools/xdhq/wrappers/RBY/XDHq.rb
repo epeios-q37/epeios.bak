@@ -132,15 +132,15 @@ module XDHq
 			call("HandleLayout_1", $VOID, variant, id, if xml.is_a?( String ) then xml else xml.toString() end, xslFilename)
 		end
 
-		def prependLayout(id, html)
+		def prependLayout(id, html)	# Deprecated!
 			handleLayout("Prepend", id, html)
 		end
 
-		def setLayout(id, html)
+		def setLayout(id, html)	# Deprecated!
 			handleLayout("Set", id, html)
 		end
 
-		def appendLayout(id, html)
+		def appendLayout(id, html)	# Deprecated!
 			handleLayout("Append", id, html)
 		end
 
@@ -154,16 +154,44 @@ module XDHq
 			handleLayout(variant, id, xml, xslURL )
 		end
 
-		def prependLayoutXSL(id, xml, xsl)
+		def prependLayoutXSL(id, xml, xsl)	# Deprecated!
 			handleLayoutXSL("Prepend", id, xml, xsl)
 		end
 
-		def setLayoutXSL(id, xml, xsl)
+		def setLayoutXSL(id, xml, xsl)	# Deprecated!
 			handleLayoutXSL("Set", id, xml, xsl)
 		end
 
-		def appendLayoutXSL(id, xml, xsl)
+		def appendLayoutXSL(id, xml, xsl)	# Deprecated!
 			handleLayoutXSL("Append", id, xml, xsl)
+		end
+
+		private def layout(variant, id, xml, xsl)
+			if !xsl.empty?
+				xsl = "data:text/xml;charset=utf-8," + URI::encode(XDHq::readAsset( xsl, $dir ))
+			end
+
+			call("HandleLayout_1", $VOID, variant, id, if xml.is_a?( String ) then xml else xml.toString() end, xsl)
+		end
+		
+		def before(id, xml, xsl="")
+			layout("beforebegin", id, xml, xsl)
+		end
+	
+		def begin(id, xml, xsl="")
+			layout("afterbegin", id, xml, xsl)
+		end
+	
+		def inner(id, xml, xsl="")
+			layout("inner", id, xml, xsl)
+		end
+	
+		def end(id, xml, xsl="")
+			layout("beforeend", id, xml, xsl)
+		end
+	
+		def after(id, xml, xsl="")
+			layout("afterend", id, xml, xsl)
 		end
 	
 		def getContents(ids)

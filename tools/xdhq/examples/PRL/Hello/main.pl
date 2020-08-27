@@ -34,7 +34,7 @@ sub readAsset {
 sub acConnect {
     my ($hello, $dom) = @_;
 
-    $dom->setLayout("",readAsset("Main.html"));
+    $dom->inner("",readAsset("Main.html"));
     $dom->focus("input");
 }
 

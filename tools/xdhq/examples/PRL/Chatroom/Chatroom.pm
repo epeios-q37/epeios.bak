@@ -69,7 +69,7 @@ sub displayMessages {
     my ($self, $dom) = @_;
 
     if ($#Shared::messageContents >= $self->{lastMessage}) {
-        $dom->prependLayoutXSL("Board", $self->_buildXML(), Shared::readAsset("Messages.xsl"));
+        $dom->begin("Board", $self->_buildXML(), Shared::readAsset("Messages.xsl"));
     }
 }
 

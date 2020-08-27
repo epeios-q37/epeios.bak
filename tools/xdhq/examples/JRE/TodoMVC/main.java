@@ -107,7 +107,7 @@ class TodoMVC extends Atlas {
 
 		xml.popTag();
 
-		dom.setLayoutXSL("Todos", xml, "Todos.xsl");
+		dom.inner("Todos", xml, "Todos.xsl");
 		handleCount(dom);
 	}
 
@@ -247,7 +247,7 @@ class TodoMVC extends Atlas {
 	public void handle(String action, String id) {
 		switch (action) {
 		case "":
-			dom.setLayout("", readAsset_("Main.html"));
+			dom.inner("", readAsset_("Main.html"));
 			dom.focus("Input");
 			dom.disableElements(new String[] { "HideActive", "HideCompleted" });
 			displayTodos(dom);

@@ -34,7 +34,7 @@ use Chatroom;
 sub acConnect {
     my ($chatroom, $dom) = @_;
 
-    $dom->setLayout("", Shared::readAsset("Main.html"));
+    $dom->inner("", Shared::readAsset("Main.html"));
     $dom->focus("Pseudo");
 
     $chatroom->displayMessages($dom);

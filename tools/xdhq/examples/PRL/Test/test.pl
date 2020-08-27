@@ -34,7 +34,7 @@ sub readAsset {
 sub acConnect {
     my ($test, $dom) = @_;
 
-    $dom->setLayout("", readAsset("Main.html"));
+    $dom->inner("", readAsset("Main.html"));
     $dom->scrollTo($dom->lastChild("Main"));
     $dom->toggleClasses({
         $dom->firstChild("Main") => "test",

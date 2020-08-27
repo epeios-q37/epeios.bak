@@ -55,7 +55,7 @@ function newSession() {
 }
 
 function acConnect(dom, id) {
-	dom.setLayout("", readAsset( "Main.html"),
+	dom.inner("", readAsset( "Main.html"),
 		() => dom.lastChild("Main",
 			id => dom.scrollTo(id,
 				() => dom.firstChild("Main",

@@ -29,7 +29,7 @@ def readAsset(path)
 end
 
 def acConnect(blank, dom)
-	dom.setLayout("", readAsset("Main.html"))
+	dom.inner("", readAsset("Main.html"))
     dom.scrollTo(dom.lastChild("Main"))
     dom.toggleClasses( {
         dom.firstChild("Main") => "test",

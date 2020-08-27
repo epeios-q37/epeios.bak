@@ -48,7 +48,7 @@ my $body = '
 sub acConnect {
     my ($hello, $dom) = @_;
 
-    $dom->setLayout("",$body);
+    $dom->inner("",$body);
     $dom->focus("input");
 }
 

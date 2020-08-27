@@ -47,7 +47,7 @@ class Hello extends Atlas {
 	{
 		switch( action) {
 		case "":
-			dom.setLayout("", html );
+			dom.inner("", html );
 			break;
 		case "Submit":
 			dom.alert("Hello, " + dom.getContent("input").trim() + "!" );

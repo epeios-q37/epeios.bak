@@ -86,7 +86,7 @@ class Notes extends Atlas {
 
 		xml.popTag();
 
-		dom.setLayoutXSL("Notes", xml, "Notes.xsl" );
+		dom.begin("Notes", xml, "Notes.xsl" );
 		dom.setContents(idsAndContents);
 		dom.enableElements(viewModeElements);
 	}
@@ -101,7 +101,7 @@ class Notes extends Atlas {
 		index = Integer.parseInt(id);
 		Note note = notes.get(index);
 
-		dom.setLayout("Edit." + id, readAsset_( "Note.html") );
+		dom.inner("Edit." + id, readAsset_( "Note.html") );
 		dom.setContents( new HashMap<String,String> () {{ put( "Title", note.title); put("Description", note.description); }} );
 		dom.disableElements(viewModeElements);
 		dom.focus("Title");
@@ -158,7 +158,7 @@ class Notes extends Atlas {
 	@Override
 	public void handle(String action, String id ) {
 		if ( action.equals( "" ) ) {
-			dom.setLayout("", readAsset_( "Main.html") );
+			dom.inner("", readAsset_( "Main.html") );
 			displayList( dom );
 		} else if ( action.equals( "ToggleDescriptions" ) ) {
 			hideDescriptions = "true".equals(dom.getContent(id));

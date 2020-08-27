@@ -137,7 +137,7 @@ function displayTodos(dom) {
 
 	tree.popTag();
 
-	dom.setLayout("Todos", tree, "Todos.xsl",
+	dom.inner("Todos", tree, "Todos.xsl",
 		() => handleCount(dom)
 	);
 }
@@ -149,7 +149,7 @@ function newSession() {
 }
 
 function acConnect(dom, id) {
-	dom.setLayout("", new Tree(), "Main.xsl",
+	dom.inner("", new Tree(), "Main.xsl",
 		() => dom.focus("Input",
 			() => displayTodos(dom)
 		)

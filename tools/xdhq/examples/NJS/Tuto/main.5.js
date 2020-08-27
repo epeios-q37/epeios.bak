@@ -70,7 +70,7 @@ function newSession() {
 }
 
 function acConnect(dom, id) {
-	dom.setLayout("", new Tree(), "Main.1.xsl");
+	dom.inner("", new Tree(), "Main.1.xsl");
 }
 
 function push(todo, id, tree) {
@@ -118,7 +118,7 @@ function displayTodos(dom) {
 
 	tree.popTag();
 
-	dom.setLayout("Todos", tree, "Todos.4.xsl",
+	dom.inner("Todos", tree, "Todos.4.xsl",
 		() => displayCount(dom, dom.itemsLeft())
 	);
 }

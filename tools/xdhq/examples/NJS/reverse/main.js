@@ -39,7 +39,7 @@ const atlas = require(atlasId);
 
 atlas.register([
     ["Connect",
-        (dom, id) => dom.setLayout("", new atlas.Tree(), "Main.xsl")],
+        (dom, id) => dom.inner("", new atlas.Tree(), "Main.xsl")],
     ["Reverse",
         (dom, id) => dom.getContent("Message",
             (result) => dom.setContent("Message", result.split('').reverse().join('')))

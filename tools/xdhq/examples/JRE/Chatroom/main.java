@@ -81,12 +81,12 @@ class Chatroom extends Atlas {
 
 	private void displayMessages_(DOM dom) {
 		if ((Shared.messages.size() - 1) >= this.lastMessage) {
-			dom.prependLayoutXSL("Board", buildXML_(), "Messages.xsl");
+			dom.begin("Board", buildXML_(), "Messages.xsl");
 		}
 	}
 
 	private void connect_(DOM dom, String id) {
-		dom.setLayout("", readAsset_("Main.html"));
+		dom.inner("", readAsset_("Main.html"));
 		dom.focus("Pseudo");
 		displayMessages_(dom);
 	}

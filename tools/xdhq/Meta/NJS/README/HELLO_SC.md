@@ -15,7 +15,7 @@ const body = `
 `;
 
 const callbacks = {
-    "": (dom, id) => dom.setLayout("", body,
+    "": (dom, id) => dom.inner("", body,
         () => dom.focus("input")),
     "Submit": (dom, id) => dom.getContent("input",
         (name) => dom.alert("Hello, " + name + "!",
