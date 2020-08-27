@@ -100,7 +100,7 @@ def displayContacts(dom, contacts):
                 html.put_tag_and_value("td", contact[key])
         html.pop_tag()
 
-    dom.set_layout("Content", html)
+    dom.inner("Content", html)
 
     dom.set_contents(notes)
 
@@ -137,7 +137,7 @@ def handleButtonVisibility(dom):
 
 def acConnect(dom):
     global contacts, state
-    dom.set_layout("", open("Main.html").read())
+    dom.inner("", open("Main.html").read())
     display(dom, contacts)
     state = State.DISPLAY
     handleButtonVisibility(dom)

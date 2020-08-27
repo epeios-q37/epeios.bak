@@ -21,8 +21,8 @@
 # define I18N_INC_
 
 // # include "xxx.h"
-# include "scllocale.h"
-# include "scltool.h"
+# include "scll.h"
+# include "sclt.h"
 
 # include "lcl.h"
 # include "cio.h"
@@ -52,7 +52,7 @@ namespace i18n {
 // To adjust if above 'enum' is modified.
 # define LOCALE__TEXT_AMOUNT	2
 
-	using scllocale::GetLocale;
+	using scll::GetLocale;
 
 	const char *Label( text__ Text );
 

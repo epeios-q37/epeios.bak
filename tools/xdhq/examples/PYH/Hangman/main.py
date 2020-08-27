@@ -77,13 +77,13 @@ def showWord(dom, secretWord, correctGuesses):
 
     html = Atlas.createHTML()
     html.put_tag_and_value("h1", output)
-    dom.set_layout("output", html)
+    dom.inner("output", html)
 
 
 
 def reset(core,dom):
     core.reset()
-    dom.set_layout("", open("Main.html").read())
+    dom.inner("", open("Main.html").read())
     core.secretWord = randword()
     print(core.secretWord)
     showWord(dom, core.secretWord, core.correctGuesses)

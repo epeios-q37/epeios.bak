@@ -367,7 +367,7 @@ def preProcess(GPIO,dom):
 		GPIO.display(dom)
 
 def acConnect(GPIO,dom):
-	dom.set_layout("", open( "Main.html").read() )
+	dom.inner("", open( "Main.html").read() )
 	GPIO.take()
 	GPIO.display(dom)
 

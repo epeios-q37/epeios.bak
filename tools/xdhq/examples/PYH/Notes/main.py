@@ -25,7 +25,7 @@ SOFTWARE.
 
 import os, sys
 
-sos.chdir(os.path.dirname(os.path.realpath(__file__)))
+os.chdir(os.path.dirname(os.path.realpath(__file__)))
 sys.path.append("../../atlastk")
 
 import atlastk as Atlas
@@ -84,7 +84,7 @@ class Notes:
 				put(self.notes[index], index, xml)
 				contents["Description." + str(index)] = self.notes[index]['description']
 
-		dom.set_layout_XSL("Notes", xml, "Notes.xsl")
+		dom.inner("Notes", xml, "Notes.xsl")
 		dom.set_contents(contents)
 		dom.enable_elements(view_mode_elements)
 
@@ -94,7 +94,7 @@ class Notes:
 		self.index = -1
 
 def ac_connect(notes, dom):
-		dom.set_layout("", open( "Main.html").read() )
+		dom.inner("", open( "Main.html").read() )
 		notes.display_list(dom)
 
 def ac_toggle_descriptions(notes, dom, id):
@@ -110,7 +110,7 @@ def ac_edit(notes, dom, id):
 	notes.index = int(index)
 	note = notes.notes[notes.index]
 
-	dom.set_layout("Edit." + index, open( "Note.html").read() )
+	dom.inner("Edit." + index, open( "Note.html").read() )
 	dom.set_contents({ "Title": note['title'], "Description": note['description'] })
 	dom.disable_elements(view_mode_elements)
 	dom.focus("Title")

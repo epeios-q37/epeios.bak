@@ -61,7 +61,7 @@ class Poppy:
   pass
 
 def acConnect(Poppy,dom):
-	dom.set_layout("", open( "Main.html").read() )
+	dom.inner("", open( "Main.html").read() )
 
 def acMove(Poppy,dom,id):
   global poppy

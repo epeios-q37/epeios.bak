@@ -52,7 +52,7 @@ body = """
 """
 
 def acConnect(dom):
-  dom.setLayout("", body)
+  dom.inner("", body)
   dom.focus("input")
 
 def acSubmit(dom):

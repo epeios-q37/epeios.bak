@@ -43,7 +43,7 @@ def set(dom, id, value):
 
 def acConnect(RGB,dom):
 	global rPin, gPin, bPin
-	dom.set_layout("", open( "Main.html").read() )
+	dom.inner("", open( "Main.html").read() )
 	set( dom, "Red", rPin)
 	set( dom, "Green", gPin)
 	set( dom, "Blue", bPin)

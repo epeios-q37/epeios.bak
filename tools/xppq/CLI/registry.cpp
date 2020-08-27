@@ -21,8 +21,8 @@
 
 using namespace registry;
 
-entry___ registry::Input( "Input", sclrgstry::Parameters );
-entry___ registry::Output( "Output", sclrgstry::Parameters );
-entry___ registry::Namespace( "Namespace", sclrgstry::Parameters );
-entry___ registry::Indentation( "Indentation", sclrgstry::Parameters );
-entry___ registry::Preserve( "Preserve", sclrgstry::Parameters );
+entry___ registry::Input( "Input", sclr::Parameters );
+entry___ registry::Output( "Output", sclr::Parameters );
+entry___ registry::Namespace( "Namespace", sclr::Parameters );
+entry___ registry::Indentation( "Indentation", sclr::Parameters );
+entry___ registry::Preserve( "Preserve", sclr::Parameters );

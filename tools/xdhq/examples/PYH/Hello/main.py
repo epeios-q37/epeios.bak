@@ -30,7 +30,7 @@ sys.path.append("../../atlastk")
 import atlastk as Atlas
 
 def ac_connect(dom):
-	dom.set_layout("", open( "Main.html").read() )
+	dom.inner("", open( "Main.html").read() )
 	dom.focus( "input")
 
 def ac_submit(dom):

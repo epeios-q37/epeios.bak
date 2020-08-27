@@ -117,7 +117,7 @@ def reading(dom):
 		tableLayout += tableItem.format(attribute,index+1,tract,state,county,pop)
 
 		if not ( index % 2500 ) or ( index == limit ):
-			dom.append_layout('table', tableLayout)
+			dom.end('table', tableLayout)
 			dom.scroll_to(dom.last_child('table'))
 			dom.flush()
 			dom.set_content('output', 'Reading rows {}/{}'.format(index,limit))
@@ -137,13 +137,13 @@ def reading(dom):
 		for county, data in counties.items():
 			countiesLayout += countiesItem.format(State=state,County=county,Pop=data['pop'],Tracts=data['tracts'])
 
-	dom.set_layout("states", statesLayout)
-	dom.set_layout("counties", countiesLayout)
+	dom.inner("states", statesLayout)
+	dom.inner("counties", countiesLayout)
 	dom.set_content('output', 'Done')
 	dom.add_class("output", "hidden")
 	
 def ac_connect(dom):
-	dom.set_layout("", open("Main.html").read())
+	dom.inner("", open("Main.html").read())
 	reading(dom)
 
 def ac_view(dom,id):

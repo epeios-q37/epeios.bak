@@ -94,7 +94,7 @@ def draw_grid(dom):
     for x in range(0, 4):
         for y in range(0, 4):
             draw_square(board, x, y)
-    dom.set_layout("Stones", board)
+    dom.inner("Stones", board)
 
 
 def set_text(texts, x, y):
@@ -110,7 +110,7 @@ def set_texts(dom):
     for x in range(0, 4):
         for y in range(0, 4):
             set_text(texts, x, y)
-    dom.set_layout("Texts", texts)
+    dom.inner("Texts", texts)
 
 
 def scramble(puzzle, dom):
@@ -120,7 +120,7 @@ def scramble(puzzle, dom):
 
 
 def ac_connect(self, dom):
-    dom.set_layout("", open("Main.html").read())
+    dom.inner("", open("Main.html").read())
     scramble(self, dom)
 
 

@@ -567,13 +567,21 @@ namespace sclm {
 
 	inline bso::bool__ BGetBoolean(
 		const rgstry::tentry__ &Entry,
+		bso::sBool &Result,
 		bso::bool__ DefaultValue,
 		qRPN)
 	{
-		return sclr::BGetBoolean(GetRegistry(), Entry, DefaultValue,qRP);
+		return sclr::BGetBoolean(GetRegistry(), Entry, Result, DefaultValue, qRP);
 	}
 
-	inline bso::bool__ MGetBoolean( const rgstry::tentry___ &Entry )
+	inline bso::sBool OGetBoolean(
+		const rgstry::tentry__ &Entry,
+		bso::bool__ DefaultValue)
+	{
+		return sclr::OGetBoolean(GetRegistry(), Entry, DefaultValue);
+	}
+
+	inline bso::bool__ MGetBoolean(const rgstry::tentry___ &Entry)
 	{
 		return sclr::MGetBoolean( GetRegistry(), Entry );
 	}

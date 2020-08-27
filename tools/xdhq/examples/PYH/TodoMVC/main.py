@@ -88,7 +88,7 @@ class TodoMVC:
 
 		xml.pop_tag()
 
-		dom.set_layout_XSL("Todos", xml, "Todos.xsl")
+		dom.inner("Todos", xml, "Todos.xsl")
 		self.handle_count(dom)
 
 	def submit_new(self, dom):
@@ -117,7 +117,7 @@ class TodoMVC:
 			self.displayTodos(dom)
 
 def ac_connect(self, dom):
-	dom.set_layout("", open("Main.html").read())
+	dom.inner("", open("Main.html").read())
 	dom.focus("Input")
 	self.display_todos(dom)
 	dom.disable_elements(["HideActive", "HideCompleted"])

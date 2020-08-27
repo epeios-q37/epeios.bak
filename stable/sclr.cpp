@@ -637,16 +637,17 @@ qRE
 bso::bool__ sclr::BGetBoolean(
 	const registry_ &Registry,
 	const rgstry::tentry__ &Entry,
+	bso::sBool &Result,
 	bso::bool__ DefaultValue,
 	qRPN )
 {
-	bso::bool__ &Result = DefaultValue;
+	bso::sBool Return = false;
 qRH
 	str::string Value;
 qRB
 	Value.Init();
 
-	if ( BGetValue( Registry, Entry, Value, qRP ) ) {
+	if ( ( Return = BGetValue( Registry, Entry, Value, qRP ) ) ) {
 		switch ( GetBoolean_( Value ) ) {
 		case tol::xbFalse:
 			Result = false;
@@ -655,6 +656,7 @@ qRB
 			Result = true;
 			break;
 		case tol::xb_Undefined:
+			// We don't care about the 'qRP' parameter, because the entry have to be corrected!
 			sclr::ReportBadOrNoValueForEntryErrorAndAbort( Entry );
 			break;
 		default:
@@ -665,7 +667,7 @@ qRB
 qRR
 qRT
 qRE
-	return Result;
+	return Return;
 }
 
 bso::bool__ sclr::MGetBoolean(

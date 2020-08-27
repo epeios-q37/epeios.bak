@@ -74,7 +74,7 @@ def reading_updates(dom,modifications=None):
 	for produce, price in updates.PRICE_UPDATES.items():
 		updatesLayout += updatesItem.format(produce,produce,price,"N/A" if modifications == None else len(modifications[produce]) if produce in modifications else 0)
 
-	dom.set_layout("updates", updatesLayout)
+	dom.inner("updates", updatesLayout)
 	
 def reading(dom):
 	dom.set_content("output", "Initialization…")
@@ -130,11 +130,11 @@ def display_modifications(dom,modifications):
 		for line in lines:
 			modificationsLayout += modificationsItem.format(line,produce, line)
 
-	dom.set_layout("modifications", modificationsLayout)
+	dom.inner("modifications", modificationsLayout)
 
 
 def ac_connect(dom):
-	dom.set_layout("", open("Main.html").read())
+	dom.inner("", open("Main.html").read())
 	reading(dom)
 
 def ac_apply(dom):

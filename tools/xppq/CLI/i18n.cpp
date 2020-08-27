@@ -19,7 +19,7 @@
 
 #include "i18n.h"
 
-#include "scllocale.h"
+#include "scll.h"
 
 #include <stdarg.h>
 
@@ -29,8 +29,8 @@
 #include "fnm.h"
 #include "dir.h"
 
-#include "sclrgstry.h"
-#include "scltool.h"
+#include "sclr.h"
+#include "sclt.h"
 
 using namespace i18n;
 

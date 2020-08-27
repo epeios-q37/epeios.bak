@@ -6,7 +6,7 @@ sys.path.append("../../atlastk")
 import atlastk as Atlas
 
 def acConnect(dom):
-    dom.set_layout("", open("Main.html").read())
+    dom.inner("", open("Main.html").read())
     dom.scroll_to(dom.last_child("Main"))
     dom.toggle_classes( {
         dom.first_child("Main"): "test",

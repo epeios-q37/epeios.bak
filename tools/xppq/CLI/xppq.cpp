@@ -23,8 +23,9 @@
 
 #include "i18n.h"
 
-#include "scltool.h"
-#include "sclerror.h"
+#include "sclt.h"
+#include "scle.h"
+#include "sclm.h"
 
 #include "err.h"
 #include "cio.h"
@@ -93,7 +94,7 @@ namespace {
 
 			i18n::GetProcessingErrorMeaning( Context, Meaning );
 
-			sclerror::SetMeaning( Meaning );
+			scle::SetMeaning( Meaning );
 
 			qRAbort();
 		}
@@ -122,18 +123,18 @@ namespace {
 
 		if ( Source != NULL ) {
 			if ( IFlow.Init( Source, err::hUserDefined ) != tol::rSuccess )
-				sclmisc::ReportFileOpeningErrorAndAbort( Source );
+				sclm::ReportFileOpeningErrorAndAbort( Source );
 
 			fnm::GetLocation(Source, Directory );
 		}
 
 		if ( Destination != NULL ) {
-			sclmisc::CreateBackupFile( Destination );
+			sclm::CreateBackupFile( Destination );
 
 			BackedUp = true;
 
 			if ( OFlow.Init( Destination, err::hUserDefined ) != tol::rSuccess )
-				sclmisc::ReportFileOpeningErrorAndAbort( Destination );
+				sclm::ReportFileOpeningErrorAndAbort( Destination );
 
 			TOFlow.Init( OFlow );
 		}
@@ -144,7 +145,7 @@ namespace {
 		if ( BackedUp ) {
 			TOFlow.reset();
 			OFlow.reset();
-			sclmisc::RecoverBackupFile( Destination );
+			sclm::RecoverBackupFile( Destination );
 		}
 	qRT
 	qRE
@@ -157,20 +158,20 @@ namespace {
 		TOL_CBUFFER___ InputBuffer, OutputBuffer, NamespaceBuffer;
 	qRB
 		Input.Init();
-		sclmisc::OGetValue( registry::Input, Input );
+		sclm::OGetValue( registry::Input, Input );
 
 		Output.Init();
-		sclmisc::OGetValue( registry::Output, Output );
+		sclm::OGetValue( registry::Output, Output );
 
 		Namespace.Init();
-		sclmisc::OGetValue( registry::Namespace, Namespace );
+		sclm::OGetValue( registry::Namespace, Namespace );
 
 		Process_(
 			Input.Amount() != 0 ? Input.Convert( InputBuffer ) : NULL,
 			Output.Amount() != 0 ? Output.Convert( OutputBuffer ) : NULL,
 			Namespace.Amount() != 0 ? Namespace.Convert( NamespaceBuffer ) : NULL,
-			sclmisc::BGetBoolean( registry::Preserve ),
-			sclmisc::BGetBoolean( registry::Indentation, true ) );
+			sclm::OGetBoolean(registry::Preserve, false),
+			sclm::OGetBoolean(registry::Indentation, true) );
 	qRR
 	qRT
 	qRE
@@ -192,15 +193,15 @@ namespace {
 	qRB
 		if ( Source != NULL )
 			if ( IFlow.Init( Source, err::hUserDefined ) != tol::rSuccess )
-				sclmisc::ReportFileOpeningErrorAndAbort( Source );
+				sclm::ReportFileOpeningErrorAndAbort( Source );
 
 		if ( Destination != NULL ) {
-			sclmisc::CreateBackupFile( Destination );
+			sclm::CreateBackupFile( Destination );
 
 			BackedUp = true;
 
 			if ( OFlow.Init( Destination, err::hUserDefined ) != tol::rSuccess )
-				sclmisc::ReportFileOpeningErrorAndAbort( Destination );
+				sclm::ReportFileOpeningErrorAndAbort( Destination );
 
 			TOFlow.Init( OFlow );
 		}
@@ -216,13 +217,13 @@ namespace {
 
 			i18n::GetEncryptionErrorMeaning( Context, Meaning );
 
-			sclerror::SetMeaning( Meaning );
+			scle::SetMeaning( Meaning );
 
 			qRAbort();
 		}
 	qRR
 		if ( BackedUp )
-			sclmisc::RecoverBackupFile( Destination );
+			sclm::RecoverBackupFile( Destination );
 	qRT
 	qRE
 	}
@@ -234,16 +235,16 @@ namespace {
 		TOL_CBUFFER___ InputBuffer, OutputBuffer, NamespaceBuffer;
 	qRB
 		Input.Init();
-		sclmisc::OGetValue( registry::Input, Input );
+		sclm::OGetValue( registry::Input, Input );
 
 		Output.Init();
-		sclmisc::OGetValue( registry::Output, Output );
+		sclm::OGetValue( registry::Output, Output );
 
 		Namespace.Init();
-		sclmisc::OGetValue( registry::Namespace, Namespace );
+		sclm::OGetValue( registry::Namespace, Namespace );
 
 		Indentation.Init();
-		sclmisc::OGetValue( registry::Indentation, Indentation );
+		sclm::OGetValue( registry::Indentation, Indentation );
 
 		Encrypt_( Input.Amount() != 0 ? Input.Convert( InputBuffer ) : NULL, Output.Amount() != 0 ? Output.Convert( OutputBuffer ) : NULL, Namespace.Amount() != 0 ? Namespace.Convert( NamespaceBuffer ) :  NULL, Indentation == "Yes" );
 	qRR
@@ -252,7 +253,7 @@ namespace {
 	}
 }
 
-const scli::sInfo &scltool::SCLTOOLInfo( void )
+const scli::sInfo &sclt::SCLTInfo( void )
 {
 	return xppq::Info;
 }
@@ -262,9 +263,9 @@ const scli::sInfo &scltool::SCLTOOLInfo( void )
 		name##_()
 
 
-int scltool::SCLTOOLMain(
+int sclt::SCLTMain(
 	const str::string_ &Command,
-	const scltool::oddities__ &Oddities )
+	const sclt::oddities__ &Oddities )
 {
 	int ExitValue = EXIT_FAILURE;
 qRH

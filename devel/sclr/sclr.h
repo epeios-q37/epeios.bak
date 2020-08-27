@@ -280,22 +280,28 @@ namespace sclr {
     }
 
     bso::bool__ BGetBoolean(
-		const registry_ &Registry,
-		const rgstry::tentry__ &Entry,
-		bso::bool__ DefaultValue,
-		qRPN );
+			const registry_ &Registry,
+			const rgstry::tentry__ &Entry,
+			bso::sBool &Result,
+			bso::bool__ DefaultValue,
+			qRPN );
 
     inline bso::bool__ OGetBoolean(
-		const registry_ &Registry,
-		const rgstry::tentry__ &Entry,
-		bso::bool__ DefaultValue = false )
-    {
-        return BGetBoolean(Registry, Entry, DefaultValue, qRPU);
-    }
+			const registry_ &Registry,
+			const rgstry::tentry__ &Entry,
+			bso::bool__ DefaultValue )
+		{
+			bso::sBool &Result = DefaultValue;
 
-	bso::bool__ MGetBoolean(
-		const registry_ &Registry,
-		const rgstry::tentry___ &Entry );
+			// No test because, if the entry is absent, 'Result' is already set to 'DefaultValue'.
+			BGetBoolean(Registry, Entry, Result, DefaultValue, qRPU);
+
+			return Result;
+		}
+
+		bso::bool__ MGetBoolean(
+			const registry_ &Registry,
+			const rgstry::tentry___ &Entry );
 
 # define SCLR_UN_( type, name, limit )\
 	type MGet##name(\

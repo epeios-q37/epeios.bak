@@ -88,7 +88,7 @@ def draw_set(set,dom):
         svg.put_tag_and_value("title", set[i]["date"] + " : " + str(set[i]["value"]))
         svg.pop_tag();
 
-    dom.set_layout("SVG", svg)
+    dom.inner("SVG", svg)
     
     dom.set_content("Text",set[0]["date"] + " - " + set[len(set)-1]["date"])
     
@@ -110,7 +110,7 @@ def draw(dom):
 
 
 def a_connect(dom):
-    dom.set_layout("", BODY)
+    dom.inner("", BODY)
     
     draw(dom)
     

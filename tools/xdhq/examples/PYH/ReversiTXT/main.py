@@ -193,7 +193,7 @@ def drawBoard(reversi, dom, prefetch=False):
             board.pop_tag()
         board.pop_tag()
 
-    dom.set_layout("board", board)
+    dom.inner("board", board)
 
     dom.set_contents({
         "black": reversi.count(BLACK),
@@ -204,7 +204,7 @@ def drawBoard(reversi, dom, prefetch=False):
 def acConnect(reversi, dom):
     reversi.player = BLACK
     reversi.weight_matrix = WEIGHT_MATRIX
-    dom.set_layout("", open("Main.html").read())
+    dom.inner("", open("Main.html").read())
     drawBoard(reversi, dom)
     dom.alert("Welcome to this Reversi (aka Othello) game made with the Atlas toolkit.\n\nYou play against the computer with the 'X' pieces.")
 

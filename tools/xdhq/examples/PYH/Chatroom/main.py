@@ -72,7 +72,7 @@ class Chatroom:
 		global messages
 		
 		if len(messages) > self.last_message:
-			dom.prepend_layout_XSL("Board", self.build_xml(), "Messages.xsl")
+			dom.begin("Board", self.build_xml(), "Messages.xsl")
 
 	def handle_pseudo(self, pseudo):
 		global pseudos, lock
@@ -100,7 +100,7 @@ class Chatroom:
 			lock.release()
 
 def ac_connect(chatroom, dom):
-	dom.set_layout("", open("Main.html").read())
+	dom.inner("", open("Main.html").read())
 	dom.focus("Pseudo")
 	chatroom.display_messages(dom)
 	
@@ -140,4 +140,4 @@ callbacks = {
 		"Update": lambda chatroom, dom: chatroom.display_messages(dom),
 	}
 		
-Atlas.launch(callbacks, Chatroom, read_open("Head.html").read())
+Atlas.launch(callbacks, Chatroom, open("Head.html").read())

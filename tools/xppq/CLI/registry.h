@@ -20,15 +20,15 @@
 #ifndef REGISTRY_INC_
 # define REGISTRY_INC_
 
-# include "sclrgstry.h"
+# include "sclr.h"
 
 namespace registry {
-	using namespace sclrgstry;
+	using namespace sclr;
 
 	namespace {
 		using rgstry::entry___;
 	}
-	
+
 	extern entry___ Input;
 	extern entry___ Output;
 	extern entry___ Indentation;
