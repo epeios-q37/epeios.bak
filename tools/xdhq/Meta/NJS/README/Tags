@@ -1,6 +1,6 @@
 # ATTENTION: prendre garde à ce que ce soit bien des tabulations qui sont utilisés comme séparateur !
 
-VERSION		0.11
+VERSION		0.12
 
 BADGES		[![NPM badge of the Atlas toolkit](https://nodei.co/npm/atlastk.png)](https://npmjs.com/atlastk/ "NPM package of the Atlas toolkit")
 

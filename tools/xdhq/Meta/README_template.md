@@ -1,7 +1,5 @@
 # *@LMCT@* version of the *Atlas* toolkit
 
-<!--![For @LMCT@](https://q37.info/download/assets/@SMCT@.png "@LMCT@ logo")-->
-
 [![Run on Repl.it](https://repl.it/badge/github/epeios-q37/atlas-@SLCT@)](https://q37.info/s/@GRSS@)
 [![Version @VERSION@](https://img.shields.io/static/v1.svg?&color=90b4ed&label=Version&message=@VERSION@)](http://github.com/epeios-q37/atlas-@SLCT@/)
 [![Stars](https://img.shields.io/github/stars/epeios-q37/atlas-@SLCT@.svg?style=social)](https://github.com/epeios-q37/atlas-@SLCT@/stargazers)
@@ -9,7 +7,6 @@
 [![Documentation](https://img.shields.io/static/v1?label=documentation&message=atlastk.org&color=ff69b4)](https://atlastk.org)
 
 @BADGES@
-
 
 > The [*Atlas* toolkit](https://atlastk.org) is available for:
 > 
@@ -20,6 +17,14 @@
 > | [*Perl*](https://q37.info/s/4nvmwjgg) |<https://github.com/epeios-q37/atlas-perl> | <https://q37.info/s/h3h34zgq> | [![Stars](https://img.shields.io/github/stars/epeios-q37/atlas-perl.svg?style=social)](https://github.com/epeios-q37/atlas-perl/stargazers) |
 > | [*Python*](https://q37.info/s/pd7j9k4r) | <https://github.com/epeios-q37/atlas-python> | <https://q37.info/s/vwpsw73v> | [![Stars](https://img.shields.io/github/stars/epeios-q37/atlas-python.svg?style=social)](https://github.com/epeios-q37/atlas-python/stargazers) |
 > | [*Ruby*](https://q37.info/s/gkfj3zpz) | <https://github.com/epeios-q37/atlas-ruby> | <https://q37.info/s/9thdtmjg> | [![Stars](https://img.shields.io/github/stars/epeios-q37/atlas-ruby.svg?style=social)](https://github.com/epeios-q37/atlas-ruby/stargazers) |
+
+---
+
+***Note for Repl.it users (online demonstrations)***: **after having launched a demonstration, you may have to click the refresh button (red arrow on picture below) top left in the frame containing the QR code to display it for the other demonstrations.**
+
+[![The refresh button](https://q37.info/s/vsc3c7gc.png "The button to click to display the QR code")](http://q37.info/s/zbgfjtp9)
+
+---
 
 @PREAMBLE@
 

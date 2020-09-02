@@ -20,7 +20,7 @@ class Hello extends Atlas {
  {
   switch(action) {
   case "": // Action label corresponding to a new session.
-   dom.setLayout("", body);
+   dom.inner("", body);
    break;
   case "Submit":
    dom.alert("Hello, " + dom.getContent("input") + "!" );
