@@ -72,14 +72,14 @@
 		<Files Group="htdocs" Path="../htdocs/" RTW="htdocs/">
 			<!-- No 'Pack="yes"', because the whole 'htdocs' directory is packed directly by the 'pack' tool.-->
 			<File>xdhwebq.js</File>
-			<File Path="../../../corpus/js/">xdhtml.js</File>
-            <File RTW="">repl_it.php</File>
-            <File RTW="">runkit.php</File>
-            <File RTW="">runkit-off.php</File>
-            <File>xdh.php</File>
-            <File>prolog.php</File>
-            <File>qrcode(.min).js.LICENSE</File>
-            <File>qrcode.min.js</File>
+			<File Path="../../../corpus/JS/">xdhtml.js</File>
+			<File RTW="">repl_it.php</File>
+			<File RTW="">runkit.php</File>
+			<File RTW="">runkit-off.php</File>
+			<File>xdh.php</File>
+			<File>prolog.php</File>
+			<File>qrcode(.min).js.LICENSE</File>
+			<File>qrcode.min.js</File>
 		</Files>
 		<File Path="../" Pack="No">xdhwebq.xcfg</File>
 		<File Path="../../" Pack="No">XDH.xcfg</File>
