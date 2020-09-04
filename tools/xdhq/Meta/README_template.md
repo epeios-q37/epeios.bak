@@ -1,10 +1,11 @@
 # *@LMCT@* version of the *Atlas* toolkit
 
-[![Run on Repl.it](https://repl.it/badge/github/epeios-q37/atlas-@SLCT@)](https://q37.info/s/@GRSS@)
-[![Version @VERSION@](https://img.shields.io/static/v1.svg?&color=90b4ed&label=Version&message=@VERSION@)](http://github.com/epeios-q37/atlas-@SLCT@/)
-[![Stars](https://img.shields.io/github/stars/epeios-q37/atlas-@SLCT@.svg?style=social)](https://github.com/epeios-q37/atlas-@SLCT@/stargazers)
-[![license: MIT](https://img.shields.io/github/license/epeios-q37/atlas-@SLCT@?color=yellow)](https://github.com/epeios-q37/atlas-@SLCT@/blob/master/LICENSE)
-[![Documentation](https://img.shields.io/static/v1?label=documentation&message=atlastk.org&color=ff69b4)](https://atlastk.org)
+[![Run on Repl.it](https://repl.it/badge/github/epeios-q37/atlas-@SLCT@)](https://q37.info/s/@GRSS@)  
+[![Version @VERSION@](https://img.shields.io/static/v1.svg?&color=90b4ed&label=Version&message=@VERSION@&style=for-the-badge)](http://github.com/epeios-q37/atlas-@SLCT@/)
+[![Stars](https://img.shields.io/github/stars/epeios-q37/atlas-@SLCT@.svg?style=for-the-badge)](https://github.com/epeios-q37/atlas-@SLCT@/stargazers)
+[![Forks](https://img.shields.io/github/forks/epeios-q37/atlas-@SLCT@.svg?style=for-the-badge)](https://github.com/epeios-q37/atlas-@SLCT@/network/members)
+[![license: MIT](https://img.shields.io/github/license/epeios-q37/atlas-@SLCT@?color=yellow&style=for-the-badge)](https://github.com/epeios-q37/atlas-@SLCT@/blob/master/LICENSE)
+[![Documentation](https://img.shields.io/static/v1?label=documentation&message=atlastk.org&color=ff69b4&style=for-the-badge)](https://atlastk.org)
 
 @BADGES@
 

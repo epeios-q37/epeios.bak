@@ -36,19 +36,29 @@ function genQRCode(url) {
 		</script>
 	</head>
 	<body onload="genQRCode('%url%')">
-		<div style="display:table; margin: 10px auto 5px auto;">
-			  <span style="display: table; margin: 15px auto 10px auto;font-style: oblique;font-size: large;font-weight: bold; text-align: center;">You can now access your<br/>application by clicking or<br/>scanning this QR code</span>
+		<div style="display:table; margin: 5px auto 5px auto;">
 			<div style="display: flex; justify-content: space-around;">
-				<fieldset style="display: block; margin-left: auto; margin-right: auto; border-radius: 15px; border-style: none; padding: 10px; box-shadow: 1px 1px 12px #555;">
+				<fieldset
+					style="display: block; margin-left: auto; margin-right: auto; border-radius: 15px; border-style: none; padding: 10px; box-shadow: 1px 1px 12px #555;">
 					<a target="_blank" href="%url%" alt="%url%">
 						<div id="qrcode"></div>
 					</a>
 				</fieldset>
 			</div>
-			<!--
-			<span style="display: table; margin: 15px auto auto auto;font-style: oblique;font-size: large;font-weight: bold;">If it does not work, fork and/or restart!</center></span></span>
-			<span style="display: table; margin: 15px auto auto auto;font-style: oblique;font-size: large;font-weight: bold;">See <a href="https://q37.info/s/zbgfjtp9" target="_blank">https://q37.info/s/zbgfjtp9</a> for more details.</span>
-			-->
+			<span style="display: table; margin: 15px auto 10px auto;font-style: oblique;font-size: large;font-weight: bold; text-align: center;">
+				The URL displayed in the terminal is now assigned<br />
+				to your application	as long as it is running.<br />
+				By clicking the above QR code, this URL will be opened<br />
+				in a new tab, or window, depending on your settings.<br />
+				To open the application on your smartphone or tablet,<br />
+				scan the QR code with your device. Enjoy!
+			</span>
+			<!--span
+				style="display: table; margin: 15px auto 10px auto;font-style: oblique;font-size: large;font-weight: bold; text-align: center;">
+				If you stop then run again, you may<br />
+				have to click the top left refresh button.<br />
+				See <a href="https://q37.info/s/zbgfjtp9" target="_blank">https://q37.info/s/zbgfjtp9</a> for more details.
+			</span-->
 		</div>
 	</body>
 </html>
