@@ -2,7 +2,7 @@
 
 VERSION		0.12
 
-BADGES		[![NPM badge of the Atlas toolkit](https://nodei.co/npm/atlastk.png)](https://npmjs.com/atlastk/ "NPM package of the Atlas toolkit")
+BADGES		[![Downloads](https://img.shields.io/npm/dm/atlastk?label=&style=for-the-badge)![Version](https://img.shields.io/npm/v/atlastk?style=for-the-badge)](https://q37.info/s/h3zjb39j)
 
 # Long mixed-case target
 LMCT		Node.js

@@ -1,5 +1,7 @@
 The *Atlas* toolkit is particularly well suited for educational purposes, to write modern programming exercises, i.e. with a true graphical interface instead of the usual outdated textual one. More about this can be found [here](https://q37.info/s/cbms43s9).
 
+*Python* is much more powerful then *Excel* macros to automate (boring) tasks, and you can also work with *PDF*, *Word*, *Google* files…. And with the *Atlas* toolkit, you have much more possibilities then with *VBA* forms. There are some examples [here](https://q37.info/s/97p44nh4).  
+
 There is also a stub to for this library at address <https://q37.info/s/zzcn3wnx>.
 
 ## Content of the repository
@@ -34,9 +36,7 @@ The *GPIO* and *RGB* applications are designed to be used on a *Raspberry Pi* or
 
 For the *Raspberry Pi*, the `RPi.GPIO` *Python* module have to be installed (this is probably already the case).
 
-
 For the *ODROID-C2*, The *Python* version of *WiringPi* must be installed, and the application has to be launched, from within the `examples` directory, with `sudo` (`sudo python GPIO/` or `sudo python RGB/`).
-
 
 The *ErgoJr* application is experimental and to control a *Poppy* *Ergo Jr* robot.
 

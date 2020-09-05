@@ -23,6 +23,7 @@ Creates a page returned by the http server launched in Repl.it.
  */
 
 $url = $_GET['url'];
+$turl = substr($url,0,1+strpos($url,"?")) . "…";	// truncated URL.
 
 $page1 = <<<EOT
 <!DOCTYPE html>
@@ -45,13 +46,13 @@ function genQRCode(url) {
 					</a>
 				</fieldset>
 			</div>
-			<span style="display: table; margin: 15px auto 10px auto;font-style: oblique;font-size: large;font-weight: bold; text-align: center;">
-				The URL displayed in the terminal is now assigned<br />
-				to your application	as long as it is running.<br />
-				By clicking the above QR code, this URL will be opened<br />
-				in a new tab, or window, depending on your settings.<br />
-				To open the application on your smartphone or tablet,<br />
-				scan the QR code with your device. Enjoy!
+			<span style="display: table; margin: 15px auto 10px auto;font-style: oblique;font-size: large;font-weight: bold; text-align: center; width: 90%;">
+				Your application is now running at the 
+				URL displayed in the terminal (<a target="_blank" href="%url%" alt="%url%">%turl%</a>). By clicking the above QR code, 
+				this URL will be opened	in a new tab, or window, depending 
+				on your settings. <br />
+				To open the application on your smartphone
+				or tablet, scan the QR code with your device. Enjoy!
 			</span>
 			<!--span
 				style="display: table; margin: 15px auto 10px auto;font-style: oblique;font-size: large;font-weight: bold; text-align: center;">
@@ -74,5 +75,5 @@ $page2 = <<<EOT
 </html>
 EOT;
 
-echo str_replace("%url%", $url, $page1);
+echo str_replace("%turl%",$turl,str_replace("%url%", $url, $page1));
 ?>
