@@ -9,7 +9,9 @@
 
 *Enseignants (French-speaking teachers)* : notice en français pour utiliser ces exercices en cours : <https://q37.info/s/mmdnch9t>.
 
-[![Run on Repl.it](https://repl.it/badge/github/epeios-q37/hangman-exercises)](https://q37.info/s/z3whmbfz) [![License](https://img.shields.io/pypi/l/atlastk.svg?style=plastic)](https://github.com/epeios-q37/hangman-exercises/blob/master/LICENSE)
+[![Run on Repl.it](https://q37.info/s/kpm7xhfm.png)](https://q37.info/s/z3whmbfz)
+
+[![license: MIT](https://img.shields.io/github/license/epeios-q37/atlas-python?color=yellow&style=for-the-badge)](https://github.com/epeios-q37/hangman-exercises/blob/master/LICENSE)
 
 This project shows an example of modern programming exercises, featuring the [Hangman game](https://q37.info/s/gtdtk4hp). See <https://q37.info/s/cbms43s9> for the rationale behind this project.
 

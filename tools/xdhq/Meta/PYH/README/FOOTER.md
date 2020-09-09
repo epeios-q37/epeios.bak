@@ -34,6 +34,10 @@ The *Stars* application is an example where the *Atlas* *toolkit* is used to con
 
 The *GPIO* and *RGB* applications are designed to be used on a *Raspberry Pi* or a *ODROID-C2*.
 
+Here is how the *WebGPIO* application looks like:
+
+![*WebGPIO* interface](https://q37.info/s/htkhqb9x.png)
+
 For the *Raspberry Pi*, the `RPi.GPIO` *Python* module have to be installed (this is probably already the case).
 
 For the *ODROID-C2*, The *Python* version of *WiringPi* must be installed, and the application has to be launched, from within the `examples` directory, with `sudo` (`sudo python GPIO/` or `sudo python RGB/`).

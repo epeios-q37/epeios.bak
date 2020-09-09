@@ -22,7 +22,7 @@ body = """
 """
 
 def acConnect(dom):
-	dom.setLayout("", body )
+	dom.inner("", body )
 
 
 def acSubmit(dom):
