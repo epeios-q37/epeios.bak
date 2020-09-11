@@ -1,13 +1,10 @@
-
-<!--
-    For Repl.it users: click on the green 'run' button,
-    select the language, and click on (or scan) the then
-    displayed QR code.
--->
-
 # A simple example of a modern programming exercise
 
-[![Run on Repl.it](https://repl.it/badge/github/epeios-q37/basic-exercise)](https://q37.info/s/9vfsdrm7) [![License](https://img.shields.io/pypi/l/atlastk.svg?style=plastic)](https://github.com/epeios-q37/basic-exercises/blob/master/LICENSE)
+[![Run on Repl.it](https://q37.info/s/kpm7xhfm.png)](https://q37.info/s/9vfsdrm7)
+
+[![license: MIT](https://img.shields.io/github/license/epeios-q37/base-exercise?color=yellow&style=for-the-badge)](https://github.com/epeios-q37/base-exercise/blob/master/LICENSE)
+[![Stars](https://img.shields.io/github/stars/epeios-q37/base-exercise.svg?style=for-the-badge)](https://github.com/epeios-q37/base-exercise/stargazers)
+[![Forks](https://img.shields.io/github/forks/epeios-q37/base-exercise.svg?style=for-the-badge)](https://github.com/epeios-q37/base-exercise/network/members)
 
 This project has for purpose to show, with a simple example, how to use the [*EduTK*](https://q37.info/s/xhgwkn7v) *Python* library to make a programming exercise. It features a somewhat improved version of the [*Hello, World!*](https://q37.info/s/k9hfpjbq) program.
 

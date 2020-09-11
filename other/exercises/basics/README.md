@@ -1,16 +1,11 @@
-
-<!--
-    For Repl.it users: click on the green 'run' button,
-    select an exercise, and click on (or scan) the then
-    displayed QR code.
--->
-
 # Some modern programming exercises
-
 
 [![Run on Repl.it](https://q37.info/s/kpm7xhfm.png)](https://q37.info/s/brjzr9fv)
 
 [![license: MIT](https://img.shields.io/github/license/epeios-q37/basics-exercises?color=yellow&style=for-the-badge)](https://github.com/epeios-q37/basics-exercises/blob/master/LICENSE)
+[![Stars](https://img.shields.io/github/stars/epeios-q37/basics-exercises.svg?style=for-the-badge)](https://github.com/epeios-q37/basics-exercises/stargazers)
+[![Forks](https://img.shields.io/github/forks/epeios-q37/basics-exercises.svg?style=for-the-badge)](https://github.com/epeios-q37/basics-exercises/network/members)
+
 
 This project shows how modern programming exercises should be made. This exercises have a graphical user interface instead of the usual textual interface, which are less and less used, or even known, by most of the people which are mainly using smartphones. For more about the rationale behind this project, see <https://q37.info/s/cbms43s9>.
 

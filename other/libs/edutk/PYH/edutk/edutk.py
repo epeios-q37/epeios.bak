@@ -164,7 +164,7 @@ def _getHead(path, title, i18n=None):
   return "<title>" + title + "</title>\n" + _HEAD_COMMON + read(path, i18n)
 
 
-# Should be the almost identical as in 'Atlas.py'
+# Should be almost identical as in 'Atlas.py'
 def _call(func, userObject, dom, id, action):
   amount = len(inspect.getargspec(func).args)
   args = []
