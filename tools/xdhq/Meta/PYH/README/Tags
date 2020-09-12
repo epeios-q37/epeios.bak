@@ -2,7 +2,7 @@
 
 VERSION		0.12
 
-BADGES		[![Downloads](https://img.shields.io/pypi/dm/atlastk.svg?label=&style=for-the-badge)![Version](https://img.shields.io/pypi/v/atlastk?style=for-the-badge&color=90b4ed&label=PyPi)](http://q37.info/s/9srmskcm)
+BADGES		[![Version](https://img.shields.io/pypi/v/atlastk?style=for-the-badge&color=90b4ed&label=PyPi)](http://q37.info/s/9srmskcm)
 
 # Long mixed-case target
 LMCT		Python

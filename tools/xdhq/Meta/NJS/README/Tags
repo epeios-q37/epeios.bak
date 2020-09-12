@@ -2,7 +2,7 @@
 
 VERSION		0.12
 
-BADGES		[![Downloads](https://img.shields.io/npm/dm/atlastk?label=&style=for-the-badge)![Version](https://img.shields.io/npm/v/atlastk?style=for-the-badge)](https://q37.info/s/h3zjb39j)
+BADGES		[![Version](https://img.shields.io/npm/v/atlastk?style=for-the-badge)](https://q37.info/s/h3zjb39j)
 
 # Long mixed-case target
 LMCT		Node.js

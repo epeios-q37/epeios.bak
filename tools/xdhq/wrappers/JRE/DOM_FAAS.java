@@ -77,7 +77,7 @@ public class DOM_FAAS extends DOM_SHRD {
 	}
 
 	static private boolean isREPLit_() {
-		return "REPLit".equals(getEnv_("ATK"));
+		return "REPLIT".equals(getEnv_("ATK").toUpperCase());
 	}
 
 	static private boolean isTokenEmpty_() {
@@ -85,7 +85,7 @@ public class DOM_FAAS extends DOM_SHRD {
 	}
 
 	static {
-		String atk = getEnv_("ATK");
+		String atk = getEnv_("ATK").toUpperCase();
 
 		if ("DEV".equals(atk)) {
 			pAddr = "localhost";
@@ -94,7 +94,7 @@ public class DOM_FAAS extends DOM_SHRD {
 		} else if ("TEST".equals(atk)) {
 			cgi = "xdh_";
 			System.out.println("\tTEST mode !");
-		} else if (!atk.isEmpty() && !"REPLit".equals(atk)) {
+		} else if (!atk.isEmpty() && !"REPLIT".equals(atk) && !"NONE".equals(atk)) {
 			throw new java.lang.RuntimeException("Bad 'ATK' environment variable value : should be 'DEV' or 'TEST' !");
 		}
 
@@ -259,6 +259,8 @@ public class DOM_FAAS extends DOM_SHRD {
 					"{res.end(\"<html><body><iframe style=\\\"border-style: none; width: 100%;height: 100%\\\" " + 
 					"src=\\\"https://atlastk.org/repl_it.php?url=" + url + "\\\"</iframe></body></html>\");}).listen(8080);";
 				Runtime.getRuntime().exec(new String[] { "/usr/bin/node", "-e", script });
+			} else if ("NONE".equals(getEnv_("ATK").toUpperCase())) {
+				// Nothing to do.
 			} else if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
 				Desktop.getDesktop().browse(new URI(url));
 			} else if (Runtime.getRuntime().exec(new String[] { "which", "xdg-open" }).getInputStream().read() != -1) {

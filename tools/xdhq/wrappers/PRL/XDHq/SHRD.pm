@@ -46,7 +46,7 @@ sub isDev {
 }
 
 sub isREPLit {
-    return ( exists $ENV{"ATK"} ) && ($ENV{"ATK"} eq "REPLit");
+    return ( exists $ENV{"ATK"} ) && (uc($ENV{"ATK"}) eq "REPLIT");
 }
 
 sub open {

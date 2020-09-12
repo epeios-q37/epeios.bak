@@ -70,16 +70,16 @@ sub _tokenIsEmpty {
 
 sub _init {
     $token = "";
-    my $atk = getEnv("ATK");
+    my $atk = uc(getEnv("ATK"));
 
-    if ($atk eq "" ) {}
+    if (($atk eq "") or ($atk eq "NONE" )) {}
     elsif ($atk eq "DEV") {
         $pAddr = "localhost";
         $wPort = "8080";
         CORE::say("\tDEV mode!");
     } elsif ($atk eq "TEST") {
         $cgi = "xdh_";
-    } elsif ($atk ne "REPLit") {
+    } elsif ($atk ne "REPLIT") {
         die("Bad 'ATK' environment variable value : should be 'DEV' or 'TEST' !");
     }
 
@@ -162,7 +162,7 @@ sub _ignition {
         if ( XDHq::SHRD::isREPLit() ) {
             system("node", "-e",
             'require("http").createServer(function (req, res){res.end("<html><body><iframe style=\"border-style: none; width: 100%;height: 100%\" src=\"https://atlastk.org/repl_it.php?url=' . $url . '\"></iframe></body></html>");process.exit();}).listen(8080)');
-        } else {
+        } elsif (not uc(getEnv("ATK")) eq "NONE") {
             XDHq::SHRD::open($url);
         }
     }
