@@ -26,10 +26,16 @@ $out = str_replace(array("\r", "\n", "\t"), '','
 			<!-- BEGIN -->
 			<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 			<meta http-equiv="Cache-Control" content="no-cache"/>
-			<script src="faas/xdhtml.js"></script>
-			<script src="faas/xdhwebq.js"></script>
+			<!--script src="faas/xdhtml_20200804.js"></script-->
+			<script src="faas/xdhtml_20200821.js"></script>
+			<script src="faas/xdhwebq_20200608.js"></script>
 			<script src="faas/qrcode.min.js"></script>
-			<style id="XDHStyle"></style>'
+			<style id="XDHStyle">
+				.xdh_style {
+					display: table;
+					margin: 50px auto auto auto;
+				}
+			</style>'
 . $head . '
 			<!--script>handleQuery("'
 . $cgi . '?_token=' . $token . '&_language=' . $language . '&_action=' . $action . '&_cont=" )</script-->
@@ -41,7 +47,7 @@ $out = str_replace(array("\r", "\n", "\t"), '','
 		</head>
 		<!--body id="Root" data-xdh-onevents="(keypress|About|SC+a)(keypress|Q37Refresh|SC+r)"-->
 		<body onload="new QRCode(\'qrcode\', {width:125, height:125, correctLevel: QRCode.CorrectLevel.L}).makeCode(window.location.href);ignition(\'' . $token . '\');">
-			<div>
+			<div class="xdh_style">
 				<noscript>
 					<div style="display: table; margin: 50px auto auto auto;">
 						<fieldset>

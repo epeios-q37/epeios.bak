@@ -36,123 +36,123 @@ import atlastk as Atlas
 
 tableItem = """
 <tr{}>
-	<td>{}</td>
-	<td>{}</td>
-	<td>{}</td>
-	<td>{}</td>
-	<td>{}</td>
+  <td>{}</td>
+  <td>{}</td>
+  <td>{}</td>
+  <td>{}</td>
+  <td>{}</td>
 </tr>
 """
 
 statesItem = """
 <tr data-xdh-content="{State}" data-xdh-onevent="View" style="cursor: default;" title="Pop: {Pop}, tracts: {Tracts}">
-	<td>{State}</td>
-	<td>{Pop}</td>
+  <td>{State}</td>
+  <td>{Pop}</td>
 </tr>
 """
 
 countiesItem = """
 <tr data-xdh-onevent="View" data-xdh-content="{State}.{County}" style="cursor: default;">
-	<td>{County}</td>
-	<td>{Pop}</td>
-	<td>{Tracts}</td>
+  <td>{County}</td>
+  <td>{Pop}</td>
+  <td>{Tracts}</td>
 </tr>
 """
 
 stateInCountiesItem = """
 <tr id=\"{State}\" class="state">
-	<td><span style=\"font-style: oblique\">State</span>: {State}</td>
-	<td>{Pop}</td>
-	<td>{Tracts}</td>
+  <td><span style=\"font-style: oblique\">State</span>: {State}</td>
+  <td>{Pop}</td>
+  <td>{Tracts}</td>
 </tr>
 """
 
 countyData = {}
 
 def reading(dom):
-	global countyData
+  global countyData
 
-	countyData = {}
+  countyData = {}
 
-	dom.set_contents({
-		"output": "Initialization…",
-		"table": "",
-		"counties": "",
-		"states": ""
-	})
+  dom.set_contents({
+    "output": "Initialization…",
+    "table": "",
+    "counties": "",
+    "states": ""
+  })
 
-	dom.remove_class("output", "hidden")
-	prevCounty = ""
+  dom.remove_class("output", "hidden")
+  prevCounty = ""
 
-	dom.set_content('output', 'Opening workbook...')
-	wb = openpyxl.load_workbook(dom.get_content("set"),read_only=True)
+  dom.set_content('output', 'Opening workbook...')
+  wb = openpyxl.load_workbook(dom.get_content("set"),read_only=True)
 
-	sheet = wb['Population by Census Tract']
+  sheet = wb['Population by Census Tract']
 
-	dom.set_content('output', 'Reading rows...')
+  dom.set_content('output', 'Reading rows...')
 
-	limit = sheet.max_row - 1	# This takes time, so it is stored.
+  limit = sheet.max_row - 1	# This takes time, so it is stored.
 
-	index = 0
-	tableLayout = ""
+  index = 0
+  tableLayout = ""
 
-	for row in sheet.iter_rows(min_row=2,values_only=True):
-		index += 1
+  for row in sheet.iter_rows(min_row=2,values_only=True):
+    index += 1
 
-		tract, state, county, pop = row
+    tract, state, county, pop = row
 
-		countyData.setdefault(state, {'tracts': 0, 'pop': 0, 'counties': {}})
-		countyData[state]['tracts'] += 1
-		countyData[state]['pop'] += pop
-		countyData[state]['counties'].setdefault(county, {'tracts': 0, 'pop': 0})
-		countyData[state]['counties'][county]['tracts'] += 1
-		countyData[state]['counties'][county]['pop'] += pop
+    countyData.setdefault(state, {'tracts': 0, 'pop': 0, 'counties': {}})
+    countyData[state]['tracts'] += 1
+    countyData[state]['pop'] += pop
+    countyData[state]['counties'].setdefault(county, {'tracts': 0, 'pop': 0})
+    countyData[state]['counties'][county]['tracts'] += 1
+    countyData[state]['counties'][county]['pop'] += pop
 
-		attribute = ""
-		
-		if prevCounty != county:
-			attribute = " id=\"{}.{}\"".format(state,county)
-			prevCounty = county
-			
-		tableLayout += tableItem.format(attribute,index+1,tract,state,county,pop)
+    attribute = ""
+    
+    if prevCounty != county:
+      attribute = " id=\"{}.{}\"".format(state,county)
+      prevCounty = county
+      
+    tableLayout += tableItem.format(attribute,index+1,tract,state,county,pop)
 
-		if not ( index % 2500 ) or ( index == limit ):
-			dom.end('table', tableLayout)
-			dom.scroll_to(dom.last_child('table'))
-			dom.flush()
-			dom.set_content('output', 'Reading rows {}/{}'.format(index,limit))
-			tableLayout = ""
+    if not ( index % 2500 ) or ( index == limit ):
+      dom.end('table', tableLayout)
+      dom.scroll_to(dom.last_child('table'))
+      dom.flush()
+      dom.set_content('output', 'Reading rows {}/{}'.format(index,limit))
+      tableLayout = ""
 
-	dom.set_content('output', 'Calculating...')
-	
-	statesLayout = ""
-	countiesLayout = ""
+  dom.set_content('output', 'Calculating...')
+  
+  statesLayout = ""
+  countiesLayout = ""
 
-	for state, stateData in countyData.items():
-		tracts, pop, counties = stateData.values()
-		statesLayout += statesItem.format(State=state,Pop=pop,Tracts=tracts)
+  for state, stateData in countyData.items():
+    tracts, pop, counties = stateData.values()
+    statesLayout += statesItem.format(State=state,Pop=pop,Tracts=tracts)
 
-		countiesLayout += stateInCountiesItem.format(State=state,Pop=pop,Tracts=tracts)
+    countiesLayout += stateInCountiesItem.format(State=state,Pop=pop,Tracts=tracts)
 
-		for county, data in counties.items():
-			countiesLayout += countiesItem.format(State=state,County=county,Pop=data['pop'],Tracts=data['tracts'])
+    for county, data in counties.items():
+      countiesLayout += countiesItem.format(State=state,County=county,Pop=data['pop'],Tracts=data['tracts'])
 
-	dom.inner("states", statesLayout)
-	dom.inner("counties", countiesLayout)
-	dom.set_content('output', 'Done')
-	dom.add_class("output", "hidden")
-	
+  dom.inner("states", statesLayout)
+  dom.inner("counties", countiesLayout)
+  dom.set_content('output', 'Done')
+  dom.add_class("output", "hidden")
+  
 def ac_connect(dom):
-	dom.inner("", open("Main.html").read())
-	reading(dom)
+  dom.inner("", open("Main.html").read())
+  reading(dom)
 
 def ac_view(dom,id):
-	dom.scroll_to(dom.get_content(id))
+  dom.scroll_to(dom.get_content(id))
 
 callbacks = {
-	"": ac_connect,
-	"View": ac_view,
-	"Refresh": lambda dom : reading(dom)
+  "": ac_connect,
+  "View": ac_view,
+  "Refresh": lambda dom : reading(dom)
 }
 
 Atlas.launch(callbacks, None, open("Head.html").read())

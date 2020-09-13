@@ -35,21 +35,21 @@ HEAD = """
 
 BODY="""
 <div style="display: table; margin: 50px auto auto auto;">
-    <fieldset>
-        <svg id="SVG" width="600" height="400" xmlns="http://www.w3.org/2000/svg"/>
-    </fieldset>
-    <div style="width: 100%; margin: 0 auto; text-align: center;">
-        <span style="padding: 2px; border: 1px dotted;" id="Text"></span>
-        <select id="Code" data-xdh-onevent="Redraw">
-            <option value="FRA">France</option>
-            <option value="WORLD">Monde</option>
-        </select>
-        <select id="Cible" data-xdh-onevent="Redraw">
-            <option value="casConfirmes">Cas confirmés</option>
-            <option value="deces">Décès</option>
-        </select>
-        <input type="checkbox" id="Relatif" data-xdh-onevent="Redraw">Relatif</input>
-    </div>
+  <fieldset>
+    <svg id="SVG" width="600" height="400" xmlns="http://www.w3.org/2000/svg"/>
+  </fieldset>
+  <div style="width: 100%; margin: 0 auto; text-align: center;">
+    <span style="padding: 2px; border: 1px dotted;" id="Text"></span>
+    <select id="Code" data-xdh-onevent="Redraw">
+      <option value="FRA">France</option>
+      <option value="WORLD">Monde</option>
+    </select>
+    <select id="Cible" data-xdh-onevent="Redraw">
+      <option value="casConfirmes">Cas confirmés</option>
+      <option value="deces">Décès</option>
+    </select>
+    <input type="checkbox" id="Relatif" data-xdh-onevent="Redraw">Relatif</input>
+  </div>
 </div>
 """
 
@@ -58,66 +58,66 @@ with urllib.request.urlopen('https://raw.githubusercontent.com/opencovid19-fr/da
 
 
 def fill(data,code,key):
-    set = []
-    
-    for item in data:
-        if item["code"] == code:
-            if key in item:
-                set.append({"date": item["date"], "value": item[key]})
-                       
-    return set
+  set = []
+  
+  for item in data:
+    if item["code"] == code:
+      if key in item:
+        set.append({"date": item["date"], "value": item[key]})
+             
+  return set
 
 
 def draw_set(set,dom):
-    seq = [item['value'] for item in set]
-    max = builtins.max(seq)
-    min = builtins.min(seq)
-    
-    height = int(dom.getAttribute("SVG", "height"))
-    
-    min = 0 if min > 0 else min
-    
-    svg = Atlas.createHTML()
-    
-    for i in range(len(set)):
-        svg.push_tag("rect")
-        svg.put_attribute("x", str(i*100/len(set)) + "%");
-        svg.put_attribute("y", height-set[i]["value"]*height/max)
-        svg.put_attribute("width", str(100/len(set)) + "%");
-        svg.put_attribute("height", str(100*set[i]["value"]/max) + "%");
-        svg.put_tag_and_value("title", set[i]["date"] + " : " + str(set[i]["value"]))
-        svg.pop_tag();
+  seq = [item['value'] for item in set]
+  max = builtins.max(seq)
+  min = builtins.min(seq)
+  
+  height = int(dom.getAttribute("SVG", "height"))
+  
+  min = 0 if min > 0 else min
+  
+  svg = Atlas.createHTML()
+  
+  for i in range(len(set)):
+    svg.push_tag("rect")
+    svg.put_attribute("x", str(i*100/len(set)) + "%");
+    svg.put_attribute("y", height-set[i]["value"]*height/max)
+    svg.put_attribute("width", str(100/len(set)) + "%");
+    svg.put_attribute("height", str(100*set[i]["value"]/max) + "%");
+    svg.put_tag_and_value("title", set[i]["date"] + " : " + str(set[i]["value"]))
+    svg.pop_tag();
 
-    dom.inner("SVG", svg)
-    
-    dom.set_content("Text",set[0]["date"] + " - " + set[len(set)-1]["date"])
-    
+  dom.inner("SVG", svg)
+  
+  dom.set_content("Text",set[0]["date"] + " - " + set[len(set)-1]["date"])
+  
 def get_relat(absol):
-    relat = []
+  relat = []
+  
+  for i in range(1,len(absol)):
+    relat.append({"date": absol[i]["date"],"value": absol[i]["value"]-absol[i-1]["value"]})    
     
-    for i in range(1,len(absol)):
-        relat.append({"date": absol[i]["date"],"value": absol[i]["value"]-absol[i-1]["value"]})    
-        
-    return relat
+  return relat
 
 def draw(dom):
-    contents = dom.getContents(["Code", "Cible", "Relatif"])
-    
-    absol = fill(data,contents["Code"],contents["Cible"])
-    
-    
-    draw_set(get_relat(absol) if contents["Relatif"] == "true" else absol,dom)
+  contents = dom.getContents(["Code", "Cible", "Relatif"])
+  
+  absol = fill(data,contents["Code"],contents["Cible"])
+  
+  
+  draw_set(get_relat(absol) if contents["Relatif"] == "true" else absol,dom)
 
 
 def a_connect(dom):
-    dom.inner("", BODY)
-    
-    draw(dom)
-    
+  dom.inner("", BODY)
+  
+  draw(dom)
+  
 callbacks = {
-	"": a_connect,
-	"Redraw": lambda dom : draw(dom)
+  "": a_connect,
+  "Redraw": lambda dom : draw(dom)
 }
 
 Atlas.launch(callbacks, None, HEAD)
-        
+    

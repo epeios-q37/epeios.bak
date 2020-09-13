@@ -1,59 +1,55 @@
-<div class="vcenter-out">
-	<div class="vcenter-in">
-		<span>
-			<fieldset>
-				<p>
-					<output id='output'></output>
-				</p>
-				<fieldset class="frame" style="height: 300px;">
-					<table>
-						<thead>
-							<tr>
-								<th class="sticky">Line</th>
-								<th class="sticky">Tract</th>
-								<th class="sticky">State</th>
-								<th class="sticky">County</th>
-								<th class="sticky">Pop</th>
-							</tr>
-						</thead>
-						<tbody id="table">
-						</tbody>
-					</table>
-				</fieldset>
-				<div style="background-color: bisque; text-align: center;">Items in frames below are clickable.</div>
-				<div style="display: flex; flex-direction: row; justify-content: space-evenly; height: 300px">
-					<fieldset class="frame">
-						<table>
-							<thead>
-								<th class="sticky">State</th>
-								<th class="sticky">Pop</th>
-							</thead>
-							<tbody id="states">
-							</tbody>
-						</table>
-					</fieldset>
-					<fieldset class="frame">
-						<table>
-							<thead>
-								<th class="sticky">County</th>
-								<th class="sticky">Pop</th>
-								<th class="sticky">Tracts</th>
-							</thead>
-							<tbody id="counties">
-							</tbody>
-						</table>
-					</fieldset>
-				</div>
-				<br />
-				<div class="hcenter">
-					<select id="set" size="2" title="Select the data set">
-						<option value="censuspopdata_extract.xlsx" selected>Extract (fast, for testing)</option>
-						<option value="censuspopdata_full.xlsx">Full (slower)</option>
-					</select>
-					<br />
-					<button class="hcenter" data-xdh-onevent="Refresh">Refresh</button>
-				</div>
-			</fieldset>
-		</span>
-	</div>
-</div>
+<span>
+  <fieldset>
+    <p>
+      <output id='output'></output>
+    </p>
+    <fieldset class="frame" style="height: 300px;">
+      <table>
+        <thead>
+          <tr>
+            <th class="sticky">Line</th>
+            <th class="sticky">Tract</th>
+            <th class="sticky">State</th>
+            <th class="sticky">County</th>
+            <th class="sticky">Pop</th>
+          </tr>
+        </thead>
+        <tbody id="table">
+        </tbody>
+      </table>
+    </fieldset>
+    <div style="background-color: bisque; text-align: center;">Items in frames below are clickable.</div>
+    <div style="display: flex; flex-direction: row; justify-content: space-evenly; height: 300px">
+      <fieldset class="frame">
+        <table>
+          <thead>
+            <th class="sticky">State</th>
+            <th class="sticky">Pop</th>
+          </thead>
+          <tbody id="states">
+          </tbody>
+        </table>
+      </fieldset>
+      <fieldset class="frame">
+        <table>
+          <thead>
+            <th class="sticky">County</th>
+            <th class="sticky">Pop</th>
+            <th class="sticky">Tracts</th>
+          </thead>
+          <tbody id="counties">
+          </tbody>
+        </table>
+      </fieldset>
+    </div>
+    <br />
+    <div class="hcenter">
+      <select id="set" size="2" title="Select the data set">
+        <option value="censuspopdata_extract.xlsx" selected>Extract (fast, for testing)</option>
+        <option value="censuspopdata_full.xlsx">Full (slower)</option>
+      </select>
+      <br />
+      <button class="hcenter" data-xdh-onevent="Refresh">Refresh</button>
+    </div>
+  </fieldset>
+</span>

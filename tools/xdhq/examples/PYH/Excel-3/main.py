@@ -37,21 +37,21 @@ import scrambler
 
 targetTemplate = """
 <tr id="tr.{Produce}" class="unselected" data-xdh-mark="{Produce}">
-	<td class="checkbox">
-		<input id="checkbox.{Produce}" type="checkbox" data-xdh-onevent="CheckboxClick"/>
-	</td>
-	<td>{Produce}</td>
-	<td>{Count}</td>
+  <td class="checkbox">
+    <input id="checkbox.{Produce}" type="checkbox" data-xdh-onevent="CheckboxClick"/>
+  </td>
+  <td>{Produce}</td>
+  <td>{Count}</td>
 </tr>
 """
 
 sourceTemplate = """
 <tr id="tr.{Produce}" class="unselected" data-xdh-mark="{Produce}">
-	<td class="radio">
-		<input id="radio.{Produce}" type="radio" name="radio" data-xdh-onevent="RadioClick"/>
-	</td>
-	<td>{Produce}</td>
-	<td>{Count}</td>
+  <td class="radio">
+    <input id="radio.{Produce}" type="radio" name="radio" data-xdh-onevent="RadioClick"/>
+  </td>
+  <td>{Produce}</td>
+  <td>{Count}</td>
 </tr>
 """
 
@@ -61,127 +61,127 @@ expanded = True
 workbook = None
 
 def load(workbook):
-	sheet = workbook['Sheet']
-	items = {}
+  sheet = workbook['Sheet']
+  items = {}
 
-	for row in sheet.iter_rows(min_row=2, min_col=1,max_col=1,values_only=True):
-		produce = row[0]
+  for row in sheet.iter_rows(min_row=2, min_col=1,max_col=1,values_only=True):
+    produce = row[0]
 
-		items.setdefault(produce, 0)
-		items[produce] += 1
+    items.setdefault(produce, 0)
+    items[produce] += 1
 
-	return items, (sheet.max_row - 1) / len(items)
+  return items, (sheet.max_row - 1) / len(items)
 
 def targets_layout(items,limit):
-	layout = ""
+  layout = ""
 
-	for item in sorted(items.items(), key = lambda item: item[1]):
-		produce, count = item
+  for item in sorted(items.items(), key = lambda item: item[1]):
+    produce, count = item
 
-		if count > limit:
-			break;
+    if count > limit:
+      break;
 
-		layout += targetTemplate.format(Produce = produce, Count = count)
+    layout += targetTemplate.format(Produce = produce, Count = count)
 
-	return layout
+  return layout
 
 def sources_layout(items,limit):
-	layout = ""
+  layout = ""
 
-	for item in sorted(items.items(), key = lambda item: item[0]):
-		produce, count = item
-		
-		if count >= limit:
-			layout += sourceTemplate.format(Produce = produce, Count = count)
+  for item in sorted(items.items(), key = lambda item: item[0]):
+    produce, count = item
+    
+    if count >= limit:
+      layout += sourceTemplate.format(Produce = produce, Count = count)
 
-	return layout
+  return layout
 
 def fill(dom):
-	items, limit = load(workbook)
+  items, limit = load(workbook)
 
-	dom.after("targets",targets_layout(items,limit))
-	dom.after("sources",sources_layout(items,limit))
+  dom.after("targets",targets_layout(items,limit))
+  dom.after("sources",sources_layout(items,limit))
 
 def display(dom):
-	global targetLabels, sourceLabel, expanded
+  global targetLabels, sourceLabel, expanded
 
-	fill(dom)
-	targetLabels = []
-	sourceLabel = ""
-	expanded = True
-	dom.disable_element("HideUnselected")
+  fill(dom)
+  targetLabels = []
+  sourceLabel = ""
+  expanded = True
+  dom.disable_element("HideUnselected")
 
 def ac_connect(dom):
-	global workbook
+  global workbook
 
-	dom.inner("", open("Main.html").read())
+  dom.inner("", open("Main.html").read())
 
-	dom.set_content("output", "Opening workbook (may take some time)…")
-	dom.remove_class("output", "hidden")
+  dom.set_content("output", "Opening workbook (may take some time)…")
+  dom.remove_class("output", "hidden")
 
-	workbook = openpyxl.load_workbook("produceSales.xlsx")
+  workbook = openpyxl.load_workbook("produceSales.xlsx")
 
-	dom.set_content("output", "Scrambling…")
-	scrambler.scramble(workbook)
+  dom.set_content("output", "Scrambling…")
+  scrambler.scramble(workbook)
 
-	dom.set_content("output", "Displaying…")
-	display(dom)
+  dom.set_content("output", "Displaying…")
+  display(dom)
 
-	dom.set_content("output", "Done.")
-	dom.add_class("output", "hidden")
+  dom.set_content("output", "Done.")
+  dom.add_class("output", "hidden")
 
 def ac_checkbox_click(dom,id):
-	global targetLabels
+  global targetLabels
 
-	mark = dom.get_mark(id)
+  mark = dom.get_mark(id)
 
-	if mark in targetLabels:
-		targetLabels.remove(mark)
-	else:
-		targetLabels.append(mark)
+  if mark in targetLabels:
+    targetLabels.remove(mark)
+  else:
+    targetLabels.append(mark)
 
-	dom.toggle_class("tr.{}".format(mark),"unselected")
+  dom.toggle_class("tr.{}".format(mark),"unselected")
 
 def ac_radio_click(dom,id):
-	global sourceLabel
+  global sourceLabel
 
-	if sourceLabel:
-		dom.toggle_class("tr.{}".format(sourceLabel),"unselected")
+  if sourceLabel:
+    dom.toggle_class("tr.{}".format(sourceLabel),"unselected")
 
-	sourceLabel = dom.get_mark(id)
+  sourceLabel = dom.get_mark(id)
 
-	dom.toggle_class("tr.{}".format(sourceLabel),"unselected")
+  dom.toggle_class("tr.{}".format(sourceLabel),"unselected")
 
 def ac_collapse_expand(dom):
-	global expanded
+  global expanded
 
-	expanded = not expanded
+  expanded = not expanded
 
-	if expanded:
-		dom.disable_element("HideUnselected")
-	else:
-		dom.enable_element("HideUnselected")
+  if expanded:
+    dom.disable_element("HideUnselected")
+  else:
+    dom.enable_element("HideUnselected")
 
 def ac_apply(dom):
-	global workbook
+  global workbook
 
-	sheet = workbook['Sheet']
+  sheet = workbook['Sheet']
 
-	for row in sheet.iter_rows(min_row=2, min_col=1,max_col=1):
-		if row[0].value in targetLabels:
-			row[0].value = sourceLabel
+  for row in sheet.iter_rows(min_row=2, min_col=1,max_col=1):
+    if row[0].value in targetLabels:
+      row[0].value = sourceLabel
 
-	dom.inner("", open("Main.html").read())
-	
-	display(dom)
-	
+  dom.inner("", open("Main.html").read())
+  
+  display(dom)
+  
 callbacks = {
-	"": ac_connect,
-	"CheckboxClick": ac_checkbox_click,
-	"RadioClick": ac_radio_click,
-	"Jump": lambda dom: dom.scroll_to("sources"),
-	"CollapseExpand": ac_collapse_expand,
-	"Apply": ac_apply
+  "": ac_connect,
+  "CheckboxClick": ac_checkbox_click,
+  "RadioClick": ac_radio_click,
+  "Jump": lambda dom: dom.scroll_to("sources"),
+  "CollapseExpand": ac_collapse_expand,
+  "Apply": ac_apply
 }
 
 Atlas.launch(callbacks, None, open("Head.html").read())

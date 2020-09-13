@@ -42,115 +42,115 @@ print(updates.PRICE_UPDATES)
 
 salesItem = """
 <tr id="{}">
-	<td>{}</td>
-	<td>{}</td>
-	<td>{}</td>
-	<td>{}</td>
+  <td>{}</td>
+  <td>{}</td>
+  <td>{}</td>
+  <td>{}</td>
 </tr>
 """
 
 updatesItem = """
 <tr id="{}">
-	<td>{}</td>
-	<td>{}</td>
-	<td>{}</td>
+  <td>{}</td>
+  <td>{}</td>
+  <td>{}</td>
 </tr>
 """
 
 modificationsItem = """
 <tr data-xdh-onevent="View" data-xdh-content="{}">
-	<td>{}</td>
-	<td>{}</td>
+  <td>{}</td>
+  <td>{}</td>
 </tr>
 """
 
 def reading_updates(dom,modifications=None):
-	global updates
-	importlib.reload(updates)
-	dom.set_content("updates", "")
+  global updates
+  importlib.reload(updates)
+  dom.set_content("updates", "")
 
-	updatesLayout = ""
+  updatesLayout = ""
 
-	for produce, price in updates.PRICE_UPDATES.items():
-		updatesLayout += updatesItem.format(produce,produce,price,"N/A" if modifications == None else len(modifications[produce]) if produce in modifications else 0)
+  for produce, price in updates.PRICE_UPDATES.items():
+    updatesLayout += updatesItem.format(produce,produce,price,"N/A" if modifications == None else len(modifications[produce]) if produce in modifications else 0)
 
-	dom.inner("updates", updatesLayout)
-	
+  dom.inner("updates", updatesLayout)
+  
 def reading(dom):
-	dom.set_content("output", "Initialization…")
+  dom.set_content("output", "Initialization…")
 
-	reading_updates(dom)
+  reading_updates(dom)
 
-	dom.set_content('output', 'Done')
-	dom.add_class("output", "hidden")
+  dom.set_content('output', 'Done')
+  dom.add_class("output", "hidden")
 
 def update_workbook(dom):
-	dom.set_content("sales", "");
+  dom.set_content("sales", "");
 
-	dom.set_content('output', 'Opening workbook...')
+  dom.set_content('output', 'Opening workbook...')
 
-	wb = openpyxl.load_workbook("produceSales_.xlsx", read_only=True)
+  wb = openpyxl.load_workbook("produceSales_.xlsx", read_only=True)
 
-	sheet = wb['Sheet']
+  sheet = wb['Sheet']
 
-	dom.remove_class("output", "hidden")
+  dom.remove_class("output", "hidden")
 
-	dom.set_content('output', 'Reading rows...')
+  dom.set_content('output', 'Reading rows...')
 
-	limit = sheet.max_row - 1	# This takes time, so it is stored.
+  limit = sheet.max_row - 1	# This takes time, so it is stored.
 
-	index = 0
-	salesLayout = ""
+  index = 0
+  salesLayout = ""
 
-	modifications = {}
+  modifications = {}
 
-	for row in sheet.iter_rows(min_row=2, min_col=1,max_col=3,values_only=True):
-		index += 1
+  for row in sheet.iter_rows(min_row=2, min_col=1,max_col=3,values_only=True):
+    index += 1
 
-		produce, cost, sold = row
+    produce, cost, sold = row
 
-		if produce in updates.PRICE_UPDATES:
-			modifications.setdefault(produce, [])
-			modifications[produce].append(index)
+    if produce in updates.PRICE_UPDATES:
+      modifications.setdefault(produce, [])
+      modifications[produce].append(index)
 
-		salesLayout += salesItem.format(index+1,index+1,produce,cost,round(sold,2))
+    salesLayout += salesItem.format(index+1,index+1,produce,cost,round(sold,2))
 
-		if not ( index % 2000 ) or ( index == limit ):
-			dom.append_layout('sales', salesLayout)
-			dom.scroll_to(dom.last_child('sales'))
-			dom.flush()
-			dom.set_content('output', 'Reading rows {}/{}'.format(index,limit))
-			salesLayout = ""
+    if not ( index % 2000 ) or ( index == limit ):
+      dom.append_layout('sales', salesLayout)
+      dom.scroll_to(dom.last_child('sales'))
+      dom.flush()
+      dom.set_content('output', 'Reading rows {}/{}'.format(index,limit))
+      salesLayout = ""
 
-	return modifications
-	
+  return modifications
+  
 def display_modifications(dom,modifications):
-	modificationsLayout = ""
-	for produce, lines in modifications.items():
-		for line in lines:
-			modificationsLayout += modificationsItem.format(line,produce, line)
+  modificationsLayout = ""
+  for produce, lines in modifications.items():
+    for line in lines:
+      modificationsLayout += modificationsItem.format(line,produce, line)
 
-	dom.inner("modifications", modificationsLayout)
+  dom.inner("modifications", modificationsLayout)
 
 
 def ac_connect(dom):
-	dom.inner("", open("Main.html").read())
-	reading(dom)
+  dom.inner("", open("Main.html").read())
+  reading(dom)
 
 def ac_apply(dom):
-	modifications = update_workbook(dom)
-	display_modifications(dom,modifications)
-	reading_updates(dom,modifications)
+  modifications = update_workbook(dom)
+  display_modifications(dom,modifications)
+  reading_updates(dom,modifications)
 
 def ac_view(dom,id):
-	dom.scroll_to(dom.get_content(id))
+  dom.scroll_to(dom.get_content(id))
 
 
 callbacks = {
-	"": ac_connect,
-	"Refresh": lambda dom: reading_updates(dom),
-	"Apply": ac_apply,
-	"View": ac_view
+  "": ac_connect,
+  "Refresh": lambda dom: reading_updates(dom),
+  "Apply": ac_apply,
+  "View": ac_view
 }
 
 Atlas.launch(callbacks, None, open("Head.html").read())

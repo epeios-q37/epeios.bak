@@ -1,52 +1,48 @@
-<div class="vcenter-out">
-	<div class="vcenter-in">
-		<span>
-			<fieldset>
-				<div style="background-color: bisque; text-align: center;">Items in frames below are clickable.</div>
-				<div style="display: flex; flex-direction: row;">
-						<div>
-						<fieldset class="frame" style="height: 300px;">
-							<table>
-								<thead>
-									<th class="sticky">Produce</th>
-									<th class="sticky">New price</th>
-									<th class="sticky">Count</th>
-								</thead>
-								<tbody id="updates">
-								</tbody>
-							</table>
-						</fieldset>
-						<button data-xdh-onevent="Refresh">Refresh</button>
-						<button data-xdh-onevent="Apply">Apply</button>
-					</div>
-						<fieldset class="frame" style="height: 300px;width: 50%;">
-							<table>
-								<thead>
-									<th class="sticky">Produce</th>
-									<th class="sticky">Line</th>
-								</thead>
-								<tbody id="modifications">
-								</tbody>
-							</table>
-						</fieldset>
-			</fieldset>
-			<p>
-				<output id='output'></output>
-			</p>
-			<fieldset class="frame" style="height: 300px">
-				<table>
-					<thead>
-						<tr>
-							<th class="sticky">Line</th>
-							<th class="sticky">Produce</th>
-							<th class="sticky">Cost per pounds</th>
-							<th class="sticky">Pounds sold</th>
-						</tr>
-					</thead>
-					<tbody id="sales">
-					</tbody>
-				</table>
-			</fieldset>
-		</span>
-	</div>
-</div>
+<span>
+  <fieldset>
+    <div style="background-color: bisque; text-align: center;">Items in frames below are clickable.</div>
+    <div style="display: flex; flex-direction: row;">
+      <div>
+        <fieldset class="frame" style="height: 300px;">
+          <table>
+            <thead>
+              <th class="sticky">Produce</th>
+              <th class="sticky">New price</th>
+              <th class="sticky">Count</th>
+            </thead>
+            <tbody id="updates">
+            </tbody>
+          </table>
+        </fieldset>
+        <button data-xdh-onevent="Refresh">Refresh</button>
+        <button data-xdh-onevent="Apply">Apply</button>
+      </div>
+      <fieldset class="frame" style="height: 300px;width: 50%;">
+        <table>
+          <thead>
+            <th class="sticky">Produce</th>
+            <th class="sticky">Line</th>
+          </thead>
+          <tbody id="modifications">
+          </tbody>
+        </table>
+      </fieldset>
+  </fieldset>
+  <p>
+    <output id='output'></output>
+  </p>
+  <fieldset class="frame" style="height: 300px">
+    <table>
+      <thead>
+        <tr>
+          <th class="sticky">Line</th>
+          <th class="sticky">Produce</th>
+          <th class="sticky">Cost per pounds</th>
+          <th class="sticky">Pounds sold</th>
+        </tr>
+      </thead>
+      <tbody id="sales">
+      </tbody>
+    </table>
+  </fieldset>
+</span>
