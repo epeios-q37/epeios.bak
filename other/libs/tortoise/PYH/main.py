@@ -27,15 +27,10 @@ import os, sys
 sys.path.append("./Atlas.zip")
 sys.path.append("./tortoise")
 
-# For using in Repl.it
-if ('HOME' in os.environ) and (os.environ['HOME'] == '/home/runner'):
-  os.environ["ATK"] = "REPLit"
-
 import atlastk
 from tortoise import *
 
 HTML = """
-<div style="display: table; margin: auto;">
  <svg id="SVG" viewbox="-150 -150 300 300">
   <text x="-100" y="-100">Click on a button below!</text>
  </svg>
@@ -47,7 +42,6 @@ HTML = """
   <button id="3" data-xdh-onevent="Draw">4</button>
   <button id="4" data-xdh-onevent="Draw">5</button>
  </div>
-</div>
 """
 
 HEAD = """

@@ -1,13 +1,9 @@
 
 # Tortoise: [turtle graphics](https://q37.info/s/3dwhcdfm) on the web
 
-[![Run on Repl.it](https://q37.info/s/kpm7xhfm.png)](https://q37.info/s/p3cvfxdx)
+[![Run on Repl.it](https://q37.info/s/kpm7xhfm.png)](https://q37.info/s/p3cvfxdx) [![About online demonstrations](https://img.shields.io/badge/about-online%20demonstrations-informational)](https://q37.info/s/sssznrb4)
 
-[![license: MIT](https://img.shields.io/github/license/epeios-q37/tortoise-python?color=yellow&style=for-the-badge)](https://github.com/epeios-q37/tortoise-python/blob/master/LICENSE)
-[![Stars](https://img.shields.io/github/stars/epeios-q37/tortoise-python.svg?style=for-the-badge)](https://github.com/epeios-q37/tortoise-python/stargazers)
-[![Forks](https://img.shields.io/github/forks/epeios-q37/tortoise-python.svg?style=for-the-badge)](https://github.com/epeios-q37/tortoise-python/network/members)
-
-[![Downloads](https://img.shields.io/pypi/dm/tortoise.svg?label=&style=for-the-badge)![Version](https://img.shields.io/pypi/v/tortoise?style=for-the-badge&color=90b4ed&label=PyPi)](http://q37.info/s/k3c3fmvp)
+[![license: MIT](https://img.shields.io/github/license/epeios-q37/tortoise-python?color=yellow&style=for-the-badge)](https://github.com/epeios-q37/tortoise-python/blob/master/LICENSE) [![Version](https://img.shields.io/pypi/v/tortoise?style=for-the-badge&color=90b4ed&label=PyPi)](http://q37.info/s/k3c3fmvp)
 
 
 [![tortoise library example](https://q37.info/s/frgzbhq9)](http://q37.info/s/dj9b7ksf)

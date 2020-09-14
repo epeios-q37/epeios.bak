@@ -9,9 +9,9 @@ Pour essayer les solutions à ces exercices dans *Repl.it* (un environnement de 
 
 ---
 
-Pour essayer les exercices en utilisant *Repl.it*, cliquer sur le bouton vert, sélectionner un exercice, puis cliquer sur le code QR (qui peut également être scanné avec un smartphone) qui s'affiche.
+Pour essayer les exercices en utilisant *Repl.it*, cliquer sur le bouton vert, sélectionner un exercice, puis cliquer sur l'URL qui s'affiche.
 
-Pour sélectionner un autre exercice, fermer l'onglet ou la fenêtre qui s'est ouverte lors du click sur le code QR, et cliquer à nouveau sur le bouton vert.
+Pour sélectionner un autre exercice, fermer l'onglet ou la fenêtre qui s'est ouverte lors du click sur l'URL, et cliquer à nouveau sur le bouton vert.
 
 ---
 

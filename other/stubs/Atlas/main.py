@@ -14,11 +14,9 @@ head = """
 """
 
 body = """
-<div style="display: table; margin: 50px auto auto auto;">
  <fieldset>
    <button data-xdh-onevent="Submit">Click me!</button>
  </fieldset>
-</div>
 """
 
 def acConnect(dom):
@@ -27,7 +25,6 @@ def acConnect(dom):
 
 def acSubmit(dom):
 	dom.alert("Hello, the World!")
-
 
 callbacks = {
 	"": acConnect,

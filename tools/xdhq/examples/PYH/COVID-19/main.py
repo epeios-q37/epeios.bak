@@ -34,22 +34,20 @@ HEAD = """
 """
 
 BODY="""
-<div style="display: table; margin: 50px auto auto auto;">
-  <fieldset>
-    <svg id="SVG" width="600" height="400" xmlns="http://www.w3.org/2000/svg"/>
-  </fieldset>
-  <div style="width: 100%; margin: 0 auto; text-align: center;">
-    <span style="padding: 2px; border: 1px dotted;" id="Text"></span>
-    <select id="Code" data-xdh-onevent="Redraw">
-      <option value="FRA">France</option>
-      <option value="WORLD">Monde</option>
-    </select>
-    <select id="Cible" data-xdh-onevent="Redraw">
-      <option value="casConfirmes">Cas confirmés</option>
-      <option value="deces">Décès</option>
-    </select>
-    <input type="checkbox" id="Relatif" data-xdh-onevent="Redraw">Relatif</input>
-  </div>
+<fieldset>
+  <svg id="SVG" width="600" height="400" xmlns="http://www.w3.org/2000/svg"/>
+</fieldset>
+<div style="width: 100%; margin: 0 auto; text-align: center;">
+  <span style="padding: 2px; border: 1px dotted;" id="Text"></span>
+  <select id="Code" data-xdh-onevent="Redraw">
+    <option value="FRA">France</option>
+    <option value="WORLD">Monde</option>
+  </select>
+  <select id="Cible" data-xdh-onevent="Redraw">
+    <option value="casConfirmes">Cas confirmés</option>
+    <option value="deces">Décès</option>
+  </select>
+  <input type="checkbox" id="Relatif" data-xdh-onevent="Redraw">Relatif</input>
 </div>
 """
 

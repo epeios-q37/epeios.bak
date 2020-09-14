@@ -34,10 +34,6 @@ import traceback
 # instead of being displayed in an alert box.
 _regularExceptions = False
 
-# Detecting 'Repl.it' environment.
-if ('HOME' in os.environ) and (os.environ['HOME'] == '/home/runner'):
-  os.environ["ATK"] = "REPLit"
-
 sys.path.append("./Atlas.zip")
 sys.path.append("../Atlas.zip")
 

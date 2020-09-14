@@ -4,4 +4,4 @@
 # Il est renommé en '.replit' lors de la publication.
 
 language = "bash"
-run = "python3 pendu.py"
+run = "ATK=none python3 pendu.py"

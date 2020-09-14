@@ -10,9 +10,9 @@ Le code est à écrire dans le fichier `pendu.py`.
 
 ---
 
-Pour lancer les exercices en utilisant *Repl.it*, cliquer sur le bouton vert, puis sur le code QR (qui peut également être scanné avec un smartphone) qui s'affiche.
+Pour lancer les exercices en utilisant *Repl.it*, cliquer sur le bouton vert, puis sur l'URL qui s'affiche.
 
-Pour revenir dans le code de l'exercice, fermer l'onglet ou la fenêtre qui s'est ouverte lors du click sur le code QR.
+Pour revenir dans le code de l'exercice, fermer l'onglet ou la fenêtre qui s'est ouverte lors du click sur l'URL.
 
 ---
 

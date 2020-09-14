@@ -1,10 +1,6 @@
 # *EduTK*: a toolkit to create modern programming exercises (*Python* version)
 
-[![license: MIT](https://img.shields.io/github/license/epeios-q37/edutk-python?color=yellow&style=for-the-badge)](https://github.com/epeios-q37/edutk-python/blob/master/LICENSE)
-[![Stars](https://img.shields.io/github/stars/epeios-q37/edutk-python.svg?style=for-the-badge)](https://github.com/epeios-q37/edutk-python/stargazers)
-[![Forks](https://img.shields.io/github/forks/epeios-q37/edutk-python.svg?style=for-the-badge)](https://github.com/epeios-q37/edutk-python/network/members)
-
-[![Downloads](https://img.shields.io/pypi/dm/edutk.svg?label=&style=for-the-badge)![Version](https://img.shields.io/pypi/v/edutk?style=for-the-badge&color=90b4ed&label=PyPi)](http://q37.info/s/xhgwkn7v)
+[![license: MIT](https://img.shields.io/github/license/epeios-q37/edutk-python?color=yellow&style=for-the-badge)](https://github.com/epeios-q37/edutk-python/blob/master/LICENSE) [![Version](https://img.shields.io/pypi/v/edutk?style=for-the-badge&color=90b4ed&label=PyPi)](http://q37.info/s/xhgwkn7v)
 
 
 The purpose of this toolkit is to provide the simplest possible way to create modern programming exercises, i.e. exercises:

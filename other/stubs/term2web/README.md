@@ -1,7 +1,7 @@
 # Stub for the *term2web* *Python* library.
 
 
-[![Run on Repl.it](https://q37.info/s/kpm7xhfm.png)](https://q37.info/s/7jqrdgnx)
+[![Run on Repl.it](https://q37.info/s/kpm7xhfm.png)](https://q37.info/s/7jqrdgnx) [![About online demonstrations](https://img.shields.io/badge/about-online%20demonstrations-informational)](https://q37.info/s/sssznrb4)
 
 [![license: MIT](https://img.shields.io/github/license/epeios-q37/term2web-python-stub?color=yellow&style=for-the-badge)](https://github.com/epeios-q37/term2web-python-stub/blob/master/LICENSE)
 

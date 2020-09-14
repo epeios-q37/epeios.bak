@@ -4,4 +4,4 @@
 # Il est renommé en '.replit' lors de la publication.
 
 language = "bash"
-run = "bash main"
+run = "ATK=none bash main"
