@@ -33,7 +33,7 @@ $out = str_replace(array("\r", "\n", "\t"), '','
 			<style id="XDHStyle">
 				.xdh_style {
 					display: table;
-					margin: 50px auto auto auto;
+					margin: 20px auto auto auto;
 				}
 			</style>'
 . $head . '

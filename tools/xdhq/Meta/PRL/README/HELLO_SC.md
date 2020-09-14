@@ -2,45 +2,44 @@
 use Atlas;
 
 my $body = '
-<div style="display: table; margin: 50px auto auto auto;">
- <fieldset>
-  <input id="input" maxlength="20" placeholder="Enter a name here" type="text"
+<fieldset>
+ <input id="input" maxlength="20" placeholder="Enter a name here" type="text"
          data-xdh-onevent="Submit" value="World"/>
-  <div style="display: flex; justify-content: space-around; margin: 5px auto auto auto;">
-   <button data-xdh-onevent="Submit">Submit</button>
-   <button data-xdh-onevent="Clear">Clear</button>
-  </div>
- </fieldset>
-</div>';
+ <div style="display: flex; justify-content: space-around; margin: 5px auto auto auto;">
+  <button data-xdh-onevent="Submit">Submit</button>
+  <button data-xdh-onevent="Clear">Clear</button>
+ </div>
+</fieldset>
+';
 
 sub acConnect {
-    my ($hello, $dom) = @_;
+ my ($hello, $dom) = @_;
 
-    $dom->inner("",$body);
-    $dom->focus("input");
+ $dom->inner("",$body);
+ $dom->focus("input");
 }
 
 sub acSubmit {
-    my ($hello, $dom) = @_;
+ my ($hello, $dom) = @_;
 
-    $dom->alert("Hello, " . $dom->getContent("input") . "!");
-    $dom->focus("input");
+ $dom->alert("Hello, " . $dom->getContent("input") . "!");
+ $dom->focus("input");
 }
 
 sub acClear {
-    my ($hello, $dom) = @_;
+ my ($hello, $dom) = @_;
 
-    if ( $dom->confirm("Are you sure?") ) {
-        $dom->setContent("input", "");
-    }
+ if ( $dom->confirm("Are you sure?") ) {
+  $dom->setContent("input", "");
+ }
 
-    $dom->focus("input");
+ $dom->focus("input");
 }
 
 my %callbacks = (
-    "" => \&acConnect,
-    "Submit" => \&acSubmit,
-    "Clear" => \&acClear,
+ "" => \&acConnect,
+ "Submit" => \&acSubmit,
+ "Clear" => \&acClear,
 );
 
 Atlas::launch(\%callbacks);
