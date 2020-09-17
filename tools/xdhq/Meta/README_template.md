@@ -23,7 +23,7 @@
 
 ---
 
-## Straight to the point: the [*Hello, World!*](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program) program
+## Straight to the point: the ["Hello, World!"](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program) program
 
 ### Source code
 
@@ -39,7 +39,7 @@
 
 Thanks to [*Replit*](https://q37.info/s/mxmgq3qm), an [online IDE](https://q37.info/s/zzkzbdw7), you can write and run programs using the *Atlas* toolkit directly in your web browser, without having to install *@LMCT@* on your computer.
 
-To see some examples, like the following [*TodoMVC*](http://todomvc.com/) application or the above [*Hello, World!*](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program) program, simply:
+To see some examples, like the following [*TodoMVC*](http://todomvc.com/) application or the above ["Hello, World!"](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program) program, simply:
 - go [here](https://q37.info/s/@GRSS@) (also accessible with the [![Run on Repl.it](https://q37.info/s/kpm7xhfm.png)](https://q37.info/s/@GRSS@) badge at the top of this page),
 -  click on the green `run` button,
 -  choose the demonstration to launch,

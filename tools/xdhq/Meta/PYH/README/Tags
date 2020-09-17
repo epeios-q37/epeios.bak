@@ -19,13 +19,13 @@ FJSL		*JavaScript*
 # GitHub Replit shortcut suffix
 GRSS		vwpsw73v
 
-# 'Hello, World!' launch commands.
+# "Hello, World!" launch commands.
 HELLO_LC	%HELLO_LC.md
 
 # PREAMBLE
 PREAMBLE	%PREAMBLE.md
 
-# 'Hello, World!' source code.
+# "Hello, World!" source code.
 HELLO_SC	%HELLO_SC.md
 
 # Footer

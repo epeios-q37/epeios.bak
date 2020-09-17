@@ -19,13 +19,13 @@ FJSL		front-end *JavaScript*
 # GitHub Replit shortcut suffix
 GRSS		st7gccd4
 
-# 'Hello, World!' launch commands.
+# "Hello, World!" launch commands.
 HELLO_LC	%HELLO_LC.md
 
 # PREAMBLE
 PREAMBLE	&
 
-# 'Hello, World!' source code.
+# "Hello, World!" source code.
 HELLO_SC	%HELLO_SC.md
 
 # Footer
