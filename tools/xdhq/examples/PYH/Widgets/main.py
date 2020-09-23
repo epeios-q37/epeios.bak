@@ -146,13 +146,12 @@ currentWidget = "button"
 def handle(label,html):
   return """
   <details id="{}" data-xdh-onevent="Toggle">
-    <summary><code>{}</code></summary>
+    <summary><tt>{}</tt></summary>
     <fieldset>{}</fieldset>
-    <fieldset>
-      <pre>{}</pre>
-    </fieldset>
-  </details>
+         <pre class="lang-html">{}</pre>
+   </details>
   """.format(label, label, html, cgi.escape(html))
+
 
 def ac_connect(dom):
   html = ""
@@ -162,6 +161,7 @@ def ac_connect(dom):
 
   dom.inner("",html)
   dom.set_attribute(currentWidget, "open", "true")
+  dom.execute_void("document.querySelectorAll('pre').forEach((block) => {hljs.highlightBlock(block);});")
 
 def ac_toggle(dom,id):
   global currentWidget
