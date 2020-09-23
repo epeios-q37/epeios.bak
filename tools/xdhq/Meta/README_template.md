@@ -65,6 +65,6 @@ With the [*Atlas* toolkit](http://atlastk.org/), you transform your programs in 
 
 The *Atlas* toolkit is written in pure *@LMCT@*, with no native code and no dependencies, allowing the *Atlas* toolkit to be used on all environments where *@LMCT@* is available. 
 
-And, icing on the cake, simply by running them on a local computer with a simple internet connexion, applications using the *Atlas* toolkit will be accessible from the entire internet on laptops, smartphones, tablets…
+And, icing on the cake, simply by running them on a local computer with a simple internet connection, applications using the *Atlas* toolkit will be accessible from the entire internet on laptops, smartphones, tablets…
 
 @FOOTER@

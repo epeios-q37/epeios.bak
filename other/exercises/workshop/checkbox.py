@@ -26,7 +26,7 @@ def prettify(body):
 # End of header.
 
 body = """
-<p>Indiquez le tpe de véhicule que vous possédez :</p>
+<p>Indiquez le type de véhicule que vous possédez :</p>
 <input type="checkbox" id="bicyclette" data-xdh-onevent="Select">
 <label for="bicyclette">Bicyclette</label><br>
 
