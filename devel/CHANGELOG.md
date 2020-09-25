@@ -10,6 +10,11 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2020-09-25:
+
+- XDHUTL:
+  - the tag default event is red from the registry and no more hard coded,
+
 ## 2020-09-24:
 
 - XDHCH:

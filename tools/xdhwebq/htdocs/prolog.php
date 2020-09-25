@@ -26,8 +26,12 @@ $out = str_replace(array("\r", "\n", "\t"), '','
 			<!-- BEGIN -->
 			<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 			<meta http-equiv="Cache-Control" content="no-cache"/>
+			<!--Below both scripts are for DEV environment. -->
 			<script src="faas/xdhtml.js"></script>
 			<script src="faas/xdhwebq.js"></script>
+			<!-- Below both scripts are for PROD environment. -->
+			<script src="faas/xdhtml_20200821.js"></script>
+			<script src="faas/xdhwebq_20200608.js"></script>
 			<script src="faas/qrcode.min.js"></script>
 			<style id="XDHStyle">
 				.xdh_style {

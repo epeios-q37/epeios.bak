@@ -24,6 +24,36 @@
 using namespace xdhutl;
 
 namespace {
+	namespace registry_ {
+		using sclr::rEntry;
+
+		rEntry TagsDefaultEvents( "TagsDefaultEvents", sclr::Definitions );
+		rEntry LooseTagDefaultEventEntry( "Tag", TagsDefaultEvents );
+		rEntry TagDefaultEventEntry(RGSTRY_TAGGING_ATTRIBUTE("name"), LooseTagDefaultEventEntry);
+		rEntry TagDefaultEvent("@Event", TagDefaultEventEntry);
+		rEntry TagDefaultEventKey("@Key", TagDefaultEventEntry);
+	}
+
+	void GetTagDefaultDefaultEvent_(str::dString &Event)
+	{
+			sclm::MGetValue(rgstry::rTEntry(registry_::TagDefaultEvent, ""), Event);
+	}
+}
+
+void xdhutl::GetTagDefaultEvent(
+	const str::string_ &Tag,	// For the 'INPUT' tag, 'Name' contains the value of the 'type' attribute (uppercased).
+	str::string_ &Event,
+	str::dString &Key )	// If the event is key related.
+{
+	if ( sclm::OGetValue(rgstry::rTEntry(registry_::TagDefaultEvent, Tag), Event) )
+		sclm::OGetValue(rgstry::rTEntry(registry_::TagDefaultEventKey, Tag), Key);
+	else
+		GetTagDefaultDefaultEvent_(Event);
+
+}
+
+
+namespace {
 	stsfsm::automat ActionAutomat_;
 
 	static void InitAndFillActionAutomat_( void )

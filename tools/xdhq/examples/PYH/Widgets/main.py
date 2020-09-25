@@ -94,7 +94,7 @@ widgets = {
 """,
   "color":
 """
-<input type="color" data-xdh-onevent="change|clSelect"/>
+<input type="color" data-xdh-onevent="clSelect"/>
 <output id="clOutput"/>
 """,
   "range":
