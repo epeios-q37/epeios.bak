@@ -76,11 +76,9 @@ namespace xdwsessn {
 			Session_.Init(Callback);
 			return XCallback_.Init(Upstream_, Token) && Session_.Initialize(Upstream_, Language, Token);
 		}
-		bso::sBool Launch(
-			const char *Id,
-			const char *Action )
+		bso::sBool Handle( const char *EventDigest )
 		{
-			return Session_.Launch(Id, Action );
+			return Session_.Handle(EventDigest);
 		}
 		bso::sBool Execute(
 			const str::dString &Script,

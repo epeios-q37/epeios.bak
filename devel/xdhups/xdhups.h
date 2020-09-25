@@ -66,11 +66,9 @@ namespace xdhups {
 		{
 			return C_().Initialize(Callback, Language, Token);
 		}
-		bso::bool__ Launch(
-			const char *Id,
-			const char *Action )
+		bso::bool__ Handle( const char *EventDigest )
 		{
-			return C_().Launch( Id, Action );
+			return C_().Handle(EventDigest);
 		}
 	};
 

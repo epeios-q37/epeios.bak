@@ -56,7 +56,7 @@ def acConnect(dom):
   dom.focus("input")
 
 def acSubmit(dom):
-  dom.alert("Hello, " + dom.getContent("input") + "!")
+  dom.alert("Hello, {}!".format(dom.getContent("input")))
   dom.focus("input")
 
 def acClear(dom):

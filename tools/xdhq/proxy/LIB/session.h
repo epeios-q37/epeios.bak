@@ -104,16 +104,15 @@ namespace session {
 		void Broadcast_(flw::rRFlow &Flow);
 		void BroadcastAction_(flw::rRFlow &Flow);
 		bso::bool__ Launch_(
-			const char *Id,
-			const char *Action);
+			const str::dString &Id,
+			const str::dString &Action);
+		bso::sBool Handle_( const char *EventDigest );
 	protected:
 		virtual bso::sBool XDHCDCInitialize(
 			xdhcuc::cSingle &Callback,
 			const char *Language,
 			const str::dString &Token ) override;
-		virtual bso::bool__ XDHCDCLaunch(
-			const char *Id,
-			const char *Action ) override;
+		virtual bso::bool__ XDHCDCHandle( const char *EventDigest ) override;
 	public:
 		void reset( bso::sBool P = true )
 		{

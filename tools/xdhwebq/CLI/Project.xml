@@ -45,7 +45,6 @@
 				<Module>xdhcmn</Module>
 				<Module>xdhcuc</Module>
 				<Module>xdhups</Module>
-				<Module>xdhutl</Module>
 			</Modules>
 		</Modules>
 		<Modules Group="XDW" Path="../">

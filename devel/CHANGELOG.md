@@ -10,6 +10,13 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2020-09-24:
+
+- XDHCH:
+  `[XDHCDC]Launch(…)` -> `[XDHCDC]Handle(…)`, and receives an event digest instead of an action,
+- XDHUPS:
+  - [adpt]
+
 ## 2020-08-27:
 
 - SCLM, SCLR:

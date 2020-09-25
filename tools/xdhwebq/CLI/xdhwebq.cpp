@@ -36,7 +36,6 @@
 #include "flf.h"
 #include "mtk.h"
 #include "websck.h"
-#include "xdhutl.h"
 
 using cio::CErr;
 using cio::COut;
@@ -109,55 +108,6 @@ namespace {
 		}
 
 		namespace {
-			namespace {
-				namespace {
-					bso::sBool Extract_(
-						const str::dString &Digest,
-						str::dString &Id,
-						str::dString &Action)
-					{
-						bso::sBool ActionInProgress = false;
-					qRH;
-						xdhutl::wEventAbstract Abstract;
-					qRB;
-						Abstract.Init();
-						if ( xdhutl::FetchEventAbstract(Digest, Id, Abstract) ) {
-							if ( xdhutl::IsPredefined( Abstract.Action() ) )
-								qRVct();
-							else if ( Abstract.Action() == xdhutl::a_User ) {
-								// 'Id' is already set.
-								Action = Abstract.UserAction;
-								ActionInProgress = true;
-							} else
-								qRGnr();
-						}
-					qRR;
-					qRT;
-					qRE;
-						return ActionInProgress;
-					}
-				}
-
-				bso::sBool Handle_(
-					const str::dString &Digest,
-					xdwsessn::rSession &Session )
-				{
-					bso::sBool Cont = true;
-				qRH;
-					str::string Id, Action;
-					qCBUFFERh IdBuffer, ActionBuffer;
-				qRB;
-					tol::Init(Id, Action);
-
-					if ( Extract_(Digest, Id, Action) )
-						Cont = Session.Launch(Id.Convert(IdBuffer), Action.Convert(ActionBuffer));
-				qRR;
-				qRT;
-				qRE;
-					return Cont;
-				}
-			}
-
 			// Special scripts, which are not executed by the client,
 			// but intercepted to launch a special action.
 			namespace ss_ {
@@ -178,6 +128,7 @@ namespace {
 					websck::rFlow Flow;
 					xdwsessn::rSession Session;
 					str::wString Digest, Script;
+					qCBUFFERh Buffer;
 				qRB
 					Flow.Init(Driver, websck::mWithTerminator);
 
@@ -185,13 +136,13 @@ namespace {
 						Script.Init();
 						sclm::MGetValue(registry::definition::ErrorScript, Script);
 						Session.Execute(Script);
-					} else if ( Session.Launch("","") ) {
+					} else if ( Session.Handle(NULL) ) {
 						while ( true ) {
 							Digest.Init();
-							if ( !websck::GetMessage(Flow,Digest) )
+							if ( !websck::GetMessage(Flow, Digest) )
 								break;
 							Flow.Dismiss();
-							if ( !Handle_(Digest, Session) )
+							if ( !Session.Handle(Digest.Convert(Buffer)) )
 								break;
 							Flow.Write(ss_::standby::Label, ss_::standby::Size);
 							Flow.Commit();

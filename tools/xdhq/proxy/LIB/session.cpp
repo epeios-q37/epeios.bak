@@ -21,6 +21,8 @@
 
 #include "common.h"
 
+#include "xdhutl.h"
+
 #include "mtk.h"
 
 using namespace session;
@@ -271,8 +273,8 @@ qRE;
 }
 
 bso::bool__ session::rSession::Launch_(
-	const char *Id,
-	const char *Action )
+	const str::dString &Id,
+	const str::dString &Action )
 {
 	bso::sBool Cont = true;
 qRH;
@@ -343,14 +345,58 @@ qRE;
 	return Cont;
 }
 
-bso::bool__ session::rSession::XDHCDCLaunch(
-	const char *Id,
-	const char *Action )
+namespace {
+	bso::sBool Extract_(
+		const str::dString &Digest,
+		str::dString &Id,
+		str::dString &Action)
+	{
+		bso::sBool ActionInProgress = false;
+	qRH;
+		xdhutl::wEventAbstract Abstract;
+	qRB;
+		Abstract.Init();
+		if ( xdhutl::FetchEventAbstract(Digest, Id, Abstract) ) {
+			if ( xdhutl::IsPredefined( Abstract.Action() ) )
+				qRVct();
+			else if ( Abstract.Action() == xdhutl::a_User ) {
+				// 'Id' is already set.
+				Action = Abstract.UserAction;
+				ActionInProgress = true;
+			} else
+				qRGnr();
+		}
+	qRR;
+	qRT;
+	qRE;
+		return ActionInProgress;
+	}
+}
+
+bso::bool__ session::rSession::Handle_( const char *EventDigest )
+{
+	bso::sBool Cont = true;
+qRH;
+	str::string Id, Action;
+qRB;
+	tol::Init(Id, Action);
+
+	if ( ( EventDigest == NULL ) || ( !EventDigest[0] ) )
+		Cont = Launch_(str::Empty, str::Empty);
+	else if ( Extract_(str::wString(EventDigest), Id, Action) )
+		Cont = Launch_(Id, Action);
+qRR;
+qRT;
+qRE;
+	return Cont;
+}
+
+bso::bool__ session::rSession::XDHCDCHandle( const char *EventDigest )
 {
 	bso::sBool Cont = false;
 qRFH;
 qRFB;
-	Cont = Launch_( Id, Action );
+	Cont = Handle_( EventDigest );
 qRFR;
 qRFT;
 qRFE(sclm::ErrorDefaultHandling());
