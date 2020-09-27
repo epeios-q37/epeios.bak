@@ -52,7 +52,6 @@ void xdhutl::GetTagDefaultEvent(
 
 }
 
-
 namespace {
 	stsfsm::automat ActionAutomat_;
 

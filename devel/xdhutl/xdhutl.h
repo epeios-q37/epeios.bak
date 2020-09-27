@@ -132,30 +132,10 @@ namespace xdhutl {
 	typedef ctn::E_CONTAINER_( event_abstract_ ) event_abstracts_;
 	E_AUTO( event_abstracts );
 
-	inline void GetTagDefaultEvent(
+	void GetTagDefaultEvent(
 		const str::string_ &Name,	// For the 'INPUT' tag, 'Name' contains the value of the 'type' attribute (uppercased).
 		str::string_ &Event,
-		str::dString &Keys )	// If the event is key related.
-	{
-		if ( Name == "SELECT" )
-			Event.Append( "change" );
-		else if ( Name == "RANGE" )
-			Event.Append( "change" );
-		else if ( Name == "CHECKBOX" )
-			Event.Append( "change" );
-		else if ( Name == "RADIO" )
-			Event.Append( "change" );
-		else if ( Name == "TEXT" ) {
-			Event.Append( "keypress" );
-			Keys.Append( "Enter" );
-		}  else if ( Name == "TEXTAREA" ) {
-			Event.Append( "keypress" );
-			Keys.Append( "Enter" );
-		} else if ( Name == "TIMEOUT" ) {	// 'TIMEOUT' is a placeholder needed by the 'setTimeout(...)' function. It will never be used in a HTML file.
-			Event.Append( "timeout" );	// The 'timeout' event has the same purpose.
-		}  else
-			Event.Append( "click" );
-	}
+		str::dString &Key );	// If the event is key related.
 
 	void FillEventAbstract(
 		const str::string_ &DefaultEvent,

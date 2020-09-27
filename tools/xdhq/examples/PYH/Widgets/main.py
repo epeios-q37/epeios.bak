@@ -30,11 +30,12 @@ sys.path.append("../../atlastk")
 import cgi
 import atlastk
 
-widgets = {
+WIDGETS = {
   "button":
 """
 <button data-xdh-onevent="btSubmit">Mon bouton!</button>
 """ ,
+
   "checkbox":
 """
 <p>Indiquez le type de véhicule que vous possédez :</p>
@@ -54,7 +55,8 @@ widgets = {
 <div>
   <button data-xdh-onevent="cbSubmit">Envoyer</button>
 </div>
-""",  
+""",
+
   "radio":
 """
 <p>Veuillez choisir la meilleure méthode pour vous contacter :</p>
@@ -76,6 +78,7 @@ widgets = {
   <button data-xdh-onevent="rdSubmit">Envoyer</button>
 </div>
 """,
+
   "datalist":
 """
 <div>
@@ -92,11 +95,13 @@ widgets = {
   </datalist>
 </div>
 """,
+
   "color":
 """
-<input type="color" data-xdh-onevent="clSelect"/>
+<input type="color" id="clColor" "data-xdh-onevent="clSelect"/>
 <output id="clOutput"/>
 """,
+
   "range":
 """
 <label for="rgVolume">Volume</label>
@@ -107,6 +112,7 @@ widgets = {
   value="5">
 </meter>
 """,
+
   "select":
 """
 <p>Veuillez choisir un dinosaure :</p>
@@ -138,42 +144,53 @@ widgets = {
     <span><b>Désactiver</b></span>
   </label>
 </div>
+""",
+
+  "ckEditor": 
 """
+<textarea id="ckInput" data-xdh-widget="ckeditor|{entities: false, enterMode : CKEDITOR.ENTER_BR, linkShowTargetTab: false}|val\(\)|"></textarea>
+<button data-xdh-onevent="ckSubmit">Submit</button>
+<fieldset>
+  <output id="ckOutput"/>
+</fieldset>
+"""
+
 }
 
-currentWidget = "button"
+current = next(iter(WIDGETS))
 
 def handle(label,html):
-  return """
-  <details id="{}" data-xdh-onevent="Toggle">
-    <summary style="cursor: default;"><tt>{}</tt></summary>
-    <fieldset>{}</fieldset>
-         <pre class="lang-html">{}</pre>
-   </details>
-  """.format(label, label, html, cgi.escape(html))
+  return (
+  f"<option value={label}>{label}</option>",
+  f"""
+<fieldset class="hidden" id="{label}">
+  <fieldset>{html}</fieldset>
+  <pre class="lang-html">{cgi.escape(html)}</pre>
+</fieldset>
+  """)
 
 
 def ac_connect(dom):
   dom.inner("", open("Main.html").read())
 
-  html = ""
+  list, widgets = "", ""
 
-  for k, v in widgets.items():
-    html += handle(k, v) 
+  for k, v in WIDGETS.items():
+    html = handle(k, v) 
+    list += html[0]
+    widgets += html[1]
 
-  dom.inner("Target",html)
-  dom.set_attribute(currentWidget, "open", "true")
+  dom.inner("List",list)
+  dom.inner("Widgets", widgets)
   dom.execute_void("document.querySelectorAll('pre').forEach((block) => {hljs.highlightBlock(block);});")
+  dom.remove_class(current, "hidden")
 
-def ac_toggle(dom,id):
-  global currentWidget
+def ac_select(dom,id):
+  global current
 
-  if id != currentWidget:
-    if currentWidget:
-      dom.remove_attribute(currentWidget, "open")
-    currentWidget = id
-  else:
-    currentWidget == ""
+  dom.add_class(current,"hidden")
+  current = dom.get_content(id)
+  dom.remove_class(current, "hidden")
 
 def dl_shape(parfums):
   html = atlastk.create_HTML()
@@ -215,9 +232,9 @@ def ac_sl_add(dom):
 
 callbacks = {
   "": ac_connect,
-  "Toggle": ac_toggle,
+  "Select": ac_select,
 
-  "btnSubmit": lambda dom: dom.alert("Click on button detected!"),
+  "btSubmit": lambda dom: dom.alert("Click on button detected!"),
 
   "cbSelect": lambda dom, id: dom.set_content("cbOutput", "{} ({})".format(id, dom.get_content(id))),
   "cbSubmit": lambda dom: dom.alert(str(dom.get_contents(["cbBicyclette", "cbAutomobile","cbPirogue"]))),
@@ -234,8 +251,9 @@ callbacks = {
   "slSelect": lambda dom, id: dom.set_content("slOutput", dom.get_content(id)),
   "slSubmit": lambda dom: dom.alert(dom.get_content("slDinosaure")),
   "slAdd": ac_sl_add,
-  "slToggle": lambda dom, id: dom.disable_element("slAutres") if dom.get_content(id) == 'true' else dom.enable_element("slAutres")
+  "slToggle": lambda dom, id: dom.disable_element("slAutres") if dom.get_content(id) == 'true' else dom.enable_element("slAutres"),
 
+  "ckSubmit": lambda dom, id: dom.set_content("ckOutput", dom.get_content("ckInput")),
 }
 
 atlastk.launch(callbacks, None, open("Head.html").read())

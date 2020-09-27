@@ -275,6 +275,7 @@
     <xpp:bloc>
       <!-- Below one is the event by default -->
       <Tag name="" Event="click"/>
+      <!-- For the 'INPUT' tag, 'name' contains the value of the 'type' attribute (uppercased) -->
       <Tag name="SELECT" Event="change"/>
       <Tag name="RANGE" Event="change"/>
       <Tag name="CHECKBOX" Event="change"/>
