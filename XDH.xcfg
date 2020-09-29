@@ -280,8 +280,10 @@
       <Tag name="RANGE" Event="change"/>
       <Tag name="CHECKBOX" Event="change"/>
       <Tag name="RADIO" Event="change"/>
+      <Tag name="DATE" Event="change"/>
       <Tag name="COLOR" Event="change"/>
       <Tag name="TEXT" Event="keypress" Key="Enter"/>
+      <Tag name="PASSWORD" Event="keypress" Key="Enter"/>
       <Tag name="TEXTAREA" Event="keypress" Key="Enter"/>
     </xpp:bloc>
   </xpp:define>

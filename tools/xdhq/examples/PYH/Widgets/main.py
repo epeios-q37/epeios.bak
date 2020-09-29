@@ -33,73 +33,80 @@ import atlastk
 WIDGETS = {
   "button":
 """
-<button data-xdh-onevent="btSubmit">Mon bouton!</button>
+<button data-xdh-onevent="btSubmit">A button</button>
 """ ,
+
+  "password":
+"""
+<input type="password" data-xdh-onevent="pwSubmit" placeholder="Password"/>
+<span>Submitted password: <output id="pwOutput"/></span>
+""",
 
   "checkbox":
 """
-<p>Indiquez le type de véhicule que vous possédez :</p>
-<input type="checkbox" id="cbBicyclette" data-xdh-onevent="cbSelect">
-<label for="cbBicyclette">Bicyclette</label>
-<br/>
-<input type="checkbox" id="cbAutomobile" data-xdh-onevent="cbSelect">
-<label for="cbAutomobile">Automobile</label>
-<br/>
-<input type="checkbox" id="cbPirogue" data-xdh-onevent="cbSelect">
-<label for="cbPirogue">Pirogue</label>
-<br>
-<fieldset>
-  <span>Dernier élément cliqué : </span>
-  <output id="cbOutput"/>
-</fieldset>
 <div>
-  <button data-xdh-onevent="cbSubmit">Envoyer</button>
+  <p>Specify the type of vehicle you own:</p>
+  <input type="checkbox" id="cbBicycle" data-xdh-onevent="cbSelect">
+  <label for="cbBicycle">Bicycle</label>
+  <br/>
+  <input type="checkbox" id="cbCar" data-xdh-onevent="cbSelect">
+  <label for="cbCar">Car</label>
+  <br/>
+  <input type="checkbox" id="cbPirogue" data-xdh-onevent="cbSelect">
+  <label for="cbPirogue">Pirogue</label>
+</div>
+<p />
+<div>Last selected vehicle: <output id="cbOutput"/></div>
+<p />
+<div>
+  <button data-xdh-onevent="cbSubmit">Submit</button>
 </div>
 """,
 
   "radio":
 """
-<p>Veuillez choisir la meilleure méthode pour vous contacter :</p>
+<p>How to contact you:</p>
 <div>
   <input type="radio" name="rdContact" id="rdEmail" data-xdh-onevent="rdSelect">
   <label for="rdEmail">Email</label>
 
-  <input type="radio" name="rdContact" id="rdTelephone" data-xdh-onevent="rdSelect">
-  <label for="rdTelephone">Téléphone</label>
+  <input type="radio" name="rdContact" id="rdPhone" data-xdh-onevent="rdSelect">
+  <label for="rdTelephone">Phone</label>
 
-  <input type="radio" name="rdContact" id="rdCourrier" data-xdh-onevent="rdSelect">
-  <label for="rdCourrier">Courrier</label>
+  <input type="radio" name="rdContact" id="rdMail" data-xdh-onevent="rdSelect">
+  <label for="rdMail">Mail (post)</label>
 </div>
-<fieldset>
-  <span>Élément sélectionné : </span>
-  <output id="rdOutput"/>
-</fieldset>
+<p />
+<div>Selected contact method: <output id="rdOutput"/></div>
+<p />
 <div>
-  <button data-xdh-onevent="rdSubmit">Envoyer</button>
+  <button data-xdh-onevent="rdSubmit">Submit</button>
 </div>
 """,
 
   "datalist":
 """
-<div>
-  <span>Parfum sélectionné :</span>
-  <output id="dlOutput"/>
-</div>
-<div>
-  <label for="dlParfum">Indiquez un parfum :</label>
-  <input list="dlParfums" id="dlParfum" data-xdh-onevent="dlSubmit"/>
-  <datalist id="dlParfums">
+<span>
+  <input list="dlFlavors" data-xdh-onevent="dlSubmit" placeholder="Select a flavor"/>
+  <datalist id="dlFlavors">
       <option value="Caramel"/>
-      <option value="Chocolat"/>
-      <option value="Vanille"/>
+      <option value="Chocolate"/>
+      <option value="Vanilla"/>
   </datalist>
-</div>
+</span>
+<span>Selected flavor: <output id="dlOutput"/></span>
+""",
+
+  "date":
+"""
+<input type="date" data-xdh-onevent="dtSelect"/>
+<span>Selected date: <output id="dtOutput"/></span>
 """,
 
   "color":
 """
-<input type="color" id="clColor" "data-xdh-onevent="clSelect"/>
-<output id="clOutput"/>
+<input type="color" id="clColor" data-xdh-onevent="clSelect"/>
+<span>Selected color: <output id="clOutput"/></span>
 """,
 
   "range":
@@ -115,38 +122,34 @@ WIDGETS = {
 
   "select":
 """
-<p>Veuillez choisir un dinosaure :</p>
-<select id="slDinosaure" data-xdh-onevent="slSelect">
-    <optgroup label="Théropodes">
-        <option value="tyrannosaure">Tyrannosaure</option>
-        <option value="vélociraptor">Vélociraptor</option>
-        <option value="deinonychus">Deinonychus</option>
-    </optgroup>
-    <optgroup label="Sauropodes"
-        <option value="diplodocus">Diplodocus</option>
-        <option value="saltasaurus">Saltasaurus</option>
-        <option value="apatosaurus">Apatosaurus</option>
-    </optgroup>
-    <optgroup id="slAutres" label="Autres"/>
+<select data-xdh-onevent="slSelect">
+  <optgroup label="Théropods">
+      <option value="tyrannosaurus">Tyrannosaurus</option>
+      <option value="vélociraptor">Velociraptor</option>
+      <option value="deinonychus">Deinonychus</option>
+  </optgroup>
+  <optgroup label="Sauropods"
+      <option value="diplodocus">Diplodocus</option>
+      <option value="saltasaurus">Saltasaurus</option>
+      <option value="apatosaurus">Apatosaurus</option>
+  </optgroup>
+  <optgroup id="slOthers" label="Others"/>
 </select>
-<fieldset>
-  <label for="slOutput">Élément sélectionné : </label>
+<span>
+  <label for="slOutput">Selected dinausor: </label>
   <output id="slOutput"/>
-</fieldset>
+</span>
+<p />
 <div>
-  <button data-xdh-onevent="slSubmit">Envoyer</button>
-</div>
-<div>
-  <input id="slInput" data-xdh-onevent="slAdd"/>
-  <button data-xdh-onevent="slAdd">Ajouter</button>
+  <input id="slInput" data-xdh-onevent="slAdd" placeholder="Other dinausor"/>
   <label>
     <input type="checkbox" data-xdh-onevent="slToggle"/>
-    <span><b>Désactiver</b></span>
+    <b>Deactivate</b>
   </label>
 </div>
 """,
 
-  "ckEditor": 
+  "CKEditor": 
 """
 <textarea id="ckInput" data-xdh-widget="ckeditor|{entities: false, enterMode : CKEDITOR.ENTER_BR, linkShowTargetTab: false}|val\(\)|"></textarea>
 <button data-xdh-onevent="ckSubmit">Submit</button>
@@ -154,7 +157,6 @@ WIDGETS = {
   <output id="ckOutput"/>
 </fieldset>
 """
-
 }
 
 current = next(iter(WIDGETS))
@@ -171,6 +173,10 @@ def handle(label,html):
 
 
 def ac_connect(dom):
+  global current
+
+  current = next(iter(WIDGETS))
+
   dom.inner("", open("Main.html").read())
 
   list, widgets = "", ""
@@ -192,33 +198,34 @@ def ac_select(dom,id):
   current = dom.get_content(id)
   dom.remove_class(current, "hidden")
 
-def dl_shape(parfums):
+def dl_shape(flavors):
   html = atlastk.create_HTML()
 
-  for parfum in parfums:
+  for flavor in flavors:
     html.push_tag("option")
-    html.put_attribute("value", parfum)
+    html.put_attribute("value", flavor)
     html.pop_tag()
 
   return html
 
-dl_parfums = ["Vanille", "Chocolat", "Caramel"]  
+dl_flavors = ["Vanilla", "Chocolate", "Caramel"]  
 
-def ac_dl_submit(dom):
-  global dl_parfums
+def ac_dl_submit(dom, id):
+  global dl_flavors
 
-  parfum = dom.get_content("dlParfum")
-  dom.set_content("dlParfum", "")
-  if not parfum in dl_parfums:
-    dl_parfums.append(parfum)
-  dl_parfums.sort()
-  dom.inner("dlParfums", dl_shape(dl_parfums))
-  dom.set_content("dlOutput", parfum)
+  flavor = dom.get_content(id)
+  dom.set_content(id, "")
+  if not flavor in dl_flavors:
+    dl_flavors.append(flavor)
+    dl_flavors.sort()
+    dom.inner("dlFlavors", dl_shape(dl_flavors))
+  dom.set_content("dlOutput", flavor)
 
 def sl_embed(other):
   html = atlastk.create_HTML()
 
   html.push_tag("option")
+  html.put_attribute("selected", "selected")
   html.put_value(other)
 #  html.pop_tag()
 
@@ -226,7 +233,7 @@ def sl_embed(other):
 
 def ac_sl_add(dom):
 #  dom.prepend_layout("autres", "<option>" + dom.getContent("input") + "</option>")
-  dom.prepend_layout("slAutres", sl_embed(dom.getContent("slInput")))
+  dom.prepend_layout("slOthers", sl_embed(dom.get_content("slInput")))
   dom.set_content("slInput", "")
   dom.focus("slInput")  
 
@@ -236,22 +243,27 @@ callbacks = {
 
   "btSubmit": lambda dom: dom.alert("Click on button detected!"),
 
+  "pwSubmit": lambda dom, id: dom.set_content("pwOutput", dom.get_content(id)),
+
   "cbSelect": lambda dom, id: dom.set_content("cbOutput", "{} ({})".format(id, dom.get_content(id))),
-  "cbSubmit": lambda dom: dom.alert(str(dom.get_contents(["cbBicyclette", "cbAutomobile","cbPirogue"]))),
+  "cbSubmit": lambda dom: dom.alert(str(dom.get_contents(["cbBicycle", "cbCar","cbPirogue"]))),
 
   "rdSelect": lambda dom, id: dom.set_content("rdOutput", id),
-  "rdSubmit": lambda dom: dom.alert(str(dom.get_contents(["rdEmail", "rdTelephone","rdCourrier"]))),
+  "rdSubmit": lambda dom: dom.alert(str(dom.get_contents(["rdEmail", "rdPhone","rdMail"]))),
 
   "dlSubmit": ac_dl_submit,
 
+  "dtSelect": lambda dom, id: dom.set_content("dtOutput", dom.get_content(id)),
+
   "clSelect": lambda dom, id: dom.set_content("clOutput", dom.get_content(id)),
+
+  "cpSelect": lambda dom, id: dom.set_content("cpOutput", dom.get_content(id)),
 
   "rgSlide": lambda dom: dom.set_attribute("rgOutput", "value", (dom.getContent("rgVolume"))),
 
   "slSelect": lambda dom, id: dom.set_content("slOutput", dom.get_content(id)),
-  "slSubmit": lambda dom: dom.alert(dom.get_content("slDinosaure")),
   "slAdd": ac_sl_add,
-  "slToggle": lambda dom, id: dom.disable_element("slAutres") if dom.get_content(id) == 'true' else dom.enable_element("slAutres"),
+  "slToggle": lambda dom, id: dom.disable_element("slOthers") if dom.get_content(id) == 'true' else dom.enable_element("slOthers"),
 
   "ckSubmit": lambda dom, id: dom.set_content("ckOutput", dom.get_content("ckInput")),
 }
