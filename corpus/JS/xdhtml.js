@@ -556,11 +556,11 @@ function getValue(elementOrId)	// Returns the value of element of id 'id'.
 			value =  element.textContent;
 			break;
 		default:
-			content = element.innerHTML;
+			value = element.innerHTML;
 			break;
 	}
 
-	return content;
+	return value;
 }
 
 function getMark(idOrElement) {
@@ -625,9 +625,9 @@ function getValues(ids) {
         let widgetRetrievingMethod = getWidgetRetrievingMethod(element);
         
         if ( widgetRetrievingMethod !== "" )
-            contents = prependToFlatStrings(eval(widgetRetrievingMethod), values);
+            values = prependToFlatStrings(eval(widgetRetrievingMethod), values);
         else
-            contents = prependToFlatStrings(getValue(element), values);
+            values = prependToFlatStrings(getValue(element), values);
 	}
 
 	return values;

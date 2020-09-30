@@ -23,4 +23,18 @@
   .hidden {
     display: none;
   }
+
+  output > span {
+    all: initial;
+    background-color: lightgrey;
+    font-style: oblique;
+  }
+
+  output > span::before {
+    content: '('
+  }
+
+  output > span::after {
+    content: ')'
+  }
 </style>

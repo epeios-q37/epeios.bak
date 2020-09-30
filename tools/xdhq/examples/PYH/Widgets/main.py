@@ -27,176 +27,54 @@ import os, sys
 os.chdir(os.path.dirname(os.path.realpath(__file__)))
 sys.path.append("../../atlastk")
 
-import cgi
-import atlastk
+import atlastk, cgi
 
-WIDGETS = {
-  "button":
-"""
-<button data-xdh-onevent="btSubmit">A button</button>
-""" ,
+target=""
 
-  "password":
-"""
-<input type="password" data-xdh-onevent="pwSubmit" placeholder="Password"/>
-<span>Submitted password: <output id="pwOutput"/></span>
-""",
+def clean(s,i):
+  pattern = f' id="_CGN{i}"'
 
-  "checkbox":
-"""
-<div>
-  <p>Specify the type of vehicle you own:</p>
-  <input type="checkbox" id="cbBicycle" data-xdh-onevent="cbSelect">
-  <label for="cbBicycle">Bicycle</label>
-  <br/>
-  <input type="checkbox" id="cbCar" data-xdh-onevent="cbSelect">
-  <label for="cbCar">Car</label>
-  <br/>
-  <input type="checkbox" id="cbPirogue" data-xdh-onevent="cbSelect">
-  <label for="cbPirogue">Pirogue</label>
-</div>
-<p />
-<div>Last selected vehicle: <output id="cbOutput"/></div>
-<p />
-<div>
-  <button data-xdh-onevent="cbSubmit">Submit</button>
-</div>
-""",
+  while pattern in s:
+    s = s.replace(pattern, "")
+    i += 1
+    pattern = f' id="_CGN{i}"'
 
-  "radio":
-"""
-<p>How to contact you:</p>
-<div>
-  <input type="radio" name="rdContact" id="rdEmail" data-xdh-onevent="rdSelect">
-  <label for="rdEmail">Email</label>
+  return s.strip(" \n").replace ("    <","<").replace("data-xdh-widget_","data-xdh-widget"),i
 
-  <input type="radio" name="rdContact" id="rdPhone" data-xdh-onevent="rdSelect">
-  <label for="rdTelephone">Phone</label>
 
-  <input type="radio" name="rdContact" id="rdMail" data-xdh-onevent="rdSelect">
-  <label for="rdMail">Mail (post)</label>
-</div>
-<p />
-<div>Selected contact method: <output id="rdOutput"/></div>
-<p />
-<div>
-  <button data-xdh-onevent="rdSubmit">Submit</button>
-</div>
-""",
+def display_code(dom,element,i):
+  source = dom.first_child(element);
+  code,i = clean(dom.get_value(source),i)
+  dom.set_value(dom.next_sibling(source),cgi.escape(code))
 
-  "datalist":
-"""
-<span>
-  <input list="dlFlavors" data-xdh-onevent="dlSubmit" placeholder="Select a flavor"/>
-  <datalist id="dlFlavors">
-      <option value="Caramel"/>
-      <option value="Chocolate"/>
-      <option value="Vanilla"/>
-  </datalist>
-</span>
-<span>Selected flavor: <output id="dlOutput"/></span>
-""",
-
-  "date":
-"""
-<input type="date" data-xdh-onevent="dtSelect"/>
-<span>Selected date: <output id="dtOutput"/></span>
-""",
-
-  "color":
-"""
-<input type="color" id="clColor" data-xdh-onevent="clSelect"/>
-<span>Selected color: <output id="clOutput"/></span>
-""",
-
-  "range":
-"""
-<label for="rgVolume">Volume</label>
-<input type="range" id="rgVolume" min="0" max="10" data-xdh-onevent="rgSlide">
-<meter id="rgOutput"
-  min="0" max="10"
-  low="5" high="8" optimum="4"
-  value="5">
-</meter>
-""",
-
-  "select":
-"""
-<select data-xdh-onevent="slSelect">
-  <optgroup label="Théropods">
-      <option value="tyrannosaurus">Tyrannosaurus</option>
-      <option value="vélociraptor">Velociraptor</option>
-      <option value="deinonychus">Deinonychus</option>
-  </optgroup>
-  <optgroup label="Sauropods"
-      <option value="diplodocus">Diplodocus</option>
-      <option value="saltasaurus">Saltasaurus</option>
-      <option value="apatosaurus">Apatosaurus</option>
-  </optgroup>
-  <optgroup id="slOthers" label="Others"/>
-</select>
-<span>
-  <label for="slOutput">Selected dinausor: </label>
-  <output id="slOutput"/>
-</span>
-<p />
-<div>
-  <input id="slInput" data-xdh-onevent="slAdd" placeholder="Other dinausor"/>
-  <label>
-    <input type="checkbox" data-xdh-onevent="slToggle"/>
-    <b>Deactivate</b>
-  </label>
-</div>
-""",
-
-  "CKEditor": 
-"""
-<textarea id="ckInput" data-xdh-widget="ckeditor|{entities: false, enterMode : CKEDITOR.ENTER_BR, linkShowTargetTab: false}|val\(\)|"></textarea>
-<button data-xdh-onevent="ckSubmit">Submit</button>
-<fieldset>
-  <output id="ckOutput"/>
-</fieldset>
-"""
-}
-
-current = next(iter(WIDGETS))
-
-def handle(label,html):
-  return (
-  f"<option value={label}>{label}</option>",
-  f"""
-<fieldset class="hidden" id="{label}">
-  <fieldset>{html}</fieldset>
-  <pre class="lang-html">{cgi.escape(html)}</pre>
-</fieldset>
-  """)
-
+  return i
 
 def ac_connect(dom):
-  global current
-
-  current = next(iter(WIDGETS))
+  global target
 
   dom.inner("", open("Main.html").read())
+  current = dom.next_sibling(dom.next_sibling(dom.first_child("")))
+  i = 0
 
-  list, widgets = "", ""
+  target = ""
 
-  for k, v in WIDGETS.items():
-    html = handle(k, v) 
-    list += html[0]
-    widgets += html[1]
+  while current != "":
+    dom.end("List",'<option value="{id}">{id}</option>'.format(id=dom.get_attribute(current,"id")))
+    i = display_code(dom,current,i)
+    current = dom.next_sibling(current)
 
-  dom.inner("List",list)
-  dom.inner("Widgets", widgets)
   dom.execute_void("document.querySelectorAll('pre').forEach((block) => {hljs.highlightBlock(block);});")
-  dom.remove_class(current, "hidden")
+
+  dom.set_attribute("ckInput","data-xdh-widget",dom.get_attribute("ckInput","data-xdh-widget_"))
+  dom.after("ckInput","")
 
 def ac_select(dom,id):
-  global current
+  global target
 
-  dom.add_class(current,"hidden")
-  current = dom.get_content(id)
-  dom.remove_class(current, "hidden")
+  if target:
+    dom.add_class(target,"hidden")
+  target = dom.get_value(id)
+  dom.remove_class(target, "hidden")
 
 def dl_shape(flavors):
   html = atlastk.create_HTML()
