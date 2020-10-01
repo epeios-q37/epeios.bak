@@ -27,7 +27,7 @@ import os, sys
 os.chdir(os.path.dirname(os.path.realpath(__file__)))
 sys.path.append("../../atlastk")
 
-import atlastk, cgi
+import atlastk, html
 
 target=""
 
@@ -47,11 +47,10 @@ def clean(s,i):
 
   return s.strip(" \n").replace ("    <","<").replace("data-xdh-widget_","data-xdh-widget"),i
 
-
 def display_code(dom,element,i):
   source = dom.first_child(element);
   code,i = clean(dom.get_value(source),i)
-  dom.set_value(dom.next_sibling(source),cgi.escape(code))
+  dom.set_value(dom.next_sibling(source),html.escape(code))
 
   return i
 
@@ -63,10 +62,11 @@ def ac_connect(dom):
   i = 0
 
   target = ""
-  list = "<option disabled selected value> -- Select a widget-- </option>"
+  list = "<option disabled selected value> -- Select a widget -- </option>"
 
   while current != "":
-    list += '<option value="{id}">{id}</option>'.format(id=dom.get_attribute(current,"id"))
+    id = dom.get_attribute(current,"id")
+    list += f'<option value="{id}">{id}</option>'
     i = display_code(dom,current,i)
     current = dom.next_sibling(current)
 
@@ -118,8 +118,7 @@ def sl_embed(other):
   return html
 
 def ac_sl_add(dom):
-#  dom.prepend_layout("autres", "<option>" + dom.getContent("input") + "</option>")
-  dom.prepend_layout("slOthers", sl_embed(dom.get_content("slInput")))
+  dom.begin("slOthers", sl_embed(dom.get_content("slInput")))
   dom.set_content("slInput", "")
   dom.focus("slInput")  
 

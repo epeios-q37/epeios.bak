@@ -54,6 +54,8 @@ function getDocument(id) {
 	}
 }
 
+// Version handling 'iframes'.
+/*
 function getElement(elementOrId) {
 	if (typeof elementOrId === "string") {
 		let doc = getDocument(elementOrId);
@@ -66,6 +68,19 @@ function getElement(elementOrId) {
 				return doc.body;
 		else
 			return doc.getElementById(id);
+	} else if (elementOrId === document.body)
+		return getElement("");	// To avoid defacement.
+	else
+		return elementOrId;
+}
+*/
+
+function getElement(elementOrId) {
+	if (typeof elementOrId === "string") {
+		if (elementOrId === "")
+			return document.body.firstElementChild;
+		else
+			return document.getElementById(elementOrId);
 	} else if (elementOrId === document.body)
 		return getElement("");	// To avoid defacement.
 	else
