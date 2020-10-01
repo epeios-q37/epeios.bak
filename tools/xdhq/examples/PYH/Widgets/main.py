@@ -31,6 +31,12 @@ import atlastk, cgi
 
 target=""
 
+"""
+From here and up to and including the 'ac_connect' function,
+to simplify the writing of the program, there are a lot a quirks
+which should not be used by regular developers.
+"""
+
 def clean(s,i):
   pattern = f' id="_CGN{i}"'
 
@@ -57,9 +63,10 @@ def ac_connect(dom):
   i = 0
 
   target = ""
+  list = "<option disabled selected value> -- Select a widget-- </option>"
 
   while current != "":
-    dom.end("List",'<option value="{id}">{id}</option>'.format(id=dom.get_attribute(current,"id")))
+    list += '<option value="{id}">{id}</option>'.format(id=dom.get_attribute(current,"id"))
     i = display_code(dom,current,i)
     current = dom.next_sibling(current)
 
@@ -67,6 +74,7 @@ def ac_connect(dom):
 
   dom.set_attribute("ckInput","data-xdh-widget",dom.get_attribute("ckInput","data-xdh-widget_"))
   dom.after("ckInput","")
+  dom.inner("List", list)
 
 def ac_select(dom,id):
   global target
