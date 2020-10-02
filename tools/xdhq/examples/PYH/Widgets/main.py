@@ -99,13 +99,13 @@ dl_flavors = ["Vanilla", "Chocolate", "Caramel"]
 def ac_dl_submit(dom, id):
   global dl_flavors
 
-  flavor = dom.get_content(id)
-  dom.set_content(id, "")
+  flavor = dom.get_value(id)
+  dom.set_value(id, "")
   if not flavor in dl_flavors:
     dl_flavors.append(flavor)
     dl_flavors.sort()
     dom.inner("dlFlavors", dl_shape(dl_flavors))
-  dom.set_content("dlOutput", flavor)
+  dom.set_value("dlOutput", flavor)
 
 def sl_embed(other):
   html = atlastk.create_HTML()
@@ -118,8 +118,8 @@ def sl_embed(other):
   return html
 
 def ac_sl_add(dom):
-  dom.begin("slOthers", sl_embed(dom.get_content("slInput")))
-  dom.set_content("slInput", "")
+  dom.begin("slOthers", sl_embed(dom.get_value("slInput")))
+  dom.set_value("slInput", "")
   dom.focus("slInput")  
 
 callbacks = {
@@ -128,29 +128,29 @@ callbacks = {
 
   "btSubmit": lambda dom: dom.alert("Click on button detected!"),
 
-  "pwSubmit": lambda dom, id: dom.set_content("pwOutput", dom.get_content(id)),
+  "pwSubmit": lambda dom, id: dom.set_value("pwOutput", dom.get_value(id)),
 
-  "cbSelect": lambda dom, id: dom.set_content("cbOutput", "{} ({})".format(id, dom.get_content(id))),
-  "cbSubmit": lambda dom: dom.alert(str(dom.get_contents(["cbBicycle", "cbCar","cbPirogue"]))),
+  "cbSelect": lambda dom, id: dom.set_value("cbOutput", "{} ({})".format(id, dom.get_value(id))),
+  "cbSubmit": lambda dom: dom.alert(str(dom.get_values(["cbBicycle", "cbCar","cbPirogue"]))),
 
-  "rdSelect": lambda dom, id: dom.set_content("rdOutput", id),
-  "rdSubmit": lambda dom: dom.alert(str(dom.get_contents(["rdEmail", "rdPhone","rdMail"]))),
+  "rdSelect": lambda dom, id: dom.set_value("rdOutput", id),
+  "rdSubmit": lambda dom: dom.alert(str(dom.get_values(["rdEmail", "rdPhone","rdMail"]))),
 
   "dlSubmit": ac_dl_submit,
 
-  "dtSelect": lambda dom, id: dom.set_content("dtOutput", dom.get_content(id)),
+  "dtSelect": lambda dom, id: dom.set_value("dtOutput", dom.get_value(id)),
 
-  "clSelect": lambda dom, id: dom.set_content("clOutput", dom.get_content(id)),
+  "clSelect": lambda dom, id: dom.set_value("clOutput", dom.get_value(id)),
 
-  "cpSelect": lambda dom, id: dom.set_content("cpOutput", dom.get_content(id)),
+  "cpSelect": lambda dom, id: dom.set_value("cpOutput", dom.get_value(id)),
 
-  "rgSlide": lambda dom: dom.set_attribute("rgOutput", "value", (dom.getContent("rgVolume"))),
+  "rgSlide": lambda dom: dom.set_attribute("rgOutput", "value", (dom.getvalue("rgVolume"))),
 
-  "slSelect": lambda dom, id: dom.set_content("slOutput", dom.get_content(id)),
+  "slSelect": lambda dom, id: dom.set_value("slOutput", dom.get_value(id)),
   "slAdd": ac_sl_add,
-  "slToggle": lambda dom, id: dom.disable_element("slOthers") if dom.get_content(id) == 'true' else dom.enable_element("slOthers"),
+  "slToggle": lambda dom, id: dom.disable_element("slOthers") if dom.get_value(id) == 'true' else dom.enable_element("slOthers"),
 
-  "ckSubmit": lambda dom, id: dom.set_content("ckOutput", dom.get_content("ckInput")),
+  "ckSubmit": lambda dom, id: dom.set_value("ckOutput", dom.get_value("ckInput")),
 }
 
 atlastk.launch(callbacks, None, open("Head.html").read())

@@ -32,7 +32,7 @@ sys.path.append("../../atlastk")
 # as the 'load_workbook' function from 'openpyxl' is overloaded.
 # Applies only in DEV context.
 import openpyxl
-import atlastk as Atlas
+import atlastk
 
 import updates
 import importlib
@@ -58,7 +58,7 @@ updatesItem = """
 """
 
 modificationsItem = """
-<tr data-xdh-onevent="View" data-xdh-content="{}">
+<tr data-xdh-onevent="View" data-xdh-mark="{}">
   <td>{}</td>
   <td>{}</td>
 </tr>
@@ -67,7 +67,7 @@ modificationsItem = """
 def reading_updates(dom,modifications=None):
   global updates
   importlib.reload(updates)
-  dom.set_content("updates", "")
+  dom.set_value("updates", "")
 
   updatesLayout = ""
 
@@ -77,17 +77,17 @@ def reading_updates(dom,modifications=None):
   dom.inner("updates", updatesLayout)
   
 def reading(dom):
-  dom.set_content("output", "Initialization…")
+  dom.set_value("output", "Initialization…")
 
   reading_updates(dom)
 
-  dom.set_content('output', 'Done')
+  dom.set_value('output', 'Done')
   dom.add_class("output", "hidden")
 
 def update_workbook(dom):
-  dom.set_content("sales", "");
+  dom.set_value("sales", "");
 
-  dom.set_content('output', 'Opening workbook...')
+  dom.set_value('output', 'Opening workbook...')
 
   wb = openpyxl.load_workbook("produceSales_.xlsx", read_only=True)
 
@@ -95,7 +95,7 @@ def update_workbook(dom):
 
   dom.remove_class("output", "hidden")
 
-  dom.set_content('output', 'Reading rows...')
+  dom.set_value('output', 'Reading rows...')
 
   limit = sheet.max_row - 1	# This takes time, so it is stored.
 
@@ -116,10 +116,10 @@ def update_workbook(dom):
     salesLayout += salesItem.format(index+1,index+1,produce,cost,round(sold,2))
 
     if not ( index % 2000 ) or ( index == limit ):
-      dom.append_layout('sales', salesLayout)
+      dom.end('sales', salesLayout)
       dom.scroll_to(dom.last_child('sales'))
       dom.flush()
-      dom.set_content('output', 'Reading rows {}/{}'.format(index,limit))
+      dom.set_value('output', 'Reading rows {}/{}'.format(index,limit))
       salesLayout = ""
 
   return modifications
@@ -143,7 +143,7 @@ def ac_apply(dom):
   reading_updates(dom,modifications)
 
 def ac_view(dom,id):
-  dom.scroll_to(dom.get_content(id))
+  dom.scroll_to(dom.get_value(id))
 
 
 callbacks = {
@@ -153,4 +153,4 @@ callbacks = {
   "View": ac_view
 }
 
-Atlas.launch(callbacks, None, open("Head.html").read())
+atlastk.launch(callbacks, None, open("Head.html").read())

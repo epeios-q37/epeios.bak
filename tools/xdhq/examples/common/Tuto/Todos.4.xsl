@@ -25,7 +25,7 @@
 				<label>
 					<xsl:value-of select="."/>
 				</label>
-				<button data-xdh-content="{@id}" class="destroy" data-xdh-onevent="Destroy"/>
+				<button data-xdh-mark="{@id}" class="destroy" data-xdh-onevent="Destroy"/>
 			</span>
 		</li>
 	</xsl:template>

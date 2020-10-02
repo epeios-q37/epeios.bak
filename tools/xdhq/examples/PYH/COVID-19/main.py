@@ -25,7 +25,7 @@ SOFTWARE.
 import sys
 sys.path.append("./Atlas.zip")
 
-import atlastk as Atlas
+import atlastk
 import json, builtins, urllib.request
 
 HEAD = """
@@ -75,7 +75,7 @@ def draw_set(set,dom):
   
   min = 0 if min > 0 else min
   
-  svg = Atlas.createHTML()
+  svg = atlastk.createHTML()
   
   for i in range(len(set)):
     svg.push_tag("rect")
@@ -88,7 +88,7 @@ def draw_set(set,dom):
 
   dom.inner("SVG", svg)
   
-  dom.set_content("Text",set[0]["date"] + " - " + set[len(set)-1]["date"])
+  dom.set_value("Text",set[0]["date"] + " - " + set[len(set)-1]["date"])
   
 def get_relat(absol):
   relat = []
@@ -99,12 +99,12 @@ def get_relat(absol):
   return relat
 
 def draw(dom):
-  contents = dom.getContents(["Code", "Cible", "Relatif"])
+  values = dom.get_values(["Code", "Cible", "Relatif"])
   
-  absol = fill(data,contents["Code"],contents["Cible"])
+  absol = fill(data,values["Code"],values["Cible"])
   
   
-  draw_set(get_relat(absol) if contents["Relatif"] == "true" else absol,dom)
+  draw_set(get_relat(absol) if values["Relatif"] == "true" else absol,dom)
 
 
 def a_connect(dom):
@@ -117,5 +117,5 @@ callbacks = {
   "Redraw": lambda dom : draw(dom)
 }
 
-Atlas.launch(callbacks, None, HEAD)
+atlastk.launch(callbacks, None, HEAD)
     

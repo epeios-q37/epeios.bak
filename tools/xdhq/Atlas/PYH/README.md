@@ -36,7 +36,7 @@ BUILT FROM ../README_template.md
 ### Source code
 
 ```python
-import atlastk as Atlas
+import atlastk
 
 body = """
 <div style="display: table; margin: 50px auto auto auto;">
@@ -56,12 +56,12 @@ def acConnect(dom):
   dom.focus("input")
 
 def acSubmit(dom):
-  dom.alert("Hello, {}!".format(dom.getContent("input")))
+  dom.alert("Hello, {}!".format(dom.get_value("input")))
   dom.focus("input")
 
 def acClear(dom):
   if ( dom.confirm("Are you sure?") ):
-    dom.setContent("input", "")
+    dom.set_value("input", "")
   dom.focus("input")
 
 callbacks = {
@@ -70,7 +70,7 @@ callbacks = {
   "Clear": acClear,
 }
 
-Atlas.launch(callbacks)
+atlastk.launch(callbacks)
 ```
 
 ### Result

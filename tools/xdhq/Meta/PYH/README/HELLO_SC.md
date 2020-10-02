@@ -1,5 +1,5 @@
 ```python
-import atlastk as Atlas
+import atlastk
 
 body = """
 <fieldset>
@@ -17,12 +17,12 @@ def ac_connect(dom):
   dom.focus("input")
 
 def ac_submit(dom):
-  dom.alert("Hello, " + dom.get_content("input") + "!")
+  dom.alert("Hello, " + dom.get_value("input") + "!")
   dom.focus("input")
 
 def ac_clear(dom):
   if ( dom.confirm("Are you sure?") ):
-    dom.set_content("input", "")
+    dom.set_value("input", "")
   dom.focus("input")
 
 callbacks = {
@@ -31,5 +31,5 @@ callbacks = {
   "Clear": ac_clear,
 }
 
-Atlas.launch(callbacks)
+atlastk.launch(callbacks)
 ```

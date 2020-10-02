@@ -32,7 +32,7 @@ sys.path.append("../../atlastk")
 # as the 'load_workbook' function from 'openpyxl' is overloaded.
 # Applies only in DEV context.
 import openpyxl
-import atlastk as Atlas
+import atlastk
 
 tableItem = """
 <tr{}>
@@ -45,14 +45,14 @@ tableItem = """
 """
 
 statesItem = """
-<tr data-xdh-content="{State}" data-xdh-onevent="View" style="cursor: default;" title="Pop: {Pop}, tracts: {Tracts}">
+<tr data-xdh-mark="{State}" data-xdh-onevent="View" style="cursor: default;" title="Pop: {Pop}, tracts: {Tracts}">
   <td>{State}</td>
   <td>{Pop}</td>
 </tr>
 """
 
 countiesItem = """
-<tr data-xdh-onevent="View" data-xdh-content="{State}.{County}" style="cursor: default;">
+<tr data-xdh-onevent="View" data-xdh-mark="{State}.{County}" style="cursor: default;">
   <td>{County}</td>
   <td>{Pop}</td>
   <td>{Tracts}</td>
@@ -74,7 +74,7 @@ def reading(dom):
 
   countyData = {}
 
-  dom.set_contents({
+  dom.set_values({
     "output": "Initialization…",
     "table": "",
     "counties": "",
@@ -84,12 +84,12 @@ def reading(dom):
   dom.remove_class("output", "hidden")
   prevCounty = ""
 
-  dom.set_content('output', 'Opening workbook...')
-  wb = openpyxl.load_workbook(dom.get_content("set"),read_only=True)
+  dom.set_value('output', 'Opening workbook...')
+  wb = openpyxl.load_workbook(dom.get_value("set"),read_only=True)
 
   sheet = wb['Population by Census Tract']
 
-  dom.set_content('output', 'Reading rows...')
+  dom.set_value('output', 'Reading rows...')
 
   limit = sheet.max_row - 1	# This takes time, so it is stored.
 
@@ -120,10 +120,10 @@ def reading(dom):
       dom.end('table', tableLayout)
       dom.scroll_to(dom.last_child('table'))
       dom.flush()
-      dom.set_content('output', 'Reading rows {}/{}'.format(index,limit))
+      dom.set_value('output', 'Reading rows {}/{}'.format(index,limit))
       tableLayout = ""
 
-  dom.set_content('output', 'Calculating...')
+  dom.set_value('output', 'Calculating...')
   
   statesLayout = ""
   countiesLayout = ""
@@ -139,7 +139,7 @@ def reading(dom):
 
   dom.inner("states", statesLayout)
   dom.inner("counties", countiesLayout)
-  dom.set_content('output', 'Done')
+  dom.set_value('output', 'Done')
   dom.add_class("output", "hidden")
   
 def ac_connect(dom):
@@ -147,7 +147,7 @@ def ac_connect(dom):
   reading(dom)
 
 def ac_view(dom,id):
-  dom.scroll_to(dom.get_content(id))
+  dom.scroll_to(dom.get_mark(id))
 
 callbacks = {
   "": ac_connect,
@@ -155,4 +155,4 @@ callbacks = {
   "Refresh": lambda dom : reading(dom)
 }
 
-Atlas.launch(callbacks, None, open("Head.html").read())
+atlastk.launch(callbacks, None, open("Head.html").read())

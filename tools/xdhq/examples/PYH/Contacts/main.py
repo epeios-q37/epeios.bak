@@ -28,7 +28,7 @@ from enum import Enum, auto
 os.chdir(os.path.dirname(os.path.realpath(__file__)))
 sys.path.append("../../atlastk")
 
-import atlastk as Atlas
+import atlastk
 
 
 class State(Enum):
@@ -70,7 +70,7 @@ current = None
 
 def displayContact(dom, contact):
   global state
-  dom.set_contents(contact)
+  dom.set_values(contact)
 
   if (state == State.EDIT):
     dom.enable_element("Contact")
@@ -82,7 +82,7 @@ def displayContact(dom, contact):
 
 def displayContacts(dom, contacts):
   #   html="<tr><td>a</td><td>b</td><td>c</td></tr>"
-  html = Atlas.createHTML()
+  html = atlastk.createHTML()
   notes = {}
 
   for i in range(len(contacts)):
@@ -102,7 +102,7 @@ def displayContacts(dom, contacts):
 
   dom.inner("Content", html)
 
-  dom.set_contents(notes)
+  dom.set_values(notes)
 
 
 def display(dom, contacts):
@@ -162,7 +162,7 @@ def acEdit(dom):
 
 def acSubmit(dom):
   global contacts
-  [name, address, phone, note] = dom.get_contents(
+  [name, address, phone, note] = dom.get_values(
     ["Name.edit", "Address.edit", "Phone.edit", "Note.edit"]).values()
 
   name = name.strip()
@@ -190,4 +190,4 @@ callbacks = {
   "Submit": acSubmit,
 }
 
-Atlas.launch(callbacks, None, open("Head.html").read())
+atlastk.launch(callbacks, None, open("Head.html").read())

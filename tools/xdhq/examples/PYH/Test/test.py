@@ -3,7 +3,7 @@ import os, sys, time
 os.chdir(os.path.dirname(os.path.realpath(__file__)))
 sys.path.append("../../atlastk")
 
-import atlastk as Atlas
+import atlastk
 
 def acConnect(dom):
     dom.inner("", open("Main.html").read())
@@ -20,4 +20,4 @@ callbacks = {
 	"": acConnect,
 }
 
-Atlas.launch(callbacks, None, open("Head.html").read())
+atlastk.launch(callbacks, None, open("Head.html").read())

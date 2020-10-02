@@ -32,7 +32,7 @@ sys.path.append("../../atlastk")
 # as the 'load_workbook' function from 'openpyxl' is overloaded.
 # Applies only in DEV context.
 import openpyxl
-import atlastk as Atlas
+import atlastk
 import scrambler
 
 targetTemplate = """
@@ -116,18 +116,18 @@ def ac_connect(dom):
 
   dom.inner("", open("Main.html").read())
 
-  dom.set_content("output", "Opening workbook (may take some time)…")
+  dom.set_value("output", "Opening workbook (may take some time)…")
   dom.remove_class("output", "hidden")
 
   workbook = openpyxl.load_workbook("produceSales.xlsx")
 
-  dom.set_content("output", "Scrambling…")
+  dom.set_value("output", "Scrambling…")
   scrambler.scramble(workbook)
 
-  dom.set_content("output", "Displaying…")
+  dom.set_value("output", "Displaying…")
   display(dom)
 
-  dom.set_content("output", "Done.")
+  dom.set_value("output", "Done.")
   dom.add_class("output", "hidden")
 
 def ac_checkbox_click(dom,id):
@@ -184,4 +184,4 @@ callbacks = {
   "Apply": ac_apply
 }
 
-Atlas.launch(callbacks, None, open("Head.html").read())
+atlastk.launch(callbacks, None, open("Head.html").read())
