@@ -75,7 +75,7 @@ class TodoMVC extends Atlas {
 			break;
 		}
 
-		dom.setContent("Count", text);
+		dom.setValue("Count", text);
 	}
 
 	private void handleCount(DOM dom) {
@@ -112,8 +112,8 @@ class TodoMVC extends Atlas {
 	}
 
 	private void submitNew(DOM dom) {
-		String content = dom.getContent("Input").trim();
-		dom.setContent("Input", "");
+		String content = dom.getValue("Input").trim();
+		dom.setValue("Input", "");
 
 		if (!"".equals(content)) {
 			todos.add(0, new Todo(content));
@@ -125,13 +125,13 @@ class TodoMVC extends Atlas {
 		int index = this.index;
 		this.index = -1;
 
-		String content = dom.getContent("Input." + index).trim();
-		dom.setContent("Input." + index, "");
+		String content = dom.getValue("Input." + index).trim();
+		dom.setValue("Input." + index, "");
 
 		if (!"".equals(content)) {
 			todos.set(index, new Todo(content, todos.get(index).completed));
 
-			dom.setContent("Label." + index, content);
+			dom.setValue("Label." + index, content);
 
 			dom.removeClasses(new HashMap<String, String>() {
 				{
@@ -207,7 +207,7 @@ class TodoMVC extends Atlas {
 	}
 
 	private void edit(DOM dom, String id) {
-		String content = dom.getContent(id);
+		String content = dom.getMark(id);
 
 		index = Integer.parseInt(content);
 
@@ -217,7 +217,7 @@ class TodoMVC extends Atlas {
 				put(id, "editing");
 			}
 		});
-		dom.setContent("Input." + content, todos.get(index).label);
+		dom.setValue("Input." + content, todos.get(index).label);
 		dom.focus("Input." + content);
 	}
 
@@ -225,7 +225,7 @@ class TodoMVC extends Atlas {
 		int index = this.index;
 		this.index = -1;
 
-		dom.setContent("Input." + index, "");
+		dom.setValue("Input." + index, "");
 		dom.removeClasses(new HashMap<String, String>() {
 			{
 				put("View." + index, "hide");
@@ -259,7 +259,7 @@ class TodoMVC extends Atlas {
 				submitModification(dom);
 			break;
 		case "Destroy":
-			todos.remove(Integer.parseInt(dom.getContent(id)));
+			todos.remove(Integer.parseInt(dom.getMark(id)));
 			displayTodos(dom);
 			break;
 		case "Toggle":

@@ -107,19 +107,19 @@ class Chatroom extends Atlas {
 
 		if ("".equals(pseudo)) {
 			dom.alert("Pseudo. can not be empty !");
-			dom.setContent("Pseudo", "");
+			dom.setValue("Pseudo", "");
 			dom.focus("Pseudo");
 		} else if (handlePseudo_(pseudo.toUpperCase())) {
 			this.pseudo = pseudo;
 			dom.addClass("PseudoButton", "hidden");
 			dom.disableElements(new String[] { "Pseudo", "PseudoButton" });
 			dom.enableElements(new String[] { "Message", "MessageButton" });
-			dom.setContent("Pseudo", pseudo);
+			dom.setValue("Pseudo", pseudo);
 			dom.focus("Message");
 			System.out.println("\t>>>> New user: " + pseudo);
 		} else {
 			dom.alert("Pseudo. not available !");
-			dom.setContent("Pseudo", pseudo);
+			dom.setValue("Pseudo", pseudo);
 			dom.focus("Pseudo");
 		}
 	}
@@ -136,8 +136,8 @@ class Chatroom extends Atlas {
 	}
 
 	private void submitMessage_(DOM dom, String id) {
-		String message = dom.getContent("Message");
-		dom.setContent("Message", "");
+		String message = dom.getValue("Message");
+		dom.setValue("Message", "");
 		dom.focus("Message");
 		addMessage_(pseudo, message);
 		displayMessages_(dom);

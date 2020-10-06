@@ -15,11 +15,11 @@ const body = `
 const callbacks = {
  "": (dom, id) => dom.inner("", body,
   () => dom.focus("input")),
- "Submit": (dom, id) => dom.getContent("input",
+ "Submit": (dom, id) => dom.getValue("input",
   (name) => dom.alert("Hello, " + name + "!",
    () => dom.focus("input"))),
  "Clear": (dom, id) => dom.confirm("Are you sure ?",
-  (answer) => { if (answer) dom.setContent("input", ""); dom.focus("input"); })
+  (answer) => { if (answer) dom.setValue("input", ""); dom.focus("input"); })
 };
 
 atlas.launch(() => new atlas.DOM(), callbacks);

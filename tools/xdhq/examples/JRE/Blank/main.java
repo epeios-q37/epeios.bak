@@ -35,7 +35,7 @@ class Blank extends Atlas {
 			dom.inner("",readAsset_( "Main.html") );
 			dom.addClass("Input", "hidden");
 		} else if ( action.equals( "Submit" ) ) {
-			dom.setContent("Pattern", dom.getContent("Pattern").toUpperCase());
+			dom.setValue("Pattern", dom.getValue("Pattern").toUpperCase());
 		} else if ( action.equals( "HideInput" ) ) {
 			dom.addClass("Input", "hidden");
 		} else if ( action.equals( "ShowInput" ) ) {

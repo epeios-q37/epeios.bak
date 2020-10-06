@@ -48,9 +48,9 @@ class Notes extends Atlas {
 		return readAsset( path, "Notes" );
 	}
 
-	private void push(Note note, int index, XML xml) {
+	private void push(Note note, int id, XML xml) {
 		xml.pushTag( "Note" );
-		xml.putAttribute( "id", + index );
+		xml.putAttribute( "id", id );
 		xml.putTagAndValue("title", note.title);
 
 		// Not used, due to d-o-e bug from Firefox (https://bugzilla.mozilla.org/show_bug.cgi?id=98168).
@@ -68,7 +68,7 @@ class Notes extends Atlas {
 
 	private void displayList( DOM dom ) {
 		XML xml = Atlas.createXML( "XDHTML" );
-		Map<String,String> idsAndContents = new HashMap<String,String>();
+		Map<String,String> idsAndValues = new HashMap<String,String>();
 		ListIterator<Note> li = notes.listIterator(1); // 0 skipped, as it serves as buffer for the new notes.
 
 		xml.pushTag( "Notes" );
@@ -80,20 +80,20 @@ class Notes extends Atlas {
 
 			if ((length == 0) || pattern.equals(note.title.substring(0, length).toLowerCase())) {
 				push(note, index, xml);
-				idsAndContents.put(  "Description." + index, note.description );
+				idsAndValues.put(  "Description." + index, note.description );
 			}
 		}
 
 		xml.popTag();
 
-		dom.begin("Notes", xml, "Notes.xsl" );
-		dom.setContents(idsAndContents);
+		dom.inner("Notes", xml, "Notes.xsl" );
+		dom.setValues(idsAndValues);
 		dom.enableElements(viewModeElements);
 	}
 
 	private void view( DOM dom ) {
 		dom.enableElements(viewModeElements);
-		dom.setContent("Edit." + index, "");
+		dom.setValue("Edit." + index, "");
 		index = -1;
 	}
 
@@ -102,14 +102,14 @@ class Notes extends Atlas {
 		Note note = notes.get(index);
 
 		dom.inner("Edit." + id, readAsset_( "Note.html") );
-		dom.setContents( new HashMap<String,String> () {{ put( "Title", note.title); put("Description", note.description); }} );
+		dom.setValues( new HashMap<String,String> () {{ put( "Title", note.title); put("Description", note.description); }} );
 		dom.disableElements(viewModeElements);
 		dom.focus("Title");
 	}
 
 	private void submit( DOM dom ) {
 		String ids[] = { "Title", "Description" };
-		String result[] = dom.getContents(ids);
+		String result[] = dom.getValues(ids);
 
 		String title = result[0].trim();
 		String description = result[1];
@@ -121,7 +121,7 @@ class Notes extends Atlas {
 				notes.add(0, new Note());
 				displayList( dom );
 			} else {
-				dom.setContents( new HashMap<String,String> () {{ put( "Title." + index, title); put("Description." + index, description); }} );
+				dom.setValues( new HashMap<String,String> () {{ put( "Title." + index, title); put("Description." + index, description); }} );
 				view( dom );
 			}
 		} else {
@@ -132,7 +132,7 @@ class Notes extends Atlas {
 
 	private void cancel( DOM dom ) {
 		Note note = notes.get(index);
-		String result[] = dom.getContents(new String[] { "Title", "Description" } );
+		String result[] = dom.getValues(new String[] { "Title", "Description" } );
 		String title = result[0].trim();
 		String description = result[1];
 
@@ -161,16 +161,16 @@ class Notes extends Atlas {
 			dom.inner("", readAsset_( "Main.html") );
 			displayList( dom );
 		} else if ( action.equals( "ToggleDescriptions" ) ) {
-			hideDescriptions = "true".equals(dom.getContent(id));
+			hideDescriptions = "true".equals(dom.getValue(id));
 			handleDescriptions( dom );
 		} else if ( action.equals( "Search" ) ) {
-			pattern = dom.getContent("Pattern").toLowerCase();
+			pattern = dom.getValue("Pattern").toLowerCase();
 			displayList( dom );
 		} else if ( action.equals( "Edit" ) ) {
-			edit(dom, dom.getContent(id));
+			edit(dom, dom.getMark(id));
 		} else if ( action.equals( "Delete" ) ) {
 			if (dom.confirm("Are you sure you want to delete this entry ?")) {
-				notes.remove(Integer.parseInt(dom.getContent(id)));
+				notes.remove(Integer.parseInt(dom.getMark(id)));
 				displayList( dom );
 			}
 		} else if ( action.equals( "Submit" ) ) {

@@ -38,11 +38,11 @@ class Hello extends Atlas {
 			dom.inner("", readAsset_( "Main.html") );
 			break;
 		case "Submit":
-			dom.alert("Hello, " + dom.getContent("input").trim() + "!" );
+			dom.alert("Hello, " + dom.getValue("input").trim() + "!" );
 			break;
 		case "Clear":
 			if ( dom.confirm( "Are you sure ?" ) )
-				dom.setContent( "input", "");
+				dom.setValue( "input", "");
 			break;
 		default:
 			throw new RuntimeException( "Unknown action '" + action + "' !!!");

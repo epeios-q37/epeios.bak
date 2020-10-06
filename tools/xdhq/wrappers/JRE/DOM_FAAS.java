@@ -251,7 +251,7 @@ public class DOM_FAAS extends DOM_SHRD {
 			char[] filler = new char[url.length()];
 			Arrays.fill(filler,'^');
 			System.out.println(filler);
-			System.out.println("Open above URL in a web browser. Enjoy!");
+			System.out.println("Open above URL in a web browser (click, right click or copy/paste). Enjoy!");
 
 			if ( isREPLit_() ) {
 				String script =
@@ -264,8 +264,8 @@ public class DOM_FAAS extends DOM_SHRD {
 			} else if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
 				Desktop.getDesktop().browse(new URI(url));
 			} else if (Runtime.getRuntime().exec(new String[] { "which", "xdg-open" }).getInputStream().read() != -1) {
-                Runtime.getRuntime().exec(new String[] { "xdg-open", url });	// For KDE based Linux distros.
-            }
+        Runtime.getRuntime().exec(new String[] { "xdg-open", url });	// For KDE based Linux distros.
+      }
 		}
 	}
 
@@ -354,7 +354,7 @@ public class DOM_FAAS extends DOM_SHRD {
 				input_ = socket.getInputStream();
 				output_ = socket.getOutputStream();
 			} catch (Exception e) {
-				System.out.println("Unable to connect to " + pAddr + ":" + pPort + " !!!");
+				System.out.println("Unable to connect to " + pAddr + ":" + pPort + "!");
 				System.exit(1);
 			}
 

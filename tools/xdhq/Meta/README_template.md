@@ -23,7 +23,7 @@
 
 ---
 
-## Straight to the point: the ["Hello, World!"](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program) program
+## Quick example: the ["Hello, World!"](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program) program
 
 ### Source code
 
@@ -35,12 +35,12 @@
 
 ### See for yourself right now - it's quick and easy!
 
-#### Online, with nothing to install [![About online demonstrations](https://img.shields.io/badge/about-online%20demonstrations-informational)](https://q37.info/s/sssznrb4)
+#### Online, with nothing to install
 
-Thanks to [*Replit*](https://q37.info/s/mxmgq3qm), an [online IDE](https://q37.info/s/zzkzbdw7), you can write and run programs using the *Atlas* toolkit directly in your web browser, without having to install *@LMCT@* on your computer.
+Thanks to [*Replit*](https://q37.info/s/mxmgq3qm), an [online IDE](https://q37.info/s/zzkzbdw7), you can write and run programs using the *Atlas* toolkit directly in your web browser, without having to install *@LMCT@* on your computer [![About online demonstrations](https://img.shields.io/badge/about-online%20demonstrations-informational)](https://q37.info/s/sssznrb4).
 
 To see some examples, like the following [*TodoMVC*](http://todomvc.com/) application or the above ["Hello, World!"](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program) program, simply:
-- go [here](https://q37.info/s/@GRSS@) (also accessible with the [![Run on Repl.it](https://q37.info/s/kpm7xhfm.png)](https://q37.info/s/@GRSS@) badge at the top of this page),
+- go [here](https://q37.info/s/@GRSS@) (also accessible with the [![Run on Repl.it](https://q37.info/s/kpm7xhfm.png)](https://q37.info/s/@GRSS@) button at the top of this page),
 -  click on the green `run` button,
 -  choose the demonstration to launch,
 -  open the then displayed URL in a browser (should be clickable), 
@@ -56,7 +56,7 @@ To see some examples, like the following [*TodoMVC*](http://todomvc.com/) applic
 
 If you want to take your code to the next level, from [CLI](https://q37.info/s/cnh9nrw9) to [GUI](https://q37.info/s/hw9n3pjs), then you found the right toolkit.
 
-With the [*Atlas* toolkit](http://atlastk.org/), you transform your programs in modern web applications ([*SPA*](https://q37.info/s/7sbmxd3j)), but without the usual hassles:
+With the [*Atlas* toolkit](http://atlastk.org/), you transform your programs in modern web applications ([*SPA*](https://q37.info/s/7sbmxd3j)) without the usual hassles:
 - no @FJSL@ to write; only *HTML*(/*CSS*) and *@LMCT@*,
 - no [front and back end architecture](https://q37.info/s/px7hhztd) to bother with,
 - no [web server](https://q37.info/s/n3hpwsht) (*Apache*, *Nginx*…) to install,
@@ -65,6 +65,6 @@ With the [*Atlas* toolkit](http://atlastk.org/), you transform your programs in 
 
 The *Atlas* toolkit is written in pure *@LMCT@*, with no native code and no dependencies, allowing the *Atlas* toolkit to be used on all environments where *@LMCT@* is available. 
 
-And, icing on the cake, simply by running them on a local computer with a simple internet connection, applications using the *Atlas* toolkit will be accessible from the entire internet on laptops, smartphones, tablets…
+And simply by running them on a local computer connected to internet, applications using the *Atlas* toolkit will be accessible from the entire internet on laptops, smartphones, tablets…
 
 @FOOTER@

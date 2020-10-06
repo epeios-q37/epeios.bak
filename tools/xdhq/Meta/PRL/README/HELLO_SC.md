@@ -22,7 +22,7 @@ sub acConnect {
 sub acSubmit {
  my ($hello, $dom) = @_;
 
- $dom->alert("Hello, " . $dom->getContent("input") . "!");
+ $dom->alert("Hello, " . $dom->getValue("input") . "!");
  $dom->focus("input");
 }
 
@@ -30,7 +30,7 @@ sub acClear {
  my ($hello, $dom) = @_;
 
  if ( $dom->confirm("Are you sure?") ) {
-  $dom->setContent("input", "");
+  $dom->setValue("input", "");
  }
 
  $dom->focus("input");

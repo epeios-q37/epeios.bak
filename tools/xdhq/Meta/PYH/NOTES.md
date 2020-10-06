@@ -74,5 +74,5 @@ Liste des sites faisant références à la version *Python* du *toolkit* *Atlas*
 
 - <http://github.com/epeios-q37/atlas-python>,
 - le wiki sur le site de*Python*: <https://wiki.python.org/moin/GuiProgramming>,
-- *Pypi: <https://pypi.org/project/atlastk/>
+- *Pypi*: <https://pypi.org/project/atlastk/>
 - *Curlie* (demande en cours): <https://curlie.org/Computers/Programming/Languages/Python/Modules/GUI/>

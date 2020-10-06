@@ -21,11 +21,11 @@ class Hello extends Atlas {
    dom.inner("", body);
    break;
   case "Submit":
-   dom.alert("Hello, " + dom.getContent("input") + "!" );
+   dom.alert("Hello, " + dom.getValue("input") + "!" );
    break;
   case "Clear":
    if ( dom.confirm("Are you sure ?") )
-    dom.setContent("input", "");
+    dom.setValue("input", "");
    break;
   }
 

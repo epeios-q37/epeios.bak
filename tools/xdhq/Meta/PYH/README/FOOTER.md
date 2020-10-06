@@ -19,7 +19,8 @@ In the `examples` directory, you will found following examples:
 - `Hangman`: [Hangman game](http://q37.info/s/gtdtk4hp),
 - `15-puzzle`: [*15-puzzle* game](https://q37.info/s/jn9zg3bn),
 - `ReversiIMG`: [*Reversi game*](http://q37.info/s/zz3dzmf7) with more evolved graphics,
-- `ReversiXSL`: [*Reversi game*](http://q37.info/s/zz3dzmf7) using *XSL*.
+- `ReversiXSL`: [*Reversi game*](http://q37.info/s/zz3dzmf7) using *XSL*,
+- `Widgets`: some widgets handled with the *Atlas* toolkit.
 
 Other examples are detailed in the next section.
 
