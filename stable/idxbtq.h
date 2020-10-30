@@ -101,11 +101,11 @@ namespace idxbtq {
 		}
 		void BecomeNext( void )	//Obsolete.
 		{
-			qRChk();	// 
+			qRChk();	//
 		}
 		void BecomePrevious( void )	//Obsolete.
 		{
-			qRChk();	// 
+			qRChk();	//
 		}
 		//f Put 'Row' as greater then 'Current'. 'Current' must be the result as a search with 'seeker_'.
 		r BecomeGreater(
@@ -249,11 +249,11 @@ namespace idxbtq {
 		}
 		void HasGreater( void )	// Obsolete.
 		{
-			qRChk();	
+			qRChk();
 		}
 		void HasLesser( void )	// Obsolete.
 		{
-			qRChk();	
+			qRChk();
 		}
 	};
 
@@ -313,7 +313,7 @@ namespace idxbtq {
 			Queue_.reset( P );
 		}
 		qCVDTOR( rFH );
-		uys::eState Init( 
+		uys::eState Init(
 			const rHF &Filenames,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
@@ -342,5 +342,16 @@ namespace idxbtq {
 
 # define E_ISEEKERt__( r )	index_seeker__<r>
 # define E_ISEEKER__			index_seeker__<sdr::row__>
+
+/**** New ****/
+
+# define qINDEXd(r) tree_queue_index_<r>
+# define qINDEXw(r) tree_queue_index<r>
+
+# define qINDEXdl qINDEXd(sdr::sRow)
+# define qINDEXwl qINDEXwl(sdr::sRow)
+
+# define qISEEKERs(r) index_seeker__<r>
+# define qISEEKERsl(r) qISEEKER(sdr::sRow)
 
 #endif

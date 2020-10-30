@@ -28,6 +28,7 @@ using namespace faaspool;
 
 #include "csdbns.h"
 #include "flx.h"
+#include "idxbtq.h"
 #include "lstbch.h"
 #include "lstcrt.h"
 #include "mtk.h"
@@ -205,20 +206,65 @@ namespace faaspool {
 	};
 
 	mtx::rMutex Mutex_ = mtx::Undefined;
+	idxbtq::qINDEXw( sBRow_ ) Index_;
+	sBRow_ IRoot_ = qNIL;
 	lstbch::qLBUNCHw( rBackend_ *, sBRow_ ) Backends_;
 	csdbns::rListener Listener_;
 
 	// NOTA : TU : Thread Unsafe ; TS : Thread Safe.
 
+	sBRow_ SearchInIndex_(
+		const str::dString &Token,
+		bso::sSign &Sign)
+		{
+			sBRow_ Row = IRoot_, Candidate = qNIL;
+			bso::sBool Continue = true;
+
+			if ( !mtx::IsLocked( Mutex_ ) )
+				qRGnr();
+
+			if ( Row == qNIL)
+				qRGnr();
+
+			while ( Continue ) {
+				switch ( Sign = str::Compare(Token,Backends_(Row)->Token) ) {
+				case -1:
+					Candidate = Index_.GetLesser(Row);
+
+					if ( Candidate != qNIL )
+						Row = Candidate;
+					else
+						Continue = false;
+
+					break;
+				case 0:
+					Continue = false;
+					break;
+				case 1:
+					Candidate = Index_.GetGreater(Row);
+
+					if ( Candidate != qNIL )
+						Row = Candidate;
+					else
+						Continue = false;
+
+					break;
+				default:
+					qRUnx();
+					break;
+				}
+			}
+
+			return Row;
+		}
+
 	sBRow_ TUGetBackendRow_( const str::dString &Token )
 	{
-		if ( !mtx::IsLocked( Mutex_ ) )
-			qRGnr();
+		bso::sSign Sign = 0;
+		sBRow_ Row = IRoot_ == qNIL ? qNIL : SearchInIndex_(Token, Sign);
 
-		sBRow_ Row = Backends_.First();
-
-		while ( (Row != qNIL) && ( Backends_( Row )->Token != Token) )
-			Row = Backends_.Next( Row );
+		if ( Sign != 0 )
+			Row = qNIL;
 
 		return Row;
 	}
@@ -268,7 +314,7 @@ namespace faaspool {
 		const str::dString &Token,
 		str::dString &Head )
 	{
-        bso::sBool Found = false;
+		bso::sBool Found = false;
 	qRH;
 		mtx::rHandle Mutex;
 	qRB;
@@ -292,9 +338,39 @@ namespace faaspool {
 			qRGnr();
 
 		Backends_.Remove( Row );
+
+		IRoot_ = Index_.Delete(Row, IRoot_);
+
+		if ( IRoot_ != qNIL )
+			IRoot_ = Index_.Balance(IRoot_);
 	qRR;
 	qRT;
 	qRE;
+	}
+
+	namespace {
+		void PutInIndex_(
+			const str::dString &Token,
+			sBRow_ Row )
+		{
+			bso::sSign Sign = 0;
+			sBRow_ IRow = SearchInIndex_(Token, Sign);
+
+			switch ( Sign ) {
+			case -1:
+				Index_.BecomeLesser(Row,IRow,IRoot_);
+				break;
+			case 0:
+				qRGnr();
+				break;
+			case 1:
+				Index_.BecomeGreater(Row,IRow,IRoot_);
+				break;
+			default:
+				qRUnx();
+				break;
+			}
+		}
 	}
 
 	rBackend_ *Create_(
@@ -314,6 +390,13 @@ namespace faaspool {
 
 		if ( Row == qNIL ) {
 			Row = Backends_.New();
+
+			Index_.Allocate(Backends_.Extent());
+
+			if ( IRoot_ == qNIL )
+				IRoot_ = Row;
+			else
+				PutInIndex_(Token, Row);
 
 			if ( (Backend = new rBackend_) == NULL )
 				qRAlc();
@@ -815,6 +898,7 @@ qGCTOR(faaspool)
 {
 	Mutex_ = mtx::Create();
 	Backends_.Init();
+	Index_.Init();
 }
 
 qGDTOR(faaspool)

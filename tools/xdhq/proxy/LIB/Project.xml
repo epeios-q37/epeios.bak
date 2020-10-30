@@ -24,10 +24,15 @@
 		<Modules Group="Epeios" Path="$EpeiosPath$/">
 			<Modules Group="Core">
 				<xpp:expand select="Core"/>
+				<Module>btr</Module>
 				<Module>cdgurl</Module>
 				<Module>cnvfdr</Module>
+				<Module>idxbtr</Module>
+				<Module>idxque</Module>
+				<Module>idxbtq</Module>
 				<Module>logq</Module>
 				<Module>ltf</Module>
+				<Module>que</Module>
 				<Module>sck</Module>
 				<Module>strmrg</Module>
 			</Modules>
@@ -57,7 +62,7 @@
         <Module>session</Module>
 		<Modules Path="../" Group="Shared">
 			<Module>plugins</Module>
-            <Module Path="../">prtcl</Module>
+				<Module Path="../">prtcl</Module>
 		</Modules>
 	</Modules>
 	<SourceDirs>

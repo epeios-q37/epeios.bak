@@ -10,6 +10,12 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+
+
+## 2020-10-30:
+
+- IDXBTR: [stdz],
+
 ## 2020-09-25:
 
 - XDHUTL:
