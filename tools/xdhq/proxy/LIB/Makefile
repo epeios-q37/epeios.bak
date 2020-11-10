@@ -38,8 +38,8 @@ mods += stkcrt stkctn str strng stsfsm
 mods += tagsbs tht thtsub tol txf 
 mods += tys uys utf xml xpp 
 mods += xtf llio dlbrry plgn plgncore 
-mods += cdgurl cnvfdr logq ltf sck 
-mods += strmrg 
+mods += btr cdgurl cnvfdr idxbtr idxque 
+mods += idxbtq logq ltf sck strmrg 
 mods += csdrcc csdbnc csdbns csdcmn csdmnc 
 mods += csdmxb csdmxc csdscb 
 mods += fblcmd fblcst fblfep fblfph fblfrd 
@@ -397,7 +397,7 @@ ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20200925"\"
+copt += -DVERSION=\""20201030"\"
 copt += -DCOPYRIGHT_YEARS=\""2017"\"
 copt += -DIDENTIFIER=\""5f3ad6c6-4f0d-428d-9c00-678e1ed3967f"\"
 

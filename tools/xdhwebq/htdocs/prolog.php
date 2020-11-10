@@ -26,11 +26,11 @@ $out = str_replace(array("\r", "\n", "\t"), '','
 			<!-- BEGIN -->
 			<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 			<meta http-equiv="Cache-Control" content="no-cache"/>
-			<!--Below both scripts are for DEV environment. -->
+			<!--Below both scripts are for DEV environment. --"
 			<script src="faas/xdhtml.js"></script>
 			<script src="faas/xdhwebq.js"></script>
 			<!-- Below both scripts are for PROD environment. -->
-			<script src="faas/xdhtml_20200821.js"></script>
+			<script src="faas/xdhtml_20201001.js"></script>
 			<script src="faas/xdhwebq_20200608.js"></script>
 			<script src="faas/qrcode.min.js"></script>
 			<style id="XDHStyle">
@@ -64,14 +64,15 @@ $out = str_replace(array("\r", "\n", "\t"), '','
 			<div' . $additional . '>
 				<div style="display:table; margin: 5px auto auto auto;">
 					<hr/>
-					<span style="display: table; margin: 10px auto 5px auto;">Click or scan for another instance:</span>
+					<span style="display: table; margin: 10px auto 5px auto;">Scan this QR code with your smartphone,</span>
 					<div style="display: flex; justify-content: space-around;">
  						<a href="#" target="_blank">
  						   <div id="qrcode"></div>
 						</a>
 					</div>
+					<span style="display: table; margin: 10px auto 5px auto;">or simply click on it for another instance.</span>
+					<hr/>
 					<div style="display: table; padding: 10px;">
-						<hr/>
 						<div style="display: table; padding: 10px;">
 							<div style="display: table; margin: auto; border: 1px solid; padding: 10px; box-shadow: 5px 5px; text-align: center;">
 								<span style="text-shadow: 1px 1px;">
@@ -84,5 +85,4 @@ $out = str_replace(array("\r", "\n", "\t"), '','
 			 </div>
 		</body>
 	</html>')
-
 ?>

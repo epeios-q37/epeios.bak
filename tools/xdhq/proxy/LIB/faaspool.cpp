@@ -211,11 +211,10 @@ namespace faaspool {
 	lstbch::qLBUNCHw( rBackend_ *, sBRow_ ) Backends_;
 	csdbns::rListener Listener_;
 
-	// NOTA : TU : Thread Unsafe ; TS : Thread Safe.
-
-	sBRow_ SearchInIndex_(
-		const str::dString &Token,
-		bso::sSign &Sign)
+	namespace {
+		sBRow_ SearchInIndex_(
+			const str::dString &Token,
+			bso::sSign &Sign)
 		{
 			sBRow_ Row = IRoot_, Candidate = qNIL;
 			bso::sBool Continue = true;
@@ -257,6 +256,32 @@ namespace faaspool {
 
 			return Row;
 		}
+
+		void PutInIndex_(
+			const str::dString &Token,
+			sBRow_ Row )
+		{
+			bso::sSign Sign = 0;
+			sBRow_ IRow = SearchInIndex_(Token, Sign);
+
+			switch ( Sign ) {
+			case -1:
+				Index_.BecomeLesser(Row,IRow,IRoot_);
+				break;
+			case 0:
+				qRGnr();
+				break;
+			case 1:
+				Index_.BecomeGreater(Row,IRow,IRoot_);
+				break;
+			default:
+				qRUnx();
+				break;
+			}
+		}
+	}
+
+	// NOTA : TU : Thread Unsafe ; TS : Thread Safe.
 
 	sBRow_ TUGetBackendRow_( const str::dString &Token )
 	{
@@ -346,31 +371,6 @@ namespace faaspool {
 	qRR;
 	qRT;
 	qRE;
-	}
-
-	namespace {
-		void PutInIndex_(
-			const str::dString &Token,
-			sBRow_ Row )
-		{
-			bso::sSign Sign = 0;
-			sBRow_ IRow = SearchInIndex_(Token, Sign);
-
-			switch ( Sign ) {
-			case -1:
-				Index_.BecomeLesser(Row,IRow,IRoot_);
-				break;
-			case 0:
-				qRGnr();
-				break;
-			case 1:
-				Index_.BecomeGreater(Row,IRow,IRoot_);
-				break;
-			default:
-				qRUnx();
-				break;
-			}
-		}
 	}
 
 	rBackend_ *Create_(
