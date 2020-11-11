@@ -72,7 +72,7 @@ $out = str_replace(array("\r", "\n", "\t"), '','
 					</div>
 					<span style="display: table; margin: 10px auto 5px auto;">or simply click on it for another instance.</span>
 					<hr/>
-					<div style="display: table; padding: 10px;">
+					<div style="display: table; padding: 10px; margin: auto;">
 						<div style="display: table; padding: 10px;">
 							<div style="display: table; margin: auto; border: 1px solid; padding: 10px; box-shadow: 5px 5px; text-align: center;">
 								<span style="text-shadow: 1px 1px;">
