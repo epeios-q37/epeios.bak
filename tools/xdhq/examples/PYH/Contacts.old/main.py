@@ -22,7 +22,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-import os, sys, enum
+import os, sys
+from enum import Enum, auto
 
 os.chdir(os.path.dirname(os.path.realpath(__file__)))
 sys.path.append("../../atlastk")
@@ -30,14 +31,12 @@ sys.path.append("../../atlastk")
 import atlastk
 
 
-class State(enum.Enum):
-  DISPLAY = enum.auto()
-  EDIT = enum.auto()
-  
-class Board:
-  def __init__(self):
-    self.state = State.DISPLAY
-    self.recordId = None
+class State(Enum):
+  DISPLAY = auto()
+  EDIT = auto()
+
+
+state = State.DISPLAY
 
 # contacts = []
 contacts = [
@@ -51,91 +50,144 @@ contacts = [
     "Name": "Holmes, Mycroft",
     "Address": "Diogenes Club, Pall Mall, Londres",
     "Phone": "(use telegraph)",
-    "Note": "Works for the British government.\nBrother of Holmes, Sherlock"
+    "Note": "Works for the British government."
   },
   {
     "Name": "Tintin",
     "Address": "Château de Moulinsart",
     "Phone": "421",
-    "Note": "Has a dog named Snowy."
+    "Note": "Has a dog named <span style=\"font-style: italic\">Snowy</span>."
   },
   {
     "Name": "Tournesol, Tryphon (prof.)",
     "Address": "Château de Moulinsart",
     "Phone": "421",
-    "Note": "Loves Loch Lomond whiskey."
+    "Note": "Loves <span style=\"font-style: italic\">Loch Lomond</span> whiskey."
   }
 ]
 
-def display_contact(board, contact, dom):
+current = None
+
+def displayContact(dom, contact):
+  global state
   dom.set_values(contact)
 
-  if (board.state == State.EDIT):
+  if (state == State.EDIT):
     dom.enable_element("Contact")
-  elif (board.state == State.DISPLAY):
+  elif (state == State.DISPLAY):
     dom.disable_element("Contact")
   else:
     raise Exception("Unknown state!")
 
 
-def display_contacts(dom, contacts):
-  html = ""
+def displayContacts(dom, contacts):
+  #   html="<tr><td>a</td><td>b</td><td>c</td></tr>"
+  html = atlastk.createHTML()
+  notes = {}
 
-  for recordId in range(len(contacts)):
-    contact = contacts[recordId]
-    html += f"""
-<tr id="{recordId}" data-xdh-onevent="Select">
-  <td>{contact["Name"]}</td>
-  <td>{contact["Address"]}</td>
-  <td>{contact["Phone"]}</td>
-  <td>{contact["Note"]}</td>
-</td>
-"""
+  for i in range(len(contacts)):
+    contact = contacts[i]
+    html.push_tag("tr")
+    html.put_attribute("id", i)
+    html.put_attribute("data-xdh-onevent", "Select")
+    for key in contact:
+      if (key == 'Note'):
+        id = "Note." + str(i)
+        html.push_tag("td")
+        html.put_attribute("id", id)
+        notes[id] = contact[key]
+      else:
+        html.put_tag_and_value("td", contact[key])
+    html.pop_tag()
+
   dom.inner("Content", html)
 
+  dom.set_values(notes)
 
-def display(board, contacts, dom):
+
+def display(dom, contacts):
+  global current
+
   if (len(contacts)):
-    display_contacts(dom, contacts)
+    displayContacts(dom, contacts)
     dom.remove_class("Contacts", "hidden")
   else:
     dom.add_class("Contacts", "hidden")
 
-  if (board.recordId):
-    display_ontact(dom, contacts[current])
+  if (current):
+    displayContact(dom, contacts[current])
 
 
-def handle_button_visibility(board, dom):
-  if board.state == State.DISPLAY:
+def handleButtonVisibility(dom):
+  global state, current
+
+  if state == State.DISPLAY:
     dom.add_class("EditionButtons", "hidden")
     dom.disable_element("HideConsultation")
-    if board.recordId:
-      dom.disable_element("HideConsultationAndSelection")
-    else:
+    if current is None:
       dom.enable_element("HideConsultationAndSelection")
-  elif board.state == State.EDIT:
+    else:
+      dom.disable_element("HideConsultationAndSelection")
+  elif State == State.EDIT:
     dom.remove_class("EditionButtons", "hidden")
     dom.enable_elements(("HideConsultation", "HideConsultationAndSelection"))
   else:
     raise Exception("Unknown state!")
 
 
-def ac_connect(board, dom):
+def acConnect(dom):
+  global contacts, state
   dom.inner("", open("Main.html").read())
-  display(board, contacts, dom)
-  board.state = State.DISPLAY
-  handle_button_visibility(board, dom)
-
-def ac_select(board, dom, id):
-  recordId = int(id)
-
-  display_contact(board,contacts[recordId],dom)
+  display(dom, contacts)
   state = State.DISPLAY
-  handle_button_visibility(board, dom)
+  handleButtonVisibility(dom)
+
+
+def acSelect(dom, id):
+  global contacts, state, current
+
+  current = int(id)
+
+  displayContact(dom, contacts[current])
+  state = State.DISPLAY
+  handleButtonVisibility(dom)
+
+def acEdit(dom):
+  global contacts, current
+
+  if current is None:
+    dom.alert("No selected item!")
+  else:
+    contact = contacts[current]
+
+def acSubmit(dom):
+  global contacts
+  [name, address, phone, note] = dom.get_values(
+    ["Name.edit", "Address.edit", "Phone.edit", "Note.edit"]).values()
+
+  name = name.strip()
+  address = address.strip()
+  phone = phone.strip()
+  note = note.strip()
+
+  if (not name):
+    dom.alert("The name can not be empty!")
+
+  contacts.append({
+    "Name": name,
+    "Address": address,
+    "Phone": phone,
+    "Note": note
+  })
+
+  display(dom, contacts)
+
 
 callbacks = {
-  "": ac_connect,
-  "Select":  ac_select
+  "": acConnect,
+  "Select": acSelect,
+  "Edit": acEdit,
+  "Submit": acSubmit,
 }
 
-atlastk.launch(callbacks, Board, open("Head.html").read())
+atlastk.launch(callbacks, None, open("Head.html").read())
