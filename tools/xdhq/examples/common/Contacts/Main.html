@@ -1,40 +1,36 @@
 <fieldset>
   <fieldset id="Contact">
-    <table>
+    <table style="margin: auto;">
       <tr>
         <td>
-          <label for="Name.edit">Full name:</label>
+          <label for="Name">Full name:</label>
         </td>
         <td>
-          <span id="Name" />
-          <input id="Name.edit" class="hidden" size="50" />
+          <input id="Name" size="50" />
         </td>
       </tr>
       <tr>
         <td>
-          <label for="Address.edit">Address:</label>
+          <label for="Address">Address:</label>
         </td>
         <td>
-          <span id="Address" />
-          <input id="Address.edit" class="hidden" size="50" />
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <label for="Phone.edit">Phone:</label>
-        </td>
-        <td>
-          <span id="Phone" />
-          <input id="Phone.edit" class="hidden" type="tel" size="50" />
+          <input id="Address" size="50" />
         </td>
       </tr>
       <tr>
         <td>
-          <label for="Note.edit">Note:</label>
+          <label for="Phone">Phone:</label>
         </td>
         <td>
-          <span id="Note" />
-          <textarea id="Note.edit" class="hidden" style="width: 100%;">
+          <input id="Phone" type="tel" size="50" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label for="Note">Note:</label>
+        </td>
+        <td>
+          <textarea id="Note" style="width: 100%;">
           </textarea>
         </td>
       </tr>
@@ -42,13 +38,12 @@
   </fieldset>
   <div style="display: table; margin: 10px auto auto auto;">
     <div>
-      <button class="ConsultationAndSelection" data-xdh-onevent="Edit">Edit</button>
-      <button class="ConsultationAndSelection">Duplicate</button>
-      <button class="Consultation">New</button>
-      <button class="ConsultationAndSelection">Delete</button>
+      <button class="DisplayAndSelect" data-xdh-onevent="Edit">Edit</button>
+      <button class="Display" data-xdh-onevent="New">New</button>
+      <button class="DisplayAndSelect" data-xdh-onevent="Delete">Delete</button>
     </div>
-    <div id="EditionButtons">
-      <button>Cancel</button>
+    <div class="Edition">
+      <button data-xdh-onevent="Cancel">Cancel</button>
       <button data-xdh-onevent="Submit">Submit</button>
     </div>
   </div>
