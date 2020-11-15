@@ -22,13 +22,19 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
+"""
+This example focuses on the GUI, as well as some features ot the Atlas toolkit.
+
+Therefore, the 'contacts' object is common to all instances, but its access
+is not protected as it should be, to avoid the example being too complex.
+"""
+
 import os, sys, enum
 
 os.chdir(os.path.dirname(os.path.realpath(__file__)))
 sys.path.append("../../atlastk")
 
 import atlastk
-
 
 class State(enum.Enum):
   DISPLAY = enum.auto()
@@ -73,17 +79,18 @@ EXAMPLE = [
   }
 ]
 
+# Will be filed later.
 fields = []
 
 # contacts = []
 contacts = EXAMPLE
 
 
-def display_contact(board, contact, dom):
-  dom.set_values(contact)
+def display_contact(contactId,dom):
+  dom.set_values(EMPTY_CONTACT if contactId == None else contacts[contactId])
 
 
-def display_contacts(dom, contacts):
+def display_contacts(contacts,dom):
   html = ""
 
   for contactId in range(len(contacts)):
@@ -100,7 +107,7 @@ def display_contacts(dom, contacts):
   dom.inner("Content", html)
 
 
-def handle_outfit(board, dom):
+def update_outfit(board, dom):
   if board.state == State.DISPLAY:
     dom.disable_element("HideDisplay")
     dom.enable_element("HideEdition")
@@ -110,7 +117,7 @@ def handle_outfit(board, dom):
     else:
       dom.enable_element("HideDisplayAndSelect")
   elif board.state == State.EDIT:
-    dom.enable_elements(("HideDisplay", "HideDisplayAndSelect"))
+    dom.enable_elements(("HideDisplay","HideDisplayAndSelect"))
     dom.disable_element("HideEdition")
     dom.enable_elements(fields)
   else:
@@ -118,59 +125,63 @@ def handle_outfit(board, dom):
 
 
 def ac_connect(board, dom):
-  dom.inner("", open("Main.html").read())
-  display_contacts(dom, contacts)
+  dom.inner("",open("Main.html").read())
+  display_contacts(contacts,dom)
   board.state = State.DISPLAY
-  handle_outfit(board, dom)
+  update_outfit(board,dom)
 
 
 def ac_refresh(board,dom):
-  display_contacts(dom,contacts)
+  display_contacts(contacts,dom)
 
 
-def ac_select(board, dom, id):
+def ac_select(board,dom,id):
   contactId = int(id)
 
-  display_contact(board,contacts[contactId],dom)
+  display_contact(contactId,dom)
   board.state = State.DISPLAY
   board.contactId = contactId
 
-  handle_outfit(board, dom)
+  update_outfit(board, dom)
 
 
-def ac_delete(board, dom):
+def ac_delete(board,dom):
   if board.contactId == None:
     raise Exception("No contact selected!")
 
   contacts.pop(board.contactId)
   board.contactId = None;
 
-  display_contact(board, EMPTY_CONTACT, dom)
+  display_contact(None,dom)
 
-  handle_outfit(board,dom)
+  update_outfit(board,dom)
 
   atlastk.broadcast_action("Refresh")
+
+
+def edit(board,dom):
+  contactId = board.contactId
+
+  board.state = State.EDIT
+
+  display_contact(contactId,dom)
+
+  update_outfit(board,dom)
+
+  dom.focus("Name")
 
 
 def ac_new(board,dom):
   board.contactId = None
 
-  board.state = State.EDIT
-
-  display_contact(board, EMPTY_CONTACT, dom)
-
-  handle_outfit(board,dom)
+  edit(board,dom)
 
 
 def ac_edit(board,dom):
   if board.contactId == None:
     raise Exception("No contact selected!")  
 
-  board.state = State.EDIT
-
-  handle_outfit(board,dom)
-
-  dom.focus("Name")
+  edit(board,dom)
 
 
 def ac_submit(board,dom):
@@ -182,6 +193,7 @@ def ac_submit(board,dom):
 
   if board.contactId == None or board.contactId >= len(contacts):
     contacts.append(idsAndValues)
+    display_contact(None,dom)
   else:
     contacts[board.contactId] = idsAndValues
 
@@ -189,21 +201,18 @@ def ac_submit(board,dom):
 
   board.state = State.DISPLAY
 
-  handle_outfit(board,dom)
+  update_outfit(board,dom)
 
 
 def ac_cancel(board,dom):
   if not dom.confirm("Are you sure?"):
     return
 
-  if board.contactId != None:
-    display_contact(board,contacts[board.contactId],dom)
-  else:
-    display_contact(board, EMPTY_CONTACT, dom)
+  display_contact(board.contactId,dom)
 
   board.state = State.DISPLAY
 
-  handle_outfit(board,dom)
+  update_outfit(board,dom)
 
 
 callbacks = {
@@ -220,4 +229,4 @@ callbacks = {
 for key in EMPTY_CONTACT.keys():
   fields.append(key)
 
-atlastk.launch(callbacks, Board, open("Head.html").read())
+atlastk.launch(callbacks,Board,open("Head.html").read())
