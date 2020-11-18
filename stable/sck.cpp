@@ -134,16 +134,38 @@ flw::size__ sck::Write(
 	return Result;
 }
 
+#if SCK__WIN
+#	define SHUT_RDWR 2	// Workaround, 'SD_BOTH' being not available because inclusion of 'winsock2.h' fails.
+#elif defined( SCK__POSIX )
+# define ioctlsocket ioctl
+# define closesocket	close
+#else
+#	error
+#endif
+
+bso::sBool sck::Shutdown(
+	socket__ Socket,
+	qRPN )
+{
+	if ( shutdown( Socket, SHUT_RDWR ) != 0 ) {
+		if ( qRPT )
+			qRLbr();
+
+		return false;
+	} else
+		return true;
+}
+
+
 // Some errors are ignored.
 bso::sBool sck::Close(
 	socket__ Socket,
 	qRPN )	// To set to 'qRPU' when called from destructors !
 {
-#ifdef SCK__WIN
 	u_long Mode = 1;	// Non-blocking.
 	bso::sBool Error = ioctlsocket( Socket, FIONBIO, &Mode ) != 0;
 
-	Error |= shutdown( Socket, 2 ) != 0;	// '2' instead of 'SD_BOTH' because inlusion of 'winsock2.h' fails.
+	Error |= !Shutdown(Socket, qRPU);
 
 	if ( (closesocket( Socket ) != 0) || Error ) {
 		if ( qRPT )
@@ -152,22 +174,6 @@ bso::sBool sck::Close(
 		return false;
 	}
 
-#elif defined( SCK__POSIX )
-	u_long Mode = 1;	// Non-blocking.
-	bso::sBool Error = ioctl( Socket, FIONBIO, &Mode ) != 0;
-
-	Error |= shutdown( Socket, SHUT_RDWR ) != 0;
-
-	//		while ( recv( Socket, (sCast_)Buffer, sizeof( Buffer ), MSG_DONTWAIT ) > 0 );
-	if ( (close( Socket ) != 0) || Error ) {
-		if ( qRPT )
-			qRLbr();
-
-		return false;
-	}
-#else
-#	error
-#endif
 	return true;
 }
 

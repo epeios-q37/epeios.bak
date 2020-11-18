@@ -235,7 +235,17 @@ namespace sck {
 		flw::size__ Amount,
 		duration__ Timeout );	// En secondes.
 
-	//f Close the socket 'Socket'.
+	/* To initiate a connection closing, which socket is handled from another thread.
+	The socket will be than closed gracefully. See 'Close(…)' */
+	bso::sBool Shutdown(
+		socket__ Socket,
+		qRPN );
+
+	// Close the socket 'Socket'.
+	/* If 'Socket' is in a 'select' in another thread (waiting that data is available to be red),
+	it would be indefinitely blocked in this 'select', and the socket will be never closed.
+	To avoid this, use 'Shutdown(…)'.
+	*/
 	bso::sBool Close(
 		socket__ Socket,
 		qRPN );	// To set to 'qRPU' when called from destructors !

@@ -24,6 +24,8 @@
 #include "dir.h"
 #include "mtk.h"
 
+#include <iostream>
+
 using namespace sclm;
 
 using scli::sInfo;
@@ -101,8 +103,10 @@ void sclm::ErrorDefaultHandling(void)
 					cio::CErr << txf::nl;
 
 				cio::CErr << txf::commit;
-			} else
+			} else {
+				std::cerr << std::endl << ">>>>> CIO not initialized! Using STD:\n\t" << Message << std::endl << std::flush;
 				qRFwk();
+			}
 		qRR
 		qRT
 		qRE

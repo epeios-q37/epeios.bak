@@ -12,6 +12,7 @@
 			<FaaS>
 					<!-- Listening service (port) for the FaaS mode. If empty or == '0', FaaS behavior NOT launched. -->
 					<Service>53700</Service>
+					<SocketTimeout>10</SocketTimeout>
 			</FaaS>
 			<!-- Default command -->
 			<Plugins>

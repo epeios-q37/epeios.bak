@@ -33,7 +33,7 @@ namespace registry {
 		extern rEntry FaaS;
 
 		namespace faas {
-            extern rEntry Service;
+			extern rEntry Service;
 		}
 	}
 

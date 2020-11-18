@@ -26,7 +26,7 @@ $out = str_replace(array("\r", "\n", "\t"), '','
 			<!-- BEGIN -->
 			<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 			<meta http-equiv="Cache-Control" content="no-cache"/>
-			<!--Below both scripts are for DEV environment. --"
+			<!--Below both scripts are for DEV environment. -->
 			<script src="faas/xdhtml.js"></script>
 			<script src="faas/xdhwebq.js"></script>
 			<!-- Below both scripts are for PROD environment. -->

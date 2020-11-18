@@ -1,5 +1,9 @@
 # *XDHq* changelog.
 
+## 2020-11-18:
+- *xdhqxdh*:
+  - introducing connexion timeout,
+
 ## 2020-10-30:
 - *xdhqxdh*:
   - using (at last) a tree based index to handle tokens in *FaaS* mode,
