@@ -191,7 +191,7 @@ namespace {
 		if ( IP.Amount() != 0 )
 			Log << " (" << IP << ")";
 
-		Log << " : " <<  Message;
+		Log << ": " <<  Message;
 	qRR;
 	qRT;
 	qRE;

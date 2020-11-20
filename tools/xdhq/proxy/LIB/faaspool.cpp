@@ -44,8 +44,9 @@ namespace {
 
 	namespace registry_ {
 		namespace parameter {
-			// Time, in minutes, after which an inactive socket is closed.
-			sclr::rEntry SocketTimeout_("SocketTimeout", registry::parameter::FaaS);
+			// Inactivity delay, in minutes, after which a connection is closed.
+			// Default value: see 'connection_timeout_::Default_';
+			sclr::rEntry ConnectionTimeout_("ConnectionTimeout", registry::parameter::FaaS);
 		}
 
 		namespace definition {
@@ -65,11 +66,14 @@ namespace {
 
 	qROW( BRow_ );	// Back-end Row.
 
-	// Handling of the socket timeout.
-	namespace socket_timeout_ {
-		qROW( Row );	// Socket Timeout row
+	// Handling of the connection timeout.
+	namespace connection_timeout_ {
+
+		qROW( Row );	// Connection Timeout row
 
 		namespace {
+			// Default inactivity delay, in minutes, after which a connection is closed.
+			qCDEF(bso::sU8, Default_, 60);
 			mtx::rMutex Mutex_ = mtx::Undefined;
 			lstbch::qLBUNCHw(sck::rRWDriver *, sRow) Drivers_;
 		}
@@ -125,14 +129,14 @@ namespace {
 		{
 		qRH;
 			mtx::rHandle Mutex;
-			time_t Stamp = 0;	// 'time-t' must be expressed in seconds (tested in CTor(…)).
+			time_t Stamp = 0;	// 'time_t' must be expressed in seconds (tested in CTor(…)).
 			bso::sU32 Timeout = 0;
 			sRow Row = qNIL, Next = qNIL;
 		qRB;
-			Timeout = sclm::OGetU32(registry_::parameter::SocketTimeout_, 60);
+			Timeout = sclm::OGetU32(registry_::parameter::ConnectionTimeout_, Default_);
 
 			if ( Timeout )
-				Stamp = tol::EpochTime( false ) - Timeout;
+				Stamp = tol::EpochTime( false ) - Timeout * 60;
 
 			Mutex.InitAndLock(Mutex_);
 
@@ -687,7 +691,7 @@ namespace {
 	qRB;
 		Log.Init( common::LogDriver );
 
-		Log << Token << " (" << IP << "): " <<  Message;
+		Log << Token << ' ' << IP << ": " <<  Message;
 	qRR;
 	qRT;
 	qRE;
@@ -740,8 +744,6 @@ namespace {
 			Put_(BuildURL_(Address, str::Empty, Token, URL), Flow);
 			Log_(IP, Token, Misc );
 		}
-
-		socket_timeout_::Purge();
 	qRR;
 		if ( Backend != NULL )
 			delete Backend;
@@ -873,7 +875,9 @@ namespace {
 		str::wString IP;
 		sck::rRWDriver Driver;
 		rBackend_ *Backend = NULL;
-		socket_timeout_::sRow STRow = qNIL;
+		connection_timeout_::sRow CTRow = qNIL;
+		str::wString Message;
+		bso::pInteger IBuffer;
 	qRB;
 		Socket = Data.Socket;
 		IP.Init( Data.IP );
@@ -885,14 +889,21 @@ namespace {
 		Handshake_( Driver );
 
 		if ( ( Backend = CreateBackend_( Driver, IP ) ) != NULL ) {
-			STRow = socket_timeout_::Store(Driver);
+			CTRow = connection_timeout_::Store(Driver);
 			HandleSwitching_( Driver, Backend->TRow, Backend->Shareds, Backend->Switch );	// Does not return until disconnection or error.
 		}
 	qRR;
 		sclm::ErrorDefaultHandling();	// Also resets the error, otherwise the `WaitUntilNoMoreClient()` will lead to a deadlock on next error.
 	qRT;
 		if ( Backend != NULL ) {
-			Log_(IP, Backend->Token, socket_timeout_::WasLate(STRow) ? "Quitting (timeout)" : "Quitting");
+			Message.Init("Quit (");
+			Message.Append(bso::Convert(*CTRow, IBuffer));
+			Message.Append(')');
+			if ( connection_timeout_::WasLate(CTRow) ) {
+				Message.Append(" T");
+			}
+
+			Log_(IP, Backend->Token, Message);
 			Backend->Driver = NULL;	// This signals that the backend is no more present.
 			Backend->WaitUntilNoMoreClient();
 			Remove_( Backend->Row );
@@ -901,8 +912,8 @@ namespace {
 			Backend = NULL;
 		}
 
-		if ( STRow != qNIL )
-			socket_timeout_::Delete(STRow);
+		if ( CTRow != qNIL )
+			connection_timeout_::Delete(CTRow);
 
 		Driver.reset();	// Otherwise it will be done after the destruction of the socket, hence the commit will fail.
 
@@ -920,6 +931,8 @@ namespace {
 	qRFH;
 	qRFB;
 		NewConnexion_( Data, Blocker );
+
+		connection_timeout_::Purge();
 	qRFR;
 	qRFT;
 	qRFE(sclm::ErrorDefaultHandling());
@@ -1025,7 +1038,7 @@ qRFB;
 	Mutex_ = mtx::Create();
 	Backends_.Init();
 	Index_.Init();
-	socket_timeout_::CTor();
+	connection_timeout_::CTor();
 qRFR;
 qRFT;
 qRFE(sclm::ErrorDefaultHandling());
@@ -1044,6 +1057,6 @@ qGDTOR(faaspool)
 		Row = Backends_.Next( Row );
 	}
 
-	socket_timeout_::DTor();
+	connection_timeout_::DTor();
 }
 

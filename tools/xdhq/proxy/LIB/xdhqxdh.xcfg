@@ -12,7 +12,8 @@
 			<FaaS>
 					<!-- Listening service (port) for the FaaS mode. If empty or == '0', FaaS behavior NOT launched. -->
 					<Service>53700</Service>
-					<SocketTimeout>10</SocketTimeout>
+					<!-- Duration of inactivity, in minutes, after which a connection is closed. -->
+					<ConnectionTimeout>90</ConnectionTimeout>
 			</FaaS>
 			<!-- Default command -->
 			<Plugins>
