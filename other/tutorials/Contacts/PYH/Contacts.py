@@ -31,8 +31,6 @@ is not protected as it should be, to avoid the example being too complex.
 
 import os, sys, enum
 
-os.chdir(os.path.dirname(os.path.realpath(__file__)))
-sys.path.append("../../atlastk")
 
 import atlastk
 
@@ -46,10 +44,10 @@ class Board:
     self.contactId = None
 
 EMPTY_CONTACT = {
-    "Name": "",
-    "Address": "",
-    "Phone": "",
-    "Note": ""
+  "Name": "",
+  "Address": "",
+  "Phone": "",
+  "Note": ""
 }
 
 EXAMPLE = [
@@ -90,24 +88,20 @@ def display_contact(contactId,dom):
   dom.set_values(EMPTY_CONTACT if contactId == None else contacts[contactId])
 
 
-def display_contacts(contacts,dom):
+def display_contacts(dom):
   html = ""
 
   for contactId in range(len(contacts)):
     contact = contacts[contactId]
-    html += f"""
-<tr id="{contactId}" data-xdh-onevent="Select" style="cursor: pointer;">
-  <td>{contact["Name"]}</td>
-  <td>{contact["Address"]}</td>
-  <td>{contact["Phone"]}</td>
-  <td>{contact["Note"]}</td>
-</td>
-"""
+    html += f'<tr id="{contactId}" data-xdh-onevent="Select" style="cursor: pointer;">'
+    for key in contact:
+      html += f'<td>{contact[key]}</td>'
+    html += '</td>'
 
-  dom.inner("Content", html)
+  dom.inner("Content",html)
 
 
-def update_outfit(board, dom):
+def update_outfit(board,dom):
   if board.state == State.DISPLAY:
     dom.disable_element("HideDisplay")
     dom.enable_element("HideEdition")
@@ -126,13 +120,13 @@ def update_outfit(board, dom):
 
 def ac_connect(board, dom):
   dom.inner("",open("Main.html").read())
-  display_contacts(contacts,dom)
+  display_contacts(dom)
   board.state = State.DISPLAY
   update_outfit(board,dom)
 
 
 def ac_refresh(board,dom):
-  display_contacts(contacts,dom)
+  display_contacts(dom)
 
 
 def ac_select(board,dom,id):
