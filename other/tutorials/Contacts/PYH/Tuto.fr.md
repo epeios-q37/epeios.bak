@@ -527,7 +527,7 @@ CALLBACKS = {
 }
 ```
 
-Et maintenant, on va remplacer dans les fonctions qui modifie la liste des contacts,à savoir `ac_submit(…)` et `ac_delete(…)`, chaque appel à la fonction `display_contacts(dom)`, qui est appelée par la fonction `ac_refresh(…)`, par un appel à `atlastk.broadcast_action("Refresh")`. Cette fonction va lancer l'action dont le libellé est passé en paramètre, à savoir `Refresh` ici, pour toutes les sessions, ce qui va provoquer l'appel à la focntion `display_contacts(…)`, et ainsi la liste des contacts sera rafraîchie dans toutes les sessions.
+Et maintenant, on va remplacer dans les fonctions qui modifie la liste des contacts,à savoir `ac_submit(…)` et `ac_delete(…)`, chaque appel à la fonction `display_contacts(dom)`, qui est appelée par la fonction `ac_refresh(…)`, par un appel à `atlastk.broadcast_action("Refresh")`. Cette fonction va lancer l'action dont le libellé est passé en paramètre, à savoir `Refresh` ici, pour toutes les sessions, ce qui va provoquer l'appel à la fonction `display_contacts(…)`, et ainsi la liste des contacts sera rafraîchie dans toutes les sessions.
 
 Encore une fois, cela ne suffit pas pour gérer correctement le partage de la liste des contacts entre les sessions, et le programme est facile à mettre en défaut en l'état, mais le code nécessaire n'étant pas directement lié au *toolkit* *Atlas*, il ne sera pas abordé dans ce tutoriel.
 
