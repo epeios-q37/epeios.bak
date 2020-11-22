@@ -349,7 +349,7 @@ Cette fonction réalise les opérations suivantes :
 
 Lors d'un clic que le bouton *New*, le programme cache maintenant ce bouton, vide les différents champs et permet la saisie d'un nouveau contact.
 
-## Boutons d'édition (`part6.py`)
+## Boutons de saisie (`part6.py`)
 
 On peut maintenant saisir un nouveau contact, mais il manque les boutons pour valider ou annuler cette saisie. Cela va se faire en désactivant l'élément *style* d'identifiant `HideEdition` (dans le fichier `Head.html`) qui définit une règle cachant les éléments auxquels on a affecté la classe edition, ce qui est le cas de l'élément `div` qui contient les deux boutons d'édition `Submit` et `Cancel`.
 
@@ -365,11 +365,9 @@ def update_outfit(board,dom):
     dom.enable_elements(FIELDS)
     dom.enable_element("HideDisplay")
     dom.disable_element("HideEdition")
-  else:
-    raise Exception("Unknown state!")
 ```
 
-Maintenant que les boutons sont affichés, on va créer les fonctions associés.
+Maintenant que les boutons sont affichés, on va créer les fonctions associées.
 
 Pour le bouton *Cancel*, on va demander confirmation et, en fonction de la réponse, ne rien faire, ou repasser en mode d'affichage aprés avoir vider les champs de saisie :
 
@@ -399,11 +397,11 @@ def ac_submit(board,dom):
     update_outfit(board,dom)
 ```
 
-La méthode `get_values(…)` prend une liste de chaîne de caractères qui correspondent à des identifiants d'éléments, et retourne un dictionnaire avec pour clef, ces identifiants, etn pour valeurs, le contenu des éléments correspondants. Comme les identifiants correspondent au nom des clefs d'un contact, ou peut stocker le dictionnaire obtenu tel quel.
+La méthode `get_values(…)` prend une liste de chaîne de caractères qui correspondent à des identifiants d'éléments, et retourne un dictionnaire avec pour clefs, ces identifiants, et pour valeurs, le contenu des éléments correspondants. Comme les identifiants correspondent au nom des clefs d'un contact, ou peut stocker le dictionnaire obtenu tel quel.
 
 La méthode `alert(…)` affiche simplement une boîte de dialogue contenant comme message la chaîne passée en paramètre, avec un bouton *OK* (ou équivalent) permettant de la fermer.
 
-On termine en metant à jour `CALLBACKS` pour affecter ces nouvelles fonctions aux actions adéquates :
+On termine en mettant à jour `CALLBACKS` pour affecter ces nouvelles fonctions aux actions adéquates :
 
 ```python
 CALLBACKS = {
@@ -414,3 +412,123 @@ CALLBACKS = {
   "Submit": ac_submit
 }
 ```
+
+## Les autres bouton (`part7.py`)
+
+Il nous restent deux boutons à afficher : le bouton d'édition (*Edit*) et le boubon de suppression. On va mettre à jour la fonction `update_outfit(…)` pour cela. Mais auparavant, nous allons modifier la classe `Board` pour lui ajouter une variable (`contactId`) stockant l'index du contact sélectionné dans la liste, qui sera mis à `None` lorsqu'aucun contact n'est selectionné :
+
+```python
+class Board:
+  def __init__(self):
+    self.state = State.DISPLAY
+    self.contactId = None
+```
+
+Nous allons modifier `ac_select(…)` pour gérer cette nouvelle variable membre :
+
+```python
+def ac_select(board,dom,id):
+  board.contactId = int(id)
+  display_contact(board.contactId,dom)  
+  …
+```
+
+Et elle va également nous servir pour l'affichage des boutons manquants. La classe `DisplayAndSelect` est affecté à ces boutons (voir le fichier `Main.html`), dont la règle CSS pour cacher les éléments de cette classe est défini dans l'élément *style* d'identifiant `HideDisplayAndSelect` (voir le fichier `Head.html`. On obtient donc cela :
+
+```python
+def update_outfit(board,dom):
+  if board.state == State.DISPLAY:
+    …
+    if board.contactId == None:
+      dom.enable_element("HideDisplayAndSelect")
+    else:
+      dom.disable_element("HideDisplayAndSelect")
+  elif board.state == State.EDIT:
+    …
+    dom.enable_elements(("HideDisplay","HideDisplayAndSelect"))
+    …
+```
+
+Passons à la fonction qui sera associée au bouton *Edit*. Elle reprendra en grande partie le contenu de la fonction `ac_new(…)` ; on pourrait d'ailleurs en factoriser une partie, mais cela dépasseriat le cadre de ce tutoriel :
+
+```python
+def ac_edit(board,dom):
+  board.state = State.EDIT
+  display_contact(board.contactId,dom)
+  update_outfit(board,dom)
+  dom.focus("Name")
+```
+
+Il faut aussi modifier la fonction `ac_submit(…)` pour tenir compte de son exécution dans le cadre du modification d'un contact :
+
+```python
+def ac_submit(board,dom):
+  …
+  else:
+    board.state = State.DISPLAY
+    if board.contactId == None:
+      contacts.append(idsAndValues)
+    else:
+      contacts[board.contactId] = idsAndValues
+    display_contact(board.contactId,dom)
+    display_contacts(dom)
+    …
+```
+
+Et également la fonction `ac_cancel(…)` pour la même raison : 
+
+```python
+  if dom.confirm("Are you sure?"):
+    display_contact(board.contactId,dom)
+    board.state = State.DISPLAY
+    update_outfit(board,dom)
+```
+
+Implémentons maintenant la fonction qui sera associée au bouton *Delete*, qui ne présente rien de particulier, au regard de ce qui a été abordé dans les précédentes sections :
+
+```python
+def ac_delete(board,dom):
+  contacts.pop(board.contactId)
+  board.contactId = None;
+  display_contact(None,dom)
+  display_contacts(dom)
+  update_outfit(board,dom)
+```
+
+Enfin, associons ces deux fonctions aux actions correspondantes correspondant au bouton *Delete* (le bouton *Edit* sera traité dans la prochaine section) :
+
+```python3
+CALLBACKS {
+  …
+  "Delete": ac_delete,
+  "Edit": ac_edit
+}
+```
+
+## Bonus
+
+Comme vous avez pu le constater, la variable `contacts` est globale, ce qui signifie qu'elle est commune à touts les sessions. Cependant, une modification apportée dans une session n'est pas immédiatement visible dans toutes les sessions. L'objet de cette section est d'apporter les modifications au code pour remédier à cela.
+
+On va se limiter à rafraîchir la liste des contacts dans l'ensemble des sessions dés qu'une modification y est apportée. À noter qu'il y aurait bien plus à faire, notamment protéger l'accès à la variable `contacts` pour contrôler les tentatives d'accès simultanée, mais cela sort du cadre de ce tutoriel.
+
+Pour commencer, on va créer une fonction qui va rafraîchir la liste des contacts :
+
+```python
+def ac_refresh(board,dom):
+  display_contacts(dom)
+```
+
+Comme vous pouvez le constater, elle présente beaucoup de similitude avec les fonctions associées à des actions (`ac_edit(…)`, `ac_submit(…)`…). Cela n'a rien d'étonnant, car on va effectivement l'associer à une action :
+
+```python
+CALLBACKS = {
+  …
+  "Refresh": ac_refresh
+}
+```
+
+Et maintenant, on va remplacer dans les fonctions qui modifie la liste des contacts,à savoir `ac_submit(…)` et `ac_delete(…)`, chaque appel à la fonction `display_contacts(dom)`, qui est appelée par la fonction `ac_refresh(…)`, par un appel à `atlastk.broadcast_action("Refresh")`. Cette fonction va lancer l'action dont le libellé est passé en paramètre, à savoir `Refresh` ici, pour toutes les sessions, ce qui va provoquer l'appel à la focntion `display_contacts(…)`, et ainsi la liste des contacts sera rafraîchie dans toutes les sessions.
+
+Encore une fois, cela ne suffit pas pour gérer correctement le partage de la liste des contacts entre les sessions, et le programme est facile à mettre en défaut en l'état, mais le code nécessaire n'étant pas directement lié au *toolkit* *Atlas*, il ne sera pas abordé dans ce tutoriel.
+
+
