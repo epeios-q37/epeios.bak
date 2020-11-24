@@ -884,12 +884,13 @@ namespace {
 
 		Blocker.Release();
 
+		CTRow = connection_timeout_::Store(Driver);
+
 		Driver.Init( Socket, false, fdr::ts_Default );
 
 		Handshake_( Driver );
 
 		if ( ( Backend = CreateBackend_( Driver, IP ) ) != NULL ) {
-			CTRow = connection_timeout_::Store(Driver);
 			HandleSwitching_( Driver, Backend->TRow, Backend->Shareds, Backend->Switch );	// Does not return until disconnection or error.
 		}
 	qRR;
@@ -910,6 +911,20 @@ namespace {
 			delete Backend;
 
 			Backend = NULL;
+		} else if ( CTRow != qNIL ) {
+			Message.Init("Dump (");
+			Message.Append(bso::Convert(*CTRow, IBuffer));
+			Message.Append(')');
+			if ( connection_timeout_::WasLate(CTRow) ) {
+				Message.Append(" T");
+			}
+
+			Log_(IP, str::wString("(N/A)"), Message);
+		} else {
+			// Should not happen!
+			Message.Init("???");
+
+			Log_(IP, str::wString("(N/A)"), Message);
 		}
 
 		if ( CTRow != qNIL )

@@ -30,11 +30,12 @@ EXAMPLE = [
     "Name": "Tournesol, Tryphon (prof.)",
     "Address": "Château de Moulinsart",
     "Phone": "421",
-    "Note": "Loves Loch Lomond whiskey."
+    "Note": "Creator of the Bianca rose."
   }
 ]
 
 contacts = EXAMPLE
+
 
 def display_contacts(dom):
   html = ""
@@ -48,21 +49,26 @@ def display_contacts(dom):
 
   dom.inner("Content", html)
 
+
 def display_contact(contactId,dom):
   dom.set_values(contacts[contactId])
+
 
 def update_outfit(dom):
   dom.disable_elements(FIELDS)
   dom.disable_element("HideDisplay")
+
 
 def ac_connect(dom):
   dom.inner("",open("Main.html").read())
   display_contacts(dom)
   update_outfit(dom)
 
+
 def ac_select(dom,id):
   display_contact(int(id),dom)  
   update_outfit(dom)
+
 
 CALLBACKS = {
   "": ac_connect,

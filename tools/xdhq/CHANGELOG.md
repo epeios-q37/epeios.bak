@@ -1,5 +1,10 @@
 # *XDHq* changelog.
 
+## 2020-11-24:
+
+- *xdhqxdh*:
+  - handling also connexion timeout from passive/unknown clients,
+
 ## 2020-11-18:
 - *xdhqxdh*:
   - introducing connexion timeout,

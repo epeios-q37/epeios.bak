@@ -34,7 +34,7 @@ EXAMPLE = [
     "Name": "Tournesol, Tryphon (prof.)",
     "Address": "Château de Moulinsart",
     "Phone": "421",
-    "Note": "Loves Loch Lomond whiskey."
+    "Note": "Creator of the Bianca rose."
   }
 ]
 

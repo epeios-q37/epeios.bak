@@ -34,7 +34,7 @@ EXAMPLE = [
     "Name": "Tournesol, Tryphon (prof.)",
     "Address": "Château de Moulinsart",
     "Phone": "421",
-    "Note": "Loves Loch Lomond whiskey."
+    "Note": "Creator of the Bianca rose."
   }
 ]
 
@@ -99,6 +99,7 @@ def ac_new(board,dom):
   display_contact(None,dom)
   update_outfit(board,dom)
   dom.focus("Name")
+
 
 CALLBACKS = {
   "": ac_connect,
