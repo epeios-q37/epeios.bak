@@ -79,8 +79,6 @@ def update_outfit(board,dom):
     dom.enable_elements(FIELDS)
     dom.enable_element("HideDisplay")
     dom.disable_element("HideEdition")
-  else:
-    raise Exception("Unknown state!")
 
 
 def ac_connect(board,dom):

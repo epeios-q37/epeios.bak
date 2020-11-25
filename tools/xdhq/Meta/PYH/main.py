@@ -16,7 +16,7 @@ except NameError:
 
 success = False
 
-demos = (
+DEMOS = (
     "Blank",
     "Hello",
     "Chatroom",
@@ -31,22 +31,22 @@ demos = (
     "Widgets",
 )
 
-demosAmount = len(demos)
+DEMOS_AMOUNT = len(DEMOS)
 
 
 while not success:
-    for id in range(0,demosAmount):
-        print(chr(id + ord('a')) + ": " + demos[id]) 
+    for id in range(0,DEMOS_AMOUNT):
+        print(chr(id + ord('a')) + ": " + DEMOS[id]) 
         
-    lastChar = chr(demosAmount + ord('a') - 1)
+    lastChar = chr(DEMOS_AMOUNT + ord('a') - 1)
         
     demoId = input("Select one of above examples ('a' … '" + lastChar + "') : ").lower()
    
     try:
-        demo = "examples." + demos[ord(demoId) - ord('a')] + "." + "main"
+        demo = "examples." + DEMOS[ord(demoId) - ord('a')] + "." + "main"
         
         # Below line is needed by 'Repl.it'.
-        sys.argv[0]="examples/" + demos[ord(demoId) - ord('a')] + "/"
+        sys.argv[0]="examples/" + DEMOS[ord(demoId) - ord('a')] + "/"
 
         if True:  # Simplifies debugging when set to False
             try:
