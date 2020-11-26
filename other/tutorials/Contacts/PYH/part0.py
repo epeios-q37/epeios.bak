@@ -1,4 +1,9 @@
-# Only purpose is to display all the element of the HTML page.
+# You don't need following 3 lines in your own applications.
+import sys, os
+sys.path.append("../../atlastk")
+os.chdir(os.path.dirname(os.path.realpath(__file__)))
+
+# Sole purpose of this program is to display all the elements of the HTML page.
 
 import atlastk
 

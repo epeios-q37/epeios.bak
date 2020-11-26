@@ -1,19 +1,21 @@
  
-# *Toolkit* *Atlas* : un tutoriel
+# Programmation pas à pas, *en Python*, d'une application web monopage avec le *toolkit* *Atlas*
 
-Histoire de meubler mes longues soirées ~~d'hiver~~ de confinement, je me suis lancé dans la rédaction d'un tutoriel détaillant pas à pas la programmation d'une application basique de gestion de contacts, en utilisant la version *Python* du *toolkit* *Atlas* tutoriel, qui est la plus populaire. L'application en question ressemble à ceci :
+Ce tutoriel vous montre pas à pas comment programmer une application web monopage avec le *toolkit* *Atlas*. L'accent est mis sur la mise en œuvre de l'a*API* du *toolkit* *Atlas*, le lecteur étant supposé possèder les connaissances de base nécessaires à la compréhension du code *HTML*/*CSS* et *Python* présent dans ce tutoriel.  
+Voici un aperçu de ce à quoi ressemble l'application faisant l'objet de ce tutoriel :
 
 ![](https://q37.info/download/assets/Contacts.png)
 
-Le *toolkit* *Atlas* permet d'écrire des [applications web monopages](https://fr.wikipedia.org/wiki/Application_web_monopage). Il est léger (quelques dizaines de Ko), sans dépendances, ne requiert pas de devoir programmer en JavaScript (ou dérivé), et n'impose pas d'architecture logicielle ([*MVC*](https://fr.wikipedia.org/wiki/Mod%C3%A8le-vue-contr%C3%B4leur) ou similaire).
+Le *toolkit* *Atlas* permet d'écrire des [applications web monopages](https://fr.wikipedia.org/wiki/Application_web_monopage). Il est léger (quelques dizaines de Ko), sans dépendances, ne requiert pas de programmer en JavaScript (ou dérivé), et n'impose pas d'architecture logicielle ([*MVC*](https://fr.wikipedia.org/wiki/Mod%C3%A8le-vue-contr%C3%B4leur) ou similaire).
 
 En outre, pour qu'elle soit accessible d'internet, il n'est pas nécessaire de déployer une application développée avec le *toolkit* *Atlas* sur un serveur distant. Il suffit que l'ordinateur à partir duquel vous lancez l'application soit connecté à internet. L'application est alors accessible de n'importe quel dispositif équipé d'un navigateur web moderne connecté à internet, sans rien avoir à configurer de particulier.
 
-Ce tutorial est disponible sur *GitHub* (https://github.com/epeios-q37/tutorial-python), mais également sur *Repl.it* (https://repl.it/@AtlasTK/tutorial-python).  
+Ce tutorial est disponible sur *GitHub* (https://github.com/epeios-q37/atlas-python), mais également sur *Repl.it* (https://repl.it/@AtlasTK/atlas-python).  
 Si vous avez *Python* 3 d'installé sur votre ordinateur, vous pouvez récupérer le dépôt *GitHub* et visualiser/exécuter les différentes sections du tutoriel directement sur votre machine, aprés avoir installé le *toolkit* *Atlas* (`pip3 install atlastk`).  
 Vous pouvez également, notamment si vous n'avez pas *Python* 3 d'installé sur votre ordinateur, visualiser/exécuter ces parties directement dans votre navigateur, en utilisant le lien ci-dessus sur *Repl.it*.
 
-Pour ne pas allonger ce tutoriel outre mesure, seules les modifications apportées d'une section à l'autre au code sont indiquée. Néanmoins, à la fin de chaque section, il y aura un lien vers le code source du programme, sur *GitHub*, dans sa version propre à cette section, ainsi que les actions à lancer pour l'exécuter sur *Repl.it*.
+Pour ne pas allonger ce tutoriel outre mesure, seules les modifications apportées d'une section à l'autre au code sont indiquée. Néanmoins, à la fin de chaque section, il y aura un lien vers le code source du programme, sur *GitHub*, dans sa version propre à cette section, ainsi que les actions à lancer pour l'exécuter sur *Repl.it*.  
+Les lignes, dans les fichiers source, précédant la ligne `import atlastk` ne sont là aur pour faciliter l'utilisation du tutoriel et ne sont pas nécessaire pour une utilisation à une utilisation courante du *toolkit* *Atlas*.
 
 
 ## Le ficher HTML principal (`Main.html`)
@@ -100,10 +102,10 @@ En voici le code :
 </span>
 ```
 
-À part l l'attribut `data-xdh-onevent`, on n'a là que du *HTML* des plus classique.  
+À part l'attribut `data-xdh-onevent`, on n'a là que du *HTML* des plus classique.  
 Les différentes classes (`Display` et `DisplayAndSelect`) ont cependant un rôle bien particulier, qui sera révélé dans lse sections qui suivent.
 
-L'attribut `data-xdh-onevent` prend ici la place de l'habituel attribut `onclick` ayant pour valeur le code *JavaScript* à lancer lorsque l'on clique sur le bouton auquel est affecté cet attribut. Ici, à la place, on définit un libellé d'action, libellé que l'on retrouvera dans le code *Python*. On va pouvoir ainsi coder les actions à réaliser lors d'un clic sue le bouton, non plus en *JavaScript*, mais en *Python*.
+L'attribut `data-xdh-onevent` prend ici la place de l'habituel attribut `onclick` prenant pour valeur le code *JavaScript* à lancer lorsque l'on clique sur le bouton auquel est affecté cet attribut. Ici, à la place, on définit un libellé d'action, libellé que l'on retrouvera dans le code *Python*. On va pouvoir ainsi coder les actions à réaliser lors d'un clic sue le bouton, non plus en *JavaScript*, mais en *Python*.
 
 ### Boutons de saisie
 
@@ -115,7 +117,8 @@ Voici le code correspondant :
 <button data-xdh-onevent="Submit">Submit</button>
 ```
 
-Là encore, rien de particulier, mis à part l'attribut `data-xdh-onevent`, que l'on a déjà rencontré ci-dessus. Le contenu des attributs `data-xdh-onevent`, à savoir `Cancel` et `Submit`, vont être utilisé dans le code *Python* de l'application.   
+Là encore, rien de particulier, mis à part l'attribut `data-xdh-onevent`, que l'on a déjà rencontré ci-dessus.  
+Le contenu des attributs `data-xdh-onevent`, à savoir `Cancel` et `Submit`, vont être utilisé dans le code *Python* de l'application.   
 Notez que le nom du bouton (la valeur de l'élément `button`) est identique à la valeur de son attribut `data-xdh-onevent` uniquement par commodité ; ce n'est en rien obligatoire.
 
 ### Liste de contacts
@@ -139,7 +142,7 @@ Notez l'identifiant `Content`, que l'on va retrouver dans le coe *Python*. L'ide
 
 ## Le fichier `Head.html`
 
-Ce fichier, également au format *HYML*,  prendra place dans la section *head* de la page *HTML* constituant l'interface de l'application.
+Ce fichier, également au format *HTML*,  prendra place dans la section *head* de la page *HTML* constituant l'interface de l'application.
 
 ### Apparence de l'application
 
@@ -564,7 +567,7 @@ def ac_cancel(board,dom):
     update_outfit(board,dom)
 ```
 
-LA méthode `confirm(…)` ouvre une boîte de dialogue affichant la chaîne de caractère passés en paramètre. Elle retourne `True` lorsque l'on clique sur le bouton *OK* (ou ce qui en tient lieu), ou `False` si on clique sur le bouton `Cancel` (ou ce qui en tent lieu), tout en fermant ladite boîte de dialogue.
+La méthode `confirm(…)` ouvre une boîte de dialogue affichant la chaîne de caractère passés en paramètre. Elle retourne `True` lorsque l'on clique sur le bouton *OK* (ou ce qui en tient lieu), ou `False` si on clique sur le bouton `Cancel` (ou ce qui en tent lieu), tout en fermant ladite boîte de dialogue.
 
 Pour le bouton `Submit`, il s'agit de récupérer les valeurs des champs de saisie, de stocker lesdites valeurs dans ce qui tient lieu de base de donnée, à savoir la variable `contacts`, de rafraîchir la liste des contacts, et de rebasculer en mode saisie, tout cela sous condition que le champs `Name` contienne une valeur :
 

@@ -1,3 +1,8 @@
+# You don't need following 3 lines in your own applications.
+import sys, os
+sys.path.append("../../atlastk")
+os.chdir(os.path.dirname(os.path.realpath(__file__)))
+
 import atlastk, enum
 
 class State(enum.Enum):
@@ -77,8 +82,6 @@ def update_outfit(board,dom):
   elif board.state == State.EDIT:
     dom.enable_elements(FIELDS)
     dom.enable_element("HideDisplay")
-  else:
-    raise Exception("Unknown state!")
 
 
 def ac_connect(board,dom):
