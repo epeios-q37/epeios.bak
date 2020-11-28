@@ -1,24 +1,26 @@
  
-# Développement d'une application web monopage avec le *toolkit* *Atlas*
+# Développer l'interface d'une application web monopage avec le *toolkit* *Atlas*
 
-Ce tutoriel vous montre pas à pas comment programmer une [application web monopage ](https://fr.wikipedia.org/wiki/Application_web_monopage)avec le *toolkit* *Atlas*. L'accent est mis sur la mise en œuvre de l'*API* du *toolkit* *Atlas*, le lecteur étant supposé possèder les connaissances de base nécessaires à la compréhension du code *HTML*/*CSS* et *Python* présent dans ce tutoriel.  
-Voici un aperçu de ce à quoi ressemble l'application en question :
+Le *toolkit* *Atlas* permet de programmer des interfaces d'applications web monopages ([SPA](https://en.wikipedia.org/wiki/Single-page_application))). Il est léger (quelques dizaines de Ko), sans dépendances, ne nécessite pas de savoir programmer en *JavaScript* (ou un langage dérivé), et n'impose pas d'architecture logicielle ([*MVC*](https://fr.wikipedia.org/wiki/Mod%C3%A8le-vue-contr%C3%B4leur) ou similaire).
+
+En outre, une application développée avec le *toolkit* *Atlas* est instantanément et automatiquement accessible d'internet, pour peu que l'ordinateur qui l'exécute soit connecté à internet. Tout dispositif équipé d'un navigateur web moderne connecté à internet peut alors y avoir accès, notamment par le biais du [code QR](https://fr.wikipedia.org/wiki/Code_QR) qui s'affiche dans l'application.
+
+Ce document détaille le développement, à l'aide de ce *toolkit*, d'une application basique de gestion de contacts, dont voici un aperçu :
 
 ![Apparence de l'application faisant l'objet du tutoriel 'Contacts'](https://q37.info/s/39dr4tcr.png)
 
-Le *toolkit* *Atlas* permet d'écrire des [applications web monopages](https://fr.wikipedia.org/wiki/Application_web_monopage). Il est léger (quelques dizaines de Ko), sans dépendances, ne nécessite pas de savoir programmer en *JavaScript* (ou un dérivé), et n'impose pas d'architecture logicielle ([*MVC*](https://fr.wikipedia.org/wiki/Mod%C3%A8le-vue-contr%C3%B4leur) ou similaire).
+L'accent étant mis sur la mise en œuvre de l'*API* du *toolkit* *Atlas*, le lecteur est supposé posséder les connaissances de base nécessaires à la compréhension du code *HTML*/*CSS* et *Python* présent dans ce document. 
 
-En outre, pour qu'elle soit accessible d'internet, il n'est pas nécessaire de déployer une application développée avec le *toolkit* *Atlas* sur un serveur distant. Il suffit que l'ordinateur à partir duquel vous lancez l'application soit connecté à internet. L'application est alors accessible de n'importe quel dispositif équipé d'un navigateur web moderne connecté à internet, sans rien avoir à configurer de particulier.
+Le code source associé à ce document est disponible sur *GitHub* (https://github.com/epeios-q37/atlas-python/tree/master/tutorials/Contacts), ainsi que sur *Repl.it* (https://repl.it/@AtlasTK/atlas-python).
+Si vous avez *Python* 3 d'installé sur votre ordinateur, vous pouvez récupérer le dépôt *GitHub* et visualiser/exécuter directement sur votre machine le code associé aux différentes sections de ce document.
+Vous pouvez également, notamment si vous n'avez pas *Python* 3 d'installé, visualiser/exécuter ce code directement dans votre navigateur, en utilisant le lien *Repl.it* ci-dessus.
 
-Ce tutorial est disponible sur *GitHub* (https://github.com/epeios-q37/atlas-python), mais également sur *Repl.it* (https://repl.it/@AtlasTK/atlas-python).  
-Si vous avez *Python* 3 d'installé sur votre ordinateur, vous pouvez récupérer le dépôt *GitHub* et visualiser/exécuter le code associé aux différentes sections du tutoriel directement sur votre machine.  
-Vous pouvez également, notamment si vous n'avez pas *Python* 3 d'installé, visualiser/exécuter ces parties directement dans votre navigateur, en utilisant le lien *Repl.it* ci-dessus.
+Pour ne pas allonger outre mesure ce document, chaque section ne contiendra que les parties du code qui la concerne. Néanmoins, au début de chaque section, il y aura un lien vers le code source complet tel que décrit dans cette section, ainsi que les instructions à lancer pour l'exécuter sur *Repl.it* et en local.
 
-Pour ne pas allonger ce tutoriel outre mesure, seules les modifications apportées au code d'une section à l'autre du tutoriel sont indiquées. Néanmoins, au début de chaque section, il y aura un lien vers le code source correspondant sur *GitHub*, ainsi que les instructions à lancer pour l'exécuter sur *Repl.it*, ainsi qu'en local.  
-Les lignes, dans les fichiers source, précédant la ligne `import atlastk` ne sont là aur pour faciliter l'utilisation du tutoriel et ne sont pas nécessaire pour une utilisation courante du *toolkit* *Atlas*.
+Les lignes, dans les fichiers source, précédant la ligne `import atlastk` ne sont là que pour faciliter l'utilisation de ces fichiers dans le cadre de ce document et ne sont pas nécessaires à une utilisation courante du *toolkit* *Atlas*.
 
 
-## Le ficher HTML principal (`Main.html`)
+## Le ficher *HTML* principal (`Main.html`)
 
 > Code source : <https://github.com/epeios-q37/atlas-python/blob/master/tutorials/Contacts/Main.html>.
 
@@ -32,14 +34,14 @@ Voici le contenu partiel de ce fichier, reflétant sa structure générale :
 ```html
 <fieldset>
   <fieldset id="Contact">
-  <!-- Détail d'un contact -->
+    <!-- Détail d'un contact -->
   </fieldset>
   <div style="display: table; margin: 10px auto auto auto;">
     <div>
       <!-- Boutons généraux. -->  
     </div>
     <div class="Edition">
-      <!-- Bouton de saisie.-->
+      <!-- Boutons de saisie.-->
     </div>
   </div>
 </fieldset>
@@ -48,7 +50,8 @@ Voici le contenu partiel de ce fichier, reflétant sa structure générale :
 </div>
 ```
 
-Il est aisément compréhensible pour ceux qui sont familier avec *HTML*.  
+Il est aisément compréhensible pour ceux qui sont familier avec *HTML*.
+
 Ses différentes sous-parties vont être détaillées ci-dessous.
 
 ### Détail d'un contact
@@ -155,7 +158,8 @@ Ce fichier, également au format *HTML*,  prendra place dans la section *head* d
 
 ### Apparence de l'application
 
-La première partie de ce fichier définit le titre, l'icône, et, à l'aide de quelques règles *CSS*, diverses retouches au niveau de l'apparence de l'interface.  
+La première partie de ce fichier définit le titre, l'icône, et, à l'aide de quelques règles *CSS*, diverses retouches au niveau de l'apparence de l'interface.
+
 En voici le contenu :
 
 ```html
@@ -200,7 +204,8 @@ En voici le contenu :
 
 ### Visibilité des boutons
 
-La seconde partie du fichier permet de gérer la visibilité des boutons.  
+La seconde partie du fichier permet de gérer la visibilité des boutons.
+
 En voici le contenu :
 
 ```html
@@ -221,8 +226,8 @@ En voici le contenu :
 </style>
 ```
 
-On y voit des élements `style` affublés d'un identifiant. Ces éléments vont permettre de cacher/afficher certains boutons.  
-Chaque élément `style` définit, en effet, une règle pour une certaine classe. En activant/désactivant un de ces éléments, on ajoute/retire à cette classe la règle *CSS* contenu dans l'élément. Par conséquent, on agit ainsi sur les éléments, en l'occurrence des boutons, auxquels cette classe est affectée.
+On y voit des éléments `style` accompagnés d'un identifiant. Ces éléments vont permettre de cacher/afficher certains boutons.  
+En effet, chaque élément `style` définit une règle pour une certaine classe. En activant/désactivant un de ces éléments, on ajoute/retire à cette classe la règle *CSS* contenu dans l'élément. Par conséquent, on agit ainsi sur les éléments, en l'occurrence des boutons, auxquels cette classe est affectée.
 
 On retrouvera les différents identifiants de ces éléments `style` dans le code détaillé dans les sections qui suivent.
 
@@ -244,7 +249,8 @@ def ac_connect(dom):
   dom.inner("",open("Main.html").read())
 ```
 
-`dom` est un objet fournit par le *toolkit* *Atlas* ; chaque session a sa propre instance de cet objet.  
+`dom` est un objet fournit par le *toolkit* *Atlas* ; chaque session a sa propre instance de cet objet.
+
 Dans cette fonction, la méthode `inner(…)`va remplacer la totalité de la page web par le contenu du fichier `Main.html` précédemment décrit.  
 Le premier paramètre de cette méthode est l'identifiant de l'élément dont on va remplacer le contenu. La chaîne vide est une valeur spéciale qui fait référence à l'élément racine de la page.
 
@@ -279,7 +285,7 @@ Dans cette section, nous allons programmer l'affichage de la liste des contacts.
 
 ### Liste fictive
 
-On va d'abord créer une liste de contacts fictives :
+On va d'abord créer une liste de contacts fictives, histoire d'avoir quelque chose à afficher :
 
 ```python
 EXAMPLE = [
@@ -310,7 +316,7 @@ EXAMPLE = [
 ]
 ```
 
-que l'on va affecter à une variable qui fera office de base de données :
+On va affecter cette liste à une variable qui fera office de base de données :
 
 ```python
 contacts = EXAMPLE
@@ -335,8 +341,9 @@ def display_contacts(dom):
 ```
 
 Dans cette fonction, on récupère chaque contact de la liste, et, pour chacun de ces contacts, le contenu de chacun de ses champs. On va s'en servir pour créer le contenu du corps du tableau dédié à l'affichage de la liste, qui sera stocké dans la variable `html`.  
-Le contenu de cette variable est ensuite injecté dans le corps de la table, plus précisément dans l'élément `tbody` d'identifiant `Content` (voir le fichier `Main.html`), grâce à la méthode `inner(…)`, que l'on a déjà rencontré.  
-Chaque ligne du tableau a son propre identifiant, et un attribut `data-xdh-onevent="Select"` qui fera l'objet de la prochaine section.  
+Le contenu de cette variable est ensuite injecté dans le corps de la table, plus précisément dans l'élément `tbody` d'identifiant `Content` (voir le fichier `Main.html`), grâce à la méthode `inner(…)`, que l'on a déjà rencontré. Notez que le premier paramètre n'est plus une chaîne de caractères vide, mais bien l'identifiant de l'élément concerné (`Content`).  
+Chaque ligne du tableau a son propre identifiant, et un attribut `data-xdh-onevent="Select"` qui fera l'objet de la prochaine section.
+
 Enfin, on ajoute l'appel à cette fonction dans la fonction `ac_connect(…)`, :
 
 ```python
@@ -356,7 +363,8 @@ Procédons maintenant à l'affichage des détails d'un contact sélectionné par
 
 ### Fonction générale d'affichage
 
-On va commencer par le remplissage des champs au sommet de l'interface avec les valeurs du contact sélectionné dans la liste.  
+On va commencer par le remplissage des champs au sommet de l'interface avec les valeurs du contact sélectionné dans la liste.
+
 Voici la fonction correspondante :
 
 ```python
@@ -370,17 +378,18 @@ Comme, dans la page *HTML*, les identifiants des éléments sont identiques aux 
 
 ### Sélection d'un contact
 
-On va maintenant définir la fonction que l'on va affecter à l'action `Select` définit dans l'attribut `data-xdh-onevent` du code *HTML* qui est crée dans la précedente section :
+On va maintenant définir la fonction que l'on va affecter à l'action `Select` définit dans l'attribut `data-xdh-onevent` du code *HTML* qui est crée dans la précédente section :
 
 ```python
 def ac_select(dom,id):
   display_contact(int(id),dom)
 ```
 
-Le paramètre `id` contient l'identifiant de l'élément recevant l'évènement à l'origine de l'action à laquelle cette fonction a été affectée. Ici, l'évènement est un clic sur une ligne du tableau contenant la liste des contacts, évènement auquel a été associée l'action `Select` via l'attribut `data-sdh-onevent`, action qui a lancé la fonction `ac_select` conformément à ce qui va être défini ci-dessous dans la variable `CALLBACKS`.  
-Dans la section précédente, on a vu que, pour le tableau *HTML* contenant la liste des contacts, chaque ligne a pour identifiant l'index, dans la table `contacts`, du contact correspondant. On peut donc utiliser directement `id`, aprés l'avoir convertit en entier (`id` est fourni sous forme d'une chaîne de caractères), pour le passer à la fonction `display_contact(…)`
+Le paramètre `id` contient l'identifiant de l'élément recevant l'évènement à l'origine de l'action à laquelle cette fonction a été affectée. Ici, l'évènement est un clic sur une ligne du tableau contenant la liste des contacts, évènement auquel a été associée l'action `Select` via l'attribut `data-xdh-onevent`. Conformément à ce qui va être défini ci-dessous dans la variable `CALLBACKS`, cette action va lancer la fonction `ac_select`.
 
-On met à jour la table `CALLBACKS`, en affectant cette fonction à l'action `Select` (définie comme valeur de l'attribut `data-on-event` dans le code *HTML* généré dans la précédente section) :
+Dans la section précédente, on a vu que, pour le tableau *HTML* contenant la liste des contacts, chaque ligne a pour identifiant l'index, dans la table `contacts`, du contact correspondant. On peut donc utiliser directement `id`, après l'avoir convertit en entier (`id` est fourni sous forme d'une chaîne de caractères), pour le passer à la fonction `display_contact(…)`
+
+On met à jour la table `CALLBACKS`, en affectant cette fonction à l'action `Select` (définie comme valeur de l'attribut `data-xdh-onevent` dans le code *HTML* généré dans la précédente section) :
 
 ```python
 CALLBACKS = {
@@ -433,7 +442,7 @@ def update_outfit(dom):
 
 On pourrait également ajouter l'identifiant `HideDisplay` à la liste passée à `disable_elements(…)`, pour économiser un appel de fonction. 
  
-### Mise en oeuvre de cette fonction
+### Mise en œuvre de cette fonction
 
  On va appeler cette fonction à chaque action de l'utilisateur, ce qui peut sembler ne pas être approprié vu son contenu, mais c'est en prévision de ce qu'elle contiendra une fois qu'elle sera enrichie dans les sections suivantes :
 
@@ -465,7 +474,7 @@ On va d'abord crée un *enum* relatifs à ces deux états, à l'aide du module *
  import atlastk, enum
 ```
 
-et pour créer l'*enum* proprement dit :
+Créons l'*enum* proprement dit :
 
 ```python
 class State(enum.Enum):
@@ -547,7 +556,7 @@ EMPTY_CONTACT = {
 }
 ```
 
-qui va être utilisé de la manière suivante dans la fonction `display_contact(…)`.
+qui va être utilisé de la manière suivante dans la fonction `display_contact(…)` :
 
 ```python
 def display_contact(contactId,dom):
@@ -574,6 +583,15 @@ Cette fonction réalise successivement les opérations suivantes :
 - mise à jour de l'apparence de l'interface ;
 - affectation du focus (méthode `focus(…)`) au premier champs éditable (d'identifiant `Name`, qui correspond au nom du contact), de manière à ce que l'utilisateur puisse procéder immédiatement à la saisie du nouveau contact.
 
+N'oublions pas de l'associer à l'action idoine :
+
+```python
+CALLBACKS = {
+  …
+  "New": ac_new
+ }
+ ```
+
 ## Boutons de saisie (`part6.py`)
 
 > * Code source : <https://github.com/epeios-q37/atlas-python/blob/master/tutorials/Contacts/part6.py> ;
@@ -586,7 +604,7 @@ On peut maintenant saisir un nouveau contact, mais il manque les boutons pour va
 ### Adaptation de la gestion des contrôles interactifs
 
 Pour afficher les boutons *Submit* et *Cancel*, on va désactiver l'élément `style` d'identifiant `HideEdition` (dans le fichier `Head.html`). Cet élément définit une règle cachant les éléments auxquels on a affecté la classe `Edition`. C'est le cas de l'élément `div` qui contient les deux boutons d'édition `Submit` et `Cancel` (voir le fichier `Main.html`).  
-Désactiver ce style Faire apparaître les boutons d'éditions ne suffit pas ; il faut également l'activer pour cacher ces boutons lorsque requis. On va, pour cela, modifier la fonction `update_outfit(…)` afin d'obtenir cela :
+Désactiver ce style pour faire apparaître les boutons d'éditions ne suffit pas ; il faut également l'activer pour cacher ces boutons lorsque requis. On va, pour cela, modifier la fonction `update_outfit(…)` afin d'obtenir cela :
 
 ```python
 def update_outfit(board,dom):
@@ -604,7 +622,7 @@ def update_outfit(board,dom):
 
 Maintenant que les boutons sont affichés, on va créer les fonctions associées.
 
-Pour le bouton *Cancel*, on va demander confirmation et, en fonction de la réponse, ne rien faire, ou repasser en mode d'affichage aprés avoir vider les champs de saisie :
+Pour le bouton *Cancel*, on va demander confirmation et, en fonction de la réponse, ne rien faire, ou repasser en mode d'affichage après avoir vider les champs de saisie :
 
 ```python
 def ac_cancel(board,dom):
@@ -677,7 +695,9 @@ def ac_select(board,dom,id):
 
 ### Adaptation de la gestion des contrôles interactifs
 
-La variable ajoutée à la classe `Board` va également nous servir pour l'affichage des boutons manquants. La classe `DisplayAndSelect` est affecté à ces boutons (voir le fichier `Main.html`), dont la règle *CSS* pour cacher les éléments de cette classe est défini dans l'élément `style` d'identifiant `HideDisplayAndSelect` (voir le fichier `Head.html`).  
+La variable ajoutée à la classe `Board` va également nous servir pour l'affichage des boutons manquants.  
+La classe `DisplayAndSelect` est affectée à ces boutons (voir le fichier `Main.html`), dont la règle *CSS* pour cacher les éléments de cette classe est définie dans l'élément `style` d'identifiant `HideDisplayAndSelect` (voir le fichier `Head.html`).
+
 On obtient donc cela :
 
 ```python
@@ -808,8 +828,8 @@ def ac_delete(board,dom):
 
 ```
 
-`atlastk.broadcast_action(…)` lance l'action dont le libellé est passé en paramètre dans toutes les sessions, ce qui, dans la fonction ci-dessus, va provoquer l'appel à la fonction `display_contacts(…)`, et ainsi la liste des contacts sera rafraîchie dans toutes les sessions.
+`atlastk.broadcast_action(…)` lance l'action dont le libellé est passé en paramètre dans toutes les sessions, ce qui, en l'occurrence, va provoquer l'appel à la fonction `display_contacts(…)`, et ainsi la liste des contacts sera rafraîchie dans toutes les sessions.
 
-Le fait que la variable `contacts` soit globale et modifiable par toute les sessions nécessiterait d'écrire du code supplémentaire, notamment pour en contrôler l'accès. De par l'absence de ce code, il est facile de mettre cette application en défaut. Néanmoins, ce code ne concernant pas directement le *toolkit* *Atlas*, il sort du cadre de ce tutoriel, et ne sera donc pas abordé ici.
+Le fait que la variable `contacts` soit globale et modifiable par toute les sessions nécessiterait d'écrire du code supplémentaire, notamment pour en contrôler l'accès. De par l'absence de ce code, il est facile de mettre cette application en défaut. Néanmoins, ce code ne concernant pas directement le *toolkit* *Atlas*, il sort du cadre de ce document, et ne sera donc pas abordé ici.
 
 

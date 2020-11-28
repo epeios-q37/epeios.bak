@@ -33,7 +33,11 @@ Dans `RTW/atlas-python` :
 
 `python3 setup.py sdist bdist_wheel`
 
-<ins>**ATTENTION**</ins> : effacer auparavant le répertoire `examples` et le fichier `main.py` !!!
+<ins>**IMPORTANT**</ins> - auparavant, effacer :
+- les répertoires :
+  - `examples`,
+  - `tutorials`,
+- le fichier `main.py` !!!
 
 ### Test local
 
