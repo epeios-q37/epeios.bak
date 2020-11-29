@@ -252,7 +252,8 @@ def ac_connect(dom):
 `dom` est un objet fournit par le *toolkit* *Atlas* ; chaque session a sa propre instance de cet objet.
 
 Dans cette fonction, la méthode `inner(…)`va remplacer la totalité de la page web par le contenu du fichier `Main.html` précédemment décrit.  
-Le premier paramètre de cette méthode est l'identifiant de l'élément dont on va remplacer le contenu. La chaîne vide est une valeur spéciale qui fait référence à l'élément racine de la page.
+Le premier paramètre de cette méthode est l'identifiant de l'élément dont on va remplacer le contenu. La chaîne vide est une valeur spéciale qui fait référence à l'élément racine de la page.  
+À titre indicatif, il existe également les méthodes `before(…)`, `begin(…)`, `end(…)` et `after(…)` pour insérer le contenu respectivement juste avant, au début, à la fin ou juste après l’élément dont l'identifiant est passé en paramètre.
 
 On va ensuite affecter cette fonction à une action, à l'aide d'un dictionnaire nommé, par convention, `CALLBACKS` :
 
@@ -420,7 +421,7 @@ FIELDS = [
 ]
  ```
 
-### Fonction générale de gestion des éléments interactifs
+### Gestion générale des éléments interactifs
 
  On va créer une fonction qui va gérer l'état de ces champs, et qui sera complétée ultérieurement pour gérer d'autre éléments :
 
@@ -442,7 +443,7 @@ def update_outfit(dom):
 
 On pourrait également ajouter l'identifiant `HideDisplay` à la liste passée à `disable_elements(…)`, pour économiser un appel de fonction. 
  
-### Mise en œuvre de cette fonction
+### Mise en œuvre
 
  On va appeler cette fonction à chaque action de l'utilisateur, ce qui peut sembler ne pas être approprié vu son contenu, mais c'est en prévision de ce qu'elle contiendra une fois qu'elle sera enrichie dans les sections suivantes :
 
@@ -830,6 +831,6 @@ def ac_delete(board,dom):
 
 `atlastk.broadcast_action(…)` lance l'action dont le libellé est passé en paramètre dans toutes les sessions, ce qui, en l'occurrence, va provoquer l'appel à la fonction `display_contacts(…)`, et ainsi la liste des contacts sera rafraîchie dans toutes les sessions.
 
-Le fait que la variable `contacts` soit globale et modifiable par toute les sessions nécessiterait d'écrire du code supplémentaire, notamment pour en contrôler l'accès. De par l'absence de ce code, il est facile de mettre cette application en défaut. Néanmoins, ce code ne concernant pas directement le *toolkit* *Atlas*, il sort du cadre de ce document, et ne sera donc pas abordé ici.
+Le fait que la variable `contacts` soit globale, et donc modifiable par toute les sessions, nécessiterait d'écrire du code supplémentaire, notamment pour en contrôler l'accès. De par l'absence de ce code, il est facile de mettre cette application en défaut. Néanmoins, ce code ne concernant pas directement le *toolkit* *Atlas*, il sort du cadre de ce document, et ne sera donc pas abordé ici.
 
 
