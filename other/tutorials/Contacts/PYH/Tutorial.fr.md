@@ -11,7 +11,7 @@ Ce document détaille le développement, à l'aide de ce *toolkit*, d'une applic
 
 L'accent étant mis sur la mise en œuvre de l'*API* du *toolkit* *Atlas*, le lecteur est supposé posséder les connaissances de base nécessaires à la compréhension du code *HTML*/*CSS* et *Python* présent dans ce document. 
 
-Le code source associé à ce document est disponible sur *GitHub* (https://github.com/epeios-q37/atlas-python/tree/master/tutorials/Contacts), ainsi que sur *Repl.it* (https://repl.it/@AtlasTK/atlas-python).
+Les fichiers source associés à ce document sont disponibles sur *GitHub* (https://github.com/epeios-q37/atlas-python/tree/master/tutorials/Contacts), dépôt lui-même clôné sur *Repl.it* (https://repl.it/@AtlasTK/atlas-python), un *IDE* en ligne.  
 Si vous avez *Python* 3 d'installé sur votre ordinateur, vous pouvez récupérer le dépôt *GitHub* et visualiser/exécuter directement sur votre machine le code associé aux différentes sections de ce document.
 Vous pouvez également, notamment si vous n'avez pas *Python* 3 d'installé, visualiser/exécuter ce code directement dans votre navigateur, en utilisant le lien *Repl.it* ci-dessus.
 
@@ -50,7 +50,7 @@ Voici le contenu partiel de ce fichier, reflétant sa structure générale :
 </div>
 ```
 
-Il est aisément compréhensible pour ceux qui sont familier avec *HTML*.
+Il est aisément compréhensible pour ceux qui sont familiers avec *HTML*.
 
 Ses différentes sous-parties vont être détaillées ci-dessous.
 
@@ -110,7 +110,7 @@ En voici le code :
 </span>
 ```
 
-À part l'attribut `data-xdh-onevent`, on n'a là que du *HTML* des plus classique.  
+À part l'attribut `data-xdh-onevent`, on n'a là que du *HTML* des plus classiques.  
 Les différentes classes (`Display` et `DisplayAndSelect`) ont cependant un rôle bien particulier, qui sera révélé dans les sections qui suivent.
 
 L'attribut `data-xdh-onevent` prend ici la place de l'habituel attribut `onclick`. L'attribut `onclick` prend habituellement pour valeur le code *JavaScript* à lancer lorsque l'on clique sur le bouton auquel il est affecté.  
