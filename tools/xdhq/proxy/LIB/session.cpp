@@ -186,7 +186,10 @@ namespace {
 	qRB;
 		Log.Init( common::LogDriver );
 
-		Log << *Id;
+		if ( Id != qNIL )
+			Log << *Id;
+		else
+			Log << "N/A";
 
 		if ( IP.Amount() != 0 )
 			Log << " (" << IP << ")";
@@ -226,7 +229,7 @@ qRB;
 				Mode_ = mSlfH;
 				Success = true;
 			} else
-				Log_(Id_, IP_, "Tokenless attempt in SaaS mode!");
+				Log_(Id_, IP_, "Tokenless session in FaaS mode!");
 	} else {
 		if ( ( TRow_ = FaaSDriver_.Init(Token, IP_) ) != qNIL ) {
 			Mode_ = mFaaS;

@@ -32,7 +32,13 @@ $out = str_replace(array("\r", "\n", "\t"), '','
 			<!-- Below both scripts are for PROD environment. -->
 			<script src="faas/xdhtml_20201001.js"></script>
 			<script src="faas/xdhwebq_20200608.js"></script>
-			<script src="faas/qrcode.min.js"></script>
+			<script>
+				function adjustQRCodeIFrame()
+				{
+					let iframe = document.body.lastChild.firstChild;
+					iframe.style.height = iframe.contentWindow.document.body.scrollHeight + \'px\';
+				}
+	</script>
 			<style id="XDHStyle">
 				.xdh_style {
 					display: table;
@@ -49,7 +55,7 @@ $out = str_replace(array("\r", "\n", "\t"), '','
 			</script>
 		</head>
 		<!--body id="Root" data-xdh-onevents="(keypress|About|SC+a)(keypress|Q37Refresh|SC+r)"-->
-		<body onload="new QRCode(\'qrcode\', {width:125, height:125, correctLevel: QRCode.CorrectLevel.L}).makeCode(window.location.href);ignition(\'' . $token . '\');">
+		<body onload="ignition(\'' . $token . '\');">
 			<div class="xdh_style">
 				<noscript>
 					<div style="display: table; margin: 50px auto auto auto;">
@@ -62,27 +68,8 @@ $out = str_replace(array("\r", "\n", "\t"), '','
 				<input type="hidden" id="LoginPassword" value="' . $Password . '"/>
 			</div>
 			<div' . $additional . '>
-				<div style="display:table; margin: 5px auto auto auto;">
-					<hr/>
-					<span style="display: table; margin: 10px auto 5px auto;">Scan this QR code with your smartphone,</span>
-					<div style="display: flex; justify-content: space-around;">
- 						<a href="#" target="_blank">
- 						   <div id="qrcode"></div>
-						</a>
-					</div>
-					<span style="display: table; margin: 10px auto 5px auto;">or simply click on it for another instance.</span>
-					<hr/>
-					<div style="display: table; padding: 10px; margin: auto;">
-						<div style="display: table; padding: 10px;">
-							<div style="display: table; margin: auto; border: 1px solid; padding: 10px; box-shadow: 5px 5px; text-align: center;">
-								<span style="text-shadow: 1px 1px;">
-									<span>Powered by the <a href="http://atlastk.org/" target="_blank"><span style="font-style: italic;">Atlas</span> toolkit</a></span>
-								</span>
-							</div>
-						</div>
-					</div>
-				</div>
-			 </div>
+				<iframe src="FaaSFooter.php?url=http://q37.info" style="border: none; width: 100%;" onload="adjustQRCodeIFrame();"/>
+			</div>
 		</body>
 	</html>')
 ?>
