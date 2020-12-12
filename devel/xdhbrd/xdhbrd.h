@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-// SKeTch
+// XDH(TML) BRoaDcasting
 
 #ifndef XDHBRD_INC_
 # define XDHBRD_INC_

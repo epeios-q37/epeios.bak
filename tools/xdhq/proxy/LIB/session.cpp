@@ -221,9 +221,12 @@ qRH;
 	csdcmn::sVersion Version = csdcmn::UnknownVersion;
 qRB;
 	if ( Token.Amount() == 0 ) {
-		SlfHDriver_.Init( common::Core, fdr::ts_Default );
-		Mode_ = mSlfH;
-		Success = true;
+			if ( common::CoreIsInitialized() ) {
+				SlfHDriver_.Init( common::Core(), fdr::ts_Default );
+				Mode_ = mSlfH;
+				Success = true;
+			} else
+				Log_(Id_, IP_, "Tokenless attempt in SaaS mode!");
 	} else {
 		if ( ( TRow_ = FaaSDriver_.Init(Token, IP_) ) != qNIL ) {
 			Mode_ = mFaaS;

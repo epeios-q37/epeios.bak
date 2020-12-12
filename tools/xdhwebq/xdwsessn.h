@@ -74,7 +74,7 @@ namespace xdwsessn {
 		{
 			Upstream_.Init(Driver);
 			Session_.Init(Callback);
-			return XCallback_.Init(Upstream_, Token) && Session_.Initialize(Upstream_, Language, Token);
+			return Session_.Initialize(Upstream_, Language, Token) && XCallback_.Init(Upstream_, Token);
 		}
 		bso::sBool Handle( const char *EventDigest )
 		{

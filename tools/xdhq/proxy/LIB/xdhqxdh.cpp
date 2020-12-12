@@ -57,7 +57,7 @@ namespace {
 				Translation.Init();
 				sclm::GetBaseTranslation("ConnectingTo", Translation, HostService);
 				cio::COut << Translation << txf::commit << txf::nl;
-				if ( common::Core.Init( HostService.Convert( Buffer ), 0, sck::NoTimeout ) ) {
+				if ( common::InitializeCore( HostService.Convert( Buffer ), 0, sck::NoTimeout ) ) {
 					Translation.Init();
 					sclm::GetBaseTranslation("ConnectedTo", Translation, HostService);
 					cio::COut << Translation << txf::commit << txf::nl;

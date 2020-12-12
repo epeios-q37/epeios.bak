@@ -30,7 +30,15 @@ namespace common {
 		using namespace xdhcmn::faas;
 	}
 
-	extern csdmnc::rCore Core;
+	bso::sBool InitializeCore(
+			const char *HostService,
+			bso::uint__ PingDelay,
+			sck::duration__ Timeout,
+			csdmnc::cLog *LogCallback = NULL );
+
+	bso::sBool CoreIsInitialized(void);
+	csdmnc::rCore &Core(void);
+
 	extern logq::rFDriver<> LogDriver;
 
 	void SetCallback(xdhcuc::cGlobal &Callback);
