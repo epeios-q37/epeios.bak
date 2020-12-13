@@ -186,7 +186,7 @@ namespace {
 	qRB;
 		Log.Init( common::LogDriver );
 
-		if ( Id != qNIL )
+		if ( Id != UndefinedId_ )
 			Log << *Id;
 		else
 			Log << "N/A";
@@ -216,7 +216,8 @@ namespace {
 bso::sBool session::rSession::XDHCDCInitialize(
 	xdhcuc::cSingle &Callback,
 	const char *Language,
-	const str::dString &Token )
+	const str::dString &Token,
+	const str::dString &UserId)
 {
 	bso::sBool Success = false;
 qRH;
@@ -258,11 +259,12 @@ qRB;
 			break;
 		}
 
-		prtcl::Put( "", Flow );
+		prtcl::Put( Language, Flow );
 		Flow.Commit();
 
 		Id_ = id_store_::Fetch();
 		Token_ = Token;
+		_UserId_ = UserId;
 
 #if 0
 		Log_(Id_, IP_, Token.Amount() ? Token : str::wString("SlfH"));	// This one calls wrongly the destructor of 'Token'.
@@ -388,7 +390,7 @@ qRB;
 	tol::Init(Id, Action);
 
 	if ( ( EventDigest == NULL ) || ( !EventDigest[0] ) )
-		Cont = Launch_(str::Empty, str::Empty);
+		Cont = Launch_(_UserId_, str::Empty);
 	else if ( Extract_(str::wString(EventDigest), Id, Action) )
 		Cont = Launch_(Id, Action);
 qRR;

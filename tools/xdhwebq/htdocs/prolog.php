@@ -32,13 +32,6 @@ $out = str_replace(array("\r", "\n", "\t"), '','
 			<!-- Below both scripts are for PROD environment. -->
 			<script src="faas/xdhtml_20201001.js"></script>
 			<script src="faas/xdhwebq_20200608.js"></script>
-			<script>
-				function adjustQRCodeIFrame()
-				{
-					let iframe = document.body.lastChild.firstChild;
-					iframe.style.height = iframe.contentWindow.document.body.scrollHeight + \'px\';
-				}
-	</script>
 			<style id="XDHStyle">
 				.xdh_style {
 					display: table;
@@ -49,13 +42,18 @@ $out = str_replace(array("\r", "\n", "\t"), '','
 			<!--script>handleQuery("'
 . $cgi . '?_token=' . $token . '&_language=' . $language . '&_action=' . $action . '&_cont=" )</script-->
 			<script>
-				function ignition(token) {
-					connect(token);
+				function adjustQRCodeIFrame()
+				{
+					let iframe = document.body.lastChild.firstChild;
+					iframe.style.height = iframe.contentWindow.document.body.scrollHeight + \'px\';
+				}
+				function ignition(token,id) {
+						connect(token,id);
 				}
 			</script>
 		</head>
 		<!--body id="Root" data-xdh-onevents="(keypress|About|SC+a)(keypress|Q37Refresh|SC+r)"-->
-		<body onload="ignition(\'' . $token . '\');">
+		<body onload="ignition(\'' . $token . '\',\'' . $id . '\');">
 			<div class="xdh_style">
 				<noscript>
 					<div style="display: table; margin: 50px auto auto auto;">
@@ -68,7 +66,7 @@ $out = str_replace(array("\r", "\n", "\t"), '','
 				<input type="hidden" id="LoginPassword" value="' . $Password . '"/>
 			</div>
 			<div' . $additional . '>
-				<iframe src="FaaSFooter.php?url=http://q37.info" style="border: none; width: 100%;" onload="adjustQRCodeIFrame();"/>
+				<iframe src="FaaSFooter.php" style="border: none; width: 100%;" onload="adjustQRCodeIFrame();"/>
 			</div>
 		</body>
 	</html>')

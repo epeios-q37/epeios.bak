@@ -58,23 +58,24 @@ namespace xdwsessn {
 	{
 	private:
 		rUpstream_ Upstream_;
-		xdhbrd::rXCallback XCallback_;
+		xdhbrd::rXCallback _Broadcaster_;
 		xdhups::sSession Session_;
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			tol::reset(P, Upstream_, XCallback_, Session_);
+			tol::reset(P, Upstream_, _Broadcaster_, Session_ );
 		}
 		E_CDTOR( rSession );
 		bso::sBool Init(
 			xdhcdc::cSingle &Callback,
 			fdr::rRWDriver &Driver,
 			const char *Language,
-			const str::dString &Token)	// If empty, FaaS session, else token used for the FaaS session.
+			const str::dString &Token,	// If empty, self-hosting ('SlfH') session, else token used for the FaaS session.
+			const str::dString &UserId )
 		{
 			Upstream_.Init(Driver);
 			Session_.Init(Callback);
-			return Session_.Initialize(Upstream_, Language, Token) && XCallback_.Init(Upstream_, Token);
+			return Session_.Initialize(Upstream_, Language, Token, UserId) && _Broadcaster_.Init(Upstream_, Token);
 		}
 		bso::sBool Handle( const char *EventDigest )
 		{

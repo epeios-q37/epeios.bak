@@ -124,7 +124,8 @@ def update_outfit(board, dom):
     raise Exception("Unknown state!")
 
 
-def ac_connect(board, dom):
+def ac_connect(board, dom, id):
+  print(">>>>>>>", id)
   dom.inner("",open("Main.html").read())
   display_contacts(contacts,dom)
   board.state = State.DISPLAY

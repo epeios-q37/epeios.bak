@@ -61,7 +61,7 @@ qRE
 	return Success;
 }
 
-bso::sBool xdhups::rAgent::_IsValid(const str::dString &Token)
+bso::sBool xdhups::rAgent::IsValid(const str::dString &Token)
 {
 	bso::sBool ReturnValue = false;
 qRH

@@ -62,9 +62,10 @@ namespace xdhups {
 		bso::sBool Initialize(
 			xdhcuc::cSingle &Callback,
 			const char *Language,
-			const str::dString &Token)	// If empty, SlfH session, else token used for the FaaS session.
+			const str::dString &Token,	// If empty, SlfH session, else token used for the FaaS session.
+			const str::dString &UserId)
 		{
-			return C_().Initialize(Callback, Language, Token);
+			return C_().Initialize(Callback, Language, Token, UserId);
 		}
 		bso::bool__ Handle( const char *EventDigest )
 		{
@@ -123,7 +124,7 @@ namespace xdhups {
 			return C_().GetHead(Token, Head);
 		}
 		// Deprecated.
-		bso::sBool _IsValid(const str::dString &Token);
+		bso::sBool IsValid(const str::dString &Token);
 	};
 }
 

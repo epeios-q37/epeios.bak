@@ -62,11 +62,12 @@ function launchEvent( digest )
 }
 
 
-function connect(token) {
+function connect(token,id) {
 	socket = new WebSocket((window.location.protocol === "http:" ? "ws" : "wss" ) + "://" + window.location.hostname + "/xdh/");
 
     socket.onopen = function(e) {
-		socket.send(token)
+		socket.send(token);
+		socket.send(id);
 	}
 
     socket.onmessage = function(event) {

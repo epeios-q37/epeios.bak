@@ -1,5 +1,9 @@
 # *XDHq* changelog.
 
+## 2020-12-13:
+
+- introducing user id to differentiate sessions,
+
 ## 2020-11-24:
 
 - *xdhqxdh*:

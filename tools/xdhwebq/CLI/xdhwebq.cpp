@@ -70,17 +70,17 @@ namespace {
 
 		struct rData {
 			eState_ State;
-			str::wString Token;
+			str::wString Token, UserId;
 			void reset( bso::sBool P = true )
 			{
 				State = s_Undefined;
-				Token.reset( P );
+				tol::reset(P, Token, UserId);
 			}
 			qCDTOR(rData);
 			void Init(void)
 			{
 				State = s_Undefined;
-				Token.Init();
+				tol::Init(Token, UserId);
 			}
 		};
 
@@ -122,7 +122,8 @@ namespace {
 					xdhups::rAgent &Agent,
 					fdr::rRWDriver &Driver,
 					xdhcdc::cSingle &Callback,
-					const str::dString &Token)
+					const str::dString &Token,
+					const str::dString &UserId)
 				{
 				qRH
 					websck::rFlow Flow;
@@ -132,7 +133,7 @@ namespace {
 				qRB
 					Flow.Init(Driver, websck::mWithTerminator);
 
-					if ( !Session.Init(Callback, Driver, "", Token) ) {
+					if ( !Session.Init(Callback, Driver, "", Token, UserId) ) {
 						Script.Init();
 						sclm::MGetValue(registry::definition::ErrorScript, Script);
 						Session.Execute(Script);
@@ -167,7 +168,7 @@ namespace {
 				if ( Callback == NULL )
 					qRGnr();
 
-				HandleRegular_(Agent, Driver, *Callback, Data.Token);
+				HandleRegular_(Agent, Driver, *Callback, Data.Token, Data.UserId);
 			qRR
 			qRT
 				if ( Callback != NULL )
@@ -201,9 +202,10 @@ namespace {
 				if ( websck::Handshake(*Driver, Header) ) {
 					Flow.Init(*Driver, websck::mWithTerminator);
 					websck::GetMessage(Flow, Data->Token);
+					websck::GetMessage(Flow, Data->UserId);
 					Data->State = sRegular;
 				} else if ( Header.FirstLine == "XDH web prolog" ) {
-					if ( websck::GetValue(str::wString("Token"), Header, Data->Token ) )
+					if ( websck::GetValue(str::wString("Token"), Header, Data->Token) )
 						Data->State = sProlog;
 				} else {
 					Data->State = s_Undefined;

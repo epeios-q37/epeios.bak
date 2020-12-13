@@ -54,7 +54,7 @@ namespace session {
 		eMode_ Mode_;
 		faaspool::rRWDriver FaaSDriver_;
 		csdmnc::rRWDriver SlfHDriver_;
-		str::wString IP_, Token_;
+		str::wString IP_, Token_, _UserId_;
 		faas_::sRow TRow_;	// Token row.
 		sId_ Id_;
 		fdr::rRWDriver &D_( void )
@@ -111,7 +111,8 @@ namespace session {
 		virtual bso::sBool XDHCDCInitialize(
 			xdhcuc::cSingle &Callback,
 			const char *Language,
-			const str::dString &Token ) override;
+			const str::dString &Token,
+			const str::dString &UserId) override;
 		virtual bso::bool__ XDHCDCHandle( const char *EventDigest ) override;
 	public:
 		void reset( bso::sBool P = true )
@@ -121,7 +122,7 @@ namespace session {
 					Release_(Id_, IP_);
 			}
 
-			tol::reset(P, FaaSDriver_, SlfHDriver_, IP_, Token_);
+			tol::reset(P, FaaSDriver_, SlfHDriver_, IP_, Token_, _UserId_);
 			TRow_ = qNIL;
 			Id_ = UndefinedId_;
 			Mode_ = m_Undefined;
@@ -131,7 +132,7 @@ namespace session {
 		bso::sBool Init(void)
 		{
 			tol::reset(FaaSDriver_, SlfHDriver_);
-			tol::Init(IP_, Token_ );
+			tol::Init(IP_, Token_, _UserId_);
 			TRow_ = qNIL;
 			Id_ = UndefinedId_;
 			Mode_ = m_Undefined;

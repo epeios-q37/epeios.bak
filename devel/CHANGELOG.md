@@ -10,6 +10,11 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2020-12-13:
+
+- XDHCDC, XDHUPS:
+  - introducing optional extranesous parameter set by user to differentiate sessions,
+
 ## 2020-11-18:
 
 - SCK:

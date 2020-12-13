@@ -60,6 +60,8 @@ $head = send("XDH web prolog\r\nToken: " . $token . "\r\n\r\n");
 if (empty($token))
     $additional = ' style="display: none;"';
 
+$id = $_REQUEST["_id"];
+
 require 'prolog.php';
 
 echo $out;
