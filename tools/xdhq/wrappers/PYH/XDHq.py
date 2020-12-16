@@ -25,7 +25,8 @@ SOFTWARE.
 """
 
 import XDHqFaaS, XDHqSHRD, XDHqXML
-from XDHqFaaS import launch
+from XDHqFaaS import launch, set_supplier
+
 
 import os, sys
 from collections import OrderedDict

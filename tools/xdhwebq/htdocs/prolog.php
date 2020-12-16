@@ -48,6 +48,7 @@ $out = str_replace(array("\r", "\n", "\t"), '','
 					iframe.style.height = iframe.contentWindow.document.body.scrollHeight + \'px\';
 				}
 				function ignition(token,id) {
+						document.body.lastChild.firstChild.src = "FaaSFooter.php?url=" + window.location.href;
 						connect(token,id);
 				}
 			</script>
@@ -66,7 +67,7 @@ $out = str_replace(array("\r", "\n", "\t"), '','
 				<input type="hidden" id="LoginPassword" value="' . $Password . '"/>
 			</div>
 			<div' . $additional . '>
-				<iframe src="FaaSFooter.php" style="border: none; width: 100%;" onload="adjustQRCodeIFrame();"/>
+				<iframe style="border: none; width: 100%;" onload="adjustQRCodeIFrame();"/>
 			</div>
 		</body>
 	</html>')

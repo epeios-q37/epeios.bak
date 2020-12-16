@@ -54,7 +54,7 @@ namespace session {
 		eMode_ Mode_;
 		faaspool::rRWDriver FaaSDriver_;
 		csdmnc::rRWDriver SlfHDriver_;
-		str::wString IP_, Token_, _UserId_;
+		str::wString IP_, Token_, UserId_;
 		faas_::sRow TRow_;	// Token row.
 		sId_ Id_;
 		fdr::rRWDriver &D_( void )
@@ -122,7 +122,7 @@ namespace session {
 					Release_(Id_, IP_);
 			}
 
-			tol::reset(P, FaaSDriver_, SlfHDriver_, IP_, Token_, _UserId_);
+			tol::reset(P, FaaSDriver_, SlfHDriver_, IP_, Token_, UserId_);
 			TRow_ = qNIL;
 			Id_ = UndefinedId_;
 			Mode_ = m_Undefined;
@@ -132,7 +132,7 @@ namespace session {
 		bso::sBool Init(void)
 		{
 			tol::reset(FaaSDriver_, SlfHDriver_);
-			tol::Init(IP_, Token_, _UserId_);
+			tol::Init(IP_, Token_, UserId_);
 			TRow_ = qNIL;
 			Id_ = UndefinedId_;
 			Mode_ = m_Undefined;

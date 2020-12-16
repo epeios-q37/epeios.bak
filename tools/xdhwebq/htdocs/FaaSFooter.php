@@ -18,27 +18,22 @@ You should have received a copy of the GNU Affero General Public License
 along with xdhwebq. If not, see <http://www.gnu.org/licenses/>.
 */
 
+$url = $_REQUEST['url'];
+
 $out='
 <head>
   <script src="faas/qrcode.min.js"></script>
-  <script>
-  function handleQRCode() {
-    let url = window.parent.location.href;
-    document.getElementById(\'qrcode\').parentElement.href=url;
-    new QRCode(\'qrcode\', {width:125, height:125, correctLevel: QRCode.CorrectLevel.L}).makeCode(url);
-  }
-  </script>
 </head>
-<body onload="handleQRCode()">
+<body onload="new QRCode(\'qrcode\', {width:125, height:125, correctLevel: QRCode.CorrectLevel.L}).makeCode(\'' . $url . '\');">
   <div style="display:table; margin: 5px auto auto auto;">
     <hr/>
     <span style="display: table; margin: 10px auto 5px auto;">Scan this QR code with your smartphone,</span>
     <div style="display: flex; justify-content: space-around;">
-      <a style="cursor: pointer;" target="_blank">
+      <a style="cursor: pointer;" target="_blank" href="' . $url . '">
         <div id="qrcode"></div>
       </a>
   </div>
-  <span style="display: table; margin: 10px auto 5px auto;">or simply click on it for another instance.</span>
+  <span style="display: table; margin: 10px auto 5px auto;">or simply click on it for a new instance.</span>
   <hr/>
   <div style="display: table; padding: 10px; margin: auto;">
     <div style="display: table; padding: 10px;">

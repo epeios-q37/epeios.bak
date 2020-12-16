@@ -58,12 +58,12 @@ namespace xdwsessn {
 	{
 	private:
 		rUpstream_ Upstream_;
-		xdhbrd::rXCallback _Broadcaster_;
+		xdhbrd::rXCallback Broadcaster_;
 		xdhups::sSession Session_;
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			tol::reset(P, Upstream_, _Broadcaster_, Session_ );
+			tol::reset(P, Upstream_, Broadcaster_, Session_ );
 		}
 		E_CDTOR( rSession );
 		bso::sBool Init(
@@ -75,7 +75,7 @@ namespace xdwsessn {
 		{
 			Upstream_.Init(Driver);
 			Session_.Init(Callback);
-			return Session_.Initialize(Upstream_, Language, Token, UserId) && _Broadcaster_.Init(Upstream_, Token);
+			return Session_.Initialize(Upstream_, Language, Token, UserId) && Broadcaster_.Init(Upstream_, Token);
 		}
 		bso::sBool Handle( const char *EventDigest )
 		{

@@ -124,8 +124,7 @@ def update_outfit(board, dom):
     raise Exception("Unknown state!")
 
 
-def ac_connect(board, dom, id):
-  print(">>>>>>>", id)
+def ac_connect(board, dom):
   dom.inner("",open("Main.html").read())
   display_contacts(contacts,dom)
   board.state = State.DISPLAY
@@ -229,5 +228,11 @@ CALLBACKS = {
 
 for key in EMPTY_CONTACT.keys():
   fields.append(key)
+
+def supplier(url):
+  print("coucou", url)
+  return print
+
+atlastk.set_supplier(supplier)
 
 atlastk.launch(CALLBACKS,Board,open("Head.html").read())

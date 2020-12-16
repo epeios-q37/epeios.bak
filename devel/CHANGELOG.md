@@ -13,7 +13,7 @@
 ## 2020-12-13:
 
 - XDHCDC, XDHUPS:
-  - introducing optional extranesous parameter set by user to differentiate sessions,
+  - introducing optional extraneous parameter set by user to differentiate sessions,
 
 ## 2020-11-18:
 

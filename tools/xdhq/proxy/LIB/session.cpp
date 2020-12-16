@@ -264,7 +264,7 @@ qRB;
 
 		Id_ = id_store_::Fetch();
 		Token_ = Token;
-		_UserId_ = UserId;
+		UserId_ = UserId;
 
 #if 0
 		Log_(Id_, IP_, Token.Amount() ? Token : str::wString("SlfH"));	// This one calls wrongly the destructor of 'Token'.
@@ -390,7 +390,7 @@ qRB;
 	tol::Init(Id, Action);
 
 	if ( ( EventDigest == NULL ) || ( !EventDigest[0] ) )
-		Cont = Launch_(_UserId_, str::Empty);
+		Cont = Launch_(UserId_, str::Empty);
 	else if ( Extract_(str::wString(EventDigest), Id, Action) )
 		Cont = Launch_(Id, Action);
 qRR;
