@@ -229,10 +229,4 @@ CALLBACKS = {
 for key in EMPTY_CONTACT.keys():
   fields.append(key)
 
-def supplier(url):
-  print("coucou", url)
-  return print
-
-atlastk.set_supplier(supplier)
-
 atlastk.launch(CALLBACKS,Board,open("Head.html").read())

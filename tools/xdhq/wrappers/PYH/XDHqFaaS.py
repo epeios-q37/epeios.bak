@@ -24,7 +24,7 @@ SOFTWARE.
 
 import XDHqSHRD
 
-import inspect, os, socket, sys, threading, base64, webbrowser
+import inspect, os, socket, sys, threading
 
 if sys.version_info[0] == 2:
 	import XDHqFaaS2
@@ -47,7 +47,7 @@ class _Supplier:
 	_actions = {
 		"none": lambda url : None,
 		"auto": XDHqSHRD.open,
-		"qrcode": lambda url: XDHqSHRD.open(f"localhost/FaaSFooter.php?url={url}"),
+		"qrcode": lambda url: XDHqSHRD.open(f"FaaSFooter.php?url={url}"),
 	}
 
 	def supply(url):
@@ -73,6 +73,8 @@ _globalCondition = threading.Condition()
 _headContent = ""
 _token = ""
 _instances = {}
+
+_url = ""
 
 class Instance:
 	def __init__(self):
@@ -201,7 +203,7 @@ def _handshake():
 		print(notification)
 
 def _ignition():
-	global _token
+	global _token, _url
 	_writeLock.acquire()
 
 	writeString( _token)
@@ -217,13 +219,13 @@ def _ignition():
 		sys.exit(getString())
 
 	if ( _wPort != ":0" ):
-		url = getString()
+		_url = getString()
 
-		print(url)
-		print("".rjust(len(url),'^'))
+		print(_url)
+		print("".rjust(len(_url),'^'))
 		print("Open above URL in a web browser (click, right click or copy/paste). Enjoy!\n")
 
-		_Supplier.supply(url)
+		_Supplier.supply(_url)
 
 def _serve(callback,userCallback,callbacks ):
 	global _writeLock, _globalCondition
@@ -286,6 +288,9 @@ def launch(callback, userCallback,callbacks,headContent):
 	_ignition()
 
 	_serve(callback,userCallback,callbacks)
+
+def get_app_url(id=""):
+	return _url + (f"&_id={id}" if id else "") 
 
 def broadcastAction(action,id=""):
 	_writeLock.acquire()

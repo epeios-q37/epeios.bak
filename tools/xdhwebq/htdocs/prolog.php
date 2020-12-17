@@ -29,6 +29,7 @@ $out = str_replace(array("\r", "\n", "\t"), '','
 			<!--Below both scripts are for DEV environment. -->
 			<script src="faas/xdhtml.js"></script>
 			<script src="faas/xdhwebq.js"></script>
+			<script src="faas/qrcode.min.js"></script><!-- For the \'AttachQRCode\' primitive. -->
 			<!-- Below both scripts are for PROD environment. -->
 			<script src="faas/xdhtml_20201001.js"></script>
 			<script src="faas/xdhwebq_20200608.js"></script>

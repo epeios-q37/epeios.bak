@@ -1,8 +1,14 @@
 # *XDHq* changelog.
 
+## 2020-12-17:
+
+- *Python*:
+  - introducing `set_supplier(…)`, `attach_qrcode(…)` end `get_app_url(…)`,
+
 ## 2020-12-13:
 
-- introducing user id to differentiate sessions,
+- *Python*:
+  - introducing user id to differentiate sessions,
 
 ## 2020-11-24:
 

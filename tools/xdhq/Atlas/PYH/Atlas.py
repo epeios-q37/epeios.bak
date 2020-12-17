@@ -29,7 +29,7 @@ import inspect
 
 import signal, sys, os
 
-from XDHq import set_supplier
+from XDHq import set_supplier, get_app_url
 
 if sys.version_info[0] == 2:
 	import __builtin__ as builtins
