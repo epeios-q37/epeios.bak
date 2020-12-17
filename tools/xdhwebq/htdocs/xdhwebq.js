@@ -98,6 +98,6 @@ function connect(token,id) {
 			if ( backendLost )
 				alert("Connection to backend lost!");
 			else if (confirm("Disconnected!\nPress OK to reload the application."))
-				location.reload(true);
+				location.reload();
     }	
 }

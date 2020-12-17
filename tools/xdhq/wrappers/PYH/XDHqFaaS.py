@@ -47,7 +47,7 @@ class _Supplier:
 	_actions = {
 		"none": lambda url : None,
 		"auto": XDHqSHRD.open,
-		"qrcode": lambda url: XDHqSHRD.open(f"FaaSFooter.php?url={url}"),
+		"qrcode": lambda url: XDHqSHRD.open(f'"{url}&_supplier=qrcode"'),
 	}
 
 	def supply(url):

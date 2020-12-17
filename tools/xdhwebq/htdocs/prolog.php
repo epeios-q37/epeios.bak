@@ -48,14 +48,14 @@ $out = str_replace(array("\r", "\n", "\t"), '','
 					let iframe = document.body.lastChild.firstChild;
 					iframe.style.height = iframe.contentWindow.document.body.scrollHeight + \'px\';
 				}
-				function ignition(token,id) {
+				function ignition(token,id,qrcodeOnly) {
 						document.body.lastChild.firstChild.src = "FaaSFooter.php?url=" + window.location.href;
-						connect(token,id);
+						if (!qrcodeOnly) connect(token,id);
 				}
 			</script>
 		</head>
 		<!--body id="Root" data-xdh-onevents="(keypress|About|SC+a)(keypress|Q37Refresh|SC+r)"-->
-		<body onload="ignition(\'' . $token . '\',\'' . $id . '\');">
+		<body onload="ignition(\'' . $token . '\',\'' . $id . '\',' . $qrcodeOnly . ');">
 			<div class="xdh_style">
 				<noscript>
 					<div style="display: table; margin: 50px auto auto auto;">

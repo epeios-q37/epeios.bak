@@ -16,7 +16,7 @@ Affero General Public License for more details.
 
 You should have received a copy of the GNU Affero General Public License
 along with xdhwebq. If not, see <http://www.gnu.org/licenses/>.
- */
+*/
 
 error_reporting(E_ALL);
 
@@ -55,6 +55,7 @@ function send($query) {
 }
 
 $token = $_REQUEST["_token"];
+$qrcodeOnly = $_REQUEST["_supplier"] == "qrcode" ? "true" : "false";    // Used in 'prolog.php' to display only the QR code.
 $head = send("XDH web prolog\r\nToken: " . $token . "\r\n\r\n");
 
 if (empty($token))
