@@ -62,25 +62,15 @@ def ac_create(dom):
 
   if not room:
     dom.alert(f"A room name can not be empty!")
-    dom.focus("Name")
-    return  
-
-  if room in rooms.values():
+  elif room in rooms.values():
     dom.alert(f"There is already a room named '{room}'")
-    dom.focus("Name")
-    return
+  else:
+    id = str(uuid.uuid4())
+    url = atlastk.get_app_url(id)
+    rooms[id]=room
+    display_rooms(dom)
+    dom.set_content("Name", "")
 
-  id = str(uuid.uuid4())
-  url = atlastk.get_app_url(id)
-
-  rooms[id]=room
-
-  display_rooms(dom)
-
-  # dom.end("Rooms",f'<fieldset style="margin: auto; width: min-content;"><legend>{room}</legend><a href="{url}" name="{id}" id="{id}"/></fieldset>')
-  # dom.end("Rooms",f'<fieldset style="margin: auto; width: min-content;"><legend>{room}</legend><a href="{url}" name="{id}" id="{id}"><img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={url}"/></a></fieldset>')
-  
-  dom.set_content("Name", "")
   dom.focus("Name")
 
 def ac_qrcode(dom,id):
@@ -88,7 +78,7 @@ def ac_qrcode(dom,id):
 
   if mark:
     url = atlastk.get_app_url(mark)
-    dom.inner(dom.last_child(id), f'<a href="{url}" target="_blank"><img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={url}"/></a>')
+    dom.inner(dom.last_child(id), f'<a href="{url}" target="_blank"><img src="https://api.qrserver.com/v1/create-qr-code/?size=125x125&data={url}"/></a>')
     dom.set_mark(id,"")
 
 CALLBACKS = {

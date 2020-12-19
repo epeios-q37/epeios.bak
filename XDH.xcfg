@@ -260,13 +260,6 @@
 }
         ]]>
         </Script>
-        <Script name="AttachQRCode_1" Arguments="Id,URL,Options">
-          <![CDATA[
-{
-  new QRCode('%Id%', %Options%).makeCode('%URL%')
-}
-        ]]>
-        </Script>
         <Script name="" Arguments="">
           <![CDATA[
 {
