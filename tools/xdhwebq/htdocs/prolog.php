@@ -49,7 +49,7 @@ $out = str_replace(array("\r", "\n", "\t"), '','
 					iframe.style.height = iframe.contentWindow.document.body.scrollHeight + \'px\';
 				}
 				function ignition(token,id,qrcodeOnly) {
-						document.body.lastChild.firstChild.src = "FaaSFooter.php?url=" + window.location.href;
+						document.body.lastChild.firstChild.src = "FaaSFooter.php?url=" + encodeURIComponent(window.location.href);
 						if (!qrcodeOnly) connect(token,id);
 				}
 			</script>

@@ -22,23 +22,36 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-import os, sys, threading, uuid
+import os, sys, uuid
 
 os.chdir(os.path.dirname(os.path.realpath(__file__)))
 sys.path.append("../../atlastk")
 
 import atlastk
 
-rooms = {}
+import room
+
+class Session:
+  def __init__(self):
+    self.room = None
+    self.last_message = None
+    self.pseudo = ""
+
+rooms = {"hgfhf": {
+  "name": "test",
+  "core": room.Room()
+}}
+
+# rooms = {}
 
 def get_rooms():
   xml = atlastk.create_XML("Rooms")
 
-  for room in rooms:
+  for id in rooms:
     xml.push_tag("Room")
-    xml.put_attribute("id", room)
-    xml.put_attribute("URL", atlastk.get_app_url(room))
-    xml.put_value(rooms[room])
+    xml.put_attribute("id", id)
+    xml.put_attribute("URL", atlastk.get_app_url(id))
+    xml.put_value(rooms[id]["name"])
     xml.pop_tag()
 
   return xml
@@ -46,34 +59,38 @@ def get_rooms():
 def display_rooms(dom):
   dom.inner("Rooms",get_rooms(), "Rooms.xsl")
 
-def ac_connect(dom, id):
+def ac_connect(session,dom,id):
   if id:
     dom.inner("",open("Room.html").read())
-    dom.set_content("Name", rooms[id])
+    dom.set_content("Name",rooms[id]["name"])
+    session.room = rooms[id]["core"]
+    session.last_message = 0
+    dom.focus("Pseudo")
+    session.room.display_messages(session,dom)    
   else:
     dom.inner("",open("Admin.html").read())
     dom.focus("Name")
     display_rooms(dom)
 
-def ac_create(dom):
+def ac_create(session,dom):
   global rooms
 
-  room = dom.get_content("Name").strip()
+  name = dom.get_content("Name").strip()
 
-  if not room:
+  if not name:
     dom.alert(f"A room name can not be empty!")
-  elif room in rooms.values():
-    dom.alert(f"There is already a room named '{room}'")
+  elif any( room["name"] == name for room in rooms.values()):
+    dom.alert(f"There is already a room named '{name}'")
   else:
     id = str(uuid.uuid4())
     url = atlastk.get_app_url(id)
-    rooms[id]=room
+    rooms[id]={"name": name, "core": room.Room()}
     display_rooms(dom)
     dom.set_content("Name", "")
 
   dom.focus("Name")
 
-def ac_qrcode(dom,id):
+def ac_qrcode(session,dom,id):
   mark = dom.get_mark(id)
 
   if mark:
@@ -81,10 +98,44 @@ def ac_qrcode(dom,id):
     dom.inner(dom.last_child(id), f'<a href="{url}" target="_blank"><img src="https://api.qrserver.com/v1/create-qr-code/?size=125x125&data={url}"/></a>')
     dom.set_mark(id,"")
 
+def ac_submit_pseudo(session,dom):
+  pseudo = dom.get_value("Pseudo").strip()
+
+  room = session.room
+
+  if not pseudo:
+    dom.alert("Pseudo. can not be empty !")
+    dom.set_value("Pseudo", "")
+    dom.focus("Pseudo")
+  elif room.handle_pseudo(pseudo.upper()):
+    session.pseudo = pseudo
+    dom.add_class("PseudoButton", "hidden")
+    dom.disable_element("Pseudo")
+    dom.enable_elements(["Message", "MessageButton"])
+    dom.focus("Message")
+    print("\t>>>> New user: " + pseudo)
+  else:
+    dom.alert("Pseudo. not available!")
+    dom.set_value("Pseudo", pseudo)
+    dom.focus("Pseudo")
+
+def ac_submit_message(session,dom):
+  room = session.room
+
+  message = dom.get_value("Message")
+  dom.set_value("Message", "")
+  dom.focus("Message")
+  room.add_message(session.pseudo,message)
+  room.display_messages(session,dom)
+  atlastk.broadcast_action("Update")     
+
 CALLBACKS = {
   "": ac_connect,
   "Create": ac_create,
-  "QRCode": ac_qrcode
+  "QRCode": ac_qrcode,
+  "SubmitPseudo": ac_submit_pseudo,
+  "SubmitMessage": ac_submit_message,
+  "Update": lambda session,dom: session.room.display_messages(session,dom) if session.room else None,
 }
     
-atlastk.launch(CALLBACKS, None, open("Head.html").read())
+atlastk.launch(CALLBACKS, Session, open("Head.html").read())
