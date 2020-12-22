@@ -29,7 +29,8 @@ DEMOS = (
     "ReversiIMG",
     "ReversiXSL",
     "Widgets",
-    ("Contacts", 8)
+    ("Contacts", 8),
+    "Chatrooms"
 )
 
 DEMOS_AMOUNT = len(DEMOS)

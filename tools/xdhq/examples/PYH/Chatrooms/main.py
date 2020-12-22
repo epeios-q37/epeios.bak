@@ -22,14 +22,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-import os, sys, uuid
+import room, os, sys, uuid
 
 os.chdir(os.path.dirname(os.path.realpath(__file__)))
 sys.path.append("../../atlastk")
 
 import atlastk
-
-import room
 
 class Session:
   def __init__(self):
@@ -37,10 +35,16 @@ class Session:
     self.last_message = None
     self.pseudo = ""
 
-rooms = {"hgfhf": {
-  "name": "test",
-  "core": room.Room()
-}}
+rooms = {
+  str(uuid.uuid4()): {
+    "name": "Test 1",
+    "core": room.Room()
+  },
+  str(uuid.uuid4()): {
+    "name": "Test 2",
+    "core": room.Room()
+  }
+}
 
 # rooms = {}
 

@@ -1,5 +1,18 @@
-<div>
-  <input id="Name" placeholder="Room name" data-xdh-onevent="Create"/>
-  <button data-xdh-onevent="Create">Create</button>
+<details>
+  <summary>Description</summary>
+  <fieldset>
+    <div style="width: 600px;">
+      In the <a href="https://repl.it/@AtlasTK/atlas-python#examples/Chatroom/main.py"><em>Chatroom</em> demonstration</a> (without the final <code>s</code>), you could see how to share data between all the sessions. With this example, only sessions sharing the same room will share the same messages.<br>
+      To achieve this, you create links with a user defined parameter, which value you can retrieve on the creation of a session. Take a look to the <em>Python</em> source files <a href="https://repl.it/@AtlasTK/atlas-python#examples/Chatrooms/main.py">here</a> to see how to do this.
+    </div>
+  </fieldset>
+</details>
+<div style="display: flex; justify-content: space-around;"">
+<div style="flex-direction: column;">
+  <div>
+    <input id="Name" placeholder="Room name" data-xdh-onevent="Create"/>
+    <button data-xdh-onevent="Create">Create</button>
+  </div>
+  <div id="Rooms"/>
+  </div>
 </div>
-<div id="Rooms"/>
