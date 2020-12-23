@@ -22,12 +22,73 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-import room, os, sys, uuid
+import os, sys, threading, uuid
 
 os.chdir(os.path.dirname(os.path.realpath(__file__)))
 sys.path.append("../../atlastk")
 
 import atlastk
+
+class Room:
+  def __init__(self):
+    self.messages = []
+    self.pseudos = []
+    self.lock = threading.Lock()
+
+  def build_xml(self,session):
+    xml = atlastk.create_XML("XDHTML")
+    xml.push_tag("Messages")
+    xml.put_attribute("pseudo",session.pseudo)
+
+    self.lock.acquire()
+
+    index = len(self.messages) - 1
+
+    while index >= session.last_message:
+      message = self.messages[index]
+
+      xml.push_tag( "Message" )
+      xml.put_attribute( "id", index )
+      xml.put_attribute( "pseudo", message['pseudo'] )
+      xml.put_value( message['content'] )
+      xml.pop_tag()
+
+      index -= 1
+
+    session.last_message = len(self.messages)
+
+    self.lock.release()
+
+    xml.pop_tag()
+
+    return xml
+
+  def display_messages(self,session,dom):
+   
+    if len(self.messages) > session.last_message:
+      dom.begin("Board", self.build_xml(session), "Messages.xsl")
+      
+      
+  def handle_pseudo(self,pseudo):
+    self.lock.acquire()
+
+    if pseudo in self.pseudos:
+      result = False
+    else:
+      self.pseudos.append(pseudo)
+      result= True
+
+    self.lock.release()
+
+    return result
+
+  def add_message(self,pseudo,message):
+    message = message.strip()
+
+    if message:
+      self.lock.acquire()
+      self.messages.append({'pseudo': pseudo, 'content': message})
+      self.lock.release()    
 
 class Session:
   def __init__(self):
@@ -38,11 +99,11 @@ class Session:
 rooms = {
   str(uuid.uuid4()): {
     "name": "Test 1",
-    "core": room.Room()
+    "core": Room()
   },
   str(uuid.uuid4()): {
     "name": "Test 2",
-    "core": room.Room()
+    "core": Room()
   }
 }
 
@@ -88,7 +149,7 @@ def ac_create(session,dom):
   else:
     id = str(uuid.uuid4())
     url = atlastk.get_app_url(id)
-    rooms[id]={"name": name, "core": room.Room()}
+    rooms[id]={"name": name, "core": Room()}
     display_rooms(dom)
     dom.set_content("Name", "")
 
@@ -117,7 +178,6 @@ def ac_submit_pseudo(session,dom):
     dom.disable_element("Pseudo")
     dom.enable_elements(["Message", "MessageButton"])
     dom.focus("Message")
-    print("\t>>>> New user: " + pseudo)
   else:
     dom.alert("Pseudo. not available!")
     dom.set_value("Pseudo", pseudo)
