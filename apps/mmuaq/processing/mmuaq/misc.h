@@ -34,7 +34,7 @@ namespace misc {
 #  undef M
 # endif
 
-# define M( name ) qCDEF( char *, name, #name )
+# define M( name ) extern const char * name
 	namespace message {
 		M( NoCorrespondingMail );
 		M( UnableToConnect );
@@ -48,10 +48,10 @@ namespace misc {
 #  define M MISC_M_BUFFER_
 # endif
 
-	inline void Dump( fdr::rIDriver &Driver )
+	inline void Dump( fdr::rRDriver &Driver )
 	{
 	qRH
-		flw::sDressedIFlow<> Flow;
+		flw::rDressedRFlow<> Flow;
 	qRB
 		Flow.Init( Driver );
 
@@ -65,7 +65,7 @@ namespace misc {
 	}
 
 	inline void Dump(
-		fdr::rIDriver &Driver,
+		fdr::rRDriver &Driver,
 		str::dString &Content )
 	{
 	qRH
@@ -81,12 +81,12 @@ namespace misc {
 
 	bso::sBool IsVerboseActivated( void );
 
-	typedef flx::rIOMonitor rIODriver_;
+	typedef flx::rRWMonitor rIODriver_;
 	class rVerboseIODriver
 	: public rIODriver_
 	{
 	private:
-		csdbnc::rIODriver Driver_;
+		csdbnc::rRWDriver Driver_;
 	public:
 		void reset( bso::sBool P = true )
 		{

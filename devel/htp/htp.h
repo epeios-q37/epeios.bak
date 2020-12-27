@@ -140,7 +140,7 @@ namespace htp {
 	{
 	private:
 		fdr::size__ Size_;	// Size of current chunk.
-		qRMV( flw::sRFlow, F_, Flow_ );
+		qRMV( flw::rRFlow, F_, Flow_ );
 	protected:
 		fdr::size__ FDRRead(
 			fdr::size__ Maximum,
@@ -160,16 +160,18 @@ namespace htp {
 
 			return Size;
 		}
-		void FDRDismiss( bso::sBool Unlock ) override
+		bso::sBool FDRDismiss(
+			bso::sBool Unlock,
+			qRPN ) override
 		{
 			if ( Size_ != 0 )
 				qRGnr();
 
-			F_().Dismiss( Unlock );
+			return F_().Dismiss( Unlock, qRP );
 		}
 		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
 		{
-			 return F_().IDriver().RTake( Owner );
+			 return F_().RDriver().RTake( Owner );
 		}
 
 	public:
@@ -195,7 +197,7 @@ namespace htp {
 	{
 	private:
 		fdr::size__ Size_;	// Size of current chunk.
-		qRMV( flw::sRFlow, F_, Flow_ );
+		qRMV( flw::rRFlow, F_, Flow_ );
 		bso::sBool GetSize_( void  );
 	protected:
 		fdr::size__ FDRRead(
@@ -220,16 +222,18 @@ namespace htp {
 
 			return Size;
 		}
-		void FDRDismiss( bso::sBool Unlock ) override
+		bso::sBool FDRDismiss(
+			bso::sBool Unlock,
+			qRPN ) override
 		{
 			if ( Size_ != 0 )
 				qRGnr();
 
-			F_().Dismiss( Unlock );
+			return F_().Dismiss( Unlock, qRP );
 		}
 		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
 		{
-			 return F_().IDriver().RTake( Owner );
+			 return F_().RDriver().RTake( Owner );
 		}
 	public:
 		void reset( bso::sBool P = true )
@@ -253,7 +257,7 @@ namespace htp {
 	private:
 		rBlocFlow BlocFlow_;
 		rChunkFlow ChunkFlow_;
-		flw::sDressedRFlow<> Flow_;
+		flw::rDressedRFlow<> Flow_;
 		void FillField_( flw::iflow__ &IFlow );
 		bso::sU16 StatusCode_;
 	public:

@@ -21,15 +21,23 @@
 
 #include "registry.h"
 
-#include "sclmisc.h"
+#include "sclm.h"
 
 #include "rgstry.h"
 
 using namespace misc;
 
+# define M( name ) extern qCDEF( char *, misc::message::name, #name )
+M( NoCorrespondingMail );
+M( UnableToConnect );
+M( UnknownField );
+/*
+		M(  );
+*/
+
 bso::sBool misc::IsVerboseActivated( void )
 {
-	return sclmisc::BGetBoolean( registry::parameter::Verbose, false );
+	return sclm::OGetBoolean( registry::parameter::Verbose, false );
 }
 
 namespace {
@@ -42,16 +50,16 @@ void misc::rVerboseIODriver::Init(
 {
 	qRH
 		str::wString HostPort;
-		qCBUFFERr Buffer;
+		qCBUFFERh Buffer;
 	qRB
 		::Markers_.In.Before = "<- " ;
 		::Markers_.In.After = "--\n";
 		::Markers_.Out.Before = "-> ";
 		HostPort.Init();
-		sclmisc::MGetValue( HostPortEntry, HostPort );
+		sclm::MGetValue( HostPortEntry, HostPort );
 
 		if ( !Driver_.Init( HostPort.Convert( Buffer ), SCK_INFINITE, qRPU ) )
-			sclmisc::ReportAndAbort( message::UnableToConnect, HostPort );
+			sclm::ReportAndAbort( message::UnableToConnect, HostPort );
 
 		rIODriver_::Init( Driver_, Channel, ::Markers_, cio::COut );
 	qRR

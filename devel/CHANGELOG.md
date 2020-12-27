@@ -10,6 +10,10 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2020-12-27:
+
+- HTP, TOL: [adpt]
+
 ## 2020-12-13:
 
 - XDHCDC, XDHUPS:

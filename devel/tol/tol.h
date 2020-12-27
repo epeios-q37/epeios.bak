@@ -1896,21 +1896,21 @@ template <typename type, type False, type Error, type Undefined> bso::bool__ ope
 	tol::extended_enum__<type, False, Error, Undefined> Op1,
 	tol::extended_enum__<type, False, Error, Undefined> Op2 )
 {
-	return Op1() == Op2();
+	return Op1.Value() == Op2.Value();
 }
 
 template <typename type, typename _type, type False, type Error, type Undefined> bso::bool__ operator==(
 	_type Op1,
 	tol::extended_enum__<type, False, Error, Undefined> Op2 )
 {
-	return Op1 == Op2();
+	return Op1 == Op2.Value();
 }
 
 template <typename type, typename _type, type False, type Error, type Undefined> bso::bool__ operator==(
 	tol::extended_enum__<type, False, Error, Undefined> Op1,
 	_type Op2 )
 {
-	return Op1() == Op2;
+	return Op1.Value() == Op2;
 }
 
 template <typename type, type False, type Error, type Undefined> bso::bool__ operator!=(
@@ -1924,7 +1924,7 @@ template <typename type, typename _type, type False, type Error, type Undefined>
 	_type Op1,
 	tol::extended_enum__<type, False, Error, Undefined> Op2 )
 {
-	return Op1 != Op2();
+	return Op1 != Op2.Value();
 }
 
 template <typename type, typename _type, type False, type Error, type Undefined> bso::bool__ operator!=(

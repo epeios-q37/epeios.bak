@@ -38,7 +38,7 @@ namespace muabsc {
 
 	void Dump(
 		const dIndexes &Indexes,
-		txf::sOFlow &Flow );
+		txf::sWFlow &Flow );
 
 	class cIndex
 	{

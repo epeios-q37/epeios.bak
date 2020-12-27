@@ -1,15 +1,20 @@
-<span data-xdh-onevent="mouseleave|HideInput">
-	<fieldset>
-		<div data-xdh-onevent="ShowInput">
-			<text>Clicking on this text shows an input field, leaving this frame hides it.</text>
-		</div>
-		<div id="Input" class="hidden">
-			<input id="Pattern" type="text" size="50" data-xdh-onevent="Submit" placeholder="Text to convert to upper case" />
-			<button title="Converts to upper case" data-xdh-onevent="Submit">Convert</button>
-		</div>
-	</fieldset>
-</span>
-<p />
-<div style="border-radius: 10px; background-color: PaleTurquoise; padding: 5px; text-align: center;">
-	<span>A very simple example.</span>
+<details>
+	<summary>Description</summary>
+	<div style="width: 400px; margin: auto; border-radius: 10px; background-color: PaleTurquoise; padding: 5px; text-align: center;">
+		A very simple example, to show the overall structure of an application made with the <em>Atlas</em> <em>toolkit</em> (<a href="https://repl.it/@AtlasTK/atlas-java#examples/Blank/main.java"><em>Java</em></a> <a href="https://repl.it/@AtlasTK/atlas-node#examples/Blank/main.js"><em>Node.js</em></a> <a href="https://repl.it/@AtlasTK/atlas-perl#examples/Blank/main.pl"><em>Perl</em></a> <a href="https://repl.it/@AtlasTK/atlas-python#examples/Blank/main.py"><em>Python</em></a> <a href="https://repl.it/@AtlasTK/atlas-ruby#examples/Blank/main.rb"><em>Ruby</em></a>)
+	</div>
+</details>
+<hr/>
+<div style="display: flex; justify-content: space-around;">
+	<span data-xdh-onevent="mouseleave|HideInput">
+		<fieldset>
+			<div data-xdh-onevent="ShowInput">
+				<text>Clicking on this text shows an input field, leaving this frame hides it.</text>
+			</div>
+			<div id="Input" class="hidden">
+				<input id="Pattern" type="text" size="50" data-xdh-onevent="Submit" placeholder="Text to convert to upper case" />
+				<button title="Converts to upper case" data-xdh-onevent="Submit">Convert</button>
+			</div>
+		</fieldset>
+	</span>
 </div>

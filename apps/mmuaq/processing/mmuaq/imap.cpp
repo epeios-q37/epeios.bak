@@ -24,7 +24,7 @@
 
 #include "muaima.h"
 
-#include "sclmisc.h"
+#include "sclm.h"
 
 #include "csdbnc.h"
 
@@ -37,8 +37,8 @@ namespace {
 		str::dString &Username,
 		str::dString &Password )
 	{
-		sclmisc::MGetValue( registry::parameter::imap::Username, Username );
-		sclmisc::MGetValue( registry::parameter::imap::Password, Password );
+		sclm::MGetValue( registry::parameter::imap::Username, Username );
+		sclm::MGetValue( registry::parameter::imap::Password, Password );
 	}
 
 	muaima::eStatus DumpPendingResponses_(
@@ -50,7 +50,7 @@ namespace {
 
 		while ( ( Code = Console.GetPendingResponseCode() ) != muaima::rc_None ) {
 			if ( Verbose || ( Concerned &&  ( Code != muaima::rcOK ) ) ) {
-				fdr::rIDriver &Driver = Console.GetResponseDriver();
+				fdr::rRDriver &Driver = Console.GetResponseDriver();
 
 				cio::COut << muaima::GetLabel( Code );
 
@@ -161,12 +161,12 @@ qRE
 namespace {
 	void GetReference_( str::dString &Reference )
 	{
-		sclmisc::MGetValue( registry::parameter::imap::Reference, Reference );
+		sclm::MGetValue( registry::parameter::imap::Reference, Reference );
 	}
 
 	void GetMailbox_( str::dString &Mailbox )
 	{
-		sclmisc::MGetValue( registry::parameter::imap::Mailbox, Mailbox );
+		sclm::MGetValue( registry::parameter::imap::Mailbox, Mailbox );
 	}
 
 	void GetReferenceAndMailbox_(
@@ -244,12 +244,12 @@ qRE
 namespace {
 	void GetSequenceSet_( str::dString &SequenceSet )
 	{
-		sclmisc::MGetValue( registry::parameter::imap::SequenceSet, SequenceSet );
+		sclm::MGetValue( registry::parameter::imap::SequenceSet, SequenceSet );
 	}
 
 	void GetItems_( str::dString &Items )
 	{
-		sclmisc::MGetValue( registry::parameter::imap::Items, Items );
+		sclm::MGetValue( registry::parameter::imap::Items, Items );
 	}
 
 	void GetMailboxSequenceSetAndItems_(
@@ -266,7 +266,7 @@ namespace {
 namespace {
 	inline muaima::eFlavor GetFlavor_( void )
 	{
-		if ( sclmisc::BGetBoolean( registry::parameter::imap::UID, false ) )
+		if ( sclm::OGetBoolean( registry::parameter::imap::UID, false ) )
 			return muaima::fUID;
 		else
 			return muaima::fRegular;
@@ -358,7 +358,7 @@ qRB
 	Message.Init();
 
 	Folder.Init();
-	sclmisc::OGetValue( registry::parameter::imap::Folder, Folder );
+	sclm::OGetValue( registry::parameter::imap::Folder, Folder );
 
 	Session.Init();
 
@@ -387,19 +387,19 @@ namespace rfc822_ {
 		str::wString Folder, Message;
 	qRB
 		Folder.Init();
-		sclmisc::MGetValue( registry::parameter::imap::Folder, Folder );
+		sclm::MGetValue( registry::parameter::imap::Folder, Folder );
 
 		Message.Init();
 		Session.Init();
 
 		RFC822.Init();
-		if ( Session.GetRFC822( Part, GetFlavor_(), Folder, sclmisc::MGetU32( registry::parameter::MailID ), RFC822, qRPU ) ) {
+		if ( Session.GetRFC822( Part, GetFlavor_(), Folder, sclm::MGetU32( registry::parameter::MailID ), RFC822, qRPU ) ) {
 			misc::Dump( RFC822.GetDriver() );
 
 			Handle_( RFC822.EndStatus( Message ), Message );
 		} else if ( Handle_( Session.EndStatus( Message ), Message ) == sOK ) {
 			Message.Init();
-			sclmisc::GetBaseTranslation( misc::message::NoCorrespondingMail, Message );
+			sclm::GetBaseTranslation( misc::message::NoCorrespondingMail, Message );
 			cio::COut << Message << txf::nl;
 		}
 	qRR
@@ -436,18 +436,18 @@ qRH
 	str::wString Folder, Message;
 qRB
 	Folder.Init();
-	sclmisc::MGetValue( registry::parameter::imap::Folder, Folder );
+	sclm::MGetValue( registry::parameter::imap::Folder, Folder );
 
 	Message.Init();
 	Session.Init();
 
 	UID.Init();
-	if ( Session.GetUID( Folder, sclmisc::MGetU32( registry::parameter::MailID ), UID, qRPU ) ) {
+	if ( Session.GetUID( Folder, sclm::MGetU32( registry::parameter::MailID ), UID, qRPU ) ) {
 		misc::Dump( UID.GetDriver() );
 		Handle_( UID.EndStatus( Message ), Message );
 	} else if ( Handle_( Session.EndStatus( Message ), Message ) == sOK ) {
 		Message.Init();
-		sclmisc::GetBaseTranslation( misc::message::NoCorrespondingMail, Message );
+		sclm::GetBaseTranslation( misc::message::NoCorrespondingMail, Message );
 		cio::COut << Message << txf::nl;
 	}
 qRR
@@ -463,7 +463,7 @@ qRH
 	str::wString Folder, Message;
 qRB
 	Folder.Init();
-	sclmisc::MGetValue( registry::parameter::imap::Folder, Folder );
+	sclm::MGetValue( registry::parameter::imap::Folder, Folder );
 
 	Message.Init();
 	Session.Init();

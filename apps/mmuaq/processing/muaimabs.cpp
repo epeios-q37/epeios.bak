@@ -25,7 +25,7 @@ using namespace muaimabs;
 
 namespace {
 	inline const str::dString &GetAlphanumMinus_(
-		flw::sIFlow &Flow,
+		flw::rRFlow &Flow,
 		str::dString &AlphaNum )
 	{
 		flw::sByte Byte = 0;
@@ -38,7 +38,7 @@ namespace {
 
 bso::sBool muaimabs::rDriverBase_::HandleFreeContext_(
 	fdr::sByte Byte,
-	flw::sIFlow &Flow,
+	flw::rRFlow &Flow,
 	fdr::sByte *Buffer,
 	fdr::sSize &Amount )
 {
@@ -69,7 +69,7 @@ bso::sBool muaimabs::rDriverBase_::HandleFreeContext_(
 			Put = false;
 		} else if ( Level_ == bso::U8Max )
 			qRLmt();
-		else 
+		else
 			Level_++;
 		// We stay in the same context.
 		break;
@@ -94,7 +94,7 @@ bso::sBool muaimabs::rDriverBase_::HandleFreeContext_(
 			Context_ = _::cEOF;
 			Put = false;
 		}
-		break;		
+		break;
 	case '{':
 		if ( Delimiter_ == dNone ) {
 			Delimiter_ = dLiteral;
@@ -113,7 +113,7 @@ bso::sBool muaimabs::rDriverBase_::HandleFreeContext_(
 		if ( ( Delimiter_ == dCRLF ) || ( Delimiter_ == dNone ) ) {	// Can sometimes occur when directly called from 'HandleFreeContext_(...)'.
 			Context_ = _::cEOF;
 			Put = false;
-		} else 
+		} else
 			Force_ = 1;
 		break;
 	case '\n':	// Should have be already skipped.
@@ -134,7 +134,7 @@ bso::sBool muaimabs::rDriverBase_::HandleFreeContext_(
 
 void muaimabs::rDriverBase_::HandleQuotedContext_(
 	fdr::sByte Byte,
-	flw::sIFlow &Flow,
+	flw::rRFlow &Flow,
 	fdr::sByte *Buffer,
 	fdr::sSize &Amount )
 {
@@ -167,7 +167,7 @@ void muaimabs::rDriverBase_::HandleQuotedContext_(
 
 void muaimabs::rDriverBase_::HandleLiteralContext_(
 	fdr::sByte Byte,
-	flw::sIFlow &Flow,
+	flw::rRFlow &Flow,
 	fdr::sByte *Buffer,
 	fdr::sSize &Amount )
 {
@@ -189,12 +189,12 @@ void muaimabs::rDriverBase_::HandleLiteralContext_(
 }
 
 void muaimabs::rDriverBase_::HandleContext_(
-	flw::sIFlow &Flow,
+	flw::rRFlow &Flow,
 	fdr::sByte *Buffer,
 	fdr::sSize &Amount )
 {
 	bso::sBool HandleSPCRLF = true;
-	
+
 	if ( ( Context_ != _::cEOF ) && Flow.EndOfFlow() )
 		Context_ = _::cEOF;
 
@@ -240,7 +240,7 @@ fdr::sSize muaimabs::rDriverBase_::Read(
 {
 	fdr::sSize Amount = 0;
 
-	flw::sIFlow &Flow = F_();
+	flw::rRFlow &Flow = F_();
 
 	if ( Maximum < 2 )	// Due to the 'Pending' handling, that must be place in the 'Buffer' to put at least chars.
 		qRVct();
@@ -282,7 +282,7 @@ fdr::sSize muaimabs::rDriverBase_::Read(
 }
 
 #define C( name )	case rc##name : return #name; break
- 
+
 const char *muaimabs::GetLabel( eResponseCode Code )
 {
 	switch ( Code ) {
@@ -337,7 +337,7 @@ const char *muaimabs::GetLabel( eResponseCode Code )
 		qRFwk();
 		break;
 	}
- 
+
 	return NULL;	// To avoid a warning.
 }
 
@@ -371,13 +371,12 @@ namespace code_ {
 	}
 
 	eResponseCode Get(
-		flw::sIFlow &Flow,
+		flw::rRFlow &Flow,
 		str::dString &Before )
 	{
 		eResponseCode Code = rc_Undefined;
 	qRH
 		str::wString Pattern;
-		flw::sByte Byte = 0;
 	qRB
 		if ( isdigit( Flow.View() ) ) {
 			GetAlphanumMinus_( Flow, Before );
@@ -405,7 +404,7 @@ eResponseCode muaimabs::rConsole::GetPendingResponseCode( void )
 {
 	eResponseCode Code = rc_Undefined;
 qRH
-	flw::sIFlow &Flow = IFlow_;
+	flw::rRFlow &Flow = IFlow_;
 	str::wString PendingData, Tag;
 qRB
 	PendingData.Init();
@@ -477,7 +476,7 @@ const char *muaimabs::GetLabel( eStatus Status )
 		qRFwk();
 		break;
 	}
- 
+
 	return NULL;	// To avoid a warning.
 }
 #undef C
@@ -499,7 +498,7 @@ namespace status_ {
 		stsfsm::Fill<eStatus>( _::Automat, s_amount, GetLabel );
 	}
 
-	eStatus Get( flw::sIFlow &Flow )
+	eStatus Get( flw::rRFlow &Flow )
 	{
 		eStatus Status = s_Undefined;
 	qRH
@@ -529,24 +528,24 @@ void muaimabs::Login(
 	const str::dString &Password,
 	rConsole &Console )
 {
-	Console.OFlow() << Console.GetNextTag() << " LOGIN " << Username << ' ' << Password  << CRLF << txf::commit;
+	Console.WFlow() << Console.GetNextTag() << " LOGIN " << Username << ' ' << Password  << CRLF << txf::commit;
 }
 
 void muaimabs::Logout( rConsole &Console )
 {
-	Console.OFlow() << Console.GetNextTag() << " LOGOUT" << CRLF << txf::commit;
+	Console.WFlow() << Console.GetNextTag() << " LOGOUT" << CRLF << txf::commit;
 }
 
 void muaimabs::Capability( rConsole &Console )
 {
-	Console.OFlow() << Console.GetNextTag() << " CAPABILITY " << CRLF << txf::commit;
+	Console.WFlow() << Console.GetNextTag() << " CAPABILITY " << CRLF << txf::commit;
 }
 
 void muaimabs::Select(
 	const str::dString &Mailbox,
 	rConsole &Console )
 {
-	Console.OFlow() << Console.GetNextTag() << " SELECT " << Mailbox << CRLF << txf::commit;
+	Console.WFlow() << Console.GetNextTag() << " SELECT " << Mailbox << CRLF << txf::commit;
 }
 
 void muaimabs::List(
@@ -554,7 +553,7 @@ void muaimabs::List(
 	const str::dString &Mailbox,
 	rConsole &Console )
 {
-	Console.OFlow() << Console.GetNextTag() << " LIST \"" << Reference << "\" \"" << Mailbox << '"' << CRLF << txf::commit;
+	Console.WFlow() << Console.GetNextTag() << " LIST \"" << Reference << "\" \"" << Mailbox << '"' << CRLF << txf::commit;
 }
 
 void muaimabs::LSub(
@@ -562,7 +561,7 @@ void muaimabs::LSub(
 	const str::dString &Mailbox,
 	rConsole &Console )
 {
-	Console.OFlow() << Console.GetNextTag() << " LSUB \"" << Reference << "\" \"" << Mailbox << '"' << CRLF << txf::commit;
+	Console.WFlow() << Console.GetNextTag() << " LSUB \"" << Reference << "\" \"" << Mailbox << '"' << CRLF << txf::commit;
 }
 
 void muaimabs::Fetch(
@@ -571,7 +570,7 @@ void muaimabs::Fetch(
 	const str::dString &Items,
 	rConsole &Console )
 {
-	Console.OFlow() << Console.GetNextTag() << ( Flavor == fUID ? " UID" : "" ) << " FETCH " << SequenceSet << ' ' << Items << CRLF << txf::commit;
+	Console.WFlow() << Console.GetNextTag() << ( Flavor == fUID ? " UID" : "" ) << " FETCH " << SequenceSet << ' ' << Items << CRLF << txf::commit;
 }
 
 namespace {

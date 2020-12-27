@@ -29,7 +29,7 @@
 # include "muabsc.h"
 
 namespace muaimabs {
-	typedef fdr::rIDressedDriver rDriver_;
+	typedef fdr::rRDressedDriver rDriver_;
 	typedef flx::sStringIFlow sSIFlow_;
 
 	class rPendingIFlow_
@@ -82,7 +82,7 @@ namespace muaimabs {
 		};
 	}
 
-	inline void SkipCRLF_( flw::sIFlow &Flow )
+	inline void SkipCRLF_( flw::rRFlow &Flow )
 	{
 		if ( Flow.Get() != '\r' )
 			qRGnr();
@@ -94,7 +94,7 @@ namespace muaimabs {
 	class rDriverBase_
 	{
 	private:
-		qRMV( flw::sIFlow, F_, Flow_ );
+		qRMV( flw::rRFlow, F_, Flow_ );
 		eDelimiter Delimiter_;
 		_::eContext Context_;
 		rPendingIFlow_ Pending_;
@@ -102,21 +102,21 @@ namespace muaimabs {
 		bso::sSize Force_;	// Remaining amount of byte to put without taking care of value.
 		bso::sBool HandleFreeContext_(
 			fdr::sByte Byte,
-			flw::sIFlow &Flow,
+			flw::rRFlow &Flow,
 			fdr::sByte *Buffer,
 			fdr::sSize &Amount );
 		void HandleQuotedContext_(
 			fdr::sByte Byte,
-			flw::sIFlow &Flow,
+			flw::rRFlow &Flow,
 			fdr::sByte *Buffer,
 			fdr::sSize &Amount );
 		void HandleLiteralContext_(
 			fdr::sByte Byte,
-			flw::sIFlow &Flow,
+			flw::rRFlow &Flow,
 			fdr::sByte *Buffer,
 			fdr::sSize &Amount );
 		void HandleContext_(
-			flw::sIFlow &Flow,
+			flw::rRFlow &Flow,
 			fdr::sByte *Buffer,
 			fdr::sSize &Amount );
 	public:
@@ -130,7 +130,7 @@ namespace muaimabs {
 		}
 		qCVDTOR( rDriverBase_ );
 		void Init(
-			flw::sIFlow &Flow,
+			flw::rRFlow &Flow,
 			const str::dString &PendingData,
 			eDelimiter Delimiter )
 		{
@@ -144,13 +144,17 @@ namespace muaimabs {
 		fdr::sSize Read(
 			fdr::sSize Maximum,
 			fdr::sByte *Buffer );
-		void Dismiss( bso::sBool Unlock )
+		bso::sBool Dismiss(
+			bso::sBool Unlock,
+			qRPN )
 		{
-//			F_().Dismiss( Unlock );
+//			F_().Dismiss( Unlock, qRP );
+
+				return true;
 		}
-		fdr::sTID ITake( fdr::sTID Owner )
+		fdr::sTID RTake( fdr::sTID Owner )
 		{
-			return F_().IDriver().ITake( Owner );
+			return F_().RDriver().RTake( Owner );
 		}
 		bso::sBool EndOfFlow( void )
 		{
@@ -163,7 +167,7 @@ namespace muaimabs {
 	{
 	private:
 		rDriverBase_ Base_;
-		flw::sDressedIFlow<> Flow_;
+		flw::rDressedRFlow<> Flow_;
 	protected:
 		virtual fdr::sSize FDRRead(
 			fdr::sSize Maximum,
@@ -171,13 +175,15 @@ namespace muaimabs {
 		{
 			return Base_.Read( Maximum, Buffer );
 		}
-		virtual void FDRDismiss( bso::sBool Unlock ) override
+		virtual bso::sBool FDRDismiss(
+			bso::sBool Unlock,
+			qRPN) override
 		{
-			return Base_.Dismiss( Unlock );
+			return Base_.Dismiss(Unlock, qRP);
 		}
-		virtual fdr::sTID FDRITake( fdr::sTID Owner ) override
+		virtual fdr::sTID FDRRTake(fdr::sTID Owner) override
 		{
-			return Base_.ITake( Owner );
+			return Base_.RTake( Owner );
 		}
 	public:
 		void reset( bso::sBool P = true )
@@ -187,7 +193,7 @@ namespace muaimabs {
 		}
 		qCVDTOR( rResponseDriver_ );
 		void Init(
-			flw::sIFlow &Flow,
+			flw::rRFlow &Flow,
 			eDelimiter Delimiter,
 			const str::dString &PendingData = str::wString() )
 		{
@@ -195,10 +201,10 @@ namespace muaimabs {
 			rDriver_::Init( fdr::ts_Default );
 			// The object 'Init(...)' several times during its lifespan, so the 'Dismissed', which drives the 'verbose' driver, is sometines called to late.
 			// By calling below method, 'Dimissed()' is called each time EOF is reached.
-			rDriver_::SetAutoDismissOnEOF();	
+			rDriver_::SetAutoDismissOnEOF();
 		}
 		void Init(
-			fdr::rIDriver &Driver,
+			fdr::rRDriver &Driver,
 			eDelimiter Delimiter,
 			const str::dString &PendingData = str::wString() )
 		{
@@ -286,8 +292,8 @@ namespace muaimabs {
 	{
 	private:
 		str::wString Tag_;
-		flw::sDressedIFlow<> IFlow_;
-		txf::rOFlow OFlow_;
+		flw::rDressedRFlow<> IFlow_;
+		txf::rWFlow OFlow_;
 		rResponseDriver_ ResponseDriver_;
 		eResponseCode PendingCode_;
 		bso::sBool PendingCodeIsStatus_;
@@ -299,7 +305,7 @@ namespace muaimabs {
 			PendingCode_ = rc_Undefined;
 		}
 		qCDTOR( rConsole );
-		void Init( fdr::rIODriver &Driver )
+		void Init( fdr::rRWDriver &Driver )
 		{
 			tol::Init( Tag_ );
 			PendingCode_ = rc_Undefined;
@@ -324,7 +330,7 @@ namespace muaimabs {
 
 			return Tag_;
 		}
-		txf::sOFlow &OFlow( void )
+		txf::sWFlow &WFlow( void )
 		{
 			return OFlow_;
 		}
@@ -333,12 +339,12 @@ namespace muaimabs {
 		{
 			eResponseCode Code = rc_Undefined;
 
-			while ( ( ( Code = GetPendingResponseCode() ) != rc_None ) && ( Code != WantedCode ) ) 
+			while ( ( ( Code = GetPendingResponseCode() ) != rc_None ) && ( Code != WantedCode ) )
 				SkipResponse();
 
 			return Code == WantedCode;
 		}
-		fdr::rIDriver &GetResponseDriver( void )
+		fdr::rRDriver &GetResponseDriver( void )
 		{
 			return ResponseDriver_;
 		}
@@ -393,7 +399,7 @@ namespace muaimabs {
 
 	/*
 		First, call 'Connect(...)', then 'Login(...)' (technically, it's not mandatory
-		but if you dont, you would not be able to do very much), and end with 
+		but if you dont, you would not be able to do very much), and end with
 		'Logout(...)'. Between 'Login(....)' and 'Logout(...)', call all other
 		functions as needed.
 

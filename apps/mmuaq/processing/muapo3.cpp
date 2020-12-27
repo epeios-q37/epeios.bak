@@ -79,7 +79,7 @@ namespace {
 
 	void SendCommand_(
 		eCommand_ Command,
-		txf::sOFlow &Flow )
+		txf::rWFlow &Flow )
 	{
 	qRH
 		str::wString CommandString;
@@ -94,7 +94,7 @@ namespace {
 	qRE
 	}
 
-	void SkipAnswer_( flw::sIFlow &Flow )
+	void SkipAnswer_( flw::rRFlow &Flow )
 	{
 		bso::sBool Continue = !Flow.EndOfFlow();
 
@@ -114,7 +114,7 @@ namespace {
 	}
 
 	eIndicator CleanBegin_(
-		flw::sIFlow &Flow,
+		flw::rRFlow &Flow,
 		bso::sBool SkipAnswer )	// Only used for an 'OK' answer.
 	{
 		switch ( Flow.Get() ) {
@@ -144,11 +144,11 @@ namespace {
 		return i_Undefined;	// To avoid a warning.
 	}
 
-	eIndicator Clean_( flw::sIFlow &Flow )
+	eIndicator Clean_( flw::rRFlow &Flow )
 	{
 		eIndicator Indicator = i_Undefined;
 
-		Indicator = CleanBegin_( Flow, true ); 
+		Indicator = CleanBegin_( Flow, true );
 
 		return Indicator;
 	}
@@ -156,8 +156,8 @@ namespace {
 	eIndicator Authenticate_(
 		const str::dString &User,
 		const str::dString &Pass,
-		flw::sIFlow &In,
-		txf::sOFlow &Out )
+		flw::rRFlow &In,
+		txf::rWFlow &Out )
 	{
 		eIndicator Indicator = i_Undefined;
 
@@ -173,31 +173,18 @@ namespace {
 		Out << Pass << NL_ << txf::commit;
 		return Clean_( In );
 	}
-
-	bso::sSize GetSize_( flw::sIFlow &Flow )
-	{
-		fdr::sSize Size = 0;
-		fdr::sByte C = 0;
-
-		while ( isdigit( C = Flow.Get() ) )
-			Size = Size * 10 + C - '0';
-
-		while ( Flow.Get() != '\n' );
-
-		return Size;
-	}
 }
 
 eIndicator muapo3::base::Authenticate(
 	const str::dString &Username,
 	const str::dString &Password,
-	fdr::rIODriver &Server,
+	fdr::rRWDriver &Server,
 	hBody & Body )
 {
 	eIndicator Indicator = i_Undefined;
 qRH
-	flw::sDressedIFlow<> IFlow;
-	txf::rOFlow OFlow;
+	flw::rDressedRFlow<> IFlow;
+	txf::rWFlow OFlow;
 qRB
 	IFlow.Init( Server );
 	OFlow.Init( Server );
@@ -213,14 +200,14 @@ qRE
 
 eIndicator muapo3::base::List(
 	sNumber Number,
-	fdr::rIODriver &Server,
+	fdr::rRWDriver &Server,
 	bso::sBool SkipAnswer,
 	hBody &Body )
 {
 	eIndicator Indicator = i_Undefined;
 qRH
-	flw::sDressedIFlow<> IFlow;
-	txf::rOFlow OFlow;
+	flw::rDressedRFlow<> IFlow;
+	txf::rWFlow OFlow;
 qRB
 	IFlow.Init( Server );
 	OFlow.Init( Server );
@@ -229,12 +216,11 @@ qRB
 
 	if ( Number != 0 )
 		OFlow << Number;
-	
+
 	OFlow << NL_<< txf::commit;
 
 	if ( !( Indicator = CleanBegin_( IFlow, SkipAnswer ) ).IsTrue() ) {
 		Body.Init( false, Server, false );
-		qRReturn;
 	} else
 		Body.Init( SkipAnswer, Server, Number == 0 );
 qRR
@@ -245,14 +231,14 @@ qRE
 
 eIndicator muapo3::base::Retrieve(
 	sNumber Number,
-	fdr::rIODriver &Server,
+	fdr::rRWDriver &Server,
 	bso::sBool SkipAnswer,
 	hBody &Body )
 {
 	eIndicator Indicator = i_Undefined;
 qRH
-	flw::sDressedIFlow<> IFlow;
-	txf::rOFlow OFlow;
+	flw::rDressedRFlow<> IFlow;
+	txf::rWFlow OFlow;
 qRB
 	IFlow.Init( Server );
 	OFlow.Init( Server );
@@ -260,10 +246,8 @@ qRB
 	SendCommand_( cRetr, OFlow );
 	OFlow << Number << NL_ << txf::commit;
 
-	if ( !( Indicator = CleanBegin_( IFlow, SkipAnswer ) ).IsTrue() )
-		qRReturn;
-
-	Body.Init( SkipAnswer, Server, true );
+	if ( ( Indicator = CleanBegin_( IFlow, SkipAnswer ) ).IsTrue() )
+		Body.Init( SkipAnswer, Server, true );
 qRR
 qRT
 qRE
@@ -273,14 +257,14 @@ qRE
 eIndicator muapo3::base::Top(
 	sNumber Number,
 	bso::sUInt AmountOfLine,
-	fdr::rIODriver &Server,
+	fdr::rRWDriver &Server,
 	bso::sBool SkipAnswer,
 	hBody &Body )
 {
 	eIndicator Indicator = i_Undefined;
 qRH
-	flw::sDressedIFlow<> IFlow;
-	txf::rOFlow OFlow;
+	flw::rDressedRFlow<> IFlow;
+	txf::rWFlow OFlow;
 qRB
 	IFlow.Init( Server );
 	OFlow.Init( Server );
@@ -288,10 +272,8 @@ qRB
 	SendCommand_( cTop, OFlow );
 	OFlow << Number << ' ' << AmountOfLine << NL_ << txf::commit;
 
-	if ( !( Indicator = CleanBegin_( IFlow, SkipAnswer ) ).IsTrue() )
-		qRReturn;
-
-	Body.Init( SkipAnswer, Server, true );
+	if ( ( Indicator = CleanBegin_( IFlow, SkipAnswer ) ).IsTrue() )
+		Body.Init( SkipAnswer, Server, true );
 qRR
 qRT
 qRE
@@ -300,13 +282,13 @@ qRE
 
 eIndicator muapo3::base::UIDL(
 	sNumber Number,
-	fdr::rIODriver &Server,
+	fdr::rRWDriver &Server,
 	hBody &Body )
 {
 	eIndicator Indicator = i_Undefined;
 qRH
-	flw::sDressedIFlow<> IFlow;
-	txf::rOFlow OFlow;
+	flw::rDressedRFlow<> IFlow;
+	txf::rWFlow OFlow;
 qRB
 	IFlow.Init( Server );
 	OFlow.Init( Server );
@@ -315,12 +297,11 @@ qRB
 
 	if ( Number != 0 )
 		OFlow << Number;
-	
+
 	OFlow << NL_<< txf::commit;
 
 	if ( !( Indicator = CleanBegin_( IFlow, Number == 0 ) ).IsTrue() ) {
 		Body.Init( false, Server, false );
-		qRReturn;
 	} else
 		Body.Init( Number == 0, Server, Number == 0 );
 qRR
@@ -330,13 +311,13 @@ qRE
 }
 
 eIndicator muapo3::base::Quit(
-	fdr::rIODriver &Server,
+	fdr::rRWDriver &Server,
 	hBody &Body )
 {
 	eIndicator Indicator = i_Undefined;
 qRH
-	flw::sDressedIFlow<> IFlow;
-	txf::rOFlow OFlow;
+	flw::rDressedRFlow<> IFlow;
+	txf::rWFlow OFlow;
 qRB
 	IFlow.Init( Server );
 	OFlow.Init( Server );
@@ -344,10 +325,8 @@ qRB
 	SendCommand_( cQuit, OFlow );
 	OFlow << NL_ << txf::commit;
 
-	if ( !( Indicator = CleanBegin_( IFlow, false ) ).IsTrue() )
-		qRReturn;
-
-	Body.Init( false, Server, true );
+	if ( ( Indicator = CleanBegin_( IFlow, false ) ).IsTrue() )
+		Body.Init( false, Server, true );
 qRR
 qRT
 qRE
@@ -357,7 +336,7 @@ qRE
 bso::sBool muapo3::Authenticate(
 	const str::dString &Username,
 	const str::dString &Password,
-	fdr::rIODriver &Server,
+	fdr::rRWDriver &Server,
 	qRPN )
 {
 	bso::sBool Success = false;
@@ -376,7 +355,7 @@ qRE
 }
 
 bso::sBool muapo3::Quit(
-	fdr::rIODriver &Server,
+	fdr::rRWDriver &Server,
 	qRPN )
 {
 	bso::sBool Success = false;
@@ -393,8 +372,6 @@ qRT
 qRE
 	return Success;
 }
-
-#define H( indicator )	if ( ( indicator ) != iOK ) qRReturn
 
 namespace indexes_ {
 	namespace {
@@ -419,13 +396,13 @@ namespace indexes_ {
 		}
 
 		bso::sBool Extract_(
-			fdr::rIDriver &Driver,
+			fdr::rRDriver &Driver,
 			muabsc::cIndex &Callback )
 		{
-			bso::sBool Success = false;
+			bso::sBool Success = true;
 		qRH
-			flw::sDressedIFlow<> Flow;
-			xtf::sIFlow XFlow;
+			flw::rDressedRFlow<> Flow;
+			xtf::sRFlow XFlow;
 			txmtbl::wLine Line;
 		qRB
 			Flow.Init( Driver );
@@ -433,8 +410,10 @@ namespace indexes_ {
 
 			Line.Init();
 			while ( txmtbl::GetLine( XFlow, Line, ' ' ) ) {
-				if ( !Extract_( Line, Callback ) )
-					qRReturn;
+				if ( !Extract_( Line, Callback ) ) {
+					Success = false;
+					break;
+				}
 
 				Line.Init();
 			}
@@ -448,19 +427,15 @@ namespace indexes_ {
 	}
 
 	bso::sBool Get(
-		fdr::rIODriver &Server,
+		fdr::rRWDriver &Server,
 		muabsc::cIndex &Callback )
 	{
 		bso::sBool Success = false;
 	qRH
 		hBody Body;
 	qRB
-		H( base::List( 0, Server, true, Body ) );
-
-		if ( !Extract_( Body.GetDriver(), Callback ) )
-			qRReturn;
-
-		Success = true;
+		if ( base::List( 0, Server, true, Body ) == iOK )
+			Success = Extract_( Body.GetDriver(), Callback );
 	qRR
 	qRT
 	qRE
@@ -469,7 +444,7 @@ namespace indexes_ {
 }
 
 bso::sBool muapo3::GetIndexes(
-	fdr::rIODriver &Server,
+	fdr::rRWDriver &Server,
 	muabsc::cIndex &Callback,
 	qRPN )
 {
@@ -486,7 +461,7 @@ bso::sBool muapo3::GetIndexes(
 
 bso::sBool muapo3::GetHeader(
 	sNumber Number,
-	fdr::rIODriver &Server,
+	fdr::rRWDriver &Server,
 	hBody &Body,
 	qRPN )
 {
@@ -502,7 +477,7 @@ bso::sBool muapo3::GetHeader(
 
 bso::sBool muapo3::GetMessage(
 	sNumber Number,
-	fdr::rIODriver &Server,
+	fdr::rRWDriver &Server,
 	hBody &Body,
 	qRPN )
 {
@@ -517,7 +492,7 @@ bso::sBool muapo3::GetMessage(
 
 bso::sBool muapo3::GetMessage(
 	sNumber Number,
-	fdr::rIODriver &Server,
+	fdr::rRWDriver &Server,
 	str::dString &Message,
 	qRPN )
 {
@@ -526,14 +501,13 @@ qRH
 	hBody Body;
 	flx::rStringODriver Driver;
 qRB
-	if ( !GetMessage( Number, Server, Body, qRP ) )
-		qRReturn;
+	if ( GetMessage( Number, Server, Body, qRP ) ) {
+		Driver.Init( Message, fdr::ts_Default );
 
-	Driver.Init( Message, fdr::ts_Default );
+		fdr::Copy(Body.GetDriver(),Driver );
 
-	fdr::Copy(Body.GetDriver(),Driver );
-
-	Success = true;
+		Success = true;
+	}
 qRR
 qRT
 qRE
@@ -564,13 +538,13 @@ namespace uidl_ {
 		}
 
 		bso::sBool Extract_(
-			fdr::rIDriver &Driver,
+			fdr::rRDriver &Driver,
 			cUIDL &Callback )
 		{
-			bso::sBool Success = false;
+			bso::sBool Success = true;
 		qRH
-			flw::sDressedIFlow<> Flow;
-			xtf::sIFlow XFlow;
+			flw::rDressedRFlow<> Flow;
+			xtf::sRFlow XFlow;
 			txmtbl::wLine Line;
 		qRB
 			Flow.Init( Driver );
@@ -578,13 +552,13 @@ namespace uidl_ {
 
 			Line.Init();
 			while ( txmtbl::GetLine( XFlow, Line, ' ' ) ) {
-				if ( !Extract_( Line, Callback ) )
-					qRReturn;
+				if ( !Extract_( Line, Callback ) ) {
+					Success = false;
+					break;
+				}
 
 				Line.Init();
 			}
-
-			Success = true;
 		qRR
 		qRT
 		qRE
@@ -593,19 +567,15 @@ namespace uidl_ {
 	}
 
 	bso::sBool Get(
-		fdr::rIODriver &Server,
+		fdr::rRWDriver &Server,
 		cUIDL &Callback )
 	{
 		bso::sBool Success = false;
 	qRH
 		hBody Body;
 	qRB
-		H( base::UIDL( 0, Server, Body ) );
-
-		if ( !Extract_( Body.GetDriver(), Callback ) )
-			qRReturn;
-
-		Success = true;
+		if ( base::UIDL( 0, Server, Body ) == iOK )
+			Success = Extract_( Body.GetDriver(), Callback );
 	qRR
 	qRT
 	qRE
@@ -614,7 +584,7 @@ namespace uidl_ {
 }
 
 bso::sBool muapo3::GetUIDLs(
-	fdr::rIODriver &Server,
+	fdr::rRWDriver &Server,
 	cUIDL &Callback,
 	qRPN )
 {
@@ -640,11 +610,12 @@ namespace get_number_for_uidl_{
 			sNumber Number,
 			const str::dString &UIDL ) override
 		{
-			if ( UIDL == UIDL_ )
+			if ( UIDL == UIDL_ ) {
 				if ( this->Number == 0 )
 					this->Number = Number;
 				else
 					qRGnr();
+			}
 		}
 	public:
 		sNumber Number;
@@ -664,7 +635,7 @@ namespace get_number_for_uidl_{
 
 sNumber muapo3::GetNumberForUIDL(
 	const dUIDL &UIDL,
-	fdr::rIODriver &Server )
+	fdr::rRWDriver &Server )
 {
 	sNumber Number = 0;
 qRH

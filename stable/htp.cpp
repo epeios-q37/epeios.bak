@@ -131,12 +131,12 @@ namespace {
 
 		if ( P != qNIL ) {
 			P = RawHeader.Next( P, FieldName.Amount() );
-		
+
 			while ( ( P != qNIL ) && ( RawHeader( P ) != NL[0] ) ) {
 				Value.Append( RawHeader( P ) );
 				P = RawHeader.Next( P );
 			}
-		
+
 			if ( P == qNIL )
 				qRFwk();
 
@@ -172,7 +172,6 @@ qRH
 	str::string
 		RawHeader,
 		Value;
-	const char *Label = NULL;
 qRB
 	RawHeader.Init();
 
@@ -189,14 +188,13 @@ qRB
 	} else if ( GetValue_(RawHeader, fTransferEncoding, Value) ) {
 		if (  Value != "chunked" )
 			qRFwk();
-		
+
 		ChunkFlow_.Init( Flow );
 
 		Flow_.Init( ChunkFlow_ );
-	}
-	else {
+	} else {
 		Flow.Dismiss();
-		Flow_.Init( Flow.IDriver() );
+		Flow_.Init( Flow.RDriver() );
 	}
 qRR
 qRT
@@ -307,7 +305,7 @@ static inline void Write_(
 }
 
 #define C( name )	case m##name : return #name; break
- 
+
 const char *htp::GetLabel( eMethod Method )
 {
 	switch ( Method ) {
@@ -319,27 +317,27 @@ const char *htp::GetLabel( eMethod Method )
 		qRFwk();
 		break;
 	}
- 
+
 	return NULL;	// To avoid a warning.
 }
- 
+
 #undef C
- 
+
 namespace {
 	stsfsm::wAutomat MethodAutomat_;
- 
+
 	void FillMethodAutomat_( void )
 	{
 		MethodAutomat_.Init();
 		stsfsm::Fill<eMethod>( MethodAutomat_, m_amount, GetLabel );
 	}
 }
- 
+
 eMethod htp::GetMethod( const str::dString &Pattern )
 {
 	return stsfsm::GetId( Pattern, MethodAutomat_, m_Undefined, m_amount );
 }
- 
+
 void htp::Send(
 	eMethod Method,
 	const str::string_ &URL,

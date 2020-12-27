@@ -76,7 +76,7 @@ const str::dString &muabsc::GetNextIMAPTag( str::dString &Tag )
 
 void muabsc::Dump(
 	const dIndexes &Indexes,
-	txf::sOFlow &Flow )
+	txf::sWFlow &Flow )
 {
 	sdr::sRow Row = Indexes.First();
 

@@ -107,7 +107,7 @@ rooms = {
   }
 }
 
-# rooms = {}
+rooms = {}
 
 def get_rooms():
   xml = atlastk.create_XML("Rooms")
@@ -160,7 +160,7 @@ def ac_qrcode(session,dom,id):
 
   if mark:
     url = atlastk.get_app_url(mark)
-    dom.inner(dom.last_child(id), f'<a href="{url}" target="_blank"><img src="https://api.qrserver.com/v1/create-qr-code/?size=125x125&data={url}"/></a>')
+    dom.inner(dom.last_child(id), f'<a href="{url}" title="{url}" target="_blank"><img src="https://api.qrserver.com/v1/create-qr-code/?size=125x125&data={url}"/></a>')
     dom.set_mark(id,"")
 
 def ac_submit_pseudo(session,dom):

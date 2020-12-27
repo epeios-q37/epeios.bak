@@ -118,7 +118,7 @@ namespace muaima {
 		}
 		qCDTOR( rSession );
 		eStatus Init(
-			fdr::rIODriver &Driver,
+			fdr::rRWDriver &Driver,
 			const str::dString &Username,
 			const str::dString &Password,
 			str::dString *Message = NULL,
@@ -153,7 +153,7 @@ namespace muaima {
 			return Status;
 		}
 		eStatus Init(
-			fdr::rIODriver &Driver,
+			fdr::rRWDriver &Driver,
 			const str::dString &Username,
 			const str::dString &Password,
 			str::dString &Message,
@@ -291,7 +291,7 @@ namespace muaima {
 		friend rSession;
 	};
 
-	class rFetch_	
+	class rFetch_
 	: public rBase_
 	{
 	private:
@@ -332,7 +332,7 @@ namespace muaima {
 
 			// Other members will be initilaized as needed.
 		}
-		fdr::rIDriver &GetDriver( void )
+		fdr::rRDriver &GetDriver( void )
 		{
 			return Content_;
 		}

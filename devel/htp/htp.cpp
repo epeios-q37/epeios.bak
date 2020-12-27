@@ -172,7 +172,6 @@ qRH
 	str::string
 		RawHeader,
 		Value;
-	const char *Label = NULL;
 qRB
 	RawHeader.Init();
 
@@ -195,7 +194,7 @@ qRB
 		Flow_.Init( ChunkFlow_ );
 	} else {
 		Flow.Dismiss();
-		Flow_.Init( Flow.IDriver() );
+		Flow_.Init( Flow.RDriver() );
 	}
 qRR
 qRT

@@ -104,7 +104,7 @@ namespace item_ {
 	}
 
 	void GetName(
-		flw::sIFlow &Flow,
+		flw::rRFlow &Flow,
 		str::dString &Name )
 	{
 		flw::sByte Byte = 0;
@@ -145,7 +145,6 @@ eStatus muaima::rSession::PurgeResponses_(
 	str::dString *Message,
 	qRPN )
 {
-	eResponseCode Code = rc_Undefined;
 	eStatus Status = s_Undefined;
 
 	Console_.SkipRemainingReponses();
@@ -178,7 +177,7 @@ eStatus muaima::rSession::Connect_(
 
 namespace {
 	void Get_(
-		flw::sIFlow &Flow,
+		flw::rRFlow &Flow,
 		bso::sByte Separator,
 		str::dString &Value )
 	{
@@ -189,11 +188,11 @@ namespace {
 	}
 
 	void Get_(
-		fdr::rIDriver &Driver,
+		fdr::rRDriver &Driver,
 		str::dString &Value )
 	{
 	qRH
-		flw::sDressedIFlow<> Flow;
+		flw::rDressedRFlow<> Flow;
 	qRB
 		Flow.Init( Driver );
 
@@ -205,15 +204,13 @@ namespace {
 	}
 }
 
-namespace list_lsub_answer_  {	
+namespace list_lsub_answer_  {
 	void Get(
-		flw::sIFlow &Flow,
+		flw::rRFlow &Flow,
 		str::dString &Attributes,
 		str::dString &Delimiter,
 		str::dString &Name )
 	{
-		flw::sByte Byte = 0;
-
 		if ( Flow.Get() != '(' )
 			qRGnr();
 
@@ -240,7 +237,7 @@ namespace list_lsub_answer_  {
 	}
 
 	void Get(
-		fdr::rIDriver &Driver,
+		fdr::rRDriver &Driver,
 		str::dString &Attributes,
 		bso::sByte &Delimiter,
 		str::dString &Name )
@@ -315,15 +312,15 @@ namespace common_ {
 		if ( AppendDelimiter )
 			if ( ( Name.Amount() != 0) && ( Name( Name.Last() ) != '/' ) )
 				Name.Append('/' );
-	
+
 		Name.Replace( '/', Delimiter );
 	}
 
-	bso::sUInt GetNumber( fdr::rIDriver &Driver )
+	bso::sUInt GetNumber( fdr::rRDriver &Driver )
 	{
 		bso::sUInt Result = 0;
 	qRH
-		flw::sDressedIFlow<> Flow;
+		flw::rDressedRFlow<> Flow;
 		bso::sByte Byte = 0;
 	qRB
 		Flow.Init( Driver );
@@ -344,11 +341,11 @@ namespace common_ {
 	}
 
 	void GetString(
-		fdr::rIDriver &Driver,
+		fdr::rRDriver &Driver,
 		str::dString &String )
 	{
 	qRH
-		flw::sDressedIFlow<> Flow;
+		flw::rDressedRFlow<> Flow;
 	qRB
 		Flow.Init( Driver );
 
@@ -421,7 +418,7 @@ qRE
 }
 
 namespace fetch_ {
-	bso::sUInt GetSequence( fdr::rIDriver &Driver )
+	bso::sUInt GetSequence( fdr::rRDriver &Driver )
 	{
 		bso::sUInt Sequence = 0;
 	qRH
@@ -437,7 +434,7 @@ namespace fetch_ {
 
 	void SearchValue(
 		item::eName WantedItemName,
-		fdr::rIDriver &Driver )
+		fdr::rRDriver &Driver )
 	{
 	qRH
 		str::wString ItemName;
@@ -490,7 +487,7 @@ bso::sBool muaima::rSession::GetFetchItem_(
 qRH
 	str::wString Folder;
 	eResponseCode Code = rc_None;
-	bso::bInteger Buffer;
+	bso::pInteger Buffer;
 	eStatus Status = s_Undefined;
 qRB
 	Folder.Init( RawFolder );
@@ -556,7 +553,6 @@ bso::sBool muaima::rSession::GetMailAmount(
 qRH
 	str::wString Folder;
 	eResponseCode Code = rc_None;
-	eStatus Status = s_Undefined;
 	rResponseDriver_ Driver;
 qRB
 	Folder.Init( RawFolder );
@@ -623,7 +619,7 @@ bso::sBool muaima::rSession::GetUID(
 {
 	return GetFetchItem_( item::nUID, muaima::fRegular, Folder, Number, UID, qRP );
 }
-	
+
 namespace {
 	void FillAutomats_( void )
 	{

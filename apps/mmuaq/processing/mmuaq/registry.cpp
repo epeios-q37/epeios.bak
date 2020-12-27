@@ -22,14 +22,14 @@
 using namespace registry;
 
 namespace {
-	rEntry POP3_("POP3", sclrgstry::Parameters );
+	rEntry POP3_("POP3", sclr::Parameters );
 }
 rEntry registry::parameter::pop3::HostPort("@HostPort", POP3_ );
 rEntry registry::parameter::pop3::Username("Username", POP3_ );
 rEntry registry::parameter::pop3::Password("Password", POP3_ );
 
 namespace {
-	rEntry IMAP_("IMAP", sclrgstry::Parameters );
+	rEntry IMAP_("IMAP", sclr::Parameters );
 }
 
 rEntry registry::parameter::imap::HostPort("@HostPort", IMAP_ );
@@ -42,12 +42,12 @@ rEntry registry::parameter::imap::Items("Items", IMAP_ );
 rEntry registry::parameter::imap::Folder("Folder", IMAP_ );
 rEntry registry::parameter::imap::UID("UID", IMAP_ );
 
-rEntry registry::parameter::Input("Input", sclrgstry::Parameters );
-rEntry registry::parameter::Output("Output", sclrgstry::Parameters );
-rEntry registry::parameter::MailID("MailID", sclrgstry::Parameters );
-rEntry registry::parameter::Lines("Lines", sclrgstry::Parameters );
-rEntry registry::parameter::Verbose("Verbose", sclrgstry::Parameters );
-rEntry registry::parameter::FieldName("FieldName", sclrgstry::Parameters );
-rEntry registry::parameter::Tag("Tag", sclrgstry::Parameters );
+rEntry registry::parameter::Input("Input", sclr::Parameters );
+rEntry registry::parameter::Output("Output", sclr::Parameters );
+rEntry registry::parameter::MailID("MailID", sclr::Parameters );
+rEntry registry::parameter::Lines("Lines", sclr::Parameters );
+rEntry registry::parameter::Verbose("Verbose", sclr::Parameters );
+rEntry registry::parameter::FieldName("FieldName", sclr::Parameters );
+rEntry registry::parameter::Tag("Tag", sclr::Parameters );
 
 

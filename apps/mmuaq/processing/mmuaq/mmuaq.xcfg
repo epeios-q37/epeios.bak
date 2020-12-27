@@ -3,7 +3,7 @@
  <Configuration target="mmuaq">
   <xpp:set name="q37.xpp" env-var="Q37_XPP"/>
   <xpp:expand value-of="q37.xpp"/>
-  <xpp:expand href="../../../../TOL.xcfg"/>
+  <xpp:expand href="../../../../CLI.xcfg"/>
   <Parameters Setup="Prod">
    <Language>en</Language>
    <!-- Default command -->
@@ -17,7 +17,7 @@
   <Definitions>
   </Definitions>
   <Locale>
-   <xpp:expand select="TOL_Locale"/>
+   <xpp:expand select="CLI_Locale"/>
    <!--          -->
    <!-- Commands -->
    <!--          -->
@@ -220,7 +220,7 @@
    </Translations>
   </Locale>
   <Arguments>
-   <xpp:expand select="TOL_Arguments"/>
+   <xpp:expand select="CLI_Arguments"/>
    <!-- Commandes : pas de 'Path' (vaut 'Parameters/Command'), ni de 'Value'. -->
    <Argument id="B64EncodeCommand" Description="B64EncodeCommandDescription" long="b64-encode" Value="B64Encode" Usage="[%InputArgument% [%OutputArgument%]]"/>
    <Argument id="B64DecodeCommand" Description="B64DecodeCommandDescription" long="b64-decode" Value="B64Decode" Usage="[%InputArgument% [%OutputArgument%]]"/>

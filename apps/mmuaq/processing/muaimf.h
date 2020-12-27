@@ -137,7 +137,7 @@ namespace muaimf {
 		}
 		const str::dString &GetName(
 			sFRow Row,
-			str::dString &Value ) const 
+			str::dString &Value ) const
 		{
 			Strings.Recall( Fields( Row ).Name, Value );
 
@@ -145,7 +145,7 @@ namespace muaimf {
 		}
 		const str::dString &GetBody(
 			sFRow Row,
-			str::dString &Value ) const 
+			str::dString &Value ) const
 		{
 			Strings.Recall( Fields( Row ).Body, Value );
 
@@ -161,24 +161,24 @@ namespace muaimf {
 
 	const str::dString &GetField(
 		eField Field,
-		fdr::rIDriver &Driver,
+		fdr::rRDriver &Driver,
 		str::dString &Body );
 
 	void Fill(
-		flw::sIFlow &Flow,
+		flw::rRFlow &Flow,
 		dFields &Fields );
 
 	void Fill(
-		fdr::rIDriver &Driver,
+		fdr::rRDriver &Driver,
 		dFields &Fields );
 
 	void Dump(
 		const dFields &Fields,
-		txf::rOFlow Flow );
+		txf::rWFlow Flow );
 
 	void Dump(
 		const dFields &Fields,
-		fdr::rODriver &Driver );
+		fdr::rWDriver &Driver );
 }
 
 

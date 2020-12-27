@@ -24,7 +24,7 @@
 using namespace muaimf;
 
 #define C( name )	case f##name : return #name; break
- 
+
 const char *muaimf::GetLabel( eField Field )
 {
 	switch ( Field ) {
@@ -37,15 +37,15 @@ const char *muaimf::GetLabel( eField Field )
 		qRFwk();
 		break;
 	}
- 
+
 	return NULL;	// To avoid a warning.
 }
- 
+
 #undef C
 
 namespace {
 	stsfsm::wAutomat FieldLabelAutomat_;
- 
+
 	void FillFieldLabelAutomat_( void )
 	{
 		FieldLabelAutomat_.Init();
@@ -64,8 +64,8 @@ namespace  {
 
 namespace {
 	inline void ConvertToWording_(
-		flw::sIFlow &IFlow,
-		flw::sOFlow &OFlow)
+		flw::rRFlow &IFlow,
+		flw::rWFlow &OFlow)
 	{
 		sByte_ Byte;
 		bso::sBool First = true;
@@ -84,7 +84,7 @@ namespace {
 	}
 
 	inline void ConvertToWording_(
-		flw::sIFlow &IFlow,
+		flw::rRFlow &IFlow,
 		str::dString &Wording )
 	{
 	qRH
@@ -99,10 +99,10 @@ namespace {
 
 	inline const char *ConvertToWording_( const char *Label )
 	{
-		static qCBUFFERr Buffer;
+		static qCBUFFERh Buffer;
 	qRH
 		flx::sStringIFlow Flow;
-		str::wString 
+		str::wString
 			LabelAsString,
 			Wording;
 	qRB
@@ -132,7 +132,7 @@ namespace {
 	// Not thhread-safe.
 	const char *GetUppercaseWording_( eField Field )
 	{
-		static qCBUFFERr Buffer;
+		static qCBUFFERh Buffer;
 	qRH
 		str::wString Wording;
 	qRB
@@ -146,7 +146,7 @@ namespace {
 	qRE
 		return Buffer;
 	}
- 
+
 	void FillFieldWordingAutomat_( void )
 	{
 		FieldWordingAutomat_.Init();
@@ -224,7 +224,7 @@ qRE
 	return Row;
 }
 
- 
+
 namespace {
 	qCDEF( char, CR_, '\r' ) ;
 	qCDEF( char, LF_, '\n' ) ;
@@ -238,7 +238,7 @@ namespace {
 
 	// If returns 'false', there is no more header.
 	bso::sBool GetField_(
-		flw::sIFlow &Flow,
+		flw::rRFlow &Flow,
 		str::dString &Name,
 		str::dString &Body )
 	{
@@ -320,7 +320,7 @@ namespace {
 
 const str::dString &muaimf::GetField(
 	eField Field,
-	fdr::rIDriver &Driver,
+	fdr::rRDriver &Driver,
 	str::dString &Body )
 {
 qRH
@@ -343,7 +343,7 @@ qRE
 }
 
 void muaimf::Fill(
-	flw::sIFlow &Flow,
+	flw::rRFlow &Flow,
 	dFields &Fields )
 {
 qRH
@@ -364,11 +364,11 @@ qRE
 }
 
 void muaimf::Fill(
-	fdr::rIDriver &Driver,
+	fdr::rRDriver &Driver,
 	dFields &Fields )
 {
 qRH
-	flw::sDressedIFlow<> Flow;
+	flw::rDressedRFlow<> Flow;
 qRB
 	Flow.Init( Driver );
 
@@ -380,7 +380,7 @@ qRE
 
 void muaimf::Dump(
 	const dFields &Fields,
-	txf::rOFlow Flow )
+	txf::rWFlow Flow )
 {
 qRH
 	sFRow Row = qNIL;
@@ -409,10 +409,10 @@ qRE
 
 void muaimf::Dump(
 	const dFields &Fields,
-	fdr::rODriver &Driver )
+	fdr::rWDriver &Driver )
 {
 qRH
-	txf::rOFlow Flow;
+	txf::rWFlow Flow;
 qRB
 	Flow.Init( Driver );
 

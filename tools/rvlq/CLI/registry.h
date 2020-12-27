@@ -36,8 +36,7 @@ namespace registry {
 			Delimiter,
 			CommentMarker,
 			TextMarker,
-			FileMarker,
-			;
+			FileMarker;
 	}
 
 	namespace definition {

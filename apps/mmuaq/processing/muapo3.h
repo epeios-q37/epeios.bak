@@ -32,7 +32,7 @@
 # include "lstcrt.h"
 
 namespace muapo3 {
-	typedef fdr::rIDressedDriver rIDressedDriver_;
+	typedef fdr::rRDressedDriver rRDressedDriver_;
 
 	// For a given state, the next state can only be 's_Regular', or the immediatly following one (except for the last one).
 	qENUM( State_ ) {
@@ -52,12 +52,12 @@ namespace muapo3 {
 	qCDEF( bso::sU8, CR_, 13 );
 	qCDEF( bso::sU8, Dot_, 46 );
 
-	class rSequenceDelimitedIDriver_
-	: public rIDressedDriver_
+	class rSequenceDelimitedRDriver_
+	: public rRDressedDriver_
 	{
 	private:
 		eState_ State_;
-		flw::sDressedIFlow<> Flow_;
+		flw::rDressedRFlow<> Flow_;
 		bso::sBool MultiLine_;
 		fdr::sByte StateSize_( void ) const
 		{
@@ -179,12 +179,12 @@ namespace muapo3 {
 					C = Flow_.Get();
 
 				if ( !HandleState_( C ) ) {	// No (more) potential termination sequence detected.
-					if ( State_ == sRegular ) {	
+					if ( State_ == sRegular ) {
 						Buffer[Amount++] = C;
 					} else { // A potential termination sequence was detected.
 						Amount += DumpState_( Buffer + Amount );
 
-						if ( State_ != sDot )	// If we are in the dot part of the termination sequence, the dot is skipped, 
+						if ( State_ != sDot )	// If we are in the dot part of the termination sequence, the dot is skipped,
 							HandleAgain = true;
 
 						State_ = sRegular;
@@ -197,30 +197,32 @@ namespace muapo3 {
 
 			return Amount;
 		}
-		virtual void FDRDismiss( bso::sBool Unlock ) override
+		virtual bso::sBool FDRDismiss(
+			bso::sBool Unlock,
+			qRPN) override
 		{
-			Flow_.Dismiss( Unlock );
+			return Flow_.Dismiss(Unlock, qRP);
 		}
-		virtual fdr::sTID FDRITake( fdr::sTID Owner ) override
+		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
 		{
-			return Flow_.IDriver().ITake( Owner );
+			return Flow_.RDriver().RTake( Owner );
 		}
 	public:
 		void reset( bso::sBool P = true )
 		{
-			rIDressedDriver_::reset( P );
+			rRDressedDriver_::reset( P );
 			tol::reset( P, Flow_ );
 			State_ = s_Undefined;
 			MultiLine_ = false;
 		}
-		qCVDTOR( rSequenceDelimitedIDriver_ );
+		qCVDTOR( rSequenceDelimitedRDriver_ );
 		void Init(
 			bso::sBool EOL,
-			fdr::rIDriver &Driver,
+			fdr::rRDriver &Driver,
 			bso::sBool MultiLine,
 			fdr::thread_safety__ ThreadSafety )
 		{
-			rIDressedDriver_::Init( ThreadSafety );
+			rRDressedDriver_::Init( ThreadSafety );
 			Flow_.Init( Driver );
 			MultiLine_ = MultiLine;
 			if ( EOL  )
@@ -233,7 +235,7 @@ namespace muapo3 {
 	class hBody
 	{
 	private:
-		rSequenceDelimitedIDriver_ Driver_;
+		rSequenceDelimitedRDriver_ Driver_;
 	public:
 		void reset( bso::sBool P = true )
 		{
@@ -242,12 +244,12 @@ namespace muapo3 {
 		qCDTOR( hBody );
 		void Init(
 			bso::sBool EOL,
-			fdr::rIDriver &Driver,
+			fdr::rRDriver &Driver,
 			bso::sBool Multiline )
 		{
 			Driver_.Init( EOL, Driver, Multiline, fdr::ts_Default );
 		}
-		fdr::rIDriver &GetDriver( void )
+		fdr::rRDriver &GetDriver( void )
 		{
 			return Driver_;
 		}
@@ -268,40 +270,40 @@ namespace muapo3 {
 		};
 
 		qXENUM( Indicator, i );
-		
+
 		// To launch before any of the operation below. Eats the message sent on connection.
 		eIndicator Authenticate(
 			const str::dString &Username,
 			const str::dString &Password,
-			fdr::rIODriver &Server,
+			fdr::rRWDriver &Server,
 			hBody & Body );
 
 		eIndicator List(
 			sNumber Number,
-			fdr::rIODriver &Server,
+			fdr::rRWDriver &Server,
 			bso::sBool SkipAnswer,
 			hBody & Body );
 
 		eIndicator Retrieve(
 			sNumber Number,
-			fdr::rIODriver &Server,
+			fdr::rRWDriver &Server,
 			bso::sBool SkipAnswer,
 			hBody & Body );
 
 		eIndicator Top(
 			sNumber Number,
 			bso::sUInt AmoutOfLine,
-			fdr::rIODriver &Server,
+			fdr::rRWDriver &Server,
 			bso::sBool SkipAnswer,
 			hBody & Body );
 
 		eIndicator UIDL(
 			sNumber Number,	// If == 0, give all the messages.
-			fdr::rIODriver &Server,
+			fdr::rRWDriver &Server,
 			hBody & Body );
 
 		eIndicator Quit(
-			fdr::rIODriver &Server,
+			fdr::rRWDriver &Server,
 			hBody & Body );
 	}
 
@@ -314,20 +316,20 @@ namespace muapo3 {
 	bso::sBool Authenticate(
 		const str::dString &Username,
 		const str::dString &Password,
-		fdr::rIODriver &Server,
+		fdr::rRWDriver &Server,
 		qRPD );
 
 	bso::sBool Quit(
-		fdr::rIODriver &Server,
+		fdr::rRWDriver &Server,
 		qRPD );
 
 	bso::sBool GetIndexes(
-		fdr::rIODriver &Server,
+		fdr::rRWDriver &Server,
 		muabsc::cIndex &Callback,
 		qRPD );
 
 	inline bso::sBool GetIndexes(
-		fdr::rIODriver &Server,
+		fdr::rRWDriver &Server,
 		muabsc::dIndexes &Indexes,
 		qRPD )
 	{
@@ -340,20 +342,20 @@ namespace muapo3 {
 
 	bso::sBool GetHeader(
 		sNumber Number,
-		fdr::rIODriver &Server,
+		fdr::rRWDriver &Server,
 		hBody &Body,
 		qRPD );
 
 
 	bso::sBool GetMessage(
 		sNumber Number,
-		fdr::rIODriver &Server,
+		fdr::rRWDriver &Server,
 		hBody &Body,
 		qRPD );
 
 	bso::sBool GetMessage(
 		sNumber Number,
-		fdr::rIODriver &Server,
+		fdr::rRWDriver &Server,
 		str::dString &Body,
 		qRPD );
 
@@ -376,7 +378,7 @@ namespace muapo3 {
 	};
 
 	bso::sBool GetUIDLs(
-		fdr::rIODriver &Server,
+		fdr::rRWDriver &Server,
 		cUIDL &Callback,
 		qRPD );
 
@@ -414,7 +416,7 @@ namespace muapo3 {
 	};
 
 	inline bso::sBool GetUIDLs(
-		fdr::rIODriver &Server,
+		fdr::rRWDriver &Server,
 		dNumbers &Numbers,
 		dUIDLs &UIDLs,
 		qRPD )
@@ -429,7 +431,7 @@ namespace muapo3 {
 	// If 0 is retuned, no corresponding message found.
 	sNumber GetNumberForUIDL(
 		const dUIDL &UIDL,
-		fdr::rIODriver &Server );
+		fdr::rRWDriver &Server );
 }
 
 

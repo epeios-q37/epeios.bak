@@ -16,6 +16,7 @@
     You should have received a copy of the GNU Affero General Public License
     along with 'MMUAq'.  If not, see <http://www.gnu.org/licenses/>.
 */
+#include "mmuaq.h"
 
 #include "imap.h"
 #include "misc.h"
@@ -26,8 +27,9 @@
 #include "muaimf.h"
 #include "muapo3.h"
 
-#include "scltool.h"
-#include "sclerror.h"
+#include "sclt.h"
+#include "scle.h"
+#include "sclm.h"
 
 #include "err.h"
 #include "cio.h"
@@ -41,15 +43,12 @@ using cio::CErr;
 using cio::COut;
 using cio::CIn;
 
-# define NAME_MC			"MMUAq"
-# define NAME_LC			"mmuaq"
-# define NAME_UC			"MMUAQ"
-# define WEBSITE_URL		"http://q37.info"
-# define AUTHOR_NAME		"Claude SIMON"
-# define AUTHOR_CONTACT		"http://q37.info/contact/"
-# define OWNER_NAME			"Claude SIMON"
-# define OWNER_CONTACT		"http://q37.info/contact/"
-# define COPYRIGHT			COPYRIGHT_YEARS " " OWNER_NAME " (" OWNER_CONTACT ")"	
+SCLI_DEF( mmuaq, NAME_LC, NAME_MC );
+
+const scli::sInfo &sclt::SCLTInfo( void )
+{
+	return mmuaq::Info;
+}
 
 namespace {
 	void PrintHeader_( void )
@@ -68,15 +67,15 @@ namespace {
 	{
 	qRH
 		str::wString Input, Output;
-		sclmisc::rIDriverRack IRack;
-		sclmisc::rODriverRack ORack;
+		sclm::rRDriverRack IRack;
+		sclm::rWDriverRack ORack;
 		cdgb64::rEncodingODriver Encoder;
 	qRB
 		Input.Init();
-		sclmisc::OGetValue( registry::parameter::Input, Input );
+		sclm::OGetValue( registry::parameter::Input, Input );
 
 		Output.Init();
-		sclmisc::OGetValue( registry::parameter::Output, Output );
+		sclm::OGetValue( registry::parameter::Output, Output );
 
 		Encoder.Init( ORack.Init( Output ), cdgb64::fOriginal );
 		fdr::Copy( IRack.Init( Input ), Encoder );
@@ -91,15 +90,15 @@ namespace {
 	{
 	qRH
 		str::wString Input, Output;
-		sclmisc::rIDriverRack IRack;
-		sclmisc::rODriverRack ORack;
+		sclm::rRDriverRack IRack;
+		sclm::rWDriverRack ORack;
 		cdgb64::rDecodingIDriver Decoder;
 	qRB
 		Input.Init();
-		sclmisc::OGetValue( registry::parameter::Input, Input );
+		sclm::OGetValue( registry::parameter::Input, Input );
 
 		Output.Init();
-		sclmisc::OGetValue( registry::parameter::Output, Output );
+		sclm::OGetValue( registry::parameter::Output, Output );
 
 		Decoder.Init( IRack.Init( Input ) );
 		fdr::Copy( Decoder, ORack.Init( Output ) );
@@ -156,7 +155,7 @@ namespace {
 		return imap::Fetch();
 	}
 
-	// High-level IMAP commands 
+	// High-level IMAP commands
 	void IMAPFolders_( void )
 	{
 		return imap::Folders();
@@ -201,8 +200,8 @@ namespace {
 		str::wString Tag;
 	qRB
 		Tag.Init();
-		
-		sclmisc::OGetValue( registry::parameter::Tag, Tag  );
+
+		sclm::OGetValue( registry::parameter::Tag, Tag  );
 
 		cio::COut << muabsc::GetNextIMAPTag( Tag ) << txf::nl;
 	qRR
@@ -213,7 +212,7 @@ namespace {
 	void GetIndexes_( void )
 	{
 	qRH
-		csdbnc::rIODriver Server;	
+		csdbnc::rIODriver Server;
 		muabsc::wIndexes Indexes;
 	qRB
 		if ( !pop3_::InitAndAuthenticate( Server ) )
@@ -233,11 +232,11 @@ namespace {
 		void GetHeader_( muaimf::dHeader &Header )
 		{
 		qRH
-			sclmisc::rIDriverRack IRack;
+			sclm::rRDriverRack IRack;
 			str::wString Input;
 		qRB
 			Input.Init();
-			sclmisc::OGetValue( registry::parameter::Input, Input );
+			sclm::OGetValue( registry::parameter::Input, Input );
 
 			muaimf::Fill( IRack.Init( Input ), Header );
 		qRR
@@ -250,7 +249,7 @@ namespace {
 	void ShowHeader_( void )
 	{
 	qRH
-		sclmisc::rODriverRack ORack;
+		sclm::rWDriverRack ORack;
 		str::wString Output;
 		muaimf::wHeader Header;
 	qRB
@@ -258,7 +257,7 @@ namespace {
 		GetHeader_( Header );
 
 		Output.Init();
-		sclmisc::OGetValue( registry::parameter::Output, Output );
+		sclm::OGetValue( registry::parameter::Output, Output );
 
 		muaimf::Dump( Header, ORack.Init( Output ) );
 	qRR
@@ -271,12 +270,12 @@ namespace {
 		void Dump_(
 			muaimf::dFRows &Rows,
 			const muaimf::dHeader &Header,
-			txf::sOFlow &Flow )
+			txf::sWFlow &Flow )
 		{
 		qRH
 			str::wString Value;
 			sdr::sRow Row = qNIL;
-		qRB	
+		qRB
 			Row = Rows.First();
 
 			while ( Row != qNIL ) {
@@ -294,7 +293,7 @@ namespace {
 			const str::dString &FieldName,
 			muaimf::dFRows &Rows,
 			const muaimf::dHeader &Header,
-			txf::sOFlow &Flow )
+			txf::sWFlow &Flow )
 		{
 		qRH
 			str::wString Translation;
@@ -303,7 +302,7 @@ namespace {
 			switch ( Header.Amount() ) {
 			case 0:
 				Translation.Init();
-				sclmisc::GetBaseTranslation( "NoSuchField", Translation, FieldName );
+				sclm::GetBaseTranslation( "NoSuchField", Translation, FieldName );
 
 				Flow << Translation << txf::nl;
 				break;
@@ -328,28 +327,27 @@ namespace {
 		muaimf::wHeader Header;
 		str::wString FieldName;
 		muaimf::eField Field;
-		muaimf::sFRow FieldRow = qNIL;
 		muaimf::wFRows FieldRows;
 		str::wString Output;
-		sclmisc::rTextOFlowRack Rack;
+		sclm::rTextWFlowRack Rack;
 	qRB
 		Header.Init();
 		GetHeader_( Header );
 
 		FieldName.Init();
-		sclmisc::MGetValue( registry::parameter::FieldName, FieldName );
+		sclm::MGetValue( registry::parameter::FieldName, FieldName );
 
 		Field = muaimf::GetField( FieldName );
 
 		if ( Field == muaimf::f_Undefined )
-			sclmisc::ReportAndAbort( misc::message::UnknownField, FieldName );
+			sclm::ReportAndAbort( misc::message::UnknownField, FieldName );
 
 		FieldRows.Init();
 
 		Header.Search( Field, FieldRows );
 
 		Output.Init();
-		sclmisc::OGetValue( registry::parameter::Output, Output );
+		sclm::OGetValue( registry::parameter::Output, Output );
 
 		Dump_( FieldName, FieldRows, Header, Rack.Init( Output ) );
 	qRR
@@ -363,9 +361,9 @@ namespace {
 	else if ( Command == #name )\
 		name##_()
 
-int scltool::SCLTOOLMain(
+int sclt::SCLTMain(
 	const str::dString &Command,
-	const scltool::fOddities &Oddities )
+	const sclt::fOddities &Oddities )
 {
 	int ExitValue = EXIT_FAILURE;
 qRH
@@ -407,7 +405,3 @@ qRT
 qRE
 	return ExitValue;
 }
-
-const char *sclmisc::SCLMISCTargetName = NAME_LC;
-const char *sclmisc::SCLMISCProductName = NAME_MC;
-

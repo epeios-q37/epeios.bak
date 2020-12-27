@@ -9,7 +9,9 @@
 			<legend>Rooms</legend>
 			<details>
 				<summary>Help</summary>
-				<span>Here are displayed the existing rooms.<br/>Click on a label, or scan the QR Code.</span>
+				<fieldset>
+				Here are displayed the existing rooms.<br/>Click on a label, or scan the QR Code.
+				</fieldset>
 			</details>
 			<xsl:apply-templates select="Room"/>
 		</fieldset>

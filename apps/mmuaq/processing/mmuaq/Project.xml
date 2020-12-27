@@ -1,17 +1,18 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Project xmlns:xpp="http://q37.info/ns/xpp/">
- <xpp:bloc>
-  <!-- User definitions -->
-  <xpp:define name="Version">
-   <xpp:bloc>(Obsolete ; generated automatically)</xpp:bloc>
-  </xpp:define>
-  <xpp:define name="CopyrightYears">
-   <xpp:bloc>2016-2017</xpp:bloc>
-  </xpp:define>
-  <xpp:set name="Credits" value="Epeios"/>
-  <xpp:set name="Type" value="Tool"/>
- </xpp:bloc>
- <xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
+	<xpp:bloc>
+		<!-- User definitions -->
+		<xpp:define name="Version">
+			<xpp:bloc></xpp:bloc>
+		</xpp:define>
+		<xpp:define name="CopyrightYears">
+			<xpp:bloc>2016</xpp:bloc>
+		</xpp:define>
+		<xpp:set name="Credits" value="Epeios"/>
+		<xpp:set name="Type" value="Tool"/>
+	</xpp:bloc>
+	<xpp:set name="q37.project" env-var="Q37_PROJECT"/>
+	<xpp:expand value-of="q37.project"/>
  <About>
   <Program>mmuaq</Program>
   <Software>MMUAq</Software>
