@@ -1,6 +1,6 @@
 <?php
 /*
-Copyright (C) 2015 Claude SIMON (http://q37.info/contact/).
+Copyright (C) 2020 Claude SIMON (http://q37.info/contact/).
 
 This file is part of xdhwebq.
 
