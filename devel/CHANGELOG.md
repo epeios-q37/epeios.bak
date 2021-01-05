@@ -10,6 +10,11 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2021-01-05:
+
+- SCLX: ,
+- XDHUTL: retrieving `Extract(…)` from *xdhqxdh* tool,
+
 ## 2020-12-27:
 
 - HTP, TOL: [adpt]

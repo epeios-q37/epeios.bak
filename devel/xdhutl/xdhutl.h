@@ -194,6 +194,11 @@ namespace xdhutl {
 		str::string_ &Id,
 		event_abstract_ &Abstract );	// If false, no digest found because the event is a key-related event but not with recognized key sequence.
 
+	bso::sBool Extract(
+		const str::dString &Digest,
+		str::dString &Id,
+		str::dString &Action);
+
 	void ExtractWidgetFeatures(
 		const xdhcmn::digest_ &Digest,
 		str::string_ &Type,

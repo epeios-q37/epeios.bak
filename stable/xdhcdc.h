@@ -61,7 +61,7 @@ namespace xdhcdc {
 			const char *Language,
 			const str::dString &Token,	// If empty, SlfH session, else token used for the FaaS session.
 			const str::dString &UserId) = 0;	// Set by user, and sent as 'id' parameter to the connect associated function.
-		virtual bso::bool__ XDHCDCHandle( const char *EventDigest ) = 0;
+		virtual bso::bool__ XDHCDCHandle(const char *EventDigest) = 0;
 	public:
 		qCALLBACK( Single );
 		bso::sBool Initialize(

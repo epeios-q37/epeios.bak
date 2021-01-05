@@ -470,6 +470,33 @@ qRE
 	return Found;
 }
 
+bso::sBool xdhutl::Extract(
+	const str::dString &Digest,
+	str::dString &Id,
+	str::dString &Action)
+{
+	bso::sBool ActionInProgress = false;
+qRH;
+	wEventAbstract Abstract;
+qRB;
+	Abstract.Init();
+
+	if ( FetchEventAbstract(Digest, Id, Abstract) ) {
+		if ( IsPredefined( Abstract.Action() ) )
+			qRVct();
+		else if ( Abstract.Action() == xdhutl::a_User ) {
+			// 'Id' is already set.
+			Action = Abstract.UserAction;
+			ActionInProgress = true;
+		} else
+			qRGnr();
+	}
+qRR;
+qRT;
+qRE;
+	return ActionInProgress;
+}
+
 void xdhutl::ExtractWidgetFeatures(
 	const xdhcmn::digest_ &Digest,
 	str::string_ &Type,

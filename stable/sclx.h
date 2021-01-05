@@ -44,6 +44,7 @@ and mainly handled by the 'xdhqxdh' and 'faasq' utilities.
 # include "xdhcdc.h"
 # include "xdhcmn.h"
 # include "xdhdws.h"
+# include "xdhutl.h"
 
 # define SCLX_DEFAULT_SUFFIX XDHDWS_DEFAULT_SUFFIX
 
@@ -840,7 +841,8 @@ namespace sclx {
 		bso::sBool XDHCDCInitialize(
 			xdhcuc::cSingle &Callback,
 			const char *Language,
-			const str::dString &Token)	override // If empty, SlfH session, else token used for the FaaS session.
+			const str::dString &Token, // If empty, SlfH session, else token used for the FaaS session.
+			const str::dString &UserID)	override
 		{
 			if ( Token.Amount() )
 				qRFwk();    // Should never be launched in 'FaaS' mode.
@@ -851,11 +853,23 @@ namespace sclx {
 
 			return true;
 		}
-		bso::bool__ XDHCDCLaunch(
-			const char *Id,
-			const char *Action ) override
+		bso::bool__ XDHCDCHandle(const char *EventDigest) override
 		{
-			return C_().Launch( *this, Id, Action );
+			bso::sBool Cont = false;
+		qRH;
+			str::wString Id, Action;
+			qCBUFFERh BId, BAction;
+		qRB;
+			tol::Init(Id, Action);
+
+			if ( !xdhutl::Extract(str::wString(EventDigest), Id, Action) )
+				qRFwk();
+
+			Cont = C_().Launch(*this, Id.Convert(BId), Action.Convert(BAction));
+		qRR;
+		qRT;
+		qRE;
+			return Cont;
 		}
 	public:
 		void reset( bso::bool__ P = true )

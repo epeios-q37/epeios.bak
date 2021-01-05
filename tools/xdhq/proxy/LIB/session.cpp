@@ -353,34 +353,6 @@ qRE;
 	return Cont;
 }
 
-namespace {
-	bso::sBool Extract_(
-		const str::dString &Digest,
-		str::dString &Id,
-		str::dString &Action)
-	{
-		bso::sBool ActionInProgress = false;
-	qRH;
-		xdhutl::wEventAbstract Abstract;
-	qRB;
-		Abstract.Init();
-		if ( xdhutl::FetchEventAbstract(Digest, Id, Abstract) ) {
-			if ( xdhutl::IsPredefined( Abstract.Action() ) )
-				qRVct();
-			else if ( Abstract.Action() == xdhutl::a_User ) {
-				// 'Id' is already set.
-				Action = Abstract.UserAction;
-				ActionInProgress = true;
-			} else
-				qRGnr();
-		}
-	qRR;
-	qRT;
-	qRE;
-		return ActionInProgress;
-	}
-}
-
 bso::bool__ session::rSession::Handle_( const char *EventDigest )
 {
 	bso::sBool Cont = true;
@@ -391,7 +363,7 @@ qRB;
 
 	if ( ( EventDigest == NULL ) || ( !EventDigest[0] ) )
 		Cont = Launch_(UserId_, str::Empty);
-	else if ( Extract_(str::wString(EventDigest), Id, Action) )
+	else if ( xdhutl::Extract(str::wString(EventDigest), Id, Action) )
 		Cont = Launch_(Id, Action);
 qRR;
 qRT;
