@@ -42,8 +42,8 @@ namespace xdhcuc {
 		// Returns 'false' when error (mainly lost connection to client).
 		virtual bso::sBool XDHCUCProcess(
 			const str::dString &Script,
-			tht::rBlocker *Blocker,	// If != 'NULL', has to be unblocked once the script sent.
-			str::dString *ReturnedValue ) = 0;
+			tht::rBlocker *Blocker,	// If != NULL, has to be unblocked once the script sent.
+			str::dString *ReturnedValue ) = 0;	// If == NULL, Blocker should also be NULL.
 
 	public:
 		qCALLBACK( Single );

@@ -24,6 +24,7 @@
 			<Modules Group="Core">
 				<xpp:expand select="Core"/>
 				<Module>sck</Module>
+				<Module>strmrg</Module>
 			</Modules>
 			<Modules Group="CSD">
 				<Module>csdbnc</Module>
@@ -33,6 +34,7 @@
 				<Module>xdhcuc</Module>
 				<Module>xdhcmn</Module>
 				<Module>xdhups</Module>
+				<Module>xdhutl</Module>
 			</Modules>
 			<Modules Group="SCL">
 				<xpp:expand select="SCL"/>

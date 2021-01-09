@@ -90,6 +90,7 @@ namespace xdhcmn {
 	using strmrg::Merge;
 
 	using strmrg::retriever__;
+	using strmrg::rRetriever;
 
 	// Merge 'Splitted', delimited by '"', and separated by ','.
 	void FlatMerge(

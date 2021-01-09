@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- For the XDHTML-based interfaces (based on 'SCLXDHTML'). -->
 <xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
-	<xpp:expand href="../XDHScripts.xcfg"/>
+	<xpp:expand href="../XDH.xcfg"/>
 	<xpp:expand href="FRD.xcfg"/>
 	<xpp:define name="XDH_Parameters">
 		<xpp:bloc>

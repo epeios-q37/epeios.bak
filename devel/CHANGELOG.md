@@ -10,6 +10,11 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2021-01-07:
+
+- STRMRG, XDHCMN: [stdz],
+- XDHUTL: introducing *PseudoDigest* handling,
+
 ## 2021-01-05:
 
 - SCLX: ,

@@ -39,7 +39,7 @@
 # include "xtf.h"
 
 
-namespace strmrg { 
+namespace strmrg {
 	E_ROW( row__ );
 
 	E_ROW( _irow__ );	// Item row.
@@ -157,7 +157,7 @@ namespace strmrg {
 			Items = T.Items;
 			Main = T.Main;
 
-			return *this; 
+			return *this;
 		}
 		void Init( void )
 		{
@@ -167,11 +167,11 @@ namespace strmrg {
 		}
 		row__ Append( const str::string_ &String );
 		row__ AppendMono( const table_ &Table );	// 'Table' is stored in one entry.
-		void AppendMulti( const table_ &Table );	// An entry is created for each (first-level) entry of 'Table' 
+		void AppendMulti( const table_ &Table );	// An entry is created for each (first-level) entry of 'Table'
 		row__ AppendMono( const str::strings_ &Strings );	// ATTENTION : Cre une seule entre avec tous les strings, et pas autant d'entre que de string.
 		void AppendMulti( const str::strings_ &Strings );	// ATTENTION : Ajoute autant d'entre que de 'Strings'.
 		void GetTable(
-			row__ Row, 
+			row__ Row,
 			table_ &Table ) const;
 		E_NAVt( Main., row__ );
 	};
@@ -209,7 +209,7 @@ namespace strmrg {
 		}
 		tokens__(
 			char Separator,
-			char Begin, 
+			char Begin,
 			char End,
 			char Escape = DefaultEscapeToken )
 		{
@@ -352,6 +352,16 @@ namespace strmrg {
 			return Availability;
 		}
 	};
+}
+
+/*******/
+/* NEW */
+/*******/
+
+namespace strmrg {
+	typedef table_ dTable;
+	typedef table wTable;
+	typedef retriever__ rRetriever;
 }
 
 #endif

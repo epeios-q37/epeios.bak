@@ -21,6 +21,7 @@
 #include "session.h"
 
 #include "csdcmn.h"
+#include "xdhutl.h"
 
 using namespace session;
 
@@ -28,6 +29,7 @@ using namespace session;
 
 bso::sBool session::sUpstream_::XDHCUCProcess(
 	const str::string_ &Script,
+	tht::rBlocker *Blocker,
 	str::dString *ReturnedValue )
 {
 	bso::sBool Success = true;
@@ -49,13 +51,17 @@ qRB
 	Proxy.Commit();
 
 	if ( ReturnedValue != NULL) {
+		if ( Blocker != NULL )
+			Blocker->Unblock();
+
 		B_().WaitSelf();
 
 		csdcmn::Get(Proxy, *ReturnedValue);
 		Proxy.Dismiss();
 
 		B_().UnblockGlobal();
-	}
+	} else if ( Blocker != NULL )
+		qRGnr();
 qRR
 	Success = false;
 	ERRRst();
@@ -67,8 +73,8 @@ qRE
 void session::rSession::Launch(void)
 {
 qRH
-	str::wString Id, Action;
-	qCBUFFERh IdBuffer, ActionBuffer;
+	str::wString Id, Action, Digest;
+	qCBUFFERh Buffer;
 	bso::sBool Exit = false;
 qRB
 	while ( !Exit ) {
@@ -87,7 +93,10 @@ qRB
 		Proxy_.Dismiss();
 		Blockers_.UnblockGlobal();
 
-		Session_.Launch(Id.Convert(IdBuffer), Action.Convert(ActionBuffer));
+		Digest.Init();
+		xdhutl::BuildPseudoDigest(Id, Action, Digest);
+
+		Session_.Handle(Digest.Convert(Buffer));
 
 	// 'Id_' is the session id and must not be confused with the local variable 'Id',
 	// which is the id of the DOM element on which there was 'Action' was applied.

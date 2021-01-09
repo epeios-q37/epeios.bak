@@ -422,7 +422,7 @@ function fetchEventHandlersAndWidgest(id) {
 	var cont = true;
 	var candidate;
 	var eventDigests = "";
-    var widgetDigests = "";
+	var widgetDigests = "";
 
 	if (node.firstChild === null)
 		cont = false;
@@ -435,7 +435,7 @@ function fetchEventHandlersAndWidgest(id) {
 			if (node.hasAttribute(onEventsAttributeName))
 				eventDigests += "(" + getOrGenerateId(node) + "|" + getPatchedNodeName(node) + "|(" + node.getAttribute(onEventsAttributeName) + "))|";
           
-            if (node.hasAttribute(widgetAttributeName))
+			if (node.hasAttribute(widgetAttributeName))
 				widgetDigests += "(" + getOrGenerateId(node) + "|(" + node.getAttribute(widgetAttributeName) + "))|";
 
 

@@ -71,6 +71,7 @@ namespace session {
 	protected:
 		virtual bso::sBool XDHCUCProcess(
 			const str::string_ &Script,
+			tht::rBlocker *Blocker,
 			str::dString *ReturnedValue) override;
 	public:
 		void reset( bso::bool__ P = true )
@@ -132,7 +133,7 @@ namespace session {
 			Proxy_.Init(ProxyDriver);
 			Session_.Init(C_());
 			Upstream_.Init(ProxyDriver, Id, Blockers_);
-			Session_.Initialize(Upstream_, "", str::Empty);
+			Session_.Initialize(Upstream_, "", str::Empty, str::Empty);
 			Handshaked = false;
 			Quit = false;
 			Blockers_.Init(Global);

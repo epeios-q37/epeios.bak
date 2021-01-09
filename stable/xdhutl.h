@@ -184,8 +184,8 @@ namespace xdhutl {
 		const str::string_ &Keys,	// Only for keyboard-related events.
 		const event_abstracts_ &Abstracts	);	// Returns the 'row' in 'Abstracts' corresponding to 'Event' ; 'qNIL' if not found.
 
-	bso::bool__ FetchEventAbstract(
-		const xdhcmn::digest_ &Digest,
+	bso::bool__  FetchEventAbstract(
+		const xdhcmn::dDigest &Digest,
 		str::string_ &Id,
 		event_abstract_ &Abstract );	// If false, no digest found because the event is a key-related event but not with recognized key sequence.
 
@@ -195,9 +195,21 @@ namespace xdhutl {
 		event_abstract_ &Abstract );	// If false, no digest found because the event is a key-related event but not with recognized key sequence.
 
 	bso::sBool Extract(
+		const xdhcmn::dDigest &Digest,
+		str::dString &Id,
+		str::dString &Action);
+
+	bso::sBool Extract(
 		const str::dString &Digest,
 		str::dString &Id,
 		str::dString &Action);
+
+	// Builds a digest which, when given to above 'Extract(…)' functions, returns 'Id' and 'Action'.
+	// Used by the 'faasq' tool.
+	void BuildPseudoDigest(
+			const str::dString &Id,
+			const str::dString &Action,
+			str::dString &Digest);
 
 	void ExtractWidgetFeatures(
 		const xdhcmn::digest_ &Digest,

@@ -402,6 +402,7 @@ qRE
 	return Row;
 }
 
+// If the digest structure is modified, also update the 'xdhutl::Build(…)' function!
 bso::bool__ xdhutl::FetchEventAbstract(
 	const xdhcmn::digest_ &Digest,
 	str::string_ &Id,
@@ -471,7 +472,7 @@ qRE
 }
 
 bso::sBool xdhutl::Extract(
-	const str::dString &Digest,
+	const xdhcmn::dDigest &Digest,
 	str::dString &Id,
 	str::dString &Action)
 {
@@ -495,6 +496,64 @@ qRR;
 qRT;
 qRE;
 	return ActionInProgress;
+}
+
+namespace {
+	qCDEF(str::wString, PseudoDigestMarker_, "_PSEUDO_DIGEST_MARKER");
+}
+
+bso::sBool xdhutl::Extract(
+	const str::dString &RawDigest,
+	str::dString &Id,
+	str::dString &Action)
+{
+	bso::bool__ Found = false;
+qRH
+	xdhcmn::wDigest Digest;
+	str::wString RawId;
+	xdhcmn::rRetriever Retriever;
+qRB
+	Digest.Init();
+	xdhcmn::Split( RawDigest, Digest );
+
+	Retriever.Init(Digest);
+
+	RawId.Init();
+	Retriever.GetString(RawId);
+
+	if ( RawId == PseudoDigestMarker_ ) {
+		Retriever.GetString(Id);
+		Retriever.GetString(Action);
+		Found = true;
+	} else
+		Found = Extract( Digest, Id, Action );
+qRR
+qRT
+qRE
+	return Found;
+}
+
+void xdhutl::BuildPseudoDigest(
+	const str::dString &Id,
+	const str::dString &Action,
+	str::dString &Digest)
+{
+qRH;
+	str::wStrings Strings;
+	strmrg::wTable Table;
+qRB;
+	Strings.Init();
+	Strings.Append(PseudoDigestMarker_);
+	Strings.Append(Id);
+	Strings.Append(Action);
+
+	Table.Init();
+	Table.AppendMulti(Strings);
+
+	xdhcmn::Merge(Table, Digest);
+qRR;
+qRT;
+qRE;
 }
 
 void xdhutl::ExtractWidgetFeatures(

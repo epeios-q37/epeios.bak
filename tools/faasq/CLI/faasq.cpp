@@ -85,7 +85,7 @@ namespace {
 
 	namespace {
 		namespace {
-			qCDEF( char *, FaaSProtocolLabel_, "7b4b6bea-2432-4584-950b-e595c9e391e1" );
+			qCDEF( char *, FaaSProtocolLabel_, "9efcf0d1-92a4-4e88-86bf-38ce18ca2894" );
 			qCDEF(bso::sU8, FaaSProtocolVersion_, 0);
 		}
 
@@ -164,6 +164,7 @@ namespace {
 				csdcmn::Put(Head, Proxy);
 				Host.Init();
 				csdcmn::Put(registry::GetWebHost(Host), Proxy);
+				csdcmn::Put("XDH", Proxy);
 				Proxy.Commit();
 
 				Token.Init();
@@ -190,7 +191,7 @@ namespace {
 			using namespace session;
 
 			namespace {
-				qCDEF( char *, MainProtocolLabel_, "8d2b7b52-6681-48d6-8974-6e0127a4ca7e" );
+				qCDEF( char *, MainProtocolLabel_, "bf077e9f-baca-48a1-bd3f-bf5181a78666" );
 				qCDEF(bso::sU8, MainProtocolVersion_, 0);
 			}
 
@@ -298,10 +299,6 @@ namespace {
 							csdcmn::Get(Proxy, Message);    // Language; not handled yet.
 
 							Proxy.Dismiss();
-
-							csdcmn::Put(Id, Proxy);
-							csdcmn::Put("XDH", Proxy);
-							Proxy.Commit();
 
 							Session->Handshaked = true;
 
