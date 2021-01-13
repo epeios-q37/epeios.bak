@@ -34,9 +34,9 @@ namespace {
 	}
 }
 
+rgstry::rEntry registry::definition::HeadFile( "HeadFile", sclr::Definitions );
 rgstry::rEntry registry::definition::XMLFilesHandling( "@Handling", XMLFiles_ );
 rgstry::rEntry registry::definition::XSLFile( RGSTRY_TAGGING_ATTRIBUTE( "target" ), UntaggedXSLFile_ );
-rgstry::rEntry registry::definition::HeadFile( "HeadFile", XMLFiles_ );
 
 static const char *Launcher_ = NULL;
 

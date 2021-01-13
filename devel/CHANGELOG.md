@@ -10,6 +10,13 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2021-01-13:
+
+- SCLX:
+  - [adpt],
+  - relocating `HeadFile` registry entry,
+
+,
 ## 2021-01-07:
 
 - STRMRG, XDHCMN: [stdz],

@@ -270,7 +270,7 @@
       </xpp:bloc>
     </xpp:bloc>
   </xpp:define>
-  <xpp:define name="XDHDefaultEvents">
+  <xpp:define name="XDHTagsDefaultEvents">
     <!-- Default event for each HTML tags-->
     <xpp:bloc>
       <!-- Below one is the event by default -->
@@ -286,5 +286,21 @@
       <Tag name="PASSWORD" Event="keypress" Key="Enter"/>
       <Tag name="TEXTAREA" Event="keypress" Key="Enter"/>
     </xpp:bloc>
+  </xpp:define>
+  <xpp:define name="XDHScriptsEmbedded">
+    <Scripts>
+      <xpp:expand select="XDHScripts"/>
+    </Scripts>
+  </xpp:define>
+  <xpp:define name="XDHTagsDefaultEventsEmbedded">
+	  <TagsDefaultEvents>
+      <xpp:expand select="XDHTagsDefaultEvents"/>
+    </TagsDefaultEvents>
+  </xpp:define>
+  <xpp:define name="XDHFull">
+	<xpp:bloc>
+	  <xpp:expand select="XDHScriptsEmbedded"/>
+	  <xpp:expand select="XDHTagsDefaultEventsEmbedded"/>
+	</xpp:bloc>
   </xpp:define>
 </xpp:bloc>

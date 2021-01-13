@@ -862,8 +862,10 @@ namespace sclx {
 		qRB;
 			tol::Init(Id, Action);
 
-			if ( !xdhutl::Extract(str::wString(EventDigest), Id, Action) )
-				qRFwk();
+			if ( ( EventDigest != NULL ) && (EventDigest[0] ) ) {
+				if ( !xdhutl::Extract(str::wString(EventDigest), Id, Action) )
+					qRFwk();
+			}
 
 			Cont = C_().Launch(*this, Id.Convert(BId), Action.Convert(BAction));
 		qRR;
@@ -984,6 +986,7 @@ namespace sclx {
 		}
 		bso::bool__ ConfirmT( const char *RawMessage )	// Translates 'RawMessage'.
 		{
+			return ConfirmT( str::wString(RawMessage));
 			return ConfirmT( str::wString(RawMessage));
 		}
 		bso::bool__ Confirm(

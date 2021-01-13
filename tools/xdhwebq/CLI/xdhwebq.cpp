@@ -200,12 +200,12 @@ namespace {
 				Header.Init();
 
 				if ( websck::Handshake(*Driver, Header) ) {
-					Flow.Init(*Driver, websck::mWithTerminator);
+					Flow.Init(*Driver, websck::mWithTerminator);	// Second time: uses the WebSocket initiated below.
 					websck::GetMessage(Flow, Data->Token);
 					websck::GetMessage(Flow, Data->UserId);
 					Data->State = sRegular;
 				} else if ( Header.FirstLine == "XDH web prolog" ) {
-					if ( websck::GetValue(str::wString("Token"), Header, Data->Token) )
+					if ( websck::GetValue(str::wString("Token"), Header, Data->Token) )	// First time: launch PHP program which intiiates the WebSocket
 						Data->State = sProlog;
 				} else {
 					Data->State = s_Undefined;

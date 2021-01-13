@@ -38,6 +38,10 @@
 			<xpp:expand select="Definitions"/>
 			<xpp:expand select="XDH_Definitions"/>
 			<xpp:bloc preserve="yes">
+				<HeadFile>
+					<xpp:expand select="XMLRootDir"/>
+					<xpp:bloc>Head.xhtml</xpp:bloc>
+				</HeadFile>
 				<XMLFiles Handling="Content"><!-- Default value for "@Handling" is "Content". Other value is "Name"-->
 					<XSLFile target="About">
 							<xpp:expand select="XMLRootDir"/>
@@ -47,10 +51,6 @@
 							<xpp:expand select="XMLRootDir"/>
 							<xpp:bloc>Prolog.xsl</xpp:bloc>
 					</XSLFile>
-					<HeadFile>
-						<xpp:expand select="XMLRootDir"/>
-						<xpp:bloc>Head.xhtml</xpp:bloc>
-					</HeadFile>
 					<XSLFile target="Login">
 							<xpp:expand select="XMLRootDir"/>
 							<xpp:bloc>Login.xsl</xpp:bloc>
@@ -61,6 +61,7 @@
 					</XSLFile>
 				</XMLFiles>
 			</xpp:bloc>
+			<xpp:expand select="XDHFull"/>
 		</Definitions>
 		<Locale>
 			<xpp:expand select="Locale"/>
