@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Projects xmlns ="http://q37.info/xcfg" xmlns:xpp="https://q37.info/ns/xpp">
-  <xpp:define name="Module">
-    <ModuleFilename>/home/csimon/bin/esketchxdh</ModuleFilename>
+  <xpp:define name="ModulesRootPath">
+  	<xpp:bloc>/home/csimon/bin/</xpp:bloc>
   </xpp:define>
  <Project target="xdhwebq">
-    <Parameters>
-      <xpp:expand select="Module"/>
-    </Parameters>
+	<Setups Default="ESketch">
+		<Setup id="ESketch">
+			<ModuleFilename>
+				<xpp:expand select="ModulesRootPath"/>
+				<xpp:bloc>esketchxdh</xpp:bloc>
+			</ModuleFilename>
+		</Setup>
+	</Setups>
  </Project>
 </Projects>

@@ -704,7 +704,7 @@ void sclx::prolog::LoadProject( sProxy &Proxy )
 {
 qRH
 	str::string ProjectFeature;
-	qRB
+qRB
 	ProjectFeature.Init();
 	sclf::LoadProject( prolog::GetProjectFeatures( Proxy, ProjectFeature ), ProjectFeature, Proxy.Info() );
 qRR

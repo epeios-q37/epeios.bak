@@ -732,9 +732,9 @@ qRB
 					if ( ( 1 << _Token ) & TokenToReport )
 						Continue = false;
 
-					_EmptyTag = true;
+					SelfClosing_ = true;
 
-				break;
+					break;
 				case '>':
 					_Flow.Get();
 
@@ -744,7 +744,7 @@ qRB
 
 					_Token = tStartTagClosed;
 
-					_EmptyTag = false;
+					SelfClosing_ = false;
 
 					if ( ( 1 << _Token ) & TokenToReport )
 						Continue = false;
@@ -756,7 +756,7 @@ qRB
 				}
 				break;
 			case tStartTagClosed:
-				if ( _EmptyTag ) {
+				if ( SelfClosing_ ) {
 					_TagName.Init();
 
 					_Tags.Top( _TagName );
@@ -841,9 +841,7 @@ qRB
 						if ( ( 1 << _Token ) & TokenToReport )
 							Continue = false;
 
-						_EmptyTag = true;
-
-
+						SelfClosing_ = true;
 					} else {
 						_Flow.Get();	// Pour la mise  jour des coordonnes.
 						RETURN( sUnexpectedCharacter );
@@ -860,14 +858,14 @@ qRB
 					if ( ( 1 << _Token ) & TokenToReport )
 						Continue = false;
 
-					_EmptyTag = false;
+					SelfClosing_ = false;
 				}/* else {
 					_Flow.Get();	// Pour la mise  jour des coordonnes.
 					RETURN( sUnexpectedCharacter );
 				}
 */				break;
 			case tStartTagClosed:
-				if ( _EmptyTag ) {
+				if ( SelfClosing_ ) {
 					_TagName.Init();
 
 					_Tags.Top( _TagName );
@@ -1241,9 +1239,9 @@ void xml::rWriter::Indent_( bso::size__ Amount ) const
 
 void xml::rWriter::PutRawValue( flw::rRFlow &Flow )
 {
-	if ( TagNameInProgress_ ) {
+	if ( OpeningTagInProgress_ ) {
 		F_() << '>';
-		TagNameInProgress_ = false;
+		OpeningTagInProgress_ = false;
 	}
 
 	flx::Copy( Flow, RF_() );
@@ -1309,7 +1307,7 @@ void xml::rWriter::PutRawAttribute(
 	flw::rRFlow &Flow,
 	eDelimiter Delimiter )
 {
-	if ( !TagNameInProgress_ )
+	if ( !OpeningTagInProgress_ )
 		qRFwk();
 
 	F_() << ' ' << Name << '=' << GetAttributeDelimiter_( Delimiter );
@@ -1384,9 +1382,9 @@ void xml::rWriter::PutRawAttribute(
 
 void xml::rWriter::PutCData( flw::rRFlow &Flow )
 {
-	if ( TagNameInProgress_ ) {
+	if ( OpeningTagInProgress_ ) {
 		F_() << '>';
-		TagNameInProgress_ = false;
+		OpeningTagInProgress_ = false;
 	}
 
 	F_() << "<![CDATA[";
@@ -1414,11 +1412,11 @@ qRB
 	if ( Tags_.IsEmpty() )
 		qRFwk();
 
-	if ( Mark != Tags_.Last() )
-		if ( Mark != qNIL )
+	if ( Mark != Undefined )
+		if ( Mark != Tags_.Last() )
 			qRFwk();
 
-	if ( TagNameInProgress_ ) {
+	if ( OpeningTagInProgress_ ) {
 		F_() << "/>";
 		Tags_.Pop();
 	}  else {
@@ -1434,7 +1432,7 @@ qRB
 
 	Commit_();
 
-	TagNameInProgress_ = false;
+	OpeningTagInProgress_ = false;
 	TagValueInProgress_ = false;
 qRR
 qRT

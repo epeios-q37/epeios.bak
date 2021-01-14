@@ -196,7 +196,7 @@ namespace xml {
 	private:
 		stkctn::qMCSTACKwl( name_ ) Tags_;
 		txf::text_oflow__ *Flow_;
-		bso::bool__ TagNameInProgress_;
+		bso::bool__ OpeningTagInProgress_;
 		bso::bool__ TagValueInProgress_;
 		eLayout Outfit_;
 		eSpecialCharHandling SpecialCharHandling_;
@@ -211,7 +211,7 @@ namespace xml {
 			if ( Flow_ == NULL )
 				qRFwk();
 
-			if ( LevelsToIgnore_ >= ( Tags_.Amount() + ( TagNameInProgress_ ? 0 : 1 ) ) )
+			if ( LevelsToIgnore_ >= ( Tags_.Amount() + ( OpeningTagInProgress_ ? 0 : 1 ) ) )
 				return txf::WVoid;
 			else
 				return *Flow_;
@@ -251,7 +251,7 @@ namespace xml {
 			if ( P )
 				CloseAllTags_();
 
-			TagNameInProgress_ = false;
+			OpeningTagInProgress_ = false;
 			TagValueInProgress_ = false;
 
 			Tags_.reset( P );
@@ -306,7 +306,7 @@ namespace xml {
 		}
 		sMark PushTag( const name_ &Name )	// See 'PopTag(...)' for the returned value.
 		{
-			if ( TagNameInProgress_ ) {
+			if ( OpeningTagInProgress_ ) {
 				F_() << '>';
 
 				if ( Outfit_ == oIndent )
@@ -315,7 +315,7 @@ namespace xml {
 
 			sMark Mark = Tags_.Push( Name );
 
-			TagNameInProgress_ = true;
+			OpeningTagInProgress_ = true;
 			TagValueInProgress_ = false;
 
 			if ( Outfit_ == oIndent )
@@ -784,7 +784,7 @@ namespace xml {
 		_context__ _Context;
 		token__ _Token;
 		stkctn::qMCSTACKwl( str::dString ) _Tags;
-		bso::bool__ _EmptyTag;	// A 'true' pour '<tag/>', sinon  'false'.
+		bso::bool__ SelfClosing_;	// A 'true' pour '<tag/>', sinon  'false'.
 		_flow___ _Flow;
 		str::string _TagName;
 		str::string AttributeName_;
@@ -797,7 +797,7 @@ namespace xml {
 		{
 			_Context = c_Undefined;
 			_Token = t_Undefined;
-			_EmptyTag = false;
+			SelfClosing_ = false;
 			_Flow.reset( P );
 
 			_TagName.reset( P );

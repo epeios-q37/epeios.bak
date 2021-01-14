@@ -4,7 +4,7 @@
 		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
 		<xpp:expand value-of="q37.xpp"/>
         <xpp:expand href="../../../CLI.xcfg"/>
-        <Setups Default="localhost">
+        <Setups Default="faas1">
             <Setup id="faas1">
                 <Proxy>
                     <Host>faas1.q37.info</Host>

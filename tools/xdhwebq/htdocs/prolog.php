@@ -20,8 +20,8 @@ along with xdhwebq. If not, see <http://www.gnu.org/licenses/>.
 
 $out = str_replace(array("\r", "\n", "\t"), '','
 	<!DOCTYPE html>
-		<html>
-			<head>
+	<html>
+		<head>
 			<!-- If modified, report modification in "xdhcefq.html" from "xdhcefq" -->
 			<!-- BEGIN -->
 			<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -39,8 +39,6 @@ $out = str_replace(array("\r", "\n", "\t"), '','
 				}
 			</style>'
 . $head . '
-			<!--script>handleQuery("'
-. $cgi . '?_token=' . $token . '&_language=' . $language . '&_action=' . $action . '&_cont=" )</script-->
 			<script>
 				function adjustQRCodeIFrame()
 				{
