@@ -10,6 +10,13 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+
+## 2021-01-15:
+
+- XML:
+  - introducing the possibility to force '<tag></tag>' instead of '<tag/>' for empty tags,
+  - `rWriter::Put(…)` keeps non self closing empty tags (useful for HTML; for example `<script src="…"></script>` are NOT transformed in the in HTML not allowed `<script src="…"/>` form)
+
 ## 2021-01-13:
 
 - SCLX:

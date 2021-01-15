@@ -506,7 +506,15 @@ namespace xml {
 		{
 			PutCData( value( Value ) ) ;
 		}
-		sMark PopTag( sMark Mark = Undefined );	// 'Mark', is used,is returned by a 'Push(...)', and is used to control if we are at the same level as the concerned 'Push(...)'.
+		sMark PopTag(
+			bso::sBool NoSelfClosing = false,	// Forces '<tag></tag>' instead of '<tag/>' for empty tag.
+			sMark Mark = Undefined );	// 'Mark', is used,is returned by a 'Push(...)', and is used to control if we are at the same level as the concerned 'Push(...)'.
+		sMark PopTag(
+			sMark Mark,
+			bso::sBool NoSelfClosing = false)
+		{
+			return PopTag(NoSelfClosing, Mark);
+		}
 		void Rewind( sMark Mark );	// Unwind to 'Mark' level.
 		txf::text_oflow__ &GetFlow( void )
 		{
@@ -874,6 +882,7 @@ namespace xml {
 		E_RODISCLOSE__( status__, Status );
 		E_RODISCLOSE__( token__, Token );
 		E_RODISCLOSE__( entities_handling__, EntitiesHandling );
+		qRODISCLOSEs(bso::sBool, SelfClosing);
 		const xtf::pos__ &GetCurrentPosition( void ) const
 		{
 			return _Flow.GetCurrentPosition();

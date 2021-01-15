@@ -1404,7 +1404,9 @@ void xml::rWriter::PutCData( const value_ &Value )
 	PutCData( Flow );
 }
 
-sMark xml::rWriter::PopTag( sMark Mark )
+sMark xml::rWriter::PopTag(
+	bso::sBool NoSelfClosing,
+	sMark Mark)
 {
 qRH
 	name Name;
@@ -1416,15 +1418,18 @@ qRB
 		if ( Mark != Tags_.Last() )
 			qRFwk();
 
-	if ( OpeningTagInProgress_ ) {
+	if ( OpeningTagInProgress_ && !NoSelfClosing ) {
 		F_() << "/>";
 		Tags_.Pop();
 	}  else {
 		Name.Init();
 		Tags_.Pop( Name );
-		if ( !TagValueInProgress_ && ( Outfit_ == oIndent ) )
+		if ( OpeningTagInProgress_ ) {
+			OpeningTagInProgress_ = false;	// Otherwise, below 'F_()' could return an unexpected 'txf::WVoid'.
+			F_() << '>';
+		} else if ( !TagValueInProgress_ && ( Outfit_ == oIndent ) )
 			Indent_( Tags_.Amount() );
-		F_() << "</" << Name << ">";
+		F_() << "</" << Name << '>';
 	}
 
 	if ( Outfit_ == oIndent )
@@ -1445,7 +1450,7 @@ void xml::rWriter::Rewind( sMark Mark )
 	while ( PopTag() != Mark );
 }
 
-bso::sBool xml::rWriter::Put( rParser &Parser )
+bso::sBool xml::rWriter::Put(rParser &Parser)
 {
 	bso::sBool Continue = true, Success = false;
 
@@ -1469,7 +1474,7 @@ bso::sBool xml::rWriter::Put( rParser &Parser )
 			PutValue( Parser.Value() );
 			break;
 		case xml::tEndTag:
-			PopTag();
+			PopTag(!Parser.SelfClosing());
 			break;
 		case xml::tCData:
 			PutCData( Parser.Value() );
@@ -1491,7 +1496,7 @@ bso::sBool xml::rWriter::Put( rParser &Parser )
 	return Success;
 }
 
-bso::sBool xml::rWriter::Put( xtf::extended_text_iflow__ &XFlow )
+bso::sBool xml::rWriter::Put(xtf::extended_text_iflow__ &XFlow)
 {
 	bso::sBool Success = true;
 qRH
@@ -1506,7 +1511,7 @@ qRE
 	return Success;
 }
 
-bso::sBool xml::rWriter::Put( const str::dString &XML )
+bso::sBool xml::rWriter::Put(const str::dString &XML)
 {
 	bso::sBool Success = false;
 qRH

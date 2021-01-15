@@ -135,7 +135,7 @@ namespace {
 			if ( Token.Amount())
 				qRFwk();
 
-			sclm::LoadXMLAndTranslateTags( registry::definition::HeadFile, sclr::GetCommonRegistry(), Head, 1, DefaultMarker);
+			sclm::LoadXMLAndTranslateTags( registry::definition::HeadFile, sclr::GetCommonRegistry(), Head, 0, DefaultMarker);
 
 			return true;
 		}
