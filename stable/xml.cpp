@@ -1502,14 +1502,9 @@ bso::sBool xml::rWriter::Put(xtf::extended_text_iflow__ &XFlow)
 qRH
 	rParser Parser;
 qRB
+	Parser.Init( XFlow, ehKeep );
 
-	while ( Success ) {
-		Parser.Init( XFlow, ehKeep );
-
-		Success = Put( Parser );
-	}
-
-	Success = true;
+	Success = Put( Parser );
 qRR
 qRT
 qRE
