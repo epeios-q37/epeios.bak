@@ -10,6 +10,16 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2021-01-17:
+- SCLM: `sclm::LoadXMLAndTranslateTags` now displays errors,
+- SCLX:
+  - the head file can contain more then one root, as long they are enclosed by a 'xpp:bloc' tag,
+  - in the head file, '<tag></tag>' (tag with no value) are kept '<tag></tag>' and no more tranformed in '<tag/>' (useful for the HTML 'script' tag, for example; see [[#2021-01-15]]),
+  - errors when reading head file are now displayed,
+- XML:
+  - introducing 'parser___::Reset(…)',
+  - with input data containing multiple roots, 'rWriter::Put(…)' handles now all roots and no more only the first one,
+- XPP:[trvl],
 
 ## 2021-01-15:
 

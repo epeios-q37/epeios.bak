@@ -25,6 +25,10 @@
 		<Translation language="fr">Fichier de projet non spécifié.</Translation>
 		<Translation language="en">No specified project file.</Translation>
 	</Translations>
+	<Translations text="SCLM_ErrorInXMLFile">
+		<Translation language="fr">Fichier '%1': %2.</Translation>
+		<Translation language="en">File '%1': %2</Translation>
+	</Translations>
 	<!--
 	<Translations text="SCLM_">
 		<Translation language="fr"></Translation>

@@ -800,22 +800,27 @@ namespace xml {
 		str::string _Value;
 		status__ _Status;
 		entities_handling__ _EntitiesHandling;
-	public:
-		void reset( bso::bool__ P = true )
+		void PartialReset_(bso::sBool P)
 		{
 			_Context = c_Undefined;
 			_Token = t_Undefined;
 			SelfClosing_ = false;
-			_Flow.reset( P );
 
 			_TagName.reset( P );
 			AttributeName_.reset( P );
 			AttributeDelimiter_ = delimiter::sUndefined;
 			_Value.reset( P );
 			_Status = s_Undefined;
-			_EntitiesHandling = eh_Undefined;
 
 			_Tags.reset( P );
+		}
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			PartialReset_(P);
+
+			_Flow.reset( P );
+			_EntitiesHandling = eh_Undefined;
 		}
 		parser___( void )
 		{
@@ -837,10 +842,21 @@ namespace xml {
 
 			_TagName.Init();
 			AttributeName_.Init();
-			AttributeDelimiter_ = delimiter::sUndefined;
+
 			_Value.Init();
 
 			_EntitiesHandling = EntitiesHandling;
+		}
+		// If input data contains more then one root, allows to process next tree.
+		void Reset(void)
+		{
+			if ( _Token != t_Processed )
+				qRFwk();
+
+			PartialReset_(true);
+			tol::Init(_Tags, _TagName, AttributeName_, _Value);
+
+			_Context = cHeaderExpected;
 		}
 		token__  Parse( int TokenToReport = tfAll );
 		token__ Parse(

@@ -988,14 +988,23 @@ void sclm::LoadXMLAndTranslateTags(
 qRH;
 	str::string Unprocessed, Untranslated;
 	fnm::name___ FileNameLocation;
+	xpp::rContext Context;
+	lcl::wMeaning Meaning;
 qRB;
 	Unprocessed.Init();
 	Load( Filename, Unprocessed );
 
 	fnm::GetLocation( Filename, FileNameLocation );
 
-	Untranslated.Init();
-	xpp::Process( Unprocessed, xml::oIndent, Untranslated, xpp::criterions___( FileNameLocation, StartLevel ) );
+	tol::Init(Untranslated, Context);
+
+	if ( xpp::Process(Unprocessed, xml::oIndent, Untranslated, xpp::criterions___( FileNameLocation, StartLevel ), Context) != xpp::sOK ) {
+		Meaning.Init();
+		xpp::GetMeaning(Context, Meaning);
+
+		ReportAndAbort(SCLM_NAME "_ErrorInXMLFile", Filename, Meaning);
+	}
+
 
 	scll::TranslateTags( Untranslated, Language, Content, Marker );
 qRR;

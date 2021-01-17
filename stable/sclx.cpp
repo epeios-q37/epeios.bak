@@ -132,11 +132,15 @@ namespace {
 			str::dString &Head,
 			qRPN ) override
 		{
+		qRFH;
+		qRFB;
 			if ( Token.Amount())
 				qRFwk();
 
 			sclm::LoadXMLAndTranslateTags( registry::definition::HeadFile, sclr::GetCommonRegistry(), Head, 0, DefaultMarker);
-
+		qRFR;
+		qRFT;
+		qRFE(sclm::ErrorDefaultHandling());
 			return true;
 		}
 	public:

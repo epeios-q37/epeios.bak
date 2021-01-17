@@ -926,8 +926,8 @@ namespace xpp {
 	status__ Encrypt(
 		const str::string_ &Namespace,
 		flw::iflow__ &IFlow,
-		xml::outfit__ Outfit,
-		utf::format__ Format,
+		const xml::outfit__ Outfit,
+		const utf::format__ Format,
 		txf::text_oflow__ &OFlow,
 		context___ &Context );
 
@@ -935,13 +935,6 @@ namespace xpp {
 		xtf::extended_text_iflow__ &XFlow,
 		const criterions___ &Criterions,
 		xml::rWriter &Writer,
-		context___ &Context );
-
-	status__ Process(
-		xtf::extended_text_iflow__ &XFlow,
-		const criterions___ &Criterions,
-		xml::outfit__ Outfit,
-		txf::text_oflow__ &OFlow,
 		context___ &Context );
 
 	inline status__ Process(
@@ -962,10 +955,17 @@ namespace xpp {
 		return Status;
 	}
 
+	status__ Process(
+		xtf::extended_text_iflow__ &XFlow,
+		const criterions___ &Criterions,
+		const xml::outfit__ Outfit,
+		txf::text_oflow__ &OFlow,
+		context___ &Context );
+
 	inline status__ Process(
 		xtf::extended_text_iflow__ &XFlow,
 		const criterions___ &Criterions,
-		xml::outfit__ Outfit,
+		const xml::outfit__ Outfit,
 		txf::text_oflow__ &OFlow )
 	{
 		status__ Status = s_Undefined;
@@ -981,11 +981,31 @@ namespace xpp {
 		return Status;
 	}
 
-	void Process(
+	status__ Process(
 		const str::string_ &In,
-		xml::outfit__ Outfit,
+		const xml::outfit__ Outfit,
 		str::string_ &Out,
-		const criterions___ &Criterions );
+		const criterions___ &Criterions,
+		context___ &Context);
+
+	inline status__ Process(
+		const str::string_ &In,
+		const xml::outfit__ Outfit,
+		str::string_ &Out,
+		const criterions___ &Criterions)
+		{
+			status__ Status = s_Undefined;
+		qRH;
+			context___ Context;
+		qRB;
+			Context.Init();
+
+			Status = Process(In, Outfit, Out, Criterions, Context);
+		qRR;
+		qRT;
+		qRE;
+			return Status;
+		}
 }
 
 /*************/
@@ -995,6 +1015,7 @@ namespace xpp {
 namespace xpp {
 	typedef preprocessing_iflow___ rRFlow;
 	typedef criterions___ rCriterions;
+	typedef context___ rContext;
 }
 
 

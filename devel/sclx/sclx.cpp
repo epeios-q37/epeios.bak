@@ -132,12 +132,18 @@ namespace {
 			str::dString &Head,
 			qRPN ) override
 		{
+			bso::sBool Success = true;
+		qRFH;
+		qRFB;
 			if ( Token.Amount())
 				qRFwk();
 
-			sclm::LoadXMLAndTranslateTags( registry::definition::HeadFile, sclr::GetCommonRegistry(), Head, 1, DefaultMarker);
-
-			return true;
+			sclm::LoadXMLAndTranslateTags( registry::definition::HeadFile, sclr::GetCommonRegistry(), Head, 0, DefaultMarker);
+		qRFR;
+			Success = false;
+		qRFT;
+		qRFE(sclm::ErrorDefaultHandling());
+			return Success;
 		}
 	public:
 		void reset( bso::bool__ P = true )

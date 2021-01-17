@@ -1770,8 +1770,8 @@ qRE
 status__ xpp::Encrypt(
 	const str::string_ &Namespace,
 	flw::iflow__ &IFlow,
-	xml::outfit__ Outfit,
-	utf::format__ Format,
+	const xml::outfit__ Outfit,
+	const utf::format__ Format,
 	txf::text_oflow__ &OFlow,
 	context___ &Context )
 {
@@ -1792,7 +1792,7 @@ qRE
 status__ xpp::Process(
 	xtf::extended_text_iflow__ &XFlow,
 	const criterions___ &Criterions,
-	xml::outfit__ Outfit,
+	const xml::outfit__ Outfit,
 	txf::text_oflow__ &OFlow,
 	context___ &Context )
 {
@@ -1809,12 +1809,14 @@ qRE
 	return Status;
 }
 
-void xpp::Process(
+status__ xpp::Process(
 	const str::string_ &In,
-	xml::outfit__ Outfit,
+	const xml::outfit__ Outfit,
 	str::string_ &Out,
-	const criterions___ &Criterions )
+	const criterions___ &Criterions,
+	context___ &Context)
 {
+	status__ Status = s_Undefined;
 qRH
 	flx::E_STRING_IFLOW__ IFlow;
 	xtf::extended_text_iflow__ XFlow;
@@ -1826,8 +1828,9 @@ qRB
 	OFlow.Init( Out );
 	TFlow.Init( OFlow );
 
-	xpp::Process( XFlow, Criterions, xml::oIndent, TFlow );
+	Status = xpp::Process(XFlow, Criterions, xml::oIndent, TFlow, Context);
 qRR
 qRT
 qRE
+	return Status;
 }

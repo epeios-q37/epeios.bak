@@ -1450,6 +1450,9 @@ void xml::rWriter::Rewind( sMark Mark )
 	while ( PopTag() != Mark );
 }
 
+// Input data is handled until EOF.
+// If no input data, return false.
+
 bso::sBool xml::rWriter::Put(rParser &Parser)
 {
 	bso::sBool Continue = true, Success = false;
@@ -1480,11 +1483,12 @@ bso::sBool xml::rWriter::Put(rParser &Parser)
 			PutCData( Parser.Value() );
 			break;
 		case xml::t_Processed:
-			Continue = false;
 			Success = true;
+			Parser.Reset();
+			// No 'Continue = false', as we continue until EOF.
 			break;
 		case xml::t_Error:
-			Success = false;
+			Success &= Parser.GetStatus() == xml::sUnexpectedEOF;
 			Continue = false;
 			break;
 		default:
