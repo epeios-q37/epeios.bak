@@ -620,7 +620,7 @@ namespace xpp {
 			const fnm::name___ &Directory,
 			const str::string_ &CypherKey,
 			bso::bool__ Preserve,
-			bso::char__ SubstitutionMarker )
+			bso::char__ SubstitutionMarker)
 		{
 			// _Repository.Init();
 			// _Tags.Init();
@@ -635,7 +635,7 @@ namespace xpp {
 			Preserve_= Preserve;
 			PreservationLevel_ = 0;
 			XMarkers_.Init();
-			CurrentXMarker_.Init();
+			CurrentXMarker_.Init(SubstitutionMarker);
 
 			return sOK;
 		}
@@ -691,6 +691,14 @@ namespace xpp {
 		return Parser;
 	}
 
+	qENUM(XMLErrorsHandling) {
+		xehReport,	// Pure XML errors generates EOF, like XPP related errors
+		xehRelay,		// Data with pure XML errors are simply relayed, up to the caller to deal with them.
+		xeh_amount,
+		xeh_Undefined,
+		xeh_Default = xehReport
+	};
+
 	struct criterions___
 	{
 		fnm::name___
@@ -700,15 +708,17 @@ namespace xpp {
 			CypherKey,
 			Namespace;
 		bso::bool__ Preserve;
-		bso::char__ SubstitutionTag;
+		bso::char__ SubstitutionMarker;
+		eXMLErrorsHandling XMLErrorsHandling;
 		void reset( bso::bool__ P = true )
 		{
 			Directory.reset( P);
 			Level = 0;
+			XMLErrorsHandling = xeh_Undefined;
 			CypherKey.reset( P );
 			Namespace.reset( P );
 			Preserve = false;
-			SubstitutionTag = 0;
+			SubstitutionMarker = 0;
 		}
 		~criterions___( void )
 		{
@@ -717,29 +727,32 @@ namespace xpp {
 		criterions___(
 			const fnm::name___ &Directory,
 			xml::sLevel Level = 0,
+			eXMLErrorsHandling XMLErrorsHandling = xeh_Default,
 			const str::string_ &CypherKey = str::string() ,
 			const str::string_ &Namespace = str::string(),
 			bso::bool__ Preserve = false,
-			bso::char__ SubstitutionTag = 0 )
+			bso::char__ SubstitutionMarker = 0 )
 		{
 			reset( false );
 
-			Init( Directory, Level, CypherKey, Namespace, Preserve, SubstitutionTag );
+			Init( Directory, Level, XMLErrorsHandling, CypherKey, Namespace, Preserve, SubstitutionMarker );
 		}
 		void Init(
 			const fnm::name___ &Directory,
 			xml::sLevel Level = 0,
+			eXMLErrorsHandling XMLErrorsHandling = xeh_Default,
 			const str::string_ &CypherKey = str::string(),
 			const str::string_ &Namespace = str::string(),
 			bso::bool__ Preserve = false,
-			bso::char__ SubstitutionTag = 0 )
+			bso::char__ SubstitutionMarker = 0)
 		{
 			this->Directory.Init( Directory );
 			this->Level = Level;
+			this->XMLErrorsHandling = XMLErrorsHandling,
 			this->CypherKey.Init( CypherKey );
 			this->Namespace.Init( Namespace );
 			this->Preserve = Preserve;
-			this->SubstitutionTag = SubstitutionTag;
+			this->SubstitutionMarker = SubstitutionMarker;
 		}
 		bso::bool__ IsNamespaceDefined( void ) const
 		{
@@ -751,7 +764,8 @@ namespace xpp {
 	: public _iflow_driver___
 	{
 	private:
-		status__ _Status;
+		status__ Status_;
+		eXMLErrorsHandling XMLErrorsHandling_;
 		_qualified_preprocessor_directives___ _Directives;
 		_repository _Repository;
 		_variables _Variables;
@@ -805,7 +819,8 @@ namespace xpp {
 			_iflow_driver___::reset( P );
 			_Parsers.reset( P );
 			_CurrentParser = NULL;
-			_Status = s_Undefined;
+			Status_ = s_Undefined;
+			XMLErrorsHandling_ = xeh_Undefined;
 		}
 		_preprocessing_iflow_driver___( void )
 		{
@@ -818,7 +833,7 @@ namespace xpp {
 		void Init(
 			xtf::extended_text_iflow__ &XFlow,
 			fdr::thread_safety__ ThreadSafety,
-			const criterions___ &Criterions )
+			const criterions___ &Criterions)
 		{
 		qRH
 			str::wString Buffer;
@@ -841,9 +856,10 @@ namespace xpp {
 			_iflow_driver___::Init( ThreadSafety );
 			_CurrentParser = NewParser( _Repository, _Variables, _Directives );
 			_Parsers.Init();
-			if ( _Parser().Init( XFlow, str::string(), Criterions.Directory, Criterions.CypherKey, Criterions.Preserve, Criterions.SubstitutionTag ) != sOK )
+			if ( _Parser().Init( XFlow, str::string(), Criterions.Directory, Criterions.CypherKey, Criterions.Preserve, Criterions.SubstitutionMarker ) != sOK )
 				qRFwk();
-			_Status = sOK;
+			Status_ = sOK;
+			XMLErrorsHandling_ = Criterions.XMLErrorsHandling;
 		qRR
 		qRT
 		qRE
@@ -851,12 +867,12 @@ namespace xpp {
 		}
 		status__ Status( void ) const
 		{
-			return _Status;
+			return Status_;
 		}
 		const context___ &GetContext( context___ &Context ) const
 		{
 			Context.Coordinates = coords___( _Parser().Position(), _Parser().LocalizedFileName() );
-			Context.Status = _Status;
+			Context.Status = Status_;
 
 			return Context;
 		}
@@ -885,9 +901,9 @@ namespace xpp {
 		}
 		void Init(
 			xtf::extended_text_iflow__ &XFlow,
-			const criterions___ &Criterions )
+			const criterions___ &Criterions)
 		{
-			_FlowDriver.Init( XFlow, fdr::tsDisabled, Criterions );
+			_FlowDriver.Init(XFlow, fdr::tsDisabled, Criterions);
 			_iflow__::Init( _FlowDriver );
 		}
 		const context___ &GetContext( context___ &Context ) const

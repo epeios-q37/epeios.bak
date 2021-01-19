@@ -998,7 +998,7 @@ qRB;
 
 	tol::Init(Untranslated, Context);
 
-	if ( xpp::Process(Unprocessed, xml::oIndent, Untranslated, xpp::criterions___( FileNameLocation, StartLevel ), Context) != xpp::sOK ) {
+	if ( xpp::Process(Unprocessed, xml::oIndent, Untranslated, xpp::criterions___(FileNameLocation, StartLevel, xpp::xehRelay), Context) != xpp::sOK ) {
 		Meaning.Init();
 		xpp::GetMeaning(Context, Meaning);
 

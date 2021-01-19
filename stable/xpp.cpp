@@ -1514,9 +1514,9 @@ sdr::size__ xpp::_preprocessing_iflow_driver___::FDRRead(
 
 		Parser = NULL;
 
-		_Status = _Parser().Handle( Parser, _Data );
+		Status_ = _Parser().Handle( Parser, _Data );
 
-		while ( _Status == s_Pending ) {
+		while ( Status_ == s_Pending ) {
 #ifdef XPP_DBG
 			if ( Parser != NULL )
 				qRFwk();
@@ -1531,25 +1531,23 @@ sdr::size__ xpp::_preprocessing_iflow_driver___::FDRRead(
 					if ( _Parser().GetFormat() == utf::f_Guess )
 						_Parser().SetFormat( Format );
 					else if ( _Parser().GetFormat() != Format )
-						_Status = ( xpp::status__ )xml::eEncodingDiscrepancy;
+						Status_ = ( xpp::status__ )xml::eEncodingDiscrepancy;
 				}
 
-				if ( _Status == s_Pending )
-					_Status = _Parser().Handle( Parser, _Data );
+				if ( Status_ == s_Pending )
+					Status_ = _Parser().Handle( Parser, _Data );
 			} else {
 				Maximum = 0;	// Pour sortir de la boucle.
-				_Status = (xpp::status__)xml::sOK;
+				Status_ = (xpp::status__)xml::sOK;
 			}
 
 		}
 
-		if ( _Status != sOK ) {
-#if 0
-			*Buffer = XTF_EOXC;	// Pour provoquer une erreur.
-			CumulativeRed++;
-#else
-			_Position = _Data.Amount();
-#endif
+		if ( Status_ != sOK ) {
+			if ( XMLErrorsHandling_ == xehReport )
+				_Position = _Data.Amount();
+			else
+				_CurrentParser = NULL;
 			break;
 		}
 

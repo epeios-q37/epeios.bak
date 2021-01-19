@@ -46,7 +46,6 @@ const char *xml::GetLabel( status__ Status )
 	CASE( MissingEqualSign );
 	CASE( BadAttributeValueDelimiter );
 	CASE( UnexpectedCharacter );
-	CASE( EmptyTagName );
 	CASE( MismatchedTag );
 	default:
 		qRFwk();
@@ -689,7 +688,7 @@ qRB
 					GetName_( _Flow, _TagName );
 
 					if ( _TagName.Amount() == 0 )
-						RETURN( sEmptyTagName );
+						RETURN( sUnexpectedCharacter );
 
 					_Tags.Push( _TagName );
 
@@ -1453,9 +1452,9 @@ void xml::rWriter::Rewind( sMark Mark )
 // Input data is handled until EOF.
 // If no input data, return false.
 
-bso::sBool xml::rWriter::Put(rParser &Parser)
+eStatus xml::rWriter::Put(rParser &Parser)
 {
-	bso::sBool Continue = true, Success = false;
+	bso::sBool Continue = true;
 
 	while ( Continue ) {
 		switch( Parser.Parse( xml::tfAll & ~xml::tfStartTagClosed ) ) {
@@ -1483,12 +1482,7 @@ bso::sBool xml::rWriter::Put(rParser &Parser)
 			PutCData( Parser.Value() );
 			break;
 		case xml::t_Processed:
-			Success = true;
-			Parser.Reset();
-			// No 'Continue = false', as we continue until EOF.
-			break;
 		case xml::t_Error:
-			Success &= Parser.GetStatus() == xml::sUnexpectedEOF;
 			Continue = false;
 			break;
 		default:
@@ -1497,27 +1491,29 @@ bso::sBool xml::rWriter::Put(rParser &Parser)
 		}
 	}
 
-	return Success;
+	return Parser.Status();
 }
 
-bso::sBool xml::rWriter::Put(xtf::extended_text_iflow__ &XFlow)
+eStatus xml::rWriter::Put(xtf::extended_text_iflow__ &XFlow)
 {
-	bso::sBool Success = true;
+	eStatus Status = s_Undefined;
 qRH
 	rParser Parser;
 qRB
 	Parser.Init( XFlow, ehKeep );
 
-	Success = Put( Parser );
+	Status = Put( Parser );
 qRR
 qRT
 qRE
-	return Success;
+	return Status;
 }
 
-bso::sBool xml::rWriter::Put(const str::dString &XML)
+eStatus xml::rWriter::Put(
+	const str::dString &XML,
+	xtf::sPos &ErrorPosition)
 {
-	bso::sBool Success = false;
+	eStatus Status = s_Undefined;
 qRH
 	flx::sStringIFlow SFlow;
 	xtf::extended_text_iflow__ XFlow;
@@ -1525,11 +1521,12 @@ qRB
 	SFlow.Init( XML );
 	XFlow.Init( SFlow, utf::f_Default );
 
-	Success = Put( XFlow );
+	Status = Put( XFlow );
+	ErrorPosition = XFlow.Position();	// Only of use when 'Status != sOk',
 qRR
 qRT
 qRE
-	return Success;
+	return Status;
 }
 
 Q37_GCTOR( xml )

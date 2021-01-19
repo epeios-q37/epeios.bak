@@ -25,15 +25,43 @@
 
 #include "err.h"
 #include "cio.h"
+#include "mtk.h"
+#include "flf.h"
+#include "xtf.h"
+#include "lcl.h"
 
 using cio::CIn;
 using cio::COut;
 using cio::CErr;
 
+void (* mtk::MTKErrorHandling)(void) = NULL;
+
 void Generic( int argc, char *argv[] )
 {
 qRH
+	flf::rIFlow Flow;
+	xtf::sRFlow XFlow;
+	xpp::rContext Context;
+	lcl::wMeaning Meaning;
+	lcl::locale Locale;
+	str::wString Translation;
 qRB
+	Flow.Init("Test.xml");
+	XFlow.Init(Flow, utf::f_Guess);
+
+	Context.Init();
+
+	if ( xpp::Process(XFlow, xpp::rCriterions(""), xml::oIndent, cio::COut, Context) != xpp::sOK ) {
+		Meaning.Init();
+		xpp::GetMeaning(Context, Meaning);
+
+		tol::Init(Locale, Translation);
+		Locale.GetTranslation(Meaning, "", Translation);
+
+		cio::COut << "\n>>>>>>>\t" << Translation;
+	}
+
+	 cio::COut << "\nEnd\n";
 qRR
 qRT
 qRE
@@ -61,7 +89,9 @@ int main( int argc, char *argv[] )
 	int ExitValue = EXIT_SUCCESS;
 qRFH
 qRFB
-	COut << "Test of library " << XPP_NAME << ' ' << __DATE__" "__TIME__"\n";
+	cio::Initialize(cio::tTerminal);
+
+	COut << "Test of library " << XPP_NAME << ' ' << __DATE__ " " __TIME__ "\n";
 
 	Generic( argc, argv );
 qRFR
@@ -70,3 +100,5 @@ qRFT
 qRFE( ErrFinal_() )
 	return ExitValue;
 }
+
+

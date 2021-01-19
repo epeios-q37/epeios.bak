@@ -37,8 +37,10 @@ $out = str_replace(array("\r", "\n", "\t"), '','
 					display: table;
 					margin: 20px auto auto auto;
 				}
-			</style>'
+			</style>
+			<!-- Begin of the user head -->'
 . $head . '
+			<!-- End if the user head -->
 			<script>
 				function adjustQRCodeIFrame()
 				{

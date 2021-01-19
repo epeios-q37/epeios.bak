@@ -869,7 +869,7 @@ namespace {
 		xtf::extended_text_iflow__ PXFlow;
 		xml::status__ Status = xml::s_Undefined;
 	qRB
-		PFlow.Init( XFlow, xpp::criterions___( Criterions.Directory, 0, Criterions.CypherKey, Criterions.IsNamespaceDefined() ? Criterions.Namespace : str::string( DEFAULT_NAMESPACE ) ) );	// NOTA: 'Layer' member is not used.
+		PFlow.Init(XFlow, xpp::criterions___(Criterions.Directory, 0, Criterions.XMLErrorsHandling, Criterions.CypherKey, Criterions.IsNamespaceDefined() ? Criterions.Namespace : str::string(DEFAULT_NAMESPACE)));	// NOTA: 'Layer' member is not used.
 		PXFlow.Init( PFlow, XFlow.Format() );
 
 		switch ( Status = xml::Parse( PXFlow, xml::ehReplace, Callback, qRPU ) ) {
@@ -1701,7 +1701,7 @@ qRB
 
 		Location.Init();
 		Buffer.Init();
-		Root = Fill( XFlow, xpp::criterions___( fnm::GetLocation( FileName, Location ).UTF8( Buffer ), 0, Criterions.CypherKey, Criterions.Namespace ), RootPath, Registry, Context );	//NOTA: 'Layer' member is not used.
+		Root = Fill( XFlow, xpp::criterions___( fnm::GetLocation( FileName, Location ).UTF8( Buffer ), 0, Criterions.XMLErrorsHandling, Criterions.CypherKey, Criterions.Namespace ), RootPath, Registry, Context );	//NOTA: 'Layer' member is not used.
 
 		if ( Root == qNIL )
 			if ( Context.Status == sParseError )

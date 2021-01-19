@@ -538,6 +538,7 @@ namespace xtf {
 
 namespace xtf {
 	typedef extended_text_iflow__ sRFlow;
+	typedef pos__ sPos;
 }
 
 

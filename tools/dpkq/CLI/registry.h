@@ -20,7 +20,7 @@
 #ifndef REGISTRY_INC_
 # define REGISTRY_INC_
 
-# include "sclrgstry.h"
+# include "sclr.h"
 
 namespace registry {
 	using namespace sclrgstry;
@@ -31,7 +31,7 @@ namespace registry {
 
 	extern entry___ NamespaceLabel;
 	extern entry___ NamespaceURI;
-	
+
 	extern entry___ Data;
 	extern entry___ Output;
 	extern entry___ XSL;

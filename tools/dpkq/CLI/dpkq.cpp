@@ -29,7 +29,6 @@
 #include "err.h"
 #include "cio.h"
 #include "epsmsc.h"
-#include "xpp.h"
 #include "fnm.h"
 #include "flf.h"
 

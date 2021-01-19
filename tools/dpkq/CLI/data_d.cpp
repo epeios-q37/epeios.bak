@@ -184,18 +184,18 @@ namespace {
 			const str::string_ &XML,
 			xml::rWriter &Writer )
 		{
-			qRH
-				flx::E_STRING_IFLOW__ IFlow;
+		qRH
+			flx::E_STRING_IFLOW__ IFlow;
 			xtf::extended_text_iflow__ XFlow;
-			qRB
-				IFlow.Init( XML );
+		qRB
+			IFlow.Init( XML );
 			XFlow.Init( IFlow, utf::f_Default );
 
 			if ( xpp::Process( XFlow, xpp::criterions___( "" ), Writer ) != xpp::sOK )
 				qRGnr();
-			qRR
-				qRT
-				qRE
+		qRR
+			qRT
+			qRE
 		}
 
 		void Display_(

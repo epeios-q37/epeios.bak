@@ -52,6 +52,25 @@ namespace xml {
 	typedef str::string_	value_;
 	typedef str::string		value;
 
+		// Code d'erreur 'retourn' par 'Parse()'.
+	qENUM(Status) {
+		sOK,
+		s_FirstXTFError,
+		eUnsupportedEncoding = s_FirstXTFError + xtf::eUnsupportedEncoding,
+		eUnexpectedEncoding = s_FirstXTFError + xtf::eUnexpectedEncoding,
+		eEncodingDiscrepancy = s_FirstXTFError + xtf::eEncodingDiscrepancy,
+		s_FirstNonXTFError,
+		sUnexpectedEOF = s_FirstNonXTFError,
+		sUnknownEntity,
+		sMissingEqualSign,
+		sBadAttributeValueDelimiter,
+		sUnexpectedCharacter,
+		sMismatchedTag,
+		s_amount,
+		s_Undefined,
+	};
+
+
 	// Output layout.
 	qENUM( Layout ) {
 		lCompact,	// All of one line.
@@ -524,11 +543,13 @@ namespace xml {
 		{
 			AlwaysCommit_ = Value;
 		}
-		bso::sBool Put( rParser &Parser );
+		eStatus Put(rParser &Parser);
 		// Indent and put the content of 'XFlow' (reparse it).
-		bso::sBool Put( xtf::extended_text_iflow__ &XFlow );
+		eStatus Put(xtf::extended_text_iflow__ &XFlow);
 		// Indent and put the content of 'XML' (reparse it).
-		bso::sBool Put( const str::dString &XML );
+		eStatus Put(
+			const str::dString &XML,
+			xtf::sPos &ErrorPosition);	// Only valid when returned valus != 'sOK'.
 		qRODISCLOSEr( eLayout, Outfit )
 		qRODISCLOSEr( eSpecialCharHandling, SpecialCharHandling )
 	};
@@ -541,24 +562,7 @@ namespace xml {
 namespace xml {
 	using xtf::pos__;
 
-	// Code d'erreur 'retourn' par 'Parse()'.
-	enum status__ {
-		sOK,
-		s_FirstXTFError,
-		eUnsupportedEncoding = s_FirstXTFError + xtf::eUnsupportedEncoding,
-		eUnexpectedEncoding = s_FirstXTFError + xtf::eUnexpectedEncoding,
-		eEncodingDiscrepancy = s_FirstXTFError + xtf::eEncodingDiscrepancy,
-		s_FirstNonXTFError,
-		sUnexpectedEOF = s_FirstNonXTFError,
-		sUnknownEntity,
-		sMissingEqualSign,
-		sBadAttributeValueDelimiter,
-		sUnexpectedCharacter,
-		sEmptyTagName,
-		sMismatchedTag,
-		s_amount,
-		s_Undefined,
-	};
+	typedef eStatus status__;
 
 	const char *GetLabel( status__ Status );
 
