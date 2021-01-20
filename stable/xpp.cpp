@@ -1534,8 +1534,8 @@ sdr::size__ xpp::_preprocessing_iflow_driver___::FDRRead(
 						Status_ = ( xpp::status__ )xml::eEncodingDiscrepancy;
 				}
 
-				if ( Status_ == s_Pending )
-					Status_ = _Parser().Handle( Parser, _Data );
+			if ( Status_ == s_Pending )
+				Status_ = _Parser().Handle( Parser, _Data );
 			} else {
 				Maximum = 0;	// Pour sortir de la boucle.
 				Status_ = (xpp::status__)xml::sOK;
@@ -1544,11 +1544,8 @@ sdr::size__ xpp::_preprocessing_iflow_driver___::FDRRead(
 		}
 
 		if ( Status_ != sOK ) {
-			if ( XMLErrorsHandling_ == xehReport )
 				_Position = _Data.Amount();
-			else
-				_CurrentParser = NULL;
-			break;
+				break;
 		}
 
 		if ( Parser != NULL ) {
@@ -1564,6 +1561,19 @@ sdr::size__ xpp::_preprocessing_iflow_driver___::FDRRead(
 	return CumulativeRed;
 }
 
+namespace {
+	// Returns true if exiting because EOX reached.
+	bso::sBool SkipSpaces_(xtf::sRFlow &Flow)
+	{
+		while( !Flow.EndOfFlow() && isspace(Flow.View()) )
+			Flow.Get();
+
+		return Flow.EndOfFlow();
+	}
+}
+
+#undef EOF
+
 status__ xpp::Process(
 	xtf::extended_text_iflow__ &XFlow,
 	const criterions___ &Criterions,
@@ -1574,13 +1584,21 @@ status__ xpp::Process(
 qRH
 	preprocessing_iflow___ PFlow;
 	xtf::extended_text_iflow__ RelayXFlow;
+	bso::sBool EOF = false;	//
 qRB
 	PFlow.Init( XFlow, Criterions );
 	RelayXFlow.Init( PFlow, XFlow.Format() );
 
-	if ( !Writer.Put( RelayXFlow ) ) {
+	while ( ( ( Status = _Convert(Writer.Put(RelayXFlow)) ) == sOK ) && !( EOF = SkipSpaces_(RelayXFlow) ) );
+
+	if ( ( Status != xpp::sOK ) || EOF ) {
 		PFlow.GetContext( Context );
-		Status = Context.Status;
+		if ( Context.Status != sOK ) {
+			Status = Context.Status;
+		} else {
+			Context.Status = Status;
+			Context.Coordinates = XFlow.Position();
+		}
 	}
 
 	if ( RelayXFlow.Format() != utf::f_Guess )

@@ -3,7 +3,7 @@
 Descriptions ajoutées dans la page HTML principale de chacune des démonstrations.
 
 - Sélectionner la description au format *Markdown* avec la souris ;
-- *Ctrl-B* + *entrée* (ou *Command Palette…*, *Tasks: Run Task*, *FaaS Description generator*) ;
+- *Shift-Ctrl-B* + *entrée* (ou *Command Palette…*, *Tasks: Run Task*, *FaaS Description generator*) ;
 - Coller le presse-papier (*CTRL-V*) comme (en remplacement de la) première ligne du fichier *HTML*.
 
 
@@ -37,6 +37,9 @@ Source code is available for [*Java*](https://repl.it/@AtlasTK/atlas-java#exampl
 The [*TodoMVC* app](http://todomvc.com/), but **not** using the [*MVC*](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller) pattern.
 Source code is available for [*Java*](https://repl.it/@AtlasTK/atlas-java#examples/TodoMVC/main.java), [*Node.js*](https://repl.it/@AtlasTK/atlas-java#examples/TodoMVC/main.java), [*Python*](https://repl.it/@AtlasTK/atlas-python#examples/TodoMVC/main.py) and [*Ruby*](https://repl.it/@AtlasTK/atlas-ruby#examples/TodoMVC/main.rb)!
 
+## `Widgets` ([file](./Widgets/Main.html))
+
+You will see here some widgets in action. Corresponding HTML code will be displayed.
 
 ## Misc
 

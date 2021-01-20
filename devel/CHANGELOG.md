@@ -10,6 +10,11 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2021-01-20:
+
+- RGSTRY, SCLM: [adpt],
+- XPP: improving error detection,
+
 ## 2021-01-19:
 
 - XML:
@@ -47,7 +52,6 @@
   - [adpt],
   - relocating `HeadFile` registry entry,
 
-,
 ## 2021-01-07:
 
 - STRMRG, XDHCMN: [stdz],

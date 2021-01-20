@@ -691,14 +691,6 @@ namespace xpp {
 		return Parser;
 	}
 
-	qENUM(XMLErrorsHandling) {
-		xehReport,	// Pure XML errors generates EOF, like XPP related errors
-		xehRelay,		// Data with pure XML errors are simply relayed, up to the caller to deal with them.
-		xeh_amount,
-		xeh_Undefined,
-		xeh_Default = xehReport
-	};
-
 	struct criterions___
 	{
 		fnm::name___
@@ -709,12 +701,10 @@ namespace xpp {
 			Namespace;
 		bso::bool__ Preserve;
 		bso::char__ SubstitutionMarker;
-		eXMLErrorsHandling XMLErrorsHandling;
 		void reset( bso::bool__ P = true )
 		{
 			Directory.reset( P);
 			Level = 0;
-			XMLErrorsHandling = xeh_Undefined;
 			CypherKey.reset( P );
 			Namespace.reset( P );
 			Preserve = false;
@@ -727,7 +717,6 @@ namespace xpp {
 		criterions___(
 			const fnm::name___ &Directory,
 			xml::sLevel Level = 0,
-			eXMLErrorsHandling XMLErrorsHandling = xeh_Default,
 			const str::string_ &CypherKey = str::string() ,
 			const str::string_ &Namespace = str::string(),
 			bso::bool__ Preserve = false,
@@ -735,12 +724,11 @@ namespace xpp {
 		{
 			reset( false );
 
-			Init( Directory, Level, XMLErrorsHandling, CypherKey, Namespace, Preserve, SubstitutionMarker );
+			Init( Directory, Level, CypherKey, Namespace, Preserve, SubstitutionMarker );
 		}
 		void Init(
 			const fnm::name___ &Directory,
 			xml::sLevel Level = 0,
-			eXMLErrorsHandling XMLErrorsHandling = xeh_Default,
 			const str::string_ &CypherKey = str::string(),
 			const str::string_ &Namespace = str::string(),
 			bso::bool__ Preserve = false,
@@ -748,7 +736,6 @@ namespace xpp {
 		{
 			this->Directory.Init( Directory );
 			this->Level = Level;
-			this->XMLErrorsHandling = XMLErrorsHandling,
 			this->CypherKey.Init( CypherKey );
 			this->Namespace.Init( Namespace );
 			this->Preserve = Preserve;
@@ -765,7 +752,6 @@ namespace xpp {
 	{
 	private:
 		status__ Status_;
-		eXMLErrorsHandling XMLErrorsHandling_;
 		_qualified_preprocessor_directives___ _Directives;
 		_repository _Repository;
 		_variables _Variables;
@@ -820,7 +806,6 @@ namespace xpp {
 			_Parsers.reset( P );
 			_CurrentParser = NULL;
 			Status_ = s_Undefined;
-			XMLErrorsHandling_ = xeh_Undefined;
 		}
 		_preprocessing_iflow_driver___( void )
 		{
@@ -859,7 +844,6 @@ namespace xpp {
 			if ( _Parser().Init( XFlow, str::string(), Criterions.Directory, Criterions.CypherKey, Criterions.Preserve, Criterions.SubstitutionMarker ) != sOK )
 				qRFwk();
 			Status_ = sOK;
-			XMLErrorsHandling_ = Criterions.XMLErrorsHandling;
 		qRR
 		qRT
 		qRE

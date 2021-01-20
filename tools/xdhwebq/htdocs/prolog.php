@@ -23,13 +23,12 @@ $out = str_replace(array("\r", "\n", "\t"), '','
 	<html>
 		<head>
 			<!-- If modified, report modification in "xdhcefq.html" from "xdhcefq" -->
-			<!-- BEGIN -->
 			<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 			<meta http-equiv="Cache-Control" content="no-cache"/>
-			<!--Below both scripts are for DEV environment. -->
+			<!-- Below both scripts are for DEV environment. -->
 			<script src="faas/xdhtml.js"></script>
 			<script src="faas/xdhwebq.js"></script>
-			<!-- Below both scripts are for PROD environment. -->
+			<!-- Below both scripts are for PROD environment. -->
 			<script src="faas/xdhtml_20201001.js"></script>
 			<script src="faas/xdhwebq_20200608.js"></script>
 			<style id="XDHStyle">
@@ -38,9 +37,9 @@ $out = str_replace(array("\r", "\n", "\t"), '','
 					margin: 20px auto auto auto;
 				}
 			</style>
-			<!-- Begin of the user head -->'
+			<!-- BEGIN of the user head section -->'
 . $head . '
-			<!-- End if the user head -->
+			<!-- END of the user head section -->
 			<script>
 				function adjustQRCodeIFrame()
 				{
