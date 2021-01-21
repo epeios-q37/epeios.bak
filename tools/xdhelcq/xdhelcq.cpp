@@ -23,8 +23,8 @@
 
 #include "nodeq.h"
 
-#include "sclerror.h"
-#include "sclargmnt.h"
+#include "scle.h"
+#include "scla.h"
 
 #include "dir.h"
 #include "err.h"
@@ -33,7 +33,6 @@
 #include "xpp.h"
 #include "fnm.h"
 #include "flf.h"
-#include "xdhujp.h"
 #include "xdhups.h"
 #include "xdhutl.h"
 
@@ -182,117 +181,132 @@ namespace {
 
 namespace {
 	err::err___ qRRor_;
-	sclerror::rError SCLError_;
-	scllocale::rRack Locale_;
-	sclmisc::sRack Rack_;
+	scle::rError SCLError_;
+	scll::rRack Locale_;
+	sclm::sRack Rack_;
 }
 
 namespace {
-	typedef xdhujp::cJS cJS_;
+	typedef xdhcuc::cSingle cUpstream_;
 
-	class sJS
-	: public cJS_ {
+	class rUpstream_
+	: public cUpstream_
+	{
 	protected:
-		virtual void XDHUJPExecute(
+		virtual bso::sBool XDHCUCProcess(
 			const str::string_ &Script,
-			TOL_CBUFFER___ *Return ) override
+			tht::rBlocker *Blocker,
+			str::dString *ReturnedValue ) override
 		{
+			bso::sBool Success = true;
 		qRH;
-			qCBUFFERr Buffer;
+			qCBUFFERh Buffer;
 			v8::Local<v8::Value> V8Return;
 			v8::Local<v8::String> String;
 			bso::integer_buffer__ IBuffer;
 		qRB;
 			V8Return = v8q::Execute( Script.Convert( Buffer ), v8q::GetIsolate() );
 
-			if ( Return != NULL ) {
+			if ( ReturnedValue != NULL ) {
+				if ( Blocker != NULL) {
+					Blocker->Unblock();
+					Blocker = NULL;	// To avoid unblocking twice below.
+				}
 				if ( !V8Return->IsNull() && !V8Return->IsUndefined() ) {
 					if ( V8Return->IsString() ) {
 						if ( !( String = V8Return->ToString() ).IsEmpty() ) {
-							Return->Malloc( String->Utf8Length() + 1 );	// '+ 1' for the NULL termination character.
-							String->WriteUtf8( *Return );
-						} else
-							Return->reset();
+							Buffer.Malloc( String->Utf8Length() + 1 );	// '+ 1' for the NULL termination character.
+							String->WriteUtf8( Buffer );
+							ReturnedValue->Append(Buffer);
+						}
 					} else if ( V8Return->IsInt32() ) {
-						str::string( bso::Convert( ( bso::int__ )V8Return->IntegerValue(), IBuffer ) ).Convert( *Return );
+						ReturnedValue->Append( bso::Convert( ( bso::int__ )V8Return->IntegerValue(), IBuffer ) );
 					} else if ( V8Return ->IsBoolean() ) {
 						if ( V8Return->ToBoolean()->IsTrue() )
-							str::string( "true" ).Convert( *Return );
+							ReturnedValue->Append( "true" );
 						else
-							str::string( "false" ).Convert( *Return );
-					} else
-						Return->reset();
-				} else
-					Return->reset();
+							ReturnedValue->Append( "false" );
+					}
+				}
 			}
-		qRR;
-		qRT;
-		qRE;
+		qRFR
+			Success = false;
+		qRFT
+				if ( Blocker != NULL)
+					Blocker->Unblock();
+		qRFE(sclm::ErrorDefaultHandling())
+			return Success;
 		}
-		virtual void XDHUJPGetWidgetAttributeName( TOL_CBUFFER___ &Buffer ) override
-		{
-			sclmisc::MGetValue( registry::custom_item::attribute_name::Widget, Buffer );
-		}
-		virtual void XDHUJPGetResultAttributeName( TOL_CBUFFER___ &Buffer ) override
-		{
-			sclmisc::MGetValue( registry::custom_item::attribute_name::Result, Buffer );
-		}
-		/*
-		virtual void XDHJSPHandleExtensions( const xdhcbk::nstring___ &Id ) override
-		{
-		HandleExtensions_( Id, _A() );
-		}
-		virtual void XDHJSPHandleCastings( const xdhcbk::nstring___ &Id ) override
-		{
-		HandleCastings_(Id, _A() );
-		}
-		*/
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			// Standardization.
 		}
-		E_CVDTOR( sJS );
-		void Init( void )
+		E_CVDTOR( rUpstream_ );
+		void Init(void)
 		{
 			// Standardization.
 		}
 	};
 
-	sJS JS_;
+	rUpstream_ Upstream_;
 	xdhups::sSession Session_;
 	xdhups::rAgent Agent_;
 	TOL_CBUFFER___ LanguageBuffer_, IdentificationBuffer_;
 
+namespace {
+	namespace {
+		typedef xdhcuc::cGlobal cUpstream_;
+
+		class sUpstream_
+		: public cUpstream_
+		{
+		protected:
+			virtual faas_::sRow XDHCUCCreate(const str::dString &Token) override
+			{
+				return xdhbrd::Create(Token);
+			}
+			virtual void XDHCUCRemove(faas_::sRow Row) override
+			{
+				return xdhbrd::Remove(Row);
+			}
+			virtual void XDHCUCBroadcast(
+				const str::dString &Script,
+				faas_::sRow Row) override
+			{
+				xdhbrd::Broadcast(Script, Row);
+			}
+		public:
+			void reset(bso::sBool = true)
+			{}
+			qCVDTOR(sUpstream_)
+			void Init(void)
+			{}
+		};
+	}
+}
+
+
 	void InitializeSession_( const str::dString &Token )	// IF empty, PROD, otherwise DEMO.
 	{
 	qRH;
-		xdhujp::sProxyCallback *ProxyCallback = NULL;
-		qCBUFFERr Buffer;
 		str::wString ModuleFilename, Identification;
 	qRB;
 		ModuleFilename.Init();
-		sclmisc::MGetValue( registry::parameter::ModuleFilename, ModuleFilename );
+		sclm::MGetValue( registry::parameter::ModuleFilename, ModuleFilename );
 
-		ProxyCallback = new xdhujp::sProxyCallback;	// Destruction is made by '_Session'.
-
-		if ( ProxyCallback == NULL )
-			qRGnr();
-
-		::JS_.Init();
-
-		ProxyCallback->Init( ::JS_ );
+		Upstream_.Init();
 
 		Identification.Init( NAME_LC " V" VERSION );
 		Identification.Append( " - Node v" NODE_VERSION_STRING "; ABI v" NODE_STRINGIFY( NODE_MODULE_VERSION ) " - " );
 		Identification.Append( "Build " __DATE__ " " __TIME__ " - " );
 		Identification.Append( cpe::GetDescription() );
 		// Library compiled with 'node-gyp', which doesn't put the 'lib' prefix on 'POSIX' systems, hence 'dlbrry::nExtOnly'.
-		Agent_.Init( xdhcmn::mMonoUser, ModuleFilename, dlbrry::nExtOnly,  Identification.Convert( IdentificationBuffer_ ) );
+		Agent_.Init( xdhcdc::mMonoUser, ModuleFilename, dlbrry::nExtOnly,  Identification.Convert( IdentificationBuffer_ ) );
 
 		Session_.Init( Agent_.RetrieveCallback( Agent_.BaseLanguage( LanguageBuffer_ ), Token, ProxyCallback ) );
 		Session_.Initialize( ProxyCallback, str::wString( LanguageBuffer_ ), Token );
-		sclmisc::SetBaseLanguage( str::wString( LanguageBuffer_ ) );
+		sclm::SetBaseLanguage( str::wString( LanguageBuffer_ ) );
 	qRR;
 		if ( ProxyCallback != NULL )
 			delete ProxyCallback;

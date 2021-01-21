@@ -166,7 +166,7 @@ namespace xdhcdc {
 		{
 			return XDHCDCGetInfo();
 		}
-		const bso::sBool GetHead(
+		bso::sBool GetHead(
 			const str::dString &Token,
 			str::dString &Head)
 		{

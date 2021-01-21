@@ -10,6 +10,11 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+
+## 2021-01-21:
+
+- XDHCDC: [warn],
+
 ## 2021-01-20:
 
 - RGSTRY, SCLM: [adpt],

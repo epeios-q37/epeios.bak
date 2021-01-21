@@ -1544,8 +1544,8 @@ sdr::size__ xpp::_preprocessing_iflow_driver___::FDRRead(
 		}
 
 		if ( Status_ != sOK ) {
-				_Position = _Data.Amount();
-				break;
+			_Position = _Data.Amount();
+			break;
 		}
 
 		if ( Parser != NULL ) {
@@ -1584,7 +1584,7 @@ status__ xpp::Process(
 qRH
 	preprocessing_iflow___ PFlow;
 	xtf::extended_text_iflow__ RelayXFlow;
-	bso::sBool EOF = false;	//
+	bso::sBool EOF = false;
 qRB
 	PFlow.Init( XFlow, Criterions );
 	RelayXFlow.Init( PFlow, XFlow.Format() );
@@ -1596,7 +1596,7 @@ qRB
 		if ( Context.Status != sOK ) {
 			Status = Context.Status;
 		} else {
-			Context.Status = Status;
+			Context.Status = Status;	// When no error, 'Status' will be 'sOK', and below line does not matter.
 			Context.Coordinates = XFlow.Position();
 		}
 	}

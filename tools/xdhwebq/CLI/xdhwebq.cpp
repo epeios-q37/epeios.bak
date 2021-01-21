@@ -52,7 +52,8 @@ namespace {
 	}
 }
 
-namespace faas_ {
+namespace
+cd D/ {
 	using namespace xdhcmn::faas;
 }
 

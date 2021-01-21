@@ -2,8 +2,6 @@
  "variables": {
   "stable": "../../stable/",
   "ext": "node",
-  "module_name": "njsq",
-  "module_path": "/home/csimon/bin"
  },
  "conditions": [
   [
