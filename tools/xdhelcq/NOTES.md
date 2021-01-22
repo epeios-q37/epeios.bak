@@ -12,7 +12,7 @@ The second argument (third with the `-m|--module` option) must be `index.js`. If
 
 As last argument, the subdirectory which contains all the file red directly by *Electron*.
 
-Example to launch the *Atlas* frontend for *TodoMVC* : `nodes_module/.bin/electron index.js -m=h:/bin/xdhqxdh TodoMVC`.
+Example to launch the *Atlas* frontend for *TodoMVC* : `node_modules/.bin/electron index.js -m=h:/bin/xdhqxdh TodoMVC`.
 
 ## Installation
 

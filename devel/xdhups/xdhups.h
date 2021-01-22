@@ -34,10 +34,6 @@
 # include "dlbrry.h"
 
 namespace xdhups {
-	namespace faas {
-		using namespace xdhcdc::faas;
-	}
-
 	typedef ntvstr::char__ nchar__;
 	typedef ntvstr::string___ nstring___;
 
@@ -92,9 +88,9 @@ namespace xdhups {
 			const str::string_ &ModuleFileName,
 			dlbrry::eNormalization Normalization,	// Usually 'dlbrry::n_Default', except when used for 'Node.js' (set to 'dlbrry::nExtOnly').
 			const char *Identification );
-		cDownstream_ *FetchCallback(faas::sId Id)
+		cDownstream_ *FetchCallback()
 		{
-			return C_().FetchCallback(Id);
+			return C_().FetchCallback();
 		}
 		const char *BaseLanguage( TOL_CBUFFER___ &Buffer ) const
 		{

@@ -53,14 +53,14 @@ qRT
 qRE
 }
 
-xdhcdc::cSingle *sclx::SCLXFetchCallback(sclx::faas::sId Id)
+xdhcdc::cSingle *sclx::SCLXFetchCallback(void)
 {
 	core::rSession *Session = new core::rSession;
 
 	if ( Session == NULL )
 		qRGnr();
 
-	Session->Init(core::Kernel(), core::Core, esketchxdh::Info, Id);
+	Session->Init(core::Kernel(), core::Core, esketchxdh::Info);
 
 //	Session->Connect();
 

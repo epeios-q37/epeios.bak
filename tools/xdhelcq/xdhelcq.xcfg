@@ -3,8 +3,8 @@
 	<Configuration target="xdhelcq">
 		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
 		<xpp:expand value-of="q37.xpp"/>
-  <xpp:expand href="../../TOL.xcfg"/>
-		<xpp:expand href="../XDH.xcfg"/>
+		<xpp:expand href="../../CLI.xcfg"/>
+		<xpp:expand href="../../XDH.xcfg"/>
 		<Parameters>
    <!--ModuleFilename>h:/bin/esketchxdh</ModuleFilename-->
 			<Language>en</Language>
@@ -17,7 +17,7 @@
 		</Scripts>
 		</Definitions>
 		<Locale>
-			<xpp:expand select="TOL_Locale"/>
+			<xpp:expand select="CLI_Locale"/>
 			<Translations text="TestCommandDescription">
 				<Translation language="fr">Commande de test.</Translation>
 				<Translation language="en">Test command.</Translation>
@@ -44,7 +44,7 @@
 			</Translations>
 		</Locale>
 		<Arguments>
-			<xpp:expand select="TOL_Arguments"/>
+			<xpp:expand select="CLI_Arguments"/>
 			<!-- Command -->
 			<Argument id="LaunchCommand" Description="LaunchCommandDescription" long="launch" short="l" Value="Launch" Usage="%ModuleFilenameOption% %TokenOption%"/>
 			<!-- Options -->

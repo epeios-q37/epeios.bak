@@ -21,6 +21,6 @@
 
 using namespace registry;
 
-rEntry registry::parameter::ModuleFilename( "ModuleFilename", sclrgstry::Parameters );
-rEntry registry::parameter::Token( "Token", sclrgstry::Parameters );
+rEntry registry::parameter::ModuleFilename( "ModuleFilename", sclr::Parameters );
+rEntry registry::parameter::Token( "Token", sclr::Parameters );
 

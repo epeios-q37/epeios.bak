@@ -115,9 +115,9 @@ namespace {
 
 			strcpy( Buffer, Language );
 		}
-		virtual xdhcdc::cSingle *XDHCDCFetchCallback(faas::sId Id) override
+		virtual xdhcdc::cSingle *XDHCDCFetchCallback(void) override
 		{
-			return SCLXFetchCallback(Id);
+			return SCLXFetchCallback();
 		}
 		virtual void XDHCDCDismissCallback(xdhcdc::cSingle *Callback) override
 		{

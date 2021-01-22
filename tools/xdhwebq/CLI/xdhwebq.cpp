@@ -52,8 +52,7 @@ namespace {
 	}
 }
 
-namespace
-cd D/ {
+namespace faas_ {
 	using namespace xdhcmn::faas;
 }
 
@@ -164,7 +163,7 @@ namespace {
 			qRH
 				xdhcdc::cSingle *Callback = NULL;
 			qRB
-				Callback = Agent.FetchCallback(faas_::UndefinedId);
+				Callback = Agent.FetchCallback();
 
 				if ( Callback == NULL )
 					qRGnr();

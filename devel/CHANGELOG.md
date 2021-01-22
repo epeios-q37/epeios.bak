@@ -10,6 +10,10 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2021-01-22:
+
+- SCLM: remove unused `rSession` member,
+- XDHCDC, XDHUPS: [adpt],
 
 ## 2021-01-21:
 

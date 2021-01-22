@@ -836,7 +836,6 @@ namespace sclx {
 		sReporting Reporting_;
 		eBackendVisibility BackendVisibility_;
 		qRMV( class rCore<rSession>, C_, Core_ );
-		faas::sId Id_;
 	protected:
 		bso::sBool XDHCDCInitialize(
 			xdhcuc::cSingle &Callback,
@@ -885,14 +884,12 @@ namespace sclx {
 			BackendVisibility_ = bv_Undefined;
 			sProxy::reset();
 			Core_ = NULL;
-			Id_ = faas::UndefinedId;
 		}
 		qCVDTOR( rSession )
 		void Init(
 			sclf::rKernel &Kernel,
 			class rCore<rSession> &Core,
 			const scli::sInfo &Info,
-			faas::sId Id,
 			eXSLFileHandling XSLFileHandling = xfh_Default )
 		{
 			this->XSLFileHandling_ = XSLFileHandling;
@@ -902,7 +899,6 @@ namespace sclx {
 			// instances::Init( *this );	// Made on connection.
 			BackendVisibility_ = bvShow;	// By default, the backend part of the login page is shown.
 			Core_ = &Core;
-			Id_ = Id;
 		}
 		bso::bool__ Connect(
 			const fblfrd::compatibility_informations__ &CompatibilityInformations,
@@ -1136,7 +1132,7 @@ namespace sclx {
 	const scli::sInfo &SCLXInfo( void );	// To define by user.
 	void SCLXInitialization( xdhcdc::eMode Mode );	// To define by user.
 
-	xdhcdc::cSingle *SCLXFetchCallback(faas::sId Id);	// To define by user.
+	xdhcdc::cSingle *SCLXFetchCallback();	// To define by user.
 
 	void SCLXDismissCallback( xdhcdc::cSingle *Callback );	// To define by user.
 

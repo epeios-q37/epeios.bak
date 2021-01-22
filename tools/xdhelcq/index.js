@@ -17,6 +17,8 @@
 	along with XDHq. If not, see <http://www.gnu.org/licenses/>.
 */
 
+const devTools = false;  // Uncomment to open dev tools.
+
 const { app, BrowserWindow } = require('electron');
 const path = require('path');
 const url = require('url');
@@ -75,7 +77,8 @@ function createWindow() {
   win = new BrowserWindow({ width: 800, height: 600 })
 
   // Open the DevTools.
-  win.webContents.openDevTools();
+  if ( typeof devTools !== 'undefined' && devTools)
+    win.webContents.openDevTools();
 
   let html = fs.readFileSync(path.join(__dirname, "XDHELCq.html"), "utf8").replace(/\$XDHELCQ_PATH\$/g, __dirname.replace(/\\/g, "\\\\")).replace(/\$XDHELCQ_HEAD\$/g, xdhelcq.getHead());
 

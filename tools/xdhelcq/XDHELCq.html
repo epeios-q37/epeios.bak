@@ -5,7 +5,13 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <!-- Without below line, 'jQuery' isn't loaded correctly. -->
   <!-- From http://stackoverflow.com/questions/32621988/electron-jquery-is-not-defined -->
-  <script>if (typeof module === 'object') { window.module = module; module = undefined; }</script>
+  <style id="XDHStyle">
+    .xdh_style {
+      display: table;
+      margin: 20px auto auto auto;
+    }
+  </style>
+ <script>if (typeof module === 'object') { window.module = module; module = undefined; }</script>
   <script src="file://$XDHELCQ_PATH$/js/xdhtml.js"></script>
   <script>
     function attachDebugger() {
@@ -33,8 +39,10 @@
 </head>
 
 <body>
+  <div class="xdh_style">
+  </div>
   <script>
-    attachDebugger();
+//    attachDebugger();
 
     var xdhelcqPath = null;
 
@@ -50,10 +58,10 @@
     }
 
     const xdhelcq = require(xdhelcqPath);
-    // console.log( require(\'electron\').remote.process.argv );
+    //console.log( require(\'electron\').remote.process.argv );
     initialize(require('electron').remote.process.argv);
-    alert( xdhelcq.moduleInfo());
-    alert( xdhelcq.getHead());
+//    alert( xdhelcq.moduleInfo());
+//    alert( xdhelcq.getHead());
     launchEvent("");
   </script>
 </body>

@@ -141,7 +141,7 @@ namespace {
 
 			strcpy( Buffer, Language );
 		}
-		virtual xdhcdc::cSingle *XDHCDCFetchCallback(faaspool::sId) override
+		virtual xdhcdc::cSingle *XDHCDCFetchCallback() override
 		{
 			return FetchCallback_();
 		}

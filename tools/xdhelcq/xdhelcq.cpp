@@ -35,10 +35,14 @@
 #include "flf.h"
 #include "xdhups.h"
 #include "xdhutl.h"
+#include "xdhbrd.h"
 
 using cio::CErr;
 using cio::COut;
 using cio::CIn;
+
+#define D cio::COut <<  txf::nl << __LOC__ << txf::nl << txf::commit
+
 
 SCLI_DEF( xdhelcq, NAME_LC, NAME_MC );
 
@@ -187,10 +191,10 @@ namespace {
 }
 
 namespace {
-	typedef xdhcuc::cSingle cUpstream_;
+	typedef xdhcuc::cSingle cSingle_;
 
-	class rUpstream_
-	: public cUpstream_
+	class rSingle_
+	: public cSingle_
 	{
 	protected:
 		virtual bso::sBool XDHCUCProcess(
@@ -205,7 +209,15 @@ namespace {
 			v8::Local<v8::String> String;
 			bso::integer_buffer__ IBuffer;
 		qRB;
+			D;
+
+			cio::COut << "Script:" << Script << txf::nl << txf::commit;
+
+			D;
+
 			V8Return = v8q::Execute( Script.Convert( Buffer ), v8q::GetIsolate() );
+
+			D;
 
 			if ( ReturnedValue != NULL ) {
 				if ( Blocker != NULL) {
@@ -242,50 +254,57 @@ namespace {
 		{
 			// Standardization.
 		}
-		E_CVDTOR( rUpstream_ );
+		E_CVDTOR( rSingle_ );
 		void Init(void)
 		{
 			// Standardization.
 		}
 	};
 
-	rUpstream_ Upstream_;
+	rSingle_ Single_;
 	xdhups::sSession Session_;
 	xdhups::rAgent Agent_;
 	TOL_CBUFFER___ LanguageBuffer_, IdentificationBuffer_;
 
-namespace {
-	namespace {
-		typedef xdhcuc::cGlobal cUpstream_;
-
-		class sUpstream_
-		: public cUpstream_
-		{
-		protected:
-			virtual faas_::sRow XDHCUCCreate(const str::dString &Token) override
-			{
-				return xdhbrd::Create(Token);
-			}
-			virtual void XDHCUCRemove(faas_::sRow Row) override
-			{
-				return xdhbrd::Remove(Row);
-			}
-			virtual void XDHCUCBroadcast(
-				const str::dString &Script,
-				faas_::sRow Row) override
-			{
-				xdhbrd::Broadcast(Script, Row);
-			}
-		public:
-			void reset(bso::sBool = true)
-			{}
-			qCVDTOR(sUpstream_)
-			void Init(void)
-			{}
-		};
+	namespace faas_ {
+		using namespace xdhcmn::faas;
 	}
-}
 
+	namespace {
+		namespace {
+			typedef xdhcuc::cGlobal cGlobal_;
+
+			class sGlobal_
+			: public cGlobal_
+			{
+			protected:
+				virtual faas_::sRow XDHCUCCreate(const str::dString &Token) override
+				{
+					return xdhbrd::Create(Token);
+				}
+				virtual void XDHCUCRemove(faas_::sRow Row) override
+				{
+					return xdhbrd::Remove(Row);
+				}
+				virtual void XDHCUCBroadcast(
+					const str::dString &Script,
+					faas_::sRow Row) override
+				{
+					xdhbrd::Broadcast(Script, Row);
+				}
+			public:
+				void reset(bso::sBool = true)
+				{}
+				qCVDTOR(sGlobal_)
+				void Init(void)
+				{}
+			};
+		}
+
+		sGlobal_ Global_;
+	}
+
+	xdhbrd::rXCallback Broadcaster_;
 
 	void InitializeSession_( const str::dString &Token )	// IF empty, PROD, otherwise DEMO.
 	{
@@ -295,21 +314,21 @@ namespace {
 		ModuleFilename.Init();
 		sclm::MGetValue( registry::parameter::ModuleFilename, ModuleFilename );
 
-		Upstream_.Init();
+		Single_.Init();
+		Global_.Init();
 
 		Identification.Init( NAME_LC " V" VERSION );
 		Identification.Append( " - Node v" NODE_VERSION_STRING "; ABI v" NODE_STRINGIFY( NODE_MODULE_VERSION ) " - " );
 		Identification.Append( "Build " __DATE__ " " __TIME__ " - " );
 		Identification.Append( cpe::GetDescription() );
 		// Library compiled with 'node-gyp', which doesn't put the 'lib' prefix on 'POSIX' systems, hence 'dlbrry::nExtOnly'.
-		Agent_.Init( xdhcdc::mMonoUser, ModuleFilename, dlbrry::nExtOnly,  Identification.Convert( IdentificationBuffer_ ) );
+		Agent_.Init( Global_, xdhcdc::mMonoUser, ModuleFilename, dlbrry::nExtOnly,  Identification.Convert( IdentificationBuffer_ ) );
 
-		Session_.Init( Agent_.RetrieveCallback( Agent_.BaseLanguage( LanguageBuffer_ ), Token, ProxyCallback ) );
-		Session_.Initialize( ProxyCallback, str::wString( LanguageBuffer_ ), Token );
+//		Session_.Init( Agent_.FetchCallback( Agent_.BaseLanguage( LanguageBuffer_ ), Token, Single_ ) );
+		Session_.Init( *Agent_.FetchCallback() );
+		Session_.Initialize( Single_, LanguageBuffer_, Token, str::Empty ) &&  Broadcaster_.Init(Single_, Token);
 		sclm::SetBaseLanguage( str::wString( LanguageBuffer_ ) );
 	qRR;
-		if ( ProxyCallback != NULL )
-			delete ProxyCallback;
 	qRT;
 	qRE;
 	}
@@ -328,8 +347,8 @@ namespace {
 			Message.Append( err::Message( Buffer ) );
 
 			ERRRst();	// To avoid relaunching of current error by objects of the 'FLW' library.
-		} else if ( sclerror::IsErrorPending() )
-			sclmisc::GetSCLBasePendingErrorTranslation( Message );
+		} else if ( scle::IsErrorPending() )
+			sclm::GetSCLBasePendingErrorTranslation( Message );
 
 		if ( Isolate != NULL )
 			Isolate->ThrowException( v8::Exception::Error( v8q::ToString( Message ) ) );
@@ -338,9 +357,11 @@ namespace {
 
 //		v8q::console::Log( Isolate, Message );
 
-		Message.InsertAt( "alert( '" );
+cio::COut << txf::nl << Message << txf::nl << txf::commit;
+
+		Message.InsertAt( "window.alert( '" );
 		Message.Append( "');" );
-		JS_.Execute( Message );
+		Single_.Process(Message);
 	qRR
 		ERRRst();
 	qRT
@@ -359,12 +380,12 @@ namespace {
 		RawArguments.Get( Arguments );
 
 		NormalizedArguments.Init();
-		sclargmnt::Normalize( Arguments, NormalizedArguments );
+		scla::Normalize( Arguments, NormalizedArguments );
 
-		sclargmnt::FillRegistry( NormalizedArguments, sclargmnt::faIsCommand, sclargmnt::uaIgnore );
+		scla::FillRegistry( NormalizedArguments, scla::faIsCommand, scla::uaIgnore );
 
 		Token.Init();
-		sclmisc::OGetValue( registry::parameter::Token, Token );
+		sclm::OGetValue( registry::parameter::Token, Token );
 
 		InitializeSession_( Token );
 	qRFR;
@@ -384,7 +405,7 @@ namespace {
 		Script.Init();
 		String.Get( Script );
 
-		JS_.Execute( Script );
+		Single_.Process(Script);
 	qRFR;
 	qRFT;
 	qRFE( ErrFinal_() );
@@ -417,25 +438,25 @@ namespace {
 
 	void GetHead_( const v8::FunctionCallbackInfo<v8::Value>& Args )
 	{
-	qRH;
+	qRFH;
 		str::wString Head, Token;
 		v8q::sLString String, RawToken;
-	qRB;
-		// Token handling NOT TESTED !!!
-
+	qRFB;
 		tol::Init( Token, Head );
 
-		RawToken.Init( Args[0] );
-		RawToken.Get( Token );
+		if ( Args.Length() ) {
+			RawToken.Init(Args[0]);
+			RawToken.Get( Token );
+		}
 
-		Agent_.Head( (void *)&Token, Head );
+		Agent_.GetHead( Token, Head );
 
 		String.Init( Head );
 
 		Args.GetReturnValue().Set( String.Core() );
-	qRR;
-	qRT;
-	qRE;
+	qRFR;
+	qRFT;
+	qRFE( ErrFinal_() );
 	}
 }
 
@@ -482,7 +503,7 @@ namespace {
 
 		tol::reset( Driver, TFlow );
 
-		JS_.Execute( Out );
+		Single_.Process(Out);
 
 	qRR
 	qRT
@@ -520,6 +541,7 @@ namespace {
 	}
 
 	namespace {
+#if 0		
 		bso::bool__ HandleEvent_( const str::string_  &Digest )
 		{
 			bso::bool__ Stop = true;
@@ -547,7 +569,19 @@ namespace {
 		qRE
 			return Stop;
 		}
-	}
+#endif
+		bso::bool__ HandleEvent_( const str::string_  &Digest )
+		{
+			bso::bool__ Stop = true;
+		qRH
+			TOL_CBUFFER___ Buffer;
+		qRB
+			Stop = Session_.Handle(Digest.Convert(Buffer));
+		qRR
+		qRT
+		qRE
+			return Stop;
+		}	}
 
 	void LaunchEvent_( const v8::FunctionCallbackInfo<v8::Value>& Args )
 	{
@@ -594,7 +628,7 @@ qRFB
 	Location.Init();
 	GetAddonLocation_( Module, Location );
 
-	sclmisc::Initialize( Rack_, Location, xdhelcq::Info );
+	sclm::Initialize( Rack_, Location, xdhelcq::Info );
 
 	node::AtExit( OnExit_, NULL );
 qRFR

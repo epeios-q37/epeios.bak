@@ -115,9 +115,9 @@ namespace {
 
 			strcpy( Buffer, Language );
 		}
-		virtual xdhcdc::cSingle *XDHCDCFetchCallback(faas::sId Id) override
+		virtual xdhcdc::cSingle *XDHCDCFetchCallback(void) override
 		{
-			return SCLXFetchCallback(Id);
+			return SCLXFetchCallback();
 		}
 		virtual void XDHCDCDismissCallback(xdhcdc::cSingle *Callback) override
 		{
@@ -132,6 +132,7 @@ namespace {
 			str::dString &Head,
 			qRPN ) override
 		{
+			bso::sBool Success = true;
 		qRFH;
 		qRFB;
 			if ( Token.Amount())
@@ -139,9 +140,10 @@ namespace {
 
 			sclm::LoadXMLAndTranslateTags( registry::definition::HeadFile, sclr::GetCommonRegistry(), Head, 0, DefaultMarker);
 		qRFR;
+			Success = false;
 		qRFT;
 		qRFE(sclm::ErrorDefaultHandling());
-			return true;
+			return Success;
 		}
 	public:
 		void reset( bso::bool__ P = true )
