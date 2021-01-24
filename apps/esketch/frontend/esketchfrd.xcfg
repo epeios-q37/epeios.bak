@@ -49,14 +49,14 @@
 					</xpp:ifeq>
 				</xpp:bloc>
 			</xpp:define>
-			<Projects Default="Embedded">
+			<Projects Default="No">
 				<xpp:define name="ProjectsRootDir">
 					<xpp:bloc>
 						<xpp:expand select="BinRootDir"/>
 						<xpp:bloc>skt/Frontend/</xpp:bloc>
 					</xpp:bloc>
 				</xpp:define>
-				<Project id="No" Alias="NoBackendProject">
+				<Project id="No" Alias="NoBackendProject" Type="Embedded">
 					<xpp:expand select="ProjectsRootDir"/>
 					<xpp:bloc>None.xprj</xpp:bloc>
 				</Project>

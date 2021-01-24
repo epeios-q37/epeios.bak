@@ -52,14 +52,14 @@ void prolog::Display( core::rSession &Session )
 	Session.Execute( "var s = document.createElement('script'); s.setAttribute('src','https://code.jquery.com/ui/1.12.1/jquery-ui.js');document.head.appendChild(s);" );
 */
 	Session.SwitchTo( base::pProlog );
-	sclx::prolog::HandleProjectTypeSwitching( Session );
+	sclx::prolog::HandlePresetSwitching( Session );
 }
 
 #define A( name ) BASE_ADef( prolog, name )
 
-A( SwitchProjectType )
+A( SwitchPreset )
 {
-	sclx::prolog::HandleProjectTypeSwitching( Session );
+	sclx::prolog::HandlePresetSwitching( Session );
 }
 
 A( DisplayProjectFilename )
@@ -67,9 +67,9 @@ A( DisplayProjectFilename )
 	sclx::prolog::DisplaySelectedProjectFilename( Session, Id );
 }
 
-A( LoadProject )
+A( LoadPreset )
 {
-	sclx::prolog::LoadProject( Session );
+	sclx::prolog::LoadPreset( Session );
 
 	login::Display( Session );
 }

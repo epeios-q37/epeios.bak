@@ -29,6 +29,9 @@ rgstry::entry___ sclf::registry::parameter::Login( "Login", sclr::Parameters );
 rgstry::entry___ sclf::registry::parameter::login::UserID( "UserID", Login );
 rgstry::entry___ sclf::registry::parameter::login::Password( "Password", Login );
 
+rgstry::entry___ sclf::registry::parameter::Preset( "Preset", sclr::Parameters );
+rgstry::entry___ sclf::registry::parameter::preset::Type("Type", Preset);
+rgstry::entry___ sclf::registry::parameter::preset::Feature("Feature", Preset);
 
 namespace parameter_ {
 	rgstry::entry___ Backend_( "Backend", sclr::Parameters );
@@ -43,6 +46,7 @@ namespace parameter_ {
 
 		rgstry::entry___ Handling_( "@Handling", sclr::parameter::Project );
 	}
+
 
 	rgstry::entry___ &Login_ = registry::parameter::Login;
 
@@ -469,14 +473,29 @@ void sclf::rFrontend::Disconnect( void )
 }
 
 
-void sclf::GetProjectsFeatures(
+void sclf::GetPresetFeatures(
 	const char *Language,
 	xml::rWriter &Writer )
 {
 qRH
-	str::string Pattern;
+	str::string Type, Feature;
 qRB
-	GetFeatures_( "Projects", "Project", "DefaultProjectType", parameter_::project_::Type, sclr::definition::project::Id, sclr::parameter::project::Feature, sclr::definition::DefaultProjectId, sclr::definition::TaggedProject, definition_::tagged_project_::Alias_, Language, Writer );
+	tol::Init(Type, Feature);
+
+	sclm::OGetValue(registry::parameter::preset::Type, Type);
+	sclm::OGetValue(registry::parameter::preset::Feature, Feature);
+
+	Writer.PushTag("Preset");
+
+	if ( Type.Amount() )
+		Writer.PutAttribute("Type", Type);
+
+	if ( Feature.Amount() )
+		Writer.PutValue(Feature);
+
+	Writer.PopTag();
+
+	GetFeatures_( "Setups", "Setup", "DefaultId", parameter_::backend_::Type_, definition_::backends::backend_::Id_,parameter_::backend_::Feature_, definition_::backends::DefaultBackendId, definition_::backends::Backend_, definition_::backends::tagged_backend::Alias, Language, Writer );
 qRR
 qRT
 qRE

@@ -46,33 +46,33 @@
 		<xpp:bloc>
 			<xpp:bloc>
 				<!-- Prolog -->
-				<Translations text="plgProject">
-					<Translation language="fr">Projet</Translation>
-					<Translation language="en">Project</Translation>
+				<Translations text="plgPreset">
+					<Translation language="fr">Préréglage</Translation>
+					<Translation language="en">Preset</Translation>
 				</Translations>
-				<Translations text="plgProjectToLoad">
-					<Translation language="fr">Projet à charger</Translation>
-					<Translation language="en">Project to load</Translation>
+				<Translations text="plgPresetToUse">
+					<Translation language="fr">Préréglage à utiliser</Translation>
+					<Translation language="en">Preset to use</Translation>
 				</Translations>
-				<Translations text="plgProjectTypes">
-					<Translation language="fr">Types de projet</Translation>
-					<Translation language="en">Project types</Translation>
+				<Translations text="plgPresetTypes">
+					<Translation language="fr">Types de prérèglages</Translation>
+					<Translation language="en">Preset types</Translation>
 				</Translations>
-				<Translations text="plgNewProjectOption">
-					<Translation language="fr">Nouveau</Translation>
-					<Translation language="en">New</Translation>
+				<Translations text="plgNonePresetOption">
+					<Translation language="fr">Aucun</Translation>
+					<Translation language="en">None</Translation>
 				</Translations>
-				<Translations text="plgPredefinedProjectOption">
+				<Translations text="plgSetupPresetOption">
 					<Translation language="fr">Prédéfini</Translation>
 					<Translation language="en">Predefined</Translation>
 				</Translations>
-				<Translations text="plgUserProjectOption">
-					<Translation language="fr">Utilisateur</Translation>
-					<Translation language="en">User</Translation>
+				<Translations text="plgProjectPresetOption">
+					<Translation language="fr">Projet</Translation>
+					<Translation language="en">PRoject</Translation>
 				</Translations>
-				<Translations text="plgPredefinedProjects">
-					<Translation language="fr">Projets prédéfinis</Translation>
-					<Translation language="en">Predefined projects</Translation>
+				<Translations text="plgPredefinedSetup">
+					<Translation language="fr">Prérèglages prédéfinis</Translation>
+					<Translation language="en">Predefined seyps</Translation>
 				</Translations>
 				<Translations text="plgProjectFile">
 					<Translation language="fr">Fichier</Translation>

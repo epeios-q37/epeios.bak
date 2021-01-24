@@ -10,6 +10,17 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2021-01-24:
+
+- SCLF, SCLX: [adpt],
+- SCLM: replacing predefined project by presets,
+
+## 2021-01-23:
+
+- SCLM:
+  - removing embedded projet type,
+- SCLX: [adpt],
+
 ## 2021-01-22:
 
 - SCLM: remove unused `rSession` member,

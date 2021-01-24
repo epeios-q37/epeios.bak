@@ -7,35 +7,35 @@
 	<xsl:template match="Layout">
 		<span class="vcenter-out">
 			<span class="vcenter-in">
-				<fieldset title="#plgProjectToLoad#">
-					<legend>#plgProject#</legend>
+				<fieldset title="#plgPresetToUse#">
+					<legend>#plgPreset#</legend>
 					<div>
 						<span>
 							<fieldset id="Border">
-								<select id="ProjectType" data-xdh-onevent="SwitchProjectType" title="#plgProjectTypes#">
-									<option value="New">
-										<xsl:if test="DefaultProjectType='New'">
+								<select id="Preset" data-xdh-onevent="SwitchPreset" title="#plgPreset#">
+									<option value="None">
+										<xsl:if test="DefaultPreset='None'">
 											<xsl:attribute name="selected">selected</xsl:attribute>
 										</xsl:if>
-										<xsl:text>#plgNewProjectOption#</xsl:text>
+										<xsl:text>#plgNonePresetOption#</xsl:text>
 									</option>
-									<option value="Predefined">
-										<xsl:if test="DefaultProjectType='Predefined'">
+									<option value="Setup">
+										<xsl:if test="DefaultPreset='Setup'">
 											<xsl:attribute name="selected">selected</xsl:attribute>
 										</xsl:if>
-										<xsl:text>#plgPredefinedProjectOption#</xsl:text>
+										<xsl:text>#plgSetupPresetOption#</xsl:text>
 									</option>
-									<option value="Remote">
-										<xsl:if test="DefaultProjectType='Remote'">
+									<option value="Project">
+										<xsl:if test="DefaultPreset='Project'">
 											<xsl:attribute name="selected">selected</xsl:attribute>
 										</xsl:if>
-										<xsl:text>#plgUserProjectOption#</xsl:text>
+										<xsl:text>#plgProjectPresetOption#</xsl:text>
 									</option>
 								</select>
-								<xsl:apply-templates select="Projects"/>
+								<xsl:apply-templates select="Setups"/>
 								<span style="display: inline-block;">
 									<!-- if the 'style' attribute is set in the child element, the 'hidden' attribute doesn't work anymore on this child element...-->
-									<fieldset id="RemoteProjectForm" title="#plgProjectFileToLoad#">
+									<fieldset id="ProjectForm" title="#plgProjectFileToLoad#">
 										<legend>#plgProjectFile#</legend>
 										<button
 											data-xdh-onevent="(OpenFile|DisplayProjectFilename|(#plgSelectProjectFile#|.xprj))"
@@ -54,14 +54,14 @@
 			</span>
 		</span>
 	</xsl:template>
-	<xsl:template match="Projects">
-		<span id="PredefinedProjectForm">
-			<select id="PredefinedProject" title="#plgPredefinedProjects#">
-				<xsl:apply-templates select="Project"/>
+	<xsl:template match="Setups">
+		<span id="SetupForm">
+			<select id="Setup" title="#plgSetups#">
+				<xsl:apply-templates select="Setup"/>
 			</select>
 		</span>
 	</xsl:template>
-	<xsl:template match="Project">
+	<xsl:template match="Setup">
 		<option>
 			<xsl:if test="@Selected='true'">
 				<xsl:attribute name="selected">selected</xsl:attribute>

@@ -703,15 +703,14 @@ void sclm::EraseProjectRegistry( void )
 	scll::Erase( scll::tProject );
 }
 
-#define C( name ) case pt##name: return #name; break
+#define C( name ) case p##name: return #name; break
 
-const char *sclm::GetLabel( eProjectType ProjectType )
+const char *sclm::GetLabel( ePreset Preset )
 {
-	switch ( ProjectType ) {
-	C( New );
-	C( Predefined );
-	C( Remote );
-	C( Embedded );
+	switch ( Preset ) {
+	C( None );
+	C( Setup );
+	C( Project );
 	default:
 		qRFwk();
 		break;
@@ -720,17 +719,17 @@ const char *sclm::GetLabel( eProjectType ProjectType )
 	return NULL;	// Pour viter un 'warning'.
 }
 
-static stsfsm::automat ProjectAutomat_;
+static stsfsm::automat PresetAutomat_;
 
-static void FillProjectAutomat_( void )
+static void FillPresetAutomat_( void )
 {
-	ProjectAutomat_.Init();
-	stsfsm::Fill( ProjectAutomat_, pt_amount, GetLabel );
+	PresetAutomat_.Init();
+	stsfsm::Fill( PresetAutomat_, p_amount, GetLabel );
 }
 
-eProjectType sclm::GetProjectType( const str::string_ &Pattern )
+ePreset sclm::GetPreset( const str::string_ &Pattern )
 {
-	return stsfsm::GetId( Pattern, ProjectAutomat_, pt_Undefined, pt_amount );
+	return stsfsm::GetId( Pattern, PresetAutomat_, p_Undefined, p_amount );
 }
 
 
@@ -770,6 +769,8 @@ qRT
 qRE
 }
 
+#if 0	// Will perhaps be reactivated when handling predefined projects.
+
 static void LoadPredefinedProject_(
 	const str::string_ &Id,
 	const sInfo &Info )
@@ -793,27 +794,26 @@ qRT
 qRE
 }
 
-void sclm::LoadProject(
-	eProjectType ProjectType,
-	const str::string_ &ProjectFeature,
+#endif
+
+void sclm::LoadPreset(
+	ePreset Preset,
+	const str::string_ &PresetFeature,
 	const sInfo &Info )
 {
-	switch ( ProjectType ) {
-	case ptNew:
-		sclr::Erase( sclr::lProject );
+	switch ( Preset ) {
+	case pNone:
+		sclr::Erase( sclr::lSetup );
 		break;
-	case ptPredefined:
-		LoadPredefinedProject_( ProjectFeature, Info );
+	case pSetup:
+		FillSetupRegistry(PresetFeature);
 		break;
-	case ptRemote:
-		if ( ProjectFeature.Amount() == 0  )
+	case pProject:
+		if ( PresetFeature.Amount() == 0  )
 			sclm::ReportAndAbort( SCLM_NAME "_NoProjectFileSelected" );
-		LoadProject_( ProjectFeature, Info );
+		LoadProject_( PresetFeature, Info );
 		break;
-	case ptEmbedded:
-		qRVct();
-		break;
-	case pt_Undefined:
+	case p_Undefined:
 		qRFwk();
 		break;
 	default:
@@ -823,12 +823,30 @@ void sclm::LoadProject(
 }
 
 
+#if 1
+
+void sclm::LoadProject( const sInfo &Info )
+{
+qRH
+	str::string Feature;
+qRB
+	Feature.Init();
+	OGetValue( sclr::parameter::project::Feature, Feature );
+
+	if ( Feature.Amount() != 0 ) {
+		LoadProject_( Feature, Info );
+	}
+qRR
+qRT
+qRE
+}
+#else // Old handling. To restore when (if ?) handling predefined projects defined in 'Definitions' section.
+
 void sclm::LoadProject( const sInfo &Info )
 {
 qRH
 	str::string Feature;
 	str::string RawType;
-	eProjectType Type = pt_Undefined;
 qRB
 	Feature.Init();
 	OGetValue( sclr::parameter::project::Feature, Feature );
@@ -849,6 +867,8 @@ qRR
 qRT
 qRE
 }
+
+#endif
 
 void sclm::CreateBackupFile(
 	const fnm::name___ &FileName,
@@ -1508,5 +1528,5 @@ void (* mtk::MTKErrorHandling)(void) = sclm::ErrorDefaultHandling;
 Q37_GCTOR( sclm )
 {
 	BinPath_.Init();
-	FillProjectAutomat_();
+	FillPresetAutomat_();
 }

@@ -606,39 +606,39 @@ void sclx::prolog::GetLayout(
 	sclf::rFrontend &Frontend,
 	xml::rWriter &Writer)
 {
-	sclf::GetProjectsFeatures( Frontend.Language(), Writer );
+	sclf::GetPresetFeatures( Frontend.Language(), Writer );
 }
 
-static sclm::eProjectType GetProjectType_( sProxy &Proxy )
+static sclm::ePreset GetPreset_( sProxy &Proxy )
 {
-	sclm::eProjectType ProjectType = sclm::pt_Undefined;
+	sclm::ePreset Preset = sclm::p_Undefined;
 qRH
 	str::string Value;
-	qRB
+qRB
 	Value.Init();
-	ProjectType = sclm::GetProjectType( Proxy.GetContent( prolog::ProjectTypeId, Value ) );
+	Preset = sclm::GetPreset( Proxy.GetContent( prolog::PresetId, Value ) );
 qRR
 qRT
 qRE
-	return ProjectType;
+	return Preset;
 }
 
-void sclx::prolog::HandleProjectTypeSwitching( sProxy & Proxy )
+void sclx::prolog::HandlePresetSwitching( sProxy & Proxy )
 {
-	switch ( GetProjectType_( Proxy ) ) {
-	case sclm::ptNew:
-		Proxy.AddClass( prolog::RemoteProjectFormId, "hide" );
-		Proxy.AddClass( prolog::PredefinedProjectFormId, "hide" );
+	switch ( GetPreset_( Proxy ) ) {
+	case sclm::pNone:
+		Proxy.AddClass( prolog::ProjectFormId, "hide" );
+		Proxy.AddClass( prolog::SetupFormId, "hide" );
 		Proxy.AddClass( prolog::BorderId, "fieldset-vanish" );
 		break;
-	case sclm::ptPredefined:
-		Proxy.AddClass( prolog::RemoteProjectFormId, "hide" );
-		Proxy.RemoveClass( prolog::PredefinedProjectFormId, "hide" );
+	case sclm::pSetup:
+		Proxy.AddClass( prolog::ProjectFormId, "hide" );
+		Proxy.RemoveClass( prolog::SetupFormId, "hide" );
 		Proxy.RemoveClass( prolog::BorderId, "fieldset-vanish" );
 		break;
-	case sclm::ptRemote:
-		Proxy.RemoveClass( prolog::RemoteProjectFormId, "hide" );
-		Proxy.AddClass( prolog::PredefinedProjectFormId, "hide" );
+	case sclm::pProject:
+		Proxy.RemoveClass( prolog::ProjectFormId, "hide" );
+		Proxy.AddClass( prolog::SetupFormId, "hide" );
 		Proxy.RemoveClass( prolog::BorderId, "fieldset-vanish" );
 		break;
 	default:
@@ -668,33 +668,30 @@ qRH
 		Retriever.GetString( FileName );
 
 	if ( FileName.Amount() != 0 )
-		Proxy.SetContent( RemoteProjectId, FileName );
+		Proxy.SetContent( ProjectId, FileName );
 qRR
 qRT
 qRE
 }
 
-sclm::eProjectType sclx::prolog::GetProjectFeatures(
+sclm::ePreset sclx::prolog::GetPresetFeatures(
 	sProxy &Proxy,
 	str::string_ &Feature )
 {
-	sclm::eProjectType Type = sclm::pt_Undefined;
+	sclm::ePreset Preset = sclm::p_Undefined;
 qRH
 	str::wString Buffer;
 	qRB
 	Buffer.Init();
 
-	switch ( Type = GetProjectType_( Proxy ) ) {
-	case sclm::ptNew:
+	switch ( Preset = GetPreset_( Proxy ) ) {
+	case sclm::pNone:
 		break;
-	case sclm::ptRemote:
-		Feature.Append( Proxy.GetContent( RemoteProjectId, Buffer ) );
+	case sclm::pSetup:
+		Feature.Append( Proxy.GetContent( SetupId, Buffer ) );
 		break;
-	case sclm::ptEmbedded:
-		qRVct();	// Not implemented yet.
-		break;
-	case sclm::ptPredefined:
-		Feature.Append( Proxy.GetContent( PredefinedProjectId, Buffer ) );
+	case sclm::pProject:
+		Feature.Append( Proxy.GetContent( ProjectId, Buffer ) );
 		break;
 	default:
 		qRFwk();
@@ -703,16 +700,16 @@ qRH
 qRR
 qRT
 qRE
-	return Type;
+	return Preset;
 }
 
-void sclx::prolog::LoadProject( sProxy &Proxy )
+void sclx::prolog::LoadPreset( sProxy &Proxy )
 {
 qRH
-	str::string ProjectFeature;
+	str::string PresetFeature;
 qRB
-	ProjectFeature.Init();
-	sclf::LoadProject( prolog::GetProjectFeatures( Proxy, ProjectFeature ), ProjectFeature, Proxy.Info() );
+	PresetFeature.Init();
+	sclf::LoadPreset( prolog::GetPresetFeatures( Proxy, PresetFeature ), PresetFeature, Proxy.Info() );
 qRR
 qRT
 qRE

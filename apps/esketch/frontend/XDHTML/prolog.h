@@ -23,15 +23,15 @@
 # include "base.h"
 
 namespace prolog {
-	BASE_AD( SwitchProjectType );
+	BASE_AD( SwitchPreset );
 	BASE_AD( DisplayProjectFilename );
-	BASE_AD( LoadProject );
+	BASE_AD( LoadPreset );
 
 	inline void Register( void )
 	{
-		BASE_AR( SwitchProjectType );
+		BASE_AR( SwitchPreset );
 		BASE_AR( DisplayProjectFilename );
-		BASE_AR( LoadProject );
+		BASE_AR( LoadPreset );
 	};
 
 	void SetLayout( core::rSession &Session );

@@ -50,6 +50,13 @@ namespace sclf {
 					UserID,
 					Password;
 			}
+
+			extern rEntry Preset;
+
+			namespace preset {
+				extern rEntry Type;
+				extern rEntry Feature;
+			}
 		}
 
 		namespace definition {
@@ -247,8 +254,9 @@ namespace sclf {
 	};
 
 	using sclm::LoadProject;
+	using sclm::LoadPreset;
 
-	void GetProjectsFeatures(
+	void GetPresetFeatures(
 		const char *Language,
 		xml::rWriter &Writer );
 
@@ -616,7 +624,7 @@ namespace sclf {
 		phNone,	// The project is not handled ; it's the one which is selected by default, user can change.
 		phLoad,	// The project is loaded.
 		phRun,	// Project loaded and run.
-		phLogin,	// Project is loaded, but only the login form is displayed ; login can be skipped depoending on loging configuration.
+		phLogin,	// Project is loaded, but only the login form is displayed ; login can be skipped depending on logging configuration.
 		ph_amount,
 		ph_Undefined,
 	};

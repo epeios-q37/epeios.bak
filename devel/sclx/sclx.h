@@ -1138,17 +1138,17 @@ namespace sclx {
 
 	namespace prolog {
 		static qCDEFS(BorderId, "Border" );
-		static qCDEFS(ProjectTypeId, "ProjectType" );
-		static qCDEFS(PredefinedProjectFormId, "PredefinedProjectForm" );
-		static qCDEFS(PredefinedProjectId, "PredefinedProject" );
-		static qCDEFS(RemoteProjectFormId, "RemoteProjectForm" );
-		static qCDEFS(RemoteProjectId, "RemoteProject" );
+		static qCDEFS(PresetId, "Preset" );
+		static qCDEFS(SetupFormId, "SetupForm" );
+		static qCDEFS(SetupId, "Setup" );
+		static qCDEFS(ProjectFormId, "ProjectForm" );
+		static qCDEFS(ProjectId, "Project" );
 
 		void GetLayout(
 			sclf::rFrontend &Frontend,
 			xml::rWriter &Writer );
 
-		void HandleProjectTypeSwitching( sProxy &Proxy );
+		void HandlePresetSwitching( sProxy &Proxy );
 
 		void DisplaySelectedProjectFilename(
 			sProxy &Proxy,
@@ -1161,11 +1161,11 @@ namespace sclx {
 			return DisplaySelectedProjectFilename(Proxy, str::wString(Id));
 		}
 
-		sclm::eProjectType GetProjectFeatures(
+		sclm::ePreset GetPresetFeatures(
 			sProxy &Proxy,
 			str::string_ &Feature );
 
-		void LoadProject( sProxy &Proxy );
+		void LoadPreset( sProxy &Proxy );
 	}
 
 	namespace login {
