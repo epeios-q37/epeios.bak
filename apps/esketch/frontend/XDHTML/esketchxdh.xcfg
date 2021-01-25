@@ -34,6 +34,10 @@
 			<xpp:expand select="XDH_Parameters"/>
 			<Language>fr</Language>
 		</Parameters>
+		<Setups>
+			<xpp:expand select="Setups"/>
+			<xpp:expand select="XDH_Setups"/>
+		</Setups>
 		<Definitions>
 			<xpp:expand select="Definitions"/>
 			<xpp:expand select="XDH_Definitions"/>

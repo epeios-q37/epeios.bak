@@ -21,6 +21,7 @@
 
 #include "core.h"
 #include "login.h"
+#include "main.h"
 #include "registry.h"
 
 #include "xdhdws.h"
@@ -69,8 +70,9 @@ A( DisplayProjectFilename )
 
 A( LoadPreset )
 {
-	sclx::prolog::LoadPreset( Session );
-
-	login::Display( Session );
+	if ( sclx::prolog::LoadPreset( Session ) )
+		main::Display(Session);
+	else
+		login::Display(Session);
 }
 

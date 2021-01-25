@@ -8,6 +8,9 @@
 			<xpp:expand select="FRD_Parameters"/>
 		</xpp:bloc>
 	</xpp:define>
+	<xpp:define name="XDH_Setups">
+		<xpp:bloc/>
+	</xpp:define>
 	<xpp:define name="XDH_Definitions">
 		<xpp:bloc>
 			<xpp:expand select="FRD_Definitions"/>

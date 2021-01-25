@@ -252,7 +252,8 @@ namespace sclm {
 		const scli::sInfo &Info,
 		str::string_ &Id );
 
-	void LoadPreset(
+	// If true, launches the main page of the app, otherwise displays the login page.
+	bso::sBool LoadPreset(
 		ePreset Preset,
 		const str::string_ &PresetFeature,
 		const scli::sInfo &Info );

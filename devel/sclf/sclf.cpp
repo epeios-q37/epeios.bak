@@ -30,8 +30,8 @@ rgstry::entry___ sclf::registry::parameter::login::UserID( "UserID", Login );
 rgstry::entry___ sclf::registry::parameter::login::Password( "Password", Login );
 
 rgstry::entry___ sclf::registry::parameter::Preset( "Preset", sclr::Parameters );
-rgstry::entry___ sclf::registry::parameter::preset::Type("Type", Preset);
-rgstry::entry___ sclf::registry::parameter::preset::Feature("Feature", Preset);
+rgstry::entry___ sclf::registry::parameter::preset::Type("@Type", Preset);
+rgstry::entry___ sclf::registry::parameter::preset::Feature(Preset);
 
 namespace parameter_ {
 	rgstry::entry___ Backend_( "Backend", sclr::Parameters );
@@ -478,24 +478,53 @@ void sclf::GetPresetFeatures(
 	xml::rWriter &Writer )
 {
 qRH
-	str::string Type, Feature;
+	str::string Type, Feature, DefaultId, Translation;
+	str::wStrings Ids, Aliases;
+	sdr::sRow Row = qNIL;
 qRB
 	tol::Init(Type, Feature);
 
 	sclm::OGetValue(registry::parameter::preset::Type, Type);
 	sclm::OGetValue(registry::parameter::preset::Feature, Feature);
 
-	Writer.PushTag("Preset");
-
 	if ( Type.Amount() )
-		Writer.PutAttribute("Type", Type);
+		Writer.PutValue(Type, "DefaultPreset");
 
-	if ( Feature.Amount() )
-		Writer.PutValue(Feature);
+	DefaultId.Init();
 
-	Writer.PopTag();
+	sclr::GetDefaultSetupId(sclm::GetRegistry(), DefaultId);
 
-	GetFeatures_( "Setups", "Setup", "DefaultId", parameter_::backend_::Type_, definition_::backends::backend_::Id_,parameter_::backend_::Feature_, definition_::backends::DefaultBackendId, definition_::backends::Backend_, definition_::backends::tagged_backend::Alias, Language, Writer );
+	if ( Type == sclm::GetLabel( sclm::pSetup ) )
+		if ( Feature.Amount() != 0 )
+			DefaultId = Feature;
+
+	tol::Init(Ids, Aliases);
+
+	sclr::GetSetupIds(sclm::GetRegistry(), Ids);
+	sclr::GetSetupAliases(sclm::GetRegistry(), Ids, Aliases);
+
+	if ( Ids.Amount() != Aliases.Amount() )
+		qRFwk();
+
+	Writer.PushTag("Setups");
+
+	if ( DefaultId.Amount() )
+		Writer.PutAttribute("Default", DefaultId);
+
+	Row = Ids.First();
+
+	while( Row != qNIL ) {
+		Writer.PushTag("Setup");
+		Writer.PutAttribute("id", Ids(Row));
+		Translation.Init();
+
+		scll::GetLocale().GetTranslation(Aliases(Row), Language, Translation);
+
+		Writer.PutAttribute("Alias", Translation);
+		Writer.PopTag();
+
+		Row = Ids.Next(Row);
+	}
 qRR
 qRT
 qRE

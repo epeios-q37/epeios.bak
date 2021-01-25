@@ -50,6 +50,8 @@ rgstry::entry___ sclr::parameter::Project("Project", Parameters );
 rgstry::entry___ sclr::parameter::project::Type( "@Type", parameter::Project );
 rgstry::entry___ sclr::parameter::project::Feature( parameter::Project );
 
+rgstry::rEntry sclr::parameter::DefaultSetupId("@Setup", sclr::Parameters);
+
 namespace definition_ {
 	rgstry::entry___ Projects_( "Projects", sclr::Definitions );
 }
@@ -89,8 +91,19 @@ rgstry::entry___ sclr::definition::plugin::Filename( "Filename", ::definition::P
 rgstry::entry___ sclr::definition::plugin::Configuration( "Configuration", ::definition::Plugin_ );
 rgstry::entry___ sclr::definition::plugin::Locale( "Locale", ::definition::Plugin_ );
 
-static rgstry::entry___ ParametersSetupId_( "@Setup", sclr::Parameters );
-static rgstry::entry___ DefaultSetupId_("Setups/@Default");
+namespace setup_ {
+	namespace {
+		rgstry::rEntry
+			Set_("Setups"),
+			Loose_("Setup", Set_);
+	}
+
+	rgstry::rEntry
+		Default("@Default", Set_),
+		Tagged(RGSTRY_TAGGING_ATTRIBUTE("id"), Loose_),
+		Id("@id", Loose_),
+		Alias("@Alias",Tagged);
+}
 
 namespace {
 	tht::rLocker GlobalLocker_;
@@ -408,17 +421,12 @@ qRH
 	txf::text_oflow__ TFlow;
 	rgstry::row__ Row = qNIL;
 	rgstry::layer__ Layer = rgstry::UndefinedLayer;
-	str::string SetupPath;
 qRB
 	if ( SetupId.Amount() != 0  ) {
-		SetupPath.Init( "Setups/Setup[id=\"" );
-		SetupPath.Append( SetupId );
-		SetupPath.Append( "\"]" );
-
 		OFlow.Init( Content );
 		TFlow.Init( OFlow );
 
-		Row = Registry_.Search( SetupPath, Layer );
+		Row = Registry_.Search(rgstry::rTEntry(setup_::Tagged, SetupId), Layer);
 
 		if ( Row != qNIL )
 			Registry_.Dump( Layer, Row, false, xml::oCompact, xml::e_None, TFlow );
@@ -465,6 +473,13 @@ qRT
 qRE
 }
 
+bso::sBool sclr::GetDefaultSetupId(
+	const dRegistry &Registry,
+	str::dString &Id)
+{
+	return OGetValue(Registry, parameter::DefaultSetupId, Id) || OGetValue(Registry, setup_::Default, Id);
+}
+
 void sclr::FillWithGivenSetup(
 	registry_ &Registry,
 	rgstry::layer__ Layer )
@@ -474,17 +489,52 @@ qRH
 qRB
 	Id.Init();
 
-	if ( OGetValue(Registry_, ParametersSetupId_, Id) || OGetValue(Registry_, DefaultSetupId_, Id) )
+	if ( GetDefaultSetupId(Registry, Id) )
 		FillWithSetupOfId( Registry, Layer, Id );
 qRR
 qRT
 qRE
 }
 
+void sclr::GetSetupIds(
+	const dRegistry &Registry,
+	str::dStrings &Ids)
+{
+		GetValues(Registry, setup_::Id, Ids);
+}
+
+void sclr::GetSetupAliases(
+	const dRegistry &Registry,
+	const str::dStrings &Ids,
+	str::dStrings &Aliases)
+{
+qRH;
+	str::wStrings Ids;
+	sdr::sRow Row = qNIL;
+	str::wString Alias;
+qRB;
+	Ids.Init();
+
+	GetSetupIds(Registry, Ids);
+
+	Row = Ids.First();
+
+	while ( Row != qNIL ) {
+		Alias.Init();
+		OGetValue(Registry, rgstry::rTEntry(setup_::Alias, Ids(Row)), Alias);
+		Aliases.Append(Alias);
+
+		Row = Ids.Next(Row);
+	}
+qRR;
+qRT;
+qRE;
+}
+
 void sclr::ReportIfNoParametersSetupId( void )
 {
-	if ( !Registry_.Exists(ParametersSetupId_) )
-		ReportBadOrNoValueForEntryErrorAndAbort(ParametersSetupId_);
+	if ( !Registry_.Exists(parameter::DefaultSetupId) )
+		ReportBadOrNoValueForEntryErrorAndAbort(parameter::DefaultSetupId);
 }
 
 void sclr::FillWithContent(

@@ -4,6 +4,7 @@
 	<xpp:expand value-of="q37.xpp"/>
 	<xpp:define name="Parameters">
 		<xpp:bloc>
+			<Preset Type="Setup">Localhost</Preset>
 			<Project Type="Predefined"/>
 			<xpp:ifeq select="prod" value="yes">
 				<Backend Type="Predefined">LocalHost</Backend>
@@ -32,6 +33,13 @@
 					<Password/>
 				</Login>
 			</xpp:ifeq>
+		</xpp:bloc>
+	</xpp:define>
+	<xpp:define name="Setups">
+		<xpp:bloc>
+			<Setup id="NoBackend" Alias="WithoutBackend"/>
+			<Setup id="Localhost" Alias="Localhost"/>
+			<Setup id="Embedded" Alias="Embedded"/>
 		</xpp:bloc>
 	</xpp:define>
 	<xpp:define name="Definitions">
@@ -114,6 +122,24 @@
 				<Translation language="fr">Moteur de traitement enclavé</Translation>
 				<Translation language="en">Embedded backend</Translation>
 			</Translations>
+			<Translations text="WithoutBackend">
+				<Translation language="fr">Sans moteur de traitement</Translation>
+				<Translation language="en">Without backend</Translation>
+			</Translations>
+			<Translations text="Localhost">
+				<Translation language="fr">Moteur de traitement local</Translation>
+				<Translation language="en">Local backend</Translation>
+			</Translations>
+			<Translations text="Embedded">
+				<Translation language="fr">Moteur de traitement enclavé</Translation>
+				<Translation language="en">Embedded backend</Translation>
+			</Translations>
+			<!--
+			<Translations text="">
+				<Translation language="fr"></Translation>
+				<Translation language="en"></Translation>
+			</Translations>
+			-->
 		</xpp:bloc>
 	</xpp:define>
 	<Profiles>

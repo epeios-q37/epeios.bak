@@ -703,16 +703,18 @@ qRE
 	return Preset;
 }
 
-void sclx::prolog::LoadPreset( sProxy &Proxy )
+bso::sBool sclx::prolog::LoadPreset( sProxy &Proxy )
 {
+	bso::sBool ReturnValue = false;
 qRH
 	str::string PresetFeature;
 qRB
 	PresetFeature.Init();
-	sclf::LoadPreset( prolog::GetPresetFeatures( Proxy, PresetFeature ), PresetFeature, Proxy.Info() );
+	ReturnValue = sclf::LoadPreset( prolog::GetPresetFeatures( Proxy, PresetFeature ), PresetFeature, Proxy.Info() );
 qRR
 qRT
 qRE
+	return ReturnValue;
 }
 
 #define C( name ) case bv##name : return #name

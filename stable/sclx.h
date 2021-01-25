@@ -1165,7 +1165,7 @@ namespace sclx {
 			sProxy &Proxy,
 			str::string_ &Feature );
 
-		void LoadPreset( sProxy &Proxy );
+		bso::sBool LoadPreset( sProxy &Proxy );
 	}
 
 	namespace login {

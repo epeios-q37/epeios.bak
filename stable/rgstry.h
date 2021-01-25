@@ -2583,5 +2583,13 @@ namespace rgstry {
 # endif
 
 }
+/*******/
+/* NEW */
+/*******/
+
+namespace rgstry {
+	typedef tags_ dTags;
+	qW(Tags);
+}
 
 #endif

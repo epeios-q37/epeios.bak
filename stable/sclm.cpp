@@ -796,7 +796,7 @@ qRE
 
 #endif
 
-void sclm::LoadPreset(
+bso::sBool sclm::LoadPreset(
 	ePreset Preset,
 	const str::string_ &PresetFeature,
 	const sInfo &Info )
@@ -804,14 +804,17 @@ void sclm::LoadPreset(
 	switch ( Preset ) {
 	case pNone:
 		sclr::Erase( sclr::lSetup );
+		return false;
 		break;
 	case pSetup:
 		FillSetupRegistry(PresetFeature);
+		return true;	// TODO: depending of the parameters, may be return false.
 		break;
 	case pProject:
 		if ( PresetFeature.Amount() == 0  )
 			sclm::ReportAndAbort( SCLM_NAME "_NoProjectFileSelected" );
-		LoadProject_( PresetFeature, Info );
+		LoadProject_( PresetFeature, Info );	// TODO: depending of the parameters, may be return false;
+		return true;
 		break;
 	case p_Undefined:
 		qRFwk();
@@ -820,6 +823,8 @@ void sclm::LoadPreset(
 		qRFwk();
 		break;
 	}
+
+	return true;	// To avoid a warning.
 }
 
 

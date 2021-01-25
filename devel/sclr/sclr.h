@@ -83,6 +83,8 @@ namespace sclr {
 			extern rgstry::entry___ Feature;
 		}
 
+		extern rgstry::rEntry DefaultSetupId;
+
 		// 'Parameters/Plugins/Plugin[target="..."]'.
 		extern rgstry::entry___ TargetedPlugin;
 
@@ -188,9 +190,22 @@ namespace sclr {
 		rgstry::layer__ layer,
 		const str::string_ &Id );
 
+	bso::sBool GetDefaultSetupId(
+		const registry_ &Registry,
+		str::dString &Id);
+
 	void FillWithGivenSetup(
 		registry_ &Registry,
 		rgstry::layer__ Layer );	// Fill the indicated setup if one is given.
+
+	void GetSetupIds(
+		const registry_ &Registry,
+		str::dStrings &Ids);
+
+	void GetSetupAliases(
+		const registry_ &Registry,
+		const str::dStrings &Ids,
+		str::dStrings &Aliases);
 
 	void ReportIfNoParametersSetupId( void );
 
