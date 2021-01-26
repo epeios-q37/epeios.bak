@@ -609,14 +609,14 @@ void sclx::prolog::GetLayout(
 	sclf::GetPresetFeatures( Frontend.Language(), Writer );
 }
 
-static sclm::ePreset GetPreset_( sProxy &Proxy )
+static sclf::ePreset GetPreset_( sProxy &Proxy )
 {
-	sclm::ePreset Preset = sclm::p_Undefined;
+	sclf::ePreset Preset = sclf::p_Undefined;
 qRH
 	str::string Value;
 qRB
 	Value.Init();
-	Preset = sclm::GetPreset( Proxy.GetContent( prolog::PresetId, Value ) );
+	Preset = sclf::GetPreset( Proxy.GetContent( prolog::PresetId, Value ) );
 qRR
 qRT
 qRE
@@ -626,17 +626,17 @@ qRE
 void sclx::prolog::HandlePresetSwitching( sProxy & Proxy )
 {
 	switch ( GetPreset_( Proxy ) ) {
-	case sclm::pNone:
+	case sclf::pNone:
 		Proxy.AddClass( prolog::ProjectFormId, "hide" );
 		Proxy.AddClass( prolog::SetupFormId, "hide" );
 		Proxy.AddClass( prolog::BorderId, "fieldset-vanish" );
 		break;
-	case sclm::pSetup:
+	case sclf::pSetup:
 		Proxy.AddClass( prolog::ProjectFormId, "hide" );
 		Proxy.RemoveClass( prolog::SetupFormId, "hide" );
 		Proxy.RemoveClass( prolog::BorderId, "fieldset-vanish" );
 		break;
-	case sclm::pProject:
+	case sclf::pProject:
 		Proxy.RemoveClass( prolog::ProjectFormId, "hide" );
 		Proxy.AddClass( prolog::SetupFormId, "hide" );
 		Proxy.RemoveClass( prolog::BorderId, "fieldset-vanish" );
@@ -674,23 +674,23 @@ qRT
 qRE
 }
 
-sclm::ePreset sclx::prolog::GetPresetFeatures(
+sclf::ePreset sclx::prolog::GetPresetFeatures(
 	sProxy &Proxy,
 	str::string_ &Feature )
 {
-	sclm::ePreset Preset = sclm::p_Undefined;
+	sclf::ePreset Preset = sclf::p_Undefined;
 qRH
 	str::wString Buffer;
-	qRB
+qRB
 	Buffer.Init();
 
 	switch ( Preset = GetPreset_( Proxy ) ) {
-	case sclm::pNone:
+	case sclf::pNone:
 		break;
-	case sclm::pSetup:
+	case sclf::pSetup:
 		Feature.Append( Proxy.GetContent( SetupId, Buffer ) );
 		break;
-	case sclm::pProject:
+	case sclf::pProject:
 		Feature.Append( Proxy.GetContent( ProjectId, Buffer ) );
 		break;
 	default:

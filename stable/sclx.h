@@ -1161,7 +1161,7 @@ namespace sclx {
 			return DisplaySelectedProjectFilename(Proxy, str::wString(Id));
 		}
 
-		sclm::ePreset GetPresetFeatures(
+		sclf::ePreset GetPresetFeatures(
 			sProxy &Proxy,
 			str::string_ &Feature );
 

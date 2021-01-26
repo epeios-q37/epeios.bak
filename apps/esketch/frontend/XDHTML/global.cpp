@@ -33,8 +33,8 @@ A( OnNewSession )
 {
 	switch ( Mode ) {
 	case xdhcdc::mMonoUser:
-		switch ( sclf::HandleProject( esketchxdh::Info ) ) {
-		case sclf::phNone:
+		switch ( sclf::HandlePreset() ) {
+		case sclf::phShow:
 			::prolog::Display( Session );
 			break;
 		case sclf::phLoad:

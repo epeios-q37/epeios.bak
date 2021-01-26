@@ -10,6 +10,12 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2021-01-26:
+
+- SCLF: improving preset handling,
+- SCLM: moving preset related stuf to SCLF,
+- SCLX: [adpt],
+
 ## 2021-01-25:
 
 - RGSTRY: [stdz],

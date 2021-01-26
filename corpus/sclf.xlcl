@@ -29,7 +29,10 @@
   <Translation language="fr">Deconnexion !</Translation>
   <Translation language="en">Disconnection !</Translation>
  </Translations>
- <!--
+<Translations text="SCLF_NoProjectFileSelected">
+	<Translation language="fr">Fichier de projet non spécifié.</Translation>
+	<Translation language="en">No specified project file.</Translation>
+</Translations> <!--
 	<Translations text="SCLF_">
 		<Translation language="fr"></Translation>
 		<Translation language="en"></Translation>

@@ -229,18 +229,6 @@ namespace sclm {
 
 	void EraseProjectRegistry( void );
 
-	qENUM( Preset ) {
-		pNone,			// No presets.
-		pSetup,		// Use a setup.
-		pProject,	// Use of a project file.
-		p_amount,
-		p_Undefined
-	};
-
-	const char *GetLabel( ePreset Preset );
-
-	ePreset GetPreset( const str::string_ &Pattern );
-
 	void LoadProject(
 		flw::iflow__ &Flow,
 		const fnm::name___ &Directory,
@@ -252,11 +240,9 @@ namespace sclm {
 		const scli::sInfo &Info,
 		str::string_ &Id );
 
-	// If true, launches the main page of the app, otherwise displays the login page.
-	bso::sBool LoadPreset(
-		ePreset Preset,
-		const str::string_ &PresetFeature,
-		const scli::sInfo &Info );
+	void LoadProject(
+		const fnm::name___ &FileName,
+		const scli::sInfo &Info);
 
 	void LoadProject( const scli::sInfo &Info );	// Load project, if applies, following configuration file indications.
 

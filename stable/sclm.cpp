@@ -703,37 +703,6 @@ void sclm::EraseProjectRegistry( void )
 	scll::Erase( scll::tProject );
 }
 
-#define C( name ) case p##name: return #name; break
-
-const char *sclm::GetLabel( ePreset Preset )
-{
-	switch ( Preset ) {
-	C( None );
-	C( Setup );
-	C( Project );
-	default:
-		qRFwk();
-		break;
-	}
-
-	return NULL;	// Pour viter un 'warning'.
-}
-
-static stsfsm::automat PresetAutomat_;
-
-static void FillPresetAutomat_( void )
-{
-	PresetAutomat_.Init();
-	stsfsm::Fill( PresetAutomat_, p_amount, GetLabel );
-}
-
-ePreset sclm::GetPreset( const str::string_ &Pattern )
-{
-	return stsfsm::GetId( Pattern, PresetAutomat_, p_Undefined, p_amount );
-}
-
-
-
 void sclm::LoadProject(
 	flw::iflow__ &Flow,
 	const fnm::name___ &Directory,
@@ -755,9 +724,9 @@ void sclm::LoadProject(
 	LoadLocale_( sclr::GetRawLayer( sclr::lProject ), scll::tProject );
 }
 
-static void LoadProject_(
-	const str::string_ &FileName,
-	const sInfo &Info )
+void sclm::LoadProject(
+	const fnm::rName &FileName,
+	const sInfo &Info)
 {
 qRH
 	str::string Id;
@@ -796,38 +765,6 @@ qRE
 
 #endif
 
-bso::sBool sclm::LoadPreset(
-	ePreset Preset,
-	const str::string_ &PresetFeature,
-	const sInfo &Info )
-{
-	switch ( Preset ) {
-	case pNone:
-		sclr::Erase( sclr::lSetup );
-		return false;
-		break;
-	case pSetup:
-		FillSetupRegistry(PresetFeature);
-		return true;	// TODO: depending of the parameters, may be return false.
-		break;
-	case pProject:
-		if ( PresetFeature.Amount() == 0  )
-			sclm::ReportAndAbort( SCLM_NAME "_NoProjectFileSelected" );
-		LoadProject_( PresetFeature, Info );	// TODO: depending of the parameters, may be return false;
-		return true;
-		break;
-	case p_Undefined:
-		qRFwk();
-		break;
-	default:
-		qRFwk();
-		break;
-	}
-
-	return true;	// To avoid a warning.
-}
-
-
 #if 1
 
 void sclm::LoadProject( const sInfo &Info )
@@ -839,7 +776,7 @@ qRB
 	OGetValue( sclr::parameter::project::Feature, Feature );
 
 	if ( Feature.Amount() != 0 ) {
-		LoadProject_( Feature, Info );
+		LoadProject( Feature, Info );
 	}
 qRR
 qRT
@@ -1533,5 +1470,4 @@ void (* mtk::MTKErrorHandling)(void) = sclm::ErrorDefaultHandling;
 Q37_GCTOR( sclm )
 {
 	BinPath_.Init();
-	FillPresetAutomat_();
 }

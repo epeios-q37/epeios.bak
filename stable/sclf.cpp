@@ -43,10 +43,11 @@ namespace parameter_ {
 
 	namespace project_ {
 		using namespace sclr::parameter::project;
-
-		rgstry::entry___ Handling_( "@Handling", sclr::parameter::Project );
 	}
 
+	namespace preset_ {
+		rgstry::entry___ Handling_( "@Handling", registry::parameter::Preset );
+	}
 
 	rgstry::entry___ &Login_ = registry::parameter::Login;
 
@@ -494,7 +495,7 @@ qRB
 
 	sclr::GetDefaultSetupId(sclm::GetRegistry(), DefaultId);
 
-	if ( Type == sclm::GetLabel( sclm::pSetup ) )
+	if ( Type == GetLabel( pSetup ) )
 		if ( Feature.Amount() != 0 )
 			DefaultId = Feature;
 
@@ -725,15 +726,46 @@ qRE
 	return About;
 }
 
+#define C( name ) case p##name: return #name; break
+
+const char *sclf::GetLabel( ePreset Preset )
+{
+	switch ( Preset ) {
+	C( None );
+	C( Setup );
+	C( Project );
+	default:
+		qRFwk();
+		break;
+	}
+
+	return NULL;	// Pour viter un 'warning'.
+}
+
+#undef C
+
+static stsfsm::automat PresetAutomat_;
+
+static void FillPresetAutomat_( void )
+{
+	PresetAutomat_.Init();
+	stsfsm::Fill( PresetAutomat_, p_amount, GetLabel );
+}
+
+ePreset sclf::GetPreset( const str::string_ &Pattern )
+{
+	return stsfsm::GetId( Pattern, PresetAutomat_, p_Undefined, p_amount );
+}
+
 #define C( name )	case ph##name : return #name; break
 
-const char *sclf::GetLabel( eProjectHandling Handling )
+const char *sclf::GetLabel( ePresetHandling Handling )
 {
 	switch ( Handling ) {
-	C( None );
+	C( Show );
 	C( Load );
-	C( Run );
 	C( Login );
+	C( Run );
 	default:
 		qRFwk();
 		break;
@@ -745,40 +777,73 @@ const char *sclf::GetLabel( eProjectHandling Handling )
 #undef C
 
 namespace {
-	stsfsm::wAutomat ProjectHandlingAutomat_;
+	stsfsm::wAutomat PresetHandlingAutomat_;
 
-	void FillProjectHandlingAutomat_( void )
+	void FillPresetHandlingAutomat_( void )
 	{
-		ProjectHandlingAutomat_.Init();
-		stsfsm::Fill<eProjectHandling>( ProjectHandlingAutomat_, ph_amount, GetLabel );
+		PresetHandlingAutomat_.Init();
+		stsfsm::Fill<ePresetHandling>( PresetHandlingAutomat_, ph_amount, GetLabel );
 	}
 }
 
-eProjectHandling sclf::GetProjectHandling( const str::dString &Pattern )
+ePresetHandling sclf::GetPresetHandling( const str::dString &Pattern )
 {
-	return stsfsm::GetId( Pattern, ProjectHandlingAutomat_, ph_Undefined, ph_amount );
+	return stsfsm::GetId( Pattern, PresetHandlingAutomat_, ph_Undefined, ph_amount );
 }
 
-eProjectHandling sclf::HandleProject( const scli::sInfo &Info )
+bso::sBool sclf::LoadPreset(
+	ePreset Preset,
+	const str::string_ &PresetFeature,
+	const scli::sInfo &Info )
 {
-	eProjectHandling Handling = phNone;
+	switch ( Preset ) {
+	case pNone:
+		sclr::Erase( sclr::lSetup );
+		return false;
+		break;
+	case pSetup:
+		sclm::FillSetupRegistry(PresetFeature);
+		return true;	// TODO: depending of the parameters, may be return false.
+		break;
+	case pProject:
+		if ( PresetFeature.Amount() == 0  )
+			sclm::ReportAndAbort( SCLF_NAME "_NoProjectFileSelected" );
+		sclm::LoadProject( PresetFeature, Info );	// TODO: depending of the parameters, may be return false;
+		return true;
+		break;
+	case p_Undefined:
+		qRFwk();
+		break;
+	default:
+		qRFwk();
+		break;
+	}
+
+	return true;	// To avoid a warning.
+}
+
+ePresetHandling sclf::HandlePreset(void)
+{
+	ePresetHandling Handling = ph_Default;
 qRH
 	str::wString RawHandling;
 qRB
 	RawHandling.Init();
 
-	if ( ( sclm::OGetValue( parameter_::project_::Handling_, RawHandling ) )
+	if ( ( sclm::OGetValue( parameter_::preset_::Handling_, RawHandling ) )
 		  && ( RawHandling.Amount() != 0 ) ) {
-		Handling = GetProjectHandling( RawHandling );
+		Handling = GetPresetHandling( RawHandling );
 
 		if ( Handling == ph_Undefined )
-			sclr::ReportBadOrNoValueForEntryErrorAndAbort( parameter_::project_::Handling_ );
+			sclr::ReportBadOrNoValueForEntryErrorAndAbort( parameter_::preset_::Handling_ );
 
 		switch ( Handling ) {
+		case phShow:
+			break;
 		case phLoad:
-		case phRun:
 		case phLogin:
-			sclm::LoadProject( Info );
+		case phRun:
+//			sclm::LoadPreset();
 			break;
 		default:
 			qRGnr();
@@ -796,7 +861,8 @@ namespace {
 	{
 		FillLoginAutomat_();
 		FillBackendSetupTypeAutomat_();
-		FillProjectHandlingAutomat_();
+		FillPresetAutomat_();
+		FillPresetHandlingAutomat_();
 	}
 }
 

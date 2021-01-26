@@ -254,7 +254,6 @@ namespace sclf {
 	};
 
 	using sclm::LoadProject;
-	using sclm::LoadPreset;
 
 	void GetPresetFeatures(
 		const char *Language,
@@ -566,7 +565,7 @@ namespace sclf {
 		lBlank,		// All the fields are left blank,
 		lPartial,	// Only the 'Login' field is filled.
 		lFull,		// Both 'Login' and 'Password' field are filled.
-		lAutomatic,	// The 'Login' page is skipped, and the login parameters are retrieved frrom the configuration file.
+		lAutomatic,	// The 'Login' page is skipped, and the login parameters are retrieved from the configuration file.
 		l_amount,
 		l_Undefined
 	};
@@ -620,20 +619,39 @@ namespace sclf {
 
 	eBackendSetupType GetBackendSetupType( const str::dString &Pattern );
 
-	qENUM( ProjectHandling ) {
-		phNone,	// The project is not handled ; it's the one which is selected by default, user can change.
-		phLoad,	// The project is loaded.
-		phRun,	// Project loaded and run.
-		phLogin,	// Project is loaded, but only the login form is displayed ; login can be skipped depending on logging configuration.
-		ph_amount,
-		ph_Undefined,
+	qENUM( Preset ) {
+		pNone,			// No presets.
+		pSetup,		// Use a setup.
+		pProject,	// Use of a project file.
+		p_amount,
+		p_Undefined
 	};
 
-	const char *GetLabel( eProjectHandling );
+	const char *GetLabel( ePreset Preset );
 
-	eProjectHandling GetProjectHandling( const str::dString &Pattern );
+	ePreset GetPreset( const str::string_ &Pattern );
 
-	eProjectHandling HandleProject( const scli::sInfo &Info );
+	// If true, launches the main page of the app, otherwise displays the login page.
+	bso::sBool LoadPreset(
+		ePreset Preset,
+		const str::string_ &PresetFeature,
+		const scli::sInfo &Info );
+
+	qENUM( PresetHandling ) {
+		phShow,	// The default preset is displayed on the prolog page.
+		phLoad,	// The default preset is loaded and the login page is displayed.
+		phLogin,	// The default preset is loaded and the login page is displayed, without the backend form.
+		phRun,	// The application is launched with the default preset.
+		ph_amount,
+		ph_Undefined,
+		ph_Default = phShow
+	};
+
+	const char *GetLabel(ePresetHandling Handling);
+
+	ePresetHandling GetPresetHandling(const str::dString &Pattern);
+
+	ePresetHandling HandlePreset(void);
 }
 
 #endif
