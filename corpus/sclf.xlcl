@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!-- $Id: sclmisc.xlcl,v 1.3 2013/07/18 19:46:20 csimon Exp $ -->
 <xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
 	<Translations text="SCLF_UnableToLoad">
@@ -17,22 +17,27 @@
 		<Translation language="fr">(Non connecté à un 'backend'.)</Translation>
 		<Translation language="en">(Not connected to a backend.)</Translation>
 	</Translations>
- <Translations text="SCLF_RequestError">
-  <Translation language="fr">%1</Translation>
-  <Translation language="en">%1</Translation>
- </Translations>
- <Translations text="SCLF_BackendError">
-  <Translation language="fr">%1</Translation>
-  <Translation language="en">%1</Translation>
- </Translations>
- <Translations text="SCLF_Disconnection">
-  <Translation language="fr">Deconnexion !</Translation>
-  <Translation language="en">Disconnection !</Translation>
- </Translations>
-<Translations text="SCLF_NoProjectFileSelected">
-	<Translation language="fr">Fichier de projet non spécifié.</Translation>
-	<Translation language="en">No specified project file.</Translation>
-</Translations> <!--
+	<Translations text="SCLF_RequestError">
+		<Translation language="fr">%1</Translation>
+		<Translation language="en">%1</Translation>
+	</Translations>
+	<Translations text="SCLF_BackendError">
+		<Translation language="fr">%1</Translation>
+		<Translation language="en">%1</Translation>
+	</Translations>
+	<Translations text="SCLF_Disconnection">
+		<Translation language="fr">Deconnexion !</Translation>
+		<Translation language="en">Disconnection !</Translation>
+	</Translations>
+	<Translations text="SCLF_NoProjectFileSelected">
+		<Translation language="fr">Fichier de projet non spécifié.</Translation>
+		<Translation language="en">No specified project file.</Translation>
+	</Translations>
+	<Translations text="SCLF_UnknownPresetType">
+		<Translation language="fr">'%1' : type de préréglage inconnu</Translation>
+		<Translation language="en">'%1': unknown preset type</Translation>
+	</Translations>
+	<!--
 	<Translations text="SCLF_">
 		<Translation language="fr"></Translation>
 		<Translation language="en"></Translation>

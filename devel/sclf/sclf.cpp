@@ -185,7 +185,7 @@ qRE
 	return Login;
 }
 
-eLogin sclf::GetLoginFeatures( xml::rWriter &Writer )
+eLogin sclf::WriteLoginFeatures(xml::rWriter &Writer)
 {
 	eLogin Login = l_Undefined;
 qRH
@@ -211,6 +211,8 @@ qRB
 		qRFwk();
 		break;
 	}
+
+	Writer.PopTag();
 qRR
 qRT
 qRE
@@ -473,29 +475,59 @@ void sclf::rFrontend::Disconnect( void )
 	Flow_.reset();
 }
 
+ePresetType sclf::GetPresetFeatures(str::dString &Feature)
+{
+	ePresetType Type = pt_Undefined;
+qRH;
+	str::wString RawType;
+qRB;
+	RawType.Init();
 
-void sclf::GetPresetFeatures(
+	sclm::OGetValue(registry::parameter::preset::Type, RawType);
+
+	Type = GetPresetType(RawType);
+
+	switch ( Type ) {
+	case ptNone:
+		break;
+	case ptSetup:
+	case ptProject:
+		sclm::OGetValue(registry::parameter::preset::Feature, Feature);
+		break;
+	case pt_Undefined:
+		sclm::ReportAndAbort(SCLF_NAME "_UnknownPresetType", RawType);
+		break;
+	default:
+		qRFwk();
+		break;
+	}
+qRR;
+qRT;
+qRE;
+	return Type;
+}
+
+void sclf::WritePresetFeatures(
 	const char *Language,
 	xml::rWriter &Writer )
 {
 qRH
-	str::string Type, Feature, DefaultId, Translation;
+	ePresetType Type = pt_Undefined;
+	str::string Feature, DefaultId, Translation;
 	str::wStrings Ids, Aliases;
 	sdr::sRow Row = qNIL;
 qRB
-	tol::Init(Type, Feature);
+	Feature.Init();
 
-	sclm::OGetValue(registry::parameter::preset::Type, Type);
-	sclm::OGetValue(registry::parameter::preset::Feature, Feature);
+	Type = GetPresetFeatures(Feature);
 
-	if ( Type.Amount() )
-		Writer.PutValue(Type, "DefaultPreset");
+	Writer.PutValue(GetLabel(Type), "DefaultPreset");
 
 	DefaultId.Init();
 
 	sclr::GetDefaultSetupId(sclm::GetRegistry(), DefaultId);
 
-	if ( Type == GetLabel( pSetup ) )
+	if ( Type == ptSetup )
 		if ( Feature.Amount() != 0 )
 			DefaultId = Feature;
 
@@ -531,7 +563,7 @@ qRT
 qRE
 }
 
-void sclf::GetBackendsFeatures(
+void sclf::WriteBackendsFeatures(
 	const char *Language,
 	xml::rWriter &Writer )
 {
@@ -558,7 +590,7 @@ qRE
 
 static void GetBackendFeatures_(
 	const str::string_ &Id,
-	rFeatures &Features )
+	rBackendFeatures &Features )
 {
 	sclr::MGetValue( sclm::GetRegistry(), rgstry::tentry___( definition_::backends::tagged_backend::Plugin, Id ), Features.Plugin );
 	sclr::OGetValue( sclm::GetRegistry(), rgstry::tentry___( definition_::backends::TaggedBackend, Id ), Features.Parameters );
@@ -600,7 +632,7 @@ namespace {
 void sclf::SetBackendFeatures(
 	const str::string_ &BackendType,
 	const str::string_ &Parameters,
-	rFeatures &Features )
+	rBackendFeatures &Features )
 {
 qRH
 	str::wString Id;
@@ -624,7 +656,7 @@ qRE
 }
 
 sdr::sRow sclf::rKernel::Init(
-	const rFeatures &Features,
+	const rBackendFeatures &Features,
 	const plgn::dAbstracts &Abstracts )
 {
 	sdr::sRow Row = qNIL;
@@ -673,7 +705,7 @@ const str::dString &sclf::rKernel::AboutPlugin( str::dString &About )
 }
 
 namespace{
-	bso::bool__ GuessBackendFeatures_( rFeatures &Features )
+	bso::bool__ GuessBackendFeatures_( rBackendFeatures &Features )
 	{
 		bso::bool__ BackendFound = false;
 	qRH
@@ -696,14 +728,14 @@ namespace{
 	}
 }
 
-void sclf::GuessBackendFeatures( rFeatures &Features )
+void sclf::GuessBackendFeatures( rBackendFeatures &Features )
 {
 	if ( !GuessBackendFeatures_( Features ) )
 		sclm::ReportAndAbort( SCLF_NAME "_MissingBackendDeclaration" );
 }
 
 const str::dString &sclf::About(
-	const rFeatures &Features,
+	const rBackendFeatures &Features,
 	str::dString &About )
 {
 qRH
@@ -726,11 +758,11 @@ qRE
 	return About;
 }
 
-#define C( name ) case p##name: return #name; break
+#define C( name ) case pt##name: return #name; break
 
-const char *sclf::GetLabel( ePreset Preset )
+const char *sclf::GetLabel( ePresetType Type )
 {
-	switch ( Preset ) {
+	switch ( Type ) {
 	C( None );
 	C( Setup );
 	C( Project );
@@ -744,17 +776,17 @@ const char *sclf::GetLabel( ePreset Preset )
 
 #undef C
 
-static stsfsm::automat PresetAutomat_;
+static stsfsm::automat PresetTypeAutomat_;
 
-static void FillPresetAutomat_( void )
+static void FillPresetTypeAutomat_( void )
 {
-	PresetAutomat_.Init();
-	stsfsm::Fill( PresetAutomat_, p_amount, GetLabel );
+	PresetTypeAutomat_.Init();
+	stsfsm::Fill( PresetTypeAutomat_, pt_amount, GetLabel );
 }
 
-ePreset sclf::GetPreset( const str::string_ &Pattern )
+ePresetType sclf::GetPresetType( const str::string_ &Pattern )
 {
-	return stsfsm::GetId( Pattern, PresetAutomat_, p_Undefined, p_amount );
+	return stsfsm::GetId( Pattern, PresetTypeAutomat_, pt_Undefined, pt_amount );
 }
 
 #define C( name )	case ph##name : return #name; break
@@ -792,26 +824,26 @@ ePresetHandling sclf::GetPresetHandling( const str::dString &Pattern )
 }
 
 bso::sBool sclf::LoadPreset(
-	ePreset Preset,
+	ePresetType Type,
 	const str::string_ &PresetFeature,
 	const scli::sInfo &Info )
 {
-	switch ( Preset ) {
-	case pNone:
+	switch ( Type ) {
+	case ptNone:
 		sclr::Erase( sclr::lSetup );
 		return false;
 		break;
-	case pSetup:
+	case ptSetup:
 		sclm::FillSetupRegistry(PresetFeature);
 		return true;	// TODO: depending of the parameters, may be return false.
 		break;
-	case pProject:
+	case ptProject:
 		if ( PresetFeature.Amount() == 0  )
 			sclm::ReportAndAbort( SCLF_NAME "_NoProjectFileSelected" );
 		sclm::LoadProject( PresetFeature, Info );	// TODO: depending of the parameters, may be return false;
 		return true;
 		break;
-	case p_Undefined:
+	case pt_Undefined:
 		qRFwk();
 		break;
 	default:
@@ -861,7 +893,7 @@ namespace {
 	{
 		FillLoginAutomat_();
 		FillBackendSetupTypeAutomat_();
-		FillPresetAutomat_();
+		FillPresetTypeAutomat_();
 		FillPresetHandlingAutomat_();
 	}
 }

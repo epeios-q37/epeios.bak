@@ -39,7 +39,7 @@ const scli::sInfo &sclx::SCLXInfo( void )
 void sclx::SCLXInitialization( xdhcdc::eMode Mode )
 {
 qRH
-	sclf::rFeatures Features;
+	sclf::rBackendFeatures Features;
 qRB
 	core::Core.Init( Mode );
 

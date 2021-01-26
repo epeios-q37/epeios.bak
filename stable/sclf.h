@@ -76,7 +76,7 @@ namespace sclf {
 		const str::string_ &Id,
 		str::string_ &Filename );
 
-	struct rFeatures {
+	struct rBackendFeatures {
 	public:
 		str::string Plugin;	// Name of the plugin.
 		const char *Identifier;
@@ -87,7 +87,7 @@ namespace sclf {
 			Identifier = NULL;
 			Parameters.reset( P );
 		}
-		E_CDTOR( rFeatures );
+		E_CDTOR( rBackendFeatures );
 		void Init(void)
 		{
 			Plugin.Init();
@@ -103,7 +103,7 @@ namespace sclf {
 	void SetBackendFeatures(
 		const str::dString &BackendType,
 		const str::string_ &Parameters,
-		rFeatures &Features );
+		rBackendFeatures &Features );
 
 	// Is exposed because, even if there is generally only one kernel per frontend, there could be two (a frontend dealing with two different backends).
 	class rKernel
@@ -122,7 +122,7 @@ namespace sclf {
 		}
 		E_CVDTOR( rKernel );
 		sdr::sRow Init(
-			const rFeatures &Features,
+			const rBackendFeatures &Features,
 			const plgn::dAbstracts &Abstracts );
 		const char *Details( void )
 		{
@@ -255,15 +255,11 @@ namespace sclf {
 
 	using sclm::LoadProject;
 
-	void GetPresetFeatures(
+	void WriteBackendsFeatures(
 		const char *Language,
 		xml::rWriter &Writer );
 
-	void GetBackendsFeatures(
-		const char *Language,
-		xml::rWriter &Writer );
-
-	void GuessBackendFeatures( rFeatures &Features );	// Set features following what's in registry.
+	void GuessBackendFeatures( rBackendFeatures &Features );	// Set features following what's in registry.
 
 # define SCLF_I( ns, name, id  )\
 	namespace ns {\
@@ -578,7 +574,7 @@ namespace sclf {
 		str::dString &UserID,
 		str::dString &Password );
 
-	eLogin GetLoginFeatures( xml::rWriter &Writer );
+	eLogin WriteLoginFeatures(xml::rWriter &Writer);
 
 	/* An identifier usually identifies the plugin used to access the backend.
 	Identifier belows are returned when there in no bckend, or if the backend is embedded. */
@@ -605,7 +601,7 @@ namespace sclf {
 	};
 
 	const str::dString &About(
-		const rFeatures &Features,
+		const rBackendFeatures &Features,
 		str::dString &About );
 
 	qENUM( BackendSetupType ) {
@@ -619,21 +615,27 @@ namespace sclf {
 
 	eBackendSetupType GetBackendSetupType( const str::dString &Pattern );
 
-	qENUM( Preset ) {
-		pNone,			// No presets.
-		pSetup,		// Use a setup.
-		pProject,	// Use of a project file.
-		p_amount,
-		p_Undefined
+	qENUM( PresetType ) {
+		ptNone,			// No presets.
+		ptSetup,		// Use a setup.
+		ptProject,	// Use of a project file.
+		pt_amount,
+		pt_Undefined
 	};
 
-	const char *GetLabel( ePreset Preset );
+	const char *GetLabel( ePresetType Type );
 
-	ePreset GetPreset( const str::string_ &Pattern );
+	ePresetType GetPresetType( const str::string_ &Pattern );
 
-	// If true, launches the main page of the app, otherwise displays the login page.
+	ePresetType GetPresetFeatures(str::dString &Feature);	// Retrieves preset features from registry.
+
+	void WritePresetFeatures(
+		const char *Language,
+		xml::rWriter &Writer );
+
+	// If true, caller has to launch the main page of the app, otherwise to display the login page.
 	bso::sBool LoadPreset(
-		ePreset Preset,
+		ePresetType Type,
 		const str::string_ &PresetFeature,
 		const scli::sInfo &Info );
 

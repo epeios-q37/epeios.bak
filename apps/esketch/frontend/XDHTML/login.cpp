@@ -34,7 +34,7 @@ namespace {
 			core::rSession &Session,
 			xml::rWriter &Writer )
 		{
-			sclx::login::GetLayout( Session, Writer );
+			sclx::login::WriteLayout(Session, Writer);
 		}
 	}
 }
@@ -69,7 +69,7 @@ A( Connect )
 {
 qRH
 	fblfrd::incompatibility_informations IncompatibilityInformations;
-	sclf::rFeatures Features;
+	sclf::rBackendFeatures Features;
 qRB
 	if ( Mode == xdhcdc::mMonoUser ) {
 		Features.Init();

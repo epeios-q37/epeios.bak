@@ -34,7 +34,7 @@ namespace {
 			core::rSession &Session,
 			xml::rWriter &Writer )
 		{
-			sclx::prolog::GetLayout( Session, Writer );
+			sclx::prolog::WriteLayout( Session, Writer );
 		}
 	}
 }

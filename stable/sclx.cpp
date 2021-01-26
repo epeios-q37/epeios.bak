@@ -602,41 +602,41 @@ void sclx::sProxy::DisableElement( const str::dString &Id )
 //	HandleElement_( Id, &sProxy::DisableElements, *this );
 }
 
-void sclx::prolog::GetLayout(
+void sclx::prolog::WriteLayout(
 	sclf::rFrontend &Frontend,
 	xml::rWriter &Writer)
 {
-	sclf::GetPresetFeatures( Frontend.Language(), Writer );
+	sclf::WritePresetFeatures( Frontend.Language(), Writer );
 }
 
-static sclf::ePreset GetPreset_( sProxy &Proxy )
+static sclf::ePresetType GetPresetType_( sProxy &Proxy )
 {
-	sclf::ePreset Preset = sclf::p_Undefined;
+	sclf::ePresetType Type = sclf::pt_Undefined;
 qRH
-	str::string Value;
+	str::string RawType;
 qRB
-	Value.Init();
-	Preset = sclf::GetPreset( Proxy.GetContent( prolog::PresetId, Value ) );
+	RawType.Init();
+	Type = sclf::GetPresetType(Proxy.GetContent(prolog::PresetId, RawType));
 qRR
 qRT
 qRE
-	return Preset;
+	return Type;
 }
 
 void sclx::prolog::HandlePresetSwitching( sProxy & Proxy )
 {
-	switch ( GetPreset_( Proxy ) ) {
-	case sclf::pNone:
+	switch ( GetPresetType_( Proxy ) ) {
+	case sclf::ptNone:
 		Proxy.AddClass( prolog::ProjectFormId, "hide" );
 		Proxy.AddClass( prolog::SetupFormId, "hide" );
 		Proxy.AddClass( prolog::BorderId, "fieldset-vanish" );
 		break;
-	case sclf::pSetup:
+	case sclf::ptSetup:
 		Proxy.AddClass( prolog::ProjectFormId, "hide" );
 		Proxy.RemoveClass( prolog::SetupFormId, "hide" );
 		Proxy.RemoveClass( prolog::BorderId, "fieldset-vanish" );
 		break;
-	case sclf::pProject:
+	case sclf::ptProject:
 		Proxy.RemoveClass( prolog::ProjectFormId, "hide" );
 		Proxy.AddClass( prolog::SetupFormId, "hide" );
 		Proxy.RemoveClass( prolog::BorderId, "fieldset-vanish" );
@@ -674,23 +674,23 @@ qRT
 qRE
 }
 
-sclf::ePreset sclx::prolog::GetPresetFeatures(
+sclf::ePresetType sclx::prolog::GetPresetFeatures(
 	sProxy &Proxy,
 	str::string_ &Feature )
 {
-	sclf::ePreset Preset = sclf::p_Undefined;
+	sclf::ePresetType Type = sclf::pt_Undefined;
 qRH
 	str::wString Buffer;
 qRB
 	Buffer.Init();
 
-	switch ( Preset = GetPreset_( Proxy ) ) {
-	case sclf::pNone:
+	switch ( Type = GetPresetType_( Proxy ) ) {
+	case sclf::ptNone:
 		break;
-	case sclf::pSetup:
+	case sclf::ptSetup:
 		Feature.Append( Proxy.GetContent( SetupId, Buffer ) );
 		break;
-	case sclf::pProject:
+	case sclf::ptProject:
 		Feature.Append( Proxy.GetContent( ProjectId, Buffer ) );
 		break;
 	default:
@@ -700,7 +700,7 @@ qRB
 qRR
 qRT
 qRE
-	return Preset;
+	return Type;
 }
 
 bso::sBool sclx::prolog::LoadPreset( sProxy &Proxy )
@@ -734,13 +734,13 @@ const char *sclx::login::GetLabel( eBackendVisibility Visibility )
 
 #undef C
 
-sclf::eLogin sclx::login::GetLayout(
+sclf::eLogin sclx::login::WriteLayout(
 	sclf::rFrontend &Frontend,
 	xml::rWriter &Writer)
 {
-	sclf::GetBackendsFeatures( Frontend.Language(), Writer );
+	sclf::WriteBackendsFeatures(Frontend.Language(), Writer);
 
-	return sclf::GetLoginFeatures( Writer );
+	return sclf::WriteLoginFeatures( Writer );
 }
 
 namespace {
@@ -939,7 +939,7 @@ namespace proxy_ {
 
 void sclx::login::GetBackendFeatures(
 	sProxy &Proxy,
-	sclf::rFeatures &Features )
+	sclf::rBackendFeatures &Features )
 {
 qRH;
 	eBackendType_ Type = bt_Undefined;

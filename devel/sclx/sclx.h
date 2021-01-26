@@ -1144,7 +1144,7 @@ namespace sclx {
 		static qCDEFS(ProjectFormId, "ProjectForm" );
 		static qCDEFS(ProjectId, "Project" );
 
-		void GetLayout(
+		void WriteLayout(
 			sclf::rFrontend &Frontend,
 			xml::rWriter &Writer );
 
@@ -1161,9 +1161,9 @@ namespace sclx {
 			return DisplaySelectedProjectFilename(Proxy, str::wString(Id));
 		}
 
-		sclf::ePreset GetPresetFeatures(
+		sclf::ePresetType GetPresetFeatures(
 			sProxy &Proxy,
-			str::string_ &Feature );
+			str::string_ &Feature);
 
 		bso::sBool LoadPreset( sProxy &Proxy );
 	}
@@ -1178,7 +1178,7 @@ namespace sclx {
 
 		const char *GetLabel( eBackendVisibility );
 
-		sclf::eLogin GetLayout(
+		sclf::eLogin WriteLayout(
 			sclf::rFrontend &Frontend,
 			xml::rWriter &Writer );
 
@@ -1186,7 +1186,7 @@ namespace sclx {
 
 		void GetBackendFeatures(
 			sProxy &Proxy,
-			sclf::rFeatures &Features );
+			sclf::rBackendFeatures &Features );
 
 		void DisplaySelectedEmbeddedBackendFilename(
 			sProxy &Proxy,
