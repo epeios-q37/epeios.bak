@@ -67,6 +67,10 @@ namespace parameter_ {
 	}
 }
 
+namespace setup_ {
+	rgstry::entry___ Handling_("@Handling", registry::setup::Setup);
+}
+
 rgstry::rEntry &sclf::BackendParametersRegistryEntry = parameter_::Backend_;
 
 namespace definition_ {
@@ -854,7 +858,24 @@ bso::sBool sclf::LoadPreset(
 	return true;	// To avoid a warning.
 }
 
-ePresetHandling sclf::HandlePreset(void)
+namespace {
+	void LoadPreset_(const scli::sInfo &Info)
+	{
+	qRH;
+		ePresetType Type = pt_Undefined;
+		str::wString Feature;
+	qRB;
+		Feature.Init();
+		Type = GetPresetFeatures(Feature);
+
+		LoadPreset(Type, Feature, Info);
+	qRR;
+	qRT;
+	qRE;
+	}
+}
+
+ePresetHandling sclf::HandlePreset(const scli::sInfo &Info)
 {
 	ePresetHandling Handling = ph_Default;
 qRH
@@ -875,7 +896,7 @@ qRB
 		case phLoad:
 		case phLogin:
 		case phRun:
-//			sclm::LoadPreset();
+			LoadPreset_(Info);
 			break;
 		default:
 			qRGnr();

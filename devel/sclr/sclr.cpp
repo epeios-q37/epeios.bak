@@ -82,14 +82,17 @@ rgstry::entry___ sclr::parameter::PluginItem( RGSTRY_TAGGING_ATTRIBUTE( "Id" ), 
 rgstry::entry___ sclr::parameter::debug::DumpRegistries( "DumpRegistries", Debug );
 rgstry::entry___ sclr::parameter::debug::DumpLocales( "DumpLocales", Debug );
 
-namespace definition {
-	static rgstry::entry___ Plugins_( RGSTRY_TAGGED_ENTRY( "Plugins", "target" ), sclr::Definitions );
-	static rgstry::entry___ Plugin_( RGSTRY_TAGGED_ENTRY( "Plugin", "id" ), Plugins_ );
+namespace definition_ {
+	namespace {
+		rgstry::entry___ Plugins_( RGSTRY_TAGGED_ENTRY( "Plugins", "target" ), sclr::Definitions );
+	}
+
+	static rgstry::entry___ Plugin( RGSTRY_TAGGED_ENTRY( "Plugin", "id" ), Plugins_ );
 }
 
-rgstry::entry___ sclr::definition::plugin::Filename( "Filename", ::definition::Plugin_ );
-rgstry::entry___ sclr::definition::plugin::Configuration( "Configuration", ::definition::Plugin_ );
-rgstry::entry___ sclr::definition::plugin::Locale( "Locale", ::definition::Plugin_ );
+rgstry::entry___ sclr::definition::plugin::Filename( "Filename", ::definition_::Plugin );
+rgstry::entry___ sclr::definition::plugin::Configuration( "Configuration", ::definition_::Plugin );
+rgstry::entry___ sclr::definition::plugin::Locale( "Locale", ::definition_::Plugin );
 
 namespace setup_ {
 	namespace {
@@ -104,6 +107,8 @@ namespace setup_ {
 		Id("@id", Loose_),
 		Alias("@Alias",Tagged);
 }
+
+rgstry::rEntry sclr::setup::Setup(setup_::Tagged);
 
 namespace {
 	tht::rLocker GlobalLocker_;

@@ -65,6 +65,14 @@ A( DisplayEmbeddedBackendFilename )
 	sclx::login::DisplaySelectedEmbeddedBackendFilename( Session, Id );
 }
 
+#if 1
+A( Connect )
+{
+	core::Connect(Mode, Session);
+
+	main::Display( Session );
+}
+#else
 A( Connect )
 {
 qRH
@@ -87,6 +95,7 @@ qRR
 qRE
 qRT
 }
+#endif
 
 A( Dismiss )
 {

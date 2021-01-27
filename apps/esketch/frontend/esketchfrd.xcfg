@@ -4,7 +4,7 @@
 	<xpp:expand value-of="q37.xpp"/>
 	<xpp:define name="Parameters">
 		<xpp:bloc>
-			<Preset Type="Setup">Localhost</Preset>
+			<Preset Type="Setup" Handling="Run">Embedded</Preset>
 			<Project Type="Predefined"/>
 			<xpp:ifeq select="prod" value="yes">
 				<Backend Type="Predefined">LocalHost</Backend>
@@ -37,9 +37,15 @@
 	</xpp:define>
 	<xpp:define name="Setups">
 		<xpp:bloc>
-			<Setup id="NoBackend" Alias="WithoutBackend"/>
-			<Setup id="Localhost" Alias="Localhost"/>
-			<Setup id="Embedded" Alias="Embedded"/>
+			<Setup id="NoBackend" Alias="WithoutBackend">
+				<Backend Type="None"/>
+			</Setup>
+			<Setup id="Localhost" Alias="Localhost">
+				<Backend Type="Predefined">LocalHost</Backend>
+			</Setup>
+			<Setup id="Embedded" Alias="Embedded">
+				<Backend Type="Predefined">Embedded</Backend>
+			</Setup>
 		</xpp:bloc>
 	</xpp:define>
 	<xpp:define name="Definitions">

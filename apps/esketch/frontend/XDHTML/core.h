@@ -78,6 +78,10 @@ namespace core {
 
 	sclf::rKernel &Kernel( void );
 
+	void Connect(
+		xdhcdc::eMode Mode,
+		rSession &Session);
+
 	void About(
 		rSession &Session,
 		xml::rWriter &Writer );

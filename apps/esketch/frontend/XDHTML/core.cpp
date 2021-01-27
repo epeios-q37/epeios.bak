@@ -107,6 +107,31 @@ qRT
 qRE
 }
 
+
+void core::Connect(
+	xdhcdc::eMode Mode,
+	rSession &Session)
+{
+qRH
+	fblfrd::incompatibility_informations IncompatibilityInformations;
+	sclf::rBackendFeatures Features;
+qRB
+	if ( Mode == xdhcdc::mMonoUser ) {
+		Features.Init();
+		sclx::login::GetBackendFeatures( Session, Features );
+		core::Kernel().Init( Features, plgn::EmptyAbstracts );
+	}
+
+	IncompatibilityInformations.Init();
+	if ( !Session.Connect( fblfrd::compatibility_informations__( SKTINF_LC, ESKETCH_API_VERSION ), IncompatibilityInformations ) )
+		qRGnr();
+qRR
+	Session.Disconnect();
+qRE
+qRT
+}
+
+
 void core::About(
 	rSession &Session,
 	xml::rWriter &Writer )

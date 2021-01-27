@@ -59,6 +59,10 @@ namespace sclf {
 			}
 		}
 
+		namespace setup {
+			using namespace sclr::setup;
+		}
+
 		namespace definition {
 			using namespace sclr::definition;
 		}
@@ -653,7 +657,7 @@ namespace sclf {
 
 	ePresetHandling GetPresetHandling(const str::dString &Pattern);
 
-	ePresetHandling HandlePreset(void);
+	ePresetHandling HandlePreset(const scli::sInfo &Info);
 }
 
 #endif

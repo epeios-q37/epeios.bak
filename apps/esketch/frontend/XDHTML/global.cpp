@@ -33,7 +33,7 @@ A( OnNewSession )
 {
 	switch ( Mode ) {
 	case xdhcdc::mMonoUser:
-		switch ( sclf::HandlePreset() ) {
+		switch ( sclf::HandlePreset(Session.Info()) ) {
 		case sclf::phShow:
 			::prolog::Display( Session );
 			break;
@@ -45,6 +45,7 @@ A( OnNewSession )
 			::login::Display( Session );
 			break;
 		case sclf::phRun:
+			core::Connect(Mode, Session);
 			::main::Display( Session );
 			break;
 		default:

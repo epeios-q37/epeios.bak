@@ -108,6 +108,10 @@ namespace sclr {
 		}
 	}
 
+	namespace setup {
+		extern rgstry::rEntry Setup;
+	}
+
 	namespace definition {
 		extern rgstry::entry___ DefaultProjectId;
 
