@@ -68,7 +68,7 @@ namespace parameter_ {
 }
 
 namespace setup_ {
-	rgstry::entry___ Handling_("@Handling", registry::setup::Setup);
+	rgstry::entry___ Handling("@Handling", registry::setup::Setup);
 }
 
 rgstry::rEntry &sclf::BackendParametersRegistryEntry = parameter_::Backend_;
@@ -824,7 +824,7 @@ namespace {
 
 ePresetHandling sclf::GetPresetHandling( const str::dString &Pattern )
 {
-	return stsfsm::GetId( Pattern, PresetHandlingAutomat_, ph_Undefined, ph_amount );
+	return stsfsm::GetId( Pattern, PresetHandlingAutomat_, ph_Undefined, ph_amount, qRPU );
 }
 
 bso::sBool sclf::LoadPreset(
@@ -838,8 +838,7 @@ bso::sBool sclf::LoadPreset(
 		return false;
 		break;
 	case ptSetup:
-		sclm::FillSetupRegistry(PresetFeature);
-		return true;	// TODO: depending of the parameters, may be return false.
+		return HandleSetup(PresetFeature);
 		break;
 	case ptProject:
 		if ( PresetFeature.Amount() == 0  )
@@ -909,6 +908,60 @@ qRE
 	return Handling;
 }
 
+#define C( name )	case sh##name : return #name; break
+
+const char *sclf::GetLabel( eSetupHandling Handling )
+{
+	switch ( Handling ) {
+	C( Load );
+	C( Run );
+	default:
+		qRFwk();
+		break;
+	}
+
+	return NULL;	// To avoid a warning.
+}
+
+#undef C
+
+namespace {
+	stsfsm::wAutomat SetupHandlingAutomat_;
+
+	void FillSetupHandlingAutomat_( void )
+	{
+		SetupHandlingAutomat_.Init();
+		stsfsm::Fill<eSetupHandling>(SetupHandlingAutomat_, sh_amount, GetLabel);
+	}
+}
+
+eSetupHandling sclf::GetSetupHandling(const str::dString &Pattern)
+{
+	return stsfsm::GetId(Pattern, SetupHandlingAutomat_, sh_Undefined, sh_amount, qRPU);
+}
+
+bso::sBool sclf::HandleSetup(const str::dString &Id)
+{
+	eSetupHandling Handling = sh_Default;
+qRH;
+	str::wString RawHandling;
+qRB;
+	RawHandling.Init();
+
+	if ( sclm::OGetValue(rgstry::rTEntry(setup_::Handling, Id), RawHandling) ) {
+		if ( ( Handling = GetSetupHandling(RawHandling) ) == sh_Undefined ) {
+			sclm::ReportAndAbort(SCLF_NAME "_UnknownSetupHandling", RawHandling);
+		}
+	}
+
+	sclm::FillSetupRegistry(Id);
+qRR;
+qRT;
+qRE;
+	return Handling == shRun;
+}
+
+
 namespace {
 	void FillAutomats_( void )
 	{
@@ -916,6 +969,7 @@ namespace {
 		FillBackendSetupTypeAutomat_();
 		FillPresetTypeAutomat_();
 		FillPresetHandlingAutomat_();
+		FillSetupHandlingAutomat_();
 	}
 }
 

@@ -658,6 +658,23 @@ namespace sclf {
 	ePresetHandling GetPresetHandling(const str::dString &Pattern);
 
 	ePresetHandling HandlePreset(const scli::sInfo &Info);
+
+	// Concerns the 'Handling' attribute of the 'Setups/Setup' entries.
+	// This entries are for all type of sftware, but the 'Handling' attribute is only for frontend related software.
+	qENUM( SetupHandling ) {
+		shLoad,	// Simply load the setup,
+		shRun,		// Load the setup and go to the main page of the software.
+		sh_amount,
+		sh_Undefined,
+		sh_Default = shLoad
+	};
+
+	const char *GetLabel(eSetupHandling Handling);
+
+	eSetupHandling GetSetupHandling(const str::dString &Pattern);
+
+	// Handles setup following configuration. When returning 'true', the main page of the application have to be displayed?
+	bso::sBool HandleSetup(const str::dString &Id);
 }
 
 #endif

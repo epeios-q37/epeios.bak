@@ -68,7 +68,7 @@ A( DisplayEmbeddedBackendFilename )
 #if 1
 A( Connect )
 {
-	core::Connect(Mode, Session);
+	core::Connect(Mode, true, Session);
 
 	main::Display( Session );
 }

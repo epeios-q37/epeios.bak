@@ -34,10 +34,13 @@
 		<Translation language="en">No specified project file.</Translation>
 	</Translations>
 	<Translations text="SCLF_UnknownPresetType">
-		<Translation language="fr">'%1' : type de préréglage inconnu</Translation>
-		<Translation language="en">'%1': unknown preset type</Translation>
+		<Translation language="fr">'%1' : valeur inconnue pour l'attribut 'Type' de l'entrée 'Preset'.</Translation>
+		<Translation language="en">'%1': unknown value for attribute 'Type' of the 'Preset' entry.</Translation>
 	</Translations>
-	<!--
+	<Translations text="SCLF_UnknownSetupHandling">
+		<Translation language="fr">'%1' : valeur inconnue pour l'attribut 'Handling' de l'entrée 'Setup'.</Translation>
+		<Translation language="en">'%1': unknown value for attribute 'Handling' of the 'Setup' entry.</Translation>
+	</Translations>	<!--
 	<Translations text="SCLF_">
 		<Translation language="fr"></Translation>
 		<Translation language="en"></Translation>

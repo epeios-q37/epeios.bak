@@ -80,6 +80,7 @@ namespace core {
 
 	void Connect(
 		xdhcdc::eMode Mode,
+		bso::sBool FromUI,	// If true, retrieve backend features from UI, otherwise from registry.
 		rSession &Session);
 
 	void About(

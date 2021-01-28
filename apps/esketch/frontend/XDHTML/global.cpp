@@ -45,7 +45,7 @@ A( OnNewSession )
 			::login::Display( Session );
 			break;
 		case sclf::phRun:
-			core::Connect(Mode, Session);
+			core::Connect(Mode, false, Session);
 			::main::Display( Session );
 			break;
 		default:

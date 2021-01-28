@@ -10,9 +10,13 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2021-01-28:
+
+- SCLF: introducing setup handling,
+
 ## 2021-01-27:
 
-- SCLR: exposing ``setup`` section for external use,
+- SCLR: exposing setup section for external use,
 
 ## 2021-01-26:
 

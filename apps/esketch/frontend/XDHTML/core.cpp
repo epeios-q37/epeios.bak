@@ -110,6 +110,7 @@ qRE
 
 void core::Connect(
 	xdhcdc::eMode Mode,
+	bso::sBool FromUI,
 	rSession &Session)
 {
 qRH
@@ -118,7 +119,10 @@ qRH
 qRB
 	if ( Mode == xdhcdc::mMonoUser ) {
 		Features.Init();
-		sclx::login::GetBackendFeatures( Session, Features );
+		if ( FromUI )
+			sclx::login::GetBackendFeatures(Session, Features);
+		else
+			sclf::GuessBackendFeatures(Features);
 		core::Kernel().Init( Features, plgn::EmptyAbstracts );
 	}
 
