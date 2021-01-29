@@ -17,7 +17,7 @@
 	along with XDHq. If not, see <http://www.gnu.org/licenses/>.
 */
 
-const devTools = false;  // Uncomment to open dev tools.
+// const devTools = true;  // Uncomment to open dev tools.
 
 const { app, BrowserWindow } = require('electron');
 const path = require('path');
@@ -96,11 +96,9 @@ function createWindow() {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-console.log("Before !");
 app.on('ready', createWindow)
-console.log( xdhelcq.moduleInfo());
-console.log( xdhelcq.getHead());
-console.log("After !");
+// console.log( xdhelcq.moduleInfo());
+// console.log( xdhelcq.getHead());
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {

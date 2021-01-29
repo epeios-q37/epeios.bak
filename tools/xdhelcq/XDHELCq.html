@@ -46,12 +46,12 @@
 
     var xdhelcqPath = null;
 
-    if (process.env.EPEIOS_SRC) {
+    if (process.env.Q37_EPEIOS) {
       let addonPath = null;
       if (process.platform == 'win32')
         addonPath = 'h:/bin/';
       else
-        addonPath = '~/bin/';
+        addonPath = '/home/csimon/bin/';
       xdhelcqPath = require('path').join(addonPath, 'xdhelcq.node');
     } else {
       xdhelcqPath = require('path').join("$XDHELCQ_PATH$", "xdhelcq.node");

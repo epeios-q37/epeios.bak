@@ -859,6 +859,7 @@ namespace sclx {
 			str::wString Id, Action;
 			qCBUFFERh BId, BAction;
 		qRB;
+			CPq;
 			tol::Init(Id, Action);
 
 			if ( ( EventDigest != NULL ) && (EventDigest[0] ) ) {
@@ -866,7 +867,11 @@ namespace sclx {
 					qRFwk();
 			}
 
+			CPq;
+
 			Cont = C_().Launch(*this, Id.Convert(BId), Action.Convert(BAction));
+
+			CPq;
 		qRR;
 		qRT;
 		qRE;

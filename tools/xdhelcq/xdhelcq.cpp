@@ -41,9 +41,6 @@ using cio::CErr;
 using cio::COut;
 using cio::CIn;
 
-#define D cio::COut <<  txf::nl << __LOC__ << txf::nl << txf::commit
-
-
 SCLI_DEF( xdhelcq, NAME_LC, NAME_MC );
 
 namespace {
@@ -209,15 +206,9 @@ namespace {
 			v8::Local<v8::String> String;
 			bso::integer_buffer__ IBuffer;
 		qRB;
-			D;
-
-			cio::COut << "Script:" << Script << txf::nl << txf::commit;
-
-			D;
+//			cio::COut << "Script:" << Script << txf::nl << txf::commit;
 
 			V8Return = v8q::Execute( Script.Convert( Buffer ), v8q::GetIsolate() );
-
-			D;
 
 			if ( ReturnedValue != NULL ) {
 				if ( Blocker != NULL) {
@@ -357,7 +348,7 @@ namespace {
 
 //		v8q::console::Log( Isolate, Message );
 
-cio::COut << txf::nl << Message << txf::nl << txf::commit;
+		cio::COut << txf::nl << Message << txf::nl << txf::commit;
 
 		Message.InsertAt( "window.alert( '" );
 		Message.Append( "');" );
@@ -504,7 +495,6 @@ namespace {
 		tol::reset( Driver, TFlow );
 
 		Single_.Process(Out);
-
 	qRR
 	qRT
 	qRE
@@ -541,7 +531,7 @@ namespace {
 	}
 
 	namespace {
-#if 0		
+#if 0
 		bso::bool__ HandleEvent_( const str::string_  &Digest )
 		{
 			bso::bool__ Stop = true;
@@ -593,7 +583,7 @@ namespace {
 
 		Digest.Init();
 		String.Get( Digest );
-	
+
 		HandleEvent_( Digest );
 	qRFR;
 	qRFT;
