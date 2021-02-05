@@ -33,7 +33,7 @@ $out='
         <div id="qrcode"></div>
       </a>
   </div>
-  <span style="display: table; margin: 10px auto 5px auto;">or simply click on it for a new instance.</span>
+  <span style="display: table; margin: 10px auto 5px auto;">or simply click on it for another instance.</span>
   <hr/>
   <div style="display: table; padding: 10px; margin: auto;">
     <div style="display: table; padding: 10px;">

@@ -33,7 +33,7 @@ $out='
 			}).join(""));
 		}
 		function adjust() {
-			let iframe = window.parent.document.body.firstChild.firstChild;
+			let iframe = window.parent.document.body.firstElementChild.firstElementChild;
 			iframe.height="1";
 			iframe.height = iframe.contentWindow.document.body.scrollHeight + \'px\';
 		}

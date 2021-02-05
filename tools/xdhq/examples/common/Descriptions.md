@@ -32,6 +32,10 @@ To achieve this, you create links with a user defined parameter, which value you
 The famous ["Hello, World!" program](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program) made with the *Atlas* *Toolkit*.  
 Source code is available for [*Java*](https://repl.it/@AtlasTK/atlas-java#examples/Hello/Hello.java), [*Node.js*](https://repl.it/@AtlasTK/atlas-node#examples/Hello/Hello.js), [*Perl*](https://repl.it/@AtlasTK/atlas-perl#examples/Hello/Hello.pl), [*Python*](https://repl.it/@AtlasTK/atlas-python#examples/Hello/Hello.py) and [*Ruby*](https://repl.it/@AtlasTK/atlas-ruby#examples/Hello/Hello.rb)!
 
+## `MatPlotLib`  ([file](../../examples/PYH/MatPlotLib/main.py))
+
+Graphics drawn with [*matplotlib*](https://matplotlib.org/) can be used with the *Atlas* *Toolkit*.
+
 ## `TodoMVC` ([file](./TodoMVC/Main.html))
 
 The [*TodoMVC* app](http://todomvc.com/), but **not** using the [*MVC*](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller) pattern.
