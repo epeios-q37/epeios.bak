@@ -134,7 +134,7 @@ flw::size__ sck::Write(
 	return Result;
 }
 
-#if SCK__WIN
+#ifdef SCK__WIN
 #	define SHUT_RDWR 2	// Workaround, 'SD_BOTH' being not available because inclusion of 'winsock2.h' fails.
 #elif defined( SCK__POSIX )
 # define ioctlsocket ioctl
