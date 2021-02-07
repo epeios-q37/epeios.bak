@@ -78,7 +78,7 @@ namespace {
 			void Init( void )
 			{
 			qRH
-				sclf::rFeatures Features;
+				sclf::rBackendFeatures Features;
 			qRB
 				Features.Init();
 				sclf::GuessBackendFeatures( Features );
