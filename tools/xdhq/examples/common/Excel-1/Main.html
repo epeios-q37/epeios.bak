@@ -1,24 +1,6 @@
+<iframe style="border: none;" src="FaaSDesc.php?text=VGhpcyBleGFtcGxlIGlzIGxvb3NlbHkgYmFzZWQgb24gW2NoYXB0ZXIgMTNdKGh0dHBzOi8vYXV0b21hdGV0aGVib3JpbmdzdHVmZi5jb20vMmUvY2hhcHRlcjEzLykgb2YgdGhlIFsqQXV0b21hdGUgdGhlIEJvcmluZyBTdHVmZiB3aXRoIFB5dGhvbipdKGh0dHBzOi8vYXV0b21hdGV0aGVib3JpbmdzdHVmZi5jb20vKSBib29rIGJ5IEFsIFN3ZWlnYXJ0LiAgCkNsaWNraW5nIG9uIGEgc3RhdGUgdGFrZXMgeW91IHRvIGl0cyBsaXN0IG9mIGNvdW50aWVzLCBhbmQgY2xpY2tpbmcgb24gYSBjb3VudHkgdGFrZXMgeW91IHRvIGl0cyBkZXRhaWxzLg=="></iframe>
 <span>
   <fieldset>
-    <p>
-      <output id='output'></output>
-    </p>
-    <fieldset class="frame" style="height: 300px;">
-      <table>
-        <thead>
-          <tr>
-            <th class="sticky">Line</th>
-            <th class="sticky">Tract</th>
-            <th class="sticky">State</th>
-            <th class="sticky">County</th>
-            <th class="sticky">Pop</th>
-          </tr>
-        </thead>
-        <tbody id="table">
-        </tbody>
-      </table>
-    </fieldset>
-    <div style="background-color: bisque; text-align: center;">Items in frames below are clickable.</div>
     <div style="display: flex; flex-direction: row; justify-content: space-evenly; height: 300px">
       <fieldset class="frame">
         <table>
@@ -42,10 +24,28 @@
         </table>
       </fieldset>
     </div>
+    <fieldset class="frame" style="height: 300px;">
+      <table>
+        <thead>
+          <tr>
+            <th class="sticky">Line</th>
+            <th class="sticky">Tract</th>
+            <th class="sticky">State</th>
+            <th class="sticky">County</th>
+            <th class="sticky">Pop</th>
+          </tr>
+        </thead>
+        <tbody id="table">
+        </tbody>
+      </table>
+    </fieldset>
+    <p>
+      <output id='output'></output>
+    </p>
     <br />
     <div class="hcenter">
       <select id="set" size="2" title="Select the data set">
-        <option value="censuspopdata_extract.xlsx" selected>Extract (fast, for testing)</option>
+        <option value="censuspopdata_extract.xlsx" selected>Excerpt (fast, for testing)</option>
         <option value="censuspopdata_full.xlsx">Full (slower)</option>
       </select>
       <br />

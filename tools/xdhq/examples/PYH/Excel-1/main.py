@@ -141,6 +141,7 @@ def reading(dom):
   dom.inner("counties", countiesLayout)
   dom.set_value('output', 'Done')
   dom.add_class("output", "hidden")
+  dom.scroll_to("states")
   
 def ac_connect(dom):
   dom.inner("", open("Main.html").read())

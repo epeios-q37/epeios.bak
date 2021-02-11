@@ -3,7 +3,7 @@
 Descriptions ajoutées dans la page HTML principale de chacune des démonstrations.
 
 - Sélectionner la description au format *Markdown* avec la souris ;
-- *Shift-Ctrl-B* + *entrée* (ou *Command Palette…*, *Tasks: Run Task*, *FaaS Description generator*) ;
+- (Cette tâche n'est disponible qu'ave le *workspace* *Meta*) *Shift-Ctrl-B* + *entrée* (ou *Command Palette…*, *Tasks: Run Task*, *FaaS Description generator*) ;
 - Coller le presse-papier (*CTRL-V*) comme (en remplacement de la) première ligne du fichier *HTML*.
 
 
@@ -26,6 +26,17 @@ You can open as many sessions as you want by clicking the below displayed [QR co
 
 In the [*Chatroom* example](https://repl.it/@AtlasTK/atlas-python#examples/Chatroom/main.py) (without the final `s`), you could see how to share data between all the sessions. With this example, only sessions from the same room will share the same messages.  
 To achieve this, you create links with a user defined parameter, which value you can retrieve on the creation of a session. Take a look to the *Python* source files [here](https://repl.it/@AtlasTK/atlas-python#examples/Chatrooms/main.py) to see how to do this.
+
+## `Excel-1` ([file](./Excel-1/Main.html))
+
+This example is loosely based on [chapter 13](https://automatetheboringstuff.com/2e/chapter13/) of the [*Automate the Boring Stuff with Python*](https://automatetheboringstuff.com/) book by Al Sweigart.  
+Clicking on a state takes you to its list of counties, and clicking on a county takes you to its details.
+
+
+## `Excel-3` ([file](./Excel-3/Main.html))
+
+This example is loosely based on [chapter 13](https://automatetheboringstuff.com/2e/chapter13/) of the [*Automate the Boring Stuff with Python*](https://automatetheboringstuff.com/) book by Al Sweigart. It shows an application that helps to correct a handwritten *Excel* file with misspelled entries.    
+Select the misspelled entries corresponding to the same item by clicking their checkboxes, click the *Jump* button, select the correctly spelled item by clicking its radio button, click the *Coll./Exp.* button to see the entries you have selected, and click the *Apply* button to apply the corrections.
 
 ## `Hello` ([file](./Hello/Main.html))
 
