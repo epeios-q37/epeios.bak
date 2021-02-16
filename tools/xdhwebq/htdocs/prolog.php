@@ -18,7 +18,7 @@ You should have received a copy of the GNU Affero General Public License
 along with xdhwebq. If not, see <http://www.gnu.org/licenses/>.
 */
 
-$out = str_replace(array("\r", "\n", "\t"), '','
+$out = str_replace(array("\r", "\n", "\t"), '',<<<MLS
 	<!DOCTYPE html>
 	<html>
 		<head>
@@ -37,14 +37,15 @@ $out = str_replace(array("\r", "\n", "\t"), '','
 					margin: 20px auto auto auto;
 				}
 			</style>
-			<!-- BEGIN of the user head section -->'
-. $head . '
+			<!-- BEGIN of the user head section -->
+$head
 			<!-- END of the user head section -->
 			<script>
 				function adjustQRCodeIFrame()
 				{
 					let iframe = document.body.lastChild.firstChild;
-					iframe.style.height = iframe.contentWindow.document.body.scrollHeight + \'px\';
+					let iframeBody = iframe.contentWindow.document.body;
+					iframe.style.height = iframeBody.scrollHeight + 'px';
 				}
 				function ignition(token,id,qrcodeOnly) {
 						document.body.lastChild.firstChild.src = "FaaSFooter.php?url=" + encodeURIComponent(window.location.href);
@@ -53,7 +54,7 @@ $out = str_replace(array("\r", "\n", "\t"), '','
 			</script>
 		</head>
 		<!--body id="Root" data-xdh-onevents="(keypress|About|SC+a)(keypress|Q37Refresh|SC+r)"-->
-		<body onload="ignition(\'' . $token . '\',\'' . $id . '\',' . $qrcodeOnly . ');">
+		<body onload="ignition('$token','$id',$qrcodeOnly);">
 			<div class="xdh_style">
 				<noscript>
 					<div style="display: table; margin: 50px auto auto auto;">
@@ -62,12 +63,14 @@ $out = str_replace(array("\r", "\n", "\t"), '','
 						</fieldset>
 					</div>
 				</noscript>
-				<input type="hidden" id="LoginUserID" value="' . $UserID . '"/>
-				<input type="hidden" id="LoginPassword" value="' . $Password . '"/>
+				<input type="hidden" id="LoginUserID" value="$UserID"/>
+				<input type="hidden" id="LoginPassword" value="$Password"/>
 			</div>
-			<div' . $additional . '>
-				<iframe style="border: none; width: 100%;" onload="adjustQRCodeIFrame();"/>
+			<div $additional>
+				<iframe style="border: none; width: 100%; height: 50px;" onload="adjustQRCodeIFrame();"/>
 			</div>
 		</body>
-	</html>')
+	</html>
+MLS
+			);
 ?>
