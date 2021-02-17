@@ -23,9 +23,9 @@ SOFTWARE.
  """
 
 import XDHq, XDHqSHRD
-from threading import Thread
-import threading
-import inspect
+from threading import Thread, Lock
+import inspect, time
+
 
 import signal, sys, os
 
@@ -112,12 +112,53 @@ def worker(userCallback,dom,callbacks):
 
 	# print("Quitting thread !")
 
-def callback(userCallback,callbacks,instance):
-	thread = threading.Thread(target=worker, args=(userCallback, XDHq.DOM(instance), callbacks))
+def _callback(userCallback,callbacks,instance):
+	thread = Thread(target=worker, args=(userCallback, XDHq.DOM(instance), callbacks))
 	thread.daemon = True
 	thread.start()
 	return thread
 
+def _is_jupyter():
+    try:
+        shell = get_ipython().__class__.__name__
+        if shell == 'ZMQInteractiveShell':
+            return True   # Jupyter notebook or qtconsole
+        elif shell == 'TerminalInteractiveShell':
+            return False  # Terminal running IPython
+        else:
+            return False  # Other type (?)
+    except NameError:
+        return False      # Probably standard Python interpreter
+
+def _jupyter_supplier(url):
+	global _url, _mutex
+
+	_url = url.replace('http://', 'https://')
+
+	_mutex.release()
+
+if _is_jupyter():
+	import IPython
+	global _mutex
+	_mutex = Lock()
+
+	XDHq.set_supplier(_jupyter_supplier)
+
+def _launch(callbacks, userCallback, headContent):
+	XDHq.launch(_callback,userCallback,callbacks,headContent)
+
 def launch(callbacks, userCallback = None, headContent = ""):
-	XDHq.launch(callback,userCallback,callbacks,headContent)
+	if _is_jupyter():
+		global _mutex
+		_mutex.acquire()
+		Thread(target=_launch, args=(callbacks, userCallback, headContent)).start()
+		_mutex.acquire()
+		print(f">>> {_url} <<<")
+		iframe = IPython.display.IFrame(src = _url, width = "100%", height = "150px")
+		time.sleep(1)
+		_mutex.release()
+		return iframe
+	else:
+		_launch(callbacks, userCallback, headContent)
+
 

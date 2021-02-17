@@ -29,8 +29,8 @@ $out = str_replace(array("\r", "\n", "\t"), '',<<<MLS
 			<script src="faas/xdhtml.js"></script>
 			<script src="faas/xdhwebq.js"></script>
 			<!-- Below both scripts are for PROD environment. -->
-			<script src="faas/xdhtml_20201001.js"></script>
-			<script src="faas/xdhwebq_20200608.js"></script>
+			<script src="faas/xdhtml_20201217.js"></script>
+			<script src="faas/xdhwebq_20201217.js"></script>
 			<style id="XDHStyle">
 				.xdh_style {
 					display: table;
