@@ -205,7 +205,7 @@ namespace {
 					websck::GetMessage(Flow, Data->UserId);
 					Data->State = sRegular;
 				} else if ( Header.FirstLine == "XDH web prolog" ) {
-					if ( websck::GetValue(str::wString("Token"), Header, Data->Token) )	// First time: launch PHP program which intiiates the WebSocket
+					if ( websck::GetValue(str::wString("Token"), Header, Data->Token) )	// First time: launch PHP program which initiates the WebSocket
 						Data->State = sProlog;
 				} else {
 					Data->State = s_Undefined;

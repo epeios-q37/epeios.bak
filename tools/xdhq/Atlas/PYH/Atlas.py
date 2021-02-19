@@ -103,7 +103,7 @@ def worker(userCallback,dom,callbacks):
 		if dom.isQuitting():
 			break
 
-		if action=="" or not "_PreProcess" in callbacks or _call(callbacks["_PreProcess"],userObject, dom, id, action):
+		if action == "" or not "_PreProcess" in callbacks or _call(callbacks["_PreProcess"],userObject, dom, id, action):
 			if ( action in callbacks ):
 				if _call(callbacks[action], userObject, dom, id, action ) and "_PostProcess" in callbacks:
 					_call(callbacks["_PostProcess"],userObject, dom, id, action)
@@ -119,16 +119,18 @@ def _callback(userCallback,callbacks,instance):
 	return thread
 
 def _is_jupyter():
-    try:
-        shell = get_ipython().__class__.__name__
-        if shell == 'ZMQInteractiveShell':
-            return True   # Jupyter notebook or qtconsole
-        elif shell == 'TerminalInteractiveShell':
-            return False  # Terminal running IPython
-        else:
-            return False  # Other type (?)
-    except NameError:
-        return False      # Probably standard Python interpreter
+	if XDHqSHRD.getEnv("ATK").strip().lower() != "jupyter":
+		return False	# jupyter environment handling is not correctly handled yet, hence it's ignored, until explicitely asked for.
+	try:
+			shell = get_ipython().__class__.__name__
+			if shell == 'ZMQInteractiveShell':
+					return True   # Jupyter notebook or qtconsole
+			elif shell == 'TerminalInteractiveShell':
+					return False  # Terminal running IPython
+			else:
+					return False  # Other type (?)
+	except NameError:
+			return False      # Probably standard Python interpreter
 
 def _jupyter_supplier(url):
 	global _url, _mutex
@@ -153,7 +155,6 @@ def launch(callbacks, userCallback = None, headContent = ""):
 		_mutex.acquire()
 		Thread(target=_launch, args=(callbacks, userCallback, headContent)).start()
 		_mutex.acquire()
-		print(f">>> {_url} <<<")
 		iframe = IPython.display.IFrame(src = _url, width = "100%", height = "150px")
 		time.sleep(1)
 		_mutex.release()

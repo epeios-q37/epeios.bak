@@ -23,6 +23,7 @@ SOFTWARE.
 """
 
 import XDHqSHRD
+from XDHqSHRD import getEnv
 
 import inspect, os, socket, sys, threading
 
@@ -97,12 +98,6 @@ class Instance:
 
 def isTokenEmpty():
 	return not _token or _token[0] == "&"
-
-def getEnv( name, value= "" ):
-	if name in os.environ:
-		return os.environ[name].strip()
-	else:
-		return value.strip()
 
 def writeUInt(value):
 	global _socket
