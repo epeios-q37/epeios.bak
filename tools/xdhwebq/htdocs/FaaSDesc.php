@@ -20,7 +20,7 @@ along with xdhwebq. If not, see <http://www.gnu.org/licenses/>.
 
 $out='
 <head>
-<meta charset="UTF-16"></meta>
+	<meta charset="UTF-16"></meta>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.1/showdown.min.js" integrity="sha512-L03kznCrNOfVxOUovR6ESfCz9Gfny7gihUX/huVbQB9zjODtYpxaVtIaAkpetoiyV2eqWbvxMH9fiSv5enX7bw==" crossorigin="anonymous"></script>
 	<script>
 		function markdownToHTML(text) {
@@ -39,28 +39,46 @@ $out='
 		}
 	</script>
 	<style>
-details {
-  font: 16px "Open Sans", Calibri, sans-serif;
-  width: 620px;
-}
+		details {
+			font: 16px "Open Sans", Calibri, sans-serif;
+			width: 620px;
+		}
 
-details > summary {
-  padding: 2px 6px;
-  width: 15em;
-  background-color: #ddd;
-  border: none;
-  box-shadow: 3px 3px 4px black;
-  cursor: pointer;
-}
+		details > summary {
+			padding: 2px 6px;
+			width: 15em;
+			background-color: #ddd;
+			border: none;
+			box-shadow: 3px 3px 4px black;
+			cursor: pointer;
+		}
 
-details > div {
-  border-radius: 0 0 10px 10px;
-  background-color: #ddd;
-  padding: 2px 6px;
-  margin: 0;
-  box-shadow: 3px 3px 4px black;
-}
-</style>	
+		details > div {
+			border-radius: 0 0 10px 10px;
+			background-color: #ddd;
+			padding: 2px 6px;
+			margin: 0;
+			box-shadow: 3px 3px 4px black;
+		}
+
+		@keyframes fadeInDown {
+			0% {
+				opacity: 0;
+				
+				transform: scale(0);
+			}
+
+			100% {
+				opacity: 1;
+				transform: scale(1);
+			}
+		}
+
+		details[open] {
+			animation-name: fadeInDown;
+			animation-duration: 1s;
+		}
+	</style>	
 </head>
 <body onload="document.getElementById(\'desc\').innerHTML=markdownToHTML(b64DecodeUnicode(\'' . $_REQUEST["text"]. '\'));adjust();">
 	<details ontoggle="adjust();" style="width: 100%;">
