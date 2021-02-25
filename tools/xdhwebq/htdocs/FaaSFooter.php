@@ -18,7 +18,11 @@ You should have received a copy of the GNU Affero General Public License
 along with xdhwebq. If not, see <http://www.gnu.org/licenses/>.
 */
 
-$url = $_REQUEST['url'];
+const PATTERN = "_supplier=qrcode";
+
+$rawUrl = $_REQUEST['url'];
+$url = str_replace("&" . PATTERN, "", $rawUrl);
+$detailsOpenAttribute = strpos($rawUrl, PATTERN) ? 'open="open"' : "";
 
 echo <<<EOS
 <head>
@@ -122,7 +126,7 @@ echo <<<EOS
 
 <body
   onload="new QRCode('qrcode', {width:125, height:125, correctLevel: QRCode.CorrectLevel.L}).makeCode('$url');adjustHeight();">
-  <details ontoggle="adjustHeight();">
+  <details ontoggle="adjustHeight();" $detailsOpenAttribute>
     <summary> <span class="summary-title">More…</span>
       <div class="summary-chevron-up">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -134,13 +138,13 @@ echo <<<EOS
     </summary>
     <div class="summary-content">
       <hr />
-      <span style="display: table; margin: 10px auto 5px auto;">Scan this QR code with a mobile device,</span>
+      <span style="display: table; margin: 10px auto 5px auto;">QR code to scan with a mobile device,</span>
       <div style="display: flex; justify-content: space-around;">
         <a style="cursor: pointer;" target="_blank" href="$url">
           <div id="qrcode"></div>
         </a>
       </div>
-      <span style="display: table; margin: 10px auto 5px auto;">or click on it for another instance.</span>
+      <span style="display: table; margin: 10px auto 5px auto;">or to click on for a new instance.</span>
       <hr />
       <div style="display: table; padding: 10px; margin: auto;">
         <div style="display: table; padding: 10px;">

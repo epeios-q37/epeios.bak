@@ -64,7 +64,6 @@ $out='
 		@keyframes fadeInDown {
 			0% {
 				opacity: 0;
-				
 				transform: scale(0);
 			}
 
