@@ -29,7 +29,6 @@ echo <<<EOS
   <script src="faas/qrcode.min.js"></script>
   <script>
     function adjustHeight() {
-      console.log("Yo!");
       let iframe = window.frameElement;
       iframe.style.height = '50px';
       let body = document.body;

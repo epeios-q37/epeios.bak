@@ -42,17 +42,20 @@ else:
 	_readUInt = XDHqFaaS3.readUInt
 	_getString = XDHqFaaS3.getString
 
+_DEFAULT_SUPPLIER_LABEL = "auto"
+
 class _Supplier:
 	current = None
 
 	_actions = {
 		"none": lambda url : None,
-		"auto": XDHqSHRD.open,
+		_DEFAULT_SUPPLIER_LABEL: XDHqSHRD.open,
 		"qrcode": lambda url: XDHqSHRD.open( '"' + url + '&_supplier=qrcode"'),
+		"jupyter": lambda url : None
 	}
 
 def _supply(url):
-	supplier = getEnv("ATK").strip().lower() or _Supplier.current or "auto"
+	supplier = getEnv("ATK").strip().lower() or _Supplier.current or _DEFAULT_SUPPLIER_LABEL
 
 	while True:
 		supplier = _Supplier._actions[supplier](url) if isinstance(supplier, str) else supplier(url)
@@ -233,7 +236,7 @@ def _serve(callback,userCallback,callbacks ):
 			id = readSInt()  # The id of the new session.
 
 			if id in _instances:
-				sys.exit("Instance of id '" + id + "' exists but should not !")
+				sys.exit("Instance of id '" + str(id) + "' exists but should not !")
 
 			instance = Instance()
 			instance.set(callback(userCallback, callbacks, instance),id)

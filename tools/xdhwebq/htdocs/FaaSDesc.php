@@ -34,7 +34,7 @@ $out='
 		}
 		function adjust() {
 			let iframe = window.parent.document.body.firstElementChild.firstElementChild;
-			iframe.height="1";
+			iframe.height = "1";
 			iframe.height = iframe.contentWindow.document.body.scrollHeight + \'px\';
 		}
 	</script>

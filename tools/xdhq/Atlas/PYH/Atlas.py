@@ -50,7 +50,6 @@ def signal_handler(sig, frame):
 
 signal.signal(signal.SIGINT, signal_handler)
 
-
 def create_XML(root_tag):
 	return XDHq.XML(root_tag)
 
@@ -110,6 +109,10 @@ def worker(userCallback,dom,callbacks):
 			else:
 				dom.alert("\tDEV ERROR: missing callback for '" + action + "' action!") 
 
+		if False and ( action == "" ):
+			global _globalLock
+			_globalLock.release()
+
 	# print("Quitting thread !")
 
 def _callback(userCallback,callbacks,instance):
@@ -119,8 +122,8 @@ def _callback(userCallback,callbacks,instance):
 	return thread
 
 def _is_jupyter():
-	if XDHqSHRD.getEnv("ATK").strip().lower() != "jupyter":
-		return False	# jupyter environment handling is not correctly handled yet, hence it's ignored, until explicitely asked for.
+#	if XDHqSHRD.getEnv("ATK").strip().lower() != "jupyter":
+#		return False	# jupyter environment handling is not correctly handled yet, hence it's ignored, until explicitely asked for.
 	try:
 			shell = get_ipython().__class__.__name__
 			if shell == 'ZMQInteractiveShell':
@@ -133,31 +136,47 @@ def _is_jupyter():
 			return False      # Probably standard Python interpreter
 
 def _jupyter_supplier(url):
-	global _url, _mutex
+	global _url, _intraLock
+	XDHq.l()
 
 	_url = url.replace('http://', 'https://')
+	XDHq.l()
 
-	_mutex.release()
+	_intraLock.release()
+	XDHq.l()
 
 if _is_jupyter():
 	import IPython
-	global _mutex
-	_mutex = Lock()
-
+	global _intraLock, _globalLock
+	XDHq.l()
+	_intraLock = Lock()
+	_globalLock = Lock()
+	XDHq.l()
 	XDHq.set_supplier(_jupyter_supplier)
+	XDHq.l()
 
 def _launch(callbacks, userCallback, headContent):
+	XDHq.l()
 	XDHq.launch(_callback,userCallback,callbacks,headContent)
+	XDHq.l()
 
 def launch(callbacks, userCallback = None, headContent = ""):
 	if _is_jupyter():
-		global _mutex
-		_mutex.acquire()
+		global _intraLock, _globalLock
+		XDHq.l()
+		_globalLock.acquire()
+		_intraLock.acquire()
+		XDHq.l()
 		Thread(target=_launch, args=(callbacks, userCallback, headContent)).start()
-		_mutex.acquire()
+		XDHq.l()
+		_intraLock.acquire()
+		XDHq.l()
 		iframe = IPython.display.IFrame(src = _url, width = "100%", height = "150px")
+		XDHq.l()
 		time.sleep(1)
-		_mutex.release()
+		XDHq.l()
+		_intraLock.release()
+		XDHq.l()
 		return iframe
 	else:
 		_launch(callbacks, userCallback, headContent)
