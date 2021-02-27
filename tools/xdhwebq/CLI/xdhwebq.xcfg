@@ -23,7 +23,7 @@
                 </xpp:cdata>
             </ErrorHead>
             <!-- Script JS lancé lorsque le token est inconnu. Sert à afficher un message d'erreur. -->
-            <ErrorScript>
+            <OldErrorScript><!-- No more used! -->
                 <!-- Si le message est modifié, modifier la FAQ en conséquence ! -->
                 <![CDATA[
 document.body.innerHTML = `
@@ -34,6 +34,11 @@ document.body.innerHTML = `
 </div>
 ` + document.body.innerHTML;
 reportClosing = false;
+                ]]>
+            </OldErrorScript>
+            <ErrorScript>
+                <![CDATA[
+exitValue = exit.values.TOKEN;
                 ]]>
             </ErrorScript>
 		</Definitions>

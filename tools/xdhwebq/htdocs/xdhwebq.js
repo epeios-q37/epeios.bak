@@ -22,11 +22,36 @@ var cgi = "";
 var session = "";
 var target = "";
 
+const exit = {
+	values : {
+	NONE: 0,		// The software is currently running.
+	// If below is modified, also modify the 'ErrorScript' entry in the 'xdhwebq.xcfg" file.
+	TOKEN: 1,		// Token does not exists.
+	BACKEND: 2,	// Backend has been shut down.
+	SOCKET: 3,	// Socket has been closed (websocket timeout, for example.).
+	},
+	messages : {
+		NONE: `
+		<span>Unknown exit value (<a href="http://q37.info/s/7mdgqk4z" target="_blank">exit message #0</a>)!!!</span>
+		`,	// This one is ued for unknown exit value.
+			TOKEN: `
+		<span>No (more) application corresponding to given token (<a href="http://q37.info/s/7mdgqk4z" target="_blank">exit message #1</a>)!</span>
+			`,
+			BACKEND: `
+		<span>Application halted! The backend has been shut down (<a href="http://q37.info/s/7mdgqk4z" target="_blank">exit message #2</a>)!</span>	
+		`,
+			SOCKET: `
+		<span>You are disconnected from the backend (<a href="http://q37.info/s/7mdgqk4z" target="_blank">exit message #3</a>)!</span>
+		<p></p>
+		<button onclick="window.parent.document.location.reload()">Reload</button>
+		`,
+	}
+};
+
+var exitValue = exit.values.NONE;
+
 var queryInProgress = false;
 var queryQueue = [];
-var backendLost = false;
-var reportClosing = true;	// Set to 'false' int the scrip' defined in the
-// 'ErrorScript' definition entry in the 'xdhwebq.xcfg'  file. 
 
 function log(message) {
 	if (navigator.userAgent.search("Edge") === -1)	// MS Edge web browser does not like too much log messages...
@@ -57,31 +82,18 @@ function launchEvent(digest) {
 	}
 }
 
-function adjustDisconnectionIFrameHeight() {
+function adjustExitIFrameHeight() {
 	let iframe = window.parent.document.body.firstElementChild.firstElementChild.firstElementChild;
 	iframe.height = "1";
 	iframe.height = iframe.contentWindow.document.body.scrollHeight + 'px';
 }
 
-function disconnected(html) {
-	let src = "Disconnection.php?text=" + encodeURIComponent(btoa(html));
+function displayExit(html) {
+	let wrappedHTML = '<span style="border-radius: 25px; padding: 10px;border: 5px solid red; background-color: bisque; text-align: center; display: table; margin: auto;">' + html + "</span>";
+	let src = "Exit.php?text=" + encodeURIComponent(btoa(wrappedHTML));
 	document.body.firstElementChild.insertAdjacentHTML('afterbegin','<div style="width: 100%;"><iframe style="border: none;" width="100%" src="' + src + '"></iframe></div>');
 	document.body.firstElementChild.scrollIntoView({behavior: 'smooth', block: 'center'});
 }
-
-let backendLostHTML = `
-<span style="border-radius: 25px; padding: 10px;border: 5px solid red; background-color: bisque; text-align: center; display: table; margin: auto;">
-	<span>Application halted! The backend has been shut down!</span>
-</span>
-`;
-
-let connectionLostHTML = `
-<span style="border-radius: 25px; padding: 10px;border: 5px solid red; background-color: bisque; text-align: center; display: table; margin: auto;">
-	<span>You are disconnected from the backend!</span>
-	<p></p>
-	<a onclick="window.parent.document.location.reload()" href="#">Reload</a>
-</span>
-`;
 
 function connect(token, id) {
 	socket = new WebSocket((window.location.protocol === "http:" ? "ws" : "wss") + "://" + window.location.hostname + "/xdh/");
@@ -95,7 +107,7 @@ function connect(token, id) {
 		if (event.data !== "%StandBy") {
 			if (event.data === "%Quit") {	// Only used in 'FaaS' mode, when quitting a backend.
 				log("Quitting !");
-				backendLost = true;
+				exitValue = exit.values.BACKEND;
 				socket.close();	// Launches 'onclose' event.
 			} else {
 				log("Executed:", event.data);
@@ -115,13 +127,26 @@ function connect(token, id) {
 	};
 
 	socket.onclose = function (event) {
-		if (reportClosing)
-			if (backendLost) {
-				disconnected(backendLostHTML);
-			//	alert("Connection to backend lost!");
-			} else {
-				disconnected(connectionLostHTML);
-				// location.reload();
-			}
+		let message = "???";
+
+		if ( exitValue === exit.values.NONE )	// Probably a websocket timeout.
+			exitValue = exit.values.SOCKET;
+
+		switch ( exitValue ) {
+		case exit.values.TOKEN:
+			message = exit.messages.TOKEN;
+			break;
+		case exit.values.BACKEND:
+			message = exit.messages.BACKEND;
+			break;
+		case exit.values.SOCKET:
+			message = exit.messages.SOCKET
+			break;
+		default:
+			message = exit.messages.NONE;
+			break;
+		}
+
+		displayExit(message);
 	}
 }
