@@ -85,6 +85,19 @@ def _call(func, userObject, dom, id, action):
 
 	return func(*args)
 
+def _is_jupyter():
+#	if XDHqSHRD.getEnv("ATK").strip().lower() != "jupyter":
+#		return False	# jupyter environment handling is not correctly handled yet, hence it's ignored, until explicitely asked for.
+	try:
+			shell = get_ipython().__class__.__name__
+			if shell == 'ZMQInteractiveShell':
+					return True   # Jupyter notebook or qtconsole
+			elif shell == 'TerminalInteractiveShell':
+					return False  # Terminal running IPython
+			else:
+					return False  # Other type (?)
+	except NameError:
+			return False      # Probably standard Python interpreter
 
 def worker(userCallback,dom,callbacks):
 	args=[]
@@ -102,6 +115,12 @@ def worker(userCallback,dom,callbacks):
 		if dom.isQuitting():
 			break
 
+		if action == "":
+			if _is_jupyter():
+				dom.disable_element("XDHStyle")
+			else:
+				dom.disable_element("XDHStyleJupyter")
+
 		if action == "" or not "_PreProcess" in callbacks or _call(callbacks["_PreProcess"],userObject, dom, id, action):
 			if ( action in callbacks ):
 				if _call(callbacks[action], userObject, dom, id, action ) and "_PostProcess" in callbacks:
@@ -109,7 +128,7 @@ def worker(userCallback,dom,callbacks):
 			else:
 				dom.alert("\tDEV ERROR: missing callback for '" + action + "' action!") 
 
-		if False and ( action == "" ):
+		if False and _is_jupyter() and ( action == "" ):
 			global _globalLock
 			_globalLock.release()
 
@@ -121,62 +140,52 @@ def _callback(userCallback,callbacks,instance):
 	thread.start()
 	return thread
 
-def _is_jupyter():
-#	if XDHqSHRD.getEnv("ATK").strip().lower() != "jupyter":
-#		return False	# jupyter environment handling is not correctly handled yet, hence it's ignored, until explicitely asked for.
-	try:
-			shell = get_ipython().__class__.__name__
-			if shell == 'ZMQInteractiveShell':
-					return True   # Jupyter notebook or qtconsole
-			elif shell == 'TerminalInteractiveShell':
-					return False  # Terminal running IPython
-			else:
-					return False  # Other type (?)
-	except NameError:
-			return False      # Probably standard Python interpreter
-
 def _jupyter_supplier(url):
 	global _url, _intraLock
-	XDHq.l()
 
 	_url = url.replace('http://', 'https://')
-	XDHq.l()
-
 	_intraLock.release()
-	XDHq.l()
 
 if _is_jupyter():
 	import IPython
-	global _intraLock, _globalLock
-	XDHq.l()
+	global _intraLock, _globalLock, _thread
+
 	_intraLock = Lock()
 	_globalLock = Lock()
-	XDHq.l()
 	XDHq.set_supplier(_jupyter_supplier)
-	XDHq.l()
+
+	_globalCounter = 0
+	_thread = None
 
 def _launch(callbacks, userCallback, headContent):
-	XDHq.l()
-	XDHq.launch(_callback,userCallback,callbacks,headContent)
-	XDHq.l()
+	global _globalCounter
+	
+	_globalCounter += 1
+	XDHq.l();
+	try:
+		XDHq.launch(_callback,userCallback,callbacks,headContent)
+	except:
+		pass
+	XDHq.l();
+	_globalCounter -= 1
 
 def launch(callbacks, userCallback = None, headContent = ""):
 	if _is_jupyter():
-		global _intraLock, _globalLock
-		XDHq.l()
-		_globalLock.acquire()
+		global _intraLock, _globalLock, _thread
+
 		_intraLock.acquire()
-		XDHq.l()
-		Thread(target=_launch, args=(callbacks, userCallback, headContent)).start()
-		XDHq.l()
-		_intraLock.acquire()
-		XDHq.l()
+		newThread = Thread(target=_launch, args=(callbacks, userCallback, headContent))
+		newThread.start()
+
+		if _thread != None:
+			_thread.join()
+
+		_thread = newThread
+
+		_intraLock.acquire()		
+
 		iframe = IPython.display.IFrame(src = _url, width = "100%", height = "150px")
-		XDHq.l()
-		time.sleep(1)
-		XDHq.l()
 		_intraLock.release()
-		XDHq.l()
 		return iframe
 	else:
 		_launch(callbacks, userCallback, headContent)

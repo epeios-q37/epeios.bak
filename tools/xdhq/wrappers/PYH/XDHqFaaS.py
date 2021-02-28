@@ -167,6 +167,11 @@ def _init():
 	if _token:
 		_token = "&" + _token
 
+	if '_socket' in globals():
+		l()
+		_socket.detach()
+		_socket.close()
+
 	_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	print("Connection to '" + str(pAddr) + ":" + str(pPort) + "'...")
 	try:
@@ -225,9 +230,6 @@ def _ignition():
 def _serve(callback,userCallback,callbacks ):
 	global _writeLock, _globalCondition
 	while True:
-
-#		l()
-
 		id = readSInt()
 		
 		if id == -1:	# Should never happen. 

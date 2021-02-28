@@ -92,7 +92,7 @@ function displayExit(html) {
 	let wrappedHTML = '<span style="border-radius: 25px; padding: 10px;border: 5px solid red; background-color: bisque; text-align: center; display: table; margin: auto;">' + html + "</span>";
 	let src = "Exit.php?text=" + encodeURIComponent(btoa(wrappedHTML));
 	document.body.firstElementChild.insertAdjacentHTML('afterbegin','<div style="width: 100%;"><iframe style="border: none;" width="100%" src="' + src + '"></iframe></div>');
-	document.body.firstElementChild.scrollIntoView({behavior: 'smooth', block: 'center'});
+	window.scroll(0,0);
 }
 
 function connect(token, id) {

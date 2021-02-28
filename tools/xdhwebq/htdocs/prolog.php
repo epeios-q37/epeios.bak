@@ -30,8 +30,14 @@ $out = str_replace(array("\r", "\n", "\t"), '',<<<MLS
 			<script src="faas/xdhwebq.js"></script>
 			<!-- Below both scripts are for PROD environment. -->
 			<script src="faas/xdhtml_20201217.js"></script>
-			<script src="faas/xdhwebq_20201217.js"></script>
+			<script src="faas/xdhwebq_20210227.js"></script>
 			<style id="XDHStyle">
+				.xdh_style {
+					display: table;
+					margin: 20px auto auto auto;
+				}
+			</style>
+			<style id="XDHStyleJupyter">
 				.xdh_style {
 					display: table;
 					margin: 20px auto auto auto;
