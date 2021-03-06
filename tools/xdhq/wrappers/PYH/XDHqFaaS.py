@@ -25,7 +25,7 @@ SOFTWARE.
 import XDHqSHRD
 from XDHqSHRD import getEnv
 
-import inspect, os, socket, sys, threading
+import inspect, os, socket, sys, threading, time
 
 if sys.version_info[0] == 2:
 	import XDHqFaaS2
@@ -41,6 +41,8 @@ else:
 	_writeString = XDHqFaaS3.writeString
 	_readUInt = XDHqFaaS3.readUInt
 	_getString = XDHqFaaS3.getString
+
+_bye = False	# For use in Jupiter notbooks, to quit an application.
 
 _DEFAULT_SUPPLIER_LABEL = "auto"
 
@@ -121,7 +123,7 @@ def writeStrings(strings):
 
 def readUInt():
 	global _socket
-	return _readUInt( _socket)
+	return _readUInt( _socket, lambda: _bye)
 
 def readSInt():
 	value = readUInt()
@@ -129,7 +131,7 @@ def readSInt():
 
 def getString():
 	global _socket
-	return _getString(_socket)
+	return _getString(_socket, lambda: _bye)
 
 def getStrings():
 	amount = readUInt()
@@ -167,20 +169,18 @@ def _init():
 	if _token:
 		_token = "&" + _token
 
-	if '_socket' in globals():
-		l()
-		_socket.detach()
-		_socket.close()
-
 	_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	
 	print("Connection to '" + str(pAddr) + ":" + str(pPort) + "'...")
+
 	try:
 		_socket.connect((pAddr,pPort))
 	except:
-		exit("Unable to connect to '" + str(pAddr) + ":" + str(pPort) + "'!")
+		sys.exit("Unable to connect to '" + str(pAddr) + ":" + str(pPort) + "'!")
 	else:
 		print("Connected to '" + str(pAddr) + ":" + str(pPort) + "'.")
-		
+
+	_socket.settimeout(1)	# In order to quit an application, in Jupyter notebooks.		
 
 def _handshake():
 	global _writeLock
@@ -372,3 +372,8 @@ class DOM_FaaS:
 			return strings
 		elif type != XDHqSHRD.RT_VOID:
 			sys.exit("Unknown return type !!!")
+
+def setBye(value):
+	global _bye
+
+	_bye = value

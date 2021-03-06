@@ -24,10 +24,7 @@ SOFTWARE.
 
 import XDHq, XDHqSHRD
 from threading import Thread, Lock
-import inspect, time
-
-
-import signal, sys, os
+import inspect, time, socket, signal, sys, os
 
 from XDHq import set_supplier, get_app_url
 
@@ -158,27 +155,24 @@ if _is_jupyter():
 	_thread = None
 
 def _launch(callbacks, userCallback, headContent):
-	global _globalCounter
-	
-	_globalCounter += 1
-	XDHq.l();
 	try:
 		XDHq.launch(_callback,userCallback,callbacks,headContent)
-	except:
+	except socket.timeout:
 		pass
-	XDHq.l();
-	_globalCounter -= 1
 
 def launch(callbacks, userCallback = None, headContent = ""):
 	if _is_jupyter():
 		global _intraLock, _globalLock, _thread
+		
+		if _thread != None:
+			XDHq.setBye(True)
+			_thread.join()
+			XDHq.setBye(False)
 
 		_intraLock.acquire()
 		newThread = Thread(target=_launch, args=(callbacks, userCallback, headContent))
+		newThread.daemon = True
 		newThread.start()
-
-		if _thread != None:
-			_thread.join()
 
 		_thread = newThread
 
