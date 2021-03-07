@@ -25,7 +25,7 @@ SOFTWARE.
 import XDHqSHRD
 from XDHqSHRD import getEnv
 
-import inspect, os, socket, sys, threading, time
+import inspect, os, socket, sys, threading
 
 if sys.version_info[0] == 2:
 	import XDHqFaaS2

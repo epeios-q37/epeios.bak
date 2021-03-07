@@ -83,8 +83,6 @@ def _call(func, userObject, dom, id, action):
 	return func(*args)
 
 def _is_jupyter():
-#	if XDHqSHRD.getEnv("ATK").strip().lower() != "jupyter":
-#		return False	# jupyter environment handling is not correctly handled yet, hence it's ignored, until explicitely asked for.
 	try:
 			shell = get_ipython().__class__.__name__
 			if shell == 'ZMQInteractiveShell':
@@ -92,7 +90,7 @@ def _is_jupyter():
 			elif shell == 'TerminalInteractiveShell':
 					return False  # Terminal running IPython
 			else:
-					return False  # Other type (?)
+					return 'google.colab' in str(get_ipython())  # Other type (?)
 	except NameError:
 			return False      # Probably standard Python interpreter
 
@@ -125,10 +123,6 @@ def worker(userCallback,dom,callbacks):
 			else:
 				dom.alert("\tDEV ERROR: missing callback for '" + action + "' action!") 
 
-		if False and _is_jupyter() and ( action == "" ):
-			global _globalLock
-			_globalLock.release()
-
 	# print("Quitting thread !")
 
 def _callback(userCallback,callbacks,instance):
@@ -145,13 +139,11 @@ def _jupyter_supplier(url):
 
 if _is_jupyter():
 	import IPython
-	global _intraLock, _globalLock, _thread
+	global _intraLock, _thread
 
 	_intraLock = Lock()
-	_globalLock = Lock()
 	XDHq.set_supplier(_jupyter_supplier)
 
-	_globalCounter = 0
 	_thread = None
 
 def _launch(callbacks, userCallback, headContent):
@@ -162,7 +154,7 @@ def _launch(callbacks, userCallback, headContent):
 
 def launch(callbacks, userCallback = None, headContent = ""):
 	if _is_jupyter():
-		global _intraLock, _globalLock, _thread
+		global _intraLock, _thread
 		
 		if _thread != None:
 			XDHq.setBye(True)

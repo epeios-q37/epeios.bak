@@ -33,7 +33,7 @@ Dans `RTW/atlas-python` :
 
 `python3 setup.py sdist bdist_wheel`
 
-<ins>**IMPORTANT**</ins> - auparavant, effacer :
+<ins>**IMPORTANT**</ins> — auparavant, effacer :
 - les répertoires :
   - `examples`,
   - `tutorials`,
