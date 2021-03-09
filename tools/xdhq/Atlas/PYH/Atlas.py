@@ -165,7 +165,7 @@ def _launch(callbacks, userCallback, headContent):
 	except socket.timeout:
 		pass
 
-def launch(callbacks, userCallback = None, headContent = ""):
+def launch(callbacks, userCallback = None, headContent = None):
 	if _is_jupyter():
 		global _intraLock, _thread
 		
