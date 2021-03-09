@@ -21,9 +21,11 @@ En créant, dans le répertoire de l'application, un fichier `__main__.py` conte
 
 **Effacer, si nécessaire, la variable d'environnement `PYTHONPATH` (`unset PYTHONPATH`).**
 
-**Mettre à jour, dans `setup.py`** :
-- le numéro de version ;
-- éventuellement la description.
+- mettre à jour, dans `setup.py` :
+  - le numéro de version,
+  - éventuellement la description ;
+- effacer les affichages de sortie des *notebooks* *Jupyter* ;
+- mettre à jour le dépôt *Github*. 
 
 ### Packaging
 
@@ -38,6 +40,8 @@ Dans `RTW/atlas-python` :
   - `examples`,
   - `tutorials`,
 - le fichier `main.py` !!!
+
+Dans le cadre de test, avant publication du *package*, on peut faire un `pip install atlastk-<version>.tar.gz` avec le fichier situé dans le répertoire `dist`.
 
 ### Test local
 
