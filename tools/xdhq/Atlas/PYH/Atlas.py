@@ -173,6 +173,7 @@ def launch(callbacks, userCallback = None, headContent = None):
 			XDHq.setBye(True)
 			_thread.join()
 			XDHq.setBye(False)
+			time.sleep(2)
 
 		_intraLock.acquire()
 		newThread = Thread(target=_launch, args=(callbacks, userCallback, headContent))
