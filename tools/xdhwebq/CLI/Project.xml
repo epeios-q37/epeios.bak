@@ -77,6 +77,8 @@
 			<File RTW="">runkit-off.php</File>
 			<File>xdh.php</File>
 			<File>prolog.php</File>
+			<File>Exit.php</File>
+			<File>FaaSDesc.php</File>
 			<File>FaaSFooter.php</File>
 			<File>qrcode(.min).js.LICENSE</File>
 			<File>qrcode.min.js</File>

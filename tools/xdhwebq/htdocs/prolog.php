@@ -26,11 +26,11 @@ $out = str_replace(array("\r", "\n", "\t"), '',<<<MLS
 			<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 			<meta http-equiv="Cache-Control" content="no-cache"/>
 			<!-- Below both scripts are for DEV environment. -->
-			<script src="faas/xdhtml.js"></script>
-			<script src="faas/xdhwebq.js"></script>
+			<script src="xdhtml.js"></script>
+			<script src="xdhwebq.js"></script>
 			<!-- Below both scripts are for PROD environment. -->
-			<script src="faas/xdhtml_20201217.js"></script>
-			<script src="faas/xdhwebq_20210227.js"></script>
+			<script src="xdhtml_20201217.js"></script>
+			<script src="xdhwebq_20210227.js"></script>
 			<style id="XDHStyle">
 				.xdh_style {
 					display: table;

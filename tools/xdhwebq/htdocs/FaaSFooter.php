@@ -26,7 +26,7 @@ $detailsOpenAttribute = strpos($rawUrl, PATTERN) ? 'open="open"' : "";
 
 echo <<<EOS
 <head>
-  <script src="faas/qrcode.min.js"></script>
+  <script src="qrcode.min.js"></script>
   <script>
     function adjustHeight() {
       let iframe = window.frameElement;
