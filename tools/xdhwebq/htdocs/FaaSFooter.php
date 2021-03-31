@@ -137,13 +137,17 @@ echo <<<EOS
     </summary>
     <div class="summary-content">
       <hr />
-      <span style="display: table; margin: 10px auto 5px auto;">QR code to scan with a mobile device,</span>
+      <span style="display: table; margin: 10px auto 5px auto; text-align: center;">
+		<span><a href="https://en.wikipedia.org/wiki/QR_code" target="_blank">QR code</a> to scan with a mobile device,</span>
+		<br />
+		<span style="margin: auto;">or to click for a new instance.</span>
+      </span>
       <div style="display: flex; justify-content: space-around;">
         <a style="cursor: pointer;" target="_blank" href="$url">
           <div id="qrcode"></div>
         </a>
       </div>
-      <span style="display: table; margin: 10px auto 5px auto;">or to click on for a new instance.</span>
+
       <hr />
       <div style="display: table; padding: 10px; margin: auto;">
         <div style="display: table; padding: 10px;">
