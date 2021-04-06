@@ -27,12 +27,12 @@ const fs = require('fs');
 const args = process.argv;
 
 function getXdhelcqPath() {
-  if (process.env.EPEIOS_SRC) {
+  if (process.env.Q37_EPEIOS) {
     let addonPath = null;
     if (process.platform == 'win32')
       addonPath = 'h:/bin/';
     else
-      addonPath = '~/bin/';
+      addonPath = '/home/csimon/bin/';
     return require('path').join(addonPath, 'xdhelcq.node');
   } else {
     return require('path').join(__dirname, "xdhelcq.node");

@@ -2,6 +2,8 @@
 
 ## Running
 
+### From command-line
+
 *Electron* path is `node_modules/.bin/electron`.
 
 The module has to be launched as value of the `--module|-m` flag.
@@ -13,6 +15,11 @@ The second argument (third with the `-m|--module` option) must be `index.js`. If
 As last argument, the subdirectory which contains all the file red directly by *Electron*.
 
 Example to launch the *Atlas* frontend for *TodoMVC* : `node_modules/.bin/electron index.js -m=h:/bin/xdhqxdh TodoMVC`.
+
+### En utilisant le *debugger* *Code::Blocks*
+
+- Dans *Hosr application:* : `/media/csimon/H/hg/epeios/tools/xdhelcq/node_modules/electron/dist/electron` ;
+- dans *Program arguments:* : `/home/csimon/epeios/tools/xdhelcq/index.js -m=/home/csimon/bin/libesketchxdh.so /home/csimon/epeios/apps/esketch/frontend/XDHTML/ `.
 
 ## Installation
 
