@@ -52,6 +52,8 @@ To see some examples, like the following [*TodoMVC*](http://todomvc.com/) applic
 
 @HELLO_LC@
 
+@SHOW_OFF@
+
 ## Your turn
 
 If you want to take your code to the next level, from [CLI](https://q37.info/s/cnh9nrw9) to [GUI](https://q37.info/s/hw9n3pjs), then you found the right toolkit.
