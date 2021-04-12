@@ -2,6 +2,6 @@
 
 ---
 
-Click below to see how to code your first *Python* application in less then 7 minutes (on [*Peertube*](https://en.wikipedia.org/wiki/PeerTube): <https://diode.zone/videos/watch/8bc4438f-da7a-4640-88e5-d3439421e841>)
+Click below to see how to code your first *Python* application in less then 7 minutes (on [*Peertube*](https://en.wikipedia.org/wiki/PeerTube): <https://q37.info/s/qfcng9j4>)
 
-[![Python app in less then 7 minutes](https://img.youtube.com/vi/thne9LtWH8k/0.jpg)](https://youtu.be/thne9LtWH8k)
+[![Python app in less then 7 minutes](https://q37.info/s/zsqctkv3.jpg)](https://q37.info/s/rt9wr4w3)
