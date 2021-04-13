@@ -41,27 +41,27 @@ sub acConnect {
 sub acToggleDescriptions {
     my ($notes, $dom, $id) = @_;
 
-    $notes->{hideDescriptions} = $dom->getContent($id) eq "true";
+    $notes->{hideDescriptions} = $dom->getValue($id) eq "true";
     $notes->handleDescriptions($dom);
 }
 
 sub acSearch {
     my ($notes, $dom) = @_;
 
-    $notes->{pattern} = lc $dom->getContent("Pattern");
+    $notes->{pattern} = lc $dom->getValue("Pattern");
     $notes->displayList($dom);
 }
 
 sub acEdit {
     my ($notes, $dom, $id) = @_;
 
-    my $idx = $dom->getContent($id);
+    my $idx = $dom->getValue($id);
     $notes->{idx} = int($idx);
 
     my %note = %{$notes->{notes}[$notes->{idx}]};
 
     $dom->inner("Edit.$idx", Shared::readAsset("Note.html"));
-    $dom->setContents({Title => $note{title}, Description => $note{description}});
+    $dom->setValues({Title => $note{title}, Description => $note{description}});
     $dom->disableElements(\@Shared::viewModeElements);
     $dom->focus("Title");
 }
@@ -70,7 +70,7 @@ sub acDelete {
     my ($notes, $dom, $id) = @_;
 
     if ($dom->confirm("Are you sure you want to delete this entry?")) {
-        splice @{$notes->{notes}}, int($dom->getContent($id)), 1;
+        splice @{$notes->{notes}}, int($dom->getValue($id)), 1;
         $notes->displayList($dom);
     }
 }
@@ -78,7 +78,7 @@ sub acDelete {
 sub acSubmit {
     my ($notes, $dom) = @_;
 
-    my %result = $dom->getContents(["Title","Description"]);
+    my %result = $dom->getValues(["Title","Description"]);
     my $title = Shared::trim($result{Title});
     my $description = $result{Description};
 
@@ -89,7 +89,7 @@ sub acSubmit {
             unshift @{$notes->{notes}}, { title => '', description => ''};
             $notes->displayList($dom);
         } else {
-            $dom->setContents({ "Title.$notes->{idx}" => $title, "Description.$notes->{idx}" => $description});
+            $dom->setValues({ "Title.$notes->{idx}" => $title, "Description.$notes->{idx}" => $description});
             $notes->view($dom);
         }
     } else {
@@ -103,7 +103,7 @@ sub acCancel {
 
     my %note = %{$notes->{notes}[$notes->{idx}]};
 
-    my %result = $dom->getContents(["Title","Description"]);
+    my %result = $dom->getValues(["Title","Description"]);
     my $title = Shared::trim($result{Title});
     my $description = $result{Description};
 

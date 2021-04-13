@@ -43,23 +43,23 @@ sub acConnect {
 sub acSubmitPseudo {
     my ($chatroom, $dom) = @_;
 
-    my $pseudo = Shared::trim($dom->getContent("Pseudo"));
+    my $pseudo = Shared::trim($dom->getValue("Pseudo"));
 
     if ( not ($pseudo)) {
         $dom->alert("Pseudo. can not be empty!");
-        $dom->setContent("Pseudo", "");
+        $dom->setValue("Pseudo", "");
         $dom->focus("Pseudo");
     } elsif ($chatroom->handlePseudo(uc $pseudo)) {
         $chatroom->{pseudo} = $pseudo;
         $dom->addClass("PseudoButton", "hidden");
 		$dom->disableElements(["Pseudo", "PseudoButton"]);
 		$dom->enableElements(["Message", "MessageButton"]);
-		$dom->setContent("Pseudo", $pseudo);
+		$dom->setValue("Pseudo", $pseudo);
 		$dom->focus("Message");
 		CORE::say("\t>>>> New user: $pseudo");
     } else {
         $dom->alert("Pseudo. not available!");
-        $dom->setContent("Pseudo", $pseudo);
+        $dom->setValue("Pseudo", $pseudo);
         $dom->focus("Pseudo");
     }
 }
@@ -67,9 +67,9 @@ sub acSubmitPseudo {
 sub acSubmitMessage {
     my ($chatroom, $dom) = @_;
 
-	my $message = $dom->getContent("Message");
+	my $message = $dom->getValue("Message");
 	
-    $dom->setContent("Message", "");
+    $dom->setValue("Message", "");
 	$dom->focus("Message");
 	$chatroom->addMessage($message);
 	$chatroom->displayMessages($dom);

@@ -47,7 +47,7 @@ sub acShowInput {
 
 my %callbacks = (
     "" => \&acConnect,
-    "Submit" => sub {my ($blank, $dom) = @_; $dom->setContent("Pattern", uc $dom->getContent("Pattern"));},
+    "Submit" => sub {my ($blank, $dom) = @_; $dom->setValue("Pattern", uc $dom->getValue("Pattern"));},
     "HideInput" => sub {my ($blank, $dom) = @_; $dom->addClass("Input", "hidden");},
     "ShowInput" => \&acShowInput
 );

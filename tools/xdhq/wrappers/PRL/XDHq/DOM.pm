@@ -177,7 +177,7 @@ sub after {
     shift->_layout("beforeend",shift,shift,shift)
 }
 
-sub getContents {
+sub getContents { # Deprecated!
     my ($self, $ids) = @_;
 
     my @result = $self->{dom}->call("GetContents_1", XDHq::SHRD::RT_STRINGS, $ids);
@@ -185,7 +185,7 @@ sub getContents {
     return _unsplit($ids, \@result); # To modify to avoid the use of the @result variable.
 }
 
-sub getContent {
+sub getContent { # Deprecated!
     my ($self, $id) = @_;
 
     my %result = $self->getContents([$id]);
@@ -193,7 +193,7 @@ sub getContent {
     return $result{$id}; # To modify to avoid the use of the %result variable.
 }
 
-sub setContents {
+sub setContents { # Deprecated!
     my $self = shift;
 
     my ($ids, $contents) = _split(shift);
@@ -201,8 +201,64 @@ sub setContents {
     $self->{dom}->call("SetContents_1", XDHq::SHRD::RT_VOID, $ids, $contents);
 }
 
-sub setContent {
+sub setContent { # Deprecated!
     shift->setContents({shift() => shift});
+}
+
+sub getValues {
+    my ($self, $ids) = @_;
+
+    my @result = $self->{dom}->call("GetValues_1", XDHq::SHRD::RT_STRINGS, $ids);
+
+    return _unsplit($ids, \@result); # To modify to avoid the use of the @result variable.
+}
+
+sub getValue {
+    my ($self, $id) = @_;
+
+    my %result = $self->getValues([$id]);
+
+    return $result{$id}; # To modify to avoid the use of the %result variable.
+}
+
+sub setValues {
+    my $self = shift;
+
+    my ($ids, $calues) = _split(shift);
+
+    $self->{dom}->call("SetValues_1", XDHq::SHRD::RT_VOID, $ids, $values);
+}
+
+sub setValue {
+    shift->setValues({shift() => shift});
+}
+
+sub getMarks {
+    my ($self, $ids) = @_;
+
+    my @result = $self->{dom}->call("GetMarks_1", XDHq::SHRD::RT_STRINGS, $ids);
+
+    return _unsplit($ids, \@result); # To modify to avoid the use of the @result variable.
+}
+
+sub getMark {
+    my ($self, $id) = @_;
+
+    my %result = $self->getMarks([$id]);
+
+    return $result{$id}; # To modify to avoid the use of the %result variable.
+}
+
+sub setMarks {
+    my $self = shift;
+
+    my ($ids, $marks) = _split(shift);
+
+    $self->{dom}->call("SetMarks_1", XDHq::SHRD::RT_VOID, $ids, $marks);
+}
+
+sub setMark {
+    shift->setMarks({shift() => shift});
 }
 
 =pod
