@@ -337,7 +337,7 @@ public class DOM {
 	}
 
 	public String getProperty(String id, String name) {
-		return (String) DOM.call("GetPoperty_1", Type.STRING, a(id), a(name));
+		return (String) DOM.call("GetProperty_1", Type.STRING, a(id), a(name));
 	}
 
 	public void focus(String id) {

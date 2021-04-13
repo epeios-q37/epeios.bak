@@ -206,7 +206,7 @@ function handleRecord( xdh, result ) {
 }
 
 function acDisplayRecord( xdh, id ) {
-	xdh.getContent( id, (result) => handleRecord( xdh, result ) );
+	xdh.getValue( id, (result) => handleRecord( xdh, result ) );
 }
 
 function acToList( xdh, id ) {
@@ -216,12 +216,12 @@ function acToList( xdh, id ) {
 
 function acSubmit( xdh, id ) {
 	LOG();
-	xdh.getContent("Pattern", (result) => { xdh.pattern = result.toLowerCase(); displayList(xdh); });
+	xdh.getValue("Pattern", (result) => { xdh.pattern = result.toLowerCase(); displayList(xdh); });
 }
 
 function acToggleMaps( xdh, id ) {
 	LOG();
-	xdh.getContent(id, (result) => { xdh.hideMaps = result; handleMapsCast(xdh); });
+	xdh.getValue(id, (result) => { xdh.hideMaps = result; handleMapsCast(xdh); });
 }
 	
 function main()

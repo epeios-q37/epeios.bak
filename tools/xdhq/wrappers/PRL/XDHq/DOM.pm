@@ -169,12 +169,12 @@ sub inner {
     shift->_layout("inner",shift,shift,shift)
 }
 
-sub after {
-    shift->_layout("beforeend",shift,shift,shift)
-}
-
 sub end {
     shift->_layout("afterend",shift,shift,shift)
+}
+
+sub after {
+    shift->_layout("beforeend",shift,shift,shift)
 }
 
 sub getContents {

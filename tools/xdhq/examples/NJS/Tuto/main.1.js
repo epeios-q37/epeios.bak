@@ -89,8 +89,8 @@ function displayTodos(dom) {
 }
 
 function acSubmit(dom, id) {
-	dom.getContent("Input",
-		(content) => dom.setContent("Input", "",
+	dom.getValue("Input",
+		(content) => dom.setValue("Input", "",
 			() => {
 				if (content.trim() != "") {
 					dom.todos.unshift(

@@ -105,7 +105,7 @@ function displayCount(dom, count) {
 			break;
 	}
 
-	dom.setContent("Count", text);
+	dom.setValue("Count", text);
 }
 
 function handleCount(dom) {
@@ -157,8 +157,8 @@ function acConnect(dom, id) {
 }
 
 function submitNew(dom) {
-	dom.getContent("Input",
-		(content) => dom.setContent("Input", "",
+	dom.getValue("Input",
+		(content) => dom.setValue("Input", "",
 			() => {
 				if (content.trim() != "") {
 					dom.todos.unshift(
@@ -178,12 +178,12 @@ function submitModification(dom) {
 	let id = dom.index;
 	dom.index = -1;
 
-	dom.getContent("Input." + id,
-		(content) => dom.setContent("Input." + id, "",
+	dom.getValue("Input." + id,
+		(content) => dom.setValue("Input." + id, "",
 			() => {
 				if (content.trim() != "") {
 					dom.todos[id]['label'] = content;
-					dom.setContent("Label." + id, content,
+					dom.setValue("Label." + id, content,
 						() => dom.removeClasses(
 							{
 								["View." + id]: "hide",
@@ -209,7 +209,7 @@ function acSubmit(dom, id) {
 }
 
 function acDestroy(dom, id) {
-	dom.getContent(id,
+	dom.getValue(id,
 		(content) => {
 			dom.todos.splice(parseInt(content), 1);
 			displayTodos(dom);
@@ -288,7 +288,7 @@ function acClear(dom, id) {
 }
 
 function acEdit(dom, id) {
-	dom.getContent(id,
+	dom.getValue(id,
 		(content) => dom.addClasses(
 			{
 				["View." + content]: "hide",
@@ -296,7 +296,7 @@ function acEdit(dom, id) {
 			},
 			() => {
 				dom.index = parseInt(content);
-				dom.setContent("Input." + content, dom.todos[dom.index]['label'],
+				dom.setValue("Input." + content, dom.todos[dom.index]['label'],
 					() => dom.focus("Input." + content))
 			}
 		)
@@ -307,7 +307,7 @@ function acCancel(dom, id) {
 	var id = dom.index;
 	dom.index = -1;
 
-	dom.setContent("Input." + id, "",
+	dom.setValue("Input." + id, "",
 		() => dom.removeClasses(
 			{
 				["View." + id]: "hide",

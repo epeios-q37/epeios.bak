@@ -100,7 +100,7 @@ function displayCount(dom, count) {
 			break;
 	}
 
-	dom.setContent("Count", text);
+	dom.setValue("Count", text);
 }
 
 function handleCount(dom) {
@@ -138,8 +138,8 @@ function displayTodos(dom) {
 }
 
 function acSubmit(dom, id) {
-	dom.getContent("Input",
-		(content) => dom.setContent("Input", "",
+	dom.getValue("Input",
+		(content) => dom.setValue("Input", "",
 			() => {
 				if (content.trim() != "") {
 					dom.todos.unshift(
@@ -156,7 +156,7 @@ function acSubmit(dom, id) {
 }
 
 function acDestroy(dom, id) {
-	dom.getContent(id,
+	dom.getValue(id,
 		(content) => {
 			dom.todos.splice(parseInt(content), 1);
 			displayTodos(dom);
@@ -230,7 +230,7 @@ function acClear(dom, id) {
 }
 
 function acEdit(dom, id) {
-	dom.getContent(id,
+	dom.getValue(id,
 		(content) => dom.addClasses(
 			{
 				["View." + content]: "hide",
@@ -238,7 +238,7 @@ function acEdit(dom, id) {
 			},
 			() => {
 				dom.index = parseInt(content);
-				dom.setContent("Input." + content, dom.todos[dom.index]['label'],
+				dom.setValue("Input." + content, dom.todos[dom.index]['label'],
 					() => dom.focus("Input." + content))
 			}
 		)

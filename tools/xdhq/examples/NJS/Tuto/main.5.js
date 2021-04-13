@@ -100,7 +100,7 @@ function displayCount(dom, count) {
 			break;
 	}
 
-	dom.setContent("Count", text);
+	dom.setValue("Count", text);
 }
 
 function displayTodos(dom) {
@@ -124,8 +124,8 @@ function displayTodos(dom) {
 }
 
 function acSubmit(dom, id) {
-	dom.getContent("Input",
-		(content) => dom.setContent("Input", "",
+	dom.getValue("Input",
+		(content) => dom.setValue("Input", "",
 			() => {
 				if (content.trim() != "") {
 					dom.todos.unshift(
@@ -142,7 +142,7 @@ function acSubmit(dom, id) {
 }
 
 function acDestroy(dom, id) {
-	dom.getContent(id,
+	dom.getValue(id,
 		(content) => {
 			dom.todos.splice(parseInt(content), 1);
 			displayTodos(dom);
