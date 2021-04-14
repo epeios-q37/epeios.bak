@@ -112,7 +112,7 @@ function displayList(dom) {
 
 	xml.popTag();
 
-	dom.begin("Notes", xml, "Notes.xsl",
+	dom.inner("Notes", xml, "Notes.xsl",
 		() => dom.setValues(contents,
 			() => dom.enableElements(viewModeElements,
 				() => handleDescriptions(dom)
@@ -157,7 +157,6 @@ function view(dom) {
 
 function edit(dom, id) {
 	dom.id = parseInt(id);
-	console.log(id);
 	dom.inner("Edit." + id, readAsset( "Note.html" ),
 		() => dom.setValues(
 			{
@@ -181,7 +180,7 @@ function acEdit(dom, id) {
 function acDelete(dom, id) {
 	dom.confirm("Are you sure you want to delete this entry ?",
 		(response) => {
-			if (response) dom.getMArk(id,
+			if (response) dom.getMark(id,
 				(result) => {
 					dom.notes.splice(parseInt(result), 1);
 					displayList(dom);

@@ -325,7 +325,10 @@ const head = `
 	.hide {
 		display: none;
 	}
-</style>
+
+	.xdh_style {
+		display: initial;
+	}</style>
 <style id="HideClearCompleted">
 	.clear-completed {
 		display: none;
@@ -396,7 +399,7 @@ const xsl = `<?xml version="1.0" encoding="UTF-8"?>
 		<xsl:apply-templates select="Todo"/>
 	</xsl:template>
 	<xsl:template match="Todo">
-		<li id="Todo.{@id}" data-xdh-onevents="(dblclick|Edit)" data-xdh-value="{@id}">
+		<li id="Todo.{@id}" data-xdh-onevents="(dblclick|Edit)" data-xdh-mark="{@id}">
 			<xsl:attribute name="class">
 				<xsl:text>view</xsl:text>
 				<xsl:choose>

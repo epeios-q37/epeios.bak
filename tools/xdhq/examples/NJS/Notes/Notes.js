@@ -108,7 +108,7 @@ function displayList(dom) {
 
 	xml.popTag();
 
-	dom.begin("Notes", xml, xsl,
+	dom.inner("Notes", xml, xsl,
 		() => dom.setValues(contents,
 			() => dom.enableElements(viewModeElements,
 				() => handleDescriptions(dom)
@@ -619,6 +619,10 @@ const head = `
  .relative {
 	position: relative;
 }
+
+	.xdh_style {
+		display: initial;
+	}
 </style>
 `;
 
@@ -709,7 +713,7 @@ const xsl = `<?xml version="1.0" encoding="UTF-8"?>
 		<li>
 			<span id="View.{@id}">
 				<div>
-					<article class="listing note-view" style="width:100%; justify-content: space-between;align-items: center;" data-xdh-value="{@id}">
+					<article class="listing note-view" style="width:100%; justify-content: space-between;align-items: center;" data-xdh-mark="{@id}">
 						<div>
 							<h3 id="Title.{@id}">
 								<xsl:value-of select="title"/>

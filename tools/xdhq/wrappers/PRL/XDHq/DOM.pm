@@ -224,7 +224,7 @@ sub getValue {
 sub setValues {
     my $self = shift;
 
-    my ($ids, $calues) = _split(shift);
+    my ($ids, $values) = _split(shift);
 
     $self->{dom}->call("SetValues_1", XDHq::SHRD::RT_VOID, $ids, $values);
 }

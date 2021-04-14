@@ -85,7 +85,7 @@ sub getUInt {
 
     while ($byte & 0x80) {
         $byte = getByte();
-        $value = ($value << 7) + ($value & 0x7f);
+        $value = ($value << 7) + ($byte & 0x7f);
     }
 
     return $value;
