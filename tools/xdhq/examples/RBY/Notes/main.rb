@@ -119,7 +119,7 @@ class Notes
 	end
 
 	def acEdit(dom, id)
-		index = dom.getValue(id)
+		index = dom.getMark(id)
 		@index = index.to_i()
 		note = @notes[@index]
 		
@@ -131,7 +131,7 @@ class Notes
 
 	def acDelete(dom, id)
 		if dom.confirm?("Are you sure you want to delete this entry ?")
-			@notes.delete_at(dom.getValue(id).to_i())
+			@notes.delete_at(dom.getMark(id).to_i())
 			displayList(dom)	
 		end
 	end

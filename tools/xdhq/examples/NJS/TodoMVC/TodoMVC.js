@@ -190,7 +190,7 @@ function acSubmit(dom, id) {
 }
 
 function acDestroy(dom, id) {
-	dom.getValue(id,
+	dom.getMark(id,
 		(content) => {
 			dom.todos.splice(parseInt(content), 1);
 			displayTodos(dom);
@@ -269,7 +269,7 @@ function acClear(dom, id) {
 }
 
 function acEdit(dom, id) {
-	dom.getValue(id,
+	dom.getMark(id,
 		(content) => dom.addClasses(
 			{
 				["View." + content]: "hide",

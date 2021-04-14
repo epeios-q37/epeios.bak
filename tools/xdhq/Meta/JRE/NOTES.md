@@ -14,7 +14,7 @@ Pour les autres *OSes*, cela semble être `:` (double-point).
 
 ## Compilation
 
-Script pour *recompiler* l'ensemble des sources *JAVA* (*attention*: les répertoires `classes` respectifs **doivent** exister !) :
+Script pour *recompiler* l'ensemble des sources *JAVA* (*attention*: les répertoires `classes` respectifs **doivent** exister !) :
 
 `ver=1.5;pushd /cygdrive/h/hg/epeios/tools/jreq;rm -rf classes/*;javac -target $ver -source $ver -d classes *.java;cd /cygdrive/h/hg/epeios/tools/xdhq/wrappers/JRE;rm -rf classes/*;javac -target $ver -source $ver -d classes *.java;cd /cygdrive/h/hg/epeios/tools/xdhq/Atlas/JRE;rm -rf classes/*;javac -source $ver -target $ver -d classes *.java;popd;`
 

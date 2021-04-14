@@ -55,7 +55,7 @@ sub acSearch {
 sub acEdit {
     my ($notes, $dom, $id) = @_;
 
-    my $idx = $dom->getValue($id);
+    my $idx = $dom->getMark($id);
     $notes->{idx} = int($idx);
 
     my %note = %{$notes->{notes}[$notes->{idx}]};
@@ -70,7 +70,7 @@ sub acDelete {
     my ($notes, $dom, $id) = @_;
 
     if ($dom->confirm("Are you sure you want to delete this entry?")) {
-        splice @{$notes->{notes}}, int($dom->getValue($id)), 1;
+        splice @{$notes->{notes}}, int($dom->getMark($id)), 1;
         $notes->displayList($dom);
     }
 }

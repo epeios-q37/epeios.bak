@@ -157,7 +157,7 @@ class TodoMVC
 	end
 
 	def acDestroy(dom, id)
-		@todos.delete_at(dom.getValue(id).to_i())
+		@todos.delete_at(dom.getMark(id).to_i())
 		displayTodos(dom)
 	end
 
@@ -212,7 +212,7 @@ class TodoMVC
 	end
 
 	def acEdit(dom, id)
-		content = dom.getValue(id)
+		content = dom.getMark(id)
 		@index = content.to_i()
 	
 		dom.addClasses({"View." + content => "hide", id => "editing"})

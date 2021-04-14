@@ -168,7 +168,7 @@ function edit(dom, id) {
 }
 
 function acEdit(dom, id) {
-	dom.getValue(id,
+	dom.getMark(id,
 		(result) => edit(dom, result)
 	);
 }
@@ -176,7 +176,7 @@ function acEdit(dom, id) {
 function acDelete(dom, id) {
 	dom.confirm("Are you sure you want to delete this entry ?",
 		(response) => {
-			if (response) dom.getValue(id,
+			if (response) dom.getMark(id,
 				(result) => {
 					dom.notes.splice(parseInt(result), 1);
 					displayList(dom);

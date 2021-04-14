@@ -2,6 +2,8 @@
 
 # *Java* version of the *Atlas* toolkit
 
+***<ins>NO MORE IN USE!!!</ins>***
+
 ![For Java](https://q37.info/download/assets/Java.png "Java logo")
 
 [![Run on Repl.it](https://repl.it/badge/github/epeios-q37/atlas-java)](https://q37.info/s/3vwk3h3n)

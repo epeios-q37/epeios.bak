@@ -157,6 +157,7 @@ function view(dom) {
 
 function edit(dom, id) {
 	dom.id = parseInt(id);
+	console.log(id);
 	dom.inner("Edit." + id, readAsset( "Note.html" ),
 		() => dom.setValues(
 			{
@@ -172,7 +173,7 @@ function edit(dom, id) {
 }
 
 function acEdit(dom, id) {
-	dom.getValue(id,
+	dom.getMark(id,
 		(result) => edit(dom, result)
 	);
 }
@@ -180,7 +181,7 @@ function acEdit(dom, id) {
 function acDelete(dom, id) {
 	dom.confirm("Are you sure you want to delete this entry ?",
 		(response) => {
-			if (response) dom.getValue(id,
+			if (response) dom.getMArk(id,
 				(result) => {
 					dom.notes.splice(parseInt(result), 1);
 					displayList(dom);
