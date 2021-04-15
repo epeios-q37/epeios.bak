@@ -14,19 +14,19 @@ $BODY =
 HEREDOC
 
 def acConnect(userObject, dom, id)
- dom.inner("", $body)
+ dom.inner("", $BODY)
  dom.focus("Input")
 end
 
 def acSubmit(userObject, dom, id)
  name = dom.getValue("Input")
- dom.set_value("Hello, " + name + "!")
- dom.set_value("Input", "")
+ dom.setValue("Output", "Hello, " + name + "!")
+ dom.setValue("Input", "")
  dom.focus("Input")
 end
 
 callbacks = {
- "" => method(:acConnect),  # This key is the action label for a new connection.
+ "" => method(:acConnect),
  "Submit" => method(:acSubmit)
 }
 

@@ -1,7 +1,7 @@
 ```javascript
-const atlas = require( 'atlastk' );
+const atlastk = require( 'atlastk' );
 
-const body = `
+const BODY = `
 <fieldset>
  <input id="Input" data-xdh-onevent="Submit" value="World"/>
  <button data-xdh-onevent="Submit">Hello</button>
@@ -13,13 +13,13 @@ const body = `
 `;
 
 const callbacks = {
- "": (dom, id) => dom.inner("", body,
-  () => dom.focus("input")),
- "Submit": (dom, id) => dom.getValue("input",
-  (name) => dom.setValue("Hello, " + name + "!",
-   () => dom.set_value("Input", "",
-    () => dom.focus("input")))),
+ "": (dom, id) => dom.inner("", BODY,
+  () => dom.focus("Input")),
+ "Submit": (dom, id) => dom.getValue("Input",
+  (name) => dom.setValue("Output", "Hello, " + name + "!",
+   () => dom.setValue("Input", "",
+    () => dom.focus("Input")))),
 };
 
-atlas.launch(() => new atlas.DOM(), callbacks);
+atlastk.launch(() => new atlastk.DOM(), callbacks);
 ```

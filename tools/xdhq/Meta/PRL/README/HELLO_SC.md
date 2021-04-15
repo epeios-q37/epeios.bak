@@ -21,10 +21,10 @@ sub acConnect {
 
 sub acSubmit {
  my ($hello, $dom) = @_;
- my $name = $dom->getValue("Input")
+ my $name = $dom->getValue("Input");
 
  $dom->setValue("Output", "Hello, $name!");
- $dom->setValue("Input", "")
+ $dom->setValue("Input", "");
  $dom->focus("Input");
 }
 

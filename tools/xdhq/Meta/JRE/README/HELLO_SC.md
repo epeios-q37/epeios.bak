@@ -10,7 +10,7 @@ class Hello extends Atlas {
   " <fieldset>" +
   "  <output id=\"Output\">Greetings displayed here!</output>" +
   " </fieldset>" +
-  "</fieldset>" +
+  "</fieldset>";
 
   @Override
   public void handle(String action, String id)
