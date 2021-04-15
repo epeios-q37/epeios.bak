@@ -23,15 +23,17 @@
 
 ---
 
-## Quick example: the ["Hello, World!"](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program) program
+## A GUI with *@LMCT@* in less then 10 minutes.
 
-### Source code
+Click below picture to see a *Youtube* video on how to program a ["Hello, World!"](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program) in less then 10 minutes:
+
+[![Building a GUI in with *@LMCT@* in less then 10 minutes](https://q37.info/s/qp4z37pg.gif)](@YTV@)
+
+Same video on [*Peertube*](https://en.wikipedia.org/wiki/PeerTube): <@PTV@>.
+
+Source code:
 
 @HELLO_SC@
-
-### Result
-
-[![Little demonstration](https://q37.info/download/assets/Hello.gif "A basic example")](https://q37.info/s/@GRSS@)
 
 ### See for yourself right now - it's quick and easy!
 

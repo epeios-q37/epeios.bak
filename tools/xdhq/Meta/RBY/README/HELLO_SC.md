@@ -1,39 +1,33 @@
 ```ruby
 require 'Atlas'
 
-$body =
+$BODY =
 <<~HEREDOC
 <fieldset>
- <input id="input" maxlength="20" placeholder="Enter a name here" type="text"
-        data-xdh-onevent="Submit" value="World"/>
- <div style="display: flex; justify-content: space-around; margin: 5px auto auto auto;">
-  <button data-xdh-onevent="Submit">Submit</button>
-  <button data-xdh-onevent="Clear">Clear</button>
- </div>
+ <input id="Input" data-xdh-onevent="Submit" value="World"/>
+ <button data-xdh-onevent="Submit">Hello</button>
+ <hr/>
+ <fieldset>
+  <output id="Output">Greetings displayed here!</output>
+ </fieldset>
 </fieldset>
 HEREDOC
 
 def acConnect(userObject, dom, id)
  dom.inner("", $body)
- dom.focus("input")
+ dom.focus("Input")
 end
 
 def acSubmit(userObject, dom, id)
- dom.alert("Hello, " + dom.getValue("input") + "!")
- dom.focus("input")
-end
-
-def acClear(userObject, dom, id)
- if dom.confirm?("Are you sure?")
-  dom.setValue("input", "")
- end
- dom.focus("input")
+ name = dom.getValue("Input")
+ dom.set_value("Hello, " + name + "!")
+ dom.set_value("Input", "")
+ dom.focus("Input")
 end
 
 callbacks = {
  "" => method(:acConnect),  # This key is the action label for a new connection.
- "Submit" => method(:acSubmit),
- "Clear" => method(:acClear),
+ "Submit" => method(:acSubmit)
 }
 
 Atlas.launch(callbacks)
