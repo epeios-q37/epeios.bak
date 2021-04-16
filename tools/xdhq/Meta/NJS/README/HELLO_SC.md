@@ -1,5 +1,5 @@
 ```javascript
-const atlastk = require( 'atlastk' );
+const atlastk = require('atlastk');
 
 const BODY = `
 <fieldset>

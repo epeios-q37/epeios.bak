@@ -23,9 +23,9 @@
 
 ---
 
-## A GUI with *@LMCT@* in less then 10 minutes.
+## A GUI with *@LMCT@* in less then 10 minutes
 
-Click below picture to see a *Youtube* video on how to program a ["Hello, World!"](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program) in less then 10 minutes:
+Click to see how to program this ["Hello, World!"](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program) with *@LMCT@* in less then 10 minutes:
 
 [![Building a GUI in with *@LMCT@* in less then 10 minutes](https://q37.info/s/qp4z37pg.gif)](@YTV@)
 
