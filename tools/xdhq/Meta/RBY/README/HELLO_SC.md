@@ -25,10 +25,10 @@ def acSubmit(userObject, dom, id)
  dom.focus("Input")
 end
 
-callbacks = {
+CALLBACKS = {
  "" => method(:acConnect),
  "Submit" => method(:acSubmit)
 }
 
-Atlas.launch(callbacks)
+Atlas.launch(CALLBACKS)
 ```

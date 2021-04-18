@@ -12,7 +12,7 @@ const BODY = `
 </fieldset>
 `;
 
-const callbacks = {
+const CALLBACKS = {
  "": (dom, id) => dom.inner("", BODY,
   () => dom.focus("Input")),
  "Submit": (dom, id) => dom.getValue("Input",
@@ -21,5 +21,5 @@ const callbacks = {
     () => dom.focus("Input")))),
 };
 
-atlastk.launch(() => new atlastk.DOM(), callbacks);
+atlastk.launch(() => new atlastk.DOM(), CALLBACKS);
 ```

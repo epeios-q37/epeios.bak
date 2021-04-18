@@ -28,10 +28,10 @@ sub acSubmit {
  $dom->focus("Input");
 }
 
-my %callbacks = (
+my %CALLBACKS = (
  "" => \&acConnect,
  "Submit" => \&acSubmit
 );
 
-Atlas::launch(\%callbacks);
+Atlas::launch(\%CALLBACKS);
 ```

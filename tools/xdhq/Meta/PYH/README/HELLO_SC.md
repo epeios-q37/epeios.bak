@@ -22,10 +22,10 @@ def ac_submit(dom):
   dom.set_value("Input", "")
   dom.focus("Input")
 
-callbacks = {
+CALLBACKS = {
   "": ac_connect,
   "Submit": ac_submit
 }
 
-atlastk.launch(callbacks)
+atlastk.launch(CALLBACKS)
 ```
