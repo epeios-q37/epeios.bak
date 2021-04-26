@@ -28,11 +28,12 @@ from core import *
 
 BLACK_MARK = 'X'
 WHITE_MARK = 'O'
+LEVEL = 1
 
 
-def print_board(reversi):
+def print_board(board):
   print('\n   a b c d e f g h \n  +-+-+-+-+-+-+-+-+')
-  for i, row in enumerate(reversi.board):
+  for i, row in enumerate(board.array()):
     print(' %d|' % (i + 1), end='')
     for r in row:
       print('{}|'.format({
@@ -68,18 +69,18 @@ def print_position(player, xy):
                 chr(xy[1] + 97), chr(xy[0] + 49)))
 
 
-reversi = None
+board = None
 humans = []
 
 def humanTurn(player):
   xy = input_position(player)
-  while xy and not reversi.put(xy[0], xy[1], player):
+  while xy and not board.put(xy[0], xy[1], player):
       xy = input_position(player)
 
 def computerTurn(player):
-  xy = reversi.find_best_position(player)
+  xy = board.find_best_position(player,LEVEL)
   if xy:
-    reversi.put(xy[0], xy[1], player)
+    board.put(xy[0], xy[1], player)
   print_position(player, xy)
 
 def turn(player):
@@ -87,7 +88,7 @@ def turn(player):
     humanTurn(player)
   else:
     computerTurn(player)
-  print_board(reversi)
+  print_board(board)
   if not humans:
     input("Hit Enter key to continue.")
 
@@ -112,23 +113,23 @@ def getHumans():
   humans = TYPES[answer]
 
 def start_game():
-  global reversi
-  reversi = Reversi(1)
+  global board
+  board = Board()
 
   getHumans()
 
-  print_board(reversi)
+  print_board(board)
 
-  while not (reversi.count(EMPTY) == 0 or reversi.count(BLACK) == 0
-         or reversi.count(WHITE) == 0):
+  while (board.count(EMPTY) != 0 and board.count(BLACK) != 0
+         and board.count(WHITE) != 0):
     turn(BLACK)
     turn(WHITE)
 
-  print_board(reversi)
-  print(f"'X': {reversi.count(BLACK)}, 'O': {reversi.count(WHITE)}")
-  if reversi.count(BLACK) > reversi.count(WHITE):
+  print_board(board)
+  print(f"'X': {board.count(BLACK)}, 'O': {board.count(WHITE)}")
+  if board.count(BLACK) > board.count(WHITE):
     print("'X' wins!")
-  elif reversi.count(BLACK) < reversi.count(WHITE):
+  elif board.count(BLACK) < board.count(WHITE):
     print("'Y' wins!")
   else:
     print('Equality)')

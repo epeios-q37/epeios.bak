@@ -32,7 +32,7 @@ BLACK = -1
 WHITE = 1
 
 # http://uguisu.skr.jp/othello/5-1.html
-WEIGHT1_MATRIX = [
+_WEIGHT1_MATRIX = [
   [120, -20, 20, 5, 5, 20, -20, 120],
   [-20, -40, -5, -5, -5, -5, -40, -20],
   [20, -5, 15, 3, 3, 15, -5, 20],
@@ -44,7 +44,7 @@ WEIGHT1_MATRIX = [
 ]
 
 
-WEIGHT2_MATRIX = [
+_WEIGHT2_MATRIX = [
   [30, -12, 0, -1, -1, 0, -12, 30],
   [-12, -15, -3, -3, -3, -3, -15, -12],
   [0, -3, 0, -1, -1, 0, -3, 0],
@@ -55,30 +55,25 @@ WEIGHT2_MATRIX = [
   [30, -12, 0, -1, -1, 0, -12, 30],
 ]
 
+_WEIGHT_MATRICES = {
+  1: _WEIGHT1_MATRIX,
+  2: _WEIGHT2_MATRIX
+}
 
-class Reversi:
+class Board:
   def reset(self):
-    self.board = []
+    self._board = []
     for _ in range(8):
-      self.board.append([EMPTY] * 8)
+      self._board.append([EMPTY] * 8)
 
-    self.board[3][3] = self.board[4][4] = BLACK
-    self.board[4][3] = self.board[3][4] = WHITE
+    self._board[3][3] = self._board[4][4] = BLACK
+    self._board[4][3] = self._board[3][4] = WHITE
 
-  def __init__(self, p):
+  def __init__(self, p = None):
     self.reset()
-    if isinstance(p, int):      # initialize board
-      # p is level and 1 or 2
-      assert p in [1, 2]
-      if p == 2:
-        self.weight_matrix = WEIGHT1_MATRIX
-      else:
-        self.weight_matrix = WEIGHT2_MATRIX
-
-    elif isinstance(p, Reversi):    # copy constructor
-      self.board = copy.deepcopy(p.board)
-      self.weight_matrix = p.weight_matrix
-    else:
+    if isinstance(p, Board):    # copy constructor
+      self._board = copy.deepcopy(p._board)
+    elif p != None:
       raise ValueError("invaid parameter")
 
   def count(self, bwe):
@@ -87,7 +82,7 @@ class Reversi:
     n = 0
     for i in range(8):
       for j in range(8):
-        if self.board[i][j] == bwe:
+        if self._board[i][j] == bwe:
           n += 1
     return n
 
@@ -99,9 +94,9 @@ class Reversi:
     x += delta_x
     y += delta_y
 
-    if x < 0 or x > 7 or y < 0 or y > 7 or self.board[x][y] == EMPTY:
+    if x < 0 or x > 7 or y < 0 or y > 7 or self._board[x][y] == EMPTY:
       return False
-    if self.board[x][y] == bw:
+    if self._board[x][y] == bw:
       return True
     return self._has_my_piece(bw, x, y, delta_x, delta_y)
 
@@ -110,7 +105,7 @@ class Reversi:
     assert bw in (BLACK, WHITE)
 
     directions = []
-    if self.board[x][y] != EMPTY:
+    if self._board[x][y] != EMPTY:
       return directions
 
     for d in itertools.product([-1, 1, 0], [-1, 1, 0]):
@@ -118,7 +113,7 @@ class Reversi:
         continue
       nx = x + d[0]
       ny = y + d[1]
-      if nx < 0 or nx > 7 or ny < 0 or ny > 7 or self.board[nx][ny] != bw * -1:
+      if nx < 0 or nx > 7 or ny < 0 or ny > 7 or self._board[nx][ny] != bw * -1:
         continue
       if self._has_my_piece(bw, nx, ny, d[0], d[1]):
         directions.append(d)
@@ -130,12 +125,12 @@ class Reversi:
 
     x += delta_x
     y += delta_y
-    assert self.board[x][y] in (BLACK, WHITE)
+    assert self._board[x][y] in (BLACK, WHITE)
 
-    if self.board[x][y] == bw:
+    if self._board[x][y] == bw:
       return
 
-    self.board[x][y] = bw
+    self._board[x][y] = bw
     return self._reverse_piece(bw, x, y, delta_x, delta_y)
 
   def isAllowed(self, x, y, bw):
@@ -150,38 +145,38 @@ class Reversi:
     directions = self.reversible_directions(bw, x, y)
     if len(directions) == 0:
       return False
-    self.board[x][y] = bw
+    self._board[x][y] = bw
     for delta in directions:
       self._reverse_piece(bw, x, y, delta[0], delta[1])
     return True
 
-  def _calc_score(self, bw):
-    assert bw in (BLACK, WHITE)
+  def _calc_score(self, bw, level):
+    assert level in [1,2], bw in (BLACK, WHITE)
     my_score = 0
     against_score = 0
     for i in range(8):
       for j in range(8):
-        if self.board[i][j] == bw:
-          my_score += self.weight_matrix[i][j]
-        elif self.board[i][j] == bw * -1:
-          against_score += self.weight_matrix[i][j]
+        if self._board[i][j] == bw:
+          my_score += _WEIGHT_MATRICES[level][i][j]
+        elif self._board[i][j] == bw * -1:
+          against_score += _WEIGHT_MATRICES[level][i][j]
     return my_score - against_score
 
-  def find_best_position(self, bw):
+  def find_best_position(self, bw, level):
     "Return the best next position."
     assert bw in (BLACK, WHITE)
 
     next_positions = {}
     for i in range(8):
       for j in range(8):
-        reversi = Reversi(self)
-        if reversi.put(i, j, bw):
+        board = Board(self)
+        if board.put(i, j, bw):
           next_positions.setdefault(
-            reversi._calc_score(bw), []
+            board._calc_score(bw,level), []
           ).append((i, j))
-    if next_positions:
-      next_position = random.choice(next_positions[max(next_positions)])
-    else:
-      next_position = None
-    return next_position
+
+    return random.choice(next_positions[max(next_positions)]) if next_positions else None
+
+  def array(self):
+    return self._board
 

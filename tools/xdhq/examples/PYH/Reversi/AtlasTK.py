@@ -23,7 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-from core import *
+import core
 import os, sys, time
 
 os.chdir(os.path.dirname(os.path.realpath(__file__)))
@@ -31,75 +31,88 @@ sys.path.append("../../atlastk")
 
 import atlastk
 
-IMGLayout = True # If at 'True', displays the TXT layout!
+layoutFlag = True # If at 'True', displays the TXT layout!
+
+class Reversi:
+  def __init__(self):
+    self.board = None
+    self.level = 0
+    self.player = core.EMPTY
+
+  def init(self, level, player):
+    self.board = core.Board()
+    self.player = player
+    self.level = level
+
 
 def drawBoard(reversi, dom):
   board = atlastk.createHTML("tbody")
-  for y, row in enumerate(reversi.board):
+  for y, row in enumerate(reversi.board.array()):
     board.push_tag("tr")
     for x, r in enumerate(row):
       board.push_tag("td")
       board.put_attribute("id", str(x) + str(y))
-      playable = (r == EMPTY) and (reversi.isAllowed(y, x, reversi.player))
+      playable = (r == core.EMPTY) and (reversi.board.isAllowed(y, x, reversi.player))
       if playable:
         board.put_attribute("data-xdh-onevent", "Play")
       board.put_attribute(
-        "class", {EMPTY: 'none', BLACK: 'black', WHITE: 'white'}[r] + (" playable" if playable else ""))
-      board.putValue({EMPTY: ' ', BLACK: 'X', WHITE: 'O'}[r])
+        "class", {core.EMPTY: 'none', core.BLACK: 'black', core.WHITE: 'white'}[r] + (" playable" if playable else ""))
+      board.putValue({core.EMPTY: ' ', core.BLACK: 'X', core.WHITE: 'O'}[r])
       board.pop_tag()
     board.pop_tag()
 
   dom.inner("board", board)
 
   dom.set_values({
-    "black": reversi.count(BLACK),
-    "white": reversi.count(WHITE)
+    "black": reversi.board.count(core.BLACK),
+    "white": reversi.board.count(core.WHITE)
   })
 
 def acConnect(reversi, dom):
-  reversi.player = BLACK
-  if IMGLayout:
+  if layoutFlag:
     dom.disable_element("IMG")
   dom.inner("", open("Main.html").read())
+  reversi.init(int(dom.get_value("level")),core.BLACK)
   drawBoard(reversi, dom)
 
 def acPlay(reversi, dom, id):
   xy = [int(id[1]), int(id[0])]
 
   player = reversi.player
+  board = reversi.board
 
-  if (reversi.put(xy[0], xy[1], player)):
+  if (board.put(xy[0], xy[1], player)):
     drawBoard(reversi, dom)
 
-    xy = reversi.find_best_position(player * -1)
+    xy = board.find_best_position(player * -1, reversi.level)
     if xy:
-      reversi.put(xy[0], xy[1], player * -1)
+      board.put(xy[0], xy[1], player * -1)
       time.sleep(1)
 
     drawBoard(reversi, dom)
 
-  if (reversi.count(EMPTY) == 0 or
-    reversi.count(BLACK) == 0 or
-      reversi.count(WHITE) == 0):
-    if reversi.count(player) > reversi.count(player * -1):
+  if (board.count(core.EMPTY) == 0 or
+    board.count(core.BLACK) == 0 or
+      board.count(core.WHITE) == 0):
+    if board.count(player) > board.count(player * -1):
       dom.alert('You win!')
-    elif reversi.count(player) < reversi.count(player * -1):
+    elif board.count(player) < board.count(player * -1):
       dom.alert('You lose!')
     else:
       dom.alert('Egality!')  
 
 def acToggleLayout(reversi, dom):
-  global IMGLayout
+  global layoutFlag
 
-  if IMGLayout:
+  if layoutFlag:
     dom.enable_element("IMG")
   else:
     dom.disable_element("IMG")
 
-  IMGLayout = not IMGLayout
+  layoutFlag = not layoutFlag
 
 def acNew(reversi, dom):
-  reversi.reset()
+  reversi.init(int(dom.get_value("level")),core.BLACK)
   drawBoard(reversi, dom)
 
 
@@ -108,6 +121,7 @@ callbacks = {
   "Play": acPlay,
   "ToggleLayout": acToggleLayout,
   "New": acNew,
+  "SelectMode": lambda reversi, dom, id: dom.set_attribute("level", "style", f"visibility: {'hidden' if dom.get_value(id) == 'HH' else 'visible'};")
 }
 
-atlastk.launch(callbacks, lambda : Reversi(2), open("Head.html").read())
+atlastk.launch(callbacks, Reversi, open("Head.html").read())

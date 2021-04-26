@@ -71,7 +71,7 @@ class App(Frame):
     self.restart()
 
   def computer_put(self):
-    xy = self.reversi.find_best_position(self.player_color * -1)
+    xy = self.reversi.find_best_position(self.player_color * -1, self.level)
     if xy:
       self.reversi.put(xy[0], xy[1], self.player_color * -1)
 
@@ -84,7 +84,7 @@ class App(Frame):
           reversi.BLACK: "●",
           reversi.WHITE: "○",
           reversi.EMPTY: " ",
-        }[self.reversi.board[i][j]]
+        }[self.reversi.array()[i][j]]
 
     # check finish
     if not (
@@ -104,7 +104,7 @@ class App(Frame):
     level = int(self.spin.get())
     if self.level != level:
       self.level = level
-      self.reversi = reversi.Reversi(level)
+      self.reversi = reversi.Board()
       self.update_board()
 
   def player_put(self, x, y):

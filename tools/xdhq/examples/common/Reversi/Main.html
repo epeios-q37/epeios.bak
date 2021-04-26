@@ -1,41 +1,38 @@
 <fieldset style="border: inset;border-width: 7px;">
-<fieldset style="border: outset;border-width: 7px;">
-<table id="board"></table>
-<div style="display: table; margin: 10px auto 10px auto">
-  <table id="score" style="width: 100%">
-    <tbody>
-      <tr>
-        <td class="black score-label">X</td>
-        <td id="black" class="score-value" />
-        <td class="separator" style="width: 10px;" />
-        <td>
-          <button data-xdh-onevent="New">NEW GAME</button>
-        </td>
-        <td class="separator" style="width: 10px;" />
-        <td id="white" class="score-value" />
-        <td class="white score-label">O</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-</fieldset>
-<fieldset style="border: outset;border-width: 7px;">
+  <fieldset style="border: outset;border-width: 7px;">
+    <table id="board"></table>
+    <div style="display: table; margin: 10px auto 10px auto">
+      <table id="score" style="width: 100%">
+        <tbody>
+          <tr>
+            <td class="black score-label">X</td>
+            <td id="black" class="score-value" />
+            <td class="separator" style="width: 10px;" />
+            <td>
+              <button data-xdh-onevent="New">NEW GAME</button>
+            </td>
+            <td class="separator" style="width: 10px;" />
+            <td id="white" class="score-value" />
+            <td class="white score-label">O</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="text-align: center;">
+      <select data-xdh-onevent="SelectMode">
+        <option value="HC">human vs computer</option>
+        <option value="CH">computer vs human</option>
+        <option value="HH">human vs human</option>
+        <option value="CC">computer vs computer</option>
+      </select>
+      <span style="display: inline-block; width: 10px;"></span>
+      <select id="level">
+        <option value="1">Level 1</option>
+        <option value="2">Level 2</option>
+      </select>
+    </div>
+  </fieldset>
   <div style="display: table; margin: 10px auto 10px auto">
-  <button data-xdh-onevent="ToggleLayout">Toggle layout</button>  
-</div>
-<div style="text-align: center;">
-  <select>
-    <option>human vs computer</option>
-    <option>computer vs human</option>
-    <option>human vs human</option>
-    <option>computer vs computer</option>
-  </select>
-  <span style="display: inline-block; width: 10px;"></span>
-  <label>Level: </label>
-  <input type="radio" id="level1" name="level" checked="checked" />
-  <label for="level1">1</label>
-  <input type="radio" id="level2" name="level" />
-  <label for="level2">2</label>
-</div>
-</fieldset>
+    <button data-xdh-onevent="ToggleLayout">Toggle layout</button>
+  </div>
 </fieldset>
