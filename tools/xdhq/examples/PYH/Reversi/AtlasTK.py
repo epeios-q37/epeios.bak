@@ -24,7 +24,7 @@ SOFTWARE.
 """
 
 import core
-import os, sys, time
+import os, sys, time, uuid
 
 os.chdir(os.path.dirname(os.path.realpath(__file__)))
 sys.path.append("../../atlastk")
@@ -35,7 +35,9 @@ COMPUTER = 0
 HUMAN = 1
 DELAY = 1 # Delay in seconds before computer move.
 
-layoutFlag = True # If at 'True', displays the TXT layout!
+DEFAULT_LAYOUT_FLAG = True # At 'True', displays the text layout.
+
+games = {}
 
 class Reversi:
   def __init__(self):
@@ -43,6 +45,7 @@ class Reversi:
     self.level = 0
     self.bw = core.EMPTY
     self.opponent = None
+    self.layoutFlag = DEFAULT_LAYOUT_FLAG
 
   def init(self, level, bw, opponent):
     self.board = core.Board()
@@ -74,8 +77,8 @@ def drawBoard(reversi, dom):
   })
 
 def acConnect(reversi, dom):
-  if layoutFlag:
-    dom.disable_element("IMG")
+  if reversi.layoutFlag:
+    dom.disable_element("EnhancedLayout")
   dom.inner("", open("Main.html").read())
   reversi.init(int(dom.get_value("level")), core.BLACK, COMPUTER)
   drawBoard(reversi, dom)
@@ -107,19 +110,17 @@ def acPlay(reversi, dom, id):
     if board.count(bw) > board.count(bw * -1):
       dom.alert('You win!')
     elif board.count(bw) < board.count(bw * -1):
-      dom.alert('You lose!')
+      dom.alert('Tie game!')
     else:
-      dom.alert('Egality!')  
+      dom.alert('Equality!')  
 
 def acToggleLayout(reversi, dom):
-  global layoutFlag
-
-  if layoutFlag:
-    dom.enable_element("IMG")
+  if reversi.layoutFlag:
+    dom.enable_element("EnhancedLayout")
   else:
-    dom.disable_element("IMG")
+    dom.disable_element("EnhancedLayout")
 
-  layoutFlag = not layoutFlag
+  reversi.layoutFlag = not reversi.layoutFlag
 
 def acNew(reversi, dom):
   players = dom.get_value("players")
@@ -135,6 +136,14 @@ def acNew(reversi, dom):
   if bw == core.WHITE:
     time.sleep(DELAY)
     computerMove(reversi,dom)
+
+  if bw == core.EMPTY:  # Human vs human
+    token = uuid.uuid4()
+    url = atlastk.get_app_url(token)
+    dom.inner("qrcode", f'<a href="{url}" title="{url}" target="_blank"><img style="margin: auto; width:100%;" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data={url}"/></a>')
+    dom.disable_element("HideHHSection")
+  else:
+   dom.enable_element("HideHHSection")
 
 callbacks = {
   "": acConnect,
