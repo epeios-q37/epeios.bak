@@ -31,19 +31,24 @@ sys.path.append("../../atlastk")
 
 import atlastk
 
+COMPUTER = 0
+HUMAN = 1
+DELAY = 1 # Delay in seconds before computer move.
+
 layoutFlag = True # If at 'True', displays the TXT layout!
 
 class Reversi:
   def __init__(self):
     self.board = None
     self.level = 0
-    self.player = core.EMPTY
+    self.bw = core.EMPTY
+    self.opponent = None
 
-  def init(self, level, player):
+  def init(self, level, bw, opponent):
     self.board = core.Board()
-    self.player = player
     self.level = level
-
+    self.bw = bw
+    self.opponent = opponent
 
 def drawBoard(reversi, dom):
   board = atlastk.createHTML("tbody")
@@ -52,7 +57,7 @@ def drawBoard(reversi, dom):
     for x, r in enumerate(row):
       board.push_tag("td")
       board.put_attribute("id", str(x) + str(y))
-      playable = (r == core.EMPTY) and (reversi.board.isAllowed(y, x, reversi.player))
+      playable = (r == core.EMPTY) and (reversi.board.isAllowed(y, x, reversi.bw if reversi.bw != core.EMPTY else core.BLACK))
       if playable:
         board.put_attribute("data-xdh-onevent", "Play")
       board.put_attribute(
@@ -72,31 +77,36 @@ def acConnect(reversi, dom):
   if layoutFlag:
     dom.disable_element("IMG")
   dom.inner("", open("Main.html").read())
-  reversi.init(int(dom.get_value("level")),core.BLACK)
+  reversi.init(int(dom.get_value("level")), core.BLACK, COMPUTER)
+  drawBoard(reversi, dom)
+
+def computerMove(reversi, dom):
+  bw = reversi.bw
+  board = reversi.board
+  xy = board.find_best_position(bw * -1, reversi.level)
+  if xy:
+    board.put(xy[0], xy[1], bw * -1)
+    time.sleep(DELAY)
+
   drawBoard(reversi, dom)
 
 def acPlay(reversi, dom, id):
   xy = [int(id[1]), int(id[0])]
 
-  player = reversi.player
+  bw = reversi.bw
   board = reversi.board
 
-  if (board.put(xy[0], xy[1], player)):
+  if (board.put(xy[0], xy[1], bw)):
     drawBoard(reversi, dom)
 
-    xy = board.find_best_position(player * -1, reversi.level)
-    if xy:
-      board.put(xy[0], xy[1], player * -1)
-      time.sleep(1)
-
-    drawBoard(reversi, dom)
+  computerMove(reversi, dom)
 
   if (board.count(core.EMPTY) == 0 or
     board.count(core.BLACK) == 0 or
       board.count(core.WHITE) == 0):
-    if board.count(player) > board.count(player * -1):
+    if board.count(bw) > board.count(bw * -1):
       dom.alert('You win!')
-    elif board.count(player) < board.count(player * -1):
+    elif board.count(bw) < board.count(bw * -1):
       dom.alert('You lose!')
     else:
       dom.alert('Egality!')  
@@ -112,9 +122,19 @@ def acToggleLayout(reversi, dom):
   layoutFlag = not layoutFlag
 
 def acNew(reversi, dom):
-  reversi.init(int(dom.get_value("level")),core.BLACK)
+  players = dom.get_value("players")
+  bw = core.EMPTY
+  if players == "HC":
+    bw = core.BLACK
+  elif players == "CH":
+    bw = core.WHITE
+  reversi.init(int(dom.get_value("level")), bw, HUMAN if players == "HH" else COMPUTER)
+
   drawBoard(reversi, dom)
 
+  if bw == core.WHITE:
+    time.sleep(DELAY)
+    computerMove(reversi,dom)
 
 callbacks = {
   "": acConnect,
