@@ -53,14 +53,14 @@ class Reversi:
     self.bw = bw
     self.opponent = opponent
 
-def drawBoard(reversi, dom):
+def drawBoard(reversi, dom, playability = True):
   board = atlastk.createHTML("tbody")
   for y, row in enumerate(reversi.board.array()):
     board.push_tag("tr")
     for x, r in enumerate(row):
       board.push_tag("td")
       board.put_attribute("id", str(x) + str(y))
-      playable = (r == core.EMPTY) and (reversi.board.isAllowed(y, x, reversi.bw if reversi.bw != core.EMPTY else core.BLACK))
+      playable = playability and (r == core.EMPTY) and (reversi.board.isAllowed(y, x, reversi.bw if reversi.bw != core.EMPTY else core.BLACK))
       if playable:
         board.put_attribute("data-xdh-onevent", "Play")
       board.put_attribute(
@@ -110,9 +110,9 @@ def acPlay(reversi, dom, id):
     if board.count(bw) > board.count(bw * -1):
       dom.alert('You win!')
     elif board.count(bw) < board.count(bw * -1):
-      dom.alert('Tie game!')
+      dom.alert('You lose!')
     else:
-      dom.alert('Equality!')  
+      dom.alert('Tie game!')  
 
 def acToggleLayout(reversi, dom):
   if reversi.layoutFlag:
@@ -131,11 +131,12 @@ def acNew(reversi, dom):
     bw = core.WHITE
   reversi.init(int(dom.get_value("level")), bw, HUMAN if players == "HH" else COMPUTER)
 
-  drawBoard(reversi, dom)
-
   if bw == core.WHITE:
+    drawBoard(reversi, dom, False)
     time.sleep(DELAY)
     computerMove(reversi,dom)
+  else:
+    drawBoard(reversi, dom)
 
   if bw == core.EMPTY:  # Human vs human
     token = uuid.uuid4()
