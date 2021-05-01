@@ -25,33 +25,34 @@ SOFTWARE.
 
 import core
 import os, sys, time, uuid
+from enum import Enum
 
 os.chdir(os.path.dirname(os.path.realpath(__file__)))
 sys.path.append("../../atlastk")
 
 import atlastk
 
-COMPUTER = 0
-HUMAN = 1
 DELAY = 1 # Delay in seconds before computer move.
-
 DEFAULT_LAYOUT_FLAG = True # At 'True', displays the text layout.
 
 games = {}
+
+
 
 class Reversi:
   def __init__(self):
     self.board = None
     self.level = 0
     self.bw = core.EMPTY
-    self.opponent = None
     self.layoutFlag = DEFAULT_LAYOUT_FLAG
+    self.token = None
 
-  def init(self, level, bw, opponent):
-    self.board = core.Board()
+  def init(self, level=0, bw=core.EMPTY, token=None, board=None):
+    assert bool(token) == bool(board) and (level == 0 ) == (bw == core.EMPTY)
     self.level = level
     self.bw = bw
-    self.opponent = opponent
+    self.token = token
+    self.board = board or core.Board()
 
 def drawBoard(reversi, dom, playability = True):
   board = atlastk.createHTML("tbody")
@@ -80,7 +81,7 @@ def acConnect(reversi, dom):
   if reversi.layoutFlag:
     dom.disable_element("EnhancedLayout")
   dom.inner("", open("Main.html").read())
-  reversi.init(int(dom.get_value("level")), core.BLACK, COMPUTER)
+  reversi.init(level=int(dom.get_value("level")), bw=core.BLACK)
   drawBoard(reversi, dom)
 
 def computerMove(reversi, dom):
@@ -92,6 +93,7 @@ def computerMove(reversi, dom):
     time.sleep(DELAY)
 
   drawBoard(reversi, dom)
+
 
 def acPlay(reversi, dom, id):
   xy = [int(id[1]), int(id[0])]
@@ -114,6 +116,7 @@ def acPlay(reversi, dom, id):
     else:
       dom.alert('Tie game!')  
 
+
 def acToggleLayout(reversi, dom):
   if reversi.layoutFlag:
     dom.enable_element("EnhancedLayout")
@@ -122,14 +125,21 @@ def acToggleLayout(reversi, dom):
 
   reversi.layoutFlag = not reversi.layoutFlag
 
-def acNew(reversi, dom):
-  players = dom.get_value("players")
-  bw = core.EMPTY
-  if players == "HC":
-    bw = core.BLACK
-  elif players == "CH":
-    bw = core.WHITE
-  reversi.init(int(dom.get_value("level")), bw, HUMAN if players == "HH" else COMPUTER)
+
+def newBetweenHumans(reversi, dom):
+  token = uuid.uuid4()
+  board = core.Board()
+  reversi.init(token=token, board=board)
+  url = atlastk.get_app_url(token)
+  dom.inner("qrcode", f'<a href="{url}" title="{url}" target="_blank"><img style="margin: auto; width:100%;" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data={url}"/></a>')
+  dom.set_value("HHStatus", "Make move or wait for opponent's move.")
+  dom.disable_elements(("HideHHStatusSection", "HideHHLinkSection"))
+  drawBoard(reversi, dom)
+
+
+def newVersusComputer(reversi, dom, bw):
+  reversi.init(level=int(dom.get_value("level")), bw=bw)
+  dom.enable_elements(("HideHHStatusSection", "HideHHLinkSection"))
 
   if bw == core.WHITE:
     drawBoard(reversi, dom, False)
@@ -138,13 +148,16 @@ def acNew(reversi, dom):
   else:
     drawBoard(reversi, dom)
 
-  if bw == core.EMPTY:  # Human vs human
-    token = uuid.uuid4()
-    url = atlastk.get_app_url(token)
-    dom.inner("qrcode", f'<a href="{url}" title="{url}" target="_blank"><img style="margin: auto; width:100%;" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data={url}"/></a>')
-    dom.disable_element("HideHHSection")
+
+def acNew(reversi, dom):
+  players = dom.get_value("players")
+  assert players in ["HH", "HC", "CH"]
+
+  if players == "HH":
+    newBetweenHumans(reversi, dom)
   else:
-   dom.enable_element("HideHHSection")
+    newVersusComputer(reversi, dom, core.BLACK if players == "HC" else core.WHITE)
+
 
 callbacks = {
   "": acConnect,
