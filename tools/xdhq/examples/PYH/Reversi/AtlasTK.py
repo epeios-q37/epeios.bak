@@ -24,8 +24,7 @@ SOFTWARE.
 """
 
 import core
-import os, sys, time, uuid
-from enum import Enum
+import os, sys, time, uuid, enum, threading, urllib
 
 os.chdir(os.path.dirname(os.path.realpath(__file__)))
 sys.path.append("../../atlastk")
@@ -35,9 +34,75 @@ import atlastk
 DELAY = 1 # Delay in seconds before computer move.
 DEFAULT_LAYOUT_FLAG = True # At 'True', displays the text layout.
 
-games = {}
+_lock = threading.Lock()
+
+_games = {}
+
+class Keys(enum.Enum):
+  BOARD = enum.auto()
+  TURN = enum.auto()
+
+def init(token):
+  global _lock, _games
+  assert token, token not in _games
+
+  with _lock:
+    board = core.Board()
+    _games[token] = {
+      Keys.BOARD: board,
+      Keys.TURN: core.EMPTY
+    }
+    print(_games)
+    return board
 
 
+def takeBlack(token):
+  global _lock, _games
+  assert token
+
+  with _lock:
+    if token not in _games or _games[token][Keys.TURN] != core.EMPTY:
+      return False
+    else:
+      _games[token][Keys.TURN] = core.WHITE
+      return True
+
+
+def setTurn(token, bw):
+  global _lock, _games
+  assert token, bw in [core.BLACK, core.WHITE]
+
+  with _lock:
+    if token not in _games:
+      return False
+    else:
+      assert _games[token][Keys.TURN] in [core.BLACK, core.WHITE], _games[token][Keys.TURN] != bw
+      _games[token][Keys.TURN] = bw
+      return True
+
+
+def getBoard(token):
+  global _lock, _games
+  assert token
+
+  with _lock:
+    if token not in _games:
+      return None
+    else:
+      return _games[token][Keys.BOARD]
+
+
+def getTurn(token):
+  global _lock, _games
+  assert token
+
+  with _lock:
+    if token not in _games:
+      return core.EMPTY
+    else:
+      return _games[token][Keys.TURN]  
+
+    
 
 class Reversi:
   def __init__(self):
@@ -48,11 +113,14 @@ class Reversi:
     self.token = None
 
   def init(self, level=0, bw=core.EMPTY, token=None, board=None):
-    assert bool(token) == bool(board) and (level == 0 ) == (bw == core.EMPTY)
+    print(token, board)
+    assert bool(token) == bool(board)
+    assert (level == 0 ) == (bw == core.EMPTY)
     self.level = level
     self.bw = bw
     self.token = token
     self.board = board or core.Board()
+
 
 def drawBoard(reversi, dom, playability = True):
   board = atlastk.createHTML("tbody")
@@ -77,11 +145,17 @@ def drawBoard(reversi, dom, playability = True):
     "white": reversi.board.count(core.WHITE)
   })
 
-def acConnect(reversi, dom):
+def acConnect(reversi, dom, id):
   if reversi.layoutFlag:
     dom.disable_element("EnhancedLayout")
   dom.inner("", open("Main.html").read())
-  reversi.init(level=int(dom.get_value("level")), bw=core.BLACK)
+  if id:
+    reversi.init(token = id, board = getBoard(id))
+    dom.disable_element("HideHHStatusSection")
+    dom.set_value("HHStatus", "Play or wait for the opponent's move." if getTurn(id) == core.EMPTY else "It's your turn!")
+  else:
+    reversi.init(level=int(dom.get_value("level")), bw=core.BLACK)
+
   drawBoard(reversi, dom)
 
 def computerMove(reversi, dom):
@@ -95,26 +169,51 @@ def computerMove(reversi, dom):
   drawBoard(reversi, dom)
 
 
-def acPlay(reversi, dom, id):
-  xy = [int(id[1]), int(id[0])]
-
-  bw = reversi.bw
-  board = reversi.board
-
-  if (board.put(xy[0], xy[1], bw)):
-    drawBoard(reversi, dom)
-
-  computerMove(reversi, dom)
-
+def testEOG(board, dom, bw):
   if (board.count(core.EMPTY) == 0 or
-    board.count(core.BLACK) == 0 or
-      board.count(core.WHITE) == 0):
+  board.count(core.BLACK) == 0 or
+    board.count(core.WHITE) == 0):
     if board.count(bw) > board.count(bw * -1):
       dom.alert('You win!')
     elif board.count(bw) < board.count(bw * -1):
       dom.alert('You lose!')
     else:
-      dom.alert('Tie game!')  
+      dom.alert('Tie game!') 
+    return True
+  return False
+
+
+def acPlay(reversi, dom, id):
+  xy = [int(id[1]), int(id[0])]
+
+  bw = reversi.bw
+  token = reversi.token
+
+  if token: # HH mode
+    if bw == core.EMPTY:
+      if not takeBlack(token):
+        dom.set_value("HHStatus", "Waiting opponents move!")
+        reversi.bw = core.WHITE
+        drawBoard(reversi, dom, False)
+        return
+      reversi.bw = core.BLACK
+      bw = core.BLACK
+    board = getBoard(token)
+    if board:
+      if (board.put(xy[0], xy[1], bw)):
+        setTurn(token, bw * -1)
+        atlastk.broadcast_action("Refresh", token)
+    else:
+      dom.set_value("HHStatus", "Game interrupted!")
+  else:
+    board = reversi.board
+
+    if (board.put(xy[0], xy[1], bw)):
+      drawBoard(reversi, dom)
+
+    computerMove(reversi, dom)
+
+    testEOG(board, dom, bw)
 
 
 def acToggleLayout(reversi, dom):
@@ -127,13 +226,12 @@ def acToggleLayout(reversi, dom):
 
 
 def newBetweenHumans(reversi, dom):
-  token = uuid.uuid4()
-  board = core.Board()
-  reversi.init(token=token, board=board)
+  token = str(uuid.uuid4())
   url = atlastk.get_app_url(token)
-  dom.inner("qrcode", f'<a href="{url}" title="{url}" target="_blank"><img style="margin: auto; width:100%;" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data={url}"/></a>')
-  dom.set_value("HHStatus", "Make move or wait for opponent's move.")
+  dom.inner("qrcode", f'<a href="{url}" title="{url}" target="_blank"><img style="margin: auto; width:100%;" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data={urllib.parse.quote(url)}"/></a>')
+  dom.set_value("HHStatus", "Play or wait for the opponent's move.")
   dom.disable_elements(("HideHHStatusSection", "HideHHLinkSection"))
+  reversi.init(token=token, board=init(token))
   drawBoard(reversi, dom)
 
 
@@ -159,12 +257,30 @@ def acNew(reversi, dom):
     newVersusComputer(reversi, dom, core.BLACK if players == "HC" else core.WHITE)
 
 
+def acRefresh(reversi, dom, id):
+  token = reversi.token
+  assert token
+  board = reversi.board
+
+  if token == id:
+    bw = getTurn(token)
+
+    if bw == core.EMPTY:
+      dom.set_value("HHStatus", "Game interrupted!")
+    else:
+      if reversi.bw == core.EMPTY:
+        reversi.bw = core.WHITE
+      drawBoard(reversi, dom, reversi.bw == bw)
+      dom.set_value("HHStatus", "Game over!" if testEOG(board, dom, reversi.bw) else "It's your turn!" if reversi.bw == bw else "Wait for the opponent's move.")
+ 
+
 callbacks = {
   "": acConnect,
   "Play": acPlay,
   "ToggleLayout": acToggleLayout,
   "New": acNew,
-  "SelectMode": lambda reversi, dom, id: dom.set_attribute("level", "style", f"visibility: {'hidden' if dom.get_value(id) == 'HH' else 'visible'};")
+  "SelectMode": lambda reversi, dom, id: dom.set_attribute("level", "style", f"visibility: {'hidden' if dom.get_value(id) == 'HH' else 'visible'};"),
+  "Refresh": acRefresh
 }
 
 atlastk.launch(callbacks, Reversi, open("Head.html").read())
