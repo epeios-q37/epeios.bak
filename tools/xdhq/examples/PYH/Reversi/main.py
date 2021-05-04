@@ -40,6 +40,7 @@ _games = {}
 class Items(enum.Enum):
   BOARD = enum.auto()
   TURN = enum.auto()
+  LOCKED = enum.auto()
 
 
 def create(token):
@@ -50,7 +51,8 @@ def create(token):
     board = core.Board()
     _games[token] = {
       Items.BOARD: board,
-      Items.TURN: core.EMPTY
+      Items.TURN: core.EMPTY,
+      Items.LOCKED: False
     }
     return board
 
@@ -106,7 +108,27 @@ def get_turn(token):
     if token not in _games:
       return core.EMPTY
     else:
-      return _games[token][Items.TURN]  
+      return _games[token][Items.TURN]
+
+
+def lock(token):
+  global _lock, _games
+  assert token
+
+  with _lock:
+    if token not in _games:
+      return False
+
+    assert Items.LOCKED in _games[token]
+
+    if _games[token][Items.LOCKED]:
+      return False
+
+    _games[token][Items.LOCKED] = True
+    return True
+
+
+
     
 
 class Reversi:
@@ -125,7 +147,7 @@ class Reversi:
   def init(self, level=0, bw=core.EMPTY, token=None, board=None):
     self._reset()
     assert bool(token) == bool(board)
-    assert (level == 0 ) == (bw == core.EMPTY)
+    assert (level == 0 ) == bool(board)
     self.level = level
     self.bw = bw
     self.token = token
@@ -158,21 +180,31 @@ def draw_board(reversi, dom, playability = True):
     "white": reversi.board.count(core.WHITE)
   })
 
+
 def set_status(dom, status, color):
   dom.inner("HHStatus",f'<span style="color: {color}">{status}</span>')
+
 
 def ac_connect(reversi, dom, id):
   if reversi.layoutFlag:
     dom.disable_element("EnhancedLayout")
+
   dom.inner("", open("Main.html").read())
+
+  if id and not lock(id):
+    dom.alert("Game has already two players!\nReverting to single player game.")
+    id = ""
+
   if id:
-    reversi.init(token = id, board = get_board(id))
+    bw = core.EMPTY if get_turn(id) == core.EMPTY else core.WHITE
+    reversi.init(token = id, board = get_board(id), bw = bw)
+    set_status(dom, "Play or wait for the opponent's move." if bw == core.EMPTY else "It's your turn!", "green")
     dom.disable_element("HideHHStatusSection")
-    set_status(dom, "Play or wait for the opponent's move." if get_turn(id) == core.EMPTY else "It's your turn!", "green")
   else:
     reversi.init(level=int(dom.get_value("level")), bw=core.BLACK)
 
   draw_board(reversi, dom)
+
 
 def computer_move(reversi, dom):
   bw = reversi.bw
@@ -187,8 +219,8 @@ def computer_move(reversi, dom):
 
 def test_eog(board, dom, bw):
   if ( board.count(core.EMPTY) == 0
-     or board.count(core.BLACK) == 0
-     or board.count(core.WHITE) == 0 ):
+       or board.count(core.BLACK) == 0
+       or board.count(core.WHITE) == 0 ):
     if board.count(bw) > board.count(bw * -1):
       dom.alert('You win!')
     elif board.count(bw) < board.count(bw * -1):
@@ -208,7 +240,7 @@ def ac_play(reversi, dom, id):
   if token: # HH mode
     if bw == core.EMPTY:
       if not take_black(token):
-        set_status(dom, "Waiting opponents move!", "red")
+        set_status(dom, "Wait for the opponent's move.", "red")
         reversi.bw = core.WHITE
         draw_board(reversi, dom, False)
         return
