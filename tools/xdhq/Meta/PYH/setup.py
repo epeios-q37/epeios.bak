@@ -24,7 +24,7 @@ SOFTWARE.
 
 import setuptools
 
-version = "0.12.9"
+version = "0.12.10"
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
@@ -34,11 +34,11 @@ setuptools.setup(
     version=version,
     author="Claude SIMON",
 #    author_email="author@example.com",
-    description="For versatile GUIs written in HTML/CSS and Python (no JavaScript needed) - The lightweight and easy-to-use toolkit to begin with GUI programming. ",
+    description="Probably the easiest and fastest way to write versatile graphical interfaces in Python.",
     keywords="GUI, web, Atlas toolkit",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/epeios-q37/atlas-python",
+    url="https://atlastk.org",
     packages=setuptools.find_packages(),
     classifiers=[
       "Environment :: Web Environment",

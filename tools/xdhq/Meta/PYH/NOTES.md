@@ -17,6 +17,30 @@ En créant, dans le répertoire de l'application, un fichier `__main__.py` conte
 - `python3 -m pipenv shell` : créer un environnement d'exécution python isolé.
 - `python3 -m pipenv clean` : désinstalle tout les *package* de l'environnement d'exécution.
 
+## Publication sur *Replit.com*
+
+Pour garder les stats *Spotlight* de *Replit*, il faut toujours garder le *replit* en cours.
+
+- Forker le *replit* courant ;
+- renommer le *replit* courant en `atlas-python-new` ;
+- renommer le *fork* en `atlas-python` ;
+- mettre à jour les fichiers (on peut utiliser la console, pour faire des `rm …`, par exemple) ;
+- renommer le *fork* en `atlas-python-old` ;
+- renommer en `atlas-python` ;
+- republier sur *Spotlight*.
+
+Il peut parfois être plus intéressant de modifier les fichiers directement.
+
+On peut importer directement un *repository* *GitHub*, mais ce n'est pas la solution actuellement retenue.
+
+- Créer un nouveau projet *Bash* ;
+- déposer le contenu du répertoire `RTW/atlas-python`
+  - avec les fichiers cachés, 
+  - sans le fichier `.directory` ;
+- effacer le fichier `main.sh` ;
+- renommer l'actuel *replit* ;
+- renommer le nouveau en *atlas-python*.
+
 ## Publication sur *PyPI*
 
 **Effacer, si nécessaire, la variable d'environnement `PYTHONPATH` (`unset PYTHONPATH`).**

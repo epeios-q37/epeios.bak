@@ -13,16 +13,14 @@ In the `examples` directory, you will found following examples:
 - `Blank`: very basic example,
 - `Hello`: ["*Hello, World!*"](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program),
 - `Chatroom`: multi-user chatroom,
-- `ReversiTXT`: [*Reversi game*](http://q37.info/s/zz3dzmf7) with `X` and `O` for token,
 - `Notes`: note taking program,
 - `TodoMVC`: [*TodoMVC*](http://todomvc.com/),
 - `Hangman`: [Hangman game](http://q37.info/s/gtdtk4hp),
 - `15-puzzle`: [*15-puzzle* game](https://q37.info/s/jn9zg3bn),
 - `Contacts`: a basic address book, 
-- `ReversiIMG`: [*Reversi game*](http://q37.info/s/zz3dzmf7) with more evolved graphics,
-- `ReversiXSL`: [*Reversi game*](http://q37.info/s/zz3dzmf7) using *XSL*,
 - `Widgets`: some widgets handled with the *Atlas* toolkit,
 - `Chatrooms` : same as above `Chatroom`, but with several rooms,
+- `Reversi`: [*Reversi game*](http://q37.info/s/zz3dzmf7) for one or two players,
 - `MatPlotLib` : the *Atlas* toolkit displaying some graphics made with [*matplotlib*](https://matplotlib.org/); this example needs, of course, the *matplotlib* package to be installed…
 
 Other examples are detailed in the next section.

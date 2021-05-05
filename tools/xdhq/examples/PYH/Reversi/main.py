@@ -23,13 +23,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-import core
 import os, sys, time, uuid, enum, threading, urllib
 
 os.chdir(os.path.dirname(os.path.realpath(__file__)))
-sys.path.append("../../atlastk")
+sys.path.extend(["../../atlastk", "."])
 
 import atlastk
+import core
 
 DELAY = 1 # Delay in seconds before computer move.
 DEFAULT_LAYOUT_FLAG = True # At 'True', displays the text layout.
