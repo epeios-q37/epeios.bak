@@ -157,7 +157,7 @@ sub _ignition {
 
         CORE::say($url);
         CORE::say("^" x length($url));
-        CORE::say("Open above URL in a web browser. Enjoy!\n");
+        CORE::say("Open above URL in a web browser (click, right click or copy/paste). Enjoy!\n");
 
         if ( XDHq::SHRD::isREPLit() ) {
             system("node", "-e",
