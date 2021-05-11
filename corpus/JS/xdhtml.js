@@ -20,6 +20,7 @@
 const onEventAttributeName = "data-xdh-onevent";
 const onEventsAttributeName = "data-xdh-onevents";
 const widgetAttributeName = "data-xdh-widget";
+const radioAttributeName = "data-xdh-radio"
  // Method to retrieve widget content, but also if present, then the widget is already handled.
 const widgetContentRetrievingMethodAttribute = "data-xdh-widget-content-retrieving-method";
 const contentAttributeName = "data-xdh-content";	// Deprecated.
@@ -547,7 +548,10 @@ function getValue(elementOrId)	// Returns the value of element of id 'id'.
 			switch (element.getAttribute("type")) {
 				case "checkbox":
 				case "radio":
-					value =  element.checked;
+					if ( element.hasAttribute("value") )
+						value = element.value;
+					else
+						value =  element.checked;
 					break;
 				default:
 					value =  element.value;
@@ -558,9 +562,7 @@ function getValue(elementOrId)	// Returns the value of element of id 'id'.
 			value =  element.value;
 			break;
 		case "SELECT":
-			if (element.selectedIndex == -1)
-				value =  "";
-			else
+			if (element.selectedIndex != -1)
 				value =  element.options[element.selectedIndex].value;
 			break;
 		case "OPTION":
@@ -571,7 +573,11 @@ function getValue(elementOrId)	// Returns the value of element of id 'id'.
 			value =  element.textContent;
 			break;
 		default:
-			value = element.innerHTML;
+			if ( element.hasAttribute( radioAttributeName ) ) {
+				if ( checked = document.querySelector('input[name="' + element.getAttribute( radioAttributeName) + '"]:checked') )
+					value = checked.value;
+			}	else
+				value = element.innerHTML;
 			break;
 	}
 
