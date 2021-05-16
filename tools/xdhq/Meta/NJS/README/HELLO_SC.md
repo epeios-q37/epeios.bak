@@ -1,6 +1,6 @@
 ```javascript
 const atlastk = require('atlastk');
-
+ 
 const BODY = `
 <fieldset>
  <input id="Input" data-xdh-onevent="Submit" value="World"/>
@@ -11,15 +11,15 @@ const BODY = `
  </fieldset>
 </fieldset>
 `;
-
+ 
 const CALLBACKS = {
  "": (dom, id) => dom.inner("", BODY,
   () => dom.focus("Input")),
  "Submit": (dom, id) => dom.getValue("Input",
-  (name) => dom.setValue("Output", "Hello, " + name + "!",
+  (name) => dom.begin("Output", "<div>Hello, " + name + "!</div>",
    () => dom.setValue("Input", "",
     () => dom.focus("Input")))),
 };
-
+ 
 atlastk.launch(() => new atlastk.DOM(), CALLBACKS);
 ```

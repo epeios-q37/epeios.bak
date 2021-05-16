@@ -21,7 +21,7 @@ class Hello extends Atlas {
       break;
     case "Submit":
       String name = dom.getValue("Input");
-      dom.setValue("Output", "Hello, " + name + "!");
+      dom.begin("Output", "<div>Hello, " + name + "!</div>");
       dom.setValue("Input", "" );
       break;
     }

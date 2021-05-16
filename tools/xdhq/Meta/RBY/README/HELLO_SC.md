@@ -1,6 +1,6 @@
 ```ruby
 require 'Atlas'
-
+ 
 $BODY =
 <<~HEREDOC
 <fieldset>
@@ -12,23 +12,23 @@ $BODY =
  </fieldset>
 </fieldset>
 HEREDOC
-
+ 
 def acConnect(userObject, dom, id)
  dom.inner("", $BODY)
  dom.focus("Input")
 end
-
+ 
 def acSubmit(userObject, dom, id)
  name = dom.getValue("Input")
- dom.setValue("Output", "Hello, " + name + "!")
+ dom.begin("Output", "<div>Hello, " + name + "!</div>")
  dom.setValue("Input", "")
  dom.focus("Input")
 end
-
+ 
 CALLBACKS = {
  "" => method(:acConnect),
  "Submit" => method(:acSubmit)
 }
-
+ 
 Atlas.launch(CALLBACKS)
 ```

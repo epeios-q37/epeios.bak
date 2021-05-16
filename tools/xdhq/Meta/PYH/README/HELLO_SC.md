@@ -1,6 +1,6 @@
 ```python
 import atlastk
-
+ 
 BODY = """
 <fieldset>
  <input id="Input" data-xdh-onevent="Submit" value="World"/>
@@ -11,21 +11,21 @@ BODY = """
  </fieldset>
 </fieldset>
 """
-
+ 
 def ac_connect(dom):
   dom.inner("", BODY)
   dom.focus("Input")
-
+ 
 def ac_submit(dom):
   name = dom.get_value("Input")
-  dom.set_value("Output", f"Hello, {name}!")
+  dom.begin("Output", f"<div>Hello, {name}!</div>")
   dom.set_value("Input", "")
   dom.focus("Input")
-
+ 
 CALLBACKS = {
   "": ac_connect,
   "Submit": ac_submit
 }
-
+ 
 atlastk.launch(CALLBACKS)
 ```

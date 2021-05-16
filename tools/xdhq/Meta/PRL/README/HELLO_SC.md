@@ -1,6 +1,6 @@
 ```perl
 use Atlas;
-
+ 
 my $BODY = '
 <fieldset>
  <input id="Input" data-xdh-onevent="Submit" value="World"/>
@@ -11,27 +11,27 @@ my $BODY = '
  </fieldset>
 </fieldset>
 ';
-
+ 
 sub acConnect {
  my ($hello, $dom) = @_;
-
+ 
  $dom->inner("", $BODY);
  $dom->focus("Input");
 }
-
+ 
 sub acSubmit {
  my ($hello, $dom) = @_;
  my $name = $dom->getValue("Input");
-
- $dom->setValue("Output", "Hello, $name!");
+ 
+ $dom->begin("Output", "<div>Hello, $name!</div>");
  $dom->setValue("Input", "");
  $dom->focus("Input");
 }
-
+ 
 my %CALLBACKS = (
  "" => \&acConnect,
  "Submit" => \&acSubmit
 );
-
+ 
 Atlas::launch(\%CALLBACKS);
 ```
