@@ -140,7 +140,7 @@ echo <<<EOS
       <span style="display: table; margin: 10px auto 5px auto; text-align: center;">
 		<span><a href="https://en.wikipedia.org/wiki/QR_code" target="_blank">QR code</a> to scan with a mobile device,</span>
 		<br />
-		<span style="margin: auto;">or to click for a new instance.</span>
+		<span style="margin: auto;">or to click to open a new session.</span>
       </span>
       <div style="display: flex; justify-content: space-around;">
         <a style="cursor: pointer;" target="_blank" href="$url">

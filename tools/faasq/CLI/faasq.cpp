@@ -118,7 +118,7 @@ namespace {
 
 	namespace {
 		namespace faas_ {
-			using namespace xdhups::faas;
+			using namespace xdhcmn::faas;
 		}
 
 		namespace {
@@ -181,6 +181,8 @@ namespace {
 				csdcmn::Get(Proxy, URL);
 
 				cio::COut << URL << txf::nl << txf::commit;
+
+				tol::Launch(URL);
 			qRR
 			qRT
 			qRE

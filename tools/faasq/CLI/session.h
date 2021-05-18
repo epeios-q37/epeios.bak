@@ -26,7 +26,7 @@
 
 namespace session {
 	namespace faas_ {
-		using namespace xdhups::faas;
+		using namespace xdhcmn::faas;
 	}
 
 	typedef xdhcuc::cSingle cUpstream_;
@@ -128,7 +128,7 @@ namespace session {
 				A_().DismissCallback(Callback_);
 
 			Agent_= &Agent;
-			Callback_ = A_().FetchCallback(Id);
+			Callback_ = A_().FetchCallback();
 
 			Proxy_.Init(ProxyDriver);
 			Session_.Init(C_());
