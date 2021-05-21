@@ -39,7 +39,7 @@
 							</xsl:attribute>
 						</xsl:element>
 					</fieldset>
-					<fieldset title="#lgnBackendToUse#" data-xdh-cast="VisibleBackendCast">
+					<fieldset title="#lgnBackendToUse#" id="Backend">
 						<legend>#lgnBackend#</legend>
 						<div>
 							<span>

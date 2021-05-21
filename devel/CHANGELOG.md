@@ -10,6 +10,10 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2021-05-21:
+
+- SXCLX: reorganization and activation of backend visibility management,
+
 ## 2021-01-28:
 
 - SCLF: introducing setup handling,

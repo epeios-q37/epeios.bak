@@ -1,12 +1,12 @@
 /* DON'T MODIFY : computer-generated file ! */
 /*
-	API from : esketchbkd V20200307 Build Mar 11 2020 14:49:17 - GNU/Linux;Clang 6.0.0;AMD64
+	API from : esketchbkd V20200407 Build May 21 2021 17:54:14 - GNU/Linux;Clang 6.0.0;AMD64
 
-	This file was generated using BARq 20200307 (Build Mar 11 2020 10:02:33 GNU/Linux;Clang 6.0.0;AMD64)
+	This file was generated using BARq 20210521 (Build May 21 2021 17:43:09 GNU/Linux;Clang 6.0.0;AMD64)
 */
 
-#ifndef ESKETCH__INC
-# define ESKETCH__INC
+#ifndef ESKETCH_INC_
+# define ESKETCH_INC_
 
 # define ESKETCH_TARGET "esketch"
 # define ESKETCH_API_VERSION "1"
@@ -51,17 +51,17 @@ namespace esketch {
 			CommandsDetails.Init();
 
 			CommandDetail.Init();
-			CommandDetail.Name = "LoadSetupOfId_1";;
+			CommandDetail.Name = "LoadSetupOfId_1";
 			CommandDetail.Casts.Append( Parameters + 0, 2 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
-			CommandDetail.Name = "LoadSetupContent_1";;
+			CommandDetail.Name = "LoadSetupContent_1";
 			CommandDetail.Casts.Append( Parameters + 2, 2 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
-			CommandDetail.Name = "SKTTest_1";;
+			CommandDetail.Name = "SKTTest_1";
 			CommandDetail.Casts.Append( Parameters + 4, 1 );
 			CommandsDetails.Append( CommandDetail );
 
@@ -138,12 +138,12 @@ namespace esketch {
 			CommandsDetails.Init();
 
 			CommandDetail.Init();
-			CommandDetail.Name = "ToUC_1";;
+			CommandDetail.Name = "ToUC_1";
 			CommandDetail.Casts.Append( Parameters + 0, 3 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
-			CommandDetail.Name = "Test_1";;
+			CommandDetail.Name = "Test_1";
 			CommandDetail.Casts.Append( Parameters + 3, 1 );
 			CommandsDetails.Append( CommandDetail );
 
@@ -225,4 +225,4 @@ namespace esketch {
 
 }
 
-#endif //#ifndef esketch__INC
+#endif //#ifndef esketch_INC_

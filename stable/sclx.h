@@ -273,12 +273,22 @@ namespace sclx {
 
 	typedef xdhcdc::cSingle cDownstream_;
 
+	// To indicate if the backend dedicated part in the login page should or not be visible.
+	qENUM( BackendVisibility )
+	{
+		bvHide,
+		bvShow,
+		bv_amount,
+		bv_Undefined
+	};
+
 	class sProxy
 	{
 	private:
 		xdhdws::sProxy Core_;
 		qRMV( const scli::sInfo, I_, Info_ );
 		eXSLFileHandling XSLFileHandling_;
+		eBackendVisibility BackendVisibility_;
 		void Fill_(
 			str::dStrings &Values,
 			const str::dString &Value )
@@ -460,6 +470,7 @@ namespace sclx {
 		{
 			tol::reset( P, Core_, Info_ );
 			XSLFileHandling_ = xfh_Undefined;
+			BackendVisibility_ = bv_Undefined;
 		}
 		qCDTOR( sProxy );
 		void Init(
@@ -470,11 +481,13 @@ namespace sclx {
 			Core_.Init(Callback, str::Empty);
 			Info_ = &Info;
 			XSLFileHandling_ = XSLFileHandling;
+			BackendVisibility_ = bvShow;	// By default, the backend part of the login page is shown.
 		}
 		const scli::sInfo &Info( void ) const
 		{
 			return I_();
 		}
+		qRWDISCLOSEr( eBackendVisibility, BackendVisibility );
 		void Execute(
 			const str::dString &Script,
 			str::dString &Result )
@@ -755,15 +768,6 @@ namespace sclx {
 		sProxy &Proxy,
 		const char *Language );
 
-	// To indicate if the backend dedicated part in the login page should or not be visible.
-	qENUM( BackendVisibility )
-	{
-		bvHide,
-		bvShow,
-		bv_amount,
-		bv_Undefined
-	};
-
 	template <typename session, typename dump> class rRack
 	{
 	private:
@@ -834,7 +838,6 @@ namespace sclx {
 		qRMV( sclf::rKernel, K_, Kernel_ );
 		page Page_;	// Current page;
 		sReporting Reporting_;
-		eBackendVisibility BackendVisibility_;
 		qRMV( class rCore<rSession>, C_, Core_ );
 	protected:
 		bso::sBool XDHCDCInitialize(
@@ -859,7 +862,6 @@ namespace sclx {
 			str::wString Id, Action;
 			qCBUFFERh BId, BAction;
 		qRB;
-			CPq;
 			tol::Init(Id, Action);
 
 			if ( ( EventDigest != NULL ) && (EventDigest[0] ) ) {
@@ -867,11 +869,7 @@ namespace sclx {
 					qRFwk();
 			}
 
-			CPq;
-
 			Cont = C_().Launch(*this, Id.Convert(BId), Action.Convert(BAction));
-
-			CPq;
 		qRR;
 		qRT;
 		qRE;
@@ -886,7 +884,6 @@ namespace sclx {
 			tol::reset(P, Info_, Kernel_);
 			Page_ = UndefinedPage;
 			Reporting_.reset( P );
-			BackendVisibility_ = bv_Undefined;
 			sProxy::reset();
 			Core_ = NULL;
 		}
@@ -902,7 +899,6 @@ namespace sclx {
 			Kernel_ = &Kernel;
 			Page_ = UndefinedPage;
 			// instances::Init( *this );	// Made on connection.
-			BackendVisibility_ = bvShow;	// By default, the backend part of the login page is shown.
 			Core_ = &Core;
 		}
 		bso::bool__ Connect(
@@ -997,7 +993,6 @@ namespace sclx {
 		{
 			return sProxy::Confirm( XML, XSL, Title, Language() );
 		}
-		qRWDISCLOSEr( eBackendVisibility, BackendVisibility );
 		qRODISCLOSEr( page, Page );
 		template <typename chars> void SetElementLayout(
 			const chars &Id,
@@ -1174,6 +1169,7 @@ namespace sclx {
 	}
 
 	namespace login {
+		static qCDEFS(BackendId, "Backend");
 		static qCDEFS(BackendTypeId, "BackendType" );
 		// Ids of the forms for the parameters of the different backend types.
 		static qCDEFS(PredefinedBackendId, "PredefinedBackend" );

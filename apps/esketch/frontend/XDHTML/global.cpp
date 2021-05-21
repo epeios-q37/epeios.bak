@@ -54,8 +54,8 @@ A( OnNewSession )
 		}
 		break;
 	case xdhcdc::mMultiUser:
-        Session.SetBackendVisibility(sclx::bvHide);
-        ::login::Display( Session );
+		Session.SetBackendVisibility(sclx::bvHide);
+		::login::Display( Session );
 		break;
 	default:
 		qRGnr();

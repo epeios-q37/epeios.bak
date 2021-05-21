@@ -21,13 +21,13 @@
 
 using namespace registry;
 
-rEntry registry::parameter::BackendFilename( "BackendFilename", sclrgstry::Parameters );
-rEntry registry::parameter::HostService( "HostService", sclrgstry::Parameters );
-rEntry registry::parameter::Identifier( "Identifier", sclrgstry::Parameters );
-rEntry registry::parameter::OutputFilename( "OutputFilename", sclrgstry::Parameters );
+rEntry registry::parameter::BackendFilename( "BackendFilename", sclr::Parameters );
+rEntry registry::parameter::HostService( "HostService", sclr::Parameters );
+rEntry registry::parameter::Identifier( "Identifier", sclr::Parameters );
+rEntry registry::parameter::OutputFilename( "OutputFilename", sclr::Parameters );
 
 namespace definitions_ {
-	rEntry Plugins( "Plugins", sclrgstry::Definitions );
+	rEntry Plugins( "Plugins", sclr::Definitions );
 	rEntry Plugin( "Plugin", Plugins );
 }
 

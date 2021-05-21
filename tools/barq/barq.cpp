@@ -23,8 +23,9 @@
 
 #include "registry.h"
 
-#include "scltool.h"
-#include "sclerror.h"
+#include "sclt.h"
+#include "scle.h"
+#include "sclm.h"
 
 #include "err.h"
 #include "cio.h"
@@ -46,7 +47,7 @@ using xml::rWriter;
 
 SCLI_DEF( barq, NAME_LC, NAME_MC );
 
-const scli::sInfo &scltool::SCLTOOLInfo( void )
+const scli::sInfo &sclt::SCLTInfo( void )
 {
 	return barq::Info;
 }
@@ -540,7 +541,7 @@ namespace {
 		const str::dString &Id,
 		str::dString &Filename )
 	{
-		return sclmisc::MGetValue( rgstry::rTEntry( registry::definition::TaggedPluginFilename, Id ), Filename );
+		return sclm::MGetValue( rgstry::rTEntry( registry::definition::TaggedPluginFilename, Id ), Filename );
 	}
 
 	fblovl::eMode GetMode_( const str::dString &Command )
@@ -602,7 +603,7 @@ qRB
 
 		Meaning.SetValue( "IncompatibleBackend" );
 
-		sclerror::SetMeaning( Meaning );
+		scle::SetMeaning( Meaning );
 
 		qRAbort();
 	}
@@ -616,7 +617,7 @@ qRR
 
 		Meaning.SetValue( "UnableToCommunicateWithBackendError" );
 
-		sclerror::SetMeaning( Meaning );
+		scle::SetMeaning( Meaning );
 
 		qRAbort();
 	}
@@ -758,7 +759,7 @@ qRH
 	str::string BackendInformations, BackendCopyright, SoftwareInformations;
 	sdr::row__ MasterRow = qNIL;
 	str::wString Arguments, OutputFilename;
-	sclmisc::rTextWFlowRack TWFlowRack;
+	sclm::rTextWFlowRack TWFlowRack;
 qRB
 	Types.Init();
 
@@ -772,18 +773,18 @@ qRB
 	Arguments.Init();
 
 	if ( Command == EmbeddedCommandLabel ) {
-		sclmisc::MGetValue( registry::parameter::BackendFilename, Arguments );
+		sclm::MGetValue( registry::parameter::BackendFilename, Arguments );
 	} else if ( Command == StraightCommandLabel ) {
-		sclmisc::MGetValue( registry::parameter::HostService, Arguments );
+		sclm::MGetValue( registry::parameter::HostService, Arguments );
 	} else if ( Command == ProxyCommandLabel ) {
-		sclmisc::MGetValue( registry::parameter::HostService, Arguments );
+		sclm::MGetValue( registry::parameter::HostService, Arguments );
 		Arguments.Append( ' ' );
-		sclmisc::MGetValue( registry::parameter::Identifier, Arguments );
+		sclm::MGetValue( registry::parameter::Identifier, Arguments );
 	} else
 		qRGnr();
 
 	OutputFilename.Init();
-	sclmisc::OGetValue( registry::parameter::OutputFilename, OutputFilename );
+	sclm::OGetValue( registry::parameter::OutputFilename, OutputFilename );
 
 	GetBackendData_( Command, Arguments, Types, ProtocolVersion, TargetLabel, APIVersion, BackendInformations, BackendCopyright, SoftwareInformations );
 
@@ -801,9 +802,9 @@ qRT
 qRE
 }
 
-int scltool::SCLTOOLMain(
+int sclt::SCLTMain(
 	const str::dString &Command,
-	const scltool::fOddities &Oddities )
+	const sclt::fOddities &Oddities )
 {
 	int ExitValue = EXIT_FAILURE;
 qRH

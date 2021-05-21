@@ -46,7 +46,7 @@ This header file contains then the API to access to the backend to which 'barq' 
 	  <xsl:text># include "cpe.h"&nl;</xsl:text>
 	  <xsl:text>&nl;</xsl:text>
 	  <xsl:text>namespace </xsl:text>
-		<xsl:value-of select="/API/@TargetUppercased"/>
+		<xsl:value-of select="/API/@target"/>
 		<xsl:text> {&nl;</xsl:text>
 		<xsl:text>&nl;</xsl:text>
 		<xsl:text>&tab;namespace {&nl;</xsl:text>
@@ -466,7 +466,7 @@ This header file contains then the API to access to the backend to which 'barq' 
 		<xsl:text>&tab;&tab;&tab;CommandDetail.Init();&nl;</xsl:text>
 		<xsl:text>&tab;&tab;&tab;CommandDetail.Name = "</xsl:text>
 		<xsl:value-of select="Name"/>
-		<xsl:text>";;&nl;</xsl:text>
+		<xsl:text>";&nl;</xsl:text>
 		<xsl:text>&tab;&tab;&tab;CommandDetail.Casts.Append( Parameters + </xsl:text>
 		<xsl:value-of select="Parameters/@Position"/>
 		<xsl:text>, </xsl:text>

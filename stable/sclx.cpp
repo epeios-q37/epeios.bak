@@ -879,6 +879,18 @@ void sclx::login::HandleBackendTypeSwitching( sProxy & Proxy )
 		qRFwk();
 		break;
 	}
+
+	switch ( Proxy.GetBackendVisibility() ) {
+	case bvHide:
+		Proxy.AddClass(BackendId, "hide");
+		break;
+	case bvShow:
+		Proxy.RemoveClass(BackendId, "hide");
+		break;
+	default:
+		qRFwk();
+		break;
+	}
 }
 
 #undef S

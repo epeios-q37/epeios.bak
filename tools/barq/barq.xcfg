@@ -3,7 +3,7 @@
 	<Configuration target="barq">
 		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
 		<xpp:expand value-of="q37.xpp"/>
-		<xpp:expand href="../../TOL.xcfg"/>
+		<xpp:expand href="../../CLI.xcfg"/>
 		<Parameters>
 			<Language>fr</Language>
 			<StraightPluginPath></StraightPluginPath>
@@ -26,7 +26,7 @@
 			</Plugins>
 		</Definitions>
 		<Locale>
-			<xpp:expand select="TOL_Locale"/>
+			<xpp:expand select="CLI_Locale"/>
 			<Translations text="EmbeddedCommandDescription">
 				<Translation language="fr">Récupère l'API d'un 'backend' de type bibliothèque dynamique.</Translation>
 				<Translation language="en">Get the API from a dynamic library backend.</Translation>
@@ -81,7 +81,7 @@
 			</Translations>
 		</Locale>
 		<Arguments>
-			<xpp:expand select="TOL_Arguments"/>
+			<xpp:expand select="CLI_Arguments"/>
 			<Argument id="EmbeddedCommand" Description="EmbeddedCommandDescription" long="embedded" short="e" Value="Embedded" Usage="%BackendFilenameArgument% [%OutputArgument%]"/>
 			<Argument id="StraightCommand" Description="StraightCommandDescription" long="straight" short="s" Value="Straight" Usage="%StraightArgument% [%OutputArgument%]"/>
 			<Argument id="ProxyCommand" Description="ProxyCommandDescription" long="proxy" short="p" Value="Proxy" Usage="%ProxyArgument% %IdentifierArgument% [%OutputArgument%]"/>
