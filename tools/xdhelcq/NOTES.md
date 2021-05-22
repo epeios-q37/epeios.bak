@@ -18,14 +18,14 @@ Example to launch the *Atlas* frontend for *TodoMVC* : `node_modules/.bin/electr
 
 ### En utilisant le *debugger* *Code::Blocks*
 
-- Dans *Hosr application:* : `/media/csimon/H/hg/epeios/tools/xdhelcq/node_modules/electron/dist/electron` ;
+- Dans *Host application:* : `/media/csimon/H/hg/epeios/tools/xdhelcq/node_modules/electron/dist/electron` ;
 - dans *Program arguments:* : `/home/csimon/epeios/tools/xdhelcq/index.js -m=/home/csimon/bin/libesketchxdh.so /home/csimon/epeios/apps/esketch/frontend/XDHTML/ `.
 
 ## Installation
 
 Install, **in this directory, without the `-g` option**, the *NPM* packages *electron* and _electron-rebuild_ (`npm install electron electron-rebuild`).
 
-## Compilation 
+## Compilation
 
 Launch `DVLGenGYP`. `electron` (and also `electron-rebuild`) will be in `nodes_modules/.bin/`. Although `DVLGenGYP` builds the wrapper, rebuild it with the IDE from *Visual Studio* in order for the binary to be deployed correctly.
 

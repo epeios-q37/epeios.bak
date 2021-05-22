@@ -4,8 +4,6 @@ Un fichier `NOTES.md` conernant les *frontend*s en général se situe dans le r�
 
 Ce fichier concerne les *frontend*s *XDHTML* en général, pas seulement celui de l'application *eSketch*. Ce fichier n'est pas copié lors de la création d'une nouvelle application.
 
-
-
 ## Lancement
 
 * Pour lancer l'application avec *XDHWebQ* :
