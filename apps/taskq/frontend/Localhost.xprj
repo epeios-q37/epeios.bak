@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="iso-8859-15"?>
+<Projects xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<Project target="taskqxdh" id="Local">
+		<Parameters>
+			<Backend Type="Remote">localhost:2000</Backend>
+			<Authentication Mode="Full">
+				<Login>The login</Login>
+				<Password>Password</Password>
+			</Authentication>
+		</Parameters>
+		<Locale>
+		</Locale>
+	</Project>
+</Projects>

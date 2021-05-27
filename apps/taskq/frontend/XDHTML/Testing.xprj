@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Projects>
+    <xpp:define name="Module">
+        <ModuleFilename>/home/csimon/bin/taskqxdh</ModuleFilename>
+    </xpp:define>
+ <Project target="faasq">
+    <Parameters>
+        <xpp:expand select="Module"/>
+    </Parameters>
+ </Project>
+ <Project target="xdhwebq">
+    <Parameters>
+        <xpp:expand select="Module"/>
+    </Parameters>
+ </Project>
+</Projects>

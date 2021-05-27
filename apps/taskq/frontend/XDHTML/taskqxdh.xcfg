@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Configurations xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
+	<xpp:expand value-of="q37.xpp"/>
+	<xpp:expand href="../taskqfrd.xcfg"/>
+	<xpp:expand href="../../../XDH.xcfg"/>
+	<Configuration target="taskqxdh">
+		<xpp:bloc>
+			<!-- Macros and variables -->
+			<xpp:bloc preserve="yes">
+				<xpp:define name="XMLRootDir">
+					<xpp:bloc>
+						<xpp:expand select="XMLRootDirHeader"/>
+						<xpp:bloc>epeios/apps/taskq/frontend/XDHTML/XML/</xpp:bloc>
+					</xpp:bloc>
+				</xpp:define>
+				<xpp:define name="XMLRootDirHeader">
+					<xpp:bloc>
+						<xpp:ifeq select="env" value="windows">
+							<xpp:bloc>H:/hg/</xpp:bloc>
+						</xpp:ifeq>
+						<xpp:ifeq select="env" value="linux">
+							<xpp:bloc>/home/csimon/</xpp:bloc>
+						</xpp:ifeq>
+						<xpp:ifeq select="env" value="mac">
+							<xpp:bloc>/Users/csimon/</xpp:bloc>
+						</xpp:ifeq>
+					</xpp:bloc>
+				</xpp:define>
+			</xpp:bloc>
+		</xpp:bloc>
+		<Parameters>
+			<xpp:expand select="Parameters"/>
+			<xpp:expand select="XDH_Parameters"/>
+			<Language>fr</Language>
+		</Parameters>
+		<Setups>
+			<xpp:expand select="Setups"/>
+			<xpp:expand select="XDH_Setups"/>
+		</Setups>
+		<Definitions>
+			<xpp:expand select="Definitions"/>
+			<xpp:expand select="XDH_Definitions"/>
+			<xpp:bloc preserve="yes">
+				<HeadFile>
+					<xpp:expand select="XMLRootDir"/>
+					<xpp:bloc>Head.xhtml</xpp:bloc>
+				</HeadFile>
+				<XMLFiles Handling="Content"><!-- Default value for "@Handling" is "Content". Other value is "Name"-->
+					<XSLFile target="About">
+							<xpp:expand select="XMLRootDir"/>
+							<xpp:bloc>About.xsl</xpp:bloc>
+					</XSLFile>
+					<XSLFile target="Prolog">
+							<xpp:expand select="XMLRootDir"/>
+							<xpp:bloc>Prolog.xsl</xpp:bloc>
+					</XSLFile>
+					<XSLFile target="Login">
+							<xpp:expand select="XMLRootDir"/>
+							<xpp:bloc>Login.xsl</xpp:bloc>
+					</XSLFile>
+					<XSLFile target="Main">
+							<xpp:expand select="XMLRootDir"/>
+							<xpp:bloc>Main.xsl</xpp:bloc>
+					</XSLFile>
+				</XMLFiles>
+			</xpp:bloc>
+			<xpp:expand select="XDHFull"/>
+		</Definitions>
+		<Locale>
+			<xpp:expand select="Locale"/>
+			<xpp:expand select="XDH_Locale"/>
+			<xpp:bloc>
+				<!-- About -->
+				<Translations text="aBy">
+					<Translation language="fr">par</Translation>
+					<Translation language="en">by</Translation>
+				</Translations>
+				<Translations text="aLauncher">
+					<Translation language="fr">Lanceur</Translation>
+					<Translation language="en">Launcher</Translation>
+				</Translations>
+				<Translations text="aBackend">
+					<Translation language="fr">Moteur de traitement</Translation>
+					<Translation language="en">Backend</Translation>
+				</Translations>
+			</xpp:bloc>
+			<xpp:bloc>
+				<!-- Prolog : in 'XDH.xcfg : XDH_Locale'-->
+			</xpp:bloc>
+			<xpp:bloc>
+				<!-- Login : in 'XDH.xcfg : XDH_Locale'-->
+			</xpp:bloc>
+			<xpp:expand href="XML/Main.xlcl"/>
+		</Locale>
+	</Configuration>
+</Configurations>

@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Locale xmlns:xpp="http://zeusw.org/epeios/xpp" target="taskqxdh">
+	<xpp:expand href="../taskqfrd.xlcl"/>
+	<Translations text="About...">
+		<Translation language="fr">À propos...</Translation>
+		<Translation language="en">About...</Translation>
+	</Translations>
+	<Translations text="ClosingConfirmation">
+		<Translation language="fr">Êtes-vous sûr de vouloir fermer l'application ?</Translation>
+		<Translation language="en">Are you sure you want to close ?</Translation>
+	</Translations>
+	<Translations text="ActionNeedsBackend">
+		<Translation language="fr">Cette action nécessite une connection à un moteur de traitement.</Translation>
+		<Translation language="en">This action needs a connection to a back-end.</Translation>
+	</Translations>
+	<Translations text="ActionNeedsBackendTitle">
+		<Translation language="fr">Attention.</Translation>
+		<Translation language="en">Warning.</Translation>
+	</Translations>
+	<Translations text="ConnectedTestMessage">
+		<Translation language="fr">Vous êtes connecté à un moteur de traitement, mais ce bouton est actif même si vous ne l'étiez pas.</Translation>
+		<Translation language="en">You are connected to a back-end, but this button would work even if you weren't.</Translation>
+	</Translations>
+	<Translations text="UnconnectedTestMessage">
+		<Translation language="fr">Vous n'êtes pas connecté à un moteur de traitement, mais ce bouton fonctionne quand même.</Translation>
+		<Translation language="en">You are not connected to a back-end, but this button will work even so.</Translation>
+	</Translations>
+	<Translations text="TestMessageTitle">
+		<Translation language="fr">Test</Translation>
+		<Translation language="en">Test</Translation>
+	</Translations>
+</Locale>

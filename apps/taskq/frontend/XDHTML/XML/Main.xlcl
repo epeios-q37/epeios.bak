@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xpp:bloc xmlns:xpp="http://q37.info/ns/xpp/">
+	<Translations text="mainConverter">
+		<Translation language="fr">Convertisseur</Translation>
+		<Translation language="en">Convert</Translation>
+	</Translations>
+	<Translations text="mainUCConverter">
+		<Translation language="fr">Convertisseur en majuscule</Translation>
+		<Translation language="en">To upper case converter</Translation>
+	</Translations>
+	<Translations text="mainConvert">
+		<Translation language="fr">Conversion</Translation>
+		<Translation language="en">Convert</Translation>
+	</Translations>
+	<Translations text="mainOK">
+		<Translation language="fr">OK</Translation>
+		<Translation language="en">OK</Translation>
+	</Translations>
+	<Translations text="mainDisplayTestMessage">
+		<Translation language="fr">Afficher message de test.</Translation>
+		<Translation language="en">Display test message.</Translation>
+	</Translations>
+	<Translations text="mainLaunchUnconnectedTest">
+		<Translation language="fr">Lance une action disponible en mode déconnecté.</Translation>
+		<Translation language="en">Launch an action available in unconnected mode.</Translation>
+	</Translations>
+	<Translations text="mainTest">
+		<Translation language="fr">Test</Translation>
+		<Translation language="en">Test</Translation>
+	</Translations>
+	<Translations text="mainUnconnectedTest">
+		<Translation language="fr">Test déconnecté</Translation>
+		<Translation language="en">Unconnected test</Translation>
+	</Translations>
+	<Translations text="mainHideShowTestButton">
+		<Translation language="fr">Cliquez sur ce texte pour afficher le bouton de test (sortir du cadre le cache).</Translation>
+		<Translation language="en">Click on this text to show test button (moving away hides it)</Translation>
+	</Translations>
+	<!--
+	<Translations text="main">
+		<Translation language="fr"></Translation>
+		<Translation language="en"></Translation>
+	</Translations>
+-->
+</xpp:bloc>

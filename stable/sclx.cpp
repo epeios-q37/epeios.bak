@@ -190,7 +190,7 @@ namespace {
 	qRH
 		flx::E_STRING_TOFLOW___ STOFlow;
 		xml::rWriter Writer;
-		qRB
+	qRB
 		STOFlow.Init( XML );
 		Writer.Init( STOFlow, xml::oCompact, xml::e_Default );
 
@@ -208,7 +208,7 @@ namespace {
 	qRH
 		str::string Message;
 		TOL_CBUFFER___ Buffer;
-		qRB
+	qRB
 		Message.Init();
 		scll::GetTranslation( RawMessage.Convert( Buffer ), Language, Message );
 
@@ -257,7 +257,7 @@ void sclx::sProxy::Fill_(
 {
 qRH
 	str::wString MergedValues;
-	qRB
+qRB
 	MergedValues.Init();
 
 	xdhcmn::FlatMerge(SplittedValues, MergedValues, true);
@@ -277,7 +277,7 @@ void sclx::sProxy::Alert_(
 {
 qRH
 	str::string CloseText;
-	qRB
+qRB
 	CloseText.Init();
 	scll::GetTranslation( SCLX_NAME "_CloseText", Language, CloseText );
 
@@ -296,7 +296,7 @@ void sclx::sProxy::Alert_(
 qRH
 	str::string XML, XSL;
 	str::wString Title;
-	qRB
+qRB
 	tol::Init(XML, XSL);
 	SetXMLAndXSL_( RawMessage, MessageLanguage, XML, XSL );
 
@@ -334,7 +334,7 @@ void sclx::sProxy::Alert(
 {
 qRH;
 	str::wString EncodedXSL;
-	qRB;
+qRB;
 	tol::Init( EncodedXSL);
 	EncodeXML_( XSL, EncodedXSL );
 
@@ -370,7 +370,7 @@ bso::bool__ sclx::sProxy::Confirm_(
 	bso::bool__ Confirmation = false;
 qRH
 	str::string CloseText;
-	qRB
+qRB
 	CloseText.Init();
 	scll::GetTranslation( SCLX_NAME "_CloseText", Language, CloseText );
 
@@ -390,7 +390,7 @@ bso::bool__ sclx::sProxy::Confirm_(
 	bso::bool__ Confirmation = false;
 qRH
 	str::string XML, XSL;
-	qRB
+qRB
 	XML.Init();
 	XSL.Init();
 
@@ -425,7 +425,7 @@ void sclx::HandleError(
 qRH
 	str::string Message;
 	err::buffer__ ErrBuffer;
-	qRB
+qRB
 	switch ( ERRType ) {
 	case err::t_Abort:
 		Message.Init();
@@ -454,7 +454,7 @@ namespace {
 		eXSLFileHandling Result = xfh_Undefined;
 	qRH;
 		str::wString Handling;
-		qRB;
+	qRB;
 		Handling.Init();
 
 		if (!sclr::OGetValue(Registry, registry::definition::XMLFilesHandling, Handling))
@@ -482,7 +482,7 @@ namespace {
 	{
 	qRH;
 		str::wString RawXSL;
-		qRB;
+	qRB;
 		if ( Handling == xfhRegistry )
 			Handling = GetXMLFileHandlingFromRegistry_( Registry );
 
@@ -521,7 +521,7 @@ void sclx::sProxy::HandleLayout_(
 {
 qRH;
 	str::wString XSL;
-	qRB;
+qRB;
 	XSL.Init();
 
 	HandleXSL_(XSLFilename, Target, XSLFileHandling_, Registry, Marker, XSL);
@@ -538,7 +538,7 @@ void sclx::sProxy::GetContents(
 {
 qRH;
 	str::wString MergedContents;
-	qRB;
+qRB;
 	MergedContents.Init();
 
 	Process_("GetContents_1", &MergedContents, Ids);
@@ -555,7 +555,7 @@ const str::dString &sclx::sProxy::GetContent(
 {
 qRH;
 	str::wStrings Contents;
-	qRB;
+qRB;
 	Contents.Init();
 
 	GetContents(str::wStrings(Id), Contents);
@@ -568,14 +568,6 @@ qRR;
 qRT;
 qRE;
 	return Content;
-}
-
-void sclx::sProxy::SetTimeout(
-	const str::dString &Delay,
-	const str::dString &Action )
-{
-	qRLmt();
-//	Core_.SetTimeout( Delay, Action );
 }
 
 void sclx::sProxy::EnableElements( const str::dStrings &Ids )
@@ -656,7 +648,7 @@ qRH
 	str::wString FileName;
 	xdhcmn::digest Args;
 	xdhcmn::retriever__ Retriever;
-	qRB
+qRB
 	tol::Init(Args, Buffer);
 	xdhcmn::Split( Proxy.GetContent( Id, Buffer ), Args );
 
@@ -806,7 +798,7 @@ namespace {
 		eBackendType_ Type = bt_Undefined;
 	qRH;
 		str::wString Pattern;
-		qRB;
+	qRB;
 		Pattern.Init();
 
 		Type = GetType_( GetType_( Proxy, Pattern ) );
@@ -840,7 +832,7 @@ namespace {
 	{
 	qRH;
 		str::wStrings Ids, Classes;
-		qRB;
+	qRB;
 		tol::Init( Ids, Classes );
 
 		SetIds_( Ids );
@@ -918,7 +910,7 @@ namespace straight_ {
 	{
 	qRH
 		str::wString Port;
-		qRB
+	qRB
 		Port.Init();
 		sclm::OGetValue( DefaultPort_, Port );
 
@@ -938,7 +930,7 @@ namespace proxy_ {
 	{
 	qRH
 		str::wString Port;
-		qRB
+	qRB
 		Port.Init();
 		sclm::OGetValue( DefaultPort_, Port );
 
@@ -957,7 +949,7 @@ qRH;
 	eBackendType_ Type = bt_Undefined;
 	str::wString Buffer;
 	str::string Parameters;
-	qRB;
+qRB;
 	tol::Init(Parameters, Buffer);
 
 	switch ( Type = GetType_( Proxy ) ) {
@@ -997,7 +989,7 @@ qRH
 	str::string FileName;
 	xdhcmn::digest Args;
 	xdhcmn::retriever__ Retriever;
-	qRB
+qRB
 	tol::Init(Args, Buffer);
 	xdhcmn::Split( str::string( Proxy.GetContent( Id, Buffer ) ), Args );
 

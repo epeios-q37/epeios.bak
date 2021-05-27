@@ -14,8 +14,8 @@
 	<xpp:set name="q37.project" env-var="Q37_PROJECT"/>
 	<xpp:expand value-of="q37.project"/>
 	<About>
-		<Program>esketchxdh</Program>
-		<Software>eSketch</Software>
+		<Program>taskqxdh</Program>
+		<Software>TaskQ</Software>
 		<UUID>c8c33276-5e09-4f11-bd1b-3283b0ef0697</UUID>
 	</About>
 	<Modules xpp:marker="$">
@@ -43,9 +43,9 @@
 			<Module>frdfrntnd</Module>
 			<Module>frdrgstry</Module>
 		</Modules>
-		<Modules Group="SKT" Path="../../">
-			<Module>sktfbc</Module>
-			<Module>sktinf</Module>
+		<Modules Group="TSK" Path="../../">
+			<Module>tskfbc</Module>
+			<Module>tskinf</Module>
 		</Modules>
 		<Modules Group="Pages">
 			<Module>login</Module>
@@ -76,8 +76,8 @@
 					<File>Prolog.xsl</File>
 			</Files>
 		</Files>
-		<File>../esketchfrd.xcfg</File>
-		<File>../esketchfrd.xlcl</File>
+		<File>../taskqfrd.xcfg</File>
+		<File>../taskqfrd.xlcl</File>
 	</Files>
 	<Misc>
 	    <CB>
@@ -90,12 +90,12 @@
 	        </Arguments>
 	    </CB>
 	</Misc>
-    <RTW Description="eSketch" Keywords="keyword1,keyword2">
-		<Dir>esketchxdh</Dir>
+    <RTW Description="TaskQ" Keywords="keyword1,keyword2">
+		<Dir>taskqxdh</Dir>
 	</RTW>
 	<Packing>
 		<WikiFiles>
-			<File Dir="computing/epeios/apps/esketch/" Desc="general description of esketchxdh" Oddity="IsHome">esketchxdh</File>
+			<File Dir="computing/epeios/apps/taskq/" Desc="general description of taskqxdh" Oddity="IsHome">taskqxdh</File>
 			<File Dir="computing/epeios/" Desc="the XDHTML technology" Oddity="IsHome">XDHTML</File>
 		</WikiFiles>
 	</Packing>

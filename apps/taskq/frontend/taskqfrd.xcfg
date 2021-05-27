@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
+	<xpp:expand value-of="q37.xpp"/>
+	<xpp:define name="Parameters">
+		<xpp:bloc>
+			<Preset Type="Setup" Handling="Run">NoBackend</Preset>
+			<Project Type="Predefined"/>
+			<xpp:ifeq select="prod" value="yes">
+				<Backend Type="Predefined">LocalHost</Backend>
+			</xpp:ifeq>
+			<xpp:ifeq select="prod" value="no">
+				<xpp:bloc>
+					<xpp:ifeq select="packing" value="yes">
+						<Backend Type="Predefined">Embedded</Backend>
+					</xpp:ifeq>
+					<xpp:ifeq select="packing" value="no">
+						<!--Backend Type="Predefined">LocalHost</Backend-->
+						<Backend Type="Predefined">Embedded</Backend>
+						<!--Backend Type="None"/-->
+					</xpp:ifeq>
+				</xpp:bloc>
+			</xpp:ifeq>
+			<xpp:ifeq select="packing" value="no">
+				<Login Mode="Full">
+					<UserID>TheUser</UserID>
+					<Password>ThePassword</Password>
+				</Login>
+			</xpp:ifeq>
+			<xpp:ifeq select="packing" value="yes">
+				<Login Mode="Full">
+					<UserID/>
+					<Password/>
+				</Login>
+			</xpp:ifeq>
+		</xpp:bloc>
+	</xpp:define>
+	<xpp:define name="Setups">
+		<xpp:bloc>
+			<Setup Handling="Run" id="NoBackend" Alias="WithoutBackend">
+				<Backend Type="None"/>
+			</Setup>
+			<Setup id="Localhost" Alias="Localhost">
+				<Backend Type="Predefined">LocalHost</Backend>
+			</Setup>
+			<Setup id="Embedded" Alias="Embedded">
+				<Backend Type="Predefined">Embedded</Backend>
+			</Setup>
+		</xpp:bloc>
+	</xpp:define>
+	<xpp:define name="Definitions">
+		<xpp:bloc>
+			<xpp:define name="BinRootDir">
+				<xpp:bloc>
+					<xpp:ifeq select="env" value="windows">
+						<xpp:bloc>h:/bin/</xpp:bloc>
+					</xpp:ifeq>
+					<xpp:ifeq select="env" value="linux">
+						<xpp:bloc>/home/csimon/bin/</xpp:bloc>
+					</xpp:ifeq>
+					<xpp:ifeq select="env" value="mac">
+						<xpp:bloc>/Users/csimon/bin/</xpp:bloc>
+					</xpp:ifeq>
+				</xpp:bloc>
+			</xpp:define>
+			<Projects Default="No">
+				<xpp:define name="ProjectsRootDir">
+					<xpp:bloc>
+						<xpp:expand select="BinRootDir"/>
+						<xpp:bloc>tsk/Frontend/</xpp:bloc>
+					</xpp:bloc>
+				</xpp:define>
+				<Project id="No" Alias="NoBackendProject" Type="Embedded">
+					<xpp:expand select="ProjectsRootDir"/>
+					<xpp:bloc>None.xprj</xpp:bloc>
+				</Project>
+				<Project id="LocalHost" Alias="LocalhostBackendProject">
+					<xpp:expand select="ProjectsRootDir"/>
+					<xpp:bloc>Localhost.xprj</xpp:bloc>
+				</Project>
+				<Project id="Embedded" Alias="EmbeddedBackendProject">
+					<xpp:expand select="ProjectsRootDir"/>
+					<xpp:bloc>Embedded.xprj</xpp:bloc>
+				</Project>
+			</Projects>
+			<Backends Default="Localhost">
+				<xpp:ifeq select="packing" value="yes">
+					<xpp:bloc>
+						<xpp:set name="PluginPath" value="./plugins/"/>
+						<xpp:set name="BackendPath" value="../processing/backend/"/>
+					</xpp:bloc>
+				</xpp:ifeq>
+				<xpp:ifeq select="packing" value="no">
+					<xpp:bloc marker="$">
+						<xpp:set name="PluginPath" value="$BinPath$plugins/"/>
+						<xpp:set name="BackendPath" value="/home/csimon/bin/"/>
+					</xpp:bloc>
+				</xpp:ifeq>
+				<xpp:bloc marker="$">
+					<Backend id="Embedded" Alias="EmbeddedPredefinedBackend" Plugin="Embedded">
+						<xpp:expand value-of="BackendPath"/>
+						<xpp:bloc>taskqbkd</xpp:bloc>
+					</Backend>
+					<Backend id="LocalHost" Alias="LocalPredefinedBackend" Plugin="Straight">localhost:53700</Backend>
+				</xpp:bloc>
+			</Backends>
+		</xpp:bloc>
+	</xpp:define>
+	<xpp:define name="Locale">
+		<xpp:bloc>
+			<Translations text="NoBackendProject">
+				<Translation language="fr">sans moteur de traitement</Translation>
+				<Translation language="en">without backend</Translation>
+			</Translations>
+			<Translations text="LocalhostBackendProject">
+				<Translation language="fr">avec moteur de traitement local</Translation>
+				<Translation language="en">with local backend</Translation>
+			</Translations>
+			<Translations text="EmbeddedBackendProject">
+				<Translation language="fr">avec moteur de traitement enclavé</Translation>
+				<Translation language="en">with embedded backend</Translation>
+			</Translations>
+			<Translations text="LocalPredefinedBackend">
+				<Translation language="fr">Moteur de traitement local</Translation>
+				<Translation language="en">Local backend</Translation>
+			</Translations>
+			<Translations text="EmbeddedPredefinedBackend">
+				<Translation language="fr">Moteur de traitement enclavé</Translation>
+				<Translation language="en">Embedded backend</Translation>
+			</Translations>
+			<Translations text="WithoutBackend">
+				<Translation language="fr">Sans moteur de traitement</Translation>
+				<Translation language="en">Without backend</Translation>
+			</Translations>
+			<Translations text="Localhost">
+				<Translation language="fr">Moteur de traitement local</Translation>
+				<Translation language="en">Local backend</Translation>
+			</Translations>
+			<Translations text="Embedded">
+				<Translation language="fr">Moteur de traitement enclavé</Translation>
+				<Translation language="en">Embedded backend</Translation>
+			</Translations>
+			<!--
+			<Translations text="">
+				<Translation language="fr"></Translation>
+				<Translation language="en"></Translation>
+			</Translations>
+			-->
+		</xpp:bloc>
+	</xpp:define>
+	<Profiles>
+		<Profile name="Default">
+		</Profile>
+		<User>Default</User>
+	</Profiles>
+</xpp:bloc>

@@ -1,0 +1,32 @@
+<xpp:bloc>
+	<title>eTest</title>
+  <style type="text/css">
+    .hide {
+      display: none;
+    }
+
+    .fieldset-vanish {
+      border-style: none;
+    }
+  </style>
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css" />
+  <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/showdown/dist/showdown.min.js"></script> 
+  <script>
+    function edit(id) {
+      var essai = new SimpleMDE({element: document.getElementById(id)});
+    }
+
+    function get() {
+      return essai.value()
+    }
+
+    function display(markdown, id) {
+      var converter = new showdown.Converter({"openLinksInNewWindow": true, "tables": true });
+      document.getElementById(id).innerHTML = converter.makeHtml(markdown);
+    }
+  </script>
+</xpp:bloc>

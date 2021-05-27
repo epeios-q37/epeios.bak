@@ -600,9 +600,10 @@ namespace sclx {
 		{
 			return GetContent(str::wString(Id), Content);
 		}
-		void SetTimeout(
-			const str::dString &Delay,
-			const str::dString &Action );
+		template <typename c> void Focus( const c &Id )
+		{
+				Process_("Focus_1", NULL, Id);
+		}
 		const char *Parent(
 			const str::dString &Id,
 			qCBUFFERh &Value )
