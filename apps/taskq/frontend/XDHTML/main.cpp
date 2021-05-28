@@ -43,7 +43,7 @@ void main::Display( core::rSession &Session )
 	SetLayout( Session );
 
 	Session.SetContent("Input", str::wString("***coucou***"));
-	Session.Execute("edit('Input');");
+	Session.Execute("var essai = edit('Input')");
 	Session.Focus("Input");
 
 	Session.SwitchTo( base::pMain );
@@ -59,7 +59,7 @@ namespace {
 	qRB;
 		Content.Init();
 //		Session.GetContent( "Input", Content );
-		Session.Execute( "get()", Content );
+		Session.Execute( "essai.value()", Content );
 
 		cio::COut << Content << txf::nl << txf::commit;
 

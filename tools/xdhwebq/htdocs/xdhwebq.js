@@ -22,6 +22,11 @@ var cgi = "";
 var session = "";
 var target = "";
 
+// By using 'geval' instead of directly 'eval',
+// variable defined in the 'geval' executed script
+// are of global scope, instead of local scope…
+var geval = eval
+
 const exit = {
 	values : {
 	NONE: 0,		// The software is currently running.
@@ -110,9 +115,8 @@ function connect(token, id) {
 				exitValue = exit.values.BACKEND;
 				socket.close();	// Launches 'onclose' event.
 			} else {
-				log("Executed:", event.data);
-				let result = eval(event.data);
-				//			console.log(event.data);
+				log("Executed:" + event.data);
+				let result = geval(event.data);
 
 				if ((typeof result !== "undefined") && (typeof result !== "object"))	// 'typeof result !== "object"' == 'result != null' !!!!
 					socket.send(result);
