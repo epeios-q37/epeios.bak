@@ -41,7 +41,7 @@ namespace {
 
 void login::SetLayout( core::rSession &Session )
 {
-	Session.SetDocumentLayout( XSLAffix_, layout_::Get );
+	Session.Inner( "", XSLAffix_, layout_::Get );
 }
 
 void login::Display( core::rSession &Session )

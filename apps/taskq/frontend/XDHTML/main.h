@@ -24,15 +24,18 @@
 
 namespace main {
 	BASE_AD(Submit);
+	BASE_AD(Toggle);
 
 	inline void Register( void  )
 	{
 		BASE_AR(Submit);
+		BASE_AR(Toggle);
 	};
 
 	void SetLayout( core::rSession &Session );
 
 	void Display( core::rSession &Session );
+
 }
 
 #endif

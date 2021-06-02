@@ -35,7 +35,7 @@ namespace{
 
 void main::SetLayout( core::rSession &Session )
 {
-	Session.SetDocumentLayout( XSLAffix_, layout_::Get );
+	Session.Inner( "", XSLAffix_, layout_::Get );
 }
 
 const char *Test = R"((function() {

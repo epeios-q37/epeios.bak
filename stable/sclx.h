@@ -131,7 +131,7 @@ namespace sclx {
 	template <typename session> class action_handler_
 	{
 	private:
-		cAction<session> *_Get( const str::string_ &Action ) const
+		cAction<session> *Get_( const str::string_ &Action ) const
 		{
 			crow__ Row = stsfsm::GetId( Action, Automat );
 
@@ -185,7 +185,7 @@ namespace sclx {
 			const char *Action,
 			xdhcdc::eMode Mode )
 		{
-			cAction<session> *Callback = _Get( str::string( Action ) );
+			cAction<session> *Callback = Get_( str::string( Action ) );
 
 			if ( Callback == NULL )
 				qRFwk();	// An event has no associated action. Check the'.xsl' file.
@@ -333,6 +333,22 @@ namespace sclx {
 		qRE
 		qRT
 		}
+		template <class ...Args> const char *Process_(
+			const char *ScriptName,
+			qCBUFFERh &Buffer,
+			const Args &...args )
+		{
+		qRH
+			str::wString Return;
+		qRB
+			Return.Init();
+			Process_(ScriptName, &Return, args...);
+			Return.Convert(Buffer);
+		qRR
+		qRE
+		qRT
+			return Buffer;
+		}
 		void Alert_(
 			const str::dString &XML,
 			const str::dString &XSL,
@@ -405,37 +421,8 @@ namespace sclx {
 			Process_("HandleClasses_1", NULL, Variant, Ids, Classes);
 		}
 	protected:
-		template <typename chars> void PrependLayout_(
-			const chars &Id,
-			const rgstry::rEntry &XSLFilename,
-			const char *Target,
-			const sclr::registry_ &Registry,
-			const str::dString &XML,
-			bso::char__ Marker)
-		{
-			return HandleLayout_("Prepend", Id, XSLFilename, Target, Registry, XML, Marker);
-		}
-		template <typename chars> void SetLayout_(
-			const chars &Id,
-			const rgstry::rEntry &XSLFilename,
-			const char *Target,
-			const sclr::registry_ &Registry,
-			const str::dString &XML,
-			bso::char__ Marker)
-		{
-			return HandleLayout_("Set", Id, XSLFilename, Target, Registry, XML, Marker);
-		}
-		template <typename chars> void AppendLayout_(
-			const chars &Id,
-			const rgstry::rEntry &XSLFilename,
-			const char *Target,
-			const sclr::registry_ &Registry,
-			const str::dString &XML,
-			bso::char__ Marker)
-		{
-			return HandleLayout_("Append", Id, XSLFilename, Target, Registry, XML, Marker);
-		}
-		template <typename session, typename rack, typename chars> void PrependLayout_(
+		template <typename session, typename rack, typename chars> void _HandleLayout_(
+			const char *Variant,
 			const chars &Id,
 			const char *Target,
 			const sclr::registry_ &Registry,
@@ -443,27 +430,7 @@ namespace sclx {
 			session &Session,
 			bso::char__ Marker = DefaultMarker )
 		{
-			return HandleLayout_<session,rack,chars>("Prepend", Id, Target, Registry, Get, Session, Marker);
-		}
-		template <typename session, typename rack, typename chars> void SetLayout_(
-			const chars &Id,
-			const char *Target,
-			const sclr::registry_ &Registry,
-			void( *Get )(session &Session, xml::rWriter &Writer),
-			session &Session,
-			bso::char__ Marker = DefaultMarker )
-		{
-			return HandleLayout_<session,rack,chars>("Set", Id, Target, Registry, Get, Session, Marker);
-		}
-		template <typename session, typename rack, typename chars> void AppendLayout_(
-			const chars &Id,
-			const char *Target,
-			const sclr::registry_ &Registry,
-			void( *Get )(session &Session, xml::rWriter &Writer),
-			session &Session,
-			bso::char__ Marker = DefaultMarker )
-		{
-			return HandleLayout_<session,rack,chars>("Append", Id, Target, Registry, Get, Session, Marker);
+			return HandleLayout_<session,rack,chars>(Variant, Id, Target, Registry, Get, Session, Marker);
 		}
 	public:
 		void reset( bso::sBool P = true )
@@ -600,15 +567,16 @@ namespace sclx {
 		{
 			return GetContent(str::wString(Id), Content);
 		}
-		template <typename c> void Focus( const c &Id )
+		template <typename chars> void Focus( const chars &Id )
 		{
 				Process_("Focus_1", NULL, Id);
 		}
-		const char *Parent(
-			const str::dString &Id,
+		template <typename chars> const char *Parent(
+			const chars &Id,
 			qCBUFFERh &Value )
 		{
-			qRLmt();
+			Process_("Parent_1", Value, Id);
+
 			return Value;
 		}
 		const char *FirstChild(
@@ -618,12 +586,13 @@ namespace sclx {
 			qRLmt();
 			return Value;
 		}
-		const char *LastChild(
-			const str::dString &Id,
+		template <typename chars> const char *LastChild(
+			const chars &Id,
 			qCBUFFERh &Value )
 		{
-			qRLmt();
-			return Value();
+			Process_("LastChild_1", Value, Id);
+
+			return Value;
 		}
 		const char *PreviousSibling(
 			const str::dString &Id,
@@ -717,10 +686,6 @@ namespace sclx {
 		void DisableElement( const char *Id )
 		{
 			DisableElement( str::wString( Id ) );
-		}
-		void DressWidgets( const str::dString &Id )
-		{
-			qRLmt();
 		}
 		const char *Dummy(
 			const str::dString &Id,
@@ -995,34 +960,35 @@ namespace sclx {
 			return sProxy::Confirm( XML, XSL, Title, Language() );
 		}
 		qRODISCLOSEr( page, Page );
-		template <typename chars> void SetElementLayout(
+		template <typename chars> void Inner(
 			const chars &Id,
 			const char *Target,
 			void( *Get )( rSession &Session, xml::rWriter &Writer ),
 			const sclr::dRegistry &Registry )
 		{
-			sProxy::SetLayout_<rSession, rRack<rSession,dump>,chars>( Id, Target, Registry, Get, *this );
+			sProxy::_HandleLayout_<rSession, rRack<rSession,dump>,chars>( "inner", Id, Target, Registry, Get, *this );
 		}
-		template <typename chars> void SetElementLayout(
+		template <typename chars> void Inner(
 			const chars &Id,
 			const char *Target,
 			void( *Get )( rSession &Session, xml::rWriter &Writer ) )
 		{
-			SetElementLayout( Id, Target, Get, frontend::Registry() );
+			Inner( Id, Target, Get, frontend::Registry() );
 		}
-		inline void SetDocumentLayout(
+		template <typename chars> void Last(
+			const chars &Id,
 			const char *Target,
 			void( *Get )( rSession &Session, xml::rWriter &Writer ),
 			const sclr::dRegistry &Registry )
 		{
-//			sProxy::HeadUp_( frontend::Registry(), DefaultMarker );
-			SetElementLayout( "", Target, Get, Registry );
+			sProxy::_HandleLayout_<rSession, rRack<rSession,dump>,chars>( "beforeend", Id, Target, Registry, Get, *this );
 		}
-		void SetDocumentLayout(
+		template <typename chars> void Last(
+			const chars &Id,
 			const char *Target,
 			void( *Get )( rSession &Session, xml::rWriter &Writer ) )
 		{
-			SetDocumentLayout( Target, Get, frontend::Registry() );
+			Last( Id, Target, Get, frontend::Registry() );
 		}
 		void SetContents(
 			const str::dStrings &Ids,

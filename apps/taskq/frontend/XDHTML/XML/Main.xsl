@@ -10,5 +10,7 @@
 		<fieldset>
 			<output id="Output">Test</output>
 		</fieldset>
+		<hr/>
+		<div id="Tree"/>
 	</xsl:template>
 </xsl:stylesheet>

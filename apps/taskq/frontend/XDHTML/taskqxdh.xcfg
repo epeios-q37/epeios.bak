@@ -63,6 +63,10 @@
 							<xpp:expand select="XMLRootDir"/>
 							<xpp:bloc>Main.xsl</xpp:bloc>
 					</XSLFile>
+						<XSLFile target="Tree">
+							<xpp:expand select="XMLRootDir"/>
+							<xpp:bloc>Tree.xsl</xpp:bloc>
+					</XSLFile>
 				</XMLFiles>
 			</xpp:bloc>
 			<xpp:expand select="XDHFull"/>

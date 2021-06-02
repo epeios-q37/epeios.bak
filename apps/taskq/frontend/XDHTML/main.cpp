@@ -26,6 +26,16 @@ namespace{
 	qCDEF( char *, XSLAffix_, "Main" );
 
 	namespace layout_ {
+		void BuilTree_(
+			core::rSession &Session,
+			xml::rWriter &Writer )
+			{
+				Writer.PushTag("Children");
+				Writer.PutValue("Child1", "Child");
+				Writer.PutValue("Child2", "Child");
+				Writer.PutValue("Child3", "Child");
+				Writer.PopTag();
+			}
 		void Get(
 			core::rSession &Session,
 			xml::rWriter &Writer )
@@ -35,7 +45,16 @@ namespace{
 
 void main::SetLayout( core::rSession &Session )
 {
-	Session.SetDocumentLayout( XSLAffix_, layout_::Get );
+	Session.Inner( "", XSLAffix_, layout_::Get );
+}
+
+namespace {
+	void BuildTree_(
+		const char *Id,
+		core::rSession &Session)
+	{
+		Session.Inner(Id, "Tree", layout_::BuilTree_);
+	}
 }
 
 void main::Display( core::rSession &Session )
@@ -45,6 +64,8 @@ void main::Display( core::rSession &Session )
 	Session.SetContent("Input", str::wString("***coucou***"));
 	Session.Execute("var essai = edit('Input')");
 	Session.Focus("Input");
+
+	BuildTree_("Tree", Session);
 
 	Session.SwitchTo( base::pMain );
 }
@@ -78,5 +99,11 @@ namespace {
 A( Submit )
 {
 	Submit_(Session);
+}
+
+A( Toggle )
+{
+	qCBUFFERh Buffer;
+	BuildTree_(Session.LastChild(Session.Parent(Id, Buffer), Buffer), Session);
 }
 
