@@ -61,7 +61,7 @@ void main::Display( core::rSession &Session )
 {
 	SetLayout( Session );
 
-	Session.SetContent("Input", str::wString("***coucou***"));
+	Session.SetValue("Input", str::wString("***coucou***"));
 	Session.Execute("var essai = edit('Input')");
 	Session.Focus("Input");
 
@@ -103,7 +103,16 @@ A( Submit )
 
 A( Toggle )
 {
-	qCBUFFERh Buffer;
-	BuildTree_(Session.LastChild(Session.Parent(Id, Buffer), Buffer), Session);
-}
+qRH;
+		qCBUFFERh Buffer;
+qRB;
+	const char *TargetId = Session.LastChild(Session.Parent(Id, Buffer), Buffer);
 
+	if ( Session.GetBValue(Id) )
+		BuildTree_(TargetId, Session);
+	else
+		Session.SetValue(TargetId, "");
+qRR;
+qRT;
+qRE;
+}

@@ -532,42 +532,21 @@ qRT;
 qRE;
 }
 
-void sclx::sProxy::GetContents(
+void sclx::sProxy::GetValues(
 	const str::dStrings &Ids,
-	str::dStrings &Contents)
+	str::dStrings &Values)
 {
 qRH;
-	str::wString MergedContents;
+	str::wString MergedValues;
 qRB;
-	MergedContents.Init();
+	MergedValues.Init();
 
-	Process_("GetContents_1", &MergedContents, Ids);
+	Process_("GetValues_1", &MergedValues, Ids);
 
-	xdhcmn::FlatSplit(MergedContents, Contents);
+	xdhcmn::FlatSplit(MergedValues, Values);
 qRR;
 qRT;
 qRE;
-}
-
-const str::dString &sclx::sProxy::GetContent(
-	const str::dString &Id,
-	str::dString &Content)
-{
-qRH;
-	str::wStrings Contents;
-qRB;
-	Contents.Init();
-
-	GetContents(str::wStrings(Id), Contents);
-
-	if ( Contents.Amount() != 1 )
-		qRFwk();
-
-	Content = Contents(Contents.First());
-qRR;
-qRT;
-qRE;
-	return Content;
 }
 
 void sclx::sProxy::EnableElements( const str::dStrings &Ids )
@@ -608,7 +587,7 @@ qRH
 	str::string RawType;
 qRB
 	RawType.Init();
-	Type = sclf::GetPresetType(Proxy.GetContent(prolog::PresetId, RawType));
+	Type = sclf::GetPresetType(Proxy.GetValue(prolog::PresetId, RawType));
 qRR
 qRT
 qRE
@@ -650,7 +629,7 @@ qRH
 	xdhcmn::retriever__ Retriever;
 qRB
 	tol::Init(Args, Buffer);
-	xdhcmn::Split( Proxy.GetContent( Id, Buffer ), Args );
+	xdhcmn::Split( Proxy.GetValue( Id, Buffer ), Args );
 
 	Retriever.Init( Args );
 
@@ -660,7 +639,7 @@ qRB
 		Retriever.GetString( FileName );
 
 	if ( FileName.Amount() != 0 )
-		Proxy.SetContent( ProjectId, FileName );
+		Proxy.SetValue( ProjectId, FileName );
 qRR
 qRT
 qRE
@@ -680,10 +659,10 @@ qRB
 	case sclf::ptNone:
 		break;
 	case sclf::ptSetup:
-		Feature.Append( Proxy.GetContent( SetupId, Buffer ) );
+		Feature.Append( Proxy.GetValue( SetupId, Buffer ) );
 		break;
 	case sclf::ptProject:
-		Feature.Append( Proxy.GetContent( ProjectId, Buffer ) );
+		Feature.Append( Proxy.GetValue( ProjectId, Buffer ) );
 		break;
 	default:
 		qRFwk();
@@ -740,7 +719,7 @@ namespace {
 		sProxy &Proxy,
 		str::dString &Type )
 	{
-		return Proxy.GetContent( login::BackendTypeId, Type );
+		return Proxy.GetValue( login::BackendTypeId, Type );
 	}
 
 	qENUM( BackendType_ )
@@ -956,17 +935,17 @@ qRB;
 	case btNone:
 		break;
 	case btPredefined:
-		Parameters.Append( Proxy.GetContent( PredefinedBackendId, Buffer ) );
+		Parameters.Append( Proxy.GetValue( PredefinedBackendId, Buffer ) );
 		break;
 	case btEmbedded:
-		Parameters.Append( Proxy.GetContent( EmbeddedBackendId, Buffer ) );
+		Parameters.Append( Proxy.GetValue( EmbeddedBackendId, Buffer ) );
 		break;
 	case btStraight:
-		Parameters.Append( Proxy.GetContent( RemoteBackendId, Buffer ) );
+		Parameters.Append( Proxy.GetValue( RemoteBackendId, Buffer ) );
 		straight_::Normalize( Parameters );
 		break;
 	case btProxy:
-		Parameters.Append( Proxy.GetContent( ProxyfiedBackendId, Buffer ) );
+		Parameters.Append( Proxy.GetValue( ProxyfiedBackendId, Buffer ) );
 		proxy_::Normalize( Parameters );
 		break;
 	default:
@@ -991,7 +970,7 @@ qRH
 	xdhcmn::retriever__ Retriever;
 qRB
 	tol::Init(Args, Buffer);
-	xdhcmn::Split( str::string( Proxy.GetContent( Id, Buffer ) ), Args );
+	xdhcmn::Split( str::string( Proxy.GetValue( Id, Buffer ) ), Args );
 
 	Retriever.Init( Args );
 
@@ -1001,7 +980,7 @@ qRB
 		Retriever.GetString( FileName );
 
 	if ( FileName.Amount() != 0 )
-		Proxy.SetContent( EmbeddedBackendId, FileName );
+		Proxy.SetValue( EmbeddedBackendId, FileName );
 qRR
 qRT
 qRE

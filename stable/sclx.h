@@ -333,6 +333,15 @@ namespace sclx {
 		qRE
 		qRT
 		}
+		template <class ...Args> const str::dString &Process_(
+			const char *ScriptName,
+			str::dString &Buffer,
+			const Args &...args )
+		{
+			Process_(ScriptName, &Buffer, args...);
+
+			return Buffer;
+		}
 		template <class ...Args> const char *Process_(
 			const char *ScriptName,
 			qCBUFFERh &Buffer,
@@ -419,6 +428,20 @@ namespace sclx {
 			const str::dStrings &Classes)
 		{
 			Process_("HandleClasses_1", NULL, Variant, Ids, Classes);
+		}
+		template <typename c1, typename c2> void GetValue_(
+			const c1 &Id,
+			c2 &Buffer )
+		{
+		qRH;
+			str::wStrings Values;
+		qRB;
+			Values.Init();
+			GetValues(str::wStrings(Id), Values);
+			str::Recall(Values, Buffer);
+		qRR;
+		qRT;
+		qRE;
 		}
 	protected:
 		template <typename session, typename rack, typename chars> void _HandleLayout_(
@@ -543,29 +566,36 @@ namespace sclx {
 		{
 			qRLmt();
 		}
-		void SetContents(
+		void GetValues(
 			const str::dStrings &Ids,
-			const str::dStrings &Contents )
+			str::dStrings &Values );
+		template <typename c> const str::dString &GetValue(
+			const c &Id,
+			str::dString &Buffer )
 		{
-			Process_("SetContents_1", NULL, Ids, Contents);
+			GetValue_(Id, Buffer);
+
+			return Buffer;
 		}
-		template <typename c1, typename c2> void SetContent(
+		template <typename c> const char *GetValue(
+			const c &Id,
+			qCBUFFERh &Buffer )
+		{
+			GetValue_(Id, Buffer);
+
+			return Buffer;
+		}
+		void SetValues(
+			const str::dStrings &Ids,
+			const str::dStrings &Values )
+		{
+			Process_("SetValues_1", NULL, Ids, Values);
+		}
+		template <typename c1, typename c2> void SetValue(
 			const c1 &Id,
-			const c2 &Content )
+			const c2 &Value )
 		{
-			return SetContents(str::wStrings(Id),str::wStrings(Content));
-		}
-		void GetContents(
-			const str::dStrings &Ids,
-			str::dStrings &Contents );
-		const str::dString &GetContent(
-			const str::dString &Id,
-			str::dString &Content );
-		const str::dString &GetContent(
-			const char *Id,
-			str::dString &Content )
-		{
-			return GetContent(str::wString(Id), Content);
+			return SetValues(str::wStrings(Id),str::wStrings(Value));
 		}
 		template <typename chars> void Focus( const chars &Id )
 		{
@@ -990,23 +1020,18 @@ namespace sclx {
 		{
 			Last( Id, Target, Get, frontend::Registry() );
 		}
-		void SetContents(
-			const str::dStrings &Ids,
-			const str::dStrings &Contents )
+		template <typename chars>bso::sBool GetBValue( const chars &Id)
 		{
-			sProxy::SetContents( Ids, Contents );
-		}
-		void SetContent(
-			const str::dString &Id,
-			const str::dString &Content )
-		{
-			sProxy::SetContent( Id, Content );
-		}
-		void SetContent(
-			const char *Id,
-			const str::dString &Content )
-		{
-			SetContent( str::wString( Id ), Content );
+			bso::sBool Return = false;
+		qRH;
+			str::wString Buffer;
+		qRB;
+			Buffer.Init();
+			Return = GetValue(Id, Buffer) == "true";
+		qRR;
+		qRT;
+		qRE;
+			return Return;
 		}
 	};
 

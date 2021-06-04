@@ -10,9 +10,14 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2021-06-04:
+
+- SCLX: adaptation to the new DOM API,
+- STR: introducing `Recall(…)`,
+
 ## 2021-06-02:
 
-- SCLX: adaptation to the new DOM api,
+- SCLX: adaptation to the new DOM API,
 
 ## 2021-05-21:
 

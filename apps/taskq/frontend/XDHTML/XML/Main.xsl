@@ -11,6 +11,8 @@
 			<output id="Output">Test</output>
 		</fieldset>
 		<hr/>
-		<div id="Tree"/>
+		<div>
+			<ul id="Tree" class="tree"/>
+		</div>
 	</xsl:template>
 </xsl:stylesheet>

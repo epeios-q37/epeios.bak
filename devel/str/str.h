@@ -538,6 +538,40 @@ namespace str {
 
 	template <typename row> E_TTCLONE_( ctn::E_MCONTAINERt_( str::string_, row ), tstrings_ );
 
+	template <typename row = sdr::sRow, typename strings> inline str::dString &Recall(
+		const strings &Multi,
+		row Row,
+		dString &Buffer )
+	{
+		Multi.Recall(Row, Buffer);
+
+		return Buffer;
+	}
+
+	template <typename row = sdr::sRow, typename strings> inline const char *Recall(
+		const strings &Multi,
+		row Row,
+		qCBUFFERh &Buffer )
+	{
+		Multi(Row).Convert(Buffer);
+
+		return Buffer;
+	}
+
+	template <typename strings> inline str::dString &Recall(
+		const strings &Multi,
+		dString &Buffer)
+	{
+		return Recall(Multi, Multi.First(), Buffer);
+	}
+
+	template <typename strings> inline const char *Recall(
+		const strings &Multi,
+		qCBUFFERh &Buffer)
+	{
+		return Recall(Multi, Multi.First(), Buffer);
+	}
+
 	typedef tstrings_<sdr::sRow> strings_;
 	E_AUTO(strings)
 
