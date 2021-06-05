@@ -10,6 +10,11 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2021-06-05:
+
+- BSO: removing *IAS* special handling,
+- IAS: removing *BSO* special handling,
+
 ## 2021-06-04:
 
 - SCLX: adaptation to the new DOM API,

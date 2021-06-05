@@ -85,9 +85,7 @@ namespace {
 		cio::COut << Content << txf::nl << txf::commit;
 
 		Script.Init();
-		Script.Append("display('");
-		Script.Append(Content);
-		Script.Append("','Output');");
+		Script.Append("display('", Content,"'Output');");
 
 		Session.Execute(Script);
 	qRR;

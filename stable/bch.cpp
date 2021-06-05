@@ -25,7 +25,7 @@
 
 using namespace bch;
 
-void bch::_GetRelations(
+void bch::GetRelations_(
 	const uys::untyped_storage_ &Sorted,
 	const uys::untyped_storage_ &Unsorted,
 	sdr::size__ Size,

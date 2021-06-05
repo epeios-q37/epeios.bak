@@ -20,36 +20,26 @@
 //	$Id: ias.h,v 1.6 2013/04/15 10:50:51 csimon Exp $
 
 #ifndef IAS_INC_
-#define IAS_INC_
+# define IAS_INC_
 
-#define IAS_NAME		"IAS"
+# define IAS_NAME		"IAS"
 
-#define	IAS_VERSION	"$Revision: 1.6 $"
+# define	IAS_VERSION	"$Revision: 1.6 $"
 
-#define IAS_OWNER		"Claude SIMON"
+# define IAS_OWNER		"Claude SIMON"
 
-#if defined( E_DEBUG ) && !defined( IAS_NODBG )
-#define IAS_DBG
-#endif
+# if defined( E_DEBUG ) && !defined( IAS_NODBG )
+#   define IAS_DBG
+# endif
 
-/* Begin of automatic documentation generation part. */
+// Indexed Aggregated Storage
 
-//V $Revision: 1.6 $
-//C Claude SIMON (csimon at zeusw dot org)
-//R $Date: 2013/04/15 10:50:51 $
+# include "err.h"
+# include "flw.h"
+# include "ags.h"
+# include "tys.h"
+# include "bch.h"
 
-/* End of automatic documentation generation part. */
-
-/* Addendum to the automatic documentation generation part. */
-//D Indexed Aggregated Storage 
-/* End addendum to automatic documentation generation part. */
-
-/*$BEGIN$*/
-
-#include "err.h"
-#include "flw.h"
-#include "ags.h"
-#include "tys.h"
 
 namespace ias {
 
@@ -187,15 +177,13 @@ namespace ias {
 	};
 }
 
-#include "bch.h"
-
 namespace ias {
 
 	using ags::descriptor__;
 
 	typedef bch::E_BUNCHt_( descriptor__, index__ ) descriptors_;
 
-#define IAS_BUFFER_SIZE	1024
+# define IAS_BUFFER_SIZE	1024
 
 	qHOOKS2( bch::sHook, Descriptors, ags::sHook, Storage );
 
@@ -207,7 +195,6 @@ namespace ias {
 			sdr::size__ CapaciteCourante,
 			sdr::size__ NouvelleCapacite )
 		{
-#if 1
 # ifdef IAS_DBG
 			if ( CapaciteCourante >= NouvelleCapacite )
 				qRFwk();
@@ -223,15 +210,8 @@ namespace ias {
 				Descriptors.Store( Buffer, ( ( Amount - HandledAmount ) > IAS_BUFFER_SIZE ? IAS_BUFFER_SIZE : ( Amount - HandledAmount ) ), CapaciteCourante + HandledAmount );
 				HandledAmount += ( ( Amount - HandledAmount ) > IAS_BUFFER_SIZE ? IAS_BUFFER_SIZE : ( Amount - HandledAmount ) );
 			}
-
-#else
-			descriptor__ D;
-			D.Descriptor = MMM_UNDEFINED_DESCRIPTOR;
-			D.Capacite = 0;
-			Descriptors.Store( D, CapaciteCourante, NouvelleCapacite - CapaciteCourante );
-#endif
 		}
-		void _Free( 
+		void _Free(
 			sdr::size__ CapaciteCourante,
 			sdr::size__ NouvelleCapacite )
 		{
@@ -455,27 +435,11 @@ namespace ias {
 		{
 			return Descriptors.Amount();
 		}
-#if 0
-		void write(
-			flw::oflow__ &OFlow,
-			sdr::size__ Size) const
-		{
-			Descriptors.write( 0, Size, OFlow );
-			AStorage.write( OFlow );
-		}
-		void read(
-			flw::iflow__ &IFlow,
-			sdr::size__ Size )
-		{
-			Descriptors.read( IFlow, 0, Size );
-			AStorage.read( IFlow );
-		}
-#endif
 	};
 
 	E_AUTO( indexed_aggregated_storage )
 
-#ifndef FLS_COMPILATION_
+# ifndef FLS_COMPILATION_
 
 	template <typename descriptors, typename storage> class hH_
 	: public sHooks
@@ -528,7 +492,7 @@ namespace ias {
 	: public hH_<bch::rFH, ags::rFH>
 	{
 	public:
-		uys::eState Init( 
+		uys::eState Init(
 			const rHF &Filenames,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
@@ -545,7 +509,7 @@ namespace ias {
 		}
 	};
 
-#endif
+# endif
 
 	inline void _indexed_aggregated_storage_driver__::SDRRecall(
 		sdr::row_t__ Position,
@@ -578,5 +542,4 @@ namespace ias {
 	}
 }
 
-/*$END$*/
 #endif

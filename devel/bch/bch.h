@@ -35,11 +35,6 @@
 # include "dtfptb.h"
 # include "flsq.h"
 
-# ifndef IAS_INC_
-#  undef BCH_INC_
-#  include "ias.h"
-# else
-
 /*************************/
 /****** New version ******/
 /*************************/
@@ -110,7 +105,19 @@ namespace bch {
 		{
 			return ( ( Row == qNIL ) || ( ( mng::Amount() == 0 ) && ( Row == 0 ) ) );
 		}
-	public:
+		template <typename t> row Append_(const t &Value)
+		{
+			return Append(Value);
+		}
+		void Append_(void) {}
+		template <typename f, typename ...o> void Append_(
+			const f &First,
+			const o & ... Others )
+		{
+			Append_(First);
+			Append_(Others...);
+		}
+		public:
 		struct s
 		: public mmr::s,
 		  public mng::s
@@ -142,7 +149,7 @@ namespace bch {
 			sdr::size__ Size )
 		{
 			this->Init();
-			
+
 			StoreAndAdjust( Seed, Size );
 		}
 		//f Allocate 'Size' objects. Extent is forced to 'Size' when 'Mode' = 'mFitted'.
@@ -261,7 +268,7 @@ namespace bch {
 		//f Append the object 'Object'. Return the position where the object is put.
 		row Append( const type &Object )
 		{
-			return Append( &Object, 1 );
+			return Append( &Object, (sdr::sSize)1 );
 		}
 		//f Append 'Amount' 'Object's. Return the position where appended.
 		void Append(
@@ -301,6 +308,15 @@ namespace bch {
 		{
 			return Append( Bunch, Bunch.Amount() - *Position, Position );
 		}
+		template <typename f, typename ... o> row Append(
+			const f &First,
+			const o & ... Others )
+			{
+				row Row = Append_(First);
+				Append_(Others...);
+
+				return Row;
+			}
 		// Les mthodes 'Add(...)' sont l pour faciliter interchangeabilit avec les object du module 'lstbch'.
 		row Add( const type *Buffer )
 		{
@@ -637,6 +653,11 @@ namespace bch {
 		{
 			return *this;
 		}
+		using _bunch_<type, row, aem::amount_extent_manager_< row >, sh >::Append;
+		row Append(bunch_ &Value)
+		{
+			return Append( (_bunch_<type, row, aem::amount_extent_manager_< row >, sh >)Value );
+		}
 /*		void Init( void )
 		{
 			_bunch_<type, row, aem::amount_extent_manager_< row >, sh >::Init();
@@ -675,7 +696,7 @@ namespace bch {
 	typedef E_BUNCH_( sdr::row__ ) relations_;
 	E_AUTO( relations )
 
-	void _GetRelations(
+	void GetRelations_(
 		const uys::untyped_storage_ &Sorted,
 		const uys::untyped_storage_ &Unsorted,
 		sdr::size__ Size,
@@ -772,7 +793,7 @@ namespace bch {
 	public:
 		struct s
 		: public _bunch<type, tys::E_STORAGEt__( type, size, row ), aem, row, sh >::s {} S_;
-		_bunch__( void ) 
+		_bunch__( void )
 		: _bunch<type, tys::E_STORAGEt__( type, size, row ), aem, row, sh >( S_ ) {}
 		_bunch__ &operator =( const _bunch__ &S )
 		{
@@ -804,12 +825,12 @@ namespace bch {
 	public:
 		struct s
 		: public _bunch<type, tys::E_STORAGEt___( type, row ), aem, row, sh >::s {} S_;
-		_bunch___( void ) 
+		_bunch___( void )
 		: _bunch<type, tys::E_STORAGEt___( type, row ), aem, row, sh >( S_ ) {}
 		_bunch___ &operator =( const _bunch___ &S )
 		{
 			_bunch<type, tys::E_STORAGEt___( type, row ), aem, row, sh >::StoreAndAdjust( S, S.Amount_ );
-	
+
 			return *this;
 		}
 		void Init( void )
@@ -855,7 +876,5 @@ namespace bch {
 		return Row;
 	}
 }
-
-# endif
 
 #endif
