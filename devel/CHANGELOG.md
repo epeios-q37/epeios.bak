@@ -10,6 +10,10 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2021-06-06:
+
+- BCH: introducing `AppendMulti(…)` with multiple parameters,
+
 ## 2021-06-05:
 
 - BSO: removing *IAS* special handling,

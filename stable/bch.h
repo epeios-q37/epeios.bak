@@ -101,23 +101,11 @@ namespace bch {
 			if ( Quantity > mng::Amount() )
 				Allouer_( Quantity, aem::m_Default );
 		}
-		bso::bool__ _AppendInsteadOfInsert(	row Row )
+		bso::bool__ AppendInsteadOfInsert_(	row Row )
 		{
 			return ( ( Row == qNIL ) || ( ( mng::Amount() == 0 ) && ( Row == 0 ) ) );
 		}
-		template <typename t> row Append_(const t &Value)
-		{
-			return Append(Value);
-		}
-		void Append_(void) {}
-		template <typename f, typename ...o> void Append_(
-			const f &First,
-			const o & ... Others )
-		{
-			Append_(First);
-			Append_(Others...);
-		}
-		public:
+	public:
 		struct s
 		: public mmr::s,
 		  public mng::s
@@ -308,15 +296,19 @@ namespace bch {
 		{
 			return Append( Bunch, Bunch.Amount() - *Position, Position );
 		}
-		template <typename f, typename ... o> row Append(
+		template <typename a> row AppendMulti(const a &Alone)
+		{
+			return Append(Alone);
+		}
+		template <typename f, typename ...o> row AppendMulti(
 			const f &First,
-			const o & ... Others )
-			{
-				row Row = Append_(First);
-				Append_(Others...);
+			const o & ...Others )
+		{
+			row Row = Append(First);
+			AppendMulti(Others...);
 
-				return Row;
-			}
+			return Row;
+		}
 		// Les mthodes 'Add(...)' sont l pour faciliter interchangeabilit avec les object du module 'lstbch'.
 		row Add( const type *Buffer )
 		{
@@ -386,7 +378,7 @@ namespace bch {
 			row RowSource,
 			row Row = 0 )
 		{
-			if ( _AppendInsteadOfInsert( Row ) )
+			if ( AppendInsteadOfInsert_( Row ) )
 				Append( Source, Amount, RowSource );
 			else
 				InsertAt_( Source, Amount, *RowSource, *Row );
@@ -403,7 +395,7 @@ namespace bch {
 			sdr::size__ Amount,
 			row Row = 0 )
 		{
-			if ( _AppendInsteadOfInsert( Row ) )
+			if ( AppendInsteadOfInsert_( Row ) )
 				Append( Source, Amount );
 			else
 				InsertAt_( Source, Amount, *Row );
@@ -653,22 +645,6 @@ namespace bch {
 		{
 			return *this;
 		}
-		using _bunch_<type, row, aem::amount_extent_manager_< row >, sh >::Append;
-		row Append(bunch_ &Value)
-		{
-			return Append( (_bunch_<type, row, aem::amount_extent_manager_< row >, sh >)Value );
-		}
-/*		void Init( void )
-		{
-			_bunch_<type, row, aem::amount_extent_manager_< row >, sh >::Init();
-		}
-		void Init(
-			const type *Seed,
-			sdr::size__ Size )
-		{
-			_bunch_<type, row, aem::amount_extent_manager_< row >, sh >::Init( Seed, Size );
-		}
-		*/
 	};
 
 	E_AUTO3( bunch )
