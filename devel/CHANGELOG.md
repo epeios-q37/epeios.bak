@@ -13,7 +13,7 @@
 ## 2021-06-07:
 
 - SCLX: [adpt],
-- STR: introducing `AppendMulti(…)` with multiple parameters for strigs object,
+- STR: introducing `AppendMulti(…)` with multiple parameters for strings object,
 
 ## 2021-06-06:
 
