@@ -310,48 +310,91 @@ namespace sclx {
 		void Fill_(
 			str::dStrings &Values,
 			const str::dStrings &SplittedValues );
-		template <class s,class... Args> void Fill_(
+		template <typename s, typename ...args> void Fill_(
 			str::dStrings &Values,
 			const s &Value,
-			const Args &...args )
+			const args &...Args )
 		{
 			Fill_(Values, Value);
-			Fill_(Values, args...);
+			Fill_(Values, Args...);
 		}
-		template <class ...Args> void Process_(
+		template <typename ...args> void Process_(
 			const char *ScriptName,
 			str::dString *Result,
-			const Args &...args )
+			const args &...Args )
 		{
 		qRH
 			str::wStrings Values;
 		qRB
 			Values.Init();
-			Fill_(Values, args...);
+			Fill_(Values, Args...);
 			Core_.Process(ScriptName, Values, Result);
 		qRR
 		qRE
 		qRT
 		}
-		template <class ...Args> const str::dString &Process_(
+		template <typename ...args> const str::dString &Process_(
 			const char *ScriptName,
 			str::dString &Buffer,
-			const Args &...args )
+			const args &...Args )
 		{
-			Process_(ScriptName, &Buffer, args...);
+			Process_(ScriptName, &Buffer, Args...);
 
 			return Buffer;
 		}
-		template <class ...Args> const char *Process_(
+		template <typename ...args> const char *Process_(
 			const char *ScriptName,
 			qCBUFFERh &Buffer,
-			const Args &...args )
+			const args &...Args )
 		{
 		qRH
 			str::wString Return;
 		qRB
 			Return.Init();
-			Process_(ScriptName, &Return, args...);
+			Process_(ScriptName, &Return, Args...);
+			Return.Convert(Buffer);
+		qRR
+		qRE
+		qRT
+			return Buffer;
+		}
+		template <typename ...args> void Process_(
+			const char *TaggedScript,
+			const char *TagList,
+			str::dString *Result,
+			const args &...Args )
+		{
+		qRH
+			str::wStrings Values;
+		qRB
+			Values.Init();
+			Fill_(Values, Args...);
+			Core_.Process(TaggedScript, TagList, Values, Result);
+		qRR
+		qRE
+		qRT
+		}
+		template <typename ...args> const str::dString &Process_(
+			const char *TaggedScript,
+			const char *TagList,
+			str::dString &Buffer,
+			const args &...Args )
+		{
+			Process_(TaggedScript, TagList, &Buffer, Args...);
+
+			return Buffer;
+		}
+		template <typename ...args> const char *Process_(
+			const char *TaggedScript,
+			const char *TagList,
+			qCBUFFERh &Buffer,
+			const args &...Args )
+		{
+		qRH
+			str::wString Return;
+		qRB
+			Return.Init();
+			Process_(TaggedScript, TagList, &Return, Args...);
 			Return.Convert(Buffer);
 		qRR
 		qRE
@@ -401,27 +444,6 @@ namespace sclx {
 		{
 			return HandleLayout_(Variant, str::wString(Id), XSLFilename, Target, Registry, XML, Marker);
 		}
-		template <typename session, typename rack, typename chars> void HandleLayout_(
-			const char *Variant,
-			const chars &Id,
-			const char *Target,
-			const sclr::registry_ &Registry,
-			void( *Get )(session &Session, xml::rWriter &Writer),
-			session &Session,
-			bso::char__ Marker = DefaultMarker )
-		{
-		qRH;
-			rack Rack;
-		qRB;
-			Rack.Init( Target, Session, I_() );
-
-			Get( Session, Rack() );
-
-			HandleLayout_( Variant, Id, registry::definition::XSLFile, Target, Registry, Rack.Target(), Marker );
-		qRR;
-		qRT;
-		qRE;
-		}
 		void HandleClasses_(
 			const char *Variant,
 			const str::dStrings &Ids,
@@ -444,7 +466,7 @@ namespace sclx {
 		qRE;
 		}
 	protected:
-		template <typename session, typename rack, typename chars> void _HandleLayout_(
+		template <typename session, typename rack, typename chars> void HandleLayout_(
 			const char *Variant,
 			const chars &Id,
 			const char *Target,
@@ -453,7 +475,17 @@ namespace sclx {
 			session &Session,
 			bso::char__ Marker = DefaultMarker )
 		{
-			return HandleLayout_<session,rack,chars>(Variant, Id, Target, Registry, Get, Session, Marker);
+		qRH;
+			rack Rack;
+		qRB;
+			Rack.Init( Target, Session, I_() );
+
+			Get( Session, Rack() );
+
+			HandleLayout_( Variant, Id, registry::definition::XSLFile, Target, Registry, Rack.Target(), Marker );
+		qRR;
+		qRT;
+		qRE;
 		}
 	public:
 		void reset( bso::sBool P = true )
@@ -497,6 +529,14 @@ namespace sclx {
 		void Execute(const char *Script)
 		{
 			return Execute(str::wString(Script));
+		}
+		template <typename ...args> void Execute(
+			const char *TaggedScript,
+			const char *TagList,
+			str::dString *Result,
+			const args &...Args )
+		{
+			Process_(TaggedScript, TagList, Result, Args...);
 		}
 		void Log( const str::dString &Message )
 		{
@@ -996,7 +1036,7 @@ namespace sclx {
 			void( *Get )( rSession &Session, xml::rWriter &Writer ),
 			const sclr::dRegistry &Registry )
 		{
-			sProxy::_HandleLayout_<rSession, rRack<rSession,dump>,chars>( "inner", Id, Target, Registry, Get, *this );
+			sProxy::HandleLayout_<rSession, rRack<rSession,dump>,chars>( "inner", Id, Target, Registry, Get, *this );
 		}
 		template <typename chars> void Inner(
 			const chars &Id,
@@ -1011,7 +1051,7 @@ namespace sclx {
 			void( *Get )( rSession &Session, xml::rWriter &Writer ),
 			const sclr::dRegistry &Registry )
 		{
-			sProxy::_HandleLayout_<rSession, rRack<rSession,dump>,chars>( "beforeend", Id, Target, Registry, Get, *this );
+			sProxy::HandleLayout_<rSession, rRack<rSession,dump>,chars>( "beforeend", Id, Target, Registry, Get, *this );
 		}
 		template <typename chars> void Last(
 			const chars &Id,

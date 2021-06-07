@@ -713,7 +713,25 @@ namespace str {
         {
             return tstrings_<row>::Append(wString(String));
         }
-	};
+        sdr::sRow AppendMulti(const string &String)
+        {
+            return tstrings_<row>::Append(String);
+        }
+        sdr::sRow AppendMulti(const string_ &String)
+        {
+            return tstrings_<row>::Append(String);
+        }
+				template <typename f, typename ...o> row AppendMulti(
+					const f &First,
+					const o &...Others)
+				{
+					row Row = Append(First);
+
+					AppendMulti(Others...);
+
+					return Row;
+				}
+			};
 
 //	template <typename row> qTCLONE(dTStrings_<row>, dTStrings);
 

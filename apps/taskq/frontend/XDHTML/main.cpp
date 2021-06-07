@@ -76,18 +76,12 @@ namespace {
 	void Submit_( core::rSession &Session )
 	{
 	qRH;
-		str::wString Content, Script;
+		str::wString Content;
 	qRB;
 		Content.Init();
-//		Session.GetContent( "Input", Content );
 		Session.Execute( "essai.value()", Content );
 
-		cio::COut << Content << txf::nl << txf::commit;
-
-		Script.Init();
-		Script.AppendMulti("display('", Content,"','Output');");
-
-		Session.Execute(Script);
+		Session.Execute("display('%Content%', 'Output')", "Content", NULL, Content);
 	qRR;
 	qRT;
 	qRE;

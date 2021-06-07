@@ -115,18 +115,18 @@ namespace {
 					}
 				}
 
-				template <typename type> void GetScriptArguments_(
+				template <typename type> void GetScriptTags_(
 					const type &Name,
-					str::dStrings &Splitted)
+					str::dStrings &Tags)
 				{
 				qRH
-					str::wString Merged;
+					str::wString MergedTags;
 				qRB
-					Merged.Init();
+					MergedTags.Init();
 
-					sclm::MGetValue(rgstry::rTEntry(TaggedScriptArguments_, Name), Merged);
+					sclm::MGetValue(rgstry::rTEntry(TaggedScriptArguments_, Name), MergedTags);
 
-					Split_(Merged, Splitted);
+					Split_(MergedTags, Tags);
 				qRR
 				qRE
 				qRT
@@ -181,31 +181,31 @@ namespace {
 					}
 				}
 
-				void SubstituteArguments_(
-					const str::string_ &Tagged,	// Script with tags. When returning, tags are substitued.
-					const str::dStrings &Arguments,
-					const str::dStrings &Values,
-					str::dString &Substituted )
+				void SubstituteTags_(
+					const str::string_ &TaggedScript,	// Script with tags. When returning, tags are substitued.
+					const str::dStrings &TagList,
+					const str::dStrings &RawTagValues,
+					str::dString &Script )
 				{
 				qRH
 					str::strings Tags, TagValues;
 					sdr::sRow Row = qNIL;
 				qRB
-					if ( Arguments.Amount() != Values.Amount())
+					if ( TagList.Amount() != RawTagValues.Amount())
 						qRFwk();
 
 					Tags.Init();
 					TagValues.Init();
 
-					Row = Arguments.First();
+					Row = TagList.First();
 
 					while ( Row != qNIL ) {
-						AppendTag_(Arguments(Row), Values(Row), Tags, TagValues);
+						AppendTag_(TagList(Row), RawTagValues(Row), Tags, TagValues);
 
-						Row = Arguments.Next(Row);
+						Row = TagList.Next(Row);
 					}
 
-					tagsbs::SubstituteLongTags( Tagged, Tags, TagValues, Substituted );
+					tagsbs::SubstituteLongTags(TaggedScript, Tags, TagValues, Script);
 				qRR
 				qRT
 				qRE
@@ -214,20 +214,20 @@ namespace {
 
 			template <typename type> void GetScript_(
 				const type &Name,
-				const str::dStrings &Values,
+				const str::dStrings &TagValues,
 				str::string_ &Script)
 			{
 			qRH
 				str::string TaggedScript;
-				str::wStrings Arguments;
+				str::wStrings TagList;
 			qRB
 				TaggedScript.Init();
 				GetTaggedScript_( Name, TaggedScript );
 
-				Arguments.Init();
-				GetScriptArguments_(Name, Arguments);
+				TagList.Init();
+				GetScriptTags_(Name, TagList);
 
-				SubstituteArguments_(TaggedScript, Arguments, Values, Script);
+				SubstituteTags_(TaggedScript, TagList, TagValues, Script);
 			qRR
 			qRT
 			qRE
@@ -236,7 +236,7 @@ namespace {
 
 		template <typename type> bso::sBool BaseProcess_(
 			const type &ScriptName,
-			const str::dStrings &Values,
+			const str::dStrings &TagValues,
 			xdhcuc::cSingle &Callback,
 			tht::rBlocker *Blocker = NULL,
 			str::dString *ReturnValue = NULL)
@@ -247,7 +247,7 @@ namespace {
 		qRB
 			Script.Init();
 
-			GetScript_(ScriptName, Values, Script);
+			GetScript_(ScriptName, TagValues, Script);
 
 			Success = Callback.Process(Script, Blocker, ReturnValue );
 		qRR
@@ -261,7 +261,7 @@ namespace {
 		namespace {
 			bso::sBool ExecuteAndGetDigest_(
 				const char *ScriptName,
-				const str::dStrings &Values,
+				const str::dStrings &TagValues,
 				xdhcuc::cSingle &Callback,
 				xdhcmn::digest_ &Digest,
 				tht::rBlocker &Blocker )
@@ -272,7 +272,7 @@ namespace {
 			qRB
 				RawDigest.Init();
 
-				if ( ( Success = BaseProcess_(ScriptName, Values, Callback, &Blocker, &RawDigest) ) ) {
+				if ( ( Success = BaseProcess_(ScriptName, TagValues, Callback, &Blocker, &RawDigest) ) ) {
 					Digest.Init();
 					xdhcmn::Split( RawDigest, Digest );
 				}
@@ -439,7 +439,7 @@ namespace {
 			{
 				bso::sBool Success = true;
 			qRH
-				str::wStrings Ids, Types, ParametersSets, ContentRetrievingMethods, FocusingMethods, SelectionMethods, Arguments;
+				str::wStrings Ids, Types, ParametersSets, ContentRetrievingMethods, FocusingMethods, SelectionMethods, TagValues;
 				str::wString FlatIds, FlatTypes, FlatParametersSets, FlatContentRetrievingMethods, FlatFocusingMethods, FlatSelectionMethods;
 			qRB
 				tol::Init(Ids, Types, ParametersSets, ContentRetrievingMethods, FocusingMethods, SelectionMethods);
@@ -449,15 +449,10 @@ namespace {
 					tol::Init(FlatIds, FlatTypes, FlatParametersSets, FlatContentRetrievingMethods, FlatFocusingMethods, FlatSelectionMethods);
 					HandleWidgets_( Ids, Types, ParametersSets, ContentRetrievingMethods, FocusingMethods, SelectionMethods, FlatIds, FlatTypes, FlatParametersSets, FlatContentRetrievingMethods, FlatFocusingMethods, FlatSelectionMethods );
 
-					Arguments.Init();
-					Arguments.Append(FlatIds);
-					Arguments.Append(FlatTypes);
-					Arguments.Append(FlatParametersSets);
-					Arguments.Append(FlatContentRetrievingMethods);
-					Arguments.Append(FlatFocusingMethods);
-					Arguments.Append(FlatSelectionMethods);
+					TagValues.Init();
+					TagValues.AppendMulti(FlatIds, FlatTypes, FlatParametersSets, FlatContentRetrievingMethods, FlatFocusingMethods, FlatSelectionMethods);
 
-					Success = BaseProcess_(ss_::InstantiateWidgets, Arguments, Callback);
+					Success = BaseProcess_(ss_::InstantiateWidgets, TagValues, Callback);
 				}
 			qRR
 			qRT
@@ -566,22 +561,65 @@ namespace {
 		else
 			return BaseProcess_(ScriptName, Values, Callback, NULL, ReturnValue);
 	}
+
+	template <typename ts, typename tl> bso::sBool Process_(
+		const ts &TaggedScript,
+		const tl &MergedTagList,
+		const str::dStrings &TagValues,
+		xdhcuc::cSingle &Callback,
+		str::dString *ReturnValue = NULL)
+	{
+		bso::sBool Success = false;
+	qRH
+		str::wString Script;
+		str::wStrings TagList;
+	qRB
+		TagList.Init();
+		Split_(str::wString(MergedTagList), TagList);
+
+		Script.Init();
+		SubstituteTags_(str::wString(TaggedScript), TagList, TagValues, Script);
+
+		Success = Callback.Process(Script, NULL, ReturnValue );
+	qRR
+	qRT
+	qRE
+		return Success;
+	}
 }
 
 bso::sBool xdhdws::sProxy::Process(
 	const char *ScriptName,
-	const str::dStrings &Values,
+	const str::dStrings &TagValues,
 	str::dString *ReturnValue )
 {
-	return Process_(ScriptName, Values, C_(), ReturnValue);
+	return Process_(ScriptName, TagValues, C_(), ReturnValue);
 }
 
 bso::sBool xdhdws::sProxy::Process(
 	const str::dString &ScriptName,
-	const str::dStrings &Values,
+	const str::dStrings &TagValues,
 	str::dString *ReturnValue )
 {
-	return Process_(ScriptName, Values, C_(), ReturnValue);
+	return Process_(ScriptName, TagValues, C_(), ReturnValue);
+}
+
+bso::sBool xdhdws::sProxy::Process(
+	const char *TaggedScript,
+	const char *TagList,
+	const str::dStrings &TagValues,
+	str::dString *ReturnValue )
+{
+	return Process_(TaggedScript, TagList, TagValues, C_(), ReturnValue);
+}
+
+bso::sBool xdhdws::sProxy::Process(
+	const str::dString &TaggedScript,
+	const char *TagList,
+	const str::dStrings &TagValues,
+	str::dString *ReturnValue )
+{
+	return Process_(TaggedScript, TagList, TagValues, C_(), ReturnValue);
 }
 
 namespace {

@@ -10,6 +10,11 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2021-06-07:
+
+- SCLX: [adpt],
+- STR: introducing `AppendMulti(…)` with multiple parameters for strigs object,
+
 ## 2021-06-06:
 
 - BCH: introducing `AppendMulti(…)` with multiple parameters,

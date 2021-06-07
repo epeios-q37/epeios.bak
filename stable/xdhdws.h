@@ -60,20 +60,37 @@ namespace xdhdws {
 		}
 		bso::sBool Process(
 			const char *ScriptName,
-			const str::dStrings &Values,
+			const str::dStrings &TagValues,
 			str::dString *ReturnValue = NULL);
 		bso::sBool Process(
 			const str::dString &ScriptName,
-			const str::dStrings &Values,
+			const str::dStrings &TagValues,
 			str::dString *ReturnValue = NULL);
 		template <typename string> bso::sBool Process(
 			const string &ScriptName,
-			const str::dStrings &Values,
+			const str::dStrings &TagValues,
 			str::dString &ReturnValue)
 		{
-			return Process(ScriptName,Values,&ReturnValue);
+			return Process(ScriptName, TagValues, &ReturnValue);
 		}
-
+		bso::sBool Process(
+			const char *TaggedScript,
+			const char *TagList,
+			const str::dStrings &TagValues,
+			str::dString *ReturnValue = NULL);
+		bso::sBool Process(
+			const str::dString &TaggedScript,
+			const char *TagList,
+			const str::dStrings &TagValues,
+			str::dString *ReturnValue = NULL);
+		template <typename string> bso::sBool Process(
+			const string &TaggedScript,
+			const char *TagList,
+			const str::dStrings &TagValues,
+			str::dString &ReturnValue)
+		{
+			return Process(TaggedScript, TagList, TagValues, &ReturnValue);
+		}
 	};
 
 	void BroadcastAction(
