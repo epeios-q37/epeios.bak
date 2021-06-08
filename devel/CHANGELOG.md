@@ -10,6 +10,10 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2021-06-08:
+
+- SCLX: `GetBValue()` -> `BGetValue()` because `GetBValue` is a macro in *VC++*,
+
 ## 2021-06-07:
 
 - SCLX: [adpt],

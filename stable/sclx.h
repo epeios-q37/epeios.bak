@@ -855,9 +855,9 @@ namespace sclx {
 		}
 	};
 
-		void BroadcastAction(
-			const char *Action,
-			const char *Id);
+	void BroadcastAction(
+		const char *Action,
+		const char *Id);
 
 	template <typename session> class rCore;
 
@@ -1060,7 +1060,7 @@ namespace sclx {
 		{
 			Last( Id, Target, Get, frontend::Registry() );
 		}
-		template <typename chars>bso::sBool GetBValue( const chars &Id)
+		template <typename chars> bool BGetValue(const chars &Id)
 		{
 			bso::sBool Return = false;
 		qRH;

@@ -100,7 +100,7 @@ qRH;
 qRB;
 	const char *TargetId = Session.LastChild(Session.Parent(Id, Buffer), Buffer);
 
-	if ( Session.GetBValue(Id) )
+	if ( Session.BGetValue(Id) )
 		BuildTree_(TargetId, Session);
 	else
 		Session.SetValue(TargetId, "");
