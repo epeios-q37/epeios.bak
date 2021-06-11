@@ -23,121 +23,36 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-import os, sys, itertools
+import os, sys
 
 os.chdir(os.path.dirname(os.path.realpath(__file__)))
 sys.path.extend(["../../atlastk", "."])
 
+from tools import *
 import atlastk
-
-EMPTY = 0
-BLACK = -1
-WHITE = 1
-
-TOKEN = {
-  EMPTY: ' ',
-  BLACK: 'X',
-  WHITE: 'O'
-}
 
 board = None
 available = None
 turn = None
 
-def has_my_piece(bw, x, y, delta_x, delta_y):
-  "There is my piece in the direction of (delta_x, delta_y) from (x, y)."
-  assert bw in (BLACK, WHITE)
-  assert delta_x in (-1, 0, 1)
-  assert delta_y in (-1, 0, 1)
-  x += delta_x
-  y += delta_y
-
-  if x < 0 or x > 7 or y < 0 or y > 7 or board[x][y] == EMPTY:
-    return False
-  if board[x][y] == bw:
-    return True
-  return has_my_piece(bw, x, y, delta_x, delta_y)
-
-def reversible_directions(bw, x, y):
-  "Can put piece on (x, y) ? Return list of reversible direction tuple"
-  assert bw in (BLACK, WHITE)
-
-  directions = []
-  if board[x][y] != EMPTY:
-    return directions
-
-  for d in itertools.product([-1, 1, 0], [-1, 1, 0]):
-    if d == (0, 0):
-      continue
-    nx = x + d[0]
-    ny = y + d[1]
-    if nx < 0 or nx > 7 or ny < 0 or ny > 7 or board[nx][ny] != bw * -1:
-      continue
-    if has_my_piece(bw, nx, ny, d[0], d[1]):
-      directions.append(d)
-  return directions
-
-def reverse_piece(bw, x, y, delta_x, delta_y):
-  global board
-  "Reverse pieces in the direction of (delta_x, delta_y) from (x, y) until bw."
-  assert bw in (BLACK, WHITE)
-
-  x += delta_x
-  y += delta_y
-  assert board[x][y] in (BLACK, WHITE)
-
-  if board[x][y] == bw:
-    return
-
-  board[x][y] = bw
-  return reverse_piece(bw, x, y, delta_x, delta_y)  
-
-def is_allowed(x, y, bw):
-  if bw == EMPTY:
-    return False
-  else:
-    return len(reversible_directions(bw, x, y)) != 0
-
-
-def init_board():
+def init():
   global board, available, turn
-
-  board = []
-
-  for _ in range(8):
-    board.append([EMPTY] * 8)
-
-  board[3][3] = board[4][4] = BLACK
-  board[4][3] = board[3][4] = WHITE
-
+  board = new_board()
   available = True
-  turn = BLACK
-
-
-class Reversi:
-  def __init__(self):
-    self.bw = None
-
-  def init(self, bw):
-    self.bw = bw
+  turn = None
 
 def set_status(dom, status, color = "black"):
-  dom.inner("Status",f'<span style="color: {color}">{status}</span>')    
+  dom.inner("Status", f'<span style="color: {color}">{status}</span>')    
 
 def draw_board(reversi, dom):
-  tokens = {}
-  toAdd = {}
-  toRemove = {}
+  tokens = toAdd = toRemove = {}
 
-  bw = reversi.bw
-
-  if bw == None:
-    bw = turn
+  bw = reversi.bw or turn or BLACK
 
   for x, row in enumerate(board):
     for y, r in enumerate(row):
       tokens[f'{x}{y}'] = TOKEN[r]
-      playable = (r == EMPTY) and bw == turn and is_allowed(x, y, bw)
+      playable = (r == EMPTY) and bw == ( turn or BLACK ) and is_allowed(board, x, y, bw)
 
       if ( playable ):
         toAdd[f'{x}{y}'] = "playable"
@@ -149,36 +64,37 @@ def draw_board(reversi, dom):
   dom.removeClasses(toRemove)
 
 
-def count(bwe):
-  "Count pieces or empty spaces in the board"
-  assert bwe in (BLACK, WHITE, EMPTY)
-  n = 0
-  for i in range(8):
-    for j in range(8):
-      if board[i][j] == bwe:
-        n += 1
-  return n
+def debug(dom, reversi):
+  html = f'''
+<div>available: {available}</div>
+<div>turn: {turn}</div>
+<div>reversi.bw: {reversi.bw}</div>
+  '''
 
+  dom.inner("Debug", html)
 
 def Refresh(dom, reversi):
   if reversi.bw == None:
     if not available:
       reversi.bw = EMPTY
+      dom.disable_element("Submit")
+    else:
+      dom.enable_element("Submit")
   draw_board(reversi, dom)
 
   dom.set_values({
-    "black": count(BLACK),
-    "white": count(WHITE)
+    "black": count(board, BLACK),
+    "white": count(board, WHITE)
   })
+  debug(dom, reversi)
 
-#  return
   if reversi.bw == EMPTY:
-    set_status(dom, f"'{TOKEN[turn]}' (you cannot play)")
+    set_status(dom, f"'{TOKEN[turn]}''s turn (you cannot play)")
   elif reversi.bw == None:
-    if turn == BLACK:
-      set_status(dom, "Play ('X') or wait opponent's move!", "blue")
-    else:
+    if turn == WHITE:
       set_status(dom, "First player ('X') played!", "blue")
+    else:
+      set_status(dom, "Play ('X') or wait opponent's move!", "blue")
   elif reversi.bw == turn:
     set_status(dom, f"Your turn ('{TOKEN[turn]}')!", "green")
   else:
@@ -187,10 +103,11 @@ def Refresh(dom, reversi):
 
 def ac_connect(reversi, dom, id):
   if ( board == None ):
-    init_board()
+    init()
+  dom.inner("", open("Main.html").read())
   if not available:
     reversi.bw = EMPTY
-  dom.inner("", open("Main.html").read())
+    dom.disable_element("Submit")
   Refresh(dom, reversi)
 
 
@@ -201,29 +118,41 @@ def ac_play(reversi, dom, id):
 
   bw = reversi.bw
 
+  if not is_allowed(board, x, y, bw or turn or BLACK):
+    return
+
+  if turn == None:
+    turn = BLACK
+
   if bw == None:
     bw = reversi.bw = turn
     available = turn == BLACK
 
   if ( bw != EMPTY ) and bw == turn:
-    if is_allowed(x, y, bw):
-      for delta in reversible_directions(bw, x, y):
-        reverse_piece(bw, x, y, delta[0], delta[1])
-      board[x][y] = bw
+    for delta in reversible_directions(board, bw, x, y):
+      reverse_piece(
+        board, bw, x, y, delta[0], delta[1])
+    board[x][y] = bw
 
-      turn = turn * -1
+    turn = turn * -1
 
-    atlastk.broadcast_action("Refresh")
+  atlastk.broadcast_action("Refresh")
 
 def ac_refresh(reversi, dom):
+  if turn == None:
+    reversi.__init__()
   Refresh(dom, reversi)
+
+def ac_new(dom):
+  init()
+  atlastk.broadcast_action("Refresh")
 
 
 CALLBACKS = {
   "": ac_connect,
   "Play": ac_play,
   "Refresh": ac_refresh,
-  "New": 
+  "New": ac_new
 }
 
 atlastk.launch(CALLBACKS,  Reversi, open("Head.html").read())
