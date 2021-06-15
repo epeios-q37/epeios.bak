@@ -23,9 +23,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-import os, sys, itertools
-
-
 BLACK = -1
 EMPTY = 0
 WHITE = 1
@@ -35,6 +32,12 @@ TOKEN = {
   BLACK: 'X',
   WHITE: 'O'
 }
+
+DIRECTIONS = [
+  (-1, -1), (-1,0), (-1,1),
+  (0,-1), (0,1),
+  (1,-1), (1,0), (1,1)
+]
 
 def new_board():
   board = []
@@ -47,29 +50,23 @@ def new_board():
 
   return board
 
-def has_my_piece(board, bw, x, y, delta_x, delta_y):
-  "There is my piece in the direction of (delta_x, delta_y) from (x, y)."
-  assert bw in (BLACK, WHITE)
-  assert delta_x in (-1, 0, 1)
-  assert delta_y in (-1, 0, 1)
-  x += delta_x
-  y += delta_y
+
+def has_my_piece(board, bw, x, y, dx, dy):
+  x += dx
+  y += dy
 
   if x < 0 or x > 7 or y < 0 or y > 7 or board[x][y] == EMPTY:
     return False
   if board[x][y] == bw:
     return True
-  return has_my_piece(board, bw, x, y, delta_x, delta_y)
+  return has_my_piece(board, bw, x, y, x, dy)
 
 def reversible_directions(board, bw, x, y):
-  "Can put piece on (x, y) ? Return list of reversible direction tuple"
-  assert bw in (BLACK, WHITE)
-
   directions = []
   if board[x][y] != EMPTY:
     return directions
 
-  for d in itertools.product([-1, 1, 0], [-1, 1, 0]):
+  for d in DIRECTIONS:
     if d == (0, 0):
       continue
     nx = x + d[0]
@@ -80,19 +77,15 @@ def reversible_directions(board, bw, x, y):
       directions.append(d)
   return directions
 
-def reverse_piece(board, bw, x, y, delta_x, delta_y):
-  "Reverse pieces in the direction of (delta_x, delta_y) from (x, y) until bw."
-  assert bw in (BLACK, WHITE)
-
-  x += delta_x
-  y += delta_y
-  assert board[x][y] in (BLACK, WHITE)
+def reverse_piece(board, bw, x, y, dx, dy):
+  x += dx
+  y += dy
 
   if board[x][y] == bw:
     return
 
   board[x][y] = bw
-  reverse_piece(board, bw, x, y, delta_x, delta_y)  
+  reverse_piece(board, bw, x, y, dx, dy)  
 
 def is_allowed(board, x, y, bw):
   if bw == EMPTY:
@@ -101,8 +94,6 @@ def is_allowed(board, x, y, bw):
     return len(reversible_directions(board, bw, x, y)) != 0
 
 def count(board, bwe):
-  "Count pieces or empty spaces in the board"
-  assert bwe in (BLACK, WHITE, EMPTY)
   n = 0
   for x in range(8):
     for y in range(8):
@@ -118,10 +109,3 @@ def winner(board):
   w = count(board, WHITE)
 
   return (w>b) - (b>w)
-
-class Reversi:
-  def __init__(self):
-    self.bw = None
-
-  def init(self, bw):
-    self.bw = bw  

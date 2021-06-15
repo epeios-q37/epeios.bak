@@ -35,6 +35,14 @@ board = None
 available = None
 turn = None
 
+
+class Player:
+  def __init__(self):
+    self.bw = None
+
+  def init(self, bw):
+    self.bw = bw  
+
 def init():
   global board, available, turn
   board = new_board()
@@ -44,10 +52,12 @@ def init():
 def set_status(dom, status, color = "black"):
   dom.inner("Status", f'<span style="color: {color}">{status}</span>')    
 
-def draw_board(reversi, dom):
-  tokens = toAdd = toRemove = {}
+def draw_board(player, dom):
+  tokens = {}
+  toAdd = {}
+  toRemove = {}
 
-  bw = reversi.bw or turn or BLACK
+  bw = player.bw or turn or BLACK
 
   for x, row in enumerate(board):
     for y, r in enumerate(row):
@@ -64,59 +74,59 @@ def draw_board(reversi, dom):
   dom.removeClasses(toRemove)
 
 
-def debug(dom, reversi):
+def debug(dom, player):
   html = f'''
 <div>available: {available}</div>
 <div>turn: {turn}</div>
-<div>reversi.bw: {reversi.bw}</div>
+<div>player.bw: {player.bw}</div>
   '''
 
   dom.inner("Debug", html)
 
-def Refresh(dom, reversi):
-  if reversi.bw == None:
+def Refresh(dom, player):
+  if player.bw == None:
     if not available:
-      reversi.bw = EMPTY
+      player.bw = EMPTY
       dom.disable_element("Submit")
     else:
       dom.enable_element("Submit")
-  draw_board(reversi, dom)
+  draw_board(player, dom)
 
   dom.set_values({
     "black": count(board, BLACK),
     "white": count(board, WHITE)
   })
-  debug(dom, reversi)
+  debug(dom, player)
 
-  if reversi.bw == EMPTY:
+  if player.bw == EMPTY:
     set_status(dom, f"'{TOKEN[turn]}''s turn (you cannot play)")
-  elif reversi.bw == None:
+  elif player.bw == None:
     if turn == WHITE:
       set_status(dom, "First player ('X') played!", "blue")
     else:
       set_status(dom, "Play ('X') or wait opponent's move!", "blue")
-  elif reversi.bw == turn:
+  elif player.bw == turn:
     set_status(dom, f"Your turn ('{TOKEN[turn]}')!", "green")
   else:
     set_status(dom, "Wait for opponent's move!", 'red"')
 
 
-def ac_connect(reversi, dom, id):
+def ac_connect(player, dom, id):
   if ( board == None ):
     init()
   dom.inner("", open("Main.html").read())
   if not available:
-    reversi.bw = EMPTY
+    player.bw = EMPTY
     dom.disable_element("Submit")
-  Refresh(dom, reversi)
+  Refresh(dom, player)
 
 
-def ac_play(reversi, dom, id):
+def ac_play(player, dom, id):
   global board, turn, available
 
   x, y = int(id[0]), int(id[1])
 
-  bw = reversi.bw
+  bw = player.bw
 
   if not is_allowed(board, x, y, bw or turn or BLACK):
     return
@@ -125,7 +135,7 @@ def ac_play(reversi, dom, id):
     turn = BLACK
 
   if bw == None:
-    bw = reversi.bw = turn
+    bw = player.bw = turn
     available = turn == BLACK
 
   if ( bw != EMPTY ) and bw == turn:
@@ -138,10 +148,10 @@ def ac_play(reversi, dom, id):
 
   atlastk.broadcast_action("Refresh")
 
-def ac_refresh(reversi, dom):
+def ac_refresh(player, dom):
   if turn == None:
-    reversi.__init__()
-  Refresh(dom, reversi)
+    player.__init__()
+  Refresh(dom, player)
 
 def ac_new(dom):
   init()
@@ -155,4 +165,4 @@ CALLBACKS = {
   "New": ac_new
 }
 
-atlastk.launch(CALLBACKS,  Reversi, open("Head.html").read())
+atlastk.launch(CALLBACKS,  Player, open("Head.html").read())
