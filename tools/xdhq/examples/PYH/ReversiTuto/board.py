@@ -27,12 +27,6 @@ BLACK = -1
 EMPTY = 0
 WHITE = 1
 
-TOKEN = {
-  EMPTY: ' ',
-  BLACK: 'X',
-  WHITE: 'O'
-}
-
 DIRECTIONS = [
   (-1, -1), (-1,0), (-1,1),
   (0,-1), (0,1),
@@ -59,7 +53,7 @@ def has_my_piece(board, bw, x, y, dx, dy):
     return False
   if board[x][y] == bw:
     return True
-  return has_my_piece(board, bw, x, y, x, dy)
+  return has_my_piece(board, bw, x, y, dx, dy)
 
 def reversible_directions(board, bw, x, y):
   directions = []

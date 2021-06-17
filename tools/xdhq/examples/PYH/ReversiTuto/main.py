@@ -28,7 +28,7 @@ import os, sys
 os.chdir(os.path.dirname(os.path.realpath(__file__)))
 sys.path.extend(["../../atlastk", "."])
 
-from tools import *
+from board import *
 import atlastk
 
 board = None
