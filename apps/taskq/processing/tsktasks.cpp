@@ -17,8 +17,33 @@
     along with 'TaskQ'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "tskinf.h"
+#include "tsktasks.h"
+
+using namespace tsktasks;
 
 
+void tsktasks::rTasks::DumpChildren(
+    sTRow Row,
+    xml::rWriter &Writer) const
+{
+qRH;
+    str::wString Value;
+qRB;
+    if ( Row == qNIL )
+      Row = Root_;
+
+    Writer.PushTag("Tasks");
+    Writer.PutAttribute("Row", *Row);
+
+    Row = GetFirst_(Row);
+
+    while ( Row != qNIL ) {
 
 
+    }
+
+    Writer.PopTag();
+qRR;
+qRT;
+qRE;
+}

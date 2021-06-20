@@ -17,8 +17,9 @@
     along with 'TaskQ'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "tskinf.h"
+#include "tskbsc.h"
 
+#include "fnm.h"
 
-
+using namespace tskbsc;
 

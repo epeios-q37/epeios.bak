@@ -17,8 +17,36 @@
     along with 'TaskQ'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "tskinf.h"
+#include "common.h"
 
+using namespace common;
 
+namespace {
+	class rRack_ {
+	public:
+		void Init( void )
+		{}
+	} Rack_;
 
+	bso::bool__ IsInitialized_ = false;
+}
 
+void common::Initialize( void )
+{
+qRH
+qRB
+	if ( IsInitialized() )
+		qRGnr();
+
+	Rack_.Init();
+
+	IsInitialized_ = true;
+qRR
+qRT
+qRE
+}
+
+bso::bool__ common::IsInitialized( void )
+{
+	return IsInitialized_;
+}

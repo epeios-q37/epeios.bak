@@ -17,8 +17,17 @@
     along with 'TaskQ'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "tskinf.h"
+// TaSK BaSiCs
 
+#ifndef TSKBSC_INC_
+# define TSKBSC_INC_
 
+# include "bso.h"
+# include "err.h"
+# include "str.h"
 
+namespace tskbsc {
 
+}
+
+#endif

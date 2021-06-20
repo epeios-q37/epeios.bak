@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Projects xmlns:xpp="http://q37.info/ns/xpp">
+	<Project target="dmnzq">
+		<xpp:bloc>
+			<xpp:set name="ostype" env-var="OSTYPE"/>
+			<xpp:ifeq select="ostype" value="">
+				<xpp:set name="env" value="win"/>
+			</xpp:ifeq>
+			<xpp:ifeq select="ostype" value="linux-gnu">
+				<xpp:set name="env" value="linux"/>
+			</xpp:ifeq>
+			<xpp:ifeq select="ostype" value="darwin14">
+				<xpp:set name="env" value="darwin"/>
+			</xpp:ifeq>
+		</xpp:bloc>
+		<Parameters>
+			<Plugins>
+				<Plugin target="Slot" Id="Straight">53700</Plugin>
+			</Plugins>
+			<xpp:define name="lib_prefix">
+				<xpp:bloc>
+					<xpp:ifeq select="env" value="win">
+						<xpp:bloc>h:\bin\</xpp:bloc>
+					</xpp:ifeq>
+					<xpp:ifeq select="env" value="linux">
+						<xpp:bloc>/home/csimon/bin/lib</xpp:bloc>
+					</xpp:ifeq>
+					<xpp:ifeq select="env" value="darwin">
+						<xpp:bloc>/Users/csimon/bin/lib</xpp:bloc>
+					</xpp:ifeq>
+				</xpp:bloc>
+			</xpp:define>
+			<xpp:define name="lib_affix">
+				<xpp:bloc>taskqbkd</xpp:bloc>
+			</xpp:define>
+			<xpp:define name="lib_suffix">
+				<xpp:bloc>
+					<xpp:ifeq select="env" value="win">
+						<xpp:bloc/>
+					</xpp:ifeq>
+					<xpp:ifeq select="env" value="linux">
+						<xpp:bloc>.so</xpp:bloc>
+					</xpp:ifeq>
+					<xpp:ifeq select="env" value="darwin">
+						<xpp:bloc>.dylib</xpp:bloc>
+					</xpp:ifeq>
+				</xpp:bloc>
+			</xpp:define>
+			<Module>
+				<xpp:expand select="lib_prefix"/>
+				<xpp:expand select="lib_affix"/>
+				<xpp:expand select="lib_suffix"/>
+			</Module>
+		</Parameters>
+	</Project>
+</Projects>
+

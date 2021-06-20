@@ -17,8 +17,17 @@
     along with 'TaskQ'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "tskinf.h"
+#ifndef TASKQBKD_INC_
+# define TASKQBKD_INC_
 
+# include "tskinf.h"
 
+# include "scli.h"
 
+# define BACKEND_NAME	TSKINF_LC	"bkd"
+# define COPYRIGHT		COPYRIGHT_YEARS " " TSKINF_OWNER_NAME " (" TSKINF_OWNER_CONTACT ")"
+# define API_VERSION	"1"
 
+SCLI_DEC( taskqbkd );
+
+#endif

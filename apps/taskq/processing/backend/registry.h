@@ -17,8 +17,21 @@
     along with 'TaskQ'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "tskinf.h"
+#ifndef REGISTRY_INC_
+# define REGISTRY_INC_
 
+# include "sclr.h"
 
+namespace registry {
+	using namespace sclr;
 
+	namespace parameter {
+		using namespace sclr::parameter;
+	}
 
+	namespace definition {
+		using namespace sclr::definition;
+	}
+}
+
+#endif

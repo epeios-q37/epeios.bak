@@ -17,8 +17,48 @@
     along with 'TaskQ'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "tskinf.h"
+#include "wrpunbound.h"
 
+#include "taskqbkd.h"
+#include "registry.h"
+#include "dir.h"
+#include "fnm.h"
 
+#include "sclm.h"
 
+using namespace wrpunbound;
+
+#define M( message )	qCDEF( char *, message##_, #message )
+
+namespace {
+	M( TestMessage );
+}
+
+#undef M
+
+using common::rStuff;
+
+#define DEC( name, version )\
+	static inline void unbound_##name##_##version(\
+		fblbkd::rBackend &BaseBackend,\
+		fblbkd::rRequest &Request )
+
+DEC( Test, 1 )
+{
+qRH
+qRB
+	REPORT( TestMessage );
+qRR
+qRT
+qRE
+}
+
+#define D( name, version )	TSKINF_UC_SHORT #name "_" #version, ::unbound_##name##_##version
+
+void wrpunbound::Inform( fblbkd::backend___ &Backend )
+{
+	Backend.Add( D( Test, 1 ),
+		fblbkd::cEnd,
+		fblbkd::cEnd );
+}
 

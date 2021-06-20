@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Configurations xmlns:xpp="http://q37.info/ns/xpp/">
+	<Configuration target="taskqbkd">
+		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
+		<xpp:expand value-of="q37.xpp"/>
+		<Parameters>
+			<Language>en</Language>
+		</Parameters>
+		<Definitions>
+		</Definitions>
+		<Locale>
+		</Locale>
+	</Configuration>
+</Configurations>

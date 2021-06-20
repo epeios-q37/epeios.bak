@@ -17,8 +17,18 @@
     along with 'TaskQ'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "tskinf.h"
+#ifndef WRPUNBOUND_INC_
+# define WRPUNBOUND_INC_
 
+# include "tskbsc.h"
 
+# include "fblbkd.h"
 
+# include "common.h"
 
+namespace wrpunbound {
+
+	void Inform( fblbkd::backend___ &Backend );
+}
+
+#endif

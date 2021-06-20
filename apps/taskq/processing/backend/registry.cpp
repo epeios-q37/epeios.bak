@@ -17,8 +17,7 @@
     along with 'TaskQ'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "tskinf.h"
+#include "registry.h"
 
-
-
+using namespace registry;
 
