@@ -1,22 +1,23 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<Project xmlns:xpp="http://zeusw.org/epeios/xpp">
+<Project xmlns:xpp="http://q37.info/ns/xpp/">
 	<xpp:bloc>
 		<!-- User definitions -->
 		<xpp:define name="Version">
-			<xpp:bloc>(Obsolete ; generated automatically)</xpp:bloc>
+			<xpp:bloc/>
 		</xpp:define>
 		<xpp:define name="CopyrightYears">
-			<xpp:bloc>2016</xpp:bloc>
+			<xpp:bloc>2019</xpp:bloc>
 		</xpp:define>
+		<xpp:set name="Credits" value="Epeios"/>
+		<xpp:set name="Type" value="Tool"/>
 	</xpp:bloc>
-	<xpp:set name="Credits" value="Epeios"/>
-	<xpp:set name="Type" value="Backend"/>
 	<xpp:set name="q37.project" env-var="Q37_PROJECT"/>
 	<xpp:expand value-of="q37.project"/>
 	<About>
-		<Program>taskqbkd</Program>
+		<Program>taskq</Program>
 		<Software>TaskQ</Software>
-		<UUID></UUID>
+		<!-- Do not modify below value (used by the 'DVLSetTol' script)! -->
+		<UUID>2364bf00-7177-45bc-bdb1-ac487ff7e5a0</UUID>
 	</About>
 	<Modules xpp:marker="$">
 		<Modules Group="Epeios" Path="$EpeiosPath$/">
@@ -26,12 +27,6 @@
 			<Modules Group="SCL">
 				<xpp:expand select="SCL"/>
 			</Modules>
-			<Modules Group="FBL">
-				<xpp:expand select="FBLB"/>
-			</Modules>
-			<Modules Group="CSD">
-				<xpp:expand select="CSDB"/>
-			</Modules>
 		</Modules>
 		<Modules Group="TSK" Path="../">
 			<Module Path="../">tskfbc</Module>
@@ -40,20 +35,10 @@
 			<Module>tsktasks</Module>
 			<Module>tskxmp</Module>
 		</Modules>
-		<Module>common</Module>
 		<Module>registry</Module>
-		<Modules Group="WRP">
-			<Module>wrpexample</Module>
-			<Module>wrpunbound</Module>
-		</Modules>
 	</Modules>
-	<Files>
-		<File>dmnzq.xprj</File>
-	</Files>
-	<SourceDirs>
-		<SourceDir>..</SourceDir>
-		<SourceDir>../..</SourceDir>
-	</SourceDirs>
-	<PreprocessorDefinitions>
-	</PreprocessorDefinitions>
+	<Files/>
+    <RTW>
+        <Dir>taskq-cli</Dir>
+    </RTW>
 </Project>

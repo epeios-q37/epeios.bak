@@ -23,26 +23,40 @@ using namespace tsktasks;
 
 
 void tsktasks::rTasks::DumpChildren(
-    sTRow Row,
-    xml::rWriter &Writer) const
+  sTRow Row,
+  xml::rWriter &Writer) const
 {
 qRH;
-    str::wString Value;
+  str::wString Value;
 qRB;
-    if ( Row == qNIL )
-      Row = Root_;
+	if ( Row == qNIL )
+		Row = Root_;
 
-    Writer.PushTag("Tasks");
-    Writer.PutAttribute("Row", *Row);
-
-    Row = GetFirst_(Row);
-
-    while ( Row != qNIL ) {
+	Writer.PushTag("Tasks");
+	Writer.PutAttribute("row", *Row);
+	Writer.PutAttribute("Amount", Tasks_.Amount());
 
 
-    }
+	Row = GetFirst_(Row);
 
-    Writer.PopTag();
+	while ( Row != qNIL ) {
+		Writer.PushTag("Task");
+    Writer.PutAttribute("row", *Row);
+
+		Value.Init();
+		GetLabel_(Row, Value);
+		Writer.PutValue(Value, "Label");
+
+		Value.Init();
+		GetDescription_(Row, Value);
+		Writer.PutValue(Value, "Description");
+
+		Writer.PopTag();
+
+		Row = GetNext_(Row);
+	}
+
+	Writer.PopTag();
 qRR;
 qRT;
 qRE;

@@ -19,8 +19,8 @@
 
 // TaSK TASKS
 
-#ifndef TSKXMP_INC_
-# define TSKXMP_INC_
+#ifndef TSKTASKS_INC_
+# define TSKTASKS_INC_
 
 # ifdef XXX_DBG
 # define TSKXMP_DBG_
@@ -28,6 +28,7 @@
 
 # include "tskbsc.h"
 
+# include "ags.h"
 # include "lstbch.h"
 # include "lstcrt.h"
 # include "str.h"
@@ -63,6 +64,7 @@ namespace tsktasks {
 		{
 			Parent = Prev = Next = First = Last = qNIL;
 		}
+		qCDTOR(sHub);
 		void  Init(void)
 		{
 			reset();
@@ -71,6 +73,8 @@ namespace tsktasks {
 
 	class rTasks {
 	private:
+		uys::rFH Hooks_;
+		qASw AggregatedStorage_;
 		lstcrt::qLCRATEw(str::dString, sCRow) Contents_;
 		lstbch::qLBUNCHw(sTask, sTRow) Tasks_;
 		lstbch::qLBUNCHw(sHub, sTRow) Hubs_;
@@ -166,25 +170,63 @@ namespace tsktasks {
 			{
 				return GetTask_(Row).Description;
 			}
-			const str::dString &GetLabel(
-				sTRow Row,
-				str::dString &Value)
+			const str::dString &GetContent_(
+				sCRow Row,
+				str::dString &Content) const
 			{
+				if ( Row != qNIL )
+					Contents_.Recall(Row, Content);
+
+				return Content;
+			}
+			const str::dString &GetLabel_(
+				sTRow Row,
+				str::dString &Label) const
+			{
+				return GetContent_(GetLabel_(Row), Label);
+			}
+			const str::dString &GetDescription_(
+				sTRow Row,
+				str::dString &Label) const
+			{
+				return GetContent_(GetDescription_(Row), Label);
 			}
 	public:
 		void reset(bso::sBool P = true)
 		{
-			tol::reset(P, Contents_, Tasks_, Hubs_);
+		  if ( P ) {
+        AggregatedStorage_.Flush();
+		  }
+
+			tol::reset(P, Hooks_);
+			tol::reset(false, Contents_, Tasks_, Hubs_, AggregatedStorage_);
 
 			Root_ = qNIL;
 		}
-		void Init(void)
+		qCDTOR(rTasks);
+    void Init(void)
 		{
 			reset();
 
-			tol::Init(Contents_, Tasks_, Hubs_);
+			uys::rHF HF;
+			HF.Init("test", NULL);
 
-			Root_ = Hubs_.Add(sHub());
+			AggregatedStorage_.plug(Hooks_);
+			tol::plug(&AggregatedStorage_, Contents_, Tasks_, Hubs_);
+
+			if ( Hooks_.Init(HF, uys::mReadWrite, uys::bPersistent, flsq::Undefined) == uys::sAbsent ) {
+        tol::Init(Contents_, Tasks_, Hubs_);
+        if ( Hubs_.Add(sHub()) != Tasks_.Add(sTask()) )
+          qRGnr();
+			}
+
+		  if ( Hubs_.Amount() == 0 )
+        qRFwk();
+
+      if ( Hubs_.Amount() != Tasks_.Amount() )
+        qRFwk();
+
+      Root_ = Hubs_.First();
 		}
 		sTRow Append(
 			const str::dString &Label,
@@ -210,30 +252,6 @@ namespace tsktasks {
 		void DumpChildren(
 			sTRow Row,
 			xml::rWriter &Writer) const;
-	};
-
-	class dMyObject
-	{
-	private:
-	public:
-		struct s {
-		};
-		dMyObject( s &S )
-		{}
-		void reset( bso::bool__ P = true )
-		{
-		}
-		void plug( qASd *AS )
-		{
-		}
-		dMyObject &operator =( const dMyObject &M )
-		{
-			return *this;
-		}
-		bso::sBool Init( void )
-		{
-			return true;
-		}
 	};
 }
 

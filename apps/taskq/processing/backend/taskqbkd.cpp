@@ -42,7 +42,7 @@ class rBackend
 : public rBackend_
 {
 private:
-	FBLBKD_RAM_MODULE( wrpexample::wMyObject ) MyObject_;
+//	FBLBKD_RAM_MODULE( wrpexample::wMyObject ) MyObject_;
 	common::rStuff Stuff_;
 protected:
 	void *SCLBStuff( void ) override
@@ -54,7 +54,7 @@ public:
 	{
 		rBackend_::reset( P );
 		Stuff_.reset( P );
-		MyObject_.reset( P );
+//		MyObject_.reset( P );
 	}
 	qCVDTOR( rBackend );
 	void Init(
@@ -74,8 +74,8 @@ public:
 
 		wrpunbound::Inform( *this );
 
-		MyObject_.Init( *this );
-		Add( MyObject_ );
+//		MyObject_.Init( *this );
+//		Add( MyObject_ );
 	}
 };
 

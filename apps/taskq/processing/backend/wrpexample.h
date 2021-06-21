@@ -21,6 +21,7 @@
 # define WRPEXAMPLE_INC_
 
 # include "tsktasks.h"
+# include "tskxmp.h"
 
 # include "fblbkd.h"
 
@@ -30,7 +31,6 @@
 # define WRPEXAMPLE_MYOBJECT_NAME	"MyObject"
 
 namespace wrpexample {
-	/*
 	typedef tskxmp::dMyObject	dMyObject_;
 
 	class dMyObject
@@ -59,7 +59,6 @@ namespace wrpexample {
 	};
 
 	qW( MyObject );
-	*/
 }
 
 
