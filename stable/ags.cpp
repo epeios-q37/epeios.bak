@@ -21,6 +21,8 @@
 
 #include "ags.h"
 
+#include "cio.h"
+
 using namespace ags;
 
 void aggregated_storage_driver__::_Free( void )
@@ -84,6 +86,12 @@ void ags::aggregated_storage_::DisplayStructure( txf::text_oflow__ &Flow ) const
 
 	Flow << '(' << Storage.Size() << ')' << txf::nl;
 }
+
+void ags::aggregated_storage_::DisplayStructure(void) const
+{
+  return DisplayStructure(cio::COut);
+}
+
 
 Q37_GCTOR( ags )
 {

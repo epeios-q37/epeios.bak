@@ -35,6 +35,138 @@
 # include "xml.h"
 
 namespace tsktasks {
+  class sOffsetStorageDriver
+  : public qSDs
+  {
+  private:
+    sdr::sSize Offset_;
+    qRMV(qSDs, D_, Driver_);
+  protected:
+		virtual void SDRAllocate( sdr::sSize Size ) override
+		{
+			return D_().Allocate(Size + Offset_);
+    }
+    virtual sdr::sSize SDRSize( void ) const override
+		{
+		  if ( Driver_ == NULL )
+        return 0;
+
+		  sdr::sSize Size = D_().Size();
+
+		  return ( Size ? Size + Offset_: 0 );
+		}
+		//v Recall 'Amount' at position 'Position' and put them in 'Buffer'.
+		virtual void SDRRecall(
+			sdr::bRow Position,
+			sdr::sSize Amount,
+			sdr::sByte *Buffer ) override
+    {
+        return D_().Recall(Position + Offset_, Amount, Buffer);
+    }
+		//v Write 'Amount' bytes from 'Buffer' to storage at position 'Position'.
+		virtual void SDRStore(
+			const sdr::sByte *Buffer,
+			sdr::sSize Amount,
+			sdr::bRow Position ) override
+		{
+		  return D_().Store(Buffer, Amount, Position + Offset_);
+		}
+  public:
+    void reset(bso::sBool P = true)
+    {
+      Offset_ = 0;
+      Driver_ = NULL;
+      qSDs::reset(P);
+    }
+    qCVDTOR(sOffsetStorageDriver);
+    void Init(
+      qSDs &Driver,
+      sdr::sSize Offset )
+    {
+        reset();
+
+        Driver_ = &Driver;
+        Offset_ = Offset;
+
+        qSDs::Init();
+    }
+  };
+
+  class rFileOffsetStorageDriver
+  : public sOffsetStorageDriver
+  {
+  private:
+    flsq::file_storage_driver___ FileStorageDriver_;
+  public:
+    void reset(bso::sBool P = true)
+    {
+      sOffsetStorageDriver::reset(P);
+      FileStorageDriver_.reset(P);
+    }
+    qCVDTOR(rFileOffsetStorageDriver);
+    bso::sBool Init(sdr::sSize Offset)
+    {
+      FileStorageDriver_.Init(flsq::Undefined, "test.q37");
+      FileStorageDriver_.Persistent();
+      sOffsetStorageDriver::Init(FileStorageDriver_, Offset);
+
+      return FileStorageDriver_.FileExists();
+    }
+    bso::sBool IsInitialized(void) const
+    {
+      return FileStorageDriver_.IsInitialized();
+    }
+    void Write(
+      const sdr::sByte *Buffer,
+      sdr::sSize Amount,
+      sdr::bRow Position)
+      {
+        return FileStorageDriver_.Store(Buffer, Amount, Position);
+      }
+    void Read(
+      sdr::bRow Position,
+      sdr::sSize Amount,
+      sdr::sByte *Buffer)
+      {
+        return FileStorageDriver_.Recall(Position, Amount, Buffer);
+      }
+  };
+
+  typedef uys::rH_<rFileOffsetStorageDriver> rH_;
+
+  class rHook
+  : public rH_
+  {
+  public:
+    void reset(bso::sBool P = true)
+    {
+      Driver_.reset(P);
+    }
+    qCDTOR(rHook);
+    bso::sBool Init(sdr::sSize Offset)
+    {
+      return Driver_.Init(Offset);
+    }
+    bso::sBool IsInitialized(void) const
+    {
+      return Driver_.IsInitialized();
+    }
+    void Write(
+      const sdr::sByte *Buffer,
+      sdr::sSize Amount,
+      sdr::bRow Position)
+      {
+        return Driver_.Write(Buffer, Amount, Position);
+      }
+    void Read(
+      sdr::bRow Position,
+      sdr::sSize Amount,
+      sdr::sByte *Buffer)
+      {
+        return Driver_.Read(Position, Amount, Buffer);
+      }
+  };
+
 	qROW(CRow);	// Content row.
 
 	struct sTask {
@@ -71,13 +203,48 @@ namespace tsktasks {
 		}
 	};
 
+	typedef lstcrt::qLCRATEd(str::dString, sCRow) dContents_;
+  typedef lstbch::qLBUNCHd(sTask, sTRow) dTasks_;
+	typedef lstbch::qLBUNCHd(sHub, sTRow) dHubs_;
+
+	class rCore_
+	{
+  public:
+    dContents_ Contents;
+    dTasks_ Tasks;
+    dHubs_ Hubs;
+    struct s {
+      dContents_::s Contents;
+      dTasks_::s Tasks;
+      dHubs_::s Hubs;
+    } S;
+    void reset(bso::sBool P = true)
+    {
+      tol::reset(P, Contents, Tasks, Hubs);
+    }
+    rCore_(void)
+    : Contents(S.Contents),
+      Tasks(S.Tasks),
+      Hubs(S.Hubs)
+      {
+        reset(false);
+      }
+    qDTOR(rCore_);
+    void Init(void)
+    {
+      tol::Init(Contents, Tasks, Hubs);
+    }
+    void plug(qASd &AS)
+    {
+      tol::plug(&AS, Contents, Tasks, Hubs);
+    }
+	};
+
 	class rTasks {
 	private:
-		uys::rFH Hooks_;
+		rHook Hooks_;
 		qASw AggregatedStorage_;
-		lstcrt::qLCRATEw(str::dString, sCRow) Contents_;
-		lstbch::qLBUNCHw(sTask, sTRow) Tasks_;
-		lstbch::qLBUNCHw(sHub, sTRow) Hubs_;
+		rCore_ Core_;
 		sTRow Root_;
 		sTRow UpdateHubs_(
 			sTRow ParentRow,
@@ -87,7 +254,7 @@ namespace tsktasks {
 
 				tol::Init(New, Parent);
 
-				Hubs_.Recall(ParentRow, Parent);
+				Core_.Hubs.Recall(ParentRow, Parent);
 
 				if ( Parent.First == qNIL ) {
 					if ( Parent.Last != qNIL )
@@ -101,14 +268,14 @@ namespace tsktasks {
 
 					Sibling.Init();
 
-					Hubs_.Recall(Parent.Last, Sibling);
+					Core_.Hubs.Recall(Parent.Last, Sibling);
 
 					if ( Sibling.Next != qNIL)
 						qRFwk();
 
 					Sibling.Next = NewRow;
 
-					Hubs_.Store(Sibling, Parent.Last);
+					Core_.Hubs.Store(Sibling, Parent.Last);
 
 					New.Prev = Parent.Last;
 
@@ -117,8 +284,8 @@ namespace tsktasks {
 
 				New.Parent = ParentRow;
 
-				Hubs_.Store(New, NewRow);
-				Hubs_.Store(Parent, ParentRow);
+				Core_.Hubs.Store(New, NewRow);
+				Core_.Hubs.Store(Parent, ParentRow);
 
 				return NewRow;
 			}
@@ -128,7 +295,7 @@ namespace tsktasks {
 
 				Hub.Init();
 
-				Hubs_.Recall(Row, Hub);
+				Core_.Hubs.Recall(Row, Hub);
 
 				return Hub;
 			}
@@ -158,7 +325,7 @@ namespace tsktasks {
 
 				Task.Init();
 
-				Tasks_.Recall(Row, Task);
+				Core_.Tasks.Recall(Row, Task);
 
 				return Task;
 			}
@@ -175,7 +342,7 @@ namespace tsktasks {
 				str::dString &Content) const
 			{
 				if ( Row != qNIL )
-					Contents_.Recall(Row, Content);
+					Core_.Contents.Recall(Row, Content);
 
 				return Content;
 			}
@@ -195,11 +362,13 @@ namespace tsktasks {
 		void reset(bso::sBool P = true)
 		{
 		  if ( P ) {
-        AggregatedStorage_.Flush();
+        Core_.Contents.Flush();
+        if ( Hooks_.IsInitialized() )
+          Hooks_.Write((const sdr::sByte *)&Core_.S, sizeof(Core_.S),0);
 		  }
 
 			tol::reset(P, Hooks_);
-			tol::reset(false, Contents_, Tasks_, Hubs_, AggregatedStorage_);
+			tol::reset(false, Core_, AggregatedStorage_);
 
 			Root_ = qNIL;
 		}
@@ -208,25 +377,28 @@ namespace tsktasks {
 		{
 			reset();
 
-			uys::rHF HF;
-			HF.Init("test", NULL);
-
 			AggregatedStorage_.plug(Hooks_);
-			tol::plug(&AggregatedStorage_, Contents_, Tasks_, Hubs_);
+			Core_.plug(AggregatedStorage_);
 
-			if ( Hooks_.Init(HF, uys::mReadWrite, uys::bPersistent, flsq::Undefined) == uys::sAbsent ) {
-        tol::Init(Contents_, Tasks_, Hubs_);
-        if ( Hubs_.Add(sHub()) != Tasks_.Add(sTask()) )
+			AggregatedStorage_.DisplayStructure();
+
+			if ( !Hooks_.Init(sizeof(Core_.S)) ) {
+        Core_.Init();
+        if ( Core_.Hubs.Add(sHub()) != Core_.Tasks.Add(sTask()) )
           qRGnr();
+			} else {
+			  Hooks_.Read(0, sizeof(Core_.S), (sdr::sByte *)&Core_.S);
 			}
 
-		  if ( Hubs_.Amount() == 0 )
+			AggregatedStorage_.DisplayStructure();
+
+		  if ( Core_.Hubs.Amount() == 0 )
         qRFwk();
 
-      if ( Hubs_.Amount() != Tasks_.Amount() )
+      if ( Core_.Hubs.Amount() != Core_.Tasks.Amount() )
         qRFwk();
 
-      Root_ = Hubs_.First();
+      Root_ = Core_.Hubs.First();
 		}
 		sTRow Append(
 			const str::dString &Label,
@@ -238,13 +410,13 @@ namespace tsktasks {
 				if (Row == qNIL)
 					Row = Root_;
 
-				Task.Label = Contents_.New();
-				Contents_(Task.Label).Init(Label);
+				Task.Label = Core_.Contents.New();
+				Core_.Contents(Task.Label).Init(Label);
 
-				NewRow = Tasks_.New();
-				Tasks_.Store(Task, NewRow);
+				NewRow = Core_.Tasks.New();
+				Core_.Tasks.Store(Task, NewRow);
 
-				if ( NewRow != Hubs_.New() )
+				if ( NewRow != Core_.Hubs.New() )
 					qRFwk();
 
 				return UpdateHubs_(Row, NewRow);

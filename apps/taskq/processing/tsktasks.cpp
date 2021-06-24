@@ -34,8 +34,7 @@ qRB;
 
 	Writer.PushTag("Tasks");
 	Writer.PutAttribute("row", *Row);
-	Writer.PutAttribute("Amount", Tasks_.Amount());
-
+	Writer.PutAttribute("Amount", Core_.Tasks.Amount() - 1);
 
 	Row = GetFirst_(Row);
 

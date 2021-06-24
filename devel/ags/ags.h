@@ -1437,6 +1437,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 			return _GetSize( Descriptor );
 		}
 		void DisplayStructure( txf::text_oflow__ &Flow ) const;
+		void DisplayStructure(void) const;
 	};
 
 	E_AUTO( aggregated_storage )
