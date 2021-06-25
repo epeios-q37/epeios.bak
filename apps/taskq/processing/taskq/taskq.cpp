@@ -55,6 +55,23 @@ namespace {
 		COut << txf::pad << "Build : " __DATE__ " " __TIME__ << " (" << cpe::GetDescription() << ')' << txf::nl;
 	}
 
+	namespace {
+    void Dump_(tsktasks::rTasks &Tasks)
+    {
+    qRH;
+      xml::rWriter Writer;
+    qRB;
+      Writer.Init(cio::COut, xml::lIndent, xml::fEncoding());
+
+      Tasks.DumpChildren(qNIL, Writer);
+
+      cio::COut << txf::nl;
+    qRR;
+    qRT;
+    qRE;
+    }
+	}
+
 	void Test_( void )
 	{
 	qRH;
@@ -63,6 +80,8 @@ namespace {
     Tasks.Init();
 
     Tasks.Append(str::wString("Hey"), qNIL);
+
+    Dump_(Tasks);
 	qRR;
 	qRT;
 	qRE;
@@ -70,19 +89,9 @@ namespace {
 
 	void Dump_(void)
 	{
-	qRH;
-	  xml::rWriter Writer;
-	qRB;
     Tasks.Init();
 
-    Writer.Init(cio::COut, xml::lIndent, xml::fEncoding());
-
-    Tasks.DumpChildren(qNIL, Writer);
-
-    cio::COut << txf::nl;
-	qRR;
-	qRT;
-	qRE;
+    Dump_(Tasks);
 	}
 }
 

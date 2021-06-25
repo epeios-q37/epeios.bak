@@ -48,7 +48,8 @@ qRB;
 
 		Value.Init();
 		GetDescription_(Row, Value);
-		Writer.PutValue(Value, "Description");
+		if ( Value.Amount() )
+      Writer.PutValue(Value, "Description");
 
 		Writer.PopTag();
 

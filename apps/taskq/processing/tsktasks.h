@@ -28,6 +28,8 @@
 
 # include "tskbsc.h"
 
+# include "cio.h"
+
 # include "ags.h"
 # include "lstbch.h"
 # include "lstcrt.h"
@@ -116,19 +118,17 @@ namespace tsktasks {
     {
       return FileStorageDriver_.IsInitialized();
     }
-    void Write(
+    void Store(
       const sdr::sByte *Buffer,
-      sdr::sSize Amount,
-      sdr::bRow Position)
+      sdr::sSize Amount)
       {
-        return FileStorageDriver_.Store(Buffer, Amount, Position);
+        return FileStorageDriver_.Store(Buffer, Amount, 0);
       }
-    void Read(
-      sdr::bRow Position,
+    void Recall(
       sdr::sSize Amount,
       sdr::sByte *Buffer)
       {
-        return FileStorageDriver_.Recall(Position, Amount, Buffer);
+        return FileStorageDriver_.Recall(0, Amount, Buffer);
       }
   };
 
@@ -151,19 +151,17 @@ namespace tsktasks {
     {
       return Driver_.IsInitialized();
     }
-    void Write(
+    void Store(
       const sdr::sByte *Buffer,
-      sdr::sSize Amount,
-      sdr::bRow Position)
+      sdr::sSize Amount)
       {
-        return Driver_.Write(Buffer, Amount, Position);
+        return Driver_.Store(Buffer, Amount);
       }
-    void Read(
-      sdr::bRow Position,
+    void Recall(
       sdr::sSize Amount,
       sdr::sByte *Buffer)
       {
-        return Driver_.Read(Position, Amount, Buffer);
+        return Driver_.Recall(Amount, Buffer);
       }
   };
 
@@ -178,6 +176,7 @@ namespace tsktasks {
 		{
 			Label = Description = qNIL;
 		}
+		qCDTOR(sTask);
 		void Init(void) {
 			reset();
 		}
@@ -209,41 +208,56 @@ namespace tsktasks {
 
 	class rCore_
 	{
+  private:
+		rHook Hooks_;
+		qASd AggregatedStorage_;
+    struct s {
+      qASd::s AggregatedStorage;
+      dContents_::s Contents;
+      dTasks_::s Tasks;
+      dHubs_::s Hubs;
+    } S_;
   public:
     dContents_ Contents;
     dTasks_ Tasks;
     dHubs_ Hubs;
-    struct s {
-      dContents_::s Contents;
-      dTasks_::s Tasks;
-      dHubs_::s Hubs;
-    } S;
     void reset(bso::sBool P = true)
     {
-      tol::reset(P, Contents, Tasks, Hubs);
+		  if ( P ) {
+        Contents.Flush();
+        if ( Hooks_.IsInitialized() )
+          Hooks_.Store((const sdr::sByte *)&S_, sizeof(S_));
+		  }
+
+		  Hooks_.reset(P);
+      tol::reset(false, Contents, Tasks, Hubs, AggregatedStorage_);
     }
     rCore_(void)
-    : Contents(S.Contents),
-      Tasks(S.Tasks),
-      Hubs(S.Hubs)
-      {
-        reset(false);
-      }
-    qDTOR(rCore_);
-    void Init(void)
+    : AggregatedStorage_(S_.AggregatedStorage),
+      Contents(S_.Contents),
+      Tasks(S_.Tasks),
+      Hubs(S_.Hubs)
     {
-      tol::Init(Contents, Tasks, Hubs);
+      reset(false);
     }
-    void plug(qASd &AS)
+    qDTOR(rCore_);
+    bso::sBool Init(void)
     {
-      tol::plug(&AS, Contents, Tasks, Hubs);
+      AggregatedStorage_.plug(Hooks_);
+      tol::plug(&AggregatedStorage_, Contents, Tasks, Hubs);
+
+      if ( !Hooks_.Init(sizeof(S_)) ) {
+        tol::Init(Contents, Tasks, Hubs);
+        return false;
+      } else {
+ 			  Hooks_.Recall(sizeof(S_), (sdr::sByte *)&S_);
+        return true;
+      }
     }
 	};
 
 	class rTasks {
 	private:
-		rHook Hooks_;
-		qASw AggregatedStorage_;
 		rCore_ Core_;
 		sTRow Root_;
 		sTRow UpdateHubs_(
@@ -361,15 +375,7 @@ namespace tsktasks {
 	public:
 		void reset(bso::sBool P = true)
 		{
-		  if ( P ) {
-        Core_.Contents.Flush();
-        if ( Hooks_.IsInitialized() )
-          Hooks_.Write((const sdr::sByte *)&Core_.S, sizeof(Core_.S),0);
-		  }
-
-			tol::reset(P, Hooks_);
-			tol::reset(false, Core_, AggregatedStorage_);
-
+      Core_.reset(P);
 			Root_ = qNIL;
 		}
 		qCDTOR(rTasks);
@@ -377,20 +383,10 @@ namespace tsktasks {
 		{
 			reset();
 
-			AggregatedStorage_.plug(Hooks_);
-			Core_.plug(AggregatedStorage_);
-
-			AggregatedStorage_.DisplayStructure();
-
-			if ( !Hooks_.Init(sizeof(Core_.S)) ) {
-        Core_.Init();
+			if ( !Core_.Init() ) {
         if ( Core_.Hubs.Add(sHub()) != Core_.Tasks.Add(sTask()) )
           qRGnr();
-			} else {
-			  Hooks_.Read(0, sizeof(Core_.S), (sdr::sByte *)&Core_.S);
 			}
-
-			AggregatedStorage_.DisplayStructure();
 
 		  if ( Core_.Hubs.Amount() == 0 )
         qRFwk();
