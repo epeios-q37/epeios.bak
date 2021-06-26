@@ -10,6 +10,13 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2021-06-26:
+
+- FLSQ:
+  - [stdz],
+  - introducing *sOffsetFileDriver*,
+- OSD: [crtn],
+
 ## 2021-06-08:
 
 - SCLX: `GetBValue()` -> `BGetValue()` because `GetBValue` is a macro in *VC++*,

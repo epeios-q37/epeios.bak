@@ -37,100 +37,9 @@
 # include "xml.h"
 
 namespace tsktasks {
-  class sOffsetStorageDriver
-  : public qSDs
-  {
-  private:
-    sdr::sSize Offset_;
-    qRMV(qSDs, D_, Driver_);
-  protected:
-		virtual void SDRAllocate( sdr::sSize Size ) override
-		{
-			return D_().Allocate(Size + Offset_);
-    }
-    virtual sdr::sSize SDRSize( void ) const override
-		{
-		  if ( Driver_ == NULL )
-        return 0;
+  typedef osd::sDriver sOffsetStorageDriver;
 
-		  sdr::sSize Size = D_().Size();
-
-		  return ( Size ? Size + Offset_: 0 );
-		}
-		//v Recall 'Amount' at position 'Position' and put them in 'Buffer'.
-		virtual void SDRRecall(
-			sdr::bRow Position,
-			sdr::sSize Amount,
-			sdr::sByte *Buffer ) override
-    {
-        return D_().Recall(Position + Offset_, Amount, Buffer);
-    }
-		//v Write 'Amount' bytes from 'Buffer' to storage at position 'Position'.
-		virtual void SDRStore(
-			const sdr::sByte *Buffer,
-			sdr::sSize Amount,
-			sdr::bRow Position ) override
-		{
-		  return D_().Store(Buffer, Amount, Position + Offset_);
-		}
-  public:
-    void reset(bso::sBool P = true)
-    {
-      Offset_ = 0;
-      Driver_ = NULL;
-      qSDs::reset(P);
-    }
-    qCVDTOR(sOffsetStorageDriver);
-    void Init(
-      qSDs &Driver,
-      sdr::sSize Offset )
-    {
-        reset();
-
-        Driver_ = &Driver;
-        Offset_ = Offset;
-
-        qSDs::Init();
-    }
-  };
-
-  class rFileOffsetStorageDriver
-  : public sOffsetStorageDriver
-  {
-  private:
-    flsq::file_storage_driver___ FileStorageDriver_;
-  public:
-    void reset(bso::sBool P = true)
-    {
-      sOffsetStorageDriver::reset(P);
-      FileStorageDriver_.reset(P);
-    }
-    qCVDTOR(rFileOffsetStorageDriver);
-    bso::sBool Init(sdr::sSize Offset)
-    {
-      FileStorageDriver_.Init(flsq::Undefined, "test.q37");
-      FileStorageDriver_.Persistent();
-      sOffsetStorageDriver::Init(FileStorageDriver_, Offset);
-
-      return FileStorageDriver_.FileExists();
-    }
-    bso::sBool IsInitialized(void) const
-    {
-      return FileStorageDriver_.IsInitialized();
-    }
-    void Store(
-      const sdr::sByte *Buffer,
-      sdr::sSize Amount)
-      {
-        return FileStorageDriver_.Store(Buffer, Amount, 0);
-      }
-    void Recall(
-      sdr::sSize Amount,
-      sdr::sByte *Buffer)
-      {
-        return FileStorageDriver_.Recall(0, Amount, Buffer);
-      }
-  };
+  typedef flsq::rFileOffsetDriver rFileOffsetStorageDriver;
 
   typedef uys::rH_<rFileOffsetStorageDriver> rH_;
 
@@ -145,7 +54,10 @@ namespace tsktasks {
     qCDTOR(rHook);
     bso::sBool Init(sdr::sSize Offset)
     {
-      return Driver_.Init(Offset);
+      Driver_.Init(flsq::Undefined, Offset, "Essai.q37");
+      Driver_.Persistent();
+
+      return Driver_.FileExists();
     }
     bso::sBool IsInitialized(void) const
     {

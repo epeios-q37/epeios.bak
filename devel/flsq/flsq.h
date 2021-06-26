@@ -35,6 +35,7 @@
 # include "sdr.h"
 # include "iop.h"
 # include "fil.h"
+# include "osd.h"
 
 # if defined( CPE_S_WIN ) || defined ( CPE_S_CYGWIN )
 #  define FLSQ_DEFAULT_MAX_FILE_AMOUNT	1000
@@ -297,7 +298,7 @@ namespace flsq {
 				if ( Success )
 					Temoin_.Ouvert = 1;
 			}
-			
+
 			if ( Success ) {
 				_ReportFileUsing( _Row, ToFlush );
 
@@ -315,9 +316,9 @@ namespace flsq {
 
 				if ( !fil::Exists( _Name ) || ( TailleFichier_ > fil::GetSize( _Name ) ) ) {
 					sdr::byte__ Datum = 0;
-					
+
 					Open_( true );
-				
+
 					File_.Seek( TailleFichier_ - 1 );
 
 					if ( File_.Write( &Datum, 1 ) != 1 ) {
@@ -330,9 +331,24 @@ namespace flsq {
 							ReleaseFile();
 				}
 			}
-		
+
 		}
 		*/
+		void GrowToSize_( fil::size__ Size )
+		{
+			sdr::byte__ Datum = 0;
+
+			Open_( true );
+
+			File_.Seek( Size - 1 );
+
+			if ( File_.Write( &Datum, 1 ) != 1 ) {
+				if ( !Temoin_.Manuel )
+					ReleaseFile();
+
+				qRLbr();
+			}
+		}
 	protected:
 		void Read(
 			position__ Position,
@@ -344,11 +360,11 @@ namespace flsq {
 			bso::size__ Amount;
 
 			File_.Seek( Position );
-				
+
 			while( Nombre > 0 ) {
-				
+
 				Amount = (bso::size__)File_.Read( Nombre, Tampon );
-					
+
 				if ( Amount <= 0 ) {
 					if ( Amount == 0 ) {
 						qRFwk();	// May be we should not generate an error, due to the behavior of some lybrary ('AGS' ? ).
@@ -356,7 +372,7 @@ namespace flsq {
 					} else
 						qRFwk();
 				}
-					
+
 				Nombre -= Amount;
 				Tampon = (char *)Tampon + Amount;
 			}
@@ -378,9 +394,9 @@ namespace flsq {
 			File_.Seek( Position );
 
 			while( Nombre > 0 ) {
-			
+
 				Amount = (bso::size__)File_.Write( Tampon, Nombre );
-			
+
 				Tampon = (char *)Tampon + Amount;
 				Nombre -= Amount;
 			}
@@ -397,21 +413,6 @@ namespace flsq {
 					ReleaseFile();
 					fil::Shrink( _Name, Capacite );	// Time consuming. If called too often, allocation to less should be avoid upstream.
 				} // else nothing, as the file will grow with the writing of the data.
-			}
-		}
-		void GrowToSize_( fil::size__ Size )
-		{
-			sdr::byte__ Datum = 0;
-					
-			Open_( true );
-				
-			File_.Seek( Size - 1 );
-
-			if ( File_.Write( &Datum, 1 ) != 1 ) {
-				if ( !Temoin_.Manuel )
-					ReleaseFile();
-
-				qRLbr();
 			}
 		}
 	public:
@@ -644,23 +645,36 @@ namespace flsq {
 		{
 			return File_;
 		}
+		friend class sFileDriver_;
 	};
 
 	typedef sdr::sStorageDriver sStorageDriver_;
 
-	//c The standard storage driver which handle a file as storage.
-	class file_storage_driver___
-	: public sStorageDriver_,
-	  public file_storage___
+	void ReleaseInactiveFiles_(
+		time_t Delay,	// in s.
+		bso::uint__ MaxAmount = BSO_UINT_MAX ); // Releases up to 'MaxAmount' files not accessed since 'Delay' ms. Thread-safe.
+}
+
+/*******/
+/* NEW */
+/*******/
+
+namespace flsq {
+  typedef file_storage___ rStorage_;
+
+  class sFileDriver_
+	: public sStorageDriver_
 	{
+private:
+  qRMV(rStorage_, S_, Storage_);
 	protected:
 		virtual void SDRAllocate( sdr::size__ Size )
 		{
-			file_storage___::Allocate( Size );
+			S_().Allocate( Size );
 		}
 		virtual sdr::size__ SDRSize( void ) const
 		{
-			fil::size__ Size = FileSize();
+			fil::size__ Size = S_().FileSize();
 
 			if ( Size > SDR_SIZE_MAX )
 				qRFwk();
@@ -672,7 +686,7 @@ namespace flsq {
 			sdr::size__ Amount,
 			sdr::byte__ *Buffer )
 		{
-			file_storage___::Read( Position, Amount, Buffer );
+			S_().Read( Position, Amount, Buffer );
 		}
 		// lit  partir de 'Position' et place dans 'Tampon' 'Nombre' octets
 		virtual void SDRStore(
@@ -680,19 +694,35 @@ namespace flsq {
 			sdr::size__ Amount,
 			sdr::row_t__ Position )
 		{
-			file_storage___::Write( Buffer, Amount, Position );
+			S_().Write( Buffer, Amount, Position );
 		}
 	public:
-		file_storage_driver___( void )
-		: sStorageDriver_(),
-		  file_storage___()
-		{}
 		void reset( bool P = true )
 		{
-			file_storage___::reset( P );
+      Storage_ = NULL;
 			sStorageDriver_::reset( P );
 		}
-		//f Return the mode.
+	  qCVDTOR(sFileDriver_);
+		void Init(rStorage_ *Storage)
+		{
+		  reset();
+
+			Storage_ = Storage;
+			sStorageDriver_::Init();
+		}
+	};
+
+	class rFileDriver
+  : public rStorage_,
+    public sFileDriver_
+  {
+    public:
+      void reset(bso::sBool P = true)
+      {
+        rStorage_::reset(P);
+        sFileDriver_::reset(P);
+      }
+      qCVDTOR(rFileDriver);
 		fil::mode__ Mode( void ) const
 		{
 			return file_storage___::Mode();
@@ -704,21 +734,70 @@ namespace flsq {
 		}
 		//f Initialize using 'Filename' as file, open it in mode 'Mode'.
 		void Init(
-			id__ ID,
+			id__ Id,
 			const fnm::name___ &FileName = fnm::name___(),
 			fil::mode__ Mode = fil::mReadWrite,
 			flsq::creation Creation = flsq::cFirstUse )
 		{
-			file_storage___::Init( ID, FileName, Mode, Creation );
-			sStorageDriver_::Init();
+		  reset();
+
+			rStorage_::Init( Id, FileName, Mode, Creation );
+			sFileDriver_::Init(this);
 		}
-	};
+  };
 
-	#define E_FILqSD___	file_storage_driver___
+  typedef osd::sDriver sOffsetDriver_;
 
-	void ReleaseInactiveFiles_(
-		time_t Delay,	// in s.
-		bso::uint__ MaxAmount = BSO_UINT_MAX ); // Releases up to 'MaxAmount' files not accessed since 'Delay' ms. Thread-safe.
+  class rFileOffsetDriver
+  : public rStorage_,
+    public sOffsetDriver_
+  {
+  private:
+    sFileDriver_ FileDriver_;
+  public:
+    void reset(bso::sBool P = true)
+    {
+      rStorage_::reset(P);
+      FileDriver_.reset(P);
+      sOffsetDriver_::reset(P);
+    }
+    qCVDTOR(rFileOffsetDriver);
+    void Init(
+			id__ Id,
+			sdr::sSize Offset,
+			const fnm::name___ &FileName = fnm::name___(),
+			fil::mode__ Mode = fil::mReadWrite,
+			flsq::creation Creation = flsq::cFirstUse )
+    {
+      reset();
+
+      rStorage_::Init(Id, FileName, Mode, Creation);
+      FileDriver_.Init(this);
+      sOffsetDriver_::Init(FileDriver_, Offset);
+    }
+    void Store(
+      const sdr::sByte *Buffer,
+      sdr::sSize Amount)
+      {
+        return Write(Buffer, Amount, 0);
+      }
+    void Recall(
+      sdr::sSize Amount,
+      sdr::sByte *Buffer)
+      {
+        return Read(0, Amount, Buffer);
+      }
+  };
 }
+
+/*******/
+/* Old */
+/*******/
+
+namespace flsq {
+  typedef rFileDriver file_storage_driver___;
+}
+
+# define E_FILqSD___	file_storage_driver___}
 
 #endif
