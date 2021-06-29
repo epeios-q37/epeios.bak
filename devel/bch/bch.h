@@ -626,7 +626,7 @@ namespace bch {
 		}
 		void plug( sHook &Hook )
 		{
-			aem::size__ Amount = Hook.D.Size() / sizeof( type );
+			aem::size__ Amount = Hook.Size() / sizeof( type );
 
 			_bunch_<type, row, aem::amount_extent_manager_< row >, sh >::plug( Hook );
 

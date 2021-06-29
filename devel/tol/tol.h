@@ -65,9 +65,11 @@
 
 # include "bso.h"
 
-// Predeclarations
-namespace uys {
-	struct sHook;
+// Predeclerations.
+
+// Should be 'uys::sHook …", but cannot predeclare typedefs.
+namespace sdr {
+  class storage_driver__;
 }
 
 namespace ags {
@@ -656,7 +658,7 @@ namespace tol {
 //			S_.Object.reset( P );	// The object is already destroyed by the one which features the reference.
 		}
 		qCVDTOR( dObject );
-		void plug( uys::sHook &Hook )
+		void plug(sdr::storage_driver__ &Hook)  // Should be 'uys::sHook …", but cannot predeclare typedefs (see top of file).
 		{
 			// Standardization.
 		}

@@ -37,45 +37,20 @@
 # include "xml.h"
 
 namespace tsktasks {
-  typedef osd::sDriver sOffsetStorageDriver;
-
-  typedef flsq::rFileOffsetDriver rFileOffsetStorageDriver;
-
-  typedef uys::rH_<rFileOffsetStorageDriver> rH_;
+  typedef flsq::rFileOffsetDriver rFileOffsetStorageDriver_;
 
   class rHook
-  : public rH_
+  : public rFileOffsetStorageDriver_
   {
   public:
-    void reset(bso::sBool P = true)
-    {
-      Driver_.reset(P);
-    }
-    qCDTOR(rHook);
     bso::sBool Init(sdr::sSize Offset)
     {
-      Driver_.Init(flsq::Undefined, Offset, "Essai.q37");
-      Driver_.Persistent();
+      rFileOffsetStorageDriver_::Init(flsq::Undefined, Offset, "Essai.q37");
+      Persistent();
 
-      return Driver_.FileExists();
+      return FileExists();
     }
-    bso::sBool IsInitialized(void) const
-    {
-      return Driver_.IsInitialized();
-    }
-    void Store(
-      const sdr::sByte *Buffer,
-      sdr::sSize Amount)
-      {
-        return Driver_.Store(Buffer, Amount);
-      }
-    void Recall(
-      sdr::sSize Amount,
-      sdr::sByte *Buffer)
-      {
-        return Driver_.Recall(Amount, Buffer);
-      }
-  };
+   };
 
 	qROW(CRow);	// Content row.
 

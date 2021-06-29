@@ -54,13 +54,11 @@
 #endif
 
 namespace uys {
-	typedef sdr::sStorageDriver sStorageDriver_;
-
 	class _storage_driver__
 	{
 	private:
 		// Le pilote.
-		sStorageDriver_ *_Driver;
+		sdr::sStorageDriver *_Driver;
 		// Indique si le pilote a t dfini de manire interne ou non.
 		bso::bool__ _Internal;
 		// Uniquement pour la 'conventional_storage__'.
@@ -98,7 +96,7 @@ namespace uys {
 		{
 			reset( true );
 		}
-		void plug( sStorageDriver_ &Driver )
+		void plug( sdr::sStorageDriver &Driver )
 		{
 			reset();
 
@@ -121,7 +119,7 @@ namespace uys {
 				}
 			}
 		}
-		sStorageDriver_ *Driver( bso::bool__ Ignore = false ) const
+		sdr::sStorageDriver *Driver( bso::bool__ Ignore = false ) const
 		{
 #ifdef UYS_DBG
 			if ( !Ignore && !_Driver )
@@ -181,12 +179,7 @@ namespace uys {
 		sdr::row_t__ PosDest,
 		sdr::size__ Nombre );
 
-	struct sHook {
-		sStorageDriver_ &D;
-		sHook( sStorageDriver_ &Driver )
-		: D( Driver )
-		{}
-	};
+  typedef sdr::sStorageDriver sHook;
 
 	//c Untyped storage.
 	class untyped_storage_
@@ -228,15 +221,6 @@ namespace uys {
 
 			S_.Size = Size;
 		}
-		void plug_( sStorageDriver_ &Driver )
-		{
-			bso::size__ Size = Driver.Size();
-
-			_Driver.plug( Driver );
-
-			if ( S_.Size != Size )
-				_Driver.Allocate( S_.Size = Size );
-		}
 	public:
 		struct s
 		{
@@ -261,16 +245,21 @@ namespace uys {
 		{
 			reset();
 		}
-		void plug( sHook &Hook )
+		void plug(sHook &Hook)
 		{
-			plug_( Hook.D );
+			bso::size__ Size = Hook.Size();
+
+			_Driver.plug(Hook);
+
+			if ( S_.Size != Size )
+				Hook.Allocate(S_.Size = Size);
 		}
 		void plug( ags::aggregated_storage_ *AS )
 		{
 			// 'AS' == 'NULL' is for flushing (mainly operated by the 'ctn' module.
 			if ( AS != NULL ) {
 				_AggregatedStorageDriver.Init( *AS );
-				plug_( _AggregatedStorageDriver );
+				plug( _AggregatedStorageDriver );
 			}
 		}
 		untyped_storage_ &operator =( const untyped_storage_ &US )
@@ -383,7 +372,7 @@ namespace uys {
 			sdr::row_t__ Begin,
 			sdr::row_t__ End ) const;
 		//f Return the used storage driver. 'Ignore' is only for 'UYS_DBG' mode and for the 'MMG' library.
-		sStorageDriver_ *Driver( bso::bool__ Ignore = false )
+		sdr::sStorageDriver *Driver( bso::bool__ Ignore = false )
 		{
 			return _Driver.Driver( Ignore );
 		}
@@ -455,32 +444,8 @@ namespace uys {
 }
 
 namespace uys {
-
-	template <typename driver> struct rH_
-	: public sHook
-	{
-	protected:
-		driver Driver_;
-	public:
-		rH_( void )
-		: sHook( Driver_ )
-		{}
-	};
-
-	class rRH	// Regular (memory - RAM) hook.
-	: public rH_<mns::standalone_conventional_memory_driver___>
-	{
-	public:
-		void reset( bso::sBool P = true )
-		{
-			Driver_.reset( P );
-		}
-		qCDTOR( rRH );
-		void Init( void )
-		{
-			Driver_.Init();
-		}
-	};
+  // Regular (memory - RAM) hook.
+  typedef mns::standalone_conventional_memory_driver___ rRH;
 
 	// Hook filenames.
 	struct rHF
@@ -516,20 +481,20 @@ namespace uys {
 
 	// Files hook.
 	class rFH
-	: public rH_<flsq::file_storage_driver___>
+	: public flsq::file_storage_driver___
 	{
 	public:
 		void reset( bso::sBool P = true )
 		{
 			if ( P ) {
-				if ( Driver_.IsInitialized() ) {
+				if ( IsInitialized() ) {
 					if ( !State().Boolean() )
 						if ( IsPersistent() && ( Mode() == mReadWrite ) )
-							Driver_.CreateFile();
+							CreateFile();
 				}
 			}
 
-			Driver_.reset( P );
+			flsq::file_storage_driver___::reset( P );
 		}
 		qCVDTOR( rFH );
 		eState Init(
@@ -538,51 +503,40 @@ namespace uys {
 			behavior__ Behavior,
 			flsq::id__ ID )
 		{
-			Driver_.Init( ID, Filenames.Filename, Convert_( Mode ), flsq::cFirstUse );
+			flsq::file_storage_driver___::Init( ID, Filenames.Filename, Convert_( Mode ), flsq::cFirstUse );
 
 			switch ( Behavior ) {
 			case bVolatile:
 				break;
 			case bPersistent:
-				Driver_.Persistent();
+				Persistent();
 				break;
 			default:
 				qRFwk();
 				break;
 			}
 
-			if ( Driver_.FileExists() )
+			if (FileExists() )
 				return sExists;
 			else
 				return sAbsent;
 		}
 		eState State( void ) const
 		{
-			return ( Driver_.FileExists() ? sExists : sAbsent );
+			return ( FileExists() ? sExists : sAbsent );
 		}
-		void CreateFiles( void )
-		{
-			Driver_.CreateFile();
-		}
-		void ReleaseFiles( void )
-		{
-			Driver_.ReleaseFile();
-		}
+
 		void DropFiles( void )
 		{
-			Driver_.Drop();
-		}
-		bso::sBool IsPersistent( void ) const
-		{
-			return Driver_.IsPersistent();
+			Drop();
 		}
 		mode__ SetMode( mode__ Mode )
 		{
-			return Convert_( Driver_.Mode( Convert_( Mode ) ) );
+			return Convert_( flsq::file_storage_driver___::Mode( Convert_( Mode ) ) );
 		}
 		mode__ Mode( void ) const
 		{
-			return Convert_( Driver_.Mode() );
+			return Convert_( flsq::file_storage_driver___::Mode() );
 		}
 	};
 

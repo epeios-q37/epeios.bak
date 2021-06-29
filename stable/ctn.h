@@ -82,17 +82,7 @@ namespace ctn {
 	qHOOKS2( tys::sHook, Statics, ias::sHooks, Dynamics );
 
 	typedef uys::sHook sHook_;
-	typedef ias::indexed_aggregated_storage_driver__ rADriver_;
-
-	struct rAHook_
-	: public rADriver_
-	{
-	public:
-		sHook_ Core;
-		rAHook_( void )
-		: Core( *this )
-		{}
-	};
+	typedef ias::indexed_aggregated_storage_driver__ rAHook_;
 
 	//c The base of a container. Internal use.
 	template <typename t, typename st, typename r> class basic_container_
@@ -657,18 +647,7 @@ namespace ctn {
 		}
 	};
 
-	typedef ias::const_indexed_aggregated_storage_driver__ rCADriver_;
-
-	struct rCAHook_
-	: public rCADriver_
-	{
-	public:
-		sHook_ Core;
-		rCAHook_( void )
-		: Core( *this )
-		{}
-	};
-
+	typedef ias::const_indexed_aggregated_storage_driver__ rCAHook_;
 
 	template <typename t, typename st, typename r> class item_base_const__
 	{
@@ -846,7 +825,7 @@ namespace ctn {
 			item_base_const__< t, mono_static__<typename_ t::s >, r >::reset( P );
 			Objet_.reset( false );
 
-			Objet_.plug( item_base_const__< t, mono_static__< typename_ t::s >, r >::Pilote_.Core );
+			Objet_.plug(item_base_const__< t, mono_static__< typename_ t::s >, r >::Pilote_);
 		}
 		const_mono_item( void )
 		: Objet_( item_base_const__< t, mono_static__< typename_ t::s >, r >::ctn_S_.ST )
@@ -916,7 +895,7 @@ namespace ctn {
 		{
 			SetReseted_();
 			basic_container_< t, mono_static__< typename_ t::s >, r >::reset( P );
-			basic_container_< t, mono_static__< typename_ t::s >, r >::Object_.plug( basic_container_< t, mono_static__< typename_ t::s >, r >::Hook_.Core );
+			basic_container_< t, mono_static__< typename_ t::s >, r >::Object_.plug(basic_container_< t, mono_static__< typename_ t::s >, r >::Hook_);
 		}
 		void FlushTest( void ) const
 		{
@@ -1051,7 +1030,7 @@ namespace ctn {
 			Objet_.reset( false );
 			AStorage.reset( P );
 
-			AStorage.plug( item_base_const__< t, poly_static__< typename_ t::s >, r >::Pilote_.Core );
+			AStorage.plug(item_base_const__< t, poly_static__< typename_ t::s >, r >::Pilote_);
 			Objet_.plug( &AStorage );
 		}
 		const_poly_item( void )
@@ -1120,7 +1099,7 @@ namespace ctn {
 		{
 			SetReseted_();
 			basic_container_< t, poly_static__< typename_ t::s >, r >::reset( P );
-			AStorage_.plug( basic_container_< t, poly_static__< typename_ t::s >, r >::Hook_.Core );
+			AStorage_.plug(basic_container_< t, poly_static__< typename_ t::s >, r >::Hook_);
 			basic_container_< t, poly_static__< typename_ t::s >, r >::Object_.plug( &AStorage_ );
 		}
 		poly_container_ &operator =( const poly_container_ &C )

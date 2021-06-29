@@ -10,6 +10,11 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2021-06-29:
+
+- UYS: simplification of *hook* related features,
+- BCH, CTN, TOL: [adpt],
+
 ## 2021-06-26:
 
 - FLSQ:
