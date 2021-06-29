@@ -26,7 +26,7 @@
 using namespace ntvstr;
 
 #ifdef NTVSTR__MBS
-# define strlen_	strlen 
+# define strlen_	strlen
 # define strchr_	strchr
 # define strrchr_	strrchr
 # define strcat_	strcat
@@ -163,5 +163,7 @@ qRT
 qRE
 	return Flow;
 }
+
+rString ntvstr::Empty = rString();
 
 

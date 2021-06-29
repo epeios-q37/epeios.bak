@@ -12,8 +12,12 @@
 
 ## 2021-06-29:
 
-- UYS: simplification of *hook* related features,
-- BCH, CTN, TOL: [adpt],
+- UYS:
+  - simplification of *hook* related features,
+  - [stdz],
+- BCH, CTN, FLSQ, IAS, LSTBCH, LSTCTN, TOL, UYS: [adpt],
+- FNM, NTVSTR: introducing `Empty`,
+- OSD: using templates,
 
 ## 2021-06-26:
 

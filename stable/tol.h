@@ -65,7 +65,7 @@
 
 # include "bso.h"
 
-// Predeclerations.
+// Predeclarations.
 
 // Should be 'uys::sHook …", but cannot predeclare typedefs.
 namespace sdr {
@@ -93,6 +93,8 @@ namespace str {
 # define TOL_ROW_( name ) E_TMIMIC__( sdr::bRow, name )
 
 # define qROW( name ) TOL_ROW_( s##name )
+// Nota: although a static object, defining it as resource containing object
+// that it is pointing to an object which has to be released by the proper function.
 # define qROWr( name ) TOL_ROW_( r##name )
 
 #define qROWS( name )\

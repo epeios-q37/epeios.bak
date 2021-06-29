@@ -218,13 +218,13 @@ namespace lstctn {
 		uys::eState Init(
 			const rHF &Filenames,
 			uys::mode__ Mode,
-			uys::behavior__ Behavior,
-			flsq::id__ ID )
+			uys::eBehavior Behavior,
+			flsq::rId Id)
 		{
-			uys::eState State = Container_.Init( Filenames.Container, Mode, Behavior, ID );
+			uys::eState State = Container_.Init(Filenames.Container, Mode, Behavior, Id);
 
 			if ( !State.IsError() ) {
-				if ( List_.Init( Filenames.List, Mode, Behavior, ID ) != State )
+				if ( List_.Init(Filenames.List, Mode, Behavior, Id) != State )
 					State = uys::sInconsistent;
 			}
 

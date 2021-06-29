@@ -37,21 +37,6 @@
 # include "xml.h"
 
 namespace tsktasks {
-  typedef flsq::rFileOffsetDriver rFileOffsetStorageDriver_;
-
-  class rHook
-  : public rFileOffsetStorageDriver_
-  {
-  public:
-    bso::sBool Init(sdr::sSize Offset)
-    {
-      rFileOffsetStorageDriver_::Init(flsq::Undefined, Offset, "Essai.q37");
-      Persistent();
-
-      return FileExists();
-    }
-   };
-
 	qROW(CRow);	// Content row.
 
 	struct sTask {
@@ -96,14 +81,14 @@ namespace tsktasks {
 	class rCore_
 	{
   private:
-		rHook Hooks_;
-		qASd AggregatedStorage_;
     struct s {
       qASd::s AggregatedStorage;
       dContents_::s Contents;
       dTasks_::s Tasks;
       dHubs_::s Hubs;
     } S_;
+    uys::rFOH<sizeof(S_)> Hooks_;
+		qASd AggregatedStorage_;
   public:
     dContents_ Contents;
     dTasks_ Tasks;
@@ -113,7 +98,7 @@ namespace tsktasks {
 		  if ( P ) {
         Contents.Flush();
         if ( Hooks_.IsInitialized() )
-          Hooks_.Store((const sdr::sByte *)&S_, sizeof(S_));
+          Hooks_.Write((const sdr::sByte *)&S_);
 		  }
 
 		  Hooks_.reset(P);
@@ -133,12 +118,12 @@ namespace tsktasks {
       AggregatedStorage_.plug(Hooks_);
       tol::plug(&AggregatedStorage_, Contents, Tasks, Hubs);
 
-      if ( !Hooks_.Init(sizeof(S_)) ) {
+      if ( Hooks_.Init("Essai.q37", uys::mReadWrite) == uys::sExists ) {
+ 			  Hooks_.Read((sdr::sByte *)&S_);
+        return true;
+      } else {
         tol::Init(Contents, Tasks, Hubs);
         return false;
-      } else {
- 			  Hooks_.Recall(sizeof(S_), (sdr::sByte *)&S_);
-        return true;
       }
     }
 	};

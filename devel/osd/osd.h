@@ -33,25 +33,22 @@
 # include "tol.h"
 
 namespace osd {
-  class sDriver
+  template <typename storage, int offset> class sDriver
   : public qSDs
   {
   private:
-    sdr::sSize Offset_;
-    qRMV(qSDs, D_, Driver_);
+    qRMV(storage, S_, Storage_);
   protected:
 		virtual void SDRAllocate( sdr::sSize Size ) override
 		{
-			return D_().Allocate(Size + Offset_);
+			return S_().OSDAllocate(Size + offset);
     }
     virtual sdr::sSize SDRSize( void ) const override
 		{
-		  if ( Driver_ == NULL )
+		  if ( Storage_ == NULL )
         return 0;
 
-		  sdr::sSize Size = D_().Size();
-
-		  return ( Size ? Size + Offset_: 0 );
+		  return S_().OSDSize();
 		}
 		//v Recall 'Amount' at position 'Position' and put them in 'Buffer'.
 		virtual void SDRRecall(
@@ -59,7 +56,7 @@ namespace osd {
 			sdr::sSize Amount,
 			sdr::sByte *Buffer ) override
     {
-        return D_().Recall(Position + Offset_, Amount, Buffer);
+        return S_().OSDRecall(Position + offset, Amount, Buffer);
     }
 		//v Write 'Amount' bytes from 'Buffer' to storage at position 'Position'.
 		virtual void SDRStore(
@@ -67,26 +64,38 @@ namespace osd {
 			sdr::sSize Amount,
 			sdr::bRow Position ) override
 		{
-		  return D_().Store(Buffer, Amount, Position + Offset_);
+		  return S_().OSDStore(Buffer, Amount, Position + offset);
 		}
   public:
     void reset(bso::sBool P = true)
     {
-      Offset_ = 0;
-      Driver_ = NULL;
+      Storage_ = NULL;
       qSDs::reset(P);
     }
     qCVDTOR(sDriver);
-    void Init(
-      qSDs &Driver,
-      sdr::sSize Offset )
+    void Init(storage *Storage)
     {
-        reset();
+      Storage_ = Storage;
 
-        Driver_ = &Driver;
-        Offset_ = Offset;
+      qSDs::Init();
+    }
+    void Init(storage &Storage)
+    {
+      Init(&Storage);
+    }
+    void Write(const sdr::sByte *Buffer)
+    {
+      if ( offset == 0 )  // Calling this function in this context does not make sense.
+        qRFwk();
 
-        qSDs::Init();
+      return S_().OSDStore(Buffer, offset, 0);
+    }
+    void Read(sdr::sByte *Buffer)
+    {
+      if ( offset == 0 )  // Calling this function in this context does not make sense.
+        qRFwk();
+
+      return S_().OSDRecall(0, offset, Buffer);
     }
   };
 }

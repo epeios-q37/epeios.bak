@@ -78,6 +78,8 @@
 namespace flsq {
 	qROWr( Id );
 	qCDEF( rId, Undefined, qNIL );
+
+  template <typename storage, int offset> qTCLONE(osd::sDriver<qCOVER2(storage, offset)>, sOffsetDriver_);
 }
 
 /**************/
@@ -350,7 +352,7 @@ namespace flsq {
 			}
 		}
 	protected:
-		void Read(
+		void Read_(
 			position__ Position,
 			bso::size__ Nombre,
 			void *Tampon )
@@ -382,7 +384,7 @@ namespace flsq {
 		}
 			/* lit  partir de 'Taille' et place dans 'Tampon' 'Taille' octets
 			retourne le nombre d'octets effectivement lus */
-		void Write(
+		void Write_(
 			const void *Tampon,
 			bso::size__ Nombre,
 			position__ Position )
@@ -406,7 +408,7 @@ namespace flsq {
 /*			else
 				File_.Flush();
 */		}
-		void Allocate( bso::size__ Capacite )
+		void Allocate_( bso::size__ Capacite )
 		{
 			if ( fil::Exists( _Name ) ) {
 				if ( Capacite < fil::GetSize( _Name ) ) {
@@ -645,7 +647,30 @@ namespace flsq {
 		{
 			return File_;
 		}
-		friend class sFileDriver_;
+		void OSDAllocate( sdr::sSize Size )
+		{
+			return Allocate_(Size);
+    }
+    sdr::sSize OSDSize( void ) const
+		{
+		  return FileSize();
+		}
+		//v Recall 'Amount' at position 'Position' and put them in 'Buffer'.
+		void OSDRecall(
+			sdr::bRow Position,
+			sdr::sSize Amount,
+			sdr::sByte *Buffer )
+    {
+        return Read_(Position, Amount, Buffer);
+    }
+		//v Write 'Amount' bytes from 'Buffer' to storage at position 'Position'.
+		void OSDStore(
+			const sdr::sByte *Buffer,
+			sdr::sSize Amount,
+			sdr::bRow Position )
+		{
+		  return Write_(Buffer, Amount, Position);
+		}
 	};
 
 	typedef sdr::sStorageDriver sStorageDriver_;
@@ -662,67 +687,17 @@ namespace flsq {
 namespace flsq {
   typedef file_storage___ rStorage_;
 
-  class sFileDriver_
-	: public sStorageDriver_
-	{
-private:
-  qRMV(rStorage_, S_, Storage_);
-	protected:
-		virtual void SDRAllocate( sdr::size__ Size )
-		{
-			S_().Allocate( Size );
-		}
-		virtual sdr::size__ SDRSize( void ) const
-		{
-			fil::size__ Size = S_().FileSize();
-
-			if ( Size > SDR_SIZE_MAX )
-				qRFwk();
-
-			return (sdr::size__)Size;
-		}
-		virtual void SDRRecall(
-			sdr::row_t__ Position,
-			sdr::size__ Amount,
-			sdr::byte__ *Buffer )
-		{
-			S_().Read( Position, Amount, Buffer );
-		}
-		// lit  partir de 'Position' et place dans 'Tampon' 'Nombre' octets
-		virtual void SDRStore(
-			const sdr::byte__ *Buffer,
-			sdr::size__ Amount,
-			sdr::row_t__ Position )
-		{
-			S_().Write( Buffer, Amount, Position );
-		}
-	public:
-		void reset( bool P = true )
-		{
-      Storage_ = NULL;
-			sStorageDriver_::reset( P );
-		}
-	  qCVDTOR(sFileDriver_);
-		void Init(rStorage_ *Storage)
-		{
-		  reset();
-
-			Storage_ = Storage;
-			sStorageDriver_::Init();
-		}
-	};
-
-	class rFileDriver
+	template <int offset> class rFileOffsetDriver
   : public rStorage_,
-    public sFileDriver_
+    public sOffsetDriver_<rStorage_, offset>
   {
-    public:
-      void reset(bso::sBool P = true)
-      {
-        rStorage_::reset(P);
-        sFileDriver_::reset(P);
-      }
-      qCVDTOR(rFileDriver);
+  public:
+    void reset(bso::sBool P = true)
+    {
+      rStorage_::reset(P);
+      sOffsetDriver_<rStorage_, offset>::reset(P);
+    }
+    qCVDTOR(rFileOffsetDriver);
 		fil::mode__ Mode( void ) const
 		{
 			return file_storage___::Mode();
@@ -742,52 +717,11 @@ private:
 		  reset();
 
 			rStorage_::Init( Id, FileName, Mode, Creation );
-			sFileDriver_::Init(this);
+			sOffsetDriver_<rStorage_, offset>::Init(this);
 		}
   };
 
-  typedef osd::sDriver sOffsetDriver_;
-
-  class rFileOffsetDriver
-  : public rStorage_,
-    public sOffsetDriver_
-  {
-  private:
-    sFileDriver_ FileDriver_;
-  public:
-    void reset(bso::sBool P = true)
-    {
-      rStorage_::reset(P);
-      FileDriver_.reset(P);
-      sOffsetDriver_::reset(P);
-    }
-    qCVDTOR(rFileOffsetDriver);
-    void Init(
-			id__ Id,
-			sdr::sSize Offset,
-			const fnm::name___ &FileName = fnm::name___(),
-			fil::mode__ Mode = fil::mReadWrite,
-			flsq::creation Creation = flsq::cFirstUse )
-    {
-      reset();
-
-      rStorage_::Init(Id, FileName, Mode, Creation);
-      FileDriver_.Init(this);
-      sOffsetDriver_::Init(FileDriver_, Offset);
-    }
-    void Store(
-      const sdr::sByte *Buffer,
-      sdr::sSize Amount)
-      {
-        return Write(Buffer, Amount, 0);
-      }
-    void Recall(
-      sdr::sSize Amount,
-      sdr::sByte *Buffer)
-      {
-        return Read(0, Amount, Buffer);
-      }
-  };
+  typedef rFileOffsetDriver<0> rFileDriver;
 }
 
 /*******/

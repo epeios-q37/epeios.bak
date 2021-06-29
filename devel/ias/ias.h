@@ -495,13 +495,13 @@ namespace ias {
 		uys::eState Init(
 			const rHF &Filenames,
 			uys::mode__ Mode,
-			uys::behavior__ Behavior,
-			flsq::id__ ID )
+			uys::eBehavior Behavior,
+			flsq::rId Id)
 		{
-			uys::eState State = Descriptors_.Init( Filenames.Descriptors, Mode, Behavior, ID );
+			uys::eState State = Descriptors_.Init(Filenames.Descriptors, Mode, Behavior, Id);
 
 			if ( !State.IsError() ) {
-				if ( State != Storage_.Init( Filenames.Storage, Mode, Behavior, ID ) )
+				if ( State != Storage_.Init(Filenames.Storage, Mode, Behavior, Id) )
 					State = uys::sInconsistent;
 			}
 

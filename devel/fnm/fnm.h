@@ -151,6 +151,8 @@ namespace fnm {
 
 namespace fnm {
 	typedef name___ rName;
+
+	using ntvstr::Empty;
 }
 
 

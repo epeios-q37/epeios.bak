@@ -245,6 +245,8 @@ namespace ntvstr {
 	typedef string___ rString;
 
 	typedef char__ sChar;
+
+	extern rString Empty;
 }
 
 txf::text_oflow__ &operator <<(

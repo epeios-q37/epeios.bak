@@ -521,13 +521,13 @@ namespace ctn {
 		uys::eState Init(
 			const rHF &Filenames,
 			uys::mode__ Mode,
-			uys::behavior__ Behavior,
-			flsq::id__ ID )
+			uys::eBehavior Behavior,
+			flsq::rId Id)
 		{
-			uys::eState State = Statics_.Init( Filenames.Statics, Mode, Behavior, ID );
+			uys::eState State = Statics_.Init(Filenames.Statics, Mode, Behavior, Id);
 
 			if ( !State.IsError() )
-				if ( Dynamics_.Init( Filenames.Dynamics, Mode, Behavior, ID ) != State )
+				if ( Dynamics_.Init(Filenames.Dynamics, Mode, Behavior, Id) != State )
 					State = uys::sInconsistent;
 
 			return State;
