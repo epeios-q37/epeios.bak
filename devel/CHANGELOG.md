@@ -10,6 +10,11 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2021-06-30:
+
+- FLSQ: reorganization,
+- OSD: `read` / `write` -> `put` / `get`,
+
 ## 2021-06-29:
 
 - UYS:

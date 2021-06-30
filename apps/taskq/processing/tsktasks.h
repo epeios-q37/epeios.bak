@@ -98,7 +98,7 @@ namespace tsktasks {
 		  if ( P ) {
         Contents.Flush();
         if ( Hooks_.IsInitialized() )
-          Hooks_.Write((const sdr::sByte *)&S_);
+          Hooks_.Put((const sdr::sByte *)&S_);
 		  }
 
 		  Hooks_.reset(P);
@@ -118,8 +118,8 @@ namespace tsktasks {
       AggregatedStorage_.plug(Hooks_);
       tol::plug(&AggregatedStorage_, Contents, Tasks, Hubs);
 
-      if ( Hooks_.Init("Essai.q37", uys::mReadWrite) == uys::sExists ) {
- 			  Hooks_.Read((sdr::sByte *)&S_);
+      if ( Hooks_.Init("Essai", uys::mReadWrite) == uys::sExists ) {
+ 			  Hooks_.Get((sdr::sByte *)&S_);
         return true;
       } else {
         tol::Init(Contents, Tasks, Hubs);
@@ -185,9 +185,25 @@ namespace tsktasks {
 
 				return Hub;
 			}
+			bso::sBool TestAndGet_(
+        sTRow (rTasks::* Get)(sTRow) const,
+        sTRow &Row) const
+      {
+        sTRow Buffer = (*this.*Get)(Row);
+
+        if ( Buffer != qNIL ) {
+          Row = Buffer;
+          return true;
+        } else
+          return false;
+      }
 			sTRow GetParent_(sTRow Row) const
 			{
 				return GetHub_(Row).Parent;
+			}
+			bso::sBool TestAndGetParent_(sTRow &Row) const
+			{
+			  return TestAndGet_(&rTasks::GetParent_, Row);
 			}
 			sTRow GetPrev_(sTRow Row) const
 			{
@@ -197,9 +213,17 @@ namespace tsktasks {
 			{
 				return GetHub_(Row).Next;
 			}
-			sTRow GetFirst_(sTRow Row) const
+			bso::sBool TestAndGetNext_(sTRow &Row) const
+			{
+			  return TestAndGet_(&rTasks::GetNext_, Row);
+			}
+      sTRow GetFirst_(sTRow Row) const
 			{
 				return GetHub_(Row).First;
+			}
+			bso::sBool TestAndGetFirst_(sTRow &Row) const
+			{
+			  return TestAndGet_(&rTasks::GetFirst_, Row);
 			}
 			sTRow GetLast_(sTRow Row) const
 			{
@@ -268,6 +292,13 @@ namespace tsktasks {
 
       Root_ = Core_.Hubs.First();
 		}
+		bso::sBool Exists(sTRow Row) const
+		{
+		  if ( Row == qNIL )
+        return true;
+
+      return Core_.Tasks.Exists(Row);
+		}
 		sTRow Append(
 			const str::dString &Label,
 			sTRow Row)
@@ -289,9 +320,13 @@ namespace tsktasks {
 
 				return UpdateHubs_(Row, NewRow);
 			}
-		void DumpChildren(
+		void Export(
 			sTRow Row,
-			xml::rWriter &Writer) const;
+			xml::rWriter &Writer,
+			const char *Generator) const;
+		void Display(
+			sTRow Row,
+			txf::sWFlow &Out) const;
 	};
 }
 

@@ -351,7 +351,6 @@ namespace flsq {
 				qRLbr();
 			}
 		}
-	protected:
 		void Read_(
 			position__ Position,
 			bso::size__ Nombre,
@@ -647,33 +646,8 @@ namespace flsq {
 		{
 			return File_;
 		}
-		void OSDAllocate( sdr::sSize Size )
-		{
-			return Allocate_(Size);
-    }
-    sdr::sSize OSDSize( void ) const
-		{
-		  return FileSize();
-		}
-		//v Recall 'Amount' at position 'Position' and put them in 'Buffer'.
-		void OSDRecall(
-			sdr::bRow Position,
-			sdr::sSize Amount,
-			sdr::sByte *Buffer )
-    {
-        return Read_(Position, Amount, Buffer);
-    }
-		//v Write 'Amount' bytes from 'Buffer' to storage at position 'Position'.
-		void OSDStore(
-			const sdr::sByte *Buffer,
-			sdr::sSize Amount,
-			sdr::bRow Position )
-		{
-		  return Write_(Buffer, Amount, Position);
-		}
+		friend class sOSDRelay_;
 	};
-
-	typedef sdr::sStorageDriver sStorageDriver_;
 
 	void ReleaseInactiveFiles_(
 		time_t Delay,	// in s.
@@ -687,27 +661,70 @@ namespace flsq {
 namespace flsq {
   typedef file_storage___ rStorage_;
 
+	class sOSDRelay_
+	{
+  private:
+    rStorage_ &S_;
+  public:
+    void reset(bso::sBool = true)
+    {
+      // Standardization.
+    }
+    sOSDRelay_( rStorage_ &Storage)
+    : S_(Storage)
+    {
+      reset(false);
+    }
+    qDTOR(sOSDRelay_);
+    void Init(void)
+    {
+      reset();
+    }
+		void OSDAllocate( sdr::sSize Size )
+		{
+			return S_.Allocate_(Size);
+    }
+    sdr::sSize OSDSize( void ) const
+		{
+		  return S_.FileSize();
+		}
+		//v Recall 'Amount' at position 'Position' and put them in 'Buffer'.
+		void OSDRecall(
+			sdr::bRow Position,
+			sdr::sSize Amount,
+			sdr::sByte *Buffer )
+    {
+      return S_.Read_(Position, Amount, Buffer);
+    }
+		//v Write 'Amount' bytes from 'Buffer' to storage at position 'Position'.
+		void OSDStore(
+			const sdr::sByte *Buffer,
+			sdr::sSize Amount,
+			sdr::bRow Position )
+		{
+		  return S_.Write_(Buffer, Amount, Position);
+		}
+	};
+
 	template <int offset> class rFileOffsetDriver
   : public rStorage_,
-    public sOffsetDriver_<rStorage_, offset>
+    public sOffsetDriver_<sOSDRelay_, offset>
   {
+  private:
+    sOSDRelay_ OSD_;
   public:
     void reset(bso::sBool P = true)
     {
       rStorage_::reset(P);
-      sOffsetDriver_<rStorage_, offset>::reset(P);
+      OSD_.reset(P);
+      sOffsetDriver_<sOSDRelay_, offset>::reset(P);
     }
-    qCVDTOR(rFileOffsetDriver);
-		fil::mode__ Mode( void ) const
-		{
-			return file_storage___::Mode();
-		}
-		//f 'Mode' becomes the mode.
-		fil::mode__ Mode( fil::mode__ Mode )
-		{
-			return file_storage___::Mode( Mode );
-		}
-		//f Initialize using 'Filename' as file, open it in mode 'Mode'.
+    rFileOffsetDriver(void)
+    : OSD_(*this)
+    {
+      reset(false);
+    }
+    qVDTOR(rFileOffsetDriver);
 		void Init(
 			id__ Id,
 			const fnm::name___ &FileName = fnm::name___(),
@@ -717,7 +734,8 @@ namespace flsq {
 		  reset();
 
 			rStorage_::Init( Id, FileName, Mode, Creation );
-			sOffsetDriver_<rStorage_, offset>::Init(this);
+			OSD_.Init();
+			sOffsetDriver_<sOSDRelay_, offset>::Init(OSD_);
 		}
   };
 

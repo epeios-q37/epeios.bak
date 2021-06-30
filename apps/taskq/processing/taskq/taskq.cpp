@@ -34,6 +34,8 @@
 #include "fnm.h"
 #include "flf.h"
 
+using namespace tsktasks;
+
 using cio::CErr;
 using cio::COut;
 using cio::CIn;
@@ -56,42 +58,69 @@ namespace {
 	}
 
 	namespace {
-    void Dump_(tsktasks::rTasks &Tasks)
+    void Dump_(
+      tsktasks::rTasks &Tasks,
+      sTRow Row)
     {
     qRH;
       xml::rWriter Writer;
     qRB;
       Writer.Init(cio::COut, xml::lIndent, xml::fEncoding());
 
-      Tasks.DumpChildren(qNIL, Writer);
-
-      cio::COut << txf::nl;
+      Tasks.Export(Row, Writer, NAME_MC " V" VERSION);
     qRR;
     qRT;
     qRE;
     }
 	}
 
-	void Test_( void )
+	void Export_(void)
 	{
-	qRH;
-		str::wString Test;
-	qRB;
+	  sTRow Row = qNIL;
+
+    Row = sclm::OGetU16(registry::parameter::Index, 0);
+
     Tasks.Init();
 
-    Tasks.Append(str::wString("Hey"), qNIL);
+    Dump_(Tasks, Row);
+	}
 
-    Dump_(Tasks);
+	void Create_(void)
+	{
+	qRH;
+	  str::wString Label;
+	  sTRow Row = qNIL;
+	qRB;
+    Label.Init();
+    sclm::MGetValue(registry::parameter::Label, Label);
+
+    Row = sclm::OGetU16(registry::parameter::Index, 0);
+
+    Tasks.Init();
+
+    if ( !Tasks.Exists(Row))
+      qRGnr();
+
+    Tasks.Append(Label, Row);
+
+    Tasks.Display(Row, cio::COut);
 	qRR;
 	qRT;
 	qRE;
 	}
 
-	void Dump_(void)
+	void Display_(void)
 	{
+	  sTRow Row = qNIL;
+
+    Row = sclm::OGetU16(registry::parameter::Index, 0);
+
     Tasks.Init();
 
-    Dump_(Tasks);
+    if ( !Tasks.Exists(Row))
+      qRGnr();
+
+    Tasks.Display(Row, cio::COut);
 	}
 }
 
@@ -110,8 +139,9 @@ qRB;
 		PrintHeader_();
 	else if ( Command == "License" )
 		epsmsc::PrintLicense( NAME_MC );
-	C( Test );
-	C( Dump );
+	C( Export );
+	C( Create );
+	C( Display );
 	else
 		qRGnr();
 

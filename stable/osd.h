@@ -83,14 +83,14 @@ namespace osd {
     {
       Init(&Storage);
     }
-    void Write(const sdr::sByte *Buffer)
+    void Put(const sdr::sByte *Buffer)
     {
       if ( offset == 0 )  // Calling this function in this context does not make sense.
         qRFwk();
 
       return S_().OSDStore(Buffer, offset, 0);
     }
-    void Read(sdr::sByte *Buffer)
+    void Get(sdr::sByte *Buffer)
     {
       if ( offset == 0 )  // Calling this function in this context does not make sense.
         qRFwk();
