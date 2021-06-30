@@ -466,7 +466,7 @@ namespace uys {
 		}
 		void Init(
 			const fnm::name___ &Path,
-			const fnm::name___ &Basename = NULL)	// Peut tre vide si 'Path' contient dj le nom de fichier.
+			const fnm::name___ &Basename = fnm::Empty)	// Peut tre vide si 'Path' contient dj le nom de fichier.
 		{
 		  reset();
 
