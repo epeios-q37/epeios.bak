@@ -38,6 +38,10 @@
 		<Module>registry</Module>
 	</Modules>
 	<Files/>
+	<SourceDirs>
+		<SourceDir>..</SourceDir>
+		<SourceDir>../..</SourceDir>
+	</SourceDirs>
     <RTW>
         <Dir>taskq-cli</Dir>
     </RTW>
