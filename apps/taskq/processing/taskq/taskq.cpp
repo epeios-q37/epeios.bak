@@ -109,7 +109,7 @@ namespace {
 	qRE;
 	}
 
-	void Display_(void)
+	void Display__(void)
 	{
 	  sTRow Row = qNIL;
 
@@ -121,6 +121,52 @@ namespace {
       qRGnr();
 
     Tasks.Display(Row, cio::COut);
+	}
+
+	class sBrowse
+	: public cBrowse
+	{
+  private:
+    void Indent_(sLevel Level)
+    {
+      while ( Level-- )
+        cio::COut << ' ';
+    }
+  protected:
+	  virtual void TSKRoot(
+      sLevel Level,
+      sTRow Row,
+      sdr::sSize Amount) override
+    {
+    }
+    virtual void TSKTask(
+      eKinship Kinship,
+      sLevel Level,
+      sTRow Row,
+      const str::dString &Label,
+      const str::dString &Description) override
+      {
+        Indent_(Level);
+
+        cio::COut << *Row << ": " << Label << txf::nl;
+      }
+    virtual void TSKParent(sLevel Level) override
+    {
+    }
+  } Browse;
+
+	void Display_(void)
+	{
+	  sTRow Row = qNIL;
+
+    Row = sclm::OGetU16(registry::parameter::Index, 0);
+
+    Tasks.Init();
+
+    if ( !Tasks.Exists(Row))
+      qRGnr();
+
+    Tasks.Browse(Row, Browse);
 	}
 }
 

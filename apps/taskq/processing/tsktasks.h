@@ -38,6 +38,14 @@
 
 namespace tsktasks {
 	qROW(CRow);	// Content row.
+	typedef bso::sU16 sLevel;
+
+	qENUM( Kinship ) {
+    kChild,
+    kSibling,
+    k_amouunt,
+    k_Undefined
+	};
 
 	struct sTask {
 	public:
@@ -125,6 +133,44 @@ namespace tsktasks {
         tol::Init(Contents, Tasks, Hubs);
         return false;
       }
+    }
+	};
+
+	class cBrowse
+	{
+  protected:
+    virtual void TSKRoot(
+      sLevel Level,
+      sTRow Row,
+      sdr::sSize Amount) = 0;
+    virtual void TSKTask(
+      eKinship Kinship,
+      sLevel Level,
+      sTRow Row,
+      const str::dString &Label,
+      const str::dString &Description) = 0;
+    virtual void TSKParent(sLevel Level) = 0;
+  public:
+    qCALLBACK(Browse);
+    void Root(
+      sLevel Level,
+      sTRow Row,
+      sdr::sSize Amount)
+    {
+      return TSKRoot(Level, Row, Amount);
+    }
+    void Task(
+      eKinship Kinship,
+      sLevel Level,
+      sTRow Row,
+      const str::dString &Label,
+      const str::dString &Description)
+    {
+      return TSKTask(Kinship, Level, Row, Label, Description);
+    }
+    void Parent(sLevel Level)
+    {
+      return TSKParent(Level);
     }
 	};
 
@@ -320,6 +366,9 @@ namespace tsktasks {
 
 				return UpdateHubs_(Row, NewRow);
 			}
+    void Browse(
+      sTRow Row,
+      cBrowse &Callback) const;
 		void Export(
 			sTRow Row,
 			xml::rWriter &Writer,

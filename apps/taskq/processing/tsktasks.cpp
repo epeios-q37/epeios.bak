@@ -23,6 +23,56 @@
 
 using namespace tsktasks;
 
+void tsktasks::rTasks::Browse(
+  sTRow Row,
+  cBrowse &Callback) const
+{
+qRH;
+  str::wString Label, Description;
+  sLevel Level = 0;
+  eKinship Kinship = k_Undefined;
+qRB;
+	if ( ( Row == qNIL ) || ( Row == Root_ ) ) {
+		Row = Root_;
+    Callback.Root(Level, Row, Core_.Tasks.Amount() - 1);
+	} else {
+    tol::Init(Label, Description);
+	  Callback.Task(Kinship, Level, Row, GetLabel_(Row, Label), GetDescription_(Row, Description));
+	}
+
+	Row = GetFirst_(Row);
+	Level++;
+	Kinship = kChild;
+
+	while ( Row != qNIL ) {
+    tol::Init(Label, Description);
+	  Callback.Task(Kinship, Level, Row, GetLabel_(Row, Label), GetDescription_(Row, Description));
+
+		if ( TestAndGetFirst_(Row)) {
+      Level++;
+      Kinship = kChild;
+		} else if ( !TestAndGetNext_(Row) ) {
+		  Level--;
+      Callback.Parent(Level);
+
+		  while ( TestAndGetParent_(Row) && ( Level != 0 ) && !TestAndGetNext_(Row) ) {
+        Level--;
+        Callback.Parent(Level);
+		  }
+
+		  if ( Level == 0 )
+        Row = qNIL;
+      else
+        Kinship = kSibling;
+    } else
+      Kinship = kSibling;
+	}
+qRR;
+qRT;
+qRE;
+}
+
+
 void tsktasks::rTasks::Export(
   sTRow Row,
   xml::rWriter &Writer,
