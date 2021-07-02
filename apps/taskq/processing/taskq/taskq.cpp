@@ -22,6 +22,7 @@
 
 #include "registry.h"
 
+#include "tskinf.h"
 #include "tsktasks.h"
 
 #include "sclm.h"
@@ -74,7 +75,7 @@ namespace {
     }
 	}
 
-	void Export_(void)
+	void Export__(void)
 	{
 	  sTRow Row = qNIL;
 
@@ -84,6 +85,91 @@ namespace {
 
     Dump_(Tasks, Row);
 	}
+
+	class sXML
+	: public cBrowse
+	{
+  private:
+    xml::rWriter Writer_;
+  protected:
+	  virtual void TSKRoot(
+      sLevel Level,
+      sTRow Row,
+      sdr::sSize Amount) override
+    {
+      Writer_.PushTag("RootTask");
+      Writer_.PutAttribute("Amount", Amount);
+    }
+    virtual void TSKTask(
+      eKinship Kinship,
+      sLevel Level,
+      sTRow Row,
+      const str::dString &Label,
+      const str::dString &Description) override
+    {
+      switch ( Kinship ) {
+      case kFirst:
+        break;
+      case kChild:
+        Writer_.PushTag("SubTasks");
+        break;
+      case kSibling:
+        Writer_.PopTag();
+        break;
+      }
+
+      Writer_.PushTag("Task");
+      Writer_.PutAttribute("row", *Row);
+
+      Writer_.PutAttribute("Label", Label);
+
+      if ( Description.Amount() )
+        Writer_.PutValue(Description, "Description");
+
+    }
+    virtual void TSKParent(sLevel Level) override
+    {
+      Writer_.PopTag();
+    }
+  public:
+    void reset(bso::sBool P = true)
+    {
+      Writer_.reset(P);
+    }
+    qCVDTOR(sXML);
+    void Init(void)
+    {
+      tol::bDateAndTime Buffer;
+
+      reset();
+
+      Writer_.Init(cio::COut, xml::lIndent, xml::fEncoding());
+
+      Writer_.PushTag(TSKINF_MC);
+      Writer_.PutAttribute("Version", TSKINF_SOFTWARE_VERSION);
+      Writer_.PutAttribute("Timestamp", tol::DateAndTime(Buffer));
+      Writer_.PutAttribute("Generator", NAME_MC " V" VERSION);
+    }
+  };
+
+	void Export_(void)
+	{
+	  sXML XML;
+
+	  XML.Init();
+
+	  sTRow Row = qNIL;
+
+    Row = sclm::OGetU16(registry::parameter::Index, 0);
+
+    Tasks.Init();
+
+    if ( !Tasks.Exists(Row))
+      qRGnr();
+
+    Tasks.Browse(Row, XML);
+	}
+
 
 	void Create_(void)
 	{

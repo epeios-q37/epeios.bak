@@ -41,6 +41,7 @@ namespace tsktasks {
 	typedef bso::sU16 sLevel;
 
 	qENUM( Kinship ) {
+	  kFirst,
     kChild,
     kSibling,
     k_amouunt,

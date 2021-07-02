@@ -35,14 +35,15 @@ qRB;
 	if ( ( Row == qNIL ) || ( Row == Root_ ) ) {
 		Row = Root_;
     Callback.Root(Level, Row, Core_.Tasks.Amount() - 1);
+    Kinship = kFirst;
 	} else {
     tol::Init(Label, Description);
-	  Callback.Task(Kinship, Level, Row, GetLabel_(Row, Label), GetDescription_(Row, Description));
+	  Callback.Task(kFirst, Level, Row, GetLabel_(Row, Label), GetDescription_(Row, Description));
+    Kinship = kChild;
 	}
 
 	Row = GetFirst_(Row);
 	Level++;
-	Kinship = kChild;
 
 	while ( Row != qNIL ) {
     tol::Init(Label, Description);
@@ -51,27 +52,31 @@ qRB;
 		if ( TestAndGetFirst_(Row)) {
       Level++;
       Kinship = kChild;
-		} else if ( !TestAndGetNext_(Row) ) {
-		  Level--;
-      Callback.Parent(Level);
+		} else if ( TestAndGetNext_(Row) ) {
+      Kinship = kSibling;
+		} else {
+		  bso::sBool Cont = true;
 
-		  while ( TestAndGetParent_(Row) && ( Level != 0 ) && !TestAndGetNext_(Row) ) {
-        Level--;
-        Callback.Parent(Level);
+		  while ( Cont ) {
+        if ( TestAndGetParent_(Row) ) {
+          Level--;
+          Callback.Parent(Level);
+          Cont = ( Level != 0 ) && !TestAndGetNext_(Row);
+        } else
+          Cont = false;
 		  }
 
 		  if ( Level == 0 )
         Row = qNIL;
-      else
+      else {
         Kinship = kSibling;
-    } else
-      Kinship = kSibling;
+      }
+    }
 	}
 qRR;
 qRT;
 qRE;
 }
-
 
 void tsktasks::rTasks::Export(
   sTRow Row,
