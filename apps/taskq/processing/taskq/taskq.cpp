@@ -91,6 +91,7 @@ namespace {
 	{
   private:
     xml::rWriter Writer_;
+    bso::sBool TaskPending_;
   protected:
 	  virtual void TSKRoot(
       sLevel Level,
@@ -126,15 +127,23 @@ namespace {
       if ( Description.Amount() )
         Writer_.PutValue(Description, "Description");
 
+      TaskPending_ = true;
+
     }
     virtual void TSKParent(sLevel Level) override
     {
+      if ( TaskPending_ ) {
+        Writer_.PopTag();
+        TaskPending_ = false;
+      }
+
       Writer_.PopTag();
     }
   public:
     void reset(bso::sBool P = true)
     {
       Writer_.reset(P);
+      TaskPending_ = false;
     }
     qCVDTOR(sXML);
     void Init(void)
