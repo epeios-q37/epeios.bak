@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2019 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 2021 Claude SIMON (http://q37.info/contact/).
 
 	This file is part of the 'TaskQ' tool.
 
@@ -22,6 +22,6 @@
 
 using namespace registry;
 
-rEntry registry::parameter::Label( "Label", sclr::Parameters );
-rEntry registry::parameter::Index( "Index", sclr::Parameters );
+rEntry registry::parameter::Label( "Label", tskrgstry::Parameters );
+rEntry registry::parameter::Index( "Index", tskrgstry::Parameters );
 

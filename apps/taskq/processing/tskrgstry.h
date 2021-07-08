@@ -17,20 +17,32 @@
     along with 'TaskQ'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "base.h"
+// TaSK ReGiSTRY
 
-#include "core.h"
-#include "login.h"
-#include "main.h"
-#include "prolog.h"
+#ifndef TSKRGSTRY_INC_
+# define TSKRGSTRY_INC_
 
-using namespace base;
+# ifdef XXX_DBG
+# define TSKXMP_DBG_
+# endif
 
-E_CDEF(char *, base:: Name, NAME);
+# include "sclr.h"
 
-void base::Register(
-	const char *Name,
-	cAction &Callback )
-{
-	core::Core.AddActionCallback( Name, Callback );
+# include "tskbsc.h"
+
+namespace tskrgstry {
+	using namespace sclr;
+
+	namespace parameter {
+		using namespace sclr::parameter;
+
+		extern rEntry Repository;
+	}
+
+	namespace definition {
+		using namespace sclr::definition;
+	}
 }
+
+
+#endif

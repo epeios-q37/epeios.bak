@@ -20,12 +20,42 @@
 #include "tsktasks.h"
 
 #include "tskinf.h"
+#include "tskrgstry.h"
+
+#include "sclm.h"
 
 using namespace tsktasks;
 
+bso::sBool tsktasks::rCore_::Init(void)
+{
+  bso::sBool Exists = false;
+qRH;
+  str::wString Repo;
+qRB;
+  Repo.Init();
+
+  sclm::MGetValue(tskrgstry::parameter::Repository, Repo);
+
+  AggregatedStorage_.plug(Hooks_);
+  tol::plug(&AggregatedStorage_, Contents, Tasks, Hubs);
+
+  if ( Hooks_.Init(Repo, uys::mReadWrite) == uys::sExists ) {
+    Hooks_.Get((sdr::sByte *)&S_);
+    Exists = true;
+  } else {
+    tol::Init(Contents, Tasks, Hubs);
+    Exists = false;
+  }
+qRR;
+qRT;
+qRE;
+
+  return Exists;
+}
+
 void tsktasks::rTasks::Browse(
   sTRow Row,
-  cBrowse &Callback) const
+  cBrowser &Browser) const
 {
 qRH;
   str::wString Label, Description;
@@ -34,11 +64,11 @@ qRH;
 qRB;
 	if ( ( Row == qNIL ) || ( Row == Root_ ) ) {
 		Row = Root_;
-    Callback.Root(Level, Row, Core_.Tasks.Amount() - 1);
+    Browser.Root(Level, Row, Core_.Tasks.Amount() - 1);
     Kinship = kFirst;
 	} else {
     tol::Init(Label, Description);
-	  Callback.Task(kFirst, Level, Row, GetLabel_(Row, Label), GetDescription_(Row, Description));
+	 Browser.Task(kFirst, Level, Row, GetLabel_(Row, Label), GetDescription_(Row, Description));
     Kinship = kChild;
 	}
 
@@ -47,7 +77,7 @@ qRB;
 
 	while ( Row != qNIL ) {
     tol::Init(Label, Description);
-	  Callback.Task(Kinship, Level, Row, GetLabel_(Row, Label), GetDescription_(Row, Description));
+	  Browser.Task(Kinship, Level, Row, GetLabel_(Row, Label), GetDescription_(Row, Description));
 
 		if ( TestAndGetFirst_(Row)) {
       Level++;
@@ -60,7 +90,7 @@ qRB;
 		  while ( Cont ) {
         if ( TestAndGetParent_(Row) ) {
           Level--;
-          Callback.Parent(Level);
+          Browser.Parent(Level);
           Cont = ( Level != 0 ) && !TestAndGetNext_(Row);
         } else
           Cont = false;
@@ -73,107 +103,6 @@ qRB;
       }
     }
 	}
-qRR;
-qRT;
-qRE;
-}
-
-void tsktasks::rTasks::Export(
-  sTRow Row,
-  xml::rWriter &Writer,
-  const char *Generator) const
-{
-qRH;
-  str::wString Value;
-  tol::bDateAndTime Buffer;
-  bso::sU16 Level = 0;
-qRB;
-
-  Writer.PushTag(TSKINF_MC);
-  Writer.PutAttribute("Version", TSKINF_SOFTWARE_VERSION);
-  Writer.PutAttribute("Timestamp", tol::DateAndTime(Buffer));
-  Writer.PutAttribute("Generator", Generator);
-
-	if ( ( Row == qNIL ) || ( Row == Root_ ) ) {
-		Row = Root_;
-		Writer.PushTag("RootTask");
-    Writer.PutAttribute("Amount", Core_.Tasks.Amount() - 1);
-	} else {
-    Writer.PushTag("Task");
-    Value.Init();
-    Writer.PutAttribute("Label", GetLabel_(Row, Value));
-	}
-
-	Writer.PutAttribute("row", *Row);
-
-	Row = GetFirst_(Row);
-	Level++;
-
-	while ( Row != qNIL ) {
-		Writer.PushTag("Task");
-    Writer.PutAttribute("row", *Row);
-
-    Value.Init();
-    Writer.PutAttribute("Label", GetLabel_(Row, Value));
-
-		Value.Init();
-		GetDescription_(Row, Value);
-		if ( Value.Amount() )
-      Writer.PutValue(Value, "Description");
-
-		if ( TestAndGetFirst_(Row)) {
-      Writer.PushTag("SubTasks");
-      Level++;
-		} else if ( !TestAndGetNext_(Row) ) {
-      Writer.PopTag();
-      Level--;
-
-		  while ( TestAndGetParent_(Row) && ( Level != 0 ) && !TestAndGetNext_(Row) ) {
-        Writer.PopTag();
-        Level--;
-		  }
-
-		  if ( Level == 0 )
-        Row = qNIL;
-      else
-        Writer.PopTag();
-		} else
-      Writer.PopTag();
-	}
-
-	Writer.PopTag();
-	Writer.PopTag();
-qRR;
-qRT;
-qRE;
-}
-
-void tsktasks::rTasks::Display(
-  sTRow Row,
-  txf::sWFlow &Out) const
-{
-qRH;
-  str::wString Value;
-  const char *Indent = "";
-qRB;
-
-	if ( ( Row == qNIL ) || ( Row == Root_ ) ) {
-		Row = Root_;
-	} else {
-    Value.Init();
-    Out << *Row << ": " << GetLabel_(Row, Value) << txf::nl;
-    Indent = "  ";
-	}
-
-	Row = GetFirst_(Row);
-
-	while ( Row != qNIL ) {
-    Value.Init();
-    Out << Indent << *Row << ": " << GetLabel_(Row, Value) << txf::nl;
-
-    Row = GetNext_(Row);
-	}
-
 qRR;
 qRT;
 qRE;

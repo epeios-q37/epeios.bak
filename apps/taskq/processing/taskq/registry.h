@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2019 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 2021 Claude SIMON (http://q37.info/contact/).
 
 	This file is part of the 'TaskQ' tool.
 
@@ -21,13 +21,13 @@
 #ifndef REGISTRY_INC_
 # define REGISTRY_INC_
 
-# include "sclr.h"
+# include "tskrgstry.h"
 
 namespace registry {
 	using namespace sclr;
 
 	namespace parameter {
-		using namespace sclr::parameter;
+		using namespace tskrgstry::parameter;
 
 		extern rEntry
       Label,
@@ -35,7 +35,7 @@ namespace registry {
 	}
 
 	namespace definition {
-		using namespace sclr::definition;
+		using namespace tskrgstry::definition;
 	}
 }
 

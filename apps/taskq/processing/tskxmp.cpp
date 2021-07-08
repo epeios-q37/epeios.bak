@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2018 Claude SIMON (http://zeusw.org/epeios/contact.html).
+	Copyright (C) 2021 Claude SIMON (http://zeusw.org/epeios/contact.html).
 
 	This file is part of 'TaskQ' software.
 

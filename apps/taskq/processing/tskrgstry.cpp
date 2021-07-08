@@ -17,20 +17,9 @@
     along with 'TaskQ'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "base.h"
+#include "tskrgstry.h"
 
-#include "core.h"
-#include "login.h"
-#include "main.h"
-#include "prolog.h"
+using namespace tskrgstry;
 
-using namespace base;
+rEntry tskrgstry::parameter::Repository( "Repository", sclr::Parameters );
 
-E_CDEF(char *, base:: Name, NAME);
-
-void base::Register(
-	const char *Name,
-	cAction &Callback )
-{
-	core::Core.AddActionCallback( Name, Callback );
-}

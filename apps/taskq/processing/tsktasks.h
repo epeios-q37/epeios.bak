@@ -122,22 +122,10 @@ namespace tsktasks {
       reset(false);
     }
     qDTOR(rCore_);
-    bso::sBool Init(void)
-    {
-      AggregatedStorage_.plug(Hooks_);
-      tol::plug(&AggregatedStorage_, Contents, Tasks, Hubs);
-
-      if ( Hooks_.Init("Essai", uys::mReadWrite) == uys::sExists ) {
- 			  Hooks_.Get((sdr::sByte *)&S_);
-        return true;
-      } else {
-        tol::Init(Contents, Tasks, Hubs);
-        return false;
-      }
-    }
+    bso::sBool Init(void);
 	};
 
-	class cBrowse
+	class cBrowser
 	{
   protected:
     virtual void TSKRoot(
@@ -152,7 +140,7 @@ namespace tsktasks {
       const str::dString &Description) = 0;
     virtual void TSKParent(sLevel Level) = 0;
   public:
-    qCALLBACK(Browse);
+    qCALLBACK(Browser);
     void Root(
       sLevel Level,
       sTRow Row,
@@ -369,14 +357,7 @@ namespace tsktasks {
 			}
     void Browse(
       sTRow Row,
-      cBrowse &Callback) const;
-		void Export(
-			sTRow Row,
-			xml::rWriter &Writer,
-			const char *Generator) const;
-		void Display(
-			sTRow Row,
-			txf::sWFlow &Out) const;
+      cBrowser &Browser) const;
 	};
 }
 

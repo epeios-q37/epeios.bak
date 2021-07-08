@@ -6,7 +6,7 @@
 			<xpp:bloc/>
 		</xpp:define>
 		<xpp:define name="CopyrightYears">
-			<xpp:bloc>2019</xpp:bloc>
+			<xpp:bloc>2021</xpp:bloc>
 		</xpp:define>
 		<xpp:set name="Credits" value="Epeios"/>
 		<xpp:set name="Type" value="Tool"/>
@@ -32,7 +32,9 @@
 			<Module Path="../">tskfbc</Module>
 			<Module Path="../">tskinf</Module>
 			<Module>tskbsc</Module>
+			<Module>tskrgstry</Module>
 			<Module>tsktasks</Module>
+			<Module>tskxml</Module>
 			<Module>tskxmp</Module>
 		</Modules>
 		<Module>registry</Module>

@@ -17,20 +17,26 @@
     along with 'TaskQ'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "base.h"
+// TaSK XML
 
-#include "core.h"
-#include "login.h"
-#include "main.h"
-#include "prolog.h"
+#ifndef TSKXML_INC_
+# define TSKXML_INC_
 
-using namespace base;
+# ifdef XXX_DBG
+# define TSKXMP_DBG_
+# endif
 
-E_CDEF(char *, base:: Name, NAME);
+# include "tskbsc.h"
+# include "tsktasks.h"
 
-void base::Register(
-	const char *Name,
-	cAction &Callback )
-{
-	core::Core.AddActionCallback( Name, Callback );
+namespace tskxml {
+
+  void Export(
+    const tsktasks::rTasks &Tasks,
+    tsktasks::sTRow Row,
+    txf::sWFlow &Flow,
+    const char *Generator);
 }
+
+
+#endif

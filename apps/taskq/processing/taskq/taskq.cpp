@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2019 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 2021 Claude SIMON (http://q37.info/contact/).
 
 	This file is part of the 'TaskQ' tool.
 
@@ -24,6 +24,7 @@
 
 #include "tskinf.h"
 #include "tsktasks.h"
+#include "tskxml.h"
 
 #include "sclm.h"
 #include "sclt.h"
@@ -55,130 +56,19 @@ namespace {
 	{
 		COut << NAME_MC " V" VERSION << " (" WEBSITE_URL ")" << txf::nl;
 		COut << "Copyright (C) " COPYRIGHT << txf::nl;
-		COut << txf::pad << "Build : " __DATE__ " " __TIME__ << " (" << cpe::GetDescription() << ')' << txf::nl;
+		COut << txf::pad << "Build: " __DATE__ " " __TIME__ << " (" << cpe::GetDescription() << ')' << txf::nl;
 	}
-
-	namespace {
-    void Dump_(
-      tsktasks::rTasks &Tasks,
-      sTRow Row)
-    {
-    qRH;
-      xml::rWriter Writer;
-    qRB;
-      Writer.Init(cio::COut, xml::lIndent, xml::fEncoding());
-
-      Tasks.Export(Row, Writer, NAME_MC " V" VERSION);
-    qRR;
-    qRT;
-    qRE;
-    }
-	}
-
-	void Export__(void)
-	{
-	  sTRow Row = qNIL;
-
-    Row = sclm::OGetU16(registry::parameter::Index, 0);
-
-    Tasks.Init();
-
-    Dump_(Tasks, Row);
-	}
-
-	class sXML
-	: public cBrowse
-	{
-  private:
-    xml::rWriter Writer_;
-    bso::sBool TaskPending_;
-  protected:
-	  virtual void TSKRoot(
-      sLevel Level,
-      sTRow Row,
-      sdr::sSize Amount) override
-    {
-      Writer_.PushTag("RootTask");
-      Writer_.PutAttribute("Amount", Amount);
-    }
-    virtual void TSKTask(
-      eKinship Kinship,
-      sLevel Level,
-      sTRow Row,
-      const str::dString &Label,
-      const str::dString &Description) override
-    {
-      switch ( Kinship ) {
-      case kFirst:
-        break;
-      case kChild:
-        Writer_.PushTag("SubTasks");
-        break;
-      case kSibling:
-        Writer_.PopTag();
-        break;
-      }
-
-      Writer_.PushTag("Task");
-      Writer_.PutAttribute("row", *Row);
-
-      Writer_.PutAttribute("Label", Label);
-
-      if ( Description.Amount() )
-        Writer_.PutValue(Description, "Description");
-
-      TaskPending_ = true;
-
-    }
-    virtual void TSKParent(sLevel Level) override
-    {
-      if ( TaskPending_ ) {
-        Writer_.PopTag();
-        TaskPending_ = false;
-      }
-
-      Writer_.PopTag();
-    }
-  public:
-    void reset(bso::sBool P = true)
-    {
-      Writer_.reset(P);
-      TaskPending_ = false;
-    }
-    qCVDTOR(sXML);
-    void Init(void)
-    {
-      tol::bDateAndTime Buffer;
-
-      reset();
-
-      Writer_.Init(cio::COut, xml::lIndent, xml::fEncoding());
-
-      Writer_.PushTag(TSKINF_MC);
-      Writer_.PutAttribute("Version", TSKINF_SOFTWARE_VERSION);
-      Writer_.PutAttribute("Timestamp", tol::DateAndTime(Buffer));
-      Writer_.PutAttribute("Generator", NAME_MC " V" VERSION);
-    }
-  };
 
 	void Export_(void)
 	{
-	  sXML XML;
-
-	  XML.Init();
-
 	  sTRow Row = qNIL;
 
     Row = sclm::OGetU16(registry::parameter::Index, 0);
 
     Tasks.Init();
 
-    if ( !Tasks.Exists(Row))
-      qRGnr();
-
-    Tasks.Browse(Row, XML);
+    tskxml::Export(Tasks, Row, cio::COut, NAME_MC " V" VERSION);
 	}
-
 
 	void Create_(void)
 	{
@@ -197,29 +87,13 @@ namespace {
       qRGnr();
 
     Tasks.Append(Label, Row);
-
-    Tasks.Display(Row, cio::COut);
 	qRR;
 	qRT;
 	qRE;
 	}
 
-	void Display__(void)
-	{
-	  sTRow Row = qNIL;
-
-    Row = sclm::OGetU16(registry::parameter::Index, 0);
-
-    Tasks.Init();
-
-    if ( !Tasks.Exists(Row))
-      qRGnr();
-
-    Tasks.Display(Row, cio::COut);
-	}
-
 	class sBrowse
-	: public cBrowse
+	: public cBrowser
 	{
   private:
     void Indent_(sLevel Level)
