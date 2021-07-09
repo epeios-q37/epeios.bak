@@ -21,6 +21,8 @@
 
 #include "tskinf.h"
 
+#include "sclm.h"
+
 using namespace tskxml;
 
 using namespace tsktasks;
@@ -38,21 +40,20 @@ namespace {
       mLabelAttr,
       m_amount,
       m_Undefined
-
     };
 
-  #define G_(label, suffix)\
-  case m##label##suffix:\
-    return #label;\
-    break
+#define G_(label, suffix)\
+case m##label##suffix:\
+  return #label;\
+  break
 
-  #define T(label)  G_( label, Tag )
+#define T(label)  G_( label, Tag )
 
-  #define A(label)  G_( label, Attr )
+#define A(label)  G_( label, Attr )
 
     const char *GetLabel_(eMarkup Markup )
     {
-      switch(Markup) {
+      switch( Markup ) {
       T( Version );
       T( RootTask );
       T( SubTasks );
@@ -65,6 +66,7 @@ namespace {
       A( Label );
       default:
         qRFwk();
+        break;
       }
 
       return NULL;  // To avoid a warning.
@@ -78,7 +80,7 @@ namespace {
       stsfsm::Fill<eMarkup>( MarkupAutomat_, m_amount, GetLabel_ );
     }
 
-    eMarkup GetMarkup( const str::dString &Pattern )
+    eMarkup GetMarkup_( const str::dString &Pattern )
     {
       return stsfsm::GetId( Pattern, MarkupAutomat_, m_Undefined, m_amount );
     }
@@ -86,12 +88,15 @@ namespace {
 
 #define L(markup) GetLabel_(m##markup)
 
+  typedef bso::sU16 sPending_;
+  const sPending_ &PendingMax_ = bso::U16Max;
+
 	class sBrowser_
 	: public cBrowser
 	{
   private:
     xml::rWriter Writer_;
-    bso::sBool TaskPending_;
+   sPending_ PendingTasks_;
   protected:
 	  virtual void TSKRoot(
       sLevel Level,
@@ -130,14 +135,17 @@ namespace {
       if ( Description.Amount() )
         Writer_.PutValue(Description, L( DescriptionTag ));
 
-      TaskPending_ = true;
+      if ( PendingTasks_ >= PendingMax_ )
+        qRLmt();
+
+      PendingTasks_++;
 
     }
     virtual void TSKParent(sLevel Level) override
     {
-      if ( TaskPending_ ) {
+      if ( PendingTasks_ > 0 ) {
         Writer_.PopTag();
-        TaskPending_ = false;
+        PendingTasks_--;
       }
 
       Writer_.PopTag();
@@ -146,7 +154,7 @@ namespace {
     void reset(bso::sBool P = true)
     {
       Writer_.reset(P);
-      TaskPending_ = false;
+      PendingTasks_ = 0;
     }
     qCVDTOR(sBrowser_);
     void Init(
@@ -179,6 +187,202 @@ qRB;
   Browser.Init(Flow, Generator);
 
   Tasks.Browse( Row, Browser);
+qRR;
+qRT;
+qRE;
+}
+
+namespace {
+  typedef stkbch::qBSTACKdl(sTRow) dStack_;
+  qW(Stack_);
+
+  void Report_(
+    const xml::rParser &Parser,
+    const char *Location)
+  {
+    sclm::ReportAndAbort("TSKXML_MarkupError", Parser.DumpPosition().Line, Parser.DumpPosition().Column, Location);
+  }
+
+#define REPORT()  Report_(Parser, __LOC__)
+
+  void HandleTask_(
+    xml::rParser &Parser,
+    dStack_ &Stack,
+    rTasks &Tasks);
+
+  // <SubTasks …>…</SubTasks>
+  //           ^
+  //                         ^
+  void HandleSubTasks_(
+    xml::rParser &Parser,
+    dStack_ &Stack,
+    rTasks &Tasks)
+  {
+    bso::sBool Cont = true;
+
+    while( Cont ) {
+      switch( Parser.Parse(xml::tfStartTag | xml::tfEndTag) ) {
+      case xml::tStartTag:
+        if ( GetMarkup_(Parser.GetTagName()) != mTaskTag )
+          REPORT();
+        HandleTask_(Parser, Stack, Tasks);
+        break;
+      case xml::tEndTag:
+        if ( GetMarkup_(Parser.GetTagName()) != mSubTasksTag )
+          REPORT();
+        Cont = false;
+        break;
+      default:
+        REPORT();
+        break;
+      }
+    }
+  }
+
+
+  // <Description …>…</Description>
+  //              ^
+  //                               ^
+  void HandleDescription_(
+    xml::rParser &Parser,
+    sTRow Row,
+    rTasks &Tasks)
+  {
+    if ( Row == qNIL )
+      REPORT();
+
+    bso::sBool Cont = true;
+
+    while( Cont ) {
+      switch( Parser.Parse(xml::tfValue | xml::tfEndTag) ) {
+      case xml::tValue:
+        Tasks.SetDescription(Row, Parser.GetValue());
+        break;
+      case xml::tEndTag:
+        if ( GetMarkup_(Parser.GetTagName()) != mDescriptionTag )
+          REPORT();
+        Cont = false;
+        break;
+      default:
+        REPORT();
+        break;
+      }
+    }
+  }
+
+  // <Task …>…</Task>
+  //       ^
+  //                 ^
+  void HandleTask_(
+    xml::rParser &Parser,
+    dStack_ &Stack,
+    rTasks &Tasks)
+  {
+  qRH;
+    bso::sBool Cont = true;
+    sTRow Row = qNIL;
+  qRB;
+    while( Cont ) {
+      switch( Parser.Parse(xml::tfAttribute | xml::tfStartTag | xml::tfEndTag) ) {
+      case xml::tAttribute:
+        switch( GetMarkup_(Parser.GetAttributeName()) ) {
+        case mRowAttr:
+          break;
+        case mLabelAttr:
+          Row = Tasks.Append(Parser.GetValue(), Stack.Top());
+          break;
+        default:
+          REPORT();
+          break;
+        }
+        break;
+      case xml::tStartTag:
+        switch( GetMarkup_(Parser.TagName()) ) {
+        case mSubTasksTag:
+          Stack.Push(Row);
+          HandleSubTasks_(Parser, Stack, Tasks);
+          Stack.Pop();
+          break;
+        case mDescriptionTag:
+          HandleDescription_(Parser, Row, Tasks);
+          break;
+        default:
+          REPORT();
+          break;
+        }
+        break;
+      case xml::tEndTag:
+        if ( GetMarkup_(Parser.GetTagName()) != mTaskTag )
+          REPORT();
+        Cont = false;
+        break;
+      default:
+        REPORT();
+        break;
+      }
+    }
+  qRR;
+  qRT;
+  qRE;
+  }
+
+  // <RootTask …>…</RootTask>
+  //           ^
+  //                         ^
+  void HandleRootTaks_(
+    xml::rParser &Parser,
+    dStack_ &Stack,
+    rTasks &Tasks)
+  {
+    bso::sBool Cont = true;
+
+    while( Cont ) {
+      switch( Parser.Parse(xml::tfAttribute | xml::tfStartTag | xml::tfEndTag) ) {
+      case xml::tAttribute:
+        break;
+      case xml::tStartTag:
+        if ( GetMarkup_(Parser.GetTagName()) != mTaskTag )
+          REPORT();
+        HandleTask_(Parser, Stack, Tasks);
+        break;
+      case xml::tEndTag:
+        if ( GetMarkup_(Parser.GetTagName()) != mRootTaskTag )
+          REPORT();
+        Cont = false;
+        break;
+      default:
+        REPORT();
+        break;
+      }
+    }
+  }
+}
+
+void tskxml::Import(
+  xml::rParser &Parser,
+  sTRow Row,
+  rTasks &Tasks)
+{
+qRH;
+  wStack_ Stack;
+qRB;
+  Stack.Init();
+  Stack.Push(Row);
+
+  if ( Parser.Parse(xml::tfStartTag) != xml::tStartTag )
+    REPORT();
+
+  switch( GetMarkup_(Parser.GetTagName()) ) {
+  case mRootTaskTag:
+    HandleRootTaks_(Parser, Stack, Tasks);
+    break;
+  case mTaskTag:
+    HandleTask_(Parser, Stack, Tasks);
+    break;
+  default:
+    REPORT();
+    break;
+  }
 qRR;
 qRT;
 qRE;

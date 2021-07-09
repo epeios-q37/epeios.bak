@@ -35,6 +35,7 @@
 #include "xpp.h"
 #include "fnm.h"
 #include "flf.h"
+#include "flw.h"
 
 using namespace tsktasks;
 
@@ -61,13 +62,20 @@ namespace {
 
 	void Export_(void)
 	{
+	qRH;
 	  sTRow Row = qNIL;
-
+	  sclm::rTextWFlowRack Rack;
+	  qCBUFFERh Buffer;
+	qRB;
     Row = sclm::OGetU16(registry::parameter::Index, 0);
 
     Tasks.Init();
 
-    tskxml::Export(Tasks, Row, cio::COut, NAME_MC " V" VERSION);
+    tskxml::Export(Tasks, Row, Rack.Init(sclm::OGetValue(registry::parameter::Output, Buffer)), NAME_MC " V" VERSION);
+  qRR;
+    Rack.HandleError();
+	qRT;
+	qRE;
 	}
 
 	void Create_(void)
@@ -137,6 +145,42 @@ namespace {
 
     Tasks.Browse(Row, Browse);
 	}
+
+	void Import_(void)
+	{
+	qRH;
+    sclm::rRDriverRack Rack;
+    flw::rDressedRFlow<> Flow;
+    xtf::sRFlow XFlow;
+	  xml::rParser Parser;
+	  qCBUFFERh Buffer;
+	  bso::sBool Cont = true;
+	qRB;
+    Flow.Init(Rack.Init(sclm::OGetValue(registry::parameter::Input, Buffer)));
+    XFlow.Init(Flow, utf::f_Default);
+    Parser.Init(XFlow, xml::eh_Default);
+
+    Tasks.Init();
+
+    while ( Cont ) {
+      switch( Parser.Parse(xml::tfStartTag | xml::tfAttribute | xml::tfStartTagClosed) ) {
+      case xml::tStartTag:
+      case xml::tAttribute:
+        break;
+      case xml::tStartTagClosed:
+        tskxml::Import(Parser, 0, Tasks);
+        Cont = false;
+        break;
+      default:
+        qRGnr();
+        break;
+      }
+    }
+	qRR;
+    Rack.HandleError();
+	qRT;
+	qRE;
+	}
 }
 
 #define C( name )\
@@ -157,6 +201,7 @@ qRB;
 	C( Export );
 	C( Create );
 	C( Display );
+	C( Import );
 	else
 		qRGnr();
 

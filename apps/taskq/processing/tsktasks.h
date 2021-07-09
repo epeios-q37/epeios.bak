@@ -337,24 +337,37 @@ namespace tsktasks {
 		sTRow Append(
 			const str::dString &Label,
 			sTRow Row)
-			{
-				sTRow NewRow = qNIL;
-				sTask Task;
+    {
+      sTRow NewRow = qNIL;
+      sTask Task;
 
-				if (Row == qNIL)
-					Row = Root_;
+      if (Row == qNIL)
+        Row = Root_;
 
-				Task.Label = Core_.Contents.New();
-				Core_.Contents(Task.Label).Init(Label);
+      Task.Label = Core_.Contents.New();
+      Core_.Contents(Task.Label).Init(Label);
 
-				NewRow = Core_.Tasks.New();
-				Core_.Tasks.Store(Task, NewRow);
+      NewRow = Core_.Tasks.New();
+      Core_.Tasks.Store(Task, NewRow);
 
-				if ( NewRow != Core_.Hubs.New() )
-					qRFwk();
+      if ( NewRow != Core_.Hubs.New() )
+        qRFwk();
 
-				return UpdateHubs_(Row, NewRow);
-			}
+      return UpdateHubs_(Row, NewRow);
+    }
+    void SetDescription(
+      sTRow Row,
+      const str::dString &Description)
+    {
+      sTask Task = GetTask_(Row);
+
+      if ( Task.Description == qNIL )
+        Task.Description = Core_.Contents.New();
+
+      Core_.Contents(Task.Description).Init(Description);
+
+      Core_.Tasks.Store(Task, Row);
+    }
     void Browse(
       sTRow Row,
       cBrowser &Browser) const;

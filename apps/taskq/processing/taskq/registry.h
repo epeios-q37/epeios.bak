@@ -31,7 +31,9 @@ namespace registry {
 
 		extern rEntry
       Label,
-      Index;
+      Index,
+      Input,
+      Output;
 	}
 
 	namespace definition {

@@ -24,4 +24,6 @@ using namespace registry;
 
 rEntry registry::parameter::Label( "Label", tskrgstry::Parameters );
 rEntry registry::parameter::Index( "Index", tskrgstry::Parameters );
+rEntry registry::parameter::Input( "Input", tskrgstry::Parameters );
+rEntry registry::parameter::Output( "Output", tskrgstry::Parameters );
 

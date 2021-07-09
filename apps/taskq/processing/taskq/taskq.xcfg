@@ -8,6 +8,7 @@
 			<Language>fr</Language>
 			<Command>Test</Command>
 			<!-- Default command -->
+			<Repository>Essai_</Repository>
 		</Parameters>
 		<Definitions>
 		</Definitions>
@@ -94,6 +95,7 @@
 				</Layout>
 				<Layout command="Export">
 					<Link index="0" Target="TaskArgument"/>
+					<Link index="1" Target="OutputArgument"/>
 				</Layout>
 				<Layout command="Display">
 					<Link index="0" Target="TaskArgument"/>

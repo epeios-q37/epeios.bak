@@ -30,12 +30,16 @@
 # include "tsktasks.h"
 
 namespace tskxml {
-
   void Export(
     const tsktasks::rTasks &Tasks,
     tsktasks::sTRow Row,
     txf::sWFlow &Flow,
     const char *Generator);
+
+  void Import(
+    xml::rParser &Parser,
+    tsktasks::sTRow Row,
+    tsktasks::rTasks &Tasks);
 }
 
 
