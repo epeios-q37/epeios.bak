@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2017 by Claude SIMON (http://zeusw.org/epeios/contact.html).
+	Copyright (C) 2021 by Claude SIMON (http://zeusw.org/epeios/contact.html).
 
 	This file is part of eSketch.
 

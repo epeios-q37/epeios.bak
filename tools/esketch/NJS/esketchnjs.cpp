@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2007-2017 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 2021 Claude SIMON (http://q37.info/contact/).
 
 	This file is part of eSketch.
 

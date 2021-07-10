@@ -128,10 +128,7 @@ namespace tsktasks {
 	class cBrowser
 	{
   protected:
-    virtual void TSKRoot(
-      sLevel Level,
-      sTRow Row,
-      sdr::sSize Amount) = 0;
+    virtual void TSKTasks(sTRow Row) = 0; // Id Row == qNIL, all the tasks are browsed.
     virtual void TSKTask(
       eKinship Kinship,
       sLevel Level,
@@ -141,12 +138,9 @@ namespace tsktasks {
     virtual void TSKParent(sLevel Level) = 0;
   public:
     qCALLBACK(Browser);
-    void Root(
-      sLevel Level,
-      sTRow Row,
-      sdr::sSize Amount)
+    void Tasks(sTRow Row)
     {
-      return TSKRoot(Level, Row, Amount);
+      return TSKTasks(Row);
     }
     void Task(
       eKinship Kinship,

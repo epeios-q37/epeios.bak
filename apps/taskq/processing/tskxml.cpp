@@ -30,14 +30,19 @@ using namespace tsktasks;
 namespace {
   namespace {
     qENUM( Markup ) {
-      mVersionTag,
-      mRootTaskTag,
-      mSubTasksTag,
+      mRootTag,
+      mTasksTag,
       mTaskTag,
+      mSubTasksTag,
       mDescriptionTag,
-      mAmountAttr,
+      mVersionAttr,
+      mTimestampAttr,
+      mGeneratorAttr,
+      mTypeAttr,
       mRowAttr,
       mLabelAttr,
+      mMainVal,
+      mSubVal,
       m_amount,
       m_Undefined
     };
@@ -48,18 +53,25 @@ case m##label##suffix:\
   break
 
 #define T(label)  G_( label, Tag )
-
 #define A(label)  G_( label, Attr )
+#define V(label)  G_( label, Val )
 
     const char *GetLabel_(eMarkup Markup )
     {
       switch( Markup ) {
-      T( Version );
-      T( RootTask );
-      T( SubTasks );
+      case mRootTag:
+        return TSKINF_MC;
+        break;
+      T( Tasks );
       T( Task );
+      T( SubTasks );
       T( Description );
-      A( Amount );
+      A( Version );
+      A( Timestamp );
+      A( Generator );
+      A( Type );
+      V( Main );
+      V( Sub );
       case mRowAttr:
         return "row";
         break;
@@ -98,13 +110,16 @@ case m##label##suffix:\
     xml::rWriter Writer_;
    sPending_ PendingTasks_;
   protected:
-	  virtual void TSKRoot(
-      sLevel Level,
-      sTRow Row,
-      sdr::sSize Amount) override
+	  virtual void TSKTasks(sTRow Row) override
     {
-      Writer_.PushTag(L( RootTaskTag ));
-      Writer_.PutAttribute(L( AmountAttr ), Amount);
+      Writer_.PushTag(L( TasksTag ));
+
+      if ( Row == qNIL ) {
+        Writer_.PutAttribute(L( TypeAttr ), L( MainVal ));
+      } else {
+        Writer_.PutAttribute(L( RowAttr ), *Row);
+        Writer_.PutAttribute(L( TypeAttr ), L( SubVal ));
+      }
     }
     virtual void TSKTask(
       eKinship Kinship,
@@ -167,10 +182,10 @@ case m##label##suffix:\
 
       Writer_.Init(Flow, xml::lIndent, xml::fEncoding());
 
-      Writer_.PushTag(TSKINF_MC);
-      Writer_.PutAttribute(L( VersionTag ), TSKINF_SOFTWARE_VERSION);
-      Writer_.PutAttribute("Timestamp", tol::DateAndTime(Buffer));
-      Writer_.PutAttribute("Generator", Generator);
+      Writer_.PushTag(L( RootTag) );
+      Writer_.PutAttribute(L( VersionAttr ), TSKINF_SOFTWARE_VERSION);
+      Writer_.PutAttribute(L( TimestampAttr ), tol::DateAndTime(Buffer));
+      Writer_.PutAttribute(L( GeneratorAttr ), Generator);
     }
   };
 }
@@ -326,10 +341,10 @@ namespace {
   qRE;
   }
 
-  // <RootTask …>…</RootTask>
+  // <Tasks …>…</Tasks>
   //           ^
   //                         ^
-  void HandleRootTaks_(
+  void HandleTasks_(
     xml::rParser &Parser,
     dStack_ &Stack,
     rTasks &Tasks)
@@ -337,16 +352,14 @@ namespace {
     bso::sBool Cont = true;
 
     while( Cont ) {
-      switch( Parser.Parse(xml::tfAttribute | xml::tfStartTag | xml::tfEndTag) ) {
-      case xml::tAttribute:
-        break;
+      switch( Parser.Parse(xml::tfStartTag | xml::tfEndTag) ) {
       case xml::tStartTag:
         if ( GetMarkup_(Parser.GetTagName()) != mTaskTag )
           REPORT();
         HandleTask_(Parser, Stack, Tasks);
         break;
       case xml::tEndTag:
-        if ( GetMarkup_(Parser.GetTagName()) != mRootTaskTag )
+        if ( GetMarkup_(Parser.GetTagName()) != mTasksTag )
           REPORT();
         Cont = false;
         break;
@@ -356,37 +369,67 @@ namespace {
       }
     }
   }
+
+  // <TasQ …>…</TaskQ>
+  //       ^
+  //                  ^
+  void HandleRoot_(
+    xml::rParser &Parser,
+    sTRow Row,
+    rTasks &Tasks)
+  {
+  qRH;
+    wStack_ Stack;
+    bso::sBool Cont = true;
+  qRB;
+    Stack.Init();
+    Stack.Push(Row);
+
+    while( Cont ) {
+      switch( Parser.Parse(xml::tfStartTag | xml::tfEndTag) ) {
+      case xml::tStartTag:
+        if ( GetMarkup_(Parser.GetTagName()) != mTasksTag )
+          REPORT();
+        HandleTasks_(Parser, Stack, Tasks);
+        break;
+      case xml::tEndTag:
+        if ( GetMarkup_(Parser.GetTagName()) != mRootTag )
+          REPORT();
+        Cont = false;
+        break;
+      default:
+        REPORT();
+        break;
+      }
+    }
+  qRR;
+  qRT;
+  qRE;
+  }
 }
 
 void tskxml::Import(
-  xml::rParser &Parser,
-  sTRow Row,
-  rTasks &Tasks)
+    xtf::sRFlow &Flow,
+    tsktasks::sTRow Row,
+    tsktasks::rTasks &Tasks)
 {
 qRH;
-  wStack_ Stack;
+  xml::rParser Parser;
 qRB;
-  Stack.Init();
-  Stack.Push(Row);
+  Parser.Init(Flow, xml::eh_Default);
 
-  if ( Parser.Parse(xml::tfStartTag) != xml::tStartTag )
+  if ( Parser.Parse( xml::tfStartTag ) != xml::tStartTag )
     REPORT();
 
-  switch( GetMarkup_(Parser.GetTagName()) ) {
-  case mRootTaskTag:
-    HandleRootTaks_(Parser, Stack, Tasks);
-    break;
-  case mTaskTag:
-    HandleTask_(Parser, Stack, Tasks);
-    break;
-  default:
+  if ( GetMarkup_(Parser.GetTagName()) != mRootTag )
     REPORT();
-    break;
-  }
+
+  HandleRoot_(Parser, Row, Tasks);
 qRR;
 qRT;
 qRE;
 }
+
 
 qGCTOR( tskxml )
 {

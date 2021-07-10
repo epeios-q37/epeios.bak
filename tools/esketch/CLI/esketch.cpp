@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2019 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 2021 Claude SIMON (http://q37.info/contact/).
 
 	This file is part of the 'eSketch' tool.
 
@@ -48,7 +48,7 @@ namespace {
 	{
 		COut << NAME_MC " V" VERSION << " (" WEBSITE_URL ")" << txf::nl;
 		COut << "Copyright (C) " COPYRIGHT << txf::nl;
-		COut << txf::pad << "Build : " __DATE__ " " __TIME__ << " (" << cpe::GetDescription() << ')' << txf::nl;
+		COut << txf::pad << "Build: " __DATE__ " " __TIME__ << " (" << cpe::GetDescription() << ')' << txf::nl;
 	}
 
 	void Test_( void )

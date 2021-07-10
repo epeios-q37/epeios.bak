@@ -37,7 +37,7 @@ namespace tskxml {
     const char *Generator);
 
   void Import(
-    xml::rParser &Parser,
+    xtf::sRFlow &Flow,
     tsktasks::sTRow Row,
     tsktasks::rTasks &Tasks);
 }

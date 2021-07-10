@@ -64,13 +64,13 @@ qRH;
 qRB;
 	if ( ( Row == qNIL ) || ( Row == Root_ ) ) {
 		Row = Root_;
-    Browser.Root(Level, Row, Core_.Tasks.Amount() - 1);
-    Kinship = kFirst;
+    Browser.Tasks(qNIL);
 	} else {
     tol::Init(Label, Description);
-	 Browser.Task(kFirst, Level, Row, GetLabel_(Row, Label), GetDescription_(Row, Description));
-    Kinship = kChild;
+    Browser.Tasks(Row);
 	}
+
+  Kinship = kFirst;
 
 	Row = GetFirst_(Row);
 	Level++;

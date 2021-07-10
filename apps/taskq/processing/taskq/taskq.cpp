@@ -106,14 +106,11 @@ namespace {
   private:
     void Indent_(sLevel Level)
     {
-      while ( Level-- )
+      while ( --Level )
         cio::COut << ' ';
     }
   protected:
-	  virtual void TSKRoot(
-      sLevel Level,
-      sTRow Row,
-      sdr::sSize Amount) override
+	  virtual void TSKTasks(sTRow Row) override
     {
     }
     virtual void TSKTask(
@@ -152,30 +149,14 @@ namespace {
     sclm::rRDriverRack Rack;
     flw::rDressedRFlow<> Flow;
     xtf::sRFlow XFlow;
-	  xml::rParser Parser;
 	  qCBUFFERh Buffer;
-	  bso::sBool Cont = true;
 	qRB;
     Flow.Init(Rack.Init(sclm::OGetValue(registry::parameter::Input, Buffer)));
     XFlow.Init(Flow, utf::f_Default);
-    Parser.Init(XFlow, xml::eh_Default);
 
     Tasks.Init();
 
-    while ( Cont ) {
-      switch( Parser.Parse(xml::tfStartTag | xml::tfAttribute | xml::tfStartTagClosed) ) {
-      case xml::tStartTag:
-      case xml::tAttribute:
-        break;
-      case xml::tStartTagClosed:
-        tskxml::Import(Parser, 0, Tasks);
-        Cont = false;
-        break;
-      default:
-        qRGnr();
-        break;
-      }
-    }
+    tskxml::Import(XFlow, 0, Tasks);
 	qRR;
     Rack.HandleError();
 	qRT;
