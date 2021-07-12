@@ -48,18 +48,61 @@ namespace tsktasks {
     k_Undefined
 	};
 
-	struct sTask {
+	// Static data which are not references.
+	// Will contain some data in the next versions of the software.
+	struct sTask_
+	{
+  public:
+    void reset(bso::sBool = true)
+    {
+      // Standardization.
+    }
+    qCDTOR(sTask_);
+    void Init(void)
+    {
+      // Standardization.
+    }
+	};
+
+	// As stored in the repository.
+	// Dynamic objects are stored apart and referenced.
+	struct sTask
+	: public sTask_
+	{
 	public:
 		sCRow
 			Label,
 			Description;
-		void reset(bso::sBool = true)
+		void reset(bso::sBool P = true)
 		{
+		  sTask_::reset(P);
 			Label = Description = qNIL;
 		}
 		qCDTOR(sTask);
 		void Init(void) {
 			reset();
+
+			sTask_::Init();
+		}
+	};
+
+  // Used as buffer, embedding dynamic data.
+	struct rTask
+	: public sTask_
+	{
+	public:
+		str::wString
+			Label,
+			Description;
+		void reset(bso::sBool P = true)
+		{
+		  sTask_::reset(P);
+		  tol::reset(P, Label, Description);
+		}
+		qCDTOR(rTask);
+		void Init(void) {
+			sTask_::Init();
+			tol::Init(Label, Description);
 		}
 	};
 
@@ -98,17 +141,21 @@ namespace tsktasks {
     } S_;
     uys::rFOH<sizeof(S_)> Hooks_;
 		qASd AggregatedStorage_;
+		void WriteStatics_(void)
+		{
+      Contents.Flush();
+
+      if ( Hooks_.IsInitialized() )
+        Hooks_.Put((const sdr::sByte *)&S_);
+		}
   public:
     dContents_ Contents;
     dTasks_ Tasks;
     dHubs_ Hubs;
     void reset(bso::sBool P = true)
     {
-		  if ( P ) {
-        Contents.Flush();
-        if ( Hooks_.IsInitialized() )
-          Hooks_.Put((const sdr::sByte *)&S_);
-		  }
+		  if ( P )
+        WriteStatics_();
 
 		  Hooks_.reset(P);
       tol::reset(false, Contents, Tasks, Hubs, AggregatedStorage_);
@@ -122,7 +169,91 @@ namespace tsktasks {
       reset(false);
     }
     qDTOR(rCore_);
-    bso::sBool Init(void);
+    bso::sBool Init(const str::dString &Repository)
+    {
+      WriteStatics_();
+
+      AggregatedStorage_.plug(Hooks_);
+      tol::plug(&AggregatedStorage_, Contents, Tasks, Hubs);
+
+      if ( Hooks_.Init(Repository, uys::mReadWrite) == uys::sExists ) {
+        Hooks_.Get((sdr::sByte *)&S_);
+        return true;
+      } else {
+        tol::Init(Contents, Tasks, Hubs);
+        return false;
+      }
+    }
+    sCRow Add(const str::dString &Content)
+    {
+      sCRow Row = Contents.New();
+
+      Contents(Row).Init(Content);
+
+      return Row;
+    }
+    void Remove(sCRow Row)
+    {
+      if ( !Contents.Exists(Row) )
+        qRGnr();
+
+      Contents.Remove(Row);
+    }
+		sTRow Append(
+			sTRow ChildRow,
+			sTRow ParentRow)
+			{
+				sHub Child, Parent;
+
+				tol::Init(Child, Parent);
+
+				Hubs.Recall(ParentRow, Parent);
+
+				if ( Parent.First == qNIL ) {
+					if ( Parent.Last != qNIL )
+						qRFwk();
+
+					Parent.First = Parent.Last = ChildRow;
+				} else if ( Parent.Last == qNIL ) {
+					qRFwk();
+				} else {
+					sHub Sibling;
+
+					Sibling.Init();
+
+					Hubs.Recall(Parent.Last, Sibling);
+
+					if ( Sibling.Next != qNIL)
+						qRFwk();
+
+					Sibling.Next = ChildRow;
+
+					Hubs.Store(Sibling, Parent.Last);
+
+					Child.Prev = Parent.Last;
+
+					Parent.Last = ChildRow;
+				}
+
+				Child.Parent = ParentRow;
+
+				Hubs.Store(Child, ChildRow);
+				Hubs.Store(Parent, ParentRow);
+
+				return ChildRow;
+			}
+			sTRow Append(
+        const sTask &Task,  // Must be orphan.
+        sTRow Row)
+      {
+        sTRow ChildRow = Tasks.New();
+        Tasks.Store(Task, ChildRow);
+
+        if ( ChildRow != Hubs.New() )
+          qRFwk();
+
+        return Append(ChildRow, Row);
+      }
 	};
 
 	class cBrowser
@@ -159,51 +290,9 @@ namespace tsktasks {
 
 	class rTasks {
 	private:
+	  str::wString Repository_;
 		rCore_ Core_;
 		sTRow Root_;
-		sTRow UpdateHubs_(
-			sTRow ParentRow,
-			sTRow NewRow)	// Target hub must be orphan.
-			{
-				sHub New, Parent;
-
-				tol::Init(New, Parent);
-
-				Core_.Hubs.Recall(ParentRow, Parent);
-
-				if ( Parent.First == qNIL ) {
-					if ( Parent.Last != qNIL )
-						qRFwk();
-
-					Parent.First = Parent.Last = NewRow;
-				} else if ( Parent.Last == qNIL ) {
-					qRFwk();
-				} else {
-					sHub Sibling;
-
-					Sibling.Init();
-
-					Core_.Hubs.Recall(Parent.Last, Sibling);
-
-					if ( Sibling.Next != qNIL)
-						qRFwk();
-
-					Sibling.Next = NewRow;
-
-					Core_.Hubs.Store(Sibling, Parent.Last);
-
-					New.Prev = Parent.Last;
-
-					Parent.Last = NewRow;
-				}
-
-				New.Parent = ParentRow;
-
-				Core_.Hubs.Store(New, NewRow);
-				Core_.Hubs.Store(Parent, ParentRow);
-
-				return NewRow;
-			}
 			sHub GetHub_(sTRow Row) const
 			{
 				sHub Hub;
@@ -300,27 +389,12 @@ namespace tsktasks {
 	public:
 		void reset(bso::sBool P = true)
 		{
-      Core_.reset(P);
+		  tol::reset(P, Repository_, Core_);
 			Root_ = qNIL;
 		}
 		qCDTOR(rTasks);
-    void Init(void)
-		{
-			reset();
-
-			if ( !Core_.Init() ) {
-        if ( Core_.Hubs.Add(sHub()) != Core_.Tasks.Add(sTask()) )
-          qRGnr();
-			}
-
-		  if ( Core_.Hubs.Amount() == 0 )
-        qRFwk();
-
-      if ( Core_.Hubs.Amount() != Core_.Tasks.Amount() )
-        qRFwk();
-
-      Root_ = Core_.Hubs.First();
-		}
+    void Init(void);
+    qRODISCLOSEr(str::dString, Repository);
 		bso::sBool Exists(sTRow Row) const
 		{
 		  if ( Row == qNIL )
@@ -329,26 +403,8 @@ namespace tsktasks {
       return Core_.Tasks.Exists(Row);
 		}
 		sTRow Append(
-			const str::dString &Label,
-			sTRow Row)
-    {
-      sTRow NewRow = qNIL;
-      sTask Task;
-
-      if (Row == qNIL)
-        Row = Root_;
-
-      Task.Label = Core_.Contents.New();
-      Core_.Contents(Task.Label).Init(Label);
-
-      NewRow = Core_.Tasks.New();
-      Core_.Tasks.Store(Task, NewRow);
-
-      if ( NewRow != Core_.Hubs.New() )
-        qRFwk();
-
-      return UpdateHubs_(Row, NewRow);
-    }
+      const rTask &Task,
+      sTRow Row);
     void SetDescription(
       sTRow Row,
       const str::dString &Description)

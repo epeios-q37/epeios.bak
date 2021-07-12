@@ -80,6 +80,8 @@
 			<Argument id="TestFlag" Description="TestFlagDescription" long="flag" short="f" Path="Flag" Value="TestFlag"/>
 			<!-- Options : 'Path' ET 'Value'. -->
 			<Argument id="TestOption" Description="TestOptionDescription" long="option" short="o" Path="Option" Label="TestOptionLabel"/>
+			<Argument id="InputOption" Description="InputOptionDescription" long="option" short="o" Path="Option" Label="TestOptionLabel"/>
+			<Argument id="TestOption" Description="TestOptionDescription" long="option" short="o" Path="Option" Label="TestOptionLabel"/>
 			<!-- Arguments libres : 'Path' mais PAS de 'Value' (ni de 'short', ni de 'long'). -->
 			<Argument id="TestArgument" Description="TestArgumentDescription" Path="Test" Label="TestArgumentLabel"/>
 			<Argument id="TaskLabelArgument" Description="TaskLabelArgumentDescription" Path="Label" Label="TaskLabelArgumentLabel"/>

@@ -26,31 +26,55 @@
 
 using namespace tsktasks;
 
-bso::sBool tsktasks::rCore_::Init(void)
+void tsktasks::rTasks::Init(void)
 {
-  bso::sBool Exists = false;
-qRH;
-  str::wString Repo;
-qRB;
-  Repo.Init();
+  Root_ = qNIL;
 
-  sclm::MGetValue(tskrgstry::parameter::Repository, Repo);
+  Repository_.Init();
+  sclm::MGetValue(tskrgstry::parameter::Repository, Repository_);
 
-  AggregatedStorage_.plug(Hooks_);
-  tol::plug(&AggregatedStorage_, Contents, Tasks, Hubs);
-
-  if ( Hooks_.Init(Repo, uys::mReadWrite) == uys::sExists ) {
-    Hooks_.Get((sdr::sByte *)&S_);
-    Exists = true;
-  } else {
-    tol::Init(Contents, Tasks, Hubs);
-    Exists = false;
+  if ( !Core_.Init(Repository_) ) {
+    if ( Core_.Hubs.Add(sHub()) != Core_.Tasks.Add(sTask()) )
+      qRGnr();
   }
+
+  if ( Core_.Hubs.Amount() == 0 )
+    qRFwk();
+
+  if ( Core_.Hubs.Amount() != Core_.Tasks.Amount() )
+    qRFwk();
+
+  Root_ = Core_.Hubs.First();
+}
+
+sTRow tsktasks::rTasks::Append(
+ const rTask &TaskBuffer,
+ sTRow Row)
+{
+qRH;
+  sTask Task;
+qRB;
+  Task.Init();
+
+  if ( TaskBuffer.Label.Amount() == 0 )
+    qRGnr();
+
+  Task.Label = Core_.Add(TaskBuffer.Label);
+
+  if ( TaskBuffer.Description.Amount() != 0 ) {
+    Task.Description = Core_.Add(TaskBuffer.Description);
+  }
+
+  Row = Core_.Append(Task, Row);
 qRR;
+  if ( Task.Label != qNIL )
+    Core_.Remove(Task.Label);
+
+  if ( Task.Description != qNIL )
+    Core_.Remove(Task.Description);
 qRT;
 qRE;
-
-  return Exists;
+  return Row;
 }
 
 void tsktasks::rTasks::Browse(

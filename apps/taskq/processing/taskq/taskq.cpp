@@ -81,11 +81,11 @@ namespace {
 	void Create_(void)
 	{
 	qRH;
-	  str::wString Label;
+    rTask Task;
 	  sTRow Row = qNIL;
 	qRB;
-    Label.Init();
-    sclm::MGetValue(registry::parameter::Label, Label);
+    Task.Init();
+    sclm::MGetValue(registry::parameter::Label, Task.Label);
 
     Row = sclm::OGetU16(registry::parameter::Index, 0);
 
@@ -94,7 +94,7 @@ namespace {
     if ( !Tasks.Exists(Row))
       qRGnr();
 
-    Tasks.Append(Label, Row);
+    Tasks.Append(Task, Row);
 	qRR;
 	qRT;
 	qRE;

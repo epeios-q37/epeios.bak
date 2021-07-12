@@ -33,9 +33,11 @@ namespace {
       mRootTag,
       mTasksTag,
       mTaskTag,
+      mDetailsTag,
       mSubTasksTag,
       mDescriptionTag,
       mVersionAttr,
+      mRepositoryAttr,
       mTimestampAttr,
       mGeneratorAttr,
       mTypeAttr,
@@ -64,9 +66,11 @@ case m##label##suffix:\
         break;
       T( Tasks );
       T( Task );
+      T( Details );
       T( SubTasks );
       T( Description );
       A( Version );
+      A( Repository );
       A( Timestamp );
       A( Generator );
       A( Type );
@@ -108,7 +112,7 @@ case m##label##suffix:\
 	{
   private:
     xml::rWriter Writer_;
-   sPending_ PendingTasks_;
+    sPending_ PendingTasks_;
   protected:
 	  virtual void TSKTasks(sTRow Row) override
     {
@@ -145,10 +149,14 @@ case m##label##suffix:\
       Writer_.PushTag(L( TaskTag ));
       Writer_.PutAttribute(L( RowAttr ), *Row);
 
+      Writer_.PushTag(L( DetailsTag ));
+
       Writer_.PutAttribute(L( LabelAttr ), Label);
 
       if ( Description.Amount() )
         Writer_.PutValue(Description, L( DescriptionTag ));
+
+      Writer_.PopTag();
 
       if ( PendingTasks_ >= PendingMax_ )
         qRLmt();
@@ -174,6 +182,7 @@ case m##label##suffix:\
     qCVDTOR(sBrowser_);
     void Init(
       txf::sWFlow &Flow,
+      const str::dString &Repository,
       const char *Generator)
     {
       tol::bDateAndTime Buffer;
@@ -184,6 +193,7 @@ case m##label##suffix:\
 
       Writer_.PushTag(L( RootTag) );
       Writer_.PutAttribute(L( VersionAttr ), TSKINF_SOFTWARE_VERSION);
+      Writer_.PutAttribute(L( RepositoryAttr ), Repository);
       Writer_.PutAttribute(L( TimestampAttr ), tol::DateAndTime(Buffer));
       Writer_.PutAttribute(L( GeneratorAttr ), Generator);
     }
@@ -199,7 +209,7 @@ void tskxml::Export(
 qRH;
   sBrowser_ Browser;
 qRB;
-  Browser.Init(Flow, Generator);
+  Browser.Init(Flow, Tasks.Repository(), Generator);
 
   Tasks.Browse( Row, Browser);
 qRR;
@@ -260,18 +270,17 @@ namespace {
   //                               ^
   void HandleDescription_(
     xml::rParser &Parser,
-    sTRow Row,
-    rTasks &Tasks)
+    rTask &Task)
   {
-    if ( Row == qNIL )
-      REPORT();
-
     bso::sBool Cont = true;
 
     while( Cont ) {
       switch( Parser.Parse(xml::tfValue | xml::tfEndTag) ) {
       case xml::tValue:
-        Tasks.SetDescription(Row, Parser.GetValue());
+        if ( Task.Description.Amount() != 0 )
+          REPORT();
+
+        Task.Description = Parser.GetValue();
         break;
       case xml::tEndTag:
         if ( GetMarkup_(Parser.GetTagName()) != mDescriptionTag )
@@ -284,6 +293,61 @@ namespace {
       }
     }
   }
+
+  // <Details …>…</Details>
+  //          ^
+  //                       ^
+  sTRow HandleDetails_(
+    xml::rParser &Parser,
+    sTRow ParentRow,
+    rTasks &Tasks)
+  {
+    sTRow Row = qNIL;
+  qRH;
+    rTask Task;
+    bso::sBool Cont = true;
+  qRB;
+    Task.Init();
+
+    while( Cont ) {
+      switch( Parser.Parse( xml::tfStartTag | xml::tfAttribute | xml::tfEndTag ) ) {
+      case xml::tAttribute:
+        switch( GetMarkup_(Parser.GetAttributeName()) ) {
+        case mLabelAttr:
+          Task.Label = Parser.GetValue();
+          break;
+        default:
+          REPORT();
+          break;
+        }
+        break;
+      case xml::tStartTag:
+        switch( GetMarkup_(Parser.TagName()) ) {
+        case mDescriptionTag:
+          HandleDescription_(Parser, Task);
+          break;
+        default:
+          REPORT();
+          break;
+        }
+        break;
+      case xml::tEndTag:
+        if ( GetMarkup_(Parser.GetTagName()) != mDetailsTag )
+          REPORT();
+        Row = Tasks.Append(Task, ParentRow);
+        Cont = false;
+        break;
+      default:
+        REPORT();
+        break;
+      }
+    }
+  qRR;
+  qRT;
+  qRE;
+    return Row;
+  }
+
 
   // <Task …>…</Task>
   //       ^
@@ -298,28 +362,22 @@ namespace {
     sTRow Row = qNIL;
   qRB;
     while( Cont ) {
-      switch( Parser.Parse(xml::tfAttribute | xml::tfStartTag | xml::tfEndTag) ) {
-      case xml::tAttribute:
-        switch( GetMarkup_(Parser.GetAttributeName()) ) {
-        case mRowAttr:
-          break;
-        case mLabelAttr:
-          Row = Tasks.Append(Parser.GetValue(), Stack.Top());
-          break;
-        default:
-          REPORT();
-          break;
-        }
-        break;
+      switch( Parser.Parse(xml::tfStartTag | xml::tfEndTag) ) {
       case xml::tStartTag:
         switch( GetMarkup_(Parser.TagName()) ) {
+        case mDetailsTag:
+          Row = HandleDetails_(Parser, Stack.Top(), Tasks);
+
+          if ( Row == qNIL )
+            REPORT();
+          break;
         case mSubTasksTag:
-          Stack.Push(Row);
+          if ( Row == qNIL )
+            REPORT();
+
+          Stack.Push(Row),
           HandleSubTasks_(Parser, Stack, Tasks);
           Stack.Pop();
-          break;
-        case mDescriptionTag:
-          HandleDescription_(Parser, Row, Tasks);
           break;
         default:
           REPORT();
