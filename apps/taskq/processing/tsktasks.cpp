@@ -96,26 +96,26 @@ qRB;
 
   Kinship = kFirst;
 
-	Row = GetFirst_(Row);
+	Row = Core_.GetFirst(Row);
 	Level++;
 
 	while ( Row != qNIL ) {
     tol::Init(Label, Description);
-	  Browser.Task(Kinship, Level, Row, GetLabel_(Row, Label), GetDescription_(Row, Description));
+	  Browser.Task(Kinship, Level, Row, Core_.GetLabel(Row, Label), Core_.GetDescription(Row, Description));
 
-		if ( TestAndGetFirst_(Row)) {
+		if ( Core_.TestAndGetFirst(Row)) {
       Level++;
       Kinship = kChild;
-		} else if ( TestAndGetNext_(Row) ) {
+		} else if ( Core_.TestAndGetNext(Row) ) {
       Kinship = kSibling;
 		} else {
 		  bso::sBool Cont = true;
 
 		  while ( Cont ) {
-        if ( TestAndGetParent_(Row) ) {
+        if ( Core_.TestAndGetParent(Row) ) {
           Level--;
           Browser.Parent(Level);
-          Cont = ( Level != 0 ) && !TestAndGetNext_(Row);
+          Cont = ( Level != 0 ) && !Core_.TestAndGetNext(Row);
         } else
           Cont = false;
 		  }

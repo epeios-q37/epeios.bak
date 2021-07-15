@@ -148,6 +148,108 @@ namespace tsktasks {
       if ( Hooks_.IsInitialized() )
         Hooks_.Put((const sdr::sByte *)&S_);
 		}
+    sHub GetHub_(sTRow Row) const
+    {
+      sHub Hub;
+
+      if ( !Hubs.Exists(Row) )
+        qRGnr();
+
+      Hub.Init();
+      Hubs.Recall(Row, Hub);
+
+      return Hub;
+    }
+    void SetHub_(
+      sTRow Row,
+      const sHub &Hub)
+    {
+      if ( !Hubs.Exists(Row) )
+        qRGnr();
+
+      Hubs.Store(Hub, Row);
+    }
+    bso::sBool TestAndGet_(
+      sTRow (rCore_::* Get)(sTRow) const,
+      sTRow &Row) const
+    {
+      sTRow Buffer = (*this.*Get)(Row);
+
+      if ( Buffer != qNIL ) {
+        Row = Buffer;
+        return true;
+      } else
+        return false;
+    }
+    sTask GetTask_(sTRow Row) const
+    {
+      sTask Task;
+
+      Task.Init();
+
+      Tasks.Recall(Row, Task);
+
+      return Task;
+    }
+    sCRow GetLabel_(sTRow Row) const
+    {
+      return GetTask_(Row).Label;
+    }
+    sCRow GetDescription_(sTRow Row) const
+    {
+      return GetTask_(Row).Description;
+    }
+    const str::dString &GetContent_(
+      sCRow Row,
+      str::dString &Content) const
+    {
+      if ( Row != qNIL )
+        Contents.Recall(Row, Content);
+
+      return Content;
+    }
+    void RemoveFromSiblings_(
+      sTRow Row,
+      sTRow PrevRow,
+      sTRow NextRow)
+    {
+      if ( PrevRow != qNIL ) {
+        sHub Hub;
+
+        Hub.Init();
+        Hub = GetHub_(PrevRow);
+        Hub.Next = NextRow;
+        SetHub_(PrevRow, Hub);
+      }
+
+      if ( NextRow != qNIL ) {
+        sHub Hub;
+
+        Hub.Init();
+        Hub = GetHub_(NextRow);
+        Hub.Prev = PrevRow;
+        SetHub_(NextRow, Hub);
+      }
+    }
+    void RemoveChild_(
+      sTRow Row,
+      sTRow ParentRow,
+      sTRow PrevRow,
+      sTRow NextRow)
+    {
+      if ( ParentRow != qNIL ) {
+        sHub Hub;
+
+        Hub.Init();
+        Hub = GetHub_(ParentRow);
+
+        if ( Hub.First == Row )
+          Hub.First = NextRow;
+
+        if ( Hub.Last == Row )
+          Hub.Last = PrevRow;
+      }
+    }
   public:
     dContents_ Contents;
     dTasks_ Tasks;
@@ -184,6 +286,59 @@ namespace tsktasks {
         return false;
       }
     }
+    bso::sBool Exists(sTRow Row) const
+    {
+      bso::sBool Exists= Tasks.Exists(Row);
+
+      if ( Hubs.Exists(Row) != Exists )
+        qRGnr();
+
+      return Exists;
+    }
+    sTRow GetParent(sTRow Row) const
+    {
+      return GetHub_(Row).Parent;
+    }
+    sTRow GetPrev(sTRow Row) const
+    {
+      return GetHub_(Row).Prev;
+    }
+    sTRow GetNext(sTRow Row) const
+    {
+      return GetHub_(Row).Next;
+    }
+    sTRow GetFirst(sTRow Row) const
+    {
+      return GetHub_(Row).First;
+    }
+    sTRow GetLast(sTRow Row) const
+    {
+      return GetHub_(Row).Last;
+    }
+    bso::sBool TestAndGetParent(sTRow &Row) const
+    {
+      return TestAndGet_(&rCore_::GetParent, Row);
+    }
+    bso::sBool TestAndGetNext(sTRow &Row) const
+    {
+      return TestAndGet_(&rCore_::GetNext, Row);
+    }
+    bso::sBool TestAndGetFirst(sTRow &Row) const
+    {
+      return TestAndGet_(&rCore_::GetFirst, Row);
+    }
+    const str::dString &GetLabel(
+      sTRow Row,
+      str::dString &Label) const
+    {
+      return GetContent_(GetLabel_(Row), Label);
+    }
+    const str::dString &GetDescription(
+      sTRow Row,
+      str::dString &Label) const
+    {
+      return GetContent_(GetDescription_(Row), Label);
+    }
     sCRow Add(const str::dString &Content)
     {
       sCRow Row = Contents.New();
@@ -191,6 +346,19 @@ namespace tsktasks {
       Contents(Row).Init(Content);
 
       return Row;
+    }
+    void SetDescription(
+      sTRow Row,
+      const str::dString &Description)
+    {
+      sTask Task = GetTask_(Row);
+
+      if ( Task.Description == qNIL )
+        Task.Description = Contents.New();
+
+      Contents(Task.Description).Init(Description);
+
+      Tasks.Store(Task, Row);
     }
     void Remove(sCRow Row)
     {
@@ -211,7 +379,7 @@ namespace tsktasks {
 
 				if ( Parent.First == qNIL ) {
 					if ( Parent.Last != qNIL )
-						qRFwk();
+						qRGnr();
 
 					Parent.First = Parent.Last = ChildRow;
 				} else if ( Parent.Last == qNIL ) {
@@ -224,7 +392,7 @@ namespace tsktasks {
 					Hubs.Recall(Parent.Last, Sibling);
 
 					if ( Sibling.Next != qNIL)
-						qRFwk();
+						qRGnr();
 
 					Sibling.Next = ChildRow;
 
@@ -253,6 +421,27 @@ namespace tsktasks {
           qRFwk();
 
         return Append(ChildRow, Row);
+      }
+      void Detach(sTRow Row)  // The concerned task keeps its children.
+      {
+        sHub Hub;
+        sTRow Prev, Next;
+
+        Prev = Next = qNIL;
+
+        Hub.Init();
+
+        Hub = GetHub_(Row);
+
+        Prev = Hub.Prev;
+        Next = Hub.Next;
+
+        RemoveFromSiblings_(Row, Prev, Next);
+        RemoveChild_(Row, Hub.Parent, Prev, Next);
+
+        Hub.Parent = Hub.Prev = Hub.Next = qNIL;
+
+        SetHub_(Row, Hub);
       }
 	};
 
@@ -293,99 +482,6 @@ namespace tsktasks {
 	  str::wString Repository_;
 		rCore_ Core_;
 		sTRow Root_;
-			sHub GetHub_(sTRow Row) const
-			{
-				sHub Hub;
-
-				Hub.Init();
-
-				Core_.Hubs.Recall(Row, Hub);
-
-				return Hub;
-			}
-			bso::sBool TestAndGet_(
-        sTRow (rTasks::* Get)(sTRow) const,
-        sTRow &Row) const
-      {
-        sTRow Buffer = (*this.*Get)(Row);
-
-        if ( Buffer != qNIL ) {
-          Row = Buffer;
-          return true;
-        } else
-          return false;
-      }
-			sTRow GetParent_(sTRow Row) const
-			{
-				return GetHub_(Row).Parent;
-			}
-			bso::sBool TestAndGetParent_(sTRow &Row) const
-			{
-			  return TestAndGet_(&rTasks::GetParent_, Row);
-			}
-			sTRow GetPrev_(sTRow Row) const
-			{
-				return GetHub_(Row).Prev;
-			}
-			sTRow GetNext_(sTRow Row) const
-			{
-				return GetHub_(Row).Next;
-			}
-			bso::sBool TestAndGetNext_(sTRow &Row) const
-			{
-			  return TestAndGet_(&rTasks::GetNext_, Row);
-			}
-      sTRow GetFirst_(sTRow Row) const
-			{
-				return GetHub_(Row).First;
-			}
-			bso::sBool TestAndGetFirst_(sTRow &Row) const
-			{
-			  return TestAndGet_(&rTasks::GetFirst_, Row);
-			}
-			sTRow GetLast_(sTRow Row) const
-			{
-				return GetHub_(Row).Last;
-			}
-			sTask GetTask_(sTRow Row) const
-			{
-				sTask Task;
-
-				Task.Init();
-
-				Core_.Tasks.Recall(Row, Task);
-
-				return Task;
-			}
-			sCRow GetLabel_(sTRow Row) const
-			{
-				return GetTask_(Row).Label;
-			}
-			sCRow GetDescription_(sTRow Row) const
-			{
-				return GetTask_(Row).Description;
-			}
-			const str::dString &GetContent_(
-				sCRow Row,
-				str::dString &Content) const
-			{
-				if ( Row != qNIL )
-					Core_.Contents.Recall(Row, Content);
-
-				return Content;
-			}
-			const str::dString &GetLabel_(
-				sTRow Row,
-				str::dString &Label) const
-			{
-				return GetContent_(GetLabel_(Row), Label);
-			}
-			const str::dString &GetDescription_(
-				sTRow Row,
-				str::dString &Label) const
-			{
-				return GetContent_(GetDescription_(Row), Label);
-			}
 	public:
 		void reset(bso::sBool P = true)
 		{
@@ -400,24 +496,11 @@ namespace tsktasks {
 		  if ( Row == qNIL )
         return true;
 
-      return Core_.Tasks.Exists(Row);
+      return Core_.Exists(Row);
 		}
 		sTRow Append(
       const rTask &Task,
       sTRow Row);
-    void SetDescription(
-      sTRow Row,
-      const str::dString &Description)
-    {
-      sTask Task = GetTask_(Row);
-
-      if ( Task.Description == qNIL )
-        Task.Description = Core_.Contents.New();
-
-      Core_.Contents(Task.Description).Init(Description);
-
-      Core_.Tasks.Store(Task, Row);
-    }
     void Browse(
       sTRow Row,
       cBrowser &Browser) const;
