@@ -59,10 +59,9 @@ def ac_connect(player, dom):
 
 
 def ac_roll(player, dom):
-  dom.add_class("dice", "opaque")
   dom.remove_class("dice", "fade-in")
+  dom.flush()
   dom.add_class("dice", "fade-in")
-  dom.remove_class("dice", "opaque")
   dom.inner("dice", open(f"dice-{random.randint(1,6)}.svg").read())
   return
   dom.add_class("dice", "opaque")
