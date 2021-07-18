@@ -27,11 +27,13 @@ BLACK = -1
 EMPTY = 0
 WHITE = 1
 
+
 DIRECTIONS = [
   (-1, -1), (-1,0), (-1,1),
   (0,-1), (0,1),
   (1,-1), (1,0), (1,1)
 ]
+
 
 def new_board():
   board = []
@@ -55,6 +57,7 @@ def has_my_piece(board, bw, x, y, dx, dy):
     return True
   return has_my_piece(board, bw, x, y, dx, dy)
 
+
 def reversible_directions(board, bw, x, y):
   directions = []
   if board[x][y] != EMPTY:
@@ -71,6 +74,7 @@ def reversible_directions(board, bw, x, y):
       directions.append(d)
   return directions
 
+
 def reverse_piece(board, bw, x, y, dx, dy):
   x += dx
   y += dy
@@ -81,11 +85,13 @@ def reverse_piece(board, bw, x, y, dx, dy):
   board[x][y] = bw
   reverse_piece(board, bw, x, y, dx, dy)  
 
+
 def is_allowed(board, x, y, bw):
   if bw == EMPTY:
     return False
   else:
     return len(reversible_directions(board, bw, x, y)) != 0
+
 
 def count(board, bwe):
   n = 0
@@ -95,8 +101,10 @@ def count(board, bwe):
         n += 1
   return n    
 
+
 def is_game_over(board):
   return count(board, EMPTY) == 0 or count(board, BLACK) == 0 or count(board, WHITE) == 0
+
 
 def winner(board):
   b = count(board, BLACK)

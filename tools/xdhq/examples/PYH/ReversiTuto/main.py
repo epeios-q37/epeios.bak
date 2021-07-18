@@ -35,6 +35,12 @@ board = None
 available = None
 turn = None
 
+TOKEN = {
+  BLACK: 'X',
+  EMPTY: ' ',
+  WHITE: 'O'
+}
+
 
 class Player:
   def __init__(self):
@@ -43,14 +49,17 @@ class Player:
   def init(self, bw):
     self.bw = bw  
 
+
 def init():
   global board, available, turn
   board = new_board()
   available = True
   turn = None
 
+
 def set_status(dom, status, color = "black"):
   dom.inner("Status", f'<span style="color: {color}">{status}</span>')    
+
 
 def draw_board(player, dom):
   tokens = {}
@@ -83,6 +92,7 @@ def debug(dom, player):
 
   dom.inner("Debug", html)
 
+
 def Refresh(dom, player):
   if player.bw == None:
     if not available:
@@ -97,6 +107,7 @@ def Refresh(dom, player):
     "white": count(board, WHITE)
   })
   debug(dom, player)
+
 
   if player.bw == EMPTY:
     set_status(dom, f"'{TOKEN[turn]}''s turn (you cannot play)")
@@ -148,10 +159,12 @@ def ac_play(player, dom, id):
 
   atlastk.broadcast_action("Refresh")
 
+
 def ac_refresh(player, dom):
   if turn == None:
     player.__init__()
   Refresh(dom, player)
+
 
 def ac_new(dom):
   init()
@@ -164,5 +177,6 @@ CALLBACKS = {
   "Refresh": ac_refresh,
   "New": ac_new
 }
+
 
 atlastk.launch(CALLBACKS,  Player, open("Head.html").read())
