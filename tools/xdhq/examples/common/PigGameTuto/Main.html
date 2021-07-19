@@ -1,38 +1,36 @@
-<fieldset style="display: flex; flex-direction: column; padding-top: 15px; width: 100%;">
+<fieldset style="display: flex; flex-direction: column; padding-top: 15px; width: 50%;">
   <span style="display: flex; align-items: center;">
-    <span class="score-label">Your score</span>
-    <span class="arrow">➤</span>
+    <span id="Label1" class="score-label">Your score</span>
+    <span id="arrow1" class="arrow">➤</span>
     <span id="player1" class="meter-container">
       <span id="player1-current" class="score-meter current-score" style="width: 20%"></span>
       <span  id="player1-turn" class="score-meter turn-score" style="width: 70%""></span>
     </span>
     <span style="width: 10px;"></span>
-    <output class="score-text">100</output>
+    <output id="score1" class="score-text">100</output>
   </span>
   <span style="height: 15px;"></span>
   <span style="display: flex; align-items: center;">
-    <span class="score-label">Op.'s score</span>
-    <span class="arrow">➤</span>
+    <span  id="Label2" class="score-label">Op.'s score</span>
+    <span id="arrow2" class="arrow">➤</span>
     <span id="player1" class="meter-container">
       <span id="player2-current" class="score-meter current-score" style="width: 30%"></span>
       <span id="player2-turn" class="score-meter turn-score" style="width: 5%"></span>
     </span>
     <span style="width: 10px;"></span>
-    <output class="score-text">10</output>
+    <output id="score2" class="score-text">10</output>
   </span>
   <span style="height: 15px;"></span>
   <span style="display: flex; flex-direction: row; justify-content: space-around;">
     <span>
       <span>Turn total: </span>
-      <output>15</output>
+      <output id="Turn">15</output>
     </span>
   </span>
   <span style="height: 15px;"></span>
   <span style="width: 100%; display: flex; justify-content: space-around; align-items: center;">
     <button id="Roll" data-xdh-onevent="Roll">ROLL</button>
-    <span style="width: 100px; height: 100px;">
-      <span id="dice" style="height: 100px;"></span>
-    </span>
+    <span id="dice" style="width: 100px; height: 100px;"></span>
     <button id="Hold" data-xdh-onevent="Hold">HOLD</button>
   </span>
 </fieldset>

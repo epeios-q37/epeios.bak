@@ -45,7 +45,7 @@ echo <<<EOS
       background: #ffffff;
       border-radius: 8px;
       position: relative;
-      width: 500px;
+      width: 400px;
     }
 
     details .summary-title {
